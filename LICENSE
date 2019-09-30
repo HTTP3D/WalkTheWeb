@@ -1,4 +1,89 @@
-                    GNU GENERAL PUBLIC LICENSE
+WalkTheWeb - 3D Internet Hosting Software
+
+Copyright 2013-2019 by HTTP3D Inc. and the contributors
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+https://www.gnu.org/licenses/gpl-3.0.txt
+
+This program incorporates work covered by the following copyright and
+permission notices:
+	
+###	All extended license files can be found in the folder:
+### /core/scripts/engine
+	
+  Wherever third party code has been used, credit has been given in the code's
+  comments.
+
+  BabylonJS is (c) licensed under Apache License 2.0, January 2004
+  https://github.com/BabylonJS/Babylon.js/blob/master/license.md
+  http://www.apache.org/licenses/
+	## External dependencies
+		- jQuery PEP: https://github.com/jquery/PEP
+		
+  Bluebird.js - Copyright (c) 2013-2018 Petka Antonov - MIT License
+  
+  Cannon.js - Copyright (c) 2015 cannon.js Authors
+	
+  Earcut.js - Copyright (c) 2016, Mapbox
+  
+  Hand.js - January 2004 - Apache 2.0 License
+  
+  Loader.js - Copyright (c) 2014 Yehuda Katz, Stefan Penner, and contributors - MIT License
+
+  Meshwriter.js - Copyright (c) 2018 Oleksii Trekhleb - MIT License
+  
+  Oimo.js - Copyright © 2010-2017 three.js authors - MIT License
+  
+  Pep.js - Copyright jQuery Foundation and other contributors, https://jquery.org/ - Creative Commons 1.0
+
+	###  WalkTheWeb uses BabylonJS and the listed sources above 
+	###  without modification to their provided Source Files.
+  
+and
+
+  HTTP3D Inc. - WalkTheWeb - 3D Internet Hosting Software
+
+  Copyright 2013-2019 by HTTP3D Inc. and the contributors
+
+  WalkTheWeb is released under the GPL Version 3
+	  Includes Permissions:
+		    Commercial Use
+		    Modification,
+		    Distribution,
+		    Patent Use,
+		    Private Use
+	  Does not Include the following Limitations:
+		    Trademark Use,
+		    Liability,
+		    Warranty
+	  Conditions:
+		    ** WalkTheWeb extends conditional Trademark Use of 
+		    ** "https://3d" and "http://3d" in urls for websites: 
+		    ** using this software and legal derivitives of this software only.
+		    License and Copyright notice,
+		    State Changes
+
+The source code for any program binaries or compressed scripts that are
+included with WalkTheWeb can be freely obtained at the following URL:
+
+	https://github.com/HTTP3D/WalkTheWeb/
+  
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
