@@ -1,0 +1,47 @@
+.wtw-iclear {
+	clear:both;
+}
+.wtw-icenter {
+	text-align:center;
+	vertical-align:middle;
+}
+.wtw-ihide {
+	display:none;
+	visibility:hidden;
+}
+.wtw-iprogresssection {
+	min-height: 300px;
+	text-align:center;
+	vertical-align:middle;
+	margin:20px;
+}
+.wtw-iprogressdiv {
+	min-height:30px;
+	min-width:70%;
+	margin-left:15%;
+	margin-right:15%;
+	margin-top:70px;
+	margin-bottom:30px;
+	border:2px solid #808080;
+	border-radius:6px;
+	background-color:#acacac;
+}
+.wtw-iprogressbar {
+	width:10%;
+	height:27px;
+	margin-top:0px;
+	margin-bottom:0px;
+	margin-left:0px;
+	border-left:1px solid #000000;
+	border-bottom:1px solid #000000;
+	border-right:1px solid #fcfcfc;
+	border-top:1px solid #fcfcfc;
+	border-radius:6px;
+	background-color:green;
+}
+.wtw-iprogresstext {
+	color:#808080;
+	font-weight:bold;
+	font-size:1.2em;
+	text-align:center;
+}

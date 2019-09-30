@@ -1,0 +1,172 @@
+html, body {
+	font-family: Arial,Tahoma,san-serif;
+	font-size: 1em;
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: #e7e7e7;
+	overflow: hidden;
+	scroll:no;
+}
+.wtw-adminmenu {
+	margin:0px;
+	padding:7px 0px 7px 10px;
+	font-weight:normal;
+	font-size:1em;
+	color:white;
+	border-top:transparent solid 1px;
+	border-bottom:transparent solid 1px;
+	background: rgba(33,33,33,0.2);
+	text-align:left;
+	vertical-align:middle;
+}
+.wtw-adminmenu:hover {
+	cursor:pointer;
+	color:#FFF7DA;
+	border-top:#454545 solid 1px;
+	border-bottom:#454545 solid 1px;
+	background-color: #282828;
+}
+.wtw-adminsubmenu {
+	margin-top:5px;
+	margin-bottom:5px;
+	margin-left:35px;
+	margin-right:35px;
+	padding:3px;
+	font-weight:normal;
+	font-size:1em;
+	color:white;
+	border:transparent solid 1px;
+	background: rgba(33,33,33,0.2);
+	text-align:left;
+}
+.wtw-adminsubmenu:hover {
+	cursor:pointer;
+	color:#FFF7DA;
+	border:#454545 solid 1px;
+	background-color:#282828;
+}
+.wtw-adminmenudiv {
+	display:none;
+	visibility:hidden;
+	background: rgba(134,134,134,0.3);
+}
+.wtw-searchresultbutton {
+	border:1px solid gray;
+	color:#000000;
+	font-weight:bold;
+	width:90px;
+	padding:0px;
+	text-align:center;
+	vertical-align:top;
+	font-size:1em;
+	background-color:#efefef:
+}
+.wtw-searchresultbutton:hover {
+	border:1px solid yellow;
+	color:green;
+	background-color:white:
+}
+.wtw-adminiconimage {
+	height:45px;
+	width:auto;
+}
+.wtw-quickbar {
+	font-size:10px;
+	color:white;
+	background-color:#273C2C;
+	display:inline-block;
+	width:35px;
+	height:35px;
+	padding-top:8px;
+	text-align:center;
+	border:1px solid #226D22;
+	margin-top:0px;
+}
+.wtw-quickbar:hover {
+	background-color:#226D22;
+}
+.wtw-quickbaroff {
+	font-size:10px;
+	color:white;
+	background-color:#4F3133;
+	display:inline-block;
+	width:35px;
+	height:35px;
+	padding-top:8px;
+	text-align:center;
+	border:1px solid #6D2222;
+	margin-top:0px;
+}
+.wtw-quickbaroff:hover {
+	background-color:#6D2222;
+}
+.wtw-objectcontainer {
+	width:350px;
+	margin:15px;
+	border:1px solid #afafaf;
+	display:inline-block;
+}
+.wtw-objectfile {
+	text-align:center;
+	padding-top:10px;
+	width:348px;
+	height:35px;
+	font-size:1em;
+	font-weight:bold;
+	border-bottom:1px solid #cfcfcf;
+	background-color:transparent;
+}
+.wtw-objectfile:hover {
+	background-color:#FBFFDE;
+	color:#375377;
+	cursor:pointer;
+}
+.wtw-objectfolder {
+	text-align:left;
+	margin:10px;
+	font-size:.8em;
+	width:100%;
+}
+.wtw-sampletext {
+	font-size:.7em;
+	color:#afafaf;
+}
+.wtw-active {
+	font-weight:bold;
+	font-size:1.2em;
+}
+.wtw-deactive {
+	font-weight:normal;
+	font-size:1em;
+}
+td.wtw-tdactive {
+	background-color:#ffffff;
+}
+td.wtw-tddeactive {
+	background-color:#cfcfcf;
+}
+.wtw-snapshot {
+	display:none;
+	visibility:hidden;
+	margin-left:15px;
+	width:280px;
+	height:auto;
+}
+.wtw-backbutton {
+	position:absolute;
+	left:6px;
+	top:6px;
+	z-index:8002;
+	text-align:center;
+	border:1px solid #454545;
+	padding:3px;
+	color:#ffffff;
+	font-size:1.4em;
+}
+.wtw-backbutton:hover {
+	border:1px solid #ffffff;
+	color:FFF7DA;
+	cursor:pointer;
+}
