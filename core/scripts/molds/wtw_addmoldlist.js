@@ -681,7 +681,9 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 		var rotationY = coords.rotationY;
 		var shapevalue = shape.toLowerCase();
 		var imageid = "ij7fi8qv7dbgb6zc";
+		var imagepath = "/content/system/stock/stucco-512x512.jpg";
 		var heightmapid = "dxmbplwoocpg5df3";
+		var heightmappath = "/content/system/stock/heightmap-1500x1500.jpg";
 		while (shapevalue.indexOf(" ") > -1) {
 			shapevalue = shapevalue.replace(" ","");
 		}
@@ -955,8 +957,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "2";
 				dGet('wtw_tmoldcoveringold').value = "none";
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "tree":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -976,8 +978,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "none";
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "flag":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -997,8 +999,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "10";
 				dGet('wtw_tmoldcoveringold').value = "none";
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "smoke":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -1018,8 +1020,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "none";
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "babylonfile":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -1039,8 +1041,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "none";
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "waterplane":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -1060,8 +1062,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "2";
 				dGet('wtw_tmoldcoveringold').value = "2d texture";
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "waterdisc":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -1082,8 +1084,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "10";
 				dGet('wtw_tmoldcoveringold').value = "2d texture";
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "disc":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -1138,8 +1140,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "texture";
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "floor":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -1160,8 +1162,7 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldcoveringold').value = "texture";
 				dGet('wtw_tmoldtextureid').value = "4to027vq39087bxr";
 				dGet('wtw_tmoldtexturepath').value = "/content/system/stock/cement-512x344.jpg";
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "box":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -1223,8 +1224,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "none";
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "image":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -1326,8 +1327,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "texture";
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;			
 			case "blogposting":
 				rotationY += 180;
@@ -1351,8 +1352,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "texture";
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "sharktank":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -1434,8 +1435,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "none";
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "storeviewcart":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -1523,12 +1524,12 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "70";
 				dGet('wtw_tmoldmaxheight').value = "70.00";
 				dGet('wtw_tmoldcoveringold').value = "terrain";
-				dGet('wtw_tmoldheightmapid').value = heightmapid;
 				dGet('wtw_tmoldtextureid').value = imageid;
-				var imageinfo = WTW.getUploadFileData(imageid);
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
-				var imageinfo = WTW.getUploadFileData(heightmapid);
-				dGet('wtw_moldheightmappreview').src = imageinfo.filedata;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldheightmapid').value = heightmapid;
+				dGet('wtw_tmoldheightmappath').value = heightmappath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
+				WTW.setPreviewImage('wtw_moldheightmappreview', 'wtw_tmoldheightmappath', 'wtw_tmoldheightmapid');
 				break;	
 			case "tube":
 				dGet('wtw_tmoldpositionx').value = "0.00";

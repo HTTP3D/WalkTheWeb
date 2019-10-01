@@ -196,7 +196,7 @@ WTWJS.prototype.addMoldTerrain = function(moldname, lenx, leny, lenz, subdivisio
 			heightmappath = molddef.graphics.heightmap.path;
 		}
 		if (heightmappath == '') {
-			heightmappath = '/content/system/stock/heightmap4-1500x1500.jpg';
+			heightmappath = '/content/system/stock/heightmap-1500x1500.jpg';
 		}
 		if (heightmapid == '') {
 			heightmapid = "dxmbplwoocpg5df3";
