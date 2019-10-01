@@ -1192,14 +1192,30 @@ class wtwuploads {
 		$zsuccess = false;
 		try {
 			if ($wtwiframes->isUserInRole("Admin")) {
+				/* check to see if web alias is already in use - if so - update it */
 				$zresponse = $wtwiframes->query("
 					select * from ".wtw_tableprefix."webaliases
-					where webaliasid='".$zwebaliasid."'
-						and not webaliasid=''
+					where lower(domainname)=lower('".$zdomainname."')
+						and lower(communitypublishname)=lower('".$zcommunitypublishname."')
+						and lower(buildingpublishname)=lower('".$zbuildingpublishname."')
+						and lower(thingpublishname)=lower('".$zthingpublishname."')
 					limit 1;");
-				if (count($zresponse) == 0) {
-					$zwebaliasid = "";
+				if (count($zresponse) > 0) {
+					foreach ($zresponse as $zrow) {
+						$zwebaliasid = $zrow["webaliasid"];
+					}
+				} else {
+					/* check if passed webaliasid exists */
+					$zresponse = $wtwiframes->query("
+						select * from ".wtw_tableprefix."webaliases
+						where webaliasid='".$zwebaliasid."'
+							and not webaliasid=''
+						limit 1;");
+					if (count($zresponse) == 0) {
+						$zwebaliasid = "";
+					}
 				}
+				/* update or insert new webalias */
 				if (empty($zwebaliasid) || !isset($zwebaliasid)) {
 					$zwebaliasid = $wtwiframes->getRandomString(16,1);
 					$wtwiframes->query("
