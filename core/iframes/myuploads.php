@@ -13,20 +13,24 @@ try {
 		require_once('../functions/class_wtwuploads.php');
 		global $wtwuploads;
 		$zfileurl = $wtwiframes->contenturl;
-		$zfilepath = $wtwiframes->contentpath."\\users";
+		$zfilepath = $wtwiframes->contentpath."\\uploads";
+		if (!file_exists($zfilepath)) {
+			mkdir($zfilepath, 0777);
+		}
+		$zfilepath = $wtwiframes->contentpath."\\uploads\\users";
 		if (!file_exists($zfilepath)) {
 			mkdir($zfilepath, 0777);
 		}
 		if(isset($wtwiframes->userid) && !empty($wtwiframes->userid)) {
-			$zfilepath = $wtwiframes->contentpath."\\users\\".$wtwiframes->userid;
+			$zfilepath = $wtwiframes->contentpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid'];
 			if (!file_exists($zfilepath)) {
 				mkdir($zfilepath, 0777);
 			}
-			$zfilepath = $wtwiframes->contentpath."\\users\\".$wtwiframes->userid."\\media";
+			$zfilepath = $wtwiframes->contentpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\media";
 			if (!file_exists($zfilepath)) {
 				mkdir($zfilepath, 0777);
 			}
-			$zfileurl = $wtwiframes->contenturl."/users/".$wtwiframes->userid."/media/";
+			$zfileurl = $wtwiframes->contenturl."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media/";
 		}
 		$wtw_hideimageid = "";
 		if(isset($_POST["wtw_hideimageid"]) && !empty($_POST["wtw_hideimageid"])) {
@@ -133,11 +137,7 @@ try {
 		foreach ($zresults as $zrow) {
 			$icononclick = "";
 			if(isset($zitem) && !empty($zitem)) {
-				if ($zitem == 'blogimage') {
-					$icononclick = "onclick=\"parent.WTW.setSelectImageID('".$zrow["originalid"]."','".$zrow["websizeid"]."','".$zrow["websizepath"]."','".$zrow["thumbnailid"]."','".$zrow["fileextension"]."',".$zrow["imagewidth"].",".$zrow["imageheight"].",".$zrow["filesize"].",'".$zrow["filetitle"]."','".$zrow["filename"]."');\"";
-				} else {
-					$icononclick = "onclick=\"parent.WTW.setSelectFileID(this,'".$zrow["uploadid"]."','".$zrow["originalid"]."','".$zrow["websizeid"]."','".$zrow["fileextension"]."',".$zrow["filesize"].",'".$zrow["filetitle"]."','".$zrow["filename"]."','".$zrow["originalpath"]."');\"";
-				}
+				$icononclick = "onclick=\"parent.WTW.setSelectFileID(this,'".$zrow["uploadid"]."','".$zrow["originalid"]."','".$zrow["websizeid"]."','".$zrow["fileextension"]."',".$zrow["filesize"].",'".$zrow["filetitle"]."','".$zrow["filename"]."','".$zrow["originalpath"]."');\"";
 			} else {
 				$icononclick = "onclick=\"parent.WTW.openFullPageForm('mediapage','".$zcategory."','".$zrow["uploadid"]."');\"";
 			}

@@ -15,15 +15,15 @@ try {
 			mkdir($zfilepath, 0777);
 		}
 		if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
-			$zfilepath = $wtwiframes->contentpath."\\users\\".$_SESSION["wtw_userid"];
+			$zfilepath = $wtwiframes->contentpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid'];
 			if (!file_exists($zfilepath)) {
 				mkdir($zfilepath, 0777);
 			}
-			$zfilepath = $wtwiframes->contentpath."\\users\\".$_SESSION["wtw_userid"]."\\media";
+			$zfilepath = $wtwiframes->contentpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\media";
 			if (!file_exists($zfilepath)) {
 				mkdir($zfilepath, 0777);
 			}
-			$zfileurl = $wtwiframes->contenturl."/users/".$_SESSION["wtw_userid"]."/media/";
+			$zfileurl = $wtwiframes->contenturl."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media/";
 		}
 		$zisvalid = 1;
 		$zpastfilename = basename(strtolower($_FILES["wtw_fileToUpload"]["name"]));
