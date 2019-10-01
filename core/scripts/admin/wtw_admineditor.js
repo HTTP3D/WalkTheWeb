@@ -2095,30 +2095,10 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 			} else {
 				dGet('wtw_tmoldgraphiclevel').checked = false;
 			}
-			if (dGet('wtw_tmoldtextureid').value != "") {
-				WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldtextureid').value, 
-					function(response) {
-						WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldtextureid').value,0);
-						var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtextureid').value);
-						imageinfo.image.onload = function() {	
-							dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
-						}
-					}
-				);
-			}
-			if (dGet('wtw_tmoldtexturebumpid').value != "") {
-				WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldtexturebumpid').value, 
-					function(response) {
-						WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldtexturebumpid').value,0);
-						var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturebumpid').value);
-						imageinfo.image.onload = function() {	
-							dGet('wtw_moldtexturebumppreview').src = imageinfo.filedata;
-						}
-					}
-				);
-			}
 			dGet('wtw_tmoldvideoid').value = molds[moldind].graphics.texture.videoid;
+			dGet('wtw_tmoldvideopath').value = molds[moldind].graphics.texture.video;
 			dGet('wtw_tmoldvideoposterid').value = molds[moldind].graphics.texture.videoposterid;
+			dGet('wtw_tmoldvideoposterpath').value = molds[moldind].graphics.texture.videoposter;
 			dGet('wtw_tmoldheightmapid').value = molds[moldind].graphics.heightmap.id;
 			dGet('wtw_tmoldheightmappath').value = molds[moldind].graphics.heightmap.path;
 			dGet('wtw_tmoldmixmapid').value = molds[moldind].graphics.heightmap.mixmapid;
@@ -2157,94 +2137,16 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 			dGet('wtw_tmoldsoundconeinnerangle').value = molds[moldind].sound.coneinnerangle;
 			dGet('wtw_tmoldsoundconeouterangle').value = molds[moldind].sound.coneouterangle;
 			dGet('wtw_tmoldsoundconeoutergain').value = molds[moldind].sound.coneoutergain;
-			if (dGet('wtw_tmoldheightmapid').value != "") {
-				WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldheightmapid').value, 
-					function(response) {
-						WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldheightmapid').value,0);
-						var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldheightmapid').value);
-						imageinfo.image.onload = function() {	
-							dGet('wtw_moldheightmappreview').src = imageinfo.filedata;
-						}
-					}
-				);
-			}
-			if (dGet('wtw_tmoldmixmapid').value != "") {
-				WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldmixmapid').value, 
-					function(response) {
-						WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldmixmapid').value,0);
-						var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldmixmapid').value);
-						imageinfo.image.onload = function() {	
-							dGet('wtw_moldmixmappreview').src = imageinfo.filedata;
-						}
-					}
-				);
-			}
-			if (dGet('wtw_tmoldtexturerid').value != "") {
-				WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldtexturerid').value, 
-					function(response) {
-						WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldtexturerid').value,0);
-						var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturerid').value);
-						imageinfo.image.onload = function() {	
-							dGet('wtw_moldtexturerpreview').src = imageinfo.filedata;
-						}
-					}
-				);
-			}
-			if (dGet('wtw_tmoldtexturegid').value != "") {
-				WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldtexturegid').value, 
-					function(response) {
-						WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldtexturegid').value,0);
-						var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturegid').value);
-						imageinfo.image.onload = function() {	
-							dGet('wtw_moldtexturegpreview').src = imageinfo.filedata;
-						}
-					}
-				);
-			}
-			if (dGet('wtw_tmoldtexturebid').value != "") {
-				WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldtexturebid').value, 
-					function(response) {
-						WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldtexturebid').value,0);
-						var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturebid').value);
-						imageinfo.image.onload = function() {	
-							dGet('wtw_moldtexturebpreview').src = imageinfo.filedata;
-						}
-					}
-				);
-			}
-			if (dGet('wtw_tmoldtexturebumprid').value != "") {
-				WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldtexturebumprid').value, 
-					function(response) {
-						WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldtexturebumprid').value,0);
-						var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturebumprid').value);
-						imageinfo.image.onload = function() {	
-							dGet('wtw_moldtexturebumprpreview').src = imageinfo.filedata;
-						}
-					}
-				);
-			}
-			if (dGet('wtw_tmoldtexturebumpgid').value != "") {
-				WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldtexturebumpgid').value, 
-					function(response) {
-						WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldtexturebumpgid').value,0);
-						var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturebumpgid').value);
-						imageinfo.image.onload = function() {	
-							dGet('wtw_moldtexturebumpgpreview').src = imageinfo.filedata;
-						}
-					}
-				);
-			}
-			if (dGet('wtw_tmoldtexturebumpbid').value != "") {
-				WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldtexturebumpbid').value, 
-					function(response) {
-						WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldtexturebumpbid').value,0);
-						var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturebumpbid').value);
-						imageinfo.image.onload = function() {	
-							dGet('wtw_moldtexturebumpbpreview').src = imageinfo.filedata;
-						}
-					}
-				);
-			}
+			WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
+			WTW.setPreviewImage('wtw_moldtexturebumppreview', 'wtw_tmoldtexturebumppath', 'wtw_tmoldtexturebumpid');
+			WTW.setPreviewImage('wtw_moldheightmappreview', 'wtw_tmoldheightmappath', 'wtw_tmoldheightmapid');
+			WTW.setPreviewImage('wtw_moldmixmappreview', 'wtw_tmoldmixmappath', 'wtw_tmoldmixmapid');
+			WTW.setPreviewImage('wtw_moldtexturerpreview', 'wtw_tmoldtexturerpath', 'wtw_tmoldtexturerid');
+			WTW.setPreviewImage('wtw_moldtexturegpreview', 'wtw_tmoldtexturegpath', 'wtw_tmoldtexturegid');
+			WTW.setPreviewImage('wtw_moldtexturebpreview', 'wtw_tmoldtexturebpath', 'wtw_tmoldtexturebid');
+			WTW.setPreviewImage('wtw_moldtexturebumprpreview', 'wtw_tmoldtexturebumprpath', 'wtw_tmoldtexturebumprid');
+			WTW.setPreviewImage('wtw_moldtexturebumpgpreview', 'wtw_tmoldtexturebumpgpath', 'wtw_tmoldtexturebumpgid');
+			WTW.setPreviewImage('wtw_moldtexturebumpbpreview', 'wtw_tmoldtexturebumpbpath', 'wtw_tmoldtexturebumpbid');
 			if (shape == "3dtext" || shape == "store3dsign") {
 				dGet('wtw_tmoldwebtext').value = molds[moldind].webtext.webtext;
 				dGet('wtw_tmoldwebstyle').value = molds[moldind].webtext.webstyle;
@@ -2882,7 +2784,16 @@ WTWJS.prototype.openAddNewMold = function(moldgroup, shape) {
 		dGet('wtw_tmoldid').value = moldid.toString();
 		WTW.show('wtw_moldtexturetitle');
 		WTW.show('wtw_moldbumptexturetitle');
-		WTW.show('wtw_moldtexturepreview');
+		WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
+		WTW.setPreviewImage('wtw_moldtexturebumppreview', 'wtw_tmoldtexturebumppath', 'wtw_tmoldtexturebumpid');
+		WTW.setPreviewImage('wtw_moldheightmappreview', 'wtw_tmoldheightmappath', 'wtw_tmoldheightmapid');
+		WTW.setPreviewImage('wtw_moldmixmappreview', 'wtw_tmoldmixmappath', 'wtw_tmoldmixmapid');
+		WTW.setPreviewImage('wtw_moldtexturerpreview', 'wtw_tmoldtexturerpath', 'wtw_tmoldtexturerid');
+		WTW.setPreviewImage('wtw_moldtexturegpreview', 'wtw_tmoldtexturegpath', 'wtw_tmoldtexturegid');
+		WTW.setPreviewImage('wtw_moldtexturebpreview', 'wtw_tmoldtexturebpath', 'wtw_tmoldtexturebid');
+		WTW.setPreviewImage('wtw_moldtexturebumprpreview', 'wtw_tmoldtexturebumprpath', 'wtw_tmoldtexturebumprid');
+		WTW.setPreviewImage('wtw_moldtexturebumpgpreview', 'wtw_tmoldtexturebumpgpath', 'wtw_tmoldtexturebumpgid');
+		WTW.setPreviewImage('wtw_moldtexturebumpbpreview', 'wtw_tmoldtexturebumpbpath', 'wtw_tmoldtexturebumpbid');
 		WTW.show('wtw_moldbasictextureset2div');
 		molds[moldind].graphics.waterreflection = "0";
 		var mold = null;
@@ -3069,7 +2980,7 @@ WTWJS.prototype.changeCoveringType = function() {
 	try {	
 		var settexture = '0';
 		var imageid = 'ij7fi8qv7dbgb6zc';
-		var imagepath = '/content/system/stock/stucco2-512x512.jpg';
+		var imagepath = '/content/system/stock/stucco-512x512.jpg';
 		var coveringname = WTW.getDDLValue('wtw_tmoldcovering');
 		WTW.setCoveringFormFields(coveringname);
 		switch (coveringname) {
@@ -3082,20 +2993,16 @@ WTWJS.prototype.changeCoveringType = function() {
 				if (dGet('wtw_tmoldtexturepath').value == '') {
 					dGet('wtw_tmoldtexturepath').value = imagepath;
 				}
-				dGet('wtw_moldtexturepreview').src = dGet('wtw_tmoldtexturepath').value;
-				dGet('wtw_moldtexturebumppreview').src = dGet('wtw_tmoldtexturebumppath').value;
 				break; 
 			case "terrain":
 				imageid = '4to027vq39087bxr';
-				imagepath = '/content/system/stock/cement-512x344.jpg';
+				imagepath = '/content/system/stock/cement-512x512.jpg';
 				if (dGet('wtw_tmoldtextureid').value == '') {
 					dGet('wtw_tmoldtextureid').value = imageid;
 				}
 				if (dGet('wtw_tmoldtexturepath').value == '') {
 					dGet('wtw_tmoldtexturepath').value = imagepath;
 				}
-				dGet('wtw_moldtexturepreview').src = dGet('wtw_tmoldtexturepath').value;
-				dGet('wtw_moldtexturebumppreview').src = dGet('wtw_tmoldtexturebumppath').value;
 				break;
 			default:
 				dGet('wtw_tmoldtextureid').value = '';
@@ -3110,6 +3017,16 @@ WTWJS.prototype.changeCoveringType = function() {
 				dGet('wtw_moldtexturebumppreview').title = '';
 				break;
 		}
+		WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
+		WTW.setPreviewImage('wtw_moldtexturebumppreview', 'wtw_tmoldtexturebumppath', 'wtw_tmoldtexturebumpid');
+		WTW.setPreviewImage('wtw_moldheightmappreview', 'wtw_tmoldheightmappath', 'wtw_tmoldheightmapid');
+		WTW.setPreviewImage('wtw_moldmixmappreview', 'wtw_tmoldmixmappath', 'wtw_tmoldmixmapid');
+		WTW.setPreviewImage('wtw_moldtexturerpreview', 'wtw_tmoldtexturerpath', 'wtw_tmoldtexturerid');
+		WTW.setPreviewImage('wtw_moldtexturegpreview', 'wtw_tmoldtexturegpath', 'wtw_tmoldtexturegid');
+		WTW.setPreviewImage('wtw_moldtexturebpreview', 'wtw_tmoldtexturebpath', 'wtw_tmoldtexturebid');
+		WTW.setPreviewImage('wtw_moldtexturebumprpreview', 'wtw_tmoldtexturebumprpath', 'wtw_tmoldtexturebumprid');
+		WTW.setPreviewImage('wtw_moldtexturebumpgpreview', 'wtw_tmoldtexturebumpgpath', 'wtw_tmoldtexturebumpgid');
+		WTW.setPreviewImage('wtw_moldtexturebumpbpreview', 'wtw_tmoldtexturebumpbpath', 'wtw_tmoldtexturebumpbid');
 		WTW.setNewMold(1);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-changeCoveringType=" + ex.message);
@@ -3684,8 +3601,43 @@ WTWJS.prototype.closeEditPoles = function() {
 	}
 }
 
+WTWJS.prototype.setPreviewImage = function(zpreviewimageid, zimagepathid, zimageidid) {
+	try {
+		if (dGet(zpreviewimageid) != null) {
+			WTW.hide(zpreviewimageid);
+			dGet(zpreviewimageid).src = '';
+			var zimagepath = "";
+			var zimageid = "";
+			if (dGet(zimagepathid) != null) {
+				zimagepath = dGet(zimagepathid).value;
+			}
+			if (dGet(zimageidid) != null) {
+				zimageid = dGet(zimageidid).value;
+			}
+			if (zimagepath != '') {
+				dGet(zpreviewimageid).src = zimagepath;
+			} else if (zimageid != "") {
+				WTW.getJSON("/connect/upload.php?uploadid=" + zimageid, 
+					function(response) {
+						WTW.loadUpload(JSON.parse(response),zimageid,0);
+						var imageinfo = WTW.getUploadFileData(zimageid);
+						imageinfo.image.onload = function() {	
+							dGet(zpreviewimageid).src = imageinfo.filedata;
+						}
+					}
+				);
+			}
+			if (dGet(zpreviewimageid).src != '') {
+				WTW.show(zpreviewimageid);
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-setPreviewImage=" + ex.message);
+	}
+}
+
 WTWJS.prototype.submitMoldForm = function(w) {
-	try {//iswaterreflection
+	try {
 		WTW.closeColorSelector();
 		var moldgroup = dGet('wtw_tmoldmoldgroup').value;
 		var molds = null;
@@ -3738,46 +3690,16 @@ WTWJS.prototype.submitMoldForm = function(w) {
 				molds[moldind] = WTW.moldBackup;
 			}
 			WTW.loadMoldForm(molds[moldind]);
-			var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtextureid').value);
-			if (dGet('wtw_moldtexturepreview') != null) {
-				dGet('wtw_moldtexturepreview').src = imageinfo.filedata;
-			}
-			var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturebumpid').value);
-			if (dGet('wtw_moldtexturebumppreview') != null) {
-				dGet('wtw_moldtexturebumppreview').src = imageinfo.filedata;
-			}
-			var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldheightmapid').value);
-			if (dGet('wtw_moldheightmappreview') != null) {
-				dGet('wtw_moldheightmappreview').src = imageinfo.filedata;
-			}
-			var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldmixmapid').value);
-			if (dGet('wtw_moldmixmappreview') != null) {
-				dGet('wtw_moldmixmappreview').src = imageinfo.filedata;
-			}
-			var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturerid').value);
-			if (dGet('wtw_moldtexturerpreview') != null) {
-				dGet('wtw_moldtexturerpreview').src = imageinfo.filedata;
-			}
-			var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturegid').value);
-			if (dGet('wtw_moldtexturegpreview') != null) {
-				dGet('wtw_moldtexturegpreview').src = imageinfo.filedata;
-			}
-			var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturebid').value);
-			if (dGet('wtw_moldtexturebpreview') != null) {
-				dGet('wtw_moldtexturebpreview').src = imageinfo.filedata;
-			}
-			var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturebumprid').value);
-			if (dGet('wtw_moldtexturebumprpreview') != null) {
-				dGet('wtw_moldtexturebumprpreview').src = imageinfo.filedata;
-			}
-			var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturebumpgid').value);
-			if (dGet('wtw_moldtexturebumpgpreview') != null) {
-				dGet('wtw_moldtexturebumpgpreview').src = imageinfo.filedata;
-			}
-			var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldtexturebumpbid').value);
-			if (dGet('wtw_moldtexturebumpbpreview') != null) {
-				dGet('wtw_moldtexturebumpbpreview').src = imageinfo.filedata;
-			}
+			WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
+			WTW.setPreviewImage('wtw_moldtexturebumppreview', 'wtw_tmoldtexturebumppath', 'wtw_tmoldtexturebumpid');
+			WTW.setPreviewImage('wtw_moldheightmappreview', 'wtw_tmoldheightmappath', 'wtw_tmoldheightmapid');
+			WTW.setPreviewImage('wtw_moldmixmappreview', 'wtw_tmoldmixmappath', 'wtw_tmoldmixmapid');
+			WTW.setPreviewImage('wtw_moldtexturerpreview', 'wtw_tmoldtexturerpath', 'wtw_tmoldtexturerid');
+			WTW.setPreviewImage('wtw_moldtexturegpreview', 'wtw_tmoldtexturegpath', 'wtw_tmoldtexturegid');
+			WTW.setPreviewImage('wtw_moldtexturebpreview', 'wtw_tmoldtexturebpath', 'wtw_tmoldtexturebid');
+			WTW.setPreviewImage('wtw_moldtexturebumprpreview', 'wtw_tmoldtexturebumprpath', 'wtw_tmoldtexturebumprid');
+			WTW.setPreviewImage('wtw_moldtexturebumpgpreview', 'wtw_tmoldtexturebumpgpath', 'wtw_tmoldtexturebumpgid');
+			WTW.setPreviewImage('wtw_moldtexturebumpbpreview', 'wtw_tmoldtexturebumpbpath', 'wtw_tmoldtexturebumpbid');
 			WTW.disposeClean(molds[moldind].moldname);
 			if (dGet('wtw_tnewmold').value == "1") {
 				if (moldname != "") {
@@ -6228,6 +6150,7 @@ WTWJS.prototype.setSelectFileID = function(selectedobj, uploadid, originalid, we
 			dGet(previewname).title = filename;
 			if (category == 'image') {
 				dGet(previewname).src = selectedobj.src;
+				WTW.show(previewname);
 			}
 		}
 		switch (category) {
@@ -6689,108 +6612,6 @@ WTWJS.prototype.openMediaPageForm = function(uploadid) {
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-openMediaPageForm=" + ex.message);
-	}
-}
-
-WTWJS.prototype.setSelectImageID = function(originalid, websizeid, websizepath, thumbnailid, fileextension, imagewidth, imageheight, filesize, filetitle, filename) {
-	try {
-		var item = dGet('wtw_tfileitem').value;
-		var iframe = dGet('wtw_myimagesframe');
-		var ipage = iframe.contentDocument || iframe.contentWindow.document;
-		var imagesrc;
-		if (ipage.getElementById('image' + websizeid) != null) {
-			imagesrc = ipage.getElementById('image' + websizeid).src;
-		}
-		switch (item) {
-			case 'webimagehover':
-				dGet('wtw_moldaddimagehoverpreview').src = imagesrc;
-				if (WTW.isNumeric(dGet('wtw_tmoldind').value)) {
-					var moldind = Number(dGet('wtw_tmoldind').value);					
-					if (thingid != '') {
-						if (WTW.thingMolds[moldind].graphics.webimages[0] == null) {
-							WTW.thingMolds[moldind].graphics.webimages[0] = WTW.newWebImage();
-						}
-						WTW.thingMolds[moldind].graphics.webimages[0].imagehoverid = websizeid;
-						WTW.addDisposeMoldToQueue(WTW.thingMolds[moldind].moldname);
-						WTW.thingMolds[moldind].shown = '0';
-					} else if (buildingid != "") {
-						if (WTW.buildingMolds[moldind].graphics.webimages[0] == null) {
-							WTW.buildingMolds[moldind].graphics.webimages[0] = WTW.newWebImage();
-						}
-						WTW.buildingMolds[moldind].graphics.webimages[0].imagehoverid = websizeid;
-						if (dGet('wtw_tmoldaddimagehoverid') != null) {
-							dGet('wtw_tmoldaddimagehoverid').value = websizeid;
-						}
-						WTW.addDisposeMoldToQueue(WTW.buildingMolds[moldind].moldname);
-						WTW.buildingMolds[moldind].shown = '0';
-					} else {
-						if (WTW.communitiesMolds[moldind].graphics.webimages[0] == null) {
-							WTW.communitiesMolds[moldind].graphics.webimages[0] = WTW.newWebImage();
-						}
-						WTW.communitiesMolds[moldind].graphics.webimages[0].imagehoverid = websizeid;
-						WTW.addDisposeMoldToQueue(WTW.communitiesMolds[moldind].moldname);
-						WTW.communitiesMolds[moldind].shown = '0';
-					}
-				}
-				break;
-			case 'webimage':
-				dGet('wtw_moldaddimagepreview').src = imagesrc;
-				if (WTW.isNumeric(dGet('wtw_tmoldind').value)) {
-					var moldind = Number(dGet('wtw_tmoldind').value);
-					if (thingid != '') {
-						if (WTW.thingMolds[moldind].graphics.webimages[0] == null) {
-							WTW.thingMolds[moldind].graphics.webimages[0] = WTW.newWebImage();
-						}
-						WTW.thingMolds[moldind].graphics.webimages[0].imageid = websizeid;
-						WTW.addDisposeMoldToQueue(WTW.thingMolds[moldind].moldname);
-						WTW.thingMolds[moldind].shown = '0';
-					} else if (buildingid != '') {
-						var imagehoverid = '';
-						if (WTW.buildingMolds[moldind].graphics.webimages[0] == null) {
-							WTW.buildingMolds[moldind].graphics.webimages[0] = WTW.newWebImage();
-						}
-						WTW.buildingMolds[moldind].graphics.webimages[0].imageid = websizeid;
-						if (WTW.buildingMolds[moldind].graphics.webimages[0].imagehoverid != undefined) {
-							if (WTW.buildingMolds[moldind].graphics.webimages[0].imagehoverid != '') {
-								imagehoverid = WTW.buildingMolds[moldind].graphics.webimages[0].imagehoverid;
-							}
-						}
-						if (dGet('wtw_tmoldaddimageid') != null) {					
-							dGet('wtw_tmoldaddimageid').value = websizeid;
-						}
-						WTW.addDisposeMoldToQueue(WTW.buildingMolds[moldind].moldname);
-						WTW.buildingMolds[moldind].shown = '0';						
-					} else {
-						if (WTW.communitiesMolds[moldind].graphics.webimages[0] == null) {
-							WTW.communitiesMolds[moldind].graphics.webimages[0] = WTW.newWebImage();
-						}
-						WTW.communitiesMolds[moldind].graphics.webimages[0].imageid = websizeid;
-						WTW.addDisposeMoldToQueue(WTW.communitiesMolds[moldind].moldname);
-						WTW.communitiesMolds[moldind].shown = '0';
-					}
-					WTW.setShownMolds();
-				}
-				break;
-			case 'blogimage':
-				if (WTW.selectedMoldName.indexOf("-scrollboxbodytext") > -1) {
-					var scrollboxbodytext = scene.getMeshByID(WTW.selectedMoldName);
-					if (scrollboxbodytext != null && scrollboxbodytext.WTW != undefined) {
-						scrollboxbodytext.WTW.webtext.webtext = "<img id=\"wtw_iii" + websizeid + "\" src=\"" + imagesrc + "\" style=\"float:left;width:200px;height:200px;border-color:blue;border-width:2px;margin-left:15px;margin-top:15px;\" />" + scrollboxbodytext.WTW.webtext.webtext;
-						var scrollpos = 0;
-					}
-				}
-				WTW.refreshTextBox();
-				break;
-			case 'extendedgroundtexture':
-				dGet('wtw_showextendedgroundtextureidform').src = imagesrc;
-				dGet('wtw_textendedgroundtextureid').value = websizeid;
-				WTW.initLoadUpload(websizeid, websizeid, 4);
-				break;
-		}
-		document.activeElement.blur();
-		WTW.closeFullPageForm();
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_admineditor.js-setSelectImageID=' + ex.message);
 	}
 }
 
