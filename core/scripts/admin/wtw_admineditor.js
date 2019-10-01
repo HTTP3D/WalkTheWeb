@@ -892,7 +892,30 @@ WTWJS.prototype.saveSkyDome = function() {
 
 WTWJS.prototype.openListConnectingGridsForm = function() {
 	try {
+		WTW.clearDDL('wtw_addcommunitybuildingid');
 		dGet('wtw_commbuildinglist').innerHTML = "";
+		WTW.getJSON("/connect/buildings.php", 
+			function(response) {
+				WTW.buildings = JSON.parse(response);
+				if (WTW.buildings != null) {
+					for (var i = 0; i < WTW.buildings.length; i++) {
+						if (WTW.buildings[i] != null) {
+							if (WTW.buildings[i].buildinginfo.buildingid != undefined) {
+								var option = document.createElement("option");
+								option.text = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
+								option.value = WTW.buildings[i].buildinginfo.buildingid;
+								dGet('wtw_addcommunitybuildingid').add(option);
+							}
+						}
+					}
+				}
+			}
+		);
+		
+		
+		
+		
+		
 		if (WTW.connectingGrids.length > 0) {
 			for (var i=0; i < WTW.connectingGrids.length; i++) {
 				if (WTW.connectingGrids[i] != null) {
@@ -925,7 +948,7 @@ WTWJS.prototype.loadBuildingForm = function(w) {
 		}
 		dGet('wtw_tbuildingname').value = "";
 		dGet('wtw_tbuildingalttag').value = "";
-		WTW.getJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getJSON("/connect/buildings.php", 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -983,7 +1006,7 @@ WTWJS.prototype.openBuildingForm = function(w) {
 		dGet('wtw_tbuildingalttag').value = "";
 		WTW.show('wtw_loadingbuildingform');
 		WTW.hide('wtw_adminmenu5b');
-		WTW.getJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getJSON("/connect/buildings.php", 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -1042,7 +1065,7 @@ WTWJS.prototype.openShareBuildingForm = function() {
 		dGet('wtw_tsharebuildtags').value = "";
 		WTW.hide('wtw_adminmenu9b');
 		WTW.show('wtw_loadingsharebuildingform');
-		WTW.getJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getJSON("/connect/buildings.php", 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -5816,7 +5839,7 @@ WTWJS.prototype.openUpdateSnapshotForm = function() {
 				}
 			);
 		} else if (buildingid != '') {
-			WTW.getJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
+			WTW.getJSON("/connect/buildings.php", 
 				function(response) {
 					WTW.buildings = JSON.parse(response);
 					if (WTW.buildings != null) {
@@ -6935,7 +6958,7 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 		}
 		if (connectinggridind > -1) {
 			switch (w) {
-				case 1:
+				case 1: /* save connecting grid */
 					if (WTW.connectingGrids[connectinggridind] != null) {
 						WTW.connectingGrids[connectinggridind].position.x = dGet('wtw_tconngridpositionx').value;
 						WTW.connectingGrids[connectinggridind].position.y = dGet('wtw_tconngridpositiony').value;
@@ -7004,7 +7027,7 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 					/* iframe src, onload function */
 					var iframe = WTW.createIFrame('/core/iframes/connectinggrids.php', onload);
 					break;
-				case 0:
+				case 0: /* delect connecting grid */
 					if (WTW.connectingGrids[connectinggridind] != null) {
 						if (WTW.connectingGrids[connectinggridind] != null) {
 							if (WTW.connectingGrids[connectinggridind].moldname != undefined) {
@@ -7083,7 +7106,7 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 					/* iframe src, onload function */
 					var iframe = WTW.createIFrame('/core/iframes/connectinggrids.php', onload);
 					break;
-				case -1:
+				case -1: /* cancel change connecting grid */
 					if (WTW.connectingGrids[connectinggridind] != null) {
 						dGet('wtw_teditconnectinggridid').value = WTW.connectingGrids[connectinggridind].connectinggridid;
 						dGet('wtw_tconngridpositionx').value = WTW.connectingGrids[connectinggridind].position.x;
@@ -9277,7 +9300,7 @@ WTWJS.prototype.getSelectBuildingsList = function() {
 		WTW.hide('wtw_listbuildings');
 		WTW.show('wtw_loadingbuildingid');
 		dGet("wtw_listbuildings").innerHTML = "";
-		WTW.getJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getJSON("/connect/buildings.php", 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -9884,6 +9907,11 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.hideAdminMenu();
 						WTW.openListConnectingGridsForm();
 						WTW.show('wtw_adminmenu27');
+						break;
+					case "wtw_addbuildingtocommunity":
+						var zbuildingid = WTW.getDDLValue('wtw_addcommunitybuildingid');
+						var zbuildingname = WTW.encode(WTW.getDDLText('wtw_addcommunitybuildingid'));
+						WTW.addConnectingGrid('building',zbuildingid, zbuildingname);
 						break;
 					case "wtw_bback27":
 					case "wtw_cancel27":	
