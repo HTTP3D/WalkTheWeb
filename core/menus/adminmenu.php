@@ -209,7 +209,7 @@
 					<a href="https://www.walktheweb.com/wiki/add-3d-buildings-to-a-3d-community/" title="Help" alt="Help" class="wtw-helplink" target="_blank">?</a>
 					<h2 style="margin-bottom:3px;">Add My 3D Building</h2>
 					<select id="wtw_addcommunitybuildingid" style="cursor: pointer;"></select>
-					<div id="wtw_addbuildingtocommunity" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);">Add Building</div>
+					<div id="wtw_addbuildingtocommunity" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);">Add 3D Building</div>
 					<hr class="wtw-menuhr" />
 					<div id="wtw_adminmenu27b">
 						<h2 style="margin-bottom:3px;">3D Buildings in this 3D Community</h2>
