@@ -10982,7 +10982,7 @@ WTWJS.prototype.openWebAliasSettings = function() {
 								var zbuildingpub = response[i].buildingpublishname;
 								var zthingpub = response[i].thingpublishname;
 								var zurl = "http://" + zdomainname;
-								if (zforcehttps == "1" || zforcehttps) {
+								if (zforcehttps == "1" || zforcehttps == 1) {
 									zurl = "https://" + zdomainname;
 								}
 								if (zcommunitypub != "") {
