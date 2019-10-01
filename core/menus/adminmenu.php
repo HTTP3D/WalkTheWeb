@@ -208,12 +208,10 @@
 					<div class="wtw-menuheader">Edit 3D Buildings in this 3D Community</div><br />
 					<a href="https://www.walktheweb.com/wiki/add-3d-buildings-to-a-3d-community/" title="Help" alt="Help" class="wtw-helplink" target="_blank">?</a>
 					<h2 style="margin-bottom:3px;">Add My 3D Building</h2>
-					<select id="wtw_addcommunitybuildingid" onchange="WTW.addConnectingGrid('building',this.options[this.selectedIndex].value, this.options[this.selectedIndex].text);" style="cursor: pointer;">
-						<?php /* echo getmybuildings($wtw->buildingid); need to pupulate from JSON on open (getuserauthorizationbuildings) */ ?>
-					</select>
+					<select id="wtw_addcommunitybuildingid" style="cursor: pointer;"></select>
+					<div id="wtw_addbuildingtocommunity" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);">Add Building</div>
 					<hr class="wtw-menuhr" />
 					<div id="wtw_adminmenu27b">
-						<hr class="wtw-menuhr" />
 						<h2 style="margin-bottom:3px;">3D Buildings in this 3D Community</h2>
 						<div id="wtw_commbuildinglist"></div>
 					</div>
