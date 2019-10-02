@@ -135,7 +135,6 @@ WTWJS.prototype.initEnvironment = function() {
 		scene.activeCameras[0] = WTW.camera;
 		scene.cameraToUseForPointers = scene.activeCameras[0];
 
-		var groundtextureid = "2391f1v9om09am77";
 		var groundpositiony = 0;
 		WTW.sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(WTW.getRadians(20), WTW.getRadians(-200), WTW.getRadians(-100)), scene);
 		WTW.sun.position = new BABYLON.Vector3(0, WTW.sunPositionY, 0);
@@ -166,7 +165,7 @@ WTWJS.prototype.initEnvironment = function() {
 		WTW.extraGround.checkCollisions = true;
 		WTW.extraGround.material = new BABYLON.StandardMaterial("mat-communityeground", scene);
 		WTW.extraGround.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		WTW.extraGround.material.diffuseTexture = new BABYLON.Texture("/content/system/images/dirt-512x512.jpg", scene);
+		WTW.extraGround.material.diffuseTexture = new BABYLON.Texture(WTW.init.groundTexturePath, scene);
 		WTW.extraGround.material.diffuseTexture.uScale = 500;
 		WTW.extraGround.material.diffuseTexture.vScale = 500;
 		var mainparent = WTW.getMainParent();
@@ -358,8 +357,8 @@ WTWJS.prototype.loadCommunity = function(addcommunities) {
 		}
 		var skydomeid = "";
 		var skydomepath = "";
-		var groundtextureid = "2391f1v9om09am77";
-		var groundtexturepath = "/content/system/images/dirt-512x512.jpg";
+		var groundtextureid = WTW.init.groundTextureID;
+		var groundtexturepath = WTW.init.groundTexturePath;
 		var eguscale = 500;
 		var egvscale = 500;
 		var groundpositiony = 0;
@@ -374,6 +373,9 @@ WTWJS.prototype.loadCommunity = function(addcommunities) {
 						}
 						if (WTW.communities[i].graphics.texture.id != null) {
 							groundtextureid = WTW.communities[i].graphics.texture.id;
+						}
+						if (WTW.communities[i].graphics.texture.path != null) {
+							groundtexturepath = WTW.communities[i].graphics.texture.path;
 						}
 						if (WTW.communities[i].ground.position.y != null) {
 							groundpositiony = Number(WTW.communities[i].ground.position.y);
@@ -399,7 +401,7 @@ WTWJS.prototype.loadCommunity = function(addcommunities) {
 		WTW.sun.intensity = WTW.getSunIntensity(WTW.init.skyInclination, WTW.init.skyAzimuth);
 
 		WTW.extraGround.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		if (groundtexturepath != "" && groundtexturepath != "/content/system/images/dirt-512x512.jpg") {
+		if (groundtexturepath != "" && groundtexturepath != '/content/system/images/dirt-512x512.jpg') {
 			WTW.extraGround.material.diffuseTexture = new BABYLON.Texture(groundtexturepath, scene);
 		}
 		WTW.extraGround.material.diffuseTexture.uScale = 500;

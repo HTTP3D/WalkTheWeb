@@ -342,6 +342,7 @@ WTWJS.prototype.newMold = function() {
 					'videoposterid':'',
 					'videoposter':'',
 					'backupid':'',
+					'backuppath':'',
 					'loaded':'0'
 				},
 				'heightmap':

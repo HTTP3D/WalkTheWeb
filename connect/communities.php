@@ -97,7 +97,8 @@ try {
 			'texture'=> array (
 				'id'=> $zrow["textureid"],
 				'path'=> $zrow["texturepath"],
-				'backupid'=>''
+				'backupid'=>'',
+				'backuppath'=>''
 			),
 			'sky'=> array (
 				'id'=> $zrow["skydomeid"],

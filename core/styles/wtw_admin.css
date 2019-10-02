@@ -170,3 +170,15 @@ td.wtw-tddeactive {
 	color:FFF7DA;
 	cursor:pointer;
 }
+.wtw-previewimage {
+	cursor:pointer;
+	margin:5px;
+	display:inline-block;
+	margin-left:auto;
+	margin-right:auto;
+	max-width: 65px;
+	max-height: 65px;
+	width: auto;
+	height: auto;
+	border: 1px solid #c0c0c0;
+}

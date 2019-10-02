@@ -171,12 +171,12 @@
 			</div>
 			<div id="wtw_moldaddimagediv">
 				<h2 style="margin-bottom:3px;">Image</h2>
-				<img id="wtw_moldaddimagepreview" class="wtw-sampleheightmap" /><br />
+				<img id="wtw_moldaddimagepreview" class="wtw-previewimage" /><br />
 				<div class="wtw-menulevel0" onclick="WTW.openFullPageForm('medialibrary','image','webimage','wtw_tmoldaddimageid','wtw_tmoldaddimagepath','wtw_moldaddimagepreview');">Change Image<!--11--></div>
 				<br />
 				<br />
 				<h4 style="margin-bottom:3px;">Hover Image</h4>
-				<img id="wtw_moldaddimagehoverpreview" class="wtw-sampleheightmap" /><br />
+				<img id="wtw_moldaddimagehoverpreview" class="wtw-previewimage" /><br />
 				<div class="wtw-menulevel0" onclick="WTW.openFullPageForm('medialibrary','image','webimagehover','wtw_tmoldaddimagehoverid','wtw_tmoldaddimagehoverpath','wtw_moldaddimagehoverpreview');">Change Hover Image<!--11--></div>
 				<br />
 				<br />
@@ -205,12 +205,12 @@
 			<div id="wtw_moldaddvideodiv">
 				<h2 style="margin-bottom:3px;">Video Settings</h2>
 				<h4 style="margin-bottom:3px;">Video File (max 100MB)</h4>
-				<img id="wtw_moldaddvideopreview" class="wtw-sampleheightmap" width="190" src="/content/system/images/videoicon.png" /><br />
+				<img id="wtw_moldaddvideopreview" class="wtw-previewimage" width="190" src="/content/system/images/videoicon.png" /><br />
 				<div class="wtw-menulevel0" onclick="WTW.openFullPageForm('medialibrary','video','webvideo','wtw_tmoldvideoid','wtw_tmoldvideopath','wtw_moldaddvideopreview');">Change Video<!--11--></div>
 				<br />
 				<br />
 				<h4 style="margin-bottom:3px;">Video Poster Image</h4>
-				<img id="wtw_moldaddvideoposterpreview" class='wtw-sampleheightmap' src="/content/system/images/videoposter.jpg" style="cursor:pointer;margin:5px;display:inline-block;margin-left:auto;margin-right:auto;" /><br />
+				<img id="wtw_moldaddvideoposterpreview" class='wtw-previewimage' src="/content/system/images/videoposter.jpg" /><br />
 				<div id="wtw_changevideoposter" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Change Poster</div>
 				<div id="wtw_removevideoposter" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Remove Poster</div>
 				<br />
@@ -232,14 +232,14 @@
 			</div>
 			<div id="wtw_moldbasictextureset2div">
 				<h4 id="wtw_moldtexturetitle" style="margin-bottom:3px;">Mold Texture Image</h4>
-				<img id="wtw_moldtexturepreview" class='wtw-sampleheightmap' src="" style="cursor:pointer;margin:5px;display:inline-block;margin-left:auto;margin-right:auto;" /><br />
+				<img id="wtw_moldtexturepreview" class='wtw-previewimage' src="" /><br />
 				<div id="wtw_moldchangetexture" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Change Texture</div>
 				<br />
 				<br />
 			</div>
 			<div id="wtw_moldbumptextureset2div">
 				<h4 id="wtw_moldbumptexturetitle" style="margin-bottom:3px;">Mold Bump Image</h4>
-				<img id="wtw_moldtexturebumppreview" class='wtw-sampleheightmap' src="" style="cursor:pointer;margin:5px;display:inline-block;margin-left:auto;margin-right:auto;" /><br />
+				<img id="wtw_moldtexturebumppreview" class='wtw-previewimage' src="" /><br />
 				<div id="wtw_moldchangebumptexture" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Change Bump Texture</div>
 				<div class="wtw-menulevel0" onclick="dGet('wtw_tmoldtexturebumpid').value='';dGet('wtw_tmoldtexturebumppath').value='';WTW.setNewMold(1);dGet('wtw_moldtexturebumppreview').src='';">Clear Bump Texture<!--11--></div>
 				<br />
@@ -247,7 +247,7 @@
 			</div>
 			<div id="wtw_moldheightmapdiv">
 				<h2 style="margin-bottom:3px;">Terrain Heightmap Image</h2>
-				<img id="wtw_moldheightmappreview" class='wtw-sampleheightmap' src="" style="cursor:pointer;margin:5px;display:inline-block;margin-left:auto;margin-right:auto;" /><br />
+				<img id="wtw_moldheightmappreview" class='wtw-previewimage' src="" /><br />
 				<div id="wtw_moldchangeheightmap" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Change Heightmap</div>
 				<br />
 				<br />
@@ -258,43 +258,43 @@
 					<div class="wtw-mainmenuvalue"><strong>Advanced Mixmap Terrain</strong> only applies after all required images are set.</div><br /><br />
 					<h4 style="margin-bottom:3px;">Terrain Mixmap Image</h4>
 					<div class="wtw-mainmenuvalue">Intensity of each texture according the channels red, green, and blue. (required)</div><br />
-					<img id="wtw_moldmixmappreview" class='wtw-sampleheightmap' src="" style="cursor:pointer;margin:5px;display:inline-block;margin-left:auto;margin-right:auto;" /><br />
+					<img id="wtw_moldmixmappreview" class='wtw-previewimage' src="" /><br />
 					<div id="wtw_changemixmap" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Change Mixmap</div>
 					<br />
 					<br />
 					<h4 style="margin-bottom:3px;">Red Texture Image</h4>
 					<div class="wtw-mainmenuvalue">Texture that will apply to the Red channel of the Mixmap. (required)</div><br />
-					<img id="wtw_moldtexturerpreview" class='wtw-sampleheightmap' src="" style="cursor:pointer;margin:5px;display:inline-block;margin-left:auto;margin-right:auto;" /><br />
+					<img id="wtw_moldtexturerpreview" class='wtw-previewimage' src="" /><br />
 					<div id="wtw_changeredtexture" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Change Red Texture</div>
 					<br />
 					<br />
 					<h4 style="margin-bottom:3px;">Green Texture Image</h4>
 					<div class="wtw-mainmenuvalue">Texture that will apply to the Green channel of the Mixmap. (required)</div><br />
-					<img id="wtw_moldtexturegpreview" class='wtw-sampleheightmap' src="" style="cursor:pointer;margin:5px;display:inline-block;margin-left:auto;margin-right:auto;" /><br />
+					<img id="wtw_moldtexturegpreview" class='wtw-previewimage' src="" /><br />
 					<div id="wtw_changegreentexture" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Change Green Texture</div>
 					<br />
 					<br />
 					<h4 style="margin-bottom:3px;">Blue Texture Image</h4>
 					<div class="wtw-mainmenuvalue">Texture that will apply to the Blue channel of the Mixmap. (required)</div><br />
-					<img id="wtw_moldtexturebpreview" class='wtw-sampleheightmap' src="" style="cursor:pointer;margin:5px;display:inline-block;margin-left:auto;margin-right:auto;" /><br />
+					<img id="wtw_moldtexturebpreview" class='wtw-previewimage' src="" /><br />
 					<div id="wtw_changebluetexture" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Change Blue Texture</div>
 					<br />
 					<br />
 					<h4 style="margin-bottom:3px;">Red Texture Bump Image</h4>
 					<div class="wtw-mainmenuvalue">Bump map texture that will apply to the Red texture. (optional)</div><br />
-					<img id="wtw_moldtexturebumprpreview" class='wtw-sampleheightmap' src="" style="cursor:pointer;margin:5px;display:inline-block;margin-left:auto;margin-right:auto;" /><br />
+					<img id="wtw_moldtexturebumprpreview" class='wtw-previewimage' src="" /><br />
 					<div id="wtw_changeredbumptexture" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Change Red Bump Map</div>
 					<br />
 					<br />
 					<h4 style="margin-bottom:3px;">Green Texture Bump Image</h4>
 					<div class="wtw-mainmenuvalue">Bump map texture that will apply to the Green texture. (optional)</div><br />
-					<img id="wtw_moldtexturebumpgpreview" class='wtw-sampleheightmap' src="" style="cursor:pointer;margin:5px;display:inline-block;margin-left:auto;margin-right:auto;" /><br />
+					<img id="wtw_moldtexturebumpgpreview" class='wtw-previewimage' src="" /><br />
 					<div id="wtw_changegreenbumptexture" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Change Green Bump Map</div>
 					<br />
 					<br />
 					<h4 style="margin-bottom:3px;">Blue Texture Bump Image</h4>
 					<div class="wtw-mainmenuvalue">Bump map texture that will apply to the Blue texture. (optional)</div><br />
-					<img id="wtw_moldtexturebumpbpreview" class='wtw-sampleheightmap' src="" style="cursor:pointer;margin:5px;display:inline-block;margin-left:auto;margin-right:auto;" /><br />
+					<img id="wtw_moldtexturebumpbpreview" class='wtw-previewimage' src="" /><br />
 					<div id="wtw_changebluebumptexture" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Change Blue Bump Map</div>
 					<br />
 					<br />

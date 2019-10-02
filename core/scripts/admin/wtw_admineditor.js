@@ -585,7 +585,8 @@ WTWJS.prototype.openAddGroundTerrain = function() {
 
 WTWJS.prototype.openEditGroundSettings = function() {
 	try {
-		var groundimageid = "2391f1v9om09am77";
+		var groundtextureid = WTW.init.groundTextureID;
+		var groundtexturepath = WTW.init.groundTexturePath;
 		WTW.hide('wtw_adminmenu41b');
 		WTW.show('wtw_loadinggroundsettingsform');
 		for (var i = 0; i < WTW.communities.length; i++) {
@@ -595,16 +596,22 @@ WTWJS.prototype.openEditGroundSettings = function() {
 						if (WTW.communities[i].graphics.texture.backupid == "") {
 							WTW.communities[i].graphics.texture.backupid = WTW.communities[i].graphics.texture.id;
 						}
-						groundimageid = WTW.communities[i].graphics.texture.id;
+						groundtextureid = WTW.communities[i].graphics.texture.id;
+					}
+					if (WTW.communities[i].graphics.texture.path != null) {
+						if (WTW.communities[i].graphics.texture.backuppath == "") {
+							WTW.communities[i].graphics.texture.backuppath = WTW.communities[i].graphics.texture.path;
+						}
+						groundtexturepath = WTW.communities[i].graphics.texture.path;
 					}
 				}
 			}
 		}
 		WTW.hide('wtw_loadinggroundsettingsform');
 		WTW.show('wtw_adminmenu41b');
-		dGet('wtw_textendedgroundtextureid').value = groundimageid;
-		var imageinfo = WTW.getUploadFileData(groundimageid);
-		dGet('wtw_showextendedgroundtextureidform').src = imageinfo.filedata;
+		dGet('wtw_textendedgroundtextureid').value = groundtextureid;
+		dGet('wtw_textendedgroundtexturepath').value = groundtexturepath;
+		WTW.setPreviewImage('wtw_showextendedgroundpreview', 'wtw_textendedgroundtexturepath', 'wtw_textendedgroundtextureid');
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-openEditGroundSettings=" + ex.message);
 	}		
@@ -612,27 +619,36 @@ WTWJS.prototype.openEditGroundSettings = function() {
 
 WTWJS.prototype.saveGround = function() {
 	try {
-		var groundimageid = "2391f1v9om09am77";
+		var groundtextureid = WTW.init.groundTextureID;
+		var groundtexturepath = WTW.init.groundTexturePath;
 		if (dGet('wtw_textendedgroundtextureid').value != "") {
-			groundimageid = dGet('wtw_textendedgroundtextureid').value;
+			groundtextureid = dGet('wtw_textendedgroundtextureid').value;
+		}
+		if (dGet('wtw_textendedgroundtexturepath').value != "") {
+			groundtexturepath = dGet('wtw_textendedgroundtexturepath').value;
 		}
 		for (var i = 0; i < WTW.communities.length; i++) {
 			if (WTW.communities[i] != null) {
 				if (WTW.communities[i].communityinfo.communityid == communityid) {
 					if (WTW.communities[i].graphics.texture.id != null) {
 						WTW.communities[i].graphics.texture.backupid = "";
-						WTW.communities[i].graphics.texture.id = groundimageid;
+						WTW.communities[i].graphics.texture.id = groundtextureid;
+					}
+					if (WTW.communities[i].graphics.texture.path != null) {
+						WTW.communities[i].graphics.texture.backuppath = "";
+						WTW.communities[i].graphics.texture.path = groundtexturepath;
 					}
 				}
 			}
 		}
+
 		var request = {
-			'groundimageid':groundimageid
+			'groundtextureid':groundtextureid
 		};
 		/* function for after iframe loads */
 		var onload = function(ipage) {
 			ipage.getElementById('wtw_tcommunityid').value = communityid;
-			ipage.getElementById('wtw_textendedgroundtextureid').value = request.groundimageid;
+			ipage.getElementById('wtw_textendedgroundtextureid').value = request.groundtextureid;
 			ipage.getElementById('wtw_bsaveextendedgroundtexture').click();
 		}
 		/* iframe src, onload function */
@@ -644,7 +660,8 @@ WTWJS.prototype.saveGround = function() {
 
 WTWJS.prototype.cancelGround = function() {
 	try {
-		var groundimageid = "2391f1v9om09am77";
+		var groundtextureid = WTW.init.groundTextureID;
+		var groundtexturepath = WTW.init.groundTexturePath;
 		for (var i = 0; i < WTW.communities.length; i++) {
 			if (WTW.communities[i] != null) {
 				if (WTW.communities[i].communityinfo.communityid == communityid) {
@@ -653,15 +670,19 @@ WTWJS.prototype.cancelGround = function() {
 							WTW.communities[i].graphics.texture.id = WTW.communities[i].graphics.texture.backupid;
 							WTW.communities[i].graphics.texture.backupid = "";
 						}
-						groundimageid = WTW.communities[i].graphics.texture.id;
+						groundtextureid = WTW.communities[i].graphics.texture.id;
+						if (WTW.communities[i].graphics.texture.backuppath != "") {
+							WTW.communities[i].graphics.texture.path = WTW.communities[i].graphics.texture.backuppath;
+							WTW.communities[i].graphics.texture.backuppath = "";
+						}
+						groundtexturepath = WTW.communities[i].graphics.texture.path;
 					}
 				}
 			}
 		}
-		dGet('wtw_textendedgroundtextureid').value = groundimageid;
-		var imageinfo = WTW.getUploadFileData(groundimageid);
-		dGet('wtw_showextendedgroundtextureidform').src = imageinfo.filedata;
-		WTW.initLoadUpload(groundimageid, groundimageid, 4);
+		dGet('wtw_textendedgroundtextureid').value = groundtextureid;
+		dGet('wtw_textendedgroundtexturepath').value = groundtexturepath;
+		WTW.setPreviewImage('wtw_showextendedgroundpreview', 'wtw_textendedgroundtexturepath', 'wtw_textendedgroundtextureid');
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-cancelGround=" + ex.message);
 	}		
@@ -6174,7 +6195,7 @@ WTWJS.prototype.setSelectFileID = function(selectedobj, uploadid, originalid, we
 				var eguscale = 500;
 				var egvscale = 500;
 				var extraGroundMaterial = new BABYLON.StandardMaterial("egmat", scene);
-				extraGroundMaterial.diffuseTexture = new BABYLON.Texture(itemnamepath, scene);
+				extraGroundMaterial.diffuseTexture = new BABYLON.Texture(dGet(itemnamepath).value, scene);
 				//var imageinfo = WTW.getUploadFileData(uploadid);
 				//extraGroundMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.filedata, "egmattexture", scene);
 				extraGroundMaterial.diffuseTexture.uScale = eguscale;
