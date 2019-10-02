@@ -5851,6 +5851,9 @@ WTWJS.prototype.openUpdateSnapshotForm = function() {
 
 WTWJS.prototype.openFullPageForm = function(pageid, setcategory, item, itemname, itemnamepath, previewname) {
 	try {
+		if (item == undefined) {
+			item = '';
+		}
 		if (itemname == undefined) {
 			itemname = '';
 		}
@@ -5968,6 +5971,11 @@ WTWJS.prototype.openFullPageForm = function(pageid, setcategory, item, itemname,
 				WTW.show('wtw_showfilepage');
 				WTW.show('wtw_errorpage');
 				WTW.show('wtw_showerror');
+				break;
+			case "fullpage":
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + setcategory + "</div>";
+				WTW.show('wtw_fullpageplugins');
+				WTW.show(item);
 				break;
 			default:
 				WTW.hide('wtw_fullpageform');

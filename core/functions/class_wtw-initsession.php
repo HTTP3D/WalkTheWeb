@@ -36,6 +36,8 @@ class wtw {
 	public $communityid = "";
 	public $buildingid = "";
 	public $thingid = "";
+	public $fullpagedivs = array();
+	
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -1955,8 +1957,9 @@ class wtw {
 	}
 	
 	public function loadFullPageForm() {
+		global $wtwdb;
 		$pagedata = "";
-		try {	
+		try {
 			$pagedata .= "<div id=\"wtw_fullpageform\" class=\"wtw-pageform\" style=\"display:none;\">\r\n";
 			$pagedata .= "	<div class=\"wtw-pageheader\">\r\n";
 			$pagedata .= "		<img src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onclick=\"WTW.closeFullPageForm();\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" class=\"wtw-pageclose\" />\r\n";
@@ -2313,6 +2316,34 @@ class wtw {
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "		</div>\r\n";
 			$pagedata .= "	</div>\r\n";
+			
+			$pagedata .= "	<div id=\"wtw_fullpageplugins\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
+			foreach ($this->fullpagedivs as $zfullpageitem) {
+				$zid = $zfullpageitem["id"];
+				$zaccessrequired = $zfullpageitem["accessrequired"]; /* array of allowed roles */
+				$zfullpagedata = $zfullpageitem["fullpagedata"];
+echo "<script>console.log('zfullpagedata=".$zfullpagedata."');</script>";
+
+				if ($wtwdb->hasPermission($zaccessrequired)) {
+echo "<script>console.log('hasPermission');</script>";
+					/* check for invalid entries */
+					if (empty($zid) | !isset($zid)) {
+						$zid = $wtwdb->getRandomString(6,1);
+					}
+
+echo "<script>console.log('onload zfullpagedata=".$zfullpagedata."');</script>";
+
+					if (empty($zfullpagedata) || !isset($zfullpagedata)) {
+						$zfullpagedata = '';
+					}
+					if (!empty($zfullpagedata) && isset($zfullpagedata)) {
+						$pagedata .= "		<div id=\"".$zid."\" class=\"wtw-fullpage\">\r\n";
+						$pagedata .= $zfullpagedata;
+						$pagedata .= "		</div>\r\n";
+					}
+				}
+			}			
+			$pagedata .= "	</div>\r\n";
 
 			$pagedata .= "	<br />\r\n";
 			$pagedata .= "	<br />\r\n";
@@ -2322,6 +2353,23 @@ class wtw {
 			$this->serror("core-functions-class_wtw-initsession.php-loadFullPageForm=".$e->getMessage());
 		}
 		return $pagedata;
+	}
+	
+	public function addFullPageForm($zid, $zaccessrequired, $zfullpagedata) {
+		$zsuccess = false;
+		try {	
+			$fullpagediv = array(
+				'id' => $zid,
+				'accessrequired' => $zaccessrequired, 
+				'fullpagedata' => $zfullpagedata
+			);
+			$this->fullpagedivs[count($this->fullpagedivs)] = $fullpagediv;
+			
+			$zsuccess = true;
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtw-initsession.php-loadFullPageForm=".$e->getMessage());
+		}
+		return $zsuccess;
 	}
 }
 

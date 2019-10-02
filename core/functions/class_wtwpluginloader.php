@@ -129,50 +129,56 @@ class wtwpluginloader {
 		global $wtwdb;
 		$zsuccess = false;
 		try {
-			$zpluginid = "";
-			$zactiveold = "0";
-			$zdeletedold = "0";
-			if (!isset($zactive)) {
-				$zactive = "0";
-			} else if (!is_numeric($zactive)) {
-				$zactive = "0";
-			}
-			$zresponse = $wtwdb->query("
-				select pluginname, active, deleted
-				from ".wtw_tableprefix."plugins
-				where lower(pluginname)=lower('".$zpluginname."');");
-			foreach ($zresponse as $zrow) {
-				$zactiveold = $zrow["active"];
-				$zdeletedold = $zrow["deleted"];
-			}
-			if (!empty($zpluginname) && isset($zpluginname)) {
-				$wtwdb->query("
-					update ".wtw_tableprefix."plugins
-					set active=".$zactive.",
-						deleteddate=null,
-						deleteduserid='".$wtwdb->userid."',
-						deleted=0
-					where pluginname='".$zpluginname."'
-					limit 1;");
-			} else {
-				$wtwdb->query("
-					insert into ".wtw_tableprefix."plugins
-					   (pluginname,
-						active,
-						createdate,
-						createuserid,
-						updatedate,
-						updateuserid)
-					values
-					   ('".$zpluginname."',
-						".$zactive.",
-						now(),
-						'".$wtwdb->userid."',
-						now(),
-						'".$wtwdb->userid."');");
-			}
-			if ($zactive == "1" && ($zdeletedold == "1" || ($zactiveold == "0" && $zdeletedold == "0"))) {
-				require_once($zcontentpath."\\plugins\\".$zpluginname."\\".$zpluginname.".php");
+			if ($wtwdb->isUserInRole('admin') || $wtwdb->isUserInRole('developer')) {
+				$zpluginid = "";
+				$zactiveold = "0";
+				$zdeletedold = "0";
+				$zfound = "";
+				if (!isset($zactive)) {
+					$zactive = "0";
+				} else if (!is_numeric($zactive)) {
+					$zactive = "0";
+				}
+				$zresponse = $wtwdb->query("
+					select pluginname, active, deleted
+					from ".wtw_tableprefix."plugins
+					where lower(pluginname)=lower('".$zpluginname."');");
+				foreach ($zresponse as $zrow) {
+					$zactiveold = $zrow["active"];
+					$zdeletedold = $zrow["deleted"];
+					$zfound = $zrow["pluginname"];
+				}
+				if (!empty($zpluginname) && isset($zpluginname)) {
+					if (!empty($zfound)) {
+						$wtwdb->query("
+							update ".wtw_tableprefix."plugins
+							set active=".$zactive.",
+								deleteddate=null,
+								deleteduserid='".$wtwdb->userid."',
+								deleted=0
+							where pluginname='".$zpluginname."'
+							limit 1;");
+					} else {
+						$wtwdb->query("
+							insert into ".wtw_tableprefix."plugins
+							   (pluginname,
+								active,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$zpluginname."',
+								".$zactive.",
+								now(),
+								'".$wtwdb->userid."',
+								now(),
+								'".$wtwdb->userid."');");
+					}
+				}
+				if ($zactive == "1" && ($zdeletedold == "1" || ($zactiveold == "0" && $zdeletedold == "0"))) {
+					require_once($zcontentpath."\\plugins\\".$zpluginname."\\".$zpluginname.".php");
+				}
 			}
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwpluginloader.php-setPluginActive=".$e->getMessage());

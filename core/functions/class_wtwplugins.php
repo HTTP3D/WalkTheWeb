@@ -57,6 +57,16 @@ class wtwplugins {
 			$this->thingid = $wtw->thingid;
 		}
 	}
+	
+	public function addAdminMenuItem($zid, $ztitle, $zmenusort, $zmenu, $zsubmenusort, $zsubmenu, $ziconurl, $zaccessrequired, $zjsfunction) {
+		global $wtwadminmenu;
+		return $wtwadminmenu->addAdminMenuItem($zid, $ztitle, $zmenusort, $zmenu, $zsubmenusort, $zsubmenu, $ziconurl, $zaccessrequired, $zjsfunction);
+	}
+	
+	public function addFullPageForm($zid, $zaccessrequired, $zfullpagedata) {
+		global $wtw;
+		return $wtw->addFullPageForm($zid, $zaccessrequired, $zfullpagedata);
+	}
 }
 
 	function wtwplugins() {
