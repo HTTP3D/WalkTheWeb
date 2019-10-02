@@ -97,6 +97,20 @@ try {
 		<div id="wtw_selectimageformscroll4" class="formsnocroll" style="white-space:normal;">
 	
 <?php
+	$animationname = '';
+	$moldevent = '';
+	$moldnamepart = '';
+	$startframe = '0';
+	$endframe = '0';
+	$animationloop = '0';
+	$speedratio = '1.00';
+	$animationendscript = '';
+	$animationendparameters = '';
+	$stopcurrentanimations = '0';
+	$zsoundid = '';
+	$zsoundpath = '';
+	$zsoundname = '';
+	$zsoundmaxdistance = '100.00';
 	if (!empty($wtwiframes->userid) && isset($wtwiframes->userid)) {
 		$zresults = $wtwiframes->query("
 			select *
@@ -147,8 +161,39 @@ try {
 		if (count($zresults) == 0) {
 			echo "<h1 style='color:red;margin-left:20px;'>3D Object not found</h1>";
 		}
-		if ($zstock == 0) { 
-			echo "<div class='wtw-clear'></div><div class='wtw-objectcontainer'><div class='wtw-objectfile'>Animations</div><div class='wtw-objectfolder'>";
+		echo "<div class='wtw-clear'></div><div class='wtw-objectcontainer'><div class='wtw-objectfile'>Animations</div><div class='wtw-objectfolder'>";
+		$zresults = $wtwiframes->query("
+			select a1.*,
+				case when a1.soundid = '' then ''
+					else
+						(select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=a1.soundid limit 1)
+					end as soundpath,
+				case when a1.moldevent='' then '0'
+					else '1'
+				end as sorder
+			from ".wtw_tableprefix."uploadobjectanimations a1
+			where a1.uploadobjectid='".$zuploadobjectid."'
+				and a1.userid='".$wtwiframes->userid."'
+				and a1.deleted=0
+			order by sorder, a1.moldevent, a1.animationname, a1.objectanimationid;");
+		foreach ($zresults as $zrow) {
+			echo "<img src='/content/system/images/close2.png' alt='Delete' title='Delete' style='width:24px;height:auto;float:right;right-margin:10px;cursor:pointer;' onclick=\"dGet('wtw_tdeleteanimation').value='".$zrow["objectanimationid"]."';WTW.showInline('wtw_deleteanimation');WTW.showInline('wtw_canceldeleteanimation');\" />";
+			echo "<img src='/content/system/images/edit.png' alt='Edit Animation' title='Edit Animation' style='width:24px;height:auto;float:right;right-margin:10px;cursor:pointer;' onclick=\"window.location.href='uploadedfiledetails.php?uploadobjectid=".$zuploadobjectid."&objectanimationid=".$zrow["objectanimationid"]."';\" />";
+			$moldevent = '';
+			if (empty($zrow["moldevent"]) || !isset($zrow["moldevent"])) {
+				$moldevent = '';
+			} else {
+				$moldevent = ": <strong>".$zrow["moldevent"]."</strong>";
+			}
+			echo "<div>".$zrow["animationname"].$moldevent."</div><br /><div class='wtw-clear'></div>";
+		}
+		echo "<br /><br /><div id='wtw_addanimation' class='wtw-greenbutton' style='width:318px;' onclick=\"addAnimation();\">Add Animation</div>";
+		echo "<div id='wtw_deleteanimation' class='wtw-redbutton' style='width:150px;display:none;visibility:hidden;text-align:center;margin-right:13px;cursor:pointer;' onclick=\"dGet('wtw_submit').click();\">Delete Animation</div><div id='wtw_canceldeleteanimation' class='wtw-yellowbutton' style='width:150px;display:none;visibility:hidden;text-align:center;cursor:pointer;' onclick=\"dGet('wtw_tdeleteanimation').value='';WTW.hide('wtw_deleteanimation');WTW.hide('wtw_canceldeleteanimation');\">Cancel</div>";
+		echo "</div></div>";
+		$addstyle="style='display:none;visibility:hidden;'";
+		if (isset($zobjectanimationid) && !empty($zobjectanimationid)) {
 			$zresults = $wtwiframes->query("
 				select a1.*,
 					case when a1.soundid = '' then ''
@@ -157,82 +202,36 @@ try {
 								from ".wtw_tableprefix."uploads 
 								where uploadid=a1.soundid limit 1)
 						end as soundpath,
-					case when a1.moldevent='' then '0'
-						else '1'
-					end as sorder
+					case when a1.soundid = '' then ''
+						else
+							(select filename 
+								from ".wtw_tableprefix."uploads 
+								where uploadid=a1.soundid limit 1)
+						end as soundname
 				from ".wtw_tableprefix."uploadobjectanimations a1
-				where a1.uploadobjectid='".$zuploadobjectid."'
+				where a1.objectanimationid='".$zobjectanimationid."'
 					and a1.userid='".$wtwiframes->userid."'
 					and a1.deleted=0
-				order by sorder, a1.moldevent, a1.animationname, a1.objectanimationid;");
+				limit 1;");
 			foreach ($zresults as $zrow) {
-				echo "<img src='/content/system/images/close2.png' alt='Delete' title='Delete' style='width:24px;height:auto;float:right;right-margin:10px;cursor:pointer;' onclick=\"dGet('wtw_tdeleteanimation').value='".$zrow["objectanimationid"]."';WTW.showInline('wtw_deleteanimation');WTW.showInline('wtw_canceldeleteanimation');\" />";
-				echo "<img src='/content/system/images/edit.png' alt='Edit Animation' title='Edit Animation' style='width:24px;height:auto;float:right;right-margin:10px;cursor:pointer;' onclick=\"window.location.href='uploadedfiledetails.php?uploadobjectid=".$zuploadobjectid."&objectanimationid=".$zrow["objectanimationid"]."';\" />";
-				$moldevent = '';
-				if (empty($zrow["moldevent"]) || !isset($zrow["moldevent"])) {
-					$moldevent = '';
-				} else {
-					$moldevent = ": <strong>".$zrow["moldevent"]."</strong>";
-				}
-				echo "<div>".$zrow["animationname"].$moldevent."</div><br /><div class='wtw-clear'></div>";
+				$animationname = $zrow['animationname'];
+				$moldevent = $zrow['moldevent'];
+				$moldnamepart = $zrow['moldnamepart'];
+				$startframe = $zrow['startframe'];
+				$endframe = $zrow['endframe'];
+				$animationloop = $zrow['animationloop']."";
+				$speedratio = $zrow['speedratio'];
+				$animationendscript = $zrow['animationendscript'];
+				$animationendparameters = $zrow['animationendparameters'];
+				$stopcurrentanimations = $zrow['stopcurrentanimations']."";
+				$addstyle="style='display:block;visibility:visible;'";
+				$zsoundid = $zrow['soundid'];
+				$zsoundpath = $zrow['soundpath'];
+				$zsoundname = $zrow['soundname'];
+				$zsoundmaxdistance = $zrow['soundmaxdistance'];
 			}
-			echo "<br /><br /><div id='wtw_addanimation' class='wtw-greenbutton' style='width:318px;' onclick=\"addAnimation();\">Add Animation</div>";
-			echo "<div id='wtw_deleteanimation' class='wtw-redbutton' style='width:150px;display:none;visibility:hidden;text-align:center;margin-right:13px;cursor:pointer;' onclick=\"dGet('wtw_submit').click();\">Delete Animation</div><div id='wtw_canceldeleteanimation' class='wtw-yellowbutton' style='width:150px;display:none;visibility:hidden;text-align:center;cursor:pointer;' onclick=\"dGet('wtw_tdeleteanimation').value='';WTW.hide('wtw_deleteanimation');WTW.hide('wtw_canceldeleteanimation');\">Cancel</div>";
-			echo "</div></div>";
-			$animationname = '';
-			$moldevent = '';
-			$moldnamepart = '';
-			$startframe = '0';
-			$endframe = '0';
-			$animationloop = '0';
-			$speedratio = '1.00';
-			$animationendscript = '';
-			$animationendparameters = '';
-			$stopcurrentanimations = '0';
-			$zsoundid = '';
-			$zsoundpath = '';
-			$zsoundname = '';
-			$zsoundmaxdistance = '100.00';
-			$addstyle="style='display:none;visibility:hidden;'";
-			if (isset($zobjectanimationid) && !empty($zobjectanimationid)) {
-				$zresults = $wtwiframes->query("
-					select a1.*,
-						case when a1.soundid = '' then ''
-							else
-								(select filepath 
-									from ".wtw_tableprefix."uploads 
-									where uploadid=a1.soundid limit 1)
-							end as soundpath,
-						case when a1.soundid = '' then ''
-							else
-								(select filename 
-									from ".wtw_tableprefix."uploads 
-									where uploadid=a1.soundid limit 1)
-							end as soundname
-					from ".wtw_tableprefix."uploadobjectanimations a1
-					where a1.objectanimationid='".$zobjectanimationid."'
-						and a1.userid='".$wtwiframes->userid."'
-						and a1.deleted=0
-					limit 1;");
-				foreach ($zresults as $zrow) {
-					$animationname = $zrow['animationname'];
-					$moldevent = $zrow['moldevent'];
-					$moldnamepart = $zrow['moldnamepart'];
-					$startframe = $zrow['startframe'];
-					$endframe = $zrow['endframe'];
-					$animationloop = $zrow['animationloop']."";
-					$speedratio = $zrow['speedratio'];
-					$animationendscript = $zrow['animationendscript'];
-					$animationendparameters = $zrow['animationendparameters'];
-					$stopcurrentanimations = $zrow['stopcurrentanimations']."";
-					$addstyle="style='display:block;visibility:visible;'";
-					$zsoundid = $zrow['soundid'];
-					$zsoundpath = $zrow['soundpath'];
-					$zsoundname = $zrow['soundname'];
-					$zsoundmaxdistance = $zrow['soundmaxdistance'];
-				}
 
-			}
+		}
  ?>
 			<div class='wtw-clear'></div>
 			<div id='wtw_addanimationdiv' class='wtw-objectcontainer' <?php echo $addstyle; ?>><div id='wtw_addanimationtitle' class='wtw-objectfile'>Edit Animation</div>
@@ -297,7 +296,7 @@ try {
 					<div class='wtw-redbutton' style='width:150px;text-align:center;margin-right:13px;cursor:pointer;' onclick="dGet('wtw_tdeleteanimation').value=dGet('wtw_tobjectanimationid').value;dGet('wtw_submit').click();">Delete Animation</div><div id='wtw_canceldeleteanimation' class='wtw-yellowbutton' style='width:150px;text-align:center;cursor:pointer;' onclick="WTW.hide('wtw_addanimationdiv');">Cancel</div>
 				</div>
 			</div>
-<?php 	}
+<?php 	
 	} ?>		
 		</div>
 		<div class='wtw-clear'></div><div class='wtw-yellowbutton' style='margin-left:20px;' onclick="window.parent.WTW.setImageMenu(4);">Close</div>		
