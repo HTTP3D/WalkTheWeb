@@ -487,8 +487,7 @@ class wtwtables {
 			if ($wtwdb->tableExists(wtw_tableprefix.'plugins') == false) {
 				$wtwdb->query("
 					CREATE TABLE `".wtw_tableprefix."plugins` (
-					  `pluginid` varchar(16) NOT NULL,
-					  `pluginname` varchar(255) DEFAULT NULL,
+					  `pluginname` varchar(64) NOT NULL,
 					  `active` int(11) DEFAULT '0',
 					  `createdate` datetime DEFAULT NULL,
 					  `createuserid` varchar(16) DEFAULT '',
@@ -497,9 +496,8 @@ class wtwtables {
 					  `deleteddate` datetime DEFAULT NULL,
 					  `deleteduserid` varchar(16) DEFAULT '',
 					  `deleted` int(11) DEFAULT '0',
-					  PRIMARY KEY (`pluginid`),
-					  UNIQUE KEY `".wtw_tableprefix."pluginid_UNIQUE` (`pluginid`),
-					  KEY `".wtw_tableprefix."idx_wtw_pluginnames` (`pluginname`,`pluginid`)
+					  PRIMARY KEY (`pluginname`),
+					  UNIQUE KEY `".wtw_tableprefix."pluginid_UNIQUE` (`pluginname`)
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 				");
 			}
