@@ -1,6 +1,5 @@
 <div id="wtw_menubase" class="wtw-menubase">
 <?php
-	require_once('./core/functions/class_wtwmenus.php');
 	global $wtwmenus;
 	echo $wtwmenus->getMainMenu();
 ?>
@@ -42,11 +41,11 @@
 					<li class="wtw-menuli" onclick="WTW.toggleFPS();"><img id="wtw_fpsicon" src="/content/system/images/menuoff.png" alt="Show Mold Count" title="Show Mold Count" class='wtw-menulefticon' /><div id="wtw_fpsvisibility">Mold Count / FPS are Hidden</div></li>
 					<li class="wtw-menuli" onclick="WTW.toggleArrows();"><img id="wtw_arrowsicon" src="/content/system/images/menuoff.png" alt="Show Arrows" title="Show Arrows" class='wtw-menulefticon' /><div id="wtw_arrowsvisibility">Arrows are Hidden</div></li>
 				</ul></li>
-			<li class="wtw-menuli" onclick="WTW.hide('wtw_menusettings');WTW.showMenuWithScroll('wtw_menumovementspeed');"><img src="/content/system/images/menumovement.png" alt="Movement Speed" title="Movement Speed" class='wtw-menulefticon' />Movement Speed</li>
-			<li class="wtw-menuli" onclick="WTW.hide('wtw_menusettings');WTW.showMenuWithScroll('wtw_menugraphicsquality');"><img src="/content/system/images/menugraphics.png" alt="Graphics Quality" title="Graphics Quality" class='wtw-menulefticon' />Graphics Quality</li>
-			<li class="wtw-menuli" onclick="WTW.hide('wtw_menusettings');WTW.showMenuWithScroll('wtw_menushadowquality');"><img src="/content/system/images/menushadows.png" alt="Shadow Quality" title="Shadow Quality" class='wtw-menulefticon' />Shadow Quality</li>
+			<li class="wtw-menuli" onclick="WTW.hide('wtw_menusettings');WTW.showSettingsMenu('wtw_menumovementspeed');"><img src="/content/system/images/menumovement.png" alt="Movement Speed" title="Movement Speed" class='wtw-menulefticon' />Movement Speed</li>
+			<li class="wtw-menuli" onclick="WTW.hide('wtw_menusettings');WTW.showSettingsMenu('wtw_menugraphicsquality');"><img src="/content/system/images/menugraphics.png" alt="Graphics Quality" title="Graphics Quality" class='wtw-menulefticon' />Graphics Quality</li>
+			<li class="wtw-menuli" onclick="WTW.hide('wtw_menusettings');WTW.showSettingsMenu('wtw_menushadowquality');"><img src="/content/system/images/menushadows.png" alt="Shadow Quality" title="Shadow Quality" class='wtw-menulefticon' />Shadow Quality</li>
 			<li class="wtw-menuli" onclick="WTW.toggleSoundMute();"><img id="wtw_submenumute" src="/content/system/images/menumuteon.png" alt="Turn Sound On" title="Turn Sound On" class='wtw-menulefticon' /><span id="wtw_submenumutetext">Sound is Off</span></li>
-			<li class="wtw-menuli" onclick="WTW.hide('wtw_menusettings');WTW.showMenuWithScroll('wtw_multiplayer');"><img id="wtw_menumultiplayer" src="/content/system/images/menumultiplayer.png" alt="Multi-Player Settings" title="Multi-Player Settings" class='wtw-menulefticon' />Multi-Player Settings</li>
+<?php		echo $wtwmenus->getSettingsMenu(); ?>
 		</ul>
 	</div>
 </div>
@@ -126,7 +125,7 @@
 					<li class="wtw-submenuli">Email</li>
 					<li class="wtw-submenuli"><input type="text" id="wtw_tnewemail" autocomplete="email" /></li>
 					<li class="wtw-submenuli">Password</li>
-					<li class="wtw-submenuli"><input type="password" id="wtw_tnewpassword" autocomplete="new-password" onkeyup="WTW.checkPassword(this,'wtw_tpasswordstrength');" onfocus="WTW.show('wtw_passwordstrengthdiv');WTW.showMenuWithScroll('wtw_menuprofile');" onblur="WTW.hide('wtw_passwordstrengthdiv');WTW.showMenuWithScroll('wtw_menuprofile');" /></li>
+					<li class="wtw-submenuli"><input type="password" id="wtw_tnewpassword" autocomplete="new-password" onkeyup="WTW.checkPassword(this,'wtw_tpasswordstrength');" onfocus="WTW.show('wtw_passwordstrengthdiv');WTW.showSettingsMenu('wtw_menuprofile');" onblur="WTW.hide('wtw_passwordstrengthdiv');WTW.showSettingsMenu('wtw_menuprofile');" /></li>
 					<li class="wtw-submenuli" id="wtw_passwordstrengthdiv" style="display:none;visibility:hidden;"><input type="text" id="wtw_tpasswordstrength" style="display:none;visibility:hidden;" /></li>
 					<li class="wtw-submenuli">Confirm Password</li>
 					<li class="wtw-submenuli"><input type="password" id="wtw_tnewpassword2" autocomplete="new-password" onkeyup="WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');" /></li>
@@ -147,7 +146,7 @@
 	<div id="wtw_menuhelpscroll" class="wtw-mainmenuscroll">
 		<ul class="wtw-menuli">
 			<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/wiki/','_blank');"><img src="/content/system/images/menuwtwhelp.png" alt="WalkTheWeb Help" title="WalkTheWeb Help" class='wtw-menulefticon' />WalkTheWeb Help</li>
-			<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.showMenuWithScroll('wtw_menucontrols');"><img src="/content/system/images/menumovement.png" alt="Movement Controls" title="Movement Controls" class='wtw-menulefticon' />Movement Controls</li>
+			<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.showSettingsMenu('wtw_menucontrols');"><img src="/content/system/images/menumovement.png" alt="Movement Controls" title="Movement Controls" class='wtw-menulefticon' />Movement Controls</li>
 			<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/knowledgebase_category/3d-browsing/','_blank');"><img src="/content/system/images/menuquestions.png" alt="Common Question" title="Common Question" class='wtw-menulefticon' />Common Question</li>
 			<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/knowledgebase_category/tutorials/','_blank');"><img src="/content/system/images/menututorials.png" alt="Tutorials" title="Tutorials" class='wtw-menulefticon' />Tutorials</li>
 			<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/knowledgebase_category/tutorials/','_blank');"><img src="/content/system/images/menutools.png" alt="Admin Help" title="Admin Help" class='wtw-menulefticon' />Admin Help</li>
@@ -163,18 +162,18 @@
 		<ul class="wtw-menuli">
 			<li id="wtw_helpglassesdiv" class="wtw-submenublockli">
 				<a href="https://www.walktheweb.com/shop/walktheweb-3d-glasses/" target="_blank"><img src="/content/system/images/3DGlassesFor5.png" alt="3D Glasses for $5" title="3D Glasses for $5" style="width:95%;height:auto;margin:2%;" /></a /></li>
-			<li class="wtw-menuli" onclick="WTW.hide('wtw_helpkeyboarddiv');WTW.hide('wtw_helptouchdiv');WTW.hide('wtw_helpcameradiv');WTW.toggle('wtw_helpmousediv');WTW.showMenuWithScroll('wtw_menucontrols');"><img src="/content/system/images/menumouse.png" alt="Mouse Controls" title="Movement Controls" class='wtw-menulefticon' />Mouse Controls</li>
+			<li class="wtw-menuli" onclick="WTW.hide('wtw_helpkeyboarddiv');WTW.hide('wtw_helptouchdiv');WTW.hide('wtw_helpcameradiv');WTW.toggle('wtw_helpmousediv');WTW.showSettingsMenu('wtw_menucontrols');"><img src="/content/system/images/menumouse.png" alt="Mouse Controls" title="Movement Controls" class='wtw-menulefticon' />Mouse Controls</li>
 			<li id="wtw_helpmousediv" class="wtw-submenublockli" style="display:none;visibility:hidden;">
 				<div style='font-size:.8em;text-align:center;'>Mouse must be over 3D Scene to move.</div>
 				<img src="/content/system/images/helpmouse.png" alt="Mouse Walk Controls" title="Mouse Walk Controls" style="width:95%;height:auto;margin:2%;" /><br />
 				<img src="/content/system/images/helpmousemove.png" alt="Mouse Pan Controls" title="Mouse Pan Controls" style="width:100%;height:auto;" /></li>
-			<li class="wtw-menuli" onclick="WTW.hide('wtw_helpmousediv');WTW.hide('wtw_helptouchdiv');WTW.hide('wtw_helpcameradiv');WTW.toggle('wtw_helpkeyboarddiv');WTW.showMenuWithScroll('wtw_menucontrols');"><img src="/content/system/images/menukeys.png" alt="Keyboard Controls" title="Movement Controls" class='wtw-menulefticon' />Keyboard Controls</li>
+			<li class="wtw-menuli" onclick="WTW.hide('wtw_helpmousediv');WTW.hide('wtw_helptouchdiv');WTW.hide('wtw_helpcameradiv');WTW.toggle('wtw_helpkeyboarddiv');WTW.showSettingsMenu('wtw_menucontrols');"><img src="/content/system/images/menukeys.png" alt="Keyboard Controls" title="Movement Controls" class='wtw-menulefticon' />Keyboard Controls</li>
 			<li id="wtw_helpkeyboarddiv" class="wtw-submenublockli" style="display:none;visibility:hidden;">
 				<div style='font-size:.8em;text-align:center;'>Mouse must be over 3D Scene to move.</div>
 				<img src="/content/system/images/helpkeyboard.png" alt="Keyboard Controls" title="Keyboard Controls" style="width:95%;height:auto;margin:2%;" /></li>
-			<li class="wtw-menuli" onclick="WTW.hide('wtw_helpmousediv');WTW.hide('wtw_helpkeyboarddiv');WTW.hide('wtw_helpcameradiv');WTW.toggle('wtw_helptouchdiv');WTW.showMenuWithScroll('wtw_menucontrols');"><img src="/content/system/images/menuipad.png" alt="Touch Controls" title="Touch Controls" class='wtw-menulefticon' />Touch Controls</li>
+			<li class="wtw-menuli" onclick="WTW.hide('wtw_helpmousediv');WTW.hide('wtw_helpkeyboarddiv');WTW.hide('wtw_helpcameradiv');WTW.toggle('wtw_helptouchdiv');WTW.showSettingsMenu('wtw_menucontrols');"><img src="/content/system/images/menuipad.png" alt="Touch Controls" title="Touch Controls" class='wtw-menulefticon' />Touch Controls</li>
 			<li id="wtw_helptouchdiv" class="wtw-submenublockli" style="display:none;visibility:hidden;"><img src="/content/system/images/helptouch3.png" alt="Touch Controls" title="Touch Controls" style="width:95%;height:auto;margin:2%;" /></li>
-			<li class="wtw-menuli" onclick="WTW.hide('wtw_helpmousediv');WTW.hide('wtw_helpkeyboarddiv');WTW.hide('wtw_helptouchdiv');WTW.toggle('wtw_helpcameradiv');WTW.showMenuWithScroll('wtw_menucontrols');"><img src="/content/system/images/menucamera.png" alt="Camera Views" title="Camera Views" class='wtw-menulefticon' />Camera Views <span style="font-size:.8em;color:yellow;">(Turn on 3D!)</span></li>
+			<li class="wtw-menuli" onclick="WTW.hide('wtw_helpmousediv');WTW.hide('wtw_helpkeyboarddiv');WTW.hide('wtw_helptouchdiv');WTW.toggle('wtw_helpcameradiv');WTW.showSettingsMenu('wtw_menucontrols');"><img src="/content/system/images/menucamera.png" alt="Camera Views" title="Camera Views" class='wtw-menulefticon' />Camera Views <span style="font-size:.8em;color:yellow;">(Turn on 3D!)</span></li>
 			<li id="wtw_helpcameradiv" class="wtw-submenublockli" style="display:none;visibility:hidden;">
 				<img src="/content/system/images/helpcameras.png" alt="Camera Position and Views" title="Camera Position and Views" style="width:95%;height:auto;margin:2%;" />
 			</li>
@@ -243,29 +242,6 @@
 		</ul>
 	</div>
 </div>
-<div id="wtw_multiplayer" class="wtw-slideupmenuright" style="display:none;visibility:hidden;">
-	<img class="wtw-closeright" onclick="WTW.closeMenus();" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
-	<div class="wtw-menuheading">Multi-Player Options</div>
-	<div id="wtw_multiplayerscroll" class="wtw-mainmenuscroll">
-		<div id="wtw_multiplayernote" class="wtw-menunote" style="display:none;visibility:hidden;">Multi-Player will allow you to see other users' avatars Walk around in the 3D Community you are viewing.<br /><br />
-			Works best if you have a fast Internet connection and quality graphics processor.<br /><br />
-			If the animation gets too slow, lower the number of Avatars (closest show first) or turn this off.</div>
-		<ul class="wtw-menuli">
-			<li class="wtw-menuliholder">
-				<img src="/content/system/images/menuq.png" alt="Show Help" title="Show Help" class='wtw-menuq' onclick="WTW.toggle('wtw_multiplayernote');" />
-				<img src="/content/system/images/menumaxavatars.png" alt="Number of Avatars" title="Number of Avatars" class='wtw-menulefticon' />Max Number of Avatars</li>
-			<li class="wtw-submenuli">
-				<input type="button" class="wtw-smallprint" value="-1" onmousedown="WTW.changeNumberValue('wtw_tavatarcount', -1); return (false);" onmouseup="WTW.changeStop();if (WTW.isNumeric(dGet('wtw_tavatarcount').value)) {WTW.multiPerson=Number(dGet('wtw_tavatarcount').value);WTW.setCookie('multiperson',WTW.multiPerson,30);}" style="cursor: pointer;" />
-				<input type="text" id="wtw_tavatarcount" maxlength="16" class="wtw-smallprintinput" onclick="WTW.checkKey(this, 'number', 0, 0);" onkeyup="WTW.checkKey(this, 'number', 0, 0);" onblur="WTW.checkKey(this, 'number', 0, 1);if (WTW.isNumeric(dGet('wtw_tavatarcount').value)) {WTW.multiPerson=Number(dGet('wtw_tavatarcount').value);WTW.setCookie('multiperson',WTW.multiPerson,30);}" style="text-align:center;background-color:#111111;color:#ffffff;" />
-				<input type="button" class="wtw-smallprint" value="+1" onmousedown="WTW.changeNumberValue('wtw_tavatarcount', 1); return (false);" onmouseup="WTW.changeStop();if (WTW.isNumeric(dGet('wtw_tavatarcount').value)) {WTW.multiPerson=Number(dGet('wtw_tavatarcount').value);WTW.setCookie('multiperson',WTW.multiPerson,30);}" style="cursor: pointer;" />
-			</li>
-		</ul>
-		<ul class="wtw-menuli">
-			<li class="wtw-menuli" onclick="WTW.toggleAvatarIDs();"><img id="wtw_submenuavatarids" src="/content/system/images/menuavataridson.png" alt="Turn Avatar IDs Off" title="Turn Avatar IDs Off" class='wtw-menulefticon' /><span id="wtw_submenuavataridstext">Avatar IDs are On</span></li>
-			<li class="wtw-menuli" onclick="WTW.toggleMultiPlayer();"><img id="wtw_submenumultiplayer" src="/content/system/images/menumultiplayer.png" alt="Turn Multi-Player Off" title="Turn Multi-Player Off" class='wtw-menulefticon' /><span id="wtw_submenumultiplayertext">Multi-Player is On</span></li>
-		</ul>
-	</div>
-</div>
 <div id="wtw_menuavatar" class="wtw-slideupmenuright" style="display:none;visibility:hidden;">
 	<img class="wtw-closeright" onclick="WTW.closeSetupMode();" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
 	<div class="wtw-menuheading">Avatar Settings</div>
@@ -304,7 +280,7 @@
 	<div class="wtw-menuheading">Press and Hold to Play</div>
 	<div class="wtw-horizontalscroll" id="wtw_listoptionalanimations"></div>
 </div>
-<div id="wtw_menuchat" class="wtw-slideupmenuleft" style="display:none;visibility:hidden;" onmouseover="WTW.showMenuWithScroll('wtw_menuchat');">
+<div id="wtw_menuchat" class="wtw-slideupmenuleft" style="display:none;visibility:hidden;" onmouseover="WTW.showSettingsMenu('wtw_menuchat');">
 	<img class="wtw-closeright" onclick="WTW.hide('wtw_menuchat');" src="/content/system/images/menuclose.png" alt="Close All Chats" title="Close All Chats" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
 	<img id="wtw_menuchatmin" class="wtw-closeright" onclick="WTW.hide('wtw_menuchatmaxdiv');WTW.hide('wtw_menuchatmin');WTW.show('wtw_menuchatmax');" src="/content/system/images/menuminimize.png" alt="Minimize Chats" title="Minimize Chats" onmouseover="this.src='/content/system/images/menuminimizehover.png';" onmouseout="this.src='/content/system/images/menuminimize.png';" />
 	<img id="wtw_menuchatmax" class="wtw-closeright" onclick="WTW.show('wtw_menuchatmaxdiv');WTW.hide('wtw_menuchatmax');WTW.show('wtw_menuchatmin');" src="/content/system/images/menumaximize.png" alt="Maximize Chats" title="Maximize Chats" onmouseover="this.src='/content/system/images/menumaximizehover.png';" onmouseout="this.src='/content/system/images/menumaximize.png';" style="display:none;visibility:hidden;" />
@@ -315,3 +291,6 @@
 	</div>
 	</div>
 </div>
+<?php
+	echo $wtwmenus->getMenuForms();
+?>

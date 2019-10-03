@@ -86,7 +86,6 @@ class wtwadminmenu {
 	}
 	
 	public function addAdminMenuItem($zid, $ztitle, $zmenusort, $zmenu, $zsubmenusort, $zsubmenu, $ziconurl, $zaccessrequired, $zjsfunction) {
-		global $wtw;
 		global $wtwdb;
 		$zsuccess = false;
 		try {
@@ -150,7 +149,6 @@ class wtwadminmenu {
 				header("Location: ".$wtw->domainurl."/"); 
 				exit();
 			} else {
-				//$zadminmenu .= "TEST=".count($userroles)."<br />"; 
 				foreach ($adminmenuarray as $zmenuitem) {
 					$zid = $zmenuitem["id"];
 					$ztitle = $zmenuitem["title"];

@@ -1826,19 +1826,6 @@ li.wtw-menunoteset {
 	font-size:1.2em;
 	text-align:center;
 }
-table.wtw-table {
-	width:100%;
-	border-collapse: collapse;
-}
-td.wtw-tablecolumnheading {
-	min-height:38px;
-	font-weight:bold;
-	border-bottom:2px solid #000000;
-}
-td.wtw-tablecolumns {
-	min-height:38px;
-	border-bottom:1px solid #cfcfcf;
-}
 .wtw-badge {
 	float:right;
 	display:none;

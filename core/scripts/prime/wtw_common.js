@@ -8233,9 +8233,10 @@ WTWJS.prototype.toggle = function(item) {
 	}
 }
 
-WTWJS.prototype.showMenuWithScroll = function(menuitem) {
+WTWJS.prototype.showSettingsMenu = function(menuitem) {
 	try {
 		WTW.show(menuitem);
+
 		if (dGet(menuitem + 'scroll') != null) {
 			dGet(menuitem + 'scroll').style.height = 'auto';
 			if (dGet(menuitem + 'scroll').clientHeight < (WTW.sizeY - 95)) {
@@ -8250,9 +8251,9 @@ WTWJS.prototype.showMenuWithScroll = function(menuitem) {
 					dGet(menuitem + 'scroll').style.height = (WTW.sizeY - 95) + "px";
 				}
 			}
-		}
+		} 
 	} catch (ex) { 
-		WTW.log("core-scripts-prime-wtw_common.js-showMenuWithScroll=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_common.js-showSettingsMenu=" + ex.message);
 	}
 }
 
@@ -9065,14 +9066,6 @@ WTWJS.prototype.loadUserSettingsAfterEngine = function() {
 
 WTWJS.prototype.closeMenus = function() {
 	try {
-		WTW.hide('wtw_menumovementspeed');
-		WTW.hide('wtw_menugraphicsquality');
-		WTW.hide('wtw_menushadowquality');
-		WTW.hide('wtw_multiplayer');
-		WTW.hide('wtw_menusettings');
-		WTW.hide('wtw_menuprofile');
-		WTW.hide('wtw_menuhelp');
-		WTW.hide('wtw_menucontrols');
 		if (dGet('wtw_menuavatar').style.display != 'none') {
 			WTW.closeSetupMode();
 		}
@@ -9080,6 +9073,14 @@ WTWJS.prototype.closeMenus = function() {
 			WTW.show('wtw_menulogin');
 			WTW.hide('wtw_menupasswordrecovery');
 			WTW.hide('wtw_menuregister');
+		}
+		var menuforms = document.getElementsByClassName('wtw-slideupmenuright');
+		for (var i=0;i<menuforms.length;i++) {
+			if (menuforms[i] != null) {
+				if (menuforms[i].id != undefined) {
+					WTW.hide(menuforms[i].id);
+				}
+			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-closeMenus=" + ex.message);
@@ -9093,7 +9094,7 @@ WTWJS.prototype.openRegisterForm = function() {
 		WTW.hide('wtw_menupasswordrecovery');
 		WTW.hide('wtw_menuloggedin');
 		WTW.show('wtw_menuregister');
-		WTW.showMenuWithScroll('wtw_menuprofile');
+		WTW.showSettingsMenu('wtw_menuprofile');
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-openRegisterForm=" + ex.message);
 	}
@@ -9106,7 +9107,7 @@ WTWJS.prototype.openRecoveryForm = function() {
 		WTW.hide('wtw_menuloggedin');
 		WTW.hide('wtw_menuregister');
 		WTW.show('wtw_menupasswordrecovery');
-		WTW.showMenuWithScroll('wtw_menuprofile');
+		WTW.showSettingsMenu('wtw_menuprofile');
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-openRegisterForm=" + ex.message);
 	}
@@ -9119,7 +9120,7 @@ WTWJS.prototype.openLoginForm = function() {
 		WTW.hide('wtw_menuloggedin');
 		WTW.hide('wtw_menupasswordrecovery');
 		WTW.show('wtw_menulogin');
-		WTW.showMenuWithScroll('wtw_menuprofile');
+		WTW.showSettingsMenu('wtw_menuprofile');
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-openLoginForm=" + ex.message);
 	}
@@ -9193,7 +9194,7 @@ WTWJS.prototype.switchAvatarMenu = function(w) {
 				}
 				break;
 		}
-		WTW.showMenuWithScroll('wtw_menuavatar');
+		WTW.showSettingsMenu('wtw_menuavatar');
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-switchAvatarMenu=" + ex.message);
 	}
@@ -10716,7 +10717,7 @@ WTWJS.prototype.editProfile = function() {
 		WTW.showInline('wtw_teditemail');
 		WTW.show('wtw_menusaveprofile');
 		WTW.show('wtw_menucancelsaveprofile');
-		WTW.showMenuWithScroll('wtw_menuprofile');
+		WTW.showSettingsMenu('wtw_menuprofile');
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-editProfile=" + ex.message);
 	}
@@ -10756,7 +10757,7 @@ WTWJS.prototype.saveProfile = function() {
 		WTW.showInline('wtw_menudisplayname');
 		WTW.showInline('wtw_menuusername');
 		WTW.showInline('wtw_menuemail');
-		WTW.showMenuWithScroll('wtw_menuprofile');
+		WTW.showSettingsMenu('wtw_menuprofile');
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-saveProfile=" + ex.message);
 	}
@@ -10765,10 +10766,10 @@ WTWJS.prototype.saveProfile = function() {
 WTWJS.prototype.saveProfileComplete = function(response) {
 	try {
 		dGet('wtw_profileerrortext').innerHTML = response;
-		WTW.showMenuWithScroll('wtw_menuprofile');
+		WTW.showSettingsMenu('wtw_menuprofile');
 		window.setTimeout(function() {
 			dGet('wtw_profileerrortext').innerHTML = '';
-			WTW.showMenuWithScroll('wtw_menuprofile');
+			WTW.showSettingsMenu('wtw_menuprofile');
 		},5000);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-saveProfileComplete=" + ex.message);
@@ -10788,7 +10789,7 @@ WTWJS.prototype.cancelEditProfile = function() {
 		dGet('wtw_teditdisplayname').value = dGet('wtw_menudisplayname').innerHTML;
 		dGet('wtw_teditusername').value = dGet('wtw_menuusername').innerHTML;
 		dGet('wtw_teditemail').value = dGet('wtw_menuemail').innerHTML;
-		WTW.showMenuWithScroll('wtw_menuprofile');
+		WTW.showSettingsMenu('wtw_menuprofile');
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-cancelEditProfile=" + ex.message);
 	}

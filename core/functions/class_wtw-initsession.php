@@ -2322,17 +2322,11 @@ class wtw {
 				$zid = $zfullpageitem["id"];
 				$zaccessrequired = $zfullpageitem["accessrequired"]; /* array of allowed roles */
 				$zfullpagedata = $zfullpageitem["fullpagedata"];
-echo "<script>console.log('zfullpagedata=".$zfullpagedata."');</script>";
-
 				if ($wtwdb->hasPermission($zaccessrequired)) {
-echo "<script>console.log('hasPermission');</script>";
 					/* check for invalid entries */
 					if (empty($zid) | !isset($zid)) {
 						$zid = $wtwdb->getRandomString(6,1);
 					}
-
-echo "<script>console.log('onload zfullpagedata=".$zfullpagedata."');</script>";
-
 					if (empty($zfullpagedata) || !isset($zfullpagedata)) {
 						$zfullpagedata = '';
 					}
@@ -2367,7 +2361,7 @@ echo "<script>console.log('onload zfullpagedata=".$zfullpagedata."');</script>";
 			
 			$zsuccess = true;
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtw-initsession.php-loadFullPageForm=".$e->getMessage());
+			$this->serror("core-functions-class_wtw-initsession.php-addFullPageForm=".$e->getMessage());
 		}
 		return $zsuccess;
 	}

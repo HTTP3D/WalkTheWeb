@@ -13,6 +13,9 @@ class wtwmenus {
 
 	}	
 	
+	public $settingsmenu = array();
+	public $settingsforms = array();
+	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
 			call_user_func_array($this->$method, array_merge(array(&$this), $arguments));
@@ -64,8 +67,8 @@ class wtwmenus {
 					switch ($menuaction) {
 						case "show-hide":
 							$style .= "cursor:pointer;";
-							$onclick = "onclick=\"WTW.closeMenus();WTW.showMenuWithScroll('".$menuproperty."');\" ";
-							//$onmouseover = "onmouseover=\"WTW.closeMenus();WTW.showMenuWithScroll('".$menuproperty."');\" ";;
+							$onclick = "onclick=\"WTW.closeMenus();WTW.showSettingsMenu('".$menuproperty."');\" ";
+							//$onmouseover = "onmouseover=\"WTW.closeMenus();WTW.showSettingsMenu('".$menuproperty."');\" ";;
 							//$onmouseout = "onmouseout=\"WTW.closeMenus();WTW.hide('".$menuproperty."');\" ";;
 							break;
 						case "open-tab":
@@ -97,6 +100,138 @@ class wtwmenus {
 		}
 		return $mainmenu;
 	}
+	
+	public function addSettingsMenuItem($zid, $ztitle, $zmenusort, $zmenu, $ziconurl, $zaccessrequired, $zjsfunction) {
+		global $wtwdb;
+		$zsuccess = false;
+		try {
+			/*	$zid = <div> id
+				$ztitle = display name
+				$zmenusort = int for sort order of menu (level 1)
+				$zmenu = top level menu item
+				$ziconurl = browse path to icon image (only applies to level 'menu')
+				$zaccessrequired = array of roles that are granted access - null for all allowed
+				$zjsfunction = javascript function to call for onclick event examples: WTW.show();   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
+			*/
+			$zmenuitem = array(
+				'id' => $zid,
+				'title' => $ztitle,
+				'menusort' => $zmenusort, 
+				'menu' => $zmenu, 
+				'iconurl' => $ziconurl, 
+				'accessrequired' => $zaccessrequired, 
+				'jsfunction' => $zjsfunction
+			);
+			$this->settingsmenu[count($this->settingsmenu)] = $zmenuitem;
+			
+			$zsuccess = true;
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-addSettingsMenuItem=".$e->getMessage());
+		}
+		return $zsuccess;
+	}	
+
+	public function getSettingsMenu() {
+		global $wtw;
+		global $wtwdb;
+		$zsettingsmenu = "";
+		try {
+			$settingsmenuarray = $this->settingsmenu;
+			/* sort menus */
+			array_multisort(array_column($settingsmenuarray, 'menusort'),  SORT_ASC,
+                array_column($settingsmenuarray, 'menu'), SORT_ASC,
+                $settingsmenuarray);
+			/* display menu */
+			$ztempmenu = "";
+			$ztempid = "";
+			foreach ($settingsmenuarray as $zmenuitem) {
+				$zid = $zmenuitem["id"];
+				$ztitle = $zmenuitem["title"];
+				$zmenusort = $zmenuitem["menusort"];
+				$zmenu = $zmenuitem["menu"];
+				$ziconurl = $zmenuitem["iconurl"];
+				$zaccessrequired = $zmenuitem["accessrequired"]; /* array of allowed roles */
+				$zjsfunction = $zmenuitem["jsfunction"];
+				if ($wtwdb->hasPermission($zaccessrequired) || empty($zaccessrequired) || !isset($zaccessrequired)) {
+					/* check for invalid entries */
+					if (empty($zid) | !isset($zid)) {
+						$zid = $wtwdb->getRandomString(5,1);
+					}
+					if (empty($ztitle) | !isset($ztitle)) {
+						$ztitle = 'Menu Item';
+					}
+					if (empty($ziconurl) | !isset($ziconurl)) {
+						$ziconurl = "/content/system/images/menuarrow.png";
+					}
+					if (empty($zjsfunction) || !isset($zjsfunction)) {
+						$zjsfunction = '';
+					}
+					if ($ztempmenu != $zmenu) {
+						$zsettingsmenu .= "<li id=\"".$zid."\" class=\"wtw-menuli\" onclick=\"WTW.hide('wtw_menusettings');".$zjsfunction."\"><img id=\"".$zid."image\" src=\"".$ziconurl."\" alt=\"".$ztitle."\" title=\"".$ztitle."\" class='wtw-menulefticon' />".$ztitle."</li>";
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-getSettingsMenu=".$e->getMessage());
+		}
+		return $zsettingsmenu;
+	}	
+
+	public function addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired) {
+		global $wtwdb;
+		$zsuccess = false;
+		try {
+			
+			$zform = array(
+				'formid' => $zformid,
+				'title' => $ztitle,
+				'formdata' => $zformdata,
+				'accessrequired' => $zaccessrequired
+			);
+			
+			$this->settingsforms[count($this->settingsforms)] = $zform;
+			$zsuccess = true;
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-addMenuForm=".$e->getMessage());
+		}
+		return $zsuccess;
+	}	
+	
+	public function getMenuForms() {
+		global $wtwdb;
+		$zmenuforms = "";
+		try {
+			foreach ($this->settingsforms as $zform) {
+				$zformid = $zform["formid"];
+				$ztitle = $zform["title"];
+				$zaccessrequired = $zform["accessrequired"]; /* array of allowed roles */
+				$zformdata = $zform["formdata"];
+				if ($wtwdb->hasPermission($zaccessrequired) || empty($zaccessrequired) || !isset($zaccessrequired)) {
+					/* check for invalid entries */
+					if (empty($zformid) | !isset($zformid)) {
+						$zformid = $wtwdb->getRandomString(6,1);
+					}
+					if (empty($zformdata) || !isset($zformdata)) {
+						$zformdata = '';
+					}
+					if (!empty($zformdata) && isset($zformdata)) {
+						$zmenuforms = "";
+						$zmenuforms .= "<div id=\"".$zformid."\" class=\"wtw-slideupmenuright\" style=\"display:none;visibility:hidden;\">";
+						$zmenuforms .= "	<img class=\"wtw-closeright\" onclick=\"WTW.closeMenus();\" src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />";
+						$zmenuforms .= "	<div class=\"wtw-menuheading\">".$ztitle."</div>";
+						$zmenuforms .= "	<div id=\"".$zformid."scroll\" class=\"wtw-mainmenuscroll\">";
+						$zmenuforms .= $zformdata;
+						$zmenuforms .= "	</div>";
+						$zmenuforms .= "</div>";
+					}
+				}
+			}			
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-getMenuForms=".$e->getMessage());
+		}
+		return $zmenuforms;
+	}	
+	
 }
 
 	function wtwmenus() {

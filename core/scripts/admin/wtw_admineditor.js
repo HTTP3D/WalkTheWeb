@@ -5864,15 +5864,22 @@ WTWJS.prototype.openFullPageForm = function(pageid, setcategory, item, itemname,
 			previewname = '';
 		}
 		WTW.setDDLValue('wtw_fileselectcategory',setcategory);
-		dGet('wtw_tfileitem').value = item;
-		dGet('wtw_tfileitemname').value = itemname;
-		dGet('wtw_tfileitemnamepath').value = itemnamepath;
-		dGet('wtw_tfileitempreviewname').value = previewname;
+		/* bringing up a fatal error may not use dGet() */
+		document.getElementById('wtw_tfileitem').value = item;
+		document.getElementById('wtw_tfileitemname').value = itemname;
+		document.getElementById('wtw_tfileitemnamepath').value = itemnamepath;
+		document.getElementById('wtw_tfileitempreviewname').value = previewname;
 		WTW.hideFullPages();
 		WTW.hide('wtw_mediapage');
 		WTW.hide('wtw_menuwtwdownloads');
 		WTW.show('wtw_fullpageform');
 		switch (pageid) {
+			case "error":
+				document.getElementById('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Users</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + setcategory + "</div>";
+				WTW.show('wtw_showfilepage');
+				WTW.show('wtw_errorpage');
+				WTW.show('wtw_showerror');
+				break;
 			case "dashboard":
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>WalkTheWeb Dashboard</div>";
 				WTW.show('wtw_dashboardpage');
@@ -5965,12 +5972,6 @@ WTWJS.prototype.openFullPageForm = function(pageid, setcategory, item, itemname,
 						WTW.openWebAliasSettings();
 						break;
 				}
-				break;
-			case "error":
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Users</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + setcategory + "</div>";
-				WTW.show('wtw_showfilepage');
-				WTW.show('wtw_errorpage');
-				WTW.show('wtw_showerror');
 				break;
 			case "fullpage":
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + setcategory + "</div>";
@@ -11392,11 +11393,9 @@ WTWJS.prototype.openAllPluginsComplete = function(zresponse, zpluginname, zactiv
 						zpluginslist += "<td class=\"wtw-tablecolumns " + ztdclass + "\"><span class='" + zpluginclass + "'>" + zresponse[i].title + "</span> : " + zresponse[i].author + "<br />" + zresponse[i].description + "<br /></td>";
 						zpluginslist += "<td class=\"wtw-tablecolumns " + ztdclass + "\">";
 						if (zresponse[i].active == "1") {
-							zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"WTW.activatePlugin('" + zresponse[i].pluginname + "',0);\">Activated</div>";
-						} else if (zresponse[i].pluginname == zpluginname && zresponse[i].active == "0" && zactive == "0") {
-							zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.refresh();\">Reload Browser</div>";
+							zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"WTW.activatePlugin('" + zresponse[i].pluginname + "',0);\" alt=\"Click to Deactivate\" title=\"Click to Deactivate\">Activated</div>";
 						} else {
-							zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.activatePlugin('" + zresponse[i].pluginname + "',1);\">Deactivated</div>";
+							zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.activatePlugin('" + zresponse[i].pluginname + "',1);\" alt=\"Click to Activate\" title=\"Click to Activate\">Deactivated</div>";
 						}
 						zpluginslist += "</td></tr>";
 					}
@@ -11425,6 +11424,14 @@ WTWJS.prototype.activatePlugin = function(zpluginname, zactive) {
 		var iframe = WTW.createIFrame('/core/iframes/pluginloader.php', onload);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-activatePlugin=" + ex.message);
+	}
+}
+
+WTWJS.prototype.activatePluginComplete = function() {
+	try {
+		window.location.href="/admin.php?showupdates=2&communityid=" + communityid + "&buildingid=" + buildingid + "&thingid=" + thingid;
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-activatePluginComplete=" + ex.message);
 	}
 }
 
@@ -11579,9 +11586,9 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 									zpluginslist += "<td class=\"wtw-tablecolumns " + ztdclass + "\"><span class='" + zpluginclass + "'>" + zmyplugins[i].title + "</span> : " + zmyplugins[i].author + "<br />" + zmyplugins[i].description + "<br /></td>";
 									zpluginslist += "<td class=\"wtw-tablecolumns " + ztdclass + "\">";
 									if (zmyplugins[i].active == "1") {
-										zpluginslist += "<div id='activate" + zmyplugins[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"WTW.activatePlugin('" + zmyplugins[i].pluginname + "',0);\">Activated</div>";
+										zpluginslist += "<div id='activate" + zmyplugins[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"WTW.activatePlugin('" + zmyplugins[i].pluginname + "',0);\" alt=\"Click to Deactivate\" title=\"Click to Deactivate\">Activated</div>";
 									} else {
-										zpluginslist += "<div id='activate" + zmyplugins[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.activatePlugin('" + zmyplugins[i].pluginname + "',1);\">Deactivated</div>";
+										zpluginslist += "<div id='activate" + zmyplugins[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.activatePlugin('" + zmyplugins[i].pluginname + "',1);\" alt=\"Click to Activate\" title=\"Click to Activate\">Deactivated</div>";
 									}
 									zpluginslist += "</td></tr>";
 								}
@@ -11661,7 +11668,7 @@ WTWJS.prototype.updatePlugin = function(zpluginname, zversion, zupdatedate, zupd
 
 WTWJS.prototype.updatePluginComplete = function(zpluginname, zversion, zupdatedate, zupdateurl, zsuccess, zshow) {
 	try {
-		window.location.href = "/admin.php?showupdates=" + zshow;
+		window.location.href = "/admin.php?showupdates=" + zshow + "&communityid=" + communityid + "&buildingid=" + buildingid + "&thingid=" + thingid;
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-updatePluginComplete=" + ex.message);
 	}

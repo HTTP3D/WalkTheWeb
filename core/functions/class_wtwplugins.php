@@ -67,6 +67,16 @@ class wtwplugins {
 		global $wtw;
 		return $wtw->addFullPageForm($zid, $zaccessrequired, $zfullpagedata);
 	}
+	
+	public function addSettingsMenuItem($zid, $ztitle, $zmenusort, $zmenu, $ziconurl, $zaccessrequired, $zjsfunction) {
+		global $wtwmenus;
+		return $wtwmenus->addSettingsMenuItem($zid, $ztitle, $zmenusort, $zmenu, $ziconurl, $zaccessrequired, $zjsfunction);
+	}
+	
+	public function addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired) {
+		global $wtwmenus;
+		return $wtwmenus->addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired);
+	}
 }
 
 	function wtwplugins() {
@@ -75,5 +85,8 @@ class wtwplugins {
 
 	/* Global for backwards compatibility. */
 	$GLOBALS['wtwplugins'] = wtwplugins();	
-
+	
+	global $wtwplugins;
+	
+	$wtwplugins->initClass();
 ?>

@@ -37,7 +37,7 @@ try {
 				$zplugins = $wtwpluginloader->getAllPlugins($wtwiframes->contentpath,0);
 				break;
 			case "wtw_bactivateplugin":
-				$wtwpluginloader->setPluginActive($wtwiframes->contentpath, $_POST["wtw_tpluginname"], $_POST["wtw_tactive"]);
+				$wtwpluginloader->setPluginActive($_POST["wtw_tpluginname"], $_POST["wtw_tactive"]);
 				break;
 			case "wtw_bgetplugininfo":
 				$zplugins = $wtwpluginloader->getAllPlugins($wtwiframes->contentpath,0);
@@ -93,7 +93,7 @@ try {
 						parent.WTW.openAllPluginsComplete(dGet('wtw_tplugins').value, dGet('wtw_tpluginname').value, dGet('wtw_tactive').value);
 						break;
 					case "wtw_bactivateplugin":
-						parent.WTW.openAllPlugins(dGet('wtw_tpluginname').value, dGet('wtw_tactive').value);
+						parent.WTW.activatePluginComplete();
 						break;
 					case "wtw_bgetplugininfo":
 						parent.WTW.getPluginInfoComplete(dGet('wtw_tplugins').value, dGet('wtw_tshow').value);

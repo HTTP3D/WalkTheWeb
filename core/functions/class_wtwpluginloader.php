@@ -47,7 +47,7 @@ class wtwpluginloader {
 	}
 	
 	public function getPluginPHP($zcontentpath, $zpluginphp, $zfolder, $zload) {
-		global $wtwdb;
+		global $wtwdb; 
 		$zresponse = array(
 			'pluginname' => '',
 			'version' => '0.0.0',
@@ -125,7 +125,7 @@ class wtwpluginloader {
 		return $zactive;
 	}
 	
-	public function setPluginActive($zcontentpath, $zpluginname, $zactive) {
+	public function setPluginActive($zpluginname, $zactive) {
 		global $wtwdb;
 		$zsuccess = false;
 		try {
@@ -154,7 +154,7 @@ class wtwpluginloader {
 							update ".wtw_tableprefix."plugins
 							set active=".$zactive.",
 								deleteddate=null,
-								deleteduserid='".$wtwdb->userid."',
+								deleteduserid='',
 								deleted=0
 							where pluginname='".$zpluginname."'
 							limit 1;");
@@ -175,9 +175,6 @@ class wtwpluginloader {
 								now(),
 								'".$wtwdb->userid."');");
 					}
-				}
-				if ($zactive == "1" && ($zdeletedold == "1" || ($zactiveold == "0" && $zdeletedold == "0"))) {
-					require_once($zcontentpath."\\plugins\\".$zpluginname."\\".$zpluginname.".php");
 				}
 			}
 		} catch (Exception $e) {
