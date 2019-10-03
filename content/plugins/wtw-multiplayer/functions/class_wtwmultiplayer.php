@@ -45,8 +45,8 @@ class wtwmultiplayer {
 		global $wtwplugins;
 		try {
 			$this->define('WTWMULTIPLAYER_PLUGIN', basename(strtolower(WTWMULTIPLAYER_FILE),".php"));
-			$this->define('WTWMULTIPLAYER_PATH', dirname(WTWMULTIPLAYER_FILE).'/');
-			$this->define('WTWMULTIPLAYER_URL', $wtwplugins->contenturl.'/'.WTWMULTIPLAYER_PLUGIN);
+			$this->define('WTWMULTIPLAYER_PATH', dirname(WTWMULTIPLAYER_FILE));
+			$this->define('WTWMULTIPLAYER_URL', $wtwplugins->contenturl.'/plugins/'.WTWMULTIPLAYER_PLUGIN);
 			$this->define('WTWMULTIPLAYER_PREFIX', str_replace("wtw_wtw-","wtw_",wtw_tableprefix.WTWMULTIPLAYER_PLUGIN)."_");
 			$this->define('WTWMULTIPLAYER_VERSION', $this->version);
 		} catch (Exception $e) {
@@ -67,22 +67,36 @@ class wtwmultiplayer {
 	
 	public function initHooks() {
 		global $wtwplugins;
-		
-		if ($wtwplugins->pagename == "admin.php") {
-			/* admin menu items */
-			/* plugin class -> addAdminMenuItem function (menu item id, menu text, level 1 sort, level 1 id, level 2 sort, level 2 id, level 1 icon, allowed roles array, onclick JavaScript function) */
-			$wtwplugins->addAdminMenuItem('wtw_adminmultiplayer', 'Multi Player', 91, 'wtw_multiplayer', 0, '', '/content/system/images/menumultiplayer.png', array('admin','developer'), null);
-			$wtwplugins->addAdminMenuItem('wtw_adminmultiplayersettings', 'Settings', 91, 'wtw_multiplayer', 1, 'wtw_multiplayersettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','Multiplayer Settings','wtw_multiplayersettingspage');");
+		try {
+			/* Admin only hooks */
+			if ($wtwplugins->pagename == "admin.php") {
+				/* admin menu items */
+				/* wtwplugins class -> addAdminMenuItem function (menu item id, menu text, level 1 sort, level 1 id, level 2 sort, level 2 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
+				$wtwplugins->addAdminMenuItem('wtw_adminmultiplayer', 'Multi Player', 91, 'wtw_multiplayer', 0, '', '/content/system/images/menumultiplayer.png', array('admin','developer'), null);
+				$wtwplugins->addAdminMenuItem('wtw_adminmultiplayersettings', 'Settings', 91, 'wtw_multiplayer', 1, 'wtw_multiplayersettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','Multiplayer Settings','wtw_multiplayersettingspage');");
+				
+				/* admin full page settings forms */
+				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
+				$wtwplugins->addFullPageForm('wtw_multiplayersettingspage', array('admin','developer'), $this->adminMultiplayerSettingsForm());
+			}
 			
-			/* admin full page forms */
-			/* plugin class -> addFullPageForm function (form id, allowed roles array, form html data) */
-			$wtwplugins->addFullPageForm('wtw_multiplayersettingspage', array('admin','developer'), $this->adminMultiplayerSettingsForm());
-		}
-		/* browse menu (bottom) settings menu items */
-		$wtwplugins->addSettingsMenuItem("wtw_menumultiplayer", "Multiplayer Settings", 50, "wtw_menumultiplayer", "/content/system/images/menumultiplayer.png", null, "WTW.showSettingsMenu('wtw_multiplayerform');");
+			/* Browse and Admin hooks  (admin inherrits all browse functions) */
+			/* browse menu (bottom) settings Menu Items */
+			/* wtwplugins class -> addSettingsMenuItem function (menu item id, menu text, sort order, level 1 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
+			$wtwplugins->addSettingsMenuItem("wtw_menumultiplayer", "Multiplayer Settings", 50, "wtw_menumultiplayer", "/content/system/images/menumultiplayer.png", null, "WTW.showSettingsMenu('wtw_multiplayerform');");
+			
+			/* browse menu (bottom) settings Menu Forms */
+			/* wtwplugins class-> addMenuForm function (form id, title text, form html string, allow roles array - null for all) */
+			$wtwplugins->addMenuForm("wtw_multiplayerform", "Multiplayer Settings", $this->multiplayerSettingsForm(), null);
+			
+			/* javascripts */
+			/* wtwplugins class -> addScript function (script id, '1' for admin only, script browse url) */
+			$wtwplugins->addScript('wtw_multiplayerscript', null, WTWMULTIPLAYER_URL."/scripts/multiplayer.js");
 		
-		$wtwplugins->addMenuForm("wtw_multiplayerform", "Multiplayer Settings", $this->multiplayerSettingsForm(), null);
-	}
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins-class_wtwmultiplayer.php-initHooks=".$e->getMessage());
+		}
+	}	
 	
 	public function adminMultiplayerSettingsForm() {
 		global $wtwplugins;
@@ -124,8 +138,8 @@ class wtwmultiplayer {
 			$zformdata .= "	</li>";
 			$zformdata .= "</ul>";
 			$zformdata .= "<ul class=\"wtw-menuli\">";
-			$zformdata .= "	<li class=\"wtw-menuli\" onclick=\"WTW.toggleAvatarIDs();\"><img id=\"wtw_submenuavatarids\" src=\"/content/system/images/menuavataridson.png\" alt=\"Turn Avatar IDs Off\" title=\"Turn Avatar IDs Off\" class='wtw-menulefticon' /><span id=\"wtw_submenuavataridstext\">Avatar IDs are On</span></li>";
-			$zformdata .= "	<li class=\"wtw-menuli\" onclick=\"WTW.toggleMultiPlayer();\"><img id=\"wtw_submenumultiplayer\" src=\"/content/system/images/menumultiplayer.png\" alt=\"Turn Multi-Player Off\" title=\"Turn Multi-Player Off\" class='wtw-menulefticon' /><span id=\"wtw_submenumultiplayertext\">Multi-Player is On</span></li>";
+			$zformdata .= "	<li class=\"wtw-menuli\" onclick=\"WTWMultiplayer.toggleAvatarIDs();\"><img id=\"wtw_submenuavatarids\" src=\"/content/system/images/menuavataridson.png\" alt=\"Turn Avatar IDs Off\" title=\"Turn Avatar IDs Off\" class='wtw-menulefticon' /><span id=\"wtw_submenuavataridstext\">Avatar IDs are On</span></li>";
+			$zformdata .= "	<li class=\"wtw-menuli\" onclick=\"WTWMultiplayer.toggleMultiPlayer();\"><img id=\"wtw_submenumultiplayer\" src=\"/content/system/images/menumultiplayer.png\" alt=\"Turn Multi-Player Off\" title=\"Turn Multi-Player Off\" class='wtw-menulefticon' /><span id=\"wtw_submenumultiplayertext\">Multi-Player is On</span></li>";
 			$zformdata .= "</ul>";
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins-class_wtwmultiplayer.php-multiplayerSettingsForm=".$e->getMessage());
