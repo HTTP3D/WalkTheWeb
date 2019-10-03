@@ -131,7 +131,7 @@ WTWJS.prototype.nextSetupMode = function(avatarname) {
 			var iframe = WTW.createIFrame('/core/iframes/avatars.php', onload);
 			WTW.closeSelectAvatar();
 			WTW.hide('wtw_menuavatarchangediv');
-			WTW.showMenuWithScroll('wtw_menuavatar');
+			WTW.showSettingsMenu('wtw_menuavatar');
 		} else if (avatarname.indexOf("myavatar-" + dGet("wtw_tinstanceid").value) > -1) {
 			if (dGet('wtw_menuavatarcolordiv').style.display != 'none') {
 				WTW.editAvatarPart(avatarname);
@@ -140,7 +140,7 @@ WTWJS.prototype.nextSetupMode = function(avatarname) {
 			if (selavatar != null) {
 				WTW.closeSelectAvatar();
 				WTW.hide('wtw_menuavatarchangediv');
-				WTW.showMenuWithScroll('wtw_menuavatar');
+				WTW.showSettingsMenu('wtw_menuavatar');
 			}
 		}
     } catch (ex) {
@@ -259,7 +259,7 @@ WTWJS.prototype.getSavedAvatar = function(reload) {
 						if (WTW.multipersonOn == 1) {
 							if (WTW.isNumeric(WTW.multiPerson)) {
 								if (Number(WTW.multiPerson) > 0) {
-									window.setTimeout(function() {WTW.initMultiuser();},1000);
+									window.setTimeout(function() {WTWMultiplayer.initMultiuser();},1000);
 								}
 							}
 						} 
@@ -375,14 +375,14 @@ WTWJS.prototype.closeSetupMode = function(save) {
 		if (movecontrols == '1') {
 			dGet('wtw_tshowhelponstart').checked = false;
 		} else if (dGet('wtw_tuserid').value == '') {
-			WTW.showMenuWithScroll('wtw_menucontrols');
+			WTW.showSettingsMenu('wtw_menucontrols');
 		}
 		if (WTW.init.loaded == 0) {
 			WTW.continueLoadSequence();
 			if (WTW.multipersonOn == 1) {
 				if (WTW.isNumeric(WTW.multiPerson)) {
 					if (Number(WTW.multiPerson) > 0) {
-						window.setTimeout(function() {WTW.initMultiuser();},1000);
+						window.setTimeout(function() {WTWMultiplayer.initMultiuser();},1000);
 					}
 				}
 			} 
@@ -420,7 +420,7 @@ WTWJS.prototype.editMyAvatar = function() {
 		WTW.cameraFollow.maxCameraSpeed = 1000;
 		WTW.cameraFollow.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 		scene.activeCameras[0] = WTW.cameraFollow;
-		WTW.showMenuWithScroll('wtw_menuavatar');
+		WTW.showSettingsMenu('wtw_menuavatar');
     } catch (ex) {
 		WTW.log("avatars-loadavatar-editMyAvatar=" + ex.message);
     }
@@ -562,7 +562,7 @@ WTWJS.prototype.loadAvatarAnimationsAll = function(response) {
 				}
 			}
 		}
-		WTW.showMenuWithScroll('wtw_menuavatar');
+		WTW.showSettingsMenu('wtw_menuavatar');
     } catch (ex) {
 		WTW.log("avatars-loadavatar-loadAvatarAnimationsAll=" + ex.message);
     }
@@ -1204,7 +1204,7 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 									if (WTW.multipersonOn == 1) {
 										if (WTW.isNumeric(WTW.multiPerson)) {
 											if (Number(WTW.multiPerson) > 0 && WTW.setupMode == 0) {
-												window.setTimeout(function() {WTW.initMultiuser();},1000);
+												window.setTimeout(function() {WTWMultiplayer.initMultiuser();},1000);
 											}
 										}
 									}

@@ -77,6 +77,74 @@ class wtwplugins {
 		global $wtwmenus;
 		return $wtwmenus->addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired);
 	}
+
+	public function serror($message) {
+		global $wtw;
+		return $wtw->serror($message);
+	}
+	
+	public function addScript($zscriptid, $zadminonly, $zscripturl) {
+		global $wtw;
+		$zsuccess = false;
+		try {
+			$zfound = false;
+			foreach ($wtw->pluginscripts as $zscript) {
+				if (isset($zscript["scriptid"]) && !empty($zscript["scriptid"])) {
+					if ($zscript["scriptid"] == $zscriptid) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				$zscript = array(
+					'scriptid' => $zscriptid,
+					'adminonly' => $zadminonly,
+					'scripturl' => $zscripturl
+				);
+				$wtw->pluginscripts[count($wtw->pluginscripts)] = $zscript;
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwplugins.php-addScript=" . $e->getMessage());
+		}
+		return $zsuccess;
+	}
+	
+	public function getPluginScripts($zadmin, $zver) {
+		global $wtw;
+		$zscripttext = "";
+		try {
+			if (!empty($zadmin) && isset($zadmin)) {
+				if ($zadmin != '1' && $zadmin != 1) {
+					$zadmin = '0';
+				} else {
+					$zadmin = '1';
+				}
+			} else {
+				$zadmin = '0';
+			}
+			foreach ($wtw->pluginscripts as $zscript) {
+				$zscriptid = $zscript["scriptid"];
+				$zadminonly = $zscript["adminonly"];
+				$zscripturl = $zscript["scripturl"];
+				if (!empty($zadminonly) && isset($zadminonly)) {
+					if ($zadminonly != '1' && $zadminonly != 1) {
+						$zadminonly = '0';
+					} else {
+						$zadminonly = '1';
+					}
+				} else {
+					$zadminonly = '0';
+				}
+				if ($zadminonly == $zadmin) {
+					$zscripttext .= "<script id=\"".$zscriptid."\" src=\"".$zscripturl."?x=".$zver."\"></script>\r\n";
+				}
+			}			
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-getMenuForms=".$e->getMessage());
+		}
+		return $zscripttext;
+	}	
 }
 
 	function wtwplugins() {

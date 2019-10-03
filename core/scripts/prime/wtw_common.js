@@ -1,12 +1,6 @@
-// "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. 
-// Patent fully incorporates the concepts for:
-//      the use of three dimensional structures or buildings as websites, 
-//      first person movement between websites (i.e. Pan and Walk), 
-//      and connecting three dimensional websites on grids to make virtual communities.
-// HTTP3D, http://3d, https://3d, and "Walk the Web" are USPTO Trademarks of Aaron Scott Dishno Ed.D. and HTTP3D Inc.
-// All code is Copyright 2013-2019 Aaron Scott Dishno Ed.D. (Author of the code) and HTTP3D Inc. 
-// Use of the code, trademarks or Patent concepts without written authorization of Aaron Scott Dishno Ed.D. is strictly prohibited.
-// Licensing, developer opportunities, and hosted solution options available, please contact adishno@walktheweb.com for details.
+/* All code is Copyright 2013-2019 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
 function dGet(k) {
 	return document.getElementById(k);
@@ -3340,78 +3334,6 @@ WTWJS.prototype.toggleFPS = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-toggleFPS=" + ex.message);
 	}
-}
-
-WTWJS.prototype.toggleAvatarIDs = function() {
-	try {
-		var setvisibility = false;
-		if (dGet('wtw_submenuavataridstext').innerHTML == 'Avatar IDs are Off') {
-			dGet('wtw_submenuavataridstext').innerHTML = 'Avatar IDs are On';
-			dGet('wtw_submenuavatarids').src = '/content/system/images/menuavataridson.png';
-			dGet('wtw_submenuavatarids').alt = 'Turn Avatar IDs Off';
-			dGet('wtw_submenuavatarids').title = 'Turn Avatar IDs Off';
-			WTW.AvatarIDs = 1;
-			WTW.setCookie("AvatarIDs",WTW.AvatarIDs,30);
-			setvisibility = true;
-		} else {
-			dGet('wtw_submenuavataridstext').innerHTML = 'Avatar IDs are Off';
-			dGet('wtw_submenuavatarids').src = '/content/system/images/menuavataridsoff.png';
-			dGet('wtw_submenuavatarids').alt = 'Turn Avatar IDs On';
-			dGet('wtw_submenuavatarids').title = 'Turn Avatar IDs On';
-			WTW.AvatarIDs = 0;
-			WTW.setCookie("AvatarIDs",WTW.AvatarIDs,30);
-		}
-		var meshes = scene.meshes;
-		if (meshes != null) {
-			for (var i=0;i<meshes.length;i++) {
-				if (meshes[i] != null) {
-					if (meshes[i].name.indexOf("person-") > -1 && meshes[i].name.indexOf("-nameplate") > -1) {
-						meshes[i].isVisible = setvisibility;
-					}
-				}
-			}
-		}
-    } catch (ex) {
-        WTW.log("core-scripts-prime-wtw_common.js-toggleAvatarIDs=" +ex.message);
-    }
-}
-
-WTWJS.prototype.toggleMultiPlayer = function() {
-	try {
-		if (dGet('wtw_submenumultiplayertext').innerHTML == 'Multi-Player is Off') {
-			dGet('wtw_submenumultiplayertext').innerHTML = 'Multi-Player is On';
-			dGet('wtw_menumultiplayer').src = '/content/system/images/menumultiplayer.png';
-			dGet('wtw_submenumultiplayer').src = '/content/system/images/menumultiplayer.png';
-			dGet('wtw_submenumultiplayer').alt = 'Turn Multi-Player Off';
-			dGet('wtw_submenumultiplayer').title = 'Turn Multi-Player Off';
-			if (dGet('wtw_tavatarcount').value == '' || WTW.isNumeric(dGet('wtw_tavatarcount').value) == false) {
-				dGet('wtw_tavatarcount').value = '20';
-			}
-			WTW.multiPerson = dGet('wtw_tavatarcount').value;
-			WTW.multipersonOn = 1;
-			WTW.setCookie("multipersonon","1",30);
-			WTW.setCookie("multiperson",WTW.multiPerson,30);
-			if (WTW.setupMode == 0) {
-				WTW.initMultiuser();
-			}
-		} else {
-			dGet('wtw_submenumultiplayertext').innerHTML = 'Multi-Player is Off';
-			dGet('wtw_menumultiplayer').src = '/content/system/images/menumultiplayeroff.png';
-			dGet('wtw_submenumultiplayer').src = '/content/system/images/menumultiplayeroff.png';
-			dGet('wtw_submenumultiplayer').alt = 'Turn Multi-Player On';
-			dGet('wtw_submenumultiplayer').title = 'Turn Multi-Player On';
-			if (dGet('wtw_tavatarcount').value == '' || WTW.isNumeric(dGet('wtw_tavatarcount').value) == false) {
-				dGet('wtw_tavatarcount').value = '0';
-			}
-			WTW.multiPerson = dGet('wtw_tavatarcount').value;
-			WTW.multipersonOn = 0;
-			WTW.setCookie("multipersonon","0",30);
-			WTW.setCookie("multiperson",WTW.multiPerson,30);
-			WTW.clearMultiuser(dGet('wtw_tinstanceid').value, dGet('wtw_tuserid').value);
-		}
-    } catch (ex) {
-        WTW.log("core-scripts-prime-wtw_common.js-toggleMultiPlayer=" +ex.message);
-    }
 }
 
 WTWJS.prototype.getUploadFileData = function(imageid) {

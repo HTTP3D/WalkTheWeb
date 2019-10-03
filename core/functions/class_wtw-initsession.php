@@ -37,7 +37,7 @@ class wtw {
 	public $buildingid = "";
 	public $thingid = "";
 	public $fullpagedivs = array();
-	
+	public $pluginscripts = array();
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -1636,45 +1636,48 @@ class wtw {
 	public function loadJSBrowseData() {
 		$jsdata = "";
 		try {	
-			$ver = $this->version; /* date("Y-m-d-H-i-s"); */
+			$zver = $this->version;
+			$zver = date("Y-m-d-H-i-s");
 			/* materials library: https://github.com/BabylonJS/Babylon.js/tree/master/dist/materialsLibrary/ */
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/multiuser/wtw_tracking.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/multiuser/wtw_chat.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$ver."\"></script>\r\n";
-			/* $jsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$ver."\"></script>\r\n"; */
-			$jsdata .= "<script src=\"/core/scripts/engine/cannon.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.gui.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.skymaterial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.watermaterial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.firematerial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.mixmaterial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.lavamaterial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.triplanarmaterial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.materials.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.terrainmaterial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/pep.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/loader.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/meshwriter.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_input.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_basicactionzones.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_addactionzonelist.js?x=".$ver."\"></script>\r\n";			
-			$jsdata .= "<script src=\"/core/scripts/coverings/wtw_basiccoverings.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/coverings/wtw_addcoveringlist.js?x=".$ver."\"></script>\r\n";		
-			$jsdata .= "<script src=\"/core/scripts/molds/wtw_basicmolds.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/molds/wtw_addmoldlist.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_basicavatars.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_addavatarlist.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/automations/wtw_basicautomations.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/automations/wtw_addautomationlist.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_core.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_init.js?x=".$ver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/multiuser/wtw_tracking.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/multiuser/wtw_chat.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$zver."\"></script>\r\n";
+			/* $jsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$zver."\"></script>\r\n"; */
+			$jsdata .= "<script src=\"/core/scripts/engine/cannon.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.gui.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.skymaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.watermaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.firematerial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.mixmaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.lavamaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.triplanarmaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.materials.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.terrainmaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/pep.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/loader.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/meshwriter.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_input.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_basicactionzones.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_addactionzonelist.js?x=".$zver."\"></script>\r\n";			
+			$jsdata .= "<script src=\"/core/scripts/coverings/wtw_basiccoverings.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/coverings/wtw_addcoveringlist.js?x=".$zver."\"></script>\r\n";		
+			$jsdata .= "<script src=\"/core/scripts/molds/wtw_basicmolds.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/molds/wtw_addmoldlist.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_basicavatars.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_addavatarlist.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/automations/wtw_basicautomations.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/automations/wtw_addautomationlist.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_core.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_init.js?x=".$zver."\"></script>\r\n";
+			global $wtwplugins;
+			$jsdata .= $wtwplugins->getPluginScripts('0', $zver);
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadJSBrowseData=".$e->getMessage());
 		}
@@ -1694,48 +1697,50 @@ class wtw {
 	public function loadJSAdminData() {
 		$jsdata = "";
 		try {	
-			$ver = $this->version; /* date("Y-m-d-H-i-s"); */
-			$ver = date("Y-m-d-H-i-s");
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/multiuser/wtw_tracking.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/multiuser/wtw_chat.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$ver."\"></script>\r\n";
-			/* $jsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$ver."\"></script>\r\n"; */
-			$jsdata .= "<script src=\"/core/scripts/engine/cannon.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.gui.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.skymaterial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.watermaterial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.firematerial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.mixmaterial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.lavamaterial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.triplanarmaterial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.materials.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.terrainmaterial.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/pep.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/loader.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/meshwriter.min.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_input.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/admin/wtw_admininput.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_basicactionzones.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_addactionzonelist.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/coverings/wtw_basiccoverings.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/coverings/wtw_addcoveringlist.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/molds/wtw_basicmolds.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/molds/wtw_addmoldlist.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_basicavatars.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_addavatarlist.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/automations/wtw_basicautomations.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/automations/wtw_addautomationlist.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_core.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/admin/wtw_admineditor.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_init.js?x=".$ver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/admin/wtw_admininit.js?x=".$ver."\"></script>\r\n";
+			$zver = $this->version;
+			$zver = date("Y-m-d-H-i-s");
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/multiuser/wtw_tracking.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/multiuser/wtw_chat.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$zver."\"></script>\r\n";
+			/* $jsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$zver."\"></script>\r\n"; */
+			$jsdata .= "<script src=\"/core/scripts/engine/cannon.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.gui.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.skymaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.watermaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.firematerial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.mixmaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.lavamaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.triplanarmaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.materials.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.terrainmaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/pep.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/loader.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/meshwriter.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_input.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/admin/wtw_admininput.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_basicactionzones.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_addactionzonelist.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/coverings/wtw_basiccoverings.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/coverings/wtw_addcoveringlist.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/molds/wtw_basicmolds.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/molds/wtw_addmoldlist.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_basicavatars.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_addavatarlist.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/automations/wtw_basicautomations.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/automations/wtw_addautomationlist.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_core.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/admin/wtw_admineditor.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_init.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/admin/wtw_admininit.js?x=".$zver."\"></script>\r\n";
+			global $wtwplugins;
+			$jsdata .= $wtwplugins->getPluginScripts('1', $zver);
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadJSAdminData=".$e->getMessage());
 		}

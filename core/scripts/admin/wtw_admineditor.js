@@ -1,12 +1,6 @@
-// "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. 
-// Patent fully incorporates the concepts for:
-//      the use of three dimensional structures or buildings as websites, 
-//      first person movement between websites (i.e. Pan and Walk), 
-//      and connecting three dimensional websites on grids to make virtual communities.
-// HTTP3D, http://3d, https://3d, and "Walk the Web" are USPTO Trademarks of Aaron Scott Dishno Ed.D. and HTTP3D Inc.
-// All code is Copyright 2013-2019 Aaron Scott Dishno Ed.D. (Author of the code) and HTTP3D Inc. 
-// Use of the code, trademarks or Patent concepts without written authorization of Aaron Scott Dishno Ed.D. is strictly prohibited.
-// Licensing, developer opportunities, and hosted solution options available, please contact adishno@walktheweb.com for details
+/* All code is Copyright 2013-2019 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
 WTWJS.prototype.lineZ;
 WTWJS.prototype.lineX;

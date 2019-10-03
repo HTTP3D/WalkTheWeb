@@ -99,20 +99,29 @@ class wtwadminmenu {
 				$zaccessrequired = array of roles that are granted access - null for all allowed
 				$zjsfunction = javascript function to call for onclick event examples: WTW.show();   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
 			*/
-			$zmenuitem = array(
-				'id' => $zid,
-				'title' => $ztitle,
-				'menusort' => $zmenusort, 
-				'menu' => $zmenu, 
-				'submenusort' => $zsubmenusort, 
-				'submenu' => $zsubmenu, 
-				'iconurl' => $ziconurl, 
-				'accessrequired' => $zaccessrequired, 
-				'jsfunction' => $zjsfunction
-			);
-			$this->adminmenu[count($this->adminmenu)] = $zmenuitem;
-			
-			$zsuccess = true;
+			$zfound = false;
+			foreach ($this->adminmenu as $zadminmenuitems) {
+				if (isset($zadminmenuitems["id"]) && !empty($zadminmenuitems["id"])) {
+					if ($zadminmenuitems["id"] == $zid) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				$zmenuitem = array(
+					'id' => $zid,
+					'title' => $ztitle,
+					'menusort' => $zmenusort, 
+					'menu' => $zmenu, 
+					'submenusort' => $zsubmenusort, 
+					'submenu' => $zsubmenu, 
+					'iconurl' => $ziconurl, 
+					'accessrequired' => $zaccessrequired, 
+					'jsfunction' => $zjsfunction
+				);
+				$this->adminmenu[count($this->adminmenu)] = $zmenuitem;
+				$zsuccess = true;
+			}
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwadminmenu.php-addAdminMenuItem=".$e->getMessage());
 		}

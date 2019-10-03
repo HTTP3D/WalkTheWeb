@@ -113,18 +113,27 @@ class wtwmenus {
 				$zaccessrequired = array of roles that are granted access - null for all allowed
 				$zjsfunction = javascript function to call for onclick event examples: WTW.show();   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
 			*/
-			$zmenuitem = array(
-				'id' => $zid,
-				'title' => $ztitle,
-				'menusort' => $zmenusort, 
-				'menu' => $zmenu, 
-				'iconurl' => $ziconurl, 
-				'accessrequired' => $zaccessrequired, 
-				'jsfunction' => $zjsfunction
-			);
-			$this->settingsmenu[count($this->settingsmenu)] = $zmenuitem;
-			
-			$zsuccess = true;
+			$zfound = false;
+			foreach ($this->settingsmenu as $zsettingsmenu) {
+				if (isset($zsettingsmenu["id"]) && !empty($zsettingsmenu["id"])) {
+					if ($zsettingsmenu["id"] == $zid) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				$zmenuitem = array(
+					'id' => $zid,
+					'title' => $ztitle,
+					'menusort' => $zmenusort, 
+					'menu' => $zmenu, 
+					'iconurl' => $ziconurl, 
+					'accessrequired' => $zaccessrequired, 
+					'jsfunction' => $zjsfunction
+				);
+				$this->settingsmenu[count($this->settingsmenu)] = $zmenuitem;
+				$zsuccess = true;
+			}
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwmenus.php-addSettingsMenuItem=".$e->getMessage());
 		}
@@ -181,16 +190,25 @@ class wtwmenus {
 		global $wtwdb;
 		$zsuccess = false;
 		try {
-			
-			$zform = array(
-				'formid' => $zformid,
-				'title' => $ztitle,
-				'formdata' => $zformdata,
-				'accessrequired' => $zaccessrequired
-			);
-			
-			$this->settingsforms[count($this->settingsforms)] = $zform;
-			$zsuccess = true;
+			$zfound = false;
+			foreach ($this->settingsforms as $zsettingsform) {
+				if (isset($zsettingsform["formid"]) && !empty($zsettingsform["formid"])) {
+					if ($zsettingsform["formid"] == $zformid) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				$zform = array(
+					'formid' => $zformid,
+					'title' => $ztitle,
+					'formdata' => $zformdata,
+					'accessrequired' => $zaccessrequired
+				);
+				
+				$this->settingsforms[count($this->settingsforms)] = $zform;
+				$zsuccess = true;
+			}
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwmenus.php-addMenuForm=".$e->getMessage());
 		}
