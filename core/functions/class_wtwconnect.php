@@ -777,7 +777,9 @@ class wtwconnect {
 	/* Global for backwards compatibility. */
 	$GLOBALS['wtwconnect'] = wtwconnect();
 	
-	session_start();
+	if (session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
 	function shutdownOnErrorConnect() {
 		$error = error_get_last();
 		if ($error != null) {
@@ -808,6 +810,6 @@ class wtwconnect {
 			}
 		}
 	}
-	
+	global $wtwconnect;
 	$wtwconnect->initClass();
 ?>

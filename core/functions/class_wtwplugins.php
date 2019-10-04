@@ -60,7 +60,11 @@ class wtwplugins {
 	
 	public function addAdminMenuItem($zid, $ztitle, $zmenusort, $zmenu, $zsubmenusort, $zsubmenu, $ziconurl, $zaccessrequired, $zjsfunction) {
 		global $wtwadminmenu;
-		return $wtwadminmenu->addAdminMenuItem($zid, $ztitle, $zmenusort, $zmenu, $zsubmenusort, $zsubmenu, $ziconurl, $zaccessrequired, $zjsfunction);
+		if (isset($wtwadminmenu)) {
+			return $wtwadminmenu->addAdminMenuItem($zid, $ztitle, $zmenusort, $zmenu, $zsubmenusort, $zsubmenu, $ziconurl, $zaccessrequired, $zjsfunction);
+		} else {
+			return false;
+		}
 	}
 	
 	public function addFullPageForm($zid, $zaccessrequired, $zfullpagedata) {
@@ -70,12 +74,20 @@ class wtwplugins {
 	
 	public function addSettingsMenuItem($zid, $ztitle, $zmenusort, $zmenu, $ziconurl, $zaccessrequired, $zjsfunction) {
 		global $wtwmenus;
-		return $wtwmenus->addSettingsMenuItem($zid, $ztitle, $zmenusort, $zmenu, $ziconurl, $zaccessrequired, $zjsfunction);
+		if (isset($wtwmenus)) {
+			return $wtwmenus->addSettingsMenuItem($zid, $ztitle, $zmenusort, $zmenu, $ziconurl, $zaccessrequired, $zjsfunction);
+		} else {
+			return false;
+		}
 	}
 	
 	public function addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired) {
 		global $wtwmenus;
-		return $wtwmenus->addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired);
+		if (isset($wtwmenus)) {
+			return $wtwmenus->addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired);
+		} else {
+			return false;
+		}
 	}
 
 	public function serror($message) {
@@ -136,12 +148,170 @@ class wtwplugins {
 				} else {
 					$zadminonly = '0';
 				}
-				if ($zadminonly == $zadmin) {
+				if ($zadminonly == $zadmin || $zadminonly == '0') {
 					$zscripttext .= "<script id=\"".$zscriptid."\" src=\"".$zscripturl."?x=".$zver."\"></script>\r\n";
 				}
 			}			
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwmenus.php-getMenuForms=".$e->getMessage());
+			$wtwdb->serror("core-functions-class_wtwmenus.php-getPluginScripts=".$e->getMessage());
+		}
+		return $zscripttext;
+	}	
+
+	public function addScriptFunction($zevent, $zfunctionname) {
+		global $wtw;
+		$zsuccess = false;
+		try {
+			$zfound = false;
+			foreach ($wtw->pluginscriptfunctions as $zscriptfunctions) {
+				if (isset($zscriptfunctions["event"]) && !empty($zscriptfunctions["event"]) && isset($zscriptfunctions["functionname"]) && !empty($zscriptfunctions["functionname"])) {
+					if ($zscriptfunctions["event"] == $zevent && $zscriptfunctions["functionname"] == $zfunctionname) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				$zscriptfunction = array(
+					'event' => $zevent,
+					'functionname' => $zfunctionname
+				);
+				$wtw->pluginscriptfunctions[count($wtw->pluginscriptfunctions)] = $zscriptfunction;
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwplugins.php-addScriptFunction=" . $e->getMessage());
+		}
+		return $zsuccess;
+	}
+	
+	public function getScriptFunctions() {
+		global $wtw;
+		$jsdata = "";
+		try {
+			$jsdata .= "<script type=\"text/javascript\">\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsRenderloop = function() {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('renderloop');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsRenderloop=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+			
+			$jsdata .= "	WTWJS.prototype.pluginsRenderloopAfterInit = function() {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('renderloopafterinit');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsRenderloopAfterInit=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+			
+			$jsdata .= "	WTWJS.prototype.pluginsLoadUserSettings = function() {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('loadusersettings');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsLoadUserSettings=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsMyAnimationsLoaded = function() {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('myavataranimationsloaded');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsMyAnimationsLoaded=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsSetupModeClosed = function() {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('setupmodeclosed');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSetupModeClosed=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsSavedAvatarRetrieved = function() {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('savedavatarretrieved');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSavedAvatarRetrieved=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsCheckActionZoneTrigger = function(zactionzone) {\r\n";
+			$jsdata .= "		var othersinzone = false;\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('checkactionzonetrigger','othersinzone');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsCheckActionZoneTrigger=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return othersinzone;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsCheckActionZone = function(zactionzone, zmeinzone, zothersinzone) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('checkactionzone');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsCheckActionZone=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsAvatarBeforeCreate = function(avatarname, avatardef) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('avatarbeforecreate', 'avatardef');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsAvatarBeforeCreate=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return avatardef;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "</script>"; 
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-getScriptFunctions=".$e->getMessage());
+		}
+		return $jsdata;
+	}	
+
+	public function getScriptFunction($zgetevent) {
+		global $wtw;
+		$zscripttext = "";
+		try {
+			foreach ($wtw->pluginscriptfunctions as $zscriptfunctions) {
+				$zevent = trim($zscriptfunctions["event"]);
+				$zfunctionname = trim($zscriptfunctions["functionname"]);
+				if (!empty($zfunctionname) && isset($zfunctionname)) {
+					if (strpos($zfunctionname,";") === false) {
+						$zfunctionname .= ";";
+					}
+					if (strtolower($zevent) == strtolower($zgetevent) && strlen($zfunctionname) > 4) {
+						$zscripttext .= $zfunctionname."\r\n";
+					}
+				}
+			}			
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-getScriptFunction=".$e->getMessage());
+		}
+		return $zscripttext;
+	}	
+
+	public function returnScriptFunction($zgetevent, $zjsvariable) {
+		/* zgetevent tells us which javascript function, zjsvariable is the js variable to assign (may or may not include var before it)*/
+		global $wtw;
+		$zscripttext = "";
+		try {
+			foreach ($wtw->pluginscriptfunctions as $zscriptfunctions) {
+				$zevent = trim($zscriptfunctions["event"]);
+				$zfunctionname = trim($zscriptfunctions["functionname"]);
+				if (!empty($zfunctionname) && isset($zfunctionname)) {
+					if (strpos($zfunctionname,";") === false) {
+						$zfunctionname .= ";";
+					}
+					if (strtolower($zevent) == strtolower($zgetevent) && strlen($zfunctionname) > 4) {
+						$zscripttext .= $zjsvariable." = ".$zfunctionname."\r\n";
+					}
+				}
+			}			
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-returnScriptFunction=".$e->getMessage());
 		}
 		return $zscripttext;
 	}	

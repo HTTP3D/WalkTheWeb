@@ -8796,40 +8796,6 @@ WTWJS.prototype.loadUserSettings = function() {
 		} else {
 			dGet("wtw_tmyavataridanon").value = "";
 		}
-		var multipersonon = WTW.getCookie("multipersonon");
-		if (multipersonon != null) {
-			if (multipersonon == "0") {
-				WTW.multipersonOn = 0;
-				dGet('wtw_submenumultiplayertext').innerHTML = 'Multi-Player is Off';
-				dGet('wtw_menumultiplayer').src = '/content/system/images/menumultiplayeroff.png';
-				dGet('wtw_submenumultiplayer').src = '/content/system/images/menumultiplayeroff.png';
-				dGet('wtw_submenumultiplayer').alt = 'Turn Multi-Player On';
-				dGet('wtw_submenumultiplayer').title = 'Turn Multi-Player On';
-			}
-		}
-		var multiperson = WTW.getCookie("multiperson");
-		if (multiperson != null) {
-			if (WTW.isNumeric(multiperson)) {
-				WTW.multiPerson = Number(multiperson);
-			} else {
-				WTW.multiPerson = 20;
-			}
-		} else {
-			WTW.multiPerson = 20;
-		}
-		dGet('wtw_tavatarcount').value = WTW.multiPerson;
-		var AvatarIDs = WTW.getCookie("AvatarIDs");
-		if (AvatarIDs != null) {
-			if (WTW.isNumeric(AvatarIDs)) {
-				WTW.AvatarIDs = Number(AvatarIDs);
-			}
-		}
-		if (WTW.AvatarIDs == 0) {
-			dGet('wtw_submenuavataridstext').innerHTML = 'Avatar IDs are Off';
-			dGet('wtw_submenuavatarids').src = '/content/system/images/menuavataridsoff.png';
-			dGet('wtw_submenuavatarids').alt = 'Turn Avatar IDs On';
-			dGet('wtw_submenuavatarids').title = 'Turn Avatar IDs On';
-		}
 		var showcompass = WTW.getCookie("showcompass");
 		if (showcompass != null) {
 			if (showcompass == "0") {
@@ -8916,6 +8882,7 @@ WTWJS.prototype.loadUserSettings = function() {
 				dGet('wtw_graphichelptitle').innerHTML = "Graphics (High Resolution)";
 				break;
 		}
+		WTW.pluginsLoadUserSettings();
 	} catch (ex) { 
 		WTW.log("core-scripts-prime-wtw_common.js-loadUserSettings=" + ex.message);
 	}

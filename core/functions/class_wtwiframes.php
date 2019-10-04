@@ -310,7 +310,9 @@ class wtwiframes {
 	/* Global for backwards compatibility. */
 	$GLOBALS['wtwiframes'] = wtwiframes();
 	
-	session_start();
+	if (session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
 	function shutdownOnErrorIframe() {
 		$error = error_get_last();
 		if ($error != null) {

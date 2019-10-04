@@ -1044,6 +1044,7 @@ WTWJS.prototype.startRender = function() {
 			engine.runRenderLoop(function () {
 				scene.render();
 				try {
+					WTW.pluginsRenderloop();
 					WTW.animationRatio = scene.getAnimationRatio();
 					WTW.fps = (Math.round(engine.getFps() * 100) / 100).toFixed(2);
 					WTW.framei += 1;
@@ -1051,14 +1052,7 @@ WTWJS.prototype.startRender = function() {
 						WTW.framei = 0;
 					}
 					if (WTW.isInitCycle == 0 && WTW.myAvatar != null && WTW.setupMode == 0) { // WTW.adminView == 0 && 
-						if (WTW.trackMovement == 0 && WTW.multipersonOn == 1) {
-							WTW.trackMovement = 1;
-							WTWMultiplayer.setTrackMovement();
-						}
-						if (WTW.moveAvatars == 0) {
-							WTW.moveAvatars = 1;
-							WTWMultiplayer.runOtherAvatarMovement();
-						}
+						WTW.pluginsRenderloopAfterInit();
 					}
 					if (WTW.MyAvatar != null) {
 						WTW.sky.position.x = WTW.MyAvatar.position.x;
@@ -1168,8 +1162,10 @@ WTWJS.prototype.checkActionZones = function() {
 							if (WTW.myAvatar != null) {
 								meinzone = WTW.myAvatar.intersectsMesh(actionzone, false);
 							}
-							if (meinzone) {
-								if (moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 2) {
+							var othersinzone = false;
+							othersinzone = WTW.pluginsCheckActionZoneTrigger(actionzone);
+							if (meinzone || othersinzone) {
+								if (meinzone && moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 2) {
 									if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
 										if (WTW.actionZones[i].status == 0) {
 											WTW.addLoadZoneToQueue(i);
@@ -1194,14 +1190,6 @@ WTWJS.prototype.checkActionZones = function() {
 										WTW.rideAlong = WTW.newRideAlong();
 										WTW.rideAlong.ridealongmoldname = moldname.replace("actionzone-", "actionzoneaxle-");
 									}
-								}
-							} else if (WTW.multiPersonInActionZone(actionzone) && moldname.indexOf("loadzone") == -1) {
-								if (moldname.indexOf("clickactivated") > -1) {
-								} else if (moldname.indexOf("door") > -1 && WTW.actionZones[i].status != 4 && WTW.actionZones[i].status != 3) {
-									WTW.actionZones[i].status = 3;
-								} else if (moldname.indexOf("mirror") > -1 && WTW.actionZones[i].status != 2) {
-									WTW.actionZones[i].status = 2;
-									WTW.checkMirrorReflectionList(i);
 								}
 							} else {
 								if (moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {
@@ -1229,6 +1217,7 @@ WTWJS.prototype.checkActionZones = function() {
 									}
 								}
 							}
+							WTW.pluginsCheckActionZone(actionzone, meinzone, othersinzone);
 						} else if (WTW.rideAlong != null) {
 							if (moldname == WTW.rideAlong.ridealongmoldname || moldname == WTW.rideAlong.ridealongmoldname.replace("actionzoneaxle","actionzone")) {
 								WTW.rideAlong = null;
@@ -1267,27 +1256,6 @@ WTWJS.prototype.checkActionZones = function() {
 	} catch(ex) {
 		WTW.log("core-checkActionZones=" + ex.message);
 	}
-}
-
-WTWJS.prototype.multiPersonInActionZone = function(actionzone) {
-	var intersects = false;
-	try {
-		for (var i=0; i < WTW.avatars.length; i++) {
-			if (WTW.avatars[i] != null) {
-				var avatarname = "person-" + WTW.avatars[i].instanceid;
-				var avatar1 = scene.getMeshByID(avatarname);
-				if (avatar1 != null) {
-					intersects = avatar1.intersectsMesh(actionzone, false); // precise false
-				}
-				if (intersects == true) {
-					i = WTW.avatars.length;
-				}
-			}
-		}
-	} catch(ex){
-		WTW.log("core-multiPersonInActionZone=" + ex.message);
-	}
-	return intersects;
 }
 
 WTWJS.prototype.setClosestBuilding = function() {

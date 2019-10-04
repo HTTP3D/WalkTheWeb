@@ -13,7 +13,6 @@ class wtwmultiplayer {
 		global $wtwplugins;
 		try {
 			$this->defineConstants();
-			$this->initHooks();
 			$this->initClass();
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins-class_wtwmultiplayer.php-construct=".$e->getMessage());
@@ -57,15 +56,14 @@ class wtwmultiplayer {
 	public function initClass() {
 		global $wtwplugins;
 		try {
-			echo "<script>console.log('LOADED MULTIPLAYER');</script>";
-
-			
+			$this->initAdminOnlyHooks();
+			$this->initHooks();
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins-class_wtwmultiplayer.php-initClass=".$e->getMessage());
 		}
 	}
 	
-	public function initHooks() {
+	public function initAdminOnlyHooks() {
 		global $wtwplugins;
 		try {
 			/* Admin only hooks */
@@ -79,8 +77,16 @@ class wtwmultiplayer {
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
 				$wtwplugins->addFullPageForm('wtw_multiplayersettingspage', array('admin','developer'), $this->adminMultiplayerSettingsForm());
 			}
-			
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins-class_wtwmultiplayer.php-initAdminOnlyHooks=".$e->getMessage());
+		}
+	}	
+	
+	public function initHooks() {
+		global $wtwplugins;
+		try {
 			/* Browse and Admin hooks  (admin inherrits all browse functions) */
+
 			/* browse menu (bottom) settings Menu Items */
 			/* wtwplugins class -> addSettingsMenuItem function (menu item id, menu text, sort order, level 1 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
 			$wtwplugins->addSettingsMenuItem("wtw_menumultiplayer", "Multiplayer Settings", 50, "wtw_menumultiplayer", "/content/system/images/menumultiplayer.png", null, "WTW.showSettingsMenu('wtw_multiplayerform');");
@@ -92,7 +98,24 @@ class wtwmultiplayer {
 			/* javascripts */
 			/* wtwplugins class -> addScript function (script id, '1' for admin only, script browse url) */
 			$wtwplugins->addScript('wtw_multiplayerscript', null, WTWMULTIPLAYER_URL."/scripts/multiplayer.js");
-		
+			
+			/* setting javascript functions to events */
+			/* wtwplugins class -> addScriptFunction function (event, javascript function) - choose from events: */
+
+			$wtwplugins->addScriptFunction("renderloopafterinit", "WTWMultiplayer.renderLoopAfterInit();");
+			/* $wtwplugins->addScriptFunction("renderloop", "console.log('renderloop');"); */
+
+			$wtwplugins->addScriptFunction("loadusersettings", "WTWMultiplayer.loadUserSettings();");
+			
+			$wtwplugins->addScriptFunction("myavataranimationsloaded", "WTWMultiplayer.activateMultiplayer();");
+			$wtwplugins->addScriptFunction("setupmodeclosed", "WTWMultiplayer.activateMultiplayer();");
+			$wtwplugins->addScriptFunction("savedavatarretrieved", "WTWMultiplayer.activateMultiplayer();");
+
+			$wtwplugins->addScriptFunction("checkactionzonetrigger", "WTWMultiplayer.multiPersonInActionZone(zactionzone);");
+			/* $wtwplugins->addScriptFunction("checkactionzone", "yourfunction();"); // variables available: zactionzone, zmeinzone, zothersinzone */
+
+			$wtwplugins->addScriptFunction("avatarbeforecreate", "WTWMultiplayer.showAvatarIDs(avatarname, avatardef);");
+
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins-class_wtwmultiplayer.php-initHooks=".$e->getMessage());
 		}

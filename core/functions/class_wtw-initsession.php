@@ -38,6 +38,7 @@ class wtw {
 	public $thingid = "";
 	public $fullpagedivs = array();
 	public $pluginscripts = array();
+	public $pluginscriptfunctions = array();
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -192,6 +193,11 @@ class wtw {
 					$this->community = "";
 					$this->building = "";
 					$this->thing = "";
+					if (trim($pathdef[1]) == "connect") {
+						require_once('./core/functions/class_wtwpluginloader.php');
+						global $wtwpluginloader;
+						$wtwpluginloader->loadConnectURL();
+					}
 				} else if (trim($pathdef[1]) == "community" || trim($pathdef[1]) == "communities") {
 					$this->community = trim($pathdef[2]);
 					$this->building = "";
@@ -1575,58 +1581,61 @@ class wtw {
 	}
 	
 	public function loadInitJSData() {
+		global $wtwplugins;
 		$jsdata = "";
 		try {	
-			$jsdata = "	<script type=\"text/javascript\">\r\n";
+			$jsdata = "<script type=\"text/javascript\">\r\n";
 			if (defined('wtw_devmode')) {
-				$jsdata .= "		var wtw_devmode = '".wtw_devmode."';\r\n";
+				$jsdata .= "	var wtw_devmode = '".wtw_devmode."';\r\n";
 			} else {
-				$jsdata .= "		var wtw_devmode = '0';\r\n";
+				$jsdata .= "	var wtw_devmode = '0';\r\n";
 			}
 			if (defined('wtw_defaultdomain')) {
-				$jsdata .= "		var wtw_defaultdomain = '".wtw_defaultdomain."';\r\n";
+				$jsdata .= "	var wtw_defaultdomain = '".wtw_defaultdomain."';\r\n";
 			} else {
-				$jsdata .= "		var wtw_defaultdomain = '';\r\n";
+				$jsdata .= "	var wtw_defaultdomain = '';\r\n";
 			}
 			if (defined('wtw_defaultsitename')) {
-				$jsdata .= "		var wtw_defaultsitename = '".wtw_defaultsitename."';\r\n";
+				$jsdata .= "	var wtw_defaultsitename = '".wtw_defaultsitename."';\r\n";
 			} else {
-				$jsdata .= "		var wtw_defaultsitename = '';\r\n";
+				$jsdata .= "	var wtw_defaultsitename = '';\r\n";
 			}
 			if (defined('wtw_googleanalytics')) {
-				$jsdata .= "		var wtw_googleanalytics = '".wtw_googleanalytics."';\r\n";
+				$jsdata .= "	var wtw_googleanalytics = '".wtw_googleanalytics."';\r\n";
 			} else {
-				$jsdata .= "		var wtw_googleanalytics = '';\r\n";
+				$jsdata .= "	var wtw_googleanalytics = '';\r\n";
 			}
-			$jsdata .= "		var wtw_protocol = '".$this->protocol."';\r\n";
-			$jsdata .= "		var wtw_domainurl = '".$this->domainurl."';\r\n";
-			$jsdata .= "		var wtw_domainname = '".$this->domainname."';\r\n";
-			$jsdata .= "		var community = '".$this->community."';\r\n";
-			$jsdata .= "		var building = '".$this->building."';\r\n";
-			$jsdata .= "		var thinging = '".$this->thing."';\r\n";
-			$jsdata .= "		var communityid = '".$this->communityid."';\r\n";
-			$jsdata .= "		var buildingid = '".$this->buildingid."';\r\n";
-			$jsdata .= "		var thingid = '".$this->thingid."';\r\n";
-			$jsdata .= "		var wtw_domain;\r\n";
-			$jsdata .= "		var wtw_uploads = [];\r\n";
-			$jsdata .= "		var wtw_version = \"".$this->version."\";\r\n";
-			$jsdata .= "		var wtw_versiondate = \"".$this->versiondate."\";\r\n";
-			$jsdata .= "		var wtw_versiontext = \"HTTP3D Inc. (v".$this->version.") ".date('m-d-Y', strtotime($this->versiondate))."\";\r\n";
-			$jsdata .= "		try {\r\n";
-			$jsdata .= "			wtw_domain = JSON.stringify(".json_encode($this->getSceneSetting()).");\r\n";
-			$jsdata .= "		} catch(ex) {\r\n 			console.log('core-snippets-checkloadurl=' + ex.message);\r\n";
+			$jsdata .= "	var wtw_protocol = '".$this->protocol."';\r\n";
+			$jsdata .= "	var wtw_domainurl = '".$this->domainurl."';\r\n";
+			$jsdata .= "	var wtw_domainname = '".$this->domainname."';\r\n";
+			$jsdata .= "	var community = '".$this->community."';\r\n";
+			$jsdata .= "	var building = '".$this->building."';\r\n";
+			$jsdata .= "	var thinging = '".$this->thing."';\r\n";
+			$jsdata .= "	var communityid = '".$this->communityid."';\r\n";
+			$jsdata .= "	var buildingid = '".$this->buildingid."';\r\n";
+			$jsdata .= "	var thingid = '".$this->thingid."';\r\n";
+			$jsdata .= "	var wtw_domain;\r\n";
+			$jsdata .= "	var wtw_uploads = [];\r\n";
+			$jsdata .= "	var wtw_version = \"".$this->version."\";\r\n";
+			$jsdata .= "	var wtw_versiondate = \"".$this->versiondate."\";\r\n";
+			$jsdata .= "	var wtw_versiontext = \"HTTP3D Inc. (v".$this->version.") ".date('m-d-Y', strtotime($this->versiondate))."\";\r\n";
+			$jsdata .= "	try {\r\n";
+			$jsdata .= "		wtw_domain = JSON.stringify(".json_encode($this->getSceneSetting()).");\r\n";
+			$jsdata .= "	} catch(ex) {\r\n 			console.log('core-snippets-checkloadurl=' + ex.message);\r\n";
+			$jsdata .= "	}\r\n";
+            $jsdata .= "	if (window != top) {\r\n";
+            $jsdata .= "	    top.location.href = location.href;\r\n";
+            $jsdata .= "	}\r\n";
+            $jsdata .= "	if (top.frames.length != 0) {\r\n";
+            $jsdata .= "	    if (window.location.href.replace) {\r\n";
+            $jsdata .= "	    	top.location.replace(self.location.href);\r\n";
+            $jsdata .= "		} else {\r\n";
+            $jsdata .= "		    top.location.href = self.document.href;\r\n";
 			$jsdata .= "		}\r\n";
-            $jsdata .= "		if (window != top) {\r\n";
-            $jsdata .= "		    top.location.href = location.href;\r\n";
-            $jsdata .= "		}\r\n";
-            $jsdata .= "		if (top.frames.length != 0) {\r\n";
-            $jsdata .= "		    if (window.location.href.replace) {\r\n";
-            $jsdata .= "		        top.location.replace(self.location.href);\r\n";
-            $jsdata .= "		    } else {\r\n";
-            $jsdata .= "		        top.location.href = self.document.href;\r\n";
-			$jsdata .= "			}\r\n";
-            $jsdata .= "		}\r\n";
-			$jsdata .= "	</script>"; 	
+            $jsdata .= "	}\r\n";
+			$jsdata .= "</script>"; 
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$this->version."\"></script>\r\n";
+			$jsdata .= $wtwplugins->getScriptFunctions();
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadInitJSData=".$e->getMessage());
 		}
@@ -1639,13 +1648,11 @@ class wtw {
 			$zver = $this->version;
 			$zver = date("Y-m-d-H-i-s");
 			/* materials library: https://github.com/BabylonJS/Babylon.js/tree/master/dist/materialsLibrary/ */
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/multiuser/wtw_tracking.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/multiuser/wtw_chat.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$zver."\"></script>\r\n";
 			/* $jsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$zver."\"></script>\r\n"; */
@@ -1699,13 +1706,11 @@ class wtw {
 		try {	
 			$zver = $this->version;
 			$zver = date("Y-m-d-H-i-s");
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/multiuser/wtw_tracking.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/multiuser/wtw_chat.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$zver."\"></script>\r\n";
 			/* $jsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$zver."\"></script>\r\n"; */
@@ -2379,8 +2384,9 @@ class wtw {
 	/* Global for backwards compatibility. */
 	$GLOBALS['wtw'] = wtw();
 
-	session_start();
-
+	if (session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
 	function shutdownOnError() {
 		$error = error_get_last();
 		if ($error != null) {

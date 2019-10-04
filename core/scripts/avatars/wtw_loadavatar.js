@@ -256,13 +256,7 @@ WTWJS.prototype.getSavedAvatar = function(reload) {
 					WTW.loadAvatarFromDB(response.avatar, reload);
 					if (reload == false) {
 						WTW.switchCamera(1);
-						if (WTW.multipersonOn == 1) {
-							if (WTW.isNumeric(WTW.multiPerson)) {
-								if (Number(WTW.multiPerson) > 0) {
-									window.setTimeout(function() {WTWMultiplayer.initMultiuser();},1000);
-								}
-							}
-						} 
+						WTW.pluginsSavedAvatarRetrieved();
 					}
 				}
 			}
@@ -379,13 +373,7 @@ WTWJS.prototype.closeSetupMode = function(save) {
 		}
 		if (WTW.init.loaded == 0) {
 			WTW.continueLoadSequence();
-			if (WTW.multipersonOn == 1) {
-				if (WTW.isNumeric(WTW.multiPerson)) {
-					if (Number(WTW.multiPerson) > 0) {
-						window.setTimeout(function() {WTWMultiplayer.initMultiuser();},1000);
-					}
-				}
-			} 
+			WTW.pluginsSetupModeClosed();
 		}
 		if (save) {
 			WTW.switchCamera(1);
@@ -1201,13 +1189,7 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 									WTW.toggleMenuAnimations();
 									WTW.toggleMenuAnimations();
 									WTW.showAvatarDisplayName(false);
-									if (WTW.multipersonOn == 1) {
-										if (WTW.isNumeric(WTW.multiPerson)) {
-											if (Number(WTW.multiPerson) > 0 && WTW.setupMode == 0) {
-												window.setTimeout(function() {WTWMultiplayer.initMultiuser();},1000);
-											}
-										}
-									}
+									WTW.pluginsMyAnimationsLoaded();
 								}
 							}); 
 						}

@@ -17,10 +17,6 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 		var rotationy = 0;
 		var rotationz = 0;
 		var avatarind = 0;
-		var displayname = 'Anonymous';
-		if (avatardef.displayname != undefined) {
-			displayname = avatardef.displayname;
-		}
 		if (avatardef.position.x != undefined) {
 			if (WTW.isNumeric(avatardef.position.x)) {
 				positionx = Number(avatardef.position.x);
@@ -126,31 +122,6 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 			avatarcenter.isVisible = false;
 		}
 		
-		if (displayname != '' && avatarname.indexOf('person-') > -1) {
-			var molddef = WTW.newMold();
-			molddef.webtext.webtext = displayname;
-			molddef.webtext.webstyle = JSON.stringify({
-				"anchor":"center",
-				"letter-height":1.00,
-				"letter-thickness":.10,
-				"color":"#0000ff",
-				"alpha":1.00,
-				"colors":{
-					"diffuse":"#f0f0f0",
-					"specular":"#000000",
-					"ambient":"#808080",
-					"emissive":"#0000ff"
-				}
-			});
-			var namemold = WTW.addMold3DText(avatarname + '-nameplate', molddef, 1, 1, 1);
-			namemold.parent = avatar;
-			namemold.position.y = 16;
-			namemold.billboardMode = 2;
-			if (WTW.AvatarIDs == 0) {
-				namemold.isVisible = false;
-			}
-		}
-		
 		var objectanimations = null;
 		var objectfolder = "/content/system/avatars/male/";
 		var objectfile = "maleidle.babylon";
@@ -181,6 +152,8 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 		}
 
 		avataranimationdefs = WTW.loadAvatarAnimationDefinitions(avatarind, avataranimationdefs);
+				
+		avatardef = WTW.pluginsAvatarBeforeCreate(avatarname, avatardef);
 		
 		BABYLON.SceneLoader.ImportMeshAsync("", objectfolder, objectfile, scene).then(
 			function (results) {

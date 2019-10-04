@@ -62,7 +62,6 @@ function WTWJS() {
 	this.actionZones = [];
 	this.automations = [];
 	this.products = [];
-	this.avatars = [];
 	this.moldList = [];
 	this.keysPressed = [];
 	this.moldEvents = [];
@@ -71,14 +70,9 @@ function WTWJS() {
 	this.refreshLastMoveEvents = true;
 	this.rideAlong = null;
 	this.drive = null;
-	this.trackMovement = 0;
 	this.touch = null;
 	this.touchLeftTimer = null;
 	this.touchRightTimer = null;
-	this.moveAvatars = 0;
-	this.multiPerson = 20;
-	this.multipersonOn = 1;
-	this.AvatarIDs = 1;
 	this.cameraYOffset = 0;
 	this.myAvatar = null; 
 	this.scrollTimer = null;
