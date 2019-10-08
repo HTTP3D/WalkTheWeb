@@ -6,11 +6,10 @@ try {
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/avatars.php");
 
 	/* get values from querystring or session */
-	$zinstanceid = $wtwconnect->getVal('i','');
-	$zuserid = $wtwconnect->getVal('d','');
-	$zuserip = $wtwconnect->getVal('p','');
+	$zinstanceid = base64_decode($wtwconnect->getVal('i',''));
+	$zuserid = base64_decode($wtwconnect->getVal('d',''));
+	$zuserip = base64_decode($wtwconnect->getVal('p',''));
 	$zuseravatarid = "";
-	$znewuseravatarid = "";
 	if ((empty($zuserid) || !isset($zuserid)) && !empty($zinstanceid) && isset($zinstanceid)) {
 		/* check for anonymous avatar with same instanceid - not logged in user (latest used) */
 		$zresults = $wtwconnect->query("

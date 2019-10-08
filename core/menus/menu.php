@@ -57,7 +57,7 @@
 			<ul class="wtw-menuli">
 				<li class="wtw-menuliholder wtw-center"><img id="wtw_profileimagelg" src="/content/system/images/menuprofilebig.png" alt="Profile" title="Profile" class='wtw-profilelg' /></li>
 				<li class="wtw-submenuli">Avatar Display Name</li>
-				<li class="wtw-submenuli"><div id="wtw_menudisplayname" class="wtw-indentbold" onclick="WTW.editProfile();">My Name</div>
+				<li class="wtw-submenuli"><div id="wtw_menudisplayname" class="wtw-indentbold" onclick="WTW.editProfile();"></div>
 					<input type="text" id="wtw_teditdisplayname" class="wtw-hide" /></li>
 				<li class="wtw-submenuli">User Name</li>
 				<li class="wtw-submenuli"><div id="wtw_menuusername" class="wtw-indentbold" onclick="WTW.editProfile();">UserName</div>

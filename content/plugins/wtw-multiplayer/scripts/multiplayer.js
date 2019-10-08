@@ -15,6 +15,7 @@ var WTWMultiplayer = new wtwmultiplayer();
 
 wtwmultiplayer.prototype.initMultiuser = function() {
 	try {
+		var avatarind = 1;
 		var objectfolder = "";
 		var objectfile = "";
 		var httpsecure = "0";
@@ -24,6 +25,9 @@ wtwmultiplayer.prototype.initMultiuser = function() {
 		var privacy = "0";
 		if (WTW.myAvatar != null) {
 			if (WTW.myAvatar.WTW != null) {
+				if (WTW.myAvatar.WTW.avatarind != undefined) {
+					avatarind = WTW.myAvatar.WTW.avatarind;
+				}
 				if (WTW.myAvatar.WTW.object != null) {
 					if (WTW.myAvatar.WTW.object.folder != undefined) {
 						objectfolder = WTW.myAvatar.WTW.object.folder;
@@ -61,6 +65,7 @@ wtwmultiplayer.prototype.initMultiuser = function() {
 		var surl = wtw_domainurl + "/connect/wtw-multiplayer-updateavatar.php?" +
 			"&i=" + btoa(dGet('wtw_tinstanceid').value) + 
 			"&u=" + btoa(myavatarid) + 
+			"&ai=" + btoa(avatarind) + 
 			"&d=" + btoa(dGet('wtw_tuserid').value) + 
 			"&o=" + btoa(objectfolder) + 
 			"&f=" + btoa(objectfile) + 
@@ -80,16 +85,16 @@ wtwmultiplayer.prototype.initMultiuser = function() {
 	} 
 }
 
-wtwmultiplayer.prototype.getMultiUserAvatar = function(instance, zuserid) {
+wtwmultiplayer.prototype.getMultiUserAvatar = function(instanceid, zuserid) {
 	try {
 		for (var i = 0; i < scene.meshes.length; i++) {
 			var moldname = scene.meshes[i].name;
-			if (moldname.indexOf("person-") > -1) {
+			if (moldname.indexOf("person-") > -1 && moldname.indexOf(instanceid) > -1) {
 				WTW.addDisposeMoldToQueue(moldname);
 			}
 		}
-		var surl = "https://3dnet.walktheweb.com/connect/getavatar.php?" + 
-			"i=" + btoa(instance) + 
+		var surl = wtw_domainurl + "/connect/wtw-multiplayer-getavatar.php?" + 
+			"i=" + btoa(instanceid) + 
 			"&d=" + btoa(zuserid) +
 			"&c=" + btoa(communityid) + 
 			"&b=" + btoa(buildingid); 
@@ -122,7 +127,7 @@ wtwmultiplayer.prototype.clearMultiuser = function(instance, zuserid) {
 				WTW.addDisposeMoldToQueue(moldname);
 			}
 		}
-		var surl = "https://3dnet.walktheweb.com/connect/clearavatar.php?" + 
+		var surl = wtw_domainurl + "/connect/wtw-multiplayer-clearavatar.php?" + 
 			"i=" + btoa(instance) + 
 			"&d=" + btoa(zuserid) + 
 			"&c=" + btoa(communityid) + 
@@ -133,72 +138,6 @@ wtwmultiplayer.prototype.clearMultiuser = function(instance, zuserid) {
 	} catch (ex) {
 		WTW.log("multiuser-tracking-clearMultiuser=" + ex.message);
 	}
-}
-
-wtwmultiplayer.prototype.getAvatarInstance = function(avatarnamepart) {
-	var instanceid = "";
-	try {
-		if (avatarnamepart.indexOf('-') > -1) {
-			var nameparts = avatarnamepart.split('-');
-			if (nameparts[0] == 'person' && nameparts[1] != null) {
-				instanceid = nameparts[1];
-			}
-		}
-	} catch(ex) {
-		WTW.log("multiuser-tracking-getAvatarInstance=" + ex.message);
-	}
-	return instanceid;
-}
-
-wtwmultiplayer.prototype.setAvatarInstanceState = function(instanceid, loaded) {
-	try {
-		if (WTWMultiplayer.avatars != null) {
-			if (WTWMultiplayer.avatars.length > 0) {
-				for (var i=0;i<WTWMultiplayer.avatars.length;i++) {
-					if (WTWMultiplayer.avatars[i] != null) {
-						if (WTWMultiplayer.avatars[i].instanceid != null) {
-							if (WTWMultiplayer.avatars[i].instanceid == instanceid) {
-								WTWMultiplayer.avatars[i].loaded = loaded;
-							}
-						}
-					}
-				}
-			}
-		} else {
-			WTWMultiplayer.avatars = [];
-		}
-	} catch (ex) {
-		WTW.log("multiuser-tracking-setAvatarInstanceState=" + ex.message);
-	}
-}
-
-wtwmultiplayer.prototype.getAvatarInstanceState = function(instanceid, zuserid) {
-	var avatarind = -1;
-	var loaded = 0;
-	try {
-		if (WTWMultiplayer.avatars != null) {
-			if (WTWMultiplayer.avatars.length > 0) {
-				for (var i=0;i<WTWMultiplayer.avatars.length;i++) {
-					if (WTWMultiplayer.avatars[i] != null) {
-						if (WTWMultiplayer.avatars[i].instanceid != null) {
-							if (WTWMultiplayer.avatars[i].instanceid == instanceid && WTWMultiplayer.avatars[i].userid == zuserid) {
-								avatarind = i;
-								loaded = WTWMultiplayer.avatars[i].loaded;
-							}
-						}
-					}
-				}
-			}
-		} else {
-			WTWMultiplayer.avatars = [];
-		}
-	} catch (ex) {
-		WTW.log("multiuser-tracking-getAvatarInstanceState=" + ex.message);
-	}
-	return {
-		'avatarind':avatarind,
-		'loaded':loaded
-	};
 }
 
 wtwmultiplayer.prototype.getAvatarDisplayName = function(instanceid) {
@@ -348,7 +287,7 @@ wtwmultiplayer.prototype.setTrackMovement = function() {
 		if (dGet('wtw_tuserid').value == '') {
 			myavatarid = dGet('wtw_tmyavataridanon').value;
 		}
-		var surl = "https://3dnet.walktheweb.com/connect/track.php?" +
+		var surl = wtw_domainurl + "/connect/wtw-multiplayer-tracking.php?" +
 			"i=" + btoa(dGet('wtw_tinstanceid').value) + 
 			"&u=" + btoa(myavatarid) + 
 			"&d=" + btoa(dGet('wtw_tuserid').value) + 
@@ -376,19 +315,89 @@ wtwmultiplayer.prototype.setTrackMovement = function() {
 	} 
 }
 
+wtwmultiplayer.prototype.getAvatarInstance = function(avatarnamepart) {
+	var instanceid = "";
+	try {
+		if (avatarnamepart.indexOf('-') > -1) {
+			var nameparts = avatarnamepart.split('-');
+			if (nameparts[0] == 'person' && nameparts[1] != null) {
+				instanceid = nameparts[1];
+			}
+		}
+	} catch(ex) {
+		WTW.log("multiuser-tracking-getAvatarInstance=" + ex.message);
+	}
+	return instanceid;
+}
+
+wtwmultiplayer.prototype.setAvatarInstanceState = function(instanceid, loaded) {
+	try {
+		if (WTWMultiplayer.avatars != null) {
+			if (WTWMultiplayer.avatars.length > 0) {
+				for (var i=0;i<WTWMultiplayer.avatars.length;i++) {
+					if (WTWMultiplayer.avatars[i] != null) {
+						if (WTWMultiplayer.avatars[i].instanceid != null) {
+							if (WTWMultiplayer.avatars[i].instanceid == instanceid) {
+								WTWMultiplayer.avatars[i].loaded = loaded;
+							}
+						}
+					}
+				}
+			}
+		} else {
+			WTWMultiplayer.avatars = [];
+		}
+	} catch (ex) {
+		WTW.log("multiuser-tracking-setAvatarInstanceState=" + ex.message);
+	}
+}
+
+wtwmultiplayer.prototype.getAvatarInstanceState = function(instanceid, zuserid) {
+	var avatarind = -1;
+	var loaded = 0;
+	try {
+		if (instanceid != dGet('wtw_tinstanceid').value) {
+			if (WTWMultiplayer.avatars != null) {
+				if (WTWMultiplayer.avatars.length > 0) {
+					for (var i=0;i<WTWMultiplayer.avatars.length;i++) {
+						if (WTWMultiplayer.avatars[i] != null) {
+							if (WTWMultiplayer.avatars[i].instanceid != null) {
+								if (WTWMultiplayer.avatars[i].instanceid == instanceid && WTWMultiplayer.avatars[i].userid == zuserid) {
+									avatarind = i;
+									loaded = WTWMultiplayer.avatars[i].loaded;
+								}
+							}
+						}
+					}
+				}
+			} else {
+				WTWMultiplayer.avatars = [];
+			}
+		} else {
+			loaded = 2;
+		}
+	} catch (ex) {
+		WTW.log("multiuser-tracking-getAvatarInstanceState=" + ex.message);
+	}
+	return {
+		'avatarind':avatarind,
+		'loaded':loaded
+	};
+}
+
 wtwmultiplayer.prototype.renderTrackingMovement = function(trackdefs) {
 	try {
 		if (trackdefs != null && trackdefs != undefined) {
 			if(trackdefs.length > 0) {
-				for (var i=0; i < trackdefs.length; i++) {
+				for (var i=trackdefs.length; i > -1; i--) {
 					if (trackdefs[i] != null && trackdefs[i] != undefined) {
 						if (i == 0) {
-							WTW.receiveChatText(trackdefs[i].chat.chatid, trackdefs[i].chat.chattext);
+							//WTW.receiveChatText(trackdefs[i].chat.chatid, trackdefs[i].chat.chattext);
 						}
 						var instanceid = trackdefs[i].instanceid;
-						var zuserid = trackdefs[i].userid;
-						var instancestate = WTWMultiplayer.getAvatarInstanceState(instanceid, zuserid);
 						if (instanceid != dGet('wtw_tinstanceid').value) {
+							var zuserid = trackdefs[i].userid;
+							var instancestate = WTWMultiplayer.getAvatarInstanceState(instanceid, zuserid);
 							var posx = Number(trackdefs[i].position.x);
 							var posy = Number(trackdefs[i].position.y);
 							var posz = Number(trackdefs[i].position.z);
@@ -409,10 +418,10 @@ wtwmultiplayer.prototype.renderTrackingMovement = function(trackdefs) {
 									if (WTWMultiplayer.avatars[instancestate.avatarind] != null) {
 										if (instancestate.loaded == '2') {
 											var avatar = scene.getMeshByID("person-" + WTWMultiplayer.avatars[instancestate.avatarind].instanceid);
-											if (avatar == null) {
-												WTWMultiplayer.avatars.splice(instancestate.avatarind,1);
-												WTWMultiplayer.avatars[instancestate.avatarind].lastupdate = false;
-											} else {
+											//if (avatar == null) {
+											//	WTWMultiplayer.avatars.splice(instancestate.avatarind,1);
+											//	WTWMultiplayer.avatars[instancestate.avatarind].lastupdate = false;
+											//} else {
 												WTWMultiplayer.avatars[instancestate.avatarind].loaded = '2';
 												WTWMultiplayer.avatars[instancestate.avatarind].avatarind = selectavatarind;
 												WTWMultiplayer.avatars[instancestate.avatarind].lastposition.x = WTWMultiplayer.avatars[instancestate.avatarind].position.x;
@@ -440,7 +449,7 @@ wtwmultiplayer.prototype.renderTrackingMovement = function(trackdefs) {
 												}
 												WTWMultiplayer.avatars[instancestate.avatarind].moveevents = moveevents;
 												WTWMultiplayer.avatars[instancestate.avatarind].lastupdate = true;
-											}
+											//}
 										} else {
 											WTWMultiplayer.avatars[instancestate.avatarind].updated = true;
 											WTWMultiplayer.avatars[instancestate.avatarind].lastupdate = false;
@@ -598,7 +607,6 @@ wtwmultiplayer.prototype.setOtherAvatarMovement = function(avatar, avatarind, tr
 				WTWMultiplayer.avatars[avatarind].lastposition.z = lastposz;
 			}
 		}
-		//WTW.setAvatarMovement(avatar, moveevents);
 		if (avatar.WTW != null) {
 			if (avatar.WTW.animations != null) {
 				if (avatar.WTW.animations.running != null) {
@@ -879,6 +887,7 @@ wtwmultiplayer.prototype.showAvatarIDs = function(avatarname, avatardef) {
 			displayname = avatardef.displayname;
 		}
 		if (displayname != '' && avatarname.indexOf('person-') > -1) {
+			var avatar = scene.getMeshByID(avatarname);
 			var molddef = WTW.newMold();
 			molddef.webtext.webtext = displayname;
 			molddef.webtext.webstyle = JSON.stringify({

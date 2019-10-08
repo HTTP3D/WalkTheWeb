@@ -58,6 +58,7 @@ class wtwmultiplayer {
 		try {
 			$this->initAdminOnlyHooks();
 			$this->initHooks();
+			$this->checkTablesForUpdates();
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins-class_wtwmultiplayer.php-initClass=".$e->getMessage());
 		}
@@ -170,6 +171,138 @@ class wtwmultiplayer {
 		return $zformdata;
 	}
 	
+	public function checkTablesForUpdates() {
+		global $wtwplugins;
+		try {
+			if ($wtwplugins->pagename == "admin.php") {
+				$dbversion = $wtwplugins->getSetting("dbversion");
+				if ($dbversion != $this->dbversion) {
+					$wtwplugins->deltaCreateTable("
+						CREATE TABLE `".WTWMULTIPLAYER_PREFIX."useravatars` (
+						  `useravatarid` varchar(45) NOT NULL,
+						  `userid` varchar(16) DEFAULT '',
+						  `userip` varchar(64) DEFAULT '',
+						  `instanceid` varchar(45) DEFAULT '',
+						  `avatarind` int(11) DEFAULT '1',
+						  `objectfolder` varchar(256) DEFAULT '',
+						  `objectfile` varchar(256) DEFAULT '',
+						  `domain` varchar(256) DEFAULT '3d.walktheweb.com',
+						  `secureprotocol` int(11) DEFAULT '1',
+						  `scalingx` decimal(18,2) DEFAULT '1.00',
+						  `scalingy` decimal(18,2) DEFAULT '1.00',
+						  `scalingz` decimal(18,2) DEFAULT '1.00',
+						  `displayname` varchar(45) DEFAULT '',
+						  `privacy` int(11) DEFAULT '0',
+						  `lastdate` datetime DEFAULT NULL,
+						  `lastip` varchar(45) DEFAULT '',
+						  `createdate` datetime DEFAULT NULL,
+						  `createuserid` varchar(16) DEFAULT '',
+						  `updatedate` datetime DEFAULT NULL,
+						  `updateuserid` varchar(16) DEFAULT '',
+						  `deleteddate` datetime DEFAULT NULL,
+						  `deleteduserid` varchar(16) DEFAULT '',
+						  `deleted` int(11) DEFAULT '0',
+						  PRIMARY KEY (`useravatarid`),
+						  UNIQUE KEY `".WTWMULTIPLAYER_PREFIX."useravatarid_UNIQUE` (`useravatarid`)
+						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+					");
+					$wtwplugins->deltaCreateTable("
+						CREATE TABLE `".WTWMULTIPLAYER_PREFIX."useravatarcolors` (
+						  `avatarpartid` varchar(40) NOT NULL,
+						  `userid` varchar(16) DEFAULT '',
+						  `useravatarid` varchar(16) DEFAULT '',
+						  `instanceid` varchar(24) DEFAULT '',
+						  `avatarpart` varchar(256) DEFAULT NULL,
+						  `emissivecolorr` decimal(20,18) DEFAULT '1.000000000000000000',
+						  `emissivecolorg` decimal(20,18) DEFAULT '1.000000000000000000',
+						  `emissivecolorb` decimal(20,18) DEFAULT '1.000000000000000000',
+						  `createdate` datetime DEFAULT NULL,
+						  `createuserid` varchar(16) DEFAULT '',
+						  `updatedate` datetime DEFAULT NULL,
+						  `updateuserid` varchar(16) DEFAULT '',
+						  `deleteddate` datetime DEFAULT NULL,
+						  `deleteduserid` varchar(16) DEFAULT '',
+						  `deleted` int(11) DEFAULT '0',
+						  PRIMARY KEY (`avatarpartid`),
+						  UNIQUE KEY `".WTWMULTIPLAYER_PREFIX."useravatarcolorid_UNIQUE` (`avatarpartid`)
+						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+					");
+					$wtwplugins->deltaCreateTable("
+						CREATE TABLE `".WTWMULTIPLAYER_PREFIX."useravataranimations` (
+						  `useravataranimationid` varchar(40) NOT NULL,
+						  `avataranimationid` varchar(16) DEFAULT NULL,
+						  `useravatarid` varchar(16) DEFAULT NULL,
+						  `instanceid` varchar(24) DEFAULT '',
+						  `avataranimationname` varchar(45) DEFAULT '',
+						  `speedratio` decimal(18,2) DEFAULT '1.00',
+						  `walkspeed` decimal(18,2) DEFAULT '1.00',
+						  `loadpriority` int(11) DEFAULT '0',
+						  `animationfriendlyname` varchar(255) DEFAULT '',
+						  `animationicon` varchar(255) DEFAULT '',
+						  `objectfolder` varchar(255) DEFAULT '',
+						  `objectfile` varchar(255) DEFAULT '',
+						  `startframe` int(11) DEFAULT '0',
+						  `endframe` int(11) DEFAULT '0',
+						  `animationloop` int(11) DEFAULT '1',
+						  `soundid` varchar(16) DEFAULT '',
+						  `soundpath` varchar(255) DEFAULT '',
+						  `soundmaxdistance` decimal(18,2) DEFAULT '100.00',
+						  `createdate` datetime DEFAULT NULL,
+						  `createuserid` varchar(16) DEFAULT '',
+						  `updatedate` datetime DEFAULT NULL,
+						  `updateuserid` varchar(16) DEFAULT '',
+						  `deleteddate` datetime DEFAULT NULL,
+						  `deleteduserid` varchar(16) DEFAULT '',
+						  `deleted` int(11) DEFAULT '0',
+						  PRIMARY KEY (`useravataranimationid`),
+						  UNIQUE KEY `".WTWMULTIPLAYER_PREFIX."useravataranimationid_UNIQUE` (`useravataranimationid`),
+						  KEY `".WTWMULTIPLAYER_PREFIX."idx_useravataranimations` (`avataranimationid`,`useravatarid`,`avataranimationname`)
+						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+					");
+					$wtwplugins->deltaCreateTable("
+						CREATE TABLE `".WTWMULTIPLAYER_PREFIX."tracking` (
+						  `trackid` varchar(16) NOT NULL,
+						  `instanceid` varchar(45) DEFAULT '',
+						  `communityid` varchar(16) DEFAULT '',
+						  `buildingid` varchar(16) DEFAULT '',
+						  `userid` varchar(16) DEFAULT '',
+						  `useravatarid` varchar(45) DEFAULT '',
+						  `positionx` decimal(18,2) DEFAULT '0.00',
+						  `positiony` decimal(18,2) DEFAULT '0.00',
+						  `positionz` decimal(18,2) DEFAULT '0.00',
+						  `rotationx` decimal(18,2) DEFAULT '0.00',
+						  `rotationy` decimal(18,2) DEFAULT '0.00',
+						  `rotationz` decimal(18,2) DEFAULT '0.00',
+						  `walkspeed` decimal(18,2) DEFAULT '1.00',
+						  `runspeed` decimal(18,2) DEFAULT '2.00',
+						  `activeanimations` varchar(512) DEFAULT '',
+						  `movetime` datetime DEFAULT NULL,
+						  PRIMARY KEY (`trackid`),
+						  UNIQUE KEY `".WTWMULTIPLAYER_PREFIX."trackid_UNIQUE` (`trackid`),
+						  KEY `".WTWMULTIPLAYER_PREFIX."tracking_webid` (`communityid`,`buildingid`,`instanceid`,`userid`,`trackid`)
+						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+					");
+					$wtwplugins->deltaCreateTable("
+						CREATE TABLE `".WTWMULTIPLAYER_PREFIX."chats` (
+						  `chatindexid` bigint(22) NOT NULL AUTO_INCREMENT,
+						  `chatid` varchar(1024) DEFAULT '',
+						  `instanceid` varchar(45) DEFAULT '',
+						  `communityid` varchar(16) DEFAULT '',
+						  `buildingid` varchar(16) DEFAULT '',
+						  `chattext` mediumtext,
+						  `createdate` datetime DEFAULT NULL,
+						  `createuserid` varchar(16) DEFAULT '',
+						  PRIMARY KEY (`chatindexid`),
+						  UNIQUE KEY `".WTWMULTIPLAYER_PREFIX."chatindexid_UNIQUE` (`chatindexid`)
+						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+					");
+					$wtwplugins->saveSetting("dbversion", $this->dbversion);
+				}
+			}
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins-class_wtwmultiplayer.php-checkTablesForUpdates=".$e->getMessage());
+		}
+	}
 }
 
 	function wtwmultiplayer() {

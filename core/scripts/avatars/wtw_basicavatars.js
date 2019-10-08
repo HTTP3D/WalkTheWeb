@@ -150,9 +150,8 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 				avataranimationdefs = avatardef.avataranimationdefs;
 			}
 		}
-
 		avataranimationdefs = WTW.loadAvatarAnimationDefinitions(avatarind, avataranimationdefs);
-				
+
 		avatardef = WTW.pluginsAvatarBeforeCreate(avatarname, avatardef);
 		
 		BABYLON.SceneLoader.ImportMeshAsync("", objectfolder, objectfile, scene).then(

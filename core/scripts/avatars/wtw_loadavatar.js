@@ -221,7 +221,7 @@ WTWJS.prototype.getSavedAvatar = function(reload) {
 		if (reload == undefined) {
 			reload = false;
 		}
-		WTW.getJSON("/connect/avatars.php?i=" + dGet('wtw_tinstanceid').value + "&d=" + dGet('wtw_tuserid').value + "&p=" + dGet('wtw_tuserip').value, 
+		WTW.getJSON("/connect/avatars.php?i=" + btoa(dGet('wtw_tinstanceid').value) + "&d=" + btoa(dGet('wtw_tuserid').value) + "&p=" + btoa(dGet('wtw_tuserip').value), 
 			function(response) {
 				response = JSON.parse(response);
 				var avatarind = -1;
@@ -1169,9 +1169,7 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 								walkskeleton.createAnimationRange(animation.animationname, Number(animation.startframe), Number(animation.endframe));
 								for (var m=0;m<walkresults.meshes.length;m++) {
 									if (walkresults.meshes[m] != null) {
-										walkresults.meshes[m].isVisible = false;
-										walkresults.meshes[m].name = "avataranimation-" + m + "-" + animation.animationname + "-" + walkresults.meshes[m].name;
-										WTW.addDisposeMoldToQueue(walkresults.meshes[m].name);
+										walkresults.meshes[m].dispose();
 									}
 								}
 								avatar.WTW.skeleton.copyAnimationRange(walkskeleton, animation.animationname, true);

@@ -76,6 +76,41 @@ class wtwdb {
 		}	
 		return $data;		
 	}
+	
+	public function deltaCreateTable($zsql) {
+		/* accepts a CREATE TABLE mysql statement and compares it to existing table (if it exists) and creates or updates the table schema */
+		try {
+			$ztable = "";
+			$zsql = str_replace("\n","",str_replace("\r","",$zsql));
+			$zsqlsegments = explode("(",$zsql);
+			foreach ($zsqlsegments as $zsqlpart) {
+				if (strpos(strtolower($zsqlpart),"create table") !== false) {
+					$zwords = explode(" ",trim($zsqlpart));
+					foreach ($zwords as $zword) {
+						if (isset($zword) && !empty($zword) && $zword != "create" && $zword != "table" && empty($ztable)) {
+							$ztable = str_replace("`","",$zword);
+						}
+					}
+				}
+			}
+			
+			/* check if table already exists */
+			if ($this->tableExists($ztable)) {
+				/* look up existing table schema and check fields, update or insert where necessary */
+				
+				
+				
+				
+				
+				
+			} else {
+				/* execute create statement */
+				$this->query($zsql);
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-deltaCreateTable=".$e->getMessage());
+		}	
+	}
 
 	public function getRandomString($zlength,$zstringtype) {
 		$zrandomstring = '';

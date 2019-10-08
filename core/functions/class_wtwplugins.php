@@ -95,6 +95,36 @@ class wtwplugins {
 		return $wtw->serror($message);
 	}
 	
+	public function query($zsql) {
+		global $wtwdb;
+		return $wtwdb->query($zsql);
+	}
+	
+	public function deltaCreateTable($zsql) {
+		global $wtwdb;
+		return $wtwdb->deltaCreateTable($zsql);
+	}
+
+	public function getSetting($zsettingname) {
+		global $wtwdb;
+		return $wtwdb->getSetting($zsettingname);
+	}
+
+	public function saveSetting($zsettingname, $zsettingvalue) {
+		global $wtwdb;
+		return $wtwdb->saveSetting($zsettingname, $zsettingvalue);
+	}
+
+	public function getSettings($zsettingnames) {
+		global $wtwdb;
+		return $wtwdb->getSettings($zsettingnames);
+	}
+
+	public function saveSettings($zsettings) {
+		global $wtwdb;
+		return $wtwdb->saveSettings($zsettings);
+	}
+	
 	public function addScript($zscriptid, $zadminonly, $zscripturl) {
 		global $wtw;
 		$zsuccess = false;
