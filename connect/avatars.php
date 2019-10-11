@@ -10,6 +10,7 @@ try {
 	$zuserid = base64_decode($wtwconnect->getVal('d',''));
 	$zuserip = base64_decode($wtwconnect->getVal('p',''));
 	$zuseravatarid = "";
+	
 	if ((empty($zuserid) || !isset($zuserid)) && !empty($zinstanceid) && isset($zinstanceid)) {
 		/* check for anonymous avatar with same instanceid - not logged in user (latest used) */
 		$zresults = $wtwconnect->query("
@@ -79,6 +80,10 @@ try {
 	$zobjectfile = "";
 	$zdisplayname = "Anonymous";
 	$zprivacy = 0;
+	$zenteranimation = "1";
+	$zexitanimation = "1";
+	$zenteranimationparameter = "";
+	$zexitanimationparameter = "";
 
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
@@ -108,6 +113,10 @@ try {
 			$zobjectfile = $zrow["objectfile"];
 			$zdisplayname = $zrow["displayname"];
 			$zprivacy = $zrow["privacy"];
+			$zenteranimation = $zrow["enteranimation"];
+			$zexitanimation = $zrow["exitanimation"];
+			$zenteranimationparameter = $zrow["enteranimationparameter"];
+			$zexitanimationparameter = $zrow["exitanimationparameter"];
 			$zavatarparts[$i] = array(
 				'avatarpartid'=> $zrow["avatarpartid"],
 				'avatarpart'=> $zrow["avatarpart"],
@@ -160,7 +169,7 @@ try {
 			$i += 1;
 		}
 	}
-	
+
 	/* combine avatar settings and animations for json return dataset */
 	$zavatar = array(
 		'userid'=> $zuserid,
@@ -174,6 +183,10 @@ try {
 		'objectfile'=> $zobjectfile,
 		'displayname'=> $zdisplayname,
 		'privacy'=> $zprivacy,
+		'enteranimation'=> $zenteranimation,
+		'enteranimationparameter'=> $zenteranimationparameter,
+		'exitanimation'=> $zexitanimation,
+		'exitanimationparameter'=> $zexitanimationparameter,
 		'avatarparts'=> $zavatarparts,
 		'avataranimationdefs'=> $zavataranimationdefs
 	);

@@ -273,6 +273,7 @@ WTWJS.prototype.mouseClick = function(e) {
 						if (pickedname.indexOf("-") > -1) {
 							var namepart = pickedname.split('-');
 							WTW.checkMoldEvent('onclick', pickedname);
+							WTW.pluginsOnClick(pickedname);
 							if (pickedname.indexOf("-image") > -1) {
 								WTW.checkImageClick(pickedname);
 							} else if (pickedname.indexOf("-storeproduct") > -1 && pickedname.indexOf("-readmore") > -1) {
@@ -287,8 +288,6 @@ WTWJS.prototype.mouseClick = function(e) {
 								WTW.productSelectCategoryScroll(pickedname,1);
 							} else if (pickedname.indexOf("-storecategories") > -1 && pickedname.indexOf("-upbutton") > -1) {
 								WTW.productSelectCategoryScroll(pickedname,-1);
-							} else if (pickedname.indexOf("person-") > -1) {
-								WTW.openChat(pickedname);
 							} else {
 								WTW.checkJSFunction(pickedname);
 							}

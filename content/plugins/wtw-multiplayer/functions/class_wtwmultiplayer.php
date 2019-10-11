@@ -99,6 +99,7 @@ class wtwmultiplayer {
 			/* javascripts */
 			/* wtwplugins class -> addScript function (script id, '1' for admin only, script browse url) */
 			$wtwplugins->addScript('wtw_multiplayerscript', null, WTWMULTIPLAYER_URL."/scripts/multiplayer.js");
+			$wtwplugins->addScript('wtw_chatscript', null, WTWMULTIPLAYER_URL."/scripts/chat.js");
 			
 			/* setting javascript functions to events */
 			/* wtwplugins class -> addScriptFunction function (event, javascript function) - choose from events: */
@@ -117,6 +118,7 @@ class wtwmultiplayer {
 
 			$wtwplugins->addScriptFunction("avatarbeforecreate", "WTWMultiplayer.showAvatarIDs(avatarname, avatardef);");
 
+			$wtwplugins->addScriptFunction("onclick", "WTWMultiplayer.onClick(pickedname);");
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins-class_wtwmultiplayer.php-initHooks=".$e->getMessage());
 		}
@@ -193,6 +195,10 @@ class wtwmultiplayer {
 						  `scalingz` decimal(18,2) DEFAULT '1.00',
 						  `displayname` varchar(45) DEFAULT '',
 						  `privacy` int(11) DEFAULT '0',
+						  `enteranimation` int(11) DEFAULT '0',
+						  `exitanimation` int(11) DEFAULT '0',
+						  `enteranimationparameter` varchar(255) DEFAULT '',
+						  `exitanimationparameter` varchar(255) DEFAULT '',
 						  `lastdate` datetime DEFAULT NULL,
 						  `lastip` varchar(45) DEFAULT '',
 						  `createdate` datetime DEFAULT NULL,

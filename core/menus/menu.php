@@ -125,7 +125,7 @@
 					<li class="wtw-submenuli">Email</li>
 					<li class="wtw-submenuli"><input type="text" id="wtw_tnewemail" autocomplete="email" /></li>
 					<li class="wtw-submenuli">Password</li>
-					<li class="wtw-submenuli"><input type="password" id="wtw_tnewpassword" autocomplete="new-password" onkeyup="WTW.checkPassword(this,'wtw_tpasswordstrength');" onfocus="WTW.show('wtw_passwordstrengthdiv');WTW.showSettingsMenu('wtw_menuprofile');" onblur="WTW.hide('wtw_passwordstrengthdiv');WTW.showSettingsMenu('wtw_menuprofile');" /></li>
+					<li class="wtw-submenuli"><input type="password" id="wtw_tnewpassword" autocomplete="new-password" onkeyup="WTW.checkPassword(this,'wtw_tpasswordstrength');" onfocus="WTW.registerPasswordFocus();" onblur="WTW.registerPasswordBlur();" /></li>
 					<li class="wtw-submenuli" id="wtw_passwordstrengthdiv" style="display:none;visibility:hidden;"><input type="text" id="wtw_tpasswordstrength" style="display:none;visibility:hidden;" /></li>
 					<li class="wtw-submenuli">Confirm Password</li>
 					<li class="wtw-submenuli"><input type="password" id="wtw_tnewpassword2" autocomplete="new-password" onkeyup="WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');" /></li>
@@ -264,6 +264,25 @@
 				<li id="wtw_menuavataranimationsdiv" class="wtw-submenublockli" style="display:none;visibility:hidden;">
 					<div style='font-size:.8em;text-align:center;background-color:#000000;border:1px solid gray;'>For Mouse or Keyboard Controls<br />Mouse must be over 3D Scene to move.</div>
 					<div class="wtw-menusubtext">Select Animation to Edit:</div>
+					<ul style="padding:0px;">
+						<li id="wtw_animation-onenter" class="wtw-avatarli" onclick="WTW.editEnterAnimation();"><div class="wtw-inlineindent">Enter 3D Scene</div></li>
+						<li id="wtw_animationdiv-enter" class="wtw-avatarli" style="display:none;visibility:hiden;"><div class="wtw-inlineindent2">
+						<select id="wtw_tselectavataranimation-enter" onchange="WTW.saveAvatarEnterAnimation();">
+							<option value='1'>Fast Pop</option>
+							<option value='2'>Fade In</option>
+							<option value='3'>Smokey Arrival</option>
+							<option value='4'>Transport Rings</option>
+							<option value='5'>Transport</option>
+							<option value='6'>Atomic Enhancement</option>
+							<option value='7'>Quick Grow</option>
+							<option value='8'>Lightning Rise</option>
+							<option value='9'>Smokey Evolution</option>
+							<option value='10'>Radioactive Spawn</option>
+							<option value='11'>Beam Force</option>
+						</select></div></li>
+					</ul>
+					
+					
 					<div id="wtw_editavataranimations"></div>
 					<a id="wtw_viewanimations"></a>
 				</li>

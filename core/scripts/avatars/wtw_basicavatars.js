@@ -192,6 +192,7 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 							results.meshes[i].position.y -= avey;
 							results.meshes[i].position.z -= avez;
 							results.meshes[i].isVisible = isvisible;
+							results.meshes[i].isVisible = false;
 							if (results.meshes[i].material != null) {
 								if (meshname.indexOf("WireFrame") > -1) {
 									results.meshes[i].material.wireframe = true;

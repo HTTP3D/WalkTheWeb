@@ -852,6 +852,15 @@ WTWJS.prototype.disposeAnimations = function(avatarname) {
     }
 }
 
+WTWJS.prototype.editEnterAnimation = function() {
+	try {
+		WTW.editAvatarAnimation('', -1, 181);
+		WTW.toggle("wtw_animationdiv-enter");
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-editEnterAnimation=" + ex.message);
+    }
+}
+
 WTWJS.prototype.editAvatarAnimation = function(animationname, currentind, total) {
 	try {
 		dGet('wtw_tavataranimationname').value = animationname;
@@ -1031,6 +1040,10 @@ WTWJS.prototype.loadAvatarFromDB = function(customdef, reload) {
 		var avatardef = WTW.newAvatarDef();
 		avatardef.displayname = customdef.displayname;
 		avatardef.privacy = customdef.privacy;
+		avatardef.enteranimation = customdef.enteranimation;
+		avatardef.enteranimationparameter = customdef.enteranimationparameter;
+		avatardef.exitanimation = customdef.exitanimation;
+		avatardef.exitanimationparameter = customdef.exitanimationparameter;
 		avatardef.avatarind = customdef.avatarind;
 		avatardef.avatarparts = customdef.avatarparts;
 		avatardef.avataranimationdefs = customdef.avataranimationdefs;
@@ -1052,6 +1065,7 @@ WTWJS.prototype.loadAvatarFromDB = function(customdef, reload) {
 			dGet('wtw_tmyavatarid').value = customdef.useravatarid;
 			WTW.setCookie("myavatarid",dGet('wtw_tmyavatarid').value,365);
 		}
+		WTW.setDDLValue('wtw_tselectavataranimation-enter',avatardef.enteranimation);
 		WTW.loadMyAvatar(avatardef, reload);
     } catch (ex) {
 		WTW.log("avatars-loadavatar-loadAvatarFromDB=" + ex.message);
@@ -1188,6 +1202,9 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 									WTW.toggleMenuAnimations();
 									WTW.showAvatarDisplayName(false);
 									WTW.pluginsMyAnimationsLoaded();
+									WTW.avatarEnter(avatarname);
+								} else {
+									WTW.avatarEnter(avatarname);
 								}
 							}); 
 						}
@@ -1197,6 +1214,791 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 		}
     } catch (ex) {
 		WTW.log("avatars-loadavatar-loadAvatarAnimations=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarEnter = function(avatarname) {
+	try {
+		var avatarparts = [];
+		var avatar = scene.getMeshByID(avatarname);
+		zenteranimation = '1';
+		if (avatar != null) {
+			if (avatar.WTW != null) {
+				if (avatar.WTW.enteranimation != null) {
+					if (WTW.isNumeric(avatar.WTW.enteranimation)) {
+						zenteranimation = avatar.WTW.enteranimation;
+					}
+				}
+			}
+			var avatarscale = scene.getMeshByID(avatarname + "-scale");
+			if (avatarscale != null) {
+				avatarparts = avatarscale.getChildren();
+			}
+		}
+		switch (zenteranimation) {
+			case '1':
+				WTW.avatarShowVisible(avatarparts);
+				break;
+			case '2':
+				WTW.avatarShowFade(avatarname, avatarparts);
+				break;
+			case '3':
+				WTW.avatarShowFadeSmoke(avatarname, avatarparts);
+				break;
+			case '4':
+				WTW.avatarShowFadeSwirl(avatarname, avatarparts);
+				break;
+			case '5':
+				WTW.avatarShowFadeSprite(avatarname, avatarparts);
+				break;
+			case '6':
+				WTW.avatarShowFadeParticles(avatarname, avatarparts);
+				break;
+			case '7':
+				WTW.avatarShowGrow(avatarname, avatarparts);
+				break;
+			case '8':
+				WTW.avatarShowGrowGlow(avatarname, avatarparts);
+				break;
+			case '9':
+				WTW.avatarShowGrowSmoke(avatarname, avatarparts);
+				break;
+			case '10':
+				WTW.avatarShowGrowGlowSmoke(avatarname, avatarparts);
+				break;
+			case '11':
+				WTW.avatarShowBeam(avatarname, avatarparts);
+				break;
+			default:
+				WTW.avatarShowVisible(avatarparts);
+				break;
+		}
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarEnter=" + ex.message);
+    }
+}
+
+WTWJS.prototype.saveAvatarEnterAnimation = function() {
+	try {
+		var zavataranimation = WTW.getDDLValue('wtw_tselectavataranimation-enter');
+		var myavatarid = dGet('wtw_tmyavatarid').value;
+		if (dGet('wtw_tuserid').value == '') {
+			myavatarid = dGet('wtw_tmyavataridanon').value;
+		}
+		if (WTW.isNumeric(zavataranimation) == false) {
+			zavataranimation = 1;
+		}
+		var request = {
+			'myavatarid':myavatarid,
+			'avataranimation':zavataranimation,
+			'transport':'1'
+		};
+		/* function for after iframe loads */
+		var onload = function(ipage) {
+			ipage.getElementById('wtw_tmyavatarid').value = request.myavatarid;
+			ipage.getElementById('wtw_tavataranimation').value = request.avataranimation;
+			ipage.getElementById('wtw_ttransport').value = request.transport;
+			ipage.getElementById('wtw_bsavetransportanimation').click();
+		}
+		/* iframe src, onload function */
+		var iframe = WTW.createIFrame('/core/iframes/avatars.php', onload);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-saveAvatarEnterAnimation=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarShowVisible = function(avatarparts) {
+	try {
+		for (var i=0; i<avatarparts.length;i++) {
+			if (avatarparts[i] != null) {
+				avatarparts[i].isVisible = true;
+			}
+		}
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarShowVisible=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarShowFade = function(avatarname, avatarparts) {
+	try {
+		for (var i=0; i<avatarparts.length;i++) {
+			if (avatarparts[i] != null) {
+				if (avatarparts[i].material != null) {
+					avatarparts[i].material.alpha = 0;
+				}
+				avatarparts[i].isVisible = true;
+			}
+		}
+		var timername  = window.setInterval(function(){
+			var avatar = scene.getMeshByID(avatarname);
+			if (avatar != null) {
+				var avatarscale = scene.getMeshByID(avatarname + "-scale");
+				if (avatarscale != null) {
+					var avatarparts = avatarscale.getChildren();
+					var childalpha = 0;
+					for (var i=0; i<avatarparts.length;i++) {
+						if (avatarparts[i] != null) {
+							if (avatarparts[i].material != null) {
+								childalpha = avatarparts[i].material.alpha;
+								if (childalpha < 1) {
+									childalpha += .01;
+								} else {
+									childalpha = 1;
+								}
+								avatarparts[i].material.alpha = childalpha;
+							}
+						}
+					} 
+					if (childalpha == 1) {
+						window.clearInterval(timername);
+					}
+				}
+			}
+		},10);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarShowFade=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarShowFadeSwirl = function(avatarname, avatarparts) {
+	try {
+		var rottimer = null;
+		var avatar = scene.getMeshByID(avatarname);
+		if (avatar != null) {
+			var torus1 = WTW.addMoldTorus(avatarname + "-torus1", .5, .5, .5, 24, 20)
+			torus1.isVisible = true;
+			torus1.parent = avatar;
+			torus1.position.y += 10;
+			torus1.rotation.z = WTW.getRadians(25);
+			var torus2 = WTW.addMoldTorus(avatarname + "-torus2", .5, .5, .5, 24, 20)
+			torus2.isVisible = true;
+			torus2.parent = avatar;
+			torus2.position.y += 5;
+			torus2.rotation.z = WTW.getRadians(-25);
+		}
+		for (var i=0; i<avatarparts.length;i++) {
+			if (avatarparts[i] != null) {
+				if (avatarparts[i].material != null) {
+					avatarparts[i].material.alpha = 0;
+				}
+				avatarparts[i].isVisible = true;
+			}
+		}
+		var timername  = window.setInterval(function(){
+			var avatar = scene.getMeshByID(avatarname);
+			if (avatar != null) {
+				var avatarscale = scene.getMeshByID(avatarname + "-scale");
+				if (avatarscale != null) {
+					var avatarparts = avatarscale.getChildren();
+					var childalpha = 0;
+					for (var i=0; i<avatarparts.length;i++) {
+						if (avatarparts[i] != null) {
+							if (avatarparts[i].material != null) {
+								childalpha = avatarparts[i].material.alpha;
+								if (childalpha < 1) {
+									childalpha += .01;
+								} else {
+									childalpha = 1;
+								}
+								avatarparts[i].material.alpha = childalpha;
+							}
+						}
+					} 
+					var torus1 = scene.getMeshByID(avatarname + "-torus1");
+					var torus2 = scene.getMeshByID(avatarname + "-torus2");
+					if (torus1 != null) {
+						torus1.rotation.y += WTW.getRadians(10);
+					} else {
+						childalpha = 1;
+					}
+					if (torus2 != null) {
+						torus2.rotation.y += WTW.getRadians(10);
+					} else {
+						childalpha = 1;
+					}
+					if (childalpha == 1) {
+						WTW.disposeClean(avatarname + "-torus1");
+						WTW.disposeClean(avatarname + "-torus2");
+						window.clearInterval(timername);
+					}
+				}
+			}
+		},20);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarShowFadeSwirl=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarShowFadeSmoke = function(avatarname, avatarparts) {
+	try {
+		var avatar = scene.getMeshByID(avatarname);
+		if (avatar != null) {
+			var smoke = WTW.addMoldSmoke(avatarname + "-smoke", null, .6, 1, .6);
+			smoke.parent = avatar;
+			smoke.position.y -= 2;
+		}
+		for (var i=0; i<avatarparts.length;i++) {
+			if (avatarparts[i] != null) {
+				if (avatarparts[i].material != null) {
+					avatarparts[i].material.alpha = 0;
+				}
+				avatarparts[i].isVisible = true;
+			}
+		}
+		window.setTimeout(function() {
+			var timername  = window.setInterval(function(){
+				var avatar = scene.getMeshByID(avatarname);
+				if (avatar != null) {
+					var avatarscale = scene.getMeshByID(avatarname + "-scale");
+					if (avatarscale != null) {
+						var avatarparts = avatarscale.getChildren();
+						var childalpha = 0;
+						for (var i=0; i<avatarparts.length;i++) {
+							if (avatarparts[i] != null) {
+								if (avatarparts[i].material != null) {
+									childalpha = avatarparts[i].material.alpha;
+									if (childalpha < 1) {
+										childalpha += .01;
+									} else {
+										childalpha = 1;
+									}
+									avatarparts[i].material.alpha = childalpha;
+								}
+							}
+						} 
+						if (childalpha == 1) {
+							var smoke = scene.getMeshByID(avatarname + "-smoke");
+							if (smoke != null) {
+								smoke.position.y -= 1000;
+								window.setTimeout(function(){WTW.disposeClean(avatarname + "-smoke");},7000);
+							}
+							window.clearInterval(timername);
+						}
+					}
+				}
+			},30);
+		},500);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarShowFadeSmoke=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarShowFadeParticles = function(avatarname, avatarparts) {
+	try {
+		var avatar = scene.getMeshByID(avatarname);
+		if (avatar != null) {
+			var smoke = WTW.addMoldSmoke(avatarname + "-smoke", null, .6, 1, .6);
+			smoke.parent = avatar;
+			smoke.position.y -= 2; 
+		}
+		var pcs = new BABYLON.PointsCloudSystem(avatarname + "pcs", 5, scene);
+		for (var i=0; i<avatarparts.length;i++) {
+			if (avatarparts[i] != null) {
+				var mold = BABYLON.MeshBuilder.CreateBox(avatarname + "particles", {}, scene);
+				mold.scaling = new BABYLON.Vector3(1,1,1);
+				var transparentmat = new BABYLON.StandardMaterial("mat" + avatarname + "particles", scene);
+				transparentmat.alpha = 0;
+				mold.material = transparentmat;
+				pcs.addSurfacePoints(avatarparts[i], 20000, BABYLON.PointColor.Random);
+				pcs.buildMeshAsync().then((mesh) => {
+					mesh.material.pointSize = 2;
+					mesh.material.alpha = 1;
+					var meshtimer = window.setInterval(function(){
+						if (mesh.material.alpha > 0) {
+							mesh.material.alpha -= .01;
+						} else {
+							mesh.dispose();
+							window.clearInterval(meshtimer);
+						}
+					},30);
+				});
+				if (avatarparts[i].material != null) {
+					avatarparts[i].material.alpha = 0;
+				}
+				avatarparts[i].isVisible = true;
+			}
+		}
+		window.setTimeout(function() {
+			var timername  = window.setInterval(function(){
+				var avatar = scene.getMeshByID(avatarname);
+				if (avatar != null) {
+					var avatarscale = scene.getMeshByID(avatarname + "-scale");
+					if (avatarscale != null) {
+						var avatarparts = avatarscale.getChildren();
+						var childalpha = 0;
+						for (var i=0; i<avatarparts.length;i++) {
+							if (avatarparts[i] != null) {
+								if (avatarparts[i].material != null) {
+									childalpha = avatarparts[i].material.alpha;
+									if (childalpha < 1) {
+										childalpha += .01;
+									} else {
+										childalpha = 1;
+									}
+									avatarparts[i].material.alpha = childalpha;
+								}
+							}
+						} 
+						if (childalpha == 1) {
+							var smoke = scene.getMeshByID(avatarname + "-smoke");
+							if (smoke != null) {
+								smoke.position.y -= 1000;
+								window.setTimeout(function(){WTW.disposeClean(avatarname + "-smoke");},7000);
+							} 
+							if (pcs != null) {
+								pcs.dispose();
+								pcs = null;
+							}
+							window.clearInterval(timername);
+						}
+					}
+				}
+			},30);
+		},1000);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarShowFadeParticles=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarShowFadeSprite = function(avatarname, avatarparts) {
+	try {
+		var avatar = scene.getMeshByID(avatarname);
+		if (avatar != null) {
+			var mold = WTW.addMoldParticleSphere(avatarname + "-sprite", null, 2.2, 2.2, 2.2);
+			mold.parent = avatar;
+			mold.position.y += 8;
+			var smoke = WTW.addMoldSmoke(avatarname + "-smoke", null, .6, 1, .6);
+			smoke.parent = avatar;
+			smoke.position.y -= 2;
+		}
+		for (var i=0; i<avatarparts.length;i++) {
+			if (avatarparts[i] != null) {
+				if (avatarparts[i].material != null) {
+					avatarparts[i].material.alpha = 0;
+				}
+				avatarparts[i].isVisible = true;
+			}
+		}
+		window.setTimeout(function() {
+			var timername  = window.setInterval(function(){
+				var avatar = scene.getMeshByID(avatarname);
+				if (avatar != null) {
+					var avatarscale = scene.getMeshByID(avatarname + "-scale");
+					if (avatarscale != null) {
+						var avatarparts = avatarscale.getChildren();
+						var childalpha = 0;
+						for (var i=0; i<avatarparts.length;i++) {
+							if (avatarparts[i] != null) {
+								if (avatarparts[i].material != null) {
+									childalpha = avatarparts[i].material.alpha;
+									if (childalpha < 1) {
+										childalpha += .01;
+									} else {
+										childalpha = 1;
+									}
+									avatarparts[i].material.alpha = childalpha;
+								}
+							}
+						} 
+						if (childalpha == 1) {
+							WTW.disposeClean(avatarname + "-sprite");
+							var smoke = scene.getMeshByID(avatarname + "-smoke");
+							if (smoke != null) {
+								smoke.position.y -= 1000;
+								window.setTimeout(function(){WTW.disposeClean(avatarname + "-smoke");},7000);
+							}
+							window.clearInterval(timername);
+						}
+					}
+				}
+			},30);
+		},500);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarShowFadeSprite=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarShowGrow = function(avatarname, avatarparts) {
+	try {
+		var avatarscale = scene.getMeshByID(avatarname + "-scale");
+		if (avatarscale != null) {
+			avatarscale.scaling.x = .001;
+			avatarscale.scaling.y = .001;
+			avatarscale.scaling.z = .001;
+		}
+		
+		for (var i=0; i<avatarparts.length;i++) {
+			if (avatarparts[i] != null) {
+				avatarparts[i].isVisible = true;
+			}
+		}
+		var timername  = window.setInterval(function(){
+			var avatar = scene.getMeshByID(avatarname);
+			if (avatar != null) {
+				var scalingx = .04;
+				var scalingy = .04;
+				var scalingz = .04;
+				if (avatar.WTW != null) {
+					if (avatar.WTW.scaling != null) {
+						if (avatar.WTW.scaling.x != null) {
+							if (WTW.isNumeric(avatar.WTW.scaling.x)) {
+								scalingx = Number(avatar.WTW.scaling.x);
+							}
+						}
+						if (avatar.WTW.scaling.y != null) {
+							if (WTW.isNumeric(avatar.WTW.scaling.y)) {
+								scalingy = Number(avatar.WTW.scaling.y);
+							}
+						}
+						if (avatar.WTW.scaling.z != null) {
+							if (WTW.isNumeric(avatar.WTW.scaling.z)) {
+								scalingz = Number(avatar.WTW.scaling.z);
+							}
+						}
+					}
+				}
+				var avatarscale = scene.getMeshByID(avatarname + "-scale");
+				if (avatarscale != null) {
+					var setscalingx = avatarscale.scaling.x;
+					var setscalingy = avatarscale.scaling.y;
+					var setscalingz = avatarscale.scaling.z;
+					if (setscalingx < scalingx) {
+						avatarscale.scaling.x += .001;
+					} else {
+						setscalingx = scalingx;
+						avatarscale.scaling.x = scalingx;
+					}
+					if (setscalingy < scalingy) {
+						avatarscale.scaling.y += .001;
+					} else {
+						setscalingy = scalingy;
+						avatarscale.scaling.y = scalingy;
+					}
+					if (setscalingz < scalingz) {
+						avatarscale.scaling.z += .001;
+					} else {
+						setscalingz = scalingz;
+						avatarscale.scaling.z = scalingz;
+					}
+					if (setscalingx == scalingx && setscalingy == scalingy && setscalingz == scalingz) {
+						window.clearInterval(timername);
+					}
+				}
+			}
+		},10);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarShowGrow=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarShowGrowSmoke = function(avatarname, avatarparts) {
+	try {
+		var avatar = scene.getMeshByID(avatarname);
+		if (avatar != null) {
+			var smoke = WTW.addMoldSmoke(avatarname + "-smoke", null, .6, .5, 2);
+			smoke.parent = avatar;
+			smoke.position.y -= 2;
+		}
+		var avatarscale = scene.getMeshByID(avatarname + "-scale");
+		if (avatarscale != null) {
+			avatarscale.scaling.x = .001;
+			avatarscale.scaling.y = .001;
+			avatarscale.scaling.z = .001;
+		}
+		
+		for (var i=0; i<avatarparts.length;i++) {
+			if (avatarparts[i] != null) {
+				avatarparts[i].isVisible = true;
+			}
+		}
+		window.setTimeout(function() {
+			var timername  = window.setInterval(function(){
+				var avatar = scene.getMeshByID(avatarname);
+				if (avatar != null) {
+					var scalingx = .04;
+					var scalingy = .04;
+					var scalingz = .04;
+					if (avatar.WTW != null) {
+						if (avatar.WTW.scaling != null) {
+							if (avatar.WTW.scaling.x != null) {
+								if (WTW.isNumeric(avatar.WTW.scaling.x)) {
+									scalingx = Number(avatar.WTW.scaling.x);
+								}
+							}
+							if (avatar.WTW.scaling.y != null) {
+								if (WTW.isNumeric(avatar.WTW.scaling.y)) {
+									scalingy = Number(avatar.WTW.scaling.y);
+								}
+							}
+							if (avatar.WTW.scaling.z != null) {
+								if (WTW.isNumeric(avatar.WTW.scaling.z)) {
+									scalingz = Number(avatar.WTW.scaling.z);
+								}
+							}
+						}
+					}
+					var avatarscale = scene.getMeshByID(avatarname + "-scale");
+					if (avatarscale != null) {
+						var setscalingx = avatarscale.scaling.x;
+						var setscalingy = avatarscale.scaling.y;
+						var setscalingz = avatarscale.scaling.z;
+						if (setscalingx < scalingx) {
+							avatarscale.scaling.x += .001;
+						} else {
+							setscalingx = scalingx;
+							avatarscale.scaling.x = scalingx;
+						}
+						if (setscalingy < scalingy) {
+							avatarscale.scaling.y += .001;
+						} else {
+							setscalingy = scalingy;
+							avatarscale.scaling.y = scalingy;
+						}
+						if (setscalingz < scalingz) {
+							avatarscale.scaling.z += .001;
+						} else {
+							setscalingz = scalingz;
+							avatarscale.scaling.z = scalingz;
+						}
+						if (setscalingx == scalingx && setscalingy == scalingy && setscalingz == scalingz) {
+							var smoke = scene.getMeshByID(avatarname + "-smoke");
+							if (smoke != null) {
+								smoke.position.y -= 1000;
+								window.setTimeout(function(){WTW.disposeClean(avatarname + "-smoke");},7000);
+							}
+							window.clearInterval(timername);
+						}
+					}
+				}
+			},40);
+		},300);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarShowGrowSmoke=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarShowGrowGlow = function(avatarname, avatarparts) {
+	try {
+		var avatarscale = scene.getMeshByID(avatarname + "-scale");
+		if (avatarscale != null) {
+			avatarscale.scaling.x = .001;
+			avatarscale.scaling.y = .001;
+			avatarscale.scaling.z = .001;
+
+			for (var i=0; i<avatarparts.length;i++) {
+				if (avatarparts[i] != null) {
+					avatarparts[i].isVisible = true;
+					WTW.highlightLayer.addMesh(avatarparts[i], BABYLON.Color3.Yellow());
+				}
+			} 
+		}
+		var timername  = window.setInterval(function(){
+			var avatar = scene.getMeshByID(avatarname);
+			if (avatar != null) {
+				var scalingx = .04;
+				var scalingy = .04;
+				var scalingz = .04;
+				if (avatar.WTW != null) {
+					if (avatar.WTW.scaling != null) {
+						if (avatar.WTW.scaling.x != null) {
+							if (WTW.isNumeric(avatar.WTW.scaling.x)) {
+								scalingx = Number(avatar.WTW.scaling.x);
+							}
+						}
+						if (avatar.WTW.scaling.y != null) {
+							if (WTW.isNumeric(avatar.WTW.scaling.y)) {
+								scalingy = Number(avatar.WTW.scaling.y);
+							}
+						}
+						if (avatar.WTW.scaling.z != null) {
+							if (WTW.isNumeric(avatar.WTW.scaling.z)) {
+								scalingz = Number(avatar.WTW.scaling.z);
+							}
+						}
+					}
+				}
+				var avatarscale = scene.getMeshByID(avatarname + "-scale");
+				if (avatarscale != null) {
+					var setscalingx = avatarscale.scaling.x;
+					var setscalingy = avatarscale.scaling.y;
+					var setscalingz = avatarscale.scaling.z;
+					if (setscalingx < scalingx) {
+						avatarscale.scaling.x += .001;
+					} else {
+						setscalingx = scalingx;
+						avatarscale.scaling.x = scalingx;
+					}
+					if (setscalingy < scalingy) {
+						avatarscale.scaling.y += .001;
+					} else {
+						setscalingy = scalingy;
+						avatarscale.scaling.y = scalingy;
+					}
+					if (setscalingz < scalingz) {
+						avatarscale.scaling.z += .001;
+					} else {
+						setscalingz = scalingz;
+						avatarscale.scaling.z = scalingz;
+					}
+					if (setscalingx == scalingx && setscalingy == scalingy && setscalingz == scalingz) {
+						var avatarparts = avatarscale.getChildren();
+						for (var i=0; i<avatarparts.length;i++) {
+							if (avatarparts[i] != null) {
+								WTW.highlightLayer.removeMesh(avatarparts[i]);
+							}
+						} 
+						window.clearInterval(timername);
+					}
+				}
+			}
+		},10);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarShowGrowGlow=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarShowGrowGlowSmoke = function(avatarname, avatarparts) {
+	try {
+		var avatar = scene.getMeshByID(avatarname);
+		if (avatar != null) {
+			var smoke = WTW.addMoldSmoke(avatarname + "-smoke", null, .6, .5, 2);
+			smoke.parent = avatar;
+			smoke.position.y -= 2;
+		}
+		var avatarscale = scene.getMeshByID(avatarname + "-scale");
+		if (avatarscale != null) {
+			avatarscale.scaling.x = .001;
+			avatarscale.scaling.y = .001;
+			avatarscale.scaling.z = .001;
+		}
+		
+		for (var i=0; i<avatarparts.length;i++) {
+			if (avatarparts[i] != null) {
+				avatarparts[i].isVisible = true;
+				WTW.highlightLayer.addMesh(avatarparts[i], BABYLON.Color3.Gray());
+				WTW.highlightLayer.outerGlow = true;
+				WTW.highlightLayer.innerGlow = false;
+			}
+		}
+		window.setTimeout(function() {
+			var timername  = window.setInterval(function(){
+				var avatar = scene.getMeshByID(avatarname);
+				if (avatar != null) {
+					var scalingx = .04;
+					var scalingy = .04;
+					var scalingz = .04;
+					if (avatar.WTW != null) {
+						if (avatar.WTW.scaling != null) {
+							if (avatar.WTW.scaling.x != null) {
+								if (WTW.isNumeric(avatar.WTW.scaling.x)) {
+									scalingx = Number(avatar.WTW.scaling.x);
+								}
+							}
+							if (avatar.WTW.scaling.y != null) {
+								if (WTW.isNumeric(avatar.WTW.scaling.y)) {
+									scalingy = Number(avatar.WTW.scaling.y);
+								}
+							}
+							if (avatar.WTW.scaling.z != null) {
+								if (WTW.isNumeric(avatar.WTW.scaling.z)) {
+									scalingz = Number(avatar.WTW.scaling.z);
+								}
+							}
+						}
+					}
+					var avatarscale = scene.getMeshByID(avatarname + "-scale");
+					if (avatarscale != null) {
+						var setscalingx = avatarscale.scaling.x;
+						var setscalingy = avatarscale.scaling.y;
+						var setscalingz = avatarscale.scaling.z;
+						if (setscalingx < scalingx) {
+							avatarscale.scaling.x += .001;
+						} else {
+							setscalingx = scalingx;
+							avatarscale.scaling.x = scalingx;
+						}
+						if (setscalingy < scalingy) {
+							avatarscale.scaling.y += .001;
+						} else {
+							setscalingy = scalingy;
+							avatarscale.scaling.y = scalingy;
+						}
+						if (setscalingz < scalingz) {
+							avatarscale.scaling.z += .001;
+						} else {
+							setscalingz = scalingz;
+							avatarscale.scaling.z = scalingz;
+						}
+						if (setscalingx == scalingx && setscalingy == scalingy && setscalingz == scalingz) {
+							var smoke = scene.getMeshByID(avatarname + "-smoke");
+							if (smoke != null) {
+								smoke.position.y -= 1000;
+								window.setTimeout(function(){WTW.disposeClean(avatarname + "-smoke");},7000);
+							}
+							var avatarparts = avatarscale.getChildren();
+							for (var i=0; i<avatarparts.length;i++) {
+								if (avatarparts[i] != null) {
+									WTW.highlightLayer.removeMesh(avatarparts[i]);
+								}
+							} 
+							window.clearInterval(timername);
+						}
+					}
+				}
+			},40);
+		},300);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarShowGrowGlowSmoke=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarShowBeam = function(avatarname, avatarparts) {
+	try {
+		var avatar = scene.getMeshByID(avatarname);
+		if (avatar != null) {
+			var mold = WTW.addMoldParticleShower(avatarname + "-sprite", null, 1, 2.4, 1);
+			mold.parent = avatar;
+			mold.position.y += 3;
+		}
+		for (var i=0; i<avatarparts.length;i++) {
+			if (avatarparts[i] != null) {
+				if (avatarparts[i].material != null) {
+					avatarparts[i].material.alpha = 0;
+				}
+				avatarparts[i].isVisible = true;
+			}
+		}
+		window.setTimeout(function() {
+			var timername  = window.setInterval(function(){
+				var avatar = scene.getMeshByID(avatarname);
+				if (avatar != null) {
+					var avatarscale = scene.getMeshByID(avatarname + "-scale");
+					if (avatarscale != null) {
+						var avatarparts = avatarscale.getChildren();
+						var childalpha = 0;
+						for (var i=0; i<avatarparts.length;i++) {
+							if (avatarparts[i] != null) {
+								if (avatarparts[i].material != null) {
+									childalpha = avatarparts[i].material.alpha;
+									if (childalpha < 1) {
+										childalpha += .01;
+									} else {
+										childalpha = 1;
+									}
+									avatarparts[i].material.alpha = childalpha;
+								}
+							}
+						} 
+						if (childalpha == 1) {
+							WTW.disposeClean(avatarname + "-sprite");
+							window.clearInterval(timername);
+						}
+					}
+				}
+			},50);
+		},1500);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarShowBeam=" + ex.message);
     }
 }
 

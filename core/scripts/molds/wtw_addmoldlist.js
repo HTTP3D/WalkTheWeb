@@ -52,6 +52,8 @@ WTWJS.prototype.getWebMoldList = function() {
         webmoldlist[webmoldlist.length] = "Candle Flame";
         webmoldlist[webmoldlist.length] = "Tree";
         webmoldlist[webmoldlist.length] = "Flag";
+        webmoldlist[webmoldlist.length] = "Partical Sphere";
+        webmoldlist[webmoldlist.length] = "Partical Shower";
         webmoldlist[webmoldlist.length] = "Smoke";
 		webmoldlist[webmoldlist.length] = "Babylon File";
         webmoldlist[webmoldlist.length] = "Water Plane";
@@ -254,6 +256,14 @@ WTWJS.prototype.addMold = function(moldname, molddef, parentname, coveringname) 
 				break;
             case "smoke":
 				mold = WTW.addMoldSmoke(moldname, molddef, lenx, leny, lenz);
+				coveringname = "none";
+				break;
+            case "particlesphere":
+				mold = WTW.addMoldParticleSphere(moldname, molddef, lenx, leny, lenz);
+				coveringname = "none";
+				break;
+            case "particleshower":
+				mold = WTW.addMoldParticleShower(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
 			case "babylonfile":
@@ -534,7 +544,7 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 			}
 			if (moldname.indexOf("communitybuildings") > -1 || moldname.indexOf("communitycommunities") > -1 || (moldname.indexOf("person-") > -1 && shape=="box") || (moldname.indexOf("myavatar-") > -1 && shape=="box")) {
 				coveringname = "hidden";
-			} else if (shape == "image" && shape == "video" && shape == "candleflame" && shape == "smoke" && shape == "babylonfile" && shape == "3dtext" && shape == "store3dsign") {
+			} else if (shape == "image" && shape == "video" && shape == "candleflame" && shape == "smoke" && shape == "babylonfile" && shape == "3dtext" && shape == "store3dsign" && shape == "particlesphere" && shape == "particleshower") {
 				coveringname = "none";
 			}
 			try {
@@ -1009,6 +1019,48 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
+				dGet('wtw_tmoldrotationx').value = "0.00";
+				dGet('wtw_tmoldrotationy').value = "0.00";
+				dGet('wtw_tmoldrotationz').value = "0.00";
+				dGet('wtw_tmoldspecial2').value = "0.00";
+				dGet('wtw_tmolduoffset').value = "0.00";
+				dGet('wtw_tmoldvoffset').value = "0.00";
+				dGet('wtw_tmolduscale').value = "0.00";
+				dGet('wtw_tmoldvscale').value = "0.00";
+				dGet('wtw_tmoldsubdivisions').value = "12";
+				dGet('wtw_tmoldcoveringold').value = "none";
+				dGet('wtw_tmoldtextureid').value = imageid;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
+				break;
+			case "particlesphere":
+				dGet('wtw_tmoldpositionx').value = positionX;
+				dGet('wtw_tmoldpositiony').value = positionY-4;
+				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldscalingx').value = "2.00";
+				dGet('wtw_tmoldscalingy').value = "2.00";
+				dGet('wtw_tmoldscalingz').value = "2.00";
+				dGet('wtw_tmoldrotationx').value = "0.00";
+				dGet('wtw_tmoldrotationy').value = "0.00";
+				dGet('wtw_tmoldrotationz').value = "0.00";
+				dGet('wtw_tmoldspecial2').value = "0.00";
+				dGet('wtw_tmolduoffset').value = "0.00";
+				dGet('wtw_tmoldvoffset').value = "0.00";
+				dGet('wtw_tmolduscale').value = "0.00";
+				dGet('wtw_tmoldvscale').value = "0.00";
+				dGet('wtw_tmoldsubdivisions').value = "12";
+				dGet('wtw_tmoldcoveringold').value = "none";
+				dGet('wtw_tmoldtextureid').value = imageid;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
+				break;
+			case "particleshower":
+				dGet('wtw_tmoldpositionx').value = positionX;
+				dGet('wtw_tmoldpositiony').value = positionY-4;
+				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldscalingx').value = "2.00";
+				dGet('wtw_tmoldscalingy').value = "6.00";
+				dGet('wtw_tmoldscalingz').value = "2.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
 				dGet('wtw_tmoldrotationy').value = "0.00";
 				dGet('wtw_tmoldrotationz').value = "0.00";
@@ -1861,6 +1913,40 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave Smoke";
 				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete Smoke";
 				dGet('wtw_editmoldformtitle').innerHTML = "Edit Smoke";
+				WTW.hide('wtw_moldspecial1');
+				WTW.hide('wtw_moldspecial2');
+				WTW.hide('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldbumptexturetitle');
+				WTW.hide('wtw_moldbasictexturesetdiv');
+				WTW.hide('wtw_moldbasictextureset2div');
+				WTW.hide('wtw_moldbumptextureset2div');
+				WTW.hide('wtw_moldtexturesetdiv');
+				break;
+			case "particlesphere":
+				dGet('wtw_moldpositiontitle').innerHTML = "Sphere Position";
+				dGet('wtw_moldscalingtitle').innerHTML = "Sphere Length";
+				dGet('wtw_moldrotationtitle').innerHTML = "Sphere Rotation";
+				dGet('wtw_moldtexturetitle').innerHTML = "Sphere Texture Image";
+				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave Sphere";
+				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete Sphere";
+				dGet('wtw_editmoldformtitle').innerHTML = "Edit Sphere";
+				WTW.hide('wtw_moldspecial1');
+				WTW.hide('wtw_moldspecial2');
+				WTW.hide('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldbumptexturetitle');
+				WTW.hide('wtw_moldbasictexturesetdiv');
+				WTW.hide('wtw_moldbasictextureset2div');
+				WTW.hide('wtw_moldbumptextureset2div');
+				WTW.hide('wtw_moldtexturesetdiv');
+				break;
+			case "particleshower":
+				dGet('wtw_moldpositiontitle').innerHTML = "Shower Position";
+				dGet('wtw_moldscalingtitle').innerHTML = "Shower Length";
+				dGet('wtw_moldrotationtitle').innerHTML = "Shower Rotation";
+				dGet('wtw_moldtexturetitle').innerHTML = "Shower Texture Image";
+				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave Shower";
+				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete Shower";
+				dGet('wtw_editmoldformtitle').innerHTML = "Edit Shower";
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.hide('wtw_moldsubdivisions');

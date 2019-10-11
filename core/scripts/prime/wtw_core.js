@@ -38,15 +38,16 @@ WTWJS.prototype.continueLoadSequence = function() {
 WTWJS.prototype.initEnvironment = function() {
 	try {
 		var instanceid = WTW.getCookie("instanceid");
-		if (instanceid != null) {
-			if (instanceid.length != 24) {
-				instanceid = WTW.getRandomString(24);
+		if (dGet('wtw_tinstanceid').value == '' && instanceid != null) {
+			if (instanceid.length == 24) {
+				dGet('wtw_tinstanceid').value = instanceid;
 			}
-		} else {
+		}
+		if (dGet('wtw_tinstanceid').value.length != 24) {
 			instanceid = WTW.getRandomString(24);
+			dGet('wtw_tinstanceid').value = instanceid;
 		}
 		WTW.setCookie("instanceid", instanceid, 365);
-		dGet('wtw_tinstanceid').value = instanceid;
 		window.name = instanceid;
 		dGet("wtw_renderCanvas").onmouseover = function() {WTW.canvasFocus = 1;};
 		dGet("wtw_renderCanvas").onmouseout = function() {WTW.canvasFocus = 0;WTW.keysPressed=[];};
@@ -76,7 +77,7 @@ WTWJS.prototype.initEnvironment = function() {
 		if (WTW.adminView == 1) {
 			scene.blockMaterialDirtyMechanism = true;
 		}
-
+		WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
 		var setupparent = BABYLON.MeshBuilder.CreateBox("setupparent-0", {}, scene);
 		setupparent.material = WTW.addCovering("hidden", "setupparent-0", WTW.newAvatarDef(), 1, 1, 1, "0", "0");
 		setupparent.material.alpha = 0;

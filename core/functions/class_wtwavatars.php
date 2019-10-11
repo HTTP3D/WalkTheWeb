@@ -715,6 +715,30 @@ class wtwavatars {
 		}
 		return $zsuccess;
 	}
+	
+	public function updateAvatarTransport($zuseravatarid, $zavataranimation, $ztransport) {
+		global $wtwiframes;
+		$zsuccess = false;
+		try {
+			$zdirection = "exit";
+			if ($ztransport == '1') {
+				$zdirection = "enter";
+			}
+			$wtwiframes->query("
+				update ".wtw_tableprefix."useravatars
+				set ".$zdirection."animation=".$zavataranimation.",
+					 updatedate=now(),
+					 updateuserid='".$wtwiframes->userid."',
+					 deleteddate=null,
+					 deleteduserid='',
+					 deleted=0
+				where useravatarid='".$zuseravatarid."';");
+			$zsuccess = true;
+		} catch (Exception $e) {
+			$wtwiframes->serror("core-functions-class_wtwavatars.php-updateAvatarTransport=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
 }
 
 	function wtwavatars() {

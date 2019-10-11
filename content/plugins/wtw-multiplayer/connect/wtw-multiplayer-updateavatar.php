@@ -18,6 +18,10 @@ try {
 	$zscalingz = base64_decode($wtwconnect->getVal('z',''));
 	$zdisplayname = base64_decode($wtwconnect->getVal('n',''));
 	$zprivacy = base64_decode($wtwconnect->getVal('p',''));
+	$zenteranimation = base64_decode($wtwconnect->getVal('en','1'));
+	$zenteranimationparameter = base64_decode($wtwconnect->getVal('enp',''));
+	$zexitanimation = base64_decode($wtwconnect->getVal('ex','1'));
+	$zexitanimationparameter = base64_decode($wtwconnect->getVal('exp',''));
 	$zip = base64_decode($wtwconnect->getVal('a',''));
 
 	$zfounduseravatarid = "";
@@ -34,7 +38,6 @@ try {
 		from ".WTWMULTIPLAYER_PREFIX."useravatars 
 		where instanceid='".$zinstanceid."' 
 			and userid='' 
-			and deleted=0 
 		order by updatedate desc limit 1;");
 	foreach ($zresults as $zrow) {
 		$zanonuseravatarid = $zrow["useravatarid"];
@@ -45,7 +48,6 @@ try {
 		where instanceid='".$zinstanceid."' 
 			and userid='".$zuserid."' 
 			and (not userid='') 
-			and deleted=0 
 		order by updatedate desc limit 1;");
 	foreach ($zresults as $zrow) {
 		$zuseruseravatarid = $zrow["useravatarid"];
@@ -75,6 +77,10 @@ try {
 				 scalingz=".$zscalingz.",
 				 displayname='".$zdisplayname."',
 				 privacy=".$zprivacy.",
+				 enteranimation=".$zenteranimation.",
+				 enteranimationparameter='".$zenteranimationparameter."',
+				 exitanimation=".$zexitanimation.",
+				 exitanimationparameter='".$zexitanimationparameter."',
 				 lastip='".$zip."',
 				 lastdate=now(),
 				 updatedate=now(),
@@ -102,6 +108,10 @@ try {
 				 scalingz,
 				 displayname,
 				 privacy,
+				 enteranimation,
+				 enteranimationparameter,
+				 exitanimation,
+				 exitanimationparameter,
 				 lastip,
 				 lastdate,
 				 createdate,
@@ -123,6 +133,10 @@ try {
 				 ".$zscalingz.",
 				 '".$zdisplayname."',
 				 ".$zprivacy.",
+				 ".$zenteranimation.",
+				 '".$zenteranimationparameter."',
+				 ".$zexitanimation.",
+				 '".$zexitanimationparameter."',
 				 '".$zip."',
 				 now(),
 				 now(),

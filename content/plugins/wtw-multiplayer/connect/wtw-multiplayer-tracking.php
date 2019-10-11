@@ -20,7 +20,7 @@ try {
 	$zactiveanimations = base64_decode($wtwconnect->getVal('a',''));
 	$zmultiusers = base64_decode($wtwconnect->getVal('m',''));
 	$zchatid = base64_decode($wtwconnect->getVal('ci',''));
-	$zchattext = base64_decode($wtwconnect->getVal('ct',''));
+	$zchattext = $wtwconnect->getVal('ct','');
 	
 	$ztrackid = "";
 	$zresults = $wtwconnect->query("
@@ -89,10 +89,10 @@ try {
 				 NOW());		
 		");
 	}
-	$zfoundchatindexid = 0;
+	$zfoundchatindexid = -1;
 	$zfoundchatid = "";
 	$zfoundchattext = "";
-/*	$zresults = $wtwconnect->query("
+	$zresults = $wtwconnect->query("
 		select chatindexid, chatid, chattext
 		from ".WTWMULTIPLAYER_PREFIX."chats 
 		where instanceid='".$zinstanceid."' 
@@ -107,9 +107,36 @@ try {
 		$zfoundchatid = $zrow["chatid"];
 		$zfoundchattext = $zrow["chattext"];
 	}
-	// delete chatindexid
-	// insert new chat text
-*/
+	if ($zfoundchatindexid > 0) {
+		$wtwconnect->query("
+			delete from ".WTWMULTIPLAYER_PREFIX."chats 
+			where chatindexid=".$zfoundchatindexid."
+			limit 1;");
+	}
+	$zinstances = explode("_", $zchatid);
+	foreach ($zinstances as $zinstance) {
+		if (!empty($zinstance) && isset($zinstance)) {
+			if ($zinstance != $zinstanceid) {
+				$wtwconnect->query("
+					insert into ".WTWMULTIPLAYER_PREFIX."chats 
+						(chatid,
+						 instanceid,
+						 communityid,
+						 buildingid,
+						 chattext,
+						 createdate,
+						 createuserid)
+					values
+						('".$zchatid."',
+						 '".$zinstance."',
+						 '".$zcommunityid."',
+						 '".$zbuildingid."',
+						 '".$zchattext."',
+						 now(),
+						 '".$wtwconnect->userid."');");
+			}
+		}
+	}
 
 	$wtwconnect->query("
 		delete from ".WTWMULTIPLAYER_PREFIX."tracking

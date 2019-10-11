@@ -1054,6 +1054,113 @@ WTWJS.prototype.addMoldWaterDisc = function(moldname, molddef, lenx, leny, lenz,
 	return mold;
 }
 
+WTWJS.prototype.addMoldParticleSphere = function(moldname, molddef, lenx, leny, lenz) {
+	var mold;
+	try {
+		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
+		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
+		var transparentmat = new BABYLON.StandardMaterial("mat" + moldname, scene);
+		transparentmat.alpha = 0;
+		mold.material = transparentmat;
+		
+		var particleSystem = new BABYLON.ParticleSystem(moldname + "-particles", 2000, scene);
+		particleSystem.parent = mold;
+		particleSystem.particleTexture = new BABYLON.Texture("/content/system/images/flare.png", scene);
+		
+		particleSystem.emitter = mold; // the starting object, the emitter
+		var emitterType = new BABYLON.SphereParticleEmitter();
+		emitterType.radius = Math.sqrt(lenx*lenx + leny*leny + lenz*lenz);
+		emitterType.radiusRange = 0;
+
+		particleSystem.particleEmitterType = emitterType;
+		
+		particleSystem.color1 = new BABYLON.Color4(0.7, 0.8, 1.0, 1.0);
+		particleSystem.color2 = new BABYLON.Color4(0.2, 0.5, 1.0, 1.0);
+		particleSystem.colorDead = new BABYLON.Color4(0, 0, 0.2, 0.0);
+	
+		particleSystem.minSize = 0.1;
+		particleSystem.maxSize = 0.5;
+	
+		particleSystem.minLifeTime = 0.3;
+		particleSystem.maxLifeTime = 1.5;
+	
+		particleSystem.emitRate = 1500;
+		
+		particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+		
+		particleSystem.gravity = new BABYLON.Vector3(0, 0, 0);
+		
+		particleSystem.minAngularSpeed = 0;
+		
+		particleSystem.maxAngularSpeed = Math.PI;
+		
+		particleSystem.minEmitPower = 1;
+		particleSystem.maxEmitPower = 1;
+		particleSystem.updateSpeed = 0.005;
+	
+		particleSystem.addVelocityGradient(0, 3, 5);
+		particleSystem.addVelocityGradient(1.0, -5, -10);
+	
+		particleSystem.start();
+		
+	} catch (ex) {
+		WTW.log("core-scripts-molds-basicmolds\r\n addMoldParticleSphere=" + ex.message);
+	}
+	return mold;
+}
+
+WTWJS.prototype.addMoldParticleShower = function(moldname, molddef, lenx, leny, lenz) {
+	var mold;
+	try {
+		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
+		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
+		var transparentmat = new BABYLON.StandardMaterial("mat" + moldname, scene);
+		transparentmat.alpha = 0;
+		mold.material = transparentmat;
+		
+		var particleSystem = new BABYLON.ParticleSystem(moldname + "-particles", 2000, scene);
+		particleSystem.parent = mold;
+		particleSystem.particleTexture = new BABYLON.Texture("/content/system/images/flare.png", scene);
+		
+		particleSystem.emitter = mold; // the starting object, the emitter
+
+		var sphereEmitter = particleSystem.createDirectedSphereEmitter(1.2, new BABYLON.Vector3(0, leny, 0), new BABYLON.Vector3(lenx * 1.5, leny * 1.5, lenz * 1.5));
+		particleSystem.particleEmitterType = sphereEmitter;
+		
+		particleSystem.color1 = new BABYLON.Color4(0.7, 0.8, 1.0, 1.0);
+		particleSystem.color2 = new BABYLON.Color4(0.2, 0.5, 1.0, 1.0);
+		particleSystem.colorDead = new BABYLON.Color4(0, 0, 0.2, 0.0);
+	
+		particleSystem.minSize = 0.1;
+		particleSystem.maxSize = 0.5;
+	
+		particleSystem.minLifeTime = 0.3;
+		particleSystem.maxLifeTime = 1.5;
+	
+		particleSystem.emitRate = 1500;
+		
+		particleSystem.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+		
+		particleSystem.gravity = new BABYLON.Vector3(0, 0, 0);
+		
+		particleSystem.minAngularSpeed = 0;
+		
+		particleSystem.maxAngularSpeed = Math.PI;
+		
+		particleSystem.minEmitPower = 1;
+		particleSystem.maxEmitPower = 1;
+		particleSystem.updateSpeed = 0.005;
+	
+		particleSystem.addVelocityGradient(0, 3, 5);
+		particleSystem.addVelocityGradient(1.0, -5, -10);
+	
+		particleSystem.start();
+		
+	} catch (ex) {
+		WTW.log("core-scripts-molds-basicmolds\r\n addMoldParticleShower=" + ex.message);
+	}
+	return mold;
+}
 
 WTWJS.prototype.addMoldSmoke = function(moldname, molddef, lenx, leny, lenz) {
 	var mold;
@@ -1068,6 +1175,8 @@ WTWJS.prototype.addMoldSmoke = function(moldname, molddef, lenx, leny, lenz) {
 		var smokePillarCone = smokePillar.createConeEmitter(0.6, 1);
 		smokePillar.emitRate = 20;
 		smokePillar.emitter = mold;
+		smokePillar.id = moldname + "-smokepillar";
+		smokePillar.name = moldname + "-smokepillar";
 		
 		/* Size */
 		smokePillar.addSizeGradient(0.0, 1.0, 2.0);

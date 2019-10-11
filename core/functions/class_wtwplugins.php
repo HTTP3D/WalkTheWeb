@@ -294,6 +294,14 @@ class wtwplugins {
 			$jsdata .= "		return avatardef;\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsOnClick = function(pickedname) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('onclick', 'pickedname');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsOnClick=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "</script>"; 
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwmenus.php-getScriptFunctions=".$e->getMessage());

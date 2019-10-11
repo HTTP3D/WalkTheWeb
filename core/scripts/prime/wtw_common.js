@@ -35,6 +35,8 @@ WTWJS.prototype.getJSON = function(url, callback) {
 		Httpreq.onreadystatechange = function () {
 			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
 				callback(Httpreq.responseText);
+			} else if (url.indexOf("wtw-multiplayer-tracking.php") > -1 && Httpreq.status == "404") {
+				WTWMultiplayer.trackMovement = 0;
 			}
 		};
 		Httpreq.send(null);  
@@ -8158,7 +8160,6 @@ WTWJS.prototype.toggle = function(item) {
 WTWJS.prototype.showSettingsMenu = function(menuitem) {
 	try {
 		WTW.show(menuitem);
-
 		if (dGet(menuitem + 'scroll') != null) {
 			dGet(menuitem + 'scroll').style.height = 'auto';
 			if (dGet(menuitem + 'scroll').clientHeight < (WTW.sizeY - 95)) {
@@ -8986,6 +8987,28 @@ WTWJS.prototype.openRegisterForm = function() {
 		WTW.showSettingsMenu('wtw_menuprofile');
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-openRegisterForm=" + ex.message);
+	}
+}
+
+WTWJS.prototype.registerPasswordFocus = function() {
+	try {
+		if (dGet('wtw_menuregister').style.display != 'none') {
+			WTW.show('wtw_passwordstrengthdiv');
+			WTW.showSettingsMenu('wtw_menuprofile');
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-registerPasswordFocus=" + ex.message);
+	}
+}
+
+WTWJS.prototype.registerPasswordBlur = function() {
+	try {
+		if (dGet('wtw_menuregister').style.display != 'none') {
+			WTW.hide('wtw_passwordstrengthdiv');
+			WTW.showSettingsMenu('wtw_menuprofile');
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-registerPasswordBlur=" + ex.message);
 	}
 }
 

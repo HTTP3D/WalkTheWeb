@@ -65,7 +65,6 @@ function WTWJS() {
 	this.moldList = [];
 	this.keysPressed = [];
 	this.moldEvents = [];
-	this.chatQueue = [];
 	this.lastMoveEvents = [];
 	this.refreshLastMoveEvents = true;
 	this.rideAlong = null;
@@ -79,6 +78,7 @@ function WTWJS() {
 	this.shiftKey = false;
 	this.mainParent = "";
 	this.uicanvas;
+	this.highlightLayer = null;
 	this.context;
 	this.ctx;
 	this.sun;

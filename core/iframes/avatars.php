@@ -45,6 +45,9 @@ try {
 			case "wtw_bgetsession":
 				$zuser = $wtwavatars->getUserSession($_POST["wtw_tinstanceid"]);
 				break;
+			case "wtw_bsavetransportanimation":
+				$wtwavatars->updateAvatarTransport($_POST["wtw_tmyavatarid"], $_POST["wtw_tavataranimation"], $_POST["wtw_ttransport"]);
+				break;
 		}
 	}
 } catch (Exception $e) {
@@ -89,6 +92,8 @@ try {
 		<input type="hidden" id="wtw_temissivecolorg" name="wtw_temissivecolorg" maxlength="255" /><br />
 		<input type="hidden" id="wtw_temissivecolorb" name="wtw_temissivecolorb" maxlength="255" /><br />
 		<input type="hidden" id="wtw_tspeedratio" name="wtw_tspeedratio" maxlength="16" /><br />
+		<input type="hidden" id="wtw_ttransport" name="wtw_ttransport" maxlength="3" /><br />
+		<input type="hidden" id="wtw_tavataranimation" name="wtw_tavataranimation" maxlength="3" /><br />
 		<input type="hidden" id="wtw_tavataranimations" name="wtw_tavataranimations" value='<?php echo $zavataranimations; ?>' /><br />
 		<input type="submit" id="wtw_bgetsession" name="wtw_bgetsession" value="Get Session" onclick="WTW.buttonClick('wtw_bgetsession');" /><br />
 		<input type="submit" id="wtw_bsetsession" name="wtw_bsetsession" value="Set Session" onclick="WTW.buttonClick('wtw_bsetsession');" /><br />
@@ -98,6 +103,7 @@ try {
 		<input type="submit" id="wtw_bsaveavataranimation" name="wtw_bsaveavataranimation" value="Save Avatar Animation" onclick="WTW.buttonClick('wtw_bsaveavataranimation');" /><br />
 		<input type="submit" id="wtw_bsaveavatardisplayname" name="wtw_bsaveavatardisplayname" value="Save Avatar Displayname" onclick="WTW.buttonClick('wtw_bsaveavatardisplayname');" /><br />
 		<input type="submit" id="wtw_bdeleteavataranimation" name="wtw_bdeleteavataranimation" value="Delete Avatar Animation" onclick="WTW.buttonClick('wtw_bdeleteavataranimation');" /><br />
+		<input type="submit" id="wtw_bsavetransportanimation" name="wtw_bsavetransportanimation" value="Save Enter or Exit Animation" onclick="WTW.buttonClick('wtw_bsavetransportanimation');" /><br />
 	</div>
 	</form>
 	<script type="text/javascript">

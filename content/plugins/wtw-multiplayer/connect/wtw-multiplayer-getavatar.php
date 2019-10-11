@@ -56,6 +56,10 @@ try {
 	$zobject = array();
 	$zdisplayname = "Anonymous";
 	$zprivacy = 0;
+	$zenteranimation = "1";
+	$zenteranimationparameter = "";
+	$zexitanimation = "1";
+	$zexitanimationparameter = "";
 	$ztrackid = "";
 	$zposition = array();
 	$zscaling = array();
@@ -99,6 +103,10 @@ try {
 			$zavatarind = $zrow["avatarind"];
 			$zdisplayname = $zrow["displayname"];
 			$zprivacy = $zrow["privacy"];
+			$zenteranimation = $zrow["enteranimation"];
+			$zenteranimationparameter = $zrow["enteranimationparameter"];
+			$zexitanimation = $zrow["exitanimation"];
+			$zexitanimationparameter = $zrow["exitanimationparameter"];
 			$ztrackid = $zrow["trackid"];
 			$zmovetime = $zrow["movetime"];
 			$zposition = array(
@@ -190,6 +198,10 @@ try {
 				'movetime'=> $zmovetime,
 				'moveevents'=> '',
 				'privacy'=> $zprivacy,
+				'enteranimation'=> $zenteranimation,
+				'enteranimationparameter'=> $zenteranimationparameter,
+				'exitanimation'=> $zexitanimation,
+				'exitanimationparameter'=> $zexitanimationparameter,
 				'avatarparts'=> $zavatarparts,
 				'avataranimationdefs'=> $zavataranimationdefs,
 				'animations'=> array(),

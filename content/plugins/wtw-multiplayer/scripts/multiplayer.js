@@ -4,6 +4,7 @@
 
 function wtwmultiplayer() {
 	this.avatars = [];
+	this.chatQueue = [];
 	this.AvatarIDs = 1;
 	this.moveAvatars = 0;
 	this.multiPlayer = 20;
@@ -58,6 +59,10 @@ wtwmultiplayer.prototype.initMultiuser = function() {
 			dGet('wtw_menudisplayname').innerHTML = 'Anonymous';
 		}
 		if (wtw_protocol.toLowerCase().indexOf('https') > -1) { httpsecure = "1"; }
+		var zenteranimation = WTW.getDDLValue('wtw_tselectavataranimation-enter');
+		var zenteranimationparameter = "";
+		var zexitanimation = "1";
+		var zexitanimationparameter = "";
 		var myavatarid = dGet('wtw_tmyavatarid').value;
 		if (dGet('wtw_tuserid').value == '') {
 			myavatarid = dGet('wtw_tmyavataridanon').value;
@@ -76,6 +81,10 @@ wtwmultiplayer.prototype.initMultiuser = function() {
 			"&z=" + btoa(scalingz) + 
 			"&n=" + btoa(dGet('wtw_menudisplayname').innerHTML) + 
 			"&p=" + btoa(privacy) + 
+			"&en=" + btoa(zenteranimation) + 
+			"&enp=" + btoa(zenteranimationparameter) + 
+			"&ex=" + btoa(zexitanimation) + 
+			"&exp=" + btoa(zexitanimationparameter) + 
 			"&a=" + btoa(dGet('wtw_tuserip').value);
 		WTW.getJSON(surl, 
 			function(response) {}
@@ -272,13 +281,13 @@ wtwmultiplayer.prototype.setTrackMovement = function() {
 		if (WTW.keysPressed.length == 0 || animations == '') {
 			animations += "onwait,";
 		}
-		if (WTW.chatQueue != null) {
-			if (WTW.chatQueue.length > 0) {
-				if (WTW.chatQueue[0] != null) {
-					if (WTW.chatQueue[0].chatid != undefined && WTW.chatQueue[0].chattext != undefined) {
-						chatid = WTW.chatQueue[0].chatid;
-						chattext = WTW.chatQueue[0].chattext;
-						WTW.chatQueue.splice(0,1);
+		if (WTWMultiplayer.chatQueue != null) {
+			if (WTWMultiplayer.chatQueue.length > 0) {
+				if (WTWMultiplayer.chatQueue[0] != null) {
+					if (WTWMultiplayer.chatQueue[0].chatid != undefined && WTWMultiplayer.chatQueue[0].chattext != undefined) {
+						chatid = WTWMultiplayer.chatQueue[0].chatid;
+						chattext = WTWMultiplayer.chatQueue[0].chattext;
+						WTWMultiplayer.chatQueue.splice(0,1);
 					}
 				}
 			}
@@ -311,6 +320,7 @@ wtwmultiplayer.prototype.setTrackMovement = function() {
 			}
 		);
 	} catch (ex) {
+		WTWMultiplayer.trackMovement = 0;
 		WTW.log("multiuser-tracking-setTrackMovement=" + ex.message);
 	} 
 }
@@ -392,7 +402,7 @@ wtwmultiplayer.prototype.renderTrackingMovement = function(trackdefs) {
 				for (var i=trackdefs.length; i > -1; i--) {
 					if (trackdefs[i] != null && trackdefs[i] != undefined) {
 						if (i == 0) {
-							//WTW.receiveChatText(trackdefs[i].chat.chatid, trackdefs[i].chat.chattext);
+							WTWMultiplayer.receiveChatText(trackdefs[i].chat.chatid, trackdefs[i].chat.chattext);
 						}
 						var instanceid = trackdefs[i].instanceid;
 						if (instanceid != dGet('wtw_tinstanceid').value) {
@@ -486,6 +496,7 @@ wtwmultiplayer.prototype.renderTrackingMovement = function(trackdefs) {
 		WTW.refreshLastMoveEvents = true;
 		WTWMultiplayer.trackMovement = 0;
 	} catch (ex) {
+		WTWMultiplayer.trackMovement = 0;
 		WTW.log("multiuser-tracking-renderTrackingMovement=" + ex.message);
 	} 
 }
