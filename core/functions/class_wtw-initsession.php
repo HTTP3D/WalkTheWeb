@@ -17,8 +17,9 @@ class wtw {
 
 	}	
 	
-	public $version = "3.0.0";
-	public $versiondate = "2019-9-30";
+	public $version = "3.1.0";
+	public $dbversion = "1.0.1";
+	public $versiondate = "2019-10-13";
 	public $serverinstanceid = "";
 	public $rootpath = "";
 	public $contentpath = "";
@@ -475,7 +476,7 @@ class wtw {
 					if ($zsetupstep == 3 || ($confirm == "YES" && $zsetupstep == 4)) {
 						require_once('./core/functions/class_wtwtables.php');
 						global $wtwtables;
-						$wtwtables->newDbInstall();
+						$wtwtables->databaseTableDefinitions();
 						$zsetupstep = 0;
 						header("Location: ".$this->domainurl."/"); 
 						exit();
@@ -490,6 +491,14 @@ class wtw {
 				);
 				register_shutdown_function('shutdownOnError');
 				global $wtwdb;
+				if ($this->pagename == "admin.php") {
+					$zdbversion = $wtwdb->getSetting("wtw_dbversion");
+					if ($zdbversion != $this->dbversion) {
+						require_once('./core/functions/class_wtwtables.php');
+						global $wtwtables;
+						$wtwtables->databaseTableDefinitions();
+					}
+				}
 				$zsetupstep = 3;
 				/* setup admin user if it does not exist */
 				$zresults = $wtwdb->query("select * 
@@ -1646,7 +1655,7 @@ class wtw {
 		$jsdata = "";
 		try {	
 			$zver = $this->version;
-			$zver = date("Y-m-d-H-i-s");
+			/* $zver = date("Y-m-d-H-i-s"); */
 			/* materials library: https://github.com/BabylonJS/Babylon.js/tree/master/dist/materialsLibrary/ */
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
@@ -1704,7 +1713,7 @@ class wtw {
 		$jsdata = "";
 		try {	
 			$zver = $this->version;
-			$zver = date("Y-m-d-H-i-s");
+			/* $zver = date("Y-m-d-H-i-s"); */
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$zver."\"></script>\r\n";

@@ -316,7 +316,11 @@ wtwmultiplayer.prototype.setTrackMovement = function() {
 			"&ct=" + btoa(chattext);
 		WTW.getJSON(surl, 
 			function(response) {
-				WTWMultiplayer.renderTrackingMovement(JSON.parse(response));
+				if (response != null) {
+					WTWMultiplayer.renderTrackingMovement(JSON.parse(response));
+				} else {
+					WTWMultiplayer.trackMovement = 0;
+				}
 			}
 		);
 	} catch (ex) {

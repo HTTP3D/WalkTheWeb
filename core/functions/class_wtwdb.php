@@ -82,10 +82,13 @@ class wtwdb {
 		try {
 			$ztable = "";
 			$zsql = str_replace("\n","",str_replace("\r","",$zsql));
+			while (strpos($zsql,"  ") !== false) {
+				$zsql = str_replace("  "," ",$zsql);
+			}
 			$zsqlsegments = explode("(",$zsql);
 			foreach ($zsqlsegments as $zsqlpart) {
 				if (strpos(strtolower($zsqlpart),"create table") !== false) {
-					$zwords = explode(" ",trim($zsqlpart));
+					$zwords = explode(" ",strtolower(trim($zsqlpart)));
 					foreach ($zwords as $zword) {
 						if (isset($zword) && !empty($zword) && $zword != "create" && $zword != "table" && empty($ztable)) {
 							$ztable = str_replace("`","",$zword);
@@ -93,16 +96,238 @@ class wtwdb {
 					}
 				}
 			}
+			$znewfields = array();
+			$zprimarykey = "";
+			$zuniquekey = "";
+			$zuniquekeyname = "";
+			$zindexkey = "";
+			$zsqlfields = explode(",",strtolower(str_replace("`","",$zsql)));
+			$zlastline = "";
+			foreach ($zsqlfields as $zline) {
+				if (strpos($zline,"create table") !== false && strpos($zline,"(") !== false) {
+					$zlineparts = explode("(",$zline);
+					$zline = $zlineparts[1]."(".$zlineparts[2];
+				}
+				if (strpos($zline,"decimal") !== false) {
+					$zlastline = $zline;
+				} else {
+					if (!empty($zlastline)) {
+						$zline = $zlastline.",".$zline;
+					}
+					$zlastline = "";
+					$zline = trim(str_replace("  "," ",$zline));
+					if (strpos($zline,"primary key") === false && strpos($zline,"unique key") === false) {
+						$znewfield = "";
+						$znewtype = "";
+						$znewnull = "yes";
+						$znewprikey = "";
+						$znewdefault = "";
+						$znewextra = "";
+						$zwords = explode(" ",$zline);
+						if (!empty($zwords[0]) && isset($zwords[0])) {
+							if ($zwords[0] != "key") {
+								$znewfield = $zwords[0];
+							}
+						}
+						if (!empty($zwords[1]) && isset($zwords[1])) {
+							
+							$znewtype = $zwords[1];
+						}
+						if (strpos($zline,"not null") !== false) {
+							$znewnull = "no";
+						}
+						if (strpos($zline," default ") !== false) {
+							$zlineparts = explode(" default ",$zline);
+							if (!empty($zlineparts[1]) && isset($zlineparts[1])) {
+								if (strpos($zlineparts[1],"'") !== false) {
+									$zdefaults = explode("'",$zlineparts[1]);
+									if (isset($zdefaults[1])) {
+										$znewdefault = $zdefaults[1];
+									}
+								} else if (strpos($zlineparts[1]," ") !== false) {
+									$zdefaults = explode(" ",$zlineparts[1]);
+									if (isset($zdefaults[0])) {
+										$znewdefault = $zdefaults[0];
+									}
+								} else {
+									$znewdefault = $zlineparts[1];
+								}
+							}
+						}
+						if (strpos($zline,"auto_increment") !== false) {
+							$znewextra = "auto_increment";
+						}
+						$znewfields[count($znewfields)] = array(
+							'field' => $znewfield,
+							'type' => $znewtype,
+							'null' => $znewnull,
+							'prikey' => $znewprikey,
+							'default' => $znewdefault,
+							'extra' => $znewextra,
+							'found' => '0'
+						);
+					} else if (strpos($zline,"primary key") !== false) {
+						$zprimarykey = str_replace(" ","",str_replace("(","",str_replace(")","",str_replace("primary key","",$zline))));
+					} else if (strpos($zline,"unique key") !== false) {
+						$zuniquekey = str_replace("unique key","",$zline);
+						if (strpos($zuniquekey,")") !== false) {
+							$zlineparts = explode(")",$zuniquekey);
+							$zuniquekey = trim($zlineparts[0]).")";
+						} else {
+							$zuniquekey = "";
+						}
+						if (strpos($zuniquekey,"(") !== false) {
+							$zlineparts = explode("(",$zuniquekey);
+							$zuniquekeyname = trim($zlineparts[0]);
+						} else {
+							$zuniquekeyname = trim($zuniquekey);
+						}
+					}
+				}
+			}
+			if (strpos($zsql,"key ") !== false) {
+				$zsqlparts = explode(")",strtolower($zsql));
+				foreach ($zsqlparts as $zline) {
+					if (strpos($zline,"key ") !== false && strpos($zline,"primary key ") === false && strpos($zline,"unique key ") === false) {
+						$zlineparts = explode("key ",$zline);
+						$zindexkey = $zlineparts[1].")";
+					}
+				}
+			}
 			
 			/* check if table already exists */
 			if ($this->tableExists($ztable)) {
+				$znewprimarysql = "";
+				$znewuniquesql = "";
+				$znewindexsql = "";
 				/* look up existing table schema and check fields, update or insert where necessary */
+				$zresults = $this->query("
+					describe `".$ztable."`");
+				foreach ($zresults as $zrow) {
+					$zfield = "";
+					$ztype = "";
+					$znull = "yes";
+					$zprikey = "";
+					$zdefault = "";
+					$zextra = "";
+					foreach ($zrow as $zkey=>$zvalue) { 
+						switch (strtolower($zkey)) {
+							case "field":
+								$zfield = strtolower($zvalue);
+								break;
+							case "type":
+								$ztype = strtolower($zvalue);
+								break;
+							case "null":
+								$znull = strtolower($zvalue);
+								break;
+							case "key":
+								$zprikey = strtolower($zvalue);
+								break;
+							case "default":
+								$zdefault = strtolower($zvalue);
+								break;
+							case "extra":
+								$zextra = strtolower($zvalue);
+								break;
+						}
+					}
+					$foundfield = false;
+					for ($i=0; $i < count($znewfields); $i++) {
+						if ($znewfields[$i]["field"] == $zfield) {
+							$zneedsupdate = false;
+							$foundfield = true;
+							$znewfields[$i]["found"] = '1';
+							if ($zfield == $zprimarykey) {
+								$znewfields[$i]["prikey"] = "pri";
+							}
+							if ($znewfields[$i]["type"] != $ztype) {
+								$zneedsupdate = true;
+							}
+							if ($znewfields[$i]["null"] != $znull) {
+								$zneedsupdate = true;
+							}
+							if ($znewfields[$i]["prikey"] != $zprikey) {
+								$this->query("alter table ".$ztable." drop primary key;");
+								$znewprimarysql = "alter table ".$ztable." add primary key (".$zprimarykey.");";
+								if (empty($znewfields[$i]["prikey"]) && !empty($zprikey)) {
+									$znewuniquesql = "alter table ".$ztable." add unique ".$zuniquekey.";";
+									if (!empty($zindexkey)) {
+										$znewindexsql = "alter table ".$ztable." add index ".$zindexkey.";";
+									}
+								}
+								$zneedsupdate = true;
+							}
+							if ($znewfields[$i]["default"] != $zdefault && $znewfields[$i]["default"] != 'null' && $zdefault != '') {
+								$zneedsupdate = true;
+							}
+							if ($znewfields[$i]["extra"] != $zextra) {
+								$zneedsupdate = true;
+							}
+							if ($zneedsupdate) {
+								/* field changed, update field */
+								$zsql = "alter table ".$ztable." modify column ".$zfield." ".$znewfields[$i]["type"];
+								if ($znewfields[$i]["null"] == "no") {
+									$zsql .= " not null";
+								}
+								if (isset($znewfields[$i]["default"])) {
+									if (strpos($znewfields[$i]["default"],"null") !== false) {
+										$zsql .= " default null";
+									} else {
+										$zsql .= " default '".$znewfields[$i]["default"]."'";
+									}
+								}
+								if (!empty($znewfields[$i]["extra"])) {
+									$zsql .= " ".$znewfields[$i]["extra"];
+								}
+								$zsql .= ";";
+								$this->query($zsql);
+							}
+						}
+					}
+					if ($foundfield == false) {
+						/* field no longer in use, consider deleting field... not sure if I want to automate this...*/
+					}
+				}
 				
-				
-				
-				
-				
-				
+				for ($i=0; $i < count($znewfields); $i++) {
+					if ($znewfields[$i]["found"] == '0') {
+						/* insert new field */
+						$zsql = "alter table ".$ztable." add column ".$znewfields[$i]["field"]." ".$znewfields[$i]["type"];
+						if ($znewfields[$i]["null"] == "no") {
+							$zsql .= " not null";
+						}
+						if (isset($znewfields[$i]["default"])) {
+							if (strpos($znewfields[$i]["default"],"null") !== false) {
+								$zsql .= " default null";
+							} else {
+								$zsql .= " default '".$znewfields[$i]["default"]."'";
+							}
+						}
+						if (!empty($znewfields[$i]["extra"])) {
+							$zsql .= " ".$znewfields[$i]["extra"];
+						}
+						$zsql .= ";";
+						$this->query($zsql);
+					}
+				}
+				if (!empty($znewprimarysql)) {
+					$this->query($znewprimarysql);
+				}
+				if (!empty($znewuniquesql) || !empty($znewindexsql)) {
+					$zresults = $this->query("show index from ".$ztable.";");
+					foreach ($zresults as $zrow) {
+						$this->query("
+							alter table ".$ztable." 
+							drop index ".$zrow["Key_name"].";");
+					}
+					if (!empty($znewuniquesql)) {
+						$this->query($znewuniquesql);
+					}
+					if (!empty($znewindexsql)) {
+						$this->query($znewindexsql);
+					}
+				}
 			} else {
 				/* execute create statement */
 				$this->query($zsql);
@@ -111,7 +336,7 @@ class wtwdb {
 			$this->serror("core-functions-class_wtwdb.php-deltaCreateTable=".$e->getMessage());
 		}	
 	}
-
+	
 	public function getRandomString($zlength,$zstringtype) {
 		$zrandomstring = '';
 		try {

@@ -21,7 +21,7 @@ class wtwmultiplayer {
 	
 	public $version = "1.0.0";
 
-	public $dbversion = "1.0.0";
+	public $dbversion = "1.0.1";
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -177,7 +177,7 @@ class wtwmultiplayer {
 		global $wtwplugins;
 		try {
 			if ($wtwplugins->pagename == "admin.php") {
-				$dbversion = $wtwplugins->getSetting("dbversion");
+				$dbversion = $wtwplugins->getSetting(WTWMULTIPLAYER_PREFIX."dbversion");
 				if ($dbversion != $this->dbversion) {
 					$wtwplugins->deltaCreateTable("
 						CREATE TABLE `".WTWMULTIPLAYER_PREFIX."useravatars` (
@@ -302,7 +302,7 @@ class wtwmultiplayer {
 						  UNIQUE KEY `".WTWMULTIPLAYER_PREFIX."chatindexid_UNIQUE` (`chatindexid`)
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 					");
-					$wtwplugins->saveSetting("dbversion", $this->dbversion);
+					$wtwplugins->saveSetting(WTWMULTIPLAYER_PREFIX."dbversion", $this->dbversion);
 				}
 			}
 		} catch (Exception $e) {
