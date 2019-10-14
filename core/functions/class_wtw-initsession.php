@@ -2017,13 +2017,16 @@ class wtw {
 			
 			$pagedata .= "	<div id=\"wtw_updatespage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_loadingupdates\" class=\"wtw-loadingnotice\">Checking for Updates...</div>\r\n";
-			$pagedata .= "		<div id=\"wtw_allupdates\">\r\n";
-			$pagedata .= "			<div class=\"wtw-dashboardboxleftfull\">\r\n";
-			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\">Updates</div>\r\n";
-			$pagedata .= "				<div class=\"wtw-dashboardbox\">\r\n";
-			$pagedata .= "					<div id=\"wtw_updatelist\"></div>\r\n";
-			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$pagedata .= "					<div id=\"wtw_updatepluginlist\"></div>\r\n";
+			$pagedata .= "		<div id=\"wtw_updatespagescroll\" class=\"wtw-formscroll\">\r\n";
+			$pagedata .= "			<div id=\"wtw_allupdates\">\r\n";
+			$pagedata .= "				<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardboxtitle\">Updates</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardbox\">\r\n";
+			$pagedata .= "						<div id=\"wtw_updatelist\"></div>\r\n";
+			$pagedata .= "						<div id=\"wtw_updatedetailslist\"></div>\r\n";
+			$pagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "						<div id=\"wtw_updatepluginlist\"></div>\r\n";
+			$pagedata .= "					</div>\r\n";
 			$pagedata .= "				</div>\r\n";
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "		</div>\r\n";

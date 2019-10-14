@@ -11476,6 +11476,7 @@ WTWJS.prototype.getPluginInfoComplete = function(zmyplugins, zshow) {
 			'filename' : '',
 			'updatedate' : wtw_versiondate,
 			'updateurl' : '',
+			'updateid' : '',
 			'active' : '1'
 		}
 		if (zmyplugins != null) {
@@ -11513,6 +11514,7 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 											zmyplugins[i].latestversion = zupdateinfo[j].version;
 											zmyplugins[i].updatedate = zupdateinfo[j].updatedate;
 											zmyplugins[i].updateurl = zupdateinfo[j].updateurl;
+											zmyplugins[i].updateid = zupdateinfo[j].updateid;
 										}
 									}
 								}
@@ -11561,6 +11563,7 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 								zupdateslist += "<div id=\"wtw_loadingupdating\" class=\"wtw-loadingnotice\">Updating...</div>";
 								if (zmyplugins[i].latestversion != wtw_version) {
 									zupdateslist += "<div class=\"wtw-greenmenubutton\" onclick=\"WTW.updateWalkTheWeb('" + zmyplugins[i].pluginname + "','" + zmyplugins[i].version + "','" + datestring + "','" + zmyplugins[i].updateurl + "');\">Update Now!</div>";
+									WTW.getVersionDetails(zmyplugins[i].updateid);
 								}
 								zupdateslist += "</div>";
 							} else {
@@ -11627,8 +11630,33 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 			WTW.showInline('wtw_adminpluginsbadge');
 			WTW.showInline('wtw_adminallpluginsbadge');
 		}
+		dGet('wtw_updatespagescroll').style.height = (WTW.sizeY - 160) + 'px';
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-checkForUpdatesComplete=" + ex.message);
+	}
+}
+
+WTWJS.prototype.getVersionDetails = function(zupdateid) {
+	try {
+		dGet('wtw_updatedetailslist').innerHTML = "";
+		WTW.getJSON("https://3dnet.walktheweb.com/connect/versiondetails.php?updateid=" + zupdateid, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse[0] != null) {
+				var zupdatedetailslist = "<div class=\"wtw-dashboardboxleftfull\">";
+				zupdatedetailslist += "<div class=\"wtw-dashboardboxtitle\">WalkTheWeb Update <b>" + zresponse[0]["version"] + "</b> Details</div><div class=\"wtw-dashboardbox\">Update Details: <br /><ul>";
+				for (var i=0; i < zresponse.length;i++) {
+					if (zresponse[i] != null) {
+						zupdatedetailslist += "<li class='wtw-normalwrap'><b>" + zresponse[i].updatetitle + "</b> - " + zresponse[i].updateby + "<br /><div style='margin-left:20px;margin-bottom:10px;'>" + zresponse[i].updatedetails + "</div></li>";
+					}
+				}
+				zupdatedetailslist += "</ul></div></div>";
+				dGet('wtw_updatedetailslist').innerHTML = zupdatedetailslist;
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-getVersionDetails=" + ex.message);
 	}
 }
 
