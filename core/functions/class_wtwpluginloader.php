@@ -288,14 +288,15 @@ class wtwpluginloader {
 	}
 
 	public function loadIFramesURL() {
+		require_once('./core/functions/class_wtwdb.php');
 		global $wtw;
 		try {
 			$zroot =  explode('?', $wtw->uri);
 			$zpathdef = explode("/", $zroot[0]);
 			$zfile = "";
 			$zpluginphp = "";
-			if (count($zpathdef) > 2) {
-				$zfile = trim($zpathdef[2]);
+			if (count($zpathdef) > 3) {
+				$zfile = trim($zpathdef[3]);
 			}
 			if (!empty($zfile) && isset($zfile)) {
 				$ziframefile = "";
@@ -343,6 +344,7 @@ class wtwpluginloader {
 			$wtw->serror("core-functions-class_wtwpluginloader.php-loadIFramesURL=" . $e->getMessage());
 		}
 	}
+
 }
 
 	function wtwpluginloader() {

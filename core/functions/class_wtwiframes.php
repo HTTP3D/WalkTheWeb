@@ -1,7 +1,8 @@
 <?php
-require_once('../../config/wtw_config.php');
-require_once('../functions/class_wtwdb.php');
-require_once('../functions/class_wtwuser.php');
+$rootpath = str_replace("/core/functions","",realpath($_SERVER["DOCUMENT_ROOT"]));
+require_once($rootpath.'/config/wtw_config.php');
+require_once($rootpath.'/core/functions/class_wtwdb.php');
+require_once($rootpath.'/core/functions/class_wtwuser.php');
 class wtwiframes {
 	protected static $_instance = null;
 	
@@ -211,7 +212,8 @@ class wtwiframes {
 	}
 	
 	public function addUserPermissions($zusersearch, $zcommunityid, $zbuildingid, $zthingid, $zuseraccess) {
-		require_once('../functions/class_wtwusers.php');
+		$rootpath = str_replace("/core/functions","",realpath($_SERVER["DOCUMENT_ROOT"]));
+		require_once($rootpath.'/core/functions/class_wtwusers.php');
 		global $wtwusers;
 		return $wtwusers->addUserPermissions($zusersearch, $zcommunityid, $zbuildingid, $zthingid, $zuseraccess);
 	}
@@ -352,6 +354,6 @@ class wtwiframes {
 			}
 		}
 	}
-	
+	global $wtwiframes;
 	$wtwiframes->initClass();
 ?>

@@ -8889,46 +8889,6 @@ WTWJS.prototype.loadUserSettings = function() {
 	}
 }
 
-WTWJS.prototype.loadCameraSettings = function() {
-	try {
-		var dimensions = WTW.getCookie("dimensions");
-		if (dimensions == null) {
-			dimensions = "";
-		} else if (dimensions == '') {
-			dimensions = "";
-		}
-		WTW.setDDLValue('wtw_cameradimensions',dimensions);
-		var firstcamera = WTW.getCookie("firstcamera");
-		if (firstcamera == null) {
-			firstcamera = "Follow Camera";
-		} else if (firstcamera == '') {
-			firstcamera = "Follow Camera";
-		}
-		WTW.setDDLValue('wtw_firstcamera',firstcamera);
-		WTW.switchCamera(1);
-		var showcameratwo = WTW.getCookie("showcameratwo");
-		if (showcameratwo != null) {
-			if (showcameratwo == "1") {
-				dGet('wtw_cameratwotext').innerHTML = "Second Camera On";
-				dGet('wtw_cameratwoicon').src = "/content/system/images/menucamera.png";
-				dGet('wtw_cameratwoicon').alt = "Hide Second Camera";
-				dGet('wtw_cameratwoicon').title = "Hide Second Camera";
-				WTW.show('wtw_cameratwoselect');
-				var secondcamera = WTW.getCookie("secondcamera");
-				if (secondcamera == null) {
-					secondcamera = "Scene Camera";
-				} else if (secondcamera == "") {
-					secondcamera = "Scene Camera";
-				}
-				WTW.setDDLValue('wtw_secondcamera',secondcamera);
-				WTW.switchCamera(2);
-			}
-		}
-	} catch (ex) { 
-		WTW.log("core-scripts-prime-wtw_common.js-loadCameraSettings=" + ex.message);
-	}
-}
-
 WTWJS.prototype.loadUserSettingsAfterEngine = function() {
 	try {
 		var gpusetting = WTW.getCookie("gpusetting");
@@ -10547,8 +10507,9 @@ WTWJS.prototype.loginAttemptResponse = function(results) {
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 				}
 				if (results.userid != '') {
+					//WTW.disposeClean("myavatar-" + dGet("wtw_tinstanceid").value);
 					WTW.setLoginValues(results.userid, results.username, results.displayname, results.email, results.userimageurl);
-					WTW.disposeClean("myavatar-" + dGet("wtw_tinstanceid").value);
+					WTW.getSavedAvatar(true);
 				}
 			}
 		}

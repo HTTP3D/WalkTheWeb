@@ -68,8 +68,12 @@ class wtwplugins {
 	}
 	
 	public function addFullPageForm($zid, $zaccessrequired, $zfullpagedata) {
-		global $wtw;
-		return $wtw->addFullPageForm($zid, $zaccessrequired, $zfullpagedata);
+		global $wtwadmin;
+		if (isset($wtwadmin)) {
+			return $wtwadmin->addFullPageForm($zid, $zaccessrequired, $zfullpagedata);
+		} else {
+			return false;
+		}
 	}
 	
 	public function addSettingsMenuItem($zid, $ztitle, $zmenusort, $zmenu, $ziconurl, $zaccessrequired, $zjsfunction) {
@@ -90,6 +94,24 @@ class wtwplugins {
 		}
 	}
 
+	public function addAdminSubMenuItem($zmenu, $zid, $ztitle, $zsubmenusort, $zaccessrequired, $zjsfunction) {
+		global $wtwadminmenu;
+		if (isset($wtwadminmenu)) {
+			return $wtwadminmenu->addAdminSubMenuItem($zmenu, $zid, $ztitle, $zsubmenusort, $zaccessrequired, $zjsfunction);
+		} else {
+			return false;
+		}
+	}
+
+	public function addAdminMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired) {
+		global $wtwadminmenu;
+		if (isset($wtwadminmenu)) {
+			return $wtwadminmenu->addAdminMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired);
+		} else {
+			return false;
+		}
+	}
+
 	public function serror($message) {
 		global $wtw;
 		return $wtw->serror($message);
@@ -103,6 +125,11 @@ class wtwplugins {
 	public function deltaCreateTable($zsql) {
 		global $wtwdb;
 		return $wtwdb->deltaCreateTable($zsql);
+	}
+
+	public function getRandomString($zlength,$zstringtype) {
+		global $wtwdb;
+		return $wtwdb->getRandomString($zlength,$zstringtype);
 	}
 
 	public function getSetting($zsettingname) {
@@ -123,6 +150,11 @@ class wtwplugins {
 	public function saveSettings($zsettings) {
 		global $wtwdb;
 		return $wtwdb->saveSettings($zsettings);
+	}
+	
+	public function isUserInRole($zrole) {
+		global $wtwdb;
+		return $wtwdb->isUserInRole($zrole);
 	}
 	
 	public function addScript($zscriptid, $zadminonly, $zscripturl) {

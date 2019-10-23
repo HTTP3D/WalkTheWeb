@@ -79,6 +79,7 @@ try {
 	$zobjectfolder = "";
 	$zobjectfile = "";
 	$zdisplayname = "Anonymous";
+	$zanonymous = '0';
 	$zprivacy = 0;
 	$zenteranimation = "1";
 	$zexitanimation = "1";
@@ -103,6 +104,9 @@ try {
 				and (c.deleted is null or c.deleted=0)
 			order by c.avatarpart, c.updatedate desc;");
 		foreach ($zresults as $zrow) {
+			if ($zrow["userid"] == '') {
+				$zanonymous = '1';
+			}
 			$zuseravatarid = $zrow["useravatarid"];
 			$zinstanceid = $zrow["instanceid"];
 			$zavatarind = $zrow["avatarind"];
@@ -173,6 +177,7 @@ try {
 	/* combine avatar settings and animations for json return dataset */
 	$zavatar = array(
 		'userid'=> $zuserid,
+		'anonymous'=>$zanonymous,
 		'useravatarid'=> $zuseravatarid,
 		'instanceid'=> $zinstanceid,
 		'avatarind'=> $zavatarind,

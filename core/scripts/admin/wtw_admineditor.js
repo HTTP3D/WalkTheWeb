@@ -2309,7 +2309,7 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 		dGet('wtw_tmoldpositionz').focus();
 		WTW.setWindowSize();
 		WTW.setNewMold(1);
-		WTW.resetMoldsOpacity();
+		/* WTW.resetMoldsOpacity(); */
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-openMoldForm=" + ex.message);
 	}
@@ -5085,7 +5085,7 @@ WTWJS.prototype.hilightActionZonePart = function(moldname) {
 
 WTWJS.prototype.unHilightActionZonePart = function() {
 	try {
-		WTW.resetMoldCoverings();
+		/* WTW.resetMoldCoverings(); */
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-unHilightActionZonePart=" + ex.message);
 	}
@@ -7284,7 +7284,7 @@ WTWJS.prototype.loadPickedObject = function(mold) {
 						}
 						if (connectinggridind > -1) {
 							WTW.openConnectingGridsForm(connectinggridind);
-							WTW.resetMoldCoverings();
+							/* WTW.resetMoldCoverings(); */
 						}
 					} else {
 						WTW.changePick(1);
@@ -9090,7 +9090,7 @@ WTWJS.prototype.setQuickEditorFocus = function(value) {
 			}
 			WTW.setCookie("bfocus","1",30);
 		} else {
-			WTW.resetMoldsOpacity();
+			/* WTW.resetMoldsOpacity(); */
 			if (dGet('wtw_bfocus') != null) {
 				dGet('wtw_bfocus').innerHTML = "Focus<br /><br />OFF";
 				dGet('wtw_bfocus').onclick = function() { WTW.setQuickEditorFocus(1); };
@@ -9252,31 +9252,31 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 							dGet('wtw_bback4').click();
 							break;
 						case 65: // a
-							dGet('wtw_adminmenusnapshot').click();
+							dGet('wtw_adminbuildingsnapshot').click();
 							break;
 						case 67: // c
-							dGet('wtw_adminmenucopybuilding').click();
+							dGet('wtw_adminbuildingcopy').click();
 							break;
 						case 68: // d
 							dGet('wtw_cancel4').click();
 							break;
 						case 72: // h
-							dGet('wtw_adminmenusharebuilding').click();
+							dGet('wtw_adminbuildingshare').click();
 							break;
 						case 73: // i
-							dGet('wtw_adminmenuinformation').click();
+							dGet('wtw_adminbuildinginfo').click();
 							break;
 						case 79: // o
-							dGet('wtw_adminmenudeletebuilding').click();
+							dGet('wtw_adminbuildingdelete').click();
 							break;
 						case 80: // p
-							dGet('wtw_adminmenupermissions').click();
+							dGet('wtw_adminbuildingaccess').click();
 							break;
 						case 83: // s
-							dGet('wtw_adminmenustarting').click();
+							dGet('wtw_adminbuildingstart').click();
 							break;
 						case 46: // del
-							dGet('wtw_adminmenudeletebuilding').click();
+							dGet('wtw_adminbuildingdelete').click();
 							break;
 					}
 					break;
@@ -9293,22 +9293,22 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 							dGet('wtw_bback6').click();
 							break;
 						case 65: // a
-							dGet('wtw_adminmenuactions').click();
+							dGet('wtw_adminbuildingactionzones').click();
 							break;
 						case 66: // b
-							dGet('wtw_adminmenuaddblock').click();
+							dGet('wtw_adminbuildingaddblock').click();
 							break;
 						case 68: // d
 							dGet('wtw_cancel6').click();
 							break;
 						case 72: // h
-							dGet('wtw_adminmenuaddthing').click();
+							dGet('wtw_adminbuildingaddthing').click();
 							break;
 						case 79: // o
-							dGet('wtw_adminmenuaddweb').click();
+							dGet('wtw_adminbuildingaddweb').click();
 							break;
 						case 82: // r
-							dGet('wtw_adminmenurecover').click();
+							dGet('wtw_adminbuildingrecover').click();
 							break;
 					}
 					break;
@@ -9335,7 +9335,7 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 							dGet('wtw_bdelmold').click();
 							break;
 						case 80: // p
-							dGet('wtw_bcreateduplicateshape').click();
+							dGet('wtw_createduplicatemold').click();
 							break;
 						case 83: // s
 							dGet('wtw_bsavethismold').click();
@@ -9397,31 +9397,31 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 							dGet('wtw_bback24').click();
 							break;
 						case 65: // a
-							dGet('wtw_adminmenucommsnapshot').click();
+							dGet('wtw_admincommunitysnapshot').click();
 							break;
 						case 67: // c
-							dGet('wtw_adminmenucommcopy').click();
+							dGet('wtw_admincommunitycopy').click();
 							break;
 						case 68: // d
 							dGet('wtw_adminmenucommdone').click();
 							break;
 						case 71: // g
-							dGet('wtw_adminmenugravity').click();
+							dGet('wtw_admincommunitygravity').click();
 							break;
 						case 72: // h
-							dGet('wtw_adminmenucommshare').click();
+							dGet('wtw_admincommunityshare').click();
 							break;
 						case 73: // i
-							dGet('wtw_adminmenucomminfo').click();
+							dGet('wtw_admincommunityinfo').click();
 							break;
 						case 80: // p
-							dGet('wtw_adminmenupermissions').click();
+							dGet('wtw_adminbuildingaccess').click();
 							break;
 						case 83: // s
-							dGet('wtw_adminmenucommstarting').click();
+							dGet('wtw_admincommunitystart').click();
 							break;
 						case 46: // del
-							dGet('wtw_adminmenucommdelete').click();
+							dGet('wtw_admincommunitydelete').click();
 							break;
 					}
 					break;
@@ -9438,28 +9438,28 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 							dGet('wtw_bback26').click();
 							break;
 						case 65: // a
-							dGet('wtw_adminmenucommactions').click();
+							dGet('wtw_admincommunityactionzones').click();
 							break;
 						case 66: // b
-							dGet('wtw_adminmenucommaddblock').click();
+							dGet('wtw_admincommunityaddblock').click();
 							break;
 						case 68: // d
 							dGet('wtw_adminmenucommdoneediting').click();
 							break;
 						case 69: // e
-							dGet('wtw_adminmenucommeditbuildcomm').click();
+							dGet('wtw_admincommunityaddbuilding').click();
 							break;
 						case 72: // h
-							dGet('wtw_adminmenucommaddthing').click();
+							dGet('wtw_admincommunityaddthing').click();
 							break;
 						case 76: // l
-							dGet('wtw_adminmenucommlandscape').click();
+							dGet('wtw_admincommunitylandscape').click();
 							break;
 						case 79: // o
-							dGet('wtw_adminmenucommaddweb').click();
+							dGet('wtw_admincommunityaddweb').click();
 							break;
 						case 82: // r
-							dGet('wtw_adminmenucommrecover').click();
+							dGet('wtw_admincommunityrecover').click();
 							break;
 					}
 					break;
@@ -9504,28 +9504,28 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 							dGet('wtw_bback34').click();
 							break;
 						case 65: // a
-							dGet('wtw_adminmenuthingsnapshot').click();
+							dGet('wtw_adminthingsnapshot').click();
 							break;
 						case 67: // c
-							dGet('wtw_adminmenuthingcopy').click();
+							dGet('wtw_adminthingcopy').click();
 							break;
 						case 68: // d
 							dGet('wtw_adminmenuthingdone').click();
 							break;
 						case 72: // h
-							dGet('wtw_adminmenuthingshare').click();
+							dGet('wtw_adminthingshare').click();
 							break;
 						case 73: // i
-							dGet('wtw_adminmenuthinginfo').click();
+							dGet('wtw_adminthinginfo').click();
 							break;
 						case 80: // p
-							dGet('wtw_adminmenupermissions').click();
+							dGet('wtw_adminbuildingaccess').click();
 							break;
 						case 83: // s
-							dGet('wtw_adminmenuthingstarting').click();
+							dGet('wtw_adminthingstart').click();
 							break;
 						case 46: // del
-							dGet('wtw_adminmenuthingdelete').click();
+							dGet('wtw_adminthingdelete').click();
 							break;
 					}
 					break;
@@ -9542,19 +9542,19 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 							dGet('wtw_bback36').click();
 							break;
 						case 65: // a
-							dGet('wtw_adminmenuthingactions').click();
+							dGet('wtw_adminthingactions').click();
 							break;
 						case 66: // b
-							dGet('wtw_adminmenuthingaddblock').click();
+							dGet('wtw_adminthingaddblock').click();
 							break;
 						case 68: // d
 							dGet('wtw_adminmenuthingdoneediting').click();
 							break;
 						case 79: // o
-							dGet('wtw_adminmenuthingaddweb').click();
+							dGet('wtw_adminthingaddweb').click();
 							break;
 						case 82: // r
-							dGet('wtw_adminmenuthingrecover').click();
+							dGet('wtw_adminthingrecover').click();
 							break;
 					}
 					break;
@@ -9670,16 +9670,16 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu26');
 						break;
-					case 'wtw_adminmenucomminfo':
+					case 'wtw_admincommunityinfo':
 						WTW.hideAdminMenu();
 						WTW.openCommunityForm(communityid);
 						WTW.show('wtw_adminmenu25');
 						break;
-					case 'wtw_adminmenucommstarting':
+					case 'wtw_admincommunitystart':
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu44');
 						break;
-					case 'wtw_adminmenugravity':
+					case 'wtw_admincommunitygravity':
 						WTW.hideAdminMenu();
 						dGet('wtw_tcommgravity').value = WTW.init.gravity;
 						if (WTW.init.gravity > 0) {
@@ -9691,18 +9691,18 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						}
 						WTW.show('wtw_adminmenu45');
 						break;
-					case 'wtw_adminmenucommpermissions':
+					case 'wtw_admincommunityaccess':
 						WTW.hideAdminMenu();
 						WTW.openPermissionsForm();
 						WTW.show('wtw_adminmenu60');
 						break;
-					case 'wtw_adminmenucommcopy':
+					case 'wtw_admincommunitycopy':
 						WTW.copyMyCommunity();
 						break;
-					case 'wtw_adminmenucommdelete':
+					case 'wtw_admincommunitydelete':
 						WTW.openConfirmation('2');
 						break;
-					case 'wtw_adminmenucommshare':
+					case 'wtw_admincommunityshare':
 						WTW.hideAdminMenu();
 						dGet('wtw_bsharecommunitytemp').innerHTML = 'Share 3D Community as Template';
 						WTW.openShareCommunityForm();
@@ -9719,36 +9719,36 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu24');
 						break;
-					case 'wtw_adminmenucommlandscape':
+					case 'wtw_admincommunitylandscape':
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu30');
 						break;
-					case 'wtw_adminmenucommaddblock':
+					case 'wtw_admincommunityaddblock':
 						WTW.hideAdminMenu();
 						WTW.getMoldList();
 						WTW.show('wtw_adminmenu10');
 						break;
-					case 'wtw_adminmenucommaddweb':
+					case 'wtw_admincommunityaddweb':
 						WTW.hideAdminMenu();
 						WTW.getWebMoldList();
 						WTW.show('wtw_adminmenu12');
 						break;
-					case 'wtw_adminmenucommaddthing':
+					case 'wtw_admincommunityaddthing':
 						WTW.hideAdminMenu();
 						WTW.getThingMoldList()
 						WTW.show('wtw_adminmenu13');
 						break;
-					case 'wtw_adminmenucommactions':
+					case 'wtw_admincommunityactionzones':
 						WTW.hideAdminMenu();
 						WTW.openSelectActionZoneForm();
 						WTW.show('wtw_adminmenu15');
 						break;
-					case 'wtw_adminmenucommrecover':
+					case 'wtw_admincommunityrecover':
 						WTW.hideAdminMenu();
 						WTW.openRecoverItems();
 						WTW.show('wtw_adminmenu16');
 						break;
-					case 'wtw_adminmenucommeditbuildcomm':
+					case 'wtw_admincommunityaddbuilding':
 						WTW.hideAdminMenu();
 						WTW.openListConnectingGridsForm();
 						WTW.show('wtw_adminmenu27');
@@ -9775,22 +9775,22 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 							WTW.openConfirmation('5');
 						}
 						break;
-					case "wtw_skysettings":
+					case "wtw_adminlandscapesky":
 						WTW.hideAdminMenu();
 						WTW.openSkyDomeForm();
 						WTW.show('wtw_adminmenu40');
 						break;
-					case "wtw_groundsettings":
+					case "wtw_adminlandscapeground":
 						WTW.hideAdminMenu();
 						WTW.openEditGroundSettings();
 						WTW.show('wtw_adminmenu41');
 						break;
-					case "wtw_waterdepth":
+					case "wtw_adminlandscapewater":
 						WTW.hideAdminMenu();
 						WTW.openCommunityForm(communityid);
 						WTW.show('wtw_adminmenu42');
 						break;
-					case "wtw_communitygravity":
+					case "wtw_adminlandscapegravity":
 						WTW.hideAdminMenu();
 						dGet('wtw_tcommgravity').value = WTW.init.gravity;
 						if (WTW.init.gravity > 0) {
@@ -9802,7 +9802,7 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						}
 						WTW.show('wtw_adminmenu45');
 						break;
-					case "wtw_addgroundterrain":
+					case "wtw_adminlandscapeterrain":
 						WTW.hideAdminMenu();
 						WTW.openAddGroundTerrain();
 						break;
@@ -9892,7 +9892,7 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu30');
 						break;
-					case 'wtw_adminmenucommsnapshot':	
+					case 'wtw_admincommunitysnapshot':	
 						WTW.hideAdminMenu();
 						dGet('wtw_snapshottitle').innerHTML = "3D Community Snapshot";
 						WTW.openUpdateSnapshotForm();
@@ -9915,28 +9915,28 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu6');
 						break;
-					case 'wtw_adminmenuinformation':
+					case 'wtw_adminbuildinginfo':
 						WTW.hideAdminMenu();
 						WTW.openBuildingForm(buildingid);
 						WTW.show('wtw_adminmenu5');
 						break;
-					case 'wtw_adminmenustarting':
+					case 'wtw_adminbuildingstart':
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu44');
 						break;
-					case 'wtw_adminmenucopybuilding':
+					case 'wtw_adminbuildingcopy':
 						WTW.copyMyBuilding();
 						break;
-					case 'wtw_adminmenudeletebuilding':
+					case 'wtw_adminbuildingdelete':
 						WTW.openConfirmation('1');
 						break;
-					case 'wtw_adminmenusharebuilding':
+					case 'wtw_adminbuildingshare':
 						WTW.hideAdminMenu();
 						dGet('wtw_bsharebuildingtemp').innerHTML = 'Share 3D Building as Template';
 						WTW.openShareBuildingForm();
 						WTW.show('wtw_adminmenu9');
 						break;
-					case 'wtw_adminmenupermissions':
+					case 'wtw_adminbuildingaccess':
 						WTW.hideAdminMenu();
 						WTW.openPermissionsForm();
 						WTW.show('wtw_adminmenu60');
@@ -9968,7 +9968,7 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.saveShareBuildingForm();
 						WTW.show('wtw_adminmenu4');
 						break;
-					case 'wtw_adminmenusnapshot':	
+					case 'wtw_adminbuildingsnapshot':	
 						WTW.hideAdminMenu();
 						dGet('wtw_snapshottitle').innerHTML = "3D Building Snapshot";
 						WTW.openUpdateSnapshotForm();
@@ -9991,27 +9991,27 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu36');
 						break;
-					case 'wtw_adminmenuthinginfo':
+					case 'wtw_adminthinginfo':
 						WTW.hideAdminMenu();
 						WTW.openThingForm(thingid);
 						WTW.show('wtw_adminmenu35');
 						break;
-					case 'wtw_adminmenuthingstarting':
+					case 'wtw_adminthingstart':
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu44');
 						break;
-					case 'wtw_adminmenuthingpermissions':
+					case 'wtw_adminthingaccess':
 						WTW.hideAdminMenu();
 						WTW.openPermissionsForm();
 						WTW.show('wtw_adminmenu60');
 						break;
-					case 'wtw_adminmenuthingcopy':
+					case 'wtw_adminthingcopy':
 						WTW.copyMyThing();
 						break;
-					case 'wtw_adminmenuthingdelete':
+					case 'wtw_adminthingdelete':
 						WTW.openConfirmation('6');
 						break;
-					case 'wtw_adminmenuthingshare':
+					case 'wtw_adminthingshare':
 						WTW.hideAdminMenu();
 						dGet('wtw_bsharethingtemplate').innerHTML = 'Share 3D Thing as Template';
 						WTW.openShareThingForm();
@@ -10032,22 +10032,22 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu34');
 						break;
-					case 'wtw_adminmenuthingaddblock':
+					case 'wtw_adminthingaddblock':
 						WTW.hideAdminMenu();
 						WTW.getMoldList();
 						WTW.show('wtw_adminmenu10');
 						break;
-					case 'wtw_adminmenuthingaddweb':
+					case 'wtw_adminthingaddweb':
 						WTW.hideAdminMenu();
 						WTW.getWebMoldList();
 						WTW.show('wtw_adminmenu12');
 						break;
-					case 'wtw_adminmenuthingactions':
+					case 'wtw_adminthingactions':
 						WTW.hideAdminMenu();
 						WTW.openSelectActionZoneForm();
 						WTW.show('wtw_adminmenu15');
 						break;
-					case 'wtw_adminmenuthingrecover':
+					case 'wtw_adminthingrecover':
 						WTW.hideAdminMenu();
 						WTW.openRecoverItems();
 						WTW.show('wtw_adminmenu16');
@@ -10068,34 +10068,34 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.saveShareThingForm();
 						WTW.show('wtw_adminmenu34');
 						break;
-					case 'wtw_adminmenuthingsnapshot':	
+					case 'wtw_adminthingsnapshot':	
 						WTW.hideAdminMenu();
 						dGet('wtw_snapshottitle').innerHTML = "3D Thing Snapshot";
 						WTW.openUpdateSnapshotForm();
 						WTW.show('wtw_adminmenu69');
 						break;
 				/* common Admin Items */
-					case 'wtw_adminmenuaddblock':
+					case 'wtw_adminbuildingaddblock':
 						WTW.hideAdminMenu();
 						WTW.getMoldList();
 						WTW.show('wtw_adminmenu10');
 						break;
-					case 'wtw_adminmenuaddweb':
+					case 'wtw_adminbuildingaddweb':
 						WTW.hideAdminMenu();
 						WTW.getWebMoldList();
 						WTW.show('wtw_adminmenu12');
 						break;
-					case 'wtw_adminmenuaddthing':
+					case 'wtw_adminbuildingaddthing':
 						WTW.hideAdminMenu();
 						WTW.getThingMoldList()
 						WTW.show('wtw_adminmenu13');
 						break;
-					case 'wtw_adminmenuactions':
+					case 'wtw_adminbuildingactionzones':
 						WTW.hideAdminMenu();
 						WTW.openSelectActionZoneForm();
 						WTW.show('wtw_adminmenu15');
 						break;
-					case 'wtw_adminmenurecover':
+					case 'wtw_adminbuildingrecover':
 						WTW.hideAdminMenu();
 						WTW.openRecoverItems();
 						WTW.show('wtw_adminmenu16');
@@ -10144,7 +10144,7 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 					case "wtw_selectsound":
 						WTW.openFullPageForm('medialibrary','audio','moldsound','wtw_tmoldsoundid','wtw_tmoldsoundpath','wtw_soundicon');
 						break;
-					case 'wtw_bcreateduplicateshape':
+					case 'wtw_createduplicatemold':
 						WTW.createDuplicateShape();
 						break;
 					case "wtw_setstartposition":
@@ -10596,7 +10596,7 @@ WTWJS.prototype.setColor = function(moldname, colorgroup, r, g, b) {
 					break;
 			}
 		}
-		WTW.resetMoldsOpacity();
+		/* WTW.resetMoldsOpacity(); */
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-setColor=" + ex.message);
 	}
@@ -10948,6 +10948,7 @@ WTWJS.prototype.editWebAlias = function(zwebaliasid) {
 				dGet("wtw_taliascommunitypublishname").value = zcommunitypub;
 				dGet("wtw_taliasbuildingpublishname").value = zbuildingpub;
 				dGet("wtw_taliasthingpublishname").value = zthingpub;
+				WTW.show('wtw_baliasdelete');
 			}
 		);
 	} catch (ex) {
@@ -10964,6 +10965,8 @@ WTWJS.prototype.openAliasForm = function() {
 		dGet('wtw_aliasselect1').style.visibility = "visible";
 		WTW.setAliasCommunities();
 		WTW.show('wtw_addwebaliasdiv');
+		WTW.hide('wtw_addwebalias');
+		WTW.hide('wtw_baliasdelete');
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-openAliasForm=" + ex.message);
 	}
@@ -11223,9 +11226,9 @@ WTWJS.prototype.setAliasThings = function() {
 
 WTWJS.prototype.saveAliasForm = function(w) {
 	try {
+		var zwebaliasid = dGet('wtw_twebaliasid').value;
 		switch (w) {
 			case 1: /* save */
-				var zwebaliasid = dGet('wtw_twebaliasid').value;
 				var zdomainname = dGet('wtw_taliasdomainname').value;
 				var zcommunitypublishname = dGet('wtw_taliascommunitypublishname').value;
 				var zbuildingpublishname = dGet('wtw_taliasbuildingpublishname').value;
@@ -11302,15 +11305,25 @@ WTWJS.prototype.saveAliasForm = function(w) {
 				}
 				/* iframe src, onload function */
 				var iframe = WTW.createIFrame('/core/iframes/uploads.php', onload);
-				WTW.clearAliasForm();
-				WTW.hide('wtw_addwebaliasdiv');
 				break;
 			case -1: /* cancel */
-				WTW.clearAliasForm();
-				WTW.hide('wtw_addwebaliasdiv');
+				break;
+			case 0: /* delete */
+				var zrequest = {
+					'webaliasid': zwebaliasid
+				}
+				/* function for after iframe loads */
+				var onload = function(ipage) {
+					ipage.getElementById('wtw_twebaliasid').value = zrequest.webaliasid;
+					ipage.getElementById('wtw_bdeletewebalias').click();
+				}
+				/* iframe src, onload function */
+				var iframe = WTW.createIFrame('/core/iframes/uploads.php', onload);
 				break;
 		}
-
+		WTW.clearAliasForm();
+		WTW.hide('wtw_addwebaliasdiv');
+		WTW.show('wtw_addwebalias');
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-saveAliasForm=" + ex.message);
 	}

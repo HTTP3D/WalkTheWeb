@@ -1,5 +1,8 @@
-WTWJS.prototype.loadSetupMode = function() {
+WTWJS.prototype.loadSetupMode = function(reload) {
 	try {
+		if (reload == undefined) {
+			reload == false;
+		}
 		var setupparent = scene.getMeshByID("setupparent-0");
 		if (setupparent != null) {
 			var objectfolder = "/content/system/babylon/selectavatar/";
@@ -76,7 +79,7 @@ WTWJS.prototype.nextSetupMode = function(avatarname) {
 			WTW.getMyAvatar(avatarind);
 			WTW.loadCameraSettings();
 			WTW.currentID = "";
-			WTW.editMyAvatar();
+			WTW.setCameraOnAvatar();
 			var myavatarid = dGet('wtw_tmyavatarid').value;
 			if (dGet('wtw_tuserid').value == '') {
 				myavatarid = dGet('wtw_tmyavataridanon').value;
@@ -150,7 +153,11 @@ WTWJS.prototype.nextSetupMode = function(avatarname) {
 
 WTWJS.prototype.setAvatarID = function(zavatarid) {
 	try {
-		dGet('wtw_tmyavatarid').value = zavatarid;
+		if (dGet('wtw_tuserid').value == '') {
+			dGet('wtw_tmyavataridanon').value = zavatarid;
+		} else {
+			dGet('wtw_tmyavatarid').value = zavatarid;
+		}
     } catch (ex) {
 		WTW.log("avatars-loadavatar-setAvatarID=" + ex.message);
     }
@@ -225,12 +232,16 @@ WTWJS.prototype.getSavedAvatar = function(reload) {
 			function(response) {
 				response = JSON.parse(response);
 				var avatarind = -1;
+				var zanonymous = "1";
 				if (response != null) {
 					if (response.avatar != null) {
 						if (response.avatar.avatarind != undefined) {
 							if (WTW.isNumeric(response.avatar.avatarind)) {
 								avatarind = Number(response.avatar.avatarind);
 							}
+						}
+						if (response.avatar.anonymous != undefined) {
+							zanonymous = response.avatar.anonymous;
 						}
 						if (dGet('wtw_tuserid').value == '') {
 							WTW.setCookie("myavatarid", response.avatar.useravatarid, 365);
@@ -241,17 +252,33 @@ WTWJS.prototype.getSavedAvatar = function(reload) {
 						}
 					}
 				}
-				if (avatarind == -1) {
+				var avatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
+				if (avatarind > -1 && zanonymous == "1" && dGet('wtw_tuserid').value != '') {
+					/* load anonymous avatar - logged in and already has anonymous avatar, but no logged in avatar */
+					dGet('wtw_tavatarind').value = avatarind;
+					WTW.setCameraOnAvatar();
+					WTW.switchAvatarMenu(4);
+				} else if (avatar != null && avatarind > -1 && zanonymous == "0" && dGet('wtw_tuserid').value != '') {
+					/* anonymouse avatar already loaded - user logged in and this will switch from anonymous avatar to logged in avatar */ 
+					dGet('wtw_tavatarind').value = avatarind;
+					WTW.setCameraOnAvatar();
+					WTW.disposeClean("myavatar-" + dGet("wtw_tinstanceid").value);
+					WTW.loadAvatarFromDB(response.avatar, reload);
+					WTW.loadCameraSettings();
+				} else if (avatarind == -1) {
+					/* needs an avatar - user does not have any avatars yet */
 					dGet('wtw_tavatarind').value = '';
+					WTW.setCameraOnAvatar();
 					WTW.loadSetupMode(); // load all avatars to choose
 				} else {
+					/* load existing avatar, has anonymous avatar for anonymous user OR has logged in avatar for logged in user */
 					dGet('wtw_tavatarind').value = avatarind;
 					if (reload == false) {
 						WTW.loadCameraSettings();
 						WTW.closeSelectAvatar();
 						WTW.closeSetupMode(false);
 					} else {
-						// may need to delete current MyAvatar...
+						/* may need to delete current MyAvatar... */
 					}
 					WTW.loadAvatarFromDB(response.avatar, reload);
 					if (reload == false) {
@@ -286,6 +313,7 @@ WTWJS.prototype.transferMainParent = function(parentmold) {
 				WTW.myAvatar.rotation.y = WTW.getRadians(WTW.init.startRotationY);
 			}
 		}
+		WTW.addDisposeMoldToQueue("setupparentcamera-0");
 		WTW.addDisposeMoldToQueue("setupparent-0");
     } catch (ex) {
 		WTW.log("avatars-loadavatar-transferMainParent=" + ex.message);
@@ -383,7 +411,7 @@ WTWJS.prototype.closeSetupMode = function(save) {
     }
 }
 
-WTWJS.prototype.editMyAvatar = function() {
+WTWJS.prototype.setCameraOnAvatar = function() {
 	try {
 		WTW.setupMode = 1;
 		WTW.hide('wtw_menuprofile');
@@ -398,6 +426,23 @@ WTWJS.prototype.editMyAvatar = function() {
 			WTW.cameraFollow.lockedTarget = null;
 			WTW.cameraFollow.lockedTarget = avatarcamera;
 			WTW.cameraFollow.position = new BABYLON.Vector3(avatar.position.x + parseFloat(Math.sin(avatar.rotation.y)) * step, avatar.position.y + avatarcamera.position.y + WTW.cameraYOffset, avatar.position.z + parseFloat(Math.cos(avatar.rotation.y)) * step);
+		} else {
+			var setupparent = scene.getMeshByID("setupparent-0");
+			if (setupparent != null) {			
+				var setupparentcamera = scene.getMeshByID("setupparentcamera-0");
+				if (setupparentcamera == null) {
+					setupparentcamera = WTW.addMoldBox("setupparentcamera-0", 1, 1, 1);
+					var transparentmat = new BABYLON.StandardMaterial("matsetupparentcamera-0", scene);
+					transparentmat.alpha = 0;
+					setupparentcamera.material = transparentmat;
+					setupparentcamera.position.y = 8;
+					setupparentcamera.parent = setupparent;
+				}
+				WTW.cameraFollow.lockedTarget = null;
+				WTW.cameraFollow.lockedTarget = setupparentcamera;
+			}
+			step = 5;
+			WTW.cameraYOffset = 0;
 		}
 		WTW.cameraFollow.radius = -step; // how far from the object to follow
 		WTW.cameraFollow.heightOffset = WTW.cameraYOffset; // how high above the object to place the camera
@@ -410,7 +455,7 @@ WTWJS.prototype.editMyAvatar = function() {
 		scene.activeCameras[0] = WTW.cameraFollow;
 		WTW.showSettingsMenu('wtw_menuavatar');
     } catch (ex) {
-		WTW.log("avatars-loadavatar-editMyAvatar=" + ex.message);
+		WTW.log("avatars-loadavatar-setCameraOnAvatar=" + ex.message);
     }
 }
 
@@ -1149,7 +1194,7 @@ WTWJS.prototype.loadAvatar = function(avatarind, parentmold, offsetX, offsetZ) {
 					selavatar.position.z = 28;
 				}
 			}
-			WTW.setAvatarVisible(avatarname, true);
+			WTW.avatarMinLoadEnter(avatarname);
 		}
     } catch (ex) {
 		WTW.log("avatars-loadavatar-loadAvatar=" + ex.message);
@@ -1214,6 +1259,23 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 		}
     } catch (ex) {
 		WTW.log("avatars-loadavatar-loadAvatarAnimations=" + ex.message);
+    }
+}
+
+WTWJS.prototype.avatarMinLoadEnter = function(avatarname) {
+	try {
+		var avatarparts = [];
+		var avatar = scene.getMeshByID(avatarname);
+		zenteranimation = '1';
+		if (avatar != null) {
+			var avatarscale = scene.getMeshByID(avatarname + "-scale");
+			if (avatarscale != null) {
+				avatarparts = avatarscale.getChildren();
+			}
+		}
+		WTW.avatarShowGrowGlowSmoke(avatarname, avatarparts);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-avatarMinLoadEnter=" + ex.message);
     }
 }
 

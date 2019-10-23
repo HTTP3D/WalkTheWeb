@@ -52,6 +52,10 @@ html, body {
 	visibility:hidden;
 	background: rgba(134,134,134,0.3);
 }
+.wtw-adminmenuform {
+	display:none;
+	visibility:hidden;
+}
 .wtw-searchresultbutton {
 	border:1px solid gray;
 	color:#000000;

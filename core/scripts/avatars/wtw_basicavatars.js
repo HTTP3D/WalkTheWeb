@@ -191,8 +191,12 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 							results.meshes[i].position.x -= avex;
 							results.meshes[i].position.y -= avey;
 							results.meshes[i].position.z -= avez;
-							results.meshes[i].isVisible = isvisible;
-							results.meshes[i].isVisible = false;
+							/* results.meshes[i].isVisible = isvisible; */
+/*							if (loadmin) {
+								results.meshes[i].isVisible = true;
+							} else { */
+								results.meshes[i].isVisible = false;
+/*							} */
 							if (results.meshes[i].material != null) {
 								if (meshname.indexOf("WireFrame") > -1) {
 									results.meshes[i].material.wireframe = true;
@@ -297,6 +301,7 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 									WTW.loadAvatarAnimations(avatarname, easingFunction, 1, Number(avataranimationdefs[0].startframe), Number(avataranimationdefs[0].endframe));
 								} else {
 									avatar.WTW.animations.running[avataranimationdefs[0].animationname] = scene.beginWeightedAnimation(skeleton, Number(avataranimationdefs[0].startframe), Number(avataranimationdefs[0].endframe), 1, avataranimationdefs[0].animationloop, Number(avataranimationdefs[0].speedratio));
+									WTW.avatarMinLoadEnter(avatarname);
 								}
 							} else {
 								WTW.loadAvatarAnimations(avatarname, easingFunction);

@@ -13,12 +13,12 @@
 			<hr class="wtw-menuhr" />
 			<div class="wtw-hide">
 				<h2>Link to My<br />WooCommerce Store</h2>
-				<div class="wtw-menulevel0">Open Store in iframe <input type="checkbox" id="wtw_tstoreiframes" value="0"  /></div>
+<!--			<div class="wtw-menulevel0">Open Store in iframe <input type="checkbox" id="wtw_tstoreiframes" value="0"  /></div> -->
 				<div class="wtw-menulevel0 wtw-hide">Store Plugin Name<br />
 					<input type="text" id="wtw_twpplugin" maxlength="255" onclick="WTW.checkKey(this, 'web', 0, 0);" onkeyup="WTW.checkKey(this, 'web', 0, 0);" onblur="WTW.checkKey(this, 'web', 0, 1);" /><br />
 					<div class="wtw-sampletext wtw-inlineindent">Example:<br />woocommerce-3d-store</div>
 				</div>
-				<div class="wtw-menulevel0">Store Base URL<br />
+<!--			<div class="wtw-menulevel0">Store Base URL<br />
 					<input type="text" id="wtw_tstoreurl" class="wtw-inlineindent" maxlength="255" onclick="WTW.checkKey(this, 'web', 0, 0);" onkeyup="WTW.checkKey(this, 'web', 0, 0);" onblur="WTW.checkKey(this, 'web', 0, 1);" /><br />
 					<div class="wtw-sampletext wtw-inlineindent">Example: https://www.walktheweb.com</div>
 				</div>
@@ -30,7 +30,7 @@
 					<input type="text" id="wtw_tstoreproducturl" class="wtw-inlineindent" maxlength="255" onclick="WTW.checkKey(this, 'web', 0, 0);" onkeyup="WTW.checkKey(this, 'web', 0, 0);" onblur="WTW.checkKey(this, 'web', 0, 1);" /><br />
 					<div class="wtw-sampletext wtw-inlineindent">Example: https://www.walktheweb.com/product/</div>
 				</div>
-				<div class="wtw-menulevel0">WooCommerce API Base URL<br />
+-->				<div class="wtw-menulevel0">WooCommerce API Base URL<br />
 					<input type="text" id="wtw_tstorewoocommerceapiurl" class="wtw-inlineindent" maxlength="255" onclick="WTW.checkKey(this, 'web', 0, 0);" onkeyup="WTW.checkKey(this, 'web', 0, 0);" onblur="WTW.checkKey(this, 'web', 0, 1);" /><br />
 					<div class="wtw-sampletext wtw-inlineindent">Example: https://www.walktheweb.com/wp-json/wc/v2/</div>
 				</div>

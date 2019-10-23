@@ -14,6 +14,8 @@ class wtwadminmenu {
 	}	
 	
 	public $adminmenu = array();
+	public $adminsubmenu = array();
+	public $adminforms = array();
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -84,7 +86,7 @@ class wtwadminmenu {
 		}
 		return $zsuccess;
 	}
-	
+
 	public function addAdminMenuItem($zid, $ztitle, $zmenusort, $zmenu, $zsubmenusort, $zsubmenu, $ziconurl, $zaccessrequired, $zjsfunction) {
 		global $wtwdb;
 		$zsuccess = false;
@@ -97,7 +99,7 @@ class wtwadminmenu {
 				$zsubmenu = second level menu item (or '')
 				$ziconurl = browse path to icon image (only applies to level 'menu')
 				$zaccessrequired = array of roles that are granted access - null for all allowed
-				$zjsfunction = javascript function to call for onclick event examples: WTW.show();   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
+				$zjsfunction = javascript function to call for onclick event examples: WTW.show('divname');   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
 			*/
 			$zfound = false;
 			foreach ($this->adminmenu as $zadminmenuitems) {
@@ -109,10 +111,10 @@ class wtwadminmenu {
 			}
 			if ($zfound == false) {
 				$zmenuitem = array(
+					'menu' => $zmenu, 
 					'id' => $zid,
 					'title' => $ztitle,
 					'menusort' => $zmenusort, 
-					'menu' => $zmenu, 
 					'submenusort' => $zsubmenusort, 
 					'submenu' => $zsubmenu, 
 					'iconurl' => $ziconurl, 
@@ -208,6 +210,228 @@ class wtwadminmenu {
 		}
 		return $zadminmenu;
 	}
+
+	public function preloadAdminSubMenu() {
+		global $wtwdb;
+		global $wtw;
+		$zsuccess = false;
+		try {
+			$updateroles = array("admin","developer","architect","graphics artist");
+			$developerroles = array("admin","developer");
+			
+			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildinginfo', '<div class="wtw-altkey">ctrl+i</div>3D Building <u>I</u>nformation', 5, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingstart', '<div class="wtw-altkey">ctrl+s</div>Set <u>S</u>tarting Position', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingaccess', '<div class="wtw-altkey">ctrl+p</div><u>P</u>ermissions', 15, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingsnapshot', '<div class="wtw-altkey">ctrl+a</div>3D Building Sn<u>a</u>pshot', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('buildingoptions', '', '<hr class="wtw-menuhr" />', 50, $updateroles, "");
+			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingcopy', '<div class="wtw-altkey">ctrl+c</div><u>C</u>opy 3D Building', 55, $updateroles, "WTW.adminMenuItemSelected(this);");
+			/* $this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingshare', '<div class="wtw-altkey">ctrl+h</div>S<u>h</u>are', 60, $updateroles, "WTW.adminMenuItemSelected(this);"); */
+			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingdelete', '<div class="wtw-altkey">ctrl+del</div>Delete 3D Building', 100, $updateroles, "WTW.adminMenuItemSelected(this);");
+
+			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingaddblock', '<div class="wtw-altkey">ctrl+b</div>Add 3D Building <u>B</u>lock', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingaddweb', '<div class="wtw-altkey">ctrl+o</div>Add 3D Web <u>O</u>bject', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingaddthing', '<div class="wtw-altkey">ctrl+h</div>Add 3D T<u>h</u>ing', 30, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingactionzones', '<div class="wtw-altkey">ctrl+a</div>Add or Edit <u>A</u>ctions', 40, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editbuilding', '', '<hr class="wtw-menuhr" />', 80, $updateroles, "");
+			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 100, $updateroles, "WTW.adminMenuItemSelected(this);");
+			
+			$this->addAdminSubMenuItem('editmold', 'wtw_createduplicatemold', '<div class="wtw-altkey">ctrl+p</div>Create a Duplicate Item', 50, $updateroles, "WTW.adminMenuItemSelected(this);");
+
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityinfo', '<div class="wtw-altkey">ctrl+i</div>3D Community <u>I</u>nformation', 5, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitystart', '<div class="wtw-altkey">ctrl+s</div>Set <u>S</u>tarting Position', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitygravity', '<div class="wtw-altkey">ctrl+g</div>3D Community <u>G</u>ravity', 15, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityaccess', '<div class="wtw-altkey">ctrl+p</div><u>P</u>ermissions', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitysnapshot', '<div class="wtw-altkey">ctrl+a</div>3D Community Sn<u>a</u>pshot', 25, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('communityoptions', '', '<hr class="wtw-menuhr" />', 50, $updateroles, "");
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitycopy', '<div class="wtw-altkey">ctrl+c</div><u>C</u>opy 3D Community', 55, $updateroles, "WTW.adminMenuItemSelected(this);");
+			/* $this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityshare', '<div class="wtw-altkey">ctrl+h</div>S<u>h</u>are', 60, $updateroles, "WTW.adminMenuItemSelected(this);"); */
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitydelete', '<div class="wtw-altkey">ctrl+del</div>Delete 3D Community', 100, $updateroles, "WTW.adminMenuItemSelected(this);");
+
+			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddblock', '<div class="wtw-altkey">ctrl+b</div>Add 3D Building <u>B</u>lock', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddweb', '<div class="wtw-altkey">ctrl+o</div>Add 3D Web <u>O</u>bject', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddthing', '<div class="wtw-altkey">ctrl+h</div>Add 3D T<u>h</u>ing', 30, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityactionzones', '<div class="wtw-altkey">ctrl+a</div>Add or Edit <u>A</u>ctions', 40, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editcommunity', '', '<hr class="wtw-menuhr" />', 60, $updateroles, "");
+			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunitylandscape', '<div class="wtw-altkey">ctrl+l</div>Edit <u>L</u>andscape and Scene', 65, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddbuilding', '<div class="wtw-altkey">ctrl+e</div>Add or <u>E</u>dit 3D Buildings<br />in this 3D Community', 70, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editcommunity', '', '<hr class="wtw-menuhr" />', 80, $updateroles, "");
+			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 100, $updateroles, "WTW.adminMenuItemSelected(this);");
+
+			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapesky', 'Sky', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapeground', 'Extended Ground', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapewater', 'Water Depth', 30, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapegravity', 'Gravity', 40, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapeterrain', 'Add Ground Terrain', 50, $updateroles, "WTW.adminMenuItemSelected(this);");
+
+			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthinginfo', '<div class="wtw-altkey">ctrl+i</div>3D Thing <u>I</u>nformation', 5, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingstart', '<div class="wtw-altkey">ctrl+s</div>Set <u>S</u>tarting Position', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingaccess', '<div class="wtw-altkey">ctrl+p</div><u>P</u>ermissions', 15, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingsnapshot', '<div class="wtw-altkey">ctrl+a</div>3D Thing Sn<u>a</u>pshot', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('thingoptions', '', '<hr class="wtw-menuhr" />', 50, $updateroles, "");
+			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingcopy', '<div class="wtw-altkey">ctrl+c</div><u>C</u>opy 3D Thing', 55, $updateroles, "WTW.adminMenuItemSelected(this);");
+			/* $this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingshare', '<div class="wtw-altkey">ctrl+h</div>S<u>h</u>are', 60, $updateroles, "WTW.adminMenuItemSelected(this);"); */
+			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingdelete', '<div class="wtw-altkey">ctrl+del</div>Delete 3D Thing', 100, $updateroles, "WTW.adminMenuItemSelected(this);");
+
+			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingaddblock', '<div class="wtw-altkey">ctrl+b</div>Add 3D Building <u>B</u>lock', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingaddweb', '<div class="wtw-altkey">ctrl+o</div>Add 3D Web <u>O</u>bject', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingactions', '<div class="wtw-altkey">ctrl+a</div>Add or Edit <u>A</u>ctions', 40, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editthing', '', '<hr class="wtw-menuhr" />', 80, $updateroles, "");
+			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 100, $updateroles, "WTW.adminMenuItemSelected(this);");
+
+			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listmeshes', 'List Current Meshes', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listcgs', 'List Connecting Grids', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listazs', 'List Action Zones', 30, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listcommmolds', 'List Community Molds', 40, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listbuildmolds', 'List Building Molds', 50, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listthingmolds', 'List Thing Molds', 60, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listautomations', 'List Automations', 70, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listloadeduploads', 'List Loaded Uploads', 80, $updateroles, "WTW.adminMenuItemSelected(this);");
+
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwadminmenu.php-preloadAdminSubMenu=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+
+	public function addAdminSubMenuItem($zmenu, $zid, $ztitle, $zsubmenusort, $zaccessrequired, $zjsfunction) {
+		global $wtwdb;
+		$zsuccess = false;
+		try {
+			/*	$zmenu = name for group of menu items
+				$zid = <div> id
+				$ztitle = display name
+				$zsubmenusort = int for sort order of submenu
+				$zaccessrequired = array of roles that are granted access - null for all allowed
+				$zjsfunction = javascript function to call for onclick event examples: WTW.show('divname');   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
+			*/
+			$zfound = false;
+			foreach ($this->adminsubmenu as $zadminsubmenuitems) {
+				if (isset($zadminsubmenuitems["id"]) && !empty($zadminsubmenuitems["id"])) {
+					if ($zadminsubmenuitems["id"] == $zid) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				$zsubmenuitem = array(
+					'menu' => $zmenu, 
+					'id' => $zid,
+					'title' => $ztitle,
+					'submenusort' => $zsubmenusort, 
+					'accessrequired' => $zaccessrequired, 
+					'jsfunction' => $zjsfunction
+				);
+				$this->adminsubmenu[count($this->adminsubmenu)] = $zsubmenuitem;
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwadminmenu.php-addAdminSubMenuItem=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+	
+	public function getAdminSubMenu($zselectmenu) {
+		global $wtw;
+		global $wtwdb;
+		$zadminsubmenu = "";
+		try {
+			$adminmenuarray = $this->adminsubmenu;
+			/* make sure submenu items have matching menu sort index */
+			array_multisort(array_column($adminmenuarray, 'menu'),  SORT_ASC,
+                array_column($adminmenuarray, 'submenusort'), SORT_ASC,
+                $adminmenuarray);
+			/* display menu */
+			foreach ($adminmenuarray as $zmenuitem) {
+				$zmenu = $zmenuitem["menu"];
+				$zid = $zmenuitem["id"];
+				$ztitle = $zmenuitem["title"];
+				$zsubmenusort = $zmenuitem["submenusort"];
+				$zaccessrequired = $zmenuitem["accessrequired"]; /* array of allowed roles */
+				$zjsfunction = $zmenuitem["jsfunction"];
+				if ($wtwdb->hasPermission($zaccessrequired) && $zmenu == $zselectmenu) {
+					/* check for invalid entries */
+					if (empty($zid) | !isset($zid)) {
+						$zid = $wtwdb->getRandomString(5,1);
+					}
+					if (empty($ztitle) | !isset($ztitle)) {
+						$ztitle = 'Menu Item';
+					}
+					if (empty($zjsfunction) || !isset($zjsfunction)) {
+						$zjsfunction = '';
+					}
+					$zadminsubmenu .= "<div id=\"".$zid."\" class=\"wtw-menulevel0\" onclick=\"WTW.adminOpenSubmenu(this);".$zjsfunction."\">".$ztitle."</div>";
+				}
+			}
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwadminmenu.php-getAdminSubMenu=".$e->getMessage());
+		}
+		return $zadminsubmenu;
+	}
+
+	public function addAdminMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired) {
+		global $wtwdb;
+		$zsuccess = false;
+		try {
+			$zfound = false;
+			foreach ($this->adminforms as $zadminform) {
+				if (isset($zadminform["formid"]) && !empty($zadminform["formid"])) {
+					if ($zadminform["formid"] == $zformid) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				$zform = array(
+					'formid' => $zformid,
+					'title' => $ztitle,
+					'formdata' => $zformdata,
+					'accessrequired' => $zaccessrequired
+				);
+				
+				$this->adminforms[count($this->adminforms)] = $zform;
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-addAdminMenuForm=".$e->getMessage());
+		}
+		return $zsuccess;
+	}	
+	
+	public function getAdminMenuForms() {
+		global $wtwdb;
+		$zmenuforms = "";
+		try {
+			foreach ($this->adminforms as $zform) {
+				$zformid = $zform["formid"];
+				$ztitle = $zform["title"];
+				$zaccessrequired = $zform["accessrequired"]; /* array of allowed roles */
+				$zformdata = $zform["formdata"];
+				if ($wtwdb->hasPermission($zaccessrequired) || empty($zaccessrequired) || !isset($zaccessrequired)) {
+					/* check for invalid entries */
+					if (empty($zformid) | !isset($zformid)) {
+						$zformid = $wtwdb->getRandomString(6,1);
+					}
+					if (empty($zformdata) || !isset($zformdata)) {
+						$zformdata = '';
+					}
+					if (!empty($zformdata) && isset($zformdata)) {
+						$zmenuforms = "";
+						$zmenuforms .= "<div id=\"".$zformid."\" class=\"wtw-adminmenuform\" style=\"display:none;visibility:hidden;\">";
+						$zmenuforms .= "	<img class=\"wtw-closeright\" onclick=\"WTW.closeMenus();\" src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />";
+						$zmenuforms .= "	<div class=\"wtw-menuheading\">".$ztitle."</div>";
+						$zmenuforms .= "	<div id=\"".$zformid."scroll\" class=\"wtw-mainmenuscroll\">";
+						$zmenuforms .= $zformdata;
+						$zmenuforms .= "	</div>";
+						$zmenuforms .= "</div>";
+					}
+				}
+			}			
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-getAdminMenuForms=".$e->getMessage());
+		}
+		return $zmenuforms;
+	}	
+
 }
 
 	function wtwadminmenu() {

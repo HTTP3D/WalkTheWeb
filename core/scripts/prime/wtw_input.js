@@ -660,7 +660,7 @@ WTWJS.prototype.mouseOutMold = function(mold) {
 			WTW.hide('wtw_itooltip');
 			if (WTW.adminView == 1 && dGet('wtw_bfocus').alt == "Focus Highlight is On") {
 				if (WTW.adminMenu == 6 || (WTW.adminMenu >= 10 && WTW.adminMenu <= 20) || WTW.adminMenu == 26 || WTW.adminMenu == 27 || WTW.adminMenu == 30 || WTW.adminMenu == 36 || (WTW.adminMenu >= 40 && WTW.adminMenu <= 52)) {
-					WTW.resetMoldsOpacity();
+					/* WTW.resetMoldsOpacity(); */
 				}
 			}
 			document.body.style.cursor = "default";

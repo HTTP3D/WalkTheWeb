@@ -1277,6 +1277,29 @@ class wtwuploads {
 		return $zsuccess;
 	}
 	
+	public function deleteWebAlias($zwebaliasid) {
+		global $wtwiframes;
+		$zsuccess = false;
+		try {
+			if ($wtwiframes->isUserInRole("Admin")) {
+				/* update or insert new webalias */
+				if (!empty($zwebaliasid) && isset($zwebaliasid)) {
+					$wtwiframes->query("
+						update ".wtw_tableprefix."webaliases
+						set deleteddate=now(),
+							deleteduserid='".$wtwiframes->userid."',
+							deleted=1
+						where webaliasid='".$zwebaliasid."'
+						limit 1;");
+				}
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$wtwiframes->serror("core-functions-class_wtwuploads.php-deleteWebAlias=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+
 	public function hasTransparency($zfiledata) {
 		$zhastransparency = false;
 		try {

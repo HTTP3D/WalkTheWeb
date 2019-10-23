@@ -74,6 +74,9 @@ try {
 			case "wtw_bsavewebalias":
 				$zsuccess = $wtwuploads->saveWebAlias($_POST["wtw_twebaliasid"],$_POST["wtw_tforcehttps"],$_POST["wtw_tdomainname"], $_POST["wtw_tcommunitypublishname"],$_POST["wtw_tbuildingpublishname"], $_POST["wtw_tthingpublishname"],$_POST["wtw_tcommunityid"], $_POST["wtw_tbuildingid"],$_POST["wtw_tthingid"]);
 				break;
+			case "wtw_bdeletewebalias":
+				$wtwuploads->deleteWebAlias($_POST["wtw_twebaliasid"]);
+				break;
 		}
 	}
 } catch (Exception $e) {
@@ -131,6 +134,7 @@ try {
 		<input type="submit" id="wtw_bdeletefile" name="wtw_bdeletefile" value="Delete File" onclick="WTW.buttonClick('wtw_bdeletefile');" />
 		<input type="submit" id="wtw_bsaveimagefilepng" name="wtw_bsaveimagefilepng" value="Save Image File (PNG)" onclick="WTW.buttonClick('wtw_bsaveimagefilepng');" />
 		<input type="submit" id="wtw_bsavewebalias" name="wtw_bsavewebalias" value="Save Web Alias" onclick="WTW.buttonClick('wtw_bsavewebalias');" />
+		<input type="submit" id="wtw_bdeletewebalias" name="wtw_bdeletewebalias" value="Delete Web Alias" onclick="WTW.buttonClick('wtw_bdeletewebalias');" />
 	</div>
 	</form>
 	<script type="text/javascript">
@@ -168,6 +172,7 @@ try {
 					case "wtw_bsavesetting":
 						parent.WTW.returnSettings(dGet('wtw_tsuccess').value, dGet('wtw_tjsfunction').value, dGet('wtw_tjsparameters').value);
 						break;
+					case "wtw_bdeletewebalias":
 					case "wtw_bsavewebalias":
 						parent.WTW.openWebAliasSettings();
 						break;

@@ -1350,111 +1350,114 @@ WTWJS.prototype.setClosestBuilding = function() {
 					WTW.showInline('wtw_showbuildingname');
 				}
 			}
-			if (WTW.adminView == 0 && ((WTW.editBuildingAccess.indexOf(dGet('wtw_tuserid').value) > -1 && closestwebtype == 'Building') || (closestaccess.indexOf(dGet('wtw_tuserid').value) > -1 && closestwebtype == 'Thing')) && dGet('wtw_tuserid').value != '') {
-				dGet('wtw_modebuilding').alt = "Edit " + closestwebtype;
-				dGet('wtw_modebuilding').title = "Edit " + closestwebtype;
-				switch (closestwebtype) {
-					case "Thing":
-						dGet('wtw_modebuilding').src = "/content/system/images/menuthings32.png";
-						break;
-					case "Community":
-						dGet('wtw_modebuilding').src = "/content/system/images/menucommunities32.png";
-						break;
-					default:
-						dGet('wtw_modebuilding').src = "/content/system/images/menubuildings32.png";
-						break;
-				}
-				dGet('wtw_modebuilding').onclick = function() {
-					var returnpath = window.location.href;
-					if (closestwebid != '') {
-						window.location.href = '/admin.php?' + closestwebtype.toLowerCase() + 'id=' + closestwebid + '&returnpath=' + returnpath;
-					} else {
-						window.location.href = '/admin.php';
+			if (WTW.editBuildingAccess != undefined) {
+				if (WTW.adminView == 0 && ((WTW.editBuildingAccess.indexOf(dGet('wtw_tuserid').value) > -1 && closestwebtype == 'Building') || (closestaccess.indexOf(dGet('wtw_tuserid').value) > -1 && closestwebtype == 'Thing')) && dGet('wtw_tuserid').value != '') {
+					dGet('wtw_modebuilding').alt = "Edit " + closestwebtype;
+					dGet('wtw_modebuilding').title = "Edit " + closestwebtype;
+					switch (closestwebtype) {
+						case "Thing":
+							dGet('wtw_modebuilding').src = "/content/system/images/menuthings32.png";
+							break;
+						case "Community":
+							dGet('wtw_modebuilding').src = "/content/system/images/menucommunities32.png";
+							break;
+						default:
+							dGet('wtw_modebuilding').src = "/content/system/images/menubuildings32.png";
+							break;
 					}
-				}
-				WTW.showInline('wtw_modebuilding');
-			} else if (WTW.adminView == 1) {
-				dGet('wtw_modebuilding').src = "/content/system/images/menuedit32.png";
-				var returnpath = '';
-				if (dGet('wtw_returnpath') != null) {
-					returnpath = dGet('wtw_returnpath').value;
-				}
-				if (returnpath != '') {
-					dGet('wtw_modebuilding').alt = "Return to 3D Website";
-					dGet('wtw_modebuilding').title = "Return to 3D Website";
-				} else {
-					dGet('wtw_modebuilding').alt = "View " + closestwebtype;
-					dGet('wtw_modebuilding').title = "View " + closestwebtype;
-				}
-				dGet('wtw_modebuilding').onclick = function() {
-					var sreturnpath = '';
+					dGet('wtw_modebuilding').onclick = function() {
+						var returnpath = window.location.href;
+						if (closestwebid != '') {
+							window.location.href = '/admin.php?' + closestwebtype.toLowerCase() + 'id=' + closestwebid + '&returnpath=' + returnpath;
+						} else {
+							window.location.href = '/admin.php';
+						}
+					}
+					WTW.showInline('wtw_modebuilding');
+				} else if (WTW.adminView == 1) {
+					dGet('wtw_modebuilding').src = "/content/system/images/menuedit32.png";
+					var returnpath = '';
 					if (dGet('wtw_returnpath') != null) {
-						sreturnpath = dGet('wtw_returnpath').value;
+						returnpath = dGet('wtw_returnpath').value;
 					}
-					if (sreturnpath != '') {
-						window.location.href = sreturnpath;
-					} else if (closestwebid != '') {
-						window.location.href = '/' + closestwebtype.toLowerCase() + '/' + closestwebid;
+					if (returnpath != '') {
+						dGet('wtw_modebuilding').alt = "Return to 3D Website";
+						dGet('wtw_modebuilding').title = "Return to 3D Website";
 					} else {
-						window.location.href = '/';
+						dGet('wtw_modebuilding').alt = "View " + closestwebtype;
+						dGet('wtw_modebuilding').title = "View " + closestwebtype;
 					}
-				}
-				WTW.showInline('wtw_modebuilding');
-			} else {
-				WTW.hide('wtw_modebuilding');
-			}
-			if (WTW.adminView == 0 && communityid != '' && WTW.editCommunityAccess.indexOf(dGet('wtw_tuserid').value) > -1 && dGet('wtw_tuserid').value != '') {
-				if (dGet('wtw_showcommunityname') != null) {
-					dGet('wtw_showcommunityname').innerHTML = WTW.communityName;
-					dGet('wtw_showcommunityname').style.cursor = 'pointer';
-				}
-				dGet('wtw_modecommunity').alt = "Edit Community";
-				dGet('wtw_modecommunity').title = "Edit Community";
-				dGet('wtw_modecommunity').src = "/content/system/images/menucommunities32.png";
-				dGet('wtw_modecommunity').onclick = function() {
-					var returnpath = window.location.href;
-					if (closestwebid != '') {
-						window.location.href = '/admin.php?communityid=' + communityid + '&returnpath=' + returnpath;
-					} else {
-						window.location.href = '/admin.php';
+					dGet('wtw_modebuilding').onclick = function() {
+						var sreturnpath = '';
+						if (dGet('wtw_returnpath') != null) {
+							sreturnpath = dGet('wtw_returnpath').value;
+						}
+						if (sreturnpath != '') {
+							window.location.href = sreturnpath;
+						} else if (closestwebid != '') {
+							window.location.href = '/' + closestwebtype.toLowerCase() + '/' + closestwebid;
+						} else {
+							window.location.href = '/';
+						}
 					}
-				}
-				WTW.showInline('wtw_modecommunity');		
-			} else if (WTW.adminView == 1 && communityid != '') {
-				if (dGet('wtw_showcommunityname') != null) {
-					dGet('wtw_showcommunityname').innerHTML = WTW.communityName;
-					dGet('wtw_showcommunityname').style.cursor = 'pointer';
-				}
-				dGet('wtw_modecommunity').src = "/content/system/images/menuedit32.png";
-				var returnpath = '';
-				if (dGet('wtw_returnpath') != null) {
-					returnpath = dGet('wtw_returnpath').value;
-				}
-				if (returnpath != '') {
-					dGet('wtw_modecommunity').alt = "Return to 3D Website";
-					dGet('wtw_modecommunity').title = "Return to 3D Website";
+					WTW.showInline('wtw_modebuilding');
 				} else {
-					dGet('wtw_modecommunity').alt = "View 3D Community";
-					dGet('wtw_modecommunity').title = "View  3D Community";
+					WTW.hide('wtw_modebuilding');
 				}
-				dGet('wtw_modecommunity').onclick = function() {
-					var sreturnpath = '';
-					if (dGet('wtw_returnpath') != null) {
-						sreturnpath = dGet('wtw_returnpath').value;
-					}
-					if (sreturnpath != '') {
-						window.location.href = sreturnpath;
-					} else if (communityid != '') {
-						window.location.href = '/' + communityid;
-					} else {
-						window.location.href = '/';
-					}
-				}
-				WTW.showInline('wtw_modecommunity');
-			} else {
-				WTW.hide('wtw_modecommunity');
 			}
-			
+			if (WTW.editCommunityAccess != undefined) {
+				if (WTW.adminView == 0 && communityid != '' && WTW.editCommunityAccess.indexOf(dGet('wtw_tuserid').value) > -1 && dGet('wtw_tuserid').value != '') {
+					if (dGet('wtw_showcommunityname') != null) {
+						dGet('wtw_showcommunityname').innerHTML = WTW.communityName;
+						dGet('wtw_showcommunityname').style.cursor = 'pointer';
+					}
+					dGet('wtw_modecommunity').alt = "Edit Community";
+					dGet('wtw_modecommunity').title = "Edit Community";
+					dGet('wtw_modecommunity').src = "/content/system/images/menucommunities32.png";
+					dGet('wtw_modecommunity').onclick = function() {
+						var returnpath = window.location.href;
+						if (closestwebid != '') {
+							window.location.href = '/admin.php?communityid=' + communityid + '&returnpath=' + returnpath;
+						} else {
+							window.location.href = '/admin.php';
+						}
+					}
+					WTW.showInline('wtw_modecommunity');		
+				} else if (WTW.adminView == 1 && communityid != '') {
+					if (dGet('wtw_showcommunityname') != null) {
+						dGet('wtw_showcommunityname').innerHTML = WTW.communityName;
+						dGet('wtw_showcommunityname').style.cursor = 'pointer';
+					}
+					dGet('wtw_modecommunity').src = "/content/system/images/menuedit32.png";
+					var returnpath = '';
+					if (dGet('wtw_returnpath') != null) {
+						returnpath = dGet('wtw_returnpath').value;
+					}
+					if (returnpath != '') {
+						dGet('wtw_modecommunity').alt = "Return to 3D Website";
+						dGet('wtw_modecommunity').title = "Return to 3D Website";
+					} else {
+						dGet('wtw_modecommunity').alt = "View 3D Community";
+						dGet('wtw_modecommunity').title = "View  3D Community";
+					}
+					dGet('wtw_modecommunity').onclick = function() {
+						var sreturnpath = '';
+						if (dGet('wtw_returnpath') != null) {
+							sreturnpath = dGet('wtw_returnpath').value;
+						}
+						if (sreturnpath != '') {
+							window.location.href = sreturnpath;
+						} else if (communityid != '') {
+							window.location.href = '/' + communityid;
+						} else {
+							window.location.href = '/';
+						}
+					}
+					WTW.showInline('wtw_modecommunity');
+				} else {
+					WTW.hide('wtw_modecommunity');
+				}
+			}
 			WTW.browseUserID = dGet('wtw_tuserid').value;
 			WTW.browseWebID = closestwebid;
 		}

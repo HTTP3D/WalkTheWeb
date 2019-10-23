@@ -142,19 +142,27 @@ class wtwusers {
 	}
 
 	public function logOut() {
-		global $wtwdb;
 		global $wtw;
 		global $wtwuser;
 		try {
+			if (session_status() == PHP_SESSION_NONE) {
+				session_start();
+			}
 			$_SESSION["wtw_username"] = '';
 			$_SESSION["wtw_userid"] = '';
 			$_SESSION["wtw_uploadpathid"] = '';
-			session_unset(); 
-			session_destroy();
+			$_SESSION = array();
+			try {
+				session_unset(); 
+				if (isset($_COOKIE[session_name()])) {
+				   setcookie(session_name(), '', time()-42000, '/');
+				}
+				session_destroy();
+			} catch (Exception $e) {}
 			$wtw->userid = '';
 			$wtwuser->userid = '';
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwusers.php-logOut=".$e->getMessage());
+			$wtw->serror("core-functions-class_wtwusers.php-logOut=".$e->getMessage());
 		}
 	}
 	

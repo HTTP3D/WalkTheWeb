@@ -321,7 +321,47 @@ WTWJS.prototype.switchCamera = function(w) {
 		} catch (ex) {}
 		scene.cameraToUseForPointers = scene.activeCameras[0];
 	} catch (ex) {
-		WTW.log("prime-cameras-switchCamera=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_cameras.js-switchCamera=" + ex.message);
+	}
+}
+
+WTWJS.prototype.loadCameraSettings = function() {
+	try {
+		var dimensions = WTW.getCookie("dimensions");
+		if (dimensions == null) {
+			dimensions = "";
+		} else if (dimensions == '') {
+			dimensions = "";
+		}
+		WTW.setDDLValue('wtw_cameradimensions',dimensions);
+		var firstcamera = WTW.getCookie("firstcamera");
+		if (firstcamera == null) {
+			firstcamera = "Follow Camera";
+		} else if (firstcamera == '') {
+			firstcamera = "Follow Camera";
+		}
+		WTW.setDDLValue('wtw_firstcamera',firstcamera);
+		WTW.switchCamera(1);
+		var showcameratwo = WTW.getCookie("showcameratwo");
+		if (showcameratwo != null) {
+			if (showcameratwo == "1") {
+				dGet('wtw_cameratwotext').innerHTML = "Second Camera On";
+				dGet('wtw_cameratwoicon').src = "/content/system/images/menucamera.png";
+				dGet('wtw_cameratwoicon').alt = "Hide Second Camera";
+				dGet('wtw_cameratwoicon').title = "Hide Second Camera";
+				WTW.show('wtw_cameratwoselect');
+				var secondcamera = WTW.getCookie("secondcamera");
+				if (secondcamera == null) {
+					secondcamera = "Scene Camera";
+				} else if (secondcamera == "") {
+					secondcamera = "Scene Camera";
+				}
+				WTW.setDDLValue('wtw_secondcamera',secondcamera);
+				WTW.switchCamera(2);
+			}
+		}
+	} catch (ex) { 
+		WTW.log("core-scripts-prime-wtw_cameras.js-loadCameraSettings=" + ex.message);
 	}
 }
 
@@ -405,7 +445,7 @@ WTWJS.prototype.initAvatarCameras = function() {
 		} 
 		WTW.setMovingCameras(avatar, avatarcamera);
 	} catch (ex) {
-		WTW.log("prime-cameras-initAvatarCameras=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_cameras.js-initAvatarCameras=" + ex.message);
 	}
 }
 
@@ -420,7 +460,7 @@ WTWJS.prototype.initFirstPersonCamera = function() {
 		WTW.camera.id = "maincamera";
 		scene.activeCameras.push(WTW.camera);	
 	} catch (ex) {
-		WTW.log("prime-cameras-initFirstPersonCamera=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_cameras.js-initFirstPersonCamera=" + ex.message);
 	}
 }
 
@@ -463,7 +503,7 @@ WTWJS.prototype.initFollowCamera = function(viewport) {
 			scene.activeCameras.push(WTW.cameraFollow);
 		}
 	} catch (ex) {
-		WTW.log("prime-cameras-initFollowCamera=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_cameras.js-initFollowCamera=" + ex.message);
 	}
 }
 
@@ -487,7 +527,7 @@ WTWJS.prototype.initArcCamera = function() {
 		//WTW.cameraArc.parent = WTW.myAvatar;
 		scene.activeCameras.push(WTW.cameraArc);
 	} catch (ex) {
-		WTW.log("prime-cameras-initArcCamera=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_cameras.js-initArcCamera=" + ex.message);
 	}
 }
 
@@ -516,7 +556,7 @@ WTWJS.prototype.initAnaglyphCamera = function() {
 		//WTW.cameraAnaglyph.parent = WTW.myAvatar;
 		scene.activeCameras.push(WTW.cameraAnaglyph);
 	} catch (ex) {
-		WTW.log("prime-cameras-initAnaglyphCamera=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_cameras.js-initAnaglyphCamera=" + ex.message);
 	}
 }
 
@@ -545,7 +585,7 @@ WTWJS.prototype.initVRCamera = function() {
 		//WTW.cameraVR.parent = WTW.myAvatar;
 		scene.activeCameras.push(WTW.cameraVR);
 	} catch (ex) {
-		WTW.log("prime-cameras-initVRCamera=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_cameras.js-initVRCamera=" + ex.message);
 	}
 }
 
@@ -573,7 +613,7 @@ WTWJS.prototype.initVRGamepadCamera = function() {
 		//WTW.cameraVRGamepad.parent = WTW.myAvatar;
 		scene.activeCameras.push(WTW.cameraVRGamepad);
 	} catch (ex) {
-		WTW.log("prime-cameras-initVRGamepadCamera=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_cameras.js-initVRGamepadCamera=" + ex.message);
 	}
 }
 
@@ -668,6 +708,6 @@ WTWJS.prototype.setMovingCameras = function(avatar, avatarcamera) {
 			}
 		}
 	} catch(ex) {
-		WTW.log("prime-cameras-setMovingCameras=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_cameras.js-setMovingCameras=" + ex.message);
 	}
 }
