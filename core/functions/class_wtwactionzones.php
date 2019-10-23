@@ -21,10 +21,10 @@ class wtwactionzones {
 	
 	public function checkActionZone($checkactionzoneid) {
 		$zactionzoneid = "";
-		global $wtwdb;
+		global $wtwiframes;
 		try {
 			if (!empty($checkactionzoneid) && isset($checkactionzoneid)) {
-				$zresults = $wtwdb->query("
+				$zresults = $wtwiframes->query("
 					select actionzoneid 
 					from ".wtw_tableprefix."actionzones 
 					where actionzoneid='".$checkactionzoneid."' limit 1;");
@@ -33,7 +33,7 @@ class wtwactionzones {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwactionzones.php-checkActionZone=".$e->getMessage());
+			$wtwiframes->serror("core-functions-class_wtwactionzones.php-checkActionZone=".$e->getMessage());
 		}
 		return $zactionzoneid;
 	}
@@ -84,7 +84,8 @@ class wtwactionzones {
 							actionzoneid='".$zactionzoneid."';");
 					$zsuccess = true;
 				} else {
-					$wtwdb->query("
+					$zactionzoneid = $wtwiframes->getRandomString(16,1);
+					$wtwiframes->query("
 						insert into ".wtw_tableprefix."actionzones
 						   (actionzoneid,
 							thingid,
@@ -148,7 +149,7 @@ class wtwactionzones {
 							".$wtwiframes->checkNumber($zaxisrotationy,0).",
 							".$wtwiframes->checkNumber($zaxisrotationz,0).",
 							'".$zrotateaxis."',
-							".$wtwiframes->checkNumber($zrotatedegrees,90)."',
+							".$wtwiframes->checkNumber($zrotatedegrees,90).",
 							".$wtwiframes->checkNumber($zrotatedirection,1).",
 							".$wtwiframes->checkNumber($zrotatespeed,1).",
 							".$wtwiframes->checkNumber($zmovementdistance,20).",
