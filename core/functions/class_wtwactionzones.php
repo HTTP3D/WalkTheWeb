@@ -29,7 +29,7 @@ class wtwactionzones {
 					from ".wtw_tableprefix."actionzones 
 					where actionzoneid='".$checkactionzoneid."' limit 1;");
 				foreach ($zresults as $zrow) {
-					$zactionzone = $zrow["actionzoneid"];
+					$zactionzoneid = $zrow["actionzoneid"];
 				}
 			}
 		} catch (Exception $e) {
