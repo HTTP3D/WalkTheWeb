@@ -84,7 +84,6 @@ class wtwactionzones {
 							actionzoneid='".$zactionzoneid."';");
 					$zsuccess = true;
 				} else {
-					$zactionzoneid = $wtwiframes->getRandomString(16,1);
 					$wtwiframes->query("
 						insert into ".wtw_tableprefix."actionzones
 						   (actionzoneid,
