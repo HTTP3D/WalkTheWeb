@@ -643,7 +643,8 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 			if (moldname.indexOf("terrain") > -1 || iswaterreflection == "1") {
 				WTW.addReflectionRefraction(mold);
 			}
-			if (checkcollisions == "0") {
+			if (checkcollisions == "0" || coveringname == "none") {
+				molddef.checkcollisions = "0";
 				mold.checkCollisions = false;
 			} else {
 				if (WTW.init.wallCollisions == 0 && shape != "floor" && WTW.adminView == 1) {
