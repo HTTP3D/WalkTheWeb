@@ -29,12 +29,11 @@ try {
 			if (isset($_POST["wtw_tdeletefile"]) && !empty($_POST["wtw_tdeletefile"])) {
 				$zdeletefile = $_POST["wtw_tdeletefile"];
 				$zfilename = $_POST["wtw_tobjectfile"];
-				$zuploadpath = $wtwiframes->contentpath;
 				if(isset($_SESSION['wtw_uploadpathid']) && !empty($_SESSION['wtw_uploadpathid'])) {
 					$pathname = pathinfo('/'.$zfilename);
-					$newfolder = $pathname['filename'];
-					if (file_exists($zuploadpath."\\uploads\\".$_SESSION['wtw_uploadpathid']."\\objects\\".$newfolder."\\".$zdeletefile)) {
-						unlink($zuploadpath."\\uploads\\".$_SESSION['wtw_uploadpathid']."\\objects\\".$newfolder."\\".$zdeletefile);
+					$znewfolder = $pathname['filename'];
+					if (file_exists($wtwiframes->contentpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\objects\\".$znewfolder."\\".$zdeletefile)) {
+						unlink($wtwiframes->contentpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\objects\\".$znewfolder."\\".$zdeletefile);
 					}
 				}
 			} else {
