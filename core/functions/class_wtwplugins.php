@@ -112,6 +112,14 @@ class wtwplugins {
 		}
 	}
 
+	public function addAdminMenuDiv($zformlocation, $zdivid, $zdivdata, $zaccessrequired) {
+		global $wtwadminmenu;
+		if (isset($wtwadminmenu)) {
+			return $wtwadminmenu->addAdminMenuDiv($zformlocation, $zdivid, $zdivdata, $zaccessrequired);
+		} else {
+			return false;
+		}
+	}
 	public function serror($message) {
 		global $wtw;
 		return $wtw->serror($message);
@@ -215,7 +223,7 @@ class wtwplugins {
 				}
 			}			
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwmenus.php-getPluginScripts=".$e->getMessage());
+			$this->serror("core-functions-class_wtwmenus.php-getPluginScripts=".$e->getMessage());
 		}
 		return $zscripttext;
 	}	
@@ -328,15 +336,156 @@ class wtwplugins {
 
 			$jsdata .= "	WTWJS.prototype.pluginsOnClick = function(pickedname) {\r\n";
 			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->getScriptFunction('onclick', 'pickedname');
+			$jsdata .= 	$this->getScriptFunction('onclick');
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsOnClick=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsDisposeClean = function(moldname) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('disposeclean');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsDisposeClean=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsMolds = function(moldlist) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnMoldDefsList('mold');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsMolds=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return moldlist;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsWebMolds = function(moldlist) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnMoldDefsList('webmold');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsWebMolds=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return moldlist;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsAddMolds = function(shape, moldname, molddef, lenx, leny, lenz) {\r\n";
+			$jsdata .= "		var mold = null;\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnMoldDefsFunctions();
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsAddMolds=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return mold;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsOpenAddNewMold = function(moldgroup, shape, moldname) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('openaddnewmold');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsOpenAddNewMold=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsLoadMoldForm = function(moldgroup, shape, moldname) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('loadmoldform');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsLoadMoldForm=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsSetNewMoldDefaults = function(shape) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('setnewmolddefaults');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSetNewMoldDefaults=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsSetMoldFormFields = function(shape) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('setmoldformfields');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSetMoldFormFields=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsOpenMoldForm = function(moldname, molds, moldind, shape) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('openmoldform');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsOpenMoldForm=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsLoadConnectingGrids = function(zconnectinggridind, zcommunityid, zbuildingid, zthingid) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('loadconnectinggrids');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsLoadConnectingGrids=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsSubmitMoldForm = function(w) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('submitmoldform');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSubmitMoldForm=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsClearEditMold = function() {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('cleareditmold');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsClearEditMold=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsCheckHovers = function(moldname, shape) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('checkhovers');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsCheckHovers=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsResetHovers = function(moldname, shape) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('resethovers');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsResetHovers=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsOpenColorSelector = function(moldname, shape, colortype) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('opencolorselector');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsOpenColorSelector=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsSetNewMold = function(moldname, molds, moldind, rebuildmold) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('setnewmold', 'rebuildmold');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSetNewMold=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return rebuildmold;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsProcessMoldQueueAdd = function(moldname, mold) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('moldqueueadd');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsProcessMoldQueueAdd=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "</script>"; 
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwmenus.php-getScriptFunctions=".$e->getMessage());
+			$this->serror("core-functions-class_wtwmenus.php-getScriptFunctions=".$e->getMessage());
 		}
 		return $jsdata;
 	}	
@@ -358,7 +507,7 @@ class wtwplugins {
 				}
 			}			
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwmenus.php-getScriptFunction=".$e->getMessage());
+			$this->serror("core-functions-class_wtwmenus.php-getScriptFunction=".$e->getMessage());
 		}
 		return $zscripttext;
 	}	
@@ -381,8 +530,87 @@ class wtwplugins {
 				}
 			}			
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwmenus.php-returnScriptFunction=".$e->getMessage());
+			$this->serror("core-functions-class_wtwmenus.php-returnScriptFunction=".$e->getMessage());
 		}
+		return $zscripttext;
+	}	
+
+	public function addMoldDef($zmoldtitle, $zlist, $zjsfunction) {
+		global $wtw;
+		$zsuccess = false;
+		try {
+			$zfound = false;
+			foreach ($wtw->pluginMoldDefs as $zmold) {
+				if (isset($zmold["scriptid"]) && !empty($zmold["scriptid"])) {
+					if ($zmold["scriptid"] == $zmoldtitle) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				$zmold = array(
+					'moldtitle' => $zmoldtitle,
+					'list' => $zlist,
+					'jsfunction' => $zjsfunction
+				);
+				$wtw->pluginMoldDefs[count($wtw->pluginMoldDefs)] = $zmold;
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwplugins.php-addMoldDef=" . $e->getMessage());
+		}
+		return $zsuccess;
+	}
+
+	public function returnMoldDefsList($zgetlist) {
+		global $wtw;
+		$zscripttext = "";
+		try {
+			foreach ($wtw->pluginMoldDefs as $zmolddef) {
+				$zlist = trim($zmolddef["list"]);
+				$zmoldtitle = trim($zmolddef["moldtitle"]);
+				$zjsfunction = trim($zmolddef["jsfunction"]);
+				if (!empty($zjsfunction) && isset($zjsfunction)) {
+					if (strpos($zjsfunction,";") === false) {
+						$zjsfunction .= ";";
+					}
+					if (strtolower($zlist) == strtolower($zgetlist) && strlen($zmoldtitle) > 1) {
+						$zscripttext .= "moldlist[moldlist.length] = \"".$zmoldtitle."\";\r\n";
+					}
+				}
+			}			
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwmenus.php-returnMoldDefs=".$e->getMessage());
+		}
+		return $zscripttext;
+	}	
+
+	public function returnMoldDefsFunctions() {
+		global $wtw;
+		$zscripttext = "switch (shape) {\r\n";
+		try {
+			foreach ($wtw->pluginMoldDefs as $zmolddef) {
+				$zlist = trim($zmolddef["list"]);
+				$zmoldtitle = str_replace(" ","",trim($zmolddef["moldtitle"]));
+				$zjsfunction = trim($zmolddef["jsfunction"]);
+				if (!empty($zjsfunction) && isset($zjsfunction)) {
+					if (strpos($zjsfunction,";") === false) {
+						$zjsfunction .= ";";
+					}
+					if (strlen($zmoldtitle) > 1 && strlen($zjsfunction) > 1) {
+						$zscripttext .= "case \"".strtolower($zmoldtitle)."\":\r\n";
+						$zscripttext .= "mold = ".$zjsfunction."\r\n";
+						$zscripttext .= "break;\r\n";
+					}
+				}
+			}			
+			$zscripttext .= "default:\r\n";
+			$zscripttext .= "mold = WTW.addMoldBox(moldname, lenx, leny, lenz);\r\n";
+			$zscripttext .= "break;\r\n";
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwmenus.php-returnMoldDefs=".$e->getMessage());
+		}
+		$zscripttext .= "}\r\n";
 		return $zscripttext;
 	}	
 }

@@ -509,77 +509,77 @@ WTWJS.prototype.getConnectingGrids = function() {
 
 WTWJS.prototype.loadConnectingGrids = function(addconnectinggrids) {
 	try {
-		var found = 0;
-		var parentconnectinggridind = -1;
-		var parentconnectinggridid = "";
+		var zparentconnectinggridind = -1;
+		var zparentconnectinggridid = "";
 		if (addconnectinggrids.webitems != undefined) {
 			for (var i = 0; i < addconnectinggrids.webitems.length; i++) {
 				if (addconnectinggrids.webitems[i] != null) {
 					var zcommunityid = "";
 					var zbuildingid = "";
 					var zthingid = "";
-					var connectinggridind = WTW.getNextCount(WTW.connectingGrids);
-					WTW.connectingGrids[connectinggridind] = addconnectinggrids.webitems[i];
-					WTW.connectingGrids[connectinggridind].connectinggridind = connectinggridind;
-					switch (WTW.connectingGrids[connectinggridind].childwebtype) {
+					var zconnectinggridind = WTW.getNextCount(WTW.connectingGrids);
+					WTW.connectingGrids[zconnectinggridind] = addconnectinggrids.webitems[i];
+					WTW.connectingGrids[zconnectinggridind].connectinggridind = zconnectinggridind;
+					switch (WTW.connectingGrids[zconnectinggridind].childwebtype) {
 						case "community":
-							zcommunityid = WTW.connectingGrids[connectinggridind].childwebid;
+							zcommunityid = WTW.connectingGrids[zconnectinggridind].childwebid;
 							break;
 						case "building":
-							zbuildingid = WTW.connectingGrids[connectinggridind].childwebid;
+							zbuildingid = WTW.connectingGrids[zconnectinggridind].childwebid;
 							break;
 						case "thing":
-							zthingid = WTW.connectingGrids[connectinggridind].childwebid;
+							zthingid = WTW.connectingGrids[zconnectinggridind].childwebid;
 							break;
 					}
-					if (WTW.connectingGrids[connectinggridind].loadlevel == "1") {
-						var parentname = "";
-						if (WTW.connectingGrids[connectinggridind].parentwebid == "") {
-							parentconnectinggridind = connectinggridind;
-							parentconnectinggridid = WTW.connectingGrids[connectinggridind].connectinggridid;
-							WTW.connectingGrids[connectinggridind].moldname = "connectinggrids-" + connectinggridind + "-" + parentconnectinggridid + "--";
-							WTW.connectingGrids[connectinggridind].shown = "1";
-							WTW.connectingGrids[connectinggridind].parentname = parentname;
-							WTW.connectingGrids[connectinggridind].parentconnectinggridind = -1;
-							WTW.connectingGrids[connectinggridind].parentconnectinggridid = "";
-							WTW.connectingGrids[connectinggridind].status = 2;
-							WTW.addMoldToQueue(WTW.connectingGrids[connectinggridind].moldname, WTW.connectingGrids[connectinggridind], parentname, "hidden",null);
-							dGet('wtw_tconnectinggridname').value = WTW.connectingGrids[connectinggridind].moldname;
-							dGet('wtw_tconnectinggridind').value = connectinggridind;
-							dGet('wtw_tconnectinggridid').value = parentconnectinggridid;
-						} else if (parentconnectinggridind != -1) {
-							WTW.connectingGrids[connectinggridind].moldname = "connectinggrids-" + connectinggridind + "-" + WTW.connectingGrids[connectinggridind].connectinggridid + "-" + parentconnectinggridind + "-" + parentconnectinggridid;
-							parentname = "connectinggrids-" + parentconnectinggridind + "-" + parentconnectinggridid + "--";
-							WTW.mainParent = parentname;
-							WTW.connectingGrids[connectinggridind].shown = "0";
-							WTW.connectingGrids[connectinggridind].parentname = parentname;
-							WTW.connectingGrids[connectinggridind].parentconnectinggridind = parentconnectinggridind;
-							WTW.connectingGrids[connectinggridind].parentconnectinggridid = parentconnectinggridid;
+					if (WTW.connectingGrids[zconnectinggridind].loadlevel == "1") {
+						var zparentname = "";
+						if (WTW.connectingGrids[zconnectinggridind].parentwebid == "") {
+							zparentconnectinggridind = zconnectinggridind;
+							zparentconnectinggridid = WTW.connectingGrids[zconnectinggridind].connectinggridid;
+							WTW.connectingGrids[zconnectinggridind].moldname = "connectinggrids-" + zconnectinggridind + "-" + zparentconnectinggridid + "--";
+							WTW.connectingGrids[zconnectinggridind].shown = "1";
+							WTW.connectingGrids[zconnectinggridind].parentname = zparentname;
+							WTW.connectingGrids[zconnectinggridind].parentconnectinggridind = -1;
+							WTW.connectingGrids[zconnectinggridind].parentconnectinggridid = "";
+							WTW.connectingGrids[zconnectinggridind].status = 2;
+							WTW.addMoldToQueue(WTW.connectingGrids[zconnectinggridind].moldname, WTW.connectingGrids[zconnectinggridind], zparentname, "hidden",null);
+							dGet('wtw_tconnectinggridname').value = WTW.connectingGrids[zconnectinggridind].moldname;
+							dGet('wtw_tconnectinggridind').value = zconnectinggridind;
+							dGet('wtw_tconnectinggridid').value = zparentconnectinggridid;
+						} else if (zparentconnectinggridind != -1) {
+							WTW.connectingGrids[zconnectinggridind].moldname = "connectinggrids-" + zconnectinggridind + "-" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "-" + zparentconnectinggridind + "-" + zparentconnectinggridid;
+							zparentname = "connectinggrids-" + zparentconnectinggridind + "-" + zparentconnectinggridid + "--";
+							WTW.mainParent = zparentname;
+							WTW.connectingGrids[zconnectinggridind].shown = "0";
+							WTW.connectingGrids[zconnectinggridind].parentname = zparentname;
+							WTW.connectingGrids[zconnectinggridind].parentconnectinggridind = zparentconnectinggridind;
+							WTW.connectingGrids[zconnectinggridind].parentconnectinggridid = zparentconnectinggridid;
 						}
-						if (WTW.connectingGrids[connectinggridind].altloadactionzoneid == "") {
-							WTW.getJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + WTW.connectingGrids[connectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[connectinggridind].connectinggridid + "&connectinggridind=" + connectinggridind, 
+						if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid == "") {
+							WTW.getJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + WTW.connectingGrids[zconnectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "&connectinggridind=" + zconnectinggridind, 
 								function(response) {
 									WTW.loadActionZones(JSON.parse(response));
 								}
 							);
 						}
 					} else {
-						var subparentconnectinggridid = WTW.connectingGrids[connectinggridind].parentconnectinggridid;
-						var subparentconnectinggridind = WTW.getConnectingGridInd(subparentconnectinggridid);
-						WTW.connectingGrids[connectinggridind].moldname = "connectinggrids-" + connectinggridind + "-" + WTW.connectingGrids[connectinggridind].connectinggridid + "-" + subparentconnectinggridind + "-" + subparentconnectinggridid;
-						parentname = "connectinggrids-" + subparentconnectinggridind + "-" + subparentconnectinggridid + "-" + parentconnectinggridind + "-" + parentconnectinggridid;
-						WTW.connectingGrids[connectinggridind].shown = "0";
-						WTW.connectingGrids[connectinggridind].parentname = parentname;
-						WTW.connectingGrids[connectinggridind].parentconnectinggridind = subparentconnectinggridind;
-						WTW.connectingGrids[connectinggridind].parentconnectinggridid = subparentconnectinggridid;
-						if (WTW.connectingGrids[connectinggridind].altloadactionzoneid == "") {
-							WTW.getJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + WTW.connectingGrids[connectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[connectinggridind].connectinggridid + "&connectinggridind=" + connectinggridind, 
+						var zsubparentconnectinggridid = WTW.connectingGrids[zconnectinggridind].parentconnectinggridid;
+						var zsubparentconnectinggridind = WTW.getConnectingGridInd(zsubparentconnectinggridid);
+						WTW.connectingGrids[zconnectinggridind].moldname = "connectinggrids-" + zconnectinggridind + "-" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "-" + zsubparentconnectinggridind + "-" + zsubparentconnectinggridid;
+						zparentname = "connectinggrids-" + zsubparentconnectinggridind + "-" + zsubparentconnectinggridid + "-" + zparentconnectinggridind + "-" + zparentconnectinggridid;
+						WTW.connectingGrids[zconnectinggridind].shown = "0";
+						WTW.connectingGrids[zconnectinggridind].parentname = zparentname;
+						WTW.connectingGrids[zconnectinggridind].parentconnectinggridind = zsubparentconnectinggridind;
+						WTW.connectingGrids[zconnectinggridind].parentconnectinggridid = zsubparentconnectinggridid;
+						if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid == "") {
+							WTW.getJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + WTW.connectingGrids[zconnectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "&connectinggridind=" + zconnectinggridind, 
 								function(response) {
 									WTW.loadActionZones(JSON.parse(response));
 								}
 							);
 						}
 					}
+					WTW.pluginsLoadConnectingGrids(zconnectinggridind, zcommunityid, zbuildingid, zthingid);
 				}
 			}
 		}

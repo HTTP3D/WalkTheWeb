@@ -1130,12 +1130,13 @@ WTWJS.prototype.openIFrame = function(url, width, height) {
 WTWJS.prototype.iFrameOnLoad = function() {
 	try {
 		var iframe = dGet('wtw_ibrowseframe');
-		var ipage = iframe.contentDocument || iframe.contentWindow.document;
+		/* the following was blocked by cross browser security */
+/*		var ipage = iframe.contentDocument || iframe.contentWindow.document;
 		if (ipage.title.length > 0) {
 			dGet('wtw_browsetitle').innerHTML = ipage.title;
 		} else {
 			dGet('wtw_browsetitle').innerHTML = iframe.src;
-		}
+		} */
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-iFrameOnLoad=" + ex.message);
 	}
@@ -1663,23 +1664,29 @@ WTWJS.prototype.getBuildingName = function(zbuildingid) {
 	return zbuildingname;
 }
 
-WTWJS.prototype.getBuildingNameFromConnectingGrid = function(zbuildingid) {
-	var zbuildingname = "";
+WTWJS.prototype.getNameFromConnectingGrid = function(zwebid) {
+	var zwebname = "";
 	try {
-		if (WTW.connectingGrids != null && zbuildingid !== "") {
+		if (WTW.connectingGrids != null && zwebid !== "") {
 			for (var i = 0; i < WTW.connectingGrids.length; i++) {
 				if (WTW.connectingGrids[i] != null) {
-					if (WTW.connectingGrids[i].buildinginfo.buildingid == zbuildingid) {
-						zbuildingname = WTW.connectingGrids[i].buildinginfo.buildingname;
+					if (WTW.connectingGrids[i].communityinfo.communityid == zwebid) {
+						zwebname = WTW.connectingGrids[i].communityinfo.communityname;
+						i = WTW.connectingGrids.length;
+					} else if (WTW.connectingGrids[i].buildinginfo.buildingid == zwebid) {
+						zwebname = WTW.connectingGrids[i].buildinginfo.buildingname;
+						i = WTW.connectingGrids.length;
+					} else if (WTW.connectingGrids[i].thinginfo.thingid == zwebid) {
+						zwebname = WTW.connectingGrids[i].thinginfo.thingname;
 						i = WTW.connectingGrids.length;
 					}
 				}
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-getBuildingNameFromConnectingGrid=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_common.js-getNameFromConnectingGrid=" + ex.message);
 	}
-	return zbuildingname;
+	return zwebname;
 }
 
 WTWJS.prototype.getThingName = function(zthingid) {
@@ -1734,6 +1741,9 @@ WTWJS.prototype.disposeClean = function(moldname, check) {
 			WTW.disposeReflectionFromMold(moldname);
 			var mold = scene.getMeshByID(moldname);
 			if (mold != null) {
+				try {
+					WTW.pluginsDisposeClean(moldname);
+				} catch (ex) {}
 				try {
 					if (moldname.indexOf("myavatar") > -1 || moldname.indexOf("selectavatar") > -1) {
 						WTW.disposeAnimations(moldname);
@@ -2544,87 +2554,6 @@ WTWJS.prototype.checkHovers = function(mold) {
 						if (hovermold != null && imagemold != null) {
 							hovermold.position.x = -.25;
 						}
-					} else if (shape == 'storeproduct') {
-						if (WTW.currentID.indexOf("descimage1") > -1) {
-							var descimage1 = scene.getMeshByID(moldname + "-descimage1");
-							if (descimage1 != null) {
-								if (descimage1.material != undefined) {
-									descimage1.material.alpha = .70;
-								}
-							}
-						}
-						if (WTW.currentID.indexOf("descimage2") > -1) {
-							var descimage2 = scene.getMeshByID(moldname + "-descimage2");
-							if (descimage2 != null) {
-								if (descimage2.material != undefined) {
-									descimage2.material.alpha = .70;
-								}
-							}
-						}
-						if (WTW.currentID.indexOf("addtocart1") > -1) {
-							var addtocart1 = scene.getMeshByID(moldname + "-addtocart1");
-							if (addtocart1 != null) {
-								if (addtocart1.material != undefined) {
-									addtocart1.material.alpha = 0;
-								}
-							}
-						}
-						if (WTW.currentID.indexOf("addtocart2") > -1) {
-							var addtocart2 = scene.getMeshByID(moldname + "-addtocart2");
-							if (addtocart2 != null) {
-								if (addtocart2.material != undefined) {
-									addtocart2.material.alpha = 0;
-								}
-							}
-						}
-						if (WTW.currentID.indexOf("readmore1") > -1) {
-							var readmore1 = scene.getMeshByID(moldname + "-readmore1");
-							if (readmore1 != null) {
-								if (readmore1.material != undefined) {
-									readmore1.material.alpha = 0;
-								}
-							}
-						}
-						if (WTW.currentID.indexOf("readmore2") > -1) {
-							var readmore2 = scene.getMeshByID(moldname + "-readmore2");
-							if (readmore2 != null) {
-								if (readmore2.material != undefined) {
-									readmore2.material.alpha = 0;
-								}
-							}
-						}
-					} else if (WTW.currentID.indexOf("carthover") > -1) {
-						var carthover = scene.getMeshByID(moldname + "-carthover");
-						if (carthover != null) {
-							if (carthover.material != undefined) {
-								carthover.material.alpha = 1;
-							}
-						}
-					} else if (WTW.currentID.indexOf("storecategories") > -1) {
-						if (WTW.currentID.indexOf("categorybuttonhover") > -1) {
-							var categoryhover = scene.getMeshByID(WTW.currentID);
-							if (categoryhover != null) {
-								if (categoryhover.material != undefined) {
-									categoryhover.material.alpha = 1;
-								}
-							}
-						}
-						if (WTW.currentID.indexOf("downbuttonhover") > -1) {
-							var downbuttonhover = scene.getMeshByID(WTW.currentID);
-							if (downbuttonhover != null) {
-								if (downbuttonhover.material != undefined) {
-									downbuttonhover.material.alpha = 1;
-								}
-							}
-						}
-						if (WTW.currentID.indexOf("upbuttonhover") > -1) {
-							var upbuttonhover = scene.getMeshByID(WTW.currentID);
-							if (upbuttonhover != null) {
-								if (upbuttonhover.material != undefined) {
-									upbuttonhover.material.alpha = 1;
-								}
-							}
-						}
 					} else {
 						var hovermold = scene.getMeshByID(WTW.currentID + "hover");
 						var imagemold = scene.getMeshByID(WTW.currentID);
@@ -2632,6 +2561,7 @@ WTWJS.prototype.checkHovers = function(mold) {
 							WTW.setDirectionalOpacity(WTW.currentID,0);
 						}
 					}
+					WTW.pluginsCheckHovers(moldname, shape);
 				}
 			}
 		}
@@ -2680,87 +2610,6 @@ WTWJS.prototype.resetHovers = function() {
 						}
 					} else if (WTW.lastID.indexOf("scrollboxbodytext") > -1) {
 						WTW.resetScrollBox(moldname);
-					} else if (shape == 'storeproduct') {
-						if (WTW.lastID.indexOf("descimage1") > -1) {
-							var descimage1 = scene.getMeshByID(moldname + "-descimage1");
-							if (descimage1 != null) {
-								if (descimage1.material != undefined) {
-									descimage1.material.alpha = 0;
-								}
-							}
-						}
-						if (WTW.lastID.indexOf("descimage2") > -1) {
-							var descimage2 = scene.getMeshByID(moldname + "-descimage2");
-							if (descimage2 != null) {
-								if (descimage2.material != undefined) {
-									descimage2.material.alpha = 0;
-								}
-							}
-						}
-						if (WTW.lastID.indexOf("addtocart1") > -1) {
-							var addtocart1 = scene.getMeshByID(moldname + "-addtocart1");
-							if (addtocart1 != null) {
-								if (addtocart1.material != undefined) {
-									addtocart1.material.alpha = 1;
-								}
-							}
-						}
-						if (WTW.lastID.indexOf("addtocart2") > -1) {
-							var addtocart2 = scene.getMeshByID(moldname + "-addtocart2");
-							if (addtocart2 != null) {
-								if (addtocart2.material != undefined) {
-									addtocart2.material.alpha = 1;
-								}
-							}
-						}
-						if (WTW.lastID.indexOf("readmore1") > -1) {
-							var readmore1 = scene.getMeshByID(moldname + "-readmore1");
-							if (readmore1 != null) {
-								if (readmore1.material != undefined) {
-									readmore1.material.alpha = 1;
-								}
-							}
-						}
-						if (WTW.lastID.indexOf("readmore2") > -1) {
-							var readmore2 = scene.getMeshByID(moldname + "-readmore2");
-							if (readmore2 != null) {
-								if (readmore2.material != undefined) {
-									readmore2.material.alpha = 1;
-								}
-							}
-						}
-					} else if (WTW.lastID.indexOf("carthover") > -1) {
-						var carthover = scene.getMeshByID(moldname + "-carthover");
-						if (carthover != null) {
-							if (carthover.material != undefined) {
-								carthover.material.alpha = 0;
-							}
-						}
-					} else if (WTW.lastID.indexOf("storecategories") > -1) {
-						if (WTW.lastID.indexOf("categorybuttonhover") > -1) {
-							var categoryhover = scene.getMeshByID(WTW.lastID);
-							if (categoryhover != null) {
-								if (categoryhover.material != undefined) {
-									categoryhover.material.alpha = 0;
-								}
-							}
-						}
-						if (WTW.lastID.indexOf("downbuttonhover") > -1) {
-							var downbuttonhover = scene.getMeshByID(WTW.lastID);
-							if (downbuttonhover != null) {
-								if (downbuttonhover.material != undefined) {
-									downbuttonhover.material.alpha = 0;
-								}
-							}
-						}
-						if (WTW.lastID.indexOf("upbuttonhover") > -1) {
-							var upbuttonhover = scene.getMeshByID(WTW.lastID);
-							if (upbuttonhover != null) {
-								if (upbuttonhover.material != undefined) {
-									upbuttonhover.material.alpha = 0;
-								}
-							}
-						}
 					} else { 
 						var hovermold = scene.getMeshByID(WTW.lastID + "hover");
 						var imagemold = scene.getMeshByID(WTW.lastID);
@@ -2768,6 +2617,7 @@ WTWJS.prototype.resetHovers = function() {
 							WTW.setDirectionalOpacity(WTW.lastID,1);
 						}
 					}
+					WTW.pluginsResetHovers(moldname, shape);
 				}
 			}
 		}
@@ -4241,7 +4091,6 @@ WTWJS.prototype.setShownConnectingGrids = function() {
 						WTW.connectingGrids[i].status = 0;
 						WTW.connectingGrids[i].shown = "0";
 						if (mold != null) {
-							WTW.productClearForSearchResults(WTW.connectingGrids[i].connectinggridid, WTW.connectingGrids[i].connectinggridind);
 							WTW.addDisposeMoldToQueue(WTW.connectingGrids[i].moldname);
 						}
 					}
@@ -4255,7 +4104,6 @@ WTWJS.prototype.setShownConnectingGrids = function() {
 						WTW.connectingGrids[i].status = 0;
 						WTW.connectingGrids[i].shown = "0";
 						if (mold != null) {
-							WTW.productClearForSearchResults(WTW.connectingGrids[i].connectinggridid, WTW.connectingGrids[i].connectinggridind);
 							WTW.addDisposeMoldToQueue(WTW.connectingGrids[i].moldname);
 						}
 					}
@@ -4264,7 +4112,6 @@ WTWJS.prototype.setShownConnectingGrids = function() {
 						WTW.connectingGrids[i].status = 0;
 						WTW.connectingGrids[i].shown = "0";
 						if (mold != null) {
-							WTW.productClearForSearchResults(WTW.connectingGrids[i].connectinggridid, WTW.connectingGrids[i].connectinggridind);
 							WTW.addDisposeMoldToQueue(WTW.connectingGrids[i].moldname);
 						}
 					}
@@ -5039,7 +4886,7 @@ WTWJS.prototype.resetMoldOpacity = function(moldgroup, moldind) {
 				molds[moldind].covering = "texture";
 			}
 			if (mold.material != undefined) {
-				if (molds[moldind].covering != "none" && molds[moldind].covering != "hidden" && molds[moldind].moldname.indexOf('video') == -1 && molds[moldind].moldname.indexOf('store') == -1) {
+				if (molds[moldind].covering != "none" && molds[moldind].covering != "hidden" && molds[moldind].moldname.indexOf('video') == -1) {
 					mold.material.specularColor = new BABYLON.Color3(Number(molds[moldind].color.specular.r), Number(molds[moldind].color.specular.g), Number(molds[moldind].color.specular.b));
 					mold.material.diffuseColor = new BABYLON.Color3(Number(molds[moldind].color.diffuse.r), Number(molds[moldind].color.diffuse.g), Number(molds[moldind].color.diffuse.b));	
 					if (mold.receiveShadows == false) {
@@ -6186,6 +6033,52 @@ WTWJS.prototype.wrapText = function(content, text, tlineheight, tfontsize, halig
 		linewidth:linewidth
 	};
 } 
+
+WTWJS.prototype.addMold3DText = function(moldname, molddef, lenx, leny, lenz) {
+	var mold;
+	try {
+		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
+		mold.scaling = new BABYLON.Vector3(lenx, leny, lenz);
+		var transparentmat = new BABYLON.StandardMaterial("mat" + moldname, scene);
+		transparentmat.alpha = 0;
+		mold.material = transparentmat;
+		var webtext = molddef.webtext.webtext;
+		var webstyle = molddef.webtext.webstyle;
+		if (webtext == null || webtext == '') {
+			webtext = '-';
+		}
+		if (webstyle == null || webstyle == '') {
+			webstyle = {
+				"anchor":"center",
+				"letter-height":6.00,
+				"letter-thickness":1.00,
+				"color":"#ff0000",
+				"alpha":1.00,
+				"colors":{
+					"diffuse":"#f0f0f0",
+					"specular":"#000000",
+					"ambient":"#808080",
+					"emissive":"#ff0000"
+				}
+			};
+		} else {
+			webstyle = JSON.parse(webstyle);
+		}
+		Writer = BABYLON.MeshWriter(scene, {scale:1});
+        var displaytext  = new Writer(webtext, webstyle);
+		var mytext = displaytext.getMesh();
+		mytext.rotation.x = WTW.getRadians(-90);
+		mytext.name = moldname + "-text";
+		mytext.parent = mold;
+		mytext.isPickable = true;
+		WTW.registerMouseOver(mytext);
+		mold.isPickable = true;
+		WTW.registerMouseOver(mold);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-addMold3DText=" + ex.message);
+	}
+	return mold;
+}
 
 WTWJS.prototype.addHtmlImg = function(content, src, halign, twidth, theight, tborderwidth, tbordercolor, scrollpos, indent, tmarginleft, tmarginright, tmargintop, tmarginbottom) {
 	var minx = 0;
@@ -8601,13 +8494,6 @@ WTWJS.prototype.processMoldQueue = function() {
 														WTW.addActionZone(molddef.moldname, WTW.actionZones[attachmoldind]);
 													}
 												}
-												if (WTW.adminView == 1) {
-													var namepart = moldname.split('-');
-													if (namepart[6] == null && moldname.indexOf("storeproduct") > -1) {
-													} else {									
-														WTW.registerMouseOver(mold);
-													}
-												}
 											}
 											if (moldname.indexOf("molds-") > -1) {
 												var csgcount = 0;
@@ -8654,6 +8540,7 @@ WTWJS.prototype.processMoldQueue = function() {
 													}
 												}
 											}
+											WTW.pluginsProcessMoldQueueAdd(moldname, mold);
 										}
 									}
 									if (moldname == WTW.mainParent) {
@@ -9101,1039 +8988,6 @@ WTWJS.prototype.recoverLoginComplete = function(response) {
 	}
 }
 
-WTWJS.prototype.setProduct = function(product, moldname) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		var found = false;
-		var productid = "";
-		var slug = "";
-		if (product.indexOf("|") > -1) {
-			var productinfo = product.split('|');
-			productid = productinfo[0];
-			slug = productinfo[1];
-		} else {
-			productid = product;
-		}
-		if (WTW.adminView == 1) {
-			dGet('wtw_tmoldproductid').value = productid;
-			dGet('wtw_tmoldslug').value = slug;
-		}
-		if (WTW.buildingMolds[moldnameparts.moldind] != null) {
-			if (WTW.buildingMolds[moldnameparts.moldind].store.name != undefined) {
-				if (WTW.buildingMolds[moldnameparts.moldind].store.name != '') {
-					WTW.loadProductDisplay(moldname, WTW.buildingMolds[moldnameparts.moldind].store.name, WTW.buildingMolds[moldnameparts.moldind].store.price, WTW.buildingMolds[moldnameparts.moldind].store.productid, WTW.buildingMolds[moldnameparts.moldind].store.slug, WTW.buildingMolds[moldnameparts.moldind].store.imageurl, WTW.buildingMolds[moldnameparts.moldind].store.shortdescription, WTW.buildingMolds[moldnameparts.moldind].store.description);
-					found = true;
-				}
-			}
-		}
-		if (moldnameparts.storewoocommerceapiurl != "" && found == false) {
-			WTW.getJSON(moldnameparts.storewoocommerceapiurl + "products/" + productid + "/?consumer_key=" + moldnameparts.woocommercekey + "&consumer_secret=" + moldnameparts.woocommercesecret, 
-				function(response) {
-					response = JSON.parse(response);
-					var imageurl = '';
-					if (response.images[0] != null) {
-						if (imageurl = response.images[0].src != undefined) {
-							imageurl = response.images[0].src;
-						}
-					}
-					WTW.loadProductDisplay(moldname, response.name, response.price, productid, slug, imageurl, response.short_description, response.description);
-				}
-			);
-		}
-	} catch (ex) { 
-		WTW.log("core-scripts-prime-wtw_common.js-setProduct=" + ex.message);
-	}
-}
-
-WTWJS.prototype.loadProductDisplay = function(moldname, productname, price, productid, slug, imageurl, shortdescription, description) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		if (imageurl != '' && moldnameparts.storeurl != "" && moldnameparts.wpplugin != "") {
-			var pimage = scene.getMeshByID(moldname + "-clickimage");
-			if (pimage != null) {
-				try {
-					if (pimage.material.diffuseTexture != null) {
-						pimage.material.diffuseTexture.dispose();
-						pimage.material.diffuseTexture = null;
-					}
-				} catch(ex) {}
-				try {
-					if (pimage.material != null) {
-						pimage.material.dispose();
-						pimage.material = null;
-					}
-				} catch(ex) {}
-			}
-			var pimage2 = scene.getMeshByID(moldname + "-clickimage2");
-			if (pimage2 != null) {
-				try {
-					if (pimage2.material.diffuseTexture != null) {
-						pimage2.material.diffuseTexture.dispose();
-						pimage2.material.diffuseTexture = null;
-					}
-				} catch(ex) {}
-				try {
-					if (pimage2.material != null) {
-						pimage2.material.dispose();
-						pimage2.material = null;
-					}
-				} catch(ex) {}
-			}
-			WTW.getJSON(moldnameparts.storeurl + "/" + moldnameparts.wpplugin + "/image.php?walktheweb_image_url=" + imageurl, 
-				function(response2) {
-				if (response2 != null) {
-						var imagedata = JSON.parse(response2);
-						var newimage = new Image();
-						newimage.src = imagedata[0].url;  
-						newimage.onload = function() {
-							var opacity = 1;
-							var covering = new BABYLON.StandardMaterial("cubemat" + moldname + "-clickimage", scene);
-							covering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imagedata[0].data, "cubemat" + moldname + "-clickimagemat", scene);
-							covering.alpha = opacity;
-							covering.specularColor = new BABYLON.Color3(opacity, opacity, opacity);
-							/* covering.emissiveColor = new BABYLON.Color3(opacity, opacity, opacity); */
-							covering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-							covering.diffuseColor = new BABYLON.Color3(opacity, opacity, opacity);		
-							var pimage = scene.getMeshByID(moldname + "-clickimage");
-							if (pimage != null) {
-								pimage.isVisible = true;
-								pimage.material = covering;
-							}
-							var pimage2 = scene.getMeshByID(moldname + "-clickimage2");
-							if (pimage2 != null) {
-								pimage2.isVisible = true;
-								pimage2.material = covering;
-							}
-						}
-						var lineheigth = "34px";
-						var fontheight = "40px";
-						var titleimage = scene.getMeshByID(moldname + "-titleimage");
-						if (titleimage == null) {
-							titleimage = scene.getMeshByID(moldname + "-titleimagesm");
-						}
-						if (titleimage != null) {
-							try {
-								if (titleimage.material.diffuseTexture != null) {
-									titleimage.material.diffuseTexture.dispose();
-									titleimage.material.diffuseTexture = null;
-								}
-							} catch(ex) {}
-							try {
-								if (titleimage.material != null) {
-									titleimage.material.dispose();
-									titleimage.material = null;
-								}
-							} catch(ex) {}
-							var coveringtitle = new BABYLON.StandardMaterial("mat" + moldname + "-titleimagetexture", scene);
-							coveringtitle.alpha = 1;
-							coveringtitle.specularColor = new BABYLON.Color3(.7, .7, .7);
-							/* coveringtitle.emissiveColor = new BABYLON.Color3(.7, .7, .7); */
-							coveringtitle.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-							coveringtitle.diffuseColor = new BABYLON.Color3(.7, .7, .7);
-							var contentTexture = new BABYLON.DynamicTexture(moldname + "-titleimagetexture", {width: 512,height: 512}, scene, true);
-							contentTexture.name = moldname + "-titleimagetexture";
-							coveringtitle.diffuseTexture = contentTexture;
-							titleimage.material = coveringtitle;
-							var namelength = WTW.cleanHTMLText(productname).length;
-							
-							if (namelength > 224) {
-								lineheigth = "10px";
-								fontheight = "12px";
-							} else if (namelength > 120) {
-								lineheigth = "14px";
-								fontheight = "16px";
-							} else if (namelength > 50) {
-								lineheigth = "18px";
-								fontheight = "20px";
-							} else if (namelength > 32) {
-								lineheigth = "20px";
-								fontheight = "24px";
-							} else if (namelength > 27) {
-								lineheigth = "24px";
-								fontheight = "30px";
-							} else if (namelength > 22) {
-								lineheigth = "30px";
-								fontheight = "36px";
-							}
-							WTW.wrapText(titleimage, WTW.cleanHTMLText(productname), lineheigth, fontheight, "center", "top", "white", 5, 0);
-							if (titleimage.name.indexOf("-titleimagesm") > -1) {
-								coveringtitle.diffuseTexture.vScale = .1;
-								coveringtitle.diffuseTexture.vOffset = .9;
-							}
-						}
-						var titleimage2 = scene.getMeshByID(moldname + "-titleimage2");
-						if (titleimage2 == null) {
-							titleimage2 = scene.getMeshByID(moldname + "-titleimage2sm");
-						}
-						if (titleimage2 != null) {
-							try {
-								if (titleimage2.material.diffuseTexture != null) {
-									titleimage2.material.diffuseTexture.dispose();
-									titleimage2.material.diffuseTexture = null;
-								}
-							} catch(ex) {}
-							try {
-								if (titleimage2.material != null) {
-									titleimage2.material.dispose();
-									titleimage2.material = null;
-								}
-							} catch(ex) {}
-							var coveringtitle2 = new BABYLON.StandardMaterial("mat" + moldname + "-titleimage2texture", scene);
-							coveringtitle2.alpha = 1;
-							coveringtitle2.specularColor = new BABYLON.Color3(.7, .7, .7);
-							/* coveringtitle2.emissiveColor = new BABYLON.Color3(.7, .7, .7); */
-							coveringtitle2.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-							coveringtitle2.diffuseColor = new BABYLON.Color3(.7, .7, .7);
-							var contentTexture2 = new BABYLON.DynamicTexture(moldname + "-titleimage2texture", {width: 512,height: 512}, scene, true);
-							contentTexture2.name = moldname + "-titleimage2texture";
-							coveringtitle2.diffuseTexture = contentTexture2;
-							titleimage2.material = coveringtitle2;
-							WTW.wrapText(titleimage2, WTW.cleanHTMLText(productname), lineheigth, fontheight, "center", "top", "white", 0, 0);
-							if (titleimage2.name.indexOf("-titleimage2sm") > -1) {
-								coveringtitle2.diffuseTexture.vScale = .1;
-								coveringtitle2.diffuseTexture.vOffset = .9;
-							}
-						}
-						var desctext = "";
-						if (shortdescription != null) {
-							if (shortdescription != undefined) {
-								if (shortdescription.length > 0) {
-									desctext = shortdescription;
-								}
-							}
-						}
-						if (desctext == "") {
-							if (description != null) {
-								if (description != undefined) {
-									if (description.length > 0) {
-										desctext = description;
-									}
-								}
-							}
-						}
-						var descimage1 = scene.getMeshByID(moldname + "-descimage1");
-						if (descimage1 != null) {
-							try {
-								if (descimage1.material.diffuseTexture != null) {
-									descimage1.material.diffuseTexture.dispose();
-									descimage1.material.diffuseTexture = null;
-								}
-							} catch(ex) {}
-							try {
-								if (descimage1.material != null) {
-									descimage1.material.dispose();
-									descimage1.material = null;
-								}
-							} catch(ex) {}
-							var coveringdesc1 = new BABYLON.StandardMaterial("mat" + moldname + "-descimage1texture", scene);
-							coveringdesc1.alpha = 0;
-							coveringdesc1.specularColor = new BABYLON.Color3(.7, .7, .7);
-							/* coveringdesc1.emissiveColor = new BABYLON.Color3(.7, .7, .7); */
-							coveringdesc1.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-							coveringdesc1.diffuseColor = new BABYLON.Color3(.7, .7, .7);
-							var contentTexture3 = new BABYLON.DynamicTexture(moldname + "-descimage1texture", {width: 512,height: 512}, scene, true);
-							contentTexture3.name = moldname + "-descimage1texture";
-							coveringdesc1.diffuseTexture = contentTexture3;
-							descimage1.material = coveringdesc1;
-							WTW.wrapText(descimage1, WTW.cleanHTMLText(desctext), "30px", "30px", "left", "top", "white", 0, 0, "90%", "20px", "10px"); // , tmaxwidth, tmarginleft, tmarginright, tfloat, tfloatwidth, tfloatheight
-						}
-
-						var descimage2 = scene.getMeshByID(moldname + "-descimage2");
-						if (descimage2 != null) {
-							try {
-								if (descimage2.material.diffuseTexture != null) {
-									descimage2.material.diffuseTexture.dispose();
-									descimage2.material.diffuseTexture = null;
-								}
-							} catch(ex) {}
-							try {
-								if (descimage2.material != null) {
-									descimage2.material.dispose();
-									descimage2.material = null;
-								}
-							} catch(ex) {}
-							var coveringdesc2 = new BABYLON.StandardMaterial("mat" + moldname + "-descimage2texture", scene);
-							coveringdesc2.alpha = 0;
-							coveringdesc2.specularColor = new BABYLON.Color3(.7, .7, .7);
-							/* coveringdesc2.emissiveColor = new BABYLON.Color3(.7, .7, .7); */
-							coveringdesc2.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-							coveringdesc2.diffuseColor = new BABYLON.Color3(.7, .7, .7);
-							var contentTexture4 = new BABYLON.DynamicTexture(moldname + "-descimage2texture", {width: 512,height: 512}, scene, true);
-							contentTexture4.name = moldname + "-descimage2texture";
-							coveringdesc2.diffuseTexture = contentTexture4;
-							descimage2.material = coveringdesc2;
-							WTW.wrapText(descimage2, WTW.cleanHTMLText(desctext), "30px", "30px", "left", "top", "white", 0, 0, "90%", "20px", "10px");
-						}
-
-						var readmore1 = scene.getMeshByID(moldname + "-readmore1");
-						if (readmore1 != null) {
-							try {
-								if (readmore1.material.diffuseTexture != null) {
-									readmore1.material.diffuseTexture.dispose();
-									readmore1.material.diffuseTexture = null;
-								}
-							} catch(ex) {}
-							try {
-								if (readmore1.material != null) {
-									readmore1.material.dispose();
-									readmore1.material = null;
-								}
-							} catch(ex) {}
-							var coveringread1 = new BABYLON.StandardMaterial("mat" + moldname + "-readimage1texture", scene);
-							coveringread1.alpha = 1;
-							coveringread1.specularColor = new BABYLON.Color3(.2, .2, .2);
-							/* coveringread1.emissiveColor = new BABYLON.Color3(1, 1, 1); */
-							coveringread1.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-							coveringread1.diffuseColor = new BABYLON.Color3(.9, .9, .9);
-							var readTexture1 = new BABYLON.DynamicTexture(moldname + "-readimage1texture", {width: 512,height: 512}, scene, true);
-							readTexture1.name = moldname + "-readimage1texture";
-							/* readTexture1.hasAlpha = true; */
-							coveringread1.diffuseTexture = readTexture1;
-							coveringread1.diffuseTexture.vScale = .2;
-							coveringread1.diffuseTexture.uScale = 1;
-							coveringread1.diffuseTexture.vOffset = .85;
-							readmore1.material = coveringread1;
-							WTW.wrapText(readmore1, "$" + Number(price).toFixed(2), lineheigth, fontheight, "center", "top", "white", 0, 0);
-						}							
-						
-						var readmore2 = scene.getMeshByID(moldname + "-readmore2");
-						if (readmore2 != null) {
-							try {
-								if (readmore2.material.diffuseTexture != null) {
-									readmore2.material.diffuseTexture.dispose();
-									readmore2.material.diffuseTexture = null;
-								}
-							} catch(ex) {}
-							try {
-								if (readmore2.material != null) {
-									readmore2.material.dispose();
-									readmore2.material = null;
-								}
-							} catch(ex) {}
-							var coveringread2 = new BABYLON.StandardMaterial("mat" + moldname + "-readimage2texture", scene);
-							coveringread2.alpha = 1;
-							coveringread2.specularColor = new BABYLON.Color3(.2, .2, .2);
-							/* coveringread2.emissiveColor = new BABYLON.Color3(1, 1, 1); */
-							coveringread2.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-							coveringread2.diffuseColor = new BABYLON.Color3(.9, .9, .9);
-							var readTexture2 = new BABYLON.DynamicTexture(moldname + "-readimage2texture", {width: 512,height: 512}, scene, true);
-							readTexture2.name = moldname + "-readimage2texture";
-							/* readTexture2.hasAlpha = true; */
-							coveringread2.diffuseTexture = readTexture2;
-							coveringread2.diffuseTexture.vScale = .2;
-							coveringread2.diffuseTexture.uScale = 1;
-							coveringread2.diffuseTexture.vOffset = .85;
-							readmore2.material = coveringread2;
-							WTW.wrapText(readmore2, "$" + Number(price).toFixed(2), lineheigth, fontheight, "center", "top", "white", 0, 0);
-						}
-						var price1 = scene.getMeshByID(moldname + "-price1");
-						if (price1 != null) {
-							try {
-								if (price1.material.diffuseTexture != null) {
-									price1.material.diffuseTexture.dispose();
-									price1.material.diffuseTexture = null;
-								}
-							} catch(ex) {}
-							try {
-								if (price1.material != null) {
-									price1.material.dispose();
-									price1.material = null;
-								}
-							} catch(ex) {}
-							var coveringprice1 = new BABYLON.StandardMaterial("mat" + moldname + "-coveringprice1texture", scene);
-							coveringprice1.alpha = 1;
-							coveringprice1.specularColor = new BABYLON.Color3(.2, .2, .2);
-							/* coveringprice1.emissiveColor = new BABYLON.Color3(1, 1, 1); */
-							coveringprice1.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-							coveringprice1.diffuseColor = new BABYLON.Color3(.9, .9, .9);
-							var priceTexture1 = new BABYLON.DynamicTexture(moldname + "-coveringprice1texture", {width: 512,height: 512}, scene, true);
-							priceTexture1.name = moldname + "-coveringprice1texture";
-							/* priceTexture1.hasAlpha = true; */
-							coveringprice1.diffuseTexture = priceTexture1;
-							coveringprice1.diffuseTexture.uScale = 1;
-							coveringprice1.diffuseTexture.vScale = .08;
-							coveringprice1.diffuseTexture.vOffset = .92;
-							price1.material = coveringprice1;
-							WTW.wrapText(price1, "$" + Number(price).toFixed(2), lineheigth, fontheight, "center", "top", "white", 0, 0);
-						}
-						var price2 = scene.getMeshByID(moldname + "-price2");
-						if (price2 != null) {
-							try {
-								if (price2.material.diffuseTexture != null) {
-									price2.material.diffuseTexture.dispose();
-									price2.material.diffuseTexture = null;
-								}
-							} catch(ex) {}
-							try {
-								if (price2.material != null) {
-									price2.material.dispose();
-									price2.material = null;
-								}
-							} catch(ex) {}
-							var coveringprice1 = new BABYLON.StandardMaterial("mat" + moldname + "-coveringprice1texture", scene);
-							coveringprice1.alpha = 1;
-							coveringprice1.specularColor = new BABYLON.Color3(.2, .2, .2);
-							/* coveringprice1.emissiveColor = new BABYLON.Color3(1, 1, 1); */
-							coveringprice1.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-							coveringprice1.diffuseColor = new BABYLON.Color3(.9, .9, .9);
-							var priceTexture1 = new BABYLON.DynamicTexture(moldname + "-coveringprice1texture", {width: 512,height: 512}, scene, true);
-							priceTexture1.name = moldname + "-coveringprice1texture";
-							/* priceTexture1.hasAlpha = true; */
-							coveringprice1.diffuseTexture = priceTexture1;
-							coveringprice1.diffuseTexture.uScale = 1;
-							coveringprice1.diffuseTexture.vScale = .08;
-							coveringprice1.diffuseTexture.vOffset = .92;
-							price2.material = coveringprice1;
-							WTW.wrapText(price2, "$" + Number(price).toFixed(2), lineheigth, fontheight, "center", "top", "white", 0, 0);
-						}
-					} 
-				}
-			);
-		}
-	} catch (ex) { 
-		WTW.log("core-scripts-prime-wtw_common.js-loadProductDisplay=" + ex.message);
-	}
-}
-
-WTWJS.prototype.productReadMore = function(moldname) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		if (moldnameparts.moldind > -1 && moldnameparts.storeproducturl != "") {
-			if (moldnameparts.molds[moldnameparts.moldind] != null) {
-				if (moldnameparts.storeiframes == '1') {
-					window.setTimeout(function() {
-						WTW.openIFrame(moldnameparts.storeproducturl + moldnameparts.molds[moldnameparts.moldind].store.slug + "/", .8, .8);
-					},500);
-				} else {
-					WTW.openWebpage(moldnameparts.storeproducturl + moldnameparts.molds[moldnameparts.moldind].store.slug + "/", '_blank');
-				}
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productReadMore=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.productAddToCart = function(moldname) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		if (moldnameparts.moldind > -1 && moldnameparts.storecarturl != "") {
-			if (moldnameparts.molds[moldnameparts.moldind] != null) {
-				if (moldnameparts.storeiframes == '1') {
-					window.setTimeout(function() {
-						WTW.openIFrame(moldnameparts.storecarturl + "?add-to-cart=" + moldnameparts.molds[moldnameparts.moldind].store.productid, .8, .8);
-					},500);
-				} else {
-					WTW.openWebpage(moldnameparts.storecarturl + "?add-to-cart=" + moldnameparts.molds[moldnameparts.moldind].store.productid, '_blank');
-				}
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productAddToCart=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.productShowCart = function(moldname) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		if (moldnameparts.storecarturl != "") {
-			if (moldnameparts.storeiframes == '1') {
-				WTW.openIFrame(moldnameparts.storecarturl, .8, .8);
-			} else {
-				WTW.openWebpage(moldnameparts.storecarturl, '_blank');
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productShowCart=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.productGetProduct = function(moldname) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		if (moldnameparts.shape == "storeproduct") {
-			var found = false;
-			var fetch = false;
-			if (moldnameparts.molds[moldnameparts.moldind] != null && moldnameparts.cgid != '' && moldnameparts.cgind > -1) {
-				if (WTW.products != null) {
-					for (var i=WTW.products.length;i > -1 ;i--) {
-						if (WTW.products[i] != null) {
-							if (WTW.products[i].fetching == "0" && WTW.products[i].connectinggridind.toString() == moldnameparts.cgind.toString() && WTW.products[i].connectinggridid == moldnameparts.cgid) {
-								moldnameparts.molds[moldnameparts.moldind].store.storeurl = WTW.products[i].storeurl;
-								moldnameparts.molds[moldnameparts.moldind].store.wpplugin = WTW.products[i].wpplugin;
-								moldnameparts.molds[moldnameparts.moldind].store.productid = WTW.products[i].productid;
-								moldnameparts.molds[moldnameparts.moldind].store.name = WTW.products[i].name;
-								moldnameparts.molds[moldnameparts.moldind].store.slug = WTW.products[i].slug;
-								moldnameparts.molds[moldnameparts.moldind].store.price = WTW.products[i].price;
-								moldnameparts.molds[moldnameparts.moldind].store.imageid = WTW.products[i].imageid;
-								moldnameparts.molds[moldnameparts.moldind].store.imageurl = WTW.products[i].imageurl;
-								moldnameparts.molds[moldnameparts.moldind].store.categoryid = WTW.products[i].categoryid;
-								moldnameparts.molds[moldnameparts.moldind].store.description = WTW.products[i].description;
-								moldnameparts.molds[moldnameparts.moldind].store.shortdescription = WTW.products[i].shortdescription;
-								WTW.products.splice(i,1);
-								found = true;
-								i = WTW.products.length;
-							} else if (WTW.products[i].fetching == "1" && WTW.products[i].connectinggridind.toString() == moldnameparts.cgind.toString() && WTW.products[i].connectinggridid == moldnameparts.cgid) {
-								fetch = true;
-								/* i = WTW.products.length; */
-							}
-						}
-					}
-				}
-				if (found == false) {
-					if (fetch == false) {
-						var newproductind = WTW.products.length;
-						WTW.products[newproductind] = WTW.newProduct();
-						WTW.products[newproductind].connectinggridind = moldnameparts.cgind.toString();
-						WTW.products[newproductind].connectinggridid = moldnameparts.cgid;
-						WTW.products[newproductind].search = "";
-						WTW.products[newproductind].fetching = "1";
-						WTW.productFetchProducts(moldname,'');
-					}
-					window.setTimeout(function() {
-						WTW.productGetProduct(moldname);
-					}, 100);
-				} else {
-					WTW.setProduct(moldnameparts.molds[moldnameparts.moldind].store.productid + "|" + moldnameparts.molds[moldnameparts.moldind].store.slug, moldname);
-				} 
-			}
-		} 
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productGetProduct=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.productSelectCategory = function(moldname) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		WTW.productClearForSearchResults(moldnameparts.cgid, moldnameparts.cgind);
-		WTW.products = [];
-		if (moldnameparts.namepart[7] != null) {
-			WTW.productFetchProducts(moldname,moldnameparts.namepart[7]);
-		} else {
-			WTW.productFetchProducts(moldname,'');
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productSelectCategory=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.productFetchProducts = function(moldname, categoryid) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		if (moldnameparts.storewoocommerceapiurl != "") {
-			var url = moldnameparts.storewoocommerceapiurl + "products/?per_page=50&consumer_key=" + moldnameparts.woocommercekey + "&consumer_secret=" + moldnameparts.woocommercesecret;
-			if (categoryid != "") {
-				url = moldnameparts.storewoocommerceapiurl + "products/?per_page=50&category=" + categoryid + "&consumer_key=" + moldnameparts.woocommercekey + "&consumer_secret=" + moldnameparts.woocommercesecret;
-			}
-			WTW.getJSON(url, 
-				function(response) {
-					WTW.productLoadProducts(moldname, JSON.parse(response), moldnameparts.storeurl, moldnameparts.wpplugin);
-				}
-			);
-		} 
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productFetchProducts=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.productLoadProducts = function(moldname, response, storeurl, wpplugin) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		for (var i=0;i<response.length;i++) {
-			if (response[i] != null) {
-				var categoryid = "";
-				if (response[i].categories != null) {
-					if (response[i].categories[0] != null) {
-						categoryid = response[i].categories[0].id;
-					}
-				}
-				var newproductind = WTW.products.length;
-				WTW.products[newproductind] = WTW.newProduct();
-				WTW.products[newproductind].storeurl = storeurl;
-				WTW.products[newproductind].wpplugin = wpplugin;
-				WTW.products[newproductind].connectinggridind = moldnameparts.cgind.toString();
-				WTW.products[newproductind].connectinggridid = moldnameparts.cgid;
-				WTW.products[newproductind].search = '';
-				WTW.products[newproductind].productid = response[i].id;
-				WTW.products[newproductind].name = WTW.encode(WTW.cleanHTMLText(response[i].name));
-				WTW.products[newproductind].slug = response[i].slug;
-				WTW.products[newproductind].price = response[i].price;
-				WTW.products[newproductind].categoryid = categoryid;
-				WTW.products[newproductind].description = WTW.encode(WTW.cleanHTMLText(response[i].description));
-				WTW.products[newproductind].shortdescription = WTW.encode(WTW.cleanHTMLText(response[i].short_description));
-				WTW.products[newproductind].fetching = '0';
-				if (response[i].images[0] != null) {
-					WTW.products[newproductind].imageid = response[i].images[0].id;
-					WTW.products[newproductind].imageurl = response[i].images[0].src;
-				}
-			}
-		}
-		if (moldname.indexOf("storecategories") > -1) {
-			WTW.productLoadSearchResults(moldname, moldnameparts.cgid, moldnameparts.cgind);
-		} else {
-			WTW.productClearFetchProducts(moldname);
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productLoadProducts=" + ex.message);
-	}  
-}
-
-
-WTWJS.prototype.productClearFetchProducts = function(moldname) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		if (WTW.products != null) {
-			for (var i=WTW.products.length;i > -1 ;i--) {
-				if (WTW.products[i] != null) {
-					if (WTW.products[i].fetching == "1" && WTW.products[i].connectinggridind.toString() == moldnameparts.cgind.toString() && WTW.products[i].connectinggridid == moldnameparts.cgid) {
-						WTW.products.splice(i,1);
-					}
-				}
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productClearFetchProducts=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.productFetchCategories = function(moldname) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		if (moldnameparts.storewoocommerceapiurl != "") {
-			var url = moldnameparts.storewoocommerceapiurl + "products/categories/?per_page=50&orderby=slug&consumer_key=" + moldnameparts.woocommercekey + "&consumer_secret=" + moldnameparts.woocommercesecret;
-			WTW.getJSON(url, 
-				function(response) {
-					WTW.productLoadCategories(moldname, JSON.parse(response));
-				}
-			);
-		} 
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productFetchCategories=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.productLoadCategories = function(moldname, response) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		var molddef = moldnameparts.molds[moldnameparts.moldind];
-		var lenx = 1;
-		var leny = 1;
-		var lenz = 1;
-		var firsty = 0;
-		var incy = 0;
-		var lasty = -5;
-		var once = 0;
-		var basemold = scene.getMeshByID(moldname + "-base");
-		if (molddef != null) {
-			if (molddef.scaling != undefined) {
-				if (molddef.scaling.x != undefined) {
-					lenx = Number(molddef.scaling.x);
-				}
-				if (molddef.scaling.y != undefined) {
-					leny = Number(molddef.scaling.y);
-				}
-				if (molddef.scaling.z != undefined) {
-					lenz = Number(molddef.scaling.z);
-				}
-			}
-		}
-		firsty = leny/2 -2.1;
-		lasty = -leny/2 + 1;
-		var categorybuttonall = BABYLON.MeshBuilder.CreateBox(moldname + "-categorybutton-", {}, scene);
-		categorybuttonall.scaling = new BABYLON.Vector3(.2, lenz - 1, .9);
-		categorybuttonall.position = new BABYLON.Vector3(-lenx/2 + .25, firsty, 0);
-		categorybuttonall.rotation.x = WTW.getRadians(-90);
-		categorybuttonall.parent = basemold;
-
-		var categorybuttontextureall = new BABYLON.StandardMaterial("mat" + moldname + "-categorybuttontexture-", scene);
-		categorybuttontextureall.alpha = 1;
-		categorybuttontextureall.specularColor = new BABYLON.Color3(.2, .2, .2);
-		/* categorybuttontextureall.emissiveColor = new BABYLON.Color3(1, 1, 1); */
-		categorybuttontextureall.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		categorybuttontextureall.diffuseColor = new BABYLON.Color3(.9, .9, .9);
-		var categoryTextureall = new BABYLON.DynamicTexture(moldname + "-categorybuttontexture-", {width: 512,height: 512}, scene, true);
-		categoryTextureall.name = moldname + "-categorybuttontexture-";
-		/* categoryTextureall.hasAlpha = true; */
-		categorybuttontextureall.diffuseTexture = categoryTextureall;
-		categorybuttontextureall.diffuseTexture.vScale = .11;
-		categorybuttontextureall.diffuseTexture.uScale = 1;
-		categorybuttontextureall.diffuseTexture.vOffset = .88;
-		categorybuttonall.material = categorybuttontextureall;
-		WTW.wrapText(categorybuttonall, "All", "45px", "40px", "center", "top", "white", 0, 0);
-		
-		var categorybuttonhoverall = BABYLON.MeshBuilder.CreateBox(moldname + "-categorybuttonhover-", {}, scene);
-		categorybuttonhoverall.scaling = new BABYLON.Vector3(.2, lenz - .99, .91);
-		categorybuttonhoverall.position = new BABYLON.Vector3(-lenx/2 + .15, firsty, 0);
-		categorybuttonhoverall.rotation.x = WTW.getRadians(-90);
-		categorybuttonhoverall.parent = basemold;
-		
-		var categorybuttontexturehoverall = new BABYLON.StandardMaterial("mat" + moldname + "-categorybuttontexturehover-", scene);
-		categorybuttontexturehoverall.alpha = 0;
-		categorybuttontexturehoverall.specularColor = new BABYLON.Color3(.2, .2, .2);
-		/* categorybuttontexturehoverall.emissiveColor = new BABYLON.Color3(1, 1, 1); */
-		categorybuttontexturehoverall.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		categorybuttontexturehoverall.diffuseColor = new BABYLON.Color3(.9, .9, .9);
-		var categorytexturehoverall = new BABYLON.DynamicTexture(moldname + "-categorytexturehover-", {width: 512,height: 512}, scene, true);
-		categorytexturehoverall.name = moldname + "-categorytexturehover-";
-		/* categorytexturehoverall.hasAlpha = true; */
-		categorybuttontexturehoverall.diffuseTexture = categorytexturehoverall;
-		categorybuttontexturehoverall.diffuseTexture.vScale = .11;
-		categorybuttontexturehoverall.diffuseTexture.uScale = 1;
-		categorybuttontexturehoverall.diffuseTexture.vOffset = .88;
-		categorybuttonhoverall.material = categorybuttontexturehoverall;
-		WTW.wrapText(categorybuttonhoverall, "All", "45px", "40px", "center", "top", "yellow", 0, 0);
-		WTW.registerMouseOver(categorybuttonhoverall);
-		incy -= 1;
-		if (response != null) {
-			for (var i=0;i<response.length;i++) {
-				if (response[i] != null) {
-					var categoryid = response[i].id;
-					var categoryname = response[i].name;
-					var categoryslug = response[i].slug;
-					if (categoryname != "") {
-						var categorybutton = BABYLON.MeshBuilder.CreateBox(moldname + "-categorybutton-" + categoryid, {}, scene);
-						categorybutton.scaling = new BABYLON.Vector3(.2, lenz - 1, .9);
-						categorybutton.position = new BABYLON.Vector3(-lenx/2 + .25, firsty + incy, 0);
-						categorybutton.rotation.x = WTW.getRadians(-90);
-						categorybutton.parent = basemold;
-
-						var categorybuttontexture = new BABYLON.StandardMaterial("mat" + moldname + "-categorybuttontexture-" + categoryid, scene);
-						categorybuttontexture.alpha = 1;
-						categorybuttontexture.specularColor = new BABYLON.Color3(.2, .2, .2);
-						/* categorybuttontexture.emissiveColor = new BABYLON.Color3(1, 1, 1); */
-						categorybuttontexture.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-						categorybuttontexture.diffuseColor = new BABYLON.Color3(.9, .9, .9);
-						var categoryTexture = new BABYLON.DynamicTexture(moldname + "-categorybuttontexture-" + categoryid, {width: 512,height: 512}, scene, true);
-						categoryTexture.name = moldname + "-categorybuttontexture-" + categoryid;
-						/* categoryTexture.hasAlpha = true; */
-						categorybuttontexture.diffuseTexture = categoryTexture;
-						categorybuttontexture.diffuseTexture.vScale = .11;
-						categorybuttontexture.diffuseTexture.uScale = 1;
-						categorybuttontexture.diffuseTexture.vOffset = .88;
-						categorybutton.material = categorybuttontexture;
-						WTW.wrapText(categorybutton, categoryname, "45px", "40px", "center", "top", "white", 0, 0);
-						
-						var categorybuttonhover = BABYLON.MeshBuilder.CreateBox(moldname + "-categorybuttonhover-" + categoryid, {}, scene);
-						categorybuttonhover.scaling = new BABYLON.Vector3(.2, lenz - .99, .91);
-						categorybuttonhover.position = new BABYLON.Vector3(-lenx/2 + .15, firsty + incy, 0);
-						categorybuttonhover.rotation.x = WTW.getRadians(-90);
-						categorybuttonhover.parent = basemold;
-						
-						var categorybuttontexturehover = new BABYLON.StandardMaterial("mat" + moldname + "-categorybuttontexturehover-" + categoryid, scene);
-						categorybuttontexturehover.alpha = 0;
-						categorybuttontexturehover.specularColor = new BABYLON.Color3(.2, .2, .2);
-						/* categorybuttontexturehover.emissiveColor = new BABYLON.Color3(1, 1, 1); */
-						categorybuttontexturehover.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-						categorybuttontexturehover.diffuseColor = new BABYLON.Color3(.9, .9, .9);
-						var categorytexturehover = new BABYLON.DynamicTexture(moldname + "-categorytexturehover-" + categoryid, {width: 512,height: 512}, scene, true);
-						categorytexturehover.name = moldname + "-categorytexturehover-" + categoryid;
-						/* categorytexturehover.hasAlpha = true; */
-						categorybuttontexturehover.diffuseTexture = categorytexturehover;
-						categorybuttontexturehover.diffuseTexture.vScale = .11;
-						categorybuttontexturehover.diffuseTexture.uScale = 1;
-						categorybuttontexturehover.diffuseTexture.vOffset = .88;
-						categorybuttonhover.material = categorybuttontexturehover;
-						WTW.wrapText(categorybuttonhover, categoryname, "45px", "40px", "center", "top", "yellow", 0, 0);
-						WTW.registerMouseOver(categorybuttonhover);
-
-						if (lasty > firsty + incy) {
-							categorybutton.visibility = 0;
-							categorybuttonhover.visibility = 0;
-							
-							if (once == 0) {
-								var upbutton = BABYLON.MeshBuilder.CreateBox(moldname + "-upbutton", {}, scene);
-								upbutton.scaling = new BABYLON.Vector3(.9, .9, .9);
-								upbutton.position = new BABYLON.Vector3(-lenx/2 + .4, firsty + 1.1, -lenz/2 + .75);
-								upbutton.rotation.x = WTW.getRadians(-90);
-								upbutton.parent = basemold;
-								
-								var upbuttontexture = new BABYLON.StandardMaterial("mat" + moldname + "-upbutton", scene);
-								upbuttontexture.emissiveTexture = new BABYLON.Texture("/content/system/images/arrowscrollup.jpg", scene);
-								upbutton.material = upbuttontexture;
-								upbutton.visibility = 0;
-
-								var upbuttonhover = BABYLON.MeshBuilder.CreateBox(moldname + "-upbuttonhover", {}, scene);
-								upbuttonhover.scaling = new BABYLON.Vector3(.95, .95, .95);
-								upbuttonhover.position = new BABYLON.Vector3(-lenx/2 + .4, firsty + 1.1, -lenz/2 + .75);
-								upbuttonhover.rotation.x = WTW.getRadians(-90);
-								upbuttonhover.parent = basemold;
-								
-								var upbuttontexturehover = new BABYLON.StandardMaterial("mat" + moldname + "-upbuttonhover", scene);
-								upbuttontexturehover.emissiveTexture = new BABYLON.Texture("/content/system/images/arrowscrollup2.jpg", scene);
-								upbuttonhover.material = upbuttontexturehover;
-								upbuttonhover.material.alpha = 0;
-								WTW.registerMouseOver(upbuttonhover);
-								upbuttonhover.visibility = 0;
-
-								var downbutton = BABYLON.MeshBuilder.CreateBox(moldname + "-downbutton", {}, scene);
-								downbutton.scaling = new BABYLON.Vector3(.9, .9, .9);
-								downbutton.position = new BABYLON.Vector3(-lenx/2 + .4, lasty, -lenz/2 + .75);
-								downbutton.rotation.x = WTW.getRadians(-90);
-								downbutton.parent = basemold;
-								
-								var downbuttontexture = new BABYLON.StandardMaterial("mat" + moldname + "-downbutton", scene);
-								downbuttontexture.emissiveTexture = new BABYLON.Texture("/content/system/images/arrowscrolldown.jpg", scene);
-								downbutton.material = downbuttontexture;
-
-								var downbuttonhover = BABYLON.MeshBuilder.CreateBox(moldname + "-downbuttonhover", {}, scene);
-								downbuttonhover.scaling = new BABYLON.Vector3(.95, .95, .95);
-								downbuttonhover.position = new BABYLON.Vector3(-lenx/2 + .4, lasty, -lenz/2 + .75);
-								downbuttonhover.rotation.x = WTW.getRadians(-90);
-								downbuttonhover.parent = basemold;
-								
-								var downbuttontexturehover = new BABYLON.StandardMaterial("mat" + moldname + "-downbuttonhover", scene);
-								downbuttontexturehover.emissiveTexture = new BABYLON.Texture("/content/system/images/arrowscrolldown2.jpg", scene);
-								downbuttonhover.material = downbuttontexturehover;
-								downbuttonhover.material.alpha = 0;
-								WTW.registerMouseOver(downbuttonhover);
-								once = 1;
-							}
-						}
-						incy -= 1;
-					}
-				}
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productLoadCategories=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.productSelectCategoryScroll = function(moldname, increment) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		var catbuttonname = moldname.replace("downbuttonhover","categorybutton").replace("upbuttonhover","categorybutton");
-		var storecategories = scene.getMeshByID(catbuttonname.replace("-categorybutton",""));
-		var upbutton = scene.getMeshByID(catbuttonname.replace("categorybutton","upbutton"));
-		var upbuttonhover = scene.getMeshByID(catbuttonname.replace("categorybutton","upbuttonhover"));
-		var downbutton = scene.getMeshByID(catbuttonname.replace("categorybutton","downbutton"));
-		var downbuttonhover = scene.getMeshByID(catbuttonname.replace("categorybutton","downbuttonhover"));
-		var move = 0;
-		if (upbutton != null && upbuttonhover != null) {
-			if (increment < 0 && upbutton.visibility == 1) {
-				move = 1;
-			}
-		}
-		if (downbutton != null && downbuttonhover != null) {
-			if (increment > 0 && downbutton.visibility == 1) {
-				move = 1;
-			}
-		}
-		if (storecategories != null && move == 1) {
-			var leny = storecategories.scaling.y;
-			var firsty = leny * .42;
-			var lasty = -leny * .42;
-			var showup = 0;
-			var showdown = 0;
-			for (var i=0;i<scene.meshes.length;i++) {
-				if (scene.meshes[i] != null) {
-					if (scene.meshes[i].id != undefined) {
-						if (scene.meshes[i].id.indexOf(catbuttonname) > -1) {
-							var catbutton = scene.getMeshByID(scene.meshes[i].id);
-							if (catbutton != null) {
-								catbutton.position.y += increment;
-								if (catbutton.position.y > firsty) {
-									catbutton.visibility = 0;
-									showup = 1;
-								} else if (catbutton.position.y < lasty) {
-									catbutton.visibility = 0;
-									showdown = 1;
-								} else {
-									catbutton.visibility = 1;
-								}
-							}
-						}
-					}
-				}
-			}
-			if (upbutton != null && upbuttonhover != null) {
-				if (showup == 1) {
-					upbutton.visibility = 1;
-					upbuttonhover.visibility = 1;
-				} else {
-					upbutton.visibility = 0;
-					upbuttonhover.visibility = 0;
-				}
-			}
-			if (downbutton != null && downbuttonhover != null) {
-				if (showdown == 1) {
-					downbutton.visibility = 1;
-					downbuttonhover.visibility = 1;
-				} else {
-					downbutton.visibility = 0;
-					downbuttonhover.visibility = 0;
-				}
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productSelectCategoryScroll=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.productClearForSearchResults = function(connectinggridid, connectinggridind) {
-	try {
-		for (var i=0;i<WTW.buildingMolds.length;i++) {
-			if (WTW.buildingMolds[i] != null) {
-				if (WTW.buildingMolds[i].store.allowsearch != undefined) {
-					if (WTW.buildingMolds[i].store.allowsearch == '1' && WTW.buildingMolds[i].connectinggridid == connectinggridid && WTW.buildingMolds[i].connectinggridind.toString() == connectinggridind.toString()) {
-						WTW.buildingMolds[i].store.productid = "";
-						WTW.buildingMolds[i].store.name = "";
-						WTW.buildingMolds[i].store.slug = "";
-						WTW.buildingMolds[i].store.price = "";
-						WTW.buildingMolds[i].store.categoryid = "";
-						WTW.buildingMolds[i].store.description = "";
-						WTW.buildingMolds[i].store.shortdescription = "";
-						WTW.buildingMolds[i].store.imageid = "";
-						WTW.buildingMolds[i].store.imageurl = "";
-					}	
-				}
-			}
-		}
-		for (var i=WTW.products.length;i > -1;i--) {
-			if (WTW.products[i] != null) {
-				if (WTW.products[i].connectinggridid == connectinggridid && WTW.products[i].connectinggridind.toString() == connectinggridind.toString()) {
-					WTW.products.splice(i,1);
-					i -= 1;
-				}	
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productClearForSearchResults=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.productLoadSearchResults = function(moldname, connectinggridid, connectinggridind) {
-	try {
-		var pi = 0;
-		for (var i=0;i<WTW.buildingMolds.length;i++) {
-			if (WTW.buildingMolds[i] != null) {
-				if (WTW.buildingMolds[i].shape == 'storeproduct' && WTW.buildingMolds[i].store.allowsearch != undefined && WTW.buildingMolds[i].connectinggridid == connectinggridid && WTW.buildingMolds[i].connectinggridind.toString() == connectinggridind.toString()) {
-					if (WTW.buildingMolds[i].store.allowsearch == '1' && WTW.products[pi] != null) {
-						WTW.buildingMolds[i].store.storeurl = WTW.products[pi].storeurl;
-						WTW.buildingMolds[i].store.wpplugin = WTW.products[pi].wpplugin;
-						WTW.buildingMolds[i].store.productid = WTW.products[pi].productid;
-						WTW.buildingMolds[i].store.name = WTW.products[pi].name;
-						WTW.buildingMolds[i].store.slug = WTW.products[pi].slug;
-						WTW.buildingMolds[i].store.price = WTW.products[pi].price;
-						WTW.buildingMolds[i].store.imageid = WTW.products[pi].imageid;
-						WTW.buildingMolds[i].store.imageurl = WTW.products[pi].imageurl;
-						WTW.buildingMolds[i].store.categoryid = WTW.products[pi].categoryid;
-						WTW.buildingMolds[i].store.description = WTW.products[pi].description;
-						WTW.buildingMolds[i].store.shortdescription = WTW.products[pi].shortdescription;
-						if (pi < WTW.products.length - 1) {
-							pi += 1;
-						} else {
-							pi = 0;
-						}
-						WTW.setProduct(WTW.buildingMolds[i].store.productid + "|" + WTW.buildingMolds[i].store.slug, WTW.buildingMolds[i].moldname);
-					}	
-				}
-			}
-		} 
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-productLoadSearchResults=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.getStoreInfo = function(moldname) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		var buildingname = WTW.getBuildingName(moldnameparts.buildingid);
-		if (moldnameparts.storewoocommerceapiurl != "" && buildingname == '') {
-			var url = moldnameparts.storeurl + "/" + moldnameparts.wpplugin + "/storeinfo.php?walktheweb_store_info=1";
-			WTW.getJSON(url, 
-				function(response) {
-					WTW.setStoreInfo(moldname, JSON.parse(response));
-				}
-			);
-		} 
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-getStoreInfo=" + ex.message);
-	}  
-}
-
-WTWJS.prototype.setStoreInfo = function(moldname, response) {
-	try {
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		for (var i=0;i<response.length;i++) {
-			if (response[i] != null) {
-				var storename = "";
-				if (response[i].storename != undefined) {
-					storename = WTW.decode(response[i].storename);
-				}
-				var titlemold2 = scene.getMeshByID(moldname + "-titleimage2");
-				if (titlemold2 != null) {
-					try {
-						if (titlemold2.material.diffuseTexture != null) {
-							titlemold2.material.diffuseTexture.dispose();
-							titlemold2.material.diffuseTexture = null;
-						}
-					} catch(ex) {}
-					try {
-						if (titlemold2.material != null) {
-							titlemold2.material.dispose();
-							titlemold2.material = null;
-						}
-					} catch(ex) {}
-					var coveringtitle1 = new BABYLON.StandardMaterial("mat" + moldname + "-titleimage1texture", scene);
-					coveringtitle1.alpha = 1;
-					coveringtitle1.specularColor = new BABYLON.Color3(.2, .2, .2);
-					/* coveringtitle1.emissiveColor = new BABYLON.Color3(1, 1, 1); */
-					coveringtitle1.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-					coveringtitle1.diffuseColor = new BABYLON.Color3(.9, .9, .9);
-					var contentTexture1 = new BABYLON.DynamicTexture(moldname + "-titleimage1texture", {width: 512,height: 512}, scene, true);
-					contentTexture1.name = moldname + "-titleimage1texture";
-					/* contentTexture1.hasAlpha = true; */
-					coveringtitle1.diffuseTexture = contentTexture1;
-					coveringtitle1.diffuseTexture.vScale = .5;
-					coveringtitle1.diffuseTexture.uScale = 1;
-					coveringtitle1.diffuseTexture.vOffset = .55;
-					titlemold2.material = coveringtitle1;
-
-					var namelength = WTW.decode(storename).length;
-					var lineheigth = "140px";
-					var fontheight = "140px";
-					if (namelength > 238) {
-						lineheigth = "20px";
-						fontheight = "20px";
-					} else if (namelength > 150) {
-						lineheigth = "30px";
-						fontheight = "30px";
-					} else if (namelength > 70) {
-						lineheigth = "40px";
-						fontheight = "40px";
-					} else if (namelength > 46) {
-						lineheigth = "50px";
-						fontheight = "42px";
-					} else if (namelength > 21) {
-						lineheigth = "80px";
-						fontheight = "48px";
-					} else if (namelength > 18) {
-						lineheigth = "120px";
-						fontheight = "50px";
-					} else if (namelength > 14) {
-						lineheigth = "130px";
-						fontheight = "60px";
-					} else if (namelength > 10) {
-						lineheigth = "130px";
-						fontheight = "70px";
-					} else if (namelength > 6) {
-						lineheigth = "120px";
-						fontheight = "90px";
-					}
-
-					WTW.wrapText(titlemold2, WTW.decode(storename), lineheigth, fontheight, "center", "top", "white", 0, 0);
-					i = response.length;
-				}
-			}
-		}
-		WTW.productClearFetchProducts(moldname);
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-setStoreInfo=" + ex.message);
-	}  
-}
-
 WTWJS.prototype.getMoldnameParts = function(moldname) {
 	var moldind = -1;
 	var moldid = "";
@@ -10146,14 +9000,6 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 	var molds = WTW.buildingMolds;
 	var namepart = [];
 	var shape = "";
-	var storeiframes = "";
-	var storeurl = "";
-	var wpplugin = "";
-	var storecarturl = "";
-	var storeproducturl = "";
-	var storewoocommerceapiurl = "";
-	var woocommercekey = "";
-	var woocommercesecret = "";
 	try {
 		if (moldname == undefined) {
 			moldname = dGet('wtw_tmoldname').value;
@@ -10201,16 +9047,6 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 					zthingid = molds[moldind].thinginfo.thingid;
 				}
 			}
-			if (WTW.connectingGrids[cgind] != null) {
-				storeiframes = WTW.connectingGrids[cgind].buildinginfo.storeiframes.toString();
-				storeurl = WTW.connectingGrids[cgind].buildinginfo.storeurl;
-				wpplugin = WTW.connectingGrids[cgind].buildinginfo.wpplugin;
-				storeproducturl = WTW.connectingGrids[cgind].buildinginfo.storeproducturl;
-				storecarturl = WTW.connectingGrids[cgind].buildinginfo.storecarturl;
-				storewoocommerceapiurl = WTW.connectingGrids[cgind].buildinginfo.storewoocommerceapiurl;
-				woocommercekey = WTW.connectingGrids[cgind].buildinginfo.woocommercekey;
-				woocommercesecret = WTW.connectingGrids[cgind].buildinginfo.woocommercesecret;
-			}
 		}	
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-getMoldnameParts=" + ex.message);
@@ -10227,15 +9063,7 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 		moldgroup:moldgroup,
 		molds:molds,
 		shape:shape,
-		namepart:namepart,
-		storeiframes:storeiframes,
-		storeurl:storeurl,
-		wpplugin:wpplugin,
-		storecarturl:storecarturl,
-		storeproducturl:storeproducturl,
-		storewoocommerceapiurl:storewoocommerceapiurl,
-		woocommercekey:woocommercekey,
-		woocommercesecret:woocommercesecret
+		namepart:namepart
 	}
 }
 

@@ -15,6 +15,7 @@ class wtwadminmenu {
 	
 	public $adminmenu = array();
 	public $adminsubmenu = array();
+	public $admindivs = array();
 	public $adminforms = array();
 	
 	public function __call ($method, $arguments)  {
@@ -359,7 +360,7 @@ class wtwadminmenu {
 					if (empty($zjsfunction) || !isset($zjsfunction)) {
 						$zjsfunction = '';
 					}
-					$zadminsubmenu .= "<div id=\"".$zid."\" class=\"wtw-menulevel0\" onclick=\"WTW.adminOpenSubmenu(this);".$zjsfunction."\">".$ztitle."</div>";
+					$zadminsubmenu .= "<div id=\"".$zid."\" class=\"wtw-menulevel0\" onclick=\"WTW.adminOpenSubmenuForm(this);".$zjsfunction."\">".$ztitle."</div>";
 				}
 			}
 		} catch (Exception $e) {
@@ -387,7 +388,6 @@ class wtwadminmenu {
 					'formdata' => $zformdata,
 					'accessrequired' => $zaccessrequired
 				);
-				
 				$this->adminforms[count($this->adminforms)] = $zform;
 				$zsuccess = true;
 			}
@@ -415,13 +415,10 @@ class wtwadminmenu {
 						$zformdata = '';
 					}
 					if (!empty($zformdata) && isset($zformdata)) {
-						$zmenuforms = "";
 						$zmenuforms .= "<div id=\"".$zformid."\" class=\"wtw-adminmenuform\" style=\"display:none;visibility:hidden;\">";
-						$zmenuforms .= "	<img class=\"wtw-closeright\" onclick=\"WTW.closeMenus();\" src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />";
-						$zmenuforms .= "	<div class=\"wtw-menuheading\">".$ztitle."</div>";
-						$zmenuforms .= "	<div id=\"".$zformid."scroll\" class=\"wtw-mainmenuscroll\">";
+						$zmenuforms .= "	<div id=\"wtw_bback".$zformid."\" alt=\"Back\" title=\"Back\" class=\"wtw-backbutton\" onclick=\"WTW.adminMenuItemSelected(this);\">&lt;&lt;</div>";
+						$zmenuforms .= "	<div class=\"wtw-menuheader\">".$ztitle."</div><br />";
 						$zmenuforms .= $zformdata;
-						$zmenuforms .= "	</div>";
 						$zmenuforms .= "</div>";
 					}
 				}
@@ -430,6 +427,65 @@ class wtwadminmenu {
 			$wtwdb->serror("core-functions-class_wtwmenus.php-getAdminMenuForms=".$e->getMessage());
 		}
 		return $zmenuforms;
+	}	
+
+	public function addAdminMenuDiv($zformlocation, $zdivid, $zdivdata, $zaccessrequired) {
+		global $wtwdb;
+		$zsuccess = false;
+		try {
+			$zfound = false;
+			foreach ($this->admindivs as $zadminform) {
+				if (isset($zadminform["divid"]) && !empty($zadminform["divid"])) {
+					if ($zadminform["divid"] == $zdivid) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				$zdiv = array(
+					'formlocation' => $zformlocation,
+					'divid' => $zdivid,
+					'divdata' => $zdivdata,
+					'accessrequired' => $zaccessrequired
+				);
+				
+				$this->admindivs[count($this->admindivs)] = $zdiv;
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-addAdminMenuDiv=".$e->getMessage());
+		}
+		return $zsuccess;
+	}	
+
+	public function getAdminMenuDivs($zformlocation) {
+		global $wtwdb;
+		$zmenudivs = "";
+		try {
+			foreach ($this->admindivs as $zdiv) {
+				$zdivformlocation = $zdiv["formlocation"];
+				if ($zdivformlocation == $zformlocation) {
+					$zdivid = $zdiv["divid"];
+					$zaccessrequired = $zdiv["accessrequired"]; /* array of allowed roles */
+					$zdivdata = $zdiv["divdata"];
+					if ($wtwdb->hasPermission($zaccessrequired) || empty($zaccessrequired) || !isset($zaccessrequired)) {
+						/* check for invalid entries */
+						if (empty($zdivid) | !isset($zdivid)) {
+							$zdivid = $wtwdb->getRandomString(6,1);
+						}
+						if (empty($zdivdata) || !isset($zdivdata)) {
+							$zdivdata = '';
+						}
+						if (!empty($zdivdata) && isset($zdivdata)) {
+							$zmenudivs .= $zdivdata;
+						}
+					}
+				}
+			}			
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwmenus.php-getAdminMenuDivs=".$e->getMessage());
+		}
+		return $zmenudivs;
 	}	
 
 }

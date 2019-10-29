@@ -19,7 +19,7 @@ class wtwbuildingmolds {
 		}
 	}
 
-	function saveBuildingMold($zbuildingmoldid, $zbuildingid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zsubdivisions, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb, $zspecularcolorr, $zspecularcolorg, $zspecularcolorb, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain, $zproductid, $zslug, $zcategoryid, $zallowsearch) {
+	function saveBuildingMold($zbuildingmoldid, $zbuildingid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zsubdivisions, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb, $zspecularcolorr, $zspecularcolorg, $zspecularcolorb, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain) {
 		global $wtwiframes;
 		try {
 			if ($wtwiframes->checkUpdateAccess("", $zbuildingid, "")) {
@@ -89,10 +89,6 @@ class wtwbuildingmolds {
 							soundconeinnerangle=".$wtwiframes->checkNumber($zsoundconeinnerangle,90).",
 							soundconeouterangle=".$wtwiframes->checkNumber($zsoundconeouterangle,180).",
 							soundconeoutergain=".$wtwiframes->checkNumber($zsoundconeoutergain,1).",
-							productid='".$zproductid."',
-							slug='".$zslug."',
-							categoryid='".$zcategoryid."',
-							allowsearch=".$wtwiframes->checkNumber($zallowsearch,1).",
 							updatedate=now(),
 							updateuserid='".$wtwiframes->userid."'
 						where buildingmoldid='".$zbuildingmoldid."'
@@ -164,10 +160,6 @@ class wtwbuildingmolds {
 							soundconeinnerangle,
 							soundconeouterangle,
 							soundconeoutergain,
-							productid,
-							slug,
-							categoryid,
-							allowsearch,
 							createdate,
 							createuserid,
 							updatedate,
@@ -236,10 +228,6 @@ class wtwbuildingmolds {
 							".$wtwiframes->checkNumber($zsoundconeinnerangle,90).",
 							".$wtwiframes->checkNumber($zsoundconeouterangle,180).",
 							".$wtwiframes->checkNumber($zsoundconeoutergain,1).",
-							'".$zproductid."',
-							'".$zslug."',
-							'".$zcategoryid."',
-							".$wtwiframes->checkNumber($zallowsearch,1).",
 							now(),
 							'".$wtwiframes->userid."',
 							now(),

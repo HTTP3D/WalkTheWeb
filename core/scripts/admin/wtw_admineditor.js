@@ -972,21 +972,9 @@ WTWJS.prototype.loadBuildingForm = function(w) {
 							if (WTW.buildings[i].buildinginfo.buildingid != undefined) {
 								if (WTW.buildings[i].buildinginfo.buildingid != null) {
 									if (dGet("wtw_tbuildingid").value == WTW.buildings[i].buildinginfo.buildingid) {
-										if (WTW.buildings[i].buildinginfo.storeiframes == "1") {
-											dGet('wtw_tstoreiframes').checked = true;
-										} else {
-											dGet('wtw_tstoreiframes').checked = false;
-										}
 										dGet('wtw_tbuildingname').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
 										dGet('wtw_tbuildingsnapshotid').value = WTW.buildings[i].buildinginfo.snapshotid;
 										dGet('wtw_tbuildinganalyticsid').value = WTW.buildings[i].buildinginfo.analyticsid;
-										dGet('wtw_tstoreurl').value = WTW.buildings[i].buildinginfo.storeurl;
-										dGet('wtw_twpplugin').value = WTW.buildings[i].buildinginfo.wpplugin;
-										dGet('wtw_tstorecarturl').value = WTW.buildings[i].buildinginfo.storecarturl;
-										dGet('wtw_tstoreproducturl').value = WTW.buildings[i].buildinginfo.storeproducturl;
-										dGet('wtw_tstorewoocommerceapiurl').value = WTW.buildings[i].buildinginfo.storewoocommerceapiurl;
-										dGet('wtw_tstorewoocommercekey').value = WTW.buildings[i].buildinginfo.woocommercekey;
-										dGet('wtw_tstorewoocommercesecret').value = WTW.buildings[i].buildinginfo.woocommercesecret;
 										dGet('wtw_tbuildingalttag').value = WTW.decode(WTW.buildings[i].alttag.name);
 									}
 								}
@@ -1030,21 +1018,9 @@ WTWJS.prototype.openBuildingForm = function(w) {
 							if (WTW.buildings[i].buildinginfo.buildingid != undefined) {
 								if (WTW.buildings[i].buildinginfo.buildingid != null) {
 									if (dGet("wtw_tbuildingid").value == WTW.buildings[i].buildinginfo.buildingid) {
-										if (WTW.buildings[i].buildinginfo.storeiframes == "1") {
-											dGet('wtw_tstoreiframes').checked = true;
-										} else {
-											dGet('wtw_tstoreiframes').checked = false;
-										}
 										dGet('wtw_tbuildingname').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
 										dGet('wtw_tbuildingsnapshotid').value = WTW.buildings[i].buildinginfo.snapshotid;
 										dGet('wtw_tbuildinganalyticsid').value = WTW.buildings[i].buildinginfo.analyticsid;
-										dGet('wtw_tstoreurl').value = WTW.buildings[i].buildinginfo.storeurl;
-										dGet('wtw_twpplugin').value = WTW.buildings[i].buildinginfo.wpplugin;
-										dGet('wtw_tstorecarturl').value = WTW.buildings[i].buildinginfo.storecarturl;
-										dGet('wtw_tstoreproducturl').value = WTW.buildings[i].buildinginfo.storeproducturl;
-										dGet('wtw_tstorewoocommerceapiurl').value = WTW.buildings[i].buildinginfo.storewoocommerceapiurl;
-										dGet('wtw_tstorewoocommercekey').value = WTW.buildings[i].buildinginfo.woocommercekey;
-										dGet('wtw_tstorewoocommercesecret').value = WTW.buildings[i].buildinginfo.woocommercesecret;
 										dGet('wtw_tbuildingalttag').value = WTW.decode(WTW.buildings[i].alttag.name);
 									}
 								}
@@ -1455,20 +1431,8 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 				for (var i = 0; i < WTW.buildings.length; i++) {
 					if (WTW.buildings[i] != null) {
 						if (WTW.buildings[i].buildinginfo.buildingid == dGet('wtw_tbuildingid').value) {
-							if (dGet('wtw_tstoreiframes').checked == true) {
-								WTW.buildings[i].buildinginfo.storeiframes = "1";
-							} else {
-								WTW.buildings[i].buildinginfo.storeiframes = "0";
-							}
 							WTW.buildings[i].buildinginfo.buildingname = WTW.encode(dGet('wtw_tbuildingname').value);
 							WTW.buildings[i].buildinginfo.analyticsid = dGet('wtw_tbuildinganalyticsid').value;
-							WTW.buildings[i].buildinginfo.storeurl = dGet('wtw_tstoreurl').value;
-							WTW.buildings[i].buildinginfo.wpplugin = dGet('wtw_twpplugin').value;
-							WTW.buildings[i].buildinginfo.storecarturl = dGet('wtw_tstorecarturl').value;
-							WTW.buildings[i].buildinginfo.storeproducturl = dGet('wtw_tstoreproducturl').value;
-							WTW.buildings[i].buildinginfo.storewoocommerceapiurl = dGet('wtw_tstorewoocommerceapiurl').value;
-							WTW.buildings[i].buildinginfo.woocommercekey = dGet('wtw_tstorewoocommercekey').value;
-							WTW.buildings[i].buildinginfo.woocommercesecret = dGet('wtw_tstorewoocommercesecret').value;
 							WTW.buildings[i].alttag.name = WTW.encode(dGet('wtw_tbuildingalttag').value);
 							dGet('wtw_showbuildingname').innerHTML = dGet('wtw_tbuildingname').value;
 						}
@@ -1478,36 +1442,13 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 					if (WTW.buildingMolds[i] != null) {
 						if (WTW.buildingMolds[i].buildinginfo.buildingid == buildingid) {
 							WTW.buildingMolds[i].graphics.texture.backupid = "";
-							if (dGet('wtw_tstoreiframes').checked == true) {
-								WTW.buildingMolds[i].store.storeiframes = "1";
-							} else {
-								WTW.buildingMolds[i].store.storeiframes = "0";
-							}
-						}
-					}
-				}
-				for (var i = 0; i < WTW.connectingGrids.length; i++) {
-					if (WTW.connectingGrids[i] != null) {
-						if (WTW.connectingGrids[i].buildinginfo.buildingid == buildingid) {
-							if (dGet('wtw_tstoreiframes').checked == true) {
-								WTW.connectingGrids[i].buildinginfo.storeiframes = "1";
-							} else {
-								WTW.connectingGrids[i].buildinginfo.storeiframes = "0";
-							}
 						}
 					}
 				}
 				var request = {
 					'buildingname':WTW.encode(dGet('wtw_tbuildingname').value),
 					'alttag':WTW.encode(dGet('wtw_tbuildingalttag').value),
-					'analyticsid':dGet('wtw_tbuildinganalyticsid').value,
-					'storeurl':dGet('wtw_tstoreurl').value,
-					'wpplugin':dGet('wtw_twpplugin').value,
-					'storecarturl':dGet('wtw_tstorecarturl').value,
-					'storeproducturl':dGet('wtw_tstoreproducturl').value,
-					'storewoocommerceapiurl':dGet('wtw_tstorewoocommerceapiurl').value,
-					'storewoocommercekey':dGet('wtw_tstorewoocommercekey').value,
-					'storewoocommercesecret':dGet('wtw_tstorewoocommercesecret').value
+					'analyticsid':dGet('wtw_tbuildinganalyticsid').value
 				};
 				/* function for after iframe loads */
 				var onload = function(ipage) {
@@ -1516,18 +1457,6 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 					ipage.getElementById('wtw_tbuildingname').value = request.buildingname;
 					ipage.getElementById('wtw_talttag').value = request.alttag;
 					ipage.getElementById('wtw_tbuildinganalyticsid').value = request.analyticsid;
-					ipage.getElementById('wtw_tstoreurl').value = request.storeurl;
-					ipage.getElementById('wtw_twpplugin').value = request.wpplugin;
-					ipage.getElementById('wtw_tstorecarturl').value = request.storecarturl;
-					ipage.getElementById('wtw_tstoreproducturl').value = request.storeproducturl;
-					ipage.getElementById('wtw_tstorewoocommerceapiurl').value = request.storewoocommerceapiurl;
-					ipage.getElementById('wtw_tstorewoocommercekey').value = request.storewoocommercekey;
-					ipage.getElementById('wtw_tstorewoocommercesecret').value = request.storewoocommercesecret;
-					if (dGet('wtw_tstoreiframes').checked == true) {
-						ipage.getElementById('wtw_tstoreiframes').value = "1";
-					} else {
-						ipage.getElementById('wtw_tstoreiframes').value = "0";
-					}
 					ipage.getElementById('wtw_bsavebuilding').click();
 				}
 				/* iframe src, onload function */
@@ -1537,21 +1466,8 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 				for (var i = 0; i < WTW.buildings.length; i++) {
 					if (WTW.buildings[i] != null) {
 					    if (WTW.buildings[i].buildinginfo.buildingid == dGet('wtw_tbuildingid').value) {
-							dGet('wtw_tstoreiframes').checked = false;
-							if (WTW.buildings[i].buildinginfo.storeiframes != undefined) {
-								if (WTW.buildings[i].buildinginfo.storeiframes == "1") {
-									dGet('wtw_tstoreiframes').checked = true;
-								}
-							}
 							dGet('wtw_tbuildingname').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
 							dGet('wtw_tbuildinganalyticsid').value = WTW.buildings[i].buildinginfo.analyticsid;
-							dGet('wtw_tstoreurl').value = WTW.buildings[i].buildinginfo.storeurl;
-							dGet('wtw_twpplugin').value = WTW.buildings[i].buildinginfo.wpplugin;
-							dGet('wtw_tstorecarturl').value = WTW.buildings[i].buildinginfo.storecarturl;
-							dGet('wtw_tstoreproducturl').value = WTW.buildings[i].buildinginfo.storeproducturl;
-							dGet('wtw_tstorewoocommerceapiurl').value = WTW.buildings[i].buildinginfo.storewoocommerceapiurl;
-							dGet('wtw_tstorewoocommercekey').value = WTW.buildings[i].buildinginfo.woocommercekey;
-							dGet('wtw_tstorewoocommercesecret').value = WTW.buildings[i].buildinginfo.woocommercesecret;
 							dGet('wtw_tbuildingalttag').value = WTW.decode(WTW.buildings[i].alttag.name);
 						}
 					}
@@ -1764,14 +1680,6 @@ WTWJS.prototype.copyBuilding = function(zcopybuildingid, zbuildingname) {
 			ipage.getElementById('wtw_tbuildingname').value = request.buildingname;
 			ipage.getElementById('wtw_talttag').value = "";
 			ipage.getElementById('wtw_tbuildinganalyticsid').value = "";
-			ipage.getElementById('wtw_tstoreiframes').value = "0";
-			ipage.getElementById('wtw_tstoreurl').value = "";
-			ipage.getElementById('wtw_twpplugin').value = "";
-			ipage.getElementById('wtw_tstorecarturl').value = "";
-			ipage.getElementById('wtw_tstoreproducturl').value = "";
-			ipage.getElementById('wtw_tstorewoocommerceapiurl').value = "";
-			ipage.getElementById('wtw_tstorewoocommercekey').value = "";
-			ipage.getElementById('wtw_tstorewoocommercesecret').value = "";
 			ipage.getElementById('wtw_bsavebuildingcopy').click();
 		}
 		/* iframe src, onload function */
@@ -2162,7 +2070,7 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 			WTW.setPreviewImage('wtw_moldtexturebumprpreview', 'wtw_tmoldtexturebumprpath', 'wtw_tmoldtexturebumprid');
 			WTW.setPreviewImage('wtw_moldtexturebumpgpreview', 'wtw_tmoldtexturebumpgpath', 'wtw_tmoldtexturebumpgid');
 			WTW.setPreviewImage('wtw_moldtexturebumpbpreview', 'wtw_tmoldtexturebumpbpath', 'wtw_tmoldtexturebumpbid');
-			if (shape == "3dtext" || shape == "store3dsign") {
+			if (shape == "3dtext") {
 				dGet('wtw_tmoldwebtext').value = molds[moldind].webtext.webtext;
 				dGet('wtw_tmoldwebstyle').value = molds[moldind].webtext.webstyle;
 				var webstyle = dGet('wtw_tmoldwebstyle').value;
@@ -2305,6 +2213,7 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 			if (mold != null) {
 				WTW.openEditPoles(mold);
 			}
+			WTW.pluginsOpenMoldForm(molds[moldind].moldname);
 		}
 		dGet('wtw_tmoldpositionz').focus();
 		WTW.setWindowSize();
@@ -2363,11 +2272,6 @@ WTWJS.prototype.loadMoldForm = function(molddef) {
 		dGet('wtw_tmolduploadobjectid').value = molddef.object.uploadobjectid;
 		dGet('wtw_tmoldobjectfolder').value = molddef.object.folder;
 		dGet('wtw_tmoldobjectfile').value = molddef.object.file;
-		if (WTW.isNumeric(dGet('wtw_tmoldspecial1').value)) {
-			WTW.setDDLValue("wtw_tmoldspecial1set", Number(dGet('wtw_tmoldspecial1').value));
-		} else {
-			WTW.setDDLValue("wtw_tmoldspecial1set", 0);
-		}
 		if (molddef.graphics.receiveshadows == '1') {
 			dGet('wtw_tmoldreceiveshadows').checked = true;
 		} else {
@@ -2448,10 +2352,6 @@ WTWJS.prototype.loadMoldForm = function(molddef) {
 		dGet('wtw_tdiffusecolorr').value = molddef.color.diffuse.r;
 		dGet('wtw_tdiffusecolorg').value = molddef.color.diffuse.g;
 		dGet('wtw_tdiffusecolorb').value = molddef.color.diffuse.b;
-		dGet('wtw_tmoldproductid').value = molddef.store.productid;
-		dGet('wtw_tmoldslug').value = molddef.store.slug;
-		dGet('wtw_tmoldcategoryid').value = molddef.store.categoryid;
-		dGet('wtw_tmoldallowsearch').value = molddef.store.allowsearch;
 		dGet('wtw_moldaddimagepreview').src = "";
 		dGet('wtw_moldaddimagehoverpreview').src = "";
 		dGet('wtw_pointlist1').innerHTML = "";
@@ -2459,15 +2359,6 @@ WTWJS.prototype.loadMoldForm = function(molddef) {
 		WTW.setDDLValue("wtw_tmoldcovering", molddef.covering);
 		WTW.setDDLValue("wtw_tmoldcsgaction", molddef.csg.action);
 		WTW.setDDLValue("wtw_tmoldloadactionzoneid", molddef.loadactionzoneid);
-		if (dGet('wtw_tmoldshape').value == "storeproduct") {
-			WTW.getProductsList(dGet('wtw_tmoldname').value);
-			WTW.getCategoriesList(dGet('wtw_tmoldname').value);
-		}
-		if (dGet('wtw_tmoldallowsearch').value == "1") {
-			dGet('wtw_tallowsearch').checked = true;
-		} else {
-			dGet('wtw_tallowsearch').checked = false;
-		}
 		if (molddef.graphics.waterreflection == "1") {
 			dGet('wtw_tmoldwaterreflection').checked = true;
 		} else {
@@ -2479,6 +2370,7 @@ WTWJS.prototype.loadMoldForm = function(molddef) {
 			dGet('wtw_bselectcsgshape').innerHTML = "Pick Shape to Merge";
 			WTW.setDDLValue("wtw_tmoldcsgaction", "");
 		}
+		WTW.pluginsLoadMoldForm(moldgroup, dGet('wtw_tmoldshape').value, dGet('wtw_tmoldname').value);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-loadMoldForm=" + ex.message);
 	}
@@ -2898,10 +2790,6 @@ WTWJS.prototype.openAddNewMold = function(moldgroup, shape) {
 		molds[moldind].color.diffuse.r = dGet('wtw_tdiffusecolorr').value;
 		molds[moldind].color.diffuse.g = dGet('wtw_tdiffusecolorg').value;
 		molds[moldind].color.diffuse.b = dGet('wtw_tdiffusecolorb').value;
-		molds[moldind].store.productid = dGet('wtw_tmoldproductid').value;
-		molds[moldind].store.slug = dGet('wtw_tmoldslug').value;
-		molds[moldind].store.categoryid = dGet('wtw_tmoldcategoryid').value;
-		molds[moldind].store.allowsearch = dGet('wtw_tmoldallowsearch').value;
 		molds[moldind].moldname = moldgroup + "molds-" + moldind.toString() + "-" + moldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + shape;
 		molds[moldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
 		molds[moldind].connectinggridind = dGet('wtw_tconnectinggridind').value;
@@ -2944,14 +2832,11 @@ WTWJS.prototype.openAddNewMold = function(moldgroup, shape) {
 				molds[moldind].paths.path1[1].z = positionZ;
 				molds[moldind].paths.path1[1].sorder = 1;
 				break;
-			case "storeproduct":
-				WTW.getProductsList(molds[moldind].moldname);
-				WTW.getCategoriesList(molds[moldind].moldname);
-				break;
 			default:
 				WTW.openEditPoles(mold);
 				break;
 		}
+		WTW.pluginsOpenAddNewMold(moldgroup, shape, molds[moldind].moldname);
 		WTW.hideAdminMenu();
 		WTW.show('wtw_adminmenu11');
 		WTW.show('wtw_adminmenu11b');
@@ -3868,10 +3753,6 @@ WTWJS.prototype.submitMoldForm = function(w) {
 			molds[moldind].color.diffuse.g = dGet('wtw_tdiffusecolorg').value;
 			molds[moldind].color.diffuse.b = dGet('wtw_tdiffusecolorb').value;
 			molds[moldind].alttag.name = WTW.encode(dGet('wtw_tmoldalttag').value);
-			molds[moldind].store.productid = dGet('wtw_tmoldproductid').value;
-			molds[moldind].store.slug = dGet('wtw_tmoldslug').value;
-			molds[moldind].store.categoryid = dGet('wtw_tmoldcategoryid').value;
-			molds[moldind].store.allowsearch = dGet('wtw_tmoldallowsearch').value;
 			molds[moldind].shown = "0";
 			molds[moldind].graphics.texture.backupid = "";
 			molds[moldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
@@ -3951,10 +3832,6 @@ WTWJS.prototype.submitMoldForm = function(w) {
 				'diffuseb':molds[moldind].color.diffuse.b,
 				'path1points':dGet('wtw_tmoldpath1points').value,
 				'path2points':dGet('wtw_tmoldpath2points').value,
-				'storeproductid':molds[moldind].store.productid,
-				'storeslug':molds[moldind].store.slug,
-				'storecategoryid':molds[moldind].store.categoryid,
-				'storeallowsearch':molds[moldind].store.allowsearch,
 				'imageid':molds[moldind].graphics.webimages[0].imageid,
 				'imagehoverid':molds[moldind].graphics.webimages[0].imagehoverid,
 				'imageclickid':molds[moldind].graphics.webimages[0].imageclickid,
@@ -4042,10 +3919,6 @@ WTWJS.prototype.submitMoldForm = function(w) {
 				ipage.getElementById('wtw_tdiffusecolorb').value = request.diffuseb;
 				ipage.getElementById('wtw_tmoldpath1points').value = request.path1points;
 				ipage.getElementById('wtw_tmoldpath2points').value = request.path2points;
-				ipage.getElementById('wtw_tmoldproductid').value = request.storeproductid;
-				ipage.getElementById('wtw_tmoldslug').value = request.storeslug;
-				ipage.getElementById('wtw_tmoldcategoryid').value = request.storecategoryid;
-				ipage.getElementById('wtw_tmoldallowsearch').value = request.storeallowsearch;
 				ipage.getElementById('wtw_tmoldaddimageid').value = request.imageid;
 				ipage.getElementById('wtw_tmoldaddimagehoverid').value = request.imagehoverid;
 				ipage.getElementById('wtw_tmoldaddimageclickid').value = request.imageclickid;
@@ -4060,6 +3933,7 @@ WTWJS.prototype.submitMoldForm = function(w) {
 			dGet('wtw_tnewmold').value = "0";
 			WTW.checkActionZones(molds[moldind]);
 		}
+		WTW.pluginsSubmitMoldForm(w);
 		WTW.clearEditMold();
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-submitMoldForm=" + ex.message);
@@ -4119,10 +3993,6 @@ WTWJS.prototype.clearEditMold = function() {
 		dGet('wtw_tmoldvideopath').value = "";
 		dGet('wtw_tmoldvideoposterid').value = "";
 		dGet('wtw_tmoldvideoposterpath').value = "";
-		dGet('wtw_tmoldproductid').value = "";
-		dGet('wtw_tmoldslug').value = "";
-		dGet('wtw_tmoldcategoryid').value = "";
-		dGet('wtw_tmoldallowsearch').value = "1";
 		dGet('wtw_tmoldind').value = "-1";
 		dGet('wtw_tmoldname').value = "";
 		dGet('wtw_tmoldcsgmoldid').value = "";
@@ -4162,6 +4032,7 @@ WTWJS.prototype.clearEditMold = function() {
 		dGet('wtw_tmoldaddimageclickid').value = "";
 		dGet('wtw_tmoldimagejsfunction').value = "";
 		dGet('wtw_tmoldimagejsparameters').value = "";
+		WTW.pluginsClearEditMold();
 		scene.render();
 		WTW.closeEditPoles();
 		WTW.setShownMolds();
@@ -4390,10 +4261,6 @@ WTWJS.prototype.createDuplicateShape = function() {
 			molds[moldind].actionzoneind = "";
 			molds[moldind].position.x = positionX;
 			molds[moldind].position.z = positionZ;
-			molds[moldind].store.productid = "";
-			molds[moldind].store.slug = "";
-			molds[moldind].store.categoryid = "";
-			molds[moldind].store.allowsearch = "1";
 			molds[moldind].moldname = moldgroup + "molds-" + moldind + "-" + moldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + molds[moldind].shape;
 			molds[moldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
 			molds[moldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
@@ -4409,10 +4276,6 @@ WTWJS.prototype.createDuplicateShape = function() {
 		dGet('wtw_tmoldactionzoneid').value = "";
 		dGet('wtw_tmoldcsgaction').selectedIndex = 0;
 		dGet('wtw_tmoldcsgmoldid').value = "";
-		dGet('wtw_tmoldproductid').value = "";
-		dGet('wtw_tmoldslug').value = "";
-		dGet('wtw_tmoldcategoryid').value = "";
-		dGet('wtw_tmoldallowsearch').value = "1";
 		WTW.setWindowSize();
 		window.setTimeout(function() {
 			WTW.setNewMold();
@@ -7876,21 +7739,10 @@ WTWJS.prototype.setNewMold = function(rebuildmold) {
 				} else if (shape != "box" && shape != "wall" && shape != "floor" && coveringname == "directional texture") {
 					coveringname = "texture";
 				}
-				if (shape == "3dtext" || shape == "store3dsign") {
+				if (shape == "3dtext") {
 					if (molds[moldind].webtext.webtext != undefined) {
 						if (molds[moldind].webtext.webtext != dGet('wtw_tmoldwebtext').value) {
 							molds[moldind].webtext.webtext = dGet('wtw_tmoldwebtext').value;
-							rebuildmold = 1;
-						}
-					}
-					if (shape == "store3dsign") {
-						var buildingname = "Store Name";
-						var foundbuildingname = WTW.getBuildingNameFromConnectingGrid(molds[moldind].buildinginfo.buildingid);
-						if (foundbuildingname != "") {
-							buildingname = foundbuildingname;
-						}
-						if (molds[moldind].webtext.webtext != buildingname) {
-							molds[moldind].webtext.webtext = buildingname;
 							rebuildmold = 1;
 						}
 					}
@@ -8247,6 +8099,7 @@ WTWJS.prototype.setNewMold = function(rebuildmold) {
 						}
 					}
 				} 
+				rebuildmold = WTW.pluginsSetNewMold(moldname, molds, moldind, rebuildmold);
 				if (rebuildmold == 1 || csgmainid != "") {
 					WTW.disposeClean(moldname);
 					mold = WTW.addMold(moldname, molds[moldind], parentname, coveringname);
@@ -8766,8 +8619,13 @@ WTWJS.prototype.toggleAdminMenuLevel = function(sectionname) {
 
 WTWJS.prototype.hideAdminMenu = function() {
 	try {
-		for (var i=0;i < 200;i++) {
-			WTW.hide('wtw_adminmenu'+i);
+		var menusubdivs = document.getElementsByClassName('wtw-adminmenuform');
+		for (var i=0;i<menusubdivs.length;i++) {
+			if (menusubdivs[i] != null) {
+				if (menusubdivs[i].id != undefined) {
+					WTW.hide(menusubdivs[i].id);
+				}
+			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-hideAdminMenu=" + ex.message);
@@ -9644,6 +9502,21 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 	}		
 }
 
+WTWJS.prototype.adminOpenSubmenuForm = function(obj) {
+	try {
+		if (obj != null) {
+			if (obj.id != undefined) {
+				if (dGet(obj.id + 'div') != null) {
+					WTW.hideAdminMenu();
+					WTW.show(obj.id + 'div');
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-adminOpenSubmenuForm=" + ex.message);
+	}		
+}
+
 WTWJS.prototype.adminMenuItemSelected = function(obj) {
 	try {
 		if (obj != null) {
@@ -10470,12 +10343,10 @@ WTWJS.prototype.openColorSelector = function() {
 				diffuse.onValueChangedObservable.add(function(value) {
 					if (value != null) {
 						WTW.setColor(dGet('wtw_tmoldname').value, 'diffuse', value.r, value.g, value.b);
-						if (molds[moldind].shape == "storeproduct") {
-							WTW.setColor(dGet('wtw_tmoldname').value + "-imageframe", 'diffuse', value.r, value.g, value.b);
-						}
 						dGet('wtw_tdiffusecolorr').value = value.r;
 						dGet('wtw_tdiffusecolorg').value = value.g;
 						dGet('wtw_tdiffusecolorb').value = value.b;
+						WTW.pluginsOpenColorSelector(dGet('wtw_tmoldname').value, molds[moldind].shape, 'diffuse');
 					}
 				});
 				panel.addControl(diffuse); 
@@ -10493,12 +10364,10 @@ WTWJS.prototype.openColorSelector = function() {
 				specular.onValueChangedObservable.add(function(value) {
 					if (value != null) {
 						WTW.setColor(dGet('wtw_tmoldname').value, 'specular', value.r, value.g, value.b);
-						if (molds[moldind].shape == "storeproduct") {
-							WTW.setColor(dGet('wtw_tmoldname').value + "-imageframe", 'specular', value.r, value.g, value.b);
-						}
 						dGet('wtw_tspecularcolorr').value = value.r;
 						dGet('wtw_tspecularcolorg').value = value.g;
 						dGet('wtw_tspecularcolorb').value = value.b;
+						WTW.pluginsOpenColorSelector(dGet('wtw_tmoldname').value, molds[moldind].shape, 'emissive');
 					}
 				});
 				panel.addControl(specular); 
@@ -10516,12 +10385,10 @@ WTWJS.prototype.openColorSelector = function() {
 				emissive.onValueChangedObservable.add(function(value) { 
 					if (value != null) {
 						WTW.setColor(dGet('wtw_tmoldname').value, 'emissive', value.r, value.g, value.b);
-						if (molds[moldind].shape == "storeproduct") {
-							WTW.setColor(dGet('wtw_tmoldname').value + "-imageframe", 'emissive', value.r, value.g, value.b);
-						}
 						dGet('wtw_temissivecolorr').value = value.r;
 						dGet('wtw_temissivecolorg').value = value.g;
 						dGet('wtw_temissivecolorb').value = value.b;
+						WTW.pluginsOpenColorSelector(dGet('wtw_tmoldname').value, molds[moldind].shape, 'emissive');
 					}
 				});
 				panel.addControl(emissive);
@@ -10620,122 +10487,6 @@ WTWJS.prototype.changeImage = function(obj, imagepath) {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-changeImage=" + ex.message);
-	}
-}
-
-WTWJS.prototype.getCategoriesList = function(moldname) {
-	try {
-		if (moldname == undefined) {
-			moldname = dGet('wtw_tmoldname').value;
-		}
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		if (moldnameparts.storewoocommerceapiurl != "") {
-			WTW.getJSON(moldnameparts.storewoocommerceapiurl + "products/categories/?per_page=50&consumer_key=" + moldnameparts.woocommercekey + "&consumer_secret=" + moldnameparts.woocommercesecret, 
-				function(response) {
-					WTW.loadCategoriesList(JSON.parse(response));
-				}
-			);
-		}
-	} catch (ex) { 
-		WTW.log("core-scripts-admin-wtw_admineditor.js-getCategoriesList=" + ex.message);
-	}
-}
-
-WTWJS.prototype.loadCategoriesList = function(response) {
-	try {
-		WTW.clearOptions("wtw_tcategoryid");
-		var option = document.createElement("option");
-		option.text = "--- All ---";
-		option.value = "";
-		if (dGet('wtw_tmoldcategoryid').value == "") {
-			option.selected = true;
-		}
-		dGet("wtw_tcategoryid").add(option);
-		for (var i=0;i<response.length;i++) {
-			if (response[i] != null) {
-				var option = document.createElement("option");
-				option.text = response[i].name;
-				option.value = response[i].id;
-				if (option.value == dGet('wtw_tmoldcategoryid').value) {
-					option.selected = true;
-				}
-				dGet("wtw_tcategoryid").add(option);
-			}
-		}
-	} catch (ex) { 
-		WTW.log("core-scripts-admin-wtw_admineditor.js-loadCategoriesList=" + ex.message);
-	}
-}
-
-WTWJS.prototype.setCategory = function(categoryid, moldname) {
-	try {
-		dGet('wtw_tmoldcategoryid').value = categoryid;
-		WTW.getProductsList(moldname, categoryid);
-	} catch (ex) { 
-		WTW.log("common-setCategory=" + ex.message);
-	}
-}
-
-WTWJS.prototype.getProductsList = function(moldname, categoryid) {
-	try {
-		if (categoryid == undefined) {
-			categoryid = "";
-		}
-		if (moldname == undefined) {
-			moldname = dGet('wtw_tmoldname').value;
-		}
-		var moldnameparts = WTW.getMoldnameParts(moldname);
-		if (moldnameparts.storewoocommerceapiurl != "") {
-			var url = moldnameparts.storewoocommerceapiurl + "products/?per_page=50&consumer_key=" + moldnameparts.woocommercekey + "&consumer_secret=" + moldnameparts.woocommercesecret;
-			if (categoryid != "") {
-				url = moldnameparts.storewoocommerceapiurl + "products/?per_page=50&category=" + categoryid + "&consumer_key=" + moldnameparts.woocommercekey + "&consumer_secret=" + moldnameparts.woocommercesecret;
-			}
-			WTW.getJSON(url, 
-				function(response) {
-					WTW.loadProductsList(JSON.parse(response));
-				}
-			);
-		}
-	} catch (ex) { 
-		WTW.log("core-scripts-admin-wtw_admineditor.js-getProductsList=" + ex.message);
-	}
-}
-
-WTWJS.prototype.loadProductsList = function(response) {
-	try {
-		WTW.clearOptions("wtw_tproduct");
-		var option = document.createElement("option");
-		option.text = "--- All ---";
-		option.value = "";
-		if (dGet('wtw_tmoldproductid').value == "") {
-			option.selected = true;
-		}
-		dGet("wtw_tproduct").add(option);
-		for (var i=0;i<response.length;i++) {
-			if (response[i] != null) {
-				var option = document.createElement("option");
-				option.text = response[i].name;
-				option.value = response[i].id + "|" + response[i].slug;
-				if (response[i].id == dGet('wtw_tmoldproductid').value) {
-					option.selected = true;
-				}
-				dGet("wtw_tproduct").add(option);
-			}
-		}
-	} catch (ex) { 
-		WTW.log("core-scripts-admin-wtw_admineditor.js-loadProductsList=" + ex.message);
-	}
-}
-
-WTWJS.prototype.setAllowSearch = function() {
-	try {
-		if (dGet('wtw_tallowsearch').checked) {
-			dGet('wtw_tmoldallowsearch').value = "1";
-		} else {
-			dGet('wtw_tmoldallowsearch').value = "0";
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admineditor.js-setAllowSearch=" + ex.message);
 	}
 }
 

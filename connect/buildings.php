@@ -47,14 +47,6 @@ try {
 			'snapshotid' => $zrow["snapshotid"],
 			'snapshotpath' => $zrow["filepath"],
 			'analyticsid'=> $zrow["analyticsid"],
-			'storeiframes'=> '',
-			'storeurl'=> '',
-			'wpplugin'=> '',
-			'storecarturl'=> '',
-			'storeproducturl'=> '',
-			'storewoocommerceapiurl'=> '',
-			'woocommercekey'=> '',
-			'woocommercesecret'=> '',
 			'snapshotdata'=> $snapshotdata
 		);
 		$zshare = array(

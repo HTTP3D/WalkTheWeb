@@ -18,7 +18,7 @@ class wtwcommunitymolds {
 			call_user_func_array($this->$method, array_merge(array(&$this), $arguments));
 		}
 	}
-	function saveCommunityMold($zcommunitymoldid, $zcommunityid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zsubdivisions, $zminheight, $zmaxheight, $zcheckcollisions, $zispickable, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb, $zspecularcolorr, $zspecularcolorg, $zspecularcolorb, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain, $zproductid, $zslug, $zcategoryid, $zallowsearch) {
+	function saveCommunityMold($zcommunitymoldid, $zcommunityid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zsubdivisions, $zminheight, $zmaxheight, $zcheckcollisions, $zispickable, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb, $zspecularcolorr, $zspecularcolorg, $zspecularcolorb, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain) {
 		global $wtwiframes;
 		try {
 			if ($wtwiframes->checkUpdateAccess($zcommunityid, "", "")) {
@@ -88,10 +88,6 @@ class wtwcommunitymolds {
 							soundconeinnerangle=".$wtwiframes->checkNumber($zsoundconeinnerangle,90).",
 							soundconeouterangle=".$wtwiframes->checkNumber($zsoundconeouterangle,180).",
 							soundconeoutergain=".$wtwiframes->checkNumber($zsoundconeoutergain,1).",
-							productid='".$zproductid."',
-							slug='".$zslug."',
-							categoryid='".$zcategoryid."',
-							allowsearch=".$wtwiframes->checkNumber($zallowsearch,1).",
 							updatedate=now(),
 							updateuserid='".$wtwiframes->userid."'
 						where communitymoldid='".$zcommunitymoldid."'
@@ -163,10 +159,6 @@ class wtwcommunitymolds {
 							soundconeinnerangle,
 							soundconeouterangle,
 							soundconeoutergain,
-							productid,
-							slug,
-							categoryid,
-							allowsearch,
 							createdate,
 							createuserid,
 							updatedate,
@@ -235,10 +227,6 @@ class wtwcommunitymolds {
 							".$wtwiframes->checkNumber($zsoundconeinnerangle,90).",
 							".$wtwiframes->checkNumber($zsoundconeouterangle,180).",
 							".$wtwiframes->checkNumber($zsoundconeoutergain,1).",
-							'".$zproductid."',
-							'".$zslug."',
-							'".$zcategoryid."',
-							".$wtwiframes->checkNumber($zallowsearch,1).",
 							now(),
 							'".$wtwiframes->userid."',
 							now(),

@@ -324,21 +324,12 @@ try {
 			'waterreflection'=> $zrow["waterreflection"], 
 			'webimages'=> $wtwconnect->getwebimages($zrow["thingmoldid"], "", "",-1)
 		);
-		if ($zrow["shape"] == '3dtext' || $zrow["shape"] == "store3dsign") {
-			$zwebtext = array(
-				'webtext'=> $zrow["webtext"],
-				'fullheight'=> '0',
-				'scrollpos'=> '0',
-				'webstyle'=> $zrow["webstyle"]
-			);
-		} else {
-			$zwebtext = array(
-				'webtext'=> str_replace($wtwconnect->domainurl,"", $ztempwebtext),
-				'fullheight'=> '0',
-				'scrollpos'=> '0',
-				'webstyle'=> $zrow["webstyle"]
-			);
-		}
+		$zwebtext = array(
+			'webtext'=> $zrow["webtext"],
+			'fullheight'=> '0',
+			'scrollpos'=> '0',
+			'webstyle'=> $zrow["webstyle"]
+		);
 		$zalttag = array(
 			'name' => $zrow["alttag"]
 		);
@@ -362,22 +353,6 @@ try {
 				'g'=> $zrow["emissivecolorg"],
 				'b'=> $zrow["emissivecolorb"]
 			)
-		);
-		$zstore = array(
-			'productid' => $zrow["productid"],
-			'slug' => $zrow["slug"],
-			'categoryid' => $zrow["categoryid"],
-			'allowsearch' => $zrow["allowsearch"],
-			'storeurl' => '',
-			'wpplugin' => '',
-			'storeiframes' => '0',
-			'search' => '',
-			'name' => '',
-			'price' => '',
-			'description' => '',
-			'shortdescription' => '',
-			'imageid' => '',
-			'imageurl' => ''
 		);
 		$zsound = array(
 			'id' => $zrow["soundid"],
@@ -415,7 +390,6 @@ try {
 			'alttag'=> $zalttag,
 			'paths'=> $zpaths,
 			'color'=> $zcolor,
-			'store'=> $zstore,
 			'sound'=> $zsound,
 			'objects'=> $zobjects,
 			'subdivisions'=> $zrow["subdivisions"], 

@@ -2,32 +2,6 @@
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
-WTWJS.prototype.newProduct = function() {
-	var product = '';
-	try {
-		product = {
-			'storeurl':'',
-			'wpplugin':'',
-			'connectinggridind':'-1',
-			'connectinggridid':'',
-			'search':'',
-			'productid':'',
-			'name':'',
-			'slug':'',
-			'price':'',
-			'categoryid':'',
-			'description':'',
-			'shortdescription':'',
-			'imageid':'',
-			'imageurl':'',
-			'fetching':'0'
-		};
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newProduct=" + ex.message);
-	}
-	return product;
-}
-
 WTWJS.prototype.newAnalyticsQueue = function() {
 	var analyticsqueue = '';
 	try {
@@ -201,15 +175,7 @@ WTWJS.prototype.newConnectingGrid = function() {
 			    'buildingname': '',
 				'snapshotid':'',
 				'analyticsid':'',
-				'access':'',
-				'storeiframes':'',
-				'storeurl':'',
-				'wpplugin':'',
-				'storecarturl':'',
-				'storeproducturl':'',
-				'storewoocommerceapiurl':'',
-				'woocommercekey':'',
-				'woocommercesecret':''
+				'access':''
 			},
 			'thinginfo':
 			{
@@ -414,23 +380,6 @@ WTWJS.prototype.newMold = function() {
 			'alttag':
 			{
 				'name':''
-			},
-			'store':
-			{
-				'storeurl':'',
-				'wpplugin':'',
-				'storeiframes':'',
-				'search':'',
-				'productid':'',
-				'name':'',
-				'slug':'',
-				'price':'',
-				'categoryid':'',
-				'description':'',
-				'shortdescription':'',
-				'imageid':'',
-				'imageurl':'',
-				'allowsearch':'1'
 			},
 			'sound':
 			{

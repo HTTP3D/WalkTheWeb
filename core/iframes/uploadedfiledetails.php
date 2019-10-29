@@ -21,7 +21,13 @@ try {
 			$wtwanimations->deleteObjectAnimation($_POST["wtw_tdeleteanimation"], $zuploadobjectid);
 			$zobjectanimationid = '';
 		} elseif (isset($zobjectanimationid) && !empty($zobjectanimationid)) {
-			$wtwanimations->saveObjectAnimation($zobjectanimationid, $zuploadobjectid, $_POST["wtw_tanimationname"], $_POST["wtw_tmoldevent"], $_POST["wtw_tmoldnamepart"], $_POST["wtw_tstartframe"], $_POST["wtw_tendframe"], $_POST["wtw_tanimationloop"], $_POST["wtw_tspeedratio"], $_POST["wtw_tanimationendscript"], $_POST["wtw_tanimationendparameters"], $_POST["wtw_tstopcurrentanimations"], $_POST["wtw_tobjectsoundid"], $_POST["wtw_tobjectmaxdistance"]);
+			$zstopcurrentanimations = "0";
+			if (isset($_POST["wtw_tstopcurrentanimations"]) && !empty($_POST["wtw_tstopcurrentanimations"])) {
+				if ($_POST["wtw_tstopcurrentanimations"] == "1") {
+					$zstopcurrentanimations = "1";
+				}
+			}
+			$wtwanimations->saveObjectAnimation($zobjectanimationid, $zuploadobjectid, $_POST["wtw_tanimationname"], $_POST["wtw_tmoldevent"], $_POST["wtw_tmoldnamepart"], $_POST["wtw_tstartframe"], $_POST["wtw_tendframe"], $_POST["wtw_tanimationloop"], $_POST["wtw_tspeedratio"], $_POST["wtw_tanimationendscript"], $_POST["wtw_tanimationendparameters"], $zstopcurrentanimations, $_POST["wtw_tobjectsoundid"], $_POST["wtw_tobjectmaxdistance"]);
 			$zobjectanimationid = '';
 		}
 		if(isset($_SESSION['wtw_uploadpathid']) && !empty($_SESSION['wtw_uploadpathid'])) {

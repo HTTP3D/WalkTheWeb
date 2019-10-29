@@ -276,18 +276,6 @@ WTWJS.prototype.mouseClick = function(e) {
 							WTW.pluginsOnClick(pickedname);
 							if (pickedname.indexOf("-image") > -1) {
 								WTW.checkImageClick(pickedname);
-							} else if (pickedname.indexOf("-storeproduct") > -1 && pickedname.indexOf("-readmore") > -1) {
-								WTW.productReadMore(pickedname);
-							} else if (pickedname.indexOf("-storeproduct") > -1 && pickedname.indexOf("-addtocart") > -1) {
-								WTW.productAddToCart(pickedname);
-							} else if (pickedname.indexOf("-storeviewcart") > -1) {
-								WTW.productShowCart(pickedname);
-							} else if (pickedname.indexOf("-storecategories") > -1 && (pickedname.indexOf("-categorybuttonhover") > -1 || pickedname.indexOf("-base") > -1)) {
-								WTW.productSelectCategory(pickedname);
-							} else if (pickedname.indexOf("-storecategories") > -1 && pickedname.indexOf("-downbutton") > -1) {
-								WTW.productSelectCategoryScroll(pickedname,1);
-							} else if (pickedname.indexOf("-storecategories") > -1 && pickedname.indexOf("-upbutton") > -1) {
-								WTW.productSelectCategoryScroll(pickedname,-1);
 							} else {
 								WTW.checkJSFunction(pickedname);
 							}

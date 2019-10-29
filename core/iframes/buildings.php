@@ -33,7 +33,7 @@ try {
 			case "wtw_bsavebuilding":
 			case "wtw_bsavenewbuilding":
 			case "wtw_bsavebuildingcopy":
-				$zbuildingid = $wtwbuildings->saveBuilding($_POST["wtw_tbuildingid"], $_POST["wtw_tpastbuildingid"], $_POST["wtw_tbuildingname"], $_POST["wtw_tbuildinganalyticsid"], $_POST["wtw_tstoreiframes"], $_POST["wtw_tstoreurl"], $_POST["wtw_twpplugin"], $_POST["wtw_tstorecarturl"], $_POST["wtw_tstoreproducturl"], $_POST["wtw_tstorewoocommerceapiurl"], $_POST["wtw_tstorewoocommercekey"], $_POST["wtw_tstorewoocommercesecret"], $_POST["wtw_talttag"], 0);
+				$zbuildingid = $wtwbuildings->saveBuilding($_POST["wtw_tbuildingid"], $_POST["wtw_tpastbuildingid"], $_POST["wtw_tbuildingname"], $_POST["wtw_tbuildinganalyticsid"], $_POST["wtw_talttag"], 0);
 				break;
 			case "wtw_bclearbuilding":
 				$wtwbuildings->clearBuilding($_POST["wtw_tbuildingid"]);
@@ -76,7 +76,6 @@ try {
 		<input type="hidden" id="wtw_tcopywebid" name="wtw_tcopywebid" value="<?php echo $zcopywebid ?>" maxlength="16" />
 		<input type="hidden" id="wtw_tbuildingname" name="wtw_tbuildingname" maxlength="255" /><br />
 		<input type="hidden" id="wtw_tbuildinganalyticsid" name="wtw_tbuildinganalyticsid" maxlength="255" /><br />
-		<input type="hidden" id="wtw_tstoreiframes" name="wtw_tstoreiframes" maxlength="1" /><br />
 		<input type="hidden" id="wtw_tstartpositionx" name="wtw_tstartpositionx" maxlength="12" /><br />
 		<input type="hidden" id="wtw_tstartpositiony" name="wtw_tstartpositiony" maxlength="12" /><br />
 		<input type="hidden" id="wtw_tstartpositionz" name="wtw_tstartpositionz" maxlength="12" /><br />
@@ -92,13 +91,6 @@ try {
 		<input type="hidden" id="wtw_tsharebuilddescription" name="wtw_tsharebuilddescription" /><br />
 		<input type="hidden" id="wtw_tsharebuildtags" name="wtw_tsharebuildtags" /><br />
 		<input type="hidden" id="wtw_teditfoundbuildingid" name="wtw_teditfoundbuildingid" value="<?php echo $zfoundbuildingid; ?>" maxlength="16" /><br />
-		<input type="hidden" id="wtw_tstoreurl" name="wtw_tstoreurl" maxlength="255" /><br />
-		<input type="hidden" id="wtw_twpplugin" name="wtw_twpplugin" maxlength="255" /><br />
-		<input type="hidden" id="wtw_tstorecarturl" name="wtw_tstorecarturl" maxlength="255" /><br />
-		<input type="hidden" id="wtw_tstoreproducturl" name="wtw_tstoreproducturl" maxlength="255" /><br />
-		<input type="hidden" id="wtw_tstorewoocommerceapiurl" name="wtw_tstorewoocommerceapiurl" maxlength="255" /><br />
-		<input type="hidden" id="wtw_tstorewoocommercekey" name="wtw_tstorewoocommercekey" maxlength="255" /><br />
-		<input type="hidden" id="wtw_tstorewoocommercesecret" name="wtw_tstorewoocommercesecret" maxlength="255" /><br />
 		<input type="submit" id="wtw_bimportbuilding" name="wtw_bimportbuilding" value="Import Building" onclick="WTW.buttonClick('wtw_bimportbuilding');" /><br />
 		<input type="submit" id="wtw_bsavebuilding" name="wtw_bsavebuilding" value="Save Building" onclick="WTW.buttonClick('wtw_bsavebuilding');" /><br />
 		<input type="submit" id="wtw_bsavenewbuilding" name="wtw_bsavenewbuilding" value="Save New Building" onclick="WTW.buttonClick('wtw_bsavenewbuilding');" /><br />

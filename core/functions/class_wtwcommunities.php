@@ -366,7 +366,6 @@ class wtwcommunities {
 		global $wtwiframes;
 		try {
 			if ($wtwiframes->checkUpdateAccess($zcommunityid, "", "") && $wtwiframes->checkUpdateAccess($zcopycommunityid, "", "")) {
-				$zstore = 0;
 				$zskyinclination = 0;
 				$zskyluminance = 0;
 				$zskyazimuth = 0;
@@ -834,10 +833,6 @@ class wtwcommunities {
 						 t3.csgmoldid,
 						 t3.csgaction,
 						 t3.alttag,
-						 t3.productid,
-						 t3.slug,
-						 t3.categoryid,
-						 t3.allowsearch,
 						 t3.jsfunction,
 						 t3.jsparameters,
 						 t3.diffusecolorr,
@@ -918,10 +913,6 @@ class wtwcommunities {
 							csgmoldid,
 							csgaction,
 							alttag,
-							productid,
-							slug,
-							categoryid,
-							allowsearch,
 							jsfunction,
 							jsparameters,
 							diffusecolorr,
@@ -1000,10 +991,6 @@ class wtwcommunities {
 							'".$zrow["csgmoldid"]."',
 							'".$zrow["csgaction"]."',
 							'".$zrow["alttag"]."',
-							'".$zrow["productid"]."',
-							'".$zrow["slug"]."',
-							'".$zrow["categoryid"]."',
-							".$wtwiframes->checkNumber($zrow["allowsearch"],1).",
 							'".$zrow["jsfunction"]."',
 							'".$zrow["jsparameters"]."',
 							".$wtwiframes->checkNumber($zrow["diffusecolorr"],1).",

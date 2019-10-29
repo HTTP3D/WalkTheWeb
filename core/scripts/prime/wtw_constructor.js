@@ -61,7 +61,6 @@ function WTWJS() {
 	this.connectingGrids = [];
 	this.actionZones = [];
 	this.automations = [];
-	this.products = [];
 	this.moldList = [];
 	this.keysPressed = [];
 	this.moldEvents = [];

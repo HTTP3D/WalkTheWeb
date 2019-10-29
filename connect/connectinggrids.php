@@ -479,15 +479,7 @@ try {
 						'buildingname'=> $zrow["parentbuildingname"],
 						'snapshotid' => $zrow["parentbuildingsnapshotid"],
 						'analyticsid'=> $zrow["parentbuildinganalyticsid"],
-						'access'=> $zrow["parentbuildingaccess"],
-						'storeiframes'=> '',
-						'storeurl'=> '',
-						'wpplugin'=> '',
-						'storecarturl'=> '',
-						'storeproducturl'=> '',
-						'storewoocommerceapiurl'=> '',
-						'woocommercekey'=> '',
-						'woocommercesecret'=> ''
+						'access'=> $zrow["parentbuildingaccess"]
 					);
 				} elseif (isset($zrow["buildingid"]) && !empty($zrow["buildingid"])) {
 					$zbuildinginfo = array(
@@ -495,15 +487,7 @@ try {
 						'buildingname'=> $zrow["buildingname"],
 						'snapshotid' => $zrow["buildingsnapshotid"],
 						'analyticsid'=> $zrow["buildinganalyticsid"],
-						'access'=> $zrow["buildingaccess"],
-						'storeiframes'=> '',
-						'storeurl'=> '',
-						'wpplugin'=> '',
-						'storecarturl'=> '',
-						'storeproducturl'=> '',
-						'storewoocommerceapiurl'=> '',
-						'woocommercekey'=> '',
-						'woocommercesecret'=> ''
+						'access'=> $zrow["buildingaccess"]
 					);
 				} else {
 					$zbuildinginfo = array(
@@ -511,15 +495,7 @@ try {
 						'buildingname'=> '',
 						'snapshotid' => '',
 						'analyticsid'=> '',
-						'access'=> '',
-						'storeiframes'=> '',
-						'storeurl'=> '',
-						'wpplugin'=> '',
-						'storecarturl'=> '',
-						'storeproducturl'=> '',
-						'storewoocommerceapiurl'=> '',
-						'woocommercekey'=> '',
-						'woocommercesecret'=> ''
+						'access'=> ''
 					);
 				}
 				if(isset($zrow["parentthingid"]) && !empty($zrow["parentthingid"])) {
@@ -631,15 +607,7 @@ try {
 						'buildingname'=> $zrow["parentbuildingname"],
 						'snapshotid' => $zrow["parentbuildingsnapshotid"],
 						'analyticsid'=> $zrow["parentbuildinganalyticsid"],
-						'access'=> $zrow["parentbuildingaccess"],
-						'storeiframes'=> '',
-						'storeurl'=> '',
-						'wpplugin'=> '',
-						'storecarturl'=> '',
-						'storeproducturl'=> '',
-						'storewoocommerceapiurl'=> '',
-						'woocommercekey'=> '',
-						'woocommercesecret'=> ''
+						'access'=> $zrow["parentbuildingaccess"]
 					);
 				} elseif (isset($zrow["buildingid"]) && !empty($zrow["buildingid"])) {
 					$zbuildinginfo = array(
@@ -647,15 +615,7 @@ try {
 						'buildingname'=> $zrow["buildingname"],
 						'snapshotid' => $zrow["buildingsnapshotid"],
 						'analyticsid'=> $zrow["buildinganalyticsid"],
-						'access'=> $zrow["buildingaccess"],
-						'storeiframes'=> '1',
-						'storeurl'=> '',
-						'wpplugin'=> '',
-						'storecarturl'=> '',
-						'storeproducturl'=> '',
-						'storewoocommerceapiurl'=> '',
-						'woocommercekey'=> '',
-						'woocommercesecret'=> ''
+						'access'=> $zrow["buildingaccess"]
 					);
 				} else {
 					$zbuildinginfo = array(
@@ -663,15 +623,7 @@ try {
 						'buildingname'=> '',
 						'snapshotid' => '',
 						'analyticsid'=> '',
-						'access'=> '',
-						'storeiframes'=> '',
-						'storeurl'=> '',
-						'wpplugin'=> '',
-						'storecarturl'=> '',
-						'storeproducturl'=> '',
-						'storewoocommerceapiurl'=> '',
-						'woocommercekey'=> '',
-						'woocommercesecret'=> ''
+						'access'=> ''
 					);
 				}
 				if(isset($zrow["subchildthingid"]) && !empty($zrow["subchildthingid"])) {

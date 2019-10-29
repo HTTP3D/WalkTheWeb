@@ -17,6 +17,7 @@ WTWJS.prototype.getMoldList = function() {
 		WTW.moldList[WTW.moldList.length] = "Disc";
 		WTW.moldList[WTW.moldList.length] = "Tube";
 		WTW.moldList[WTW.moldList.length] = "Line";
+		WTW.moldList = WTW.pluginsMolds(WTW.moldList);
 		dGet("wtw_moldsbuttonlist").innerHTML = "";
 		for (var i=0;i < WTW.moldList.length;i++) {
 			if (WTW.moldList[i] != null) {
@@ -60,14 +61,7 @@ WTWJS.prototype.getWebMoldList = function() {
         webmoldlist[webmoldlist.length] = "Water Disc";
 		webmoldlist[webmoldlist.length] = "View Blog";
 		webmoldlist[webmoldlist.length] = "Blog Posting";
-		if (buildingid != "") {
-			webmoldlist[webmoldlist.length] = "Store Product";
-			webmoldlist[webmoldlist.length] = "Store Sign";
-			webmoldlist[webmoldlist.length] = "Store 3D Sign";
-			webmoldlist[webmoldlist.length] = "Store View Cart";
-			webmoldlist[webmoldlist.length] = "Store Categories";
-			webmoldlist[webmoldlist.length] = "Store Search";
-		}
+		webmoldlist = WTW.pluginsWebMolds(webmoldlist);
 		dGet("wtw_webmoldsbuttonlist").innerHTML = "";
 		for (var i=0;i < webmoldlist.length;i++) {
 			if (webmoldlist[i] != null) {
@@ -290,32 +284,9 @@ WTWJS.prototype.addMold = function(moldname, molddef, parentname, coveringname) 
 				mold = WTW.addMoldBlogPosting(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
-			case "storeproduct":
-				mold = WTW.addMoldStoreProduct(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
-				break;
-			case "storesign":
-				mold = WTW.addMoldStoreSign(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
-				break;
-			case "store3dsign":
-				mold = WTW.addMoldStore3DSign(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
-				break;
-			case "storeviewcart":
-				mold = WTW.addMoldStoreViewCart(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
-				break;
-			case "storecategories":
-				mold = WTW.addMoldStoreCategories(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
-				break;
-			case "storesearch":
-				mold = WTW.addMoldStoreSearch(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
-				break;
 			default:
-				mold = WTW.addMoldBox(moldname, lenx, leny, lenz);
+				mold = WTW.pluginsAddMolds(shape, moldname, molddef, lenx, leny, lenz);
+				coveringname = "none";
 				break;
 		}
 		mold = WTW.completeMold(mold, moldname, parentname, molddef, coveringname, posx, posy, posz);
@@ -544,8 +515,6 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 			}
 			if (moldname.indexOf("communitybuildings") > -1 || moldname.indexOf("communitycommunities") > -1 || (moldname.indexOf("person-") > -1 && shape=="box") || (moldname.indexOf("myavatar-") > -1 && shape=="box")) {
 				coveringname = "hidden";
-			} else if (shape == "image" && shape == "video" && shape == "candleflame" && shape == "smoke" && shape == "babylonfile" && shape == "3dtext" && shape == "store3dsign" && shape == "particlesphere" && shape == "particleshower") {
-				coveringname = "none";
 			}
 			try {
 				if (molddef.graphics.waterreflection != null) {
@@ -1428,120 +1397,6 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "glass";
 				break;
-			case "storeproduct":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
-				dGet('wtw_tmoldscalingx').value = "3.00";
-				dGet('wtw_tmoldscalingy').value = "5.00";
-				dGet('wtw_tmoldscalingz').value = "5.00";
-				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
-				dGet('wtw_tmoldrotationz').value = "0.00";
-				dGet('wtw_tmoldspecial2').value = "0.00";
-				dGet('wtw_tmolduoffset').value = "0.00";
-				dGet('wtw_tmoldvoffset').value = "0.00";
-				dGet('wtw_tmolduscale').value = "0.00";
-				dGet('wtw_tmoldvscale').value = "0.00";
-				dGet('wtw_tmoldsubdivisions').value = "12";
-				break;
-			case "storesign":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
-				dGet('wtw_tmoldscalingx').value = "3.00";
-				dGet('wtw_tmoldscalingy').value = "10.00";
-				dGet('wtw_tmoldscalingz').value = "30.00";
-				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
-				dGet('wtw_tmoldrotationz').value = "0.00";
-				dGet('wtw_tmoldspecial2').value = "0.00";
-				dGet('wtw_tmolduoffset').value = "0.00";
-				dGet('wtw_tmoldvoffset').value = "0.00";
-				dGet('wtw_tmolduscale').value = "0.00";
-				dGet('wtw_tmoldvscale').value = "0.00";
-				dGet('wtw_tmoldsubdivisions').value = "12";
-				break;			
-			case "store3dsign":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY-4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
-				dGet('wtw_tmoldscalingx').value = "1.00";
-				dGet('wtw_tmoldscalingy').value = "1.00";
-				dGet('wtw_tmoldscalingz').value = "1.00";
-				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY + 90;
-				dGet('wtw_tmoldrotationz').value = "0.00";
-				dGet('wtw_tmoldspecial2').value = "0.00";
-				dGet('wtw_tmolduoffset').value = "0.00";
-				dGet('wtw_tmoldvoffset').value = "0.00";
-				dGet('wtw_tmolduscale').value = "0.00";
-				dGet('wtw_tmoldvscale').value = "0.00";
-				dGet('wtw_tmoldwebtext').value = "Text";
-				dGet('wtw_tmoldwebtextheight').value = "6.00";
-				dGet('wtw_tmoldwebtextthick').value = "1.00";
-				WTW.setDDLValue('wtw_tmoldwebtextalign', "center");
-				dGet('wtw_tmoldwebtextcolor').value = "#ff0000";
-				dGet('wtw_tmoldwebtextspecular').value = "#000000";
-				dGet('wtw_tmoldwebtextdiffuse').value = "#f0f0f0";
-				dGet('wtw_tmoldwebtextambient').value = "#808080";
-				dGet('wtw_tmoldsubdivisions').value = "12";
-				dGet('wtw_tmoldcoveringold').value = "none";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
-				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
-				break;
-			case "storeviewcart":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
-				dGet('wtw_tmoldscalingx').value = "0.25";
-				dGet('wtw_tmoldscalingy').value = "1.00";
-				dGet('wtw_tmoldscalingz').value = "5.00";
-				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
-				dGet('wtw_tmoldrotationz').value = "0.00";
-				dGet('wtw_tmoldspecial2').value = "0.00";
-				dGet('wtw_tmolduoffset').value = "0.00";
-				dGet('wtw_tmoldvoffset').value = "0.00";
-				dGet('wtw_tmolduscale').value = "0.00";
-				dGet('wtw_tmoldvscale').value = "0.00";
-				dGet('wtw_tmoldsubdivisions').value = "12";
-				break;			
-			case "storecategories":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
-				dGet('wtw_tmoldscalingx').value = "1.00";
-				dGet('wtw_tmoldscalingy').value = "14.00";
-				dGet('wtw_tmoldscalingz').value = "10.00";
-				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
-				dGet('wtw_tmoldrotationz').value = "0.00";
-				dGet('wtw_tmoldspecial2').value = "0.00";
-				dGet('wtw_tmolduoffset').value = "0.00";
-				dGet('wtw_tmoldvoffset').value = "0.00";
-				dGet('wtw_tmolduscale').value = "0.00";
-				dGet('wtw_tmoldvscale').value = "0.00";
-				dGet('wtw_tmoldsubdivisions').value = "12";
-				break;			
-			case "storesearch":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
-				dGet('wtw_tmoldscalingx').value = "1.00";
-				dGet('wtw_tmoldscalingy').value = "14.00";
-				dGet('wtw_tmoldscalingz').value = "10.00";
-				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
-				dGet('wtw_tmoldrotationz').value = "0.00";
-				dGet('wtw_tmoldspecial2').value = "0.00";
-				dGet('wtw_tmolduoffset').value = "0.00";
-				dGet('wtw_tmoldvoffset').value = "0.00";
-				dGet('wtw_tmolduscale').value = "0.00";
-				dGet('wtw_tmoldvscale').value = "0.00";
-				dGet('wtw_tmoldsubdivisions').value = "12";
-				break;			
 			case "custom": 
 				dGet('wtw_tmoldpositionx').value = positionX;
 				dGet('wtw_tmoldpositiony').value = positionY - 5;
@@ -1620,11 +1475,11 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 		}
+		WTW.pluginsSetNewMoldDefaults(shape);
 		dGet('wtw_tmoldcsgmoldid').value = "";
 		WTW.setDDLValue("wtw_tmoldcsgaction", "");
-		WTW.setDDLValue("wtw_tmoldspecial1set", Number(dGet('wtw_tmoldspecial1').value));
 		dGet('wtw_selectedcsgshape').innerHTML = "";
-		dGet('wtw_tmoldactionzoneid').value = "";		
+		dGet('wtw_tmoldactionzoneid').value = "";
 	} catch (ex) {
 		WTW.log("core-scripts-molds-addmoldlist\r\n setNewMoldDefaults=" + ex.message);
 	} 
@@ -1655,8 +1510,6 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 		WTW.hide('wtw_pointlistdiv');
 		WTW.hide('wtw_pointeditdiv');
 		WTW.hide('wtw_objectdiv');
-		WTW.hide('wtw_productdiv');
-		WTW.hide('wtw_productthingdiv');
 		switch (shapevalue) {
 			case "tube":
 				dGet('wtw_moldpositiontitle').innerHTML = "Tube Position";
@@ -2252,126 +2105,6 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturepreview');
 				break;
-			case "storeproduct":
-				dGet('wtw_moldpositiontitle').innerHTML = "Position";
-				dGet('wtw_moldscalingtitle').innerHTML = "Length";
-				dGet('wtw_moldrotationtitle').innerHTML = "Rotation";
-				dGet('wtw_moldtexturetitle').innerHTML = "Frame Image";
-				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave Product";
-				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete Product";
-				dGet('wtw_editmoldformtitle').innerHTML = "Edit Product";
-				WTW.hide('wtw_moldaddimagediv');
-				WTW.hide('wtw_moldspecial1');
-				WTW.hide('wtw_moldspecial2');
-				WTW.hide('wtw_moldsubdivisions');
-				WTW.hide('wtw_alttagdiv');
-				WTW.show('wtw_moldtexturetitle'); 
-				WTW.hide('wtw_moldbumptexturetitle');
-				WTW.hide('wtw_moldbumptextureset2div');
-				WTW.show('wtw_moldtexturepreview');
-				if (buildingid != "") {
-					WTW.show('wtw_productdiv');
-				} else if (thingid != "") {
-					WTW.show('wtw_productthingdiv');
-				}
-				dGet('wtw_tallowsearch').checked = true;
-				break;
-			case "storesign":
-				dGet('wtw_moldpositiontitle').innerHTML = "Position";
-				dGet('wtw_moldscalingtitle').innerHTML = "Length";
-				dGet('wtw_moldrotationtitle').innerHTML = "Rotation";
-				dGet('wtw_moldtexturetitle').innerHTML = "Frame Image";
-				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave Sign";
-				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete Sign";
-				dGet('wtw_editmoldformtitle').innerHTML = "Edit Sign";
-				WTW.hide('wtw_moldaddimagediv');
-				WTW.hide('wtw_moldspecial1');
-				WTW.hide('wtw_moldspecial2');
-				WTW.hide('wtw_moldsubdivisions');
-				WTW.hide('wtw_alttagdiv');
-				WTW.show('wtw_moldtexturetitle'); 
-				WTW.hide('wtw_moldbumptexturetitle');
-				WTW.hide('wtw_moldbumptextureset2div');
-				WTW.show('wtw_moldtexturepreview');
-				dGet('wtw_tallowsearch').checked = true;
-				break;
-			case "store3dsign":
-				dGet('wtw_moldpositiontitle').innerHTML = "3D Text Position";
-				dGet('wtw_moldscalingtitle').innerHTML = "3D Text Length";
-				dGet('wtw_moldrotationtitle').innerHTML = "3D Text Rotation";
-				dGet('wtw_moldtexturetitle').innerHTML = "3D Text Texture Image";
-				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave 3D Sign";
-				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete 3D Sign";
-				dGet('wtw_editmoldformtitle').innerHTML = "Edit 3D Sign";
-				WTW.hide('wtw_moldaddimagediv');
-				WTW.hide('wtw_alttagdiv');
-				WTW.hide('wtw_moldspecial1');
-				WTW.hide('wtw_moldspecial2');
-				WTW.hide('wtw_moldsubdivisions');
-				WTW.hide('wtw_moldbumptexturetitle');
-				WTW.hide('wtw_moldbasictexturesetdiv');
-				WTW.hide('wtw_moldbasictextureset2div');
-				WTW.hide('wtw_moldbumptextureset2div');
-				WTW.hide('wtw_moldtexturesetdiv');
-				WTW.show('wtw_moldwebtextdiv');
-				break;
-			case "storeviewcart":
-				dGet('wtw_moldpositiontitle').innerHTML = "Position";
-				dGet('wtw_moldscalingtitle').innerHTML = "Length";
-				dGet('wtw_moldrotationtitle').innerHTML = "Rotation";
-				dGet('wtw_moldtexturetitle').innerHTML = "Frame Image";
-				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave Cart Button";
-				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete Cart Button";
-				dGet('wtw_editmoldformtitle').innerHTML = "Edit Cart Button";
-				WTW.hide('wtw_moldaddimagediv');
-				WTW.hide('wtw_moldspecial1');
-				WTW.hide('wtw_moldspecial2');
-				WTW.hide('wtw_moldsubdivisions');
-				WTW.hide('wtw_alttagdiv');
-				WTW.show('wtw_moldtexturetitle'); 
-				WTW.hide('wtw_moldbumptexturetitle');
-				WTW.hide('wtw_moldbumptextureset2div');
-				WTW.show('wtw_moldtexturepreview');
-				dGet('wtw_tallowsearch').checked = true;
-				break;
-			case "storecategories":
-				dGet('wtw_moldpositiontitle').innerHTML = "Position";
-				dGet('wtw_moldscalingtitle').innerHTML = "Length";
-				dGet('wtw_moldrotationtitle').innerHTML = "Rotation";
-				dGet('wtw_moldtexturetitle').innerHTML = "Frame Image";
-				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave Categories";
-				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete Categories";
-				dGet('wtw_editmoldformtitle').innerHTML = "Edit Categories";
-				WTW.hide('wtw_moldaddimagediv');
-				WTW.hide('wtw_moldspecial1');
-				WTW.hide('wtw_moldspecial2');
-				WTW.hide('wtw_moldsubdivisions');
-				WTW.hide('wtw_alttagdiv');
-				WTW.show('wtw_moldtexturetitle'); 
-				WTW.hide('wtw_moldbumptexturetitle');
-				WTW.hide('wtw_moldbumptextureset2div');
-				WTW.show('wtw_moldtexturepreview');
-				dGet('wtw_tallowsearch').checked = true;
-				break;
-			case "storesearch":
-				dGet('wtw_moldpositiontitle').innerHTML = "Position";
-				dGet('wtw_moldscalingtitle').innerHTML = "Length";
-				dGet('wtw_moldrotationtitle').innerHTML = "Rotation";
-				dGet('wtw_moldtexturetitle').innerHTML = "Frame Image";
-				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave Search";
-				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete Search";
-				dGet('wtw_editmoldformtitle').innerHTML = "Edit Search";
-				WTW.hide('wtw_moldaddimagediv');
-				WTW.hide('wtw_moldspecial1');
-				WTW.hide('wtw_moldspecial2');
-				WTW.hide('wtw_moldsubdivisions');
-				WTW.hide('wtw_alttagdiv');
-				WTW.show('wtw_moldtexturetitle'); 
-				WTW.hide('wtw_moldbumptexturetitle');
-				WTW.hide('wtw_moldbumptextureset2div');
-				WTW.show('wtw_moldtexturepreview');
-				dGet('wtw_tallowsearch').checked = true;
-				break;
 			case "custom":
 				dGet('wtw_moldpositiontitle').innerHTML = "Position";
 				dGet('wtw_moldscalingtitle').innerHTML = "Length";
@@ -2428,6 +2161,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.show('wtw_moldmergemoldsdiv');
 				break;
 		}
+		WTW.pluginsSetMoldFormFields(shape);
 	} catch (ex) {
 		WTW.log("core-scripts-molds-addmoldlist\r\n setMoldFormFields=" + ex.message);
 	}

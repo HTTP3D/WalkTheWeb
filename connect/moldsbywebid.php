@@ -408,10 +408,6 @@ try {
 			a1.alttag as communityalttag,
 			'' as buildingalttag,
 			'' as thingalttag,
-            a1.productid,
-            a1.slug,
-            a1.categoryid,
-            a1.allowsearch,
             a1.jsfunction,
             a1.jsparameters,
             (select count(*) from ".wtw_tableprefix."communitymolds 
@@ -825,10 +821,6 @@ try {
 			'' as communityalttag,
 			a1.alttag as buildingalttag,
 			'' as thingalttag,
-            a1.productid,
-            a1.slug,
-            a1.categoryid,
-            a1.allowsearch,
             a1.jsfunction,
             a1.jsparameters,
             (select count(*) from ".wtw_tableprefix."buildingmolds 
@@ -1240,10 +1232,6 @@ try {
 			'' as communityalttag,
 			'' as buildingalttag,
 			a1.alttag as thingalttag,
-            a1.productid,
-            a1.slug,
-            a1.categoryid,
-            a1.allowsearch,
             a1.jsfunction,
             a1.jsparameters,
             (select count(*) from ".wtw_tableprefix."thingmolds 
@@ -1657,10 +1645,6 @@ try {
 			'' as communityalttag,
 			'' as buildingalttag,
 			a1.alttag as thingalttag,
-            a1.productid,
-            a1.slug,
-            a1.categoryid,
-            a1.allowsearch,
             a1.jsfunction,
             a1.jsparameters,
             (select count(*) from ".wtw_tableprefix."thingmolds 
@@ -2076,10 +2060,6 @@ try {
 			'' as communityalttag,
 			'' as buildingalttag,
 			a1.alttag as thingalttag,
-            a1.productid,
-            a1.slug,
-            a1.categoryid,
-            a1.allowsearch,
             a1.jsfunction,
             a1.jsparameters,
             (select count(*) from ".wtw_tableprefix."thingmolds 
@@ -2495,10 +2475,6 @@ try {
 			'' as communityalttag,
 			'' as buildingalttag,
 			a1.alttag as thingalttag,
-            a1.productid,
-            a1.slug,
-            a1.categoryid,
-            a1.allowsearch,
             a1.jsfunction,
             a1.jsparameters,
             (select count(*) from ".wtw_tableprefix."thingmolds 
@@ -2636,21 +2612,12 @@ try {
 			'waterreflection'=> $zrow["waterreflection"], 
 			'webimages'=> $wtwconnect->getwebimages($zrow["thingmoldid"], $zrow["buildingmoldid"], $zrow["communitymoldid"], $zrow["graphiclevel"])
 		);
-		if ($zrow["shape"] == '3dtext' || $zrow["shape"] == "store3dsign") {
-			$zwebtext = array(
-				'webtext'=> $zrow["webtext"],
-				'fullheight'=> '0',
-				'scrollpos'=> '0',
-				'webstyle'=> $zrow["webstyle"]
-			);
-		} else {
-			$zwebtext = array(
-				'webtext'=> str_replace($wtwconnect->domainurl,"", $ztempwebtext),
-				'fullheight'=> '0',
-				'scrollpos'=> '0',
-				'webstyle'=> $zrow["webstyle"]
-			);
-		}
+		$zwebtext = array(
+			'webtext'=> $zrow["webtext"],
+			'fullheight'=> '0',
+			'scrollpos'=> '0',
+			'webstyle'=> $zrow["webstyle"]
+		);
 		$zalttag = array(
 			'name'=> ''
 		);
@@ -2674,12 +2641,6 @@ try {
 				'g'=> $zrow["emissivecolorg"],
 				'b'=> $zrow["emissivecolorb"]
 			)
-		);
-		$zstore = array(
-			'productid' => $zrow["productid"],
-			'slug' => $zrow["slug"],
-			'categoryid' => $zrow["categoryid"],
-			'allowsearch' => $zrow["allowsearch"]
 		);
 		$zsound = array(
 			'id' => $zrow["soundid"],
@@ -2732,7 +2693,6 @@ try {
 			'alttag'=> $zalttag,
 			'paths'=> $zpaths,
 			'color'=> $zcolor,
-			'store'=> $zstore,
 			'sound'=> $zsound,
 			'objects'=> $zobjects,
 			'subdivisions'=> $zrow["subdivisions"], 

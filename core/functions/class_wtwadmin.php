@@ -15,7 +15,6 @@ class wtwadmin {
 	
 	public $adminmenu = array();
 	public $adminsubmenu = array();
-	public $adminforms = array();
 	public $fullpagedivs = array();
 	
 	public function __call ($method, $arguments)  {
@@ -181,10 +180,6 @@ class wtwadmin {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldsoundconeinnerangle\" /><!-- degrees -->\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldsoundconeouterangle\" /><!-- degrees -->\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldsoundconeoutergain\" /><!-- 0 to 1 -->\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldproductid\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldslug\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldcategoryid\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldallowsearch\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldwebstyle\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tconfirmid\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_teditconnectinggridind\" />\r\n";

@@ -7,28 +7,6 @@
 				<div class="wtw-rightbutton" onclick="WTW.openFullPageForm('medialibrary','object','3dobject');">Select 3D Object</div>
 				<br />
 			</div>
-			<div id="wtw_productdiv">
-				<h2 style="margin-bottom:3px;">Display Type</h2>
-				<select id="wtw_tmoldspecial1set" onchange="dGet('wtw_tmoldspecial1').value=dGet('wtw_tmoldspecial1set').options[dGet('wtw_tmoldspecial1set').selectedIndex].value;WTW.setNewMold(1);">
-					<option value="0">Rounded Box Display</option>
-					<option value="1">Box Display</option>
-					<option value="2">Rounded Box No Image</option>
-				</select>
-				<h2 style="margin-bottom:3px;">Product Selection</h2>
-				<h4>Product Category</h4>
-				<select id="wtw_tcategoryid" onchange="WTW.setCategory(this.options[this.selectedIndex].value, dGet('wtw_tmoldname').value);">
-				</select>
-				<h4>Product</h4>
-				<select id="wtw_tproduct" onchange="WTW.setProduct(this.options[this.selectedIndex].value, dGet('wtw_tmoldname').value);">
-				</select><br /><br />
-				<input type="checkbox" id="wtw_tallowsearch" class="wtw-smallprint" value="1" onchange="WTW.setAllowSearch();" /> Allow Search to Override<br />this Product Display<br /><br />
-				<hr class="wtw-menuhr" />
-			</div>
-			<div id="wtw_productthingdiv">
-				<h4 style="margin-bottom:3px;">Product Selection</h4>
-				<div style="color:#c0c0c0;">You can set the product after it is placed into a 3D Building.</div>
-				<hr class="wtw-menuhr" />
-			</div>
 			<h2 id="wtw_moldpositiontitle" style="margin-bottom:3px;">Mold Position</h2>
 			<div class="wtw-onecol" style="white-space:nowrap;">Position Z (left,-right)<br /> 
 				<input type="text" id="wtw_tmoldpositionz" maxlength="16" class="wtw-secondcolcontent wtw-smallprintinput" onclick="WTW.checkKey(this, 'number', 0, 0);" onkeyup="WTW.checkKey(this, 'number', 0, 0);" onblur="WTW.checkKey(this, 'number', 0, 1);WTW.setNewMold();" />
@@ -124,6 +102,8 @@
 				<input type="button" id="wtw_beditmoldyr2" class="wtw-smallprint" value="+.01" onmousedown="WTW.changeNumberValue('wtw_tmoldrotationy', .01);" onmouseup="WTW.changeStop();" style="cursor: pointer;" />
 				<input type="button" id="wtw_beditmoldyr1" class="wtw-smallprint" value="+1" onmousedown="WTW.changeNumberValue('wtw_tmoldrotationy', 1);" onmouseup="WTW.changeStop();" style="cursor: pointer;" />
 			</div><hr class="wtw-menuhr" />
+<?php		global $wtwadminmenu;
+			echo $wtwadminmenu->getAdminMenuDivs('editmold'); ?>
 			<div id="wtw_moldwebtextdiv">
 				<h2 style="margin-bottom:3px;">3D Text</h2>
 				<br />

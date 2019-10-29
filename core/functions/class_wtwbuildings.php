@@ -37,7 +37,7 @@ class wtwbuildings {
 		return $found;
 	}
 
-	public function saveBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zanalyticsid, $zstoreiframes, $zstoreurl, $zwpplugin, $zstorecarturl, $zstoreproducturl, $zstorewoocommerceapiurl, $zstorewoocommercekey, $zstorewoocommercesecret, $zalttag) {
+	public function saveBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zanalyticsid, $zalttag) {
 		global $wtwiframes;
 		$zcopybuildingid = "";
 		try {
@@ -225,46 +225,6 @@ class wtwbuildings {
 			/* new building has to already exist */
 			/* does user have access to copy building and new building */
 			if ($wtwiframes->checkUpdateAccess("", $zbuildingid, "") && $wtwiframes->checkUpdateAccess("", $zcopybuildingid, "")) {
-				/* read in values of copy building */
-				/* woocommerce specific... will be moved to a plugin ...
-				$zstore = 0;
-				$zstoreiframes = 0;
-				$zstoreurl = "";
-				$zwpplugin = "";
-				$zstorecarturl = "";
-				$zstoreproducturl = "";
-				$zstorewoocommerceapiurl = "";
-				$zstorewoocommercekey = "";
-				$zstorewoocommercesecret = "";
-				$zresults = $wtwiframes->query("
-					select * 
-					from ".wtw_tableprefix."buildings 
-					where buildingid='".$zcopybuildingid."' 
-					limit 1;");
-				foreach ($zresults as $zrow) {
-					$zstore = $zrow["store"];
-					$zstoreiframes = $zrow["storeiframes"];
-					$zstoreurl = $zrow["storeurl"];
-					$zwpplugin = $zrow["wpplugin"];
-					$zstorecarturl = $zrow["storecarturl"];
-					$zstoreproducturl = $zrow["storeproducturl"];
-					$zstorewoocommerceapiurl = $zrow["storewoocommerceapiurl"];
-					$zstorewoocommercekey = $zrow["storewoocommercekey"];
-					$zstorewoocommercesecret = $zrow["storewoocommercesecret"];
-				} */
-				/* update values of building */
-				/* $wtwiframes->query("
-					update ".wtw_tableprefix."buildings 
-					set store=".$wtwiframes->checkNumber($zstore,0).",
-						storeiframes=".$wtwiframes->checkNumber($zstoreiframes,0).",
-						storeurl='".$zstoreurl."',
-						wpplugin='".$zwpplugin."',
-						storecarturl='".$zstorecarturl."',
-						storeproducturl='".$zstoreproducturl."',
-						storewoocommerceapiurl='".$zstorewoocommerceapiurl."',
-						storewoocommercekey='".$zstorewoocommercekey."',
-						storewoocommercesecret='".$zstorewoocommercesecret."'
-					where buildingid='".$zbuildingid."';"); */
 				/* update actionzones */
 				$zresults = $wtwiframes->query("
 					select 
@@ -811,10 +771,6 @@ class wtwbuildings {
 						 t3.csgmoldid,
 						 t3.csgaction,
 						 t3.alttag,
-						 t3.productid,
-						 t3.slug,
-						 t3.categoryid,
-						 t3.allowsearch,
 						 t3.jsfunction,
 						 t3.jsparameters,
 						 t3.diffusecolorr,
@@ -896,10 +852,6 @@ class wtwbuildings {
 					$zcsgmoldid = $zrow["csgmoldid"];
 					$zcsgaction = $zrow["csgaction"];
 					$zalttag = $zrow["alttag"];
-					$zproductid = $zrow["productid"];
-					$zslug = $zrow["slug"];
-					$zcategoryid = $zrow["categoryid"];
-					$zallowsearch = $zrow["allowsearch"];
 					$zjsfunction = $zrow["jsfunction"];
 					$zjsparameters = $zrow["jsparameters"];
 					$zdiffusecolorr = $zrow["diffusecolorr"];
@@ -977,10 +929,6 @@ class wtwbuildings {
 							csgmoldid,
 							csgaction,
 							alttag,
-							productid,
-							slug,
-							categoryid,
-							allowsearch,
 							jsfunction,
 							jsparameters,
 							diffusecolorr,
@@ -1060,10 +1008,6 @@ class wtwbuildings {
 							'".$zcsgmoldid."',
 							'".$zcsgaction."',
 							'".$wtwiframes->escapeHTML($zalttag)."',
-							'".$zproductid."',
-							'".$wtwiframes->escapeHTML($zslug)."',
-							'".$zcategoryid."',
-							".$wtwiframes->checkNumber($zallowsearch,1).",
 							'".$zjsfunction."',
 							'".$zjsparameters."',
 							".$wtwiframes->checkNumber($zdiffusecolorr,1).",

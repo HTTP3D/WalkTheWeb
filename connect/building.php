@@ -26,14 +26,6 @@ try {
 			'buildingid' => $zrow["buildingid"],
 			'buildingname' => htmlspecialchars($zrow["buildingname"], ENT_QUOTES, 'UTF-8'),
 			'createdate' => $zrow["createdate"],
-			'storeiframes'=> '',
-			'storeurl'=> '',
-			'wpplugin'=> '',
-			'storecarturl'=> '',
-			'storeproducturl'=> '',
-			'storewoocommerceapiurl'=> '',
-			'woocommercekey'=> '',
-			'woocommercesecret'=> '',
 			'snapshotid' => $zrow["snapshotid"],
 			'analyticsid'=> $zrow["analyticsid"]
 		);

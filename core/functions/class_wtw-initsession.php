@@ -17,9 +17,9 @@ class wtw {
 
 	}	
 	
-	public $version = "3.1.0";
-	public $dbversion = "1.0.1";
-	public $versiondate = "2019-10-13";
+	public $version = "3.1.1";
+	public $dbversion = "1.0.2";
+	public $versiondate = "2019-10-29";
 	public $serverinstanceid = "";
 	public $rootpath = "";
 	public $contentpath = "";
@@ -39,6 +39,7 @@ class wtw {
 	public $thingid = "";
 	public $pluginscripts = array();
 	public $pluginscriptfunctions = array();
+	public $pluginMoldDefs = array();
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
