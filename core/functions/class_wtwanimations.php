@@ -64,6 +64,31 @@ class wtwanimations {
 			if (!empty($wtwiframes->userid) && isset($wtwiframes->userid)) {
 				if ($found) {
 					$wtwiframes->query("
+						update ".wtw_tableprefix."uploadobjectanimations
+						set	objectanimationid='".$zobjectanimationid."',
+							userid='".$wtwiframes->userid."',
+							animationname='".$zanimationname."',
+							moldevent='".$zmoldevent."',
+							moldnamepart='".$zmoldnamepart."',
+							startframe=".$zstartframe.",
+							endframe=".$zendframe.",
+							animationloop=".$zanimationloop.",
+							speedratio=".$zspeedratio.",
+							animationendscript='".$zanimationendscript."',
+							animationendparameters='".$zanimationendparameters."',
+							stopcurrentanimations=".$zstopcurrentanimations.",
+							soundid='".$zsoundid."',
+							soundmaxdistance=".$zsoundmaxdistance.",
+							updatedate=now(),
+							updateuserid='".$wtwiframes->userid."',
+							deleteddate=null,
+							deleteduserid='',
+							deleted=0
+						where objectanimationid='".$zobjectanimationid."'
+							and uploadobjectid='".$zuploadobjectid."'
+							and userid='".$wtwiframes->userid."';");
+				} else {
+					$wtwiframes->query("
 						insert into ".wtw_tableprefix."uploadobjectanimations
 							(objectanimationid,
 							 uploadobjectid,
@@ -104,31 +129,6 @@ class wtwanimations {
 							 '".$wtwiframes->userid."',
 							 now(),
 							 '".$wtwiframes->userid."');");
-				} else {
-					$wtwiframes->query("
-						update ".wtw_tableprefix."uploadobjectanimations
-						set	objectanimationid='".$zobjectanimationid."',
-							userid='".$wtwiframes->userid."',
-							animationname='".$zanimationname."',
-							moldevent='".$zmoldevent."',
-							moldnamepart='".$zmoldnamepart."',
-							startframe=".$zstartframe.",
-							endframe=".$zendframe.",
-							animationloop=".$zanimationloop.",
-							speedratio=".$zspeedratio.",
-							animationendscript='".$zanimationendscript."',
-							animationendparameters='".$zanimationendparameters."',
-							stopcurrentanimations=".$zstopcurrentanimations.",
-							soundid='".$zsoundid."',
-							soundmaxdistance=".$zsoundmaxdistance.",
-							updatedate=now(),
-							updateuserid='".$wtwiframes->userid."',
-							deleteddate=null,
-							deleteduserid='',
-							deleted=0
-						where objectanimationid='".$zobjectanimationid."'
-							and uploadobjectid='".$zuploadobjectid."'
-							and userid='".$wtwiframes->userid."';");
 				}
 				$zsuccess = true;
 			}
