@@ -673,7 +673,10 @@ class wtwavatars {
 					'useravataranimationid'=> $zrow["useravataranimationid"],
 					'useravatarid'=> $zrow["useravatarid"],
 					'myspeedratio'=> $zrow["myspeedratio"],
-					'mywalkspeed'=> $zrow["mywalkspeed"]
+					'mywalkspeed'=> $zrow["mywalkspeed"],
+					'totalframes' => '0',
+					'totalstartframe' => '0',
+					'totalendframe' => '0'
 				);
 				$i += 1;
 			}

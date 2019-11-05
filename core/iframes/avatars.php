@@ -117,7 +117,7 @@ try {
 						parent.WTW.loadAvatarAnimationsAll(JSON.parse(dGet('wtw_tavataranimations').value));
 						break;
 					case "wtw_bsaveavataranimation":
-						parent.WTW.reloadMyAvatar(dGet('wtw_tuseravataranimationid').value, dGet('wtw_tuseravataranimationidfield').value);
+						parent.WTW.updateAnimSelectValue(dGet('wtw_tuseravataranimationidfield').value, dGet('wtw_tuseravataranimationid').value);
 						break;
 					case "wtw_bsetsession":
 						break;

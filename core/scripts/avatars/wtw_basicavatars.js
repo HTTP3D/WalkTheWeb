@@ -298,9 +298,15 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 							if (firstloaded) {
 								if (loadmin == false) {
 									avatar.WTW.animations.running[avataranimationdefs[0].animationname] = scene.beginWeightedAnimation(skeleton, Number(avataranimationdefs[0].startframe), Number(avataranimationdefs[0].endframe), 0, avataranimationdefs[0].animationloop, Number(avataranimationdefs[0].speedratio));
+									avatar.WTW.animations[0].totalframes = Number(avataranimationdefs[0].endframe);
+									avatar.WTW.animations[0].totalstartframe = 1;
+									avatar.WTW.animations[0].totalendframe = Number(avataranimationdefs[0].endframe);
 									WTW.loadAvatarAnimations(avatarname, easingFunction, 1, Number(avataranimationdefs[0].startframe), Number(avataranimationdefs[0].endframe));
 								} else {
 									avatar.WTW.animations.running[avataranimationdefs[0].animationname] = scene.beginWeightedAnimation(skeleton, Number(avataranimationdefs[0].startframe), Number(avataranimationdefs[0].endframe), 1, avataranimationdefs[0].animationloop, Number(avataranimationdefs[0].speedratio));
+									avatar.WTW.animations[0].totalframes = Number(avataranimationdefs[0].endframe);
+									avatar.WTW.animations[0].totalstartframe = 1;
+									avatar.WTW.animations[0].totalendframe = Number(avataranimationdefs[0].endframe);
 									WTW.avatarMinLoadEnter(avatarname);
 								}
 							} else {

@@ -168,7 +168,10 @@ try {
 				'startframe'=> $zrow["startframe"],
 				'endframe'=> $zrow["endframe"],
 				'animationloop'=> $zrow["animationloop"],
-				'walkspeed'=> $zrow["walkspeed"]
+				'walkspeed'=> $zrow["walkspeed"],
+				'totalframes' => '0',
+				'totalstartframe' => '0',
+				'totalendframe' => '0'
 			);
 			$i += 1;
 		}

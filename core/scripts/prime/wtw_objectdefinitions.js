@@ -561,7 +561,10 @@ WTWJS.prototype.newAvatarAnimationDef = function() {
 			'animationloop':true,
 			'defaultspeedratio':'1.00',
 			'speedratio':'1.00',
-			'walkspeed':'1'
+			'walkspeed':'1',
+			'totalframes':'0',
+			'totalstartframe':'0',
+			'totalendframe':'0'
 		};
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAvatarAnimationDef=" + ex.message);
@@ -590,7 +593,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 				case 3:
@@ -608,7 +614,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 				case 4:
@@ -626,7 +635,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 				case 5:
@@ -644,7 +656,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 				case 6:
@@ -662,7 +677,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 				case 7:
@@ -680,7 +698,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 				case 8:
@@ -698,7 +719,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 				case 9:
@@ -716,7 +740,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 				case 10:
@@ -734,7 +761,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 				default:
@@ -752,7 +782,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 			}
@@ -776,7 +809,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 				default:
@@ -794,7 +830,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 			}
@@ -818,7 +857,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 				default:
@@ -836,7 +878,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 						'animationloop':true,
 						'defaultspeedratio':'1.00',
 						'speedratio':'1.00',
-						'walkspeed':'1'
+						'walkspeed':'1',
+						'totalframes':'0',
+						'totalstartframe':'0',
+						'totalendframe':'0'
 					};
 					break;
 			}
@@ -854,7 +899,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 				'animationloop':true,
 				'defaultspeedratio':'1.00',
 				'speedratio':'1.00',
-				'walkspeed':'1'
+				'walkspeed':'1',
+				'totalframes':'0',
+				'totalstartframe':'0',
+				'totalendframe':'0'
 			};
 			animationdefs[4] = {
 				'useravataranimationid':'',
@@ -870,7 +918,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 				'animationloop':true,
 				'defaultspeedratio':'1.00',
 				'speedratio':'1.00',
-				'walkspeed':'1'
+				'walkspeed':'1',
+				'totalframes':'0',
+				'totalstartframe':'0',
+				'totalendframe':'0'
 			};
 			animationdefs[5] = {
 				'useravataranimationid':'',
@@ -886,7 +937,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 				'animationloop':true,
 				'defaultspeedratio':'1.00',
 				'speedratio':'1.00',
-				'walkspeed':'1'
+				'walkspeed':'1',
+				'totalframes':'0',
+				'totalstartframe':'0',
+				'totalendframe':'0'
 			};
 			animationdefs[6] = {
 				'useravataranimationid':'',
@@ -902,7 +956,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 				'animationloop':true,
 				'defaultspeedratio':'1.00',
 				'speedratio':'1.00',
-				'walkspeed':'1'
+				'walkspeed':'1',
+				'totalframes':'0',
+				'totalstartframe':'0',
+				'totalendframe':'0'
 			};
 			animationdefs[7] = {
 				'useravataranimationid':'',
@@ -918,7 +975,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 				'animationloop':true,
 				'defaultspeedratio':'1.00',
 				'speedratio':'1.00',
-				'walkspeed':'1'
+				'walkspeed':'1',
+				'totalframes':'0',
+				'totalstartframe':'0',
+				'totalendframe':'0'
 			};
 			animationdefs[8] = {
 				'useravataranimationid':'',
@@ -934,7 +994,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 				'animationloop':true,
 				'defaultspeedratio':'2.00',
 				'speedratio':'2.00',
-				'walkspeed':'1'
+				'walkspeed':'1',
+				'totalframes':'0',
+				'totalstartframe':'0',
+				'totalendframe':'0'
 			};
 			animationdefs[9] = {
 				'useravataranimationid':'',
@@ -950,7 +1013,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 				'animationloop':true,
 				'defaultspeedratio':'2.00',
 				'speedratio':'2.00',
-				'walkspeed':'1'
+				'walkspeed':'1',
+				'totalframes':'0',
+				'totalstartframe':'0',
+				'totalendframe':'0'
 			};
 			animationdefs[10] = {
 				'useravataranimationid':'',
@@ -966,7 +1032,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 				'animationloop':true,
 				'defaultspeedratio':'2.00',
 				'speedratio':'2.00',
-				'walkspeed':'1'
+				'walkspeed':'1',
+				'totalframes':'0',
+				'totalstartframe':'0',
+				'totalendframe':'0'
 			};
 			animationdefs[11] = {
 				'useravataranimationid':'',
@@ -982,7 +1051,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 				'animationloop':true,
 				'defaultspeedratio':'2.00',
 				'speedratio':'2.00',
-				'walkspeed':'1'
+				'walkspeed':'1',
+				'totalframes':'0',
+				'totalstartframe':'0',
+				'totalendframe':'0'
 			};
 			animationdefs[12] = {
 				'useravataranimationid':'',
@@ -998,7 +1070,10 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 				'animationloop':true,
 				'defaultspeedratio':'2.00',
 				'speedratio':'2.00',
-				'walkspeed':'1'
+				'walkspeed':'1',
+				'totalframes':'0',
+				'totalstartframe':'0',
+				'totalendframe':'0'
 			};
 		}
 	} catch (ex) {
