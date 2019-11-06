@@ -127,7 +127,10 @@ function WTWJS() {
 	this.sunPositionY = 1000;
 	this.sunPositionZ = -10;
 	this.rotationSpeed = 1000;
-	this.walkSpeed = .5;
+	this.turnSpeed = 1;
+	this.turnAnimationSpeed = 1;
+	this.walkSpeed = 1;
+	this.walkAnimationSpeed = 1;
 	this.shadowset;
 	this.graphicSet = 1;
 	this.soundMute = true;

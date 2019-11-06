@@ -21,7 +21,7 @@ WTWJS.prototype.addActionzoneLoadzone = function(actionzonename, actionzoneind, 
 		molddef.ispickable = "0";
 		WTW.addMoldToQueue(actionzonename, molddef, molddef.parentname, molddef.covering, null);
 		if (WTW.adminView == 1) {
-			if (dGet('wtw_bzones').alt == "Action Zones are Shown" || actionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
+			if (dGet('wtw_bzones').title == "Action Zones are Shown" || actionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
 				WTW.setOpacity(actionzonename, .2);
 			}
 		}
@@ -208,7 +208,7 @@ WTWJS.prototype.addActionzoneSlidingDoor = function(actionzonename, actionzonein
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 				WTW.setOpacity(actionzonename, .2);
 				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
@@ -467,7 +467,7 @@ WTWJS.prototype.addActionzoneSwingingDoor = function(actionzonename, actionzonei
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 				WTW.setOpacity(actionzonename, .2);
 				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
@@ -656,7 +656,7 @@ WTWJS.prototype.addActionzoneClickSlidingDoor = function(actionzonename, actionz
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 				WTW.setOpacity(actionzonename, .2);
 				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
@@ -693,7 +693,7 @@ WTWJS.prototype.addActionzoneMirror = function(actionzonename, actionzoneind, ac
 				actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 			}
 			if (dGet('wtw_bzones') != null) {
-				if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+				if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 					WTW.setOpacity(actionzonename, .2);
 				}
 			}
@@ -802,7 +802,7 @@ WTWJS.prototype.addActionzoneRidealong = function(actionzonename, actionzoneind,
 				}
 			}
 			if (dGet('wtw_bzones') != null) {
-				if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+				if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 					WTW.setOpacity(actionzonename, .2);
 				}
 			}
@@ -948,7 +948,7 @@ WTWJS.prototype.addActionzoneRotate = function(actionzonename, actionzoneind, ac
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 				WTW.setOpacity(actionzonename, .2);
 				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
@@ -1525,7 +1525,7 @@ WTWJS.prototype.addActionzonePeoplemover = function(actionzonename, actionzonein
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 				WTW.setOpacity(actionzonename, .2);
 				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
@@ -1757,7 +1757,7 @@ WTWJS.prototype.addActionzoneElevator = function(actionzonename, actionzoneind, 
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 				WTW.setOpacity(actionzonename, .2);
 				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
@@ -1877,7 +1877,7 @@ WTWJS.prototype.addActionzonePassengerSeat = function(actionzonename, actionzone
 			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 		}
 		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 				WTW.setOpacity(actionzonename, .2);
 				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
@@ -1997,7 +1997,7 @@ WTWJS.prototype.addActionzoneDriverSeat = function(actionzonename, actionzoneind
 			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 		}
 		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 				WTW.setOpacity(actionzonename, .2);
 				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
@@ -2195,7 +2195,7 @@ WTWJS.prototype.addActionzoneDriverTurnAngle = function(actionzonename, actionzo
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 				WTW.setOpacity(actionzonename, .2);
 				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
@@ -2497,7 +2497,7 @@ WTWJS.prototype.addActionzoneDriverTurningWheel = function(actionzonename, actio
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 				WTW.setOpacity(actionzonename, .2);
 				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
@@ -2693,7 +2693,7 @@ WTWJS.prototype.addActionzoneDriverWheel = function(actionzonename, actionzonein
 			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 		}
 		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').alt == "Action Zones are Shown") {
+			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
 				WTW.setOpacity(actionzonename, .2);
 				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
@@ -2701,6 +2701,40 @@ WTWJS.prototype.addActionzoneDriverWheel = function(actionzonename, actionzonein
 		WTW.actionZones[actionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneDriverWheel=" + ex.message);
+	}
+	return actionzone;
+}
+
+WTWJS.prototype.addActionzoneSeat = function(actionzonename, actionzoneind, actionzonedef) {
+	var actionzone;
+	try {
+		var molddef = WTW.newMold();
+		molddef.shape = actionzonedef.actionzoneshape;
+		molddef.covering = "hidden";
+		molddef.position.x = actionzonedef.position.x;
+		molddef.position.y = actionzonedef.position.y;
+		molddef.position.z = actionzonedef.position.z;
+		molddef.scaling.x = actionzonedef.scaling.x;
+		molddef.scaling.y = actionzonedef.scaling.y;
+		molddef.scaling.z = actionzonedef.scaling.z;
+		molddef.rotation.x = actionzonedef.rotation.x;
+		molddef.rotation.y = actionzonedef.rotation.y;
+		molddef.rotation.z = actionzonedef.rotation.z;
+		molddef.subdivisions = 12;
+		molddef.opacity = 0;
+		molddef.parentname = actionzonedef.parentname;
+		molddef.actionzoneind = actionzoneind;
+		molddef.checkcollisions = "0";
+		molddef.ispickable = "0";
+		WTW.addMoldToQueue(actionzonename, molddef, molddef.parentname, molddef.covering, null);
+		if (WTW.adminView == 1) {
+			if (dGet('wtw_bzones').title == "Action Zones are Shown" || actionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
+				WTW.setOpacity(actionzonename, .2);
+			}
+		}
+		WTW.actionZones[actionzoneind].shown = "2";
+	} catch (ex) {
+		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneSeat=" + ex.message);
 	}
 	return actionzone;
 }

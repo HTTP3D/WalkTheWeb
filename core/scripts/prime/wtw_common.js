@@ -167,12 +167,16 @@ WTWJS.prototype.hilightMoldFast = function(moldname, scolor) {
 					break;
 			}
 			WTW.unhilightMold(moldname);
-			var hilight = new BABYLON.HighlightLayer(moldname + "-hilight", scene);
-			hilight.addMesh(mold, color);
+			if (WTW.highlightLayer == null) {
+				WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
+			}
+			WTW.highlightLayer.outerGlow = true;
+			WTW.highlightLayer.innerGlow = true;
+			WTW.highlightLayer.addMesh(mold, color);
 			window.setTimeout(function(){
-				hilight.outerGlow = false;
-				hilight.innerGlow = false;
-				hilight.dispose();
+				WTW.highlightLayer.outerGlow = false;
+				WTW.highlightLayer.innerGlow = false;
+				WTW.highlightLayer.removeMesh(mold);
 			},500);
 		}
 	} catch (ex) {
@@ -195,14 +199,17 @@ WTWJS.prototype.hilightMold = function(moldname, scolor) {
 				case "blue":
 					color = BABYLON.Color3.Blue();
 					break;
+				case "yellow":
+					color = BABYLON.Color3.Yellow();
+					break;
 			}
 			WTW.unhilightMold(moldname);
-			var hilight = new BABYLON.HighlightLayer(moldname + "-hilight", scene);
-			hilight.addMesh(mold, color);
-			window.setTimeout(function(){
-				hilight.outerGlow = false;
-				//hilight.innerGlow = false;
-			},500);
+			if (WTW.highlightLayer == null) {
+				WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
+			}
+			WTW.highlightLayer.outerGlow = true;
+			//WTW.highlightLayer.innerGlow = true;
+			WTW.highlightLayer.addMesh(mold, color);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-hilightMold=" + ex.message);
@@ -211,7 +218,10 @@ WTWJS.prototype.hilightMold = function(moldname, scolor) {
 
 WTWJS.prototype.unhilightMold = function(moldname) {
 	try {
-		WTW.disposeClean(moldname + "-hilight");
+		if (WTW.highlightLayer != null) {
+			var mold = scene.getMeshByID(moldname);
+			WTW.highlightLayer.removeMesh(mold);
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-unhilightMold=" + ex.message);
 	}
@@ -570,7 +580,7 @@ WTWJS.prototype.setOpacity = function(moldname, opacity) {
 				covering.alpha = opacity;
 				mold.material = covering;
 			}
-		}
+		} 
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-setOpacity=" + ex.message);
     }
@@ -1944,12 +1954,39 @@ WTWJS.prototype.changeRotationSpeed = function() {
 	}
 }
 
+WTWJS.prototype.changeWalkAnimationSpeed = function() {
+	try {
+		WTW.walkAnimationSpeed = Number(dGet('wtw_twalkanimationspeed').value);
+        WTW.setCookie("walkinganimationspeed",WTW.walkAnimationSpeed,365);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-changeWalkAnimationSpeed=" + ex.message);
+	}
+}
+
 WTWJS.prototype.changeWalkSpeed = function() {
 	try {
 		WTW.walkSpeed = Number(dGet('wtw_twalkspeed').value);
         WTW.setCookie("walkingspeed",WTW.walkSpeed,365);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-changeWalkSpeed=" + ex.message);
+	}
+}
+
+WTWJS.prototype.changeTurnAnimationSpeed = function() {
+	try {
+		WTW.turnAnimationSpeed = Number(dGet('wtw_tturnanimationspeed').value);
+        WTW.setCookie("turnanimationspeed",WTW.turnAnimationSpeed,365);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-changeTurnAnimationSpeed=" + ex.message);
+	}
+}
+
+WTWJS.prototype.changeTurnSpeed = function() {
+	try {
+		WTW.turnSpeed = Number(dGet('wtw_tturnspeed').value);
+        WTW.setCookie("turnspeed",WTW.turnSpeed,365);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-changeTurnSpeed=" + ex.message);
 	}
 }
 
@@ -2513,56 +2550,28 @@ WTWJS.prototype.checkMoldEvent = function(moldevent, moldname) {
 
 WTWJS.prototype.checkHovers = function(mold) {
 	try {
-		var molds = null;
-		var moldname = "";
-		var moldind = -1;
-		var shape = "";
-		var namepart = null;
-		if (WTW.currentID.indexOf("-") > -1) {
-			namepart = WTW.currentID.split('-');
-		}
-		if (namepart[0] != null) {
-			switch (namepart[0]) {
-				case "thingmolds":
-					molds = WTW.thingMolds;
-					break;
-				case "buildingmolds":
-					molds = WTW.buildingMolds;
-					break;
-				case "communitymolds":
-					molds = WTW.communitiesMolds;
-					break;
+		var moldnameparts = WTW.getMoldnameParts(WTW.currentID);
+		WTW.checkMoldEvent('onmouseover', mold.meshUnderPointer.name);
+		if (moldnameparts.molds != null) {
+			if (WTW.adminView == 1) {
+				WTW.mouseOverMoldAdmin(mold, WTW.currentID);
 			}
-			if (molds != null) {
-				if (namepart[1] != null) {
-					moldind = Number(namepart[1]);
-				}
-				if (namepart[5] != null) {
-					shape = namepart[5];
-				}
-				if (molds[moldind] != null) {
-					moldname = molds[moldind].moldname;
-				}
-				if (typeof WTW.mouseOverMoldAdmin == 'function') {
-					WTW.mouseOverMoldAdmin(mold, WTW.currentID);
-				}
-				if (namepart.length > 5) {
-					WTW.checkToolTip(namepart, moldind);
-					if (shape == 'image') {
-						var hovermold = scene.getMeshByID(namepart[0] + "-" + namepart[1] + "-" + namepart[2] + "-" + namepart[3] + "-" + namepart[4] + "-" + namepart[5] + "-hoverimage");
-						var imagemold = scene.getMeshByID(namepart[0] + "-" + namepart[1] + "-" + namepart[2] + "-" + namepart[3] + "-" + namepart[4] + "-" + namepart[5] + "-mainimage");
-						if (hovermold != null && imagemold != null) {
-							hovermold.position.x = -.25;
-						}
-					} else {
-						var hovermold = scene.getMeshByID(WTW.currentID + "hover");
-						var imagemold = scene.getMeshByID(WTW.currentID);
-						if (hovermold != null && imagemold != null) {
-							WTW.setDirectionalOpacity(WTW.currentID,0);
-						}
+			if (moldnameparts.namepart.length > 5) {
+				WTW.checkToolTip(moldnameparts.namepart, moldnameparts.moldind);
+				if (moldnameparts.shape == 'image') {
+					var hovermold = scene.getMeshByID(moldnameparts.namepart[0] + "-" + moldnameparts.namepart[1] + "-" + moldnameparts.namepart[2] + "-" + moldnameparts.namepart[3] + "-" + moldnameparts.namepart[4] + "-" + moldnameparts.namepart[5] + "-hoverimage");
+					var imagemold = scene.getMeshByID(moldnameparts.namepart[0] + "-" + moldnameparts.namepart[1] + "-" + moldnameparts.namepart[2] + "-" + moldnameparts.namepart[3] + "-" + moldnameparts.namepart[4] + "-" + moldnameparts.namepart[5] + "-mainimage");
+					if (hovermold != null && imagemold != null) {
+						hovermold.position.x = -.25;
 					}
-					WTW.pluginsCheckHovers(moldname, shape);
+				} else {
+					var hovermold = scene.getMeshByID(WTW.currentID + "hover");
+					var imagemold = scene.getMeshByID(WTW.currentID);
+					if (hovermold != null && imagemold != null) {
+						WTW.setDirectionalOpacity(WTW.currentID,0);
+					}
 				}
+				WTW.pluginsCheckHovers(moldnameparts.moldname, moldnameparts.shape);
 			}
 		}
 	} catch (ex) {
@@ -4246,10 +4255,10 @@ WTWJS.prototype.setShownMoldsByWeb = function(moldgroup) {
 						if (WTW.adminView == 1) {
 							if (dGet('wtw_bmerged') != null && csgmoldid != "") {
 								mold = scene.getMeshByID(molds[i].moldname);
-								if (webid != "" && dGet('wtw_bmerged').alt == "Merged Shapes are Shown" && mold == null) {
+								if (webid != "" && dGet('wtw_bmerged').title == "Merged Shapes are Shown" && mold == null) {
 									molds[i].checkcollisions = "0";
 									WTW.addMold(molds[i].moldname, molds[i], molds[i].parentname, molds[i].covering);
-								} else if (dGet('wtw_bmerged').alt == "Merged Shapes are Hidden" && mold != null) {
+								} else if (dGet('wtw_bmerged').title == "Merged Shapes are Hidden" && mold != null) {
 									WTW.addDisposeMoldToQueue(molds[i].moldname);
 								}
 							}
@@ -4535,12 +4544,12 @@ WTWJS.prototype.setShownMoldsByGroup = function(moldgroup) {
 						if (WTW.adminView == 1) {
 							if (dGet('wtw_bmerged') != null && csgmoldid != "" && csgaction != "union") {
 								mold = scene.getMeshByID(molds[i].moldname);
-								if (webid != "" && dGet('wtw_bmerged').alt == "Merged Shapes are Shown") {
+								if (webid != "" && dGet('wtw_bmerged').title == "Merged Shapes are Shown") {
 									if (mold == null && molds[csgmoldind] != null) {
 										molds[i].checkcollisions = "0";
 										WTW.addMold(molds[i].moldname, molds[i], molds[i].parentname, molds[i].covering);
 									}
-								} else if (dGet('wtw_bmerged').alt == "Merged Shapes are Hidden" && mold != null) {
+								} else if (dGet('wtw_bmerged').title == "Merged Shapes are Hidden" && mold != null) {
 									WTW.addDisposeMoldToQueue(molds[i].moldname);
 								}
 							}
@@ -8656,6 +8665,24 @@ WTWJS.prototype.loadUserSettings = function() {
 				WTW.walkSpeed = Number(walkspeed);
 			}
 		}
+		var walkanimationspeed = WTW.getCookie("walkanimationspeed");
+		if (walkanimationspeed != null) {
+			if (WTW.isNumeric(walkanimationspeed)) {
+				WTW.walkAnimationSpeed = Number(walkanimationspeed);
+			}
+		}
+		var turnspeed = WTW.getCookie("turnspeed");
+		if (turnspeed != null) {
+			if (WTW.isNumeric(turnspeed)) {
+				WTW.turnSpeed = Number(turnspeed);
+			}
+		}
+		var turnanimationspeed = WTW.getCookie("turnanimationspeed");
+		if (turnanimationspeed != null) {
+			if (WTW.isNumeric(turnanimationspeed)) {
+				WTW.turnAnimationSpeed = Number(turnanimationspeed);
+			}
+		}
 		var shadowsetting = WTW.getCookie("shadowsetting");
 		if (shadowsetting != null) {
 			if (WTW.isNumeric(shadowsetting)) {
@@ -8719,8 +8746,17 @@ WTWJS.prototype.loadUserSettings = function() {
 		if (dGet('wtw_trotationspeed') != null) {
 			dGet('wtw_trotationspeed').value = WTW.rotationSpeed;
 		}
+		if (dGet('wtw_twalkanimationspeed') != null) {
+			dGet('wtw_twalkanimationspeed').value = WTW.walkAnimationSpeed;
+		}
 		if (dGet('wtw_twalkspeed') != null) {
 			dGet('wtw_twalkspeed').value = WTW.walkSpeed;
+		}
+		if (dGet('wtw_tturnanimationspeed') != null) {
+			dGet('wtw_tturnanimationspeed').value = WTW.turnAnimationSpeed;
+		}
+		if (dGet('wtw_tturnspeed') != null) {
+			dGet('wtw_tturnspeed').value = WTW.turnSpeed;
 		}
 		if (dGet('wtw_tshadowsetting') != null) {
 			dGet('wtw_tshadowsetting').value = WTW.shadowset;

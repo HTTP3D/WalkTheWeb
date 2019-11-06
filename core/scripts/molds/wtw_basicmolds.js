@@ -1,7 +1,11 @@
 WTWJS.prototype.addMoldBox = function(moldname, lenx, leny, lenz) {
 	var mold;
 	try {
-		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
+		var sideorientation = BABYLON.Mesh.DEFAULT;
+		if (moldname.indexOf("actionzone") > -1 && WTW.adminView == 1) {
+			sideorientation = BABYLON.Mesh.DOUBLESIDE;
+		}
+		mold = BABYLON.MeshBuilder.CreateBox(moldname, {sideOrientation: sideorientation}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx, leny, lenz);
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldBox=" + ex.message);

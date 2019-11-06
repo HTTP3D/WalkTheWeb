@@ -250,7 +250,7 @@ WTWJS.prototype.mouseClick = function(e) {
 				WTW.mouseStartX = e.clientX; 
 				WTW.mouseStartY = e.clientY;
 			}
-			if (typeof WTW.mouseClickAdmin == 'function') {
+			if (WTW.adminView == 1) {
 				WTW.mouseClickAdmin(e);
 			} 
 			if (WTW.mouseStartX == WTW.mouseX && WTW.mouseStartY == WTW.mouseY) {
@@ -298,7 +298,7 @@ WTWJS.prototype.mouseRight = function(e) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}
-			if (typeof WTW.mouseClickRightAdmin == 'function') {
+			if (WTW.adminView == 1) {
 				WTW.mouseClickRightAdmin(e);
 				return false;
 			} else {
@@ -322,7 +322,7 @@ WTWJS.prototype.mouseDown = function(e) {
 			WTW.mouseStartY = e.clientY;
 			WTW.mouseMoveX = e.clientX; 
 			WTW.mouseMoveY = e.clientY;
-			if (typeof WTW.mouseDownAdmin == 'function') {
+			if (WTW.adminView == 1) {
 				WTW.mouseDownAdmin(e);
 			}
 			if (scene != undefined && WTW.mouseStartX == WTW.mouseX && WTW.mouseStartY == WTW.mouseY) {
@@ -359,7 +359,7 @@ WTWJS.prototype.mouseUp = function(e) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}
-			if (typeof WTW.mouseUpAdmin == 'function') {
+			if (WTW.adminView == 1) {
 				WTW.mouseUpAdmin(e);
 			}
 			if (WTW.drive != null) {
@@ -507,7 +507,7 @@ WTWJS.prototype.mouseScroll = function(rolled) {
 				WTW.camera.cameraDirection = WTW.camera.cameraDirection.add(new BABYLON.Vector3(rolled*DirX, rolled*DirY, rolled*DirZ));
 			} else {
 				if (rolled > 0) {
-					rolled = WTW.walkSpeed * 1.5;
+					rolled = 1.5;
 					var nowdate = new Date();
 					if (WTW.isMouseDown == 1) {
 						if (WTW.scrollTimer != null) {
@@ -524,7 +524,7 @@ WTWJS.prototype.mouseScroll = function(rolled) {
 					}
 					WTW.scrollTimer = new Date();
 				} else {
-					rolled = -WTW.walkSpeed * 1.5;
+					rolled = -1.5;
 					WTW.keyPressedRemove(1038);
 					WTW.keyPressedAdd(1040);
 					WTW.scrollTimer = new Date();
@@ -624,17 +624,6 @@ WTWJS.prototype.mouseOverMold = function(mold) {
 				WTW.lastID = WTW.currentID;
 				WTW.currentID = mold.meshUnderPointer.name;
 				WTW.checkHovers(mold);
-				WTW.checkMoldEvent('onmouseover', mold.meshUnderPointer.name);
-			}
-			if (WTW.adminView == 1) {
-				if (WTW.adminMenu == 6 || (WTW.adminMenu >= 10 && WTW.adminMenu <= 20) || WTW.adminMenu == 26 || WTW.adminMenu == 27 || WTW.adminMenu == 30 || WTW.adminMenu == 36 || (WTW.adminMenu >= 40 && WTW.adminMenu <= 52)) {
-					if (mold.meshUnderPointer == null) {
-						//WTW.resetMoldsOpacity();
-					} else if (WTW.currentID != mold.meshUnderPointer.name) {
-						//WTW.resetMoldsOpacity();
-						//mouseOverMold;
-					}
-				}
 			}
 		}
 	} catch(ex) {
@@ -646,9 +635,9 @@ WTWJS.prototype.mouseOutMold = function(mold) {
 	try {
 		if (WTW.canvasFocus == 1) {
 			WTW.hide('wtw_itooltip');
-			if (WTW.adminView == 1 && dGet('wtw_bfocus').alt == "Focus Highlight is On") {
-				if (WTW.adminMenu == 6 || (WTW.adminMenu >= 10 && WTW.adminMenu <= 20) || WTW.adminMenu == 26 || WTW.adminMenu == 27 || WTW.adminMenu == 30 || WTW.adminMenu == 36 || (WTW.adminMenu >= 40 && WTW.adminMenu <= 52)) {
-					/* WTW.resetMoldsOpacity(); */
+			if (WTW.adminView == 1) {
+				if (dGet('wtw_bfocus').title == "Focus Highlight is On") {
+					WTW.unhilightMold(WTW.currentID);
 				}
 			}
 			document.body.style.cursor = "default";

@@ -114,7 +114,10 @@ WTWJS.prototype.getMoldBase = function(pickedmesh) {
 
 WTWJS.prototype.mouseOverMoldAdmin = function(tagmesh, currentid) {
 	try {
-		if (dGet('wtw_bfocus').alt == "Focus Highlight is On") {
+		if (dGet('wtw_bfocus').title == "Focus Highlight is On") {
+			if ((WTW.currentID.indexOf("communitymold") > -1 && communityid != "") || (WTW.currentID.indexOf("buildingmold") > -1 && buildingid != "") || (WTW.currentID.indexOf("thingmold") > -1 && thingid != "")) {
+				WTW.hilightMold(WTW.currentID, 'green');
+			}
 			var namepart;
 			if (currentid.indexOf("-") > -1) {
 				namepart = currentid.split('-');
@@ -139,42 +142,6 @@ WTWJS.prototype.mouseOverMoldAdmin = function(tagmesh, currentid) {
 			}
 			if (mold != null) {
 				//add code to get parent mold (connecting grid) from moldname part
-			}
-			if (mold != null) {
-				if ((WTW.adminMenu == 6 || WTW.adminMenu == 26 || WTW.adminMenu == 10 || WTW.adminMenu == 11 || WTW.adminMenu == 12 || WTW.adminMenu == 15 || WTW.adminMenu == 20) && mold.name.indexOf("connectinggrids") > -1) {
-					var parts = mold.getChildren();
-					if (parts != null) {
-						for (var i=0; i < parts.length;i++) {
-							if (parts[i].name.indexOf("actionzone") == -1) {
-								WTW.highlightMold(parts[i], "#FFFF00");
-								var subparts = parts[i].getChildren();
-								if (subparts != null) {
-									for (var j=0; j < subparts.length;j++) {
-										if (subparts[j].name.indexOf("actionzone") == -1) {
-											WTW.highlightMold(subparts[j], "#FFFF00");
-											var subsubparts = subparts[j].getChildren();
-											if (subsubparts != null) {
-												for (var k=0; k < subsubparts.length;k++) {
-													if (subsubparts[k].name.indexOf("actionzone") == -1) {
-														WTW.highlightMold(subsubparts[k], "#FFFF00");
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				} else if ((WTW.adminMenu == 26 || WTW.adminMenu == 10 || WTW.adminMenu == 11 || WTW.adminMenu == 12 || WTW.adminMenu == 15 || WTW.adminMenu == 20 || WTW.adminMenu == 40 || WTW.adminMenu == 41 || WTW.adminMenu == 42 || WTW.adminMenu == 43) && namepart[0].indexOf("community") > -1 && namepart[5] != "terrain") {
-					WTW.highlightMold(mold, "#008000");
-				} else if ((WTW.adminMenu == 26 || WTW.adminMenu == 10 || WTW.adminMenu == 11 || WTW.adminMenu == 12 || WTW.adminMenu == 15 || WTW.adminMenu == 20 || WTW.adminMenu == 40 || WTW.adminMenu == 41 || WTW.adminMenu == 42 || WTW.adminMenu == 43) && namepart[0].indexOf("community") > -1 && namepart[5] == "terrain") {
-					WTW.highlightMold(mold, "#800080");
-				} else if ((WTW.adminMenu == 6 || WTW.adminMenu == 10 || WTW.adminMenu == 11 || WTW.adminMenu == 12 || WTW.adminMenu == 15 || WTW.adminMenu == 20) && namepart[0].indexOf("building") > -1) {
-					WTW.highlightMold(mold, "#008000");
-				} else if ((WTW.adminMenu == 10 || WTW.adminMenu == 11 || WTW.adminMenu == 12 || WTW.adminMenu == 15 || WTW.adminMenu == 20 || WTW.adminMenu == 36) && namepart[0].indexOf("thing") > -1) {
-					WTW.highlightMold(mold, "#008000");
-				}
 			}
 		}
 	} catch (ex) {

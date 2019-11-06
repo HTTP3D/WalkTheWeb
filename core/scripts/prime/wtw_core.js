@@ -77,7 +77,9 @@ WTWJS.prototype.initEnvironment = function() {
 		if (WTW.adminView == 1) {
 			scene.blockMaterialDirtyMechanism = true;
 		}
-		WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
+		if (WTW.highlightLayer == null) {
+			WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
+		}
 		var setupparent = BABYLON.MeshBuilder.CreateBox("setupparent-0", {}, scene);
 		setupparent.material = WTW.addCovering("hidden", "setupparent-0", WTW.newAvatarDef(), 1, 1, 1, "0", "0");
 		setupparent.material.alpha = 0;
@@ -1534,7 +1536,7 @@ WTWJS.prototype.moveAvatar = function(avatar, keyspressed) {
 									if (WTW.jumpTimer == null) {
 										var jumpind = 0;
 										WTW.jumpTimer = window.setInterval(function() {
-											var rolled = WTW.walkSpeed*3;
+											var rolled = 3;
 											var DirX = Math.sin(WTW.camera.rotation.y)*Math.cos(WTW.camera.rotation.x);
 											var DirY = 1;
 											var DirZ = Math.cos(WTW.camera.rotation.y)*Math.cos(WTW.camera.rotation.x);
@@ -1743,7 +1745,8 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											}
 											break;
 										case 'onwalk':
-											var stride =  (-15 * avatar.WTW.animations.running[key].weight) / WTW.fps; //WTW.walkSpeed
+											var stride =  (-15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //WTW.walkSpeed
+											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
 											var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
 											var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
 											var ray = new BABYLON.Ray(avatar.position, direction, 50);
@@ -1757,6 +1760,7 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											break;
 										case 'onrun':
 											var stride =  (-25 * avatar.WTW.animations.running[key].weight) / WTW.fps; //  / WTW.walkSpeed
+											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
 											var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
 											var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
 											var ray = new BABYLON.Ray(avatar.position, direction, 50);
@@ -1770,6 +1774,7 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											break;
 										case 'onwalkbackwards':
 											var stride =  10 * avatar.WTW.animations.running[key].weight / WTW.fps; //  / WTW.walkSpeed
+											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
 											var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
 											var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
 											var ray = new BABYLON.Ray(avatar.position, direction, 50);
@@ -1783,6 +1788,7 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											break;
 										case 'onrunbackwards':
 											var stride =  25 * avatar.WTW.animations.running[key].weight / WTW.fps; //  / WTW.walkSpeed
+											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
 											var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
 											var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
 											var ray = new BABYLON.Ray(avatar.position, direction, 50);
@@ -1795,19 +1801,24 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											avatar.moveWithCollisions(move);
 											break;
 										case 'onturnleft':
-											avatar.rotation.y -= WTW.getRadians(25 * avatar.WTW.animations.running[key].weight / WTW.fps);
+											avatar.rotation.y -= WTW.getRadians(70 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
+											avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed;
 											break;
 										case 'onrunturnleft':
-											avatar.rotation.y -= WTW.getRadians(60 * avatar.WTW.animations.running[key].weight / WTW.fps);
+											avatar.rotation.y -= WTW.getRadians(120 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
+											avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed * 1.5;
 											break;
 										case 'onturnright':
-											avatar.rotation.y += WTW.getRadians(25 * avatar.WTW.animations.running[key].weight / WTW.fps);
+											avatar.rotation.y += WTW.getRadians(70 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
+											avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed;
 											break;
 										case 'onrunturnright':
-											avatar.rotation.y += WTW.getRadians(60 * avatar.WTW.animations.running[key].weight / WTW.fps);
+											avatar.rotation.y += WTW.getRadians(120 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
+											avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed * 1.5;
 											break;
 										case 'onstrafeleft':
 											var stride =  6 * avatar.WTW.animations.running[key].weight / WTW.fps; //  / WTW.walkSpeed
+											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
 											var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
 											var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
 											var ray = new BABYLON.Ray(avatar.position, direction, 50);
@@ -1821,6 +1832,7 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											break;
 										case 'onrunstrafeleft':
 											var stride =  15 * avatar.WTW.animations.running[key].weight / WTW.fps; //  / WTW.walkSpeed
+											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
 											var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
 											var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
 											var ray = new BABYLON.Ray(avatar.position, direction, 50);
@@ -1834,6 +1846,7 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											break;
 										case 'onstraferight':
 											var stride =  -6 * avatar.WTW.animations.running[key].weight / WTW.fps; // / WTW.walkSpeed
+											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
 											var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
 											var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
 											var ray = new BABYLON.Ray(avatar.position, direction, 50);
@@ -1848,6 +1861,7 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											break;
 										case 'onrunstraferight':
 											var stride =  -15 * avatar.WTW.animations.running[key].weight / WTW.fps; // / WTW.walkSpeed
+											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
 											var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
 											var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
 											var ray = new BABYLON.Ray(avatar.position, direction, 50);

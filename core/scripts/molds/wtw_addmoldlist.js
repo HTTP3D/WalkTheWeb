@@ -624,6 +624,9 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 					mold.checkCollisions = true; 
 				}
 			}
+			if (WTW.adminView == 1) {
+				WTW.registerMouseOver(mold);
+			}
 			if (parentvalid == false) {
 				WTW.addDisposeMoldToQueue(moldname);
 			}
