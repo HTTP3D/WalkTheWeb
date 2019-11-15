@@ -19,7 +19,7 @@ WTWJS.prototype.initLoadSequence = function() {
 			window.location.href = "https://www.walktheweb.com/wiki/trouble-viewing-3d-websites/";
 		}
 	} catch (ex) {
-		WTW.log("core-initLoadSequence=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-initLoadSequence=" + ex.message);
 	} 
 }
 
@@ -31,7 +31,7 @@ WTWJS.prototype.continueLoadSequence = function() {
 		WTW.loadScene();
 		WTW.loadUserSettingsAfterEngine();
 	} catch (ex) {
-		WTW.log("core-continueLoadSequence=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-continueLoadSequence=" + ex.message);
 	} 
 }
 
@@ -55,21 +55,20 @@ WTWJS.prototype.initEnvironment = function() {
 		canvas.addEventListener("webglcontextrestored", function (event) {initializeResources();  }, false);
 		engine = new BABYLON.Engine(canvas, true, {deterministicLockstep: false, lockstepMaxSteps: 4});
 		console.log("%c\r\n\r\nWalkTheWeb Open-Source 3D Internet\r\n" + wtw_versiontext + "\r\n", "color:green;font-weight:bold;");
-		//WTW.log("WebGL version=" + engine.webGLVersion);
 		scene = new BABYLON.Scene(engine);        
 		scene.name = "WalkTheWeb";
-		scene.enablePhysics();
+		scene.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
+		var physicsplugin = new BABYLON.CannonJSPlugin();
+		scene.enablePhysics(scene.gravity, physicsplugin);
 		scene.autoClear = false;
 		scene.autoClearDepthAndStencil = false;
-		scene.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
 		scene.collisionsEnabled = true;
 		scene.fogMode = BABYLON.Scene.FOGMODE_LINEAR;
 		scene.fogDensity = 0.01;
 		scene.fogStart = 500.0;
 		scene.fogEnd = 2500.0;
 		scene.fogColor = new BABYLON.Color3(0.4, 0.5, 0.6);
-		//scene.clearColor = new BABYLON.Color3(.8, .8, .8);
-		//scene.useMaterialMeshMap = true;
+
 		WTW.mouseOver = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, WTW.mouseOverMold);
 		WTW.mouseOut = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, WTW.mouseOutMold);
 		scene.actionManager = new BABYLON.ActionManager(scene);
@@ -99,12 +98,7 @@ WTWJS.prototype.initEnvironment = function() {
 			WTW.camera.inertia = .80;
 		}
 		WTW.resetActivityTimer();
-		//WTW.camera.inputs.clear();
-		//WTW.camera.inputs.attached.touch.detachControl();
 		WTW.camera.inputs.attached.mouse.detachControl();
-		//WTW.camera.inputs.attached.keyboard.detachControl();
-		//WTW.camera.inputs.attached.gamepad.detachControl();
-		
 		WTW.camera.yOffset = 180;		
 		WTW.camera.position.x = 0;
 		WTW.camera.position.y = 20;
@@ -132,7 +126,6 @@ WTWJS.prototype.initEnvironment = function() {
 		scene.activeCameras[0] = WTW.camera;
 		scene.cameraToUseForPointers = scene.activeCameras[0];
 
-		var groundpositiony = 0;
 		WTW.sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(WTW.getRadians(20), WTW.getRadians(-200), WTW.getRadians(-100)), scene);
 		WTW.sun.position = new BABYLON.Vector3(0, WTW.sunPositionY, 0);
 		WTW.sun.intensity = WTW.getSunIntensity(WTW.init.skyInclination, WTW.init.skyAzimuth);
@@ -165,6 +158,7 @@ WTWJS.prototype.initEnvironment = function() {
 		WTW.extraGround.material.diffuseTexture = new BABYLON.Texture(WTW.init.groundTexturePath, scene);
 		WTW.extraGround.material.diffuseTexture.uScale = 500;
 		WTW.extraGround.material.diffuseTexture.vScale = 500;
+		WTW.extraGround.physicsImpostor = new BABYLON.PhysicsImpostor(WTW.extraGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.5 }, scene);
 		var mainparent = WTW.getMainParent();
 		WTW.toggleCompass();
 		WTW.startRender();
@@ -192,10 +186,9 @@ WTWJS.prototype.initEnvironment = function() {
 			WTW.getSessionAvatar();
 		}
 	} catch (ex) {
-		WTW.log("core-initEnvironment=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-initEnvironment=" + ex.message);
 	} 
 }
-
 
 WTWJS.prototype.loadInitSettings = function() {
 	try {
@@ -235,8 +228,6 @@ WTWJS.prototype.loadInitSettings = function() {
 				WTW.editBuildingAccess = wtw_domain.buildinginfo.access;
 				try {
 					WTW.init.gravity = wtw_domain.domaininfo.gravity;
-					WTW.init.wallCollisions = wtw_domain.domaininfo.wallcollisions;
-					WTW.init.floorCollisions = wtw_domain.domaininfo.floorcollisions;
 				} catch (ex) {}
 				if (WTW.init.startRotationX > 180) {
 					WTW.init.startRotationX -= 360;
@@ -261,7 +252,7 @@ WTWJS.prototype.loadInitSettings = function() {
 			buildingid = "";
 		}
 	} catch (ex) {
-		WTW.log("core-loadInitSettings=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-loadInitSettings=" + ex.message);
 	} 
 }
 
@@ -306,7 +297,7 @@ WTWJS.prototype.loadUserCanvas = function() {
 			WTW.ctx.clearRect(0, 0, WTW.sizeX, WTW.sizeY);
 		}
 	} catch (ex) {
-		WTW.log("core-loadUserCanvas=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-loadUserCanvas=" + ex.message);
 	} 
 }
 
@@ -322,7 +313,7 @@ WTWJS.prototype.loadScene = function() {
 			WTW.loadCommunity(null);
 		}
 	} catch (ex) {
-		WTW.log("core-loadScene=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-loadScene=" + ex.message);
 	} 
 }
 
@@ -406,7 +397,6 @@ WTWJS.prototype.loadCommunity = function(addcommunities) {
 		var groundcovering = WTW.extraGround.material;
 		WTW.extraGround.material.dispose();
 		WTW.extraGround.material = groundcovering;
-/*		WTW.extraGround.physicsImpostor = new BABYLON.PhysicsImpostor(WTW.extraGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }); */
 		if ((groundpositiony < waterpositiony) || (WTW.adminView == 1 && communityid != "")) {
 			WTW.initLoadUpload(groundtextureid, groundtextureid, 7);
 			WTW.water = BABYLON.MeshBuilder.CreatePlane("communitywater", {width:5000, height:5000, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
@@ -417,8 +407,8 @@ WTWJS.prototype.loadCommunity = function(addcommunities) {
 			WTW.waterMat.windForce = -10;
 			WTW.waterMat.waveHeight = .2;
 			WTW.waterMat.windDirection = new BABYLON.Vector2(1, 1);
-			WTW.waterMat.waterColor = new BABYLON.Color3(0.1, 0.2, 0.5); //(0.1, 0.2, 0.5); water color blended with the refraction (near)
-			WTW.waterMat.waterColor2 = new BABYLON.Color3(0.3, 0.4, 0.8); //(0.3, 0.4, 0.8); water color blended with the reflection (far)
+			WTW.waterMat.waterColor = new BABYLON.Color3(0.1, 0.2, 0.5); /* water color blended with the refraction (near) */
+			WTW.waterMat.waterColor2 = new BABYLON.Color3(0.3, 0.4, 0.8); /* water color blended with the reflection (far) */
 			WTW.waterMat.colorBlendFactor = 0.2;
 			WTW.waterMat.bumpHeight = 0.6;
 			WTW.waterMat.waveLength = 0.02;	
@@ -432,26 +422,19 @@ WTWJS.prototype.loadCommunity = function(addcommunities) {
 		}
 		
 		if (WTW.sky.position.x != WTW.init.startPositionX || WTW.sky.position.y != WTW.init.startPositionY - 100 || WTW.sky.position.z != WTW.init.startPositionZ) {
-			// add animation
-			
+			// optional: add animation
 			WTW.sky.position.x = WTW.init.startPositionX;
 			WTW.sky.position.y = WTW.init.startPositionY - 100;
 			WTW.sky.position.z = WTW.init.startPositionZ;
-			//WTW.sky.rotation.x = WTW.getRadians(90);
-			//WTW.sky.rotation.y = WTW.getRadians(180);
-			//WTW.sky.rotation.z = WTW.getRadians(90);
 		}
 		if (groundpositiony != 0) {
-			// add animation
-			
-			
+			// optional: add animation
 			WTW.extraGround.position.y = groundpositiony;
 		}
 /*		scene.fogDensity = 0.0001;
 		scene.fogStart = 1000.0;
 		scene.fogEnd = 2500.0;
 		scene.fogColor = new BABYLON.Color3(0.4, 0.5, 0.6);
-		//scene.clearColor = new BABYLON.Color3(.8, .8, .8);
 */
 		if (WTW.shadows == null) {
 			var shadowsetting = WTW.getCookie("shadowsetting");
@@ -478,12 +461,8 @@ WTWJS.prototype.loadCommunity = function(addcommunities) {
 			}
 		}
 		WTW.isUploadReadyOrAdd('t1qlqxd6pzubzzzy');
-		//scene.enablePhysics(new BABYLON.Vector3(0,-WTW.init.gravity, 0), new BABYLON.OimoJSPlugin()); // BABYLON.OimoJSPlugin(200)
-		scene.enablePhysics(new BABYLON.Vector3(0,-WTW.init.gravity, 0), new BABYLON.CannonJSPlugin());
-		scene.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
-		//scene.workerCollisions = true;
 	} catch (ex) {
-		WTW.log("core-loadCommunity=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-loadCommunity=" + ex.message);
 	} 
 }
 
@@ -498,6 +477,7 @@ WTWJS.prototype.getConnectingGrids = function() {
 			parentwebid = thingid;
 		}
 		if (parentwebid != '') {
+WTW.log("/connect/connectinggrids.php?parentwebid=" + parentwebid + "&startpositionx=" + WTW.camera.position.x + "&startpositiony=" + WTW.camera.position.y + "&startpositionz=" + WTW.camera.position.z + "&userid=" + dGet('wtw_tuserid').value);
 			WTW.getJSON("/connect/connectinggrids.php?parentwebid=" + parentwebid + "&startpositionx=" + WTW.camera.position.x + "&startpositiony=" + WTW.camera.position.y + "&startpositionz=" + WTW.camera.position.z + "&userid=" + dGet('wtw_tuserid').value, 
 				function(response) {
 					WTW.loadConnectingGrids(JSON.parse(response));
@@ -505,7 +485,7 @@ WTWJS.prototype.getConnectingGrids = function() {
 			);
 		}
 	} catch (ex) {
-		WTW.log("core-getConnectingGrids=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-getConnectingGrids=" + ex.message);
 	} 
 }
 
@@ -594,7 +574,7 @@ WTWJS.prototype.loadConnectingGrids = function(addconnectinggrids) {
 		});
 		scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnEveryFrameTrigger, WTW.processMoldQueue, condition2));
 	} catch (ex) {
-		WTW.log("core-loadConnectingGrids=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-loadConnectingGrids=" + ex.message);
 	} 
 }
 
@@ -630,7 +610,7 @@ WTWJS.prototype.getActionZones = function(connectinggridind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-getActionZones=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-getActionZones=" + ex.message);
 	} 
 }
 
@@ -662,7 +642,6 @@ WTWJS.prototype.loadActionZones = function(addactionzones) {
 					} else {
 						WTW.actionZones[actionzoneind].parentname = cgmoldname;
 					}
-					//WTW.actionZones[actionzoneind].parentname = WTW.getParentName(WTW.actionZones[actionzoneind].connectinggridind);
 					var actionzonename = "actionzone-" + actionzoneind + "-" + WTW.actionZones[actionzoneind].actionzoneid + "-" + WTW.actionZones[actionzoneind].connectinggridind + "-" + WTW.actionZones[actionzoneind].connectinggridid + "-" + WTW.actionZones[actionzoneind].actionzonetype;
 					WTW.actionZones[actionzoneind].moldname = actionzonename;
 					WTW.attachConnectingGridToActionZone(actionzoneind);
@@ -670,7 +649,7 @@ WTWJS.prototype.loadActionZones = function(addactionzones) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-loadActionZones=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-loadActionZones=" + ex.message);
 	} 
 }
 
@@ -704,7 +683,7 @@ WTWJS.prototype.attachConnectingGridToActionZone = function(actionzoneind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-attachConnectingGridToActionZone=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-attachConnectingGridToActionZone=" + ex.message);
 	} 
 }
 
@@ -777,7 +756,7 @@ WTWJS.prototype.getMoldsByWebID = function(actionzoneind) {
 			}
 		); */
 	} catch (ex) {
-		WTW.log("core-getMoldsByWebID=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-getMoldsByWebID=" + ex.message);
 	}
 }
 
@@ -930,7 +909,7 @@ WTWJS.prototype.loadMolds = function(addmolds) {
 			}		
 		} 
 	} catch (ex) {
-		WTW.log("core-loadMolds=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-loadMolds=" + ex.message);
 	}
 }
 
@@ -958,7 +937,7 @@ WTWJS.prototype.loadAutomations = function(addautomations) {
 			}
 		}	
 	} catch (ex) {
-		WTW.log("core-loadAutomations=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-loadAutomations=" + ex.message);
 	}
 }
 
@@ -1022,7 +1001,7 @@ WTWJS.prototype.unloadMoldsByWebID = function(actionzoneind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-unloadMoldsByWebID=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-unloadMoldsByWebID=" + ex.message);
 	}
 }
 
@@ -1033,7 +1012,7 @@ WTWJS.prototype.stopRender = function() {
 			engine.stopRenderLoop();
 		}
 	} catch (ex) {
-		WTW.log("core-stopRender=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-stopRender=" + ex.message);
 	}
 }
 
@@ -1129,24 +1108,13 @@ WTWJS.prototype.startRender = function() {
 					if (WTW.checkShownMolds == 0) {
 						WTW.setShownMolds();
 					}
-					/* uncomment if enabling que (currently goes straight to trackPageView) */
-					/* WTW.checkAnalyticsQueue(); */
 					WTW.setClosestBuilding();
 					WTW.checkActionZones();
-/*					if (WTW.isInitCycle == 1) {
-						BABYLON.SceneOptimizer.OptimizeAsync(scene, BABYLON.SceneOptimizerOptions.HighDegradationAllowed() ,	function(){	
-							//if ( mydebug ) {
-								console.log("Optimization successful");
-							//}
-						}, function(){ 
-							//Optimization failed
-						});
-					}*/
 				} catch (ex) {} 
 			});
 		}
 	} catch (ex) {
-		WTW.log("core-startRender=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-startRender=" + ex.message);
 	}
 }
 
@@ -1257,7 +1225,7 @@ WTWJS.prototype.checkActionZones = function() {
 			WTW.hide('wtw_showmeshfps');
 		}
 	} catch(ex) {
-		WTW.log("core-checkActionZones=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-checkActionZones=" + ex.message);
 	}
 }
 
@@ -1464,7 +1432,7 @@ WTWJS.prototype.setClosestBuilding = function() {
 			WTW.browseWebID = closestwebid;
 		}
 	} catch (ex) {
-		WTW.log("core-setClosestBuilding=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-setClosestBuilding=" + ex.message);
 	}
 }
 
@@ -1510,7 +1478,7 @@ WTWJS.prototype.setAvatarSync = function(animations, moveevents) {
 			}
 		}
 	} catch(ex) {
-		WTW.log("core-setAvatarSync=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-setAvatarSync=" + ex.message);
 	}
 }
 
@@ -1533,27 +1501,6 @@ WTWJS.prototype.moveAvatar = function(avatar, keyspressed) {
 									moveevents[moveevents.length] = "onjump";
 									break;
 	/*							case 32: //space jump
-									if (WTW.jumpTimer == null) {
-										var jumpind = 0;
-										WTW.jumpTimer = window.setInterval(function() {
-											var rolled = 3;
-											var DirX = Math.sin(WTW.camera.rotation.y)*Math.cos(WTW.camera.rotation.x);
-											var DirY = 1;
-											var DirZ = Math.cos(WTW.camera.rotation.y)*Math.cos(WTW.camera.rotation.x);
-											//WTW.camera.cameraDirection = WTW.camera.cameraDirection.add(new BABYLON.Vector3(rolled*DirX, DirY, rolled*DirZ)); 
-											jumpind += 1;
-											if (WTW.jumpTimer != null && jumpind > 3) {
-												window.clearInterval(WTW.jumpTimer);
-												WTW.jumpTimer = null;
-												WTW.jumpTimer = window.setTimeout(function(){
-													if (WTW.jumpTimer != null) {
-														window.clearTimeout(WTW.jumpTimer);
-														WTW.jumpTimer = null;
-													}
-												},1000);
-											}
-										},10);
-									}
 									break;
 	*/							case 38: //arrow w forward
 								case 87: //w forward
@@ -1641,6 +1588,12 @@ WTWJS.prototype.moveAvatar = function(avatar, keyspressed) {
 								case 1070: //mouse rotate down
 									moveevents[moveevents.length] = "onrotatedown";
 									break;
+								case 0: //pause animation
+									moveevents[moveevents.length] = "onpause";
+									break;
+								case 3001: //sit wait
+									moveevents[moveevents.length] = "onsitwait";
+									break;
 							} 
 						} else {
 							moveevents[moveevents.length] = keyspressed[k];
@@ -1658,7 +1611,7 @@ WTWJS.prototype.moveAvatar = function(avatar, keyspressed) {
 			WTW.setAvatarMovement(avatar, moveevents);
 		} 
 	} catch(ex) {
-		WTW.log("core-moveAvatar=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-moveAvatar=" + ex.message);
 	}
 }
 	
@@ -1677,6 +1630,9 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 					if (avatar.WTW.animations.running != null) {
 						var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
 						var weight = 0;
+						if (WTW.isInArray(moveevents, 'onpause')) {
+							weight = 1;
+						}
 						for(var key in avatar.WTW.animations.running) {
 							if (avatar.WTW.animations.running[key] != null) {
 								if (key == 'onwait' && WTW.isInArray(moveevents, key) == false) {
@@ -1745,134 +1701,158 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											}
 											break;
 										case 'onwalk':
-											var stride =  (-15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //WTW.walkSpeed
-											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-											var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-											var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-											var ray = new BABYLON.Ray(avatar.position, direction, 50);
-											var hit = scene.pickWithRay(ray);
-											if (hit.pickedMesh){
-												if (hit.distance < 2) {
-													move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+											if (WTW.moveOverride == 0) {
+												WTW.cancelSit(avatar, moveevents);
+												var stride =  (-15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //WTW.walkSpeed
+												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+												var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+												var ray = new BABYLON.Ray(avatar.position, direction, 50);
+												var hit = scene.pickWithRay(ray);
+												if (hit.pickedMesh){
+													if (hit.distance < 2) {
+														move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+													}
 												}
+												avatar.moveWithCollisions(move);
 											}
-											avatar.moveWithCollisions(move);
 											break;
 										case 'onrun':
-											var stride =  (-25 * avatar.WTW.animations.running[key].weight) / WTW.fps; //  / WTW.walkSpeed
-											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-											var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-											var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-											var ray = new BABYLON.Ray(avatar.position, direction, 50);
-											var hit = scene.pickWithRay(ray);
-											if (hit.pickedMesh){
-												if (hit.distance < 2) {
-													move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-												}
-											}	
-											avatar.moveWithCollisions(move);
+											if (WTW.moveOverride == 0) {
+												WTW.cancelSit(avatar, moveevents);
+												var stride =  (-25 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //  / WTW.walkSpeed
+												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+												var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+												var ray = new BABYLON.Ray(avatar.position, direction, 50);
+												var hit = scene.pickWithRay(ray);
+												if (hit.pickedMesh){
+													if (hit.distance < 2) {
+														move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+													}
+												}	
+												avatar.moveWithCollisions(move);
+											}
 											break;
 										case 'onwalkbackwards':
-											var stride =  10 * avatar.WTW.animations.running[key].weight / WTW.fps; //  / WTW.walkSpeed
-											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-											var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-											var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-											var ray = new BABYLON.Ray(avatar.position, direction, 50);
-											var hit = scene.pickWithRay(ray);
-											if (hit.pickedMesh){
-												if (hit.distance < 2) {
-													move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-												}
-											}	
-											avatar.moveWithCollisions(move);
+											if (WTW.moveOverride == 0) {
+												var stride =  (10 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //  / WTW.walkSpeed
+												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+												var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+												var ray = new BABYLON.Ray(avatar.position, direction, 50);
+												var hit = scene.pickWithRay(ray);
+												if (hit.pickedMesh){
+													if (hit.distance < 2) {
+														move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+													}
+												}	
+												avatar.moveWithCollisions(move);
+											}
 											break;
 										case 'onrunbackwards':
-											var stride =  25 * avatar.WTW.animations.running[key].weight / WTW.fps; //  / WTW.walkSpeed
-											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-											var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-											var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-											var ray = new BABYLON.Ray(avatar.position, direction, 50);
-											var hit = scene.pickWithRay(ray);
-											if (hit.pickedMesh){
-												if (hit.distance < 2) {
-													move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-												}
-											}	
-											avatar.moveWithCollisions(move);
+											if (WTW.moveOverride == 0) {
+												var stride =  (25 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //  / WTW.walkSpeed
+												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+												var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+												var ray = new BABYLON.Ray(avatar.position, direction, 50);
+												var hit = scene.pickWithRay(ray);
+												if (hit.pickedMesh){
+													if (hit.distance < 2) {
+														move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
+													}
+												}	
+												avatar.moveWithCollisions(move);
+											}
 											break;
 										case 'onturnleft':
-											avatar.rotation.y -= WTW.getRadians(70 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
-											avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed;
+											if (WTW.moveOverride == 0) {
+												avatar.rotation.y -= WTW.getRadians(70 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
+												avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed;
+											}
 											break;
 										case 'onrunturnleft':
-											avatar.rotation.y -= WTW.getRadians(120 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
-											avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed * 1.5;
+											if (WTW.moveOverride == 0) {
+												avatar.rotation.y -= WTW.getRadians(120 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
+												avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed * 1.5;
+											}
 											break;
 										case 'onturnright':
-											avatar.rotation.y += WTW.getRadians(70 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
-											avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed;
+											if (WTW.moveOverride == 0) {
+												avatar.rotation.y += WTW.getRadians(70 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
+												avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed;
+											}
 											break;
 										case 'onrunturnright':
-											avatar.rotation.y += WTW.getRadians(120 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
-											avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed * 1.5;
+											if (WTW.moveOverride == 0) {
+												avatar.rotation.y += WTW.getRadians(120 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
+												avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed * 1.5;
+											}
 											break;
 										case 'onstrafeleft':
-											var stride =  6 * avatar.WTW.animations.running[key].weight / WTW.fps; //  / WTW.walkSpeed
-											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-											var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-											var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-											var ray = new BABYLON.Ray(avatar.position, direction, 50);
-											var hit = scene.pickWithRay(ray);
-											if (hit.pickedMesh){
-												if (hit.distance < 2) {
-													move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 1, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-												}
-											}	
-											avatar.moveWithCollisions(move);
+											if (WTW.moveOverride == 0) {
+												var stride =  (6 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //  / WTW.walkSpeed
+												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
+												var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
+												var ray = new BABYLON.Ray(avatar.position, direction, 50);
+												var hit = scene.pickWithRay(ray);
+												if (hit.pickedMesh){
+													if (hit.distance < 2) {
+														move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 1, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
+													}
+												}	
+												avatar.moveWithCollisions(move);
+											}
 											break;
 										case 'onrunstrafeleft':
-											var stride =  15 * avatar.WTW.animations.running[key].weight / WTW.fps; //  / WTW.walkSpeed
-											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-											var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-											var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-											var ray = new BABYLON.Ray(avatar.position, direction, 50);
-											var hit = scene.pickWithRay(ray);
-											if (hit.pickedMesh){
-												if (hit.distance < 2) {
-													move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 1, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-												}
-											}	
-											avatar.moveWithCollisions(move);
+											if (WTW.moveOverride == 0) {
+												var stride =  (15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //  / WTW.walkSpeed
+												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
+												var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
+												var ray = new BABYLON.Ray(avatar.position, direction, 50);
+												var hit = scene.pickWithRay(ray);
+												if (hit.pickedMesh){
+													if (hit.distance < 2) {
+														move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 1, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
+													}
+												}	
+												avatar.moveWithCollisions(move);
+											}
 											break;
 										case 'onstraferight':
-											var stride =  -6 * avatar.WTW.animations.running[key].weight / WTW.fps; // / WTW.walkSpeed
-											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-											var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-											var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-											var ray = new BABYLON.Ray(avatar.position, direction, 50);
-											var hit = scene.pickWithRay(ray);
-											if (hit.pickedMesh){
-												if (hit.distance < 2) {
-													//move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 1, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-													move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-												}
-											}	
-											avatar.moveWithCollisions(move);
+											if (WTW.moveOverride == 0) {
+												var stride =  (-6 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; // / WTW.walkSpeed
+												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
+												var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
+												var ray = new BABYLON.Ray(avatar.position, direction, 50);
+												var hit = scene.pickWithRay(ray);
+												if (hit.pickedMesh){
+													if (hit.distance < 2) {
+														move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
+													}
+												}	
+												avatar.moveWithCollisions(move);
+											}
 											break;
 										case 'onrunstraferight':
-											var stride =  -15 * avatar.WTW.animations.running[key].weight / WTW.fps; // / WTW.walkSpeed
-											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-											var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-											var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-											var ray = new BABYLON.Ray(avatar.position, direction, 50);
-											var hit = scene.pickWithRay(ray);
-											if (hit.pickedMesh){
-												if (hit.distance < 2) {
-													//move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 1, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-													move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-												}
-											}	
-											avatar.moveWithCollisions(move);
+											if (WTW.moveOverride == 0) {
+												var stride =  (-15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; // / WTW.walkSpeed
+												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
+												var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
+												var ray = new BABYLON.Ray(avatar.position, direction, 50);
+												var hit = scene.pickWithRay(ray);
+												if (hit.pickedMesh){
+													if (hit.distance < 2) {
+														move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
+													}
+												}	
+												avatar.moveWithCollisions(move);
+											}
 											break;
 									}
 									WTW.setMovingCameras(avatar, avatarcamera);
@@ -1890,7 +1870,7 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 			}
 		}
 	} catch(ex) {
-		WTW.log("core-setAvatarMovement=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-setAvatarMovement=" + ex.message);
 	}
 }
 

@@ -2280,9 +2280,20 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 						var animation = avatar.WTW.animations[animationind];
 						if (animation.objectfolder != '' && animation.objectfile != '') {
 							BABYLON.SceneLoader.ImportMeshAsync("", animation.objectfolder, animation.objectfile, scene).then( function (walkresults) {
-
+								var avatarparent = scene.getMeshByID(avatarname + "-scale");
 								frametotal += lastframecount + 1;
+/*								for (var i=0; i < walkresults.meshes.length; i++) {
+									if (walkresults.meshes[i] != null) {
+										if (walkresults.meshes[i].parent == null) {
+											walkresults.meshes[i].parent = avatarparent;
+										}
+									}
+								} */
 								var walkskeleton = walkresults.skeletons[0];
+								if (walkskeleton.parent == null) {
+									walkskeleton.parent = avatarparent;
+								}
+								
 								if (animation.animationname == "onoption") {
 									animation.animationname = "onoption" + animation.avataranimationid;
 								}
@@ -2295,6 +2306,8 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 								avatar.WTW.skeleton.copyAnimationRange(walkskeleton, animation.animationname, true);
 								if (easingfunction != undefined && easingfunction != null) {
 									for (var c=0; c < avatar.WTW.skeleton.bones.length; c++) {
+										//avatar.WTW.skeleton.bones[c].scale(.04, .04, .04);
+										
 										avatar.WTW.skeleton.bones[c].animations[0].setEasingFunction(easingfunction);
 									}
 								}
@@ -2306,10 +2319,10 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 								avatar.WTW.animations[animationind].totalendframe = totalendframe;
 
 								if (enteranimate) {
-									avatar.WTW.animations.running[animation.animationname] = scene.beginWeightedAnimation(avatar.WTW.skeleton, frametotal, totalendframe, 0, animation.animationloop, Number(animation.speedratio));
+									avatar.WTW.animations.running[animation.animationname] = scene.beginWeightedAnimation(avatar.WTW.skeleton, frametotal, totalendframe, animation.startweight, animation.animationloop, Number(animation.speedratio));
 								}
 								if (enteranimate == false) {
-									avatar.WTW.animations.running[animation.animationname] = scene.beginWeightedAnimation(avatar.WTW.skeleton, Number(avatar.WTW.animations[animationind].totalstartframe), Number(avatar.WTW.animations[animationind].totalendframe), 0, animation.animationloop, Number(animation.speedratio));
+									avatar.WTW.animations.running[animation.animationname] = scene.beginWeightedAnimation(avatar.WTW.skeleton, Number(avatar.WTW.animations[animationind].totalstartframe), Number(avatar.WTW.animations[animationind].totalendframe), animation.startweight, animation.animationloop, Number(animation.speedratio), animation.onanimationend);
 								} else if (avatar.WTW.animations[animationind + 1] != null) {
 									lastframecount = Number(animation.endframe) - Number(animation.startframe) + 1;
 									WTW.loadAvatarAnimations(avatarname, easingfunction, animationind + 1, frametotal, lastframecount);
@@ -2318,9 +2331,18 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 									WTW.toggleMenuAnimations();
 									WTW.showAvatarDisplayName(false);
 									WTW.pluginsMyAnimationsLoaded();
-									
+									if (WTW.adminView == 1) {
+										window.setTimeout(function() {
+											if (WTW.getCookie("wtw_bavatarcamera") != null) {
+												if (WTW.getCookie("wtw_bavatarcamera") == '0') {
+													WTW.setQuickEditorAvatarCamera(0);
+												}
+											}
+										},1000);
+									}
 									if (enteranimate) {
 										WTW.avatarEnter(avatarname);
+										WTW.loadSit(avatarname);
 									} else {
 										WTW.avatarShowVisible(avatarname);
 									}
@@ -2380,57 +2402,12 @@ WTWJS.prototype.changeAvatarAnimation = function(selobj) {
 			if (dGet(selobj.id + "-value") != null) {
 				useravataranimationid = dGet(selobj.id + "-value").value;
 			}
-			var avatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
-			if (avatar != null) {
-				if (avatar.WTW.animations != undefined) {
-					var totalendframe = 0;
-					var totalframes = 0;
-					for (var i=avatar.WTW.animations.length;i>-1;i--) {
-						if (avatar.WTW.animations[i] != null) {
-							if (avatar.WTW.animations[i].useravataranimationid == useravataranimationid && animationname == "onoption" && useravataranimationid != '') {
-								if (avatar.WTW.animations.running['onoption' + avatar.WTW.animations[i].avataranimationid] != undefined) {
-									avatar.WTW.animations.running['onoption' + avatar.WTW.animations[i].avataranimationid].stop();
-								}
-								found = i;
-							} else if (animationname != "onoption") {
-								if (avatar.WTW.animations.running[animationname] != undefined) {
-									avatar.WTW.animations.running[animationname].stop();
-									avatar.WTW.skeleton.deleteAnimationRange(animationname,false);
-								}
-							}
-							if (Number(avatar.WTW.animations[i].totalendframe) > totalendframe) {
-								totalendframe = Number(avatar.WTW.animations[i].totalendframe);
-								totalframes = Number(avatar.WTW.animations[i].totalframes);
-							}
-						}
-					}
-					if (found == -1) {
-						found = avatar.WTW.animations.length;
-						avatar.WTW.animations[found] = WTW.newAvatarAnimationDef();
-					}
-					avatar.WTW.animations[found].useravataranimationid = useravataranimationid;
-					avatar.WTW.animations[found].avataranimationid = avataranimationid;
-					avatar.WTW.animations[found].speedratio = speedratio;
-					avatar.WTW.animations[found].animationname = animationname;
-					avatar.WTW.animations[found].startframe = startframe;
-					avatar.WTW.animations[found].endframe = endframe;
-					avatar.WTW.animations[found].objectfolder = objectfolder;
-					avatar.WTW.animations[found].objectfile = objectfile;
-					avatar.WTW.animations[found].animationfriendlyname = animationfriendlyname;
-					avatar.WTW.animations[found].loadpriority = loadpriority;
-					avatar.WTW.animations[found].animationicon = animationicon;
-					
-					var easingFunction = new BABYLON.QuinticEase(); /*QuadraticEase();*/
-					easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
-
-					totalendframe += 1;
-					WTW.loadAvatarAnimations("myavatar-" + dGet("wtw_tinstanceid").value, easingFunction, found, totalendframe, 0, false);
-				}
-			}
 			var myavatarid = dGet('wtw_tmyavatarid').value;
 			if (dGet('wtw_tuserid').value == '') {
 				myavatarid = dGet('wtw_tmyavataridanon').value;
 			}
+			var avatarname = "myavatar-" + dGet("wtw_tinstanceid").value;
+			WTW.loadAvatarAnimation(avatarname, useravataranimationid, animationfriendlyname, animationicon, avataranimationid, animationname, objectfolder, objectfile, startframe, endframe, speedratio, loadpriority);
 			var request = {
 				'myavatarid':myavatarid,
 				'useravataranimationid':useravataranimationid,
@@ -2455,6 +2432,76 @@ WTWJS.prototype.changeAvatarAnimation = function(selobj) {
 		selobj.blur();
     } catch (ex) {
 		WTW.log("avatars-loadavatar-changeAvatarAnimation=" + ex.message);
+    }
+}
+
+WTWJS.prototype.loadAvatarAnimation = function(avatarname, useravataranimationid, animationfriendlyname, animationicon, avataranimationid, animationname, objectfolder, objectfile, startframe, endframe, speedratio, startweight, loadpriority, animationloop, onanimationend) {
+	try {
+		if (loadpriority == undefined) {
+			loadpriority = 0;
+		}
+		if (animationloop == undefined) {
+			animationloop = true;
+		}
+		if (onanimationend == undefined) {
+			onanimationend = null;
+		}
+		if (startweight == undefined) {
+			startweight = 0;
+		}
+		var found = -1;
+		var avatar = scene.getMeshByID(avatarname);
+		if (avatar != null) {
+			if (avatar.WTW.animations != undefined) {
+				var totalendframe = 0;
+				var totalframes = 0;
+				for (var i=avatar.WTW.animations.length;i>-1;i--) {
+					if (avatar.WTW.animations[i] != null) {
+						if (avatar.WTW.animations[i].useravataranimationid == useravataranimationid && animationname == "onoption" && useravataranimationid != '') {
+							if (avatar.WTW.animations.running['onoption' + avatar.WTW.animations[i].avataranimationid] != undefined) {
+								avatar.WTW.animations.running['onoption' + avatar.WTW.animations[i].avataranimationid].stop();
+							}
+							found = i;
+						} else if (animationname != "onoption") {
+							if (avatar.WTW.animations.running[animationname] != undefined) {
+								avatar.WTW.animations.running[animationname].stop();
+								avatar.WTW.skeleton.deleteAnimationRange(animationname,false);
+							}
+						}
+						if (Number(avatar.WTW.animations[i].totalendframe) > totalendframe) {
+							totalendframe = Number(avatar.WTW.animations[i].totalendframe);
+							totalframes = Number(avatar.WTW.animations[i].totalframes);
+						}
+					}
+				}
+				if (found == -1) {
+					found = avatar.WTW.animations.length;
+					avatar.WTW.animations[found] = WTW.newAvatarAnimationDef();
+				}
+				avatar.WTW.animations[found].useravataranimationid = useravataranimationid;
+				avatar.WTW.animations[found].avataranimationid = avataranimationid;
+				avatar.WTW.animations[found].speedratio = speedratio;
+				avatar.WTW.animations[found].animationname = animationname;
+				avatar.WTW.animations[found].startframe = startframe;
+				avatar.WTW.animations[found].endframe = endframe;
+				avatar.WTW.animations[found].objectfolder = objectfolder;
+				avatar.WTW.animations[found].objectfile = objectfile;
+				avatar.WTW.animations[found].animationfriendlyname = animationfriendlyname;
+				avatar.WTW.animations[found].loadpriority = loadpriority;
+				avatar.WTW.animations[found].animationicon = animationicon;
+				avatar.WTW.animations[found].animationloop = animationloop;
+				avatar.WTW.animations[found].onanimationend = onanimationend;
+				avatar.WTW.animations[found].startweight = startweight;
+				
+				var easingFunction = new BABYLON.QuinticEase(); /*QuadraticEase();*/
+				easingFunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+
+				totalendframe += 1;
+				WTW.loadAvatarAnimations(avatarname, easingFunction, found, totalendframe, 0, false);
+			}
+		}
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-loadAvatarAnimation=" + ex.message);
     }
 }
 
@@ -2484,3 +2531,199 @@ WTWJS.prototype.disposeAnimations = function(avatarname) {
     }
 }
 
+WTWJS.prototype.loadSit = function(avatarname) {
+	try {
+WTW.log("loadSit");
+		var useravataranimationid = "cccccccccccccccc";
+		var avataranimationid = "dddddddddddddddd";
+		WTW.loadAvatarAnimation(avatarname, useravataranimationid, 'Sit Wait', '', avataranimationid, 'onsitwait', '/content/system/animations/movement/', 'sitwait.babylon', 1, 155, 1, 0, 0);
+//		useravataranimationid = "eeeeeeeeeeeeeeee";
+//		avataranimationid = "ffffffffffffffff";
+//		WTW.loadAvatarAnimation(avatarname, useravataranimationid, 'Sit To Stand', '', avataranimationid, 'onsittostand', '/content/system/animations/movement/', 'sittostand.babylon', 1, 55, 1, 0, 0);
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-loadSit=" + ex.message);
+    }
+}
+
+WTWJS.prototype.startSit = function(moldname) {
+	try {	
+WTW.log("startSit");
+		var avatarname = "myavatar-" + dGet("wtw_tinstanceid").value;
+		var avatar = scene.getMeshByID(avatarname);
+		if (avatar != null) {
+			var moldnameparts = WTW.getMoldnameParts(moldname);
+			var actionzonename = moldnameparts.parentname;
+			var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzoneaxlebase-","actionzoneaxle-"));
+			if (actionzoneaxle != null) {
+				WTW.walkToPosition(avatarname, actionzoneaxle, 'WTW.setSit', actionzoneaxle);
+			}
+		}
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-startSit=" + ex.message);
+    }
+}
+
+WTWJS.prototype.setSit = function(moldtomatch) {
+	try {	
+WTW.log("setSit");
+
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-setSit=" + ex.message);
+    }
+}
+
+WTWJS.prototype.walkToPosition = function(avatarname, moldtomatch, functionname, parameters) {
+	try {
+		var avatar = scene.getMeshByID(avatarname);
+		if (avatar != null) {
+			var abspos = WTW.getWorldPosition(moldtomatch);
+			var absrot = WTW.getWorldRotation(moldtomatch);
+
+			if (avatar.position != abspos) {
+				var angledegy = WTW.cleanDegrees(WTW.getDegrees(Math.atan((abspos.x-avatar.position.x)/(abspos.z-avatar.position.z))) + 180);
+				var avatardeg = WTW.getDegrees(avatar.rotation.y);
+				var moveavatar = window.setInterval(function(){
+					var targetangle = WTW.getMyAngleToPoint(abspos.x,abspos.z);
+					var avatardeg = WTW.getDegrees(avatar.rotation.y);
+					var dir = 1;
+					var degleft = 0;
+					var walk = 1;
+					var dx = (abspos.x - avatar.position.x);
+					var dz = (abspos.z - avatar.position.z);
+					var dist = Math.sqrt((dx * dx) + (dz * dz));
+					if (Math.round(targetangle) == 0 || Math.round(targetangle) == 360 || dist < 2) {
+						dir = 0;
+					} else if (targetangle < 1) {
+						dir = -.1;
+						degleft = targetangle;
+					} else if (targetangle < 2) {
+						dir = -.1;
+						degleft = targetangle;
+					} else if (targetangle < 10) {
+						dir = -.5;
+						degleft = targetangle;
+					} else if (targetangle < 30) {
+						dir = -1;
+						degleft = targetangle;
+					} else if (targetangle < 90) {
+						dir = -5;
+						degleft = targetangle;
+					} else if (targetangle < 180) {
+						dir = -10;
+						degleft = targetangle;
+					} else {
+						degleft = 360 - targetangle;
+					}
+					avatardeg += dir;
+					avatar.rotation.y = WTW.getRadians(avatardeg);
+					if (dist < 2) {
+						walk = 0;
+						WTW.keyPressedRemove('onwalk');
+					} else {
+						WTW.keyPressedAdd('onwalk');
+					}
+					if (degleft < 2 && walk == 0) {
+						window.clearInterval(moveavatar);
+						avatar.position.x = abspos.x;
+						//avatar.position.y = abspos.y;
+						avatar.position.z = abspos.z;
+						
+						
+						
+//						avatar.rotation.x = absrot.x;
+//						avatar.rotation.y = absrot.y;
+//						avatar.rotation.z = absrot.z;
+						
+/*						
+						WTW.keyPressedAdd('onsitwait');
+						var sitdist = 0;
+						var sitmove = window.setInterval(function() {
+							avatar.translate(BABYLON.Axis.Z, .1, BABYLON.Space.LOCAL);
+							if (sitdist > 4.4) {
+								window.clearInterval(sitmove);
+							} else {
+								sitdist += .1;
+							}
+						},10); 
+*/					
+						WTW.executeFunctionByName(functionname, window, parameters);
+					}
+				},10);
+			} else {
+				WTW.executeFunctionByName(functionname, window, parameters);
+			}
+		}
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-walkToPosition=" + ex.message);
+    }
+}
+
+WTWJS.prototype.turnToRotation = function(avatarname, moldtoface, functionname, parameters) {
+	try {
+		var avatar = scene.getMeshByID(avatarname);
+		if (avatar != null) {
+			var abspos = WTW.getWorldPosition(moldtoface);
+			var angle = WTW.getMyAngleToPoint(abspos.x, abspos.z);
+			
+			var moveavatar = window.setInterval(function(){
+				WTW.moveOverride = 1;
+				var targetangle = WTW.getMyAngleToPoint(abspos.x,abspos.z);
+				var avatardeg = WTW.getDegrees(avatar.rotation.y);
+				var dir = 1;
+				var degleft = 0;
+				if (Math.round(targetangle) == 0 || Math.round(targetangle) == 360) {
+					dir = 0;
+				} else if (targetangle < 2) {
+					dir = -targetangle;
+					degleft = targetangle;
+				} else if (targetangle < 180) {
+					dir = -1;
+					degleft = targetangle;
+				} else {
+					degleft = 360 - targetangle;
+				}
+				avatardeg += dir;
+				avatar.rotation.y = WTW.getRadians(avatardeg);
+				if (dir > 1) {
+					WTW.keyPressedAdd('onrunturnright');
+				} else {
+					WTW.keyPressedAdd('onrunturnleft');
+				}
+				if (degleft < 1) {
+					window.clearInterval(moveavatar);
+					WTW.keyPressedRemove('onrunturnright');
+					WTW.keyPressedRemove('onrunturnleft');
+					WTW.moveOverride = 0;
+					WTW.executeFunctionByName(functionname, window, parameters);
+				}
+			},10);			
+		}
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-turnToRotation=" + ex.message);
+    }
+}
+
+WTWJS.prototype.cancelSit = function(avatar, moveevents) {
+	try {
+		if (WTW.isInArray(moveevents, 'onsitwait')) {
+			WTW.keyPressedAdd('onwait');
+			WTW.keyPressedRemove('onsitwait');
+			var dist = 0;
+			var sitmove = window.setInterval(function() {
+				var movedist = -.1;
+				if (dist < .5) {
+					movedist = -.5;
+				}
+				avatar.translate(BABYLON.Axis.Z, movedist, BABYLON.Space.LOCAL);
+				if (dist < -4.4) {
+					window.clearInterval(sitmove);
+					WTW.keyPressedRemove('onwait');
+				} else {
+					dist += movedist;
+				}
+			},10);
+		}
+    } catch (ex) {
+		WTW.log("avatars-loadavatar-cancelSit=" + ex.message);
+    }
+}

@@ -318,12 +318,15 @@ WTWJS.prototype.setActionZoneFormFields = function(actionzonetype) {
 				break;
 			case "seat":
 				WTW.hide('wtw_actionzonesizediv');
-				WTW.hide('wtw_actionzoneaxisdiv');
 				WTW.hide('wtw_copyaxletoactionzonediv');
+				WTW.hide('wtw_actionzoneaxisdiv');
 				WTW.hide('wtw_actionzoneadvancedoptslink');
+				WTW.hide('wtw_actionzonepartsdivlabel');
 				dGet('wtw_editactionzoneformtitle').innerHTML = "Add Seat";
-				dGet('wtw_tcopyaxletoactionzone').disabled = true;
+				dGet('wtw_axispositiontitle').innerHTML = "Camera Position";
+				dGet('wtw_axisrotationtitle').innerHTML = "Camera Rotation";
 				WTW.show('wtw_actionzoneadvancedopts');
+				WTW.show('wtw_attachactionzonediv');
 				WTW.show('wtw_actionzonepartsdiv');
 				break;
 			case "mirror":

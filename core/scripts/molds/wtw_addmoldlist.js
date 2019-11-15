@@ -616,22 +616,16 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 				molddef.checkcollisions = "0";
 				mold.checkCollisions = false;
 			} else {
-				if (WTW.init.wallCollisions == 0 && shape != "floor" && WTW.adminView == 1) {
-					mold.checkCollisions = false;
-				} else if (WTW.init.floorCollisions == 0 && shape == "floor" && WTW.adminView == 1) {
-					mold.checkCollisions = false;
-				} else {
-					mold.checkCollisions = true; 
-				}
+				mold.checkCollisions = true; 
 			}
 			if (WTW.adminView == 1) {
 				WTW.registerMouseOver(mold);
 			}
-			if (parentvalid == false) {
-				WTW.addDisposeMoldToQueue(moldname);
-			}
+			//if (parentvalid == false) {
+			//	WTW.addDisposeMoldToQueue(moldname);
+			//}
 			if (WTW.AdminView == 0 && parentname.indexOf("connectinggrids") > -1 && (moldname.indexOf("building") > -1 || moldname.indexOf("community") > -1)) {
-				mold.freezeWorldMatrix();
+				//mold.freezeWorldMatrix();
 			} else {
 				//mold.unfreezeWorldMatrix();
 			}

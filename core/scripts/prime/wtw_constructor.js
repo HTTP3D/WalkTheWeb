@@ -36,8 +36,6 @@ function WTWJS() {
 		'startRotationY':0,
 		'startRotationZ':0,
 		'gravity':9.8,
-		'wallCollisions':1,
-		'floorCollisions':1,
 		'loaded':0
 	}
 /*	Notes about the sky Values ---
@@ -73,6 +71,7 @@ function WTWJS() {
 	this.touchRightTimer = null;
 	this.cameraYOffset = 0;
 	this.myAvatar = null; 
+	this.moveOverride = 0;
 	this.scrollTimer = null;
 	this.shiftKey = false;
 	this.mainParent = "";

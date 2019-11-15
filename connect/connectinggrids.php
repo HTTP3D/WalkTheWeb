@@ -574,8 +574,7 @@ try {
 					'shown'=>'0',
 					'status'=> '0');
 				$i += 1;
-			}
-			if (($zconnectinggridid != $zrow["connectinggridid"] || $zsubconnectinggridid != $zrow["subconnectinggridid"]) && isset($zrow["subconnectinggridid"]) && !empty($zrow["subconnectinggridid"])) {
+			} else if (($zconnectinggridid != $zrow["connectinggridid"] || $zsubconnectinggridid != $zrow["subconnectinggridid"]) && isset($zrow["subconnectinggridid"]) && !empty($zrow["subconnectinggridid"])) {
 				if(isset($zrow["parentcommunityid"]) && !empty($zrow["parentcommunityid"])) {
 					$zcommunityinfo = array(
 						'communityid'=> $zrow["parentcommunityid"],

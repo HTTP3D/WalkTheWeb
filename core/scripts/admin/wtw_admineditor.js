@@ -116,22 +116,26 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 		} else if (thingid != '') {
 			WTW.loadThingForm(thingid);
 		}
-		if (WTW.getCookie("gravityoption") == '0') {
-			WTW.setQuickEditorGravity(0);
+		if (WTW.getCookie("wtw_bfocus") != null) {
+			if (WTW.getCookie("wtw_bfocus") == '0') {
+				WTW.setQuickEditorFocus(0);
+			}
 		}
-		if (WTW.getCookie("wtw_bfocus") == '0') {
-			WTW.setQuickEditorFocus(0);
+		if (WTW.getCookie("wtw_bmerged") != null) {
+			if (WTW.getCookie("wtw_bmerged") == '1') {
+				WTW.setQuickEditorMerged(1);
+			}
 		}
-        if (WTW.getCookie("wallcollisionsoption") == '1') {
-            WTW.init.wallCollisions = 0;
-        } else {
-            WTW.init.wallCollisions = 1;
-        }
-        if (WTW.getCookie("floorcollisionsoption") == '1') {
-            WTW.init.floorCollisions = 0;
-        } else {
-            WTW.init.floorCollisions = 1;
-        }
+		if (WTW.getCookie("wtw_bzones") != null) {
+			if (WTW.getCookie("wtw_bzones") == '1') {
+				WTW.setQuickEditorZones(1);
+			}
+		}
+		if (WTW.getCookie("wtw_blines") != null) {
+			if (WTW.getCookie("wtw_blines") == '0') {
+				WTW.setQuickEditorLines(0);
+			}
+		}
 		dGet('wtw_twaterpositiony').value = WTW.init.waterPositionY;
 		dGet('wtw_tgroundpositiony').value = WTW.init.groundPositionY;
 		WTW.setAdminTarget();
@@ -2206,7 +2210,7 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 				csgmoldind = WTW.getMoldInd(molds, molds[moldind].csg.moldid, dGet('wtw_tconnectinggridind').value);
 				if (molds[csgmoldind] != null) {
 					var csgmainname = molds[csgmoldind].moldname;
-					dGet('wtw_selectedcsgshape').innerHTML += "<div class='wtw-secondcolcontent' onmouseover=\"WTW.hilightActionZonePart('" + csgmainname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\">Merge with (" + molds[csgmoldind].shape + ") &nbsp;&nbsp;&nbsp;&nbsp; <a href='#' onclick=\"WTW.removeMerge('" + csgmainname + "')\">Remove</a></div><br /><br />";
+					dGet('wtw_selectedcsgshape').innerHTML += "<div class='wtw-secondcolcontent' onmouseover=\"WTW.hilightMold('" + csgmainname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + csgmainname + "');\">Merge with (" + molds[csgmoldind].shape + ") &nbsp;&nbsp;&nbsp;&nbsp; <a href='#' onclick=\"WTW.removeMerge('" + csgmainname + "')\">Remove</a></div><br /><br />";
 				}
 			}
 			var mold = scene.getMeshByID(molds[moldind].moldname);
@@ -4290,10 +4294,10 @@ WTWJS.prototype.showActionZone = function(actionzoneind) {
 		if (WTW.actionZones[actionzoneind] != null) {
 			switch (WTW.actionZones[actionzoneind].actionzonetype) {
 				case "loadzone":
-				case "seat":
 				case "mirror":
 					WTW.setOpacity("actionzone-" + actionzoneind + "-" + WTW.actionZones[actionzoneind].actionzoneid + "-" + WTW.actionZones[actionzoneind].connectinggridind + "-" + WTW.actionZones[actionzoneind].connectinggridid + "-" + WTW.actionZones[actionzoneind].actionzonetype, .2);
 					break;
+				case "seat":
 				case "slidingdoor":
 				case "swingingdoor":
 				case "rotate":
@@ -4469,7 +4473,7 @@ WTWJS.prototype.openActionZoneForm = function(actionzoneid) {
 			WTW.actionZones[actionzoneind].moldname = "actionzone-" + actionzoneind + "-" + WTW.actionZones[actionzoneind].actionzoneid + "-" + WTW.actionZones[actionzoneind].connectinggridind + "-" + WTW.actionZones[actionzoneind].connectinggridid + "-" + WTW.actionZones[actionzoneind].actionzonetype;
 			WTW.addActionZone(WTW.actionZones[actionzoneind].moldname, WTW.actionZones[actionzoneind]);
 			WTW.showActionZone(actionzoneind);
-			if (actionzonetype == "passengerseat" || actionzonetype == "driverseat") {	
+			if (actionzonetype.indexOf("seat") > -1) {	
 				dGet('wtw_tattachavatarmoldname').value = WTW.actionZones[actionzoneind].moldname.replace("actionzone-","actionzoneaxlebase2-");
 			}
 			dGet('wtw_actionzonepartslist').innerHTML = "";
@@ -4526,7 +4530,7 @@ WTWJS.prototype.openActionZoneForm = function(actionzoneid) {
 				dGet('wtw_tactionzonejsparameters').value = WTW.actionZones[actionzoneind].jsparameters;	
 				WTW.getLoadActionZoneList(WTW.actionZones[actionzoneind].loadactionzoneid);
 				WTW.setActionZoneFormFields(dGet('wtw_tactionzonetype').value);
-				if (actionzonetype == "passengerseat" || actionzonetype == "driverseat") {	
+				if (actionzonetype.indexOf("seat") > -1) {	
 					dGet('wtw_tattachavatarmoldname').value = WTW.actionZones[actionzoneind].moldname.replace("actionzone-","actionzoneaxlebase2-");
 				}
 				var actionzone = scene.getMeshByID(WTW.actionZones[actionzoneind].moldname);
@@ -4548,7 +4552,7 @@ WTWJS.prototype.openActionZoneForm = function(actionzoneid) {
 								shape = namepart[5];
 							}
 							if (moldpartname.indexOf("molds") > -1) {
-								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + moldpartname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + moldpartname + "')\">Action Zone Part (" + shape + ")</div>";
+								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + moldpartname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + moldpartname + "');\" onclick=\"WTW.removeActionZonePart('" + moldpartname + "')\">Action Zone Part (" + shape + ")</div>";
 							}
 						}
 					}
@@ -4564,30 +4568,30 @@ WTWJS.prototype.openActionZoneForm = function(actionzoneid) {
 								shape = namepart[5];
 							}
 							if (moldpartname.indexOf("molds") > -1) {
-								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + moldpartname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + moldpartname + "')\">Action Zone Part (" + shape + ")</div>";
+								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + moldpartname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + moldpartname + "');\" onclick=\"WTW.removeActionZonePart('" + moldpartname + "')\">Action Zone Part (" + shape + ")</div>";
 							}
 						}
 					}
 				}
-				if (actionzonetype == "passengerseat" || actionzonetype == "driverseat") {
+				if (actionzonetype.indexOf("seat") > -1) {
 					for (var j=0; j < WTW.thingMolds.length; j++) {
 						if (WTW.thingMolds[j] != null) {
 							if (WTW.thingMolds[j].actionzoneid == actionzoneid) {
-								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + WTW.thingMolds[j].moldname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + WTW.thingMolds[j].moldname + "')\">Action Zone Part (" + WTW.thingMolds[j].shape + ")</div>";
+								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.thingMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.thingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.thingMolds[j].moldname + "')\">Action Zone Part (" + WTW.thingMolds[j].shape + ")</div>";
 							}
 						}
 					}
 					for (var j=0; j < WTW.buildingMolds.length; j++) {
 						if (WTW.buildingMolds[j] != null) {
 							if (WTW.buildingMolds[j].actionzoneid == actionzoneid) {
-								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + WTW.buildingMolds[j].moldname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + WTW.buildingMolds[j].moldname + "')\">Action Zone Part (" + WTW.buildingMolds[j].shape + ")</div>";
+								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.buildingMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.buildingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.buildingMolds[j].moldname + "')\">Action Zone Part (" + WTW.buildingMolds[j].shape + ")</div>";
 							}
 						}
 					}
 					for (var j=0; j < WTW.communitiesMolds.length; j++) {
 						if (WTW.communitiesMolds[j] != null) {
 							if (WTW.communitiesMolds[j].actionzoneid == actionzoneid) {
-								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + WTW.communitiesMolds[j].moldname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + WTW.communitiesMolds[j].moldname + "')\">Action Zone Part (" + WTW.communitiesMolds[j].shape + ")</div>";
+								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.communitiesMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.communitiesMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.communitiesMolds[j].moldname + "')\">Action Zone Part (" + WTW.communitiesMolds[j].shape + ")</div>";
 							}
 						}
 					}
@@ -4870,25 +4874,6 @@ WTWJS.prototype.clearActionZone = function(zmoldswithactionzones, zactionzoneid)
 	}
 }
 
-WTWJS.prototype.hilightActionZonePart = function(moldname) {
-	try {
-		var mold = scene.getMeshByID(moldname);
-		if (mold != null) {
-			WTW.highlightMold(mold, "#0000ff");
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admineditor.js-hilightActionZonePart=" + ex.message);
-	}
-}
-
-WTWJS.prototype.unHilightActionZonePart = function() {
-	try {
-		/* WTW.resetMoldCoverings(); */
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admineditor.js-unHilightActionZonePart=" + ex.message);
-	}
-}
-
 WTWJS.prototype.removeActionZonePart = function(moldname) {
 	try {
 		var mold = scene.getMeshByID(moldname);
@@ -4918,26 +4903,26 @@ WTWJS.prototype.removeActionZonePart = function(moldname) {
 				WTW.loadMoldForm(molds[moldind]);
 				WTW.submitMoldForm(2);
 			} 	
-			if (dGet('wtw_tactionzonetype').value == "passengerseat" || dGet('wtw_tactionzonetype').value == "driverseat") {
+			if (dGet('wtw_tactionzonetype').value.indexOf("seat") > -1) {
 				dGet('wtw_actionzonepartslist').innerHTML = "";
 				for (var j=0; j < WTW.thingMolds.length; j++) {
 					if (WTW.thingMolds[j] != null) {
 						if (WTW.thingMolds[j].actionzoneid == actionzoneid) {
-							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + WTW.thingMolds[j].moldname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + WTW.thingMolds[j].moldname + "')\">Action Zone Part (" + WTW.thingMolds[j].shape + ")</div>";
+							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.thingMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.thingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.thingMolds[j].moldname + "')\">Action Zone Part (" + WTW.thingMolds[j].shape + ")</div>";
 						}
 					}
 				}
 				for (var j=0; j < WTW.buildingMolds.length; j++) {
 					if (WTW.buildingMolds[j] != null) {
 						if (WTW.buildingMolds[j].actionzoneid == actionzoneid) {
-							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + WTW.buildingMolds[j].moldname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + WTW.buildingMolds[j].moldname + "')\">Action Zone Part (" + WTW.buildingMolds[j].shape + ")</div>";
+							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.buildingMolds[j].moldname + "'.'yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.buildingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.buildingMolds[j].moldname + "')\">Action Zone Part (" + WTW.buildingMolds[j].shape + ")</div>";
 						}
 					}
 				}
 				for (var j=0; j < WTW.communitiesMolds.length; j++) {
 					if (WTW.communitiesMolds[j] != null) {
 						if (WTW.communitiesMolds[j].actionzoneid == actionzoneid) {
-							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + WTW.communitiesMolds[j].moldname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + WTW.communitiesMolds[j].moldname + "')\">Action Zone Part (" + WTW.communitiesMolds[j].shape + ")</div>";
+							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.communitiesMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.communitiesMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.communitiesMolds[j].moldname + "')\">Action Zone Part (" + WTW.communitiesMolds[j].shape + ")</div>";
 						}
 					}
 				}
@@ -4974,7 +4959,7 @@ WTWJS.prototype.removeActionZonePart = function(moldname) {
 											var namepart = moldpartname.split('-');
 											shape = namepart[5];
 										}
-										dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + moldpartname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + moldpartname + "')\">Action Zone Part (" + shape + ")</div>";
+										dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + moldpartname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + moldpartname + "');\" onclick=\"WTW.removeActionZonePart('" + moldpartname + "')\">Action Zone Part (" + shape + ")</div>";
 									}
 								}
 							}
@@ -4982,8 +4967,7 @@ WTWJS.prototype.removeActionZonePart = function(moldname) {
 					}
 				}
 			}
-			WTW.hilightActionZonePart(moldname);
-			window.setTimeout(function(){ WTW.unHilightActionZonePart(); }, 500);
+			WTW.hilightMoldFast(moldname,'yellow');
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-removeActionZonePart=" + ex.message);
@@ -5012,7 +4996,7 @@ WTWJS.prototype.addActionZonePart = function(actionzoneid, mold) {
 				moldind = Number(namepart[1]);
 			}
 			var shape = namepart[5];
-			if (dGet('wtw_tactionzonetype').value != "passengerseat" && dGet('wtw_tactionzonetype').value != "driverseat") {
+			if (dGet('wtw_tactionzonetype').value.indexOf("seat") > -1) {
 				for (var i = 0; i < WTW.actionZones.length; i++) {
 					if (WTW.actionZones[i] != null) {
 						if (WTW.actionZones[i].actionzoneid == actionzoneid) {
@@ -5030,15 +5014,14 @@ WTWJS.prototype.addActionZonePart = function(actionzoneid, mold) {
 									mold.position.x = posx;
 									mold.position.y = posy;
 									mold.position.z = posz;
-									dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + moldname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + moldname + "')\">Action Zone Part (" + shape + ")</div>";
+									dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + moldname + "');\" onclick=\"WTW.removeActionZonePart('" + moldname + "')\">Action Zone Part (" + shape + ")</div>";
 								}
 							}
 						}
 					}
 				}
 			}
-			//WTW.hilightActionZonePart(moldname);
-			//window.setTimeout(function(){ WTW.unHilightActionZonePart(); }, 500);
+			WTW.hilightMoldFast(moldname,'yellow');
 			if (molds[moldind] != null) {
 				molds[moldind].actionzoneid = actionzoneid;
 				molds[moldind].graphics.texture.backupid = "";		
@@ -5050,21 +5033,21 @@ WTWJS.prototype.addActionZonePart = function(actionzoneid, mold) {
 				for (var j=0; j < WTW.thingMolds.length; j++) {
 					if (WTW.thingMolds[j] != null) {
 						if (WTW.thingMolds[j].actionzoneid == actionzoneid) {
-							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + WTW.thingMolds[j].moldname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + WTW.thingMolds[j].moldname + "')\">Action Zone Part (" + WTW.thingMolds[j].shape + ")</div>";
+							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.thingMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.thingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.thingMolds[j].moldname + "')\">Action Zone Part (" + WTW.thingMolds[j].shape + ")</div>";
 						}
 					}
 				}
 				for (var j=0; j < WTW.buildingMolds.length; j++) {
 					if (WTW.buildingMolds[j] != null) {
 						if (WTW.buildingMolds[j].actionzoneid == actionzoneid) {
-							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + WTW.buildingMolds[j].moldname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + WTW.buildingMolds[j].moldname + "')\">Action Zone Part (" + WTW.buildingMolds[j].shape + ")</div>";
+							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.buildingMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.buildingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.buildingMolds[j].moldname + "')\">Action Zone Part (" + WTW.buildingMolds[j].shape + ")</div>";
 						}
 					}
 				}
 				for (var j=0; j < WTW.communitiesMolds.length; j++) {
 					if (WTW.communitiesMolds[j] != null) {
 						if (WTW.communitiesMolds[j].actionzoneid == actionzoneid) {
-							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightActionZonePart('" + WTW.communitiesMolds[j].moldname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\" onclick=\"WTW.removeActionZonePart('" + WTW.communitiesMolds[j].moldname + "')\">Action Zone Part (" + WTW.communitiesMolds[j].shape + ")</div>";
+							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.communitiesMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.communitiesMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.communitiesMolds[j].moldname + "')\">Action Zone Part (" + WTW.communitiesMolds[j].shape + ")</div>";
 						}
 					}
 				}
@@ -5166,10 +5149,9 @@ WTWJS.prototype.addMergePart = function(mold) {
 				}
 			}
 			if (moldid != "") {
-				WTW.hilightActionZonePart(moldname);
-				window.setTimeout(function(){ WTW.unHilightActionZonePart(); }, 500);
+				WTW.hilightMoldFast(moldname,'yellow');
 				dGet('wtw_selectedcsgshape').innerHTML = "";
-				dGet('wtw_selectedcsgshape').innerHTML += "<div class='wtw-secondcolcontent' onmouseover=\"WTW.hilightActionZonePart('" + moldname + "');\" onmouseout=\"WTW.unHilightActionZonePart();\">Merge with (" + shape + ") &nbsp;&nbsp;&nbsp;&nbsp; <a href='#' onclick=\"WTW.removeMerge('" + moldname + "')\">Remove</a></div><br /><br />";
+				dGet('wtw_selectedcsgshape').innerHTML += "<div class='wtw-secondcolcontent' onmouseover=\"WTW.hilightMold('" + moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + moldname + "');\">Merge with (" + shape + ") &nbsp;&nbsp;&nbsp;&nbsp; <a href='#' onclick=\"WTW.removeMerge('" + moldname + "')\">Remove</a></div><br /><br />";
 				dGet('wtw_bselectcsgshape').innerHTML = "Change Shape to Merge";
 			} else {
 				WTW.removeMerge(moldname);
@@ -6622,9 +6604,9 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 					}
 					var request = {
 						'connectinggridid':dGet("wtw_teditconnectinggridid").value,
-						'communityid':WTW.connectingGrids[connectinggridind].communityinfo.communityid,
-						'buildingid':WTW.connectingGrids[connectinggridind].buildinginfo.buildingid,
-						'thingid':WTW.connectingGrids[connectinggridind].thinginfo.thingid,
+						'communityid':communityid,
+						'buildingid':buildingid,
+						'thingid':thingid,
 						'loadactionzoneid':dGet('wtw_teditloadactionzoneid').value,
 						'altloadactionzoneid':altloadactionzoneid,
 						'parentwebid':dGet('wtw_tparentwebid').value,
@@ -6643,6 +6625,31 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 						'conngridrotationz':dGet('wtw_tconngridrotationz').value,
 						'conngridalttag':dGet('wtw_tconngridalttag').value
 					};
+WTW.log("connectinggridid=" + request.connectinggridid);
+WTW.log("communityid=" + request.communityid);
+WTW.log("buildingid=" + request.buildingid);
+WTW.log("thingid=" + request.thingid);
+WTW.log("loadactionzoneid=" + request.loadactionzoneid);
+WTW.log("altloadactionzoneid=" + request.altloadactionzoneid);
+WTW.log("parentwebid=" + request.parentwebid);
+WTW.log("parentwebtype=" + request.parentwebtype);
+WTW.log("childwebid=" + request.childwebid);
+WTW.log("childwebtype=" + request.childwebtype);
+WTW.log("connectinggridind=" + request.connectinggridind);
+WTW.log("conngridpositionx=" + request.conngridpositionx);
+WTW.log("conngridpositiony=" + request.conngridpositiony);
+WTW.log("conngridpositionz=" + request.conngridpositionz);
+WTW.log("conngridscalingx=" + request.conngridscalingx);
+WTW.log("conngridscalingy=" + request.conngridscalingy);
+WTW.log("conngridscalingz=" + request.conngridscalingz);
+WTW.log("conngridrotationx=" + request.conngridrotationx);
+WTW.log("conngridrotationy=" + request.conngridrotationy);
+WTW.log("conngridrotationz=" + request.conngridrotationz);
+WTW.log("conngridalttag=" + request.conngridalttag);
+
+
+
+
 					/* function for after iframe loads */
 					var onload = function(ipage) {
 						ipage.getElementById('wtw_teditconnectinggridid').value = request.connectinggridid;
@@ -7124,7 +7131,7 @@ WTWJS.prototype.setNewActionZone = function() {
 			dGet('wtw_taxisscalingx').value = ".2";
 			dGet('wtw_taxisscalingy').value = "20";
 			dGet('wtw_taxisscalingz').value = ".2";
-		} else if (dGet('wtw_tactionzonetype').value == "driverseat" || dGet('wtw_tactionzonetype').value == "passengerseat") {
+		} else if (dGet('wtw_tactionzonetype').value.indexOf("seat") > -1) {
 			dGet('wtw_taxisscalingx').value = ".2";
 			dGet('wtw_taxisscalingy').value = ".2";
 			dGet('wtw_taxisscalingz').value = "10";
@@ -7233,6 +7240,35 @@ WTWJS.prototype.setNewActionZone = function() {
 							WTW.openEditPoles(actionzone);
 						}
 						break;
+					case "seat":
+						if (actionzoneaxle != null) {
+							actionzoneaxle.position.x = axispositionx;
+							actionzoneaxle.position.y = axispositiony;
+							actionzoneaxle.position.z = axispositionz;
+							actionzoneaxle.rotation.x = WTW.getRadians(axisrotx);
+							actionzoneaxle.rotation.y = WTW.getRadians(axisroty);
+							actionzoneaxle.rotation.z = WTW.getRadians(axisrotz);
+						}
+						if (actionzoneaxlepole != null) {
+							actionzoneaxlepole.position.x = 0;
+							actionzoneaxlepole.position.y = 0;
+							actionzoneaxlepole.position.z = 5;
+							actionzoneaxle.isVisible = true;
+						}
+						if (actionzone != null) {
+							actionzone.position.x = zpositionx;
+							actionzone.position.y = zpositiony;
+							actionzone.position.z = zpositionz;
+							actionzone.scaling.x = zscalingx;
+							actionzone.scaling.y = zscalingy;
+							actionzone.scaling.z = zscalingz;
+							actionzone.rotation.x = zrotationx;
+							actionzone.rotation.y = zrotationy;
+							actionzone.rotation.z = zrotationz;
+							actionzone.isVisible = true;
+							WTW.openEditPoles(actionzone);
+						}
+						break;
 					default:
 						if (actionzoneaxlebase != null) {
 							actionzoneaxlebase.position.x = axispositionx;
@@ -7289,6 +7325,9 @@ WTWJS.prototype.setNewActionZone = function() {
 									if (objparts[0].indexOf("community") > -1) {
 										molds = WTW.communitiesMolds;
 										moldsgroup = "community";
+									} else if (objparts[0].indexOf("thing") > -1) {
+										molds = WTW.thingMolds;
+										moldsgroup = "thing";
 									}
 								}
 								if (objparts[1] != null) {
@@ -7631,7 +7670,7 @@ WTWJS.prototype.setNewMold = function(rebuildmold) {
 				if (parentname.indexOf("actionzone") > -1) {
 					var actionzoneparts = parentname.split('-');
 					var actionzoneind = Number(actionzoneparts[1]);
-					if (WTW.actionZones[actionzoneind].actionzonetype == "passengerseat" || WTW.actionZones[actionzoneind].actionzonetype == "driverseat") {
+					if (WTW.actionZones[actionzoneind].actionzonetype.indexOf("seat") > -1) {
 						var actionzoneaxlebase2 = scene.getMeshByID("actionzoneaxlebase2-" + actionzoneind.toString() + "-" + WTW.actionZones[actionzoneind].actionzoneid + "-" + WTW.actionZones[actionzoneind].connectinggridind + "-" + WTW.actionZones[actionzoneind].connectinggridid + "-" + WTW.actionZones[actionzoneind].actionzonetype);
 						if (actionzoneaxlebase2 != null) {
 //							posx -= actionzoneaxlebase2.position.x;
@@ -8568,107 +8607,6 @@ WTWJS.prototype.hideAdminMenu = function() {
 	}
 }
 
-WTWJS.prototype.setQuickEditorGravity = function(value) {
-	try {
-		if (value == 1) {
-			scene.gravity = new BABYLON.Vector3(0, -9.8, 0);
-			WTW.camera.applyGravity = true;
-			WTW.setCookie("gravityoption", "1", 30);
-			WTW.mouseScroll(2);
-			if (dGet('wtw_bgravity') != null) {
-				dGet('wtw_bgravity').innerHTML = "Gravity<br /><br />ON";
-				dGet('wtw_bgravity').onclick = function() { WTW.setQuickEditorGravity(0); };
-				dGet('wtw_bgravity').className = "wtw-quickbar";
-				dGet('wtw_bgravity').title = "Gravity is On";
-				dGet('wtw_bgravity').alt = "Gravity is On";
-				if (dGet('wtw_admingravity') != null) {
-					dGet('wtw_admingravity').innerHTML = "Gravity ON<!--1-->";
-				}
-			}
-		} else {
-			scene.gravity = new BABYLON.Vector3(0, 0, 0);
-			WTW.camera.applyGravity = false;
-			WTW.setCookie("gravityoption", "0", 30);
-			if (dGet('wtw_bgravity') != null) {
-				dGet('wtw_bgravity').innerHTML = "Gravity<br /><br />OFF";
-				dGet('wtw_bgravity').onclick = function() { WTW.setQuickEditorGravity(1); };
-				dGet('wtw_bgravity').className = "wtw-quickbaroff";
-				dGet('wtw_bgravity').title = "Gravity is Off";
-				dGet('wtw_bgravity').alt = "Gravity is Off";
-				if (dGet('wtw_admingravity') != null) {
-					dGet('wtw_admingravity').innerHTML = "Gravity OFF<!--1-->";
-				}
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admineditor.js-setQuickEditorGravity=" + ex.message);
-	}
-}
-
-WTWJS.prototype.setQuickEditorWall = function(value) {
-	try {
-		if (value == 1) {
-			for (var i = 0; i < scene.meshes.length; i++) {
-				var moldname = scene.meshes[i].name;
-				if (moldname.indexOf("buildingmolds") > -1 || moldname.indexOf("communitymolds") > -1 || moldname.indexOf("thingmolds") > -1) {
-					if (moldname.indexOf("-") > -1) {
-						var namepart = moldname.split('-');
-						if (namepart[5] != null) {
-							var shape = namepart[5];
-							if (shape != "floor" && shape != "terrain") {
-								var mold = scene.getMeshByID(moldname);
-								if (mold != null) {
-									mold.checkCollisions = true;
-								}
-							}
-						}
-					}
-				}
-			} 	
-			if (dGet('wtw_bwall') != null) {
-				dGet('wtw_bwall').innerHTML = "Walls<br /><br />ON";	
-				dGet('wtw_bwall').onclick = function() { WTW.setQuickEditorWall(0); };
-				dGet('wtw_bwall').className = "wtw-quickbar";
-				dGet('wtw_bwall').title = "Wall Collisions are On";
-				dGet('wtw_bwall').alt = "Wall Collisions are On";
-				if (dGet('wtw_adminwall') != null) {
-					dGet('wtw_adminwall').innerHTML = "Wall Collisions ON<!--1-->";	
-				}
-			}
-		} else {
-			for (var i = 0; i < scene.meshes.length; i++) {
-				var moldname = scene.meshes[i].name;
-				if (moldname.indexOf("buildingmolds") > -1 || moldname.indexOf("communitymolds") > -1 || moldname.indexOf("thingmolds") > -1) {
-					if (moldname.indexOf("-") > -1) {
-						var namepart = moldname.split('-');
-						if (namepart[5] != null) {
-							var shape = namepart[5];
-							if (shape != "floor" && shape != "terrain") {
-								var mold = scene.getMeshByID(moldname);
-								if (mold != null) {
-									mold.checkCollisions = false;
-								}
-							}
-						}
-					}
-				}
-			} 						
-			if (dGet('wtw_bwall') != null) {
-				dGet('wtw_bwall').innerHTML = "Walls<br /><br />OFF";	
-				dGet('wtw_bwall').onclick = function() { WTW.setQuickEditorWall(1); };
-				dGet('wtw_bwall').className = "wtw-quickbaroff";
-				dGet('wtw_bwall').title = "Wall Collisions are Off";
-				dGet('wtw_bwall').alt = "Wall Collisions are Off";
-				if (dGet('wtw_adminwall') != null) {
-					dGet('wtw_adminwall').innerHTML = "Wall Collisions OFF<!--1-->";	
-				}
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admineditor.js-setQuickEditorWall=" + ex.message);
-	}
-}
-
 WTWJS.prototype.setQuickEditorAvatarCamera = function(value) {
 	try {
 		if (value == 1) {
@@ -8686,6 +8624,7 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(value) {
 					dGet('wtw_adminavatarcamera').innerHTML = "Avatar Camera ON<!--1-->";
 				}
 			}
+			WTW.setCookie("wtw_bavatarcamera","1",30);
 		} else {
 			WTW.cameraFocus = 0;
 			WTW.camera.inputs.attachInput(WTW.camera.inputs.attached.mouse);
@@ -8701,9 +8640,43 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(value) {
 					dGet('wtw_adminavatarcamera').innerHTML = "Avatar Camera OFF<!--1-->";
 				}
 			}
+			WTW.setCookie("wtw_bavatarcamera","0",30);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-setQuickEditorAvatarCamera=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setQuickEditorFocus = function(value) {
+	try {
+		if (value == 1) {
+			if (dGet('wtw_bfocus') != null) {
+				dGet('wtw_bfocus').innerHTML = "Focus<br /><br />ON";
+				dGet('wtw_bfocus').onclick = function() { WTW.setQuickEditorFocus(0); };
+				dGet('wtw_bfocus').className = "wtw-quickbar";
+				dGet('wtw_bfocus').title = "Focus Highlight is On";
+				dGet('wtw_bfocus').alt = "Focus Highlight is On";
+				if (dGet('wtw_adminfocus') != null) {
+					dGet('wtw_adminfocus').innerHTML = "Focus ON<!--1-->";
+				}
+			}
+			WTW.setCookie("wtw_bfocus","1",30);
+		} else {
+			/* WTW.resetMoldsOpacity(); */
+			if (dGet('wtw_bfocus') != null) {
+				dGet('wtw_bfocus').innerHTML = "Focus<br /><br />OFF";
+				dGet('wtw_bfocus').onclick = function() { WTW.setQuickEditorFocus(1); };
+				dGet('wtw_bfocus').className = "wtw-quickbaroff";
+				dGet('wtw_bfocus').title = "Focus Highlight is Off";
+				dGet('wtw_bfocus').alt = "Focus Highlight is Off";
+				if (dGet('wtw_adminfocus') != null) {
+					dGet('wtw_adminfocus').innerHTML = "Focus OFF<!--1-->";
+				}
+			}
+			WTW.setCookie("wtw_bfocus","0",30);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-setQuickEditorFocus=" + ex.message);
 	}
 }
 
@@ -8721,6 +8694,7 @@ WTWJS.prototype.setQuickEditorMerged = function(value) {
 					dGet('wtw_adminmerged').innerHTML = "Merged Molds ON<!--1-->";
 				}
 			}
+			WTW.setCookie("wtw_bmerged","1",30);
 		} else {
 			WTW.setHideCSG();
 			if (dGet('wtw_bmerged') != null) {
@@ -8733,6 +8707,7 @@ WTWJS.prototype.setQuickEditorMerged = function(value) {
 					dGet('wtw_adminmerged').innerHTML = "Merged Molds OFF<!--1-->";
 				}
 			}
+			WTW.setCookie("wtw_bmerged","0",30);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-setQuickEditorMerged=" + ex.message);
@@ -8757,6 +8732,7 @@ WTWJS.prototype.setQuickEditorZones = function(value) {
 					dGet('wtw_adminzones').innerHTML = "Action Zones ON<!--1-->";
 				}
 			}
+			WTW.setCookie("wtw_bzones","1",30);
 		} else {
 			for (var i=0;i<WTW.actionZones.length;i++) {
 				if (WTW.actionZones[i] != null) {
@@ -8773,6 +8749,7 @@ WTWJS.prototype.setQuickEditorZones = function(value) {
 					dGet('wtw_adminzones').innerHTML = "Action Zones OFF<!--1-->";
 				}
 			}
+			WTW.setCookie("wtw_bzones","0",30);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-setQuickEditorZones=" + ex.message);
@@ -8822,6 +8799,7 @@ WTWJS.prototype.setQuickEditorLines = function(value) {
 					dGet('wtw_adminlines').innerHTML = "Alignment Lines ON<!--1-->";
 				}
 			}
+			WTW.setCookie("wtw_blines","1",30);
 		} else {
 			if (WTW.lineZ == undefined || WTW.lineZ == null ) {
 			} else {
@@ -8863,42 +8841,10 @@ WTWJS.prototype.setQuickEditorLines = function(value) {
 					dGet('wtw_adminlines').innerHTML = "Alignment Lines OFF<!--1-->";
 				}
 			}
+			WTW.setCookie("wtw_blines","0",30);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-setQuickEditorLines=" + ex.message);
-	}
-}
-
-WTWJS.prototype.setQuickEditorFocus = function(value) {
-	try {
-		if (value == 1) {
-			if (dGet('wtw_bfocus') != null) {
-				dGet('wtw_bfocus').innerHTML = "Focus<br /><br />ON";
-				dGet('wtw_bfocus').onclick = function() { WTW.setQuickEditorFocus(0); };
-				dGet('wtw_bfocus').className = "wtw-quickbar";
-				dGet('wtw_bfocus').title = "Focus Highlight is On";
-				dGet('wtw_bfocus').alt = "Focus Highlight is On";
-				if (dGet('wtw_adminfocus') != null) {
-					dGet('wtw_adminfocus').innerHTML = "Focus ON<!--1-->";
-				}
-			}
-			WTW.setCookie("bfocus","1",30);
-		} else {
-			/* WTW.resetMoldsOpacity(); */
-			if (dGet('wtw_bfocus') != null) {
-				dGet('wtw_bfocus').innerHTML = "Focus<br /><br />OFF";
-				dGet('wtw_bfocus').onclick = function() { WTW.setQuickEditorFocus(1); };
-				dGet('wtw_bfocus').className = "wtw-quickbaroff";
-				dGet('wtw_bfocus').title = "Focus Highlight is Off";
-				dGet('wtw_bfocus').alt = "Focus Highlight is Off";
-				if (dGet('wtw_adminfocus') != null) {
-					dGet('wtw_adminfocus').innerHTML = "Focus OFF<!--1-->";
-				}
-			}
-			WTW.setCookie("bfocus","0",30);
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admineditor.js-setQuickEditorFocus=" + ex.message);
 	}
 }
 
@@ -10001,25 +9947,11 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.openFullPageForm('settings','Web Aliases');
 						break;
 				/* Dev Tools Admin Items */
-					case "wtw_admingravity":
-						if (dGet('wtw_admingravity').innerHTML.indexOf('Gravity ON') > -1) {
-							WTW.setQuickEditorGravity(0);
-						} else {
-							WTW.setQuickEditorGravity(1);
-						}
-						break;
 					case "wtw_adminfocus":
 						if (dGet('wtw_adminfocus').innerHTML.indexOf('Focus ON') > -1) {
 							WTW.setQuickEditorFocus(0);
 						} else {
 							WTW.setQuickEditorFocus(1);
-						}
-						break;
-					case "wtw_adminwall":
-						if (dGet('wtw_adminwall').innerHTML.indexOf('Wall Collisions ON') > -1) {
-							WTW.setQuickEditorWall(0);
-						} else {
-							WTW.setQuickEditorWall(1);
 						}
 						break;
 					case "wtw_adminavatarcamera":

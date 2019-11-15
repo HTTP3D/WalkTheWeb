@@ -165,6 +165,9 @@ WTWJS.prototype.hilightMoldFast = function(moldname, scolor) {
 				case "blue":
 					color = BABYLON.Color3.Blue();
 					break;
+				case "yellow":
+					color = BABYLON.Color3.Yellow();
+					break;
 			}
 			WTW.unhilightMold(moldname);
 			if (WTW.highlightLayer == null) {
@@ -220,7 +223,9 @@ WTWJS.prototype.unhilightMold = function(moldname) {
 	try {
 		if (WTW.highlightLayer != null) {
 			var mold = scene.getMeshByID(moldname);
-			WTW.highlightLayer.removeMesh(mold);
+			if (mold != null) {
+				WTW.highlightLayer.removeMesh(mold);
+			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-unhilightMold=" + ex.message);
@@ -370,8 +375,30 @@ WTWJS.prototype.getWorldPosition = function(mold) {
 		mold.computeWorldMatrix(true);
 		abspos = mold.getAbsolutePosition();
 	} catch (ex){
+		WTW.log("core-scripts-prime-wtw_common.js-getWorldPosition=" + ex.message);
 	}
 	return abspos;
+}
+
+WTWJS.prototype.getWorldRotation = function(mold) {
+	var absrot = {'x':0,'y':0,'z':0};
+	try {
+		absrot.x = mold.rotation.x;
+		absrot.y = mold.rotation.y;
+		absrot.z = mold.rotation.z;
+		var parentmold = mold.parent;
+		if (parentmold != null) {
+			while (parentmold != null) {
+				absrot.x += parentmold.rotation.x;
+				absrot.y += parentmold.rotation.y;
+				absrot.z += parentmold.rotation.z;
+				parentmold = parentmold.parent;
+			}
+		}
+	} catch (ex){
+		WTW.log("core-scripts-prime-wtw_common.js-getWorldRotation=" + ex.message);
+	}
+	return absrot;
 }
 
 WTWJS.prototype.getGPU = function() {
@@ -409,15 +436,6 @@ WTWJS.prototype.getGPU = function() {
         } else if (/(Mali|MALI)/i.test(gpustring)) {
             gpu = WTW.getARM(gpustring, screenres);
         }
-        //console.log(getunmaskedinfo(glinfo).renderer + "\n");
-        //            function getunmaskedinfo(glinfo) {
-        //                var unmaskedinfo = {
-        //                    renderer: '',
-        //                    vendor: ''
-        //                };
-        //                return unmaskedinfo;
-        //            }
-        // 		console.log("\n" + "\n"+"\n" );
     } catch (ex) {
         WTW.log("core-scripts-prime-wtw_common.js-getGPU=" + ex.message);
     }
@@ -476,8 +494,7 @@ WTWJS.prototype.getIntel = function(gpustr, res) {
         if ((/HD Graphics \d{3}/i.test(gpustr) || /Iris Graphics \d{3}/i.test(gpustr)) && res <= 2073600) { // if the resolution if 1080p or less
             intel = 'medium';
         } else if ((/Iris Pro \d{3}/i.test(gpustr) || /Iris Pro \w{4}/i.test(gpustr) || /Iris Pro Graphics \w{4}/i.test(gpustr) || /Iris Graphics \w{4}/i.test(gpustr)) && res <= 2073600) { //Iris Pro 580
-            intel = 'high'; // might want to switch this to "high" aka high shadows not ultimate shadows
-
+            intel = 'high'; /* "high" aka high shadows not ultimate shadows */
         }
     } catch (ex) {
         WTW.log("core-scripts-prime-wtw_common.js-getIntel=" + ex.message);
@@ -990,9 +1007,6 @@ WTWJS.prototype.getMyAngleToPoint = function(x,z) {
 		var px = WTW.camera.position.x;
 		var pz = WTW.camera.position.z;
 		var camangle = WTW.getDegrees(WTW.camera.rotation.y);
-		var r = WTW.getNewPoint(px, pz, camangle, 40);
-		var rx = r.x;
-		var rz = r.z;
 		var buildingangle = WTW.getAngleToPoint(px, pz, x, z);
 		zangle = WTW.cleanDegrees(camangle + 270 + buildingangle);
 	} catch (ex) {
@@ -1001,12 +1015,12 @@ WTWJS.prototype.getMyAngleToPoint = function(x,z) {
 	return zangle;
 }
 
-WTWJS.prototype.getAngleToPoint = function(cx, cy, px, py) {
+WTWJS.prototype.getAngleToPoint = function(cx, cz, px, pz) {
 	var pointangle = 0;
 	try {
-		var dy = py - cy;
+		var dz = pz - cz;
 		var dx = px - cx;
-		var pointangle = Math.atan2(dy, dx);
+		var pointangle = Math.atan2(dz, dx);
 		pointangle *= 180 / Math.PI;
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-getAngleToPoint=" + ex.message);
@@ -1308,19 +1322,23 @@ WTWJS.prototype.isItemInArray = function(sarray, checkid, connectinggridind, alt
 			for (var i = 0; i < sarray.length; i++) {
 				if (sarray[i] != null) {
 					if (sarray[i] != undefined) {
-						if (sarray[i].moldid != undefined) {
-							if (sarray[i].moldid != undefined && moldgroup.indexOf("molds") > -1) {
-								if (sarray[i].moldid == checkid && Number(sarray[i].connectinggridind) == Number(connectinggridind) && Number(sarray[i].altconnectinggridind) == Number(altconnectinggridind)) {
-									found = true;
-									i = sarray.length;
+						if (moldgroup.indexOf("molds") > -1) {
+							if (sarray[i].moldid != undefined) {
+								if (sarray[i].moldid != undefined) {
+									if (sarray[i].moldid == checkid && Number(sarray[i].connectinggridind) == Number(connectinggridind) && Number(sarray[i].altconnectinggridind) == Number(altconnectinggridind)) {
+										found = true;
+										i = sarray.length;
+									}
 								}
 							}
 						}
-						if (sarray[i].actionzoneid != undefined) {
-							if (sarray[i].actionzoneid != undefined && moldgroup == "actionzones") {
-								if (sarray[i].actionzoneid == checkid && Number(sarray[i].connectinggridind) == Number(connectinggridind)) {
-									found = true;
-									i = sarray.length;
+						if (moldgroup == "actionzones") {
+							if (sarray[i].actionzoneid != undefined) {
+								if (sarray[i].actionzoneid != undefined) {
+									if (sarray[i].actionzoneid == checkid && Number(sarray[i].connectinggridind) == Number(connectinggridind)) {
+										found = true;
+										i = sarray.length;
+									}
 								}
 							}
 						}
@@ -2543,6 +2561,12 @@ WTWJS.prototype.checkMoldEvent = function(moldevent, moldname) {
 				}
 			}
 		}
+		if (moldevent == "onclick") {
+			var moldnameparts = WTW.getMoldnameParts(moldname);
+			if (moldnameparts.parentname.indexOf('seat') > -1) {
+				WTW.startSit(moldname);
+			}
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-checkMoldEvent=" + ex.message);
 	}
@@ -2558,6 +2582,9 @@ WTWJS.prototype.checkHovers = function(mold) {
 			}
 			if (moldnameparts.namepart.length > 5) {
 				WTW.checkToolTip(moldnameparts.namepart, moldnameparts.moldind);
+				if (moldnameparts.parentname.indexOf("seat") > -1) {
+					WTW.showToolTip('Select to Sit');
+				}
 				if (moldnameparts.shape == 'image') {
 					var hovermold = scene.getMeshByID(moldnameparts.namepart[0] + "-" + moldnameparts.namepart[1] + "-" + moldnameparts.namepart[2] + "-" + moldnameparts.namepart[3] + "-" + moldnameparts.namepart[4] + "-" + moldnameparts.namepart[5] + "-hoverimage");
 					var imagemold = scene.getMeshByID(moldnameparts.namepart[0] + "-" + moldnameparts.namepart[1] + "-" + moldnameparts.namepart[2] + "-" + moldnameparts.namepart[3] + "-" + moldnameparts.namepart[4] + "-" + moldnameparts.namepart[5] + "-mainimage");
@@ -2695,6 +2722,8 @@ WTWJS.prototype.showToolTip = function(tip) {
 		if (tip != "") {
 			dGet('wtw_itooltip').innerHTML = tip;
 			WTW.show('wtw_itooltip');
+		} else {
+			WTW.hide('wtw_itooltip');
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-showtooltip=" + ex.message);
@@ -3749,10 +3778,12 @@ WTWJS.prototype.transformPosition = function(molddef, posx, posy, posz) {
 							posy -= actionzoneaxlebase.position.y;
 							posz -= actionzoneaxlebase.position.z;
 						}
-					} else if (WTW.actionZones[j].actionzoneid == molddef.actionzoneid && (WTW.actionZones[j].actionzonetype == "passengerseat" || WTW.actionZones[j].actionzonetype == "driverseat")) {
+					} else if (WTW.actionZones[j].actionzoneid == molddef.actionzoneid && WTW.actionZones[j].actionzonetype.indexOf("seat") > -1) {
 						var actionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + WTW.actionZones[j].actionzonetype);
 						if (actionzoneaxlebase != null) {
-
+							posx -= actionzoneaxlebase.position.x;
+							posy -= actionzoneaxlebase.position.y;
+							posz -= actionzoneaxlebase.position.z;
 						}
 					}
 				}
@@ -3791,7 +3822,7 @@ WTWJS.prototype.listConnectingGrids = function() {
 				if (WTW.connectingGrids[i].childwebtype=="community") {
 					color = "red";
 				} else if (WTW.connectingGrids[i].childwebtype=="building") {
-					color = "blue";
+					color = "lightblue";
 				} else if (WTW.connectingGrids[i].childwebtype=="thing") {
 					color = "green";
 				} else {
@@ -3808,7 +3839,7 @@ WTWJS.prototype.listConnectingGrids = function() {
 				if (WTW.connectingGrids[i].childwebtype=="community") {
 					color = "brown";
 				} else if (WTW.connectingGrids[i].childwebtype=="building") {
-					color = "blue";
+					color = "lightblue";
 				} else if (WTW.connectingGrids[i].childwebtype=="thing") {
 					color = "green";
 				} else {
@@ -3822,13 +3853,13 @@ WTWJS.prototype.listConnectingGrids = function() {
 
 WTWJS.prototype.listActionZones = function() {
 	var color = "black";
-	WTW.log("---action zones--------------------------------------");
+	WTW.log("---action zones-(shown)------------------------------");
 	for (var i = 0; i < WTW.actionZones.length; i++) {
 		if (WTW.actionZones[i] != null) {
 			if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1) {
 				color = "green";
 			} else if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("high") > -1) {
-				color = "blue";
+				color = "lightblue";
 			} else {
 				color = "black";
 			}
@@ -3838,13 +3869,13 @@ WTWJS.prototype.listActionZones = function() {
 			}
 		}
 	}
-	WTW.log("-----------------------------------------");
+	WTW.log("---action zones-(not shown)--------------------------");
 	for (var i = 0; i < WTW.actionZones.length; i++) {
 		if (WTW.actionZones[i] != null) {
 			if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1) {
 				color = "green";
 			} else if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("high") > -1) {
-				color = "blue";
+				color = "lightblue";
 			} else {
 				color = "black";
 			}
@@ -3920,11 +3951,9 @@ WTW.log("len=" + wtw_uploads.length);
 WTW.log("----------------------");
 }
 
-
-
 WTWJS.prototype.listMeshes = function() {
 	try {
-		var color = "black";
+		var color = "gray";
 		WTW.log("---loaded meshes--------count=" + scene.meshes.length + "------------------------------");
 		for (var i=0; i < scene.meshes.length; i++) {
 			var parentname = "";
@@ -3939,7 +3968,7 @@ WTWJS.prototype.listMeshes = function() {
 					parentname = mold.parent.name;
 				}
 			} else if (moldname.toLowerCase().indexOf("actionzone") > -1) {
-				color = "blue";
+				color = "lightblue";
 				var mold = scene.getMeshByID(moldname);
 				if (mold != null && mold.parent != null) {
 					parentname = mold.parent.name;
@@ -3951,7 +3980,7 @@ WTWJS.prototype.listMeshes = function() {
 					parentname = mold.parent.name;
 				}
 			} else {
-				color = "black";
+				color = "gray";
 			}
 			var inmesh = "NO";
 			if (moldname.toLowerCase().indexOf("mold") > -1) {
@@ -4579,7 +4608,7 @@ WTWJS.prototype.setMoldActionZoneParent = function(molds, moldind) {
 					if (WTW.actionZones[j].parentname == molds[moldind].parentname) {
 						if (WTW.actionZones[j].actionzoneid == molds[moldind].actionzoneid && (WTW.actionZones[j].actionzonetype == "door" || WTW.actionZones[j].actionzonetype == "swingingdoor" || WTW.actionZones[j].actionzonetype == "slidingdoor" || WTW.actionZones[j].actionzonetype == "clickactivatedslidingdoor" || WTW.actionZones[j].actionzonetype == "peoplemover" || WTW.actionZones[j].actionzonetype == "rotate" || WTW.actionZones[j].actionzonetype == "elevator" || WTW.actionZones[j].actionzonetype == "driverturnangle" || WTW.actionZones[j].actionzonetype == "driverwheel")) {
 							parentname = WTW.actionZones[j].moldname.replace("actionzone-", "actionzoneaxlebase2-");
-						} else if (WTW.actionZones[j].actionzoneid == molds[moldind].actionzoneid && (WTW.actionZones[j].actionzonetype == "driverseat" || WTW.actionZones[j].actionzonetype == "passengerseat")) {
+						} else if (WTW.actionZones[j].actionzoneid == molds[moldind].actionzoneid && WTW.actionZones[j].actionzonetype.indexOf("seat") > -1) {
 							parentname = WTW.actionZones[j].moldname.replace("actionzone-", "actionzoneaxlebase-");
 						} else if (WTW.actionZones[j].actionzoneid == molds[moldind].actionzoneid && WTW.actionZones[j].actionzonetype == "driverturningwheel") {
 							parentname = WTW.actionZones[j].moldname.replace("actionzone-", "actionzoneaxle2-");
@@ -9036,6 +9065,7 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 	var molds = WTW.buildingMolds;
 	var namepart = [];
 	var shape = "";
+	var parentname = "";
 	try {
 		if (moldname == undefined) {
 			moldname = dGet('wtw_tmoldname').value;
@@ -9083,7 +9113,14 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 					zthingid = molds[moldind].thinginfo.thingid;
 				}
 			}
-		}	
+		}
+		var mold = scene.getMeshByID(moldname);
+		if (mold != null) {
+			var parentmold = mold.parent;
+			if (parentmold != null) {
+				parentname = parentmold.name;
+			}
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-getMoldnameParts=" + ex.message);
 	}  
@@ -9099,7 +9136,8 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 		moldgroup:moldgroup,
 		molds:molds,
 		shape:shape,
-		namepart:namepart
+		namepart:namepart,
+		parentname:parentname
 	}
 }
 
@@ -9760,5 +9798,3 @@ WTWJS.prototype.updateUserAccessList = function(permissionslist, inviteeresponse
 		WTW.log("core-scripts-prime-wtw_common.js-updateUserAccessList=" + ex.message);
 	}
 }
-
-

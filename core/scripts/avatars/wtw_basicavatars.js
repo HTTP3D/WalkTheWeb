@@ -46,7 +46,7 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 			if (WTW.isNumeric(avatardef.scaling.z)) {
 				scalingz = Number(avatardef.scaling.z);
 			}
-		}
+		} 
 		if (avatardef.rotation.x != undefined) {
 			if (WTW.isNumeric(avatardef.rotation.x)) {
 				rotationx = Number(avatardef.rotation.x);
@@ -188,19 +188,15 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 							results.meshes[i].isPickable = true;
 							results.meshes[i].name = childmoldname;
 							results.meshes[i].id = childmoldname;
-							results.meshes[i].position.x -= avex;
+/*							results.meshes[i].position.x -= avex;
 							results.meshes[i].position.y -= avey;
-							results.meshes[i].position.z -= avez;
+							results.meshes[i].position.z -= avez; */
 							/* results.meshes[i].isVisible = isvisible; */
-/*							if (loadmin) {
-								results.meshes[i].isVisible = true;
-							} else { */
-								results.meshes[i].isVisible = false;
-/*							} */
+							results.meshes[i].isVisible = false;
 							if (results.meshes[i].material != null) {
-								if (meshname.indexOf("WireFrame") > -1) {
-									results.meshes[i].material.wireframe = true;
-								}
+								//if (meshname.indexOf("WireFrame") > -1) {
+								//	results.meshes[i].material.wireframe = true;
+								//}
 								if (results.meshes[i].material.alpha != undefined) {
 									results.meshes[i].material.alpha = 1;
 								}
@@ -224,6 +220,10 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 								
 								
 							}
+//var skeletonViewer = new BABYLON.Debug.SkeletonViewer(results.skeletons[0], results.meshes[i], scene);
+//skeletonViewer.isEnabled = true; // Enable it
+//skeletonViewer.color = BABYLON.Color3.Red();
+
 							WTW.registerMouseOver(results.meshes[i]);
 							if (results.meshes[i].parent == null) {
 								results.meshes[i].parent = avatarparent;
@@ -278,14 +278,40 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 							var childmoldname = avatarname + "-" + meshname;
 							results.skeletons[i].name = childmoldname;
 							results.skeletons[i].id = childmoldname;
-							if (meshname.indexOf("WireFrame") > -1) {
-								results.skeletons[i].material.wireframe = true;
-							}
+							//if (meshname.indexOf("WireFrame") > -1) {
+							//	results.skeletons[i].material.wireframe = true;
+							//}
 							WTW.registerMouseOver(results.skeletons[i]);
 							if (results.skeletons[i].parent == null) {
-								results.skeletons[i].parent = avatarparent;
+								var rootbone = results.skeletons[i].getChildren();
+								for (var j=0; j < rootbone.length; j++) {
+									rootbone[j].setScale(.04, .04, .04);
+								}
 							}
-							
+							if (results.skeletons[i].bones != null) {
+								for (var j=0; j < results.skeletons[i].bones.length; j++) {
+									if (results.skeletons[i].bones[j] != null) {
+										if (j == 0) {
+											//results.skeletons[i].bones[j].setScale(.04, .04, .04);
+											results.skeletons[i].bones[j].parent = avatarparent;
+											
+											//results.skeletons[i].bones[j].scaling.x = .04; 
+											//results.skeletons[i].bones[j].scaling.y = .04; 
+											//results.skeletons[i].bones[j].scaling.z = .04; 
+											//(.04, .04, .04);
+										} else {
+											if (results.skeletons[i].bones[j].parent == null) {
+												results.skeletons[i].bones[j].parent = results.skeletons[i].bones[0];
+//WTW.log("PARENT NULL=" + results.skeletons[i].bones[j].name,"pink");
+//WTW.log("parent=" + results.skeletons[i].bones[j].getScale());
+											}
+										}
+//WTW.log(j + "-bonename=" + results.skeletons[i].bones[j].name);
+//WTW.log("bone=" + results.skeletons[i].bones[j].getScale());
+									}
+								}
+							}
+		
 							if (avatar.WTW.animations.length == 0) {
 								avatar.WTW.animations = avataranimationdefs;
 							}

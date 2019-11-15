@@ -272,8 +272,10 @@ WTWJS.prototype.mouseClick = function(e) {
 						var mesh = scene.getMeshByID(pickedname);
 						if (pickedname.indexOf("-") > -1) {
 							var namepart = pickedname.split('-');
+WTW.log("pickedname=" + pickedname);
 							WTW.checkMoldEvent('onclick', pickedname);
 							WTW.pluginsOnClick(pickedname);
+
 							if (pickedname.indexOf("-image") > -1) {
 								WTW.checkImageClick(pickedname);
 							} else {
@@ -540,6 +542,7 @@ WTWJS.prototype.mouseScroll = function(rolled) {
 WTWJS.prototype.keyPressedAdd = function(keycode) {
 	try {
 		if (keycode != undefined) {
+			keycode += "";
 			if (WTW.canvasFocus == 1 || keycode.indexOf('onoption') > -1) {
 				var found = false;
 				if (WTW.keysPressed != null) {
@@ -552,7 +555,11 @@ WTWJS.prototype.keyPressedAdd = function(keycode) {
 					}
 				}
 				if (found == false) {
-					WTW.keysPressed[WTW.keysPressed.length] = keycode;
+					if (WTW.isNumeric(keycode)) {
+						WTW.keysPressed[WTW.keysPressed.length] = Number(keycode);
+					} else {
+						WTW.keysPressed[WTW.keysPressed.length] = keycode;
+					}
 				}
 			}
 		}
@@ -636,7 +643,7 @@ WTWJS.prototype.mouseOutMold = function(mold) {
 		if (WTW.canvasFocus == 1) {
 			WTW.hide('wtw_itooltip');
 			if (WTW.adminView == 1) {
-				if (dGet('wtw_bfocus').title == "Focus Highlight is On") {
+				if (dGet('wtw_bfocus').title == "Focus Highlight is On" || WTW.highlightLayer != null) {
 					WTW.unhilightMold(WTW.currentID);
 				}
 			}

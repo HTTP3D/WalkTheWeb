@@ -1417,9 +1417,7 @@ class wtwbuildings {
 						rotationx=-5,
 						rotationy=100,
 						rotationz=0,
-						gravity=1,
-						wallcollisions=1,
-						floorcollisions=1
+						gravity=1
 					where buildingid='".$zbuildingid,"';");
 				$zsuccess = true;
 			}

@@ -331,10 +331,8 @@
 			<div id="wtw_quickeditorsettings" class="wtw-menulevel0" style="text-align:center;position:absolute;z-index:8000;bottom:0px;width:320px;margin:0px;padding-left:0px;padding-right:0px;border-top:#333333;">
 				<div style="width:100%;text-align:center;margin-top:0px;">
 					<div style="font-size:.8em;color:white;margin-bottom:4px;width:100%;margin-left:0px;margin-right:0px;margin-top:0px;">Quick Editor Settings</div>
-					<div id="wtw_bgravity" onclick="WTW.setQuickEditorGravity(0);" class="wtw-quickbar" title="Gravity is On" alt="Gravity is On">Gravity<br /><br />ON</div>
-					<div id="wtw_bfocus" onclick="WTW.setQuickEditorFocus(0);" class="wtw-quickbar" title="Focus Highlight is On" alt="Focus Highlight is On">Focus<br /><br />ON</div>
-					<div id="wtw_bwall" onclick="WTW.setQuickEditorWall(0);" class="wtw-quickbar" title="Wall Collisions are On" alt="Wall Collisions are On">Walls<br /><br />ON</div>
 					<div id="wtw_bavatarcamera" onclick="WTW.setQuickEditorAvatarCamera(0);" class="wtw-quickbar" title="Camera is Attached to Avatar" alt="Camera is Attached to Avatar">Avatar<br />Camera<br />ON</div>
+					<div id="wtw_bfocus" onclick="WTW.setQuickEditorFocus(0);" class="wtw-quickbar" title="Focus Highlight is On" alt="Focus Highlight is On">Focus<br /><br />ON</div>
 					<div id="wtw_bmerged" onclick="WTW.setQuickEditorMerged(1);" class="wtw-quickbaroff" title="Merged Shapes are Hidden" alt="Merged Shapes are Hidden">Merged<br /><br />OFF</div>
 					<div id="wtw_bzones" onclick="WTW.setQuickEditorZones(1);" class="wtw-quickbaroff" title="Action Zones are Hidden" alt="Action Zones are Hidden">Zones<br /><br />OFF</div>
 					<div id="wtw_blines" onclick="WTW.setQuickEditorLines(0);" class="wtw-quickbar" title="Alignment Lines are Shown" alt="Alignment Lines are Shown">Lines<br /><br />ON</div>
