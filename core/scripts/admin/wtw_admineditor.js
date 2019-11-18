@@ -5,7 +5,7 @@
 WTWJS.prototype.lineZ;
 WTWJS.prototype.lineX;
 WTWJS.prototype.lineY;
-WTWJS.prototype.lineY1; 
+WTWJS.prototype.lineY1;
 WTWJS.prototype.lineY2;
 WTWJS.prototype.lineY3;
 WTWJS.prototype.lineY4;
@@ -2222,7 +2222,6 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 		dGet('wtw_tmoldpositionz').focus();
 		WTW.setWindowSize();
 		WTW.setNewMold(1);
-		/* WTW.resetMoldsOpacity(); */
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-openMoldForm=" + ex.message);
 	}
@@ -3567,6 +3566,18 @@ WTWJS.prototype.submitMoldForm = function(w) {
 			WTW.setDDLValue("wtw_tmoldcsgaction", "");
 		}		
 		if (w == 0) {
+			var basemoldind = -1;
+			var baseshape = "box";
+			if (molds[moldind].csg.moldid != '') {
+				for (var i=0;i<molds.length;i++) {
+					if (molds[i] != null) {
+						if (molds[i].moldid == molds[moldind].csg.moldid) {
+							basemoldind = i;
+							baseshape = molds[i].shape;
+						}
+					}
+				}
+			}
 			if (moldname != "") {
 				WTW.disposeClean(moldname);
 			}
@@ -3588,7 +3599,15 @@ WTWJS.prototype.submitMoldForm = function(w) {
 				dGet('wtw_tnewmold').value = "0";
 			}
 			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/molds.php', onload);	
+			var iframe = WTW.createIFrame('/core/iframes/molds.php', onload);
+			WTW.pluginsSubmitMoldForm(w);
+			WTW.clearEditMold();
+			if (basemoldind > -1) {
+				WTW.openMoldForm(basemoldind,baseshape,moldgroup); 
+			} else {
+				WTW.hideAdminMenu();
+				WTW.backToEdit();
+			}
 		} else if (w == -1) {
 			if (WTW.moldBackup != null) {
 				molds[moldind] = WTW.moldBackup;
@@ -3614,6 +3633,10 @@ WTWJS.prototype.submitMoldForm = function(w) {
 				molds[moldind].shown = "0";
 				WTW.setShownMolds();
 			}
+			WTW.pluginsSubmitMoldForm(w);
+			WTW.clearEditMold();
+			WTW.hideAdminMenu();
+			WTW.backToEdit();
 		} else {
 			if (molds[moldind] == null) {
 				molds[moldind] = WTW.newMold();
@@ -3936,9 +3959,11 @@ WTWJS.prototype.submitMoldForm = function(w) {
 			var iframe = WTW.createIFrame('/core/iframes/molds.php', onload);			
 			dGet('wtw_tnewmold').value = "0";
 			WTW.checkActionZones(molds[moldind]);
+			WTW.pluginsSubmitMoldForm(w);
+			WTW.clearEditMold();
+			WTW.hideAdminMenu();
+			WTW.backToEdit();
 		}
-		WTW.pluginsSubmitMoldForm(w);
-		WTW.clearEditMold();
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-submitMoldForm=" + ex.message);
 	}
@@ -7650,11 +7675,7 @@ WTWJS.prototype.setNewMold = function(rebuildmold) {
 				if (mold.material != undefined) {
 					mold.material.specularColor = new BABYLON.Color3(Number(molds[moldind].color.specular.r), Number(molds[moldind].color.specular.g), Number(molds[moldind].color.specular.b));
 					mold.material.diffuseColor = new BABYLON.Color3(Number(molds[moldind].color.diffuse.r), Number(molds[moldind].color.diffuse.g), Number(molds[moldind].color.diffuse.b));	
-					if (shape != "terrain" && shape != "floor") {
-						mold.material.emissiveColor = new BABYLON.Color3(Number(molds[moldind].color.emissive.r), Number(molds[moldind].color.emissive.g), Number(molds[moldind].color.emissive.b));
-					} else {
-						mold.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-					}
+					mold.material.emissiveColor = new BABYLON.Color3(Number(molds[moldind].color.emissive.r), Number(molds[moldind].color.emissive.g), Number(molds[moldind].color.emissive.b));
 				}
 				if (molds[moldind].covering == "color" || molds[moldind].covering == "marble") {
 					var moldimageframename = moldname + "-imageframe";
@@ -8028,7 +8049,6 @@ WTWJS.prototype.setNewMold = function(rebuildmold) {
 					if (Number(molds[moldind].csg.count) > 0) {
 						WTW.disposeClean(moldname);
 						molds[moldind].shown = "0";
-						rebuildmold = 0;
 						csgmainid = "";
 					}
 				}
@@ -8073,11 +8093,25 @@ WTWJS.prototype.setNewMold = function(rebuildmold) {
 							}
 						}
 					}
-				} 
+				}
+				var hasdependents = 0;
+				for (var i=0;i<molds.length;i++) {
+					if (molds[i] != null) {
+						if (molds[moldind].moldid == molds[i].csg.moldid) {
+							WTW.disposeClean(molds[i].moldname);
+							molds[i].shown = "0";
+							hasdependents = 1;
+							rebuildmold = 1;
+						}
+					}
+				}
 				rebuildmold = WTW.pluginsSetNewMold(moldname, molds, moldind, rebuildmold);
 				if (rebuildmold == 1 || csgmainid != "") {
 					WTW.disposeClean(moldname);
 					mold = WTW.addMold(moldname, molds[moldind], parentname, coveringname);
+					if (hasdependents == 1) {
+						mold = WTW.processCSGAction(mold, moldgroup, molds[moldind]);
+					}
 				}
 				if (rebuildmold == 1 && shape != "image") {
 					if (mold != null && dGet('wtw_tmoldmoldgroup').value == "building") {

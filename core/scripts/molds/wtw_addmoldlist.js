@@ -607,6 +607,11 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 						} catch (ex) {}
 					}
 					mold.material = WTW.addCovering(coveringname, moldname, molddef, lenx, leny, lenz, special1, special2);
+					if (mold.material != undefined) {
+						mold.material.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
+						mold.material.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));	
+						mold.material.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
+					}
 				}
 			}
 			if (moldname.indexOf("terrain") > -1 || iswaterreflection == "1") {

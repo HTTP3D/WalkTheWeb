@@ -68,8 +68,9 @@
 					echo $wtwadminmenu->getAdminSubMenu('editmold'); ?>
 					<br />
 					<div id="wtw_bsavethismold" class="wtw-greenbutton" onclick="WTW.submitMoldForm(1);WTW.hideAdminMenu();WTW.backToEdit();" style="font-size:1.4em;"><div class="wtw-altkey2">ctrl+s</div><u>S</u>ave Mold<!--11--></div>
-					<div id="wtw_bdelmold" class="wtw-redbutton" onclick="WTW.submitMoldForm(0);WTW.hideAdminMenu();WTW.backToEdit();"><div class="wtw-altkey2">ctrl+d</div><u>D</u>elete Mold<!--11--></div>
+					<div id="wtw_bdelmold" class="wtw-redbutton" onclick="WTW.submitMoldForm(0);"><div class="wtw-altkey2">ctrl+d</div><u>D</u>elete Mold<!--11--></div>
 					<div id="wtw_bcancelmold" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu12" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback12" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
