@@ -154,10 +154,6 @@ WTWJS.prototype.switchCamera = function(w) {
 					WTW.cameraFollowTwo.rotationOffset = WTW.getDegrees(avatar.rotation.y) + WTW.cameraFollowTwo.yOffset;
 				}
 			}
-			if (dGet('wtw_cameratwotext').innerHTML == "Second Camera On") {
-				//WTW.toggleCameraTwo();
-				//WTW.toggleCameraTwo();
-			}
 		} else if (w == 3) {
 			if (WTW.cameraArc == null) {
 				WTW.initArcCamera();
@@ -183,14 +179,12 @@ WTWJS.prototype.switchCamera = function(w) {
 					WTW.initFollowCamera(2);
 				}
 				var step = 25;
-				WTW.cameraYOffset = 5;
 				WTW.cameraFollowTwo.lockedTarget = null;
 				switch (secondcamera) {
 					case 'First-Person Camera':
 						step = 1;
-						WTW.cameraYOffset = 0;
 						WTW.cameraFollowTwo.radius = step; // how far from the object to follow
-						WTW.cameraFollowTwo.heightOffset = WTW.cameraYOffset; // how high above the object to place the camera
+						WTW.cameraFollowTwo.heightOffset = 0; // how high above the object to place the camera
 						WTW.cameraFollowTwo.yOffset = 0;
 						WTW.cameraFollowTwo.inertia = .005;
 						WTW.cameraFollowTwo.cameraAcceleration = 0.5;
@@ -207,9 +201,8 @@ WTWJS.prototype.switchCamera = function(w) {
 						break;
 					case 'Scene Camera':
 						step = 40;
-						WTW.cameraYOffset = 15;
 						WTW.cameraFollowTwo.radius = step; // how far from the object to follow
-						WTW.cameraFollowTwo.heightOffset = WTW.cameraYOffset; // how high above the object to place the camera
+						WTW.cameraFollowTwo.heightOffset = 15; // how high above the object to place the camera
 						WTW.cameraFollowTwo.yOffset = 0;
 						WTW.cameraFollowTwo.inertia = .25;
 						WTW.cameraFollowTwo.cameraAcceleration = 0.3;
@@ -226,9 +219,8 @@ WTWJS.prototype.switchCamera = function(w) {
 					case 'Self Camera':
 						avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
 						step = 30;
-						WTW.cameraYOffset = 8;
 						WTW.cameraFollowTwo.radius = step; // how far from the object to follow
-						WTW.cameraFollowTwo.heightOffset = WTW.cameraYOffset; // how high above the object to place the camera
+						WTW.cameraFollowTwo.heightOffset = 8; // how high above the object to place the camera
 						WTW.cameraFollowTwo.yOffset = 180;
 						WTW.cameraFollowTwo.inertia = .10;
 						WTW.cameraFollowTwo.cameraAcceleration = 0.5;
@@ -244,7 +236,7 @@ WTWJS.prototype.switchCamera = function(w) {
 						break;
 					default:
 						WTW.cameraFollowTwo.radius = step; // how far from the object to follow
-						WTW.cameraFollowTwo.heightOffset = WTW.cameraYOffset; // how high above the object to place the camera
+						WTW.cameraFollowTwo.heightOffset = 0; // how high above the object to place the camera
 						WTW.cameraFollowTwo.yOffset = 0;
 						WTW.cameraFollowTwo.inertia = .10;
 						WTW.cameraFollowTwo.cameraAcceleration = 0.5;
@@ -298,6 +290,10 @@ WTWJS.prototype.switchCamera = function(w) {
 				WTW.cameraArc = null;
 			}
 		} catch (ex) {}
+		if (scene.activeCameras[3] != undefined) {
+			scene.activeCameras.splice(3,1);
+		}
+
 		try {
 			if (scene.activeCameras[0].id != 'maincamera') {
 				if (scene.activeCameras[1] != undefined) {
@@ -389,11 +385,9 @@ WTWJS.prototype.initAvatarCameras = function() {
 		}
 		if (avatarcamera != null && avatar != null) {
 			if (WTW.cameraFollow != null) {
-				//WTW.cameraFollow.parent = WTW.myAvatar;
 				WTW.cameraFollow.lockedTarget = avatarcamera;
 			}
 			if (WTW.cameraAnaglyph != null) {
-				//WTW.cameraAnaglyph.parent = WTW.myAvatar;
 				switch (WTW.getDDLValue('wtw_firstcamera')) {
 					case 'First-Person Camera':
 						WTW.cameraAnaglyph.lockedTarget = null;
@@ -404,7 +398,6 @@ WTWJS.prototype.initAvatarCameras = function() {
 				}
 			}
 			if (WTW.cameraVR != null) {
-				//WTW.cameraVR.parent = WTW.myAvatar;
 				switch (WTW.getDDLValue('wtw_firstcamera')) {
 					case 'First-Person Camera':
 						WTW.cameraVR.lockedTarget = null;
@@ -415,7 +408,6 @@ WTWJS.prototype.initAvatarCameras = function() {
 				}
 			}
 			if (WTW.cameraVRGamepad != null) {
-				//WTW.cameraVRGamepad.parent = WTW.myAvatar;
 				switch (WTW.getDDLValue('wtw_firstcamera')) {
 					case 'First-Person Camera':
 						WTW.cameraVRGamepad.lockedTarget = null;
@@ -426,7 +418,7 @@ WTWJS.prototype.initAvatarCameras = function() {
 				}
 			}
 			if (WTW.cameraFollowTwo != null && avatar != null) {
-				//WTW.cameraFollowTwo.parent = WTW.myAvatar;
+				var secondcamera = WTW.getDDLValue('wtw_secondcamera');
 				avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
 				WTW.cameraFollowTwo.lockedTarget = null;
 				if (secondcamera == 'First-Person Camera' && avatarcamera != null) {
@@ -438,7 +430,6 @@ WTWJS.prototype.initAvatarCameras = function() {
 				}
 			}
 			if (WTW.cameraArc != null && avatar != null) {
-				//WTW.cameraArc.parent = WTW.myAvatar;
 				avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
 				WTW.cameraArc.lockedTarget = avatarcamera;
 			}
@@ -449,6 +440,22 @@ WTWJS.prototype.initAvatarCameras = function() {
 	}
 }
 
+WTWJS.prototype.addActiveCamera = function(zcamera) {
+	try {
+		var zfound = false;
+		for (var i=0;i<scene.activeCameras.length;i++) {
+			if (scene.activeCameras[i].id == zcamera.id) {
+				zfound = true;
+			}
+		}
+		if (zfound == false) {
+			scene.activeCameras.push(zcamera);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_cameras.js-addActiveCamera=" + ex.message);
+	}
+}
+		
 WTWJS.prototype.initFirstPersonCamera = function() {
 	try {
 		WTW.camera = new BABYLON.UniversalCamera("maincamera", new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY, WTW.init.startPositionZ), scene);
@@ -458,7 +465,7 @@ WTWJS.prototype.initFirstPersonCamera = function() {
 		WTW.camera.yOffset = 180;
 		WTW.camera.inertia = .75;
 		WTW.camera.id = "maincamera";
-		scene.activeCameras.push(WTW.camera);	
+		WTW.addActiveCamera(WTW.camera);	
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_cameras.js-initFirstPersonCamera=" + ex.message);
 	}
@@ -476,7 +483,7 @@ WTWJS.prototype.initFollowCamera = function(viewport) {
 			avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
 		}
 		if (viewport == 2) {
-			WTW.cameraFollowTwo = new BABYLON.FollowCamera("followcamera", WTW.camera.position, scene);
+			WTW.cameraFollowTwo = new BABYLON.FollowCamera("followcameratwo", WTW.camera.position, scene);
 			WTW.cameraFollowTwo.inputs.clear();
 			//WTW.cameraFollowTwo.inputs.remove(WTW.cameraFollowTwo.inputs.attached.keyboard); 
 			//WTW.cameraFollowTwo.inputs.remove(WTW.cameraFollowTwo.inputs.attached.mouse); 
@@ -486,8 +493,7 @@ WTWJS.prototype.initFollowCamera = function(viewport) {
 			WTW.cameraFollowTwo.yOffset = 0;
 			WTW.cameraFollowTwo.viewport = new BABYLON.Viewport(0.7, 0.7, 0.3, 0.3);
 			WTW.cameraFollowTwo.id = "followcameratwo";
-			//WTW.cameraFollowTwo.parent = WTW.myAvatar;
-			scene.activeCameras.push(WTW.cameraFollowTwo);
+			WTW.addActiveCamera(WTW.cameraFollowTwo);
 		} else {
 			WTW.cameraFollow = new BABYLON.FollowCamera("followcamera", WTW.camera.position, scene);
 			WTW.cameraFollow.inputs.clear();
@@ -499,8 +505,7 @@ WTWJS.prototype.initFollowCamera = function(viewport) {
 			WTW.cameraFollow.yOffset = 0;
 			WTW.cameraFollow.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 			WTW.cameraFollow.id = "followcamera";
-			//WTW.cameraFollow.parent = WTW.myAvatar;
-			scene.activeCameras.push(WTW.cameraFollow);
+			WTW.addActiveCamera(WTW.cameraFollow);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_cameras.js-initFollowCamera=" + ex.message);
@@ -525,7 +530,7 @@ WTWJS.prototype.initArcCamera = function() {
 		WTW.cameraArc.inertia = .75;
 		WTW.cameraArc.fov = .4;
 		//WTW.cameraArc.parent = WTW.myAvatar;
-		scene.activeCameras.push(WTW.cameraArc);
+		WTW.addActiveCamera(WTW.cameraArc);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_cameras.js-initArcCamera=" + ex.message);
 	}
@@ -534,7 +539,6 @@ WTWJS.prototype.initArcCamera = function() {
 WTWJS.prototype.initAnaglyphCamera = function() {
 	try {
 		WTW.cameraAnaglyph = new BABYLON.AnaglyphUniversalCamera("anaglyphcamera", scene.activeCameras[0].position, .033, scene); //eye space = .033 try .05
-		//WTW.cameraAnaglyph = new BABYLON.AnaglyphArcRotateCamera("anaglyphcamera", 0, Math.PI / 2, 10, scene.activeCameras[0].position, .033, scene);
 		WTW.cameraAnaglyph.inputs.clear();
 		//WTW.cameraAnaglyph.inputs.remove(WTW.cameraAnaglyph.inputs.attached.keyboard); 
 		//WTW.cameraAnaglyph.inputs.remove(WTW.cameraAnaglyph.inputs.attached.mouse); 
@@ -554,7 +558,7 @@ WTWJS.prototype.initAnaglyphCamera = function() {
 */		WTW.cameraAnaglyph.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 		WTW.cameraAnaglyph.id = "anaglyphcamera";
 		//WTW.cameraAnaglyph.parent = WTW.myAvatar;
-		scene.activeCameras.push(WTW.cameraAnaglyph);
+		WTW.addActiveCamera(WTW.cameraAnaglyph);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_cameras.js-initAnaglyphCamera=" + ex.message);
 	}
@@ -563,10 +567,9 @@ WTWJS.prototype.initAnaglyphCamera = function() {
 WTWJS.prototype.initVRCamera = function() {
 	try {
 		WTW.cameraVR = new BABYLON.VRDeviceOrientationFreeCamera ("vrcamera", scene.activeCameras[0].position, scene);
-		//WTW.cameraVR = new BABYLON.VRDeviceOrientationArcRotateCamera ("vrcamera", 0, Math.PI / 2, 10, scene.activeCameras[0].position, scene);
-		WTW.cameraVR.inputs.clear();
-		//WTW.cameraVR.inputs.remove(WTW.cameraVR.inputs.attached.keyboard); 
-		//WTW.cameraVR.inputs.remove(WTW.cameraVR.inputs.attached.mouse);
+		//WTW.cameraVR.inputs.clear();
+		WTW.cameraVR.inputs.remove(WTW.cameraVR.inputs.attached.keyboard); 
+		WTW.cameraVR.inputs.remove(WTW.cameraVR.inputs.attached.mouse);
 		var avatarcamera = null;
 		if (WTW.getDDLValue('wtw_firstcamera') == 'Self Camera') {
 			avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
@@ -583,7 +586,7 @@ WTWJS.prototype.initVRCamera = function() {
 */		WTW.cameraVR.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 		WTW.cameraVR.id = "vrcamera";
 		//WTW.cameraVR.parent = WTW.myAvatar;
-		scene.activeCameras.push(WTW.cameraVR);
+		WTW.addActiveCamera(WTW.cameraVR);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_cameras.js-initVRCamera=" + ex.message);
 	}
@@ -611,7 +614,7 @@ WTWJS.prototype.initVRGamepadCamera = function() {
 */		WTW.cameraVRGamepad.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 		WTW.cameraVRGamepad.id = "vrgamepadcamera";
 		//WTW.cameraVRGamepad.parent = WTW.myAvatar;
-		scene.activeCameras.push(WTW.cameraVRGamepad);
+		WTW.addActiveCamera(WTW.cameraVRGamepad);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_cameras.js-initVRGamepadCamera=" + ex.message);
 	}
