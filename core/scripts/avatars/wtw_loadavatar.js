@@ -1651,16 +1651,20 @@ WTWJS.prototype.avatarShowGrowSmoke = function(avatarname, avatarparts) {
 
 WTWJS.prototype.avatarShowGrowGlow = function(avatarname, avatarparts) {
 	try {
+		if (WTW.highlightLayer == null) {
+			WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
+		}
 		var avatarscale = scene.getMeshByID(avatarname + "-scale");
 		if (avatarscale != null) {
 			avatarscale.scaling.x = .001;
 			avatarscale.scaling.y = .001;
 			avatarscale.scaling.z = .001;
-
 			for (var i=0; i<avatarparts.length;i++) {
 				if (avatarparts[i] != null) {
 					avatarparts[i].isVisible = true;
-					WTW.highlightLayer.addMesh(avatarparts[i], BABYLON.Color3.Yellow());
+					try {
+						WTW.highlightLayer.addMesh(avatarparts[i], BABYLON.Color3.Yellow());
+					} catch(ex){}
 				}
 			} 
 		}
@@ -1716,7 +1720,9 @@ WTWJS.prototype.avatarShowGrowGlow = function(avatarname, avatarparts) {
 						var avatarparts = avatarscale.getChildren();
 						for (var i=0; i<avatarparts.length;i++) {
 							if (avatarparts[i] != null) {
-								WTW.highlightLayer.removeMesh(avatarparts[i]);
+								try {
+									WTW.highlightLayer.removeMesh(avatarparts[i]);
+								} catch(ex){}
 							}
 						} 
 						window.clearInterval(timername);
@@ -1743,13 +1749,17 @@ WTWJS.prototype.avatarShowGrowGlowSmoke = function(avatarname, avatarparts) {
 			avatarscale.scaling.y = .001;
 			avatarscale.scaling.z = .001;
 		}
-		
+		if (WTW.highlightLayer == null) {
+			WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
+		}
 		for (var i=0; i<avatarparts.length;i++) {
 			if (avatarparts[i] != null) {
 				avatarparts[i].isVisible = true;
-				WTW.highlightLayer.addMesh(avatarparts[i], BABYLON.Color3.Gray());
-				WTW.highlightLayer.outerGlow = true;
-				WTW.highlightLayer.innerGlow = false;
+				try {
+					WTW.highlightLayer.addMesh(avatarparts[i], BABYLON.Color3.Gray());
+					WTW.highlightLayer.outerGlow = true;
+					WTW.highlightLayer.innerGlow = false;
+				} catch(ex){}
 			}
 		}
 		window.setTimeout(function() {
@@ -1810,7 +1820,9 @@ WTWJS.prototype.avatarShowGrowGlowSmoke = function(avatarname, avatarparts) {
 							var avatarparts = avatarscale.getChildren();
 							for (var i=0; i<avatarparts.length;i++) {
 								if (avatarparts[i] != null) {
-									WTW.highlightLayer.removeMesh(avatarparts[i]);
+									try {
+										WTW.highlightLayer.removeMesh(avatarparts[i]);
+									} catch(ex){}
 								}
 							} 
 							window.clearInterval(timername);
