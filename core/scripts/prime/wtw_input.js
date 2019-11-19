@@ -272,7 +272,6 @@ WTWJS.prototype.mouseClick = function(e) {
 						var mesh = scene.getMeshByID(pickedname);
 						if (pickedname.indexOf("-") > -1) {
 							var namepart = pickedname.split('-');
-WTW.log("pickedname=" + pickedname);
 							WTW.checkMoldEvent('onclick', pickedname);
 							WTW.pluginsOnClick(pickedname);
 

@@ -477,7 +477,6 @@ WTWJS.prototype.getConnectingGrids = function() {
 			parentwebid = thingid;
 		}
 		if (parentwebid != '') {
-WTW.log("/connect/connectinggrids.php?parentwebid=" + parentwebid + "&startpositionx=" + WTW.camera.position.x + "&startpositiony=" + WTW.camera.position.y + "&startpositionz=" + WTW.camera.position.z + "&userid=" + dGet('wtw_tuserid').value);
 			WTW.getJSON("/connect/connectinggrids.php?parentwebid=" + parentwebid + "&startpositionx=" + WTW.camera.position.x + "&startpositiony=" + WTW.camera.position.y + "&startpositionz=" + WTW.camera.position.z + "&userid=" + dGet('wtw_tuserid').value, 
 				function(response) {
 					WTW.loadConnectingGrids(JSON.parse(response));

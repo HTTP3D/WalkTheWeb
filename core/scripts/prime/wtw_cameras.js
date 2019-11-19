@@ -641,7 +641,6 @@ WTWJS.prototype.setMovingCameras = function(avatar, avatarcamera) {
 						break;
 				}
 				if (WTW.camera != null && avatarcamera != null) {
-//WTW.log("sin=" + Math.sin(avatar.rotation.y) + "==cos=" + Math.cos(avatar.rotation.y));
 					WTW.camera.position.x = avatar.position.x; //-(Math.sin(avatar.rotation.y) - Math.cos(avatar.rotation.y));
 					WTW.camera.position.y = avatar.position.y + avatarcamera.position.y;
 					WTW.camera.position.z = avatar.position.z-(Math.sin(avatar.rotation.y) + Math.cos(avatar.rotation.y));

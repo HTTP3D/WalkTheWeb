@@ -2545,7 +2545,6 @@ WTWJS.prototype.disposeAnimations = function(avatarname) {
 
 WTWJS.prototype.loadSit = function(avatarname) {
 	try {
-WTW.log("loadSit");
 		var useravataranimationid = "cccccccccccccccc";
 		var avataranimationid = "dddddddddddddddd";
 		WTW.loadAvatarAnimation(avatarname, useravataranimationid, 'Sit Wait', '', avataranimationid, 'onsitwait', '/content/system/animations/movement/', 'sitwait.babylon', 1, 155, 1, 0, 0);
@@ -2559,7 +2558,6 @@ WTW.log("loadSit");
 
 WTWJS.prototype.startSit = function(moldname) {
 	try {	
-WTW.log("startSit");
 		var avatarname = "myavatar-" + dGet("wtw_tinstanceid").value;
 		var avatar = scene.getMeshByID(avatarname);
 		if (avatar != null) {
@@ -2577,7 +2575,6 @@ WTW.log("startSit");
 
 WTWJS.prototype.setSit = function(moldtomatch) {
 	try {	
-WTW.log("setSit");
 
     } catch (ex) {
 		WTW.log("avatars-loadavatar-setSit=" + ex.message);

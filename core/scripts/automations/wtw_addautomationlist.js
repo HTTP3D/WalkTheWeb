@@ -81,7 +81,6 @@ WTWJS.prototype.addAutomation = function(automationname, automationdef) {
 	try {
 		automation = scene.getMeshByID(automationname);
 		if (automation == null) {
-//WTW.log("automationname=" + automationname);			
 			var automationind = -1;
 			if (WTW.isNumeric(automationdef.automationind)) {
 				automationind = Number(automationdef.automationind);

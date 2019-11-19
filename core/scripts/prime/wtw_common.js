@@ -3946,9 +3946,9 @@ WTWJS.prototype.listUploads = function() {
 			}
 		}
 	}		
-WTW.log("----------------------");
-WTW.log("len=" + wtw_uploads.length);
-WTW.log("----------------------");
+	WTW.log("----------------------");
+	WTW.log("len=" + wtw_uploads.length);
+	WTW.log("----------------------");
 }
 
 WTWJS.prototype.listMeshes = function() {

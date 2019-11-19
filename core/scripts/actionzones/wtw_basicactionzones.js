@@ -1375,10 +1375,6 @@ WTWJS.prototype.addActionzonePeoplemover = function(actionzonename, actionzonein
 							rangez = hiz - loz;
 							rangex = hix - lox;
 							rangey = hiy - loy;
-
-//WTW.log("x=" + rangex, 'blue'); //-40   //3
-//WTW.log("y=" + rangey, 'red'); //40     //1.5500000000000007
-//WTW.log("z=" + rangez, 'green'); //0    //-26.380000000000003
 							
 							if (rangez == 0) {
 								//escalators

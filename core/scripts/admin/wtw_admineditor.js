@@ -6650,31 +6650,6 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 						'conngridrotationz':dGet('wtw_tconngridrotationz').value,
 						'conngridalttag':dGet('wtw_tconngridalttag').value
 					};
-WTW.log("connectinggridid=" + request.connectinggridid);
-WTW.log("communityid=" + request.communityid);
-WTW.log("buildingid=" + request.buildingid);
-WTW.log("thingid=" + request.thingid);
-WTW.log("loadactionzoneid=" + request.loadactionzoneid);
-WTW.log("altloadactionzoneid=" + request.altloadactionzoneid);
-WTW.log("parentwebid=" + request.parentwebid);
-WTW.log("parentwebtype=" + request.parentwebtype);
-WTW.log("childwebid=" + request.childwebid);
-WTW.log("childwebtype=" + request.childwebtype);
-WTW.log("connectinggridind=" + request.connectinggridind);
-WTW.log("conngridpositionx=" + request.conngridpositionx);
-WTW.log("conngridpositiony=" + request.conngridpositiony);
-WTW.log("conngridpositionz=" + request.conngridpositionz);
-WTW.log("conngridscalingx=" + request.conngridscalingx);
-WTW.log("conngridscalingy=" + request.conngridscalingy);
-WTW.log("conngridscalingz=" + request.conngridscalingz);
-WTW.log("conngridrotationx=" + request.conngridrotationx);
-WTW.log("conngridrotationy=" + request.conngridrotationy);
-WTW.log("conngridrotationz=" + request.conngridrotationz);
-WTW.log("conngridalttag=" + request.conngridalttag);
-
-
-
-
 					/* function for after iframe loads */
 					var onload = function(ipage) {
 						ipage.getElementById('wtw_teditconnectinggridid').value = request.connectinggridid;
@@ -8368,10 +8343,6 @@ WTWJS.prototype.shareCommunitySecurity = function(zkey) {
 			function(response) {
 				response = JSON.parse(response);
 
-WTW.log("communityid=" + response.communityid);
-WTW.log("userid=" + response.userid);
-WTW.log("serror=" + response.serror);
-WTW.log("url=" + response.url);
 
 /*		'communityid' => $communityid,
 		'userid' => $userid,
@@ -8975,8 +8946,6 @@ WTWJS.prototype.getSelectCommunitiesList = function() {
 }
 
 WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
-//WTW.log("adminMenu=" + WTW.adminMenu);
-//WTW.log("keycode=" + keycode);
 	try {
 		var e = e || window.event;
 		if (keycode == 90 || keycode == 88 || keycode == 67 || keycode == 86) {

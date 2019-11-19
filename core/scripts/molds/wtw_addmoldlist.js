@@ -319,7 +319,6 @@ WTWJS.prototype.addPhysics = function(mold, molddef) {
 		if (namepart[0] == "actionzone" && namepart[5] == "driverseat" && thingid == "") {
 			mold.parent.parent = null;
 /*			if (mold.parent.physicsImpostor == null) {
-WTW.log("DRIVERSEATparent=" + mold.parent.name,'red');
 				mold.parent.physicsImpostor = new BABYLON.PhysicsImpostor(mold.parent, BABYLON.PhysicsImpostor.BoxImpostor, {  
 					mass: 80,
 					friction: 0.5,
