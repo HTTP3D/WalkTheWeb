@@ -168,6 +168,14 @@
 					<input type="button" id="wtw_beditactionzonerotyr1" class="wtw-smallprint" value="+1" onmousedown="WTW.changeNumberValue('wtw_tactionzoneroty', 1);WTW.blockPassThrough(); return (false);" onmouseup="WTW.changeStop();" onclick="WTW.blockPassThrough();" style="cursor: pointer;" />
 				</div>
 			</div><br /><br />
+			<div id="wtw_actionzoneavataranimationsdiv">
+				<h4>Load Avatar Animations</h4>
+				<div id="wtw_azavataranimations"></div><br />
+				<div class="wtw-onecol">Select to Add:</div><br />
+				<select id="wtw_tazavataranimationid"></select><br />
+				<div class="wtw-menulevel0" onclick="WTW.saveAZAvatarAnimation();">Add Animation</div>
+				<br /><br />
+			</div>
 			<div id="wtw_azvisibilitydistancediv">
 				<h4>Action Zone Load Distance</h4>
 				<select id="wtw_tazloadactionzoneid"></select>
