@@ -152,12 +152,12 @@
 			<div id="wtw_moldaddimagediv">
 				<h2 style="margin-bottom:3px;">Image</h2>
 				<img id="wtw_moldaddimagepreview" class="wtw-previewimage" /><br />
-				<div class="wtw-menulevel0" onclick="WTW.openFullPageForm('medialibrary','image','webimage','wtw_tmoldaddimageid','wtw_tmoldaddimagepath','wtw_moldaddimagepreview');">Change Image<!--11--></div>
+				<div class="wtw-menulevel0" onclick="WTW.openFullPageForm('medialibrary','image','webimage','wtw_tmoldaddimageid','wtw_tmoldaddimagepath','wtw_moldaddimagepreview');">Change Image</div>
 				<br />
 				<br />
 				<h4 style="margin-bottom:3px;">Hover Image</h4>
 				<img id="wtw_moldaddimagehoverpreview" class="wtw-previewimage" /><br />
-				<div class="wtw-menulevel0" onclick="WTW.openFullPageForm('medialibrary','image','webimagehover','wtw_tmoldaddimagehoverid','wtw_tmoldaddimagehoverpath','wtw_moldaddimagehoverpreview');">Change Hover Image<!--11--></div>
+				<div class="wtw-menulevel0" onclick="WTW.openFullPageForm('medialibrary','image','webimagehover','wtw_tmoldaddimagehoverid','wtw_tmoldaddimagehoverpath','wtw_moldaddimagehoverpreview');">Change Hover Image</div>
 				<br />
 				<br />
 				<h2 style="margin-bottom:3px;">Add Click Event</h2>
@@ -186,7 +186,7 @@
 				<h2 style="margin-bottom:3px;">Video Settings</h2>
 				<h4 style="margin-bottom:3px;">Video File (max 100MB)</h4>
 				<img id="wtw_moldaddvideopreview" class="wtw-previewimage" width="190" src="/content/system/images/videoicon.png" /><br />
-				<div class="wtw-menulevel0" onclick="WTW.openFullPageForm('medialibrary','video','webvideo','wtw_tmoldvideoid','wtw_tmoldvideopath','wtw_moldaddvideopreview');">Change Video<!--11--></div>
+				<div class="wtw-menulevel0" onclick="WTW.openFullPageForm('medialibrary','video','webvideo','wtw_tmoldvideoid','wtw_tmoldvideopath','wtw_moldaddvideopreview');">Change Video</div>
 				<br />
 				<br />
 				<h4 style="margin-bottom:3px;">Video Poster Image</h4>
@@ -221,7 +221,7 @@
 				<h4 id="wtw_moldbumptexturetitle" style="margin-bottom:3px;">Mold Bump Image</h4>
 				<img id="wtw_moldtexturebumppreview" class='wtw-previewimage' src="" /><br />
 				<div id="wtw_moldchangebumptexture" class="wtw-menulevel0" onclick="WTW.adminMenuItemSelected(this);">Change Bump Texture</div>
-				<div class="wtw-menulevel0" onclick="dGet('wtw_tmoldtexturebumpid').value='';dGet('wtw_tmoldtexturebumppath').value='';WTW.setNewMold(1);dGet('wtw_moldtexturebumppreview').src='';">Clear Bump Texture<!--11--></div>
+				<div class="wtw-menulevel0" onclick="dGet('wtw_tmoldtexturebumpid').value='';dGet('wtw_tmoldtexturebumppath').value='';WTW.setNewMold(1);dGet('wtw_moldtexturebumppreview').src='';">Clear Bump Texture</div>
 				<br />
 				<br />
 			</div>
@@ -429,7 +429,7 @@
 					<br />
 					<br />
 					<div id="wtw_selectedcsgshape"></div>
-					<div id="wtw_bselectcsgshape" class="wtw-menulevel0" onclick="WTW.selectMergePart(WTW.pick);">Pick Shape to Merge<!--11--></div>
+					<div id="wtw_bselectcsgshape" class="wtw-menulevel0" onclick="WTW.selectMergePart(WTW.pick);">Pick Shape to Merge</div>
 					<br />
 					<hr class="wtw-menuhr" />
 				</div>

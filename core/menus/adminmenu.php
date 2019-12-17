@@ -67,8 +67,8 @@
 <?php				include './core/forms/mold.php'; 
 					echo $wtwadminmenu->getAdminSubMenu('editmold'); ?>
 					<br />
-					<div id="wtw_bsavethismold" class="wtw-greenbutton" onclick="WTW.submitMoldForm(1);WTW.hideAdminMenu();WTW.backToEdit();" style="font-size:1.4em;"><div class="wtw-altkey2">ctrl+s</div><u>S</u>ave Mold<!--11--></div>
-					<div id="wtw_bdelmold" class="wtw-redbutton" onclick="WTW.submitMoldForm(0);"><div class="wtw-altkey2">ctrl+d</div><u>D</u>elete Mold<!--11--></div>
+					<div id="wtw_bsavethismold" class="wtw-greenbutton" onclick="WTW.submitMoldForm(1);WTW.hideAdminMenu();WTW.backToEdit();" style="font-size:1.4em;"><div class="wtw-altkey2">ctrl+s</div><u>S</u>ave Mold</div>
+					<div id="wtw_bdelmold" class="wtw-redbutton" onclick="WTW.submitMoldForm(0);"><div class="wtw-altkey2">ctrl+d</div><u>D</u>elete Mold</div>
 					<div id="wtw_bcancelmold" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
 					<br /><br />
 				</div>
@@ -198,16 +198,16 @@
 					<div id="wtw_cancel30" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);">Done with Scene</div>
 				</div>
 				<div id="wtw_adminmenu32" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
-					<div id="wtw_bback32" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;<!--32--></div>
+					<div id="wtw_bback32" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
 					<div class="wtw-menuheader">Select 3D Thing</div><br />
 					<br />
 					<div id="wtw_loadingthingid" class="wtw-loadingnotice" style="margin-left:auto;margin-right:auto;color:#000000;">Loading...</div>
 					<div id="wtw_listthings"></div>
 					<br />
-					<div class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel<!--32--></div>
+					<div class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
 				</div>
 				<div id="wtw_adminmenu34" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
-					<div id="wtw_bback34" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;<!--34--></div>
+					<div id="wtw_bback34" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
 					<div class="wtw-menuheader">Options and Settings</div><br />
 <?php				echo $wtwadminmenu->getAdminSubMenu('thingoptions'); ?>
 					<br />
@@ -222,7 +222,7 @@
 					<div id="wtw_cancel35" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
 				</div>
 				<div id="wtw_adminmenu36" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
-					<div id="wtw_bback36" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;<!--36--></div>
+					<div id="wtw_bback36" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
 					<div class="wtw-menuheader">Edit 3D Thing</div><br />
 					<div class="wtw-menulevel0text"><strong>Right Click</strong> an Item on your scene to <strong>Edit</strong> the Item or select from the following:</div>
 <?php				echo $wtwadminmenu->getAdminSubMenu('editthing'); ?>

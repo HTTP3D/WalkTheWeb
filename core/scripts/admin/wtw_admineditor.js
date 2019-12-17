@@ -3190,7 +3190,7 @@ WTWJS.prototype.openEditPoles = function(mold) {
 				WTW.moveY.scaling.y = 1;
 				WTW.moveY.scaling.z = 2;
 			}
-			if (dGet('wtw_adminaxislabels').innerHTML == "Axis Labels ON<!--1-->") {
+			if (dGet('wtw_adminaxislabels').innerHTML == "Axis Labels ON") {
 				WTW.moveX.isVisible = true;
 				WTW.moveY.isVisible = true;
 				WTW.moveZ.isVisible = true;				
@@ -8908,7 +8908,7 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(value) {
 				dGet('wtw_bavatarcamera').title = "Camera is Attached to Avatar";
 				dGet('wtw_bavatarcamera').alt = "Camera is Attached to Avatar";
 				if (dGet('wtw_adminavatarcamera') != null) {
-					dGet('wtw_adminavatarcamera').innerHTML = "Avatar Camera ON<!--1-->";
+					dGet('wtw_adminavatarcamera').innerHTML = "Avatar Camera ON";
 				}
 			}
 			WTW.setCookie("wtw_bavatarcamera","1",30);
@@ -8937,7 +8937,7 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(value) {
 				dGet('wtw_bavatarcamera').title = "Camera is Detached from Avatar";
 				dGet('wtw_bavatarcamera').alt = "Camera is Detached from Avatar";
 				if (dGet('wtw_adminavatarcamera') != null) {
-					dGet('wtw_adminavatarcamera').innerHTML = "Avatar Camera OFF<!--1-->";
+					dGet('wtw_adminavatarcamera').innerHTML = "Avatar Camera OFF";
 				}
 			}
 			WTW.setCookie("wtw_bavatarcamera","0",30);
@@ -8957,7 +8957,7 @@ WTWJS.prototype.setQuickEditorFocus = function(value) {
 				dGet('wtw_bfocus').title = "Focus Highlight is On";
 				dGet('wtw_bfocus').alt = "Focus Highlight is On";
 				if (dGet('wtw_adminfocus') != null) {
-					dGet('wtw_adminfocus').innerHTML = "Focus ON<!--1-->";
+					dGet('wtw_adminfocus').innerHTML = "Focus ON";
 				}
 			}
 			WTW.setCookie("wtw_bfocus","1",30);
@@ -8970,7 +8970,7 @@ WTWJS.prototype.setQuickEditorFocus = function(value) {
 				dGet('wtw_bfocus').title = "Focus Highlight is Off";
 				dGet('wtw_bfocus').alt = "Focus Highlight is Off";
 				if (dGet('wtw_adminfocus') != null) {
-					dGet('wtw_adminfocus').innerHTML = "Focus OFF<!--1-->";
+					dGet('wtw_adminfocus').innerHTML = "Focus OFF";
 				}
 			}
 			WTW.setCookie("wtw_bfocus","0",30);
@@ -8991,7 +8991,7 @@ WTWJS.prototype.setQuickEditorMerged = function(value) {
 				dGet('wtw_bmerged').title = "Merged Shapes are Shown";
 				dGet('wtw_bmerged').alt = "Merged Shapes are Shown";
 				if (dGet('wtw_adminmerged') != null) {
-					dGet('wtw_adminmerged').innerHTML = "Merged Molds ON<!--1-->";
+					dGet('wtw_adminmerged').innerHTML = "Merged Molds ON";
 				}
 			}
 			WTW.setCookie("wtw_bmerged","1",30);
@@ -9004,7 +9004,7 @@ WTWJS.prototype.setQuickEditorMerged = function(value) {
 				dGet('wtw_bmerged').title = "Merged Shapes are Hidden";
 				dGet('wtw_bmerged').alt = "Merged Shapes are Hidden";
 				if (dGet('wtw_adminmerged') != null) {
-					dGet('wtw_adminmerged').innerHTML = "Merged Molds OFF<!--1-->";
+					dGet('wtw_adminmerged').innerHTML = "Merged Molds OFF";
 				}
 			}
 			WTW.setCookie("wtw_bmerged","0",30);
@@ -9029,7 +9029,7 @@ WTWJS.prototype.setQuickEditorZones = function(value) {
 				dGet('wtw_bzones').title = "Action Zones are Shown";
 				dGet('wtw_bzones').alt = "Action Zones are Shown";
 				if (dGet('wtw_adminzones') != null) {
-					dGet('wtw_adminzones').innerHTML = "Action Zones ON<!--1-->";
+					dGet('wtw_adminzones').innerHTML = "Action Zones ON";
 				}
 			}
 			WTW.setCookie("wtw_bzones","1",30);
@@ -9046,7 +9046,7 @@ WTWJS.prototype.setQuickEditorZones = function(value) {
 				dGet('wtw_bzones').title = "Action Zones are Hidden";
 				dGet('wtw_bzones').alt = "Action Zones are Hidden";
 				if (dGet('wtw_adminzones') != null) {
-					dGet('wtw_adminzones').innerHTML = "Action Zones OFF<!--1-->";
+					dGet('wtw_adminzones').innerHTML = "Action Zones OFF";
 				}
 			}
 			WTW.setCookie("wtw_bzones","0",30);
@@ -9096,7 +9096,7 @@ WTWJS.prototype.setQuickEditorLines = function(value) {
 				dGet('wtw_blines').title = "Alignment Lines are Shown";
 				dGet('wtw_blines').alt = "Alignment Lines are Shown";
 				if (dGet('wtw_adminlines') != null) {
-					dGet('wtw_adminlines').innerHTML = "Alignment Lines ON<!--1-->";
+					dGet('wtw_adminlines').innerHTML = "Alignment Lines ON";
 				}
 			}
 			WTW.setCookie("wtw_blines","1",30);
@@ -9138,7 +9138,7 @@ WTWJS.prototype.setQuickEditorLines = function(value) {
 				dGet('wtw_blines').title = "Alignment Lines are Hidden";
 				dGet('wtw_blines').alt = "Alignment Lines are Hidden";
 				if (dGet('wtw_adminlines') != null) {
-					dGet('wtw_adminlines').innerHTML = "Alignment Lines OFF<!--1-->";
+					dGet('wtw_adminlines').innerHTML = "Alignment Lines OFF";
 				}
 			}
 			WTW.setCookie("wtw_blines","0",30);

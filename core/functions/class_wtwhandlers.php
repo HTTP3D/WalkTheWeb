@@ -294,6 +294,18 @@ class wtwhandlers {
 		return $wtwdb->getWebAliases($zmoldgroup, $zwebid);
 	}
 
+	public function getPost($zfield, $zdefault) {
+		$zvalue = $zdefault;
+		try {
+			if (isset($_POST[$zfield])) {
+				$zvalue = $_POST[$zfield];
+			}
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwhandlers.php-getPost=".$e->getMessage());
+		}
+		return $zvalue;
+	}
+
 	public function addHandlerHeader($zavailabledomains) {
 		$zheader = "";
 		try {
