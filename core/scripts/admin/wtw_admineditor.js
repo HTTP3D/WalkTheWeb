@@ -4140,6 +4140,9 @@ WTWJS.prototype.showActionZone = function(actionzoneind) {
 			var actionzoneaxlebase2 = scene.getMeshByID("actionzoneaxlebase2-" + actionzoneind + "-" + WTW.actionZones[actionzoneind].actionzoneid + "-" + WTW.actionZones[actionzoneind].connectinggridind + "-" + WTW.actionZones[actionzoneind].connectinggridid + "-" + WTW.actionZones[actionzoneind].actionzonetype);
 			if (actionzone != null) {
 				actionzone.isVisible = true;
+				actionzone.enableEdgesRendering(); 
+				actionzone.edgesWidth = 4.0;
+				actionzone.edgesColor = new BABYLON.Color4(0, 0, 1, 1);
 			}
 			if (actionzoneaxle != null) {
 				actionzoneaxle.isVisible = true;
@@ -4193,6 +4196,7 @@ WTWJS.prototype.hideActionZone = function(actionzoneind) {
 			var actionzoneaxlebase2 = scene.getMeshByID("actionzoneaxlebase2-" + actionzoneind + "-" + WTW.actionZones[actionzoneind].actionzoneid + "-" + WTW.actionZones[actionzoneind].connectinggridind + "-" + WTW.actionZones[actionzoneind].connectinggridid + "-" + WTW.actionZones[actionzoneind].actionzonetype);
 			if (actionzone != null) {
 				actionzone.isVisible = false;
+				actionzone.disableEdgesRendering(); 
 			}
 			if (actionzoneaxle != null) {
 				actionzoneaxle.isVisible = false;
