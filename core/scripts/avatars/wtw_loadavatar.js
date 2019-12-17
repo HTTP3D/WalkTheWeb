@@ -118,7 +118,7 @@ WTWJS.prototype.nextSetupMode = function(avatarname) {
 				'objectfile': objectfile,
 				'function':'saveavatar'
 			};
-			WTW.getJSON("/core/handlers/avatars.php", 
+			WTW.postJSON("/core/handlers/avatars.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -126,9 +126,7 @@ WTWJS.prototype.nextSetupMode = function(avatarname) {
 						myavatarid = zresponse.avatarid;
 						WTW.setAvatarID(myavatarid);
 					}
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 			WTW.closeSelectAvatar();
 			WTW.hide('wtw_menuavatarchangediv');
@@ -167,14 +165,12 @@ WTWJS.prototype.getSessionAvatar = function() {
 			'instanceid': dGet("wtw_tinstanceid").value,
 			'function':'getsession'
 		};
-		WTW.getJSON("/core/handlers/avatars.php", 
+		WTW.postJSON("/core/handlers/avatars.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.loadUserSession(JSON.parse(zresponse.user));
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
     } catch (ex) {
 		WTW.log("avatars-loadavatar-getSessionAvatar=" + ex.message);
@@ -359,13 +355,11 @@ WTWJS.prototype.saveAvatarColor = function(moldname) {
 				'emissivecolorb': dGet("wtw_temissivecolorb").value,
 				'function':'saveavatarcolor'
 			};
-			WTW.getJSON("/core/handlers/avatars.php", 
+			WTW.postJSON("/core/handlers/avatars.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		}
     } catch (ex) {
@@ -468,14 +462,12 @@ WTWJS.prototype.getAvatarAnimationsAll = function() {
 			'avatarid': myavatarid,
 			'function':'getavataranimationsall'
 		};
-		WTW.getJSON("/core/handlers/avatars.php", 
+		WTW.postJSON("/core/handlers/avatars.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.loadAvatarAnimationsAll(zresponse.avataranimations);
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
     } catch (ex) {
 		WTW.log("avatars-loadavatar-getAvatarAnimationsAll=" + ex.message);
@@ -718,13 +710,11 @@ WTWJS.prototype.deleteUserAnimation = function(selectname) {
 				'avataranimationid':avataranimationid,
 				'function':'deleteavataranimation'
 			};
-			WTW.getJSON("/core/handlers/avatars.php", 
+			WTW.postJSON("/core/handlers/avatars.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		}
     } catch (ex) {
@@ -1016,6 +1006,15 @@ WTWJS.prototype.loadMyAvatar = function(avatardef, reload) {
 		avatardef.lastrotation.x = WTW.init.startRotationX;
 		avatardef.lastrotation.y = WTW.init.startRotationY;
 		avatardef.lastrotation.z = WTW.init.startRotationZ;
+
+		var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
+		zstartstand.scaling = new BABYLON.Vector3(4, 1, 4);
+		zstartstand.position = new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY - .5, WTW.init.startPositionZ);
+		zstartstand.checkCollisions = true;
+		zcovering = new BABYLON.StandardMaterial("matstartstand", scene);
+		zstartstand.material = new BABYLON.StandardMaterial("matstartstand", scene);
+		zstartstand.material.alpha = 0;
+		
 		WTW.myAvatar = WTW.addAvatar(avatardef.name, avatardef, avatardef.parentname);
 		//WTW.myAvatar.parent = WTW.getMainParent();
 		WTW.myAvatar.rotation.y = WTW.getRadians(WTW.init.startRotationY);
@@ -1166,13 +1165,11 @@ WTWJS.prototype.saveAvatarEnterAnimation = function() {
 			'transport': '1',
 			'function':'savetransportanimation'
 		};
-		WTW.getJSON("/core/handlers/avatars.php", 
+		WTW.postJSON("/core/handlers/avatars.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
     } catch (ex) {
 		WTW.log("avatars-loadavatar-saveAvatarEnterAnimation=" + ex.message);
@@ -2188,13 +2185,11 @@ WTWJS.prototype.saveAvatarDisplayName = function() {
 				'avatardisplayname': dGet('wtw_tavatardisplayname').value,
 				'function':'saveavatardisplayname'
 			};
-			WTW.getJSON("/core/handlers/avatars.php", 
+			WTW.postJSON("/core/handlers/avatars.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		}
 	} catch (ex) { 
@@ -2438,7 +2433,7 @@ WTWJS.prototype.changeAvatarAnimation = function(selobj) {
 				'speedratio':speedratio,
 				'function':'saveavataranimation'
 			};
-			WTW.getJSON("/core/handlers/avatars.php", 
+			WTW.postJSON("/core/handlers/avatars.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -2446,9 +2441,7 @@ WTWJS.prototype.changeAvatarAnimation = function(selobj) {
 						useravataranimationid = zresponse.useravataranimationid;
 					}
 					WTW.updateAnimSelectValue(selobj.id + '-value', useravataranimationid);
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		}
 		selobj.blur();
