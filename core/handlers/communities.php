@@ -4,133 +4,40 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwcommunities.php');
 	global $wtwcommunities;
-	$zresults = file_get_contents('php://input');
-	$zdata = json_decode($zresults, TRUE);
+	$zrequest = file_get_contents('php://input');
+	$zrequest = json_decode($zrequest, TRUE);
 
-	$zfunction = null;
-	$zcommunityid = '';
-	$zpastcommunityid = '';
-	$zcommunityname = '';
-	$zdescription = '';
-	$ztags = '';
-	$zanalyticsid = '';
-	$zgroundpositiony = '';
-	$zwaterpositiony = '';
-	$zalttag = '';
-	$zpositionx = 0;
-	$zpositiony = 0;
-	$zpositionz = 0;
-	$zscalingx = 1;
-	$zscalingy = 1;
-	$zscalingz = 1;
-	$zrotationx = 0;
-	$zrotationy = 0;
-	$zrotationz = 0;
-	$zgravity = 9.8;
-	$ztextureid = '';
-	$zskydomeid = '';
-	$zskyinclination = '';
-	$zskyluminance = '';
-	$zskyazimuth = '';
-	$zskyrayleigh = '';
-	$zskyturbidity = '';
-	$zskymiedirectionalg = '';
-	$zskymiecoefficient = '';
-	$zgroundtextureid = '';
+	$zfunction = strtolower($wtwhandlers->getPost('function',''));
+	$zcommunityid = $wtwhandlers->getPost('communityid','');
+	$zpastcommunityid = $wtwhandlers->getPost('pastcommunityid','');
+	$zcommunityname = $wtwhandlers->getPost('communityname','');
+	$zdescription = $wtwhandlers->getPost('description','');
+	$ztags = $wtwhandlers->getPost('tags','');
+	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
+	$zgroundpositiony = $wtwhandlers->getPost('groundpositiony','');
+	$zwaterpositiony = $wtwhandlers->getPost('waterpositiony','');
+	$zalttag = $wtwhandlers->getPost('alttag','');
+	$zpositionx = $wtwhandlers->getPost('positionx','0');
+	$zpositiony = $wtwhandlers->getPost('positiony','0');
+	$zpositionz = $wtwhandlers->getPost('positionz','0');
+	$zscalingx = $wtwhandlers->getPost('scalingx','1');
+	$zscalingy = $wtwhandlers->getPost('scalingy','1');
+	$zscalingz = $wtwhandlers->getPost('scalingz','1');
+	$zrotationx = $wtwhandlers->getPost('rotationx','0');
+	$zrotationy = $wtwhandlers->getPost('rotationy','0');
+	$zrotationz = $wtwhandlers->getPost('rotationz','0');
+	$zgravity = $wtwhandlers->getPost('gravity','9.8');
+	$ztextureid = $wtwhandlers->getPost('textureid','');
+	$zskydomeid = $wtwhandlers->getPost('skydomeid','');
+	$zskyinclination = $wtwhandlers->getPost('skyinclination','');
+	$zskyluminance = $wtwhandlers->getPost('skyluminance','');
+	$zskyazimuth = $wtwhandlers->getPost('skyazimuth','');
+	$zskyrayleigh = $wtwhandlers->getPost('skyrayleigh','');
+	$zskyturbidity = $wtwhandlers->getPost('skyturbidity','');
+	$zskymiedirectionalg = $wtwhandlers->getPost('skymiedirectionalg','');
+	$zskymiecoefficient = $wtwhandlers->getPost('skymiecoefficient','');
+	$zgroundtextureid = $wtwhandlers->getPost('groundtextureid','');
 	
-	if (!empty($zdata) && isset($zdata)) {
-		if (isset($zdata["function"])) {
-			$zfunction = strtolower($zdata["function"]);
-		}
-		if (isset($zdata["communityid"])) {
-			$zcommunityid = $zdata["communityid"];
-		}
-		if (isset($zdata["pastcommunityid"])) {
-			$zpastcommunityid = $zdata["pastcommunityid"];
-		}
-		if (isset($zdata["communityname"])) {
-			$zcommunityname = $zdata["communityname"];
-		}
-		if (isset($zdata["description"])) {
-			$zdescription = $zdata["description"];
-		}
-		if (isset($zdata["tags"])) {
-			$ztags = $zdata["tags"];
-		}
-		if (isset($zdata["analyticsid"])) {
-			$zanalyticsid = $zdata["analyticsid"];
-		}
-		if (isset($zdata["groundpositiony"])) {
-			$zgroundpositiony = $zdata["groundpositiony"];
-		}
-		if (isset($zdata["waterpositiony"])) {
-			$zwaterpositiony = $zdata["waterpositiony"];
-		}
-		if (isset($zdata["alttag"])) {
-			$zalttag = $zdata["alttag"];
-		}
-		if (isset($zdata["positionx"])) {
-			$zpositionx = $zdata["positionx"];
-		}
-		if (isset($zdata["positiony"])) {
-			$zpositiony = $zdata["positiony"];
-		}
-		if (isset($zdata["positionz"])) {
-			$zpositionz = $zdata["positionz"];
-		}
-		if (isset($zdata["scalingx"])) {
-			$zscalingx = $zdata["scalingx"];
-		}
-		if (isset($zdata["scalingy"])) {
-			$zscalingy = $zdata["scalingy"];
-		}
-		if (isset($zdata["scalingz"])) {
-			$zscalingz = $zdata["scalingz"];
-		}
-		if (isset($zdata["rotationx"])) {
-			$zrotationx = $zdata["rotationx"];
-		}
-		if (isset($zdata["rotationy"])) {
-			$zrotationy = $zdata["rotationy"];
-		}
-		if (isset($zdata["rotationz"])) {
-			$zrotationz = $zdata["rotationz"];
-		}
-		if (isset($zdata["gravity"])) {
-			$zgravity = $zdata["gravity"];
-		}
-		if (isset($zdata["textureid"])) {
-			$ztextureid = $zdata["textureid"];
-		}
-		if (isset($zdata["skydomeid"])) {
-			$zskydomeid = $zdata["skydomeid"];
-		}
-		if (isset($zdata["skyinclination"])) {
-			$zskyinclination = $zdata["skyinclination"];
-		}
-		if (isset($zdata["skyluminance"])) {
-			$zskyluminance = $zdata["skyluminance"];
-		}
-		if (isset($zdata["skyazimuth"])) {
-			$zskyazimuth = $zdata["skyazimuth"];
-		}
-		if (isset($zdata["skyrayleigh"])) {
-			$zskyrayleigh = $zdata["skyrayleigh"];
-		}
-		if (isset($zdata["skyturbidity"])) {
-			$zskyturbidity = $zdata["skyturbidity"];
-		}
-		if (isset($zdata["skymiedirectionalg"])) {
-			$zskymiedirectionalg = $zdata["skymiedirectionalg"];
-		}
-		if (isset($zdata["skymiecoefficient"])) {
-			$zskymiecoefficient = $zdata["skymiecoefficient"];
-		}
-		if (isset($zdata["groundtextureid"])) {
-			$zgroundtextureid = $zdata["groundtextureid"];
-		}
-	}
-
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savecommunity":

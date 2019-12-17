@@ -4,55 +4,19 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwuploads.php');
 	global $wtwuploads;
-	$zresults = file_get_contents('php://input');
-	$zdata = json_decode($zresults, TRUE);
+	$zrequest = file_get_contents('php://input');
+	$zrequest = json_decode($zrequest, TRUE);
 
-	$zfunction = null;
-	$zuploadfile = null;
-	$zuploadfiles = null;
-	$zuploadobjectid = '';
-	$zobjectanimationid = '';
-	$zobjectfolder = '';
-	$zobjectfilepart = '';
-	$zfilename = '';
-	$zitem = '';
+	$zfunction = strtolower($wtwhandlers->getPost('function',''));
+	$zuploadfile = $wtwhandlers->getPost('uploadfile',null);
+	$zuploadfiles = $wtwhandlers->getPost('uploadfiles',null);
+	$zuploadobjectid = $wtwhandlers->getPost('uploadobjectid','');
+	$zobjectanimationid = $wtwhandlers->getPost('objectanimationid','');
+	$zobjectfolder = $wtwhandlers->getPost('objectfolder','');
+	$zobjectfilepart = $wtwhandlers->getPost('objectfilepart','');
+	$zfilename = $wtwhandlers->getPost('filename','');
+	$zitem = $wtwhandlers->getPost('item','');
 	
-	if (!empty($zdata) && isset($zdata)) {
-		if (isset($zdata["function"])) {
-			$zfunction = strtolower($zdata["function"]);
-		}
-		if (isset($zdata["uploadobjectid"])) {
-			$zuploadobjectid = $zdata["uploadobjectid"];
-		}
-		if (isset($zdata["objectanimationid"])) {
-			$zobjectanimationid = $zdata["objectanimationid"];
-		}
-		if (isset($zdata["objectfolder"])) {
-			$zobjectfolder = $zdata["objectfolder"];
-		}
-		if (isset($zdata["objectfilepart"])) {
-			$zobjectfilepart = $zdata["objectfilepart"];
-		}
-		if (isset($zdata["filename"])) {
-			$zfilename = $zdata["filename"];
-		}
-	}
-	if (!isset($zfunction)) {
-		$zfunction = $_POST["function"];
-		if (isset($_POST["objectfilepart"])) {
-			$zobjectfilepart = $_POST["objectfilepart"];
-		}
-		if (isset($_POST["item"])) {
-			$zitem = $_POST["item"];
-		}
-		if (isset($_FILES["wtw_uploadfile"])) {
-			$zuploadfile = $_FILES["wtw_uploadfile"];
-		}
-		if (isset($_FILES["wtw_uploadfiles"])) {
-			$zuploadfiles = $_FILES["wtw_uploadfiles"];
-		}
-	}
-
 	$zresponse = array();
 	switch ($zfunction) {
 		case "getuploadedfiles":

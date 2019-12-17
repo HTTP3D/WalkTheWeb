@@ -4,73 +4,25 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwanimations.php');
 	global $wtwanimations;
-	$zresults = file_get_contents('php://input');
-	$zdata = json_decode($zresults, TRUE);
+	$zrequest = file_get_contents('php://input');
+	$zrequest = json_decode($zrequest, TRUE);
 
-	$zfunction = null;
-	$zuploadobjectid = '';
-	$zobjectanimationid = '';
-	$zanimationname = '';
-	$zmoldevent = '';
-	$zmoldnamepart = '';
-	$zstartframe = '0';
-	$zendframe = '0';
-	$zanimationloop = '1';
-	$zspeedratio = '1';
-	$zanimationendscript = '';
-	$zanimationendparameters = '';
-	$zstopcurrentanimations = '';
-	$zobjectsoundid = '';
-	$zobjectmaxdistance = '100';
+	$zfunction = strtolower($wtwhandlers->getPost('function',''));
+	$zuploadobjectid = $wtwhandlers->getPost('uploadobjectid','');
+	$zobjectanimationid = $wtwhandlers->getPost('objectanimationid','');
+	$zanimationname = $wtwhandlers->getPost('animationname','');
+	$zmoldevent = $wtwhandlers->getPost('moldevent','');
+	$zmoldnamepart = $wtwhandlers->getPost('moldnamepart','');
+	$zstartframe = $wtwhandlers->getPost('startframe','0');
+	$zendframe = $wtwhandlers->getPost('endframe','0');
+	$zanimationloop = $wtwhandlers->getPost('animationloop','1');
+	$zspeedratio = $wtwhandlers->getPost('speedratio','1');
+	$zanimationendscript = $wtwhandlers->getPost('animationendscript','');
+	$zanimationendparameters = $wtwhandlers->getPost('animationendparameters','');
+	$zstopcurrentanimations = $wtwhandlers->getPost('stopcurrentanimations','');
+	$zobjectsoundid = $wtwhandlers->getPost('objectsoundid','');
+	$zobjectmaxdistance = $wtwhandlers->getPost('objectmaxdistance','100');
 	
-	if (!empty($zdata) && isset($zdata)) {
-		if (isset($zdata["function"])) {
-			$zfunction = strtolower($zdata["function"]);
-		}
-		if (isset($zdata["uploadobjectid"])) {
-			$zuploadobjectid = $zdata["uploadobjectid"];
-		}
-		if (isset($zdata["objectanimationid"])) {
-			$zobjectanimationid = $zdata["objectanimationid"];
-		}
-		if (isset($zdata["animationname"])) {
-			$zanimationname = $zdata["animationname"];
-		}
-		if (isset($zdata["moldevent"])) {
-			$zmoldevent = $zdata["moldevent"];
-		}
-		if (isset($zdata["moldnamepart"])) {
-			$zmoldnamepart = $zdata["moldnamepart"];
-		}
-		if (isset($zdata["startframe"])) {
-			$zstartframe = $zdata["startframe"];
-		}
-		if (isset($zdata["endframe"])) {
-			$zendframe = $zdata["endframe"];
-		}
-		if (isset($zdata["animationloop"])) {
-			$zanimationloop = $zdata["animationloop"];
-		}
-		if (isset($zdata["speedratio"])) {
-			$zspeedratio = $zdata["speedratio"];
-		}
-		if (isset($zdata["animationendscript"])) {
-			$zanimationendscript = $zdata["animationendscript"];
-		}
-		if (isset($zdata["animationendparameters"])) {
-			$zanimationendparameters = $zdata["animationendparameters"];
-		}
-		if (isset($zdata["stopcurrentanimations"])) {
-			$zstopcurrentanimations = $zdata["stopcurrentanimations"];
-		}
-		if (isset($zdata["objectsoundid"])) {
-			$zobjectsoundid = $zdata["objectsoundid"];
-		}
-		if (isset($zdata["objectmaxdistance"])) {
-			$zobjectmaxdistance = $zdata["objectmaxdistance"];
-		}
-	}
-
 	$zresponse = array();
 	switch ($zfunction) {
 		case "getuploadedfileanimationsdetails":

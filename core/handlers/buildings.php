@@ -4,84 +4,27 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwbuildings.php');
 	global $wtwbuildings;
-	$zresults = file_get_contents('php://input');
-	$zdata = json_decode($zresults, TRUE);
+	$zrequest = file_get_contents('php://input');
+	$zrequest = json_decode($zrequest, TRUE);
 
-	$zfunction = null;
-	$zbuildingid = '';
-	$zpastbuildingid = '';
-	$zbuildingname = '';
-	$zdescription = '';
-	$ztags = '';
-	$zanalyticsid = '';
-	$zalttag = '';
-	$zpositionx = 0;
-	$zpositiony = 0;
-	$zpositionz = 0;
-	$zscalingx = 1;
-	$zscalingy = 1;
-	$zscalingz = 1;
-	$zrotationx = 0;
-	$zrotationy = 0;
-	$zrotationz = 0;
-	$zgravity = 9.8;
-
-	if (!empty($zdata) && isset($zdata)) {
-		if (isset($zdata["function"])) {
-			$zfunction = strtolower($zdata["function"]);
-		}
-		if (isset($zdata["buildingid"])) {
-			$zbuildingid = $zdata["buildingid"];
-		}
-		if (isset($zdata["pastbuildingid"])) {
-			$zpastbuildingid = $zdata["pastbuildingid"];
-		}
-		if (isset($zdata["buildingname"])) {
-			$zbuildingname = $zdata["buildingname"];
-		}
-		if (isset($zdata["description"])) {
-			$zdescription = $zdata["description"];
-		}
-		if (isset($zdata["tags"])) {
-			$ztags = $zdata["tags"];
-		}
-		if (isset($zdata["analyticsid"])) {
-			$zanalyticsid = $zdata["analyticsid"];
-		}
-		if (isset($zdata["alttag"])) {
-			$zalttag = $zdata["alttag"];
-		}
-		if (isset($zdata["positionx"])) {
-			$zpositionx = $zdata["positionx"];
-		}
-		if (isset($zdata["positiony"])) {
-			$zpositiony = $zdata["positiony"];
-		}
-		if (isset($zdata["positionz"])) {
-			$zpositionz = $zdata["positionz"];
-		}
-		if (isset($zdata["scalingx"])) {
-			$zscalingx = $zdata["scalingx"];
-		}
-		if (isset($zdata["scalingy"])) {
-			$zscalingy = $zdata["scalingy"];
-		}
-		if (isset($zdata["scalingz"])) {
-			$zscalingz = $zdata["scalingz"];
-		}
-		if (isset($zdata["rotationx"])) {
-			$zrotationx = $zdata["rotationx"];
-		}
-		if (isset($zdata["rotationy"])) {
-			$zrotationy = $zdata["rotationy"];
-		}
-		if (isset($zdata["rotationz"])) {
-			$zrotationz = $zdata["rotationz"];
-		}
-		if (isset($zdata["gravity"])) {
-			$zgravity = $zdata["gravity"];
-		}
-	}
+	$zfunction = strtolower($wtwhandlers->getPost('function',''));
+	$zbuildingid = $wtwhandlers->getPost('buildingid','');
+	$zpastbuildingid = $wtwhandlers->getPost('pastbuildingid','');
+	$zbuildingname = $wtwhandlers->getPost('buildingname','');
+	$zdescription = $wtwhandlers->getPost('description','');
+	$ztags = $wtwhandlers->getPost('tags','');
+	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
+	$zalttag = $wtwhandlers->getPost('alttag','');
+	$zpositionx = $wtwhandlers->getPost('positionx','0');
+	$zpositiony = $wtwhandlers->getPost('positiony','0');
+	$zpositionz = $wtwhandlers->getPost('positionz','0');
+	$zscalingx = $wtwhandlers->getPost('scalingx','1');
+	$zscalingy = $wtwhandlers->getPost('scalingy','1');
+	$zscalingz = $wtwhandlers->getPost('scalingz','1');
+	$zrotationx = $wtwhandlers->getPost('rotationx','0');
+	$zrotationy = $wtwhandlers->getPost('rotationy','0');
+	$zrotationz = $wtwhandlers->getPost('rotationz','0');
+	$zgravity = $wtwhandlers->getPost('gravity','9.8');
 
 	$zresponse = array();
 	switch ($zfunction) {

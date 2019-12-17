@@ -119,15 +119,13 @@ WTWJS.prototype.communitySearchSelect = function(zcopywebid) {
 						'alttag': community.communityinfo.alttag,
 						'function':'importcommunity'
 					};
-					WTW.getJSON("/core/handlers/communities.php", 
+					WTW.postJSON("/core/handlers/communities.php", zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							WTW.updateProgressBar(95,100);
 							/* note serror would contain errors */
 							WTW.completedCommunityImport('community', zcommunityid, zcopywebid);
-						}, 
-						'POST', 
-						JSON.stringify(zrequest)
+						}
 					);
 				}
 			}
@@ -229,13 +227,11 @@ WTWJS.prototype.buildingSearchSelect = function(zcopywebid) {
 						'function':'importbuilding'
 					};
 					WTW.updateProgressBar(50,100);
-					WTW.getJSON("/core/handlers/buildings.php", 
+					WTW.postJSON("/core/handlers/buildings.php", zrequest, 
 						function(zresponse) {
 							WTW.updateProgressBar(95,100);
 							WTW.completedBuildingImport('building', zbuildingid, zcopywebid);
-						}, 
-						'POST', 
-						JSON.stringify(zrequest)
+						}
 					);
 				}
 			}
@@ -338,15 +334,13 @@ WTWJS.prototype.thingSearchSelect = function(zcopywebid) {
 						'alttag': thing.thinginfo.alttag,
 						'function':'importthing'
 					};
-					WTW.getJSON("/core/handlers/things.php", 
+					WTW.postJSON("/core/handlers/things.php", zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							WTW.updateProgressBar(95,100);
 							/* note serror would contain errors */
 							WTW.completedThingImport('thing', zthingid, zcopywebid);
-						}, 
-						'POST', 
-						JSON.stringify(zrequest)
+						}
 					);
 				}
 			}
@@ -413,13 +407,11 @@ WTWJS.prototype.copyActionZones = function(zmoldgroup, zwebid, zcopywebid) {
 							'actionzonesbulk': btoa(response),
 							'function':'importactionzone'
 						};
-						WTW.getJSON("/core/handlers/actionzones.php", 
+						WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
 							function(zresponse) {
 								WTW.updateProgressBar(95,100);
 								WTW.completedActionZonesImport(zmoldgroup, zwebid, zcopywebid);
-							}, 
-							'POST', 
-							JSON.stringify(zrequest)
+							}
 						);
 					} else {
 						WTW.completedActionZonesImport(zmoldgroup, zwebid, zcopywebid);
@@ -470,15 +462,13 @@ WTWJS.prototype.copyParentConnectingGrids = function(zmoldgroup, zwebid, zcopywe
 							'connectinggridsbulk': btoa(response),
 							'function':'importparentconnectinggrids'
 						};
-						WTW.getJSON("/core/handlers/connectinggrids.php", 
+						WTW.postJSON("/core/handlers/connectinggrids.php", zrequest, 
 							function(zresponse) {
 								zresponse = JSON.parse(zresponse);
 								WTW.updateProgressBar(95,100);
 								/* note serror would contain errors */
 								WTW.completedParentConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
-							}, 
-							'POST', 
-							JSON.stringify(zrequest)
+							}
 						);
 					} else {
 						WTW.completedParentConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
@@ -530,15 +520,13 @@ WTWJS.prototype.copyConnectingGrids = function(zmoldgroup, zwebid, zcopywebid) {
 								'connectinggridsbulk': btoa(response),
 								'function':'importconnectinggrids'
 							};
-							WTW.getJSON("/core/handlers/connectinggrids.php", 
+							WTW.postJSON("/core/handlers/connectinggrids.php", zrequest, 
 								function(zresponse) {
 									zresponse = JSON.parse(zresponse);
 									WTW.updateProgressBar(95,100);
 									/* note serror would contain errors */
 									WTW.completedConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
-								}, 
-								'POST', 
-								JSON.stringify(zrequest)
+								}
 							);
 						} else {
 							WTW.completedConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
@@ -552,15 +540,13 @@ WTWJS.prototype.copyConnectingGrids = function(zmoldgroup, zwebid, zcopywebid) {
 					'webid': zwebid,
 					'function':'updatechildconnectinggrids'
 				};
-				WTW.getJSON("/core/handlers/connectinggrids.php", 
+				WTW.postJSON("/core/handlers/connectinggrids.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						WTW.updateProgressBar(95,100);
 						/* note serror would contain errors */
 						WTW.completedConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 			} else {
 				WTW.completedConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
@@ -610,15 +596,13 @@ WTWJS.prototype.copyMolds = function(zmoldgroup, zwebid, zcopywebid) {
 							'moldsbulk': btoa(response),
 							'function':'importmolds'
 						};
-						WTW.getJSON("/core/handlers/molds.php", 
+						WTW.postJSON("/core/handlers/molds.php", zrequest, 
 							function(zresponse) {
 								zresponse = JSON.parse(zresponse);
 								WTW.updateProgressBar(95,100);
 								/* note serror would contain errors */
 								WTW.completedMoldsImport(zmoldgroup, zwebid, zcopywebid);
-							}, 
-							'POST', 
-							JSON.stringify(zrequest)
+							}
 						);
 					} else {
 						WTW.completedMoldsImport(zmoldgroup, zwebid, zcopywebid);
@@ -670,15 +654,13 @@ WTWJS.prototype.copyWebImages = function(zmoldgroup, zwebid, zcopywebid) {
 							'webimagesbulk': btoa(response),
 							'function':'importwebimages'
 						};
-						WTW.getJSON("/core/handlers/uploads.php", 
+						WTW.postJSON("/core/handlers/uploads.php", zrequest, 
 							function(zresponse) {
 								zresponse = JSON.parse(zresponse);
 								WTW.updateProgressBar(95,100);
 								/* note serror would contain errors */
 								WTW.completedWebImagesImport(zmoldgroup, zwebid, zcopywebid);
-							}, 
-							'POST', 
-							JSON.stringify(zrequest)
+							}
 						);
 					} else {
 						WTW.completedWebImagesImport(zmoldgroup, zwebid, zcopywebid);
@@ -736,15 +718,13 @@ WTWJS.prototype.copyUploads = function(zmoldgroup, zwebid, zcopywebid) {
 							'uploadsbulk': btoa(response),
 							'function':'importuploads'
 						};
-						WTW.getJSON("/core/handlers/uploads.php", 
+						WTW.postJSON("/core/handlers/uploads.php", zrequest, 
 							function(zresponse) {
 								zresponse = JSON.parse(zresponse);
 								WTW.updateProgressBar(95,100);
 								/* note serror would contain errors */
 								WTW.completedUploadsImport(zmoldgroup, zwebid, zcopywebid);
-							}, 
-							'POST', 
-							JSON.stringify(zrequest)
+							}
 						);
 					} else {
 						WTW.completedUploadsImport(zmoldgroup, zwebid, zcopywebid);
@@ -796,15 +776,13 @@ WTWJS.prototype.copyMoldPoints = function(zmoldgroup, zwebid, zcopywebid) {
 							'moldsbulk': btoa(response),
 							'function':'importmoldpoints'
 						};
-						WTW.getJSON("/core/handlers/molds.php", 
+						WTW.postJSON("/core/handlers/molds.php", zrequest, 
 							function(zresponse) {
 								zresponse = JSON.parse(zresponse);
 								WTW.updateProgressBar(95,100);
 								/* note serror would contain errors */
 								WTW.completedMoldPointsImport(zmoldgroup, zwebid, zcopywebid);
-							}, 
-							'POST', 
-							JSON.stringify(zrequest)
+							}
 						);
 					} else {
 						WTW.completedMoldPointsImport(zmoldgroup, zwebid, zcopywebid);

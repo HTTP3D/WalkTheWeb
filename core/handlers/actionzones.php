@@ -4,164 +4,47 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwactionzones.php');
 	global $wtwactionzones;
-	$zresults = file_get_contents('php://input');
-	$zdata = json_decode($zresults, TRUE);
+	$zrequest = file_get_contents('php://input');
+	$zrequest = json_decode($zrequest, TRUE);
 
-	$zfunction = null;
-	$zactionzoneid = '';
-	$zcommunityid = '';
-	$zbuildingid = '';
-	$zthingid = '';
-	$zactionzonename = '';
-	$zactionzonetype = '';
-	$zactionzoneshape = '';
-	$zattachmoldid = '';
-	$zmovementtype = '';
-	$zrotatespeed = '1';
-	$zpositionx = '0';
-	$zpositiony = '0';
-	$zpositionz = '0';
-	$zscalingx = '1';
-	$zscalingy = '1';
-	$zscalingz = '1';
-	$zrotationx = '0';
-	$zrotationy = '0';
-	$zrotationz = '0';
-	$zaxispositionx = '0';
-	$zaxispositiony = '0';
-	$zaxispositionz = '0';
-	$zaxisscalingx = '1';
-	$zaxisscalingy = '1';
-	$zaxisscalingz = '1';
-	$zaxisrotationx = '0';
-	$zaxisrotationy = '0';
-	$zaxisrotationz = '0';
-	$zrotateaxis = 'y';
-	$zrotatedegrees = '90';
-	$zrotatedirection = '1';
-	$zloadactionzoneid = '';
-	$zjsfunction = '';
-	$zjsparameters = '';
-	$zmoldswithactionzones = '';
-	$zavataranimationid = '';
-	$zactionzonesbulk = '';
-	
-	if (!empty($zdata) && isset($zdata)) {
-		if (isset($zdata["function"])) {
-			$zfunction = strtolower($zdata["function"]);
-		}
-		if (isset($zdata["actionzoneid"])) {
-			$zactionzoneid = $zdata["actionzoneid"];
-		}
-		if (isset($zdata["communityid"])) {
-			$zcommunityid = $zdata["communityid"];
-		}
-		if (isset($zdata["buildingid"])) {
-			$zbuildingid = $zdata["buildingid"];
-		}
-		if (isset($zdata["thingid"])) {
-			$zthingid = $zdata["thingid"];
-		}
-		if (isset($zdata["actionzonename"])) {
-			$zactionzonename = $zdata["actionzonename"];
-		}
-		if (isset($zdata["actionzonetype"])) {
-			$zactionzonetype = $zdata["actionzonetype"];
-		}
-		if (isset($zdata["actionzoneshape"])) {
-			$zactionzoneshape = $zdata["actionzoneshape"];
-		}
-		if (isset($zdata["attachmoldid"])) {
-			$zattachmoldid = $zdata["attachmoldid"];
-		}
-		if (isset($zdata["movementtype"])) {
-			$zmovementtype = $zdata["movementtype"];
-		}
-		if (isset($zdata["rotatespeed"])) {
-			$zrotatespeed = $zdata["rotatespeed"];
-		}
-		if (isset($zdata["positionx"])) {
-			$zpositionx = $zdata["positionx"];
-		}
-		if (isset($zdata["positiony"])) {
-			$zpositiony = $zdata["positiony"];
-		}
-		if (isset($zdata["positionz"])) {
-			$zpositionz = $zdata["positionz"];
-		}
-		if (isset($zdata["scalingx"])) {
-			$zscalingx = $zdata["scalingx"];
-		}
-		if (isset($zdata["scalingy"])) {
-			$zscalingy = $zdata["scalingy"];
-		}
-		if (isset($zdata["scalingz"])) {
-			$zscalingz = $zdata["scalingz"];
-		}
-		if (isset($zdata["rotationx"])) {
-			$zrotationx = $zdata["rotationx"];
-		}
-		if (isset($zdata["rotationy"])) {
-			$zrotationy = $zdata["rotationy"];
-		}
-		if (isset($zdata["rotationz"])) {
-			$zrotationz = $zdata["rotationz"];
-		}
-		if (isset($zdata["axispositionx"])) {
-			$zaxispositionx = $zdata["axispositionx"];
-		}
-		if (isset($zdata["axispositiony"])) {
-			$zaxispositiony = $zdata["axispositiony"];
-		}
-		if (isset($zdata["axispositionz"])) {
-			$zaxispositionz = $zdata["axispositionz"];
-		}
-		if (isset($zdata["axisscalingx"])) {
-			$zaxisscalingx = $zdata["axisscalingx"];
-		}
-		if (isset($zdata["axisscalingy"])) {
-			$zaxisscalingy = $zdata["axisscalingy"];
-		}
-		if (isset($zdata["axisscalingz"])) {
-			$zaxisscalingz = $zdata["axisscalingz"];
-		}
-		if (isset($zdata["axisrotationx"])) {
-			$zaxisrotationx = $zdata["axisrotationx"];
-		}
-		if (isset($zdata["axisrotationy"])) {
-			$zaxisrotationy = $zdata["axisrotationy"];
-		}
-		if (isset($zdata["axisrotationz"])) {
-			$zaxisrotationz = $zdata["axisrotationz"];
-		}
-		if (isset($zdata["rotateaxis"])) {
-			$zrotateaxis = $zdata["rotateaxis"];
-		}
-		if (isset($zdata["rotatedegrees"])) {
-			$zrotatedegrees = $zdata["rotatedegrees"];
-		}
-		if (isset($zdata["rotatedirection"])) {
-			$zrotatedirection = $zdata["rotatedirection"];
-		}
-		if (isset($zdata["loadactionzoneid"])) {
-			$zloadactionzoneid = $zdata["loadactionzoneid"];
-		}
-		if (isset($zdata["jsfunction"])) {
-			$zjsfunction = $zdata["jsfunction"];
-		}
-		if (isset($zdata["jsparameters"])) {
-			$zjsparameters = $zdata["jsparameters"];
-		}
-		if (isset($zdata["moldswithactionzones"])) {
-			$zmoldswithactionzones = $zdata["moldswithactionzones"];
-		}
-		if (isset($zdata["avataranimationid"])) {
-			$zavataranimationid = $zdata["avataranimationid"];
-		}
-		if (isset($zdata["actionzonesbulk"])) {
-			$zactionzonesbulk = $zdata["actionzonesbulk"];
-		}
-	}
+	$zfunction = strtolower($wtwhandlers->getPost('function',''));
+	$zactionzoneid = $wtwhandlers->getPost('actionzoneid','');
+	$zcommunityid = $wtwhandlers->getPost('communityid','');
+	$zbuildingid = $wtwhandlers->getPost('buildingid','');
+	$zthingid = $wtwhandlers->getPost('thingid','');
+	$zactionzonename = $wtwhandlers->getPost('actionzonename','');
+	$zactionzonetype = $wtwhandlers->getPost('actionzonetype','');
+	$zactionzoneshape = $wtwhandlers->getPost('actionzoneshape','');
+	$zattachmoldid = $wtwhandlers->getPost('attachmoldid','');
+	$zmovementtype = $wtwhandlers->getPost('movementtype','');
+	$zrotatespeed = $wtwhandlers->getPost('rotatespeed','1');
+	$zpositionx = $wtwhandlers->getPost('positionx','0');
+	$zpositiony = $wtwhandlers->getPost('positiony','0');
+	$zpositionz = $wtwhandlers->getPost('positionz','0');
+	$zscalingx = $wtwhandlers->getPost('scalingx','1');
+	$zscalingy = $wtwhandlers->getPost('scalingy','1');
+	$zscalingz = $wtwhandlers->getPost('scalingz','1');
+	$zrotationx = $wtwhandlers->getPost('rotationx','0');
+	$zrotationy = $wtwhandlers->getPost('rotationy','0');
+	$zrotationz = $wtwhandlers->getPost('rotationz','0');
+	$zaxispositionx = $wtwhandlers->getPost('axispositionx','0');
+	$zaxispositiony = $wtwhandlers->getPost('axispositiony','0');
+	$zaxispositionz = $wtwhandlers->getPost('axispositionz','0');
+	$zaxisscalingx = $wtwhandlers->getPost('axisscalingx','1');
+	$zaxisscalingy = $wtwhandlers->getPost('axisscalingy','1');
+	$zaxisscalingz = $wtwhandlers->getPost('axisscalingz','1');
+	$zaxisrotationx = $wtwhandlers->getPost('axisrotationx','0');
+	$zaxisrotationy = $wtwhandlers->getPost('axisrotationy','0');
+	$zaxisrotationz = $wtwhandlers->getPost('axisrotationz','0');
+	$zrotateaxis = $wtwhandlers->getPost('rotateaxis','y');
+	$zrotatedegrees = $wtwhandlers->getPost('rotatedegrees','90');
+	$zrotatedirection = $wtwhandlers->getPost('rotatedirection','1');
+	$zloadactionzoneid = $wtwhandlers->getPost('loadactionzoneid','');
+	$zjsfunction = $wtwhandlers->getPost('jsfunction','');
+	$zjsparameters = $wtwhandlers->getPost('jsparameters','');
+	$zmoldswithactionzones = $wtwhandlers->getPost('moldswithactionzones','');
+	$zavataranimationid = $wtwhandlers->getPost('avataranimationid','');
+	$zactionzonesbulk = $wtwhandlers->getPost('actionzonesbulk','');
 
 	$zresponse = array();
 	switch ($zfunction) {

@@ -51,6 +51,27 @@ WTWJS.prototype.getJSON = function(zurl, zcallback, zaction, zrequest) {
 	}
 }
 
+WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
+	try {
+		var form1 = document.createElement('form');
+		var Httpreq = new XMLHttpRequest();
+		var zformdata = new FormData(form1);
+		for(var zkey in zrequest) {
+			zformdata.append(zkey, zrequest[zkey]);
+		}
+		zformdata.append('action', 'POST');
+		Httpreq.open('POST', zurl);
+		Httpreq.onreadystatechange = function () {
+			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+				zcallback(Httpreq.responseText);
+			}
+		};
+		Httpreq.send(zformdata);  
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_install.js-postJSON=" + ex.message);
+	}
+}
+
 WTWJS.prototype.encode = function(value) {
 	try {
 		if (value != null) {

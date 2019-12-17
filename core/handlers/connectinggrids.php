@@ -4,97 +4,31 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwconnectinggrids.php');
 	global $wtwconnectinggrids;
-	$zresults = file_get_contents('php://input');
-	$zdata = json_decode($zresults, TRUE);
+	$zrequest = file_get_contents('php://input');
+	$zrequest = json_decode($zrequest, TRUE);
 
-	$zfunction = null;
-	$zconnectinggridid = '';
-	$zparentwebid = '';
-	$zparentwebtype = '';
-	$zchildwebid = '';
-	$zchildwebtype = '';
-	$zloadactionzoneid = '';
-	$zaltloadactionzoneid = '';
-	$zpositionx = 0;
-	$zpositiony = 0;
-	$zpositionz = 0;
-	$zscalingx = 1;
-	$zscalingy = 1;
-	$zscalingz = 1;
-	$zrotationx = 0;
-	$zrotationy = 0;
-	$zrotationz = 0;
-	$zalttag = '';
-	$zmoldgroup = '';
-	$zwebid = '';
-	$zconnectinggridsbulk = '';
+	$zfunction = strtolower($wtwhandlers->getPost('function',''));
+	$zconnectinggridid = $wtwhandlers->getPost('connectinggridid','');
+	$zparentwebid = $wtwhandlers->getPost('parentwebid','');
+	$zparentwebtype = $wtwhandlers->getPost('parentwebtype','');
+	$zchildwebid = $wtwhandlers->getPost('childwebid','');
+	$zchildwebtype = $wtwhandlers->getPost('childwebtype','');
+	$zloadactionzoneid = $wtwhandlers->getPost('loadactionzoneid','');
+	$zaltloadactionzoneid = $wtwhandlers->getPost('altloadactionzoneid','');
+	$zpositionx = $wtwhandlers->getPost('positionx','0');
+	$zpositiony = $wtwhandlers->getPost('positiony','0');
+	$zpositionz = $wtwhandlers->getPost('positionz','0');
+	$zscalingx = $wtwhandlers->getPost('scalingx','1');
+	$zscalingy = $wtwhandlers->getPost('scalingy','1');
+	$zscalingz = $wtwhandlers->getPost('scalingz','1');
+	$zrotationx = $wtwhandlers->getPost('rotationx','0');
+	$zrotationy = $wtwhandlers->getPost('rotationy','0');
+	$zrotationz = $wtwhandlers->getPost('rotationz','0');
+	$zalttag = $wtwhandlers->getPost('alttag','');
+	$zmoldgroup = $wtwhandlers->getPost('moldgroup','');
+	$zwebid = $wtwhandlers->getPost('webid','');
+	$zconnectinggridsbulk = $wtwhandlers->getPost('connectinggridsbulk','');
 	
-	if (!empty($zdata) && isset($zdata)) {
-		if (isset($zdata["function"])) {
-			$zfunction = strtolower($zdata["function"]);
-		}
-		if (isset($zdata["connectinggridid"])) {
-			$zconnectinggridid = $zdata["connectinggridid"];
-		}
-		if (isset($zdata["parentwebid"])) {
-			$zparentwebid = $zdata["parentwebid"];
-		}
-		if (isset($zdata["parentwebtype"])) {
-			$zparentwebtype = $zdata["parentwebtype"];
-		}
-		if (isset($zdata["childwebid"])) {
-			$zchildwebid = $zdata["childwebid"];
-		}
-		if (isset($zdata["childwebtype"])) {
-			$zchildwebtype = $zdata["childwebtype"];
-		}
-		if (isset($zdata["loadactionzoneid"])) {
-			$zloadactionzoneid = $zdata["loadactionzoneid"];
-		}
-		if (isset($zdata["altloadactionzoneid"])) {
-			$zaltloadactionzoneid = $zdata["altloadactionzoneid"];
-		}
-		if (isset($zdata["positionx"])) {
-			$zpositionx = $zdata["positionx"];
-		}
-		if (isset($zdata["positiony"])) {
-			$zpositiony = $zdata["positiony"];
-		}
-		if (isset($zdata["positionz"])) {
-			$zpositionz = $zdata["positionz"];
-		}
-		if (isset($zdata["scalingx"])) {
-			$zscalingx = $zdata["scalingx"];
-		}
-		if (isset($zdata["scalingy"])) {
-			$zscalingy = $zdata["scalingy"];
-		}
-		if (isset($zdata["scalingz"])) {
-			$zscalingz = $zdata["scalingz"];
-		}
-		if (isset($zdata["rotationx"])) {
-			$zrotationx = $zdata["rotationx"];
-		}
-		if (isset($zdata["rotationy"])) {
-			$zrotationy = $zdata["rotationy"];
-		}
-		if (isset($zdata["rotationz"])) {
-			$zrotationz = $zdata["rotationz"];
-		}
-		if (isset($zdata["alttag"])) {
-			$zalttag = $zdata["alttag"];
-		}
-		if (isset($zdata["moldgroup"])) {
-			$zmoldgroup = $zdata["moldgroup"];
-		}
-		if (isset($zdata["webid"])) {
-			$zwebid = $zdata["webid"];
-		}
-		if (isset($zdata["connectinggridsbulk"])) {
-			$zconnectinggridsbulk = $zdata["connectinggridsbulk"];
-		}
-	}
-
 	$zresponse = array();
 	switch ($zfunction) {
 		case "saveconnectinggrid":

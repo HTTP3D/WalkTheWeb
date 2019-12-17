@@ -4,73 +4,25 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwusers.php');
 	global $wtwusers;
-	$zresults = file_get_contents('php://input');
-	$zdata = json_decode($zresults, TRUE);
+	$zrequest = file_get_contents('php://input');
+	$zrequest = json_decode($zrequest, TRUE);
 
-	$zfunction = null;
-	$zuserid = '';
-	$zusername = '';
-	$zuseremail = '';
-	$zpassword = '';
-	$zavatarid = '';
-	$zinstanceid = '';
-	$zdisplayname = '';
-	$zroleid = '';
-	$zuserinroleid = '';
-	$zcommunityid = '';
-	$zbuildingid = '';
-	$zthingid = '';
-	$zusersearch = '';
-	$zuseraccess = '';
+	$zfunction = strtolower($wtwhandlers->getPost('function',''));
+	$zuserid = $wtwhandlers->getPost('userid','');
+	$zusername = $wtwhandlers->getPost('username','');
+	$zuseremail = $wtwhandlers->getPost('useremail','');
+	$zpassword = $wtwhandlers->getPost('password','');
+	$zavatarid = $wtwhandlers->getPost('avatarid','');
+	$zinstanceid = $wtwhandlers->getPost('instanceid','');
+	$zdisplayname = $wtwhandlers->getPost('displayname','');
+	$zroleid = $wtwhandlers->getPost('roleid','');
+	$zuserinroleid = $wtwhandlers->getPost('userinroleid','');
+	$zcommunityid = $wtwhandlers->getPost('communityid','');
+	$zbuildingid = $wtwhandlers->getPost('buildingid','');
+	$zthingid = $wtwhandlers->getPost('thingid','');
+	$zusersearch = $wtwhandlers->getPost('usersearch','');
+	$zuseraccess = $wtwhandlers->getPost('useraccess','');
 	
-	if (!empty($zdata) && isset($zdata)) {
-		if (isset($zdata["function"])) {
-			$zfunction = strtolower($zdata["function"]);
-		}
-		if (isset($zdata["userid"])) {
-			$zuserid = $zdata["userid"];
-		}
-		if (isset($zdata["username"])) {
-			$zusername = $zdata["username"];
-		}
-		if (isset($zdata["useremail"])) {
-			$zuseremail = $zdata["useremail"];
-		}
-		if (isset($zdata["password"])) {
-			$zpassword = $zdata["password"];
-		}
-		if (isset($zdata["avatarid"])) {
-			$zavatarid = $zdata["avatarid"];
-		}
-		if (isset($zdata["instanceid"])) {
-			$zinstanceid = $zdata["instanceid"];
-		}
-		if (isset($zdata["displayname"])) {
-			$zdisplayname = $zdata["displayname"];
-		}
-		if (isset($zdata["roleid"])) {
-			$zroleid = $zdata["roleid"];
-		}
-		if (isset($zdata["userinroleid"])) {
-			$zuserinroleid = $zdata["userinroleid"];
-		}
-		if (isset($zdata["communityid"])) {
-			$zcommunityid = $zdata["communityid"];
-		}
-		if (isset($zdata["buildingid"])) {
-			$zbuildingid = $zdata["buildingid"];
-		}
-		if (isset($zdata["thingid"])) {
-			$zthingid = $zdata["thingid"];
-		}
-		if (isset($zdata["usersearch"])) {
-			$zusersearch = $zdata["usersearch"];
-		}
-		if (isset($zdata["useraccess"])) {
-			$zuseraccess = $zdata["useraccess"];
-		}
-	}
-
 	$zresponse = array();
 	switch ($zfunction) {
 		case "saveuser":

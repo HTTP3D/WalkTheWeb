@@ -4,32 +4,14 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwpluginloader.php');
 	global $wtwpluginloader;
-	$zresults = file_get_contents('php://input');
-	$zdata = json_decode($zresults, TRUE);
+	$zrequest = file_get_contents('php://input');
+	$zrequest = json_decode($zrequest, TRUE);
 
-	$zfunction = null;
-	$zpluginname = '';
-	$zactive = '';
-	$zversion = '';
-	$zupdateurl = '';
-	
-	if (!empty($zdata) && isset($zdata)) {
-		if (isset($zdata["function"])) {
-			$zfunction = strtolower($zdata["function"]);
-		}
-		if (isset($zdata["pluginname"])) {
-			$zpluginname = $zdata["pluginname"];
-		}
-		if (isset($zdata["active"])) {
-			$zactive = $zdata["active"];
-		}
-		if (isset($zdata["version"])) {
-			$zversion = $zdata["version"];
-		}
-		if (isset($zdata["updateurl"])) {
-			$zupdateurl = $zdata["updateurl"];
-		}
-	}
+	$zfunction = strtolower($wtwhandlers->getPost('function',''));
+	$zpluginname = $wtwhandlers->getPost('pluginname','');
+	$zactive = $wtwhandlers->getPost('active','');
+	$zversion = $wtwhandlers->getPost('version','');
+	$zupdateurl = $wtwhandlers->getPost('updateurl','');
 
 	$zresponse = array();
 	switch ($zfunction) {

@@ -223,14 +223,12 @@ WTWJS.prototype.addThingsMustHave = function() {
 		var zrequest = {
 			'function':'addmusthave'
 		};
-		WTW.getJSON("/core/handlers/things.php", 
+		WTW.postJSON("/core/handlers/things.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.setUserThings(JSON.parse(zresponse.things), 1);
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-addThingsMustHave=" + ex.message);
@@ -337,14 +335,12 @@ WTWJS.prototype.deleteDevAccess = function() {
 			'usersearch': dGet('wtw_tadduserdevaccess').value,
 			'function':'deletepermissions'
 		};
-		WTW.getJSON("/core/handlers/users.php", 
+		WTW.postJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.openPermissionsForm();
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 		dGet('wtw_tadduserdevaccess').value = "";
 	} catch (ex) {
@@ -362,14 +358,12 @@ WTWJS.prototype.addDevAccess = function() {
 			'usersearch': dGet('wtw_tadduserdevaccess').value,
 			'function':'savepermissions'
 		};
-		WTW.getJSON("/core/handlers/users.php", 
+		WTW.postJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.openPermissionsForm();
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 		dGet('wtw_tadduserdevaccess').value = "";
 	} catch (ex) {
@@ -387,14 +381,12 @@ WTWJS.prototype.addAccess = function() {
 			'usersearch': dGet('wtw_tadduseridname').value,
 			'function':'savepermissions'
 		};
-		WTW.getJSON("/core/handlers/users.php", 
+		WTW.postJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.openPermissionsForm();
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 		dGet('wtw_tadduseridname').value = "";
 	} catch (ex) {
@@ -411,14 +403,12 @@ WTWJS.prototype.deleteAccess = function() {
 			'usersearch': dGet('wtw_tadduseridname').value,
 			'function':'deletepermissions'
 		};
-		WTW.getJSON("/core/handlers/users.php", 
+		WTW.postJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.openPermissionsForm();
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-deleteAccess=" + ex.message);
@@ -873,13 +863,11 @@ WTWJS.prototype.saveSkyDome = function() {
 			'skymiecoefficient': WTW.init.skyMieCoefficient,
 			'function':'saveskydome'
 		};
-		WTW.getJSON("/core/handlers/communities.php", 
+		WTW.postJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-saveSkyDome=" + ex.message);
@@ -1315,14 +1303,12 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 					'communityid': communityid,
 					'function':'deletecommunity'
 				};
-				WTW.getJSON("/core/handlers/communities.php", 
+				WTW.postJSON("/core/handlers/communities.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
 						WTW.redirectParent('/admin.php');
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 				WTW.deleteCookie("communityid");
 				break;
@@ -1360,13 +1346,11 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 					'alttag':WTW.encode(dGet('wtw_tcommunityalttag').value),
 					'function':'savecommunity'
 				};
-				WTW.getJSON("/core/handlers/communities.php", 
+				WTW.postJSON("/core/handlers/communities.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 				break;
 			case -1:
@@ -1401,13 +1385,11 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 					'buildingid': buildingid,
 					'function':'deletebuilding'
 				};
-				WTW.getJSON("/core/handlers/buildings.php", 
+				WTW.postJSON("/core/handlers/buildings.php", zrequest, 
 					function(zresponse) {
 						WTW.deleteCookie("buildingid");
 						WTW.redirectParent('/admin.php');
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 				break;
 			case 1: 
@@ -1428,11 +1410,9 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 					'analyticsid':dGet('wtw_tbuildinganalyticsid').value,
 					'function':'savebuilding'
 				};
-				WTW.getJSON("/core/handlers/buildings.php", 
+				WTW.postJSON("/core/handlers/buildings.php", zrequest, 
 					function(zresponse) {
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 				break;
 			case -1: 
@@ -1462,14 +1442,12 @@ WTWJS.prototype.submitthingForm = function(w) {
 					'thingid': thingid,
 					'function':'deletething'
 				};
-				WTW.getJSON("/core/handlers/things.php", 
+				WTW.postJSON("/core/handlers/things.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
 						WTW.redirectParent('/admin.php');
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 				WTW.deleteCookie("thingid");
 				break;
@@ -1498,13 +1476,11 @@ WTWJS.prototype.submitthingForm = function(w) {
 						'alttag': WTW.encode(dGet('wtw_tthingalttag').value),
 						'function':'savething'
 					};
-					WTW.getJSON("/core/handlers/things.php", 
+					WTW.postJSON("/core/handlers/things.php", zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							/* note serror would contain errors */
-						}, 
-						'POST', 
-						JSON.stringify(zrequest)
+						}
 					);
 				}
 				break;
@@ -1612,14 +1588,12 @@ WTWJS.prototype.copyThing = function(zcopythingid, zthingname) {
 			'alttag': WTW.encode(dGet('wtw_tthingalttag').value),
 			'function':'savething'
 		};
-		WTW.getJSON("/core/handlers/things.php", 
+		WTW.postJSON("/core/handlers/things.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.copyThingComplete(zresponse.thingid);
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-copyThing=" + ex.message);
@@ -1638,13 +1612,11 @@ WTWJS.prototype.copyBuilding = function(zcopybuildingid, zbuildingname) {
 			'buildingname':WTW.encode(dGet('wtw_tbuildingname').value),
 			'function':'savebuilding'
 		};
-		WTW.getJSON("/core/handlers/buildings.php", 
+		WTW.postJSON("/core/handlers/buildings.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				WTW.copyBuildingComplete(zresponse.buildingid);
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-copyBuilding=" + ex.message);
@@ -1672,14 +1644,12 @@ WTWJS.prototype.copyCommunity = function(zcopycommunityid, zcommunityname) {
 			'alttag': '',
 			'function':'savecommunity'
 		};
-		WTW.getJSON("/core/handlers/communities.php", 
+		WTW.postJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.copyCommunityComplete(zresponse.communityid);
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-copyCommunity=" + ex.message);
@@ -1750,13 +1720,11 @@ WTWJS.prototype.setStartPosition = function(zcommunityid, zbuildingid, zthingid)
 					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
 					'function':'savestartposition'
 				};
-				WTW.getJSON("/core/handlers/communities.php", 
+				WTW.postJSON("/core/handlers/communities.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 			} else if (zbuildingid != "") {
 				var zrequest = {
@@ -1772,11 +1740,9 @@ WTWJS.prototype.setStartPosition = function(zcommunityid, zbuildingid, zthingid)
 					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
 					'function':'savestartposition'
 				};
-				WTW.getJSON("/core/handlers/buildings.php", 
+				WTW.postJSON("/core/handlers/buildings.php", zrequest, 
 					function(zresponse) {
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 			} else if (zthingid != "") {
 				var zrequest = {
@@ -1792,13 +1758,11 @@ WTWJS.prototype.setStartPosition = function(zcommunityid, zbuildingid, zthingid)
 					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
 					'function':'savestartposition'
 				};
-				WTW.getJSON("/core/handlers/things.php", 
+				WTW.postJSON("/core/handlers/things.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 			}
 			dGet('wtw_startsaved').style.visibility = "visible";
@@ -1819,13 +1783,11 @@ WTWJS.prototype.saveGravity = function() {
 				'gravity':WTW.init.gravity,
 				'function':'savegravity'
 			};
-			WTW.getJSON("/core/handlers/communities.php", 
+			WTW.postJSON("/core/handlers/communities.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		} else if (buildingid != "") {
 			var zrequest = {
@@ -1833,11 +1795,9 @@ WTWJS.prototype.saveGravity = function() {
 				'gravity':WTW.init.gravity,
 				'function':'savegravity'
 			};
-			WTW.getJSON("/core/handlers/buildings.php", 
+			WTW.postJSON("/core/handlers/buildings.php", zrequest, 
 				function(zresponse) {
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		} else if (thingid != "") {
 			var zrequest = {
@@ -1845,13 +1805,11 @@ WTWJS.prototype.saveGravity = function() {
 				'gravity':WTW.init.gravity,
 				'function':'savegravity'
 			};
-			WTW.getJSON("/core/handlers/things.php", 
+			WTW.postJSON("/core/handlers/things.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		}		
 	} catch (ex) {
@@ -3523,14 +3481,12 @@ WTWJS.prototype.submitMoldForm = function(w) {
 				'deleted': '1',
 				'function':'deletemold'
 			};
-			WTW.getJSON("/core/handlers/molds.php", 
+			WTW.postJSON("/core/handlers/molds.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
 					dGet('wtw_tnewmold').value = "0";
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 			WTW.pluginsSubmitMoldForm(w);
 			WTW.clearEditMold();
@@ -3807,13 +3763,11 @@ WTWJS.prototype.submitMoldForm = function(w) {
 				'deleted': '0',
 				'function':'savemold'
 			};
-			WTW.getJSON("/core/handlers/molds.php", 
+			WTW.postJSON("/core/handlers/molds.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 			dGet('wtw_tnewmold').value = "0";
 			WTW.checkActionZones(molds[moldind]);
@@ -3972,13 +3926,11 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 					'deleted': '0',
 					'function':'deletemold'
 				};
-				WTW.getJSON("/core/handlers/molds.php", 
+				WTW.postJSON("/core/handlers/molds.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 				var communityind = -1;
 				WTW.getJSON("/connect/communitymoldsrecover.php?communityid=" + communityid + "&communityind=" + communityind + "&communitymoldid=" + zmoldid, 
@@ -4013,13 +3965,11 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 					'deleted': '0',
 					'function':'deletemold'
 				};
-				WTW.getJSON("/core/handlers/molds.php", 
+				WTW.postJSON("/core/handlers/molds.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 				var buildingind = WTW.getBuildingInd(buildingid);
 				WTW.getJSON("/connect/buildingmoldsrecover.php?buildingid=" + buildingid + "&buildingind=" + buildingind + "&buildingmoldid=" + zmoldid, 
@@ -4054,13 +4004,11 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 					'deleted': '0',
 					'function':'deletemold'
 				};
-				WTW.getJSON("/core/handlers/molds.php", 
+				WTW.postJSON("/core/handlers/molds.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 				var thingind = WTW.getThingInd(thingid);
 				WTW.getJSON("/connect/thingmoldsrecover.php?thingid=" + thingid + "&thingind=" + thingind + "&thingmoldid=" + zmoldid, 
@@ -4505,14 +4453,12 @@ WTWJS.prototype.deleteAZAvatarAnimation = function(zactionzoneanimationid) {
 			'avataranimationid': zactionzoneanimationid,
 			'function':'deleteavataranimation'
 		};
-		WTW.getJSON("/core/handlers/actionzones.php", 
+		WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.loadAZAnimationsList();
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-deleteAZAvatarAnimation=" + ex.message);
@@ -4550,14 +4496,12 @@ WTWJS.prototype.saveAZAvatarAnimation = function() {
 			'avataranimationid':WTW.getDDLValue('wtw_tazavataranimationid'),
 			'function':'saveavataranimation'
 		};
-		WTW.getJSON("/core/handlers/actionzones.php", 
+		WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.loadAZAnimationsList();
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-saveAZAvatarAnimation=" + ex.message);
@@ -4680,13 +4624,11 @@ WTWJS.prototype.submitActionZoneForm = function(w) {
 					'thingid': thingid,
 					'function':'deleteactionzone'
 				};
-				WTW.getJSON("/core/handlers/actionzones.php", 
+				WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 			}
 		} else {
@@ -4765,13 +4707,11 @@ WTWJS.prototype.submitActionZoneForm = function(w) {
 				'jsparameters':dGet('wtw_tactionzonejsparameters').value,
 				'function':'saveactionzone'
 			};
-			WTW.getJSON("/core/handlers/actionzones.php", 
+			WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		}
 		if (w != 2) {
@@ -4794,13 +4734,11 @@ WTWJS.prototype.clearActionZone = function(zmoldswithactionzones, zactionzoneid)
 			'moldswithactionzones':zmoldswithactionzones,
 			'function':'removeactionzone'
 		};
-		WTW.getJSON("/core/handlers/actionzones.php", 
+		WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-clearActionZone=" + ex.message);
@@ -5279,12 +5217,10 @@ WTWJS.prototype.selectAddActionZonePart = function(w) {
 					'jsparameters':dGet('wtw_tactionzonejsparameters').value,
 					'function':'saveactionzone'
 				};
-				WTW.getJSON("/core/handlers/actionzones.php", 
+				WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 			}
 			WTW.pick = 2;
@@ -5806,16 +5742,14 @@ WTWJS.prototype.deleteObjectFile = function() {
 			'objectfilepart': zobjectfilepart,
 			'function':'deleteobjectfile'
 		};
-		WTW.getJSON("/core/handlers/uploadedfiles.php", 
+		WTW.postJSON("/core/handlers/uploadedfiles.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.hide('wtw_deletefile');
 				WTW.hide('wtw_canceldelete');
 				WTW.loadObjectDetailsName();
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-deleteObjectFile=" + ex.message);
@@ -5867,7 +5801,6 @@ WTWJS.prototype.uploadFiles = function() {
 		Httpreq.onreadystatechange = function () {
 			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
 				var zresponse = JSON.parse(Httpreq.responseText);
-WTW.log("serror=" + zresponse.serror);
 				var zcategory = WTW.getDDLValue('wtw_fileselectcategory');
 				WTW.loadMyFilesPage(zitem, zcategory, '0');
 				WTW.setImageMenu(2);
@@ -5891,7 +5824,7 @@ WTWJS.prototype.loadUploadedObjectsDiv = function(showloading) {
 		var zrequest = {
 			'function':'getuploadedfiles'
 		};
-		WTW.getJSON("/core/handlers/uploadedfiles.php", 
+		WTW.postJSON("/core/handlers/uploadedfiles.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				var zitem = dGet('wtw_tfileitem').value;
@@ -5915,9 +5848,7 @@ WTWJS.prototype.loadUploadedObjectsDiv = function(showloading) {
 					WTW.hide('wtw_loadingselectimage');
 				}
 				WTW.resetUploadButton();
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-loadUploadedObjectsDiv=" + ex.message);
@@ -5952,7 +5883,7 @@ WTWJS.prototype.loadObjectDetailsName = function(zuploadobjectid) {
 			'uploadobjectid': zuploadobjectid,
 			'function':'getuploadedfilenamedetails'
 		};
-		WTW.getJSON("/core/handlers/uploadedfiles.php", 
+		WTW.postJSON("/core/handlers/uploadedfiles.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.length > 0) {
@@ -5975,9 +5906,7 @@ WTWJS.prototype.loadObjectDetailsName = function(zuploadobjectid) {
 					znamediv += "<h1 style='color:red;margin-left:20px;'>3D Object not found</h1>";
 				}
 				dGet('wtw_uploadedobjectsnamediv').innerHTML = znamediv;
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-loadObjectDetailsName=" + ex.message);
@@ -5992,7 +5921,7 @@ WTWJS.prototype.loadObjectDetailsFiles = function(zuploadobjectid, zobjectfolder
 			'objectfolder': zobjectfolder,
 			'function':'getuploadedfilefilesdetails'
 		};
-		WTW.getJSON("/core/handlers/uploadedfiles.php", 
+		WTW.postJSON("/core/handlers/uploadedfiles.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				zfilesdiv += "<div class='wtw-clear'></div>";
@@ -6013,9 +5942,7 @@ WTWJS.prototype.loadObjectDetailsFiles = function(zuploadobjectid, zobjectfolder
 				zfilesdiv += "<div id='wtw_deletefile' class='wtw-redbutton' style='width:150px;display:none;visibility:hidden;text-align:center;margin-right:13px;cursor:pointer;' onclick=\"WTW.deleteObjectFile();\">Delete File</div><div id='wtw_canceldelete' class='wtw-yellowbutton' style='width:150px;display:none;visibility:hidden;text-align:center;cursor:pointer;' onclick=\"dGet('wtw_tdeletefile').value='';WTW.hide('wtw_deletefile');WTW.hide('wtw_canceldelete');WTW.show('wtw_uploadbutton');\">Cancel</div>";
 				zfilesdiv += "</div></div>";
 				dGet('wtw_uploadedobjectsfilesdiv').innerHTML = zfilesdiv;
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-loadObjectDetailsFiles=" + ex.message);
@@ -6030,7 +5957,7 @@ WTWJS.prototype.loadObjectDetailsAnimations = function(zuploadobjectid) {
 			'uploadobjectid': zuploadobjectid,
 			'function':'getuploadedfileanimationsdetails'
 		};
-		WTW.getJSON("/core/handlers/animations.php", 
+		WTW.postJSON("/core/handlers/animations.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				zanimationsdiv += "<div class='wtw-clear'></div><div class='wtw-objectcontainer'><div class='wtw-objectfile'>Animations</div><div class='wtw-objectfolder'>";
@@ -6051,9 +5978,7 @@ WTWJS.prototype.loadObjectDetailsAnimations = function(zuploadobjectid) {
 				zanimationsdiv += "<div id='wtw_deleteanimation' class='wtw-redbutton' style='width:150px;display:none;visibility:hidden;text-align:center;margin-right:13px;cursor:pointer;' onclick=\"WTW.deleteObjectAnimation(dGet('wtw_tdeleteanimation').value, '" + zuploadobjectid + "');\">Delete Animation</div><div id='wtw_canceldeleteanimation' class='wtw-yellowbutton' style='width:150px;display:none;visibility:hidden;text-align:center;cursor:pointer;' onclick=\"dGet('wtw_tdeleteanimation').value='';WTW.hide('wtw_deleteanimation');WTW.hide('wtw_canceldeleteanimation');\">Cancel</div>";
 				zanimationsdiv += "</div></div>";
 				dGet('wtw_uploadedobjectsanimationsdiv').innerHTML = zanimationsdiv;
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-loadObjectDetailsAnimations=" + ex.message);
@@ -6069,7 +5994,7 @@ WTWJS.prototype.loadObjectAnimation = function(zobjectanimationid) {
 			'objectanimationid': zobjectanimationid,
 			'function':'getobjectanimation'
 		};
-		WTW.getJSON("/core/handlers/animations.php", 
+		WTW.postJSON("/core/handlers/animations.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse[0] != null) {
@@ -6101,9 +6026,7 @@ WTWJS.prototype.loadObjectAnimation = function(zobjectanimationid) {
 					}
 					WTW.show('wtw_addanimationdiv');
 				}
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-loadObjectAnimation=" + ex.message);
@@ -6118,16 +6041,14 @@ WTWJS.prototype.deleteObjectAnimation = function(zobjectanimationid, zuploadobje
 				'objectanimationid': zobjectanimationid,
 				'function':'deleteobjectanimation'
 			};
-			WTW.getJSON("/core/handlers/animations.php", 
+			WTW.postJSON("/core/handlers/animations.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					WTW.hide('wtw_addanimationdiv');
 					WTW.hide('wtw_deleteanimation');
 					WTW.hide('wtw_canceldeleteanimation');
 					WTW.loadObjectDetailsAnimations(zuploadobjectid)
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		}
 	} catch (ex) {
@@ -6164,16 +6085,14 @@ WTWJS.prototype.saveObjectAnimation = function() {
 				'objectsoundid': dGet('wtw_tobjectsoundid').value,
 				'function':'saveobjectanimation'
 			};
-			WTW.getJSON("/core/handlers/animations.php", 
+			WTW.postJSON("/core/handlers/animations.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					WTW.hide('wtw_addanimationdiv');
 					WTW.hide('wtw_deleteanimation');
 					WTW.hide('wtw_canceldeleteanimation');
 					WTW.loadObjectDetailsAnimations(zuploadobjectid)
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		}
 	} catch (ex) {
@@ -6485,7 +6404,7 @@ WTWJS.prototype.loadMyFilesPage = function(zitem, zcategory, zhide) {
 			'hide': zhide,
 			'function':'getmyimages'
 		};
-		WTW.getJSON("/core/handlers/uploads.php", 
+		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				var zmyimagesdiv = '';
 				zresponse = JSON.parse(zresponse);
@@ -6557,9 +6476,7 @@ WTWJS.prototype.loadMyFilesPage = function(zitem, zcategory, zhide) {
 				WTW.show('wtw_myimagesdiv');
 				dGet('wtw_myimagesdiv').style.height = (WTW.sizeY - 160) + 'px';
 				WTW.hide('wtw_loadingselectimage');
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admineditor.js-loadMyFilesPage=' + ex.message);
@@ -6577,14 +6494,12 @@ WTWJS.prototype.toggleHideMyImage = function(zuploadid, zitem, zcategory, zpageh
 			'hide': zhide,
 			'function':'togglehidemyimage'
 		};
-		WTW.getJSON("/core/handlers/uploads.php", 
+		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				var zstockimagesdiv = '';
 				zresponse = JSON.parse(zresponse);
 				WTW.loadMyFilesPage(zitem, zcategory, zpagehide);
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admineditor.js-toggleHideMyImage=' + ex.message);
@@ -6600,7 +6515,7 @@ WTWJS.prototype.loadStockPage = function(zitem) {
 			'item': zitem,
 			'function':'getstockimages'
 		};
-		WTW.getJSON("/core/handlers/uploads.php", 
+		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				var zstockimagesdiv = '';
 				zresponse = JSON.parse(zresponse);
@@ -6630,9 +6545,7 @@ WTWJS.prototype.loadStockPage = function(zitem) {
 				WTW.show('wtw_stockimagesdiv');
 				dGet('wtw_stockimagesdiv').style.height = (WTW.sizeY - 160) + 'px';
 				WTW.hide('wtw_loadingselectimage');
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admineditor.js-loadStockPage=' + ex.message);
@@ -6650,7 +6563,7 @@ WTWJS.prototype.loadCommunityPage = function(zcommunityid, zbuildingid, zthingid
 			'thingid': zthingid,
 			'function':'getcommunityimages'
 		};
-		WTW.getJSON("/core/handlers/uploads.php", 
+		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				var zcommunityimagesdiv = '';
 				zresponse = JSON.parse(zresponse);
@@ -6696,9 +6609,7 @@ WTWJS.prototype.loadCommunityPage = function(zcommunityid, zbuildingid, zthingid
 				WTW.show('wtw_communityimagesdiv');
 				dGet('wtw_communityimagesdiv').style.height = (WTW.sizeY - 160) + 'px';
 				WTW.hide('wtw_loadingselectimage');
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admineditor.js-loadCommunityPage=' + ex.message);
@@ -7025,13 +6936,11 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 						'alttag': dGet('wtw_tconngridalttag').value,
 						'function':'saveconnectinggrid'
 					};
-					WTW.getJSON("/core/handlers/connectinggrids.php", 
+					WTW.postJSON("/core/handlers/connectinggrids.php", zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							/* note serror would contain errors */
-						}, 
-						'POST', 
-						JSON.stringify(zrequest)
+						}
 					);
 					break;
 				case 0: /* delect connecting grid */
@@ -7106,13 +7015,11 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 						'connectinggridid': dGet("wtw_teditconnectinggridid").value,
 						'function':'deleteconnectinggrid'
 					};
-					WTW.getJSON("/core/handlers/connectinggrids.php", 
+					WTW.postJSON("/core/handlers/connectinggrids.php", zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							/* note serror would contain errors */
-						}, 
-						'POST', 
-						JSON.stringify(zrequest)
+						}
 					);
 					break;
 				case -1: /* cancel change connecting grid */
@@ -8590,13 +8497,11 @@ WTWJS.prototype.saveShareCommunityForm = function() {
 			'tags': dGet('wtw_tsharecommtags').value,
 			'function':'sharecommunitytemplate'
 		};
-		WTW.getJSON("/core/handlers/communities.php", 
+		WTW.postJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-saveShareCommunityForm=" + ex.message);
@@ -8612,11 +8517,9 @@ WTWJS.prototype.saveShareBuildingForm = function() {
 			'tags': dGet('wtw_tsharebuildtags').value,
 			'function':'sharebuildingtemplate'
 		};
-		WTW.getJSON("/core/handlers/buildings.php", 
+		WTW.postJSON("/core/handlers/buildings.php", zrequest, 
 			function(zresponse) {
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-saveShareBuildingForm=" + ex.message);
@@ -8633,13 +8536,11 @@ WTWJS.prototype.saveShareThingForm = function() {
 			'tags': dGet('wtw_tsharethingtags').value,
 			'function':'sharethingtemplate'
 		};
-		WTW.getJSON("/core/handlers/things.php", 
+		WTW.postJSON("/core/handlers/things.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-saveShareThingForm=" + ex.message);
@@ -8657,14 +8558,12 @@ WTWJS.prototype.shareCommunityTemplate = function() {
 			'webid': communityid,
 			'function':'setkeyhash'
 		};
-		WTW.getJSON("/core/handlers/uploads.php", 
+		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.shareCommunitySecurity(zresponse.keyhash);
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-shareCommunityTemplate=" + ex.message);
@@ -11299,14 +11198,12 @@ WTWJS.prototype.saveAliasForm = function(w) {
 					'forcehttps': zforcehttps,
 					'function':'savewebalias'
 				};
-				WTW.getJSON("/core/handlers/uploads.php", 
+				WTW.postJSON("/core/handlers/uploads.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
 						WTW.openWebAliasSettings();
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 				break;
 			case -1: /* cancel */
@@ -11316,14 +11213,12 @@ WTWJS.prototype.saveAliasForm = function(w) {
 					'webaliasid': zwebaliasid,
 					'function':'deletewebalias'
 				};
-				WTW.getJSON("/core/handlers/uploads.php", 
+				WTW.postJSON("/core/handlers/uploads.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
 						WTW.openWebAliasSettings();
-					}, 
-					'POST', 
-					JSON.stringify(zrequest)
+					}
 				);
 				break;
 		}
@@ -11371,14 +11266,12 @@ WTWJS.prototype.openAllPlugins = function(zpluginname, zactive) {
 		var zrequest = {
 			'function':'getallplugins'
 		};
-		WTW.getJSON("/core/handlers/pluginloader.php", 
+		WTW.postJSON("/core/handlers/pluginloader.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.openAllPluginsComplete(zresponse.plugins, zpluginname, zactive);
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-openAllPlugins=" + ex.message);
@@ -11434,14 +11327,12 @@ WTWJS.prototype.activatePlugin = function(zpluginname, zactive) {
 			'active': zactive,
 			'function':'activateplugin'
 		};
-		WTW.getJSON("/core/handlers/pluginloader.php", 
+		WTW.postJSON("/core/handlers/pluginloader.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.activatePluginComplete();
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-activatePlugin=" + ex.message);
@@ -11479,14 +11370,12 @@ WTWJS.prototype.checkForUpdates = function(zshow) {
 		var zrequest = {
 			'function':'getplugininfo'
 		};
-		WTW.getJSON("/core/handlers/pluginloader.php", 
+		WTW.postJSON("/core/handlers/pluginloader.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.getPluginInfoComplete(zresponse.plugins, zshow);
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-checkForUpdates=" + ex.message);
@@ -11703,14 +11592,12 @@ WTWJS.prototype.updatePlugin = function(zpluginname, zversion, zupdatedate, zupd
 			'updateurl': zupdateurl,
 			'function':'getupdate'
 		};
-		WTW.getJSON("/core/handlers/pluginloader.php", 
+		WTW.postJSON("/core/handlers/pluginloader.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.updatePluginComplete(zpluginname, zversion, zupdatedate, zupdateurl, zresponse.success, zshow);
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-updatePlugin=" + ex.message);
@@ -11762,14 +11649,12 @@ WTWJS.prototype.updateWalkTheWeb = function(zpluginname, zversion, zupdatedate, 
 			'updateurl': zupdateurl,
 			'function':'getupdate'
 		};
-		WTW.getJSON("/core/handlers/pluginloader.php", 
+		WTW.postJSON("/core/handlers/pluginloader.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				WTW.updateWalkTheWebComplete(zpluginname, zversion, zupdatedate, zupdateurl, zresponse.success);
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-updateWalkTheWeb=" + ex.message);
@@ -11935,14 +11820,12 @@ WTWJS.prototype.deleteUserRole = function(zuserid, zuserinroleid) {
 				'userid':zuserid,
 				'function':'deleteuserrole'
 			};
-			WTW.getJSON("/core/handlers/users.php", 
+			WTW.postJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
 					WTW.getUser(zuserid);
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		}
 	} catch (ex) {
@@ -11960,14 +11843,12 @@ WTWJS.prototype.addUserRole = function(zuserid) {
 				'roleid': zroleid,
 				'function':'saveuserrole'
 			};
-			WTW.getJSON("/core/handlers/users.php", 
+			WTW.postJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
 					WTW.getUser(zuserid);
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		}
 	} catch (ex) {
@@ -12039,14 +11920,12 @@ WTWJS.prototype.saveNewUser = function() {
 				'email': zemail,
 				'function':'savenewuser'
 			};
-			WTW.getJSON("/core/handlers/users.php", 
+			WTW.postJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
 					WTW.openAllUsers();
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		} else {
 			dGet('wtw_errorusersave2').innerHTML = "User Name must be 3 or more characters";
@@ -12075,14 +11954,12 @@ WTWJS.prototype.saveUser = function() {
 				'email':zemail,
 				'function':'saveuser'
 			};
-			WTW.getJSON("/core/handlers/users.php", 
+			WTW.postJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
 					WTW.openAllUsers();
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		} else {
 			dGet('wtw_errorusersave').innerHTML = "User Name must be 3 or more characters";
@@ -12099,14 +11976,12 @@ WTWJS.prototype.deleteUser = function(zuserid) {
 				'userid': zuserid,
 				'function':'deleteuser'
 			};
-			WTW.getJSON("/core/handlers/users.php", 
+			WTW.postJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
 					WTW.openAllUsers();
-				}, 
-				'POST', 
-				JSON.stringify(zrequest)
+				}
 			);
 		}
 	} catch (ex) {
