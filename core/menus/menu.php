@@ -211,12 +211,6 @@
 				<input id="wtw_tturnspeed" type="range" min=".1" max="1.9" value="1" step=".01" style="direction: ltr;width:240px;cursor:pointer;" onchange="WTW.changeTurnSpeed();this.blur();"/>
 			</li>
 		</ul>
-		<ul class="wtw-menuli">
-			<li class="wtw-menuliholder"><img src="/content/system/images/menupan.png" alt="Pan Speed" title="Pan Speed" class='wtw-menulefticon' />Pan (Rotation) Speed</li>
-			<li class="wtw-submenuli">
-				<input id="wtw_trotationspeed" type="range" min="800" max="2200" value="1000" step="10" style="direction: rtl;width:240px;cursor:pointer;" onchange="WTW.changeRotationSpeed();this.blur();"/>
-			</li>
-		</ul>
 	</div>
 </div>
 <div id="wtw_menugraphicsquality" class="wtw-slideupmenuright" style="display:none;visibility:hidden;">
