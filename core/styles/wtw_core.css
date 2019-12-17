@@ -74,6 +74,13 @@ button {
 .wtw-smallprint {
 	font-size: 1em;
 }
+.wtw-smallwhite {
+	font-size: 1em;
+	margin-left:20px;
+	font-weight:normal;
+	text-align:left;
+	color:#ffffff;
+}
 .wtw-smallfilename {
 	font-size: 10px;
 	white-space:nowrap;
