@@ -286,14 +286,14 @@ class wtwusers {
 	}
 	
 	public function saveUserRoleID($zuserid, $zroleid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			if ($this->userIdIsValid($zuserid)) {
-				if ($wtwiframes->isUserInRole("admin")) {
+				if ($wtwhandlers->isUserInRole("admin")) {
 					if (!empty($zroleid) && isset($zroleid)) {
 						if ($this->roleIdIsValid($zroleid)) {
-							$zresults = $wtwiframes->query("
+							$zresults = $wtwhandlers->query("
 								select userinroleid, deleted from ".wtw_tableprefix."usersinroles 
 								where roleid = '".$zroleid."'
 									and userid = '".$zuserid."' order by createdate limit 1;
@@ -304,10 +304,10 @@ class wtwusers {
 									$zdeleted = $zrow['deleted'];
 								}
 								if (!empty($zuserinroleid) && isset($zuserinroleid) && $zdeleted == 1) {
-									$wtwiframes->query("
+									$wtwhandlers->query("
 										update ".wtw_tableprefix."usersinroles 
 										set updatedate=now(),
-											updateuserid='".$wtwiframes->userid."',
+											updateuserid='".$wtwhandlers->userid."',
 											deleted=0,
 											deleteddate=null,
 											deleteduserid=''
@@ -316,8 +316,8 @@ class wtwusers {
 									$zsuccess = true;
 								}
 							} else {
-								$zuserinroleid = $wtwiframes->getRandomString(16,1);
-								$wtwiframes->query("
+								$zuserinroleid = $wtwhandlers->getRandomString(16,1);
+								$wtwhandlers->query("
 									insert into ".wtw_tableprefix."usersinroles 
 										(userinroleid,
 										 userid,
@@ -331,9 +331,9 @@ class wtwusers {
 										 '".$zuserid."',
 										 '".$zroleid."',
 										 now(),
-										 '".$wtwiframes->userid."',
+										 '".$wtwhandlers->userid."',
 										 now(),
-										 '".$wtwiframes->userid."');
+										 '".$wtwhandlers->userid."');
 								");
 								$zsuccess = true;
 							}
@@ -342,40 +342,40 @@ class wtwusers {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-saveUserRoleID=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-saveUserRoleID=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function deleteUserRoleID($zuserid, $zuserinroleid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->isUserInRole("admin")) {
+			if ($wtwhandlers->isUserInRole("admin")) {
 				if (!empty($zuserinroleid) && isset($zuserinroleid)) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."usersinroles 
 						set deleted=1,
 							deleteddate=now(),
-							deleteduserid='".$wtwiframes->userid."'
+							deleteduserid='".$wtwhandlers->userid."'
 						where userinroleid='".$zuserinroleid."';
 					");
 					$zsuccess = true;
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-deleteUserRoleID=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-deleteUserRoleID=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function addUserPermissions($zusersearch, $zcommunityid, $zbuildingid, $zthingid, $zuseraccess) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zresponse = "Permission Change Failed";
 		try {
-			if ($wtwiframes->checkAdminAccess($zcommunityid, $zbuildingid, $zthingid)) {
+			if ($wtwhandlers->checkAdminAccess($zcommunityid, $zbuildingid, $zthingid)) {
 				$zuserid = "";
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select userid 
 					from ".wtw_tableprefix."users 
 					where userid='".$zusersearch."' 
@@ -386,7 +386,7 @@ class wtwusers {
 					$zuserid = $zrow["userid"];
 				}
 				if (empty($zuserid) || !isset($zuserid)) {
-					$zresults = $wtwiframes->query("
+					$zresults = $wtwhandlers->query("
 						select userid 
 						from ".wtw_tableprefix."users 
 						where email='".$zusersearch."' 
@@ -398,7 +398,7 @@ class wtwusers {
 					}
 				}
 				if (empty($zuserid) || !isset($zuserid)) {
-					$zresults = $wtwiframes->query("
+					$zresults = $wtwhandlers->query("
 						select userid 
 						from ".wtw_tableprefix."users 
 						where username='".$zusersearch."' 
@@ -410,7 +410,7 @@ class wtwusers {
 					}
 				}
 				if (empty($zuserid) || !isset($zuserid)) {
-					$zresults = $wtwiframes->query("
+					$zresults = $wtwhandlers->query("
 						select userid 
 						from ".wtw_tableprefix."users 
 						where displayname='".$zusersearch."' 
@@ -423,7 +423,7 @@ class wtwusers {
 				}
 				if (!empty($zuserid) && isset($zuserid)) {
 					$zfounduserauthorizationid = "";
-					$zresults = $wtwiframes->query("
+					$zresults = $wtwhandlers->query("
 						select userauthorizationid 
 						from ".wtw_tableprefix."userauthorizations 
 						where userid='".$zuserid."' 
@@ -435,18 +435,18 @@ class wtwusers {
 						$zfounduserauthorizationid = $zrow["userauthorizationid"];
 					}
 					if (!empty($zfounduserauthorizationid) && isset($zfounduserauthorizationid)) {
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							update ".wtw_tableprefix."userauthorizations
 							set useraccess='".$zuseraccess."',
 								updatedate=now(),
-								updateuserid='".$wtwiframes->userid."',
+								updateuserid='".$wtwhandlers->userid."',
 								deleteddate=null,
 								deleteduserid='',
 								deleted=0
 							where userauthorizationid='".$zfounduserauthorizationid."';");
 					} else {
-						$zfounduserauthorizationid = $wtwiframes->getRandomString(16,1);
-						$wtwiframes->query("
+						$zfounduserauthorizationid = $wtwhandlers->getRandomString(16,1);
+						$wtwhandlers->query("
 							insert into ".wtw_tableprefix."userauthorizations
 								(userauthorizationid,
 								 userid,
@@ -466,26 +466,26 @@ class wtwusers {
 								 '".$zthingid."',
 								 '".$zuseraccess."',
 								 now(),
-								 '".$wtwiframes->userid."',
+								 '".$wtwhandlers->userid."',
 								 now(),
-								 '".$wtwiframes->userid."');");
+								 '".$wtwhandlers->userid."');");
 					}
 					$zresponse = "updated";
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-addUserPermissions=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-addUserPermissions=".$e->getMessage());
 		}
 		return $zresponse;
 	}	
 
 	function deleteUserPermissions($zuserid, $zcommunityid, $zbuildingid, $zthingid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zresponse = "Permission Change Failed";
 		try {
-			if ($wtwiframes->checkAdminAccess($zcommunityid, $zbuildingid, $zthingid) && !empty($zuserid) && isset($zuserid)) {
+			if ($wtwhandlers->checkAdminAccess($zcommunityid, $zbuildingid, $zthingid) && !empty($zuserid) && isset($zuserid)) {
 				$zfounduserauthorizationid = "";
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select userauthorizationid 
 					from ".wtw_tableprefix."userauthorizations 
 					where userid='".$zuserid."' 
@@ -496,27 +496,27 @@ class wtwusers {
 				foreach ($zresults as $zrow) {
 					$zfounduserauthorizationid = $zrow["userauthorizationid"];
 				}
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."userauthorizations
 					set deleted=1,
-						deleteduserid='".$wtwiframes->userid."',
+						deleteduserid='".$wtwhandlers->userid."',
 						deleteddate=now()
 					where userauthorizationid='".$zfounduserauthorizationid."';");
 				$zresponse = "user access deleted";
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-deleteUserPermissions=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-deleteUserPermissions=".$e->getMessage());
 		}
 		return $zresponse;
 	}
 	
 	function getUserPermissions($zcommunityid, $zbuildingid, $zthingid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zresponse = "";
 		try {
 			$zpermissions = array();
-			if ($wtwiframes->checkAdminAccess($zcommunityid, $zbuildingid, $zthingid)) {
-				$zresults = $wtwiframes->query("
+			if ($wtwhandlers->checkAdminAccess($zcommunityid, $zbuildingid, $zthingid)) {
+				$zresults = $wtwhandlers->query("
 					select u1.*,
 						browseauth.browsecount,
 						inviteeauth.invitecount,
@@ -574,13 +574,13 @@ class wtwusers {
 			}
 			$zresponse = json_encode($zpermissions);
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-getUserPermissions=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-getUserPermissions=".$e->getMessage());
 		}
 		return $zresponse;
 	}		
 	
 	public function isUserNameAvailable($zusername) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = true;
 		$zserror = "";
 		try {
@@ -588,14 +588,14 @@ class wtwusers {
 				$zsuccess = false;
 			} else {
 				$zresults = array();
-				if (!empty($wtwiframes->getSessionUserID())) {
-					$zresults = $wtwiframes->query("
+				if (!empty($wtwhandlers->getSessionUserID())) {
+					$zresults = $wtwhandlers->query("
 						select * from ".wtw_tableprefix."users
 						where username like '".$zusername."'
-							and not userid='".$wtwiframes->userid."'
+							and not userid='".$wtwhandlers->userid."'
 						limit 1;");
 				} else {
-					$zresults = $wtwiframes->query("
+					$zresults = $wtwhandlers->query("
 						select * from ".wtw_tableprefix."users
 						where username like '".$zusername."'
 						limit 1;");
@@ -605,25 +605,25 @@ class wtwusers {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-isUserNameAvailable=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-isUserNameAvailable=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 
 	public function isEmailAvailable($zemail) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = true;
 		$zserror = "";
 		try {
 			$zresults = array();
-			if (!empty($wtwiframes->getSessionUserID())) {
-				$zresults = $wtwiframes->query("
+			if (!empty($wtwhandlers->getSessionUserID())) {
+				$zresults = $wtwhandlers->query("
 					select * from ".wtw_tableprefix."users
 					where email like '".$zemail."'
-						and not userid='".$wtwiframes->userid."'
+						and not userid='".$wtwhandlers->userid."'
 					limit 1;");
 			} else {
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select * from ".wtw_tableprefix."users
 					where email like '".$zemail."'
 					limit 1;");
@@ -632,14 +632,14 @@ class wtwusers {
 				$zsuccess = false;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-isEmailAvailable=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-isEmailAvailable=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	
 	public function createAccount($zusername, $zemail, $zpassword) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		$zserror = "";
 		try {
@@ -654,12 +654,12 @@ class wtwusers {
 			}
 			if ($this->isUserNameAvailable($zusername)) {
 				if ($this->isEmailAvailable($zemail)) {
-					$zuserid = $wtwiframes->getRandomString(16,1);
-					$zuploadpathid = $wtwiframes->getRandomString(16,1);
+					$zuserid = $wtwhandlers->getRandomString(16,1);
+					$zuploadpathid = $wtwhandlers->getRandomString(16,1);
 					$zoptions = ['cost' => 11];
 					$zpasswordhash = password_hash($zpassword, PASSWORD_DEFAULT, $zoptions);
 					$ztimestamp = date('Y/m/d H:i:s');
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."users 
 							(username,
 							 userid,
@@ -698,7 +698,7 @@ class wtwusers {
 				$zserror = "User Name is already in use.";
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-createAccount=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-createAccount=".$e->getMessage());
 		}
 		return array( 
 			'success' => $zsuccess,
@@ -706,10 +706,10 @@ class wtwusers {
 	}
 	
 	public function emailExists($zuseremail) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zfound = false;
 		try {
-			$zresults = $wtwiframes->query("
+			$zresults = $wtwhandlers->query("
 				select userid
 				from ".wtw_tableprefix."users
 				where email='".$zuseremail."'
@@ -718,16 +718,16 @@ class wtwusers {
 				$zfound = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-emailExists=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-emailExists=".$e->getMessage());
 		}
 		return $zfound;
 	}
 
 	public function getUserNameByEmail($zuseremail) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zusername = "";
 		try {
-			$zresults = $wtwiframes->query("
+			$zresults = $wtwhandlers->query("
 				select userid, username
 				from ".wtw_tableprefix."users
 				where email='".$zuseremail."'
@@ -736,13 +736,13 @@ class wtwusers {
 				$zusername = $zrow["username"];
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-getUserNameByEmail=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-getUserNameByEmail=".$e->getMessage());
 		}
 		return $zusername;
 	}
 
 	public function recoverLoginByEmail($zuseremail) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zresponse = "";
 		try {
 			$zusername = $this->getUserNameByEmail($zuseremail);
@@ -754,24 +754,24 @@ class wtwusers {
 				$zresponse = "Email Address Not Found";
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-recoverLoginByEmail=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-recoverLoginByEmail=".$e->getMessage());
 		}
 		return $zresponse;
 	}
 	
 	public function saveProfile($zmyavatarid,$zinstanceid,$zusername,$zdisplayname,$zuseremail) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zresponse = "";
 		try {
 			$zsuccess = false;
-			if (!empty($wtwiframes->getSessionUserID())) {
+			if (!empty($wtwhandlers->getSessionUserID())) {
 				if ($this->isUserNameAvailable($zusername)) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."users
 						set username='".$zusername."',
 							updatedate=now(),
-							updateuserid='".$wtwiframes->userid."'
-						where userid='".$wtwiframes->userid."'
+							updateuserid='".$wtwhandlers->userid."'
+						where userid='".$wtwhandlers->userid."'
 							and deleted=0;");
 					$_SESSION["wtw_username"] = $zusername;
 					$zsuccess = true;
@@ -779,24 +779,24 @@ class wtwusers {
 					$zresponse .= "User Name already in use<br />";
 				}
 				if ($this->isEmailAvailable($zuseremail)) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."users
 						set useremail='".$zuseremail."',
 							updatedate=now(),
-							updateuserid='".$wtwiframes->userid."'
-						where userid='".$wtwiframes->userid."'
+							updateuserid='".$wtwhandlers->userid."'
+						where userid='".$wtwhandlers->userid."'
 							and deleted=0;");
 					$zsuccess = true;
 				} else {
 					$zresponse .= "Email already in use<br />";
 				}
 				if (!empty($zmyavatarid) && isset($zmyavatarid)) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."useravatars
 						set displayname='".$zdisplayname."',
 							updatedate=now(),
-							updateuserid='".$wtwiframes->userid."'
-						where userid='".$wtwiframes->userid."'
+							updateuserid='".$wtwhandlers->userid."'
+						where userid='".$wtwhandlers->userid."'
 							and useravatarid='".$zmyavatarid."'
 							and deleted=0;");
 					$zsuccess = true;
@@ -806,23 +806,23 @@ class wtwusers {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-saveProfile=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-saveProfile=".$e->getMessage());
 		}
 		return $zresponse;
 	}
 	
 	public function saveUser($zuserid, $zusername, $zuseremail) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->isUserInRole("admin")) {
-				$wtwiframes->query("
+			if ($wtwhandlers->isUserInRole("admin")) {
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."users
 					set username='".$zusername."',
 						email='".$zuseremail."'
 					where userid='".$zuserid."'
 					limit 1;");
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select *
 					from ".wtw_tableprefix."users
 					where userid='".$zuserid."'
@@ -834,26 +834,26 @@ class wtwusers {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-saveUser=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-saveUser=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 
 	public function saveNewUser($zusername, $zpassword, $zemail) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->isUserInRole("admin")) {
+			if ($wtwhandlers->isUserInRole("admin")) {
 				if (!empty($zpassword) && isset($zpassword)) {
 					$zpassword = base64_decode($zpassword);
 				}
 				if ($this->isUserNameAvailable($zusername)) {
 					if ($this->isEmailAvailable($zemail)) {
-						$zuserid = $wtwiframes->getRandomString(16,1);
-						$zuploadpathid = $wtwiframes->getRandomString(16,1);
+						$zuserid = $wtwhandlers->getRandomString(16,1);
+						$zuploadpathid = $wtwhandlers->getRandomString(16,1);
 						$zoptions = ['cost' => 11];
 						$zpasswordhash = password_hash($zpassword, PASSWORD_DEFAULT, $zoptions);
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							insert into ".wtw_tableprefix."users 
 								(username,
 								 userid,
@@ -873,32 +873,32 @@ class wtwusers {
 								 '".$zemail."',
 								 '".$zusername."',
 								 now(),
-								 '".$wtwiframes->userid."',
+								 '".$wtwhandlers->userid."',
 								 now(),
-								 '".$wtwiframes->userid."');");
+								 '".$wtwhandlers->userid."');");
 						$zsuccess = true;
 					}
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-saveNewUser=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-saveNewUser=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 
 	public function deleteUser($zuserid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->isUserInRole("admin")) {
-				$wtwiframes->query("
+			if ($wtwhandlers->isUserInRole("admin")) {
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."users
 					set deleted=1,
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where userid='".$zuserid."'
 					limit 1;");
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select deleted
 					from ".wtw_tableprefix."users
 					where userid='".$zuserid."'
@@ -910,7 +910,7 @@ class wtwusers {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwusers.php-saveNewUser=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-saveNewUser=".$e->getMessage());
 		}
 		return $zsuccess;
 	}

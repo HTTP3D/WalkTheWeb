@@ -20,11 +20,11 @@ class wtwcommunities {
 	}
 	
 	public function communityExist($zcommunityid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$found = false;
 		try {
 			$zresults = array();
-			$zresults = $wtwiframes->query("
+			$zresults = $wtwhandlers->query("
 				select communityid 
 				from ".wtw_tableprefix."communities 
 				where communityid='".$zcommunityid."' limit 1");
@@ -32,7 +32,7 @@ class wtwcommunities {
 				$found = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-communityExist=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-communityExist=".$e->getMessage());
 		}
 		return $found;
 	}
@@ -41,17 +41,17 @@ class wtwcommunities {
 		$copycommunityid = "";
 		$newcommunityid = "";
 		try {
-			if (empty($zpastcommunityid) || !isset($zpastcommunityid) || $wtwiframes->checkUpdateAccess($zpastcommunityid, "", "") == false) {
+			if (empty($zpastcommunityid) || !isset($zpastcommunityid) || $wtwhandlers->checkUpdateAccess($zpastcommunityid, "", "") == false) {
 				/* denies copy function if you do not have access to community to copy */
 				$zpastcommunityid = "";
 			}
 			$zresults = array();
 			if ($zcommunityid == "") {
 				/* create new communityid */
-				$zcommunityid = $wtwiframes->getRandomString(16,1);
+				$zcommunityid = $wtwhandlers->getRandomString(16,1);
 				if (empty($zpastcommunityid) || !isset($zpastcommunityid)) {
 					/* create new community (without access to copy community or if not copying existing community, this creates new community) */
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."communities
 							(communityid,
 							 pastcommunityid,
@@ -68,19 +68,19 @@ class wtwcommunities {
 						values
 							('".$zcommunityid."',
 							 '".$zpastcommunityid."',
-							 '".$wtwiframes->escapeHTML($zcommunityname)."',
+							 '".$wtwhandlers->escapeHTML($zcommunityname)."',
 							 '".$zanalyticsid."',
-							 '".$wtwiframes->userid."',
-							 ".$wtwiframes->checkNumber($zgroundpositiony,0).",
-							 ".$wtwiframes->checkNumber($zwaterpositiony,-1).",
-							 '".$wtwiframes->escapeHTML($zalttag)."',
+							 '".$wtwhandlers->userid."',
+							 ".$wtwhandlers->checkNumber($zgroundpositiony,0).",
+							 ".$wtwhandlers->checkNumber($zwaterpositiony,-1).",
+							 '".$wtwhandlers->escapeHTML($zalttag)."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				} else {
 					/* with access to copy building, this gets all values */
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."communities
 							(communityid,
 							 pastcommunityid,
@@ -108,9 +108,9 @@ class wtwcommunities {
 							 updateuserid)
 						select '".$zcommunityid."' as communityid,
 							 '".$zpastcommunityid."' as pastcommunityid,
-							 '".$wtwiframes->escapeHTML($zcommunityname)."' as communityname,
+							 '".$wtwhandlers->escapeHTML($zcommunityname)."' as communityname,
 							 '' as analyticsid,
-							 '".$wtwiframes->userid."' as userid,
+							 '".$wtwhandlers->userid."' as userid,
 							 positionx,
 							 positiony,
 							 positionz,
@@ -127,15 +127,15 @@ class wtwcommunities {
 							 skydomeid,
 							 alttag,
 							 now() as createdate,
-							 '".$wtwiframes->userid."' as createuserid,
+							 '".$wtwhandlers->userid."' as createuserid,
 							 now() as updatedate,
-							 '".$wtwiframes->userid."' as updateuserid
+							 '".$wtwhandlers->userid."' as updateuserid
 						from ".wtw_tableprefix."communities
 						where communityid='".$zpastcommunityid."';");
 				}
 				/* give user Admin access to their new community */ 
-				$zuserauthorizationid = $wtwiframes->getRandomString(16,1);
-				$wtwiframes->query("
+				$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
+				$wtwhandlers->query("
 					insert into ".wtw_tableprefix."userauthorizations
 						(userauthorizationid,
 						 userid,
@@ -147,29 +147,29 @@ class wtwcommunities {
 						 updateuserid)
 					values
 						('".$zuserauthorizationid."',
-						 '".$wtwiframes->userid."',
+						 '".$wtwhandlers->userid."',
 						 '".$zcommunityid."',
 						 'admin',
 						 now(),
-						 '".$wtwiframes->userid."',
+						 '".$wtwhandlers->userid."',
 						 now(),
-						 '".$wtwiframes->userid."');");
-			} else if ($wtwiframes->checkUpdateAccess($zcommunityid, "", "")) {
+						 '".$wtwhandlers->userid."');");
+			} else if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
 				/* only updates if you have access */
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communities
 					set 
-						communityname='".$wtwiframes->escapeHTML($zcommunityname)."',
+						communityname='".$wtwhandlers->escapeHTML($zcommunityname)."',
 						analyticsid='".$zanalyticsid."',
-						groundpositiony=".$wtwiframes->checkNumber($zgroundpositiony,0).",
-						waterpositiony=".$wtwiframes->checkNumber($zwaterpositiony,-1).",
-						alttag='".$wtwiframes->escapeHTML($zalttag)."',
+						groundpositiony=".$wtwhandlers->checkNumber($zgroundpositiony,0).",
+						waterpositiony=".$wtwhandlers->checkNumber($zwaterpositiony,-1).",
+						alttag='".$wtwhandlers->escapeHTML($zalttag)."',
 						updatedate=now(),
-						updateuserid='".$wtwiframes->userid."'
+						updateuserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."';");
 			}				
 		} catch (Exception $e) {
-			serror("core-functions-class_wtwcommunities.php-saveCommunity=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveCommunity=".$e->getMessage());
 		}
 		if (!empty($zpastcommunityid) && isset($zpastcommunityid) && !empty($newcommunityid) && isset($newcommunityid)) {
 			$copycommunityid = $this->copyCommunity($newcommunityid, $zpastcommunityid);
@@ -181,191 +181,191 @@ class wtwcommunities {
 	}
 
 	public function saveCommunityStartPosition($zcommunityid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->checkUpdateAccess($zcommunityid, "", "")) {
-				$wtwiframes->query("
+			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communities
-					set positionx=".$wtwiframes->checkNumber($zstartpositionx,0).",
-						positiony=".$wtwiframes->checkNumber($zstartpositiony,0).",
-						positionz=".$wtwiframes->checkNumber($zstartpositionz,0).",
-						scalingx=".$wtwiframes->checkNumber($zstartscalingx,1).",
-						scalingy=".$wtwiframes->checkNumber($zstartscalingy,1).",
-						scalingz=".$wtwiframes->checkNumber($zstartscalingz,1).",
-						rotationx=".$wtwiframes->checkNumber($zstartrotationx,0).",
-						rotationy=".$wtwiframes->checkNumber($zstartrotationy,0).",
-						rotationz=".$wtwiframes->checkNumber($zstartrotationz,0).",
+					set positionx=".$wtwhandlers->checkNumber($zstartpositionx,0).",
+						positiony=".$wtwhandlers->checkNumber($zstartpositiony,0).",
+						positionz=".$wtwhandlers->checkNumber($zstartpositionz,0).",
+						scalingx=".$wtwhandlers->checkNumber($zstartscalingx,1).",
+						scalingy=".$wtwhandlers->checkNumber($zstartscalingy,1).",
+						scalingz=".$wtwhandlers->checkNumber($zstartscalingz,1).",
+						rotationx=".$wtwhandlers->checkNumber($zstartrotationx,0).",
+						rotationy=".$wtwhandlers->checkNumber($zstartrotationy,0).",
+						rotationz=".$wtwhandlers->checkNumber($zstartrotationz,0).",
 						updatedate=now(),
-						updateuserid='".$wtwiframes->userid."'
+						updateuserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."';");
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-saveCommunityStartPosition=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveCommunityStartPosition=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 
 	public function saveCommunityGravity($zcommunityid, $zgravity) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->checkUpdateAccess($zcommunityid, "", "")) {
-				$wtwiframes->query("
+			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communities
 					set gravity=".$zgravity.",
 						updatedate=now(),
-						updateuserid='".$wtwiframes->userid."'
+						updateuserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."';");
 			}
 			$zsuccess = true;
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-saveCommunityGravity=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveCommunityGravity=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function deleteCommunity($zcommunityid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->checkAdminAccess($zcommunityid, "", "")) {
+			if ($wtwhandlers->checkAdminAccess($zcommunityid, "", "")) {
 				$zdeleteindex = 2;
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select max(deleted) as maxdeleted 
 					from ".wtw_tableprefix."communitymolds 
 					where communityid='".$zcommunityid."' limit 1;");
 				foreach ($zresults as $zrow) {
-					$zdeleteindex = $wtwiframes->getNumber($zrow["maxdeleted"],2);
+					$zdeleteindex = $wtwhandlers->getNumber($zrow["maxdeleted"],2);
 				}
 				$zdeleteindex += 1;
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."webimages w1 
 						inner join ".wtw_tableprefix."communitymolds cm1
 							on w1.communitymoldid = cm1.communitymoldid
 					set w1.deleted=".$zdeleteindex.",
 						w1.deleteddate=now(),
-						w1.deleteduserid='".$wtwiframes->userid."'
+						w1.deleteduserid='".$wtwhandlers->userid."'
 					where cm1.communityid='".$zcommunityid."'
 						and not cm1.communityid=''
 						and not w1.communitymoldid=''
 						and w1.deleted=0;");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communitiesbuildings
 					set deleted=".$zdeleteindex.",
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."'
 						and not communityid='';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communitymolds
 					set deleted=".$zdeleteindex.",
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones
 					set deleted=".$zdeleteindex.",
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."'
 						and not communityid='';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."automations
 					set deleted=".$zdeleteindex.",
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."'
 						and deleted=0
 						and not communityid='';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."automations t1 
 						inner join ".wtw_tableprefix."automationsteps t2
 							on t1.automationid=t2.automationid 
 					set t2.deleted=".$zdeleteindex.",
 						t2.deleteddate=now(),
-						t2.deleteduserid='".$wtwiframes->userid."'
+						t2.deleteduserid='".$wtwhandlers->userid."'
 					where t1.communityid='".$zcommunityid."'
 						and t2.deleted=0
 						and not t1.communityid='';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communities
 					set deleted=".$zdeleteindex.",
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."'
 						and not communityid='';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."webaliases
 					set deleted=".$zdeleteindex.",
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."'
 						and not communityid='';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."userauthorizations
 					set deleted=".$zdeleteindex.",
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."'
 						and not communityid='';");
 				$zsuccess = true;
 			}
 
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-deleteCommunity=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-deleteCommunity=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function saveCommunityGround($zcommunityid, $ztextureid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->checkUpdateAccess($zcommunityid, "", "")) {
-				$wtwiframes->query("
+			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communities
 					set textureid='".$ztextureid."'
 					where communityid='".$zcommunityid."';");
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-saveCommunityGround=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveCommunityGround=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function saveCommunitySky($zcommunityid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->checkUpdateAccess($zcommunityid, "", "")) {
-				$wtwiframes->query("
+			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communities
 					set skydomeid='".$zskydomeid."',
-						skyinclination=".$wtwiframes->checkNumber($zskyinclination,0).",
-						skyluminance=".$wtwiframes->checkNumber($zskyluminance,1).",
-						skyazimuth=".$wtwiframes->checkNumber($zskyazimuth,.25).",
-						skyrayleigh=".$wtwiframes->checkNumber($zskyrayleigh,2).",
-						skyturbidity=".$wtwiframes->checkNumber($zskyturbidity,10).",
-						skymiedirectionalg=".$wtwiframes->checkNumber($zskymiedirectionalg,.8).",
-						skymiecoefficient=".$wtwiframes->checkNumber($zskymiecoefficient,.008).",
+						skyinclination=".$wtwhandlers->checkNumber($zskyinclination,0).",
+						skyluminance=".$wtwhandlers->checkNumber($zskyluminance,1).",
+						skyazimuth=".$wtwhandlers->checkNumber($zskyazimuth,.25).",
+						skyrayleigh=".$wtwhandlers->checkNumber($zskyrayleigh,2).",
+						skyturbidity=".$wtwhandlers->checkNumber($zskyturbidity,10).",
+						skymiedirectionalg=".$wtwhandlers->checkNumber($zskymiedirectionalg,.8).",
+						skymiecoefficient=".$wtwhandlers->checkNumber($zskymiecoefficient,.008).",
 						updatedate=now(),
-						updateuserid='".$wtwiframes->userid."'
+						updateuserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."';");
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-saveCommunitySky=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveCommunitySky=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 
 	public function copyCommunity($zcommunityid, $zcopycommunityid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
-			if ($wtwiframes->checkUpdateAccess($zcommunityid, "", "") && $wtwiframes->checkUpdateAccess($zcopycommunityid, "", "")) {
+			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "") && $wtwhandlers->checkUpdateAccess($zcopycommunityid, "", "")) {
 				$zskyinclination = 0;
 				$zskyluminance = 0;
 				$zskyazimuth = 0;
@@ -373,7 +373,7 @@ class wtwcommunities {
 				$zskyturbidity = 0;
 				$zskymiedirectionalg = 0;
 				$zskymiecoefficient = 0;
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select * 
 					from ".wtw_tableprefix."communities 
 					where communityid='".$zfromcommunityid."' 
@@ -387,7 +387,7 @@ class wtwcommunities {
 					$zskymiedirectionalg = $zrow["skymiedirectionalg"];
 					$zskymiecoefficient = $zrow["skymiecoefficient"];
 				}
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communities 
 					set skyinclination=".$zskyinclination.",
 						skyluminance=".$zskyluminance.",
@@ -397,7 +397,7 @@ class wtwcommunities {
 						skymiedirectionalg=".$zskymiedirectionalg.",
 						skymiecoefficient=".$zskymiecoefficient."
 					where communityid='".$zcommunityid."';");
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t2.actionzoneid as pastactionzoneid,
 						 '".$zcommunityid."' as communityid,
 						 t2.buildingid,
@@ -435,8 +435,8 @@ class wtwcommunities {
 					where t2.communityid='".$zfromcommunityid."'
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zactionzoneid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zactionzoneid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."actionzones
 							(actionzoneid,
 							 pastactionzoneid,
@@ -488,35 +488,35 @@ class wtwcommunities {
 							 '".$zrow["actionzonetype"]."',
 							 '".$zrow["actionzoneshape"]."',
 							 '".$zrow["movementtype"]."',
-							 ".$wtwiframes->checkNumber($zrow["positionx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positiony"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positionz"],0).",
-							 ".$wtwiframes->checkNumber($zrow["scalingx"],1).",
-							 ".$wtwiframes->checkNumber($zrow["scalingy"],1).",
-							 ".$wtwiframes->checkNumber($zrow["scalingz"],1).",
-							 ".$wtwiframes->checkNumber($zrow["rotationx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["rotationy"],0).",
-							 ".$wtwiframes->checkNumber($zrow["rotationz"],0).",
-							 ".$wtwiframes->checkNumber($zrow["axispositionx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["axispositiony"],0).",
-							 ".$wtwiframes->checkNumber($zrow["axispositionz"],0).",
-							 ".$wtwiframes->checkNumber($zrow["axisrotationx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["axisrotationy"],0).",
-							 ".$wtwiframes->checkNumber($zrow["axisrotationz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positiony"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingx"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingy"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingz"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationy"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["axispositionx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["axispositiony"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["axispositionz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["axisrotationx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["axisrotationy"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["axisrotationz"],0).",
 							 '".$zrow["rotateaxis"]."',
-							 ".$wtwiframes->checkNumber($zrow["rotatedegrees"],90).",
-							 ".$wtwiframes->checkNumber($zrow["rotatedirection"],1).",
-							 ".$wtwiframes->checkNumber($zrow["rotatespeed"],1).",
-							 ".$wtwiframes->checkNumber($zrow["movementdistance"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotatedegrees"],90).",
+							 ".$wtwhandlers->checkNumber($zrow["rotatedirection"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["rotatespeed"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["movementdistance"],0).",
 							 '".$zrow["parentactionzoneid"]."',
 							 '".$zrow["jsfunction"]."',
 							 '".$zrow["jsparameters"]."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t2.connectinggridid as pastconnectinggridid,
 						 t2.parentwebid,
 						 t2.parentwebtype,
@@ -540,8 +540,8 @@ class wtwcommunities {
 						and t2.parentwebid=''
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zconnectinggridid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zconnectinggridid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."connectinggrids
 							(connectinggridid,
 							 pastconnectinggridid,
@@ -573,25 +573,25 @@ class wtwcommunities {
 							 '".$zrow["parentwebtype"]."',
 							 '".$zrow["childwebid"]."',
 							 '".$zrow["childwebtype"]."',
-							 ".$wtwiframes->checkNumber($zrow["positionx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positiony"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positionz"],0).",
-							 ".$wtwiframes->checkNumber($zrow["scalingx"],1).",
-							 ".$wtwiframes->checkNumber($zrow["scalingy"],1).",
-							 ".$wtwiframes->checkNumber($zrow["scalingz"],1).",
-							 ".$wtwiframes->checkNumber($zrow["rotationx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["rotationy"],0).",
-							 ".$wtwiframes->checkNumber($zrow["rotationz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positiony"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingx"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingy"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingz"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationy"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationz"],0).",
 							 '".$zrow["loadactionzoneid"]."',
 							 '".$zrow["unloadactionzoneid"]."',
 							 '".$zrow["attachactionzoneid"]."',
 							 '".$zrow["alttag"]."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t2.connectinggridid as pastconnectinggridid,
 						 '".$zcommunityid,"' as parentwebid,
 						 t2.parentwebtype,
@@ -614,8 +614,8 @@ class wtwcommunities {
 					where t2.parentwebid='".$zfromcommunityid."'
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zconnectinggridid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zconnectinggridid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."connectinggrids
 							(connectinggridid,
 							 pastconnectinggridid,
@@ -647,25 +647,25 @@ class wtwcommunities {
 							 '".$zrow["parentwebtype"]."',
 							 '".$zrow["childwebid"]."',
 							 '".$zrow["childwebtype"]."',
-							 ".$wtwiframes->checkNumber($zrow["positionx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positiony"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positionz"],0).",
-							 ".$wtwiframes->checkNumber($zrow["scalingx"],1).",
-							 ".$wtwiframes->checkNumber($zrow["scalingy"],1).",
-							 ".$wtwiframes->checkNumber($zrow["scalingz"],1).",
-							 ".$wtwiframes->checkNumber($zrow["rotationx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["rotationy"],0).",
-							 ".$wtwiframes->checkNumber($zrow["rotationz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positiony"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingx"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingy"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingz"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationy"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationz"],0).",
 							 '".$zrow["loadactionzoneid"]."',
 							 '".$zrow["unloadactionzoneid"]."',
 							 '".$zrow["attachactionzoneid"]."',
 							 '".$zrow["alttag"]."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t2.automationid as pastautomationid,
 						 t2.automationname,
 						 '".$zcommunityid."' as communityid,
@@ -678,8 +678,8 @@ class wtwcommunities {
 					where t2.communityid='".$zfromcommunityid."'
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zautomationid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zautomationid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."automations
 							(automationid,
 							 pastautomationid,
@@ -705,11 +705,11 @@ class wtwcommunities {
 							 '".$zrow["jsfunction"]."',
 							 '".$zrow["jsparameters"]."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}	
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t2.automationstepid as pastautomationstepid,
 						 t3.automationid as automationid,
 						 t2.step,
@@ -734,8 +734,8 @@ class wtwcommunities {
 							on t4.pastactionzoneid = t2.actionzoneid
 					where t2.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zautomationstepid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zautomationstepid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."automationsteps
 							(automationstepid,
 							 pastautomationstepid,
@@ -757,21 +757,21 @@ class wtwcommunities {
 							('".$zautomationstepid."',
 							 '".$zrow["pastautomationstepid"]."',
 							 '".$zrow["automationid"]."',
-							 ".$wtwiframes->checkNumber($zrow["step"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["step"],1).",
 							 '".$zrow["automationtype"]."',
 							 '".$zrow["actionzoneid"]."',
-							 ".$wtwiframes->checkNumber($zrow["actionzonestatus"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["actionzonestatus"],0).",
 							 '".$zrow["conditionoperator"]."',
 							 '".$zrow["conditionstatus"]."',
 							 '".$zrow["conditionvalue"]."',
 							 '".$zrow["jsfunction"]."',
 							 '".$zrow["jsparameters"]."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}	
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t3.communitymoldid as pastcommunitymoldid,
 						 '".$zcommunityid."' as communityid,
 						 t3.loadactionzoneid,
@@ -848,8 +848,8 @@ class wtwcommunities {
 					where t3.communityid='".$zfromcommunityid."'
 						and t3.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zcommunitymoldid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zcommunitymoldid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."communitymolds
 						   (communitymoldid,
 							pastcommunitymoldid,
@@ -935,24 +935,24 @@ class wtwcommunities {
 							'".$zrow["loadactionzoneid"]."',
 							'".$zrow["shape"]."',
 							'".$zrow["covering"]."',
-							".$wtwiframes->checkNumber($zrow["positionx"],0).",
-							".$wtwiframes->checkNumber($zrow["positiony"],0).",
-							".$wtwiframes->checkNumber($zrow["positionz"],0).",
-							".$wtwiframes->checkNumber($zrow["scalingx"],1).",
-							".$wtwiframes->checkNumber($zrow["scalingy"],1).",
-							".$wtwiframes->checkNumber($zrow["scalingz"],1).",
-							".$wtwiframes->checkNumber($zrow["rotationx"],0).",
-							".$wtwiframes->checkNumber($zrow["rotationy"],0).",
-							".$wtwiframes->checkNumber($zrow["rotationz"],0).",
-							".$wtwiframes->checkNumber($zrow["special1"],0).",
-							".$wtwiframes->checkNumber($zrow["special2"],0).",
-							".$wtwiframes->checkNumber($zrow["uoffset"],0).",
-							".$wtwiframes->checkNumber($zrow["voffset"],0).",
-							".$wtwiframes->checkNumber($zrow["uscale"],0).",
-							".$wtwiframes->checkNumber($zrow["vscale"],0).",
+							".$wtwhandlers->checkNumber($zrow["positionx"],0).",
+							".$wtwhandlers->checkNumber($zrow["positiony"],0).",
+							".$wtwhandlers->checkNumber($zrow["positionz"],0).",
+							".$wtwhandlers->checkNumber($zrow["scalingx"],1).",
+							".$wtwhandlers->checkNumber($zrow["scalingy"],1).",
+							".$wtwhandlers->checkNumber($zrow["scalingz"],1).",
+							".$wtwhandlers->checkNumber($zrow["rotationx"],0).",
+							".$wtwhandlers->checkNumber($zrow["rotationy"],0).",
+							".$wtwhandlers->checkNumber($zrow["rotationz"],0).",
+							".$wtwhandlers->checkNumber($zrow["special1"],0).",
+							".$wtwhandlers->checkNumber($zrow["special2"],0).",
+							".$wtwhandlers->checkNumber($zrow["uoffset"],0).",
+							".$wtwhandlers->checkNumber($zrow["voffset"],0).",
+							".$wtwhandlers->checkNumber($zrow["uscale"],0).",
+							".$wtwhandlers->checkNumber($zrow["vscale"],0).",
 							'".$zrow["uploadobjectid"]."',
-							".$wtwiframes->checkNumber($zrow["receiveshadows"],0).",
-							".$wtwiframes->checkNumber($zrow["graphiclevel"],0).",
+							".$wtwhandlers->checkNumber($zrow["receiveshadows"],0).",
+							".$wtwhandlers->checkNumber($zrow["graphiclevel"],0).",
 							'".$zrow["textureid"]."',
 							'".$zrow["texturebumpid"]."',
 							'".$zrow["texturehoverid"]."',
@@ -969,45 +969,45 @@ class wtwcommunities {
 							'".$zrow["soundid"]."',
 							'".$zrow["soundname"]."',
 							'".$zrow["soundattenuation"]."',
-							".$wtwiframes->checkNumber($zrow["soundloop"],1).",
-							".$wtwiframes->checkNumber($zrow["soundmaxdistance"],100).",
-							".$wtwiframes->checkNumber($zrow["soundrollofffactor"],1).",
-							".$wtwiframes->checkNumber($zrow["soundrefdistance"],1).",
-							".$wtwiframes->checkNumber($zrow["soundconeinnerangle"],90).",
-							".$wtwiframes->checkNumber($zrow["soundconeouterangle"],180).",
-							".$wtwiframes->checkNumber($zrow["soundconeoutergain"],1).",
+							".$wtwhandlers->checkNumber($zrow["soundloop"],1).",
+							".$wtwhandlers->checkNumber($zrow["soundmaxdistance"],100).",
+							".$wtwhandlers->checkNumber($zrow["soundrollofffactor"],1).",
+							".$wtwhandlers->checkNumber($zrow["soundrefdistance"],1).",
+							".$wtwhandlers->checkNumber($zrow["soundconeinnerangle"],90).",
+							".$wtwhandlers->checkNumber($zrow["soundconeouterangle"],180).",
+							".$wtwhandlers->checkNumber($zrow["soundconeoutergain"],1).",
 							'".$zrow["webtext"]."',
 							'".$zrow["webstyle"]."',
-							".$wtwiframes->checkNumber($zrow["opacity"],100).",
+							".$wtwhandlers->checkNumber($zrow["opacity"],100).",
 							'".$zrow["sideorientation"]."',
-							".$wtwiframes->checkNumber($zrow["billboard"],0).",
-							".$wtwiframes->checkNumber($zrow["waterreflection"],0).",
-							".$wtwiframes->checkNumber($zrow["subdivisions"],12).",
-							".$wtwiframes->checkNumber($zrow["minheight"],0).",
-							".$wtwiframes->checkNumber($zrow["maxheight"],30).",
-							".$wtwiframes->checkNumber($zrow["checkcollisions"],1).",
-							".$wtwiframes->checkNumber($zrow["ispickable"],1).",        
+							".$wtwhandlers->checkNumber($zrow["billboard"],0).",
+							".$wtwhandlers->checkNumber($zrow["waterreflection"],0).",
+							".$wtwhandlers->checkNumber($zrow["subdivisions"],12).",
+							".$wtwhandlers->checkNumber($zrow["minheight"],0).",
+							".$wtwhandlers->checkNumber($zrow["maxheight"],30).",
+							".$wtwhandlers->checkNumber($zrow["checkcollisions"],1).",
+							".$wtwhandlers->checkNumber($zrow["ispickable"],1).",        
 							'".$zrow["actionzoneid"]."',
 							'".$zrow["csgmoldid"]."',
 							'".$zrow["csgaction"]."',
 							'".$zrow["alttag"]."',
 							'".$zrow["jsfunction"]."',
 							'".$zrow["jsparameters"]."',
-							".$wtwiframes->checkNumber($zrow["diffusecolorr"],1).",
-							".$wtwiframes->checkNumber($zrow["diffusecolorg"],1).",
-							".$wtwiframes->checkNumber($zrow["diffusecolorb"],1).",
-							".$wtwiframes->checkNumber($zrow["specularcolorr"],1).",
-							".$wtwiframes->checkNumber($zrow["specularcolorg"],1).",
-							".$wtwiframes->checkNumber($zrow["specularcolorb"],1).",
-							".$wtwiframes->checkNumber($zrow["emissivecolorr"],1).",
-							".$wtwiframes->checkNumber($zrow["emissivecolorg"],1).",
-							".$wtwiframes->checkNumber($zrow["emissivecolorb"],1).",
+							".$wtwhandlers->checkNumber($zrow["diffusecolorr"],1).",
+							".$wtwhandlers->checkNumber($zrow["diffusecolorg"],1).",
+							".$wtwhandlers->checkNumber($zrow["diffusecolorb"],1).",
+							".$wtwhandlers->checkNumber($zrow["specularcolorr"],1).",
+							".$wtwhandlers->checkNumber($zrow["specularcolorg"],1).",
+							".$wtwhandlers->checkNumber($zrow["specularcolorb"],1).",
+							".$wtwhandlers->checkNumber($zrow["emissivecolorr"],1).",
+							".$wtwhandlers->checkNumber($zrow["emissivecolorg"],1).",
+							".$wtwhandlers->checkNumber($zrow["emissivecolorb"],1).",
 							now(),
-							'".$wtwiframes->userid."',
+							'".$wtwhandlers->userid."',
 							now(),
-							'".$wtwiframes->userid."');");
+							'".$wtwhandlers->userid."');");
 				}
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t4.webimageid as pastwebimageid,
 						 '' as thingmoldid,
 						 '' as buildingmoldid,
@@ -1033,8 +1033,8 @@ class wtwcommunities {
 							and t5.deleted=0
 							and t4.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zwebimageid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zwebimageid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."webimages
 							(webimageid,
 							 pastwebimageid,
@@ -1059,7 +1059,7 @@ class wtwcommunities {
 							 '".$zrow["thingmoldid"]."',
 							 '".$zrow["buildingmoldid"]."',
 							 '".$zrow["communitymoldid"]."',
-							 ".$wtwiframes->checkNumber($zrow["imageindex"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["imageindex"],0).",
 							 '".$zrow["imageid"]."',
 							 '".$zrow["imagehoverid"]."',
 							 '".$zrow["imageclickid"]."',
@@ -1068,11 +1068,11 @@ class wtwcommunities {
 							 userid,
 							 '".$zrow["alttag"]."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}	
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t6.communitymoldid as moldid,
 						 t4.pathnumber,
 						 t4.sorder,
@@ -1092,8 +1092,8 @@ class wtwcommunities {
 						and t5.deleted=0
 						and t4.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zmoldpointid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zmoldpointid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."moldpoints
 							(moldpointid,
 							 moldid,
@@ -1115,26 +1115,26 @@ class wtwcommunities {
 							 ".$zrow["positiony"].",
 							 ".$zrow["positionz"].",
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}	
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communitymolds
 					set actionzoneid=''
 					where actionzoneid is null 
 						and communityid='".$zcommunityid."';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communitymolds
 					set csgmoldid=''
 					where csgmoldid is null 
 						and communityid='".$zcommunityid."';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones
 					set attachmoldid=''
 					where attachmoldid is null 
 						and communityid='".$zcommunityid."' and (not communityid='');");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communitymolds t1 
 					left join (select * from ".wtw_tableprefix."communitymolds 
 							where communityid='".$zcommunityid."') t2
@@ -1143,7 +1143,7 @@ class wtwcommunities {
 					where t1.communityid='".$zcommunityid."'
 						and (not t1.csgmoldid='')
 						and (not t2.communitymoldid is null);");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communitymolds t1 
 					left join (select * from ".wtw_tableprefix."actionzones 
 							where communityid='".$zcommunityid."' 
@@ -1153,7 +1153,7 @@ class wtwcommunities {
 					where t1.communityid='".$zcommunityid."'
 						and (not t1.actionzoneid='')
 						and (not t2.actionzoneid is null);");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communitymolds t1 
 					left join (select * from ".wtw_tableprefix."actionzones 
 							where communityid='".$zcommunityid."' 
@@ -1163,7 +1163,7 @@ class wtwcommunities {
 					where t1.communityid='".$zcommunityid."'
 						and (not t1.loadactionzoneid='')
 						and (not t2.actionzoneid is null);");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1
 					left join (select * from ".wtw_tableprefix."communitymolds 
 							where communityid='".$zcommunityid."') t2
@@ -1172,7 +1172,7 @@ class wtwcommunities {
 					where t1.communityid='".$zcommunityid."'
 						and (not t1.attachmoldid='')
 						and (not t2.communitymoldid is null);");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1
 					left join (select * from ".wtw_tableprefix."actionzones 
 							where communityid='".$zcommunityid."' and (not communityid='')) t2
@@ -1181,7 +1181,7 @@ class wtwcommunities {
 					where t1.communityid='".$zcommunityid."'
 						and (not t1.parentactionzoneid='')
 						and (not t2.actionzoneid is null);");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1
 					left join (select * from ".wtw_tableprefix."actionzones 
 							where communityid='".$zcommunityid."' and (not communityid='')) t2
@@ -1190,7 +1190,7 @@ class wtwcommunities {
 					where t1.communityid='".$zcommunityid."'
 						and (not t1.loadactionzoneid='')
 						and (not t2.actionzoneid is null);");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."automations t1
 					left join (select * from ".wtw_tableprefix."actionzones 
 							where communityid='".$zcommunityid."' and deleted=0) t2
@@ -1198,7 +1198,7 @@ class wtwcommunities {
 					set t1.loadactionzoneid=t2.actionzoneid
 					where t1.communityid='".$zcommunityid."'
 						and (not t1.loadactionzoneid='');");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."connectinggrids t1
 					left join (select * from ".wtw_tableprefix."actionzones 
 							where communityid='".$zcommunityid."' 
@@ -1209,7 +1209,7 @@ class wtwcommunities {
 					where t1.childwebid='".$zcommunityid."'
 						and t1.parentwebid=''
 						and (not t1.loadactionzoneid='');");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."connectinggrids t1
 					left join (select * from ".wtw_tableprefix."actionzones 
 							where communityid='".$zcommunityid."' 
@@ -1220,7 +1220,7 @@ class wtwcommunities {
 					where t1.childwebid='".$zcommunityid."'
 						and t1.parentwebid=''
 						and (not t1.unloadactionzoneid=''); ");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."connectinggrids t1
 					left join (select * from ".wtw_tableprefix."actionzones 
 							where communityid='".$zcommunityid."' 
@@ -1232,19 +1232,18 @@ class wtwcommunities {
 						and (not t1.attachactionzoneid='');");
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-copyCommunity=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-copyCommunity=".$e->getMessage());
 		}
 		return $zcommunityid;
 	}
 	
 	public function importCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zcommunityanalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			/* ini_set('max_execution_time', 300); */
-			if (!empty($wtwiframes->getSessionUserID())) {
-				echo "<script>parent.WTW.updateProgressBar(75,100);</script>";
-				if ($wtwiframes->keyExists(wtw_tableprefix.'communities', 'communityid', $zcommunityid) == false) {
-					$wtwiframes->query("
+			if (!empty($wtwhandlers->getSessionUserID())) {
+				if ($wtwhandlers->keyExists(wtw_tableprefix.'communities', 'communityid', $zcommunityid) == false) {
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."communities
 							(communityid, 
 							 pastcommunityid, 
@@ -1304,13 +1303,13 @@ class wtwcommunities {
 							 ".$zgroundpositiony.", 
 							 ".$zwaterpositiony.", 
 							 '".$zalttag."',
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
-					$zuserauthorizationid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+							 '".$wtwhandlers->userid."');");
+					$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."userauthorizations
 							(userauthorizationid,
 							 userid,
@@ -1324,21 +1323,21 @@ class wtwcommunities {
 							 updateuserid)
 						values
 							('".$zuserauthorizationid."',
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 '".$zcommunityid."',
 							 '',
 							 '',
 							 'admin',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
-					$zwebaliasid = $wtwiframes->getRandomString(16,1);
+							 '".$wtwhandlers->userid."');");
+					$zwebaliasid = $wtwhandlers->getRandomString(16,1);
 					$forcehttps = "0";
-					if ($wtwiframes->protocol == "https://") {
+					if ($wtwhandlers->protocol == "https://") {
 						$forcehttps = "1";
 					}
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."webaliases
 							(webaliasid,
 							 domainname,
@@ -1351,25 +1350,24 @@ class wtwcommunities {
 							 updateuserid)
 						values
 							('".$zwebaliasid."',
-							 '".$wtwiframes->domainname."',
+							 '".$wtwhandlers->domainname."',
 							 '".$zcommunityid."',
-							 '".$wtwiframes->domainname."',
+							 '".$wtwhandlers->domainname."',
 							 ".$forcehttps.",
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
 			}
-			echo "<script>parent.WTW.updateProgressBar(95,100);</script>";
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-importCommunity=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-importCommunity=".$e->getMessage());
 		}
 		return $zcommunityid;
 	}
 
 	public function shareCommunityTemplate($zcommunityid, $ztemplatename, $zdescription, $ztags) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
 			if ($conn->connect_error) {
@@ -1387,7 +1385,7 @@ class wtwcommunities {
 			}
 			$conn->close();
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-shareCommunityTemplate=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-shareCommunityTemplate=".$e->getMessage());
 		}
 	}		
 }

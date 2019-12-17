@@ -1,8 +1,7 @@
 <?php
-	if (file_exists("/config/wtw_config.php")) {
-		require_once('./config/wtw_config.php');
-	}
-	require_once('./core/functions/class_wtwuser.php');
+if (file_exists("/config/wtw_config.php")) {
+	require_once('./config/wtw_config.php');
+}
 class wtw {
 	protected static $_instance = null;
 	
@@ -14,12 +13,14 @@ class wtw {
 	}
 	
 	public function __construct() {
-
+		$this->rootpath = str_replace('\core\functions','',dirname(__FILE__));
+		define("wtw_rootpath", $this->rootpath);
+		require_once(wtw_rootpath.'/core/functions/class_wtwuser.php');
 	}	
 	
-	public $version = "3.1.1";
-	public $dbversion = "1.0.2";
-	public $versiondate = "2019-10-29";
+	public $version = "3.2.0";
+	public $dbversion = "1.0.4";
+	public $versiondate = "2019-12-16";
 	public $serverinstanceid = "";
 	public $rootpath = "";
 	public $contentpath = "";
@@ -157,13 +158,12 @@ class wtw {
 			if (isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
 				$this->uri = trim(strtolower($_SERVER['REQUEST_URI']));
 			}
-			$this->rootpath = str_replace('\core\functions','',dirname(__FILE__));
 			if (defined('wtw_contentpath')) {
 				$this->contentpath = wtw_contentpath;
 				$wtwuser->contentpath = wtw_contentpath;
 			} else {
-				$this->contentpath = $this->rootpath."\\content";
-				$wtwuser->contentpath = $this->rootpath."\\content";
+				$this->contentpath = wtw_rootpath."/content";
+				$wtwuser->contentpath = wtw_rootpath."/content";
 			}
 			if (defined('wtw_contenturl')) {
 				$this->contenturl = $this->domainurl.wtw_contenturl;
@@ -195,16 +195,16 @@ class wtw {
 					$this->building = "";
 					$this->thing = "";
 					if (trim($pathdef[1]) == "connect") {
-						require_once('./core/functions/class_wtwpluginloader.php');
+						require_once(wtw_rootpath.'/core/functions/class_wtwpluginloader.php');
 						global $wtwpluginloader;
 						$wtwpluginloader->loadConnectURL();
 					} if (trim($pathdef[1]) == "core") {
 						if (isset($pathdef[2]) && !empty($pathdef[2])) {
-							require_once('./core/functions/class_wtwpluginloader.php');
+							require_once(wtw_rootpath.'/core/functions/class_wtwpluginloader.php');
 							global $wtwpluginloader;
 							switch (trim($pathdef[2])) {
-								case "iframes":
-									$wtwpluginloader->loadIFramesURL();
+								case "handlers":
+									$wtwpluginloader->loadHandlersURL();
 									break;
 							}
 						}
@@ -237,31 +237,9 @@ class wtw {
 			} else {
 				if (defined("wtw_defaultdomain")) {
 					if ($this->domainname == strtolower(wtw_defaultdomain)) {
-						if (defined("wtw_defaultcommunity") && defined("wtw_defaultbuilding") && defined("wtw_defaultthing")) {
-							$this->community = wtw_defaultcommunity;
-							$this->building = wtw_defaultbuilding;
-							$this->thing = wtw_defaultthing;
-						} else if (defined("wtw_defaultcommunity") && defined("wtw_defaultbuilding")) {
-							$this->community = wtw_defaultcommunity;
-							$this->building = wtw_defaultbuilding;
-							$this->thing = "";
-						} else if (defined("wtw_defaultcommunity")) {
-							$this->community = wtw_defaultcommunity;
-							$this->building = "";
-							$this->thing = "";
-						} else if (defined("wtw_defaultbuilding")) {
-							$this->community = "";
-							$this->building = wtw_defaultbuilding;
-							$this->thing = "";
-						} else if (defined("wtw_defaultthing")) {
-							$this->community = "";
-							$this->building = "";
-							$this->thing = wtw_defaultthing;
-						} else {
-							$this->community = "";
-							$this->building = "";
-							$this->thing = "";
-						}
+						$this->community = "";
+						$this->building = "";
+						$this->thing = "";
 					}
 				}
 			}
@@ -355,14 +333,14 @@ class wtw {
 				$zsetupstep = 1;
 				if ($_SERVER['REQUEST_METHOD']=='POST') {
 					if (!file_exists("/config")) {
-						mkdir($this->rootpath.'/config', 0777);
+						mkdir(wtw_rootpath.'/config', 0777);
 					}
 					$server = $_POST["wtw_tserver"];
 					$database = $_POST["wtw_tdatabase"];
 					$dbuser = $_POST["wtw_tdbuser"];
 					$dbpassword = $_POST["wtw_tdbpassword"];
 					$prefix = $_POST["wtw_tprefix"];
-					$contentpath = addslashes($this->rootpath."\\content");
+					$contentpath = addslashes(wtw_rootpath."/content");
 					$contenturl = "/content";
 					$zdomainname = "";
 					if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
@@ -381,7 +359,7 @@ class wtw {
 						define("wtw_defaultdomain", $zdomainname);
 						$this->contentpath = $contentpath;
 						$this->contenturl = $this->domainurl.$contenturl;
-						$cfile = fopen($this->rootpath."/config/wtw_config.php","wb");
+						$cfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
 						fwrite($cfile,"<?php\r\n");
 						fwrite($cfile,"    define(\"wtw_serverinstanceid\", \"".$this->serverinstanceid."\");\r\n");
 						fwrite($cfile,"    define(\"wtw_dbserver\", \"".$server."\");\r\n");
@@ -393,35 +371,6 @@ class wtw {
 						fwrite($cfile,"    define(\"wtw_contentpath\", \"".$contentpath."\");\r\n");
 						fwrite($cfile,"    define(\"wtw_contenturl\", \"".$contenturl."\");\r\n\r\n");
 						fwrite($cfile,"    define(\"wtw_defaultdomain\", \"".$zdomainname."\");\r\n\r\n");
-						fwrite($cfile,"    # When someone browses your site by just the domain name...\r\n");
-						fwrite($cfile,"    # wtw_defaultcommunity, wtw_defaultbuilding, and wtw_defaultthing are used to set the home page for your site.\r\n");
-						fwrite($cfile,"    # Each path segment also determines which starting point the avatars will use.\r\n");
-						fwrite($cfile,"    #\r\n");
-						fwrite($cfile,"    # Examples:\r\n");
-						fwrite($cfile,"    #\r\n");
-						fwrite($cfile,"    #   define(\"wtw_defaultcommunity\", \"mycommunity\"); \r\n");
-						fwrite($cfile,"    #     works like:     https://3d.yourdomain.com/mycommunity\r\n");
-						fwrite($cfile,"    #     or              https://3d.yourdomain.com/communities/mycommunity\r\n");
-						fwrite($cfile,"    #     sets the starting point as the community starting point\r\n");
-						fwrite($cfile,"    #\r\n");
-						fwrite($cfile,"    #   define(\"wtw_defaultbuilding\", \"mybuilding\");\r\n");
-						fwrite($cfile,"    #     works like:     https://3d.yourdomain.com/buildings/mybuilding   (loads only the building)\r\n");
-						fwrite($cfile,"    #     sets the starting point as the building starting point without a community\r\n");
-						fwrite($cfile,"    # \r\n");
-						fwrite($cfile,"    #   define(\"wtw_defaultthing\", \"mything\");\r\n");
-						fwrite($cfile,"    #     works like:     https://3d.yourdomain.com/things/mything   (loads only the thing)\r\n");
-						fwrite($cfile,"    #     sets the starting point as the thing starting point without a community or building\r\n");
-						fwrite($cfile,"    # \r\n");
-						fwrite($cfile,"    #   if wtw_defaultcommunity and wtw_defaultbuilding are set:\r\n");
-						fwrite($cfile,"    #     works like:     https://3d.yourdomain.com/mycommunity/mybuilding\r\n");
-						fwrite($cfile,"    #     sets the starting point as the building starting point in the community\r\n");
-						fwrite($cfile,"    #\r\n");
-						fwrite($cfile,"    #   if wtw_defaultcommunity, wtw_defaultbuilding, and wtw_defaultthing are set:\r\n");
-						fwrite($cfile,"    #     works like:     https://3d.yourdomain.com/mycommunity/mybuilding/mything\r\n");
-						fwrite($cfile,"    #     sets the starting point as the thing starting point in the building in the community\r\n\r\n");
-	 	 				fwrite($cfile,"    #define(\"wtw_defaultcommunity\", \"mycommunity\");\r\n");
-						fwrite($cfile,"    #define(\"wtw_defaultbuilding\", \"mybuilding\");\r\n");
-						fwrite($cfile,"    #define(\"wtw_defaultthing\", \"mything\");\r\n\r\n");
 						fwrite($cfile,"?>");
 						fclose($cfile);
 						$zsetupstep = 0;
@@ -439,7 +388,7 @@ class wtw {
 					$lines = file("/config/wtw_config.php");
 					$last = sizeof($lines) - 1 ; 
 					unset($lines[$last]); 
-					$cfile = fopen($this->rootpath."/config/wtw_config.php","wb");
+					$cfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
 					fwrite($cfile, implode('', $lines));
 					fwrite($cfile,"    define(\"wtw_serverinstanceid\", \"".$this->serverinstanceid."\");\r\n");
 					fwrite($cfile,"?>");
@@ -447,9 +396,9 @@ class wtw {
 				}
 			}
 			if ($zsetupstep == 0) {
-				require_once('./core/functions/class_wtwdb.php');
-				require_once('./core/functions/class_wtwusers.php');
-				require_once('./core/functions/class_wtwpluginloader.php');
+				require_once(wtw_rootpath.'/core/functions/class_wtwdb.php');
+				require_once(wtw_rootpath.'/core/functions/class_wtwusers.php');
+				require_once(wtw_rootpath.'/core/functions/class_wtwpluginloader.php');
 				$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
 				if ($conn->connect_error) {
 					$zsetupstep = 2;
@@ -484,7 +433,7 @@ class wtw {
 						} catch (Exception $e){}
 					}
 					if ($zsetupstep == 3 || ($confirm == "YES" && $zsetupstep == 4)) {
-						require_once('./core/functions/class_wtwtables.php');
+						require_once(wtw_rootpath.'/core/functions/class_wtwtables.php');
 						global $wtwtables;
 						$wtwtables->databaseTableDefinitions();
 						$zsetupstep = 0;
@@ -504,7 +453,7 @@ class wtw {
 				if ($this->pagename == "admin.php") {
 					$zdbversion = $wtwdb->getSetting("wtw_dbversion");
 					if ($zdbversion != $this->dbversion) {
-						require_once('./core/functions/class_wtwtables.php');
+						require_once(wtw_rootpath.'/core/functions/class_wtwtables.php');
 						global $wtwtables;
 						$wtwtables->databaseTableDefinitions();
 					}
@@ -536,7 +485,7 @@ class wtw {
 			if ($zsetupstep == 3) {
 				if ($_SERVER['REQUEST_METHOD']=='POST') {
 					try {
-						require_once('./core/functions/class_wtwtables.php');
+						require_once(wtw_rootpath.'/core/functions/class_wtwtables.php');
 						global $wtwusers;
 						global $wtwtables;
 						$zsitename = $_POST["wtw_tsitename"];
@@ -550,7 +499,7 @@ class wtw {
 							$lines = file("/config/wtw_config.php");
 							$last = sizeof($lines) - 1 ; 
 							unset($lines[$last]); 
-							$cfile = fopen($this->rootpath."/config/wtw_config.php","wb");
+							$cfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
 							fwrite($cfile, implode('', $lines));
 							fwrite($cfile,"    define(\"wtw_defaultsitename\", \"".$zsitename."\");\r\n");
 							fwrite($cfile,"    define(\"wtw_googleanalytics\", \"".$zanalytics."\");\r\n");
@@ -758,7 +707,7 @@ class wtw {
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Installing Your First 3D Community Scene</h3>";
 					echo "<div id=\"wtw_progresstext\" class=\"wtw-iprogresstext\">&nbsp;</div>";
 					echo "<div class=\"wtw-iprogressdiv\"><div id=\"wtw_progressbar\" class=\"wtw-iprogressbar\"></div></div>";
-					echo "</div><div id=\"wtw_iframesdiv\" style=\"display:none;visibility:hidden;\"></div></div><br /></div><br /></form>";
+					echo "</div></div><br /></div><br /></form>";
 					echo "<script>";
 					echo "WTW.communitySearch('');";
 					echo "</script></body></html>";
@@ -786,7 +735,7 @@ class wtw {
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Installing Your First 3D Building Scene</h3>";
 					echo "<div id=\"wtw_progresstext\" class=\"wtw-iprogresstext\">&nbsp;</div>";
 					echo "<div class=\"wtw-iprogressdiv\"><div id=\"wtw_progressbar\" class=\"wtw-iprogressbar\"></div></div>";
-					echo "</div><div id=\"wtw_iframesdiv\" style=\"display:none;visibility:hidden;\"></div></div><br /></div><br /></form>";
+					echo "</div></div><br /></div><br /></form>";
 					echo "<script>";
 					echo "WTW.buildingSearch('');";
 					echo "</script></body></html>";
@@ -1468,12 +1417,12 @@ class wtw {
 				$zresults = $wtwdb->query("
 					select 
 						case when u2.filepath = '' or u2.filepath is null 
-							then '".$this->domainurl."/content/communities/".$this->communityid."/snapshots/defaultcommunitysm.png'
+							then '".$this->domainurl."/content/uploads/communities/".$this->communityid."/snapshots/defaultcommunitysm.png'
 							else u2.filepath
 							end as previewpath, 
 						case when u2.filepath = '' or u2.filepath is null 
-							then '\\communities\\".$this->communityid."\\snapshots\\defaultcommunitysm.png'
-							else '\\previews\\communities\\".$this->communityid."-snapshot.png'
+							then '/uploads/communities/".$this->communityid."/snapshots/defaultcommunitysm.png'
+							else ''
 							end as testpreviewpath, 
 						case when u2.filepath = '' or u2.filepath is null 
 							then u1.imagewidth
@@ -1495,12 +1444,12 @@ class wtw {
 				$zresults = $wtwdb->query("
 					select 
 						case when u2.filepath = '' or u2.filepath is null 
-							then '".$this->domainurl."/content/buildings/".$this->buildingid."/snapshots/defaultbuildingsm.png'
+							then '".$this->domainurl."/content/uploads/buildings/".$this->buildingid."/snapshots/defaultbuildingsm.png'
 							else u2.filepath
 							end as previewpath, 
 						case when u2.filepath = '' or u2.filepath is null 
-							then '\\buildings\\".$this->buildingid."\\snapshots\\defaultbuildingsm.png'
-							else '\\previews\\buildings\\".$this->buildingid."-snapshot.png'
+							then '/uploads/buildings/".$this->buildingid."/snapshots/defaultbuildingsm.png'
+							else ''
 							end as testpreviewpath, 
 						case when u2.filepath = '' or u2.filepath is null 
 							then u1.imagewidth
@@ -1522,12 +1471,12 @@ class wtw {
 				$zresults = $wtwdb->query("
 					select 
 						case when u2.filepath = '' or u2.filepath is null 
-							then '".$this->domainurl."/content/things/".$this->thingid."/snapshots/defaultthingsm.png'
+							then '".$this->domainurl."/content/uploads/things/".$this->thingid."/snapshots/defaultthingsm.png'
 							else u2.filepath
 							end as previewpath, 
 						case when u2.filepath = '' or u2.filepath is null 
-							then '\\things\\".$this->thingid."\\snapshots\\defaultthingsm.png'
-							else '\\previews\\things\\".$this->thingid."-snapshot.png'
+							then '/uploads/things/".$this->thingid."/snapshots/defaultthingsm.png'
+							else ''
 							end as testpreviewpath, 
 						case when u2.filepath = '' or u2.filepath is null 
 							then u1.imagewidth
@@ -1791,7 +1740,6 @@ class wtw {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tconnectinggridname\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_eulaversion\" value=\"0\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_eulaacceptdate\" />\r\n";
-			$hiddenfields .= "<div id=\"wtw_iframesdiv\" class=\"wtw-hiddenform\"></div>\r\n";
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadHiddenFields=".$e->getMessage());
 		}

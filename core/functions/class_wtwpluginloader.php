@@ -24,13 +24,13 @@ class wtwpluginloader {
 		$zresponse = array();
 		try {
 			$i = 0;
-			$zfilepath = $zcontentpath."\\plugins";
+			$zfilepath = $zcontentpath."/plugins";
 			if (file_exists($zfilepath)) {
 				$zfolders = new DirectoryIterator($zfilepath);
 				foreach ($zfolders as $zfileinfo) {
 					if ($zfileinfo->isDir() && !$zfileinfo->isDot()) {
 						$zfolder = $zfileinfo->getFilename();
-						$zpluginphp = $zfilepath."\\".$zfolder."\\".$zfolder.".php";
+						$zpluginphp = $zfilepath."/".$zfolder."/".$zfolder.".php";
 						if (file_exists($zpluginphp)) {
 							$zresponse[$i] = $this->getPluginPHP($zcontentpath, $zpluginphp, $zfolder, $zload);
 							$i += 1;
@@ -93,7 +93,7 @@ class wtwpluginloader {
 				if (!empty($zpluginname) && isset($zpluginname)) {
 					$zresponse['active'] = $this->getPluginActive($zpluginname);
 					if ($zresponse['active'] == "1" && $zload == 1) {
-						require_once($zcontentpath."\\plugins\\".$zpluginname."\\".$zpluginname.".php");
+						require_once($zcontentpath."/plugins/".$zpluginname."/".$zpluginname.".php");
 					}
 				}
 			}
@@ -184,19 +184,19 @@ class wtwpluginloader {
 	}	
 
 	public function updateWalkTheWeb($zpluginname, $zversion, $zupdateurl) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			$ztempfilename = $zpluginname.str_replace(".","-",$zversion).".zip";
-			$ztempfilepath = $wtwiframes->contentpath."\\system\\updates\\".$zpluginname."\\";
-			if (!file_exists($wtwiframes->contentpath."\\system")) {
-				mkdir($wtwiframes->contentpath."\\system", 0777);
+			$ztempfilepath = $wtwhandlers->contentpath."/system/updates/".$zpluginname."/";
+			if (!file_exists($wtwhandlers->contentpath."/system")) {
+				mkdir($wtwhandlers->contentpath."/system", 0777);
 			}
-			if (!file_exists($wtwiframes->contentpath."\\system\\updates")) {
-				mkdir($wtwiframes->contentpath."\\system\\updates", 0777);
+			if (!file_exists($wtwhandlers->contentpath."/system/updates")) {
+				mkdir($wtwhandlers->contentpath."/system/updates", 0777);
 			}
-			if (!file_exists($wtwiframes->contentpath."\\system\\updates\\".$zpluginname)) {
-				mkdir($wtwiframes->contentpath."\\system\\updates\\".$zpluginname, 0777);
+			if (!file_exists($wtwhandlers->contentpath."/system/updates/".$zpluginname)) {
+				mkdir($wtwhandlers->contentpath."/system/updates/".$zpluginname, 0777);
 			}
 			if(ini_get('allow_url_fopen') ) {
 				$zdata1 = file_get_contents($zupdateurl);
@@ -215,22 +215,22 @@ class wtwpluginloader {
 				$res = $zip->open($ztempfilepath.$ztempfilename);
 				if ($res === true) {
 					if ($zpluginname == "walktheweb") {
-						$zip->extractTo($wtwiframes->rootpath);
+						$zip->extractTo($wtwhandlers->rootpath);
 					} else {
-						$zip->extractTo($wtwiframes->contentpath."\\plugins");
+						$zip->extractTo($wtwhandlers->contentpath."/plugins");
 					}
 					$zip->close();
 					$zsuccess = true;
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwpluginloader.php-updateWalkTheWeb=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwpluginloader.php-updateWalkTheWeb=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function loadConnectURL() {
-		require_once('./core/functions/class_wtwdb.php');
+		require_once(wtw_rootpath.'/core/functions/class_wtwdb.php');
 		global $wtw;
 		try {
 			$zroot =  explode('?', $wtw->uri);
@@ -242,21 +242,21 @@ class wtwpluginloader {
 			}
 			if (!empty($zfile) && isset($zfile)) {
 				$zconnectfile = "";
-				$zfilepath = $wtw->contentpath."\\plugins";
+				$zfilepath = $wtw->contentpath."/plugins";
 				if (file_exists($zfilepath)) {
 					$zfolders = new DirectoryIterator($zfilepath);
 					foreach ($zfolders as $zdirinfo) {
 						if ($zdirinfo->isDir() && !$zdirinfo->isDot()) {
 							$zfolder = $zdirinfo->getFilename();
 							if ($this->getPluginActive($zfolder) == "1") {
-								if (file_exists($zfilepath."\\".$zfolder."\\connect")) {
-									$zconnectfiles = new DirectoryIterator($zfilepath."\\".$zfolder."\\connect");
+								if (file_exists($zfilepath."/".$zfolder."/connect")) {
+									$zconnectfiles = new DirectoryIterator($zfilepath."/".$zfolder."/connect");
 									foreach ($zconnectfiles as $zfileinfo) {
 										if (!$zfileinfo->isDir() && !$zfileinfo->isDot()) {
 											$zcfile = $zfileinfo->getFilename();
 											if ($zcfile == $zfile) {
-												$zconnectfile = $zfilepath."\\".$zfolder."\\connect\\".$zcfile;
-												$zpluginphp = $zfilepath."\\".$zfolder."\\".$zfolder.".php";
+												$zconnectfile = $zfilepath."/".$zfolder."/connect/".$zcfile;
+												$zpluginphp = $zfilepath."/".$zfolder."/".$zfolder.".php";
 											}
 										}
 									}
@@ -266,10 +266,10 @@ class wtwpluginloader {
 					}
 				}
 				if (!empty($zconnectfile) && isset($zconnectfile)) {
-					require_once('./core/functions/class_wtwconnect.php');
+					require_once(wtw_rootpath.'/core/functions/class_wtwconnect.php');
 					if (!empty($zpluginphp) && isset($zpluginphp)) {
 						if (file_exists($zpluginphp)) {
-							require_once('./core/functions/class_wtwplugins.php');
+							require_once(wtw_rootpath.'/core/functions/class_wtwplugins.php');
 							require_once($zpluginphp);
 						}
 					}
@@ -287,8 +287,8 @@ class wtwpluginloader {
 		}
 	}
 
-	public function loadIFramesURL() {
-		require_once('./core/functions/class_wtwdb.php');
+	public function loadHandlersURL() {
+		require_once(wtw_rootpath.'/core/functions/class_wtwdb.php');
 		global $wtw;
 		try {
 			$zroot =  explode('?', $wtw->uri);
@@ -299,22 +299,22 @@ class wtwpluginloader {
 				$zfile = trim($zpathdef[3]);
 			}
 			if (!empty($zfile) && isset($zfile)) {
-				$ziframefile = "";
-				$zfilepath = $wtw->contentpath."\\plugins";
+				$zhandlersfile = "";
+				$zfilepath = $wtw->contentpath."/plugins";
 				if (file_exists($zfilepath)) {
 					$zfolders = new DirectoryIterator($zfilepath);
 					foreach ($zfolders as $zdirinfo) {
 						if ($zdirinfo->isDir() && !$zdirinfo->isDot()) {
 							$zfolder = $zdirinfo->getFilename();
 							if ($this->getPluginActive($zfolder) == "1") {
-								if (file_exists($zfilepath."\\".$zfolder."\\iframes")) {
-									$ziframesfiles = new DirectoryIterator($zfilepath."\\".$zfolder."\\iframes");
-									foreach ($ziframesfiles as $zfileinfo) {
+								if (file_exists($zfilepath."/".$zfolder."/handlers")) {
+									$zhandlersfiles = new DirectoryIterator($zfilepath."/".$zfolder."/handlers");
+									foreach ($zhandlersfiles as $zfileinfo) {
 										if (!$zfileinfo->isDir() && !$zfileinfo->isDot()) {
 											$zcfile = $zfileinfo->getFilename();
 											if ($zcfile == $zfile) {
-												$ziframefile = $zfilepath."\\".$zfolder."\\iframes\\".$zcfile;
-												$zpluginphp = $zfilepath."\\".$zfolder."\\".$zfolder.".php";
+												$zhandlersfile = $zfilepath."/".$zfolder."/handlers/".$zcfile;
+												$zpluginphp = $zfilepath."/".$zfolder."/".$zfolder.".php";
 											}
 										}
 									}
@@ -323,15 +323,15 @@ class wtwpluginloader {
 						}
 					}
 				}
-				if (!empty($ziframefile) && isset($ziframefile)) {
-					require_once('./core/functions/class_wtwiframes.php');
+				if (!empty($zhandlersfile) && isset($zhandlersfile)) {
+					require_once(wtw_rootpath.'/core/functions/class_wtwhandlers.php');
 					if (!empty($zpluginphp) && isset($zpluginphp)) {
 						if (file_exists($zpluginphp)) {
-							require_once('./core/functions/class_wtwplugins.php');
+							require_once(wtw_rootpath.'/core/functions/class_wtwplugins.php');
 							require_once($zpluginphp);
 						}
 					}
-					require_once($ziframefile);
+					require_once($zhandlersfile);
 				} else {
 					http_response_code(404);
 				}
@@ -341,7 +341,7 @@ class wtwpluginloader {
 				exit();
 			}
 		} catch (Exception $e) {
-			$wtw->serror("core-functions-class_wtwpluginloader.php-loadIFramesURL=" . $e->getMessage());
+			$wtw->serror("core-functions-class_wtwpluginloader.php-loadHandlersURL=" . $e->getMessage());
 		}
 	}
 

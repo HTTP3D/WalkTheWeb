@@ -1014,6 +1014,479 @@ class wtwdb {
 		return $zsuccess;
 	}
 
+	public function getobjectanimations($zuploadobjectid) {
+		$zobjectanimations = array();
+		try {
+			$zresults = $this->query("
+			    select a1.*,
+					case when a1.soundid = '' then ''
+						else
+							(select filepath 
+								from ".wtw_tableprefix."uploads 
+								where uploadid=a1.soundid limit 1)
+						end as soundpath,
+					case when a1.moldevent='onload' then '2'
+						when a1.moldevent='' then '0'
+						else '1'
+					end as sorder
+				from ".wtw_tableprefix."uploadobjectanimations a1
+				where a1.uploadobjectid='".$zuploadobjectid."'
+					and a1.deleted=0
+				order by sorder, a1.moldevent, a1.animationname, a1.objectanimationid;");
+			$i = 0;
+			foreach ($zresults as $zrow) {
+				$zobjectanimations[$i] = array(
+					'objectanimationid'=> $zrow['objectanimationid'],
+					'animationname'=> $zrow['animationname'],
+					'moldevent'=> $zrow['moldevent'],
+					'moldnamepart'=> $zrow['moldnamepart'],
+					'startframe'=> $zrow['startframe'],
+					'endframe'=> $zrow['endframe'],
+					'animationloop'=> $zrow['animationloop'],
+					'speedratio'=> $zrow['speedratio'],
+					'additionalscript'=> $zrow['additionalscript'],
+					'additionalparameters'=> $zrow['additionalparameters'],
+					'animationendscript'=> $zrow['animationendscript'],
+					'animationendparameters'=> $zrow['animationendparameters'],
+					'stopcurrentanimations'=> $zrow['stopcurrentanimations'],
+					'soundid'=> $zrow['soundid'],
+					'soundpath'=> $zrow['soundpath'],
+					'soundmaxdistance'=> $zrow['soundmaxdistance']
+				);
+				$i += 1;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getobjectanimations=".$e->getMessage());
+		}
+		return $zobjectanimations;
+	}
+
+	public function getwebimages($zthingmoldid, $zbuildingmoldid, $zcommunitymoldid, $zgraphiclevel) {
+		$webimages = array();
+		try {
+			if (empty($zgraphiclevel) || !isset($zgraphiclevel)) {
+				$zgraphiclevel = -1;
+			} elseif (is_numeric($zgraphiclevel) == false) {
+				$zgraphiclevel = -1;
+			}
+			$webimages[0] = array(
+				'imageid'=> '',
+				'imagepath'=> '',
+				'imagehoverid'=> '',
+				'imagehoverpath'=> '',
+				'imageclickid'=> '',
+				'imageclickpath'=> '',
+				'jsfunction'=> '',
+				'jsparameters'=> '',
+				'imageloaded'=> '0',
+				'hoverloaded'=> '0',
+				'clickloaded'=> '0'
+			);
+			$zresults = $this->query("
+				select a1.webimageid,
+					a1.pastwebimageid,
+					a1.thingmoldid,
+					a1.buildingmoldid,
+					a1.communitymoldid,
+					a1.imageindex,
+					a1.graphiclevel,
+					a1.jsfunction,
+					a1.jsparameters,
+					a1.userid,
+					a1.alttag,
+					a1.createdate,
+					a1.createuserid,
+					a1.updatedate,
+					a1.updateuserid,
+					a1.deleteddate,
+					a1.deleteduserid,
+					a1.deleted,
+					case when not a1.thingmoldid='' then
+							case when a1.imageid = '' then ''
+								else
+									case when (t1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select originalid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imageid limit 1)
+										else (select websizeid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imageid limit 1)
+									end 
+								end
+						when not a1.buildingmoldid='' then
+							case when a1.imageid = '' then ''
+								else
+									case when (b1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select originalid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imageid limit 1)
+										else (select websizeid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imageid limit 1)
+									end 
+								end
+						when not a1.communitymoldid='' then
+							case when a1.imageid = '' then ''
+								else
+									case when (c1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select originalid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imageid limit 1)
+										else (select websizeid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imageid limit 1)
+									end 
+								end
+						else ''
+					end as imageid,
+					case when not a1.thingmoldid='' then
+							case when a1.imageid = '' then ''
+								else
+									case when (t1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.originalid=u1.uploadid 
+												where u2.uploadid=a1.imageid limit 1)
+										else (select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.websizeid=u1.uploadid 
+												where u2.uploadid=a1.imageid limit 1)
+									end 
+								end
+						when not a1.buildingmoldid='' then
+							case when a1.imageid = '' then ''
+								else
+									case when (b1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.originalid=u1.uploadid 
+												where u2.uploadid=a1.imageid limit 1)
+										else (select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.websizeid=u1.uploadid 
+												where u2.uploadid=a1.imageid limit 1)
+									end 
+								end
+						when not a1.communitymoldid='' then
+							case when a1.imageid = '' then ''
+								else
+									case when (c1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.originalid=u1.uploadid 
+												where u2.uploadid=a1.imageid limit 1)
+										else (select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.websizeid=u1.uploadid 
+												where u2.uploadid=a1.imageid limit 1)
+									end 
+								end
+						else ''
+					end as imagepath,
+
+					case when not a1.thingmoldid='' then
+							case when a1.imagehoverid = '' then ''
+								else
+									case when (t1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select originalid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imagehoverid limit 1)
+										else (select websizeid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imagehoverid limit 1)
+									end 
+								end
+						when not a1.buildingmoldid='' then
+							case when a1.imagehoverid = '' then ''
+								else
+									case when (b1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select originalid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imagehoverid limit 1)
+										else (select websizeid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imagehoverid limit 1)
+									end 
+								end
+						when not a1.communitymoldid='' then
+							case when a1.imagehoverid = '' then ''
+								else
+									case when (c1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select originalid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imagehoverid limit 1)
+										else (select websizeid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imagehoverid limit 1)
+									end 
+								end
+						else ''
+					end as imagehoverid,
+					case when not a1.thingmoldid='' then
+							case when a1.imagehoverid = '' then ''
+								else
+									case when (t1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.originalid=u1.uploadid 
+												where u2.uploadid=a1.imagehoverid limit 1)
+										else (select u1.filepath 
+												from ".wtw_tableprefix."uploads u2
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.websizeid=u1.uploadid 
+												where u2.uploadid=a1.imagehoverid limit 1)
+									end 
+								end
+						when not a1.buildingmoldid='' then
+							case when a1.imagehoverid = '' then ''
+								else
+									case when (b1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.originalid=u1.uploadid 
+												where u2.uploadid=a1.imagehoverid limit 1)
+										else (select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.websizeid=u1.uploadid 
+												where u2.uploadid=a1.imagehoverid limit 1)
+									end 
+								end
+						when not a1.communitymoldid='' then
+							case when a1.imagehoverid = '' then ''
+								else
+									case when (c1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.originalid=u1.uploadid 
+												where u2.uploadid=a1.imagehoverid limit 1)
+										else (select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.websizeid=u1.uploadid 
+												where u2.uploadid=a1.imagehoverid limit 1)
+									end 
+								end
+						else ''
+					end as imagehoverpath,
+
+					case when not a1.thingmoldid='' then
+							case when a1.imageclickid = '' then ''
+								else
+									case when (t1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select originalid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imageclickid limit 1)
+										else (select websizeid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imageclickid limit 1)
+									end 
+								end
+						when not a1.buildingmoldid='' then
+							case when a1.imageclickid = '' then ''
+								else
+									case when (b1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select originalid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imageclickid limit 1)
+										else (select websizeid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imageclickid limit 1)
+									end 
+								end
+						when not a1.communitymoldid='' then
+							case when a1.imageclickid = '' then ''
+								else
+									case when (c1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select originalid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imageclickid limit 1)
+										else (select websizeid 
+												from ".wtw_tableprefix."uploads 
+												where uploadid=a1.imageclickid limit 1)
+									end 
+								end
+						else ''
+					end as imageclickid,
+					case when not a1.thingmoldid='' then
+							case when a1.imageclickid = '' then ''
+								else
+									case when (t1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.originalid=u1.uploadid 
+												where u2.uploadid=a1.imageclickid limit 1)
+										else (select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.websizeid=u1.uploadid 
+												where u2.uploadid=a1.imageclickid limit 1)
+									end 
+								end
+						when not a1.buildingmoldid='' then
+							case when a1.imageclickid = '' then ''
+								else
+									case when (b1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.originalid=u1.uploadid 
+												where u2.uploadid=a1.imageclickid limit 1)
+										else (select u1.filepath 
+												from ".wtw_tableprefix."uploads u2 
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.websizeid=u1.uploadid 
+												where u2.uploadid=a1.imageclickid limit 1)
+									end 
+								end
+						when not a1.communitymoldid='' then
+							case when a1.imageclickid = '' then ''
+								else
+									case when (c1.graphiclevel = '1' and not '".$zgraphiclevel."' = '0') or '".$zgraphiclevel."' = '1' then 
+											(select u1.filepath 
+												from ".wtw_tableprefix."uploads u2
+													left join ".wtw_tableprefix."uploads u1 
+														on u2.originalid=u1.uploadid 
+												where u2.uploadid=a1.imageclickid limit 1)
+										else (select u1.filepath 
+											from ".wtw_tableprefix."uploads u2 
+												left join ".wtw_tableprefix."uploads u1 
+													on u2.websizeid=u1.uploadid 
+											where u2.uploadid=a1.imageclickid limit 1)
+									end 
+								end
+						else ''
+					end as imageclickpath
+				from ".wtw_tableprefix."webimages a1 
+					left join ".wtw_tableprefix."thingmolds t1 
+						on a1.thingmoldid=t1.thingmoldid
+					left join ".wtw_tableprefix."buildingmolds b1 
+						on a1.buildingmoldid=b1.buildingmoldid
+					left join ".wtw_tableprefix."communitymolds c1 
+						on a1.communitymoldid=c1.communitymoldid
+				where a1.thingmoldid='".$zthingmoldid."'
+					and a1.buildingmoldid='".$zbuildingmoldid."'
+					and a1.communitymoldid='".$zcommunitymoldid."'
+					and a1.deleted=0
+				order by a1.imageindex, a1.webimageid desc;");
+			
+			$i = 0;
+			foreach ($zresults as $zrow) {
+				$webimages[$i] = array(
+					'imageid'=> $zrow["imageid"],
+					'imagepath'=> $zrow["imagepath"],
+					'imagehoverid'=> $zrow["imagehoverid"],
+					'imagehoverpath'=> $zrow["imagehoverpath"],
+					'imageclickid'=> $zrow["imageclickid"],
+					'imageclickpath'=> $zrow["imageclickpath"],
+					'jsfunction'=> $zrow["jsfunction"],
+					'jsparameters'=> $zrow["jsparameters"],
+					'imageloaded'=> '0',
+					'hoverloaded'=> '0',
+					'clickloaded'=> '0'
+				);
+				$i += 1;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getwebimages=".$e->getMessage());
+		}
+		return $webimages;
+	}
+	
+	public function getmoldpoints($zthingmoldid, $zbuildingmoldid, $zcommunitymoldid, $zpathnumber, $zshape) {
+		$pathpoints = array();
+		$zmoldid = "";
+		try {
+			if ($zshape == 'tube') {
+				if(!empty($zcommunitymoldid)) {
+					$zmoldid = $zcommunitymoldid;
+				} else if(!empty($zbuildingmoldid)) {
+					$zmoldid = $zbuildingmoldid;
+				} else if(!empty($zthingmoldid)) {
+					$zmoldid = $zthingmoldid;
+				}
+				/* get point data for a given mold (lines, ribbons, lathe, etc...) */
+				$zresults = $this->query("
+					select * 
+					from ".wtw_tableprefix."moldpoints
+					where moldid='".$zmoldid."'
+						and pathnumber=".$this->checkNumber($pathnumber,1)."
+						and deleted=0
+					order by sorder,createdate;");
+
+				$i = 0;
+				foreach ($zresults as $zrow) {
+					$pathpoints[$i] = array(
+						'x'=> $zrow["positionx"],
+						'y'=> $zrow["positiony"],
+						'z'=> $zrow["positionz"],
+						'sorder'=> $zrow["sorder"]
+					);
+					$i += 1;
+				}
+				if ($i == 0) {
+					$pathpoints[0] = null;
+				}
+			} else {
+				$pathpoints[0] = null;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getmoldpoints=".$e->getMessage());
+		}
+		return $pathpoints;
+	}
+	
+	public function getWebAliases($zmoldgroup, $zwebid) {
+		$zdomains = array();
+		try {
+			$ztablename = "";
+			switch ($zmoldgroup) {
+				case "community":
+					$ztablename = "communities";
+					break;
+				case "building":
+					$ztablename = "buildings";
+					break;
+				case "thing":
+					$ztablename = "things";
+					break;
+			}
+			if (!empty($zwebid) && isset($zwebid) && !empty($ztablename) && isset($ztablename)) {
+				$i = 0;
+				/* get web alias (domain names) for a community */
+				$zresults = $this->query("
+					select w1.*,
+						t1.analyticsid
+					from ".wtw_tableprefix."webaliases w1
+						left join ".wtw_tableprefix.$ztablename." t1
+							on w1.".$zmoldgroup."id=t1.".$zmoldgroup."id
+					where w1.".$zmoldgroup."id='".$zwebid."'
+					   and w1.deleted=0
+					order by w1.domainname, w1.webaliasid;");
+				foreach ($zresults as $zrow) {
+					$zdomains[$i]  = array(
+						'domainname' => $zrow["domainname"],
+						'analyticsid'=> $zrow["analyticsid"]
+					); 
+					$i += 1;
+				}
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getWebAliases=".$e->getMessage());
+		}
+		return $zdomains;
+	}
+
 	public function trackPageView($currentpage) {
 		$zsuccess = false;
 		try {

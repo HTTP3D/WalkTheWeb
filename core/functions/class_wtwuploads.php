@@ -19,54 +19,85 @@ class wtwuploads {
 		}
 	}
 	
+	public function checkContentFolders($zcommunityid, $zbuildingid, $zthingid) {
+		global $wtwhandlers;
+		try {
+			if (!file_exists($wtwhandlers->contentpath."/uploads")) {
+				mkdir($wtwhandlers->contentpath."/uploads", 0777);
+			}
+			if (!file_exists($wtwhandlers->contentpath."/uploads/users")) {
+				mkdir($wtwhandlers->contentpath."/uploads/users", 0777);
+			}
+			if (!file_exists($wtwhandlers->contentpath."/uploads/communities")) {
+				mkdir($wtwhandlers->contentpath."/uploads/communities", 0777);
+			}
+			if (!file_exists($wtwhandlers->contentpath."/uploads/buildings")) {
+				mkdir($wtwhandlers->contentpath."/uploads/buildings", 0777);
+			}
+			if (!file_exists($wtwhandlers->contentpath."/uploads/things")) {
+				mkdir($wtwhandlers->contentpath."/uploads/things", 0777);
+			}
+			if (!empty($zcommunityid) && isset($zcommunityid)) {
+				if (!file_exists($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid)) {
+					mkdir($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid, 0777);
+				}
+				if (!file_exists($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/media")) {
+					mkdir($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/media", 0777);
+				}
+				if (!file_exists($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/snapshots")) {
+					mkdir($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/snapshots", 0777);
+				}
+			}
+			if (!empty($zbuildingid) && isset($zbuildingid)) {
+				if (!file_exists($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid)) {
+					mkdir($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid, 0777);
+				}
+				if (!file_exists($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/media")) {
+					mkdir($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/media", 0777);
+				}
+				if (!file_exists($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/snapshots")) {
+					mkdir($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/snapshots", 0777);
+				}
+			}
+			if (!empty($zthingid) && isset($zthingid)) {
+				if (!file_exists($wtwhandlers->contentpath."/uploads/things/".$zthingid)) {
+					mkdir($wtwhandlers->contentpath."/uploads/things/".$zthingid, 0777);
+				}
+				if (!file_exists($wtwhandlers->contentpath."/uploads/things/".$zthingid."/media")) {
+					mkdir($wtwhandlers->contentpath."/uploads/things/".$zthingid."/media", 0777);
+				}
+				if (!file_exists($wtwhandlers->contentpath."/uploads/things/".$zthingid."/snapshots")) {
+					mkdir($wtwhandlers->contentpath."/uploads/things/".$zthingid."/snapshots", 0777);
+				}
+			}
+			if(isset($_SESSION['wtw_uploadpathid']) && !empty($_SESSION['wtw_uploadpathid'])) {
+				$syear = date('Y');
+				$smonth = date('m');
+				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'])) {
+					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'], 0777);
+				}
+				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear)) {
+					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear, 0777);
+				}
+				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth)) {
+					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth, 0777);
+				}
+				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects")) {
+					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects", 0777);
+				}
+			}
+
+			
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-checkContentFolders=".$e->getMessage());
+		}
+	}
+	
 	public function copyFile($zfile1, $zfilepath1, $zfile2, $zfilepath2, $zcommunityid, $zbuildingid, $zthingid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$serror = "";
 		try {
-			$zfilepath = $wtwiframes->contentpath."\\uploads";
-			if (!file_exists($zfilepath)) {
-				mkdir($zfilepath, 0777);
-			}
-			if (!empty($zbuildingid)) {
-				$zfilepath = $wtwiframes->contentpath."\\uploads\\buildings";
-				if (!file_exists($zfilepath)) {
-					mkdir($zfilepath, 0777);
-				}
-				$zfilepath = $wtwiframes->contentpath."\\uploads\\buildings\\".$zbuildingid;
-				if (!file_exists($zfilepath)) {
-					mkdir($zfilepath, 0777);
-				}
-				$zfilepath = $wtwiframes->contentpath."\\uploads\\buildings\\".$zbuildingid."\\media";
-				if (!file_exists($zfilepath)) {
-					mkdir($zfilepath, 0777);
-				}
-			} else if (!empty($zthingid)) {
-				$zfilepath = $wtwiframes->contentpath."\\uploads\\things";
-				if (!file_exists($zfilepath)) {
-					mkdir($zfilepath, 0777);
-				}
-				$zfilepath = $wtwiframes->contentpath."\\uploads\\things\\".$zthingid;
-				if (!file_exists($zfilepath)) {
-					mkdir($zfilepath, 0777);
-				}
-				$zfilepath = $wtwiframes->contentpath."\\uploads\\things\\".$zthingid."\\media";
-				if (!file_exists($zfilepath)) {
-					mkdir($zfilepath, 0777);
-				}
-			} else if (!empty($zcommunityid)) {
-				$zfilepath = $wtwiframes->contentpath."\\uploads\\communities";
-				if (!file_exists($zfilepath)) {
-					mkdir($zfilepath, 0777);
-				}
-				$zfilepath = $wtwiframes->contentpath."\\uploads\\communities\\".$zcommunityid;
-				if (!file_exists($zfilepath)) {
-					mkdir($zfilepath, 0777);
-				}
-				$zfilepath = $wtwiframes->contentpath."\\uploads\\communities\\".$zcommunityid."\\media";
-				if (!file_exists($zfilepath)) {
-					mkdir($zfilepath, 0777);
-				}
-			}
+			$this->checkContentFolders($zcommunityid, $zbuildingid, $zthingid);
 			if (!file_exists($zfilepath1.$zfile1)) {
 				$serror = "Source File not Found. ".$zfilepath1.$zfile1;
 			}
@@ -80,43 +111,43 @@ class wtwuploads {
 				copy($zfilepath1.$zfile1, $zfilepath2.$zfile2);
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-copyFile=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-copyFile=".$e->getMessage());
 		}	
 		return $serror;
 	}
 
 	public function deleteFile($zfile1, $zfilepath1, $zcommunityid, $zbuildingid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		/* purposly not added yet */
 	}
 	
 	public function getSetting($zsettingname) {
-		global $wtwiframes;
-		return $wtwiframes->getSetting($zsettingname);
+		global $wtwhandlers;
+		return $wtwhandlers->getSetting($zsettingname);
 	}
 
 	public function getSettings($zsettingnames) {
-		global $wtwiframes;
-		return $wtwiframes->getSettings($zsettingnames);
+		global $wtwhandlers;
+		return $wtwhandlers->getSettings($zsettingnames);
 	}
 
 	public function saveSetting($zsettingname, $zsettingvalue) {
-		global $wtwiframes;
-		return $wtwiframes->saveSetting($zsettingname, $zsettingvalue);
+		global $wtwhandlers;
+		return $wtwhandlers->saveSetting($zsettingname, $zsettingvalue);
 	}
 	
 	public function saveSettings($zsettings) {
-		global $wtwiframes;
-		return $wtwiframes->saveSettings($zsettings);
+		global $wtwhandlers;
+		return $wtwhandlers->saveSettings($zsettings);
 	}
 
 	public function updateFileInDb($zuploadid, $imageset, $originalid, $websizeid, $thumbnailid, $zfiletitle, $zfilename, $zfileextension, $zfilesize, $zfiletype, $zfiledata, $imagewidth, $imageheight, $zfilepath) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zresults = array();
 		try {
-			if (!empty($wtwiframes->userid) && isset($wtwiframes->userid)) {
+			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
 				if (empty($zuploadid) || !isset($zuploadid)) {
-					$zuploadid = $wtwiframes->getRandomString(16,1);
+					$zuploadid = $wtwhandlers->getRandomString(16,1);
 				}
 				if (empty($originalid) || !isset($originalid)) {
 					$originalid = $zuploadid;
@@ -131,7 +162,7 @@ class wtwuploads {
 				} else {
 					$zfiledata = "'".$zfiledata."'";
 				}
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					insert into ".wtw_tableprefix."uploads
 						(uploadid,
 						 originalid,
@@ -156,22 +187,22 @@ class wtwuploads {
 						 '".$originalid."',
 						 '".$websizeid."',
 						 '".$thumbnailid."',
-						 '".$wtwiframes->userid."',
+						 '".$wtwhandlers->userid."',
 						 '".$zfiletitle."',
 						 '".$zfilename."',
 						 '".$zfileextension."',
-						 ".$wtwiframes->checkNumber($zfilesize,1024).",
+						 ".$wtwhandlers->checkNumber($zfilesize,1024).",
 						 '".$zfiletype."',
 						 '".$zfilepath."',
 						 ".$zfiledata.",
-						 ".$wtwiframes->checkNumber($imagewidth,512).",
-						 ".$wtwiframes->checkNumber($imageheight,512).",
+						 ".$wtwhandlers->checkNumber($imagewidth,512).",
+						 ".$wtwhandlers->checkNumber($imageheight,512).",
 						 now(),
-						 '".$wtwiframes->userid."',
+						 '".$wtwhandlers->userid."',
 						 now(),
-						 '".$wtwiframes->userid."');");
+						 '".$wtwhandlers->userid."');");
 				if (!empty($websizeid) && isset($websizeid) && !empty($originalid) && isset($originalid)) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."uploads
 						set websizeid = '".$websizeid."'
 						where originalid='".$originalid."'
@@ -179,26 +210,26 @@ class wtwuploads {
 							and not originalid = '';");
 				}
 				if (!empty($thumbnailid) && isset($thumbnailid) && !empty($originalid) && isset($originalid)) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."uploads
 						set thumbnailid = '".$thumbnailid."'
 						where originalid='".$originalid."'
 							and thumbnailid = ''
 							and not originalid = '';");
 				}
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select *
 					from ".wtw_tableprefix."uploads
 					where uploadid='".$zuploadid."';");
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-updateFileInDb=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-updateFileInDb=".$e->getMessage());
 		}	
 		return $zresults;
 	}
 	
-	public function saveImageFilePng($zfilepath1, $zfilename1, $zfiledata, $zthingid, $zbuildingid, $zcommunityid) {
-		global $wtwiframes;
+	public function saveImageFilePng($zfilepath1, $zfilename1, $zfiledata, $zcommunityid, $zbuildingid, $zthingid) {
+		global $wtwhandlers;
 		$zsnapshotid = "";
 		$zsnapshotpath = "";
 		$zsnapshotdata = null;
@@ -211,53 +242,25 @@ class wtwuploads {
 			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
 				$zuserid = $_SESSION["wtw_userid"];
 			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads")) {
-				mkdir($wtwiframes->contentpath."\\uploads", 0777);
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads\\things")) {
-				mkdir($wtwiframes->contentpath."\\uploads\\things", 0777);
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads\\things\\".$zthingid) && !empty($zthingid)) {
-				mkdir($wtwiframes->contentpath."\\uploads\\things\\".$zthingid, 0777);
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads\\things\\".$zthingid."\\snapshots") && !empty($zthingid)) {
-				mkdir($wtwiframes->contentpath."\\uploads\\things\\".$zthingid."\\snapshots", 0777);
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads\\buildings")) {
-				mkdir($wtwiframes->contentpath."\\uploads\\buildings", 0777);
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads\\buildings\\".$zbuildingid) && !empty($zbuildingid)) {
-				mkdir($wtwiframes->contentpath."\\uploads\\buildings\\".$zbuildingid, 0777);
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads\\buildings\\".$zbuildingid."\\snapshots") && !empty($zbuildingid)) {
-				mkdir($wtwiframes->contentpath."\\uploads\\buildings\\".$zbuildingid."\\snapshots", 0777);
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads\\communities")) {
-				mkdir($wtwiframes->contentpath."\\uploads\\communities", 0777);
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads\\communities\\".$zcommunityid) && !empty($zcommunityid)) {
-				mkdir($wtwiframes->contentpath."\\uploads\\communities\\".$zcommunityid, 0777);
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads\\communities\\".$zcommunityid."\\snapshots") && !empty($zcommunityid)) {
-				mkdir($wtwiframes->contentpath."\\uploads\\communities\\".$zcommunityid."\\snapshots", 0777);
-			}
+			$this->checkContentFolders($zcommunityid, $zbuildingid, $zthingid);
+			
 			if (!empty($zbuildingid)) {
-				$zfilepath1 = $wtwiframes->contentpath."\\uploads\\buildings\\".$zbuildingid."\\snapshots\\";
-				$browsepath = $wtwiframes->contenturl."/uploads/buildings/".$zbuildingid."/snapshots/".$zfilename1;
-				$previewpath = $wtwiframes->contentpath."\\uploads\\buildings\\".$zbuildingid."-snapshot.png";
-				$previewbrowsepath = $wtwiframes->contenturl."/uploads/buildings/".$zbuildingid."-snapshot.png";
+				$zfilepath1 = $wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/snapshots/";
+				$browsepath = $wtwhandlers->contenturl."/uploads/buildings/".$zbuildingid."/snapshots/".$zfilename1;
+				$previewpath = $wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."-snapshot.png";
+				$previewbrowsepath = $wtwhandlers->contenturl."/uploads/buildings/".$zbuildingid."-snapshot.png";
 				$previewfilename = $zbuildingid."-snapshot.png";
 			} else if (!empty($zcommunityid)) {
-				$zfilepath1 = $wtwiframes->contentpath."\\uploads\\communities\\".$zcommunityid."\\snapshots\\";
-				$browsepath = $wtwiframes->contenturl."/uploads/communities/".$zcommunityid."/snapshots/".$zfilename1;
-				$previewpath = $wtwiframes->contentpath."\\uploads\\communities\\".$zcommunityid."-snapshot.png";
-				$previewbrowsepath = $wtwiframes->contenturl."/uploads/communities/".$zcommunityid."-snapshot.png";
+				$zfilepath1 = $wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/snapshots/";
+				$browsepath = $wtwhandlers->contenturl."/uploads/communities/".$zcommunityid."/snapshots/".$zfilename1;
+				$previewpath = $wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."-snapshot.png";
+				$previewbrowsepath = $wtwhandlers->contenturl."/uploads/communities/".$zcommunityid."-snapshot.png";
 				$previewfilename = $zcommunityid."-snapshot.png";
 			} else if (!empty($zthingid)) {
-				$zfilepath1 = $wtwiframes->contentpath."\\uploads\\things\\".$zthingid."\\snapshots\\";
-				$browsepath = $wtwiframes->contenturl."/uploads/things/".$zthingid."/snapshots/".$zfilename1;
-				$previewpath = $wtwiframes->contentpath."\\uploads\\things\\".$zthingid."-snapshot.png";
-				$previewbrowsepath = $wtwiframes->contenturl."/uploads/things/".$zthingid."-snapshot.png";
+				$zfilepath1 = $wtwhandlers->contentpath."/uploads/things/".$zthingid."/snapshots/";
+				$browsepath = $wtwhandlers->contenturl."/uploads/things/".$zthingid."/snapshots/".$zfilename1;
+				$previewpath = $wtwhandlers->contentpath."/uploads/things/".$zthingid."-snapshot.png";
+				$previewbrowsepath = $wtwhandlers->contenturl."/uploads/things/".$zthingid."-snapshot.png";
 				$previewfilename = $zthingid."-snapshot.png";
 			}
 			$zfiledata = str_replace('data:image/png;base64,', '', $zfiledata);
@@ -275,8 +278,8 @@ class wtwuploads {
 				$zfiletitle = "defaultthingsm.png";
 			}
 			$zfilepath = $zfilepath1.$zfiletitle;
-			$originalid = $wtwiframes->getRandomString(16,2);
-			$websizeid = $wtwiframes->getRandomString(16,2);
+			$originalid = $wtwhandlers->getRandomString(16,2);
+			$websizeid = $wtwhandlers->getRandomString(16,2);
 			$this->resizeImage($zfile1, $previewpath, 512);
 			$previewimagedetails = getimagesize($previewpath);
 			$zpreviewwidth = $previewimagedetails[0];
@@ -302,29 +305,29 @@ class wtwuploads {
 			}
 			
 			if (!empty($zthingid) && isset($zthingid)) {
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."things
 					set  snapshotid='".$zsnapshotid."',
 						 updatedate=now(),
-						 updateuserid='".$wtwiframes->userid."'
+						 updateuserid='".$wtwhandlers->userid."'
 					where thingid='".$zthingid."';");
 			} else if (!empty($zbuildingid) && isset($zbuildingid)) {
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."buildings
 					set  snapshotid='".$zsnapshotid."',
 						 updatedate=now(),
-						 updateuserid='".$wtwiframes->userid."'
+						 updateuserid='".$wtwhandlers->userid."'
 					where buildingid='".$zbuildingid."';");
 			} else if (!empty($zcommunityid) && isset($zcommunityid)) {
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."communities
 					set  snapshotid='".$zsnapshotid."',
 						 updatedate=now(),
-						 updateuserid='".$wtwiframes->userid."'
+						 updateuserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."';");
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-saveImageFilePng=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-saveImageFilePng=".$e->getMessage());
 		}	
 		return array(
 			'snapshotid' => $zsnapshotid,
@@ -333,7 +336,7 @@ class wtwuploads {
 	}
 	
 	public function resizeImage($originalFile, $ztargetfile, $newWidth) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			$info = getimagesize($originalFile);
 			$mime = $info['mime'];
@@ -375,12 +378,12 @@ class wtwuploads {
 			}
 			$image_save_func($tmp, "$ztargetfile");
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-resizeImage=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-resizeImage=".$e->getMessage());
 		}
 	}
 	
 	public function uploadFileToDb($zfilepath, $zfiletitle, $zfilename, $zfileextension, $zfiletype, $public) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			$zuploadid = "";
 			$zuploadpath = "";
@@ -388,27 +391,13 @@ class wtwuploads {
 			$zwidth = null;
 			$zheight = null;
 			if ($public == '1') {
-				$zuploadpath = $wtwiframes->contentpath;
-				if (!file_exists($zuploadpath."\\uploads")) {
-					mkdir($zuploadpath."\\uploads", 0777);
-				}
+				$this->checkContentFolders('', '', '');
+				$zuploadpath = $wtwhandlers->contentpath;
 				if(isset($_SESSION['wtw_uploadpathid']) && !empty($_SESSION['wtw_uploadpathid'])) {
 					$syear = date('Y');
 					$smonth = date('m');
-					if (!file_exists($zuploadpath."\\uploads\\users")) {
-						mkdir($zuploadpath."\\uploads\\users", 0777);
-					}
-					if (!file_exists($zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid'])) {
-						mkdir($zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid'], 0777);
-					}
-					if (!file_exists($zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\".$syear)) {
-						mkdir($zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\".$syear, 0777);
-					}
-					if (!file_exists($zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\".$syear."\\".$smonth)) {
-						mkdir($zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\".$syear."\\".$smonth, 0777);
-					}
-					$zuploadpath = $zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\".$syear."\\".$smonth."\\";
-					$browsepath = $wtwiframes->contenturl."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth."/";
+					$zuploadpath = $zuploadpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth."/";
+					$browsepath = $wtwhandlers->contenturl."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth."/";
 				} else {
 					$public = '0';
 				}
@@ -546,12 +535,12 @@ class wtwuploads {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-uploadFileToDb=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-uploadFileToDb=".$e->getMessage());
 		}
 	}
 	
 	public function avoidDuplicateFileNames($zuploadpath, $zfilename) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			if (file_exists($zuploadpath.$zfilename)) {
 				$path_parts = pathinfo($zfilename);
@@ -564,63 +553,52 @@ class wtwuploads {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-avoidDuplicateFileNames=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-avoidDuplicateFileNames=".$e->getMessage());
 		}
 		return $zfilename;
 	}
 	
 	public function getNewFileName($zfilename, $newwidth, $newheight) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			$path_parts = pathinfo($zfilename);
 			$ext = $path_parts['extension'];
 			$zfile = $path_parts['filename'];
 			$zfilename = $zfile."-".ceil($newwidth)."x".ceil($newheight).".".$ext;
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-getNewFileName=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getNewFileName=".$e->getMessage());
 		}
 		return $zfilename;
 	}
 	
 	public function uploadObjectFileToDb($zfilepath, $zfilename, $zfileextension, $zfiletype) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			$zuploadid = "";
 			$zuploadpath = "";
 			$browsepath = "";
 			$zobjectfolder = "";
-			$zuploadpath = $wtwiframes->contentpath;
-			if (!file_exists($zuploadpath."\\uploads")) {
-				mkdir($zuploadpath."\\uploads", 0777);
-			}
+			$this->checkContentFolders('', '', '');
+			$zuploadpath = $wtwhandlers->contentpath;
 			if(isset($_SESSION['wtw_uploadpathid']) && !empty($_SESSION['wtw_uploadpathid'])) {
 				$pathname = pathinfo('/'.$zfilename);
 				$newfolder = $pathname['filename'];
-				if (!file_exists($zuploadpath."\\uploads\\users")) {
-					mkdir($zuploadpath."\\uploads\\users", 0777);
+				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder)) {
+					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder, 0777);
 				}
-				if (!file_exists($zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid'])) {
-					mkdir($zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid'], 0777);
-				}
-				if (!file_exists($zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\objects")) {
-					mkdir($zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\objects", 0777);
-				}
-				if (!file_exists($zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\objects\\".$newfolder)) {
-					mkdir($zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\objects\\".$newfolder, 0777);
-				}
-				$zuploadpath = $zuploadpath."\\uploads\\users\\".$_SESSION['wtw_uploadpathid']."\\objects\\".$newfolder."\\";
-				$browsepath = $wtwiframes->contenturl."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder."/";
+				$zuploadpath = $zuploadpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder."/";
+				$browsepath = $wtwhandlers->contenturl."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder."/";
 				$zobjectfolder = "/content/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder."/";
 			}
 			$zfilesize = filesize($zfilepath);
 			if (!isset($zfilesize) && empty($zfilesize)) {
 				$zfilesize = "null";
 			}
-			if (!empty($wtwiframes->userid) && isset($wtwiframes->userid)) {
+			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
 				$zfilename = $this->avoidDuplicateFileNames($zuploadpath, $zfilename);
 				copy($zfilepath, $zuploadpath.$zfilename);
-				$zuploadobjectid = $wtwiframes->getRandomString(16,1);
-				$wtwiframes->query("
+				$zuploadobjectid = $wtwhandlers->getRandomString(16,1);
+				$wtwhandlers->query("
 					insert into ".wtw_tableprefix."uploadobjects
 						(uploadobjectid,
 						 userid,
@@ -632,35 +610,35 @@ class wtwuploads {
 						 updateuserid)
 					values
 						('".$zuploadobjectid."',
-						 '".$wtwiframes->userid."',
+						 '".$wtwhandlers->userid."',
 						 '".$zobjectfolder."',
 						 '".$zfilename."',
 						 now(),
-						 '".$wtwiframes->userid."',
+						 '".$wtwhandlers->userid."',
 						 now(),
-						 '".$wtwiframes->userid."');");
+						 '".$wtwhandlers->userid."');");
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-uploadObjectFileToDb=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-uploadObjectFileToDb=".$e->getMessage());
 		}
 	}
 	
 	public function setUploadVisibility($zthumbnailid, $zhide) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
-			if (!empty($wtwiframes->userid) && isset($wtwiframes->userid)) {
+			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
 				if ($zhide == 1 || $zhide == "1") {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."uploads
 						set hide=1,
 							hidedate=now(),
-							hideuserid='".$wtwiframes->userid."'
+							hideuserid='".$wtwhandlers->userid."'
 						where ((thumbnailid='".$zthumbnailid."') 
 							or uploadid='".$zthumbnailid."')
 							and not thumbnailid=''
-							and userid='".$wtwiframes->userid."';");
+							and userid='".$wtwhandlers->userid."';");
 				} else {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."uploads
 						set hide=0,
 							hidedate=NULL,
@@ -668,28 +646,28 @@ class wtwuploads {
 						where ((thumbnailid='".$zthumbnailid."') 
 							or uploadid='".$zthumbnailid."')
 							and not thumbnailid=''
-							and userid='".$wtwiframes->userid."';");
+							and userid='".$wtwhandlers->userid."';");
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-setUploadVisibility=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-setUploadVisibility=".$e->getMessage());
 		}
 	}
 
 	public function importWebImages($zmoldgroup, $zwebid, $zcopywebid, $zwebimagesbulk) {
 		$zsuccess = false;
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			/* ini_set('max_execution_time', 300); */
-			if (!empty($wtwiframes->getSessionUserID())) {
+			if (!empty($wtwhandlers->getSessionUserID())) {
 				if (!empty($zwebimagesbulk)) {
 					$zwebimagesbulk = base64_decode($zwebimagesbulk);
 					$zwebimages = json_decode($zwebimagesbulk);
 					$zrecordeach = 50 / count($zwebimages);
 					$i = 50;
 					foreach ($zwebimages as $zrow) {
-						$zwebimageid = $wtwiframes->getRandomString(16,1);
-						$wtwiframes->query("
+						$zwebimageid = $wtwhandlers->getRandomString(16,1);
+						$wtwhandlers->query("
 							insert into ".wtw_tableprefix."webimages
 								(webimageid, 
 								 pastwebimageid, 
@@ -715,24 +693,23 @@ class wtwuploads {
 								 '".$zrow->communitymoldid."', 
 								 '".$zrow->buildingmoldid."', 
 								 '".$zrow->thingmoldid."', 
-								 ".$wtwiframes->checkNumber($zrow->imageindex,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->imageindex,0).", 
 								 '".$zrow->imageid."', 
 								 '".$zrow->imagehoverid."', 
 								 '".$zrow->imageclickid."', 
-								 ".$wtwiframes->checkNumber($zrow->graphiclevel,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->graphiclevel,0).", 
 								 '".$zrow->jsfunction."', 
 								 '".$zrow->jsparameters."', 
-								 '".$wtwiframes->userid."', 
+								 '".$wtwhandlers->userid."', 
 								 '".$zrow->alttag."', 
 								 now(),
-								 '".$wtwiframes->userid."',
+								 '".$wtwhandlers->userid."',
 								 now(),
-								 '".$wtwiframes->userid."');");
+								 '".$wtwhandlers->userid."');");
 						$i += $zrecordeach;
-						echo "<script>parent.WTW.updateProgressBar(".$i.",100);</script>";
 					}
 					/* update foreign keys to new webimageids (updating moldids) */
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."webimages t1
 							inner join ".wtw_tableprefix.$zmoldgroup."molds t2
 							on t1.".$zmoldgroup."moldid=t2.past".$zmoldgroup."moldid
@@ -744,25 +721,39 @@ class wtwuploads {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-importWebImages=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-importWebImages=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function importUploads($zmoldgroup, $zwebid, $zcopywebid, $zuploadsbulk) {
 		$zsuccess = false;
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			/* ini_set('max_execution_time', 300); */
-			if (!empty($wtwiframes->getSessionUserID())) {
+			if (!empty($wtwhandlers->getSessionUserID())) {
 				if (!empty($zuploadsbulk)) {
 					$zuploadsbulk = base64_decode($zuploadsbulk);
 					$zuploads = json_decode($zuploadsbulk);
-					$this->checkUploadFolders($zmoldgroup, $zwebid);
+					$zcommunityid = '';
+					$zbuildingid = '';
+					$zthingid = '';
+					switch ($zmoldgroup) {
+						case "community":
+							$zcommunityid = $zwebid;
+							break;
+						case "building":
+							$zbuildingid = $zwebid;
+							break;
+						case "thing":
+							$zthingid = $zwebid;
+							break;
+					}
+					$this->checkContentFolders($zcommunityid, $zbuildingid, $zthingid);
 					$zrecordeach = 20 / count($zuploads);
 					$i = 80;
 					foreach ($zuploads as $zrow) {
-						$zuploadid = $wtwiframes->getRandomString(16,1);
+						$zuploadid = $wtwhandlers->getRandomString(16,1);
 						$zfiledata = null;
 						if (isset($zrow->filedata) && !empty($zrow->filedata)) {
 							$zfiledata = addslashes(base64_decode($zrow->filedata));
@@ -771,7 +762,7 @@ class wtwuploads {
 							$fileresults = $this->writeDataToFile($zrow->filedata, $zmoldgroup, $zwebid, $zrow->filename);
 							$filename = $fileresults["filename"];
 							$filepath = $fileresults["filepath"];
-							$wtwiframes->query("
+							$wtwhandlers->query("
 								insert into ".wtw_tableprefix."uploads
 									(uploadid, 
 									 pastuploadid, 
@@ -802,23 +793,23 @@ class wtwuploads {
 									 '".$zrow->filetitle."', 
 									 '".$filename."', 
 									 '".$zrow->fileextension."', 
-									 ".$wtwiframes->checkNumber($zrow->filesize,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->filesize,0).", 
 									 '".$zrow->filetype."', 
 									 '".$filepath."', 
 									 '".$zfiledata."', 
-									 ".$wtwiframes->checkNumber($zrow->imagewidth,1).", 
-									 ".$wtwiframes->checkNumber($zrow->imageheight,1).", 
+									 ".$wtwhandlers->checkNumber($zrow->imagewidth,1).", 
+									 ".$wtwhandlers->checkNumber($zrow->imageheight,1).", 
 									 0, 
 									 '".$zrow->userid."', 
 									 now(),
-									 '".$wtwiframes->userid."',
+									 '".$wtwhandlers->userid."',
 									 now(),
-									 '".$wtwiframes->userid."');");
+									 '".$wtwhandlers->userid."');");
 						} else {
 							$fileresults = $this->writeFileFromPath($zrow->filepath, $zmoldgroup, $zwebid, $zrow->filename);
 							$filename = $fileresults["filename"];
 							$filepath = $fileresults["filepath"];
-							$wtwiframes->query("
+							$wtwhandlers->query("
 								insert into ".wtw_tableprefix."uploads
 									(uploadid, 
 									 pastuploadid, 
@@ -848,35 +839,34 @@ class wtwuploads {
 									 '".$zrow->filetitle."', 
 									 '".$filename."', 
 									 '".$zrow->fileextension."', 
-									 ".$wtwiframes->checkNumber($zrow->filesize,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->filesize,0).", 
 									 '".$zrow->filetype."', 
 									 '".$filepath."', 
-									 ".$wtwiframes->checkNumber($zrow->imagewidth,1).", 
-									 ".$wtwiframes->checkNumber($zrow->imageheight,1).", 
-									 ".$wtwiframes->checkNumber($zrow->stock,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->imagewidth,1).", 
+									 ".$wtwhandlers->checkNumber($zrow->imageheight,1).", 
+									 ".$wtwhandlers->checkNumber($zrow->stock,0).", 
 									 '".$zrow->userid."', 
 									 now(),
-									 '".$wtwiframes->userid."',
+									 '".$wtwhandlers->userid."',
 									 now(),
-									 '".$wtwiframes->userid."');");
+									 '".$wtwhandlers->userid."');");
 						}
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							update ".wtw_tableprefix."uploads
 							set originalid='".$zuploadid."'
 							where originalid='".$zrow->uploadid."';");
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							update ".wtw_tableprefix."uploads
 							set websizeid='".$zuploadid."'
 							where websizeid='".$zrow->uploadid."';");
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							update ".wtw_tableprefix."uploads
 							set thumbnailid='".$zuploadid."'
 							where thumbnailid='".$zrow->uploadid."';"); 
 						$i += $zrecordeach;
-						echo "<script>parent.WTW.updateProgressBar(".$i.",100);</script>";
 					}
 					/* update foreign keys to new uploadids */
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.textureid=t2.pastuploadid
@@ -885,7 +875,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.textureid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.texturebumpid=t2.pastuploadid
@@ -894,7 +884,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.texturebumpid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.texturehoverid=t2.pastuploadid
@@ -903,7 +893,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.texturehoverid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.videoid=t2.pastuploadid
@@ -912,7 +902,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.videoid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.videoposterid=t2.pastuploadid
@@ -921,7 +911,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.videoposterid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.heightmapid=t2.pastuploadid
@@ -930,7 +920,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.heightmapid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.mixmapid=t2.pastuploadid
@@ -939,7 +929,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.mixmapid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.texturerid=t2.pastuploadid
@@ -948,7 +938,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.texturerid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.texturegid=t2.pastuploadid
@@ -957,7 +947,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.texturegid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.texturebid=t2.pastuploadid
@@ -966,7 +956,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.texturebid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.texturebumprid=t2.pastuploadid
@@ -975,7 +965,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.texturebumprid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.texturebumpgid=t2.pastuploadid
@@ -984,7 +974,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.texturebumpgid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.texturebumpbid=t2.pastuploadid
@@ -993,7 +983,7 @@ class wtwuploads {
 							and (not t1.".$zmoldgroup."id='')
 							and (not t1.texturebumpbid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1
 							inner join ".wtw_tableprefix."uploads t2
 							on t1.soundid=t2.pastuploadid
@@ -1003,7 +993,7 @@ class wtwuploads {
 							and (not t1.soundid='')
 							and (not t2.uploadid is null);");
 
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."webimages t1
 							inner join ".wtw_tableprefix.$zmoldgroup."molds t3
 								on t1.".$zmoldgroup."moldid=t3.".$zmoldgroup."moldid
@@ -1014,7 +1004,7 @@ class wtwuploads {
 							and (not t3.".$zmoldgroup."id='')
 							and (not t1.imageid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."webimages t1
 							inner join ".wtw_tableprefix.$zmoldgroup."molds t3
 								on t1.".$zmoldgroup."moldid=t3.".$zmoldgroup."moldid
@@ -1025,7 +1015,7 @@ class wtwuploads {
 							and (not t3.".$zmoldgroup."id='')
 							and (not t1.imagehoverid='')
 							and (not t2.uploadid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."webimages t1
 							inner join ".wtw_tableprefix.$zmoldgroup."molds t3
 								on t1.".$zmoldgroup."moldid=t3.".$zmoldgroup."moldid
@@ -1040,13 +1030,13 @@ class wtwuploads {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-importUploads=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-importUploads=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function writeDataToFile($zbase64data, $zmoldgroup, $zwebid, $zfilename) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$znewfilename = "";
 		$znewfilepath = "";
 		try {
@@ -1062,14 +1052,14 @@ class wtwuploads {
 					$zmoldgrouppath = "things";
 					break;
 			}
-			$zfilepath = $wtwiframes->contentpath."\\uploads\\".$zmoldgrouppath."\\".$zwebid."\\";
-			$zbrowsepath = $wtwiframes->contenturl."/uploads/".$zmoldgrouppath."/".$zwebid."/";
+			$zfilepath = $wtwhandlers->contentpath."/uploads/".$zmoldgrouppath."/".$zwebid."/";
+			$zbrowsepath = $wtwhandlers->contenturl."/uploads/".$zmoldgrouppath."/".$zwebid."/";
 			$znewfilename = $this->avoidDuplicateFileNames($zfilepath, $zfilename);
 			$zdata1 = base64_decode($zbase64data);
 			$znewfilepath = $zbrowsepath.$znewfilename;
 			$zsuccess = file_put_contents($zfilepath.$znewfilename, $zdata1);		
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-writeDataToFile=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-writeDataToFile=".$e->getMessage());
 		}
 		return array(
 			'filename' => $znewfilename,
@@ -1077,7 +1067,7 @@ class wtwuploads {
 	}
 	
 	public function writeFileFromPath($zfromurl, $zmoldgroup, $zwebid, $zfilename) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$znewfilename = "";
 		$znewfilepath = "";
 		try {
@@ -1094,8 +1084,8 @@ class wtwuploads {
 						$zmoldgrouppath = "things";
 						break;
 				}
-				$zfilepath = $wtwiframes->contentpath."\\uploads\\".$zmoldgrouppath."\\".$zwebid."\\";
-				$zbrowsepath = $wtwiframes->contenturl."/uploads/".$zmoldgrouppath."/".$zwebid."/";
+				$zfilepath = $wtwhandlers->contentpath."/uploads/".$zmoldgrouppath."/".$zwebid."/";
+				$zbrowsepath = $wtwhandlers->contenturl."/uploads/".$zmoldgrouppath."/".$zwebid."/";
 				$znewfilename = $this->avoidDuplicateFileNames($zfilepath, $zfilename);
 				$znewfilepath = $zbrowsepath.$znewfilename;
 				
@@ -1116,51 +1106,15 @@ class wtwuploads {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-writeFileFromPath=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-writeFileFromPath=".$e->getMessage());
 		}
 		return array(
 			'filename' => $znewfilename,
 			'filepath' => $znewfilepath);
 	}
 	
-	
-	public function checkUploadFolders($zmoldgroup, $zwebid) {
-		global $wtwiframes;
-		$zsuccess = false;
-		try {
-			$zmoldgrouppath = "misc";
-			switch ($zmoldgroup) {
-				case "community":
-					$zmoldgrouppath = "communities";
-					break;
-				case "building":
-					$zmoldgrouppath = "buildings";
-					break;
-				case "thing":
-					$zmoldgrouppath = "things";
-					break;
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads")) {
-				mkdir($wtwiframes->contentpath."\\uploads", 0777);
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads\\".$zmoldgrouppath)) {
-				mkdir($wtwiframes->contentpath."\\uploads\\".$zmoldgrouppath, 0777);
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads\\".$zmoldgrouppath."\\".$zwebid)) {
-				mkdir($wtwiframes->contentpath."\\uploads\\".$zmoldgrouppath."\\".$zwebid, 0777);
-			}
-			if (!file_exists($wtwiframes->contentpath."\\uploads\\".$zmoldgrouppath."\\".$zwebid."\\snapshots")) {
-				mkdir($wtwiframes->contentpath."\\uploads\\".$zmoldgrouppath."\\".$zwebid."\\snapshots", 0777);
-			}
-			$zsuccess = true;
-		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-checkUploadFolders=".$e->getMessage());
-		}
-		return $zsuccess;
-	}
-	
 	public function setKeyHash($zkey, $zmoldgroup, $zwebid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			if (!empty($zkey) && isset($zkey)) {
 				$zkey = base64_decode($zkey);
@@ -1168,7 +1122,7 @@ class wtwuploads {
 				$zkeyhash = password_hash($zkey, PASSWORD_DEFAULT, $options);
 				switch ($zmoldgroup) {
 					case "community":
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							update ".wtw_tableprefix."communities
 							set sharehash='".$zkeyhash."'
 							where communityid='".$zwebid."';");
@@ -1182,18 +1136,18 @@ class wtwuploads {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-getKeyHash=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getKeyHash=".$e->getMessage());
 		}
 		return $zkey;
 	}
 
 	public function saveWebAlias($zwebaliasid,$zforcehttps,$zdomainname,$zcommunitypublishname,$zbuildingpublishname,$zthingpublishname,$zcommunityid,$zbuildingid,$zthingid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->isUserInRole("Admin")) {
+			if ($wtwhandlers->isUserInRole("Admin")) {
 				/* check to see if web alias is already in use - if so - update it */
-				$zresponse = $wtwiframes->query("
+				$zresponse = $wtwhandlers->query("
 					select * from ".wtw_tableprefix."webaliases
 					where lower(domainname)=lower('".$zdomainname."')
 						and lower(communitypublishname)=lower('".$zcommunitypublishname."')
@@ -1206,7 +1160,7 @@ class wtwuploads {
 					}
 				} else {
 					/* check if passed webaliasid exists */
-					$zresponse = $wtwiframes->query("
+					$zresponse = $wtwhandlers->query("
 						select * from ".wtw_tableprefix."webaliases
 						where webaliasid='".$zwebaliasid."'
 							and not webaliasid=''
@@ -1217,8 +1171,8 @@ class wtwuploads {
 				}
 				/* update or insert new webalias */
 				if (empty($zwebaliasid) || !isset($zwebaliasid)) {
-					$zwebaliasid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zwebaliasid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."webaliases
 						   (webaliasid,
 							forcehttps,
@@ -1246,11 +1200,11 @@ class wtwuploads {
 							'".$zthingid."',
 							'".$zthingpublishname."',
 							now(),
-							'".$wtwiframes->userid."',
+							'".$wtwhandlers->userid."',
 							now(),
-							'".$wtwiframes->userid."');");
+							'".$wtwhandlers->userid."');");
 				} else {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."webaliases
 						set forcehttps=".$zforcehttps.",
 							domainname='".$zdomainname."',
@@ -1262,7 +1216,7 @@ class wtwuploads {
 							thingid='".$zthingid."',
 							thingpublishname='".$zthingpublishname."',
 							updatedate=now(),
-							updateuserid='".$wtwiframes->userid."',
+							updateuserid='".$wtwhandlers->userid."',
 							deleteddate=null,
 							deleteduserid='',
 							deleted=0
@@ -1272,22 +1226,22 @@ class wtwuploads {
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-saveWebAlias=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-saveWebAlias=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function deleteWebAlias($zwebaliasid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->isUserInRole("Admin")) {
+			if ($wtwhandlers->isUserInRole("Admin")) {
 				/* update or insert new webalias */
 				if (!empty($zwebaliasid) && isset($zwebaliasid)) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."webaliases
 						set deleteddate=now(),
-							deleteduserid='".$wtwiframes->userid."',
+							deleteduserid='".$wtwhandlers->userid."',
 							deleted=1
 						where webaliasid='".$zwebaliasid."'
 						limit 1;");
@@ -1295,7 +1249,7 @@ class wtwuploads {
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-deleteWebAlias=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-deleteWebAlias=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
@@ -1331,9 +1285,414 @@ class wtwuploads {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwuploads.php-hasTransparency=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-hasTransparency=".$e->getMessage());
 		}
 		return $zhastransparency;
+	}
+	
+	
+	public function getUploadedFiles() {
+		global $wtwhandlers;
+		$zresults = array();
+		try {
+			$zresults = $wtwhandlers->query("
+				select *
+				from ".wtw_tableprefix."uploadobjects
+				where userid='".$wtwhandlers->userid."'
+					or stock=1
+				order by createdate desc, objectfile, objectfolder, uploadobjectid;");
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getUploadedFiles=".$e->getMessage());
+		}
+		return $zresults;
+	}
+
+	public function getUploadedFileNameDetails($zuploadobjectid) {
+		global $wtwhandlers;
+		$zresults = array();
+		try {
+			$zresults = $wtwhandlers->query("
+				select *
+				from ".wtw_tableprefix."uploadobjects
+				where (userid='".$wtwhandlers->userid."'
+						or stock=1)
+						and uploadobjectid='".$zuploadobjectid."'
+				limit 1;");
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getUploadedFileNameDetails=".$e->getMessage());
+		}
+		return $zresults;
+	}
+
+	public function getUploadedFileFilesDetails($zobjectfolder) {
+		global $wtwhandlers;
+		$zresults = array();
+		try {
+			$i = 0;
+			$dir = str_replace('/content',$wtwhandlers->contentpath,$zobjectfolder);
+			$dir = rtrim($dir, "/");
+			if (is_dir($dir)) {
+				if ($dh = opendir($dir)) {
+					while (($zfile = readdir($dh)) !== false) {
+						if ($zfile != '.' && $zfile != '..') {
+							$zresults[$i] = array(
+								'file'=> $zfile
+							);
+							$i += 1;
+						}
+					}
+					closedir($dh);
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getUploadedFileFilesDetails=".$e->getMessage());
+		}
+		return $zresults;
+	}
+	
+	public function uploadFile($zuploadfile) {
+		global $wtwhandlers;
+		try {
+			$this->checkContentFolders('', '', '');
+			$zitem = $wtwhandlers->getVal("item","");	
+			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media";
+				$zfileurl = $wtwhandlers->contenturl."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media/";
+				$zisvalid = 1;
+				$zpastfilename = basename(strtolower($zuploadfile["name"]));
+				$zfileextension = pathinfo($zfilepath."/". $zpastfilename,PATHINFO_EXTENSION);
+				$zfilesize = $zuploadfile["size"];
+				$zfiletype = $zuploadfile["type"];
+				$zfilename = $wtwhandlers->getRandomString(16,1).".".$zfileextension;
+				$ztargetfile = $zfilepath."/".$zfilename;
+				if (file_exists($ztargetfile)) {
+					echo "File already exists.";
+					$zisvalid = 0;
+				}
+				if ($zfilesize > 128000000) {
+					echo "Your file is too large.";
+					$zisvalid = 0;
+				}
+				if(strtolower($zfileextension) != "babylon" && strtolower($zfileextension) != "gltf" && strtolower($zfileextension) != "glb") {
+					echo "Only babylon, gltf, and glb files are allowed at this time.";
+					$zisvalid = 0;
+				}
+				if ($zisvalid == 0) {
+					echo "Your file was not uploaded.";
+				} else {
+					if (move_uploaded_file($zuploadfile["tmp_name"], $ztargetfile)) {
+						$this->uploadObjectFileToDb($ztargetfile, $zpastfilename, $zfileextension, $zfiletype);
+					} else {
+						echo "There was an error uploading your file.";
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-uploadFile=".$e->getMessage());
+		}
+	}
+
+	public function uploadFiles($zuploadfiles, $zitem) {
+		global $wtwhandlers;
+		$serror = "";
+		try {
+			$this->checkContentFolders('', '', '');
+			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media/";
+				if (!file_exists($zfilepath)) {
+					mkdir($zfilepath, 0777);
+				}
+				for ($i = 0; $i < count($zuploadfiles["name"]);$i++) {
+					$zisvalid = 1;
+					$zpastfilename = basename(strtolower($zuploadfiles["name"][$i]));
+					$zfileextension = pathinfo($zfilepath."/". $zpastfilename,PATHINFO_EXTENSION);
+					$zfilesize = $zuploadfiles["size"][$i];
+					$zfiletype = $zuploadfiles["type"][$i];
+					$ztargetfile = $zfilepath."/".$zpastfilename;
+					if ($zfilesize > 128000000) {
+						$serror .= "Your file is too large.";
+						$zisvalid = 0;
+					}
+					if((!strpos($zitem, 'sound') > -1) && (!strpos($zitem, 'audio') > -1) && strtolower($zfileextension) != "jpg" && strtolower($zfileextension) != "png" && strtolower($zfileextension) != "jpeg" && strtolower($zfileextension) != "gif" && strtolower($zfileextension) != "mp4" && strtolower($zfileextension) != "webm" && strtolower($zfileextension) != "ogv") {
+						echo "Only JPG, JPEG, PNG, GIF, MP4, OGV, and WEBM files are allowed.";
+						$zisvalid = 0;
+					} elseif((strpos($zitem, 'sound') > -1) && strtolower($zfileextension) != "wav" && strtolower($zfileextension) != "mp3" && strtolower($zfileextension) != "wma" && strtolower($zfileextension) != "m4a") {
+						echo "Only WAV, MP3, M4A, and WMA files are allowed.";
+						$zisvalid = 0;
+					} 
+					if ($zisvalid == 1) {
+						if (move_uploaded_file($zuploadfiles["tmp_name"][$i], $ztargetfile)) {
+							$this->uploadFileToDb($ztargetfile, '', $zpastfilename, $zfileextension, $zfiletype, '1'); 
+						} else {
+							$serror .= "There was an error uploading your files.";
+						}
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-uploadFiles=".$e->getMessage());
+		}
+		return $serror;
+	}
+
+	public function uploadObjectFiles($zuploadfiles, $zobjectfilepart) {
+		global $wtwhandlers;
+		$serror = "";
+		try {
+			$this->checkContentFolders('', '', '');
+			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$zobjectfilepart;
+				if (!file_exists($zfilepath)) {
+					mkdir($zfilepath, 0777);
+				}
+				for ($i = 0; $i < count($zuploadfiles["name"]);$i++) {
+					$zisvalid = 1;
+					$zpastfilename = basename(strtolower($zuploadfiles["name"][$i]));
+					$zfileextension = pathinfo($zfilepath."/". $zpastfilename,PATHINFO_EXTENSION);
+					$zfilesize = $zuploadfiles["size"][$i];
+					$zfiletype = $zuploadfiles["type"][$i];
+					$ztargetfile = $zfilepath."/".$zpastfilename;
+					if ($zfilesize > 128000000) {
+						$serror .= "Your file is too large.";
+						$zisvalid = 0;
+					}
+					if(strtolower($zfileextension) != "babylon" && strtolower($zfileextension) != "manifest" && strtolower($zfileextension) != "txt" && strtolower($zfileextension) != "jpg" && strtolower($zfileextension) != "png" && strtolower($zfileextension) != "jpeg" && strtolower($zfileextension) != "gif" && strtolower($zfileextension) != "wav" && strtolower($zfileextension) != "mp3" && strtolower($zfileextension) != "mp4" && strtolower($zfileextension) != "webm" && strtolower($zfileextension) != "ogv" && strtolower($zfileextension) != "bin" && strtolower($zfileextension) != "gltf" && strtolower($zfileextension) != "bgltf" && strtolower($zfileextension) != "glb" && strtolower($zfileextension) != "blend" && strtolower($zfileextension) != "blend1" && strtolower($zfileextension) != "log") {
+						$serror .= "Only babylon, gltf, glb, blend, and image files are allowed at this time.";
+						$zisvalid = 0;
+					}
+/*					if((!strpos($_POST["wtw_titem"], 'sound') > -1) && (!strpos($_POST["wtw_titem"], 'audio') > -1) && strtolower($zfileextension) != "jpg" && strtolower($zfileextension) != "png" && strtolower($zfileextension) != "jpeg" && strtolower($zfileextension) != "gif" && strtolower($zfileextension) != "mp4" && strtolower($zfileextension) != "webm" && strtolower($zfileextension) != "ogv") {
+						echo "Only JPG, JPEG, PNG, GIF, MP4, OGV, and WEBM files are allowed.";
+						$zisvalid = 0;
+					} elseif((strpos($_POST["wtw_titem"], 'sound') > -1) && strtolower($zfileextension) != "wav" && strtolower($zfileextension) != "mp3" && strtolower($zfileextension) != "wma" && strtolower($zfileextension) != "m4a") {
+						echo "Only WAV, MP3, M4A, and WMA files are allowed.";
+						$zisvalid = 0;
+					} */
+					if ($zisvalid == 1) {
+						if (move_uploaded_file($zuploadfiles["tmp_name"][$i], $ztargetfile)) {
+/*							$this->uploadFileToDb($ztargetfile, '', $zpastfilename, $zfileextension, $zfiletype, '1'); */
+						} else {
+							$serror .= "There was an error uploading your files.";
+						}
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-uploadObjectFiles=".$e->getMessage());
+		}
+		return $serror;
+	}
+	
+	public function deleteObjectFile($zfilename, $zobjectfilepart) {
+		global $wtwhandlers;
+		$serror = "";
+		try {
+			$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$zobjectfilepart."/".$zfilename;
+			if (file_exists($zfilepath)) {
+				unlink($zfilepath);
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-deleteObjectFile=".$e->getMessage());
+		}
+		return $serror;
+	}
+
+	public function getMyImages($zcategory, $zhide) {
+		global $wtwhandlers;
+		$zresults = array();
+		try {
+			$zresults = $wtwhandlers->query("
+				select u1.*,
+					case when u1.websizeid='' then ''
+						else (select filepath 
+								from ".wtw_tableprefix."uploads 
+								where uploadid=u1.websizeid limit 1)
+					end as websizepath,
+					case when u1.originalid='' then ''
+						else (select filepath 
+								from ".wtw_tableprefix."uploads 
+								where uploadid=u1.originalid limit 1)
+					end as originalpath
+				from ".wtw_tableprefix."uploads u1
+				where u1.deleted=0
+					and u1.userid='".$wtwhandlers->userid."'
+					and u1.hide=".$zhide."
+					and case when '".$zcategory."' = 'image' then 
+							(u1.thumbnailid = u1.uploadid and u1.filetype like '%image%')
+						when '".$zcategory."' = 'video' then
+							(u1.filetype like '%video%')
+						when '".$zcategory."' = 'audio' then
+							(u1.filetype like '%audio%')
+						when '".$zcategory."' = 'doc' then
+							(u1.filetype like '%pdf%' 
+								or u1.filetype like '%doc%' 
+								or u1.filetype like '%log%' 
+								or u1.filetype like '%txt%' 
+								or u1.filetype like '%rtf%')
+						else
+							(u1.thumbnailid = u1.uploadid
+							and u1.filetype like '%image%')
+							or (u1.filetype like '%video%')
+							or (u1.filetype like '%audio%')
+						end
+				order by u1.updatedate desc, u1.createdate desc, u1.filename, u1.uploadid;");
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getMyImages=".$e->getMessage());
+		}
+		return $zresults;
+	}
+
+	public function getStockImages($zitem) {
+		global $wtwhandlers;
+		$zresults = array();
+		try {
+			if (strpos($zitem, 'sound')) {
+				$zresults = $wtwhandlers->query("
+					select * 
+					from ".wtw_tableprefix."uploads
+					where deleted=0
+						and stock='1'
+						and uploads.filetype like '%audio%'
+					order by updatedate desc, createdate desc, filename, uploadid;");
+			} else {
+				$zresults = $wtwhandlers->query("
+					select u1.*,
+						u2.filepath as websizepath,
+						u3.filepath as originalpath
+					from ".wtw_tableprefix."uploads u1
+						left join ".wtw_tableprefix."uploads u2
+							on u1.websizeid=u2.uploadid
+						left join ".wtw_tableprefix."uploads u3
+							on u1.originalid=u3.uploadid
+					where u1.deleted=0
+						and u1.stock='1'
+						and u1.thumbnailid = u1.uploadid
+						and u1.filetype like '%image%'
+					order by u1.updatedate desc, u1.createdate desc, u1.filename, u1.uploadid;");
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getStockImages=".$e->getMessage());
+		}
+		return $zresults;
+	}
+	
+	public function getCommunityImages($zcommunityid, $zbuildingid, $zthingid) {
+		global $wtwhandlers;
+		$zresults = array();
+		try {
+			$zmoldgroup = "";
+			$ztable = "";
+			$zwebid = "";
+			if (!empty($zcommunityid) && isset($zcommunityid)) {
+				$zmoldgroup = "community";
+				$ztable = "communities";
+				$zwebid = $zcommunityid;
+			} else if (!empty($zbuildingid) && isset($zbuildingid)) {
+				$zmoldgroup = "building";
+				$ztable = "buildings";
+				$zwebid = $zbuildingid;
+			} else if (!empty($zthingid) && isset($zthingid)) {
+				$zmoldgroup = "thing";
+				$ztable = "things";
+				$zwebid = $zthingid;
+			}
+			$zresults = $wtwhandlers->query("
+				select uploads.uploadid,
+					uploads.originalid,
+					uploads.websizeid,
+					uploads.thumbnailid,
+					uploads.userid,
+					uploads.filetitle,
+					uploads.filename,
+					uploads.fileextension,
+					uploads.filesize,
+					uploads.filetype,
+					uploads.filepath,
+					u2.filepath as websizepath,
+					u3.filepath as originalpath,
+					max(uploads.filedata) as filedata,
+					uploads.imagewidth,
+					uploads.imageheight,
+					uploads.stock,
+					uploads.createdate,
+					uploads.updatedate,
+					uploads.updateuserid
+				from ".wtw_tableprefix."uploads uploads
+						inner join (select u1.thumbnailid  
+							from ".wtw_tableprefix."uploads u1 
+								inner join (select t1.textureid, t1.texturehoverid, t1.heightmapid, w1.imageid, w1.imagehoverid 
+									from ".wtw_tableprefix.$zmoldgroup."molds t1
+									left join ".wtw_tableprefix."webimages w1 
+										on t1.".$zmoldgroup."moldid=w1.".$zmoldgroup."moldid 
+									where t1.".$zmoldgroup."id='".$zwebid."' 
+										and (not t1.textureid='' 
+										or not t1.texturehoverid='' 
+										or not t1.heightmapid=''
+										or not w1.imageid='' 
+										or not w1.imagehoverid='')) t2
+									on u1.thumbnailid = t2.textureid
+									or u1.thumbnailid = t2.texturehoverid
+									or u1.thumbnailid = t2.heightmapid
+									or u1.thumbnailid = t2.imageid
+									or u1.thumbnailid = t2.imagehoverid
+									or u1.websizeid = t2.textureid
+									or u1.websizeid = t2.texturehoverid
+									or u1.websizeid = t2.heightmapid
+									or u1.websizeid = t2.imageid
+									or u1.websizeid = t2.imagehoverid
+									or u1.originalid = t2.textureid
+									or u1.originalid = t2.texturehoverid
+									or u1.originalid = t2.heightmapid
+									or u1.originalid = t2.imageid
+									or u1.originalid = t2.imagehoverid
+							where u1.deleted=0
+								and u1.filetype like '%image%'
+								and (not u1.thumbnailid='')
+							group by u1.thumbnailid) thumbnails
+						on uploads.thumbnailid=thumbnails.thumbnailid
+					left join ".wtw_tableprefix."uploads u2
+						on uploads.websizeid=u2.uploadid
+					left join ".wtw_tableprefix."uploads u3
+						on uploads.originalid=u3.uploadid
+				where
+					uploads.uploadid=uploads.thumbnailid
+				group by uploads.uploadid,
+					uploads.originalid,
+					uploads.websizeid,
+					uploads.thumbnailid,
+					uploads.userid,
+					uploads.filetitle,
+					uploads.filename,
+					uploads.fileextension,
+					uploads.filesize,
+					uploads.filetype,
+					uploads.filepath,
+					u2.filepath,
+					u3.filepath,
+					uploads.imagewidth,
+					uploads.imageheight,
+					uploads.stock,
+					uploads.createdate,
+					uploads.updatedate,
+					uploads.updateuserid;");
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getCommunityImages=".$e->getMessage());
+		}
+		return $zresults;
+	}
+	
+	function toggleHideMyImage($zuploadid, $zhide) {
+		global $wtwhandlers;
+		$zresults = array();
+		try {
+			$zresults = $wtwhandlers->query("
+				update ".wtw_tableprefix."uploads
+				set hide=".$zhide."
+				where uploadid='".$zuploadid."'
+				limit 1;");
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-toggleHideMyImage=".$e->getMessage());
+		}
+		return $zresults;
 	}
 }
 

@@ -40,7 +40,7 @@ class wtwplugins {
 		global $wtw;
 		if ($wtw != null) {
 			$this->serverinstanceid = $wtw->serverinstanceid;
-			$this->rootpath = $wtw->rootpath;
+			$this->rootpath = wtw_rootpath;
 			$this->contentpath = $wtw->contentpath;
 			$this->contenturl = $wtw->contenturl;
 			$this->protocol = $wtw->protocol;

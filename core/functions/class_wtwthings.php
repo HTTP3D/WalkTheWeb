@@ -20,11 +20,11 @@ class wtwthings {
 	}
 	
 	public function thingExist($zthingid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$found = false;
 		try {
 			$zresults = array();
-			$zresults = $wtwiframes->query("
+			$zresults = $wtwhandlers->query("
 				select thingid 
 				from ".wtw_tableprefix."things 
 				where thingid='".$zthingid."' limit 1");
@@ -32,28 +32,28 @@ class wtwthings {
 				$found = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwthings.php-thingExist=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwthings.php-thingExist=".$e->getMessage());
 		}
 		return $found;
 	}
 
 	public function saveThing($zthingid, $zpastthingid, $zthingname, $zanalyticsid, $zalttag) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$copythingid = "";
 		$newthingid = "";
 		try {
-			if (!empty($zpastthingid) && isset($zpastthingid) && $wtwiframes->checkUpdateAccess("", "", $zpastthingid) == false) {
+			if (!empty($zpastthingid) && isset($zpastthingid) && $wtwhandlers->checkUpdateAccess("", "", $zpastthingid) == false) {
 				/* denies copy function if you do not have access to thing to copy */
 				$zpastthingid = "";
 			}
 			$zresults = array();
 			if ($zthingid == "") {
 				/* create new thingid */
-				$zthingid = $wtwiframes->getRandomString(16,1);
+				$zthingid = $wtwhandlers->getRandomString(16,1);
 				
 				if (empty($zpastthingid) || !isset($zpastthingid)) {
 					/* create new thing (without access to copy thing or if not copying existing thing, this creates new thing) */
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."things
 							(thingid,
 							 pastthingid,
@@ -68,17 +68,17 @@ class wtwthings {
 						values
 							('".$zthingid."',
 							 '',
-							 '".$wtwiframes->escapeHTML($zthingname)."',
+							 '".$wtwhandlers->escapeHTML($zthingname)."',
 							 '".$zanalyticsid."',
-							 '".$wtwiframes->userid."',
-							 '".$wtwiframes->escapeHTML($zalttag)."',
+							 '".$wtwhandlers->userid."',
+							 '".$wtwhandlers->escapeHTML($zalttag)."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				} else {
 					/* with access to copy thing, this gets all values */
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."things
 							(thingid,
 							 pastthingid,
@@ -104,9 +104,9 @@ class wtwthings {
 							 updateuserid)
 						select '".$zthingid."' as thingid,
 							 '".$zpastthingid."' as pastthingid,
-							 '".$wtwiframes->escapeHTML($zthingname)."' as thingname,
+							 '".$wtwhandlers->escapeHTML($zthingname)."' as thingname,
 							 '' as analyticsid,
-							 '".$wtwiframes->userid."' as userid,
+							 '".$wtwhandlers->userid."' as userid,
 							 positionx,
 							 positiony,
 							 positionz,
@@ -121,14 +121,14 @@ class wtwthings {
 							 floorcollisions,
 							 alttag,
 							 now() as createdate,
-							 '".$wtwiframes->userid."' as createuserid,
+							 '".$wtwhandlers->userid."' as createuserid,
 							 now() as updatedate,
-							 '".$wtwiframes->userid."' as updateuserid
+							 '".$wtwhandlers->userid."' as updateuserid
 						from ".wtw_tableprefix."things
 						where thingid='".$zpastthingid."';");
 				}
 				/* give user Admin access to their new thing */ 
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					insert into ".wtw_tableprefix."userauthorizations
 						(userauthorizationid,
 						 userid,
@@ -140,26 +140,26 @@ class wtwthings {
 						 updateuserid)
 					values
 						(getid16(),
-						 '".$wtwiframes->userid."',
+						 '".$wtwhandlers->userid."',
 						 '".$zthingid."',
 						 'admin',
 						 now(),
-						 '".$wtwiframes->userid."',
+						 '".$wtwhandlers->userid."',
 						 now(),
-						 '".$wtwiframes->userid."');");
-			} else if ($wtwiframes->checkUpdateAccess("", "", $zthingid)) {
+						 '".$wtwhandlers->userid."');");
+			} else if ($wtwhandlers->checkUpdateAccess("", "", $zthingid)) {
 				/* only updates if you have access */
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."things
-					set  thingname='".$wtwiframes->escapeHTML($zthingname)."',
+					set  thingname='".$wtwhandlers->escapeHTML($zthingname)."',
 						 analyticsid='".$zanalyticsid."',
-						 alttag='".$wtwiframes->escapeHTML($zalttag)."',
+						 alttag='".$wtwhandlers->escapeHTML($zalttag)."',
 						 updatedate=now(),
-						 updateuserid='".$wtwiframes->userid."'
+						 updateuserid='".$wtwhandlers->userid."'
 					where thingid='".$zthingid."';");
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwthings.php-saveThing=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwthings.php-saveThing=".$e->getMessage());
 		}
 		if ($zpastthingid != "" && $zthingid != "") {
 			$copythingid = $this->copyThing($zthingid, $zpastthingid);
@@ -171,139 +171,139 @@ class wtwthings {
 	}
 
 	public function saveThingStartPosition($zthingid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->checkUpdateAccess("", "", $zthingid)) {
-				$wtwiframes->query("
+			if ($wtwhandlers->checkUpdateAccess("", "", $zthingid)) {
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."things
-					set positionx=".$wtwiframes->checkNumber($zstartpositionx,0).",
-						positiony=".$wtwiframes->checkNumber($zstartpositiony,0).",
-						positionz=".$wtwiframes->checkNumber($zstartpositionz,0).",
-						scalingx=".$wtwiframes->checkNumber($zstartscalingx,1).",
-						scalingy=".$wtwiframes->checkNumber($zstartscalingy,1).",
-						scalingz=".$wtwiframes->checkNumber($zstartscalingz,1).",
-						rotationx=".$wtwiframes->checkNumber($zstartrotationx,0).",
-						rotationy=".$wtwiframes->checkNumber($zstartrotationy,0).",
-						rotationz=".$wtwiframes->checkNumber($zstartrotationz,0).",
+					set positionx=".$wtwhandlers->checkNumber($zstartpositionx,0).",
+						positiony=".$wtwhandlers->checkNumber($zstartpositiony,0).",
+						positionz=".$wtwhandlers->checkNumber($zstartpositionz,0).",
+						scalingx=".$wtwhandlers->checkNumber($zstartscalingx,1).",
+						scalingy=".$wtwhandlers->checkNumber($zstartscalingy,1).",
+						scalingz=".$wtwhandlers->checkNumber($zstartscalingz,1).",
+						rotationx=".$wtwhandlers->checkNumber($zstartrotationx,0).",
+						rotationy=".$wtwhandlers->checkNumber($zstartrotationy,0).",
+						rotationz=".$wtwhandlers->checkNumber($zstartrotationz,0).",
 						updatedate=now(),
-						updateuserid='".$wtwiframes->userid."'
+						updateuserid='".$wtwhandlers->userid."'
 					where thingid='".$zthingid."';");
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwthings.php-saveThingStartPosition=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwthings.php-saveThingStartPosition=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function clearThing($zthingid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->checkAdminAccess("", "", $zthingid)) {
+			if ($wtwhandlers->checkAdminAccess("", "", $zthingid)) {
 				$zdeleteindex = 2;
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select max(deleted) as maxdeleted 
 					from ".wtw_tableprefix."thingmolds 
 					where thingid='".$zthingid."' limit 1;");
 				foreach ($zresults as $zrow) {
-					$zdeleteindex = $wtwiframes->getNumber($zrow["maxdeleted"],2);
+					$zdeleteindex = $wtwhandlers->getNumber($zrow["maxdeleted"],2);
 				}
 				$zdeleteindex += 1;
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."webimages w1 
 						inner join ".wtw_tableprefix."thingmolds tm1
 							on w1.thingmoldid = tm1.thingmoldid
 					set w1.deleted=".$zdeleteindex.",
 						w1.deleteddate=now(),
-						w1.deleteduserid='".$wtwiframes->userid."'
+						w1.deleteduserid='".$wtwhandlers->userid."'
 					where tm1.thingid='".$zthingid."'
 						and not tm1.thingid=''
 						and not w1.thingmoldid=''
 						and w1.deleted=0;");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."thingmolds
 					set deleted=".$zdeleteindex.",
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where thingid='".$zthingid."'
 						and deleted=0;");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones
 					set deleted=".$zdeleteindex.",
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where thingid='".$zthingid."'
 						and deleted=0
 						and not actionzonetype='loadzone';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."automations
 					set deleted=".$zdeleteindex.",
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where thingid='".$zthingid."'
 						and deleted=0;");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."things
 					set updatedate=now(),
-						updateuserid='".$wtwiframes->userid."'
+						updateuserid='".$wtwhandlers->userid."'
 					where thingid='".$zthingid."';");
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwthings.php-clearThing=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwthings.php-clearThing=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 
 	public function deleteThing($zthingid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->checkAdminAccess("", "", $zthingid)) {
+			if ($wtwhandlers->checkAdminAccess("", "", $zthingid)) {
 				$zdeleteindex = 2;
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select max(deleted) as maxdeleted 
 					from ".wtw_tableprefix."thingmolds 
 					where thingid='".$zthingid."' limit 1;");
 				foreach ($zresults as $zrow) {
-					$zdeleteindex = $wtwiframes->getNumber($zrow["maxdeleted"],2);
+					$zdeleteindex = $wtwhandlers->getNumber($zrow["maxdeleted"],2);
 				}
 				$zdeleteindex += 1;				
 				$this->clearThing($zthingid);
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."things
 					set deleted=".$zdeleteindex.",
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where thingid='".$zthingid."'
 						and deleted=0
 						and not thingid='';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."userauthorizations
 					set deleted=".$zdeleteindex.",
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where thingid='".$zthingid."'
 						and deleted=0
 						and not thingid='';");
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwthings.php-deleteThing=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwthings.php-deleteThing=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 
 	public function copyThing($zthingid, $zcopythingid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			/* new thing has to already exist */
 			/* does user have access to copy thing and new thing */
-			if ($wtwiframes->checkUpdateAccess("", "", $zthingid) && $wtwiframes->checkUpdateAccess("", "", $zcopythingid)) {
-				$zresults = $wtwiframes->query("
+			if ($wtwhandlers->checkUpdateAccess("", "", $zthingid) && $wtwhandlers->checkUpdateAccess("", "", $zcopythingid)) {
+				$zresults = $wtwhandlers->query("
 					select t2.actionzoneid as pastactionzoneid,
 						 t2.communityid,
 						 t2.buildingid,
@@ -341,8 +341,8 @@ class wtwthings {
 					where t2.thingid='".$zfromthingid."'
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zactionzoneid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zactionzoneid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."actionzones
 							(actionzoneid,
 							 pastactionzoneid,
@@ -394,35 +394,35 @@ class wtwthings {
 							 '".$zrow["actionzonetype"]."',
 							 '".$zrow["actionzoneshape"]."',
 							 '".$zrow["movementtype"]."',
-							 ".$wtwiframes->checkNumber($zrow["positionx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positiony"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positionz"],0).",
-							 ".$wtwiframes->checkNumber($zrow["scalingx"],1).",
-							 ".$wtwiframes->checkNumber($zrow["scalingy"],1).",
-							 ".$wtwiframes->checkNumber($zrow["scalingz"],1).",
-							 ".$wtwiframes->checkNumber($zrow["rotationx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["rotationy"],0).",
-							 ".$wtwiframes->checkNumber($zrow["rotationz"],0).",
-							 ".$wtwiframes->checkNumber($zrow["axispositionx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["axispositiony"],0).",
-							 ".$wtwiframes->checkNumber($zrow["axispositionz"],0).",
-							 ".$wtwiframes->checkNumber($zrow["axisrotationx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["axisrotationy"],0).",
-							 ".$wtwiframes->checkNumber($zrow["axisrotationz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positiony"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingx"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingy"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingz"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationy"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["axispositionx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["axispositiony"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["axispositionz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["axisrotationx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["axisrotationy"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["axisrotationz"],0).",
 							 '".$zrow["rotateaxis"]."',
-							 ".$wtwiframes->checkNumber($zrow["rotatedegrees"],90).",
-							 ".$wtwiframes->checkNumber($zrow["rotatedirection"],1).",
-							 ".$wtwiframes->checkNumber($zrow["rotatespeed"],1).",
-							 ".$wtwiframes->checkNumber($zrow["movementdistance"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotatedegrees"],90).",
+							 ".$wtwhandlers->checkNumber($zrow["rotatedirection"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["rotatespeed"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["movementdistance"],0).",
 							 '".$zrow["parentactionzoneid"]."',
 							 '".$zrow["jsfunction"]."',
 							 '".$zrow["jsparameters"]."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t2.connectinggridid as pastconnectinggridid,
 						 t2.parentwebid,
 						 t2.parentwebtype,
@@ -458,8 +458,8 @@ class wtwthings {
 						and parentwebid=''
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zconnectinggridid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zconnectinggridid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."connectinggrids
 							(connectinggridid,
 							 pastconnectinggridid,
@@ -491,25 +491,25 @@ class wtwthings {
 							 '".$zrow["parentwebtype"]."',
 							 '".$zrow["childwebid"]."',
 							 '".$zrow["childwebtype"]."',
-							 ".$wtwiframes->checkNumber($zrow["positionx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positiony"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positionz"],0).",
-							 ".$wtwiframes->checkNumber($zrow["scalingx"],1).",
-							 ".$wtwiframes->checkNumber($zrow["scalingy"],1).",
-							 ".$wtwiframes->checkNumber($zrow["scalingz"],1).",
-							 ".$wtwiframes->checkNumber($zrow["rotationx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["rotationy"],0).",
-							 ".$wtwiframes->checkNumber($zrow["rotationz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positiony"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingx"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingy"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingz"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationy"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationz"],0).",
 							 '".$zrow["loadactionzoneid"]."',
 							 '".$zrow["unloadactionzoneid"]."',
 							 '".$zrow["attachactionzoneid"]."',
 							 '".$zrow["alttag"]."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t2.connectinggridid as pastconnectinggridid,
 						 '".$zthingid."' as parentwebid,
 						 t2.parentwebtype,
@@ -544,8 +544,8 @@ class wtwthings {
 					where t2.parentwebid='".$zfromthingid."'
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zconnectinggridid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zconnectinggridid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."connectinggrids
 							(connectinggridid,
 							 pastconnectinggridid,
@@ -577,25 +577,25 @@ class wtwthings {
 							 '".$zrow["parentwebtype"]."',
 							 '".$zrow["childwebid"]."',
 							 '".$zrow["childwebtype"]."',
-							 ".$wtwiframes->checkNumber($zrow["positionx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positiony"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positionz"],0).",
-							 ".$wtwiframes->checkNumber($zrow["scalingx"],1).",
-							 ".$wtwiframes->checkNumber($zrow["scalingy"],1).",
-							 ".$wtwiframes->checkNumber($zrow["scalingz"],1).",
-							 ".$wtwiframes->checkNumber($zrow["rotationx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["rotationy"],0).",
-							 ".$wtwiframes->checkNumber($zrow["rotationz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positiony"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingx"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingy"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingz"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationy"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationz"],0).",
 							 '".$zrow["loadactionzoneid"]."',
 							 '".$zrow["unloadactionzoneid"]."',
 							 '".$zrow["attachactionzoneid"]."',
 							 '".$zrow["alttag"]."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t2.automationid as pastautomationid,
 						 t2.automationname,
 						 t2.communityid,
@@ -612,8 +612,8 @@ class wtwthings {
 					where t2.thingid='".$zfromthingid."'
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zautomationid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zautomationid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."automations
 							(automationid,
 							 pastautomationid,
@@ -639,11 +639,11 @@ class wtwthings {
 							 '".$zrow["jsfunction"]."',
 							 '".$zrow["jsparameters"]."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t2.automationstepid as pastautomationstepid,
 						 t3.automationid as automationid,
 						 t2.step,
@@ -669,8 +669,8 @@ class wtwthings {
 						on t4.pastactionzoneid=t2.actionzoneid
 					where t2.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zautomationstepid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zautomationstepid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."automationsteps
 							(automationstepid,
 							 pastautomationstepid,
@@ -692,21 +692,21 @@ class wtwthings {
 							('".$zautomationstepid."',
 							 '".$zrow["pastautomationstepid"]."',
 							 '".$zrow["automationid"]."',
-							 ".$wtwiframes->checkNumber($zrow["step"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["step"],1).",
 							 '".$zrow["automationtype"]."',
 							 '".$zrow["actionzoneid"]."',
-							 ".$wtwiframes->checkNumber($zrow["actionzonestatus"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["actionzonestatus"],0).",
 							 '".$zrow["conditionoperator"]."',
 							 '".$zrow["conditionstatus"]."',
 							 '".$zrow["conditionvalue"]."',
 							 '".$zrow["jsfunction"]."',
 							 '".$zrow["jsparameters"]."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t3.thingmoldid as pastthingmoldid,
 						t4.actionzoneid as loadactionzoneid,
 						'".$zthingid."' as thingid,
@@ -791,8 +791,8 @@ class wtwthings {
 					where t3.thingid='".$zfromthingid."'
 						and t3.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zthingmoldid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zthingmoldid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."thingmolds
 						   (thingmoldid,
 							pastthingmoldid,
@@ -878,24 +878,24 @@ class wtwthings {
 							'".$zrow["thingid"]."',
 							'".$zrow["shape"]."',
 							'".$zrow["covering"]."',
-							".$wtwiframes->checkNumber($zrow["positionx"],0).",
-							".$wtwiframes->checkNumber($zrow["positiony"],0).",
-							".$wtwiframes->checkNumber($zrow["positionz"],0).",
-							".$wtwiframes->checkNumber($zrow["scalingx"],1).",
-							".$wtwiframes->checkNumber($zrow["scalingy"],1).",
-							".$wtwiframes->checkNumber($zrow["scalingz"],1).",
-							".$wtwiframes->checkNumber($zrow["rotationx"],0).",
-							".$wtwiframes->checkNumber($zrow["rotationy"],0).",
-							".$wtwiframes->checkNumber($zrow["rotationz"],0).",
-							".$wtwiframes->checkNumber($zrow["special1"],0).",
-							".$wtwiframes->checkNumber($zrow["special2"],0).",
-							".$wtwiframes->checkNumber($zrow["uoffset"],0).",
-							".$wtwiframes->checkNumber($zrow["voffset"],0).",
-							".$wtwiframes->checkNumber($zrow["uscale"],0).",
-							".$wtwiframes->checkNumber($zrow["vscale"],0).",
+							".$wtwhandlers->checkNumber($zrow["positionx"],0).",
+							".$wtwhandlers->checkNumber($zrow["positiony"],0).",
+							".$wtwhandlers->checkNumber($zrow["positionz"],0).",
+							".$wtwhandlers->checkNumber($zrow["scalingx"],1).",
+							".$wtwhandlers->checkNumber($zrow["scalingy"],1).",
+							".$wtwhandlers->checkNumber($zrow["scalingz"],1).",
+							".$wtwhandlers->checkNumber($zrow["rotationx"],0).",
+							".$wtwhandlers->checkNumber($zrow["rotationy"],0).",
+							".$wtwhandlers->checkNumber($zrow["rotationz"],0).",
+							".$wtwhandlers->checkNumber($zrow["special1"],0).",
+							".$wtwhandlers->checkNumber($zrow["special2"],0).",
+							".$wtwhandlers->checkNumber($zrow["uoffset"],0).",
+							".$wtwhandlers->checkNumber($zrow["voffset"],0).",
+							".$wtwhandlers->checkNumber($zrow["uscale"],0).",
+							".$wtwhandlers->checkNumber($zrow["vscale"],0).",
 							'".$zrow["uploadobjectid"]."',
-							".$wtwiframes->checkNumber($zrow["receiveshadows"],0).",
-							".$wtwiframes->checkNumber($zrow["graphiclevel"],0).",
+							".$wtwhandlers->checkNumber($zrow["receiveshadows"],0).",
+							".$wtwhandlers->checkNumber($zrow["graphiclevel"],0).",
 							'".$zrow["textureid"]."',
 							'".$zrow["texturebumpid"]."',
 							'".$zrow["texturehoverid"]."',
@@ -912,45 +912,45 @@ class wtwthings {
 							'".$zrow["soundid"]."',
 							'".$zrow["soundname"]."',
 							'".$zrow["soundattenuation"]."',
-							".$wtwiframes->checkNumber($zrow["soundloop"],1).",
-							".$wtwiframes->checkNumber($zrow["soundmaxdistance"],100).",
-							".$wtwiframes->checkNumber($zrow["soundrollofffactor"],1).",
-							".$wtwiframes->checkNumber($zrow["soundrefdistance"],1).",
-							".$wtwiframes->checkNumber($zrow["soundconeinnerangle"],90).",
-							".$wtwiframes->checkNumber($zrow["soundconeouterangle"],180).",
-							".$wtwiframes->checkNumber($zrow["soundconeoutergain"],1).",
+							".$wtwhandlers->checkNumber($zrow["soundloop"],1).",
+							".$wtwhandlers->checkNumber($zrow["soundmaxdistance"],100).",
+							".$wtwhandlers->checkNumber($zrow["soundrollofffactor"],1).",
+							".$wtwhandlers->checkNumber($zrow["soundrefdistance"],1).",
+							".$wtwhandlers->checkNumber($zrow["soundconeinnerangle"],90).",
+							".$wtwhandlers->checkNumber($zrow["soundconeouterangle"],180).",
+							".$wtwhandlers->checkNumber($zrow["soundconeoutergain"],1).",
 							'".$zrow["webtext"]."',
 							'".$zrow["webstyle"]."',
-							".$wtwiframes->checkNumber($zrow["opacity"],100).",
+							".$wtwhandlers->checkNumber($zrow["opacity"],100).",
 							'".$zrow["sideorientation"]."',
-							".$wtwiframes->checkNumber($zrow["billboard"],0).",
-							".$wtwiframes->checkNumber($zrow["waterreflection"],0).",
-							".$wtwiframes->checkNumber($zrow["subdivisions"],12).",
-							".$wtwiframes->checkNumber($zrow["minheight"],0).",
-							".$wtwiframes->checkNumber($zrow["maxheight"],30).",
-							".$wtwiframes->checkNumber($zrow["checkcollisions"],1).",
-							".$wtwiframes->checkNumber($zrow["ispickable"],1).",
+							".$wtwhandlers->checkNumber($zrow["billboard"],0).",
+							".$wtwhandlers->checkNumber($zrow["waterreflection"],0).",
+							".$wtwhandlers->checkNumber($zrow["subdivisions"],12).",
+							".$wtwhandlers->checkNumber($zrow["minheight"],0).",
+							".$wtwhandlers->checkNumber($zrow["maxheight"],30).",
+							".$wtwhandlers->checkNumber($zrow["checkcollisions"],1).",
+							".$wtwhandlers->checkNumber($zrow["ispickable"],1).",
 							'".$zrow["actionzoneid"]."',
 							'".$zrow["csgmoldid"]."',
 							'".$zrow["csgaction"]."',
 							'".$zrow["alttag"]."',
 							'".$zrow["jsfunction"]."',
 							'".$zrow["jsparameters"]."',
-							".$wtwiframes->checkNumber($zrow["diffusecolorr"],1).",
-							".$wtwiframes->checkNumber($zrow["diffusecolorg"],1).",
-							".$wtwiframes->checkNumber($zrow["diffusecolorb"],1).",
-							".$wtwiframes->checkNumber($zrow["specularcolorr"],1).",
-							".$wtwiframes->checkNumber($zrow["specularcolorg"],1).",
-							".$wtwiframes->checkNumber($zrow["specularcolorb"],1).",
-							".$wtwiframes->checkNumber($zrow["emissivecolorr"],1).",
-							".$wtwiframes->checkNumber($zrow["emissivecolorg"],1).",
-							".$wtwiframes->checkNumber($zrow["emissivecolorb"],1).",
+							".$wtwhandlers->checkNumber($zrow["diffusecolorr"],1).",
+							".$wtwhandlers->checkNumber($zrow["diffusecolorg"],1).",
+							".$wtwhandlers->checkNumber($zrow["diffusecolorb"],1).",
+							".$wtwhandlers->checkNumber($zrow["specularcolorr"],1).",
+							".$wtwhandlers->checkNumber($zrow["specularcolorg"],1).",
+							".$wtwhandlers->checkNumber($zrow["specularcolorb"],1).",
+							".$wtwhandlers->checkNumber($zrow["emissivecolorr"],1).",
+							".$wtwhandlers->checkNumber($zrow["emissivecolorg"],1).",
+							".$wtwhandlers->checkNumber($zrow["emissivecolorb"],1).",
 							now(),
-							'".$wtwiframes->userid."',
+							'".$wtwhandlers->userid."',
 							now(),
-							'".$wtwiframes->userid."');");
+							'".$wtwhandlers->userid."');");
 				}
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t4.webimageid as pastwebimageid,
 						 t6.thingmoldid as thingmoldid,
 						 '' as buildingmoldid,
@@ -975,8 +975,8 @@ class wtwthings {
 						and t5.deleted=0
 						and t4.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zwebimageid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zwebimageid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."webimages
 							(webimageid,
 							 pastwebimageid,
@@ -1001,20 +1001,20 @@ class wtwthings {
 							 '".$zrow["thingmoldid"]."',
 							 '".$zrow["buildingmoldid"]."',
 							 '".$zrow["communitymoldid"]."',
-							 ".$wtwiframes->checkNumber($zrow["imageindex"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["imageindex"],1).",
 							 '".$zrow["imageid"]."',
 							 '".$zrow["imagehoverid"]."',
 							 '".$zrow["imageclickid"]."',
 							 '".$zrow["jsfunction"]."',
 							 '".$zrow["jsparameters"]."',
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 '".$zrow["alttag"]."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select t6.thingmoldid as thingmoldid,
 						 t4.pathnumber,
 						 t4.sorder,
@@ -1033,8 +1033,8 @@ class wtwthings {
 						and t5.deleted=0
 						and t4.deleted=0;");
 				foreach ($zresults as $zrow) {
-					$zmoldpointid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zmoldpointid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."moldpoints
 							(moldpointid,
 							 moldid,
@@ -1050,37 +1050,37 @@ class wtwthings {
 						values
 							('".$zmoldpointid."',
 							 '".$zrow["moldid"]."',
-							 ".$wtwiframes->checkNumber($zrow["pathnumber"],1).",
-							 ".$wtwiframes->checkNumber($zrow["sorder"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positionx"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positiony"],0).",
-							 ".$wtwiframes->checkNumber($zrow["positionz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["pathnumber"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["sorder"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positiony"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionz"],0).",
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."thingmolds
 					set actionzoneid=''
 					where actionzoneid is null 
 						and thingid='".$zthingid."';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."thingmolds
 					set loadactionzoneid=''
 					where loadactionzoneid is null 
 						and thingid='".$zthingid."';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."thingmolds
 					set csgmoldid=''
 					where csgmoldid is null 
 						and thingid='".$zthingid."';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones
 					set attachmoldid=''
 					where attachmoldid is null 
 						and thingid='".$zthingid."';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."thingmolds t1 
 						inner join (select * 
 							from ".wtw_tableprefix."thingmolds 
@@ -1091,7 +1091,7 @@ class wtwthings {
 					where not t1.csgmoldid=''
 						and t1.thingid='".$zthingid."'
 						and (not t2.thingmoldid is null);");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1
 						inner join (select * 
 							from ".wtw_tableprefix."thingmolds 
@@ -1101,7 +1101,7 @@ class wtwthings {
 					set t1.attachmoldid=t2.thingmoldid
 					where t1.thingid='".$zthingid."'
 						and not t1.attachmoldid='';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1
 						inner join (select * 
 							from ".wtw_tableprefix."actionzones 
@@ -1112,7 +1112,7 @@ class wtwthings {
 					set t1.parentactionzoneid=t2.actionzoneid
 					where t1.thingid='".$zthingid."'
 						and not t1.parentactionzoneid='';");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1
 						inner join (select * 
 							from ".wtw_tableprefix."actionzones 
@@ -1126,19 +1126,18 @@ class wtwthings {
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwthings.php-copyThing=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwthings.php-copyThing=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function importThing($zthingid, $zpastthingid, $zthingname, $zthinganalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $zalttag) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			/* ini_set('max_execution_time', 300); */
-			if (!empty($wtwiframes->getSessionUserID())) {
-				echo "<script>parent.WTW.updateProgressBar(75,100);</script>";
-				if ($wtwiframes->keyExists(wtw_tableprefix.'things', 'thingid', $zthingid) == false) {
-					$wtwiframes->query("
+			if (!empty($wtwhandlers->getSessionUserID())) {
+				if ($wtwhandlers->keyExists(wtw_tableprefix.'things', 'thingid', $zthingid) == false) {
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."things
 							(thingid, 
 							 pastthingid, 
@@ -1176,13 +1175,13 @@ class wtwthings {
 							 ".$zstartrotationz.", 
 							 ".$zgravity.", 
 							 '".$zalttag."',
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
-					$zuserauthorizationid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+							 '".$wtwhandlers->userid."');");
+					$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."userauthorizations
 							(userauthorizationid,
 							 userid,
@@ -1196,26 +1195,25 @@ class wtwthings {
 							 updateuserid)
 						values
 							('".$zuserauthorizationid."',
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 '',
 							 '',
 							 '".$zthingid."',
 							 'admin',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
 			}
-			echo "<script>parent.WTW.updateProgressBar(95,100);</script>";
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwthings.php-importThing=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwthings.php-importThing=".$e->getMessage());
 		}
 		return $zthingid;
 	}		
 	
 	public function addMustHave() {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$returntext = array();
 		try {
 			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
@@ -1261,13 +1259,13 @@ class wtwthings {
 			}
 			$conn->close();
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwthings.php-addMustHave=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwthings.php-addMustHave=".$e->getMessage());
 		}
 		return htmlspecialchars(json_encode($returntext), ENT_QUOTES, 'UTF-8');
 	}
 
 	public function shareThingTemplate($zthingid, $ztemplatename, $zdescription, $ztags) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
 			if ($conn->connect_error) {
@@ -1285,12 +1283,12 @@ class wtwthings {
 			}
 			$conn->close();
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwthings.php-shareThingTemplate=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwthings.php-shareThingTemplate=".$e->getMessage());
 		}
 	}	
 
 	public function saveTemplateThing($zpastthingid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$newthingid = "";
 		try {
 			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
@@ -1315,7 +1313,7 @@ class wtwthings {
 			}
 			$conn->close();
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwthings.php-saveTemplateThing=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwthings.php-saveTemplateThing=".$e->getMessage());
 		}
 		return $newthingid;
 	}

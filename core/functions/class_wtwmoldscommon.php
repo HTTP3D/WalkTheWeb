@@ -20,23 +20,23 @@ class wtwmoldscommon {
 	}
 	
 	public function savePathPoints($zcommunityid, $zbuildingid, $zthingid, $zmoldid, $zpathnumber, $zpathpoints) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			if ($zmoldid != "") {
 				$access = false;
 				if (!empty($zcommunityid) && isset($zcommunityid)) {
-					$access = $wtwiframes->checkAdminAccess($zcommunityid, "", "");
+					$access = $wtwhandlers->checkAdminAccess($zcommunityid, "", "");
 				} else if (!empty($zbuildingid) && isset($zbuildingid)) {
-					$access = $wtwiframes->checkAdminAccess("", $zbuildingid, "");
+					$access = $wtwhandlers->checkAdminAccess("", $zbuildingid, "");
 				} else if (!empty($zthingid) && isset($zthingid)) {
-					$access = $wtwiframes->checkAdminAccess("", "", $zthingid);
+					$access = $wtwhandlers->checkAdminAccess("", "", $zthingid);
 				}
 				if ($access) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."moldpoints
 						set deleteddate=now(),
-							deleteduserid='".$wtwiframes->userid."',
+							deleteduserid='".$wtwhandlers->userid."',
 							deleted=1
 						where moldid='".$zmoldid."'
 							and pathnumber=".$zpathnumber.";");
@@ -45,33 +45,33 @@ class wtwmoldscommon {
 				$pathpoints = (array) json_decode($zpathpoints,true);
 				foreach($pathpoints as $key=>$value) {
 					$zmoldpointid = "";
-					$zresults = $wtwiframes->query("
+					$zresults = $wtwhandlers->query("
 						select moldpointid 
 						from ".wtw_tableprefix."moldpoints 
 						where moldid='".$zmoldid."' 
-							and pathnumber=".$wtwiframes->checkNumber($zpathnumber,1)." 
-							and sorder=".$wtwiframes->checkNumber($value["sorder"],0)." 
+							and pathnumber=".$wtwhandlers->checkNumber($zpathnumber,1)." 
+							and sorder=".$wtwhandlers->checkNumber($value["sorder"],0)." 
 						order by createdate 
 						limit 1");
 					foreach ($zresults as $zrow) {
 						$zmoldpointid = $zrow["moldpointid"];
 					}
 					if (!empty($zmoldpointid) && isset($zmoldpointid)) {
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							update ".wtw_tableprefix."moldpoints
-							set positionx=".$wtwiframes->checkNumber($value["x"],0).",
-								positiony=".$wtwiframes->checkNumber($value["y"],0).",
-								positionz=".$wtwiframes->checkNumber($value["z"],0).",
+							set positionx=".$wtwhandlers->checkNumber($value["x"],0).",
+								positiony=".$wtwhandlers->checkNumber($value["y"],0).",
+								positionz=".$wtwhandlers->checkNumber($value["z"],0).",
 								updatedate=now(),
-								updateuserid='".$wtwiframes->userid."',
+								updateuserid='".$wtwhandlers->userid."',
 								deleteddate=null,
 								deleteduserid='',
 								deleted=0
 							where moldpointid='".$zmoldpointid."'
 								and moldid='".$zmoldid."'
-								and pathnumber=".$wtwiframes->checkNumber($zpathnumber,1).";");
+								and pathnumber=".$wtwhandlers->checkNumber($zpathnumber,1).";");
 					} else {
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							insert into ".wtw_tableprefix."moldpoints
 								(moldpointid,
 								 moldid,
@@ -87,15 +87,15 @@ class wtwmoldscommon {
 							values
 								('".$zmoldpointid."',
 								 '".$zmoldid."',
-								 ".$wtwiframes->checkNumber($zpathnumber,1).",
-								 ".$wtwiframes->checkNumber($value["sorder"],0).",
-								 ".$wtwiframes->checkNumber($value["x"],0).",
-								 ".$wtwiframes->checkNumber($value["y"],0).",
-								 ".$wtwiframes->checkNumber($value["z"],0).",
+								 ".$wtwhandlers->checkNumber($zpathnumber,1).",
+								 ".$wtwhandlers->checkNumber($value["sorder"],0).",
+								 ".$wtwhandlers->checkNumber($value["x"],0).",
+								 ".$wtwhandlers->checkNumber($value["y"],0).",
+								 ".$wtwhandlers->checkNumber($value["z"],0).",
 								 now(),
-								 '".$wtwiframes->userid."',
+								 '".$wtwhandlers->userid."',
 								 now(),
-								 '".$wtwiframes->userid."');");
+								 '".$wtwhandlers->userid."');");
 					}
 					$zsuccess = true;
 				}	
@@ -107,40 +107,40 @@ class wtwmoldscommon {
 	}
 	
 	function saveWebImage($zthingmoldid, $zbuildingmoldid, $zcommunitymoldid, $zimageindex, $zimageid, $zimagehoverid, $zimageclickid, $zjsfunction, $zjsparameters) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			$zwebimageid = "";
-			$zresults = $wtwiframes->query("
+			$zresults = $wtwhandlers->query("
 				select webimageid 
 				from ".wtw_tableprefix."webimages 
 				where thingmoldid='".$zthingmoldid."' 
 					and buildingmoldid='".$zbuildingmoldid."' 
 					and communitymoldid='".$zcommunitymoldid."' 
-					and imageindex=".$wtwiframes->checkNumber($zimageindex,0)." 
+					and imageindex=".$wtwhandlers->checkNumber($zimageindex,0)." 
 				order by createdate desc, webimageid desc 
 				limit 1;");
 			foreach ($zresults as $zrow) {
 				$zwebimageid = $zrow["webimageid"];
 			}
 			if (!empty($zwebimageid) && isset($zwebimageid)) {
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."webimages
-					set imageindex=".$wtwiframes->checkNumber($zimageindex,0).",
+					set imageindex=".$wtwhandlers->checkNumber($zimageindex,0).",
 						imageid='".$zimageid."',
 						imagehoverid='".$zimagehoverid."',
 						imageclickid='".$zimageclickid."',
 						jsfunction='".$zjsfunction."',
 						jsparameters='".$zjsparameters."',
 						updatedate=now(),
-						updateuserid='".$wtwiframes->userid."',
+						updateuserid='".$wtwhandlers->userid."',
 						deleteddate=null,
 						deleteduserid='',
 						deleted=0
 					where webimageid='".$zwebimageid."';");
 			} else {
-				$zwebimageid = $wtwiframes->getRandomString(16,1);
-				$wtwiframes->query("
+				$zwebimageid = $wtwhandlers->getRandomString(16,1);
+				$wtwhandlers->query("
 					insert into ".wtw_tableprefix."webimages
 						(webimageid,
 						 thingmoldid,
@@ -162,17 +162,17 @@ class wtwmoldscommon {
 						 '".$zthingmoldid."',
 						 '".$zbuildingmoldid."',
 						 '".$zcommunitymoldid."',
-						 ".$wtwiframes->checkNumber($zimageindex,0).",
+						 ".$wtwhandlers->checkNumber($zimageindex,0).",
 						 '".$zimageid."',
 						 '".$zimagehoverid."',
 						 '".$zimageclickid."',
 						 '".$zjsfunction."',
 						 '".$zjsparameters."',
-						 '".$wtwiframes->userid."',
+						 '".$wtwhandlers->userid."',
 						 now(),
-						 '".$wtwiframes->userid."',
+						 '".$wtwhandlers->userid."',
 						 now(),
-						 '".$wtwiframes->userid."');
+						 '".$wtwhandlers->userid."');
 					");
 			}
 			$zsuccess = true;
@@ -184,10 +184,10 @@ class wtwmoldscommon {
 
 	public function importMolds($zmoldgroup, $zwebid, $zcopywebid, $zmoldsbulk) {
 		$zsuccess = false;
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			/* ini_set('max_execution_time', 300); */
-			if (!empty($wtwiframes->getSessionUserID())) {
+			if (!empty($wtwhandlers->getSessionUserID())) {
 				if (!empty($zmoldsbulk)) {
 					$zmoldsbulk = base64_decode($zmoldsbulk);
 					$zmolds = json_decode($zmoldsbulk);
@@ -206,8 +206,8 @@ class wtwmoldscommon {
 								$pastmoldid = $zrow->thingmoldid;
 								break;
 						}
-						$zmoldid = $wtwiframes->getRandomString(16,1);
-						$wtwiframes->query("
+						$zmoldid = $wtwhandlers->getRandomString(16,1);
+						$wtwhandlers->query("
 							insert into ".wtw_tableprefix.$zmoldgroup."molds
 								(".$zmoldgroup."moldid,
 								 past".$zmoldgroup."moldid,
@@ -295,25 +295,25 @@ class wtwmoldscommon {
 								 '".$zrow->loadactionzoneid."', 
 								 '".$zrow->shape."', 
 								 '".$zrow->covering."', 
-								 ".$wtwiframes->checkNumber($zrow->positionx,0).", 
-								 ".$wtwiframes->checkNumber($zrow->positiony,0).", 
-								 ".$wtwiframes->checkNumber($zrow->positionz,0).", 
-								 ".$wtwiframes->checkNumber($zrow->scalingx,1).", 
-								 ".$wtwiframes->checkNumber($zrow->scalingy,1).", 
-								 ".$wtwiframes->checkNumber($zrow->scalingz,1).", 
-								 ".$wtwiframes->checkNumber($zrow->rotationx,0).", 
-								 ".$wtwiframes->checkNumber($zrow->rotationy,0).", 
-								 ".$wtwiframes->checkNumber($zrow->rotationz,0).", 
-								 ".$wtwiframes->checkNumber($zrow->special1,0).", 
-								 ".$wtwiframes->checkNumber($zrow->special2,0).", 
-								 ".$wtwiframes->checkNumber($zrow->uoffset,0).", 
-								 ".$wtwiframes->checkNumber($zrow->voffset,0).", 
-								 ".$wtwiframes->checkNumber($zrow->uscale,0).", 
-								 ".$wtwiframes->checkNumber($zrow->vscale,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->positionx,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->positiony,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->positionz,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->scalingx,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->scalingy,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->scalingz,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->rotationx,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->rotationy,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->rotationz,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->special1,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->special2,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->uoffset,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->voffset,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->uscale,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->vscale,0).", 
 								 '".$zrow->uploadobjectid."', 
 								 '".$zrow->objectfolder."', 
 								 '".$zrow->objectfile."', 
-								 ".$wtwiframes->checkNumber($zrow->graphiclevel,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->graphiclevel,0).", 
 								 '".$zrow->textureid."', 
 								 '".$zrow->texturebumpid."', 
 								 '".$zrow->texturehoverid."', 
@@ -328,36 +328,36 @@ class wtwmoldscommon {
 								 '".$zrow->texturebumprid."', 
 								 '".$zrow->texturebumpgid."', 
 								 '".$zrow->texturebumpbid."', 
-								 ".$wtwiframes->checkNumber($zrow->minheight,0).", 
-								 ".$wtwiframes->checkNumber($zrow->maxheight,30).", 
+								 ".$wtwhandlers->checkNumber($zrow->minheight,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->maxheight,30).", 
 								 '".$zrow->soundid."', 
 								 '".$zrow->soundname."', 
 								 '".$zrow->soundattenuation."', 
-								 ".$wtwiframes->checkNumber($zrow->soundloop,1).", 
-								 ".$wtwiframes->checkNumber($zrow->soundmaxdistance,100).", 
-								 ".$wtwiframes->checkNumber($zrow->soundrollofffactor,1).", 
-								 ".$wtwiframes->checkNumber($zrow->soundrefdistance,1).", 
-								 ".$wtwiframes->checkNumber($zrow->soundconeinnerangle,90).", 
-								 ".$wtwiframes->checkNumber($zrow->soundconeouterangle,180).", 
-								 ".$wtwiframes->checkNumber($zrow->soundconeoutergain,1).", 
-								 ".$wtwiframes->checkNumber($zrow->diffusecolorr,1).", 
-								 ".$wtwiframes->checkNumber($zrow->diffusecolorg,1).", 
-								 ".$wtwiframes->checkNumber($zrow->diffusecolorb,1).", 
-								 ".$wtwiframes->checkNumber($zrow->specularcolorr,1).", 
-								 ".$wtwiframes->checkNumber($zrow->specularcolorg,1).", 
-								 ".$wtwiframes->checkNumber($zrow->specularcolorb,1).", 
-								 ".$wtwiframes->checkNumber($zrow->emissivecolorr,1).", 
-								 ".$wtwiframes->checkNumber($zrow->emissivecolorg,1).", 
-								 ".$wtwiframes->checkNumber($zrow->emissivecolorb,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->soundloop,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->soundmaxdistance,100).", 
+								 ".$wtwhandlers->checkNumber($zrow->soundrollofffactor,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->soundrefdistance,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->soundconeinnerangle,90).", 
+								 ".$wtwhandlers->checkNumber($zrow->soundconeouterangle,180).", 
+								 ".$wtwhandlers->checkNumber($zrow->soundconeoutergain,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->diffusecolorr,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->diffusecolorg,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->diffusecolorb,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->specularcolorr,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->specularcolorg,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->specularcolorb,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->emissivecolorr,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->emissivecolorg,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->emissivecolorb,1).", 
 								 '".$zrow->webtext."', 
 								 '".$zrow->webstyle."', 
-								 ".$wtwiframes->checkNumber($zrow->opacity,100).", 
-								 ".$wtwiframes->checkNumber($zrow->billboard,0).", 
-								 ".$wtwiframes->checkNumber($zrow->waterreflection,0).", 
-								 ".$wtwiframes->checkNumber($zrow->receiveshadows,0).", 
-								 ".$wtwiframes->checkNumber($zrow->subdivisions,12).", 
-								 ".$wtwiframes->checkNumber($zrow->checkcollisions,1).", 
-								 ".$wtwiframes->checkNumber($zrow->ispickable,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->opacity,100).", 
+								 ".$wtwhandlers->checkNumber($zrow->billboard,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->waterreflection,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->receiveshadows,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->subdivisions,12).", 
+								 ".$wtwhandlers->checkNumber($zrow->checkcollisions,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->ispickable,1).", 
 								 '".$zrow->actionzoneid."', 
 								 '".$zrow->csgmoldid."', 
 								 '".$zrow->csgaction."', 
@@ -365,25 +365,24 @@ class wtwmoldscommon {
 								 '".$zrow->jsfunction."', 
 								 '".$zrow->jsparameters."',
 								 now(),
-								 '".$wtwiframes->userid."',
+								 '".$wtwhandlers->userid."',
 								 now(),
-								 '".$wtwiframes->userid."');");
+								 '".$wtwhandlers->userid."');");
 						$i += $zrecordeach;
-						echo "<script>parent.WTW.updateProgressBar(".$i.",100);</script>";
 					}
 					/* clean up data */
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds
 						set actionzoneid=''
 						where actionzoneid is null 
 							and ".$zmoldgroup."id='".$zwebid."';");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds
 						set csgmoldid=''
 						where csgmoldid is null 
 							and ".$zmoldgroup."id='".$zwebid."';");
 					/* update foreign keys to new moldids */
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1 
 							inner join (select * 
 								from ".wtw_tableprefix.$zmoldgroup."molds 
@@ -393,7 +392,7 @@ class wtwmoldscommon {
 						where not t1.csgmoldid=''
 							and t1.".$zmoldgroup."id='".$zwebid."'
 							and (not t2.".$zmoldgroup."moldid is null);");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1 
 							inner join (select * 
 								from ".wtw_tableprefix."actionzones 
@@ -404,7 +403,7 @@ class wtwmoldscommon {
 						where not t1.actionzoneid=''
 							and t1.".$zmoldgroup."id='".$zwebid."'
 							and not t2.actionzoneid is null;"); 
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."molds t1 
 							inner join (select * 
 								from ".wtw_tableprefix."actionzones 
@@ -415,7 +414,7 @@ class wtwmoldscommon {
 						where not t1.loadactionzoneid=''
 							and t1.".$zmoldgroup."id='".$zwebid."'
 							and not t2.actionzoneid is null;"); 
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."actionzones t1
 							inner join (select * 
 								from ".wtw_tableprefix.$zmoldgroup."molds 
@@ -429,16 +428,16 @@ class wtwmoldscommon {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwmoldscommon.php-importMolds=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwmoldscommon.php-importMolds=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function importMoldPoints($zmoldgroup, $zwebid, $zcopywebid, $zmoldpointsbulk) {
 		$zsuccess = false;
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
-			if (!empty($wtwiframes->getSessionUserID())) {
+			if (!empty($wtwhandlers->getSessionUserID())) {
 				if (!empty($zmoldpointsbulk)) {
 					$zcommunityid = "";
 					$zbuildingid = "";
@@ -459,9 +458,9 @@ class wtwmoldscommon {
 					$zrecordeach = 50 / count($zmoldpoints);
 					$i = 50;
 					foreach ($zmoldpoints as $zrow) {
-						$zmoldpointid = $wtwiframes->getRandomString(16,1);
-						if (!empty($sql) && !empty($wtwiframes->userid)) {
-							$wtwiframes->query("
+						$zmoldpointid = $wtwhandlers->getRandomString(16,1);
+						if (!empty($sql) && !empty($wtwhandlers->userid)) {
+							$wtwhandlers->query("
 								insert into ".wtw_tableprefix."moldpoints
 									(moldpointid,
 									 pastmoldpointid,
@@ -479,21 +478,20 @@ class wtwmoldscommon {
 									('".$zmoldpointid."', 
 									 '".$zrow->moldpointid."', 
 									 '".$zrow->moldid."', 
-									 ".$wtwiframes->checkNumber($zrow->pathnumber,1).", 
-									 ".$wtwiframes->checkNumber($zrow->sorder,0).", 
-									 ".$wtwiframes->checkNumber($zrow->positionx,0).", 
-									 ".$wtwiframes->checkNumber($zrow->positiony,0).", 
-									 ".$wtwiframes->checkNumber($zrow->positionz,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->pathnumber,1).", 
+									 ".$wtwhandlers->checkNumber($zrow->sorder,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->positionx,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->positiony,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->positionz,0).", 
 									 now(),
-									 '".$wtwiframes->userid."',
+									 '".$wtwhandlers->userid."',
 									 now(),
-									 '".$wtwiframes->userid."');");
+									 '".$wtwhandlers->userid."');");
 							$i += $zrecordeach;
-							echo "<script>parent.WTW.updateProgressBar(".$i.",100);</script>";
 						}
 					}
 					/* update foreign keys to new moldpointids */
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix.$zmoldgroup."moldpoints t1 
 							inner join (select * 
 								from ".wtw_tableprefix.$zmoldgroup."molds 
@@ -507,7 +505,7 @@ class wtwmoldscommon {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwmoldscommon.php-importMoldPoints=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwmoldscommon.php-importMoldPoints=".$e->getMessage());
 		}
 		return $zsuccess;
 	}

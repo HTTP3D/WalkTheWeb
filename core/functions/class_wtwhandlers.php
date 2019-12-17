@@ -1,5 +1,5 @@
 <?php
-class wtwconnect {
+class wtwhandlers {
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -11,7 +11,7 @@ class wtwconnect {
 	
 	public function __construct() {
 		$this->rootpath = str_replace('\core\functions','',dirname(__FILE__));
-		if (!defined('wtw_rootpath')) {
+		if (!defined("wtw_rootpath")) {
 			define("wtw_rootpath", $this->rootpath);
 		}
 		require_once(wtw_rootpath.'/config/wtw_config.php');
@@ -95,7 +95,7 @@ class wtwconnect {
 			if (defined('wtw_contentpath')) {
 				$this->contentpath = wtw_contentpath;
 			} else {
-				$this->contentpath = wtw_rootpath."/content";
+				$this->contentpath = $this->rootpath."/content";
 			}
 			if (defined('wtw_contenturl')) {
 				$this->contenturl = wtw_contenturl;
@@ -122,7 +122,7 @@ class wtwconnect {
 				$this->serverinstanceid = wtw_serverinstanceid;
 			}
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwconnect.php-initClass=" . $e->getMessage());
+			$this->serror("core-functions-class_wtwhandlers.php-initClass=" . $e->getMessage());
 		}
 	}
 	
@@ -161,7 +161,7 @@ class wtwconnect {
 		try {
 			$this->userid = $wtwdb->getSessionUserID();
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwconnect.php-getSessionUserID=" . $e->getMessage());
+			$this->serror("core-functions-class_wtwhandlers.php-getSessionUserID=" . $e->getMessage());
 		}
 		return $this->userid;
 	}
@@ -294,7 +294,7 @@ class wtwconnect {
 		return $wtwdb->getWebAliases($zmoldgroup, $zwebid);
 	}
 
-	public function addConnectHeader($zavailabledomains) {
+	public function addHandlerHeader($zavailabledomains) {
 		$zheader = "";
 		try {
 			$zheader .= header('Access-Control-Allow-Origin: '.$zavailabledomains);
@@ -304,7 +304,7 @@ class wtwconnect {
 			//$zheader .= header('Content-type: application/json; charset=iso-8859-1');
 			//$zheader .= header('Content-Language: en');
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwconnect.php-addConnectHeader=".$e->getMessage());
+			$wtwdb->serror("core-functions-class_wtwhandlers.php-addHandlerHeader=".$e->getMessage());
 		}
 		return $zheader;
 	}
@@ -315,12 +315,12 @@ class wtwconnect {
 	}
 }
 
-	function wtwconnect() {
-		return wtwconnect::instance();
+	function wtwhandlers() {
+		return wtwhandlers::instance();
 	}
 
 	/* Global for backwards compatibility. */
-	$GLOBALS['wtwconnect'] = wtwconnect();
+	$GLOBALS['wtwhandlers'] = wtwhandlers();
 	
 	if (session_status() == PHP_SESSION_NONE) {
 		session_start();
@@ -355,6 +355,6 @@ class wtwconnect {
 			}
 		}
 	}
-	global $wtwconnect;
-	$wtwconnect->initClass();
+	global $wtwhandlers;
+	$wtwhandlers->initClass();
 ?>

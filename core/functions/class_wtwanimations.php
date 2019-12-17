@@ -19,8 +19,66 @@ class wtwanimations {
 		}
 	}
 
+	public function getUploadedFileAnimationsDetails($zuploadobjectid) {
+		global $wtwhandlers;
+		$zresults = array();
+		try {
+			$zresults = $wtwhandlers->query("
+				select a1.*,
+					case when a1.soundid = '' then ''
+						else
+							(select filepath 
+								from ".wtw_tableprefix."uploads 
+								where uploadid=a1.soundid limit 1)
+						end as soundpath,
+					case when a1.moldevent='' then '0'
+						else '1'
+					end as sorder
+				from ".wtw_tableprefix."uploadobjectanimations a1
+					inner join ".wtw_tableprefix."uploadobjects uo1
+						on a1.uploadobjectid=uo1.uploadobjectid
+				where a1.uploadobjectid='".$zuploadobjectid."'
+					and (a1.userid='".$wtwhandlers->userid."'
+						or uo1.stock=1)
+					and a1.deleted=0
+				order by sorder, a1.moldevent, a1.animationname, a1.objectanimationid;");
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwanimations.php-getUploadedFileAnimationsDetails=".$e->getMessage());
+		}
+		return $zresults;
+	}
+
+	public function getObjectAnimation($zobjectanimationid) {
+		global $wtwhandlers;
+		$zresults = array();
+		try {
+			$zresults = $wtwhandlers->query("
+				select a1.*,
+					case when a1.soundid = '' then ''
+						else
+							(select filepath 
+								from ".wtw_tableprefix."uploads 
+								where uploadid=a1.soundid limit 1)
+						end as soundpath,
+					case when a1.soundid = '' then ''
+						else
+							(select filename 
+								from ".wtw_tableprefix."uploads 
+								where uploadid=a1.soundid limit 1)
+						end as soundname
+				from ".wtw_tableprefix."uploadobjectanimations a1
+				where a1.objectanimationid='".$zobjectanimationid."'
+					and a1.userid='".$wtwhandlers->userid."'
+					and a1.deleted=0
+				limit 1;");
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwanimations.php-getObjectAnimation=".$e->getMessage());
+		}
+		return $zresults;
+	}
+
 	public function saveObjectAnimation($zobjectanimationid, $zuploadobjectid, $zanimationname, $zmoldevent, $zmoldnamepart, $zstartframe, $zendframe, $zanimationloop, $zspeedratio, $zanimationendscript, $zanimationendparameters, $zstopcurrentanimations, $zsoundid, $zsoundmaxdistance) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			if(empty($zstartframe) || !isset($zstartframe)) {
@@ -52,7 +110,7 @@ class wtwanimations {
 				$zstopcurrentanimations = '0';
 			}
 			$found = false;
-			$zresults = $wtwiframes->query("
+			$zresults = $wtwhandlers->query("
 				select objectanimationid 
 				from ".wtw_tableprefix."uploadobjectanimations 
 				where objectanimationid='".$zobjectanimationid."' 
@@ -61,12 +119,12 @@ class wtwanimations {
 			foreach ($zresults as $zrow) {
 				$found = true;
 			}
-			if (!empty($wtwiframes->userid) && isset($wtwiframes->userid)) {
+			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
 				if ($found) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."uploadobjectanimations
 						set	objectanimationid='".$zobjectanimationid."',
-							userid='".$wtwiframes->userid."',
+							userid='".$wtwhandlers->userid."',
 							animationname='".$zanimationname."',
 							moldevent='".$zmoldevent."',
 							moldnamepart='".$zmoldnamepart."',
@@ -80,15 +138,15 @@ class wtwanimations {
 							soundid='".$zsoundid."',
 							soundmaxdistance=".$zsoundmaxdistance.",
 							updatedate=now(),
-							updateuserid='".$wtwiframes->userid."',
+							updateuserid='".$wtwhandlers->userid."',
 							deleteddate=null,
 							deleteduserid='',
 							deleted=0
 						where objectanimationid='".$zobjectanimationid."'
 							and uploadobjectid='".$zuploadobjectid."'
-							and userid='".$wtwiframes->userid."';");
+							and userid='".$wtwhandlers->userid."';");
 				} else {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."uploadobjectanimations
 							(objectanimationid,
 							 uploadobjectid,
@@ -112,7 +170,7 @@ class wtwanimations {
 						values
 							('".$zobjectanimationid."',
 							 '".$zuploadobjectid."',
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 '".$zanimationname."',
 							 '".$zmoldevent."',
 							 '".$zmoldnamepart."',
@@ -126,29 +184,28 @@ class wtwanimations {
 							 '".$zsoundid."',
 							 ".$zsoundmaxdistance.",
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwanimations.php-saveObjectAnimation=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwanimations.php-saveObjectAnimation=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 
-	public function deleteObjectAnimation($zobjectanimationid, $zuploadobjectid) {
-		global $wtwiframes;
+	public function deleteObjectAnimation($zobjectanimationid) {
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if (!empty($wtwiframes->userid) && isset($wtwiframes->userid)) {
+			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
 				$found = false;
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select objectanimationid 
 					from ".wtw_tableprefix."uploadobjectanimations 
 					where objectanimationid='".$zobjectanimationid."' 
-						and uploadobjectid='".$zuploadobjectid."'
 						and not objectanimationid=''
 						and not uploadobjectid=''
 					limit 1;");
@@ -156,19 +213,18 @@ class wtwanimations {
 					$found = true;
 				}
 				if ($found) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."uploadobjectanimations
 						set	deleteddate=now(),
-							deleteduserid='".$wtwiframes->userid."',
+							deleteduserid='".$wtwhandlers->userid."',
 							deleted=1
 						where objectanimationid='".$zobjectanimationid."'
-							and uploadobjectid='".$zuploadobjectid."'
-							and userid='".$wtwiframes->userid."';");
+							and userid='".$wtwhandlers->userid."';");
 				}
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwanimations.php-deleteObjectAnimation=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwanimations.php-deleteObjectAnimation=".$e->getMessage());
 		}
 		return $zsuccess;
 	}

@@ -20,11 +20,11 @@ class wtwthingmolds {
 	}
 	
 	function saveThingMold($zthingmoldid, $zthingid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zsubdivisions, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb, $zspecularcolorr, $zspecularcolorg, $zspecularcolorb, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
-			if ($wtwiframes->checkUpdateAccess("", "", $zthingid)) {
+			if ($wtwhandlers->checkUpdateAccess("", "", $zthingid)) {
 				$zfoundthingmoldid = "";
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select thingmoldid 
 					from ".wtw_tableprefix."thingmolds 
 					where thingmoldid='".$zthingmoldid."'
@@ -34,68 +34,68 @@ class wtwthingmolds {
 					$zfoundthingmoldid = $zrow["thingmoldid"];
 				}
 				if (!empty($zfoundthingmoldid) && isset($zfoundthingmoldid)) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."thingmolds
 						set loadactionzoneid='".$zloadactionzoneid."',
 							shape='".$zshape."',
 							covering='".$zcovering."',
-							positionx=".$wtwiframes->checkNumber($zpositionx,0).",
-							positiony=".$wtwiframes->checkNumber($zpositiony,0).",
-							positionz=".$wtwiframes->checkNumber($zpositionz,0).",
-							scalingx=".$wtwiframes->checkNumber($zscalingx,1).",
-							scalingy=".$wtwiframes->checkNumber($zscalingy,1).",
-							scalingz=".$wtwiframes->checkNumber($zscalingz,1).",
-							rotationx=".$wtwiframes->checkNumber($zrotationx,0).",
-							rotationy=".$wtwiframes->checkNumber($zrotationy,0).",
-							rotationz=".$wtwiframes->checkNumber($zrotationz,0).",
-							special1=".$wtwiframes->checkNumber($zspecial1,0).",
-							special2=".$wtwiframes->checkNumber($zspecial2,0).",
-							uoffset=".$wtwiframes->checkNumber($zuoffset,0).",
-							voffset=".$wtwiframes->checkNumber($zvoffset,0).",
-							uscale=".$wtwiframes->checkNumber($zuscale,0).",
-							vscale=".$wtwiframes->checkNumber($zvscale,0).",
+							positionx=".$wtwhandlers->checkNumber($zpositionx,0).",
+							positiony=".$wtwhandlers->checkNumber($zpositiony,0).",
+							positionz=".$wtwhandlers->checkNumber($zpositionz,0).",
+							scalingx=".$wtwhandlers->checkNumber($zscalingx,1).",
+							scalingy=".$wtwhandlers->checkNumber($zscalingy,1).",
+							scalingz=".$wtwhandlers->checkNumber($zscalingz,1).",
+							rotationx=".$wtwhandlers->checkNumber($zrotationx,0).",
+							rotationy=".$wtwhandlers->checkNumber($zrotationy,0).",
+							rotationz=".$wtwhandlers->checkNumber($zrotationz,0).",
+							special1=".$wtwhandlers->checkNumber($zspecial1,0).",
+							special2=".$wtwhandlers->checkNumber($zspecial2,0).",
+							uoffset=".$wtwhandlers->checkNumber($zuoffset,0).",
+							voffset=".$wtwhandlers->checkNumber($zvoffset,0).",
+							uscale=".$wtwhandlers->checkNumber($zuscale,0).",
+							vscale=".$wtwhandlers->checkNumber($zvscale,0).",
 							uploadobjectid='".$zuploadobjectid."',
-							subdivisions=".$wtwiframes->checkNumber($zsubdivisions,12).",
-							receiveshadows=".$wtwiframes->checkNumber($zreceiveshadows,0).",
-							graphiclevel=".$wtwiframes->checkNumber($zgraphiclevel,0).",
+							subdivisions=".$wtwhandlers->checkNumber($zsubdivisions,12).",
+							receiveshadows=".$wtwhandlers->checkNumber($zreceiveshadows,0).",
+							graphiclevel=".$wtwhandlers->checkNumber($zgraphiclevel,0).",
 							videoid='".$zvideoid."',
 							videoposterid='".$zvideoposterid."',
 							textureid='".$ztextureid."',
 							texturebumpid='".$ztexturebumpid."',
-							opacity=".$wtwiframes->checkNumber($zopacity,100).",
-							waterreflection=".$wtwiframes->checkNumber($zwaterreflection,0).",
+							opacity=".$wtwhandlers->checkNumber($zopacity,100).",
+							waterreflection=".$wtwhandlers->checkNumber($zwaterreflection,0).",
 							actionzoneid='".$zactionzoneid."',
 							csgmoldid='".$zcsgmoldid."',
 							csgaction='".$zcsgaction."',
 							alttag='".$zalttag."',
 							webtext='".$zwebtext."',
 							webstyle='".$zwebstyle."',
-							diffusecolorr=".$wtwiframes->checkNumber($zdiffusecolorr,1).",
-							diffusecolorg=".$wtwiframes->checkNumber($zdiffusecolorg,1).",
-							diffusecolorb=".$wtwiframes->checkNumber($zdiffusecolorb,1).",
-							specularcolorr=".$wtwiframes->checkNumber($zspecularcolorr,1).",
-							specularcolorg=".$wtwiframes->checkNumber($zspecularcolorg,1).",
-							specularcolorb=".$wtwiframes->checkNumber($zspecularcolorb,1).",
-							emissivecolorr=".$wtwiframes->checkNumber($zemissivecolorr,1).",
-							emissivecolorg=".$wtwiframes->checkNumber($zemissivecolorg,1).",
-							emissivecolorb=".$wtwiframes->checkNumber($zemissivecolorb,1).",
+							diffusecolorr=".$wtwhandlers->checkNumber($zdiffusecolorr,1).",
+							diffusecolorg=".$wtwhandlers->checkNumber($zdiffusecolorg,1).",
+							diffusecolorb=".$wtwhandlers->checkNumber($zdiffusecolorb,1).",
+							specularcolorr=".$wtwhandlers->checkNumber($zspecularcolorr,1).",
+							specularcolorg=".$wtwhandlers->checkNumber($zspecularcolorg,1).",
+							specularcolorb=".$wtwhandlers->checkNumber($zspecularcolorb,1).",
+							emissivecolorr=".$wtwhandlers->checkNumber($zemissivecolorr,1).",
+							emissivecolorg=".$wtwhandlers->checkNumber($zemissivecolorg,1).",
+							emissivecolorb=".$wtwhandlers->checkNumber($zemissivecolorb,1).",
 							soundid='".$zsoundid."',
 							soundname='".$zsoundname."',
 							soundattenuation='".$zsoundattenuation."',
-							soundloop=".$wtwiframes->checkNumber($zsoundloop,1).",
-							soundmaxdistance=".$wtwiframes->checkNumber($zsoundmaxdistance,100).",
-							soundrollofffactor=".$wtwiframes->checkNumber($zsoundrollofffactor,1).",
-							soundrefdistance=".$wtwiframes->checkNumber($zsoundrefdistance,1).",
-							soundconeinnerangle=".$wtwiframes->checkNumber($zsoundconeinnerangle,90).",
-							soundconeouterangle=".$wtwiframes->checkNumber($zsoundconeouterangle,180).",
-							soundconeoutergain=".$wtwiframes->checkNumber($zsoundconeoutergain,1).",
+							soundloop=".$wtwhandlers->checkNumber($zsoundloop,1).",
+							soundmaxdistance=".$wtwhandlers->checkNumber($zsoundmaxdistance,100).",
+							soundrollofffactor=".$wtwhandlers->checkNumber($zsoundrollofffactor,1).",
+							soundrefdistance=".$wtwhandlers->checkNumber($zsoundrefdistance,1).",
+							soundconeinnerangle=".$wtwhandlers->checkNumber($zsoundconeinnerangle,90).",
+							soundconeouterangle=".$wtwhandlers->checkNumber($zsoundconeouterangle,180).",
+							soundconeoutergain=".$wtwhandlers->checkNumber($zsoundconeoutergain,1).",
 							updatedate=now(),
-							updateuserid='".$wtwiframes->userid."'
+							updateuserid='".$wtwhandlers->userid."'
 						where thingmoldid='".$zthingmoldid."'
 							and thingid='".$zthingid."';");
 				} else {
-					$zthingmoldid = $wtwiframes->getRandomString(16,1);
-					$wtwiframes->query("
+					$zthingmoldid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."thingmolds
 						   (thingmoldid,
 							thingid,
@@ -170,25 +170,25 @@ class wtwthingmolds {
 							'".$zloadactionzoneid."',
 							'".$zshape."',
 							'".$zcovering."',
-							".$wtwiframes->checkNumber($zpositionx,0).",
-							".$wtwiframes->checkNumber($zpositiony,0).",
-							".$wtwiframes->checkNumber($zpositionz,0).",
-							".$wtwiframes->checkNumber($zscalingx,1).",
-							".$wtwiframes->checkNumber($zscalingy,1).",
-							".$wtwiframes->checkNumber($zscalingz,1).",
-							".$wtwiframes->checkNumber($zrotationx,0).",
-							".$wtwiframes->checkNumber($zrotationy,0).",
-							".$wtwiframes->checkNumber($zrotationz,0).",
-							".$wtwiframes->checkNumber($zspecial1,0).",
-							".$wtwiframes->checkNumber($zspecial2,0).",
-							".$wtwiframes->checkNumber($zuoffset,0).",
-							".$wtwiframes->checkNumber($zvoffset,0).",
-							".$wtwiframes->checkNumber($zuscale,0).",
-							".$wtwiframes->checkNumber($zvscale,0).",
+							".$wtwhandlers->checkNumber($zpositionx,0).",
+							".$wtwhandlers->checkNumber($zpositiony,0).",
+							".$wtwhandlers->checkNumber($zpositionz,0).",
+							".$wtwhandlers->checkNumber($zscalingx,1).",
+							".$wtwhandlers->checkNumber($zscalingy,1).",
+							".$wtwhandlers->checkNumber($zscalingz,1).",
+							".$wtwhandlers->checkNumber($zrotationx,0).",
+							".$wtwhandlers->checkNumber($zrotationy,0).",
+							".$wtwhandlers->checkNumber($zrotationz,0).",
+							".$wtwhandlers->checkNumber($zspecial1,0).",
+							".$wtwhandlers->checkNumber($zspecial2,0).",
+							".$wtwhandlers->checkNumber($zuoffset,0).",
+							".$wtwhandlers->checkNumber($zvoffset,0).",
+							".$wtwhandlers->checkNumber($zuscale,0).",
+							".$wtwhandlers->checkNumber($zvscale,0).",
 							'".$zuploadobjectid."',
-							".$wtwiframes->checkNumber($zsubdivisions,12).",
-							".$wtwiframes->checkNumber($zreceiveshadows,0).",
-							".$wtwiframes->checkNumber($zgraphiclevel,0).",
+							".$wtwhandlers->checkNumber($zsubdivisions,12).",
+							".$wtwhandlers->checkNumber($zreceiveshadows,0).",
+							".$wtwhandlers->checkNumber($zgraphiclevel,0).",
 							'".$zvideoid."',
 							'".$zvideoposterid."',
 							'".$ztextureid."',
@@ -201,37 +201,37 @@ class wtwthingmolds {
 							'".$ztexturebumprid."',
 							'".$ztexturebumpgid."',
 							'".$ztexturebumpbid."',
-							".$wtwiframes->checkNumber($zopacity,100).",
-							".$wtwiframes->checkNumber($zwaterreflection,0).",
+							".$wtwhandlers->checkNumber($zopacity,100).",
+							".$wtwhandlers->checkNumber($zwaterreflection,0).",
 							'".$zactionzoneid."',
 							'".$zcsgmoldid."',
 							'".$zcsgaction."',
 							'".$zalttag."',
 							'".$zwebtext."',
 							'".$zwebstyle."',
-							".$wtwiframes->checkNumber($zdiffusecolorr,1).",
-							".$wtwiframes->checkNumber($zdiffusecolorg,1).",
-							".$wtwiframes->checkNumber($zdiffusecolorb,1).",
-							".$wtwiframes->checkNumber($zspecularcolorr,1).",
-							".$wtwiframes->checkNumber($zspecularcolorg,1).",
-							".$wtwiframes->checkNumber($zspecularcolorb,1).",
-							".$wtwiframes->checkNumber($zemissivecolorr,1).",
-							".$wtwiframes->checkNumber($zemissivecolorg,1).",
-							".$wtwiframes->checkNumber($zemissivecolorb,1).",
+							".$wtwhandlers->checkNumber($zdiffusecolorr,1).",
+							".$wtwhandlers->checkNumber($zdiffusecolorg,1).",
+							".$wtwhandlers->checkNumber($zdiffusecolorb,1).",
+							".$wtwhandlers->checkNumber($zspecularcolorr,1).",
+							".$wtwhandlers->checkNumber($zspecularcolorg,1).",
+							".$wtwhandlers->checkNumber($zspecularcolorb,1).",
+							".$wtwhandlers->checkNumber($zemissivecolorr,1).",
+							".$wtwhandlers->checkNumber($zemissivecolorg,1).",
+							".$wtwhandlers->checkNumber($zemissivecolorb,1).",
 							'".$zsoundid."',
 							'".$zsoundname."',
 							'".$zsoundattenuation."',
-							".$wtwiframes->checkNumber($zsoundloop,1).",
-							".$wtwiframes->checkNumber($zsoundmaxdistance,100).",
-							".$wtwiframes->checkNumber($zsoundrollofffactor,1).",
-							".$wtwiframes->checkNumber($zsoundrefdistance,1).",
-							".$wtwiframes->checkNumber($zsoundconeinnerangle,90).",
-							".$wtwiframes->checkNumber($zsoundconeouterangle,180).",
-							".$wtwiframes->checkNumber($zsoundconeoutergain,1).",
+							".$wtwhandlers->checkNumber($zsoundloop,1).",
+							".$wtwhandlers->checkNumber($zsoundmaxdistance,100).",
+							".$wtwhandlers->checkNumber($zsoundrollofffactor,1).",
+							".$wtwhandlers->checkNumber($zsoundrefdistance,1).",
+							".$wtwhandlers->checkNumber($zsoundconeinnerangle,90).",
+							".$wtwhandlers->checkNumber($zsoundconeouterangle,180).",
+							".$wtwhandlers->checkNumber($zsoundconeoutergain,1).",
 							now(),
-							'".$wtwiframes->userid."',
+							'".$wtwhandlers->userid."',
 							now(),
-							'".$wtwiframes->userid."');");
+							'".$wtwhandlers->userid."');");
 				}
 			}
 			
@@ -251,12 +251,12 @@ class wtwthingmolds {
 	}
 
 	function deleteThingMold($zthingmoldid, $zthingid, $zdeleted) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if ($wtwiframes->checkUpdateAccess("", "", $zthingid)) {
+			if ($wtwhandlers->checkUpdateAccess("", "", $zthingid)) {
 				if ($zdeleted == "0" || $zdeleted == 0) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."thingmolds
 						set deleted=0,
 							deleteddate=null,
@@ -266,19 +266,19 @@ class wtwthingmolds {
 							and thingid='".$zthingid."';");
 					$zsuccess = true;
 				} else if (!empty($zdeleted) && isset($zdeleted) && is_numeric($zdeleted)) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."thingmolds
 						set deleted=".$zdeleted.",
 							deleteddate=now(),
-							deleteduserid='".$wtwiframes->userid."'
+							deleteduserid='".$wtwhandlers->userid."'
 						where
 							thingmoldid='".$zthingmoldid."'
 							and thingid='".$zthingid."';");
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."webimages
 						set deleted=".$zdeleted.",
 							deleteddate=now(),
-							deleteduserid='".$wtwiframes->userid."'
+							deleteduserid='".$wtwhandlers->userid."'
 						where thingmoldid='".$zthingmoldid."'
 							and not thingmold='';");
 					$zsuccess = true;

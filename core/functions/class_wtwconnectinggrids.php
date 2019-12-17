@@ -20,23 +20,23 @@ class wtwconnectinggrids {
 	}
 
 	public function saveConnectingGrid($zconnectinggridid, $zparentwebid, $zparentwebtype, $zchildwebid, $zchildwebtype, $zloadactionzoneid, $zaltloadactionzoneid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zalttag) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		try {
 			$access = false;
 			switch ($zparentwebtype) {
 				case "community":
-					$access = $wtwiframes->checkAdminAccess($zparentwebid, "", "");
+					$access = $wtwhandlers->checkAdminAccess($zparentwebid, "", "");
 					break;
 				case "building":
-					$access = $wtwiframes->checkAdminAccess("", $zparentwebid, "");
+					$access = $wtwhandlers->checkAdminAccess("", $zparentwebid, "");
 					break;
 				case "thing":
-					$access = $wtwiframes->checkAdminAccess("", "", $zparentwebid);
+					$access = $wtwhandlers->checkAdminAccess("", "", $zparentwebid);
 					break;
 			}
 			if ($access) {
 				$zfoundconnectinggridid = "";
-				$zresults = $wtwiframes->query("
+				$zresults = $wtwhandlers->query("
 					select connectinggridid 
 					from ".wtw_tableprefix."connectinggrids 
 					where connectinggridid='".$zconnectinggridid."';");
@@ -44,28 +44,28 @@ class wtwconnectinggrids {
 					$zfoundconnectinggridid = $zrow["connectinggridid"];
 				}
 				if (!empty($zfoundconnectinggridid) && isset($zfoundconnectinggridid)) {
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."connectinggrids
-						set positionx=".$wtwiframes->checkNumber($zpositionx,0).",
-							positiony=".$wtwiframes->checkNumber($zpositiony,0).",
-							positionz=".$wtwiframes->checkNumber($zpositionz,0).",
-							scalingx=".$wtwiframes->checkNumber($zscalingx,1).",
-							scalingy=".$wtwiframes->checkNumber($zscalingy,1).",
-							scalingz=".$wtwiframes->checkNumber($zscalingz,1).",
-							rotationx=".$wtwiframes->checkNumber($zrotationx,0).",
-							rotationy=".$wtwiframes->checkNumber($zrotationy,0).",
-							rotationz=".$wtwiframes->checkNumber($zrotationz,0).",
+						set positionx=".$wtwhandlers->checkNumber($zpositionx,0).",
+							positiony=".$wtwhandlers->checkNumber($zpositiony,0).",
+							positionz=".$wtwhandlers->checkNumber($zpositionz,0).",
+							scalingx=".$wtwhandlers->checkNumber($zscalingx,1).",
+							scalingy=".$wtwhandlers->checkNumber($zscalingy,1).",
+							scalingz=".$wtwhandlers->checkNumber($zscalingz,1).",
+							rotationx=".$wtwhandlers->checkNumber($zrotationx,0).",
+							rotationy=".$wtwhandlers->checkNumber($zrotationy,0).",
+							rotationz=".$wtwhandlers->checkNumber($zrotationz,0).",
 							altloadactionzoneid='".$zaltloadactionzoneid."',
-							alttag='".$wtwiframes->escapeHTML($zalttag)."',
+							alttag='".$wtwhandlers->escapeHTML($zalttag)."',
 							updatedate=now(),
-							updateuserid='".$wtwiframes->userid."'
+							updateuserid='".$wtwhandlers->userid."'
 						where connectinggridid='".$zfoundconnectinggridid."';");
 				} else if (!empty($zchildwebtype) && isset($zchildwebtype)) {
-					$zconnectinggridid = $wtwiframes->checkIDFormat($zconnectinggridid);
+					$zconnectinggridid = $wtwhandlers->checkIDFormat($zconnectinggridid);
 					if (empty($zconnectinggridid) || !isset($zconnectinggridid)) {
-						$zconnectinggridid = $wtwiframes->getRandomString(16,1);
+						$zconnectinggridid = $wtwhandlers->getRandomString(16,1);
 					}
-					$wtwiframes->query("
+					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."connectinggrids
 							(connectinggridid,
 							 parentwebid,
@@ -94,38 +94,38 @@ class wtwconnectinggrids {
 							 '".$zparentwebtype."',
 							 '".$zchildwebid."',
 							 '".$zchildwebtype."',
-							 ".$wtwiframes->checkNumber($zpositionx,0).",
-							 ".$wtwiframes->checkNumber($zpositiony,0).",
-							 ".$wtwiframes->checkNumber($zpositionz,0).",
-							 ".$wtwiframes->checkNumber($zscalingx,1).",
-							 ".$wtwiframes->checkNumber($zscalingy,1).",
-							 ".$wtwiframes->checkNumber($zscalingz,1).",
-							 ".$wtwiframes->checkNumber($zrotationx,0).",
-							 ".$wtwiframes->checkNumber($zrotationy,0).",
-							 ".$wtwiframes->checkNumber($zrotationz,0).",
+							 ".$wtwhandlers->checkNumber($zpositionx,0).",
+							 ".$wtwhandlers->checkNumber($zpositiony,0).",
+							 ".$wtwhandlers->checkNumber($zpositionz,0).",
+							 ".$wtwhandlers->checkNumber($zscalingx,1).",
+							 ".$wtwhandlers->checkNumber($zscalingy,1).",
+							 ".$wtwhandlers->checkNumber($zscalingz,1).",
+							 ".$wtwhandlers->checkNumber($zrotationx,0).",
+							 ".$wtwhandlers->checkNumber($zrotationy,0).",
+							 ".$wtwhandlers->checkNumber($zrotationz,0).",
 							 '".$zloadactionzoneid."',
 							 '".$zaltloadactionzoneid."',
-							 '".$wtwiframes->escapeHTML($zalttag)."',
+							 '".$wtwhandlers->escapeHTML($zalttag)."',
 							 now(),
-							 '".$wtwiframes->userid."',
+							 '".$wtwhandlers->userid."',
 							 now(),
-							 '".$wtwiframes->userid."');");
+							 '".$wtwhandlers->userid."');");
 				}
 				/* NEED TO CHECK CONNECTING GRID ACTION ZONE (LOAD ZONE) checkconnectinggridactionzone */
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-saveConnectingGrid=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveConnectingGrid=".$e->getMessage());
 		}
 		return $zconnectinggridid;
 	}
 	
 	public function deleteConnectingGrid($zconnectinggridid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			$zparentwebid = "";
 			$zparentwebtype = "";
-			$zresults = $wtwiframes->query("
+			$zresults = $wtwhandlers->query("
 				select parentwebid, parentwebtype 
 				from ".wtw_tableprefix."connectinggrids 
 				where connectinggridid='".$zconnectinggridid."';");
@@ -136,45 +136,45 @@ class wtwconnectinggrids {
 			$access = false;
 			switch ($zparentwebtype) {
 				case "community":
-					$access = $wtwiframes->checkAdminAccess($zparentwebid, "", "");
+					$access = $wtwhandlers->checkAdminAccess($zparentwebid, "", "");
 					break;
 				case "building":
-					$access = $wtwiframes->checkAdminAccess("", $zparentwebid, "");
+					$access = $wtwhandlers->checkAdminAccess("", $zparentwebid, "");
 					break;
 				case "thing":
-					$access = $wtwiframes->checkAdminAccess("", "", $zparentwebid);
+					$access = $wtwhandlers->checkAdminAccess("", "", $zparentwebid);
 					break;
 			}
 			if ($access) {
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."connectinggrids
 					set deleted=1,
 						deleteddate=now(),
-						deleteduserid='".$wtwiframes->userid."'
+						deleteduserid='".$wtwhandlers->userid."'
 					where connectinggridid='".$zconnectinggridid."';");
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-deleteConnectingGrid=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-deleteConnectingGrid=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 
 	public function importConnectingGrids($ztype, $zmoldgroup, $zwebid, $zconnectinggridsbulk) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			/* ini_set('max_execution_time', 300); */
-			if (!empty($wtwiframes->getSessionUserID())) {
+			if (!empty($wtwhandlers->getSessionUserID())) {
 				if (!empty($zconnectinggridsbulk)) {
 					$zconnectinggridsbulk = base64_decode($zconnectinggridsbulk);
 					$zconnectinggrids = json_decode($zconnectinggridsbulk);
 					$zrecordeach = 50 / count($zconnectinggrids);
 					$i = 50;
 					foreach ($zconnectinggrids as $zrow) {
-						$zconnectinggridid = $wtwiframes->getRandomString(16,1);
+						$zconnectinggridid = $wtwhandlers->getRandomString(16,1);
 						if ($ztype == 'parent') {
-							$wtwiframes->query("
+							$wtwhandlers->query("
 								insert into ".wtw_tableprefix."connectinggrids
 									(connectinggridid, 
 									 pastconnectinggridid, 
@@ -207,26 +207,26 @@ class wtwconnectinggrids {
 									 '".$zrow->parentwebtype."', 
 									 '".$zwebid."', 
 									 '".$zrow->childwebtype."', 
-									 ".$wtwiframes->checkNumber($zrow->positionx,0).", 
-									 ".$wtwiframes->checkNumber($zrow->positiony,0).", 
-									 ".$wtwiframes->checkNumber($zrow->positionz,0).", 
-									 ".$wtwiframes->checkNumber($zrow->scalingx,1).", 
-									 ".$wtwiframes->checkNumber($zrow->scalingy,1).", 
-									 ".$wtwiframes->checkNumber($zrow->scalingz,1).", 
-									 ".$wtwiframes->checkNumber($zrow->rotationx,0).", 
-									 ".$wtwiframes->checkNumber($zrow->rotationy,0).", 
-									 ".$wtwiframes->checkNumber($zrow->rotationz,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->positionx,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->positiony,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->positionz,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->scalingx,1).", 
+									 ".$wtwhandlers->checkNumber($zrow->scalingy,1).", 
+									 ".$wtwhandlers->checkNumber($zrow->scalingz,1).", 
+									 ".$wtwhandlers->checkNumber($zrow->rotationx,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->rotationy,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->rotationz,0).", 
 									 '".$zrow->loadactionzoneid."', 
 									 '".$zrow->altloadactionzoneid."', 
 									 '".$zrow->unloadactionzoneid."', 
 									 '".$zrow->attachactionzoneid."', 
 									 '".$zrow->alttag."', 
 									 now(),
-									 '".$wtwiframes->userid."',
+									 '".$wtwhandlers->userid."',
 									 now(),
-									 '".$wtwiframes->userid."');");
+									 '".$wtwhandlers->userid."');");
 						} else if ($ztype == 'child' && $zmoldgroup == "community") {
-							$wtwiframes->query("
+							$wtwhandlers->query("
 								insert into ".wtw_tableprefix."connectinggrids
 									(connectinggridid, 
 									 pastconnectinggridid, 
@@ -259,32 +259,31 @@ class wtwconnectinggrids {
 									 '".$zrow->parentwebtype."', 
 									 '',
 									 '".$zrow->childwebtype."', 
-									 ".$wtwiframes->checkNumber($zrow->positionx,0).", 
-									 ".$wtwiframes->checkNumber($zrow->positiony,0).", 
-									 ".$wtwiframes->checkNumber($zrow->positionz,0).", 
-									 ".$wtwiframes->checkNumber($zrow->scalingx,1).", 
-									 ".$wtwiframes->checkNumber($zrow->scalingy,1).", 
-									 ".$wtwiframes->checkNumber($zrow->scalingz,1).", 
-									 ".$wtwiframes->checkNumber($zrow->rotationx,0).", 
-									 ".$wtwiframes->checkNumber($zrow->rotationy,0).", 
-									 ".$wtwiframes->checkNumber($zrow->rotationz,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->positionx,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->positiony,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->positionz,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->scalingx,1).", 
+									 ".$wtwhandlers->checkNumber($zrow->scalingy,1).", 
+									 ".$wtwhandlers->checkNumber($zrow->scalingz,1).", 
+									 ".$wtwhandlers->checkNumber($zrow->rotationx,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->rotationy,0).", 
+									 ".$wtwhandlers->checkNumber($zrow->rotationz,0).", 
 									 '".$zrow->loadactionzoneid."', 
 									 '".$zrow->altloadactionzoneid."', 
 									 '".$zrow->unloadactionzoneid."', 
 									 '".$zrow->attachactionzoneid."', 
 									 '".$zrow->alttag."', 
 									 now(),
-									 '".$wtwiframes->userid."',
+									 '".$wtwhandlers->userid."',
 									 now(),
-									 '".$wtwiframes->userid."');");
+									 '".$wtwhandlers->userid."');");
 						} else if ($ztype == 'child' && $zmoldgroup == "building") {
 						}
 						$i += $zrecordeach;
-						echo "<script>parent.WTW.updateProgressBar(".$i.",100);</script>";
 					}
 					/* update foreign keys to new actionzoneids */
 					if ($ztype == 'parent') {
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							update ".wtw_tableprefix."connectinggrids t1
 								inner join (select * 
 									from ".wtw_tableprefix."actionzones 
@@ -295,7 +294,7 @@ class wtwconnectinggrids {
 							where t1.childwebid='".$zwebid."'
 								and t1.parentwebid=''
 								and (not t1.loadactionzoneid='');");
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							update ".wtw_tableprefix."connectinggrids t1
 								inner join (select * 
 									from ".wtw_tableprefix."actionzones 
@@ -306,7 +305,7 @@ class wtwconnectinggrids {
 							where t1.childwebid='".$zwebid."'
 								and t1.parentwebid=''
 								and (not t1.unloadactionzoneid='');"); 
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							update ".wtw_tableprefix."connectinggrids t1
 								inner join (select * 
 									from ".wtw_tableprefix."actionzones 
@@ -317,7 +316,7 @@ class wtwconnectinggrids {
 							where t1.parentwebid='".$zwebid."'
 								and (not t1.attachactionzoneid='');");
 					} else {
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							update ".wtw_tableprefix."connectinggrids t1
 								inner join (select * 
 									from ".wtw_tableprefix."actionzones 
@@ -328,7 +327,7 @@ class wtwconnectinggrids {
 							where t1.parentwebid='".$zwebid."'
 								and t1.childwebid=''
 								and (not t1.loadactionzoneid='');");
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							update ".wtw_tableprefix."connectinggrids t1
 								inner join (select * 
 									from ".wtw_tableprefix."actionzones 
@@ -339,7 +338,7 @@ class wtwconnectinggrids {
 							where t1.parentwebid='".$zwebid."'
 								and t1.childwebid=''
 								and (not t1.unloadactionzoneid='');"); 
-						$wtwiframes->query("
+						$wtwhandlers->query("
 							update ".wtw_tableprefix."connectinggrids t1
 								inner join (select * 
 									from ".wtw_tableprefix."actionzones 
@@ -354,24 +353,24 @@ class wtwconnectinggrids {
 				}				
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-importConnectingGrids=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-importConnectingGrids=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
 	
 	public function updateChildConnectingGrid($zmoldgroup, $zwebid) {
-		global $wtwiframes;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			/* ini_set('max_execution_time', 300); */
-			if (!empty($wtwiframes->getSessionUserID())) {
-				$wtwiframes->query("
+			if (!empty($wtwhandlers->getSessionUserID())) {
+				$wtwhandlers->query("
 					update ".wtw_tableprefix."connectinggrids
 					set childwebid='".$zwebid."'
 					where childwebid=''
 						and childwebtype='building'
 					limit 1;");
-				$wtwiframes->query("
+				$wtwhandlers->query("
 					update wtw_connectinggrids t1
 						inner join (select * 
 							from wtw_connectinggrids
@@ -386,7 +385,7 @@ class wtwconnectinggrids {
 						and not t2.loadactionzoneid='';");
 			}
 		} catch (Exception $e) {
-			$wtwiframes->serror("core-functions-class_wtwcommunities.php-updateChildConnectingGrid=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-updateChildConnectingGrid=".$e->getMessage());
 		}
 		return $zsuccess;
 	}

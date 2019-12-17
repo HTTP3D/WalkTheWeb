@@ -25,6 +25,23 @@ class wtwtables {
 		try {
 			/* ini_set('max_execution_time', 300); */
 			$wtwdb->deltaCreateTable("
+				CREATE TABLE `".wtw_tableprefix."actionzoneanimations` (
+				  `actionzoneanimationid` varchar(16) NOT NULL,
+				  `actionzoneid` varchar(16) NOT NULL,
+				  `avataranimationid` varchar(16) NOT NULL,
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int(11) DEFAULT '0',
+				  PRIMARY KEY (`actionzoneanimationid`),
+				  UNIQUE KEY `".wtw_tableprefix."actionzoneanimationid_UNIQUE` (`actionzoneanimationid`),
+				  KEY `".wtw_tableprefix."idx_actionzoneanimations` (`actionzoneid`,`avataranimationid`,`actionzoneanimationid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			");
+			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."actionzones` (
 				  `actionzoneid` varchar(16) NOT NULL,
 				  `pastactionzoneid` varchar(16) DEFAULT '',
