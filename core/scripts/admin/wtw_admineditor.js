@@ -220,13 +220,18 @@ WTWJS.prototype.setUserThings = function(addthings, added) {
 
 WTWJS.prototype.addThingsMustHave = function() {
 	try {
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tthings').value = "";
-			ipage.getElementById('wtw_baddmusthave').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/things.php', onload);
+		var zrequest = {
+			'function':'addmusthave'
+		};
+		WTW.getJSON("/core/handlers/things.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.setUserThings(JSON.parse(zresponse.things), 1);
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-addThingsMustHave=" + ex.message);
 	}
@@ -326,19 +331,21 @@ WTWJS.prototype.setAccessValid = function(w) {
 WTWJS.prototype.deleteDevAccess = function() {
 	try {
 		var zrequest = {
-			'userdevaccess':dGet('wtw_tadduserdevaccess').value
+			'communityid': communityid,
+			'buildingid': buildingid,
+			'thingid': thingid,
+			'usersearch': dGet('wtw_tadduserdevaccess').value,
+			'function':'deletepermissions'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tcommunityid').value = communityid;
-			ipage.getElementById('wtw_tbuildingid').value = buildingid;
-			ipage.getElementById('wtw_tthingid').value = thingid;
-			ipage.getElementById('wtw_tpermissions').value = "";
-			ipage.getElementById('wtw_tadduserdevaccess').value = zrequest.userdevaccess;
-			ipage.getElementById('wtw_bdeletepermissions').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/users.php', onload);		
+		WTW.getJSON("/core/handlers/users.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.openPermissionsForm();
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 		dGet('wtw_tadduserdevaccess').value = "";
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-deleteDevAccess=" + ex.message);
@@ -347,22 +354,23 @@ WTWJS.prototype.deleteDevAccess = function() {
 
 WTWJS.prototype.addDevAccess = function() {
 	try {
-		var request = {
-			'userdevaccess':dGet('wtw_tadduserdevaccess').value,
-			'useraccess':dGet('wtw_taddnewaccess').value
+		var zrequest = {
+			'communityid': communityid,
+			'buildingid': buildingid,
+			'thingid': thingid,
+			'useraccess': dGet('wtw_taddnewaccess').value,
+			'usersearch': dGet('wtw_tadduserdevaccess').value,
+			'function':'savepermissions'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tcommunityid').value = communityid;
-			ipage.getElementById('wtw_tbuildingid').value = buildingid;
-			ipage.getElementById('wtw_tthingid').value = thingid;
-			ipage.getElementById('wtw_tpermissions').value = "";
-			ipage.getElementById('wtw_tadduserdevaccess').value = request.userdevaccess;
-			ipage.getElementById('wtw_tuseraccess').value = request.useraccess;
-			ipage.getElementById('wtw_bsavepermissions').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/users.php', onload);		
+		WTW.getJSON("/core/handlers/users.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.openPermissionsForm();
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 		dGet('wtw_tadduserdevaccess').value = "";
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-addDevAccess=" + ex.message);
@@ -371,22 +379,23 @@ WTWJS.prototype.addDevAccess = function() {
 
 WTWJS.prototype.addAccess = function() {
 	try {
-		var request = {
-			'newaccess':dGet('wtw_taddnewaccess').value,
-			'userid':dGet('wtw_tadduseridname').value
+		var zrequest = {
+			'communityid': communityid,
+			'buildingid': buildingid,
+			'thingid': thingid,
+			'useraccess': dGet('wtw_taddnewaccess').value,
+			'usersearch': dGet('wtw_tadduseridname').value,
+			'function':'savepermissions'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tcommunityid').value = communityid;
-			ipage.getElementById('wtw_tbuildingid').value = buildingid;
-			ipage.getElementById('wtw_tthingid').value = thingid;
-			ipage.getElementById('wtw_tpermissions').value = "";
-			ipage.getElementById('wtw_tuseraccess').value = request.newaccess;
-			ipage.getElementById('wtw_tuserid').value = request.userid;
-			ipage.getElementById('wtw_bsavepermissions').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/users.php', onload);
+		WTW.getJSON("/core/handlers/users.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.openPermissionsForm();
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 		dGet('wtw_tadduseridname').value = "";
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-addAccess=" + ex.message);
@@ -395,51 +404,24 @@ WTWJS.prototype.addAccess = function() {
 
 WTWJS.prototype.deleteAccess = function() {
 	try {
-		var request = {
-			'newaccess':dGet('wtw_taddnewaccess').value,
-			'userid':dGet('wtw_tadduseridname').value
+		var zrequest = {
+			'communityid': communityid,
+			'buildingid': buildingid,
+			'thingid': thingid,
+			'usersearch': dGet('wtw_tadduseridname').value,
+			'function':'deletepermissions'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tcommunityid').value = communityid;
-			ipage.getElementById('wtw_tbuildingid').value = buildingid;
-			ipage.getElementById('wtw_tthingid').value = thingid;
-			ipage.getElementById('wtw_tpermissions').value = "";
-			ipage.getElementById('wtw_tuseraccess').value = request.newaccess;
-			ipage.getElementById('wtw_tuserid').value = request.userid;
-			ipage.getElementById('wtw_bdeletepermissions').click();
-			dGet('wtw_tadduseridname').value = "";
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/users.php', onload);
+		WTW.getJSON("/core/handlers/users.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.openPermissionsForm();
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-deleteAccess=" + ex.message);
-	}		
-}
-
-WTWJS.prototype.getAccess = function() {
-	try {
-		var request = {
-			'newaccess':dGet('wtw_taddnewaccess').value,
-			'userid':dGet('wtw_tadduseridname').value
-		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tcommunityid').value = communityid;
-			ipage.getElementById('wtw_tbuildingid').value = buildingid;
-			ipage.getElementById('wtw_tthingid').value = thingid;
-			ipage.getElementById('wtw_tpermissions').value = "";
-			ipage.getElementById('wtw_tuseraccess').value = request.newaccess;
-			ipage.getElementById('wtw_tuserid').value = request.userid;
-			ipage.getElementById('wtw_bgetpermissions').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/users.php', onload);
-		WTW.hide('wtw_adminmenu60b');
-		WTW.show('wtw_loadinguserdevaccessform');
-		dGet('wtw_tadduseridname').value = "";
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admineditor.js-getAccess=" + ex.message);
 	}		
 }
 
@@ -639,18 +621,19 @@ WTWJS.prototype.saveGround = function() {
 				}
 			}
 		}
-
-		var request = {
-			'groundtextureid':groundtextureid
+		var zrequest = {
+			'communityid': communityid,
+			'groundtextureid': groundtextureid,
+			'function':'saveextendedground'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tcommunityid').value = communityid;
-			ipage.getElementById('wtw_textendedgroundtextureid').value = request.groundtextureid;
-			ipage.getElementById('wtw_bsaveextendedgroundtexture').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/communities.php', onload);		
+		WTW.getJSON("/core/handlers/communities.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-saveGround=" + ex.message);
 	}		
@@ -878,32 +861,26 @@ WTWJS.prototype.saveSkyDome = function() {
 				}
 			}
 		}
-		var request = {
-			'skydomeid':skydomeid,
-			'skyInclination':WTW.init.skyInclination,
-			'skyLuminance':WTW.init.skyLuminance,
-			'skyAzimuth':WTW.init.skyAzimuth,
-			'skyRayleigh':WTW.init.skyRayleigh,
-			'skyTurbidity':WTW.init.skyTurbidity,
-			'skyMieDirectionalG':WTW.init.skyMieDirectionalG,
-			'skyMieCoefficient':WTW.init.skyMieCoefficient,
-			
+		var zrequest = {
+			'communityid': communityid,
+			'skydomeid': skydomeid,
+			'skyinclination': WTW.init.skyInclination,
+			'skyluminance': WTW.init.skyLuminance,
+			'skyazimuth': WTW.init.skyAzimuth,
+			'skyrayleigh': WTW.init.skyRayleigh,
+			'skyturbidity': WTW.init.skyTurbidity,
+			'skymiedirectionalg': WTW.init.skyMieDirectionalG,
+			'skymiecoefficient': WTW.init.skyMieCoefficient,
+			'function':'saveskydome'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tcommunityid').value = communityid;
-			ipage.getElementById('wtw_tskydomeid').value = request.skydomeid;
-			ipage.getElementById('wtw_tskyinclination').value = request.skyInclination;
-			ipage.getElementById('wtw_tskyluminance').value = request.skyLuminance;
-			ipage.getElementById('wtw_tskyazimuth').value = request.skyAzimuth;
-			ipage.getElementById('wtw_tskyrayleigh').value = request.skyRayleigh;
-			ipage.getElementById('wtw_tskyturbidity').value = request.skyTurbidity;
-			ipage.getElementById('wtw_tskymiedirectionalg').value = request.skyMieDirectionalG;
-			ipage.getElementById('wtw_tskymiecoefficient').value = request.skyMieCoefficient;
-			ipage.getElementById('wtw_bsaveskydometexture').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/communities.php', onload);
+		WTW.getJSON("/core/handlers/communities.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-saveSkyDome=" + ex.message);
 	}
@@ -930,11 +907,6 @@ WTWJS.prototype.openListConnectingGridsForm = function() {
 				}
 			}
 		);
-		
-		
-		
-		
-		
 		if (WTW.connectingGrids.length > 0) {
 			for (var i=0; i < WTW.connectingGrids.length; i++) {
 				if (WTW.connectingGrids[i] != null) {
@@ -1339,13 +1311,19 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 	try {
 		switch (w) {
 			case 0:
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tcommunityid').value = communityid;
-					ipage.getElementById('wtw_bdeletecommunity').click();
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/communities.php', onload);
+				var zrequest = {
+					'communityid': communityid,
+					'function':'deletecommunity'
+				};
+				WTW.getJSON("/core/handlers/communities.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+						WTW.redirectParent('/admin.php');
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 				WTW.deleteCookie("communityid");
 				break;
 			case 1:
@@ -1374,25 +1352,22 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 						}
 					}
 				}
-				var request = {
+				var zrequest = {
 					'communityname':WTW.encode(dGet('wtw_tcommunityname').value),
 					'analyticsid':dGet('wtw_tcommunityanalyticsid').value,
 					'groundpositiony':dGet('wtw_tgroundpositiony').value,
 					'waterpositiony':dGet('wtw_twaterpositiony').value,
-					'alttag':WTW.encode(dGet('wtw_tcommunityalttag').value)
+					'alttag':WTW.encode(dGet('wtw_tcommunityalttag').value),
+					'function':'savecommunity'
 				};
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tcommunityid').value = communityid;
-					ipage.getElementById('wtw_tcommunityname').value = request.communityname;
-					ipage.getElementById('wtw_tcommunityanalyticsid').value = request.analyticsid;
-					ipage.getElementById('wtw_tgroundpositiony').value = request.groundpositiony;
-					ipage.getElementById('wtw_twaterpositiony').value = request.waterpositiony;
-					ipage.getElementById('wtw_talttag').value = request.alttag;
-					ipage.getElementById('wtw_bsavecommunity').click();
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/communities.php', onload);
+				WTW.getJSON("/core/handlers/communities.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 				break;
 			case -1:
 				for (var i = 0; i < WTW.communities.length; i++) {
@@ -1422,14 +1397,18 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 		}
 		switch (w) {
 			case 0:
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tbuildingid').value = buildingid;
-					ipage.getElementById('wtw_bdeletebuilding').click();
-					WTW.deleteCookie("buildingid");
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/buildings.php', onload);
+				var zrequest = {
+					'buildingid': buildingid,
+					'function':'deletebuilding'
+				};
+				WTW.getJSON("/core/handlers/buildings.php", 
+					function(zresponse) {
+						WTW.deleteCookie("buildingid");
+						WTW.redirectParent('/admin.php');
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 				break;
 			case 1: 
 				for (var i = 0; i < WTW.buildings.length; i++) {
@@ -1442,29 +1421,19 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 						}
 					}
 				}
-				for (var i = 0; i < WTW.buildingMolds.length; i++) {
-					if (WTW.buildingMolds[i] != null) {
-						if (WTW.buildingMolds[i].buildinginfo.buildingid == buildingid) {
-							WTW.buildingMolds[i].graphics.texture.backupid = "";
-						}
-					}
-				}
-				var request = {
+				var zrequest = {
+					'buildingid': buildingid,
 					'buildingname':WTW.encode(dGet('wtw_tbuildingname').value),
 					'alttag':WTW.encode(dGet('wtw_tbuildingalttag').value),
-					'analyticsid':dGet('wtw_tbuildinganalyticsid').value
+					'analyticsid':dGet('wtw_tbuildinganalyticsid').value,
+					'function':'savebuilding'
 				};
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tbuildingid').value = buildingid;
-					ipage.getElementById('wtw_tpastbuildingid').value = "";
-					ipage.getElementById('wtw_tbuildingname').value = request.buildingname;
-					ipage.getElementById('wtw_talttag').value = request.alttag;
-					ipage.getElementById('wtw_tbuildinganalyticsid').value = request.analyticsid;
-					ipage.getElementById('wtw_bsavebuilding').click();
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/buildings.php', onload);
+				WTW.getJSON("/core/handlers/buildings.php", 
+					function(zresponse) {
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 				break;
 			case -1: 
 				for (var i = 0; i < WTW.buildings.length; i++) {
@@ -1489,18 +1458,20 @@ WTWJS.prototype.submitthingForm = function(w) {
 		var validate = 1;
 		switch (w) {
 			case 0:
-				var request = {
-					'thingind':dGet('wtw_tthingind').value
+				var zrequest = {
+					'thingid': thingid,
+					'function':'deletething'
 				};
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tthingid').value = thingid;
-					ipage.getElementById('wtw_tthingind').value = request.thingind;
-					ipage.getElementById('wtw_bdeletething').click();
-					WTW.deleteCookie("thingid");
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/things.php', onload);			
+				WTW.getJSON("/core/handlers/things.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+						WTW.redirectParent('/admin.php');
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
+				WTW.deleteCookie("thingid");
 				break;
 			case 1: 
 				if (dGet('wtw_tthingname').value.trim().length == 0) {
@@ -1519,24 +1490,22 @@ WTWJS.prototype.submitthingForm = function(w) {
 							}
 						}
 					}
-					var request = {
-						'thingind':dGet('wtw_tthingind').value,
-						'thingname':WTW.encode(dGet('wtw_tthingname').value),
-						'analyticsid':dGet('wtw_tthinganalyticsid').value,
-						'alttag':WTW.encode(dGet('wtw_tthingalttag').value)
+					var zrequest = {
+						'thingid': thingid,
+						'pastthingid': '',
+						'thingname': WTW.encode(dGet('wtw_tthingname').value),
+						'analyticsid': dGet('wtw_tthinganalyticsid').value,
+						'alttag': WTW.encode(dGet('wtw_tthingalttag').value),
+						'function':'savething'
 					};
-					/* function for after iframe loads */
-					var onload = function(ipage) {
-						ipage.getElementById('wtw_tthingid').value = thingid;
-						ipage.getElementById('wtw_tthingind').value = request.thingind;
-						ipage.getElementById('wtw_tpastthingid').value = "";
-						ipage.getElementById('wtw_tthingname').value = request.thingname;
-						ipage.getElementById('wtw_tthinganalyticsid').value = request.analyticsid;	
-						ipage.getElementById('wtw_talttag').value = request.alttag;
-						ipage.getElementById('wtw_bsavething').click();
-					}
-					/* iframe src, onload function */
-					var iframe = WTW.createIFrame('/core/iframes/things.php', onload);			
+					WTW.getJSON("/core/handlers/things.php", 
+						function(zresponse) {
+							zresponse = JSON.parse(zresponse);
+							/* note serror would contain errors */
+						}, 
+						'POST', 
+						JSON.stringify(zrequest)
+					);
 				}
 				break;
 			case -1: 
@@ -1559,15 +1528,6 @@ WTWJS.prototype.submitthingForm = function(w) {
 		WTW.setAdminTarget();
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-submitthingForm=" + ex.message);
-	}
-}
-
-WTWJS.prototype.buildingSearchShowBuilding = function(newbuildingid) {
-	try {
-		WTW.setCookie("buildingid", newbuildingid, 30);
-		window.location.href="/admin.php?buildingid=" + newbuildingid + "&hmenu=5&newbuilding=1";
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admineditor.js-buildingSearchShowBuilding=" + ex.message);
 	}
 }
 
@@ -1644,23 +1604,23 @@ WTWJS.prototype.copyThing = function(zcopythingid, zthingname) {
 		} else if (dGet('wtw_tthingname').value == "") {
 			dGet('wtw_tthingname').value = "New 3D Thing";
 		}
-		var request = {
-			'copythingid':zcopythingid,
-			'thingind':dGet('wtw_tthingind').value,
-			'thingname':WTW.encode(dGet('wtw_tthingname').value)
+		var zrequest = {
+			'thingid': '',
+			'pastthingid': zcopythingid,
+			'thingname': WTW.encode(dGet('wtw_tthingname').value),
+			'analyticsid': '',
+			'alttag': WTW.encode(dGet('wtw_tthingalttag').value),
+			'function':'savething'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tthingid').value = "";
-			ipage.getElementById('wtw_tthingind').value = request.thingind;
-			ipage.getElementById('wtw_tpastthingid').value = request.copythingid;
-			ipage.getElementById('wtw_tthingname').value = request.thingname;
-			ipage.getElementById('wtw_talttag').value = "";
-			ipage.getElementById('wtw_tthinganalyticsid').value = "";
-			ipage.getElementById('wtw_bsavethingcopy').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/things.php', onload);
+		WTW.getJSON("/core/handlers/things.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.copyThingComplete(zresponse.thingid);
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-copyThing=" + ex.message);
 	}
@@ -1673,21 +1633,19 @@ WTWJS.prototype.copyBuilding = function(zcopybuildingid, zbuildingname) {
 		} else if (dGet('wtw_tbuildingname').value == "") {
 			dGet('wtw_tbuildingname').value = "New 3D Building";
 		}
-		var request = {
-			'copybuildingid':zcopybuildingid,
-			'buildingname':dGet('wtw_tbuildingname').value
+		var zrequest = {
+			'pastbuildingid': zcopybuildingid,
+			'buildingname':WTW.encode(dGet('wtw_tbuildingname').value),
+			'function':'savebuilding'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tbuildingid').value = "";
-			ipage.getElementById('wtw_tpastbuildingid').value = request.copybuildingid;
-			ipage.getElementById('wtw_tbuildingname').value = request.buildingname;
-			ipage.getElementById('wtw_talttag').value = "";
-			ipage.getElementById('wtw_tbuildinganalyticsid').value = "";
-			ipage.getElementById('wtw_bsavebuildingcopy').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/buildings.php', onload);
+		WTW.getJSON("/core/handlers/buildings.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				WTW.copyBuildingComplete(zresponse.buildingid);
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-copyBuilding=" + ex.message);
 	}
@@ -1706,53 +1664,26 @@ WTWJS.prototype.copyCommunity = function(zcopycommunityid, zcommunityname) {
 		if (dGet('wtw_twaterpositiony').value == "" || WTW.isNumeric(dGet('wtw_twaterpositiony').value) == false) {
 			dGet('wtw_twaterpositiony').value = "-1.00";
 		}
-		var request = {
-			'communityind':dGet('wtw_tcommunityind').value,
-			'copycommunityid':zcopycommunityid,
-			'communityname':dGet('wtw_tcommunityname').value,
-			'groundpositiony':dGet('wtw_tgroundpositiony').value,
-			'waterpositiony':dGet('wtw_twaterpositiony').value
+		var zrequest = {
+			'pastcommunityid': zcopycommunityid,
+			'communityname': WTW.encode(dGet('wtw_tcommunityname').value),
+			'groundpositiony': dGet('wtw_tgroundpositiony').value,
+			'waterpositiony': dGet('wtw_twaterpositiony').value,
+			'alttag': '',
+			'function':'savecommunity'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tcommunityid').value = "";
-			ipage.getElementById('wtw_tcommunityind').value = request.communityind;
-			ipage.getElementById('wtw_tpastcommunityid').value = request.copycommunityid;
-			ipage.getElementById('wtw_tcommunityname').value = request.communityname;
-			ipage.getElementById('wtw_talttag').value = "";
-			ipage.getElementById('wtw_tcommunityanalyticsid').value = "";
-			ipage.getElementById('wtw_tgroundpositiony').value = request.groundpositiony;
-			ipage.getElementById('wtw_twaterpositiony').value = request.waterpositiony;
-			ipage.getElementById('wtw_bsavecommunitycopy').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/communities.php', onload);
+		WTW.getJSON("/core/handlers/communities.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.copyCommunityComplete(zresponse.communityid);
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-copyCommunity=" + ex.message);
 	}
-}
-
-WTWJS.prototype.openNewWeb = function(zthingid, zbuildingid, zcommunityid) {
-	try {
-		if (zthingid != "") {
-			window.setTimeout(function() {
-				WTW.setCookie("thingid", zthingid, 30);
-				window.location.href="/admin.php?thingid=" + zthingid + "&hmenu=35&newthing=1";
-			}, 2000);  
-		} else if (zbuildingid != "") {
-			window.setTimeout(function() {
-				WTW.setCookie("buildingid", zbuildingid, 30);
-				window.location.href="/admin.php?buildingid=" + zbuildingid + "&hmenu=5&newbuilding=1";
-			}, 2000);  
-		} else if (zcommunityid != "") {
-			window.setTimeout(function() {
-				WTW.setCookie("communityid", zcommunityid, 30);
-				window.location.href="admin.php?communityid=" + zcommunityid + "&hmenu=25&newcommunity=1";
-			}, 2000); 
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admineditor.js-openNewWeb=" + ex.message);
-	} 
 }
 
 WTWJS.prototype.copyThingComplete = function(zthingid) {
@@ -1805,65 +1736,70 @@ WTWJS.prototype.setStartPosition = function(zcommunityid, zbuildingid, zthingid)
 		if (WTW.myAvatar!= null) {
 			var iframe = null;
 			var ipage = null;
-			var request = {
-				'positionx':WTW.myAvatar.position.x,
-				'positiony':WTW.myAvatar.position.y,
-				'positionz':WTW.myAvatar.position.z,
-				'rotationx':WTW.cameraYOffset,
-				'rotationy':WTW.getDegrees(WTW.myAvatar.rotation.y),
-				'rotationz':WTW.getDegrees(WTW.myAvatar.rotation.z)
-			}
 			if (zcommunityid != "") {
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tcommunityid').value = zcommunityid;
-					ipage.getElementById('wtw_tstartpositionx').value = request.positionx;
-					ipage.getElementById('wtw_tstartpositiony').value = request.positiony;
-					ipage.getElementById('wtw_tstartpositionz').value = request.positionz;
-					ipage.getElementById('wtw_tstartscalingx').value = 1; 
-					ipage.getElementById('wtw_tstartscalingy').value = 1; 
-					ipage.getElementById('wtw_tstartscalingz').value = 1; 
-					ipage.getElementById('wtw_tstartrotationx').value = request.rotationx;
-					ipage.getElementById('wtw_tstartrotationy').value = request.rotationy;
-					ipage.getElementById('wtw_tstartrotationz').value = request.rotationz;
-					ipage.getElementById('wtw_bsavestartposition').click();		
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/communities.php', onload);
+				var zrequest = {
+					'communityid': communityid,
+					'positionx': WTW.myAvatar.position.x,
+					'positiony': WTW.myAvatar.position.y,
+					'positionz': WTW.myAvatar.position.z,
+					'scalingx': 1,
+					'scalingy': 1,
+					'scalingz': 1,
+					'rotationx': WTW.cameraYOffset,
+					'rotationy': WTW.getDegrees(WTW.myAvatar.rotation.y),
+					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
+					'function':'savestartposition'
+				};
+				WTW.getJSON("/core/handlers/communities.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 			} else if (zbuildingid != "") {
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tbuildingid').value = zbuildingid;
-					ipage.getElementById('wtw_tstartpositionx').value = request.positionx;
-					ipage.getElementById('wtw_tstartpositiony').value = request.positiony;
-					ipage.getElementById('wtw_tstartpositionz').value = request.positionz;
-					ipage.getElementById('wtw_tstartscalingx').value = 1; 
-					ipage.getElementById('wtw_tstartscalingy').value = 1; 
-					ipage.getElementById('wtw_tstartscalingz').value = 1; 
-					ipage.getElementById('wtw_tstartrotationx').value = request.rotationx;
-					ipage.getElementById('wtw_tstartrotationy').value = request.rotationy;
-					ipage.getElementById('wtw_tstartrotationz').value = request.rotationz;
-					ipage.getElementById('wtw_bsavestartposition').click();		
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/buildings.php', onload);
+				var zrequest = {
+					'buildingid': zbuildingid,
+					'positionx': WTW.myAvatar.position.x,
+					'positiony': WTW.myAvatar.position.y,
+					'positionz': WTW.myAvatar.position.z,
+					'scalingx': 1,
+					'scalingy': 1,
+					'scalingz': 1,
+					'rotationx': WTW.cameraYOffset,
+					'rotationy': WTW.getDegrees(WTW.myAvatar.rotation.y),
+					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
+					'function':'savestartposition'
+				};
+				WTW.getJSON("/core/handlers/buildings.php", 
+					function(zresponse) {
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 			} else if (zthingid != "") {
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tthingid').value = zthingid;
-					ipage.getElementById('wtw_tstartpositionx').value = request.positionx;
-					ipage.getElementById('wtw_tstartpositiony').value = request.positiony;
-					ipage.getElementById('wtw_tstartpositionz').value = request.positionz;
-					ipage.getElementById('wtw_tstartscalingx').value = 1; 
-					ipage.getElementById('wtw_tstartscalingy').value = 1; 
-					ipage.getElementById('wtw_tstartscalingz').value = 1; 
-					ipage.getElementById('wtw_tstartrotationx').value = request.rotationx;
-					ipage.getElementById('wtw_tstartrotationy').value = request.rotationy;
-					ipage.getElementById('wtw_tstartrotationz').value = request.rotationz;
-					ipage.getElementById('wtw_bsavestartposition').click();		
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/things.php', onload);
+				var zrequest = {
+					'thingid': thingid,
+					'positionx': WTW.myAvatar.position.x,
+					'positiony': WTW.myAvatar.position.y,
+					'positionz': WTW.myAvatar.position.z,
+					'scalingx': 1,
+					'scalingy': 1,
+					'scalingz': 1,
+					'rotationx': WTW.cameraYOffset,
+					'rotationy': WTW.getDegrees(WTW.myAvatar.rotation.y),
+					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
+					'function':'savestartposition'
+				};
+				WTW.getJSON("/core/handlers/things.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 			}
 			dGet('wtw_startsaved').style.visibility = "visible";
 			window.setTimeout(function(){
@@ -1877,36 +1813,46 @@ WTWJS.prototype.setStartPosition = function(zcommunityid, zbuildingid, zthingid)
 
 WTWJS.prototype.saveGravity = function() {
 	try {
-		var request = {
-			'gravity':WTW.init.gravity
-		};
 		if (communityid != "") {
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tcommunityid').value = communityid;
-				ipage.getElementById('wtw_tgravity').value = request.gravity;
-				ipage.getElementById('wtw_bsavegravity').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/communities.php', onload);
+			var zrequest = {
+				'communityid': communityid,
+				'gravity':WTW.init.gravity,
+				'function':'savegravity'
+			};
+			WTW.getJSON("/core/handlers/communities.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		} else if (buildingid != "") {
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tbuildingid').value = buildingid;
-				ipage.getElementById('wtw_tgravity').value = request.gravity;
-				ipage.getElementById('wtw_bsavegravity').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/buildings.php', onload);
+			var zrequest = {
+				'buildingid': buildingid,
+				'gravity':WTW.init.gravity,
+				'function':'savegravity'
+			};
+			WTW.getJSON("/core/handlers/buildings.php", 
+				function(zresponse) {
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		} else if (thingid != "") {
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tthingid').value = thingid;
-				ipage.getElementById('wtw_tgravity').value = request.gravity;
-				ipage.getElementById('wtw_bsavegravity').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/things.php', onload);
+			var zrequest = {
+				'thingid': thingid,
+				'gravity':WTW.init.gravity,
+				'function':'savegravity'
+			};
+			WTW.getJSON("/core/handlers/things.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		}		
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-saveGravity=" + ex.message);
@@ -1918,14 +1864,11 @@ WTWJS.prototype.setGravity = function() {
 		if (WTW.isNumeric(dGet('wtw_tcommgravity').value)) {
 			if (Number(dGet('wtw_tcommgravity').value) != 0) {
 				scene.gravity = new BABYLON.Vector3(0, -Number(dGet('wtw_tcommgravity').value), 0);
-				WTW.camera.applyGravity = true;
 			} else {
 				scene.gravity = new BABYLON.Vector3(0, 0, 0);
-				WTW.camera.applyGravity = false;
 			}
 		} else {
 			scene.gravity = new BABYLON.Vector3(0, 0, 0);
-			WTW.camera.applyGravity = false;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-setGravity=" + ex.message);
@@ -3489,16 +3432,6 @@ WTWJS.prototype.closeEditPoles = function() {
 			WTW.lineZ8.dispose();
             WTW.lineZ8 = null;
 		}
-	/*	for (var i=0; i < scene.materials.length;i++) {
-			try {
-				if (scene.materials[i] != null) {
-					if (scene.materials[i].id.indexOf("moldmove") > -1) {
-						//scene.materials[i].dispose();
-					}
-				}
-			} catch (ex) {
-			}
-		}*/
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-closeEditPoles=" + ex.message);
 	}
@@ -3582,24 +3515,23 @@ WTWJS.prototype.submitMoldForm = function(w) {
 				WTW.disposeClean(moldname);
 			}
 			molds[moldind] = null;
-			var request = {
-				'communityid':dGet('wtw_tcommunityid').value,
-				'buildingid':dGet('wtw_tbuildingid').value,
-				'thingid':dGet('wtw_tthingid').value,
-				'moldid':dGet('wtw_tmoldid').value
+			var zrequest = {
+				'communityid': communityid,
+				'buildingid': buildingid,
+				'thingid': thingid,
+				'moldid': dGet('wtw_tmoldid').value,
+				'deleted': '1',
+				'function':'deletemold'
 			};
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tcommunityid').value = request.communityid;
-				ipage.getElementById('wtw_tbuildingid').value = request.buildingid;
-				ipage.getElementById('wtw_tthingid').value = request.thingid;
-				ipage.getElementById('wtw_tmoldid').value = request.moldid;
-				ipage.getElementById('wtw_tmolddeleted').value = "1";
-				ipage.getElementById('wtw_bdeletemold').click();
-				dGet('wtw_tnewmold').value = "0";
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/molds.php', onload);
+			WTW.getJSON("/core/handlers/molds.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					dGet('wtw_tnewmold').value = "0";
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 			WTW.pluginsSubmitMoldForm(w);
 			WTW.clearEditMold();
 			if (basemoldind > -1) {
@@ -3787,176 +3719,102 @@ WTWJS.prototype.submitMoldForm = function(w) {
 			molds[moldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
 			molds[moldind].connectinggridind = dGet('wtw_tconnectinggridind').value;
 			
-			var request = {
-				'communityid':communityid,
-				'buildingid':buildingid,
-				'thingid':thingid,
-				'moldid':molds[moldind].moldid,
-				'moldind':moldind,
-				'loadactionzoneid':molds[moldind].loadactionzoneid,
-				'moldgroup':moldgroup,
-				'shape':molds[moldind].shape,
-				'covering':molds[moldind].covering,
-				'positionx':molds[moldind].position.x,
-				'positiony':molds[moldind].position.y,
-				'positionz':molds[moldind].position.z,
-				'scalingx':molds[moldind].scaling.x,
-				'scalingy':molds[moldind].scaling.y,
-				'scalingz':molds[moldind].scaling.z,
-				'rotationx':molds[moldind].rotation.x,
-				'rotationy':molds[moldind].rotation.y,
-				'rotationz':molds[moldind].rotation.z,
-				'special1':molds[moldind].scaling.special1,
-				'special2':molds[moldind].scaling.special2,
-				'uoffset':molds[moldind].graphics.uoffset,
-				'voffset':molds[moldind].graphics.voffset,
-				'uscale':molds[moldind].graphics.uscale,
-				'vscale':molds[moldind].graphics.vscale,
-				'uploadobjectid':molds[moldind].object.uploadobjectid,
-				'objectfolder':molds[moldind].object.folder,
-				'objectfile':molds[moldind].object.file,
-				'receiveshadows':molds[moldind].graphics.receiveshadows,
-				'graphiclevel':molds[moldind].graphics.level,
-				'videoid':molds[moldind].graphics.texture.videoid,
-				'videoposterid':molds[moldind].graphics.texture.videoposterid,
-				'textureid':molds[moldind].graphics.texture.id,
-				'texturebumpid':molds[moldind].graphics.texture.bumpid,
-				'heightmapid':molds[moldind].graphics.heightmap.id,
-				'mixmapid':molds[moldind].graphics.heightmap.mixmapid,
-				'texturerid':molds[moldind].graphics.heightmap.texturerid,
-				'texturegid':molds[moldind].graphics.heightmap.texturegid,
-				'texturebid':molds[moldind].graphics.heightmap.texturebid,
-				'texturebumprid':molds[moldind].graphics.heightmap.texturebumprid,
-				'texturebumpgid':molds[moldind].graphics.heightmap.texturebumpgid,
-				'texturebumpbid':molds[moldind].graphics.heightmap.texturebumpbid,
-				'soundid':molds[moldind].sound.id,
-				'soundname':molds[moldind].sound.name,
-				'soundattenuation':molds[moldind].sound.attenuation,
-				'soundmaxdistance':molds[moldind].sound.maxdistance,
-				'soundrollofffactor':molds[moldind].sound.rollofffactor,
-				'soundrefdistance':molds[moldind].sound.refdistance,
-				'soundconeinnerangle':molds[moldind].sound.coneinnerangle,
-				'soundconeouterangle':molds[moldind].sound.coneouterangle,
-				'soundconeoutergain':molds[moldind].sound.coneoutergain,
-				'opacity':molds[moldind].opacity,
-				'subdivisions':molds[moldind].subdivisions,
-				'actionzoneid':molds[moldind].actionzoneid,
-				'maxheight':molds[moldind].graphics.heightmap.maxheight,
-				'csgmoldid':molds[moldind].csg.moldid,
-				'csgaction':molds[moldind].csg.action,
-				'webimageind':molds[moldind].graphics.webimageind,
-				'alttagname':molds[moldind].alttag.name,
-				'webtext':molds[moldind].webtext.webtext,
-				'webstyle':molds[moldind].webtext.webstyle,
-				'specularr':molds[moldind].color.specular.r,
-				'specularg':molds[moldind].color.specular.g,
-				'specularb':molds[moldind].color.specular.b,
-				'emissiver':molds[moldind].color.emissive.r,
-				'emissiveg':molds[moldind].color.emissive.g,
-				'emissiveb':molds[moldind].color.emissive.b,
-				'diffuser':molds[moldind].color.diffuse.r,
-				'diffuseg':molds[moldind].color.diffuse.g,
-				'diffuseb':molds[moldind].color.diffuse.b,
-				'path1points':dGet('wtw_tmoldpath1points').value,
-				'path2points':dGet('wtw_tmoldpath2points').value,
-				'imageid':molds[moldind].graphics.webimages[0].imageid,
-				'imagehoverid':molds[moldind].graphics.webimages[0].imagehoverid,
-				'imageclickid':molds[moldind].graphics.webimages[0].imageclickid,
-				'imagejsfunction':molds[moldind].graphics.webimages[0].jsfunction,
-				'imagejsparameters':molds[moldind].graphics.webimages[0].jsparameters,
-				'waterreflection':molds[moldind].graphics.waterreflection
+			var zrequest = {
+				'communityid': communityid,
+				'buildingid': buildingid,
+				'thingid': thingid,
+				'moldid': molds[moldind].moldid,
+				'moldind': moldind,
+				'loadactionzoneid': molds[moldind].loadactionzoneid,
+				'moldgroup': moldgroup,
+				'shape': molds[moldind].shape,
+				'covering': molds[moldind].covering,
+				'positionx': molds[moldind].position.x,
+				'positiony': molds[moldind].position.y,
+				'positionz': molds[moldind].position.z,
+				'scalingx': molds[moldind].scaling.x,
+				'scalingy': molds[moldind].scaling.y,
+				'scalingz': molds[moldind].scaling.z,
+				'rotationx': molds[moldind].rotation.x,
+				'rotationy': molds[moldind].rotation.y,
+				'rotationz': molds[moldind].rotation.z,
+				'special1': molds[moldind].scaling.special1,
+				'special2': molds[moldind].scaling.special2,
+				'uoffset': molds[moldind].graphics.uoffset,
+				'voffset': molds[moldind].graphics.voffset,
+				'uscale': molds[moldind].graphics.uscale,
+				'vscale': molds[moldind].graphics.vscale,
+				'uploadobjectid': molds[moldind].object.uploadobjectid,
+				'objectfolder': molds[moldind].object.folder,
+				'objectfile': molds[moldind].object.file,
+				'receiveshadows': molds[moldind].graphics.receiveshadows,
+				'graphiclevel': molds[moldind].graphics.level,
+				'videoid': molds[moldind].graphics.texture.videoid,
+				'videoposterid': molds[moldind].graphics.texture.videoposterid,
+				'textureid': molds[moldind].graphics.texture.id,
+				'texturebumpid': molds[moldind].graphics.texture.bumpid,
+				'heightmapid': molds[moldind].graphics.heightmap.id,
+				'mixmapid': molds[moldind].graphics.heightmap.mixmapid,
+				'texturerid': molds[moldind].graphics.heightmap.texturerid,
+				'texturegid': molds[moldind].graphics.heightmap.texturegid,
+				'texturebid': molds[moldind].graphics.heightmap.texturebid,
+				'texturebumprid': molds[moldind].graphics.heightmap.texturebumprid,
+				'texturebumpgid': molds[moldind].graphics.heightmap.texturebumpgid,
+				'texturebumpbid': molds[moldind].graphics.heightmap.texturebumpbid,
+				'soundid': molds[moldind].sound.id,
+				'soundname': molds[moldind].sound.name,
+				'soundattenuation': molds[moldind].sound.attenuation,
+				'soundmaxdistance': molds[moldind].sound.maxdistance,
+				'soundrollofffactor': molds[moldind].sound.rollofffactor,
+				'soundrefdistance': molds[moldind].sound.refdistance,
+				'soundconeinnerangle': molds[moldind].sound.coneinnerangle,
+				'soundconeouterangle': molds[moldind].sound.coneouterangle,
+				'soundconeoutergain': molds[moldind].sound.coneoutergain,
+				'opacity': molds[moldind].opacity,
+				'subdivisions': molds[moldind].subdivisions,
+				'actionzoneid': molds[moldind].actionzoneid,
+				'minheight': '0',
+				'maxheight': molds[moldind].graphics.heightmap.maxheight,
+				'checkcollisions': '1',
+				'ispickable': '1',
+				'csgmoldid': molds[moldind].csg.moldid,
+				'csgaction': molds[moldind].csg.action,
+				'imageid': '',
+				'imageind': molds[moldind].graphics.webimageind,
+				'imagepath': '',
+				'imagehoverpath': '',
+				'imageclickid': '',
+				'alttagname': molds[moldind].alttag.name,
+				'webtext': molds[moldind].webtext.webtext,
+				'webstyle': molds[moldind].webtext.webstyle,
+				'specularcolorr': molds[moldind].color.specular.r,
+				'specularcolorg': molds[moldind].color.specular.g,
+				'specularcolorb': molds[moldind].color.specular.b,
+				'emissivecolorr': molds[moldind].color.emissive.r,
+				'emissivecolorg': molds[moldind].color.emissive.g,
+				'emissivecolorb': molds[moldind].color.emissive.b,
+				'diffusecolorr': molds[moldind].color.diffuse.r,
+				'diffusecolorg': molds[moldind].color.diffuse.g,
+				'diffusecolorb': molds[moldind].color.diffuse.b,
+				'path1points': dGet('wtw_tmoldpath1points').value,
+				'path2points': dGet('wtw_tmoldpath2points').value,
+				'imageid': molds[moldind].graphics.webimages[0].imageid,
+				'imagehoverid': molds[moldind].graphics.webimages[0].imagehoverid,
+				'imageclickid': molds[moldind].graphics.webimages[0].imageclickid,
+				'imagejsfunction': molds[moldind].graphics.webimages[0].jsfunction,
+				'imagejsparameters': molds[moldind].graphics.webimages[0].jsparameters,
+				'waterreflection': molds[moldind].graphics.waterreflection,
+				'deleted': '0',
+				'function':'savemold'
 			};
-
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tcommunityid').value = request.communityid;
-				ipage.getElementById('wtw_tbuildingid').value = request.buildingid;
-				ipage.getElementById('wtw_tthingid').value = request.thingid;
-				ipage.getElementById('wtw_tmoldid').value = request.moldid;
-				ipage.getElementById('wtw_tmoldloadactionzoneid').value = request.loadactionzoneid;
-				ipage.getElementById('wtw_tmoldmoldgroup').value = request.moldgroup;
-				ipage.getElementById('wtw_tmoldshape').value = request.shape;
-				ipage.getElementById('wtw_tmoldcovering').value = request.covering;
-				ipage.getElementById('wtw_tmoldind').value = request.moldind;
-				ipage.getElementById('wtw_tmoldpositionx').value = request.positionx;
-				ipage.getElementById('wtw_tmoldpositiony').value = request.positiony;
-				ipage.getElementById('wtw_tmoldpositionz').value = request.positionz;
-				ipage.getElementById('wtw_tmoldscalingx').value = request.scalingx;
-				ipage.getElementById('wtw_tmoldscalingy').value = request.scalingy;
-				ipage.getElementById('wtw_tmoldscalingz').value = request.scalingz;
-				ipage.getElementById('wtw_tmoldrotationx').value = request.rotationx;
-				ipage.getElementById('wtw_tmoldrotationy').value = request.rotationy;
-				ipage.getElementById('wtw_tmoldrotationz').value = request.rotationz;
-				ipage.getElementById('wtw_tmoldspecial1').value = request.special1;
-				ipage.getElementById('wtw_tmoldspecial2').value = request.special2;
-				ipage.getElementById('wtw_tmolduoffset').value = request.uoffset;
-				ipage.getElementById('wtw_tmoldvoffset').value = request.voffset;
-				ipage.getElementById('wtw_tmolduscale').value = request.uscale;
-				ipage.getElementById('wtw_tmoldvscale').value = request.vscale;
-				ipage.getElementById('wtw_tmolduploadobjectid').value = request.uploadobjectid;
-				ipage.getElementById('wtw_tmoldobjectfolder').value = request.objectfolder;
-				ipage.getElementById('wtw_tmoldobjectfile').value = request.objectfile;
-				ipage.getElementById('wtw_tmoldreceiveshadows').value = request.receiveshadows;
-				ipage.getElementById('wtw_tmoldgraphiclevel').value = request.graphiclevel;
-				ipage.getElementById('wtw_tmoldvideoid').value = request.videoid;
-				ipage.getElementById('wtw_tmoldvideoposterid').value = request.videoposterid;
-				ipage.getElementById('wtw_tmoldtextureid').value = request.textureid;
-				ipage.getElementById('wtw_tmoldtexturebumpid').value = request.texturebumpid;
-				ipage.getElementById('wtw_tmoldheightmapid').value = request.heightmapid;
-				ipage.getElementById('wtw_tmoldmixmapid').value = request.mixmapid;
-				ipage.getElementById('wtw_tmoldtexturerid').value = request.texturerid;
-				ipage.getElementById('wtw_tmoldtexturegid').value = request.texturegid;
-				ipage.getElementById('wtw_tmoldtexturebid').value = request.texturebid;
-				ipage.getElementById('wtw_tmoldtexturebumprid').value = request.texturebumprid;
-				ipage.getElementById('wtw_tmoldtexturebumpgid').value = request.texturebumpgid;
-				ipage.getElementById('wtw_tmoldtexturebumpbid').value = request.texturebumpbid;
-				ipage.getElementById('wtw_tmoldsoundid').value = request.soundid;
-				ipage.getElementById('wtw_tmoldsoundname').value = request.soundname;
-				ipage.getElementById('wtw_tmoldsoundattenuation').value = request.soundattenuation;
-				ipage.getElementById('wtw_tmoldsoundloop').value = request.soundloop;
-				ipage.getElementById('wtw_tmoldsoundmaxdistance').value = request.soundmaxdistance;
-				ipage.getElementById('wtw_tmoldsoundrollofffactor').value = request.soundrollofffactor;
-				ipage.getElementById('wtw_tmoldsoundrefdistance').value = request.soundrefdistance;
-				ipage.getElementById('wtw_tmoldsoundconeinnerangle').value = request.soundconeinnerangle;
-				ipage.getElementById('wtw_tmoldsoundconeouterangle').value = request.soundconeouterangle;
-				ipage.getElementById('wtw_tmoldsoundconeoutergain').value = request.soundconeoutergain;
-				ipage.getElementById('wtw_tmoldopacity').value = request.opacity;
-				ipage.getElementById('wtw_tmoldsubdivisions').value = request.subdivisions;
-				ipage.getElementById('wtw_tmoldactionzoneid').value = request.actionzoneid;
-				ipage.getElementById('wtw_tmoldminheight').value = "0";
-				ipage.getElementById('wtw_tmoldmaxheight').value = request.maxheight;
-				ipage.getElementById('wtw_tmoldcheckcollisions').value = "1";
-				ipage.getElementById('wtw_tmoldispickable').value = "1";
-				ipage.getElementById('wtw_tmoldcsgmoldid').value = request.csgmoldid;
-				ipage.getElementById('wtw_tmoldcsgaction').value = request.csgaction;
-				ipage.getElementById('wtw_tmoldimageind').value = request.webimageind;
-				ipage.getElementById('wtw_tmoldaddimagepath').value = "";
-				ipage.getElementById('wtw_tmoldaddimagehoverpath').value = "";
-				ipage.getElementById('wtw_tmoldalttag').value = request.alttagname;
-				ipage.getElementById('wtw_tmoldwebtext').value = request.webtext;
-				ipage.getElementById('wtw_tmoldwebstyle').value = request.webstyle;
-				ipage.getElementById('wtw_tspecularcolorr').value = request.specularr;
-				ipage.getElementById('wtw_tspecularcolorg').value = request.specularg;
-				ipage.getElementById('wtw_tspecularcolorb').value = request.specularb;
-				ipage.getElementById('wtw_temissivecolorr').value = request.emissiver;
-				ipage.getElementById('wtw_temissivecolorg').value = request.emissiveg;
-				ipage.getElementById('wtw_temissivecolorb').value = request.emissiveb;
-				ipage.getElementById('wtw_tdiffusecolorr').value = request.diffuser;
-				ipage.getElementById('wtw_tdiffusecolorg').value = request.diffuseg;
-				ipage.getElementById('wtw_tdiffusecolorb').value = request.diffuseb;
-				ipage.getElementById('wtw_tmoldpath1points').value = request.path1points;
-				ipage.getElementById('wtw_tmoldpath2points').value = request.path2points;
-				ipage.getElementById('wtw_tmoldaddimageid').value = request.imageid;
-				ipage.getElementById('wtw_tmoldaddimagehoverid').value = request.imagehoverid;
-				ipage.getElementById('wtw_tmoldaddimageclickid').value = request.imageclickid;
-				ipage.getElementById('wtw_tmoldjsfunction').value = request.imagejsfunction;
-				ipage.getElementById('wtw_tmoldjsparameters').value = request.imagejsparameters;
-				ipage.getElementById('wtw_tmoldwaterreflection').value = request.waterreflection;
-				ipage.getElementById('wtw_tmolddeleted').value = "0";
-				ipage.getElementById('wtw_bsavemold').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/molds.php', onload);			
+			WTW.getJSON("/core/handlers/molds.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 			dGet('wtw_tnewmold').value = "0";
 			WTW.checkActionZones(molds[moldind]);
 			WTW.pluginsSubmitMoldForm(w);
@@ -4071,32 +3929,6 @@ WTWJS.prototype.clearEditMold = function() {
 	}
 }
 
-WTWJS.prototype.updateMoldID = function(moldid,ind, moldgroup) {
-	try {
-		var i = -1;
-		var molds = null;
-		if (WTW.isNumeric(ind)) {
-			i = Number(ind);
-		}
-		if (i > -1 && moldid.length > 0) {
-			if (moldgroup == "building") {
-				molds = WTW.buildingMolds;
-			} else if (moldgroup == "community") {
-				molds = WTW.communitiesMolds;
-			} else if (moldgroup == "thing") {
-				molds = WTW.thingMolds;
-			}
-			if (molds != null) {
-				if (molds[i] != null) {
-					molds[i].moldid = moldid;
-				}
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admineditor.js-updateMoldID=" + ex.message);
-	}
-}
-
 WTWJS.prototype.openRecoverItems = function() {
 	try {
 		var path = "";
@@ -4132,20 +3964,22 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 	try {
 		switch (zmoldtype) {
 			case "communitymolds":
-				var request = {
-					'moldid':zmoldid
+				var zrequest = {
+					'communityid': communityid,
+					'buildingid': buildingid,
+					'thingid': thingid,
+					'moldid': zmoldid,
+					'deleted': '0',
+					'function':'deletemold'
 				};
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tcommunityid').value = communityid;
-					ipage.getElementById('wtw_tbuildingid').value = buildingid;
-					ipage.getElementById('wtw_tthingid').value = thingid;
-					ipage.getElementById('wtw_tmoldid').value = request.moldid;
-					ipage.getElementById('wtw_tmolddeleted').value = "0";
-					ipage.getElementById('wtw_bdeletemold').click();
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/molds.php', onload);
+				WTW.getJSON("/core/handlers/molds.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 				var communityind = -1;
 				WTW.getJSON("/connect/communitymoldsrecover.php?communityid=" + communityid + "&communityind=" + communityind + "&communitymoldid=" + zmoldid, 
 					function(response) {
@@ -4171,20 +4005,22 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 				);			
 				break;		
 			case "buildingmolds":
-				var request = {
-					'moldid':zmoldid
+				var zrequest = {
+					'communityid': communityid,
+					'buildingid': buildingid,
+					'thingid': thingid,
+					'moldid': zmoldid,
+					'deleted': '0',
+					'function':'deletemold'
 				};
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tcommunityid').value = communityid;
-					ipage.getElementById('wtw_tbuildingid').value = buildingid;
-					ipage.getElementById('wtw_tthingid').value = thingid;
-					ipage.getElementById('wtw_tmoldid').value = request.moldid;
-					ipage.getElementById('wtw_tmolddeleted').value = "0";
-					ipage.getElementById('wtw_bdeletemold').click();
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/molds.php', onload);
+				WTW.getJSON("/core/handlers/molds.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 				var buildingind = WTW.getBuildingInd(buildingid);
 				WTW.getJSON("/connect/buildingmoldsrecover.php?buildingid=" + buildingid + "&buildingind=" + buildingind + "&buildingmoldid=" + zmoldid, 
 					function(response) {
@@ -4210,20 +4046,22 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 				);
 				break;
 			case "thingmolds":
-				var request = {
-					'moldid':zmoldid
+				var zrequest = {
+					'communityid': communityid,
+					'buildingid': buildingid,
+					'thingid': thingid,
+					'moldid': zmoldid,
+					'deleted': '0',
+					'function':'deletemold'
 				};
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tcommunityid').value = communityid;
-					ipage.getElementById('wtw_tbuildingid').value = buildingid;
-					ipage.getElementById('wtw_tthingid').value = thingid;
-					ipage.getElementById('wtw_tmoldid').value = request.moldid;
-					ipage.getElementById('wtw_tmolddeleted').value = "0";
-					ipage.getElementById('wtw_bdeletemold').click();
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/molds.php', onload);
+				WTW.getJSON("/core/handlers/molds.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 				var thingind = WTW.getThingInd(thingid);
 				WTW.getJSON("/connect/thingmoldsrecover.php?thingid=" + thingid + "&thingind=" + thingind + "&thingmoldid=" + zmoldid, 
 					function(response) {
@@ -4319,6 +4157,7 @@ WTWJS.prototype.showActionZone = function(actionzoneind) {
 		if (WTW.actionZones[actionzoneind] != null) {
 			switch (WTW.actionZones[actionzoneind].actionzonetype) {
 				case "loadzone":
+				case "loadanimations":
 				case "mirror":
 					WTW.setOpacity("actionzone-" + actionzoneind + "-" + WTW.actionZones[actionzoneind].actionzoneid + "-" + WTW.actionZones[actionzoneind].connectinggridind + "-" + WTW.actionZones[actionzoneind].connectinggridid + "-" + WTW.actionZones[actionzoneind].actionzonetype, .2);
 					break;
@@ -4624,8 +4463,104 @@ WTWJS.prototype.openActionZoneForm = function(actionzoneid) {
 				WTW.setNewActionZone();
 			}
 		}	
+		if (actionzonetype == "loadanimations") {
+			WTW.loadAZAnimationsList();
+			WTW.loadAZAvatarAnimations();
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-openActionZoneForm=" + ex.message);
+	}
+}		
+
+WTWJS.prototype.loadAZAnimationsList = function() {
+	try {
+		dGet('wtw_azavataranimations').innerHTML = '';
+		WTW.getJSON("/connect/actionzone.php?actionzoneid=" + dGet('wtw_tactionzoneid').value, 
+			function(zresponse) {
+				if (zresponse != null) {
+					zresponse = JSON.parse(zresponse);
+					if (zresponse.actionzones[0].avataranimations.length > 0) {
+						dGet('wtw_azavataranimations').innerHTML += '<div class="wtw-onecol">Load Animations:</div><br />';
+						for (var i=0;i<zresponse.actionzones[0].avataranimations.length;i++) {
+							if (zresponse.actionzones[0].avataranimations[i] != null) {
+								dGet('wtw_azavataranimations').innerHTML += "<div class='wtw-redbuttonright' onclick=\"WTW.deleteAZAvatarAnimation('" + zresponse.actionzones[0].avataranimations[i].actionzoneanimationid + "');\">Delete</div><div class='wtw-smallwhite'>" + zresponse.actionzones[0].avataranimations[i].animationfriendlyname + " (" + zresponse.actionzones[0].avataranimations[i].animationname + ")</div><div class='wtw-clear'></div>";
+							}
+						}
+					}
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-loadAZAnimationsList=" + ex.message);
+	}
+}		
+
+WTWJS.prototype.deleteAZAvatarAnimation = function(zactionzoneanimationid) {
+	try {
+		var zrequest = {
+			'actionzoneid': dGet('wtw_tactionzoneid').value,
+			'communityid': communityid,
+			'buildingid': buildingid,
+			'thingid': thingid,
+			'avataranimationid': zactionzoneanimationid,
+			'function':'deleteavataranimation'
+		};
+		WTW.getJSON("/core/handlers/actionzones.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.loadAZAnimationsList();
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-deleteAZAvatarAnimation=" + ex.message);
+	}
+}		
+
+WTWJS.prototype.loadAZAvatarAnimations = function() {
+	try {
+		WTW.clearDDL('wtw_tazavataranimationid');
+		WTW.getJSON("/connect/avataranimations.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				for (var i=0;i<zresponse.avataranimations.length;i++) {
+					if (zresponse.avataranimations[i] != null) {
+						var option = document.createElement("option");
+						option.text = zresponse.avataranimations[i].animationfriendlyname + " (" + zresponse.avataranimations[i].animationname + ")";
+						option.value = zresponse.avataranimations[i].avataranimationid;
+						dGet('wtw_tazavataranimationid').add(option);
+					}
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-loadAZAvatarAnimations=" + ex.message);
+	}
+}		
+
+WTWJS.prototype.saveAZAvatarAnimation = function() {
+	try {
+		var zrequest = {
+			'actionzoneid': dGet('wtw_tactionzoneid').value,
+			'communityid': communityid,
+			'buildingid': buildingid,
+			'thingid': thingid,
+			'avataranimationid':WTW.getDDLValue('wtw_tazavataranimationid'),
+			'function':'saveavataranimation'
+		};
+		WTW.getJSON("/core/handlers/actionzones.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.loadAZAnimationsList();
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-saveAZAvatarAnimation=" + ex.message);
 	}
 }		
 
@@ -4736,27 +4671,28 @@ WTWJS.prototype.submitActionZoneForm = function(w) {
 			}
 			WTW.disposeClean("actionzone-" + dGet('wtw_tactionzoneind').value + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].actionzoneid + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridind + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridid + "-" + dGet('wtw_tactionzonetype').value);
 			WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)] = null;
-			var request = {
-				'actionzoneid':dGet('wtw_tactionzoneid').value
-			};
+
 			if (dGet('wtw_tactionzoneid').value != "") {
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tcommunityid').value = communityid;
-					ipage.getElementById('wtw_tbuildingid').value = buildingid;
-					ipage.getElementById('wtw_tthingid').value = thingid;
-					ipage.getElementById('wtw_tactionzoneid').value = request.actionzoneid;
-					ipage.getElementById('wtw_bdeleteactionzone').click();	
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/actionzones.php', onload);
+				var zrequest = {
+					'actionzoneid': dGet('wtw_tactionzoneid').value,
+					'communityid': communityid,
+					'buildingid': buildingid,
+					'thingid': thingid,
+					'function':'deleteactionzone'
+				};
+				WTW.getJSON("/core/handlers/actionzones.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 			}
 		} else {
 			var zactionzoneind = Number(dGet('wtw_tactionzoneind').value);
-			var loadactionzoneid = "";
-			if (dGet('wtw_tazloadactionzoneid').selectedIndex > -1) {
-				loadactionzoneid = dGet('wtw_tazloadactionzoneid').options[dGet('wtw_tazloadactionzoneid').selectedIndex].value;
-			}
+			var zloadactionzoneid = WTW.getDDLValue('wtw_tazloadactionzoneid');
+
 			if (WTW.actionZones[zactionzoneind] != null) {
 				WTW.actionZones[zactionzoneind].actionzoneid = dGet('wtw_tactionzoneid').value;
 				WTW.actionZones[zactionzoneind].thinginfo.thingid = thingid;
@@ -4787,85 +4723,56 @@ WTWJS.prototype.submitActionZoneForm = function(w) {
 				WTW.actionZones[zactionzoneind].axis.rotatedegrees = dGet('wtw_tactionzonerotatedegrees').value;
 				WTW.actionZones[zactionzoneind].axis.rotatedirection = "1";
 				WTW.actionZones[zactionzoneind].movementdistance = dGet('wtw_taxisscalingz').value;
-				WTW.actionZones[zactionzoneind].loadactionzone = loadactionzoneid;
+				WTW.actionZones[zactionzoneind].loadactionzone = zloadactionzoneid;
 				WTW.actionZones[zactionzoneind].jsfunction = dGet('wtw_tactionzonejsfunction').value;
 				WTW.actionZones[zactionzoneind].jsparameters = dGet('wtw_tactionzonejsparameters').value;
 			}
 			
-			var request = {
-				'actionzoneid':dGet('wtw_tactionzoneid').value,
-				'actionzoneind':dGet('wtw_tactionzoneind').value,
+			var zrequest = {
+				'actionzoneid': dGet('wtw_tactionzoneid').value,
+				'communityid': communityid,
+				'buildingid': buildingid,
+				'thingid': thingid,
 				'actionzonename':dGet('wtw_tactionzonename').value,
-				'axispositionx':dGet('wtw_taxispositionx').value,
-				'axispositiony':dGet('wtw_taxispositiony').value,
-				'axispositionz':dGet('wtw_taxispositionz').value,
-				'axisrotationx':dGet('wtw_taxisrotationx').value,
-				'axisrotationy':dGet('wtw_taxisrotationy').value,
-				'axisrotationz':dGet('wtw_taxisrotationz').value,
-				'axisscalingx':dGet('wtw_taxisscalingx').value,
-				'axisscalingy':dGet('wtw_taxisscalingy').value,
-				'axisscalingz':dGet('wtw_taxisscalingz').value,
 				'actionzonetype':dGet('wtw_tactionzonetype').value,
 				'actionzoneshape':dGet('wtw_tactionzoneshape').value,
 				'attachmoldid':dGet('wtw_tattachmoldid').value,
 				'movementtype':dGet('wtw_tactionzonemovementtype').value,
 				'rotatespeed':dGet('wtw_tactionzonerotatespeed').value,
-				'actionzoneposx':dGet('wtw_tactionzoneposx').value,
-				'actionzoneposy':dGet('wtw_tactionzoneposy').value,
-				'actionzoneposz':dGet('wtw_tactionzoneposz').value,
-				'actionzonescalingx':dGet('wtw_tactionzonescalingx').value,
-				'actionzonescalingy':dGet('wtw_tactionzonescalingy').value,
-				'actionzonescalingz':dGet('wtw_tactionzonescalingz').value,
-				'actionzonerotx':dGet('wtw_tactionzonerotx').value,
-				'actionzoneroty':dGet('wtw_tactionzoneroty').value,
-				'actionzonerotz':dGet('wtw_tactionzonerotz').value,
-				'jsfunction':dGet('wtw_tactionzonejsfunction').value,
-				'jsparameters':dGet('wtw_tactionzonejsparameters').value,
+				'positionx':dGet('wtw_tactionzoneposx').value,
+				'positiony':dGet('wtw_tactionzoneposy').value,
+				'positionz':dGet('wtw_tactionzoneposz').value,
+				'scalingx':dGet('wtw_tactionzonescalingx').value,
+				'scalingy':dGet('wtw_tactionzonescalingy').value,
+				'scalingz':dGet('wtw_tactionzonescalingz').value,
+				'rotationx':dGet('wtw_tactionzonerotx').value,
+				'rotationy':dGet('wtw_tactionzoneroty').value,
+				'rotationz':dGet('wtw_tactionzonerotz').value,
+				'axispositionx':dGet('wtw_taxispositionx').value,
+				'axispositiony':dGet('wtw_taxispositiony').value,
+				'axispositionz':dGet('wtw_taxispositionz').value,
+				'axisscalingx':dGet('wtw_taxisscalingx').value,
+				'axisscalingy':dGet('wtw_taxisscalingy').value,
+				'axisscalingz':dGet('wtw_taxisscalingz').value,
+				'axisrotationx':dGet('wtw_taxisrotationx').value,
+				'axisrotationy':dGet('wtw_taxisrotationy').value,
+				'axisrotationz':dGet('wtw_taxisrotationz').value,
 				'rotateaxis':dGet('wtw_tactionzonerotateaxis').value,
 				'rotatedegrees':dGet('wtw_tactionzonerotatedegrees').value,
-				'loadactionzoneid':loadactionzoneid
+				'rotatedirection':'1',
+				'loadactionzoneid':zloadactionzoneid,
+				'jsfunction':dGet('wtw_tactionzonejsfunction').value,
+				'jsparameters':dGet('wtw_tactionzonejsparameters').value,
+				'function':'saveactionzone'
 			};
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tcommunityid').value = communityid;
-				ipage.getElementById('wtw_tbuildingid').value = buildingid;
-				ipage.getElementById('wtw_tthingid').value = thingid;
-				ipage.getElementById('wtw_tactionzoneid').value = request.actionzoneid;
-				ipage.getElementById('wtw_tactionzoneind').value = request.actionzoneind;
-				ipage.getElementById('wtw_tactionzonename').value = request.actionzonename;
-				ipage.getElementById('wtw_taxispositionx').value = request.axispositionx;
-				ipage.getElementById('wtw_taxispositiony').value = request.axispositiony;
-				ipage.getElementById('wtw_taxispositionz').value = request.axispositionz;		
-				ipage.getElementById('wtw_taxisrotationx').value = request.axisrotationx;
-				ipage.getElementById('wtw_taxisrotationy').value = request.axisrotationy;
-				ipage.getElementById('wtw_taxisrotationz').value = request.axisrotationz;		
-				ipage.getElementById('wtw_taxisscalingx').value = request.axisscalingx;
-				ipage.getElementById('wtw_taxisscalingy').value = request.axisscalingy;
-				ipage.getElementById('wtw_taxisscalingz').value = request.axisscalingz;
-				ipage.getElementById('wtw_tactionzonetype').value = request.actionzonetype;
-				ipage.getElementById('wtw_tactionzoneshape').value = request.actionzoneshape;
-				ipage.getElementById('wtw_tattachmoldid').value = request.attachmoldid;
-				ipage.getElementById('wtw_tactionzonemovementtype').value = request.movementtype;
-				ipage.getElementById('wtw_tactionzonerotatespeed').value = request.rotatespeed;
-				ipage.getElementById('wtw_tactionzoneposx').value = request.actionzoneposx;
-				ipage.getElementById('wtw_tactionzoneposy').value = request.actionzoneposy;
-				ipage.getElementById('wtw_tactionzoneposz').value = request.actionzoneposz;
-				ipage.getElementById('wtw_tactionzonescalingx').value = request.actionzonescalingx;
-				ipage.getElementById('wtw_tactionzonescalingy').value = request.actionzonescalingy;
-				ipage.getElementById('wtw_tactionzonescalingz').value = request.actionzonescalingz;		
-				ipage.getElementById('wtw_tactionzonerotx').value = request.actionzonerotx;
-				ipage.getElementById('wtw_tactionzoneroty').value = request.actionzoneroty;
-				ipage.getElementById('wtw_tactionzonerotz').value = request.actionzonerotz;
-				ipage.getElementById('wtw_tactionzonejsfunction').value = request.jsfunction;
-				ipage.getElementById('wtw_tactionzonejsparameters').value = request.jsparameters;
-				ipage.getElementById('wtw_tactionzonerotateaxis').value = request.rotateaxis;
-				ipage.getElementById('wtw_tactionzonerotatedirection').value = "1";
-				ipage.getElementById('wtw_tactionzonerotatedegrees').value = request.rotatedegrees;	
-				ipage.getElementById('wtw_tazloadactionzoneid').value = request.loadactionzoneid;
-				ipage.getElementById('wtw_bsaveactionzone').click();	
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/actionzones.php', onload);
+			WTW.getJSON("/core/handlers/actionzones.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		}
 		if (w != 2) {
 			WTW.hideAdminMenu();
@@ -4879,21 +4786,22 @@ WTWJS.prototype.submitActionZoneForm = function(w) {
 
 WTWJS.prototype.clearActionZone = function(zmoldswithactionzones, zactionzoneid) {
 	try {
-		var request = {
-			'actionzoneid':zactionzoneid,
-			'moldswithactionzones':zmoldswithactionzones
+		var zrequest = {
+			'actionzoneid': dGet('wtw_tactionzoneid').value,
+			'communityid': communityid,
+			'buildingid': buildingid,
+			'thingid': thingid,
+			'moldswithactionzones':zmoldswithactionzones,
+			'function':'removeactionzone'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tcommunityid').value = communityid;
-			ipage.getElementById('wtw_tbuildingid').value = buildingid;
-			ipage.getElementById('wtw_tthingid').value = thingid;
-			ipage.getElementById('wtw_tmoldactionzoneid').value = request.actionzoneid;
-			ipage.getElementById('wtw_tmoldswithactionzones').value = request.moldswithactionzones;
-			ipage.getElementById('wtw_bremoveactionzone').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/actionzones.php', onload);
+		WTW.getJSON("/core/handlers/actionzones.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-clearActionZone=" + ex.message);
 	}
@@ -5298,6 +5206,9 @@ WTWJS.prototype.selectAddActionZonePart = function(w) {
 				if (WTW.actionZones[zactionzoneind] == null) {
 					WTW.actionZones[zactionzoneind] = WTW.newActionZone();
 				}
+				
+				var zloadactionzoneid = WTW.getDDLValue('wtw_tazloadactionzoneid');
+				
 				WTW.actionZones[zactionzoneind].actionzoneid = dGet('wtw_tactionzoneid').value;
 				WTW.actionZones[zactionzoneind].communityinfo.communityid = communityid;
 				WTW.actionZones[zactionzoneind].buildinginfo.buildingid = buildingid;
@@ -5306,6 +5217,7 @@ WTWJS.prototype.selectAddActionZonePart = function(w) {
 				WTW.actionZones[zactionzoneind].actionzonetype = dGet('wtw_tactionzonetype').value;
 				WTW.actionZones[zactionzoneind].actionzoneshape = dGet('wtw_tactionzoneshape').value;
 				WTW.actionZones[zactionzoneind].attachmoldid = dGet('wtw_tattachmoldid').value;
+				WTW.actionZones[zactionzoneind].loadactionzoneid = zloadactionzoneid;
 				WTW.actionZones[zactionzoneind].movementtype = dGet('wtw_tactionzonemovementtype').value;
 				WTW.actionZones[zactionzoneind].rotatespeed = dGet('wtw_tactionzonerotatespeed').value;
 				WTW.actionZones[zactionzoneind].position.x = dGet('wtw_tactionzoneposx').value;
@@ -5329,78 +5241,51 @@ WTWJS.prototype.selectAddActionZonePart = function(w) {
 				WTW.actionZones[zactionzoneind].movementdistance = dGet('wtw_taxisscalingz').value;
 				WTW.actionZones[zactionzoneind].jsfunction = dGet('wtw_tactionzonejsfunction').value;
 				WTW.actionZones[zactionzoneind].jsparameters = dGet('wtw_tactionzonejsparameters').value;
-				var request = {
-					'actionzoneid':dGet('wtw_tactionzoneid').value,
-					'actionzoneind':dGet('wtw_tactionzoneind').value,
+
+				var zrequest = {
+					'actionzoneid': dGet('wtw_tactionzoneid').value,
+					'communityid': communityid,
+					'buildingid': buildingid,
+					'thingid': thingid,
 					'actionzonename':dGet('wtw_tactionzonename').value,
-					'axispositionx':dGet('wtw_taxispositionx').value,
-					'axispositiony':dGet('wtw_taxispositiony').value,
-					'axispositionz':dGet('wtw_taxispositionz').value,
-					'axisrotationx':dGet('wtw_taxisrotationx').value,
-					'axisrotationy':dGet('wtw_taxisrotationy').value,
-					'axisrotationz':dGet('wtw_taxisrotationz').value,
-					'axisscalingx':dGet('wtw_taxisscalingx').value,
-					'axisscalingy':dGet('wtw_taxisscalingy').value,
-					'axisscalingz':dGet('wtw_taxisscalingz').value,
 					'actionzonetype':dGet('wtw_tactionzonetype').value,
 					'actionzoneshape':dGet('wtw_tactionzoneshape').value,
 					'attachmoldid':dGet('wtw_tattachmoldid').value,
 					'movementtype':dGet('wtw_tactionzonemovementtype').value,
 					'rotatespeed':dGet('wtw_tactionzonerotatespeed').value,
-					'actionzoneposx':dGet('wtw_tactionzoneposx').value,
-					'actionzoneposy':dGet('wtw_tactionzoneposy').value,
-					'actionzoneposz':dGet('wtw_tactionzoneposz').value,
-					'actionzonescalingx':dGet('wtw_tactionzonescalingx').value,
-					'actionzonescalingy':dGet('wtw_tactionzonescalingy').value,
-					'actionzonescalingz':dGet('wtw_tactionzonescalingz').value,
-					'actionzonerotx':dGet('wtw_tactionzonerotx').value,
-					'actionzoneroty':dGet('wtw_tactionzoneroty').value,
-					'actionzonerotz':dGet('wtw_tactionzonerotz').value,
+					'positionx':dGet('wtw_tactionzoneposx').value,
+					'positiony':dGet('wtw_tactionzoneposy').value,
+					'positionz':dGet('wtw_tactionzoneposz').value,
+					'scalingx':dGet('wtw_tactionzonescalingx').value,
+					'scalingy':dGet('wtw_tactionzonescalingy').value,
+					'scalingz':dGet('wtw_tactionzonescalingz').value,
+					'rotationx':dGet('wtw_tactionzonerotx').value,
+					'rotationy':dGet('wtw_tactionzoneroty').value,
+					'rotationz':dGet('wtw_tactionzonerotz').value,
+					'axispositionx':dGet('wtw_taxispositionx').value,
+					'axispositiony':dGet('wtw_taxispositiony').value,
+					'axispositionz':dGet('wtw_taxispositionz').value,
+					'axisscalingx':dGet('wtw_taxisscalingx').value,
+					'axisscalingy':dGet('wtw_taxisscalingy').value,
+					'axisscalingz':dGet('wtw_taxisscalingz').value,
+					'axisrotationx':dGet('wtw_taxisrotationx').value,
+					'axisrotationy':dGet('wtw_taxisrotationy').value,
+					'axisrotationz':dGet('wtw_taxisrotationz').value,
+					'rotateaxis':dGet('wtw_tactionzonerotateaxis').value,
+					'rotatedegrees':dGet('wtw_tactionzonerotatedegrees').value,
+					'rotatedirection':'1',
+					'loadactionzoneid':zloadactionzoneid,
 					'jsfunction':dGet('wtw_tactionzonejsfunction').value,
 					'jsparameters':dGet('wtw_tactionzonejsparameters').value,
-					'rotateaxis':dGet('wtw_tactionzonerotateaxis').value,
-					'rotatedegrees':dGet('wtw_tactionzonerotatedegrees').value
+					'function':'saveactionzone'
 				};
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tcommunityid').value = communityid;
-					ipage.getElementById('wtw_tbuildingid').value = buildingid;
-					ipage.getElementById('wtw_tthingid').value = thingid;
-					ipage.getElementById('wtw_tactionzoneid').value = request.actionzoneid;
-					ipage.getElementById('wtw_tactionzoneind').value = request.actionzoneind;
-					ipage.getElementById('wtw_tactionzonename').value = request.actionzonename;
-					ipage.getElementById('wtw_taxispositionx').value = request.axispositionx;
-					ipage.getElementById('wtw_taxispositiony').value = request.axispositiony;
-					ipage.getElementById('wtw_taxispositionz').value = request.axispositionz;
-					ipage.getElementById('wtw_taxisrotationx').value = request.axisrotationx;
-					ipage.getElementById('wtw_taxisrotationy').value = request.axisrotationy;
-					ipage.getElementById('wtw_taxisrotationz').value = request.axisrotationz;
-					ipage.getElementById('wtw_taxisscalingx').value = request.axisscalingx;
-					ipage.getElementById('wtw_taxisscalingy').value = request.axisscalingy;
-					ipage.getElementById('wtw_taxisscalingz').value = request.axisscalingz;
-					ipage.getElementById('wtw_tactionzonetype').value = request.actionzonetype;
-					ipage.getElementById('wtw_tactionzoneshape').value = request.actionzoneshape;
-					ipage.getElementById('wtw_tattachmoldid').value = request.attachmoldid;
-					ipage.getElementById('wtw_tactionzonemovementtype').value = request.movementtype;
-					ipage.getElementById('wtw_tactionzonerotatespeed').value = request.rotatespeed;
-					ipage.getElementById('wtw_tactionzoneposx').value = request.actionzoneposx;
-					ipage.getElementById('wtw_tactionzoneposy').value = request.actionzoneposy;
-					ipage.getElementById('wtw_tactionzoneposz').value = request.actionzoneposz;
-					ipage.getElementById('wtw_tactionzonescalingx').value = request.actionzonescalingx;
-					ipage.getElementById('wtw_tactionzonescalingy').value = request.actionzonescalingy;
-					ipage.getElementById('wtw_tactionzonescalingz').value = request.actionzonescalingz;
-					ipage.getElementById('wtw_tactionzonerotx').value = request.actionzonerotx;
-					ipage.getElementById('wtw_tactionzoneroty').value = request.actionzoneroty;
-					ipage.getElementById('wtw_tactionzonerotz').value = request.actionzonerotz;
-					ipage.getElementById('wtw_tactionzonejsfunction').value = request.jsfunction;
-					ipage.getElementById('wtw_tactionzonejsparameters').value = request.jsparameters;
-					ipage.getElementById('wtw_tactionzonerotateaxis').value = request.rotateaxis;
-					ipage.getElementById('wtw_tactionzonerotatedirection').value = "1";
-					ipage.getElementById('wtw_tactionzonerotatedegrees').value = request.rotatedegrees;
-					ipage.getElementById('wtw_bsaveactionzone').click();				
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/actionzones.php', onload);
+				WTW.getJSON("/core/handlers/actionzones.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 			}
 			WTW.pick = 2;
 			dGet('wtw_baddactionzonepart').innerHTML = "Cancel Pick Shape";
@@ -5665,17 +5550,17 @@ WTWJS.prototype.openFullPageForm = function(pageid, setcategory, item, itemname,
 		}
 		WTW.setDDLValue('wtw_fileselectcategory',setcategory);
 		/* bringing up a fatal error may not use dGet() */
-		document.getElementById('wtw_tfileitem').value = item;
-		document.getElementById('wtw_tfileitemname').value = itemname;
-		document.getElementById('wtw_tfileitemnamepath').value = itemnamepath;
-		document.getElementById('wtw_tfileitempreviewname').value = previewname;
+		dGet('wtw_tfileitem').value = item;
+		dGet('wtw_tfileitemname').value = itemname;
+		dGet('wtw_tfileitemnamepath').value = itemnamepath;
+		dGet('wtw_tfileitempreviewname').value = previewname;
 		WTW.hideFullPages();
 		WTW.hide('wtw_mediapage');
 		WTW.hide('wtw_menuwtwdownloads');
 		WTW.show('wtw_fullpageform');
 		switch (pageid) {
 			case "error":
-				document.getElementById('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Users</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + setcategory + "</div>";
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Users</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + setcategory + "</div>";
 				WTW.show('wtw_showfilepage');
 				WTW.show('wtw_errorpage');
 				WTW.show('wtw_showerror');
@@ -5867,89 +5752,463 @@ WTWJS.prototype.openDashboardForm = function(item) {
 	}
 }
 
-WTWJS.prototype.startUploadImage = function() {
+WTWJS.prototype.startUploadImage = function(zbuttontext) {
 	try {
-		if (dGet('wtw_menuuploadedobjects').className == 'wtw-menutabtopselected') {
-			var iframe = dGet('wtw_uploadedobjectsframe');
-			var ipage = iframe.contentDocument || iframe.contentWindow.document;
-			ipage.getElementById('wtw_buploadcommunityimage').click();
-		} else {
-			WTW.setImageMenu(2);
-			var iframe = dGet('wtw_myimagesframe');
-			var ipage = iframe.contentDocument || iframe.contentWindow.document;
-			ipage.getElementById('wtw_buploadcommunityimage').click();
+		switch (zbuttontext) {
+			case "Upload Primary 3D File":
+				dGet('wtw_fileupload').click();
+				break;
+			case "Upload or Replace File(s)":
+				dGet('wtw_filesupload').onchange = function() {
+					WTW.uploadObjectFiles();
+				}
+				dGet('wtw_filesupload').click();
+				break;
+			default:
+				dGet('wtw_filesupload').onchange = function() {
+					WTW.uploadFiles();
+				}
+				dGet('wtw_filesupload').click();
+				break;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-startUploadImage=" + ex.message);
 	}
 }
 
-WTWJS.prototype.setImageMenu = function(w) {
+WTWJS.prototype.uploadFile = function() {
 	try {
-		dGet('wtw_menuimagecommunity').className = 'wtw-menutabtop';
-		dGet('wtw_menuimagemy').className = 'wtw-menutabtop';
-		dGet('wtw_menuimagestock').className = 'wtw-menutabtop';
-		dGet('wtw_menuuploadedobjects').className = 'wtw-menutabtop';
-		dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Media Library</div>";
-		WTW.hide('wtw_menuimagecommunitydiv');
-		WTW.hide('wtw_menuimagemydiv');
-		WTW.hide('wtw_hiddenimagesoption');
-		WTW.hide('wtw_menuimagestockdiv');
-		WTW.hide('wtw_menuuploadedobjectsdiv');
-		WTW.show('wtw_bstartimageupload');
-		if (WTW.isNumeric(w)) {
-			switch (Number(w)) {
-				case 2:
-					dGet('wtw_menuimagemy').className = 'wtw-menutabtopselected';
-					WTW.showInline('wtw_menuimagemydiv');
-					WTW.showInline('wtw_hiddenimagesoption');
-					dGet('wtw_myimagesframe').style.height = (WTW.sizeY - 160) + 'px';
-					break;
-				case 3:
-					dGet('wtw_menuimagestock').className = 'wtw-menutabtopselected';
-					WTW.showInline('wtw_menuimagestockdiv');
-					dGet('wtw_stockimagesframe').style.height = (WTW.sizeY - 160) + 'px';
-					break;
-				case 4:
-					dGet('wtw_menuuploadedobjects').className = 'wtw-menutabtopselected';
-					WTW.showInline('wtw_menuuploadedobjectsdiv');
-					dGet('wtw_uploadedobjectsframe').style.height = (WTW.sizeY - 160) + 'px';
-					WTW.loadObjectPage(true);
-					break;
-				default: 
-					dGet('wtw_menuimagecommunity').className = 'wtw-menutabtopselected';
-					WTW.showInline('wtw_menuimagecommunitydiv');
-					dGet('wtw_communityimagesframe').style.height = (WTW.sizeY - 160) + 'px';
-					WTW.setDDLValue('wtw_fileselectcategory','image');
-					break;
+		var form1 = document.createElement('form');
+		var Httpreq = new XMLHttpRequest();
+		var zformdata = new FormData(form1);
+		zformdata.append('wtw_uploadfile', dGet('wtw_fileupload').files[0], dGet('wtw_fileupload').files[0].name);
+		zformdata.append('action', 'POST');
+		zformdata.append('function', 'uploadfile');
+		Httpreq.open('POST', '/core/handlers/uploadedfiles.php');
+		Httpreq.onreadystatechange = function () {
+			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+				var zresponse = JSON.parse(Httpreq.responseText);
+				WTW.loadUploadedObjectsDiv(true);
 			}
-			WTW.resetUploadButton();
-		}
+		};
+		Httpreq.send(zformdata);  
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admineditor.js-setImageMenu=" + ex.message);
+		WTW.log("core-scripts-admin-wtw_admineditor.js-uploadFile=" + ex.message);
 	}
 }
 
-WTWJS.prototype.openObjectPageForm = function(item, filename) {
+WTWJS.prototype.deleteObjectFile = function() {
+	try {
+		var zobjectfilepart = dGet('wtw_tobjectfile').value;
+		zobjectfilepart = zobjectfilepart.replace(".babylon","");
+		var zrequest = {
+			'filename': dGet('wtw_tdeletefile').value,
+			'objectfilepart': zobjectfilepart,
+			'function':'deleteobjectfile'
+		};
+		WTW.getJSON("/core/handlers/uploadedfiles.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.hide('wtw_deletefile');
+				WTW.hide('wtw_canceldelete');
+				WTW.loadObjectDetailsName();
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-deleteObjectFile=" + ex.message);
+	}
+}
+
+WTWJS.prototype.uploadObjectFiles = function() {
+	try {
+		var zobjectfilepart = dGet('wtw_tobjectfile').value;
+		zobjectfilepart = zobjectfilepart.replace(".babylon","");
+		var form1 = document.createElement('form');
+		var Httpreq = new XMLHttpRequest();
+		var zformdata = new FormData(form1);
+		for (var i=0;i < dGet('wtw_filesupload').files.length;i++) {
+			zformdata.append('wtw_uploadfiles[]', dGet('wtw_filesupload').files[i], dGet('wtw_filesupload').files[i].name);
+		}
+		zformdata.append('action', 'POST');
+		zformdata.append('objectfilepart', zobjectfilepart);
+		zformdata.append('function', 'uploadobjectfiles');
+		Httpreq.open('POST', '/core/handlers/uploadedfiles.php');
+		Httpreq.onreadystatechange = function () {
+			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+				var zresponse = JSON.parse(Httpreq.responseText);
+				WTW.loadObjectDetailsName();
+			}
+		};
+		Httpreq.send(zformdata);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-uploadObjectFiles=" + ex.message);
+	}
+}
+
+WTWJS.prototype.uploadFiles = function() {
+	try {
+		var zobjectfilepart = dGet('wtw_tobjectfile').value;
+		var zitem = dGet('wtw_tfileitem').value;
+		zobjectfilepart = zobjectfilepart.replace(".babylon","");
+		var form1 = document.createElement('form');
+		var Httpreq = new XMLHttpRequest();
+		var zformdata = new FormData(form1);
+		for (var i=0;i < dGet('wtw_filesupload').files.length;i++) {
+			zformdata.append('wtw_uploadfiles[]', dGet('wtw_filesupload').files[i], dGet('wtw_filesupload').files[i].name);
+		}
+		zformdata.append('action', 'POST');
+		zformdata.append('objectfilepart', zobjectfilepart);
+		zformdata.append('item', zitem);
+		zformdata.append('function', 'uploadfiles');
+		Httpreq.open('POST', '/core/handlers/uploadedfiles.php');
+		Httpreq.onreadystatechange = function () {
+			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+				var zresponse = JSON.parse(Httpreq.responseText);
+WTW.log("serror=" + zresponse.serror);
+				var zcategory = WTW.getDDLValue('wtw_fileselectcategory');
+				WTW.loadMyFilesPage(zitem, zcategory, '0');
+				WTW.setImageMenu(2);
+			}
+		};
+		Httpreq.send(zformdata);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-uploadFiles=" + ex.message);
+	}
+}
+
+WTWJS.prototype.loadUploadedObjectsDiv = function(showloading) {
+	try {
+		dGet('wtw_bstartimageupload').innerHTML = 'Upload Primary 3D File';
+		WTW.hide('wtw_uploadedobjectdetailsdiv');
+		if (showloading) {
+			WTW.hide('wtw_uploadedobjectsdiv');
+			WTW.show('wtw_loadingselectimage');
+		}
+		dGet('wtw_uploadedobjectsdiv').innerHTML = "";
+		var zrequest = {
+			'function':'getuploadedfiles'
+		};
+		WTW.getJSON("/core/handlers/uploadedfiles.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				var zitem = dGet('wtw_tfileitem').value;
+				for (var i=0;i<zresponse.length;i++) {
+					zcreatedate = zresponse[i].createdate;
+					//zcreatedate = date('m/d/Y', strtotime($zcreatedate));
+					zlinktext = "Edit";
+					if (zresponse[i].stock == '1') {
+						zlinktext = "View";
+					}
+					if (zitem == "3dobject") {
+						zlinktext = "Select";
+						dGet('wtw_uploadedobjectsdiv').innerHTML += "<div class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.setSelectObject('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.setSelectObject('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">Edit</div><div class='wtw-clear'></div></div></div>";
+					} else {
+						dGet('wtw_uploadedobjectsdiv').innerHTML += "<div class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-clear'></div></div></div>";
+					}
+				}
+				dGet('wtw_uploadedobjectsdiv').style.height = (WTW.sizeY - 160) + 'px';
+				WTW.show('wtw_uploadedobjectsdiv');
+				if (showloading) {
+					WTW.hide('wtw_loadingselectimage');
+				}
+				WTW.resetUploadButton();
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-loadUploadedObjectsDiv=" + ex.message);
+	}
+}
+
+WTWJS.prototype.openObjectPageForm = function(zuploadobjectid, zfilename) {
 	try {
 		var category = WTW.getDDLValue('wtw_fileselectcategory');
-		WTW.hide('wtw_uploadedobjectsframe');
-		WTW.show('wtw_loadingselectimage');
-		dGet('wtw_uploadedobjectsframe').src = '/core/iframes/uploadedfiledetails.php?uploadobjectid=' + item + '&filename=' + filename;
-		dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','" + category + "','');WTW.setImageMenu(4);\">Media Library</div><img id='wtw_arrowicon2' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + filename + "</div>";
 		dGet('wtw_tbackupfullpageformtitle').value = dGet('wtw_fullpageformtitle').innerHTML;
-		dGet('wtw_uploadedobjectsframe').onload = function() {
-			window.setTimeout(function() {
-				WTW.show('wtw_uploadedobjectsframe');
-				WTW.hide('wtw_loadingselectimage');
-				WTW.resetUploadButton();
-			},500);
-		};
+		dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','" + category + "','');WTW.setImageMenu(4);\">Media Library</div><img id='wtw_arrowicon2' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zfilename + "</div>";
+		WTW.hide('wtw_uploadedobjectsdiv');
+		WTW.hide('wtw_loadingselectimage');
+		dGet('wtw_uploadedobjectdetailsdiv').style.height = (WTW.sizeY - 160) + 'px';
+		WTW.show('wtw_uploadedobjectdetailsdiv');
+		WTW.loadObjectDetailsName(zuploadobjectid);
+		WTW.loadObjectDetailsAnimations(zuploadobjectid);
+		dGet('wtw_bstartimageupload').innerHTML = 'Upload or Replace File(s)';
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-openObjectPageForm=" + ex.message);
 	}
 }
 
+WTWJS.prototype.loadObjectDetailsName = function(zuploadobjectid) {
+	try {
+		if (zuploadobjectid == undefined) {
+			zuploadobjectid = dGet('wtw_tuploadobjectid').value;
+		}
+		dGet('wtw_uploadedobjectsnamediv').innerHTML = "";
+		var znamediv = "";
+		var zrequest = {
+			'uploadobjectid': zuploadobjectid,
+			'function':'getuploadedfilenamedetails'
+		};
+		WTW.getJSON("/core/handlers/uploadedfiles.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse.length > 0) {
+					for (var i=0;i < zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							dGet('wtw_tuploadobjectid').value = zresponse[i].uploadobjectid;
+							dGet('wtw_tobjectfile').value = zresponse[i].objectfile;
+							if (zresponse[i].stock == 1) {
+								znamediv += "<h1 style='color:black;margin-left:20px;'>Edit Stock 3D Object</h1>";
+							} else {
+								znamediv += "<h1 style='color:black;margin-left:20px;'>Edit 3D Object</h1>";
+							}
+							var zcreatedate = zresponse[i].createdate;
+							//zcreatedate = date('m/d/Y', strtotime($zcreatedate));
+							znamediv += "<div class='wtw-objectcontainer'><div class='wtw-objectfile'>" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "</div></div>";
+							WTW.loadObjectDetailsFiles(zuploadobjectid, zresponse[i].objectfolder, zresponse[i].objectfile);
+						}
+					}
+				} else {
+					znamediv += "<h1 style='color:red;margin-left:20px;'>3D Object not found</h1>";
+				}
+				dGet('wtw_uploadedobjectsnamediv').innerHTML = znamediv;
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-loadObjectDetailsName=" + ex.message);
+	}
+}
+
+WTWJS.prototype.loadObjectDetailsFiles = function(zuploadobjectid, zobjectfolder, zfilename) {
+	try {
+		dGet('wtw_uploadedobjectsfilesdiv').innerHTML = "";
+		var zfilesdiv = "";
+		var zrequest = {
+			'objectfolder': zobjectfolder,
+			'function':'getuploadedfilefilesdetails'
+		};
+		WTW.getJSON("/core/handlers/uploadedfiles.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				zfilesdiv += "<div class='wtw-clear'></div>";
+				zfilesdiv += "<div class='wtw-objectcontainer'><div class='wtw-objectfile'>File List</div><div class='wtw-objectfolder'>";
+				if (zresponse.length > 0) {
+					for (var i=0;i < zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							zfilesdiv += "<img src='/content/system/images/close2.png' alt='Delete' title='Delete' style='width:24px;height:auto;float:right;right-margin:10px;cursor:pointer;' onclick=\"dGet('wtw_tdeletefile').value='" + zresponse[i].file + "';WTW.hide('wtw_uploadbutton');WTW.showInline('wtw_deletefile');WTW.showInline('wtw_canceldelete');\" />";
+							if (zresponse[i].file == zfilename) {
+								zfilesdiv += "<div class='wtw-floatright'>Primary</div><strong>" + zresponse[i].file + "</strong><br /><div class='wtw-clear'></div>";
+							} else {
+								zfilesdiv += "<div>" + zresponse[i].file + "</div><br /><div class='wtw-clear'></div>";
+							}
+						}
+					}
+				}
+				zfilesdiv += "<br /><br /><div id='wtw_uploadbutton' class='wtw-greenbutton' style='width:318px;' onclick=\"dGet('wtw_filesupload').click();\">Upload or Replace File(s)</div>";
+				zfilesdiv += "<div id='wtw_deletefile' class='wtw-redbutton' style='width:150px;display:none;visibility:hidden;text-align:center;margin-right:13px;cursor:pointer;' onclick=\"WTW.deleteObjectFile();\">Delete File</div><div id='wtw_canceldelete' class='wtw-yellowbutton' style='width:150px;display:none;visibility:hidden;text-align:center;cursor:pointer;' onclick=\"dGet('wtw_tdeletefile').value='';WTW.hide('wtw_deletefile');WTW.hide('wtw_canceldelete');WTW.show('wtw_uploadbutton');\">Cancel</div>";
+				zfilesdiv += "</div></div>";
+				dGet('wtw_uploadedobjectsfilesdiv').innerHTML = zfilesdiv;
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-loadObjectDetailsFiles=" + ex.message);
+	}
+}
+
+WTWJS.prototype.loadObjectDetailsAnimations = function(zuploadobjectid) {
+	try {
+		dGet('wtw_uploadedobjectsanimationsdiv').innerHTML = "";
+		var zanimationsdiv = "";
+		var zrequest = {
+			'uploadobjectid': zuploadobjectid,
+			'function':'getuploadedfileanimationsdetails'
+		};
+		WTW.getJSON("/core/handlers/animations.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				zanimationsdiv += "<div class='wtw-clear'></div><div class='wtw-objectcontainer'><div class='wtw-objectfile'>Animations</div><div class='wtw-objectfolder'>";
+				if (zresponse.length > 0) {
+					for (var i=0;i < zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							zanimationsdiv += "<img src='/content/system/images/close2.png' alt='Delete' title='Delete' style='width:24px;height:auto;float:right;right-margin:10px;cursor:pointer;' onclick=\"dGet('wtw_tdeleteanimation').value='" + zresponse[i].objectanimationid + "';WTW.showInline('wtw_deleteanimation');WTW.showInline('wtw_canceldeleteanimation');\" />";
+							zanimationsdiv += "<img src='/content/system/images/edit.png' alt='Edit Animation' title='Edit Animation' style='width:24px;height:auto;float:right;right-margin:10px;cursor:pointer;' onclick=\"WTW.loadObjectAnimation('" + zresponse[i].objectanimationid + "');\" />";
+							var zmoldevent = '';
+							if (zresponse[i].moldevent != '') {
+								zmoldevent = ": <strong>" + zresponse[i].moldevent + "</strong>";
+							}
+							zanimationsdiv += "<div>" + zresponse[i].animationname + zmoldevent + "</div><br /><div class='wtw-clear'></div>";
+						}
+					}
+				}
+				zanimationsdiv += "<br /><br /><div id='wtw_addanimation' class='wtw-greenbutton' style='width:318px;' onclick=\"WTW.addAnimation('" + zuploadobjectid + "');\">Add Animation</div>";
+				zanimationsdiv += "<div id='wtw_deleteanimation' class='wtw-redbutton' style='width:150px;display:none;visibility:hidden;text-align:center;margin-right:13px;cursor:pointer;' onclick=\"WTW.deleteObjectAnimation(dGet('wtw_tdeleteanimation').value, '" + zuploadobjectid + "');\">Delete Animation</div><div id='wtw_canceldeleteanimation' class='wtw-yellowbutton' style='width:150px;display:none;visibility:hidden;text-align:center;cursor:pointer;' onclick=\"dGet('wtw_tdeleteanimation').value='';WTW.hide('wtw_deleteanimation');WTW.hide('wtw_canceldeleteanimation');\">Cancel</div>";
+				zanimationsdiv += "</div></div>";
+				dGet('wtw_uploadedobjectsanimationsdiv').innerHTML = zanimationsdiv;
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-loadObjectDetailsAnimations=" + ex.message);
+	}
+}
+
+WTWJS.prototype.loadObjectAnimation = function(zobjectanimationid) {
+	try {
+		WTW.hide('wtw_deleteanimation');
+		WTW.hide('wtw_canceldeleteanimation');
+		WTW.hide('wtw_addanimationdiv');
+		var zrequest = {
+			'objectanimationid': zobjectanimationid,
+			'function':'getobjectanimation'
+		};
+		WTW.getJSON("/core/handlers/animations.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse[0] != null) {
+					dGet('wtw_tobjectanimationid').value = zresponse[0].objectanimationid;
+					dGet('wtw_tuploadobjectid').value = zresponse[0].uploadobjectid;
+					dGet('wtw_tanimationname').value = zresponse[0].animationname;
+					dGet('wtw_tmoldnamepart').value = zresponse[0].moldnamepart;
+					dGet('wtw_tstartframe').value = zresponse[0].startframe;
+					dGet('wtw_tendframe').value = zresponse[0].endframe;
+					dGet('wtw_tspeedratio').value = zresponse[0].speedratio;
+					dGet('wtw_tanimationendscript').value = zresponse[0].animationendscript;
+					dGet('wtw_tanimationendparameters').value = zresponse[0].animationendparameters;
+					dGet('wtw_tobjectsoundid').value = zresponse[0].soundid;
+					dGet('wtw_tobjectsoundpath').value = zresponse[0].soundpath;
+					dGet('wtw_objectselectedsound').innerHTML = zresponse[0].soundname;
+					dGet('wtw_objectsoundicon').alt = zresponse[0].soundname;
+					dGet('wtw_objectsoundicon').title = zresponse[0].soundname;
+					dGet('wtw_tobjectsoundmaxdistance').value = zresponse[0].soundmaxdistance;
+					WTW.setDDLValue('wtw_tmoldevent', zresponse[0].moldevent)
+					if (zresponse[0].animationloop == '1') {
+						dGet('wtw_tanimationloop').checked = true;
+					} else {
+						dGet('wtw_tanimationloop').checked = false;
+					}
+					if (zresponse[0].stopcurrentanimations == '1') {
+						dGet('wtw_tstopcurrentanimations').checked = true;
+					} else {
+						dGet('wtw_tstopcurrentanimations').checked = false;
+					}
+					WTW.show('wtw_addanimationdiv');
+				}
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-loadObjectAnimation=" + ex.message);
+	}
+}
+
+WTWJS.prototype.deleteObjectAnimation = function(zobjectanimationid, zuploadobjectid) {
+	try {
+		WTW.hide('wtw_addanimationdiv');
+		if (zobjectanimationid != '') {
+			var zrequest = {
+				'objectanimationid': zobjectanimationid,
+				'function':'deleteobjectanimation'
+			};
+			WTW.getJSON("/core/handlers/animations.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					WTW.hide('wtw_addanimationdiv');
+					WTW.hide('wtw_deleteanimation');
+					WTW.hide('wtw_canceldeleteanimation');
+					WTW.loadObjectDetailsAnimations(zuploadobjectid)
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-deleteObjectAnimation=" + ex.message);
+	}
+}
+
+WTWJS.prototype.saveObjectAnimation = function() {
+	try {
+		WTW.hide('wtw_addanimationdiv');
+		if (dGet('wtw_tobjectanimationid').value != '') {
+			var zanimationloop = '0';
+			var zstopcurrentanimations = '0';
+			if (dGet('wtw_tanimationloop').checked) {
+				zanimationloop = '1';
+			}
+			if (dGet('wtw_tstopcurrentanimations').checked) {
+				zstopcurrentanimations = '1';
+			}
+			var zrequest = {
+				'objectanimationid': dGet('wtw_tobjectanimationid').value,
+				'uploadobjectid': dGet('wtw_tuploadobjectid').value,
+				'animationname': dGet('wtw_tanimationname').value,
+				'moldevent': WTW.getDDLValue('wtw_tmoldevent'),
+				'moldnamepart': dGet('wtw_tmoldnamepart').value,
+				'startframe': dGet('wtw_tstartframe').value,
+				'endframe': dGet('wtw_tendframe').value,
+				'animationloop': zanimationloop,
+				'speedratio': dGet('wtw_tspeedratio').value,
+				'animationendscript': dGet('wtw_tanimationendscript').value,
+				'animationendparameters': dGet('wtw_tanimationendparameters').value,
+				'stopcurrentanimations': zstopcurrentanimations,
+				'objectmaxdistance': dGet('wtw_tobjectsoundmaxdistance').value,
+				'objectsoundid': dGet('wtw_tobjectsoundid').value,
+				'function':'saveobjectanimation'
+			};
+			WTW.getJSON("/core/handlers/animations.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					WTW.hide('wtw_addanimationdiv');
+					WTW.hide('wtw_deleteanimation');
+					WTW.hide('wtw_canceldeleteanimation');
+					WTW.loadObjectDetailsAnimations(zuploadobjectid)
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-saveObjectAnimation=" + ex.message);
+	}
+}
+
+WTWJS.prototype.addAnimation = function(zuploadobjectid) {
+	try {
+		dGet('wtw_tobjectanimationid').value = WTW.getRandomString(16);
+		dGet('wtw_tuploadobjectid').value = zuploadobjectid;
+		dGet('wtw_tanimationname').value = '';
+		dGet('wtw_tmoldevent').selectedIndex = 0;
+		dGet('wtw_tmoldnamepart').value = '';
+		dGet('wtw_tstartframe').value = '';
+		dGet('wtw_tendframe').value = '';
+		dGet('wtw_tanimationloop').checked = false;
+		dGet('wtw_tspeedratio').value = '1.00';
+		dGet('wtw_tanimationendscript').value = '';
+		dGet('wtw_tanimationendparameters').value = '';
+		dGet('wtw_tstopcurrentanimations').checked = false;
+		dGet('wtw_addanimationtitle').innerHTML = 'Add Animation';
+		dGet('wtw_tobjectsoundmaxdistance').value = '1.00';
+		dGet('wtw_objectselectedsound').innerHTML = '';
+		dGet('wtw_objectsoundicon').alt = '';
+		dGet('wtw_objectsoundicon').title = '';
+		dGet('wtw_tobjectsoundid').value = '';
+		dGet('wtw_tobjectsoundpath').value = '';
+		WTW.show('wtw_addanimationdiv');
+		dGet('wtw_tanimationname').focus();
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-addAnimation=" + ex.message);
+	}
+}
+	
 WTWJS.prototype.setSelectObject = function(uploadobjectid, objectfolder, objectfile) {
 	try {
 		WTW.hide('wtw_fullpageform');
@@ -6021,14 +6280,6 @@ WTWJS.prototype.setSelectFileID = function(selectedobj, uploadid, originalid, we
 				WTW.setNewMold(0);
 			}
 		} else {
-/*			var iframe = dGet('wtw_uploadedobjectsframe');
-			var ipage = iframe.contentDocument || iframe.contentWindow.document;
-			ipage.getElementById('wtw_tobjectsoundid').value = dGet('wtw_tobjectsoundid').value;
-			ipage.getElementById('wtw_tobjectsoundpath').value = dGet('wtw_tobjectsoundpath').value;
-			ipage.getElementById('wtw_objectsoundicon').alt = dGet('wtw_tobjectsoundicon').alt;
-			ipage.getElementById('objectsoundicon').title = dGet('wtw_tobjectsoundicon').title;
-			ipage.getElementById('wtw_objectselectedsound').innerHTML = dGet('wtw_tobjectsoundicon').title;
-*/
 			WTW.hide('wtw_menuimagemydiv');
 			WTW.hide('wtw_menuwtwdownloads');
 			WTW.show('wtw_menuuploadedobjectsdiv');
@@ -6040,14 +6291,12 @@ WTWJS.prototype.setSelectFileID = function(selectedobj, uploadid, originalid, we
 			dGet('wtw_menuimagemy').className = 'wtw-menutabtop';
 			dGet('wtw_menuimagestock').className = 'wtw-menutabtop';
 			dGet('wtw_menuuploadedobjects').className = 'wtw-menutabtopselected';			
-			dGet('wtw_menuimagemy').innerHTML = "My Files";
-			dGet('wtw_menuimagestock').innerHTML = "Stock Images";
 			if (communityid != '') {
-				dGet('wtw_menuimagecommunity').innerHTML = "3D Community Images";
+				dGet('wtw_menuimagecommunity').innerHTML = "3D Community Files";
 			} else if (buildingid != '') {
-				dGet('wtw_menuimagecommunity').innerHTML = "3D Building Images";
+				dGet('wtw_menuimagecommunity').innerHTML = "3D Building Files";
 			} else if (thingid != '') {
-				dGet('wtw_menuimagecommunity').innerHTML = "3D Thing Images";
+				dGet('wtw_menuimagecommunity').innerHTML = "3D Thing Files";
 			}
 			if (communityid != '' || buildingid != '' || thingid != '') {
 				WTW.loadCommunityPage(communityid, buildingid, thingid, zitem);
@@ -6083,22 +6332,21 @@ WTWJS.prototype.selectFileForm = function(obj) {
 		WTW.showInline('wtw_menuimagemy');
 		WTW.hide('wtw_menuimagestock');
 		WTW.hide('wtw_menuuploadedobjects');
+		dGet('wtw_bstartimageupload').innerHTML = "Upload File(s)";
+		dGet('wtw_showhiddenimagesdiv').innerHTML = "Show Hidden Files";
+		if (communityid != '') {
+			dGet('wtw_menuimagecommunity').innerHTML = "3D Community Files";
+		} else if (buildingid != '') {
+			dGet('wtw_menuimagecommunity').innerHTML = "3D Building Files";
+		} else if (thingid != '') {
+			dGet('wtw_menuimagecommunity').innerHTML = "3D Thing Files";
+		}
 		switch (category) {
 			case '':
 				WTW.loadMyFilesPage(zitem, category, hide);
-				WTW.loadObjectPage(false);
+				WTW.loadUploadedObjectsDiv(false);
 				WTW.loadStockPage(zitem);
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Media Library</div>";
-				dGet('wtw_menuimagemy').innerHTML = "My Files";
-				dGet('wtw_menuimagestock').innerHTML = "Stock Images";
-				dGet('wtw_showhiddenimagesdiv').innerHTML = "Show Hidden Files";
-				if (communityid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Community Images";
-				} else if (buildingid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Building Images";
-				} else if (thingid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Thing Images";
-				}
 				if (communityid != '' || buildingid != '' || thingid != '') {
 					WTW.loadCommunityPage(communityid, buildingid, thingid, zitem);
 					WTW.showInline('wtw_menuimagecommunity');
@@ -6109,18 +6357,7 @@ WTWJS.prototype.selectFileForm = function(obj) {
 			case 'image':
 				WTW.loadMyFilesPage(zitem, category, hide);
 				WTW.loadStockPage(zitem);
-				dGet('wtw_bstartimageupload').innerHTML = "Upload Image";
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Select Image</div>";
-				dGet('wtw_menuimagemy').innerHTML = "My Images";
-				dGet('wtw_menuimagestock').innerHTML = "Stock Images";
-				dGet('wtw_showhiddenimagesdiv').innerHTML = "Show Hidden Images";
-				if (communityid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Community Images";
-				} else if (buildingid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Building Images";
-				} else if (thingid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Thing Images";
-				}
 				WTW.showInline('wtw_menuimagestock');
 				if (communityid != '' || buildingid != '' || thingid != '') {
 					WTW.loadCommunityPage(communityid, buildingid, thingid, zitem);
@@ -6129,69 +6366,25 @@ WTWJS.prototype.selectFileForm = function(obj) {
 				break;
 			case 'video':
 				WTW.loadMyFilesPage(zitem, category, hide);
-				dGet('wtw_bstartimageupload').innerHTML = "Upload Video";
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Select Video</div>";
-				dGet('wtw_menuimagemy').innerHTML = "My Videos";
-				dGet('wtw_menuimagestock').innerHTML = "Stock Videos";
-				dGet('wtw_showhiddenimagesdiv').innerHTML = "Show Hidden Videos";
-				if (communityid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Community Videos";
-				} else if (buildingid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Building Videos";
-				} else if (thingid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Thing Videos";
-				}
 				break;
 			case 'audio':
 				WTW.loadMyFilesPage(zitem, category, hide);
-				dGet('wtw_bstartimageupload').innerHTML = "Upload Sound";
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Select Sound</div>";
-				dGet('wtw_menuimagemy').innerHTML = "My Sounds";
-				dGet('wtw_menuimagestock').innerHTML = "Stock Sounds";
-				dGet('wtw_showhiddenimagesdiv').innerHTML = "Show Hidden Sounds";
-				if (communityid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Community Sounds";
-				} else if (buildingid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Building Sounds";
-				} else if (thingid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Thing Sounds";
-				}
 				break;
 			case 'object':
-				WTW.loadObjectPage(true);
+				WTW.loadUploadedObjectsDiv(true);
 				WTW.hide('wtw_menuimagemy');
 				WTW.showInline('wtw_menuuploadedobjects');
 				WTW.setImageMenu(4);
 				break;
 			case 'doc':
 				WTW.loadMyFilesPage(zitem, category, hide);
-				dGet('wtw_bstartimageupload').innerHTML = "Upload Document";
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Select Document</div>";
-				dGet('wtw_menuimagemy').innerHTML = "My Documents";
-				dGet('wtw_menuimagestock').innerHTML = "Stock Documents";
-				dGet('wtw_showhiddenimagesdiv').innerHTML = "Show Hidden Documents";
-				if (communityid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Community Documents";
-				} else if (buildingid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Building Documents";
-				} else if (thingid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Thing Documents";
-				}
 				break;
 			default:
 				WTW.loadMyFilesPage(zitem, category, hide);
-				dGet('wtw_bstartimageupload').innerHTML = "Upload File";
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Select File</div>";
-				dGet('wtw_menuimagemy').innerHTML = "My Files";
-				dGet('wtw_menuimagestock').innerHTML = "Stock Files";
-				dGet('wtw_showhiddenimagesdiv').innerHTML = "Show Hidden Files";
-				if (communityid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Community Files";
-				} else if (buildingid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Building Files";
-				} else if (thingid != '') {
-					dGet('wtw_menuimagecommunity').innerHTML = "3D Thing Files";
-				}
 				break;
 		}
 		if (category != 'object') {
@@ -6219,42 +6412,63 @@ WTWJS.prototype.selectFileForm = function(obj) {
 	}
 }	
 
+WTWJS.prototype.setImageMenu = function(w) {
+	try {
+		dGet('wtw_menuimagecommunity').className = 'wtw-menutabtop';
+		dGet('wtw_menuimagemy').className = 'wtw-menutabtop';
+		dGet('wtw_menuimagestock').className = 'wtw-menutabtop';
+		dGet('wtw_menuuploadedobjects').className = 'wtw-menutabtop';
+		dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Media Library</div>";
+		WTW.hide('wtw_menuimagecommunitydiv');
+		WTW.hide('wtw_menuimagemydiv');
+		WTW.hide('wtw_hiddenimagesoption');
+		WTW.hide('wtw_menuimagestockdiv');
+		WTW.hide('wtw_menuuploadedobjectsdiv');
+		WTW.show('wtw_bstartimageupload');
+		if (WTW.isNumeric(w)) {
+			switch (Number(w)) {
+				case 2:
+					dGet('wtw_menuimagemy').className = 'wtw-menutabtopselected';
+					WTW.showInline('wtw_menuimagemydiv');
+					WTW.showInline('wtw_hiddenimagesoption');
+					break;
+				case 3:
+					dGet('wtw_menuimagestock').className = 'wtw-menutabtopselected';
+					WTW.showInline('wtw_menuimagestockdiv');
+					break;
+				case 4:
+					dGet('wtw_menuuploadedobjects').className = 'wtw-menutabtopselected';
+					WTW.showInline('wtw_menuuploadedobjectsdiv');
+					WTW.loadUploadedObjectsDiv(true);
+					break;
+				default: 
+					dGet('wtw_menuimagecommunity').className = 'wtw-menutabtopselected';
+					WTW.showInline('wtw_menuimagecommunitydiv');
+					break;
+			}
+			WTW.resetUploadButton();
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-setImageMenu=" + ex.message);
+	}
+}
+
 WTWJS.prototype.resetUploadButton = function() {
 	try {
 		if (dGet('wtw_bstartimageupload') != null) {
 			var category = WTW.getDDLValue('wtw_fileselectcategory');
-			switch (category) {
-				case '':
-					if (dGet('wtw_menuuploadedobjects').className == 'wtw-menutabtopselected' && dGet('wtw_uploadedobjectsframe').src.indexOf('/core/iframes/uploadedfiles.php') > -1) {
-						dGet('wtw_bstartimageupload').innerHTML = 'Upload Primary 3D File';
-					} else {
-						dGet('wtw_bstartimageupload').innerHTML = 'Upload File';
-					}
-					break;
-				case 'image':
-					dGet('wtw_bstartimageupload').innerHTML = "Upload Image";
-					break;
-				case 'video':
-					dGet('wtw_bstartimageupload').innerHTML = "Upload Video";
-					break;
-				case 'audio':
-					dGet('wtw_bstartimageupload').innerHTML = "Upload Sound";
-					break;
-				case 'object':
-					if (dGet('wtw_menuuploadedobjects').className == 'wtw-menutabtopselected' && dGet('wtw_uploadedobjectsframe').src.indexOf('/core/iframes/uploadedfiles.php') > -1) {
-						dGet('wtw_bstartimageupload').innerHTML = 'Upload Primary 3D File';
-					} else {
-						dGet('wtw_bstartimageupload').innerHTML = 'Upload File';
-					}
-					break;
-				case 'doc':
-					dGet('wtw_bstartimageupload').innerHTML = "Upload Document";
-					break;
-				default:
-					dGet('wtw_bstartimageupload').innerHTML = "Upload File";
-					break;
-			}			
-			dGet('wtw_bstartimageupload').onclick = function() {window.parent.WTW.startUploadImage();return (false)};
+			if (dGet('wtw_menuuploadedobjectsdiv').style.display != 'none') {
+				category = 'object';
+			}
+			dGet('wtw_bstartimageupload').innerHTML = "Upload File(s)";
+			if ((category == '' || category == 'object') && dGet('wtw_menuuploadedobjects').className == 'wtw-menutabtopselected' && dGet('wtw_uploadedobjectsdiv').style.display != 'none') {
+				if (dGet('wtw_uploadedobjectdetailsdiv').style.display == 'none') {
+					dGet('wtw_bstartimageupload').innerHTML = 'Upload Primary 3D File';
+				} else {
+					dGet('wtw_bstartimageupload').innerHTML = 'Upload or Replace File(s)';
+				}
+			}
+			dGet('wtw_bstartimageupload').onclick = function() {WTW.startUploadImage(this.innerHTML);};
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-resetUploadButton=" + ex.message);
@@ -6263,38 +6477,163 @@ WTWJS.prototype.resetUploadButton = function() {
 
 WTWJS.prototype.loadMyFilesPage = function(zitem, zcategory, zhide) {
 	try {
-		if (WTW.adminView == 1) {
-			dGet('wtw_myimagesframe').style.visibility = 'hidden';
-			WTW.show('wtw_loadingselectimage');
-			if (dGet('wtw_myimagesframe').src.indexOf('/core/iframes/myuploads.php?item=' + zitem + '&category=' + zcategory + '&hide=' + zhide) == -1) {
-				dGet('wtw_myimagesframe').src = '/core/iframes/myuploads.php?item=' + zitem + '&category=' + zcategory + '&hide=' + zhide;
-				dGet('wtw_myimagesframe').onload = function() {
-					window.setTimeout(function() {
-						dGet('wtw_selectimageformscroll').style.visibility = 'visible';
-						dGet('wtw_communityimagesframe').style.visibility = 'visible';
-						dGet('wtw_myimagesframe').style.visibility = 'visible';
-						dGet('wtw_stockimagesframe').style.visibility = 'visible';
-						WTW.hide('wtw_loadingselectimage');
-					},500);
-				};
-			} else {
-				dGet('wtw_selectimageformscroll').style.visibility = 'visible';
-				dGet('wtw_communityimagesframe').style.visibility = 'visible';
-				dGet('wtw_myimagesframe').style.visibility = 'visible';
-				dGet('wtw_stockimagesframe').style.visibility = 'visible';
+		WTW.hide('wtw_myimagesdiv');
+		WTW.show('wtw_loadingselectimage');
+		dGet('wtw_myimagesdiv').innerHTML = "";
+		var zrequest = {
+			'category': zcategory,
+			'hide': zhide,
+			'function':'getmyimages'
+		};
+		WTW.getJSON("/core/handlers/uploads.php", 
+			function(zresponse) {
+				var zmyimagesdiv = '';
+				zresponse = JSON.parse(zresponse);
+				if (zresponse.length > 0) {
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							zicononclick = '';
+							if(zitem != '') {
+								zicononclick = "onclick=\"WTW.setSelectFileID(this,'" + zresponse[i].uploadid + "','" + zresponse[i].originalid + "','" + zresponse[i].websizeid + "','" + zresponse[i].fileextension + "'," + zresponse[i].filesize + ",'" + zresponse[i].filetitle + "','" + zresponse[i].filename + "','" + zresponse[i].originalpath + "');\"";
+							} else {
+								zicononclick = "onclick=\"WTW.openFullPageForm('mediapage','" + zcategory + "','" + zresponse[i].uploadid + "');\"";
+							}
+							zfilehint = zresponse[i].filetitle;
+							if (zfilehint.length > 13) {
+								zfilehint = zfilehint.substr(0, 10) + "...";
+							}
+							var zimageid = "wtw_file" + zresponse[i].websizeid;
+							var zimagesrc = '';
+							var zthumbnailid = zresponse[i].thumbnailid;
+							var zwebsizeid = zresponse[i].websizeid;
+							if (zresponse[i].filetype.indexOf('image') > -1 && zresponse[i].filepath != '') {
+								zimagesrc = zresponse[i].filepath;
+							} else if (zresponse[i].filetype.indexOf('image') > -1) {
+								zimagesrc = "data:" + zresponse[i].filetype + ";base64," + atob(zresponse[i].filedata);
+							} else if (zresponse[i].filetype.indexOf('audio') > -1) {
+								zimageid = "wtw_sound" + zresponse[i].uploadid;
+								zimagesrc = "/content/system/images/iconaudio.png";
+								zthumbnailid = zresponse[i].uploadid;
+								zwebsizeid = zresponse[i].uploadid;
+							} else if (zresponse[i].filetype.indexOf('video') > -1) {
+								zimageid = "wtw_video" + zresponse[i].uploadid;
+								zimagesrc = "/content/system/images/iconvideo.png";
+								zthumbnailid = zresponse[i].uploadid;
+								zwebsizeid = zresponse[i].uploadid;
+							} else {
+								zimageid = "wtw_doc" + zresponse[i].uploadid;
+								zimagesrc = "/content/system/images/icondoc.png";
+								zthumbnailid = zresponse[i].uploadid;
+								zwebsizeid = zresponse[i].uploadid;
+							}
+							zmyimagesdiv += "<div class='wtw-sampleheightmapdiv' onmouseover=\"dGet('wtw_div" + zresponse[i].uploadid + "').style.visibility='visible';\" onmouseout=\"dGet('wtw_div" + zresponse[i].uploadid + "').style.visibility='hidden';\"><img id='" + zimageid + "' class='wtw-sampleheightmap' " + zicononclick + " src=\"" + zimagesrc + "\" style=\"cursor:pointer;margin-left:5px;margin-right:5px;margin-top:5px;margin-bottom:0px;display:inline-block;\" title=\"" + zresponse[i].filetitle + "\" alt=\"" + zresponse[i].filetitle + "\" /><div class='wtw-smallfilename'>" + zfilehint + "</div><div id='wtw_div" + zresponse[i].uploadid + "' style='visibility:hidden;'><div style='text-align:center;font-size:.6em;padding:0px;margin-top:0px;margin-bottom:0px;cursor:pointer;display:inline-block;' onclick=\"this.innerHTML='Saving...';this.style.color='red';dGet('wtw_file" + zwebsizeid + "').style.borderColor='red';WTW.toggleHideMyImage('" + zresponse[i].uploadid + "','" + zitem + "','" + zcategory + "','" + zhide + "');\"><img src='/content/system/images/iconhide.png' alt='Hide' title='Hide' class='wtw-smallicon' style=\"cursor:pointer;\" /></div><img src='/content/system/images/iconinfo.png' alt='Information' title='Information' class='wtw-smallicon' onclick=\"WTW.openFullPageForm('mediapage','" + zcategory + "','" + zresponse[i].uploadid + "');\" style=\"cursor:pointer;\" /></div></div>";
+						}
+					}
+				} else {
+					var serror = "";
+					switch (zcategory) {
+						case 'image':
+							serror += "<h1 class='wtw-red'>No Uploaded Images Found</h1>Use the <strong>Stock Files</strong> button above or<br /><br />the <strong>Upload</strong> button on the top right to <strong>Add an Image</strong>.";
+							break;
+						case 'video':
+							serror += "<h1 class='wtw-red'>No Uploaded Videos Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a Video File</strong>.";
+							break;
+						case 'audio':
+							serror += "<h1 class='wtw-red'>No Uploaded Sound Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add an Audio File</strong>.";
+							break;
+						case 'doc':
+							serror += "<h1 class='wtw-red'>No Uploaded Document Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a Document File</strong>.";
+							break;
+						case 'object':
+							serror += "<h1 class='wtw-red'>No 3D Object Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a 3D Object File</strong>.";
+							break;
+						default:
+							serror += "<h1 class='wtw-red'>No Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a File</strong>.";
+							break;
+					}
+					zmyimagesdiv += "<div class='wtw-warningmessage'>" + serror + "<br /><br /></div>";
+				}
+				dGet('wtw_myimagesdiv').innerHTML = zmyimagesdiv;
+				WTW.show('wtw_myimagesdiv');
+				dGet('wtw_myimagesdiv').style.height = (WTW.sizeY - 160) + 'px';
 				WTW.hide('wtw_loadingselectimage');
-			}
-		}
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admineditor.js-loadMyFilesPage=' + ex.message);
 	}
 }	
 
+WTWJS.prototype.toggleHideMyImage = function(zuploadid, zitem, zcategory, zpagehide) {
+	try {
+		var zhide = '0';
+		if (zpagehide != '1') {
+			zhide = '1';
+		}
+		var zrequest = {
+			'uploadid': zuploadid,
+			'hide': zhide,
+			'function':'togglehidemyimage'
+		};
+		WTW.getJSON("/core/handlers/uploads.php", 
+			function(zresponse) {
+				var zstockimagesdiv = '';
+				zresponse = JSON.parse(zresponse);
+				WTW.loadMyFilesPage(zitem, zcategory, zpagehide);
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_admineditor.js-toggleHideMyImage=' + ex.message);
+	}
+}	
+
 WTWJS.prototype.loadStockPage = function(zitem) {
 	try {
-		if (dGet('wtw_stockimagesframe').src.indexOf('/core/iframes/imagesstock.php?item=' + zitem) == -1) {
-			dGet('wtw_stockimagesframe').src = '/core/iframes/imagesstock.php?item=' + zitem;
-		}
+		WTW.hide('wtw_stockimagesdiv');
+		WTW.show('wtw_loadingselectimage');
+		dGet('wtw_stockimagesdiv').innerHTML = "";
+		var zrequest = {
+			'item': zitem,
+			'function':'getstockimages'
+		};
+		WTW.getJSON("/core/handlers/uploads.php", 
+			function(zresponse) {
+				var zstockimagesdiv = '';
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				for (var i=0;i<zresponse.length;i++) {
+					if (zresponse[i] != null) {
+						zfilehint = zresponse[i].filetitle;
+						if (zfilehint.length > 13) {
+							zfilehint = zfilehint.substr(0, 10) + "...";
+						}
+						var zwebsizeid = zresponse[i].websizeid;
+						if (zitem.indexOf('sound') > -1) {
+							zwebsizeid = zresponse[i].uploadid;
+							zimagesrc = "/content/system/images/3dsound.png";
+						} else {
+							var zimagesrc = '';
+							if (zresponse[i].filepath != '') {
+								zimagesrc = zresponse[i].filepath;
+							} else {
+								zimagesrc = "data:" + zresponse[i].filetype + ";base64," + atob(zresponse[i].filedata);
+							}
+						}
+						zstockimagesdiv += "<div class='wtw-sampleheightmapdiv'><img id='wtw_stockimage" + zwebsizeid + "' class='wtw-sampleheightmap' onclick=\"WTW.setSelectFileID(this,'" + zresponse[i].uploadid + "','" + zresponse[i].originalid + "','" + zresponse[i].websizeid + "','" + zresponse[i].fileextension + "'," + zresponse[i].filesize + ",'" + zresponse[i].filetitle + "','" + zresponse[i].filename + "','" + zresponse[i].originalpath + "');\" src=\"" + zimagesrc + "\" style=\"cursor:pointer;margin:5px;display:inline-block;\" title=\"" + zresponse[i].filetitle + "\" alt=\"" + zresponse[i].filetitle + "\" /><div class='wtw-smallfilename'>" + zfilehint + "</div></div>";
+					}
+				}
+				dGet('wtw_stockimagesdiv').innerHTML = zstockimagesdiv;
+				WTW.show('wtw_stockimagesdiv');
+				dGet('wtw_stockimagesdiv').style.height = (WTW.sizeY - 160) + 'px';
+				WTW.hide('wtw_loadingselectimage');
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admineditor.js-loadStockPage=' + ex.message);
 	}
@@ -6302,33 +6641,67 @@ WTWJS.prototype.loadStockPage = function(zitem) {
 
 WTWJS.prototype.loadCommunityPage = function(zcommunityid, zbuildingid, zthingid, zitem) {
 	try {
-		if (dGet('wtw_communityimagesframe').src.indexOf('/core/iframes/imagesinuse.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&item=' + zitem) == -1) {
-			dGet('wtw_communityimagesframe').src = '/core/iframes/imagesinuse.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&item=' + zitem; 
-		}
+		WTW.hide('wtw_communityimagesdiv');
+		WTW.show('wtw_loadingselectimage');
+		dGet('wtw_communityimagesdiv').innerHTML = "";
+		var zrequest = {
+			'communityid': zcommunityid,
+			'buildingid': zbuildingid,
+			'thingid': zthingid,
+			'function':'getcommunityimages'
+		};
+		WTW.getJSON("/core/handlers/uploads.php", 
+			function(zresponse) {
+				var zcommunityimagesdiv = '';
+				zresponse = JSON.parse(zresponse);
+				for (var i=0;i<zresponse.length;i++) {
+					if (zresponse[i] != null) {
+						var zicononclick = "onclick=\"WTW.setSelectFileID(this,'" + zresponse[i].uploadid + "','" + zresponse[i].originalid + "','" + zresponse[i].websizeid + "','" + zresponse[i].fileextension + "'," + zresponse[i].filesize + ",'" + zresponse[i].filetitle + "','" + zresponse[i].filename + "','" + zresponse[i].originalpath + "');\"";
+						var zfilehint = zresponse[i].filetitle;
+						if (zfilehint.length > 13) {
+							zfilehint = zfilehint.substr(0, 10) + "...";
+						}
+						var zcategory = "images";
+						var zimageid = "wtw_file" + zresponse[i].websizeid;
+						var zimagesrc = '';
+						var zwebsizeid = zresponse[i].websizeid;
+						var zthumbnailid = zresponse[i].thumbnailid;
+						if (zresponse[i].filetype.indexOf('image') > -1 && zresponse[i].filepath != '') {
+							zimagesrc = zresponse[i].filepath;
+						} else if (zresponse[i].filetype.indexOf('image') > -1) {
+							zimagesrc = "data:" + zresponse[i].filetype + ";base64," + atob(zresponse[i].filedata);
+						} else if (zresponse[i].filetype.indexOf('audio') > -1) {
+							zcategory = "sounds";
+							zimageid = "wtw_sound" + zresponse[i].uploadid;
+							zimagesrc = '/content/system/images/iconaudio.png';
+							zthumbnailid = zresponse[i].uploadid;
+							zwebsizeid = zresponse[i].uploadid;
+						} else if (zresponse[i].filetype.indexOf('video') > -1) {
+							zcategory = "videos";
+							zimageid = "wtw_video" + zresponse[i].uploadid;
+							zimagesrc = '/content/system/images/iconvideo.png';
+							zthumbnailid = zresponse[i].uploadid;
+							zwebsizeid = zresponse[i].uploadid;
+						} else {
+							zcategory = "documents";
+							zimageid = "wtw_doc" + zresponse[i].uploadid;
+							zimagesrc = '/content/system/images/icondoc.png';
+							zthumbnailid = zresponse[i].uploadid;
+							zwebsizeid = zresponse[i].uploadid;
+						}
+						zcommunityimagesdiv += "<div class='wtw-sampleheightmapdiv' onmouseover=\"dGet('wtw_webdiv" + zresponse[i].uploadid + "').style.visibility='visible';\" onmouseout=\"dGet('wtw_webdiv" + zresponse[i].uploadid + "').style.visibility='hidden';\"><img id='" + zimageid + "' class='wtw-sampleheightmap' " + zicononclick + " src=\"" + zimagesrc + "\" style=\"cursor:pointer;margin-left:5px;margin-right:5px;margin-top:5px;margin-bottom:0px;display:inline-block;\" title=\"" + zresponse[i].filetitle + "\" alt=\"" + zresponse[i].filetitle + "\" /><div class='wtw-smallfilename'>" + zfilehint + "</div><div id='wtw_webdiv" + zresponse[i].uploadid + "' style='visibility:hidden;'><div style='text-align:center;font-size:.6em;padding:0px;margin-top:0px;margin-bottom:0px;cursor:pointer;display:inline-block;' onclick=\"this.innerHTML='Saving...';this.style.color='red';dGet('wtw_file" + zwebsizeid + "').style.borderColor='red';dGet('wtw_hideimageid').value='" + zthumbnailid + "';dGet('wtw_submit').click();\"></div><img src='/content/system/images/iconinfo.png' alt='Information' title='Information' class='wtw-smallicon' onclick=\"WTW.openFullPageForm('mediapage','" + zcategory + "','" + zresponse[i].uploadid + "');\" style=\"cursor:pointer;\" /></div></div>";
+					}
+				}
+				dGet('wtw_communityimagesdiv').innerHTML = zcommunityimagesdiv;
+				WTW.show('wtw_communityimagesdiv');
+				dGet('wtw_communityimagesdiv').style.height = (WTW.sizeY - 160) + 'px';
+				WTW.hide('wtw_loadingselectimage');
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admineditor.js-loadCommunityPage=' + ex.message);
-	}
-}	
-
-WTWJS.prototype.loadObjectPage = function(showloading) {
-	try {
-		if (dGet('wtw_uploadedobjectsframe').src.indexOf('/core/iframes/uploadedfiles.php?item=' + dGet('wtw_tfileitem').value) == -1) {
-			WTW.hide('wtw_uploadedobjectsframe');
-			if (showloading) {
-				WTW.show('wtw_loadingselectimage');
-			}
-			dGet('wtw_uploadedobjectsframe').src = '/core/iframes/uploadedfiles.php?item=' + dGet('wtw_tfileitem').value; 
-			dGet('wtw_uploadedobjectsframe').onload = function() {
-				window.setTimeout(function() {
-					WTW.show('wtw_uploadedobjectsframe');
-					if (showloading) {
-						WTW.hide('wtw_loadingselectimage');
-					}
-				},500);
-			};
-		}
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_admineditor.js-loadObjectPage=' + ex.message);
 	}
 }	
 
@@ -6387,6 +6760,7 @@ WTWJS.prototype.openMediaPageForm = function(uploadid) {
 										dGet('wtw_mediathumbnaildimensions').innerHTML = WTW.formatNumber(uploadinfo[i].thumbnail.width,0) + ' x ' + WTW.formatNumber(uploadinfo[i].thumbnail.height,0);
 									}
 									if (uploadinfo[i].thumbnail.path != undefined) {
+										dGet('wtw_mediathumbnail').src = uploadinfo[i].thumbnail.path;
 										dGet('wtw_mediathumbnailpath').innerHTML = "<a href='" + uploadinfo[i].thumbnail.path + "' target='_blank'>" + uploadinfo[i].thumbnail.path + "</a>";
 										dGet('wtw_mediathumbnaildownload').href = uploadinfo[i].thumbnail.path;
 									}
@@ -6402,6 +6776,7 @@ WTWJS.prototype.openMediaPageForm = function(uploadid) {
 										dGet('wtw_mediaoriginaldimensions').innerHTML = WTW.formatNumber(uploadinfo[i].original.width,0) + ' x ' + WTW.formatNumber(uploadinfo[i].original.height,0);
 									}
 									if (uploadinfo[i].original.path != undefined) {
+										dGet('wtw_mediaoriginal').src = uploadinfo[i].original.path;
 										dGet('wtw_mediaoriginalpath').innerHTML = "<a href='" + uploadinfo[i].original.path + "' target='_blank'>" + uploadinfo[i].original.path + "</a>";
 										dGet('wtw_mediaoriginaldownload').href = uploadinfo[i].original.path;
 									}
@@ -6417,6 +6792,7 @@ WTWJS.prototype.openMediaPageForm = function(uploadid) {
 										dGet('wtw_mediawebsizedimensions').innerHTML = WTW.formatNumber(uploadinfo[i].websize.width,0) + ' x ' + WTW.formatNumber(uploadinfo[i].websize.height,0);
 									}
 									if (uploadinfo[i].websize.path != undefined) {
+										dGet('wtw_mediawebsize').src = uploadinfo[i].websize.path;
 										dGet('wtw_mediawebsizepath').innerHTML = "<a href='" + uploadinfo[i].websize.path + "' target='_blank'>" + uploadinfo[i].websize.path + "</a>";
 										dGet('wtw_mediawebsizedownload').href = uploadinfo[i].websize.path;
 									}
@@ -6424,12 +6800,10 @@ WTWJS.prototype.openMediaPageForm = function(uploadid) {
 								WTW.show('wtw_imagethumbnailinfo');
 								WTW.show('wtw_imagewebsizeinfo');
 								WTW.show('wtw_imageoriginalinfo');
-								WTW.show('wtw_originalimagediv');
 							} else {
 								WTW.hide('wtw_imagethumbnailinfo');
 								WTW.hide('wtw_imagewebsizeinfo');
 								WTW.hide('wtw_imageoriginalinfo');
-								WTW.hide('wtw_originalimagediv');
 							}
 						}
 					}
@@ -6627,56 +7001,38 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 					if (dGet('wtw_taltloadactionzoneid').selectedIndex > -1) {
 						altloadactionzoneid = dGet('wtw_taltloadactionzoneid').options[dGet('wtw_taltloadactionzoneid').selectedIndex].value
 					}
-					var request = {
-						'connectinggridid':dGet("wtw_teditconnectinggridid").value,
-						'communityid':communityid,
-						'buildingid':buildingid,
-						'thingid':thingid,
-						'loadactionzoneid':dGet('wtw_teditloadactionzoneid').value,
-						'altloadactionzoneid':altloadactionzoneid,
-						'parentwebid':dGet('wtw_tparentwebid').value,
-						'parentwebtype':dGet('wtw_tparentwebtype').value,
-						'childwebid':dGet('wtw_tchildwebid').value,
-						'childwebtype':dGet('wtw_tchildwebtype').value,
-						'connectinggridind':connectinggridind,
-						'conngridpositionx':dGet('wtw_tconngridpositionx').value,
-						'conngridpositiony':dGet('wtw_tconngridpositiony').value,
-						'conngridpositionz':dGet('wtw_tconngridpositionz').value,
-						'conngridscalingx':dGet('wtw_tconngridscalingx').value,
-						'conngridscalingy':dGet('wtw_tconngridscalingy').value,
-						'conngridscalingz':dGet('wtw_tconngridscalingz').value,
-						'conngridrotationx':dGet('wtw_tconngridrotationx').value,
-						'conngridrotationy':dGet('wtw_tconngridrotationy').value,
-						'conngridrotationz':dGet('wtw_tconngridrotationz').value,
-						'conngridalttag':dGet('wtw_tconngridalttag').value
+					var zrequest = {
+						'connectinggridid': dGet("wtw_teditconnectinggridid").value,
+						'communityid': communityid,
+						'buildingid': buildingid,
+						'thingid': thingid,
+						'loadactionzoneid': dGet('wtw_teditloadactionzoneid').value,
+						'altloadactionzoneid': altloadactionzoneid,
+						'parentwebid': dGet('wtw_tparentwebid').value,
+						'parentwebtype': dGet('wtw_tparentwebtype').value,
+						'childwebid': dGet('wtw_tchildwebid').value,
+						'childwebtype': dGet('wtw_tchildwebtype').value,
+						'connectinggridind': connectinggridind,
+						'positionx': dGet('wtw_tconngridpositionx').value,
+						'positiony': dGet('wtw_tconngridpositiony').value,
+						'positionz': dGet('wtw_tconngridpositionz').value,
+						'scalingx': dGet('wtw_tconngridscalingx').value,
+						'scalingy': dGet('wtw_tconngridscalingy').value,
+						'scalingz': dGet('wtw_tconngridscalingz').value,
+						'rotationx': dGet('wtw_tconngridrotationx').value,
+						'rotationy': dGet('wtw_tconngridrotationy').value,
+						'rotationz': dGet('wtw_tconngridrotationz').value,
+						'alttag': dGet('wtw_tconngridalttag').value,
+						'function':'saveconnectinggrid'
 					};
-					/* function for after iframe loads */
-					var onload = function(ipage) {
-						ipage.getElementById('wtw_teditconnectinggridid').value = request.connectinggridid;
-						ipage.getElementById('wtw_tcommunityid').value = request.communityid;
-						ipage.getElementById('wtw_tbuildingid').value = request.buildingid;
-						ipage.getElementById('wtw_tthingid').value = request.thingid;
-						ipage.getElementById('wtw_tloadactionzoneid').value = request.loadactionzoneid;
-						ipage.getElementById('wtw_taltloadactionzoneid').value = request.altloadactionzoneid;
-						ipage.getElementById('wtw_tparentwebid').value = request.parentwebid;
-						ipage.getElementById('wtw_tparentwebtype').value = request.parentwebtype;
-						ipage.getElementById('wtw_tchildwebid').value = request.childwebid;
-						ipage.getElementById('wtw_tchildwebtype').value = request.childwebtype;
-						ipage.getElementById('wtw_teditconnectinggridind').value = request.connectinggridind;
-						ipage.getElementById('wtw_tconngridpositionx').value = request.conngridpositionx;
-						ipage.getElementById('wtw_tconngridpositiony').value = request.conngridpositiony;
-						ipage.getElementById('wtw_tconngridpositionz').value = request.conngridpositionz;
-						ipage.getElementById('wtw_tconngridscalingx').value = request.conngridscalingx;
-						ipage.getElementById('wtw_tconngridscalingy').value = request.conngridscalingy;
-						ipage.getElementById('wtw_tconngridscalingz').value = request.conngridscalingz;
-						ipage.getElementById('wtw_tconngridrotationx').value = request.conngridrotationx;
-						ipage.getElementById('wtw_tconngridrotationy').value = request.conngridrotationy;
-						ipage.getElementById('wtw_tconngridrotationz').value = request.conngridrotationz;
-						ipage.getElementById('wtw_tconngridalttag').value = request.conngridalttag;
-						ipage.getElementById('wtw_bsaveconnectinggrid').click();	
-					}
-					/* iframe src, onload function */
-					var iframe = WTW.createIFrame('/core/iframes/connectinggrids.php', onload);
+					WTW.getJSON("/core/handlers/connectinggrids.php", 
+						function(zresponse) {
+							zresponse = JSON.parse(zresponse);
+							/* note serror would contain errors */
+						}, 
+						'POST', 
+						JSON.stringify(zrequest)
+					);
 					break;
 				case 0: /* delect connecting grid */
 					if (WTW.connectingGrids[connectinggridind] != null) {
@@ -6746,16 +7102,18 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 						}
 					}
 					WTW.closeConfirmation();
-					var request = {
-						'connectinggridid':dGet("wtw_teditconnectinggridid").value
+					var zrequest = {
+						'connectinggridid': dGet("wtw_teditconnectinggridid").value,
+						'function':'deleteconnectinggrid'
 					};
-					/* function for after iframe loads */
-					var onload = function(ipage) {
-						ipage.getElementById('wtw_teditconnectinggridid').value = request.connectinggridid;
-						ipage.getElementById('wtw_bdeleteconnectinggrid').click();	
-					}
-					/* iframe src, onload function */
-					var iframe = WTW.createIFrame('/core/iframes/connectinggrids.php', onload);
+					WTW.getJSON("/core/handlers/connectinggrids.php", 
+						function(zresponse) {
+							zresponse = JSON.parse(zresponse);
+							/* note serror would contain errors */
+						}, 
+						'POST', 
+						JSON.stringify(zrequest)
+					);
 					break;
 				case -1: /* cancel change connecting grid */
 					if (WTW.connectingGrids[connectinggridind] != null) {
@@ -6946,7 +7304,11 @@ WTWJS.prototype.addConnectingGrid = function(childwebtype, childwebid, childwebn
 							}
 						);
 					}
-					WTW.holdPosition = WTW.camera.position.x + "|" + WTW.camera.position.y + .1 + "|" + WTW.camera.position.z
+					if (WTW.myAvatar != null) {
+						WTW.holdPosition = WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + .1 + "|" + WTW.myAvatar.position.z;
+					} else {
+						WTW.holdPosition = "||";
+					}
 					WTW.checkActionZones();
 					WTW.setNewConnectingGrid();
 					WTW.openConnectingGridsForm(connectinggridind);
@@ -8037,7 +8399,7 @@ WTWJS.prototype.setNewMold = function(rebuildmold) {
 						csgmain = WTW.processCSGAction(csgmain, moldgroup, molds[csgmainind]);
 						var receiveshadows = '0';
 						var waterreflection = '0';
-						if (molds[csgmainind].graphics.receiveshadows != undefined) {
+/*						if (molds[csgmainind].graphics.receiveshadows != undefined) {
 							if (molds[csgmainind].graphics.receiveshadows == '1') {
 								receiveshadows = '1';
 							}
@@ -8049,10 +8411,11 @@ WTWJS.prototype.setNewMold = function(rebuildmold) {
 						}
 						if (receiveshadows == '1') {
 							mold.receiveShadows = true;
-						} else if (WTW.shadowset > 0) {
-							WTW.addShadowToShadowmaps(mold);
+						} 
+						if (WTW.shadowset > 0) {
+							WTW.shadows.getShadowMap().renderList.push(mold);
 						}
-						if (waterreflection == '1' && WTW.waterMat != null) {
+*/						if (waterreflection == '1' && WTW.waterMat != null) {
 							WTW.waterMat.addToRenderList(mold);
 						}
 						csgmain.checkCollisions = false;
@@ -8089,32 +8452,6 @@ WTWJS.prototype.setNewMold = function(rebuildmold) {
 					}
 				}
 				if (rebuildmold == 1 && shape != "image") {
-					if (mold != null && dGet('wtw_tmoldmoldgroup').value == "building") {
-						if (WTW.shadowset == 3) {
-							if (molds[moldind].shape == "floor") {
-								mold.receiveShadows = true;
-							}
-							WTW.addShadowToShadowmaps(mold);
-						} else if (WTW.shadowset == 2 && molds[moldind] != null) {
-							if (molds[moldind].shape == "floor") {
-								mold.receiveShadows = true;
-							}
-							WTW.addShadowToShadowmaps(mold);
-						}
-					} else if (mold != null && dGet('wtw_tmoldmoldgroup').value == "community") {
-						if (WTW.shadowset == 3) {
-							if (molds[moldind].shape == "terrain" || molds[moldind].shape == "floor") {
-								mold.receiveShadows = true;
-							}
-							WTW.addShadowToShadowmaps(mold);
-						} else if (WTW.shadowset > 0) {
-							if (molds[moldind].shape != "floor") {
-								WTW.addShadowToShadowmaps(mold);
-							} else {
-								mold.receiveShadows = true;
-							}
-						}
-					}
 					WTW.registerMouseOver(mold);
 				}
 				WTW.openEditPoles(mold);
@@ -8246,22 +8583,21 @@ WTWJS.prototype.setNewConnectingGrid = function() {
 
 WTWJS.prototype.saveShareCommunityForm = function() {
 	try {
-		var request = {
-			'sharename':dGet('wtw_tsharecommtempname').value,
-			'sharedescription':dGet('wtw_tsharecommdescription').value,
-			'sharetags':dGet('wtw_tsharecommtags').value
+		var zrequest = {
+			'communityid': communityid,
+			'communityname': dGet('wtw_tsharecommtempname').value,
+			'description': dGet('wtw_tsharecommdescription').value,
+			'tags': dGet('wtw_tsharecommtags').value,
+			'function':'sharecommunitytemplate'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tcommunityid').value = communityid;
-			ipage.getElementById('wtw_tcommunityind').value = "-1";
-			ipage.getElementById('wtw_tsharecommtempname').value = request.sharename;
-			ipage.getElementById('wtw_tsharecommdescription').value = request.sharedescription;
-			ipage.getElementById('wtw_tsharecommtags').value = request.sharetags;
-			ipage.getElementById('wtw_bsharecommunitytemplate').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/communities.php', onload);
+		WTW.getJSON("/core/handlers/communities.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-saveShareCommunityForm=" + ex.message);
 	}
@@ -8269,21 +8605,19 @@ WTWJS.prototype.saveShareCommunityForm = function() {
 
 WTWJS.prototype.saveShareBuildingForm = function() {
 	try {
-		var request = {
-			'sharename':dGet('wtw_tsharebuildtempname').value,
-			'sharedescription':dGet('wtw_tsharebuilddescription').value,
-			'sharetags':dGet('wtw_tsharebuildtags').value
+		var zrequest = {
+			'buildingid': buildingid,
+			'buildingname': dGet('wtw_tsharebuildtempname').value,
+			'description': dGet('wtw_tsharebuilddescription').value,
+			'tags': dGet('wtw_tsharebuildtags').value,
+			'function':'sharebuildingtemplate'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tbuildingid').value = buildingid;
-			ipage.getElementById('wtw_tsharebuildtempname').value = request.sharename;
-			ipage.getElementById('wtw_tsharebuilddescription').value = request.sharedescription;
-			ipage.getElementById('wtw_tsharebuildtags').value = request.sharetags;
-			ipage.getElementById('wtw_bsharebuildingtemplate').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/buildings.php', onload);
+		WTW.getJSON("/core/handlers/buildings.php", 
+			function(zresponse) {
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-saveShareBuildingForm=" + ex.message);
 	}
@@ -8291,22 +8625,22 @@ WTWJS.prototype.saveShareBuildingForm = function() {
 
 WTWJS.prototype.saveShareThingForm = function() {
 	try {
-		var request = {
-			'sharename':dGet('wtw_tsharethingtempname').value,
-			'sharedescription':dGet('wtw_tsharethingdescription').value,
-			'sharetags':dGet('wtw_tsharethingtags').value
+		var zrequest = {
+			'thingid': thingid,
+			'pastthingid': '',
+			'thingname': dGet('wtw_tsharethingtempname').value,
+			'description': dGet('wtw_tsharethingdescription').value,
+			'tags': dGet('wtw_tsharethingtags').value,
+			'function':'sharethingtemplate'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tthingid').value = thingid;
-			ipage.getElementById('wtw_tthingind').value = "-1";
-			ipage.getElementById('wtw_tsharethingtempname').value = request.sharename;
-			ipage.getElementById('wtw_tsharethingdescription').value = request.sharedescription;
-			ipage.getElementById('wtw_tsharethingtags').value = request.sharetags;
-			ipage.getElementById('wtw_bsharethingtemplate').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/things.php', onload);
+		WTW.getJSON("/core/handlers/things.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-saveShareThingForm=" + ex.message);
 	}
@@ -8317,20 +8651,21 @@ WTWJS.prototype.shareCommunityTemplate = function() {
 		WTW.closeConfirmation();
 		dGet('wtw_bsharecommunitytemp').innerHTML = 'Shared 3D Thing';
 		WTW.saveShareCommunityForm();
-		var request = {
-			'key':btoa(WTW.getRandomString(16)),
+		var zrequest = {
+			'key': btoa(WTW.getRandomString(16)),
 			'moldgroup': 'community',
-			'webid':communityid
+			'webid': communityid,
+			'function':'setkeyhash'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tkey').value = request.key;
-			ipage.getElementById('wtw_tmoldgroup').value = request.moldgroup;
-			ipage.getElementById('wtw_twebid').value = request.webid;
-			ipage.getElementById('wtw_bsetKeyHash').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/uploads.php', onload);
+		WTW.getJSON("/core/handlers/uploads.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.shareCommunitySecurity(zresponse.keyhash);
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-shareCommunityTemplate=" + ex.message);
 	}
@@ -8612,11 +8947,59 @@ WTWJS.prototype.hideAdminMenu = function() {
 	}
 }
 
+WTWJS.prototype.getNewCoordinates = function(dist) {
+	var positionX = 0;
+	var positionY = 0;
+	var positionZ = 0;
+	var rotationY = 0.00;
+	try {
+		if (WTW.cameraFocus == 1) {
+			rotationY = WTW.getDegrees(WTW.myAvatar.rotation.y);
+			positionY = Math.round(WTW.myAvatar.position.y);
+			positionX = Math.round((WTW.myAvatar.position.x + dist * Math.cos(WTW.myAvatar.rotation.y)));
+			positionZ = Math.round((WTW.myAvatar.position.z - dist * Math.sin(WTW.myAvatar.rotation.y)));
+		} else {
+			rotationY = WTW.getDegrees(WTW.camera.rotation.y) - 90;
+			var adjrot = WTW.getRadians(rotationY);
+			positionY = Math.round(WTW.camera.position.y);
+			positionX = Math.round((WTW.camera.position.x + dist * Math.cos(adjrot)));
+			positionZ = Math.round((WTW.camera.position.z - dist * Math.sin(adjrot)));
+		}
+		rotationY = WTW.cleanDegrees(rotationY);
+		if (rotationY > 135 && rotationY < 225) {
+			rotationY = 90.00;
+		} else if (rotationY >= 225 && rotationY < 315) {
+			rotationY = 180.00;
+		} else if ((rotationY >= 315 && rotationY <= 360) || (rotationY >= 0 && rotationY < 45)) {
+			rotationY = -90.00;
+		} else {
+			rotationY = 0.00;
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-getNewCoordinates=" + ex.message);
+	}
+	return {
+		positionX : positionX.toFixed(2),
+		positionY : positionY.toFixed(2),
+		positionZ : positionZ.toFixed(2),
+		rotationY : rotationY
+	};
+}
+
 WTWJS.prototype.setQuickEditorAvatarCamera = function(value) {
 	try {
 		if (value == 1) {
 			WTW.cameraFocus = 1;
-			//WTW.camera.inputs.clear();
+			var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
+			var headtop = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-headtop");
+			if (avatarcamera != null && headtop != null) {
+				WTW.camera.parent = avatarcamera;
+				avatarcamera.parent = headtop;
+				WTW.camera.position.x = 0;
+				WTW.camera.position.y = 0;
+				WTW.camera.position.z = 0;
+				WTW.camera.rotation.y = WTW.getRadians(0);
+			}
 			WTW.camera.inputs.attached.mouse.detachControl();
 			WTW.switchCamera(1);
 			if (dGet('wtw_bavatarcamera') != null) {
@@ -8632,6 +9015,19 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(value) {
 			WTW.setCookie("wtw_bavatarcamera","1",30);
 		} else {
 			WTW.cameraFocus = 0;
+			var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
+			if (avatarcamera != null) {
+				var abspos = WTW.getWorldPosition(avatarcamera);
+				var avatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
+				var mainparentmold = scene.getMeshByID(WTW.mainParent);
+				if (avatar != null && mainparentmold != null) {
+					avatarcamera.parent = mainparentmold;
+					WTW.camera.position.x = abspos.x;
+					WTW.camera.position.y = abspos.y;
+					WTW.camera.position.z = abspos.z;
+					WTW.camera.rotation.y = WTW.getRadians(WTW.getDegrees(avatar.rotation.y) + 90);
+				}
+			}
 			WTW.camera.inputs.attachInput(WTW.camera.inputs.attached.mouse);
 			WTW.camera.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 			scene.activeCameras[0] = WTW.camera;
@@ -9442,10 +9838,8 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						dGet('wtw_tcommgravity').value = WTW.init.gravity;
 						if (WTW.init.gravity > 0) {
 							scene.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
-							WTW.camera.applyGravity = true;
 						} else {
 							scene.gravity = new BABYLON.Vector3(0, 0, 0);
-							WTW.camera.applyGravity = false;
 						}
 						WTW.show('wtw_adminmenu45');
 						break;
@@ -9553,10 +9947,8 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						dGet('wtw_tcommgravity').value = WTW.init.gravity;
 						if (WTW.init.gravity > 0) {
 							scene.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
-							WTW.camera.applyGravity = true;
 						} else {
 							scene.gravity = new BABYLON.Vector3(0, 0, 0);
-							WTW.camera.applyGravity = false;
 						}
 						WTW.show('wtw_adminmenu45');
 						break;
@@ -9609,16 +10001,13 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 							if (Number(dGet('wtw_tcommgravity').value) != 0) {
 								WTW.init.gravity = Number(dGet('wtw_tcommgravity').value);
 								scene.gravity = new BABYLON.Vector3(0, -Number(dGet('wtw_tcommgravity').value), 0);
-								WTW.camera.applyGravity = true;
 							} else {
 								WTW.init.gravity = 0;
 								scene.gravity = new BABYLON.Vector3(0, 0, 0);
-								WTW.camera.applyGravity = false;
 							}
 						} else {
 							WTW.init.gravity = 0;
 							scene.gravity = new BABYLON.Vector3(0, 0, 0);
-							WTW.camera.applyGravity = false;
 						}
 						WTW.saveGravity();
 						WTW.show('wtw_adminmenu30');
@@ -9631,16 +10020,13 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 							if (Number(dGet('wtw_tcommgravity').value) != 0) {
 								WTW.init.gravity = Number(dGet('wtw_tcommgravity').value);
 								scene.gravity = new BABYLON.Vector3(0, -Number(dGet('wtw_tcommgravity').value), 0);
-								WTW.camera.applyGravity = true;
 							} else {
 								WTW.init.gravity = 0;
 								scene.gravity = new BABYLON.Vector3(0, 0, 0);
-								WTW.camera.applyGravity = false;
 							}
 						} else {
 							WTW.init.gravity = 0;
 							scene.gravity = new BABYLON.Vector3(0, 0, 0);
-							WTW.camera.applyGravity = false;
 						}
 						WTW.show('wtw_adminmenu30');
 						break;
@@ -9928,11 +10314,11 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						break;
 					case "wtw_bupdatesnapshot":
 						if (communityid != '') {
-							WTW.snapshot3D(dGet('wtw_tcontentpath').value + '\\uploads\\communities\\' + dGet('wtw_tcommunityid').value + '\\snapshots\\', 'defaultcommunity.png');
+							WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/communities/' + dGet('wtw_tcommunityid').value + '/snapshots/', 'defaultcommunity.png');
 						} else if (buildingid != '') {
-							WTW.snapshot3D(dGet('wtw_tcontentpath').value + '\\uploads\\buildings\\' + dGet('wtw_tbuildingid').value + '\\snapshots\\', 'defaultbuilding.png');
+							WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/buildings/' + dGet('wtw_tbuildingid').value + '/snapshots/', 'defaultbuilding.png');
 						} else if (thingid != '') {
-							WTW.snapshot3D(dGet('wtw_tcontentpath').value + '\\uploads\\things\\' + dGet('wtw_tthingid').value + '\\snapshots\\', 'defaultthing.png');
+							WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/things/' + dGet('wtw_tthingid').value + '/snapshots/', 'defaultthing.png');
 						}
 						break;
 				/* user Admin Items */
@@ -10910,37 +11296,35 @@ WTWJS.prototype.saveAliasForm = function(w) {
 					'communityid': zaliascommunityid,
 					'buildingid': zaliasbuildingid,
 					'thingid': zaliasthingid,
-					'forcehttps': zforcehttps
-				}
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_twebaliasid').value = zrequest.webaliasid;
-					ipage.getElementById('wtw_tdomainname').value = zrequest.domainname;
-					ipage.getElementById('wtw_tcommunitypublishname').value = zrequest.communitypublishname;
-					ipage.getElementById('wtw_tbuildingpublishname').value = zrequest.buildingpublishname;
-					ipage.getElementById('wtw_tthingpublishname').value = zrequest.thingpublishname;
-					ipage.getElementById('wtw_tcommunityid').value = zrequest.communityid;
-					ipage.getElementById('wtw_tbuildingid').value = zrequest.buildingid;
-					ipage.getElementById('wtw_tthingid').value = zrequest.thingid;
-					ipage.getElementById('wtw_tforcehttps').value = zrequest.forcehttps;
-					ipage.getElementById('wtw_bsavewebalias').click();
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/uploads.php', onload);
+					'forcehttps': zforcehttps,
+					'function':'savewebalias'
+				};
+				WTW.getJSON("/core/handlers/uploads.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+						WTW.openWebAliasSettings();
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 				break;
 			case -1: /* cancel */
 				break;
 			case 0: /* delete */
 				var zrequest = {
-					'webaliasid': zwebaliasid
-				}
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_twebaliasid').value = zrequest.webaliasid;
-					ipage.getElementById('wtw_bdeletewebalias').click();
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/uploads.php', onload);
+					'webaliasid': zwebaliasid,
+					'function':'deletewebalias'
+				};
+				WTW.getJSON("/core/handlers/uploads.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+						WTW.openWebAliasSettings();
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 				break;
 		}
 		WTW.clearAliasForm();
@@ -10984,16 +11368,18 @@ WTWJS.prototype.openAllPlugins = function(zpluginname, zactive) {
 		WTW.hide('wtw_allplugins');
 		WTW.hide('wtw_pluginslist');
 		dGet('wtw_pluginslist').innerHTML = "";
-		
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tpluginname').value = zpluginname;
-			ipage.getElementById('wtw_tactive').value = zactive;
-			ipage.getElementById('wtw_bgetallplugins').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/pluginloader.php', onload);
-		
+		var zrequest = {
+			'function':'getallplugins'
+		};
+		WTW.getJSON("/core/handlers/pluginloader.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.openAllPluginsComplete(zresponse.plugins, zpluginname, zactive);
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-openAllPlugins=" + ex.message);
 	}
@@ -11043,14 +11429,20 @@ WTWJS.prototype.openAllPluginsComplete = function(zresponse, zpluginname, zactiv
 
 WTWJS.prototype.activatePlugin = function(zpluginname, zactive) {
 	try {
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tpluginname').value = zpluginname;
-			ipage.getElementById('wtw_tactive').value = zactive;
-			ipage.getElementById('wtw_bactivateplugin').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/pluginloader.php', onload);
+		var zrequest = {
+			'pluginname': zpluginname,
+			'active': zactive,
+			'function':'activateplugin'
+		};
+		WTW.getJSON("/core/handlers/pluginloader.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.activatePluginComplete();
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-activatePlugin=" + ex.message);
 	}
@@ -11084,13 +11476,18 @@ WTWJS.prototype.checkForUpdates = function(zshow) {
 				zshow = "0";
 				break;
 		}
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tshow').value = zshow;
-			ipage.getElementById('wtw_bgetplugininfo').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/pluginloader.php', onload);
+		var zrequest = {
+			'function':'getplugininfo'
+		};
+		WTW.getJSON("/core/handlers/pluginloader.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.getPluginInfoComplete(zresponse.plugins, zshow);
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-checkForUpdates=" + ex.message);
 	}
@@ -11301,23 +11698,20 @@ WTWJS.prototype.updatePlugin = function(zpluginname, zversion, zupdatedate, zupd
 			dGet('updateplugin' + zpluginname).innerHTML = "Updating";
 		}
 		var zrequest = {
-			'pluginname':zpluginname,
-			'version':zversion,
-			'updatedate':zupdatedate,
-			'updateurl':zupdateurl,
-			'show':zshow
+			'pluginname': zpluginname,
+			'version': zversion,
+			'updateurl': zupdateurl,
+			'function':'getupdate'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tpluginname').value = zrequest.pluginname;
-			ipage.getElementById('wtw_tversion').value = zrequest.version;
-			ipage.getElementById('wtw_tupdatedate').value = zrequest.updatedate;
-			ipage.getElementById('wtw_tupdateurl').value = zrequest.updateurl;
-			ipage.getElementById('wtw_tshow').value = zrequest.show;
-			ipage.getElementById('wtw_bgetpluginupdate').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/pluginloader.php', onload);
+		WTW.getJSON("/core/handlers/pluginloader.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.updatePluginComplete(zpluginname, zversion, zupdatedate, zupdateurl, zresponse.success, zshow);
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-updatePlugin=" + ex.message);
 	}
@@ -11363,21 +11757,20 @@ WTWJS.prototype.updateWalkTheWeb = function(zpluginname, zversion, zupdatedate, 
 		WTW.show('wtw_loadingupdating');
 		WTW.show('wtw_updatelist');
 		var zrequest = {
-			'pluginname':zpluginname,
-			'version':zversion,
-			'updatedate':zupdatedate,
-			'updateurl':zupdateurl
+			'pluginname': zpluginname,
+			'version': zversion,
+			'updateurl': zupdateurl,
+			'function':'getupdate'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tpluginname').value = zrequest.pluginname;
-			ipage.getElementById('wtw_tversion').value = zrequest.version;
-			ipage.getElementById('wtw_tupdatedate').value = zrequest.updatedate;
-			ipage.getElementById('wtw_tupdateurl').value = zrequest.updateurl;
-			ipage.getElementById('wtw_bgetupdate').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/pluginloader.php', onload);
+		WTW.getJSON("/core/handlers/pluginloader.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.updateWalkTheWebComplete(zpluginname, zversion, zupdatedate, zupdateurl, zresponse.success);
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-updateWalkTheWeb=" + ex.message);
 	}
@@ -11539,16 +11932,18 @@ WTWJS.prototype.deleteUserRole = function(zuserid, zuserinroleid) {
 			dGet('deleteuserrole' + zuserinroleid).innerHTML = "Deleting...";
 			var zrequest = {
 				'userinroleid':zuserinroleid,
-				'userid':zuserid
+				'userid':zuserid,
+				'function':'deleteuserrole'
 			};
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tuserinroleid').value = zrequest.userinroleid;
-				ipage.getElementById('wtw_tuserid').value = zrequest.userid;
-				ipage.getElementById('wtw_bdeleteuserrole').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/users.php', onload);
+			WTW.getJSON("/core/handlers/users.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					WTW.getUser(zuserid);
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-deleteUserRole=" + ex.message);
@@ -11561,17 +11956,19 @@ WTWJS.prototype.addUserRole = function(zuserid) {
 		if (zroleid != "" && zuserid != "") {
 			dGet('adduserrole' + zuserid).innerHTML = "Adding...";
 			var zrequest = {
-				'userid':zuserid,
-				'roleid':zroleid
+				'userid': zuserid,
+				'roleid': zroleid,
+				'function':'saveuserrole'
 			};
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tuserid').value = zrequest.userid;
-				ipage.getElementById('wtw_troleid').value = zrequest.roleid;
-				ipage.getElementById('wtw_bsaveuserrole').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/users.php', onload);
+			WTW.getJSON("/core/handlers/users.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					WTW.getUser(zuserid);
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-addUserRole=" + ex.message);
@@ -11637,20 +12034,20 @@ WTWJS.prototype.saveNewUser = function() {
 			zemail = dGet("wtw_tuseruseremail2").value;
 			zpassword = btoa(dGet("wtw_tuseruserpassword2").value);
 			var zrequest = {
-				'username':zusername,
-				'password':zpassword,
-				'email':zemail
+				'username': zusername,
+				'password': zpassword,
+				'email': zemail,
+				'function':'savenewuser'
 			};
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tuserid').value = '';
-				ipage.getElementById('wtw_tusername').value = zrequest.username;
-				ipage.getElementById('wtw_tpassword').value = zrequest.password;
-				ipage.getElementById('wtw_tuseremail').value = zrequest.email;
-				ipage.getElementById('wtw_bsavenewuser').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/users.php', onload);
+			WTW.getJSON("/core/handlers/users.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					WTW.openAllUsers();
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		} else {
 			dGet('wtw_errorusersave2').innerHTML = "User Name must be 3 or more characters";
 		}
@@ -11675,17 +12072,18 @@ WTWJS.prototype.saveUser = function() {
 			var zrequest = {
 				'userid':zuserid,
 				'username':zusername,
-				'email':zemail
+				'email':zemail,
+				'function':'saveuser'
 			};
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tuserid').value = zrequest.userid;
-				ipage.getElementById('wtw_tusername').value = zrequest.username;
-				ipage.getElementById('wtw_tuseremail').value = zrequest.email;
-				ipage.getElementById('wtw_bsaveuser').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/users.php', onload);
+			WTW.getJSON("/core/handlers/users.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					WTW.openAllUsers();
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		} else {
 			dGet('wtw_errorusersave').innerHTML = "User Name must be 3 or more characters";
 		}
@@ -11697,17 +12095,19 @@ WTWJS.prototype.saveUser = function() {
 WTWJS.prototype.deleteUser = function(zuserid) {
 	try {	
 		if (zuserid != "") {
-			dGet('deleteuser' + zuserid).innerHTML = "Deleting...";
 			var zrequest = {
-				'userid':zuserid
+				'userid': zuserid,
+				'function':'deleteuser'
 			};
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tuserid').value = zrequest.userid;
-				ipage.getElementById('wtw_bdeleteuser').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/users.php', onload);
+			WTW.getJSON("/core/handlers/users.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					WTW.openAllUsers();
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-deleteUser=" + ex.message);

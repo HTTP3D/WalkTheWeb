@@ -32,6 +32,40 @@ WTWJS.prototype.addActionzoneLoadzone = function(actionzonename, actionzoneind, 
 	return actionzone;
 }
 
+WTWJS.prototype.addActionzoneLoadAnimations = function(actionzonename, actionzoneind, actionzonedef) {
+	var actionzone;
+	try {
+		var molddef = WTW.newMold();
+		molddef.shape = actionzonedef.actionzoneshape;
+		molddef.covering = "hidden";
+		molddef.position.x = actionzonedef.position.x;
+		molddef.position.y = actionzonedef.position.y;
+		molddef.position.z = actionzonedef.position.z;
+		molddef.scaling.x = actionzonedef.scaling.x;
+		molddef.scaling.y = actionzonedef.scaling.y;
+		molddef.scaling.z = actionzonedef.scaling.z;
+		molddef.rotation.x = actionzonedef.rotation.x;
+		molddef.rotation.y = actionzonedef.rotation.y;
+		molddef.rotation.z = actionzonedef.rotation.z;
+		molddef.subdivisions = 12;
+		molddef.opacity = 0;
+		molddef.parentname = actionzonedef.parentname;
+		molddef.actionzoneind = actionzoneind;
+		molddef.checkcollisions = "0";
+		molddef.ispickable = "0";
+		WTW.addMoldToQueue(actionzonename, molddef, molddef.parentname, molddef.covering, null);
+		if (WTW.adminView == 1) {
+			if (dGet('wtw_bzones').title == "Action Zones are Shown" || actionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
+				WTW.setOpacity(actionzonename, .2);
+			}
+		}
+		WTW.actionZones[actionzoneind].shown = "2";
+	} catch (ex) {
+		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneLoadAnimations=" + ex.message);
+	}
+	return actionzone;
+}
+
 WTWJS.prototype.addActionzoneSlidingDoor = function(actionzonename, actionzoneind, actionzonedef) {
 	var actionzone;
 	try {

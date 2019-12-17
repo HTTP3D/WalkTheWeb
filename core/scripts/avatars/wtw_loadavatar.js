@@ -77,7 +77,7 @@ WTWJS.prototype.nextSetupMode = function(avatarname) {
 			}
 			dGet('wtw_tavatarind').value = avatarind;
 			WTW.getMyAvatar(avatarind);
-			WTW.loadCameraSettings();
+//			WTW.loadCameraSettings();
 			WTW.currentID = "";
 			WTW.setCameraOnAvatar();
 			var myavatarid = dGet('wtw_tmyavatarid').value;
@@ -106,32 +106,30 @@ WTWJS.prototype.nextSetupMode = function(avatarname) {
 					scalingz = WTW.myAvatar.WTW.scaling.z;
 				}
 			}
-			var request = {
-				'myavatarid':myavatarid,
-				'instanceid':dGet("wtw_tinstanceid").value,
-				'userip':dGet("wtw_tuserip").value,
-				'avatarind':dGet('wtw_tavatarind').value,
-				'scalingx':scalingx,
-				'scalingy':scalingy,
-				'scalingz':scalingz,
-				'objectfolder':objectfolder,
-				'objectfile':objectfile
+			var zrequest = {
+				'avatarid': myavatarid,
+				'instanceid': dGet("wtw_tinstanceid").value,
+				'userip': dGet("wtw_tuserip").value,
+				'avatarind': dGet('wtw_tavatarind').value,
+				'scalingx': scalingx,
+				'scalingy': scalingy,
+				'scalingz': scalingz,
+				'objectfolder': objectfolder,
+				'objectfile': objectfile,
+				'function':'saveavatar'
 			};
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tmyavatarid').value = request.myavatarid;
-				ipage.getElementById('wtw_tinstanceid').value = request.instanceid;
-				ipage.getElementById('wtw_tuserip').value = request.userip;
-				ipage.getElementById('wtw_tavatarind').value = request.avatarind;
-				ipage.getElementById('wtw_tscalingx').value = request.scalingx;
-				ipage.getElementById('wtw_tscalingy').value = request.scalingy;
-				ipage.getElementById('wtw_tscalingz').value = request.scalingz;
-				ipage.getElementById('wtw_tobjectfolder').value = request.objectfolder;
-				ipage.getElementById('wtw_tobjectfile').value = request.objectfile;
-				ipage.getElementById('wtw_bsaveavatar').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/avatars.php', onload);
+			WTW.getJSON("/core/handlers/avatars.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					if (zresponse.avatarid != undefined) {
+						myavatarid = zresponse.avatarid;
+						WTW.setAvatarID(myavatarid);
+					}
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 			WTW.closeSelectAvatar();
 			WTW.hide('wtw_menuavatarchangediv');
 			WTW.showSettingsMenu('wtw_menuavatar');
@@ -165,16 +163,19 @@ WTWJS.prototype.setAvatarID = function(zavatarid) {
 
 WTWJS.prototype.getSessionAvatar = function() {
 	try {
-		var request = {
-			'instanceid':dGet("wtw_tinstanceid").value
+		var zrequest = {
+			'instanceid': dGet("wtw_tinstanceid").value,
+			'function':'getsession'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tinstanceid').value = request.instanceid;
-			ipage.getElementById('wtw_bgetsession').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/avatars.php', onload);
+		WTW.getJSON("/core/handlers/avatars.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.loadUserSession(JSON.parse(zresponse.user));
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
     } catch (ex) {
 		WTW.log("avatars-loadavatar-getSessionAvatar=" + ex.message);
     }
@@ -264,7 +265,7 @@ WTWJS.prototype.getSavedAvatar = function(reload) {
 					WTW.setCameraOnAvatar();
 					WTW.disposeClean("myavatar-" + dGet("wtw_tinstanceid").value);
 					WTW.loadAvatarFromDB(response.avatar, reload);
-					WTW.loadCameraSettings();
+//					WTW.loadCameraSettings();
 				} else if (avatarind == -1) {
 					/* needs an avatar - user does not have any avatars yet */
 					dGet('wtw_tavatarind').value = '';
@@ -274,7 +275,7 @@ WTWJS.prototype.getSavedAvatar = function(reload) {
 					/* load existing avatar, has anonymous avatar for anonymous user OR has logged in avatar for logged in user */
 					dGet('wtw_tavatarind').value = avatarind;
 					if (reload == false) {
-						WTW.loadCameraSettings();
+//						WTW.loadCameraSettings();
 						WTW.closeSelectAvatar();
 						WTW.closeSetupMode(false);
 					} else {
@@ -306,7 +307,7 @@ WTWJS.prototype.transferMainParent = function(parentmold) {
 				}
 			}
 			if (WTW.myAvatar != null) {
-				//WTW.myAvatar.parent = WTW.getMainParent();
+				WTW.myAvatar.parent = WTW.getMainParent();
 				WTW.myAvatar.position.x = WTW.init.startPositionX;
 				WTW.myAvatar.position.y = WTW.init.startPositionY;
 				WTW.myAvatar.position.z = WTW.init.startPositionZ;
@@ -349,25 +350,23 @@ WTWJS.prototype.saveAvatarColor = function(moldname) {
 			if (dGet('wtw_tuserid').value == '') {
 				myavatarid = dGet('wtw_tmyavataridanon').value;
 			}
-			var request = {
-				'myavatarid':myavatarid,
-				'instanceid':dGet("wtw_tinstanceid").value,
-				'avatarpart':avatarpart,
-				'emissivecolorr':dGet("wtw_temissivecolorr").value,
-				'emissivecolorg':dGet("wtw_temissivecolorg").value,
-				'emissivecolorb':dGet("wtw_temissivecolorb").value
+			var zrequest = {
+				'avatarid': myavatarid,
+				'instanceid': dGet("wtw_tinstanceid").value,
+				'avatarpart': avatarpart,
+				'emissivecolorr': dGet("wtw_temissivecolorr").value,
+				'emissivecolorg': dGet("wtw_temissivecolorg").value,
+				'emissivecolorb': dGet("wtw_temissivecolorb").value,
+				'function':'saveavatarcolor'
 			};
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tmyavatarid').value = request.myavatarid;
-				ipage.getElementById('wtw_tinstanceid').value = request.instanceid;
-				ipage.getElementById('wtw_tavatarpart').value = request.avatarpart;
-				ipage.getElementById('wtw_temissivecolorr').value = request.emissivecolorr;
-				ipage.getElementById('wtw_temissivecolorg').value = request.emissivecolorg;
-				ipage.getElementById('wtw_temissivecolorb').value = request.emissivecolorb;
-				ipage.getElementById('wtw_bsaveavatarcolor').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/avatars.php', onload);
+			WTW.getJSON("/core/handlers/avatars.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		}
     } catch (ex) {
 		WTW.log("avatars-loadavatar-saveAvatarColor=" + ex.message);
@@ -425,7 +424,8 @@ WTWJS.prototype.setCameraOnAvatar = function() {
 		if (avatar != null && avatarcamera != null) {
 			WTW.cameraFollow.lockedTarget = null;
 			WTW.cameraFollow.lockedTarget = avatarcamera;
-			WTW.cameraFollow.position = new BABYLON.Vector3(avatar.position.x + parseFloat(Math.sin(avatar.rotation.y)) * step, avatar.position.y + avatarcamera.position.y + WTW.cameraYOffset, avatar.position.z + parseFloat(Math.cos(avatar.rotation.y)) * step);
+			//WTW.cameraFollow.position = new BABYLON.Vector3(avatar.position.x + parseFloat(Math.sin(avatar.rotation.y)) * step, avatar.position.y + avatarcamera.position.y + WTW.cameraYOffset, avatar.position.z + parseFloat(Math.cos(avatar.rotation.y)) * step);
+			//WTW.cameraFollow.position = new BABYLON.Vector3(-step, 14, 0);
 		} else {
 			var setupparent = scene.getMeshByID("setupparent-0");
 			if (setupparent != null) {			
@@ -444,16 +444,15 @@ WTWJS.prototype.setCameraOnAvatar = function() {
 			step = 5;
 			WTW.cameraYOffset = 0;
 		}
-		WTW.cameraFollow.radius = -step; // how far from the object to follow
+		WTW.cameraFollow.radius = step; // how far from the object to follow
 		WTW.cameraFollow.heightOffset = WTW.cameraYOffset; // how high above the object to place the camera
-		WTW.cameraFollow.rotationOffset = 0; // the viewing angle		
+		WTW.cameraFollow.rotationOffset = 180; // the viewing angle		
 		WTW.cameraFollow.yOffset = 0;
 		WTW.cameraFollow.inertia = .10;
 		WTW.cameraFollow.cameraAcceleration = 0.5;
 		WTW.cameraFollow.maxCameraSpeed = 1000;
 		WTW.cameraFollow.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 		scene.activeCameras[0] = WTW.cameraFollow;
-		WTW.showSettingsMenu('wtw_menuavatar');
     } catch (ex) {
 		WTW.log("avatars-loadavatar-setCameraOnAvatar=" + ex.message);
     }
@@ -465,16 +464,19 @@ WTWJS.prototype.getAvatarAnimationsAll = function() {
 		if (dGet('wtw_tuserid').value == '') {
 			myavatarid = dGet('wtw_tmyavataridanon').value;
 		}
-		var request = {
-			'myavatarid':myavatarid
+		var zrequest = {
+			'avatarid': myavatarid,
+			'function':'getavataranimationsall'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tmyavatarid').value = request.myavatarid;
-			ipage.getElementById('wtw_bgetavataranimationsall').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/avatars.php', onload);		
+		WTW.getJSON("/core/handlers/avatars.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.loadAvatarAnimationsAll(zresponse.avataranimations);
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
     } catch (ex) {
 		WTW.log("avatars-loadavatar-getAvatarAnimationsAll=" + ex.message);
     }
@@ -491,95 +493,112 @@ WTWJS.prototype.loadAvatarAnimationsAll = function(response) {
 			var setselect = false;
 			for (var i=0;i<response.length;i++) {
 				if (response[i] != null) {
+					var zfound = false;
 					var animationname = response[i].animationname;
 					switch (response[i].animationname) {
 						case "onwait":
 							animationname = "Standing Idle";
+							zfound = true;
 							break;
 						case "onwalk":
 							animationname = "Walk";
+							zfound = true;
 							break;
 						case "onwalkbackwards":
 							animationname = "Walk Backwards";
+							zfound = true;
 							break;
 						case "onturnleft":
 							animationname = "Turn Left";
+							zfound = true;
 							break;
 						case "onturnright":
 							animationname = "Turn Right";
+							zfound = true;
 							break;
 						case "onstrafeleft":
 							animationname = "Strafe Left";
+							zfound = true;
 							break;
 						case "onstraferight":
 							animationname = "Strafe Right";
+							zfound = true;
 							break;
 						case "onrun":
 							animationname = "Run";
+							zfound = true;
 							break;
 						case "onrunbackwards":
 							animationname = "Run Backwards";
+							zfound = true;
 							break;
 						case "onrunturnleft":
 							animationname = "Run Turn Left";
+							zfound = true;
 							break;
 						case "onrunturnright":
 							animationname = "Run Turn Right";
+							zfound = true;
 							break;
 						case "onrunstrafeleft":
 							animationname = "Run Strafe Left";
+							zfound = true;
 							break;
 						case "onrunstraferight":
 							animationname = "Run Strafe Right";
+							zfound = true;
 							break;
 						case "onoption":
 							animationname = "Optional Gestures ++";
+							zfound = true;
 							break;
 					}
-					if (lastanimationname != animationname) {
-						setselect = false;
-						if (lastanimationname != "") {
-							editavataranimations += "</select></div></li>";
-						}
-						if (response[i].animationname == "onoption") {
-							optionind = i;
-						}
-						currentinput = "wtw_tselectavataranimation-" + i + "-value";
-						editavataranimations += "<li id='wtw_animation-" + response[i].animationname + "' class='wtw-avatarli' onclick=\"WTW.editAvatarAnimation('" + response[i].animationname + "'," + i + "," + response.length + ");\">";
-						editavataranimations += "<div class='wtw-inlineindent'>" + animationname + "</div></li>";
-						editavataranimations += "<li id='wtw_animationdiv-" + i + "' class='wtw-avatarli' style='display:none;visibility:hidden;'>";
-						if (response[i].animationname == "onoption") {
-							editavataranimations += "<div>";
-						} else {
-							editavataranimations += "<div class='wtw-inlineindent2'>";
-						}
-						editavataranimations += "<input id='" + currentinput + "' type='hidden' value='' />";
-						
-						if (response[i].animationname == "onoption") {
-							editavataranimations += "<select id='wtw_tselectavataranimation-" + i + "' onchange=\"WTW.changeAvatarAnimation(this);\" style='display:none;visibility:hidden;' >";
-							editavataranimations += "<option value=''> -- Select Animation -- </option>";
-						} else {
-							editavataranimations += "<select id='wtw_tselectavataranimation-" + i + "' onchange=\"WTW.changeAvatarAnimation(this);\" >";
-						}
-						if (optionind > 68) {
-							WTW.hide('wtw_animation-add');
-						}
-						lastanimationname = animationname;
-					}
-					var selected = "";
-					var value = response[i].useravataranimationid + "|" + response[i].avataranimationid + "|" + response[i].speedratio + "|" + response[i].animationname + "|" + response[i].startframe + "|" + response[i].endframe + "|" + response[i].objectfolder + "|" + response[i].objectfile + "|" + response[i].animationfriendlyname + "|" + response[i].loadpriority + "|" + response[i].animationicon;
-					if (response[i].useravataranimationid != null && response[i].useravataranimationid != '') {
-						if (setselect == false && response[i].animationname != "onoption") {
-							selected = "selected='true'";
-							if (dGet(currentinput) != null) {
-								dGet(currentinput).value = response[i].useravataranimationid;
+					if (zfound) {
+						if (lastanimationname != animationname) {
+							setselect = false;
+							if (lastanimationname != "") {
+								editavataranimations += "</select></div></li>";
 							}
-							setselect = true;
-						} else {
-							optionalanimations[optionalanimations.length] = value;
+							if (response[i].animationname == "onoption") {
+								optionind = i;
+							}
+							currentinput = "wtw_tselectavataranimation-" + i + "-value";
+							editavataranimations += "<li id='wtw_animation-" + response[i].animationname + "' class='wtw-avatarli' onclick=\"WTW.editAvatarAnimation('" + response[i].animationname + "'," + i + "," + response.length + ");\">";
+							editavataranimations += "<div class='wtw-inlineindent'>" + animationname + "</div></li>";
+							editavataranimations += "<li id='wtw_animationdiv-" + i + "' class='wtw-avatarli' style='display:none;visibility:hidden;'>";
+							if (response[i].animationname == "onoption") {
+								editavataranimations += "<div>";
+							} else {
+								editavataranimations += "<div class='wtw-inlineindent2'>";
+							}
+							editavataranimations += "<input id='" + currentinput + "' type='hidden' value='' />";
+							
+							if (response[i].animationname == "onoption") {
+								editavataranimations += "<select id='wtw_tselectavataranimation-" + i + "' onchange=\"WTW.changeAvatarAnimation(this);\" style='display:none;visibility:hidden;' >";
+								editavataranimations += "<option value=''> -- Select Animation -- </option>";
+							} else {
+								editavataranimations += "<select id='wtw_tselectavataranimation-" + i + "' onchange=\"WTW.changeAvatarAnimation(this);\" >";
+							}
+							if (optionind > 68) {
+								WTW.hide('wtw_animation-add');
+							}
+							lastanimationname = animationname;
 						}
+						var selected = "";
+						var value = response[i].useravataranimationid + "|" + response[i].avataranimationid + "|" + response[i].speedratio + "|" + response[i].animationname + "|" + response[i].startframe + "|" + response[i].endframe + "|" + response[i].objectfolder + "|" + response[i].objectfile + "|" + response[i].animationfriendlyname + "|" + response[i].loadpriority + "|" + response[i].animationicon;
+						if (response[i].useravataranimationid != null && response[i].useravataranimationid != '') {
+							if (setselect == false && response[i].animationname != "onoption") {
+								selected = "selected='true'";
+								if (dGet(currentinput) != null) {
+									dGet(currentinput).value = response[i].useravataranimationid;
+								}
+								setselect = true;
+							} else {
+								optionalanimations[optionalanimations.length] = value;
+							}
+						}
+						editavataranimations += "<option " + selected + " value='" + value + "'>" + response[i].animationfriendlyname + "</option>";
 					}
-					editavataranimations += "<option " + selected + " value='" + value + "'>" + response[i].animationfriendlyname + "</option>";
 				}
 			}
 		}
@@ -693,20 +712,20 @@ WTWJS.prototype.deleteUserAnimation = function(selectname) {
 			if (dGet('wtw_tuserid').value == '') {
 				myavatarid = dGet('wtw_tmyavataridanon').value;
 			}
-			var request = {
-				'myavatarid':myavatarid,
-				'useravataranimationid':useravataranimationid,
-				'avataranimationid':avataranimationid
+			var zrequest = {
+				'avatarid': myavatarid,
+				'useravataranimationid': useravataranimationid,
+				'avataranimationid':avataranimationid,
+				'function':'deleteavataranimation'
 			};
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tmyavatarid').value = request.myavatarid;
-				ipage.getElementById('wtw_tuseravataranimationid').value = request.useravataranimationid;
-				ipage.getElementById('wtw_tavataranimationid').value = request.avataranimationid;
-				ipage.getElementById('wtw_bdeleteavataranimation').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/avatars.php', onload);
+			WTW.getJSON("/core/handlers/avatars.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		}
     } catch (ex) {
 		WTW.log("avatars-loadavatar-deleteUserAnimation=" + ex.message);
@@ -1002,7 +1021,6 @@ WTWJS.prototype.loadMyAvatar = function(avatardef, reload) {
 		WTW.myAvatar.rotation.y = WTW.getRadians(WTW.init.startRotationY);
 		if (reload == false) {
 			WTW.cameraYOffset = WTW.init.startRotationX;
-			WTW.initAvatarCameras();
 		}
     } catch (ex) {
 		WTW.log("avatars-loadavatar-loadMyAvatar=" + ex.message);
@@ -1026,7 +1044,7 @@ WTWJS.prototype.loadAvatar = function(avatarind, parentmold, offsetX, offsetZ) {
 			avatardef.avatarind = avatarind;
 			selavatar = WTW.addAvatar3DObject(avatarname, avatardef, true, true);
 			selavatar.parent = parentmold;
-			selavatar.rotation.y = WTW.getRadians(0);
+			selavatar.rotation.y = WTW.getRadians(90);
 			selavatar.position.x = offsetX;
 			selavatar.position.z = offsetZ;
 		} else {
@@ -1142,20 +1160,20 @@ WTWJS.prototype.saveAvatarEnterAnimation = function() {
 		if (WTW.isNumeric(zavataranimation) == false) {
 			zavataranimation = 1;
 		}
-		var request = {
-			'myavatarid':myavatarid,
-			'avataranimation':zavataranimation,
-			'transport':'1'
+		var zrequest = {
+			'avatarid': myavatarid,
+			'avataranimation': zavataranimation,
+			'transport': '1',
+			'function':'savetransportanimation'
 		};
-		/* function for after iframe loads */
-		var onload = function(ipage) {
-			ipage.getElementById('wtw_tmyavatarid').value = request.myavatarid;
-			ipage.getElementById('wtw_tavataranimation').value = request.avataranimation;
-			ipage.getElementById('wtw_ttransport').value = request.transport;
-			ipage.getElementById('wtw_bsavetransportanimation').click();
-		}
-		/* iframe src, onload function */
-		var iframe = WTW.createIFrame('/core/iframes/avatars.php', onload);
+		WTW.getJSON("/core/handlers/avatars.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+			}, 
+			'POST', 
+			JSON.stringify(zrequest)
+		);
     } catch (ex) {
 		WTW.log("avatars-loadavatar-saveAvatarEnterAnimation=" + ex.message);
     }
@@ -1961,6 +1979,9 @@ WTWJS.prototype.getAvatarSettings = function(avatarind) {
 				case 5:
 					objectfolder = "/content/system/avatars/malcolm/";
 					objectfile = "malcolmidle.babylon";
+					//scalingx = '1.0';
+					//scalingy = '1.0';
+					//scalingz = '1.0';
 					break;
 				case 6:
 					objectfolder = "/content/system/avatars/liam/";
@@ -2161,20 +2182,20 @@ WTWJS.prototype.saveAvatarDisplayName = function() {
 			}
 			dGet('wtw_menudisplayname').innerHTML = dGet('wtw_tavatardisplayname').value;
 			dGet('wtw_teditdisplayname').value = dGet('wtw_tavatardisplayname').value;
-			var request = {
-				'myavatarid':dGet('wtw_tmyavatarid').value,
-				'instanceid':dGet("wtw_tinstanceid").value,
-				'avatardisplayname':dGet('wtw_tavatardisplayname').value
+			var zrequest = {
+				'avatarid': dGet('wtw_tmyavatarid').value,
+				'instanceid': dGet("wtw_tinstanceid").value,
+				'avatardisplayname': dGet('wtw_tavatardisplayname').value,
+				'function':'saveavatardisplayname'
 			};
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tmyavatarid').value = request.myavatarid;
-				ipage.getElementById('wtw_tinstanceid').value = request.instanceid;
-				ipage.getElementById('wtw_tavatardisplayname').value = request.avatardisplayname;
-				ipage.getElementById('wtw_bsaveavatardisplayname').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/avatars.php', onload);
+			WTW.getJSON("/core/handlers/avatars.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		}
 	} catch (ex) { 
 		WTW.log("avatars-loadavatar-saveAvatarDisplayName=" + ex.message);
@@ -2318,8 +2339,6 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 								avatar.WTW.skeleton.copyAnimationRange(walkskeleton, animation.animationname, true);
 								if (easingfunction != undefined && easingfunction != null) {
 									for (var c=0; c < avatar.WTW.skeleton.bones.length; c++) {
-										//avatar.WTW.skeleton.bones[c].scale(.04, .04, .04);
-										
 										avatar.WTW.skeleton.bones[c].animations[0].setEasingFunction(easingfunction);
 									}
 								}
@@ -2343,15 +2362,6 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 									WTW.toggleMenuAnimations();
 									WTW.showAvatarDisplayName(false);
 									WTW.pluginsMyAnimationsLoaded();
-									if (WTW.adminView == 1) {
-										window.setTimeout(function() {
-											if (WTW.getCookie("wtw_bavatarcamera") != null) {
-												if (WTW.getCookie("wtw_bavatarcamera") == '0') {
-													WTW.setQuickEditorAvatarCamera(0);
-												}
-											}
-										},1000);
-									}
 									if (enteranimate) {
 										WTW.avatarEnter(avatarname);
 										WTW.loadSit(avatarname);
@@ -2420,26 +2430,26 @@ WTWJS.prototype.changeAvatarAnimation = function(selobj) {
 			}
 			var avatarname = "myavatar-" + dGet("wtw_tinstanceid").value;
 			WTW.loadAvatarAnimation(avatarname, useravataranimationid, animationfriendlyname, animationicon, avataranimationid, animationname, objectfolder, objectfile, startframe, endframe, speedratio, loadpriority);
-			var request = {
-				'myavatarid':myavatarid,
-				'useravataranimationid':useravataranimationid,
-				'useravataranimationidfield':selobj.id + '-value',
+			var zrequest = {
+				'avatarid': myavatarid,
+				'useravataranimationid': useravataranimationid,
 				'avataranimationid':avataranimationid,
 				'avataranimationname':dGet('wtw_tavataranimationname').value,
-				'speedratio':speedratio
+				'speedratio':speedratio,
+				'function':'saveavataranimation'
 			};
-			/* function for after iframe loads */
-			var onload = function(ipage) {
-				ipage.getElementById('wtw_tmyavatarid').value = request.myavatarid;
-				ipage.getElementById('wtw_tuseravataranimationid').value = request.useravataranimationid;
-				ipage.getElementById('wtw_tuseravataranimationidfield').value = request.useravataranimationidfield;
-				ipage.getElementById('wtw_tavataranimationid').value = request.avataranimationid;
-				ipage.getElementById('wtw_tavataranimationname').value = request.avataranimationname;
-				ipage.getElementById('wtw_tspeedratio').value = request.speedratio;
-				ipage.getElementById('wtw_bsaveavataranimation').click();
-			}
-			/* iframe src, onload function */
-			var iframe = WTW.createIFrame('/core/iframes/avatars.php', onload);
+			WTW.getJSON("/core/handlers/avatars.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					if (zresponse.useravataranimationid != undefined) {
+						useravataranimationid = zresponse.useravataranimationid;
+					}
+					WTW.updateAnimSelectValue(selobj.id + '-value', useravataranimationid);
+				}, 
+				'POST', 
+				JSON.stringify(zrequest)
+			);
 		}
 		selobj.blur();
     } catch (ex) {
@@ -2478,6 +2488,9 @@ WTWJS.prototype.loadAvatarAnimation = function(avatarname, useravataranimationid
 							if (avatar.WTW.animations.running[animationname] != undefined) {
 								avatar.WTW.animations.running[animationname].stop();
 								avatar.WTW.skeleton.deleteAnimationRange(animationname,false);
+							}
+							if (animationname == avatar.WTW.animations[i].animationname && found == -1) {
+								found = i;
 							}
 						}
 						if (Number(avatar.WTW.animations[i].totalendframe) > totalendframe) {
@@ -2548,9 +2561,6 @@ WTWJS.prototype.loadSit = function(avatarname) {
 		var useravataranimationid = "cccccccccccccccc";
 		var avataranimationid = "dddddddddddddddd";
 		WTW.loadAvatarAnimation(avatarname, useravataranimationid, 'Sit Wait', '', avataranimationid, 'onsitwait', '/content/system/animations/movement/', 'sitwait.babylon', 1, 155, 1, 0, 0);
-//		useravataranimationid = "eeeeeeeeeeeeeeee";
-//		avataranimationid = "ffffffffffffffff";
-//		WTW.loadAvatarAnimation(avatarname, useravataranimationid, 'Sit To Stand', '', avataranimationid, 'onsittostand', '/content/system/animations/movement/', 'sittostand.babylon', 1, 55, 1, 0, 0);
     } catch (ex) {
 		WTW.log("avatars-loadavatar-loadSit=" + ex.message);
     }
@@ -2575,7 +2585,19 @@ WTWJS.prototype.startSit = function(moldname) {
 
 WTWJS.prototype.setSit = function(moldtomatch) {
 	try {	
-
+		/* walk to position, rotate then */
+/*						
+		WTW.keyPressedAdd('onsitwait');
+		var sitdist = 0;
+		var sitmove = window.setInterval(function() {
+			avatar.translate(BABYLON.Axis.Z, .1, BABYLON.Space.LOCAL);
+			if (sitdist > 4.4) {
+				window.clearInterval(sitmove);
+			} else {
+				sitdist += .1;
+			}
+		},10); 
+*/					
     } catch (ex) {
 		WTW.log("avatars-loadavatar-setSit=" + ex.message);
     }
@@ -2600,61 +2622,41 @@ WTWJS.prototype.walkToPosition = function(avatarname, moldtomatch, functionname,
 					var dx = (abspos.x - avatar.position.x);
 					var dz = (abspos.z - avatar.position.z);
 					var dist = Math.sqrt((dx * dx) + (dz * dz));
-					if (Math.round(targetangle) == 0 || Math.round(targetangle) == 360 || dist < 2) {
+					if (Math.round(targetangle) == 0 || Math.round(targetangle) == 360 || dist < 3) {
 						dir = 0;
 					} else if (targetangle < 1) {
 						dir = -.1;
 						degleft = targetangle;
 					} else if (targetangle < 2) {
-						dir = -.1;
-						degleft = targetangle;
-					} else if (targetangle < 10) {
 						dir = -.5;
 						degleft = targetangle;
-					} else if (targetangle < 30) {
+					} else if (targetangle < 10) {
 						dir = -1;
 						degleft = targetangle;
-					} else if (targetangle < 90) {
+					} else if (targetangle < 30) {
 						dir = -5;
 						degleft = targetangle;
-					} else if (targetangle < 180) {
+					} else if (targetangle < 90) {
 						dir = -10;
+						degleft = targetangle;
+					} else if (targetangle < 180) {
+						dir = -15;
 						degleft = targetangle;
 					} else {
 						degleft = 360 - targetangle;
 					}
 					avatardeg += dir;
 					avatar.rotation.y = WTW.getRadians(avatardeg);
-					if (dist < 2) {
+					if (dist < 3) {
 						walk = 0;
 						WTW.keyPressedRemove('onwalk');
 					} else {
 						WTW.keyPressedAdd('onwalk');
 					}
-					if (degleft < 2 && walk == 0) {
+					if (degleft < 3 && walk == 0) {
 						window.clearInterval(moveavatar);
 						avatar.position.x = abspos.x;
-						//avatar.position.y = abspos.y;
 						avatar.position.z = abspos.z;
-						
-						
-						
-//						avatar.rotation.x = absrot.x;
-//						avatar.rotation.y = absrot.y;
-//						avatar.rotation.z = absrot.z;
-						
-/*						
-						WTW.keyPressedAdd('onsitwait');
-						var sitdist = 0;
-						var sitmove = window.setInterval(function() {
-							avatar.translate(BABYLON.Axis.Z, .1, BABYLON.Space.LOCAL);
-							if (sitdist > 4.4) {
-								window.clearInterval(sitmove);
-							} else {
-								sitdist += .1;
-							}
-						},10); 
-*/					
 						WTW.executeFunctionByName(functionname, window, parameters);
 					}
 				},10);

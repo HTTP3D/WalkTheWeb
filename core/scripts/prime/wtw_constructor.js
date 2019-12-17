@@ -27,7 +27,7 @@ function WTWJS() {
 		'groundPositionY':0,
 		'waterPositionY':-1,
 		'startPositionX':0,
-		'startPositionY':0,
+		'startPositionY':10,
 		'startPositionZ':0,
 		'startScalingX':1,
 		'startScalingY':1,

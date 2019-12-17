@@ -7,6 +7,7 @@ WTWJS.prototype.getActionZoneList = function() {
 		actionzonelist[actionzonelist.length] = {"name":"Swinging Door","helpurl":"https://www.walktheweb.com/wiki/swinging-doors-action-zone/"};
 		actionzonelist[actionzonelist.length] = {"name":"Click Activated Sliding Door","helpurl":""};
 		actionzonelist[actionzonelist.length] = {"name":"Rotate","helpurl":""};
+		actionzonelist[actionzonelist.length] = {"name":"Load Animations","helpurl":""};
 /*		actionzonelist[actionzonelist.length] = {"name":"Seat","helpurl":""}; */
 		/* currently in testing or under development */
 /*		actionzonelist[actionzonelist.length] = {"name":"Mirror","helpurl":""}; 
@@ -92,6 +93,9 @@ WTWJS.prototype.addActionZone = function(actionzonename, actionzonedef) {
 				switch (actionzonetype) {
 					case "loadzone":
 						actionzone = WTW.addActionzoneLoadzone(actionzonename, actionzoneind, actionzonedef);
+						break;
+					case "loadanimations":
+						actionzone = WTW.addActionzoneLoadAnimations(actionzonename, actionzoneind, actionzonedef);
 						break;
 					case "slidingdoor":
 						actionzone = WTW.addActionzoneSlidingDoor(actionzonename, actionzoneind, actionzonedef);
@@ -197,6 +201,9 @@ WTWJS.prototype.setNewActionZoneDefaults = function(actionzonetype) {
 			case "loadzone":
 				dGet('wtw_tactionzonename').value = "Custom - Load Zone";
 				break;
+			case "loadanimations":
+				dGet('wtw_tactionzonename').value = "Load Animations";
+				break;
 			case "slidingdoor":
 				dGet('wtw_tactionzonename').value = "New Sliding Door";
 				dGet('wtw_tactionzonemovementtype').value = "slide";
@@ -278,6 +285,7 @@ WTWJS.prototype.setActionZoneFormFields = function(actionzonetype) {
 		WTW.hide('wtw_actionzonerotatespeeddiv');
 		WTW.hide('wtw_actionzoneadvancedopts');
 		WTW.hide('wtw_attachactionzonediv');
+		WTW.hide('wtw_actionzoneavataranimationsdiv');
 		dGet('wtw_tcopyaxletoactionzone').disabled = false;
 		dGet('wtw_axispositiontitle').innerHTML = "Axis Position";
 		dGet('wtw_axisrotationtitle').innerHTML = "Axis Rotation";
@@ -299,6 +307,16 @@ WTWJS.prototype.setActionZoneFormFields = function(actionzonetype) {
 				dGet('wtw_editactionzoneformtitle').innerHTML = "Add Load Zone";
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
 				WTW.show('wtw_actionzoneadvancedopts');
+				break;
+			case "loadanimations":
+				WTW.hide('wtw_actionzoneaxisdiv');
+				WTW.hide('wtw_copyaxletoactionzonediv');
+				WTW.hide('wtw_actionzoneadvancedoptslink');
+				WTW.hide('wtw_actionzonepartsdiv');
+				dGet('wtw_editactionzoneformtitle').innerHTML = "Add Load Animations";
+				dGet('wtw_tcopyaxletoactionzone').disabled = true;
+				WTW.show('wtw_actionzoneadvancedopts');
+				WTW.show('wtw_actionzoneavataranimationsdiv');
 				break;
 			case "slidingdoor":
 				dGet('wtw_editactionzoneformtitle').innerHTML = "Add Sliding Door";				

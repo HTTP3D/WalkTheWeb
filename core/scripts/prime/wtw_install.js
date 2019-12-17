@@ -29,17 +29,23 @@ WTWJS.prototype.log = function(txt,color) {
 	}
 }
 
-WTWJS.prototype.getJSON = function(url, callback) {
+WTWJS.prototype.getJSON = function(zurl, zcallback, zaction, zrequest) {
 	try {
+		if (zaction == undefined) {
+			zaction = 'GET';
+		}
+		if (zrequest == undefined) {
+			zrequest = null;
+		}
 		var Httpreq = new XMLHttpRequest();
 		Httpreq.overrideMimeType("application/json");
-		Httpreq.open('GET', url, true);
+		Httpreq.open(zaction, zurl, true);
 		Httpreq.onreadystatechange = function () {
 			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
-				callback(Httpreq.responseText);
+				zcallback(Httpreq.responseText);
 			}
 		};
-		Httpreq.send(null);  
+		Httpreq.send(zrequest);  
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_install.js-getJSON=" + ex.message);
 	}
@@ -172,37 +178,3 @@ WTWJS.prototype.getRandomString = function(length) {
 	}
     return result;
 }
-
-WTWJS.prototype.createIFrame = function(zsrc, zonloadfunction) {
-	var iframe = null;
-	try {
-		if (dGet('wtw_iframesdiv') != null) {
-			iframe = document.createElement('iframe');
-			iframe.id = "iframe-" + WTW.getRandomString(16);
-			dGet('wtw_iframesdiv').appendChild(iframe);
-			iframe.onload = function() {
-				if (iframe.src != "") {
-					var ipage = iframe.contentDocument || iframe.contentWindow.document;
-					ipage.getElementById('wtw_iframename').value = iframe.id;
-					zonloadfunction(ipage);
-				}
-			}
-			iframe.src = zsrc;
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_install.js-createIframe=" + ex.message);
-	}
-	return iframe;
-}
-
-WTWJS.prototype.removeIFrame = function(wtw_iframename) {
-	try {
-		if (dGet(wtw_iframename) != null) {
-			dGet(wtw_iframename).parentNode.removeChild(dGet(wtw_iframename));
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_install.js-removeIFrame=" + ex.message);
-	}
-}
-
-

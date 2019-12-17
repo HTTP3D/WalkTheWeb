@@ -87,43 +87,48 @@ WTWJS.prototype.communitySearchSelect = function(zcopywebid) {
 				response = JSON.parse(response);
 				if (response.communities[0] != undefined) {
 					var community = response.communities[0];
-					/* function for after iframe loads */
-					var onload = function(ipage) {
-						var zcommunityid = WTW.getRandomString(16);
-						ipage.getElementById('wtw_tcommunityid').value = zcommunityid;
-						ipage.getElementById('wtw_tpastcommunityid').value = zcopywebid;
-						ipage.getElementById('wtw_tcommunityname').value = community.communityinfo.communityname;
-						ipage.getElementById('wtw_tcommunityanalyticsid').value = '';
-						ipage.getElementById('wtw_tmoldgroup').value = 'community';
-						ipage.getElementById('wtw_twebid').value = zcommunityid;
-						ipage.getElementById('wtw_tcopywebid').value = zcopywebid;
-						ipage.getElementById('wtw_tstartpositionx').value = community.position.x;
-						ipage.getElementById('wtw_tstartpositiony').value = community.position.y;
-						ipage.getElementById('wtw_tstartpositionz').value = community.position.x;
-						ipage.getElementById('wtw_tstartscalingx').value = community.scaling.x;
-						ipage.getElementById('wtw_tstartscalingy').value = community.scaling.y;
-						ipage.getElementById('wtw_tstartscalingz').value = community.scaling.z;
-						ipage.getElementById('wtw_tstartrotationx').value = community.rotation.x;
-						ipage.getElementById('wtw_tstartrotationy').value = community.rotation.y;
-						ipage.getElementById('wtw_tstartrotationz').value = community.rotation.z;
-						ipage.getElementById('wtw_tgravity').value = community.ground.gravity;
-						ipage.getElementById('wtw_ttextureid').value = community.graphics.texture.id;
-						ipage.getElementById('wtw_tskydomeid').value = community.graphics.sky.id;
-						ipage.getElementById('wtw_tskyinclination').value = community.graphics.sky.skyinclination;
-						ipage.getElementById('wtw_tskyluminance').value = community.graphics.sky.skyluminance;
-						ipage.getElementById('wtw_tskyazimuth').value = community.graphics.sky.skyazimuth;
-						ipage.getElementById('wtw_tskyrayleigh').value = community.graphics.sky.skyrayleigh;
-						ipage.getElementById('wtw_tskyturbidity').value = community.graphics.sky.skyturbidity;
-						ipage.getElementById('wtw_tskymiedirectionalg').value = community.graphics.sky.skymiedirectionalg;
-						ipage.getElementById('wtw_tskymiecoefficient').value = community.graphics.sky.skymiecoefficient;
-						ipage.getElementById('wtw_tgroundpositiony').value = community.ground.position.y;
-						ipage.getElementById('wtw_twaterpositiony').value = community.water.position.y;
-						ipage.getElementById('wtw_talttag').value = community.communityinfo.alttag;
-						WTW.updateProgressBar(50,100);
-						ipage.getElementById('wtw_bimportcommunity').click();
-					}
-					/* iframe src, onload function */
-					var iframe = WTW.createIFrame('/core/iframes/communities.php', onload);
+					WTW.updateProgressBar(50,100);
+					WTW.updateProgressBar(75,100);
+					var zcommunityid = WTW.getRandomString(16);
+					var zrequest = {
+						'communityid': zcommunityid,
+						'pastcommunityid': zcopywebid,
+						'communityname': community.communityinfo.communityname,
+						'analyticsid': '',
+						'positionx': community.position.x,
+						'positiony': community.position.y,
+						'positionz': community.position.z,
+						'scalingx': community.scaling.x,
+						'scalingy': community.scaling.y,
+						'scalingz': community.scaling.z,
+						'rotationx': community.rotation.x,
+						'rotationy': community.rotation.y,
+						'rotationz': community.rotation.z,
+						'gravity': community.ground.gravity,
+						'textureid': community.graphics.texture.id,
+						'skydomeid': community.graphics.sky.id,
+						'skyinclination': community.graphics.sky.skyinclination,
+						'skyluminance': community.graphics.sky.skyluminance,
+						'skyazimuth': community.graphics.sky.skyazimuth,
+						'skyrayleigh': community.graphics.sky.skyrayleigh,
+						'skyturbidity': community.graphics.sky.skyturbidity,
+						'skymiedirectionalg': community.graphics.sky.skymiedirectionalg,
+						'skymiecoefficient': community.graphics.sky.skymiecoefficient,
+						'groundpositiony': community.ground.position.y,
+						'waterpositiony': community.water.position.y,
+						'alttag': community.communityinfo.alttag,
+						'function':'importcommunity'
+					};
+					WTW.getJSON("/core/handlers/communities.php", 
+						function(zresponse) {
+							zresponse = JSON.parse(zresponse);
+							WTW.updateProgressBar(95,100);
+							/* note serror would contain errors */
+							WTW.completedCommunityImport('community', zcommunityid, zcopywebid);
+						}, 
+						'POST', 
+						JSON.stringify(zrequest)
+					);
 				}
 			}
 		);
@@ -204,32 +209,34 @@ WTWJS.prototype.buildingSearchSelect = function(zcopywebid) {
 				response = JSON.parse(response);
 				if (response.buildings[0] != undefined) {
 					var building = response.buildings[0];
-					/* function for after iframe loads */
-					var onload = function(ipage) {
-						var zbuildingid = WTW.getRandomString(16);
-						ipage.getElementById('wtw_tbuildingid').value = zbuildingid;
-						ipage.getElementById('wtw_tpastbuildingid').value = zcopywebid;
-						ipage.getElementById('wtw_tbuildingname').value = building.buildinginfo.buildingname;
-						ipage.getElementById('wtw_tbuildinganalyticsid').value = '';
-						ipage.getElementById('wtw_tmoldgroup').value = 'building';
-						ipage.getElementById('wtw_twebid').value = zbuildingid;
-						ipage.getElementById('wtw_tcopywebid').value = zcopywebid;
-						ipage.getElementById('wtw_tstartpositionx').value = building.position.x;
-						ipage.getElementById('wtw_tstartpositiony').value = building.position.y;
-						ipage.getElementById('wtw_tstartpositionz').value = building.position.x;
-						ipage.getElementById('wtw_tstartscalingx').value = building.scaling.x;
-						ipage.getElementById('wtw_tstartscalingy').value = building.scaling.y;
-						ipage.getElementById('wtw_tstartscalingz').value = building.scaling.z;
-						ipage.getElementById('wtw_tstartrotationx').value = building.rotation.x;
-						ipage.getElementById('wtw_tstartrotationy').value = building.rotation.y;
-						ipage.getElementById('wtw_tstartrotationz').value = building.rotation.z;
-						ipage.getElementById('wtw_tgravity').value = building.gravity;
-						ipage.getElementById('wtw_talttag').value = building.buildinginfo.alttag;
-						WTW.updateProgressBar(50,100);
-						ipage.getElementById('wtw_bimportbuilding').click();
-					}
-					/* iframe src, onload function */
-					var iframe = WTW.createIFrame('/core/iframes/buildings.php', onload);
+					var zbuildingid = WTW.getRandomString(16);
+					var zrequest = {
+						'buildingid': zbuildingid,
+						'pastbuildingid': zcopywebid,
+						'buildingname': building.buildinginfo.buildingname,
+						'analytics': '',
+						'positionx': building.position.x,
+						'positiony': building.position.y,
+						'positionz': building.position.z,
+						'scalingx': building.scaling.x,
+						'scalingy': building.scaling.y,
+						'scalingz': building.scaling.z,
+						'rotationx': building.rotation.x,
+						'rotationy': building.rotation.y,
+						'rotationz': building.rotation.z,
+						'gravity': building.gravity,
+						'alttag': building.buildinginfo.alttag,
+						'function':'importbuilding'
+					};
+					WTW.updateProgressBar(50,100);
+					WTW.getJSON("/core/handlers/buildings.php", 
+						function(zresponse) {
+							WTW.updateProgressBar(95,100);
+							WTW.completedBuildingImport('building', zbuildingid, zcopywebid);
+						}, 
+						'POST', 
+						JSON.stringify(zrequest)
+					);
 				}
 			}
 		);
@@ -311,32 +318,36 @@ WTWJS.prototype.thingSearchSelect = function(zcopywebid) {
 				response = JSON.parse(response);
 				if (response.things[0] != undefined) {
 					var thing = response.things[0];
-					/* function for after iframe loads */
-					var onload = function(ipage) {
-						var zthingid = WTW.getRandomString(16);
-						ipage.getElementById('wtw_tthingid').value = zthingid;
-						ipage.getElementById('wtw_tpastthingid').value = zcopywebid;
-						ipage.getElementById('wtw_tthingname').value = thing.thinginfo.thingname;
-						ipage.getElementById('wtw_tthinganalyticsid').value = '';
-						ipage.getElementById('wtw_tmoldgroup').value = 'thing';
-						ipage.getElementById('wtw_twebid').value = zthingid;
-						ipage.getElementById('wtw_tcopywebid').value = zcopywebid;
-						ipage.getElementById('wtw_tstartpositionx').value = thing.position.x;
-						ipage.getElementById('wtw_tstartpositiony').value = thing.position.y;
-						ipage.getElementById('wtw_tstartpositionz').value = thing.position.x;
-						ipage.getElementById('wtw_tstartscalingx').value = thing.scaling.x;
-						ipage.getElementById('wtw_tstartscalingy').value = thing.scaling.y;
-						ipage.getElementById('wtw_tstartscalingz').value = thing.scaling.z;
-						ipage.getElementById('wtw_tstartrotationx').value = thing.rotation.x;
-						ipage.getElementById('wtw_tstartrotationy').value = thing.rotation.y;
-						ipage.getElementById('wtw_tstartrotationz').value = thing.rotation.z;
-						ipage.getElementById('wtw_tgravity').value = thing.gravity;
-						ipage.getElementById('wtw_talttag').value = thing.thinginfo.alttag;
-						WTW.updateProgressBar(50,100);
-						ipage.getElementById('wtw_bimportthing').click();
-					}
-					/* iframe src, onload function */
-					var iframe = WTW.createIFrame('/core/iframes/things.php', onload);
+					WTW.updateProgressBar(50,100);
+					var zthingid = WTW.getRandomString(16);
+					var zrequest = {
+						'thingid': zthingid,
+						'pastthingid': zcopywebid,
+						'thingname': thing.thinginfo.thingname,
+						'analyticsid': '',
+						'positionx': thing.position.x,
+						'positiony': thing.position.y,
+						'positionz': thing.position.z,
+						'scalingx': thing.scaling.x,
+						'scalingy': thing.scaling.y,
+						'scalingz': thing.scaling.z,
+						'rotationx': thing.rotation.x,
+						'rotationy': thing.rotation.y,
+						'rotationz': thing.rotation.z,
+						'gravity': thing.gravity,
+						'alttag': thing.thinginfo.alttag,
+						'function':'importthing'
+					};
+					WTW.getJSON("/core/handlers/things.php", 
+						function(zresponse) {
+							zresponse = JSON.parse(zresponse);
+							WTW.updateProgressBar(95,100);
+							/* note serror would contain errors */
+							WTW.completedThingImport('thing', zthingid, zcopywebid);
+						}, 
+						'POST', 
+						JSON.stringify(zrequest)
+					);
 				}
 			}
 		);
@@ -367,15 +378,21 @@ WTWJS.prototype.copyActionZones = function(zmoldgroup, zwebid, zcopywebid) {
 			}
 		},300);
 		var zfield = "";
+		var zcommunityid = '';
+		var zbuildingid = '';
+		var zthingid = '';
 		switch (zmoldgroup) {
 			case "community":
 				zfield = "communityid";
+				zcommunityid = zwebid;
 				break;
 			case "building":
 				zfield = "buildingid";
+				zbuildingid = zwebid;
 				break;
 			case "thing":
 				zfield = "thingid";
+				zthingid = zwebid;
 				break;
 		}
 		if (zfield != "" && zwebid != "" && zcopywebid != "") {
@@ -388,21 +405,22 @@ WTWJS.prototype.copyActionZones = function(zmoldgroup, zwebid, zcopywebid) {
 					response = WTW.cleanInvalidCharacters(response);
 					testresponse = JSON.parse(response);
 					if (testresponse[0] != undefined) {
-						/* function for after iframe loads */
-						var onload = function(ipage) {
-							ipage.getElementById('wtw_tmoldgroup').value = zmoldgroup;
-							ipage.getElementById('wtw_twebid').value = zwebid;
-							ipage.getElementById('wtw_tcopywebid').value = zcopywebid;
-							ipage.getElementById('wtw_tcommunityid').value = '';
-							ipage.getElementById('wtw_tbuildingid').value = '';
-							ipage.getElementById('wtw_tthingid').value = '';
-							ipage.getElementById('wtw_t' + zmoldgroup + 'id').value = zwebid;
-							ipage.getElementById('wtw_tactionzonesbulk').value = btoa(response);
-							WTW.updateProgressBar(50,100);
-							ipage.getElementById('wtw_bimportactionzone').click();
-						}
-						/* iframe src, onload function */
-						var iframe = WTW.createIFrame('/core/iframes/actionzones.php', onload);
+						WTW.updateProgressBar(50,100);
+						var zrequest = {
+							'communityid': zcommunityid,
+							'buildingid': zbuildingid,
+							'thingid': zthingid,
+							'actionzonesbulk': btoa(response),
+							'function':'importactionzone'
+						};
+						WTW.getJSON("/core/handlers/actionzones.php", 
+							function(zresponse) {
+								WTW.updateProgressBar(95,100);
+								WTW.completedActionZonesImport(zmoldgroup, zwebid, zcopywebid);
+							}, 
+							'POST', 
+							JSON.stringify(zrequest)
+						);
 					} else {
 						WTW.completedActionZonesImport(zmoldgroup, zwebid, zcopywebid);
 					}
@@ -445,21 +463,23 @@ WTWJS.prototype.copyParentConnectingGrids = function(zmoldgroup, zwebid, zcopywe
 					response = WTW.cleanInvalidCharacters(response);
 					testresponse = JSON.parse(response);
 					if (testresponse[0] != undefined) {
-						/* function for after iframe loads */
-						var onload = function(ipage) {
-							ipage.getElementById('wtw_tmoldgroup').value = zmoldgroup;
-							ipage.getElementById('wtw_twebid').value = zwebid;
-							ipage.getElementById('wtw_tcopywebid').value = zcopywebid;
-							ipage.getElementById('wtw_tparentwebid').value = '';
-							ipage.getElementById('wtw_tparentwebtype').value = '';
-							ipage.getElementById('wtw_tchildwebid').value = zwebid;
-							ipage.getElementById('wtw_tchildwebtype').value = zmoldgroup;
-							ipage.getElementById('wtw_tconnectinggridsbulk').value = btoa(response);
-							WTW.updateProgressBar(50,100);
-							ipage.getElementById('wtw_bimportparentconnectinggrids').click();
-						}
-						/* iframe src, onload function */
-						var iframe = WTW.createIFrame('/core/iframes/connectinggrids.php', onload);
+						WTW.updateProgressBar(50,100);
+						var zrequest = {
+							'moldgroup': zmoldgroup,
+							'webid': zwebid,
+							'connectinggridsbulk': btoa(response),
+							'function':'importparentconnectinggrids'
+						};
+						WTW.getJSON("/core/handlers/connectinggrids.php", 
+							function(zresponse) {
+								zresponse = JSON.parse(zresponse);
+								WTW.updateProgressBar(95,100);
+								/* note serror would contain errors */
+								WTW.completedParentConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
+							}, 
+							'POST', 
+							JSON.stringify(zrequest)
+						);
 					} else {
 						WTW.completedParentConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
 					}
@@ -503,37 +523,45 @@ WTWJS.prototype.copyConnectingGrids = function(zmoldgroup, zwebid, zcopywebid) {
 						response = WTW.cleanInvalidCharacters(response);
 						testresponse = JSON.parse(response);
 						if (testresponse[0] != undefined) {
-							/* function for after iframe loads */
-							var onload = function(ipage) {
-								ipage.getElementById('wtw_tmoldgroup').value = zmoldgroup;
-								ipage.getElementById('wtw_twebid').value = zwebid;
-								ipage.getElementById('wtw_tcopywebid').value = zcopywebid;
-								ipage.getElementById('wtw_tparentwebid').value = zwebid;
-								ipage.getElementById('wtw_tparentwebtype').value = zmoldgroup;
-								ipage.getElementById('wtw_tchildwebid').value = '';
-								ipage.getElementById('wtw_tchildwebtype').value = '';
-								ipage.getElementById('wtw_tconnectinggridsbulk').value = btoa(response);
-								WTW.updateProgressBar(50,100);
-								ipage.getElementById('wtw_bimportconnectinggrids').click();
-							}
-							/* iframe src, onload function */
-							var iframe = WTW.createIFrame('/core/iframes/connectinggrids.php', onload);
+							WTW.updateProgressBar(50,100);
+							var zrequest = {
+								'moldgroup': zmoldgroup,
+								'webid': zwebid,
+								'connectinggridsbulk': btoa(response),
+								'function':'importconnectinggrids'
+							};
+							WTW.getJSON("/core/handlers/connectinggrids.php", 
+								function(zresponse) {
+									zresponse = JSON.parse(zresponse);
+									WTW.updateProgressBar(95,100);
+									/* note serror would contain errors */
+									WTW.completedConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
+								}, 
+								'POST', 
+								JSON.stringify(zrequest)
+							);
 						} else {
 							WTW.completedConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
 						}
 					}
 				);
 			} else if (zmoldgroup == "building") {
-				/* function for after iframe loads */
-				var onload = function(ipage) {
-					ipage.getElementById('wtw_tmoldgroup').value = zmoldgroup;
-					ipage.getElementById('wtw_twebid').value = zwebid;
-					ipage.getElementById('wtw_tcopywebid').value = zcopywebid;
-					WTW.updateProgressBar(50,100);
-					ipage.getElementById('wtw_bupdatechildconnectinggrids').click();
-				}
-				/* iframe src, onload function */
-				var iframe = WTW.createIFrame('/core/iframes/connectinggrids.php', onload);
+				WTW.updateProgressBar(50,100);
+				var zrequest = {
+					'moldgroup': zmoldgroup,
+					'webid': zwebid,
+					'function':'updatechildconnectinggrids'
+				};
+				WTW.getJSON("/core/handlers/connectinggrids.php", 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						WTW.updateProgressBar(95,100);
+						/* note serror would contain errors */
+						WTW.completedConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
+					}, 
+					'POST', 
+					JSON.stringify(zrequest)
+				);
 			} else {
 				WTW.completedConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
 			}
@@ -574,17 +602,24 @@ WTWJS.prototype.copyMolds = function(zmoldgroup, zwebid, zcopywebid) {
 					response = WTW.cleanInvalidCharacters(response);
 					testresponse = JSON.parse(response);
 					if (testresponse[0] != undefined) {
-						/* function for after iframe loads */
-						var onload = function(ipage) {
-							ipage.getElementById('wtw_tmoldgroup').value = zmoldgroup;
-							ipage.getElementById('wtw_twebid').value = zwebid;
-							ipage.getElementById('wtw_tcopywebid').value = zcopywebid;
-							ipage.getElementById('wtw_tmoldsbulk').value = btoa(response);
-							WTW.updateProgressBar(10,100);
-							ipage.getElementById('wtw_bimportmolds').click();
-						}
-						/* iframe src, onload function */
-						var iframe = WTW.createIFrame('/core/iframes/molds.php', onload);
+						WTW.updateProgressBar(10,100);
+						var zrequest = {
+							'moldgroup': zmoldgroup,
+							'webid': zwebid,
+							'copywebid': zcopywebid,
+							'moldsbulk': btoa(response),
+							'function':'importmolds'
+						};
+						WTW.getJSON("/core/handlers/molds.php", 
+							function(zresponse) {
+								zresponse = JSON.parse(zresponse);
+								WTW.updateProgressBar(95,100);
+								/* note serror would contain errors */
+								WTW.completedMoldsImport(zmoldgroup, zwebid, zcopywebid);
+							}, 
+							'POST', 
+							JSON.stringify(zrequest)
+						);
 					} else {
 						WTW.completedMoldsImport(zmoldgroup, zwebid, zcopywebid);
 					}
@@ -627,17 +662,24 @@ WTWJS.prototype.copyWebImages = function(zmoldgroup, zwebid, zcopywebid) {
 					response = WTW.cleanInvalidCharacters(response);
 					testresponse = JSON.parse(response);
 					if (testresponse[0] != undefined) {
-						/* function for after iframe loads */
-						var onload = function(ipage) {
-							ipage.getElementById('wtw_tmoldgroup').value = zmoldgroup;
-							ipage.getElementById('wtw_twebid').value = zwebid;
-							ipage.getElementById('wtw_tcopywebid').value = zcopywebid;
-							ipage.getElementById('wtw_twebimagesbulk').value = btoa(response);
-							WTW.updateProgressBar(50,100);
-							ipage.getElementById('wtw_bimportwebimages').click();
-						}
-						/* iframe src, onload function */
-						var iframe = WTW.createIFrame('/core/iframes/uploads.php', onload);
+						WTW.updateProgressBar(50,100);
+						var zrequest = {
+							'moldgroup': zmoldgroup,
+							'webid': zwebid,
+							'copywebid': zcopywebid,
+							'webimagesbulk': btoa(response),
+							'function':'importwebimages'
+						};
+						WTW.getJSON("/core/handlers/uploads.php", 
+							function(zresponse) {
+								zresponse = JSON.parse(zresponse);
+								WTW.updateProgressBar(95,100);
+								/* note serror would contain errors */
+								WTW.completedWebImagesImport(zmoldgroup, zwebid, zcopywebid);
+							}, 
+							'POST', 
+							JSON.stringify(zrequest)
+						);
 					} else {
 						WTW.completedWebImagesImport(zmoldgroup, zwebid, zcopywebid);
 					}
@@ -686,16 +728,24 @@ WTWJS.prototype.copyUploads = function(zmoldgroup, zwebid, zcopywebid) {
 					response = WTW.cleanInvalidCharacters(response);
 					testresponse = JSON.parse(response);
 					if (testresponse[0] != undefined) {
-						/* function for after iframe loads */
-						var onload = function(ipage) {
-							ipage.getElementById('wtw_tmoldgroup').value = zmoldgroup;
-							ipage.getElementById('wtw_twebid').value = zwebid;
-							ipage.getElementById('wtw_tcopywebid').value = zcopywebid;
-							ipage.getElementById('wtw_tuploadsbulk').value = btoa(response);
-							ipage.getElementById('wtw_bimportuploads').click();
-						}
-						/* iframe src, onload function */
-						var iframe = WTW.createIFrame('/core/iframes/uploads.php', onload);
+						WTW.updateProgressBar(50,100);
+						var zrequest = {
+							'moldgroup': zmoldgroup,
+							'webid': zwebid,
+							'copywebid': zcopywebid,
+							'uploadsbulk': btoa(response),
+							'function':'importuploads'
+						};
+						WTW.getJSON("/core/handlers/uploads.php", 
+							function(zresponse) {
+								zresponse = JSON.parse(zresponse);
+								WTW.updateProgressBar(95,100);
+								/* note serror would contain errors */
+								WTW.completedUploadsImport(zmoldgroup, zwebid, zcopywebid);
+							}, 
+							'POST', 
+							JSON.stringify(zrequest)
+						);
 					} else {
 						WTW.completedUploadsImport(zmoldgroup, zwebid, zcopywebid);
 					}
@@ -738,17 +788,24 @@ WTWJS.prototype.copyMoldPoints = function(zmoldgroup, zwebid, zcopywebid) {
 					response = WTW.cleanInvalidCharacters(response);
 					testresponse = JSON.parse(response);
 					if (testresponse[0] != undefined) {
-						/* function for after iframe loads */
-						var onload = function(ipage) {
-							ipage.getElementById('wtw_tmoldgroup').value = zmoldgroup;
-							ipage.getElementById('wtw_twebid').value = zwebid;
-							ipage.getElementById('wtw_tcopywebid').value = zcopywebid;
-							ipage.getElementById('wtw_tmoldsbulk').value = btoa(response);
-							WTW.updateProgressBar(50,100);
-							ipage.getElementById('wtw_bimportmoldpoints').click();
-						}
-						/* iframe src, onload function */
-						var iframe = WTW.createIFrame('/core/iframes/molds.php', onload);
+						WTW.updateProgressBar(50,100);
+						var zrequest = {
+							'moldgroup': zmoldgroup,
+							'webid': zwebid,
+							'copywebid': zcopywebid,
+							'moldsbulk': btoa(response),
+							'function':'importmoldpoints'
+						};
+						WTW.getJSON("/core/handlers/molds.php", 
+							function(zresponse) {
+								zresponse = JSON.parse(zresponse);
+								WTW.updateProgressBar(95,100);
+								/* note serror would contain errors */
+								WTW.completedMoldPointsImport(zmoldgroup, zwebid, zcopywebid);
+							}, 
+							'POST', 
+							JSON.stringify(zrequest)
+						);
 					} else {
 						WTW.completedMoldPointsImport(zmoldgroup, zwebid, zcopywebid);
 					}

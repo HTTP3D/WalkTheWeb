@@ -63,11 +63,8 @@ WTWJS.prototype.initEnvironment = function() {
 		scene.autoClear = false;
 		scene.autoClearDepthAndStencil = false;
 		scene.collisionsEnabled = true;
-		scene.fogMode = BABYLON.Scene.FOGMODE_LINEAR;
-		scene.fogDensity = 0.01;
-		scene.fogStart = 500.0;
-		scene.fogEnd = 2500.0;
-		scene.fogColor = new BABYLON.Color3(0.4, 0.5, 0.6);
+		scene.fogEnabled = true;
+		scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
 
 		WTW.mouseOver = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, WTW.mouseOverMold);
 		WTW.mouseOut = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, WTW.mouseOutMold);
@@ -86,55 +83,25 @@ WTWJS.prototype.initEnvironment = function() {
 		setupparent.position.y = 0;
 		setupparent.position.z = 0;
 		setupparent.rotation.y = WTW.getRadians(0);
+		WTW.loadPrimaryCamera(setupparent);
 
-		if (/Android|webOS|iPhone|iPad|Opera Mini|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            WTW.isMobile = true;
-			WTW.camera = new BABYLON.VirtualJoysticksCamera("maincamera",new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY, WTW.init.startPositionZ), scene);
-            WTW.camera.inertia = .70;
-            WTW.camera.speed = 1.8;
-		} else {
-            WTW.isMobile = false;
-			WTW.camera = new BABYLON.UniversalCamera("maincamera", new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY, WTW.init.startPositionZ), scene);
-			WTW.camera.inertia = .80;
-		}
-		WTW.resetActivityTimer();
-		WTW.camera.inputs.attached.mouse.detachControl();
-		WTW.camera.yOffset = 180;		
-		WTW.camera.position.x = 0;
-		WTW.camera.position.y = 20;
-		WTW.camera.position.z = 0;
-		WTW.camera.rotation.x = WTW.getRadians(0);
-		WTW.camera.rotation.y = WTW.getRadians(0);
-		WTW.rotationSpeed = 1800;
-		WTW.camera.angularSensibility = WTW.rotationSpeed;
-		WTW.camera.maxZ = 5000;
-		if (WTW.init.gravity > 0) {
-			WTW.camera.applyGravity = true;		
-		} else {
-			WTW.camera.applyGravity = false;		
-		}
-		WTW.camera.id = "maincamera";
-		scene.activeCameras.push(WTW.camera);
-		WTW.camera.viewport = new BABYLON.Viewport(0, 0, 1, 1);
-		scene.activeCameras[0].attachControl(canvas, true); // true allows canvas default event actions
-		WTW.camera.parent = setupparent; 
-		WTW.camera.position.x = 0;
-		WTW.camera.position.y = 10;
-		WTW.camera.position.z = 0;
-		WTW.camera.rotation.x = WTW.getRadians(10);
-		WTW.camera.rotation.y = 0;
-		scene.activeCameras[0] = WTW.camera;
-		scene.cameraToUseForPointers = scene.activeCameras[0];
-
-		WTW.sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(WTW.getRadians(20), WTW.getRadians(-200), WTW.getRadians(-100)), scene);
+		/* direct light immitating the sun */
+		WTW.sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -1, -1), scene);
 		WTW.sun.position = new BABYLON.Vector3(0, WTW.sunPositionY, 0);
 		WTW.sun.intensity = WTW.getSunIntensity(WTW.init.skyInclination, WTW.init.skyAzimuth);
 		WTW.sun.shadowMinZ = 1;
-		WTW.sun.shadowMaxZ = 40000;
+		WTW.sun.shadowMaxZ = 4000;
+		WTW.sun.diffuse = new BABYLON.Color3(.4, .4, .4);
+		WTW.sun.specular = new BABYLON.Color3(.2, .2, .2);
+		WTW.sun.groundColor = new BABYLON.Color3(.1, .1, .1);
 
-		WTW.sky = BABYLON.MeshBuilder.CreateSphere("sky", {segments: 40, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.BACKSIDE}, scene);
+		/* lesser light for back sides */
+		WTW.sunlight = new BABYLON.DirectionalLight("sunlight", new BABYLON.Vector3(1, -1, 1), scene);
+		WTW.sunlight.intensity = WTW.sun.intensity / 3;
+		
+		WTW.sky = BABYLON.MeshBuilder.CreateSphere("sky", {segments: 40, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.BACKSIDE}, scene);
 		WTW.sky.scaling.x = 5000;
-		WTW.sky.scaling.y = 5000;
+		WTW.sky.scaling.y = 4800;
 		WTW.sky.scaling.z = 5000;
 		WTW.sky.position.x = 0;
 		WTW.sky.position.y = -100;
@@ -160,6 +127,7 @@ WTWJS.prototype.initEnvironment = function() {
 		WTW.extraGround.material.diffuseTexture.vScale = 500;
 		WTW.extraGround.physicsImpostor = new BABYLON.PhysicsImpostor(WTW.extraGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.5 }, scene);
 		var mainparent = WTW.getMainParent();
+		WTW.loadCameraSettings();
 		WTW.toggleCompass();
 		WTW.startRender();
 		var condition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
@@ -431,13 +399,8 @@ WTWJS.prototype.loadCommunity = function(addcommunities) {
 			// optional: add animation
 			WTW.extraGround.position.y = groundpositiony;
 		}
-/*		scene.fogDensity = 0.0001;
-		scene.fogStart = 1000.0;
-		scene.fogEnd = 2500.0;
-		scene.fogColor = new BABYLON.Color3(0.4, 0.5, 0.6);
-*/
 		if (WTW.shadows == null) {
-			var shadowsetting = WTW.getCookie("shadowsetting");
+			var shadowsetting = WTW.getCookie("wtw_shadowsetting");
             if (shadowsetting == null || isNaN(shadowsetting))  {
                 if (WTW.gpuSetting == 'medium') {
 					WTW.shadowset = 1;
@@ -448,9 +411,6 @@ WTWJS.prototype.loadCommunity = function(addcommunities) {
 					WTW.shadowset = 3;
                 }
             }
-			if (WTW.adminView != 0) {
-				WTW.shadowset = 3;
-			}
             WTW.setShadowSettings();
 		}
 		WTW.getConnectingGrids();
@@ -477,7 +437,19 @@ WTWJS.prototype.getConnectingGrids = function() {
 			parentwebid = thingid;
 		}
 		if (parentwebid != '') {
-			WTW.getJSON("/connect/connectinggrids.php?parentwebid=" + parentwebid + "&startpositionx=" + WTW.camera.position.x + "&startpositiony=" + WTW.camera.position.y + "&startpositionz=" + WTW.camera.position.z + "&userid=" + dGet('wtw_tuserid').value, 
+			var positionx = 0;
+			var positiony = 0;
+			var positionz = 0;
+			if (WTW.myAvatar != null) {
+				positionx = WTW.myAvatar.position.x;
+				positiony = WTW.myAvatar.position.y;
+				positionz = WTW.myAvatar.position.z;
+			} else {
+				positionx = WTW.init.startPositionX;
+				positiony = WTW.init.startPositionY;
+				positionz = WTW.init.startPositionZ;
+			}
+			WTW.getJSON("/connect/connectinggrids.php?parentwebid=" + parentwebid + "&startpositionx=" + positionx + "&startpositiony=" + positiony + "&startpositionz=" + positionz + "&userid=" + dGet('wtw_tuserid').value, 
 				function(response) {
 					WTW.loadConnectingGrids(JSON.parse(response));
 				}
@@ -1035,74 +1007,72 @@ WTWJS.prototype.startRender = function() {
 					if (WTW.isInitCycle == 0 && WTW.myAvatar != null && WTW.setupMode == 0) { // WTW.adminView == 0 && 
 						WTW.pluginsRenderloopAfterInit();
 					}
-					if (WTW.MyAvatar != null) {
-						WTW.sky.position.x = WTW.MyAvatar.position.x;
-						WTW.sky.position.y = WTW.MyAvatar.position.y - 100;
-						WTW.sky.position.z = WTW.MyAvatar.position.z;				
-						WTW.extraGround.position.x = WTW.MyAvatar.position.x;
-						WTW.extraGround.position.z = WTW.MyAvatar.position.z;
-						WTW.extraGround.material.diffuseTexture.uOffset = (WTW.MyAvatar.position.x)/10;
-						WTW.extraGround.material.diffuseTexture.vOffset = (WTW.MyAvatar.position.z)/10;
+					if (WTW.myAvatar != null) {
+						WTW.sky.position.x = WTW.myAvatar.position.x;
+						WTW.sky.position.y = WTW.myAvatar.position.y - 100;
+						WTW.sky.position.z = WTW.myAvatar.position.z;			
+						WTW.extraGround.position.x = WTW.myAvatar.position.x;
+						WTW.extraGround.position.z = WTW.myAvatar.position.z;
+						WTW.extraGround.material.diffuseTexture.uOffset = (WTW.myAvatar.position.x)/10;
+						WTW.extraGround.material.diffuseTexture.vOffset = (WTW.myAvatar.position.z)/10;
 						if (WTW.water != null) {
-							WTW.water.position.x = WTW.MyAvatar.position.x;
-							WTW.water.position.z = WTW.MyAvatar.position.z;
+							WTW.water.position.x = WTW.myAvatar.position.x;
+							WTW.water.position.z = WTW.myAvatar.position.z;
 						}
-						if (WTW.water != null && WTW.MyAvatar.position.y < 0) {
+						if (WTW.water != null && WTW.myAvatar.position.y < -16) {
 							WTW.sky.scaling.x = 2500;
 							WTW.sky.scaling.y = 2500;
 							WTW.sky.scaling.z = 2500;
-							scene.fogDensity = 0.0001;
-							scene.fogStart = 350.0;
-							scene.fogEnd = 1000.0;
+							scene.fogDensity = 0.01;
 							scene.fogColor = new BABYLON.Color3(0.0, 0.3, 0.4);
 						} else {
-							var skysize = 1000 + (WTW.MyAvatar.position.y * 2);
+							var skysize = 1000 + (WTW.myAvatar.position.y * 2);
 							if (skysize < 3500) {
 								skysize = 3500;
 							}
-							scene.fogDensity = 0.0001;
-							scene.fogStart = 3000.0;
-							scene.fogEnd = 5000.0;
+							scene.fogDensity = 0.0005;
 							scene.fogColor = new BABYLON.Color3(0.4, 0.5, 0.6);
+							
+							WTW.setMeshTransparentFog(WTW.sky,30);
+							WTW.setMeshTransparentFog(WTW.extraGround,30);
+							
 							WTW.sky.scaling.x = skysize;
-							WTW.sky.scaling.y = skysize;
+							WTW.sky.scaling.y = skysize-200;
 							WTW.sky.scaling.z = skysize;
 						}
 					} else { 
-						WTW.sky.position.x = WTW.camera.position.x;
-						WTW.sky.position.y = WTW.camera.position.y - 100;
-						WTW.sky.position.z = WTW.camera.position.z;				
-						WTW.extraGround.position.x = WTW.camera.position.x;
-						WTW.extraGround.position.z = WTW.camera.position.z;
-						WTW.extraGround.material.diffuseTexture.uOffset = (WTW.camera.position.x)/10;
-						WTW.extraGround.material.diffuseTexture.vOffset = (WTW.camera.position.z)/10;
+						WTW.sky.position.x = WTW.init.startPositionX;
+						WTW.sky.position.y = WTW.init.startPositionY - 100;
+						WTW.sky.position.z = WTW.init.startPositionZ;				
+						WTW.extraGround.position.x =WTW.init.startPositionX;
+						WTW.extraGround.position.z = WTW.init.startPositionZ;
+						WTW.extraGround.material.diffuseTexture.uOffset = (WTW.init.startPositionX)/10;
+						WTW.extraGround.material.diffuseTexture.vOffset = (WTW.init.startPositionZ)/10;
 						if (WTW.water != null) {
-							WTW.water.position.x = WTW.camera.position.x;
-							WTW.water.position.z = WTW.camera.position.z;
+							WTW.water.position.x = WTW.init.startPositionX;
+							WTW.water.position.z = WTW.init.startPositionZ;
 						}
-						if (WTW.water != null && WTW.camera.position.y < 0) {
+						if (WTW.water != null && WTW.init.startPositionY < -16) {
 							WTW.sky.scaling.x = 2500;
 							WTW.sky.scaling.y = 2500;
 							WTW.sky.scaling.z = 2500;
-							scene.fogDensity = 0.0001;
-							scene.fogStart = 350.0;
-							scene.fogEnd = 1000.0;
+							scene.fogDensity = 0.001;
 							scene.fogColor = new BABYLON.Color3(0.0, 0.3, 0.4);
 						} else {
-							var skysize = 1000 + (WTW.camera.position.y * 2);
+							var skysize = 3500;
+							if (WTW.myAvatar != null) {
+								skysize = 1000 + (WTW.myAvatar.position.y * 2);
+							}
 							if (skysize < 3500) {
 								skysize = 3500;
 							}
-							scene.fogDensity = 0.0001;
-							scene.fogStart = 3000.0;
-							scene.fogEnd = 5000.0;
+							scene.fogDensity = 0.0005;
 							scene.fogColor = new BABYLON.Color3(0.4, 0.5, 0.6);
 							WTW.sky.scaling.x = skysize;
 							WTW.sky.scaling.y = skysize;
 							WTW.sky.scaling.z = skysize;
 						}
 					} 
-					
 					WTW.loadUserCanvas();
 					if (WTW.checkShownMolds == 0) {
 						WTW.setShownMolds();
@@ -1120,7 +1090,13 @@ WTWJS.prototype.startRender = function() {
 WTWJS.prototype.checkActionZones = function() {
 	try {
 		if (WTW.setupMode == 0) {
-			if (WTW.holdPosition != WTW.camera.position.x + "|" + WTW.camera.position.y + "|" + WTW.camera.position.z || WTW.holdPosition == WTW.init.startPositionX + "|" + WTW.init.startPositionY + "|" + WTW.init.startPositionZ || WTW.isInitCycle == 1 || WTW.rideAlong != null) {
+			var checkactionzones = false;
+			if (WTW.myAvatar != null) {
+				if (WTW.holdPosition != WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + "|" + WTW.myAvatar.position.z) {
+					checkactionzones = true;
+				}
+			}
+			if (checkactionzones || WTW.isInitCycle == 1 || WTW.rideAlong != null) {
 				for (var i = 0; i < WTW.actionZones.length; i++) {
 					if (WTW.actionZones[i] != null) {
 						var moldname = WTW.actionZones[i].moldname;
@@ -1133,6 +1109,7 @@ WTWJS.prototype.checkActionZones = function() {
 								meinzone = WTW.myAvatar.intersectsMesh(actionzone, false);
 							}
 							var othersinzone = false;
+							/* check if others are in the zone */
 							othersinzone = WTW.pluginsCheckActionZoneTrigger(actionzone);
 							if (meinzone || othersinzone) {
 								if (meinzone && moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 2) {
@@ -1143,6 +1120,8 @@ WTWJS.prototype.checkActionZones = function() {
 									}
 									WTW.checkAnalytics(i);
 									WTW.actionZones[i].status = 2;
+								} else if (moldname.indexOf("loadanimations") > -1) {
+									WTW.checkLoadAnimations(i);
 								} else if (moldname.indexOf("clickactivated") > -1) {
 								} else if (moldname.indexOf("door") > -1 && WTW.actionZones[i].status != 4 && WTW.actionZones[i].status != 3) {
 									WTW.actionZones[i].status = 3;
@@ -1197,13 +1176,19 @@ WTWJS.prototype.checkActionZones = function() {
 						}
 					}
 				}
-				WTW.holdPosition = WTW.camera.position.x + "|" + WTW.camera.position.y + "|" + WTW.camera.position.z;
+				if (WTW.myAvatar != null) {
+					WTW.holdPosition = WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + "|" + WTW.myAvatar.position.z;
+				} else {
+					WTW.holdPosition = "||";
+				}
 			}
 		}
-		if (WTW.activityTimer != null && WTW.holdPosition != WTW.camera.position.x + "|" + WTW.camera.position.y + "|" + WTW.camera.position.z) {
-			WTW.holdPosition = WTW.camera.position.x + "|" + WTW.camera.position.y + "|" + WTW.camera.position.z;
-			WTW.resetActivityTimer();
-		} 
+		if (WTW.activityTimer != null && WTW.myAvatar != null) {
+			if (WTW.holdPosition != WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + "|" + WTW.myAvatar.position.z) {
+				WTW.holdPosition = WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + "|" + WTW.myAvatar.position.z;
+				WTW.resetActivityTimer();
+			}
+		}
 		if (WTW.showFPS == 1) {
 			var gridlines = 0;
 			if (WTW.lineY != null) {
@@ -1283,10 +1268,13 @@ WTWJS.prototype.setClosestBuilding = function() {
 					for (var i=0; i < WTW.connectingGrids.length; i++) {
 						if (WTW.connectingGrids[i] != null) {
 							if (WTW.connectingGrids[i].parentwebtype == 'community' && WTW.connectingGrids[i].childwebtype == 'building') {
+								var checkdist = 1000000;
 								var x = WTW.connectingGrids[i].position.x;
 								var y = WTW.connectingGrids[i].position.y;
 								var z = WTW.connectingGrids[i].position.z;
-								var checkdist = WTW.distance(WTW.camera.position.x,WTW.camera.position.y,WTW.camera.position.z,x,y,z);
+								if (WTW.myAvatar != null) {
+									checkdist = WTW.distance(WTW.myAvatar.position.x,WTW.myAvatar.position.y,WTW.myAvatar.position.z,x,y,z);
+								}
 								if (lowdist == -1 || checkdist < lowdist) {
 									WTW.closestAngle = WTW.getMyAngleToPoint(x,z);
 									if (WTW.connectingGrids[i].buildinginfo.buildingname != "" && WTW.connectingGrids[i].buildinginfo.buildingname != undefined && WTW.connectingGrids[i].buildinginfo.buildingname != null) {
@@ -1627,7 +1615,6 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 			if (avatar.WTW != null) {
 				if (avatar.WTW.animations != null) {
 					if (avatar.WTW.animations.running != null) {
-						var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
 						var weight = 0;
 						if (WTW.isInArray(moveevents, 'onpause')) {
 							weight = 1;
@@ -1675,93 +1662,55 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 								if (avatar.WTW.animations.running[key].weight > 0) {
 									switch (key) {
 										case 'onrotateup':
-											WTW.cameraYOffset -= 200/(WTW.sizeY - WTW.mouseStartY + WTW.mouseY); //.2;
+											WTW.cameraYOffset -= 200/(WTW.sizeY - WTW.mouseStartY + WTW.mouseY);
 											if (WTW.cameraYOffset < -10) {
 												WTW.cameraYOffset = -10; // -4
 											}
 											weight -= avatar.WTW.animations.running[key].weight;
 											break;
 										case 'onrotatedown':
-											WTW.cameraYOffset += 200/(WTW.sizeY - WTW.mouseY + WTW.mouseStartY); //((WTW.mouseY - WTW.mouseStartY)/200); //.2;
+											WTW.cameraYOffset += 200/(WTW.sizeY - WTW.mouseY + WTW.mouseStartY);
 											if (WTW.cameraYOffset > 20) {
 												WTW.cameraYOffset = 20;
 											}
 											weight -= avatar.WTW.animations.running[key].weight;
 											break;
 										case 'onwait':
-											var direction = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
-											var ray = new BABYLON.Ray(avatar.position, direction, 50);
-											var hit = scene.pickWithRay(ray);
-											if (hit.pickedMesh){
-												if (hit.distance > .5) {
-													var move = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
-													avatar.moveWithCollisions(move);
-												}
-											}
+											var zstride = WTW.init.gravity * 15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+											zmove = new BABYLON.Vector3(0, -zstride, 0);
+											avatar.moveWithCollisions(zmove);
 											break;
 										case 'onwalk':
 											if (WTW.moveOverride == 0) {
 												WTW.cancelSit(avatar, moveevents);
-												var stride =  (-15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //WTW.walkSpeed
+												var zstride = 15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
 												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-												var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-												var ray = new BABYLON.Ray(avatar.position, direction, 50);
-												var hit = scene.pickWithRay(ray);
-												if (hit.pickedMesh){
-													if (hit.distance < 2) {
-														move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-													}
-												}
+												var move = WTW.getMoveVector(avatar.name, 0, zstride);
 												avatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onrun':
 											if (WTW.moveOverride == 0) {
 												WTW.cancelSit(avatar, moveevents);
-												var stride =  (-25 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //  / WTW.walkSpeed
+												var zstride = 25 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
 												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-												var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-												var ray = new BABYLON.Ray(avatar.position, direction, 50);
-												var hit = scene.pickWithRay(ray);
-												if (hit.pickedMesh){
-													if (hit.distance < 2) {
-														move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-													}
-												}	
+												var move = WTW.getMoveVector(avatar.name, 0, zstride);
 												avatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onwalkbackwards':
 											if (WTW.moveOverride == 0) {
-												var stride =  (10 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //  / WTW.walkSpeed
+												var zstride = 10 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
 												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-												var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-												var ray = new BABYLON.Ray(avatar.position, direction, 50);
-												var hit = scene.pickWithRay(ray);
-												if (hit.pickedMesh){
-													if (hit.distance < 2) {
-														move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-													}
-												}	
+												var move = WTW.getMoveVector(avatar.name, 180, zstride);
 												avatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onrunbackwards':
 											if (WTW.moveOverride == 0) {
-												var stride =  (25 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //  / WTW.walkSpeed
+												var zstride = 25 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
 												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-												var direction = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-												var ray = new BABYLON.Ray(avatar.position, direction, 50);
-												var hit = scene.pickWithRay(ray);
-												if (hit.pickedMesh){
-													if (hit.distance < 2) {
-														move = new BABYLON.Vector3(parseFloat(Math.sin(avatar.rotation.y)) * stride, 0, parseFloat(Math.cos(avatar.rotation.y)) * stride);
-													}
-												}	
+												var move = WTW.getMoveVector(avatar.name, 180, zstride);
 												avatar.moveWithCollisions(move);
 											}
 											break;
@@ -1791,70 +1740,38 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											break;
 										case 'onstrafeleft':
 											if (WTW.moveOverride == 0) {
-												var stride =  (6 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //  / WTW.walkSpeed
+												var zstride = 4 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
 												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-												var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-												var ray = new BABYLON.Ray(avatar.position, direction, 50);
-												var hit = scene.pickWithRay(ray);
-												if (hit.pickedMesh){
-													if (hit.distance < 2) {
-														move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 1, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-													}
-												}	
+												var move = WTW.getMoveVector(avatar.name, -90, zstride);
 												avatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onrunstrafeleft':
 											if (WTW.moveOverride == 0) {
-												var stride =  (15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; //  / WTW.walkSpeed
+												var zstride = 8 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
 												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-												var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-												var ray = new BABYLON.Ray(avatar.position, direction, 50);
-												var hit = scene.pickWithRay(ray);
-												if (hit.pickedMesh){
-													if (hit.distance < 2) {
-														move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 1, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-													}
-												}	
+												var move = WTW.getMoveVector(avatar.name, -90, zstride);
 												avatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onstraferight':
 											if (WTW.moveOverride == 0) {
-												var stride =  (-6 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; // / WTW.walkSpeed
+												var zstride = 4 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
 												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-												var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-												var ray = new BABYLON.Ray(avatar.position, direction, 50);
-												var hit = scene.pickWithRay(ray);
-												if (hit.pickedMesh){
-													if (hit.distance < 2) {
-														move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-													}
-												}	
+												var move = WTW.getMoveVector(avatar.name, 90, zstride);
 												avatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onrunstraferight':
 											if (WTW.moveOverride == 0) {
-												var stride =  (-15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed) / WTW.fps; // / WTW.walkSpeed
+												var zstride = 8 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
 												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, -WTW.init.gravity, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-												var direction = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-												var ray = new BABYLON.Ray(avatar.position, direction, 50);
-												var hit = scene.pickWithRay(ray);
-												if (hit.pickedMesh){
-													if (hit.distance < 2) {
-														move = new BABYLON.Vector3(parseFloat(Math.cos(avatar.rotation.y)) * stride, 0, parseFloat(Math.sin(avatar.rotation.y)) * -stride);
-													}
-												}	
+												var move = WTW.getMoveVector(avatar.name, 90, zstride);
 												avatar.moveWithCollisions(move);
 											}
 											break;
 									}
-									WTW.setMovingCameras(avatar, avatarcamera);
+									WTW.setMovingCameras(avatar);
 								}
 							}
 						}
@@ -1872,4 +1789,3 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 		WTW.log("core-scripts-prime-wtw_core.js-setAvatarMovement=" + ex.message);
 	}
 }
-

@@ -502,9 +502,9 @@ WTWJS.prototype.mouseScroll = function(rolled) {
 			}
 			if (WTW.cameraFocus == 0) {
 				rolled = rolled / 120;
-				var DirX = Math.sin(WTW.camera.rotation.y)*Math.cos(WTW.camera.rotation.x);
+				var DirX = Math.sin(WTW.camera.rotation.y);
 				var DirY = -Math.sin(WTW.camera.rotation.x);
-				var DirZ = Math.cos(WTW.camera.rotation.y)*Math.cos(WTW.camera.rotation.x);
+				var DirZ = Math.cos(WTW.camera.rotation.y);
 				WTW.camera.cameraDirection = WTW.camera.cameraDirection.add(new BABYLON.Vector3(rolled*DirX, rolled*DirY, rolled*DirZ));
 			} else {
 				if (rolled > 0) {

@@ -58,11 +58,7 @@ WTWJS.prototype.addMoldSphere = function(moldname, lenx, leny, lenz, subdivision
 	try {
 		mold = BABYLON.MeshBuilder.CreateSphere(moldname, {segments: subdivisions, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx, leny, lenz);
-/*		window.setTimeout(function() {
-			var mold = scene.getMeshByID(moldname);
-			mold.physicsImpostor = new BABYLON.PhysicsImpostor(mold, BABYLON.PhysicsImpostor.SphereImpostor, { ignoreParent: true, mass: .5, friction: 1, restitution: 0.9 }, scene);
-		},1000); 
-*/	} catch (ex) {
+	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldSphere=" + ex.message);
 	}
 	return mold;
@@ -1315,11 +1311,11 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 									results.meshes[i].position.x -= avex;
 									results.meshes[i].position.y -= avey;
 									results.meshes[i].position.z -= avez;
-if (results.meshes[i].name.indexOf('ground') > -1) {
-									results.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(results.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.3 }, scene);
-} else if (results.meshes[i].name.indexOf('sides') > -1) {
-									results.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(results.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.9 }, scene);
-}
+									if (results.meshes[i].name.indexOf('ground') > -1) {
+										results.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(results.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.3 }, scene);
+									} else if (results.meshes[i].name.indexOf('sides') > -1) {
+										results.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(results.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.9 }, scene);
+									}
 									if (meshname.indexOf("WireFrame") > -1) {
 										results.meshes[i].material.wireframe = true;
 									}
@@ -1332,6 +1328,10 @@ if (results.meshes[i].name.indexOf('ground') > -1) {
 											results.meshes[i].parent = mold;
 										}
 									}
+									if (WTW.shadows != null) {
+										WTW.shadows.getShadowMap().renderList.push(results.meshes[i]);
+									}
+									results.meshes[i].receiveShadows = true;
 									if (objectanimations != null) {
 										WTW.addMoldAnimation(moldname, meshname, results.meshes[i], objectanimations);
 									}

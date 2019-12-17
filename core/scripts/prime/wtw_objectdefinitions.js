@@ -237,6 +237,98 @@ WTWJS.prototype.newConnectingGrid = function() {
 	return connectinggrid;
 }
 
+WTWJS.prototype.newActionZone = function() {
+	var actionzone = '';
+	try {
+		actionzone = {
+			'communityinfo':
+			{
+				'communityid':'',
+				'communityind':'-1',
+				'analyticsid':''
+			},
+			'buildinginfo':
+			{
+				'buildingid':'',
+				'buildingind':'-1',
+				'analyticsid':''
+			},
+			'thinginfo':
+			{
+				'thingid':'',
+				'thingind':'-1',
+				'analyticsid':''
+			},
+			'position':
+			{
+				'x':'0.00',
+				'y':'0.00',
+				'z':'0.00'
+			},
+			'scaling':
+			{
+				'x':'1.00',
+				'y':'1.00',
+				'z':'1.00'
+			},
+			'rotation':
+			{
+				'x':'0.00',
+				'y':'0.00',
+				'z':'0.00'
+			},
+			'axis': {
+				'position':
+				{
+					'x':'0.00',
+					'y':'0.00',
+					'z':'0.00'
+				},
+				'scaling':
+				{
+					'x':'1.00',
+					'y':'1.00',
+					'z':'1.00'
+				},
+				'rotation':
+				{
+					'x':'0.00',
+					'y':'0.00',
+					'z':'0.00'
+				},
+				'rotateaxis':'y',
+				'rotatedegrees':'90',
+				'rotatedirection':'1'
+			},
+			'actionzoneid':'',
+			'actionzoneind':'-1',
+			'actionzonename':'',
+			'actionzonetype':'',
+			'actionzoneshape':'box',
+			'attachmoldid':'',
+			'parentactionzoneid':'',
+			'movementtype':'',
+			'rotatespeed':'1.00',
+			'movementdistance':'',
+			'loadactionzoneid':'',
+			'inloadactionzone':'0',
+			'altloadactionzoneid':'', 
+			'altloadactionzoneind':'', 
+			'connectinggridid':'',
+			'connectinggridind':'',
+			'avataranimations':null,
+			'jsfunction':'',
+			'jsparameters':'',
+			'shown':'0',
+			'status':'0',
+			'parentname':''
+		};
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newActionZone=" + ex.message);
+	}
+	return actionzone;
+}
+
 WTWJS.prototype.newMold = function() {
 	var molddef = '';
 	var path1 = [];
@@ -1104,91 +1196,6 @@ WTWJS.prototype.newWebImage = function() {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newWebImage=" + ex.message);
 	}
 	return webimage;
-}
-
-WTWJS.prototype.newActionZone = function() {
-	var actionzone = '';
-	try {
-		actionzone = {
-			'communityinfo':
-			{
-				'communityid':'',
-				'communityind':'-1',
-				'analyticsid':''
-			},
-			'buildinginfo':
-			{
-				'buildingid':'',
-				'buildingind':'-1',
-				'analyticsid':''
-			},
-			'thinginfo':
-			{
-				'thingid':'',
-				'thingind':'-1',
-				'analyticsid':''
-			},
-			'position':
-			{
-				'x':'0.00',
-				'y':'0.00',
-				'z':'0.00'
-			},
-			'scaling':
-			{
-				'x':'1.00',
-				'y':'1.00',
-				'z':'1.00'
-			},
-			'rotation':
-			{
-				'x':'0.00',
-				'y':'0.00',
-				'z':'0.00'
-			},
-			'axis': {
-				'position':
-				{
-					'x':'0.00',
-					'y':'0.00',
-					'z':'0.00'
-				},
-				'rotation':
-				{
-					'x':'0.00',
-					'y':'0.00',
-					'z':'0.00'
-				},
-				'rotateaxis':'y',
-				'rotatedegrees':'90',
-				'rotatedirection':'1'
-			},
-			'actionzoneid':'',
-			'actionzoneind':'-1',
-			'actionzonename':'',
-			'actionzonetype':'',
-			'actionzoneshape':'box',
-			'attachmoldid':'',
-			'parentactionzoneid':'',
-			'movementtype':'',
-			'rotatespeed':'1.00',
-			'movementdistance':'',
-			'loadactionzoneid':'',
-			'inloadactionzone':'0',
-			'altloadactionzoneid':'', 
-			'altloadactionzoneind':'', 
-			'connectinggridid':'',
-			'connectinggridind':'',
-			'jsfunction':'',
-			'jsparameters':'',
-			'shown':'0',
-			'status':'0',
-			'parentname':''
-		};
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newActionZone=" + ex.message);
-	}
-	return actionzone;
 }
 
 WTWJS.prototype.newHTMLSegment = function() {
