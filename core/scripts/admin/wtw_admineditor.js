@@ -11594,7 +11594,7 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 								}
 								zupdateslist += "<div id=\"wtw_loadingupdating\" class=\"wtw-loadingnotice\">Updating...</div>";
 								if (zmyplugins[i].latestversion != wtw_version) {
-									zupdateslist += "<div class=\"wtw-greenmenubutton\" onclick=\"WTW.updateWalkTheWeb('" + zmyplugins[i].pluginname + "','" + zmyplugins[i].version + "','" + datestring + "','" + zmyplugins[i].updateurl + "');\">Update Now!</div>";
+									zupdateslist += "<div class=\"wtw-greenmenubutton\" onclick=\"WTW.updateWalkTheWeb('" + zmyplugins[i].pluginname + "','" + zmyplugins[i].latestversion + "','" + datestring + "','" + zmyplugins[i].updateurl + "');\">Update Now!</div>";
 									WTW.getVersionDetails(zmyplugins[i].updateid);
 								}
 								zupdateslist += "</div>";
