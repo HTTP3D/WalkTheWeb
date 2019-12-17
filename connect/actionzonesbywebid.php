@@ -400,6 +400,55 @@ try {
 	$zactionzones = array();
 	/* format json return dataset */
 	foreach ($zresults as $zrow) {
+		$zactionzoneid = $zrow["actionzoneid"];
+		$zactionzonetype = $zrow["actionzonetype"];
+		$zavataranimations = array();
+		if ($zactionzonetype == "loadanimations") {
+			$j = 0;
+			$zresults2 = $wtwconnect->query("
+				select az.*,
+					aa.requireslogin,
+					aa.loadpriority,
+					aa.animationname,
+					aa.animationfriendlyname,
+					aa.animationicon,
+					aa.objectfolder,
+					aa.objectfile,
+					aa.startframe,
+					aa.endframe,
+					aa.animationloop,
+					aa.speedratio,
+					aa.soundid,
+					aa.soundpath,
+					aa.soundmaxdistance
+				from ".wtw_tableprefix."actionzoneanimations az
+					inner join ".wtw_tableprefix."avataranimations aa
+						on az.avataranimationid=aa.avataranimationid
+				where az.actionzoneid='".$zactionzoneid."'
+					and az.deleted=0;");
+			foreach ($zresults2 as $zrow2) {
+				$zavataranimations[$j] = array(
+					'actionzoneanimationid'=> $zrow2["actionzoneanimationid"],
+					'avataranimationid'=> $zrow2["avataranimationid"],
+					'requireslogin'=> $zrow2["requireslogin"],
+					'loadpriority'=> $zrow2["loadpriority"],
+					'animationname'=> $zrow2["animationname"],
+					'animationfriendlyname'=> $zrow2["animationfriendlyname"],
+					'animationicon'=> $zrow2["animationicon"],
+					'objectfolder'=> $zrow2["objectfolder"],
+					'objectfile'=> $zrow2["objectfile"],
+					'startframe'=> $zrow2["startframe"],
+					'endframe'=> $zrow2["endframe"],
+					'animationloop'=> $zrow2["animationloop"],
+					'speedratio'=> $zrow2["speedratio"],
+					'soundid'=> $zrow2["soundid"],
+					'soundpath'=> $zrow2["soundpath"],
+					'soundmaxdistance'=> $zrow2["soundmaxdistance"]
+				);
+				$j += 1;
+			}
+		}
+		
 		$zcommunityinfo = array(
 			'communityid'=> $zrow["communityid"],
 			'communityind'=> '',
@@ -467,6 +516,7 @@ try {
 			'altconnectinggridind'=> '-1',
 			'connectinggridid'=> $zconnectinggridid,
 			'connectinggridind'=> $zconnectinggridind,
+			'avataranimations'=> $zavataranimations,
 			'jsfunction'=> $zrow["jsfunction"], 
 			'jsparameters'=> $zrow["jsparameters"],
 			'shown'=>'0',
