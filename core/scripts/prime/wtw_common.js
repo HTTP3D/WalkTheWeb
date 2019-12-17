@@ -2149,7 +2149,7 @@ WTWJS.prototype.setShadowSettings = function() {
 
 WTWJS.prototype.setMeshTransparentFog = function(mesh, maxz) {
     try {
-		// vertex colors
+		/* vertex colors */
 		var colors = [];
 		var color = [1,1,1,1];
 		var vtx = mesh.getVerticesData( BABYLON.VertexBuffer.PositionKind);

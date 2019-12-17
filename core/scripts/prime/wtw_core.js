@@ -1034,7 +1034,6 @@ WTWJS.prototype.startRender = function() {
 							scene.fogColor = new BABYLON.Color3(0.4, 0.5, 0.6);
 							
 							WTW.setMeshTransparentFog(WTW.sky,30);
-							WTW.setMeshTransparentFog(WTW.extraGround,30);
 							
 							WTW.sky.scaling.x = skysize;
 							WTW.sky.scaling.y = skysize-200;
