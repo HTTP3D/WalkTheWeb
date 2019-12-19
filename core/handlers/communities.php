@@ -10,7 +10,7 @@ try {
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zcommunityid = $wtwhandlers->getPost('communityid','');
 	$zpastcommunityid = $wtwhandlers->getPost('pastcommunityid','');
-	$zcommunityname = $wtwhandlers->getPost('communityname','');
+	$zcommunityname = base64_decode($wtwhandlers->getPost('communityname',''));
 	$zdescription = $wtwhandlers->getPost('description','');
 	$ztags = $wtwhandlers->getPost('tags','');
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
@@ -41,7 +41,7 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savecommunity":
-			$zcommunityid = $wtwcommunities->saveCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag, 0);
+			$zcommunityid = $wtwcommunities->saveCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag);
 			$zresponse = array(
 				'communityid'=> $zcommunityid
 			);
@@ -67,7 +67,7 @@ try {
 		case "importcommunity":
 			$zcommunityid = $wtwcommunities->importCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag);
 			$zresponse = array(
-				'serror'=> $zcommunityid
+				'communityid'=> $zcommunityid
 			);
 			break;
 	}
