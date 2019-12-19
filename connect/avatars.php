@@ -98,7 +98,8 @@ try {
 				c.emissivecolorg,
 				c.emissivecolorb
 			from ".wtw_tableprefix."useravatars a 
-				left join ".wtw_tableprefix."useravatarcolors c
+				left join (select * from ".wtw_tableprefix."useravatarcolors 
+						where deleted=0) c
 					on a.useravatarid = c.useravatarid
 			where a.useravatarid='".$zuseravatarid."'
 				and (c.deleted is null or c.deleted=0)
