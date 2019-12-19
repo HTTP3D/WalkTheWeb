@@ -1339,11 +1339,12 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 					}
 				}
 				var zrequest = {
-					'communityname':WTW.encode(dGet('wtw_tcommunityname').value),
-					'analyticsid':dGet('wtw_tcommunityanalyticsid').value,
-					'groundpositiony':dGet('wtw_tgroundpositiony').value,
-					'waterpositiony':dGet('wtw_twaterpositiony').value,
-					'alttag':WTW.encode(dGet('wtw_tcommunityalttag').value),
+					'communityid': communityid,
+					'communityname': btoa(dGet('wtw_tcommunityname').value),
+					'analyticsid': dGet('wtw_tcommunityanalyticsid').value,
+					'groundpositiony': dGet('wtw_tgroundpositiony').value,
+					'waterpositiony': dGet('wtw_twaterpositiony').value,
+					'alttag': WTW.encode(dGet('wtw_tcommunityalttag').value),
 					'function':'savecommunity'
 				};
 				WTW.postJSON("/core/handlers/communities.php", zrequest, 
@@ -1872,7 +1873,7 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 		if (molds[moldind] != null) {
 			testmoldid = molds[moldind].moldid;
 		}
-		if (dGet("wtw_tmoldid").value != "" && dGet("wtw_tmoldid").value != testmoldid && saveprevious != false) {
+		if (dGet('wtw_tmoldid').value != "" && dGet('wtw_tmoldid').value != testmoldid && saveprevious != false) {
 			WTW.submitMoldForm(1);
 		}
 		WTW.getMoldList();
@@ -5718,20 +5719,23 @@ WTWJS.prototype.startUploadImage = function(zbuttontext) {
 
 WTWJS.prototype.uploadFile = function() {
 	try {
-		var form1 = document.createElement('form');
-		var Httpreq = new XMLHttpRequest();
-		var zformdata = new FormData(form1);
-		zformdata.append('wtw_uploadfile', dGet('wtw_fileupload').files[0], dGet('wtw_fileupload').files[0].name);
-		zformdata.append('action', 'POST');
-		zformdata.append('function', 'uploadfile');
-		Httpreq.open('POST', '/core/handlers/uploadedfiles.php');
-		Httpreq.onreadystatechange = function () {
-			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
-				var zresponse = JSON.parse(Httpreq.responseText);
-				WTW.loadUploadedObjectsDiv(true);
-			}
-		};
-		Httpreq.send(zformdata);  
+		if (dGet('wtw_fileupload').value != null) {
+			var form1 = document.createElement('form');
+			var Httpreq = new XMLHttpRequest();
+			var zformdata = new FormData(form1);
+			zformdata.append('wtw_uploadfile', dGet('wtw_fileupload').files[0], dGet('wtw_fileupload').files[0].name);
+			zformdata.append('action', 'POST');
+			zformdata.append('function', 'uploadfile');
+			Httpreq.open('POST', '/core/handlers/uploadedfiles.php');
+			Httpreq.onreadystatechange = function () {
+				if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+					var zresponse = JSON.parse(Httpreq.responseText);
+					dGet('wtw_fileupload').value = null;
+					WTW.loadUploadedObjectsDiv(true);
+				}
+			};
+			Httpreq.send(zformdata);  
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-uploadFile=" + ex.message);
 	}
@@ -5760,27 +5764,42 @@ WTWJS.prototype.deleteObjectFile = function() {
 	}
 }
 
+WTWJS.prototype.selectUploadFiles = function() {
+	try {
+		if (dGet('wtw_bstartimageupload').innerHTML == "Upload of Replace File(s)") {
+			WTWuploadObjectFiles();
+		} else {
+			WTW.uploadFiles();
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-selectUploadFiles=" + ex.message);
+	}
+}
+
 WTWJS.prototype.uploadObjectFiles = function() {
 	try {
-		var zobjectfilepart = dGet('wtw_tobjectfile').value;
-		zobjectfilepart = zobjectfilepart.replace(".babylon","");
-		var form1 = document.createElement('form');
-		var Httpreq = new XMLHttpRequest();
-		var zformdata = new FormData(form1);
-		for (var i=0;i < dGet('wtw_filesupload').files.length;i++) {
-			zformdata.append('wtw_uploadfiles[]', dGet('wtw_filesupload').files[i], dGet('wtw_filesupload').files[i].name);
-		}
-		zformdata.append('action', 'POST');
-		zformdata.append('objectfilepart', zobjectfilepart);
-		zformdata.append('function', 'uploadobjectfiles');
-		Httpreq.open('POST', '/core/handlers/uploadedfiles.php');
-		Httpreq.onreadystatechange = function () {
-			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
-				var zresponse = JSON.parse(Httpreq.responseText);
-				WTW.loadObjectDetailsName();
+		if (dGet('wtw_filesupload').value != null) {
+			var zobjectfilepart = dGet('wtw_tobjectfile').value;
+			zobjectfilepart = zobjectfilepart.replace(".babylon","");
+			var form1 = document.createElement('form');
+			var Httpreq = new XMLHttpRequest();
+			var zformdata = new FormData(form1);
+			for (var i=0;i < dGet('wtw_filesupload').files.length;i++) {
+				zformdata.append('wtw_uploadfiles[]', dGet('wtw_filesupload').files[i], dGet('wtw_filesupload').files[i].name);
 			}
-		};
-		Httpreq.send(zformdata);
+			zformdata.append('action', 'POST');
+			zformdata.append('objectfilepart', zobjectfilepart);
+			zformdata.append('function', 'uploadobjectfiles');
+			Httpreq.open('POST', '/core/handlers/uploadedfiles.php');
+			Httpreq.onreadystatechange = function () {
+				if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+					var zresponse = JSON.parse(Httpreq.responseText);
+					dGet('wtw_filesupload').value = null;
+					WTW.loadObjectDetailsName();
+				}
+			};
+			Httpreq.send(zformdata);
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-uploadObjectFiles=" + ex.message);
 	}
@@ -5788,29 +5807,32 @@ WTWJS.prototype.uploadObjectFiles = function() {
 
 WTWJS.prototype.uploadFiles = function() {
 	try {
-		var zobjectfilepart = dGet('wtw_tobjectfile').value;
-		var zitem = dGet('wtw_tfileitem').value;
-		zobjectfilepart = zobjectfilepart.replace(".babylon","");
-		var form1 = document.createElement('form');
-		var Httpreq = new XMLHttpRequest();
-		var zformdata = new FormData(form1);
-		for (var i=0;i < dGet('wtw_filesupload').files.length;i++) {
-			zformdata.append('wtw_uploadfiles[]', dGet('wtw_filesupload').files[i], dGet('wtw_filesupload').files[i].name);
-		}
-		zformdata.append('action', 'POST');
-		zformdata.append('objectfilepart', zobjectfilepart);
-		zformdata.append('item', zitem);
-		zformdata.append('function', 'uploadfiles');
-		Httpreq.open('POST', '/core/handlers/uploadedfiles.php');
-		Httpreq.onreadystatechange = function () {
-			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
-				var zresponse = JSON.parse(Httpreq.responseText);
-				var zcategory = WTW.getDDLValue('wtw_fileselectcategory');
-				WTW.loadMyFilesPage(zitem, zcategory, '0');
-				WTW.setImageMenu(2);
+		if (dGet('wtw_filesupload').value != null) {
+			var zobjectfilepart = dGet('wtw_tobjectfile').value;
+			var zitem = dGet('wtw_tfileitem').value;
+			zobjectfilepart = zobjectfilepart.replace(".babylon","");
+			var form1 = document.createElement('form');
+			var Httpreq = new XMLHttpRequest();
+			var zformdata = new FormData(form1);
+			for (var i=0;i < dGet('wtw_filesupload').files.length;i++) {
+				zformdata.append('wtw_uploadfiles[]', dGet('wtw_filesupload').files[i], dGet('wtw_filesupload').files[i].name);
 			}
-		};
-		Httpreq.send(zformdata);
+			zformdata.append('action', 'POST');
+			zformdata.append('objectfilepart', zobjectfilepart);
+			zformdata.append('item', zitem);
+			zformdata.append('function', 'uploadfiles');
+			Httpreq.open('POST', '/core/handlers/uploadedfiles.php');
+			Httpreq.onreadystatechange = function () {
+				if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+					var zresponse = JSON.parse(Httpreq.responseText);
+					dGet('wtw_filesupload').value = null;
+					var zcategory = WTW.getDDLValue('wtw_fileselectcategory');
+					WTW.loadMyFilesPage(zitem, zcategory, '0');
+					WTW.setImageMenu(2);
+				}
+			};
+			Httpreq.send(zformdata);
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-uploadFiles=" + ex.message);
 	}
@@ -5942,7 +5964,7 @@ WTWJS.prototype.loadObjectDetailsFiles = function(zuploadobjectid, zobjectfolder
 						}
 					}
 				}
-				zfilesdiv += "<br /><br /><div id='wtw_uploadbutton' class='wtw-greenbutton' style='width:318px;' onclick=\"dGet('wtw_filesupload').click();\">Upload or Replace File(s)</div>";
+				zfilesdiv += "<br /><br /><div id='wtw_uploadbutton' class='wtw-greenbutton' style='width:318px;' onclick=\"WTW.startUploadImage('Upload or Replace File(s)');\">Upload or Replace File(s)</div>";
 				zfilesdiv += "<div id='wtw_deletefile' class='wtw-redbutton' style='width:150px;display:none;visibility:hidden;text-align:center;margin-right:13px;cursor:pointer;' onclick=\"WTW.deleteObjectFile();\">Delete File</div><div id='wtw_canceldelete' class='wtw-yellowbutton' style='width:150px;display:none;visibility:hidden;text-align:center;cursor:pointer;' onclick=\"dGet('wtw_tdeletefile').value='';WTW.hide('wtw_deletefile');WTW.hide('wtw_canceldelete');WTW.show('wtw_uploadbutton');\">Cancel</div>";
 				zfilesdiv += "</div></div>";
 				dGet('wtw_uploadedobjectsfilesdiv').innerHTML = zfilesdiv;

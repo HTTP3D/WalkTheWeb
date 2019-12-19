@@ -8,15 +8,15 @@ try {
 	$zrequest = json_decode($zrequest, TRUE);
 
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
-	$zuploadfile = $wtwhandlers->getPost('uploadfile',null);
-	$zuploadfiles = $wtwhandlers->getPost('uploadfiles',null);
 	$zuploadobjectid = $wtwhandlers->getPost('uploadobjectid','');
 	$zobjectanimationid = $wtwhandlers->getPost('objectanimationid','');
 	$zobjectfolder = $wtwhandlers->getPost('objectfolder','');
 	$zobjectfilepart = $wtwhandlers->getPost('objectfilepart','');
 	$zfilename = $wtwhandlers->getPost('filename','');
 	$zitem = $wtwhandlers->getPost('item','');
-	
+	$zuploadfile = $wtwhandlers->getFiles('wtw_uploadfile',null);
+	$zuploadfiles = $wtwhandlers->getFiles('wtw_uploadfiles',null);
+
 	$zresponse = array();
 	switch ($zfunction) {
 		case "getuploadedfiles":
