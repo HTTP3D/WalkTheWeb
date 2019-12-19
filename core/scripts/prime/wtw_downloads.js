@@ -93,7 +93,7 @@ WTWJS.prototype.communitySearchSelect = function(zcopywebid) {
 					var zrequest = {
 						'communityid': zcommunityid,
 						'pastcommunityid': zcopywebid,
-						'communityname': community.communityinfo.communityname,
+						'communityname': btoa(community.communityinfo.communityname),
 						'analyticsid': '',
 						'positionx': community.position.x,
 						'positiony': community.position.y,
