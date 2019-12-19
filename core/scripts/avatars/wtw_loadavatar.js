@@ -466,7 +466,7 @@ WTWJS.prototype.getAvatarAnimationsAll = function() {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-				WTW.loadAvatarAnimationsAll(zresponse.avataranimations);
+				WTW.loadAvatarAnimationsAll(JSON.parse(zresponse.avataranimations));
 			}
 		);
     } catch (ex) {
@@ -2078,10 +2078,10 @@ WTWJS.prototype.openChangeAvatar = function() {
 			setupparent.material = WTW.addCovering("hidden", "setupparent-0", WTW.newAvatarDef(), 1, 1, 1, "0", "0");
 			setupparent.material.alpha = 0;
 		}
-		setupparent.position.x = 0;
+		setupparent.position.x = -20;
 		setupparent.position.y = 0;
-		setupparent.position.z = -20;
-		setupparent.rotation.y = WTW.getRadians(0);
+		setupparent.position.z = 0;
+		setupparent.rotation.y = WTW.getRadians(90);
 		setupparent.parent = WTW.myAvatar;
 		WTW.loadSetupMode();
     } catch (ex) {
