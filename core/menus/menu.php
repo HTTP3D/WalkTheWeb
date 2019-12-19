@@ -70,7 +70,7 @@
 				<li id="wtw_menucancelsaveprofile" class="wtw-menuli wtw-hide" onclick="WTW.cancelEditProfile();"><img src="/content/system/images/menulogin.png" alt="Cancel" title="Cancel" class='wtw-menulefticon' />Cancel</li>
 				<li class="wtw-submenuli"><hr /></li>
 				<li class="wtw-menuli" class="wtw-clear" onclick="WTW.editProfile();"><img src="/content/system/images/menueditprofile.png" alt="Edit My Profile" title="Edit My Profile" class='wtw-menulefticon' />Edit My Profile</li>
-				<li class="wtw-menuli" onclick="WTW.setCameraOnAvatar();"><img src="/content/system/images/menueditavatar.png" alt="Edit My Avatar" title="Edit My Avatar" class='wtw-menulefticon' />Edit My Avatar</li>
+				<li class="wtw-menuli" onclick="WTW.showSettingsMenu('wtw_menuavatar');WTW.setCameraOnAvatar();"><img src="/content/system/images/menueditavatar.png" alt="Edit My Avatar" title="Edit My Avatar" class='wtw-menulefticon' />Edit My Avatar</li>
 				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/my-3d-stats/','_blank');"><img src="/content/system/images/menustats.png" alt="My 3D Stats" title="My 3D Stats" class='wtw-menulefticon' />My 3D Stats</li>
 				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/account/password/','_blank');"><img src="/content/system/images/menupassword.png" alt="Change Password" title="Change Password" class='wtw-menulefticon' />Change Password</li>
 				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.logOut();"><img src="/content/system/images/menulogout.png" alt="Log Out" title="Log Out" class='wtw-menulefticon' /><div>Log Out</div></li>
@@ -91,7 +91,7 @@
 					<li class="wtw-menuli" onclick="WTW.loginAttempt();"><img src="/content/system/images/menulogin.png" alt="Login" title="Login" class='wtw-menulefticon' /><div style="color:yellow;">Login</div></li>
 				</ul>
 				<ul class="wtw-menuli">
-					<li class="wtw-menuli" onclick="WTW.setCameraOnAvatar();"><img src="/content/system/images/menueditavatar.png" alt="Edit My Avatar" title="Edit My Avatar" class='wtw-menulefticon' />Edit My Avatar</li>
+					<li class="wtw-menuli" onclick="WTW.showSettingsMenu('wtw_menuavatar');WTW.setCameraOnAvatar();"><img src="/content/system/images/menueditavatar.png" alt="Edit My Avatar" title="Edit My Avatar" class='wtw-menulefticon' />Edit My Avatar</li>
 					<li class="wtw-menuli" onclick="WTW.openRecoveryForm();"><img src="/content/system/images/menupassword.png" alt="Recover Login" title="Recover Login" class='wtw-menulefticon' /><div>Forgot My Login</div></li>
 					<li class="wtw-menuli" onclick="WTW.openRegisterForm();">
 						<img src="/content/system/images/menuregister.png" alt="Create My Account" title="Create My Account" class='wtw-menulefticon' /><div style="color:yellow;">Create My Account</div></li>
@@ -293,8 +293,6 @@
 							<option value='11'>Beam Force</option>
 						</select></div></li>
 					</ul>
-					
-					
 					<div id="wtw_editavataranimations"></div>
 					<a id="wtw_viewanimations"></a>
 				</li>
