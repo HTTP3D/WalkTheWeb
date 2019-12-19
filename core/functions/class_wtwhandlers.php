@@ -306,6 +306,18 @@ class wtwhandlers {
 		return $zvalue;
 	}
 
+	public function getFiles($zfield, $zdefault) {
+		$zvalue = $zdefault;
+		try {
+			if (isset($_FILES[$zfield])) {
+				$zvalue = $_FILES[$zfield];
+			}
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwhandlers.php-getFiles=".$e->getMessage());
+		}
+		return $zvalue;
+	}
+
 	public function addHandlerHeader($zavailabledomains) {
 		$zheader = "";
 		try {
