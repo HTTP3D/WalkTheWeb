@@ -38,8 +38,8 @@ class wtwcommunities {
 	}
 
 	public function saveCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag) {
+		global $wtwhandlers;
 		$copycommunityid = "";
-		$newcommunityid = "";
 		try {
 			if (empty($zpastcommunityid) || !isset($zpastcommunityid) || $wtwhandlers->checkUpdateAccess($zpastcommunityid, "", "") == false) {
 				/* denies copy function if you do not have access to community to copy */
@@ -167,15 +167,16 @@ class wtwcommunities {
 						updatedate=now(),
 						updateuserid='".$wtwhandlers->userid."'
 					where communityid='".$zcommunityid."';");
+				$copycommunityid = $zcommunityid;
 			}				
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveCommunity=".$e->getMessage());
 		}
-		if (!empty($zpastcommunityid) && isset($zpastcommunityid) && !empty($newcommunityid) && isset($newcommunityid)) {
-			$copycommunityid = $this->copyCommunity($newcommunityid, $zpastcommunityid);
+		if (!empty($zpastcommunityid) && isset($zpastcommunityid) && !empty($zcommunityid) && isset($zcommunityid)) {
+			$copycommunityid = $this->copyCommunity($zcommunityid, $zpastcommunityid);
 		}
 		if (empty($copycommunityid) || !isset($copycommunityid)) {
-			$copycommunityid = $newcommunityid;
+			$copycommunityid = $zcommunityid;
 		}
 		return $copycommunityid;
 	}

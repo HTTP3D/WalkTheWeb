@@ -40,7 +40,6 @@ class wtwthings {
 	public function saveThing($zthingid, $zpastthingid, $zthingname, $zanalyticsid, $zalttag) {
 		global $wtwhandlers;
 		$copythingid = "";
-		$newthingid = "";
 		try {
 			if (!empty($zpastthingid) && isset($zpastthingid) && $wtwhandlers->checkUpdateAccess("", "", $zpastthingid) == false) {
 				/* denies copy function if you do not have access to thing to copy */
