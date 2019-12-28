@@ -1386,7 +1386,7 @@ WTWJS.prototype.avatarShowFadeParticles = function(avatarname, avatarparts) {
 				var transparentmat = new BABYLON.StandardMaterial("mat" + avatarname + "particles", scene);
 				transparentmat.alpha = 0;
 				mold.material = transparentmat;
-				pcs.addSurfacePoints(avatarparts[i], 20000, BABYLON.PointColor.Random);
+				pcs.addSurfacePoints(avatarparts[i], 20000, BABYLON.PointColor.UV);
 				pcs.buildMeshAsync().then((mesh) => {
 					mesh.material.pointSize = 2;
 					mesh.material.alpha = 1;

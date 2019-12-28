@@ -1484,16 +1484,31 @@ WTWJS.prototype.moveAvatar = function(avatar, keyspressed) {
 						if (WTW.isNumeric(keyspressed[k])) {
 							switch (keyspressed[k]) {
 								case 32: //space jump
-									moveevents[moveevents.length] = "onjump";
-									break;
-	/*							case 32: //space jump
-									break;
-	*/							case 38: //arrow w forward
-								case 87: //w forward
-									if (WTW.shiftKey) {
-										moveevents[moveevents.length] = "onrun";
+									var index = WTW.indexInArray(moveevents, 'onwalk');
+									var index2 = WTW.indexInArray(moveevents, 'onrun');
+									if (index > -1) {
+										moveevents[index] = "onwalkjump";
+									} else if (index2 > -1) {
+										moveevents[index2] = "onrunjump";
 									} else {
-										moveevents[moveevents.length] = "onwalk";
+										moveevents[moveevents.length] = "onjump";
+									}
+									break;
+								case 38: //arrow w forward
+								case 87: //w forward
+									var index = WTW.indexInArray(moveevents, 'onjump');
+									if (index > -1) {
+										if (WTW.shiftKey) {
+											moveevents[index] = "onrunjump";
+										} else {
+											moveevents[index] = "onwalkjump";
+										}
+									} else {
+										if (WTW.shiftKey) {
+											moveevents[moveevents.length] = "onrun";
+										} else {
+											moveevents[moveevents.length] = "onwalk";
+										}
 									}
 									break;
 								case 1038: //arrow w forward
@@ -1614,6 +1629,7 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 			if (avatar.WTW != null) {
 				if (avatar.WTW.animations != null) {
 					if (avatar.WTW.animations.running != null) {
+						/* set the weight for each animation running */
 						var weight = 0;
 						if (WTW.isInArray(moveevents, 'onpause')) {
 							weight = 1;
@@ -1622,6 +1638,12 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 							if (avatar.WTW.animations.running[key] != null) {
 								if (key == 'onwait' && WTW.isInArray(moveevents, key) == false) {
 									avatar.WTW.animations.running[key].weight = 0;
+								} else if (WTW.isInArray(moveevents, 'onwalkjump') || WTW.isInArray(moveevents, 'onrunjump')) {
+									if (key == 'onwalkjump') {
+										avatar.WTW.animations.running['onwalkjump'].weight = 1;
+									} else if (key == 'onrunjump') {
+										avatar.WTW.animations.running['onrunjump'].weight = 1;
+									}
 								} else if (WTW.isInArray(lastmoveevents, key) && WTW.isInArray(moveevents, key)) {
 									if (avatar.WTW.animations.running[key].weight > 1/lastmoveevents.length) {
 										if (avatar.WTW.animations.running[key].weight - 1/lastmoveevents.length > increment) {
@@ -1659,7 +1681,15 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 								}
 								weight += avatar.WTW.animations.running[key].weight;
 								if (avatar.WTW.animations.running[key].weight > 0) {
+									/* sets movement based on weight and framerate */
 									switch (key) {
+										case 'onwait':
+											var zstride = WTW.init.gravity * 15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+											//zmove = new BABYLON.Vector3(0, -zstride, 0);
+											zmove = WTW.getMoveDownVector(avatar.name, -zstride);
+											
+											avatar.moveWithCollisions(zmove);
+											break;
 										case 'onrotateup':
 											WTW.cameraYOffset -= 200/(WTW.sizeY - WTW.mouseStartY + WTW.mouseY);
 											if (WTW.cameraYOffset < -10) {
@@ -1674,11 +1704,6 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											}
 											weight -= avatar.WTW.animations.running[key].weight;
 											break;
-										case 'onwait':
-											var zstride = WTW.init.gravity * 15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
-											zmove = new BABYLON.Vector3(0, -zstride, 0);
-											avatar.moveWithCollisions(zmove);
-											break;
 										case 'onwalk':
 											if (WTW.moveOverride == 0) {
 												WTW.cancelSit(avatar, moveevents);
@@ -1688,6 +1713,13 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 												avatar.moveWithCollisions(move);
 											}
 											break;
+										case 'onwalkjump':	
+											WTW.cancelSit(avatar, moveevents);
+											var zstride = 15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+											var move = WTW.getMoveVector(avatar.name, 0, zstride);
+											avatar.moveWithCollisions(move);
+											break;
 										case 'onrun':
 											if (WTW.moveOverride == 0) {
 												WTW.cancelSit(avatar, moveevents);
@@ -1696,6 +1728,13 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 												var move = WTW.getMoveVector(avatar.name, 0, zstride);
 												avatar.moveWithCollisions(move);
 											}
+											break;
+										case 'onrunjump':
+											WTW.cancelSit(avatar, moveevents);
+											var zstride = 25 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+											var move = WTW.getMoveVector(avatar.name, 0, zstride);
+											avatar.moveWithCollisions(move);
 											break;
 										case 'onwalkbackwards':
 											if (WTW.moveOverride == 0) {

@@ -1329,6 +1329,26 @@ WTWJS.prototype.isInArray = function(array, stext) {
 	return inarray;
 }
 
+WTWJS.prototype.indexInArray = function(array, stext) {
+	var indexinarray = -1;
+	try {
+		if (array != null) {
+			if (array.length > 0) {
+				for (var i=0;i<array.length;i++) {
+					if (array[i] != null) {
+						if (array[i] == stext) {
+							indexinarray = i;
+						}
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-indexInArray=" + ex.message);
+	}
+	return indexinarray;
+}
+
 WTWJS.prototype.isItemInArray = function(sarray, checkid, connectinggridind, altconnectinggridind, moldgroup) {
 	var found = false;
 	try {
@@ -9732,39 +9752,6 @@ WTWJS.prototype.getDirectionVector = function(zsourcename, zdegreeoffset) {
 	return zdirection;
 }
 
-WTWJS.prototype.getMoveVector = function(zsourcename, zdegreeoffset, zstride) {
-	var zmove = null;
-	try {
-		if (zdegreeoffset == undefined) {
-			zdegreeoffset = 0;
-		}
-		var zsource = scene.getMeshByID(zsourcename);
-		if (zsource != null) {
-			var zdist = 200;
-			var rot = WTW.getRadians(WTW.getDegrees(zsource.rotation.y) + zdegreeoffset);
-			var positionx = zsource.position.x + (Math.cos(rot) * zdist);
-			var positionz = zsource.position.z - (Math.sin(rot) * zdist);
-			var zdirection = new BABYLON.Vector3(positionx, zsource.position.y, positionz);
-			zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, -WTW.init.gravity, -parseFloat(Math.sin(rot)) * zstride);
-			var raystart = new BABYLON.Vector3(zsource.position.x, zsource.position.y, zsource.position.z);
-			var ray = new BABYLON.Ray(raystart, zdirection, zdist);
-			var hits = scene.multiPickWithRay(ray);
-			for (var i=0; i<hits.length; i++){
-				if (hits[i].pickedMesh.name.indexOf("molds-") > -1) {
-					if (hits[i].distance < 2) {
-						zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, 10, -parseFloat(Math.sin(rot)) * zstride);
-					} else if (hits[i].distance < 10) {
-						zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, 0, -parseFloat(Math.sin(rot)) * zstride);
-					}
-				}
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-getMoveVector=" + ex.message);
-	}
-	return zmove;
-}
-
 WTWJS.prototype.getOffset = function() {
 	zoffset = null;
 	try {
@@ -9941,4 +9928,147 @@ WTWJS.prototype.checkLoadAnimations = function(zactionzoneind) {
 		WTW.log("core-scripts-prime-wtw_common.js-checkLoadAnimations=" + ex.message);
 	}
 }
-		
+
+WTWJS.prototype.getMoveVector = function(zsourcename, zdegreeoffset, zstride) {
+	var zmove = null;
+	try {
+		if (zdegreeoffset == undefined) {
+			zdegreeoffset = 0;
+		}
+		var zsource = scene.getMeshByID(zsourcename);
+		if (zsource != null) {
+			var zdist = 200;
+			var rot = WTW.getRadians(WTW.getDegrees(zsource.rotation.y) + zdegreeoffset);
+			var positionx = zsource.position.x + (Math.cos(rot) * zdist);
+			var positionz = zsource.position.z - (Math.sin(rot) * zdist);
+			var zdirection = new BABYLON.Vector3(positionx, zsource.position.y, positionz);
+			zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, 0, -parseFloat(Math.sin(rot)) * zstride);
+			var raystart = new BABYLON.Vector3(zsource.position.x, zsource.position.y, zsource.position.z);
+			var ray = new BABYLON.Ray(raystart, zdirection, zdist);
+			var hits = scene.multiPickWithRay(ray);
+			var dist = 100;
+			var moldname = '';
+			for (var i=0; i<hits.length; i++){
+				if (hits[i].pickedMesh.name.indexOf("molds-") > -1) {
+					if (hits[i].distance < dist) {
+						dist = hits[i].distance;
+						moldname = hits[i].pickedMesh.name;
+						
+					}
+				}
+			}
+			var slope = 0;
+			var mold = scene.getMeshByID(moldname);
+			if (mold != null) {
+				var raystart2 = new BABYLON.Vector3(zsource.position.x, zsource.position.y+.2, zsource.position.z);
+				var ray2 = new BABYLON.Ray(raystart2, zdirection, zdist);
+				var hits2 = scene.multiPickWithRay(ray2);
+				var dist2 = 100;
+				for (var i=0; i<hits2.length; i++){
+					if (hits2[i].pickedMesh.name == moldname) {
+						if (hits2[i].distance < dist2) {
+							dist2 = hits2[i].distance;
+						}
+					}
+				}
+				slope = (Math.abs(dist2)-Math.abs(dist))/.2;
+			}
+			if (dist < 2 && slope < .2) {
+				zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, 1.1, -parseFloat(Math.sin(rot)) * zstride);
+				zsource.WTW.lastupdate = true;
+			} else if (dist < 5 && (slope > 3 || slope == 0)) {
+				zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, 0, -parseFloat(Math.sin(rot)) * zstride);
+				zsource.WTW.lastupdate = true;
+			} else {
+				if (zsource.WTW.lastupdate) {
+					zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, 0, -parseFloat(Math.sin(rot)) * zstride);
+					zsource.WTW.lastupdate = false;
+				} else {
+					zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, -WTW.init.gravity, -parseFloat(Math.sin(rot)) * zstride);
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-getMoveVector=" + ex.message);
+	}
+	return zmove;
+}
+
+WTWJS.prototype.getMoveDownVector = function(zsourcename, zstride) {
+	var zmove = null;
+	try {
+		var zsource = scene.getMeshByID(zsourcename);
+		if (zsource != null) {
+			zmove = new BABYLON.Vector3(0, zstride, 0);
+			var zdist = 6;
+			var zdist1 = zdist;
+			var zdist2 = zdist;
+			var zdist3 = zdist;
+			var zdist4 = zdist;
+			var zpos1 = new BABYLON.Vector3(zsource.position.x+1, zsource.position.y+1, zsource.position.z);
+			var zpos2 = new BABYLON.Vector3(zsource.position.x-1, zsource.position.y+1, zsource.position.z);
+			var zpos3 = new BABYLON.Vector3(zsource.position.x, zsource.position.y+1, zsource.position.z+1);
+			var zpos4 = new BABYLON.Vector3(zsource.position.x, zsource.position.y+1, zsource.position.z-1);
+			var zdir1 = new BABYLON.Vector3(0, -1, 0);
+			var zray1 = new BABYLON.Ray(zpos1, zdir1, zdist);
+			var zray2 = new BABYLON.Ray(zpos2, zdir1, zdist);
+			var zray3 = new BABYLON.Ray(zpos3, zdir1, zdist);
+			var zray4 = new BABYLON.Ray(zpos4, zdir1, zdist);
+			var zhits1 = scene.multiPickWithRay(zray1);
+			var zhits2 = scene.multiPickWithRay(zray2);
+			var zhits3 = scene.multiPickWithRay(zray3);
+			var zhits4 = scene.multiPickWithRay(zray4);
+			for (var i=0; i<zhits1.length; i++){
+				if (zhits1[i].pickedMesh.name.indexOf("molds-") > -1 || zhits1[i].pickedMesh.name == 'communityeground') {
+					if (zhits1[i].distance < zdist1) {
+						zdist1 = zhits1[i].distance;
+					}
+				}
+			}
+			for (var i=0; i<zhits2.length; i++){
+				if (zhits2[i].pickedMesh.name.indexOf("molds-") > -1 || zhits2[i].pickedMesh.name == 'communityeground') {
+					if (zhits2[i].distance < zdist2) {
+						zdist2 = zhits2[i].distance;
+					}
+				}
+			}
+			for (var i=0; i<zhits3.length; i++){
+				if (zhits3[i].pickedMesh.name.indexOf("molds-") > -1 || zhits3[i].pickedMesh.name == 'communityeground') {
+					if (zhits3[i].distance < zdist3) {
+						zdist3 = zhits3[i].distance;
+					}
+				}
+			}
+			for (var i=0; i<zhits4.length; i++){
+				if (zhits4[i].pickedMesh.name.indexOf("molds-") > -1 || zhits4[i].pickedMesh.name == 'communityeground') {
+					if (zhits4[i].distance < zdist4) {
+						zdist4 = zhits4[i].distance;
+					}
+				}
+			}
+			var zslope1 = 0;
+			var zslope2 = 0;
+			var zcriticalslope = 3.55;
+			if (zdist1 != zdist2) {
+				if (zdist2 > zdist1) {
+					zslope1 = Math.abs(2/zdist2-zdist1);
+				} else {
+					zslope1 = Math.abs(2/zdist1-zdist2);
+				}
+			}
+			if (zdist3 != zdist4) {
+				if (zdist4 > zdist3) {
+					zslope2 = Math.abs(2/zdist4-zdist3);
+				} else {
+					zslope2 = Math.abs(2/zdist3-zdist4);
+				}
+			}
+			if ((zdist1 < 1.2 || zdist2 < 1.2 || zdist3 < 1.2 || zdist4 < 1.2) && ((zslope1 > 0 && zslope1 < zcriticalslope) || (zslope2 > 0 && zslope2 < zcriticalslope))) {
+				zmove = new BABYLON.Vector3(0, 0, 0);
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-getMoveDownVector=" + ex.message);
+	}
+	return zmove;
+}
