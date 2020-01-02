@@ -1151,17 +1151,17 @@ WTWJS.prototype.avatarEnter = function(avatarname) {
 
 WTWJS.prototype.saveAvatarEnterAnimation = function() {
 	try {
-		var zavataranimation = WTW.getDDLValue('wtw_tselectavataranimation-enter');
+		var zavataranimationid = WTW.getDDLValue('wtw_tselectavataranimation-enter');
 		var myavatarid = dGet('wtw_tmyavatarid').value;
 		if (dGet('wtw_tuserid').value == '') {
 			myavatarid = dGet('wtw_tmyavataridanon').value;
 		}
-		if (WTW.isNumeric(zavataranimation) == false) {
-			zavataranimation = 1;
+		if (WTW.isNumeric(zavataranimationid) == false) {
+			zavataranimationid = 1;
 		}
 		var zrequest = {
 			'avatarid': myavatarid,
-			'avataranimation': zavataranimation,
+			'avataranimationid': zavataranimationid,
 			'transport': '1',
 			'function':'savetransportanimation'
 		};

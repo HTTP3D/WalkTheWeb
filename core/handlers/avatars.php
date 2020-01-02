@@ -52,7 +52,7 @@ try {
 			$wtwavatars->deleteAvatarAnimation($zuseravataranimationid, $zavatarid, $zavataranimationid);
 			break;
 		case "savetransportanimation":
-			$wtwavatars->updateAvatarTransport($zavatarid, $zavataranimation, $ztransport);
+			$wtwavatars->updateAvatarTransport($zavatarid, $zavataranimationid, $ztransport);
 			break;
 		case "getavataranimationsall":
 			$zavataranimations = $wtwavatars->getAvatarAnimationsAll($zavatarid);
