@@ -19,6 +19,7 @@ WTWJS.prototype.getActionZoneList = function() {
 		actionzonelist[actionzonelist.length] = {"name":"Driver Turn Angle","helpurl":""};
 		actionzonelist[actionzonelist.length] = {"name":"Driver Turning Wheel","helpurl":""};
 		actionzonelist[actionzonelist.length] = {"name":"Driver Wheel","helpurl":""}; */
+		actionzonelist = WTW.pluginsActionZones(actionzonelist);
 		WTW.clearDDL('wtw_tactionzonetypelist');
 		dGet("wtw_actionzonesbuttonlist").innerHTML = "";
 		for (var i=0;i < actionzonelist.length;i++) {
@@ -140,7 +141,8 @@ WTWJS.prototype.addActionZone = function(actionzonename, actionzonedef) {
 						actionzone = WTW.addActionzoneDriverWheel(actionzonename, actionzoneind, actionzonedef);
 						break;
 					default:
-						actionzone = WTW.addActionzoneLoadzone(actionzonename, actionzoneind, actionzonedef);
+WTW.log('actionzonetype=' + actionzonetype);						
+						actionzone = WTW.pluginsAddActionZones(actionzonetype, actionzonename, actionzoneind, actionzonedef);
 						break;
 				}
 			}
@@ -267,6 +269,7 @@ WTWJS.prototype.setNewActionZoneDefaults = function(actionzonetype) {
 				break;
 			default:
 				dGet('wtw_tactionzonename').value = "New Action Zone";
+				WTW.pluginsSetNewActionZoneDefaults(actionzonetype);
 				break;
 		}
 	} catch (ex) {
@@ -420,6 +423,7 @@ WTWJS.prototype.setActionZoneFormFields = function(actionzonetype) {
 				break;
 			default:
 				dGet('wtw_editactionzoneformtitle').innerHTML = "Add Action Zone";
+				WTW.pluginsSetActionZoneFormFields(actionzonetype);
 				break;
 		}	
 	} catch (ex) {

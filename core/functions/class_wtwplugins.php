@@ -350,6 +350,41 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsActionZones = function(actionzonelist) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnActionZoneDefsList();
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsActionZones=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return actionzonelist;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsAddActionZones = function(actionzonetype, actionzonename, actionzoneind, actionzonedef) {\r\n";
+			$jsdata .= "		var actionzone = null;\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnActionZoneDefsFunctions();
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsAddActionZones=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return actionzone;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsSetNewActionZoneDefaults = function(actionzonetype) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('setnewactionzonedefaults');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSetNewActionZoneDefaults=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsSetActionZoneFormFields = function(actionzonetype) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('setactionzoneformfields');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSetActionZoneFormFields=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsMolds = function(moldlist) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->returnMoldDefsList('mold');
@@ -535,6 +570,82 @@ class wtwplugins {
 		return $zscripttext;
 	}	
 
+	public function addActionZoneDef($zactionzonetitle, $zjsfunction) {
+		global $wtw;
+		$zsuccess = false;
+		try {
+			$zfound = false;
+			foreach ($wtw->pluginActionZoneDefs as $zactionzone) {
+				if (isset($zactionzone["scriptid"]) && !empty($zactionzone["scriptid"])) {
+					if ($zactionzone["scriptid"] == $zactionzonetitle) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				$zactionzone = array(
+					'actionzonetitle' => $zactionzonetitle,
+					'jsfunction' => $zjsfunction
+				);
+				$wtw->pluginActionZoneDefs[count($wtw->pluginActionZoneDefs)] = $zactionzone;
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwplugins.php-addActionZoneDef=" . $e->getMessage());
+		}
+		return $zsuccess;
+	}
+
+	public function returnActionZoneDefsList() {
+		global $wtw;
+		$zscripttext = "";
+		try {
+			foreach ($wtw->pluginActionZoneDefs as $zactionzonedef) {
+				$zactionzonetitle = trim($zactionzonedef["actionzonetitle"]);
+				$zjsfunction = trim($zactionzonedef["jsfunction"]);
+				if (!empty($zjsfunction) && isset($zjsfunction)) {
+					if (strpos($zjsfunction,";") === false) {
+						$zjsfunction .= ";";
+					}
+					if (strlen($zactionzonetitle) > 1) {
+						$zscripttext .= "actionzonelist[actionzonelist.length] = {'name':'".$zactionzonetitle."','helpurl':''};\r\n";
+					}
+				}
+			}			
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwmenus.php-returnActionZoneDefsList=".$e->getMessage());
+		}
+		return $zscripttext;
+	}	
+
+	public function returnActionZoneDefsFunctions() {
+		global $wtw;
+		$zscripttext = "switch (actionzonetype) {\r\n";
+		try {
+			foreach ($wtw->pluginActionZoneDefs as $zactionzonedef) {
+				$zactionzonetitle = str_replace(" ","",trim($zactionzonedef["actionzonetitle"]));
+				$zjsfunction = trim($zactionzonedef["jsfunction"]);
+				if (!empty($zjsfunction) && isset($zjsfunction)) {
+					if (strpos($zjsfunction,";") === false) {
+						$zjsfunction .= ";";
+					}
+					if (strlen($zactionzonetitle) > 1 && strlen($zjsfunction) > 1) {
+						$zscripttext .= "case \"".strtolower($zactionzonetitle)."\":\r\n";
+						$zscripttext .= "actionzone = ".$zjsfunction."\r\n";
+						$zscripttext .= "break;\r\n";
+					}
+				}
+			}			
+			$zscripttext .= "default:\r\n";
+			$zscripttext .= "actionzone = WTW.addActionzoneLoadzone(actionzonename, actionzoneind, actionzonedef);\r\n";
+			$zscripttext .= "break;\r\n";
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwmenus.php-returnActionZoneDefs=".$e->getMessage());
+		}
+		$zscripttext .= "}\r\n";
+		return $zscripttext;
+	}	
+	
 	public function addMoldDef($zmoldtitle, $zlist, $zjsfunction) {
 		global $wtw;
 		$zsuccess = false;

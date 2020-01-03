@@ -40,6 +40,7 @@ class wtw {
 	public $thingid = "";
 	public $pluginscripts = array();
 	public $pluginscriptfunctions = array();
+	public $pluginActionZoneDefs = array();
 	public $pluginMoldDefs = array();
 	
 	public function __call ($method, $arguments)  {
