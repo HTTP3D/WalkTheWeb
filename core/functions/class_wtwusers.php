@@ -138,11 +138,11 @@ class wtwusers {
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwusers.php-loginAttempt=".$e->getMessage());
 		}
-		return json_encode($zuser);
+		return $zuser;
 	}
 
 	public function logOut() {
-		global $wtw;
+		global $wtwdb;
 		global $wtwuser;
 		try {
 			if (session_status() == PHP_SESSION_NONE) {
@@ -159,10 +159,10 @@ class wtwusers {
 				}
 				session_destroy();
 			} catch (Exception $e) {}
-			$wtw->userid = '';
+			$wtwdb->userid = '';
 			$wtwuser->userid = '';
 		} catch (Exception $e) {
-			$wtw->serror("core-functions-class_wtwusers.php-logOut=".$e->getMessage());
+			$wtwdb->serror("core-functions-class_wtwusers.php-logOut=".$e->getMessage());
 		}
 	}
 	

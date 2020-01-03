@@ -9286,7 +9286,7 @@ WTWJS.prototype.loginAttempt = function() {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-				WTW.loginAttemptResponse(zresponse.loginresponse);
+				WTW.loginAttemptResponse(zresponse);
 			}
 		);
 	} catch (ex) {
@@ -9295,7 +9295,6 @@ WTWJS.prototype.loginAttempt = function() {
 }
 	
 WTWJS.prototype.loginAttemptResponse = function(results) {
-WTW.log("loginAttemptResponse");
 	try {
 		var serror = "";
 		if (results != null) {
@@ -9312,6 +9311,7 @@ WTW.log("loginAttemptResponse");
 					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 				}
+
 				if (results.userid != '') {
 					//WTW.disposeClean("myavatar-" + dGet("wtw_tinstanceid").value);
 					WTW.setLoginValues(results.userid, results.username, results.displayname, results.email, results.userimageurl);

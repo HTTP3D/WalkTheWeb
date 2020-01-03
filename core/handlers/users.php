@@ -35,10 +35,7 @@ try {
 			$wtwusers->deleteUser($zuserid);
 			break;
 		case "login":
-			$zloginresponse = $wtwusers->loginAttempt($zusername, $zuseremail, $zpassword);
-			$zresponse = array(
-				'loginresponse'=> $zloginresponse
-			);
+			$zresponse = $wtwusers->loginAttempt($zusername, $zuseremail, $zpassword);
 			break;
 		case "register":
 			$zserror = '';

@@ -258,7 +258,7 @@ WTWJS.prototype.getSavedAvatar = function(reload) {
 				} else if (avatar != null && avatarind > -1 && zanonymous == "0" && dGet('wtw_tuserid').value != '') {
 					/* anonymouse avatar already loaded - user logged in and this will switch from anonymous avatar to logged in avatar */ 
 					dGet('wtw_tavatarind').value = avatarind;
-					WTW.setCameraOnAvatar();
+					//WTW.setCameraOnAvatar();
 					WTW.disposeClean("myavatar-" + dGet("wtw_tinstanceid").value);
 					WTW.loadAvatarFromDB(response.avatar, reload);
 //					WTW.loadCameraSettings();
@@ -1144,6 +1144,7 @@ WTWJS.prototype.avatarEnter = function(avatarname) {
 				WTW.avatarShowVisible(avatarname, avatarparts);
 				break;
 		}
+		WTW.switchCamera(1);
     } catch (ex) {
 		WTW.log("avatars-loadavatar-avatarEnter=" + ex.message);
     }
@@ -2340,10 +2341,11 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 								var totalframes = Number(animation.endframe);
 								var totalendframe = (frametotal + Number(animation.endframe) - Number(animation.startframe));
 								var totalstartframe = totalendframe - animation.endframe;
-								avatar.WTW.animations[animationind].totalframes = animation.endframe;
-								avatar.WTW.animations[animationind].totalstartframe = totalstartframe;
-								avatar.WTW.animations[animationind].totalendframe = totalendframe;
-
+								if (avatar.WTW.animations[animationind] != null) {
+									avatar.WTW.animations[animationind].totalframes = animation.endframe;
+									avatar.WTW.animations[animationind].totalstartframe = totalstartframe;
+									avatar.WTW.animations[animationind].totalendframe = totalendframe;
+								}
 								if (enteranimate) {
 									avatar.WTW.animations.running[animation.animationname] = scene.beginWeightedAnimation(avatar.WTW.skeleton, frametotal, totalendframe, animation.startweight, animation.animationloop, Number(animation.speedratio));
 								}
@@ -2359,7 +2361,7 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 									WTW.pluginsMyAnimationsLoaded();
 									if (enteranimate) {
 										WTW.avatarEnter(avatarname);
-										WTW.loadSit(avatarname);
+//										WTW.loadSit(avatarname);
 									} else {
 										WTW.avatarShowVisible(avatarname);
 									}
