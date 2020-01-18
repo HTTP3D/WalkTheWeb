@@ -1,7 +1,4 @@
 <?php
-if (file_exists("/config/wtw_config.php")) {
-	require_once('./config/wtw_config.php');
-}
 class wtw {
 	protected static $_instance = null;
 	
@@ -15,6 +12,9 @@ class wtw {
 	public function __construct() {
 		$this->rootpath = str_replace('\core\functions','',dirname(__FILE__));
 		define("wtw_rootpath", $this->rootpath);
+		if (file_exists(wtw_rootpath.'/config/wtw_config.php')) {
+			require_once(wtw_rootpath.'./config/wtw_config.php');
+		}
 		require_once(wtw_rootpath.'/core/functions/class_wtwuser.php');
 	}	
 	
@@ -333,7 +333,7 @@ class wtw {
 			if (!defined('wtw_dbserver') || !defined('wtw_dbname') || !defined('wtw_dbusername') || !defined('wtw_dbpassword') || !defined('wtw_tableprefix')) {
 				$zsetupstep = 1;
 				if ($_SERVER['REQUEST_METHOD']=='POST') {
-					if (!file_exists("/config")) {
+					if (!file_exists(wtw_rootpath.'/config')) {
 						mkdir(wtw_rootpath.'/config', 0777);
 					}
 					$server = $_POST["wtw_tserver"];
@@ -347,7 +347,7 @@ class wtw {
 					if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
 						$zdomainname = strtolower($_SERVER['HTTP_HOST']);
 					}
-					if (!file_exists("/config/wtw_config.php")) {
+					if (!file_exists(wtw_rootpath.'/config/wtw_config.php')) {
 						define("wtw_serverinstanceid", $this->serverinstanceid);
 						define("wtw_dbserver", $server);
 						define("wtw_dbname", $database);
@@ -360,7 +360,7 @@ class wtw {
 						define("wtw_defaultdomain", $zdomainname);
 						$this->contentpath = $contentpath;
 						$this->contenturl = $this->domainurl.$contenturl;
-						$cfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
+						$cfile = fopen(wtw_rootpath.'/config/wtw_config.php','wb');
 						fwrite($cfile,"<?php\r\n");
 						fwrite($cfile,"    define(\"wtw_serverinstanceid\", \"".$this->serverinstanceid."\");\r\n");
 						fwrite($cfile,"    define(\"wtw_dbserver\", \"".$server."\");\r\n");
@@ -386,7 +386,7 @@ class wtw {
 			} else {
 				if (!defined('wtw_serverinstanceid')) {
 					define("wtw_serverinstanceid", $this->serverinstanceid);
-					$lines = file("/config/wtw_config.php");
+					$lines = file(wtw_rootpath.'/config/wtw_config.php');
 					$last = sizeof($lines) - 1 ; 
 					unset($lines[$last]); 
 					$cfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
@@ -396,6 +396,7 @@ class wtw {
 					fclose($cfile);
 				}
 			}
+echo $zsetupstep;
 			if ($zsetupstep == 0) {
 				require_once(wtw_rootpath.'/core/functions/class_wtwdb.php');
 				require_once(wtw_rootpath.'/core/functions/class_wtwusers.php');
@@ -496,8 +497,8 @@ class wtw {
 						$zadminpassword2 = $_POST["wtw_tadminpassword2"];
 						$zadminemail = $_POST["wtw_tadminemail"];
 						
-						if (file_exists("/config/wtw_config.php") && !defined('wtw_defaultsitename')) {
-							$lines = file("/config/wtw_config.php");
+						if (file_exists(wtw_rootpath.'/config/wtw_config.php') && !defined('wtw_defaultsitename')) {
+							$lines = file(wtw_rootpath.'/config/wtw_config.php');
 							$last = sizeof($lines) - 1 ; 
 							unset($lines[$last]); 
 							$cfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
