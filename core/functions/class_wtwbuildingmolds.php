@@ -94,7 +94,9 @@ class wtwbuildingmolds {
 						where buildingmoldid='".$zbuildingmoldid."'
 							and buildingid='".$zbuildingid."';");
 				} else {
-					$zbuildingmoldid = $wtwhandlers->getRandomString(16,1);
+					if (empty($zbuildingmoldid) || !isset($zbuildingmoldid)) {
+						$zbuildingmoldid = $wtwhandlers->getRandomString(16,1);
+					}
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."buildingmolds
 						   (buildingmoldid,

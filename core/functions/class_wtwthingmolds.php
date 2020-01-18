@@ -94,7 +94,9 @@ class wtwthingmolds {
 						where thingmoldid='".$zthingmoldid."'
 							and thingid='".$zthingid."';");
 				} else {
-					$zthingmoldid = $wtwhandlers->getRandomString(16,1);
+					if (empty($zthingmoldid) || !isset($zthingmoldid)) {
+						$zthingmoldid = $wtwhandlers->getRandomString(16,1);
+					}
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."thingmolds
 						   (thingmoldid,

@@ -93,7 +93,9 @@ class wtwcommunitymolds {
 						where communitymoldid='".$zcommunitymoldid."'
 							and communityid='".$zcommunityid."';");
 				} else {
-					$zcommunitymoldid = $wtwhandlers->getRandomString(16,1);
+					if (empty($zcommunitymoldid) || !isset($zcommunitymoldid)) {
+						$zcommunitymoldid = $wtwhandlers->getRandomString(16,1);
+					}
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."communitymolds
 						   (communitymoldid,
