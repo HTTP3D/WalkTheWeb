@@ -9286,7 +9286,7 @@ WTWJS.prototype.loginAttempt = function() {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-				WTW.loginAttemptResponse(zresponse.loginresponse);
+				WTW.loginAttemptResponse(zresponse);
 			}
 		);
 	} catch (ex) {
@@ -9311,6 +9311,7 @@ WTWJS.prototype.loginAttemptResponse = function(results) {
 					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 				}
+
 				if (results.userid != '') {
 					//WTW.disposeClean("myavatar-" + dGet("wtw_tinstanceid").value);
 					WTW.setLoginValues(results.userid, results.username, results.displayname, results.email, results.userimageurl);
@@ -10065,10 +10066,33 @@ WTWJS.prototype.getMoveDownVector = function(zsourcename, zstride) {
 			}
 			if ((zdist1 < 1.2 || zdist2 < 1.2 || zdist3 < 1.2 || zdist4 < 1.2) && ((zslope1 > 0 && zslope1 < zcriticalslope) || (zslope2 > 0 && zslope2 < zcriticalslope))) {
 				zmove = new BABYLON.Vector3(0, 0, 0);
-			}
+			} 
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-getMoveDownVector=" + ex.message);
 	}
 	return zmove;
+}
+
+WTWJS.prototype.checkAnimationSet = function(zavatar, zkey) {
+	try {
+		if (zavatar != null) {
+			if (zavatar.WTW != null) {
+				if (zavatar.WTW.animations != null) {
+					if (zavatar.WTW.animations.running != null) {
+						var weightkey = zkey;
+						if (WTW.animationSet != '') {
+							weightkey = zkey + "-" + WTW.animationSet;
+						}
+						if (zavatar.WTW.animations.running[weightkey] != null) {
+							zkey = weightkey;
+						}
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-checkAnimationSet=" + ex.message);
+	}
+	return zkey;
 }

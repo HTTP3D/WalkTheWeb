@@ -103,6 +103,7 @@ function WTWJS() {
 	this.mouseTimer = null;
 	this.activityTimer = null;
 	this.jumpTimer = null;
+	this.animationSet = '';
 	this.showFPS = 0;
 	this.sizeX = 1024;
 	this.sizeY = 768;
