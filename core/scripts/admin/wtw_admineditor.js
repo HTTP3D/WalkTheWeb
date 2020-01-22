@@ -6758,7 +6758,7 @@ WTWJS.prototype.openMediaPageForm = function(uploadid) {
 
 WTWJS.prototype.editBuilding = function(zbuildingid) {
 	try {
-		WTW.openWebpage(wtw_domainurl + "/admin.php?buildingid=" + zbuildingid + "&hmenu=25");
+		WTW.openWebpage(wtw_domainurl + "/admin.php?buildingid=" + zbuildingid);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-editBuilding=" + ex.message);
 	}

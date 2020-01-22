@@ -279,6 +279,7 @@ WTWJS.prototype.getSavedAvatar = function(reload) {
 					}
 					WTW.loadAvatarFromDB(response.avatar, reload);
 					if (reload == false) {
+
 						WTW.switchCamera(1);
 						WTW.pluginsSavedAvatarRetrieved();
 					}
@@ -447,6 +448,7 @@ WTWJS.prototype.setCameraOnAvatar = function() {
 		WTW.cameraFollow.maxCameraSpeed = 1000;
 		WTW.cameraFollow.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 		scene.activeCameras[0] = WTW.cameraFollow;
+		scene.cameraToUseForPointers = scene.activeCameras[0];
     } catch (ex) {
 		WTW.log("avatars-loadavatar-setCameraOnAvatar=" + ex.message);
     }
@@ -930,7 +932,9 @@ WTWJS.prototype.resetAvatarPartSelect = function() {
 		var avatarpieces = avatarscale.getChildren();
 		if (avatarpieces != null) {
 			for (var i=0;i<avatarpieces.length;i++) {
-				dGet('wtw_li-' + avatarpieces[i].name).className = 'wtw-avatarli';
+				if (dGet('wtw_li-' + avatarpieces[i].name) != null) {
+					dGet('wtw_li-' + avatarpieces[i].name).className = 'wtw-avatarli';
+				}
 			}
 		}
     } catch (ex) {

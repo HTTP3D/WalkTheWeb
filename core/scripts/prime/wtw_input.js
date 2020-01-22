@@ -629,6 +629,9 @@ WTWJS.prototype.mouseOverMold = function(mold) {
 			if (mold.meshUnderPointer != null) {
 				WTW.lastID = WTW.currentID;
 				WTW.currentID = mold.meshUnderPointer.name;
+				if (mold.meshUnderPointer.isPickable) {
+					document.body.style.cursor = "pointer";
+				}
 				WTW.checkHovers(mold);
 			}
 		}
