@@ -317,7 +317,7 @@ class wtwplugins {
 			$jsdata .= "		return othersinzone;\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsCheckActionZone = function(zactionzone, zmeinzone, zothersinzone) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsCheckActionZone = function(zactionzonename, zactionzoneind, zmeinzone, zothersinzone) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= $this->getScriptFunction('checkactionzone');
 			$jsdata .= "		} catch (ex) {\r\n";
@@ -341,6 +341,18 @@ class wtwplugins {
 			$jsdata .= "			WTW.log('class_wtw-pluginsOnClick=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
+
+
+			$jsdata .= "	WTWJS.prototype.pluginsSetAvatarMovement = function(zavatar, zmoveevents, zkey, zweight) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('setavatarmovement');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSetAvatarMovement=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zweight;\r\n";
+			$jsdata .= "	}\r\n";
+
+
 
 			$jsdata .= "	WTWJS.prototype.pluginsDisposeClean = function(moldname) {\r\n";
 			$jsdata .= "		try {\r\n";

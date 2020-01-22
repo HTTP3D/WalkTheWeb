@@ -10,10 +10,10 @@ class wtw {
 	}
 	
 	public function __construct() {
-		$this->rootpath = str_replace('\core\functions','',dirname(__FILE__));
+		$this->rootpath = str_replace('/core/functions','',str_replace('\\','/',dirname(__FILE__)));
 		define("wtw_rootpath", $this->rootpath);
 		if (file_exists(wtw_rootpath.'/config/wtw_config.php')) {
-			require_once(wtw_rootpath.'./config/wtw_config.php');
+			require_once(wtw_rootpath.'/config/wtw_config.php');
 		}
 		require_once(wtw_rootpath.'/core/functions/class_wtwuser.php');
 	}	
@@ -341,7 +341,7 @@ class wtw {
 					$dbuser = $_POST["wtw_tdbuser"];
 					$dbpassword = $_POST["wtw_tdbpassword"];
 					$prefix = $_POST["wtw_tprefix"];
-					$contentpath = addslashes(wtw_rootpath."/content");
+					$contentpath = wtw_rootpath."/content";
 					$contenturl = "/content";
 					$zdomainname = "";
 					if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
@@ -396,7 +396,6 @@ class wtw {
 					fclose($cfile);
 				}
 			}
-echo $zsetupstep;
 			if ($zsetupstep == 0) {
 				require_once(wtw_rootpath.'/core/functions/class_wtwdb.php');
 				require_once(wtw_rootpath.'/core/functions/class_wtwusers.php');
