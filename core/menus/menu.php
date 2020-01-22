@@ -50,9 +50,9 @@
 	</div>
 </div>
 <div id="wtw_menuprofile" class="wtw-slideupmenuright" style="display:none;visibility:hidden;">
-	<img onclick="WTW.closeMenus();" class="wtw-closeright" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
 	<div id="wtw_menuprofilescroll" class="wtw-mainmenuscroll">
 		<div id="wtw_menuloggedin" style="display:none;visibility:hidden;">
+			<img onclick="WTW.closeMenus();" class="wtw-closeright" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
 			<div class="wtw-menuheading">My Profile</div>
 			<ul class="wtw-menuli">
 				<li class="wtw-menuliholder wtw-center"><img id="wtw_profileimagelg" src="/content/system/images/menuprofilebig.png" alt="Profile" title="Profile" class='wtw-profilelg' /></li>
@@ -78,6 +78,7 @@
 		</div>
 		<div id="wtw_menulogin">
 			<form>
+				<img onclick="WTW.closeMenus();" class="wtw-closeright" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
 				<img src="/content/system/images/menuq.png" alt="Show Help" title="Show Help" class='wtw-menuq' onclick="WTW.toggle('wtw_loginnote');" />
 				<div class="wtw-menuheading">Login</div>
 				<div id="wtw_loginnote" class="wtw-menunote" style="display:none;visibility:hidden;">Login or click Create Account to get started.</div>
@@ -100,6 +101,7 @@
 		</div>
 		<div id="wtw_menupasswordrecovery" class="wtw-hide">
 			<form>
+				<img onclick="WTW.closeMenus();" class="wtw-closeright" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
 				<img src="/content/system/images/menuq.png" alt="Show Help" title="Show Help" class='wtw-menuq' onclick="WTW.toggle('wtw_loginnote');" />
 				<div class="wtw-menuheading">Recover My Login</div>
 				<div id="wtw_loginnote" class="wtw-menunote" style="display:none;visibility:hidden;">Note</div>
@@ -118,6 +120,7 @@
 		</div>
 		<div id="wtw_menuregister" style="display:none;visibility:hidden;">
 			<form>
+				<img onclick="WTW.closeMenus();" class="wtw-closeright" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
 				<div class="wtw-menuheading">Create My Account</div>
 				<ul class="wtw-menuli" style="border-bottom:1px solid #454545;">
 					<li class="wtw-submenuli">Username</li>
