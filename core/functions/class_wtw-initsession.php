@@ -18,7 +18,7 @@ class wtw {
 		require_once(wtw_rootpath.'/core/functions/class_wtwuser.php');
 	}	
 	
-	public $version = "3.2.0";
+	public $version = "3.2.1";
 	public $dbversion = "1.0.4";
 	public $versiondate = "2019-12-16";
 	public $serverinstanceid = "";
@@ -40,8 +40,9 @@ class wtw {
 	public $thingid = "";
 	public $pluginscripts = array();
 	public $pluginscriptfunctions = array();
-	public $pluginActionZoneDefs = array();
 	public $pluginMoldDefs = array();
+	public $pluginActionZoneDefs = array();
+	public $pluginCoveringDefs = array();
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {

@@ -22,6 +22,7 @@ WTWJS.prototype.getCoveringList = function(shape) {
 			coveringlist[coveringlist.length] = "Road";
 			coveringlist[coveringlist.length] = "Hidden";
 		}
+		WTW.coveringlist = WTW.pluginsCoverings(WTW.coveringlist);
 		WTW.clearOptions("wtw_tmoldcovering");
 		for (var i=0;i < coveringlist.length;i++) {
 			var option = document.createElement("option");
@@ -86,7 +87,7 @@ WTWJS.prototype.addCovering = function(coveringname, moldname, molddef, lenx, le
 				covering = null;
 				break;
 			default:
-				covering = WTW.addCoveringTexture(moldname, molddef, lenx, leny, lenz, special1, special2);
+				covering = WTW.pluginsAddCoverings(moldname, molddef, lenx, leny, lenz, special1, special2);
 				break;
 		}
 	} catch (ex) {
@@ -201,6 +202,7 @@ WTWJS.prototype.setCoveringFormFields = function(coveringname) {
 				WTW.closeColorSelector();
 				break;
 		}	
+		WTW.pluginsSetCoveringFormFields(coveringname);
 	} catch (ex) {
 		WTW.log("core-scripts-molds-addcoveringlist\r\n setCoveringFormFields=" + ex.message);
 	}

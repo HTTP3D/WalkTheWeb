@@ -441,7 +441,7 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsSetNewMoldDefaults = function(shape) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsSetNewMoldDefaults = function(shape, positionX, positionY, positionZ, rotationY) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->getScriptFunction('setnewmolddefaults');
 			$jsdata .= "		} catch (ex) {\r\n";
@@ -486,6 +486,33 @@ class wtwplugins {
 			$jsdata .= 	$this->getScriptFunction('cleareditmold');
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsClearEditMold=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsCoverings = function(coveringlist) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnCoveringDefsList('covering');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsCoverings=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return coveringlist;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsAddCoverings = function(moldname, molddef, lenx, leny, lenz, special1, special2) {\r\n";
+			$jsdata .= "		var covering = null;\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnCoveringDefsFunctions();
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsAddCoverings=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return covering;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsSetCoveringFormFields = function(coveringname) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('setcoveringformfields');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSetCoveringFormFields=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
@@ -582,6 +609,85 @@ class wtwplugins {
 		return $zscripttext;
 	}	
 
+	public function addMoldDef($zmoldtitle, $zlist, $zjsfunction) {
+		global $wtw;
+		$zsuccess = false;
+		try {
+			$zfound = false;
+			foreach ($wtw->pluginMoldDefs as $zmold) {
+				if (isset($zmold["scriptid"]) && !empty($zmold["scriptid"])) {
+					if ($zmold["scriptid"] == $zmoldtitle) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				$zmold = array(
+					'moldtitle' => $zmoldtitle,
+					'list' => $zlist,
+					'jsfunction' => $zjsfunction
+				);
+				$wtw->pluginMoldDefs[count($wtw->pluginMoldDefs)] = $zmold;
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwplugins.php-addMoldDef=" . $e->getMessage());
+		}
+		return $zsuccess;
+	}
+
+	public function returnMoldDefsList($zgetlist) {
+		global $wtw;
+		$zscripttext = "";
+		try {
+			foreach ($wtw->pluginMoldDefs as $zmolddef) {
+				$zlist = trim($zmolddef["list"]);
+				$zmoldtitle = trim($zmolddef["moldtitle"]);
+				$zjsfunction = trim($zmolddef["jsfunction"]);
+				if (!empty($zjsfunction) && isset($zjsfunction)) {
+					if (strpos($zjsfunction,";") === false) {
+						$zjsfunction .= ";";
+					}
+					if (strtolower($zlist) == strtolower($zgetlist) && strlen($zmoldtitle) > 1) {
+						$zscripttext .= "moldlist[moldlist.length] = \"".$zmoldtitle."\";\r\n";
+					}
+				}
+			}			
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwmenus.php-returnMoldDefs=".$e->getMessage());
+		}
+		return $zscripttext;
+	}	
+
+	public function returnMoldDefsFunctions() {
+		global $wtw;
+		$zscripttext = "switch (shape) {\r\n";
+		try {
+			foreach ($wtw->pluginMoldDefs as $zmolddef) {
+				$zlist = trim($zmolddef["list"]);
+				$zmoldtitle = str_replace(" ","",trim($zmolddef["moldtitle"]));
+				$zjsfunction = trim($zmolddef["jsfunction"]);
+				if (!empty($zjsfunction) && isset($zjsfunction)) {
+					if (strpos($zjsfunction,";") === false) {
+						$zjsfunction .= ";";
+					}
+					if (strlen($zmoldtitle) > 1 && strlen($zjsfunction) > 1) {
+						$zscripttext .= "case \"".strtolower($zmoldtitle)."\":\r\n";
+						$zscripttext .= "mold = ".$zjsfunction."\r\n";
+						$zscripttext .= "break;\r\n";
+					}
+				}
+			}			
+			$zscripttext .= "default:\r\n";
+			$zscripttext .= "mold = WTW.addMoldBox(moldname, lenx, leny, lenz);\r\n";
+			$zscripttext .= "break;\r\n";
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwmenus.php-returnMoldDefs=".$e->getMessage());
+		}
+		$zscripttext .= "}\r\n";
+		return $zscripttext;
+	}	
+
 	public function addActionZoneDef($zactionzonetitle, $zjsfunction) {
 		global $wtw;
 		$zsuccess = false;
@@ -658,80 +764,77 @@ class wtwplugins {
 		return $zscripttext;
 	}	
 	
-	public function addMoldDef($zmoldtitle, $zlist, $zjsfunction) {
+	public function addCoveringDef($zcoveringtitle, $zjsfunction) {
 		global $wtw;
 		$zsuccess = false;
 		try {
 			$zfound = false;
-			foreach ($wtw->pluginMoldDefs as $zmold) {
-				if (isset($zmold["scriptid"]) && !empty($zmold["scriptid"])) {
-					if ($zmold["scriptid"] == $zmoldtitle) {
+			foreach ($wtw->pluginCoveringDefs as $zcovering) {
+				if (isset($zcovering["scriptid"]) && !empty($zcovering["scriptid"])) {
+					if ($zcovering["scriptid"] == $zcoveringtitle) {
 						$zfound = true;
 					}
 				}
 			}
 			if ($zfound == false) {
-				$zmold = array(
-					'moldtitle' => $zmoldtitle,
-					'list' => $zlist,
+				$zcovering = array(
+					'coveringtitle' => $zcoveringtitle,
 					'jsfunction' => $zjsfunction
 				);
-				$wtw->pluginMoldDefs[count($wtw->pluginMoldDefs)] = $zmold;
+				$wtw->pluginCoveringDefs[count($wtw->pluginCoveringDefs)] = $zcovering;
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwplugins.php-addMoldDef=" . $e->getMessage());
+			$this->serror("core-functions-class_wtwplugins.php-addCoveringDef=" . $e->getMessage());
 		}
 		return $zsuccess;
 	}
 
-	public function returnMoldDefsList($zgetlist) {
+	public function returnCoveringDefsList() {
 		global $wtw;
 		$zscripttext = "";
 		try {
-			foreach ($wtw->pluginMoldDefs as $zmolddef) {
-				$zlist = trim($zmolddef["list"]);
-				$zmoldtitle = trim($zmolddef["moldtitle"]);
-				$zjsfunction = trim($zmolddef["jsfunction"]);
+			foreach ($wtw->pluginCoveringDefs as $zcoveringdef) {
+				$zcoveringtitle = trim($zcoveringdef["coveringtitle"]);
+				$zjsfunction = trim($zactionzonedef["jsfunction"]);
 				if (!empty($zjsfunction) && isset($zjsfunction)) {
 					if (strpos($zjsfunction,";") === false) {
 						$zjsfunction .= ";";
 					}
-					if (strtolower($zlist) == strtolower($zgetlist) && strlen($zmoldtitle) > 1) {
-						$zscripttext .= "moldlist[moldlist.length] = \"".$zmoldtitle."\";\r\n";
+					if (strlen($zcoveringtitle) > 1) {
+						$zscripttext .= "coveringlist[coveringlist.length] = {'name':'".$zcoveringtitle."','helpurl':''};\r\n";
 					}
 				}
 			}			
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-returnMoldDefs=".$e->getMessage());
+			$this->serror("core-functions-class_wtwmenus.php-returnCoveringDefsList=".$e->getMessage());
 		}
 		return $zscripttext;
 	}	
 
-	public function returnMoldDefsFunctions() {
+	public function returnCoveringDefsFunctions() {
 		global $wtw;
-		$zscripttext = "switch (shape) {\r\n";
+		$zscripttext = "switch (coveringname) {\r\n";
 		try {
-			foreach ($wtw->pluginMoldDefs as $zmolddef) {
-				$zlist = trim($zmolddef["list"]);
-				$zmoldtitle = str_replace(" ","",trim($zmolddef["moldtitle"]));
-				$zjsfunction = trim($zmolddef["jsfunction"]);
+			foreach ($wtw->pluginCoveringDefs as $zcoveringdef) {
+				$zcoveringtitle = str_replace(" ","",trim($zcoveringdef["coveringtitle"]));
+				$zjsfunction = trim($zcoveringdef["jsfunction"]);
 				if (!empty($zjsfunction) && isset($zjsfunction)) {
 					if (strpos($zjsfunction,";") === false) {
 						$zjsfunction .= ";";
 					}
-					if (strlen($zmoldtitle) > 1 && strlen($zjsfunction) > 1) {
-						$zscripttext .= "case \"".strtolower($zmoldtitle)."\":\r\n";
-						$zscripttext .= "mold = ".$zjsfunction."\r\n";
+					if (strlen($zcoveringtitle) > 1 && strlen($zjsfunction) > 1) {
+						$zscripttext .= "case \"".strtolower($zcoveringtitle)."\":\r\n";
+						$zscripttext .= "covering = ".$zjsfunction."\r\n";
 						$zscripttext .= "break;\r\n";
 					}
 				}
 			}			
 			$zscripttext .= "default:\r\n";
-			$zscripttext .= "mold = WTW.addMoldBox(moldname, lenx, leny, lenz);\r\n";
+			$zscripttext .= "covering = WTW.addCoveringColor(moldname, molddef);\r\n";
 			$zscripttext .= "break;\r\n";
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-returnMoldDefs=".$e->getMessage());
+			$this->serror("core-functions-class_wtwmenus.php-returnCoveringDefsFunctions=".$e->getMessage());
 		}
 		$zscripttext .= "}\r\n";
 		return $zscripttext;
