@@ -65,6 +65,9 @@ WTWJS.prototype.addCovering = function(coveringname, moldname, molddef, lenx, le
 			case "road":
 				covering = WTW.addCoveringRoad(moldname, molddef);
 				break;
+			case "texture":
+				covering = WTW.addCoveringTexture(moldname, molddef, lenx, leny, lenz, special1, special2);
+				break;
 			case "directional texture":
 				covering = WTW.addCoveringDirectionalTexture(moldname, molddef, lenx, leny, lenz);
 				break; 
@@ -87,7 +90,7 @@ WTWJS.prototype.addCovering = function(coveringname, moldname, molddef, lenx, le
 				covering = null;
 				break;
 			default:
-				covering = WTW.pluginsAddCoverings(moldname, molddef, lenx, leny, lenz, special1, special2);
+				covering = WTW.pluginsAddCoverings(coveringname, moldname, molddef, lenx, leny, lenz, special1, special2);
 				break;
 		}
 	} catch (ex) {
