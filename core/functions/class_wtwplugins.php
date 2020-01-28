@@ -498,7 +498,7 @@ class wtwplugins {
 			$jsdata .= "		return coveringlist;\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsAddCoverings = function(moldname, molddef, lenx, leny, lenz, special1, special2) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsAddCoverings = function(coveringname, moldname, molddef, lenx, leny, lenz, special1, special2) {\r\n";
 			$jsdata .= "		var covering = null;\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->returnCoveringDefsFunctions();
