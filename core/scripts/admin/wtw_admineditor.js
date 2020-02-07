@@ -6117,7 +6117,7 @@ WTWJS.prototype.saveObjectAnimation = function() {
 					WTW.hide('wtw_addanimationdiv');
 					WTW.hide('wtw_deleteanimation');
 					WTW.hide('wtw_canceldeleteanimation');
-					WTW.loadObjectDetailsAnimations(zuploadobjectid)
+					WTW.loadObjectDetailsAnimations(dGet('wtw_tuploadobjectid').value)
 				}
 			);
 		}
