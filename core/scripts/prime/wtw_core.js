@@ -1478,20 +1478,28 @@ WTWJS.prototype.moveAvatar = function(avatar, keyspressed) {
 		}
 		if (avatar != null && WTW.cameraFocus == 1) {
 			var moveevents = [];
+			var animations = '';
 			if (keyspressed != null) {
 				for (var k=0;k < keyspressed.length;k++) {
 					if (keyspressed[k] != null) {
 						if (WTW.isNumeric(keyspressed[k])) {
+							let anim = '';
 							switch (keyspressed[k]) {
 								case 32: //space jump
 									var index = WTW.indexInArray(moveevents, WTW.checkAnimationSet(avatar, 'onwalk'));
 									var index2 = WTW.indexInArray(moveevents, WTW.checkAnimationSet(avatar, 'onrun'));
 									if (index > -1) {
-										moveevents[index] = WTW.checkAnimationSet(avatar, 'onwalkjump');
+										anim = WTW.checkAnimationSet(avatar, 'onwalkjump');
+										moveevents[index] = anim;
+										animations += anim + ",";
+										anim = '';
 									} else if (index2 > -1) {
-										moveevents[index2] = WTW.checkAnimationSet(avatar, 'onrunjump');
+										anim = WTW.checkAnimationSet(avatar, 'onrunjump');
+										moveevents[index2] = anim;
+										animations += anim + ",";
+										anim = '';
 									} else {
-										moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onjump');
+										anim = WTW.checkAnimationSet(avatar, 'onjump');
 									}
 									break;
 								case 38: //arrow w forward
@@ -1499,112 +1507,125 @@ WTWJS.prototype.moveAvatar = function(avatar, keyspressed) {
 									var index = WTW.indexInArray(moveevents, WTW.checkAnimationSet(avatar, 'onjump'));
 									if (index > -1) {
 										if (WTW.shiftKey) {
-											moveevents[index] = WTW.checkAnimationSet(avatar, 'onrunjump');
+											anim = WTW.checkAnimationSet(avatar, 'onrunjump');
 										} else {
-											moveevents[index] = WTW.checkAnimationSet(avatar, 'onwalkjump');
+											anim = WTW.checkAnimationSet(avatar, 'onwalkjump');
 										}
+										moveevents[index] = anim;
+										animations += anim + ",";
+										anim = '';
 									} else {
 										if (WTW.shiftKey) {
-											moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrun');
+											anim = WTW.checkAnimationSet(avatar, 'onrun');
 										} else {
-											moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onwalk');
+											anim = WTW.checkAnimationSet(avatar, 'onwalk');
 										}
 									}
 									break;
 								case 1038: //arrow w forward
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onwalk');
+									anim = WTW.checkAnimationSet(avatar, 'onwalk');
 									break;
 								case 2038: //arrow w forward
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrun');
+									anim = WTW.checkAnimationSet(avatar, 'onrun');
 									break;
 								case 40: //arrow s backwards
 								case 83: //s backwards
 									if (WTW.shiftKey) {
-										moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrunbackwards');
+										anim = WTW.checkAnimationSet(avatar, 'onrunbackwards');
 									} else {
-										moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onwalkbackwards');
+										anim = WTW.checkAnimationSet(avatar, 'onwalkbackwards');
 									}
 									break;
 								case 1040: //arrow s backwards
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onwalkbackwards');
+									anim = WTW.checkAnimationSet(avatar, 'onwalkbackwards');
 									break;
 								case 2040: //arrow s backwards
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrunbackwards');
+									anim = WTW.checkAnimationSet(avatar, 'onrunbackwards');
 									break;
 								case 37: //arrow q rotate left
 								case 81: //q rotate left
 									if (WTW.shiftKey) {
-										moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrunturnleft');
+										anim = WTW.checkAnimationSet(avatar, 'onrunturnleft');
 									} else {
-										moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onturnleft');
+										anim = WTW.checkAnimationSet(avatar, 'onturnleft');
 									}
 									break;
 								case 1037: //mouse rotate left
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onturnleft');
+									anim = WTW.checkAnimationSet(avatar, 'onturnleft');
 									break;
 								case 2037: //mouse rotate left
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrunturnleft');
+									anim = WTW.checkAnimationSet(avatar, 'onrunturnleft');
 									break;
 								case 39: //arrow e rotate right
 								case 69: //e rotate right
 									if (WTW.shiftKey) {
-										moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrunturnright');
+										anim = WTW.checkAnimationSet(avatar, 'onrunturnright');
 									} else {
-										moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onturnright');
+										anim = WTW.checkAnimationSet(avatar, 'onturnright');
 									}
 									break;
 								case 1039: //mouse rotate right
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onturnright');
+									anim = WTW.checkAnimationSet(avatar, 'onturnright');
 									break;
 								case 2039: //mouse rotate right
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrunturnright');
+									anim = WTW.checkAnimationSet(avatar, 'onrunturnright');
 									break;
 								case 65: //a strafe left
 								case 1065: //mouse strafe left
 									if (WTW.shiftKey) {
-										moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrunstrafeleft');
+										anim = WTW.checkAnimationSet(avatar, 'onrunstrafeleft');
 									} else {
-										moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onstrafeleft');
+										anim = WTW.checkAnimationSet(avatar, 'onstrafeleft');
 									}
 									break;
 								case 2065: //mouse strafe left
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrunstrafeleft');
+									anim = WTW.checkAnimationSet(avatar, 'onrunstrafeleft');
 									break;
 								case 68: //d strafe right
 								case 1068: //mouse strafe right
 									if (WTW.shiftKey) {
-										moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrunstraferight');
+										anim = WTW.checkAnimationSet(avatar, 'onrunstraferight');
 									} else {
-										moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onstraferight');
+										anim = WTW.checkAnimationSet(avatar, 'onstraferight');
 									}
 									break;
 								case 2068: //mouse strafe right
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrunstraferight');
+									anim = WTW.checkAnimationSet(avatar, 'onrunstraferight');
 									break;
 								case 82: //r rotate up
 								case 1082: //mouse rotate up
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrotateup');
+									anim = WTW.checkAnimationSet(avatar, 'onrotateup');
 									break;
 								case 70: //f rotate down
 								case 1070: //mouse rotate down
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onrotatedown');
+									anim = WTW.checkAnimationSet(avatar, 'onrotatedown');
 									break;
 								case 0: //pause animation
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onpause');
+									anim = WTW.checkAnimationSet(avatar, 'onpause');
 									break;
 								case 3001: //sit wait
-									moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onsitwait');
+									anim = WTW.checkAnimationSet(avatar, 'onsitwait');
 									break;
 							} 
+							if (anim != '') {
+								moveevents[moveevents.length] = anim;
+								animations += anim + ",";
+								anim = '';
+							}
 						} else {
-							moveevents[moveevents.length] = keyspressed[k];
+							anim = WTW.checkAnimationSet(avatar, keyspressed[k]);
+							moveevents[moveevents.length] = anim;
+							animations += anim + ",";
 						}
 					}
 				}
 			}
 			if (keyspressed.length == 0) {
-				moveevents[moveevents.length] = WTW.checkAnimationSet(avatar, 'onwait');
+				anim = WTW.checkAnimationSet(avatar, 'onwait');
+				moveevents[moveevents.length] = anim;
+				animations += anim + ",";
 			}
+			WTW.activeAnimations = animations;
 			if (WTW.refreshLastMoveEvents) {
 				WTW.lastMoveEvents = moveevents;
 				WTW.refreshLastMoveEvents = false;
@@ -1691,16 +1712,20 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											avatar.moveWithCollisions(zmove);
 											break;
 										case 'onrotateup':
-											WTW.cameraYOffset -= 200/(WTW.sizeY - WTW.mouseStartY + WTW.mouseY);
-											if (WTW.cameraYOffset < -10) {
-												WTW.cameraYOffset = -10; // -4
+											if (avatar.name.indexOf("myavatar-") > -1) {
+												WTW.cameraYOffset -= 200/(WTW.sizeY - WTW.mouseStartY + WTW.mouseY);
+												if (WTW.cameraYOffset < -10) {
+													WTW.cameraYOffset = -10; // -4
+												}
 											}
 											weight -= avatar.WTW.animations.running[key].weight;
 											break;
 										case 'onrotatedown':
-											WTW.cameraYOffset += 200/(WTW.sizeY - WTW.mouseY + WTW.mouseStartY);
-											if (WTW.cameraYOffset > 20) {
-												WTW.cameraYOffset = 20;
+											if (avatar.name.indexOf("myavatar-") > -1) {
+												WTW.cameraYOffset += 200/(WTW.sizeY - WTW.mouseY + WTW.mouseStartY);
+												if (WTW.cameraYOffset > 20) {
+													WTW.cameraYOffset = 20;
+												}
 											}
 											weight -= avatar.WTW.animations.running[key].weight;
 											break;
@@ -1812,7 +1837,9 @@ WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
 											weight = WTW.pluginsSetAvatarMovement(avatar, moveevents, key, weight);
 											break;
 									}
-									WTW.setMovingCameras(avatar);
+									if (avatar.name.indexOf("myavatar-") > -1) {
+										WTW.setMovingCameras(avatar);
+									}
 								}
 							}
 						}
