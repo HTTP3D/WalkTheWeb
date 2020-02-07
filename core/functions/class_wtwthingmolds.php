@@ -291,6 +291,40 @@ class wtwthingmolds {
 		}
 		return $zsuccess;
 	}
+
+	function saveThingMoldActionZone($zthingmoldid, $zthingid, $zactionzoneid) {
+		/* this is not Load Zone, Mold is part of another ActionZone like Door Swinging */
+		global $wtwhandlers;
+		$zsuccess = false;
+		try {
+			if ($wtwhandlers->checkUpdateAccess("", "", $zthingid)) {
+				$zfoundthingmoldid = "";
+				$zresults = $wtwhandlers->query("
+					select thingmoldid 
+					from ".wtw_tableprefix."thingmolds 
+					where thingmoldid='".$zthingmoldid."'
+						and not thingmoldid=''
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfoundthingmoldid = $zrow["thingmoldid"];
+				}
+				if (!empty($zfoundthingmoldid) && isset($zfoundthingmoldid)) {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."thingmolds
+						set actionzoneid='".$zactionzoneid."',
+							updatedate=now(),
+							updateuserid='".$wtwhandlers->userid."'
+						where thingmoldid='".$zthingmoldid."'
+							and thingid='".$zthingid."';");
+					$zsuccess = true;
+				}
+			}			
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwthingmolds.php-saveThingMoldActionZone=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+
 }
 
 	function wtwthingmolds() {

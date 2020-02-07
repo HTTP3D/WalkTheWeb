@@ -117,6 +117,21 @@ try {
 				}
 			}
 			break;
+		case "savemoldactionzone":
+			if (!empty($zcommunityid)) {
+				require_once(wtw_rootpath.'/core/functions/class_wtwcommunitymolds.php');
+				global $wtwcommunitymolds;
+				$zmoldid = $wtwcommunitymolds->saveCommunityMoldActionZone($zmoldid, $zcommunityid, $zactionzoneid);
+			} else if (!empty($zbuildingid)) {
+				require_once(wtw_rootpath.'/core/functions/class_wtwbuildingmolds.php');
+				global $wtwbuildingmolds;
+				$zmoldid = $wtwbuildingmolds->saveBuildingMoldActionZone($zmoldid, $zbuildingid, $zactionzoneid);
+			} else if (!empty($zthingid)) {
+				require_once(wtw_rootpath.'/core/functions/class_wtwthingmolds.php');
+				global $wtwthingmolds;
+				$zmoldid = $wtwthingmolds->saveThingMoldActionZone($zmoldid, $zthingid, $zactionzoneid);
+			}
+			break;
 		case "deletemold":
 			if (!empty($zcommunityid)) {
 				require_once(wtw_rootpath.'/core/functions/class_wtwcommunitymolds.php');

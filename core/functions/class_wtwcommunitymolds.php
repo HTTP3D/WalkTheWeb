@@ -18,6 +18,7 @@ class wtwcommunitymolds {
 			call_user_func_array($this->$method, array_merge(array(&$this), $arguments));
 		}
 	}
+	
 	function saveCommunityMold($zcommunitymoldid, $zcommunityid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zsubdivisions, $zminheight, $zmaxheight, $zcheckcollisions, $zispickable, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb, $zspecularcolorr, $zspecularcolorg, $zspecularcolorb, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain) {
 		global $wtwhandlers;
 		try {
@@ -292,6 +293,40 @@ class wtwcommunitymolds {
 		}
 		return $zsuccess;
 	}
+
+	function saveCommunityMoldActionZone($zcommunitymoldid, $zcommunityid, $zactionzoneid) {
+		/* this is not Load Zone, Mold is part of another ActionZone like Door Swinging */
+		global $wtwhandlers;
+		$zsuccess = false;
+		try {
+			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
+				$zfoundcommunitymoldid = "";
+				$zresults = $wtwhandlers->query("
+					select communitymoldid 
+					from ".wtw_tableprefix."communitymolds 
+					where communitymoldid='".$zcommunitymoldid."'
+						and not communitymoldid=''
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfoundcommunitymoldid = $zrow["communitymoldid"];
+				}
+				if (!empty($zfoundcommunitymoldid) && isset($zfoundcommunitymoldid)) {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."communitymolds
+						set actionzoneid='".$zactionzoneid."',
+							updatedate=now(),
+							updateuserid='".$wtwhandlers->userid."'
+						where communitymoldid='".$zcommunitymoldid."'
+							and communityid='".$zcommunityid."';");
+					$zsuccess = true;
+				}
+			}			
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwcommunitymolds.php-saveCommunityMoldActionZone=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+
 }
 
 	function wtwcommunitymolds() {

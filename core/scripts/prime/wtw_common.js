@@ -9007,6 +9007,10 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 	var molds = WTW.buildingMolds;
 	var namepart = [];
 	var shape = "";
+	var loadactionzoneid = "";
+	var actionzoneid = "";
+	var coveringname = "";
+	var moldnamebase = "";
 	var parentname = "";
 	try {
 		if (moldname == undefined) {
@@ -9036,6 +9040,7 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 			if (namepart[5] != null) {
 				shape = namepart[5];
 			}
+			moldnamebase = namepart[0] + "-" + namepart[1] + "-" + namepart[2] + "-" + namepart[3] + "-";
 			switch (moldgroup) {
 				case "community":
 					molds = WTW.communitiesMolds;
@@ -9054,6 +9059,9 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 				if (molds[moldind].thinginfo.thingid != undefined) {
 					zthingid = molds[moldind].thinginfo.thingid;
 				}
+				loadactionzoneid = molds[moldind].loadactionzoneid;
+				actionzoneid = molds[moldind].actionzoneid;
+				coveringname = molds[moldind].covering;
 			}
 		}
 		var mold = scene.getMeshByID(moldname);
@@ -9078,9 +9086,32 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 		moldgroup:moldgroup,
 		molds:molds,
 		shape:shape,
+		loadactionzoneid:loadactionzoneid,
+		actionzoneid:actionzoneid,
+		coveringname:coveringname,
 		namepart:namepart,
+		moldnamebase:moldnamebase,
 		parentname:parentname
 	}
+}
+
+WTWJS.prototype.getMoldBase = function(mold) {
+	try {
+		var moldname = mold.name;
+		if (mold.parent != null) {
+			var moldnameparts = WTW.getMoldnameParts(moldname);
+			var moldparent = mold.parent;
+			var parentnameparts = WTW.getMoldnameParts(moldparent.name);
+			while (moldnameparts.moldnamebase == parentnameparts.moldnamebase && mold.parent != null) {
+				mold = moldparent;
+				moldparent = moldparent.parent;
+				parentnameparts = WTW.getMoldnameParts(moldparent.name);
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-getMoldBase=" + ex.message);
+	}
+	return mold;
 }
 
 WTWJS.prototype.checkAnalytics = function(actionzoneind) {

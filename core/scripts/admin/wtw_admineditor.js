@@ -4754,89 +4754,61 @@ WTWJS.prototype.removeActionZonePart = function(moldname) {
 	try {
 		var mold = scene.getMeshByID(moldname);
 		if (mold != null) {
-			var actionzoneid = "";
-			var moldind = -1;
-			var molds = WTW.buildingMolds;
-			var moldgroup = "building";
-			if (moldname.indexOf("community") > -1) {
-				moldgroup = "community";
-				molds = WTW.communitiesMolds;
-			} else if (moldname.indexOf("thing") > -1) {
-				moldgroup = "thing";
-				molds = WTW.thingMolds;
-			}
-			if (moldname.indexOf("-") > -1) {
-				var namepart = moldname.split('-');
-				if (namepart[1] != null) {
-					if (WTW.isNumeric(namepart[1])) {
-						moldind = Number(namepart[1]);
+			mold = WTW.getMoldBase(mold);
+			var moldnameparts = WTW.getMoldnameParts(mold.name);
+			if (moldnameparts.molds[moldnameparts.moldind] != null) {
+				moldnameparts.molds[moldnameparts.moldind].actionzoneid = "";
+				moldnameparts.molds[moldnameparts.moldind].graphics.texture.backupid = "";
+				WTW.loadMoldForm(moldnameparts.molds[moldnameparts.moldind]);
+				var zrequest = {
+					'communityid': communityid,
+					'buildingid': buildingid,
+					'thingid': thingid,
+					'moldid': moldnameparts.molds[moldnameparts.moldind].moldid,
+					'moldind': moldnameparts.moldind,
+					'actionzoneid': '',
+					'function':'savemoldactionzone'
+				};
+				WTW.postJSON("/core/handlers/molds.php", zrequest, 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
 					}
-				}
-			}
-			if (molds[moldind] != null) {
-				molds[moldind].actionzoneid = "";
-				molds[moldind].graphics.texture.backupid = "";
-				WTW.loadMoldForm(molds[moldind]);
-				WTW.submitMoldForm(2);
+				);
 			} 	
-			if (dGet('wtw_tactionzonetype').value.indexOf("seat") > -1) {
-				dGet('wtw_actionzonepartslist').innerHTML = "";
-				for (var j=0; j < WTW.thingMolds.length; j++) {
-					if (WTW.thingMolds[j] != null) {
-						if (WTW.thingMolds[j].actionzoneid == actionzoneid) {
-							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.thingMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.thingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.thingMolds[j].moldname + "')\">Action Zone Part (" + WTW.thingMolds[j].shape + ")</div>";
-						}
-					}
-				}
-				for (var j=0; j < WTW.buildingMolds.length; j++) {
-					if (WTW.buildingMolds[j] != null) {
-						if (WTW.buildingMolds[j].actionzoneid == actionzoneid) {
-							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.buildingMolds[j].moldname + "'.'yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.buildingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.buildingMolds[j].moldname + "')\">Action Zone Part (" + WTW.buildingMolds[j].shape + ")</div>";
-						}
-					}
-				}
-				for (var j=0; j < WTW.communitiesMolds.length; j++) {
-					if (WTW.communitiesMolds[j] != null) {
-						if (WTW.communitiesMolds[j].actionzoneid == actionzoneid) {
-							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.communitiesMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.communitiesMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.communitiesMolds[j].moldname + "')\">Action Zone Part (" + WTW.communitiesMolds[j].shape + ")</div>";
-						}
-					}
-				}
-			} else {
-				for (var i = 0; i < WTW.actionZones.length; i++) {
-					if (WTW.actionZones[i] != null) {
-						if (WTW.actionZones[i].actionzoneid == actionzoneid) {
-							var actionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + i + "-" + WTW.actionZones[i].actionzoneid + "-" + WTW.actionZones[i].connectinggridind + "-" + WTW.actionZones[i].connectinggridid + "-" + WTW.actionZones[i].actionzonetype);
-							var actionzoneaxlebase2 = scene.getMeshByID("actionzoneaxlebase2-" + i + "-" + WTW.actionZones[i].actionzoneid + "-" + WTW.actionZones[i].connectinggridind + "-" + WTW.actionZones[i].connectinggridid + "-" + WTW.actionZones[i].actionzonetype);
-							var actionzoneaxle = scene.getMeshByID("actionzoneaxle-" + i + "-" + WTW.actionZones[i].actionzoneid + "-" + WTW.actionZones[i].connectinggridind + "-" + WTW.actionZones[i].connectinggridid + "-" + WTW.actionZones[i].actionzonetype);
-							if (actionzoneaxlebase != null) {
-								if (mold.parent != null) {
-									if (mold.parent != actionzoneaxlebase.parent) {
-										if (mold.parent.name.indexOf("actionzone") > -1) {
-											mold.parent = actionzoneaxlebase.parent;
-											mold.position.x = molds[moldind].position.x;
-											mold.position.y = molds[moldind].position.y;
-											mold.position.z = molds[moldind].position.z;
-											mold.rotation.x = WTW.getRadians(molds[moldind].rotation.x);
-											mold.rotation.y = WTW.getRadians(molds[moldind].rotation.y);
-											mold.rotation.z = WTW.getRadians(molds[moldind].rotation.z);
-										}
+			for (var i = 0; i < WTW.actionZones.length; i++) {
+				if (WTW.actionZones[i] != null) {
+					if (WTW.actionZones[i].actionzoneid == moldnameparts.actionzoneid) {
+						var actionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + i + "-" + WTW.actionZones[i].actionzoneid + "-" + WTW.actionZones[i].connectinggridind + "-" + WTW.actionZones[i].connectinggridid + "-" + WTW.actionZones[i].actionzonetype);
+						var actionzoneaxlebase2 = scene.getMeshByID("actionzoneaxlebase2-" + i + "-" + WTW.actionZones[i].actionzoneid + "-" + WTW.actionZones[i].connectinggridind + "-" + WTW.actionZones[i].connectinggridid + "-" + WTW.actionZones[i].actionzonetype);
+						var actionzoneaxle = scene.getMeshByID("actionzoneaxle-" + i + "-" + WTW.actionZones[i].actionzoneid + "-" + WTW.actionZones[i].connectinggridind + "-" + WTW.actionZones[i].connectinggridid + "-" + WTW.actionZones[i].actionzonetype);
+						if (actionzoneaxlebase != null) {
+							if (mold.parent != null) {
+								if (mold.parent != actionzoneaxlebase.parent) {
+									if (mold.parent.name.indexOf("actionzone") > -1) {
+										mold.parent = actionzoneaxlebase.parent;
+										mold.position.x = moldnameparts.molds[moldnameparts.moldind].position.x;
+										mold.position.y = moldnameparts.molds[moldnameparts.moldind].position.y;
+										mold.position.z = moldnameparts.molds[moldnameparts.moldind].position.z;
+										mold.rotation.x = WTW.getRadians(moldnameparts.molds[moldnameparts.moldind].rotation.x);
+										mold.rotation.y = WTW.getRadians(moldnameparts.molds[moldnameparts.moldind].rotation.y);
+										mold.rotation.z = WTW.getRadians(moldnameparts.molds[moldnameparts.moldind].rotation.z);
 									}
 								}
 							}
-							if (actionzoneaxlebase2 != null) {
-								dGet('wtw_actionzonepartslist').innerHTML = "";
-								var moldparts = actionzoneaxlebase2.getChildren();
-								if (moldparts.length > 0) {
-									for (var i=0;i < moldparts.length;i++) {
-										var moldpartname = moldparts[i].name;
-										var shape = i;
-										if (moldpartname.indexOf("-") > -1) {
-											var namepart = moldpartname.split('-');
-											shape = namepart[5];
-										}
-										dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + moldpartname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + moldpartname + "');\" onclick=\"WTW.removeActionZonePart('" + moldpartname + "')\">Action Zone Part (" + shape + ")</div>";
+						}
+						if (actionzoneaxlebase2 != null) {
+							dGet('wtw_actionzonepartslist').innerHTML = "";
+							var moldparts = actionzoneaxlebase2.getChildren();
+							if (moldparts.length > 0) {
+								for (var i=0;i < moldparts.length;i++) {
+									var moldpartname = moldparts[i].name;
+									var shape = i;
+									if (moldpartname.indexOf("-") > -1) {
+										var namepart = moldpartname.split('-');
+										shape = namepart[5];
 									}
+									dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + moldpartname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + moldpartname + "');\" onclick=\"WTW.removeActionZonePart('" + moldpartname + "')\">Action Zone Part (" + shape + ")</div>";
 								}
 							}
 						}
@@ -4853,78 +4825,71 @@ WTWJS.prototype.removeActionZonePart = function(moldname) {
 WTWJS.prototype.addActionZonePart = function(actionzoneid, mold) {
 	try {
 		if (mold != null) {
-			var moldgroup = "building";
-			var moldind = -1;
-			var molds = WTW.buildingMolds;
-			var moldname = mold.name;
+			mold = WTW.getMoldBase(mold);
+			var moldnameparts = WTW.getMoldnameParts(mold.name);
 			var namepart;
-			if (moldname.indexOf("community") > -1) {
-				moldgroup = "community";
-				molds = WTW.communitiesMolds;
-			} else if (moldname.indexOf("thing") > -1) {
-				moldgroup = "thing";
-				molds = WTW.thingMolds;
-			}
-			if (moldname.indexOf("-") > -1) {
-				namepart = moldname.split('-');
-			}
-			if (WTW.isNumeric(namepart[1])) {
-				moldind = Number(namepart[1]);
-			}
-			var shape = namepart[5];
-			if (dGet('wtw_tactionzonetype').value.indexOf("seat") > -1) {
-				for (var i = 0; i < WTW.actionZones.length; i++) {
-					if (WTW.actionZones[i] != null) {
-						if (WTW.actionZones[i].actionzoneid == actionzoneid) {
-							var actionzoneaxlebase = scene.getMeshByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxlebase-"));
-							var actionzoneaxlebase2 = scene.getMeshByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxlebase2-"));
-							if (actionzoneaxlebase != null) {
-								if (mold.parent != actionzoneaxlebase2) {
-									mold.parent = actionzoneaxlebase2;
-									var posx = mold.position.x;
-									var posy = mold.position.y;
-									var posz = mold.position.z;
-									posx -= actionzoneaxlebase.position.x;
-									posy -= actionzoneaxlebase.position.y;
-									posz -= actionzoneaxlebase.position.z;
-									mold.position.x = posx;
-									mold.position.y = posy;
-									mold.position.z = posz;
-									dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + moldname + "');\" onclick=\"WTW.removeActionZonePart('" + moldname + "')\">Action Zone Part (" + shape + ")</div>";
-								}
+			for (var i = 0; i < WTW.actionZones.length; i++) {
+				if (WTW.actionZones[i] != null) {
+					if (WTW.actionZones[i].actionzoneid == actionzoneid) {
+						var actionzoneaxlebase = scene.getMeshByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxlebase-"));
+						var actionzoneaxlebase2 = scene.getMeshByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxlebase2-"));
+						if (actionzoneaxlebase != null) {
+							if (mold.parent.name != actionzoneaxlebase2.name) {
+								mold.parent = actionzoneaxlebase2;
+								var posx = mold.position.x;
+								var posy = mold.position.y;
+								var posz = mold.position.z; 
+								posx -= actionzoneaxlebase.position.x;
+								posy -= actionzoneaxlebase.position.y;
+								posz -= actionzoneaxlebase.position.z;
+								mold.position.x = posx;
+								mold.position.y = posy;
+								mold.position.z = posz;
 							}
 						}
 					}
 				}
 			}
-			WTW.hilightMoldFast(moldname,'yellow');
-			if (molds[moldind] != null) {
-				molds[moldind].actionzoneid = actionzoneid;
-				molds[moldind].graphics.texture.backupid = "";		
-				WTW.loadMoldForm(molds[moldind]);
-				WTW.submitMoldForm(2);
+			WTW.hilightMoldFast(mold.name,'yellow');
+			if (moldnameparts.molds[moldnameparts.moldind] != null) {
+				moldnameparts.molds[moldnameparts.moldind].actionzoneid = actionzoneid;
+				moldnameparts.molds[moldnameparts.moldind].graphics.texture.backupid = "";		
+				WTW.loadMoldForm(moldnameparts.molds[moldnameparts.moldind]);
+				var zrequest = {
+					'communityid': communityid,
+					'buildingid': buildingid,
+					'thingid': thingid,
+					'moldid': moldnameparts.molds[moldnameparts.moldind].moldid,
+					'moldind': moldnameparts.moldind,
+					'actionzoneid': moldnameparts.molds[moldnameparts.moldind].actionzoneid,
+					'function':'savemoldactionzone'
+				};
+				WTW.postJSON("/core/handlers/molds.php", zrequest, 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+					}
+				);
 			} 	
-			if (dGet('wtw_tactionzonetype').value.indexOf("seat") > -1) {
-				dGet('wtw_actionzonepartslist').innerHTML = "";
-				for (var j=0; j < WTW.thingMolds.length; j++) {
-					if (WTW.thingMolds[j] != null) {
-						if (WTW.thingMolds[j].actionzoneid == actionzoneid) {
-							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.thingMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.thingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.thingMolds[j].moldname + "')\">Action Zone Part (" + WTW.thingMolds[j].shape + ")</div>";
-						}
+			dGet('wtw_actionzonepartslist').innerHTML = "";
+			for (var j=0; j < WTW.thingMolds.length; j++) {
+				if (WTW.thingMolds[j] != null) {
+					if (WTW.thingMolds[j].actionzoneid == actionzoneid) {
+						dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.thingMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.thingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.thingMolds[j].moldname + "')\">Action Zone Part (" + WTW.thingMolds[j].shape + ")</div>";
 					}
 				}
-				for (var j=0; j < WTW.buildingMolds.length; j++) {
-					if (WTW.buildingMolds[j] != null) {
-						if (WTW.buildingMolds[j].actionzoneid == actionzoneid) {
-							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.buildingMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.buildingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.buildingMolds[j].moldname + "')\">Action Zone Part (" + WTW.buildingMolds[j].shape + ")</div>";
-						}
+			}
+			for (var j=0; j < WTW.buildingMolds.length; j++) {
+				if (WTW.buildingMolds[j] != null) {
+					if (WTW.buildingMolds[j].actionzoneid == actionzoneid) {
+						dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.buildingMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.buildingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.buildingMolds[j].moldname + "')\">Action Zone Part (" + WTW.buildingMolds[j].shape + ")</div>";
 					}
 				}
-				for (var j=0; j < WTW.communitiesMolds.length; j++) {
-					if (WTW.communitiesMolds[j] != null) {
-						if (WTW.communitiesMolds[j].actionzoneid == actionzoneid) {
-							dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.communitiesMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.communitiesMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.communitiesMolds[j].moldname + "')\">Action Zone Part (" + WTW.communitiesMolds[j].shape + ")</div>";
-						}
+			}
+			for (var j=0; j < WTW.communitiesMolds.length; j++) {
+				if (WTW.communitiesMolds[j] != null) {
+					if (WTW.communitiesMolds[j].actionzoneid == actionzoneid) {
+						dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.communitiesMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.communitiesMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.communitiesMolds[j].moldname + "')\">Action Zone Part (" + WTW.communitiesMolds[j].shape + ")</div>";
 					}
 				}
 			}
