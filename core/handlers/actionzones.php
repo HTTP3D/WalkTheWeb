@@ -83,10 +83,10 @@ try {
 				}
 			}
 			break;
-		case "saveavataranimation":
+		case "saveazavataranimation":
 			$wtwactionzones->updateActionZoneAvatarAnimation($zactionzoneid, $zavataranimationid, $zcommunityid, $zbuildingid, $zthingid);
 			break;
-		case "deleteavataranimation":
+		case "deleteazavataranimation":
 			$wtwactionzones->deleteActionZoneAvatarAnimation($zactionzoneid, $zavataranimationid, $zcommunityid, $zbuildingid, $zthingid);
 			break;
 		case "importactionzone":

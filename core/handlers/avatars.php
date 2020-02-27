@@ -43,19 +43,19 @@ try {
 			$wtwavatars->saveAvatarDisplayName($zavatarid, $zinstanceid, $zavatardisplayname);
 			break;
 		case "saveavataranimation":
-			$zuseravataranimationid = $wtwavatars->saveAvatarAnimation($zuseravataranimationid, $zavatarid, $zavataranimationid, $zavataranimationname, $zspeedratio);
+			$zuseravataranimationid = $wtwavatars->saveAvatarAnimation($zuseravataranimationid, $zavatarid, $zinstanceid, $zavataranimationid, $zavataranimationname, $zspeedratio);
 			$zresponse = array(
 				'useravataranimationid'=> $zuseravataranimationid
 			);
 			break;
 		case "deleteavataranimation":
-			$wtwavatars->deleteAvatarAnimation($zuseravataranimationid, $zavatarid, $zavataranimationid);
+			$wtwavatars->deleteAvatarAnimation($zuseravataranimationid, $zavatarid, $zinstanceid, $zavataranimationid);
 			break;
 		case "savetransportanimation":
-			$wtwavatars->updateAvatarTransport($zavatarid, $zavataranimationid, $ztransport);
+			$wtwavatars->updateAvatarTransport($zavatarid, $zinstanceid, $zavataranimationid, $ztransport);
 			break;
 		case "getavataranimationsall":
-			$zavataranimations = $wtwavatars->getAvatarAnimationsAll($zavatarid);
+			$zavataranimations = $wtwavatars->getAvatarAnimationsAll($zavatarid, $zinstanceid);
 			$zresponse = array(
 				'avataranimations'=> $zavataranimations
 			);
