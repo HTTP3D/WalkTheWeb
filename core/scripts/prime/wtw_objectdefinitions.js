@@ -501,7 +501,7 @@ WTWJS.prototype.newMold = function() {
 			'subdivisionsshown':'0',
 			'shown':'0',
 			'opacity':'100',
-			'checkcollisions':'',
+			'checkcollisions':'1',
 			'ispickable':'',
 			'jsfunction':'',
 			'jsparameters':'',
@@ -624,7 +624,6 @@ WTWJS.prototype.newAvatarDef = function() {
 			'parentname':WTW.mainParent,
 			'movetime':'',
 			'moveevents':'',
-			'lastmoveevents':'',
 			'updated':'',
 			'lastupdate':false,
 			'loaded':'0'

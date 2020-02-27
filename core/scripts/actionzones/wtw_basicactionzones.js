@@ -20,11 +20,6 @@ WTWJS.prototype.addActionzoneLoadzone = function(actionzonename, actionzoneind, 
 		molddef.checkcollisions = "0";
 		molddef.ispickable = "0";
 		WTW.addMoldToQueue(actionzonename, molddef, molddef.parentname, molddef.covering, null);
-		if (WTW.adminView == 1) {
-			if (dGet('wtw_bzones').title == "Action Zones are Shown" || actionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
-				WTW.setOpacity(actionzonename, .2);
-			}
-		}
 		WTW.actionZones[actionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneLoadzone=" + ex.message);

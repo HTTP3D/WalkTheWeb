@@ -49,6 +49,7 @@ WTWJS.prototype.getWebMoldList = function() {
 		webmoldlist[webmoldlist.length] = "3D Text";
 		webmoldlist[webmoldlist.length] = "Image";
         webmoldlist[webmoldlist.length] = "Video";
+		webmoldlist[webmoldlist.length] = "Babylon File";
         webmoldlist[webmoldlist.length] = "Lightbulb";
         webmoldlist[webmoldlist.length] = "Candle Flame";
         webmoldlist[webmoldlist.length] = "Tree";
@@ -56,7 +57,7 @@ WTWJS.prototype.getWebMoldList = function() {
         webmoldlist[webmoldlist.length] = "Partical Sphere";
         webmoldlist[webmoldlist.length] = "Partical Shower";
         webmoldlist[webmoldlist.length] = "Smoke";
-		webmoldlist[webmoldlist.length] = "Babylon File";
+        webmoldlist[webmoldlist.length] = "Water Fountain";
         webmoldlist[webmoldlist.length] = "Water Plane";
         webmoldlist[webmoldlist.length] = "Water Disc";
 		webmoldlist[webmoldlist.length] = "View Blog";
@@ -250,6 +251,10 @@ WTWJS.prototype.addMold = function(moldname, molddef, parentname, coveringname) 
 				break;
             case "smoke":
 				mold = WTW.addMoldSmoke(moldname, molddef, lenx, leny, lenz);
+				coveringname = "none";
+				break;
+            case "waterfountain":
+				mold = WTW.addMoldFountain(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
             case "particlesphere":
@@ -503,7 +508,6 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 			var rotz = Number(molddef.rotation.z);
 			var special1 = 0;
 			var special2 = 0;
-			var parentvalid = false;
 			try {
 				if (molddef.checkcollisions != null) {
 					checkcollisions = molddef.checkcollisions;
@@ -534,13 +538,6 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 			mold.position = new BABYLON.Vector3(posx, posy, posz);
 			mold.rotation = new BABYLON.Vector3(WTW.getRadians(rotx), WTW.getRadians(roty), WTW.getRadians(rotz));
 			mold.isPickable = true;
-			if (parentname != "") {
-				var parentmold = scene.getMeshByID(parentname);
-				if (parentmold != null) {
-					mold.parent = parentmold;
-					parentvalid = true;
-				}
-			}
 			if (molddef.sound != undefined) {
 				if (molddef.sound.id != '') {
 					WTW.loadSoundToMold(mold, moldname, molddef.sound.id, molddef.sound.path, molddef.sound.loop, molddef.sound.attenuation, molddef.sound.maxdistance, molddef.sound.rollofffactor, molddef.sound.refdistance, -1);
@@ -625,9 +622,6 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 			if (WTW.adminView == 1) {
 				WTW.registerMouseOver(mold);
 			}
-			//if (parentvalid == false) {
-			//	WTW.addDisposeMoldToQueue(moldname);
-			//}
 			if (WTW.AdminView == 0 && parentname.indexOf("connectinggrids") > -1 && (moldname.indexOf("building") > -1 || moldname.indexOf("community") > -1)) {
 				//mold.freezeWorldMatrix();
 			} else {
@@ -646,6 +640,15 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 			//if (shape == "box" && coveringname == "texture") {
 			//	mold.convertToUnIndexedMesh();
 			//}
+			if (parentname != "") {
+				var parentmold = scene.getMeshByID(parentname);
+				if (parentmold != null) {
+					mold.parent = parentmold;
+				} else {
+					WTW.disposeClean(moldname);
+					//	WTW.addDisposeMoldToQueue(moldname);
+				}
+			}
 		}	
 	} catch (ex) {
 		WTW.log("core-scripts-molds-addmoldlist\r\n completeMold=" + ex.message);
@@ -984,6 +987,27 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "smoke":
+				dGet('wtw_tmoldpositionx').value = positionX;
+				dGet('wtw_tmoldpositiony').value = positionY-4;
+				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldscalingx').value = "1.00";
+				dGet('wtw_tmoldscalingy').value = "1.00";
+				dGet('wtw_tmoldscalingz').value = "1.00";
+				dGet('wtw_tmoldrotationx').value = "0.00";
+				dGet('wtw_tmoldrotationy').value = "0.00";
+				dGet('wtw_tmoldrotationz').value = "0.00";
+				dGet('wtw_tmoldspecial2').value = "0.00";
+				dGet('wtw_tmolduoffset').value = "0.00";
+				dGet('wtw_tmoldvoffset').value = "0.00";
+				dGet('wtw_tmolduscale').value = "0.00";
+				dGet('wtw_tmoldvscale').value = "0.00";
+				dGet('wtw_tmoldsubdivisions').value = "12";
+				dGet('wtw_tmoldcoveringold').value = "none";
+				dGet('wtw_tmoldtextureid').value = imageid;
+				dGet('wtw_tmoldtexturepath').value = imagepath;
+				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
+				break;
+			case "waterfountain":
 				dGet('wtw_tmoldpositionx').value = positionX;
 				dGet('wtw_tmoldpositiony').value = positionY-4;
 				dGet('wtw_tmoldpositionz').value = positionZ;
@@ -1476,7 +1500,7 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 		}
-		WTW.pluginsSetNewMoldDefaults(shape);
+		WTW.pluginsSetNewMoldDefaults(shape, positionX, positionY, positionZ, rotationY);
 		dGet('wtw_tmoldcsgmoldid').value = "";
 		WTW.setDDLValue("wtw_tmoldcsgaction", "");
 		dGet('wtw_selectedcsgshape').innerHTML = "";
@@ -1768,6 +1792,23 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave Smoke";
 				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete Smoke";
 				dGet('wtw_editmoldformtitle').innerHTML = "Edit Smoke";
+				WTW.hide('wtw_moldspecial1');
+				WTW.hide('wtw_moldspecial2');
+				WTW.hide('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldbumptexturetitle');
+				WTW.hide('wtw_moldbasictexturesetdiv');
+				WTW.hide('wtw_moldbasictextureset2div');
+				WTW.hide('wtw_moldbumptextureset2div');
+				WTW.hide('wtw_moldtexturesetdiv');
+				break;
+			case "waterfountain":
+				dGet('wtw_moldpositiontitle').innerHTML = "Fountain Position";
+				dGet('wtw_moldscalingtitle').innerHTML = "Fountain Length";
+				dGet('wtw_moldrotationtitle').innerHTML = "Fountain Rotation";
+				dGet('wtw_moldtexturetitle').innerHTML = "Fountain Texture Image";
+				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave Fountain";
+				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete Fountain";
+				dGet('wtw_editmoldformtitle').innerHTML = "Edit Fountain";
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.hide('wtw_moldsubdivisions');

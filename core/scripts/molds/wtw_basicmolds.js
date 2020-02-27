@@ -790,7 +790,7 @@ WTWJS.prototype.addMoldVideo = function(moldname, molddef, lenx, leny, lenz) {
 					objectanimations[3].animationloop = false;
 					objectanimations[3].speedratio = 1.00;
 					objectanimations[3].additionalscript = 'WTW.checkVideoClick';
-					objectanimations[3].additionalparameters = moldname + ',0';
+					objectanimations[3].additionalparameters = moldname + ',9';
 
 					objectanimations[4] = WTW.newObjectAnimation();
 					objectanimations[4].animationname = 'startAgainTV';
@@ -1224,6 +1224,77 @@ WTWJS.prototype.addMoldSmoke = function(moldname, molddef, lenx, leny, lenz) {
 	return mold;
 }
 
+WTWJS.prototype.addMoldFountain = function(moldname, molddef, lenx, leny, lenz) {
+	var mold;
+	try {
+		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
+		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
+		var transparentmat = new BABYLON.StandardMaterial("mat" + moldname, scene);
+		transparentmat.alpha = 0;
+		mold.material = transparentmat;
+
+		// Create a particle system
+		var water = new BABYLON.ParticleSystem("particles", 20000, scene);
+	  
+		//Texture of each particle
+		water.particleTexture = new BABYLON.Texture("/content/system/images/flare.png", scene);
+	  
+		// Where the particles come from
+		water.emitter = mold; // the starting object, the emitter
+		water.id = moldname + "-water";
+		water.name = moldname + "-water";
+		water.minEmitBox = new BABYLON.Vector3(.1, 0, 0); // Starting all from
+		water.maxEmitBox = new BABYLON.Vector3(-.1, 0, 0); // To...
+	  
+		// Colors of all particles
+		water.color1 = new BABYLON.Color4(0.7, 0.8, 1.0, 1.0);
+		water.color2 = new BABYLON.Color4(0.2, 0.5, 1.0, 1.0);
+		water.colorDead = new BABYLON.Color4(0, 0, 0.2, 0.0);
+	  
+		// Size of each particle (random between...
+		water.minSize = .1
+		water.maxSize = 0.5; //.1
+	  
+		// Life time of each particle (random between...
+		water.minLifeTime = 8;
+		water.maxLifeTime = 12.5;
+	  
+		// Emission rate
+		// water.emitRate = 100;
+		//water.manualEmitCount = 1500;
+	  
+		// Blend mode : BLENDMODE_ONEONE, or BLENDMODE_STANDARD
+		water.blendMode = BABYLON.ParticleSystem.BLENDMODE_ONEONE;
+	  
+		// Set the gravity of all particles
+		water.gravity = new BABYLON.Vector3(0, -3, 0);
+	  
+		// Direction of each particle after it has been emitted
+		water.direction1 = new BABYLON.Vector3(-1, 4, 1);
+		water.direction2 = new BABYLON.Vector3(1, 4, -1);
+	  
+		// Angular speed, in radians
+		water.minAngularSpeed = Math.PI /4;
+		water.maxAngularSpeed = Math.PI;
+	  
+		// Speed
+		water.minEmitPower = .5;
+		water.maxEmitPower = .75;
+	  
+		water.updateSpeed = 0.05;
+		water.emitRate = 200;
+
+		water.parent = mold;
+	  
+		// Start the particle system
+		water.start();
+		water.disposeOnStop = true;
+	} catch (ex) {
+		WTW.log("core-scripts-molds-basicmolds\r\n addMoldFountain=" + ex.message);
+	}
+	return mold;
+}
+
 WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, lenz) {
 	var mold;
 	try {
@@ -1236,6 +1307,7 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 		var objectanimations = null;
 		var drotationy = 0;
 		var billboard = '0';
+		/* read objectid, folder path, and file values */
 		if (molddef.object.uploadobjectid != undefined) {
 			if (molddef.object.uploadobjectid != '') {
 				uploadobjectid = molddef.object.uploadobjectid;
@@ -1251,21 +1323,25 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 				objectfile = molddef.object.file;
 			}
 		}
+		/* get array of animation defs */
 		if (molddef.object.objectanimations != undefined) {
 			if (molddef.object.objectanimations != '') {
 				objectanimations = molddef.object.objectanimations;
 			}
 		}
+		/* this rotation gets applied as offset to billboard mode */
 		if (molddef.rotation.y != undefined) {
 			if (molddef.rotation.y != '') {
 				drotationy = molddef.rotation.y;
 			}
 		}
+		/* when billboard enabled, it keeps the object orientated to your camera view (always facing the same direction to you) */
 		if (molddef.rotation.billboard != undefined) {
 			if (molddef.rotation.billboard != '') {
 				billboard = molddef.rotation.billboard;
 				if (billboard == '1') {
 					mold.billboardMode = BABYLON.Mesh.BILLBOARDMODE_Y;
+					/* create rotation box to parent 3D Object */
 					moldrot = BABYLON.MeshBuilder.CreateBox(moldname + "-moldrot", {}, scene);
 					moldrot.scaling = new BABYLON.Vector3(lenx,leny,lenz);
 					moldrot.parent = mold;
@@ -1274,6 +1350,7 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 			}
 		}
 		if (objectfile != '') {
+			/* material for the invisible box parent */
 			var transparentmat = new BABYLON.StandardMaterial("mat" + moldname, scene);
 			transparentmat.alpha = 0;
 			mold.material = transparentmat;
@@ -1284,6 +1361,7 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 				BABYLON.SceneLoader.ImportMeshAsync("", objectfolder, objectfile, scene).then(
 					function (results) {
 						if (results.meshes != null) {
+							/* make sure the 3D Object is positioned over parent (if transformations are all applied, there is no position adjustment) */
 							var totalx = 0;
 							var totaly = 0;
 							var totalz = 0;
@@ -1304,23 +1382,28 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 							}
 							for (var i=0; i < results.meshes.length; i++) {
 								if (results.meshes[i] != null) {
+									/* add the base mold name to each of the child meshes */
 									var meshname = results.meshes[i].name;
-									var childmoldname = moldname + "-" + results.meshes[i].name;
+									var childmoldname = moldname + "-" + meshname;
 									results.meshes[i].id = childmoldname;
 									results.meshes[i].name = childmoldname;
 									results.meshes[i].position.x -= avex;
 									results.meshes[i].position.y -= avey;
 									results.meshes[i].position.z -= avez;
+									/* this if statement will be moved to a plugin hook (minigolf related test) */
 									if (results.meshes[i].name.indexOf('ground') > -1) {
 										results.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(results.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.3 }, scene);
 									} else if (results.meshes[i].name.indexOf('sides') > -1) {
 										results.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(results.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.9 }, scene);
 									}
+									/* overwrite material to wireframe if selected */
 									if (meshname.indexOf("WireFrame") > -1) {
 										results.meshes[i].material.wireframe = true;
 									}
+									/* make sure chile meshes are pickable */
 									results.meshes[i].isPickable = true;
 									WTW.registerMouseOver(results.meshes[i]);
+									/* make sure all object meshes have a parent */
 									if (results.meshes[i].parent == null) {
 										if (billboard == '1') {
 											results.meshes[i].parent = moldrot;
@@ -1329,24 +1412,36 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 										}
 									}
 									if (WTW.shadows != null) {
+										/* add mesh to world shadow map */
 										WTW.shadows.getShadowMap().renderList.push(results.meshes[i]);
 									}
 									results.meshes[i].receiveShadows = true;
+									/* initiate and preload any event driven animations */
 									if (objectanimations != null) {
 										WTW.addMoldAnimation(moldname, meshname, results.meshes[i], objectanimations);
+									}
+									if (results.meshes[i].material != null) {
+										results.meshes[i].material.ambientColor = new BABYLON.Color3(.3, .3, .3);
+									}
+									if (mold == null || mold.parent == null) {
+										/* if the parent has been deleted after this async process began (avoiding orphaned bjects)*/
+										results.meshes[i].dispose();
 									}
 								}
 							}
 						}
 						if (results.skeletons != null)	{
+							/* load any skeletons (most often avatars) */
 							for (var i=0; i < results.skeletons.length; i++) {
 								if (results.skeletons[i] != null) {
 									var bone = results.skeletons[i];
 									var meshname = results.skeletons[i].name;
 									bone.isVisible = false;
+									/* append moldname to all child skeleton names */
 									var childmoldname = moldname + "-" + meshname;
 									results.skeletons[i].name = childmoldname;
 									/* WTW.registerMouseOver(results.skeletons[i]); */
+									/* make sure all bones have a parent set */
 									if (results.skeletons[i].parent == null) {
 										if (billboard == '1') {
 											results.skeletons[i].parent = moldrot;
@@ -1354,12 +1449,21 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 											results.skeletons[i].parent = mold;
 										}
 									}
+									if (mold == null || mold.parent == null) {
+										/* if the parent has been deleted after this async process began (avoiding orphaned bjects) */
+										results.skeletons[i].dispose();
+									}
 								}
 							}
 						}
+						if (mold == null || mold.parent == null) {
+							/* if the parent has been deleted after this async process began (avoiding orphaned bjects) */
+							WTW.disposeClean(moldname);
+						}
 					}
 				);
-			} else if (objectfile.indexOf('.gltf') > -1) {
+			} else if (objectfile.indexOf('.gltf') > -1 || objectfile.indexOf('.obj') > -1) {
+				/* babylon can natively load gltf or obj files, but this is not fully tested or complete (animations not loaded) */
 				BABYLON.SceneLoader.ImportMeshAsync("", objectfolder, objectfile, scene).then(
 					function (results) {
 						if (results.meshes != null) {
@@ -2130,7 +2234,7 @@ WTWJS.prototype.addMoldLightbulb = function(moldname, molddef, lenx, leny, lenz,
 				moldnameparts.molds[moldnameparts.moldind].objects.shadows.dispose();
 				moldnameparts.molds[moldnameparts.moldind].objects.shadows = '';
 			}
-			moldnameparts.molds[moldnameparts.moldind].objects.light = new BABYLON.PointLight(moldname + "-light", new BABYLON.Vector3(0, 0, 0), scene);
+			moldnameparts.molds[moldnameparts.moldind].objects.light = new BABYLON.PointLight(moldname + "-light", new BABYLON.Vector3(0, -1, 1), scene);
 			moldnameparts.molds[moldnameparts.moldind].objects.light.intensity = 0.3;
 			moldnameparts.molds[moldnameparts.moldind].objects.light.shadowMinZ = 1;
 			moldnameparts.molds[moldnameparts.moldind].objects.light.shadowMaxZ = 100;

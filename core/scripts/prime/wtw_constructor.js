@@ -35,9 +35,9 @@ function WTWJS() {
 		'startRotationX':0,
 		'startRotationY':0,
 		'startRotationZ':0,
-		'gravity':9.8,
+		'gravity':3.5,
 		'loaded':0
-	}
+	} /* gravity was 9.8 */
 /*	Notes about the sky Values ---
 		skyInclination = 0; //The sun position from Sunrise to Sunset. (-.60 to .60 increment .01) // range slider shows +.6 value	
 		skyLuminance = 1; // Controls the overall brightness of sky. (0 to 1 increment .01)
@@ -62,17 +62,20 @@ function WTWJS() {
 	this.moldList = [];
 	this.keysPressed = [];
 	this.moldEvents = [];
-	this.lastMoveEvents = [];
-	this.refreshLastMoveEvents = true;
 	this.rideAlong = null;
 	this.drive = null;
 	this.touch = null;
 	this.touchLeftTimer = null;
 	this.touchRightTimer = null;
+	this.scrollTimer = null;
 	this.cameraYOffset = 0;
 	this.myAvatar = null; 
+	this.animationSet = '';
+	this.walkSpeed = 1;
+	this.walkAnimationSpeed = 1;
+	this.turnSpeed = 1;
+	this.turnAnimationSpeed = 1;
 	this.moveOverride = 0;
-	this.scrollTimer = null;
 	this.shiftKey = false;
 	this.mainParent = "";
 	this.uicanvas;
@@ -102,9 +105,6 @@ function WTWJS() {
 	this.moveTimer = null;
 	this.mouseTimer = null;
 	this.activityTimer = null;
-	this.jumpTimer = null;
-	this.animationSet = '';
-	this.activeAnimations = null;
 	this.showFPS = 0;
 	this.sizeX = 1024;
 	this.sizeY = 768;
@@ -128,10 +128,6 @@ function WTWJS() {
 	this.sunPositionY = 1000;
 	this.sunPositionZ = -10;
 	this.rotationSpeed = 1000;
-	this.turnSpeed = 1;
-	this.turnAnimationSpeed = 1;
-	this.walkSpeed = 1;
-	this.walkAnimationSpeed = 1;
 	this.shadowset;
 	this.graphicSet = 1;
 	this.soundMute = true;
@@ -152,6 +148,9 @@ function WTWJS() {
 	this.browseUserID = "";
 	this.editCommunityAccess = "";
 	this.editBuildingAccess = "";
+	
+	this.temp1 = null;
+	this.temp2 = null;
 }
 
 var WTW = new WTWJS();

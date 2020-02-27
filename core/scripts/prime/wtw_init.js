@@ -26,8 +26,7 @@ WTWJS.prototype.initEvents = function() {
 		window.addEventListener('touchend', WTW.touchUp, false);
 		window.addEventListener('touchmove', WTW.touchMoving, false);
 		window.addEventListener('touchcancel', WTW.touchCancel, false);
-		window.addEventListener('touchleave', WTW.touchCancel, false);
-		window.addEventListener('message', WTW.receiveWPMessage); 
+		window.addEventListener('touchleave', WTW.touchCancel, false); 
 	} catch (ex) {
 		WTW.log("init-initEvents=" + ex.message);
 	}

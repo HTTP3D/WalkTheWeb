@@ -4415,7 +4415,15 @@ WTWJS.prototype.openActionZoneForm = function(actionzoneid) {
 				}
 				WTW.setNewActionZone();
 			}
-		}	
+		}
+		let actionzonename = dGet('wtw_tactionzonename').value;
+		if (actionzonename == 'Extreme Load Zone' || actionzonename == 'High - Load when far' || actionzonename == 'Normal - Load when near') {
+			dGet('wtw_tactionzonename').disabled = true;
+			WTW.hide('wtw_bdelactionzone');
+		} else {
+			dGet('wtw_tactionzonename').disabled = false;
+			WTW.showInline('wtw_bdelactionzone');
+		}
 		if (actionzonetype == "loadanimations") {
 			WTW.loadAZAnimationsList();
 			WTW.loadAZAvatarAnimations();
@@ -4456,7 +4464,7 @@ WTWJS.prototype.deleteAZAvatarAnimation = function(zactionzoneanimationid) {
 			'buildingid': buildingid,
 			'thingid': thingid,
 			'avataranimationid': zactionzoneanimationid,
-			'function':'deleteavataranimation'
+			'function':'deleteazavataranimation'
 		};
 		WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
 			function(zresponse) {
@@ -4499,7 +4507,7 @@ WTWJS.prototype.saveAZAvatarAnimation = function() {
 			'buildingid': buildingid,
 			'thingid': thingid,
 			'avataranimationid':WTW.getDDLValue('wtw_tazavataranimationid'),
-			'function':'saveavataranimation'
+			'function':'saveazavataranimation'
 		};
 		WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
 			function(zresponse) {
@@ -4551,12 +4559,18 @@ WTWJS.prototype.setActionZonePosition = function() {
 }
 
 WTWJS.prototype.submitActionZoneForm = function(w) {
-	try {
+	try { // wtw_tazloadactionzoneid
 		if (w != 2) {
 			WTW.closeEditPoles();
 		}
-		if (dGet('wtw_tactionzonetype').value == "loadzone" && dGet('wtw_tactionzonename').value.toLowerCase().indexOf("custom") == -1) {
-			dGet('wtw_tactionzonename').value = "Custom: " + dGet('wtw_tactionzonename').value;
+		let actionzonename = dGet('wtw_tactionzonename').value;
+		if (actionzonename == 'Extreme Load Zone' || actionzonename == 'High - Load when far' || actionzonename == 'Normal - Load when near') {
+			dGet('wtw_tactionzonename').disabled = false;
+			WTW.showInline('wtw_bdelactionzone');
+		} else {
+			if (dGet('wtw_tactionzonetype').value == "loadzone" && dGet('wtw_tactionzonename').value.toLowerCase().indexOf("custom") == -1) {
+				dGet('wtw_tactionzonename').value = "Custom: " + dGet('wtw_tactionzonename').value;
+			}
 		}
 		if (w == 0) {
 			var actionzone = scene.getMeshByID("actionzone-" + dGet('wtw_tactionzoneind').value + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].actionzoneid + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridind + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridid + "-" + dGet('wtw_tactionzonetype').value);
@@ -4639,7 +4653,9 @@ WTWJS.prototype.submitActionZoneForm = function(w) {
 		} else {
 			var zactionzoneind = Number(dGet('wtw_tactionzoneind').value);
 			var zloadactionzoneid = WTW.getDDLValue('wtw_tazloadactionzoneid');
-
+			if (actionzonename == 'Extreme Load Zone') {
+				zloadactionzoneid = '';
+			}
 			if (WTW.actionZones[zactionzoneind] != null) {
 				WTW.actionZones[zactionzoneind].actionzoneid = dGet('wtw_tactionzoneid').value;
 				WTW.actionZones[zactionzoneind].thinginfo.thingid = thingid;
@@ -5068,7 +5084,7 @@ WTWJS.prototype.openSelectActionZoneForm = function() {
 			for (var i = 0; i < WTW.actionZones.length; i++) {
 				if (WTW.actionZones[i] != null) {
 					if ((WTW.actionZones[i].communityinfo.communityid == communityid && communityid != "") || (WTW.actionZones[i].buildinginfo.buildingid == buildingid && buildingid != "") || (WTW.actionZones[i].thinginfo.thingid == thingid && thingid != "")) {
-						if (WTW.actionZones[i].actionzonename.length > 0 && WTW.actionZones[i].actionzonename != 'Extreme Load Zone' && WTW.actionZones[i].actionzonename != 'High - Load when far' && WTW.actionZones[i].actionzonename != 'Normal - Load when near') {
+						if (WTW.actionZones[i].actionzonename.length > 0) { /* ( && WTW.actionZones[i].actionzonename != 'Extreme Load Zone' && WTW.actionZones[i].actionzonename != 'High - Load when far' && WTW.actionZones[i].actionzonename != 'Normal - Load when near')  */
 							dGet("wtw_selectactionzoneid").options[actionzonecount] = new Option(WTW.actionZones[i].actionzonename, WTW.actionZones[i].actionzoneid);
 							actionzonecount += 1;
 						}

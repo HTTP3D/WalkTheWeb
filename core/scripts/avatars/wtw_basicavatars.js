@@ -74,10 +74,9 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 			avatar.material.alpha = 0;
 			avatar.applyGravity = true;
 			avatar.showBoundingBox = false;
-			var avataryoffset = -1;
 			if (loadmin == false) {
-				avatar.ellipsoid = new BABYLON.Vector3(2, 4, 1);
-				avatar.ellipsoidOffset = new BABYLON.Vector3(0, 4, 0);
+				avatar.ellipsoid = new BABYLON.Vector3(3, 8, 3); //(2, 4, 1)
+				avatar.ellipsoidOffset = new BABYLON.Vector3(0, 8, 0); //(0, 4, 0)
 				avatar.checkCollisions = true;
 			} else {
 				avatar.checkCollisions = false;
@@ -196,6 +195,9 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 								if (results.meshes[i].material.alpha != undefined) {
 									results.meshes[i].material.alpha = 1;
 								}
+								
+								results.meshes[i].material.ambientColor = new BABYLON.Color3(.3, .3, .3);
+								
 								if (avatarparts != null) {
 									for (var j=0;j<avatarparts.length;j++) {
 										if (avatarparts[j] != null) {
@@ -396,10 +398,14 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 								avatar.WTW.animations = avataranimationdefs;
 							}
 							avatar.WTW.animations.running = [];
-							avatar.WTW.animations.running['onrotateup'] = {'weight':0};
-							avatar.WTW.animations.running['onrotatedown'] = {'weight':0};
-							avatar.WTW.animations.running['onrotateup'].weight = 0;
-							avatar.WTW.animations.running['onrotatedown'].weight = 0;
+							avatar.WTW.animations.running['onrotateup'] = {
+								'weight':0,
+								'active':0
+							};
+							avatar.WTW.animations.running['onrotatedown'] = {
+								'weight':0,
+								'active':0
+							};
 							var firstloaded = true; // first animation was already loaded with avatar mesh
 							if (firstloaded) {
 								if (loadmin == false) {

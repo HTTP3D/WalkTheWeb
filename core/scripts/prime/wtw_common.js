@@ -997,16 +997,18 @@ WTWJS.prototype.distance = function(sx0,sy0,sz0,sx1,sy1,sz1) {
 WTWJS.prototype.getMyDistance = function(sx1,sy1,sz1) {
 	var distance = 0;
 	try {
-		var x0 = WTW.myAvatar.position.x;
-		var y0 = WTW.myAvatar.position.y;
-		var z0 = WTW.myAvatar.position.z;
-		var x1 = Number(sx1);
-		var y1 = Number(sy1);
-		var z1 = Number(sz1);
-		deltaX = x1 - x0;
-		deltaY = y1 - y0;
-		deltaZ = z1 - z0;
-		distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+		if (WTW.myAvatar != null) {
+			var x0 = WTW.myAvatar.position.x;
+			var y0 = WTW.myAvatar.position.y;
+			var z0 = WTW.myAvatar.position.z;
+			var x1 = Number(sx1);
+			var y1 = Number(sy1);
+			var z1 = Number(sz1);
+			deltaX = x1 - x0;
+			deltaY = y1 - y0;
+			deltaZ = z1 - z0;
+			distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-getMyDistance=" + ex.message);
 	}
@@ -1793,23 +1795,29 @@ WTWJS.prototype.getMainParent = function() {
 
 WTWJS.prototype.disposeClean = function(moldname, check) {
 	try {
+		/* extension of the babylon dispose function to catch various child and sub elements */
 		if (moldname != "") {
 			scene.blockfreeActiveMeshesAndRenderingGroups = true;
 			if (typeof check === "undefined") {
 				check = true;
 			}
             var namepart = moldname.split('-');
+			/* dispose mold (mesh) from shadow and reflection arrays */
 			WTW.disposeShadowFromMold(moldname);
 			WTW.disposeReflectionFromMold(moldname);
 			var mold = scene.getMeshByID(moldname);
+			/* confirm mold is in the scene */
 			if (mold != null) {
 				try {
+					/* plugin hook for custom code */
 					WTW.pluginsDisposeClean(moldname);
 				} catch (ex) {}
 				try {
 					if (moldname.indexOf("myavatar") > -1 || moldname.indexOf("selectavatar") > -1) {
+						/* dispose of avatar parts / animations */
 						WTW.disposeAnimations(moldname);
 					} else if (namepart[5] == 'video') {
+						/* stop and clear the video before it is deleted */
 						var strtemp = moldname;
 						strtemp = strtemp.replace("-base","-mainvideo");
 						var videomold = scene.getMeshByID(strtemp);
@@ -1823,6 +1831,7 @@ WTWJS.prototype.disposeClean = function(moldname, check) {
 							}
 					   }
 					} else if (namepart[5].indexOf('water') > -1) {
+						/* remove mold from reflection and refraction arrays */
 						var strtemp = moldname;
 						if (strtemp.indexOf('-base') > -1) {
 							strtemp = strtemp.replace("-base","");
@@ -1853,18 +1862,24 @@ WTWJS.prototype.disposeClean = function(moldname, check) {
 							}
 							watermat.dispose();
 						} catch(ex) {}
-						WTW.disposeClean(strtemp + "-water", false);
+						if (check) {
+							WTW.disposeClean(strtemp + "-water", false);
+						}
 					} else if (namepart[5].indexOf('image') > -1) {
+						/* dispose of hover over and click image mold layers */
 						var strtemp = moldname;
 						if (strtemp.indexOf('-base') > -1) {
 							strtemp = strtemp.replace("-base","-mainimage");
 						} else {
 							strtemp += "-mainimage";
 						}
-						WTW.disposeClean(strtemp, false);
-						WTW.disposeClean(strtemp.replace("-mainimage","-hoverimage"), false);
-						WTW.disposeClean(strtemp.replace("-mainimage","-clickimage"), false);
+						if (check) {
+							WTW.disposeClean(strtemp, false);
+							WTW.disposeClean(strtemp.replace("-mainimage","-hoverimage"), false);
+							WTW.disposeClean(strtemp.replace("-mainimage","-clickimage"), false);
+						}
 					} else if (namepart[5].indexOf('babylonfile') > -1 || namepart[0] == 'myavatar') {
+						/* dispose of child objects from imported meshes */
 						var childmeshes = mold.getChildren();
 						if (childmeshes != null) {
 							for (var i=0; i < childmeshes.length; i++) {
@@ -1876,38 +1891,46 @@ WTWJS.prototype.disposeClean = function(moldname, check) {
 					}
 				} catch (ex) {}
 				try {
+					/* dispose of any action managers (animations) */
 					if (mold.actionManager != null) {
 						mold.actionManager.dispose();
 						mold.actionManager = null;
 					}
 				} catch(ex) {}
 				try {
+					/* dispose of texture materials */
 					if (mold.material.diffuseTexture != null) {
 						mold.material.diffuseTexture.dispose();
 						mold.material.diffuseTexture = null;
 					}
 				} catch(ex) {}
 				try {
+					/* dispose of any remaining materials */
 					if (mold.material != null) {
 						mold.material.dispose();
 						mold.material = null;
 					}
 				} catch(ex) {}
+				/* dispose of mold */
 				mold.dispose();
 				mold = null;
-				WTW.disposeMoldEvent(moldname);
-				if (moldname.indexOf("actionzone") > -1) {
-					WTW.disposeClean(moldname.replace("actionzone","actionzoneaxle"),false);
-					WTW.disposeClean(moldname.replace("actionzone","actionzoneaxlepole"),false);
-					WTW.disposeClean(moldname.replace("actionzone","actionzoneaxlebase"),false);
-					WTW.disposeClean(moldname.replace("actionzone","actionzoneaxlebase2"),false);
+				if (check) {
+					/* dispose of action zone components (axle, pole, hinge, bases) */
+					WTW.disposeMoldEvent(moldname);
+					if (moldname.indexOf("actionzone") > -1) {
+						WTW.disposeClean(moldname.replace("actionzone","actionzoneaxle"),false);
+						WTW.disposeClean(moldname.replace("actionzone","actionzoneaxlepole"),false);
+						WTW.disposeClean(moldname.replace("actionzone","actionzoneaxlebase"),false);
+						WTW.disposeClean(moldname.replace("actionzone","actionzoneaxlebase2"),false);
+					}
 				}
+				/* dispose of any dynamic meshes (changes subdivisions as get closer) */
 				var moldfar = scene.getMeshByID(moldname + "-far");
 				if (moldfar != null) {
 					WTW.disposeClean(moldname + "-far");
 				}
 				try {
-				/* molds[moldind].sound.sound */
+					/* stop and remove sound and lights */
 					var molds = null;
 					switch (namepart[0]) {
 						case "communitymolds":
@@ -1999,7 +2022,7 @@ WTWJS.prototype.checkJSFunction = function(moldname) {
 WTWJS.prototype.changeWalkAnimationSpeed = function() {
 	try {
 		WTW.walkAnimationSpeed = Number(dGet('wtw_twalkanimationspeed').value);
-        WTW.setCookie("walkinganimationspeed",WTW.walkAnimationSpeed,365);
+        WTW.setCookie("walkanimationspeed",WTW.walkAnimationSpeed,365);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-changeWalkAnimationSpeed=" + ex.message);
 	}
@@ -2443,7 +2466,20 @@ WTWJS.prototype.runFunction = function(animationname) {
 									WTW.moldEvents[i].stage = '0';
 								}
 							}
-							scene.beginAnimation(WTW.moldEvents[i].mold, startframe, endframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[endscript] == "function") {window[endscript](endscript);}}, WTW.moldEvents[i].stopcurrentanimations);
+							/* temp for demo - sync 2 animations */
+							if (WTW.moldEvents[i].mold.name == "buildingmolds-0-h3ecuos3uff4t8gl-0-2202l5q2xiaogwn5-babylonfile-OccupyGuy_MouthAnimGeo") {
+								WTW.temp1 = scene.beginAnimation(WTW.moldEvents[i].mold, startframe, endframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[endscript] == "function") {window[endscript](endscript);}}, WTW.moldEvents[i].stopcurrentanimations);
+								if (WTW.temp2 != null) {
+									WTW.temp1.syncWith(WTW.temp2);
+								}
+							} else if (WTW.moldEvents[i].mold.name == "buildingmolds-0-h3ecuos3uff4t8gl-0-2202l5q2xiaogwn5-babylonfile-Guitar") {
+								WTW.temp2 = scene.beginAnimation(WTW.moldEvents[i].mold, startframe, endframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[endscript] == "function") {window[endscript](endscript);}}, WTW.moldEvents[i].stopcurrentanimations);
+								if (WTW.temp1 != null) {
+									WTW.temp2.syncWith(WTW.temp1);
+								}
+							} else {
+								scene.beginAnimation(WTW.moldEvents[i].mold, startframe, endframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[endscript] == "function") {window[endscript](endscript);}}, WTW.moldEvents[i].stopcurrentanimations);
+							}
 							if (WTW.moldEvents[i].soundid != '' && WTW.soundMute == false) {
 								if (typeof WTW.moldEvents[i].sound.play == 'function') {
 									WTW.moldEvents[i].sound.play();
@@ -3329,34 +3365,50 @@ WTWJS.prototype.checkVideoClick = function(moldname, force) {
 		if (force == undefined) {
 			force = 3;
 		}
+		/* get parent moldname */
 		moldname = moldname.replace('-base','').replace('-mainvideo','');
+		/* get mold with video player texture */
         var videomold = scene.getMeshByID(moldname + "-mainvideo");
+		/* get mold for video poster image (for when not playing) */
         var videoposter = scene.getMeshByID(moldname + "-videoposter");
 
         if (videomold != null) {
+			/* if it is fully loaded */
             if (!videomold.WTW.firstvideoclick) {
+				/* load video to texture - only required the first time it is started after mold loads */
                 videomold.material.diffuseTexture.video.src = videomold.WTW.videosrc;
                 videomold.WTW.firstvideoclick = true;
                 videomold.material.diffuseTexture.video.load();
                 videomold.material.diffuseTexture.video.pause();
+				/* move the video poster mold with the video texture (show it) */
 				videoposter.position.x = videomold.position.x -.1;
             }
-			if ((videomold.material.diffuseTexture.video.paused && force == 3) || force == 1 || force == 2) {
-				videoposter.position.x = videomold.position.x +.1;
-				if (force == 2) { // start again
-					videomold.material.diffuseTexture.video.load();
-				} else if (force == 1) {
-				} // force == 1 // play
-                videomold.material.diffuseTexture.video.play();
-            } else { // pause
-				if (force == -1) { // pause at start
-					videoposter.position.x = videomold.position.x -.1;
-					videomold.material.diffuseTexture.video.load();
-				} else {
+			if (force == 9) { /* open in tab (full screen mode) */
+				/* stop the 3D Video Player */
+				videomold.material.diffuseTexture.video.pause();
+				/* open the video player page in new tab */
+				WTW.openWebpage("/core/pages/playvideo.php?videosrc=" + videomold.material.diffuseTexture.video.src, "_blank");
+			} else {
+				if ((videomold.material.diffuseTexture.video.paused && force == 3) || force == 1 || force == 2) {
+					/* move the video poster mold with the video texture (hide it) */
 					videoposter.position.x = videomold.position.x +.1;
+					if (force == 2) { /* start again */
+						videomold.material.diffuseTexture.video.load();
+					} else if (force == 1) {
+					} /* force == 1 // play */
+					videomold.material.diffuseTexture.video.play();
+				} else { /* pause */
+					if (force == -1) { /* pause at start */
+						/* move the video poster mold with the video texture (show it) */
+						videoposter.position.x = videomold.position.x -.1;
+						videomold.material.diffuseTexture.video.load();
+					} else {
+						/* move the video poster mold with the video texture (hide it) */
+						videoposter.position.x = videomold.position.x +.1;
+					}
+					videomold.material.diffuseTexture.video.pause();
 				}
-                videomold.material.diffuseTexture.video.pause();
-            }
+			}
         }
     } catch (ex) {
         WTW.log("core-scripts-prime-wtw_common.js-checkVideoClick=" + ex.message);
@@ -8801,6 +8853,7 @@ WTWJS.prototype.loadUserSettingsAfterEngine = function() {
 			}, function(){ 
 				console.log("Optimization failed");
 			});*/
+			WTW.pluginsLoadUserSettingsAfterEngine();
 		}, 8000);
 	} catch (ex) { 
 		WTW.log("core-scripts-prime-wtw_common.js-loadUserSettingsAfterEngine=" + ex.message);
@@ -9616,7 +9669,9 @@ WTWJS.prototype.getSettings = function(zsettings, zjsfunction, zjsparameters) {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-				WTW.returnSettings(zresponse.settingsvalues, zjsfunction, zjsparameters);
+				if (zjsfunction != null) {
+					WTW.returnSettings(zresponse.settings, zjsfunction, zjsparameters);
+				}
 			}
 		);
 	} catch (ex) {
@@ -9626,7 +9681,9 @@ WTWJS.prototype.getSettings = function(zsettings, zjsfunction, zjsparameters) {
 
 WTWJS.prototype.returnSettings = function(zsettings, zjsfunction, zjsparameters) {
 	try {
-		WTW.executeFunctionByName(zjsfunction, window, zsettings, zjsparameters);
+		if (zjsfunction != null) {
+			WTW.executeFunctionByName(zjsfunction, window, zsettings, zjsparameters);
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-returnSettings=" + ex.message);
 	}
@@ -9645,7 +9702,9 @@ WTWJS.prototype.saveSetting = function(zsetting, zvalue, zjsfunction, zjsparamet
 		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
-				WTW.returnSettings(zresponse.success, zjsfunction, zjsparameters);
+				if (zjsfunction != null) {
+					WTW.returnSettings(zresponse.success, zjsfunction, zjsparameters);
+				}
 			}
 		);
 	} catch (ex) {
@@ -9665,7 +9724,9 @@ WTWJS.prototype.saveSettings = function(zsettings, zjsfunction, zjsparameters) {
 		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
-				WTW.returnSettings(zresponse.success, zjsfunction, zjsparameters);
+				if (zjsfunction != null) {
+					WTW.returnSettings(zresponse.success, zjsfunction, zjsparameters);
+				}
 			}
 		);
 	} catch (ex) {
@@ -9678,14 +9739,18 @@ WTWJS.prototype.executeFunctionByName = function(zjsfunction, context /*, args *
 	var args = null;
 	var zfunction = null;
 	try {
-		args = Array.prototype.slice.call(arguments, 2);
-		var namespaces = zjsfunction.split(".");
-		func = namespaces.pop();
-		for(var i = 0; i < namespaces.length; i++) {
-			context = context[namespaces[i]];
-		}
-		if (typeof context[func] == 'function') {
-			zfunction = context[func].apply(context, args);
+		if (zjsfunction != null) {
+			if (zjsfunction != '') {
+				args = Array.prototype.slice.call(arguments, 2);
+				var namespaces = zjsfunction.split(".");
+				func = namespaces.pop();
+				for(var i = 0; i < namespaces.length; i++) {
+					context = context[namespaces[i]];
+				}
+				if (typeof context[func] == 'function') {
+					zfunction = context[func].apply(context, args);
+				}
+			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-executeFunctionByName=" + ex.message);
@@ -10105,15 +10170,83 @@ WTWJS.prototype.getMoveDownVector = function(zsourcename, zstride) {
 	return zmove;
 }
 
-WTWJS.prototype.checkAnimationSet = function(zavatar, zkey) {
+WTWJS.prototype.checkAvatarsInZone = function(actionzone) {
+	var zinzone = false;
+	try {
+		//meinzone = WTW.myAvatar.intersectsMesh(actionzone, false);
+		
+		
+		
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-checkAvatarsInZone=" + ex.message);
+	}
+	return zinzone;
+}
+
+WTWJS.prototype.setMovementEventsKey = function(zmoveevents, zkey, zweight) {
+	try {
+		for (var i=0;i<zmoveevents.length;i++) {
+			if (zmoveevents[i] != null) {
+				if (zmoveevents[i].key == zkey) {
+					zmoveevents[i].weight = zweight;
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-setMovementEventsKey=" + ex.message);
+	}
+	return zmoveevents;
+}
+
+WTWJS.prototype.isInMovementEvents = function(zmoveevents, zkey) {
+	var inarray = false;
+	try {
+		if (zmoveevents != null) {
+			if (zmoveevents.length > 0) {
+				for (var i=0;i<zmoveevents.length;i++) {
+					if (zmoveevents[i] != null) {
+						if (zmoveevents[i].key == zkey && zmoveevents[i].weight > 0) {
+							inarray = true;
+						}
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-isInMovementEvents=" + ex.message);
+	}
+	return inarray;
+}
+
+WTWJS.prototype.resetActiveAnimations = function(zavatar) {
+	try {
+		if (zavatar != null) {
+			if (zavatar.WTW != null) {
+				if (zavatar.WTW.animations != null) {
+					if (zavatar.WTW.animations.running != null) {
+						for(var key in zavatar.WTW.animations.running) {
+							if (zavatar.WTW.animations.running[key] != null) {
+								zavatar.WTW.animations.running[key].active = 0;
+							}
+						}
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-resetActiveAnimations=" + ex.message);
+	}
+}
+
+WTWJS.prototype.checkAnimationSet = function(zavatar, zkey, zanimationset) {
 	try {
 		if (zavatar != null) {
 			if (zavatar.WTW != null) {
 				if (zavatar.WTW.animations != null) {
 					if (zavatar.WTW.animations.running != null) {
 						var weightkey = zkey;
-						if (WTW.animationSet != '') {
-							weightkey = zkey + "-" + WTW.animationSet;
+						if (zanimationset != '') {
+							weightkey = zkey + "-" + zanimationset;
 						}
 						if (zavatar.WTW.animations.running[weightkey] != null) {
 							zkey = weightkey;

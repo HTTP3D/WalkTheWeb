@@ -462,6 +462,7 @@ WTWJS.prototype.getAvatarAnimationsAll = function() {
 		}
 		var zrequest = {
 			'avatarid': myavatarid,
+			'instanceid': dGet("wtw_tinstanceid").value,
 			'function':'getavataranimationsall'
 		};
 		WTW.postJSON("/core/handlers/avatars.php", zrequest, 
@@ -708,6 +709,7 @@ WTWJS.prototype.deleteUserAnimation = function(selectname) {
 			}
 			var zrequest = {
 				'avatarid': myavatarid,
+				'instanceid': dGet("wtw_tinstanceid").value,
 				'useravataranimationid': useravataranimationid,
 				'avataranimationid':avataranimationid,
 				'function':'deleteavataranimation'
@@ -1166,6 +1168,7 @@ WTWJS.prototype.saveAvatarEnterAnimation = function() {
 		}
 		var zrequest = {
 			'avatarid': myavatarid,
+			'instanceid': dGet("wtw_tinstanceid").value,
 			'avataranimationid': zavataranimationid,
 			'transport': '1',
 			'function':'savetransportanimation'
@@ -2326,7 +2329,9 @@ WTWJS.prototype.loadAvatarAnimations = function(avatarname, easingfunction, anim
 								if (walkskeleton.parent == null) {
 									walkskeleton.parent = avatarparent;
 								}
-								
+								if (animation.startweight == undefined) {
+									animation.startweight = 0;
+								}
 								if (animation.animationname == "onoption") {
 									animation.animationname = "onoption" + animation.avataranimationid;
 								}
@@ -2435,6 +2440,7 @@ WTWJS.prototype.changeAvatarAnimation = function(selobj) {
 				'avatarid': myavatarid,
 				'useravataranimationid': useravataranimationid,
 				'avataranimationid':avataranimationid,
+				'instanceid': dGet("wtw_tinstanceid").value,
 				'avataranimationname':dGet('wtw_tavataranimationname').value,
 				'speedratio':speedratio,
 				'function':'saveavataranimation'
@@ -2715,7 +2721,7 @@ WTWJS.prototype.turnToRotation = function(avatarname, moldtoface, functionname, 
 
 WTWJS.prototype.cancelSit = function(avatar, moveevents) {
 	try {
-		if (WTW.isInArray(moveevents, 'onsitwait')) {
+		if (WTW.isInMovementEvents(moveevents, 'onsitwait')) {
 			WTW.keyPressedAdd('onwait');
 			WTW.keyPressedRemove('onsitwait');
 			var dist = 0;

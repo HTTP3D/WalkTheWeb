@@ -63,6 +63,7 @@ WTWJS.prototype.initEnvironment = function() {
 		scene.autoClear = false;
 		scene.autoClearDepthAndStencil = false;
 		scene.collisionsEnabled = true;
+		scene.ambientColor = new BABYLON.Color3(.3, .3, .3);
 		scene.fogEnabled = true;
 		scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
 
@@ -91,13 +92,14 @@ WTWJS.prototype.initEnvironment = function() {
 		WTW.sun.intensity = WTW.getSunIntensity(WTW.init.skyInclination, WTW.init.skyAzimuth);
 		WTW.sun.shadowMinZ = 1;
 		WTW.sun.shadowMaxZ = 4000;
+		WTW.sun.ambient = new BABYLON.Color3(.4, .4, .4);
 		WTW.sun.diffuse = new BABYLON.Color3(.4, .4, .4);
 		WTW.sun.specular = new BABYLON.Color3(.2, .2, .2);
 		WTW.sun.groundColor = new BABYLON.Color3(.1, .1, .1);
 
 		/* lesser light for back sides */
 		WTW.sunlight = new BABYLON.DirectionalLight("sunlight", new BABYLON.Vector3(1, -1, 1), scene);
-		WTW.sunlight.intensity = WTW.sun.intensity / 3;
+		WTW.sunlight.intensity = WTW.sun.intensity / 1.5; //3;
 		
 		WTW.sky = BABYLON.MeshBuilder.CreateSphere("sky", {segments: 40, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.BACKSIDE}, scene);
 		WTW.sky.scaling.x = 5000;
@@ -1092,8 +1094,13 @@ WTWJS.prototype.checkActionZones = function() {
 			var checkactionzones = false;
 			if (WTW.myAvatar != null) {
 				if (WTW.holdPosition != WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + "|" + WTW.myAvatar.position.z) {
+					/* if my avatar has moved then check action zones */
 					checkactionzones = true;
 				}
+			}
+			if (WTW.pluginsSetCheckActionZones()) {
+				/* plugins can trigger if you need to check the Action Zones (common after any avatar movement) */
+				checkactionzones = true;
 			}
 			if (checkactionzones || WTW.isInitCycle == 1 || WTW.rideAlong != null) {
 				for (var i = 0; i < WTW.actionZones.length; i++) {
@@ -1109,6 +1116,7 @@ WTWJS.prototype.checkActionZones = function() {
 							}
 							var othersinzone = false;
 							/* check if others are in the zone */
+							
 							othersinzone = WTW.pluginsCheckActionZoneTrigger(actionzone);
 							if (meinzone || othersinzone) {
 								if (meinzone && moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 2) {
@@ -1422,438 +1430,392 @@ WTWJS.prototype.setClosestBuilding = function() {
 	}
 }
 
-WTWJS.prototype.setAvatarSync = function(animations, moveevents) {
-	try {
-		if (animations != null && moveevents != null) {
-			for(var key in animations) {
-				if (animations[key] != null) {
-					if (key != 'onrotateup' && key != 'onrotatedown') {
-						if (animations[key].weight != undefined) {
-							if (moveevents.length == 0 || moveevents.length == 1) {
-								animations[key].syncWith(null);
-							} else if (key == 'onwalk' || key == 'onwalkbackwards' || key == 'onrun' || key == 'onrunbackwards' || animations[key].weight == 0) {
-								animations[key].syncWith(null);
-							} else {
-								if (animations['onwalk'] != undefined && animations['onrun'] != undefined) {
-									if (animations['onrun'].weight > animations['onwalk'].weight) {
-										animations[key].syncWith(animations['onrun']);
-									} else if (animations['onwalk'].weight > 0) {
-										animations[key].syncWith(animations['onwalk']);
-									} else if (animations['onrun'].weight > 0) {
-										animations[key].syncWith(animations['onrun']);
+WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
+	try {//active
+		if (zavatar == undefined) {
+			zavatar = WTW.myAvatar;
+		}
+		if (zkeyspressed == undefined) {
+			zkeyspressed = WTW.keysPressed;
+		}
+		if (WTW.animationSet == undefined || WTW.animationSet == null) {
+			WTW.animationSet = '';
+		}
+		if (zavatar != null && WTW.cameraFocus == 1) {
+			zavatar.rotation.x = 0;
+			zavatar.rotation.z = 0;
+			var increment = .10;
+			var zactivecount = 0;
+			var zmoveevents = [];
+			if (zavatar.WTW != null) {
+				if (zavatar.WTW.animations != null) {
+					if (zavatar.WTW.animations.running != null) {
+						WTW.resetActiveAnimations(zavatar);
+						if (zkeyspressed != null) {
+							for (var k=0;k < zkeyspressed.length;k++) {
+								if (zkeyspressed[k] != null) {
+									if (WTW.isNumeric(zkeyspressed[k])) {
+										let zanim = '';
+										switch (zkeyspressed[k]) {
+											case 32: //space jump
+												let zonwalk = false;
+												let zonrun = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet)].active == 1) {
+														zonwalk = true;
+													}
+												}
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet)].active == 1) {
+														zonrun = true;
+													}
+												}
+												if (zonwalk) {
+													zanim = WTW.checkAnimationSet(zavatar, 'onwalkjump', WTW.animationSet);
+													if (zavatar.WTW.animations.running[zanim] != undefined) {
+														zavatar.WTW.animations.running[zanim].active = 1;
+													}
+													zanim = '';
+													zactivecount += 1;
+												} else if (zonrun) {
+													zanim = WTW.checkAnimationSet(zavatar, 'onrunjump', WTW.animationSet);
+													if (zavatar.WTW.animations.running[zanim] != undefined) {
+														zavatar.WTW.animations.running[zanim].active = 1;
+													}
+													zanim = '';
+													zactivecount += 1;
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onjump', WTW.animationSet);
+												}
+												break;
+											case 38: //arrow w forward
+											case 87: //w forward
+												let zonjump = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onjump', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onjump', WTW.animationSet)].active == 1) {
+														zonjump = true;
+													}
+												}
+												if (zonjump) {
+													if (WTW.shiftKey) {
+														zanim = WTW.checkAnimationSet(zavatar, 'onrunjump', WTW.animationSet);
+													} else {
+														zanim = WTW.checkAnimationSet(zavatar, 'onwalkjump', WTW.animationSet);
+													}
+													if (zavatar.WTW.animations.running[zanim] != undefined) {
+														zavatar.WTW.animations.running[zanim].active = 1;
+													}
+													zanim = '';
+													zactivecount += 1;
+												} else {
+													if (WTW.shiftKey) {
+														zanim = WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet);
+													} else {
+														zanim = WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet);
+													}
+												}
+												break;
+											case 1038: //arrow w forward
+												zanim = WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet);
+												break;
+											case 2038: //arrow w forward
+												zanim = WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet);
+												break;
+											case 40: //arrow s backwards
+											case 83: //s backwards
+												if (WTW.shiftKey) {
+													zanim = WTW.checkAnimationSet(zavatar, 'onrunbackwards', WTW.animationSet);
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onwalkbackwards', WTW.animationSet);
+												}
+												break;
+											case 1040: //arrow s backwards
+												zanim = WTW.checkAnimationSet(zavatar, 'onwalkbackwards', WTW.animationSet);
+												break;
+											case 2040: //arrow s backwards
+												zanim = WTW.checkAnimationSet(zavatar, 'onrunbackwards', WTW.animationSet);
+												break;
+											case 37: //arrow q rotate left
+											case 81: //q rotate left
+												if (WTW.shiftKey) {
+													zanim = WTW.checkAnimationSet(zavatar, 'onrunturnleft', WTW.animationSet);
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet);
+												}
+												break;
+											case 1037: //mouse rotate left
+												zanim = WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet);
+												break;
+											case 2037: //mouse rotate left
+												zanim = WTW.checkAnimationSet(zavatar, 'onrunturnleft', WTW.animationSet);
+												break;
+											case 39: //arrow e rotate right
+											case 69: //e rotate right
+												if (WTW.shiftKey) {
+													zanim = WTW.checkAnimationSet(zavatar, 'onrunturnright', WTW.animationSet);
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onturnright', WTW.animationSet);
+												}
+												break;
+											case 1039: //mouse rotate right
+												zanim = WTW.checkAnimationSet(zavatar, 'onturnright', WTW.animationSet);
+												break;
+											case 2039: //mouse rotate right
+												zanim = WTW.checkAnimationSet(zavatar, 'onrunturnright', WTW.animationSet);
+												break;
+											case 65: //a strafe left
+											case 1065: //mouse strafe left
+												if (WTW.shiftKey) {
+													zanim = WTW.checkAnimationSet(zavatar, 'onrunstrafeleft', WTW.animationSet);
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onstrafeleft', WTW.animationSet);
+												}
+												break;
+											case 2065: //mouse strafe left
+												zanim = WTW.checkAnimationSet(zavatar, 'onrunstrafeleft', WTW.animationSet);
+												break;
+											case 68: //d strafe right
+											case 1068: //mouse strafe right
+												if (WTW.shiftKey) {
+													zanim = WTW.checkAnimationSet(zavatar, 'onrunstraferight', WTW.animationSet);
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onstraferight', WTW.animationSet);
+												}
+												break;
+											case 2068: //mouse strafe right
+												zanim = WTW.checkAnimationSet(zavatar, 'onrunstraferight', WTW.animationSet);
+												break;
+											case 82: //r rotate up
+											case 1082: //mouse rotate up
+												zanim = WTW.checkAnimationSet(zavatar, 'onrotateup', WTW.animationSet);
+												break;
+											case 70: //f rotate down
+											case 1070: //mouse rotate down
+												zanim = WTW.checkAnimationSet(zavatar, 'onrotatedown', WTW.animationSet);
+												break;
+											case 0: //pause animation
+												zanim = WTW.checkAnimationSet(zavatar, 'onpause', WTW.animationSet);
+												break;
+											case 3001: //sit wait
+												zanim = WTW.checkAnimationSet(zavatar, 'onsitwait', WTW.animationSet);
+												break;
+										} 
+										if (zanim != '') {
+											if (zavatar.WTW.animations.running[zanim] != undefined) {
+												zavatar.WTW.animations.running[zanim].active = 1;
+											}
+											zanim = '';
+											zactivecount += 1;
+										}
+									} else {
+										zanim = WTW.checkAnimationSet(zavatar, zkeyspressed[k], WTW.animationSet);
+										if (zavatar.WTW.animations.running[zanim] != undefined) {
+											zavatar.WTW.animations.running[zanim].active = 1;
+										}
+										zactivecount += 1;
 									}
-								} else if (animations['onwalk'] != undefined) {
-									if (animations['onwalk'].weight > 0) {
-										animations[key].syncWith(animations['onwalk']);
-									}
-								} else if (animations['onrun'] != undefined) {
-									if (animations['onrun'].weight > 0) {
-										animations[key].syncWith(animations['onrun']);
-									}
-								} else if (animations['onwalkbackwards'] != undefined) {
-									if (animations['onwalkbackwards'].weight > 0) {
-										animations[key].syncWith(animations['onwalkbackwards']);
-									}
-								} else {
-									animations[key].syncWith(null);
 								}
 							}
 						}
-					}
-				}
-			}
-		}
-	} catch(ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-setAvatarSync=" + ex.message);
-	}
-}
+						if (zkeyspressed.length == 0) {
+							zanim = WTW.checkAnimationSet(zavatar, 'onwait', WTW.animationSet);
+							if (zavatar.WTW.animations.running[zanim] != undefined) {
+								zavatar.WTW.animations.running[zanim].active = 1;
+							}
+							zactivecount += 1;
+						}
 
-WTWJS.prototype.moveAvatar = function(avatar, keyspressed) {
-	try {
-		if (avatar == undefined) {
-			avatar = WTW.myAvatar;
-		}
-		if (keyspressed == undefined) {
-			keyspressed = WTW.keysPressed;
-		}
-		if (avatar != null && WTW.cameraFocus == 1) {
-			var moveevents = [];
-			var animations = '';
-			if (keyspressed != null) {
-				for (var k=0;k < keyspressed.length;k++) {
-					if (keyspressed[k] != null) {
-						if (WTW.isNumeric(keyspressed[k])) {
-							let anim = '';
-							switch (keyspressed[k]) {
-								case 32: //space jump
-									var index = WTW.indexInArray(moveevents, WTW.checkAnimationSet(avatar, 'onwalk'));
-									var index2 = WTW.indexInArray(moveevents, WTW.checkAnimationSet(avatar, 'onrun'));
-									if (index > -1) {
-										anim = WTW.checkAnimationSet(avatar, 'onwalkjump');
-										moveevents[index] = anim;
-										animations += anim + ",";
-										anim = '';
-									} else if (index2 > -1) {
-										anim = WTW.checkAnimationSet(avatar, 'onrunjump');
-										moveevents[index2] = anim;
-										animations += anim + ",";
-										anim = '';
-									} else {
-										anim = WTW.checkAnimationSet(avatar, 'onjump');
-									}
-									break;
-								case 38: //arrow w forward
-								case 87: //w forward
-									var index = WTW.indexInArray(moveevents, WTW.checkAnimationSet(avatar, 'onjump'));
-									if (index > -1) {
-										if (WTW.shiftKey) {
-											anim = WTW.checkAnimationSet(avatar, 'onrunjump');
-										} else {
-											anim = WTW.checkAnimationSet(avatar, 'onwalkjump');
-										}
-										moveevents[index] = anim;
-										animations += anim + ",";
-										anim = '';
-									} else {
-										if (WTW.shiftKey) {
-											anim = WTW.checkAnimationSet(avatar, 'onrun');
-										} else {
-											anim = WTW.checkAnimationSet(avatar, 'onwalk');
-										}
-									}
-									break;
-								case 1038: //arrow w forward
-									anim = WTW.checkAnimationSet(avatar, 'onwalk');
-									break;
-								case 2038: //arrow w forward
-									anim = WTW.checkAnimationSet(avatar, 'onrun');
-									break;
-								case 40: //arrow s backwards
-								case 83: //s backwards
-									if (WTW.shiftKey) {
-										anim = WTW.checkAnimationSet(avatar, 'onrunbackwards');
-									} else {
-										anim = WTW.checkAnimationSet(avatar, 'onwalkbackwards');
-									}
-									break;
-								case 1040: //arrow s backwards
-									anim = WTW.checkAnimationSet(avatar, 'onwalkbackwards');
-									break;
-								case 2040: //arrow s backwards
-									anim = WTW.checkAnimationSet(avatar, 'onrunbackwards');
-									break;
-								case 37: //arrow q rotate left
-								case 81: //q rotate left
-									if (WTW.shiftKey) {
-										anim = WTW.checkAnimationSet(avatar, 'onrunturnleft');
-									} else {
-										anim = WTW.checkAnimationSet(avatar, 'onturnleft');
-									}
-									break;
-								case 1037: //mouse rotate left
-									anim = WTW.checkAnimationSet(avatar, 'onturnleft');
-									break;
-								case 2037: //mouse rotate left
-									anim = WTW.checkAnimationSet(avatar, 'onrunturnleft');
-									break;
-								case 39: //arrow e rotate right
-								case 69: //e rotate right
-									if (WTW.shiftKey) {
-										anim = WTW.checkAnimationSet(avatar, 'onrunturnright');
-									} else {
-										anim = WTW.checkAnimationSet(avatar, 'onturnright');
-									}
-									break;
-								case 1039: //mouse rotate right
-									anim = WTW.checkAnimationSet(avatar, 'onturnright');
-									break;
-								case 2039: //mouse rotate right
-									anim = WTW.checkAnimationSet(avatar, 'onrunturnright');
-									break;
-								case 65: //a strafe left
-								case 1065: //mouse strafe left
-									if (WTW.shiftKey) {
-										anim = WTW.checkAnimationSet(avatar, 'onrunstrafeleft');
-									} else {
-										anim = WTW.checkAnimationSet(avatar, 'onstrafeleft');
-									}
-									break;
-								case 2065: //mouse strafe left
-									anim = WTW.checkAnimationSet(avatar, 'onrunstrafeleft');
-									break;
-								case 68: //d strafe right
-								case 1068: //mouse strafe right
-									if (WTW.shiftKey) {
-										anim = WTW.checkAnimationSet(avatar, 'onrunstraferight');
-									} else {
-										anim = WTW.checkAnimationSet(avatar, 'onstraferight');
-									}
-									break;
-								case 2068: //mouse strafe right
-									anim = WTW.checkAnimationSet(avatar, 'onrunstraferight');
-									break;
-								case 82: //r rotate up
-								case 1082: //mouse rotate up
-									anim = WTW.checkAnimationSet(avatar, 'onrotateup');
-									break;
-								case 70: //f rotate down
-								case 1070: //mouse rotate down
-									anim = WTW.checkAnimationSet(avatar, 'onrotatedown');
-									break;
-								case 0: //pause animation
-									anim = WTW.checkAnimationSet(avatar, 'onpause');
-									break;
-								case 3001: //sit wait
-									anim = WTW.checkAnimationSet(avatar, 'onsitwait');
-									break;
-							} 
-							if (anim != '') {
-								moveevents[moveevents.length] = anim;
-								animations += anim + ",";
-								anim = '';
-							}
-						} else {
-							anim = WTW.checkAnimationSet(avatar, keyspressed[k]);
-							moveevents[moveevents.length] = anim;
-							animations += anim + ",";
-						}
-					}
-				}
-			}
-			if (keyspressed.length == 0) {
-				anim = WTW.checkAnimationSet(avatar, 'onwait');
-				moveevents[moveevents.length] = anim;
-				animations += anim + ",";
-			}
-			WTW.activeAnimations = animations;
-			if (WTW.refreshLastMoveEvents) {
-				WTW.lastMoveEvents = moveevents;
-				WTW.refreshLastMoveEvents = false;
-			}
-			WTW.setAvatarMovement(avatar, moveevents);
-		} 
-	} catch(ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-moveAvatar=" + ex.message);
-	}
-}
-	
-WTWJS.prototype.setAvatarMovement = function(avatar, moveevents) {
-	try {
-		if (avatar != null) {
-			avatar.rotation.x = 0;
-			avatar.rotation.z = 0;
-			var increment = .05;
-			var lastmoveevents = [];
-			if (WTW.lastMoveEvents != null) {
-				lastmoveevents = WTW.lastMoveEvents;
-			}
-			if (avatar.WTW != null) {
-				if (avatar.WTW.animations != null) {
-					if (avatar.WTW.animations.running != null) {
 						/* set the weight for each animation running */
-						var weight = 0;
-						if (WTW.isInArray(moveevents, 'onpause')) {
-							weight = 1;
+						var zweight = 0;
+						if (zavatar.WTW.animations.running['onwait'] != undefined) {
+							if (zavatar.WTW.animations.running['onwait'].active == 0) {
+								zavatar.WTW.animations.running['onwait'].weight = 0;
+							}
 						}
-						for(var key in avatar.WTW.animations.running) {
-							if (avatar.WTW.animations.running[key] != null) {
-								if (key == 'onwait' && WTW.isInArray(moveevents, key) == false) {
-									avatar.WTW.animations.running[key].weight = 0;
-								} else if (WTW.isInArray(moveevents, 'onwalkjump') || WTW.isInArray(moveevents, 'onrunjump')) {
-									if (key == 'onwalkjump') {
-										avatar.WTW.animations.running['onwalkjump'].weight = 1;
-									} else if (key == 'onrunjump') {
-										avatar.WTW.animations.running['onrunjump'].weight = 1;
-									}
-								} else if (WTW.isInArray(lastmoveevents, key) && WTW.isInArray(moveevents, key)) {
-									if (avatar.WTW.animations.running[key].weight > 1/lastmoveevents.length) {
-										if (avatar.WTW.animations.running[key].weight - 1/lastmoveevents.length > increment) {
-											avatar.WTW.animations.running[key].weight -= increment;
-										} else {
-											avatar.WTW.animations.running[key].weight = 1/lastmoveevents.length;
-										}
-									} else if (avatar.WTW.animations.running[key].weight < 1/lastmoveevents.length) {
-										if (1/lastmoveevents.length - avatar.WTW.animations.running[key].weight > increment) {
-											avatar.WTW.animations.running[key].weight += increment;
-										} else {
-											avatar.WTW.animations.running[key].weight = 1/lastmoveevents.length;
-										}
-									}
-								} else if (WTW.isInArray(moveevents, key)) {
-									if (avatar.WTW.animations.running[key].weight < 1/moveevents.length) {
-										if (1/moveevents.length - avatar.WTW.animations.running[key].weight > increment) {
-											avatar.WTW.animations.running[key].weight += increment;
-										} else {
-											avatar.WTW.animations.running[key].weight = 1/moveevents.length;
-										}
-									}
-								} else if (WTW.isInArray(lastmoveevents, key)) {
-									if (avatar.WTW.animations.running[key].weight > 0) {
-										if (avatar.WTW.animations.running[key].weight > increment) {
-											avatar.WTW.animations.running[key].weight -= increment;
-										} else {
-											avatar.WTW.animations.running[key].weight = 0;
-										}
+						if (zavatar.WTW.animations.running['onwalkjump'] != undefined) {
+							if (zavatar.WTW.animations.running['onwalkjump'].active == 1) {
+								// clear other weights
+								zavatar.WTW.animations.running['onwalkjump'].weight = 1;
+							}
+						}
+						if (zavatar.WTW.animations.running['onrunjump'] != undefined) {
+							if (zavatar.WTW.animations.running['onrunjump'].active == 1) {
+								// clear other weights
+								zavatar.WTW.animations.running['onrunjump'].weight = 1;
+							}
+						}
+						for(var key in zavatar.WTW.animations.running) {
+							if (zavatar.WTW.animations.running[key] != undefined) {
+								if (zavatar.WTW.animations.running[key].active == 0) {
+									if (zavatar.WTW.animations.running[key].weight > 0) {
+										zavatar.WTW.animations.running[key].weight -= increment;
+									} else {
+										zavatar.WTW.animations.running[key].weight = 0;
 									}
 								} else {
-									if (key != 'onwait') {
-										avatar.WTW.animations.running[key].weight = 0;
+									if (zavatar.WTW.animations.running[key].weight < (1/zactivecount)) {
+										if (zavatar.WTW.animations.running[key].weight + increment > (1/zactivecount)) {
+											zavatar.WTW.animations.running[key].weight = (1/zactivecount);
+										} else {
+											zavatar.WTW.animations.running[key].weight += increment;
+										}
+									} else {
+										if (zavatar.WTW.animations.running[key].weight - increment < (1/zactivecount)) {
+											zavatar.WTW.animations.running[key].weight = (1/zactivecount);
+										} else {
+											zavatar.WTW.animations.running[key].weight -= increment;
+										}
 									}
 								}
-								weight += avatar.WTW.animations.running[key].weight;
-								if (avatar.WTW.animations.running[key].weight > 0) {
-									/* sets movement based on weight and framerate */
+								zmoveevents[zmoveevents.length] = {
+									'key':key,
+									'weight':zavatar.WTW.animations.running[key].weight,
+									'active':zavatar.WTW.animations.running[key].active
+								}
+								zweight += zavatar.WTW.animations.running[key].weight;
+								if (zavatar.WTW.animations.running[key].weight > 0) {
+									/* sets movement based on weight, move settings, and framerate */
 									switch (key) {
 										case 'onwait':
-											var zstride = WTW.init.gravity * 15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
-											//zmove = new BABYLON.Vector3(0, -zstride, 0);
-											var zmove = WTW.getMoveDownVector(avatar.name, -zstride);
-											
-											avatar.moveWithCollisions(zmove);
+											var zstride = WTW.init.gravity * 15 * zavatar.WTW.animations.running[key].weight / WTW.fps;
+											var zmove = WTW.getMoveDownVector(zavatar.name, -zstride);
+											zavatar.moveWithCollisions(zmove);
 											break;
 										case 'onrotateup':
-											if (avatar.name.indexOf("myavatar-") > -1) {
-												WTW.cameraYOffset -= 200/(WTW.sizeY - WTW.mouseStartY + WTW.mouseY);
-												if (WTW.cameraYOffset < -10) {
-													WTW.cameraYOffset = -10; // -4
-												}
+											WTW.cameraYOffset -= 200/(WTW.sizeY - WTW.mouseStartY + WTW.mouseY);
+											if (WTW.cameraYOffset < -10) {
+												WTW.cameraYOffset = -10; // -4
 											}
-											weight -= avatar.WTW.animations.running[key].weight;
+											zweight -= zavatar.WTW.animations.running[key].weight;
 											break;
 										case 'onrotatedown':
-											if (avatar.name.indexOf("myavatar-") > -1) {
-												WTW.cameraYOffset += 200/(WTW.sizeY - WTW.mouseY + WTW.mouseStartY);
-												if (WTW.cameraYOffset > 20) {
-													WTW.cameraYOffset = 20;
-												}
+											WTW.cameraYOffset += 200/(WTW.sizeY - WTW.mouseY + WTW.mouseStartY);
+											if (WTW.cameraYOffset > 20) {
+												WTW.cameraYOffset = 20;
 											}
-											weight -= avatar.WTW.animations.running[key].weight;
+											zweight -= zavatar.WTW.animations.running[key].weight;
 											break;
 										case 'onwalk':
 											if (WTW.moveOverride == 0) {
-												WTW.cancelSit(avatar, moveevents);
-												var zstride = 15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
-												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = WTW.getMoveVector(avatar.name, 0, zstride);
-												avatar.moveWithCollisions(move);
+												var zstride = 15 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+												zavatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = WTW.getMoveVector(zavatar.name, 0, zstride);
+												zavatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onwalkjump':	
-											WTW.cancelSit(avatar, moveevents);
-											var zstride = 15 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
-											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-											var move = WTW.getMoveVector(avatar.name, 0, zstride);
-											avatar.moveWithCollisions(move);
+											var zstride = 15 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+											zavatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+											var move = WTW.getMoveVector(zavatar.name, 0, zstride);
+											zavatar.moveWithCollisions(move);
 											break;
 										case 'onrun':
 											if (WTW.moveOverride == 0) {
-												WTW.cancelSit(avatar, moveevents);
-												var zstride = 25 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
-												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = WTW.getMoveVector(avatar.name, 0, zstride);
-												avatar.moveWithCollisions(move);
+												var zstride = 25 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+												zavatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = WTW.getMoveVector(zavatar.name, 0, zstride);
+												zavatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onrunjump':
-											WTW.cancelSit(avatar, moveevents);
-											var zstride = 25 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
-											avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-											var move = WTW.getMoveVector(avatar.name, 0, zstride);
-											avatar.moveWithCollisions(move);
+											var zstride = 25 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+											zavatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+											var move = WTW.getMoveVector(zavatar.name, 0, zstride);
+											zavatar.moveWithCollisions(move);
 											break;
 										case 'onwalkbackwards':
 											if (WTW.moveOverride == 0) {
-												var zstride = 10 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
-												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = WTW.getMoveVector(avatar.name, 180, zstride);
-												avatar.moveWithCollisions(move);
+												var zstride = 10 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+												zavatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = WTW.getMoveVector(zavatar.name, 180, zstride);
+												zavatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onrunbackwards':
 											if (WTW.moveOverride == 0) {
-												var zstride = 25 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
-												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = WTW.getMoveVector(avatar.name, 180, zstride);
-												avatar.moveWithCollisions(move);
+												var zstride = 25 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+												zavatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = WTW.getMoveVector(zavatar.name, 180, zstride);
+												zavatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onturnleft':
 											if (WTW.moveOverride == 0) {
-												avatar.rotation.y -= WTW.getRadians(70 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
-												avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed;
+												zavatar.rotation.y -= WTW.getRadians(70 * zavatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
+												zavatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed;
 											}
 											break;
 										case 'onrunturnleft':
 											if (WTW.moveOverride == 0) {
-												avatar.rotation.y -= WTW.getRadians(120 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
-												avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed * 1.5;
+												zavatar.rotation.y -= WTW.getRadians(120 * zavatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
+												zavatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed * 1.5;
 											}
 											break;
 										case 'onturnright':
 											if (WTW.moveOverride == 0) {
-												avatar.rotation.y += WTW.getRadians(70 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
-												avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed;
+												zavatar.rotation.y += WTW.getRadians(70 * zavatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
+												zavatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed;
 											}
 											break;
 										case 'onrunturnright':
 											if (WTW.moveOverride == 0) {
-												avatar.rotation.y += WTW.getRadians(120 * avatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
-												avatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed * 1.5;
+												zavatar.rotation.y += WTW.getRadians(120 * zavatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
+												zavatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed * 1.5;
 											}
 											break;
 										case 'onstrafeleft':
 											if (WTW.moveOverride == 0) {
-												var zstride = 4 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
-												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = WTW.getMoveVector(avatar.name, -90, zstride);
-												avatar.moveWithCollisions(move);
+												var zstride = 4 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+												zavatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = WTW.getMoveVector(zavatar.name, -90, zstride);
+												zavatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onrunstrafeleft':
 											if (WTW.moveOverride == 0) {
-												var zstride = 8 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
-												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = WTW.getMoveVector(avatar.name, -90, zstride);
-												avatar.moveWithCollisions(move);
+												var zstride = 8 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+												zavatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = WTW.getMoveVector(zavatar.name, -90, zstride);
+												zavatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onstraferight':
 											if (WTW.moveOverride == 0) {
-												var zstride = 4 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
-												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = WTW.getMoveVector(avatar.name, 90, zstride);
-												avatar.moveWithCollisions(move);
+												var zstride = 4 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+												zavatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = WTW.getMoveVector(zavatar.name, 90, zstride);
+												zavatar.moveWithCollisions(move);
 											}
 											break;
 										case 'onrunstraferight':
 											if (WTW.moveOverride == 0) {
-												var zstride = 8 * avatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
-												avatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
-												var move = WTW.getMoveVector(avatar.name, 90, zstride);
-												avatar.moveWithCollisions(move);
+												var zstride = 8 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
+												zavatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
+												var move = WTW.getMoveVector(zavatar.name, 90, zstride);
+												zavatar.moveWithCollisions(move);
 											}
 											break;
 										default:
-											weight = WTW.pluginsSetAvatarMovement(avatar, moveevents, key, weight);
+											zweight = WTW.pluginsSetAvatarMovement(zavatar, key, zweight);
 											break;
 									}
-									if (avatar.name.indexOf("myavatar-") > -1) {
-										WTW.setMovingCameras(avatar);
-									}
+									WTW.setMovingCameras(zavatar);
 								}
 							}
 						}
-						if (weight < 1) {
-							if (avatar.WTW.animations.running[WTW.checkAnimationSet(avatar, 'onwait')] != null) {
-								avatar.WTW.animations.running[WTW.checkAnimationSet(avatar, 'onwait')].weight += (1-weight);
+						if (zweight < 1) {
+							let zanimset = WTW.checkAnimationSet(zavatar, 'onwait', WTW.animationSet);
+							if (zavatar.WTW.animations.running[zanimset] != null) {
+								zavatar.WTW.animations.running[zanimset].weight += (1-zweight);
+								zmoveevents = WTW.setMovementEventsKey(zmoveevents, zanimset, zavatar.WTW.animations.running[zanimset].weight);
 							}
 						}
-						WTW.setAvatarSync(avatar.WTW.animations.running, moveevents);
 					}
 				}
 			}
-		}
+			WTW.pluginsMoveAvatar(zavatar, zmoveevents);
+		} 
 	} catch(ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-setAvatarMovement=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-moveAvatar=" + ex.message);
 	}
 }

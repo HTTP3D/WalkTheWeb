@@ -141,7 +141,6 @@ WTWJS.prototype.addActionZone = function(actionzonename, actionzonedef) {
 						actionzone = WTW.addActionzoneDriverWheel(actionzonename, actionzoneind, actionzonedef);
 						break;
 					default:
-WTW.log('actionzonetype=' + actionzonetype);						
 						actionzone = WTW.pluginsAddActionZones(actionzonetype, actionzonename, actionzoneind, actionzonedef);
 						break;
 				}
