@@ -16,7 +16,7 @@
 </head>
 <body style="background-color:#000000;">
 <div style="text-align:center;margin:0px;padding:0px;">
-<video id="wtw_videoplayer" controls width="100%" height="auto">
+<video id="wtw_videoplayer" controls height="100%" width="auto">
   <source src="<?php echo $videosrc; ?>" type="video/<?php echo $videoextension; ?>">
   Your browser does not support the video tag.
 </video>
@@ -28,7 +28,7 @@
 		if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
 			try {
 				document.getElementById('wtw_videoplayer').pause();
-				window.parent.WTW.closeIFrame();
+				//window.parent.WTW.closeIFrame();
 			} catch(ex) {}
 		}
 	}
@@ -41,13 +41,26 @@
 	
 	window.onload = function () {
 		try {
-			if (document.getElementById('wtw_videoplayer').requestFullscreen) {
+/*			if (document.getElementById('wtw_videoplayer').requestFullscreen) {
 			  document.getElementById('wtw_videoplayer').requestFullscreen();
 			} else if (document.getElementById('wtw_videoplayer').mozRequestFullScreen) {
 			  document.getElementById('wtw_videoplayer').mozRequestFullScreen();
 			} else if (document.getElementById('wtw_videoplayer').webkitRequestFullscreen) {
 			  document.getElementById('wtw_videoplayer').webkitRequestFullscreen();
+			} */
+			
+/*			var p = document.getElementById('wtw_videoplayer');
+
+			if (!window.isFs) {
+				window.isFs = true;
+				var fn_enter = p.requestFullscreen || p.webkitRequestFullscreen || p.mozRequestFullScreen || p.oRequestFullscreen || p.msRequestFullscreen;
+				fn_enter.call(p);
+			} else {
+				window.isFs = false;
+				var fn_exit = p.exitFullScreen || p.webkitExitFullScreen || p.mozExitFullScreen || p.oExitFullScreen || p.msExitFullScreen;
+				fn_exit.call(p);
 			}
+*/			
 		} catch(ex) {}
 		try {
 			document.getElementById('wtw_videoplayer').play();
