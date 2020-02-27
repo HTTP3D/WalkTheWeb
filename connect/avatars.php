@@ -11,55 +11,26 @@ try {
 	$zuserip = base64_decode($wtwconnect->getVal('p',''));
 	$zuseravatarid = "";
 	
-	if ((empty($zuserid) || !isset($zuserid)) && !empty($zinstanceid) && isset($zinstanceid)) {
+	if (!empty($zuserid) && isset($zuserid)) {
+		/* check for avatar for logged in user (latest used) */
+		$zresults = $wtwconnect->query("
+			select useravatarid 
+			from ".wtw_tableprefix."useravatars 
+			where userid='".$zuserid."' 
+				and deleted=0 
+			order by updatedate desc 
+			limit 1;");
+		foreach ($zresults as $zrow) {
+			$zuseravatarid = $zrow["useravatarid"];
+		}
+	}
+	if ((empty($zuseravatarid) || !isset($zuseravatarid)) && (empty($zuserid) || !isset($zuserid)) && !empty($zinstanceid) && isset($zinstanceid)) {
 		/* check for anonymous avatar with same instanceid - not logged in user (latest used) */
 		$zresults = $wtwconnect->query("
 			select useravatarid 
 			from ".wtw_tableprefix."useravatars 
 			where instanceid='".$zinstanceid."' 
 				and userid='' 
-				and deleted=0 
-			order by updatedate desc 
-			limit 1;");
-		foreach ($zresults as $zrow) {
-			$zuseravatarid = $zrow["useravatarid"];
-		}
-	}
-	if ((empty($zuseravatarid) || !isset($zuseravatarid)) && (!empty($zuserid) && isset($zuserid)) && !empty($zinstanceid) && isset($zinstanceid)) {
-		/* check for avatar with same instanceid for logged in user (latest used) */
-		$zresults = $wtwconnect->query("
-			select useravatarid 
-			from ".wtw_tableprefix."useravatars 
-			where userid='".$zuserid."' 
-				and instanceid='".$zinstanceid."' 
-				and deleted=0 
-			order by updatedate desc 
-			limit 1;");
-		foreach ($zresults as $zrow) {
-			$zuseravatarid = $zrow["useravatarid"];
-		}
-	}
-	if ((empty($zuseravatarid) || !isset($zuseravatarid)) && !empty($zinstanceid) && isset($zinstanceid)) {
-		/* check for anonymous avatar with same instanceid for user logged in (latest used) */
-		$zresults = $wtwconnect->query("
-			select useravatarid 
-			from ".wtw_tableprefix."useravatars 
-			where instanceid='".$zinstanceid."' 
-				and userid='' 
-				and deleted=0 
-			order by updatedate desc 
-			limit 1;");
-		foreach ($zresults as $zrow) {
-			$zuseravatarid = $zrow["useravatarid"];
-		}
-	}
-	if ((empty($zuseravatarid) || !isset($zuseravatarid)) && (!empty($zuserid) && isset($zuserid))) {
-		/* check for avatar for logged in user with any instance (latest used) */
-		$zresults = $wtwconnect->query("
-			select useravatarid 
-			from ".wtw_tableprefix."useravatars 
-			where userid='".$zuserid."' 
-				and (not userid='') 
 				and deleted=0 
 			order by updatedate desc 
 			limit 1;");
