@@ -49,25 +49,24 @@ class wtwavatars {
 					$zfounduseravatarid = $zrow["useravatarid"];
 				}
 			}
-			if (empty($zfounduseravatarid) || !isset($zfounduseravatarid)) {
+			if ((empty($zfounduseravatarid) || !isset($zfounduseravatarid)) && !empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
 				/* check for existing avatar by loggedin user and instance */ 
 				$zresults = $wtwhandlers->query("
 					select useravatarid 
 					from ".wtw_tableprefix."useravatars 
-					where instanceid='".$zinstanceid."' 
-						and userid='".$wtwhandlers->userid."'
-						and not instanceid='' 
+					where userid='".$wtwhandlers->userid."'
+						and not userid='' 
 					order by updatedate desc limit 1;");
 				foreach ($zresults as $zrow) {
 					$zfounduseravatarid = $zrow["useravatarid"];
 				}
 			}
-			if ((empty($zfounduseravatarid) || !isset($zfounduseravatarid)) && !empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
+			if ((empty($zfounduseravatarid) || !isset($zfounduseravatarid)) && !empty($zinstanceid) && isset($zinstanceid)) {
 				/* check for existing avatar by loggedin user */ 
 				$zresults = $wtwhandlers->query("
 					select useravatarid 
 					from ".wtw_tableprefix."useravatars 
-					where userid='".$wtwhandlers->userid."'
+					where instanceid='".$zinstanceid."'
 						and not instanceid='' 
 					order by updatedate desc limit 1;");
 				foreach ($zresults as $zrow) {
@@ -88,31 +87,53 @@ class wtwavatars {
 		$zresponse = "";
 		try {
 			$zavatar = array();
-			$zresults = $wtwhandlers->query("
-				select u.*,
-					a.useravatarid,
-					a.avatarind
-				from ".wtw_tableprefix."users u 
-					left join (select * 
-						from ".wtw_tableprefix."useravatars 
-						where userid='".$wtwhandlers->userid."' 
-							and instanceid='".$zinstanceid."' 
-							and (not userid='') 
-							and deleted=0 
-						order by updatedate desc limit 1) a
-					on u.userid=a.userid
-				where u.userid='".$wtwhandlers->userid."';");
-			foreach ($zresults as $zrow) {
-				$zavatar = array(
-					'userid'=> $zrow["userid"],
-					'username'=> $zrow["username"],
-					'myavatarid'=> $zrow["useravatarid"],
-					'avatarind'=> $zrow["avatarind"],
-					'uploadpathid'=> $zrow["uploadpathid"],
-					'displayname'=> $zrow["displayname"],
-					'userimageurl'=> $zrow["userimageurl"],
-					'email'=> $zrow["email"]
-				);
+			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
+				$zresults = $wtwhandlers->query("
+					select u.*,
+						a.useravatarid,
+						a.avatarind
+					from ".wtw_tableprefix."users u 
+						left join (select * 
+							from ".wtw_tableprefix."useravatars 
+							where userid='".$wtwhandlers->userid."' 
+								and (not userid='') 
+								and deleted=0 
+							order by updatedate desc limit 1) a
+						on u.userid=a.userid
+					where u.userid='".$wtwhandlers->userid."';");
+				foreach ($zresults as $zrow) {
+					$zavatar = array(
+						'userid'=> $zrow["userid"],
+						'username'=> $zrow["username"],
+						'myavatarid'=> $zrow["useravatarid"],
+						'avatarind'=> $zrow["avatarind"],
+						'uploadpathid'=> $zrow["uploadpathid"],
+						'displayname'=> $zrow["displayname"],
+						'userimageurl'=> $zrow["userimageurl"],
+						'email'=> $zrow["email"]
+					);
+				}
+			} else {
+				$zresults = $wtwhandlers->query("
+					select useravatarid,
+						avatarind
+					from ".wtw_tableprefix."useravatars 
+					where instanceid='".$zinstanceid."' 
+								and userid=''
+								and deleted=0 
+							order by updatedate desc limit 1;");
+				foreach ($zresults as $zrow) {
+					$zavatar = array(
+						'userid'=> '',
+						'username'=> 'Anonymous',
+						'myavatarid'=> $zrow["useravatarid"],
+						'avatarind'=> $zrow["avatarind"],
+						'uploadpathid'=> '',
+						'displayname'=> 'Anonymous',
+						'userimageurl'=> '',
+						'email'=> ''
+					);
+				}
 			}
 			$zresponse = json_encode($zavatar);
 		} catch (Exception $e) {
@@ -128,16 +149,34 @@ class wtwavatars {
 			$wtwhandlers->getSessionUserID();
 			$zfounduseravatarid = $this->getAvatar($zuseravatarid,$zinstanceid);
 			$zfoundavatarind = "";
-			/* get existing avatar index (which avatar choice) */ 
-			$zresults = $wtwhandlers->query("
-				select avatarind 
-				from ".wtw_tableprefix."useravatars 
-				where useravatarid='".$zuseravatarid."' 
-					and userid='".$wtwhandlers->userid."' 
-					and instanceid='".$zinstanceid."' 
-				limit 1;");
-			foreach ($zresults as $zrow) {
-				$zfoundavatarind = $zrow["avatarind"];
+			
+			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
+				/* get existing avatar index (which avatar choice) */ 
+				$zresults = $wtwhandlers->query("
+					select avatarind 
+					from ".wtw_tableprefix."useravatars 
+					where useravatarid='".$zfounduseravatarid."' 
+						and userid='".$wtwhandlers->userid."' 
+					order by updatedate desc
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfoundavatarind = $zrow["avatarind"];
+					$zinstanceid = $zrow["instanceid"];
+				}
+			}
+			if ((empty($zfoundavatarind) || !isset($zfoundavatarind)) && !empty($zinstanceid) && isset($zinstanceid)) {
+				/* get existing avatar index (which avatar choice) */ 
+				$zresults = $wtwhandlers->query("
+					select avatarind 
+					from ".wtw_tableprefix."useravatars 
+					where useravatarid='".$zfounduseravatarid."' 
+						and userid='' 
+						and instanceid='".$zinstanceid."'
+					order by updatedate desc
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfoundavatarind = $zrow["avatarind"];
+				}
 			}
 			if (!empty($zfounduseravatarid) && isset($zfounduseravatarid) && $zfoundavatarind != $zavatarind) { 
 				/* changed your avatar choice, this removes old color settings (back to default) */
@@ -165,8 +204,7 @@ class wtwavatars {
 						deleteddate=null,
 						deleteduserid='',
 						deleted=0
-					where useravatarid='".$zfounduseravatarid."'
-						and userid='".$wtwhandlers->userid."';");
+					where useravatarid='".$zfounduseravatarid."';");
 			} else {
 				/* save new avatar */
 				$zfounduseravatarid = $wtwhandlers->getRandomString(16,1);
@@ -305,12 +343,11 @@ class wtwavatars {
 		try {
 			$wtwhandlers->getSessionUserID();
 			$zavatarpartid = "";
+			$zfounduseravatarid = $this->getAvatar($zuseravatarid,$zinstanceid);
 			$zresults = $wtwhandlers->query("
 				select avatarpartid 
 				from ".wtw_tableprefix."useravatarcolors 
-				where useravatarid='".$zuseravatarid."' 
-					and userid='".$wtwhandlers->userid."' 
-					and instanceid='".$zinstanceid."' 
+				where useravatarid='".$zfounduseravatarid."' 
 					and avatarpart='".$zavatarpart."' 
 				limit 1;");
 			foreach ($zresults as $zrow) {
@@ -328,9 +365,7 @@ class wtwavatars {
 						deleteddate=null,
 						deleteduserid='',
 						deleted=0
-					where avatarpartid='".$zavatarpartid."'
-						and userid='".$wtwhandlers->userid."'
-						and instanceid='".$zinstanceid."';");
+					where avatarpartid='".$zavatarpartid."';");
 			} else {
 				$zavatarpartid = $wtwhandlers->getRandomString(16,1);
 				$wtwhandlers->query("
@@ -446,17 +481,18 @@ class wtwavatars {
 		return $zsuccess;
 	}
 	
-	public function saveAvatarAnimation($zuseravataranimationid,$zuseravatarid,$zavataranimationid,$zavataranimationname,$zspeedratio) {
+	public function saveAvatarAnimation($zuseravataranimationid,$zuseravatarid,$zinstanceid,$zavataranimationid,$zavataranimationname,$zspeedratio) {
 		global $wtwhandlers;
 		try {
 			$wtwhandlers->getSessionUserID();
 			$zfounduseravataranimationid = "";
+			$zfounduseravatarid = $this->getAvatar($zuseravatarid,$zinstanceid);
 			$zresults = $wtwhandlers->query("
 					select useravataranimationid 
 					from ".wtw_tableprefix."useravataranimations 
 					where avataranimationname='".$zavataranimationname."' 
 						and (not avataranimationname='') 
-						and useravatarid='".$zuseravatarid."' 
+						and useravatarid='".$zfounduseravatarid."' 
 						and not useravatarid='' 
 					limit 1;");
 			foreach ($zresults as $zrow) {
@@ -471,7 +507,7 @@ class wtwavatars {
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."useravataranimations
 					set avataranimationid='".$zavataranimationid."',
-						 useravatarid='".$zuseravatarid."',
+						 useravatarid='".$zfounduseravatarid."',
 						 avataranimationname='".$zavataranimationname."',
 						 speedratio=".$wtwhandlers->checkNumber($zspeedratio,1).",
 						 updatedate=now(),
@@ -496,7 +532,7 @@ class wtwavatars {
 						values
 						('".$zfounduseravataranimationid."',
 						 '".$zavataranimationid."',
-						 '".$zuseravatarid."',
+						 '".$zfounduseravatarid."',
 						 '".$zavataranimationname."',
 						 ".$wtwhandlers->checkNumber($zspeedratio,1).",
 						 now(),
@@ -511,11 +547,12 @@ class wtwavatars {
 		return $zuseravataranimationid;
 	}
 	
-	public function getAvatarAnimationsAll($zuseravatarid) {
+	public function getAvatarAnimationsAll($zuseravatarid, $zinstanceid) {
 		global $wtwhandlers;
 		$zresponse = null;
 		$animations = array();
 		try {
+			$zfounduseravatarid = $this->getAvatar($zuseravatarid,$zinstanceid);
 			$zresults = $wtwhandlers->query("
 				select a.*,
 					u.useravataranimationid,
@@ -525,7 +562,7 @@ class wtwavatars {
 				from ".wtw_tableprefix."avataranimations a 
 					left join (select * 
 						from ".wtw_tableprefix."useravataranimations 
-						where useravatarid='".$zuseravatarid."' 
+						where useravatarid='".$zfounduseravatarid."' 
 							and deleted=0) u
 					on a.avataranimationid = u.avataranimationid
 				where (a.userid='".$wtwhandlers->userid."' 
@@ -573,16 +610,17 @@ class wtwavatars {
 		return $zresponse;
 	}
 	
-	public function deleteAvatarAnimation($zuseravataranimationid,$zuseravatarid,$zavataranimationid) {
+	public function deleteAvatarAnimation($zuseravataranimationid,$zuseravatarid,$zinstanceid,$zavataranimationid) {
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
+			$zfounduseravatarid = $this->getAvatar($zuseravatarid,$zinstanceid);
 			$zfounduseravataranimationid = "";
 			$zresults = $wtwhandlers->query("
 				select useravataranimationid 
 				from ".wtw_tableprefix."useravataranimations 
 				where useravataranimationid='".$zuseravataranimationid."' 
-					and useravatarid='".$zuseravatarid."' 
+					and useravatarid='".$zfounduseravatarid."' 
 					and not useravatarid='' 
 				limit 1;");
 			foreach ($zresults as $zrow) {
@@ -592,7 +630,7 @@ class wtwavatars {
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."useravataranimations
 					set avataranimationid='".$zavataranimationid."',
-						 useravatarid='".$zuseravatarid."',
+						 useravatarid='".$zfounduseravatarid."',
 						 deleteddate=now(),
 						 deleteduserid='".$wtwhandlers->userid."',
 						 deleted=1
@@ -605,10 +643,11 @@ class wtwavatars {
 		return $zsuccess;
 	}
 	
-	public function updateAvatarTransport($zuseravatarid, $zavataranimation, $ztransport) {
+	public function updateAvatarTransport($zuseravatarid, $zinstanceid, $zavataranimation, $ztransport) {
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
+			$zfounduseravatarid = $this->getAvatar($zuseravatarid,$zinstanceid);
 			$zdirection = "exit";
 			if ($ztransport == '1') {
 				$zdirection = "enter";
@@ -621,7 +660,7 @@ class wtwavatars {
 					 deleteddate=null,
 					 deleteduserid='',
 					 deleted=0
-				where useravatarid='".$zuseravatarid."';");
+				where useravatarid='".$zfounduseravatarid."';");
 			$zsuccess = true;
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwavatars.php-updateAvatarTransport=".$e->getMessage());

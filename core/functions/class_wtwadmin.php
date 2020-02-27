@@ -76,10 +76,12 @@ class wtwadmin {
 	
 	public function loadCSSAdminData() {
 		global $wtw;
+		global $wtwplugins;
 		$cssdata = "";
 		try {	
 			$cssdata .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_core.css\" />\r\n";
 			$cssdata .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_admin.css\" />\r\n";
+			$cssdata .= $wtwplugins->getPluginStylesheets('1');
 		} catch (Exception $e) {
 			$wtw->serror("core-functions-class_wtwadmin.php-loadCSSAdminData=".$e->getMessage());
 		}

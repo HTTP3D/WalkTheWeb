@@ -38,6 +38,7 @@ class wtw {
 	public $communityid = "";
 	public $buildingid = "";
 	public $thingid = "";
+	public $pluginstylesheets = array();
 	public $pluginscripts = array();
 	public $pluginscriptfunctions = array();
 	public $pluginMoldDefs = array();
@@ -1604,6 +1605,7 @@ class wtw {
 			$jsdata .= "		}\r\n";
             $jsdata .= "	}\r\n";
 			$jsdata .= "</script>"; 
+			$jsdata .= "<script src=\"/core/scripts/engine/socket.io.js\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$this->version."\"></script>\r\n";
 			$jsdata .= $wtwplugins->getScriptFunctions();
 		} catch (Exception $e) {
@@ -1661,9 +1663,11 @@ class wtw {
 	}
 
 	public function loadCSSBrowseData() {
+		global $wtwplugins;
 		$cssdata = "";
 		try {	
 			$cssdata .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_core.css\" />\r\n";
+			$cssdata .= $wtwplugins->getPluginStylesheets('0');
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadCSSBrowseData=".$e->getMessage());
 		}

@@ -690,7 +690,7 @@ class wtwdb {
 			foreach ($zresults as $zrow) {
 				$zsettingid = $zrow["settingid"];
 			}
-			if (!empty($zsettingid) && isset($zsettingid)) {
+			if (isset($zsettingid)) {
 				$this->query("
 					update ".wtw_tableprefix."settings 
 					set settingvalue='".$zsettingvalue."',
@@ -735,7 +735,7 @@ class wtwdb {
 			}
 			foreach ($zsettingnames as $zsettingname) {
 				$zsettingname = trim($zsettingname);
-				if (!empty($zsettingname) && isset($zsettingname)) {
+				if (isset($zsettingname)) {
 					$zresults = $this->query("
 						select * 
 						from ".wtw_tableprefix."settings 

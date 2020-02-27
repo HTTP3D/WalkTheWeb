@@ -165,6 +165,69 @@ class wtwplugins {
 		return $wtwdb->isUserInRole($zrole);
 	}
 	
+	public function addStylesheet($zstylesheetid, $zadminonly, $zstylesheeturl) {
+		global $wtw;
+		$zsuccess = false;
+		try {
+			$zfound = false;
+			foreach ($wtw->pluginstylesheets as $zstylesheet) {
+				if (isset($zstylesheet["stylesheetid"]) && !empty($zstylesheet["stylesheetid"])) {
+					if ($zstylesheet["stylesheetid"] == $zstylesheetid) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				$zstylesheet = array(
+					'stylesheetid' => $zstylesheetid,
+					'adminonly' => $zadminonly,
+					'stylesheeturl' => $zstylesheeturl
+				);
+				$wtw->pluginstylesheets[count($wtw->pluginstylesheets)] = $zstylesheet;
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwplugins.php-addStylesheet=" . $e->getMessage());
+		}
+		return $zsuccess;
+	}
+	
+	public function getPluginStylesheets($zadmin) {
+		global $wtw;
+		$zstylesheettext = "";
+		try {
+			if (!empty($zadmin) && isset($zadmin)) {
+				if ($zadmin != '1' && $zadmin != 1) {
+					$zadmin = '0';
+				} else {
+					$zadmin = '1';
+				}
+			} else {
+				$zadmin = '0';
+			}
+			foreach ($wtw->pluginstylesheets as $zstylesheet) {
+				$zstylesheetid = $zstylesheet["stylesheetid"];
+				$zadminonly = $zstylesheet["adminonly"];
+				$zstylesheeturl = $zstylesheet["stylesheeturl"];
+				if (!empty($zadminonly) && isset($zadminonly)) {
+					if ($zadminonly != '1' && $zadminonly != 1) {
+						$zadminonly = '0';
+					} else {
+						$zadminonly = '1';
+					}
+				} else {
+					$zadminonly = '0';
+				}
+				if ($zadminonly == $zadmin || $zadminonly == '0') {
+					$zstylesheettext .= "<link rel=\"stylesheet\" type=\"text/css\" id=\"".$zstylesheetid."\" href=\"".$zstylesheeturl."\"></style>\r\n";
+				}
+			}			
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwmenus.php-getPluginStylesheets=".$e->getMessage());
+		}
+		return $zstylesheettext;
+	}	
+
 	public function addScript($zscriptid, $zadminonly, $zscripturl) {
 		global $wtw;
 		$zsuccess = false;
@@ -259,6 +322,15 @@ class wtwplugins {
 		$jsdata = "";
 		try {
 			$jsdata .= "<script type=\"text/javascript\">\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsLoadUserSettingsAfterEngine = function() {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('pluginsloadusersettingsafterengine');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsLoadUserSettingsAfterEngine=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsRenderloop = function() {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= $this->getScriptFunction('renderloop');
@@ -307,6 +379,16 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsSetCheckActionZones = function() {\r\n";
+			$jsdata .= "		var runcheckactionzone = false;\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('setcheckactionzones','runcheckactionzone');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSetCheckActionZones=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return runcheckactionzone;\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsCheckActionZoneTrigger = function(zactionzone) {\r\n";
 			$jsdata .= "		var othersinzone = false;\r\n";
 			$jsdata .= "		try {\r\n";
@@ -342,17 +424,22 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-
-			$jsdata .= "	WTWJS.prototype.pluginsSetAvatarMovement = function(zavatar, zmoveevents, zkey, zweight) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsMoveAvatar = function(zavatar, zmoveevents) {\r\n";
 			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->getScriptFunction('setavatarmovement');
+			$jsdata .= 	$this->getScriptFunction('moveavatar');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsMoveAvatar=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsSetAvatarMovement = function(zavatar, zkey, zweight) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('setavatarmovement', 'zweight');
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsSetAvatarMovement=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "		return zweight;\r\n";
 			$jsdata .= "	}\r\n";
-
-
 
 			$jsdata .= "	WTWJS.prototype.pluginsDisposeClean = function(moldname) {\r\n";
 			$jsdata .= "		try {\r\n";
@@ -758,7 +845,7 @@ class wtwplugins {
 			$zscripttext .= "actionzone = WTW.addActionzoneLoadzone(actionzonename, actionzoneind, actionzonedef);\r\n";
 			$zscripttext .= "break;\r\n";
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-returnActionZoneDefs=".$e->getMessage());
+			$this->serror("core-functions-class_wtwmenus.php-returnActionZoneDefsFunctions=".$e->getMessage());
 		}
 		$zscripttext .= "}\r\n";
 		return $zscripttext;
