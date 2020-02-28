@@ -11481,11 +11481,11 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 								} else {
 									var versiondate = new Date(wtw_versiondate);
 									var versiondatestring = (versiondate.getMonth()+1) + "/" + versiondate.getDate() + "/" + versiondate.getFullYear();
-									zupdateslist += "<div class=\"wtw-dashboardboxtitle\">WalkTheWeb has an update!</div><div class=\"wtw-dashboardbox\">Your Version: " + wtw_version + " (" + versiondatestring + ")<br />";
-									zupdateslist += "Last Update=" + datestring + "<br /><br />";
+									zupdateslist += "<div class=\"wtw-dashboardboxtitle\">WalkTheWeb has an update!</div><div class=\"wtw-dashboardbox\">Your Version: " + wtw_version + " (" + versiondatestring + ")<br /><br />";
 									zupdateslist += "<b>New Version Available:</b><hr />";
 									zupdateslist += "App Name=" + zmyplugins[i].pluginname + "<br />";
 									zupdateslist += "App Version=" + zmyplugins[i].latestversion + "<br />";
+									zupdateslist += "App Update=" + datestring + "<br />";
 									zupdatewtw += 1;
 								}
 								zupdateslist += "<div id=\"wtw_loadingupdating\" class=\"wtw-loadingnotice\">Updating...</div>";
