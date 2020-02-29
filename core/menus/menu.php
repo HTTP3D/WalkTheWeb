@@ -312,17 +312,6 @@
 	<div class="wtw-menuheading">Press and Hold to Play</div>
 	<div class="wtw-horizontalscroll" id="wtw_listoptionalanimations"></div>
 </div>
-<div id="wtw_menuchat" class="wtw-slideupmenuleft" style="display:none;visibility:hidden;" onmouseover="WTW.showSettingsMenu('wtw_menuchat');">
-	<img class="wtw-closeright" onclick="WTW.hide('wtw_menuchat');" src="/content/system/images/menuclose.png" alt="Close All Chats" title="Close All Chats" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
-	<img id="wtw_menuchatmin" class="wtw-closeright" onclick="WTW.hide('wtw_menuchatmaxdiv');WTW.hide('wtw_menuchatmin');WTW.show('wtw_menuchatmax');" src="/content/system/images/menuminimize.png" alt="Minimize Chats" title="Minimize Chats" onmouseover="this.src='/content/system/images/menuminimizehover.png';" onmouseout="this.src='/content/system/images/menuminimize.png';" />
-	<img id="wtw_menuchatmax" class="wtw-closeright" onclick="WTW.show('wtw_menuchatmaxdiv');WTW.hide('wtw_menuchatmax');WTW.show('wtw_menuchatmin');" src="/content/system/images/menumaximize.png" alt="Maximize Chats" title="Maximize Chats" onmouseover="this.src='/content/system/images/menumaximizehover.png';" onmouseout="this.src='/content/system/images/menumaximize.png';" style="display:none;visibility:hidden;" />
-	<div class="wtw-menuheading">Avatar Chat</div>
-	<div id="wtw_menuchatmaxdiv">
-	<div id="wtw_menuchatscroll" class="wtw-mainmenuscroll">
-		<div id="wtw_chatsendrequests"></div>
-	</div>
-	</div>
-</div>
 <?php
 	echo $wtwmenus->getMenuForms();
 ?>
