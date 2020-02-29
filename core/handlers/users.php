@@ -40,8 +40,8 @@ try {
 		case "register":
 			$zserror = '';
 			$zresults = $wtwusers->createAccount($zusername, $zuseremail, $zpassword);
-			if ($result->serror != "") {
-				$zserror = $result->serror;
+			if ($zresults->serror != "") {
+				$zserror = $zresults->serror;
 			} else if ($zresults->success == false) {
 				$zserror = "Could not Create Account";
 			}
