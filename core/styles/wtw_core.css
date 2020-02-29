@@ -145,6 +145,11 @@ input.wtw-smallprintinput {
 	visibility: hidden;
 	text-align: center;
 	padding:3px;
+	filter: alpha(opacity=50);
+	/* IE */
+	-moz-opacity: 0.5;
+	/* Mozilla */
+	opacity: 0.5;
 	pointer-events:none;
 	touch-action: none;
 }
