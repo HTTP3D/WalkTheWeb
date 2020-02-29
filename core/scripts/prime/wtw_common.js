@@ -2609,6 +2609,8 @@ WTWJS.prototype.checkMoldEvent = function(moldevent, moldname) {
 WTWJS.prototype.checkHovers = function(mold) {
 	try {
 		var moldnameparts = WTW.getMoldnameParts(WTW.currentID);
+		var zmoldname = WTW.currentID;
+		var zshape = '';
 		WTW.checkMoldEvent('onmouseover', mold.meshUnderPointer.name);
 		if (moldnameparts.molds != null) {
 			if (WTW.adminView == 1) {
@@ -2632,8 +2634,16 @@ WTWJS.prototype.checkHovers = function(mold) {
 						WTW.setDirectionalOpacity(WTW.currentID,0);
 					}
 				}
-				WTW.pluginsCheckHovers(moldnameparts.moldname, moldnameparts.shape);
+				zmoldname = moldnameparts.moldname;
+				zshape = moldnameparts.shape;
 			}
+		} else {
+			if (zmoldname.indexOf('person-') > -1 || zmoldname.indexOf('myavatar-') > -1) {
+				zshape = 'avatar';
+			}
+		}
+		if (zmoldname != undefined) {
+			WTW.pluginsCheckHovers(zmoldname, zshape);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-checkHovers=" + ex.message);
@@ -2760,7 +2770,15 @@ WTWJS.prototype.showToolTip = function(tip) {
 			WTW.hide('wtw_itooltip');
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-showtooltip=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_common.js-showToolTip=" + ex.message);
+	}
+}
+
+WTWJS.prototype.hideToolTip = function() {
+	try {
+		WTW.hide('wtw_itooltip');
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-hideToolTip=" + ex.message);
 	}
 }
 
@@ -3851,20 +3869,6 @@ WTWJS.prototype.transformPosition = function(molddef, posx, posy, posz) {
 	}
 }
 
-WTWJS.prototype.setShownMolds = function() {
-	try {
-		WTW.checkShownMolds = 1;
-		WTW.setShownConnectingGrids();
-		WTW.setShownActionZones();
-		WTW.setShownMoldsByWeb("community");
-		WTW.setShownMoldsByWeb("building");
-		WTW.setShownMoldsByWeb("thing");
-		WTW.checkShownMolds = 0;
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-setShownMolds=" + ex.message);
-	} 
-}
-
 WTWJS.prototype.listConnectingGrids = function() {
 	var color = "black";
 	WTW.log("---connecting grids--------------------------------------");
@@ -4282,7 +4286,23 @@ WTWJS.prototype.setShownActionZones = function() {
 	} 	
 }
 
+WTWJS.prototype.setShownMolds = function() {
+	try {
+		WTW.checkShownMolds = 1;
+		WTW.setShownConnectingGrids();
+		WTW.setShownActionZones();
+		if (WTW.setShownMoldsByWeb("community") == false) {
+			WTW.setShownMoldsByWeb("building");
+			WTW.setShownMoldsByWeb("thing");
+		}
+		WTW.checkShownMolds = 0;
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-setShownMolds=" + ex.message);
+	} 
+}
+
 WTWJS.prototype.setShownMoldsByWeb = function(moldgroup) {
+	var zfound = false;
 	try {
 		var webid = communityid;
 		var molds = WTW.communitiesMolds
@@ -4335,6 +4355,7 @@ WTWJS.prototype.setShownMoldsByWeb = function(moldgroup) {
 							if (csgmoldid == "") {
 								molds[i].shown = "1";
 								WTW.addMoldToQueue(molds[i].moldname, molds[i], molds[i].parentname, molds[i].covering,null);
+								zfound = true;
 							}
 						}
 						if (WTW.adminView == 1) {
@@ -4343,6 +4364,7 @@ WTWJS.prototype.setShownMoldsByWeb = function(moldgroup) {
 								if (webid != "" && dGet('wtw_bmerged').title == "Merged Shapes are Shown" && mold == null) {
 									molds[i].checkcollisions = "0";
 									WTW.addMold(molds[i].moldname, molds[i], molds[i].parentname, molds[i].covering);
+									zfound = true;
 								} else if (dGet('wtw_bmerged').title == "Merged Shapes are Hidden" && mold != null) {
 									WTW.addDisposeMoldToQueue(molds[i].moldname);
 								}
@@ -4371,6 +4393,7 @@ WTWJS.prototype.setShownMoldsByWeb = function(moldgroup) {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-setShownMoldsByWeb=" + ex.message);
 	} 
+	return zfound;
 }
 
 WTWJS.prototype.setShownMoldsByGroup = function(moldgroup) {
@@ -9057,9 +9080,11 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 	var zbuildingid = "";
 	var zthingid = "";
 	var moldgroup = "building";
-	var molds = WTW.buildingMolds;
+	var molds = [];
 	var namepart = [];
+	var avatarpart = "";
 	var shape = "";
+	var instanceid = "";
 	var loadactionzoneid = "";
 	var actionzoneid = "";
 	var coveringname = "";
@@ -9072,15 +9097,44 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 		if (moldname.indexOf("-") > -1) {
 			namepart = moldname.split('-');
 			if (namepart[0] != null) {
-				moldgroup = namepart[0].replace("molds","");
+				if (namepart[0].indexOf('molds') > -1) {
+					moldgroup = namepart[0].replace("molds","");
+					switch (moldgroup) {
+						case "community":
+							molds = WTW.communitiesMolds;
+							break;
+						case "building":
+							molds = WTW.buildingMolds;
+							break;
+						case "thing":
+							molds = WTW.thingMolds;
+							break;
+					}
+				} else if (namepart[0].indexOf('actionzone') > -1) {
+					moldgroup = "actionzone";
+					molds = WTW.actionZones;
+				} else if (namepart[0].indexOf('connectinggrid') > -1) {
+					moldgroup = "connectinggrid";
+					molds = WTW.connectingGrids;
+				} else if (namepart[0].indexOf('myavatar') > -1 || namepart[0].indexOf('person') > -1) {
+					moldgroup = "avatars";
+				}
 			}
 			if (namepart[1] != null) {
-				if (WTW.isNumeric(namepart[1])) {
-					moldind = Number(namepart[1]);
+				if (namepart[0].indexOf('myavatar') > -1 || namepart[0].indexOf('person') > -1) {
+					instanceid = namepart[1];
+				} else {
+					if (WTW.isNumeric(namepart[1])) {
+						moldind = Number(namepart[1]);
+					}
 				}
 			}
 			if (namepart[2] != null) {
-				moldid = namepart[2];
+				if (namepart[0].indexOf('myavatar') > -1 || namepart[0].indexOf('person') > -1) {
+					avatarpart = namepart[2];
+				} else {
+					moldid = namepart[2];
+				}
 			}
 			if (namepart[3] != null) {
 				if (WTW.isNumeric(namepart[3])) {
@@ -9094,14 +9148,6 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 				shape = namepart[5];
 			}
 			moldnamebase = namepart[0] + "-" + namepart[1] + "-" + namepart[2] + "-" + namepart[3] + "-";
-			switch (moldgroup) {
-				case "community":
-					molds = WTW.communitiesMolds;
-					break;
-				case "thing":
-					molds = WTW.thingMolds;
-					break;
-			}
 			if (molds[moldind] != null) {
 				if (molds[moldind].communityinfo.communityid != undefined) {
 					zcommunityid = molds[moldind].communityinfo.communityid;
@@ -9136,9 +9182,11 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 		communityid:zcommunityid,
 		buildingid:zbuildingid,
 		thingid:zthingid,
+		instanceid:instanceid,
 		moldgroup:moldgroup,
 		molds:molds,
 		shape:shape,
+		avatarpart:avatarpart,
 		loadactionzoneid:loadactionzoneid,
 		actionzoneid:actionzoneid,
 		coveringname:coveringname,
