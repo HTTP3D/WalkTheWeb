@@ -233,7 +233,6 @@ class wtwmenus {
 						$zformdata = '';
 					}
 					if (!empty($zformdata) && isset($zformdata)) {
-						$zmenuforms = "";
 						$zmenuforms .= "<div id=\"".$zformid."\" class=\"wtw-slideupmenuright\" style=\"display:none;visibility:hidden;\">";
 						$zmenuforms .= "	<img class=\"wtw-closeright\" onclick=\"WTW.closeMenus();\" src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />";
 						$zmenuforms .= "	<div class=\"wtw-menuheading\">".$ztitle."</div>";
