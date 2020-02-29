@@ -105,6 +105,7 @@ class wtwusers {
 				}
 				foreach ($zresults as $zrow) {
 					$passwordhash = $zrow["userpassword"];
+					$zuserid = $zrow["userid"];
 					global $wtw;
 					global $wtwuser;
 					if (password_verify($zpassword, $passwordhash)) {
