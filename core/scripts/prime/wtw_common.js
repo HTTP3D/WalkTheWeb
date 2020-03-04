@@ -1929,45 +1929,54 @@ WTWJS.prototype.disposeClean = function(moldname, check) {
 				if (moldfar != null) {
 					WTW.disposeClean(moldname + "-far");
 				}
-				try {
-					/* stop and remove sound and lights */
-					var molds = null;
-					switch (namepart[0]) {
-						case "communitymolds":
-							molds = WTW.communitiesMolds;
-							break;
-						case "buildingmolds":
-							molds = WTW.buildingMolds;
-							break;
-						case "thingmolds":
-							molds = WTW.thingMolds;
-							break;
-					}
-					if (molds != null) {
-						var moldind = Number(namepart[1]);
-						if (molds[moldind] != null) {
-							if (molds[moldind].sound.sound != '') {
-								molds[moldind].sound.sound.stop(0);
-								molds[moldind].sound.sound.detachFromMesh();
-								molds[moldind].sound.sound.dispose();
-								molds[moldind].sound.sound = null;
-								molds[moldind].sound.sound = '';
-							}
-							if (molds[moldind].objects.light != '') {
-								molds[moldind].objects.light.dispose();
-								molds[moldind].objects.shadows.dispose();
-								molds[moldind].objects.light = '';
-								molds[moldind].objects.shadows = '';
-							}
-						}
-					}
-				} catch(ex) {}
 			}
+			try {
+				var moldgroup = Number(namepart[0]);
+				var moldind = Number(namepart[1]);
+				WTW.clearSoundAndLights(moldgroup, moldind);
+			} catch(ex) {}
 			scene.blockfreeActiveMeshesAndRenderingGroups = false;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-disposeClean=" + ex.message);
 		scene.blockfreeActiveMeshesAndRenderingGroups = false;
+	}
+}
+
+WTWJS.prototype.clearSoundAndLights = function(moldgroup, moldind) {
+	try {
+		/* stop and remove sound and lights */
+		var molds = null;
+		switch (moldgroup) {
+			case "communitymolds":
+				molds = WTW.communitiesMolds;
+				break;
+			case "buildingmolds":
+				molds = WTW.buildingMolds;
+				break;
+			case "thingmolds":
+				molds = WTW.thingMolds;
+				break;
+		}
+		if (molds != null) {
+			if (molds[moldind] != null) {
+				if (molds[moldind].sound.sound != '') {
+					molds[moldind].sound.sound.stop(0);
+					molds[moldind].sound.sound.detachFromMesh();
+					molds[moldind].sound.sound.dispose();
+					molds[moldind].sound.sound = null;
+					molds[moldind].sound.sound = '';
+				}
+				if (molds[moldind].objects.light != '') {
+					molds[moldind].objects.light.dispose();
+					molds[moldind].objects.shadows.dispose();
+					molds[moldind].objects.light = '';
+					molds[moldind].objects.shadows = '';
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-clearSoundAndLights=" + ex.message);
 	}
 }
 
@@ -2183,7 +2192,9 @@ WTWJS.prototype.setShadowSettings = function() {
 //		}
 		WTW.shadows.getShadowMap().renderList = zrenderlist;
         if (WTW.shadowset > 0) {
-			WTW.extraGround.receiveShadows = true;
+			if (WTW.extraGround != null) {
+				WTW.extraGround.receiveShadows = true;
+			}
 		}
     } catch (ex) {
         WTW.log("core-scripts-prime-wtw_common.js-setShadowSettings=" +ex.message);
@@ -2928,19 +2939,7 @@ WTWJS.prototype.loadSoundToMold = function(mold, moldname, soundid, soundpath, s
 				request.onreadystatechange = function () {
 					if (request.readyState == 4) {
 						if (request.status == 200) {
-							var sound = new BABYLON.Sound(moldname + "sound", request.response, scene, null, {
-								loop: soundloop, 
-								autoplay: soundautoplay, 
-								spatialSound: true,
-								distanceModel: soundattenuation, 
-								maxDistance : soundmaxdistance,
-								rolloffFactor: soundrollofffactor,
-								refDistance : soundrefdistance
-							});
-							sound.attachToMesh(mold);
-							if (WTW.soundMute == true) {
-								sound.pause();
-							}
+							var addsound = true;
 							if (eventind == -1) {
 								var namepart = moldname.split('-');
 								var moldind = -1;
@@ -2956,11 +2955,41 @@ WTWJS.prototype.loadSoundToMold = function(mold, moldname, soundid, soundpath, s
 									moldind = Number(namepart[1]);
 								}
 								if (molds[moldind] != null) {
-									molds[moldind].sound.sound = sound;
+									if (molds[moldind].sound != null) {
+										if (molds[moldind].sound.sound != null && molds[moldind].sound.sound != '') {
+											addsound = false;
+										}
+									}
 								}
 							} else {
 								if (WTW.moldEvents[eventind] != null) {
-									WTW.moldEvents[eventind].sound = sound;
+									if (WTW.moldEvents[eventind].sound != null && WTW.moldEvents[eventind].sound != '') {
+										addsound = false;
+									}
+								}
+							}
+							if (addsound) {
+								var sound = new BABYLON.Sound(moldname + "sound", request.response, scene, null, {
+									loop: soundloop, 
+									autoplay: soundautoplay, 
+									spatialSound: true,
+									distanceModel: soundattenuation, 
+									maxDistance : soundmaxdistance,
+									rolloffFactor: soundrollofffactor,
+									refDistance : soundrefdistance
+								});
+								sound.attachToMesh(mold);
+								if (WTW.soundMute == true) {
+									sound.pause();
+								}
+								if (eventind == -1) {
+									if (molds[moldind] != null) {
+										molds[moldind].sound.sound = sound;
+									}
+								} else {
+									if (WTW.moldEvents[eventind] != null) {
+										WTW.moldEvents[eventind].sound = sound;
+									}
 								}
 							}
 						}
@@ -3948,8 +3977,10 @@ WTWJS.prototype.listCommunityMolds = function() {
 		if (WTW.communitiesMolds[i] != null) {
 			var mold = scene.getMeshByID(WTW.communitiesMolds[i].moldname);
 			var shadow = "false";
-			if (mold.receiveShadows == true) {
-				shadow = "true";
+			if (mold != null) {
+				if (mold.receiveShadows == true) {
+					shadow = "true";
+				}
 			}
 			WTW.log(i + "==" + WTW.communitiesMolds[i].moldname + "=(shown)=" + WTW.communitiesMolds[i].shown + "=(shadows)=" + shadow);		
 		}
@@ -3960,15 +3991,15 @@ WTWJS.prototype.listBuildingMolds = function() {
 	for (var i = 0; i < WTW.buildingMolds.length; i++) {
 		if (WTW.buildingMolds[i] != null) {
 			var mold = scene.getMeshByID(WTW.buildingMolds[i].moldname);
+			var shadow = "false";
 			var visible = 'no';
 			if (mold != null) {
 				visible = mold.isVisible;
+				if (mold.receiveShadows == true) {
+					shadow = "true";
+				}
 			} else {
 				visible = 'null';
-			}
-			var shadow = "false";
-			if (mold.receiveShadows == true) {
-				shadow = "true";
 			}
 			WTW.log(i + "==" + WTW.buildingMolds[i].moldname + "=(shown)=" + WTW.buildingMolds[i].shown + "=(visible)=" + visible + "=(shadows)=" + shadow);
 		}
@@ -8894,6 +8925,14 @@ WTWJS.prototype.closeMenus = function() {
 			WTW.hide('wtw_menuregister');
 		}
 		var menuforms = document.getElementsByClassName('wtw-slideupmenuright');
+		for (var i=0;i<menuforms.length;i++) {
+			if (menuforms[i] != null) {
+				if (menuforms[i].id != undefined) {
+					WTW.hide(menuforms[i].id);
+				}
+			}
+		}
+		var menuforms = document.getElementsByClassName('wtw-slideupmenuleft');
 		for (var i=0;i<menuforms.length;i++) {
 			if (menuforms[i] != null) {
 				if (menuforms[i].id != undefined) {
