@@ -2069,7 +2069,7 @@ WTWJS.prototype.loadAvatarAnimationDefinitions = function(zavatarind, zcustomani
     } catch (ex) {
 		WTW.log("avatars-loadavatar-loadAvatarAnimationDefinitions=" + ex.message);
     }
-	return animationdefs;
+	return zanimationdefs;
 }
 
 WTWJS.prototype.openChangeAvatar = function() {
