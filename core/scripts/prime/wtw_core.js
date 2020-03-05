@@ -1131,6 +1131,13 @@ WTWJS.prototype.checkActionZones = function() {
 								}
 								WTW.checkAnalytics(i);
 								WTW.actionZones[i].status = 2;
+							} else if (meinzone == false && moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {
+								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
+									if (WTW.actionZones[i].status == 2) {
+										WTW.addUnloadZoneToQueue(i);
+									}
+								}
+								WTW.actionZones[i].status = 0;
 							} else if (moldname.indexOf("loadanimations") > -1) {
 								WTW.checkLoadAnimations(i);
 							} else if (moldname.indexOf("clickactivated") > -1) {
