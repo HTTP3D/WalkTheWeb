@@ -929,6 +929,7 @@ WTWJS.prototype.unloadMoldsByWebID = function(actionzoneind) {
 							if (WTW.communitiesMolds[j] != null) {
 								if (WTW.communitiesMolds[j].loadactionzoneid == actionzoneid && WTW.communitiesMolds[j].connectinggridind == connectinggridind) {
 									WTW.addDisposeMoldToQueue(WTW.communitiesMolds[j].moldname, false);
+									WTW.clearSoundAndLights('communitymolds', j);
 									WTW.communitiesMolds[j] = null;
 								}
 							}
@@ -937,6 +938,7 @@ WTWJS.prototype.unloadMoldsByWebID = function(actionzoneind) {
 							if (WTW.buildingMolds[j] != null) {
 								if (WTW.buildingMolds[j].loadactionzoneid == actionzoneid && WTW.buildingMolds[j].connectinggridind == connectinggridind) {
 									WTW.addDisposeMoldToQueue(WTW.buildingMolds[j].moldname, false);
+									WTW.clearSoundAndLights('buildingmolds', j);
 									WTW.buildingMolds[j] = null;
 								}
 							}
@@ -945,6 +947,7 @@ WTWJS.prototype.unloadMoldsByWebID = function(actionzoneind) {
 							if (WTW.thingMolds[j] != null) {
 								if (WTW.thingMolds[j].loadactionzoneid == actionzoneid && WTW.thingMolds[j].connectinggridind == connectinggridind) {
 									WTW.addDisposeMoldToQueue(WTW.thingMolds[j].moldname, false);
+									WTW.clearSoundAndLights('thingmolds', j);
 									WTW.thingMolds[j] = null;
 								}
 							}
@@ -1079,7 +1082,20 @@ WTWJS.prototype.startRender = function() {
 						WTW.setShownMolds();
 					}
 					WTW.setClosestBuilding();
-					WTW.checkActionZones();
+					if (WTW.checkZones || WTW.isInitCycle == 1) {
+						WTW.checkActionZones();
+					}
+					if (WTW.showFPS == 1) {
+						var gridlines = 0;
+						if (WTW.lineY != null) {
+							gridlines = 30;
+						}
+						var mcount = 0;
+						if (scene.meshes.length - WTW.baseMoldCount - gridlines > 0) {
+							mcount = scene.meshes.length - WTW.baseMoldCount - gridlines;
+						}
+						dGet('wtw_showmeshfps').innerHTML = "Mold Count = " + (mcount) + "<br />Frames Per Second=" + WTW.fps;
+					}
 				} catch (ex) {} 
 			});
 		}
@@ -1090,131 +1106,95 @@ WTWJS.prototype.startRender = function() {
 
 WTWJS.prototype.checkActionZones = function() {
 	try {
-		if (WTW.setupMode == 0) {
-			var checkactionzones = false;
-			if (WTW.myAvatar != null) {
-				if (WTW.holdPosition != WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + "|" + WTW.myAvatar.position.z) {
-					/* if my avatar has moved then check action zones */
-					checkactionzones = true;
-				}
-			}
-			if (WTW.pluginsSetCheckActionZones()) {
-				/* plugins can trigger if you need to check the Action Zones (common after any avatar movement) */
-				checkactionzones = true;
-			}
-			if (checkactionzones || WTW.isInitCycle == 1 || WTW.rideAlong != null) {
-				for (var i = 0; i < WTW.actionZones.length; i++) {
-					if (WTW.actionZones[i] != null) {
-						var moldname = WTW.actionZones[i].moldname;
-						var actionzone = scene.getMeshByID(moldname);
-						if (moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].shown != "2") {
-							WTW.actionZones[i].status = 0;
-						} else if (actionzone != null) {
-							var meinzone = false;
-							if (WTW.myAvatar != null) {
-								meinzone = WTW.myAvatar.intersectsMesh(actionzone, false);
-							}
-							var othersinzone = false;
-							/* check if others are in the zone */
-							
-							othersinzone = WTW.pluginsCheckActionZoneTrigger(actionzone);
-							if (meinzone || othersinzone) {
-								if (meinzone && moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 2) {
-									if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
-										if (WTW.actionZones[i].status == 0) {
-											WTW.addLoadZoneToQueue(i);
-										}
-									}
-									WTW.checkAnalytics(i);
-									WTW.actionZones[i].status = 2;
-								} else if (moldname.indexOf("loadanimations") > -1) {
-									WTW.checkLoadAnimations(i);
-								} else if (moldname.indexOf("clickactivated") > -1) {
-								} else if (moldname.indexOf("door") > -1 && WTW.actionZones[i].status != 4 && WTW.actionZones[i].status != 3) {
-									WTW.actionZones[i].status = 3;
-								} else if (moldname.indexOf("mirror") > -1 && WTW.actionZones[i].status != 2) {
-									WTW.actionZones[i].status = 2;
-									WTW.checkMirrorReflectionList(i);
-								} else if ((moldname.indexOf("ridealong") > -1 || moldname.indexOf("elevator") > -1 || moldname.indexOf("passengerseat") > -1) && WTW.rideAlong == null) {
-									WTW.rideAlong = WTW.newRideAlong();
-									WTW.rideAlong.ridealongmoldname = moldname;
-									WTW.rideAlong.attachmoldid = WTW.actionZones[i].attachmoldid;
-									WTW.rideAlong.attachmoldname = WTW.actionZones[i].parentname;
-									WTW.rideAlong.rotatemoldname = WTW.getRotateMoldName(WTW.actionZones[i].parentname);
-								} else if (moldname.indexOf("peoplemover") > -1) {
-									if (WTW.rideAlong == null) {
-										WTW.rideAlong = WTW.newRideAlong();
-										WTW.rideAlong.ridealongmoldname = moldname.replace("actionzone-", "actionzoneaxle-");
+		if (WTW.setupMode == 0 || WTW.rideAlong != null) {
+			for (var i = 0; i < WTW.actionZones.length; i++) {
+				if (WTW.actionZones[i] != null) {
+					var moldname = WTW.actionZones[i].moldname;
+					var actionzone = scene.getMeshByID(moldname);
+					if (moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].shown != "2") {
+						WTW.actionZones[i].status = 0;
+					} else if (actionzone != null) {
+						var meinzone = false;
+						if (WTW.myAvatar != null) {
+							meinzone = WTW.myAvatar.intersectsMesh(actionzone, false);
+						}
+						var othersinzone = false;
+						/* check if others are in the zone */
+						
+						othersinzone = WTW.pluginsCheckActionZoneTrigger(actionzone);
+						if (meinzone || othersinzone) {
+							if (meinzone && moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 2) {
+								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
+									if (WTW.actionZones[i].status == 0) {
+										WTW.addLoadZoneToQueue(i);
 									}
 								}
-							} else {
-								if (moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {
-									if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
-										if (WTW.actionZones[i].status == 2) {
-											WTW.addUnloadZoneToQueue(i);
-										}
+								WTW.checkAnalytics(i);
+								WTW.actionZones[i].status = 2;
+							} else if (moldname.indexOf("loadanimations") > -1) {
+								WTW.checkLoadAnimations(i);
+							} else if (moldname.indexOf("clickactivated") > -1) {
+							} else if (moldname.indexOf("door") > -1 && WTW.actionZones[i].status != 4 && WTW.actionZones[i].status != 3) {
+								WTW.actionZones[i].status = 3;
+							} else if (moldname.indexOf("mirror") > -1 && WTW.actionZones[i].status != 2) {
+								WTW.actionZones[i].status = 2;
+								WTW.checkMirrorReflectionList(i);
+							} else if ((moldname.indexOf("ridealong") > -1 || moldname.indexOf("elevator") > -1 || moldname.indexOf("passengerseat") > -1) && WTW.rideAlong == null) {
+								WTW.rideAlong = WTW.newRideAlong();
+								WTW.rideAlong.ridealongmoldname = moldname;
+								WTW.rideAlong.attachmoldid = WTW.actionZones[i].attachmoldid;
+								WTW.rideAlong.attachmoldname = WTW.actionZones[i].parentname;
+								WTW.rideAlong.rotatemoldname = WTW.getRotateMoldName(WTW.actionZones[i].parentname);
+							} else if (moldname.indexOf("peoplemover") > -1) {
+								if (WTW.rideAlong == null) {
+									WTW.rideAlong = WTW.newRideAlong();
+									WTW.rideAlong.ridealongmoldname = moldname.replace("actionzone-", "actionzoneaxle-");
+								}
+							}
+						} else {
+							if (moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {
+								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
+									if (WTW.actionZones[i].status == 2) {
+										WTW.addUnloadZoneToQueue(i);
 									}
-									WTW.actionZones[i].status = 0;
-								} else if (moldname.indexOf("clickactivated") > -1) {
-								} else if (moldname.indexOf("door") > -1 && WTW.actionZones[i].status != 2 && WTW.actionZones[i].status != 1 && WTW.actionZones[i].status != 0) {
-									WTW.actionZones[i].status = 2;
-								} else if (moldname.indexOf("mirror") > -1 && WTW.actionZones[i].status != 2) {
-									WTW.actionZones[i].status = 2;
-									WTW.checkMirrorReflectionList(i);
-								} else if ((moldname.indexOf("ridealong") > -1 || moldname.indexOf("elevator") > -1 || moldname.indexOf("passengerseat") > -1) && WTW.rideAlong != null) {
-									if (moldname == WTW.rideAlong.ridealongmoldname) {
-										if (WTW.rideAlong.attachmoldid == WTW.actionZones[i].attachmoldid) {
-											WTW.rideAlong = null;
-										}
-									}
-								} else if (moldname.indexOf("peoplemover") > -1 && WTW.rideAlong != null) {
-									if (moldname == WTW.rideAlong.ridealongmoldname.replace("actionzoneaxle","actionzone")) {
+								}
+								WTW.actionZones[i].status = 0;
+							} else if (moldname.indexOf("clickactivated") > -1) {
+							} else if (moldname.indexOf("door") > -1 && WTW.actionZones[i].status != 2 && WTW.actionZones[i].status != 1 && WTW.actionZones[i].status != 0) {
+								WTW.actionZones[i].status = 2;
+							} else if (moldname.indexOf("mirror") > -1 && WTW.actionZones[i].status != 2) {
+								WTW.actionZones[i].status = 2;
+								WTW.checkMirrorReflectionList(i);
+							} else if ((moldname.indexOf("ridealong") > -1 || moldname.indexOf("elevator") > -1 || moldname.indexOf("passengerseat") > -1) && WTW.rideAlong != null) {
+								if (moldname == WTW.rideAlong.ridealongmoldname) {
+									if (WTW.rideAlong.attachmoldid == WTW.actionZones[i].attachmoldid) {
 										WTW.rideAlong = null;
 									}
 								}
+							} else if (moldname.indexOf("peoplemover") > -1 && WTW.rideAlong != null) {
+								if (moldname == WTW.rideAlong.ridealongmoldname.replace("actionzoneaxle","actionzone")) {
+									WTW.rideAlong = null;
+								}
 							}
-							WTW.pluginsCheckActionZone(moldname, i, meinzone, othersinzone);
-						} else if (WTW.rideAlong != null) {
-							if (moldname == WTW.rideAlong.ridealongmoldname || moldname == WTW.rideAlong.ridealongmoldname.replace("actionzoneaxle","actionzone")) {
-								WTW.rideAlong = null;
-							}
-						} else if (moldname.indexOf("loadzone") > -1) {
-							WTW.actionZones[i].status = 0;
 						}
+						WTW.pluginsCheckActionZone(moldname, i, meinzone, othersinzone);
+					} else if (WTW.rideAlong != null) {
+						if (moldname == WTW.rideAlong.ridealongmoldname || moldname == WTW.rideAlong.ridealongmoldname.replace("actionzoneaxle","actionzone")) {
+							WTW.rideAlong = null;
+						}
+					} else if (moldname.indexOf("loadzone") > -1) {
+						WTW.actionZones[i].status = 0;
 					}
 				}
-				if (WTW.myAvatar != null) {
+			}
+			if (WTW.activityTimer != null && WTW.myAvatar != null) {
+				if (WTW.holdPosition != WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + "|" + WTW.myAvatar.position.z) {
 					WTW.holdPosition = WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + "|" + WTW.myAvatar.position.z;
-				} else {
-					WTW.holdPosition = "||";
+					WTW.resetActivityTimer();
 				}
 			}
 		}
-		if (WTW.activityTimer != null && WTW.myAvatar != null) {
-			if (WTW.holdPosition != WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + "|" + WTW.myAvatar.position.z) {
-				WTW.holdPosition = WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + "|" + WTW.myAvatar.position.z;
-				WTW.resetActivityTimer();
-			}
-		}
-		if (WTW.showFPS == 1) {
-			var gridlines = 0;
-			if (WTW.lineY != null) {
-				gridlines = 30;
-			}
-			var mcount = 0;
-			if (scene.meshes.length - WTW.baseMoldCount - gridlines > 0) {
-				mcount = scene.meshes.length - WTW.baseMoldCount - gridlines;
-			}
-			dGet('wtw_showmeshfps').innerHTML = "Mold Count = " + (mcount) + "<br />Frames Per Second=" + WTW.fps;
-			dGet('wtw_fpsvisibility').innerHTML = "Mold Count/FPS are Visible";
-			dGet('wtw_fpsicon').src = "/content/system/images/menuon.png";
-			dGet('wtw_fpsicon').alt = "Hide Mold Count";
-			dGet('wtw_fpsicon').title = "Hide Mold Count";
-			WTW.show('wtw_showmeshfps');
-			WTW.showFPS = 1;
-		} else {
-			WTW.hide('wtw_showmeshfps');
-		}
+		WTW.checkZones = false;
 	} catch(ex) {
 		WTW.log("core-scripts-prime-wtw_core.js-checkActionZones=" + ex.message);
 	}
@@ -1679,7 +1659,11 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 										case 'onwait':
 											var zstride = WTW.init.gravity * 15 * zavatar.WTW.animations.running[key].weight / WTW.fps;
 											var zmove = WTW.getMoveDownVector(zavatar.name, -zstride);
+											var avatary = zavatar.position.y;
 											zavatar.moveWithCollisions(zmove);
+											if (avatary != zavatar.position.y) {
+												WTW.checkZones = true;
+											}
 											break;
 										case 'onrotateup':
 											WTW.cameraYOffset -= 200/(WTW.sizeY - WTW.mouseStartY + WTW.mouseY);
@@ -1702,12 +1686,14 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 												var move = WTW.getMoveVector(zavatar.name, 0, zstride);
 												zavatar.moveWithCollisions(move);
 											}
+											WTW.checkZones = true;
 											break;
 										case 'onwalkjump':	
 											var zstride = 15 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
 											zavatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
 											var move = WTW.getMoveVector(zavatar.name, 0, zstride);
 											zavatar.moveWithCollisions(move);
+											WTW.checkZones = true;
 											break;
 										case 'onrun':
 											if (WTW.moveOverride == 0) {
@@ -1716,12 +1702,14 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 												var move = WTW.getMoveVector(zavatar.name, 0, zstride);
 												zavatar.moveWithCollisions(move);
 											}
+											WTW.checkZones = true;
 											break;
 										case 'onrunjump':
 											var zstride = 25 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
 											zavatar.WTW.animations.running[key].speedRatio = WTW.walkAnimationSpeed;
 											var move = WTW.getMoveVector(zavatar.name, 0, zstride);
 											zavatar.moveWithCollisions(move);
+											WTW.checkZones = true;
 											break;
 										case 'onwalkbackwards':
 											if (WTW.moveOverride == 0) {
@@ -1730,6 +1718,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 												var move = WTW.getMoveVector(zavatar.name, 180, zstride);
 												zavatar.moveWithCollisions(move);
 											}
+											WTW.checkZones = true;
 											break;
 										case 'onrunbackwards':
 											if (WTW.moveOverride == 0) {
@@ -1738,6 +1727,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 												var move = WTW.getMoveVector(zavatar.name, 180, zstride);
 												zavatar.moveWithCollisions(move);
 											}
+											WTW.checkZones = true;
 											break;
 										case 'onturnleft':
 											if (WTW.moveOverride == 0) {
@@ -1770,6 +1760,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 												var move = WTW.getMoveVector(zavatar.name, -90, zstride);
 												zavatar.moveWithCollisions(move);
 											}
+											WTW.checkZones = true;
 											break;
 										case 'onrunstrafeleft':
 											if (WTW.moveOverride == 0) {
@@ -1778,6 +1769,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 												var move = WTW.getMoveVector(zavatar.name, -90, zstride);
 												zavatar.moveWithCollisions(move);
 											}
+											WTW.checkZones = true;
 											break;
 										case 'onstraferight':
 											if (WTW.moveOverride == 0) {
@@ -1786,6 +1778,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 												var move = WTW.getMoveVector(zavatar.name, 90, zstride);
 												zavatar.moveWithCollisions(move);
 											}
+											WTW.checkZones = true;
 											break;
 										case 'onrunstraferight':
 											if (WTW.moveOverride == 0) {
@@ -1794,6 +1787,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 												var move = WTW.getMoveVector(zavatar.name, 90, zstride);
 												zavatar.moveWithCollisions(move);
 											}
+											WTW.checkZones = true;
 											break;
 										default:
 											zweight = WTW.pluginsSetAvatarMovement(zavatar, key, zweight);

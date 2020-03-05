@@ -136,6 +136,7 @@ function WTWJS() {
 	this.baseMoldCount = "";
 	this.checkLoadQueue = 0;
 	this.checkShownMolds = 0;
+	this.checkZones = true;
 	this.closestAngle = null;
 	this.closestDistance = null;
 	this.loadedJSFiles = "";

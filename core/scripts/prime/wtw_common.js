@@ -4323,8 +4323,12 @@ WTWJS.prototype.setShownMolds = function() {
 		WTW.setShownConnectingGrids();
 		WTW.setShownActionZones();
 		if (WTW.setShownMoldsByWeb("community") == false) {
-			WTW.setShownMoldsByWeb("building");
-			WTW.setShownMoldsByWeb("thing");
+			if (WTW.myAvatar != null) {
+				if (WTW.myAvatar.WTW.loaded) {
+					WTW.setShownMoldsByWeb("building");
+					WTW.setShownMoldsByWeb("thing");
+				}
+			}
 		}
 		WTW.checkShownMolds = 0;
 	} catch (ex) {

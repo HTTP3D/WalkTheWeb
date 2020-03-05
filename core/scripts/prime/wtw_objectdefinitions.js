@@ -626,7 +626,7 @@ WTWJS.prototype.newAvatarDef = function() {
 			'moveevents':'',
 			'updated':'',
 			'lastupdate':false,
-			'loaded':'0'
+			'loaded':false
 		};
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAvatarDef=" + ex.message);
