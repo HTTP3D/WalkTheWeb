@@ -116,6 +116,32 @@ class wtw {
 				echo $serverip." server is up.";
 				exit();
 			} 
+			$this->protocol = "http://";
+			if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+				if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == "https") {
+					$this->domainurl = "https://".$this->domainname;
+					$this->protocol = "https://";
+					$_SERVER['HTTPS']='on';
+				} else {
+					$this->domainurl = "http://".$this->domainname;
+				}
+			} else if (empty($_SERVER['HTTPS']) || !isset($_SERVER['HTTPS'])){
+				$this->domainurl = "http://".$this->domainname;
+			} else if ($_SERVER['HTTPS'] == "off") {
+				$this->domainurl = "http://".$this->domainname;
+			} else {
+				$this->domainurl = "https://".$this->domainname;
+				$this->protocol = "https://";
+				$_SERVER['HTTPS']='on';
+			}
+			if ($this->protocol == "https://"){
+				session_set_cookie_params($lifetime = 0, $path = '/', $this->domainname, $secure = true, $httponly = true);
+			} else {
+				session_set_cookie_params($lifetime = 0, $path = '/', $this->domainname, $secure = false, $httponly = true);
+			}
+			if (session_status() == PHP_SESSION_NONE) {
+				session_start();
+			}
 			$zuserip = "";
 			try {
 				$zuserip = $this->getClientIP();
@@ -134,24 +160,6 @@ class wtw {
 			}
 			if (!empty($_SESSION["wtw_username"]) && isset($_SESSION["wtw_username"])) {
 				$wtwuser->username = $_SESSION["wtw_username"];
-			}
-			$this->protocol = "http://";
-			if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
-				if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == "https") {
-					$this->domainurl = "https://".$this->domainname;
-					$this->protocol = "https://";
-					$_SERVER['HTTPS']='on';
-				} else {
-					$this->domainurl = "http://".$this->domainname;
-				}
-			} else if (empty($_SERVER['HTTPS']) || !isset($_SERVER['HTTPS'])){
-				$this->domainurl = "http://".$this->domainname;
-			} else if ($_SERVER['HTTPS'] == "off") {
-				$this->domainurl = "http://".$this->domainname;
-			} else {
-				$this->domainurl = "https://".$this->domainname;
-				$this->protocol = "https://";
-				$_SERVER['HTTPS']='on';
 			}
 			if (isset($_SERVER['PHP_SELF']) && !empty($_SERVER['PHP_SELF'])) {
 				$this->pagename = strtolower(basename($_SERVER['PHP_SELF']));
@@ -172,11 +180,6 @@ class wtw {
 				$this->contenturl = $this->domainurl.wtw_contenturl;
 			} else {
 				$this->contenturl = $this->domainurl."/content";
-			}
-			if ($this->protocol == "https://"){
-				session_set_cookie_params($lifetime = 0, $path = '/', $this->domainname, $secure = true, $httponly = true);
-			} else {
-				session_set_cookie_params($lifetime = 0, $path = '/', $this->domainname, $secure = false, $httponly = true);
 			}
 			if (defined('wtw_serverinstanceid')) {
 				$this->serverinstanceid = wtw_serverinstanceid;
@@ -1629,15 +1632,11 @@ class wtw {
 			/* $jsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$zver."\"></script>\r\n"; */
 			$jsdata .= "<script src=\"/core/scripts/engine/cannon.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/babylon.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylonjs.loaders.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylonjs.postProcess.min.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/babylon.gui.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.skymaterial.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.watermaterial.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.firematerial.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.mixmaterial.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.lavamaterial.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.triplanarmaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylonjs.proceduralTextures.min.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/babylon.materials.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.terrainmaterial.min.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/pep.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/loader.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/meshwriter.min.js?x=".$zver."\"></script>\r\n";
@@ -1761,9 +1760,6 @@ class wtw {
 	/* Global for backwards compatibility. */
 	$GLOBALS['wtw'] = wtw();
 
-	if (session_status() == PHP_SESSION_NONE) {
-		session_start();
-	}
 	function shutdownOnError() {
 		$error = error_get_last();
 		if ($error != null) {

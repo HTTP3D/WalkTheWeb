@@ -10,7 +10,7 @@ class wtwhandlers {
 	}
 	
 	public function __construct() {
-		$this->rootpath = str_replace('\core\functions','',dirname(__FILE__));
+		$this->rootpath = str_replace('/core/functions','',str_replace('\\','/',dirname(__FILE__)));
 		if (!defined("wtw_rootpath")) {
 			define("wtw_rootpath", $this->rootpath);
 		}
