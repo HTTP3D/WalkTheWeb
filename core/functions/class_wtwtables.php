@@ -506,6 +506,25 @@ class wtwtables {
 				  UNIQUE KEY `".wtw_tableprefix."roleid_UNIQUE` (`roleid`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 			");
+			$wtwdb->deltaCreateTable("			
+				CREATE TABLE `".wtw_tableprefix."scripts` (
+				  `scriptid` varchar(16) NOT NULL,
+				  `actionzoneid` varchar(16) DEFAULT '',
+				  `moldgroup` varchar(15) DEFAULT '',
+				  `webid` varchar(16) DEFAULT '',
+				  `scriptname` varchar(256) DEFAULT '',
+				  `scriptpath` varchar(256) DEFAULT '',
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int DEFAULT '0',
+				  PRIMARY KEY (`scriptid`),
+				  UNIQUE KEY `".wtw_tableprefix."scriptid_UNIQUE` (`scriptid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;			
+			");
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."settings` (
 				  `settingid` bigint(22) NOT NULL AUTO_INCREMENT,

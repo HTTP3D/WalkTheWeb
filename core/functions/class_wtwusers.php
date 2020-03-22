@@ -90,7 +90,7 @@ class wtwusers {
 				$zpassword = base64_decode($zpassword);
 			}
 			if (!empty($zpassword) && isset($zpassword)) {
-				$serror = "Invalid Username or Password";
+				/*$serror = "Invalid Username or Password";*/
 				$zresults = array();
 				if (!empty($zusername) && isset($zusername)) {
 					$zresults = $wtwdb->query("

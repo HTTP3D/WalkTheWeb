@@ -14,6 +14,11 @@ try {
 	$zobjectfilepart = $wtwhandlers->getPost('objectfilepart','');
 	$zfilename = $wtwhandlers->getPost('filename','');
 	$zitem = $wtwhandlers->getPost('item','');
+	$zmoldgroup = $wtwhandlers->getPost('moldgroup','buildings');
+	$zwebid = $wtwhandlers->getPost('webid','');
+	$zscriptid = $wtwhandlers->getPost('scriptid','');
+	$zscriptpath = $wtwhandlers->getPost('scriptpath','');
+	$zactionzoneid = $wtwhandlers->getPost('actionzoneid','');
 	$zuploadfile = $wtwhandlers->getFiles('wtw_uploadfile',null);
 	$zuploadfiles = $wtwhandlers->getFiles('wtw_uploadfiles',null);
 
@@ -45,6 +50,18 @@ try {
 			break;
 		case "deleteobjectfile":
 			$wtwuploads->deleteObjectFile($zfilename, $zobjectfilepart);
+			break;
+		case "uploadjavascriptfiles":
+			$serror = $wtwuploads->uploadJavaScriptFiles($zuploadfiles, $zmoldgroup, $zwebid, $zactionzoneid);
+			$zresponse = array(
+				'serror'=> $serror
+			);
+			break;
+		case "deletejavascriptfile":	
+			$serror = $wtwuploads->deleteJavaScriptFile($zmoldgroup, $zwebid, $zactionzoneid, $zscriptid, $zscriptpath);
+			$zresponse = array(
+				'serror'=> $serror
+			);
 			break;
 	}
 

@@ -11,6 +11,26 @@ try {
 	$zconnectinggridind = $wtwconnect->getVal('connectinggridind','-1'); /* allows for multiple instances of same object (example: 4 of the same chairs in a building or 2 of the same building in a community) */
 	$zparentname = $wtwconnect->getVal('parentname',''); /* keeps things nested under buildings or communities and buildings nested under communities */
 	
+	$zresponse = array();
+	$zactionzones = array();
+	$zscripts = array();
+	$i = 0;
+	/* get scripts related to community, building, or thing by action zone (loadzone) */
+	$zresults = $wtwconnect->query("
+		select *
+		from ".wtw_tableprefix."scripts
+		where deleted=0
+			and actionzoneid='".$zactionzoneid."';");
+	foreach ($zresults as $zrow) {
+		$zscripts[$i] = array(
+			'scriptid'=> $zrow["scriptid"],
+			'scriptname'=> $zrow["scriptname"],
+			'scriptpath'=> $zrow["scriptpath"],
+			'loaded'=>'0'
+		);
+		$i += 1;
+	}
+
 	/* select a single action zones related to community, building, or thing by action zone (loadzone) */
 	$zresults = $wtwconnect->query("
 		select *
@@ -21,8 +41,6 @@ try {
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
 	$i = 0;
-	$zresponse = array();
-	$zactionzones = array();
 	/* format json return dataset */
 	foreach ($zresults as $zrow) {
 		$zactionzoneid = $zrow["actionzoneid"];
@@ -147,6 +165,7 @@ try {
 			'avataranimations'=> $zavataranimations,
 			'jsfunction'=> $zrow["jsfunction"], 
 			'jsparameters'=> $zrow["jsparameters"],
+			'scripts'=> $zscripts,
 			'shown'=>'0',
 			'status'=>'0',
 			'parentname'=>$zparentname,

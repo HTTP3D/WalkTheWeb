@@ -319,6 +319,7 @@ WTWJS.prototype.newActionZone = function() {
 			'avataranimations':null,
 			'jsfunction':'',
 			'jsparameters':'',
+			'scripts':[],
 			'shown':'0',
 			'status':'0',
 			'parentname':''

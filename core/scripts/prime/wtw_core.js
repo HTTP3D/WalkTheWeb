@@ -1129,6 +1129,7 @@ WTWJS.prototype.checkActionZones = function() {
 										WTW.addLoadZoneToQueue(i);
 									}
 								}
+								WTW.checkLoadScripts(i);
 								WTW.checkAnalytics(i);
 								WTW.actionZones[i].status = 2;
 							} else if (meinzone == false && moldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {
@@ -1165,6 +1166,7 @@ WTWJS.prototype.checkActionZones = function() {
 										WTW.addUnloadZoneToQueue(i);
 									}
 								}
+								WTW.checkUnloadScripts(i);
 								WTW.actionZones[i].status = 0;
 							} else if (moldname.indexOf("clickactivated") > -1) {
 							} else if (moldname.indexOf("door") > -1 && WTW.actionZones[i].status != 2 && WTW.actionZones[i].status != 1 && WTW.actionZones[i].status != 0) {

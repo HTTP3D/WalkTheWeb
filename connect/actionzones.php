@@ -101,6 +101,24 @@ try {
 			}
 		}
 		
+		$zscripts = array();
+		$k = 0;
+		/* get scripts related to community, building, or thing by action zone (loadzone) */
+		$zresults3 = $wtwconnect->query("
+			select *
+			from ".wtw_tableprefix."scripts
+			where deleted=0
+				and actionzoneid='".$zactionzoneid."';");
+		foreach ($zresults3 as $zrow3) {
+			$zscripts[$k] = array(
+				'scriptid'=> $zrow3["scriptid"],
+				'scriptname'=> $zrow3["scriptname"],
+				'scriptpath'=> $zrow3["scriptpath"],
+				'loaded'=>'0'
+			);
+			$k += 1;
+		}
+		
 		$zcommunityinfo = array(
 			'communityid'=> $zrow["communityid"],
 			'analyticsid'=> $zrow["communityanalyticsid"]
@@ -166,6 +184,7 @@ try {
 			'avataranimations'=> $zavataranimations,
 			'jsfunction'=> $zrow["jsfunction"], 
 			'jsparameters'=> $zrow["jsparameters"],
+			'scripts'=> $zscripts,
 			'shown'=>'0',
 			'status'=>'0',
 			'parentname'=>$zparentname,

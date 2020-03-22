@@ -110,6 +110,14 @@ WTWJS.prototype.refresh = function() {
 	}
 }
 
+WTWJS.prototype.onUnload = function() {
+	try {
+		WTW.pluginsOnUnload();
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-onUnload=" + ex.message);
+	}
+}
+
 WTWJS.prototype.checkLoadJSFile = function(filename, filetype) {
 	try {
 		if (WTW.loadedJSFiles.indexOf("[" + filename + "]") == -1) {
@@ -145,8 +153,9 @@ WTWJS.prototype.loadJSFile = function(filename, filetype) {
 			fileref.setAttribute("type", "text/css");
 			fileref.setAttribute("href", filename);
 		}
-		if (typeof fileref != "undefined")
+		if (typeof fileref != "undefined") {
 			document.getElementsByTagName("head")[0].appendChild(fileref);
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-loadJSFile=" + ex.message);
 	}
@@ -158,11 +167,70 @@ WTWJS.prototype.unloadJSFile = function(filename, filetype) {
 		var targetattr = (filetype == "js") ? "src" : (filetype == "css") ? "href" : "none";
 		var allsuspects = document.getElementsByTagName(targetelement);
 		for (var i = allsuspects.length; i >= 0; i--) {
-			if (allsuspects[i] && allsuspects[i].getAttribute(targetattr) != null && allsuspects[i].getAttribute(targetattr).indexOf(filename) != -1)
+			if (allsuspects[i] && allsuspects[i].getAttribute(targetattr) != null && allsuspects[i].getAttribute(targetattr).indexOf(filename) != -1) {
 				allsuspects[i].parentNode.removeChild(allsuspects[i]);
+			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-unloadJSFile=" + ex.message);
+	}
+}
+
+WTWJS.prototype.checkLoadScripts = function(actionzoneind) {
+	try {
+		if (WTW.actionZones[actionzoneind] != null) {
+			var zscripts = WTW.actionZones[actionzoneind].scripts;
+			if (zscripts != null) {
+				for (var i=0;i<zscripts.length;i++) {
+					if (zscripts[i] != null) {
+						if (zscripts[i].loaded == '0') {
+							var zmoldgroup = "communities";
+							var zwebid = WTW.actionZones[actionzoneind].communityinfo.communityid;
+							if (WTW.actionZones[actionzoneind].buildinginfo.buildingid != '') {
+								zmoldgroup = "buildings";
+								zwebid = WTW.actionZones[actionzoneind].buildinginfo.buildingid;
+							} else if (WTW.actionZones[actionzoneind].thinginfo.thingid != '') {
+								zmoldgroup = "things";
+								zwebid = WTW.actionZones[actionzoneind].thinginfo.thingid;
+							}
+							WTW.checkLoadJSFile("/content/uploads/" + zmoldgroup + "/" + zwebid + "/" + zscripts[i].scriptpath, 'js');
+							WTW.actionZones[actionzoneind].scripts[i].loaded = '1';
+						}
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-checkLoadScripts=" + ex.message);
+	}
+}
+
+WTWJS.prototype.checkUnloadScripts = function(actionzoneind) {
+	try {
+		if (WTW.actionZones[actionzoneind] != null) {
+			var zscripts = WTW.actionZones[actionzoneind].scripts;
+			if (zscripts != null) {
+				for (var i=0;i<zscripts.length;i++) {
+					if (zscripts[i] != null) {
+						if (zscripts[i].loaded == '1') {
+							var zmoldgroup = "communities";
+							var zwebid = WTW.actionZones[actionzoneind].communityinfo.communityid;
+							if (WTW.actionZones[actionzoneind].buildinginfo.buildingid != '') {
+								zmoldgroup = "buildings";
+								zwebid = WTW.actionZones[actionzoneind].buildinginfo.buildingid;
+							} else if (WTW.actionZones[actionzoneind].thinginfo.thingid != '') {
+								zmoldgroup = "things";
+								zwebid = WTW.actionZones[actionzoneind].thinginfo.thingid;
+							}
+							WTW.checkUnloadJSFile("/content/uploads/" + zmoldgroup + "/" + zwebid + "/" + zscripts[i].scriptpath, 'js');
+							WTW.actionZones[actionzoneind].scripts[i].loaded = '0';
+						}
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-checkUnloadScripts=" + ex.message);
 	}
 }
 
@@ -173,9 +241,9 @@ WTWJS.prototype.resetActivityTimer = function() {
 			WTW.activityTimer = null;
 		}
 		if (WTW.isMobile) {
-			WTW.activityTimer = window.setTimeout(function () {WTW.noActivityPause();}, 120000);
+			WTW.activityTimer = window.setTimeout(function () {WTW.noActivityPause();}, 300000);
 		} else {
-			WTW.activityTimer = window.setTimeout(function () {WTW.noActivityPause();}, 3600000);
+			WTW.activityTimer = window.setTimeout(function () {WTW.noActivityPause();}, 10800000);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-resetActivityTimer=" + ex.message);
@@ -8174,6 +8242,63 @@ WTWJS.prototype.showSettingsMenu = function(menuitem) {
 	}
 }
 
+WTWJS.prototype.resizeMenu = function(zformid, zsize) {
+	try {
+		/* formid is the name of the form div */
+		/* zsize should be min or max */
+		if (zsize == 'min') {
+			WTW.hide(zformid + 'maxdiv');
+			WTW.hide(zformid + 'min');
+			WTW.show(zformid + 'max');
+		} else {
+			WTW.show(zformid + 'maxdiv');
+			WTW.hide(zformid + 'max');
+			WTW.show(zformid + 'min');
+		}
+		if (dGet(zformid + 'scroll') != null) {
+			dGet(zformid + 'scroll').style.height = 'auto';
+			dGet(zformid + 'scroll').style.minHeight = '0px';
+		}
+	} catch (ex) { 
+		WTW.log("core-scripts-prime-wtw_common.js-resizeMenu=" + ex.message);
+	}
+}
+
+WTWJS.prototype.closeMenus = function(zmenuid) {
+	try {
+		if (zmenuid == undefined) {
+			zmenuid = '';
+		}
+		if (dGet('wtw_menuavatar').style.display != 'none') {
+			WTW.closeSetupMode();
+		}
+		if (dGet('wtw_menuregister').style.display != 'none') {
+			WTW.show('wtw_menulogin');
+			WTW.hide('wtw_menupasswordrecovery');
+			WTW.hide('wtw_menuregister');
+		}
+		var menuforms = document.getElementsByClassName('wtw-slideupmenuright');
+		for (var i=0;i<menuforms.length;i++) {
+			if (menuforms[i] != null) {
+				if (menuforms[i].id != undefined) {
+					WTW.hide(menuforms[i].id);
+				}
+			}
+		}
+		var menuforms = document.getElementsByClassName('wtw-slideupmenuleft');
+		for (var i=0;i<menuforms.length;i++) {
+			if (menuforms[i] != null) {
+				if (menuforms[i].id != undefined) {
+					WTW.hide(menuforms[i].id);
+				}
+			}
+		}
+		WTW.pluginsCloseMenus(zmenuid);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-closeMenus=" + ex.message);
+	}
+}
+
 WTWJS.prototype.getSunIntensity = function (inclination, azimuth) {
 	var intensity = .3;
 	try {
@@ -8915,37 +9040,6 @@ WTWJS.prototype.loadUserSettingsAfterEngine = function() {
 		}, 8000);
 	} catch (ex) { 
 		WTW.log("core-scripts-prime-wtw_common.js-loadUserSettingsAfterEngine=" + ex.message);
-	}
-}
-
-WTWJS.prototype.closeMenus = function() {
-	try {
-		if (dGet('wtw_menuavatar').style.display != 'none') {
-			WTW.closeSetupMode();
-		}
-		if (dGet('wtw_menuregister').style.display != 'none') {
-			WTW.show('wtw_menulogin');
-			WTW.hide('wtw_menupasswordrecovery');
-			WTW.hide('wtw_menuregister');
-		}
-		var menuforms = document.getElementsByClassName('wtw-slideupmenuright');
-		for (var i=0;i<menuforms.length;i++) {
-			if (menuforms[i] != null) {
-				if (menuforms[i].id != undefined) {
-					WTW.hide(menuforms[i].id);
-				}
-			}
-		}
-		var menuforms = document.getElementsByClassName('wtw-slideupmenuleft');
-		for (var i=0;i<menuforms.length;i++) {
-			if (menuforms[i] != null) {
-				if (menuforms[i].id != undefined) {
-					WTW.hide(menuforms[i].id);
-				}
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-closeMenus=" + ex.message);
 	}
 }
 

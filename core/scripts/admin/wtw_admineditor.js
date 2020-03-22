@@ -1914,15 +1914,17 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 			dGet('wtw_tmolduploadobjectid').value = molds[moldind].object.uploadobjectid;
 			dGet('wtw_tmoldobjectfolder').value = molds[moldind].object.folder;
 			dGet('wtw_tmoldobjectfile').value = molds[moldind].object.file;
-			if (molds[moldind].graphics.receiveshadows == '1') {
-				dGet('wtw_tmoldreceiveshadows').checked = true;
-			} else {
-				dGet('wtw_tmoldreceiveshadows').checked = false;
-			}
-			if (molds[moldind].graphics.level == '1') {
-				dGet('wtw_tmoldgraphiclevel').checked = true;
-			} else {
-				dGet('wtw_tmoldgraphiclevel').checked = false;
+			if (molds[moldind].graphics != null) {
+				if (molds[moldind].graphics.receiveshadows == '1') {
+					dGet('wtw_tmoldreceiveshadows').checked = true;
+				} else {
+					dGet('wtw_tmoldreceiveshadows').checked = false;
+				}
+				if (molds[moldind].graphics.level == '1') {
+					dGet('wtw_tmoldgraphiclevel').checked = true;
+				} else {
+					dGet('wtw_tmoldgraphiclevel').checked = false;
+				}
 			}
 			dGet('wtw_tmoldvideoid').value = molds[moldind].graphics.texture.videoid;
 			dGet('wtw_tmoldvideopath').value = molds[moldind].graphics.texture.video;
@@ -3771,7 +3773,7 @@ WTWJS.prototype.submitMoldForm = function(w) {
 				}
 			);
 			dGet('wtw_tnewmold').value = "0";
-			WTW.checkActionZones(molds[moldind]);
+			WTW.checkActionZones();
 			WTW.pluginsSubmitMoldForm(w);
 			WTW.clearEditMold();
 			WTW.hideAdminMenu();
@@ -4344,7 +4346,10 @@ WTWJS.prototype.openActionZoneForm = function(actionzoneid) {
 				dGet('wtw_taxisscalingz').value = WTW.actionZones[actionzoneind].movementdistance;
 				dGet('wtw_tactionzonerotatespeed').value = WTW.actionZones[actionzoneind].rotatespeed;
 				dGet('wtw_tactionzonejsfunction').value = WTW.actionZones[actionzoneind].jsfunction;
-				dGet('wtw_tactionzonejsparameters').value = WTW.actionZones[actionzoneind].jsparameters;	
+				dGet('wtw_tactionzonejsparameters').value = WTW.actionZones[actionzoneind].jsparameters;
+				if (WTW.actionZones[actionzoneind].scripts != null) {
+					WTW.loadAZFormScripts(WTW.actionZones[actionzoneind].scripts);
+				}
 				WTW.getLoadActionZoneList(WTW.actionZones[actionzoneind].loadactionzoneid);
 				WTW.setActionZoneFormFields(dGet('wtw_tactionzonetype').value);
 				if (actionzonetype.indexOf("seat") > -1) {	
@@ -4430,6 +4435,69 @@ WTWJS.prototype.openActionZoneForm = function(actionzoneid) {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admineditor.js-openActionZoneForm=" + ex.message);
+	}
+}		
+
+WTWJS.prototype.getAZFormScripts = function() {
+	try {
+		WTW.getJSON("/connect/scripts.php?actionzoneid=" + dGet('wtw_tactionzoneid').value, 
+			function(zresponse) {
+				if (zresponse != null) {
+					zresponse = JSON.parse(zresponse);
+					WTW.loadAZFormScripts(zresponse);
+				}
+			}
+		);		
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-getAZFormScripts=" + ex.message);
+	}
+}		
+
+WTWJS.prototype.loadAZFormScripts = function(zscripts) {
+	try {
+		dGet('wtw_azjavascriptlinks').innerHTML = '';
+		var zwebid = communityid + buildingid + thingid;
+		var zmoldgroup = "buildings";
+		if (communityid != "") {
+			zmoldgroup = "communities";
+		} else if (thingid != "") {
+			zmoldgroup = "things";
+		}
+		var zscriptlinks = "";
+		for (var i=0;i<zscripts.length;i++) {
+			zscriptlinks += "<div class='wtw-menulevel2'><div onclick=\"WTW.deleteAZFormScript('" + zscripts[i].scriptid + "','" + zscripts[i].scriptpath + "');\" class=\"wtw-redbuttonright\">Delete</div><a href=\"/content/uploads/" + zmoldgroup + "/" + zwebid + "/" + zscripts[i].scriptpath + "\" target=\"_blank\" class=\"wtw-linkwrap\">" + zscripts[i].scriptpath + "</a></div><div class=\"wtw-clear\"></div>";
+		}
+		dGet('wtw_azjavascriptlinks').innerHTML = zscriptlinks;
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-loadAZFormScripts=" + ex.message);
+	}
+}		
+
+WTWJS.prototype.deleteAZFormScript = function(zscriptid, zscriptpath) {
+	try {
+		var zmoldgroup = "communities";
+		if (buildingid != '') {
+			zmoldgroup = "buildings";
+		} else if (thingid != '') {
+			zmoldgroup = "things";
+		}
+		var zrequest = {
+			'actionzoneid': dGet('wtw_tactionzoneid').value,
+			'moldgroup': zmoldgroup,
+			'webid': communityid + buildingid + thingid,
+			'scriptid': zscriptid,
+			'scriptpath': zscriptpath,
+			'function':'deletejavascriptfile'
+		};
+		WTW.postJSON("/core/handlers/uploadedfiles.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.getAZFormScripts();
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admineditor.js-deleteAZFormScript=" + ex.message);
 	}
 }		
 
@@ -5686,6 +5754,12 @@ WTWJS.prototype.startUploadImage = function(zbuttontext) {
 				}
 				dGet('wtw_filesupload').click();
 				break;
+			case "Upload JavaScript File":
+				dGet('wtw_filesupload').onchange = function() {
+					WTW.uploadObjectFiles('uploadjavascriptfiles');
+				}
+				dGet('wtw_filesupload').click();
+				break;
 			default:
 				dGet('wtw_filesupload').onchange = function() {
 					WTW.uploadFiles();
@@ -5757,9 +5831,18 @@ WTWJS.prototype.selectUploadFiles = function() {
 	}
 }
 
-WTWJS.prototype.uploadObjectFiles = function() {
+WTWJS.prototype.uploadObjectFiles = function(ztype) {
 	try {
 		if (dGet('wtw_filesupload').value != null) {
+			if (ztype == undefined) {
+				ztype = 'uploadobjectfiles';
+			}
+			var zmoldgroup = "communities";
+			if (buildingid != '') {
+				zmoldgroup = "buildings";
+			} else if (thingid != '') {
+				zmoldgroup = "things";
+			}
 			var zobjectfilepart = dGet('wtw_tobjectfile').value;
 			zobjectfilepart = zobjectfilepart.replace(".babylon","");
 			var form1 = document.createElement('form');
@@ -5770,13 +5853,23 @@ WTWJS.prototype.uploadObjectFiles = function() {
 			}
 			zformdata.append('action', 'POST');
 			zformdata.append('objectfilepart', zobjectfilepart);
-			zformdata.append('function', 'uploadobjectfiles');
+			zformdata.append('moldgroup', zmoldgroup);
+			zformdata.append('webid', communityid + buildingid + thingid);
+			zformdata.append('actionzoneid', dGet('wtw_tactionzoneid').value);
+			zformdata.append('function', ztype);
 			Httpreq.open('POST', '/core/handlers/uploadedfiles.php');
 			Httpreq.onreadystatechange = function () {
 				if (Httpreq.readyState == 4 && Httpreq.status == "200") {
 					var zresponse = JSON.parse(Httpreq.responseText);
 					dGet('wtw_filesupload').value = null;
-					WTW.loadObjectDetailsName();
+					switch (ztype) {
+						case 'uploadobjectfiles':
+							WTW.loadObjectDetailsName();
+							break;
+						case 'uploadjavascriptfiles':
+							WTW.getAZFormScripts();
+							break;
+					}
 				}
 			};
 			Httpreq.send(zformdata);

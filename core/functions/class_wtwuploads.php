@@ -1474,7 +1474,112 @@ class wtwuploads {
 		}
 		return $serror;
 	}
-	
+
+	public function uploadJavaScriptFiles($zuploadfiles, $zmoldgroup, $zwebid, $zactionzoneid) {
+		global $wtwhandlers;
+		$serror = "";
+		try {
+			$this->checkContentFolders('', '', '');
+			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				$zfilepath = $wtwhandlers->contentpath."/uploads/".$zmoldgroup."/".$zwebid;
+				if (!file_exists($zfilepath)) {
+					mkdir($zfilepath, 0777);
+				}
+				for ($i = 0; $i < count($zuploadfiles["name"]);$i++) {
+					$zisvalid = 1;
+					$zpastfilename = basename($zuploadfiles["name"][$i]);
+					$zfileextension = pathinfo($zfilepath."/". $zpastfilename,PATHINFO_EXTENSION);
+					$zfilesize = $zuploadfiles["size"][$i];
+					$zfiletype = $zuploadfiles["type"][$i];
+					$ztargetfile = $zfilepath."/".$zpastfilename;
+					if ($zfilesize > 2000000) {
+						$serror .= "Your file is too large.";
+						$zisvalid = 0;
+					}
+					if(strtolower($zfileextension) != "js") {
+						$serror .= "Only JavaScript (.js) files are allowed.";
+						$zisvalid = 0;
+					}
+					if ($zisvalid == 1) {
+						if (move_uploaded_file($zuploadfiles["tmp_name"][$i], $ztargetfile)) {
+							$this->saveJavaScriptFile($zactionzoneid, $zmoldgroup, $zwebid, $zpastfilename);
+						} else {
+							$serror .= "There was an error uploading your files.";
+						}
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-uploadJavaScriptFiles=".$e->getMessage());
+		}
+		return $serror;
+	}
+
+	public function saveJavaScriptFile($zactionzoneid, $zmoldgroup, $zwebid, $zscriptpath) {
+		global $wtwhandlers;
+		try {
+			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				if (strlen($zscriptpath) > 4) {
+					$zscriptname = str_replace(".js","",strtolower($zscriptpath));
+					$zscriptid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."scripts
+							   (scriptid,
+								actionzoneid,
+								moldgroup,
+								webid,
+								scriptname,
+								scriptpath,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$zscriptid."',
+								'".$zactionzoneid."',
+								'".$zmoldgroup."',
+								'".$zwebid."',
+								'".$zscriptname."',
+								'".$zscriptpath."',
+								now(),
+								'".$wtwhandlers->userid."',
+								now(),
+								'".$wtwhandlers->userid."');");
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-saveJavaScriptFile=".$e->getMessage());
+		}
+	}
+
+//deleteJavaScriptFile($zwebid, $zactionzoneid, $zscriptid)
+	public function deleteJavaScriptFile($zmoldgroup, $zwebid, $zactionzoneid, $zscriptid, $zscriptpath) {
+		global $wtwhandlers;
+		$serror = "";
+		try {
+			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				$zfilepath = $wtwhandlers->contentpath."/uploads/".$zmoldgroup."/".$zwebid."/".$zscriptpath;
+				if (file_exists($zfilepath)) {
+					/* uncomment if you want the file to be deleted */
+					/* unlink($zfilepath); */
+				}
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."scripts
+					set deleteddate=now(),
+						deleteduserid='".$wtwhandlers->userid."',
+						deleted=1
+					where scriptid='".$zscriptid."'
+						and actionzoneid='".$zactionzoneid."'
+						and webid='".$zwebid."';");
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-deleteObjectFile=".$e->getMessage());
+		}
+		return $serror;
+	}
+
+
+
 	public function deleteObjectFile($zfilename, $zobjectfilepart) {
 		global $wtwhandlers;
 		$serror = "";

@@ -194,4 +194,9 @@
 			<br />
 			<div id="wtw_baddactionzonepart" class="wtw-menulevel0" onclick="WTW.selectAddActionZonePart(WTW.pick);">Pick Shape to Add</div>
 		</div>
+		<div id="wtw_azjavascriptdiv">
+			<h4>Load JavaScript in Zone</h4>
+			<div id="wtw_azjavascriptlinks" ></div>
+			<div id="wtw_azjavascript" class="wtw-menulevel0" onclick="WTW.startUploadImage(this.innerHTML);return (false);">Upload JavaScript File</div>
+		</div><br /><br />
 	</div>

@@ -288,6 +288,7 @@ WTWJS.prototype.setActionZoneFormFields = function(actionzonetype) {
 		WTW.hide('wtw_actionzoneadvancedopts');
 		WTW.hide('wtw_attachactionzonediv');
 		WTW.hide('wtw_actionzoneavataranimationsdiv');
+		WTW.hide('wtw_azjavascriptdiv');
 		dGet('wtw_tcopyaxletoactionzone').disabled = false;
 		dGet('wtw_axispositiontitle').innerHTML = "Axis Position";
 		dGet('wtw_axisrotationtitle').innerHTML = "Axis Rotation";
@@ -309,6 +310,7 @@ WTWJS.prototype.setActionZoneFormFields = function(actionzonetype) {
 				dGet('wtw_editactionzoneformtitle').innerHTML = "Add Load Zone";
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
 				WTW.show('wtw_actionzoneadvancedopts');
+				WTW.show('wtw_azjavascriptdiv');
 				break;
 			case "loadanimations":
 				WTW.hide('wtw_actionzoneaxisdiv');

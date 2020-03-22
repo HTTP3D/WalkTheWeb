@@ -301,7 +301,7 @@ class wtwhandlers {
 				$zvalue = $_POST[$zfield];
 			}
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwhandlers.php-getPost=".$e->getMessage());
+			$this->serror("core-functions-class_wtwhandlers.php-getPost=".$e->getMessage());
 		}
 		return $zvalue;
 	}
@@ -313,7 +313,7 @@ class wtwhandlers {
 				$zvalue = $_FILES[$zfield];
 			}
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwhandlers.php-getFiles=".$e->getMessage());
+			$this->serror("core-functions-class_wtwhandlers.php-getFiles=".$e->getMessage());
 		}
 		return $zvalue;
 	}
@@ -328,7 +328,7 @@ class wtwhandlers {
 			//$zheader .= header('Content-type: application/json; charset=iso-8859-1');
 			//$zheader .= header('Content-Language: en');
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwhandlers.php-addHandlerHeader=".$e->getMessage());
+			$this->serror("core-functions-class_wtwhandlers.php-addHandlerHeader=".$e->getMessage());
 		}
 		return $zheader;
 	}
