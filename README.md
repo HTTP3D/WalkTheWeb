@@ -18,6 +18,8 @@ INSTALLATION
     (sample config file is provided in the /config folder)
     Open the website to complete the installation.
 
+That is it! 
+
 
 Note: on Linux systems, add a .htaccess file in the root (or site config) with the following:
 
@@ -32,7 +34,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.php [L]
 
 
-That is it! 
+
 
 LEARNING
 ---------------------------------------------------------------------------
