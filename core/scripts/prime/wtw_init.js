@@ -5,6 +5,7 @@
 WTWJS.prototype.initEvents = function() {
 	try {
 		dGet('wtw_renderCanvas').addEventListener("click", WTW.mouseClick);
+		window.addEventListener("beforeunload", WTW.onUnload,false);
 		window.addEventListener("onkeydown", WTW.keyDown,true);
 		window.addEventListener("keydown", WTW.keyDown);		
 		window.addEventListener("onkeyup", WTW.keyUp,true);

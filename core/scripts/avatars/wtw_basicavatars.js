@@ -75,8 +75,8 @@ WTWJS.prototype.addAvatar3DObject = function(avatarname, avatardef, loadmin, isv
 			avatar.applyGravity = true;
 			avatar.showBoundingBox = false;
 			if (loadmin == false) {
-				avatar.ellipsoid = new BABYLON.Vector3(3, 8, 3); //(2, 4, 1)
-				avatar.ellipsoidOffset = new BABYLON.Vector3(0, 8, 0); //(0, 4, 0)
+				avatar.ellipsoid = new BABYLON.Vector3(3, 8, 3);
+				avatar.ellipsoidOffset = new BABYLON.Vector3(0, 8, 0);
 				avatar.checkCollisions = true;
 			} else {
 				avatar.checkCollisions = false;

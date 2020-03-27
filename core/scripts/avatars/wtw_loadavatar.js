@@ -595,7 +595,7 @@ WTWJS.prototype.loadAvatarAnimationsAll = function(zresponse) {
 				}
 			}
 		}
-		zeditavataranimations += "</select></div><div id='wtw_addoptionalanimations'></div><div id='wtw_animation-add' class='wtw-chatbuttonaccept' onclick=\"WTW.addAvatarAnimationRow(" + zoptionind + ",'');\" style='text-align:center;margin-left:20px;'>+ Add Animation</div>";
+		zeditavataranimations += "</select></div><div id='wtw_addoptionalanimations'></div><div id='wtw_animation-add' class='wtw-addbuttonaccept' onclick=\"WTW.addAvatarAnimationRow(" + zoptionind + ",'');\" style='text-align:center;margin-left:20px;'>+ Add Animation</div>";
 		zeditavataranimations += "<div style='font-size:.8em;text-align:center;'><img id='wtw_helpanimicon' src='/content/system/images/menugestures32.png' alt='Animations' title='Animations' /> Click on toolbar below to execute.</div></li></ul>";
 		dGet("wtw_editavataranimations").innerHTML = zeditavataranimations;
 		if (zoptionalanimations.length > 0) {

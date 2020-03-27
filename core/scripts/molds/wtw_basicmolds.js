@@ -35,6 +35,19 @@ WTWJS.prototype.addMoldCone = function(moldname, lenx, leny, lenz, subdivisions,
 	return mold;
 }	
 
+WTWJS.prototype.addMoldSpotLight = function(moldname, lenx, leny, lenz, subdivisions, special1, special2) {
+	var mold;
+	try {
+		mold = BABYLON.MeshBuilder.CreateCylinder(moldname, {height: 1, diameterTop: special1, diameterBottom: special2, tessellation: subdivisions, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
+		var light = new BABYLON.SpotLight(moldname + "-spotlight", new BABYLON.Vector3(0, -3, 0), new BABYLON.Vector3(0, -3, 0), Math.PI / 3, 20, scene);
+		light.parent = mold;
+		mold.scaling = new BABYLON.Vector3(lenx, leny, lenz);
+	} catch (ex) {
+		WTW.log("core-scripts-molds-basicmolds\r\n addMoldSpotLight=" + ex.message);
+	}
+	return mold;
+}	
+
 WTWJS.prototype.addMoldPolygon = function(moldname, lenx, leny, lenz, special1) {
 	var mold;
 	try {
@@ -1370,6 +1383,7 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 							var avez = 0;
 							for (var i=0; i < results.meshes.length; i++) {
 								if (results.meshes[i] != null) {
+									//results.meshes[i].setEnabled(false);
 									totalx += results.meshes[i].position.x;
 									totaly += results.meshes[i].position.y;
 									totalz += results.meshes[i].position.z;

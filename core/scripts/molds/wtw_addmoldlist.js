@@ -51,6 +51,7 @@ WTWJS.prototype.getWebMoldList = function() {
         webmoldlist[webmoldlist.length] = "Video";
 		webmoldlist[webmoldlist.length] = "Babylon File";
         webmoldlist[webmoldlist.length] = "Lightbulb";
+/*	    webmoldlist[webmoldlist.length] = "Spot Light"; */
         webmoldlist[webmoldlist.length] = "Candle Flame";
         webmoldlist[webmoldlist.length] = "Tree";
         webmoldlist[webmoldlist.length] = "Flag";
@@ -236,6 +237,9 @@ WTWJS.prototype.addMold = function(moldname, molddef, parentname, coveringname) 
 				break;
             case "lightbulb":
 				mold = WTW.addMoldLightbulb(moldname, molddef, lenx, leny, lenz, posx, posy, posz, subdivisions);
+				break;
+            case "spotlight":
+				mold = WTW.addMoldSpotLight(moldname, lenx, leny, lenz, subdivisions, special1, special2);
 				break;
             case "candleflame":
 				mold = WTW.addMoldCandleFlame(moldname, molddef, lenx, leny, lenz);
@@ -922,6 +926,23 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmolduscale').value = "0.00";
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "10";
+				break;
+			case "spotlight":
+				dGet('wtw_tmoldpositionx').value = positionX;
+				dGet('wtw_tmoldpositiony').value = positionY;
+				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldscalingx').value = "2.00";
+				dGet('wtw_tmoldscalingy').value = "2.00";
+				dGet('wtw_tmoldscalingz').value = "2.00";
+				dGet('wtw_tmoldrotationx').value = "0.00";
+				dGet('wtw_tmoldrotationy').value = "0.00";
+				dGet('wtw_tmoldrotationz').value = "0.00";
+				dGet('wtw_tmoldspecial2').value = "1.00";
+				dGet('wtw_tmolduoffset').value = "0.00";
+				dGet('wtw_tmoldvoffset').value = "0.00";
+				dGet('wtw_tmolduscale').value = "0.00";
+				dGet('wtw_tmoldvscale').value = "0.00";
+				dGet('wtw_tmoldsubdivisions').value = "20";
 				break;
 			case "candleflame":
 				dGet('wtw_tmoldpositionx').value = positionX;
@@ -1726,6 +1747,25 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				dGet('wtw_editmoldformtitle').innerHTML = "Edit Lightbulb";
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
+				WTW.show('wtw_moldsubdivisions');
+				WTW.show('wtw_moldtexturetitle');
+				WTW.show('wtw_moldtexturepreview');
+				WTW.show('wtw_moldscalediv');
+				WTW.show('wtw_moldmergemoldsdiv');
+				break;
+			case "spotlight":
+				dGet('wtw_moldpositiontitle').innerHTML = "Spot Light Position";
+				dGet('wtw_moldscalingtitle').innerHTML = "Spot Light Length";
+				dGet('wtw_moldrotationtitle').innerHTML = "Spot Light Rotation";
+				dGet('wtw_moldspecial1title').innerHTML = "Top Radius";
+				dGet('wtw_moldspecial2title').innerHTML = "Bottom Radius";
+				dGet('wtw_moldtexturetitle').innerHTML = "Spot Light Texture Image";
+				dGet('wtw_moldbumptexturetitle').innerHTML = "Spot Light Bump Image";
+				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave Spot Light";
+				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete Spot Light";
+				dGet('wtw_editmoldformtitle').innerHTML = "Edit Spot Light";
+				WTW.show('wtw_moldspecial1');
+				WTW.show('wtw_moldspecial2');
 				WTW.show('wtw_moldsubdivisions');
 				WTW.show('wtw_moldtexturetitle');
 				WTW.show('wtw_moldtexturepreview');
