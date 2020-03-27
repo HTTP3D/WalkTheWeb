@@ -1669,87 +1669,7 @@ li.wtw-menunoteset {
 	padding:10px;
 	text-align:center;
 }
-.wtw-chatbox {
-	border:1px solid #afafaf;
-	border-radius:10px;
-	width:340px;
-	min-height:50px;
-	text-align:left;
-	vertical-align:middle;
-	margin:10px;
-}
-.wtw-chatboxshadow {
-	border-left:4px solid #A9CCE3;
-	border-top:4px solid #A9CCE3;
-	border-right:4px solid #5499C7;
-	border-bottom:4px solid #5499C7;
-	border-radius:10px;
-	min-height:50px;
-	text-align:left;
-	vertical-align:middle;
-	margin:0px 1px 1px 0px;
-}
-.wtw-chattext {
-	border:1px solid #afafaf;
-	border-radius:5px;
-	width:95%;
-	min-height:50px;
-	max-height:300px;
-	text-align:left;
-	vertical-align:top;
-	margin:2%;
-	overflow-y:auto;
-	overflow-x:hidden;
-	background-color:#ffffff;
-	color:#000000;
-	
-	overflow-wrap: break-word;
-	word-wrap: break-word;
-	-ms-word-break: break-all;
-	/* This is the dangerous one in WebKit, as it breaks things wherever */
-	word-break: break-all;
-	/* Instead use this non-standard one: */
-	word-break: break-word;
-	/* Adds a hyphen where the word breaks, if supported (No Blink) */
-	-ms-hyphens: auto;
-	-moz-hyphens: auto;
-	-webkit-hyphens: auto;
-	hyphens: auto;
-}
-.wtw-chattextarea {
-	margin:3%;
-}
-.wtw-chatdisplayname {
-	margin:10px;
-	color:#FBF8C6;
-	font-weight:bold;
-}
-.wtw-chatdisplaynameblink {
-	animation: wtw-chatblinker 1s linear infinite;
-	margin:10px;
-	color:#FBF8C6;
-	font-weight:bold;
-	opacity: .3;
-}
-@keyframes wtw-chatblinker {
-  50% {
-    color:yellow;
-	opacity: 1;
-  }
-}
-.wtw-chatrequestcount {
-	float:right;
-	margin:10px;
-	border:3px solid #a0a0a0;
-	border-radius:10px;
-	min-height:20px;
-	min-width:20px;
-	text-align:center;
-	color:black;
-	font-weight:bold;
-	background-color:#c0c0c0;
-}
-.wtw-chatbuttonaccept {
+.wtw-addbuttonaccept {
 	margin:10px;
 	display:inline-block;
 	border:2px solid green;
@@ -1758,49 +1678,10 @@ li.wtw-menunoteset {
 	background-color:#ffffff;
 	color:green;
 }
-.wtw-chatbuttonaccept:hover {
+.wtw-addbuttonaccept:hover {
 	color:black;
 	background-color:#FBF8C6;
 	cursor:pointer;
-}
-.wtw-chatbuttondecline {
-	margin:10px;
-	display:inline-block;
-	border:2px solid red;
-	border-radius:10px;
-	padding:5px;
-	background-color:#ffffff;
-	color:red;
-}
-.wtw-chatbuttondecline:hover {
-	color:black;
-	background-color:#FBF8C6;
-	cursor:pointer;
-}
-.wtw-chattextsend {
-	margin:10px;
-	display:inline-block;
-	border:2px solid green;
-	border-radius:10px;
-	padding:5px 30px 5px 30px;
-	background-color:#ffffff;
-	color:green;
-}
-.wtw-chattextsend:hover {
-	color:black;
-	background-color:#FBF8C6;
-	cursor:pointer;
-}
-.wtw-chatcenter {
-	text-align:center;
-}
-.wtw-chathr {
-	width:20%;
-	margin-left:2%;
-	height: 1px;
-    border: 0; 
-	border-top: 1px solid #ccc;
-	padding: 0;
 }
 .wtw-iprogresssection {
 	min-height: 300px;
