@@ -21,7 +21,7 @@ INSTALLATION
 That is it! 
 
 
-Note: on Linux systems, add a .htaccess file in the root (or site config) with the following:
+Note: on Linux systems, add a .htaccess file in the root (or use site config) with the following:
 
 RewriteEngine On
 
