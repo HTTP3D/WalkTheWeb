@@ -21,13 +21,16 @@ INSTALLATION
 
 Note: on Linux systems, add a .htaccess file in the root (or site config) with the following:
 
-# BEGIN WalkTheWeb
 RewriteEngine On
+
 RewriteBase /
+
 RewriteCond %{REQUEST_FILENAME} !-f
+
 RewriteCond %{REQUEST_FILENAME} !-d
+
 RewriteRule . /index.php [L]
-# END WalkTheWeb
+
 
 That is it! 
 
