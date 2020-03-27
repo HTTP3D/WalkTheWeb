@@ -85,10 +85,10 @@ class wtwplugins {
 		}
 	}
 	
-	public function addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired) {
+	public function addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired, $zcssclass) {
 		global $wtwmenus;
 		if (isset($wtwmenus)) {
-			return $wtwmenus->addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired);
+			return $wtwmenus->addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired, $zcssclass);
 		} else {
 			return false;
 		}
@@ -379,16 +379,6 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsSetCheckActionZones = function() {\r\n";
-			$jsdata .= "		var runcheckactionzone = false;\r\n";
-			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->returnScriptFunction('setcheckactionzones','runcheckactionzone');
-			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('class_wtw-pluginsSetCheckActionZones=' + ex.message);\r\n";
-			$jsdata .= "		}\r\n";
-			$jsdata .= "		return runcheckactionzone;\r\n";
-			$jsdata .= "	}\r\n";
-
 			$jsdata .= "	WTWJS.prototype.pluginsCheckActionZoneTrigger = function(zactionzone) {\r\n";
 			$jsdata .= "		var othersinzone = false;\r\n";
 			$jsdata .= "		try {\r\n";
@@ -641,6 +631,22 @@ class wtwplugins {
 			$jsdata .= 	$this->getScriptFunction('moldqueueadd');
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsProcessMoldQueueAdd=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsCloseMenus = function(zmenuid) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('closemenus');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsCloseMenus=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsOnUnload = function() {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('onunload');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsOnUnload=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 

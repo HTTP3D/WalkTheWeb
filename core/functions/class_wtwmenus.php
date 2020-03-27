@@ -186,11 +186,14 @@ class wtwmenus {
 		return $zsettingsmenu;
 	}	
 
-	public function addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired) {
+	public function addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired, $zcssclass) {
 		global $wtwdb;
 		$zsuccess = false;
 		try {
 			$zfound = false;
+			if (empty($zcssclass) || !isset($zcssclass)) {
+				$zcssclass = 'wtw-slideupmenuright';
+			}
 			foreach ($this->settingsforms as $zsettingsform) {
 				if (isset($zsettingsform["formid"]) && !empty($zsettingsform["formid"])) {
 					if ($zsettingsform["formid"] == $zformid) {
@@ -203,7 +206,8 @@ class wtwmenus {
 					'formid' => $zformid,
 					'title' => $ztitle,
 					'formdata' => $zformdata,
-					'accessrequired' => $zaccessrequired
+					'accessrequired' => $zaccessrequired,
+					'cssclass' => $zcssclass
 				);
 				
 				$this->settingsforms[count($this->settingsforms)] = $zform;
@@ -226,15 +230,21 @@ class wtwmenus {
 				$zformdata = $zform["formdata"];
 				if ($wtwdb->hasPermission($zaccessrequired) || empty($zaccessrequired) || !isset($zaccessrequired)) {
 					/* check for invalid entries */
+					$zcssclass = $zform["cssclass"];
 					if (empty($zformid) | !isset($zformid)) {
 						$zformid = $wtwdb->getRandomString(6,1);
 					}
 					if (empty($zformdata) || !isset($zformdata)) {
 						$zformdata = '';
 					}
+					if (empty($zcssclass) || !isset($zcssclass)) {
+						$zcssclass = 'wtw-slideupmenuright';
+					}
 					if (!empty($zformdata) && isset($zformdata)) {
-						$zmenuforms .= "<div id=\"".$zformid."\" class=\"wtw-slideupmenuright\" style=\"display:none;visibility:hidden;\">";
-						$zmenuforms .= "	<img class=\"wtw-closeright\" onclick=\"WTW.closeMenus();\" src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />";
+						$zmenuforms .= "<div id=\"".$zformid."\" class=\"".$zcssclass."\" style=\"display:none;visibility:hidden;\">";
+						$zmenuforms .= "	<img class=\"wtw-closeright\" onclick=\"WTW.closeMenus('".$zformid."');\" src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />";
+						$zmenuforms .= "	<img id=\"".$zformid."min\" class=\"wtw-closeright\" onclick=\"WTW.resizeMenu('".$zformid."', 'min');\" src=\"/content/system/images/menuminimize.png\" alt=\"Minimize ".$ztitle."\" title=\"Minimize ".$ztitle."\" onmouseover=\"this.src='/content/system/images/menuminimizehover.png';\" onmouseout=\"this.src='/content/system/images/menuminimize.png';\" style=\"display:none;visibility:hidden;\" />\r\n";
+						$zmenuforms .= "	<img id=\"".$zformid."max\" class=\"wtw-closeright\" onclick=\"WTW.resizeMenu('".$zformid."', 'max');\" src=\"/content/system/images/menumaximize.png\" alt=\"Maximize ".$ztitle."\" title=\"Maximize ".$ztitle."\" onmouseover=\"this.src='/content/system/images/menumaximizehover.png';\" onmouseout=\"this.src='/content/system/images/menumaximize.png';\" style=\"display:none;visibility:hidden;\" />\r\n";
 						$zmenuforms .= "	<div class=\"wtw-menuheading\">".$ztitle."</div>";
 						$zmenuforms .= "	<div id=\"".$zformid."scroll\" class=\"wtw-mainmenuscroll\">";
 						$zmenuforms .= $zformdata;

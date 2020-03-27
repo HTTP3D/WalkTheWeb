@@ -38,15 +38,11 @@ class wtwadmin {
 			/* $jsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$zver."\"></script>\r\n"; */
 			$jsdata .= "<script src=\"/core/scripts/engine/cannon.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/babylon.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.gui.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.skymaterial.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.watermaterial.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.firematerial.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.mixmaterial.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.lavamaterial.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.triplanarmaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylonjs.loaders.min.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/babylon.materials.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.terrainmaterial.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylonjs.postProcess.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylon.gui.min.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/babylonjs.proceduralTextures.min.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/pep.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/loader.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/meshwriter.min.js?x=".$zver."\"></script>\r\n";

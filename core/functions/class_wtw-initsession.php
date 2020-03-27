@@ -18,9 +18,9 @@ class wtw {
 		require_once(wtw_rootpath.'/core/functions/class_wtwuser.php');
 	}	
 	
-	public $version = "3.2.2";
+	public $version = "3.2.3";
 	public $dbversion = "1.0.6";
-	public $versiondate = "2020-2-27";
+	public $versiondate = "2020-3-27";
 	public $serverinstanceid = "";
 	public $rootpath = "";
 	public $contentpath = "";
