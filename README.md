@@ -18,6 +18,17 @@ INSTALLATION
     (sample config file is provided in the /config folder)
     Open the website to complete the installation.
 
+
+Note: on Linux systems, add a .htaccess file in the root (or site config) with the following:
+
+# BEGIN WalkTheWeb
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+# END WalkTheWeb
+
 That is it! 
 
 LEARNING
