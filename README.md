@@ -31,7 +31,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 
 RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteRule . /index.php [R=301,L]
+RewriteRule ^.*$ /index.php?wtwpath=%{REQUEST_URI}&%{QUERY_STRING} [P]
 
 
 
