@@ -1,3 +1,4 @@
+<!-- admin menu form for editing the water depth in a 3D Community Scene -->
 <div id="wtw_adminmenu42b" class="wtw-hide">
 	<h2 class="wtw-center">Extended Land Height</h2>
 	<div style="font-size:1em;color:#c0c0c0;text-align:center;">Sets the Water Depth</div>

@@ -1,3 +1,4 @@
+<!-- admin menu form for editing user access to a 3D Community, Building, or Thing -->
 <div id="wtw_adminmenu61b" class="wtw-hide">
 	<h2>3D Community Access</h2>
 	<div style="white-space:normal;font-size:.5em;">Note: Neighbors are Users with 3D Buildings in this 3D Community.<br />

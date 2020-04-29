@@ -1,3 +1,4 @@
+<!-- admin menu form for editing a Connecting Grid, which sets the position, scaling, and rotation of 3D Communities, Buildings, and Things -->
 	<div id="wtw_adminmenu14b" class="wtw-smallprint" style="display:none;visibility:hidden;">
 		<h4 id="wtw_buildingnametitle"></h4>
 		<h4 id="wtw_buildingpositiontitle">3D Building Position</h4>

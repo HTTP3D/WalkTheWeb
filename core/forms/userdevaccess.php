@@ -1,3 +1,4 @@
+<!-- admin menu form for editing developer roles (depreciated) -->
 <div id="wtw_adminmenu60b" class="wtw-hide">
 	<h2>Add User</h2>
 	<div class="wtw-mainmenuvalue" style="font-size:.8em;">(User Name, Email, Display Name, or User ID)</div><br />

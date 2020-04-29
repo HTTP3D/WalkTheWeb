@@ -1,3 +1,4 @@
+<!-- admin menu form for Sharing a 3D Thing -->
 <div id="wtw_adminmenu39b" class="wtw-hide">
 	<h2>Template Name</h2>
 	<input type="text" id="wtw_tsharethingtempname" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><br />

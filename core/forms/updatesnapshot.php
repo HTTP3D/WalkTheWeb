@@ -1,3 +1,4 @@
+<!-- admin menu form for Updating a default snapshot of the 3D Item, this is used as the preview for when someone shares a link -->
 <div id="wtw_adminmenu69b" class="wtw-hide"><br />
 	<img id="wtw_defaultsnapshot" class="wtw-snapshot" />
 	<br />

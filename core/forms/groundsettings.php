@@ -1,3 +1,4 @@
+<!-- admin menu form for editing the extended ground texture -->
 <div id="wtw_adminmenu41b" class="wtw-hide">
 	<h2>Ground Texture Image:</h2>
 	<img id="wtw_showextendedgroundpreview" class="wtw-previewimage" /><br /><br />

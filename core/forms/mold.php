@@ -1,3 +1,4 @@
+<!-- admin menu form for editing molds (meshes and all associated information for when to load/unload them) -->
 		<div id="wtw_adminmenu11b" class="wtw-smallprint" style="display:none;visibility:hidden;">
 			<div id="wtw_objectdiv">
 				<h2 style="margin-bottom:3px;">3D Object</h2>

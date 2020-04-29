@@ -1,3 +1,4 @@
+<!-- admin menu form for editing 3D Building information -->
 	<div id="wtw_adminmenu5b" style="display:none;visibility:hidden;">
 		<h2>3D Building Name</h2>
 		<input type="text" id="wtw_tbuildingname" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><br />

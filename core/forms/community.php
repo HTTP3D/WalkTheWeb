@@ -1,3 +1,4 @@
+<!-- admin menu form for editing 3D Community Information -->
 	<div id="wtw_adminmenu25b" style="display:none;visibility:hidden;">
 		<h2>3D Community Name</h2>
 		<input type="text" id="wtw_tcommunityname" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><br />

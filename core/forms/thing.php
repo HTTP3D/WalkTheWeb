@@ -1,3 +1,4 @@
+<!-- admin menu form for editing 3D Thing information -->
 <div id="wtw_adminmenu35b" class="wtw-hide">
 	<div class="wtw-smallprint">
 		<h2>3D Thing Name</h2>

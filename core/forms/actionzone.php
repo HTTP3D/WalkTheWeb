@@ -1,3 +1,4 @@
+<!-- admin menu form for editing action zones, which apply actions based on avatar position (basically in or out of an action zone) -->
 	<div id="wtw_adminmenu20b" class="wtw-smallprint" style="display:none;visibility:hidden;">
 		<select id="wtw_tactionzonetypelist" style="display:none;visibility:hidden;"></select>
 		<h4>Action Zone Friendly Name</h4>

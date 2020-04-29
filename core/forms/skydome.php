@@ -1,3 +1,4 @@
+<!-- admin menu form for editing the 3D Community Scene sky -->
 <div id="wtw_adminmenu40b" class="wtw-hide">
 	<div id="wtw_skysetday" class="wtw-menulevel2" onclick="WTW.adminMenuItemSelected(this);">Set Day Scene</div>
 	<div id="wtw_skysetsunrise" class="wtw-menulevel2" onclick="WTW.adminMenuItemSelected(this);">Set Sunrise Scene</div>

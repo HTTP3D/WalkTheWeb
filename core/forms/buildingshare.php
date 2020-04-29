@@ -1,3 +1,4 @@
+<!-- admin menu form for Sharing a Building -->
 <div id="wtw_adminmenu9b" class="wtw-hide">
 	<h2>Template Name</h2>
 	<input type="text" id="wtw_tsharebuildtempname" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><br />
