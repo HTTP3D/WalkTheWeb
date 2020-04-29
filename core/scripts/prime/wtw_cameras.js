@@ -19,23 +19,6 @@ WTWJS.prototype.loadPrimaryCamera = function(parentmold) {
 		WTW.camera.angularSensibility = 1800;
 		WTW.camera.maxZ = 5000;
 		WTW.camera.id = "maincamera";
-		if (wtw_domain != null) {
-			var wtw_domaininfo = JSON.parse(wtw_domain);
-			if (wtw_domaininfo.domaininfo != null) {
-				WTW.init.startPositionX = Number(wtw_domaininfo.startlocation.position.x);
-				WTW.init.startPositionY = Number(wtw_domaininfo.startlocation.position.y);
-				WTW.init.startPositionZ = Number(wtw_domaininfo.startlocation.position.z);
-				WTW.init.startScalingX = Number(wtw_domaininfo.startlocation.scaling.x);
-				WTW.init.startScalingY = Number(wtw_domaininfo.startlocation.scaling.y);
-				WTW.init.startScalingZ = Number(wtw_domaininfo.startlocation.scaling.z);
-				WTW.init.startRotationX = Number(wtw_domaininfo.startlocation.rotation.x);
-				WTW.init.startRotationY = Number(wtw_domaininfo.startlocation.rotation.y);
-				WTW.init.startRotationZ = Number(wtw_domaininfo.startlocation.rotation.z);
-				if (WTW.init.startRotationX > 180) {
-					WTW.init.startRotationX -= 360;
-				}
-			}
-		}
 		WTW.camera.position.x = WTW.init.startPositionX;
 		WTW.camera.position.y = WTW.init.startPositionY + 16;
 		WTW.camera.position.z = WTW.init.startPositionZ;

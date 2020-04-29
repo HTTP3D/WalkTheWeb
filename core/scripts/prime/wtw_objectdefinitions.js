@@ -21,7 +21,7 @@ WTWJS.prototype.newMoldEvent = function() {
 	var moldevent = '';
 	try {
 		moldevent = {
-			'animationname':'',
+			'animationevent':'',
 			'moldevent':'onclick',
 			'moldname':'',
 			'mold':null,
@@ -56,8 +56,8 @@ WTWJS.prototype.newObjectAnimation = function() {
 			'objectanimationid':'',
 			'objectfolder':'',
 			'objectfile':'',
-			'animationname':'onclick',
-			'moldevent':'',
+			'animationname':'MyOnclick',
+			'moldevent':'onclick',
 			'moldnamepart':null,
 			'startframe':'1',
 			'endframe':'10',
@@ -90,7 +90,7 @@ WTWJS.prototype.newMoldQueue = function() {
 			'connectinggridind':'-1',
 			'check':true,
 			'molddef':WTW.newMold(),
-			'parentname':WTW.mainParent,
+			'parentname':WTW.mainParent.name,
 			'coveringname':'texture',
 			'csgmolddef':null,
 		};
@@ -550,9 +550,9 @@ WTWJS.prototype.newAvatarDef = function() {
 		avatardef = {
 			'position':
 			{
-				'x':'0.00',
-				'y':'0.00',
-				'z':'0.00'
+				'x':WTW.init.startPositionX,
+				'y':WTW.init.startPositionY,
+				'z':WTW.init.startPositionZ
 			},
 			'lastposition':
 			{
@@ -575,7 +575,7 @@ WTWJS.prototype.newAvatarDef = function() {
 			'rotation':
 			{
 				'x':'0.00',
-				'y':'0.00',
+				'y':WTW.init.startRotationY,
 				'z':'0.00'
 			},
 			'lastrotation':
@@ -607,17 +607,25 @@ WTWJS.prototype.newAvatarDef = function() {
 			'avataranimationdefs': avataranimationdefs,
 			'animations': animations,
 			'name':'',
+			'globalavatarid':'',
+			'useravatarid':'',
+			'avatarid':'',
 			'avatarind':'1',
 			'trackid':'',
 			'instanceid':'',
 			'userid':'',
+			'anonymous':'1',
 			'avatar':'default',
 			'displayname':'',
-			'privacy':'',
+			'privacy':'0',
 			'enteranimation':'1',
 			'enteranimationparameter':'',
 			'exitanimation':'1',
 			'exitanimationparameter':'',
+			'walkspeed':'1',
+			'walkanimationspeed':'1',
+			'turnspeed':'1',
+			'turnanimationspeed':'1',
 			'shown':'0',
 			'opacity':'1',
 			'checkcollisions':'0',
@@ -642,7 +650,7 @@ WTWJS.prototype.newAvatarAnimationDef = function() {
 			'animationind':-1,
 			'useravataranimationid':'',
 			'avataranimationid':'',
-			'animationname':'onoption',
+			'animationevent':'onoption',
 			'animationfriendlyname':'',
 			'loadpriority':0,
 			'animationicon':'',
@@ -676,7 +684,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[0] = {
 						'useravataranimationid':'',
 						'avataranimationid':'ohb6x5ze1112a9e6',
-						'animationname':'onwait',
+						'animationevent':'onwait',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -697,7 +705,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[0] = {
 						'useravataranimationid':'',
 						'avataranimationid':'wc004i6dcn4rdn2g',
-						'animationname':'onwait',
+						'animationevent':'onwait',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -718,7 +726,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[0] = {
 						'useravataranimationid':'',
 						'avataranimationid':'gfso15ljwulgi6c9',
-						'animationname':'onwait',
+						'animationevent':'onwait',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -739,7 +747,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[0] = {
 						'useravataranimationid':'',
 						'avataranimationid':'45dg48tccn60jnna',
-						'animationname':'onwait',
+						'animationevent':'onwait',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -760,7 +768,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[0] = {
 						'useravataranimationid':'',
 						'avataranimationid':'78k4zhhzhemwlcvc',
-						'animationname':'onwait',
+						'animationevent':'onwait',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -781,7 +789,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[0] = {
 						'useravataranimationid':'',
 						'avataranimationid':'n3i9s7ophcae5h1r',
-						'animationname':'onwait',
+						'animationevent':'onwait',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -802,7 +810,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[0] = {
 						'useravataranimationid':'',
 						'avataranimationid':'o4kgmoik9nf8ws7p',
-						'animationname':'onwait',
+						'animationevent':'onwait',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -823,7 +831,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[0] = {
 						'useravataranimationid':'',
 						'avataranimationid':'o3h47opkqwat7mge',
-						'animationname':'onwait',
+						'animationevent':'onwait',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -844,7 +852,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[0] = {
 						'useravataranimationid':'',
 						'avataranimationid':'5nt31zrtvvq4cdu3',
-						'animationname':'onwait',
+						'animationevent':'onwait',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -865,7 +873,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[0] = {
 						'useravataranimationid':'',
 						'avataranimationid':'r9087b004i9ptv0e',
-						'animationname':'onwait',
+						'animationevent':'onwait',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -892,7 +900,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[1] = {
 						'useravataranimationid':'',
 						'avataranimationid':'1wfesp5owhoxl9gj',
-						'animationname':'onwalk',
+						'animationevent':'onwalk',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -913,7 +921,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[1] = {
 						'useravataranimationid':'',
 						'avataranimationid':'b03ftsjbxr0sxam8',
-						'animationname':'onwalk',
+						'animationevent':'onwalk',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -940,7 +948,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[2] = {
 						'useravataranimationid':'',
 						'avataranimationid':'aryiq3b9d4i7iwz6',
-						'animationname':'onwalkbackwards',
+						'animationevent':'onwalkbackwards',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -961,7 +969,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 					animationdefs[2] = {
 						'useravataranimationid':'',
 						'avataranimationid':'0ikarv3xbs0n7544',
-						'animationname':'onwalkbackwards',
+						'animationevent':'onwalkbackwards',
 						'animationfriendlyname':'',
 						'loadpriority':0,
 						'animationicon':'',
@@ -982,7 +990,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[3] = {
 				'useravataranimationid':'',
 				'avataranimationid':'9xworrh44cbkwq1y',
-				'animationname':'onturnleft',
+				'animationevent':'onturnleft',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',
@@ -1001,7 +1009,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[4] = {
 				'useravataranimationid':'',
 				'avataranimationid':'mbpjld4fttowgnt6',
-				'animationname':'onturnright',
+				'animationevent':'onturnright',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',
@@ -1020,7 +1028,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[5] = {
 				'useravataranimationid':'',
 				'avataranimationid':'hur9z71kpv6b2bgb',
-				'animationname':'onstrafeleft',
+				'animationevent':'onstrafeleft',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',
@@ -1039,7 +1047,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[6] = {
 				'useravataranimationid':'',
 				'avataranimationid':'6x3o6sh2u1m1bjnq',
-				'animationname':'onstraferight',
+				'animationevent':'onstraferight',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',
@@ -1058,7 +1066,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[7] = {
 				'useravataranimationid':'',
 				'avataranimationid':'mz182mwpsvx1f1va',
-				'animationname':'onrun',
+				'animationevent':'onrun',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',
@@ -1077,7 +1085,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[8] = {
 				'useravataranimationid':'',
 				'avataranimationid':'rzn9d3dihtq4h2v5',
-				'animationname':'onrunbackwards',
+				'animationevent':'onrunbackwards',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',
@@ -1096,7 +1104,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[9] = {
 				'useravataranimationid':'',
 				'avataranimationid':'45dh9tcbikbvhqa9',
-				'animationname':'onrunturnleft',
+				'animationevent':'onrunturnleft',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',
@@ -1115,7 +1123,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[10] = {
 				'useravataranimationid':'',
 				'avataranimationid':'gi7iwy1cobjpzqpf',
-				'animationname':'onrunturnright',
+				'animationevent':'onrunturnright',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',
@@ -1134,7 +1142,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[11] = {
 				'useravataranimationid':'',
 				'avataranimationid':'xd3eqg21webe0wff',
-				'animationname':'onrunstrafeleft',
+				'animationevent':'onrunstrafeleft',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',
@@ -1153,7 +1161,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[12] = {
 				'useravataranimationid':'',
 				'avataranimationid':'w547k8hrbbn89k4v',
-				'animationname':'onrunstraferight',
+				'animationevent':'onrunstraferight',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',
@@ -1172,7 +1180,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[13] = {
 				'useravataranimationid':'',
 				'avataranimationid':'i547k8hrtbn89k4s',
-				'animationname':'onjump',
+				'animationevent':'onjump',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',
@@ -1191,7 +1199,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[14] = {
 				'useravataranimationid':'',
 				'avataranimationid':'j548k8hrtbs89k4t',
-				'animationname':'onwalkjump',
+				'animationevent':'onwalkjump',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',
@@ -1210,7 +1218,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function(avatarind) {
 			animationdefs[15] = {
 				'useravataranimationid':'',
 				'avataranimationid':'h748k8hqtbs87k4r',
-				'animationname':'onrunjump',
+				'animationevent':'onrunjump',
 				'animationfriendlyname':'',
 				'loadpriority':0,
 				'animationicon':'',

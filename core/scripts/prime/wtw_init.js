@@ -5,7 +5,6 @@
 WTWJS.prototype.initEvents = function() {
 	try {
 		dGet('wtw_renderCanvas').addEventListener("click", WTW.mouseClick);
-		window.addEventListener("beforeunload", WTW.onUnload,false);
 		window.addEventListener("onkeydown", WTW.keyDown,true);
 		window.addEventListener("keydown", WTW.keyDown);		
 		window.addEventListener("onkeyup", WTW.keyUp,true);
@@ -22,12 +21,18 @@ WTWJS.prototype.initEvents = function() {
 		dGet('wtw_renderCanvas').addEventListener("mousedown", WTW.mouseDown);
 		dGet('wtw_renderCanvas').addEventListener("mouseup", WTW.mouseUp);
 		dGet('wtw_renderCanvas').addEventListener("mousemove", WTW.mouseMove);
-		dGet('wtw_renderCanvas').addEventListener("contextmenu", WTW.mouseRight);
+		window.addEventListener("contextmenu", WTW.mouseRight);
 		window.addEventListener('touchstart', WTW.touchDown, false);
 		window.addEventListener('touchend', WTW.touchUp, false);
 		window.addEventListener('touchmove', WTW.touchMoving, false);
 		window.addEventListener('touchcancel', WTW.touchCancel, false);
 		window.addEventListener('touchleave', WTW.touchCancel, false); 
+		window.addEventListener("beforeunload", WTW.beforeUnload,false);
+		if (window.addEventListener) {
+			window.addEventListener("message", WTW.onMessage, false);        
+		} else if (window.attachEvent) {
+			window.attachEvent("onmessage", WTW.onMessage, false);
+		}
 	} catch (ex) {
 		WTW.log("init-initEvents=" + ex.message);
 	}

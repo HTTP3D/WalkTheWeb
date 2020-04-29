@@ -110,14 +110,6 @@ WTWJS.prototype.refresh = function() {
 	}
 }
 
-WTWJS.prototype.onUnload = function() {
-	try {
-		WTW.pluginsOnUnload();
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-onUnload=" + ex.message);
-	}
-}
-
 WTWJS.prototype.checkLoadJSFile = function(filename, filetype) {
 	try {
 		if (WTW.loadedJSFiles.indexOf("[" + filename + "]") == -1) {
@@ -345,6 +337,24 @@ WTWJS.prototype.unhilightMold = function(moldname) {
 	}
 }
 
+WTWJS.prototype.isTextBox = function(element) {
+	let istextbox = false;
+	try {
+		var tagName = element.tagName.toLowerCase();
+		if (tagName === 'textarea') return true;
+		if (tagName !== 'input') return false;
+		var type = element.getAttribute('type').toLowerCase(),
+			/* if any of these input types is not supported by a browser, it will behave as input type text. */
+			inputTypes = ['text', 'password', 'number', 'email', 'tel', 'url', 'search', 'date', 'datetime', 'datetime-local', 'time', 'month', 'week'];
+		if (inputTypes.indexOf(type) >= 0) {
+			istextbox = true;
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-isTextBox=" + ex.message);
+	}
+    return istextbox;
+}
+
 WTWJS.prototype.cleanHTMLText = function(htmltext) {
 	try {
 		var div = document.createElement('div');
@@ -474,6 +484,21 @@ WTWJS.prototype.setWindowSize = function() {
 				dGet('wtw_fullpageform').style.width = (WTW.sizeX - 5 - Number(dGet('wtw_adminmenubutton').style.left.replace("px",""))).toString() + 'px';
 			}
 		}
+		if (dGet('wtw_ibrowsediv').style.display != "none") {
+			var zwidth = dGet('wtw_ibrowsediv').clientWidth;
+			var zheight = dGet('wtw_ibrowsediv').clientHeight;
+			if (WTW.isNumeric(zwidth)) {
+				dGet('wtw_ibrowsediv').style.width = Math.round(Number(zwidth)) + "px";
+				dGet('wtw_ibrowsediv').style.left = Math.round((WTW.sizeX - Number(zwidth)) / 2) + "px";
+			}
+			if (WTW.isNumeric(zheight)) {
+				dGet('wtw_ibrowsediv').style.height = Math.round(Number(zheight)) + "px";
+				dGet('wtw_ibrowsediv').style.top = Math.round((WTW.sizeY - Number(zheight)) / 2) + "px";
+			}
+			dGet('wtw_ibrowsediv').style.display = "inline-block";
+			dGet('wtw_ibrowsediv').style.visibility = "visible";
+			dGet('wtw_ibrowsediv').style.zIndex = 3000;
+		}
 		if (engine != undefined) {
 			engine.resize();
 		}
@@ -560,20 +585,20 @@ WTWJS.prototype.getBrowser = function() {
     try {
         var isopera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0; // Opera 8.0+
         var isfirefox = typeof InstallTrigger !== 'undefined'; // Firefox 1.0+
-        var issafari = /constructor/i.test(window.HTMLElement) || (function (p) {
-            return p.toString() === "[object SafariRemoteNotification]";
-        })(!window['safari'] || safari.pushNotification); // Safari 3.0+ 
-
+        var issafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification)); // Safari 3.0+ 
+        var ischrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime); // Chrome 1+
+		var isedgechromium = ischrome && (navigator.userAgent.indexOf("Edg") != -1); // Edge (based on chromium) detection
         var isie = /*@cc_on!@*/ false || !!document.documentMode; // Internet Explorer 6-11
         var isedge = !isie && !!window.StyleMedia; // Edge 20+
-        var ischrome = !!window.chrome && !!window.chrome.webstore; // Chrome 1+
-        //var isblink = (ischrome || isopera) && !!window.CSS; // Blink engine detection
+		var isblink = (ischrome || isopera) && !!window.CSS; // Blink engine detection
         browser = isopera ? 'opera' :
             isfirefox ? 'firefox' :
             issafari ? 'safari' :
+			ischrome ? 'chrome' :
+			isedgechromium ? 'edgechrome' :
             isie ? 'ie' :
             isedge ? 'edge' :
-            ischrome ? 'chrome' :
+            isblink ? 'blink' :
             'unknown';
     } catch (ex) {
         WTW.log("core-scripts-prime-wtw_common.js-getBrowser=" + ex.message);
@@ -1201,24 +1226,31 @@ WTWJS.prototype.openWebpage = function(url, target) {
 	}
 }
 
-WTWJS.prototype.openIFrame = function(url, width, height) {
+WTWJS.prototype.openIFrame = function(url, zwidth, zheight, ztitle) {
 	try {
+		if (ztitle == undefined) {
+			ztitle = "";
+		}
 		WTW.setWindowSize();
-		if (typeof width === "undefined" || width === null) {
-			width = .9; 
+		if (typeof zwidth === "undefined" || zwidth === null) {
+			zwidth = .9; 
 		}
-		if (typeof height === "undefined" || height === null) {
-			height = .9; 
+		if (typeof zheight === "undefined" || zheight === null) {
+			zheight = .9; 
 		}
+		WTW.hide('wtw_ipagediv');
+		WTW.show('wtw_ibrowseframe');
 		var iframe = dGet('wtw_ibrowseframe');
 		iframe.onload = function() {
 			WTW.iFrameOnLoad();
 		};
-		iframe.src = url;
-		dGet('wtw_ibrowsediv').style.width = Math.round(WTW.sizeX * width) + "px";
-		dGet('wtw_ibrowsediv').style.height = Math.round(WTW.sizeY * height) + "px";
-		dGet('wtw_ibrowsediv').style.left = Math.round((WTW.sizeX * (1 - width)) / 2) + "px";
-		dGet('wtw_ibrowsediv').style.top = Math.round((WTW.sizeY * (1 - height)) / 2) + "px";
+		if (iframe.src != url) {
+			iframe.src = url;
+		}
+		dGet('wtw_ibrowsediv').style.width = Math.round(WTW.sizeX * zwidth) + "px";
+		dGet('wtw_ibrowsediv').style.height = Math.round(WTW.sizeY * zheight) + "px";
+		dGet('wtw_ibrowsediv').style.left = Math.round((WTW.sizeX * (1 - zwidth)) / 2) + "px";
+		dGet('wtw_ibrowsediv').style.top = Math.round((WTW.sizeY * (1 - zheight)) / 2) + "px";
 		dGet('wtw_ibrowsediv').style.display = "inline-block";
 		dGet('wtw_ibrowsediv').style.visibility = "visible";
 		dGet('wtw_ibrowsediv').style.zIndex = 3000;
@@ -1226,7 +1258,7 @@ WTWJS.prototype.openIFrame = function(url, width, height) {
 			iframe.onload = function() { WTW.setHelp();	};
 			dGet('wtw_browsetitle').innerHTML = "WalkTheWeb - Help";
 		} else {
-			dGet('wtw_browsetitle').innerHTML = "";
+			dGet('wtw_browsetitle').innerHTML = ztitle;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-openIFrame=" + ex.message);
@@ -1235,6 +1267,27 @@ WTWJS.prototype.openIFrame = function(url, width, height) {
 	}
 }
 
+WTWJS.prototype.resizeIFrame = function(zdimensions) {
+	try {
+		/* zdimensions = zwidth, zheight */
+		let zwidth = zdimensions[0];
+		let zheight = zdimensions[1];
+		WTW.setWindowSize();
+		if (typeof zwidth === "undefined" || zwidth === null) {
+			zwidth = .9; 
+		}
+		if (typeof zheight === "undefined" || zheight === null) {
+			zheight = .9; 
+		}
+		dGet('wtw_ibrowsediv').style.width = Math.round(WTW.sizeX * zwidth) + "px";
+		dGet('wtw_ibrowsediv').style.height = Math.round(WTW.sizeY * zheight) + "px";
+		dGet('wtw_ibrowsediv').style.left = Math.round((WTW.sizeX * (1 - zwidth)) / 2) + "px";
+		dGet('wtw_ibrowsediv').style.top = Math.round((WTW.sizeY * (1 - zheight)) / 2) + "px";
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-resizeIFrame=" + ex.message);
+	}
+}
+		
 WTWJS.prototype.iFrameOnLoad = function() {
 	try {
 		var iframe = dGet('wtw_ibrowseframe');
@@ -1261,6 +1314,833 @@ WTWJS.prototype.closeIFrame = function() {
 		dGet('wtw_ibrowseframe').src = "/core/pages/loading.php";
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-closeIFrame=" + ex.message);
+	}
+}
+
+WTWJS.prototype.transferMainParent = function(zparentmold) {
+	try {
+    } catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-transferMainParent=" + ex.message);
+    }
+}
+
+WTWJS.prototype.openGlobalLogin = function() {
+	try {
+		WTW.openIFrame("https://3dnet.walktheweb.com/core/login/login.php?serverinstance=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&webid=" + btoa(communityid + buildingid + thingid), .3, .6, "Login Menu");
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-openGlobalLogin=" + ex.message);
+	}
+}
+
+WTWJS.prototype.logoutGlobal = function() {
+	try {
+		WTW.openIFrame("https://3dnet.walktheweb.com/core/login/login.php?logout=1&serverinstance=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&webid=" + btoa(communityid + buildingid + thingid), .3, .6, "Login Menu");
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-logoutGlobal=" + ex.message);
+	}
+}
+
+WTWJS.prototype.globalLogin = function(zparameters) {
+	try {
+		let zusername = "";
+		let zglobaluserid = "-1";
+		let zemail = "";
+		let zaccesstoken = "";
+		if (zparameters.indexOf('|') > -1) {
+			let zparameter = zparameters.split('|');
+			zemail = atob(zparameter[0]);
+			zglobaluserid = atob(zparameter[1]);
+			zaccesstoken = atob(zparameter[2]);
+			zusername = zemail.split('@')[0];
+			var zrequest = {
+				'username':btoa(zusername),
+				'globaluserid':btoa(zglobaluserid),
+				'useremail':btoa(zemail),
+				'accesstoken':btoa(zaccesstoken),
+				'function':'globallogin'
+			};
+			WTW.postJSON("/core/handlers/users.php", zrequest,
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* continue if no errors */
+					if (WTW.globalLoginResponse(zresponse)) {
+						WTW.openLocalLogin('Select My Avatar',.3,.6);
+					}
+				}
+			);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-globalLogin=" + ex.message);
+	}
+}
+
+WTWJS.prototype.globalLoginResponse = function(zresults) {
+	let znoerror = true;
+	try {
+		var serror = "";
+		if (zresults != null) {
+			if (zresults.serror != undefined) {
+				if (zresults.serror != '') {
+					znoerror = false;
+					serror = zresults.serror;
+					dGet('wtw_tglobaluserid').value = '';
+					dGet('wtw_tuserid').value = '';
+					dGet('wtw_tusername').value = '';
+					dGet('wtw_tuseremail').value = '';
+					dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
+					dGet('wtw_menudisplayname').innerHTML = 'Login';
+					dGet('wtw_tuserimageurl').value = "";
+					dGet('wtw_menuusername').innerHTML = 'Login';
+					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
+					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
+					dGet('wtw_taccesstoken').value = '';
+				}
+				if (zresults.userid != '') {
+					dGet('wtw_taccesstoken').value = zresults.accesstoken;
+					dGet('wtw_tglobaluserid').value = zresults.globaluserid;
+					WTW.hide('wtw_menulogin');
+					WTW.show('wtw_menuloggedin');
+					WTW.setLoginValues(zresults.userid, zresults.username, zresults.displayname, zresults.email, zresults.userimageurl);
+				} else {
+					WTW.hide('wtw_menuloggedin');
+					WTW.show('wtw_menulogin');
+				}
+			}
+		}
+		var iframe = dGet('wtw_ibrowseframe');
+		window.parent.postMessage({
+			'message': serror
+		}, "*");
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-globalLoginResponse=" + ex.message);
+	}
+	return znoerror;
+}
+
+WTWJS.prototype.openLoginMenu = function() {
+	try {
+		if (dGet('wtw_tuserid').value != '') {
+			WTW.openLocalLogin('Local Profile', .3, .5);
+		} else {
+			WTW.openLocalLogin('Login Menu', .3, .5);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-openLoginMenu=" + ex.message);
+	}
+}
+
+WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
+	try {
+		WTW.setWindowSize();
+		if (typeof zwidth === "undefined" || zwidth === null) {
+			zwidth = .9; 
+		}
+		if (typeof zheight === "undefined" || zheight === null) {
+			zheight = .9; 
+		}
+		let zpagediv = "";
+		dGet('wtw_browsetitle').innerHTML = zitem;
+		dGet('wtw_browseheaderclose').onclick = function() {WTW.closeIFrame();};
+		switch (zitem) {
+			case "Local Profile":	
+				zpagediv += "<h2 class=\"wtw-login\">Profile</h2>";
+				
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				break;
+			case "Login Menu":
+				zpagediv += "<h2 class=\"wtw-login\">Login Menu</h2>" +
+					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openGlobalLogin();\"><img src=\"/content/system/images/menuwtw.png\" alt=\"WalkTheWeb\" title=\"WalkTheWeb\" class=\"wtw-loginlogo\"/><img id=\"wtw_globalcheck\" src=\"/content/system/images/greencheck.png\" class=\"wtw-checkcircle\" /><div style=\"margin-top:4px;\">WalkTheWeb Global Login<br /><span style=\"font-size:.6em;\">(Works on most WalkTheWeb 3D Websites)</span></div></div>" +
+					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('3D Website Login', .3, .6);\"><img src=\"/content/system/images/icon-128x128.jpg\" alt=\"HTTP3D Inc.\" title=\"HTTP3D Inc.\" class=\"wtw-loginlogo\"/><img id=\"wtw_localcheck\" src=\"/content/system/images/greencheck.png\" class=\"wtw-checkcircle\" /><div style=\"margin-top:4px;\">3D Website Login<br /><span style=\"font-size:.6em;\">(3D Websites on this Server Only)</span></div></div>";
+				if (dGet('wtw_tuserid').value != '') {
+					zpagediv += "<div class=\"wtw-logincancel\" onclick=\"WTW.logoutGlobal();\">Logout Global</div>&nbsp;&nbsp;" +
+					"<div class=\"wtw-logincancel\" onclick=\"WTW.logout();\" style=\"width:170px;\">Logout 3D Website Only</div>";
+				} else {
+					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Select an Anonymous Avatar', .3, .5);\"><img src=\"/content/system/images/menuprofilebig.png\" alt=\"Anonymous Login\" title=\"Anonymous Login\" class=\"wtw-loginlogo\"/><div style=\"margin-top:10px;\">Continue as Anonymous</div></div>";
+				}
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				if (dGet('wtw_taccesstoken').value == '') {
+					dGet('wtw_globalcheck').style.visibility = 'hidden';
+				}
+				if (dGet('wtw_tuserid').value == '') {
+					dGet('wtw_localcheck').style.visibility = 'hidden';
+				}
+				break;
+			case "3D Website Login":
+				zpagediv += "<h2 class=\"wtw-login\">3D Website Login</h2>" +
+					"<div class=\"wtw-loginlabel\">User Name</div><div><input type=\"text\" id=\"wtw_tlogin\" autocomplete=\"username\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabel\">Password</div><div><input type=\"password\" id=\"wtw_tpassword\" autocomplete=\"current-password\" class=\"wtw-textbox\" maxlength=\"256\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabelspace\">&nbsp;</div><div class=\"wtw-logintext\"><input type=\"checkbox\" id=\"wtw_trememberlogin\" class=\"wtw-checkbox\" /> Remember Me</div><div style=\"clear:both;\"></div><br />" +
+					"<div id=\"wtw_loginerrortext\" class=\"wtw-errortext\">&nbsp;</div><br />" +
+					"<div class=\"wtw-loginbutton\" onclick=\"WTW.loginAttempt();\"><img src=\"/content/system/images/icon-128x128.jpg\" alt=\"HTTP3D Inc.\" title=\"HTTP3D Inc.\" class=\"wtw-loginlogo\"/><div style=\"margin-top:10px;\">3D Website Login</div></div>" +
+					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLoginMenu();\">Cancel</div>&nbsp;&nbsp;" +
+					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Recover Login', .3, .5);\">Forgot Login?</div>&nbsp;&nbsp;" +
+					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Create Login', .3, .7);\">Create Login</div>";
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				var zlogin = WTW.getCookie("rememberlogin");
+				if (zlogin != '') {
+					dGet('wtw_tlogin').value = zlogin;
+					dGet('wtw_trememberlogin').checked = true;
+				} else {
+					dGet('wtw_trememberlogin').checked = false;
+				}
+				break;
+			case "Recover Login":
+				zpagediv += "<h2 class=\"wtw-login\">Recover Login</h2>" +
+					"<div class=\"wtw-loginlabel\">Email</div><div><input type=\"text\" id=\"wtw_trecoverbyemail\" autocomplete=\"email\" class=\"wtw-textbox\" maxlength=\"256\" /></div><div style=\"clear:both;\"></div>" +
+					"<div id=\"wtw_recovererrortext\" class=\"wtw-errortext\">&nbsp;</div><br />" +
+					"<div class=\"wtw-loginbutton\" onclick=\"WTW.recoverLogin();\"><div style=\"margin-top:10px;\">Recover my Password</div></div>" +
+					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('3D Website Login', .3, .6);\">Return to Login</div>&nbsp;&nbsp;";
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				break;
+			case "Create Login":
+				zpagediv += "<h2 class=\"wtw-login\">Create 3D Website Login</h2>" +
+					"<div class=\"wtw-loginlabel\">User Name</div><div><input type=\"text\" id=\"wtw_tnewlogin\" autocomplete=\"username\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabel\">Email</div><div><input type=\"text\" id=\"wtw_tnewemail\" autocomplete=\"email\" class=\"wtw-textbox\" maxlength=\"256\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabelspace\" id=\"wtw_passwordstrengthdiv\" style=\"visibility:hidden;text-align:center;margin-left:220px;margin-top:0px;\"><input type=\"text\" id=\"wtw_tpasswordstrength\" style=\"visibility:hidden;\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabel\">Password</div><div><input type=\"password\" id=\"wtw_tnewpassword\" autocomplete=\"new-password\" class=\"wtw-textbox\" maxlength=\"256\" onkeyup=\"WTW.checkPassword(this,'wtw_tpasswordstrength');WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');\" onfocus=\"WTW.registerPasswordFocus();\" onblur=\"WTW.registerPasswordBlur();\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabel\">Confirm Password</div><div><input type=\"password\" id=\"wtw_tnewpassword2\" autocomplete=\"new-password\" class=\"wtw-textbox\" maxlength=\"256\" onkeyup=\"WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');\" /></div><div style=\"clear:both;\"></div>" +
+					"<div id=\"wtw_registererrortext\" class=\"wtw-errortext\">&nbsp;</div><br />" +
+					"<div class=\"wtw-loginbutton\" onclick=\"WTW.createAccount();\"><div style=\"margin-top:10px;\">Create Login</div></div>" +
+					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('3D Website Login', .3, .6);\">Cancel</div>";
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				break;
+			case "Select My Avatar":
+				zpagediv += "<h2 class=\"wtw-login\">Select My Avatar</h2>" +
+					"<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:60%;\"><div id=\"wtw_myavatars\"></div></div><br />" + 
+					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openAvatarDesigner();\"><div style=\"margin-top:4px;\">Create My New Avatar</div></div>";
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				WTW.getMyAvatarList();
+				break;
+			case "Select an Anonymous Avatar":
+				zpagediv += "<h2 class=\"wtw-login\">Select an Anonymous Avatar</h2>" + 
+					"<div class=\"wtw-loadingmenu\">Loading</div>" + 
+					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Login Menu', .3, .5);\">Cancel</div>";
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				WTW.getAnonymousAvatarList();
+				break;
+		}
+		WTW.hide('wtw_ibrowseframe');
+		WTW.show('wtw_ipagediv');
+		dGet('wtw_ibrowsediv').style.width = Math.round(WTW.sizeX * zwidth) + "px";
+		dGet('wtw_ibrowsediv').style.height = Math.round(WTW.sizeY * zheight) + "px";
+		dGet('wtw_ibrowsediv').style.left = Math.round((WTW.sizeX * (1 - zwidth)) / 2) + "px";
+		dGet('wtw_ibrowsediv').style.top = Math.round((WTW.sizeY * (1 - zheight)) / 2) + "px";
+		dGet('wtw_ibrowsediv').style.display = "inline-block";
+		dGet('wtw_ibrowsediv').style.visibility = "visible";
+		dGet('wtw_ibrowsediv').style.zIndex = 3000;
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-openLocalLogin=" + ex.message);
+		WTW.closeIFrame();
+	}
+}
+
+WTWJS.prototype.getAnonymousAvatarList = function() {
+	try {
+		WTW.getJSON("/connect/avatars.php?groups=anonymous", 
+			function(zresponse) {
+				var zanonavatars = [];
+				if (zresponse != null) {
+					zresponse = JSON.parse(zresponse);
+					if (zresponse.avatars != null) {
+						for (var i=0;i<zresponse.avatars.length;i++) {
+							if (zresponse.avatars[i] != null) {
+								zanonavatars[zanonavatars.length] = {
+									'globalavatarid': '',
+									'useravatarid': zresponse.avatars[i].useravatarid,
+									'avatarid': zresponse.avatars[i].avatarid,
+									'avatargroup': zresponse.avatars[i].avatargroup,
+									'displayname': zresponse.avatars[i].displayname,
+									'gender': zresponse.avatars[i].gender,
+									'object': {
+										'folder': zresponse.avatars[i].object.folder,
+										'file': zresponse.avatars[i].object.file
+									},
+									'scaling': {
+										'x': zresponse.avatars[i].scaling.x,
+										'y': zresponse.avatars[i].scaling.y,
+										'z': zresponse.avatars[i].scaling.z
+									},
+									'thumbnails': {
+										'imagefull': zresponse.avatars[i].thumbnails.imagefull,
+										'imageface': zresponse.avatars[i].thumbnails.imageface
+									},
+									'sortorder': zresponse.avatars[i].sortorder,
+									'selected': false
+								}
+							}
+						}
+					}
+				}
+				var zpagediv = "<h2 class=\"wtw-login\">Select an Anonymous Avatar</h2>";
+				zpagediv += "<div class=\"wtw-imagescrollhorizontal\">";
+				if (zanonavatars.length > 0) {
+					for (var i=0;i<zanonavatars.length;i++) {
+						if (zanonavatars[i] != null) {
+							zpagediv += "<div class=\"wtw-imagescroll\" onclick=\"WTW.onMyAvatarSelect('', '', '" + zanonavatars[i].avatarid + "');\"><img src=\"" + zanonavatars[i].object.folder + zanonavatars[i].thumbnails.imageface + "\" title=\"" + zanonavatars[i].displayname + "\" alt=\"" + zanonavatars[i].displayname + "\" class=\"wtw-imagesavatar\" /></div>";
+						}
+					}
+				} else {
+					zpagediv += "No Anonymous Avatars Available";
+				}
+				zpagediv += "</div>";
+				zpagediv += "<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Login Menu', .3, .5);\">Cancel</div>";
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-getAnonymousAvatarList=" + ex.message);
+	}
+}
+
+WTWJS.prototype.getMyAvatarList = function() {
+	try {
+		let zmyavatars = [];
+		let zlocalcomplete = false;
+		let zglobalcomplete = false;
+		if (dGet('wtw_myavatars') != null) {
+			WTW.getJSON("/connect/avatars.php?groups=my", 
+				function(zresponse) {
+					if (zresponse != null) {
+						zresponse = JSON.parse(zresponse);
+						if (zresponse.avatars != null) {
+							if (zresponse.avatars.length > 0) {
+								for (var i=0;i<zresponse.avatars.length;i++) {
+									if (zresponse.avatars[i] != null) {
+										zmyavatars[zmyavatars.length] = {
+											'globalavatarid': '',
+											'useravatarid': zresponse.avatars[i].useravatarid,
+											'avatarid': zresponse.avatars[i].avatarid,
+											'avatargroup': zresponse.avatars[i].avatargroup,
+											'displayname': zresponse.avatars[i].displayname,
+											'gender': zresponse.avatars[i].gender,
+											'object': {
+												'folder': zresponse.avatars[i].object.folder,
+												'file': zresponse.avatars[i].object.file
+											},
+											'scaling': {
+												'x': zresponse.avatars[i].scaling.x,
+												'y': zresponse.avatars[i].scaling.y,
+												'z': zresponse.avatars[i].scaling.z
+											},
+											'thumbnails': {
+												'imagefull': zresponse.avatars[i].thumbnails.imagefull,
+												'imageface': zresponse.avatars[i].thumbnails.imageface
+											},
+											'sortorder': zresponse.avatars[i].sortorder,
+											'selected': false
+										}
+									}
+								}
+							}
+						}
+					}
+					zlocalcomplete = true;
+					if (zglobalcomplete) {
+						WTW.showMyAvatarList(zmyavatars);
+					}
+				}
+			);
+			// call for global list
+			var zrequest = {
+				'accesstoken':dGet('wtw_taccesstoken').value,
+				'globaluserid':btoa(dGet('wtw_tglobaluserid').value),
+				'serverinstanceid':btoa(dGet('wtw_serverinstanceid').value),
+				'groups':'my',
+				'function':'getmyglobalavatars'
+			};
+			WTW.postJSON("https://3dnet.walktheweb.com/connect/globalavatars.php", zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					if (zresponse.avatars != null) {
+						if (zresponse.avatars.length > 0) {
+							for (var i=0;i<zresponse.avatars.length;i++) {
+								if (zresponse.avatars[i] != null) {
+									zmyavatars[zmyavatars.length] = {
+										'globalavatarid': zresponse.avatars[i].globalavatarid,
+										'useravatarid': zresponse.avatars[i].useravatarid,
+										'avatarid': zresponse.avatars[i].avatarid,
+										'avatargroup': zresponse.avatars[i].avatargroup,
+										'displayname': zresponse.avatars[i].displayname,
+										'gender': zresponse.avatars[i].gender,
+										'object': {
+											'folder': zresponse.avatars[i].object.folder,
+											'file': zresponse.avatars[i].object.file
+										},
+										'scaling': {
+											'x': zresponse.avatars[i].scaling.x,
+											'y': zresponse.avatars[i].scaling.y,
+											'z': zresponse.avatars[i].scaling.z
+										},
+										'thumbnails': {
+											'imagefull': zresponse.avatars[i].thumbnails.imagefull,
+											'imageface': zresponse.avatars[i].thumbnails.imageface
+										},
+										'sortorder': zresponse.avatars[i].sortorder,
+										'selected': false
+									}
+								}
+							}
+						}
+					}
+					zglobalcomplete = true;
+					if (zlocalcomplete) {
+						WTW.showMyAvatarList(zmyavatars);
+					}
+				}
+			);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-getMyAvatarList=" + ex.message);
+	}
+}
+
+WTWJS.prototype.showMyAvatarList = function(zmyavatars) {
+	try {
+		let zmyavatarcount = 0;
+		if (zmyavatars != null) {
+			zmyavatarcount = zmyavatars.length;
+		}
+		if (zmyavatarcount > 0) {
+			if (dGet('wtw_myavatars') != null) {
+				let zmylist = ''; 
+				dGet('wtw_myavatars').innerHTML = '';
+				let zdefault = -1;
+				for (var i=0;i<zmyavatars.length;i++) {
+					if (zmyavatars[i] != null) {
+						if (zdefault == -1) {
+							let zuseravatarid = zmyavatars[i].useravatarid;
+							let zglobalavatarid = zmyavatars[i].globalavatarid;
+							let zavatarid = zmyavatars[i].avatarid;
+							dGet('wtw_browseheaderclose').onclick = function() {WTW.onMyAvatarSelect(zglobalavatarid, zuseravatarid, zavatarid);};
+							zdefault = i;
+						}
+						let zicon = "/content/system/images/localserver.png";
+						let ztext = "Local Avatar";
+						if (zmyavatars[i].globalavatarid != '') {
+							zicon = "/content/system/images/global.png";
+							ztext = "Global Avatar";
+						}
+						zmylist += "<div class=\"wtw-loginbutton\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.onMyAvatarSelect('" + zmyavatars[i].globalavatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\"><img src=\"" + zicon + "\" class=\"wtw-icon\" title=\"" + ztext + "\" alt=\"" + ztext + "\" />" + zmyavatars[i].displayname + "</div>\r\n";
+					}
+				}
+				dGet('wtw_myavatars').innerHTML = zmylist;
+				if (zdefault == -1) {
+					dGet('wtw_browseheaderclose').onclick = function() {WTW.openAvatarDesigner();};
+				}
+			}
+		} else {
+			WTW.openAvatarDesigner();
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-showMyAvatarList=" + ex.message);
+	}
+}
+
+WTWJS.prototype.onMyAvatarSelect = function(zglobalavatarid, zuseravatarid, zavatarid) {
+	try {
+		dGet('wtw_tuseravatarid').value = zuseravatarid;
+		dGet('wtw_tglobalavatarid').value = zglobalavatarid;
+		dGet('wtw_tavatarid').value = zavatarid;
+		WTW.setCookie("globalavatarid", zglobalavatarid, 365);
+		WTW.setCookie("useravatarid", zuseravatarid, 365);
+		WTW.closeIFrame();
+		WTW.getSavedAvatar("myavatar-" + dGet("wtw_tinstanceid").value, zglobalavatarid, zuseravatarid, zavatarid, true);
+		WTW.pluginsOnMyAvatarSelect(zglobalavatarid, zuseravatarid, zavatarid);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-onMyAvatarSelect=" + ex.message);
+	}
+}
+
+WTWJS.prototype.loginAttempt = function() {
+	try {
+		if (dGet('wtw_trememberlogin').checked == true) {
+			WTW.setCookie("rememberlogin", dGet('wtw_tlogin').value, 365);
+		} else {
+			WTW.deleteCookie("rememberlogin");
+		}
+		dGet('wtw_loginerrortext').innerHTML = "";
+		var email = "";
+		var username = "";
+		if (dGet('wtw_tlogin').value.indexOf('@') > -1) {
+			email = dGet('wtw_tlogin').value;
+		} else {
+			username = dGet('wtw_tlogin').value;
+		}
+		var zrequest = {
+			'username':btoa(username),
+			'useremail':btoa(email),
+			'password':btoa(dGet('wtw_tpassword').value),
+			'function':'login'
+		};
+		WTW.postJSON("/core/handlers/users.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.loginAttemptResponse(zresponse);
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-loginAttempt=" + ex.message);
+	}
+}
+
+WTWJS.prototype.loginAttemptResponse = function(zresults) {
+	try {
+		var serror = "";
+		if (zresults != null) {
+			if (zresults.serror != undefined) {
+				if (zresults.serror != '') {
+					serror = zresults.serror;
+					dGet('wtw_tuserid').value = '';
+					dGet('wtw_tusername').value = '';
+					dGet('wtw_tuseremail').value = '';
+					dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
+					dGet('wtw_menudisplayname').innerHTML = 'Login';
+					dGet('wtw_tuserimageurl').value = "";
+					dGet('wtw_menuusername').innerHTML = 'Login';
+					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
+					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
+				}
+				if (zresults.userid != '') {
+					WTW.hide('wtw_menulogin');
+					WTW.show('wtw_menuloggedin');
+					WTW.setLoginValues(zresults.userid, zresults.username, zresults.displayname, zresults.email, zresults.userimageurl);
+					WTW.openLocalLogin('Select My Avatar',.3,.6);
+				} else {
+					WTW.hide('wtw_menuloggedin');
+					WTW.show('wtw_menulogin');
+				}
+			}
+		}
+		if (dGet('wtw_loginerrortext') != null) {
+			if (serror != "") {
+				dGet('wtw_loginerrortext').innerHTML = serror;
+				WTW.show('wtw_loginerrortext');
+			} else {
+				dGet('wtw_loginerrortext').innerHTML = "";
+				WTW.hide('wtw_loginerrortext');
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-loginAttemptResponse=" + ex.message);
+	}
+}
+
+WTWJS.prototype.logout = function() {
+	try {
+		WTW.hide('wtw_mainadminmode');
+		WTW.hide('wtw_menuloggedin');
+		WTW.show('wtw_menulogin');
+		dGet('wtw_tuserid').value = "";
+		dGet('wtw_taccesstoken').value = "";
+		dGet('wtw_tusername').value = "";
+		dGet('wtw_tuploadpathid').value = "";
+		dGet('wtw_mainmenudisplayname').innerHTML = "Login";
+		dGet('wtw_menudisplayname').innerHTML = '';
+		dGet('wtw_tuseremail').value = "";
+		dGet('wtw_menuusername').innerHTML = "";
+		dGet('wtw_profileimagelg').src = "/content/system/images/menuprofilebig.png";
+		dGet('wtw_profileimagesm').src = "/content/system/images/menuprofile32.png";
+		if (window.location.href.indexOf("admin.php") > -1) {
+			window.location.href = "//" + wtw_domainname + "/";
+		} else {
+			WTW.logoutMyAvatar();
+		}
+		var zrequest = {
+			'function':'logout'
+		};
+		WTW.postJSON("/core/handlers/users.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.openLoginMenu();
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-logout=" + ex.message);
+	}
+}
+
+WTWJS.prototype.createAccount = function() {
+	try {
+		/* NEEDED add validation */
+		var zrequest = {
+			'newlogin':btoa(dGet('wtw_tnewlogin').value),
+			'newemail':btoa(dGet('wtw_tnewemail').value),
+			'newpassword':btoa(dGet('wtw_tnewpassword').value),
+			'function':'register'
+		};
+		WTW.postJSON("/core/handlers/users.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.createAccountComplete(zresponse.serror);
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-createAccount=" + ex.message);
+	}
+}
+
+WTWJS.prototype.createAccountComplete = function(serror) {
+	try {
+		/* show if error */
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-createAccountComplete=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setLoginValues = function(zuserid, zusername, zdisplayname, zemail, zuserimageurl) {
+	try {
+		if (zuserid == undefined) {
+			zuserid = dGet('wtw_tuserid').value;
+		} else {
+			dGet('wtw_tuserid').value = zuserid;
+		}
+		if (zusername == undefined) {
+			zusername = dGet('wtw_tusername').value;
+		} else {
+			dGet('wtw_tusername').value = zusername;
+		}
+		if (zdisplayname == undefined) {
+			zdisplayname = dGet('wtw_tavatardisplayname').value;
+		} else {
+			dGet('wtw_tavatardisplayname').value = zdisplayname;
+		}
+		if (zemail == undefined) {
+			zemail = dGet('wtw_tuseremail').value;
+		} else {
+			dGet('wtw_tuseremail').value = zemail;
+		}
+		if (zuserimageurl == undefined) {
+			zuserimageurl = dGet('wtw_tuserimageurl').value;
+		} else {
+			dGet('wtw_tuserimageurl').value = zuserimageurl;
+		}
+		if (zdisplayname != '' && zdisplayname != undefined && zdisplayname != 'undefined') {
+			dGet('wtw_mainmenudisplayname').innerHTML = zdisplayname;
+			dGet('wtw_menudisplayname').innerHTML = zdisplayname;
+		} else if (zusername != '' && zusername != undefined && zusername != 'undefined') {
+			dGet('wtw_mainmenudisplayname').innerHTML = zusername;
+			dGet('wtw_menudisplayname').innerHTML = zusername;
+			zdisplayname = zusername;
+		}
+		dGet('wtw_teditdisplayname').value = zdisplayname;
+		dGet('wtw_teditusername').value = zusername;
+		dGet('wtw_menuusername').innerHTML = zusername;
+		dGet('wtw_teditemail').value = zemail;
+		dGet('wtw_menuemail').innerHTML = zemail;
+		if (zuserimageurl != '' && zuserimageurl != undefined) {	
+			dGet('wtw_profileimagelg').src = zuserimageurl;
+			dGet('wtw_profileimagesm').src = zuserimageurl;
+		}
+		WTW.hide('wtw_menulogin');
+		WTW.show('wtw_mainadminmode');
+		WTW.show('wtw_menuloggedin');
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-setLoginValues=" + ex.message);
+	}
+}
+
+WTWJS.prototype.openAvatarDesigner = function() {
+	try {
+		WTW.openIFrame("/content/plugins/wtw-avatars/pages/designer.php?globaluserid=" + dGet('wtw_tglobaluserid').value + "&globalavatarid=" + dGet('wtw_tglobalavatarid').value + "&useravatarid=" + dGet('wtw_tuseravatarid').value, .95, .95, "Avatar Desiger");
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-openAvatarDesigner=" + ex.message);
+	}
+}
+
+WTWJS.prototype.editProfile = function() {
+	try {
+		WTW.hide('wtw_menudisplayname');
+		WTW.hide('wtw_menuusername');
+		WTW.hide('wtw_menuemail');
+		WTW.showInline('wtw_teditdisplayname');
+		WTW.showInline('wtw_teditusername');
+		WTW.showInline('wtw_teditemail');
+		WTW.show('wtw_menusaveprofile');
+		WTW.show('wtw_menucancelsaveprofile');
+		WTW.showSettingsMenu('wtw_menuprofile');
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-editProfile=" + ex.message);
+	}
+}
+
+WTWJS.prototype.saveProfile = function() {
+	try {
+		/* validate entries... */
+		var zrequest = {
+			'useravatarid': dGet('wtw_tuseravatarid').value,
+			'instanceid': dGet('wtw_tinstanceid').value,
+			'username': dGet('wtw_teditusername').value,
+			'useremail': dGet('wtw_teditemail').value,
+			'displayname': dGet('wtw_teditdisplayname').value,
+			'function':'saveprofile'
+		};
+		WTW.postJSON("/core/handlers/users.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.saveProfileComplete(zresponse.serror);
+			}
+		);
+		WTW.hide('wtw_teditdisplayname');
+		WTW.hide('wtw_teditusername');
+		WTW.hide('wtw_teditemail');
+		WTW.hide('wtw_menusaveprofile');
+		WTW.hide('wtw_menucancelsaveprofile');
+		dGet('wtw_menudisplayname').innerHTML = dGet('wtw_teditdisplayname').value;
+		dGet('wtw_tavatardisplayname').value = dGet('wtw_teditdisplayname').value;
+		dGet('wtw_menuusername').innerHTML = dGet('wtw_teditusername').value;
+		dGet('wtw_menuemail').innerHTML = dGet('wtw_teditemail').value;
+		WTW.showInline('wtw_menudisplayname');
+		WTW.showInline('wtw_menuusername');
+		WTW.showInline('wtw_menuemail');
+		WTW.showSettingsMenu('wtw_menuprofile');
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-saveProfile=" + ex.message);
+	}
+}
+
+WTWJS.prototype.saveProfileComplete = function(response) {
+	try {
+		dGet('wtw_profileerrortext').innerHTML = response;
+		WTW.showSettingsMenu('wtw_menuprofile');
+		window.setTimeout(function() {
+			dGet('wtw_profileerrortext').innerHTML = '';
+			WTW.showSettingsMenu('wtw_menuprofile');
+		},5000);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-saveProfileComplete=" + ex.message);
+	}
+}
+
+WTWJS.prototype.cancelEditProfile = function() {
+	try {
+		WTW.hide('wtw_teditdisplayname');
+		WTW.hide('wtw_teditusername');
+		WTW.hide('wtw_teditemail');
+		WTW.hide('wtw_menusaveprofile');
+		WTW.hide('wtw_menucancelsaveprofile');
+		WTW.showInline('wtw_menudisplayname');
+		WTW.showInline('wtw_menuusername');
+		WTW.showInline('wtw_menuemail');
+		dGet('wtw_teditdisplayname').value = dGet('wtw_menudisplayname').innerHTML;
+		dGet('wtw_teditusername').value = dGet('wtw_menuusername').innerHTML;
+		dGet('wtw_teditemail').value = dGet('wtw_menuemail').innerHTML;
+		WTW.showSettingsMenu('wtw_menuprofile');
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-cancelEditProfile=" + ex.message);
+	}
+}
+
+WTWJS.prototype.registerPasswordFocus = function() {
+	try {
+		dGet('wtw_passwordstrengthdiv').style.visibility = 'visible';
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-registerPasswordFocus=" + ex.message);
+	}
+}
+
+WTWJS.prototype.registerPasswordBlur = function() {
+	try {
+		dGet('wtw_passwordstrengthdiv').style.visibility = 'hidden';
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-registerPasswordBlur=" + ex.message);
+	}
+}
+
+WTWJS.prototype.scorePassword = function(zpassword) {
+	var score = 0;
+	try {
+		if (zpassword != undefined) {
+			/* points for every unique letter until 5 repetitions */
+			var letters = new Object();
+			for (var i=0; i<zpassword.length; i++) {
+				letters[zpassword[i]] = (letters[zpassword[i]] || 0) + 1;
+				score += 5.0 / letters[zpassword[i]];
+			}
+			/* bonus points for complexity */
+			var variations = {
+				digits: /\d/.test(zpassword),
+				lower: /[a-z]/.test(zpassword),
+				upper: /[A-Z]/.test(zpassword),
+				nonWords: /\W/.test(zpassword),
+			}
+			variationCount = 0;
+			for (var check in variations) {
+				variationCount += (variations[check] == true) ? 1 : 0;
+			}
+			score += (variationCount - 1) * 10;
+			score = parseInt(score);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-scorePassword=" + ex.message);
+	}
+    return score;
+}
+
+WTWJS.prototype.checkPasswordStrength = function(zpassword) {
+	score = 0;
+	zvalue = "Poor Password";
+	zcolor = "#F87777";
+	try {
+		var score = WTW.scorePassword(zpassword);
+		if (score > 80) {
+			zvalue = "Strong Password";
+			zcolor = "#77F893";
+		} else if (score > 60) {
+			zvalue = "Good Password";
+			zcolor = "#DEF877";
+		} else if (score >= 30) {
+			zvalue = "Weak Password";
+			zcolor = "#F8DB77";
+		} else {
+			zvalue = "Poor Password";
+			zcolor = "#F87777";
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-checkPasswordStrength=" + ex.message);
+	}
+    return {
+		'score': score,
+		'value': zvalue,
+		'color': zcolor };
+}
+
+WTWJS.prototype.checkPassword = function(zpasswordtextbox, metername) {
+	try {
+		var check = WTW.checkPasswordStrength(zpasswordtextbox.value);
+		if (zpasswordtextbox.value.length > 0) {
+			dGet(metername).style.visibility = 'visible';
+		} else {
+			dGet(metername).style.visibility = 'hidden';
+		}
+		if (dGet(metername) != null) {
+			dGet(metername).value = check.value;
+			dGet(metername).style.textAlign = 'center';
+			dGet(metername).style.backgroundColor = check.color;
+			if (check.score > 80) {
+				dGet(metername).style.borderColor = 'green';
+			} else {
+				dGet(metername).style.borderColor = 'gray';
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-checkPassword=" + ex.message);
+	}
+}
+
+WTWJS.prototype.checkPasswordConfirm = function(zpassword, zpassword2, zerrortext) {
+	try {
+		if (dGet(zpassword) != null && dGet(zpassword2) != null && dGet(zerrortext) != null) {
+			dGet(zerrortext).innerHTML = "";
+			if (dGet(zpassword).value != dGet(zpassword2).value) {
+				dGet(zerrortext).innerHTML = "Passwords do not match.";
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-checkPasswordConfirm=" + ex.message);
 	}
 }
 
@@ -1838,27 +2718,6 @@ WTWJS.prototype.getThingName = function(zthingid) {
 		WTW.log("core-scripts-prime-wtw_common.js-getThingName=" + ex.message);
 	}
 	return zthingname;
-}
-
-WTWJS.prototype.getMainParent = function() {
-	var mainparent = null;
-	try {
-		if (WTW.mainParent == "") {
-			WTW.mainParent = "connectinggrids-0---";
-		}
-		mainparent = scene.getMeshByID(WTW.mainParent);
-		if (mainparent == null) {
-			mainparent = BABYLON.MeshBuilder.CreateBox(WTW.mainParent, {}, scene);
-			mainparent.material = WTW.addCovering("hidden", WTW.mainParent, WTW.newMold(), 1, 1, 1, "0", "0");
-			mainparent.material.alpha = 0;
-		}
-		if (WTW.mainParent != "connectinggrids-0---") {
-			WTW.disposeClean("connectinggrids-0---");
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-getMainParent=" + ex.message);
-	}
-	return mainparent;
 }
 
 WTWJS.prototype.disposeClean = function(moldname, check) {
@@ -2679,6 +3538,9 @@ WTWJS.prototype.checkMoldEvent = function(moldevent, moldname) {
 			if (moldnameparts.parentname.indexOf('seat') > -1) {
 				WTW.startSit(moldname);
 			}
+			if (moldname.indexOf("myavatar") > -1) {
+				WTW.openHUDFollow();
+			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-checkMoldEvent=" + ex.message);
@@ -2843,6 +3705,7 @@ WTWJS.prototype.checkToolTip = function(namepart, moldind) {
 WTWJS.prototype.showToolTip = function(tip) {
 	try {
 		if (tip != "") {
+			WTW.setToolTipLocation();
 			dGet('wtw_itooltip').innerHTML = tip;
 			WTW.show('wtw_itooltip');
 		} else {
@@ -2863,18 +3726,20 @@ WTWJS.prototype.hideToolTip = function() {
 
 WTWJS.prototype.setToolTipLocation = function() {
 	try {
-		var iwidth = WTW.mouseX - (dGet('wtw_itooltip').offsetWidth/2);
-		var iheight = WTW.mouseY - dGet('wtw_itooltip').offsetHeight - 20;
-		if (WTW.mouseX < WTW.sizeX / 5) {
-			iwidth += (dGet('wtw_itooltip').offsetWidth/2);
-		} else if (WTW.mouseX > WTW.sizeX - (WTW.sizeX / 5)) {
-			iwidth -= (dGet('wtw_itooltip').offsetWidth/2);
+		if (dGet('wtw_itooltip').style.display != 'none') {
+			var iwidth = WTW.mouseX - (dGet('wtw_itooltip').offsetWidth/2);
+			var iheight = WTW.mouseY - dGet('wtw_itooltip').offsetHeight - 20;
+			if (WTW.mouseX < WTW.sizeX / 5) {
+				iwidth += (dGet('wtw_itooltip').offsetWidth/2);
+			} else if (WTW.mouseX > WTW.sizeX - (WTW.sizeX / 5)) {
+				iwidth -= (dGet('wtw_itooltip').offsetWidth/2);
+			}
+			if (WTW.mouseY < WTW.sizeY / 5) {
+				iheight += (dGet('wtw_itooltip').offsetHeight + 30);
+			}
+			dGet('wtw_itooltip').style.left = iwidth + 'px';
+			dGet('wtw_itooltip').style.top = iheight + 'px';
 		}
-		if (WTW.mouseY < WTW.sizeY / 5) {
-			iheight += (dGet('wtw_itooltip').offsetHeight + 30);
-		}
-		dGet('wtw_itooltip').style.left = iwidth + 'px';
-		dGet('wtw_itooltip').style.top = iheight + 'px';
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-setToolTipLocation=" + ex.message);
     }
@@ -4391,12 +5256,8 @@ WTWJS.prototype.setShownMolds = function() {
 		WTW.setShownConnectingGrids();
 		WTW.setShownActionZones();
 		if (WTW.setShownMoldsByWeb("community") == false) {
-			if (WTW.myAvatar != null) {
-				if (WTW.myAvatar.WTW.loaded) {
-					WTW.setShownMoldsByWeb("building");
-					WTW.setShownMoldsByWeb("thing");
-				}
-			}
+			WTW.setShownMoldsByWeb("building");
+			WTW.setShownMoldsByWeb("thing");
 		}
 		WTW.checkShownMolds = 0;
 	} catch (ex) {
@@ -8222,6 +9083,15 @@ WTWJS.prototype.toggle = function(item) {
 WTWJS.prototype.showSettingsMenu = function(menuitem) {
 	try {
 		WTW.show(menuitem);
+		if (menuitem == 'wtw_menuprofile') {
+			if (dGet('wtw_tuserid').value != '') {
+				WTW.hide('wtw_menulogin');
+				WTW.show('wtw_menuloggedin');
+			} else {
+				WTW.hide('wtw_menuloggedin');
+				WTW.show('wtw_menulogin');
+			}
+		}
 		if (dGet(menuitem + 'scroll') != null) {
 			dGet(menuitem + 'scroll').style.height = 'auto';
 			if (dGet(menuitem + 'scroll').clientHeight < (WTW.sizeY - 95)) {
@@ -8269,14 +9139,7 @@ WTWJS.prototype.closeMenus = function(zmenuid) {
 		if (zmenuid == undefined) {
 			zmenuid = '';
 		}
-		if (dGet('wtw_menuavatar').style.display != 'none') {
-			WTW.closeSetupMode();
-		}
-		if (dGet('wtw_menuregister').style.display != 'none') {
-			WTW.show('wtw_menulogin');
-			WTW.hide('wtw_menupasswordrecovery');
-			WTW.hide('wtw_menuregister');
-		}
+		WTW.show('wtw_menulogin');
 		var menuforms = document.getElementsByClassName('wtw-slideupmenuright');
 		for (var i=0;i<menuforms.length;i++) {
 			if (menuforms[i] != null) {
@@ -8702,6 +9565,9 @@ WTWJS.prototype.processMoldQueue = function() {
 										moldgroup = "connectinggrid";
 										molds = WTW.connectingGrids;
 										moldind = Number(molddef.connectinggridind);
+										if (moldname == WTW.mainParent) {
+											WTW.mainParentMold = mold;
+										}
 									} else if (moldname.indexOf("actionzone-") > -1) {
 										moldgroup = "actionzone";
 										molds = WTW.actionZones;
@@ -8907,17 +9773,11 @@ WTWJS.prototype.loadUserSettings = function() {
 		if (soundmute != null) {
 			WTW.toggleSoundMute();
 		}
-		var myavatarid = WTW.getCookie("myavatarid");
-		if (myavatarid != null) {
-			dGet("wtw_tmyavatarid").value = myavatarid;
+		var zuseravatarid = WTW.getCookie("useravatarid");
+		if (zuseravatarid != null) {
+			dGet("wtw_tuseravatarid").value = zuseravatarid;
 		} else {
-			dGet("wtw_tmyavatarid").value = "";
-		}
-		var myavataridanon = WTW.getCookie("myavataridanon");
-		if (myavataridanon != null) {
-			dGet("wtw_tmyavataridanon").value = myavataridanon;
-		} else {
-			dGet("wtw_tmyavataridanon").value = "";
+			dGet("wtw_tuseravatarid").value = "";
 		}
 		var showcompass = WTW.getCookie("showcompass");
 		if (showcompass != null) {
@@ -9043,67 +9903,6 @@ WTWJS.prototype.loadUserSettingsAfterEngine = function() {
 	}
 }
 
-WTWJS.prototype.openRegisterForm = function() {
-	try {
-		WTW.closeMenus();
-		WTW.hide('wtw_menulogin');
-		WTW.hide('wtw_menupasswordrecovery');
-		WTW.hide('wtw_menuloggedin');
-		WTW.show('wtw_menuregister');
-		WTW.showSettingsMenu('wtw_menuprofile');
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-openRegisterForm=" + ex.message);
-	}
-}
-
-WTWJS.prototype.registerPasswordFocus = function() {
-	try {
-		if (dGet('wtw_menuregister').style.display != 'none') {
-			WTW.show('wtw_passwordstrengthdiv');
-			WTW.showSettingsMenu('wtw_menuprofile');
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-registerPasswordFocus=" + ex.message);
-	}
-}
-
-WTWJS.prototype.registerPasswordBlur = function() {
-	try {
-		if (dGet('wtw_menuregister').style.display != 'none') {
-			WTW.hide('wtw_passwordstrengthdiv');
-			WTW.showSettingsMenu('wtw_menuprofile');
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-registerPasswordBlur=" + ex.message);
-	}
-}
-
-WTWJS.prototype.openRecoveryForm = function() {
-	try {
-		WTW.closeMenus();
-		WTW.hide('wtw_menulogin');
-		WTW.hide('wtw_menuloggedin');
-		WTW.hide('wtw_menuregister');
-		WTW.show('wtw_menupasswordrecovery');
-		WTW.showSettingsMenu('wtw_menuprofile');
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-openRegisterForm=" + ex.message);
-	}
-}
-
-WTWJS.prototype.openLoginForm = function() {
-	try {
-		WTW.closeMenus();
-		WTW.hide('wtw_menuregister');
-		WTW.hide('wtw_menuloggedin');
-		WTW.hide('wtw_menupasswordrecovery');
-		WTW.show('wtw_menulogin');
-		WTW.showSettingsMenu('wtw_menuprofile');
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-openLoginForm=" + ex.message);
-	}
-}
-
 WTWJS.prototype.toggleHelpOnStart = function() {
 	try {
 		if (dGet('wtw_tshowhelponstart').checked) {
@@ -9118,40 +9917,15 @@ WTWJS.prototype.toggleHelpOnStart = function() {
 
 WTWJS.prototype.switchAvatarMenu = function(w) {
 	try {
-		if (w != 2 && dGet('wtw_menuavatarcolordiv').style.display != 'none') {
-			WTW.saveAvatarColor(dGet('wtw_tmoldname').value);
-			if (WTW.guiAdminColors != null) {
-				WTW.guiAdminColors.dispose();
-				WTW.guiAdminColors = null;
-			}
-		}
-		var selavatar = scene.getMeshByID("selectavatar-1-preview");
 		switch (w) {
 			case 1:
-				WTW.hide('wtw_menuavatarcolordiv');
 				WTW.hide('wtw_menuavataranimationsdiv');
 				WTW.hide('wtw_menuavatarchangediv');
-				if (selavatar != null) {
-					WTW.closeSelectAvatar();
-				}
 				WTW.showAvatarDisplayName();
-				break;
-			case 2:
-				WTW.hide('wtw_menuavatardisplaynamediv');
-				WTW.hide('wtw_menuavataranimationsdiv');
-				WTW.hide('wtw_menuavatarchangediv');
-				if (selavatar != null) {
-					WTW.closeSelectAvatar();
-				}
-				WTW.toggleAvatarColor();
 				break;
 			case 3:
 				WTW.hide('wtw_menuavatardisplaynamediv');
-				WTW.hide('wtw_menuavatarcolordiv');
 				WTW.hide('wtw_menuavatarchangediv');
-				if (selavatar != null) {
-					WTW.closeSelectAvatar();
-				}
 				if (dGet('wtw_menuavataranimationsdiv').style.display == 'none') {
 					WTW.getAvatarAnimationsAll();
 					WTW.show('wtw_menuavataranimationsdiv');
@@ -9161,13 +9935,11 @@ WTWJS.prototype.switchAvatarMenu = function(w) {
 				break;
 			case 4:
 				WTW.hide('wtw_menuavatardisplaynamediv');
-				WTW.hide('wtw_menuavatarcolordiv');
 				WTW.hide('wtw_menuavataranimationsdiv');
 				if (dGet('wtw_menuavatarchangediv').style.display == 'none') {
-					WTW.openChangeAvatar();
+					WTW.closeMenus();WTW.openLocalLogin('Select My Avatar',.3,.6);
 					WTW.show('wtw_menuavatarchangediv');
 				} else {
-					WTW.closeSelectAvatar();
 					WTW.hide('wtw_menuavatarchangediv');
 				}
 				break;
@@ -9460,376 +10232,6 @@ WTWJS.prototype.trackPageView = function(actionzoneind, distancename) {
 		
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-trackPageView=" + ex.message);
-	}
-}
-
-WTWJS.prototype.logOut = function() {
-	try {
-		WTW.hide('wtw_mainadminmode');
-		WTW.hide('wtw_menuloggedin');
-		WTW.hide('wtw_menuregister');
-		WTW.hide('wtw_menupasswordrecovery');
-		WTW.show('wtw_menulogin');
-		WTW.show('wtw_loginnote');
-		dGet('wtw_tuserid').value = "";
-		dGet('wtw_tusername').value = "";
-		dGet('wtw_tuploadpathid').value = "";
-		dGet('wtw_loginerrortext').innerHTML = "";
-		dGet('wtw_mainmenudisplayname').innerHTML = "Login";
-		dGet('wtw_menudisplayname').innerHTML = '';
-		dGet('wtw_tuseremail').value = "";
-		dGet('wtw_menuusername').innerHTML = "";
-		dGet('wtw_profileimagelg').src = "/content/system/images/menuprofilebig.png";
-		dGet('wtw_profileimagesm').src = "/content/system/images/menuprofile32.png";
-		if (window.location.href.indexOf("admin.php") > -1) {
-			window.location.href = "//" + wtw_domainname + "/";
-		} else {
-			WTW.closeSetupMode();
-			WTW.logoutMyAvatar();
-		}
-		var zrequest = {
-			'function':'logout'
-		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				/* note serror would contain errors */
-			}
-		);
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-logOut=" + ex.message);
-	}
-}
-
-WTWJS.prototype.createAccount = function() {
-	try {
-		/* NEEDED add validation */
-		var zrequest = {
-			'newlogin':btoa(dGet('wtw_tnewlogin').value),
-			'newemail':btoa(dGet('wtw_tnewemail').value),
-			'newpassword':btoa(dGet('wtw_tnewpassword').value),
-			'function':'register'
-		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				/* note serror would contain errors */
-				WTW.createAccountComplete(zresponse.serror);
-			}
-		);
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-createAccount=" + ex.message);
-	}
-}
-
-WTWJS.prototype.createAccountComplete = function(serror) {
-	try {
-		/* show if error */
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-createAccountComplete=" + ex.message);
-	}
-}
-
-WTWJS.prototype.loginAttempt = function() {
-	try {
-		if (dGet('wtw_trememberlogin').checked == true) {
-			WTW.setCookie("rememberlogin", dGet('wtw_tlogin').value, 365);
-		} else {
-			WTW.deleteCookie("rememberlogin");
-		}
-		dGet('wtw_loginerrortext').innerHTML = "";
-		var email = "";
-		var username = "";
-		if (dGet('wtw_tlogin').value.indexOf('@') > -1) {
-			email = dGet('wtw_tlogin').value;
-		} else {
-			username = dGet('wtw_tlogin').value;
-		}
-		var zrequest = {
-			'username':btoa(username),
-			'email':btoa(email),
-			'password':btoa(dGet('wtw_tpassword').value),
-			'function':'login'
-		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				/* note serror would contain errors */
-				WTW.loginAttemptResponse(zresponse);
-			}
-		);
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-loginAttempt=" + ex.message);
-	}
-}
-	
-WTWJS.prototype.loginAttemptResponse = function(results) {
-	try {
-		var serror = "";
-		if (results != null) {
-			if (results.serror != undefined) {
-				if (results.serror != '') {
-					serror = results.serror;
-					dGet('wtw_tuserid').value = '';
-					dGet('wtw_tusername').value = '';
-					dGet('wtw_tuseremail').value = '';
-					dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
-					dGet('wtw_menudisplayname').innerHTML = 'Login';
-					dGet('wtw_tuserimageurl').value = "";
-					dGet('wtw_menuusername').innerHTML = 'Login';
-					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
-					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
-				}
-
-				if (results.userid != '') {
-					//WTW.disposeClean("myavatar-" + dGet("wtw_tinstanceid").value);
-					WTW.setLoginValues(results.userid, results.username, results.displayname, results.email, results.userimageurl);
-					WTW.getSavedAvatar(true);
-				}
-			}
-		}
-		if (serror != "") {
-			dGet('wtw_loginerrortext').innerHTML = serror;
-			WTW.show('wtw_loginerrortext');
-		} else {
-			dGet('wtw_loginerrortext').innerHTML = "";
-			WTW.hide('wtw_loginerrortext');
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-loginAttemptResponse=" + ex.message);
-	}
-}
-
-WTWJS.prototype.setLoginValues = function(zuserid, zusername, zdisplayname, zemail, zuserimageurl) {
-	try {
-		if (zuserid == undefined) {
-			zuserid = dGet('wtw_tuserid').value;
-		} else {
-			dGet('wtw_tuserid').value = zuserid;
-		}
-		if (zusername == undefined) {
-			zusername = dGet('wtw_tusername').value;
-		} else {
-			dGet('wtw_tusername').value = zusername;
-		}
-		if (zdisplayname == undefined) {
-			zdisplayname = dGet('wtw_tavatardisplayname').value;
-		} else {
-			dGet('wtw_tavatardisplayname').value = zdisplayname;
-		}
-		if (zemail == undefined) {
-			zemail = dGet('wtw_tuseremail').value;
-		} else {
-			dGet('wtw_tuseremail').value = zemail;
-		}
-		if (zuserimageurl == undefined) {
-			zuserimageurl = dGet('wtw_tuserimageurl').value;
-		} else {
-			dGet('wtw_tuserimageurl').value = zuserimageurl;
-		}
-		if (zdisplayname != '' && zdisplayname != undefined && zdisplayname != 'undefined') {
-			dGet('wtw_mainmenudisplayname').innerHTML = zdisplayname;
-			dGet('wtw_menudisplayname').innerHTML = zdisplayname;
-		} else if (zusername != '' && zusername != undefined && zusername != 'undefined') {
-			dGet('wtw_mainmenudisplayname').innerHTML = zusername;
-			dGet('wtw_menudisplayname').innerHTML = zusername;
-			zdisplayname = zusername;
-		}
-		dGet('wtw_teditdisplayname').value = zdisplayname;
-		dGet('wtw_teditusername').value = zusername;
-		dGet('wtw_menuusername').innerHTML = zusername;
-		dGet('wtw_teditemail').value = zemail;
-		dGet('wtw_menuemail').innerHTML = zemail;
-		if (zuserimageurl != '' && zuserimageurl != undefined) {	
-			dGet('wtw_profileimagelg').src = zuserimageurl;
-			dGet('wtw_profileimagesm').src = zuserimageurl;
-		}
-		WTW.hide('wtw_menulogin');
-		WTW.hide('wtw_menupasswordrecovery');
-		WTW.hide('wtw_menuregister');
-		WTW.hide('wtw_loginnote');
-		WTW.show('wtw_mainadminmode');
-		WTW.show('wtw_menuloggedin');
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-setLoginValues=" + ex.message);
-	}
-}
-
-WTWJS.prototype.editProfile = function() {
-	try {
-		WTW.hide('wtw_menudisplayname');
-		WTW.hide('wtw_menuusername');
-		WTW.hide('wtw_menuemail');
-		WTW.showInline('wtw_teditdisplayname');
-		WTW.showInline('wtw_teditusername');
-		WTW.showInline('wtw_teditemail');
-		WTW.show('wtw_menusaveprofile');
-		WTW.show('wtw_menucancelsaveprofile');
-		WTW.showSettingsMenu('wtw_menuprofile');
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-editProfile=" + ex.message);
-	}
-}
-
-WTWJS.prototype.saveProfile = function() {
-	try {
-		/* validate entries... */
-		var zrequest = {
-			'avatarid': dGet('wtw_tmyavatarid').value,
-			'instanceid': dGet('wtw_tinstanceid').value,
-			'username': dGet('wtw_teditusername').value,
-			'useremail': dGet('wtw_teditemail').value,
-			'displayname': dGet('wtw_teditdisplayname').value,
-			'function':'saveprofile'
-		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				/* note serror would contain errors */
-				WTW.saveProfileComplete(zresponse.serror);
-			}
-		);
-		WTW.hide('wtw_teditdisplayname');
-		WTW.hide('wtw_teditusername');
-		WTW.hide('wtw_teditemail');
-		WTW.hide('wtw_menusaveprofile');
-		WTW.hide('wtw_menucancelsaveprofile');
-		dGet('wtw_menudisplayname').innerHTML = dGet('wtw_teditdisplayname').value;
-		dGet('wtw_tavatardisplayname').value = dGet('wtw_teditdisplayname').value;
-		dGet('wtw_menuusername').innerHTML = dGet('wtw_teditusername').value;
-		dGet('wtw_menuemail').innerHTML = dGet('wtw_teditemail').value;
-		WTW.showInline('wtw_menudisplayname');
-		WTW.showInline('wtw_menuusername');
-		WTW.showInline('wtw_menuemail');
-		WTW.showSettingsMenu('wtw_menuprofile');
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-saveProfile=" + ex.message);
-	}
-}
-
-WTWJS.prototype.saveProfileComplete = function(response) {
-	try {
-		dGet('wtw_profileerrortext').innerHTML = response;
-		WTW.showSettingsMenu('wtw_menuprofile');
-		window.setTimeout(function() {
-			dGet('wtw_profileerrortext').innerHTML = '';
-			WTW.showSettingsMenu('wtw_menuprofile');
-		},5000);
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-saveProfileComplete=" + ex.message);
-	}
-}
-
-WTWJS.prototype.cancelEditProfile = function() {
-	try {
-		WTW.hide('wtw_teditdisplayname');
-		WTW.hide('wtw_teditusername');
-		WTW.hide('wtw_teditemail');
-		WTW.hide('wtw_menusaveprofile');
-		WTW.hide('wtw_menucancelsaveprofile');
-		WTW.showInline('wtw_menudisplayname');
-		WTW.showInline('wtw_menuusername');
-		WTW.showInline('wtw_menuemail');
-		dGet('wtw_teditdisplayname').value = dGet('wtw_menudisplayname').innerHTML;
-		dGet('wtw_teditusername').value = dGet('wtw_menuusername').innerHTML;
-		dGet('wtw_teditemail').value = dGet('wtw_menuemail').innerHTML;
-		WTW.showSettingsMenu('wtw_menuprofile');
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-cancelEditProfile=" + ex.message);
-	}
-}
-
-WTWJS.prototype.scorePassword = function(zpassword) {
-	var score = 0;
-	try {
-		if (zpassword != undefined) {
-			/* points for every unique letter until 5 repetitions */
-			var letters = new Object();
-			for (var i=0; i<zpassword.length; i++) {
-				letters[zpassword[i]] = (letters[zpassword[i]] || 0) + 1;
-				score += 5.0 / letters[zpassword[i]];
-			}
-			/* bonus points for complexity */
-			var variations = {
-				digits: /\d/.test(zpassword),
-				lower: /[a-z]/.test(zpassword),
-				upper: /[A-Z]/.test(zpassword),
-				nonWords: /\W/.test(zpassword),
-			}
-			variationCount = 0;
-			for (var check in variations) {
-				variationCount += (variations[check] == true) ? 1 : 0;
-			}
-			score += (variationCount - 1) * 10;
-			score = parseInt(score);
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-scorePassword=" + ex.message);
-	}
-    return score;
-}
-
-WTWJS.prototype.checkPasswordStrength = function(zpassword) {
-	score = 0;
-	zvalue = "Poor Password";
-	zcolor = "#F87777";
-	try {
-		var score = WTW.scorePassword(zpassword);
-		if (score > 80) {
-			zvalue = "Strong Password";
-			zcolor = "#77F893";
-		} else if (score > 60) {
-			zvalue = "Good Password";
-			zcolor = "#DEF877";
-		} else if (score >= 30) {
-			zvalue = "Weak Password";
-			zcolor = "#F8DB77";
-		} else {
-			zvalue = "Poor Password";
-			zcolor = "#F87777";
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-checkPasswordStrength=" + ex.message);
-	}
-    return {
-		'score': score,
-		'value': zvalue,
-		'color': zcolor };
-}
-
-WTWJS.prototype.checkPassword = function(zpasswordtextbox, metername) {
-	try {
-		var check = WTW.checkPasswordStrength(zpasswordtextbox.value);
-		if (zpasswordtextbox.value.length > 0) {
-			WTW.show(metername);
-		} else {
-			WTW.hide(metername);
-		}
-		if (dGet(metername) != null) {
-			dGet(metername).value = check.value;
-			dGet(metername).style.textAlign = 'center';
-			dGet(metername).style.backgroundColor = check.color;
-			if (check.score > 80) {
-				dGet(metername).style.borderColor = 'green';
-			} else {
-				dGet(metername).style.borderColor = 'gray';
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-checkPassword=" + ex.message);
-	}
-}
-
-WTWJS.prototype.checkPasswordConfirm = function(zpassword, zpassword2, zerrortext) {
-	try {
-		if (dGet(zpassword) != null && dGet(zpassword2) != null && dGet(zerrortext) != null) {
-			dGet(zerrortext).innerHTML = "";
-			if (dGet(zpassword).value != dGet(zpassword2).value) {
-				dGet(zerrortext).innerHTML = "Passwords do not match.";
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-checkPasswordConfirm=" + ex.message);
 	}
 }
 
@@ -10188,12 +10590,12 @@ WTWJS.prototype.checkLoadAnimations = function(zactionzoneind) {
 										if (avatar.WTW != null) {
 											if (avatar.WTW.animations != null) {
 												if (avatar.WTW.animations.running != null) {
-													if (avatar.WTW.animations.running[zazanimations[i].animationname] == undefined) {
+													if (avatar.WTW.animations.running[zazanimations[i].animationevent] == undefined) {
 														var zanimationloop = true;
 														if (zazanimations[i].animationloop == '0') {
 															zanimationloop = false;
 														}
-														WTW.loadAvatarAnimation(avatar.name, '', zazanimations[i].animationfriendlyname, zazanimations[i].animationicon, zazanimations[i].avataranimationid, zazanimations[i].animationname, zazanimations[i].objectfolder, zazanimations[i].objectfile, zazanimations[i].startframe, zazanimations[i].endframe, zazanimations[i].speedratio, 0, zazanimations[i].loadpriority, zanimationloop, null);
+														WTW.loadAvatarAnimation(avatar.name, '', zazanimations[i].animationfriendlyname, zazanimations[i].animationicon, zazanimations[i].avataranimationid, zazanimations[i].animationevent, zazanimations[i].objectfolder, zazanimations[i].objectfile, zazanimations[i].startframe, zazanimations[i].endframe, zazanimations[i].speedratio, 0, zazanimations[i].loadpriority, zanimationloop, null);
 													}
 												}
 											}

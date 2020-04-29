@@ -11,7 +11,7 @@ function WTWJS() {
 	this.enablePhysics = 1;
 	this.canvasFocus = 1;
 	this.cameraFocus = 1; /* 1 for MyAvatar, 0 for detached, 2 reserved for mesh focused */
-	this.setupMode = 1;
+	this.placeHolder = 1;
 	this.init = {
 		'groundTextureID':'2391f1v9om09am77',
 		'groundTexturePath':'/content/system/images/dirt-512x512.jpg',
@@ -47,6 +47,7 @@ function WTWJS() {
 		skyMieDirectionalG = .8; // The amount of haze particles in the atmosphere. (.20 to .99 increment .01)
 		skyMieCoefficient = .005; // The haze particle size coefficient. (.001 to .999 increment .001)
 */	
+	this.eventListeners = [];
 	this.loadQueue = [];
 	this.loadMoldQueue = [];
 	this.analyticsQueue = [];
@@ -75,9 +76,9 @@ function WTWJS() {
 	this.walkAnimationSpeed = 1;
 	this.turnSpeed = 1;
 	this.turnAnimationSpeed = 1;
-	this.moveOverride = 0;
 	this.shiftKey = false;
-	this.mainParent = "";
+	this.mainParent = "connectinggrids-0---";
+	this.mainParentMold = null;
 	this.uicanvas;
 	this.highlightLayer = null;
 	this.context;

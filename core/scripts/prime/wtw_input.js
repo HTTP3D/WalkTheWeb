@@ -66,8 +66,6 @@ WTWJS.prototype.touchDown = function(e) {
 			WTW.show('wtw_itouchright');
 			WTW.touchRightTimer = new Date();
 		}
-		
-		
 		//WTW.setToolTipLocation();
 		//window.setTimeout(function() { WTW.hide('wtw_itooltip'); },3000);
 		if (WTW.pause == 1) {
@@ -189,6 +187,12 @@ WTWJS.prototype.keyDown = function(e) {
 		e = e || window.event;
 		var ctrl = e.ctrlKey ? e.ctrlKey : ((e.keyCode === 17) ? true : false);
 		WTW.shiftKey = e.shiftKey ? e.shiftKey : ((e.keyCode === 16) ? true : false);
+		let zbrowser = WTW.getBrowser();
+		let zcommandworksin = "chrome,edgechrome,safari,firefox,opera";
+		if (e.keyCode === 122 && zcommandworksin.indexOf(zbrowser) > -1) {
+			e.preventDefault();
+			document.querySelector("#wtw_renderCanvas").requestFullscreen();
+		}
 		if (WTW.adminView == 1 && (ctrl || e.keyCode == 27)) {
 			WTW.adminMenuQuickKeys(e.keyCode);
 		} else if (WTW.canvasFocus == 1) {
@@ -255,31 +259,25 @@ WTWJS.prototype.mouseClick = function(e) {
 			} 
 			if (WTW.mouseStartX == WTW.mouseX && WTW.mouseStartY == WTW.mouseY) {
 				var pickedResult = scene.pick(WTW.mouseX, WTW.mouseY);
-				var pickedname = "";
+				var zpickedname = "";
 				if (pickedResult.pickedMesh == null) {
 					if (WTW.currentID != "") {
 						pickedResult.pickedMesh = scene.getMeshByID(WTW.currentID);
 					}
-					pickedname = WTW.currentID;
+					zpickedname = WTW.currentID;
 				} else {
-					pickedname = pickedResult.pickedMesh.name;
+					zpickedname = pickedResult.pickedMesh.name;
 				}
-				if (WTW.setupMode == 1) {
-					WTW.nextSetupMode(pickedname);
-				}
-				if (WTW.setupMode == 0) {
-					if (pickedname != '') {
-						var mesh = scene.getMeshByID(pickedname);
-						if (pickedname.indexOf("-") > -1) {
-							var namepart = pickedname.split('-');
-							WTW.checkMoldEvent('onclick', pickedname);
-							WTW.pluginsOnClick(pickedname);
-
-							if (pickedname.indexOf("-image") > -1) {
-								WTW.checkImageClick(pickedname);
-							} else {
-								WTW.checkJSFunction(pickedname);
-							}
+				if (zpickedname != '') {
+					var mesh = scene.getMeshByID(zpickedname);
+					if (zpickedname.indexOf("-") > -1) {
+						var namepart = zpickedname.split('-');
+						WTW.checkMoldEvent('onclick', zpickedname);
+						WTW.pluginsOnClick(zpickedname);
+						if (zpickedname.indexOf("-image") > -1) {
+							WTW.checkImageClick(zpickedname);
+						} else {
+							WTW.checkJSFunction(zpickedname);
 						}
 					}
 				}
@@ -294,7 +292,6 @@ WTWJS.prototype.mouseClick = function(e) {
 WTWJS.prototype.mouseRight = function(e) {
 	try {
 		e = e || window.event;
-		//scene.activeCamera = scene.activeCameras[0];
 		if (WTW.canvasFocus == 1) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
@@ -304,6 +301,24 @@ WTWJS.prototype.mouseRight = function(e) {
 				return false;
 			} else {
 				return true;
+			}
+		} else {
+			let zclasses = "";
+			if (e.target.attributes.class != undefined) {
+				zclasses = e.target.attributes.class.value;
+			}
+			let allowright = false;
+			if (WTW.isTextBox(e.target) && e.target.disabled == false) {
+				allowright = true;
+			} else if (zclasses != "") {
+				if (zclasses.indexOf(' ') > -1) {
+					allowright = zclasses.toLowerCase().split(" ").includes("allow-contextmenu");
+				} else if (zclasses.toLowerCase() == "allow-contextmenu") {
+					allowright = true;
+				}
+			}
+			if (WTW.adminView != 1 && allowright == false) {
+				e.preventDefault();
 			}
 		}
     } catch (ex) {
@@ -401,7 +416,7 @@ WTWJS.prototype.mouseMove = function(e) {
 			if (e.clientX != undefined) {
 				WTW.mouseX = e.clientX; 
 				WTW.mouseY = e.clientY;
-				if (WTW.setupMode == 0 || (WTW.setupMode == 1 && WTW.mouseMoveX < WTW.sizeX-285)) {
+				if (WTW.mouseMoveX < WTW.sizeX-285) {
 					if (WTW.isMouseDown == 1 && WTW.mouseX > WTW.mouseMoveX) {
 						WTW.keyPressedRemove(1037);
 						WTW.keyPressedAdd(1039);
@@ -657,5 +672,50 @@ WTWJS.prototype.mouseOutMold = function(mold) {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_input.js-mouseOutMold=" + ex.message);
+	}
+}
+
+WTWJS.prototype.onMessage = function (e) {
+	try {
+		e = e || window.event;
+		let zsafe = false;
+		// Check sender origin to be trusted
+		if (e.origin == "https://secure.walktheweb.com") {
+			zsafe = true;
+		} else if (e.origin == "https://3d.walktheweb.com") {
+			zsafe = true;
+		} else if (e.origin == "https://3dnet.walktheweb.com") {
+			zsafe = true;
+		} else if (e.origin == "https://3d.http3d.net") {
+			zsafe = true;
+		}
+		if (zsafe) {
+			let zfunctionname = '';
+			if (e.data.func != undefined) {
+				zfunctionname = e.data.func;
+			}
+			let zparameters = null;
+			if (e.data.parameters != undefined) {
+				zparameters = e.data.parameters;
+			}
+			let zmessage = null;
+			if (e.data.message != undefined) {
+				zmessage = e.data.message;
+			}
+			WTW.executeFunctionByName(zfunctionname, window, zparameters);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_input.js-onMessage=" + ex.message);
+	}
+}
+
+WTWJS.prototype.beforeUnload = function (e) {
+	try {
+		e = e || window.event;
+		WTW.pluginsBeforeUnload();
+//		e.returnValue = null;
+//		return null;
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_input.js-beforeUnload=" + ex.message);
 	}
 }
