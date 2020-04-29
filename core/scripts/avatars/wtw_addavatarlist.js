@@ -13,24 +13,16 @@ WTWJS.prototype.getAvatarList = function() {
 WTWJS.prototype.addAvatar = function(avatarname, avatardef, parentname) {
 	var avatar;
 	try {
-		if (avatardef.avatar == null) {
+		if (avatardef.avatar == undefined) {
 			avatardef.avatar = "";
 		}
 		switch (avatardef.avatar.toLowerCase()) {
-			case "female":
-				avatardef.avatar = 'female';
-				avatar = WTW.addAvatar3DObject(avatarname, avatardef, false, true);
-				break;
-			case "male":
-				avatardef.avatar = 'male';
-				avatar = WTW.addAvatar3DObject(avatarname, avatardef, false, true);
-				break;
 			case "shark":
 				avatar = WTW.addAvatarShark(avatarname, avatardef);
 				break;
 			default:
 				avatardef.avatar = '';
-				avatar = WTW.addAvatar3DObject(avatarname, avatardef, false, true);
+				avatar = WTW.addAvatar3DObject(avatarname, avatardef);
 				break;
 		}
 		var avatarparent = scene.getMeshByID(avatardef.parentname);

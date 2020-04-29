@@ -4512,7 +4512,7 @@ WTWJS.prototype.loadAZAnimationsList = function() {
 						dGet('wtw_azavataranimations').innerHTML += '<div class="wtw-onecol">Load Animations:</div><br />';
 						for (var i=0;i<zresponse.actionzones[0].avataranimations.length;i++) {
 							if (zresponse.actionzones[0].avataranimations[i] != null) {
-								dGet('wtw_azavataranimations').innerHTML += "<div class='wtw-redbuttonright' onclick=\"WTW.deleteAZAvatarAnimation('" + zresponse.actionzones[0].avataranimations[i].actionzoneanimationid + "');\">Delete</div><div class='wtw-smallwhite'>" + zresponse.actionzones[0].avataranimations[i].animationfriendlyname + " (" + zresponse.actionzones[0].avataranimations[i].animationname + ")</div><div class='wtw-clear'></div>";
+								dGet('wtw_azavataranimations').innerHTML += "<div class='wtw-redbuttonright' onclick=\"WTW.deleteAZAvatarAnimation('" + zresponse.actionzones[0].avataranimations[i].actionzoneanimationid + "');\">Delete</div><div class='wtw-smallwhite'>" + zresponse.actionzones[0].avataranimations[i].animationfriendlyname + " (" + zresponse.actionzones[0].avataranimations[i].animationevent + ")</div><div class='wtw-clear'></div>";
 							}
 						}
 					}
@@ -4555,7 +4555,7 @@ WTWJS.prototype.loadAZAvatarAnimations = function() {
 				for (var i=0;i<zresponse.avataranimations.length;i++) {
 					if (zresponse.avataranimations[i] != null) {
 						var option = document.createElement("option");
-						option.text = zresponse.avataranimations[i].animationfriendlyname + " (" + zresponse.avataranimations[i].animationname + ")";
+						option.text = zresponse.avataranimations[i].animationfriendlyname + " (" + zresponse.avataranimations[i].animationevent + ")";
 						option.value = zresponse.avataranimations[i].avataranimationid;
 						dGet('wtw_tazavataranimationid').add(option);
 					}
@@ -11579,6 +11579,7 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 									zupdateslist += "App Name=" + zmyplugins[i].pluginname + "<br />";
 									zupdateslist += "App Version=" + zmyplugins[i].latestversion + "<br />";
 									zupdateslist += "App Update=" + datestring + "<br />";
+									zupdateslist += "Backup your files and database before updating!<br />";
 									zupdatewtw += 1;
 								}
 								zupdateslist += "<div id=\"wtw_loadingupdating\" class=\"wtw-loadingnotice\">Updating...</div>";
