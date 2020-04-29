@@ -1,4 +1,7 @@
 <?php
+/* these /connect files are designed to extend data to other servers - like having your 3D Building in their 3D Community Scene */
+/* permissions are required for access to some data */
+/* this connect file provides action zone information */
 require_once('../core/functions/class_wtwconnect.php');
 global $wtwconnect;
 try {
@@ -50,9 +53,9 @@ try {
 			$j = 0;
 			$zresults2 = $wtwconnect->query("
 				select az.*,
-					aa.requireslogin,
+					aa.avatarid,
 					aa.loadpriority,
-					aa.animationname,
+					aa.animationevent,
 					aa.animationfriendlyname,
 					aa.animationicon,
 					aa.objectfolder,
@@ -73,9 +76,9 @@ try {
 				$zavataranimations[$j] = array(
 					'actionzoneanimationid'=> $zrow2["actionzoneanimationid"],
 					'avataranimationid'=> $zrow2["avataranimationid"],
-					'requireslogin'=> $zrow2["requireslogin"],
+					'avatarid'=> $zrow2["avatarid"],
 					'loadpriority'=> $zrow2["loadpriority"],
-					'animationname'=> $zrow2["animationname"],
+					'animationevent'=> $zrow2["animationevent"],
 					'animationfriendlyname'=> $zrow2["animationfriendlyname"],
 					'animationicon'=> $zrow2["animationicon"],
 					'objectfolder'=> $zrow2["objectfolder"],

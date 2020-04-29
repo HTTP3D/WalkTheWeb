@@ -1,4 +1,7 @@
 <?php
+/* these /connect files are designed to extend data to other servers - like having your 3D Building in their 3D Community Scene */
+/* permissions are required for access to some data */
+/* this connect file provides community mold information to recover a deleted item */
 require_once('../core/functions/class_wtwconnect.php');
 global $wtwconnect;
 try {
