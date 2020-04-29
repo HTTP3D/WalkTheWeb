@@ -17,6 +17,8 @@ INSTALLATION
 7.  Optional: You can manually configure the settings as /config/wtw_config.php
     (sample config file is provided in the /config folder)
     Open the website to complete the installation.
+8.  After installation completes, select the user name on the bottom right menu and 
+    click Select My Avatar from the Profile Menu to get started.
 
 That is it! 
 
