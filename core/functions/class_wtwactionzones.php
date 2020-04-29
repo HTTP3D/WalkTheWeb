@@ -1,5 +1,6 @@
 <?php
 class wtwactionzones {
+	/* $wtwactionzones class for admin database functions for action zones */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -20,6 +21,7 @@ class wtwactionzones {
 	}
 	
 	public function checkActionZone($checkactionzoneid) {
+		/* validates if a action zone id is in the actionzones table */
 		$zactionzoneid = "";
 		global $wtwhandlers;
 		try {
@@ -39,11 +41,13 @@ class wtwactionzones {
 	}
 	
 	public function saveActionZone($zactionzoneid, $zcommunityid, $zbuildingid, $zthingid, $zactionzonename, $zactionzonetype, $zactionzoneshape, $zattachmoldid, $zmovementtype, $zrotatespeed, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zaxispositionx, $zaxispositiony, $zaxispositionz, $zaxisrotationx, $zaxisrotationy, $zaxisrotationz, $zrotateaxis, $zrotatedegrees, $zrotatedirection, $zmovementdistance, $zloadactionzoneid, $zjsfunction, $zjsparameters) {
+		/* save an action zone to the actionzones table */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
 			if ($wtwhandlers->checkUpdateAccess($zcommunityid, $zbuildingid, $zthingid)) {
 				$foundactionzoneid = $this->checkActionZone($zactionzoneid);
+				/* if actionzoneid is found, update the record */
 				if (!empty($foundactionzoneid) && isset($foundactionzoneid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."actionzones
@@ -84,6 +88,7 @@ class wtwactionzones {
 							actionzoneid='".$zactionzoneid."';");
 					$zsuccess = true;
 				} else {
+					/* if actionzoneid is not found, insert the record */
 					if (empty($zactionzoneid) || !isset($zactionzoneid)) {
 						$zactionzoneid = $wtwhandlers->getRandomString(16,1);
 					}
@@ -172,12 +177,17 @@ class wtwactionzones {
 	}
 	
 	public function deleteActionZone($zactionzoneid, $zcommunityid, $zbuildingid, $zthingid) {
+		/* sets the record flag as deleted for the action zone */
+		/* note, we update the record setting deleteddate, deleteduserid, and flag deleted a number greater than zero for deleted */
+		/* deleted=1 is common, uses higher numbers to assist in recovering groups of items as needed */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
+			/* user must have update access to set something deleted */
 			if ($wtwhandlers->checkUpdateAccess($zcommunityid, $zbuildingid, $zthingid)) {
 				$newactionzoneid = "";
 				$zactionzonetype = "";
+				/* retrieve a replacement action zone for any objects using the deleted action zone */
 				$zresults = $wtwhandlers->query("
 					select * from ".wtw_tableprefix."actionzones
 					where actionzoneid='".$zactionzoneid."'
@@ -209,6 +219,7 @@ class wtwactionzones {
 						}
 					}
 				}
+				/* set actionzone deleted */
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones
 					set deleted=1,
@@ -231,6 +242,7 @@ class wtwactionzones {
 						and communityid='".$zcommunityid."';");
 				
 				if (!empty($newactionzoneid) && isset($newactionzoneid)) {
+					/* clear community, building, and thing molds that used the deleted action zone */
 					if (!empty($zcommunityid) && isset($zcommunityid)) {
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."communitymolds
@@ -272,6 +284,8 @@ class wtwactionzones {
 	}
 
 	public function importActionZones($zcommunityid, $zbuildingid, $zthingid, $zactionzonesbulk) {
+		/* used when downloading communities, buildings, and things in the media library */
+		/* action zones bulk is a JSON object of action zones */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
@@ -413,6 +427,7 @@ class wtwactionzones {
 	}
 
 	public function updateActionZoneOnCommunityMold($zcommunitymoldid, $zcommunityid, $zactionzoneid) {
+		/* update an action zone that loads a community mold */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
@@ -434,6 +449,7 @@ class wtwactionzones {
 	}
 	
 	public function updateActionZoneCommunityMolds($zcommunitymolds, $zcommunityid, $zactionzoneid) {
+		/* takes a series of comma separated moldids and updates the action zone on each */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
@@ -456,6 +472,7 @@ class wtwactionzones {
 	}
 	
 	public function updateActionZoneOnBuildingMold($zbuildingmoldid, $zbuildingid, $zactionzoneid) {
+		/* update an action zone that loads a building mold */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
@@ -477,6 +494,7 @@ class wtwactionzones {
 	}
 	
 	public function updateActionZoneBuildingMolds($zbuildingmolds, $zbuildingid, $zactionzoneid) {
+		/* takes a series of comma separated moldids and updates the action zone on each */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
@@ -499,6 +517,7 @@ class wtwactionzones {
 	}
 	
 	public function updateActionZoneOnThingMold($zthingmoldid, $zthingid, $zactionzoneid) {
+		/* update an action zone that loads a thing mold */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
@@ -520,6 +539,7 @@ class wtwactionzones {
 	}
 	
 	public function updateActionZoneThingMolds($zthingmolds, $zthingid, $zactionzoneid) {
+		/* takes a series of comma separated moldids and updates the action zone on each */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
@@ -542,6 +562,7 @@ class wtwactionzones {
 	}
 	
 	public function updateActionZoneAvatarAnimation($zactionzoneid, $zavataranimationid, $zcommunityid, $zbuildingid, $zthingid) {
+		/* some action zones can trigger an avatar to load an animation when in the zone, this function adds the animations to the action zone set */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
@@ -595,6 +616,7 @@ class wtwactionzones {
 	}
 
 	public function deleteActionZoneAvatarAnimation($zactionzoneid, $zactionzoneanimationid, $zcommunityid, $zbuildingid, $zthingid) {
+		/* some action zones can trigger an avatar to load an animation when in the zone, this function removes the animations for the action zone set */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {

@@ -1,5 +1,6 @@
 <?php
 class wtwdb {
+	/* main $wtwdb class for WalkTheWeb database functions */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -19,6 +20,7 @@ class wtwdb {
 		}
 	}
 	
+	/* declare public $wtwdb variables */
 	public $userid = "";
 	public $pagename = "";
 	
@@ -849,7 +851,7 @@ class wtwdb {
 	public function checkFolderPath($zurl) {
 		$validurl = "";
 		try {
-			if (preg_match('/[a-zA-Z0-9_.-/:]/', $zurl)) {
+			if (preg_match('/[a-zA-Z0-9_.-\/\:]/', $zurl)) {
 				$validurl = $zurl;
 			}
 		} catch (Exception $e) {

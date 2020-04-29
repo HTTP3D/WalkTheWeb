@@ -1,5 +1,6 @@
 <?php
 class wtwavatars {
+	/* $wtwavatars class for admin database functions for avatars */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -20,6 +21,7 @@ class wtwavatars {
 	}
 
 	public function getAvatar($zuseravatarid,$zinstanceid) {
+		/* gets basic avatar information - runtime uses /connect/useravatar.php for local and /connect/avatar.php for anonymous; (also has global option) */
 		global $wtwhandlers;
 		$zfounduseravatarid = "";
 		try {
@@ -83,6 +85,7 @@ class wtwavatars {
 	}
 
 	public function getUserSession($zinstanceid) {
+		/* get local user informaiton based on logged in session */
 		global $wtwhandlers;
 		$zresponse = "";
 		try {
@@ -105,7 +108,7 @@ class wtwavatars {
 					$zavatar = array(
 						'userid'=> $zrow["userid"],
 						'username'=> $zrow["username"],
-						'myavatarid'=> $zrow["useravatarid"],
+						'useravatarid'=> $zrow["useravatarid"],
 						'avatarind'=> $zrow["avatarind"],
 						'uploadpathid'=> $zrow["uploadpathid"],
 						'displayname'=> $zrow["displayname"],
@@ -126,7 +129,7 @@ class wtwavatars {
 					$zavatar = array(
 						'userid'=> '',
 						'username'=> 'Anonymous',
-						'myavatarid'=> $zrow["useravatarid"],
+						'useravatarid'=> $zrow["useravatarid"],
 						'avatarind'=> $zrow["avatarind"],
 						'uploadpathid'=> '',
 						'displayname'=> 'Anonymous',
@@ -143,6 +146,7 @@ class wtwavatars {
 	}
 		
 	public function saveAvatar($zuseravatarid,$zinstanceid,$zuserip,$zavatarind,$zobjectfolder,$zobjectfile,$zscalingx,$zscalingy,$zscalingz) {
+		/* updates avatar information - depreciated with release v3.3.0 and avatar designer plugin */
 		global $wtwhandlers;
 		$zfounduseravatarid = "";
 		try {
@@ -250,6 +254,7 @@ class wtwavatars {
 	}
 
 	public function checkAnonymousAvatar($zinstanceid,$zuserip,$zavatarind) {
+		/* checks to see if current user has an anonymous avatar - depreciated with release v3.3.0 and avatar designer plugin */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -338,6 +343,7 @@ class wtwavatars {
 	}
 	
 	public function saveAvatarColor($zuseravatarid,$zinstanceid,$zavatarpart,$zemissivecolorr,$zemissivecolorg,$zemissivecolorb) {
+		/* save color settings for current user avatar - depreciated with release v3.3.0 and avatar designer plugin */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -404,6 +410,7 @@ class wtwavatars {
 	}
 	
 	public function saveAvatarDisplayName($zuseravatarid,$zinstanceid,$zavatardisplayname) {
+		/* save display name for current user avatar - depreciated with release v3.3.0 and avatar designer plugin */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -481,7 +488,8 @@ class wtwavatars {
 		return $zsuccess;
 	}
 	
-	public function saveAvatarAnimation($zuseravataranimationid,$zuseravatarid,$zinstanceid,$zavataranimationid,$zavataranimationname,$zspeedratio) {
+	public function saveAvatarAnimation($zuseravataranimationid,$zuseravatarid,$zinstanceid,$zavataranimationid,$zavataranimationevent,$zspeedratio) {
+		/* save avatar animation settings for current user avatar - depreciated with release v3.3.0 and avatar designer plugin */
 		global $wtwhandlers;
 		try {
 			$wtwhandlers->getSessionUserID();
@@ -490,17 +498,17 @@ class wtwavatars {
 			$zresults = $wtwhandlers->query("
 					select useravataranimationid 
 					from ".wtw_tableprefix."useravataranimations 
-					where avataranimationname='".$zavataranimationname."' 
-						and (not avataranimationname='') 
+					where avataranimationevent='".$zavataranimationevent."' 
+						and (not avataranimationevent='') 
 						and useravatarid='".$zfounduseravatarid."' 
 						and not useravatarid='' 
 					limit 1;");
 			foreach ($zresults as $zrow) {
 				$zfounduseravataranimationid = $zrow["useravataranimationid"];
 			}
-			if ($zavataranimationname == 'onoption' && !empty($zuseravataranimationid) && isset($zuseravataranimationid)) {
+			if ($zavataranimationevent == 'onoption' && !empty($zuseravataranimationid) && isset($zuseravataranimationid)) {
 				$zfounduseravataranimationid = $zuseravataranimationid;
-			} else if ($zavataranimationname == 'onoption') {
+			} else if ($zavataranimationevent == 'onoption') {
 				$zfounduseravataranimationid = "";
 			}
 			if (!empty($zfounduseravataranimationid) && isset($zfounduseravataranimationid)) {
@@ -508,7 +516,7 @@ class wtwavatars {
 					update ".wtw_tableprefix."useravataranimations
 					set avataranimationid='".$zavataranimationid."',
 						 useravatarid='".$zfounduseravatarid."',
-						 avataranimationname='".$zavataranimationname."',
+						 avataranimationevent='".$zavataranimationevent."',
 						 speedratio=".$wtwhandlers->checkNumber($zspeedratio,1).",
 						 updatedate=now(),
 						 updateuserid='".$wtwhandlers->userid."',
@@ -523,7 +531,7 @@ class wtwavatars {
 						(useravataranimationid,
 						 avataranimationid,
 						 useravatarid,
-						 avataranimationname,
+						 avataranimationevent,
 						 speedratio,
 						 createdate,
 						 createuserid,
@@ -533,7 +541,7 @@ class wtwavatars {
 						('".$zfounduseravataranimationid."',
 						 '".$zavataranimationid."',
 						 '".$zfounduseravatarid."',
-						 '".$zavataranimationname."',
+						 '".$zavataranimationevent."',
 						 ".$wtwhandlers->checkNumber($zspeedratio,1).",
 						 now(),
 						 '".$wtwhandlers->userid."',
@@ -548,6 +556,7 @@ class wtwavatars {
 	}
 	
 	public function getAvatarAnimationsAll($zuseravatarid, $zinstanceid) {
+		/* gets all avatar animations for menu - depreciated with release v3.3.0 and avatar designer plugin */
 		global $wtwhandlers;
 		$zresponse = null;
 		$animations = array();
@@ -567,21 +576,19 @@ class wtwavatars {
 					on a.avataranimationid = u.avataranimationid
 				where (a.userid='".$wtwhandlers->userid."' 
 					or a.userid='')
-					and (('".$wtwhandlers->userid."'='' and requireslogin=0)
-						or not '".$wtwhandlers->userid."'='')
 					and a.deleted=0
 				order by a.loadpriority desc, 
-						a.animationname, 
+						a.animationevent, 
 						a.animationfriendlyname, 
 						a.avataranimationid;");
 			$i = 0;
 			foreach ($zresults as $zrow) {
 				$animations[$i] = array(
 					'avataranimationid'=> $zrow["avataranimationid"],
-					'requireslogin'=> $zrow["requireslogin"],
+					'avatarid'=> $zrow["avatarid"],
 					'userid'=> $zrow["userid"],
 					'loadpriority'=> $zrow["loadpriority"],
-					'animationname'=> $zrow["animationname"],
+					'animationevent'=> $zrow["animationevent"],
 					'animationicon'=> $zrow["animationicon"],
 					'animationfriendlyname'=> $zrow["animationfriendlyname"],
 					'objectfolder'=> $zrow["objectfolder"],
@@ -611,6 +618,7 @@ class wtwavatars {
 	}
 	
 	public function deleteAvatarAnimation($zuseravataranimationid,$zuseravatarid,$zinstanceid,$zavataranimationid) {
+		/* flags deleted when current user removes animation - depreciated with release v3.3.0 and avatar designer plugin */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -644,6 +652,7 @@ class wtwavatars {
 	}
 	
 	public function updateAvatarTransport($zuseravatarid, $zinstanceid, $zavataranimation, $ztransport) {
+		/* sets the avatar screen entrance */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {

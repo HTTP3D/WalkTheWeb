@@ -1,5 +1,6 @@
 <?php
 class wtwthingmolds {
+	/* $wtwthingmolds class for admin database functions for 3d thing molds */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -20,6 +21,7 @@ class wtwthingmolds {
 	}
 	
 	function saveThingMold($zthingmoldid, $zthingid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zsubdivisions, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb, $zspecularcolorr, $zspecularcolorg, $zspecularcolorb, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain) {
+		/* saves thing mold settings when a thing mold is added or edited */
 		global $wtwhandlers;
 		try {
 			if ($wtwhandlers->checkUpdateAccess("", "", $zthingid)) {
@@ -253,6 +255,7 @@ class wtwthingmolds {
 	}
 
 	function deleteThingMold($zthingmoldid, $zthingid, $zdeleted) {
+		/* flags a thing mold as deleted so it will not load as part of the thing */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -293,6 +296,7 @@ class wtwthingmolds {
 	}
 
 	function saveThingMoldActionZone($zthingmoldid, $zthingid, $zactionzoneid) {
+		/* update a thing mold to be part of an action zone - often animated */
 		/* this is not Load Zone, Mold is part of another ActionZone like Door Swinging */
 		global $wtwhandlers;
 		$zsuccess = false;

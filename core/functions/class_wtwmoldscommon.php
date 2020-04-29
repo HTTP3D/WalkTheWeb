@@ -1,5 +1,6 @@
 <?php 
 class wtwmoldscommon {
+	/* $wtwmoldscommon class for admin database functions for 3d community, building, and thing molds */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -20,6 +21,7 @@ class wtwmoldscommon {
 	}
 	
 	public function savePathPoints($zcommunityid, $zbuildingid, $zthingid, $zmoldid, $zpathnumber, $zpathpoints) {
+		/* certain molds like pipes have point values to follow, this function saves a series of points to the database */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -107,6 +109,7 @@ class wtwmoldscommon {
 	}
 	
 	function saveWebImage($zthingmoldid, $zbuildingmoldid, $zcommunitymoldid, $zimageindex, $zimageid, $zimagehoverid, $zimageclickid, $zjsfunction, $zjsparameters) {
+		/* web images are used by image related molds, they provide default image, hover image, and image when clicked */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -183,6 +186,7 @@ class wtwmoldscommon {
 	}
 
 	public function importMolds($zmoldgroup, $zwebid, $zcopywebid, $zmoldsbulk) {
+		/* imports the molds to community, building, and thing when downloaded by the media library */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
@@ -434,6 +438,7 @@ class wtwmoldscommon {
 	}
 	
 	public function importMoldPoints($zmoldgroup, $zwebid, $zcopywebid, $zmoldpointsbulk) {
+		/* downloads mold points for molds that are downloaded by the media library */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {

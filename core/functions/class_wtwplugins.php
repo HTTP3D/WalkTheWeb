@@ -1,5 +1,6 @@
 <?php
 class wtwplugins {
+	/* $wtwplugins class for WalkTheWeb plugins to have easy access to common used functions for reading, scrubbing data, and database interaction */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -19,6 +20,7 @@ class wtwplugins {
 		}
 	}
 	
+	/* declare public $wtwplugins variables */
 	public $serverinstanceid = "";
 	public $rootpath = "";
 	public $contentpath = "";
@@ -28,6 +30,7 @@ class wtwplugins {
 	public $domainurl = "";
 	public $pagename = "";
 	public $userid = "";
+	public $userip = "";
 	public $uri = "";
 	public $community = "";
 	public $building = "";
@@ -37,6 +40,7 @@ class wtwplugins {
 	public $thingid = "";
 
 	public function initClass() {
+		/* set the global variables */
 		global $wtw;
 		if ($wtw != null) {
 			$this->serverinstanceid = $wtw->serverinstanceid;
@@ -48,6 +52,7 @@ class wtwplugins {
 			$this->domainurl = $wtw->domainurl;
 			$this->pagename = $wtw->pagename;
 			$this->userid = $wtw->userid;
+			$this->userip = $wtw->userip;
 			$this->uri = $wtw->uri;
 			$this->community = $wtw->community;
 			$this->building = $wtw->building;
@@ -58,6 +63,7 @@ class wtwplugins {
 		}
 	}
 	
+	/* expose functions to this class from other functions so that the original function is only updated in one place */
 	public function addAdminMenuItem($zid, $ztitle, $zmenusort, $zmenu, $zsubmenusort, $zsubmenu, $ziconurl, $zaccessrequired, $zjsfunction) {
 		global $wtwadminmenu;
 		if (isset($wtwadminmenu)) {
@@ -160,12 +166,69 @@ class wtwplugins {
 		return $wtwdb->saveSettings($zsettings);
 	}
 	
+	public function getVal($key, $defaultval) {
+		global $wtwdb;
+		return $wtwdb->getVal($key, $defaultval);
+	}
+
+	public function getNumber($key, $defaultval) {
+		global $wtwdb;
+		return $wtwdb->getNumber($key, $defaultval);
+	}
+
+	public function checkIDFormat($zid) {
+		global $wtwdb;
+		return $wtwdb->checkIDFormat($zid);
+	}
+
+	public function checkNumber($val, $defaultval) {
+		global $wtwdb;
+		return $wtwdb->checkNumber($val, $defaultval);
+	}
+
+	public function checkAlphaNumeric($zid) {
+		global $wtwdb;
+		return $wtwdb->checkAlphaNumeric($zid);
+	}
+
+	public function checkFolderPath($zurl) {
+		global $wtwdb;
+		return $wtwdb->checkFolderPath($zurl);
+	}
+
+	public function checkFileName($zid) {
+		global $wtwdb;
+		return $wtwdb->checkFileName($zid);
+	}
+
+	public function checkFunctionName($zid) {
+		global $wtwdb;
+		return $wtwdb->checkFunctionName($zid);
+	}
+
+	public function checkPublishName($zdomainname, $zwebtype, $zpublishname) {
+		global $wtwdb;
+		return $wtwdb->checkPublishName($zdomainname, $zwebtype, $zpublishname);
+	}
+
+	public function prepCheckDate($zdate) {
+		/* returns either 'dateformatted' or NULL - ready to be used in SQL */
+		global $wtwdb;
+		return $wtwdb->prepCheckDate($zdate);
+	}
+
+	public function escapeHTML($text) {
+		global $wtwdb;
+		return $wtwdb->escapeHTML($text);
+	}
+
 	public function isUserInRole($zrole) {
 		global $wtwdb;
 		return $wtwdb->isUserInRole($zrole);
 	}
 	
 	public function addStylesheet($zstylesheetid, $zadminonly, $zstylesheeturl) {
+		/* function to add a stylsheet to the page load */
 		global $wtw;
 		$zsuccess = false;
 		try {
@@ -193,6 +256,7 @@ class wtwplugins {
 	}
 	
 	public function getPluginStylesheets($zadmin) {
+		/* retrieve stylesheets html for page load */
 		global $wtw;
 		$zstylesheettext = "";
 		try {
@@ -229,6 +293,7 @@ class wtwplugins {
 	}	
 
 	public function addScript($zscriptid, $zadminonly, $zscripturl) {
+		/* function to add a javascript to the page load */
 		global $wtw;
 		$zsuccess = false;
 		try {
@@ -256,6 +321,7 @@ class wtwplugins {
 	}
 	
 	public function getPluginScripts($zadmin, $zver) {
+		/* retrieve javascript html for page load */
 		global $wtw;
 		$zscripttext = "";
 		try {
@@ -292,6 +358,7 @@ class wtwplugins {
 	}	
 
 	public function addScriptFunction($zevent, $zfunctionname) {
+		/* function to add a javascript function to a hook (core function event) */
 		global $wtw;
 		$zsuccess = false;
 		try {
@@ -318,6 +385,7 @@ class wtwplugins {
 	}
 	
 	public function getScriptFunctions() {
+		/* retrieve javascript functions for page load - they use the array of entries to build the HTML added to the page loaded */
 		global $wtw;
 		$jsdata = "";
 		try {
@@ -363,15 +431,7 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsSetupModeClosed = function() {\r\n";
-			$jsdata .= "		try {\r\n";
-			$jsdata .= $this->getScriptFunction('setupmodeclosed');
-			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('class_wtw-pluginsSetupModeClosed=' + ex.message);\r\n";
-			$jsdata .= "		}\r\n";
-			$jsdata .= "	}\r\n";
-
-			$jsdata .= "	WTWJS.prototype.pluginsSavedAvatarRetrieved = function() {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsSavedAvatarRetrieved = function(zavatarname, zsendrefresh) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= $this->getScriptFunction('savedavatarretrieved');
 			$jsdata .= "		} catch (ex) {\r\n";
@@ -406,7 +466,7 @@ class wtwplugins {
 			$jsdata .= "		return avatardef;\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsOnClick = function(pickedname) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsOnClick = function(zpickedname) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->getScriptFunction('onclick');
 			$jsdata .= "		} catch (ex) {\r\n";
@@ -642,11 +702,19 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsOnUnload = function() {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsOnMyAvatarSelect = function(zglobalavatarid, zuseravatarid, zavatarid) {\r\n";
 			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->getScriptFunction('onunload');
+			$jsdata .= 	$this->getScriptFunction('onmyavatarselect');
 			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('class_wtw-pluginsOnUnload=' + ex.message);\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsOnMyAvatarSelect=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsBeforeUnload = function() {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('beforeunload');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsBeforeUnload=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
@@ -658,6 +726,9 @@ class wtwplugins {
 	}	
 
 	public function getScriptFunction($zgetevent) {
+		/* get script function from php array to add to hook (core function events) */
+		/* get event matches the name of the event with the added event in the array */
+		/* it most often matches the core function name but all lower case */
 		global $wtw;
 		$zscripttext = "";
 		try {
@@ -703,6 +774,7 @@ class wtwplugins {
 	}	
 
 	public function addMoldDef($zmoldtitle, $zlist, $zjsfunction) {
+		/* plugins can dynamically add a mold type and provide the js code function that will create the mold at runtime */
 		global $wtw;
 		$zsuccess = false;
 		try {
@@ -730,6 +802,7 @@ class wtwplugins {
 	}
 
 	public function returnMoldDefsList($zgetlist) {
+		/* this is a simple list of molds that can be added to a 3D Community, Building, or Thing */
 		global $wtw;
 		$zscripttext = "";
 		try {
@@ -753,6 +826,7 @@ class wtwplugins {
 	}	
 
 	public function returnMoldDefsFunctions() {
+		/* this function returns the js functions that create the custom molds */
 		global $wtw;
 		$zscripttext = "switch (shape) {\r\n";
 		try {
@@ -782,6 +856,7 @@ class wtwplugins {
 	}	
 
 	public function addActionZoneDef($zactionzonetitle, $zjsfunction) {
+		/* plugins can create custom action zone types and add them to the admin options to use */
 		global $wtw;
 		$zsuccess = false;
 		try {
@@ -808,6 +883,7 @@ class wtwplugins {
 	}
 
 	public function returnActionZoneDefsList() {
+		/* returns a simple list of custom action zones added - shown in the action zones list to add to a 3D Community, Building, or Thing */
 		global $wtw;
 		$zscripttext = "";
 		try {
@@ -830,6 +906,7 @@ class wtwplugins {
 	}	
 
 	public function returnActionZoneDefsFunctions() {
+		/* retrieves the js functions that will create the custom action zone */
 		global $wtw;
 		$zscripttext = "switch (actionzonetype) {\r\n";
 		try {
@@ -858,6 +935,7 @@ class wtwplugins {
 	}	
 	
 	public function addCoveringDef($zcoveringtitle, $zjsfunction) {
+		/* allows plugins to create custom coverings (materials) to be added to the admin tools and used in admin mode */
 		global $wtw;
 		$zsuccess = false;
 		try {
@@ -884,6 +962,7 @@ class wtwplugins {
 	}
 
 	public function returnCoveringDefsList() {
+		/* provides a simple list of custom coverings (materials) for the admin forms (like edit mold) */
 		global $wtw;
 		$zscripttext = "";
 		try {
@@ -906,6 +985,7 @@ class wtwplugins {
 	}	
 
 	public function returnCoveringDefsFunctions() {
+		/* retrieves the js functions for adding and using the custom covering (material) at runtime */
 		global $wtw;
 		$zscripttext = "switch (coveringname) {\r\n";
 		try {

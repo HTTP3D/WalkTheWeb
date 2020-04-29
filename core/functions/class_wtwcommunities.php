@@ -1,5 +1,6 @@
 <?php
 class wtwcommunities {
+	/* $wtwcommunities class for admin database functions for 3d communities */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -20,6 +21,7 @@ class wtwcommunities {
 	}
 	
 	public function communityExist($zcommunityid) {
+		/* check if a community id exists in the database */
 		global $wtwhandlers;
 		$found = false;
 		try {
@@ -38,6 +40,7 @@ class wtwcommunities {
 	}
 
 	public function saveCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag) {
+		/* save community settings to the database */
 		global $wtwhandlers;
 		$copycommunityid = "";
 		try {
@@ -182,6 +185,7 @@ class wtwcommunities {
 	}
 
 	public function saveCommunityStartPosition($zcommunityid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz) {
+		/* this sets the avatar start position in a 3D Community scene */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -209,6 +213,7 @@ class wtwcommunities {
 	}
 
 	public function saveCommunityGravity($zcommunityid, $zgravity) {
+		/* this sets the gravity applied to a particular 3D Community scene */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -228,6 +233,7 @@ class wtwcommunities {
 	}
 	
 	public function deleteCommunity($zcommunityid) {
+		/* flags a community as deleted */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -321,6 +327,7 @@ class wtwcommunities {
 	}
 	
 	public function saveCommunityGround($zcommunityid, $ztextureid) {
+		/* updates the extended ground texture settings */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -338,6 +345,7 @@ class wtwcommunities {
 	}
 	
 	public function saveCommunitySky($zcommunityid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient) {
+		/* save 3D Community Scene sky settings */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -364,6 +372,7 @@ class wtwcommunities {
 	}
 
 	public function copyCommunity($zcommunityid, $zcopycommunityid) {
+		/* creates a copy of a 3D Community */
 		global $wtwhandlers;
 		try {
 			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "") && $wtwhandlers->checkUpdateAccess($zcopycommunityid, "", "")) {
@@ -1239,6 +1248,7 @@ class wtwcommunities {
 	}
 	
 	public function importCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zcommunityanalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag) {
+		/* imports community settings from the media library wen you download a community */
 		global $wtwhandlers;
 		try {
 			/* ini_set('max_execution_time', 300); */
@@ -1368,6 +1378,7 @@ class wtwcommunities {
 	}
 
 	public function shareCommunityTemplate($zcommunityid, $ztemplatename, $zdescription, $ztags) {
+		/* shares a community to the media library (not currently available) */
 		global $wtwhandlers;
 		try {
 			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);

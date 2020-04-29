@@ -1,5 +1,8 @@
 <?php
 class wtwpluginloader {
+	/* $wtwpluginloader class for WalkTheWeb functions for loading the various 3d plugins */
+	/* this is used by the engine to determine if a plugin is found, active, and to implement plugin code as necessary */
+	/* if you are creating a plugin, use the /core/functions/class_plugins.php for functions and global values */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -20,6 +23,7 @@ class wtwpluginloader {
 	}
 	
 	public function getAllPlugins($zcontentpath, $zload) {
+		/* check the plugin folder path to get all plugins by folders */
 		global $wtwdb;
 		$zresponse = array();
 		try {
@@ -47,6 +51,7 @@ class wtwpluginloader {
 	}
 	
 	public function getPluginPHP($zcontentpath, $zpluginphp, $zfolder, $zload) {
+		/* check for initial php file under plugin folder (name should match the folder with .php added) */
 		global $wtwdb; 
 		$zresponse = array(
 			'pluginname' => '',
@@ -104,6 +109,7 @@ class wtwpluginloader {
 	}
 	
 	public function getPluginActive($zpluginname) {
+		/* see if a plugin is set to active */
 		global $wtwdb;
 		$zactive = "0";
 		try {
@@ -126,6 +132,7 @@ class wtwpluginloader {
 	}
 	
 	public function setPluginActive($zpluginname, $zactive) {
+		/* set a plugin active status */
 		global $wtwdb;
 		$zsuccess = false;
 		try {
@@ -184,6 +191,7 @@ class wtwpluginloader {
 	}	
 
 	public function updateWalkTheWeb($zpluginname, $zversion, $zupdateurl) {
+		/* download and update WalkTheWeb core product */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -230,6 +238,8 @@ class wtwpluginloader {
 	}
 	
 	public function loadConnectURL() {
+		/* plugins can have a /connect folder that is accessed as a root folder through the provided rewrite rules */
+		/* basically /content/plugins/YOURPLUGINNAME/connect/ is treated as /connect/ */
 		require_once(wtw_rootpath.'/core/functions/class_wtwdb.php');
 		global $wtw;
 		try {
@@ -288,6 +298,8 @@ class wtwpluginloader {
 	}
 
 	public function loadHandlersURL() {
+		/* plugins can have a /handlers folder that is accessed as a root /core/handlers/ folder through the provided rewrite rules */
+		/* basically /content/plugins/YOURPLUGINNAME/handlers/ is treated as /core/handlers/ */
 		require_once(wtw_rootpath.'/core/functions/class_wtwdb.php');
 		global $wtw;
 		try {

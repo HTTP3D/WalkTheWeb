@@ -1,5 +1,6 @@
 <?php
 class wtwuser {
+	/* $wtwuser class for quick information about the current WalkTheWeb user */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -13,6 +14,7 @@ class wtwuser {
 
 	}	
 	
+	/* declare public $wtwuser variables */
 	public $userid = "";
 	public $username = "";
 	public $userip = "";

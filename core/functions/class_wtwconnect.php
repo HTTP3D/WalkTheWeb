@@ -1,5 +1,7 @@
 <?php
 class wtwconnect {
+	/* $wtwconnect class for database functions tied to the /connect folder files */
+	/* these /connect files are designed to extend data to other servers - like having your 3D Building in their 3D Community Scene */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -10,6 +12,7 @@ class wtwconnect {
 	}
 	
 	public function __construct() {
+		/* set root path for file references */
 		$this->rootpath = str_replace('/core/functions','',str_replace('\\','/',dirname(__FILE__)));
 		if (!defined('wtw_rootpath')) {
 			define("wtw_rootpath", $this->rootpath);
@@ -24,8 +27,11 @@ class wtwconnect {
 			call_user_func_array($this->$method, array_merge(array(&$this), $arguments));
 		}
 	}
-
+	
+	/* declare public $wtwconnect variables */
 	public $serverinstanceid = "";
+	public $accesstoken = "";
+	public $globaluserid = -1;
 	public $rootpath = "";
 	public $contentpath = "";
 	public $contenturl = "";
@@ -38,6 +44,7 @@ class wtwconnect {
 	public $uri = "";
 
 	public function getClientIP(){
+		/* returns the current user IP address - also attempts to include IP if server is behind load balancers */
 		$clientip = "";
 		try {
 			if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)){
@@ -52,6 +59,7 @@ class wtwconnect {
 	}	
 
 	public function initClass() {
+		/* checks for https and loads the public variables */
 		try {
 			set_error_handler (
 				function($errno, $errstr, $errfile, $errline) {
@@ -84,13 +92,22 @@ class wtwconnect {
 				$this->protocol = "https://";
 				$_SERVER['HTTPS']='on';
 			}
+			if (!empty($_SESSION["wtw_accesstoken"]) && isset($_SESSION["wtw_accesstoken"])) {
+				$this->accesstoken = $_SESSION["wtw_accesstoken"];
+			}
+			if (!empty($_SESSION["wtw_globaluserid"]) && isset($_SESSION["wtw_globaluserid"])) {
+				$this->globaluserid = $_SESSION["wtw_globaluserid"];
+			}
 			if (isset($_SERVER['PHP_SELF']) && !empty($_SERVER['PHP_SELF'])) {
 				$this->pagename = strtolower(basename($_SERVER['PHP_SELF']));
 			} else {
 				$this->pagename = "index.php";
 			}
 			if (isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
-				$this->uri = trim(strtolower($_SERVER['REQUEST_URI']));
+				$this->uri = trim($_SERVER['REQUEST_URI']);
+				if (isset($_GET["wtwpath"])) {
+					$this->uri = $_GET["wtwpath"];
+				}
 			}
 			if (defined('wtw_contentpath')) {
 				$this->contentpath = wtw_contentpath;
@@ -126,6 +143,7 @@ class wtwconnect {
 		}
 	}
 	
+	/* expose functions to this class from other functions so that the original function is only updated in one place */
 	public function serror($message) {
 		global $wtwdb;
 		$wtwdb->serror($message);
@@ -295,6 +313,7 @@ class wtwconnect {
 	}
 
 	public function addConnectHeader($zavailabledomains) {
+		/* sets the domain allowed for cross script - only when allowed */
 		$zheader = "";
 		try {
 			$zheader .= header('Access-Control-Allow-Origin: '.$zavailabledomains);
@@ -326,6 +345,7 @@ class wtwconnect {
 		session_start();
 	}
 	function shutdownOnErrorConnect() {
+		/* error trapping function */
 		$error = error_get_last();
 		if ($error != null) {
 			$errors = array(

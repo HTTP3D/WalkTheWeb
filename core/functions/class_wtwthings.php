@@ -1,5 +1,6 @@
 <?php
 class wtwthings {
+	/* $wtwthings class for admin database functions for 3d things */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -20,6 +21,7 @@ class wtwthings {
 	}
 	
 	public function thingExist($zthingid) {
+		/* validate if a thing id is found in the database */
 		global $wtwhandlers;
 		$found = false;
 		try {
@@ -38,6 +40,7 @@ class wtwthings {
 	}
 
 	public function saveThing($zthingid, $zpastthingid, $zthingname, $zanalyticsid, $zalttag) {
+		/* save thing settings */
 		global $wtwhandlers;
 		$copythingid = "";
 		try {
@@ -170,6 +173,7 @@ class wtwthings {
 	}
 
 	public function saveThingStartPosition($zthingid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz) {
+		/* update avatar start position in relation to a thing */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -197,6 +201,7 @@ class wtwthings {
 	}
 	
 	public function clearThing($zthingid) {
+		/* flags all molds as deleted for a given 3D Thing */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -257,6 +262,7 @@ class wtwthings {
 	}
 
 	public function deleteThing($zthingid) {
+		/* flag a 3D Thing as deleted */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -296,6 +302,7 @@ class wtwthings {
 	}
 
 	public function copyThing($zthingid, $zcopythingid) {
+		/* create a copy of a 3D Thing as a new 3D Thing */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -1131,6 +1138,7 @@ class wtwthings {
 	}
 	
 	public function importThing($zthingid, $zpastthingid, $zthingname, $zthinganalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $zalttag) {
+		/* import thing from 3dnet.walktheweb.com in the media library */
 		global $wtwhandlers;
 		try {
 			/* ini_set('max_execution_time', 300); */
@@ -1212,6 +1220,7 @@ class wtwthings {
 	}		
 	
 	public function addMustHave() {
+		/* downloads and adds a few 3D Things for an initial install (depreciated) */
 		global $wtwhandlers;
 		$returntext = array();
 		try {
@@ -1264,6 +1273,7 @@ class wtwthings {
 	}
 
 	public function shareThingTemplate($zthingid, $ztemplatename, $zdescription, $ztags) {
+		/* share thing as a template to the media library (not currently available) */
 		global $wtwhandlers;
 		try {
 			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
@@ -1287,6 +1297,7 @@ class wtwthings {
 	}	
 
 	public function saveTemplateThing($zpastthingid) {
+		/* save template thing settings for when it is shared */
 		global $wtwhandlers;
 		$newthingid = "";
 		try {

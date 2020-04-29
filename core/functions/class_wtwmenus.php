@@ -1,5 +1,6 @@
 <?php
 class wtwmenus {
+	/* $wtwmenus class for main WalkTheWeb browsing menu functions */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -13,6 +14,7 @@ class wtwmenus {
 
 	}	
 	
+	/* declare public $wtwmenus variables */
 	public $settingsmenu = array();
 	public $settingsforms = array();
 	
@@ -23,6 +25,7 @@ class wtwmenus {
 	}
 	
 	public function getMainMenu() {
+		/* gets the dynamically created browsing menu (bottom of the screen) */
 		global $wtw;
 		global $wtwdb;
 		$mainmenu = "";
@@ -102,6 +105,7 @@ class wtwmenus {
 	}
 	
 	public function addSettingsMenuItem($zid, $ztitle, $zmenusort, $zmenu, $ziconurl, $zaccessrequired, $zjsfunction) {
+		/* add menu options to the settings section of the browse menu */
 		global $wtwdb;
 		$zsuccess = false;
 		try {
@@ -141,6 +145,7 @@ class wtwmenus {
 	}	
 
 	public function getSettingsMenu() {
+		/* retrieve the dynamically created settings menu */
 		global $wtw;
 		global $wtwdb;
 		$zsettingsmenu = "";
@@ -187,6 +192,7 @@ class wtwmenus {
 	}	
 
 	public function addMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired, $zcssclass) {
+		/* add a form data to the browse menu - often used from plugins */
 		global $wtwdb;
 		$zsuccess = false;
 		try {
@@ -220,6 +226,7 @@ class wtwmenus {
 	}	
 	
 	public function getMenuForms() {
+		/* retrieve the form data to be added to the browse menu - often items are added by plugins */
 		global $wtwdb;
 		$zmenuforms = "";
 		try {

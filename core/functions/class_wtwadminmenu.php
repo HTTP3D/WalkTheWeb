@@ -1,5 +1,6 @@
 <?php
 class wtwadminmenu {
+	/* $wtwadminmenu class for the menu functions for WalkTheWeb Websites when browsed from admin.php */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -13,6 +14,7 @@ class wtwadminmenu {
 
 	}	
 	
+	/* declare public $wtwadminmenu variables */
 	public $adminmenu = array();
 	public $adminsubmenu = array();
 	public $admindivs = array();
@@ -25,6 +27,8 @@ class wtwadminmenu {
 	}
 	
 	public function preloadAdminMenu() {
+		/* admin menu is dynamically created and sorted before display */
+		/* this allows plugins to add menu items tied to functions - then sorted and shown in proper order */
 		global $wtwdb;
 		global $wtw;
 		$zsuccess = false;
@@ -33,6 +37,18 @@ class wtwadminmenu {
 			$updateroles = array("admin","developer","architect","graphics artist");
 			$developerroles = array("admin","developer");
 			$adminroles = array("admin");
+			
+			/* add admin menu item function: */
+			/*	$zid = <div> id
+				$ztitle = display name
+				$zmenusort = int for sort order of menu (level 1)
+				$zmenu = top level menu item
+				$zsubmenusort = int for sort order of submenu (level 2)
+				$zsubmenu = second level menu item (or '')
+				$ziconurl = browse path to icon image (only applies to level 1 'menu')
+				$zaccessrequired = array of roles that are granted access - null for all allowed
+				$zjsfunction = javascript function to call for onclick event examples: WTW.show('divname');   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
+			*/
 			$this->addAdminMenuItem('wtw_admindashboard', 'Dashboard', -100, 'wtw_dashboard', 0, '', '/content/system/images/menudashboard.png', null, "WTW.toggleAdminMenuDashboard();");
 			$this->addAdminMenuItem('wtw_adminmenudashboard', 'Admin Home', -100, 'wtw_dashboard', 1, 'wtw_adminhome', '', null, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminMenuItem('wtw_adminmenuupdates', 'Updates', -100, 'wtw_dashboard', 2, 'wtw_updates', '', $developerroles, "WTW.openFullPageForm('updates','Check for Updates','');");
@@ -86,138 +102,24 @@ class wtwadminmenu {
 		return $zsuccess;
 	}
 
-	public function addAdminMenuItem($zid, $ztitle, $zmenusort, $zmenu, $zsubmenusort, $zsubmenu, $ziconurl, $zaccessrequired, $zjsfunction) {
-		global $wtwdb;
-		$zsuccess = false;
-		try {
-			/*	$zid = <div> id
-				$ztitle = display name
-				$zmenusort = int for sort order of menu (level 1)
-				$zmenu = top level menu item
-				$zsubmenusort = int for sort order of submenu (level 2)
-				$zsubmenu = second level menu item (or '')
-				$ziconurl = browse path to icon image (only applies to level 'menu')
-				$zaccessrequired = array of roles that are granted access - null for all allowed
-				$zjsfunction = javascript function to call for onclick event examples: WTW.show('divname');   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
-			*/
-			$zfound = false;
-			foreach ($this->adminmenu as $zadminmenuitems) {
-				if (isset($zadminmenuitems["id"]) && !empty($zadminmenuitems["id"])) {
-					if ($zadminmenuitems["id"] == $zid) {
-						$zfound = true;
-					}
-				}
-			}
-			if ($zfound == false) {
-				$zmenuitem = array(
-					'menu' => $zmenu, 
-					'id' => $zid,
-					'title' => $ztitle,
-					'menusort' => $zmenusort, 
-					'submenusort' => $zsubmenusort, 
-					'submenu' => $zsubmenu, 
-					'iconurl' => $ziconurl, 
-					'accessrequired' => $zaccessrequired, 
-					'jsfunction' => $zjsfunction
-				);
-				$this->adminmenu[count($this->adminmenu)] = $zmenuitem;
-				$zsuccess = true;
-			}
-		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwadminmenu.php-addAdminMenuItem=".$e->getMessage());
-		}
-		return $zsuccess;
-	}
-	
-	public function getAdminMenu() {
-		global $wtw;
-		global $wtwdb;
-		$zadminmenu = "";
-		try {
-			$adminmenuarray = $this->adminmenu;
-			/* make sure submenu items have matching menu sort index */
-			array_multisort(array_column($adminmenuarray, 'menu'),  SORT_ASC,
-                array_column($adminmenuarray, 'submenusort'), SORT_ASC,
-                $adminmenuarray);
-			$ztempmenu = "";
-			$ztempmenusort = "";
-			foreach ($adminmenuarray as $zmenuitem) {
-				if ($ztempmenu != $zmenuitem["menu"]) {
-					$ztempmenusort = $zmenuitem["menusort"];
-				} else {
-					$zmenuitem["menusort"] = $ztempmenusort;
-				}
-			} 
-			/* sort menu and submenus */
-			array_multisort(array_column($adminmenuarray, 'menusort'),  SORT_ASC,
-                array_column($adminmenuarray, 'submenusort'), SORT_ASC,
-                $adminmenuarray);
-			/* display menu */
-			$ztempmenu = "";
-			$ztempid = "";
-			if (empty($wtwdb->getSessionUserID())) {
-				header("Location: ".$wtw->domainurl."/"); 
-				exit();
-			} else {
-				foreach ($adminmenuarray as $zmenuitem) {
-					$zid = $zmenuitem["id"];
-					$ztitle = $zmenuitem["title"];
-					$zmenusort = $zmenuitem["menusort"];
-					$zmenu = $zmenuitem["menu"];
-					$zsubmenusort = $zmenuitem["submenusort"];
-					$zsubmenu = $zmenuitem["submenu"];
-					$ziconurl = $zmenuitem["iconurl"];
-					$zaccessrequired = $zmenuitem["accessrequired"]; /* array of allowed roles */
-					$zjsfunction = $zmenuitem["jsfunction"];
-					if ($wtwdb->hasPermission($zaccessrequired)) {
-						/* check for invalid entries */
-						if (empty($zid) | !isset($zid)) {
-							$zid = $wtwdb->getRandomString(5,1);
-						}
-						if (empty($ztitle) | !isset($ztitle)) {
-							$ztitle = 'Menu Item';
-						}
-						if (empty($ziconurl) | !isset($ziconurl)) {
-							$ziconurl = "/content/system/images/menuarrow.png";
-						}
-						if (empty($zjsfunction) || !isset($zjsfunction)) {
-							$zjsfunction = '';
-						}
-						if ($ztempmenu != $zmenu) {
-							if (!empty($ztempmenu)) {
-								$zadminmenu .= "</div>";
-							}
-							$ztempid = $zid;
-							$zadminmenu .= "<div id=\"".$zid."\" class=\"wtw-adminmenu\" onclick=\"WTW.adminOpenSubmenu(this);".$zjsfunction."\">";
-							$zadminmenu .= "<img src=\"".$ziconurl."\" alt=\"".$ztitle."\" title=\"".$ztitle."\" class='wtw-menulefticon' />";
-							$zadminmenu .= "<div id=\"".$zid."badge\" class=\"wtw-badge\"></div>".$ztitle."</div>";
-							/* prep for submenu items */
-							$zadminmenu .= "<div id=\"".$zid."div\" class=\"wtw-adminmenudiv\" style=\"display:none;\">";
-						}
-						if (!empty($zsubmenu) && isset($zsubmenu)) {
-							$zadminmenu .= "<div id=\"".$zid."\" class=\"wtw-adminsubmenu\" onclick=\"".$zjsfunction."\"><div id=\"".$zid."badge\" class=\"wtw-badge\"></div>".$ztitle."</div>";
-						}
-						$ztempmenu = $zmenu;
-					}
-				}
-			}
-			if (count($this->adminmenu) > 0) {
-				$zadminmenu .= "</div>";
-			}
-		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwadminmenu.php-getAdminMenu=".$e->getMessage());
-		}
-		return $zadminmenu;
-	}
-
 	public function preloadAdminSubMenu() {
+		/* submenus are called as toggle on/off under main menu items */
 		global $wtwdb;
 		global $wtw;
 		$zsuccess = false;
 		try {
+			/* accessrequired - array of role names or null for all allowed */
 			$updateroles = array("admin","developer","architect","graphics artist");
 			$developerroles = array("admin","developer");
 			
+			/* add admin sub menu item function: */
+			/*	$zmenu = name for group of menu items
+				$zid = <div> id
+				$ztitle = display name
+				$zsubmenusort = int for sort order of submenu
+				$zaccessrequired = array of roles that are granted access - null for all allowed
+				$zjsfunction = javascript function to call for onclick event examples: WTW.show('divname');   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
+			*/
 			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildinginfo', '<div class="wtw-altkey">ctrl+i</div>3D Building <u>I</u>nformation', 5, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingstart', '<div class="wtw-altkey">ctrl+s</div>Set <u>S</u>tarting Position', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingaccess', '<div class="wtw-altkey">ctrl+p</div><u>P</u>ermissions', 15, $updateroles, "WTW.adminMenuItemSelected(this);");
@@ -292,17 +194,148 @@ class wtwadminmenu {
 		return $zsuccess;
 	}
 
-	public function addAdminSubMenuItem($zmenu, $zid, $ztitle, $zsubmenusort, $zaccessrequired, $zjsfunction) {
+	public function addAdminMenuItem($zid, $ztitle, $zmenusort, $zmenu, $zsubmenusort, $zsubmenu, $ziconurl, $zaccessrequired, $zjsfunction) {
+		/* add admin menu item function: */
+		/*	$zid = <div> id
+			$ztitle = display name
+			$zmenusort = int for sort order of menu (level 1)
+			$zmenu = top level menu item
+			$zsubmenusort = int for sort order of submenu (level 2)
+			$zsubmenu = second level menu item (or '')
+			$ziconurl = browse path to icon image (only applies to level 1 'menu')
+			$zaccessrequired = array of roles that are granted access - null for all allowed
+			$zjsfunction = javascript function to call for onclick event examples: WTW.show('divname');   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
+		*/
 		global $wtwdb;
 		$zsuccess = false;
 		try {
-			/*	$zmenu = name for group of menu items
-				$zid = <div> id
-				$ztitle = display name
-				$zsubmenusort = int for sort order of submenu
-				$zaccessrequired = array of roles that are granted access - null for all allowed
-				$zjsfunction = javascript function to call for onclick event examples: WTW.show('divname');   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
-			*/
+			/* check if loaded to avoid duplicate ids */
+			$zfound = false;
+			foreach ($this->adminmenu as $zadminmenuitems) {
+				if (isset($zadminmenuitems["id"]) && !empty($zadminmenuitems["id"])) {
+					if ($zadminmenuitems["id"] == $zid) {
+						$zfound = true;
+					}
+				}
+			}
+			if ($zfound == false) {
+				/* add menu item to the array */
+				$zmenuitem = array(
+					'menu' => $zmenu, 
+					'id' => $zid,
+					'title' => $ztitle,
+					'menusort' => $zmenusort, 
+					'submenusort' => $zsubmenusort, 
+					'submenu' => $zsubmenu, 
+					'iconurl' => $ziconurl, 
+					'accessrequired' => $zaccessrequired, 
+					'jsfunction' => $zjsfunction
+				);
+				$this->adminmenu[count($this->adminmenu)] = $zmenuitem;
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwadminmenu.php-addAdminMenuItem=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+	
+	public function getAdminMenu() {
+		/* get admin menu array, sort, and return html text for display on admin.php page */
+		global $wtw;
+		global $wtwdb;
+		$zadminmenu = "";
+		try {
+			$adminmenuarray = $this->adminmenu;
+			/* make sure submenu items have matching menu sort index */
+			array_multisort(array_column($adminmenuarray, 'menu'),  SORT_ASC,
+                array_column($adminmenuarray, 'submenusort'), SORT_ASC,
+                $adminmenuarray);
+			$ztempmenu = "";
+			$ztempmenusort = "";
+			foreach ($adminmenuarray as $zmenuitem) {
+				if ($ztempmenu != $zmenuitem["menu"]) {
+					$ztempmenusort = $zmenuitem["menusort"];
+				} else {
+					$zmenuitem["menusort"] = $ztempmenusort;
+				}
+			} 
+			/* sort menu and submenus */
+			array_multisort(array_column($adminmenuarray, 'menusort'),  SORT_ASC,
+                array_column($adminmenuarray, 'submenusort'), SORT_ASC,
+                $adminmenuarray);
+			/* display menu */
+			$ztempmenu = "";
+			$ztempid = "";
+			if (empty($wtwdb->getSessionUserID())) {
+				header("Location: ".$wtw->domainurl."/"); 
+				exit();
+			} else {
+				/* read each value, validate data, and create html menu items */
+				foreach ($adminmenuarray as $zmenuitem) {
+					$zid = $zmenuitem["id"];
+					$ztitle = $zmenuitem["title"];
+					$zmenusort = $zmenuitem["menusort"];
+					$zmenu = $zmenuitem["menu"];
+					$zsubmenusort = $zmenuitem["submenusort"];
+					$zsubmenu = $zmenuitem["submenu"];
+					$ziconurl = $zmenuitem["iconurl"];
+					$zaccessrequired = $zmenuitem["accessrequired"]; /* array of allowed roles */
+					$zjsfunction = $zmenuitem["jsfunction"];
+					if ($wtwdb->hasPermission($zaccessrequired)) {
+						/* check for invalid entries */
+						if (empty($zid) | !isset($zid)) {
+							$zid = $wtwdb->getRandomString(5,1);
+						}
+						if (empty($ztitle) | !isset($ztitle)) {
+							$ztitle = 'Menu Item';
+						}
+						if (empty($ziconurl) | !isset($ziconurl)) {
+							$ziconurl = "/content/system/images/menuarrow.png";
+						}
+						if (empty($zjsfunction) || !isset($zjsfunction)) {
+							$zjsfunction = '';
+						}
+						if ($ztempmenu != $zmenu) {
+							if (!empty($ztempmenu)) {
+								$zadminmenu .= "</div>";
+							}
+							$ztempid = $zid;
+							$zadminmenu .= "<div id=\"".$zid."\" class=\"wtw-adminmenu\" onclick=\"WTW.adminOpenSubmenu(this);".$zjsfunction."\">";
+							$zadminmenu .= "<img src=\"".$ziconurl."\" alt=\"".$ztitle."\" title=\"".$ztitle."\" class='wtw-menulefticon' />";
+							$zadminmenu .= "<div id=\"".$zid."badge\" class=\"wtw-badge\"></div>".$ztitle."</div>";
+							/* prep for submenu items */
+							$zadminmenu .= "<div id=\"".$zid."div\" class=\"wtw-adminmenudiv\" style=\"display:none;\">";
+						}
+						if (!empty($zsubmenu) && isset($zsubmenu)) {
+							$zadminmenu .= "<div id=\"".$zid."\" class=\"wtw-adminsubmenu\" onclick=\"".$zjsfunction."\"><div id=\"".$zid."badge\" class=\"wtw-badge\"></div>".$ztitle."</div>";
+						}
+						$ztempmenu = $zmenu;
+					}
+				}
+			}
+			if (count($this->adminmenu) > 0) {
+				$zadminmenu .= "</div>";
+			}
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwadminmenu.php-getAdminMenu=".$e->getMessage());
+		}
+		return $zadminmenu;
+	}
+
+	public function addAdminSubMenuItem($zmenu, $zid, $ztitle, $zsubmenusort, $zaccessrequired, $zjsfunction) {
+		/* add admin sub menu item function: */
+		/*	$zmenu = name for group of menu items
+			$zid = <div> id
+			$ztitle = display name
+			$zsubmenusort = int for sort order of submenu
+			$zaccessrequired = array of roles that are granted access - null for all allowed
+			$zjsfunction = javascript function to call for onclick event examples: WTW.show('divname');   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
+		*/
+		global $wtwdb;
+		$zsuccess = false;
+		try {
+			/* check if loaded to avoid duplicate ids */
 			$zfound = false;
 			foreach ($this->adminsubmenu as $zadminsubmenuitems) {
 				if (isset($zadminsubmenuitems["id"]) && !empty($zadminsubmenuitems["id"])) {
@@ -312,6 +345,7 @@ class wtwadminmenu {
 				}
 			}
 			if ($zfound == false) {
+				/* add submenu item to the array */
 				$zsubmenuitem = array(
 					'menu' => $zmenu, 
 					'id' => $zid,
@@ -330,6 +364,7 @@ class wtwadminmenu {
 	}
 	
 	public function getAdminSubMenu($zselectmenu) {
+		/* get admin menu array, sort, and return html text for display on admin.php page */
 		global $wtw;
 		global $wtwdb;
 		$zadminsubmenu = "";
@@ -339,7 +374,7 @@ class wtwadminmenu {
 			array_multisort(array_column($adminmenuarray, 'menu'),  SORT_ASC,
                 array_column($adminmenuarray, 'submenusort'), SORT_ASC,
                 $adminmenuarray);
-			/* display menu */
+			/* read each value, validate data, and create html menu items */
 			foreach ($adminmenuarray as $zmenuitem) {
 				$zmenu = $zmenuitem["menu"];
 				$zid = $zmenuitem["id"];
@@ -368,9 +403,12 @@ class wtwadminmenu {
 	}
 
 	public function addAdminMenuForm($zformid, $ztitle, $zformdata, $zaccessrequired) {
+		/* some menu items display a complete form */
+		/* this allows forms to be added dynamically from plugins */
 		global $wtwdb;
 		$zsuccess = false;
 		try {
+			/* check for duplicate ids */
 			$zfound = false;
 			foreach ($this->adminforms as $zadminform) {
 				if (isset($zadminform["formid"]) && !empty($zadminform["formid"])) {
@@ -380,6 +418,7 @@ class wtwadminmenu {
 				}
 			}
 			if ($zfound == false) {
+				/* add form to array of forms */
 				$zform = array(
 					'formid' => $zformid,
 					'title' => $ztitle,
@@ -396,6 +435,8 @@ class wtwadminmenu {
 	}	
 	
 	public function getAdminMenuForms() {
+		/* retrieve the admin menu forms to be displayed in html on the admin.php page */
+		/* forms start with display:none and visibility:hidden until called */
 		global $wtwdb;
 		$zmenuforms = "";
 		try {
@@ -412,6 +453,7 @@ class wtwadminmenu {
 					if (empty($zformdata) || !isset($zformdata)) {
 						$zformdata = '';
 					}
+					/* this wraps your form data with a title and close form links */
 					if (!empty($zformdata) && isset($zformdata)) {
 						$zmenuforms .= "<div id=\"".$zformid."\" class=\"wtw-adminmenuform\" style=\"display:none;visibility:hidden;\">";
 						$zmenuforms .= "	<div id=\"wtw_bback".$zformid."\" alt=\"Back\" title=\"Back\" class=\"wtw-backbutton\" onclick=\"WTW.adminMenuItemSelected(this);\">&lt;&lt;</div>";
@@ -428,9 +470,11 @@ class wtwadminmenu {
 	}	
 
 	public function addAdminMenuDiv($zformlocation, $zdivid, $zdivdata, $zaccessrequired) {
+		/* this allows a div to be added to an admin menu item */
 		global $wtwdb;
 		$zsuccess = false;
 		try {
+			/* check for duplicate ids */
 			$zfound = false;
 			foreach ($this->admindivs as $zadminform) {
 				if (isset($zadminform["divid"]) && !empty($zadminform["divid"])) {
@@ -440,6 +484,7 @@ class wtwadminmenu {
 				}
 			}
 			if ($zfound == false) {
+				/* add admin div area to the array of admin divs */
 				$zdiv = array(
 					'formlocation' => $zformlocation,
 					'divid' => $zdivid,
@@ -457,6 +502,7 @@ class wtwadminmenu {
 	}	
 
 	public function getAdminMenuDivs($zformlocation) {
+		/* get html for the admin menu divs by form location (where in the menu it will reside) */
 		global $wtwdb;
 		$zmenudivs = "";
 		try {

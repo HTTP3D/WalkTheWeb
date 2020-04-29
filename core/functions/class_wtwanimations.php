@@ -1,5 +1,6 @@
 <?php
 class wtwanimations {
+	/* $wtwanimations class for admin database functions for animations */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -20,6 +21,7 @@ class wtwanimations {
 	}
 
 	public function getUploadedFileAnimationsDetails($zuploadobjectid) {
+		/* these are 3D object animations that can be assigned to the 3D Object at runtime */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
@@ -49,6 +51,7 @@ class wtwanimations {
 	}
 
 	public function getObjectAnimation($zobjectanimationid) {
+		/* animations can be assigned to any mold in the scene (not only 3D Objects) */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
@@ -78,6 +81,7 @@ class wtwanimations {
 	}
 
 	public function saveObjectAnimation($zobjectanimationid, $zuploadobjectid, $zanimationname, $zmoldevent, $zmoldnamepart, $zstartframe, $zendframe, $zanimationloop, $zspeedratio, $zanimationendscript, $zanimationendparameters, $zstopcurrentanimations, $zsoundid, $zsoundmaxdistance) {
+		/* found on the media library, 3D Objects upload pages, animation section */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -109,6 +113,7 @@ class wtwanimations {
 			} else {
 				$zstopcurrentanimations = '0';
 			}
+			/* check of animation is already assigned */
 			$found = false;
 			$zresults = $wtwhandlers->query("
 				select objectanimationid 
@@ -121,6 +126,7 @@ class wtwanimations {
 			}
 			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
 				if ($found) {
+					/* if found update record */
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."uploadobjectanimations
 						set	objectanimationid='".$zobjectanimationid."',
@@ -146,6 +152,7 @@ class wtwanimations {
 							and uploadobjectid='".$zuploadobjectid."'
 							and userid='".$wtwhandlers->userid."';");
 				} else {
+					/* if not found insert record */
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."uploadobjectanimations
 							(objectanimationid,
@@ -197,6 +204,7 @@ class wtwanimations {
 	}
 
 	public function deleteObjectAnimation($zobjectanimationid) {
+		/* flags the record as deleted so it is not loaded at runtime */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {

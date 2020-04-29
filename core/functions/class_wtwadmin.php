@@ -1,5 +1,6 @@
 <?php
 class wtwadmin {
+	/* main $wtwadmin class for WalkTheWeb Websites when browsed from admin.php */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -13,6 +14,7 @@ class wtwadmin {
 
 	}	
 	
+	/* declare public $wtwadmin variables */
 	public $adminmenu = array();
 	public $adminsubmenu = array();
 	public $fullpagedivs = array();
@@ -24,14 +26,19 @@ class wtwadmin {
 	}
 	
 	public function loadJSAdminData() {
+		/* loads the scripts used on the admin.php page - note the browse only version is in the /core/functions/class_wtw-initsession.php file */
 		global $wtw;
 		$jsdata = "";
 		try {	
 			$zver = $wtw->version;
+			/* alternative used during development to force reload every time */
 			/* $zver = date("Y-m-d-H-i-s"); */
+			/* additional materials library available: https://github.com/BabylonJS/Babylon.js/tree/master/dist/materialsLibrary/ */
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_hud.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_transitionsavatars.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$zver."\"></script>\r\n";
@@ -71,6 +78,7 @@ class wtwadmin {
 	}
 	
 	public function loadCSSAdminData() {
+		/* loads the CSS stylesheets specific to core and admin */
 		global $wtw;
 		global $wtwplugins;
 		$cssdata = "";
@@ -85,12 +93,13 @@ class wtwadmin {
 	}
 	
 	public function loadMainElementsAdmin() {
+		/* these are the main page elements such as canvases and graphic helpers */
 		global $wtw;
 		$mainelements = "";
 		try {
 			$mainelements .= "<div id=\"wtw_confirmform\" class=\"wtw-popupform\">\r\n";
 			$mainelements .= "	<div id=\"wtw_browseheader\" class=\"wtw-browseheader\" style=\"margin-top:0px;\">\r\n";
-			$mainelements .= "		<div class=\"wtw-browseclose\" onclick=\"WTW.closeConfirmation();\">\r\n";
+			$mainelements .= "		<div id=\"wtw_browseheadercloseconfirmation\" class=\"wtw-browseclose\" onclick=\"WTW.closeConfirmation();\">\r\n";
 			$mainelements .= "			<img src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />\r\n";
 			$mainelements .= "		</div>\r\n";
 			$mainelements .= "		<h2 id=\"wtw_confirmformtitle\" style=\"margin:0px 15px 0px 15px;padding-top:10px;padding-bottom:10px\">Confirm</h2>\r\n";
@@ -114,6 +123,7 @@ class wtwadmin {
 	}		
 
 	public function loadHiddenFieldsAdmin() {
+		/* these are used to pass information to and from the animated canvas and the database */
 		global $wtw;
 		$hiddenfields = "";
 		try {
@@ -228,6 +238,7 @@ class wtwadmin {
 	}
 
 	public function loadFullPageFormAdmin() {
+		/* admin menu can trigger full page setings - these are different pages that can turn off-on (show/hide) */
 		global $wtwdb;
 		$pagedata = "";
 		try {
@@ -237,7 +248,8 @@ class wtwadmin {
 			$pagedata .= "		<img id=\"wtw_arrowicon\" src=\"/content/system/images/menuarrow32.png\" alt=\"\" title=\"\" class=\"wtw-toparrowicon\" />\r\n";
 			$pagedata .= "		<div id=\"wtw_fullpageformtitle\"><div class=\"wtw-toparrowtext\">Media Library</div></div><div class=\"wtw-clear\"></div>\r\n";
 			$pagedata .= "	</div>\r\n";
-
+			
+			/* dashboard page */
 			$pagedata .= "	<div id=\"wtw_dashboardpage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_loadingdashboard\" class=\"wtw-loadingnotice\">Loading...</div>\r\n";
 			$pagedata .= "		<div id=\"wtw_dashboard\">\r\n";
@@ -269,6 +281,7 @@ class wtwadmin {
 			$pagedata .= "		</div>\r\n";
 			$pagedata .= "	</div>\r\n";
 			
+			/* updates page */
 			$pagedata .= "	<div id=\"wtw_updatespage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_loadingupdates\" class=\"wtw-loadingnotice\">Checking for Updates...</div>\r\n";
 			$pagedata .= "		<div id=\"wtw_updatespagescroll\" class=\"wtw-formscroll\">\r\n";
@@ -286,6 +299,7 @@ class wtwadmin {
 			$pagedata .= "		</div>\r\n";
 			$pagedata .= "	</div>\r\n";
 
+			/* media library - 3d downloads */
 			$pagedata .= "	<div id=\"wtw_showimportpage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_importhorizontalmenu\" class=\"wtw-horizontalmenu\">\r\n";
 			$pagedata .= "			<div id=\"wtw_menumedialibrary\" class=\"wtw-menutabtop\" onclick=\"WTW.openFullPageForm('medialibrary','');\">Back</div>\r\n";
@@ -328,7 +342,8 @@ class wtwadmin {
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "		</div><br />\r\n";
 			$pagedata .= "	</div>\r\n";
-
+			
+			/* media library - select image page */
 			$pagedata .= "	<div id=\"wtw_selectimagepage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_horizontalmenu\" class=\"wtw-horizontalmenu\">\r\n";
 			$pagedata .= "			<div id=\"wtw_bstartimageupload\" class=\"wtw-uploadbutton\" onclick=\"WTW.startUploadImage(this.innerHTML);return (false);\">Upload Image</div>\r\n";
@@ -440,6 +455,7 @@ class wtwadmin {
 			$pagedata .= "		</div>\r\n";
 			$pagedata .= "	</div>\r\n";
 			
+			/* media library - file details page */
 			$pagedata .= "	<div id=\"wtw_showfilepage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_loadingmediapage\" class=\"wtw-loadingnotice\">Loading...</div>\r\n";
 			$pagedata .= "		<div id=\"wtw_mediapage\" class=\"wtw-fullpage\">\r\n";
@@ -522,6 +538,7 @@ class wtwadmin {
 			$pagedata .= "		</div>\r\n";
 			$pagedata .= "	</div>\r\n";
 			
+			/* users roles and functions */
 			$pagedata .= "	<div id=\"wtw_userspage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_loadingusers\" class=\"wtw-loadingnotice\">Loading...</div>\r\n";
 			$pagedata .= "		<div id=\"wtw_allusers\" class=\"wtw-fullpage\">\r\n";
@@ -535,7 +552,8 @@ class wtwadmin {
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "		</div>\r\n";
 			$pagedata .= "	</div>\r\n";
-
+			
+			/* plugins list and functions */
 			$pagedata .= "	<div id=\"wtw_pluginspage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_loadingplugins\" class=\"wtw-loadingnotice\">Loading...</div>\r\n";
 			$pagedata .= "		<div id=\"wtw_allplugins\" class=\"wtw-fullpage\">\r\n";
@@ -547,7 +565,8 @@ class wtwadmin {
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "		</div>\r\n";
 			$pagedata .= "	</div>\r\n";
-
+			
+			/* settings page - email server */
 			$pagedata .= "	<div id=\"wtw_settingspage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_loadingsettings\" class=\"wtw-loadingnotice\">Loading...</div>\r\n";
 			$pagedata .= "		<div id=\"wtw_emailserversettings\" class=\"wtw-fullpage\">\r\n";
@@ -573,7 +592,8 @@ class wtwadmin {
 			$pagedata .= "				</div>\r\n";
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "		</div>\r\n";
-
+			
+			/* settings page - web aliases */
 			$pagedata .= "		<div id=\"wtw_webaliassettings\" class=\"wtw-fullpage\">\r\n";
 			$pagedata .= "			<div class=\"wtw-dashboardboxleftfull\">\r\n";
 			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\"><div id='wtw_addwebalias' class='wtw-greenbuttonright' onclick=\"WTW.openAliasForm();\">Add New</div>Web Alias Settings</div>\r\n";
@@ -646,7 +666,8 @@ class wtwadmin {
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "		</div>\r\n";
 			$pagedata .= "	</div>\r\n";
-
+			
+			/* troubleshooting - display error page */
 			$pagedata .= "	<div id=\"wtw_errorpage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_showerror\" class=\"wtw-fullpage\">\r\n";
 			$pagedata .= "			<div class=\"wtw-dashboardboxleftfull\">\r\n";
@@ -658,6 +679,7 @@ class wtwadmin {
 			$pagedata .= "		</div>\r\n";
 			$pagedata .= "	</div>\r\n";
 			
+			/* dynamically created full page divs from plugins */
 			$pagedata .= "	<div id=\"wtw_fullpageplugins\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			foreach ($this->fullpagedivs as $zfullpageitem) {
 				$zid = $zfullpageitem["id"];
@@ -691,6 +713,7 @@ class wtwadmin {
 	}
 
 	public function addFullPageForm($zid, $zaccessrequired, $zfullpagedata) {
+		/* add form as full page div - used in plugins */
 		$zsuccess = false;
 		try {	
 			$fullpagediv = array(

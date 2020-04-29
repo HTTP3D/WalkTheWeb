@@ -1,5 +1,6 @@
 <?php
 class wtwcommunitymolds {
+	/* $wtwcommunitymolds class for admin database functions for 3d community molds */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -20,6 +21,7 @@ class wtwcommunitymolds {
 	}
 	
 	function saveCommunityMold($zcommunitymoldid, $zcommunityid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zsubdivisions, $zminheight, $zmaxheight, $zcheckcollisions, $zispickable, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb, $zspecularcolorr, $zspecularcolorg, $zspecularcolorb, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain) {
+		/* save a community mold settings */
 		global $wtwhandlers;
 		try {
 			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
@@ -253,6 +255,7 @@ class wtwcommunitymolds {
 	}
 
 	function deleteCommunityMold($zcommunitymoldid, $zcommunityid, $zdeleted) {
+		/* flag a community mold as deleted */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -295,6 +298,7 @@ class wtwcommunitymolds {
 	}
 
 	function saveCommunityMoldActionZone($zcommunitymoldid, $zcommunityid, $zactionzoneid) {
+		/* update a community mold to be part of an action zone - often animated */
 		/* this is not Load Zone, Mold is part of another ActionZone like Door Swinging */
 		global $wtwhandlers;
 		$zsuccess = false;

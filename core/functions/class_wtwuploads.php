@@ -1,5 +1,6 @@
 <?php
 class wtwuploads {
+	/* $wtwuploads class for WalkTheWeb functions for uploading and retrieving files */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -20,6 +21,7 @@ class wtwuploads {
 	}
 	
 	public function checkContentFolders($zcommunityid, $zbuildingid, $zthingid) {
+		/* checks and adds content folders as needed for use with uploaded files */
 		global $wtwhandlers;
 		try {
 			if (!file_exists($wtwhandlers->contentpath."/uploads")) {
@@ -94,6 +96,7 @@ class wtwuploads {
 	}
 	
 	public function copyFile($zfile1, $zfilepath1, $zfile2, $zfilepath2, $zcommunityid, $zbuildingid, $zthingid) {
+		/* copies a file from one location to another - used after upload to place the temp file to the correct final location */
 		global $wtwhandlers;
 		$serror = "";
 		try {
@@ -118,9 +121,10 @@ class wtwuploads {
 
 	public function deleteFile($zfile1, $zfilepath1, $zcommunityid, $zbuildingid) {
 		global $wtwhandlers;
-		/* purposly not added yet */
+		/* purposly not added yet - admins will have to delete files directly as needed */
 	}
 	
+	/* expose functions to this class from other functions so that the original function is only updated in one place */
 	public function getSetting($zsettingname) {
 		global $wtwhandlers;
 		return $wtwhandlers->getSetting($zsettingname);
@@ -142,6 +146,7 @@ class wtwuploads {
 	}
 
 	public function updateFileInDb($zuploadid, $imageset, $originalid, $websizeid, $thumbnailid, $zfiletitle, $zfilename, $zfileextension, $zfilesize, $zfiletype, $zfiledata, $imagewidth, $imageheight, $zfilepath) {
+		/* if file is stored in the database or file system, this updates the relative information in the database */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
@@ -229,6 +234,7 @@ class wtwuploads {
 	}
 	
 	public function saveImageFilePng($zfilepath1, $zfilename1, $zfiledata, $zcommunityid, $zbuildingid, $zthingid) {
+		/* saves image files (mostly screen shots), resizes, and updates settings in the database */
 		global $wtwhandlers;
 		$zsnapshotid = "";
 		$zsnapshotpath = "";
@@ -336,6 +342,7 @@ class wtwuploads {
 	}
 	
 	public function resizeImage($originalFile, $ztargetfile, $newWidth) {
+		/* resize image function */
 		global $wtwhandlers;
 		try {
 			$info = getimagesize($originalFile);
@@ -383,6 +390,7 @@ class wtwuploads {
 	}
 	
 	public function uploadFileToDb($zfilepath, $zfiletitle, $zfilename, $zfileextension, $zfiletype, $public) {
+		/* function to upload a file to the database - if file is to be stored in the database */
 		global $wtwhandlers;
 		try {
 			$zuploadid = "";
@@ -540,6 +548,7 @@ class wtwuploads {
 	}
 	
 	public function avoidDuplicateFileNames($zuploadpath, $zfilename) {
+		/* checks for duplicate file names and sets a new filename if a duplicate is found */
 		global $wtwhandlers;
 		try {
 			if (file_exists($zuploadpath.$zfilename)) {
@@ -559,6 +568,7 @@ class wtwuploads {
 	}
 	
 	public function getNewFileName($zfilename, $newwidth, $newheight) {
+		/* get a new filename that does not exist yet */
 		global $wtwhandlers;
 		try {
 			$path_parts = pathinfo($zfilename);
@@ -572,6 +582,7 @@ class wtwuploads {
 	}
 	
 	public function uploadObjectFileToDb($zfilepath, $zfilename, $zfileextension, $zfiletype) {
+		/* create folder, upload 3D Object (media Library), and add settings to the database */
 		global $wtwhandlers;
 		try {
 			$zuploadid = "";
@@ -624,6 +635,7 @@ class wtwuploads {
 	}
 	
 	public function setUploadVisibility($zthumbnailid, $zhide) {
+		/* if it should show or hide the image in the Media Library images (like an archive function) */
 		global $wtwhandlers;
 		try {
 			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
@@ -655,6 +667,7 @@ class wtwuploads {
 	}
 
 	public function importWebImages($zmoldgroup, $zwebid, $zcopywebid, $zwebimagesbulk) {
+		/* imports the textures and images to the local server when downloading a 3D Obect from the media Library */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
@@ -727,6 +740,7 @@ class wtwuploads {
 	}
 	
 	public function importUploads($zmoldgroup, $zwebid, $zcopywebid, $zuploadsbulk) {
+		/* import the related uploads table entries for a downloaded 3D Object from Media Library */
 		$zsuccess = false;
 		global $wtwhandlers;
 		try {
@@ -1036,6 +1050,7 @@ class wtwuploads {
 	}
 	
 	public function writeDataToFile($zbase64data, $zmoldgroup, $zwebid, $zfilename) {
+		/* converts a database stored file to a physical file on the server */
 		global $wtwhandlers;
 		$znewfilename = "";
 		$znewfilepath = "";
@@ -1067,6 +1082,7 @@ class wtwuploads {
 	}
 	
 	public function writeFileFromPath($zfromurl, $zmoldgroup, $zwebid, $zfilename) {
+		/* gets a file form the internet and stores it locally - used mainly to retrieve textures and images from https://3dnet.walktheweb.com */
 		global $wtwhandlers;
 		$znewfilename = "";
 		$znewfilepath = "";
@@ -1114,6 +1130,7 @@ class wtwuploads {
 	}
 	
 	public function setKeyHash($zkey, $zmoldgroup, $zwebid) {
+		/* security hash for downloading/uploading */
 		global $wtwhandlers;
 		try {
 			if (!empty($zkey) && isset($zkey)) {
@@ -1142,6 +1159,7 @@ class wtwuploads {
 	}
 
 	public function saveWebAlias($zwebaliasid,$zforcehttps,$zdomainname,$zcommunitypublishname,$zbuildingpublishname,$zthingpublishname,$zcommunityid,$zbuildingid,$zthingid) {
+		/* updates the web alias from the admin menu settings page */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -1232,6 +1250,7 @@ class wtwuploads {
 	}
 	
 	public function deleteWebAlias($zwebaliasid) {
+		/* sets the deleted flag for a web alias */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -1255,6 +1274,7 @@ class wtwuploads {
 	}
 
 	public function hasTransparency($zfiledata) {
+		/* sets the image transparency */
 		$zhastransparency = false;
 		try {
 			if (is_resource($zfiledata)) {
@@ -1292,6 +1312,7 @@ class wtwuploads {
 	
 	
 	public function getUploadedFiles() {
+		/* retrieve uploaded 3D Object file settings from the database */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
@@ -1308,6 +1329,7 @@ class wtwuploads {
 	}
 
 	public function getUploadedFileNameDetails($zuploadobjectid) {
+		/* retrieve uploaded 3D Object file details settings from the database */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
@@ -1325,6 +1347,7 @@ class wtwuploads {
 	}
 
 	public function getUploadedFileFilesDetails($zobjectfolder) {
+		/* retrieve uploaded 3D Object file details settings from the 3D Object folder */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
@@ -1351,6 +1374,7 @@ class wtwuploads {
 	}
 	
 	public function uploadFile($zuploadfile) {
+		/* upload file process */
 		global $wtwhandlers;
 		try {
 			$this->checkContentFolders('', '', '');
@@ -1393,6 +1417,7 @@ class wtwuploads {
 	}
 
 	public function uploadFiles($zuploadfiles, $zitem) {
+		/* upload multiple files */
 		global $wtwhandlers;
 		$serror = "";
 		try {
@@ -1436,6 +1461,7 @@ class wtwuploads {
 	}
 
 	public function uploadObjectFiles($zuploadfiles, $zobjectfilepart) {
+		/* upload 3D Object supplimentary files - overwrites any existing files for easy updates - remember users may need to clear cache to see changes immediately */
 		global $wtwhandlers;
 		$serror = "";
 		try {
@@ -1476,6 +1502,7 @@ class wtwuploads {
 	}
 
 	public function uploadJavaScriptFiles($zuploadfiles, $zmoldgroup, $zwebid, $zactionzoneid) {
+		/* upload javascript files for use with plugins */
 		global $wtwhandlers;
 		$serror = "";
 		try {
@@ -1516,6 +1543,7 @@ class wtwuploads {
 	}
 
 	public function saveJavaScriptFile($zactionzoneid, $zmoldgroup, $zwebid, $zscriptpath) {
+		/* save javascript file references to the database */
 		global $wtwhandlers;
 		try {
 			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
@@ -1552,8 +1580,8 @@ class wtwuploads {
 		}
 	}
 
-//deleteJavaScriptFile($zwebid, $zactionzoneid, $zscriptid)
 	public function deleteJavaScriptFile($zmoldgroup, $zwebid, $zactionzoneid, $zscriptid, $zscriptpath) {
+		/* sets deleted flag for javascript file reference */
 		global $wtwhandlers;
 		$serror = "";
 		try {
@@ -1578,9 +1606,8 @@ class wtwuploads {
 		return $serror;
 	}
 
-
-
 	public function deleteObjectFile($zfilename, $zobjectfilepart) {
+		/* deletes the 3D Object file - used to assist with overwrite functions */
 		global $wtwhandlers;
 		$serror = "";
 		try {
@@ -1595,6 +1622,7 @@ class wtwuploads {
 	}
 
 	public function getMyImages($zcategory, $zhide) {
+		/* gets Media Library images by category */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
@@ -1640,6 +1668,7 @@ class wtwuploads {
 	}
 
 	public function getStockImages($zitem) {
+		/* gets Media Library Images - stock images */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
@@ -1674,6 +1703,7 @@ class wtwuploads {
 	}
 	
 	public function getCommunityImages($zcommunityid, $zbuildingid, $zthingid) {
+		/* gets Media Library Images - images already in this 3D Community, Building, or Thing */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
@@ -1779,6 +1809,7 @@ class wtwuploads {
 	}
 	
 	function toggleHideMyImage($zuploadid, $zhide) {
+		/* sets image to hide/show like an archive function */
 		global $wtwhandlers;
 		$zresults = array();
 		try {

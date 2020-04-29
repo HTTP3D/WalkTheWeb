@@ -1,5 +1,6 @@
 <?php
 class wtwbuildings {
+	/* $wtwbuildings class for admin database functions for 3d buildings */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -20,6 +21,7 @@ class wtwbuildings {
 	}
 	
 	public function buildingExist($zbuildingid) {
+		/* validate if a building id is found in the database */
 		global $wtwhandlers;
 		$found = false;
 		try {
@@ -38,6 +40,7 @@ class wtwbuildings {
 	}
 
 	public function saveBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zanalyticsid, $zalttag) {
+		/* save building settings */
 		global $wtwhandlers;
 		$zcopybuildingid = "";
 		try {
@@ -172,6 +175,7 @@ class wtwbuildings {
 	}
 	
 	public function deleteBuilding($zbuildingid) {
+		/* flag the building as deleted */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -218,7 +222,8 @@ class wtwbuildings {
 		return $zsuccess;
 	}
 
-	public function copyBuilding($zbuildingid, $zcopybuildingid) { /* new building , building to copy */
+	public function copyBuilding($zbuildingid, $zcopybuildingid) { 
+		/* used to create a new building from media library templates or building to copy */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -1266,6 +1271,7 @@ class wtwbuildings {
 	}
 	
 	public function clearBuilding($zbuildingid) {
+		/* sets the deleted flag on all objects of a 3d building */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -1428,6 +1434,7 @@ class wtwbuildings {
 	}
 	
 	public function importBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zbuildinganalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $zalttag) {
+		/* import building from 3dnet.walktheweb.com in the media library */
 		global $wtwhandlers;
 		try {
 			/* ini_set('max_execution_time', 300); */
@@ -1509,6 +1516,7 @@ class wtwbuildings {
 	}	
 
 	public function saveBuildingStartPosition($zbuildingid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz) {
+		/* update avatar start position in relation to a building */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -1536,6 +1544,7 @@ class wtwbuildings {
 	}
 
 	public function saveBuildingGravity($zbuildingid, $zgravity) {
+		/* update building gravity setting */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -1555,6 +1564,7 @@ class wtwbuildings {
 	}
 			
 	public function saveTemplateBuilding($zpastbuildingid) {
+		/* save template building settings for when it is shared */
 		global $wtwhandlers;
 		$newbuildingid = "";
 		try {
@@ -1586,6 +1596,7 @@ class wtwbuildings {
 	}	
 
 	public function shareBuildingTemplate($zbuildingid, $ztemplatename, $zdescription, $ztags) {
+		/* share building as a template to the media library (not currently available) */
 		global $wtwhandlers;
 		try {
 			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);

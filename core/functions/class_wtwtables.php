@@ -1,5 +1,6 @@
 <?php 
 class wtwtables {
+	/* $wtwtables class for defining and updating the core WalkTheWeb Tables, data upgrades, and initializing data */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -20,6 +21,7 @@ class wtwtables {
 	}
 
 	public function databaseTableDefinitions() {
+		/* table definitions used for new installs and updating existing installs of WalkTheWeb core */
 		global $wtw;
 		global $wtwdb;
 		try {
@@ -92,11 +94,12 @@ class wtwtables {
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."avataranimations` (
 				  `avataranimationid` varchar(16) NOT NULL,
-				  `requireslogin` int(11) DEFAULT '0',
+				  `avatarid` varchar(16) DEFAULT '',
 				  `userid` varchar(16) DEFAULT '',
 				  `loadpriority` int(11) DEFAULT '0',
-				  `animationname` varchar(45) DEFAULT '',
+				  `animationevent` varchar(45) DEFAULT '',
 				  `animationfriendlyname` varchar(255) DEFAULT '',
+				  `setdefault` int(11) DEFAULT '0',
 				  `animationicon` varchar(255) DEFAULT '',
 				  `objectfolder` varchar(255) DEFAULT '',
 				  `objectfile` varchar(255) DEFAULT '',
@@ -116,8 +119,33 @@ class wtwtables {
 				  `deleted` int(11) DEFAULT '0',
 				  PRIMARY KEY (`avataranimationid`),
 				  UNIQUE KEY `".wtw_tableprefix."avataranimationid_UNIQUE` (`avataranimationid`),
-				  KEY `".wtw_tableprefix."idx_avataranimations` (`userid`,`loadpriority`,`soundid`,`animationname`,`requireslogin`)
+				  KEY `".wtw_tableprefix."idx_avataranimations` (`userid`,`loadpriority`,`soundid`,`animationevent`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;				
+			");
+			$wtwdb->deltaCreateTable("			
+				CREATE TABLE `".wtw_tableprefix."avatars` (
+				  `avatarid` varchar(16) NOT NULL,
+				  `avatargroup` varchar(64) DEFAULT 'Default',
+				  `displayname` varchar(255) DEFAULT '',
+				  `avatarfolder` varchar(255) DEFAULT '',
+				  `avatarfile` varchar(255) DEFAULT '',
+				  `gender` varchar(25) DEFAULT 'female',
+				  `scalingx` decimal(18,4) DEFAULT '0.0800',
+				  `scalingy` decimal(18,4) DEFAULT '0.0800',
+				  `scalingz` decimal(18,4) DEFAULT '0.0800',
+				  `imagefull` varchar(255) DEFAULT '',
+				  `imageface` varchar(255) DEFAULT '',
+				  `sortorder` int DEFAULT '5',
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int DEFAULT '0',
+				  PRIMARY KEY (`avatarid`),
+				  UNIQUE KEY `".wtw_tableprefix."avatarid_UNIQUE` (`avatarid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;			
 			");
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."buildingmolds` (
@@ -793,10 +821,10 @@ class wtwtables {
 			");
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."useravataranimations` (
-				  `useravataranimationid` varchar(40) NOT NULL,
+				  `useravataranimationid` varchar(16) NOT NULL,
 				  `avataranimationid` varchar(16) DEFAULT '',
 				  `useravatarid` varchar(16) DEFAULT '',
-				  `avataranimationname` varchar(45) DEFAULT '',
+				  `avataranimationevent` varchar(45) DEFAULT '',
 				  `speedratio` decimal(18,2) DEFAULT '1.00',
 				  `walkspeed` decimal(18,2) DEFAULT '1.00',
 				  `createdate` datetime DEFAULT NULL,
@@ -808,7 +836,7 @@ class wtwtables {
 				  `deleted` int(11) DEFAULT '0',
 				  PRIMARY KEY (`useravataranimationid`),
 				  UNIQUE KEY `".wtw_tableprefix."useravataranimationid_UNIQUE` (`useravataranimationid`),
-				  KEY `".wtw_tableprefix."idx_useravataranimations` (`avataranimationid`,`useravatarid`,`avataranimationname`)
+				  KEY `".wtw_tableprefix."idx_useravataranimations` (`avataranimationid`,`useravatarid`,`avataranimationevent`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 			");
 			$wtwdb->deltaCreateTable("
@@ -838,13 +866,15 @@ class wtwtables {
 				  `useravatarid` varchar(16) NOT NULL,
 				  `userid` varchar(16) DEFAULT '',
 				  `userip` varchar(64) DEFAULT '',
-				  `instanceid` varchar(45) DEFAULT '',
+				  `instanceid` varchar(24) DEFAULT '',
+				  `avatarid` varchar(16) DEFAULT '',
 				  `avatarind` int(11) DEFAULT '1',
 				  `objectfolder` varchar(255) DEFAULT '',
 				  `objectfile` varchar(255) DEFAULT '',
-				  `scalingx` decimal(18,2) DEFAULT '1.00',
-				  `scalingy` decimal(18,2) DEFAULT '1.00',
-				  `scalingz` decimal(18,2) DEFAULT '1.00',
+				  `gender` varchar(25) DEFAULT 'female',
+				  `scalingx` decimal(18,4) DEFAULT '1.00',
+				  `scalingy` decimal(18,4) DEFAULT '1.00',
+				  `scalingz` decimal(18,4) DEFAULT '1.00',
 				  `displayname` varchar(45) DEFAULT '',
 				  `privacy` int(11) DEFAULT '0',
 				  `lastdate` datetime DEFAULT NULL,
@@ -872,6 +902,7 @@ class wtwtables {
 				  `userpassword` varchar(255) NOT NULL,
 				  `recoverpassword` varchar(255) DEFAULT '',
 				  `recoverpassworddate` datetime DEFAULT NULL,
+				  `accesstoken` varchar(2048) DEFAULT '',
 				  `displayname` varchar(255) DEFAULT '',
 				  `userimageurl` varchar(255) DEFAULT '',
 				  `email` varchar(255) DEFAULT '',
@@ -957,222 +988,230 @@ class wtwtables {
 				  KEY `".wtw_tableprefix."webimages_webid` (`communitymoldid`,`buildingmoldid`,`thingmoldid`,`imageindex`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 			");
-			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 		} catch (Exception $e) {
 			$wtw->serror("core-functions-tabledefs.php-databaseTableDefinitions=".$e->getMessage());
 		}
 	}
 	
 	public function loadInitDbData($zuserid) {
+		/* this process is only run for new database setups - or if certain tables are deleted or empty */
 		global $wtw;
 		try {
 			/* ini_set('max_execution_time', 300); */
 			global $wtwdb;
 			$timestamp = date('Y/m/d H:i:s');
 			$wtwdb->query("
-				INSERT INTO `".wtw_tableprefix."avataranimations` VALUES 
-				('0gaz1cjnohb72qh8',0,'',4,'onoption','Leaning Look Gesture','','/content/system/animations/gestures/','leaninglookgesture.babylon',1,193,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('0ikarv3xbs0n7544',0,'',49,'onwalkbackwards','Default Male','','/content/system/avatars/male/','malewalkback.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('0m07zbocsuwwuj6b',0,'',48,'onturnright','Happy Turn Right','','/content/system/animations/movement/','happyturnright.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('0sv3rkk659wmilhl',0,'',48,'onturnright','Cat Walk Right','','/content/system/animations/movement/','catwalkright.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('0wfg0nafbajsdg6h',0,'',40,'onrun','Running Scared','','/content/system/animations/movement/','runningscared.babylon',1,27,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('100zwiuq5i2v40oc',0,'',4,'onoption','You Are Out','/content/system/icons/animyouareout.png','/content/system/animations/gestures/','youareout.babylon',1,87,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('1be5j7fkk51ph9wp',0,'',50,'onwalk','Strut Walk','','/content/system/animations/movement/','strutwalk.babylon',1,35,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('1ls8ugqbf7q0vawn',0,'',4,'onoption','Pointing Up Gesture','','/content/system/animations/gestures/','pointingupgesture.babylon',1,45,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('1n6x2mwmgdjld27t',0,'',3,'onoption','Slide Hip Hop','','/content/system/animations/movement/','slidehiphop.babylon',1,416,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('1ssmqrmtayyxt7mi',0,'',4,'onoption','Counting Gesture','/content/system/icons/animcounting.png','/content/system/animations/gestures/','countinggesture.babylon',1,160,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-/* changed */				('1wfesp5owhoxl9gj',0,'',50,'onwalk','Default Female','','/content/system/avatars/female/','femalewalk.babylon',1,25,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('226p0vd951objpwd',0,'',4,'onoption','Relieved Sigh Gesture','','/content/system/animations/gestures/','relievedsighgesture.babylon',1,73,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','2019-06-08 12:56:53','".$zuserid."',NULL,'',0),
-				('294skjy73v4xambn',0,'',4,'onoption','Yes Gesture','','/content/system/animations/gestures/','yesgesture.babylon',1,63,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('2eqg47npjmhj9qu0',0,'',3,'onoption','Big Tut Hip Hop Dance','','/content/system/animations/movement/','bigtuthiphopdance.babylon',1,291,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('2kopg7lfdjk7awnj',0,'',3,'onoption','Salsa Dancing','','/content/system/animations/movement/','salsadancing.babylon',1,288,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('2pdqkmd13bbpheh8',0,'',5,'onoption','Injured Wave','/content/system/icons/animinjuredwave.png','/content/system/animations/gestures/','injuredwave.babylon',1,122,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('36i2rmud99jwxywp',0,'',4,'onoption','Defeated Gesture','/content/system/icons/animdefeated.png','/content/system/animations/gestures/','defeatgesture.babylon',1,176,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('3b9d2a8bveclwqxh',0,'',4,'onoption','Point Forward Gesture','','/content/system/animations/gestures/','pointforwardgesture.babylon',1,113,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('3nz15p12a61m084v',0,'',4,'onoption','Dismissing Light Gesture','','/content/system/animations/gestures/','smalldismissinggesture.babylon',1,54,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('3nz17wvpvat9s4cc',0,'',3,'onoption','Northern Soul Spin','','/content/system/animations/movement/','northernsoulspin.babylon',1,98,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('3p81hb6w0bjp0vb0',0,'',4,'onoption','Shucks Gesture','','/content/system/animations/gestures/','shucksdisappointedgesture.babylon',1,101,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('45dg48tccn60jnna',0,'',100,'onwait','Mild Male Movement','','/content/system/avatars/malcolm/','malcolmidle.babylon',1,195,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('45dh9tcbikbvhqa9',0,'',38,'onrunturnleft','Default','','/content/system/avatars/male/','maleturnleft.babylon',1,29,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('46kczxmcwhp14ftt',0,'',49,'onwalkbackwards','Looking Back','','/content/system/animations/movement/','lookingback.babylon',1,37,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('52yl1g7mggx8c3h1',0,'',3,'onoption','Quick Wave Hip Hop','','/content/system/animations/movement/','quickwavehiphopdance.babylon',1,29,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('57k7c3h6c8630tyd',0,'',5,'onoption','Waving Gesture','/content/system/icons/animwavinggesture.png','/content/system/animations/gestures/','wavinggesture.babylon',1,36,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('5c850obkwugsi9pu',0,'',48,'onturnleft','Happy Turn Left','','/content/system/animations/movement/','happyturnleft.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('5fo4lk4vzaip0ypq',0,'',4,'onoption','Reacting Gesture','','/content/system/animations/gestures/','reactinggesture.babylon',1,89,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('5h1peyir8wr38ws8',0,'',48,'onturnright','Female Turn Right','','/content/system/animations/movement/','femaleturnright.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('5mqtw1g5gtoyt47m',0,'',4,'onoption','No Gesture','','/content/system/animations/gestures/','nogesture.babylon',1,44,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('5nt31zrtvvq4cdu3',0,'',100,'onwait','Swaying Female','','/content/system/avatars/shae/','shaeidle.babylon',1,303,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('658miot2v41u2v4z',0,'',4,'onoption','Thank You Gesture','','/content/system/animations/gestures/','thankyougesture.babylon',1,73,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('6b02dlxs7orqetut',0,'',4,'onoption','Let Down Gesture','','/content/system/animations/gestures/','letdowngesture.babylon',1,54,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('6i1o866dabru0f4d',0,'',4,'onoption','Shake Head Gesture','','/content/system/animations/gestures/','shakeheadgesture.babylon',1,74,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('6kcyrxfa73xd115n',0,'',4,'onoption','Surprised Gesture','','/content/system/animations/gestures/','surprisedgesture.babylon',1,97,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('6moihybqo6x0cm4q',0,'',3,'onoption','House Dancing','','/content/system/animations/movement/','housedancing.babylon',1,629,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('6x3o6sh2u1m1bjnq',0,'',47,'onstraferight','Default','','/content/system/avatars/male/','malestraferight.babylon',1,45,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('755b2ernys6grg0n',0,'',3,'onoption','Shuffling Dance','','/content/system/animations/movement/','shufflingdance.babylon',1,181,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('78k4zhhzhemwlcvc',0,'',100,'onwait','Swaying Male','','/content/system/avatars/liam/','liamidle.babylon',1,200,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('7bxqw8ivvpxisgw2',0,'',40,'onrun','Medium Run','','/content/system/animations/movement/','mediumrun.babylon',1,14,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('7kbub1a8d5nt3zqo',0,'',4,'onoption','Pointing Gesture','','/content/system/animations/gestures/','pointinggesture.babylon',1,48,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('7q0whoxmdypm1doc',0,'',40,'onrun','Tired Run','','/content/system/animations/movement/','tiredrun.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('7vr8tdhb5tlira5w',0,'',3,'onoption','Robot Hip Hop','','/content/system/animations/movement/','robothiphopdance.babylon',1,371,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('81g5fo2bcu7ivthz',0,'',4,'onoption','Angry Gesture','/content/system/icons/animangry.png','/content/system/animations/gestures/','angrygesture.babylon',1,461,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('83trbcrqfzkvnphe',0,'',4,'onoption','Talking Gesture','','/content/system/animations/gestures/','talkinggesture.babylon',1,95,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('850lxwpsw51objq0',0,'',4,'onoption','Whatever Gesture','','/content/system/animations/gestures/','whatevergesture.babylon',1,35,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('8hnu9s5deu3v545f',0,'',4,'onoption','Look Away Gesture','','/content/system/animations/gestures/','lookawaygesture.babylon',1,57,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('8s5hvy5vx1dqlpu0',0,'',100,'onwait','Look Around Idle','','/content/system/animations/movement/','lookaroundidle.babylon',1,97,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('8y1cl06y5ycu46hx',0,'',4,'onoption','Yawn Gesture','','/content/system/animations/gestures/','yawngesture.babylon',1,201,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('91g7nl087d7vr8tf',0,'',40,'onrun','Zombie Run','','/content/system/animations/movement/','zombierun.babylon',1,20,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('93p82o6si45c9cu9',0,'',48,'onturnleft','Sad Turn Left','','/content/system/animations/movement/','sadturnleft.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('94slne4emxqwd3dj',0,'',40,'onrun','Happy Run','','/content/system/animations/movement/','happyrun.babylon',1,22,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('94tsgw50n9bu6grd',0,'',4,'onoption','Happy Gesture','','/content/system/animations/gestures/','happygesture.babylon',1,241,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('950lwr5gtnwj0f23',0,'',4,'onoption','Shake It Off Gesture','','/content/system/animations/gestures/','shakeitoffgesture.babylon',1,141,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('9apn4p6ra3p6sfrk',0,'',3,'onoption','Simple Hip Hop','','/content/system/animations/movement/','simplehiphop.babylon',1,369,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('9qwarzjulfen1bf6',0,'',4,'onoption','Loser Gesture','','/content/system/animations/gestures/','losergesture.babylon',1,79,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('9tb3i9ufmt6gp94v',0,'',4,'onoption','Tell Secret Gesture','','/content/system/animations/gestures/','tellsecretgesture.babylon',1,263,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('9uhtmngb5uthyd0y',0,'',4,'onoption','Head Gesture','','/content/system/animations/gestures/','headgesture.babylon',1,68,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('9xworrh44cbkwq1y',0,'',48,'onturnleft','Default Turn Left','','/content/system/avatars/male/','maleturnleft.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('a2i9vj3tsjata05q',0,'',40,'onrun','Goofy Run','','/content/system/animations/movement/','goofyrun.babylon',1,16,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('ae3dhb4qa61pev6b',0,'',3,'onoption','Big Swing Dance','','/content/system/animations/movement/','bigswingdance.babylon',1,560,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('ahkbxolyywmgcf21',0,'',100,'onwait','Sad Idle','','/content/system/animations/movement/','sadidle.babylon',1,65,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('aryiq3b9d4i7iwz6',0,'',49,'onwalkbackwards','Default Female','','/content/system/avatars/female/','femalewalkback.babylon',1,30,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('b03ftsjbxr0sxam8',0,'',50,'onwalk','Default Male','','/content/system/avatars/male/','malewalk.babylon',1,26,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('bf8ui0jnm5x76b3g',0,'',4,'onoption','Shake Fist Gesture','','/content/system/animations/gestures/','shakefistgesture.babylon',1,59,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('byudabpm1a9jwxvm',0,'',49,'onwalkbackwards','Slow Jog Backwards','','/content/system/animations/movement/','slowjogback.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('cafb89mbrso015nt',0,'',48,'onturnleft','Dizzy Turn Left','','/content/system/animations/movement/','dizzyturnleft.babylon',1,41,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('cjosv2o5rchcbinq',0,'',3,'onoption','Macarena Dance','','/content/system/animations/movement/','macarenadance.babylon',1,198,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('crriawom5w1g8r4d',0,'',50,'onwalk','Limp Walk','','/content/system/animations/movement/','limpwalk.babylon',1,40,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('dbimisccqkophb2g',0,'',49,'onwalkbackwards','Moon Walk','','/content/system/animations/movement/','moonwalk.babylon',1,25,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('detuvuk9l9jvpzrw',0,'',4,'onoption','Pouting Gesture','','/content/system/animations/gestures/','poutinggesture.babylon',1,72,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('dkorsmpqjhvti2v4',0,'',4,'onoption','Greeting Wave Gesture','','/content/system/animations/gestures/','greetingwavegesture.babylon',1,123,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('dn4p2bcsw4yf8uka',0,'',4,'onoption','Dismissing Gesture','/content/system/icons/animdismiss.png','/content/system/animations/gestures/','dismissinggesture.babylon',1,79,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('dv7gmrzn88jx3o3f',0,'',4,'onoption','Arrogant Gesture','/content/system/icons/animarrogant.png','/content/system/animations/gestures/','arrogantgesture.babylon',1,71,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('dwd8y5vy4p5ovfh4',0,'',4,'onoption','Agree Submit Gesture','/content/system/icons/animagreesubmit.png','/content/system/animations/gestures/','agreesubmitgesture.babylon',1,113,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('ebe10ys0rqettozu',0,'',4,'onoption','Agitated Gesture','/content/system/icons/animagitated.png','/content/system/animations/gestures/','agitatedgesture.babylon',1,247,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('ebe124gw50l1binn',0,'',50,'onwalk','Cat Walk','','/content/system/animations/movement/','catwalk.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('eckq10ypm06ur6ow',0,'',4,'onoption','Looking Gesture','','/content/system/animations/gestures/','lookinggesture.babylon',1,117,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('f1webf4cdrsll9ff',0,'',40,'onrun','Long Distance Run','','/content/system/animations/movement/','longdistancerun.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('f7r5i55dev56ddsu',0,'',4,'onoption','Patting Gesture','','/content/system/animations/gestures/','pattinggesture.babylon',1,81,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('fmt7mipymal3qetx',0,'',4,'onoption','Clapping Gesture','/content/system/icons/animclapping.png','/content/system/animations/gestures/','clappinggesture.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('gemyywk67fmrxd4f',0,'',49,'onwalkbackwards','Happy Walk Backwards','','/content/system/animations/movement/','happywalkback.babylon',1,26,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('geo7z9d15mm8d3cg',0,'',40,'onrun','Female Run','','/content/system/animations/movement/','femalerun.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('gfrjdbf5hx8fdm05',0,'',4,'onoption','Happy Hand Gesture','','/content/system/animations/gestures/','happyhandgesture.babylon',1,71,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('gfso15ljwulgi6c9',0,'',100,'onwait','Young Male','','/content/system/avatars/jasper/','jasperidle.babylon',1,201,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('gi7iwy1cobjpzqpf',0,'',38,'onrunturnright','Default','','/content/system/avatars/male/','maleturnright.babylon',1,29,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('gozvhp6q7q4ccsuu',0,'',48,'onturnright','Beast Turn Right','','/content/system/animations/movement/','beastturnright.babylon',1,26,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('gp5ll76c5rb9gfuv',0,'',100,'onwait','Dizzy Idle','','/content/system/animations/movement/','dizzyidle.babylon',1,103,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('gyf7q390af9z5use',0,'',50,'onwalk','Sad Walk','','/content/system/animations/movement/','sadwalk.babylon',1,36,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('h6flqwaqsrfv2o72',0,'',4,'onoption','Taunt Gesture','','/content/system/animations/gestures/','tauntgesture.babylon',1,94,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('h8qzncruvvot2v7d',0,'',4,'onoption','Look Back Gesture','','/content/system/animations/gestures/','lookbackgesture.babylon',1,98,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('hb6x2mvj1ltaz3h4',0,'',4,'onoption','Neck Stretch Gesture','','/content/system/animations/gestures/','neckstretchgesture.babylon',1,77,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('hur9z71kpv6b2bgb',0,'',47,'onstrafeleft','Default','','/content/system/avatars/male/','malestrafeleft.babylon',1,45,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('hzimk09d0zvdbf9y',0,'',50,'onwalk','Sneaky Walk','','/content/system/animations/movement/','sneakywalk.babylon',1,42,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('ifjedo87c15nvc6t',0,'',4,'onoption','Yelling Out Gesture','','/content/system/animations/gestures/','yellingoutgesture.babylon',1,104,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('ifnwj1lugo3dlteh',0,'',100,'onwait','Ready Idle','','/content/system/animations/movement/','readyidle.babylon',1,48,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('igskfi7iwz740n8a',0,'',4,'onoption','Formal Bow Gesture','/content/system/icons/animformalbow.png','/content/system/animations/gestures/','formalbowgesture.babylon',1,67,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('ix5ybplteh6j2so3',0,'',4,'onoption','Back Pain Gesture','/content/system/icons/animbackpain.png','/content/system/animations/gestures/','paingesture.babylon',1,43,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('j7fkiupzvc5nwhse',0,'',3,'onoption','Snake Hip Hop','','/content/system/animations/movement/','snakehiphop.babylon',1,367,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('jd979om4o16sdknm',0,'',3,'onoption','Big Samba Dance','','/content/system/animations/movement/','bigsambadance.babylon',1,437,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('jnodt1pg3392g47q',0,'',4,'onoption','Bashful Gesture','/content/system/icons/animbashful.png','/content/system/animations/gestures/','bashfulgesture.babylon',1,265,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('josx8d6rbcoezoih',0,'',3,'onoption','Chicken Dance','','/content/system/animations/movement/','chickendance.babylon',1,115,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('js8voqp85yd0xmal',0,'',3,'onoption','Northern Soul Floor Spin','','/content/system/animations/movement/','northernsoulfloorspin.babylon',1,180,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('jvosyd128xxwpwaq',0,'',4,'onoption','Praying Gesture','','/content/system/animations/gestures/','prayinggesture.babylon',1,78,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('jx1drn2a9hnu7j0h',0,'',48,'onturnright','Dizzy Turn Right','','/content/system/animations/movement/','dizzyturnright.babylon',1,41,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('jx1g35i1pexfbcrr',0,'',4,'onoption','Sarcastic Nod Gesture','','/content/system/animations/gestures/','sarcasticnod.babylon',1,57,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('jy5w3rh45dexe7th',0,'',3,'onoption','Full Swing Dancing','','/content/system/animations/movement/','fullswingdancing.babylon',1,594,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('k4uw1exfcf5gvzag',0,'',50,'onwalk','Leisure Walk','','/content/system/animations/movement/','leisurewalk.babylon',1,34,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('kgi8nkui3yf92ifl',0,'',49,'onwalkbackwards','Crouch Backwards','','/content/system/animations/movement/','crouchbackwards.babylon',1,94,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('l09bsyd394qernys',0,'',4,'onoption','Informal Bow Gesture','','/content/system/animations/gestures/','informalbowgesture.babylon',1,67,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('lip3bcqn2fu0kpwf',0,'',4,'onoption','Explaining Gesture','/content/system/icons/animexplaining.png','/content/system/animations/gestures/','explaininggesture.babylon',1,91,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('liq5jbvgnvgnuaxs',0,'',4,'onoption','Arm Gesture','/content/system/icons/animarmgesture.png','/content/system/animations/gestures/','armgesture.babylon',1,83,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('lui1oae38z4q8z89',0,'',4,'onoption','Shoulder Rub Gesture','','/content/system/animations/gestures/','shoulderrubgesture.babylon',1,141,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('ly05p4gzjqzt2v56',0,'',100,'onwait','Happy Idle','','/content/system/animations/movement/','happyidle.babylon',1,71,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('m084uy5y9ip27sel',0,'',50,'onwalk','Beast Walk','','/content/system/animations/movement/','beastwalk.babylon',1,35,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('mbpjld4fttowgnt6',0,'',48,'onturnright','Default Turn Right','','/content/system/avatars/male/','maleturnright.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('me3cezrsqa768mhk',0,'',49,'onwalkbackwards','Limp Backwards','','/content/system/animations/movement/','limpwalkback.babylon',1,41,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('mjwscdstrdii0hde',0,'',4,'onoption','Rejected Gesture','','/content/system/animations/gestures/','rejectedgesture.babylon',1,116,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('mnct0obkwsa3lppd',0,'',4,'onoption','Knockout Count Gesture','','/content/system/animations/gestures/','knockoutcountgesture.babylon',1,335,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('mne0wirdkpstrbbo',0,'',4,'onoption','Head Turn Gesture','','/content/system/animations/gestures/','headturngesture.babylon',1,61,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('myvgp6sen2bgdeyj',0,'',50,'onwalk','Happy Walk','','/content/system/animations/movement/','happywalk.babylon',1,27,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('mywoocpjiyal4tp1',0,'',4,'onoption','Angry Point Gesture','/content/system/icons/animangrypoint.png','/content/system/animations/gestures/','angrypointgesture.babylon',1,78,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('mz182mwpsvx1f1va',0,'',40,'onrun','Default','','/content/system/avatars/male/','malerun.babylon',1,16,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('n3g324bafcdwc17u',0,'',3,'onoption','Northern Soul Dance','','/content/system/animations/movement/','northernsouldance.babylon',1,387,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('n3i9s7ophcae5h1r',0,'',100,'onwait','Casual Female','','/content/system/avatars/stefani/','stefaniidle.babylon',1,299,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('n4ms0oe0sye3cg8q',0,'',40,'onrun','Beast Run','','/content/system/animations/movement/','beastrun.babylon',1,22,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('nf5gtq80dtzgdg8q',0,'',4,'onoption','Excited Gesture','/content/system/icons/animexcited.png','/content/system/animations/gestures/','excitedgesture.babylon',1,158,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('nkwr491exe8wukbw',0,'',50,'onwalk','Dizzy Walk','','/content/system/animations/movement/','dizzywalk.babylon',1,51,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('nkxwr238y0978ngc',0,'',40,'onrun','Jogging','','/content/system/animations/movement/','jogging.babylon',1,21,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('nneyndv8j1myzywn',0,'',3,'onoption','Northern Soul Combo','','/content/system/animations/movement/','northernsoulcombo.babylon',1,255,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('nzyvhskedm1acu7j',0,'',5,'onoption','Simple Wave','/content/system/icons/animsimplewave.png','/content/system/animations/gestures/','simplewave.babylon',1,115,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('o3h47opkqwat7mge',0,'',100,'onwait','Mild Female Movement','','/content/system/avatars/regina/','reginaidle.babylon',1,241,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('o4kgmoik9nf8ws7p',0,'',100,'onwait','Young Female','','/content/system/avatars/pearl/','pearlidle.babylon',1,325,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('o4ll77gmryhi6b3i',0,'',4,'onoption','Weight Shift Gesture','','/content/system/animations/gestures/','weightshiftgesture.babylon',1,48,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('o5ns0qlqxgh3xgfu',0,'',3,'onoption','Big House Dancing','','/content/system/animations/movement/','bighousedancing.babylon',1,476,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('odrpbe0xjzagi3xe',0,'',40,'onrun','Treadmill Run','','/content/system/animations/movement/','treadmillrun.babylon',1,189,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('ohb6x5ze1112a9e6',0,'',100,'onwait','Default Female','','/content/system/avatars/female/','femaleidle.babylon',1,100,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('ovat8qwe81g48vnm',0,'',3,'onoption','Samba Dancing','','/content/system/animations/movement/','sambadancing.babylon',1,476,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('owgiaxpqlqv6c4kj',0,'',48,'onturnleft','Beast Turn Left','','/content/system/animations/movement/','beastturnleft.babylon',1,26,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('p5nqsnzwk4yf7sdi',0,'',4,'onoption','Hands Forward Gesture','','/content/system/animations/gestures/','handsforwardgesture.babylon',1,75,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('pae24fsnud98fdks',0,'',3,'onoption','Swim Dancing','','/content/system/animations/movement/','swimdancing.babylon',1,195,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('phb3iaxqwbvfjfh7',0,'',4,'onoption','Major Thumbs Up','','/content/system/animations/gestures/','majorthumbsup.babylon',1,101,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('pjizf4enzxs35gsm',0,'',3,'onoption','Quick Dance','','/content/system/animations/movement/','quickdance.babylon',1,177,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('pjnkwsa3jeg338tf',0,'',3,'onoption','Arms Hip Hop Dance','','/content/system/animations/movement/','armshiphopdance.babylon',1,528,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('pqidae38xws7osux',0,'',4,'onoption','Crazy Gesture','/content/system/icons/animcrazy.png','/content/system/animations/gestures/','crazygesture.babylon',1,121,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('pv9mcxisgxam79mc',0,'',4,'onoption','Smoking Gesture','','/content/system/animations/gestures/','smokinggesture.babylon',1,431,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('pvaqtybndu45a3ki',0,'',5,'onoption','Over Here Wave','/content/system/icons/animoverhere.png','/content/system/animations/gestures/','overherewave.babylon',1,77,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('qn1a8e94to0zveet',0,'',4,'onoption','Crying Gesture','/content/system/icons/animcrying.png','/content/system/animations/gestures/','cryinggesture.babylon',1,151,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('r6j56eh8r36kat8o',0,'',4,'onoption','Using Tablet Gesture','','/content/system/animations/gestures/','usingtabletgesture.babylon',1,796,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('r9087b004i9ptv0e',0,'',100,'onwait','Default Male','','/content/system/avatars/male/','maleidle.babylon',1,213,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('rlmct57mgemyxr22',0,'',48,'onturnleft','Female Turn Left','','/content/system/animations/movement/','femaleturnleft.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('rqckr4dh9ui1n4o1',0,'',3,'onoption','Cupboard House Dance','','/content/system/animations/movement/','refhousedance.babylon',1,513,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('rzn9d3dihtq4h2v5',0,'',39,'onrunbackwards','Default','','/content/system/avatars/male/','malewalkback.babylon',1,29,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('s0qludcktfn16ra7',0,'',3,'onoption','Quick Swing Dance','','/content/system/animations/movement/','quickswingdance.babylon',1,60,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('s1wbxqtx4w2n3g1v',0,'',4,'onoption','Angry Fists Gesture','/content/system/icons/animangrysmall.png','/content/system/animations/gestures/','angrysmallgesture.babylon',1,79,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('s34ekmhkea8bwiwx',0,'',4,'onoption','Yelling Gesture','','/content/system/animations/gestures/','yellinggesture.babylon',1,189,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-/* changed */				('sekqwbwk3so17vpw',0,'',50,'onwalk','Lady Walk','','/content/system/animations/movement/','ladywalk.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('sftqa61oagdg8q22',0,'',4,'onoption','Arm Stretching Gesture','/content/system/icons/animarmstretch.png','/content/system/animations/gestures/','armstretchinggesture.babylon',1,214,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('sutmnct0n71lugsk',0,'',4,'onoption','Phone Talk Gesture','','/content/system/animations/gestures/','phonetalkgesture.babylon',1,116,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('sye7thx78iwz73sq',0,'',4,'onoption','Raise Hand Gesture','','/content/system/animations/gestures/','raisehandgesture.babylon',1,98,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('t0ks8vnm4sjb16sd',0,'',4,'onoption','No No No Gesture','','/content/system/animations/gestures/','nononogesture.babylon',1,121,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('t8psw52wcxl9juor',0,'',40,'onrun','Casual Run','','/content/system/animations/movement/','casualrun.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('t9xs5gtq7uj9mcu8',0,'',50,'onwalk','Fast-Pace Walk','','/content/system/animations/movement/','fastpacewalk.babylon',1,22,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('tj69t9teic5sgygb',0,'',100,'onwait','Warrior Idle','','/content/system/animations/movement/','warrioridle.babylon',1,276,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('tvy4tq8z6zbm73xe',0,'',3,'onoption','Hip Hop Dance','','/content/system/animations/movement/','hiphopdance.babylon',1,415,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('u42zqn2essi6efyg',0,'',50,'onwalk','Swagger Walk','','/content/system/animations/movement/','swaggerwalk.babylon',1,68,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('u7iy62u1m1bga2g6',0,'',4,'onoption','Victory Gesture','','/content/system/animations/gestures/','victorygesture.babylon',1,206,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('uld4gzjr5hx8e93p',0,'',4,'onoption','Thinking Gesture','','/content/system/animations/gestures/','thinkinggesture.babylon',1,103,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('v2qev531xk2n04mr',0,'',40,'onrun','Focused Run','','/content/system/animations/movement/','focusedrun.babylon',1,16,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('vix5x656ejgnxprn',0,'',4,'onoption','Fist Pump Gesture','/content/system/icons/animfistpump.png','/content/system/animations/gestures/','fistpumpgesture.babylon',1,92,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('vld4frlngcbjr7s8',0,'',48,'onturnleft','Casual Turn Left','','/content/system/animations/movement/','casualturnleft.babylon',1,25,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('w547k8hrbbn89k4v',0,'',37,'onrunstraferight','Default','','/content/system/avatars/male/','malestraferight.babylon',1,45,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('w66c83qh7izct0n8',0,'',40,'onrun','Long Stride Run','','/content/system/animations/movement/','longstriderun.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('w8gjfi9t9tb4p5mp',0,'',4,'onoption','Looking Down Gesture','','/content/system/animations/gestures/','lookingdowngesture.babylon',1,115,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('w9jy5ur91g34b869',0,'',4,'onoption','Petting Gesture','','/content/system/animations/gestures/','pettinggesture.babylon',1,135,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('wc004i6dcn4rdn2g',0,'',100,'onwait','Casual Male','','/content/system/avatars/remy/','remyidle.babylon',1,196,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
-				('wglmdxkz9bt6gsi5',0,'',4,'onoption','Acknowledge Gesture','/content/system/icons/animacknowledge.png','/content/system/animations/gestures/','acknowledgegesture.babylon',1,47,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('wr5gush0oahh0m3j',0,'',48,'onturnright','Casual Turn Right','','/content/system/animations/movement/','casualturnright.babylon',1,25,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('x2jj1myxr0u4335i',0,'',5,'onoption','Fast Wave','/content/system/icons/animfastwave.png','/content/system/animations/gestures/','fastwave.babylon',1,14,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('x3n02bct3yipypn3',0,'',3,'onoption','Belly Dance','','/content/system/animations/movement/','bellydance.babylon',1,472,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('x50ktfmwlapo879p',0,'',3,'onoption','Gangnam Style Dance','','/content/system/animations/movement/','gangnamstyledance.babylon',1,297,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('x50m1cn60hb850pg',0,'',4,'onoption','Muscle Flex Gesture','','/content/system/animations/gestures/','muscleflexgesture.babylon',1,113,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('xd3eqg21webe0wff',0,'',37,'onrunstrafeleft','Default','','/content/system/avatars/male/','malestrafeleft.babylon',1,45,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('xjx0cl084w78njq0',0,'',4,'onoption','Strong Gesture','','/content/system/animations/gestures/','stronggesture.babylon',1,47,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('xpqkmgdg7mkxyywm',0,'',40,'onrun','Fast Run','','/content/system/animations/movement/','fastrun.babylon',1,13,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('xqv42zrric7x3nzy',0,'',4,'onoption','Thoughtful Nod Gesture','','/content/system/animations/gestures/','thoughtfulheadnodgesture.babylon',1,71,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('y7546hx62w7d82lr',0,'',48,'onturnleft','Cat Walk Left','','/content/system/animations/movement/','catwalkleft.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('ycrv2pckvnnbncoe',0,'',40,'onrun','Easy Run','','/content/system/animations/movement/','easyrun.babylon',1,21,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('yfbcqmywlapm197b',0,'',40,'onrun','Drunk Run','','/content/system/animations/movement/','drunkrun.babylon',1,45,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('yjsekoodu42xisfp',0,'',4,'onoption','Salute Gesture','','/content/system/animations/gestures/','salutegesture.babylon',1,69,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('z17vscbkwr6ml4tr',0,'',48,'onturnright','Sad Turn Right','','/content/system/animations/movement/','sadturnright.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('z2ev4yiljunof38w',0,'',4,'onoption','Agony Gesture','/content/system/icons/animagony.png','/content/system/animations/gestures/','agonygesture.babylon',1,90,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('zkwtccm2jgp4gyf8',0,'',4,'onoption','Charge Gesture','/content/system/icons/animcharge.png','/content/system/animations/gestures/','chargegesture.babylon',1,138,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('zof6lea9ggxandvb',0,'',4,'onoption','Agreeing Gesture','/content/system/icons/animagreeing.png','/content/system/animations/gestures/','agreeinggesture.babylon',1,45,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('zpkqzqn4lom2g48s',0,'',40,'onrun','Slow Run','','/content/system/animations/movement/','slowrun.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('zubywnjr6mm8bu9u',0,'',49,'onwalkbackwards','Sad Walk Backwards','','/content/system/animations/movement/','sadwalkback.babylon',1,30,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				('zyt8s5elr1xhp26o',0,'',4,'onoption','Annoyed Head Shake Gesture','/content/system/icons/animannoyedheadshake.png','/content/system/animations/gestures/','annoyedheadshakegesture.babylon',1,62,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);
+				INSERT INTO `".wtw_tableprefix."avatars` ('avatarid', 'avatargroup', 'displayname', 'avatarfolder', 'avatarfile', 'gender', 'scalingx', 'scalingy', 'scalingz', 'imagefull', 'imageface', 'sortorder', 'createdate', 'createuserid', 'updatedate', 'updateuserid', 'deleteddate', 'deleteduserid', 'deleted') VALUES 
+				('3b9bt5c70igtmqux','Anonymous','Anonymous Male','/content/system/avatars/male/','maleidle.babylon','male',0.0800,0.0800,0.0800,'malefull.png','maleface.png',2,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('641svy8bwjx2kme7','Default','Remy','/content/system/avatars/remy/','remyidle.babylon','male',0.0400,0.0400,0.0400,'remyfull.png','remyface.png',4,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('9e94useo7x2ief0s','Default','Liam','/content/system/avatars/liam/','liamidle.babylon','male',0.0400,0.0400,0.0400,'liamfull.png','liamface.png',4,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('aajvq38y06vulgh0','Default','Pearl','/content/system/avatars/pearl/','pearlidle.babylon','female',0.0700,0.0700,0.0700,'pearlfull.png','pearlface.png',3,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('dihtmpm1ae3b9d3a','Default','Malcolm','/content/system/avatars/malcolm/','malcolmidle.babylon','male',0.0400,0.0400,0.0400,'malcolmfull.png','malcolmface.png',4,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('h1ro3h59xs5eknl0','Default','Shae','/content/system/avatars/shae/','shaeidle.babylon','female',0.0400,0.0400,0.0400,'shaefull.png','shaeface.png',3,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('odtx7arzof5eigp4','Default','Regina','/content/system/avatars/regina/','reginaidle.babylon','female',0.0400,0.0400,0.0400,'reginafull.png','reginaface.png',3,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('p7y3p6ti6d85yf7q','Anonymous','Anonymous Female','/content/system/avatars/female/','femaleidle.babylon','female',0.0800,0.0800,0.0800,'femalefull.png','femaleface.png',1,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('r8tgsns20ruwx0bg','Default','Jasper','/content/system/avatars/jasper/','jasperidle.babylon','male',0.0700,0.0700,0.0700,'jasperfull.png','jasperface.png',4,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('v1ij2rkmdypo97c2','Default','Stefani','/content/system/avatars/stefani/','stefaniidle.babylon','female',0.0400,0.0400,0.0400,'stefanifull.png','stefaniface.png',3,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);
 			");
 			$wtwdb->query("
-				INSERT INTO `".wtw_tableprefix."buildingcategories` VALUES 
-				(1,'3D Stores','".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
-				(2,'3D Offices','".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);
+				INSERT INTO `".wtw_tableprefix."avataranimations` ('avataranimationid', 'avatarid', 'userid', 'loadpriority', 'animationevent', 'animationfriendlyname', 'setdefault', 'animationicon', 'objectfolder', 'objectfile', 'startframe', 'endframe', 'animationloop', 'speedratio', 'soundid', 'soundpath', 'soundmaxdistance', 'createdate', 'createuserid', 'updatedate', 'updateuserid', 'deleteddate', 'deleteduserid', 'deleted') VALUES 
+				('0gaz1cjnohb72qh8','','',4,'onoption','Leaning Look Gesture','0','','/content/system/animations/gestures/','leaninglookgesture.babylon',1,193,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('0ikarv3xbs0n7544','','',49,'onwalkbackwards','Default Male','1','','/content/system/avatars/male/','malewalkback.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('0m07zbocsuwwuj6b','','',48,'onturnright','Happy Turn Right','0','','/content/system/animations/movement/','happyturnright.babylon',1,36,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('0sv3rkk659wmilhl','','',48,'onturnright','Cat Walk Right','0','','/content/system/animations/movement/','catwalkright.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('0wfg0nafbajsdg6h','','',40,'onrun','Running Scared','0','','/content/system/animations/movement/','runningscared.babylon',1,27,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('100zwiuq5i2v40oc','','',4,'onoption','You Are Out','0','/content/system/icons/animyouareout.png','/content/system/animations/gestures/','youareout.babylon',1,87,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('1be5j7fkk51ph9wp','','',50,'onwalk','Strut Walk','0','','/content/system/animations/movement/','strutwalk.babylon',1,35,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('1ls8ugqbf7q0vawn','','',4,'onoption','Pointing Up Gesture','0','','/content/system/animations/gestures/','pointingupgesture.babylon',1,45,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('1n6x2mwmgdjld27t','','',3,'onoption','Slide Hip Hop','0','','/content/system/animations/movement/','slidehiphop.babylon',1,416,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('1ssmqrmtayyxt7mi','','',4,'onoption','Counting Gesture','0','/content/system/icons/animcounting.png','/content/system/animations/gestures/','countinggesture.babylon',1,160,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('1wfesp5owhoxl9gj','','',50,'onwalk','Default Female','0','','/content/system/avatars/female/','femalewalk.babylon',1,25,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('226p0vd951objpwd','','',4,'onoption','Relieved Sigh Gesture','0','','/content/system/animations/gestures/','relievedsighgesture.babylon',1,73,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','2019-06-08 12:56:53','".$zuserid."',NULL,'',0),
+				('294skjy73v4xambn','','',4,'onoption','Yes Gesture','0','','/content/system/animations/gestures/','yesgesture.babylon',1,63,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('2eqg47npjmhj9qu0','','',3,'onoption','Big Tut Hip Hop Dance','0','','/content/system/animations/movement/','bigtuthiphopdance.babylon',1,291,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('2kopg7lfdjk7awnj','','',3,'onoption','Salsa Dancing','0','','/content/system/animations/movement/','salsadancing.babylon',1,288,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('2pdqkmd13bbpheh8','','',5,'onoption','Injured Wave','0','/content/system/icons/animinjuredwave.png','/content/system/animations/gestures/','injuredwave.babylon',1,122,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('36i2rmud99jwxywp','','',4,'onoption','Defeated Gesture','0','/content/system/icons/animdefeated.png','/content/system/animations/gestures/','defeatgesture.babylon',1,176,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('3b9d2a8bveclwqxh','','',4,'onoption','Point Forward Gesture','0','','/content/system/animations/gestures/','pointforwardgesture.babylon',1,113,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('3nz15p12a61m084v','','',4,'onoption','Dismissing Light Gesture','0','','/content/system/animations/gestures/','smalldismissinggesture.babylon',1,54,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('3nz17wvpvat9s4cc','','',3,'onoption','Northern Soul Spin','0','','/content/system/animations/movement/','northernsoulspin.babylon',1,98,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('3p81hb6w0bjp0vb0','','',4,'onoption','Shucks Gesture','0','','/content/system/animations/gestures/','shucksdisappointedgesture.babylon',1,101,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('45dg48tccn60jnna','dihtmpm1ae3b9d3a','',100,'onwait','Mild Male Movement','0','','/content/system/avatars/malcolm/','malcolmidle.babylon',1,195,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('45dh9tcbikbvhqa9','','',38,'onrunturnleft','Default','1','','/content/system/avatars/male/','maleturnleft.babylon',1,29,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('46kczxmcwhp14ftt','','',49,'onwalkbackwards','Looking Back','0','','/content/system/animations/movement/','lookingback.babylon',1,37,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('52yl1g7mggx8c3h1','','',3,'onoption','Quick Wave Hip Hop','0','','/content/system/animations/movement/','quickwavehiphopdance.babylon',1,29,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('57k7c3h6c8630tyd','','',5,'onoption','Waving Gesture','0','/content/system/icons/animwavinggesture.png','/content/system/animations/gestures/','wavinggesture.babylon',1,36,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('5c850obkwugsi9pu','','',48,'onturnleft','Happy Turn Left','0','','/content/system/animations/movement/','happyturnleft.babylon',1,36,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('5fo4lk4vzaip0ypq','','',4,'onoption','Reacting Gesture','0','','/content/system/animations/gestures/','reactinggesture.babylon',1,89,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('5h1peyir8wr38ws8','','',48,'onturnright','Female Turn Right','0','','/content/system/animations/movement/','femaleturnright.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('5mqtw1g5gtoyt47m','','',4,'onoption','No Gesture','0','','/content/system/animations/gestures/','nogesture.babylon',1,44,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('5nt31zrtvvq4cdu3','h1ro3h59xs5eknl0','',100,'onwait','Swaying Female','0','','/content/system/avatars/shae/','shaeidle.babylon',1,303,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('658miot2v41u2v4z','','',4,'onoption','Thank You Gesture','0','','/content/system/animations/gestures/','thankyougesture.babylon',1,73,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('6b02dlxs7orqetut','','',4,'onoption','Let Down Gesture','0','','/content/system/animations/gestures/','letdowngesture.babylon',1,54,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('6i1o866dabru0f4d','','',4,'onoption','Shake Head Gesture','0','','/content/system/animations/gestures/','shakeheadgesture.babylon',1,74,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('6kcyrxfa73xd115n','','',4,'onoption','Surprised Gesture','0','','/content/system/animations/gestures/','surprisedgesture.babylon',1,97,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('6moihybqo6x0cm4q','','',3,'onoption','House Dancing','0','','/content/system/animations/movement/','housedancing.babylon',1,629,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('6x3o6sh2u1m1bjnq','','',47,'onstraferight','Default','1','','/content/system/avatars/male/','malestraferight.babylon',1,45,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('755b2ernys6grg0n','','',3,'onoption','Shuffling Dance','0','','/content/system/animations/movement/','shufflingdance.babylon',1,181,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('78k4zhhzhemwlcvc','9e94useo7x2ief0s','',100,'onwait','Swaying Male','0','','/content/system/avatars/liam/','liamidle.babylon',1,200,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('7bxqw8ivvpxisgw2','','',40,'onrun','Medium Run','0','','/content/system/animations/movement/','mediumrun.babylon',1,14,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('7kbub1a8d5nt3zqo','','',4,'onoption','Pointing Gesture','0','','/content/system/animations/gestures/','pointinggesture.babylon',1,48,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('7q0whoxmdypm1doc','','',40,'onrun','Tired Run','0','','/content/system/animations/movement/','tiredrun.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('7vr8tdhb5tlira5w','','',3,'onoption','Robot Hip Hop','0','','/content/system/animations/movement/','robothiphopdance.babylon',1,371,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('81g5fo2bcu7ivthz','','',4,'onoption','Angry Gesture','0','/content/system/icons/animangry.png','/content/system/animations/gestures/','angrygesture.babylon',1,461,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('83trbcrqfzkvnphe','','',4,'onoption','Talking Gesture','0','','/content/system/animations/gestures/','talkinggesture.babylon',1,95,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('850lxwpsw51objq0','','',4,'onoption','Whatever Gesture','0','','/content/system/animations/gestures/','whatevergesture.babylon',1,35,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('8hnu9s5deu3v545f','','',4,'onoption','Look Away Gesture','0','','/content/system/animations/gestures/','lookawaygesture.babylon',1,57,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('8s5hvy5vx1dqlpu0','','',100,'onwait','Look Around Idle','0','','/content/system/animations/movement/','lookaroundidle.babylon',1,97,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('8y1cl06y5ycu46hx','','',4,'onoption','Yawn Gesture','0','','/content/system/animations/gestures/','yawngesture.babylon',1,201,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('91g7nl087d7vr8tf','','',40,'onrun','Zombie Run','0','','/content/system/animations/movement/','zombierun.babylon',1,20,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('93p82o6si45c9cu9','','',48,'onturnleft','Sad Turn Left','0','','/content/system/animations/movement/','sadturnleft.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('94slne4emxqwd3dj','','',40,'onrun','Happy Run','0','','/content/system/animations/movement/','happyrun.babylon',1,22,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('94tsgw50n9bu6grd','','',4,'onoption','Happy Gesture','0','','/content/system/animations/gestures/','happygesture.babylon',1,241,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('950lwr5gtnwj0f23','','',4,'onoption','Shake It Off Gesture','0','','/content/system/animations/gestures/','shakeitoffgesture.babylon',1,141,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('9apn4p6ra3p6sfrk','','',3,'onoption','Simple Hip Hop','0','','/content/system/animations/movement/','simplehiphop.babylon',1,369,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('9qwarzjulfen1bf6','','',4,'onoption','Loser Gesture','0','','/content/system/animations/gestures/','losergesture.babylon',1,79,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('9tb3i9ufmt6gp94v','','',4,'onoption','Tell Secret Gesture','0','','/content/system/animations/gestures/','tellsecretgesture.babylon',1,263,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('9uhtmngb5uthyd0y','','',4,'onoption','Head Gesture','0','','/content/system/animations/gestures/','headgesture.babylon',1,68,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('9xworrh44cbkwq1y','','',48,'onturnleft','Default Turn Left','1','','/content/system/avatars/male/','maleturnleft.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('a2i9vj3tsjata05q','','',40,'onrun','Goofy Run','0','','/content/system/animations/movement/','goofyrun.babylon',1,16,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('ae3dhb4qa61pev6b','','',3,'onoption','Big Swing Dance','0','','/content/system/animations/movement/','bigswingdance.babylon',1,560,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('ahkbxolyywmgcf21','','',100,'onwait','Sad Idle','0','','/content/system/animations/movement/','sadidle.babylon',1,65,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('aryiq3b9d4i7iwz6','','',49,'onwalkbackwards','Default Female','0','','/content/system/avatars/female/','femalewalkback.babylon',1,30,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('b03ftsjbxr0sxam8','','',50,'onwalk','Default Male','1','','/content/system/avatars/male/','malewalk.babylon',1,26,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('bf8ui0jnm5x76b3g','','',4,'onoption','Shake Fist Gesture','0','','/content/system/animations/gestures/','shakefistgesture.babylon',1,59,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('byudabpm1a9jwxvm','','',49,'onwalkbackwards','Slow Jog Backwards','0','','/content/system/animations/movement/','slowjogback.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('cafb89mbrso015nt','','',48,'onturnleft','Dizzy Turn Left','0','','/content/system/animations/movement/','dizzyturnleft.babylon',1,41,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('cjosv2o5rchcbinq','','',3,'onoption','Macarena Dance','0','','/content/system/animations/movement/','macarenadance.babylon',1,198,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('crriawom5w1g8r4d','','',50,'onwalk','Limp Walk','0','','/content/system/animations/movement/','limpwalk.babylon',1,40,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('dbimisccqkophb2g','','',49,'onwalkbackwards','Moon Walk','0','','/content/system/animations/movement/','moonwalk.babylon',1,25,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('detuvuk9l9jvpzrw','','',4,'onoption','Pouting Gesture','0','','/content/system/animations/gestures/','poutinggesture.babylon',1,72,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('dkorsmpqjhvti2v4','','',4,'onoption','Greeting Wave Gesture','0','','/content/system/animations/gestures/','greetingwavegesture.babylon',1,123,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('dn4p2bcsw4yf8uka','','',4,'onoption','Dismissing Gesture','0','/content/system/icons/animdismiss.png','/content/system/animations/gestures/','dismissinggesture.babylon',1,79,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('dv7gmrzn88jx3o3f','','',4,'onoption','Arrogant Gesture','0','/content/system/icons/animarrogant.png','/content/system/animations/gestures/','arrogantgesture.babylon',1,71,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('dwd8y5vy4p5ovfh4','','',4,'onoption','Agree Submit Gesture','0','/content/system/icons/animagreesubmit.png','/content/system/animations/gestures/','agreesubmitgesture.babylon',1,113,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('ebe10ys0rqettozu','','',4,'onoption','Agitated Gesture','0','/content/system/icons/animagitated.png','/content/system/animations/gestures/','agitatedgesture.babylon',1,247,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('ebe124gw50l1binn','','',50,'onwalk','Cat Walk','0','','/content/system/animations/movement/','catwalk.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('eckq10ypm06ur6ow','','',4,'onoption','Looking Gesture','0','','/content/system/animations/gestures/','lookinggesture.babylon',1,117,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('f1webf4cdrsll9ff','','',40,'onrun','Long Distance Run','0','','/content/system/animations/movement/','longdistancerun.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('f7r5i55dev56ddsu','','',4,'onoption','Patting Gesture','0','','/content/system/animations/gestures/','pattinggesture.babylon',1,81,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('fmt7mipymal3qetx','','',4,'onoption','Clapping Gesture','0','/content/system/icons/animclapping.png','/content/system/animations/gestures/','clappinggesture.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('gemyywk67fmrxd4f','','',49,'onwalkbackwards','Happy Walk Backwards','0','','/content/system/animations/movement/','happywalkback.babylon',1,26,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('geo7z9d15mm8d3cg','','',40,'onrun','Female Run','0','','/content/system/animations/movement/','femalerun.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('gfrjdbf5hx8fdm05','','',4,'onoption','Happy Hand Gesture','0','','/content/system/animations/gestures/','happyhandgesture.babylon',1,71,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('gfso15ljwulgi6c9','r8tgsns20ruwx0bg','',100,'onwait','Young Male','0','','/content/system/avatars/jasper/','jasperidle.babylon',1,201,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('gi7iwy1cobjpzqpf','','',38,'onrunturnright','Default','1','','/content/system/avatars/male/','maleturnright.babylon',1,29,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('gozvhp6q7q4ccsuu','','',48,'onturnright','Beast Turn Right','0','','/content/system/animations/movement/','beastturnright.babylon',1,26,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('gp5ll76c5rb9gfuv','','',100,'onwait','Dizzy Idle','0','','/content/system/animations/movement/','dizzyidle.babylon',1,103,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('gyf7q390af9z5use','','',50,'onwalk','Sad Walk','0','','/content/system/animations/movement/','sadwalk.babylon',1,36,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('h6flqwaqsrfv2o72','','',4,'onoption','Taunt Gesture','0','','/content/system/animations/gestures/','tauntgesture.babylon',1,94,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('h8qzncruvvot2v7d','','',4,'onoption','Look Back Gesture','0','','/content/system/animations/gestures/','lookbackgesture.babylon',1,98,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('hb6x2mvj1ltaz3h4','','',4,'onoption','Neck Stretch Gesture','0','','/content/system/animations/gestures/','neckstretchgesture.babylon',1,77,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('hur9z71kpv6b2bgb','','',47,'onstrafeleft','Default','1','','/content/system/avatars/male/','malestrafeleft.babylon',1,45,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('hzimk09d0zvdbf9y','','',50,'onwalk','Sneaky Walk','0','','/content/system/animations/movement/','sneakywalk.babylon',1,42,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('ifjedo87c15nvc6t','','',4,'onoption','Yelling Out Gesture','0','','/content/system/animations/gestures/','yellingoutgesture.babylon',1,104,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('ifnwj1lugo3dlteh','','',100,'onwait','Ready Idle','0','','/content/system/animations/movement/','readyidle.babylon',1,48,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('igskfi7iwz740n8a','','',4,'onoption','Formal Bow Gesture','0','/content/system/icons/animformalbow.png','/content/system/animations/gestures/','formalbowgesture.babylon',1,67,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('ix5ybplteh6j2so3','','',4,'onoption','Back Pain Gesture','0','/content/system/icons/animbackpain.png','/content/system/animations/gestures/','paingesture.babylon',1,43,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('j7fkiupzvc5nwhse','','',3,'onoption','Snake Hip Hop','0','','/content/system/animations/movement/','snakehiphop.babylon',1,367,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('jd979om4o16sdknm','','',3,'onoption','Big Samba Dance','0','','/content/system/animations/movement/','bigsambadance.babylon',1,437,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('jnodt1pg3392g47q','','',4,'onoption','Bashful Gesture','0','/content/system/icons/animbashful.png','/content/system/animations/gestures/','bashfulgesture.babylon',1,265,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('josx8d6rbcoezoih','','',3,'onoption','Chicken Dance','0','','/content/system/animations/movement/','chickendance.babylon',1,115,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('js8voqp85yd0xmal','','',3,'onoption','Northern Soul Floor Spin','0','','/content/system/animations/movement/','northernsoulfloorspin.babylon',1,180,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('jvosyd128xxwpwaq','','',4,'onoption','Praying Gesture','0','','/content/system/animations/gestures/','prayinggesture.babylon',1,78,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('jx1drn2a9hnu7j0h','','',48,'onturnright','Dizzy Turn Right','0','','/content/system/animations/movement/','dizzyturnright.babylon',1,41,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('jx1g35i1pexfbcrr','','',4,'onoption','Sarcastic Nod Gesture','0','','/content/system/animations/gestures/','sarcasticnod.babylon',1,57,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('jy5w3rh45dexe7th','','',3,'onoption','Full Swing Dancing','0','','/content/system/animations/movement/','fullswingdancing.babylon',1,594,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('k4uw1exfcf5gvzag','','',50,'onwalk','Leisure Walk','0','','/content/system/animations/movement/','leisurewalk.babylon',1,34,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('kgi8nkui3yf92ifl','','',49,'onwalkbackwards','Crouch Backwards','0','','/content/system/animations/movement/','crouchbackwards.babylon',1,94,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('l09bsyd394qernys','','',4,'onoption','Informal Bow Gesture','0','','/content/system/animations/gestures/','informalbowgesture.babylon',1,67,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('lip3bcqn2fu0kpwf','','',4,'onoption','Explaining Gesture','0','/content/system/icons/animexplaining.png','/content/system/animations/gestures/','explaininggesture.babylon',1,91,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('liq5jbvgnvgnuaxs','','',4,'onoption','Arm Gesture','0','/content/system/icons/animarmgesture.png','/content/system/animations/gestures/','armgesture.babylon',1,83,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('lui1oae38z4q8z89','','',4,'onoption','Shoulder Rub Gesture','0','','/content/system/animations/gestures/','shoulderrubgesture.babylon',1,141,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('ly05p4gzjqzt2v56','','',100,'onwait','Happy Idle','0','','/content/system/animations/movement/','happyidle.babylon',1,71,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('m084uy5y9ip27sel','','',50,'onwalk','Beast Walk','0','','/content/system/animations/movement/','beastwalk.babylon',1,35,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('mbpjld4fttowgnt6','','',48,'onturnright','Default Turn Right','1','','/content/system/avatars/male/','maleturnright.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('me3cezrsqa768mhk','','',49,'onwalkbackwards','Limp Backwards','0','','/content/system/animations/movement/','limpwalkback.babylon',1,41,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('mjwscdstrdii0hde','','',4,'onoption','Rejected Gesture','0','','/content/system/animations/gestures/','rejectedgesture.babylon',1,116,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('mnct0obkwsa3lppd','','',4,'onoption','Knockout Count Gesture','0','','/content/system/animations/gestures/','knockoutcountgesture.babylon',1,335,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('mne0wirdkpstrbbo','','',4,'onoption','Head Turn Gesture','0','','/content/system/animations/gestures/','headturngesture.babylon',1,61,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('myvgp6sen2bgdeyj','','',50,'onwalk','Happy Walk','0','','/content/system/animations/movement/','happywalk.babylon',1,27,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('mywoocpjiyal4tp1','','',4,'onoption','Angry Point Gesture','0','/content/system/icons/animangrypoint.png','/content/system/animations/gestures/','angrypointgesture.babylon',1,78,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('mz182mwpsvx1f1va','','',40,'onrun','Default','1','','/content/system/avatars/male/','malerun.babylon',1,16,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('n3g324bafcdwc17u','','',3,'onoption','Northern Soul Dance','0','','/content/system/animations/movement/','northernsouldance.babylon',1,387,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('n3i9s7ophcae5h1r','v1ij2rkmdypo97c2','',100,'onwait','Casual Female','0','','/content/system/avatars/stefani/','stefaniidle.babylon',1,299,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('n4ms0oe0sye3cg8q','','',40,'onrun','Beast Run','0','','/content/system/animations/movement/','beastrun.babylon',1,22,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('nf5gtq80dtzgdg8q','','',4,'onoption','Excited Gesture','0','/content/system/icons/animexcited.png','/content/system/animations/gestures/','excitedgesture.babylon',1,158,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('nkwr491exe8wukbw','','',50,'onwalk','Dizzy Walk','0','','/content/system/animations/movement/','dizzywalk.babylon',1,51,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('nkxwr238y0978ngc','','',40,'onrun','Jogging','0','','/content/system/animations/movement/','jogging.babylon',1,21,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('nneyndv8j1myzywn','','',3,'onoption','Northern Soul Combo','0','','/content/system/animations/movement/','northernsoulcombo.babylon',1,255,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('nzyvhskedm1acu7j','','',5,'onoption','Simple Wave','0','/content/system/icons/animsimplewave.png','/content/system/animations/gestures/','simplewave.babylon',1,115,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('o3h47opkqwat7mge','odtx7arzof5eigp4','',100,'onwait','Mild Female Movement','0','','/content/system/avatars/regina/','reginaidle.babylon',1,241,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('o4kgmoik9nf8ws7p','aajvq38y06vulgh0','',100,'onwait','Young Female','0','','/content/system/avatars/pearl/','pearlidle.babylon',1,325,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('o4ll77gmryhi6b3i','','',4,'onoption','Weight Shift Gesture','0','','/content/system/animations/gestures/','weightshiftgesture.babylon',1,48,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('o5ns0qlqxgh3xgfu','','',3,'onoption','Big House Dancing','0','','/content/system/animations/movement/','bighousedancing.babylon',1,476,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('odrpbe0xjzagi3xe','','',40,'onrun','Treadmill Run','0','','/content/system/animations/movement/','treadmillrun.babylon',1,189,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('ohb6x5ze1112a9e6','p7y3p6ti6d85yf7q','',100,'onwait','Default Female','0','','/content/system/avatars/female/','femaleidle.babylon',1,100,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('ovat8qwe81g48vnm','','',3,'onoption','Samba Dancing','0','','/content/system/animations/movement/','sambadancing.babylon',1,476,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('owgiaxpqlqv6c4kj','','',48,'onturnleft','Beast Turn Left','0','','/content/system/animations/movement/','beastturnleft.babylon',1,26,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('p5nqsnzwk4yf7sdi','','',4,'onoption','Hands Forward Gesture','0','','/content/system/animations/gestures/','handsforwardgesture.babylon',1,75,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('pae24fsnud98fdks','','',3,'onoption','Swim Dancing','0','','/content/system/animations/movement/','swimdancing.babylon',1,195,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('phb3iaxqwbvfjfh7','','',4,'onoption','Major Thumbs Up','0','','/content/system/animations/gestures/','majorthumbsup.babylon',1,101,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('pjizf4enzxs35gsm','','',3,'onoption','Quick Dance','0','','/content/system/animations/movement/','quickdance.babylon',1,177,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('pjnkwsa3jeg338tf','','',3,'onoption','Arms Hip Hop Dance','0','','/content/system/animations/movement/','armshiphopdance.babylon',1,528,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('pqidae38xws7osux','','',4,'onoption','Crazy Gesture','0','/content/system/icons/animcrazy.png','/content/system/animations/gestures/','crazygesture.babylon',1,121,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('pv9mcxisgxam79mc','','',4,'onoption','Smoking Gesture','0','','/content/system/animations/gestures/','smokinggesture.babylon',1,431,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('pvaqtybndu45a3ki','','',5,'onoption','Over Here Wave','0','/content/system/icons/animoverhere.png','/content/system/animations/gestures/','overherewave.babylon',1,77,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('qn1a8e94to0zveet','','',4,'onoption','Crying Gesture','0','/content/system/icons/animcrying.png','/content/system/animations/gestures/','cryinggesture.babylon',1,151,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('r6j56eh8r36kat8o','','',4,'onoption','Using Tablet Gesture','0','','/content/system/animations/gestures/','usingtabletgesture.babylon',1,796,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('r9087b004i9ptv0e','3b9bt5c70igtmqux','',100,'onwait','Default Male','1','','/content/system/avatars/male/','maleidle.babylon',1,213,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('rlmct57mgemyxr22','','',48,'onturnleft','Female Turn Left','0','','/content/system/animations/movement/','femaleturnleft.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('rqckr4dh9ui1n4o1','','',3,'onoption','Cupboard House Dance','0','','/content/system/animations/movement/','refhousedance.babylon',1,513,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('rzn9d3dihtq4h2v5','','',39,'onrunbackwards','Default','1','','/content/system/avatars/male/','malewalkback.babylon',1,29,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('s0qludcktfn16ra7','','',3,'onoption','Quick Swing Dance','0','','/content/system/animations/movement/','quickswingdance.babylon',1,60,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('s1wbxqtx4w2n3g1v','','',4,'onoption','Angry Fists Gesture','0','/content/system/icons/animangrysmall.png','/content/system/animations/gestures/','angrysmallgesture.babylon',1,79,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('s34ekmhkea8bwiwx','','',4,'onoption','Yelling Gesture','0','','/content/system/animations/gestures/','yellinggesture.babylon',1,189,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('sekqwbwk3so17vpw','','',50,'onwalk','Lady Walk','0','','/content/system/animations/movement/','ladywalk.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('sftqa61oagdg8q22','','',4,'onoption','Arm Stretching Gesture','0','/content/system/icons/animarmstretch.png','/content/system/animations/gestures/','armstretchinggesture.babylon',1,214,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('sutmnct0n71lugsk','','',4,'onoption','Phone Talk Gesture','0','','/content/system/animations/gestures/','phonetalkgesture.babylon',1,116,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('sye7thx78iwz73sq','','',4,'onoption','Raise Hand Gesture','0','','/content/system/animations/gestures/','raisehandgesture.babylon',1,98,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('t0ks8vnm4sjb16sd','','',4,'onoption','No No No Gesture','0','','/content/system/animations/gestures/','nononogesture.babylon',1,121,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('t8psw52wcxl9juor','','',40,'onrun','Casual Run','0','','/content/system/animations/movement/','casualrun.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('t9xs5gtq7uj9mcu8','','',50,'onwalk','Fast-Pace Walk','0','','/content/system/animations/movement/','fastpacewalk.babylon',1,22,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('tj69t9teic5sgygb','','',100,'onwait','Warrior Idle','0','','/content/system/animations/movement/','warrioridle.babylon',1,276,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('tvy4tq8z6zbm73xe','','',3,'onoption','Hip Hop Dance','0','','/content/system/animations/movement/','hiphopdance.babylon',1,415,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('u42zqn2essi6efyg','','',50,'onwalk','Swagger Walk','0','','/content/system/animations/movement/','swaggerwalk.babylon',1,68,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('u7iy62u1m1bga2g6','','',4,'onoption','Victory Gesture','0','','/content/system/animations/gestures/','victorygesture.babylon',1,206,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('uld4gzjr5hx8e93p','','',4,'onoption','Thinking Gesture','0','','/content/system/animations/gestures/','thinkinggesture.babylon',1,103,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('v2qev531xk2n04mr','','',40,'onrun','Focused Run','0','','/content/system/animations/movement/','focusedrun.babylon',1,16,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('vix5x656ejgnxprn','','',4,'onoption','Fist Pump Gesture','0','/content/system/icons/animfistpump.png','/content/system/animations/gestures/','fistpumpgesture.babylon',1,92,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('vld4frlngcbjr7s8','','',48,'onturnleft','Casual Turn Left','0','','/content/system/animations/movement/','casualturnleft.babylon',1,25,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('w547k8hrbbn89k4v','','',37,'onrunstraferight','Default','1','','/content/system/avatars/male/','malestraferight.babylon',1,45,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('w66c83qh7izct0n8','','',40,'onrun','Long Stride Run','0','','/content/system/animations/movement/','longstriderun.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('w8gjfi9t9tb4p5mp','','',4,'onoption','Looking Down Gesture','0','','/content/system/animations/gestures/','lookingdowngesture.babylon',1,115,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('w9jy5ur91g34b869','','',4,'onoption','Petting Gesture','0','','/content/system/animations/gestures/','pettinggesture.babylon',1,135,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('wc004i6dcn4rdn2g','641svy8bwjx2kme7','',100,'onwait','Casual Male','0','','/content/system/avatars/remy/','remyidle.babylon',1,196,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2),
+				('wglmdxkz9bt6gsi5','','',4,'onoption','Acknowledge Gesture','0','/content/system/icons/animacknowledge.png','/content/system/animations/gestures/','acknowledgegesture.babylon',1,47,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('wr5gush0oahh0m3j','','',48,'onturnright','Casual Turn Right','0','','/content/system/animations/movement/','casualturnright.babylon',1,25,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('x2jj1myxr0u4335i','','',5,'onoption','Fast Wave','0','/content/system/icons/animfastwave.png','/content/system/animations/gestures/','fastwave.babylon',1,14,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('x3n02bct3yipypn3','','',3,'onoption','Belly Dance','0','','/content/system/animations/movement/','bellydance.babylon',1,472,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('x50ktfmwlapo879p','','',3,'onoption','Gangnam Style Dance','0','','/content/system/animations/movement/','gangnamstyledance.babylon',1,297,1,1.00,'','',100.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('x50m1cn60hb850pg','','',4,'onoption','Muscle Flex Gesture','0','','/content/system/animations/gestures/','muscleflexgesture.babylon',1,113,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('xd3eqg21webe0wff','','',37,'onrunstrafeleft','Default','1','','/content/system/avatars/male/','malestrafeleft.babylon',1,45,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('xjx0cl084w78njq0','','',4,'onoption','Strong Gesture','0','','/content/system/animations/gestures/','stronggesture.babylon',1,47,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('xpqkmgdg7mkxyywm','','',40,'onrun','Fast Run','0','','/content/system/animations/movement/','fastrun.babylon',1,13,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('xqv42zrric7x3nzy','','',4,'onoption','Thoughtful Nod Gesture','0','','/content/system/animations/gestures/','thoughtfulheadnodgesture.babylon',1,71,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('y7546hx62w7d82lr','','',48,'onturnleft','Cat Walk Left','0','','/content/system/animations/movement/','catwalkleft.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('ycrv2pckvnnbncoe','','',40,'onrun','Easy Run','0','','/content/system/animations/movement/','easyrun.babylon',1,21,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('yfbcqmywlapm197b','','',40,'onrun','Drunk Run','0','','/content/system/animations/movement/','drunkrun.babylon',1,45,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('yjsekoodu42xisfp','','',4,'onoption','Salute Gesture','0','','/content/system/animations/gestures/','salutegesture.babylon',1,69,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('z17vscbkwr6ml4tr','','',48,'onturnright','Sad Turn Right','0','','/content/system/animations/movement/','sadturnright.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('z2ev4yiljunof38w','','',4,'onoption','Agony Gesture','0','/content/system/icons/animagony.png','/content/system/animations/gestures/','agonygesture.babylon',1,90,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('zkwtccm2jgp4gyf8','','',4,'onoption','Charge Gesture','0','/content/system/icons/animcharge.png','/content/system/animations/gestures/','chargegesture.babylon',1,138,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('zof6lea9ggxandvb','','',4,'onoption','Agreeing Gesture','0','/content/system/icons/animagreeing.png','/content/system/animations/gestures/','agreeinggesture.babylon',1,45,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('zpkqzqn4lom2g48s','','',40,'onrun','Slow Run','0','','/content/system/animations/movement/','slowrun.babylon',1,18,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('zubywnjr6mm8bu9u','','',49,'onwalkbackwards','Sad Walk Backwards','0','','/content/system/animations/movement/','sadwalkback.babylon',1,30,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('zyt8s5elr1xhp26o','','',4,'onoption','Annoyed Head Shake Gesture','0','/content/system/icons/animannoyedheadshake.png','/content/system/animations/gestures/','annoyedheadshakegesture.babylon',1,62,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);
 			");
 			$wtwdb->query("
 				INSERT INTO `".wtw_tableprefix."menuitems` VALUES 
@@ -1421,12 +1460,205 @@ class wtwtables {
 				('h336lea89olz2do8','','q10xngdeyl4vwy07','h336lea89olz2do8','yxs6lcxokr6lhll3','".$zuserid."','yellow.jpg','yellow.jpg','jpg',7802.00,'image/jpeg','/content/system/stock/yellow-512x512.jpg',NULL,512.00,512.00,1,NULL,'',0,'".$timestamp."','".$zuserid."',0,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
 				('yxs6lcxokr6lhll3','','q10xngdeyl4vwy07','h336lea89olz2do8','yxs6lcxokr6lhll3','".$zuserid."','yellow.jpg','yellow.jpg','jpg',804.00,'image/jpeg','/content/system/stock/yellow.jpg',null,80.00,80.00,1,NULL,'',0,'".$timestamp."','".$zuserid."',0,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);
 			");
-
-
-
+			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 		} catch (Exception $e) {
 			global $wtw;
 			$wtw->serror("core-functions-tabledefs.php-loadInitDbData=".$e->getMessage());
+		}
+	}
+	
+	public function checkDBVersionData($zuserid) {
+		/* this process will check database for correct or new values for this version and future versions */
+		global $wtw;
+		try {
+			global $wtwdb;
+			$timestamp = date('Y/m/d H:i:s');
+
+			/* updated v3.3.0 - add new avatars - if you do not wish to use them, set deleted=0. (if you try to full delete them, it will readd them) */
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avatars where avatarid='3b9bt5c70igtmqux';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avatars (avatarid, avatargroup, displayname, avatarfolder, avatarfile, gender, scalingx, scalingy, scalingz, imagefull, imageface, sortorder, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('3b9bt5c70igtmqux','Anonymous','Anonymous Male','/content/system/avatars/male/','maleidle.babylon','male',0.0800,0.0800,0.0800,'malefull.png','maleface.png',2,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avatars where avatarid='641svy8bwjx2kme7';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avatars (avatarid, avatargroup, displayname, avatarfolder, avatarfile, gender, scalingx, scalingy, scalingz, imagefull, imageface, sortorder, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('641svy8bwjx2kme7','Default','Remy','/content/system/avatars/remy/','remyidle.babylon','male',0.0400,0.0400,0.0400,'remyfull.png','remyface.png',4,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+			
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avatars where avatarid='9e94useo7x2ief0s';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avatars (avatarid, avatargroup, displayname, avatarfolder, avatarfile, gender, scalingx, scalingy, scalingz, imagefull, imageface, sortorder, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('9e94useo7x2ief0s','Default','Liam','/content/system/avatars/liam/','liamidle.babylon','male',0.0400,0.0400,0.0400,'liamfull.png','liamface.png',4,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+			
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avatars where avatarid='aajvq38y06vulgh0';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avatars (avatarid, avatargroup, displayname, avatarfolder, avatarfile, gender, scalingx, scalingy, scalingz, imagefull, imageface, sortorder, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('aajvq38y06vulgh0','Default','Pearl','/content/system/avatars/pearl/','pearlidle.babylon','female',0.0700,0.0700,0.0700,'pearlfull.png','pearlface.png',3,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avatars where avatarid='dihtmpm1ae3b9d3a';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avatars (avatarid, avatargroup, displayname, avatarfolder, avatarfile, gender, scalingx, scalingy, scalingz, imagefull, imageface, sortorder, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('dihtmpm1ae3b9d3a','Default','Malcolm','/content/system/avatars/malcolm/','malcolmidle.babylon','male',0.0400,0.0400,0.0400,'malcolmfull.png','malcolmface.png',4,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avatars where avatarid='h1ro3h59xs5eknl0';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avatars (avatarid, avatargroup, displayname, avatarfolder, avatarfile, gender, scalingx, scalingy, scalingz, imagefull, imageface, sortorder, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('h1ro3h59xs5eknl0','Default','Shae','/content/system/avatars/shae/','shaeidle.babylon','female',0.0400,0.0400,0.0400,'shaefull.png','shaeface.png',3,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avatars where avatarid='odtx7arzof5eigp4';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avatars (avatarid, avatargroup, displayname, avatarfolder, avatarfile, gender, scalingx, scalingy, scalingz, imagefull, imageface, sortorder, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('odtx7arzof5eigp4','Default','Regina','/content/system/avatars/regina/','reginaidle.babylon','female',0.0400,0.0400,0.0400,'reginafull.png','reginaface.png',3,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avatars where avatarid='p7y3p6ti6d85yf7q';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avatars (avatarid, avatargroup, displayname, avatarfolder, avatarfile, gender, scalingx, scalingy, scalingz, imagefull, imageface, sortorder, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('p7y3p6ti6d85yf7q','Anonymous','Anonymous Female','/content/system/avatars/female/','femaleidle.babylon','female',0.0800,0.0800,0.0800,'femalefull.png','femaleface.png',1,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avatars where avatarid='r8tgsns20ruwx0bg';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avatars (avatarid, avatargroup, displayname, avatarfolder, avatarfile, gender, scalingx, scalingy, scalingz, imagefull, imageface, sortorder, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('r8tgsns20ruwx0bg','Default','Jasper','/content/system/avatars/jasper/','jasperidle.babylon','male',0.0700,0.0700,0.0700,'jasperfull.png','jasperface.png',4,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avatars where avatarid='v1ij2rkmdypo97c2';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avatars (avatarid, avatargroup, displayname, avatarfolder, avatarfile, gender, scalingx, scalingy, scalingz, imagefull, imageface, sortorder, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('v1ij2rkmdypo97c2','Default','Stefani','/content/system/avatars/stefani/','stefaniidle.babylon','female',0.0400,0.0400,0.0400,'stefanifull.png','stefaniface.png',3,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+
+			/* updated v3.3.0 - update onwait animations for each new avatar */
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='45dg48tccn60jnna';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('45dg48tccn60jnna','dihtmpm1ae3b9d3a','',100,'onwait','Mild Male Movement','0','','/content/system/avatars/malcolm/','malcolmidle.babylon',1,195,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2);");}
+			else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set avatarid='dihtmpm1ae3b9d3a', updatedate='".$timestamp."', updateuserid='".$zuserid."' where avataranimationid='45dg48tccn60jnna';"); }
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='5nt31zrtvvq4cdu3';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('5nt31zrtvvq4cdu3','h1ro3h59xs5eknl0','',100,'onwait','Swaying Female','0','','/content/system/avatars/shae/','shaeidle.babylon',1,303,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2);");}
+			else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set avatarid='h1ro3h59xs5eknl0', updatedate='".$timestamp."', updateuserid='".$zuserid."' where avataranimationid='5nt31zrtvvq4cdu3';"); }
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='78k4zhhzhemwlcvc';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('78k4zhhzhemwlcvc','9e94useo7x2ief0s','',100,'onwait','Swaying Male','0','','/content/system/avatars/liam/','liamidle.babylon',1,200,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2);");}
+			else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set avatarid='9e94useo7x2ief0s', updatedate='".$timestamp."', updateuserid='".$zuserid."' where avataranimationid='78k4zhhzhemwlcvc';"); }
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='gfso15ljwulgi6c9';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('gfso15ljwulgi6c9','r8tgsns20ruwx0bg','',100,'onwait','Young Male','0','','/content/system/avatars/jasper/','jasperidle.babylon',1,201,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2);");}
+			else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set avatarid='r8tgsns20ruwx0bg', updatedate='".$timestamp."', updateuserid='".$zuserid."' where avataranimationid='gfso15ljwulgi6c9';"); }
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='n3i9s7ophcae5h1r';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('n3i9s7ophcae5h1r','v1ij2rkmdypo97c2','',100,'onwait','Casual Female','0','','/content/system/avatars/stefani/','stefaniidle.babylon',1,299,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2);");}
+			else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set avatarid='v1ij2rkmdypo97c2', updatedate='".$timestamp."', updateuserid='".$zuserid."' where avataranimationid='n3i9s7ophcae5h1r';"); }
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='o3h47opkqwat7mge';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('o3h47opkqwat7mge','odtx7arzof5eigp4','',100,'onwait','Mild Female Movement','0','','/content/system/avatars/regina/','reginaidle.babylon',1,241,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2);");}
+			else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set avatarid='odtx7arzof5eigp4', updatedate='".$timestamp."', updateuserid='".$zuserid."' where avataranimationid='o3h47opkqwat7mge';"); }
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='o4kgmoik9nf8ws7p';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('o4kgmoik9nf8ws7p','aajvq38y06vulgh0','',100,'onwait','Young Female','0','','/content/system/avatars/pearl/','pearlidle.babylon',1,325,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2);");}
+			else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set avatarid='aajvq38y06vulgh0', updatedate='".$timestamp."', updateuserid='".$zuserid."' where avataranimationid='o4kgmoik9nf8ws7p';"); }
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='ohb6x5ze1112a9e6';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('ohb6x5ze1112a9e6','p7y3p6ti6d85yf7q','',100,'onwait','Default Female','0','','/content/system/avatars/female/','femaleidle.babylon',1,100,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2);");}
+			else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set avatarid='p7y3p6ti6d85yf7q', updatedate='".$timestamp."', updateuserid='".$zuserid."' where avataranimationid='ohb6x5ze1112a9e6';"); }
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='r9087b004i9ptv0e';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('r9087b004i9ptv0e','3b9bt5c70igtmqux','',100,'onwait','Default Male','1','','/content/system/avatars/male/','maleidle.babylon',1,213,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2);");}
+			else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set avatarid='3b9bt5c70igtmqux', updatedate='".$timestamp."', updateuserid='".$zuserid."' where avataranimationid='r9087b004i9ptv0e';"); }
+
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='wc004i6dcn4rdn2g';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('wc004i6dcn4rdn2g','641svy8bwjx2kme7','',100,'onwait','Casual Male','0','','/content/system/avatars/remy/','remyidle.babylon',1,196,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2);");}
+			else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set avatarid='641svy8bwjx2kme7', updatedate='".$timestamp."', updateuserid='".$zuserid."' where avataranimationid='wc004i6dcn4rdn2g';"); }
+			
+			/* updated v3.3.0 - change in animation required a change in end frame value */
+			$wtwdb->query("update ".wtw_tableprefix."avataranimations set endframe=36, updatedate='".$timestamp."', updateuserid='".$zuserid."' where avataranimationid='0m07zbocsuwwuj6b' or avataranimationid='5c850obkwugsi9pu';");
+			
+			/* updated v3.3.0 - created setdefault to allow one default for each animation event, it loads if no animation is set for that event */
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where setdefault=1 and deleted=0;");
+			if (count($zresults) < 12) { 
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onwait' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='r9087b004i9ptv0e';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('r9087b004i9ptv0e','3b9bt5c70igtmqux','',100,'onwait','Default Male','1','','/content/system/avatars/male/','maleidle.babylon',1,213,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',2);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=2  where avataranimationid='r9087b004i9ptv0e';"); }
+				}
+
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onwalk' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='b03ftsjbxr0sxam8';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('b03ftsjbxr0sxam8','','',50,'onwalk','Default Male','1','','/content/system/avatars/male/','malewalk.babylon',1,26,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=0  where avataranimationid='b03ftsjbxr0sxam8';"); }
+				}				
+
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onwalkbackwards' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='0ikarv3xbs0n7544';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('0ikarv3xbs0n7544','','',49,'onwalkbackwards','Default Male','1','','/content/system/avatars/male/','malewalkback.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=0  where avataranimationid='0ikarv3xbs0n7544';"); }
+				}				
+
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onturnleft' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='9xworrh44cbkwq1y';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('9xworrh44cbkwq1y','','',48,'onturnleft','Default Turn Left','1','','/content/system/avatars/male/','maleturnleft.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=0  where avataranimationid='9xworrh44cbkwq1y';"); }
+				}				
+
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onturnright' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='mbpjld4fttowgnt6';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('mbpjld4fttowgnt6','','',48,'onturnright','Default Turn Right','1','','/content/system/avatars/male/','maleturnright.babylon',1,29,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=0  where avataranimationid='mbpjld4fttowgnt6';"); }
+				}				
+
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onstrafeleft' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='hur9z71kpv6b2bgb';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('hur9z71kpv6b2bgb','','',47,'onstrafeleft','Default','1','','/content/system/avatars/male/','malestrafeleft.babylon',1,45,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=0  where avataranimationid='hur9z71kpv6b2bgb';"); }
+				}				
+
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onstraferight' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='6x3o6sh2u1m1bjnq';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('6x3o6sh2u1m1bjnq','','',47,'onstraferight','Default','1','','/content/system/avatars/male/','malestraferight.babylon',1,45,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=0  where avataranimationid='6x3o6sh2u1m1bjnq';"); }
+				}
+
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onrun' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='mz182mwpsvx1f1va';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('mz182mwpsvx1f1va','','',40,'onrun','Default','1','','/content/system/avatars/male/','malerun.babylon',1,16,1,1.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=0  where avataranimationid='mz182mwpsvx1f1va';"); }
+				}
+
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onrunbackwards' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='rzn9d3dihtq4h2v5';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('rzn9d3dihtq4h2v5','','',39,'onrunbackwards','Default','1','','/content/system/avatars/male/','malewalkback.babylon',1,29,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=0  where avataranimationid='rzn9d3dihtq4h2v5';"); }
+				}
+
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onrunturnleft' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='45dh9tcbikbvhqa9';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('45dh9tcbikbvhqa9','','',38,'onrunturnleft','Default','1','','/content/system/avatars/male/','maleturnleft.babylon',1,29,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=0  where avataranimationid='45dh9tcbikbvhqa9';"); }
+				}
+
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onrunturnright' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='gi7iwy1cobjpzqpf';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('gi7iwy1cobjpzqpf','','',38,'onrunturnright','Default','1','','/content/system/avatars/male/','maleturnright.babylon',1,29,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=0  where avataranimationid='gi7iwy1cobjpzqpf';"); }
+				}
+
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onrunstrafeleft' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='xd3eqg21webe0wff';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('xd3eqg21webe0wff','','',37,'onrunstrafeleft','Default','1','','/content/system/avatars/male/','malestrafeleft.babylon',1,45,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=0  where avataranimationid='xd3eqg21webe0wff';"); }
+				}
+
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where animationevent='onrunstraferight' and setdefault=1 and deleted=0;");
+				if (count($zresults) == 0) { 
+					$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avataranimations where avataranimationid='w547k8hrbbn89k4v';");
+					if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimations (avataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, setdefault, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('w547k8hrbbn89k4v','','',37,'onrunstraferight','Default','1','','/content/system/avatars/male/','malestraferight.babylon',1,45,1,2.00,'','',50.00,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);");}
+					else { $wtwdb->query("update ".wtw_tableprefix."avataranimations set setdefault=1, updatedate='".$timestamp."', updateuserid='".$zuserid."', deleteddate=null, deleteduserid='', deleted=0  where avataranimationid='w547k8hrbbn89k4v';"); }
+				}
+			}
+			
+			/* updated v3.3.0 - allow more scaling decimal places for avatars */
+			$wtwdb->query("ALTER TABLE `".wtw_tableprefix."useravatars` 
+				CHANGE COLUMN `scalingx` `scalingx` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
+			$wtwdb->query("ALTER TABLE `".wtw_tableprefix."useravatars` 
+				CHANGE COLUMN `scalingy` `scalingy` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
+			$wtwdb->query("ALTER TABLE `".wtw_tableprefix."useravatars` 
+				CHANGE COLUMN `scalingz` `scalingz` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
+			
+			/* updated v3.3.0 - avatar designer was moved to a plugin - needs to be enabled on first run */
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."plugins where pluginname='wtw-avatars';");
+			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."plugins (pluginname, active, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('wtw-avatars',1,".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);"); }
+			
+			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
+		} catch (Exception $e) {
+			$wtw->serror("core-functions-tabledefs.php-checkDBVersionData=".$e->getMessage());
 		}
 	}
 }

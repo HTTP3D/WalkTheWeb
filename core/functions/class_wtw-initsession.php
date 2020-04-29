@@ -1,5 +1,6 @@
 <?php
 class wtw {
+	/* main $wtw class for WalkTheWeb Websites */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -10,6 +11,7 @@ class wtw {
 	}
 	
 	public function __construct() {
+		/* set root path for file references */
 		$this->rootpath = str_replace('/core/functions','',str_replace('\\','/',dirname(__FILE__)));
 		define("wtw_rootpath", $this->rootpath);
 		if (file_exists(wtw_rootpath.'/config/wtw_config.php')) {
@@ -18,10 +20,12 @@ class wtw {
 		require_once(wtw_rootpath.'/core/functions/class_wtwuser.php');
 	}	
 	
-	public $version = "3.2.3";
-	public $dbversion = "1.0.6";
-	public $versiondate = "2020-3-27";
+	/* declare public $wtw variables */
+	public $version = "3.3.0";
+	public $dbversion = "1.1.0";
+	public $versiondate = "2020-4-29";
 	public $serverinstanceid = "";
+	public $accesstoken = "";
 	public $rootpath = "";
 	public $contentpath = "";
 	public $contenturl = "";
@@ -30,6 +34,7 @@ class wtw {
 	public $domainurl = "";
 	public $pagename = "";
 	public $userid = "";
+	public $globaluserid = -1;
 	public $userip = "";
 	public $uri = "";
 	public $community = "";
@@ -52,6 +57,7 @@ class wtw {
 	}
 
 	public function serror($message) {
+		/* reports errors and writes them to the database errorlog table */
 		$returntext = "";
 		try {
 			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
@@ -70,9 +76,9 @@ class wtw {
 				try {
 					if ($this->pagename == "admin.php") {
 						$error = "<script type=\"text/javascript\">";
-						//$error = "console.log('".addslashes($message)."');";
-						//$error .= "document.getElementById('wtw_error').innerHTML = '".addslashes($message)."';";
-						//$error .= "WTW.openFullPageForm('error','Error Found');";
+						/* $error = "console.log('".addslashes($message)."');";
+						   $error .= "document.getElementById('wtw_error').innerHTML = '".addslashes($message)."';";
+						   $error .= "WTW.openFullPageForm('error','Error Found');"; */
 						$error .= "</script>";
 						echo $error;
 					}
@@ -86,6 +92,7 @@ class wtw {
 	}
 	
 	public function getClientIP(){
+		/* returns the current user IP address - also attempts to include IP if server is behind load balancers */
 		$clientip = "";
 		try {
 			if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)){
@@ -100,6 +107,7 @@ class wtw {
 	}	
 
 	public function checkHost(){ 
+		/* checks for https, traps load balancers from having to fully load a page, and loads the public variables */
 		try {
 			global $wtwuser;
 			/* load class variables */
@@ -161,13 +169,22 @@ class wtw {
 			if (!empty($_SESSION["wtw_username"]) && isset($_SESSION["wtw_username"])) {
 				$wtwuser->username = $_SESSION["wtw_username"];
 			}
+			if (!empty($_SESSION["wtw_accesstoken"]) && isset($_SESSION["wtw_accesstoken"])) {
+				$this->accesstoken = $_SESSION["wtw_accesstoken"];
+			}
+			if (!empty($_SESSION["wtw_globaluserid"]) && isset($_SESSION["wtw_globaluserid"])) {
+				$this->globaluserid = $_SESSION["wtw_globaluserid"];
+			}
 			if (isset($_SERVER['PHP_SELF']) && !empty($_SERVER['PHP_SELF'])) {
 				$this->pagename = strtolower(basename($_SERVER['PHP_SELF']));
 			} else {
 				$this->pagename = "index.php";
 			}
 			if (isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
-				$this->uri = trim(strtolower($_SERVER['REQUEST_URI']));
+				$this->uri = trim($_SERVER['REQUEST_URI']);
+				if (isset($_GET["wtwpath"])) {
+					$this->uri = $_GET["wtwpath"];
+				}
 			}
 			if (defined('wtw_contentpath')) {
 				$this->contentpath = wtw_contentpath;
@@ -192,6 +209,7 @@ class wtw {
 	}
 	
 	public function getDomainInfo() {
+		/* parse the URL and check for web aliases, connect files, or handler files */
 		try {
 			if (!empty($this->uri) && isset($this->uri)) {
 				$root =  explode('?', $this->uri);
@@ -255,6 +273,7 @@ class wtw {
 	}
 	
 	public function getVal($key, $defaultval) {
+		/* get querystring information with a default value if not found */
 		$value = $defaultval;
 		try {
 			if(isset($_GET[$key]) && !empty($_GET[$key])) {
@@ -267,6 +286,7 @@ class wtw {
 	}
 	
 	public function getNumber($key, $defaultval) {
+		/* get querystring number information with a default value if not found */
 		$value = $defaultval;
 		try {
 			if(isset($_GET[$key]) && !empty($_GET[$key])) {
@@ -281,6 +301,7 @@ class wtw {
 	}
 	
 	public function checkNumber($val, $defaultval) {
+		/* number validation function with fallback value */
 		$checkval = $defaultval;
 		try {
 			if (!empty($val) && isset($val)) {
@@ -295,6 +316,7 @@ class wtw {
 	}
 
 	public function escapeHTML($text) {
+		/* text validation function that handles special characters */
 		$checktext = "";
 		try {
 			if (!empty($text) && isset($text)) {
@@ -307,6 +329,8 @@ class wtw {
 	}	
 	
 	public function getRandomString($zlength,$zstringtype) {
+		/* creates a random alpha numeric text string ov different lengths and character types */
+		/* note that most id values use type 1 */
 		$zrandomstring = '';
 		try {
 			$zcharacters = '';
@@ -338,6 +362,7 @@ class wtw {
 			if (!defined('wtw_dbserver') || !defined('wtw_dbname') || !defined('wtw_dbusername') || !defined('wtw_dbpassword') || !defined('wtw_tableprefix')) {
 				$zsetupstep = 1;
 				if ($_SERVER['REQUEST_METHOD']=='POST') {
+					/* database connectivity values submitted and processed */
 					if (!file_exists(wtw_rootpath.'/config')) {
 						mkdir(wtw_rootpath.'/config', 0777);
 					}
@@ -353,6 +378,8 @@ class wtw {
 						$zdomainname = strtolower($_SERVER['HTTP_HOST']);
 					}
 					if (!file_exists(wtw_rootpath.'/config/wtw_config.php')) {
+						/* create config text file /config/wtw_config.php if it does not exist */
+						/* set global variable values */
 						define("wtw_serverinstanceid", $this->serverinstanceid);
 						define("wtw_dbserver", $server);
 						define("wtw_dbname", $database);
@@ -365,6 +392,7 @@ class wtw {
 						define("wtw_defaultdomain", $zdomainname);
 						$this->contentpath = $contentpath;
 						$this->contenturl = $this->domainurl.$contenturl;
+						/* write global variable values to text file - will be used on page load after it is found */
 						$cfile = fopen(wtw_rootpath.'/config/wtw_config.php','wb');
 						fwrite($cfile,"<?php\r\n");
 						fwrite($cfile,"    define(\"wtw_serverinstanceid\", \"".$this->serverinstanceid."\");\r\n");
@@ -386,10 +414,12 @@ class wtw {
 						$zsetupstep = 2;
 					}
 				} else if (defined('wtw_dbserver') || defined('wtw_dbname') || defined('wtw_dbusername') || defined('wtw_dbpassword') || defined('wtw_tableprefix')) {
+					/* if all values are confirmed, move to next step in setup */
 					$zsetupstep = 2;
 				}
 			} else {
 				if (!defined('wtw_serverinstanceid')) {
+					/* check for server instance id - create if not found */
 					define("wtw_serverinstanceid", $this->serverinstanceid);
 					$lines = file(wtw_rootpath.'/config/wtw_config.php');
 					$last = sizeof($lines) - 1 ; 
@@ -402,6 +432,7 @@ class wtw {
 				}
 			}
 			if ($zsetupstep == 0) {
+				/* database check */
 				require_once(wtw_rootpath.'/core/functions/class_wtwdb.php');
 				require_once(wtw_rootpath.'/core/functions/class_wtwusers.php');
 				require_once(wtw_rootpath.'/core/functions/class_wtwpluginloader.php');
@@ -439,6 +470,7 @@ class wtw {
 						} catch (Exception $e){}
 					}
 					if ($zsetupstep == 3 || ($confirm == "YES" && $zsetupstep == 4)) {
+						/* run table setup and updates */
 						require_once(wtw_rootpath.'/core/functions/class_wtwtables.php');
 						global $wtwtables;
 						$wtwtables->databaseTableDefinitions();
@@ -449,6 +481,7 @@ class wtw {
 				} 
 			}
 			if ($zsetupstep == 0) {
+				/* all previous steps are complete - turn on error trapping */
 				set_error_handler (
 					function($errno, $errstr, $errfile, $errline) {
 						throw new ErrorException($errstr, $errno, 0, $errfile, $errline);     
@@ -457,11 +490,15 @@ class wtw {
 				register_shutdown_function('shutdownOnError');
 				global $wtwdb;
 				if ($this->pagename == "admin.php") {
+					/* check for table updates if the db version is not current */
 					$zdbversion = $wtwdb->getSetting("wtw_dbversion");
 					if ($zdbversion != $this->dbversion) {
 						require_once(wtw_rootpath.'/core/functions/class_wtwtables.php');
 						global $wtwtables;
+						/* run table updates */
 						$wtwtables->databaseTableDefinitions();
+						/* run data updates and additions */
+						$wtwtables->checkDBVersionData($this->userid);
 					}
 				}
 				$zsetupstep = 3;
@@ -481,6 +518,7 @@ class wtw {
 								and deleted=0
 							limit 1;");
 						foreach ($zresults as $zrow) {
+							/* set basic current user information - if it exists */
 							$wtwuser->email = $zrow["email"];
 							$wtwuser->userimageurl = $zrow["userimageurl"];
 							$wtwuser->uploadpathid = $zrow["uploadpathid"];
@@ -490,6 +528,7 @@ class wtw {
 			}
 			if ($zsetupstep == 3) {
 				if ($_SERVER['REQUEST_METHOD']=='POST') {
+					/* set up admin user from setup form */
 					try {
 						require_once(wtw_rootpath.'/core/functions/class_wtwtables.php');
 						global $wtwusers;
@@ -501,6 +540,7 @@ class wtw {
 						$zadminpassword2 = $_POST["wtw_tadminpassword2"];
 						$zadminemail = $_POST["wtw_tadminemail"];
 						
+						/* write analytics and default email/sitename to config file */
 						if (file_exists(wtw_rootpath.'/config/wtw_config.php') && !defined('wtw_defaultsitename')) {
 							$lines = file(wtw_rootpath.'/config/wtw_config.php');
 							$last = sizeof($lines) - 1 ; 
@@ -513,8 +553,11 @@ class wtw {
 							fwrite($cfile,"?>");
 							fclose($cfile);
 						}
+						/* set up initial admin user - from installation process */
 						$zuserid = $wtwusers->firstAdminUser($zadminuser,$zadminpassword,$zadminemail);
+						/* load initial tables form install */
 						$wtwtables->loadInitDbData($zuserid);
+						/* set user as admin role */
 						$wtwusers->addUserRole($zuserid, 'Admin');
 						header("Location: ".$this->domainurl."/"); 
 						exit();
@@ -522,6 +565,7 @@ class wtw {
 				}
 			}
 			if ($zsetupstep == 0) {
+				/* check if first 3D Community is created */
 				global $wtwdb;
 				$scount = 0;
 				$zresults = $wtwdb->query("select count(*) scount 
@@ -531,6 +575,7 @@ class wtw {
 				}
 				if ($scount == 0) {
 					if (empty($_SESSION["wtw_userid"]) || !isset($_SESSION["wtw_userid"])) {
+						/* if not logged in - log in admin user */
 						$zsetupstep = 5;
 						if ($_SERVER['REQUEST_METHOD']=='POST') {
 							global $wtwusers;
@@ -548,6 +593,7 @@ class wtw {
 				}
 			}
 			if ($zsetupstep == 0) {
+				/* check if first 3D Building is created */
 				global $wtwdb;
 				$scount = 0;
 				$zresults = $wtwdb->query("select count(*) scount 
@@ -557,6 +603,7 @@ class wtw {
 				}
 				if ($scount == 0) {
 					if (empty($_SESSION["wtw_userid"]) || !isset($_SESSION["wtw_userid"])) {
+						/* if not logged in - log in admin user */
 						$zsetupstep = 5;
 						if ($_SERVER['REQUEST_METHOD']=='POST') {
 							global $wtwusers;
@@ -573,6 +620,7 @@ class wtw {
 					}
 				}
 			} 
+			/* setup process steps - display webpages */
 			switch ($zsetupstep) {
 				case 1: /* Need to set up Database Login */
 					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
@@ -754,7 +802,7 @@ class wtw {
 	}
 
 	public function checkWeb() {
-		/* check if domain name is set to a Community and check if https is available */
+		/* check if domain name is set to a 3D Community, Building or Thing and check if https is available */
 		global $wtwdb;
 		try {
 			if (!empty($this->community)) {
@@ -773,6 +821,7 @@ class wtw {
 				}
 			}
 			if ($this->pagename == "admin.php" && ($wtwdb->isUserInRole('admin') || $wtwdb->isUserInRole('architect') || $wtwdb->isUserInRole('developer') || $wtwdb->isUserInRole('graphics artist'))) {
+				/* user has admin access, get item to edit from querystring */
 				if(isset($_GET["communityid"]) && !empty($_GET["communityid"])) {
 					$this->communityid = $wtwdb->checkIDFormat($_GET["communityid"]);
 				}
@@ -789,9 +838,11 @@ class wtw {
 					$this->thingid = "";
 				}
 			} else if ($this->pagename == "admin.php") {
+				/* user does not have admin.php access so redirect to public home page */
 				header("Location: ".$this->domainurl."/"); 
 				exit();
 			} else {
+				/* url may be a web alias - check for available 3D Website paths */
 				$sql = "
 					select *
 					from ".wtw_tableprefix."webaliases
@@ -845,13 +896,10 @@ class wtw {
 		$adjpos = array();
 		try {
 			/* adjust avatar position in world (x,y,z) space for being nested under another object - 
-				example: avatar position relative to a building in a community */
-			/* use z2 variables to calculate te adjustments and apply them to the z variables */
-			
-			
-			// deg2rad(); php function
-			
-			
+				example: avatar start position relative to a building in a community */
+			/* use z2 variables to calculate the adjustments and apply them to the z variables */
+			/* currently this is a place holder for when this functionality is required */
+			/* note: will need rad2deg php function to calculate rotations */
 			$adjpos = array(
 				'positionx' => $zpositionx,
 				'positiony' => $zpositiony,
@@ -869,6 +917,7 @@ class wtw {
 	}
 
 	public function userHasArchitect($zrolename) {
+		/* check if user has the role of architect access */
 		$hasaccess = false;
 		try {
 			if ($zrolename == 'Admin' || $zrolename == 'Architect' || $zrolename == 'Developer' || $zrolename == 'Graphics Artist') {
@@ -882,11 +931,11 @@ class wtw {
 		
 
 	public function getSceneSetting() {
-		/* check if domain name is set to a Community and check if https is available */
+		/* get initial 3D COmmunity Scene settings (sky, water level, ground textures, and avatar start position) */
 		global $wtwdb;
 		$initialscene = array();
 		try {
-			/* select initial avater position based on path publish names */
+			/* select initial avatar position based on path publish names (work in progress - includes prep for future use) */
 			$zpositionx = 0;
 			$zpositiony = 0;
 			$zpositionz = 0;
@@ -906,8 +955,9 @@ class wtw {
 			$zbuildingaccess = array();
 			$zthingaccess = array();
 			if (!empty($this->userid) && isset($this->userid)) {
-				/* get user access to this web items */
+				/* get user access to this 3D web item */
 				if (!empty($this->communityid)) {
+					/* check community level */
 					$zresults = $wtwdb->query("
 						select r.roleid, r.rolename 
 						from ".wtw_tableprefix."userauthorizations a
@@ -924,6 +974,7 @@ class wtw {
 					foreach ($zresults as $zrow) {
 						$zcommunityaccess[$i] = $zrow["rolename"];
 						if ($this->pagename == "admin.php" && $this->userHasArchitect($zrow["rolename"]) == false) {
+							/* access denied - redirect to public website */
 							header("Location: ".$this->domainurl);
 							exit();
 						}
@@ -931,6 +982,7 @@ class wtw {
 					}
 				}
 				if (!empty($this->buildingid)) {
+					/* check building level */
 					$zresults = $wtwdb->query("
 						select r.roleid, r.rolename 
 						from ".wtw_tableprefix."userauthorizations a
@@ -954,6 +1006,7 @@ class wtw {
 					}
 				}
 				if (!empty($this->thingid)) {
+					/* check thing level */
 					$zresults = $wtwdb->query("
 						select r.roleid, r.rolename 
 						from ".wtw_tableprefix."userauthorizations a
@@ -979,6 +1032,11 @@ class wtw {
 			}
 			
 			if (!empty($this->communityid) && !empty($this->buildingid) && !empty($this->thingid)) {
+				/* if a community, building, and thing are called as start point reference */
+				/* note this means the relative position to a thing, within a building, within a community */
+				/* each level of connection grid can be positioned, scaled, and rotated */
+				
+				/* things table - get thing's self position, rotation, and scaling */
 				$zresults = $wtwdb->query("
 					select positionx, positiony, positionz, rotationx, rotationy, rotationz, scalingx, scalingy, scalingz
 					from ".wtw_tableprefix."things
@@ -997,6 +1055,7 @@ class wtw {
 					$zscalingz = $this->checkNumber($zrow["scalingz"],1);
 				}
 				if (!empty($this->buildingid)) {
+					/* connectinggrids table - get thing's position, rotation, and scaling in relation to the building */
 					$zresults = $wtwdb->query("
 						select positionx, positiony, positionz, rotationx, rotationy, rotationz, scalingx, scalingy, scalingz
 						from ".wtw_tableprefix."connectinggrids
@@ -1029,6 +1088,7 @@ class wtw {
 					}
 				}
 				if (!empty($this->communityid)) {
+					/* connectinggrids table - get building's position, rotation, and scaling in relation to the community */
 					$zresults = $wtwdb->query("
 						select positionx, positiony, positionz, rotationx, rotationy, rotationz, scalingx, scalingy, scalingz
 						from ".wtw_tableprefix."connectinggrids
@@ -1061,6 +1121,8 @@ class wtw {
 					}
 				}
 			} else if (!empty($this->communityid) && !empty($this->buildingid)) {
+				/* if a building in a community is called as start point reference */
+				/* buildings table - get building's self position, rotation, and scaling */
 				$zresults = $wtwdb->query("
 					select positionx, positiony, positionz, rotationx, rotationy, rotationz, scalingx, scalingy, scalingz
 					from ".wtw_tableprefix."buildings
@@ -1079,6 +1141,7 @@ class wtw {
 					$zscalingz = $this->checkNumber($zrow["scalingz"],1);
 				}
 				if (!empty($this->communityid)) {
+					/* connectinggrids table - get building's position, rotation, and scaling in relation to the community */
 					$zresults = $wtwdb->query("
 						select positionx, positiony, positionz, rotationx, rotationy, rotationz, scalingx, scalingy, scalingz
 						from ".wtw_tableprefix."connectinggrids
@@ -1111,6 +1174,8 @@ class wtw {
 					}
 				}
 			} else if (!empty($this->communityid) && !empty($this->thingid)) {
+				/* if a thing in a community is called as start point reference */
+				/* things table - get thing's self position, rotation, and scaling */
 				$zresults = $wtwdb->query("
 					select positionx, positiony, positionz, rotationx, rotationy, rotationz, scalingx, scalingy, scalingz
 					from ".wtw_tableprefix."things
@@ -1129,6 +1194,7 @@ class wtw {
 					$zscalingz = $this->checkNumber($zrow["scalingz"],1);
 				}
 				if (!empty($this->communityid)) {
+					/* connectinggrids table - get thing's position, rotation, and scaling in relation to the community */
 					$zresults = $wtwdb->query("
 						select positionx, positiony, positionz, rotationx, rotationy, rotationz, scalingx, scalingy, scalingz
 						from ".wtw_tableprefix."connectinggrids
@@ -1161,6 +1227,8 @@ class wtw {
 					}
 				}
 			} else if (!empty($this->buildingid) && !empty($this->thingid)) {
+				/* if a thing in a building is called as start point reference (no community ) */
+				/* things table - get thing's self position, rotation, and scaling */
 				$zresults = $wtwdb->query("
 					select positionx, positiony, positionz, rotationx, rotationy, rotationz, scalingx, scalingy, scalingz
 					from ".wtw_tableprefix."things
@@ -1179,6 +1247,7 @@ class wtw {
 					$zscalingz = $this->checkNumber($zrow["scalingz"],1);
 				}
 				if (!empty($this->buildingid)) {
+					/* connectinggrids table - get thing's position, rotation, and scaling in relation to the building */
 					$zresults = $wtwdb->query("
 						select positionx, positiony, positionz, rotationx, rotationy, rotationz, scalingx, scalingy, scalingz
 						from ".wtw_tableprefix."connectinggrids
@@ -1211,6 +1280,8 @@ class wtw {
 					}
 				}
 			} else if (!empty($this->communityid)) {
+				/* if only a community is called as start point reference */
+				/* communities table - get community's self position, rotation, and scaling */
 				$zresults = $wtwdb->query("
 					select positionx, positiony, positionz, rotationx, rotationy, rotationz, scalingx, scalingy, scalingz
 					from ".wtw_tableprefix."communities
@@ -1229,6 +1300,8 @@ class wtw {
 					$zscalingz = $this->checkNumber($zrow["scalingz"],1);
 				}
 			} else if (!empty($this->buildingid)) {
+				/* if only a building is called as start point reference */
+				/* buildings table - get building's self position, rotation, and scaling */
 				$zresults = $wtwdb->query("
 					select positionx, positiony, positionz, rotationx, rotationy, rotationz, scalingx, scalingy, scalingz
 					from ".wtw_tableprefix."buildings
@@ -1247,6 +1320,8 @@ class wtw {
 					$zscalingz = $this->checkNumber($zrow["scalingz"],1);
 				}
 			} else if (!empty($this->thingid)) {
+				/* if only a thing is called as start point reference */
+				/* things table - get thing's self position, rotation, and scaling */
 				$zresults = $wtwdb->query("
 					select positionx, positiony, positionz, rotationx, rotationy, rotationz, scalingx, scalingy, scalingz
 					from ".wtw_tableprefix."things
@@ -1286,7 +1361,7 @@ class wtw {
 				'skymiedirectionalg' => '.8',
 				'skymiecoefficient' => '.005');
 			if (!empty($this->communityid)) {
-				/* get main settings */
+				/* get main 3D Community Scene settings */
 				$zresults = $wtwdb->query("
 					select *,
 						case when textureid = '' then ''
@@ -1334,7 +1409,7 @@ class wtw {
 				}
 			}
 			if (!empty($this->buildingid)) {
-				/* get main settings */
+				/* get main 3D Building settings */
 				$zresults = $wtwdb->query("
 					select *
 					from ".wtw_tableprefix."buildings
@@ -1353,7 +1428,7 @@ class wtw {
 				}
 			}			
 			if (!empty($this->thingid)) {
-				/* get main settings */
+				/* get main 3D Thing settings */
 				$zresults = $wtwdb->query("
 					select *
 					from ".wtw_tableprefix."things
@@ -1406,6 +1481,7 @@ class wtw {
 	}
 	
 	public function loadMetaData() {
+		/* sets the meta data for the web page */
 		global $wtwdb;
 		$metadata = "";
 		try {
@@ -1419,7 +1495,9 @@ class wtw {
 			$webdescription = "";
 			$webtitle = "WalkTheWeb: 3D Internet";
 			$zresults = array();
+			/* get meta data values based on 3D Community, Building, or Thing */
 			if (!empty($this->communityid)) {
+				/* get meta data values based on 3D Community as root level */
 				$zresults = $wtwdb->query("
 					select 
 						case when u2.filepath = '' or u2.filepath is null 
@@ -1447,6 +1525,7 @@ class wtw {
 						on u1.originalid=u2.uploadid 
 					where c1.communityid=".$this->communityid." limit 1);");
 			} else if (!empty($this->buildingid)) {
+				/* get meta data values based on 3D Building as root level */
 				$zresults = $wtwdb->query("
 					select 
 						case when u2.filepath = '' or u2.filepath is null 
@@ -1474,6 +1553,7 @@ class wtw {
 						on u1.originalid=u2.uploadid 
 					where b1.buildingid=".$this->buildingid." limit 1);");
 			} else if (!empty($this->thingid)) {
+				/* get meta data values based on 3D Thing as root level */
 				$zresults = $wtwdb->query("
 					select 
 						case when u2.filepath = '' or u2.filepath is null 
@@ -1522,6 +1602,7 @@ class wtw {
 			if (empty($webdescription) || !isset($webdescription)) {
 				$webdescription = "WalkTheWeb: Internationally Patented 3D Internet Browsing and 3D Website hosting. WalkTheWeb (R), http://3d (TM), https://3d (TM), and HTTP3D (TM).";
 			} 
+			/* meta data entries */
 			$metadata = "<title>".$webtitle."</title>\r\n";
 			$metadata .= "<meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\" />\r\n";
 			$metadata .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\r\n";
@@ -1539,6 +1620,7 @@ class wtw {
 			$metadata .= "<meta property=\"og:url\" content=\"".$this->protocol.$this->domainname.$this->uri."\" />\r\n";
 			$metadata .= "<meta property=\"og:type\" content=\"business.business\" />\r\n";
 			$metadata .= "<meta property=\"og:title\" content=\"".$webtitle."\" />\r\n";
+			/* additional optional meta data - should be defined on the /config/wtw_config.php file */
 			if (defined('domainverify')) {
 				$metadata .= "<meta name=\"p:domain_verify\" content=\"".domainverify."\"/>\r\n";
 			}
@@ -1555,6 +1637,7 @@ class wtw {
 	}
 	
 	public function loadInitJSData() {
+		/* global JavaScript variables passed from the Database using PHP */
 		global $wtwplugins;
 		$jsdata = "";
 		try {	
@@ -1618,14 +1701,19 @@ class wtw {
 	}
 
 	public function loadJSBrowseData() {
+		/* these scripts are loaded when in the browse mode (for Admin scripts, see /core/functions/class_wtwadmin.php) */
+		/* note that admin also loads these same scripts, but adds additional scripts in a particular order */
 		$jsdata = "";
 		try {	
 			$zver = $this->version;
+			/* alternative used during development to force reload every time */
 			/* $zver = date("Y-m-d-H-i-s"); */
-			/* materials library: https://github.com/BabylonJS/Babylon.js/tree/master/dist/materialsLibrary/ */
+			/* additional materials library available: https://github.com/BabylonJS/Babylon.js/tree/master/dist/materialsLibrary/ */
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_hud.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_transitionsavatars.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$zver."\"></script>\r\n";
@@ -1662,6 +1750,7 @@ class wtw {
 	}
 
 	public function loadCSSBrowseData() {
+		/* loads the CSS stylesheets */
 		global $wtwplugins;
 		$cssdata = "";
 		try {	
@@ -1674,6 +1763,7 @@ class wtw {
 	}
 	
 	public function loadMainElements() {
+		/* these are the main page elements such as canvases and graphic helpers */
 		$mainelements = "";
 		try {
 			$mainelements = "<div id=\"wtw_showmeshfps\"></div>\r\n";
@@ -1688,13 +1778,14 @@ class wtw {
 			$mainelements .= "<canvas id=\"wtw_uiCanvas\"></canvas>\r\n";
 			$mainelements .= "<canvas id=\"wtw_renderCanvas\" touch-action=\"none\"></canvas>\r\n";
 			$mainelements .= "<div id=\"wtw_greyout\"></div>\r\n";
-			$mainelements .= "<div id=\"wtw_ibrowsediv\" class=\"wtw-browsediv\">\r\n";
+			$mainelements .= "<div id=\"wtw_ibrowsediv\" class=\"wtw-browsediv\" style=\"display:none;\">\r\n";
 			$mainelements .= "	<div id=\"wtw_browseheader\" class=\"wtw-browseheader\">\r\n";
-			$mainelements .= "		<div class=\"wtw-browseclose\" onclick=\"WTW.closeIFrame();\">\r\n";
+			$mainelements .= "		<div id=\"wtw_browseheaderclose\" class=\"wtw-browseclose\" onclick=\"WTW.closeIFrame();\">\r\n";
 			$mainelements .= "			<img src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />\r\n";
 			$mainelements .= "		</div>\r\n";
 			$mainelements .= "		<div id=\"wtw_browsetitle\"></div>\r\n";
 			$mainelements .= "	</div>\r\n";
+			$mainelements .= "  <div id=\"wtw_ipagediv\" class=\"wtw-ipagediv\"></div>\r\n";
 			$mainelements .= "	<iframe id=\"wtw_ibrowseframe\" class=\"wtw-ibrowseframe\" src=\"/core/pages/loading.php\"></iframe>\r\n";
 			$mainelements .= "</div>\r\n";
 		} catch (Exception $e) {
@@ -1704,10 +1795,13 @@ class wtw {
 	}
 	
 	public function loadHiddenFields() {
+		/* these are used to pass information to and from the animated canvas and the database */
 		$hiddenfields = "";
 		global $wtwuser;
 		try {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_serverinstanceid\" value=\"".$this->serverinstanceid."\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_taccesstoken\" value=\"".$this->accesstoken."\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tglobaluserid\" value=\"".$this->globaluserid."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserid\" value=\"".$wtwuser->userid."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserip\" value=\"".$wtwuser->userip."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tusername\" value=\"".$wtwuser->username."\" />\r\n";
@@ -1717,10 +1811,11 @@ class wtw {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tcontentpath\" value=\"".$wtwuser->contentpath."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuploadpathid\" value=\"".$wtwuser->uploadpathid."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tinstanceid\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmyavatarid\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tglobalavatarid\" value=\"\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseravatarid\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarid\" value=\"\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarind\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmyavataridanon\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationname\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationevent\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tattachavatarmoldname\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldname\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tdiffusecolorr\" />\r\n";
@@ -1761,6 +1856,7 @@ class wtw {
 	$GLOBALS['wtw'] = wtw();
 
 	function shutdownOnError() {
+		/* error trapping function */
 		$error = error_get_last();
 		if ($error != null) {
 			$errors = array(
@@ -1774,6 +1870,7 @@ class wtw {
 				$message = addslashes(str_replace("\n","",str_replace("\r","",$error['message'])));
 				$error = "<script type=\"text/javascript\">";
 				try {
+					/* attempt to show error on page when available */
 					$error .= "if (document.getElementById('wtw_error') != null) {";
 					$error .= "document.getElementById('wtw_error').innerHTML = '".addslashes(str_replace("Stack trace","<br />Stack trace",$message))."';";
 					$error .= "WTW.openFullPageForm('error','Error Found');";
@@ -1784,6 +1881,7 @@ class wtw {
 					if ($conn->connect_error) {
 						$error .= "console.log('Connection failed: ".str_replace("'","\'",$conn->connect_error)."');";
 					} else {
+						/* write error to errorlog table */
 						$sql = "insert into ".wtw_tableprefix."errorlog 
 								(message,
 								 logdate)
