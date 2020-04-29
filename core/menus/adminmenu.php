@@ -1,3 +1,4 @@
+<!-- admin menu for the admin.php page -->
 	<div id="wtw_adminmenubutton" class="wtw-mainmenubutton" onclick="WTW.toggleAdminMenu(this.id, 'left');" style="left:0px;bottom:33px;" onmouseover="WTW.hide('wtw_itooltip');">
 			<div id="wtw_adminmenuleft" class="wtw-arrowleft" style="visibility:hidden;"></div>
 			<div class="wtw-menubuttontext">Admin</div>

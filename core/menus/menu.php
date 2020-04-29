@@ -1,3 +1,4 @@
+<!-- browse menu for the index.php page (all users) -->
 <div id="wtw_menubase" class="wtw-menubase">
 <?php
 	global $wtwmenus;
@@ -70,74 +71,22 @@
 				<li id="wtw_menucancelsaveprofile" class="wtw-menuli wtw-hide" onclick="WTW.cancelEditProfile();"><img src="/content/system/images/menulogin.png" alt="Cancel" title="Cancel" class='wtw-menulefticon' />Cancel</li>
 				<li class="wtw-submenuli"><hr /></li>
 				<li class="wtw-menuli" class="wtw-clear" onclick="WTW.editProfile();"><img src="/content/system/images/menueditprofile.png" alt="Edit My Profile" title="Edit My Profile" class='wtw-menulefticon' />Edit My Profile</li>
-				<li class="wtw-menuli" onclick="WTW.showSettingsMenu('wtw_menuavatar');WTW.setCameraOnAvatar();"><img src="/content/system/images/menueditavatar.png" alt="Edit My Avatar" title="Edit My Avatar" class='wtw-menulefticon' />Edit My Avatar</li>
+				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openAvatarDesigner();"><img src="/content/system/images/menueditavatar.png" alt="Edit My Avatar" title="Edit My Avatar" class='wtw-menulefticon' />Edit My Avatar</li>
+				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openLocalLogin('Select My Avatar',.3,.6);"><img src="/content/system/images/menueditavatar.png" alt="Select My Avatar" title="Select My Avatar" class='wtw-menulefticon' />Select My Avatar</li>
 				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/my-3d-stats/','_blank');"><img src="/content/system/images/menustats.png" alt="My 3D Stats" title="My 3D Stats" class='wtw-menulefticon' />My 3D Stats</li>
 				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/account/password/','_blank');"><img src="/content/system/images/menupassword.png" alt="Change Password" title="Change Password" class='wtw-menulefticon' />Change Password</li>
-				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.logOut();"><img src="/content/system/images/menulogout.png" alt="Log Out" title="Log Out" class='wtw-menulefticon' /><div>Log Out</div></li>
+				<li class="wtw-menuli" onclick="WTW.openLoginMenu();WTW.closeMenus();"><img src="/content/system/images/menulogin.png" alt="Login Menu" title="Login Menu" class='wtw-menulefticon' /><div style="color:yellow;">Login Menu</div></li>
+				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.logout();"><img src="/content/system/images/menulogout.png" alt="Log Out" title="Log Out" class='wtw-menulefticon' /><div>Log Out</div></li>
 			</ul>
 		</div>
 		<div id="wtw_menulogin">
 			<form>
 				<img onclick="WTW.closeMenus();" class="wtw-closeright" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
-				<img src="/content/system/images/menuq.png" alt="Show Help" title="Show Help" class='wtw-menuq' onclick="WTW.toggle('wtw_loginnote');" />
 				<div class="wtw-menuheading">Login</div>
-				<div id="wtw_loginnote" class="wtw-menunote" style="display:none;visibility:hidden;">Login or click Create Account to get started.</div>
-				<ul class="wtw-menuli" style="border-bottom:1px solid #454545;">
-					<li class="wtw-submenuli">Username or Email</li>
-					<li class="wtw-submenuli"><input type="text" id="wtw_tlogin" autocomplete="username" /></li>
-					<li class="wtw-submenuli">Password</li>
-					<li class="wtw-submenuli"><input type="password" id="wtw_tpassword" autocomplete="current-password" /></li>
-					<li class="wtw-submenuli"><input type="checkbox" id="wtw_trememberlogin" /> Remember Username</li>
-					<li class="wtw-menuliholder"><div id="wtw_loginerrortext" style="color:red;margin-left:10px;"></div></li>
-					<li class="wtw-menuli" onclick="WTW.loginAttempt();"><img src="/content/system/images/menulogin.png" alt="Login" title="Login" class='wtw-menulefticon' /><div style="color:yellow;">Login</div></li>
-				</ul>
 				<ul class="wtw-menuli">
-					<li class="wtw-menuli" onclick="WTW.showSettingsMenu('wtw_menuavatar');WTW.setCameraOnAvatar();"><img src="/content/system/images/menueditavatar.png" alt="Edit My Avatar" title="Edit My Avatar" class='wtw-menulefticon' />Edit My Avatar</li>
-					<li class="wtw-menuli" onclick="WTW.openRecoveryForm();"><img src="/content/system/images/menupassword.png" alt="Recover Login" title="Recover Login" class='wtw-menulefticon' /><div>Forgot My Login</div></li>
-					<li class="wtw-menuli" onclick="WTW.openRegisterForm();">
-						<img src="/content/system/images/menuregister.png" alt="Create My Account" title="Create My Account" class='wtw-menulefticon' /><div style="color:yellow;">Create My Account</div></li>
-				</ul>
-			</form>
-		</div>
-		<div id="wtw_menupasswordrecovery" class="wtw-hide">
-			<form>
-				<img onclick="WTW.closeMenus();" class="wtw-closeright" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
-				<img src="/content/system/images/menuq.png" alt="Show Help" title="Show Help" class='wtw-menuq' onclick="WTW.toggle('wtw_loginnote');" />
-				<div class="wtw-menuheading">Recover My Login</div>
-				<div id="wtw_loginnote" class="wtw-menunote" style="display:none;visibility:hidden;">Note</div>
-				<ul class="wtw-menuli" style="border-bottom:1px solid #454545;">
-					<li class="wtw-submenuli">Email</li>
-					<li class="wtw-submenuli"><input type="text" id="wtw_trecoverbyemail" autocomplete="email" /></li>
-					<li class="wtw-menuliholder"><div id="wtw_recovererrortext" style="color:red;margin-left:10px;"></div></li>
-					<li class="wtw-menuli" onclick="WTW.recoverLogin();"><img src="/content/system/images/menulogin.png" alt="Recover Login" title="Recover Login" class='wtw-menulefticon' /><div style="color:yellow;">Recover Login</div></li>
-					<li class="wtw-menuli" onclick=""><img src="/content/system/images/menupassword.png" alt="Recover Login" title="Recover Login" class='wtw-menulefticon' /><div style="color:yellow;">Recover Password</div></li>
-				</ul>
-				<ul class="wtw-menuli">
-					<li class="wtw-menuli" onclick="WTW.openLoginForm();">
-						<img src="/content/system/images/menulogin.png" alt="Back to Login" title="Back to Login" class='wtw-menulefticon' />Back to Login</li>
-				</ul>
-			</form>
-		</div>
-		<div id="wtw_menuregister" style="display:none;visibility:hidden;">
-			<form>
-				<img onclick="WTW.closeMenus();" class="wtw-closeright" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
-				<div class="wtw-menuheading">Create My Account</div>
-				<ul class="wtw-menuli" style="border-bottom:1px solid #454545;">
-					<li class="wtw-submenuli">Username</li>
-					<li class="wtw-submenuli"><input type="text" id="wtw_tnewlogin" autocomplete="username" /></li>
-					<li class="wtw-submenuli">Email</li>
-					<li class="wtw-submenuli"><input type="text" id="wtw_tnewemail" autocomplete="email" /></li>
-					<li class="wtw-submenuli">Password</li>
-					<li class="wtw-submenuli"><input type="password" id="wtw_tnewpassword" autocomplete="new-password" onkeyup="WTW.checkPassword(this,'wtw_tpasswordstrength');" onfocus="WTW.registerPasswordFocus();" onblur="WTW.registerPasswordBlur();" /></li>
-					<li class="wtw-submenuli" id="wtw_passwordstrengthdiv" style="display:none;visibility:hidden;"><input type="text" id="wtw_tpasswordstrength" style="display:none;visibility:hidden;" /></li>
-					<li class="wtw-submenuli">Confirm Password</li>
-					<li class="wtw-submenuli"><input type="password" id="wtw_tnewpassword2" autocomplete="new-password" onkeyup="WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');" /></li>
-					<li class="wtw-menuliholder"><div id="wtw_registererrortext" style="color:red;margin-left:10px;"></div></li>
-					<li class="wtw-menuli" onclick="WTW.createAccount();return false;"><img src="/content/system/images/menuregister.png" alt="Create Account" title="Create Account" class='wtw-menulefticon' /><div style="color:yellow;">Create Account</div></li>
-				</ul>
-				<ul class="wtw-menuli">
-					<li class="wtw-menuli" onclick="WTW.openLoginForm();">
-						<img src="/content/system/images/menulogin.png" alt="Return to Login" title="Return to Login" class='wtw-menulefticon' /><div>Return to Login</div></li>
+					<li class="wtw-menuli" onclick="WTW.openLoginMenu();WTW.closeMenus();"><img src="/content/system/images/menulogin.png" alt="Login Menu" title="Login Menu" class='wtw-menulefticon' /><div style="color:yellow;">Login</div></li>
+					<li class="wtw-menuli" onclick="WTW.openLocalLogin('Recover Login', .3, .5);WTW.closeMenus();"><img src="/content/system/images/menupassword.png" alt="Recover Login" title="Recover Login" class='wtw-menulefticon' /><div>Forgot My Login</div></li>
+					<li class="wtw-menuli" onclick="WTW.openLocalLogin('Create Login', .3, .7);WTW.closeMenus();"><img src="/content/system/images/menuregister.png" alt="Create My Account" title="Create My Account" class='wtw-menulefticon' /><div style="color:yellow;">Create My Account</div></li>
 				</ul>
 			</form>
 		</div>
@@ -180,7 +129,7 @@
 			<li id="wtw_helpcameradiv" class="wtw-submenublockli" style="display:none;visibility:hidden;">
 				<img src="/content/system/images/helpcameras.png" alt="Camera Position and Views" title="Camera Position and Views" style="width:95%;height:auto;margin:2%;" />
 			</li>
-			<li class="wtw-menuli" onclick="WTW.openLoginForm();">
+			<li class="wtw-menuli" onclick="WTW.openLoginMenu();">
 				<img src="/content/system/images/menulogin.png" alt="Login" title="Login" class='wtw-menulefticon' /><div style="color:yellow;">Login</div></li>
 		</ul>
 		<div class="wtw-center"><input type="checkbox" id="wtw_tshowhelponstart" onchange="WTW.toggleHelpOnStart();" /> Show this Menu on Start</div><br />
@@ -258,7 +207,7 @@
 	</div>
 </div>
 <div id="wtw_menuavatar" class="wtw-slideupmenuright" style="display:none;visibility:hidden;">
-	<img class="wtw-closeright" onclick="WTW.closeSetupMode();" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
+	<img class="wtw-closeright" onclick="WTW.closeAvatarSettings();" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
 	<div class="wtw-menuheading">Avatar Settings</div>
 	<div id="wtw_menuavatarscroll" class="wtw-mainmenuscroll">
 		<div id="wtw_avatarmenudiv">
@@ -270,10 +219,6 @@
 						Reported offenders may be banned perminently.
 						Note that all names used are recorded with your account.<br />
 					</div>
-				</li>
-				<li id="wtw_menuavatarcolor" class="wtw-menuli" onclick="WTW.switchAvatarMenu(2);"><img src="/content/system/images/menupaint.png" alt="Avatar Colors" title="Avatar Colors" class='wtw-menulefticon' /><div>Avatar Colors</div></li>
-				<li id="wtw_menuavatarcolordiv" class="wtw-submenublockli" style="display:none;visibility:hidden;"><div class="wtw-menusubtext">Select Item to Color:</div>
-					<div id="wtw_editavatarparts"></div>
 				</li>
 				<li class="wtw-menuli" onclick="WTW.switchAvatarMenu(3);"><img src="/content/system/images/menuanimations.png" alt="Avatar Animations" title="Avatar Animations" class='wtw-menulefticon' /><div>Avatar Animations</div></li>
 				<li id="wtw_menuavataranimationsdiv" class="wtw-submenublockli" style="display:none;visibility:hidden;">
@@ -300,10 +245,9 @@
 					<a id="wtw_viewanimations"></a>
 				</li>
 				<li class="wtw-menuli" onclick="WTW.switchAvatarMenu(4);"><img src="/content/system/images/menueditavatar.png" alt="Change My Avatar" title="Change My Avatar" class='wtw-menulefticon' /><div>Change My Avatar</div></li>
-				<li id="wtw_menuavatarchangediv" class="wtw-submenublockli" style="display:none;visibility:hidden;"><div class="wtw-menusubtext">Select Avatar in 3D Scene</div></li>
+				<li id="wtw_menuavatarchangediv" class="wtw-submenublockli" style="display:none;visibility:hidden;"><div class="wtw-menusubtext">Select My Avatar</div></li>
 			</ul>
-			<div id="wtw_loginnote" class="wtw-loginnote">Login for more options.</div>
-			<div class="wtw-greenmenubutton" onclick="WTW.closeSetupMode();">Close Avatar Settings</div>
+			<div class="wtw-greenmenubutton" onclick="WTW.closeAvatarSettings();">Close Avatar Settings</div>
 		</div>
 	</div>
 </div>
