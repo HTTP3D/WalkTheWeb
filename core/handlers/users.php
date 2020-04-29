@@ -1,4 +1,6 @@
 <?php
+/* handlers recieve the form submittals from the javascript and route the data to the correct class functions for processing to and from the database */
+/* this handler is for user functions */
 require_once('../functions/class_wtwhandlers.php');
 global $wtwhandlers;
 try {
@@ -7,12 +9,15 @@ try {
 	$zrequest = file_get_contents('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
 
+	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
+	$zglobaluserid = $wtwhandlers->getPost('globaluserid','');
 	$zuserid = $wtwhandlers->getPost('userid','');
 	$zusername = $wtwhandlers->getPost('username','');
 	$zuseremail = $wtwhandlers->getPost('useremail','');
 	$zpassword = $wtwhandlers->getPost('password','');
-	$zavatarid = $wtwhandlers->getPost('avatarid','');
+	$zaccesstoken = $wtwhandlers->getPost('accesstoken','');
+	$zuseravatarid = $wtwhandlers->getPost('useravatarid','');
 	$zinstanceid = $wtwhandlers->getPost('instanceid','');
 	$zdisplayname = $wtwhandlers->getPost('displayname','');
 	$zroleid = $wtwhandlers->getPost('roleid','');
@@ -23,6 +28,7 @@ try {
 	$zusersearch = $wtwhandlers->getPost('usersearch','');
 	$zuseraccess = $wtwhandlers->getPost('useraccess','');
 	
+	/* select the function called */
 	$zresponse = array();
 	switch ($zfunction) {
 		case "saveuser":
@@ -36,6 +42,9 @@ try {
 			break;
 		case "login":
 			$zresponse = $wtwusers->loginAttempt($zusername, $zuseremail, $zpassword);
+			break;
+		case "globallogin":
+			$zresponse = $wtwusers->globalLogin($zusername, $zglobaluserid, $zuseremail, $zaccesstoken);
 			break;
 		case "register":
 			$zserror = '';
@@ -56,10 +65,10 @@ try {
 			);
 			break;
 		case "logout":
-			$wtwusers->logOut();
+			$wtwusers->logout();
 			break;
 		case "saveprofile":
-			$zserror = $wtwusers->saveProfile($zavatarid, $zinstanceid, $zusername, $zdisplayname, $zuseremail);
+			$zserror = $wtwusers->saveProfile($zuseravatarid, $zinstanceid, $zusername, $zdisplayname, $zuseremail);
 			$zresponse = array(
 				'serror'=> $zserror
 			);
@@ -78,7 +87,9 @@ try {
 			break;
 	}
 
+	/* set headers to keep data local to server */
 	echo $wtwhandlers->addHandlerHeader($wtwhandlers->domainname);
+	/* return the response from the function */
 	echo json_encode($zresponse);
 
 } catch (Exception $e) {

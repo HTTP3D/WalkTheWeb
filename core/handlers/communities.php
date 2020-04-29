@@ -1,4 +1,6 @@
 <?php
+/* handlers recieve the form submittals from the javascript and route the data to the correct class functions for processing to and from the database */
+/* this handler is for community functions */
 require_once('../functions/class_wtwhandlers.php');
 global $wtwhandlers;
 try {
@@ -7,6 +9,7 @@ try {
 	$zrequest = file_get_contents('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
 
+	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zcommunityid = $wtwhandlers->getPost('communityid','');
 	$zpastcommunityid = $wtwhandlers->getPost('pastcommunityid','');
@@ -38,6 +41,7 @@ try {
 	$zskymiecoefficient = $wtwhandlers->getPost('skymiecoefficient','');
 	$zgroundtextureid = $wtwhandlers->getPost('groundtextureid','');
 	
+	/* select the function called */
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savecommunity":
@@ -72,7 +76,9 @@ try {
 			break;
 	}
 
+	/* set headers to keep data local to server */
 	echo $wtwhandlers->addHandlerHeader($wtwhandlers->domainname);
+	/* return the response from the function */
 	echo json_encode($zresponse);
 	
 } catch (Exception $e) {

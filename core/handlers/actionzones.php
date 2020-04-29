@@ -1,4 +1,6 @@
 <?php
+/* handlers recieve the form submittals from the javascript and route the data to the correct class functions for processing to and from the database */
+/* this handler is for action zone functions */
 require_once('../functions/class_wtwhandlers.php');
 global $wtwhandlers;
 try {
@@ -6,7 +8,8 @@ try {
 	global $wtwactionzones;
 	$zrequest = file_get_contents('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
-
+	
+	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zactionzoneid = $wtwhandlers->getPost('actionzoneid','');
 	$zcommunityid = $wtwhandlers->getPost('communityid','');
@@ -46,6 +49,7 @@ try {
 	$zavataranimationid = $wtwhandlers->getPost('avataranimationid','');
 	$zactionzonesbulk = $wtwhandlers->getPost('actionzonesbulk','');
 
+	/* select the function called */
 	$zresponse = array();
 	switch ($zfunction) {
 		case "saveactionzone":
@@ -94,7 +98,9 @@ try {
 			break;
 	}
 
+	/* set headers to keep data local to server */
 	echo $wtwhandlers->addHandlerHeader($wtwhandlers->domainname);
+	/* return the response from the function */
 	echo json_encode($zresponse);
 
 } catch (Exception $e) {

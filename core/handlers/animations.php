@@ -1,4 +1,6 @@
 <?php
+/* handlers recieve the form submittals from the javascript and route the data to the correct class functions for processing to and from the database */
+/* this handler is for animation functions */
 require_once('../functions/class_wtwhandlers.php');
 global $wtwhandlers;
 try {
@@ -6,7 +8,8 @@ try {
 	global $wtwanimations;
 	$zrequest = file_get_contents('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
-
+	
+	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zuploadobjectid = $wtwhandlers->getPost('uploadobjectid','');
 	$zobjectanimationid = $wtwhandlers->getPost('objectanimationid','');
@@ -23,6 +26,7 @@ try {
 	$zobjectsoundid = $wtwhandlers->getPost('objectsoundid','');
 	$zobjectmaxdistance = $wtwhandlers->getPost('objectmaxdistance','100');
 	
+	/* select the function called */
 	$zresponse = array();
 	switch ($zfunction) {
 		case "getuploadedfileanimationsdetails":
@@ -39,7 +43,9 @@ try {
 			break;
 	}
 
+	/* set headers to keep data local to server */
 	echo $wtwhandlers->addHandlerHeader($wtwhandlers->domainname);
+	/* return the response from the function */
 	echo json_encode($zresponse);
 
 } catch (Exception $e) {

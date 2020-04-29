@@ -1,4 +1,6 @@
 <?php
+/* handlers recieve the form submittals from the javascript and route the data to the correct class functions for processing to and from the database */
+/* this handler is for connecting grid functions */
 require_once('../functions/class_wtwhandlers.php');
 global $wtwhandlers;
 try {
@@ -6,7 +8,8 @@ try {
 	global $wtwconnectinggrids;
 	$zrequest = file_get_contents('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
-
+	
+	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zconnectinggridid = $wtwhandlers->getPost('connectinggridid','');
 	$zparentwebid = $wtwhandlers->getPost('parentwebid','');
@@ -29,6 +32,7 @@ try {
 	$zwebid = $wtwhandlers->getPost('webid','');
 	$zconnectinggridsbulk = $wtwhandlers->getPost('connectinggridsbulk','');
 	
+	/* select the function called */
 	$zresponse = array();
 	switch ($zfunction) {
 		case "saveconnectinggrid":
@@ -48,7 +52,9 @@ try {
 			break;
 	}
 
+	/* set headers to keep data local to server */
 	echo $wtwhandlers->addHandlerHeader($wtwhandlers->domainname);
+	/* return the response from the function */
 	echo json_encode($zresponse);
 
 } catch (Exception $e) {

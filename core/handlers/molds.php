@@ -1,4 +1,6 @@
 <?php
+/* handlers recieve the form submittals from the javascript and route the data to the correct class functions for processing to and from the database */
+/* this handler is for mold functions (Community, Building, and Thing) */
 require_once('../functions/class_wtwhandlers.php');
 global $wtwhandlers;
 try {
@@ -6,7 +8,8 @@ try {
 	global $wtwmoldscommon;
 	$zrequest = file_get_contents('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
-
+	
+	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zmoldid = $wtwhandlers->getPost('moldid','');
 	$zcommunityid = $wtwhandlers->getPost('communityid','');
@@ -91,6 +94,7 @@ try {
 	$zcopywebid = $wtwhandlers->getPost('copywebid','');
 	$zmoldsbulk = $wtwhandlers->getPost('moldsbulk','');
 	
+	/* select the function called */
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savemold":
@@ -155,7 +159,9 @@ try {
 			break;
 	}
 
+	/* set headers to keep data local to server */
 	echo $wtwhandlers->addHandlerHeader($wtwhandlers->domainname);
+	/* return the response from the function */
 	echo json_encode($zresponse);
 
 } catch (Exception $e) {
