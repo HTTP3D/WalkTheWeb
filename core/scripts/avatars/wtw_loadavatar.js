@@ -160,7 +160,7 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 			WTW.disposeAnimations(zavatarname);
 			/* make sure the base functions are defined - otherwise adds default for that avatar event */
 			/* basic avatar animation events: (onwait, onwalk, onwalkbackwards, onturnleft, onturnright, onstrafeleft, onstraferight, onrun, onrunbackwards, onrunleft, onrunright, onrunstrafeleft, onrunstraferight) */
-			zavatardef.avataranimationdefs = WTW.loadAvatarAnimationDefinitions(1, zavatardef.avataranimationdefs);
+			zavatardef.avataranimationdefs = WTW.loadAvatarAnimationDefinitions(zavatardef.avataranimationdefs);
 			/* reloads avatar animations except for the onwait that stays loaded */
 			WTW.reloadAvatarAnimations(zavatarname, zavatardef.avataranimationdefs);
 		}
@@ -296,7 +296,6 @@ WTWJS.prototype.reloadAvatarAnimations = function(zavatarname, zavataranimationd
 	/* this function starts the onwait animation */
 	/* zavataranimationdefs is an array of animation definitions to be loaded index 0 is the idle onwait event */
 	try {
-		var avatarind = 0;
 		var zskeleton = null;
 		var zavatar = scene.getMeshByID(zavatarname);
 		if (zavatar != null) {
@@ -328,59 +327,45 @@ WTWJS.prototype.reloadAvatarAnimations = function(zavatarname, zavataranimationd
     }
 }
 
-WTWJS.prototype.loadAvatarAnimationDefinitions = function(zavatarind, zcustomanimationdefs) {
+WTWJS.prototype.loadAvatarAnimationDefinitions = function(zcustomanimationdefs) {
 	/* checks the avatar animation definitions to make sure all base events are covered */
-	/* inserts the default if one is not provided */
-	var zanimationdefs = [];
+	/* inserts the default animation for an event if a custom one is not provided */
 	try {
+		var zanimationdefs = [];
 		/* newAvatarAnimationDefs provides the defaults from the /core/scripts/prime/wtw_objectdefinitions.js file */
-		zanimationdefs = WTW.newAvatarAnimationDefs(zavatarind);
-		if (zcustomanimationdefs != null) {
+		zanimationdefs = WTW.newAvatarAnimationDefs();
+		if (zcustomanimationdefs == null) {
+			zcustomanimationdefs = zanimationdefs;
+		} else {
 			if (zcustomanimationdefs.length > 0) {
-				for (var i=0; i<zanimationdefs.length; i++) {
+				/* cycle through default animations */
+				for (var i=0; i<zanimationdefs.length;i++) {
 					if (zanimationdefs[i] != null) {
 						var zanimname = zanimationdefs[i].animationevent;
+						var zfound = false;
+						/* check to see if default animation event is in the custom animations list */
 						for (var j=0; j<zcustomanimationdefs.length; j++) {
 							if (zcustomanimationdefs[j] != null) {
 								if (zcustomanimationdefs[j].animationevent == zanimname) {
-									zanimationdefs[i].useravataranimationid = zcustomanimationdefs[j].useravataranimationid;
-									zanimationdefs[i].avataranimationid = zcustomanimationdefs[j].avataranimationid;
-									zanimationdefs[i].animationevent = zcustomanimationdefs[j].animationevent;
-									zanimationdefs[i].objectfolder = zcustomanimationdefs[j].objectfolder;
-									zanimationdefs[i].objectfile = zcustomanimationdefs[j].objectfile;
-									zanimationdefs[i].startframe = zcustomanimationdefs[j].startframe;
-									zanimationdefs[i].endframe = zcustomanimationdefs[j].endframe;
-									zanimationdefs[i].animationloop = zcustomanimationdefs[j].animationloop;
-									zanimationdefs[i].defaultspeedratio = zcustomanimationdefs[j].defaultspeedratio;
-									zanimationdefs[i].speedratio = zcustomanimationdefs[j].speedratio;
-									zanimationdefs[i].walkspeed = zcustomanimationdefs[j].walkspeed;
+									/* found animation event in custom animations */
+									zfound = true;
 								}
 							}
 						}
-					}
-				}
-				for (var j=0; j<zcustomanimationdefs.length; j++) {
-					if (zcustomanimationdefs[j] != null) {
-						var zanimname = zcustomanimationdefs[j].animationevent;
-						var zfound = 0;
-						for (var i=0; i<zanimationdefs.length; i++) {
-							if (zanimationdefs[i] != null) {
-								if (zanimationdefs[i].animationevent == zanimname && zanimname != "onoption") {
-									zfound = 1;
-								}
-							}
-						}
-						if (zfound == 0) {
-							zanimationdefs[zanimationdefs.length] = zcustomanimationdefs[j];
+						if (zfound == false) {
+							/* if not found then add default animation to custom animations */
+							zcustomanimationdefs[zcustomanimationdefs.length] = zanimationdefs[i];
 						}
 					}
 				}
+			} else {
+				zcustomanimationdefs = zanimationdefs;
 			}
 		}
     } catch (ex) {
 		WTW.log("core-scripts-avatars-wtw_loadavatar.js-loadAvatarAnimationDefinitions=" + ex.message);
     }
-	return zanimationdefs;
+	return zcustomanimationdefs;
 }
 
 WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zenteranimate) {

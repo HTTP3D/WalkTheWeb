@@ -48,12 +48,13 @@ try {
 	$zavatarparts = array();
 	$zresponse = null;
 	$zavataranimationdefs = array();
-	$zavatarind = -1;
 	$zscalingx = '.07';
 	$zscalingy = '.07';
 	$zscalingz = '.07';
 	$zobjectfolder = "";
 	$zobjectfile = "";
+	$zstartframe = '1';
+	$zendframe = '1';
 	$zgender = "female";
 	$zdisplayname = "Anonymous";
 	$zanonymous = '0';
@@ -71,8 +72,7 @@ try {
 		$zresults = $wtwconnect->query("
 			select * 
 			from ".wtw_tableprefix."avatars 
-			where avatargroup='Anonymous'
-				and avatarid='".$zavatarid."'
+			where avatarid='".$zavatarid."'
 				and deleted=0 
 			limit 1;");
 		foreach ($zresults as $zrow) {
@@ -81,13 +81,15 @@ try {
 			$zscalingz = $zrow["scalingz"];
 			$zobjectfolder = $zrow["avatarfolder"];
 			$zobjectfile = $zrow["avatarfile"];
+			$zstartframe = $zrow["startframe"];
+			$zendframe = $zrow["endframe"];
 			$zgender = $zrow["gender"];
 		}
 		$zanonymous = '1';
 	} else if ((empty($zuseravatarid) || !isset($zuseravatarid)) && (empty($zuserid) || !isset($zuserid)) && !empty($zinstanceid) && isset($zinstanceid)) {
 		/* check for anonymous avatar with same instanceid - not logged in user (latest used) */
 		$zresults = $wtwconnect->query("
-			select useravatarid 
+			select * 
 			from ".wtw_tableprefix."useravatars 
 			where instanceid='".$zinstanceid."' 
 				and userid='' 
@@ -96,6 +98,14 @@ try {
 			limit 1;");
 		foreach ($zresults as $zrow) {
 			$zuseravatarid = $zrow["useravatarid"];
+			$zscalingx = $zrow["scalingx"];
+			$zscalingy = $zrow["scalingy"];
+			$zscalingz = $zrow["scalingz"];
+			$zobjectfolder = $zrow["avatarfolder"];
+			$zobjectfile = $zrow["avatarfile"];
+			$zstartframe = $zrow["startframe"];
+			$zendframe = $zrow["endframe"];
+			$zgender = $zrow["gender"];
 		}
 	}
 
@@ -122,12 +132,13 @@ try {
 			$zuseravatarid = $zrow["useravatarid"];
 			$zinstanceid = $zrow["instanceid"];
 			$zavatarid = $zrow["avatarid"];
-			$zavatarind = $zrow["avatarind"];
 			$zscalingx = $zrow["scalingx"];
 			$zscalingy = $zrow["scalingy"];
 			$zscalingz = $zrow["scalingz"];
 			$zobjectfolder = $zrow["objectfolder"];
 			$zobjectfile = $zrow["objectfile"];
+			$zstartframe = $zrow["startframe"];
+			$zendframe = $zrow["endframe"];
 			$zdisplayname = $zrow["displayname"];
 			$zprivacy = $zrow["privacy"];
 			$zenteranimation = $zrow["enteranimation"];
@@ -146,8 +157,31 @@ try {
 			$i += 1;
 		}
 	}
+	$zavataranimationdefs[0] = array(
+		'animationind'=> 0,
+		'useravataranimationid'=> '',
+		'avataranimationid'=> '',
+		'animationevent'=> 'onwait',
+		'animationfriendlyname'=> 'Wait',
+		'loadpriority'=> 100,
+		'animationicon'=> '',
+		'defaultspeedratio'=> 1.00,
+		'speedratio'=> 1.00,
+		'objectfolder'=> $zobjectfolder,
+		'objectfile'=> $zobjectfile,
+		'startframe'=> $zstartframe,
+		'endframe'=> $zendframe,
+		'animationloop'=> 1,
+		'soundid'=> '',
+		'soundpath'=> '',
+		'soundmaxdistance'=> 100,
+		'walkspeed'=> '1',
+		'totalframes' => '0',
+		'totalstartframe' => '0',
+		'totalendframe' => '0'
+	);
 	if (!empty($zuseravatarid) && isset($zuseravatarid)) {
-		$i = 0;
+		$i = 1;
 		/* get avatar animations */
 		$zresults = $wtwconnect->query("
 			select u.*,
@@ -196,7 +230,7 @@ try {
 			$i += 1;
 		}
 	} else {
-		$i = 0;
+		$i = 1;
 		/* get avatar by avatarid */
 		$zresults = $wtwconnect->query("
 			select * 
@@ -240,7 +274,6 @@ try {
 		'useravatarid'=> $zuseravatarid,
 		'instanceid'=> $zinstanceid,
 		'avatarid'=> $zavatarid,
-		'avatarind'=> $zavatarind,
 		'displayname'=> $zdisplayname,
 		'privacy'=> $zprivacy,
 		'scalingx'=> $zscalingx,
@@ -265,7 +298,9 @@ try {
 		),
 		'object'=> array(
 			'folder'=> $zobjectfolder,
-			'file'=> $zobjectfile
+			'file'=> $zobjectfile,
+			'startframe'=> $zstartframe,
+			'endframe'=> $zendframe
 		),
 		'avatarparts'=> $zavatarparts,
 		'avataranimationdefs'=> $zavataranimationdefs,

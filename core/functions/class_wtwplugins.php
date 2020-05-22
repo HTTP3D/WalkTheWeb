@@ -415,6 +415,15 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 			
+			$jsdata .= "	WTWJS.prototype.pluginsLoadLoginSettings = function(zloaddefault) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->returnScriptFunction('loadloginsettings', 'zloaddefault');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsLoadLoginSettings=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zloaddefault;\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsLoadUserSettings = function() {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= $this->getScriptFunction('loadusersettings');
@@ -423,6 +432,14 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsOpenLocalLogin = function(zitem, zwidth, zheight) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('openlocallogin');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsOpenLocalLogin=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+			
 			$jsdata .= "	WTWJS.prototype.pluginsMyAnimationsLoaded = function() {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= $this->getScriptFunction('myavataranimationsloaded');
@@ -437,6 +454,15 @@ class wtwplugins {
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsSavedAvatarRetrieved=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsGetMyAvatarList = function(zloaddefault) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('getmyavatarlist','zloaddefault');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsGetMyAvatarList=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zloaddefault;\r\n";
 			$jsdata .= "	}\r\n";
 
 			$jsdata .= "	WTWJS.prototype.pluginsCheckActionZoneTrigger = function(zactionzone) {\r\n";

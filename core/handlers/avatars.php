@@ -12,14 +12,17 @@ try {
 	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zuseravatarid = $wtwhandlers->getPost('useravatarid','');
-	$zavatarind = $wtwhandlers->getPost('avatarind','');
+	$zavatarid = $wtwhandlers->getPost('avatarid','');
 	$zinstanceid = $wtwhandlers->getPost('instanceid','');
 	$zuserip = $wtwhandlers->getPost('userip','');
 	$zobjectfolder = $wtwhandlers->getPost('objectfolder','');
 	$zobjectfile = $wtwhandlers->getPost('objectfile','');
-	$zscalingx = $wtwhandlers->getPost('scalingx','');
-	$zscalingy = $wtwhandlers->getPost('scalingy','');
-	$zscalingz = $wtwhandlers->getPost('scalingz','');
+	$zdisplayname = $wtwhandlers->getPost('displayname','');
+	$zscalingx = $wtwhandlers->getPost('scalingx','.04');
+	$zscalingy = $wtwhandlers->getPost('scalingy','.04');
+	$zscalingz = $wtwhandlers->getPost('scalingz','.04');
+	$zstartframe = $wtwhandlers->getPost('startframe','0');
+	$zendframe = $wtwhandlers->getPost('endframe','0');
 	$zavatarpart = $wtwhandlers->getPost('avatarpart','');
 	$zemissivecolorr = $wtwhandlers->getPost('emissivecolorr','');
 	$zemissivecolorg = $wtwhandlers->getPost('emissivecolorg','');
@@ -34,8 +37,8 @@ try {
 	/* select the function called */
 	$zresponse = array();
 	switch ($zfunction) {
-		case "saveavatar":
-			$zuseravatarid = $wtwavatars->saveAvatar($zuseravatarid, $zinstanceid, $zuserip, $zavatarind, $zobjectfolder, $zobjectfile, $zscalingx, $zscalingy, $zscalingz);
+		case "quicksaveavatar":
+			$zuseravatarid = $wtwavatars->quicksaveAvatar($zinstanceid, $zuserip, $zavatarid, $zdisplayname);
 			$zresponse = array(
 				'useravatarid'=> $zuseravatarid
 			);

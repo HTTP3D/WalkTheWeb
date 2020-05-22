@@ -269,7 +269,12 @@ class wtwhandlers {
 		global $wtwdb;
 		return $wtwdb->checkFunctionName($zid);
 	}
-
+	
+	public function checkDisplayName($zid, $zdefault) {
+		global $wtwdb;
+		return $wtwdb->checkDisplayName($zid, $zdefault);
+	}
+		
 	public function checkPublishName($zdomainname, $zwebtype, $zpublishname) {
 		global $wtwdb;
 		return $wtwdb->checkPublishName($zdomainname, $zwebtype, $zpublishname);

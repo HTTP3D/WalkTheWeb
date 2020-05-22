@@ -297,6 +297,7 @@ input.wtw-smallprintinput {
 	height:32px;
 	width:auto;
 	float:left;
+	margin-right:15px;
 }
 #wtw_greyout {
 	z-index: 2995;
@@ -1890,7 +1891,7 @@ input[type=checkbox].wtw-checkbox:hover {
 	border:#afafaf 1px solid;
 	padding:5px;
 	border-radius:10px;
-	width:120px;
+	width:150px;
 	margin-left:auto;
 	margin-right:auto;
 	background-color: #ffffff;

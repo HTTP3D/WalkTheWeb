@@ -687,17 +687,19 @@ class wtwdb {
 			$zresults = $this->query("
 				select * 
 				from ".wtw_tableprefix."settings 
-				where settingname='".$zsettingname."'
-					and deleted=0;");
+				where settingname='".$zsettingname."';");
 			foreach ($zresults as $zrow) {
 				$zsettingid = $zrow["settingid"];
 			}
-			if (isset($zsettingid)) {
+			if (isset($zsettingid) && !empty($zsettingid)) {
 				$this->query("
 					update ".wtw_tableprefix."settings 
 					set settingvalue='".$zsettingvalue."',
 						updatedate=now(),
-						updateuserid='".$this->userid."'
+						updateuserid='".$this->userid."',
+						deleteddate=null,
+						deleteduserid='',
+						deleted=0
 					where settingid=".$zsettingid.";");
 			} else {
 				$this->query("
@@ -714,8 +716,7 @@ class wtwdb {
 						 now(),
 						 '".$this->userid."',
 						 now(),
-						 '".$this->userid."')
-						;");
+						 '".$this->userid."');");
 			}
 		} catch (Exception $e) {
 			$zsuccess = false;
@@ -844,6 +845,19 @@ class wtwdb {
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-checkAlphaNumeric=".$e->getMessage());
+		}			
+		return $validid;
+	}
+
+	public function checkDisplayName($zid, $zdefault) {
+		$validid = $zdefault;
+		try {
+			$zid = str_replace(" ","",addslashes($zid));
+			if (preg_match('/[a-zA-Z0-9_-]/', $zid)) {
+				$validid = $zid;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-checkDisplayName=".$e->getMessage());
 		}			
 		return $validid;
 	}

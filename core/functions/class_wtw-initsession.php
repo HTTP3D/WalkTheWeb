@@ -22,7 +22,7 @@ class wtw {
 	
 	/* declare public $wtw variables */
 	public $version = "3.3.0";
-	public $dbversion = "1.1.0";
+	public $dbversion = "1.1.1";
 	public $versiondate = "2020-4-29";
 	public $serverinstanceid = "";
 	public $accesstoken = "";
@@ -364,7 +364,8 @@ class wtw {
 				if ($_SERVER['REQUEST_METHOD']=='POST') {
 					/* database connectivity values submitted and processed */
 					if (!file_exists(wtw_rootpath.'/config')) {
-						mkdir(wtw_rootpath.'/config', 0777);
+						mkdir(wtw_rootpath.'/config', 0777, true);
+						chmod(wtw_rootpath.'/config', 0777);
 					}
 					$server = $_POST["wtw_tserver"];
 					$database = $_POST["wtw_tdatabase"];
@@ -1814,7 +1815,6 @@ class wtw {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tglobalavatarid\" value=\"\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseravatarid\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarid\" value=\"\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarind\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationevent\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tattachavatarmoldname\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldname\" />\r\n";

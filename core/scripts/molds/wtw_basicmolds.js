@@ -1399,6 +1399,7 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 									/* add the base mold name to each of the child meshes */
 									var meshname = results.meshes[i].name;
 									var childmoldname = moldname + "-" + meshname;
+									childmoldname = childmoldname.replace(" ","_").toLowerCase();
 									results.meshes[i].id = childmoldname;
 									results.meshes[i].name = childmoldname;
 									results.meshes[i].position.x -= avex;
@@ -1435,10 +1436,24 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 										WTW.addMoldAnimation(moldname, meshname, results.meshes[i], objectanimations);
 									}
 									if (results.meshes[i].material != null) {
-										results.meshes[i].material.ambientColor = new BABYLON.Color3(.3, .3, .3);
+//										results.meshes[i].material.id = childmoldname + "mat";
+//										results.meshes[i].material.name = childmoldname + "mat";
+//WTW.log("childmoldname=" + childmoldname);
+//										results.meshes[i].material.ambientColor = new BABYLON.Color3(.3, .3, .3);
+//										results.meshes[i].material.diffuseColor = new BABYLON.Color3(.3, .3, .3);
+//										results.meshes[i].material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+//										results.meshes[i].material.specularColor = new BABYLON.Color3(1, 1, 1);
+//										var zcovering = results.meshes[i].material;
+//										results.meshes[i].material.dispose();
+//										results.meshes[i].material = zcovering;
 									}
+
+//									results.meshes[i].material.ambientColor = new BABYLON.Color3(.3, .3, .3);
+/*									
+*/
+
 									if (mold == null || mold.parent == null) {
-										/* if the parent has been deleted after this async process began (avoiding orphaned bjects)*/
+										/* if the parent has been deleted after this async process began (avoiding orphaned objects)*/
 										results.meshes[i].dispose();
 									}
 								}
@@ -2248,9 +2263,9 @@ WTWJS.prototype.addMoldLightbulb = function(moldname, molddef, lenx, leny, lenz,
 				moldnameparts.molds[moldnameparts.moldind].objects.shadows.dispose();
 				moldnameparts.molds[moldnameparts.moldind].objects.shadows = '';
 			}
-			moldnameparts.molds[moldnameparts.moldind].objects.light = new BABYLON.PointLight(moldname + "-light", new BABYLON.Vector3(0, -1, 1), scene);
-			moldnameparts.molds[moldnameparts.moldind].objects.light.intensity = 0.3;
-			moldnameparts.molds[moldnameparts.moldind].objects.light.shadowMinZ = 1;
+			moldnameparts.molds[moldnameparts.moldind].objects.light = new BABYLON.DirectionalLight(moldname + "-light", new BABYLON.Vector3(0, -1, 1), scene);
+			moldnameparts.molds[moldnameparts.moldind].objects.light.intensity = 0.8;
+			moldnameparts.molds[moldnameparts.moldind].objects.light.shadowMinZ = 0;
 			moldnameparts.molds[moldnameparts.moldind].objects.light.shadowMaxZ = 100;
 			moldnameparts.molds[moldnameparts.moldind].objects.light.diffuse = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));
 			moldnameparts.molds[moldnameparts.moldind].objects.light.specular = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
@@ -2260,32 +2275,47 @@ WTWJS.prototype.addMoldLightbulb = function(moldname, molddef, lenx, leny, lenz,
 			moldnameparts.molds[moldnameparts.moldind].objects.shadows.setDarkness(0.1);
 			moldnameparts.molds[moldnameparts.moldind].objects.shadows.usePoissonSampling = true;
 			
-			for (var i=0; i < WTW.communitiesMolds.length;i++) {
-				if (WTW.communitiesMolds[i] != null) {
-					if (WTW.communitiesMolds[i].moldname != undefined) {
-						var smold = scene.getMeshByID(WTW.communitiesMolds[i].moldname);
-						if (smold != null) {
-							WTW.addShadowToMold(smold, moldnameparts.molds[moldnameparts.moldind].objects.shadows);
+			if (moldnameparts.moldgroup == 'community') {
+				for (var i=0; i < WTW.communitiesMolds.length;i++) {
+					if (WTW.communitiesMolds[i] != null) {
+						if (WTW.communitiesMolds[i].moldname != undefined) {
+							var zcommunitymoldnameparts = WTW.getMoldnameParts(WTW.communitiesMolds[i].moldname);
+							if (moldnameparts.cgid == zcommunitymoldnameparts.cgid) {
+								var smold = scene.getMeshByID(WTW.communitiesMolds[i].moldname);
+								if (smold != null) {
+									WTW.addShadowToMold(smold, moldnameparts.molds[moldnameparts.moldind].objects.shadows);
+								}
+							}
 						}
 					}
 				}
 			}
-			for (var i=0; i < WTW.buildingMolds.length;i++) {
-				if (WTW.buildingMolds[i] != null) {
-					if (WTW.buildingMolds[i].moldname != undefined) {
-						var smold = scene.getMeshByID(WTW.buildingMolds[i].moldname);
-						if (smold != null) {
-							WTW.addShadowToMold(smold, moldnameparts.molds[moldnameparts.moldind].objects.shadows);
+			if (moldnameparts.moldgroup == 'building') {
+				for (var i=0; i < WTW.buildingMolds.length;i++) {
+					if (WTW.buildingMolds[i] != null) {
+						if (WTW.buildingMolds[i].moldname != undefined) {
+							var zbuildingmoldnameparts = WTW.getMoldnameParts(WTW.buildingMolds[i].moldname);
+							if (moldnameparts.cgid == zbuildingmoldnameparts.cgid) {
+								var smold = scene.getMeshByID(WTW.buildingMolds[i].moldname);
+								if (smold != null) {
+									WTW.addShadowToMold(smold, moldnameparts.molds[moldnameparts.moldind].objects.shadows);
+								}
+							}
 						}
 					}
 				}
 			}
-			for (var i=0; i < WTW.thingMolds.length;i++) {
-				if (WTW.thingMolds[i] != null) {
-					if (WTW.thingMolds[i].moldname != undefined) {
-						var smold = scene.getMeshByID(WTW.thingMolds[i].moldname);
-						if (smold != null) {
-							WTW.addShadowToMold(smold, moldnameparts.molds[moldnameparts.moldind].objects.shadows);
+			if (moldnameparts.moldgroup == 'thing') {
+				for (var i=0; i < WTW.thingMolds.length;i++) {
+					if (WTW.thingMolds[i] != null) {
+						if (WTW.thingMolds[i].moldname != undefined) {
+							var zthingmoldnameparts = WTW.getMoldnameParts(WTW.thingMolds[i].moldname);
+							if (moldnameparts.cgid == zthingmoldnameparts.cgid) {
+								var smold = scene.getMeshByID(WTW.thingMolds[i].moldname);
+								if (smold != null) {
+									WTW.addShadowToMold(smold, moldnameparts.molds[moldnameparts.moldind].objects.shadows);
+								}
+							}
 						}
 					}
 				}

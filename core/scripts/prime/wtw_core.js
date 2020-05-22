@@ -4,18 +4,6 @@
 
 WTWJS.prototype.initLoadSequence = function() {
 	try {
-		if (dGet('wtw_tuserid').value == '') {
-			WTW.openLoginMenu();
-		}
-		if (typeof WTW.adminInit == 'function') {
-			WTW.adminView = 1;
-			if (dGet('wtw_tuserid').value == "") {
-				window.location.href = '/';
-			}
-		}
-		if (dGet('wtw_tuserid').value != "") {
-			WTW.setLoginValues();
-		}
 		if (BABYLON.Engine.isSupported()) {
 			WTW.loadSequence();
 		} else {
@@ -29,6 +17,7 @@ WTWJS.prototype.initLoadSequence = function() {
 WTWJS.prototype.loadSequence = function() {
 	try {
 		WTW.initEnvironment();
+		WTW.loadLoginSettings();
 		WTW.loadInitSettings();
 		WTW.loadUserSettings();
 		WTW.loadUserCanvas();
@@ -68,6 +57,7 @@ WTWJS.prototype.initEnvironment = function() {
 		scene.autoClearDepthAndStencil = false;
 		scene.collisionsEnabled = true;
 		scene.ambientColor = new BABYLON.Color3(.3, .3, .3);
+//		scene.clearColor = new BABYLON.Color3(0.1, 0.1, 0.1);
 		scene.fogEnabled = true;
 		scene.fogMode = BABYLON.Scene.FOGMODE_EXP;
 
@@ -81,33 +71,21 @@ WTWJS.prototype.initEnvironment = function() {
 		if (WTW.highlightLayer == null) {
 			WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
 		}
-/*		var zparent = BABYLON.MeshBuilder.CreateBox(WTW.mainParent, {}, scene);
-		zparent.material = WTW.addCovering("hidden", WTW.mainParent, WTW.newMold(), 1, 1, 1, "0", "0");
-		zparent.material.alpha = 0;
-		zparent.position.x = 0;
-		zparent.position.y = 0;
-		zparent.position.z = 0;
-		zparent.rotation.y = WTW.getRadians(0);
-		zparent.name = WTW.mainParent;
-		zparent.id = WTW.mainParent;
-		WTW.mainparentMold= zparent;
-		WTW.loadAvatarPlaceholder();
-		WTW.loadPrimaryCamera(zparent);
-*/
+
 		/* direct light immitating the sun */
-		WTW.sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -1, -1), scene);
+		WTW.sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -200, -300), scene);
 		WTW.sun.position = new BABYLON.Vector3(0, WTW.sunPositionY, 0);
 		WTW.sun.intensity = WTW.getSunIntensity(WTW.init.skyInclination, WTW.init.skyAzimuth);
 		WTW.sun.shadowMinZ = 1;
 		WTW.sun.shadowMaxZ = 4000;
-		WTW.sun.ambient = new BABYLON.Color3(.4, .4, .4);
-		WTW.sun.diffuse = new BABYLON.Color3(.4, .4, .4);
+//		WTW.sun.ambient = new BABYLON.Color3(.4, .4, .4);
+//		WTW.sun.diffuse = new BABYLON.Color3(.4, .4, .4);
 		WTW.sun.specular = new BABYLON.Color3(.2, .2, .2);
 		WTW.sun.groundColor = new BABYLON.Color3(.1, .1, .1);
 
-		/* lesser light for back sides */
-		WTW.sunlight = new BABYLON.DirectionalLight("sunlight", new BABYLON.Vector3(1, -1, 1), scene);
-		WTW.sunlight.intensity = WTW.sun.intensity / 1.5; //3;
+		/* lesser light for back sides of 3D Objects */
+		WTW.sunlight = new BABYLON.DirectionalLight("sunlight", new BABYLON.Vector3(1, -200, 300), scene);
+		WTW.sunlight.intensity = WTW.sun.intensity / 1.2;
 		
 		WTW.sky = BABYLON.MeshBuilder.CreateSphere("sky", {segments: 40, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.BACKSIDE}, scene);
 		WTW.sky.scaling.x = 5000;
@@ -157,7 +135,37 @@ WTWJS.prototype.initEnvironment = function() {
 				dGet('wtw_mainmenudisplayname').innerHTML = "<span style='color:yellow;'>Login</span>";
 			}
 		}
-		if (dGet('wtw_tuserid').value != '') {
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_core.js-initEnvironment=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.loadLoginSettings = function() {
+	try {
+		if (typeof WTW.adminInit == 'function') {
+			WTW.adminView = 1;
+			if (dGet('wtw_tuserid').value == "") {
+				window.location.href = '/';
+			}
+		}
+		var zloaddefault = true;
+		zloaddefault = WTW.pluginsLoadLoginSettings(zloaddefault);
+		if (zloaddefault) {
+			WTW.loadLoginAvatarSelect();
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_core.js-loadLoginSettings=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.loadLoginAvatarSelect = function() {
+	try {
+		if (dGet('wtw_tuserid').value == '') {
+			WTW.openLoginMenu();
+			WTW.hide('wtw_menuloggedin');
+			WTW.show('wtw_menulogin');
+		} else {
+			WTW.setLoginValues();
 			/* check cookie and load Avatar OR open select Avatar list */
 			WTW.hide('wtw_menulogin');
 			WTW.hide('wtw_menuloggedin');
@@ -167,16 +175,17 @@ WTWJS.prototype.initEnvironment = function() {
 				if (WTW.getCookie("globalavatarid") != null) {
 					zglobalavatarid = WTW.getCookie("globalavatarid");
 				}
-				WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobalavatarid, zuseravatarid, '', false);
+				if (zglobalavatarid != '') {
+					WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobalavatarid, zuseravatarid, '', false);
+				} else {
+					WTW.openLocalLogin('Select My Avatar',.3,.6);
+				}
 			} else {
 				WTW.openLocalLogin('Select My Avatar',.3,.6);
 			}
-		} else {
-			WTW.hide('wtw_menuloggedin');
-			WTW.show('wtw_menulogin');
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-initEnvironment=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_core.js-loadLoginAvatarSelect=" + ex.message);
 	} 
 }
 
@@ -399,7 +408,8 @@ WTWJS.prototype.loadCommunity = function(addcommunities) {
 		}
 		WTW.loadSkyScene(WTW.init.skyInclination, WTW.init.skyLuminance, WTW.init.skyAzimuth, WTW.init.skyRayleigh, WTW.init.skyTurbidity, WTW.init.skyMieDirectionalG, WTW.init.skyMieCoefficient, .25);
 		WTW.sun.intensity = WTW.getSunIntensity(WTW.init.skyInclination, WTW.init.skyAzimuth);
-
+		WTW.sunlight.intensity = WTW.sun.intensity / 1.2;
+		
 		WTW.extraGround.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
 		if (groundtexturepath != "" && groundtexturepath != '/content/system/images/dirt-512x512.jpg') {
 			WTW.extraGround.material.diffuseTexture = new BABYLON.Texture(groundtexturepath, scene);

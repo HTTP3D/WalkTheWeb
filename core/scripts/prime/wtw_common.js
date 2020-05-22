@@ -1448,19 +1448,14 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 				break;
 			case "Login Menu":
-				zpagediv += "<h2 class=\"wtw-login\">Login Menu</h2>" +
-					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openGlobalLogin();\"><img src=\"/content/system/images/menuwtw.png\" alt=\"WalkTheWeb\" title=\"WalkTheWeb\" class=\"wtw-loginlogo\"/><img id=\"wtw_globalcheck\" src=\"/content/system/images/greencheck.png\" class=\"wtw-checkcircle\" /><div style=\"margin-top:4px;\">WalkTheWeb Global Login<br /><span style=\"font-size:.6em;\">(Works on most WalkTheWeb 3D Websites)</span></div></div>" +
-					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('3D Website Login', .3, .6);\"><img src=\"/content/system/images/icon-128x128.jpg\" alt=\"HTTP3D Inc.\" title=\"HTTP3D Inc.\" class=\"wtw-loginlogo\"/><img id=\"wtw_localcheck\" src=\"/content/system/images/greencheck.png\" class=\"wtw-checkcircle\" /><div style=\"margin-top:4px;\">3D Website Login<br /><span style=\"font-size:.6em;\">(3D Websites on this Server Only)</span></div></div>";
+				zpagediv += "<h2 class=\"wtw-login\">Login Menu</h2>";
+				zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('3D Website Login', .3, .6);\"><img src=\"/content/system/images/icon-128x128.jpg\" alt=\"HTTP3D Inc.\" title=\"HTTP3D Inc.\" class=\"wtw-loginlogo\"/><img id=\"wtw_localcheck\" src=\"/content/system/images/greencheck.png\" class=\"wtw-checkcircle\" /><div style=\"margin-top:4px;\">3D Website Login<br /><span style=\"font-size:.6em;\">(3D Websites on this Server Only)</span></div></div>";
 				if (dGet('wtw_tuserid').value != '') {
-					zpagediv += "<div class=\"wtw-logincancel\" onclick=\"WTW.logoutGlobal();\">Logout Global</div>&nbsp;&nbsp;" +
-					"<div class=\"wtw-logincancel\" onclick=\"WTW.logout();\" style=\"width:170px;\">Logout 3D Website Only</div>";
+					zpagediv += "<div class=\"wtw-logincancel\" onclick=\"WTW.logout();\" style=\"width:170px;\">Logout 3D Website Only</div>";
 				} else {
-					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Select an Anonymous Avatar', .3, .5);\"><img src=\"/content/system/images/menuprofilebig.png\" alt=\"Anonymous Login\" title=\"Anonymous Login\" class=\"wtw-loginlogo\"/><div style=\"margin-top:10px;\">Continue as Anonymous</div></div>";
+					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Select an Anonymous Avatar', .3, .5);\"><img src=\"/content/system/images/menuprofilebig.png\" alt=\"Anonymous Login\" title=\"Anonymous Login\" class=\"wtw-loginlogo\"/><div style=\"margin-top:10px;\">3D Browse as Guest</div></div>";
 				}
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				if (dGet('wtw_taccesstoken').value == '') {
-					dGet('wtw_globalcheck').style.visibility = 'hidden';
-				}
 				if (dGet('wtw_tuserid').value == '') {
 					dGet('wtw_localcheck').style.visibility = 'hidden';
 				}
@@ -1506,10 +1501,18 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				break;
 			case "Select My Avatar":
 				zpagediv += "<h2 class=\"wtw-login\">Select My Avatar</h2>" +
-					"<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:60%;\"><div id=\"wtw_myavatars\"></div></div><br />" + 
-					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openAvatarDesigner();\"><div style=\"margin-top:4px;\">Create My New Avatar</div></div>";
+					"<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:38%;\"><div id=\"wtw_myavatars\"></div></div><br />" + 
+					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Select an Avatar', .3, .55);\"><div style=\"margin-top:4px;\">Quick-Start Avatars</div></div><br />" + 
+					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openAvatarDesigner();\"><div style=\"margin-top:4px;\">Create a New Avatar</div></div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 				WTW.getMyAvatarList();
+				break;
+			case "Select an Avatar":
+				zpagediv += "<h2 class=\"wtw-login\">Select an Avatar</h2>" + 
+					"<div class=\"wtw-loadingmenu\">Loading</div>" + 
+					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Select My Avatar', .3, .6);\">Cancel</div>";
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				WTW.getFullAvatarList();
 				break;
 			case "Select an Anonymous Avatar":
 				zpagediv += "<h2 class=\"wtw-login\">Select an Anonymous Avatar</h2>" + 
@@ -1519,6 +1522,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				WTW.getAnonymousAvatarList();
 				break;
 		}
+		WTW.pluginsOpenLocalLogin(zitem, zwidth, zheight);
 		WTW.hide('wtw_ibrowseframe');
 		WTW.show('wtw_ipagediv');
 		dGet('wtw_ibrowsediv').style.width = Math.round(WTW.sizeX * zwidth) + "px";
@@ -1583,7 +1587,7 @@ WTWJS.prototype.getAnonymousAvatarList = function() {
 					zpagediv += "No Anonymous Avatars Available";
 				}
 				zpagediv += "</div>";
-				zpagediv += "<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Login Menu', .3, .5);\">Cancel</div>";
+				zpagediv += "<br /><div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Login Menu', .3, .5);\">Cancel</div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 			}
 		);
@@ -1592,102 +1596,112 @@ WTWJS.prototype.getAnonymousAvatarList = function() {
 	}
 }
 
+WTWJS.prototype.getFullAvatarList = function() {
+	try {
+		WTW.getJSON("/connect/avatars.php?groups=", 
+			function(zresponse) {
+				var zfullavatars = [];
+				if (zresponse != null) {
+					zresponse = JSON.parse(zresponse);
+					if (zresponse.avatars != null) {
+						for (var i=0;i<zresponse.avatars.length;i++) {
+							if (zresponse.avatars[i] != null) {
+								zfullavatars[zfullavatars.length] = {
+									'globalavatarid': '',
+									'useravatarid': zresponse.avatars[i].useravatarid,
+									'avatarid': zresponse.avatars[i].avatarid,
+									'avatargroup': zresponse.avatars[i].avatargroup,
+									'displayname': zresponse.avatars[i].displayname,
+									'gender': zresponse.avatars[i].gender,
+									'object': {
+										'folder': zresponse.avatars[i].object.folder,
+										'file': zresponse.avatars[i].object.file
+									},
+									'scaling': {
+										'x': zresponse.avatars[i].scaling.x,
+										'y': zresponse.avatars[i].scaling.y,
+										'z': zresponse.avatars[i].scaling.z
+									},
+									'thumbnails': {
+										'imagefull': zresponse.avatars[i].thumbnails.imagefull,
+										'imageface': zresponse.avatars[i].thumbnails.imageface
+									},
+									'sortorder': zresponse.avatars[i].sortorder,
+									'selected': false
+								}
+							}
+						}
+					}
+				}
+				var zpagediv = "<h2 class=\"wtw-login\">Select an Avatar</h2>";
+				zpagediv += "<div class=\"wtw-loginlabel\">Display Name</div><div><input type=\"text\" id=\"wtw_tdisplayname\" value=\"" + dGet('wtw_tusername').value + "\" autocomplete=\"username\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>";
+				zpagediv += "<div class=\"wtw-imagescrollhorizontal\">";
+				if (zfullavatars.length > 0) {
+					for (var i=0;i<zfullavatars.length;i++) {
+						if (zfullavatars[i] != null) {
+							zpagediv += "<div class=\"wtw-imagescroll\" onclick=\"WTW.onMyAvatarSaveSelect('" + zfullavatars[i].globalavatarid + "', '" + zfullavatars[i].useravatarid + "', '" + zfullavatars[i].avatarid + "');\"><img src=\"" + zfullavatars[i].object.folder + zfullavatars[i].thumbnails.imageface + "\" title=\"" + zfullavatars[i].displayname + "\" alt=\"" + zfullavatars[i].displayname + "\" class=\"wtw-imagesavatar\" /></div>";
+						}
+					}
+				} else {
+					zpagediv += "No Avatars Available";
+				}
+				zpagediv += "</div>";
+				zpagediv += "<br /><div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Select My Avatar', .3, .6);\">Cancel</div>";
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-getFullAvatarList=" + ex.message);
+	}
+}
+
 WTWJS.prototype.getMyAvatarList = function() {
 	try {
-		let zmyavatars = [];
-		let zlocalcomplete = false;
-		let zglobalcomplete = false;
-		if (dGet('wtw_myavatars') != null) {
-			WTW.getJSON("/connect/avatars.php?groups=my", 
-				function(zresponse) {
-					if (zresponse != null) {
-						zresponse = JSON.parse(zresponse);
-						if (zresponse.avatars != null) {
-							if (zresponse.avatars.length > 0) {
-								for (var i=0;i<zresponse.avatars.length;i++) {
-									if (zresponse.avatars[i] != null) {
-										zmyavatars[zmyavatars.length] = {
-											'globalavatarid': '',
-											'useravatarid': zresponse.avatars[i].useravatarid,
-											'avatarid': zresponse.avatars[i].avatarid,
-											'avatargroup': zresponse.avatars[i].avatargroup,
-											'displayname': zresponse.avatars[i].displayname,
-											'gender': zresponse.avatars[i].gender,
-											'object': {
-												'folder': zresponse.avatars[i].object.folder,
-												'file': zresponse.avatars[i].object.file
-											},
-											'scaling': {
-												'x': zresponse.avatars[i].scaling.x,
-												'y': zresponse.avatars[i].scaling.y,
-												'z': zresponse.avatars[i].scaling.z
-											},
-											'thumbnails': {
-												'imagefull': zresponse.avatars[i].thumbnails.imagefull,
-												'imageface': zresponse.avatars[i].thumbnails.imageface
-											},
-											'sortorder': zresponse.avatars[i].sortorder,
-											'selected': false
+		var zloaddefault = true;
+		zloaddefault = WTW.pluginsGetMyAvatarList(zloaddefault);
+		if (zloaddefault) {
+			let zmyavatars = [];
+			if (dGet('wtw_myavatars') != null) {
+				WTW.getJSON("/connect/avatars.php?groups=my", 
+					function(zresponse) {
+						if (zresponse != null) {
+							zresponse = JSON.parse(zresponse);
+							if (zresponse.avatars != null) {
+								if (zresponse.avatars.length > 0) {
+									for (var i=0;i<zresponse.avatars.length;i++) {
+										if (zresponse.avatars[i] != null) {
+											zmyavatars[zmyavatars.length] = {
+												'globalavatarid': '',
+												'useravatarid': zresponse.avatars[i].useravatarid,
+												'avatarid': zresponse.avatars[i].avatarid,
+												'avatargroup': zresponse.avatars[i].avatargroup,
+												'displayname': zresponse.avatars[i].displayname,
+												'gender': zresponse.avatars[i].gender,
+												'object': {
+													'folder': zresponse.avatars[i].object.folder,
+													'file': zresponse.avatars[i].object.file
+												},
+												'scaling': {
+													'x': zresponse.avatars[i].scaling.x,
+													'y': zresponse.avatars[i].scaling.y,
+													'z': zresponse.avatars[i].scaling.z
+												},
+												'thumbnails': {
+													'imagefull': zresponse.avatars[i].thumbnails.imagefull,
+													'imageface': zresponse.avatars[i].thumbnails.imageface
+												},
+												'sortorder': zresponse.avatars[i].sortorder,
+												'selected': false
+											}
 										}
 									}
 								}
 							}
 						}
-					}
-					zlocalcomplete = true;
-					if (zglobalcomplete) {
 						WTW.showMyAvatarList(zmyavatars);
 					}
-				}
-			);
-			// call for global list
-			var zrequest = {
-				'accesstoken':dGet('wtw_taccesstoken').value,
-				'globaluserid':btoa(dGet('wtw_tglobaluserid').value),
-				'serverinstanceid':btoa(dGet('wtw_serverinstanceid').value),
-				'groups':'my',
-				'function':'getmyglobalavatars'
-			};
-			WTW.postJSON("https://3dnet.walktheweb.com/connect/globalavatars.php", zrequest, 
-				function(zresponse) {
-					zresponse = JSON.parse(zresponse);
-					if (zresponse.avatars != null) {
-						if (zresponse.avatars.length > 0) {
-							for (var i=0;i<zresponse.avatars.length;i++) {
-								if (zresponse.avatars[i] != null) {
-									zmyavatars[zmyavatars.length] = {
-										'globalavatarid': zresponse.avatars[i].globalavatarid,
-										'useravatarid': zresponse.avatars[i].useravatarid,
-										'avatarid': zresponse.avatars[i].avatarid,
-										'avatargroup': zresponse.avatars[i].avatargroup,
-										'displayname': zresponse.avatars[i].displayname,
-										'gender': zresponse.avatars[i].gender,
-										'object': {
-											'folder': zresponse.avatars[i].object.folder,
-											'file': zresponse.avatars[i].object.file
-										},
-										'scaling': {
-											'x': zresponse.avatars[i].scaling.x,
-											'y': zresponse.avatars[i].scaling.y,
-											'z': zresponse.avatars[i].scaling.z
-										},
-										'thumbnails': {
-											'imagefull': zresponse.avatars[i].thumbnails.imagefull,
-											'imageface': zresponse.avatars[i].thumbnails.imageface
-										},
-										'sortorder': zresponse.avatars[i].sortorder,
-										'selected': false
-									}
-								}
-							}
-						}
-					}
-					zglobalcomplete = true;
-					if (zlocalcomplete) {
-						WTW.showMyAvatarList(zmyavatars);
-					}
-				}
-			);
+				);
+			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-getMyAvatarList=" + ex.message);
@@ -1715,12 +1729,15 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars) {
 							zdefault = i;
 						}
 						let zicon = "/content/system/images/localserver.png";
-						let ztext = "Local Avatar";
+						let ztext = "3D Website Avatar";
 						if (zmyavatars[i].globalavatarid != '') {
 							zicon = "/content/system/images/global.png";
-							ztext = "Global Avatar";
+							ztext = "WalkTheWeb Avatar";
 						}
-						zmylist += "<div class=\"wtw-loginbutton\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.onMyAvatarSelect('" + zmyavatars[i].globalavatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\"><img src=\"" + zicon + "\" class=\"wtw-icon\" title=\"" + ztext + "\" alt=\"" + ztext + "\" />" + zmyavatars[i].displayname + "</div>\r\n";
+						if (zmyavatars[i].thumbnails.imageface != '') {
+							zicon = zmyavatars[i].thumbnails.imageface;
+						}
+						zmylist += "<div class=\"wtw-loginbutton\" style=\"text-align:left;\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.onMyAvatarSelect('" + zmyavatars[i].globalavatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\"><img src=\"" + zicon + "\" class=\"wtw-icon\" title=\"" + ztext + "\" alt=\"" + ztext + "\" />" + zmyavatars[i].displayname + "</div>\r\n";
 					}
 				}
 				dGet('wtw_myavatars').innerHTML = zmylist;
@@ -1733,6 +1750,46 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars) {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-showMyAvatarList=" + ex.message);
+	}
+}
+
+WTWJS.prototype.onMyAvatarSaveSelect = function(zglobalavatarid, zuseravatarid, zavatarid) {
+	try {
+		if (dGet('wtw_tdisplayname') != null) {
+			if (dGet('wtw_menudisplayname').innerHTML == '' && dGet('wtw_tdisplayname').value != '') {
+				dGet('wtw_menudisplayname').innerHTML = dGet('wtw_tdisplayname').value;
+			}
+		}
+		if (dGet('wtw_menudisplayname').innerHTML == '' && dGet('wtw_tusername').value != '') {
+			dGet('wtw_menudisplayname').innerHTML = dGet('wtw_tusername').value;
+		}
+		if (dGet('wtw_menudisplayname').innerHTML == '' && dGet('wtw_tuseremail').value != '') {
+			var emailbase = dGet('wtw_tuseremail').value.split('@');
+			dGet('wtw_menudisplayname').innerHTML = emailbase[0];
+		}
+		if (dGet('wtw_menudisplayname').innerHTML == '') {
+			dGet('wtw_menudisplayname').innerHTML = 'Anonymous';
+		}
+		dGet('wtw_tavatardisplayname').value = dGet('wtw_menudisplayname').innerHTML;
+			var zrequest = {
+				'instanceid': dGet("wtw_tinstanceid").value,
+				'userip': dGet('wtw_tuserip').value,
+				'displayname':btoa(dGet('wtw_tdisplayname').value),
+				'avatarid':zavatarid,
+				'function':'quicksaveavatar'
+			};
+			WTW.postJSON("/core/handlers/avatars.php", zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					if (zresponse.useravatarid != undefined) {
+						zuseravatarid = zresponse.useravatarid;
+						WTW.onMyAvatarSelect(zglobalavatarid, zuseravatarid, zavatarid);
+					}
+				}
+			);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-onMyAvatarSaveSelect=" + ex.message);
 	}
 }
 
@@ -9166,11 +9223,11 @@ WTWJS.prototype.getSunIntensity = function (inclination, azimuth) {
 	var intensity = .3;
 	try {
 		if (inclination < .3 && inclination > -.3 && azimuth > .2) {
-			intensity = 1; //0.8;
+			intensity = 1.5;
 		} else if ((inclination >= .3 || inclination <= -.3) && azimuth > .2) {
-			intensity = 0.5;
+			intensity = 0.75;
 		} else if (azimuth < .2) {
-			intensity = 0.3;
+			intensity = 0.43;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-getSunIntensity=" + ex.message);

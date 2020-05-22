@@ -49,8 +49,10 @@ try {
 		case "register":
 			$zserror = '';
 			$zresults = $wtwusers->createAccount($zusername, $zuseremail, $zpassword);
-			if ($zresults->serror != "") {
+			if (isset($zresults->serror)) {
 				$zserror = $zresults->serror;
+			}
+			if (!empty($zserror)) {
 			} else if ($zresults->success == false) {
 				$zserror = "Could not Create Account";
 			}

@@ -19,7 +19,7 @@ try {
 			$zresults = $wtwconnect->query("
 				SELECT ua1.useravatarid, ua1.avatarid, ua1.gender, ua1.displayname, 
 					ua1.objectfolder as avatarfolder, ua1.objectfile as avatarfile,  
-					ua1.scalingx, ua1.scalingy, ua1.scalingz, 
+					ua1.scalingx, ua1.scalingy, ua1.scalingz, ua1.startframe, ua1.endframe,
 					a1.avatargroup, a1.imagefull, a1.imageface, a1.sortorder  
 				FROM ".wtw_tableprefix."useravatars ua1 left join ".wtw_tableprefix."avatars a1
 				on ua1.avatarid = a1.avatarid
@@ -73,7 +73,9 @@ try {
 			'gender'=> $zrow["gender"],
 			'object'=> array(
 				'folder'=> $zrow["avatarfolder"],
-				'file'=> $zrow["avatarfile"]
+				'file'=> $zrow["avatarfile"],
+				'startframe'=> $zrow["startframe"],
+				'endframe'=> $zrow["endframe"]
 			),
 			'scaling'=> array(
 				'x'=> $zrow["scalingx"],

@@ -30,7 +30,9 @@ try {
 			'gender'=> $zrow["gender"],
 			'object'=> array(
 				'folder'=> $zrow["avatarfolder"],
-				'file'=> $zrow["avatarfile"]
+				'file'=> $zrow["avatarfile"],
+				'startframe'=> $zrow["startframe"],
+				'endframe'=> $zrow["endframe"]
 			),
 			'scaling'=> array(
 				'x'=> $zrow["scalingx"],

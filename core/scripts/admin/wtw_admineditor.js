@@ -5784,7 +5784,9 @@ WTWJS.prototype.uploadFile = function() {
 			Httpreq.open('POST', '/core/handlers/uploadedfiles.php');
 			Httpreq.onreadystatechange = function () {
 				if (Httpreq.readyState == 4 && Httpreq.status == "200") {
-					var zresponse = JSON.parse(Httpreq.responseText);
+					try {
+						var zresponse = JSON.parse(Httpreq.responseText);
+					} catch (ex) {}
 					dGet('wtw_fileupload').value = null;
 					WTW.loadUploadedObjectsDiv(true);
 				}

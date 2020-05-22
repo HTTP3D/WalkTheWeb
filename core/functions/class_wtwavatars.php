@@ -25,7 +25,6 @@ class wtwavatars {
 		global $wtwhandlers;
 		$zfounduseravatarid = "";
 		try {
-			$zfoundavatarind = "";
 			/* check for existing avatar for loggedin user */ 
 			$zresults = $wtwhandlers->query("
 				select useravatarid 
@@ -93,8 +92,7 @@ class wtwavatars {
 			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
 				$zresults = $wtwhandlers->query("
 					select u.*,
-						a.useravatarid,
-						a.avatarind
+						a.useravatarid
 					from ".wtw_tableprefix."users u 
 						left join (select * 
 							from ".wtw_tableprefix."useravatars 
@@ -109,7 +107,6 @@ class wtwavatars {
 						'userid'=> $zrow["userid"],
 						'username'=> $zrow["username"],
 						'useravatarid'=> $zrow["useravatarid"],
-						'avatarind'=> $zrow["avatarind"],
 						'uploadpathid'=> $zrow["uploadpathid"],
 						'displayname'=> $zrow["displayname"],
 						'userimageurl'=> $zrow["userimageurl"],
@@ -118,8 +115,7 @@ class wtwavatars {
 				}
 			} else {
 				$zresults = $wtwhandlers->query("
-					select useravatarid,
-						avatarind
+					select useravatarid
 					from ".wtw_tableprefix."useravatars 
 					where instanceid='".$zinstanceid."' 
 								and userid=''
@@ -130,7 +126,6 @@ class wtwavatars {
 						'userid'=> '',
 						'username'=> 'Anonymous',
 						'useravatarid'=> $zrow["useravatarid"],
-						'avatarind'=> $zrow["avatarind"],
 						'uploadpathid'=> '',
 						'displayname'=> 'Anonymous',
 						'userimageurl'=> '',
@@ -145,201 +140,136 @@ class wtwavatars {
 		return $zresponse;
 	}
 		
-	public function saveAvatar($zuseravatarid,$zinstanceid,$zuserip,$zavatarind,$zobjectfolder,$zobjectfile,$zscalingx,$zscalingy,$zscalingz) {
-		/* updates avatar information - depreciated with release v3.3.0 and avatar designer plugin */
+	public function quickSaveAvatar($zinstanceid, $zuserip, $zavatarid, $zdisplayname) {
+		/* adds new quick pick avatar to user account */
 		global $wtwhandlers;
-		$zfounduseravatarid = "";
+		$zfounduseravatarid = '';
 		try {
-			$wtwhandlers->getSessionUserID();
-			$zfounduseravatarid = $this->getAvatar($zuseravatarid,$zinstanceid);
-			$zfoundavatarind = "";
-			
 			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
-				/* get existing avatar index (which avatar choice) */ 
+				/* check for existing avatar with same avatarid and userid */ 
 				$zresults = $wtwhandlers->query("
-					select avatarind 
+					select * 
 					from ".wtw_tableprefix."useravatars 
-					where useravatarid='".$zfounduseravatarid."' 
+					where avatarid='".$zavatarid."'
 						and userid='".$wtwhandlers->userid."' 
 					order by updatedate desc
 					limit 1;");
 				foreach ($zresults as $zrow) {
-					$zfoundavatarind = $zrow["avatarind"];
-					$zinstanceid = $zrow["instanceid"];
+					$zfounduseravatarid = $zrow["useravatarid"];
 				}
-			}
-			if ((empty($zfoundavatarind) || !isset($zfoundavatarind)) && !empty($zinstanceid) && isset($zinstanceid)) {
-				/* get existing avatar index (which avatar choice) */ 
-				$zresults = $wtwhandlers->query("
-					select avatarind 
-					from ".wtw_tableprefix."useravatars 
-					where useravatarid='".$zfounduseravatarid."' 
-						and userid='' 
-						and instanceid='".$zinstanceid."'
-					order by updatedate desc
-					limit 1;");
-				foreach ($zresults as $zrow) {
-					$zfoundavatarind = $zrow["avatarind"];
-				}
-			}
-			if (!empty($zfounduseravatarid) && isset($zfounduseravatarid) && $zfoundavatarind != $zavatarind) { 
-				/* changed your avatar choice, this removes old color settings (back to default) */
-				$wtwhandlers->query("
-					update ".wtw_tableprefix."useravatarcolors
-					set deleteddate=now(),
-						deleteduserid='".$wtwhandlers->userid."',
-						deleted=1
-					where useravatarid='".$zfounduseravatarid."';");
-			}
-			if (!empty($zfounduseravatarid) && isset($zfounduseravatarid)) {
-				/* save new settings for existing found avatar */
-				$wtwhandlers->query("
-					update ".wtw_tableprefix."useravatars
-					set avatarind=".$wtwhandlers->checkNumber($zavatarind,1).",
-						instanceid='".$zinstanceid."',
-						userip='".$zuserip."',
-						objectfolder='".$zobjectfolder."',
-						objectfile='".$zobjectfile."',
-						scalingx=".$wtwhandlers->checkNumber($zscalingx,1).",
-						scalingy=".$wtwhandlers->checkNumber($zscalingy,1).",
-						scalingz=".$wtwhandlers->checkNumber($zscalingz,1).",
-						updatedate=now(),
-						updateuserid='".$wtwhandlers->userid."',
-						deleteddate=null,
-						deleteduserid='',
-						deleted=0
-					where useravatarid='".$zfounduseravatarid."';");
-			} else {
-				/* save new avatar */
-				$zfounduseravatarid = $wtwhandlers->getRandomString(16,1);
-				$wtwhandlers->query("
-					insert into ".wtw_tableprefix."useravatars
-						(useravatarid,
-						 instanceid,
-						 userid,
-						 userip,
-						 avatarind,
-						 objectfolder,
-						 objectfile,
-						 scalingx,
-						 scalingy,
-						 scalingz,
-						 createdate,
-						 createuserid,
-						 updatedate,
-						 updateuserid)
-					values
-						('".$zfounduseravatarid."',
-						 '".$zinstanceid."',
-						 '".$wtwhandlers->userid."',
-						 '".$zuserip."',
-						 ".$wtwhandlers->checkNumber($zavatarind,1).",
-						 '".$zobjectfolder."',
-						 '".$zobjectfile."',
-						 ".$wtwhandlers->checkNumber($zscalingx,1).",
-						 ".$wtwhandlers->checkNumber($zscalingy,1).",
-						 ".$wtwhandlers->checkNumber($zscalingz,1).",
-						 now(),
-						 '".$wtwhandlers->userid."',
-						 now(),
-						 '".$wtwhandlers->userid."');");
-				if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
-					$this->checkAnonymousAvatar($zinstanceid,$zuserip,$zavatarind);
+				if (empty($zfounduseravatarid) || !isset($zfounduseravatarid)) {
+					/* if not found, add avatar to user account in useravatars table */
+					$zfoundavatarid = '';
+					$zavatargroup = 'default';
+					$zobjectfolder = '';
+					$zobjectfile = '';
+					$zgender = 'male';
+					$zscalingx = .04;
+					$zscalingy = .04;
+					$zscalingz = .04;
+					$zdisplayname = base64_decode($zdisplayname);
+					/* get default avatar definition from avatars table */
+					$zresults = $wtwhandlers->query("
+						select * 
+						from ".wtw_tableprefix."avatars 
+						where avatarid='".$zavatarid."'
+						order by updatedate desc
+						limit 1;");
+					foreach ($zresults as $zrow) {
+						$zfoundavatarid = $zrow["avatarid"];
+						$zavatargroup = $zrow["avatargroup"];
+						$zobjectfolder = $zrow["avatarfolder"];
+						$zobjectfile = $zrow["avatarfile"];
+						$zgender = $zrow["gender"];
+						$zscalingx = $zrow["scalingx"];
+						$zscalingy = $zrow["scalingy"];
+						$zscalingz = $zrow["scalingz"];
+					}
+					
+					if (isset($zfoundavatarid) && !empty($zfoundavatarid)) {
+						/* save new avatar to useravatars, using avatar table data */
+						$zfounduseravatarid = $wtwhandlers->getRandomString(16,1);
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."useravatars
+								(useravatarid,
+								 instanceid,
+								 userid,
+								 userip,
+								 avatarid,
+								 avatargroup,
+								 objectfolder,
+								 objectfile,
+								 gender,
+								 scalingx,
+								 scalingy,
+								 scalingz,
+								 displayname,
+								 createdate,
+								 createuserid,
+								 updatedate,
+								 updateuserid)
+							values
+								('".$zfounduseravatarid."',
+								 '".$zinstanceid."',
+								 '".$wtwhandlers->userid."',
+								 '".$zuserip."',
+								 '".$zfoundavatarid."',
+								 '".$zavatargroup."',
+								 '".$zobjectfolder."',
+								 '".$zobjectfile."',
+								 '".$zgender."',
+								 ".$wtwhandlers->checkNumber($zscalingx,.04).",
+								 ".$wtwhandlers->checkNumber($zscalingy,.04).",
+								 ".$wtwhandlers->checkNumber($zscalingz,.04).",
+								 '".$wtwhandlers->checkDisplayName($zdisplayname, 'Anonymous')."',
+								 now(),
+								 '".$wtwhandlers->userid."',
+								 now(),
+								 '".$wtwhandlers->userid."');");
+
+						/* add default animations for new user avatar */
+						$zresults = $wtwhandlers->query("
+							select * 
+							from ".wtw_tableprefix."avataranimations 
+							where setdefault=1 and deleted=0
+							order by loadpriority desc
+							limit 15;");
+						foreach ($zresults as $zrow) {
+							$wtwhandlers->query("
+								insert into ".wtw_tableprefix."useravataranimations
+								   (useravataranimationid,
+									avataranimationid,
+									useravatarid,
+									avataranimationevent,
+									speedratio,
+									walkspeed,
+									createdate,
+									createuserid,
+									updatedate,
+									updateuserid)
+								   values
+								   ('".$wtwhandlers->getRandomString(16,1)."',
+									'".$zrow["avataranimationid"]."',
+									'".$zfounduseravatarid."',
+									'".$zrow["animationevent"]."',
+									".$zrow["speedratio"].",
+									1.00,
+									now(),
+									'".$wtwhandlers->userid."',
+									now(),
+									'".$wtwhandlers->userid."');");
+						}
+					}
 				}
 			}
 		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwavatars.php-saveAvatar=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwavatars.php-quickSaveAvatar=".$e->getMessage());
 		}
 		return $zfounduseravatarid;
 	}
 
 	public function checkAnonymousAvatar($zinstanceid,$zuserip,$zavatarind) {
-		/* checks to see if current user has an anonymous avatar - depreciated with release v3.3.0 and avatar designer plugin */
-		global $wtwhandlers;
-		$zsuccess = false;
-		try {
-			$zfounduseravatarid = "";
-			/* get existing avatar index (which avatar choice) */ 
-			$zresults = $wtwhandlers->query("
-				select useravatarid 
-				from ".wtw_tableprefix."useravatars 
-				where userid='' 
-					and instanceid='".$zinstanceid."' 
-				limit 1;");
-			foreach ($zresults as $zrow) {
-				$zfounduseravatarid = $zrow["useravatarid"];
-			}
-			if (empty($zfounduseravatarid) || !isset($zfounduseravatarid)) {
-				$zanonavatarind = 2;
-				$zscaling = '.07';
-				$zobjectfolder = "/content/system/avatars/male/";
-				$zobjectfile = "maleidle.babylon";
-				switch ($zavatarind) {
-					case 1:
-						$zanonavatarind = 1;
-						$zobjectfolder = "/content/system/avatars/female/";
-						$zobjectfile = "femaleidle.babylon";
-						break;
-					case 7:
-						$zanonavatarind = 1;
-						$zobjectfolder = "/content/system/avatars/female/";
-						$zobjectfile = "femaleidle.babylon";
-						break;
-					case 8:
-						$zanonavatarind = 1;
-						$zobjectfolder = "/content/system/avatars/female/";
-						$zobjectfile = "femaleidle.babylon";
-						break;
-					case 9:
-						$zanonavatarind = 1;
-						$zobjectfolder = "/content/system/avatars/female/";
-						$zobjectfile = "femaleidle.babylon";
-						break;
-					case 10:
-						$zanonavatarind = 1;
-						$zobjectfolder = "/content/system/avatars/female/";
-						$zobjectfile = "femaleidle.babylon";
-						break;
-				}
-				/* save new avatar */
-				$zfounduseravatarid = $wtwhandlers->getRandomString(16,1);
-				$wtwhandlers->query("
-					insert into ".wtw_tableprefix."useravatars
-						(useravatarid,
-						 instanceid,
-						 userid,
-						 userip,
-						 avatarind,
-						 objectfolder,
-						 objectfile,
-						 scalingx,
-						 scalingy,
-						 scalingz,
-						 createdate,
-						 createuserid,
-						 updatedate,
-						 updateuserid)
-					values
-						('".$zfounduseravatarid."',
-						 '".$zinstanceid."',
-						 '',
-						 '".$zuserip."',
-						 ".$zanonavatarind.",
-						 '".$zobjectfolder."',
-						 '".$zobjectfile."',
-						 ".$zscaling.",
-						 ".$zscaling.",
-						 ".$zscaling.",
-						 now(),
-						 '".$wtwhandlers->userid."',
-						 now(),
-						 '".$wtwhandlers->userid."');");
-			}
-			$zsuccess = true;
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwavatars.php-checkAnonymousAvatar=".$e->getMessage());
-		}
-		return $zsuccess;
+		return true;
 	}
 	
 	public function saveAvatarColor($zuseravatarid,$zinstanceid,$zavatarpart,$zemissivecolorr,$zemissivecolorg,$zemissivecolorb) {
