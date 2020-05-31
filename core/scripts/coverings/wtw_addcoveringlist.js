@@ -1,4 +1,8 @@
+/* coverings are materials - we call them coverings because they are the */
+/* wrapper of additional definition information about a material that WILL be created when triggered by a load zone. */
+
 WTWJS.prototype.getCoveringList = function(shape) {
+	/* covering list is used by admin to populate the drop down list of possible coverings for a mold */
 	var coveringlist = null;
 	coveringlist = [];
 	try {
@@ -40,8 +44,10 @@ WTWJS.prototype.getCoveringList = function(shape) {
 }
 
 WTWJS.prototype.addCovering = function(coveringname, moldname, molddef, lenx, leny, lenz, special1, special2) {
+	/* function that is run to add the covering to a mold - set by covering name */
 	var covering;
 	try {
+		/* each covering is defined by a separate function */
 		switch (coveringname) {
 			case "color":
 				covering = WTW.addCoveringColor(moldname, molddef);
@@ -100,6 +106,8 @@ WTWJS.prototype.addCovering = function(coveringname, moldname, molddef, lenx, le
 }
 
 WTWJS.prototype.setCoveringFormFields = function(coveringname) {
+	/* admin mode menu - shows and hides the various parts of the form depending on relevence to covering */
+	/* for example a texture covering shows the texture selection part of the form */
 	try {
 		switch (coveringname) {
 			case "glass":

@@ -1,4 +1,7 @@
+/* covering functions - adds the materials to the molds (meshes) */
+
 WTWJS.prototype.addCoveringWire = function(moldname, molddef) {
+	/* wireframe the mold instead of adding a material */
 	var covering;
 	try {
 		covering = "none";
@@ -13,6 +16,7 @@ WTWJS.prototype.addCoveringWire = function(moldname, molddef) {
 }
 
 WTWJS.prototype.addCoveringColor = function(moldname, molddef) {
+	/* set the color of the mold - works alone and with a texture to tint the texture */
 	var covering;
 	try {
 		var opacity = 1;
@@ -40,6 +44,8 @@ WTWJS.prototype.addCoveringColor = function(moldname, molddef) {
 }
 
 WTWJS.prototype.addCoveringGlass = function(moldname, molddef) {
+	/* basically a color material with an opacity of .2 (or 20%) */
+	/* you can also achieve this with a color or texture with an opacity set in advanced options on the form */
 	var covering;
 	try {
 		WTW.disposeMaterial("mat" + moldname);		
@@ -58,6 +64,7 @@ WTWJS.prototype.addCoveringGlass = function(moldname, molddef) {
 }
 
 WTWJS.prototype.addCoveringMirror = function(moldname, molddef) {
+	/* work in progress - adds a mirror surface to a mold and will load the molds that will reflect in that surface */
 	var covering;
 	try {
 		var mirrorLevel = .9;
@@ -92,6 +99,7 @@ WTWJS.prototype.addCoveringMirror = function(moldname, molddef) {
 }
 
 WTWJS.prototype.addCoveringTexture = function(moldname, molddef, lenx, leny, lenz, special1, special2) {
+	/* basic add texture material to mold - attempts to scale the texture on the surface (which can be overwritten in the advanced options of the form) */
 	var covering;
 	try {
 		var shape = "box"; 
@@ -231,6 +239,7 @@ WTWJS.prototype.addCoveringTexture = function(moldname, molddef, lenx, leny, len
 }
 
 WTWJS.prototype.addCoveringDirectionalTexture = function(moldname, molddef, lenx, leny, lenz) {
+	/* texture applied to cubes that will make texture aling around the cube (like for a brick wall) */
 	var covering;
 	try {
 		var alphawall = 1;
@@ -641,6 +650,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(moldname, molddef, lenx
 }
 
 WTWJS.prototype.addCoveringWater = function(moldname, molddef) {
+	/* water like surface material with reflection and refraction */
 	var covering;
 	try {
 		covering = new BABYLON.WaterMaterial("mat" + moldname, scene, new BABYLON.Vector2(512, 512));
@@ -664,6 +674,7 @@ WTWJS.prototype.addCoveringWater = function(moldname, molddef) {
 }
 
 WTWJS.prototype.addCoveringFire = function(moldname, molddef) {
+	/* fire procedural texture */
 	var covering;
 	try {
 		covering = new BABYLON.StandardMaterial("mat" + moldname, scene);
@@ -677,6 +688,7 @@ WTWJS.prototype.addCoveringFire = function(moldname, molddef) {
 }
 
 WTWJS.prototype.addCoveringMarble = function(moldname, molddef, lenx, leny, lenz) {
+	/* marble procedural texture */
 	var covering;
 	try {
 		var max = Math.max(Number(lenx), Number(leny), Number(lenz));
@@ -727,6 +739,7 @@ WTWJS.prototype.addCoveringMarble = function(moldname, molddef, lenx, leny, lenz
 }
 
 WTWJS.prototype.addCoveringRoad = function(moldname, molddef) {
+	/* road procedural texture */
 	var covering;
 	try {
 		covering = new BABYLON.StandardMaterial("mat" + moldname, scene);
@@ -744,6 +757,7 @@ WTWJS.prototype.addCoveringRoad = function(moldname, molddef) {
 }
 
 WTWJS.prototype.addCoveringHidden = function(moldname, alpha) {
+	/* hidden will make a transparent object */
 	var covering;
 	try {
 		if (typeof alpha === "undefined") {
@@ -761,6 +775,7 @@ WTWJS.prototype.addCoveringHidden = function(moldname, alpha) {
 }
 
 WTWJS.prototype.addCovering2D = function(moldname, molddef, lenx, leny, lenz) {
+	/* simple texture for a plane or disc */
 	var covering;
 	try {
 		var uoffset = 0;
@@ -845,6 +860,10 @@ WTWJS.prototype.addCovering2D = function(moldname, molddef, lenx, leny, lenz) {
 }
 
 WTWJS.prototype.addCoveringTerrain = function(moldname, molddef, lenx, leny, lenz) {
+	/* terrain allows a number of configuration options including heightmap, RGB tri-color map, bump maps, etc... */
+	/* the attempt was to make it work no matter what combination was supplied. so there are a lot of if-else conditions */
+	/* preloading images before render */
+	/* and advanced options */
 	var covering;
 	try {
 		if (molddef.graphics.heightmap.mixmappath != '' && molddef.graphics.heightmap.texturerpath != '' && molddef.graphics.heightmap.texturegpath != '' && molddef.graphics.heightmap.texturebpath != '') {
@@ -919,6 +938,10 @@ WTWJS.prototype.addCoveringTerrain = function(moldname, molddef, lenx, leny, len
 }
 
 WTWJS.prototype.loadTerrainAdvancedImages = function(moldname, lenx, leny, lenz, heightmapid, parentname, molddef, coveringname, mixmapid, texturerid, texturegid, texturebid, texturebumprid, texturebumpgid, texturebumpbid) {
+	/* terrain allows a number of configuration options including heightmap, RGB tri-color map, bump maps, etc... */
+	/* the attempt was to make it work no matter what combination was supplied. so there are a lot of if-else conditions */
+	/* preloading images before render */
+	/* and advanced options */
 	var covering;
 	try {
 		var heightmappath = molddef.graphics.heightmap.path;
@@ -1000,6 +1023,10 @@ WTWJS.prototype.loadTerrainAdvancedImages = function(moldname, lenx, leny, lenz,
 }
 
 WTWJS.prototype.addCoveringTerrainAdvanced = function(moldname, lenx, leny, lenz, molddef, heightmappath, mixmappath, texturerpath, texturegpath, texturebpath, texturebumprpath, texturebumpgpath, texturebumpbpath) {
+	/* terrain allows a number of configuration options including heightmap, RGB tri-color map, bump maps, etc... */
+	/* the attempt was to make it work no matter what combination was supplied. so there are a lot of if-else conditions */
+	/* preloading images before render */
+	/* and advanced options */
 	var covering;
 	try {
 		var uoffset = 0;

@@ -1,4 +1,6 @@
+/* currently not in use, these funcitons will hold the ability to add auto bot avatars to scenes */
 WTWJS.prototype.getAvatarList = function() {
+	/* list of autobot avatars */
 	var avatarlist = [];
 	try {
 		avatarlist[avatarlist.length] = "Anonymous";
@@ -11,6 +13,7 @@ WTWJS.prototype.getAvatarList = function() {
 }
 
 WTWJS.prototype.addAvatar = function(avatarname, avatardef, parentname) {
+	/* functions to add the autobot avatars selected by avatartype (avatar) */
 	var avatar;
 	try {
 		if (avatardef.avatar == undefined) {
@@ -33,15 +36,4 @@ WTWJS.prototype.addAvatar = function(avatarname, avatardef, parentname) {
 		WTW.log("core-scripts-avatars-addavatarlist\r\n addAvatar=" + ex.message);
 	} 
 	return avatar;
-}
-
-//need? -getRoboAvatarList- not currently in use
-WTWJS.prototype.getRoboAvatarList = function() {
-	var roboavatarlist = [];
-	try {
-		roboavatarlist[roboavatarlist.length] = "Default";
-	} catch (ex) {
-		WTW.log("core-scripts-avatars-addavatarlist\r\n getRoboAvatarList=" + ex.message);
-	} 
-	return roboavatarlist;
 }

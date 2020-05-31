@@ -2,7 +2,7 @@ WTWJS.prototype.addAvatarPlaceholder = function(zavatarname, zavatardef) {
 	/* creates a placeholder for the current user - before they select an avatar */
 	var zavatar = null;
 	try {
-		/* validate values form the avatar definition file */
+		/* validate values from the avatar definition file */
 		var zpositionx = 0;
 		var zpositiony = 0;
 		var zpositionz = 0;

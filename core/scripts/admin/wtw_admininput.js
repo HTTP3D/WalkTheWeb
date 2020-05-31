@@ -4,10 +4,6 @@
 
 WTWJS.prototype.mouseDownAdmin = function(e) {
 	try {
-		if (WTW.moveTimer != null) {
-			window.clearInterval(WTW.moveTimer);
-			WTW.moveTimer = null;
-		}
 		WTW.selectPick(e);
 	} catch (ex) {
 		WTW.log("admininput-mouseDownAdmin=" + ex.message);
@@ -16,10 +12,6 @@ WTWJS.prototype.mouseDownAdmin = function(e) {
 
 WTWJS.prototype.mouseUpAdmin = function(e) {
 	try {
-		if (WTW.moveTimer != null) {
-			window.clearInterval(WTW.moveTimer);
-			WTW.moveTimer = null;
-		}
 		WTW.changeStop();
 		if (WTW.moveZ != null) {
 			return false;

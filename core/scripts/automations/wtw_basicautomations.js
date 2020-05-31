@@ -1,4 +1,6 @@
+/* automation steps can have the following functions assigned - some animate, pause, rotate, etc... */
 function automationpause(automationdef) {
+	/* built in pause as a step in the process */
 	try {
 		var automationind = automationdef.automationind;
 		if (WTW.automations[automationind] != null) {
@@ -15,6 +17,7 @@ function automationpause(automationdef) {
 }
 
 function automationstatus(automationdef) {
+	/* check status of an automation */
 	try {
 		var automationind = automationdef.automationind;
 		var actionzoneind = -1;
@@ -31,6 +34,7 @@ function automationstatus(automationdef) {
 }
 
 function automationcondition(automationdef) {
+	/* test for a condition for a step to be completed (like rotation = 45 degrees) */
 	try {
 		var conditionskip = false;
 		var automationind = automationdef.automationind;
@@ -87,6 +91,7 @@ function automationcondition(automationdef) {
 }
 
 function automationrepeat(automationdef) {
+	/* when all steps are complete, should the automation start over again */
 	try {
 		var jumptostep = Number(automationdef.step.conditionvalue) - .5;
 		var automationind = automationdef.automationind;

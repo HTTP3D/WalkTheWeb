@@ -1,4 +1,7 @@
+/* these functions are related to transitions of avatars in and out of scenes */
+
 WTWJS.prototype.saveAvatarEnterAnimation = function() {
+	/* saves the avatar enter animation to the database - depreciated by the new avatar designer plugin */
 	try {
 		var zavataranimationid = WTW.getDDLValue('wtw_tselectavataranimation-enter');
 		if (WTW.isNumeric(zavataranimationid) == false) {
@@ -23,6 +26,7 @@ WTWJS.prototype.saveAvatarEnterAnimation = function() {
 }
 
 WTWJS.prototype.addAvatarAnimationRow = function(zoptionind, zselectedvalue) {
+	/* adds another row to the available optional animations - depreciated by the new avatar designer plugin */
 	try {
 		var zuseravataranimationid = "";
 		var zoptional = dGet('wtw_tselectavataranimation-' + zoptionind);
@@ -73,6 +77,7 @@ WTWJS.prototype.addAvatarAnimationRow = function(zoptionind, zselectedvalue) {
 }
 
 WTWJS.prototype.updateAnimSelectValue = function(zuseravataranimationidfield, zuseravataranimationid) {
+	/* updates the optional animations - depreciated by the new avatar designer plugin */
 	try {
 		if (dGet(zuseravataranimationidfield) != null) {
 			dGet(zuseravataranimationidfield).value = zuseravataranimationid;
@@ -110,6 +115,7 @@ WTWJS.prototype.updateAnimSelectValue = function(zuseravataranimationidfield, zu
 }
 
 WTWJS.prototype.deleteUserAnimation = function(zselectname) {
+	/* deletes an optional animation - depreciated by the new avatar designer plugin */
 	try {
 		var zuseravataranimationid = "";
 		var zavataranimationid = "";
@@ -162,6 +168,7 @@ WTWJS.prototype.deleteUserAnimation = function(zselectname) {
 }
 
 WTWJS.prototype.toggleMenuAnimations = function() {
+	/* opens and closes the execute animations box from the menu - will be depreciated soon */
 	try {
 		if (dGet('wtw_menuoptionalanimations').style.display == 'none') {
 			var zlistoptionalanimations = "";
@@ -208,6 +215,7 @@ WTWJS.prototype.toggleMenuAnimations = function() {
 }
 
 WTWJS.prototype.getAvatarAnimationsAll = function() {
+	/* loads all available animation definitions - will be depreciated soon */
 	try {
 		var zrequest = {
 			'useravatarid': dGet('wtw_tuseravatarid').value,
@@ -227,6 +235,7 @@ WTWJS.prototype.getAvatarAnimationsAll = function() {
 }
 
 WTWJS.prototype.loadAvatarAnimationsAll = function(zresponse) {
+	/* loads all animation definitions noting the ones assigned to a particular avatar - used by the menu - will be depreciated soon */
 	try {
 		var zoptionind = -1;
 		var zeditavataranimations = "<ul style='padding:0px;'>";
@@ -365,6 +374,7 @@ WTWJS.prototype.loadAvatarAnimationsAll = function(zresponse) {
 }
 
 WTWJS.prototype.editEnterAnimation = function() {
+	/* toggles to show/hide enter animation section - will be depreciated soon */
 	try {
 		WTW.editAvatarAnimation('', -1, 181);
 		WTW.toggle("wtw_animationdiv-enter");
@@ -374,6 +384,7 @@ WTWJS.prototype.editEnterAnimation = function() {
 }
 
 WTWJS.prototype.editAvatarAnimation = function(animationevent, currentind, total) {
+	/* toggles to show/hide enter animation section by index - menu - will be depreciated soon */
 	try {
 		dGet('wtw_tavataranimationevent').value = animationevent;
 		for (var i=0;i<total;i++) {
@@ -389,6 +400,7 @@ WTWJS.prototype.editAvatarAnimation = function(animationevent, currentind, total
 }
 
 WTWJS.prototype.avatarEnter = function(zavatarname) {
+	/* selects the enter animation for an avatar and executes the appropriate function */
 	try {
 		var zavatarparts = [];
 		var zavatar = scene.getMeshByID(zavatarname);
@@ -453,6 +465,7 @@ WTWJS.prototype.avatarEnter = function(zavatarname) {
 }
 
 WTWJS.prototype.avatarMinLoadEnter = function(zavatarname) {
+	/* enter animation for an avatar - used for demo avatars in scene */
 	try {
 		var zavatarparts = [];
 		var zavatar = scene.getMeshByID(zavatarname);
@@ -469,6 +482,7 @@ WTWJS.prototype.avatarMinLoadEnter = function(zavatarname) {
 }
 
 WTWJS.prototype.avatarShowVisible = function(zavatarname, zavatarparts) {
+	/* enter animation for an avatar - quick visible */
 	try {
 		if (zavatarparts == undefined) {
 			zavatarparts = [];
@@ -500,6 +514,7 @@ WTWJS.prototype.avatarShowVisible = function(zavatarname, zavatarparts) {
 }
 
 WTWJS.prototype.avatarShowFade = function(zavatarname, zavatarparts) {
+	/* enter animation for an avatar - fade to visible */
 	try {
 		for (var i=0; i<zavatarparts.length;i++) {
 			if (zavatarparts[i] != null) {
@@ -542,6 +557,7 @@ WTWJS.prototype.avatarShowFade = function(zavatarname, zavatarparts) {
 }
 
 WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
+	/* enter animation for an avatar - fade to visible with 2 torus swirling arroud */
 	try {
 		var zavatar = scene.getMeshByID(zavatarname);
 		if (zavatar != null) {
@@ -611,6 +627,7 @@ WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
 }
 
 WTWJS.prototype.avatarShowFadeSmoke = function(zavatarname, zavatarparts) {
+	/* enter animation for an avatar - fade to visible with smoke */
 	try {
 		var zavatar = scene.getMeshByID(zavatarname);
 		if (zavatar != null) {
@@ -666,6 +683,7 @@ WTWJS.prototype.avatarShowFadeSmoke = function(zavatarname, zavatarparts) {
 }
 
 WTWJS.prototype.avatarShowFadeParticles = function(zavatarname, zavatarparts) {
+	/* enter animation for an avatar - fade to visible with particles then solid */
 	try {
 		var zavatar = scene.getMeshByID(zavatarname);
 		if (zavatar != null) {
@@ -744,6 +762,7 @@ WTWJS.prototype.avatarShowFadeParticles = function(zavatarname, zavatarparts) {
 }
 
 WTWJS.prototype.avatarShowFadeSprite = function(zavatarname, zavatarparts) {
+	/* enter animation for an avatar - fade to visible with particle sprite shower */
 	try {
 		var zavatar = scene.getMeshByID(zavatarname);
 		if (zavatar != null) {
@@ -803,6 +822,7 @@ WTWJS.prototype.avatarShowFadeSprite = function(zavatarname, zavatarparts) {
 }
 
 WTWJS.prototype.avatarShowGrow = function(zavatarname, zavatarparts) {
+	/* enter animation for an avatar - start small and grow to scale */
 	try {
 		var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
 		if (zavatarscale != null) {
@@ -877,6 +897,7 @@ WTWJS.prototype.avatarShowGrow = function(zavatarname, zavatarparts) {
 }
 
 WTWJS.prototype.avatarShowGrowSmoke = function(zavatarname, zavatarparts) {
+	/* enter animation for an avatar - start small and grow to scale with smoke */
 	try {
 		var zavatar = scene.getMeshByID(zavatarname);
 		if (zavatar != null) {
@@ -964,6 +985,7 @@ WTWJS.prototype.avatarShowGrowSmoke = function(zavatarname, zavatarparts) {
 }
 
 WTWJS.prototype.avatarShowGrowGlow = function(zavatarname, zavatarparts) {
+	/* enter animation for an avatar - start small and grow to scale with glow outline */
 	try {
 		if (WTW.highlightLayer == null) {
 			WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
@@ -1051,6 +1073,7 @@ WTWJS.prototype.avatarShowGrowGlow = function(zavatarname, zavatarparts) {
 }
 
 WTWJS.prototype.avatarShowGrowGlowSmoke = function(zavatarname, zavatarparts) {
+	/* enter animation for an avatar - start small and grow to scale with glow outline and smoke */
 	try {
 		var zavatar = scene.getMeshByID(zavatarname);
 		if (zavatar != null) {
@@ -1153,6 +1176,7 @@ WTWJS.prototype.avatarShowGrowGlowSmoke = function(zavatarname, zavatarparts) {
 }
 
 WTWJS.prototype.avatarShowBeam = function(zavatarname, zavatarparts) {
+	/* enter animation for an avatar - show within a beam */
 	try {
 		var zavatar = scene.getMeshByID(zavatarname);
 		if (zavatar != null) {
@@ -1204,6 +1228,7 @@ WTWJS.prototype.avatarShowBeam = function(zavatarname, zavatarparts) {
 }
 
 WTWJS.prototype.loadSit = function(zavatarname) {
+	/* work in progress - sit command will move avatar to location, turn, and sit on designated mold */
 	try {
 		var zuseravataranimationid = "cccccccccccccccc";
 		var zavataranimationid = "dddddddddddddddd";
@@ -1214,6 +1239,7 @@ WTWJS.prototype.loadSit = function(zavatarname) {
 }
 
 WTWJS.prototype.startSit = function(zmoldname) {
+	/* work in progress - start sit move by walk to position */
 	try {	
 		var zavatarname = "myavatar-" + dGet("wtw_tinstanceid").value;
 		var zavatar = scene.getMeshByID(zavatarname);
@@ -1231,6 +1257,7 @@ WTWJS.prototype.startSit = function(zmoldname) {
 }
 
 WTWJS.prototype.setSit = function(zmoldtomatch) {
+	/* work in progress - sit move */
 	try {	
 		/* walk to position, rotate then */
 /*						
@@ -1251,6 +1278,7 @@ WTWJS.prototype.setSit = function(zmoldtomatch) {
 }
 
 WTWJS.prototype.walkToPosition = function(zavatarname, zmoldtomatch, zfunctionname, zparameters) {
+	/* work in progress - force avatar to walk to a position and rotation */
 	try {
 		var zavatar = scene.getMeshByID(zavatarname);
 		if (zavatar != null) {
@@ -1317,6 +1345,7 @@ WTWJS.prototype.walkToPosition = function(zavatarname, zmoldtomatch, zfunctionna
 }
 
 WTWJS.prototype.turnToRotation = function(zavatarname, zmoldtoface, zfunctionname, zparameters) {
+	/* work in progress - force avatar to turn to a set rotation */
 	try {
 		var zavatar = scene.getMeshByID(zavatarname);
 		if (zavatar != null) {
@@ -1360,6 +1389,7 @@ WTWJS.prototype.turnToRotation = function(zavatarname, zmoldtoface, zfunctionnam
 }
 
 WTWJS.prototype.cancelSit = function(zavatar, zmoveevents) {
+	/* work in progress - cancel a sit move and restart onwait */
 	try {
 		if (WTW.isInMovementEvents(zmoveevents, 'onsitwait')) {
 			WTW.keyPressedAdd('onwait');

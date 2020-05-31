@@ -1,3 +1,4 @@
+/* code for an elevator */
 WTWJS.prototype.elevatorDoorTimer = null;
 WTWJS.prototype.elevatorTimer = null;
 

@@ -1,4 +1,8 @@
+/* automations are series of animations or timing of events that can be coordinated to function together. */
+/* for example an elevator opens a door, waits x seconds, then closes the door. If a button is pressed starts another automation */
+/* like when a floor is pressed, the door closes, elevator moves to that floor (with passengers), stops, opens the door, waits x seconds, and then closes the door again */
 WTWJS.prototype.initAutomations = function() {
+	/* load any existing automations when load zone (action zone) is entered */
 	try {
 		var checkautomationid = '';
 		var checkconnectinggridid = '';
@@ -20,6 +24,7 @@ WTWJS.prototype.initAutomations = function() {
 }
 
 WTWJS.prototype.nextStepAutomation = function(automationid, connectinggridind, completedstep) {
+	/* each step runs sequentially after the previous step concludes */
 	try {
 		var nextstep = 1000;
 		for (var i = 0; i < WTW.automations.length; i++) {
@@ -41,6 +46,7 @@ WTWJS.prototype.nextStepAutomation = function(automationid, connectinggridind, c
 }
 
 WTWJS.prototype.startAutomation = function(automationid, connectinggridind, step, ignorerunning) {
+	/* start the automation with step 1 */
 	try {
 		if (ignorerunning == undefined) {
 			ignorerunning = false;
@@ -77,6 +83,7 @@ WTWJS.prototype.startAutomation = function(automationid, connectinggridind, step
 }
 
 WTWJS.prototype.addAutomation = function(automationname, automationdef) {
+	/* temporarily disabled - work in progress */
 /*	var automation = null;
 	try {
 		automation = scene.getMeshByID(automationname);

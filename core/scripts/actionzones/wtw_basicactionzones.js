@@ -1,9 +1,13 @@
 WTWJS.prototype.addActionzoneLoadzone = function(actionzonename, actionzoneind, actionzonedef) {
+	/* load zone = shape often box by default - triggers molds to load when your avatar enters the load zone */
 	var actionzone;
 	try {
+		/* create the shape for the load zone */
+		/* default actionzoneshape is cube and hidden (opacity 0) */
 		var molddef = WTW.newMold();
 		molddef.shape = actionzonedef.actionzoneshape;
 		molddef.covering = "hidden";
+		/* position, scaling, and rotation of zone */
 		molddef.position.x = actionzonedef.position.x;
 		molddef.position.y = actionzonedef.position.y;
 		molddef.position.z = actionzonedef.position.z;
@@ -13,11 +17,19 @@ WTWJS.prototype.addActionzoneLoadzone = function(actionzonename, actionzoneind, 
 		molddef.rotation.x = actionzonedef.rotation.x;
 		molddef.rotation.y = actionzonedef.rotation.y;
 		molddef.rotation.z = actionzonedef.rotation.z;
+		/* subdivisions are only used for some shapes like spheres */
 		molddef.subdivisions = 12;
+		/* set transparent in 3D Scene */
 		molddef.opacity = 0;
+		/* every mold has a parent except for the main scene mold cube - most times it is the 3D Community, Building or Thing */
 		molddef.parentname = actionzonedef.parentname;
+		/* actionzoneid refers to the database saved unique identifier (definition of what is being built. */
+		/* but since each 3D Object can be added to 3D Scenes multiple times, repeating the same actionzoneid, */
+		/* actionzoneind (notice ind is for index) refers to the instance of the 3d object when added to the 3D Scene */
 		molddef.actionzoneind = actionzoneind;
+		/* by default zones do not have collisions - avatars can walk into them */
 		molddef.checkcollisions = "0";
+		/* even in admin mode, zones are not pickable in the 3D S, use the menu to select and edit a zone */
 		molddef.ispickable = "0";
 		WTW.addMoldToQueue(actionzonename, molddef, molddef.parentname, molddef.covering, null);
 		WTW.actionZones[actionzoneind].shown = "2";
@@ -28,8 +40,11 @@ WTWJS.prototype.addActionzoneLoadzone = function(actionzonename, actionzoneind, 
 }
 
 WTWJS.prototype.addActionzoneLoadAnimations = function(actionzonename, actionzoneind, actionzonedef) {
+	/* load animations = shape often box by default - triggers to load avatar animations to your avatar when it enters the zone */
 	var actionzone;
 	try {
+		/* create the shape for the animation zone */
+		/* default actionzoneshape is cube and hidden (opacity 0) */
 		var molddef = WTW.newMold();
 		molddef.shape = actionzonedef.actionzoneshape;
 		molddef.covering = "hidden";
@@ -62,6 +77,7 @@ WTWJS.prototype.addActionzoneLoadAnimations = function(actionzonename, actionzon
 }
 
 WTWJS.prototype.addActionzoneSlidingDoor = function(actionzonename, actionzoneind, actionzonedef) {
+	/* sliding door zone = shape often box by default - triggers molds to move in a defined axis direction when any avatar enters the zone */
 	var actionzone;
 	try {
 		var parentname = actionzonedef.parentname;
@@ -153,6 +169,8 @@ WTWJS.prototype.addActionzoneSlidingDoor = function(actionzonename, actionzonein
 			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotz);
 		}
 		if (actionzone == null) {
+			/* create the shape for the zone that avatars enter to trigger the action */
+			/* default actionzoneshape is cube and hidden (opacity 0) */
 			var molddef5 = WTW.newMold();
 			molddef5.shape = actionzonedef.actionzoneshape;
 			molddef5.covering = "hidden";
@@ -250,6 +268,7 @@ WTWJS.prototype.addActionzoneSlidingDoor = function(actionzonename, actionzonein
 }
 
 WTWJS.prototype.addActionzoneSwingingDoor = function(actionzonename, actionzoneind, actionzonedef) {
+	/* swinging door zone = shape often box by default - triggers molds to move in a rotation around a defined axis direction when any avatar enters the zone */
 	var actionzone;
 	try {
 		var parentname = actionzonedef.parentname;
@@ -344,6 +363,8 @@ WTWJS.prototype.addActionzoneSwingingDoor = function(actionzonename, actionzonei
 			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotz);
 		}
 		if (actionzone == null) {
+			/* create the shape for the zone that avatars enter to trigger the action */
+			/* default actionzoneshape is cube and hidden (opacity 0) */
 			var molddef5 = WTW.newMold();
 			molddef5.shape = actionzonedef.actionzoneshape;
 			molddef5.covering = "hidden";
@@ -509,6 +530,7 @@ WTWJS.prototype.addActionzoneSwingingDoor = function(actionzonename, actionzonei
 }
 
 WTWJS.prototype.addActionzoneClickSlidingDoor = function(actionzonename, actionzoneind, actionzonedef) {
+	/* click to sliding door zone = (work in progress) selected mold to click - triggers molds to move in a defined axis direction when any avatar enters the zone */
 	var actionzone;
 	try {
 		var parentname = actionzonedef.parentname;
@@ -698,6 +720,7 @@ WTWJS.prototype.addActionzoneClickSlidingDoor = function(actionzonename, actionz
 }
 
 WTWJS.prototype.addActionzoneMirror = function(actionzonename, actionzoneind, actionzonedef) {
+	/* mirror - (work in progress) molds in this zone will automatically have a reflection in the mirrored surface of a selected mold */
 	var actionzone;
 	try {
 		if (WTW.actionZones[actionzoneind].shown == "0") {
@@ -707,6 +730,8 @@ WTWJS.prototype.addActionzoneMirror = function(actionzonename, actionzoneind, ac
 			var zpositionz = Number(actionzonedef.position.z);
 			actionzone = scene.getMeshByID(actionzonename);
 			if (actionzone == null) {
+				/* create the shape for the zone that watches for reflections of molds */
+				/* default actionzoneshape is cube and hidden (opacity 0) */
 				var molddef5 = WTW.newMold();
 				molddef5.shape = actionzonedef.actionzoneshape;
 				molddef5.covering = "hidden";
@@ -735,6 +760,7 @@ WTWJS.prototype.addActionzoneMirror = function(actionzonename, actionzoneind, ac
 }
 
 WTWJS.prototype.addActionzoneRidealong = function(actionzonename, actionzoneind, actionzonedef) {
+	/* ridealong - (work in progress) shape often box by default - attaches to a parent mold and moves with the parent mold - any avatar in the zone will automatically parent and move with the parent mold - picture a ride on a boat where the avatar can still walk around the boat */
 	var actionzone;
 	try {
 		var parentname = actionzonedef.parentname;
@@ -767,6 +793,8 @@ WTWJS.prototype.addActionzoneRidealong = function(actionzonename, actionzoneind,
 				}
 				actionzone = scene.getMeshByID(actionzonename);
 				if (actionzone == null) {
+					/* create the shape for the zone that avatars enter to ride along */
+					/* default actionzoneshape is cube and hidden (opacity 0) */
 					var molddef5 = WTW.newMold();
 					molddef5.shape = actionzonedef.actionzoneshape;
 					molddef5.covering = "hidden";
@@ -809,6 +837,8 @@ WTWJS.prototype.addActionzoneRidealong = function(actionzonename, actionzoneind,
 				}
 				actionzone = scene.getMeshByID(actionzonename);
 				if (actionzone == null) {
+					/* create the shape for the zone that avatars enter to ride along this instance is parented to another action zone (example farris wheel car attached to a spinning wheel) */
+					/* default actionzoneshape is cube and hidden (opacity 0) */
 					var molddef5 = WTW.newMold();
 					molddef5.shape = actionzonedef.actionzoneshape;
 					molddef5.covering = "hidden";
@@ -844,6 +874,7 @@ WTWJS.prototype.addActionzoneRidealong = function(actionzonename, actionzoneind,
 }
 
 WTWJS.prototype.addActionzoneRotate = function(actionzonename, actionzoneind, actionzonedef) {
+	/* rotate - rotating axle that molds can be attached so that they rotate around the selected axle */
 	var actionzone;
 	try {
 		var parentname = actionzonedef.parentname;
@@ -991,6 +1022,7 @@ WTWJS.prototype.addActionzoneRotate = function(actionzonename, actionzoneind, ac
 }
 
 WTWJS.prototype.addActionzonePeoplemover = function(actionzonename, actionzoneind, actionzonedef) {
+	/* people mover - (work in progress) shape often box by default - when avatar is in the zone they will move at a defined pace in a direction of the axis. This is useful for things like moving sidewalks, elevators, and escalators. */
 	var actionzone;
 	try {
 		var parentname = actionzonedef.parentname;
@@ -1088,6 +1120,8 @@ WTWJS.prototype.addActionzonePeoplemover = function(actionzonename, actionzonein
 			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotx); // note this is a fix z==x - wont work for all
 		}
 		if (actionzone == null) {
+			/* create the shape for the zone that avatars enter to move from one location to another along a defined axis */
+			/* default actionzoneshape is cube and hidden (opacity 0) */
 			var molddef5 = WTW.newMold();
 			molddef5.shape = actionzonedef.actionzoneshape;
 			molddef5.covering = "hidden";
@@ -1565,6 +1599,7 @@ WTWJS.prototype.addActionzonePeoplemover = function(actionzonename, actionzonein
 var testx = 0;
 
 WTWJS.prototype.addActionzoneElevator = function(actionzonename, actionzoneind, actionzonedef) {
+	/* elevator - (work in progress) shape often box by default - extenson of people mover to include button activated moves, timing with doors, and stopping movement on floors */
 	var actionzone;
 	try {
 		var parentname = actionzonedef.parentname;
@@ -1664,6 +1699,8 @@ WTWJS.prototype.addActionzoneElevator = function(actionzonename, actionzoneind, 
 			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotz);
 		}
 		if (actionzone == null) {
+			/* create the shape for the zone that avatars enter to ride the elevator (parent to and move with) */
+			/* default actionzoneshape is cube and hidden (opacity 0) */
 			var molddef5 = WTW.newMold();
 			molddef5.shape = actionzonedef.actionzoneshape;
 			molddef5.covering = "hidden";
@@ -1794,7 +1831,134 @@ WTWJS.prototype.addActionzoneElevator = function(actionzonename, actionzoneind, 
 	return actionzone;
 }
 
+WTWJS.prototype.addActionzoneSeat = function(actionzonename, actionzoneind, actionzonedef) {
+	/* seat - (work in progress) selected mold to click - trigers an animation of your avatar to move in front of the seat and sit */
+	var actionzone;
+	try {
+		var parentname = actionzonedef.parentname;
+		var zpositionx = Number(actionzonedef.position.x);
+		var zpositiony = Number(actionzonedef.position.y);
+		var zpositionz = Number(actionzonedef.position.z);
+		var axispositionx = zpositionx; //Number(actionzonedef.axis.position.x);
+		var axispositiony = zpositiony; //Number(actionzonedef.axis.position.y);
+		var axispositionz = zpositionz; //Number(actionzonedef.axis.position.z);
+		var axisrotx = Number(actionzonedef.axis.rotation.x);
+		var axisroty = Number(actionzonedef.axis.rotation.y);
+		var axisrotz = Number(actionzonedef.axis.rotation.z);
+		var buildingind = -1;
+		var moldgroup = "building";
+		if (actionzonedef.buildinginfo.buildingid != "") {
+			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
+		} else if (actionzonedef.communityinfo.communityid != "") {
+			moldgroup = "community";
+		} else if (actionzonedef.thinginfo.thingid != "") {
+			moldgroup = "thing";
+		}
+		actionzone = scene.getMeshByID(actionzonename);
+		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
+		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (actionzoneaxlebase == null) {
+			var molddef = WTW.newMold();
+			molddef.shape = "box";
+			molddef.covering = "hidden";
+			molddef.opacity = 0;
+			molddef.scaling.x = 1;
+			molddef.scaling.y = 1;
+			molddef.scaling.z = 1;
+			molddef.parentname = parentname;
+			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
+			actionzoneaxlebase.isPickable = false;
+			actionzoneaxlebase.checkCollisions = false;
+			actionzoneaxlebase.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+		}
+		if (actionzoneaxle == null) {
+			WTW.actionZones[actionzoneind].status = 0;
+			var molddef1 = WTW.newMold();
+			molddef1.shape = "box";
+			molddef1.covering = "hidden";
+			molddef1.scaling.x = 1;
+			molddef1.scaling.y = 1;
+			molddef1.scaling.z = 1;
+			molddef1.opacity = 0;
+			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
+			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
+			actionzoneaxle.position.x = axispositionx;
+			actionzoneaxle.position.y = axispositiony;
+			actionzoneaxle.position.z = axispositionz;
+			//actionzoneaxle.rotation.x = WTW.getRadians(axisrotx);
+			//actionzoneaxle.rotation.y = WTW.getRadians(axisroty);
+			//actionzoneaxle.rotation.z = WTW.getRadians(axisrotz);
+			actionzoneaxle.isPickable = false;
+			actionzoneaxle.checkCollisions = false;
+			actionzoneaxle.position.y -= 8;
+			actionzoneaxle.position.x += 4;
+			actionzoneaxle.rotation.y = WTW.getRadians(-90);
+		}
+		if (actionzoneaxlepole == null && WTW.adminView == 1) {
+			var molddef4 = WTW.newMold();
+			molddef4.shape = "box";
+			molddef4.covering = "texture";
+			molddef4.scaling.x = .20;
+			molddef4.scaling.y = .20;
+			molddef4.scaling.z = 10;
+			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			molddef4.opacity = 1;
+			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
+			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
+			actionzoneaxlepole.isPickable = false;
+			actionzoneaxlepole.checkCollisions = false;
+			actionzoneaxlepole.rotation.x = WTW.getRadians(90);
+			actionzoneaxlepole.position.y += 5;
+		}
+		if (actionzoneaxlebase2 == null) {
+			var molddef2 = WTW.newMold();
+			molddef2.shape = "box";
+			molddef2.covering = "hidden";
+			molddef2.scaling.x = 1;
+			molddef2.scaling.y = 1;
+			molddef2.scaling.z = 1;
+			molddef2.opacity = 0;
+			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
+			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
+			actionzoneaxlebase2.isPickable = false;
+			actionzoneaxlebase2.checkCollisions = false;
+			actionzoneaxlebase2.rotation.y = WTW.getRadians(-90);
+		}
+		if (actionzone == null) {
+			var molddef5 = WTW.newMold();
+			molddef5.shape = actionzonedef.actionzoneshape;
+			molddef5.covering = "hidden";
+			molddef5.position.x = zpositionx;
+			molddef5.position.y = zpositiony;
+			molddef5.position.z = zpositionz;
+			molddef5.scaling.x = actionzonedef.scaling.x;
+			molddef5.scaling.y = actionzonedef.scaling.y;
+			molddef5.scaling.z = actionzonedef.scaling.z;
+			molddef5.subdivisions = 12;
+			molddef5.opacity = 0;
+			molddef5.parentname = parentname;
+			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
+			actionzone.isPickable = false;
+			actionzone.checkCollisions = false;
+		}
+		if (dGet('wtw_bzones') != null) {
+			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
+				WTW.setOpacity(actionzonename, .2);
+				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+			}
+		}
+		WTW.actionZones[actionzoneind].shown = "2";	
+	} catch (ex) {
+		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneSeat=" + ex.message);
+	}
+	return actionzone;
+}
+
 WTWJS.prototype.addActionzonePassengerSeat = function(actionzonename, actionzoneind, actionzonedef) {
+	/* passengerseat - (work in progress) combo of seat and ridealong - seat functionality with the addition of parenting to mold for ridealong movement */
 	var actionzone;
 	try {
 		var parentname = actionzonedef.parentname;
@@ -1915,6 +2079,7 @@ WTWJS.prototype.addActionzonePassengerSeat = function(actionzonename, actionzone
 }
 
 WTWJS.prototype.addActionzoneDriverSeat = function(actionzonename, actionzoneind, actionzonedef) {
+	/* driverseat - (work in progress) seat expansion with heads up display for driving, animations for steering, and ridealong */
 	var actionzone;
 	try {
 		var parentname = actionzonedef.parentname;
@@ -2035,6 +2200,7 @@ WTWJS.prototype.addActionzoneDriverSeat = function(actionzonename, actionzoneind
 }
 
 WTWJS.prototype.addActionzoneDriverTurnAngle = function(actionzonename, actionzoneind, actionzonedef) {
+	/* driverturnangle - (work in progress) axis used as a parent mold for any mold that should rotate with the driver turning angle */
 	var actionzone;
 	try {
 		var parentname = actionzonedef.parentname;
@@ -2233,6 +2399,7 @@ WTWJS.prototype.addActionzoneDriverTurnAngle = function(actionzonename, actionzo
 }
 
 WTWJS.prototype.addActionzoneDriverTurningWheel = function(actionzonename, actionzoneind, actionzonedef) {
+	/* driverturningwheel - (work in progress) axis used as a parent mold for any mold that should rotate with the driver turning angle with the additional rotation of movement tires */
 	var actionzone;
 	try {
 		var parentname = actionzonedef.parentname;
@@ -2535,6 +2702,7 @@ WTWJS.prototype.addActionzoneDriverTurningWheel = function(actionzonename, actio
 }
 
 WTWJS.prototype.addActionzoneDriverWheel = function(actionzonename, actionzoneind, actionzonedef) {
+	/* driverwheel - (work in progress) rotation of movement tires tied to the acceleration */
 	var actionzone;
 	try {
 		var parentname = actionzonedef.parentname;
@@ -2730,127 +2898,3 @@ WTWJS.prototype.addActionzoneDriverWheel = function(actionzonename, actionzonein
 	return actionzone;
 }
 
-WTWJS.prototype.addActionzoneSeat = function(actionzonename, actionzoneind, actionzonedef) {
-	var actionzone;
-	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = zpositionx; //Number(actionzonedef.axis.position.x);
-		var axispositiony = zpositiony; //Number(actionzonedef.axis.position.y);
-		var axispositionz = zpositionz; //Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var buildingind = -1;
-		var moldgroup = "building";
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-			moldgroup = "community";
-		} else if (actionzonedef.thinginfo.thingid != "") {
-			moldgroup = "thing";
-		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.scaling.x = 1;
-			molddef.scaling.y = 1;
-			molddef.scaling.z = 1;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
-			actionzoneaxlebase.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
-		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = axispositionx;
-			actionzoneaxle.position.y = axispositiony;
-			actionzoneaxle.position.z = axispositionz;
-			//actionzoneaxle.rotation.x = WTW.getRadians(axisrotx);
-			//actionzoneaxle.rotation.y = WTW.getRadians(axisroty);
-			//actionzoneaxle.rotation.z = WTW.getRadians(axisrotz);
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
-			actionzoneaxle.position.y -= 8;
-			actionzoneaxle.position.x += 4;
-			actionzoneaxle.rotation.y = WTW.getRadians(-90);
-		}
-		if (actionzoneaxlepole == null && WTW.adminView == 1) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = .20;
-			molddef4.scaling.z = 10;
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 1;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
-			actionzoneaxlepole.rotation.x = WTW.getRadians(90);
-			actionzoneaxlepole.position.y += 5;
-		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.scaling.x = 1;
-			molddef2.scaling.y = 1;
-			molddef2.scaling.z = 1;
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-			actionzoneaxlebase2.rotation.y = WTW.getRadians(-90);
-		}
-		if (actionzone == null) {
-			var molddef5 = WTW.newMold();
-			molddef5.shape = actionzonedef.actionzoneshape;
-			molddef5.covering = "hidden";
-			molddef5.position.x = zpositionx;
-			molddef5.position.y = zpositiony;
-			molddef5.position.z = zpositionz;
-			molddef5.scaling.x = actionzonedef.scaling.x;
-			molddef5.scaling.y = actionzonedef.scaling.y;
-			molddef5.scaling.z = actionzonedef.scaling.z;
-			molddef5.subdivisions = 12;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-		}
-		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
-			}
-		}
-		WTW.actionZones[actionzoneind].shown = "2";	
-	} catch (ex) {
-		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneSeat=" + ex.message);
-	}
-	return actionzone;
-}

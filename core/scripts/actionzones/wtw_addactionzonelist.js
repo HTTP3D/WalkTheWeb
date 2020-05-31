@@ -1,4 +1,5 @@
 WTWJS.prototype.getActionZoneList = function() {
+	/* populates the new action zone list types drop down */
 	var actionzonelist = null;
 	actionzonelist = [];
 	try {
@@ -8,6 +9,7 @@ WTWJS.prototype.getActionZoneList = function() {
 		actionzonelist[actionzonelist.length] = {"name":"Click Activated Sliding Door","helpurl":""};
 		actionzonelist[actionzonelist.length] = {"name":"Rotate","helpurl":""};
 		actionzonelist[actionzonelist.length] = {"name":"Load Animations","helpurl":""};
+/* the following are works in progress and conceptual ideas */
 /*		actionzonelist[actionzonelist.length] = {"name":"Seat","helpurl":""}; */
 		/* currently in testing or under development */
 /*		actionzonelist[actionzonelist.length] = {"name":"Mirror","helpurl":""}; 
@@ -20,7 +22,9 @@ WTWJS.prototype.getActionZoneList = function() {
 		actionzonelist[actionzonelist.length] = {"name":"Driver Turning Wheel","helpurl":""};
 		actionzonelist[actionzonelist.length] = {"name":"Driver Wheel","helpurl":""}; */
 		actionzonelist = WTW.pluginsActionZones(actionzonelist);
+		/* clear drop down list before reloading */
 		WTW.clearDDL('wtw_tactionzonetypelist');
+		/* besides the drop down, there is also a list of buttons to add an action zone */
 		dGet("wtw_actionzonesbuttonlist").innerHTML = "";
 		for (var i=0;i < actionzonelist.length;i++) {
 			if (actionzonelist[i] != null) {
@@ -32,6 +36,7 @@ WTWJS.prototype.getActionZoneList = function() {
 					dGet("wtw_actionzonesbuttonlist").innerHTML += "<a href=\"" + actionzonelist[i].helpurl + "\" title=\"Help\" alt=\"Help\" class=\"wtw-helplink\" target=\"_blank\" onclick=\"WTW.blockPassThrough();\">?</a>";
 				}
 				dGet("wtw_actionzonesbuttonlist").innerHTML += "<div id=\"wtw_baddzones" + actionzonevalue + "\" name=\"wtw_baddzones" + actionzonevalue + "\" onclick=\"WTW.openActionZoneForm('" + actionzonevalue + "');\" style='cursor: pointer;' class='wtw-menulevel2'>" + actionzonelist[i].name + "</div>\r\n";
+				/* option for drop down list */
 				var option = document.createElement("option");
 				option.text = actionzonelist[i].name;
 				option.value = actionzonevalue;
@@ -46,6 +51,7 @@ WTWJS.prototype.getActionZoneList = function() {
 }
 
 WTWJS.prototype.addActionZone = function(actionzonename, actionzonedef) {
+	/* function selects which function will create the action zone - by actionzonetype */
 	var actionzone = null;
 	try {
 		var actionzoneind = -1;
@@ -53,8 +59,10 @@ WTWJS.prototype.addActionZone = function(actionzonename, actionzonedef) {
 			actionzoneind = Number(actionzonedef.actionzoneind);
 		}
 		actionzone = scene.getMeshByID(actionzonename);
+		/* only create if action zone is not already in the scene (by unique actionzonename) */
 		if (actionzone == null) {
 			if (WTW.actionZones[actionzoneind] != null) {
+				/* some action zones require position adjustments based on parent mold */
 				var axispositionx = Number(actionzonedef.axis.position.x);
 				var axispositiony = Number(actionzonedef.axis.position.y);
 				var axispositionz = Number(actionzonedef.axis.position.z);
@@ -87,60 +95,80 @@ WTWJS.prototype.addActionZone = function(actionzonename, actionzonedef) {
 					actionzonedef.position.z -= (parentactionzoneaxlebase.position.z);
 					actionzonedef.parentname = parentactionzoneaxlebase2name;
 				}
+				/* all action zone types are converted to lowercase and no spaces for the type comparison */ 
 				var actionzonetype = actionzonedef.actionzonetype.toLowerCase();
 				while (actionzonetype.indexOf(" ") > -1) {
 					actionzonetype = actionzonetype.replace(" ","");
 				}
+				/* select proper function to create the action zone based on actionzonetype */
+				/* action zones are designed to trigger an animation or javascript event onload, onclick, on avatar in zone, etc... */
 				switch (actionzonetype) {
 					case "loadzone":
+						/* load zone = shape often box by default - triggers molds to load when your avatar enters the load zone */
 						actionzone = WTW.addActionzoneLoadzone(actionzonename, actionzoneind, actionzonedef);
 						break;
 					case "loadanimations":
+						/* load animations = shape often box by default - triggers to load avatar animations to your avatar when it enters the zone */
 						actionzone = WTW.addActionzoneLoadAnimations(actionzonename, actionzoneind, actionzonedef);
 						break;
 					case "slidingdoor":
+						/* sliding door zone = shape often box by default - triggers molds to move in a defined axis direction when any avatar enters the zone */
 						actionzone = WTW.addActionzoneSlidingDoor(actionzonename, actionzoneind, actionzonedef);
 						break;
 					case "swingingdoor":
+						/* swinging door zone = shape often box by default - triggers molds to move in a rotation around a defined axis direction when any avatar enters the zone */
 						actionzone = WTW.addActionzoneSwingingDoor(actionzonename, actionzoneind, actionzonedef);
 						break;
 					case "clickactivatedslidingdoor":
+						/* click to sliding door zone = (work in progress) selected mold to click - triggers molds to move in a defined axis direction when any avatar enters the zone */
 						actionzone = WTW.addActionzoneClickSlidingDoor(actionzonename, actionzoneind, actionzonedef);
 						break;
-					case "seat":
-						actionzone = WTW.addActionzoneSeat(actionzonename, actionzoneind, actionzonedef);
-						break;
 					case "mirror":
+						/* mirror - (work in progress) molds in this zone will automatically have a reflection in the mirrored surface of a selected mold */
 						actionzone = WTW.addActionzoneMirror(actionzonename, actionzoneind, actionzonedef);
 						break; 
 					case "ridealong":
+						/* ridealong - (work in progress) shape often box by default - attaches to a parent mold and moves with the parent mold - any avatar in the zone will automatically parent and move with the parent mold - picture a ride on a boat where the avatar can still walk around the boat */
 						actionzone = WTW.addActionzoneRidealong(actionzonename, actionzoneind, actionzonedef);
 						break;
 					case "rotate":
+						/* rotate - rotating axle that molds can be attached so that they rotate around the selected axle */
 						actionzone = WTW.addActionzoneRotate(actionzonename, actionzoneind, actionzonedef);
 						break;
 					case "peoplemover":
+						/* people mover - (work in progress) shape often box by default - when avatar is in the zone they will move at a defined pace in a direction of the axis. This is useful for things like moving sidewalks, elevators, and escalators. */
 						actionzone = WTW.addActionzonePeoplemover(actionzonename, actionzoneind, actionzonedef);
 						break;
 					case "elevator":
+						/* elevator - (work in progress) shape often box by default - extenson of people mover to include button activated moves, timing with doors, and stopping movement on floors */
 						actionzone = WTW.addActionzoneElevator(actionzonename, actionzoneind, actionzonedef);
 						break;
+					case "seat":
+						/* seat - (work in progress) selected mold to click - trigers an animation of your avatar to move in front of the seat and sit */
+						actionzone = WTW.addActionzoneSeat(actionzonename, actionzoneind, actionzonedef);
+						break;
 					case "passengerseat":
+						/* passengerseat - (work in progress) combo of seat and ridealong - seat functionality with the addition of parenting to mold for ridealong movement */
 						actionzone = WTW.addActionzonePassengerSeat(actionzonename, actionzoneind, actionzonedef);
 						break;
 					case "driverseat":
+						/* driverseat - (work in progress) seat expansion with heads up display for driving, animations for steering, and ridealong */
 						actionzone = WTW.addActionzoneDriverSeat(actionzonename, actionzoneind, actionzonedef);
 						break;
 					case "driverturnangle":
+						/* driverturnangle - (work in progress) axis used as a parent mold for any mold that should rotate with the driver turning angle */
 						actionzone = WTW.addActionzoneDriverTurnAngle(actionzonename, actionzoneind, actionzonedef);
 						break;
 					case "driverturningwheel":
+						/* driverturningwheel - (work in progress) axis used as a parent mold for any mold that should rotate with the driver turning angle with the additional rotation of movement tires */
 						actionzone = WTW.addActionzoneDriverTurningWheel(actionzonename, actionzoneind, actionzonedef);
 						break;
 					case "driverwheel":
+						/* driverwheel - (work in progress) rotation of movement tires tied to the acceleration */
 						actionzone = WTW.addActionzoneDriverWheel(actionzonename, actionzoneind, actionzonedef);
 						break;
 					default:
+						/* this function is the hook so that plugins can define their own action zones */
 						actionzone = WTW.pluginsAddActionZones(actionzonetype, actionzonename, actionzoneind, actionzonedef);
 						break;
 				}
@@ -157,6 +185,7 @@ WTWJS.prototype.addActionZone = function(actionzonename, actionzonedef) {
 }
 
 WTWJS.prototype.setNewActionZoneDefaults = function(actionzonetype) {
+	/* selected by actionzonetype - defines the default values and zone names for admin edit of a zone */
 	try {
 		var coords = WTW.getNewCoordinates(50);
 		var positionX = coords.positionX;
@@ -277,6 +306,7 @@ WTWJS.prototype.setNewActionZoneDefaults = function(actionzonetype) {
 }
 
 WTWJS.prototype.setActionZoneFormFields = function(actionzonetype) {
+	/* selected by actionzonetype - defines the default labels and visible form field sections for admin edit of a zone */
 	try {
 		actionzonetype = actionzonetype.toLowerCase();
 		while (actionzonetype.indexOf(" ") > -1) {

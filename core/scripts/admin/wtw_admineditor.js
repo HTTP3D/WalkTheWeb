@@ -8421,7 +8421,7 @@ WTWJS.prototype.setNewMold = function(rebuildmold) {
 						if (receiveshadows == '1') {
 							mold.receiveShadows = true;
 						} 
-						if (WTW.shadowset > 0) {
+						if (WTW.shadowSet > 0) {
 							WTW.shadows.getShadowMap().renderList.push(mold);
 						}
 */						if (waterreflection == '1' && WTW.waterMat != null) {
