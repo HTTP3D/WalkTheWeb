@@ -2,7 +2,11 @@
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
+/* These functions are used to download selected 3D Communities, 3D Buildings, 3D Things, or related content */
+/* downloads are hosted by 3dnet.walktheweb.com 3D Internet Hub */
+
 WTWJS.prototype.updateProgressText = function(ztext) {
+	/* note that updates the progress of the installation step */
 	try {
 		if (dGet('wtw_progresstext') != null) {
 			dGet('wtw_progresstext').innerHTML = ztext;
@@ -13,6 +17,7 @@ WTWJS.prototype.updateProgressText = function(ztext) {
 }
 
 WTWJS.prototype.updateProgressBar = function(zprogress, ztotal) {
+	/* updates the current progress bar positon */
 	try {
 		if (dGet('wtw_progressbar') != null) {
 			zpercent = Math.round(100/ztotal * zprogress);
@@ -25,6 +30,7 @@ WTWJS.prototype.updateProgressBar = function(zprogress, ztotal) {
 }
 
 WTWJS.prototype.communitySearch = function(search) {
+	/* keyword search to find a community to download to your instance */
 	try {
 		search = WTW.encode(search);
 		WTW.getJSON("https://3dnet.walktheweb.com/connect/communitysearch.php?s=" + search, 
@@ -38,6 +44,7 @@ WTWJS.prototype.communitySearch = function(search) {
 }
 
 WTWJS.prototype.communitySearchReply = function(response) {
+	/* receives search results and parses for screen display */
 	try {
 		dGet('wtw_commtempsearchresults').innerHTML = "";
 		for (var i=0; i < response.length; i++) {
@@ -64,6 +71,7 @@ WTWJS.prototype.communitySearchReply = function(response) {
 }
 
 WTWJS.prototype.communitySearchSelect = function(zcopywebid) {
+	/* This process takes the selected 3D Community and downloads a copy of the 3D Community (3D Scene) to the local instance */
 	try {
 		WTW.hide('wtw_selectwebform');
 		WTW.show('wtw_installprogress');
@@ -136,6 +144,8 @@ WTWJS.prototype.communitySearchSelect = function(zcopywebid) {
 }
 
 WTWJS.prototype.completedCommunityImport = function(zmoldgroup, zwebid, zcopywebid) {
+	/* the basic 3D Community information is downloaded, next the supplimental parts are downloaded (action zones, molds, coverings, etc...) */
+	/* then starts downloading the Action Zones */
 	try {
 		WTW.updateProgressBar(100,100);
 		WTW.copyActionZones(zmoldgroup, zwebid, zcopywebid);
@@ -145,6 +155,7 @@ WTWJS.prototype.completedCommunityImport = function(zmoldgroup, zwebid, zcopyweb
 }
 
 WTWJS.prototype.buildingSearch = function(search) {
+	/* keyword search to find a building to download to your instance */
 	try {
 		search = WTW.encode(search);
 		WTW.getJSON("https://3dnet.walktheweb.com/connect/buildingsearch.php?s=" + search, 
@@ -158,6 +169,7 @@ WTWJS.prototype.buildingSearch = function(search) {
 }
 
 WTWJS.prototype.buildingSearchReply = function(response) {
+	/* receives search results and parses for screen display */
 	try {
 		dGet('wtw_buildtempsearchresults').innerHTML = "";
 		for (var i=0; i < response.length; i++) {
@@ -184,6 +196,7 @@ WTWJS.prototype.buildingSearchReply = function(response) {
 }
 
 WTWJS.prototype.buildingSearchSelect = function(zcopywebid) {
+	/* This process takes the selected 3D Building and downloads a copy of the 3D Building to the local instance */
 	try {
 		WTW.hide('wtw_selectwebform');
 		WTW.show('wtw_installprogress');
@@ -242,6 +255,8 @@ WTWJS.prototype.buildingSearchSelect = function(zcopywebid) {
 }
 
 WTWJS.prototype.completedBuildingImport = function(zmoldgroup, zwebid, zcopywebid) {
+	/* the basic 3D Building information is downloaded, next the supplimental parts are downloaded (action zones, molds, coverings, etc...) */
+	/* then starts downloading the Action Zones */
 	try {
 		WTW.updateProgressBar(100,100);
 		WTW.copyActionZones(zmoldgroup, zwebid, zcopywebid);
@@ -251,6 +266,7 @@ WTWJS.prototype.completedBuildingImport = function(zmoldgroup, zwebid, zcopywebi
 }
 
 WTWJS.prototype.thingSearch = function(search) {
+	/* keyword search to find a thing to download to your instance */
 	try {
 		search = WTW.encode(search);
 		WTW.getJSON("https://3dnet.walktheweb.com/connect/thingsearch.php?s=" + search + "&u=" + dGet("wtw_tuserid").value, 
@@ -264,6 +280,7 @@ WTWJS.prototype.thingSearch = function(search) {
 }
 
 WTWJS.prototype.thingSearchReply = function(response) {
+	/* receives search results and parses for screen display */
 	try {
 		dGet('wtw_thingtempsearchresults').innerHTML = "";
 		for (var i=0; i < response.length; i++) {
@@ -291,6 +308,7 @@ WTWJS.prototype.thingSearchReply = function(response) {
 }
 
 WTWJS.prototype.thingSearchSelect = function(zcopywebid) {
+	/* This process takes the selected 3D Thing and downloads a copy of the 3D Thing to the local instance */
 	try {
 		WTW.hide('wtw_selectwebform');
 		WTW.show('wtw_installprogress');
@@ -351,6 +369,8 @@ WTWJS.prototype.thingSearchSelect = function(zcopywebid) {
 }
 
 WTWJS.prototype.completedThingImport = function(zmoldgroup, zwebid, zcopywebid) {
+	/* the basic 3D Thing information is downloaded, next the supplimental parts are downloaded (action zones, molds, coverings, etc...) */
+	/* then starts downloading the Action Zones */
 	try {
 		WTW.updateProgressBar(100,100);
 		WTW.copyActionZones(zmoldgroup, zwebid, zcopywebid);
@@ -360,6 +380,7 @@ WTWJS.prototype.completedThingImport = function(zmoldgroup, zwebid, zcopywebid) 
 }
 
 WTWJS.prototype.copyActionZones = function(zmoldgroup, zwebid, zcopywebid) {
+	/* download and install Action Zones to local copy */
 	try {
 		WTW.updateProgressText("Fetching Action Zones");
 		WTW.updateProgressBar(1,100);
@@ -425,6 +446,8 @@ WTWJS.prototype.copyActionZones = function(zmoldgroup, zwebid, zcopywebid) {
 }
 
 WTWJS.prototype.completedActionZonesImport = function(zmoldgroup, zwebid, zcopywebid) {
+	/* completed Action Zones to local copy */
+	/* then starts downloading the Connecting Grids */
 	try {
 		WTW.updateProgressBar(100,100);
 		WTW.copyParentConnectingGrids(zmoldgroup, zwebid, zcopywebid);
@@ -434,6 +457,7 @@ WTWJS.prototype.completedActionZonesImport = function(zmoldgroup, zwebid, zcopyw
 }
 
 WTWJS.prototype.copyParentConnectingGrids = function(zmoldgroup, zwebid, zcopywebid) {
+	/* download and install parent Connection Grids to local copy */
 	try {
 		WTW.updateProgressText("Fetching Connecting Grids");
 		WTW.updateProgressBar(1,100);
@@ -482,6 +506,8 @@ WTWJS.prototype.copyParentConnectingGrids = function(zmoldgroup, zwebid, zcopywe
 }
 
 WTWJS.prototype.completedParentConnectingGridsImport = function(zmoldgroup, zwebid, zcopywebid) {
+	/* completed parent Connecting Grids to local copy */
+	/* then starts downloading additional Connecting Grids (if they exist) */
 	try {
 		WTW.updateProgressBar(100,100);
 		WTW.copyConnectingGrids(zmoldgroup, zwebid, zcopywebid);
@@ -491,6 +517,7 @@ WTWJS.prototype.completedParentConnectingGridsImport = function(zmoldgroup, zweb
 }
 
 WTWJS.prototype.copyConnectingGrids = function(zmoldgroup, zwebid, zcopywebid) {
+	/* download and install Connecting Grids to local copy */
 	try {
 		WTW.updateProgressText("Fetching Connecting Grids");
 		WTW.updateProgressBar(1,100);
@@ -558,6 +585,8 @@ WTWJS.prototype.copyConnectingGrids = function(zmoldgroup, zwebid, zcopywebid) {
 }
 
 WTWJS.prototype.completedConnectingGridsImport = function(zmoldgroup, zwebid, zcopywebid) {
+	/* completed Connecting Grids to local copy */
+	/* then starts downloading Molds (if they exist) */
 	try {
 		WTW.updateProgressBar(100,100);
 		WTW.copyMolds(zmoldgroup, zwebid, zcopywebid);
@@ -567,6 +596,7 @@ WTWJS.prototype.completedConnectingGridsImport = function(zmoldgroup, zwebid, zc
 }
 
 WTWJS.prototype.copyMolds = function(zmoldgroup, zwebid, zcopywebid) {
+	/* download and install Molds to local copy */
 	try {
 		WTW.updateProgressText("Fetching Molds");
 		WTW.updateProgressBar(1,100);
@@ -616,6 +646,8 @@ WTWJS.prototype.copyMolds = function(zmoldgroup, zwebid, zcopywebid) {
 }
 
 WTWJS.prototype.completedMoldsImport = function(zmoldgroup, zwebid, zcopywebid) {
+	/* completed Molds to local copy */
+	/* then starts downloading Web Images (if they exist) */
 	try {
 		WTW.updateProgressBar(100,100);
 		WTW.copyWebImages(zmoldgroup, zwebid, zcopywebid);
@@ -625,6 +657,7 @@ WTWJS.prototype.completedMoldsImport = function(zmoldgroup, zwebid, zcopywebid) 
 }
 
 WTWJS.prototype.copyWebImages = function(zmoldgroup, zwebid, zcopywebid) {
+	/* download and install Web Images to local copy */
 	try {
 		WTW.updateProgressText("Fetching Web Image Settings");
 		WTW.updateProgressBar(1,100);
@@ -674,6 +707,8 @@ WTWJS.prototype.copyWebImages = function(zmoldgroup, zwebid, zcopywebid) {
 }
 
 WTWJS.prototype.completedWebImagesImport = function(zmoldgroup, zwebid, zcopywebid) {
+	/* completed Web Images to local copy */
+	/* then starts downloading Uploads (if they exist) */
 	try {
 		WTW.updateProgressBar(100,100);
 		WTW.copyUploads(zmoldgroup, zwebid, zcopywebid);
@@ -683,6 +718,7 @@ WTWJS.prototype.completedWebImagesImport = function(zmoldgroup, zwebid, zcopyweb
 }
 
 WTWJS.prototype.copyUploads = function(zmoldgroup, zwebid, zcopywebid) {
+	/* download and install Uploads to local copy */
 	try {
 		WTW.updateProgressText("Fetching Uploaded Files and Images");
 		WTW.updateProgressBar(1,100);
@@ -738,6 +774,8 @@ WTWJS.prototype.copyUploads = function(zmoldgroup, zwebid, zcopywebid) {
 }
 
 WTWJS.prototype.completedUploadsImport = function(zmoldgroup, zwebid, zcopywebid) {
+	/* completed Uploads to local copy */
+	/* then starts downloading Mold Points (if they exist) */
 	try {
 		WTW.updateProgressBar(100,100);
 		WTW.copyMoldPoints(zmoldgroup, zwebid, zcopywebid);
@@ -747,6 +785,7 @@ WTWJS.prototype.completedUploadsImport = function(zmoldgroup, zwebid, zcopywebid
 }
 
 WTWJS.prototype.copyMoldPoints = function(zmoldgroup, zwebid, zcopywebid) {
+	/* download and install Mold Points to local copy */
 	try {
 		WTW.updateProgressText("Fetching Mold Points");
 		WTW.updateProgressBar(1,100);
@@ -796,6 +835,8 @@ WTWJS.prototype.copyMoldPoints = function(zmoldgroup, zwebid, zcopywebid) {
 }
 
 WTWJS.prototype.completedMoldPointsImport = function(zmoldgroup, zwebid, zcopywebid) {
+	/* completed Mold Points to local copy */
+	/* end of download process, opens appropriate admin menu */
 	try {
 		WTW.updateProgressText("3D Community Import Completed");
 		WTW.updateProgressBar(100,100);

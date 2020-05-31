@@ -2,7 +2,10 @@
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
+/* these functions are used by the event listeners to handle the input devices */
+
 WTWJS.prototype.setTouchMove = function(e) {
+	/* touch input - movement detected */
 	var isclick = false;
 	try {
 		if (e == undefined) {
@@ -35,6 +38,7 @@ WTWJS.prototype.setTouchMove = function(e) {
 }
 
 WTWJS.prototype.touchDown = function(e) {
+	/* touch input - touch detected */
 	try {
 		WTW.isMouseDown = 0;
 		//scene.activeCamera = scene.activeCameras[0];
@@ -77,6 +81,7 @@ WTWJS.prototype.touchDown = function(e) {
 }
 
 WTWJS.prototype.touchUp = function(e) {
+	/* touch input - touch release detected */
 	try {
 		if (e.touches[0] != undefined) {
 			WTW.touch = e.touches;
@@ -121,6 +126,7 @@ WTWJS.prototype.touchUp = function(e) {
 }
 
 WTWJS.prototype.touchMoving = function(e) {
+	/* touch input - touch currently moving detected */
 	try {
 		if (WTW.canvasFocus == 1) {
 			WTW.setTouchMove(e);
@@ -173,6 +179,7 @@ WTWJS.prototype.touchMoving = function(e) {
 }
 
 WTWJS.prototype.touchCancel = function(e) {
+	/* touch input - touch canceled or released detected */
 	try {
 		WTW.setTouchMove(e);
 		WTW.hide('wtw_itouchleft');
@@ -183,6 +190,7 @@ WTWJS.prototype.touchCancel = function(e) {
 }
 
 WTWJS.prototype.keyDown = function(e) {
+	/* keyboard input - key down detected */
 	try {
 		e = e || window.event;
 		var ctrl = e.ctrlKey ? e.ctrlKey : ((e.keyCode === 17) ? true : false);
@@ -224,6 +232,7 @@ WTWJS.prototype.keyDown = function(e) {
 }
 
 WTWJS.prototype.keyUp = function(e) {
+	/* keyboard input - key up detected */
 	try {
 		e = e || window.event;
 		var ctrl = e.ctrlKey ? e.ctrlKey : ((e.keyCode === 17) ? true : false);
@@ -243,7 +252,98 @@ WTWJS.prototype.keyUp = function(e) {
     }
 }
 
+WTWJS.prototype.keyPressedAdd = function(keycode) {
+	/* add a keycode or term to the WTW.keysPressed Array to be handled by the avatar movement */
+	/* entered through code function and not necessarily tied to a keyboard */
+	try {
+		if (keycode != undefined) {
+			keycode += "";
+			if (WTW.canvasFocus == 1 || keycode.indexOf('onoption') > -1) {
+				var found = false;
+				if (WTW.keysPressed != null) {
+					for (var i=0;i < WTW.keysPressed.length;i++) {
+						if (WTW.keysPressed[i] != null) {
+							if (WTW.keysPressed[i] == keycode) {
+								found = true;
+							}
+						}
+					}
+				}
+				if (found == false) {
+					if (WTW.isNumeric(keycode)) {
+						WTW.keysPressed[WTW.keysPressed.length] = Number(keycode);
+					} else {
+						WTW.keysPressed[WTW.keysPressed.length] = keycode;
+					}
+				}
+			}
+		}
+    } catch (ex) {
+		WTW.log("core-scripts-prime-wtw_input.js-keyPressedAdd=" + ex.message);
+    }
+}
+
+WTWJS.prototype.keyPressedReplace = function(replacekeycode, keycode) {
+	/* replace a keycode or term in the WTW.keysPressed Array to be handled by the avatar movement */
+	/* entered through code function and not necessarily tied to a keyboard */
+	try {
+		if (keycode != undefined) {
+			if (WTW.canvasFocus == 1 || keycode.indexOf('onoption') > -1) {
+				var found = false;
+				if (WTW.keysPressed != null) {
+					for (var i=WTW.keysPressed.length;i > -1;i--) {
+						if (WTW.keysPressed[i] != null) {
+							if (WTW.keysPressed[i] == replacekeycode) {
+								WTW.keysPressed.splice(i, 1);
+							}
+							if (WTW.keysPressed[i] == keycode) {
+								found = true;
+							}
+						} else {
+							WTW.keysPressed.splice(i, 1);
+						}
+					}
+				}
+				if (found == false) {
+					WTW.keysPressed[WTW.keysPressed.length] = keycode;
+				}
+			}
+		}
+    } catch (ex) {
+		WTW.log("core-scripts-prime-wtw_input.js-keyPressedReplace=" + ex.message);
+    }
+}
+
+WTWJS.prototype.keyPressedRemove = function(keycode) {
+	/* remove a keycode or term from the WTW.keysPressed Array to be handled by the avatar movement */
+	/* entered through code function and not necessarily tied to a keyboard */
+	try {
+		if (keycode != undefined) {
+			var onoption = -1;
+			if (WTW.isNumeric(keycode) == false) {
+				onoption = keycode.indexOf('onoption');
+			}
+			if (WTW.canvasFocus == 1 || onoption > -1) {
+				if (WTW.keysPressed != null) {
+					for (var i=WTW.keysPressed.length;i > -1;i--) {
+						if (WTW.keysPressed[i] != null) {
+							if (WTW.keysPressed[i] == keycode) {
+								WTW.keysPressed.splice(i, 1);
+							}
+						} else {
+							WTW.keysPressed.splice(i, 1);
+						}
+					}
+				}
+			}
+		}
+    } catch (ex) {
+		WTW.log("core-scripts-prime-wtw_input.js-keyPressedRemove=" + ex.message);
+    }
+}
+
 WTWJS.prototype.mouseClick = function(e) {
+	/* mouse input - single click detected */
 	try {
 		e = e || window.event;
 		if (WTW.canvasFocus == 1) {
@@ -290,6 +390,7 @@ WTWJS.prototype.mouseClick = function(e) {
 }
 
 WTWJS.prototype.mouseRight = function(e) {
+	/* mouse input - single right click detected */
 	try {
 		e = e || window.event;
 		if (WTW.canvasFocus == 1) {
@@ -327,6 +428,7 @@ WTWJS.prototype.mouseRight = function(e) {
 }
 
 WTWJS.prototype.mouseDown = function(e) {
+	/* mouse input - left mouse button held down detected */
 	try {
 		WTW.isMouseDown = 1;
 		e = e || window.event;
@@ -364,6 +466,7 @@ WTWJS.prototype.mouseDown = function(e) {
 }
 
 WTWJS.prototype.mouseUp = function(e) {
+	/* mouse input - left mouse button up or release detected */
 	try {
 		WTW.isMouseDown = 0;
 		e = e || window.event;
@@ -407,6 +510,7 @@ WTWJS.prototype.mouseUp = function(e) {
 }
 
 WTWJS.prototype.mouseMove = function(e) {
+	/* mouse input - mouse movement detected */
 	try {
 		e = e || window.event;
 		if (WTW.canvasFocus == 1) {
@@ -485,6 +589,7 @@ WTWJS.prototype.mouseMove = function(e) {
 }
 
 WTWJS.prototype.mouseScroll1 = function(e) {
+	/* mouse input - mouse scrollbar movement detected (type1) */
 	try {
 		e = e || window.event;
 		if (WTW.canvasFocus == 1) {
@@ -498,6 +603,7 @@ WTWJS.prototype.mouseScroll1 = function(e) {
 }
 
 WTWJS.prototype.mouseScroll2 = function(e) {
+	/* mouse input - mouse scrollbar movement detected (type2) */
 	try {
 		if (WTW.canvasFocus == 1) {
 			var rolled = e.wheelDelta>0||e.detail<0?120:-120;
@@ -510,6 +616,7 @@ WTWJS.prototype.mouseScroll2 = function(e) {
 }
 
 WTWJS.prototype.mouseScroll = function(rolled) {
+	/* mouse input - process mouse scrollbar movement */
     try {
 		if (WTW.canvasFocus == 1) {
 			if (WTW.pause == 1) {
@@ -553,91 +660,9 @@ WTWJS.prototype.mouseScroll = function(rolled) {
     }
 }
 
-WTWJS.prototype.keyPressedAdd = function(keycode) {
-	try {
-		if (keycode != undefined) {
-			keycode += "";
-			if (WTW.canvasFocus == 1 || keycode.indexOf('onoption') > -1) {
-				var found = false;
-				if (WTW.keysPressed != null) {
-					for (var i=0;i < WTW.keysPressed.length;i++) {
-						if (WTW.keysPressed[i] != null) {
-							if (WTW.keysPressed[i] == keycode) {
-								found = true;
-							}
-						}
-					}
-				}
-				if (found == false) {
-					if (WTW.isNumeric(keycode)) {
-						WTW.keysPressed[WTW.keysPressed.length] = Number(keycode);
-					} else {
-						WTW.keysPressed[WTW.keysPressed.length] = keycode;
-					}
-				}
-			}
-		}
-    } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-keyPressedAdd=" + ex.message);
-    }
-}
-
-WTWJS.prototype.keyPressedReplace = function(replacekeycode, keycode) {
-	try {
-		if (keycode != undefined) {
-			if (WTW.canvasFocus == 1 || keycode.indexOf('onoption') > -1) {
-				var found = false;
-				if (WTW.keysPressed != null) {
-					for (var i=WTW.keysPressed.length;i > -1;i--) {
-						if (WTW.keysPressed[i] != null) {
-							if (WTW.keysPressed[i] == replacekeycode) {
-								WTW.keysPressed.splice(i, 1);
-							}
-							if (WTW.keysPressed[i] == keycode) {
-								found = true;
-							}
-						} else {
-							WTW.keysPressed.splice(i, 1);
-						}
-					}
-				}
-				if (found == false) {
-					WTW.keysPressed[WTW.keysPressed.length] = keycode;
-				}
-			}
-		}
-    } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-keyPressedReplace=" + ex.message);
-    }
-}
-
-WTWJS.prototype.keyPressedRemove = function(keycode) {
-	try {
-		if (keycode != undefined) {
-			var onoption = -1;
-			if (WTW.isNumeric(keycode) == false) {
-				onoption = keycode.indexOf('onoption');
-			}
-			if (WTW.canvasFocus == 1 || onoption > -1) {
-				if (WTW.keysPressed != null) {
-					for (var i=WTW.keysPressed.length;i > -1;i--) {
-						if (WTW.keysPressed[i] != null) {
-							if (WTW.keysPressed[i] == keycode) {
-								WTW.keysPressed.splice(i, 1);
-							}
-						} else {
-							WTW.keysPressed.splice(i, 1);
-						}
-					}
-				}
-			}
-		}
-    } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-keyPressedRemove=" + ex.message);
-    }
-}
-
 WTWJS.prototype.mouseOverMold = function(mold) {
+	/* mouse related - execute when a mouse cursor hovers a mold */
+	/* mold has to have the event loaded using: WTW.registerMouseOver(mold); */
 	try {
 		if (WTW.canvasFocus == 1) {
 			document.body.style.cursor = "default";
@@ -656,6 +681,8 @@ WTWJS.prototype.mouseOverMold = function(mold) {
 }
 
 WTWJS.prototype.mouseOutMold = function(mold) {
+	/* mouse related - execute when a mouse cursor stops hovering a mold */
+	/* mold has to have the event loaded using: WTW.registerMouseOver(mold); */
 	try {
 		if (WTW.canvasFocus == 1) {
 			WTW.hide('wtw_itooltip');
@@ -676,6 +703,7 @@ WTWJS.prototype.mouseOutMold = function(mold) {
 }
 
 WTWJS.prototype.onMessage = function (e) {
+	/* message listener is enabled and this function can receive predefined messages from an iframe within the WalkTheWeb instance */
 	try {
 		e = e || window.event;
 		let zsafe = false;
@@ -706,16 +734,5 @@ WTWJS.prototype.onMessage = function (e) {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_input.js-onMessage=" + ex.message);
-	}
-}
-
-WTWJS.prototype.beforeUnload = function (e) {
-	try {
-		e = e || window.event;
-		WTW.pluginsBeforeUnload();
-//		e.returnValue = null;
-//		return null;
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-beforeUnload=" + ex.message);
 	}
 }

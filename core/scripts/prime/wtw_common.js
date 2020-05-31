@@ -2,15 +2,21 @@
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
+/* These functions provide many of the common functions for browse and admin modes */
+/* including many utility functions that can be used from any WalkTheWeb site and 3D Plugin */
+
 function dGet(k) {
+	/* function to simplify document.getElementById calls (outside the WTW class) */
 	return document.getElementById(k);
 }
 
 WTWJS.prototype.dGet = function(k) {
+	/* function to simplify document.getElementById calls (inside the WTW class - WTW.dGet() ) */
 	return document.getElementById(k);
 }
 
 WTWJS.prototype.log = function(txt,color) {
+	/* WTW.log() combines console.log and setting the color for the log */
 	if (wtw_devmode == '1') {
 		if (color == undefined) {
 			color = 'black';
@@ -23,11 +29,8 @@ WTWJS.prototype.log = function(txt,color) {
 	}
 }
 
-String.prototype.toProperCase = function () {
-    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-}
-
 WTWJS.prototype.getJSON = function(zurl, zcallback, zaction, zrequest) {
+	/* performs a JSON call for data */
 	try {
 		if (zaction == undefined) {
 			zaction = 'GET';
@@ -52,6 +55,7 @@ WTWJS.prototype.getJSON = function(zurl, zcallback, zaction, zrequest) {
 }
 
 WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
+	/* performs a form POST based JSON call for data */
 	try {
 		var form1 = document.createElement('form');
 		var Httpreq = new XMLHttpRequest();
@@ -73,6 +77,7 @@ WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
 }
 
 WTWJS.prototype.getWebpage = function(zurl, zcallback) {
+	/* retrieves a full webpage content */
 	try {
 		var Httpreq = new XMLHttpRequest();
 		Httpreq.responseType = 'document';
@@ -91,6 +96,7 @@ WTWJS.prototype.getWebpage = function(zurl, zcallback) {
 }
 
 WTWJS.prototype.redirectParent = function(url) {
+	/* used from within an iframe to redirect the main WalkTheWeb webpage */
 	try {
 		if (url.length > 0) {
 			window.location.href = url;
@@ -103,6 +109,7 @@ WTWJS.prototype.redirectParent = function(url) {
 }
 
 WTWJS.prototype.refresh = function() {
+	/* force reload the current Webpage */
 	try {
 		window.location.href = window.location.href;
 	} catch (ex) {
@@ -110,7 +117,14 @@ WTWJS.prototype.refresh = function() {
 	}
 }
 
+String.prototype.toProperCase = function () {
+	/* reformat text as proper case */
+    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+
 WTWJS.prototype.checkLoadJSFile = function(filename, filetype) {
+	/* works with dynamically loading JavaScript files */
+	/* require once functionality - check if it is already loaded and load if it is not. */
 	try {
 		if (WTW.loadedJSFiles.indexOf("[" + filename + "]") == -1) {
 			WTW.loadJSFile(filename, filetype);
@@ -122,6 +136,8 @@ WTWJS.prototype.checkLoadJSFile = function(filename, filetype) {
 }
 
 WTWJS.prototype.checkUnloadJSFile = function(filename, filetype) {
+	/* works with dynamically loading JavaScript files */
+	/* require once functionality - but only unload the JS file if all needs for it are no longer in use. */
 	try {
 		if (WTW.loadedJSFiles.indexOf("[" + filename + "]") != -1) {
 			WTW.unloadJSFile(filename, filetype);
@@ -133,6 +149,7 @@ WTWJS.prototype.checkUnloadJSFile = function(filename, filetype) {
 }
 
 WTWJS.prototype.loadJSFile = function(filename, filetype) {
+	/* dynamically loading JavaScript files */
 	try {
 		if (filetype == "js") {
 			var fileref = document.createElement('script');
@@ -154,6 +171,7 @@ WTWJS.prototype.loadJSFile = function(filename, filetype) {
 }
 
 WTWJS.prototype.unloadJSFile = function(filename, filetype) {
+	/* dynamically unloading JavaScript files */
 	try {
 		var targetelement = (filetype == "js") ? "script" : (filetype == "css") ? "link" : "none";
 		var targetattr = (filetype == "js") ? "src" : (filetype == "css") ? "href" : "none";
@@ -169,6 +187,8 @@ WTWJS.prototype.unloadJSFile = function(filename, filetype) {
 }
 
 WTWJS.prototype.checkLoadScripts = function(actionzoneind) {
+	/* dynamically loading JavaScript files */
+	/* check to see if any script needs to be loaded with an action zone as reference (avatar entered the zone) */
 	try {
 		if (WTW.actionZones[actionzoneind] != null) {
 			var zscripts = WTW.actionZones[actionzoneind].scripts;
@@ -198,6 +218,8 @@ WTWJS.prototype.checkLoadScripts = function(actionzoneind) {
 }
 
 WTWJS.prototype.checkUnloadScripts = function(actionzoneind) {
+	/* dynamically unloading JavaScript files */
+	/* check to see if any script needs to be unloaded with an action zone as reference (avatar left the zone) */
 	try {
 		if (WTW.actionZones[actionzoneind] != null) {
 			var zscripts = WTW.actionZones[actionzoneind].scripts;
@@ -227,6 +249,7 @@ WTWJS.prototype.checkUnloadScripts = function(actionzoneind) {
 }
 
 WTWJS.prototype.resetActivityTimer = function() {
+	/* resets the activity timer when avatar moves (determine inactivity timeout) */
 	try {
 		if (WTW.activityTimer != null) {
 			window.clearTimeout(WTW.activityTimer);
@@ -243,6 +266,7 @@ WTWJS.prototype.resetActivityTimer = function() {
 }
 
 WTWJS.prototype.noActivityPause = function() {
+	/* pauses the render cycle used with the activity timer */
 	try {
 		if (WTW.activityTimer != null) {
 			window.clearTimeout(WTW.activityTimer);
@@ -256,6 +280,7 @@ WTWJS.prototype.noActivityPause = function() {
 }
 
 WTWJS.prototype.hilightMoldFast = function(moldname, scolor) {
+	/* highlight a mold on the 3D Scene (quick blink) */
 	try {
 		var mold = scene.getMeshByID(moldname);
 		if (mold != null) {
@@ -293,6 +318,7 @@ WTWJS.prototype.hilightMoldFast = function(moldname, scolor) {
 }
 
 WTWJS.prototype.hilightMold = function(moldname, scolor) {
+	/* highlight a mold on the 3D Scene */
 	try {
 		var mold = scene.getMeshByID(moldname);
 		if (mold != null) {
@@ -325,6 +351,7 @@ WTWJS.prototype.hilightMold = function(moldname, scolor) {
 }
 
 WTWJS.prototype.unhilightMold = function(moldname) {
+	/* unhighlight a mold on the 3D Scene */
 	try {
 		if (WTW.highlightLayer != null) {
 			var mold = scene.getMeshByID(moldname);
@@ -338,6 +365,7 @@ WTWJS.prototype.unhilightMold = function(moldname) {
 }
 
 WTWJS.prototype.isTextBox = function(element) {
+	/* check if a selected mold is a text enter box */
 	let istextbox = false;
 	try {
 		var tagName = element.tagName.toLowerCase();
@@ -356,6 +384,7 @@ WTWJS.prototype.isTextBox = function(element) {
 }
 
 WTWJS.prototype.cleanHTMLText = function(htmltext) {
+	/* convert html to text so it cannot be executed as html (for form entries) */
 	try {
 		var div = document.createElement('div');
 		div.innerHTML = htmltext;
@@ -368,6 +397,7 @@ WTWJS.prototype.cleanHTMLText = function(htmltext) {
 }
 
 WTWJS.prototype.encode = function(value) {
+	/* simplified version of escape text */
 	try {
 		if (value != null) {
 			while (value.indexOf('"') > -1) {
@@ -393,6 +423,7 @@ WTWJS.prototype.encode = function(value) {
 }
 
 WTWJS.prototype.decode = function(value) {
+	/* decifer simplified version of escape text */
 	try {
 		if (value != null) {
 			while (value.indexOf('&amp;') > -1) {
@@ -424,6 +455,7 @@ WTWJS.prototype.decode = function(value) {
 }
 
 WTWJS.prototype.cleanInvalidCharacters = function(value) {
+	/* remove line breaks and other select non text characters from string */
 	try {
 		if (value != null) {
 			value = value.replace(/\\n/g, "\\n")  
@@ -444,6 +476,7 @@ WTWJS.prototype.cleanInvalidCharacters = function(value) {
 }
 
 WTWJS.prototype.blockPassThrough = function(e) {
+	/* keep the canvas from receiving click throughs from menu or form pages */
 	try {
 		if (e == undefined) {
 			e = window.event;
@@ -457,6 +490,7 @@ WTWJS.prototype.blockPassThrough = function(e) {
 }
 
 WTWJS.prototype.setWindowSize = function() {
+	/* set window size and reset proportional elements as needed */
     try {
         if (typeof (window.innerWidth) == 'number') { /* Non-IE */
             WTW.sizeX = window.innerWidth;
@@ -508,6 +542,7 @@ WTWJS.prototype.setWindowSize = function() {
 }
 
 WTWJS.prototype.getWorldPosition = function(mold) {
+	/* world position is useful when molds have alternate parent coordinates */
 	var abspos = {'x':0,'y':0,'z':0};
 	try {
 		mold.computeWorldMatrix(true);
@@ -519,6 +554,7 @@ WTWJS.prototype.getWorldPosition = function(mold) {
 }
 
 WTWJS.prototype.getWorldRotation = function(mold) {
+	/* world rotation is useful when molds have alternate parents and applied rotations */
 	var absrot = {'x':0,'y':0,'z':0};
 	try {
 		absrot.x = mold.rotation.x;
@@ -540,6 +576,7 @@ WTWJS.prototype.getWorldRotation = function(mold) {
 }
 
 WTWJS.prototype.getGPU = function() {
+	/* check for user GPU capabilities */
     var gpu = "high";
     try {
         var gpustring;
@@ -581,6 +618,7 @@ WTWJS.prototype.getGPU = function() {
 }
 
 WTWJS.prototype.getBrowser = function() {
+	/* check for user Browser capabilities */
     var browser = "unknown";
     try {
         var isopera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0; // Opera 8.0+
@@ -607,6 +645,7 @@ WTWJS.prototype.getBrowser = function() {
 }
 
 WTWJS.prototype.getNVidia = function(gpustr, res) {
+	/* check for user Video capabilities */
     var resolution = "low";
     try {
         if (/GTX [5-9]\d{2}\s/i.test(gpustr) || /GTX [1]\d{3}\s/i.test(gpustr)) { // check this statement, maybe add one for gtx 5XX series breakdown 
@@ -627,6 +666,7 @@ WTWJS.prototype.getNVidia = function(gpustr, res) {
 }
 
 WTWJS.prototype.getIntel = function(gpustr, res) {
+	/* check for user CPU capabilities */
     var intel = "low";
     try {
         if ((/HD Graphics \d{3}/i.test(gpustr) || /Iris Graphics \d{3}/i.test(gpustr)) && res <= 2073600) { // if the resolution if 1080p or less
@@ -641,6 +681,7 @@ WTWJS.prototype.getIntel = function(gpustr, res) {
 }
 
 WTWJS.prototype.getAMD = function(gpustr, res) {
+	/* check for user CPU capabilities */
     var amd = "low";
     /* the amd card with R5-R9 may not be differentiated */
     try {
@@ -667,6 +708,7 @@ WTWJS.prototype.getAMD = function(gpustr, res) {
 }
 
 WTWJS.prototype.getQualComm = function(gpustr, res) {
+	/* check for user CPU capabilities */
     var qualcomm = 'low';
     try {
          if (/Adreno [4-5][3-9]\d/i.test(gpustr) && res <= 2073600) {
@@ -679,6 +721,7 @@ WTWJS.prototype.getQualComm = function(gpustr, res) {
 }
 
 WTWJS.prototype.getImagination = function(gpustr, res) {
+	/* check for user CPU capabilities */
     var imagination = 'low';
     try {
         if (/Series.?GT7800/i.test(gpustr) && res <= 2073600) {
@@ -693,6 +736,7 @@ WTWJS.prototype.getImagination = function(gpustr, res) {
 }
 
 WTWJS.prototype.getARM = function(gpustr, res) {
+	/* check for user CPU capabilities */
     var arm = 'low';
     try {
         if (/(Mali|MALI)-T[8-9][6-8]\d/i.test(gpustr) && res <= 2073600) {
@@ -706,6 +750,7 @@ WTWJS.prototype.getARM = function(gpustr, res) {
 }
 
 WTWJS.prototype.createJoint = function(imp1, imp2, distanceBetweenPoints) {
+	/* joints used by physics engine that relatively connect molds */
 	try {
 		var joint = new BABYLON.DistanceJoint({
 			maxDistance: distanceBetweenPoints
@@ -717,6 +762,7 @@ WTWJS.prototype.createJoint = function(imp1, imp2, distanceBetweenPoints) {
 }
 		
 WTWJS.prototype.setOpacity = function(moldname, opacity) {
+	/* set opacity (transparency) of a given mold by name */
 	try {
 		var mold = scene.getMeshByID(moldname);
 		if (mold != null) {
@@ -742,6 +788,7 @@ WTWJS.prototype.setOpacity = function(moldname, opacity) {
 }
 
 WTWJS.prototype.setDirectionalOpacity = function(moldname, opacity) {
+	/* set opacity (transparency) on a directional textured surface */
 	try {
 		var mold = scene.getMeshByID(moldname);
 		if (mold != null) {
@@ -768,6 +815,7 @@ WTWJS.prototype.setDirectionalOpacity = function(moldname, opacity) {
 }
 
 WTWJS.prototype.getQuerystring = function(key, default_) {
+	/* get web page querystring value by key name */
     var squery = "";
     try {
         if (default_ == null) default_ = "";
@@ -786,6 +834,7 @@ WTWJS.prototype.getQuerystring = function(key, default_) {
 }
 
 WTWJS.prototype.formatNumber = function(n, dp) {
+	/* format a number with #,###.## (n is number and dp is number of decimal points) */
 	var numbertext = "";
 	try {
 		if (WTW.isNumeric(n)) {
@@ -805,6 +854,7 @@ WTWJS.prototype.formatNumber = function(n, dp) {
 }
 
 WTWJS.prototype.isDate = function(val) {
+	/* check if text is valid date */
 	if (val != null) {
 		var d = new Date(val);
 		return !isNaN(d.valueOf());
@@ -814,12 +864,14 @@ WTWJS.prototype.isDate = function(val) {
 }
 
 WTWJS.prototype.addDays = function(date, days) {
+	/* add days to date */
     var result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
 }
 
 WTWJS.prototype.formatDate = function(date) {
+	/* format date as month/day/year */
 	if (date != "") {
 		var d = new Date(date),
 			month = '' + (d.getMonth() + 1),
@@ -835,6 +887,7 @@ WTWJS.prototype.formatDate = function(date) {
 }
 
 WTWJS.prototype.formatDateLong = function(date) {
+	/* format long date spelled out month */
 	try {
 		if (date != "") {
 			var d = new Date(date);
@@ -890,6 +943,7 @@ WTWJS.prototype.formatDateLong = function(date) {
 }
 
 WTWJS.prototype.formatDataSize = function(num) {
+	/* format number with commas */
 	var snum = '';
 	try {
 		if (WTW.isNumeric(num)) {
@@ -912,6 +966,7 @@ WTWJS.prototype.formatDataSize = function(num) {
 }
 
 WTWJS.prototype.setDDLValue = function(ddlname, value) {
+	/* set the drop-down list selected value by value */
 	try {
 		if (dGet(ddlname) != null) {
 			var ddl = dGet(ddlname);
@@ -936,6 +991,7 @@ WTWJS.prototype.setDDLValue = function(ddlname, value) {
 }
 
 WTWJS.prototype.setDDLText = function(ddlname, stext) {
+	/* set the drop-down list selected value by text */
 	try {
 		if (dGet(ddlname) != null) {
 			var ddl = dGet(ddlname);
@@ -954,6 +1010,7 @@ WTWJS.prototype.setDDLText = function(ddlname, stext) {
 }
 
 WTWJS.prototype.getDDLValue = function(ddlname) {
+	/* get the drop-down list selected value */
 	var ddlvalue = "";
 	try {
 		if (dGet(ddlname).options[dGet(ddlname).selectedIndex] != undefined) {
@@ -966,6 +1023,7 @@ WTWJS.prototype.getDDLValue = function(ddlname) {
 }
 
 WTWJS.prototype.getDDLText = function(ddlname) {
+	/* get the drop-down list selected text */
 	var ddltext = "";
 	try {
 		if (dGet(ddlname).options[dGet(ddlname).selectedIndex] != undefined) {
@@ -978,6 +1036,7 @@ WTWJS.prototype.getDDLText = function(ddlname) {
 }
 
 WTWJS.prototype.clearDDL = function(ddlname) {
+	/* clear a drop-down list - remove all values (often used to prepare for reloading) */
 	try {
 		if (dGet(ddlname) != null) {
 			var ddl = dGet(ddlname);
@@ -991,20 +1050,24 @@ WTWJS.prototype.clearDDL = function(ddlname) {
 }
 
 WTWJS.prototype.isNumeric = function(n) {
+	/* boolean - is a text string a number */
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 WTWJS.prototype.isURL = function(url) {
+	/* boolean - is a text string an URL */
 	var pattern = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
 	return pattern.test(url);
 }
 
 WTWJS.prototype.isEmail = function(email) {
+	/* boolean - is a text string an email address */
 	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	return re.test(email);
 }
 
 WTWJS.prototype.getScrollY = function() {
+	/* returns the amount of scroll of a window scrollbar */
 	var y = 0;
 	try {
 		var doc = document, w = window;
@@ -1025,6 +1088,7 @@ WTWJS.prototype.getScrollY = function() {
 }
 
 WTWJS.prototype.getRadians = function(degrees) {
+	/* converts degrees to radians */
 	var radians = 0;
 	try {
 		if (WTW.isNumeric(degrees)) {
@@ -1037,6 +1101,7 @@ WTWJS.prototype.getRadians = function(degrees) {
 }
 
 WTWJS.prototype.getDegrees = function(radians) {
+	/* converts radians to degrees */
 	var degrees = 0;
 	try {
 		if (WTW.isNumeric(radians)) {
@@ -1049,6 +1114,7 @@ WTWJS.prototype.getDegrees = function(radians) {
 }
 
 WTWJS.prototype.cleanDegrees = function(degrees) {
+	/* converts degrees to between 0 and 360 (eliminates higher or negative degrees for easier comparisons) */
 	try {
 		if (WTW.isNumeric(degrees)) {
 			while (degrees < 0) {
@@ -1065,18 +1131,20 @@ WTWJS.prototype.cleanDegrees = function(degrees) {
 }
 
 WTWJS.prototype.isOdd = function(num) {
+	/* boolean - check if odd (true) or even (false) number */
 	return num % 2;
 }
 
-WTWJS.prototype.distance = function(sx0,sy0,sz0,sx1,sy1,sz1) {
+WTWJS.prototype.distance = function(zx0,zy0,zz0,zx1,zy1,zz1) {
+	/* distance between 2 points in 3d space */
 	var distance = 0;
 	try {
-		var x0 = Number(sx0);
-		var y0 = Number(sy0);
-		var z0 = Number(sz0);
-		var x1 = Number(sx1);
-		var y1 = Number(sy1);
-		var z1 = Number(sz1);
+		var x0 = Number(zx0);
+		var y0 = Number(zy0);
+		var z0 = Number(zz0);
+		var x1 = Number(zx1);
+		var y1 = Number(zy1);
+		var z1 = Number(zz1);
 		deltaX = x1 - x0;
 		deltaY = y1 - y0;
 		deltaZ = z1 - z0;
@@ -1088,6 +1156,7 @@ WTWJS.prototype.distance = function(sx0,sy0,sz0,sx1,sy1,sz1) {
 }
 
 WTWJS.prototype.getMyDistance = function(sx1,sy1,sz1) {
+	/* distance form point to my avatar current position */
 	var distance = 0;
 	try {
 		if (WTW.myAvatar != null) {
@@ -1109,6 +1178,7 @@ WTWJS.prototype.getMyDistance = function(sx1,sy1,sz1) {
 }
 
 WTWJS.prototype.getBuildingDistance = function(bx, by, bz, posx, posy, posz, brotx, broty, brotz) {
+	/* distance form my avatar to a particular building */
 	var distance = 0;
 	try {
 		var x0 = WTW.myAvatar.position.x;
@@ -1125,6 +1195,7 @@ WTWJS.prototype.getBuildingDistance = function(bx, by, bz, posx, posy, posz, bro
 }
 
 WTWJS.prototype.rotatePoint = function(cx, cz, px, pz, rad) {
+	/* in a plane, rotate a point (x,z) around a center (cx, cz) */
 	var nx = px;
 	var nz = pz;
 	try {
@@ -1142,6 +1213,7 @@ WTWJS.prototype.rotatePoint = function(cx, cz, px, pz, rad) {
 }
 
 WTWJS.prototype.getMyAngleToPoint = function(x,z) {
+	/* calculate an angle from my avatar heading to a given point in a horizontal plane */
 	var zangle = 0;
 	try {
 		var px = WTW.myAvatar.position.x;
@@ -1156,6 +1228,7 @@ WTWJS.prototype.getMyAngleToPoint = function(x,z) {
 }
 
 WTWJS.prototype.getAngleToPoint = function(cx, cz, px, pz) {
+	/* calculate an angle from point (cx,cz) assumed 0 angle - to a given point (px,pz) in a horizontal plane */
 	var pointangle = 0;
 	try {
 		var dz = pz - cz;
@@ -1169,6 +1242,7 @@ WTWJS.prototype.getAngleToPoint = function(cx, cz, px, pz) {
 }
 
 WTWJS.prototype.getNewPoint = function(x, z, angle, distance) {
+	/* from any point (x,z) get a new point on the plane for an angle at a distance (rounded) */
     var result = {};
 	try {
 		result.x = Math.round(Math.cos((Math.PI / 2 - WTW.getRadians(angle))) * distance + x);
@@ -1180,6 +1254,7 @@ WTWJS.prototype.getNewPoint = function(x, z, angle, distance) {
 }
 
 WTWJS.prototype.getNewPointDecimal = function(x, z, angle, distance) {
+	/* from any point (x,z) get a new point on the plane for an angle at a distance (not rounded) */
     var result = {};
 	try {
 		result.x = Math.cos((Math.PI / 2 - WTW.getRadians(angle))) * distance + x;
@@ -1191,10 +1266,12 @@ WTWJS.prototype.getNewPointDecimal = function(x, z, angle, distance) {
 }
 
 WTWJS.prototype.randomBetween = function(min,max) {
+	/* get a random number between min and max numbers */
     return Math.floor(Math.random()*(max-min+1)+min);
 }
 
 WTWJS.prototype.getRandomString = function(length) {
+	/* gets a random alpha numeric string - often used as ID fields */
     var result = '';
 	try {
 		var chars = '0123456789abcdefghijklmnopqrstuvwxyz';
@@ -1208,6 +1285,7 @@ WTWJS.prototype.getRandomString = function(length) {
 }
 
 WTWJS.prototype.openWebpage = function(url, target) {
+	/* open webpage - with target option */
 	try {
 		if (target == undefined) {
 			if (url.toLowerCase().indexOf("//" + wtw_domainname + "/") > -1) {
@@ -1227,6 +1305,7 @@ WTWJS.prototype.openWebpage = function(url, target) {
 }
 
 WTWJS.prototype.openIFrame = function(url, zwidth, zheight, ztitle) {
+	/* open iframe page with frame window (includes title and close x), height and width (values should be between .1 and 1) */
 	try {
 		if (ztitle == undefined) {
 			ztitle = "";
@@ -1241,9 +1320,6 @@ WTWJS.prototype.openIFrame = function(url, zwidth, zheight, ztitle) {
 		WTW.hide('wtw_ipagediv');
 		WTW.show('wtw_ibrowseframe');
 		var iframe = dGet('wtw_ibrowseframe');
-		iframe.onload = function() {
-			WTW.iFrameOnLoad();
-		};
 		if (iframe.src != url) {
 			iframe.src = url;
 		}
@@ -1268,6 +1344,7 @@ WTWJS.prototype.openIFrame = function(url, zwidth, zheight, ztitle) {
 }
 
 WTWJS.prototype.resizeIFrame = function(zdimensions) {
+	/* resize iframe is called when window size is changed */
 	try {
 		/* zdimensions = zwidth, zheight */
 		let zwidth = zdimensions[0];
@@ -1287,23 +1364,9 @@ WTWJS.prototype.resizeIFrame = function(zdimensions) {
 		WTW.log("core-scripts-prime-wtw_common.js-resizeIFrame=" + ex.message);
 	}
 }
-		
-WTWJS.prototype.iFrameOnLoad = function() {
-	try {
-		var iframe = dGet('wtw_ibrowseframe');
-		/* the following was blocked by cross browser security */
-/*		var ipage = iframe.contentDocument || iframe.contentWindow.document;
-		if (ipage.title.length > 0) {
-			dGet('wtw_browsetitle').innerHTML = ipage.title;
-		} else {
-			dGet('wtw_browsetitle').innerHTML = iframe.src;
-		} */
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-iFrameOnLoad=" + ex.message);
-	}
-}
 
 WTWJS.prototype.closeIFrame = function() {
+	/* closes the iframe window frame */
 	try {
 		var iframe = dGet('wtw_ibrowseframe');
 		iframe.onload = function() {};
@@ -1317,14 +1380,11 @@ WTWJS.prototype.closeIFrame = function() {
 	}
 }
 
-WTWJS.prototype.transferMainParent = function(zparentmold) {
-	try {
-    } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-transferMainParent=" + ex.message);
-    }
-}
+
+/* login pages, options, and related functions */
 
 WTWJS.prototype.openGlobalLogin = function() {
+	/* opens login for 3dnet.walktheweb.com - as a global WalkTheWeb login option */
 	try {
 		WTW.openIFrame("https://3dnet.walktheweb.com/core/login/login.php?serverinstance=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&webid=" + btoa(communityid + buildingid + thingid), .3, .6, "Login Menu");
 	} catch (ex) {
@@ -1333,6 +1393,7 @@ WTWJS.prototype.openGlobalLogin = function() {
 }
 
 WTWJS.prototype.logoutGlobal = function() {
+	/* references 3dnet.walktheweb.com - logout of global WalkTheWeb login */
 	try {
 		WTW.openIFrame("https://3dnet.walktheweb.com/core/login/login.php?logout=1&serverinstance=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&webid=" + btoa(communityid + buildingid + thingid), .3, .6, "Login Menu");
 	} catch (ex) {
@@ -1341,6 +1402,7 @@ WTWJS.prototype.logoutGlobal = function() {
 }
 
 WTWJS.prototype.globalLogin = function(zparameters) {
+	/* references 3dnet.walktheweb.com - global WalkTheWeb login complete and confirms the local values from login */
 	try {
 		let zusername = "";
 		let zglobaluserid = "-1";
@@ -1375,6 +1437,7 @@ WTWJS.prototype.globalLogin = function(zparameters) {
 }
 
 WTWJS.prototype.globalLoginResponse = function(zresults) {
+	/* references 3dnet.walktheweb.com - global WalkTheWeb login complete and returns the local values from login */
 	let znoerror = true;
 	try {
 		var serror = "";
@@ -1418,6 +1481,7 @@ WTWJS.prototype.globalLoginResponse = function(zresults) {
 }
 
 WTWJS.prototype.openLoginMenu = function() {
+	/* open login menu for login or show profile as needed */
 	try {
 		if (dGet('wtw_tuserid').value != '') {
 			WTW.openLocalLogin('Local Profile', .3, .5);
@@ -1430,6 +1494,7 @@ WTWJS.prototype.openLoginMenu = function() {
 }
 
 WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
+	/* show various local login screens as needed */
 	try {
 		WTW.setWindowSize();
 		if (typeof zwidth === "undefined" || zwidth === null) {
@@ -1539,6 +1604,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 }
 
 WTWJS.prototype.getAnonymousAvatarList = function() {
+	/* provides a formatted list of anonymous avatars to select and use in the scene */
 	try {
 		WTW.getJSON("/connect/avatars.php?groups=anonymous", 
 			function(zresponse) {
@@ -1597,6 +1663,7 @@ WTWJS.prototype.getAnonymousAvatarList = function() {
 }
 
 WTWJS.prototype.getFullAvatarList = function() {
+	/* provides a formatted list of all available avatars to select and use in the scene (for logged in users) */
 	try {
 		WTW.getJSON("/connect/avatars.php?groups=", 
 			function(zresponse) {
@@ -1656,6 +1723,7 @@ WTWJS.prototype.getFullAvatarList = function() {
 }
 
 WTWJS.prototype.getMyAvatarList = function() {
+	/* gets a list of my avatars to select and use in the scene (only if user is logged in) */
 	try {
 		var zloaddefault = true;
 		zloaddefault = WTW.pluginsGetMyAvatarList(zloaddefault);
@@ -1709,6 +1777,7 @@ WTWJS.prototype.getMyAvatarList = function() {
 }
 
 WTWJS.prototype.showMyAvatarList = function(zmyavatars) {
+	/* formats the list of avatars to select and use in the scene */
 	try {
 		let zmyavatarcount = 0;
 		if (zmyavatars != null) {
@@ -1754,6 +1823,7 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars) {
 }
 
 WTWJS.prototype.onMyAvatarSaveSelect = function(zglobalavatarid, zuseravatarid, zavatarid) {
+	/* process to enter the 3D Scene when the avatar is selected (save my selection) */
 	try {
 		if (dGet('wtw_tdisplayname') != null) {
 			if (dGet('wtw_menudisplayname').innerHTML == '' && dGet('wtw_tdisplayname').value != '') {
@@ -1771,29 +1841,30 @@ WTWJS.prototype.onMyAvatarSaveSelect = function(zglobalavatarid, zuseravatarid, 
 			dGet('wtw_menudisplayname').innerHTML = 'Anonymous';
 		}
 		dGet('wtw_tavatardisplayname').value = dGet('wtw_menudisplayname').innerHTML;
-			var zrequest = {
-				'instanceid': dGet("wtw_tinstanceid").value,
-				'userip': dGet('wtw_tuserip').value,
-				'displayname':btoa(dGet('wtw_tdisplayname').value),
-				'avatarid':zavatarid,
-				'function':'quicksaveavatar'
-			};
-			WTW.postJSON("/core/handlers/avatars.php", zrequest, 
-				function(zresponse) {
-					zresponse = JSON.parse(zresponse);
-					/* note serror would contain errors */
-					if (zresponse.useravatarid != undefined) {
-						zuseravatarid = zresponse.useravatarid;
-						WTW.onMyAvatarSelect(zglobalavatarid, zuseravatarid, zavatarid);
-					}
+		var zrequest = {
+			'instanceid': dGet("wtw_tinstanceid").value,
+			'userip': dGet('wtw_tuserip').value,
+			'displayname':btoa(dGet('wtw_tdisplayname').value),
+			'avatarid':zavatarid,
+			'function':'quicksaveavatar'
+		};
+		WTW.postJSON("/core/handlers/avatars.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				if (zresponse.useravatarid != undefined) {
+					zuseravatarid = zresponse.useravatarid;
+					WTW.onMyAvatarSelect(zglobalavatarid, zuseravatarid, zavatarid);
 				}
-			);
+			}
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-onMyAvatarSaveSelect=" + ex.message);
 	}
 }
 
 WTWJS.prototype.onMyAvatarSelect = function(zglobalavatarid, zuseravatarid, zavatarid) {
+	/* process to enter the 3D Scene when the avatar is selected */
 	try {
 		dGet('wtw_tuseravatarid').value = zuseravatarid;
 		dGet('wtw_tglobalavatarid').value = zglobalavatarid;
@@ -1809,6 +1880,7 @@ WTWJS.prototype.onMyAvatarSelect = function(zglobalavatarid, zuseravatarid, zava
 }
 
 WTWJS.prototype.loginAttempt = function() {
+	/* process a local server login attempt */
 	try {
 		if (dGet('wtw_trememberlogin').checked == true) {
 			WTW.setCookie("rememberlogin", dGet('wtw_tlogin').value, 365);
@@ -1842,6 +1914,7 @@ WTWJS.prototype.loginAttempt = function() {
 }
 
 WTWJS.prototype.loginAttemptResponse = function(zresults) {
+	/* response and results of a local server login request */
 	try {
 		var serror = "";
 		if (zresults != null) {
@@ -1884,6 +1957,7 @@ WTWJS.prototype.loginAttemptResponse = function(zresults) {
 }
 
 WTWJS.prototype.logout = function() {
+	/* local server log out and clear login values from 3D Scene and browse window */
 	try {
 		WTW.hide('wtw_mainadminmode');
 		WTW.hide('wtw_menuloggedin');
@@ -1919,6 +1993,7 @@ WTWJS.prototype.logout = function() {
 }
 
 WTWJS.prototype.createAccount = function() {
+	/* local server registration (add new user) attempt */
 	try {
 		/* NEEDED add validation */
 		var zrequest = {
@@ -1940,6 +2015,7 @@ WTWJS.prototype.createAccount = function() {
 }
 
 WTWJS.prototype.createAccountComplete = function(serror) {
+	/* local server registration complete response */
 	try {
 		/* show if error */
 	} catch (ex) {
@@ -1948,6 +2024,7 @@ WTWJS.prototype.createAccountComplete = function(serror) {
 }
 
 WTWJS.prototype.setLoginValues = function(zuserid, zusername, zdisplayname, zemail, zuserimageurl) {
+	/* after a successful login, set the related visual and reference browser login values */
 	try {
 		if (zuserid == undefined) {
 			zuserid = dGet('wtw_tuserid').value;
@@ -2000,6 +2077,7 @@ WTWJS.prototype.setLoginValues = function(zuserid, zusername, zdisplayname, zema
 }
 
 WTWJS.prototype.openAvatarDesigner = function() {
+	/* opens the Avatar Designer and loads your current avatar for changes */
 	try {
 		WTW.openIFrame("/content/plugins/wtw-avatars/pages/designer.php?globaluserid=" + dGet('wtw_tglobaluserid').value + "&globalavatarid=" + dGet('wtw_tglobalavatarid').value + "&useravatarid=" + dGet('wtw_tuseravatarid').value, .95, .95, "Avatar Desiger");
 	} catch (ex) {
@@ -2008,6 +2086,7 @@ WTWJS.prototype.openAvatarDesigner = function() {
 }
 
 WTWJS.prototype.editProfile = function() {
+	/* edit local user profile */
 	try {
 		WTW.hide('wtw_menudisplayname');
 		WTW.hide('wtw_menuusername');
@@ -2024,6 +2103,7 @@ WTWJS.prototype.editProfile = function() {
 }
 
 WTWJS.prototype.saveProfile = function() {
+	/* save local server user profile */
 	try {
 		/* validate entries... */
 		var zrequest = {
@@ -2060,6 +2140,7 @@ WTWJS.prototype.saveProfile = function() {
 }
 
 WTWJS.prototype.saveProfileComplete = function(response) {
+	/* save local server user profile complete */
 	try {
 		dGet('wtw_profileerrortext').innerHTML = response;
 		WTW.showSettingsMenu('wtw_menuprofile');
@@ -2073,6 +2154,7 @@ WTWJS.prototype.saveProfileComplete = function(response) {
 }
 
 WTWJS.prototype.cancelEditProfile = function() {
+	/* cancel changes to local server profile */
 	try {
 		WTW.hide('wtw_teditdisplayname');
 		WTW.hide('wtw_teditusername');
@@ -2092,6 +2174,7 @@ WTWJS.prototype.cancelEditProfile = function() {
 }
 
 WTWJS.prototype.registerPasswordFocus = function() {
+	/* new user password focus */
 	try {
 		dGet('wtw_passwordstrengthdiv').style.visibility = 'visible';
 	} catch (ex) {
@@ -2100,6 +2183,7 @@ WTWJS.prototype.registerPasswordFocus = function() {
 }
 
 WTWJS.prototype.registerPasswordBlur = function() {
+	/* new user password on blur */
 	try {
 		dGet('wtw_passwordstrengthdiv').style.visibility = 'hidden';
 	} catch (ex) {
@@ -2108,6 +2192,7 @@ WTWJS.prototype.registerPasswordBlur = function() {
 }
 
 WTWJS.prototype.scorePassword = function(zpassword) {
+	/* score the complexity of the password */
 	var score = 0;
 	try {
 		if (zpassword != undefined) {
@@ -2138,6 +2223,7 @@ WTWJS.prototype.scorePassword = function(zpassword) {
 }
 
 WTWJS.prototype.checkPasswordStrength = function(zpassword) {
+	/* check password strength - used with score password */
 	score = 0;
 	zvalue = "Poor Password";
 	zcolor = "#F87777";
@@ -2166,6 +2252,7 @@ WTWJS.prototype.checkPasswordStrength = function(zpassword) {
 }
 
 WTWJS.prototype.checkPassword = function(zpasswordtextbox, metername) {
+	/* check password - used with score password and check password strength */
 	try {
 		var check = WTW.checkPasswordStrength(zpasswordtextbox.value);
 		if (zpasswordtextbox.value.length > 0) {
@@ -2189,6 +2276,7 @@ WTWJS.prototype.checkPassword = function(zpasswordtextbox, metername) {
 }
 
 WTWJS.prototype.checkPasswordConfirm = function(zpassword, zpassword2, zerrortext) {
+	/* check if passwords match */
 	try {
 		if (dGet(zpassword) != null && dGet(zpassword2) != null && dGet(zerrortext) != null) {
 			dGet(zerrortext).innerHTML = "";
@@ -2201,7 +2289,11 @@ WTWJS.prototype.checkPasswordConfirm = function(zpassword, zpassword2, zerrortex
 	}
 }
 
+/* completed login screen section */
+
+
 WTWJS.prototype.showHelp = function(helptab) {
+	/* show the help screen */
 	try {
 		dGet('wtw_helptab').value = helptab;
 		WTW.setHelp();
@@ -2211,6 +2303,7 @@ WTWJS.prototype.showHelp = function(helptab) {
 }
 
 WTWJS.prototype.setHelp = function() {
+	/* set the help options */
 	try {
 		var iframe = dGet('wtw_ibrowseframe');
 		var iwindow = iframe.contentWindow || iframe;
@@ -2224,6 +2317,7 @@ WTWJS.prototype.setHelp = function() {
 }
 
 WTWJS.prototype.setFunction = function(functionname, parameters, moldname) {
+	/* convert function name and parameters to executable function and execute it */
 	try {
 		if (moldname != undefined) {
 			parameters += "," + moldname;
@@ -2242,6 +2336,7 @@ WTWJS.prototype.setFunction = function(functionname, parameters, moldname) {
 }
 
 WTWJS.prototype.createFunctionName = function(moldname) {
+	/* create new function name (or new name for repeated instances of the same object) */
 	var functionname = "";
 	try {
 		functionname = "f" + moldname;
@@ -2266,6 +2361,7 @@ WTWJS.prototype.createFunctionName = function(moldname) {
 }
 
 WTWJS.prototype.getRotateMoldName = function(moldname) {
+	/* name of the axle for rotation from an Action Zone that is applied to a mold */
 	var rotatemoldname = "";
 	try {
 		var actionzoneid = "";
@@ -2299,6 +2395,7 @@ WTWJS.prototype.getRotateMoldName = function(moldname) {
 }
 
 WTWJS.prototype.deleteIdFromArray = function(array, stext) {
+	/* remove a select id from a given Array */
 	try {
 		if (array != null) {
 			if (array.length > 0) {
@@ -2317,6 +2414,7 @@ WTWJS.prototype.deleteIdFromArray = function(array, stext) {
 }
 
 WTWJS.prototype.isInArray = function(array, stext) {
+	/* boolean - is text in the array values */
 	var inarray = false;
 	try {
 		if (array != null) {
@@ -2337,6 +2435,7 @@ WTWJS.prototype.isInArray = function(array, stext) {
 }
 
 WTWJS.prototype.indexInArray = function(array, stext) {
+	/* integer - return the Array index value where stext is found in the array */
 	var indexinarray = -1;
 	try {
 		if (array != null) {
@@ -2357,6 +2456,9 @@ WTWJS.prototype.indexInArray = function(array, stext) {
 }
 
 WTWJS.prototype.isItemInArray = function(sarray, checkid, connectinggridind, altconnectinggridind, moldgroup) {
+	/* boolean - check if an id is in a given array, with consideration to being the same connecting grid and mold group */
+	/* each different connecting grid means a new instance of an object - so the id can be in the array more than once from different connecting grids (instances) in the same 3D Scene */
+	/* Example, 4 of the same chairs around a table, each chair has the same design (id) but different instances with position, scaling, and rotation */
 	var found = false;
 	try {
 		if (sarray != null && checkid != "") {
@@ -2394,6 +2496,7 @@ WTWJS.prototype.isItemInArray = function(sarray, checkid, connectinggridind, alt
 }
 
 WTWJS.prototype.isStepInAutomations = function(automationstepid, connectinggridind) {
+	/* check for an existing step in an automation (example: check for next step) */
 	var found = false;
 	try {
 		if (WTW.automations != null && automationstepid != "") {
@@ -2412,6 +2515,7 @@ WTWJS.prototype.isStepInAutomations = function(automationstepid, connectinggridi
 }
 
 WTWJS.prototype.isUploadReady = function(uploadid) {
+	/* has the uploaded item been loaded or is it still in process */
 	var ready = false;
 	try {
 		if (wtw_uploads != null && uploadid != "") {
@@ -2431,6 +2535,7 @@ WTWJS.prototype.isUploadReady = function(uploadid) {
 }
 
 WTWJS.prototype.isUploadAdded = function(uploadid) {
+	/* add an upload object to the upload array */
 	var found = false;
 	try {
 		if (wtw_uploads != null && uploadid != "") {
@@ -2450,6 +2555,7 @@ WTWJS.prototype.isUploadAdded = function(uploadid) {
 }
 
 WTWJS.prototype.isUploadInQueue = function(uploadid) {
+	/* see if uplaod is queued to be loaded */
 	var found = false;
 	try {
 		if (wtw_uploads != null && uploadid != "") {
@@ -2469,6 +2575,7 @@ WTWJS.prototype.isUploadInQueue = function(uploadid) {
 }
 
 WTWJS.prototype.setUploadInQueue = function(uploadid, value) {
+	/* add upload to queue */
 	try {
 		var found = -1;
 		if (wtw_uploads != null && uploadid != "") {
@@ -2493,6 +2600,9 @@ WTWJS.prototype.setUploadInQueue = function(uploadid, value) {
 }
 
 WTWJS.prototype.getNextCount = function(listarray) {
+	/* get next available index for an array */
+	/* values were set to null instead of splice to preserve instance (index) for other items */
+	/* null values found are next available or new index is added if needed */
 	var nextcount = -1;
 	try {
 		if (listarray != null) {
@@ -3087,21 +3197,21 @@ WTWJS.prototype.changeGraphic = function(w) {
 WTWJS.prototype.changeShadow = function(w) {
 	try {
         if (typeof w == 'string') {
-            WTW.shadowset = Number(w);
+            WTW.shadowSet = Number(w);
         } else {
-            WTW.shadowset += w;
-            if (WTW.shadowset > 3) {
-                WTW.shadowset = 3;
+            WTW.shadowSet += w;
+            if (WTW.shadowSet > 3) {
+                WTW.shadowSet = 3;
             }
-		    if (WTW.shadowset < 0) {
-                WTW.shadowset = 3;
+		    if (WTW.shadowSet < 0) {
+                WTW.shadowSet = 3;
             }
 		    if (WTW.adminView != 0) {
-                WTW.shadowset = 3;
+                WTW.shadowSet = 3;
             }
         }
-        if (( WTW.gpuSetting == 'medium') && WTW.shadowset == 3){
-        } else if (( WTW.gpuSetting == 'low') && WTW.shadowset == 2){
+        if (( WTW.gpuSetting == 'medium') && WTW.shadowSet == 3){
+        } else if (( WTW.gpuSetting == 'low') && WTW.shadowSet == 2){
         } else {
 			WTW.setShadowSettings();
 		}
@@ -3112,9 +3222,9 @@ WTWJS.prototype.changeShadow = function(w) {
 
 WTWJS.prototype.setShadowSettings = function() {
     try {
-		dGet('wtw_tshadowsetting').defaultValue = WTW.shadowset;
+		dGet('wtw_tshadowsetting').defaultValue = WTW.shadowSet;
         var shadowresolution = 1024;
-		switch (WTW.shadowset) {
+		switch (WTW.shadowSet) {
 			case 0:
 				shadowresolution = 512;
 				if (WTW.gpuSetting == 'low') {
@@ -3147,9 +3257,9 @@ WTWJS.prototype.setShadowSettings = function() {
                 }
 				break;
 		}
-		dGet('wtw_tshadowsetting').value = WTW.shadowset;
+		dGet('wtw_tshadowsetting').value = WTW.shadowSet;
 		
-		WTW.setCookie("wtw_shadowsetting",WTW.shadowset,365);
+		WTW.setCookie("wtw_shadowsetting",WTW.shadowSet,365);
 		
 		var zrenderlist = [];
         if(WTW.shadows != null) {
@@ -3167,15 +3277,15 @@ WTWJS.prototype.setShadowSettings = function() {
 		//WTW.shadows.getShadowMap().refreshRate = BABYLON.RenderTargetTexture.REFRESHRATE_RENDER_ONCE;
 //		WTW.shadows.forceBackFacesOnly = true;
 
-//		if (WTW.shadowset < 2) {
+//		if (WTW.shadowSet < 2) {
 		WTW.shadows.usePoissonSampling = true;
-//		} else if (WTW.shadowset < 3) {
+//		} else if (WTW.shadowSet < 3) {
 //          WTW.shadows.useExponentialShadowMap = true;
 //		} else {
 //			WTW.shadows.useBlurExponentialShadowMap = true;
 //		}
 		WTW.shadows.getShadowMap().renderList = zrenderlist;
-        if (WTW.shadowset > 0) {
+        if (WTW.shadowSet > 0) {
 			if (WTW.extraGround != null) {
 				WTW.extraGround.receiveShadows = true;
 			}
@@ -8955,10 +9065,10 @@ WTWJS.prototype.snapshot3D = function(zfilepath, zfilename) {
 		dGet('wtw_bsnapshotcommunity').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
 		dGet('wtw_tfilename').value = zfilename;
 		dGet('wtw_tfilepath').value = zfilepath;
-		WTW.context = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
+		var zcontext = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
 		scene.render();
 		var filedata = canvas.toDataURL("image/png");
-		WTW.context = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: false});
+		zcontext = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: false});
 		var zrequest = {
 			'communityid': communityid,
 			'buildingid': buildingid,
@@ -9665,7 +9775,7 @@ WTWJS.prototype.processMoldQueue = function() {
 												if (receiveshadows == '1') {
 													mold.receiveShadows = true;
 												}
-												if (WTW.shadowset > 0 && moldname.indexOf('babylonfile') == -1) {
+												if (WTW.shadowSet > 0 && moldname.indexOf('babylonfile') == -1) {
 													WTW.shadows.addShadowCaster(mold, true);
 												}
 												if (waterreflection == '1' && WTW.waterMat != null) {
@@ -9688,9 +9798,6 @@ WTWJS.prototype.processMoldQueue = function() {
 											}
 											WTW.pluginsProcessMoldQueueAdd(moldname, mold);
 										}
-									}
-									if (moldname == WTW.mainParent) {
-										WTW.transferMainParent(mold);
 									}
 								}
 							}
@@ -9817,7 +9924,7 @@ WTWJS.prototype.loadUserSettings = function() {
 		var shadowsetting = WTW.getCookie("wtw_shadowsetting");
 		if (shadowsetting != null) {
 			if (WTW.isNumeric(shadowsetting)) {
-				WTW.shadowset = Number(shadowsetting);
+				WTW.shadowSet = Number(shadowsetting);
 			}
 		}	
 		var graphicsetting = WTW.getCookie("graphicsetting");
@@ -9881,14 +9988,14 @@ WTWJS.prototype.loadUserSettings = function() {
 			dGet('wtw_tturnspeed').value = WTW.turnSpeed;
 		}
 		if (dGet('wtw_tshadowsetting') != null) {
-			dGet('wtw_tshadowsetting').value = WTW.shadowset;
-			WTW.setCookie("wtw_shadowsetting",WTW.shadowset,365);
+			dGet('wtw_tshadowsetting').value = WTW.shadowSet;
+			WTW.setCookie("wtw_shadowsetting",WTW.shadowSet,365);
 		}
 		if (dGet('wtw_tgraphicsetting') != null) {
 			dGet('wtw_tgraphicsetting').value = WTW.graphicSet;
 			WTW.setCookie("graphicsetting",WTW.graphicSet,365);
 		}
-		switch (WTW.shadowset) {
+		switch (WTW.shadowSet) {
 			case 0:
                 if (WTW.gpuSetting == 'low') {
                     dGet('wtw_shadowhelptitle').innerHTML = "Shadows (None - Low Resolution)<br><b>This is your recommended setting.<b/>";
@@ -10903,4 +11010,59 @@ WTWJS.prototype.checkAnimationSet = function(zavatar, zkey, zanimationset) {
 		WTW.log("core-scripts-prime-wtw_common.js-checkAnimationSet=" + ex.message);
 	}
 	return zkey;
+}
+
+WTWJS.prototype.attachParent = function(child, parent) {
+	/* work in progress - attach to new parent and recalculate the transition position, rotation, and scaling for consistency */
+	var rotation = BABYLON.Quaternion.Identity();
+	var position = BABYLON.Vector3.Zero();
+	var m1 = BABYLON.Matrix.Identity();
+	var m2 = BABYLON.Matrix.Identity();
+	parent.getWorldMatrix().decompose(BABYLON.Vector3.Zero(), rotation, position);
+	rotation.toRotationMatrix(m1);
+	m2.setTranslation(position);
+	m2.multiplyToRef(m1, m1);
+	var invParentMatrix = BABYLON.Matrix.Invert(m1);
+	var m = child.getWorldMatrix().multiply(invParentMatrix);
+	m.decompose(BABYLON.Vector3.Zero(), child.rotationQuaternion, position);
+	invParentMatrix = BABYLON.Matrix.Invert(parent.getWorldMatrix());
+	var m = child.getWorldMatrix().multiply(invParentMatrix);
+	m.decompose(BABYLON.Vector3.Zero(), BABYLON.Quaternion.Identity(), position);
+	child.position.x = position.x * parent.scaling.x;
+	child.position.y = position.y * parent.scaling.y;
+	child.position.z = position.z * parent.scaling.z;
+	if (parent.scaling.x != 1 || parent.scaling.y != 1 || parent.scaling.z != 1) {
+		var children = parent.getChildren();
+		var scaleFixMesh;
+		for (var i = 0; i < children.length; i++) {
+			if (children[i].name == 'scaleFixMesh') {
+				scaleFixMesh = children[i];
+				break;
+			}
+		}
+		if (scaleFixMesh == undefined) {
+			scaleFixMesh = new BABYLON.Mesh('scaleFixMesh', parent.getScene());
+			scaleFixMesh.parent = parent;
+		}
+		scaleFixMesh.scaling.x = 1 / parent.scaling.x;
+		scaleFixMesh.scaling.y = 1 / parent.scaling.y;
+		scaleFixMesh.scaling.z = 1 / parent.scaling.z;
+		child.parent = scaleFixMesh;
+	} else {
+		child.parent = parent;
+	}
+}
+
+WTWJS.prototype.detachParent = function(object, parent) {
+	/* work in progress - deattach to new parent and recalculate the transition position, rotation, and scaling for consistency */
+/*  //var parentMatrix = Matrix.Invert(parent.getWorldMatrix());  
+  var newMatrix = object.getWorldMatrix(); //.multiply(parentMatrix);
+  object.parent = null;
+  object.getAbsolutePosition()
+  newMatrix.decompose(object.scaling, object.rotationQuaternion, object.position);
+ */ 
+	object.computeWorldMatrix(true);
+	var abspos = object.getAbsolutePosition();
+	object.parent = null;
+	object.setAbsolutePosition(abspos);
 }

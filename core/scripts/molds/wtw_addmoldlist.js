@@ -1,4 +1,9 @@
+/* molds are meshes - we call them molds because they are the */
+/* wrapper of additional definition information about a mesh that WILL be created when triggered by a load zone. */
+
 WTWJS.prototype.getMoldList = function() {
+	/* Mold list is used by admin to populate the drop down list of possible molds */
+	/* this is simplified into basic shapes (here) and complex ones 3D Web Objects shown in the next function */
 	WTW.moldList = [];
 	try {
 		WTW.moldList[WTW.moldList.length] = "Wall";
@@ -44,6 +49,9 @@ WTWJS.prototype.getMoldList = function() {
 }
 
 WTWJS.prototype.getWebMoldList = function() {
+	/* Web Mold list is used by admin to populate the drop down list of possible Web Molds */
+	/* this is simplified into basic shapes (function above) and complex ones 3D Web Objects (here) */
+	/* these may be complex shapes and/or include uploaded objects, animation, lighting, or other functionality */
 	var webmoldlist = [];
 	try {
 		webmoldlist[webmoldlist.length] = "3D Text";
@@ -87,6 +95,8 @@ WTWJS.prototype.getWebMoldList = function() {
 }
 		
 WTWJS.prototype.addMold = function(moldname, molddef, parentname, coveringname) {
+	/* the ad mold process checks the values and creates the meshes, applies the coverings, and initiates colllisions, shadows, physics, etc... */
+	/* this process all molds into meshes in the 3D Scene (both basic and web molds lists above) */
 	var mold;
 	try {
 		var checkcollisions = "1";
@@ -164,340 +174,188 @@ WTWJS.prototype.addMold = function(moldname, molddef, parentname, coveringname) 
 		posx = transformposition.posx;
 		posy = transformposition.posy;
 		posz = transformposition.posz;
+		/* select the function to create the mold based on "shape" which is the mold type */
 		switch (shape) {
 			case "wall":
+				/* wall - a box set with defaults for common scaling */
 				mold = WTW.addMoldBox(moldname, lenx, leny, lenz);
 				break;
 			case "box":
+				/* box - a basic cube shape of various scaling */
 				mold = WTW.addMoldBox(moldname, lenx, leny, lenz);
 				break;
 			case "roundedbox":
+				/* roundedbox - a basic cube with round corners and various scaling */
 				mold = WTW.addMoldRoundedBox(moldname, lenx, leny, lenz);
 				break;
 			case "floor":
+				/* floor - a box set with defaults for common scaling */
 				mold = WTW.addMoldBox(moldname, lenx, leny, lenz);
 				break;
 			case "cylinder":
+				/* cylinder - canister with solid ends */
 				mold = WTW.addMoldCylinder(moldname, lenx, leny, lenz, subdivisions);
 				break;
 			case "halfpipe":
+				/* halfpipe - cylinder cut in half and carved out */
 				if (special1 < .01) {
 					special1 = .01;
 				}
 				mold = WTW.addMoldHalfPipe(moldname, lenx, leny, lenz, subdivisions, special1);
 				break;
 			case "cone":
+				/* cone - cylinder with one end closed to a point. */
 				mold = WTW.addMoldCone(moldname, lenx, leny, lenz, subdivisions, special1, special2);
 				break;
 			case "polygon":
+				/* polygon - various polygons defined by the special setting */
 				mold = WTW.addMoldPolygon(moldname, lenx, leny, lenz, special1);
 				break; 
 			case "sphere":
+				/* sphere - ball with a setting for subdivisions that can make it smoother */
 				mold = WTW.addMoldSphere(moldname, lenx, leny, lenz, subdivisions);
 				break;
 			case "dome":
+				/* dome - sphere cut in half and carved out */
 				mold = WTW.addMoldDome(moldname, lenx, leny, lenz, subdivisions, special1);
 				break;
 			case "triangle":
+				/* triangle - work in progress - needs to be able to adjust the points for various angles and thickness */
 				mold = WTW.addMoldTriangle(moldname, lenx, leny, lenz, special1);
 				break;
 			case "torus":
+				/* torus - donut shape */
 				mold = WTW.addMoldTorus(moldname, lenx, leny, lenz, subdivisions, special1);
 				break;
 			case "plane":
+				/* plane - one sided flat box */
 				mold = WTW.addMoldPlane(moldname, lenx, leny, lenz);
 				break;
 			case "disc":
+				/* disc - one sided flat oval */
 				mold = WTW.addMoldDisc(moldname, lenx, leny, lenz, subdivisions);
 				break;
 			case "tube":
+				/* tube - length of tube that you can set the points to pass through to make any shape */
 				mold = WTW.addMoldTube(moldname, lenx, leny, lenz, subdivisions, special1, path1);
 				break;
 			case "line":
+				/* line - tube without thickness - add points to pass through */
 				mold = WTW.addMoldLine(moldname, lenx, leny, lenz, path1);
 				break;
 			case "terrain":
+				/* terrain - ground formations that can use heightmaps */
 				mold = WTW.addMoldTerrain(moldname, lenx, leny, lenz, subdivisions, molddef.graphics.heightmap.path, molddef.graphics.heightmap.id, minheight, maxheight, parentname, molddef, coveringname, posx, posy, posz);
 				break;
 			case "3dtext":
+				/* 3dtext - 3d text font you can add text to 3D Scenes */
 				mold = WTW.addMold3DText(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
 			case "image":
+				/* image - with ability to hover over and change image */
 				mold = WTW.addMoldImage(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
 			case "raisedimage":
+				/* raisedimage - image that uses a heightmap */
 				mold = WTW.addMoldRaisedImage(moldname, molddef, lenx, leny, lenz, subdivisions, molddef.graphics.heightmap.path, minheight, maxheight);
 				coveringname = "none";
 				break;
             case "video":
+				/* video - video player or screen - real videos with play, pause, stop , and rewind buttons */
 				mold = WTW.addMoldVideo(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
             case "lightbulb":
+				/* lightbulb - adds smaller light to scene - great for inside rooms */
 				mold = WTW.addMoldLightbulb(moldname, molddef, lenx, leny, lenz, posx, posy, posz, subdivisions);
 				break;
             case "spotlight":
+				/* spotlight - adds a spot light to a scene */
 				mold = WTW.addMoldSpotLight(moldname, lenx, leny, lenz, subdivisions, special1, special2);
 				break;
             case "candleflame":
+				/* candleflame - image simulation */
 				mold = WTW.addMoldCandleFlame(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
             case "tree":
+				/* tree - dynamically created (depreciated soon to babylon 3D Objects) */
 				mold = WTW.addMoldTree(moldname, molddef, lenx, leny, lenz, posx, posy, posz, subdivisions);
 				coveringname = "none";
 				break;
             case "flag":
+				/* flag - dynamic flowing flag - depreciated soon to babylon 3D Objects */
 				mold = WTW.addMoldFlag(moldname, molddef, lenx, leny, lenz, posx, posy, posz, subdivisions);
 				coveringname = "none";
 				break;
             case "smoke":
+				/* smoke - particle emitter for smoke effect */
 				mold = WTW.addMoldSmoke(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
             case "waterfountain":
+				/* waterfountain - particle emitter for water effect */
 				mold = WTW.addMoldFountain(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
             case "particlesphere":
+				/* particlesphere - particle emitter for sphere effect */
 				mold = WTW.addMoldParticleSphere(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
             case "particleshower":
+				/* particleshower - particle emitter for water shower effect */
 				mold = WTW.addMoldParticleShower(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
 			case "babylonfile":
+				/* babylonfile - upload your own 3D Object Molds and use them in your scene - uses the media library */
 				mold = WTW.addMoldBabylonFile(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
             case "waterplane":
+				/* waterplane - plane with a water procedural texture applied */
 				mold = WTW.addMoldWaterPlane(moldname, molddef, lenx, leny, lenz);
 				coveringname = "water";
 				break;
             case "waterdisc":
+				/* waterdisc - disc with a water procedural texture applied */
 				mold = WTW.addMoldWaterDisc(moldname, molddef, lenx, leny, lenz, subdivisions);
 				coveringname = "water";
 				break;
 			case "simpletextbox":
+				/* simpletextbox - add text to a box material surface to add to your scene */
 				mold = WTW.addMoldSimpleTextBox(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
 			case "viewblog":
+				/* viewblog - work in progress - view a 3D Blog */
 				mold = WTW.addMoldViewBlog(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
 			case "blogposting":
+				/* blogposting - work in progress - write to a 3D Blog with a 3D Form */
 				mold = WTW.addMoldBlogPosting(moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
 			default:
+				/* checks plugins for mold shape and custom functions */
 				mold = WTW.pluginsAddMolds(shape, moldname, molddef, lenx, leny, lenz);
 				coveringname = "none";
 				break;
 		}
+		/* apply the coverings, properties, shadows, physics, etc... */
 		mold = WTW.completeMold(mold, moldname, parentname, molddef, coveringname, posx, posy, posz);
-		//mold = WTW.addPhysics(mold, molddef);
 	} catch (ex) {
 		WTW.log("core-scripts-molds-addmoldlist\r\n addMold=" + ex.message);
 	} 
 	return mold;
 }
 
-WTWJS.prototype.addPhysics = function(mold, molddef) {
-	try {
-/*		All matrices are rebuilt (if needed) on every frame. If you want to force a complete update of a specific mesh, you can just do:
-		scene.incrementRenderId();
-		object.computeWorldMatrix(true);
-		incrementRenderId just simulates a new frame to invalidate all caches
-		http://www.html5gamedevs.com/topic/21494-keep-childs-world-position-when-parenting/
-	*/
-		var moldname = mold.name;
-		var parentname = "";
-		var namepart = moldname.split('-');
-		var parentnamepart = null;
-		if (mold.parent != null) {
-			parentname = mold.parent.name;
-			parentnamepart = mold.parent.name.split('-');
-		} else {
-			var pname = "-----";
-			parentnamepart = pname.split('-');
-		}
-		if (namepart[0] == "actionzone" && namepart[5] == "driverseat" && thingid == "") {
-			mold.parent.parent = null;
-/*			if (mold.parent.physicsImpostor == null) {
-				mold.parent.physicsImpostor = new BABYLON.PhysicsImpostor(mold.parent, BABYLON.PhysicsImpostor.BoxImpostor, {  
-					mass: 80,
-					friction: 0.5,
-					restitution: 0.5,
-					nativeOptions: {
-						noSleep: true,
-						move: true
-					}
-				});
-			}*/
-		} else if (parentnamepart[0] == "actionzoneaxlebase2" && parentnamepart[5] == "driverwheel" && thingid == "") {
-			var parentmold = scene.getMeshByID(molddef.parentname);
-			var connectingmold = parentmold;
-			var parentactionzone = scene.getMeshByID(molddef.parentname.replace("actionzoneaxlebase2","actionzone"));
-			parentactionzone.computeWorldMatrix(true);
-			var parentazabspos = parentactionzone.getAbsolutePosition();
-			//var parentabspos = parentmold.getAbsolutePosition();
-			
-			
-			
-			try {
-				while (connectingmold.name.indexOf("connectinggrids") == -1) {
-					connectingmold = connectingmold.parent;
-				}
-			} catch(ex){}
-			if (mold.parent != null) {
-				WTW.detachParent(mold,mold.parent);
-			}
-			if (mold.physicsImpostor == null) {
-				mold.physicsImpostor = new BABYLON.PhysicsImpostor(mold, BABYLON.PhysicsImpostor.SphereImpostor, {
-					mass: 1,
-					friction: 4,
-					restitution: 0.5,
-					nativeOptions: {
-						move: true
-					}
-				});
-				var holderSize = 3;
-				var holder1 = BABYLON.MeshBuilder.CreateBox(moldname.replace("thingmolds","actionzoneholder"), {
-					height: holderSize, width: holderSize/3, depth: holderSize/3
-				}, scene);
-				//holder1.position.x = parentactionzone.position.x;
-				//holder1.position.y = parentactionzone.position.y;
-				//holder1.position.z = parentactionzone.position.z;
-				holder1.position = parentazabspos;
-				holder1.physicsImpostor = new BABYLON.PhysicsImpostor(holder1, BABYLON.PhysicsImpostor.SphereImpostor, {
-					mass: 8,
-					friction: 4,
-					restitution: 0.5
-				});
-				holder1.physicsImpostor.physicsBody.collidesWith = ~1;
-				
-				var sJoint1 = new BABYLON.MotorEnabledJoint(BABYLON.PhysicsJoint.SliderJoint, {
-					mainPivot: parentazabspos,
-					mainAxis: new BABYLON.Vector3(0, -1, 0),
-					connectedAxis: new BABYLON.Vector3(0, -1, 0),
-					nativeParams: {
-						limit: [0, 0],
-						spring: [100, 2],
-						min: 5,
-						max: 30
-					}
-				});
-				if (parentmold != null) {
-					if (parentmold.physicsImpostor == null) {
-						parentmold.physicsImpostor = new BABYLON.PhysicsImpostor(parentmold, BABYLON.PhysicsImpostor.BoxImpostor, {  
-							mass: 20,
-							friction: 0.5,
-							restitution: 0.5,
-							nativeOptions: {
-								noSleep: true,
-								move: true
-							}
-						});
-					}
-					parentmold.physicsImpostor.addJoint(holder1.physicsImpostor, sJoint1);
-					parentmold.isVisible = true;
-/*					var joint1 = new BABYLON.HingeJoint({
-						mainPivot: new BABYLON.Vector3(parentmold.position.x, parentmold.position.y - 2, parentmold.position.z),
-						connectedPivot: new BABYLON.Vector3(5, 0, 0),
-						mainAxis: new BABYLON.Vector3(-1, 0, 0),
-						connectedAxis: new BABYLON.Vector3(-1, 0, 0),
-						nativeParams: {
-							limit: [0, 0]
-						}
-					});
-					holder1.physicsImpostor.addJoint(mold.physicsImpostor, joint1);*/
-				}
-			}
-		}		
-
-	} catch (ex) {
-		WTW.log("core-scripts-molds-addmoldlist\r\n addPhysics=" + ex.message);
-	} 
-	return mold;
-}
-
-WTWJS.prototype.attachParent = function(child, parent) {
-	var rotation = BABYLON.Quaternion.Identity();
-	var position = BABYLON.Vector3.Zero();
-	var m1 = BABYLON.Matrix.Identity();
-	var m2 = BABYLON.Matrix.Identity();
-	parent.getWorldMatrix().decompose(BABYLON.Vector3.Zero(), rotation, position);
-	rotation.toRotationMatrix(m1);
-	m2.setTranslation(position);
-	m2.multiplyToRef(m1, m1);
-	var invParentMatrix = BABYLON.Matrix.Invert(m1);
-	var m = child.getWorldMatrix().multiply(invParentMatrix);
-	m.decompose(BABYLON.Vector3.Zero(), child.rotationQuaternion, position);
-	invParentMatrix = BABYLON.Matrix.Invert(parent.getWorldMatrix());
-	var m = child.getWorldMatrix().multiply(invParentMatrix);
-	m.decompose(BABYLON.Vector3.Zero(), BABYLON.Quaternion.Identity(), position);
-	child.position.x = position.x * parent.scaling.x;
-	child.position.y = position.y * parent.scaling.y;
-	child.position.z = position.z * parent.scaling.z;
-	if (parent.scaling.x != 1 || parent.scaling.y != 1 || parent.scaling.z != 1) {
-		var children = parent.getChildren();
-		var scaleFixMesh;
-		for (var i = 0; i < children.length; i++) {
-			if (children[i].name == 'scaleFixMesh') {
-				scaleFixMesh = children[i];
-				break;
-			}
-		}
-		if (scaleFixMesh == undefined) {
-			scaleFixMesh = new BABYLON.Mesh('scaleFixMesh', parent.getScene());
-			scaleFixMesh.parent = parent;
-		}
-		scaleFixMesh.scaling.x = 1 / parent.scaling.x;
-		scaleFixMesh.scaling.y = 1 / parent.scaling.y;
-		scaleFixMesh.scaling.z = 1 / parent.scaling.z;
-		child.parent = scaleFixMesh;
-	} else {
-		child.parent = parent;
-	}
-}
-
-WTWJS.prototype.detachParent = function(object, parent) {
-/*  //var parentMatrix = Matrix.Invert(parent.getWorldMatrix());  
-  var newMatrix = object.getWorldMatrix(); //.multiply(parentMatrix);
-  object.parent = null;
-  object.getAbsolutePosition()
-  newMatrix.decompose(object.scaling, object.rotationQuaternion, object.position);
- */ 
-	object.computeWorldMatrix(true);
-	var abspos = object.getAbsolutePosition();
-	object.parent = null;
-	object.setAbsolutePosition(abspos);
-}
-
-
-
-WTWJS.prototype.isDrivable = function(connectinggridmold) {
-	var drivable = false;
-	try {
-		var parts = connectinggridmold.getChildren();
-		if (parts != null) {
-			for (var i=0; i < parts.length;i++) {
-				if (parts[i].name.indexOf("driverseat") == -1) {
-					drivable = true;
-				}
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-molds-addmoldlist\r\n isDrivable=" + ex.message);
-	} 
-	return drivable;
-}
-
 WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, coveringname, posx, posy, posz) {
+	/* apply the coverings, properties, shadows, physics, etc... */
 	try {
 		if (mold != null) {
 			var checkcollisions = "1";
@@ -547,27 +405,19 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 					WTW.loadSoundToMold(mold, moldname, molddef.sound.id, molddef.sound.path, molddef.sound.loop, molddef.sound.attenuation, molddef.sound.maxdistance, molddef.sound.rollofffactor, molddef.sound.refdistance, -1);
 				}
 			}
-/*			var csgmoldid = "";
-			var csgaction = "";
-			if (molddef.csg != undefined) {
-				if (molddef.csg.moldid != undefined) {
-					csgmoldid = molddef.csg.moldid;
-				}
-				if (molddef.csg.action != undefined) {
-					csgaction = molddef.csg.action;
-				}
-			}
-			if (csgmoldid != '' && csgaction == "subtract") {
-				coveringname == "texture";
-			} */
 			if (coveringname == "hidden" || namepart[0] == "actionzone" || namepart[0] == "connectinggrid") {
+				/* some molds do not ned coverings (came with - or not necessary) */
 				mold.isVisible = false;
 			} else {
+				/* molds that require coverings to be added */
 				if (shape != "box" && shape != "wall" && shape != "floor" && coveringname == "directional texture") {
+					/* correction for molds that cannot use directional covering */
 					coveringname = "texture";
 				}
 				if (coveringname != "none") {
+					/* molds that require coverings to be added */
 					if (coveringname == "directional texture") {
+						/* clear out old covering on directional defined surfaces before recovering */
 						if (mold.material != null) {
 							if (mold.material.subMaterials != undefined) {
 								for (var i=0;i < mold.material.subMaterials.length;i++) {
@@ -591,6 +441,7 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 							mold.subMeshes.push(new BABYLON.SubMesh(5, 20, 4, 30, 6, mold));
 						}			
 					} else {
+						/* clear old coverings that are not directional */
 						try {
 							if (mold.material != undefined) {
 								if (mold.material.diffuseTexture != null) {
@@ -606,8 +457,10 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 							}
 						} catch (ex) {}
 					}
+					/* add covering basedon covering name */
 					mold.material = WTW.addCovering(coveringname, moldname, molddef, lenx, leny, lenz, special1, special2);
 					if (mold.material != undefined) {
+						/* set colors and color tinting mainly for textures just added */
 						mold.material.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
 						mold.material.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));	
 						mold.material.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
@@ -615,17 +468,21 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 				}
 			}
 			if (moldname.indexOf("terrain") > -1 || iswaterreflection == "1") {
+				/* if mold is set to add reflection, add mold to the reflections array */
 				WTW.addReflectionRefraction(mold);
 			}
 			if (checkcollisions == "0" || coveringname == "none") {
 				molddef.checkcollisions = "0";
 				mold.checkCollisions = false;
 			} else {
+				/* if not intentionally set to off, use collisions */
 				mold.checkCollisions = true; 
 			}
 			if (WTW.adminView == 1) {
+				/* mouse over covers hovers in the 3D Scene - for admin mode */
 				WTW.registerMouseOver(mold);
 			}
+			/* work in progress - currently disabled, freeze world matrix can speed up the scene with less calculations */
 			if (WTW.AdminView == 0 && parentname.indexOf("connectinggrids") > -1 && (moldname.indexOf("building") > -1 || moldname.indexOf("community") > -1)) {
 				//mold.freezeWorldMatrix();
 			} else {
@@ -644,13 +501,14 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 			//if (shape == "box" && coveringname == "texture") {
 			//	mold.convertToUnIndexedMesh();
 			//}
+			
+			/* cleanup - remove any un-parented molds (sometimes the parent was deleted since the mold started to be created) */
 			if (parentname != "") {
 				var parentmold = scene.getMeshByID(parentname);
 				if (parentmold != null) {
 					mold.parent = parentmold;
 				} else {
 					WTW.disposeClean(moldname);
-					//	WTW.addDisposeMoldToQueue(moldname);
 				}
 			}
 		}	
@@ -661,6 +519,7 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 }
 
 WTWJS.prototype.setNewMoldDefaults = function(shape) {
+	/* For each new mold and new web mold, these are the default values when created using the admin form */
 	try {
 		var coords = WTW.getNewCoordinates(50);
 		var positionX = coords.positionX;
@@ -1532,6 +1391,8 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 }
 
 WTWJS.prototype.setMoldFormFields = function(shape) {
+	/* For each new mold and new web mold, these are the sections shown on the admin form per shape */
+	/* for example: sphere has subdivisions and a box does not, or babylon files allow uploads selections but have no added textures */
 	try {
 		var shapevalue = shape.toLowerCase();
 		while (shapevalue.indexOf(" ") > -1) {

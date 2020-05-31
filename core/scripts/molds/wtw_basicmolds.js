@@ -2243,6 +2243,7 @@ WTWJS.prototype.addMoldLightbulb = function(moldname, molddef, lenx, leny, lenz,
 		bulbcenter = BABYLON.MeshBuilder.CreateSphere(moldname + "-bulbcenter", {segments: subdivisions, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.FRONTSIDE}, scene);
 		bulbcenter.scaling = new BABYLON.Vector3(lenx * .3, leny * .8, lenz * .3);
 		bulbcenter.material = WTW.addCovering("color", moldname + "-bulbmat", moldbulb, lenx * .3, leny * .8, lenz * .3, '0', '0');
+		bulbcenter.isPickable = true;
 		bulbcenter.parent = mold;
 		
 		var moldglass = BABYLON.MeshBuilder.CreateSphere(moldname, {segments: subdivisions, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.FRONTSIDE}, scene);
@@ -2274,7 +2275,7 @@ WTWJS.prototype.addMoldLightbulb = function(moldname, molddef, lenx, leny, lenz,
 			moldnameparts.molds[moldnameparts.moldind].objects.shadows = new BABYLON.ShadowGenerator(1024, moldnameparts.molds[moldnameparts.moldind].objects.light);
 			moldnameparts.molds[moldnameparts.moldind].objects.shadows.setDarkness(0.1);
 			moldnameparts.molds[moldnameparts.moldind].objects.shadows.usePoissonSampling = true;
-			
+/*			
 			if (moldnameparts.moldgroup == 'community') {
 				for (var i=0; i < WTW.communitiesMolds.length;i++) {
 					if (WTW.communitiesMolds[i] != null) {
@@ -2320,6 +2321,7 @@ WTWJS.prototype.addMoldLightbulb = function(moldname, molddef, lenx, leny, lenz,
 					}
 				}
 			}
+*/
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldLightbulb=" + ex.message);

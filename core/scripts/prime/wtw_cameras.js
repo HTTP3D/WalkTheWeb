@@ -3,6 +3,7 @@
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
 WTWJS.prototype.loadPrimaryCamera = function(parentmold) {
+	/* loads the initial camera on the scene - before the avatar is shown */
 	try {
 		if (/Android|webOS|iPhone|iPad|Opera Mini|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             WTW.isMobile = true;
@@ -36,6 +37,7 @@ WTWJS.prototype.loadPrimaryCamera = function(parentmold) {
 }
 
 WTWJS.prototype.loadCameraSettings = function() {
+	/* retrieve the camera settings from cookies if they are set */
 	try {
 		var firstcamera = WTW.getCookie("firstcamera");
 		if (firstcamera == null) {
@@ -76,6 +78,7 @@ WTWJS.prototype.loadCameraSettings = function() {
 }
 
 WTWJS.prototype.switchCamera = function(w) {
+	/* switch camera for your avatar - includes various combinations of cameras and positions */
 	try {
 		WTW.cameraYOffset = 0;
 		var avatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
@@ -445,6 +448,7 @@ WTWJS.prototype.switchCamera = function(w) {
 }
 
 WTWJS.prototype.addActiveCamera = function(zcamera) {
+	/* add a camera to the active cameras array - active camera track position even if not shown */
 	try {
 		var zfound = false;
 		for (var i=0;i<scene.activeCameras.length;i++) {
@@ -461,17 +465,20 @@ WTWJS.prototype.addActiveCamera = function(zcamera) {
 }
 		
 WTWJS.prototype.initFollowCamera = function(viewport) {
+	/* create a follow camera */
 	try {
 		if (viewport == undefined) {
 			viewport = 2;
 		}
 		var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
 		if (viewport == 2) {
+			/* viewport 2 is the top right small scene window */
 			var startposition = new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY, WTW.init.startPositionZ);
 			if (WTW.myAvatar != null) {
 				startposition = new BABYLON.Vector3(WTW.myAvatar.position.x, WTW.myAvatar.position.y, WTW.myAvatar.position.z);
 			}
 			WTW.cameraFollowTwo = new BABYLON.FollowCamera("followcameratwo", startposition, scene);
+			/* remove camera inputs to replace with custom controls */
 			WTW.cameraFollowTwo.inputs.clear();
 			//WTW.cameraFollowTwo.inputs.remove(WTW.cameraFollowTwo.inputs.attached.keyboard); 
 			//WTW.cameraFollowTwo.inputs.remove(WTW.cameraFollowTwo.inputs.attached.mouse); 
@@ -483,7 +490,9 @@ WTWJS.prototype.initFollowCamera = function(viewport) {
 			WTW.cameraFollowTwo.id = "followcameratwo";
 			WTW.addActiveCamera(WTW.cameraFollowTwo);
 		} else {
+			/* viewport 1 is the main full scene window */
 			WTW.cameraFollow = new BABYLON.FollowCamera("followcamera", WTW.camera.position, scene);
+			/* remove camera inputs to replace with custom controls */
 			WTW.cameraFollow.inputs.clear();
 			//WTW.cameraFollow.inputs.remove(WTW.cameraFollow.inputs.attached.keyboard); 
 			//WTW.cameraFollow.inputs.remove(WTW.cameraFollow.inputs.attached.mouse); 
@@ -501,8 +510,10 @@ WTWJS.prototype.initFollowCamera = function(viewport) {
 }
 
 WTWJS.prototype.initArcCamera = function() {
+	/* create an arc rotation camera */
 	try {
 		WTW.cameraArc = new BABYLON.ArcRotateCamera("thingcamera", 0, 1.5, 75, scene.activeCameras[0].position, scene);
+		/* remove camera inputs to replace with custom controls */
 		WTW.cameraArc.inputs.clear();
 		//WTW.cameraArc.inputs.remove(WTW.cameraArc.inputs.attached.keyboard); 
 		//WTW.cameraArc.inputs.remove(WTW.cameraArc.inputs.attached.mouse); 
@@ -522,8 +533,10 @@ WTWJS.prototype.initArcCamera = function() {
 }
 
 WTWJS.prototype.initAnaglyphCamera = function() {
+	/* create a red/cyan glasses camera */
 	try {
 		WTW.cameraAnaglyph = new BABYLON.AnaglyphUniversalCamera("anaglyphcamera", scene.activeCameras[0].position, .033, scene); //eye space = .033 try .05
+		/* remove camera inputs to replace with custom controls */
 		WTW.cameraAnaglyph.inputs.clear();
 		//WTW.cameraAnaglyph.inputs.remove(WTW.cameraAnaglyph.inputs.attached.keyboard); 
 		//WTW.cameraAnaglyph.inputs.remove(WTW.cameraAnaglyph.inputs.attached.mouse); 
@@ -545,8 +558,10 @@ WTWJS.prototype.initAnaglyphCamera = function() {
 }
 
 WTWJS.prototype.initVRCamera = function() {
+	/* create a VR camera */
 	try {
 		WTW.cameraVR = new BABYLON.VRDeviceOrientationFreeCamera ("vrcamera", scene.activeCameras[0].position, scene);
+		/* remove camera inputs to replace with custom controls */
 		//WTW.cameraVR.inputs.clear();
 		WTW.cameraVR.inputs.remove(WTW.cameraVR.inputs.attached.keyboard); 
 		WTW.cameraVR.inputs.remove(WTW.cameraVR.inputs.attached.mouse);
@@ -568,8 +583,10 @@ WTWJS.prototype.initVRCamera = function() {
 }
 
 WTWJS.prototype.initVRGamepadCamera = function() {
+	/* create a VR camera with gamepad support */
 	try {
 		WTW.cameraVRGamepad = new BABYLON.VRDeviceOrientationGamepadCamera("vrgamepadcamera", scene.activeCameras[0].position, scene);
+		/* remove camera inputs to replace with custom controls */
 		//WTW.cameraVRGamepad.inputs.clear();
 		WTW.cameraVRGamepad.inputs.remove(WTW.cameraVRGamepad.inputs.attached.keyboard); 
 		WTW.cameraVRGamepad.inputs.remove(WTW.cameraVRGamepad.inputs.attached.mouse);
@@ -591,6 +608,7 @@ WTWJS.prototype.initVRGamepadCamera = function() {
 }
 
 WTWJS.prototype.setMovingCameras = function(avatar) {
+	/* adjust the camera position and rotation based on avatar movement */
 	try {
 		if (avatar != null && WTW.cameraFocus == 1) {
 			var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");

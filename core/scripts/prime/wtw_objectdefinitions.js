@@ -2,7 +2,10 @@
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
+/* these functions create a default object for each main type of object used in WalkTheWeb */
+
 WTWJS.prototype.newAnalyticsQueue = function() {
+	/* create an instance for the analytics Queue */
 	var analyticsqueue = '';
 	try {
 		analyticsqueue = {
@@ -18,6 +21,7 @@ WTWJS.prototype.newAnalyticsQueue = function() {
 }
 
 WTWJS.prototype.newMoldEvent = function() {
+	/* create an instance for the mold event (animation tied to a mold) */
 	var moldevent = '';
 	try {
 		moldevent = {
@@ -50,6 +54,7 @@ WTWJS.prototype.newMoldEvent = function() {
 }
 
 WTWJS.prototype.newObjectAnimation = function() {
+	/* create an instance for the Object Animation (Animation defined for 3D Objects like Babylon Files) */
 	var objectanimation = '';
 	try {
 		objectanimation = {
@@ -79,6 +84,8 @@ WTWJS.prototype.newObjectAnimation = function() {
 }
 
 WTWJS.prototype.newMoldQueue = function() {
+	/* create an instance for the mold Queue */
+	/* mold queue is used to spread mold creation over frames more evenly for smoother animation */
 	var moldqueue = '';
 	try {
 		moldqueue = {
@@ -101,6 +108,7 @@ WTWJS.prototype.newMoldQueue = function() {
 }
 
 WTWJS.prototype.newRideAlong = function() {
+	/* work in progress - create an instance for the Ride Along (avatar riding on a vehicle) */
 	var ridealong = '';
 	try {
 		ridealong = {
@@ -128,6 +136,7 @@ WTWJS.prototype.newRideAlong = function() {
 }
 
 WTWJS.prototype.newUpload = function() {
+	/* create an instance for an Uploaded File (depreciated - used for database stored files) */
 	var upload = '';
 	try {
 		upload = {
@@ -158,6 +167,8 @@ WTWJS.prototype.newUpload = function() {
 }
 
 WTWJS.prototype.newConnectingGrid = function() {
+	/* create an instance for a Connecting Grid - defined the position, scaling, and rotation of a web item in another web item. */
+	/* Example: placement of a 3D Building in a 3D Community Scene */
 	var connectinggrid = '';
 	try {
 		connectinggrid = {
@@ -238,6 +249,8 @@ WTWJS.prototype.newConnectingGrid = function() {
 }
 
 WTWJS.prototype.newActionZone = function() {
+	/* create an instance for an Action Zone */
+	/* Action Zones provide a trigger in the 3D Scene to execute an action of usually animation or JavaScript function */
 	var actionzone = '';
 	try {
 		actionzone = {
@@ -331,6 +344,8 @@ WTWJS.prototype.newActionZone = function() {
 }
 
 WTWJS.prototype.newMold = function() {
+	/* create an instance for a Mold */
+	/* molds are definitions for meshes to be loaded or unloaded in the 3D Scene */
 	var molddef = '';
 	var path1 = [];
 	var path2 = [];
@@ -527,6 +542,8 @@ WTWJS.prototype.newMold = function() {
 }
 
 WTWJS.prototype.newPathPoint = function() {
+	/* create an instance for a Path Point */
+	/* points are used for Tubes, Lines, and other molds that use a series of points as part of their use */
 	var pathpoint = '';
 	try {
 		var pathpoint = {
@@ -542,6 +559,7 @@ WTWJS.prototype.newPathPoint = function() {
 }
 
 WTWJS.prototype.newAvatarDef = function() {
+	/* create an instance for an Avatar definition */
 	var avatardef = '';
 	var avatarparts = [];
 	var animations = [];
@@ -643,6 +661,7 @@ WTWJS.prototype.newAvatarDef = function() {
 }
 
 WTWJS.prototype.newAvatarAnimationDef = function() {
+	/* create an instance for an Avatar Animation Definition */
 	var animationdef = '';
 	try {
 		animationdef = {
@@ -674,6 +693,7 @@ WTWJS.prototype.newAvatarAnimationDef = function() {
 }
 
 WTWJS.prototype.newAvatarAnimationDefs = function() {
+	/* create an instance of an Array of default Avatar Animations that includes all of the basic functionality */
 	var animationdefs = [];
 	try {
 		animationdefs[0] = {
@@ -1009,6 +1029,7 @@ WTWJS.prototype.newWebImage = function() {
 }
 
 WTWJS.prototype.newHTMLSegment = function() {
+	/* create an instance for HTML segments of text to be converted into 3D Elements in the 3D Scene */
 	var htmlsegment = '';
 	try {
 		htmlsegment = {
@@ -1054,6 +1075,9 @@ WTWJS.prototype.newHTMLSegment = function() {
 }
 
 WTWJS.prototype.newAutomation = function() {
+	/* create an instance for an Automation Step */
+	/* automations are sequences of events. */
+	/* Example: open a door, pause an amount of time, then close a door automatically */
 	try {
 		automation = {
 			'communityinfo':

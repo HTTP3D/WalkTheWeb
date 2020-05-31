@@ -2,7 +2,10 @@
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
+/* these functions are used to initialize a new instance of WalkTheWeb and listeners for input */
+
 WTWJS.prototype.initEvents = function() {
+	/* initialize all event listeners for input controls */
 	try {
 		dGet('wtw_renderCanvas').addEventListener("click", WTW.mouseClick);
 		window.addEventListener("onkeydown", WTW.keyDown,true);
@@ -34,11 +37,12 @@ WTWJS.prototype.initEvents = function() {
 			window.attachEvent("onmessage", WTW.onMessage, false);
 		}
 	} catch (ex) {
-		WTW.log("init-initEvents=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_init.js-initEvents=" + ex.message);
 	}
 }
 
 window.onload = function() {
+	/* windows onload includes analytics reporting (if set), set window size, and initialize WalkTheWeb */
 	try {
 		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -61,10 +65,11 @@ window.onload = function() {
 			WTW.accessDenied();
 		}
 	} catch (ex) {
-		WTW.log("init-onload=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_init.js-onload=" + ex.message);
 	}
 }
 window.onresize = function () {
+	/* on resize, run the set window size function */
 	try {
 		if (typeof WTW.setWindowSize == 'function') {
 			WTW.setWindowSize();
@@ -73,3 +78,16 @@ window.onresize = function () {
 		WTW.log("init-onresize=" + ex.message);
 	}
 }
+
+WTWJS.prototype.beforeUnload = function (e) {
+	/* function is tied to the event listener for beforeunload - executes right before the webpage closes */
+	try {
+		e = e || window.event;
+		WTW.pluginsBeforeUnload();
+//		e.returnValue = null;
+//		return null;
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_init.js-beforeUnload=" + ex.message);
+	}
+}
+

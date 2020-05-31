@@ -1,3 +1,5 @@
+/* work in progress - event listeners that can be used instead of code Hooks */
+
 WTWJS.prototype.addEventListener = function(zevent, zfunction, zparameters, zsort, ztype) {
 	try {
 		/* type = override, append (default), or wtw (original function) */

@@ -2,21 +2,27 @@
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
+/* these functions are only used on the installation process. Some of these functions are later repeated in other files as needed (and can have modifications) */
+
+/* initials the WTW JavaScript class */
 function WTWJS() {
 	this.adminView = 0;
 }
 var WTW = new WTWJS();
 var wtw_devmode = '1';
 
-WTWJS.prototype.dGet = function(k) {
+function dGet(k) {
+	/* function to simplify document.getElementById calls (outside the WTW class) */
 	return document.getElementById(k);
 }
 
-function dGet(k) {
+WTWJS.prototype.dGet = function(k) {
+	/* function to simplify document.getElementById calls (inside the WTW class - WTW.dGet() ) */
 	return document.getElementById(k);
 }
 
 WTWJS.prototype.log = function(txt,color) {
+	/* WTW.log() combines console.log and setting the color for the log */
 	if (wtw_devmode == '1') {
 		if (color == undefined) {
 			color = "black";
@@ -30,6 +36,7 @@ WTWJS.prototype.log = function(txt,color) {
 }
 
 WTWJS.prototype.getJSON = function(zurl, zcallback, zaction, zrequest) {
+	/* performs a JSON call for data */
 	try {
 		if (zaction == undefined) {
 			zaction = 'GET';
@@ -52,6 +59,7 @@ WTWJS.prototype.getJSON = function(zurl, zcallback, zaction, zrequest) {
 }
 
 WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
+	/* performs a form POST based JSON call for data */
 	try {
 		var form1 = document.createElement('form');
 		var Httpreq = new XMLHttpRequest();
@@ -73,6 +81,7 @@ WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
 }
 
 WTWJS.prototype.encode = function(value) {
+	/* simplified version of escape text */
 	try {
 		if (value != null) {
 			while (value.indexOf('"') > -1) {
@@ -98,6 +107,7 @@ WTWJS.prototype.encode = function(value) {
 }
 
 WTWJS.prototype.decode = function(value) {
+	/* decifer simplified version of escape text */
 	try {
 		if (value != null) {
 			while (value.indexOf('&amp;') > -1) {
@@ -129,6 +139,7 @@ WTWJS.prototype.decode = function(value) {
 }
 
 WTWJS.prototype.show = function(item) {
+	/* show HTML element from its id */
 	try {
 		if (dGet(item) != null) {
 			dGet(item).style.display = 'block';
@@ -146,6 +157,7 @@ WTWJS.prototype.show = function(item) {
 }
 
 WTWJS.prototype.showInline = function(item) {
+	/* show HTML element inline-block from its id */
 	try {
 		if (dGet(item) != null) {
 			dGet(item).style.display = 'inline-block';
@@ -157,6 +169,7 @@ WTWJS.prototype.showInline = function(item) {
 }
 
 WTWJS.prototype.hide = function(item) {
+	/* hide HTML element from its id */
 	try {
 		if (dGet(item) != null) {
 			dGet(item).style.display = 'none';
@@ -168,6 +181,7 @@ WTWJS.prototype.hide = function(item) {
 }
 
 WTWJS.prototype.cleanInvalidCharacters = function(value) {
+	/* remove line breaks and other select non text characters from string */
 	try {
 		if (value != null) {
 			value = value.replace(/\\n/g, "\\n")  
@@ -188,6 +202,7 @@ WTWJS.prototype.cleanInvalidCharacters = function(value) {
 }
 
 WTWJS.prototype.getRandomString = function(length) {
+	/* gets a random alpha numeric string - often used as ID fields */
     var result = '';
 	try {
 		var chars = '0123456789abcdefghijklmnopqrstuvwxyz';

@@ -283,39 +283,39 @@ WTWJS.prototype.loadUserCanvas = function() {
 			WTW.uicanvas = dGet("wtw_uiCanvas");
 			WTW.uicanvas.width = WTW.sizeX;
 			WTW.uicanvas.height = WTW.sizeY;
-			WTW.ctx = WTW.uicanvas.getContext("2d");
+			let zctx = WTW.uicanvas.getContext("2d");
 			var compassangle = 90;
 			if (WTW.myAvatar != null) {
 				compassangle = -WTW.getDegrees(WTW.myAvatar.rotation.y) + 90;
 			}
 			if (WTW.adminView == 1) {
-				WTW.ctx.translate(WTW.sizeX - (WTW.sizeX * 1.1 / 24),WTW.sizeY - (WTW.sizeX * .3 / 12) - 120); 
+				zctx.translate(WTW.sizeX - (WTW.sizeX * 1.1 / 24),WTW.sizeY - (WTW.sizeX * .3 / 12) - 120); 
 			} else {
-				WTW.ctx.translate(WTW.sizeX - (WTW.sizeX * 1.1 / 24),WTW.sizeY - (WTW.sizeX * .3 / 12) - 90); 
+				zctx.translate(WTW.sizeX - (WTW.sizeX * 1.1 / 24),WTW.sizeY - (WTW.sizeX * .3 / 12) - 90); 
 			}
-			WTW.ctx.rotate(compassangle * Math.PI / 180); 
+			zctx.rotate(compassangle * Math.PI / 180); 
 			try {
-				WTW.ctx.drawImage(dGet("wtw_iwalkcompass"), -(WTW.sizeX / 24), -(WTW.sizeX / 24), (WTW.sizeX * 2 / 24), (WTW.sizeX * 2 / 24));
+				zctx.drawImage(dGet("wtw_iwalkcompass"), -(WTW.sizeX / 24), -(WTW.sizeX / 24), (WTW.sizeX * 2 / 24), (WTW.sizeX * 2 / 24));
 			} catch(ex) {}
-			WTW.ctx.rotate(-compassangle * Math.PI / 180);
+			zctx.rotate(-compassangle * Math.PI / 180);
 			if (WTW.closestAngle != null && WTW.closestDistance > 80) {
-				WTW.ctx.rotate(-(WTW.closestAngle) * Math.PI / 180); 
+				zctx.rotate(-(WTW.closestAngle) * Math.PI / 180); 
 				try {
-					WTW.ctx.drawImage(dGet("wtw_iwalkcompassarrow"), -10, -80, 19, 80);
+					zctx.drawImage(dGet("wtw_iwalkcompassarrow"), -10, -80, 19, 80);
 				} catch(ex) {}
-				WTW.ctx.rotate((WTW.closestAngle) * Math.PI / 180);
+				zctx.rotate((WTW.closestAngle) * Math.PI / 180);
 			}
 			if (WTW.adminView == 1) {
-				WTW.ctx.translate(-(WTW.sizeX - (WTW.sizeX * 1.1 / 24)), -(WTW.sizeY - (WTW.sizeX * .3 / 12) - 120)); 
+				zctx.translate(-(WTW.sizeX - (WTW.sizeX * 1.1 / 24)), -(WTW.sizeY - (WTW.sizeX * .3 / 12) - 120)); 
 			} else {
-				WTW.ctx.translate(-(WTW.sizeX - (WTW.sizeX * 1.1 / 24)), -(WTW.sizeY - (WTW.sizeX * .3 / 12) - 90)); 
+				zctx.translate(-(WTW.sizeX - (WTW.sizeX * 1.1 / 24)), -(WTW.sizeY - (WTW.sizeX * .3 / 12) - 90)); 
 			}
 		} else {
 			WTW.uicanvas = dGet("wtw_uiCanvas");
 			WTW.uicanvas.width = WTW.sizeX;
 			WTW.uicanvas.height = WTW.sizeY;
-			WTW.ctx = WTW.uicanvas.getContext("2d");
-			WTW.ctx.clearRect(0, 0, WTW.sizeX, WTW.sizeY);
+			let zctx = WTW.uicanvas.getContext("2d");
+			zctx.clearRect(0, 0, WTW.sizeX, WTW.sizeY);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_core.js-loadUserCanvas=" + ex.message);
@@ -348,8 +348,8 @@ WTWJS.prototype.loadCommunity = function(addcommunities) {
 					WTW.editCommunityAccess = WTW.communities[0].communityinfo.access;
 				}
 			}
-			if (WTW.communityName == "Walk the Web") {
-				dGet('wtw_showcommunityname').innerHTML = "Walk the Web";
+			if (WTW.communityName == "Walk the Web" || WTW.communityName == "WalkTheWeb") {
+				dGet('wtw_showcommunityname').innerHTML = "WalkTheWeb";
 				dGet('wtw_showcommunityname').style.cursor = 'default';
 			} else {
 				dGet('wtw_showcommunityname').innerHTML = WTW.decode(WTW.communityName);
@@ -457,12 +457,12 @@ WTWJS.prototype.loadCommunity = function(addcommunities) {
 			var shadowsetting = WTW.getCookie("wtw_shadowsetting");
             if (shadowsetting == null || isNaN(shadowsetting))  {
                 if (WTW.gpuSetting == 'medium') {
-					WTW.shadowset = 1;
+					WTW.shadowSet = 1;
                 }
                 else if (WTW.gpuSetting == 'high') {
-					WTW.shadowset = 3;
+					WTW.shadowSet = 3;
                 } else {
-					WTW.shadowset = 3;
+					WTW.shadowSet = 3;
                 }
             }
             WTW.setShadowSettings();
@@ -1049,12 +1049,8 @@ WTWJS.prototype.startRender = function() {
 				scene.render();
 				try {
 					WTW.pluginsRenderloop();
-					WTW.animationRatio = scene.getAnimationRatio();
+					//WTW.animationRatio = scene.getAnimationRatio();
 					WTW.fps = (Math.round(engine.getFps() * 100) / 100).toFixed(2);
-					WTW.framei += 1;
-					if (WTW.framei > WTW.fps * 2) {
-						WTW.framei = 0;
-					}
 					if (WTW.isInitCycle == 0 && WTW.myAvatar != null) {
 						WTW.pluginsRenderloopAfterInit();
 					}
@@ -1306,7 +1302,7 @@ WTWJS.prototype.setClosestBuilding = function() {
 				WTW.closestAngle = null;
 			} 
 		}
-		if (WTW.browseWebID != closestwebid || (WTW.browseUserID != dGet('wtw_tuserid').value)) {
+		if (WTW.closestWebID != closestwebid) {
 			
 			if (dGet('wtw_showbuildingname') != null) {
 				if (closestwebname != "") {
@@ -1423,8 +1419,7 @@ WTWJS.prototype.setClosestBuilding = function() {
 					WTW.hide('wtw_modecommunity');
 				}
 			}
-			WTW.browseUserID = dGet('wtw_tuserid').value;
-			WTW.browseWebID = closestwebid;
+			WTW.closestWebID = closestwebid;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_core.js-setClosestBuilding=" + ex.message);

@@ -1,4 +1,5 @@
 WTWJS.prototype.openHUDFollow = function() {
+	/* new feature just beginning to be coded */
 	try {
 WTW.log("OPEN HUD");
 		var anchor = new BABYLON.TransformNode("");
