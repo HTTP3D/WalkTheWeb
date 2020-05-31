@@ -1187,12 +1187,12 @@ WTWJS.prototype.clearAnimations = function(zavatarname) {
 WTWJS.prototype.changeMyAvatarAnimation = function(zavataranimationid) {
 	try {
 		lasteditavatarid = zavataranimationid;
-		let zavatarind = -1;
+		let zavataranimationind = -1;
 		if (dGet('wtw_teditanimationevent').value != '') {
 			for (var i=0;i<WTW.avatarAnimations.length;i++) {
 				if (WTW.avatarAnimations[i] != null) {
 					if (WTW.avatarAnimations[i].avataranimationid == zavataranimationid) {
-						zavatarind = i;
+						zavataranimationind = i;
 					}
 					if (WTW.avatarAnimations[i].animationevent == dGet('wtw_teditanimationevent').value) {
 						WTW.avatarAnimations[i].selected = false;
@@ -1200,8 +1200,8 @@ WTWJS.prototype.changeMyAvatarAnimation = function(zavataranimationid) {
 				}
 			}
 		}
-		if (WTW.avatarAnimations[zavatarind] != null) {
-			WTW.avatarAnimations[zavatarind].selected = true;
+		if (WTW.avatarAnimations[zavataranimationind] != null) {
+			WTW.avatarAnimations[zavataranimationind].selected = true;
 		}
 		WTW.getMyAvatarAnimations(dGet('wtw_teditanimationevent').value);
 	} catch (ex) {
@@ -1954,15 +1954,17 @@ WTWJS.prototype.preloadAvatar = function(zavatarid) {
 }
 
 WTWJS.prototype.selectAvatar = function(zavatarid) {
-	try {
+	try {//avatarid
 		if (loadingtimer != null) {
 			WTW.stopLoading();
 		}
 		for (var i=0;i<WTW.avatars.length;i++) {
 			if (WTW.avatars[i] != null) {
 				var zloadedavatarid = '';
-				if (avatardef.avatarid != undefined) {
-					zloadedavatarid = avatardef.avatarid;
+				if (avatardef != null) {
+					if (avatardef.avatarid != undefined) {
+						zloadedavatarid = avatardef.avatarid;
+					}
 				}
 				if (WTW.avatars[i].avatarid == zavatarid) {
 					WTW.avatars[i].selected = true;

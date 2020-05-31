@@ -7,7 +7,7 @@ try {
 	/* get sent data */
 	$zrequest = file_get_contents('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
-	/* get the requested function name for the awitch case below */
+	/* get the requested function name for the switch case below */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	
 	/* get form Posted Values - your passed data */
