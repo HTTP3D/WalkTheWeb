@@ -1049,6 +1049,60 @@ WTWJS.prototype.clearDDL = function(ddlname) {
     }
 }
 
+WTWJS.prototype.setCookie = function(name,value,days) {
+	/* set cookie will use https if available */
+	try {
+		var expires = "";
+		if (days) {
+			var date = new Date();
+			date.setTime(date.getTime() + (days*24*60*60*1000));
+			var expires = "; expires=" + date.toGMTString();
+		}
+		if (wtw_protocol == "https://") {
+			document.cookie = name + "=" + value + expires + "; domain=" + wtw_domainname + ";path=/;secure";
+		} else {
+			document.cookie = name + "non=" + value + expires + "; path=/";
+		}
+    } catch (ex) {
+        WTW.log("core-scripts-prime-wtw_common.js-setCookie=" +ex.message);
+    }
+}
+
+WTWJS.prototype.getCookie = function(name) {
+	/* get cookie by name */
+	var value = "";
+	try {
+		if (wtw_protocol != "https://") {
+			name += "non=";
+		}
+		var cookies = document.cookie.split(';');
+		for(var i=0;i < cookies.length;i++) {
+			var cook = cookies[i];
+			while (cook.charAt(0)==' ') {
+				cook = cook.substring(1,cook.length);
+			}
+			if (cook.indexOf(name) == 0) {
+				value = cook.substring(name.length,cook.length);
+			}
+		}
+		if (value == "") {
+			value = null;
+		} else if (value.indexOf("non=") > -1) {
+			value = value.replace("non=","");
+		} else if (value.indexOf("=") > -1) {
+			value = value.replace("=","");
+		}
+    } catch (ex) {
+        WTW.log("core-scripts-prime-wtw_common.js-getCookie=" +ex.message);
+    }
+	return value;
+}
+
+WTWJS.prototype.deleteCookie = function(name) {
+	/* delete cookie by name (expire immediately) */
+    WTW.setCookie(name,"",-1);
+}
+
 WTWJS.prototype.isNumeric = function(n) {
 	/* boolean - is a text string a number */
     return !isNaN(parseFloat(n)) && isFinite(n);
@@ -1972,6 +2026,21 @@ WTWJS.prototype.logout = function() {
 		dGet('wtw_menuusername').innerHTML = "";
 		dGet('wtw_profileimagelg').src = "/content/system/images/menuprofilebig.png";
 		dGet('wtw_profileimagesm').src = "/content/system/images/menuprofile32.png";
+		if (dGet('wtw_mainadminmode') != null) {
+			dGet('wtw_mainadminmode').innerHTML = "";
+		}
+		if (dGet('wtw_modecommunity') != null) {
+			dGet('wtw_modecommunity').onclick = "";
+		}
+		if (dGet('wtw_showcommunityname') != null) {
+			dGet('wtw_showcommunityname').onclick = "";
+		}
+		if (dGet('wtw_modebuilding') != null) {
+			dGet('wtw_modebuilding').onclick = "";
+		}
+		if (dGet('wtw_showbuildingname') != null) {
+			dGet('wtw_showbuildingname').onclick = "";
+		}
 		if (window.location.href.indexOf("admin.php") > -1) {
 			window.location.href = "//" + wtw_domainname + "/";
 		} else {
@@ -2360,6 +2429,19 @@ WTWJS.prototype.createFunctionName = function(moldname) {
 	return functionname;
 }
 
+WTWJS.prototype.registerMouseOver = function(mold) {
+	/* register mouse over creates a mouseover event on a mold hover in the 3D Scene */
+	try {
+		if (mold != null) {
+			mold.actionManager = new BABYLON.ActionManager(scene);	
+			mold.actionManager.registerAction(WTW.mouseOver);
+			mold.actionManager.registerAction(WTW.mouseOut);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-registerMouseOver=" + ex.message);
+	}
+}
+
 WTWJS.prototype.getRotateMoldName = function(moldname) {
 	/* name of the axle for rotation from an Action Zone that is applied to a mold */
 	var rotatemoldname = "";
@@ -2624,6 +2706,7 @@ WTWJS.prototype.getNextCount = function(listarray) {
 }
 
 WTWJS.prototype.getParentName = function(connectinggridind) {
+	/* get a parent name (Connecting Grid) based on the index in the array of loaded Connecting Grids */
 	var parentname = "";
 	try {
 		if (WTW.isNumeric(connectinggridind)) {
@@ -2638,6 +2721,7 @@ WTWJS.prototype.getParentName = function(connectinggridind) {
 }
 
 WTWJS.prototype.getParentActionZoneName = function(actionzoneind, connectinggridind) {
+	/* get the Parent Name of a mold that parents an Action Zone (example part of a door) */
 	var parentname = "";
 	try {
 		if (WTW.isNumeric(actionzoneind)) {
@@ -2652,6 +2736,7 @@ WTWJS.prototype.getParentActionZoneName = function(actionzoneind, connectinggrid
 }
 
 WTWJS.prototype.getMoldInd = function(molds, moldid, connectinggridind) {
+	/* get Mold Index from an array of molds using the moldID (gets definition) and Connecting Grid (gets instance) */
 	var moldind = -1;
 	try {
 		if (molds != null && moldid != "") {
@@ -2671,6 +2756,7 @@ WTWJS.prototype.getMoldInd = function(molds, moldid, connectinggridind) {
 }
 
 WTWJS.prototype.getAltMoldInd = function(molds, moldid, altconnectinggridind) {
+	/* get Mold Index from an array of molds using the moldID (gets definition) and Alternate Connecting Grid (gets instance) */
 	var moldind = -1;
 	try {
 		if (molds != null && moldid != "") {
@@ -2690,6 +2776,7 @@ WTWJS.prototype.getAltMoldInd = function(molds, moldid, altconnectinggridind) {
 }
 
 WTWJS.prototype.getUploadInd = function(uploadid) {
+	/* get upload index for an upload definition */
 	var uploadind = -1;
 	try {
 		if (wtw_uploads != null && uploadid != "") {
@@ -2709,6 +2796,7 @@ WTWJS.prototype.getUploadInd = function(uploadid) {
 }
 
 WTWJS.prototype.getThingInd = function(zthingid) {
+	/* get thing Index for a thing (not concerned with instance) */
 	var zthingind = -1;
 	try {
 		if (WTW.things != null) {
@@ -2728,6 +2816,7 @@ WTWJS.prototype.getThingInd = function(zthingid) {
 }
 
 WTWJS.prototype.getBuildingInd = function(zbuildingid) {
+	/* get thing Index for a building (not concerned with instance) */
 	var zbuildingind = -1;
 	try {
 		if (WTW.buildings != null && zbuildingid !== "") {
@@ -2747,6 +2836,7 @@ WTWJS.prototype.getBuildingInd = function(zbuildingid) {
 }
 
 WTWJS.prototype.getCommunityInd = function(zcommunityid) {
+	/* get thing Index for a community (not concerned with instance) */
 	var zcommunityind = -1;
 	try {
 		if (WTW.communities != null && zcommunityid != "") {
@@ -2768,6 +2858,7 @@ WTWJS.prototype.getCommunityInd = function(zcommunityid) {
 }
 
 WTWJS.prototype.getConnectingGridInd = function(zconnectinggridid) {
+	/* get thing Index for a connecting grid (connecting grids create the instance) */
 	var zconnectinggridind = -1;
 	try {
 		if (WTW.connectingGrids != null && zconnectinggridid != "") {
@@ -2787,6 +2878,7 @@ WTWJS.prototype.getConnectingGridInd = function(zconnectinggridid) {
 }
 
 WTWJS.prototype.getActionZoneInd = function(zactionzoneid, connectinggridind) {
+	/* get action zone Index by id and connecting grid (connecting grids create the instance) */
 	var zactionzoneind = -1;
 	try {
 		if (WTW.actionZones != null && zactionzoneid != "") {
@@ -2806,6 +2898,7 @@ WTWJS.prototype.getActionZoneInd = function(zactionzoneid, connectinggridind) {
 }
 
 WTWJS.prototype.getCommunityName = function(zcommunityid) {
+	/* get community name for a given community id (all instances use the same name) */
 	var zcommunityname = "";
 	try {
 		if (WTW.communities != null && zcommunityid !== "") {
@@ -2825,6 +2918,7 @@ WTWJS.prototype.getCommunityName = function(zcommunityid) {
 }
 
 WTWJS.prototype.getBuildingName = function(zbuildingid) {
+	/* get building name for a given building id (all instances use the same name) */
 	var zbuildingname = "";
 	try {
 		if (WTW.buildings != null && zbuildingid !== "") {
@@ -2844,6 +2938,7 @@ WTWJS.prototype.getBuildingName = function(zbuildingid) {
 }
 
 WTWJS.prototype.getNameFromConnectingGrid = function(zwebid) {
+	/* get hte name of a community, building, or thing by the connecting grid (instance) */
 	var zwebname = "";
 	try {
 		if (WTW.connectingGrids != null && zwebid !== "") {
@@ -2869,6 +2964,7 @@ WTWJS.prototype.getNameFromConnectingGrid = function(zwebid) {
 }
 
 WTWJS.prototype.getThingName = function(zthingid) {
+	/* get thing name for a given thing id (all instances use the same name) */
 	var zthingname = "";
 	try {
 		if (WTW.things != null && zthingid !== "") {
@@ -3075,6 +3171,7 @@ WTWJS.prototype.clearSoundAndLights = function(moldgroup, moldind) {
 }
 
 WTWJS.prototype.disposeMaterial = function(materialname) {
+	/* dispose of material from all molds using it in the 3D Scene */
 	try {
 		var covering = scene.getMaterialByID(materialname);
 		if (covering != null) {
@@ -3085,20 +3182,31 @@ WTWJS.prototype.disposeMaterial = function(materialname) {
 	}
 }
 
-WTWJS.prototype.clearOptions = function(selectname) {
-	try {
-		if (dGet(selectname) != null) {
-			for(var i=dGet(selectname).options.length - 1; i >= 0 ; i--)
-			{
-				dGet(selectname).remove(i);
-			}
+WTWJS.prototype.setMeshTransparentFog = function(mesh, maxz) {
+	/* used on large molds to provide the fog appearance at distances by vertex points */
+    try {
+		/* vertex colors */
+		var colors = [];
+		var color = [1,1,1,1];
+		var vtx = mesh.getVerticesData( BABYLON.VertexBuffer.PositionKind);
+		var i = 0;
+		while (i<vtx.length) {
+			var x = vtx[i++];
+			var y = vtx[i++];
+			var z = vtx[i++];
+			color[3] = 1.0 - Math.min(1, Math.max(0, z / maxz));
+			colors.push(color[0],color[1],color[2],color[3]);
 		}
+		mesh.setVerticesData( BABYLON.VertexBuffer.ColorKind, colors);
+		mesh.useVertexColors = true;
+		mesh.hasVertexAlpha = true;
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-clearOptions=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_common.js-setMeshTransparentFog=" + ex.message);
 	}
-}
+};
 
 WTWJS.prototype.checkJSFunction = function(moldname) {
+	/* triggered by click event, if the mold has a function (by function name string) assigned to it, this will execute it */
 	try {
 		if (moldname.indexOf('-') > -1) {
 			var namepart = moldname.split('-');
@@ -3122,7 +3230,11 @@ WTWJS.prototype.checkJSFunction = function(moldname) {
     }
 }
 
+
+/* User Menu Settings functions */
+
 WTWJS.prototype.changeWalkAnimationSpeed = function() {
+	/* walk animation speed set in the user menu */
 	try {
 		WTW.walkAnimationSpeed = Number(dGet('wtw_twalkanimationspeed').value);
         WTW.setCookie("walkanimationspeed",WTW.walkAnimationSpeed,365);
@@ -3132,6 +3244,7 @@ WTWJS.prototype.changeWalkAnimationSpeed = function() {
 }
 
 WTWJS.prototype.changeWalkSpeed = function() {
+	/* walk speed set in the user menu */
 	try {
 		WTW.walkSpeed = Number(dGet('wtw_twalkspeed').value);
         WTW.setCookie("walkspeed",WTW.walkSpeed,365);
@@ -3141,6 +3254,7 @@ WTWJS.prototype.changeWalkSpeed = function() {
 }
 
 WTWJS.prototype.changeTurnAnimationSpeed = function() {
+	/* turn animation speed set in the user menu */
 	try {
 		WTW.turnAnimationSpeed = Number(dGet('wtw_tturnanimationspeed').value);
         WTW.setCookie("turnanimationspeed",WTW.turnAnimationSpeed,365);
@@ -3150,6 +3264,7 @@ WTWJS.prototype.changeTurnAnimationSpeed = function() {
 }
 
 WTWJS.prototype.changeTurnSpeed = function() {
+	/* turn speed set in the user menu */
 	try {
 		WTW.turnSpeed = Number(dGet('wtw_tturnspeed').value);
         WTW.setCookie("turnspeed",WTW.turnSpeed,365);
@@ -3159,6 +3274,7 @@ WTWJS.prototype.changeTurnSpeed = function() {
 }
 
 WTWJS.prototype.changeGraphic = function(w) {
+	/* graphic level set in the user menu */
 	try {
         if (typeof w == 'string') {
             WTW.graphicSet = Number(w);
@@ -3195,6 +3311,7 @@ WTWJS.prototype.changeGraphic = function(w) {
 }
 
 WTWJS.prototype.changeShadow = function(w) {
+	/* shadow resolution set in the user menu */
 	try {
         if (typeof w == 'string') {
             WTW.shadowSet = Number(w);
@@ -3221,6 +3338,7 @@ WTWJS.prototype.changeShadow = function(w) {
 }
 
 WTWJS.prototype.setShadowSettings = function() {
+	/* set shadow properties after shadow setting changed in the user menu */
     try {
 		dGet('wtw_tshadowsetting').defaultValue = WTW.shadowSet;
         var shadowresolution = 1024;
@@ -3295,170 +3413,11 @@ WTWJS.prototype.setShadowSettings = function() {
     }
 }
 
-WTWJS.prototype.setMeshTransparentFog = function(mesh, maxz) {
-    try {
-		/* vertex colors */
-		var colors = [];
-		var color = [1,1,1,1];
-		var vtx = mesh.getVerticesData( BABYLON.VertexBuffer.PositionKind);
-		var i = 0;
-		while (i<vtx.length) {
-			var x = vtx[i++];
-			var y = vtx[i++];
-			var z = vtx[i++];
-			color[3] = 1.0 - Math.min(1, Math.max(0, z / maxz));
-			colors.push(color[0],color[1],color[2],color[3]);
-		}
-		mesh.setVerticesData( BABYLON.VertexBuffer.ColorKind, colors);
-		mesh.useVertexColors = true;
-		mesh.hasVertexAlpha = true;
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-setMeshTransparentFog=" + ex.message);
-	}
-};
 
-WTWJS.prototype.setCookie = function(name,value,days) {
-	try {
-		var expires = "";
-		if (days) {
-			var date = new Date();
-			date.setTime(date.getTime() + (days*24*60*60*1000));
-			var expires = "; expires=" + date.toGMTString();
-		}
-		if (wtw_protocol == "https://") {
-			document.cookie = name + "=" + value + expires + "; domain=" + wtw_domainname + ";path=/;secure";
-		} else {
-			document.cookie = name + "non=" + value + expires + "; path=/";
-		}
-    } catch (ex) {
-        WTW.log("core-scripts-prime-wtw_common.js-setCookie=" +ex.message);
-    }
-}
-
-WTWJS.prototype.getCookie = function(name) {
-	var value = "";
-	try {
-		if (wtw_protocol != "https://") {
-			name += "non=";
-		}
-		var cookies = document.cookie.split(';');
-		for(var i=0;i < cookies.length;i++) {
-			var cook = cookies[i];
-			while (cook.charAt(0)==' ') {
-				cook = cook.substring(1,cook.length);
-			}
-			if (cook.indexOf(name) == 0) {
-				value = cook.substring(name.length,cook.length);
-			}
-		}
-		if (value == "") {
-			value = null;
-		} else if (value.indexOf("non=") > -1) {
-			value = value.replace("non=","");
-		} else if (value.indexOf("=") > -1) {
-			value = value.replace("=","");
-		}
-    } catch (ex) {
-        WTW.log("core-scripts-prime-wtw_common.js-getCookie=" +ex.message);
-    }
-	return value;
-}
-
-WTWJS.prototype.deleteCookie = function(name) {
-    WTW.setCookie(name,"",-1);
-}
-
-WTWJS.prototype.registerMouseOver = function(mold) {
-	try {
-		if (mold != null) {
-			mold.actionManager = new BABYLON.ActionManager(scene);	
-			mold.actionManager.registerAction(WTW.mouseOver);
-			mold.actionManager.registerAction(WTW.mouseOut);
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-registerMouseOver=" + ex.message);
-	}
-}
-
-WTWJS.prototype.highlightMold = function(mold, color) {
-	try {
-		if (mold != null) {
-			var opacity = .2;
-			if (mold.material != undefined) {
-				if (mold.material.subMaterials != undefined) {
-					for (var i = 0; i < mold.material.subMaterials.length; i++) {
-						mold.material.subMaterials[i].alpha = opacity;
-						if (opacity == 1) {
-							mold.material.subMaterials[i].specularColor = new BABYLON.Color3(opacity, opacity, opacity);
-							mold.material.subMaterials[i].diffuseColor = new BABYLON.Color3(opacity, opacity, opacity);		
-							mold.material.subMaterials[i].emissiveColor = new BABYLON.Color3(.7, .7, .7);
-						} else {
-							mold.material.subMaterials[i].specularColor = new BABYLON.Color3(opacity, opacity, opacity);
-							mold.material.subMaterials[i].diffuseColor = new BABYLON.Color3(opacity, opacity, opacity);		
-							if (color == "#008000") {
-								mold.material.subMaterials[i].emissiveColor = new BABYLON.Color3(opacity, 1, opacity);
-							} else if (color == "#800080") {
-								mold.material.subMaterials[i].emissiveColor = new BABYLON.Color3(opacity, opacity, 1);
-							} else {
-								mold.material.subMaterials[i].emissiveColor = new BABYLON.Color3(1, opacity, opacity);
-							}
-						}
-					}
-				} else {
-					mold.material.alpha = opacity;
-					if (color == "#008000") {
-						mold.material.specularColor = new BABYLON.Color3(opacity, 1, opacity);			
-						mold.material.diffuseColor = new BABYLON.Color3(opacity, 1, opacity);	
-						mold.material.emissiveColor = new BABYLON.Color3(opacity, 1, opacity);
-					} else if (color == "#800080") {
-						mold.material.specularColor = new BABYLON.Color3(opacity, opacity, 1);			
-						mold.material.diffuseColor = new BABYLON.Color3(opacity, opacity, 1);	
-						mold.material.emissiveColor = new BABYLON.Color3(opacity, opacity, 1);
-					} else {
-						mold.material.specularColor = new BABYLON.Color3(1, opacity, opacity);			
-						mold.material.diffuseColor = new BABYLON.Color3(1, opacity, opacity);	
-						mold.material.emissiveColor = new BABYLON.Color3(1, opacity, opacity);
-					}
-				}
-				scene.render();
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-highlightMold=" + ex.message);
-	}
-}
-
-WTWJS.prototype.unhighlightMold = function(mold, opacity) {
-	try {
-		if (mold != null) {
-			if (opacity == undefined) {
-				opacity = 1;
-			} 
-			if (mold.material != undefined) {
-				if (mold.material.subMaterials != undefined) {
-					for (var i = 0; i < mold.material.subMaterials.length; i++) {
-						mold.material.subMaterials[i].alpha = opacity;
-						mold.material.subMaterials[i].specularColor = new BABYLON.Color3(opacity, opacity, opacity);
-						mold.material.subMaterials[i].diffuseColor = new BABYLON.Color3(opacity, opacity, opacity);		
-						/* mold.material.subMaterials[i].emissiveColor = new BABYLON.Color3(opacity, opacity, opacity); */
-						mold.material.subMaterials[i].emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-					}
-				} else {
-					mold.material.alpha = opacity;
-					mold.material.specularColor = new BABYLON.Color3(opacity, opacity, opacity);			
-					mold.material.diffuseColor = new BABYLON.Color3(opacity, opacity, opacity);	
-					/* mold.material.emissiveColor = new BABYLON.Color3(opacity, opacity, opacity); */
-					mold.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-				}
-				scene.render();
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-unhighlightMold=" + ex.message);
-	}
-}
+/* mold animations and triggered events */
 
 WTWJS.prototype.addMoldAnimation = function(moldname, childname, mold, objectanimations) {
+	/* load an animation to a mold */
 	try {
 		if (objectanimations != null && mold != null) {
 			for (var i=0; i < objectanimations.length;i++) {
@@ -3553,6 +3512,7 @@ WTWJS.prototype.addMoldAnimation = function(moldname, childname, mold, objectani
 }
 
 WTWJS.prototype.runFunction = function(animationname) {
+	/* run a mold animation (triggered by event) */
 	try {
 		for (var i=0;i < WTW.moldEvents.length;i++) {
 			if (WTW.moldEvents[i] != null) {
@@ -3603,11 +3563,17 @@ WTWJS.prototype.runFunction = function(animationname) {
 }
 
 WTWJS.prototype.disposeMoldEvent = function(moldname) {
+	/* dispose mold animation event */
 	try {
 		for (var i=WTW.moldEvents.length;i>-1;i--) {
 			if (WTW.moldEvents[i] != null) {
 				if (WTW.moldEvents[i].moldname.indexOf(moldname) > -1) {
 					if (typeof window[WTW.moldEvents[i].animationname] == 'function') {
+						if (WTW.moldEvents[i].soundid != '') {
+							if (typeof WTW.moldEvents[i].sound.play == 'function') {
+								WTW.moldEvents[i].sound.stop();
+							}
+						}
 						window[WTW.moldEvents[i].animationname] = null;
 					}
 					WTW.moldEvents.splice(i, 1);
@@ -6159,12 +6125,7 @@ WTWJS.prototype.resetMoldOpacity = function(moldgroup, moldind) {
 						mold.material.subMaterials[i].alpha = opacity;
 						mold.material.subMaterials[i].specularColor = new BABYLON.Color3(Number(molds[moldind].color.specular.r), Number(molds[moldind].color.specular.g), Number(molds[moldind].color.specular.b));
 						mold.material.subMaterials[i].diffuseColor = new BABYLON.Color3(Number(molds[moldind].color.diffuse.r), Number(molds[moldind].color.diffuse.g), Number(molds[moldind].color.diffuse.b));	
-/*						if (mold.receiveShadows == false) {
-							mold.material.subMaterials[i].emissiveColor = new BABYLON.Color3(Number(molds[moldind].color.emissive.r), Number(molds[moldind].color.emissive.g), Number(molds[moldind].color.emissive.b));
-						} else {
-							mold.material.subMaterials[i].emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-						}
-*/					}
+					}
 				}
 			}
 			var moldimageframename = moldname + "-imageframe";
@@ -6174,45 +6135,8 @@ WTWJS.prototype.resetMoldOpacity = function(moldgroup, moldind) {
 					moldimageframe.material.specularColor = new BABYLON.Color3(Number(molds[moldind].color.specular.r), Number(molds[moldind].color.specular.g), Number(molds[moldind].color.specular.b));
 					moldimageframe.material.emissiveColor = new BABYLON.Color3(Number(molds[moldind].color.emissive.r), Number(molds[moldind].color.emissive.g), Number(molds[moldind].color.emissive.b));
 					moldimageframe.material.diffuseColor = new BABYLON.Color3(Number(molds[moldind].color.diffuse.r), Number(molds[moldind].color.diffuse.g), Number(molds[moldind].color.diffuse.b));	
-					/* moldimageframe.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity); */
 				}
 			}
-/*			var parts = mold.getChildren();
-			if (parts != null) {
-				for (var i=0; i < parts.length;i++) {
-					if (parts[i].name.indexOf("actionzone") == -1) {
-						if (parts[i].name.indexOf("-image-base") > -1 || parts[i].name.indexOf("-video-base") > -1) {
-							WTW.unhighlightMold(parts[i], 0);
-						} else {
-							WTW.unhighlightMold(parts[i], opacity);
-						}
-						var subparts = parts[i].getChildren();
-						if (subparts != null) {
-							for (var j=0; j < subparts.length;j++) {
-								if (subparts[j].name.indexOf("actionzone") == -1) {
-									if (subparts[j].name.indexOf("-image-base") > -1 || subparts[j].name.indexOf("-video-base") > -1) {
-										WTW.unhighlightMold(subparts[j], 0);
-									} else {
-										WTW.unhighlightMold(subparts[j], opacity);
-									}
-									var subsubparts = subparts[j].getChildren();
-									if (subsubparts != null) {
-										for (var k=0; k < subsubparts.length;k++) {
-											if (subsubparts[k].name.indexOf("actionzone") == -1) {
-												if (subsubparts[k].name.indexOf("-image-base") > -1 || subsubparts[k].name.indexOf("-video-base") > -1) {
-													WTW.unhighlightMold(subsubparts[k], 0);
-												} else {
-													WTW.unhighlightMold(subsubparts[k], opacity);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			} */
 		}		
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-resetMoldOpacity=" + ex.message);
