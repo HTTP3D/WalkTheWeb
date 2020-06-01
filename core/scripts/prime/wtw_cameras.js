@@ -15,6 +15,12 @@ WTWJS.prototype.loadPrimaryCamera = function(parentmold) {
 			WTW.camera = new BABYLON.UniversalCamera("maincamera", new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY, WTW.init.startPositionZ), scene);
 			WTW.camera.inertia = .80;
 		}
+		WTW.camera.inputs.attached.keyboard.detachControl();
+		if (WTW.placeHolder == 0) {
+			WTW.camera.inputs.attached.mouse.detachControl();
+		} else {
+			WTW.camera.inputs.remove(WTW.camera.inputs.attached.keyboard); 
+		}
 		WTW.resetActivityTimer();
 		WTW.camera.yOffset = 90;	
 		WTW.camera.angularSensibility = 1800;
@@ -28,7 +34,6 @@ WTWJS.prototype.loadPrimaryCamera = function(parentmold) {
 		WTW.camera.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 		WTW.addActiveCamera(WTW.camera);
 		scene.activeCameras[0].attachControl(canvas, true);
-		WTW.camera.inputs.attached.mouse.detachControl();
 		WTW.camera.parent = parentmold; 
 		scene.cameraToUseForPointers = scene.activeCameras[0];
 	} catch (ex) {
