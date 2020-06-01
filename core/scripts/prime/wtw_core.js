@@ -1749,18 +1749,46 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 										case 'onturnleft':
 											zavatar.rotation.y -= WTW.getRadians(70 * zavatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
 											zavatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed;
+											var zstride = WTW.init.gravity * 15 * zavatar.WTW.animations.running[key].weight / WTW.fps;
+											var zmove = WTW.getMoveDownVector(zavatar.name, -zstride);
+											var avatary = zavatar.position.y;
+											zavatar.moveWithCollisions(zmove);
+											if (avatary != zavatar.position.y) {
+												WTW.checkZones = true;
+											}
 											break;
 										case 'onrunturnleft':
 											zavatar.rotation.y -= WTW.getRadians(120 * zavatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
 											zavatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed * 1.5;
+											var zstride = WTW.init.gravity * 15 * zavatar.WTW.animations.running[key].weight / WTW.fps;
+											var zmove = WTW.getMoveDownVector(zavatar.name, -zstride);
+											var avatary = zavatar.position.y;
+											zavatar.moveWithCollisions(zmove);
+											if (avatary != zavatar.position.y) {
+												WTW.checkZones = true;
+											}
 											break;
 										case 'onturnright':
 											zavatar.rotation.y += WTW.getRadians(70 * zavatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
 											zavatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed;
+											var zstride = WTW.init.gravity * 15 * zavatar.WTW.animations.running[key].weight / WTW.fps;
+											var zmove = WTW.getMoveDownVector(zavatar.name, -zstride);
+											var avatary = zavatar.position.y;
+											zavatar.moveWithCollisions(zmove);
+											if (avatary != zavatar.position.y) {
+												WTW.checkZones = true;
+											}
 											break;
 										case 'onrunturnright':
 											zavatar.rotation.y += WTW.getRadians(120 * zavatar.WTW.animations.running[key].weight * WTW.turnSpeed / WTW.fps);
 											zavatar.WTW.animations.running[key].speedRatio = WTW.turnAnimationSpeed * 1.5;
+											var zstride = WTW.init.gravity * 15 * zavatar.WTW.animations.running[key].weight / WTW.fps;
+											var zmove = WTW.getMoveDownVector(zavatar.name, -zstride);
+											var avatary = zavatar.position.y;
+											zavatar.moveWithCollisions(zmove);
+											if (avatary != zavatar.position.y) {
+												WTW.checkZones = true;
+											}
 											break;
 										case 'onstrafeleft':
 											var zstride = 4 * zavatar.WTW.animations.running[key].weight * WTW.walkSpeed / WTW.fps;
