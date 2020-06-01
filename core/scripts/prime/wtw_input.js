@@ -130,7 +130,7 @@ WTWJS.prototype.touchMoving = function(e) {
 	try {
 		if (WTW.canvasFocus == 1) {
 			WTW.setTouchMove(e);
-			if (dGet('wtw_itouchleft').style.display == 'block') {
+			if (dGet('wtw_itouchleft').style.display == 'block' && WTW.placeHolder == 0) {
 				dGet('wtw_itouchleft').style.left = (WTW.mouseX - 25) + 'px';
 				dGet('wtw_itouchleft').style.top = (WTW.mouseY - 25) + 'px';
 				WTW.show('wtw_itouchleft');
@@ -203,7 +203,7 @@ WTWJS.prototype.keyDown = function(e) {
 		}
 		if (WTW.adminView == 1 && (ctrl || e.keyCode == 27)) {
 			WTW.adminMenuQuickKeys(e.keyCode);
-		} else if (WTW.canvasFocus == 1) {
+		} else if (WTW.canvasFocus == 1 && WTW.placeHolder == 0) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}
@@ -241,7 +241,7 @@ WTWJS.prototype.keyUp = function(e) {
 		}
 		if (WTW.adminView == 1 && (ctrl || e.keyCode == 27)) {
 			
-		} else if (WTW.canvasFocus == 1) {
+		} else if (WTW.canvasFocus == 1 && WTW.placeHolder == 0) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}
@@ -618,7 +618,7 @@ WTWJS.prototype.mouseScroll2 = function(e) {
 WTWJS.prototype.mouseScroll = function(rolled) {
 	/* mouse input - process mouse scrollbar movement */
     try {
-		if (WTW.canvasFocus == 1) {
+		if (WTW.canvasFocus == 1 && WTW.placeHolder == 0) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}

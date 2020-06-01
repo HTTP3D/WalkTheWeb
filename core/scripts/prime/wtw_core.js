@@ -1437,7 +1437,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 		if (WTW.animationSet == undefined || WTW.animationSet == null) {
 			WTW.animationSet = '';
 		}
-		if (zavatar != null && WTW.cameraFocus == 1) {
+		if (zavatar != null && WTW.cameraFocus == 1 && WTW.placeHolder == 0) {
 			zavatar.rotation.x = 0;
 			zavatar.rotation.z = 0;
 			var increment = .10;
