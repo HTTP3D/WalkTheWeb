@@ -74,6 +74,14 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
 				dGet('wtw_tmoldname').value = mold.name;
 				WTW.loadPickedObject(mold);
 			}
+WTW.log('pickedmesh=' + pickedmesh);
+		} else if (pickedname != '') {
+WTW.log('pickedname=' + pickedname);
+			var nameparts = pickedname.split('-');
+			pickedname = nameparts[0] + "-" + nameparts[1] + "-" + nameparts[2] + "-" + nameparts[3] + "-" + nameparts[4] + "-" + nameparts[5];
+			dGet('wtw_tmoldname').value = pickedname;
+			var mold = scene.getMeshByID(pickedname);
+			WTW.loadPickedObject(mold);
 		}
 		e.preventDefault();
 		return false;
@@ -85,7 +93,12 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
 WTWJS.prototype.getMoldBase = function(pickedmesh) {
 	var mold = null;
 	try {
-		if (pickedmesh.name.indexOf("buildingmolds") > -1 && buildingid == "") {
+		if (pickedmesh.name.indexOf("communitymolds") > -1 && communityid == "") {
+			mold = pickedmesh.parent;
+			while (mold.name.indexOf("connectinggrids") == -1) {
+				mold = mold.parent;
+			}
+		} else if (pickedmesh.name.indexOf("buildingmolds") > -1 && buildingid == "") {
 			mold = pickedmesh.parent;
 			while (mold.name.indexOf("connectinggrids") == -1) {
 				mold = mold.parent;

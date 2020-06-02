@@ -4986,7 +4986,7 @@ WTWJS.prototype.addActionZonePart = function(actionzoneid, mold) {
 
 WTWJS.prototype.getLoadZoneList = function(defaultvalue) {
 	try {
-		WTW.clearOptions("wtw_tmoldloadactionzoneid");
+		WTW.clearDDL("wtw_tmoldloadactionzoneid");
 		for (var i=0;i < WTW.actionZones.length;i++) {
 			if (WTW.actionZones[i] != null) {
 				if (WTW.actionZones[i].actionzonetype == 'loadzone') {
@@ -5016,7 +5016,7 @@ WTWJS.prototype.getLoadZoneList = function(defaultvalue) {
 
 WTWJS.prototype.getLoadActionZoneList = function(defaultvalue) {
 	try {
-		WTW.clearOptions("wtw_tazloadactionzoneid");
+		WTW.clearDDL("wtw_tazloadactionzoneid");
 		for (var i=0;i < WTW.actionZones.length;i++) {
 			if (WTW.actionZones[i] != null) {
 				if (WTW.actionZones[i].actionzonetype == 'loadzone') {
@@ -5145,7 +5145,7 @@ WTWJS.prototype.openSelectActionZoneForm = function() {
 		WTW.getActionZoneList();
 		if (WTW.actionZones.length > 0) {
 			dGet("wtw_selectactionzoneid").onchange = function() {};
-			WTW.clearOptions("wtw_selectactionzoneid");
+			WTW.clearDDL("wtw_selectactionzoneid");
 			var actionzonecount = 0;
 			dGet("wtw_selectactionzoneid").options[actionzonecount] = new Option("-- Select Action Zone --", "-1");
 			actionzonecount += 1;
@@ -6851,7 +6851,7 @@ WTWJS.prototype.editThing = function(zthingid) {
 WTWJS.prototype.loadAltActionZones = function(ddlname) {
 	try {
 		if (dGet(ddlname) != null) {
-			WTW.clearOptions(ddlname);
+			WTW.clearDDL(ddlname);
 			var option = document.createElement("option");
 			option.text = "Default";
 			option.value = "";
@@ -11148,8 +11148,8 @@ WTWJS.prototype.setAliasForm = function(zobj) {
 
 WTWJS.prototype.setAliasCommunities = function() {
 	try {
-		WTW.clearOptions("wtw_aliasdomaincommunityid");
-		WTW.clearOptions("wtw_aliascommunityid");
+		WTW.clearDDL("wtw_aliasdomaincommunityid");
+		WTW.clearDDL("wtw_aliascommunityid");
 		WTW.getJSON("/connect/communitynames.php", 
 			function(response) {
 				response = JSON.parse(response);
@@ -11179,7 +11179,7 @@ WTWJS.prototype.setAliasCommunities = function() {
 
 WTWJS.prototype.setAliasBuildings = function() {
 	try {
-		WTW.clearOptions("wtw_aliasbuildingid");
+		WTW.clearDDL("wtw_aliasbuildingid");
 		WTW.getJSON("/connect/buildingnames.php", 
 			function(response) {
 				response = JSON.parse(response);
@@ -11207,7 +11207,7 @@ WTWJS.prototype.setAliasBuildings = function() {
 
 WTWJS.prototype.setAliasThings = function() {
 	try {
-		WTW.clearOptions("wtw_aliasthingid");
+		WTW.clearDDL("wtw_aliasthingid");
 		WTW.getJSON("/connect/thingnames.php", 
 			function(response) {
 				response = JSON.parse(response);
