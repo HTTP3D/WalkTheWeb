@@ -74,9 +74,7 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
 				dGet('wtw_tmoldname').value = mold.name;
 				WTW.loadPickedObject(mold);
 			}
-WTW.log('pickedmesh=' + pickedmesh);
 		} else if (pickedname != '') {
-WTW.log('pickedname=' + pickedname);
 			var nameparts = pickedname.split('-');
 			pickedname = nameparts[0] + "-" + nameparts[1] + "-" + nameparts[2] + "-" + nameparts[3] + "-" + nameparts[4] + "-" + nameparts[5];
 			dGet('wtw_tmoldname').value = pickedname;
