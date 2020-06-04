@@ -255,7 +255,7 @@ function WTWJS() {
 	this.cameraVR = null; /* VR Camera */
 	this.cameraVRGamepad = null; /* VR Camera with gamepad controls */
 	this.cameraWebVR = null; /* Web VR Camera */
-	
+	this.cameraDistance = -25;
 	
 /* avatar related */
 	

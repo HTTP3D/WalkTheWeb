@@ -272,7 +272,7 @@ WTWJS.prototype.switchCamera = function(w) {
 							WTW.cameraFollow.lockedTarget = null;
 							WTW.cameraFollow.lockedTarget = avatarcenter;
 						}
-						WTW.cameraFollow.radius = step; // how far from the object to follow
+						WTW.setCameraDistance(); // how far from the object to follow
 						WTW.cameraFollow.heightOffset = WTW.cameraYOffset; // how high above the object to place the camera
 						WTW.cameraFollow.rotationOffset = 0; // the viewing angle		
 						WTW.cameraFollow.yOffset = 180;
@@ -644,6 +644,7 @@ WTWJS.prototype.setMovingCameras = function(avatar) {
 				if (WTW.cameraFollow != null) {
 					WTW.cameraFollow.heightOffset = WTW.cameraYOffset;
 					WTW.cameraFollow.rotationOffset = WTW.getDegrees(avatar.rotation.y) + WTW.cameraFollow.yOffset;
+					WTW.setCameraDistance();
 				}
 				if (WTW.cameraFollowTwo != null && avatar != null && avatarcenter != null) {
 					if (secondcamera == 'First-Person Camera') {
@@ -704,5 +705,53 @@ WTWJS.prototype.setMovingCameras = function(avatar) {
 		}
 	} catch(ex) {
 		WTW.log("core-scripts-prime-wtw_cameras.js-setMovingCameras=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setCameraDistance = function() {
+	/* adjust the camera distance if intercepts a mold before showing the avatar */
+	try {
+		if (WTW.placeHolder == 0) {
+			/* only process if avatar is on the scene */
+			var zdist = 100;
+			var zavatardistance = 100;
+			/* get camera focus point of avatar (center mass) */
+			var avatarcenter = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+			if (avatarcenter != null) {
+				var zavatarcenterposition = WTW.getWorldPosition(avatarcenter);
+				var zavatarpos = new BABYLON.Vector3(zavatarcenterposition.x, zavatarcenterposition.y, zavatarcenterposition.z);
+				/* get direction by delta of the points (x2-x1, y2-y1, z2-z1) */
+				var zdir = new BABYLON.Vector3((WTW.cameraFollow.position.x-zavatarcenterposition.x), (WTW.cameraFollow.position.y-zavatarcenterposition.y), (WTW.cameraFollow.position.z-zavatarcenterposition.z));
+				var zray = new BABYLON.Ray(zavatarpos, zdir, zdist);
+				/* get distance of camera currently from avatar */
+				var zcameradistance = Math.sqrt(Math.pow(zavatarpos.x - WTW.cameraFollow.position.x, 2) + Math.pow(zavatarpos.y - WTW.cameraFollow.position.y, 2) + Math.pow(zavatarpos.z - WTW.cameraFollow.position.z, 2));
+				var zhits = scene.multiPickWithRay(zray);
+				for (var i=0; i<zhits.length; i++){
+					if (zhits[i].pickedMesh.name.indexOf("molds-") > -1) {
+						if (zhits[i].distance < zdist) {
+							/* distance of closest mold */
+							zdist = zhits[i].distance;
+						}
+					}
+				} 
+			}
+			/* if distance to closest mold is less than set camera distance, move camera closer than mold */
+			if (zdist < Math.abs(WTW.cameraDistance)) {
+				if (WTW.cameraDistance < 0) {
+					/* camera behind avatar (follow) */
+					WTW.cameraFollow.radius = -zdist + 1;
+				} else {
+					/* camera in front of avatar (selfie) */
+					WTW.cameraFollow.radius = zdist - 1;
+				}
+			} else {
+				/* otherwise set camera distance to default set */
+				WTW.cameraFollow.radius = WTW.cameraDistance;
+			}
+		}
+	} catch(ex) {
+		/* on error, set camera to default */
+		WTW.cameraFollow.radius = WTW.cameraDistance;
+		WTW.log("core-scripts-prime-wtw_cameras.js-setCameraDistance=" + ex.message);
 	}
 }

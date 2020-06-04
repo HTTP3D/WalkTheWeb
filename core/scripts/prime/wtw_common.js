@@ -3233,6 +3233,16 @@ WTWJS.prototype.checkJSFunction = function(moldname) {
 
 /* User Menu Settings functions */
 
+WTWJS.prototype.changeCameraDistance = function() {
+	/* walk animation speed set in the user menu */
+	try {
+		WTW.cameraDistance = Number(dGet('wtw_tcameradistance').value);
+        WTW.setCookie("cameradistance",WTW.cameraDistance,365);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-changeCameraDistance=" + ex.message);
+	}
+}
+
 WTWJS.prototype.changeWalkAnimationSpeed = function() {
 	/* walk animation speed set in the user menu */
 	try {
@@ -9821,6 +9831,12 @@ WTWJS.prototype.changeStop = function() {
 
 WTWJS.prototype.loadUserSettings = function() {
 	try {
+		var cameradistance = WTW.getCookie("cameradistance");
+		if (cameradistance != null) {
+			if (WTW.isNumeric(cameradistance)) {
+				WTW.cameraDistance = Number(cameradistance);
+			}
+		}
 		var walkspeed = WTW.getCookie("walkspeed");
 		if (walkspeed != null) {
 			if (WTW.isNumeric(walkspeed)) {
@@ -9898,6 +9914,9 @@ WTWJS.prototype.loadUserSettings = function() {
 				WTW.show('wtw_showmeshfps');
 				WTW.showFPS = 1;
 			}
+		}
+		if (dGet('wtw_tcameradistance') != null) {
+			dGet('wtw_tcameradistance').value = WTW.cameraDistance;
 		}
 		if (dGet('wtw_twalkanimationspeed') != null) {
 			dGet('wtw_twalkanimationspeed').value = WTW.walkAnimationSpeed;
