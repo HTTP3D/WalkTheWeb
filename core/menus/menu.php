@@ -29,6 +29,10 @@
 					<option value="WebVR Daydream">3D WebVR Daydream</option>
 					<option value="WebVR Generic">3D WebVR Generic</option> -->
 				</select><br /></li>
+			<li class="wtw-menuliholder"><img src="/content/system/images/menuwalk.png" alt="Camera Distance" title="Camera Distance" class='wtw-menulefticon' />Camera Distance</li>
+			<li class="wtw-submenuli">
+				<input id="wtw_tcameradistance" type="range" min="-100" max="100" value="-25" step="1" style="direction: ltr;width:240px;cursor:pointer;" oninput="WTW.changeCameraDistance();" onchange="WTW.changeCameraDistance();this.blur();"/>
+			</li>
 			<li class="wtw-menuli" onclick="WTW.toggleCameraTwo();"><img id="wtw_cameratwoicon" src="/content/system/images/menucameraoff.png" alt="Turn Camera On" title="Turn Camera On" class='wtw-menulefticon' /><div id="wtw_cameratwotext">Second Camera Off</div></li>
 			<li id="wtw_cameratwoselect" class="wtw-submenuli" style="display:none;visibility:hidden;"><select id="wtw_secondcamera" class="wtw-menudropdown" onchange="WTW.switchCamera(2);">
 					<option value="Scene Camera">Scene Camera</option>
