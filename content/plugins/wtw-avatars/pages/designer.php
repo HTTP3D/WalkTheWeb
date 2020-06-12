@@ -50,6 +50,8 @@ if (!empty($_SESSION["wtw_uploadpathid"]) && isset($_SESSION["wtw_uploadpathid"]
 	$jsdata .= "	}\r\n";
 	$jsdata .= "</script>"; 
 echo $jsdata;
+$zver = $wtw->version;
+$zver = date("Y-m-d-H-i-s");
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -57,26 +59,26 @@ echo $jsdata;
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<link rel="stylesheet" type="text/css" href="/content/plugins/wtw-avatars/assets/css/styles.css" />
         <title>WalkTheWeb Avatar Designer</title>
-		<script src="/core/scripts/engine/earcut.js"></script>
-		<script src="/core/scripts/engine/babylon.js"></script>
-		<script src="/core/scripts/engine/babylonjs.loaders.min.js"></script>
-		<script src="/core/scripts/engine/babylonjs.postProcess.min.js"></script>
-		<script src="/core/scripts/engine/babylon.gui.min.js"></script>
-		<script src="/core/scripts/engine/babylonjs.proceduralTextures.min.js"></script>
-		<script src="/core/scripts/engine/babylon.materials.min.js"></script>
-		<script src="/core/scripts/engine/pep.js"></script>
-		<script src="/core/scripts/engine/loader.js"></script>
-		<script src="/core/scripts/engine/meshwriter.min.js"></script>
-        <script src="/content/plugins/wtw-avatars/scripts/wtwavatars_common.js"></script>
-        <script src="/content/plugins/wtw-avatars/scripts/wtwavatars_designer.js"></script>
-		<script src="/core/scripts/avatars/wtw_basicavatars.js"></script>
-		<script src="/core/scripts/avatars/wtw_transitionsavatars.js"></script>
-		<script src="/core/scripts/avatars/wtw_loadavatar.js"></script>
-		<script src="/core/scripts/coverings/wtw_addcoveringlist.js"></script>
-		<script src="/core/scripts/coverings/wtw_basiccoverings.js"></script>
-		<script src="/core/scripts/molds/wtw_addmoldlist.js"></script>
-		<script src="/core/scripts/molds/wtw_basicmolds.js"></script>
-		<script src="/core/scripts/prime/wtw_objectdefinitions.js"></script>
+		<script src="/core/scripts/engine/earcut.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/engine/babylon.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/engine/babylonjs.loaders.min.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/engine/babylonjs.postProcess.min.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/engine/babylon.gui.min.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/engine/babylonjs.proceduralTextures.min.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/engine/babylon.materials.min.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/engine/pep.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/engine/loader.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/engine/meshwriter.min.js?x=<?php echo $zver; ?>"></script>
+        <script src="/content/plugins/wtw-avatars/scripts/wtwavatars_common.js?x=<?php echo $zver; ?>"></script>
+        <script src="/content/plugins/wtw-avatars/scripts/wtwavatars_designer.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/avatars/wtw_basicavatars.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/avatars/wtw_transitionsavatars.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/avatars/wtw_loadavatar.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/coverings/wtw_addcoveringlist.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/coverings/wtw_basiccoverings.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/molds/wtw_addmoldlist.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/molds/wtw_basicmolds.js?x=<?php echo $zver; ?>"></script>
+		<script src="/core/scripts/prime/wtw_objectdefinitions.js?x=<?php echo $zver; ?>"></script>
     </head>
 	<body>
 		<canvas id="renderCanvas" touch-action="none"></canvas>
@@ -100,5 +102,6 @@ echo $jsdata;
 		<input type="hidden" id="wtw_tavataranimationevent" />
 		<input type="hidden" id="wtw_tanimationfriendlyname" />
 		<input type="hidden" id="wtw_tanimationind" />
+		<input type="hidden" id="wtw_tcolortype" value="Diffuse" />
 	</body>
 </html>

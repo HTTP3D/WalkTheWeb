@@ -112,7 +112,7 @@ class wtwavatars_functions {
 		return $zuseravatarid;
 	}
 
-	public function saveAvatarColor($zuseravatarid, $zinstanceid, $zavatarpart, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb) {
+	public function saveAvatarColor($zuseravatarid, $zinstanceid, $zavatarpart, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb) {
 		global $wtwplugins;
 		$zfoundavatarpartid = '';
 		try {
@@ -138,6 +138,9 @@ class wtwavatars_functions {
 							emissivecolorr,
 							emissivecolorg,
 							emissivecolorb,
+							diffusecolorr,
+							diffusecolorg,
+							diffusecolorb,
 							createdate,
 							createuserid,
 							updatedate,
@@ -148,9 +151,12 @@ class wtwavatars_functions {
 							'".$wtwplugins->userid."',
 							'".$zinstanceid."',
 							'".$zavatarpart."',
-							".$wtwplugins->checkNumber($zemissivecolorr,1).",
-							".$wtwplugins->checkNumber($zemissivecolorg,1).",
-							".$wtwplugins->checkNumber($zemissivecolorb,1).",
+							".$wtwplugins->checkNumber($zemissivecolorr,0).",
+							".$wtwplugins->checkNumber($zemissivecolorg,0).",
+							".$wtwplugins->checkNumber($zemissivecolorb,0).",
+							".$wtwplugins->checkNumber($zdiffusecolorr,1).",
+							".$wtwplugins->checkNumber($zdiffusecolorg,1).",
+							".$wtwplugins->checkNumber($zdiffusecolorb,1).",
 							now(),
 							'".$wtwplugins->userid."',
 							now(),
@@ -160,9 +166,12 @@ class wtwavatars_functions {
 						update ".wtw_tableprefix."useravatarcolors
 						set 
 							instanceid='".$zinstanceid."',
-							emissivecolorr=".$wtwplugins->checkNumber($zemissivecolorr,1).",
-							emissivecolorg=".$wtwplugins->checkNumber($zemissivecolorg,1).",
-							emissivecolorb=".$wtwplugins->checkNumber($zemissivecolorb,1).",
+							emissivecolorr=".$wtwplugins->checkNumber($zemissivecolorr,0).",
+							emissivecolorg=".$wtwplugins->checkNumber($zemissivecolorg,0).",
+							emissivecolorb=".$wtwplugins->checkNumber($zemissivecolorb,0).",
+							diffusecolorr=".$wtwplugins->checkNumber($zdiffusecolorr,1).",
+							diffusecolorg=".$wtwplugins->checkNumber($zdiffusecolorg,1).",
+							diffusecolorb=".$wtwplugins->checkNumber($zdiffusecolorb,1).",
 							updatedate=now(),
 							updateuserid='".$wtwplugins->userid."'					
 						where avatarpartid='".$zfoundavatarpartid."';");

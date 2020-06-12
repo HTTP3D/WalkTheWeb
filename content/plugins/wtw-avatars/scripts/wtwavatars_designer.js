@@ -1,3 +1,5 @@
+/* avatar designer scripts - works menus and avatar settings */
+/* global values used for the avatar designer only (page loads as iframe) */
 var scene, canvas, engine, camera, gui;
 var avatarSelector, leftMenu, rightMenu, rightMenuLower, colorMenu, colorpicker, activeinput, loadingtext, loadingtimer, activeMenu;
 var runningevent = '';
@@ -8,6 +10,7 @@ var showglobal = true;
 var avatardef = null;
 
 WTWJS.prototype.createScene = function() {
+	/* create the avatar designer scene - lighting designed to match the default WalkTheWeb scene */
 	try {
 		console.log("%c\r\n\r\nWalkTheWeb 3D Avatar Designer\r\nHTTP3D Inc. (v1.0.0) 04-17-2020", "color:green;font-weight:bold;");
 		if (BABYLON.Engine.isSupported()) {
@@ -45,8 +48,6 @@ WTWJS.prototype.createScene = function() {
 			/* lesser light for back sides */
 			WTW.sunlight = new BABYLON.DirectionalLight("sunlight", new BABYLON.Vector3(1, -1, 1), scene);
 			WTW.sunlight.intensity = WTW.sun.intensity / 1.5; //3;
-
-//			scene.clearColor = new BABYLON.Color3(0.1, 0.1, 0.1);
 			
 			var zsetupparent = BABYLON.MeshBuilder.CreateBox("setupparent-0", {}, scene);
 			zsetupparent.material = WTW.addCovering("hidden", "setupparent-0", WTW.newAvatarDef(), 1, 1, 1, "0", "0");
@@ -95,6 +96,7 @@ WTWJS.prototype.createScene = function() {
 }
 
 WTWJS.prototype.loadLeftMenu = function(zactive) {
+	/* load the left menu, zactive sets the menu items to load */
 	try {
 		if (zactive == undefined || zactive == null) {
 			zactive = 1;
@@ -122,11 +124,13 @@ WTWJS.prototype.loadLeftMenu = function(zactive) {
 		leftMenu.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
 		leftMenu.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 		gui.addControl(leftMenu);
-
+		
+		/* select my avatar button */
 		var button0 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("selectavatar-button", 'Select My Avatar', 'image');
 		button0.width = "330px";
 		button0.height = "60px";
 		if (zactive  == 0) {
+			/* set active button blue with yellow text */
 			button0.color = "yellow";
 			button0.background = "blue";
 			if (dGet('wtw_tavatarid').value == "") {
@@ -142,10 +146,12 @@ WTWJS.prototype.loadLeftMenu = function(zactive) {
 		leftMenu.addControl(button0, 1, 0);
 		
 		if (dGet('wtw_tavatarid').value != "") {
+			/* avatar profile button */
 			var button1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarprofile-button", 'Avatar Profile', 'image');
 			button1.width = "330px";
 			button1.height = "60px";
 			if (zactive  == 1) {
+				/* set active button blue with yellow text */
 				button1.color = "yellow";
 				button1.background = "blue";
 			} else {
@@ -155,10 +161,12 @@ WTWJS.prototype.loadLeftMenu = function(zactive) {
 			button1.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
 			leftMenu.addControl(button1, 0, 0);
 
+			/* avatar colors button */
 			var button2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarcolors-button", 'Avatar Colors', 'image');
 			button2.width = "330px";
 			button2.height = "60px";
 			if (zactive  == 2) {
+				/* set active button blue with yellow text */
 				button2.color = "yellow";
 				button2.background = "blue";
 				button2.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
@@ -169,10 +177,12 @@ WTWJS.prototype.loadLeftMenu = function(zactive) {
 			}
 			leftMenu.addControl(button2, 2, 0);
 
+			/* avatar animations button */
 			var button3 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avataranimations-button", 'Avatar Animations', 'image');
 			button3.width = "330px";
 			button3.height = "60px";
 			if (zactive  == 3) {
+				/* set active button blue with yellow text */
 				button3.color = "yellow";
 				button3.background = "blue";
 				button3.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
@@ -183,6 +193,7 @@ WTWJS.prototype.loadLeftMenu = function(zactive) {
 			}
 			leftMenu.addControl(button3, 3, 0);
 
+			/* save and continue button */
 			var button4 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("save-button", 'Save and Continue', 'image');
 			button4.width = "330px";
 			button4.height = "60px";
@@ -203,7 +214,8 @@ WTWJS.prototype.loadLeftMenu = function(zactive) {
 }
 
 WTWJS.prototype.loadRightMenu = function(zactive) {
-	try {//material
+	/* load the right menu, zactive sets the menu items to load */
+	try {
 		if (zactive == undefined) {
 			zactive = -1;
 		}
@@ -222,12 +234,12 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 		rightMenu.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 	
 		switch (zactive) {
-			case 0:
+			case 0:   /* select avatar options */
 				rightMenu.width = "330px";
 				rightMenu.height = "200px";
 				WTW.chooseAvatar();
 				break;
-			case 1:
+			case 1:   /* select avatar profile settings */
 				if (dGet('wtw_tavatarid').value != "") {
 					rightMenu.width = "330px";
 					rightMenu.height = "400px";
@@ -328,13 +340,13 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 					}
 				}
 				break;
-			case 2:
+			case 2:   /* avatar colors settings */
 				if (dGet('wtw_tavatarid').value != "") {
 					if (colorMenu != null) {
 						colorMenu.dispose();
 					}
 					colorMenu = new BABYLON.GUI.Grid();
-					colorMenu.topInPixels = 20;
+					colorMenu.topInPixels = 75;
 					colorMenu.rightInPixels = 340;
 					colorMenu.width = "510px";
 					colorMenu.height = "150px";
@@ -347,13 +359,20 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 				
 					rightMenu.topInPixels = 20;
 					rightMenu.width = "330px";
-					rightMenu.height = (WTW.avatarParts.length + 1) + "00px";
-					rightMenu.addColumnDefinition(2/3);
-					rightMenu.addColumnDefinition(1/3);
-					for (var i=0;i<WTW.avatarParts.length;i++) {
-						rightMenu.addRowDefinition(1/WTW.avatarParts.length);
+					if (WTW.avatarParts != null) {
+						if (WTW.avatarParts.length > 0) {
+							rightMenu.height = ((WTW.avatarParts.length + 2.5) * 100) + "px";
+							rightMenu.addColumnDefinition(2/3);
+							rightMenu.addColumnDefinition(1/3);
+							rightMenu.addRowDefinition(1/(WTW.avatarParts.length + 1));
+							for (var i=0;i<WTW.avatarParts.length;i++) {
+								if (WTW.avatarParts[i] != null) {
+									rightMenu.addRowDefinition(1/(WTW.avatarParts.length + 1));
+								}
+							}
+							WTW.avatarParts.sort(function(a,b){return a.part < b.part ? -1 : 1}); 
+						}
 					}
-					WTW.avatarParts.sort(function(a,b){return a.part < b.part ? -1 : 1}); 
 					var zmoldname = WTW.getMyAvatarPart(dGet('wtw_tavatarpart').value);
 					dGet('wtw_tmoldname').value = zmoldname;
 					var zmold = scene.getMeshByID(zmoldname);
@@ -362,7 +381,11 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 						colorpicker.name = "avatarcolorpicker";
 						colorpicker.id = "avatarcolorpicker";
 						if (zmold != null) {
-							colorpicker.value = zmold.material.emissiveColor;
+							if (dGet('wtw_tcolortype').value  == 'Diffuse') {
+								colorpicker.value = zmold.material.diffuseColor;
+							} else {
+								colorpicker.value = zmold.material.emissiveColor;
+							}
 						} else {
 							colorpicker.value = new BABYLON.Vector3(1, 1, 1);
 						}
@@ -371,64 +394,98 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 						colorpicker.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
 						colorpicker.onValueChangedObservable.add(function(value) {
 							if (value != null) {
-								WTW.setMyAvatarColor('emissive', value.r, value.g, value.b);
+								WTW.setMyAvatarColor(value.r, value.g, value.b);
 							}
 						});
 					}
 					colorMenu.addControl(colorpicker,0,0);
 
-					for (var i=0;i<WTW.avatarParts.length;i++) {
-						rightMenu.addRowDefinition(1/WTW.avatarParts.length);
+					var zdiffusebutton = BABYLON.GUI.Button.CreateImageWithCenterTextButton('diffuse-button', 'Diffuse', 'image');
+					zdiffusebutton.width = "210px";
+					zdiffusebutton.height = "50px";
+					if (dGet('wtw_tcolortype').value  == 'Diffuse') {
+						zdiffusebutton.color = "yellow";
+						zdiffusebutton.background = "blue";
+					} else {
+						zdiffusebutton.color = "white";
+						zdiffusebutton.background = "green";
+					}
+					zdiffusebutton.onPointerClickObservable.add(function(ev, state) { dGet('wtw_tcolortype').value='Diffuse';WTW.loadLeftMenu(2);});
+					rightMenu.addControl(zdiffusebutton, 0, 0);
 
-						var button1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarParts[i].part + "-color-button", WTW.avatarParts[i].part, 'image');
-						button1.width = "210px";
-						button1.height = "50px";
-						if (dGet('wtw_tavatarpart').value  == WTW.avatarParts[i].part) {
-							button1.color = "yellow";
-							button1.background = "blue";
-						} else {
-							button1.color = "white";
-							button1.background = "green";
-						}
-						button1.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarPart(state.currentTarget.name.split('-')[0]);WTW.loadLeftMenu(2);});
-						rightMenu.addControl(button1, i, 0);
+					var zemissivebutton = BABYLON.GUI.Button.CreateImageWithCenterTextButton('emissive-button', 'Emissive', 'image');
+					zemissivebutton.width = "210px";
+					zemissivebutton.height = "50px";
+					if (dGet('wtw_tcolortype').value  == 'Emissive') {
+						zemissivebutton.color = "yellow";
+						zemissivebutton.background = "blue";
+					} else {
+						zemissivebutton.color = "white";
+						zemissivebutton.background = "green";
+					}
+					zemissivebutton.onPointerClickObservable.add(function(ev, state) { dGet('wtw_tcolortype').value='Emissive';WTW.loadLeftMenu(2);});
+					rightMenu.addControl(zemissivebutton, 0, 1);
 
-						if (dGet('wtw_tavatarpart').value  == WTW.avatarParts[i].part) {
-							activeinput = new BABYLON.GUI.InputText(WTW.avatarParts[i].part + "-color-input");
-							activeinput.promptMessage = "Color (hex)";
-							activeinput.width = "110px";
-							activeinput.height = "50px";
-							activeinput.text = WTW.avatarParts[i].hex;
-							activeinput.color = WTW.setTextColor(WTW.avatarParts[i].hex, "#ffffff", "#000000");
-							activeinput.background = WTW.avatarParts[i].hex;
-							activeinput.focusedBackground = "#000000";
-							if (activeinput.color == "#000000") {
-								activeinput.focusedBackground = "#ffffff";
+					if (WTW.avatarParts != null) {
+						for (var i=0;i<WTW.avatarParts.length;i++) {
+							if (WTW.avatarParts[i] != null) {
+								rightMenu.addRowDefinition(1/(WTW.avatarParts.length + 1));
+								var button1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarParts[i].part + "-color-button", WTW.avatarParts[i].part, 'image');
+								button1.width = "210px";
+								button1.height = "50px";
+								if (dGet('wtw_tavatarpart').value  == WTW.avatarParts[i].part) {
+									button1.color = "black";
+									button1.background = "yellow";
+								} else {
+									button1.color = "black";
+									button1.background = "white";
+								}
+								button1.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarPart(state.currentTarget.name.split('-')[0]);WTW.loadLeftMenu(2);});
+								rightMenu.addControl(button1, i+1, 0);
+								
+								var zhex = WTW.avatarParts[i].emissivehex;
+								if (dGet('wtw_tcolortype').value  == 'Diffuse') {
+									zhex = WTW.avatarParts[i].diffusehex;
+								}
+
+								if (dGet('wtw_tavatarpart').value  == WTW.avatarParts[i].part) {
+									activeinput = new BABYLON.GUI.InputText(WTW.avatarParts[i].part + "-color-input");
+									activeinput.promptMessage = "Color (hex)";
+									activeinput.width = "110px";
+									activeinput.height = "50px";
+									activeinput.text = zhex;
+									activeinput.color = WTW.setTextColor(zhex, "#ffffff", "#000000");
+									activeinput.background = zhex;
+									activeinput.focusedBackground = "#000000";
+									if (activeinput.color == "#000000") {
+										activeinput.focusedBackground = "#ffffff";
+									}
+									activeinput.onFocusSelectAll = true;
+									activeinput.onBlurObservable.add(function(value) {WTW.updateColorByHex(value.text);});
+									activeinput.onTextPasteObservable.add(function(value) {WTW.updateColorByHex(value.text);});
+									rightMenu.addControl(activeinput, i+1, 1);
+								} else {
+									var inputtext = new BABYLON.GUI.InputText(WTW.avatarParts[i].part + "-color-input");
+									inputtext.promptMessage = "Color (hex)";
+									inputtext.width = "110px";
+									inputtext.height = "50px";
+									inputtext.text = zhex;
+									inputtext.color = WTW.setTextColor(zhex, "#ffffff", "#000000");
+									inputtext.background = zhex;
+									inputtext.focusedBackground = "#000000";
+									if (inputtext.color == "#000000") {
+										inputtext.focusedBackground = "#ffffff";
+									}
+									inputtext.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarPart(state.currentTarget.name.split('-')[0]);WTW.loadLeftMenu(2);});
+									rightMenu.addControl(inputtext, i+1, 1);
+								}
 							}
-							activeinput.onFocusSelectAll = true;
-							activeinput.onBlurObservable.add(function(value) {WTW.updateColorByHex(value.text);});
-							activeinput.onTextPasteObservable.add(function(value) {WTW.updateColorByHex(value.text);});
-							rightMenu.addControl(activeinput, i, 1);
-						} else {
-							var inputtext = new BABYLON.GUI.InputText(WTW.avatarParts[i].part + "-color-input");
-							inputtext.promptMessage = "Color (hex)";
-							inputtext.width = "110px";
-							inputtext.height = "50px";
-							inputtext.text = WTW.avatarParts[i].hex;
-							inputtext.color = WTW.setTextColor(WTW.avatarParts[i].hex, "#ffffff", "#000000");
-							inputtext.background = WTW.avatarParts[i].hex;
-							inputtext.focusedBackground = "#000000";
-							if (inputtext.color == "#000000") {
-								inputtext.focusedBackground = "#ffffff";
-							}
-							inputtext.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarPart(state.currentTarget.name.split('-')[0]);WTW.loadLeftMenu(2);});
-							rightMenu.addControl(inputtext, i, 1);
 						}
 					}
 					gui.addControl(colorMenu);
 				}
 				break;
-			case 3:
+			case 3:   /* avatar animation settings */
 				if (dGet('wtw_tavatarid').value != "") {
 					rightMenu.topInPixels = 10;
 					rightMenu.rightInPixels = 20;
@@ -495,7 +552,7 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 					
 				}
 				break;
-			case 4:
+			case 4:   /* save avatar settings */
 				if (dGet('wtw_tavatarid').value != "") {
 					rightMenu.topInPixels = 10;
 					rightMenu.rightInPixels = 20;
@@ -546,8 +603,10 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 }
 
 WTWJS.prototype.loadDesignerAvatar = function(zglobalavatarid, zuseravatarid) {
+	/* loads your currently selected avatar to the designer (if you have one selected) */
 	try {
 		WTW.startLoading();
+		/* if it is a global avatar get form 3dnet.walktheweb.com */
 		if (zglobalavatarid != '') {
 			var zrequest = {
 				'globalavatarid':btoa(zglobalavatarid),
@@ -628,6 +687,7 @@ WTWJS.prototype.loadDesignerAvatar = function(zglobalavatarid, zuseravatarid) {
 				}
 			);			
 		} else {
+			/* load local server user avatar */
 			WTW.getJSON("/connect/useravatar.php?a=" + btoa(zuseravatarid) + "&i=" + btoa(dGet('wtw_tinstanceid').value) + "&d=" + btoa(dGet('wtw_tuserid').value) + "&p=" + btoa(dGet('wtw_tuserip').value), 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
@@ -703,6 +763,7 @@ WTWJS.prototype.loadDesignerAvatar = function(zglobalavatarid, zuseravatarid) {
 }
 
 WTWJS.prototype.saveMyAvatar = function() {
+	/* save avatar settings */
 	try {
 		var zavatardef = [];
 		let zobjectfolder = '';
@@ -747,6 +808,7 @@ WTWJS.prototype.saveMyAvatar = function() {
 				if (zresponse.useravatarid != '') {
 					dGet('wtw_tuseravatarid').value = zresponse.useravatarid;
 					if (dGet('wtw_tglobalavatar').value == '1') {
+						/* if checkbox for global is checked, save to global 3dnet.walktheweb.com */
 						var zsecureprotocol = '0';
 						if (wtw_protocol == "https://") {
 							zsecureprotocol = '1';
@@ -802,7 +864,9 @@ WTWJS.prototype.saveMyAvatar = function() {
 }
 
 WTWJS.prototype.saveMyAvatarColors = function() {
+	/* save avatar colors */
 	try {
+		/* save to local server */
 		for (var i=0;i<WTW.avatarParts.length;i++) {
 			if (WTW.avatarParts[i] != null) {
 				var zrequest = {
@@ -811,9 +875,12 @@ WTWJS.prototype.saveMyAvatarColors = function() {
 					'instanceid':dGet('wtw_tinstanceid').value,
 					'avatarpartid':'',
 					'avatarpart':WTW.avatarParts[i].part,
-					'emissivecolorr':WTW.avatarParts[i].colorr,
-					'emissivecolorg':WTW.avatarParts[i].colorg,
-					'emissivecolorb':WTW.avatarParts[i].colorb,
+					'emissivecolorr':WTW.avatarParts[i].emissivecolorr,
+					'emissivecolorg':WTW.avatarParts[i].emissivecolorg,
+					'emissivecolorb':WTW.avatarParts[i].emissivecolorb,
+					'diffusecolorr':WTW.avatarParts[i].diffusecolorr,
+					'diffusecolorg':WTW.avatarParts[i].diffusecolorg,
+					'diffusecolorb':WTW.avatarParts[i].diffusecolorb,
 					'index':i,
 					'function':'saveavatarcolor'
 				};
@@ -832,10 +899,14 @@ WTWJS.prototype.saveMyAvatarColors = function() {
 							'emissivecolorr':zresponse.emissivecolorr,
 							'emissivecolorg':zresponse.emissivecolorg,
 							'emissivecolorb':zresponse.emissivecolorb,
+							'diffusecolorr':zresponse.diffusecolorr,
+							'diffusecolorg':zresponse.diffusecolorg,
+							'diffusecolorb':zresponse.diffusecolorb,
 							'index':zresponse.index,
 							'function':'saveavatarcolor'
 						};
 						if (dGet('wtw_tglobalavatar').value == '1') {
+							/* if checkbox for global is checked, save to global 3dnet.walktheweb.com */
 							WTW.postJSON("https://3dnet.walktheweb.com/connect/globalsaveavatar.php", zrequest2, 
 								function(zresponse2) {
 									zresponse2 = JSON.parse(zresponse2);
@@ -857,6 +928,7 @@ WTWJS.prototype.saveMyAvatarColors = function() {
 }
 
 WTWJS.prototype.saveMyAvatarAnimations = function() {
+	/* save avatar animations */
 	try {
 		let zlastanimationevent = '';
 		let zdefaultid = '';
@@ -898,6 +970,7 @@ WTWJS.prototype.saveMyAvatarAnimations = function() {
 								function(zresponse) {
 									zresponse = JSON.parse(zresponse);
 									if (dGet('wtw_tglobalavatar').value == '1') {
+										/* if checkbox for global is checked, save to global 3dnet.walktheweb.com */
 										if (zresponse.objectfolder.indexOf("http") == -1) {
 											zresponse.objectfolder = "https://3dnet.walktheweb.com" + zresponse.objectfolder;
 										}
@@ -956,6 +1029,7 @@ WTWJS.prototype.saveMyAvatarAnimations = function() {
 }
 
 WTWJS.prototype.returnCloseDesigner = function() {
+	/* return to 3D website and close Avatar Designer */
 	try {
 		var zuseravatarid = WTW.getQuerystring('useravatarid','');
 		if (zuseravatarid != '') {
@@ -981,6 +1055,7 @@ WTWJS.prototype.returnCloseDesigner = function() {
 }
 
 WTWJS.prototype.updateGlobalAvatar = function(zvalue) {
+	/* sets the checkbox form value for saving */
 	try {
 		dGet('wtw_tglobalavatar').value = zvalue;
 	} catch (ex) {
@@ -989,6 +1064,7 @@ WTWJS.prototype.updateGlobalAvatar = function(zvalue) {
 }
 
 WTWJS.prototype.editMyAvatarAnimations = function(zevent) {
+	/* set menu to edit animations (used by button click event) */
 	try {
 		dGet('wtw_teditanimationevent').value = zevent;
 		WTW.loadRightMenu(3);
@@ -998,6 +1074,7 @@ WTWJS.prototype.editMyAvatarAnimations = function(zevent) {
 }
 
 WTWJS.prototype.toggleEditAnimations = function() {
+	/* set menu to edit or stop editing animations (used by button click event) */
 	try {
 		if (editmode) {
 			editmode = false;
@@ -1012,6 +1089,7 @@ WTWJS.prototype.toggleEditAnimations = function() {
 }
 
 WTWJS.prototype.selectAnimationEvent = function(zevent) {
+	/* select animation event and load the possible animations to change it to */
 	try {
 		let zlastanimationevent = '';
 		let zrows = 0;
@@ -1153,6 +1231,7 @@ WTWJS.prototype.selectAnimationEvent = function(zevent) {
 }
 
 WTWJS.prototype.clearAnimations = function(zavatarname) {
+	/* clear the animations loaded (except the idle animation) so that it can be reloaded */
 	try {
 		let zavatar = scene.getMeshByID(zavatarname);
 		if (zavatar != null) {
@@ -1185,6 +1264,7 @@ WTWJS.prototype.clearAnimations = function(zavatarname) {
 }
 
 WTWJS.prototype.changeMyAvatarAnimation = function(zavataranimationid) {
+	/* change the selected animation */
 	try {
 		lasteditavatarid = zavataranimationid;
 		let zavataranimationind = -1;
@@ -1210,6 +1290,7 @@ WTWJS.prototype.changeMyAvatarAnimation = function(zavataranimationid) {
 }
 
 WTWJS.prototype.getMyAvatarAnimations = function(zanimationevent) {
+	/* get my avatar animations or select the default animation for each animation event */
 	try {
 		if (editmode) {
 			dGet('wtw_teditanimationevent').value = zanimationevent;
@@ -1255,6 +1336,7 @@ WTWJS.prototype.getMyAvatarAnimations = function(zanimationevent) {
 }
 
 WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
+	/* load the avatar and all of its parts and colors */
 	try {
 		WTW.startLoading();
 		if (dGet('wtw_tavatarid').value == '') {
@@ -1389,36 +1471,68 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 								if (results.meshes[i].material.alpha != undefined) {
 									results.meshes[i].material.alpha = 1;
 								}
-								results.meshes[i].material.ambientColor = new BABYLON.Color3(.3, .3, .3);
-								let zcolorr = 1;
-								let zcolorg = 1;
-								let zcolorb = 1;
+								/* load any color settings or set defaults */
+								let zemissivecolorr = 0;
+								let zemissivecolorg = 0;
+								let zemissivecolorb = 0;
+								let zdiffusecolorr = 1;
+								let zdiffusecolorg = 1;
+								let zdiffusecolorb = 1;
 								if (zavatardef.avatarparts != null) {
 									if (zavatardef.avatarparts.length > 0) {
 										for (var j=0;j<zavatardef.avatarparts.length;j++) {
 											if (zavatardef.avatarparts[j] != undefined) {
 												if (zavatardef.avatarparts[j].avatarpart == meshname) {
-													zcolorr = zavatardef.avatarparts[j].emissivecolorr;
-													zcolorg = zavatardef.avatarparts[j].emissivecolorg;
-													zcolorb = zavatardef.avatarparts[j].emissivecolorb;
+													if (zavatardef.avatarparts[j].emissivecolorr != undefined) {
+														zemissivecolorr = zavatardef.avatarparts[j].emissivecolorr;
+													}
+													if (zavatardef.avatarparts[j].emissivecolorg != undefined) {
+														zemissivecolorg = zavatardef.avatarparts[j].emissivecolorg;
+													}
+													if (zavatardef.avatarparts[j].emissivecolorb != undefined) {
+														zemissivecolorb = zavatardef.avatarparts[j].emissivecolorb;
+													}
+													if (zavatardef.avatarparts[j].diffusecolorr != undefined) {
+														zdiffusecolorr = zavatardef.avatarparts[j].diffusecolorr;
+													}
+													if (zavatardef.avatarparts[j].diffusecolorg != undefined) {
+														zdiffusecolorg = zavatardef.avatarparts[j].diffusecolorg;
+													}
+													if (zavatardef.avatarparts[j].diffusecolorb != undefined) {
+														zdiffusecolorb = zavatardef.avatarparts[j].diffusecolorb;
+													}
 												}
 											}
 										}
 									}
 								}
-								let zhex = "#ffffff;";
-								results.meshes[i].material.emissiveColor = new BABYLON.Color3(zcolorr,zcolorg,zcolorb);
+								let zemissivehex = "#000000";
+								let zdiffusehex = "#ffffff";
+								/* emissive and specular currently share colors */
+								results.meshes[i].material.emissiveColor = new BABYLON.Color3(zemissivecolorr,zemissivecolorg,zemissivecolorb);
+								results.meshes[i].material.specularColor = new BABYLON.Color3(zemissivecolorr,zemissivecolorg,zemissivecolorb);
+								/* diffuse and ambient currently share colors */
+								results.meshes[i].material.diffuseColor = new BABYLON.Color3(zdiffusecolorr,zdiffusecolorg,zdiffusecolorb);
+								results.meshes[i].material.ambientColor = new BABYLON.Color3(zdiffusecolorr,zdiffusecolorg,zdiffusecolorb);
+								/* refresh the materials to apply colors */
 								var covering = results.meshes[i].material;
 								results.meshes[i].material.dispose();
 								results.meshes[i].material = covering;
-								zhex = results.meshes[i].material.emissiveColor.toHexString();
+								zemissivehex = results.meshes[i].material.emissiveColor.toHexString();
+								zdiffusehex = results.meshes[i].material.diffuseColor.toHexString();
+								
+								/* set local array of color values per avatar mesh part for editor and save process */
 								WTW.avatarParts[i] = {
 									'moldname':childmoldname,
 									'part':meshname,
-									'colorr':zcolorr,
-									'colorg':zcolorg,
-									'colorb':zcolorb,
-									'hex':zhex
+									'emissivecolorr':zemissivecolorr,
+									'emissivecolorg':zemissivecolorg,
+									'emissivecolorb':zemissivecolorb,
+									'emissivehex':zemissivehex,
+									'diffusecolorr':zdiffusecolorr,
+									'diffusecolorg':zdiffusecolorg,
+									'diffusecolorb':zdiffusecolorb,
+									'diffusehex':zdiffusehex
 								};
 							}
 							WTW.registerMouseOver(results.meshes[i]);
@@ -1462,6 +1576,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 						}
 					}
 				}
+				/* load skeleton for animations */
 				if (results.skeletons != null)	{
 					var skeleton = results.meshes[0].skeleton;
 					WTW.myAvatar.WTW.skeleton = results.meshes[0].skeleton;
@@ -1643,6 +1758,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 }
 
 WTWJS.prototype.loadAnimations = function() {
+	/* load avatar animation settings into an array for edit */
 	try {
 		var j = 0;
 		WTW.avatarAnimations = [];
@@ -1697,6 +1813,7 @@ WTWJS.prototype.loadAnimations = function() {
 }
 
 WTWJS.prototype.chooseAvatar = function() {
+	/* open horizontal scroll of avatar images to select the avatar */
 	try {
 		WTW.startLoading();
 		if (avatarSelector != null) {
@@ -1771,15 +1888,24 @@ WTWJS.prototype.chooseAvatar = function() {
 }
 
 WTWJS.prototype.updateColorByHex = function(zhex) {
+	/* when a hex color code is changed, this process updates the mesh and color picker wheel selection */
 	try {
 		if (/^#([0-9A-F]{3}){1,2}$/i.test(zhex) == false) {
 			zhex = "#FFFFFF";
 		}
 		var zmold = scene.getMeshByID(dGet('wtw_tmoldname').value);
 		if (zmold != null) {
-			zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zhex);
-			WTW.updateAvatarPartColor(zmold.material.emissiveColor.r, zmold.material.emissiveColor.g, zmold.material.emissiveColor.b, zhex);
-			colorpicker.value = zmold.material.emissiveColor;
+			if (dGet('wtw_tcolortype').value  == 'Diffuse') {
+				zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zhex);
+				zmold.material.ambientColor = new BABYLON.Color3.FromHexString(zhex);
+				WTW.updateAvatarPartColor(zmold.material.diffuseColor.r, zmold.material.diffuseColor.g, zmold.material.diffuseColor.b, zhex);
+				colorpicker.value = zmold.material.diffuseColor;
+			} else {
+				zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zhex);
+				zmold.material.specularColor = new BABYLON.Color3.FromHexString(zhex);
+				WTW.updateAvatarPartColor(zmold.material.emissiveColor.r, zmold.material.emissiveColor.g, zmold.material.emissiveColor.b, zhex);
+				colorpicker.value = zmold.material.emissiveColor;
+			}
 			if (activeinput != null) {
 				activeinput.text = zhex.toUpperCase();
 				activeinput.background = zhex;
@@ -1796,20 +1922,27 @@ WTWJS.prototype.updateColorByHex = function(zhex) {
 }
 
 WTWJS.prototype.getMyAvatarPart = function(zpart) {
+	/* when an avatar part is selected, this loads the part to be edited (for color selection) */
 	let zmoldname = "";
 	try {
 		if (zpart == undefined) {
 			zpart = '';
 		}
 		for (var i=0;i<WTW.avatarParts.length;i++) {
-			if ((zpart == '' && i == 0) || WTW.avatarParts[i].part == zpart) {
-				zmoldname = WTW.avatarParts[i].moldname;
-				dGet('wtw_tmoldname').value = zmoldname;
-				dGet('wtw_tavatarpart').value = WTW.avatarParts[i].part;
-				var zmold = scene.getMeshByID(zmoldname);
-				if (zmold != null && colorpicker != null) {
-					colorpicker.value = zmold.material.emissiveColor;
-					WTW.hilightMoldFast(zmoldname, "yellow");
+			if (WTW.avatarParts[i] != null) {
+				if ((zpart == '' && i == 0) || WTW.avatarParts[i].part == zpart) {
+					zmoldname = WTW.avatarParts[i].moldname;
+					dGet('wtw_tmoldname').value = zmoldname;
+					dGet('wtw_tavatarpart').value = WTW.avatarParts[i].part;
+					var zmold = scene.getMeshByID(zmoldname);
+					if (zmold != null && colorpicker != null) {
+						if (dGet('wtw_tcolortype').value == 'Diffuse') {
+							colorpicker.value = zmold.material.diffuseColor;
+						} else {
+							colorpicker.value = zmold.material.emissiveColor;
+						}
+						WTW.hilightMoldFast(zmoldname, "yellow");
+					}
 				}
 			}
 		}
@@ -1820,13 +1953,23 @@ WTWJS.prototype.getMyAvatarPart = function(zpart) {
 }
 
 WTWJS.prototype.updateAvatarPartColor = function(r, g, b, hex) {
+	/* update the color selected to the local array of color settings (used for saving) */
 	try {
 		for (var i=0;i<WTW.avatarParts.length;i++) {
-			if (WTW.avatarParts[i].part == dGet('wtw_tavatarpart').value) {
-				WTW.avatarParts[i].colorr = r;
-				WTW.avatarParts[i].colorg = g;
-				WTW.avatarParts[i].colorb = b;
-				WTW.avatarParts[i].hex = hex;
+			if (WTW.avatarParts[i] != null) {
+				if (WTW.avatarParts[i].part == dGet('wtw_tavatarpart').value) {
+					if (dGet('wtw_tcolortype').value == 'Diffuse') {
+						WTW.avatarParts[i].diffusecolorr = r;
+						WTW.avatarParts[i].diffusecolorg = g;
+						WTW.avatarParts[i].diffusecolorb = b;
+						WTW.avatarParts[i].diffusehex = hex;
+					} else {
+						WTW.avatarParts[i].emissivecolorr = r;
+						WTW.avatarParts[i].emissivecolorg = g;
+						WTW.avatarParts[i].emissivecolorb = b;
+						WTW.avatarParts[i].emissivehex = hex;
+					}
+				}
 			}
 		}
 	} catch (ex) {
@@ -1834,21 +1977,20 @@ WTWJS.prototype.updateAvatarPartColor = function(r, g, b, hex) {
 	}
 }
 
-WTWJS.prototype.setMyAvatarColor = function(zcolorgroup, r, g, b) {
+WTWJS.prototype.setMyAvatarColor = function(r, g, b) {
+	/* on change of color, this function updates the avatar part with the color selected */
 	try {
 		var zmold = scene.getMeshByID(dGet('wtw_tmoldname').value);
 		var zpartcolor = "#ffffff";
 		if (zmold != null) {
-			switch (zcolorgroup) {
-				case "diffuse":
+			switch (dGet('wtw_tcolortype').value) {
+				case "Diffuse":
 					zmold.material.diffuseColor = new BABYLON.Color3(r,g,b);
+					zmold.material.ambientColor = new BABYLON.Color3(r,g,b);
 					zpartcolor = zmold.material.diffuseColor.toHexString();
 					break;
-				case "specular":
+				case "Emissive":
 					zmold.material.specularColor = new BABYLON.Color3(r,g,b);
-					zpartcolor = zmold.material.specularColor.toHexString();
-					break;
-				case "emissive":
 					zmold.material.emissiveColor = new BABYLON.Color3(r,g,b);
 					zpartcolor = zmold.material.emissiveColor.toHexString();
 					break;
@@ -1874,6 +2016,8 @@ WTWJS.prototype.setMyAvatarColor = function(zcolorgroup, r, g, b) {
 }
 
 WTWJS.prototype.setTextColor = function(bgColor, lightColor, darkColor) {
+	/* when the color is selected, the form updates the color to the background */
+	/* this also sets the text color to an opposite color than the background (black or white) */
 	var zcolor = "black";
 	try {
 		var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
@@ -1896,6 +2040,7 @@ WTWJS.prototype.setTextColor = function(bgColor, lightColor, darkColor) {
 }
 
 WTWJS.prototype.updateDisplayName = function(ztext) {
+	/* update text name over avatar to match profile name */
 	try {
 		dGet('wtw_tdisplayname').value = ztext;
 		WTW.showIDs(ztext);
@@ -1905,6 +2050,7 @@ WTWJS.prototype.updateDisplayName = function(ztext) {
 }
 
 WTWJS.prototype.closeMenu = function() {
+	/* close all menus - prep for opening the next menu option */
 	try {
 		if (leftMenu != null) {
 			leftMenu.dispose();
@@ -1936,6 +2082,7 @@ WTWJS.prototype.closeMenu = function() {
 }
 
 WTWJS.prototype.preloadAvatar = function(zavatarid) {
+	/* load the basic avatar settings */
 	try {
 		WTW.getJSON("/connect/avatar.php?avatarid=" + zavatarid, 
 			function(zresponse) {
@@ -1954,7 +2101,8 @@ WTWJS.prototype.preloadAvatar = function(zavatarid) {
 }
 
 WTWJS.prototype.selectAvatar = function(zavatarid) {
-	try {//avatarid
+	/* on select avatar, this reloads the avatar by the selected avatar id */
+	try {
 		if (loadingtimer != null) {
 			WTW.stopLoading();
 		}
@@ -1984,6 +2132,7 @@ WTWJS.prototype.selectAvatar = function(zavatarid) {
 }
 
 WTWJS.prototype.startLoading = function() {
+	/* show the blinking loading text */
 	try {
 		if (loadingtimer == null) {
 			loadingtimer = window.setInterval(function() {
@@ -2006,6 +2155,7 @@ WTWJS.prototype.startLoading = function() {
 }
 
 WTWJS.prototype.stopLoading = function() {
+	/* stop the blinking loading text */
 	try {
 		if (loadingtimer != null) {
 			window.clearInterval(loadingtimer);
@@ -2021,6 +2171,7 @@ WTWJS.prototype.stopLoading = function() {
 }
 
 WTWJS.prototype.mouseClick = function(e) {
+	/* on mouse click event, used to select the part of the avatar to color on the avatar color menu option */
 	try {
 		e = e || window.event;
 		var pickedResult = scene.pick(e.clientX, e.clientY);
@@ -2050,16 +2201,21 @@ WTWJS.prototype.mouseClick = function(e) {
 }
 
 window.addEventListener("resize", function () {
+	/* resize the canvas when the window is resized */
 	engine.resize();
 });
 
 window.onload = function () {
+	/* window on load event */
+	/* add onclick event listener */
 	dGet('renderCanvas').addEventListener("click", WTW.mouseClick);
+	/* add on message event listener to talk with parent frame */
 	if (window.addEventListener) {
 		window.addEventListener("message", WTW.onMessage, false);        
 	} else if (window.attachEvent) {
 		window.attachEvent("onmessage", WTW.onMessage, false);
 	}
+	/* get avatar speed settings */
 	var walkspeed = WTW.getCookie("walkspeed");
 	if (walkspeed != null) {
 		if (WTW.isNumeric(walkspeed)) {
@@ -2084,6 +2240,7 @@ window.onload = function () {
 			WTW.turnAnimationSpeed = Number(turnanimationspeed);
 		}
 	}
+	/* get canvas and initiate the create scene function (and start render loop for animation) */
 	canvas = document.getElementById("renderCanvas");
 	engine = new BABYLON.Engine(canvas, true);
 	WTW.createScene();
@@ -2091,11 +2248,3 @@ window.onload = function () {
 		scene.render();
 	});
 }
-
-/*
-doc https://doc.babylonjs.com/how_to/gui
-inputs https://www.babylonjs-playground.com/#I1Y5YT#1
-alignment https://www.babylonjs-playground.com/#XCPP9Y#13
-WTW.log(JSON.stringify(zavatar.WTW.skeleton._ranges), 'pink');
-
-*/
