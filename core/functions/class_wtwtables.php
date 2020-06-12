@@ -848,9 +848,12 @@ class wtwtables {
 				  `useravatarid` varchar(16) DEFAULT '',
 				  `instanceid` varchar(24) DEFAULT '',
 				  `avatarpart` varchar(255) DEFAULT '',
-				  `emissivecolorr` decimal(20,18) DEFAULT '1.000000000000000000',
-				  `emissivecolorg` decimal(20,18) DEFAULT '1.000000000000000000',
-				  `emissivecolorb` decimal(20,18) DEFAULT '1.000000000000000000',
+				  `emissivecolorr` decimal(20,18) DEFAULT '0.000000000000000000',
+				  `emissivecolorg` decimal(20,18) DEFAULT '0.000000000000000000',
+				  `emissivecolorb` decimal(20,18) DEFAULT '0.000000000000000000',
+				  `diffusecolorr` decimal(20,18) DEFAULT '1.000000000000000000',
+				  `diffusecolorg` decimal(20,18) DEFAULT '1.000000000000000000',
+				  `diffusecolorb` decimal(20,18) DEFAULT '1.000000000000000000',
 				  `createdate` datetime DEFAULT NULL,
 				  `createuserid` varchar(16) DEFAULT '',
 				  `updatedate` datetime DEFAULT NULL,
@@ -1679,6 +1682,20 @@ class wtwtables {
 				CHANGE COLUMN `scalingy` `scalingy` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
 			$wtwdb->query("ALTER TABLE `".wtw_tableprefix."useravatars` 
 				CHANGE COLUMN `scalingz` `scalingz` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
+
+
+
+
+/* add code to modify and add columns
+				  `emissivecolorr` decimal(20,18) DEFAULT '0.000000000000000000',
+				  `emissivecolorg` decimal(20,18) DEFAULT '0.000000000000000000',
+				  `emissivecolorb` decimal(20,18) DEFAULT '0.000000000000000000',
+				  `diffusecolorr` decimal(20,18) DEFAULT '1.000000000000000000',
+				  `diffusecolorg` decimal(20,18) DEFAULT '1.000000000000000000',
+				  `diffusecolorb` decimal(20,18) DEFAULT '1.000000000000000000',
+*/
+
+
 			
 			/* updated v3.3.0 - avatar designer was moved to a plugin - needs to be enabled on first run */
 			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."plugins where pluginname='wtw-avatars';");
