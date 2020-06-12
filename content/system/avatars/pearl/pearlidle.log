@@ -1,0 +1,322 @@
+Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  D:\Data\HTTP3DInc\Blender\avatars\pearl\
+	Python World class constructor completed
+	processing begun of skeleton:  Armature, id:  0
+		processing begun of bone:  mixamorig:Hips, index:  0
+		processing begun of bone:  mixamorig:Spine, index:  1
+		processing begun of bone:  mixamorig:Spine1, index:  2
+		processing begun of bone:  mixamorig:Spine2, index:  3
+		processing begun of bone:  mixamorig:Neck, index:  4
+		processing begun of bone:  mixamorig:Head, index:  5
+		processing begun of bone:  mixamorig:RightEye, index:  6
+		processing begun of bone:  mixamorig:LeftEye, index:  7
+		processing begun of bone:  mixamorig:HeadTop_End, index:  8
+		processing begun of bone:  mixamorig:LeftShoulder, index:  9
+		processing begun of bone:  mixamorig:LeftArm, index:  10
+		processing begun of bone:  mixamorig:LeftForeArm, index:  11
+		processing begun of bone:  mixamorig:LeftHand, index:  12
+		processing begun of bone:  mixamorig:LeftHandThumb1, index:  13
+		processing begun of bone:  mixamorig:LeftHandThumb2, index:  14
+		processing begun of bone:  mixamorig:LeftHandThumb3, index:  15
+		processing begun of bone:  mixamorig:LeftHandThumb4, index:  16
+		processing begun of bone:  mixamorig:LeftHandIndex1, index:  17
+		processing begun of bone:  mixamorig:LeftHandIndex2, index:  18
+		processing begun of bone:  mixamorig:LeftHandIndex3, index:  19
+		processing begun of bone:  mixamorig:LeftHandIndex4, index:  20
+		processing begun of bone:  mixamorig:LeftHandMiddle1, index:  21
+		processing begun of bone:  mixamorig:LeftHandMiddle2, index:  22
+		processing begun of bone:  mixamorig:LeftHandMiddle3, index:  23
+		processing begun of bone:  mixamorig:LeftHandMiddle4, index:  24
+		processing begun of bone:  mixamorig:LeftHandRing1, index:  25
+		processing begun of bone:  mixamorig:LeftHandRing2, index:  26
+		processing begun of bone:  mixamorig:LeftHandRing3, index:  27
+		processing begun of bone:  mixamorig:LeftHandRing4, index:  28
+		processing begun of bone:  mixamorig:LeftHandPinky1, index:  29
+		processing begun of bone:  mixamorig:LeftHandPinky2, index:  30
+		processing begun of bone:  mixamorig:LeftHandPinky3, index:  31
+		processing begun of bone:  mixamorig:LeftHandPinky4, index:  32
+		processing begun of bone:  mixamorig:RightShoulder, index:  33
+		processing begun of bone:  mixamorig:RightArm, index:  34
+		processing begun of bone:  mixamorig:RightForeArm, index:  35
+		processing begun of bone:  mixamorig:RightHand, index:  36
+		processing begun of bone:  mixamorig:RightHandPinky1, index:  37
+		processing begun of bone:  mixamorig:RightHandPinky2, index:  38
+		processing begun of bone:  mixamorig:RightHandPinky3, index:  39
+		processing begun of bone:  mixamorig:RightHandPinky4, index:  40
+		processing begun of bone:  mixamorig:RightHandRing1, index:  41
+		processing begun of bone:  mixamorig:RightHandRing2, index:  42
+		processing begun of bone:  mixamorig:RightHandRing3, index:  43
+		processing begun of bone:  mixamorig:RightHandRing4, index:  44
+		processing begun of bone:  mixamorig:RightHandMiddle1, index:  45
+		processing begun of bone:  mixamorig:RightHandMiddle2, index:  46
+		processing begun of bone:  mixamorig:RightHandMiddle3, index:  47
+		processing begun of bone:  mixamorig:RightHandMiddle4, index:  48
+		processing begun of bone:  mixamorig:RightHandIndex1, index:  49
+		processing begun of bone:  mixamorig:RightHandIndex2, index:  50
+		processing begun of bone:  mixamorig:RightHandIndex3, index:  51
+		processing begun of bone:  mixamorig:RightHandIndex4, index:  52
+		processing begun of bone:  mixamorig:RightHandThumb1, index:  53
+		processing begun of bone:  mixamorig:RightHandThumb2, index:  54
+		processing begun of bone:  mixamorig:RightHandThumb3, index:  55
+		processing begun of bone:  mixamorig:RightHandThumb4, index:  56
+		processing begun of bone:  mixamorig:LeftUpLeg, index:  57
+		processing begun of bone:  mixamorig:LeftLeg, index:  58
+		processing begun of bone:  mixamorig:LeftFoot, index:  59
+		processing begun of bone:  mixamorig:LeftToeBase, index:  60
+		processing begun of bone:  mixamorig:LeftToe_End, index:  61
+		processing begun of bone:  mixamorig:RightUpLeg, index:  62
+		processing begun of bone:  mixamorig:RightLeg, index:  63
+		processing begun of bone:  mixamorig:RightFoot, index:  64
+		processing begun of bone:  mixamorig:RightToeBase, index:  65
+		processing begun of bone:  mixamorig:RightToe_End, index:  66
+		processing action Armature|mixamo.com|Layer0:  in[1 - 325], out[0 - 325]
+	processing begun of mesh:  Shoes
+		processing begun of material:  Shoesmat
+			processing texture Pearl_Shoes_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Shoes_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Shoes_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "ShoesDiffuseUVLayer"
+			processing texture Pearl_Shoes_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Shoes_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Shoes_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "ShoesDiffuseUVLayer"
+			processing texture Pearl_Shoes_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Shoes_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Shoes_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "ShoesDiffuseUVLayer"
+			processing texture Pearl_Shoes_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Shoes_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Shoes_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "ShoesDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  322
+		num normals        :  322
+		num tangents       :  1288
+		num uvs            :  644
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  816
+		Skeleton stats:  
+			Total Influencers:  895
+			Avg # of influencers per vertex:  2.7795
+			Highest # of influencers observed:  3, num vertices with this:  251
+			exported as 3 influencers
+			num skeletonWeights and skeletonIndices:  1288
+	processing begun of mesh:  Eyelashes
+		processing begun of material:  Eyelashesmat
+			processing texture Pearl_Body_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "EyelashesDiffuseUVLayer"
+			processing texture Pearl_Body_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "EyelashesDiffuseUVLayer"
+			processing texture Pearl_Body_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "EyelashesDiffuseUVLayer"
+			processing texture Pearl_Body_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "EyelashesDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  49
+		num normals        :  49
+		num tangents       :  196
+		num uvs            :  98
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  123
+		Skeleton stats:  
+			Total Influencers:  49
+			Avg # of influencers per vertex:  1
+			Highest # of influencers observed:  1, num vertices with this:  49
+			exported as 1 influencers
+			num skeletonWeights and skeletonIndices:  196
+		Shape Keys:
+	processing begun of mesh:  Tops
+		processing begun of material:  Topmat
+			processing texture Pearl_Top_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Top_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Top_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "TopsDiffuseUVLayer"
+			processing texture Pearl_Top_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Top_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Top_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "TopsDiffuseUVLayer"
+			processing texture Pearl_Top_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Top_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Top_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "TopsDiffuseUVLayer"
+			processing texture Pearl_Top_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Top_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Top_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "TopsDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  1674
+		num normals        :  1674
+		num tangents       :  6696
+		num uvs            :  3348
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  6906
+		Skeleton stats:  
+			Total Influencers:  8681
+			Avg # of influencers per vertex:  5.1858
+			Highest # of influencers observed:  8, num vertices with this:  84
+			exported as 8 influencers
+			num skeletonWeights and skeletonIndices:  13392
+	processing begun of mesh:  Bottoms
+		processing begun of material:  Bottommat
+			processing texture Pearl_Bottom_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Bottom_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Bottom_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "BottomsDiffuseUVLayer"
+			processing texture Pearl_Bottom_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Bottom_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Bottom_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "BottomsDiffuseUVLayer"
+			processing texture Pearl_Bottom_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Bottom_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Bottom_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "BottomsDiffuseUVLayer"
+			processing texture Pearl_Bottom_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Bottom_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Bottom_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "BottomsDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  1039
+		num normals        :  1039
+		num tangents       :  4156
+		num uvs            :  2078
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  3648
+		Skeleton stats:  
+			Total Influencers:  3455
+			Avg # of influencers per vertex:  3.3253
+			Highest # of influencers observed:  4, num vertices with this:  443
+			exported as 4 influencers
+			num skeletonWeights and skeletonIndices:  4156
+	processing begun of mesh:  Body
+		processing begun of material:  Bodymat
+			processing texture Pearl_Body_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "BodyDiffuseUVLayer"
+			processing texture Pearl_Body_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "BodyDiffuseUVLayer"
+			processing texture Pearl_Body_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "BodyDiffuseUVLayer"
+			processing texture Pearl_Body_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "BodyDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  4716
+		num normals        :  4716
+		num tangents       :  18864
+		num uvs            :  9432
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  18063
+		Skeleton stats:  
+			Total Influencers:  9529
+			Avg # of influencers per vertex:  2.0206
+			Highest # of influencers observed:  7, num vertices with this:  22
+			exported as 7 influencers
+			num skeletonWeights and skeletonIndices:  37728
+		Shape Keys:
+	processing begun of mesh:  Eyes
+		processing begun of material:  Eyesmat
+			processing texture Pearl_Body_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "EyesDiffuseUVLayer"
+			processing texture Pearl_Body_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "EyesDiffuseUVLayer"
+			processing texture Pearl_Body_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "EyesDiffuseUVLayer"
+			processing texture Pearl_Body_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Body_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "EyesDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  419
+		num normals        :  419
+		num tangents       :  1676
+		num uvs            :  838
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  1824
+		Skeleton stats:  
+			Total Influencers:  419
+			Avg # of influencers per vertex:  1
+			Highest # of influencers observed:  1, num vertices with this:  419
+			exported as 1 influencers
+			num skeletonWeights and skeletonIndices:  1676
+		Shape Keys:
+	processing begun of mesh:  Hair
+		processing begun of material:  Hairmat
+			processing texture Pearl_Hair_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Hair_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Hair_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "HairDiffuseUVLayer"
+			processing texture Pearl_Hair_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Hair_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Hair_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "HairDiffuseUVLayer"
+			processing texture Pearl_Hair_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Hair_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Hair_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "HairDiffuseUVLayer"
+			processing texture Pearl_Hair_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Hair_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\pearl\\Pearl_Hair_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "HairDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  1694
+		num normals        :  1694
+		num tangents       :  6776
+		num uvs            :  3388
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  4788
+		Skeleton stats:  
+			Total Influencers:  5798
+			Avg # of influencers per vertex:  3.4227
+			Highest # of influencers observed:  6, num vertices with this:  128
+			exported as 6 influencers
+			num skeletonWeights and skeletonIndices:  13552
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of light (DIRECTIONAL):  Lamp
+========= Writing of JSON file started =========
+	writing mesh:  Shoes
+	writing mesh:  Eyelashes
+	writing mesh:  Tops
+	writing mesh:  Bottoms
+	writing mesh:  Body
+	writing mesh:  Eyes
+	writing mesh:  Hair
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 22.0435 secs
