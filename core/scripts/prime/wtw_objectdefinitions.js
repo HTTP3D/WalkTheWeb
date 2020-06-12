@@ -4,167 +4,8 @@
 
 /* these functions create a default object for each main type of object used in WalkTheWeb */
 
-WTWJS.prototype.newAnalyticsQueue = function() {
-	/* create an instance for the analytics Queue */
-	var analyticsqueue = '';
-	try {
-		analyticsqueue = {
-			'actionzoneind':'-1',
-			'distancename':'',
-			'connectinggridind':'-1',
-			'formind':'-1'
-		};
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAnalyticsQueue=" + ex.message);
-	}
-	return analyticsqueue;
-}
 
-WTWJS.prototype.newMoldEvent = function() {
-	/* create an instance for the mold event (animation tied to a mold) */
-	var moldevent = '';
-	try {
-		moldevent = {
-			'animationevent':'',
-			'moldevent':'onclick',
-			'moldname':'',
-			'mold':null,
-			'moldfunction':'',
-			'parameters':'',
-			'startframe':'1',
-			'endframe':'10',
-			'animationloop':false,
-			'speedratio':'1.00',
-			'animationendscript':'',
-			'animationendparameters':'',
-			'stopcurrentanimations':false,
-			'additionalscript':'',
-			'additionalparameters':'',
-			'soundid':'',
-			'soundpath':'',
-			'soundmaxdistance':'100.00',
-			'sound':'',
-			'stage':'0',
-			'loaded':false
-		};
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newMoldEvent=" + ex.message);
-	}
-	return moldevent;
-}
-
-WTWJS.prototype.newObjectAnimation = function() {
-	/* create an instance for the Object Animation (Animation defined for 3D Objects like Babylon Files) */
-	var objectanimation = '';
-	try {
-		objectanimation = {
-			'objectanimationid':'',
-			'objectfolder':'',
-			'objectfile':'',
-			'animationname':'MyOnclick',
-			'moldevent':'onclick',
-			'moldnamepart':null,
-			'startframe':'1',
-			'endframe':'10',
-			'animationloop':false,
-			'speedratio':'1.00',
-			'additionalscript':'',
-			'additionalparameters':'',
-			'animationendscript':null,
-			'animationendparameters':'',
-			'stopcurrentanimations':false,
-			'soundid':'',
-			'soundpath':'',
-			'soundmaxdistance':'100.00'
-		};
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newObjectAnimation=" + ex.message);
-	}
-	return objectanimation;
-}
-
-WTWJS.prototype.newMoldQueue = function() {
-	/* create an instance for the mold Queue */
-	/* mold queue is used to spread mold creation over frames more evenly for smoother animation */
-	var moldqueue = '';
-	try {
-		moldqueue = {
-			'moldname':'',
-			'queprocess':'add',
-			'actionzoneind':'-1',
-			'actionzoneid':'',
-			'formind':'-1',
-			'connectinggridind':'-1',
-			'check':true,
-			'molddef':WTW.newMold(),
-			'parentname':WTW.mainParent.name,
-			'coveringname':'texture',
-			'csgmolddef':null,
-		};
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newMoldQueue=" + ex.message);
-	}
-	return moldqueue;
-}
-
-WTWJS.prototype.newRideAlong = function() {
-	/* work in progress - create an instance for the Ride Along (avatar riding on a vehicle) */
-	var ridealong = '';
-	try {
-		ridealong = {
-			'ridealongmoldname':'',
-			'attachmoldid':'',
-			'attachmoldname':'',
-			'rotatemoldname':'',
-			'position':
-			{
-				'x':'',
-				'y':'',
-				'z':''
-			},
-			'rotation':
-			{
-				'x':'0.00',
-				'y':'0.00',
-				'z':'0.00'
-			}
-		};
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newRideAlong=" + ex.message);
-	}
-	return ridealong;
-}
-
-WTWJS.prototype.newUpload = function() {
-	/* create an instance for an Uploaded File (depreciated - used for database stored files) */
-	var upload = '';
-	try {
-		upload = {
-			'uploadinfo':
-			{
-				'title':'',
-				'name':'',
-				'extension':'',
-				'type':'',
-				'size':'',
-				'width':'',
-				'height':''
-			},
-			'id':'',
-			'uploadid':'',
-			'originalid':'',
-			'websizeid':'',
-			'thumbnailid':'',
-			'filepath':'',
-			'data':'',
-			'userid':'',
-			'queue':'0'
-		};
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newUpload=" + ex.message);
-	}
-	return upload;
-}
+/* 3D Scene and Molds Related Objects */ 
 
 WTWJS.prototype.newConnectingGrid = function() {
 	/* create an instance for a Connecting Grid - defined the position, scaling, and rotation of a web item in another web item. */
@@ -557,6 +398,215 @@ WTWJS.prototype.newPathPoint = function() {
 	}
 	return pathpoint;
 }
+
+WTWJS.prototype.newMoldEvent = function() {
+	/* create an instance for the mold event (animation tied to a mold) */
+	var moldevent = '';
+	try {
+		moldevent = {
+			'animationevent':'',
+			'moldevent':'onclick',
+			'moldname':'',
+			'mold':null,
+			'moldfunction':'',
+			'parameters':'',
+			'startframe':'1',
+			'endframe':'10',
+			'animationloop':false,
+			'speedratio':'1.00',
+			'animationendscript':'',
+			'animationendparameters':'',
+			'stopcurrentanimations':false,
+			'additionalscript':'',
+			'additionalparameters':'',
+			'soundid':'',
+			'soundpath':'',
+			'soundmaxdistance':'100.00',
+			'sound':'',
+			'stage':'0',
+			'loaded':false
+		};
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newMoldEvent=" + ex.message);
+	}
+	return moldevent;
+}
+
+WTWJS.prototype.newWebImage = function() {
+	var webimage = '';
+	try {
+		var webimage = {
+			'imageid':'',
+			'imagepath':'',
+			'imagehoverid':'',
+			'imagehoverpath':'',
+			'imageclickid':'',
+			'imageclickpath':'',
+			'jsfunction':'',
+			'jsparameters':'',
+			'imageloaded':'0',
+			'hoverloaded':'0',
+			'clickloaded':'0'
+		};
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newWebImage=" + ex.message);
+	}
+	return webimage;
+}
+
+WTWJS.prototype.newHTMLSegment = function() {
+	/* create an instance for HTML segments of text to be converted into 3D Elements in the 3D Scene */
+	var htmlsegment = '';
+	try {
+		htmlsegment = {
+			'tagname':'',
+			'src':'',
+			'style':
+			{
+				'color':'black',
+				'float':'left',
+				'textalign':'left',
+				'display':'block',
+				'width:':'100%',
+				'height:':'100%',
+				'size':'2px',
+				'lineheight':'30px',
+				'fontsize':'20px',
+				'borderwidth':'0px',
+				'bordercolor':'transparent',
+				'maxwidth':'100%',
+				'marginleft':'0px',
+				'marginright':'0px',
+				'margintop':'0px',
+				'marginbottom':'0px'
+			},
+			'system': 
+			{
+				'indent':'0',
+				'x':'0',
+				'y':'0',
+				'width':'0',
+				'height':'0',
+				'maxwidth':'0',
+				'maxheight':'0',
+				'float':'',
+				'floatwidth':'0',
+				'floatheight':'0'
+			}
+		};
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newHTMLSegment=" + ex.message);
+	}
+	return htmlsegment;
+}
+
+WTWJS.prototype.newUpload = function() {
+	/* create an instance for an Uploaded File (depreciated - used for database stored files) */
+	var upload = '';
+	try {
+		upload = {
+			'uploadinfo':
+			{
+				'title':'',
+				'name':'',
+				'extension':'',
+				'type':'',
+				'size':'',
+				'width':'',
+				'height':''
+			},
+			'id':'',
+			'uploadid':'',
+			'originalid':'',
+			'websizeid':'',
+			'thumbnailid':'',
+			'filepath':'',
+			'data':'',
+			'userid':'',
+			'queue':'0'
+		};
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newUpload=" + ex.message);
+	}
+	return upload;
+}
+
+WTWJS.prototype.newObjectAnimation = function() {
+	/* create an instance for the Object Animation (Animation defined for 3D Objects like Babylon Files) */
+	var objectanimation = '';
+	try {
+		objectanimation = {
+			'objectanimationid':'',
+			'objectfolder':'',
+			'objectfile':'',
+			'animationname':'MyOnclick',
+			'moldevent':'onclick',
+			'moldnamepart':null,
+			'startframe':'1',
+			'endframe':'10',
+			'animationloop':false,
+			'speedratio':'1.00',
+			'additionalscript':'',
+			'additionalparameters':'',
+			'animationendscript':null,
+			'animationendparameters':'',
+			'stopcurrentanimations':false,
+			'soundid':'',
+			'soundpath':'',
+			'soundmaxdistance':'100.00'
+		};
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newObjectAnimation=" + ex.message);
+	}
+	return objectanimation;
+}
+
+
+/* Queue Events or loading to be processed */ 
+
+WTWJS.prototype.newMoldQueue = function() {
+	/* create an instance for the mold Queue */
+	/* mold queue is used to spread mold creation over frames more evenly for smoother animation */
+	var moldqueue = '';
+	try {
+		moldqueue = {
+			'moldname':'',
+			'queprocess':'add',
+			'actionzoneind':'-1',
+			'actionzoneid':'',
+			'formind':'-1',
+			'connectinggridind':'-1',
+			'check':true,
+			'molddef':WTW.newMold(),
+			'parentname':WTW.mainParent.name,
+			'coveringname':'texture',
+			'csgmolddef':null,
+		};
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newMoldQueue=" + ex.message);
+	}
+	return moldqueue;
+}
+
+WTWJS.prototype.newAnalyticsQueue = function() {
+	/* create an instance for the analytics Queue */
+	/* each instance will result in a page view for Analytics */
+	var analyticsqueue = '';
+	try {
+		analyticsqueue = {
+			'actionzoneind':'-1',
+			'distancename':'',
+			'connectinggridind':'-1',
+			'formind':'-1'
+		};
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAnalyticsQueue=" + ex.message);
+	}
+	return analyticsqueue;
+}
+
+
+/* Avatar Related Objects */ 
 
 WTWJS.prototype.newAvatarDef = function() {
 	/* create an instance for an Avatar definition */
@@ -1006,73 +1056,8 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 	return animationdefs;
 }
 
-WTWJS.prototype.newWebImage = function() {
-	var webimage = '';
-	try {
-		var webimage = {
-			'imageid':'',
-			'imagepath':'',
-			'imagehoverid':'',
-			'imagehoverpath':'',
-			'imageclickid':'',
-			'imageclickpath':'',
-			'jsfunction':'',
-			'jsparameters':'',
-			'imageloaded':'0',
-			'hoverloaded':'0',
-			'clickloaded':'0'
-		};
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newWebImage=" + ex.message);
-	}
-	return webimage;
-}
 
-WTWJS.prototype.newHTMLSegment = function() {
-	/* create an instance for HTML segments of text to be converted into 3D Elements in the 3D Scene */
-	var htmlsegment = '';
-	try {
-		htmlsegment = {
-			'tagname':'',
-			'src':'',
-			'style':
-			{
-				'color':'black',
-				'float':'left',
-				'textalign':'left',
-				'display':'block',
-				'width:':'100%',
-				'height:':'100%',
-				'size':'2px',
-				'lineheight':'30px',
-				'fontsize':'20px',
-				'borderwidth':'0px',
-				'bordercolor':'transparent',
-				'maxwidth':'100%',
-				'marginleft':'0px',
-				'marginright':'0px',
-				'margintop':'0px',
-				'marginbottom':'0px'
-			},
-			'system': 
-			{
-				'indent':'0',
-				'x':'0',
-				'y':'0',
-				'width':'0',
-				'height':'0',
-				'maxwidth':'0',
-				'maxheight':'0',
-				'float':'',
-				'floatwidth':'0',
-				'floatheight':'0'
-			}
-		};
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newHTMLSegment=" + ex.message);
-	}
-	return htmlsegment;
-}
+/* Automation Related Objects */ 
 
 WTWJS.prototype.newAutomation = function() {
 	/* create an instance for an Automation Step */
@@ -1122,6 +1107,68 @@ WTWJS.prototype.newAutomation = function() {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAutomation=" + ex.message);
 	}
 	return automation;
+}
+
+
+/* Vehicle Related Objects */ 
+
+WTWJS.prototype.newDriveVehicle = function() {
+	/* work in progress - create an instance for avatar driving a vehicle */
+	var zdrive = '';
+	try {
+		/* 	vehicle = boat, (eventually will also include car, plane, rocket, hovercraft, etc...)
+				This will define the type of movement applied (boat will lean and flow into the turns, stop slower, etc...)
+			connectinggridname = connecting grid for the vehicle (usually 3D Thing's connecting grid parent)
+			connectinggridid = id of the connecting grid (for the 3D Thing)
+			connectinggridind = index (instance) of the connecting grid (for the 3D Thing)
+			currentturn = rotation in degrees
+			currentspeed = current speed of the moving vehicle
+			currentdirection = forward (1), neutral (0), or backwards (-1)
+			avatarsriding = array of avatar names to include with the ride along as the vehicle moves
+			
+			*position and rotation can be read from connecting grid
+		*/		
+		zdrive = {
+			'vehicle':'boat',
+			'connectinggridname':'',
+			'instanceid':'',
+			'currentturn':0,
+			'currentspeed':0,
+			'currentdirection':0,
+			'avatarsriding': []
+		};
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newDriveVehicle=" + ex.message);
+	}
+	return zdrive;
+}
+
+WTWJS.prototype.newRideAlong = function() {
+	/* work in progress - create an instance for the Ride Along (avatar riding on a vehicle) */
+	var ridealong = '';
+	try {
+		ridealong = {
+			'ridealongmoldname':'',
+			'attachmoldid':'',
+			'attachmoldname':'',
+			'rotatemoldname':'',
+			'position':
+			{
+				'x':'',
+				'y':'',
+				'z':''
+			},
+			'rotation':
+			{
+				'x':'0.00',
+				'y':'0.00',
+				'z':'0.00'
+			}
+		};
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newRideAlong=" + ex.message);
+	}
+	return ridealong;
 }
 
 

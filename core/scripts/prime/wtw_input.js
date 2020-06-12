@@ -369,13 +369,15 @@ WTWJS.prototype.mouseClick = function(e) {
 					zpickedname = pickedResult.pickedMesh.name;
 				}
 				if (zpickedname != '') {
-					var mesh = scene.getMeshByID(zpickedname);
+					var zmold = scene.getMeshByID(zpickedname);
 					if (zpickedname.indexOf("-") > -1) {
 						var namepart = zpickedname.split('-');
 						WTW.checkMoldEvent('onclick', zpickedname);
 						WTW.pluginsOnClick(zpickedname);
 						if (zpickedname.indexOf("-image") > -1) {
 							WTW.checkImageClick(zpickedname);
+						} else if (zpickedname.indexOf("-vehicle") > -1) {
+							WTW.toggleStartVehicle(zmold);
 						} else {
 							WTW.checkJSFunction(zpickedname);
 						}
@@ -481,9 +483,6 @@ WTWJS.prototype.mouseUp = function(e) {
 			if (WTW.adminView == 1) {
 				WTW.mouseUpAdmin(e);
 			}
-			if (WTW.drive != null) {
-				WTW.drive.currentturn = 0;
-			}
 			if (WTW.dragID.indexOf("-scrollboxtab") > -1) {
 				WTW.lastID = WTW.dragID;
 				WTW.dragID = WTW.dragID.replace("-scrollboxtab","");
@@ -547,38 +546,36 @@ WTWJS.prototype.mouseMove = function(e) {
 			}
 			WTW.setToolTipLocation();
 			if (WTW.isMouseDown == 1) {
-				if (WTW.drive == null) {
-					if (WTW.dragID.indexOf("-") > -1) {
-						if (WTW.dragID.indexOf("-scrollboxtab") > -1) {
-							var molds = WTW.buildingMolds;
-							var moldind = -1;
-							var namepart = WTW.dragID.split('-');
-							var pheight = 0;
-							var scrollmove = 0;
-							if (namepart[0] != null) {
-								if (namepart[0].indexOf("communitymolds") > -1) {
-									molds = WTW.communitiesMolds;
-								}
+				if (WTW.dragID.indexOf("-") > -1) {
+					if (WTW.dragID.indexOf("-scrollboxtab") > -1) {
+						var molds = WTW.buildingMolds;
+						var moldind = -1;
+						var namepart = WTW.dragID.split('-');
+						var pheight = 0;
+						var scrollmove = 0;
+						if (namepart[0] != null) {
+							if (namepart[0].indexOf("communitymolds") > -1) {
+								molds = WTW.communitiesMolds;
 							}
-							if (namepart[1] != null) {
-								if (WTW.isNumeric(namepart[1])) {
-									moldind = Number(namepart[1]);
-								}
-							}
-							if (molds[moldind] != null) {
-								if (molds[moldind].webtext.fullheight != undefined) {
-									pheight = Number(molds[moldind].webtext.fullheight);
-								}			
-							}					
-							if (pheight > 512) {
-								scrollmove = (WTW.mouseStartY - WTW.mouseY) * (pheight / 512);
-							} else {
-								scrollmove = (WTW.mouseStartY - WTW.mouseY);
-							}
-							WTW.scrollBoxMove(WTW.dragID, scrollmove);
-							WTW.mouseStartY = WTW.mouseY;
-							e.preventDefault();
 						}
+						if (namepart[1] != null) {
+							if (WTW.isNumeric(namepart[1])) {
+								moldind = Number(namepart[1]);
+							}
+						}
+						if (molds[moldind] != null) {
+							if (molds[moldind].webtext.fullheight != undefined) {
+								pheight = Number(molds[moldind].webtext.fullheight);
+							}			
+						}					
+						if (pheight > 512) {
+							scrollmove = (WTW.mouseStartY - WTW.mouseY) * (pheight / 512);
+						} else {
+							scrollmove = (WTW.mouseStartY - WTW.mouseY);
+						}
+						WTW.scrollBoxMove(WTW.dragID, scrollmove);
+						WTW.mouseStartY = WTW.mouseY;
+						e.preventDefault();
 					}
 				}
 			}

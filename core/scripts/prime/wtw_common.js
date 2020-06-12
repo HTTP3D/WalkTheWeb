@@ -5265,9 +5265,6 @@ WTWJS.prototype.setShownConnectingGrids = function() {
 					if (loadlevel == "1") {
 						lenmax = 5000;
 					}
-					if (WTW.drive != null) {
-						lenmax = 99999999;
-					}
 				} 
 				if (loadlevel == "1") {
 					mydist = WTW.getMyDistance(Number(WTW.connectingGrids[i].position.x), Number(WTW.connectingGrids[i].position.y), Number(WTW.connectingGrids[i].position.z));
@@ -8003,8 +8000,8 @@ WTWJS.prototype.scrollBoxRepaint = function(moldname, scrollmove) {
 				}
 			}
 		}
-		if (WTW.drive == null && scene.activeCameras[0] != null) {
-			scene.activeCameras[0].attachControl(canvas, true); // true allows canvas default event actions
+		if (scene.activeCameras[0] != null) {
+			scene.activeCameras[0].attachControl(canvas, true); /* true allows canvas default event actions */
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-scrollBoxRepaint=" + ex.message);
@@ -10212,6 +10209,27 @@ WTWJS.prototype.getMoldnameParts = function(moldname) {
 	}
 }
 
+WTWJS.prototype.getMoldConnectingGrid = function(zmold) {
+	try {
+		if (zmold.name.indexOf("communitymolds") > -1 && communityid == "") {
+			while (zmold.name.indexOf("connectinggrids") == -1) {
+				zmold = zmold.parent;
+			}
+		} else if (zmold.name.indexOf("buildingmolds") > -1 && buildingid == "") {
+			while (zmold.name.indexOf("connectinggrids") == -1) {
+				zmold = zmold.parent;
+			}
+		} else if (zmold.name.indexOf("thingmolds") > -1 && thingid == "") {
+			while (zmold.name.indexOf("connectinggrids") == -1) {
+				zmold = zmold.parent;
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-getMoldConnectingGrid=" + ex.message);
+    }
+	return zmold;
+}
+
 WTWJS.prototype.getMoldBase = function(mold) {
 	try {
 		var moldname = mold.name;
@@ -10938,12 +10956,16 @@ WTWJS.prototype.checkAnimationSet = function(zavatar, zkey, zanimationset) {
 			if (zavatar.WTW != null) {
 				if (zavatar.WTW.animations != null) {
 					if (zavatar.WTW.animations.running != null) {
-						var weightkey = zkey;
-						if (zanimationset != '') {
-							weightkey = zkey + "-" + zanimationset;
-						}
-						if (zavatar.WTW.animations.running[weightkey] != null) {
-							zkey = weightkey;
+						if (zanimationset.indexOf("vehicle") > -1) {
+							zkey = WTW.setVehicleAnimation(zkey);
+						} else {
+							var weightkey = zkey;
+							if (zanimationset != '') {
+								weightkey = zkey + "-" + zanimationset;
+							}
+							if (zavatar.WTW.animations.running[weightkey] != null) {
+								zkey = weightkey;
+							}
 						}
 					}
 				}

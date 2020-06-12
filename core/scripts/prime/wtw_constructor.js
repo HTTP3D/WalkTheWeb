@@ -274,11 +274,15 @@ function WTWJS() {
 	/* WTW.keysPressed - keys pressed Array of values that are translated into movement and animation */
 	this.keysPressed = [];
 	
+
+/* vehicle related */
+
 	/* WTW.rideAlong - value set to show avatar is currently riding along with an alternate parent (may be depreciated soon) */
 	this.rideAlong = null;
 	
 	/* WTW.drive - Work in progress - value set to drive vehicle */
 	this.drive = null;
+
 
 
 /* user settings */	
