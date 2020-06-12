@@ -1,0 +1,356 @@
+Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  D:\Data\HTTP3DInc\Blender\avatars\regina\
+	Python World class constructor completed
+	processing begun of skeleton:  Armature, id:  0
+		processing begun of bone:  mixamorig:Hips, index:  0
+		processing begun of bone:  mixamorig:Spine, index:  1
+		processing begun of bone:  mixamorig:Spine1, index:  2
+		processing begun of bone:  mixamorig:Spine2, index:  3
+		processing begun of bone:  mixamorig:Neck, index:  4
+		processing begun of bone:  mixamorig:Head, index:  5
+		processing begun of bone:  mixamorig:HeadTop_End, index:  6
+		processing begun of bone:  mixamorig:RightEye, index:  7
+		processing begun of bone:  mixamorig:LeftEye, index:  8
+		processing begun of bone:  mixamorig:LeftShoulder, index:  9
+		processing begun of bone:  mixamorig:LeftArm, index:  10
+		processing begun of bone:  mixamorig:LeftForeArm, index:  11
+		processing begun of bone:  mixamorig:LeftHand, index:  12
+		processing begun of bone:  mixamorig:LeftHandMiddle1, index:  13
+		processing begun of bone:  mixamorig:LeftHandMiddle2, index:  14
+		processing begun of bone:  mixamorig:LeftHandMiddle3, index:  15
+		processing begun of bone:  mixamorig:LeftHandMiddle4, index:  16
+		processing begun of bone:  mixamorig:LeftHandThumb1, index:  17
+		processing begun of bone:  mixamorig:LeftHandThumb2, index:  18
+		processing begun of bone:  mixamorig:LeftHandThumb3, index:  19
+		processing begun of bone:  mixamorig:LeftHandThumb4, index:  20
+		processing begun of bone:  mixamorig:LeftHandIndex1, index:  21
+		processing begun of bone:  mixamorig:LeftHandIndex2, index:  22
+		processing begun of bone:  mixamorig:LeftHandIndex3, index:  23
+		processing begun of bone:  mixamorig:LeftHandIndex4, index:  24
+		processing begun of bone:  mixamorig:LeftHandRing1, index:  25
+		processing begun of bone:  mixamorig:LeftHandRing2, index:  26
+		processing begun of bone:  mixamorig:LeftHandRing3, index:  27
+		processing begun of bone:  mixamorig:LeftHandRing4, index:  28
+		processing begun of bone:  mixamorig:LeftHandPinky1, index:  29
+		processing begun of bone:  mixamorig:LeftHandPinky2, index:  30
+		processing begun of bone:  mixamorig:LeftHandPinky3, index:  31
+		processing begun of bone:  mixamorig:LeftHandPinky4, index:  32
+		processing begun of bone:  mixamorig:RightShoulder, index:  33
+		processing begun of bone:  mixamorig:RightArm, index:  34
+		processing begun of bone:  mixamorig:RightForeArm, index:  35
+		processing begun of bone:  mixamorig:RightHand, index:  36
+		processing begun of bone:  mixamorig:RightHandMiddle1, index:  37
+		processing begun of bone:  mixamorig:RightHandMiddle2, index:  38
+		processing begun of bone:  mixamorig:RightHandMiddle3, index:  39
+		processing begun of bone:  mixamorig:RightHandMiddle4, index:  40
+		processing begun of bone:  mixamorig:RightHandThumb1, index:  41
+		processing begun of bone:  mixamorig:RightHandThumb2, index:  42
+		processing begun of bone:  mixamorig:RightHandThumb3, index:  43
+		processing begun of bone:  mixamorig:RightHandThumb4, index:  44
+		processing begun of bone:  mixamorig:RightHandIndex1, index:  45
+		processing begun of bone:  mixamorig:RightHandIndex2, index:  46
+		processing begun of bone:  mixamorig:RightHandIndex3, index:  47
+		processing begun of bone:  mixamorig:RightHandIndex4, index:  48
+		processing begun of bone:  mixamorig:RightHandRing1, index:  49
+		processing begun of bone:  mixamorig:RightHandRing2, index:  50
+		processing begun of bone:  mixamorig:RightHandRing3, index:  51
+		processing begun of bone:  mixamorig:RightHandRing4, index:  52
+		processing begun of bone:  mixamorig:RightHandPinky1, index:  53
+		processing begun of bone:  mixamorig:RightHandPinky2, index:  54
+		processing begun of bone:  mixamorig:RightHandPinky3, index:  55
+		processing begun of bone:  mixamorig:RightHandPinky4, index:  56
+		processing begun of bone:  mixamorig:LeftUpLeg, index:  57
+		processing begun of bone:  mixamorig:LeftLeg, index:  58
+		processing begun of bone:  mixamorig:LeftFoot, index:  59
+		processing begun of bone:  mixamorig:LeftToeBase, index:  60
+		processing begun of bone:  mixamorig:LeftToe_End, index:  61
+		processing begun of bone:  mixamorig:RightUpLeg, index:  62
+		processing begun of bone:  mixamorig:RightLeg, index:  63
+		processing begun of bone:  mixamorig:RightFoot, index:  64
+		processing begun of bone:  mixamorig:RightToeBase, index:  65
+		processing begun of bone:  mixamorig:RightToe_End, index:  66
+		processing action Armature|mixamo.com|Layer0:  in[1 - 241], out[0 - 241]
+	processing begun of mesh:  Shoes
+		processing begun of material:  Shoesmat
+			processing texture Regina_Shoes_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Shoes_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Shoes_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "ShoesDiffuseUVLayer"
+			processing texture Regina_Shoes_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Shoes_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Shoes_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "ShoesDiffuseUVLayer"
+			processing texture Regina_Shoes_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Shoes_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Shoes_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "ShoesDiffuseUVLayer"
+			processing texture Regina_Shoes_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Shoes_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Shoes_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "ShoesDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  1532
+		num normals        :  1532
+		num tangents       :  6128
+		num uvs            :  3064
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  5814
+		Skeleton stats:  
+			Total Influencers:  5202
+			Avg # of influencers per vertex:  3.3956
+			Highest # of influencers observed:  5, num vertices with this:  80
+			exported as 5 influencers
+			num skeletonWeights and skeletonIndices:  12256
+	processing begun of mesh:  Hats
+		processing begun of material:  Hatmat
+			processing texture Regina_Hat_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hat_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hat_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "HatsDiffuseUVLayer"
+			processing texture Regina_Hat_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hat_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hat_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "HatsDiffuseUVLayer"
+			processing texture Regina_Hat_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hat_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hat_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "HatsDiffuseUVLayer"
+			processing texture Regina_Hat_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hat_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hat_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "HatsDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  465
+		num normals        :  465
+		num tangents       :  1860
+		num uvs            :  930
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  1452
+		Skeleton stats:  
+			Total Influencers:  465
+			Avg # of influencers per vertex:  1
+			Highest # of influencers observed:  1, num vertices with this:  465
+			exported as 1 influencers
+			num skeletonWeights and skeletonIndices:  1860
+	processing begun of mesh:  Eyelashes
+		processing begun of material:  Eyelashesmat
+			processing texture Regina_Body_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "defaultDiffuseUVLayer"
+			processing texture Regina_Body_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "defaultDiffuseUVLayer"
+			processing texture Regina_Body_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "defaultDiffuseUVLayer"
+			processing texture Regina_Body_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "defaultDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  50
+		num normals        :  50
+		num tangents       :  200
+		num uvs            :  100
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  126
+		Skeleton stats:  
+			Total Influencers:  50
+			Avg # of influencers per vertex:  1
+			Highest # of influencers observed:  1, num vertices with this:  50
+			exported as 1 influencers
+			num skeletonWeights and skeletonIndices:  200
+		Shape Keys:
+	processing begun of mesh:  Tops
+		processing begun of material:  Topmat
+			processing texture Regina_Top_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Top_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Top_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "TopsDiffuseUVLayer"
+			processing texture Regina_Top_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Top_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Top_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "TopsDiffuseUVLayer"
+			processing texture Regina_Top_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Top_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Top_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "TopsDiffuseUVLayer"
+			processing texture Regina_Top_Opacity
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Top_Opacity.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Top_Opacity.png' are the same file
+				texture type:  bumpTexture, mapped using: "TopsDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  1094
+		num normals        :  1094
+		num tangents       :  4376
+		num uvs            :  2188
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  3453
+		Skeleton stats:  
+			Total Influencers:  6621
+			Avg # of influencers per vertex:  6.0521
+			Highest # of influencers observed:  8, num vertices with this:  157
+			exported as 8 influencers
+			num skeletonWeights and skeletonIndices:  8752
+	processing begun of mesh:  Bottoms
+		processing begun of material:  Bottommat
+			processing texture Regina_Bottom_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Bottom_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Bottom_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "BottomsDiffuseUVLayer"
+			processing texture Regina_Bottom_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Bottom_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Bottom_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "BottomsDiffuseUVLayer"
+			processing texture Regina_Bottom_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Bottom_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Bottom_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "BottomsDiffuseUVLayer"
+			processing texture Regina_Bottom_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Bottom_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Bottom_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "BottomsDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  1198
+		num normals        :  1198
+		num tangents       :  4792
+		num uvs            :  2396
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  4812
+		Skeleton stats:  
+			Total Influencers:  6680
+			Avg # of influencers per vertex:  5.576
+			Highest # of influencers observed:  8, num vertices with this:  40
+			exported as 8 influencers
+			num skeletonWeights and skeletonIndices:  9584
+	processing begun of mesh:  Body
+		processing begun of material:  Bodymat
+			processing texture Regina_Body_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "BodyDiffuseUVLayer"
+			processing texture Regina_Body_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "BodyDiffuseUVLayer"
+			processing texture Regina_Body_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "BodyDiffuseUVLayer"
+			processing texture Regina_Body_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "BodyDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  4133
+		num normals        :  4133
+		num tangents       :  16532
+		num uvs            :  8266
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  15975
+		Skeleton stats:  
+			WARNING: Maximum # of influencers exceeded for 13 vertices, extras ignored
+			Total Influencers:  11016
+			Avg # of influencers per vertex:  2.6654
+			Highest # of influencers observed:  10, num vertices with this:  13
+			exported as 8 influencers
+			num skeletonWeights and skeletonIndices:  33064
+		Shape Keys:
+	processing begun of mesh:  Eyes
+		processing begun of material:  Eyesmat
+			processing texture Regina_Body_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "EyesDiffuseUVLayer"
+			processing texture Regina_Body_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "EyesDiffuseUVLayer"
+			processing texture Regina_Body_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "EyesDiffuseUVLayer"
+			processing texture Regina_Body_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Body_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "EyesDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  422
+		num normals        :  422
+		num tangents       :  1688
+		num uvs            :  844
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  1824
+		Skeleton stats:  
+			Total Influencers:  422
+			Avg # of influencers per vertex:  1
+			Highest # of influencers observed:  1, num vertices with this:  422
+			exported as 1 influencers
+			num skeletonWeights and skeletonIndices:  1688
+		Shape Keys:
+	processing begun of mesh:  Hair
+		processing begun of material:  Hairmat
+			processing texture Regina_Hair_Diffuse
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hair_Diffuse.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hair_Diffuse.png' are the same file
+				texture type:  diffuseTexture, mapped using: "HairDiffuseUVLayer"
+			processing texture Regina_Hair_Specular
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hair_Specular.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hair_Specular.png' are the same file
+				texture type:  specularTexture, mapped using: "HairDiffuseUVLayer"
+			processing texture Regina_Hair_Gloss
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hair_Gloss.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hair_Gloss.png' are the same file
+				texture type:  value not meaningful 2, mapped using: "HairDiffuseUVLayer"
+			processing texture Regina_Hair_Normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hair_Normal.png' and 'D:\\Data\\HTTP3DInc\\Blender\\avatars\\regina\\Regina_Hair_Normal.png' are the same file
+				texture type:  bumpTexture, mapped using: "HairDiffuseUVLayer"
+		Custom split normals with tangents being used
+		num positions      :  1032
+		num normals        :  1032
+		num tangents       :  4128
+		num uvs            :  2064
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  2763
+		Skeleton stats:  
+			Total Influencers:  3780
+			Avg # of influencers per vertex:  3.6628
+			Highest # of influencers observed:  7, num vertices with this:  11
+			exported as 7 influencers
+			num skeletonWeights and skeletonIndices:  8256
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of light (DIRECTIONAL):  Lamp
+========= Writing of JSON file started =========
+	writing mesh:  Shoes
+	writing mesh:  Hats
+	writing mesh:  Eyelashes
+	writing mesh:  Tops
+	writing mesh:  Bottoms
+	writing mesh:  Body
+	writing mesh:  Eyes
+	writing mesh:  Hair
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 23.2157 secs
