@@ -88,33 +88,6 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
     }
 }
 
-WTWJS.prototype.getMoldBase = function(pickedmesh) {
-	var mold = null;
-	try {
-		if (pickedmesh.name.indexOf("communitymolds") > -1 && communityid == "") {
-			mold = pickedmesh.parent;
-			while (mold.name.indexOf("connectinggrids") == -1) {
-				mold = mold.parent;
-			}
-		} else if (pickedmesh.name.indexOf("buildingmolds") > -1 && buildingid == "") {
-			mold = pickedmesh.parent;
-			while (mold.name.indexOf("connectinggrids") == -1) {
-				mold = mold.parent;
-			}
-		} else if (pickedmesh.name.indexOf("thingmolds") > -1 && thingid == "") {
-			mold = pickedmesh.parent;
-			while (mold.name.indexOf("connectinggrids") == -1) {
-				mold = mold.parent;
-			}
-		} else {
-			mold = pickedmesh;
-		}
-	} catch (ex) {
-		WTW.log("admininput-getMoldBase=" + ex.message);
-    }
-	return mold;
-}
-
 WTWJS.prototype.mouseOverMoldAdmin = function(tagmesh, currentid) {
 	try {
 		if (dGet('wtw_bfocus').title == "Focus Highlight is On") {

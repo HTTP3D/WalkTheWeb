@@ -2527,8 +2527,8 @@ WTWJS.prototype.addActionzoneDriverTurningWheel = function(actionzonename, actio
 						if (WTW.isNumeric(WTW.drive.currentspeed)) {
 							currentspeed = Number(WTW.drive.currentspeed);
 						}
-						if (WTW.isNumeric(WTW.drive.drivedirection)) {
-							currentdirection = Number(WTW.drive.drivedirection);
+						if (WTW.isNumeric(WTW.drive.currentdirection)) {
+							currentdirection = Number(WTW.drive.currentdirection);
 						}
 						if (WTW.isNumeric(WTW.drive.connectinggridind)) {
 							testconnectinggridind = Number(WTW.drive.connectinggridind);
@@ -2559,8 +2559,8 @@ WTWJS.prototype.addActionzoneDriverTurningWheel = function(actionzonename, actio
 						if (WTW.isNumeric(WTW.drive.currentspeed)) {
 							currentspeed = Number(WTW.drive.currentspeed);
 						}
-						if (WTW.isNumeric(WTW.drive.drivedirection)) {
-							currentdirection = Number(WTW.drive.drivedirection);
+						if (WTW.isNumeric(WTW.drive.currentdirection)) {
+							currentdirection = Number(WTW.drive.currentdirection);
 						}
 						if (WTW.isNumeric(WTW.drive.connectinggridind)) {
 							testconnectinggridind = Number(WTW.drive.connectinggridind);
@@ -2778,8 +2778,8 @@ WTWJS.prototype.addActionzoneDriverWheel = function(actionzonename, actionzonein
 						if (WTW.isNumeric(WTW.drive.currentspeed)) {
 							currentspeed = Number(WTW.drive.currentspeed);
 						}
-						if (WTW.isNumeric(WTW.drive.drivedirection)) {
-							currentdirection = Number(WTW.drive.drivedirection);
+						if (WTW.isNumeric(WTW.drive.currentdirection)) {
+							currentdirection = Number(WTW.drive.currentdirection);
 						}
 						if (WTW.isNumeric(WTW.drive.connectinggridind)) {
 							testconnectinggridind = Number(WTW.drive.connectinggridind);
@@ -2809,8 +2809,8 @@ WTWJS.prototype.addActionzoneDriverWheel = function(actionzonename, actionzonein
 						if (WTW.isNumeric(WTW.drive.currentspeed)) {
 							currentspeed = Number(WTW.drive.currentspeed);
 						}
-						if (WTW.isNumeric(WTW.drive.drivedirection)) {
-							currentdirection = Number(WTW.drive.drivedirection);
+						if (WTW.isNumeric(WTW.drive.currentdirection)) {
+							currentdirection = Number(WTW.drive.currentdirection);
 						}
 						if (WTW.isNumeric(WTW.drive.connectinggridind)) {
 							testconnectinggridind = Number(WTW.drive.connectinggridind);

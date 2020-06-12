@@ -27,7 +27,7 @@ WTWJS.prototype.getCoveringList = function(shape) {
 			coveringlist[coveringlist.length] = "Hidden";
 		}
 		WTW.coveringlist = WTW.pluginsCoverings(WTW.coveringlist);
-		WTW.clearOptions("wtw_tmoldcovering");
+		WTW.clearDDL("wtw_tmoldcovering");
 		for (var i=0;i < coveringlist.length;i++) {
 			var option = document.createElement("option");
 			option.text = coveringlist[i];

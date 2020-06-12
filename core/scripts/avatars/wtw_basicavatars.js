@@ -419,27 +419,52 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 								results.meshes[i].name = zchildmoldname;
 								results.meshes[i].id = zchildmoldname;
 								results.meshes[i].isVisible = false;
-								if (results.meshes[i].material != null) {
-									if (results.meshes[i].material.alpha != undefined) {
-										results.meshes[i].material.alpha = 1;
-									}
-									results.meshes[i].material.ambientColor = new BABYLON.Color3(.3, .3, .3);
-									if (zavatarparts != null) {
-										for (var j=0;j<zavatarparts.length;j++) {
-											if (zavatarparts[j] != null) {
-												var zavatarpart = zavatarparts[j].avatarpart;
-												if (zavatarpart == zmeshname) {
-													var zer = zavatarparts[j].emissivecolorr;
-													var zeg = zavatarparts[j].emissivecolorg;
-													var zeb = zavatarparts[j].emissivecolorb;
-													results.meshes[i].material.emissiveColor = new BABYLON.Color3(zer,zeg,zeb);
-													var zcovering = results.meshes[i].material;
-													results.meshes[i].material.dispose();
-													results.meshes[i].material = zcovering;
+								
+								/* set custom colors to avatar parts */
+								let zemissivecolorr = 0;
+								let zemissivecolorg = 0;
+								let zemissivecolorb = 0;
+								let zdiffusecolorr = 1;
+								let zdiffusecolorg = 1;
+								let zdiffusecolorb = 1;
+								if (zavatarparts != null) {
+									for (var j=0;j<zavatarparts.length;j++) {
+										if (zavatarparts[j] != null) {
+											var zavatarpart = zavatarparts[j].avatarpart;
+											if (zavatarpart == zmeshname) {
+												if (zavatarparts[j].emissivecolorr != undefined) {
+													zemissivecolorr = zavatarparts[j].emissivecolorr;
+												}
+												if (zavatarparts[j].emissivecolorg != undefined) {
+													zemissivecolorg = zavatarparts[j].emissivecolorg;
+												}
+												if (zavatarparts[j].emissivecolorb != undefined) {
+													zemissivecolorb = zavatarparts[j].emissivecolorb;
+												}
+												if (zavatarparts[j].diffusecolorr != undefined) {
+													zdiffusecolorr = zavatarparts[j].diffusecolorr;
+												}
+												if (zavatarparts[j].diffusecolorg != undefined) {
+													zdiffusecolorg = zavatarparts[j].diffusecolorg;
+												}
+												if (zavatarparts[j].diffusecolorb != undefined) {
+													zdiffusecolorb = zavatarparts[j].diffusecolorb;
 												}
 											}
 										}
 									}
+								}
+								if (results.meshes[i].material != null) {
+									/* emissive and specular currently share colors */
+									results.meshes[i].material.emissiveColor = new BABYLON.Color3(zemissivecolorr,zemissivecolorg,zemissivecolorb);
+									results.meshes[i].material.specularColor = new BABYLON.Color3(zemissivecolorr,zemissivecolorg,zemissivecolorb);
+									/* diffuse and ambient currently share colors */
+									results.meshes[i].material.diffuseColor = new BABYLON.Color3(zdiffusecolorr,zdiffusecolorg,zdiffusecolorb);
+									results.meshes[i].material.ambientColor = new BABYLON.Color3(zdiffusecolorr,zdiffusecolorg,zdiffusecolorb);
+									/* refresh the materials to apply colors */
+									var zcovering = results.meshes[i].material;
+									results.meshes[i].material.dispose();
+									results.meshes[i].material = zcovering;
 								}
 								WTW.registerMouseOver(results.meshes[i]);
 								if (results.meshes[i].parent == null) {
@@ -452,6 +477,7 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 								if (i > 0) {
 									results.meshes[i].WTW = [];
 								}
+								/* avatar mesh based animations (not common, usually skeleton based) */
 								results.meshes[i].WTW.animations = [];
 								if (zobjectanimations != null) {
 									if (zobjectanimations != null) {
@@ -489,6 +515,7 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 							}
 						} 
 					}
+					/* load skeleton based animations */
 					if (results.skeletons != null)	{
 						var zskeleton = results.meshes[0].skeleton;
 						zavatar.WTW.skeleton = results.meshes[0].skeleton;
