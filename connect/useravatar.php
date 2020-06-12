@@ -117,7 +117,10 @@ try {
 				c.avatarpart,
 				c.emissivecolorr,
 				c.emissivecolorg,
-				c.emissivecolorb
+				c.emissivecolorb,
+				c.diffusecolorr,
+				c.diffusecolorg,
+				c.diffusecolorb
 			from ".wtw_tableprefix."useravatars a 
 				left join (select * from ".wtw_tableprefix."useravatarcolors 
 						where deleted=0) c
@@ -152,7 +155,11 @@ try {
 				'emissivecolorr'=> $zrow["emissivecolorr"],
 				'emissivecolorg'=> $zrow["emissivecolorg"],
 				'emissivecolorb'=> $zrow["emissivecolorb"],
-				'hex'=>''
+				'emissivehex'=>'',
+				'diffusecolorr'=> $zrow["diffusecolorr"],
+				'diffusecolorg'=> $zrow["diffusecolorg"],
+				'diffusecolorb'=> $zrow["diffusecolorb"],
+				'diffusehex'=>''
 			);
 			$i += 1;
 		}
