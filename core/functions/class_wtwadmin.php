@@ -35,11 +35,20 @@ class wtwadmin {
 			/* $zver = date("Y-m-d-H-i-s"); */
 			/* additional materials library available: https://github.com/BabylonJS/Babylon.js/tree/master/dist/materialsLibrary/ */
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_utilities.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_dynamicscripts.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_login.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_uploads.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_analytics.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_hud.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_basicavatars.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_addavatarlist.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_transitionsavatars.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_avatarfunctions.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/hud/wtw_hud.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$zver."\"></script>\r\n";
 			/* $jsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$zver."\"></script>\r\n"; */
@@ -57,17 +66,18 @@ class wtwadmin {
 			$jsdata .= "<script src=\"/core/scripts/admin/wtw_admininput.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_basicactionzones.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_addactionzonelist.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_actionzonefunctions.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/coverings/wtw_basiccoverings.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/coverings/wtw_addcoveringlist.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/molds/wtw_basicmolds.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/molds/wtw_addmoldlist.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_basicavatars.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_addavatarlist.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/molds/wtw_3dblog.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/automations/wtw_basicautomations.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/automations/wtw_addautomationlist.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/vehicles/wtw_vehicles.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_core.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/admin/wtw_admineditor.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/admin/wtw_adminmenus.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_init.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/admin/wtw_admininit.js?x=".$zver."\"></script>\r\n";
 			global $wtwplugins;
@@ -255,8 +265,8 @@ class wtwadmin {
 			$pagedata .= "		<div id=\"wtw_loadingdashboard\" class=\"wtw-loadingnotice\">Loading...</div>\r\n";
 			$pagedata .= "		<div id=\"wtw_dashboard\">\r\n";
 			$pagedata .= "			<div id=\"wtw_userwebcount\" class=\"wtw-dashboardboxleft\">\r\n";
-			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\">3D Website Count</div>\r\n";
-			$pagedata .= "				<div class=\"wtw-dashboardbox\">\r\n";
+			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\" onclick=\"WTW.toggleDashboardBox('wtw_webcountdiv');\"><div id=\"wtw_webcountdivarrow\" class=\"wtw-divarrow\">⯅</div>3D Website Count</div>\r\n";
+			$pagedata .= "				<div id=\"wtw_webcountdiv\" class=\"wtw-dashboardboxmax\">\r\n";
 			$pagedata .= "					<h3 class=\"wtw-black\">My 3D Websites</h3>\r\n";
 			$pagedata .= "					<div class=\"wtw-dashboardlabel\">3D Community Scenes</div>\r\n";
 			$pagedata .= "					<div id=\"wtw_mycommcount\" class=\"wtw-dashboardvalue\"></div>\r\n";

@@ -87,7 +87,7 @@ class wtwmenus {
 							break;
 						default:
 							$style .= "cursor:pointer;";
-							$onclick = "onclick=\"WTW.setFunction('".$menuaction."','".$menuproperty."');\" ";
+							$onclick = "onclick=\"WTW.setFunctionAndExecute('".$menuaction."','".$menuproperty."');\" ";
 							break;
 					}
 					$style = "style=\"".$style."\"";

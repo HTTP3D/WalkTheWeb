@@ -508,7 +508,7 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsSetAvatarMovement = function(zavatar, zkey, zweight) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsSetAvatarMovement = function(zavatar, zevent, zweight) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->returnScriptFunction('setavatarmovement', 'zweight');
 			$jsdata .= "		} catch (ex) {\r\n";
@@ -517,7 +517,7 @@ class wtwplugins {
 			$jsdata .= "		return zweight;\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsDisposeClean = function(moldname) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsDisposeClean = function(zmoldname) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->getScriptFunction('disposeclean');
 			$jsdata .= "		} catch (ex) {\r\n";
