@@ -171,8 +171,8 @@ function WTWJS() {
 	/* WTW.sunPositionY - height of the sun - as you fly up, it can rise... (work in progress) */
 	this.sunPositionY = 1000;
 
-	/* WTW.sunlight - the indirect light object added to the scene so that things are slightly lit on the back sides */
-	this.sunlight;
+	/* WTW.backLight - the indirect light object added to the scene so that things are slightly lit on the back sides */
+	this.backLight;
 
 	/* WTW.extraGround - the plane that is the ground that extends off in the distance. */
 	/* extra ground is designed to stay right under your avatar and the texture moves like a conveyer belt as you move. */

@@ -1,3 +1,11 @@
+/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
+
+/* these functions create the various molds */
+
+/* meshes vs molds - meshes are loaded to the scene, molds are the definitions that will create the mesh on demand */
+
 WTWJS.prototype.addMoldBox = function(moldname, lenx, leny, lenz) {
 	var mold;
 	try {
@@ -303,7 +311,7 @@ WTWJS.prototype.addMoldSimpleTextBox = function(moldname, molddef, lenx, leny, l
 	try {
 		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
-		mold.material = WTW.addCovering("hidden", moldname, molddef, lenx, leny, lenz, "0", "0");
+		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
 		mold.material.alpha = 0;
 		var webimageid = "t1qlqxd6pzubzzzy";
 		var webtext = "<div style=\"font-size:24px;color:blue;\">Community Blog</div>";
@@ -362,11 +370,11 @@ WTWJS.prototype.addMoldImage = function(moldname, molddef, lenx, leny, lenz) {
 	try {
 		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
-		mold.material = WTW.addCovering("hidden", moldname, molddef, lenx, leny, lenz, "0", "0");
+		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
 		mold.material.alpha = 0;
 		var basemold = BABYLON.MeshBuilder.CreateBox(moldname + "-base", {}, scene);
 		basemold.scaling = new BABYLON.Vector3(1/lenx,1/leny,1/lenz);
-		basemold.material = WTW.addCovering("hidden", moldname + "-base", molddef, lenx, leny, lenz, "0", "0");
+		basemold.material = new BABYLON.StandardMaterial("matbase" + moldname, scene);
 		basemold.material.alpha = 0;
 		basemold.parent = mold;
 		var imageid = "t1qlqxd6pzubzzzy";
@@ -547,11 +555,12 @@ WTWJS.prototype.addMoldRaisedImage = function(moldname, molddef, lenx, leny, len
 	try {
 		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
-		mold.material = WTW.addCovering("hidden", moldname, molddef, lenx, leny, lenz, "0", "0");
+		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
 		mold.material.alpha = 0;
 		var basemold = BABYLON.MeshBuilder.CreateBox(moldname + "-base", {}, scene);
 		basemold.scaling = new BABYLON.Vector3(1/lenx,1/leny,1/lenz);
-		basemold.material = WTW.addCovering("hidden", moldname + "-base", molddef, lenx, leny, lenz, "0", "0");
+		basemold.material = new BABYLON.StandardMaterial("matbase" + moldname, scene);
+		basemold.material.alpha = 0;
 		basemold.parent = mold;
 		var textureid = "t1qlqxd6pzubzzzy";
 		var texturepath = "/content/system/stock/lightgray-512x447.jpg";
@@ -721,13 +730,13 @@ WTWJS.prototype.addMoldVideo = function(moldname, molddef, lenx, leny, lenz) {
     try {
         mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
         mold.scaling = new BABYLON.Vector3(lenx, leny, lenz);
-        mold.material = WTW.addCovering("hidden", moldname, molddef, lenx, leny, lenz, "0", "0");
+		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
 		mold.material.alpha = 0;
         var basemold = BABYLON.MeshBuilder.CreateBox(moldname + "-base", {}, scene);
         basemold.scaling = new BABYLON.Vector3(1 / lenx, 1 / leny, 1 / lenz);
-        basemold.material = WTW.addCovering("hidden", moldname + "-base", molddef, lenx, leny, lenz, "0", "0");
-        basemold.parent = mold;
+		basemold.material = new BABYLON.StandardMaterial("matbase" + moldname, scene);
 		basemold.material.alpha = 0;
+        basemold.parent = mold;
 		var loop = false;
         var video = "/content/system/images/enterwelcomecenter.mp4";
 		var videoposter = "/content/system/images/videoposter.jpg";
@@ -1020,11 +1029,12 @@ WTWJS.prototype.addMoldWaterPlane = function(moldname, molddef, lenx, leny, lenz
 	try {
 		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx,1,lenz);
-		mold.material = WTW.addCovering("hidden", moldname, molddef, lenx, 1, lenz, "0", "0");
+		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
 		mold.material.alpha = 0;
 		var basemold = BABYLON.MeshBuilder.CreateBox(moldname + "-base", {}, scene);
 		basemold.scaling = new BABYLON.Vector3(1/lenx,1,1/lenz);
-		basemold.material = WTW.addCovering("hidden", moldname + "-base", molddef, lenx, 1, lenz, "0", "0");
+		basemold.material = new BABYLON.StandardMaterial("matbase" + moldname, scene);
+		basemold.material.alpha = 0;
 		basemold.parent = mold;
 		
 		var watermold = BABYLON.MeshBuilder.CreatePlane(moldname + "-water", {updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
@@ -1046,11 +1056,12 @@ WTWJS.prototype.addMoldWaterDisc = function(moldname, molddef, lenx, leny, lenz,
 	try {
 		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx,1,lenz);
-		mold.material = WTW.addCovering("hidden", moldname, molddef, lenx, 1, lenz, "0", "0");
+		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
 		mold.material.alpha = 0;
 		var basemold = BABYLON.MeshBuilder.CreateBox(moldname + "-base", {}, scene);
 		basemold.scaling = new BABYLON.Vector3(1/lenx,1,1/lenz);
-		basemold.material = WTW.addCovering("hidden", moldname + "-base", molddef, lenx, 1, lenz, "0", "0");
+		basemold.material = new BABYLON.StandardMaterial("matbase" + moldname, scene);
+		basemold.material.alpha = 0;
 		basemold.parent = mold;
 		
 		var watermold = BABYLON.MeshBuilder.CreateDisc(moldname + "-water", {tessellation: subdivisions, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
@@ -1313,6 +1324,10 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 	try {
 		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
+
+//		if (moldname.indexOf('-vehicle') > -1) {
+//			mold.physicsImpostor = new BABYLON.PhysicsImpostor(mold, BABYLON.PhysicsImpostor.BoxImpostor, {ignoreParent: true,  mass: 1, friction: 1, restitution: 0.9 }, scene);
+//		}
 		var moldrot = null;
 		var uploadobjectid = '';
 		var objectfolder = '';
@@ -1410,6 +1425,8 @@ WTWJS.prototype.addMoldBabylonFile = function(moldname, molddef, lenx, leny, len
 										results.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(results.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.3 }, scene);
 									} else if (results.meshes[i].name.indexOf('sides') > -1) {
 										results.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(results.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.9 }, scene);
+									} else if (results.meshes[i].name.indexOf('hull') > -1) {
+//										mold.physicsImpostor = new BABYLON.PhysicsImpostor(results.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, {ignoreParent: false,  mass: 1, friction: 1, restitution: .5 }, scene);
 									}
 									/* overwrite material to wireframe if selected */
 									if (meshname.indexOf("WireFrame") > -1) {
@@ -1547,11 +1564,12 @@ WTWJS.prototype.addMoldViewBlog = function(moldname, molddef, lenx, leny, lenz) 
 	try {
 		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
-		mold.material = WTW.addCovering("hidden", moldname, molddef, lenx, leny, lenz, "0", "0");
+		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
 		mold.material.alpha = 0;
 		var scalemold = BABYLON.MeshBuilder.CreateBox(moldname + "-scale", {}, scene);
 		scalemold.scaling = new BABYLON.Vector3(1/lenx,1/leny,1/lenz);
-		scalemold.material = WTW.addCovering("hidden", moldname + "-scale", molddef, 1, 1, 1, "0", "0");
+		scalemold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
+		scalemold.material.alpha = 0;
 		scalemold.WTW = molddef;
 		scalemold.parent = mold;
 		var webtext = "";
@@ -1606,7 +1624,7 @@ WTWJS.prototype.addMoldViewBlog = function(moldname, molddef, lenx, leny, lenz) 
 		basicmold2.parentname = moldname + "-scale";
 		basicmold2.checkcollisions = "1";
 		var scrollboxgroove = WTW.addMold(moldname + "-scrollboxgroove", basicmold2, basicmold2.parentname, basicmold2.covering);
-		WTW.setCSGAction(moldname + "-scrollboxwall", scrollboxwall, scrollboxgroove, "subtract", basicmold);
+		WTW.processCSGAction(moldname + "-scrollboxwall", scrollboxwall, scrollboxgroove, "subtract", basicmold);
 		
 		var basicmold3 = WTW.newMold();
 		basicmold3.shape = "box";
@@ -1634,7 +1652,7 @@ WTWJS.prototype.addMoldViewBlog = function(moldname, molddef, lenx, leny, lenz) 
 		basicmold4.parentname = moldname + "-scale";
 		basicmold4.checkcollisions = "1";
 		var scrollboxgroovecut = WTW.addMold(moldname + "-scrollboxgroovecut", basicmold4, basicmold4.parentname, basicmold4.covering);
-		WTW.setCSGAction(moldname + "-scrollboxgroovetexture", scrollboxgroovetexture, scrollboxgroovecut, "subtract", basicmold3);
+		WTW.processCSGAction(moldname + "-scrollboxgroovetexture", scrollboxgroovetexture, scrollboxgroovecut, "subtract", basicmold3);
 			
 		var basicmold10 = WTW.newMold();
 		basicmold10.shape = "box";
@@ -1822,13 +1840,14 @@ WTWJS.prototype.addMoldBlogPosting = function(moldname, molddef, lenx, leny, len
 	try {
 		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
-		mold.material = WTW.addCovering("hidden", moldname, molddef, lenx, leny, lenz, "0", "0");
+		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
 		mold.WTW = molddef;
 		mold.material.alpha = 0;
 		var scalemold = BABYLON.MeshBuilder.CreateBox(moldname + "-scale", {}, scene);
 		scalemold.scaling = new BABYLON.Vector3(1/lenx,1/leny,1/lenz);
 		scalemold.position.x = .5;
-		scalemold.material = WTW.addCovering("hidden", moldname + "-scale", molddef, 1, 1, 1, "0", "0");
+		scalemold.material = new BABYLON.StandardMaterial("matscalemold" + moldname, scene);
+		scalemold.material.alpha = 0;
 		scalemold.WTW = molddef;
 		scalemold.parent = mold;
 		
@@ -1901,7 +1920,7 @@ WTWJS.prototype.addMoldBlogPosting = function(moldname, molddef, lenx, leny, len
 		basicmold1.parentname = moldname + "-scale";
 		basicmold1.checkcollisions = "1";
 		var posttextviewgroove = WTW.addMold(moldname + "-posttextviewgroove", basicmold1, basicmold1.parentname, basicmold1.covering);
-		posttextwall = WTW.setCSGAction(moldname + "-posttextwall", posttextwall, posttextviewgroove, "subtract", basicmold);
+		posttextwall = WTW.processCSGAction(moldname + "-posttextwall", posttextwall, posttextviewgroove, "subtract", basicmold);
 
 		var basicmold2 = WTW.newMold();
 		basicmold2.shape = "box";
@@ -1915,7 +1934,7 @@ WTWJS.prototype.addMoldBlogPosting = function(moldname, molddef, lenx, leny, len
 		basicmold2.parentname = moldname + "-scale";
 		basicmold2.checkcollisions = "1";
 		var posttextgroove = WTW.addMold(moldname + "-posttextgroove", basicmold2, basicmold2.parentname, basicmold2.covering);
-		posttextwall = WTW.setCSGAction(moldname + "-posttextwall", posttextwall, posttextgroove, "subtract", basicmold);
+		posttextwall = WTW.processCSGAction(moldname + "-posttextwall", posttextwall, posttextgroove, "subtract", basicmold);
 		WTW.registerMouseOver(posttextwall);
 		
 		var basicmold3 = WTW.newMold();
@@ -1944,7 +1963,7 @@ WTWJS.prototype.addMoldBlogPosting = function(moldname, molddef, lenx, leny, len
 		basicmold4.parentname = moldname + "-scale";
 		basicmold4.checkcollisions = "1";
 		var posttextgroovecut = WTW.addMold(moldname + "-posttextgroovecut", basicmold4, basicmold4.parentname, basicmold4.covering);
-		posttextgroovetexture = WTW.setCSGAction(moldname + "-posttextgroovetexture", posttextgroovetexture, posttextgroovecut, "subtract", basicmold3);
+		posttextgroovetexture = WTW.processCSGAction(moldname + "-posttextgroovetexture", posttextgroovetexture, posttextgroovecut, "subtract", basicmold3);
 		
 		var basicmold18 = WTW.newMold();
 		basicmold18.shape = "box";
@@ -2229,7 +2248,7 @@ WTWJS.prototype.addMoldLightbulb = function(moldname, molddef, lenx, leny, lenz,
 		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
 		molddef.covering = "hidden";
-		mold.material = WTW.addCovering("hidden", moldname, molddef, lenx, leny, lenz, "0", "0");
+		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
 		mold.material.alpha = 0;
 		
 		var moldbulb = WTW.newMold();
@@ -2339,14 +2358,14 @@ WTWJS.prototype.addMoldTree = function(moldname, molddef, lenx, leny, lenz, posx
 		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
 		molddef.covering = "hidden";
-		mold.material = WTW.addCovering("hidden", moldname, molddef, lenx, leny, lenz, "0", "0");
+		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
 		mold.material.alpha = 0;
 		
 		var treebase = BABYLON.MeshBuilder.CreateBox(moldname + "-treebase", {}, scene);
 		treebase.scaling = new BABYLON.Vector3(lenx + .2,6,lenz + .2);
 		treebase.position.y = 3;
 		molddef.covering = "hidden";
-		treebase.material = WTW.addCovering("hidden", moldname, molddef, lenx, leny, lenz, "0", "0");
+		treebase.material = new BABYLON.StandardMaterial("mattreebase" + moldname, scene);
 		treebase.parent = mold;
 		
 		/* leaf material */
@@ -2390,7 +2409,7 @@ WTWJS.prototype.addMoldFlag = function(moldname, molddef, lenx, leny, lenz, posx
 		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
 		molddef.covering = "hidden";
-		mold.material = WTW.addCovering("hidden", moldname, molddef, lenx, leny, lenz, "0", "0");	
+		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
 		molddef.covering = "texture";
 		mold.material.alpha = 0;
 		var lenx = 10;

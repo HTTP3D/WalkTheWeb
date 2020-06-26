@@ -1,3 +1,9 @@
+/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
+
+/* these functions create the various action zones */
+
 WTWJS.prototype.addActionzoneLoadzone = function(actionzonename, actionzoneind, actionzonedef) {
 	/* load zone = shape often box by default - triggers molds to load when your avatar enters the load zone */
 	var actionzone;
@@ -763,7 +769,42 @@ WTWJS.prototype.addActionzoneRidealong = function(actionzonename, actionzoneind,
 	/* ridealong - (work in progress) shape often box by default - attaches to a parent mold and moves with the parent mold - any avatar in the zone will automatically parent and move with the parent mold - picture a ride on a boat where the avatar can still walk around the boat */
 	var actionzone;
 	try {
-		var parentname = actionzonedef.parentname;
+
+		/* create the shape for the animation zone */
+		/* default actionzoneshape is cube and hidden (opacity 0) */
+		var molddef = WTW.newMold();
+		molddef.shape = actionzonedef.actionzoneshape;
+		molddef.covering = "hidden";
+		molddef.position.x = actionzonedef.position.x;
+		molddef.position.y = actionzonedef.position.y;
+		molddef.position.z = actionzonedef.position.z;
+		molddef.scaling.x = actionzonedef.scaling.x;
+		molddef.scaling.y = actionzonedef.scaling.y;
+		molddef.scaling.z = actionzonedef.scaling.z;
+		molddef.rotation.x = actionzonedef.rotation.x;
+		molddef.rotation.y = actionzonedef.rotation.y;
+		molddef.rotation.z = actionzonedef.rotation.z;
+		molddef.subdivisions = 12;
+		molddef.opacity = 0;
+		molddef.parentname = actionzonedef.parentname;
+		molddef.actionzoneind = actionzoneind;
+		molddef.checkcollisions = "0";
+		molddef.ispickable = "0";
+		WTW.addMoldToQueue(actionzonename, molddef, molddef.parentname, molddef.covering, null);
+		if (WTW.adminView == 1) {
+			if (dGet('wtw_bzones').title == "Action Zones are Shown" || actionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
+				WTW.setOpacity(actionzonename, .2);
+			}
+		}
+		WTW.actionZones[actionzoneind].shown = "2";
+
+
+
+
+
+
+
+/*		var parentname = actionzonedef.parentname;
 		var zpositionx = Number(actionzonedef.position.x);
 		var zpositiony = Number(actionzonedef.position.y);
 		var zpositionz = Number(actionzonedef.position.z);
@@ -793,8 +834,8 @@ WTWJS.prototype.addActionzoneRidealong = function(actionzonename, actionzoneind,
 				}
 				actionzone = scene.getMeshByID(actionzonename);
 				if (actionzone == null) {
-					/* create the shape for the zone that avatars enter to ride along */
-					/* default actionzoneshape is cube and hidden (opacity 0) */
+					/ * create the shape for the zone that avatars enter to ride along * /
+					/ * default actionzoneshape is cube and hidden (opacity 0) * /
 					var molddef5 = WTW.newMold();
 					molddef5.shape = actionzonedef.actionzoneshape;
 					molddef5.covering = "hidden";
@@ -837,8 +878,8 @@ WTWJS.prototype.addActionzoneRidealong = function(actionzonename, actionzoneind,
 				}
 				actionzone = scene.getMeshByID(actionzonename);
 				if (actionzone == null) {
-					/* create the shape for the zone that avatars enter to ride along this instance is parented to another action zone (example farris wheel car attached to a spinning wheel) */
-					/* default actionzoneshape is cube and hidden (opacity 0) */
+					/ * create the shape for the zone that avatars enter to ride along this instance is parented to another action zone (example farris wheel car attached to a spinning wheel) * /
+					/ * default actionzoneshape is cube and hidden (opacity 0) * /
 					var molddef5 = WTW.newMold();
 					molddef5.shape = actionzonedef.actionzoneshape;
 					molddef5.covering = "hidden";
@@ -867,6 +908,11 @@ WTWJS.prototype.addActionzoneRidealong = function(actionzonename, actionzoneind,
 			}
 			WTW.actionZones[actionzoneind].shown = "2";
 		}
+		
+		*/
+		
+		
+		
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneRidealong=" + ex.message);
 	}

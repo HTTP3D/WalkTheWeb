@@ -2,6 +2,8 @@
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
+/* these functions pertain to the various camera and camera tracking with avatars */
+
 WTWJS.prototype.loadPrimaryCamera = function(parentmold) {
 	/* loads the initial camera on the scene - before the avatar is shown */
 	try {
@@ -142,9 +144,8 @@ WTWJS.prototype.switchCamera = function(w) {
 								WTW.cameraAnaglyph.rotation.y = WTW.getRadians(0);
 								WTW.cameraAnaglyph.rotation.z = WTW.getRadians(0);
 							} else if (WTW.cameraFocus != 1) {
-								//var mainparentmold = scene.getMeshByID(WTW.mainParent);
-								//if (mainparentmold != null) {
-								//	WTW.cameraAnaglyph.parent = mainparentmold;
+								//if (WTW.mainParentMold != null) {
+								//	WTW.cameraAnaglyph.parent = WTW.mainParentMold;
 								//}
 							}
 							if (WTW.cameraFollow != null) {
@@ -191,9 +192,8 @@ WTWJS.prototype.switchCamera = function(w) {
 								WTW.camera.rotation.y = WTW.getRadians(0);
 								WTW.camera.rotation.z = WTW.getRadians(0);
 							} else if (WTW.cameraFocus != 1) {
-								var mainparentmold = scene.getMeshByID(WTW.mainParent);
-								if (mainparentmold != null) {
-									WTW.camera.parent = mainparentmold;
+								if (WTW.mainParentMold != null) {
+									WTW.camera.parent = WTW.mainParentMold;
 									
 								}
 							}
@@ -216,9 +216,8 @@ WTWJS.prototype.switchCamera = function(w) {
 							WTW.cameraAnaglyph.lockedTarget = null;
 							WTW.cameraAnaglyph.lockedTarget = avatarcenter;
 						}
-						var mainparentmold = scene.getMeshByID(WTW.mainParent);
-						if (mainparentmold != null) {
-							WTW.cameraAnaglyph.parent = mainparentmold;
+						if (WTW.mainParentMold != null) {
+							WTW.cameraAnaglyph.parent = WTW.mainParentMold;
 						}
 						if (WTW.cameraFollow != null) {
 							WTW.cameraFollow.viewport = new BABYLON.Viewport(0, 0, 0, 0);
@@ -612,88 +611,91 @@ WTWJS.prototype.initVRGamepadCamera = function() {
 	}
 }
 
-WTWJS.prototype.setMovingCameras = function(avatar) {
+WTWJS.prototype.setMovingCameras = function(zavatar) {
 	/* adjust the camera position and rotation based on avatar movement */
+	/* this function executes every time your avatar moves or turns - or - in the render cycle when you are driving a vehicle */
 	try {
-		if (avatar != null && WTW.cameraFocus == 1) {
-			var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
-			var avatarcenter = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
-			var mainparent = scene.getMeshByID(WTW.mainParent);
-			if (avatar.name.indexOf('myavatar-') > -1) {
-				var dist = -25;
-				var height = 5;
-				var firstcamera = WTW.getDDLValue('wtw_firstcamera');
-				var secondcamera = WTW.getDDLValue('wtw_secondcamera');
-				switch (firstcamera) {
+		if (zavatar != null && WTW.cameraFocus == 1) {
+			/* these objects are used to focus the camera on parts of the avatar */
+			var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
+			var zavatarcenter = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+			/* rotation of a parent object to the avatar (riding on a vehicle) is added to the camera rotation for world space */
+			var zrotation = 0;
+			if (zavatar.parent != null) {
+				zrotation = WTW.getDegrees(zavatar.parent.rotation.y);
+			}
+			
+			/* cameras only adjusts movement when focused on your avatar */
+			if (zavatar.name.indexOf('myavatar-') > -1) {
+				var zdist = -25;
+				var zfirstcamera = WTW.getDDLValue('wtw_firstcamera');
+				var zsecondcamera = WTW.getDDLValue('wtw_secondcamera');
+				switch (zfirstcamera) {
 					case 'First-Person Camera':
-						dist = 2;
-						height = 2;
+						zdist = 2;
 						break;
 					case 'Scene Camera':
-						dist = -40;
-						height = 15;
+						zdist = -40;
 						break;
 					case 'Self Camera':
-						dist = 30;
-						height = 8;
+						zdist = 30;
 						break;
 				}
+				/* main camera for first person */
 				if (WTW.camera != null) {
 					WTW.camera.rotation.x = Math.atan2(WTW.cameraYOffset, 20);
 				}
+				/* main follow camera (also used for self camera) */
 				if (WTW.cameraFollow != null) {
 					WTW.cameraFollow.heightOffset = WTW.cameraYOffset;
-					WTW.cameraFollow.rotationOffset = WTW.getDegrees(avatar.rotation.y) + WTW.cameraFollow.yOffset;
+					WTW.cameraFollow.rotationOffset = WTW.getDegrees(zavatar.rotation.y) + WTW.cameraFollow.yOffset + zrotation;
 					WTW.setCameraDistance();
 				}
-				if (WTW.cameraFollowTwo != null && avatar != null && avatarcenter != null) {
-					if (secondcamera == 'First-Person Camera') {
-						WTW.cameraFollowTwo.position.x = avatar.position.x;
-						WTW.cameraFollowTwo.position.y = avatar.position.y + avatarcenter.position.y;
-						WTW.cameraFollowTwo.position.z = avatar.position.z-(Math.sin(avatar.rotation.y) + Math.cos(avatar.rotation.y));
-						WTW.cameraFollowTwo.rotation.y = avatar.rotation.y;
+				/* follow two is the scene camera window follow camera */
+				if (WTW.cameraFollowTwo != null && zavatar != null && zavatarcenter != null) {
+					if (zsecondcamera == 'First-Person Camera') {
+						WTW.cameraFollowTwo.position.x = zavatar.position.x;
+						WTW.cameraFollowTwo.position.y = zavatar.position.y + zavatarcenter.position.y;
+						WTW.cameraFollowTwo.position.z = zavatar.position.z-(Math.sin(zavatar.rotation.y) + Math.cos(zavatar.rotation.y));
+						WTW.cameraFollowTwo.rotation.y = zavatar.rotation.y;
 					} else {
-						WTW.cameraFollowTwo.rotationOffset = WTW.getDegrees(avatar.rotation.y) + WTW.cameraFollowTwo.yOffset;
+						WTW.cameraFollowTwo.rotationOffset = WTW.getDegrees(zavatar.rotation.y) + WTW.cameraFollowTwo.yOffset + zrotation;
 					}
 				}
-				if (WTW.cameraAnaglyph != null && avatar != null && avatarcamera != null) {
-					if (firstcamera == 'First-Person Camera') {
-						//WTW.cameraAnaglyph.rotation.x = Math.atan2(WTW.cameraYOffset, 20);
+				/* main window with the red/cyan glasses camera */
+				if (WTW.cameraAnaglyph != null && zavatar != null && zavatarcamera != null) {
+					if (zfirstcamera == 'First-Person Camera') {
 						WTW.cameraAnaglyph.rotation.x = Math.atan2(WTW.cameraYOffset, 20);
 					} else {
 						WTW.cameraAnaglyph.heightOffset = WTW.cameraYOffset;
-						WTW.cameraAnaglyph.rotation.y = WTW.getRadians(WTW.getDegrees(avatar.rotation.y) + WTW.cameraAnaglyph.yOffset);
-						WTW.cameraAnaglyph.position = new BABYLON.Vector3(avatar.position.x + parseFloat(Math.cos(avatar.rotation.y)) * dist, avatar.position.y + avatarcenter.position.y + WTW.cameraYOffset, avatar.position.z - parseFloat(Math.sin(avatar.rotation.y)) * dist);
+						WTW.cameraAnaglyph.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + WTW.cameraAnaglyph.yOffset + zrotation);
+						WTW.cameraAnaglyph.position = new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.cos(zavatar.rotation.y)) * zdist, zavatar.position.y + zavatarcenter.position.y + WTW.cameraYOffset, zavatar.position.z - parseFloat(Math.sin(zavatar.rotation.y)) * zdist);
 					}
 				}
-				if (WTW.cameraVR != null && avatar != null && avatarcenter != null) {
-					if (firstcamera == 'First-Person Camera') {
-						//var e = new BABYLON.Vector3(Math.atan2(WTW.cameraYOffset, 20),WTW.getRadians(WTW.getDegrees(avatar.rotation.y) + WTW.cameraVR.yOffset),0);
-						//WTW.cameraVR.rotationQuaternion = BABYLON.Quaternion.RotationYawPitchRoll(e.y, e.x, e.z);   
-					} else {
-						WTW.cameraVR.rotation.y = WTW.getRadians(WTW.getDegrees(avatar.rotation.y) + WTW.cameraVR.yOffset);
+				/* main window with the VR camera */
+				if (WTW.cameraVR != null && zavatar != null && zavatarcenter != null) {
+					if (zfirstcamera != 'First-Person Camera') {
+						WTW.cameraVR.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + WTW.cameraVR.yOffset + zrotation);
 					}
-					WTW.cameraVR.position = new BABYLON.Vector3(avatar.position.x + parseFloat(Math.cos(avatar.rotation.y)) * dist, avatar.position.y + avatarcenter.position.y + WTW.cameraYOffset, avatar.position.z - parseFloat(Math.sin(avatar.rotation.y)) * dist);
+					WTW.cameraVR.position = new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.cos(zavatar.rotation.y)) * zdist, zavatar.position.y + zavatarcenter.position.y + WTW.cameraYOffset, zavatar.position.z - parseFloat(Math.sin(zavatar.rotation.y)) * zdist);
 				}
-				if (WTW.cameraVRGamepad != null && avatar != null && avatarcenter != null) {
-					if (firstcamera == 'First-Person Camera') {
-						//var e = new BABYLON.Vector3(Math.atan2(WTW.cameraYOffset, 20),WTW.getRadians(WTW.getDegrees(avatar.rotation.y) + WTW.cameraVRGamepad.yOffset),0);
-						//WTW.cameraVRGamepad.rotationQuaternion = BABYLON.Quaternion.RotationYawPitchRoll(e.y, e.x, e.z);   
-					} else {
-						WTW.cameraVRGamepad.rotation.y = WTW.getRadians(WTW.getDegrees(avatar.rotation.y) + WTW.cameraVRGamepad.yOffset);
+				/* main window with the VR camera with gamepad support */
+				if (WTW.cameraVRGamepad != null && zavatar != null && zavatarcenter != null) {
+					if (zfirstcamera != 'First-Person Camera') {
+						WTW.cameraVRGamepad.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + WTW.cameraVRGamepad.yOffset + zrotation);
 					}
-					WTW.cameraVRGamepad.position = new BABYLON.Vector3(avatar.position.x + parseFloat(Math.cos(avatar.rotation.y)) * dist, avatar.position.y + avatarcenter.position.y + WTW.cameraYOffset, avatar.position.z - parseFloat(Math.sin(avatar.rotation.y)) * dist);
+					WTW.cameraVRGamepad.position = new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.cos(zavatar.rotation.y)) * zdist, zavatar.position.y + zavatarcenter.position.y + WTW.cameraYOffset, zavatar.position.z - parseFloat(Math.sin(zavatar.rotation.y)) * zdist);
 				}
-
-				if (WTW.cameraArc != null && avatar != null) {
-					dist = -60;
-					height = 5;
-					WTW.cameraArc.lockedTarget = avatarcenter;
-					WTW.cameraArc.setPosition(new BABYLON.Vector3(avatar.position.x + parseFloat(Math.cos(avatar.rotation.y)) * dist, avatar.position.y + avatarcenter.position.y + WTW.cameraYOffset, avatar.position.z - parseFloat(Math.sin(avatar.rotation.y)) * dist));
+				/* arc camera support (currently not in the selection list) */
+				if (WTW.cameraArc != null && zavatar != null) {
+					zdist = -60;
+					WTW.cameraArc.lockedTarget = zavatarcenter;
+					WTW.cameraArc.setPosition(new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.cos(zavatar.rotation.y)) * zdist, zavatar.position.y + zavatarcenter.position.y + WTW.cameraYOffset, zavatar.position.z - parseFloat(Math.sin(zavatar.rotation.y)) * zdist));
 				}
+				/* release the scroll wheel timer movement after the camera adjustments */
 				if (WTW.scrollTimer != null) {
-					var nowdate = new Date();
-					if ((nowdate - WTW.scrollTimer) > 500) {
+					var znowdate = new Date();
+					if ((znowdate - WTW.scrollTimer) > 500) {
 						WTW.keyPressedRemove(1040);
 						WTW.keyPressedRemove(1038);
 						WTW.keyPressedRemove(2038);
@@ -716,9 +718,9 @@ WTWJS.prototype.setCameraDistance = function() {
 			var zdist = 100;
 			var zavatardistance = 100;
 			/* get camera focus point of avatar (center mass) */
-			var avatarcenter = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
-			if (avatarcenter != null) {
-				var zavatarcenterposition = WTW.getWorldPosition(avatarcenter);
+			var zavatarcenter = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+			if (zavatarcenter != null) {
+				var zavatarcenterposition = WTW.getWorldPosition(zavatarcenter);
 				var zavatarpos = new BABYLON.Vector3(zavatarcenterposition.x, zavatarcenterposition.y, zavatarcenterposition.z);
 				/* get direction by delta of the points (x2-x1, y2-y1, z2-z1) */
 				var zdir = new BABYLON.Vector3((WTW.cameraFollow.position.x-zavatarcenterposition.x), (WTW.cameraFollow.position.y-zavatarcenterposition.y), (WTW.cameraFollow.position.z-zavatarcenterposition.z));

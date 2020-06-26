@@ -561,6 +561,34 @@ WTWJS.prototype.newObjectAnimation = function() {
 	return objectanimation;
 }
 
+WTWJS.prototype.newOffset = function() {
+	/* offset is a position, rotation, and scaling offset used for parenting objects */
+	/* example: align a 3D Object in an avatar hand when it is picked up */
+	zoffset = null;
+	try {
+		zoffset = {
+			'position': {
+				'x':0,
+				'y':0,
+				'z':0
+			},
+			'scaling': {
+				'x':1,
+				'y':1,
+				'z':1
+			},
+			'rotation': {
+				'x':0,
+				'y':0,
+				'z':0
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newOffset=" + ex.message);
+	}
+	return zoffset;
+}
+
 
 /* Queue Events or loading to be processed */ 
 
@@ -1127,15 +1155,19 @@ WTWJS.prototype.newDriveVehicle = function() {
 			avatarsriding = array of avatar names to include with the ride along as the vehicle moves
 			
 			*position and rotation can be read from connecting grid
-		*/		
+		*/
 		zdrive = {
-			'vehicle':'boat',
+			'vehicle':null,
+			'vehicletype':'boat',
 			'connectinggridname':'',
 			'instanceid':'',
+			'applyturn':0,
 			'currentturn':0,
+			'applyspeed':0,
 			'currentspeed':0,
 			'currentdirection':0,
-			'avatarsriding': []
+			'autoturn': null,
+			'autospeed': null
 		};
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newDriveVehicle=" + ex.message);

@@ -1,3 +1,9 @@
+/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
+
+/* these functions set the types of action zones to add and define the default values, form fields, and functions to create the action zones */
+
 WTWJS.prototype.getActionZoneList = function() {
 	/* populates the new action zone list types drop down */
 	var actionzonelist = null;
@@ -9,11 +15,11 @@ WTWJS.prototype.getActionZoneList = function() {
 		actionzonelist[actionzonelist.length] = {"name":"Click Activated Sliding Door","helpurl":""};
 		actionzonelist[actionzonelist.length] = {"name":"Rotate","helpurl":""};
 		actionzonelist[actionzonelist.length] = {"name":"Load Animations","helpurl":""};
+		actionzonelist[actionzonelist.length] = {"name":"Ride Along","helpurl":""};
 /* the following are works in progress and conceptual ideas */
 /*		actionzonelist[actionzonelist.length] = {"name":"Seat","helpurl":""}; */
 		/* currently in testing or under development */
 /*		actionzonelist[actionzonelist.length] = {"name":"Mirror","helpurl":""}; 
-		actionzonelist[actionzonelist.length] = {"name":"Ride Along","helpurl":""};
 		actionzonelist[actionzonelist.length] = {"name":"Elevator","helpurl":""};
 		actionzonelist[actionzonelist.length] = {"name":"People Mover","helpurl":""};
 		actionzonelist[actionzonelist.length] = {"name":"Passenger Seat","helpurl":""};
@@ -389,6 +395,7 @@ WTWJS.prototype.setActionZoneFormFields = function(actionzonetype) {
 				WTW.hide('wtw_actionzoneadvancedoptslink');
 				WTW.hide('wtw_actionzoneaxisdiv');
 				WTW.hide('wtw_actionzonemovementdistancediv');
+				WTW.hide('wtw_actionzonepartsdiv');
 				dGet('wtw_editactionzoneformtitle').innerHTML = "Add Ride Along Zone";
 				WTW.show('wtw_actionzoneadvancedopts');
 				break;

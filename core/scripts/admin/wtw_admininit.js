@@ -2,6 +2,8 @@
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
+/* these functions can be used to add admin mode only initializations (run functions after scene is initialized) */
+
 	if (typeof WTW.adminInit == 'function') {
 		WTW.adminInit();
 	}

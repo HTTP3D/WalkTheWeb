@@ -2,7 +2,7 @@
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
-/* these functions are used to initialize a new instance of WalkTheWeb and listeners for input */
+/* these functions are used to initialize a new instance of WalkTheWeb and listeners for inputs */
 
 WTWJS.prototype.initEvents = function() {
 	/* initialize all event listeners for input controls */

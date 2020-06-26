@@ -1,3 +1,9 @@
+/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
+
+/* these functions load and unload placeholders and avatars with their colors and animations */
+
 WTWJS.prototype.loadAvatarPlaceholder = function() {
 	/* call to create the placeholder before the user selects their avatar - provides a parent and focus for the cameras */
 	try {
@@ -613,15 +619,15 @@ WTWJS.prototype.disposeAnimations = function(zavatarname) {
 			if (zavatar.WTW != null) {
 				if (zavatar.WTW.animations != null) {
 					if (zavatar.WTW.animations.running != null) {
-						for(var zkey in zavatar.WTW.animations.running) {
-							if (zavatar.WTW.animations.running[zkey] != null) {
-								if (typeof zavatar.WTW.animations.running[zkey].stop == 'function') {
-									zavatar.WTW.animations.running[zkey].stop();
+						for(var zevent in zavatar.WTW.animations.running) {
+							if (zavatar.WTW.animations.running[zevent] != null) {
+								if (typeof zavatar.WTW.animations.running[zevent].stop == 'function') {
+									zavatar.WTW.animations.running[zevent].stop();
 								}
-								if (zavatar.WTW.skeleton != undefined && zkey != 'onwait') {
-									zavatar.WTW.skeleton.deleteAnimationRange(zkey,true);
+								if (zavatar.WTW.skeleton != undefined && zevent != 'onwait') {
+									zavatar.WTW.skeleton.deleteAnimationRange(zevent,true);
 								}
-								zavatar.WTW.animations.running[zkey] = null;
+								zavatar.WTW.animations.running[zevent] = null;
 							}
 						}
 					}

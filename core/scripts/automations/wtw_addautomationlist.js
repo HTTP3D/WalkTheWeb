@@ -1,3 +1,9 @@
+/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
+
+/* these functions set the types of automations to add and define the default values, form fields, and functions to create the automations */
+
 /* automations are series of animations or timing of events that can be coordinated to function together. */
 /* for example an elevator opens a door, waits x seconds, then closes the door. If a button is pressed starts another automation */
 /* like when a floor is pressed, the door closes, elevator moves to that floor (with passengers), stops, opens the door, waits x seconds, and then closes the door again */

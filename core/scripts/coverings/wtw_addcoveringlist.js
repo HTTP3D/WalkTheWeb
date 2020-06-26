@@ -1,5 +1,10 @@
-/* coverings are materials - we call them coverings because they are the */
-/* wrapper of additional definition information about a material that WILL be created when triggered by a load zone. */
+/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
+
+/* these functions set the types of coverings to add and define the default values, form fields, and functions to create the coverings */
+
+/* materials vs coverings - materials are loaded on the meshes in the scene, coverings are the definitions that create the materials to be added the mesh on demand */
 
 WTWJS.prototype.getCoveringList = function(shape) {
 	/* covering list is used by admin to populate the drop down list of possible coverings for a mold */
