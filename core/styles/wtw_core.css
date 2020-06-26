@@ -1162,9 +1162,33 @@ a.wtw-helplink2:hover {
 	color:#ffffff;
 	background-color:#333333;
 }
+.wtw-dashboardboxtitle:hover {
+	cursor: pointer;
+}
+.wtw-divarrow {
+	font-size:1.2em;
+	float:right;
+	margin-right:5px;
+	margin-top:-3px;
+}
 .wtw-dashboardbox {
 	margin:10px;
 	vertical-align:top;
+}
+.wtw-dashboardboxmin {
+	margin:10px;
+	vertical-align:top;
+	transition: max-height 0.3s ease;
+	max-height: 0px;
+	overflow: hidden;
+}
+.wtw-dashboardboxmax {
+	margin:10px;
+	vertical-align:top;
+	transition: max-height 0.3s ease;
+	max-height: 300px;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 .wtw-dashboardlabel {
 	float:left;
