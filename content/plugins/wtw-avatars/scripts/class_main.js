@@ -92,22 +92,22 @@ WTW_AVATARS.prototype.checkActionZone = function(zactionzonename, zactionzoneind
 	} 
 }
 
-WTW_AVATARS.prototype.setAvatarMovement = function(zavatar, zkey, zweight) {
+WTW_AVATARS.prototype.setAvatarMovement = function(zavatar, zevent, zweight) {
 	try {
 		/* this function sets the positon (movement) of an avatar while a specific animation plays */
-		/* zkey is the name of the animation */
+		/* zevent is the name of the animation */
 		/* group animations can be set using the global variable: */
 		/* WTW.animationSet = 'riffle'; */
 		/* so that onwait becomes onwait-riffle animation if it exists */
-		switch (zkey) {
+		switch (zevent) {
 			case "onwait-riffle":
-				var zstride = WTW.init.gravity * 15 * zavatar.WTW.animations.running[zkey].weight * WTW.walkSpeed / WTW.fps;
+				var zstride = WTW.init.gravity * 15 * zavatar.WTW.animations.running[zevent].weight * WTW.walkSpeed / WTW.fps;
 				var zmove = WTW.getMoveDownVector(zavatar.name, -zstride);
 				zavatar.moveWithCollisions(zmove);
 				break;
 			case "onwalk-riffle":
-				var zstride = 15 * zavatar.WTW.animations.running[zkey].weight * WTW.walkSpeed / WTW.fps;
-				zavatar.WTW.animations.running[zkey].speedRatio = WTW.walkAnimationSpeed;
+				var zstride = 15 * zavatar.WTW.animations.running[zevent].weight * WTW.walkSpeed / WTW.fps;
+				zavatar.WTW.animations.running[zevent].speedRatio = WTW.walkAnimationSpeed;
 				var zmove = WTW.getMoveVector(zavatar.name, 0, zstride);
 				zavatar.moveWithCollisions(zmove);
 				break;

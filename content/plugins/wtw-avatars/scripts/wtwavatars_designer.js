@@ -46,11 +46,11 @@ WTWJS.prototype.createScene = function() {
 			WTW.sun.groundColor = new BABYLON.Color3(.1, .1, .1);
 
 			/* lesser light for back sides */
-			WTW.sunlight = new BABYLON.DirectionalLight("sunlight", new BABYLON.Vector3(1, -1, 1), scene);
-			WTW.sunlight.intensity = WTW.sun.intensity / 1.5; //3;
+			WTW.backLight = new BABYLON.DirectionalLight("backlight", new BABYLON.Vector3(1, -1, 1), scene);
+			WTW.backLight.intensity = WTW.sun.intensity / 1.5; //3;
 			
 			var zsetupparent = BABYLON.MeshBuilder.CreateBox("setupparent-0", {}, scene);
-			zsetupparent.material = WTW.addCovering("hidden", "setupparent-0", WTW.newAvatarDef(), 1, 1, 1, "0", "0");
+			zsetupparent.material = new BABYLON.StandardMaterial("matsetupparent" + moldname, scene);
 			zsetupparent.material.alpha = 0;
 			zsetupparent.position.y = -5;
 			
@@ -1421,7 +1421,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 			}
 		}
 		WTW.myAvatar = BABYLON.MeshBuilder.CreateBox(avatarname, {}, scene);
-		WTW.myAvatar.material = WTW.addCovering("hidden", avatarname, zavatardef, 1, 1, 1, "0", "0");
+		WTW.myAvatar.material = new BABYLON.StandardMaterial("matmyavatar" + moldname, scene);
 		WTW.myAvatar.material.alpha = 0;
 		WTW.myAvatar.parent = zsetupparent;
 		WTW.myAvatar.applyGravity = true;
@@ -1433,7 +1433,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 		WTW.myAvatar.WTW = zavatardef;
 
 		var avatarscale = BABYLON.MeshBuilder.CreateBox(avatarname + '-scale', {}, scene);
-		avatarscale.material = WTW.addCovering("hidden", avatarname + '-scale', zavatardef, 1, 1, 1, "0", "0");
+		avatarscale.material = new BABYLON.StandardMaterial("matscale" + moldname, scene);
 		avatarscale.material.alpha = 0;
 		avatarscale.isPickable = false;
 		avatarscale.parent = WTW.myAvatar;
@@ -1441,14 +1441,14 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 		avatarscale.rotation.y = WTW.getRadians(-90);
 
 		var avatarcamera = BABYLON.MeshBuilder.CreateBox(avatarname + "-camera", {}, scene);
-		avatarcamera.material = WTW.addCovering("hidden", avatarname + "-camera", zavatardef, 1, 1, 1, "0", "0");
+		avatarcamera.material = new BABYLON.StandardMaterial("matcamera" + moldname, scene);
 		avatarcamera.material.alpha = 0;
 		avatarcamera.parent = WTW.myAvatar;
 		avatarcamera.position.y = 12;
 		avatarcamera.rotation.y = WTW.getRadians(-90);
 
 		var avatarcenter = BABYLON.MeshBuilder.CreateBox(avatarname + "-center", {}, scene);
-		avatarcenter.material = WTW.addCovering("hidden", avatarname + "-center", zavatardef, 1, 1, 1, "0", "0");
+		avatarcenter.material = new BABYLON.StandardMaterial("matcenter" + moldname, scene);
 		avatarcenter.material.alpha = 0;
 		avatarcenter.parent = WTW.myAvatar;
 		avatarcenter.position.y = 10;

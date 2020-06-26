@@ -104,10 +104,10 @@ class wtwavatars {
 			/* $wtwplugins->addScriptFunction("setnewactionzonedefaults", "wtwavatars.setNewActionZoneDefaults(actionzonetype);"); */
 			/* $wtwplugins->addScriptFunction("setactionzoneformfields", "wtwavatars.setNewActionZoneFormFields(actionzonetype);"); */
 			/* $wtwplugins->addScriptFunction("checkactionzone", "wtwavatars.checkActionZone(zactionzonename, zactionzoneind, zmeinzone, zothersinzone);"); */
-			/* $wtwplugins->addScriptFunction("setavatarmovement", "wtwavatars.setAvatarMovement(zavatar, zkey, zweight);"); */
+			/* $wtwplugins->addScriptFunction("setavatarmovement", "wtwavatars.setAvatarMovement(zavatar, zevent, zweight);"); */
 			/* $wtwplugins->addScriptFunction("checkhovers", "wtwavatars.checkHovers(moldname, shape);"); */
 			/* $wtwplugins->addScriptFunction("resethovers", "wtwavatars.resetHovers(moldname, shape);"); */
-			/* $wtwplugins->addScriptFunction("disposeclean", "wtwavatars.disposeClean(moldname);"); */
+			/* $wtwplugins->addScriptFunction("disposeclean", "wtwavatars.disposeClean(zmoldname);"); */
 			
 			
 			/* Custom Molds (meshes) */

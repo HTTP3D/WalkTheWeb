@@ -4,7 +4,7 @@ WTW_AVATARS.prototype.addMoldMyCustomMold = function(moldname, molddef, lenx, le
 		/* each custom mold will have a separate function */
 		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
 		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
-		mold.material = WTW.addCovering("hidden", moldname, molddef, lenx, leny, lenz, "0", "0");
+		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
 		mold.material.alpha = 0;
 		
 		/* everything you create in this function should be parented to the above invisible Box: */

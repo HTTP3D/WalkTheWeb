@@ -7,7 +7,7 @@ function WTWJS() {
 	this.mouseOver = null;
 	this.mouseOut = null;
 	this.sun = null;
-	this.sunlight = null;
+	this.backLight = null;
 	this.lastID = '';
 	this.currentID = '';
 	this.highlightLayer = null;
@@ -67,7 +67,7 @@ WTWJS.prototype.getJSON = function(zurl, zcallback, zaction, zrequest) {
 		};
 		Httpreq.send(zrequest);  
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_common.js-getJSON=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getJSON=" + ex.message);
 	}
 }
 
@@ -88,7 +88,7 @@ WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
 		};
 		Httpreq.send(zformdata);  
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_common.js-postJSON=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-postJSON=" + ex.message);
 	}
 }
 
@@ -106,7 +106,7 @@ WTWJS.prototype.setCookie = function(name,value,days) {
 			document.cookie = name + "non=" + value + expires + "; path=/";
 		}
     } catch (ex) {
-        WTW.log("core-scripts-prime-wtw_common.js-setCookie=" +ex.message);
+        WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-setCookie=" +ex.message);
     }
 }
 
@@ -134,7 +134,7 @@ WTWJS.prototype.getCookie = function(name) {
 			value = value.replace("=","");
 		}
     } catch (ex) {
-        WTW.log("core-scripts-prime-wtw_common.js-getCookie=" +ex.message);
+        WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getCookie=" +ex.message);
     }
 	return value;
 }
@@ -143,20 +143,20 @@ WTWJS.prototype.deleteCookie = function(name) {
     WTW.setCookie(name,"",-1);
 }
 
-WTWJS.prototype.getQuerystring = function(key, default_) {
+WTWJS.prototype.getQuerystring = function(zkey, zdefault) {
     var squery = "";
     try {
-        if (default_ == null) default_ = "";
-        key = key.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-        var regex = new RegExp("[\\?&]" + key + "=([^&#]*)");
+        if (zdefault == null) zdefault = "";
+        zkey = zkey.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regex = new RegExp("[\\?&]" + zkey + "=([^&#]*)");
         var qs = regex.exec(window.location.href);
         if (qs == null) {
-            squery = default_;
+            squery = zdefault;
         } else {
             squery = qs[1];
         }
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-getQuerystring=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getQuerystring=" + ex.message);
     }
     return squery;
 }
@@ -169,7 +169,7 @@ WTWJS.prototype.getRandomString = function(length) {
 			result += chars[Math.floor(Math.random() * chars.length)];
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_install.js-randomString=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-randomString=" + ex.message);
 	}
     return result;
 }
@@ -185,7 +185,7 @@ WTWJS.prototype.getRadians = function(degrees) {
 			radians = degrees * Math.PI / 180;
 		}
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-getRadians=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getRadians=" + ex.message);
     }
 	return radians;
 }
@@ -197,7 +197,7 @@ WTWJS.prototype.getDegrees = function(radians) {
 			degrees = WTW.cleanDegrees(radians * 180 / Math.PI);
 		}
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-getDegrees=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getDegrees=" + ex.message);
     }
 	return degrees;
 }
@@ -210,7 +210,7 @@ WTWJS.prototype.registerMouseOver = function(mold) {
 			mold.actionManager.registerAction(WTW.mouseOut);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-registerMouseOver=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-registerMouseOver=" + ex.message);
 	}
 }
 
@@ -225,7 +225,7 @@ WTWJS.prototype.mouseOverMold = function(mold) {
 			}
 		}
 	} catch(ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseOverMold=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-mouseOverMold=" + ex.message);
 	}
 }
 
@@ -235,7 +235,7 @@ WTWJS.prototype.mouseOutMold = function(mold) {
 		WTW.lastID = WTW.currentID;
 		WTW.currentID = "";
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseOutMold=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-mouseOutMold=" + ex.message);
 	}
 }
 
@@ -268,7 +268,7 @@ WTWJS.prototype.showIDs = function(zdisplayname) {
 		namemold.position.y = 16;
 		namemold.billboardMode = 2;
     } catch (ex) {
-        WTW.log("core-scripts-prime-wtw_common.js-showIDs=" +ex.message);
+        WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-showIDs=" +ex.message);
     }
 }
 
@@ -463,7 +463,7 @@ WTWJS.prototype.newMold = function() {
 			'moldname':''
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newmold=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-newmold=" + ex.message);
 	}
 	return molddef;
 }
@@ -485,7 +485,7 @@ WTWJS.prototype.newWebImage = function() {
 			'clickloaded':'0'
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newWebImage=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-newWebImage=" + ex.message);
 	}
 	return webimage;
 }
@@ -531,7 +531,7 @@ WTWJS.prototype.addMold3DText = function(moldname, molddef, lenx, leny, lenz) {
 		mold.isPickable = true;
 		WTW.registerMouseOver(mold);
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-addMold3DText=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-addMold3DText=" + ex.message);
 	}
 	return mold;
 }
@@ -569,7 +569,7 @@ WTWJS.prototype.hilightMoldFast = function(moldname, scolor) {
 			},500);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-hilightMoldFast=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-hilightMoldFast=" + ex.message);
 	}
 }
 
@@ -601,7 +601,7 @@ WTWJS.prototype.hilightMold = function(moldname, scolor) {
 			WTW.highlightLayer.addMesh(mold, color);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-hilightMold=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-hilightMold=" + ex.message);
 	}
 }
 
@@ -614,102 +614,102 @@ WTWJS.prototype.unhilightMold = function(moldname) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-unhilightMold=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-unhilightMold=" + ex.message);
 	}
 }
 
-WTWJS.prototype.disposeClean = function(moldname, check) {
+WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 	try {
 		/* extension of the babylon dispose function to catch various child and sub elements */
-		if (moldname != "") {
+		if (zmoldname != "") {
 			scene.blockfreeActiveMeshesAndRenderingGroups = true;
-			if (typeof check === "undefined") {
-				check = true;
+			if (typeof zcheck === "undefined") {
+				zcheck = true;
 			}
-            var namepart = moldname.split('-');
+            var znamepart = zmoldname.split('-');
 			/* dispose mold (mesh) from shadow and reflection arrays */
-			WTW.disposeShadowFromMold(moldname);
-			WTW.disposeReflectionFromMold(moldname);
-			var mold = scene.getMeshByID(moldname);
+			WTW.disposeShadowFromMold(zmoldname);
+			WTW.disposeReflectionFromMold(zmoldname);
+			var zmold = scene.getMeshByID(zmoldname);
 			/* confirm mold is in the scene */
-			if (mold != null) {
+			if (zmold != null) {
 				try {
 					/* plugin hook for custom code */
-					WTW.pluginsDisposeClean(moldname);
+					WTW.pluginsDisposeClean(zmoldname);
 				} catch (ex) {}
 				try {
-					if (moldname.indexOf("myavatar") > -1 || moldname.indexOf("selectavatar") > -1) {
+					if (zmoldname.indexOf("myavatar") > -1 || zmoldname.indexOf("selectavatar") > -1) {
 						/* dispose of avatar parts / animations */
-						WTW.disposeAnimations(moldname);
-					} else if (namepart[5] == 'video') {
+						WTW.disposeAnimations(zmoldname);
+					} else if (znamepart[5] == 'video') {
 						/* stop and clear the video before it is deleted */
-						var strtemp = moldname;
-						strtemp = strtemp.replace("-base","-mainvideo");
-						var videomold = scene.getMeshByID(strtemp);
-						if (videomold != null){
-							if (videomold.material.diffuseTexture.video != undefined) {
-								videomold.material.diffuseTexture.video.pause();
-								videomold.material.diffuseTexture.video.src = "";
+						var zstrtemp = zmoldname;
+						zstrtemp = zstrtemp.replace("-base","-mainvideo");
+						var zvideomold = scene.getMeshByID(zstrtemp);
+						if (zvideomold != null){
+							if (zvideomold.material.diffuseTexture.video != undefined) {
+								zvideomold.material.diffuseTexture.video.pause();
+								zvideomold.material.diffuseTexture.video.src = "";
 							}
-							if (videomold.material.diffuseTexture.video != null) {
-								videomold.material.diffuseTexture.video = null;
+							if (zvideomold.material.diffuseTexture.video != null) {
+								zvideomold.material.diffuseTexture.video = null;
 							}
 					   }
-					} else if (namepart[5].indexOf('water') > -1) {
+					} else if (znamepart[5].indexOf('water') > -1) {
 						/* remove mold from reflection and refraction arrays */
-						var strtemp = moldname;
-						if (strtemp.indexOf('-base') > -1) {
-							strtemp = strtemp.replace("-base","");
+						var zstrtemp = zmoldname;
+						if (zstrtemp.indexOf('-base') > -1) {
+							zstrtemp = zstrtemp.replace("-base","");
 						}
-						var watermat = scene.getMaterialByID(strtemp + "-watermat");
-						if (watermat != null) {
-							if (watermat.reflectionTexture.renderList != null) {
-								if (watermat.reflectionTexture.renderList.length > 0) {
-									watermat.reflectionTexture.renderList.splice(0, watermat.reflectionTexture.renderList.length);
+						var zwatermat = scene.getMaterialByID(zstrtemp + "-watermat");
+						if (zwatermat != null) {
+							if (zwatermat.reflectionTexture.renderList != null) {
+								if (zwatermat.reflectionTexture.renderList.length > 0) {
+									zwatermat.reflectionTexture.renderList.splice(0, zwatermat.reflectionTexture.renderList.length);
 								}
 							}
-							if (watermat.refractionTexture.renderList != null) {
-								if (watermat.refractionTexture.renderList.length > 0) {
-									watermat.refractionTexture.renderList.splice(0, watermat.refractionTexture.renderList.length);
+							if (zwatermat.refractionTexture.renderList != null) {
+								if (zwatermat.refractionTexture.renderList.length > 0) {
+									zwatermat.refractionTexture.renderList.splice(0, zwatermat.refractionTexture.renderList.length);
 								}
 							}
 						}
 						try {
-							if (watermat.reflectionTexture != null) {
-								watermat.reflectionTexture.dispose();
-								watermat.reflectionTexture = null;
+							if (zwatermat.reflectionTexture != null) {
+								zwatermat.reflectionTexture.dispose();
+								zwatermat.reflectionTexture = null;
 							}
 						} catch(ex) {}
 						try {
-							if (watermat.refractionTexture != null) {
-								watermat.refractionTexture.dispose();
-								watermat.refractionTexture = null;
+							if (zwatermat.refractionTexture != null) {
+								zwatermat.refractionTexture.dispose();
+								zwatermat.refractionTexture = null;
 							}
-							watermat.dispose();
+							zwatermat.dispose();
 						} catch(ex) {}
-						if (check) {
-							WTW.disposeClean(strtemp + "-water", false);
+						if (zcheck) {
+							WTW.disposeClean(zstrtemp + "-water", false);
 						}
-					} else if (namepart[5].indexOf('image') > -1) {
+					} else if (znamepart[5].indexOf('image') > -1) {
 						/* dispose of hover over and click image mold layers */
-						var strtemp = moldname;
-						if (strtemp.indexOf('-base') > -1) {
-							strtemp = strtemp.replace("-base","-mainimage");
+						var zstrtemp = zmoldname;
+						if (zstrtemp.indexOf('-base') > -1) {
+							zstrtemp = zstrtemp.replace("-base","-mainimage");
 						} else {
-							strtemp += "-mainimage";
+							zstrtemp += "-mainimage";
 						}
-						if (check) {
-							WTW.disposeClean(strtemp, false);
-							WTW.disposeClean(strtemp.replace("-mainimage","-hoverimage"), false);
-							WTW.disposeClean(strtemp.replace("-mainimage","-clickimage"), false);
+						if (zcheck) {
+							WTW.disposeClean(zstrtemp, false);
+							WTW.disposeClean(zstrtemp.replace("-mainimage","-hoverimage"), false);
+							WTW.disposeClean(zstrtemp.replace("-mainimage","-clickimage"), false);
 						}
-					} else if (namepart[5].indexOf('babylonfile') > -1 || namepart[0] == 'myavatar') {
+					} else if (znamepart[5].indexOf('babylonfile') > -1 || znamepart[0] == 'myavatar') {
 						/* dispose of child objects from imported meshes */
-						var childmeshes = mold.getChildren();
-						if (childmeshes != null) {
-							for (var i=0; i < childmeshes.length; i++) {
-								if (childmeshes[i] != null) {
-									childmeshes[i].dispose();
+						var zchildmeshes = zmold.getChildren();
+						if (zchildmeshes != null) {
+							for (var i=0; i < zchildmeshes.length; i++) {
+								if (zchildmeshes[i] != null) {
+									zchildmeshes[i].dispose();
 								}
 							}
 						}
@@ -717,53 +717,49 @@ WTWJS.prototype.disposeClean = function(moldname, check) {
 				} catch (ex) {}
 				try {
 					/* dispose of any action managers (animations) */
-					if (mold.actionManager != null) {
-						mold.actionManager.dispose();
-						mold.actionManager = null;
+					if (zmold.actionManager != null) {
+						zmold.actionManager.dispose();
+						zmold.actionManager = null;
 					}
 				} catch(ex) {}
 				try {
 					/* dispose of texture materials */
-					if (mold.material.diffuseTexture != null) {
-						mold.material.diffuseTexture.dispose();
-						mold.material.diffuseTexture = null;
+					if (zmold.material.diffuseTexture != null) {
+						zmold.material.diffuseTexture.dispose();
+						zmold.material.diffuseTexture = null;
 					}
 				} catch(ex) {}
 				try {
 					/* dispose of any remaining materials */
-					if (mold.material != null) {
-						mold.material.dispose();
-						mold.material = null;
+					if (zmold.material != null) {
+						zmold.material.dispose();
+						zmold.material = null;
 					}
 				} catch(ex) {}
 				/* dispose of mold */
-				mold.dispose();
-				mold = null;
-				if (check) {
+				zmold.dispose();
+				zmold = null;
+				if (zcheck) {
 					/* dispose of action zone components (axle, pole, hinge, bases) */
-					WTW.disposeMoldEvent(moldname);
-					if (moldname.indexOf("actionzone") > -1) {
-						WTW.disposeClean(moldname.replace("actionzone","actionzoneaxle"),false);
-						WTW.disposeClean(moldname.replace("actionzone","actionzoneaxlepole"),false);
-						WTW.disposeClean(moldname.replace("actionzone","actionzoneaxlebase"),false);
-						WTW.disposeClean(moldname.replace("actionzone","actionzoneaxlebase2"),false);
+					WTW.disposeMoldEvent(zmoldname);
+					if (zmoldname.indexOf("actionzone") > -1) {
+						WTW.disposeClean(zmoldname.replace("actionzone","actionzoneaxle"),false);
+						WTW.disposeClean(zmoldname.replace("actionzone","actionzoneaxlepole"),false);
+						WTW.disposeClean(zmoldname.replace("actionzone","actionzoneaxlebase"),false);
+						WTW.disposeClean(zmoldname.replace("actionzone","actionzoneaxlebase2"),false);
 					}
 				}
 				/* dispose of any dynamic meshes (changes subdivisions as get closer) */
-				var moldfar = scene.getMeshByID(moldname + "-far");
-				if (moldfar != null) {
-					WTW.disposeClean(moldname + "-far");
+				var zmoldfar = scene.getMeshByID(zmoldname + "-far");
+				if (zmoldfar != null) {
+					WTW.disposeClean(zmoldname + "-far");
 				}
 			}
-			try {
-				var moldgroup = Number(namepart[0]);
-				var moldind = Number(namepart[1]);
-				WTW.clearSoundAndLights(moldgroup, moldind);
-			} catch(ex) {}
+			WTW.disposeSoundAndLights(zmoldname);
 			scene.blockfreeActiveMeshesAndRenderingGroups = false;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_common.js-disposeClean=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-disposeClean=" + ex.message);
 		scene.blockfreeActiveMeshesAndRenderingGroups = false;
 	}
 }
@@ -781,7 +777,7 @@ WTWJS.prototype.openLocalLogin = function(zmenuname, zwidth, zheigth) {
 			'parameters':Array(zwidth,zheigth)
 		}, "*");
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_login.js-openLocalLogin=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-openLocalLogin=" + ex.message);
 	}
 }
 
@@ -793,6 +789,6 @@ WTWJS.prototype.onMessage = function (e) {
 WTW.log(zmessage.replace("<","&lt;").replace(">","&gt;"));
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_login.js-onMessage=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-onMessage=" + ex.message);
 	}
 }
