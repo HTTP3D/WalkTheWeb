@@ -76,10 +76,17 @@ class wtwadmin {
 			$jsdata .= "<script src=\"/core/scripts/automations/wtw_addautomationlist.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/vehicles/wtw_vehicles.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_core.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/admin/wtw_admineditor.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/admin/wtw_adminconnectinggrids.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/admin/wtw_adminactionzones.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/admin/wtw_admincommunities.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/admin/wtw_adminbuildings.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/admin/wtw_adminthings.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/admin/wtw_adminmolds.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/admin/wtw_adminusers.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/admin/wtw_adminmenus.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_init.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/admin/wtw_adminforms.js?x=".$zver."\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/admin/wtw_admininit.js?x=".$zver."\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/prime/wtw_init.js?x=".$zver."\"></script>\r\n";
 			global $wtwplugins;
 			$jsdata .= $wtwplugins->getPluginScripts('1', $zver);
 		} catch (Exception $e) {
