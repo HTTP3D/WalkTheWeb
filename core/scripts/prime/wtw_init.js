@@ -64,6 +64,9 @@ window.onload = function() {
 		if (typeof WTW.accessDenied == 'function') {
 			WTW.accessDenied();
 		}
+		if (typeof WTW.adminInit == 'function') {
+			WTW.adminInit();
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_init.js-onload=" + ex.message);
 	}

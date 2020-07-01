@@ -4,34 +4,8 @@
 
 /* these functions are for the admin menu in admin mode only */
 
-WTWJS.prototype.toggleDashboardBox = function(zelementname) {
-	try {
-		var zdiv = dGet(zelementname);
-		var zdivarrow = dGet(zelementname + 'arrow');
-		if (zdiv != null) {
-			zdiv.style.transition = 'max-height 0.3s ease';
-			if (zdiv.style.maxHeight == '0px') {
-				zdiv.style.maxHeight = '300px';
-				zdiv.style.overflowY = 'auto';
-				if (zdivarrow != null) {
-					zdivarrow.innerHTML = '⯅';
-				}
-			} else {
-				zdiv.style.maxHeight = '300px';
-				zdiv.style.maxHeight = '0px';
-				zdiv.style.overflowY = 'hidden';
-				if (zdivarrow != null) {
-					zdivarrow.innerHTML = '⯆';
-				}
-				
-			}
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminmenus.js-toggleDashboardBox=" + ex.message);
-	}
-}
-
 WTWJS.prototype.toggleAdminMenu = function(buttonid) {
+	/* open and closes the admin menu (slide from the left) */
 	try {
 		if (dGet(buttonid).style.left == "0px") {
 			var x = 0;
@@ -99,32 +73,8 @@ WTWJS.prototype.toggleAdminMenu = function(buttonid) {
 	}
 }
 
-WTWJS.prototype.toggleAdminMenuDashboard = function() {
-	try {
-		if (dGet('wtw_fullpageform').style.display == "none" || (dGet('wtw_dashboardpage').style.display == "none" && dGet('wtw_updatespage').style.display == "none")) {
-			WTW.openFullPageForm('dashboard','','');
-		} else {
-			WTW.closeFullPageForm();
-			//WTW.hideFullPages();
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminmenus.js-toggleAdminMenuDashboard=" + ex.message);
-	}
-}
-
-WTWJS.prototype.toggleAdminMenuMediaLibrary = function() {
-	try {
-		if (dGet('wtw_fullpageform').style.display == "none" || dGet('wtw_selectimagepage').style.display == "none") {
-			WTW.openFullPageForm('medialibrary','','');
-		} else {
-			WTW.closeFullPageForm();
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminmenus.js-toggleAdminMenuMediaLibrary=" + ex.message);
-	}
-}
-
 WTWJS.prototype.toggleAdminMenuLevel = function(sectionname) {
+	/* opens and closes the main secions of the admin menu */
 	try {
 		var obj = dGet("wtw_adminmenu" + sectionname + "div");
 		if (obj != null) {
@@ -144,6 +94,7 @@ WTWJS.prototype.toggleAdminMenuLevel = function(sectionname) {
 }
 
 WTWJS.prototype.hideAdminMenu = function() {
+	/* closes all sections of the admin menu */
 	try {
 		var menusubdivs = document.getElementsByClassName('wtw-adminmenuform');
 		for (var i=0;i<menusubdivs.length;i++) {
@@ -159,6 +110,7 @@ WTWJS.prototype.hideAdminMenu = function() {
 }
 
 WTWJS.prototype.adminOpenSubmenuForm = function(obj) {
+	/* open a section (submenu form) of the admin menu */
 	try {
 		if (obj != null) {
 			if (obj.id != undefined) {
@@ -174,6 +126,7 @@ WTWJS.prototype.adminOpenSubmenuForm = function(obj) {
 }
 
 WTWJS.prototype.adminMenuItemSelected = function(obj) {
+	/* select the menu item and execute the appropriate functions per menu item */
 	try {
 		if (obj != null) {
 			if (obj.id != undefined) {
@@ -852,7 +805,42 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 	}
 }
 
+WTWJS.prototype.backToEdit = function() {
+	/* select an edit menu based on if you are editing a 3D Community, 3D Building, or 3D Thing */
+	try {
+		if (buildingid != "") {
+			WTW.show('wtw_adminmenu6');
+		} else if (communityid != "") {
+			WTW.show('wtw_adminmenu26');
+		} else if (thingid != "") {
+			WTW.show('wtw_adminmenu36');
+		} else {
+			WTW.show('wtw_adminmenu1');
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-backToEdit=" + ex.message);
+	}
+}
+
+WTWJS.prototype.backToTools = function() {
+	/* select a tools menu based on if you are editing a 3D Community, 3D Building, or 3D Thing */
+	try {
+		if (buildingid != "") {
+			WTW.show('wtw_adminmenu4');
+		} else if (communityid != "") {
+			WTW.show('wtw_adminmenu24');
+		} else if (thingid != "") {
+			WTW.show('wtw_adminmenu34');
+		} else {
+			WTW.show('wtw_adminmenu1');
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-backToTools=" + ex.message);
+	}
+}
+
 WTWJS.prototype.adminOpenSubmenu = function(zobj) {
+	/* hide all submenu sections then load a select submenu form */
 	try {
 		WTW.hide('wtw_fullpageform');
 		var zobjid = zobj.id+'div';
@@ -875,6 +863,886 @@ WTWJS.prototype.adminOpenSubmenu = function(zobj) {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminmenus.js-adminOpenSubmenu=" + ex.message);
+	}
+}
+
+
+/* toggle open and closed full page forms */
+
+WTWJS.prototype.toggleAdminMenuDashboard = function() {
+	/* open and close dashboard */
+	try {
+		if (dGet('wtw_fullpageform').style.display == "none" || (dGet('wtw_dashboardpage').style.display == "none" && dGet('wtw_updatespage').style.display == "none")) {
+			WTW.openFullPageForm('dashboard','','');
+		} else {
+			WTW.closeFullPageForm();
+			//WTW.hideFullPages();
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-toggleAdminMenuDashboard=" + ex.message);
+	}
+}
+
+WTWJS.prototype.toggleDashboardBox = function(zelementname) {
+	/* open and close dashboard boxes with animation by changes in maxHeight */
+	try {
+		var zdiv = dGet(zelementname);
+		var zdivarrow = dGet(zelementname + 'arrow');
+		if (zdiv != null) {
+			zdiv.style.transition = 'max-height 0.3s ease';
+			if (zdiv.style.maxHeight == '0px') {
+				zdiv.style.maxHeight = '300px';
+				zdiv.style.overflowY = 'auto';
+				if (zdivarrow != null) {
+					zdivarrow.innerHTML = '⯅';
+				}
+			} else {
+				zdiv.style.maxHeight = '300px';
+				zdiv.style.maxHeight = '0px';
+				zdiv.style.overflowY = 'hidden';
+				if (zdivarrow != null) {
+					zdivarrow.innerHTML = '⯆';
+				}
+				
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-toggleDashboardBox=" + ex.message);
+	}
+}
+
+WTWJS.prototype.toggleAdminMenuMediaLibrary = function() {
+	/* open and close Media Library */
+	try {
+		if (dGet('wtw_fullpageform').style.display == "none" || dGet('wtw_selectimagepage').style.display == "none") {
+			WTW.openFullPageForm('medialibrary','','');
+		} else {
+			WTW.closeFullPageForm();
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-toggleAdminMenuMediaLibrary=" + ex.message);
+	}
+}
+
+
+/* admin menu 'quick edit menu' (bottom left) toggle on/off features */
+
+WTWJS.prototype.setQuickEditorAvatarCamera = function(value) {
+	/* toggle camera - attach to avatar or release for free movement */
+	try {
+		if (value == 1) {
+			WTW.cameraFocus = 1;
+			var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
+			var headtop = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-headtop");
+			if (avatarcamera != null && headtop != null) {
+				WTW.camera.parent = avatarcamera;
+				avatarcamera.parent = headtop;
+				WTW.camera.position.x = 0;
+				WTW.camera.position.y = 0;
+				WTW.camera.position.z = 0;
+				WTW.camera.rotation.y = WTW.getRadians(0);
+			}
+			WTW.camera.inputs.attached.mouse.detachControl();
+			WTW.switchCamera(1);
+			if (dGet('wtw_bavatarcamera') != null) {
+				dGet('wtw_bavatarcamera').innerHTML = "Avatar<br />Camera<br />ON";
+				dGet('wtw_bavatarcamera').onclick = function() { WTW.setQuickEditorAvatarCamera(0); };
+				dGet('wtw_bavatarcamera').className = "wtw-quickbar";
+				dGet('wtw_bavatarcamera').title = "Camera is Attached to Avatar";
+				dGet('wtw_bavatarcamera').alt = "Camera is Attached to Avatar";
+				if (dGet('wtw_adminavatarcamera') != null) {
+					dGet('wtw_adminavatarcamera').innerHTML = "Avatar Camera ON";
+				}
+			}
+			WTW.setCookie("wtw_bavatarcamera","1",30);
+		} else {
+			WTW.cameraFocus = 0;
+			var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
+			if (avatarcamera != null) {
+				var abspos = WTW.getWorldPosition(avatarcamera);
+				var avatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
+				if (avatar != null && WTW.mainParentMold != null) {
+					avatarcamera.parent = WTW.mainParentMold;
+					WTW.camera.position.x = abspos.x;
+					WTW.camera.position.y = abspos.y;
+					WTW.camera.position.z = abspos.z;
+					WTW.camera.rotation.y = WTW.getRadians(WTW.getDegrees(avatar.rotation.y) + 90);
+				}
+			}
+			WTW.camera.inputs.attachInput(WTW.camera.inputs.attached.mouse);
+			WTW.camera.viewport = new BABYLON.Viewport(0, 0, 1, 1);
+			scene.activeCameras[0] = WTW.camera;
+			if (dGet('wtw_bavatarcamera') != null) {
+				dGet('wtw_bavatarcamera').innerHTML = "Avatar<br />Camera<br />OFF";
+				dGet('wtw_bavatarcamera').onclick = function() { WTW.setQuickEditorAvatarCamera(1); };
+				dGet('wtw_bavatarcamera').className = "wtw-quickbaroff";
+				dGet('wtw_bavatarcamera').title = "Camera is Detached from Avatar";
+				dGet('wtw_bavatarcamera').alt = "Camera is Detached from Avatar";
+				if (dGet('wtw_adminavatarcamera') != null) {
+					dGet('wtw_adminavatarcamera').innerHTML = "Avatar Camera OFF";
+				}
+			}
+			WTW.setCookie("wtw_bavatarcamera","0",30);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-setQuickEditorAvatarCamera=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setQuickEditorFocus = function(value) {
+	/* toggle off or on highlight molds on mouse over */
+	try {
+		if (value == 1) {
+			if (dGet('wtw_bfocus') != null) {
+				dGet('wtw_bfocus').innerHTML = "Focus<br /><br />ON";
+				dGet('wtw_bfocus').onclick = function() { WTW.setQuickEditorFocus(0); };
+				dGet('wtw_bfocus').className = "wtw-quickbar";
+				dGet('wtw_bfocus').title = "Focus Highlight is On";
+				dGet('wtw_bfocus').alt = "Focus Highlight is On";
+				if (dGet('wtw_adminfocus') != null) {
+					dGet('wtw_adminfocus').innerHTML = "Focus ON";
+				}
+			}
+			WTW.setCookie("wtw_bfocus","1",30);
+		} else {
+			/* WTW.resetMoldsOpacity(); */
+			if (dGet('wtw_bfocus') != null) {
+				dGet('wtw_bfocus').innerHTML = "Focus<br /><br />OFF";
+				dGet('wtw_bfocus').onclick = function() { WTW.setQuickEditorFocus(1); };
+				dGet('wtw_bfocus').className = "wtw-quickbaroff";
+				dGet('wtw_bfocus').title = "Focus Highlight is Off";
+				dGet('wtw_bfocus').alt = "Focus Highlight is Off";
+				if (dGet('wtw_adminfocus') != null) {
+					dGet('wtw_adminfocus').innerHTML = "Focus OFF";
+				}
+			}
+			WTW.setCookie("wtw_bfocus","0",30);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-setQuickEditorFocus=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setQuickEditorMerged = function(value) {
+	/* show or hide the complete molds that were merged (using opacity) */
+	try {
+		if (value == 1) {
+			WTW.setShowCSG();
+			if (dGet('wtw_bmerged') != null) {
+				dGet('wtw_bmerged').innerHTML = "Merged<br /><br />ON";
+				dGet('wtw_bmerged').onclick = function() { WTW.setQuickEditorMerged(0); };
+				dGet('wtw_bmerged').className = "wtw-quickbar";
+				dGet('wtw_bmerged').title = "Merged Shapes are Shown";
+				dGet('wtw_bmerged').alt = "Merged Shapes are Shown";
+				if (dGet('wtw_adminmerged') != null) {
+					dGet('wtw_adminmerged').innerHTML = "Merged Molds ON";
+				}
+			}
+			WTW.setCookie("wtw_bmerged","1",30);
+		} else {
+			WTW.setHideCSG();
+			if (dGet('wtw_bmerged') != null) {
+				dGet('wtw_bmerged').innerHTML = "Merged<br /><br />OFF";
+				dGet('wtw_bmerged').onclick = function() { WTW.setQuickEditorMerged(1); };
+				dGet('wtw_bmerged').className = "wtw-quickbaroff";
+				dGet('wtw_bmerged').title = "Merged Shapes are Hidden";
+				dGet('wtw_bmerged').alt = "Merged Shapes are Hidden";
+				if (dGet('wtw_adminmerged') != null) {
+					dGet('wtw_adminmerged').innerHTML = "Merged Molds OFF";
+				}
+			}
+			WTW.setCookie("wtw_bmerged","0",30);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-setQuickEditorMerged=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setShowCSG = function() {
+	/* show merged molds (show originals in opacity) */
+	try {
+		var moldgroup = "community";
+		var molds = WTW.communitiesMolds;
+		if (buildingid != "") {
+			moldgroup = "building";
+			molds = WTW.buildingMolds;
+		} else if (thingid != "") {
+			moldgroup = "thing";
+			molds = WTW.thingMolds;
+		}
+		for (var i=0; i < molds.length; i++) {
+			if (molds[i] != null) {
+				var csgmoldid = molds[i].csg.moldid;
+				if (csgmoldid != "" && molds[i].shown == "2") {
+					var csgmoldname = molds[i].moldname;
+					var csgmold = scene.getMeshByID(csgmoldname);
+					if (csgmold == null) {
+						molds[i].covering = "color";
+						molds[i].opacity = "30";
+						csgmold = WTW.addMold(csgmoldname, molds[i], molds[i].parentname, "color");
+						WTW.registerMouseOver(csgmold);
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-setShowCSG=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setHideCSG = function() {
+	/* hide merged molds */
+	try {
+		var moldgroup = "community";
+		var molds = WTW.communitiesMolds;
+		if (buildingid != "") {
+			moldgroup = "building";
+			molds = WTW.buildingMolds;
+		} else if (thingid != "") {
+			moldgroup = "thing";
+			molds = WTW.thingMolds;
+		}
+		for (var i=0; i < molds.length; i++) {
+			if (molds[i] != null) {
+				var csgmoldid = molds[i].csg.moldid;
+				if (csgmoldid != "" && molds[i].shown == "2") {
+					var csgmoldname = molds[i].moldname;
+					var csgmold = scene.getMeshByID(csgmoldname);
+					if (csgmold != null) {
+						var moldnameparts = WTW.getMoldnameParts(csgmoldname);
+						moldnameparts.molds[moldnameparts.moldind].shown = '0';
+						WTW.disposeClean(csgmoldname);
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-setHideCSG=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setQuickEditorZones = function(value) {
+	/* show or hide action zones in the 3D Scene */
+	try {
+		if (value == 1) {
+			for (var i=0;i<WTW.actionZones.length;i++) {
+				if (WTW.actionZones[i] != null) {
+					WTW.showActionZone(i);
+				}
+			}
+			if (dGet('wtw_bzones') != null) {
+				dGet('wtw_bzones').innerHTML = "Zones<br /><br />ON";
+				dGet('wtw_bzones').onclick = function() { WTW.setQuickEditorZones(0); };
+				dGet('wtw_bzones').className = "wtw-quickbar";
+				dGet('wtw_bzones').title = "Action Zones are Shown";
+				dGet('wtw_bzones').alt = "Action Zones are Shown";
+				if (dGet('wtw_adminzones') != null) {
+					dGet('wtw_adminzones').innerHTML = "Action Zones ON";
+				}
+			}
+			WTW.setCookie("wtw_bzones","1",30);
+		} else {
+			for (var i=0;i<WTW.actionZones.length;i++) {
+				if (WTW.actionZones[i] != null) {
+					WTW.hideActionZone(i);
+				}
+			}
+			if (dGet('wtw_bzones') != null) {
+				dGet('wtw_bzones').innerHTML = "Zones<br /><br />OFF";
+				dGet('wtw_bzones').onclick = function() { WTW.setQuickEditorZones(1); };
+				dGet('wtw_bzones').className = "wtw-quickbaroff";
+				dGet('wtw_bzones').title = "Action Zones are Hidden";
+				dGet('wtw_bzones').alt = "Action Zones are Hidden";
+				if (dGet('wtw_adminzones') != null) {
+					dGet('wtw_adminzones').innerHTML = "Action Zones OFF";
+				}
+			}
+			WTW.setCookie("wtw_bzones","0",30);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-setQuickEditorZones=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setQuickEditorLines = function(value) {
+	/* show or hide the editor guide lines when editing an object */
+	try {
+		if (value == 1) {
+			if (WTW.lineZ == undefined || WTW.lineZ == null ) {
+			} else {
+				WTW.lineZ.isVisible = true;
+				WTW.lineX.isVisible = true;
+				WTW.lineY.isVisible = true;
+				WTW.lineX1.isVisible = true;
+				WTW.lineX2.isVisible = true;
+				WTW.lineX3.isVisible = true;
+				WTW.lineX4.isVisible = true;
+				WTW.lineX5.isVisible = true;
+				WTW.lineX6.isVisible = true;
+				WTW.lineX7.isVisible = true;
+				WTW.lineX8.isVisible = true;
+				WTW.lineY1.isVisible = true;
+				WTW.lineY2.isVisible = true;
+				WTW.lineY3.isVisible = true;
+				WTW.lineY4.isVisible = true;
+				WTW.lineY5.isVisible = true;
+				WTW.lineY6.isVisible = true;
+				WTW.lineY7.isVisible = true;
+				WTW.lineY8.isVisible = true;
+				WTW.lineZ1.isVisible = true;
+				WTW.lineZ2.isVisible = true;
+				WTW.lineZ3.isVisible = true;
+				WTW.lineZ4.isVisible = true;
+				WTW.lineZ5.isVisible = true;
+				WTW.lineZ6.isVisible = true;
+				WTW.lineZ7.isVisible = true;
+				WTW.lineZ8.isVisible = true;  				
+			}
+			if (dGet('wtw_blines') != null) {
+				dGet('wtw_blines').innerHTML = "Lines<br /><br />ON";
+				dGet('wtw_blines').onclick = function() { WTW.setQuickEditorLines(0); };
+				dGet('wtw_blines').className = "wtw-quickbar";
+				dGet('wtw_blines').title = "Alignment Lines are Shown";
+				dGet('wtw_blines').alt = "Alignment Lines are Shown";
+				if (dGet('wtw_adminlines') != null) {
+					dGet('wtw_adminlines').innerHTML = "Alignment Lines ON";
+				}
+			}
+			WTW.setCookie("wtw_blines","1",30);
+		} else {
+			if (WTW.lineZ == undefined || WTW.lineZ == null ) {
+			} else {
+				WTW.lineZ.isVisible = false;
+				WTW.lineX.isVisible = false;
+				WTW.lineY.isVisible = false;
+				WTW.lineX1.isVisible = false;
+				WTW.lineX2.isVisible = false;
+				WTW.lineX3.isVisible = false;
+				WTW.lineX4.isVisible = false;
+				WTW.lineX5.isVisible = false;
+				WTW.lineX6.isVisible = false;
+				WTW.lineX7.isVisible = false;
+				WTW.lineX8.isVisible = false;
+				WTW.lineY1.isVisible = false;
+				WTW.lineY2.isVisible = false;
+				WTW.lineY3.isVisible = false;
+				WTW.lineY4.isVisible = false;
+				WTW.lineY5.isVisible = false;
+				WTW.lineY6.isVisible = false;
+				WTW.lineY7.isVisible = false;
+				WTW.lineY8.isVisible = false;
+				WTW.lineZ1.isVisible = false;
+				WTW.lineZ2.isVisible = false;
+				WTW.lineZ3.isVisible = false;
+				WTW.lineZ4.isVisible = false;
+				WTW.lineZ5.isVisible = false;
+				WTW.lineZ6.isVisible = false;
+				WTW.lineZ7.isVisible = false;
+				WTW.lineZ8.isVisible = false;            
+			}
+			if (dGet('wtw_blines') != null) {
+				dGet('wtw_blines').innerHTML = "Lines<br /><br />OFF";
+				dGet('wtw_blines').onclick = function() { WTW.setQuickEditorLines(1); };
+				dGet('wtw_blines').className = "wtw-quickbaroff";
+				dGet('wtw_blines').title = "Alignment Lines are Hidden";
+				dGet('wtw_blines').alt = "Alignment Lines are Hidden";
+				if (dGet('wtw_adminlines') != null) {
+					dGet('wtw_adminlines').innerHTML = "Alignment Lines OFF";
+				}
+			}
+			WTW.setCookie("wtw_blines","0",30);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-setQuickEditorLines=" + ex.message);
+	}
+}
+
+WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
+	/* some keys have been assigned with ctrl- combos to trigger admin menu options */
+	try {
+		var e = e || window.event;
+		if (keycode == 90 || keycode == 88 || keycode == 67 || keycode == 86) {
+			// save keys for undo, cut, copy, and paste
+		} else {
+			switch(WTW.adminMenu) {
+				case 1:
+					switch (keycode) {
+						case 27: // esc
+							break;
+						case 65: // a
+							break;
+						case 66: // b
+							break;
+						case 67: // c
+							break;
+						case 68: // d
+							break;
+						case 69: // e
+							break;
+						case 71: // g
+							break;
+						case 72: // h
+							break;
+						case 76: // l
+							WTW.openFullPageForm('medialibrary','','');
+							break;
+						case 79: // o
+							break;
+						case 82: // r
+							WTW.openFullPageForm('dashboard','','');
+							break;
+						case 83: // s
+							break;
+					}
+					break;
+				case 2:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback2').click();
+							break;
+					}
+					break;
+				case 4:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback4').click();
+							break;
+						case 65: // a
+							dGet('wtw_adminbuildingsnapshot').click();
+							break;
+						case 67: // c
+							dGet('wtw_adminbuildingcopy').click();
+							break;
+						case 68: // d
+							dGet('wtw_cancel4').click();
+							break;
+						case 72: // h
+							dGet('wtw_adminbuildingshare').click();
+							break;
+						case 73: // i
+							dGet('wtw_adminbuildinginfo').click();
+							break;
+						case 79: // o
+							dGet('wtw_adminbuildingdelete').click();
+							break;
+						case 80: // p
+							dGet('wtw_adminbuildingaccess').click();
+							break;
+						case 83: // s
+							dGet('wtw_adminbuildingstart').click();
+							break;
+						case 46: // del
+							dGet('wtw_adminbuildingdelete').click();
+							break;
+					}
+					break;
+				case 5:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback5').click();
+							break;
+					}
+					break;
+				case 6:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback6').click();
+							break;
+						case 65: // a
+							dGet('wtw_adminbuildingactionzones').click();
+							break;
+						case 66: // b
+							dGet('wtw_adminbuildingaddblock').click();
+							break;
+						case 68: // d
+							dGet('wtw_cancel6').click();
+							break;
+						case 72: // h
+							dGet('wtw_adminbuildingaddthing').click();
+							break;
+						case 79: // o
+							dGet('wtw_adminbuildingaddweb').click();
+							break;
+						case 82: // r
+							dGet('wtw_adminbuildingrecover').click();
+							break;
+					}
+					break;
+				case 9:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback9').click();
+							break;
+					}
+					break;
+				case 10:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback10').click();
+							break;
+					}
+					break;
+				case 11:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback11').click();
+							break;
+						case 68: // d
+							dGet('wtw_bdelmold').click();
+							break;
+						case 80: // p
+							dGet('wtw_createduplicatemold').click();
+							break;
+						case 83: // s
+							dGet('wtw_bsavethismold').click();
+							break;
+					}
+					break;
+				case 12:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback12').click();
+							break;
+					}
+					break;
+				case 13:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback13').click();
+							break;
+					}
+					break;
+				case 14:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback14').click();
+							break;
+					}
+					break;
+				case 15:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback15').click();
+							break;
+					}
+					break;
+				case 16:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback16').click();
+							break;
+					}
+					break;
+				case 20:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback20').click();
+							break;
+					}
+					break;
+				case 22:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback22').click();
+							break;
+					}
+					break;
+				case 24:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback24').click();
+							break;
+						case 65: // a
+							dGet('wtw_admincommunitysnapshot').click();
+							break;
+						case 67: // c
+							dGet('wtw_admincommunitycopy').click();
+							break;
+						case 68: // d
+							dGet('wtw_adminmenucommdone').click();
+							break;
+						case 71: // g
+							dGet('wtw_admincommunitygravity').click();
+							break;
+						case 72: // h
+							dGet('wtw_admincommunityshare').click();
+							break;
+						case 73: // i
+							dGet('wtw_admincommunityinfo').click();
+							break;
+						case 80: // p
+							dGet('wtw_adminbuildingaccess').click();
+							break;
+						case 83: // s
+							dGet('wtw_admincommunitystart').click();
+							break;
+						case 46: // del
+							dGet('wtw_admincommunitydelete').click();
+							break;
+					}
+					break;
+				case 25:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback25').click();
+							break;
+					}
+					break;
+				case 26:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback26').click();
+							break;
+						case 65: // a
+							dGet('wtw_admincommunityactionzones').click();
+							break;
+						case 66: // b
+							dGet('wtw_admincommunityaddblock').click();
+							break;
+						case 68: // d
+							dGet('wtw_adminmenucommdoneediting').click();
+							break;
+						case 69: // e
+							dGet('wtw_admincommunityaddbuilding').click();
+							break;
+						case 72: // h
+							dGet('wtw_admincommunityaddthing').click();
+							break;
+						case 76: // l
+							dGet('wtw_admincommunitylandscape').click();
+							break;
+						case 79: // o
+							dGet('wtw_admincommunityaddweb').click();
+							break;
+						case 82: // r
+							dGet('wtw_admincommunityrecover').click();
+							break;
+					}
+					break;
+				case 27:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback27').click();
+							break;
+					}
+					break;
+				case 28:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback28').click();
+							break;
+					}
+					break;
+				case 29:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback29').click();
+							break;
+					}
+					break;
+				case 30:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback30').click();
+							break;
+					}
+					break;
+				case 32:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback32').click();
+							break;
+					}
+					break;
+				case 34:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback34').click();
+							break;
+						case 65: // a
+							dGet('wtw_adminthingsnapshot').click();
+							break;
+						case 67: // c
+							dGet('wtw_adminthingcopy').click();
+							break;
+						case 68: // d
+							dGet('wtw_adminmenuthingdone').click();
+							break;
+						case 72: // h
+							dGet('wtw_adminthingshare').click();
+							break;
+						case 73: // i
+							dGet('wtw_adminthinginfo').click();
+							break;
+						case 80: // p
+							dGet('wtw_adminbuildingaccess').click();
+							break;
+						case 83: // s
+							dGet('wtw_adminthingstart').click();
+							break;
+						case 46: // del
+							dGet('wtw_adminthingdelete').click();
+							break;
+					}
+					break;
+				case 35:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback35').click();
+							break;
+					}
+					break;
+				case 36:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback36').click();
+							break;
+						case 65: // a
+							dGet('wtw_adminthingactions').click();
+							break;
+						case 66: // b
+							dGet('wtw_adminthingaddblock').click();
+							break;
+						case 68: // d
+							dGet('wtw_adminmenuthingdoneediting').click();
+							break;
+						case 79: // o
+							dGet('wtw_adminthingaddweb').click();
+							break;
+						case 82: // r
+							dGet('wtw_adminthingrecover').click();
+							break;
+					}
+					break;
+				case 39:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback39').click();
+							break;
+					}
+					break;
+				case 40:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback40').click();
+							break;
+					}
+					break;
+				case 41:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback41').click();
+							break;
+					}
+					break;
+				case 42:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback42').click();
+							break;
+					}
+					break;
+				case 44:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback44').click();
+							break;
+					}
+					break;
+				case 45:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback45').click();
+							break;
+					}
+					break;
+				case 60:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback60').click();
+							break;
+					}
+					break;
+				case 61:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback61').click();
+							break;
+					}
+					break;
+				case 65:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback65').click();
+							break;
+					}
+					break;
+				case 66:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback66').click();
+							break;
+					}
+					break;
+				case 69:
+					switch (keycode) {
+						case 27: // esc
+							dGet('wtw_bback69').click();
+							break;
+					}
+					break;
+			}
+			e.preventDefault();
+			return false;
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-adminMenuQuickKeys=" + ex.message);
+	}		
+}
+
+WTWJS.prototype.setMenuBarSelectText = function() {
+	/* browse menubar while in admin mode - set default menu bar text wording and show/hide */
+	try {
+		if (thingid == "" && buildingid == "" && communityid == "") {
+			dGet('wtw_showcommunityname').innerHTML = "Select 3D Item to Edit";	
+			dGet('wtw_showcommunityname').style.cursor = 'default';
+			dGet('wtw_showbuildingname').innerHTML = "from Admin Menu Above";	
+			dGet('wtw_showbuildingname').style.cursor = 'default';
+			WTW.hide('wtw_modebuilding');
+			WTW.hide('wtw_mainadminmode');
+		} else {
+			WTW.showInline('wtw_modebuilding');
+			WTW.showInline('wtw_mainadminmode');
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-setMenuBarSelectText=" + ex.message);
+	}
+}
+
+WTWJS.prototype.toggleAdvanced = function(thisdiv, sectiondiv) {
+	/* various admin forms use an 'advanced options' link to show / hide additional settings */
+	try {
+		if (dGet(sectiondiv) != null) {
+			if (thisdiv.innerHTML == "-- Show Advanced Options --") {
+				thisdiv.innerHTML = "-- Hide Advanced Options --";
+				dGet(sectiondiv).style.display = "block";
+				dGet(sectiondiv).style.visibility = "visible";
+			} else if (thisdiv.innerHTML == "-- Show Advanced Mixmap Terrain --") {
+				thisdiv.innerHTML = "-- Hide Advanced Mixmap Terrain --";
+				dGet(sectiondiv).style.display = "block";
+				dGet(sectiondiv).style.visibility = "visible";
+			} else if (thisdiv.innerHTML == "-- Hide Advanced Mixmap Terrain --") {
+				thisdiv.innerHTML = "-- Show Advanced Mixmap Terrain --";
+				dGet(sectiondiv).style.display = "none";
+				dGet(sectiondiv).style.visibility = "hidden";
+			} else {
+				thisdiv.innerHTML = "-- Show Advanced Options --";
+				dGet(sectiondiv).style.display = "none";
+				dGet(sectiondiv).style.visibility = "hidden";
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-toggleAdvanced=" + ex.message);
 	}
 }
 

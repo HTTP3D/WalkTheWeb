@@ -23,6 +23,11 @@ WTWJS.prototype.loadSequence = function() {
 	/* when babylon engine is supported, this is the load sequence of functions */
 	/* each function can be found in order after this function */
 	try {
+		if (typeof WTW.adminInit == 'function') {
+			/* check if loading in admin mode, if so, the function is loaded - sets WTW.adminView variable */
+			WTW.adminView = 1;
+		}
+
 		/* sets up the environment with babylon engine */
 		WTW.initEnvironment();
 		/* see if user is logged in and set the associated settings */
@@ -194,9 +199,7 @@ WTWJS.prototype.initEnvironment = function() {
 WTWJS.prototype.loadLoginSettings = function() {
 	/* load login settings */
 	try {
-		if (typeof WTW.adminInit == 'function') {
-			/* check if admin mode function is loaded - set WTW.adminView variable */
-			WTW.adminView = 1;
+		if (WTW.adminView == 1) {
 			if (dGet('wtw_tuserid').value == "") {
 				/* if not logged in, redirect user to server home page */
 				window.location.href = '/';
