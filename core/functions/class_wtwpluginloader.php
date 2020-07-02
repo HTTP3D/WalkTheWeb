@@ -42,8 +42,8 @@ class wtwpluginloader {
 					}
 				}
 			} else {
-				mkdir($zfilepath, 0777, true);
-				chmod($zfilepath, 0777);
+				mkdir($zfilepath, 0755, true);
+				chmod($zfilepath, 0755);
 			}
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwpluginloader.php-getAllPlugins=".$e->getMessage());
@@ -199,16 +199,16 @@ class wtwpluginloader {
 			$ztempfilename = $zpluginname.str_replace(".","-",$zversion).".zip";
 			$ztempfilepath = $wtwhandlers->contentpath."/system/updates/".$zpluginname."/";
 			if (!file_exists($wtwhandlers->contentpath."/system")) {
-				mkdir($wtwhandlers->contentpath."/system", 0777, true);
-				chmod($wtwhandlers->contentpath."/system", 0777);
+				mkdir($wtwhandlers->contentpath."/system", 0755, true);
+				chmod($wtwhandlers->contentpath."/system", 0755);
 			}
 			if (!file_exists($wtwhandlers->contentpath."/system/updates")) {
-				mkdir($wtwhandlers->contentpath."/system/updates", 0777, true);
-				chmod($wtwhandlers->contentpath."/system/updates", 0777);
+				mkdir($wtwhandlers->contentpath."/system/updates", 0755, true);
+				chmod($wtwhandlers->contentpath."/system/updates", 0755);
 			}
 			if (!file_exists($wtwhandlers->contentpath."/system/updates/".$zpluginname)) {
-				mkdir($wtwhandlers->contentpath."/system/updates/".$zpluginname, 0777, true);
-				chmod($wtwhandlers->contentpath."/system/updates/".$zpluginname, 0777);
+				mkdir($wtwhandlers->contentpath."/system/updates/".$zpluginname, 0755, true);
+				chmod($wtwhandlers->contentpath."/system/updates/".$zpluginname, 0755);
 			}
 			if(ini_get('allow_url_fopen') ) {
 				$zdata1 = file_get_contents($zupdateurl);

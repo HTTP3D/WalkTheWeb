@@ -364,8 +364,8 @@ class wtw {
 				if ($_SERVER['REQUEST_METHOD']=='POST') {
 					/* database connectivity values submitted and processed */
 					if (!file_exists(wtw_rootpath.'/config')) {
-						mkdir(wtw_rootpath.'/config', 0777, true);
-						chmod(wtw_rootpath.'/config', 0777);
+						mkdir(wtw_rootpath.'/config', 0755, true);
+						chmod(wtw_rootpath.'/config', 0755);
 					}
 					$server = $_POST["wtw_tserver"];
 					$database = $_POST["wtw_tdatabase"];
@@ -408,6 +408,7 @@ class wtw {
 						fwrite($cfile,"    define(\"wtw_defaultdomain\", \"".$zdomainname."\");\r\n\r\n");
 						fwrite($cfile,"?>");
 						fclose($cfile);
+						chmod(wtw_rootpath.'/config/wtw_config.php', 0755);
 						$zsetupstep = 0;
 						header("Location: ".$this->domainurl."/"); 
 						exit();
@@ -430,6 +431,7 @@ class wtw {
 					fwrite($cfile,"    define(\"wtw_serverinstanceid\", \"".$this->serverinstanceid."\");\r\n");
 					fwrite($cfile,"?>");
 					fclose($cfile);
+					chmod(wtw_rootpath.'/config/wtw_config.php', 0755);
 				}
 			}
 			if ($zsetupstep == 0) {
@@ -553,6 +555,7 @@ class wtw {
 							fwrite($cfile,"    define(\"wtw_defaultfromemail\", \"".$zadminemail."\");\r\n");
 							fwrite($cfile,"?>");
 							fclose($cfile);
+							chmod(wtw_rootpath.'/config/wtw_config.php', 0755);
 						}
 						/* set up initial admin user - from installation process */
 						$zuserid = $wtwusers->firstAdminUser($zadminuser,$zadminpassword,$zadminemail);

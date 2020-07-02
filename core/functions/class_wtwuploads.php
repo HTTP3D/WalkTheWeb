@@ -25,85 +25,85 @@ class wtwuploads {
 		global $wtwhandlers;
 		try {
 			if (!file_exists($wtwhandlers->contentpath."/uploads")) {
-				mkdir($wtwhandlers->contentpath."/uploads", 0777, true);
-				chmod($wtwhandlers->contentpath."/uploads", 0777);
+				mkdir($wtwhandlers->contentpath."/uploads", 0755, true);
+				chmod($wtwhandlers->contentpath."/uploads", 0755);
 			}
 			if (!file_exists($wtwhandlers->contentpath."/uploads/users")) {
-				mkdir($wtwhandlers->contentpath."/uploads/users", 0777, true);
-				chmod($wtwhandlers->contentpath."/uploads/users", 0777);
+				mkdir($wtwhandlers->contentpath."/uploads/users", 0755, true);
+				chmod($wtwhandlers->contentpath."/uploads/users", 0755);
 			}
 			if (!file_exists($wtwhandlers->contentpath."/uploads/communities")) {
-				mkdir($wtwhandlers->contentpath."/uploads/communities", 0777, true);
-				chmod($wtwhandlers->contentpath."/uploads/communities", 0777);
+				mkdir($wtwhandlers->contentpath."/uploads/communities", 0755, true);
+				chmod($wtwhandlers->contentpath."/uploads/communities", 0755);
 			}
 			if (!file_exists($wtwhandlers->contentpath."/uploads/buildings")) {
-				mkdir($wtwhandlers->contentpath."/uploads/buildings", 0777, true);
-				chmod($wtwhandlers->contentpath."/uploads/buildings", 0777);
+				mkdir($wtwhandlers->contentpath."/uploads/buildings", 0755, true);
+				chmod($wtwhandlers->contentpath."/uploads/buildings", 0755);
 			}
 			if (!file_exists($wtwhandlers->contentpath."/uploads/things")) {
-				mkdir($wtwhandlers->contentpath."/uploads/things", 0777, true);
-				chmod($wtwhandlers->contentpath."/uploads/things", 0777);
+				mkdir($wtwhandlers->contentpath."/uploads/things", 0755, true);
+				chmod($wtwhandlers->contentpath."/uploads/things", 0755);
 			}
 			if (!empty($zcommunityid) && isset($zcommunityid)) {
 				if (!file_exists($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid)) {
-					mkdir($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid, 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid, 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid, 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid, 0755);
 				}
 				if (!file_exists($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/media")) {
-					mkdir($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/media", 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/media", 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/media", 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/media", 0755);
 				}
 				if (!file_exists($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/snapshots")) {
-					mkdir($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/snapshots", 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/snapshots", 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/snapshots", 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/communities/".$zcommunityid."/snapshots", 0755);
 				}
 			}
 			if (!empty($zbuildingid) && isset($zbuildingid)) {
 				if (!file_exists($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid)) {
-					mkdir($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid, 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid, 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid, 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid, 0755);
 				}
 				if (!file_exists($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/media")) {
-					mkdir($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/media", 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/media", 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/media", 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/media", 0755);
 				}
 				if (!file_exists($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/snapshots")) {
-					mkdir($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/snapshots", 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/snapshots", 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/snapshots", 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/buildings/".$zbuildingid."/snapshots", 0755);
 				}
 			}
 			if (!empty($zthingid) && isset($zthingid)) {
 				if (!file_exists($wtwhandlers->contentpath."/uploads/things/".$zthingid)) {
-					mkdir($wtwhandlers->contentpath."/uploads/things/".$zthingid, 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/things/".$zthingid, 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/things/".$zthingid, 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/things/".$zthingid, 0755);
 				}
 				if (!file_exists($wtwhandlers->contentpath."/uploads/things/".$zthingid."/media")) {
-					mkdir($wtwhandlers->contentpath."/uploads/things/".$zthingid."/media", 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/things/".$zthingid."/media", 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/things/".$zthingid."/media", 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/things/".$zthingid."/media", 0755);
 				}
 				if (!file_exists($wtwhandlers->contentpath."/uploads/things/".$zthingid."/snapshots")) {
-					mkdir($wtwhandlers->contentpath."/uploads/things/".$zthingid."/snapshots", 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/things/".$zthingid."/snapshots", 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/things/".$zthingid."/snapshots", 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/things/".$zthingid."/snapshots", 0755);
 				}
 			}
 			if(isset($_SESSION['wtw_uploadpathid']) && !empty($_SESSION['wtw_uploadpathid'])) {
 				$syear = date('Y');
 				$smonth = date('m');
 				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'])) {
-					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'], 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'], 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'], 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'], 0755);
 				}
 				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear)) {
-					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear, 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear, 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear, 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear, 0755);
 				}
 				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth)) {
-					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth, 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth, 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth, 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth, 0755);
 				}
 				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects")) {
-					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects", 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects", 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects", 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects", 0755);
 				}
 			}
 
@@ -123,14 +123,15 @@ class wtwuploads {
 				$serror = "Source File not Found. ".$zfilepath1.$zfile1;
 			}
 			if (!file_exists($zfilepath2)) {
-				mkdir($zfilepath2, 0777, true);
-				chmod($zfilepath2, 0777);
+				mkdir($zfilepath2, 0755, true);
+				chmod($zfilepath2, 0755);
 			}
 			if (file_exists($zfilepath2.$zfile2)) {
 				$serror = "Destination File Already Exists. ".$zfilepath2.$zfile2;
 			}
 			if ($serror == "") {
 				copy($zfilepath1.$zfile1, $zfilepath2.$zfile2);
+				chmod($zfilepath2.$zfile2, 0755);
 			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-copyFile=".$e->getMessage());
@@ -293,6 +294,7 @@ class wtwuploads {
 			$data1 = base64_decode($zfiledata);
 			$zfile1 = $zfilepath1.$zfilename1;
 			$zsuccess = file_put_contents($zfile1, $data1);
+			chmod($zfile1, 0755);
 			$zfilepath = "";
 			$zfiletitle = "";
 			if ($zfilename1 == "defaultbuilding.png") {
@@ -402,7 +404,8 @@ class wtwuploads {
 			if (file_exists($ztargetfile)) {
 				unlink($ztargetfile);
 			}
-			$image_save_func($tmp, "$ztargetfile");
+			$image_save_func($tmp, $ztargetfile);
+			chmod($ztargetfile, 0755);
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-resizeImage=".$e->getMessage());
 		}
@@ -520,7 +523,8 @@ class wtwuploads {
 				if (file_exists($zfilepath)) {
 					unlink($zfilepath);
 				}
-				$image_save_func($newimage, "$zfilepath");
+				$image_save_func($newimage, $zfilepath);
+				chmod($zfilepath, 0755);
 				$zfilesize = filesize($zfilepath);
 				$zfiledata = addslashes(file_get_contents($zfilepath));
 				$websizeid = "";
@@ -548,7 +552,8 @@ class wtwuploads {
 				if (file_exists($zfilepath)) {
 					unlink($zfilepath);
 				}
-				$image_save_func($newimage, "$zfilepath");
+				$image_save_func($newimage, $zfilepath);
+				chmod($zfilepath, 0755);
 				$zfilesize = filesize($zfilepath);
 				$zfiledata = addslashes(file_get_contents($zfilepath));
 				$newfilename = "";
@@ -614,8 +619,8 @@ class wtwuploads {
 				$pathname = pathinfo('/'.$zfilename);
 				$newfolder = $pathname['filename'];
 				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder)) {
-					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder, 0777, true);
-					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder, 0777);
+					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder, 0755, true);
+					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder, 0755);
 				}
 				$zuploadpath = $zuploadpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder."/";
 				$browsepath = $wtwhandlers->contenturl."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder."/";
@@ -796,6 +801,7 @@ class wtwuploads {
 							$fileresults = $this->writeDataToFile($zrow->filedata, $zmoldgroup, $zwebid, $zrow->filename);
 							$filename = $fileresults["filename"];
 							$filepath = $fileresults["filepath"];
+							chmod($filepath, 0755);
 							$wtwhandlers->query("
 								insert into ".wtw_tableprefix."uploads
 									(uploadid, 
@@ -843,6 +849,7 @@ class wtwuploads {
 							$fileresults = $this->writeFileFromPath($zrow->filepath, $zmoldgroup, $zwebid, $zrow->filename);
 							$filename = $fileresults["filename"];
 							$filepath = $fileresults["filepath"];
+							chmod($filepath, 0755);
 							$wtwhandlers->query("
 								insert into ".wtw_tableprefix."uploads
 									(uploadid, 
@@ -1092,7 +1099,8 @@ class wtwuploads {
 			$znewfilename = $this->avoidDuplicateFileNames($zfilepath, $zfilename);
 			$zdata1 = base64_decode($zbase64data);
 			$znewfilepath = $zbrowsepath.$znewfilename;
-			$zsuccess = file_put_contents($zfilepath.$znewfilename, $zdata1);		
+			$zsuccess = file_put_contents($zfilepath.$znewfilename, $zdata1);	
+			chmod($zfilepath.$znewfilename, 0755);			
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-writeDataToFile=".$e->getMessage());
 		}
@@ -1127,7 +1135,8 @@ class wtwuploads {
 				
 				if(ini_get('allow_url_fopen') ) {
 					$zdata1 = file_get_contents($zfromurl);
-					$zsuccess = file_put_contents($zfilepath.$znewfilename, $zdata1);			
+					$zsuccess = file_put_contents($zfilepath.$znewfilename, $zdata1);	
+					chmod($zfilepath.$znewfilename, 0755);
 				} else if (extension_loaded('curl')) {
 					$getfile = curl_init($zfromurl);
 					$openfile = fopen($zfilepath.$znewfilename, 'wb');
@@ -1136,6 +1145,7 @@ class wtwuploads {
 					curl_exec($getfile);
 					curl_close($getfile);
 					fclose($openfile);
+					chmod($zfilepath.$znewfilename, 0755);
 				} else {
 					$znewfilename = $zfilename;
 					$znewfilepath = $zfromurl;
@@ -1425,6 +1435,7 @@ class wtwuploads {
 					echo "Your file was not uploaded.";
 				} else {
 					if (move_uploaded_file($zuploadfile["tmp_name"], $ztargetfile)) {
+						chmod($ztargetfile, 0755);
 						$this->uploadObjectFileToDb($ztargetfile, $zpastfilename, $zfileextension, $zfiletype);
 					} else {
 						echo "There was an error uploading your file.";
@@ -1445,8 +1456,8 @@ class wtwuploads {
 			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
 				$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media/";
 				if (!file_exists($zfilepath)) {
-					mkdir($zfilepath, 0777, true);
-					chmod($zfilepath, 0777);
+					mkdir($zfilepath, 0755, true);
+					chmod($zfilepath, 0755);
 				}
 				for ($i = 0; $i < count($zuploadfiles["name"]);$i++) {
 					$zisvalid = 1;
@@ -1468,6 +1479,7 @@ class wtwuploads {
 					} 
 					if ($zisvalid == 1) {
 						if (move_uploaded_file($zuploadfiles["tmp_name"][$i], $ztargetfile)) {
+							chmod($ztargetfile, 0755);
 							$this->uploadFileToDb($ztargetfile, '', $zpastfilename, $zfileextension, $zfiletype, '1'); 
 						} else {
 							$serror .= "There was an error uploading your files.";
@@ -1490,8 +1502,8 @@ class wtwuploads {
 			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
 				$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$zobjectfilepart;
 				if (!file_exists($zfilepath)) {
-					mkdir($zfilepath, 0777, true);
-					chmod($zfilepath, 0777);
+					mkdir($zfilepath, 0755, true);
+					chmod($zfilepath, 0755);
 				}
 				for ($i = 0; $i < count($zuploadfiles["name"]);$i++) {
 					$zisvalid = 1;
@@ -1510,6 +1522,7 @@ class wtwuploads {
 					}
 					if ($zisvalid == 1) {
 						if (move_uploaded_file($zuploadfiles["tmp_name"][$i], $ztargetfile)) {
+							chmod($ztargetfile, 0755);
 /*							$this->uploadFileToDb($ztargetfile, '', $zpastfilename, $zfileextension, $zfiletype, '1'); */
 						} else {
 							$serror .= "There was an error uploading your files.";
@@ -1532,8 +1545,8 @@ class wtwuploads {
 			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
 				$zfilepath = $wtwhandlers->contentpath."/uploads/".$zmoldgroup."/".$zwebid;
 				if (!file_exists($zfilepath)) {
-					mkdir($zfilepath, 0777, true);
-					chmod($zfilepath, 0777);
+					mkdir($zfilepath, 0755, true);
+					chmod($zfilepath, 0755);
 				}
 				for ($i = 0; $i < count($zuploadfiles["name"]);$i++) {
 					$zisvalid = 1;
@@ -1552,6 +1565,7 @@ class wtwuploads {
 					}
 					if ($zisvalid == 1) {
 						if (move_uploaded_file($zuploadfiles["tmp_name"][$i], $ztargetfile)) {
+							chmod($ztargetfile, 0755);
 							$this->saveJavaScriptFile($zactionzoneid, $zmoldgroup, $zwebid, $zpastfilename);
 						} else {
 							$serror .= "There was an error uploading your files.";
