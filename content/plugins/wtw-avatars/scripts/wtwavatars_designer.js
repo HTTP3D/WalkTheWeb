@@ -50,7 +50,7 @@ WTWJS.prototype.createScene = function() {
 			WTW.backLight.intensity = WTW.sun.intensity / 1.5; //3;
 			
 			var zsetupparent = BABYLON.MeshBuilder.CreateBox("setupparent-0", {}, scene);
-			zsetupparent.material = new BABYLON.StandardMaterial("matsetupparent" + moldname, scene);
+			zsetupparent.material = new BABYLON.StandardMaterial("matsetupparent-0", scene);
 			zsetupparent.material.alpha = 0;
 			zsetupparent.position.y = -5;
 			
@@ -1421,7 +1421,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 			}
 		}
 		WTW.myAvatar = BABYLON.MeshBuilder.CreateBox(avatarname, {}, scene);
-		WTW.myAvatar.material = new BABYLON.StandardMaterial("matmyavatar" + moldname, scene);
+		WTW.myAvatar.material = new BABYLON.StandardMaterial("matmyavatar" + avatarname, scene);
 		WTW.myAvatar.material.alpha = 0;
 		WTW.myAvatar.parent = zsetupparent;
 		WTW.myAvatar.applyGravity = true;
@@ -1433,7 +1433,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 		WTW.myAvatar.WTW = zavatardef;
 
 		var avatarscale = BABYLON.MeshBuilder.CreateBox(avatarname + '-scale', {}, scene);
-		avatarscale.material = new BABYLON.StandardMaterial("matscale" + moldname, scene);
+		avatarscale.material = new BABYLON.StandardMaterial("matscale" + avatarname, scene);
 		avatarscale.material.alpha = 0;
 		avatarscale.isPickable = false;
 		avatarscale.parent = WTW.myAvatar;
@@ -1441,14 +1441,14 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 		avatarscale.rotation.y = WTW.getRadians(-90);
 
 		var avatarcamera = BABYLON.MeshBuilder.CreateBox(avatarname + "-camera", {}, scene);
-		avatarcamera.material = new BABYLON.StandardMaterial("matcamera" + moldname, scene);
+		avatarcamera.material = new BABYLON.StandardMaterial("matcamera" + avatarname, scene);
 		avatarcamera.material.alpha = 0;
 		avatarcamera.parent = WTW.myAvatar;
 		avatarcamera.position.y = 12;
 		avatarcamera.rotation.y = WTW.getRadians(-90);
 
 		var avatarcenter = BABYLON.MeshBuilder.CreateBox(avatarname + "-center", {}, scene);
-		avatarcenter.material = new BABYLON.StandardMaterial("matcenter" + moldname, scene);
+		avatarcenter.material = new BABYLON.StandardMaterial("matcenter" + avatarname, scene);
 		avatarcenter.material.alpha = 0;
 		avatarcenter.parent = WTW.myAvatar;
 		avatarcenter.position.y = 10;
