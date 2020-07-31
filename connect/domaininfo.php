@@ -113,8 +113,6 @@ try {
 				connectinggrids.rotationz as bcrotationz,
 				communities.userid,
 				communities.gravity,
-				'1' as wallcollisions,
-				'1' as floorcollisions,
 				communities.communityname as sitename,
 				buildings.buildingname,
 				communities.communityname,
@@ -213,8 +211,6 @@ try {
 				0 as bcrotationz,
 				communities.userid,
 				communities.gravity,
-				'1' as wallcollisions,
-				'1' as floorcollisions,
 				communities.communityname as sitename,
 				'' as buildingname,
 				communities.communityname,
@@ -300,8 +296,6 @@ try {
 				0 as bcrotationz,
 				buildings.userid,
 				buildings.gravity,
-				buildings.wallcollisions,
-				buildings.floorcollisions,
 				buildings.buildingname as sitename,
 				buildings.buildingname,
 				'default' as communityname,
@@ -350,9 +344,7 @@ try {
 			'communityid' => $zrow["communityid"],
 			'sitename' => $zrow["sitename"],
 			'gravity' => $zrow["gravity"],
-			'userid' => $zrow["userid"],
-			'wallcollisions'=> $zrow["wallcollisions"],
-			'floorcollisions'=> $zrow["floorcollisions"]);
+			'userid' => $zrow["userid"]);
 		$zbuildinginfo = array(
 			'buildingid' => $zrow["buildingid"],
 			'buildingname' => $zrow["buildingname"],

@@ -1,7 +1,7 @@
 <?php
 /* these /connect files are designed to extend data to other servers - like having your 3D Building in their 3D Community Scene */
 /* permissions are required for access to some data */
-/* this connect file provides shared 3D Community information */
+/* this connect file provides shared 3D Building information */
 require_once('../core/functions/class_wtwconnect.php');
 global $wtwconnect;
 
@@ -83,7 +83,7 @@ function addUploadID($zuploadid, $zrecursive) {
 			}
 		}
 	} catch (Exception $e) {
-		$wtwconnect->serror("connect-communityshare.php-addUploadID=".$e->getMessage());
+		$wtwconnect->serror("connect-buildingshare.php-addUploadID=".$e->getMessage());
 	}
 }
 
@@ -119,26 +119,26 @@ function addUserID($zuserid) {
 			}
 		}
 	} catch (Exception $e) {
-		$wtwconnect->serror("connect-communityshare.php-addUserID=".$e->getMessage());
+		$wtwconnect->serror("connect-buildingshare.php-addUserID=".$e->getMessage());
 	}
 }
 
 try {
 	/* google analytics tracking (if defined in wtw_config.php) */
-	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/communityshare.php");
+	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/buildingshare.php");
 	
 	/* get values from querystring or session */
-	$zcommunityid = $wtwconnect->getVal('communityid','');
+	$zbuildingid = $wtwconnect->getVal('buildingid','');
 	$zuserid = $wtwconnect->getVal('userid','');
 	$zsharehash = $wtwconnect->getVal('sharehash','');
-
+	
 	addUserID($zuserid);
 	
-	/* get community */
+	/* get building */
 	$zresults = $wtwconnect->query("
 		select *
-		from ".wtw_tableprefix."communities
-		where communityid='".$zcommunityid."'
+		from ".wtw_tableprefix."buildings
+		where buildingid='".$zbuildingid."'
 			and shareuserid='".$zuserid."'
 			and sharehash='".$zsharehash."'
 			and deleted=0
@@ -156,7 +156,7 @@ try {
 		$zresultscg = $wtwconnect->query("
 			select *
 			from ".wtw_tableprefix."connectinggrids
-			where childwebid='".$zcommunityid."'
+			where childwebid='".$zbuildingid."'
 				and parentwebid=''
 				and deleted=0;");
 		$zcg = 0;
@@ -197,7 +197,7 @@ try {
 		$zresultsaz = $wtwconnect->query("
 			select *
 			from ".wtw_tableprefix."actionzones
-			where communityid='".$zcommunityid."'
+			where buildingid='".$zbuildingid."'
 				and deleted=0;");
 		$zaz = 0;
 		$zactionzones = array();
@@ -230,7 +230,7 @@ try {
 			$zresultsscripts = $wtwconnect->query("
 				select *
 				from ".wtw_tableprefix."scripts
-				where webid='".$zcommunityid."'
+				where webid='".$zbuildingid."'
 					and actionzoneid='".$zrowaz["actionzoneid"]."'
 					and deleted=0;");
 			$zscript = 0;
@@ -243,7 +243,7 @@ try {
 					'webid'=>$zrowscripts["webid"],
 					'scriptname'=>$zrowscripts["scriptname"],
 					'scriptfilename'=>$zrowscripts["scriptpath"],
-					'scriptpath'=>$wtwconnect->domainurl."/content/uploads/communities/".$zcommunityid."/".$zrowscripts["scriptpath"],
+					'scriptpath'=>$wtwconnect->domainurl."/content/uploads/buildings/".$zbuildingid."/".$zrowscripts["scriptpath"],
 					'createdate'=>$zrowscripts["createdate"],
 					'createuserid'=>$zrowscripts["createuserid"],
 					'updatedate'=>$zrowscripts["updatedate"],
@@ -303,7 +303,7 @@ try {
 
 		/* get molds */
 		$zresultsmolds = $wtwconnect->query("
-			select cm.*,
+			select bm.*,
 				uo.userid as uploadobjuserid,
 				uo.stock as uploadobjstock,
 				uo.objectfolder as uploadobjfolder,
@@ -312,11 +312,11 @@ try {
 				uo.createuserid as uploadobjcreateuserid,
 				uo.updatedate as uploadobjupdatedate,
 				uo.updateuserid as uploadobjupdateuserid
-			from ".wtw_tableprefix."communitymolds cm
+			from ".wtw_tableprefix."buildingmolds bm
 				left join ".wtw_tableprefix."uploadobjects uo
-				on cm.uploadobjectid=uo.uploadobjectid
-			where cm.communityid='".$zcommunityid."'
-				and cm.deleted=0
+				on bm.uploadobjectid=uo.uploadobjectid
+			where bm.buildingid='".$zbuildingid."'
+				and bm.deleted=0
 				and (uo.deleted is null or uo.deleted=0);");
 		$zmold = 0;
 		$zmolds = array();
@@ -326,7 +326,7 @@ try {
 			$zresultsmp = $wtwconnect->query("
 				select *
 				from ".wtw_tableprefix."moldpoints
-				where moldid='".$zrowmolds["communitymoldid"]."'
+				where moldid='".$zrowmolds["buildingmoldid"]."'
 					and deleted=0;");
 			$zmp = 0;
 			$zmoldpoints = array();
@@ -354,7 +354,7 @@ try {
 			$zresultswi = $wtwconnect->query("
 				select *
 				from ".wtw_tableprefix."moldpoints
-				where communitymoldid='".$zrowmolds["communitymoldid"]."'
+				where buildingmoldid='".$zrowmolds["buildingmoldid"]."'
 					and deleted=0;");
 			$zwi = 0;
 			$zwebimages = array();
@@ -387,7 +387,7 @@ try {
 				addUserID($zrowwi["createuserid"]);
 				addUserID($zrowwi["updateuserid"]);
 			}			
-			
+
 			/* get list of uploaded objects in folder */
 			$zobjectfiles = array();
 			if (!empty($zrowmolds["uploadobjfolder"]) && isset($zrowmolds["uploadobjfolder"])) {
@@ -414,7 +414,7 @@ try {
 			$zresultsuoanim = $wtwconnect->query("
 				select *
 				from ".wtw_tableprefix."moldpoints
-				where moldid='".$zrowmolds["communitymoldid"]."'
+				where moldid='".$zrowmolds["buildingmoldid"]."'
 					and deleted=0;");
 			$zuoanim = 0;
 			$zuploadedobjectanimations = array();
@@ -449,9 +449,9 @@ try {
 			}			
 
 			$zmolds[$zmold] = array(
-				'communitymoldid'=>$zrowmolds["communitymoldid"],
-				'pastcommunitymoldid'=>$zrowmolds["pastcommunitymoldid"],
-				'communityid'=>$zrowmolds["communityid"],
+				'buildingmoldid'=>$zrowmolds["buildingmoldid"],
+				'pastbuildingmoldid'=>$zrowmolds["pastbuildingmoldid"],
+				'buildingid'=>$zrowmolds["buildingid"],
 				'loadactionzoneid'=>$zrowmolds["loadactionzoneid"],
 				'shape'=>$zrowmolds["shape"],
 				'covering'=>$zrowmolds["covering"],
@@ -565,8 +565,6 @@ try {
 
 		/* json structured response */
 		addUploadID($zrow["snapshotid"], true);
-		addUploadID($zrow["textureid"], true);
-		addUploadID($zrow["skydomeid"], true);
 		addUserID($zrow["userid"]);
 		addUserID($zrow["shareuserid"]);
 		addUserID($zrow["createuserid"]);
@@ -575,9 +573,9 @@ try {
 		$zresponse = array(
 			'serverinstanceid'=>wtw_serverinstanceid,
 			'domainurl'=>$wtwconnect->domainurl,
-			'communityid' => $zrow["communityid"],
-			'pastcommunityid' => $zrow["pastcommunityid"],
-			'communityname' => htmlspecialchars($zrow["communityname"], ENT_QUOTES, 'UTF-8'),
+			'buildingid' => $zrow["buildingid"],
+			'pastbuildingid' => $zrow["pastbuildingid"],
+			'buildingname' => htmlspecialchars($zrow["buildingname"], ENT_QUOTES, 'UTF-8'),
 			'userid' => $zrow["userid"],
 			'positionx' => $zrow["positionx"],
 			'positiony' => $zrow["positiony"],
@@ -589,18 +587,6 @@ try {
 			'rotationy' => $zrow["rotationy"],
 			'rotationz' => $zrow["rotationz"],
 			'gravity' => $zrow["gravity"],
-			'textureid' => $zrow["textureid"],
-			'skydomeid' => $zrow["skydomeid"],
-			'skyinclination' => $zrow["skyinclination"],
-			'skyluminance' => $zrow["skyluminance"],
-			'skyazimuth' => $zrow["skyazimuth"],
-			'skyrayleigh' => $zrow["skyrayleigh"],
-			'skyturbidity' => $zrow["skyturbidity"],
-			'skymiedirectionalg' => $zrow["skymiedirectionalg"],
-			'skymiecoefficient' => $zrow["skymiecoefficient"],
-			'gravity' => $zrow["gravity"],
-			'groundpositiony' => $zrow["groundpositiony"],
-			'waterpositiony' => $zrow["waterpositiony"],
 			'templatename' => htmlspecialchars($zrow["templatename"], ENT_QUOTES, 'UTF-8'),
 			'tags' => htmlspecialchars($zrow["tags"], ENT_QUOTES, 'UTF-8'),
 			'description' => htmlspecialchars($zrow["description"], ENT_QUOTES, 'UTF-8'),
@@ -620,6 +606,6 @@ try {
 	}
 	echo json_encode($zresponse);	
 } catch (Exception $e) {
-	$wtwconnect->serror("connect-communityshare.php=".$e->getMessage());
+	$wtwconnect->serror("connect-buildingshare.php=".$e->getMessage());
 }
 ?>

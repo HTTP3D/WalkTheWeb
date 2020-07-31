@@ -65,9 +65,7 @@ try {
 			'share'=> $zshare,
 			'alttag'=> $zalttag,
 			'authorizedusers'=> $zauthorizedusers,
-			'gravity'=> $zrow["gravity"],
-			'wallcollisions'=> $zrow["wallcollisions"],
-			'floorcollisions'=> $zrow["floorcollisions"]
+			'gravity'=> $zrow["gravity"]
 		);
 		$i += 1;
 	}
