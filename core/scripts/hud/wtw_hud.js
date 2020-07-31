@@ -8,7 +8,7 @@
 WTWJS.prototype.openHUDFollow = function() {
 	/* new feature just beginning to be coded */
 	try {
-WTW.log("OPEN HUD");
+/*WTW.log("OPEN HUD");
 		var zanchor = new BABYLON.TransformNode("");
 		var zmanager = new BABYLON.GUI.GUI3DManager(scene);
 
@@ -47,7 +47,7 @@ WTW.log("OPEN HUD");
 		zpanel.blockLayout = false;
 
 		scene.render();
-	} catch (ex) {
+*/	} catch (ex) {
 		WTW.log("core-scripts-hud-wtw_hud.js-openHUDFollow=" + ex.message);
 	}
 }

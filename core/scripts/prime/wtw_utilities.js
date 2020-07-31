@@ -556,9 +556,9 @@ WTWJS.prototype.setCookie = function(name,value,days) {
 			var expires = "; expires=" + date.toGMTString();
 		}
 		if (wtw_protocol == "https://") {
-			document.cookie = name + "=" + value + expires + "; domain=" + wtw_domainname + ";path=/;secure";
+			document.cookie = name + "=" + value + expires + "; domain=" + wtw_domainname + ";SameSite=Strict;path=/;secure";
 		} else {
-			document.cookie = name + "non=" + value + expires + "; path=/";
+			document.cookie = name + "non=" + value + expires + ";SameSite=Strict;path=/";
 		}
     } catch (ex) {
         WTW.log("core-scripts-prime-wtw_utilities.js-setCookie=" +ex.message);
