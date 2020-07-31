@@ -97,8 +97,6 @@ class wtwbuildings {
 							 rotationy,
 							 rotationz,
 							 gravity,
-							 wallcollisions,
-							 floorcollisions,
 							 alttag,
 							 createdate,
 							 createuserid,
@@ -119,8 +117,6 @@ class wtwbuildings {
 							 rotationy,
 							 rotationz,
 							 gravity,
-							 wallcollisions,
-							 floorcollisions,
 							 alttag,
 							 now() as createdate,
 							 '".$wtwhandlers->userid."' as createuserid,
@@ -130,6 +126,7 @@ class wtwbuildings {
 						where buildingid='".$zpastbuildingid."';");
 				}
 				/* give user Admin access to their new building */ 
+				$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
 				$wtwhandlers->query("
 					insert into ".wtw_tableprefix."userauthorizations
 						(userauthorizationid,
@@ -141,7 +138,7 @@ class wtwbuildings {
 						 updatedate,
 						 updateuserid)
 					values
-						(getid16(),
+						('".$zuserauthorizationid."',,
 						 '".$wtwhandlers->userid."',
 						 '".$zbuildingid."',
 						 'admin',
@@ -1563,60 +1560,84 @@ class wtwbuildings {
 		return $zsuccess;
 	}
 			
-	public function saveTemplateBuilding($zpastbuildingid) {
-		/* save template building settings for when it is shared */
+	public function saveBuildingTemplate($zbuildingid, $ztemplatename, $zdescription, $ztags) {
+		/* save building as a template to the media library */
 		global $wtwhandlers;
-		$newbuildingid = "";
+		$zresponse = array(
+			'success'=>'',
+			'serror'=>'',
+			'userid'=>'',
+			'sharehash'=>''
+		);
 		try {
-			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
-			if ($conn->connect_error) {
-				serror("core-functions-class_wtwbuildings.php-saveTemplateBuilding=".$conn->connect_error);
-			} else {
+			if ($wtwhandlers->checkAdminAccess("", $zbuildingid, "")) {
 				$zuserid = "";
-				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
-					$zuserid = $_SESSION["wtw_userid"];
-				}
-				$sql = "CALL copytemplatetobuilding('".$zpastbuildingid."','".$zuserid."');";
-				$result = $conn->query($sql);
-				if (is_object($result)) {
-					if ($result->num_rows > 0) {
-						while($zrow = $result->fetch_assoc()) {
-							$newbuildingid = $zrow["buildingid"];
-						}
-					} else {
-						serror("core-functions-class_wtwbuildings.php-saveTemplateBuilding=Building could not be created");
-					}		
-				}
-			}
-			$conn->close();
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwbuildings.php-saveTemplateBuilding=".$e->getMessage());
-		}
-		return $newbuildingid;
-	}	
-
-	public function shareBuildingTemplate($zbuildingid, $ztemplatename, $zdescription, $ztags) {
-		/* share building as a template to the media library (not currently available) */
-		global $wtwhandlers;
-		try {
-			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
-			if ($conn->connect_error) {
-				serror("core-functions-class_wtwbuildings.php-shareBuildingTemplate=".$conn->connect_error);
-			} else {
-				$zuserid = "";
+				$zfoundbuildingid = "";
 				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
 				$ztemplatename = htmlspecialchars($ztemplatename, ENT_QUOTES, 'UTF-8');
 				$zdescription = htmlspecialchars($zdescription, ENT_QUOTES, 'UTF-8');
 				$ztags = htmlspecialchars($ztags, ENT_QUOTES, 'UTF-8');
-				$sql = "CALL sharebuildingtemplate('".$zbuildingid."','".$ztemplatename."','".$zdescription."','".$ztags."','".$zuserid."');";
-				$result = $conn->query($sql);
+				$zsharehash = $wtwhandlers->getRandomString(16,1);
+				$zresponse["sharehash"] = $zsharehash;
+				
+				$zresults = $wtwhandlers->query("
+					select buildingid 
+					from ".wtw_tableprefix."buildings 
+					where buildingid='".$zbuildingid."' limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfoundbuildingid = $zrow["buildingid"];
+				}
+				if (!empty($zfoundbuildingid) && isset($zfoundbuildingid)) {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."buildings
+						set templatename='".$ztemplatename."',
+						    tags='".$ztags."',
+							description='".$zdescription."',
+							sharehash='".$zsharehash."',
+							shareuserid='".$zuserid."',
+							updatedate=now(),
+							updateuserid='".$zuserid."'
+						where buildingid='".$zbuildingid."'
+						limit 1;");
+				}
+			} 
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwbuildings.php-saveBuildingTemplate=".$e->getMessage());
+		}
+		return $zresponse;
+	}	
+
+	public function shareBuildingTemplate($zbuildingid, $zsharehash) {
+		/* share building as a template to the media library */
+		global $wtwhandlers;
+		$zresponse = array(
+			'success'=>'',
+			'serror'=>'',
+			'userid'=>'',
+			'sharehash'=>''
+		);
+		try {
+			if ($wtwhandlers->checkAdminAccess("", $zbuildingid, "")) {
+				$zuserid = "";
+				$zfoundbuildingid = "";
+				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+					$zuserid = $_SESSION["wtw_userid"];
+				}
+				$zfromurl = "https://3dnet.walktheweb.com/connect/share.php?buildingid=".$zbuildingid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;
+
+				if(ini_get('allow_url_fopen') ) {
+					$zresponse = file_get_contents($zfromurl);
+				} else if (extension_loaded('curl')) {
+					$zresponse = curl_init($zfromurl);
+				}
+				$zresponse = json_decode($zresponse, true);
 			}
-			$conn->close();
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwbuildings.php-shareBuildingTemplate=".$e->getMessage());
 		}
+		return $zresponse;
 	}	
 }
 

@@ -49,7 +49,7 @@ class wtwthings {
 				$zpastthingid = "";
 			}
 			$zresults = array();
-			if ($zthingid == "") {
+			if (empty($zthingid)) {
 				/* create new thingid */
 				$zthingid = $wtwhandlers->getRandomString(16,1);
 				
@@ -97,8 +97,12 @@ class wtwthings {
 							 rotationy,
 							 rotationz,
 							 gravity,
-							 wallcollisions,
-							 floorcollisions,
+							 templatename,
+							 tags,
+							 description,
+							 snapshotid,
+							 shareuserid,
+							 sharetemplatedate,
 							 alttag,
 							 createdate,
 							 createuserid,
@@ -107,7 +111,7 @@ class wtwthings {
 						select '".$zthingid."' as thingid,
 							 '".$zpastthingid."' as pastthingid,
 							 '".$wtwhandlers->escapeHTML($zthingname)."' as thingname,
-							 '' as analyticsid,
+							 analyticsid,
 							 '".$wtwhandlers->userid."' as userid,
 							 positionx,
 							 positiony,
@@ -119,8 +123,12 @@ class wtwthings {
 							 rotationy,
 							 rotationz,
 							 gravity,
-							 wallcollisions,
-							 floorcollisions,
+							 templatename,
+							 tags,
+							 description,
+							 snapshotid,
+							 shareuserid,
+							 sharetemplatedate,
 							 alttag,
 							 now() as createdate,
 							 '".$wtwhandlers->userid."' as createuserid,
@@ -130,6 +138,7 @@ class wtwthings {
 						where thingid='".$zpastthingid."';");
 				}
 				/* give user Admin access to their new thing */ 
+				$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
 				$wtwhandlers->query("
 					insert into ".wtw_tableprefix."userauthorizations
 						(userauthorizationid,
@@ -141,7 +150,7 @@ class wtwthings {
 						 updatedate,
 						 updateuserid)
 					values
-						(getid16(),
+						('".$zuserauthorizationid."',
 						 '".$wtwhandlers->userid."',
 						 '".$zthingid."',
 						 'admin',
@@ -163,10 +172,12 @@ class wtwthings {
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwthings.php-saveThing=".$e->getMessage());
 		}
-		if ($zpastthingid != "" && $zthingid != "") {
-			$copythingid = $this->copyThing($zthingid, $zpastthingid);
+		if (!empty($zpastthingid) && !empty($zthingid)) {
+			if ($this->copyThing($zthingid, $zpastthingid)) {
+				$copythingid = $zthingid;
+			}
 		}
-		if ($copythingid == "") {
+		if (empty($copythingid)) {
 			$copythingid = $zthingid;
 		}
 		return $copythingid;
@@ -301,25 +312,27 @@ class wtwthings {
 		return $zsuccess;
 	}
 
-	public function copyThing($zthingid, $zcopythingid) {
+	public function copyThing($zthingid, $zfromthingid) {
 		/* create a copy of a 3D Thing as a new 3D Thing */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			/* new thing has to already exist */
 			/* does user have access to copy thing and new thing */
-			if ($wtwhandlers->checkUpdateAccess("", "", $zthingid) && $wtwhandlers->checkUpdateAccess("", "", $zcopythingid)) {
+			if ($wtwhandlers->checkUpdateAccess("", "", $zthingid) && $wtwhandlers->checkUpdateAccess("", "", $zfromthingid)) {
 				$zresults = $wtwhandlers->query("
 					select t2.actionzoneid as pastactionzoneid,
 						 t2.communityid,
 						 t2.buildingid,
-						 '".$tzhingid."' as thingid,
+						 '".$zthingid."' as thingid,
 						 t2.attachmoldid,
 						 t2.loadactionzoneid,
+						 t2.parentactionzoneid,
 						 t2.actionzonename,
 						 t2.actionzonetype,
 						 t2.actionzoneshape,
 						 t2.movementtype,
+						 t2.movementdistance,
 						 t2.positionx,
 						 t2.positiony,
 						 t2.positionz,
@@ -339,8 +352,6 @@ class wtwthings {
 						 t2.rotatedegrees,
 						 t2.rotatedirection,
 						 t2.rotatespeed,
-						 t2.movementdistance,
-						 t2.parentactionzoneid,
 						 t2.jsfunction,
 						 t2.jsparameters
 					from ".wtw_tableprefix."actionzones t2
@@ -357,10 +368,12 @@ class wtwthings {
 							 thingid,
 							 attachmoldid,
 							 loadactionzoneid,
+							 parentactionzoneid,
 							 actionzonename,
 							 actionzonetype,
 							 actionzoneshape,
 							 movementtype,
+							 movementdistance,
 							 positionx,
 							 positiony,
 							 positionz,
@@ -380,8 +393,6 @@ class wtwthings {
 							 rotatedegrees,
 							 rotatedirection,
 							 rotatespeed,
-							 movementdistance,
-							 parentactionzoneid,
 							 jsfunction,
 							 jsparameters,
 							 createdate,
@@ -396,10 +407,12 @@ class wtwthings {
 							 '".$zrow["thingid"]."',
 							 '".$zrow["attachmoldid"]."',
 							 '".$zrow["loadactionzoneid"]."',
+							 '".$zrow["parentactionzoneid"]."',
 							 '".$zrow["actionzonename"]."',
 							 '".$zrow["actionzonetype"]."',
 							 '".$zrow["actionzoneshape"]."',
 							 '".$zrow["movementtype"]."',
+							 ".$wtwhandlers->checkNumber($zrow["movementdistance"],0).",
 							 ".$wtwhandlers->checkNumber($zrow["positionx"],0).",
 							 ".$wtwhandlers->checkNumber($zrow["positiony"],0).",
 							 ".$wtwhandlers->checkNumber($zrow["positionz"],0).",
@@ -419,10 +432,81 @@ class wtwthings {
 							 ".$wtwhandlers->checkNumber($zrow["rotatedegrees"],90).",
 							 ".$wtwhandlers->checkNumber($zrow["rotatedirection"],1).",
 							 ".$wtwhandlers->checkNumber($zrow["rotatespeed"],1).",
-							 ".$wtwhandlers->checkNumber($zrow["movementdistance"],0).",
-							 '".$zrow["parentactionzoneid"]."',
 							 '".$zrow["jsfunction"]."',
 							 '".$zrow["jsparameters"]."',
+							 now(),
+							 '".$wtwhandlers->userid."',
+							 now(),
+							 '".$wtwhandlers->userid."');");
+				}
+				$zresults = $wtwhandlers->query("
+					select t2.actionzoneanimationid as pastactionzoneanimationid,
+						 t2.avataranimationid,
+						 t3.actionzoneid
+					from ".wtw_tableprefix."actionzoneanimations t2
+					inner join (select actionzoneid, pastactionzoneid
+							from ".wtw_tableprefix."actionzones 
+							where thingid='".$zthingid."' and (not thingid='')) t3
+						on t3.pastactionzoneid = t2.actionzoneid
+					where t2.deleted=0;");
+				foreach ($zresults as $zrow) {
+					$zactionzoneanimationid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."actionzoneanimations
+							(actionzoneanimationid,
+							 pastactionzoneanimationid,
+							 actionzoneid,
+							 avataranimationid,
+							 createdate,
+							 createuserid,
+							 updatedate,
+							 updateuserid)
+						values
+							('".$zactionzoneanimationid."',
+							 '".$zrow["pastactionzoneanimationid"]."',
+							 '".$zrow["actionzoneid"]."',
+							 '".$zrow["avataranimationid"]."',
+							 now(),
+							 '".$wtwhandlers->userid."',
+							 now(),
+							 '".$wtwhandlers->userid."');");
+				}
+				$zresults = $wtwhandlers->query("
+					select t2.scriptid as pastscriptid,
+						 t3.actionzoneid,
+						 t2.moldgroup,
+						 '".$zthingid."' as webid,
+						 t2.scriptname,
+						 t2.scriptpath
+					from ".wtw_tableprefix."scripts t2
+					inner join (select actionzoneid, pastactionzoneid
+							from ".wtw_tableprefix."actionzones 
+							where thingid='".$zthingid."' and (not thingid='')) t3
+						on t3.pastactionzoneid = t2.actionzoneid
+					where t2.deleted=0;");
+				foreach ($zresults as $zrow) {
+					$zscriptid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."scripts
+							(scriptid,
+							 pastscriptid,
+							 actionzoneid,
+							 moldgroup,
+							 webid,
+							 scriptname,
+							 scriptpath,
+							 createdate,
+							 createuserid,
+							 updatedate,
+							 updateuserid)
+						values
+							('".$zscriptid."',
+							 '".$zrow["pastscriptid"]."',
+							 '".$zrow["actionzoneid"]."',
+							 '".$zrow["moldgroup"]."',
+							 '".$zrow["webid"]."',
+							 '".$zrow["scriptname"]."',
+							 '".$zrow["scriptpath"]."',
 							 now(),
 							 '".$wtwhandlers->userid."',
 							 now(),
@@ -446,6 +530,7 @@ class wtwthings {
 						 t3.actionzoneid as loadactionzoneid,
 						 t4.actionzoneid as unloadactionzoneid,
 						 t5.actionzoneid as attachactionzoneid,
+						 t6.actionzoneid as altloadactionzoneid,
 						 t2.alttag
 					from ".wtw_tableprefix."connectinggrids t2
 					left join (select actionzoneid, pastactionzoneid 
@@ -460,6 +545,10 @@ class wtwthings {
 							from ".wtw_tableprefix."actionzones 
 							where thingid='".$zthingid."' and (not thingid='')) t5
 						on t5.pastactionzoneid=t2.attachactionzoneid
+					left join (select actionzoneid, pastactionzoneid 
+							from ".wtw_tableprefix."actionzones 
+							where thingid='".$zthingid."' and (not thingid='')) t6
+						on t6.pastactionzoneid=t2.altloadactionzoneid
 					where t2.childwebid='".$zfromthingid."'
 						and parentwebid=''
 						and t2.deleted=0;");
@@ -485,6 +574,7 @@ class wtwthings {
 							 loadactionzoneid,
 							 unloadactionzoneid,
 							 attachactionzoneid,
+							 altloadactionzoneid,
 							 alttag,
 							 createdate,
 							 createuserid,
@@ -509,6 +599,7 @@ class wtwthings {
 							 '".$zrow["loadactionzoneid"]."',
 							 '".$zrow["unloadactionzoneid"]."',
 							 '".$zrow["attachactionzoneid"]."',
+							 '".$zrow["altloadactionzoneid"]."',
 							 '".$zrow["alttag"]."',
 							 now(),
 							 '".$wtwhandlers->userid."',
@@ -533,6 +624,7 @@ class wtwthings {
 						 t3.actionzoneid as loadactionzoneid,
 						 t4.actionzoneid as unloadactionzoneid,
 						 t5.actionzoneid as attachactionzoneid,
+						 t6.actionzoneid as altloadactionzoneid,
 						 t2.alttag
 					from ".wtw_tableprefix."connectinggrids t2
 					left join (select actionzoneid, pastactionzoneid 
@@ -547,6 +639,10 @@ class wtwthings {
 							from ".wtw_tableprefix."actionzones 
 							where thingid='".$zthingid."' and (not thingid='')) t5
 						on t5.pastactionzoneid=t2.attachactionzoneid
+					left join (select actionzoneid, pastactionzoneid 
+							from ".wtw_tableprefix."actionzones 
+							where thingid='".$zthingid."' and (not thingid='')) t6
+						on t6.pastactionzoneid=t2.altloadactionzoneid
 					where t2.parentwebid='".$zfromthingid."'
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
@@ -571,6 +667,7 @@ class wtwthings {
 							 loadactionzoneid,
 							 unloadactionzoneid,
 							 attachactionzoneid,
+							 altloadactionzoneid,
 							 alttag,
 							 createdate,
 							 createuserid,
@@ -595,6 +692,7 @@ class wtwthings {
 							 '".$zrow["loadactionzoneid"]."',
 							 '".$zrow["unloadactionzoneid"]."',
 							 '".$zrow["attachactionzoneid"]."',
+							 '".$zrow["altloadactionzoneid"]."',
 							 '".$zrow["alttag"]."',
 							 now(),
 							 '".$wtwhandlers->userid."',
@@ -734,13 +832,23 @@ class wtwthings {
 						t3.uscale,
 						t3.vscale,
 						t3.uploadobjectid,
-						t3.receiveshadows,
+					t3.objectfolder,
+					t3.objectfile,
 						t3.graphiclevel,
 						t3.textureid,
 						t3.texturebumpid,
 						t3.texturehoverid,
 						t3.videoid,
 						t3.videoposterid,
+						t3.diffusecolorr,
+						t3.diffusecolorg,
+						t3.diffusecolorb,
+						t3.specularcolorr,
+						t3.specularcolorg,
+						t3.specularcolorb,
+						t3.emissivecolorr,
+						t3.emissivecolorg,
+						t3.emissivecolorb,
 						t3.heightmapid,
 						t3.mixmapid,
 						t3.texturerid,
@@ -765,6 +873,7 @@ class wtwthings {
 						t3.sideorientation,
 						t3.billboard,
 						t3.waterreflection,
+					t3.receiveshadows,
 						t3.subdivisions,
 						t3.minheight,
 						t3.maxheight,
@@ -774,17 +883,12 @@ class wtwthings {
 						t3.csgmoldid,
 						t3.csgaction,
 						t3.alttag,
+					t3.productid,
+					t3.slug,
+					t3.categoryid,
+					t3.allowsearch,
 						t3.jsfunction,
-						t3.jsparameters,
-						t3.diffusecolorr,
-						t3.diffusecolorg,
-						t3.diffusecolorb,
-						t3.specularcolorr,
-						t3.specularcolorg,
-						t3.specularcolorb,
-						t3.emissivecolorr,
-						t3.emissivecolorg,
-						t3.emissivecolorb
+						t3.jsparameters
 					from ".wtw_tableprefix."thingmolds t3
 					left join (select actionzoneid, pastactionzoneid 
 							from ".wtw_tableprefix."actionzones 
@@ -822,13 +926,23 @@ class wtwthings {
 							uscale,
 							vscale,
 							uploadobjectid,
-							receiveshadows,
+							objectfolder,
+							objectfile,
 							graphiclevel,
 							textureid,
 							texturebumpid,
 							texturehoverid,
 							videoid,
 							videoposterid,
+							diffusecolorr,
+							diffusecolorg,
+							diffusecolorb,
+							specularcolorr,
+							specularcolorg,
+							specularcolorb,
+							emissivecolorr,
+							emissivecolorg,
+							emissivecolorb,
 							heightmapid,
 							mixmapid,
 							texturerid,
@@ -853,6 +967,7 @@ class wtwthings {
 							sideorientation,
 							billboard,
 							waterreflection,
+							receiveshadows,
 							subdivisions,
 							minheight,
 							maxheight,
@@ -862,17 +977,12 @@ class wtwthings {
 							csgmoldid,
 							csgaction,
 							alttag,
+							productid,
+							slug,
+							categoryid,
+							allowsearch,
 							jsfunction,
 							jsparameters,
-							diffusecolorr,
-							diffusecolorg,
-							diffusecolorb,
-							specularcolorr,
-							specularcolorg,
-							specularcolorb,
-							emissivecolorr,
-							emissivecolorg,
-							emissivecolorb,
 							createdate,
 							createuserid,
 							updatedate,
@@ -900,13 +1010,23 @@ class wtwthings {
 							".$wtwhandlers->checkNumber($zrow["uscale"],0).",
 							".$wtwhandlers->checkNumber($zrow["vscale"],0).",
 							'".$zrow["uploadobjectid"]."',
-							".$wtwhandlers->checkNumber($zrow["receiveshadows"],0).",
+							'".$zrow["objectfolder"]."',
+							'".$zrow["objectfile"]."',
 							".$wtwhandlers->checkNumber($zrow["graphiclevel"],0).",
 							'".$zrow["textureid"]."',
 							'".$zrow["texturebumpid"]."',
 							'".$zrow["texturehoverid"]."',
 							'".$zrow["videoid"]."',
 							'".$zrow["videoposterid"]."',
+							".$wtwhandlers->checkNumber($zrow["diffusecolorr"],1).",
+							".$wtwhandlers->checkNumber($zrow["diffusecolorg"],1).",
+							".$wtwhandlers->checkNumber($zrow["diffusecolorb"],1).",
+							".$wtwhandlers->checkNumber($zrow["specularcolorr"],1).",
+							".$wtwhandlers->checkNumber($zrow["specularcolorg"],1).",
+							".$wtwhandlers->checkNumber($zrow["specularcolorb"],1).",
+							".$wtwhandlers->checkNumber($zrow["emissivecolorr"],1).",
+							".$wtwhandlers->checkNumber($zrow["emissivecolorg"],1).",
+							".$wtwhandlers->checkNumber($zrow["emissivecolorb"],1).",
 							'".$zrow["heightmapid"]."',
 							'".$zrow["mixmapid"]."',
 							'".$zrow["texturerid"]."',
@@ -931,6 +1051,7 @@ class wtwthings {
 							'".$zrow["sideorientation"]."',
 							".$wtwhandlers->checkNumber($zrow["billboard"],0).",
 							".$wtwhandlers->checkNumber($zrow["waterreflection"],0).",
+							".$wtwhandlers->checkNumber($zrow["receiveshadows"],0).",
 							".$wtwhandlers->checkNumber($zrow["subdivisions"],12).",
 							".$wtwhandlers->checkNumber($zrow["minheight"],0).",
 							".$wtwhandlers->checkNumber($zrow["maxheight"],30).",
@@ -940,17 +1061,12 @@ class wtwthings {
 							'".$zrow["csgmoldid"]."',
 							'".$zrow["csgaction"]."',
 							'".$zrow["alttag"]."',
+							'".$zrow["productid"]."',
+							'".$zrow["slug"]."',
+							'".$zrow["categoryid"]."',
+							".$wtwhandlers->checkNumber($zrow["allowsearch"],1).",
 							'".$zrow["jsfunction"]."',
 							'".$zrow["jsparameters"]."',
-							".$wtwhandlers->checkNumber($zrow["diffusecolorr"],1).",
-							".$wtwhandlers->checkNumber($zrow["diffusecolorg"],1).",
-							".$wtwhandlers->checkNumber($zrow["diffusecolorb"],1).",
-							".$wtwhandlers->checkNumber($zrow["specularcolorr"],1).",
-							".$wtwhandlers->checkNumber($zrow["specularcolorg"],1).",
-							".$wtwhandlers->checkNumber($zrow["specularcolorb"],1).",
-							".$wtwhandlers->checkNumber($zrow["emissivecolorr"],1).",
-							".$wtwhandlers->checkNumber($zrow["emissivecolorg"],1).",
-							".$wtwhandlers->checkNumber($zrow["emissivecolorb"],1).",
 							now(),
 							'".$wtwhandlers->userid."',
 							now(),
@@ -965,6 +1081,7 @@ class wtwthings {
 						 t4.imageid,
 						 t4.imagehoverid,
 						 t4.imageclickid,
+						 t4.graphiclevel,
 						 t4.jsfunction,
 						 t4.jsparameters,
 						 t4.userid,
@@ -993,6 +1110,7 @@ class wtwthings {
 							 imageid,
 							 imagehoverid,
 							 imageclickid,
+							 graphiclevel,
 							 jsfunction,
 							 jsparameters,
 							 userid,
@@ -1011,6 +1129,7 @@ class wtwthings {
 							 '".$zrow["imageid"]."',
 							 '".$zrow["imagehoverid"]."',
 							 '".$zrow["imageclickid"]."',
+							 ".$wtwhandlers->checkNumber($zrow["graphiclevel"],0).",
 							 '".$zrow["jsfunction"]."',
 							 '".$zrow["jsparameters"]."',
 							 '".$wtwhandlers->userid."',
@@ -1272,28 +1391,84 @@ class wtwthings {
 		return htmlspecialchars(json_encode($returntext), ENT_QUOTES, 'UTF-8');
 	}
 
-	public function shareThingTemplate($zthingid, $ztemplatename, $zdescription, $ztags) {
-		/* share thing as a template to the media library (not currently available) */
+	public function saveThingTemplate($zthingid, $ztemplatename, $zdescription, $ztags) {
+		/* save thing as a template to the media library */
 		global $wtwhandlers;
+		$zresponse = array(
+			'success'=>'',
+			'serror'=>'',
+			'userid'=>'',
+			'sharehash'=>''
+		);
 		try {
-			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
-			if ($conn->connect_error) {
-				serror("core-functions-things.php-shareThingTemplate=".$conn->connect_error);
-			} else {
+			if ($wtwhandlers->checkAdminAccess("", "", $zthingid)) {
 				$zuserid = "";
+				$zfoundthingid = "";
 				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
 				$ztemplatename = htmlspecialchars($ztemplatename, ENT_QUOTES, 'UTF-8');
 				$zdescription = htmlspecialchars($zdescription, ENT_QUOTES, 'UTF-8');
 				$ztags = htmlspecialchars($ztags, ENT_QUOTES, 'UTF-8');
-				$sql = "CALL sharethingtemplate('".$zthingid."','".$ztemplatename."','".$zdescription."','".$ztags."','".$zuserid."');";
-				$result = $conn->query($sql);
+				$zsharehash = $wtwhandlers->getRandomString(16,1);
+				$zresponse["sharehash"] = $zsharehash;
+				
+				$zresults = $wtwhandlers->query("
+					select thingid 
+					from ".wtw_tableprefix."things 
+					where thingid='".$zthingid."' limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfoundthingid = $zrow["thingid"];
+				}
+				if (!empty($zfoundthingid) && isset($zfoundthingid)) {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."things
+						set templatename='".$ztemplatename."',
+						    tags='".$ztags."',
+							description='".$zdescription."',
+							sharehash='".$zsharehash."',
+							shareuserid='".$zuserid."',
+							updatedate=now(),
+							updateuserid='".$zuserid."'
+						where thingid='".$zthingid."'
+						limit 1;");
+				}
+			} 
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwthings.php-saveThingTemplate=".$e->getMessage());
+		}
+		return $zresponse;
+	}	
+
+	public function shareThingTemplate($zthingid, $zsharehash) {
+		/* share thing as a template to the media library */
+		global $wtwhandlers;
+		$zresponse = array(
+			'success'=>'',
+			'serror'=>'',
+			'userid'=>'',
+			'sharehash'=>''
+		);
+		try {
+			if ($wtwhandlers->checkAdminAccess("", "", $zthingid)) {
+				$zuserid = "";
+				$zfoundthingid = "";
+				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+					$zuserid = $_SESSION["wtw_userid"];
+				}
+				$zfromurl = "https://3dnet.walktheweb.com/connect/share.php?thingid=".$zthingid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;
+
+				if(ini_get('allow_url_fopen') ) {
+					$zresponse = file_get_contents($zfromurl);
+				} else if (extension_loaded('curl')) {
+					$zresponse = curl_init($zfromurl);
+				}
+				$zresponse = json_decode($zresponse, true);
 			}
-			$conn->close();
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwthings.php-shareThingTemplate=".$e->getMessage());
 		}
+		return $zresponse;
 	}	
 
 	public function saveTemplateThing($zpastthingid) {

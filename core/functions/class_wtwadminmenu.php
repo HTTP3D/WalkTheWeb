@@ -131,7 +131,7 @@ class wtwadminmenu {
 			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingsnapshot', '<div class="wtw-altkey">ctrl+a</div>3D Building Sn<u>a</u>pshot', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('buildingoptions', '', '<hr class="wtw-menuhr" />', 50, $updateroles, "");
 			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingcopy', '<div class="wtw-altkey">ctrl+c</div><u>C</u>opy 3D Building', 55, $updateroles, "WTW.adminMenuItemSelected(this);");
-			/* $this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingshare', '<div class="wtw-altkey">ctrl+h</div>S<u>h</u>are', 60, $updateroles, "WTW.adminMenuItemSelected(this);"); */
+			 $this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingshare', '<div class="wtw-altkey">ctrl+h</div>S<u>h</u>are 3D Building', 60, $updateroles, "WTW.adminMenuItemSelected(this);"); 
 			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingdelete', '<div class="wtw-altkey">ctrl+del</div>Delete 3D Building', 100, $updateroles, "WTW.adminMenuItemSelected(this);");
 
 			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingaddblock', '<div class="wtw-altkey">ctrl+b</div>Add 3D Building <u>B</u>lock', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
@@ -150,7 +150,7 @@ class wtwadminmenu {
 			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitysnapshot', '<div class="wtw-altkey">ctrl+a</div>3D Community Sn<u>a</u>pshot', 25, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('communityoptions', '', '<hr class="wtw-menuhr" />', 50, $updateroles, "");
 			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitycopy', '<div class="wtw-altkey">ctrl+c</div><u>C</u>opy 3D Community', 55, $updateroles, "WTW.adminMenuItemSelected(this);");
-			/* $this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityshare', '<div class="wtw-altkey">ctrl+h</div>S<u>h</u>are', 60, $updateroles, "WTW.adminMenuItemSelected(this);"); */
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityshare', '<div class="wtw-altkey">ctrl+h</div>S<u>h</u>are 3D Community', 60, $updateroles, "WTW.adminMenuItemSelected(this);"); 
 			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitydelete', '<div class="wtw-altkey">ctrl+del</div>Delete 3D Community', 100, $updateroles, "WTW.adminMenuItemSelected(this);");
 
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddblock', '<div class="wtw-altkey">ctrl+b</div>Add 3D Building <u>B</u>lock', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
@@ -175,7 +175,7 @@ class wtwadminmenu {
 			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingsnapshot', '<div class="wtw-altkey">ctrl+a</div>3D Thing Sn<u>a</u>pshot', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('thingoptions', '', '<hr class="wtw-menuhr" />', 50, $updateroles, "");
 			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingcopy', '<div class="wtw-altkey">ctrl+c</div><u>C</u>opy 3D Thing', 55, $updateroles, "WTW.adminMenuItemSelected(this);");
-			/* $this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingshare', '<div class="wtw-altkey">ctrl+h</div>S<u>h</u>are', 60, $updateroles, "WTW.adminMenuItemSelected(this);"); */
+			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingshare', '<div class="wtw-altkey">ctrl+h</div>S<u>h</u>are 3D Thing', 60, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingdelete', '<div class="wtw-altkey">ctrl+del</div>Delete 3D Thing', 100, $updateroles, "WTW.adminMenuItemSelected(this);");
 
 			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingaddblock', '<div class="wtw-altkey">ctrl+b</div>Add 3D Building <u>B</u>lock', 10, $updateroles, "WTW.adminMenuItemSelected(this);");

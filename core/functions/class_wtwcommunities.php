@@ -1377,28 +1377,84 @@ class wtwcommunities {
 		return $zcommunityid;
 	}
 
-	public function shareCommunityTemplate($zcommunityid, $ztemplatename, $zdescription, $ztags) {
-		/* shares a community to the media library (not currently available) */
+	public function saveCommunityTemplate($zcommunityid, $ztemplatename, $zdescription, $ztags) {
+		/* save community as a template to the media library */
 		global $wtwhandlers;
+		$zresponse = array(
+			'success'=>'',
+			'serror'=>'',
+			'userid'=>'',
+			'sharehash'=>''
+		);
 		try {
-			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
-			if ($conn->connect_error) {
-				serror("core-functions-class_wtwcommunities.php-shareCommunityTemplate=".$conn->connect_error);
-			} else {
+			if ($wtwhandlers->checkAdminAccess($zcommunityid, "", "")) {
 				$zuserid = "";
+				$zfoundcommunityid = "";
 				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
 				$ztemplatename = htmlspecialchars($ztemplatename, ENT_QUOTES, 'UTF-8');
 				$zdescription = htmlspecialchars($zdescription, ENT_QUOTES, 'UTF-8');
 				$ztags = htmlspecialchars($ztags, ENT_QUOTES, 'UTF-8');
-				$sql = "CALL sharecommunitytemplate('".$zcommunityid."','".$ztemplatename."','".$zdescription."','".$ztags."','".$zuserid."');";
-				$result = $conn->query($sql);
+				$zsharehash = $wtwhandlers->getRandomString(16,1);
+				$zresponse["sharehash"] = $zsharehash;
+				
+				$zresults = $wtwhandlers->query("
+					select communityid 
+					from ".wtw_tableprefix."communities 
+					where communityid='".$zcommunityid."' limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfoundcommunityid = $zrow["communityid"];
+				}
+				if (!empty($zfoundcommunityid) && isset($zfoundcommunityid)) {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."communities
+						set templatename='".$ztemplatename."',
+						    tags='".$ztags."',
+							description='".$zdescription."',
+							sharehash='".$zsharehash."',
+							shareuserid='".$zuserid."',
+							updatedate=now(),
+							updateuserid='".$zuserid."'
+						where communityid='".$zcommunityid."'
+						limit 1;");
+				}
+			} 
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveCommunityTemplate=".$e->getMessage());
+		}
+		return $zresponse;
+	}		
+
+	public function shareCommunityTemplate($zcommunityid, $zsharehash) {
+		/* share community as a template to the media library */
+		global $wtwhandlers;
+		$zresponse = array(
+			'success'=>'',
+			'serror'=>'',
+			'userid'=>'',
+			'sharehash'=>''
+		);
+		try {
+			if ($wtwhandlers->checkAdminAccess($zcommunityid, "", "")) {
+				$zuserid = "";
+				$zfoundcommunityid = "";
+				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+					$zuserid = $_SESSION["wtw_userid"];
+				}
+				$zfromurl = "https://3dnet.walktheweb.com/connect/share.php?communityid=".$zcommunityid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;
+
+				if(ini_get('allow_url_fopen') ) {
+					$zresponse = file_get_contents($zfromurl);
+				} else if (extension_loaded('curl')) {
+					$zresponse = curl_init($zfromurl);
+				}
+				$zresponse = json_decode($zresponse, true);
 			}
-			$conn->close();
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-shareCommunityTemplate=".$e->getMessage());
 		}
+		return $zresponse;
 	}		
 }
 

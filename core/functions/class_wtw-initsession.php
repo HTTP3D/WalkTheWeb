@@ -21,9 +21,9 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = "3.3.2";
-	public $dbversion = "1.1.3";
-	public $versiondate = "2020-6-26";
+	public $version = "3.3.3";
+	public $dbversion = "1.1.4";
+	public $versiondate = "2020-7-31";
 	public $serverinstanceid = "";
 	public $accesstoken = "";
 	public $rootpath = "";
@@ -1351,8 +1351,6 @@ class wtw {
 				'sitename' => '',
 				'gravity' => '9.8',
 				'userid' => $this->userid,
-				'wallcollisions'=> '1',
-				'floorcollisions'=> '1',
 				'textureid' => '2391f1v9om09am77',
 				'texturepath' => '/content/system/stock/dirt-512x512.jpg',
 				'skydomeid' => '',

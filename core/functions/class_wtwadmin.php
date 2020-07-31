@@ -146,6 +146,7 @@ class wtwadmin {
 		$hiddenfields = "";
 		try {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_returnpath\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_sharehash\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tcommunityid\" value=\"".$wtw->communityid."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tcommunityind\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tcommunitysnapshotid\" />\r\n";

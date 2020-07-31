@@ -29,6 +29,7 @@ class wtwtables {
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."actionzoneanimations` (
 				  `actionzoneanimationid` varchar(16) NOT NULL,
+				  `pastactionzoneanimationid` varchar(16) DEFAULT '',
 				  `actionzoneid` varchar(16) NOT NULL,
 				  `avataranimationid` varchar(16) NOT NULL,
 				  `createdate` datetime DEFAULT NULL,
@@ -255,8 +256,6 @@ class wtwtables {
 				  `rotationy` decimal(18,2) DEFAULT '100.00',
 				  `rotationz` decimal(18,2) DEFAULT '0.00',
 				  `gravity` decimal(18,2) DEFAULT '9.80',
-				  `wallcollisions` int(11) DEFAULT '1',
-				  `floorcollisions` int(11) DEFAULT '1',
 				  `templatename` varchar(255) DEFAULT '',
 				  `tags` varchar(255) DEFAULT '',
 				  `description` mediumtext,
@@ -539,6 +538,7 @@ class wtwtables {
 			$wtwdb->deltaCreateTable("			
 				CREATE TABLE `".wtw_tableprefix."scripts` (
 				  `scriptid` varchar(16) NOT NULL,
+				  `pastscriptid` varchar(16) DEFAULT '',
 				  `actionzoneid` varchar(16) DEFAULT '',
 				  `moldgroup` varchar(15) DEFAULT '',
 				  `webid` varchar(16) DEFAULT '',
