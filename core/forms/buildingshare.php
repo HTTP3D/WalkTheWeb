@@ -1,10 +1,10 @@
 <!-- admin menu form for Sharing a Building -->
 <div id="wtw_adminmenu9b" class="wtw-hide">
 	<h2>Template Name</h2>
-	<input type="text" id="wtw_tsharebuildtempname" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><br />
+	<input type="text" id="wtw_tsharebuildtempname" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" />
 	<br /><br />
 	<h2>Description</h2>
-	<textarea id="wtw_tsharebuilddescription" rows="4" onclick="WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);"></textarea><br />
+	<textarea id="wtw_tsharebuilddescription" rows="4" onclick="WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);"></textarea>
 	<br /><br />
 	<h2>Search Category Tags</h2>
 	<input type="text" id="wtw_tsharebuildtags" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><br />

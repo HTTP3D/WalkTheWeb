@@ -1,10 +1,10 @@
 <!-- admin menu form for editing Sharing a 3D Community -->
 <div id="wtw_adminmenu29b" class="wtw-hide">
 	<h2>Template Name</h2>
-	<input type="text" id="wtw_tsharecommtempname" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><br />
+	<input type="text" id="wtw_tsharecommtempname" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" />
 	<br /><br />
 	<h2>Description</h2>
-	<textarea id="wtw_tsharecommdescription" rows="4" onclick="WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);"></textarea><br />
+	<textarea id="wtw_tsharecommdescription" rows="4" onclick="WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);"></textarea>
 	<br /><br />
 	<h2>Search Category Tags</h2>
 	<input type="text" id="wtw_tsharecommtags" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><br />
