@@ -40,6 +40,7 @@ try {
 	$zskymiedirectionalg = $wtwhandlers->getPost('skymiedirectionalg','');
 	$zskymiecoefficient = $wtwhandlers->getPost('skymiecoefficient','');
 	$zgroundtextureid = $wtwhandlers->getPost('groundtextureid','');
+	$zsharehash = $wtwhandlers->getPost('sharehash','');
 	
 	/* select the function called */
 	$zresponse = array();
@@ -65,9 +66,14 @@ try {
 		case "saveextendedground":
 			$wtwcommunities->saveCommunityGround($zcommunityid, $zgroundtextureid);
 			break;
-		case "sharecommunitytemplate":
-			$wtwcommunities->shareCommunityTemplate($zcommunityid, $zcommunityname, $zdescription, $ztags);
+
+		case "savecommunitytemplate":
+			$zresponse = $wtwcommunities->saveCommunityTemplate($zcommunityid, $zcommunityname, $zdescription, $ztags);
 			break;
+		case "sharecommunitytemplate":
+			$zresponse = $wtwcommunities->shareCommunityTemplate($zcommunityid, $zsharehash);
+			break;
+
 		case "importcommunity":
 			$zcommunityid = $wtwcommunities->importCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag);
 			$zresponse = array(

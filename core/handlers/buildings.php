@@ -28,6 +28,7 @@ try {
 	$zrotationy = $wtwhandlers->getPost('rotationy','0');
 	$zrotationz = $wtwhandlers->getPost('rotationz','0');
 	$zgravity = $wtwhandlers->getPost('gravity','9.8');
+	$zsharehash = $wtwhandlers->getPost('sharehash','');
 
 	/* select the function called */
 	$zresponse = array();
@@ -44,11 +45,12 @@ try {
 		case "savegravity":
 			$wtwbuildings->saveBuildingGravity($zbuildingid, $zgravity);
 			break;
-		case "sharebuildingtemplate":
-			$wtwbuildings->shareBuildingTemplate($zbuildingid, $zbuildname, $zdescription, $ztags);
+
+		case "savebuildingtemplate":
+			$zresponse = $wtwbuildings->saveBuildingTemplate($zbuildingid, $zbuildingname, $zdescription, $ztags);
 			break;
-		case "savetempbuilding":
-			$zbuildingid = $wtwbuildings->saveTemplateBuilding($zpastbuildingid);
+		case "sharebuildingtemplate":
+			$zresponse = $wtwbuildings->shareBuildingTemplate($zbuildingid, $zsharehash);
 			break;
 		case "importbuilding":
 			$zbuildingid = $wtwbuildings->importBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $zalttag);

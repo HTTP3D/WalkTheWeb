@@ -28,6 +28,7 @@ try {
 	$zgravity = $wtwhandlers->getPost('gravity','9.8');
 	$zdescription = $wtwhandlers->getPost('description','');
 	$ztags = $wtwhandlers->getPost('tags','');
+	$zsharehash = $wtwhandlers->getPost('sharehash','');
 	
 	/* select the function called */
 	$zresponse = array();
@@ -56,8 +57,11 @@ try {
 		case "importthing":
 			$zthingid = $wtwthings->importThing($zthingid, $zpastthingid, $zthingname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $zalttag);
 			break;
+		case "savethingtemplate":
+			$zresponse = $wtwthings->saveThingTemplate($zthingid, $zthingname, $zdescription, $ztags);
+			break;
 		case "sharethingtemplate":
-			$wtwthings->shareThingTemplate($zthingid, $zthingname, $zdescription, $ztags);
+			$zresponse = $wtwthings->shareThingTemplate($zthingid, $zsharehash);
 			break;
 	}
 
