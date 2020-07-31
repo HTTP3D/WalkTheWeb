@@ -278,6 +278,8 @@ input.wtw-smallprintinput {
 	visibility: hidden;
 	pointer-events:auto;
 	touch-action: auto;
+	border-top-left-radius:10px;
+	border-top-right-radius:10px;
 }
 .wtw-formscroll {
 	width: 100%;
