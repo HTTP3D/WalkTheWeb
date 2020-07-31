@@ -339,12 +339,12 @@ WTWJS.prototype.saveShareCommunityForm = function() {
 			'communityname': dGet('wtw_tsharecommtempname').value,
 			'description': dGet('wtw_tsharecommdescription').value,
 			'tags': dGet('wtw_tsharecommtags').value,
-			'function':'sharecommunitytemplate'
+			'function':'savecommunitytemplate'
 		};
 		WTW.postJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
-				/* note serror would contain errors */
+				dGet('wtw_sharehash').value = zresponse.sharehash;
 			}
 		);
 	} catch (ex) {
@@ -358,58 +358,24 @@ WTWJS.prototype.shareCommunityTemplate = function() {
 	try {
 		WTW.closeConfirmation();
 		dGet('wtw_bsharecommunitytemp').innerHTML = 'Shared 3D Community';
-		WTW.saveShareCommunityForm();
 		var zrequest = {
-			'key': btoa(WTW.getRandomString(16)),
-			'moldgroup': 'community',
-			'webid': communityid,
-			'function':'setkeyhash'
+			'communityid': communityid,
+			'sharehash': dGet('wtw_sharehash').value,
+			'function':'sharecommunitytemplate'
 		};
-		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
+		WTW.postJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
+
 				/* note serror would contain errors */
-				WTW.shareCommunitySecurity(zresponse.keyhash);
+				dGet('wtw_sharecommunityresponse').innerHTML = zresponse.success + " " + zresponse.serror;
+				window.setTimeout(function() {
+					dGet('wtw_sharecommunityresponse').innerHTML = "";
+				}, 5000);
 			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-shareCommunityTemplate=" + ex.message);
-	}
-}
-
-WTWJS.prototype.updateShareCommunityTemplate = function(response) {
-	/* 3D Community Share process complete */
-	try {
-		dGet('wtw_sharecommunityresponse').innerHTML = response;
-		location.hash = "#wtw_sharecommunityresponse";
-		window.setTimeout(function() {
-			dGet('wtw_sharecommunityresponse').innerHTML = "";
-		}, 3000);
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-updateShareCommunityTemplate=" + ex.message);
-	}
-}
-
-WTWJS.prototype.shareCommunitySecurity = function(zkey) {
-	/* security setings for Shared Community (obsolete) */
-	try {
-		
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/communitysharerequest.php?key=" + zkey + "&communityid=" + communityid + "&userid=" + dGet('wtw_tuserid').value + "&protocol=" + wtw_protocol + "&domain=" + wtw_domainname, 
-			function(response) {
-				response = JSON.parse(response);
-
-
-/*		'communityid' => $communityid,
-		'userid' => $userid,
-		'serror' => 'SUCCESS',
-		'url' => $url
-*/
-
-				//WTW.updateShareCommunityTemplate(JSON.parse(response));
-			}
-		);
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-shareCommunitySecurity=" + ex.message);
 	}
 }
 

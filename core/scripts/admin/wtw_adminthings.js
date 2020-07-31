@@ -177,16 +177,32 @@ WTWJS.prototype.submitthingForm = function(w) {
 WTWJS.prototype.copyMyThing = function() {
 	/* make a copy of an existing 3D Thing (use as backup or as a new 3D Thing to edit and use) */
 	try {
-		dGet('wtw_tthingind').value = "-1";
-		var thingname = WTW.encode(dGet('wtw_tthingname').value);
-		if (thingname == "") {
-			thingname = WTW.getThingName(thingid);
-		}
-		if (thingname != "") {
-			WTW.copyThing(thingid, thingname + " - Copy");
-		} else {
-			WTW.copyThing(thingid, "New 3D Thing - Copy");
-		}
+		dGet('wtw_tthingind').value = '-1';
+		dGet('wtw_tthingname').value = '';
+		WTW.getJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+			function(response) {
+				WTW.things = JSON.parse(response);
+				if (WTW.things != null) {
+					for (var i = 0; i < WTW.things.length; i++) {
+						if (WTW.things[i] != null) {
+							if (WTW.things[i].thinginfo.thingid != undefined) {
+								if (WTW.things[i].thinginfo.thingid != null) {
+									if (thingid == WTW.things[i].thinginfo.thingid) {
+										dGet('wtw_tthingname').value = WTW.decode(WTW.things[i].thinginfo.thingname) + " - Copy";
+										var thingname = WTW.encode(dGet('wtw_tthingname').value);
+										if (thingname != "") {
+											WTW.copyThing(thingid, thingname + " - Copy");
+										} else {
+											WTW.copyThing(thingid, "New 3D Thing - Copy");
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminthings.js-copyMyThing=" + ex.message);
 	}
@@ -426,12 +442,12 @@ WTWJS.prototype.saveShareThingForm = function() {
 			'thingname': dGet('wtw_tsharethingtempname').value,
 			'description': dGet('wtw_tsharethingdescription').value,
 			'tags': dGet('wtw_tsharethingtags').value,
-			'function':'sharethingtemplate'
+			'function':'savethingtemplate'
 		};
 		WTW.postJSON("/core/handlers/things.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
-				/* note serror would contain errors */
+				dGet('wtw_sharehash').value = zresponse.sharehash;
 			}
 		);
 	} catch (ex) {
@@ -441,31 +457,27 @@ WTWJS.prototype.saveShareThingForm = function() {
 
 WTWJS.prototype.shareThingTemplate = function() {
 	/* after user is sent to confirm form to make sure they want to Share the 3D Thing */
-	/* this process the share */
+	/* this will process the share */
 	try {
 		WTW.closeConfirmation();
 		dGet('wtw_bsharethingtemplate').value = 'Shared 3D Thing';
-		WTW.saveShareThingForm();
-		WTW.getJSON("/templates/connect/thingsharetemplate.php?thingid=" + thingid + "&userid=" + dGet('wtw_tuserid').value, 
-			function(response) {
-				WTW.updateShareThingTemplate(JSON.parse(response));
+		var zrequest = {
+			'thingid': thingid,
+			'sharehash': dGet('wtw_sharehash').value,
+			'function':'sharethingtemplate'
+		};
+		WTW.postJSON("/core/handlers/things.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+
+				/* note serror would contain errors */
+				dGet('wtw_sharethingresponse').innerHTML = zresponse.success + " " + zresponse.serror;
+				window.setTimeout(function() {
+					dGet('wtw_sharethingresponse').innerHTML = "";
+				}, 5000);
 			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminthings.js-shareThingTemplate=" + ex.message);
 	}
 }
-
-WTWJS.prototype.updateShareThingTemplate = function(response) {
-	/* 3D Thing Share process complete */
-	try {
-		dGet('wtw_sharethingresponse').innerHTML = response;
-		location.hash = "#wtw_sharethingresponse";
-		window.setTimeout(function() {
-			dGet('wtw_sharethingresponse').innerHTML = "";
-		}, 3000);
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminthings.js-updateShareThingTemplate=" + ex.message);
-	}
-}
-

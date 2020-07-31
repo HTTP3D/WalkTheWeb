@@ -323,10 +323,12 @@ WTWJS.prototype.saveShareBuildingForm = function() {
 			'buildingname': dGet('wtw_tsharebuildtempname').value,
 			'description': dGet('wtw_tsharebuilddescription').value,
 			'tags': dGet('wtw_tsharebuildtags').value,
-			'function':'sharebuildingtemplate'
+			'function':'savebuildingtemplate'
 		};
 		WTW.postJSON("/core/handlers/buildings.php", zrequest, 
 			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				dGet('wtw_sharehash').value = zresponse.sharehash;
 			}
 		);
 	} catch (ex) {
@@ -340,27 +342,23 @@ WTWJS.prototype.shareBuildingTemplate = function() {
 	try {
 		WTW.closeConfirmation();
 		dGet('wtw_bsharebuildingtemp').innerHTML = 'Shared 3D Building';
-		WTW.saveShareBuildingForm();
-		WTW.getJSON("/templates/connect/buildingsharetemplate.php?buildingid=" + buildingid + "&userid=" + dGet('wtw_tuserid').value, 
-			function(response) {
-				WTW.updateShareBuildingTemplate(JSON.parse(response));
+		var zrequest = {
+			'buildingid': buildingid,
+			'sharehash': dGet('wtw_sharehash').value,
+			'function':'sharebuildingtemplate'
+		};
+		WTW.postJSON("/core/handlers/buildings.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+
+				/* note serror would contain errors */
+				dGet('wtw_sharebuildingresponse').innerHTML = zresponse.success + " " + zresponse.serror;
+				window.setTimeout(function() {
+					dGet('wtw_sharebuildingresponse').innerHTML = "";
+				}, 5000);
 			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminbuildings.js-shareBuildingTemplate=" + ex.message);
 	}
 }
-
-WTWJS.prototype.updateShareBuildingTemplate = function(response) {
-	/* 3D Building Share process complete */
-	try {
-		dGet('wtw_sharebuildingresponse').innerHTML = response;
-		location.hash = "#wtw_sharebuildingresponse";
-		window.setTimeout(function() {
-			dGet('wtw_sharebuildingresponse').innerHTML = "";
-		}, 3000);
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminbuildings.js-updateShareBuildingTemplate=" + ex.message);
-	} 
-}
-
