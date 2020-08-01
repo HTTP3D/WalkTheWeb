@@ -832,17 +832,24 @@ WTWJS.prototype.isTextBox = function(zelement) {
 	/* check if a selected html element is a text enter box */
 	let zistextbox = false;
 	try {
-		var ztagname = zelement.tagName.toLowerCase();
-		if (ztagname === 'textarea') {
-			zistextbox = true;
-		} else if (ztagname == 'input') {
-			zistextbox = true;
-		} else {
-			var ztype = zelement.getAttribute('type').toLowerCase(),
-				/* if any of these input types is not supported by a browser, it will behave as input type text. */
-				inputTypes = ['text', 'password', 'number', 'email', 'tel', 'url', 'search', 'date', 'datetime', 'datetime-local', 'time', 'month', 'week'];
-			if (inputTypes.indexOf(ztype) >= 0) {
-				zistextbox = true;
+		var ztagname = zelement.tagName;
+		if (ztagname != null) {
+			if (ztagname != undefined) {
+				ztagname = ztagname.toLowerCase();
+				if (ztagname === 'textarea') {
+					zistextbox = true;
+				} else if (ztagname == 'input') {
+					zistextbox = true;
+				} else {
+					if (zelement.getAttribute('type') != null) {
+						var ztype = zelement.getAttribute('type').toLowerCase(),
+							/* if any of these input types is not supported by a browser, it will behave as input type text. */
+							inputTypes = ['text', 'password', 'number', 'email', 'tel', 'url', 'search', 'date', 'datetime', 'datetime-local', 'time', 'month', 'week'];
+						if (inputTypes.indexOf(ztype) >= 0) {
+							zistextbox = true;
+						}
+					}
+				}
 			}
 		}
 	} catch (ex) {
