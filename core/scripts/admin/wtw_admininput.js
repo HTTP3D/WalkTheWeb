@@ -186,39 +186,15 @@ WTWJS.prototype.loadPickedObject = function(mold) {
 	try {
 		if (mold != null) {
 			if (mold.name.indexOf("-") > -1) {
-				var shape = "box";
-				var moldind = -1;
-				var moldgroup = "building";
-				var namepart = mold.name.split('-');
-				if (namepart[0] != null) {
-					moldgroup = namepart[0].replace("molds","");
-				}
-				if (namepart[1] != null) {
-					if (WTW.isNumeric(namepart[1])) {
-						moldind = Number(namepart[1]);
-					}
-				}
-				if (namepart[5] != null) {
-					shape = namepart[5];
-				}
-				if (moldind > -1) {
-					if (moldgroup == "thing" || moldgroup == "building" || moldgroup == "community") {
+				let moldnameparts = WTW.getMoldnameParts(mold.name);
+				if (moldnameparts.moldind > -1) {
+					if (moldnameparts.cgind > 0) {
+						WTW.openConnectingGridsForm(moldnameparts.cgind);
+					} else if (moldnameparts.moldgroup == "thing" || moldnameparts.moldgroup == "building" || moldnameparts.moldgroup == "community") {
 						/* selected object is a mold from the current object in edit mode */
 						dGet('wtw_tnewmold').value = "0";
 						/* open mold form for selected mold to edit it */
-						WTW.openMoldForm(moldind,shape,moldgroup); 
-					} else if (moldgroup == "connectinggrids") {
-						/* selected object is a web object (3D Building or 3D Thing) in the 3D Scene */
-						var connectinggridind = -1;
-						if (namepart[1] != null) {
-							if (WTW.isNumeric(namepart[1])) {
-								connectinggridind = Number(namepart[1]);
-							}
-						}
-						if (connectinggridind > -1) {
-							/* open connecting grid form for the selected web object for edit */
-							WTW.openConnectingGridsForm(connectinggridind);
-						}
+						WTW.openMoldForm(moldnameparts.moldind,moldnameparts.shape,moldnameparts.moldgroup); 
 					} else {
 						/* try again */
 						WTW.changePick(1);
