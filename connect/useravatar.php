@@ -120,7 +120,11 @@ try {
 				c.emissivecolorb,
 				c.diffusecolorr,
 				c.diffusecolorg,
-				c.diffusecolorb
+				c.diffusecolorb,
+				c.diffusecolor,
+				c.specularcolor,
+				c.emissivecolor,
+				c.ambientcolor
 			from ".wtw_tableprefix."useravatars a 
 				left join (select * from ".wtw_tableprefix."useravatarcolors 
 						where deleted=0) c
@@ -159,7 +163,11 @@ try {
 				'diffusecolorr'=> $zrow["diffusecolorr"],
 				'diffusecolorg'=> $zrow["diffusecolorg"],
 				'diffusecolorb'=> $zrow["diffusecolorb"],
-				'diffusehex'=>''
+				'diffusehex'=>'',
+				'diffusecolor'=> $zrow["diffusecolor"],
+				'emissivecolor'=> $zrow["emissivecolor"],
+				'specularcolor'=> $zrow["specularcolor"],
+				'ambientcolor'=> $zrow["ambientcolor"]
 			);
 			$i += 1;
 		}
@@ -330,6 +338,6 @@ try {
 	$zresponse['avatar'] = $zavatar;
 	echo json_encode($zresponse);	
 } catch (Exception $e) {
-	$wtwconnect->serror("connect-avatar.php=".$e->getMessage());
+	$wtwconnect->serror("connect-useravatar.php=".$e->getMessage());
 }
 ?>

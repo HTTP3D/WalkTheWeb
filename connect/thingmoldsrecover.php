@@ -341,21 +341,10 @@ try {
 			'path2'=> $wtwconnect->getmoldpoints($zrow["thingmoldid"], '', '', 2, $zrow["shape"])
 		);
 		$zcolor = array(
-			'diffuse'=> array(
-				'r'=> $zrow["diffusecolorr"],
-				'g'=> $zrow["diffusecolorg"],
-				'b'=> $zrow["diffusecolorb"]
-			),
-			'specular'=> array(
-				'r'=> $zrow["specularcolorr"],
-				'g'=> $zrow["specularcolorg"],
-				'b'=> $zrow["specularcolorb"]
-			),
-			'emissive'=> array(
-				'r'=> $zrow["emissivecolorr"],
-				'g'=> $zrow["emissivecolorg"],
-				'b'=> $zrow["emissivecolorb"]
-			)
+			'diffusecolor'=> $zrow["diffusecolor"],
+			'emissivecolor'=> $zrow["emissivecolor"],
+			'specularcolor'=> $zrow["specularcolor"],
+			'ambientcolor'=> $zrow["ambientcolor"]
 		);
 		$zsound = array(
 			'id' => $zrow["soundid"],
