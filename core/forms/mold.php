@@ -134,19 +134,19 @@
 				</div><br /><br />
 				<h4 style="margin-bottom:3px;">Letter Color (emissive)</h4>
 				<div class="wtw-mainmenuvalue">(Example: #ff0000)</div><br />
-				<input type="text" id="wtw_tmoldwebtextcolor" maxlength="16" class="wtw-smallprintinput" onblur="WTW.setNewMold();" />
+				<input type="text" id="wtw_tmoldwebtextcolor" maxlength="7" class="wtw-smallprintinput" onblur="WTW.setNewMold();" />
 				<br /><br />
 				<h4 style="margin-bottom:3px;">Highlight Color (specular)</h4>
 				<div class="wtw-mainmenuvalue">(Example: #000000)</div><br />
-				<input type="text" id="wtw_tmoldwebtextspecular" maxlength="16" class="wtw-smallprintinput" onblur="WTW.setNewMold();" />
+				<input type="text" id="wtw_tmoldwebtextspecular" maxlength="7" class="wtw-smallprintinput" onblur="WTW.setNewMold();" />
 				<br /><br />
 				<h4 style="margin-bottom:3px;">Base Color (diffuse)</h4>
 				<div class="wtw-mainmenuvalue">(Example: #f0f0f0)</div><br />
-				<input type="text" id="wtw_tmoldwebtextdiffuse" maxlength="16" class="wtw-smallprintinput" onblur="WTW.setNewMold();" />
+				<input type="text" id="wtw_tmoldwebtextdiffuse" maxlength="7" class="wtw-smallprintinput" onblur="WTW.setNewMold();" />
 				<br /><br />
 				<h4 style="margin-bottom:3px;">Environment Color (ambient)</h4>
 				<div class="wtw-mainmenuvalue">(Example: #808080)</div><br />
-				<input type="text" id="wtw_tmoldwebtextambient" maxlength="16" class="wtw-smallprintinput" onblur="WTW.setNewMold();" />
+				<input type="text" id="wtw_tmoldwebtextambient" maxlength="7" class="wtw-smallprintinput" onblur="WTW.setNewMold();" />
 				<br /><br />
 				<hr class="wtw-menuhr" />
 			</div>
@@ -210,6 +210,25 @@
 				<h2 style="margin-bottom:3px;">Covering Type</h2>
 				<select id="wtw_tmoldcovering" onchange="WTW.changeCoveringType();">
 				</select>
+			</div>
+			<div id="wtw_moldcolorsdiv">
+				<h4 style="margin-bottom:3px;">Mold Diffuse Color (Base)</h4>
+				<div class="wtw-mainmenuvalue">(Example: #ffffff)</div><br />
+				<input type="text" id="wtw_tmolddiffusecolor" maxlength="7" class="wtw-smallprintinput" onfocus="WTW.openColorSelector(this, 'Diffuse Color (Base)', 'diffuse');" onblur="WTW.closeColorSelector(false);WTW.setNewMold();" onchange="WTW.setColorDirect(this);" onkeyup="WTW.setColorDirect(this);" />
+				<br />
+				<h4 style="margin-bottom:3px;">Mold Emissive Color (Projected)</h4>
+				<div class="wtw-mainmenuvalue">(Example: #000000)</div><br />
+				<input type="text" id="wtw_tmoldemissivecolor" maxlength="7" class="wtw-smallprintinput" onfocus="WTW.openColorSelector(this, 'Emissive Color (Projected)', 'emissive');" onblur="WTW.closeColorSelector(false);WTW.setNewMold();" onchange="WTW.setColorDirect(this);" onkeyup="WTW.setColorDirect(this);" />
+				<br />
+				<h4 style="margin-bottom:3px;">Mold Specular Color (Highlight)</h4>
+				<div class="wtw-mainmenuvalue">(Example: #686868)</div><br />
+				<input type="text" id="wtw_tmoldspecularcolor" maxlength="7" class="wtw-smallprintinput" onfocus="WTW.openColorSelector(this, 'Specular Color (Highlight)', 'specular');" onblur="WTW.closeColorSelector(false);WTW.setNewMold();" onchange="WTW.setColorDirect(this);" onkeyup="WTW.setColorDirect(this);" />
+				<br />
+				<h4 style="margin-bottom:3px;">Mold Ambient Color (Environment)</h4>
+				<div class="wtw-mainmenuvalue">(Example: #575757)</div><br />
+				<input type="text" id="wtw_tmoldambientcolor" maxlength="7" class="wtw-smallprintinput" onfocus="WTW.openColorSelector(this, 'Ambient Color (Environment)', 'ambient');" onblur="WTW.closeColorSelector(false);WTW.setNewMold();" onchange="WTW.setColorDirect(this);" onkeyup="WTW.setColorDirect(this);" />
+				<br />
+				<hr class="wtw-menuhr" />
 			</div>
 			<div id="wtw_moldbasictextureset2div">
 				<h4 id="wtw_moldtexturetitle" style="margin-bottom:3px;">Mold Texture Image</h4>
