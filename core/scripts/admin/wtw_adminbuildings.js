@@ -119,7 +119,6 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 				};
 				WTW.postJSON("/core/handlers/buildings.php", zrequest, 
 					function(zresponse) {
-						WTW.deleteCookie("buildingid");
 						WTW.redirectParent('/admin.php');
 					}
 				);
@@ -138,8 +137,8 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 				}
 				var zrequest = {
 					'buildingid': buildingid,
-					'buildingname':WTW.encode(dGet('wtw_tbuildingname').value),
-					'alttag':WTW.encode(dGet('wtw_tbuildingalttag').value),
+					'buildingname':btoa(dGet('wtw_tbuildingname').value),
+					'alttag':btoa(dGet('wtw_tbuildingalttag').value),
 					'analyticsid':dGet('wtw_tbuildinganalyticsid').value,
 					'function':'savebuilding'
 				};
@@ -170,15 +169,31 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 WTWJS.prototype.copyMyBuilding = function() {
 	/* make a copy of an existing 3D Building (use as backup or as a new 3D Building to edit and use) */
 	try {
-		var buildingname = WTW.encode(dGet('wtw_tbuildingname').value);
-		if (buildingname == "") {
-			buildingname = WTW.getBuildingName(buildingid);
-		}
-		if (buildingname != "") {
-			WTW.copyBuilding(buildingid, buildingname + " - Copy");
-		} else {
-			WTW.copyBuilding(buildingid, "New 3D Building - Copy");
-		}
+		dGet('wtw_tbuildingname').value = '';
+		WTW.getJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
+			function(response) {
+				WTW.buildings = JSON.parse(response);
+				if (WTW.buildings != null) {
+					for (var i = 0; i < WTW.buildings.length; i++) {
+						if (WTW.buildings[i] != null) {
+							if (WTW.buildings[i].buildinginfo.buildingid != undefined) {
+								if (WTW.buildings[i].buildinginfo.buildingid != null) {
+									if (buildingid == WTW.buildings[i].buildinginfo.buildingid) {
+										dGet('wtw_tbuildingname').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingname) + " - Copy";
+										var zbuildingname = WTW.encode(dGet('wtw_tbuildingname').value);
+										if (zbuildingname != "") {
+											WTW.copyBuilding(buildingid, zbuildingname + " - Copy");
+										} else {
+											WTW.copyBuilding(buildingid, "New 3D Building - Copy");
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminbuildings.js-copyMyBuilding=" + ex.message);
 	}
@@ -194,7 +209,7 @@ WTWJS.prototype.copyBuilding = function(zcopybuildingid, zbuildingname) {
 		}
 		var zrequest = {
 			'pastbuildingid': zcopybuildingid,
-			'buildingname':WTW.encode(dGet('wtw_tbuildingname').value),
+			'buildingname':btoa(dGet('wtw_tbuildingname').value),
 			'function':'savebuilding'
 		};
 		WTW.postJSON("/core/handlers/buildings.php", zrequest, 
@@ -213,11 +228,7 @@ WTWJS.prototype.copyBuildingComplete = function(zbuildingid) {
 	try {
 		window.setTimeout(function() {
 			if (zbuildingid != "" && zbuildingid != buildingid) {
-				WTW.setCookie("buildingid", zbuildingid, 30);
 				window.location.href="/admin.php?buildingid=" + zbuildingid + "&hmenu=5&newbuilding=1";
-			} else {
-				WTW.setCookie("buildingid", buildingid, 30);
-				window.location.href="/admin.php?buildingid=" + buildingid + "&hmenu=5&newbuilding=1";
 			}
 		}, 2000);
 	} catch (ex) {
@@ -240,7 +251,7 @@ WTWJS.prototype.getSelectBuildingsList = function() {
 							if (WTW.buildings[i].buildinginfo.buildingid == buildingid) {
 								dGet("wtw_listbuildings").innerHTML += "<div id=\"wtw_beditbuilding" + WTW.buildings[i].buildinginfo.buildingid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'>" + WTW.decode(WTW.buildings[i].buildinginfo.buildingname) + "</div>\r\n";
 							} else {
-								dGet("wtw_listbuildings").innerHTML += "<div id=\"wtw_beditbuilding" + WTW.buildings[i].buildinginfo.buildingid + "\" onclick=\"WTW.setCookie('buildingid', '" + WTW.buildings[i].buildinginfo.buildingid + "', 30);	window.location.href='admin.php?buildingid=" + WTW.buildings[i].buildinginfo.buildingid + "';\" class='wtw-menulevel2'>" + WTW.decode(WTW.buildings[i].buildinginfo.buildingname) + "</div>\r\n";
+								dGet("wtw_listbuildings").innerHTML += "<div id=\"wtw_beditbuilding" + WTW.buildings[i].buildinginfo.buildingid + "\" onclick=\"window.location.href='admin.php?buildingid=" + WTW.buildings[i].buildinginfo.buildingid + "';\" class='wtw-menulevel2'>" + WTW.decode(WTW.buildings[i].buildinginfo.buildingname) + "</div>\r\n";
 							}
 						}
 					}
@@ -320,9 +331,9 @@ WTWJS.prototype.saveShareBuildingForm = function() {
 	try {
 		var zrequest = {
 			'buildingid': buildingid,
-			'buildingname': dGet('wtw_tsharebuildtempname').value,
-			'description': dGet('wtw_tsharebuilddescription').value,
-			'tags': dGet('wtw_tsharebuildtags').value,
+			'buildingname': btoa(dGet('wtw_tsharebuildtempname').value),
+			'description': btoa(dGet('wtw_tsharebuilddescription').value),
+			'tags': btoa(dGet('wtw_tsharebuildtags').value),
 			'function':'savebuildingtemplate'
 		};
 		WTW.postJSON("/core/handlers/buildings.php", zrequest, 

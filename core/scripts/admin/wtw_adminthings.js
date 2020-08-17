@@ -113,7 +113,6 @@ WTWJS.prototype.submitthingForm = function(w) {
 						WTW.redirectParent('/admin.php');
 					}
 				);
-				WTW.deleteCookie("thingid");
 				break;
 			case 1: 
 				/* save 3D Thing settings */
@@ -136,9 +135,9 @@ WTWJS.prototype.submitthingForm = function(w) {
 					var zrequest = {
 						'thingid': thingid,
 						'pastthingid': '',
-						'thingname': WTW.encode(dGet('wtw_tthingname').value),
+						'thingname': btoa(dGet('wtw_tthingname').value),
 						'analyticsid': dGet('wtw_tthinganalyticsid').value,
-						'alttag': WTW.encode(dGet('wtw_tthingalttag').value),
+						'alttag': btoa(dGet('wtw_tthingalttag').value),
 						'function':'savething'
 					};
 					WTW.postJSON("/core/handlers/things.php", zrequest, 
@@ -219,9 +218,9 @@ WTWJS.prototype.copyThing = function(zcopythingid, zthingname) {
 		var zrequest = {
 			'thingid': '',
 			'pastthingid': zcopythingid,
-			'thingname': WTW.encode(dGet('wtw_tthingname').value),
+			'thingname': btoa(dGet('wtw_tthingname').value),
 			'analyticsid': '',
-			'alttag': WTW.encode(dGet('wtw_tthingalttag').value),
+			'alttag': btoa(dGet('wtw_tthingalttag').value),
 			'function':'savething'
 		};
 		WTW.postJSON("/core/handlers/things.php", zrequest, 
@@ -241,11 +240,7 @@ WTWJS.prototype.copyThingComplete = function(zthingid) {
 	try {
 		window.setTimeout(function() {
 			if (zthingid != "" && zthingid != thingid) {
-				WTW.setCookie("thingid", zthingid, 30);
 				window.location.href="/admin.php?thingid=" + zthingid + "&hmenu=35&newthing=1";
-			} else {
-				WTW.setCookie("thingid", thingid, 30);
-				window.location.href="/admin.php?thingid=" + thingid + "&hmenu=35&newthing=1";
 			}
 		}, 2000);
 	} catch (ex) {
@@ -317,7 +312,7 @@ WTWJS.prototype.getSelectThingsList = function() {
 							if (WTW.things[i].thinginfo.thingid == thingid) {
 								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditthing" + WTW.things[i].thinginfo.thingid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
 							} else {
-								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditthing" + WTW.things[i].thinginfo.thingid + "\" onclick=\"WTW.setCookie('thingid', '" + WTW.things[i].thinginfo.thingid + "', 30);	window.location.href='admin.php?thingid=" + WTW.things[i].thinginfo.thingid + "';\" class='wtw-menulevel2'>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
+								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditthing" + WTW.things[i].thinginfo.thingid + "\" onclick=\"window.location.href='admin.php?thingid=" + WTW.things[i].thinginfo.thingid + "';\" class='wtw-menulevel2'>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
 							}
 						}
 					}
@@ -439,9 +434,9 @@ WTWJS.prototype.saveShareThingForm = function() {
 		var zrequest = {
 			'thingid': thingid,
 			'pastthingid': '',
-			'thingname': dGet('wtw_tsharethingtempname').value,
-			'description': dGet('wtw_tsharethingdescription').value,
-			'tags': dGet('wtw_tsharethingtags').value,
+			'thingname': btoa(dGet('wtw_tsharethingtempname').value),
+			'description': btoa(dGet('wtw_tsharethingdescription').value),
+			'tags': btoa(dGet('wtw_tsharethingtags').value),
 			'function':'savethingtemplate'
 		};
 		WTW.postJSON("/core/handlers/things.php", zrequest, 

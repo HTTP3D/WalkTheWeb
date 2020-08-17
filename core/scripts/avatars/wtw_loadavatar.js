@@ -133,11 +133,13 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 					}
 				}
 			}
-			/* update start position of avatar to current position */
-			WTW.init.startPositionX = zavatar.position.x;
-			WTW.init.startPositionY = zavatar.position.y;
-			WTW.init.startPositionZ = zavatar.position.z;
-			WTW.init.startRotationY = WTW.getDegrees(zavatar.rotation.y);
+			if (zavatar.position != undefined) {
+				/* update start position of avatar to current position */
+				WTW.init.startPositionX = zavatar.position.x;
+				WTW.init.startPositionY = zavatar.position.y;
+				WTW.init.startPositionZ = zavatar.position.z;
+				WTW.init.startRotationY = WTW.getDegrees(zavatar.rotation.y);
+			}
 		}
 		zavatardef.name = zavatarname;
 		zavatardef.instanceid = zinstanceid;

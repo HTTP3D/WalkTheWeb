@@ -1061,13 +1061,10 @@ WTWJS.prototype.setQuickEditorMerged = function(value) {
 WTWJS.prototype.setShowCSG = function() {
 	/* show merged molds (show originals in opacity) */
 	try {
-		var moldgroup = "community";
 		var molds = WTW.communitiesMolds;
 		if (buildingid != "") {
-			moldgroup = "building";
 			molds = WTW.buildingMolds;
 		} else if (thingid != "") {
-			moldgroup = "thing";
 			molds = WTW.thingMolds;
 		}
 		for (var i=0; i < molds.length; i++) {
@@ -1093,13 +1090,10 @@ WTWJS.prototype.setShowCSG = function() {
 WTWJS.prototype.setHideCSG = function() {
 	/* hide merged molds */
 	try {
-		var moldgroup = "community";
 		var molds = WTW.communitiesMolds;
 		if (buildingid != "") {
-			moldgroup = "building";
 			molds = WTW.buildingMolds;
 		} else if (thingid != "") {
-			moldgroup = "thing";
 			molds = WTW.thingMolds;
 		}
 		for (var i=0; i < molds.length; i++) {

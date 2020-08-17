@@ -272,7 +272,7 @@ WTWJS.prototype.setShownMolds = function() {
 	} 
 }
 
-WTWJS.prototype.setShownMoldsByWeb = function(zmoldgroup) {
+WTWJS.prototype.setShownMoldsByWeb = function(zwebtype) {
 	/* each group of molds are checked to be added to scene by action zone */
 	var zfound = false;
 	try {
@@ -283,7 +283,7 @@ WTWJS.prototype.setShownMoldsByWeb = function(zmoldgroup) {
 		} else if (thingid != "") {
 			zwebid = thingid;
 		}
-		switch (zmoldgroup) {
+		switch (zwebtype) {
 			case "building":
 				zmolds = WTW.buildingMolds;
 				break;
@@ -1237,37 +1237,37 @@ WTWJS.prototype.processMoldQueue = function() {
 									if (WTW.loadMoldQueue[i].parentname == "" || zparentmold != null) {
 										zmold = WTW.addMold(zmoldname, zmolddef, WTW.loadMoldQueue[i].parentname, WTW.loadMoldQueue[i].coveringname);
 									}
-									var zmoldgroup = "";
+									var zwebtype = "";
 									var zmolds = null;
 									var zmoldind = -1; 
 									if (zmoldname.indexOf("communitymolds-") > -1) {
-										zmoldgroup = "community";
+										zwebtype = "community";
 										zmolds = WTW.communitiesMolds;
 										zmoldind = Number(zmolddef.moldind);
 									} else if (zmoldname.indexOf("buildingmolds-") > -1) {
-										zmoldgroup = "building";
+										zwebtype = "building";
 										zmolds = WTW.buildingMolds;
 										zmoldind = Number(zmolddef.moldind);
 									} else if (zmoldname.indexOf("thingmolds-") > -1) {
-										zmoldgroup = "thing";
+										zwebtype = "thing";
 										zmolds = WTW.thingMolds;
 										zmoldind = Number(zmolddef.moldind);
 									} else if (zmoldname.indexOf("connectinggrids-") > -1) {
-										zmoldgroup = "connectinggrid";
+										zwebtype = "connectinggrid";
 										zmolds = WTW.connectingGrids;
 										zmoldind = Number(zmolddef.connectinggridind);
 										if (zmoldname == WTW.mainParent) {
 											WTW.mainParentMold = zmold;
 										}
 									} else if (zmoldname.indexOf("actionzone-") > -1) {
-										zmoldgroup = "actionzone";
+										zwebtype = "actionzone";
 										zmolds = WTW.actionZones;
 										zmoldind = Number(zmolddef.actionzoneind);
 									}
 									if (zmolds != null) {
 										if (zmolds[zmoldind] != null) {
 											zmolds[zmoldind].shown = "2";
-											if (zmoldgroup != "connectinggrid" && zmoldgroup != "actionzone" && zmoldgroup != "") {
+											if (zwebtype != "connectinggrid" && zwebtype != "actionzone" && zwebtype != "") {
 												if (zattachmoldind > -1) {
 													if (WTW.actionZones[zattachmoldind] != null) {
 														WTW.addActionZone(zmolddef.moldname, WTW.actionZones[zattachmoldind]);

@@ -684,6 +684,7 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 		}
 		WTW.extraGround.material.diffuseTexture.uScale = zeguscale;
 		WTW.extraGround.material.diffuseTexture.vScale = zegvscale;
+		WTW.extraGround.material.specularColor = new BABYLON.Color3(.1,.1,.1);
 		/* refresh-reload ground texture */
 		var zgroundcovering = WTW.extraGround.material;
 		WTW.extraGround.material.dispose();
@@ -1193,7 +1194,13 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 									} else {
 										WTW.communitiesMolds[zmoldind].parentname = zconnectinggridname;
 									}
-									WTW.communitiesMolds[zmoldind].moldname = "communitymolds-" + zmoldind + "-" + WTW.communitiesMolds[zmoldind].moldid + "-" + zconnectinggridind + "-" + zconnectinggridid + "-" + WTW.communitiesMolds[zmoldind].shape;
+									if (zaltconnectinggridind > -1) {
+										WTW.communitiesMolds[zmoldind].connectinggridind = zaltconnectinggridind;
+										WTW.communitiesMolds[zmoldind].connectinggridid = zaltconnectinggridid;
+										WTW.communitiesMolds[zmoldind].moldname = "communitymolds-" + zmoldind + "-" + WTW.communitiesMolds[zmoldind].moldid + "-" + zaltconnectinggridind + "-" + zaltconnectinggridid + "-" + WTW.communitiesMolds[zmoldind].shape;
+									} else {
+										WTW.communitiesMolds[zmoldind].moldname = "communitymolds-" + zmoldind + "-" + WTW.communitiesMolds[zmoldind].moldid + "-" + zconnectinggridind + "-" + zconnectinggridid + "-" + WTW.communitiesMolds[zmoldind].shape;
+									}
 									WTW.communitiesMolds[zmoldind].inloadactionzone = zinloadactionzone;
 									if (ztestactionzoneid != WTW.communitiesMolds[zmoldind].loadactionzoneid) {
 										ztestactionzoneid = WTW.communitiesMolds[zmoldind].loadactionzoneid;
@@ -1224,7 +1231,13 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 									} else {
 										WTW.buildingMolds[zmoldind].parentname = zconnectinggridname;
 									}
-									WTW.buildingMolds[zmoldind].moldname = "buildingmolds-" + zmoldind + "-" + WTW.buildingMolds[zmoldind].moldid + "-" + zconnectinggridind + "-" + zconnectinggridid + "-" + WTW.buildingMolds[zmoldind].shape;
+									if (zaltconnectinggridind > -1) {
+										WTW.buildingMolds[zmoldind].connectinggridind = zaltconnectinggridind;
+										WTW.buildingMolds[zmoldind].connectinggridid = zaltconnectinggridid;
+										WTW.buildingMolds[zmoldind].moldname = "buildingmolds-" + zmoldind + "-" + WTW.buildingMolds[zmoldind].moldid + "-" + zaltconnectinggridind + "-" + zaltconnectinggridid + "-" + WTW.buildingMolds[zmoldind].shape;
+									} else {
+										WTW.buildingMolds[zmoldind].moldname = "buildingmolds-" + zmoldind + "-" + WTW.buildingMolds[zmoldind].moldid + "-" + zconnectinggridind + "-" + zconnectinggridid + "-" + WTW.buildingMolds[zmoldind].shape;
+									}
 									WTW.buildingMolds[zmoldind].inloadactionzone = zinloadactionzone;
 									if (ztestactionzoneid != WTW.buildingMolds[zmoldind].loadactionzoneid) {
 										ztestactionzoneid = WTW.buildingMolds[zmoldind].loadactionzoneid;
@@ -1255,7 +1268,13 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 									} else {
 										WTW.thingMolds[zmoldind].parentname = zconnectinggridname;
 									}
-									WTW.thingMolds[zmoldind].moldname = "thingmolds-" + zmoldind + "-" + WTW.thingMolds[zmoldind].moldid + "-" + zconnectinggridind + "-" + zconnectinggridid + "-" + WTW.thingMolds[zmoldind].shape;
+									if (zaltconnectinggridind > -1) {
+										WTW.thingMolds[zmoldind].connectinggridind = zaltconnectinggridind;
+										WTW.thingMolds[zmoldind].connectinggridid = zaltconnectinggridid;
+										WTW.thingMolds[zmoldind].moldname = "thingmolds-" + zmoldind + "-" + WTW.thingMolds[zmoldind].moldid + "-" + zaltconnectinggridind + "-" + zaltconnectinggridid + "-" + WTW.thingMolds[zmoldind].shape;
+									} else {
+										WTW.thingMolds[zmoldind].moldname = "thingmolds-" + zmoldind + "-" + WTW.thingMolds[zmoldind].moldid + "-" + zconnectinggridind + "-" + zconnectinggridid + "-" + WTW.thingMolds[zmoldind].shape;
+									}
 									WTW.thingMolds[zmoldind].inloadactionzone = zinloadactionzone;
 									if (ztestactionzoneid != WTW.thingMolds[zmoldind].loadactionzoneid) {
 										ztestactionzoneid = WTW.thingMolds[zmoldind].loadactionzoneid;

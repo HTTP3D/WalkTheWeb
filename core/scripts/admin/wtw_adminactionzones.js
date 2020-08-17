@@ -146,201 +146,200 @@ WTWJS.prototype.hideActionZone = function(actionzoneind) {
 	}
 }
 
-WTWJS.prototype.openActionZoneForm = function(actionzoneid) {
+WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 	/* open the action zone edit form to modify or add a new action zone */
 	try {
-		var commbuildingind = -1;
-		var parentname = dGet('wtw_tconnectinggridname').value;
-		var moldgroup = "building";
+		var zparentname = dGet('wtw_tconnectinggridname').value;
+		var zwebtype = "building";
 		WTW.hideAdminMenu();
 		WTW.show('wtw_adminmenu20');
 		WTW.show('wtw_adminmenu20b');
 		if (communityid != "") {
-			moldgroup = "community";
+			zwebtype = "community";
 		} else if (thingid != "") {
-			moldgroup = "thing";
+			zwebtype = "thing";
 		}
 		dGet('wtw_tmoldshape').value = "box";
-		dGet('wtw_tmoldmoldgroup').value = moldgroup;
+		dGet('wtw_tmoldwebtype').value = zwebtype;
 		WTW.setDDLValue("wtw_tmoldcovering", "texture");
-		var actionzonetype = "";
+		var zactionzonetype = "";
 		for (var i=0;i < dGet('wtw_tactionzonetypelist').options.length;i++) {
-			if (actionzoneid == dGet('wtw_tactionzonetypelist').options[i].value) {
-				actionzonetype = actionzoneid;
+			if (zactionzoneid == dGet('wtw_tactionzonetypelist').options[i].value) {
+				zactionzonetype = zactionzoneid;
 			}
 		}
-		if (actionzonetype != "") {
-			var defaultloadactionzoneid = WTW.getLoadActionZoneID("High");
-			WTW.getLoadActionZoneList(defaultloadactionzoneid);
-			actionzoneid = WTW.getRandomString(16);
-			dGet('wtw_tactionzoneid').value = actionzoneid;
-			dGet('wtw_tactionzonetype').value = actionzonetype;
-			WTW.setNewActionZoneDefaults(actionzonetype);
-			WTW.setActionZoneFormFields(actionzonetype);
-			var actionzoneind = WTW.getNextCount(WTW.actionZones);
-			dGet('wtw_tactionzoneind').value = actionzoneind;
-			WTW.actionZones[actionzoneind] = WTW.newActionZone();
-			WTW.actionZones[actionzoneind].actionzoneid = actionzoneid;
-			WTW.actionZones[actionzoneind].actionzoneind = actionzoneind;
-			WTW.actionZones[actionzoneind].buildinginfo.buildingid = buildingid;
-			WTW.actionZones[actionzoneind].communityinfo.communityid = communityid;
-			WTW.actionZones[actionzoneind].thinginfo.thingid = thingid;
-			WTW.actionZones[actionzoneind].actionzonename = dGet('wtw_tactionzonename').value;
-			WTW.actionZones[actionzoneind].actionzonetype = dGet('wtw_tactionzonetype').value;
-			WTW.actionZones[actionzoneind].actionzoneshape = dGet('wtw_tactionzoneshape').value;
-			WTW.actionZones[actionzoneind].position.x = dGet('wtw_tactionzoneposx').value;
-			WTW.actionZones[actionzoneind].position.y = dGet('wtw_tactionzoneposy').value;
-			WTW.actionZones[actionzoneind].position.z = dGet('wtw_tactionzoneposz').value;
-			WTW.actionZones[actionzoneind].scaling.x = dGet('wtw_tactionzonescalingx').value;
-			WTW.actionZones[actionzoneind].scaling.y = dGet('wtw_tactionzonescalingy').value;
-			WTW.actionZones[actionzoneind].scaling.z = dGet('wtw_tactionzonescalingz').value;
-			WTW.actionZones[actionzoneind].rotation.x = dGet('wtw_tactionzonerotx').value;
-			WTW.actionZones[actionzoneind].rotation.y = dGet('wtw_tactionzoneroty').value;
-			WTW.actionZones[actionzoneind].rotation.z = dGet('wtw_tactionzonerotz').value;
-			WTW.actionZones[actionzoneind].axis.position.x = dGet('wtw_taxispositionx').value;
-			WTW.actionZones[actionzoneind].axis.position.y = dGet('wtw_taxispositiony').value;
-			WTW.actionZones[actionzoneind].axis.position.z = dGet('wtw_taxispositionz').value;
-			WTW.actionZones[actionzoneind].axis.rotation.x = dGet('wtw_taxisrotationx').value;
-			WTW.actionZones[actionzoneind].axis.rotation.y = dGet('wtw_taxisrotationy').value;
-			WTW.actionZones[actionzoneind].axis.rotation.z = dGet('wtw_taxisrotationz').value;
-			WTW.actionZones[actionzoneind].axis.rotateaxis = dGet('wtw_tactionzonerotateaxis').value;
-			WTW.actionZones[actionzoneind].axis.rotatedegrees = dGet('wtw_tactionzonerotatedegrees').value;
-			WTW.actionZones[actionzoneind].axis.rotatedirection = "1";
-			WTW.actionZones[actionzoneind].attachmoldid = dGet('wtw_tattachmoldid').value;
-			WTW.actionZones[actionzoneind].movementtype = dGet('wtw_tactionzonemovementtype').value;
-			WTW.actionZones[actionzoneind].rotatespeed = dGet('wtw_tactionzonerotatespeed').value;
-			WTW.actionZones[actionzoneind].movementdistance = dGet('wtw_taxisscalingz').value;
-			WTW.actionZones[actionzoneind].parentname = parentname;
-			WTW.actionZones[actionzoneind].jsfunction = dGet('wtw_tactionzonejsfunction').value;
-			WTW.actionZones[actionzoneind].jsparameters = dGet('wtw_tactionzonejsparameters').value;
-			WTW.actionZones[actionzoneind].loadactionzoneid = defaultloadactionzoneid;
-			WTW.actionZones[actionzoneind].connectinggridid = dGet("wtw_tconnectinggridid").value;
-			WTW.actionZones[actionzoneind].connectinggridind = dGet("wtw_tconnectinggridind").value;
-			WTW.actionZones[actionzoneind].parentname = WTW.getParentName(WTW.actionZones[actionzoneind].connectinggridind);
-			WTW.actionZones[actionzoneind].moldname = "actionzone-" + actionzoneind + "-" + WTW.actionZones[actionzoneind].actionzoneid + "-" + WTW.actionZones[actionzoneind].connectinggridind + "-" + WTW.actionZones[actionzoneind].connectinggridid + "-" + WTW.actionZones[actionzoneind].actionzonetype;
-			WTW.addActionZone(WTW.actionZones[actionzoneind].moldname, WTW.actionZones[actionzoneind]);
-			WTW.showActionZone(actionzoneind);
-			if (actionzonetype.indexOf("seat") > -1) {	
-				dGet('wtw_tattachavatarmoldname').value = WTW.actionZones[actionzoneind].moldname.replace("actionzone-","actionzoneaxlebase2-");
+		if (zactionzonetype != "") {
+			var zdefaultloadactionzoneid = WTW.getLoadActionZoneID("High");
+			WTW.getLoadActionZoneList(zdefaultloadactionzoneid);
+			zactionzoneid = WTW.getRandomString(16);
+			dGet('wtw_tactionzoneid').value = zactionzoneid;
+			dGet('wtw_tactionzonetype').value = zactionzonetype;
+			WTW.setNewActionZoneDefaults(zactionzonetype);
+			WTW.setActionZoneFormFields(zactionzonetype);
+			var zactionzoneind = WTW.getNextCount(WTW.actionZones);
+			dGet('wtw_tactionzoneind').value = zactionzoneind;
+			WTW.actionZones[zactionzoneind] = WTW.newActionZone();
+			WTW.actionZones[zactionzoneind].actionzoneid = zactionzoneid;
+			WTW.actionZones[zactionzoneind].actionzoneind = zactionzoneind;
+			WTW.actionZones[zactionzoneind].buildinginfo.buildingid = buildingid;
+			WTW.actionZones[zactionzoneind].communityinfo.communityid = communityid;
+			WTW.actionZones[zactionzoneind].thinginfo.thingid = thingid;
+			WTW.actionZones[zactionzoneind].actionzonename = dGet('wtw_tactionzonename').value;
+			WTW.actionZones[zactionzoneind].actionzonetype = dGet('wtw_tactionzonetype').value;
+			WTW.actionZones[zactionzoneind].actionzoneshape = dGet('wtw_tactionzoneshape').value;
+			WTW.actionZones[zactionzoneind].position.x = dGet('wtw_tactionzoneposx').value;
+			WTW.actionZones[zactionzoneind].position.y = dGet('wtw_tactionzoneposy').value;
+			WTW.actionZones[zactionzoneind].position.z = dGet('wtw_tactionzoneposz').value;
+			WTW.actionZones[zactionzoneind].scaling.x = dGet('wtw_tactionzonescalingx').value;
+			WTW.actionZones[zactionzoneind].scaling.y = dGet('wtw_tactionzonescalingy').value;
+			WTW.actionZones[zactionzoneind].scaling.z = dGet('wtw_tactionzonescalingz').value;
+			WTW.actionZones[zactionzoneind].rotation.x = dGet('wtw_tactionzonerotx').value;
+			WTW.actionZones[zactionzoneind].rotation.y = dGet('wtw_tactionzoneroty').value;
+			WTW.actionZones[zactionzoneind].rotation.z = dGet('wtw_tactionzonerotz').value;
+			WTW.actionZones[zactionzoneind].axis.position.x = dGet('wtw_taxispositionx').value;
+			WTW.actionZones[zactionzoneind].axis.position.y = dGet('wtw_taxispositiony').value;
+			WTW.actionZones[zactionzoneind].axis.position.z = dGet('wtw_taxispositionz').value;
+			WTW.actionZones[zactionzoneind].axis.rotation.x = dGet('wtw_taxisrotationx').value;
+			WTW.actionZones[zactionzoneind].axis.rotation.y = dGet('wtw_taxisrotationy').value;
+			WTW.actionZones[zactionzoneind].axis.rotation.z = dGet('wtw_taxisrotationz').value;
+			WTW.actionZones[zactionzoneind].axis.rotateaxis = dGet('wtw_tactionzonerotateaxis').value;
+			WTW.actionZones[zactionzoneind].axis.rotatedegrees = dGet('wtw_tactionzonerotatedegrees').value;
+			WTW.actionZones[zactionzoneind].axis.rotatedirection = "1";
+			WTW.actionZones[zactionzoneind].attachmoldid = dGet('wtw_tattachmoldid').value;
+			WTW.actionZones[zactionzoneind].movementtype = dGet('wtw_tactionzonemovementtype').value;
+			WTW.actionZones[zactionzoneind].rotatespeed = dGet('wtw_tactionzonerotatespeed').value;
+			WTW.actionZones[zactionzoneind].movementdistance = dGet('wtw_taxisscalingz').value;
+			WTW.actionZones[zactionzoneind].parentname = zparentname;
+			WTW.actionZones[zactionzoneind].jsfunction = dGet('wtw_tactionzonejsfunction').value;
+			WTW.actionZones[zactionzoneind].jsparameters = dGet('wtw_tactionzonejsparameters').value;
+			WTW.actionZones[zactionzoneind].loadactionzoneid = zdefaultloadactionzoneid;
+			WTW.actionZones[zactionzoneind].connectinggridid = dGet("wtw_tconnectinggridid").value;
+			WTW.actionZones[zactionzoneind].connectinggridind = dGet("wtw_tconnectinggridind").value;
+			WTW.actionZones[zactionzoneind].parentname = WTW.getParentName(WTW.actionZones[zactionzoneind].connectinggridind);
+			WTW.actionZones[zactionzoneind].moldname = "actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].zactionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype;
+			WTW.addActionZone(WTW.actionZones[zactionzoneind].moldname, WTW.actionZones[zactionzoneind]);
+			WTW.showActionZone(zactionzoneind);
+			if (zactionzonetype.indexOf("seat") > -1) {	
+				dGet('wtw_tattachavatarmoldname').value = WTW.actionZones[zactionzoneind].moldname.replace("actionzone-","actionzoneaxlebase2-");
 			}
 			dGet('wtw_actionzonepartslist').innerHTML = "";
 			WTW.submitActionZoneForm(2);
-			var safetyincrement = 0;
-			var newaztimer = window.setInterval(function() {
-				safetyincrement += 1;
-				var actionzone = scene.getMeshByID(WTW.actionZones[actionzoneind].moldname);
-				if (actionzone != null || safetyincrement > 50) {
+			var zsafetyincrement = 0;
+			var znewaztimer = window.setInterval(function() {
+				zsafetyincrement += 1;
+				var zactionzone = scene.getMeshByID(WTW.actionZones[zactionzoneind].moldname);
+				if (zactionzone != null || zsafetyincrement > 50) {
 					WTW.setNewActionZone();
-					window.clearInterval(newaztimer);
-					newaztimer = null;
+					window.clearInterval(znewaztimer);
+					znewaztimer = null;
 				}
 			},100);
 		} else {
-			dGet('wtw_tactionzoneid').value = actionzoneid;
-			var actionzoneind = WTW.getActionZoneInd(actionzoneid,dGet("wtw_tconnectinggridind").value);
-			dGet('wtw_tactionzoneind').value = actionzoneind;
-			if (WTW.actionZones[actionzoneind] != null) {
-				dGet('wtw_editactionzoneformtitle').innerHTML = "Edit " + WTW.actionZones[actionzoneind].actionzonename;
-				dGet('wtw_tactionzonetype').value = WTW.actionZones[actionzoneind].actionzonetype;
-				actionzonetype = dGet('wtw_tactionzonetype').value;
-				dGet('wtw_tactionzonerotateaxis').value = WTW.actionZones[actionzoneind].axis.rotateaxis;
-				dGet('wtw_tactionzonename').value = WTW.actionZones[actionzoneind].actionzonename;
-				dGet('wtw_tactionzonerotatedegrees').value = WTW.actionZones[actionzoneind].axis.rotatedegrees;
-				if (Number(WTW.actionZones[actionzoneind].scaling.x) == 20 && Number(WTW.actionZones[actionzoneind].scaling.y) == 20 && Number(WTW.actionZones[actionzoneind].scaling.z) == 20 && Number(WTW.actionZones[actionzoneind].position.x) == Number(WTW.actionZones[actionzoneind].axis.position.x) && Number(WTW.actionZones[actionzoneind].position.y) == Number(WTW.actionZones[actionzoneind].axis.position.y) && Number(WTW.actionZones[actionzoneind].position.z) == Number(WTW.actionZones[actionzoneind].axis.position.z)) {
+			dGet('wtw_tactionzoneid').value = zactionzoneid;
+			var zactionzoneind = WTW.getActionZoneInd(zactionzoneid,dGet("wtw_tconnectinggridind").value);
+			dGet('wtw_tactionzoneind').value = zactionzoneind;
+			if (WTW.actionZones[zactionzoneind] != null) {
+				dGet('wtw_editactionzoneformtitle').innerHTML = "Edit " + WTW.actionZones[zactionzoneind].actionzonename;
+				dGet('wtw_tactionzonetype').value = WTW.actionZones[zactionzoneind].actionzonetype;
+				zactionzonetype = dGet('wtw_tactionzonetype').value;
+				dGet('wtw_tactionzonerotateaxis').value = WTW.actionZones[zactionzoneind].axis.rotateaxis;
+				dGet('wtw_tactionzonename').value = WTW.actionZones[zactionzoneind].actionzonename;
+				dGet('wtw_tactionzonerotatedegrees').value = WTW.actionZones[zactionzoneind].axis.rotatedegrees;
+				if (Number(WTW.actionZones[zactionzoneind].scaling.x) == 20 && Number(WTW.actionZones[zactionzoneind].scaling.y) == 20 && Number(WTW.actionZones[zactionzoneind].scaling.z) == 20 && Number(WTW.actionZones[zactionzoneind].position.x) == Number(WTW.actionZones[zactionzoneind].axis.position.x) && Number(WTW.actionZones[zactionzoneind].position.y) == Number(WTW.actionZones[zactionzoneind].axis.position.y) && Number(WTW.actionZones[zactionzoneind].position.z) == Number(WTW.actionZones[zactionzoneind].axis.position.z)) {
 					dGet('wtw_tcopyaxletoactionzone').checked = true;
 				} else {
 					dGet('wtw_tcopyaxletoactionzone').checked = false;
 				}
 				dGet('wtw_taxisscalingx').value = ".20";
 				dGet('wtw_taxisscalingy').value = ".20";						
-				dGet('wtw_tactionzoneshape').value = WTW.actionZones[actionzoneind].actionzoneshape;
-				dGet('wtw_tactionzonemovementtype').value = WTW.actionZones[actionzoneind].movementtype;
-				dGet('wtw_taxispositionx').value = WTW.actionZones[actionzoneind].axis.position.x;
-				dGet('wtw_taxispositiony').value = WTW.actionZones[actionzoneind].axis.position.y;
-				dGet('wtw_taxispositionz').value = WTW.actionZones[actionzoneind].axis.position.z;
-				dGet('wtw_taxisrotationx').value = WTW.actionZones[actionzoneind].axis.rotation.x;
-				dGet('wtw_taxisrotationy').value = WTW.actionZones[actionzoneind].axis.rotation.y;
-				dGet('wtw_taxisrotationz').value = WTW.actionZones[actionzoneind].axis.rotation.z;
-				dGet('wtw_tactionzoneposx').value = WTW.actionZones[actionzoneind].position.x;
-				dGet('wtw_tactionzoneposy').value = WTW.actionZones[actionzoneind].position.y;
-				dGet('wtw_tactionzoneposz').value = WTW.actionZones[actionzoneind].position.z;
-				dGet('wtw_tactionzonescalingx').value = WTW.actionZones[actionzoneind].scaling.x;
-				dGet('wtw_tactionzonescalingy').value = WTW.actionZones[actionzoneind].scaling.y;
-				dGet('wtw_tactionzonescalingz').value = WTW.actionZones[actionzoneind].scaling.z;
-				dGet('wtw_tactionzonerotx').value = WTW.actionZones[actionzoneind].rotation.x;
-				dGet('wtw_tactionzoneroty').value = WTW.actionZones[actionzoneind].rotation.y;
-				dGet('wtw_tactionzonerotz').value = WTW.actionZones[actionzoneind].rotation.z;
-				dGet('wtw_tattachmoldid').value = WTW.actionZones[actionzoneind].attachmoldid;
-				dGet('wtw_taxisscalingz').value = WTW.actionZones[actionzoneind].movementdistance;
-				dGet('wtw_tactionzonerotatespeed').value = WTW.actionZones[actionzoneind].rotatespeed;
-				dGet('wtw_tactionzonejsfunction').value = WTW.actionZones[actionzoneind].jsfunction;
-				dGet('wtw_tactionzonejsparameters').value = WTW.actionZones[actionzoneind].jsparameters;
-				if (WTW.actionZones[actionzoneind].scripts != null) {
-					WTW.loadAZFormScripts(WTW.actionZones[actionzoneind].scripts);
+				dGet('wtw_tactionzoneshape').value = WTW.actionZones[zactionzoneind].actionzoneshape;
+				dGet('wtw_tactionzonemovementtype').value = WTW.actionZones[zactionzoneind].movementtype;
+				dGet('wtw_taxispositionx').value = WTW.actionZones[zactionzoneind].axis.position.x;
+				dGet('wtw_taxispositiony').value = WTW.actionZones[zactionzoneind].axis.position.y;
+				dGet('wtw_taxispositionz').value = WTW.actionZones[zactionzoneind].axis.position.z;
+				dGet('wtw_taxisrotationx').value = WTW.actionZones[zactionzoneind].axis.rotation.x;
+				dGet('wtw_taxisrotationy').value = WTW.actionZones[zactionzoneind].axis.rotation.y;
+				dGet('wtw_taxisrotationz').value = WTW.actionZones[zactionzoneind].axis.rotation.z;
+				dGet('wtw_tactionzoneposx').value = WTW.actionZones[zactionzoneind].position.x;
+				dGet('wtw_tactionzoneposy').value = WTW.actionZones[zactionzoneind].position.y;
+				dGet('wtw_tactionzoneposz').value = WTW.actionZones[zactionzoneind].position.z;
+				dGet('wtw_tactionzonescalingx').value = WTW.actionZones[zactionzoneind].scaling.x;
+				dGet('wtw_tactionzonescalingy').value = WTW.actionZones[zactionzoneind].scaling.y;
+				dGet('wtw_tactionzonescalingz').value = WTW.actionZones[zactionzoneind].scaling.z;
+				dGet('wtw_tactionzonerotx').value = WTW.actionZones[zactionzoneind].rotation.x;
+				dGet('wtw_tactionzoneroty').value = WTW.actionZones[zactionzoneind].rotation.y;
+				dGet('wtw_tactionzonerotz').value = WTW.actionZones[zactionzoneind].rotation.z;
+				dGet('wtw_tattachmoldid').value = WTW.actionZones[zactionzoneind].attachmoldid;
+				dGet('wtw_taxisscalingz').value = WTW.actionZones[zactionzoneind].movementdistance;
+				dGet('wtw_tactionzonerotatespeed').value = WTW.actionZones[zactionzoneind].rotatespeed;
+				dGet('wtw_tactionzonejsfunction').value = WTW.actionZones[zactionzoneind].jsfunction;
+				dGet('wtw_tactionzonejsparameters').value = WTW.actionZones[zactionzoneind].jsparameters;
+				if (WTW.actionZones[zactionzoneind].scripts != null) {
+					WTW.loadAZFormScripts(WTW.actionZones[zactionzoneind].scripts);
 				}
-				WTW.getLoadActionZoneList(WTW.actionZones[actionzoneind].loadactionzoneid);
+				WTW.getLoadActionZoneList(WTW.actionZones[zactionzoneind].loadactionzoneid);
 				WTW.setActionZoneFormFields(dGet('wtw_tactionzonetype').value);
-				if (actionzonetype.indexOf("seat") > -1) {	
-					dGet('wtw_tattachavatarmoldname').value = WTW.actionZones[actionzoneind].moldname.replace("actionzone-","actionzoneaxlebase2-");
+				if (zactionzonetype.indexOf("seat") > -1) {	
+					dGet('wtw_tattachavatarmoldname').value = WTW.actionZones[zactionzoneind].moldname.replace("actionzone-","actionzoneaxlebase2-");
 				}
-				var actionzone = scene.getMeshByID(WTW.actionZones[actionzoneind].moldname);
-				if (actionzone == null) {
-					WTW.addActionZone(WTW.actionZones[actionzoneind].moldname, WTW.actionZones[actionzoneind]);
+				var zactionzone = scene.getMeshByID(WTW.actionZones[zactionzoneind].moldname);
+				if (zactionzone == null) {
+					WTW.addActionZone(WTW.actionZones[zactionzoneind].moldname, WTW.actionZones[zactionzoneind]);
 				}
-				WTW.showActionZone(actionzoneind);
-				var actionzoneaxlebase2 = scene.getMeshByID(WTW.actionZones[actionzoneind].moldname.replace("actionzone-","actionzoneaxlebase2-"));
-				var actionzoneaxle = scene.getMeshByID(WTW.actionZones[actionzoneind].moldname.replace("actionzone-","actionzoneaxle-"));
+				WTW.showActionZone(zactionzoneind);
+				var zactionzoneaxlebase2 = scene.getMeshByID(WTW.actionZones[zactionzoneind].moldname.replace("actionzone-","actionzoneaxlebase2-"));
+				var zactionzoneaxle = scene.getMeshByID(WTW.actionZones[zactionzoneind].moldname.replace("actionzone-","actionzoneaxle-"));
 				dGet('wtw_actionzonepartslist').innerHTML = "";
-				if (actionzoneaxlebase2 != null) {
-					var moldparts1 = actionzoneaxlebase2.getChildren();
-					if (moldparts1.length > 0) {
-						for (var i=0;i<moldparts1.length;i++) {
-							var moldpartname = moldparts1[i].name;
-							var shape = i;
-							if (moldpartname.indexOf("-") > -1) {
-								var namepart = moldpartname.split('-');
-								shape = namepart[5];
+				if (zactionzoneaxlebase2 != null) {
+					var zmoldparts1 = zactionzoneaxlebase2.getChildren();
+					if (zmoldparts1.length > 0) {
+						for (var i=0;i < zmoldparts1.length;i++) {
+							var zmoldpartname = zmoldparts1[i].name;
+							var zshape = i;
+							if (zmoldpartname.indexOf("-") > -1) {
+								var znamepart = zmoldpartname.split('-');
+								zshape = znamepart[5];
 							}
-							if (moldpartname.indexOf("molds") > -1) {
-								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + moldpartname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + moldpartname + "');\" onclick=\"WTW.removeActionZonePart('" + moldpartname + "')\">Action Zone Part (" + shape + ")</div>";
-							}
-						}
-					}
-				}
-				if (actionzoneaxle != null) {
-					var moldparts2 = actionzoneaxle.getChildren();
-					if (moldparts2.length > 0) {
-						for (var i=0;i<moldparts2.length;i++) {
-							var moldpartname = moldparts2[i].name;
-							var shape = i;
-							if (moldpartname.indexOf("-") > -1) {
-								var namepart = moldpartname.split('-');
-								shape = namepart[5];
-							}
-							if (moldpartname.indexOf("molds") > -1) {
-								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + moldpartname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + moldpartname + "');\" onclick=\"WTW.removeActionZonePart('" + moldpartname + "')\">Action Zone Part (" + shape + ")</div>";
+							if (zmoldpartname.indexOf("molds") > -1) {
+								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + zmoldpartname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + zmoldpartname + "');\" onclick=\"WTW.removeActionZonePart('" + zmoldpartname + "')\">Action Zone Part (" + zshape + ")</div>";
 							}
 						}
 					}
 				}
-				if (actionzonetype.indexOf("seat") > -1) {
+				if (zactionzoneaxle != null) {
+					var zmoldparts2 = zactionzoneaxle.getChildren();
+					if (zmoldparts2.length > 0) {
+						for (var i=0;i < zmoldparts2.length;i++) {
+							var zmoldpartname = zmoldparts2[i].name;
+							var zshape = i;
+							if (zmoldpartname.indexOf("-") > -1) {
+								var znamepart = zmoldpartname.split('-');
+								zshape = znamepart[5];
+							}
+							if (zmoldpartname.indexOf("molds") > -1) {
+								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + zmoldpartname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + zmoldpartname + "');\" onclick=\"WTW.removeActionZonePart('" + zmoldpartname + "')\">Action Zone Part (" + zshape + ")</div>";
+							}
+						}
+					}
+				}
+				if (zactionzonetype.indexOf("seat") > -1) {
 					for (var j=0; j < WTW.thingMolds.length; j++) {
 						if (WTW.thingMolds[j] != null) {
-							if (WTW.thingMolds[j].actionzoneid == actionzoneid) {
+							if (WTW.thingMolds[j].actionzoneid == zactionzoneid) {
 								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.thingMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.thingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.thingMolds[j].moldname + "')\">Action Zone Part (" + WTW.thingMolds[j].shape + ")</div>";
 							}
 						}
 					}
 					for (var j=0; j < WTW.buildingMolds.length; j++) {
 						if (WTW.buildingMolds[j] != null) {
-							if (WTW.buildingMolds[j].actionzoneid == actionzoneid) {
+							if (WTW.buildingMolds[j].actionzoneid == zactionzoneid) {
 								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.buildingMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.buildingMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.buildingMolds[j].moldname + "')\">Action Zone Part (" + WTW.buildingMolds[j].shape + ")</div>";
 							}
 						}
 					}
 					for (var j=0; j < WTW.communitiesMolds.length; j++) {
 						if (WTW.communitiesMolds[j] != null) {
-							if (WTW.communitiesMolds[j].actionzoneid == actionzoneid) {
+							if (WTW.communitiesMolds[j].actionzoneid == zactionzoneid) {
 								dGet('wtw_actionzonepartslist').innerHTML += "<div class='wtw-menulevel2' onmouseover=\"WTW.hilightMold('" + WTW.communitiesMolds[j].moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + WTW.communitiesMolds[j].moldname + "');\" onclick=\"WTW.removeActionZonePart('" + WTW.communitiesMolds[j].moldname + "')\">Action Zone Part (" + WTW.communitiesMolds[j].shape + ")</div>";
 							}
 						}
@@ -357,7 +356,7 @@ WTWJS.prototype.openActionZoneForm = function(actionzoneid) {
 			dGet('wtw_tactionzonename').disabled = false;
 			WTW.showInline('wtw_bdelactionzone');
 		}
-		if (actionzonetype == "loadanimations") {
+		if (zactionzonetype == "loadanimations") {
 			WTW.loadAZAnimationsList();
 			WTW.loadAZAvatarAnimations();
 		}
@@ -389,15 +388,15 @@ WTWJS.prototype.loadAZFormScripts = function(zscripts) {
 	try {
 		dGet('wtw_azjavascriptlinks').innerHTML = '';
 		var zwebid = communityid + buildingid + thingid;
-		var zmoldgroup = "buildings";
+		var zwebtype = "buildings";
 		if (communityid != "") {
-			zmoldgroup = "communities";
+			zwebtype = "communities";
 		} else if (thingid != "") {
-			zmoldgroup = "things";
+			zwebtype = "things";
 		}
 		var zscriptlinks = "";
 		for (var i=0;i<zscripts.length;i++) {
-			zscriptlinks += "<div class='wtw-menulevel2'><div onclick=\"WTW.deleteAZFormScript('" + zscripts[i].scriptid + "','" + zscripts[i].scriptpath + "');\" class=\"wtw-redbuttonright\">Delete</div><a href=\"/content/uploads/" + zmoldgroup + "/" + zwebid + "/" + zscripts[i].scriptpath + "\" target=\"_blank\" class=\"wtw-linkwrap\">" + zscripts[i].scriptpath + "</a></div><div class=\"wtw-clear\"></div>";
+			zscriptlinks += "<div class='wtw-menulevel2'><div onclick=\"WTW.deleteAZFormScript('" + zscripts[i].scriptid + "','" + zscripts[i].scriptpath + "');\" class=\"wtw-redbuttonright\">Delete</div><a href=\"/content/uploads/" + zwebtype + "/" + zwebid + "/" + zscripts[i].scriptpath + "\" target=\"_blank\" class=\"wtw-linkwrap\">" + zscripts[i].scriptpath + "</a></div><div class=\"wtw-clear\"></div>";
 		}
 		dGet('wtw_azjavascriptlinks').innerHTML = zscriptlinks;
 	} catch (ex) {
@@ -408,15 +407,15 @@ WTWJS.prototype.loadAZFormScripts = function(zscripts) {
 WTWJS.prototype.deleteAZFormScript = function(zscriptid, zscriptpath) {
 	/* remove a script from the list of scripts to be loaded with a zone */
 	try {
-		var zmoldgroup = "communities";
+		var zwebtype = "communities";
 		if (buildingid != '') {
-			zmoldgroup = "buildings";
+			zwebtype = "buildings";
 		} else if (thingid != '') {
-			zmoldgroup = "things";
+			zwebtype = "things";
 		}
 		var zrequest = {
 			'actionzoneid': dGet('wtw_tactionzoneid').value,
-			'moldgroup': zmoldgroup,
+			'webtype': zwebtype,
 			'webid': communityid + buildingid + thingid,
 			'scriptid': zscriptid,
 			'scriptpath': zscriptpath,

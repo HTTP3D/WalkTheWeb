@@ -58,7 +58,7 @@ WTWJS.prototype.setWindowSize = function() {
 			if (dGet('wtw_adminmenu') != null) {
 				dGet('wtw_adminmenu').style.height = (WTW.sizeY-33) + "px";
 				dGet('wtw_adminmenu3d').style.maxHeight = (WTW.sizeY - 34) + "px";
-				dGet('wtw_adminmenuscroll').style.height = (WTW.sizeY - 95) + "px";
+				dGet('wtw_adminmenuscroll').style.height = (WTW.sizeY - 125) + "px";
 				var zfullpages = document.getElementsByClassName('wtw-fullpage');
 				for (var i=0;i<zfullpages.length;i++) {
 					if (zfullpages[i] != null) {
@@ -93,6 +93,21 @@ WTWJS.prototype.setWindowSize = function() {
     }
 }
 
+WTWJS.prototype.checkFocus = function() {
+	/* globally checks focus for all document events */
+	var y = 0;
+	try {
+		if (WTW.adminView == 1) {
+			document.activeElement.focus();
+			if (document.activeElement.id != 'wtw_renderCanvas' && WTW.guiAdminColors != null) { 
+				WTW.closeColorSelector(true); 
+			}
+		}
+    } catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-checkFocus=" + ex.message);
+    }
+}
+
 WTWJS.prototype.getScrollY = function() {
 	/* returns the amount of scroll of a window scrollbar */
 	var y = 0;
@@ -114,130 +129,212 @@ WTWJS.prototype.getScrollY = function() {
     return y;
 }
 
-WTWJS.prototype.getMoldnameParts = function(moldname) {
+WTWJS.prototype.getMoldnameParts = function(zmoldname) {
 	/* get mold name parts - the name reeals a lot of information about the mold and this breaks down the parts that you may use from it */
-	var moldind = -1;
-	var moldid = "";
-	var cgind = -1;
-	var cgid = "";
+	var zmoldind = -1;
+	var zmoldid = "";
+	var zcgind = -1;
+	var zcgid = "";
 	var zcommunityid = "";
 	var zbuildingid = "";
 	var zthingid = "";
-	var moldgroup = "building";
-	var molds = [];
-	var namepart = [];
-	var avatarpart = "";
-	var shape = "";
-	var instanceid = "";
-	var loadactionzoneid = "";
-	var actionzoneid = "";
-	var coveringname = "";
-	var moldnamebase = "";
-	var parentname = "";
+	var zwebtype = "building";
+	var zmolds = [];
+	var znamepart = [];
+	var zavatarpart = "";
+	var zshape = "";
+	var zinstanceid = "";
+	var zloadactionzoneid = "";
+	var zactionzoneid = "";
+	var zcoveringname = "";
+	var zmoldnamebase = "";
+	var zparentname = "";
 	try {
-		if (moldname == undefined) {
-			moldname = dGet('wtw_tmoldname').value;
+		if (zmoldname == undefined) {
+			zmoldname = dGet('wtw_tmoldname').value;
 		}
-		if (moldname.indexOf("-") > -1) {
-			namepart = moldname.split('-');
-			if (namepart[0] != null) {
-				if (namepart[0].indexOf('molds') > -1) {
-					moldgroup = namepart[0].replace("molds","");
-					switch (moldgroup) {
+		if (zmoldname.indexOf("-") > -1) {
+			znamepart = zmoldname.split('-');
+			if (znamepart[0] != null) {
+				if (znamepart[0].indexOf('molds') > -1) {
+					zwebtype = znamepart[0].replace("molds","");
+					switch (zwebtype) {
 						case "community":
-							molds = WTW.communitiesMolds;
+							zmolds = WTW.communitiesMolds;
 							break;
 						case "building":
-							molds = WTW.buildingMolds;
+							zmolds = WTW.buildingMolds;
 							break;
 						case "thing":
-							molds = WTW.thingMolds;
+							zmolds = WTW.thingMolds;
 							break;
 					}
-				} else if (namepart[0].indexOf('actionzone') > -1) {
-					moldgroup = "actionzone";
-					molds = WTW.actionZones;
-				} else if (namepart[0].indexOf('connectinggrid') > -1) {
-					moldgroup = "connectinggrid";
-					molds = WTW.connectingGrids;
-				} else if (namepart[0].indexOf('myavatar') > -1 || namepart[0].indexOf('person') > -1) {
-					moldgroup = "avatars";
+				} else if (znamepart[0].indexOf('actionzone') > -1) {
+					zwebtype = "actionzone";
+					zmolds = WTW.actionZones;
+				} else if (znamepart[0].indexOf('connectinggrid') > -1) {
+					zwebtype = "connectinggrid";
+					zmolds = WTW.connectingGrids;
+				} else if (znamepart[0].indexOf('myavatar') > -1 || znamepart[0].indexOf('person') > -1) {
+					zwebtype = "avatars";
 				}
 			}
-			if (namepart[1] != null) {
-				if (namepart[0].indexOf('myavatar') > -1 || namepart[0].indexOf('person') > -1) {
-					instanceid = namepart[1];
+			if (znamepart[1] != null) {
+				if (znamepart[0].indexOf('myavatar') > -1 || znamepart[0].indexOf('person') > -1) {
+					zinstanceid = znamepart[1];
 				} else {
-					if (WTW.isNumeric(namepart[1])) {
-						moldind = Number(namepart[1]);
+					if (WTW.isNumeric(znamepart[1])) {
+						zmoldind = Number(znamepart[1]);
 					}
 				}
 			}
-			if (namepart[2] != null) {
-				if (namepart[0].indexOf('myavatar') > -1 || namepart[0].indexOf('person') > -1) {
-					avatarpart = namepart[2];
+			if (znamepart[2] != null) {
+				if (znamepart[0].indexOf('myavatar') > -1 || znamepart[0].indexOf('person') > -1) {
+					zavatarpart = znamepart[2];
 				} else {
-					moldid = namepart[2];
+					zmoldid = znamepart[2];
 				}
 			}
-			if (namepart[3] != null) {
-				if (WTW.isNumeric(namepart[3])) {
-					cgind = Number(namepart[3]);
+			if (znamepart[3] != null) {
+				if (WTW.isNumeric(znamepart[3])) {
+					zcgind = Number(znamepart[3]);
 				}
 			}
-			if (namepart[4] != null) {
-				cgid = namepart[4];
+			if (znamepart[4] != null) {
+				zcgid = znamepart[4];
 			}
-			if (namepart[5] != null) {
-				shape = namepart[5];
+			if (znamepart[5] != null) {
+				zshape = znamepart[5];
 			}
-			moldnamebase = namepart[0] + "-" + namepart[1] + "-" + namepart[2] + "-" + namepart[3] + "-";
-			if (molds[moldind] != null) {
-				if (molds[moldind].communityinfo.communityid != undefined) {
-					zcommunityid = molds[moldind].communityinfo.communityid;
+			zmoldnamebase = znamepart[0] + "-" + znamepart[1] + "-" + znamepart[2] + "-" + znamepart[3] + "-";
+			if (zmolds[zmoldind] != null) {
+				if (zmolds[zmoldind].communityinfo.communityid != undefined) {
+					zcommunityid = zmolds[zmoldind].communityinfo.communityid;
 				}
-				if (molds[moldind].buildinginfo.buildingid != undefined) {
-					zbuildingid = molds[moldind].buildinginfo.buildingid;
+				if (zmolds[zmoldind].buildinginfo.buildingid != undefined) {
+					zbuildingid = zmolds[zmoldind].buildinginfo.buildingid;
 				}
-				if (molds[moldind].thinginfo.thingid != undefined) {
-					zthingid = molds[moldind].thinginfo.thingid;
+				if (zmolds[zmoldind].thinginfo.thingid != undefined) {
+					zthingid = zmolds[zmoldind].thinginfo.thingid;
 				}
-				loadactionzoneid = molds[moldind].loadactionzoneid;
-				actionzoneid = molds[moldind].actionzoneid;
-				coveringname = molds[moldind].covering;
+				zloadactionzoneid = zmolds[zmoldind].loadactionzoneid;
+				zactionzoneid = zmolds[zmoldind].actionzoneid;
+				zcoveringname = zmolds[zmoldind].covering;
 			}
 		}
-		var mold = scene.getMeshByID(moldname);
-		if (mold != null) {
-			var parentmold = mold.parent;
-			if (parentmold != null) {
-				parentname = parentmold.name;
+		var zmold = scene.getMeshByID(zmoldname);
+		if (zmold != null) {
+			var zparentmold = zmold.parent;
+			if (zparentmold != null) {
+				zparentname = zparentmold.name;
 			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getMoldnameParts=" + ex.message);
 	}  
 	return {
-		moldname:moldname,
-		moldind:moldind,
-		moldid:moldid,
-		cgind:cgind,
-		cgid:cgid,
+		moldname:zmoldname,
+		moldind:zmoldind,
+		moldid:zmoldid,
+		cgind:zcgind,
+		cgid:zcgid,
 		communityid:zcommunityid,
 		buildingid:zbuildingid,
 		thingid:zthingid,
-		instanceid:instanceid,
-		moldgroup:moldgroup,
-		molds:molds,
-		shape:shape,
-		avatarpart:avatarpart,
-		loadactionzoneid:loadactionzoneid,
-		actionzoneid:actionzoneid,
-		coveringname:coveringname,
-		namepart:namepart,
-		moldnamebase:moldnamebase,
-		parentname:parentname
+		instanceid:zinstanceid,
+		webtype:zwebtype,
+		molds:zmolds,
+		shape:zshape,
+		avatarpart:zavatarpart,
+		loadactionzoneid:zloadactionzoneid,
+		actionzoneid:zactionzoneid,
+		coveringname:zcoveringname,
+		namepart:znamepart,
+		moldnamebase:zmoldnamebase,
+		parentname:zparentname
 	}
+}
+
+WTWJS.prototype.rgbToHex = function(zred, zgreen, zblue) {
+	/* converts red, green, blue to hex */
+	/* note uses babylon colors decimal between 0 and 1 */
+	var zhex = '';
+	try {
+		if (WTW.isNumeric(zred) && WTW.isNumeric(zgreen) && WTW.isNumeric(zblue)) {
+			if (zred <= 1 && zred >=0 && zgreen <= 1 && zgreen >=0 && zblue <= 1 && zblue >=0) {
+				let zredhex = (zred * 255).toString(16);
+				let zgreenhex = (zgreen * 255).toString(16);
+				let zbluehex = (zblue * 255).toString(16);
+				if (zredhex.length == 1) {
+					zredhex = "0" + zredhex;
+				}
+				if (zgreenhex.length == 1) {
+					zgreenhex = "0" + zgreenhex;
+				}
+				if (zbluehex.length == 1) {
+					zbluehex = "0" + zbluehex;
+				}
+				zhex = '#' + zredhex + zgreenhex + zbluehex;
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-rgbToHex=" + ex.message);
+	}
+	return zhex;
+}
+
+WTWJS.prototype.hexToRGB = function(zhex) {
+	/* converts hex to red, green, blue, and a babylon color3 */
+	/* note uses babylon colors decimal between 0 and 1 */
+	var zred = 0;
+	var zgreen = 0;
+	var zblue = 0;
+	var zcolor3 = new BABYLON.Color3(zred, zgreen, zblue);
+	try {
+		var zresult = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(zhex);
+		zred = parseInt(result[1], 16) / 255;
+		zgreen = parseInt(result[2], 16) / 255;
+		zblue = parseInt(result[3], 16) / 255;
+		zcolor3 = new BABYLON.Color3(zred, zgreen, zblue);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-hexToRGB=" + ex.message);
+	}
+	return {
+		'r':zred,
+		'g':zgreen,
+		'b':zblue,
+		'color3':zcolor3
+	};
+}
+
+WTWJS.prototype.setTextColor = function(zbgcolor, zlightcolor, zdarkcolor) {
+	/* when the color is selected, the form updates the color to the background */
+	/* this also sets the text color to an opposite color than the background (default is black or white) */
+	var zcolor = "black";
+	try {
+		if (zlightcolor == undefined) {
+			zlightcolor = "#ffffff";
+		}
+		if (zdarkcolor == undefined) {
+			zdarkcolor = "#000000";
+		}
+		var zcolorstring = (zbgcolor.charAt(0) === '#') ? zbgcolor.substring(1, 7) : zbgcolor;
+		var zred = parseInt(zcolorstring.substring(0, 2), 16); // hexToR
+		var zgreen = parseInt(zcolorstring.substring(2, 4), 16); // hexToG
+		var zblue = parseInt(zcolorstring.substring(4, 6), 16); // hexToB
+		var zuicolors = [zred / 255, zgreen / 255, zblue / 255];
+		var zcols = zuicolors.map((zcol) => {
+			if (zcol <= 0.03928) {
+				return zcol / 12.92;
+			}
+			return Math.pow((zcol + 0.055) / 1.055, 2.4);
+		});
+		var zcompare = (0.2126 * zcols[0]) + (0.7152 * zcols[1]) + (0.0722 * zcols[2]);
+		zcolor = (zcompare > 0.179) ? zdarkcolor : zlightcolor;
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-setTextColor=" + ex.message);
+	}
+	return zcolor;
 }
 
 
@@ -956,11 +1053,11 @@ WTWJS.prototype.clearDDL = function(ddlname) {
     }
 }
 
-WTWJS.prototype.changeNumberValue = function(item, dn, refresh) {
+WTWJS.prototype.changeNumberValue = function(item, dn, zrefresh) {
 	/* when a number is changed in the forms, this automates the number counting as the button is held down */
 	try {
-		if (refresh == undefined) {
-			refresh = 0;
+		if (zrefresh == undefined) {
+			zrefresh = 0;
 		}
 		WTW.changeStop();
 		var vali = dGet(item).value;
@@ -980,7 +1077,7 @@ WTWJS.prototype.changeNumberValue = function(item, dn, refresh) {
 				} else if (item.indexOf("tconngrid") > -1) {
 					WTW.setNewConnectingGrid();
 				} else {
-					WTW.setNewMold(refresh);
+					WTW.setNewMold(zrefresh);
 				}
 			} else {
 				dGet(item).value = (nvali.toFixed(0));
@@ -1004,7 +1101,7 @@ WTWJS.prototype.changeNumberValue = function(item, dn, refresh) {
 					} else if (item.indexOf("tconngrid") > -1) {
 						WTW.setNewConnectingGrid();
 					} else {
-						WTW.setNewMold(refresh);
+						WTW.setNewMold(zrefresh);
 					}
 				} else {
 					dGet(item).value = (nval.toFixed(0));
@@ -2068,32 +2165,32 @@ WTWJS.prototype.isInArray = function(zarray, ztext) {
 	return zinarray;
 }
 
-WTWJS.prototype.isItemInArray = function(sarray, checkid, connectinggridind, altconnectinggridind, moldgroup) {
+WTWJS.prototype.isItemInArray = function(zarray, zcheckid, zconnectinggridind, zaltconnectinggridind, zarraytype) {
 	/* boolean - check if an id is in a given array, with consideration to being the same connecting grid and mold group */
 	/* each different connecting grid means a new instance of an object - so the id can be in the array more than once from different connecting grids (instances) in the same 3D Scene */
 	/* Example, 4 of the same chairs around a table, each chair has the same design (id) but different instances with position, scaling, and rotation */
-	var found = false;
+	var zfound = false;
 	try {
-		if (sarray != null && checkid != "") {
-			for (var i = 0; i < sarray.length; i++) {
-				if (sarray[i] != null) {
-					if (sarray[i] != undefined) {
-						if (moldgroup.indexOf("molds") > -1) {
-							if (sarray[i].moldid != undefined) {
-								if (sarray[i].moldid != undefined) {
-									if (sarray[i].moldid == checkid && Number(sarray[i].connectinggridind) == Number(connectinggridind) && Number(sarray[i].altconnectinggridind) == Number(altconnectinggridind)) {
-										found = true;
-										i = sarray.length;
+		if (zarray != null && zcheckid != "") {
+			for (var i = 0; i < zarray.length; i++) {
+				if (zarray[i] != null) {
+					if (zarray[i] != undefined) {
+						if (zarraytype.indexOf("molds") > -1) {
+							if (zarray[i].moldid != undefined) {
+								if (zarray[i].moldid != undefined) {
+									if (zarray[i].moldid == zcheckid && Number(zarray[i].connectinggridind) == Number(zconnectinggridind) && Number(zarray[i].altconnectinggridind) == Number(zaltconnectinggridind)) {
+										zfound = true;
+										i = zarray.length;
 									}
 								}
 							}
 						}
-						if (moldgroup == "actionzones") {
-							if (sarray[i].actionzoneid != undefined) {
-								if (sarray[i].actionzoneid != undefined) {
-									if (sarray[i].actionzoneid == checkid && Number(sarray[i].connectinggridind) == Number(connectinggridind)) {
-										found = true;
-										i = sarray.length;
+						if (zarraytype == "actionzones") {
+							if (zarray[i].actionzoneid != undefined) {
+								if (zarray[i].actionzoneid != undefined) {
+									if (zarray[i].actionzoneid == zcheckid && Number(zarray[i].connectinggridind) == Number(zconnectinggridind)) {
+										zfound = true;
+										i = zarray.length;
 									}
 								}
 							}
@@ -2105,18 +2202,18 @@ WTWJS.prototype.isItemInArray = function(sarray, checkid, connectinggridind, alt
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-isItemInArray=" + ex.message);
 	}
-	return found;
+	return zfound;
 }
 
-WTWJS.prototype.isStepInAutomations = function(automationstepid, connectinggridind) {
+WTWJS.prototype.isStepInAutomations = function(zautomationstepid, zconnectinggridind) {
 	/* check for an existing step in an automation (example: check for next step) */
-	var found = false;
+	var zfound = false;
 	try {
-		if (WTW.automations != null && automationstepid != "") {
+		if (WTW.automations != null && zautomationstepid != "") {
 			for (var i = 0; i < WTW.automations.length; i++) {
 				if (WTW.automations[i] != null) {
-					if (WTW.automations[i].step.automationstepid == automationstepid && WTW.automations[i].connectinggridind == connectinggridind) {
-						found = true;
+					if (WTW.automations[i].step.automationstepid == zautomationstepid && WTW.automations[i].connectinggridind == zconnectinggridind) {
+						zfound = true;
 					}
 				}
 			}
@@ -2124,18 +2221,18 @@ WTWJS.prototype.isStepInAutomations = function(automationstepid, connectinggridi
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-isStepInAutomations=" + ex.message);
 	}
-	return found;
+	return zfound;
 }
 
-WTWJS.prototype.isUploadReady = function(uploadid) {
+WTWJS.prototype.isUploadReady = function(zuploadid) {
 	/* has the uploaded item been loaded or is it still in process */
-	var ready = false;
+	var zready = false;
 	try {
-		if (wtw_uploads != null && uploadid != "") {
+		if (wtw_uploads != null && zuploadid != "") {
 			for (var i = 0; i < wtw_uploads.length; i++) {
 				if (wtw_uploads[i] != null) {
-					if (wtw_uploads[i].uploadid == uploadid && wtw_uploads[i].queue == '0') {
-						ready = true;
+					if (wtw_uploads[i].uploadid == zuploadid && wtw_uploads[i].queue == '0') {
+						zready = true;
 						i = wtw_uploads.length;
 					}
 				}
@@ -2144,18 +2241,18 @@ WTWJS.prototype.isUploadReady = function(uploadid) {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-isUploadReady=" + ex.message);
 	}
-	return ready;
+	return zready;
 }
 
-WTWJS.prototype.isUploadAdded = function(uploadid) {
+WTWJS.prototype.isUploadAdded = function(zuploadid) {
 	/* add an upload object to the upload array */
-	var found = false;
+	var zfound = false;
 	try {
-		if (wtw_uploads != null && uploadid != "") {
+		if (wtw_uploads != null && zuploadid != "") {
 			for (var i = 0; i < wtw_uploads.length; i++) {
 				if (wtw_uploads[i] != null) {
-					if (wtw_uploads[i].uploadid == uploadid) { 
-						found = true;
+					if (wtw_uploads[i].uploadid == zuploadid) { 
+						zfound = true;
 						i = wtw_uploads.length;
 					}
 				}
@@ -2164,18 +2261,18 @@ WTWJS.prototype.isUploadAdded = function(uploadid) {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-isUploadAdded=" + ex.message);
 	}
-	return found;
+	return zfound;
 }
 
-WTWJS.prototype.isUploadInQueue = function(uploadid) {
+WTWJS.prototype.isUploadInQueue = function(zuploadid) {
 	/* see if uplaod is queued to be loaded */
-	var found = false;
+	var zfound = false;
 	try {
-		if (wtw_uploads != null && uploadid != "") {
+		if (wtw_uploads != null && zuploadid != "") {
 			for (var i = 0; i < wtw_uploads.length; i++) {
 				if (wtw_uploads[i] != null) {
-					if (wtw_uploads[i].uploadid == uploadid && wtw_uploads[i].queue == "1") { 
-						found = true;
+					if (wtw_uploads[i].uploadid == zuploadid && wtw_uploads[i].queue == "1") { 
+						zfound = true;
 						i = wtw_uploads.length;
 					}
 				}
@@ -2184,20 +2281,20 @@ WTWJS.prototype.isUploadInQueue = function(uploadid) {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-isUploadInQueue=" + ex.message);
 	}
-	return found;
+	return zfound;
 }
 
 /* find and return index */
-WTWJS.prototype.indexInArray = function(array, stext) {
-	/* integer - return the Array index value where stext is found in the array */
-	var indexinarray = -1;
+WTWJS.prototype.indexInArray = function(zarray, ztext) {
+	/* integer - return the Array index value where ztext is found in the zarray */
+	var zindexinarray = -1;
 	try {
-		if (array != null) {
-			if (array.length > 0) {
-				for (var i=0;i<array.length;i++) {
-					if (array[i] != null) {
-						if (array[i] == stext) {
-							indexinarray = i;
+		if (zarray != null) {
+			if (zarray.length > 0) {
+				for (var i=0;i<zarray.length;i++) {
+					if (zarray[i] != null) {
+						if (zarray[i] == ztext) {
+							zindexinarray = i;
 						}
 					}
 				}
@@ -2206,43 +2303,43 @@ WTWJS.prototype.indexInArray = function(array, stext) {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-indexInArray=" + ex.message);
 	}
-	return indexinarray;
+	return zindexinarray;
 }
 
-WTWJS.prototype.getNextCount = function(listarray) {
+WTWJS.prototype.getNextCount = function(zlistarray) {
 	/* get next available index for an array */
 	/* values were set to null instead of splice to preserve instance (index) for other items */
 	/* null values found are next available or new index is added if needed */
-	var nextcount = -1;
+	var znextcount = -1;
 	try {
-		if (listarray != null) {
-			for (var i = 0; i < listarray.length; i++) {
-				if (listarray[i] == null && nextcount == -1) {
-					nextcount = i;
+		if (zlistarray != null) {
+			for (var i = 0; i < zlistarray.length; i++) {
+				if (zlistarray[i] == null && znextcount == -1) {
+					znextcount = i;
 				}
 			}
-			if (nextcount == -1) {
-				nextcount = listarray.length;
+			if (znextcount == -1) {
+				znextcount = zlistarray.length;
 			}
 		} else {
-			nextcount = 0;
+			znextcount = 0;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getNextCount=" + ex.message);
 	}
-	return nextcount;
+	return znextcount;
 }
 
-WTWJS.prototype.getMoldInd = function(molds, moldid, connectinggridind) {
+WTWJS.prototype.getMoldInd = function(zmolds, zmoldid, zconnectinggridind) {
 	/* get Mold Index from an array of molds using the moldID (gets definition) and Connecting Grid (gets instance) */
-	var moldind = -1;
+	var zmoldind = -1;
 	try {
-		if (molds != null && moldid != "") {
-			for (var i = 0; i < molds.length; i++) {
-				if (molds[i] != null) {
-					if (molds[i].moldid == moldid && connectinggridind == molds[i].connectinggridind) {
-						moldind = i;
-						i = molds.length;
+		if (zmolds != null && zmoldid != "") {
+			for (var i = 0; i < zmolds.length; i++) {
+				if (zmolds[i] != null) {
+					if (zmolds[i].moldid == zmoldid && zconnectinggridind == zmolds[i].connectinggridind) {
+						zmoldind = i;
+						i = zmolds.length;
 					}
 				}
 			}
@@ -2250,19 +2347,19 @@ WTWJS.prototype.getMoldInd = function(molds, moldid, connectinggridind) {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getMoldInd=" + ex.message);
 	}
-	return moldind;
+	return zmoldind;
 }
 
-WTWJS.prototype.getAltMoldInd = function(molds, moldid, altconnectinggridind) {
+WTWJS.prototype.getAltMoldInd = function(zmolds, zmoldid, zaltconnectinggridind) {
 	/* get Mold Index from an array of molds using the moldID (gets definition) and Alternate Connecting Grid (gets instance) */
-	var moldind = -1;
+	var zmoldind = -1;
 	try {
-		if (molds != null && moldid != "") {
-			for (var i = 0; i < molds.length; i++) {
-				if (molds[i] != null) {
-					if (molds[i].moldid == moldid && altconnectinggridind == molds[i].altconnectinggridind) {
-						moldind = i;
-						i = molds.length;
+		if (zmolds != null && zmoldid != "") {
+			for (var i = 0; i < zmolds.length; i++) {
+				if (zmolds[i] != null) {
+					if (zmolds[i].moldid == zmoldid && zaltconnectinggridind == zmolds[i].altconnectinggridind) {
+						zmoldind = i;
+						i = zmolds.length;
 					}
 				}
 			}
@@ -2270,18 +2367,18 @@ WTWJS.prototype.getAltMoldInd = function(molds, moldid, altconnectinggridind) {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getAltMoldInd=" + ex.message);
 	}
-	return moldind;
+	return zmoldind;
 }
 
-WTWJS.prototype.getUploadInd = function(uploadid) {
+WTWJS.prototype.getUploadInd = function(zuploadid) {
 	/* get upload index for an upload definition */
-	var uploadind = -1;
+	var zuploadind = -1;
 	try {
-		if (wtw_uploads != null && uploadid != "") {
+		if (wtw_uploads != null && zuploadid != "") {
 			for (var i = 0; i < wtw_uploads.length; i++) {
 				if (wtw_uploads[i] != null) {
-					if (wtw_uploads[i].uploadid == uploadid) {
-						uploadind = i;
+					if (wtw_uploads[i].uploadid == zuploadid) {
+						zuploadind = i;
 						i = wtw_uploads.length;
 					}
 				}
@@ -2290,7 +2387,7 @@ WTWJS.prototype.getUploadInd = function(uploadid) {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getUploadInd=" + ex.message);
 	}
-	return uploadind;
+	return zuploadind;
 }
 
 WTWJS.prototype.getThingInd = function(zthingid) {

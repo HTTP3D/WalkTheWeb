@@ -7,53 +7,53 @@
 /* mold functions are used by 3D Communities, 3D Buildings, and 3D Things */
 /* molds are definition files that create meshes on demand */
 
-WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious) {
+WTWJS.prototype.openMoldForm = function(zmoldind, zshape, zwebtype, zsaveprevious) {
 	/* open mold form to create new or edit existing mold */
 	try { 
-		var molds;
-		if (typeof saveprevious === "undefined") {  
-			saveprevious = true;
+		var zmolds;
+		if (typeof zsaveprevious === "undefined") {  
+			zsaveprevious = true;
 		}
-		switch (moldgroup) {
+		switch (zwebtype) {
 			case "community":
-				molds = WTW.communitiesMolds;
+				zmolds = WTW.communitiesMolds;
 				break;
 			case "thing":
-				molds = WTW.thingMolds;
+				zmolds = WTW.thingMolds;
 				break;
 			default:
-				molds = WTW.buildingMolds;
+				zmolds = WTW.buildingMolds;
 				break;
 		}
-		var testmoldid = "";
-		if (molds[moldind] != null) {
-			testmoldid = molds[moldind].moldid;
+		var ztestmoldid = "";
+		if (zmolds[zmoldind] != null) {
+			ztestmoldid = zmolds[zmoldind].moldid;
 		}
-		if (dGet('wtw_tmoldid').value != "" && dGet('wtw_tmoldid').value != testmoldid && saveprevious != false) {
+		if (dGet('wtw_tmoldid').value != "" && dGet('wtw_tmoldid').value != ztestmoldid && zsaveprevious != false) {
 			WTW.submitMoldForm(1);
 		}
 		WTW.getMoldList();
 		WTW.getWebMoldList();
-		if (shape == "") {
-			shape = "box";
+		if (zshape == "") {
+			zshape = "box";
 		}
-		WTW.getCoveringList(shape);
+		WTW.getCoveringList(zshape);
 		WTW.hideAdminMenu();
 		WTW.show('wtw_adminmenu11');
 		WTW.show('wtw_adminmenu11b');
 		if (dGet('wtw_adminmenubutton').style.left == "0px") {
 			WTW.toggleAdminMenu('wtw_adminmenubutton');
 		}
-		WTW.setMoldFormFields(shape);
-		dGet('wtw_tmoldshape').value = shape;
-		dGet('wtw_tmoldmoldgroup').value = moldgroup;
-		if (molds[moldind] != null) {
+		WTW.setMoldFormFields(zshape);
+		dGet('wtw_tmoldshape').value = zshape;
+		dGet('wtw_tmoldwebtype').value = zwebtype;
+		if (zmolds[zmoldind] != null) {
 			try {
-				WTW.moldBackup = JSON.parse(JSON.stringify(molds[moldind]));
+				WTW.moldBackup = JSON.parse(JSON.stringify(zmolds[zmoldind]));
 			} catch(ex) {}
 			
-			WTW.loadMoldForm(molds[moldind]);
-			switch (moldgroup) {
+			WTW.loadMoldForm(zmolds[zmoldind]);
+			switch (zwebtype) {
 				case "community":
 					dGet('wtw_tcommunityind').value = 0;
 					break;
@@ -66,64 +66,69 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 				default:
 					break;
 			}
-			WTW.setCoveringFormFields(molds[moldind].covering);
-			dGet('wtw_tmolduploadobjectid').value = molds[moldind].object.uploadobjectid;
-			dGet('wtw_tmoldobjectfolder').value = molds[moldind].object.folder;
-			dGet('wtw_tmoldobjectfile').value = molds[moldind].object.file;
-			if (molds[moldind].graphics != null) {
-				if (molds[moldind].graphics.receiveshadows == '1') {
+			WTW.setCoveringFormFields(zmolds[zmoldind].covering);
+			dGet('wtw_tmolduploadobjectid').value = zmolds[zmoldind].object.uploadobjectid;
+			dGet('wtw_tmoldobjectfolder').value = zmolds[zmoldind].object.folder;
+			dGet('wtw_tmoldobjectfile').value = zmolds[zmoldind].object.file;
+			if (zmolds[zmoldind].graphics != null) {
+				if (zmolds[zmoldind].graphics.receiveshadows == '1') {
 					dGet('wtw_tmoldreceiveshadows').checked = true;
 				} else {
 					dGet('wtw_tmoldreceiveshadows').checked = false;
 				}
-				if (molds[moldind].graphics.level == '1') {
+				if (zmolds[zmoldind].graphics.level == '1') {
 					dGet('wtw_tmoldgraphiclevel').checked = true;
 				} else {
 					dGet('wtw_tmoldgraphiclevel').checked = false;
 				}
 			}
-			dGet('wtw_tmoldvideoid').value = molds[moldind].graphics.texture.videoid;
-			dGet('wtw_tmoldvideopath').value = molds[moldind].graphics.texture.video;
-			dGet('wtw_tmoldvideoposterid').value = molds[moldind].graphics.texture.videoposterid;
-			dGet('wtw_tmoldvideoposterpath').value = molds[moldind].graphics.texture.videoposter;
-			dGet('wtw_tmoldheightmapid').value = molds[moldind].graphics.heightmap.id;
-			dGet('wtw_tmoldheightmappath').value = molds[moldind].graphics.heightmap.path;
-			dGet('wtw_tmoldmixmapid').value = molds[moldind].graphics.heightmap.mixmapid;
-			dGet('wtw_tmoldmixmappath').value = molds[moldind].graphics.heightmap.mixmappath;
-			dGet('wtw_tmoldtexturerid').value = molds[moldind].graphics.heightmap.texturerid;
-			dGet('wtw_tmoldtexturerpath').value = molds[moldind].graphics.heightmap.texturerpath;
-			dGet('wtw_tmoldtexturegid').value = molds[moldind].graphics.heightmap.texturegid;
-			dGet('wtw_tmoldtexturegpath').value = molds[moldind].graphics.heightmap.texturegpath;
-			dGet('wtw_tmoldtexturebid').value = molds[moldind].graphics.heightmap.texturebid;
-			dGet('wtw_tmoldtexturebpath').value = molds[moldind].graphics.heightmap.texturebpath;
-			dGet('wtw_tmoldtexturebumprid').value = molds[moldind].graphics.heightmap.texturebumprid;
-			dGet('wtw_tmoldtexturebumprpath').value = molds[moldind].graphics.heightmap.texturebumprpath;
-			dGet('wtw_tmoldtexturebumpgid').value = molds[moldind].graphics.heightmap.texturebumpgid;
-			dGet('wtw_tmoldtexturebumpgpath').value = molds[moldind].graphics.heightmap.texturebumpgpath;
-			dGet('wtw_tmoldtexturebumpbid').value = molds[moldind].graphics.heightmap.texturebumpbid;
-			dGet('wtw_tmoldtexturebumpbpath').value = molds[moldind].graphics.heightmap.texturebumpbpath;
-			dGet('wtw_tmoldsoundid').value = molds[moldind].sound.id;
-			dGet('wtw_tmoldsoundpath').value = molds[moldind].sound.path;
-			dGet('wtw_tmoldsoundname').value = molds[moldind].sound.name;
-			dGet('wtw_soundicon').alt = molds[moldind].sound.name;
-			dGet('wtw_soundicon').title = molds[moldind].sound.name;
-			dGet('wtw_selectedsound').innerHTML = molds[moldind].sound.name;
-			WTW.setDDLValue("wtw_tmoldsoundattenuation", molds[moldind].sound.attenuation);
+			dGet('wtw_tmolddiffusecolor').value = zmolds[zmoldind].color.diffusecolor;
+			dGet('wtw_tmoldemissivecolor').value = zmolds[zmoldind].color.emissivecolor;
+			dGet('wtw_tmoldspecularcolor').value = zmolds[zmoldind].color.specularcolor;
+			dGet('wtw_tmoldambientcolor').value = zmolds[zmoldind].color.ambientcolor;
+			
+			dGet('wtw_tmoldvideoid').value = zmolds[zmoldind].graphics.texture.videoid;
+			dGet('wtw_tmoldvideopath').value = zmolds[zmoldind].graphics.texture.video;
+			dGet('wtw_tmoldvideoposterid').value = zmolds[zmoldind].graphics.texture.videoposterid;
+			dGet('wtw_tmoldvideoposterpath').value = zmolds[zmoldind].graphics.texture.videoposter;
+			dGet('wtw_tmoldheightmapid').value = zmolds[zmoldind].graphics.heightmap.id;
+			dGet('wtw_tmoldheightmappath').value = zmolds[zmoldind].graphics.heightmap.path;
+			dGet('wtw_tmoldmixmapid').value = zmolds[zmoldind].graphics.heightmap.mixmapid;
+			dGet('wtw_tmoldmixmappath').value = zmolds[zmoldind].graphics.heightmap.mixmappath;
+			dGet('wtw_tmoldtexturerid').value = zmolds[zmoldind].graphics.heightmap.texturerid;
+			dGet('wtw_tmoldtexturerpath').value = zmolds[zmoldind].graphics.heightmap.texturerpath;
+			dGet('wtw_tmoldtexturegid').value = zmolds[zmoldind].graphics.heightmap.texturegid;
+			dGet('wtw_tmoldtexturegpath').value = zmolds[zmoldind].graphics.heightmap.texturegpath;
+			dGet('wtw_tmoldtexturebid').value = zmolds[zmoldind].graphics.heightmap.texturebid;
+			dGet('wtw_tmoldtexturebpath').value = zmolds[zmoldind].graphics.heightmap.texturebpath;
+			dGet('wtw_tmoldtexturebumprid').value = zmolds[zmoldind].graphics.heightmap.texturebumprid;
+			dGet('wtw_tmoldtexturebumprpath').value = zmolds[zmoldind].graphics.heightmap.texturebumprpath;
+			dGet('wtw_tmoldtexturebumpgid').value = zmolds[zmoldind].graphics.heightmap.texturebumpgid;
+			dGet('wtw_tmoldtexturebumpgpath').value = zmolds[zmoldind].graphics.heightmap.texturebumpgpath;
+			dGet('wtw_tmoldtexturebumpbid').value = zmolds[zmoldind].graphics.heightmap.texturebumpbid;
+			dGet('wtw_tmoldtexturebumpbpath').value = zmolds[zmoldind].graphics.heightmap.texturebumpbpath;
+			dGet('wtw_tmoldsoundid').value = zmolds[zmoldind].sound.id;
+			dGet('wtw_tmoldsoundpath').value = zmolds[zmoldind].sound.path;
+			dGet('wtw_tmoldsoundname').value = zmolds[zmoldind].sound.name;
+			dGet('wtw_soundicon').alt = zmolds[zmoldind].sound.name;
+			dGet('wtw_soundicon').title = zmolds[zmoldind].sound.name;
+			dGet('wtw_selectedsound').innerHTML = zmolds[zmoldind].sound.name;
+			WTW.setDDLValue("wtw_tmoldsoundattenuation", zmolds[zmoldind].sound.attenuation);
 			WTW.setSoundFields();
-			if (molds[moldind].sound.loop == '1') {
+			if (zmolds[zmoldind].sound.loop == '1') {
 				dGet('wtw_tmoldsoundloop').checked = true;
 				dGet('wtw_tmoldvideoloop').checked = true;
 			} else {
 				dGet('wtw_tmoldsoundloop').checked = false;
 				dGet('wtw_tmoldvideoloop').checked = false;
 			}
-			dGet('wtw_tmoldvideomaxdistance').value = molds[moldind].sound.maxdistance;
-			dGet('wtw_tmoldsoundmaxdistance').value = molds[moldind].sound.maxdistance;
-			dGet('wtw_tmoldsoundrollofffactor').value = molds[moldind].sound.rollofffactor;
-			dGet('wtw_tmoldsoundrefdistance').value = molds[moldind].sound.refdistance;
-			dGet('wtw_tmoldsoundconeinnerangle').value = molds[moldind].sound.coneinnerangle;
-			dGet('wtw_tmoldsoundconeouterangle').value = molds[moldind].sound.coneouterangle;
-			dGet('wtw_tmoldsoundconeoutergain').value = molds[moldind].sound.coneoutergain;
+			dGet('wtw_tmoldvideomaxdistance').value = zmolds[zmoldind].sound.maxdistance;
+			dGet('wtw_tmoldsoundmaxdistance').value = zmolds[zmoldind].sound.maxdistance;
+			dGet('wtw_tmoldsoundrollofffactor').value = zmolds[zmoldind].sound.rollofffactor;
+			dGet('wtw_tmoldsoundrefdistance').value = zmolds[zmoldind].sound.refdistance;
+			dGet('wtw_tmoldsoundconeinnerangle').value = zmolds[zmoldind].sound.coneinnerangle;
+			dGet('wtw_tmoldsoundconeouterangle').value = zmolds[zmoldind].sound.coneouterangle;
+			dGet('wtw_tmoldsoundconeoutergain').value = zmolds[zmoldind].sound.coneoutergain;
 			WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 			WTW.setPreviewImage('wtw_moldtexturebumppreview', 'wtw_tmoldtexturebumppath', 'wtw_tmoldtexturebumpid');
 			WTW.setPreviewImage('wtw_moldheightmappreview', 'wtw_tmoldheightmappath', 'wtw_tmoldheightmapid');
@@ -134,93 +139,93 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 			WTW.setPreviewImage('wtw_moldtexturebumprpreview', 'wtw_tmoldtexturebumprpath', 'wtw_tmoldtexturebumprid');
 			WTW.setPreviewImage('wtw_moldtexturebumpgpreview', 'wtw_tmoldtexturebumpgpath', 'wtw_tmoldtexturebumpgid');
 			WTW.setPreviewImage('wtw_moldtexturebumpbpreview', 'wtw_tmoldtexturebumpbpath', 'wtw_tmoldtexturebumpbid');
-			if (shape == "3dtext") {
-				dGet('wtw_tmoldwebtext').value = molds[moldind].webtext.webtext;
-				dGet('wtw_tmoldwebstyle').value = molds[moldind].webtext.webstyle;
-				var webstyle = dGet('wtw_tmoldwebstyle').value;
-				var webtextalign = 'center';
-				var webtextheight = 6;
-				var webtextthick = 1;
-				var webtextcolor = '#ff0000';
-				var webtextdiffuse = '#f0f0f0';
-				var webtextspecular = '#000000';
-				var webtextambient = '#808080';
-				if (webstyle.indexOf(',') > -1) {
-					while (webstyle.indexOf('"') > -1) {
-						webstyle = webstyle.replace('"','');
+			if (zshape == "3dtext") {
+				dGet('wtw_tmoldwebtext').value = zmolds[zmoldind].webtext.webtext;
+				dGet('wtw_tmoldwebstyle').value = zmolds[zmoldind].webtext.webstyle;
+				var zwebstyle = dGet('wtw_tmoldwebstyle').value;
+				var zwebtextalign = 'center';
+				var zwebtextheight = 6;
+				var zwebtextthick = 1;
+				var zwebtextcolor = '#ff0000';
+				var zwebtextdiffuse = '#f0f0f0';
+				var zwebtextspecular = '#000000';
+				var zwebtextambient = '#808080';
+				if (zwebstyle.indexOf(',') > -1) {
+					while (zwebstyle.indexOf('"') > -1) {
+						zwebstyle = zwebstyle.replace('"','');
 					}
-					while (webstyle.indexOf('}') > -1) {
-						webstyle = webstyle.replace('}','');
+					while (zwebstyle.indexOf('}') > -1) {
+						zwebstyle = zwebstyle.replace('}','');
 					}
-					while (webstyle.indexOf('{') > -1) {
-						webstyle = webstyle.replace('{','');
+					while (zwebstyle.indexOf('{') > -1) {
+						zwebstyle = zwebstyle.replace('{','');
 					}
-					webstyle = webstyle.replace('colors:diffuse','diffuse');
-					var styles = webstyle.split(',');
-					for (var i=0;i<styles.length;i++) {
-						if (styles[i].indexOf(':') > -1) {
-							style = styles[i].split(':');
+					zwebstyle = zwebstyle.replace('colors:diffuse','diffuse');
+					var zstyles = zwebstyle.split(',');
+					for (var i=0;i<zstyles.length;i++) {
+						if (zstyles[i].indexOf(':') > -1) {
+							style = zstyles[i].split(':');
 							switch (style[0]) {
 								case 'anchor':
-									webtextalign = style[1];
+									zwebtextalign = style[1];
 									break;
 								case 'letter-height':
-									webtextheight = Number(style[1]).toFixed(2);
+									zwebtextheight = Number(style[1]).toFixed(2);
 									break;
 								case 'letter-thickness':
-									webtextthick = Number(style[1]).toFixed(2);
+									zwebtextthick = Number(style[1]).toFixed(2);
 									break;
 								case 'color':
-									webtextcolor = style[1];
+									zwebtextcolor = style[1];
 									break;
 								case 'diffuse':
-									webtextdiffuse = style[1];
+									zwebtextdiffuse = style[1];
 									break;
 								case 'specular':
-									webtextspecular = style[1];
+									zwebtextspecular = style[1];
 									break;
 								case 'ambient':
-									webtextambient = style[1];
+									zwebtextambient = style[1];
 									break;
 							}
 						}
 					}
 				}
-				WTW.setDDLValue("wtw_tmoldwebtextalign", webtextalign);
-				dGet('wtw_tmoldwebtextheight').value = webtextheight;
-				dGet('wtw_tmoldwebtextthick').value = webtextthick;
-				dGet('wtw_tmoldwebtextcolor').value = webtextcolor;
-				dGet('wtw_tmoldwebtextdiffuse').value = webtextdiffuse;
-				dGet('wtw_tmoldwebtextspecular').value = webtextspecular;
-				dGet('wtw_tmoldwebtextambient').value = webtextambient;
+				WTW.setDDLValue("wtw_tmoldwebtextalign", zwebtextalign);
+				dGet('wtw_tmoldwebtextheight').value = zwebtextheight;
+				dGet('wtw_tmoldwebtextthick').value = zwebtextthick;
+				dGet('wtw_tmoldwebtextcolor').value = zwebtextcolor;
+				dGet('wtw_tmoldwebtextdiffuse').value = zwebtextdiffuse;
+				dGet('wtw_tmoldwebtextspecular').value = zwebtextspecular;
+				dGet('wtw_tmoldwebtextambient').value = zwebtextambient;
 			}
 			dGet('wtw_tmoldimageind').value = "-1";
-			if (shape == "image" && molds[moldind].graphics.webimages[0] != undefined) {
+			if (zshape == "image" && zmolds[zmoldind].graphics.webimages[0] != undefined) {
 				dGet('wtw_tmoldimageind').value = "0";
-				var imageid = "t1qlqxd6pzubzzzy";
-				var imagehoverid = "t1qlqxd6pzubzzzy";
-				var imageclickid = "t1qlqxd6pzubzzzy";
-				if (molds[moldind].graphics.webimages[0].imageid != "") {
-					imageid = molds[moldind].graphics.webimages[0].imageid;
+				var zimageid = "t1qlqxd6pzubzzzy";
+				var zimagehoverid = "t1qlqxd6pzubzzzy";
+				var zimageclickid = "t1qlqxd6pzubzzzy";
+				if (zmolds[zmoldind].graphics.webimages[0].imageid != "") {
+					zimageid = zmolds[zmoldind].graphics.webimages[0].imageid;
 				}
-				if (molds[moldind].graphics.webimages[0].imagehoverid != "") {
-					imagehoverid = molds[moldind].graphics.webimages[0].imagehoverid;
+				if (zmolds[zmoldind].graphics.webimages[0].imagehoverid != "") {
+					zimagehoverid = zmolds[zmoldind].graphics.webimages[0].imagehoverid;
 				}
-				if (molds[moldind].graphics.webimages[0].imageclickid != "") {
-					imageclickid = molds[moldind].graphics.webimages[0].imageclickid;
+				if (zmolds[zmoldind].graphics.webimages[0].imageclickid != "") {
+					zimageclickid = zmolds[zmoldind].graphics.webimages[0].imageclickid;
 				}
-				dGet('wtw_tmoldimagejsfunction').value = molds[moldind].graphics.webimages[0].jsfunction;
-				dGet('wtw_tmoldimagejsparameters').value = molds[moldind].graphics.webimages[0].jsparameters;
-				dGet('wtw_tmoldaddimageid').value = imageid;
-				dGet('wtw_tmoldaddimagehoverid').value = imagehoverid;				
-				dGet('wtw_tmoldaddimageclickid').value = imageclickid;	
+				dGet('wtw_tmoldimagejsfunction').value = zmolds[zmoldind].graphics.webimages[0].jsfunction;
+				dGet('wtw_tmoldimagejsparameters').value = zmolds[zmoldind].graphics.webimages[0].jsparameters;
+				dGet('wtw_tmoldaddimageid').value = zimageid;
+				dGet('wtw_tmoldaddimagehoverid').value = zimagehoverid;				
+				dGet('wtw_tmoldaddimageclickid').value = zimageclickid;	
 				if (dGet('wtw_tmoldaddimageid').value != "") {
 					WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldaddimageid').value, 
 						function(response) {
 							WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldaddimageid').value,0);
-							var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldaddimageid').value);
-							imageinfo.image.onload = function() {	
-								dGet('wtw_moldaddimagepreview').src = imageinfo.filedata;
+							var zimageinfo = WTW.getUploadFileData(dGet('wtw_tmoldaddimageid').value);
+							zimageinfo.image.onload = function() {	
+								dGet('wtw_moldaddimagepreview').src = zimageinfo.filedata;
 							}
 						}
 					);
@@ -229,55 +234,55 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 					WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldaddimagehoverid').value, 
 						function(response) {
 							WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldaddimagehoverid').value,0);
-							var imageinfo = WTW.getUploadFileData(dGet('wtw_tmoldaddimagehoverid').value);
-							imageinfo.image.onload = function() {	
-								dGet('wtw_moldaddimagehoverpreview').src = imageinfo.filedata;
+							var zimageinfo = WTW.getUploadFileData(dGet('wtw_tmoldaddimagehoverid').value);
+							zimageinfo.image.onload = function() {	
+								dGet('wtw_moldaddimagehoverpreview').src = zimageinfo.filedata;
 							}
 						}
 					);
 				}
-				if (molds[moldind].graphics.webimages[0].jsfunction == "WTW.openWebpage") {
+				if (zmolds[zmoldind].graphics.webimages[0].jsfunction == "WTW.openWebpage") {
 					dGet("wtw_tmoldaddonclick").selectedIndex = 2;
-				} else if (molds[moldind].graphics.webimages[0].jsfunction == "WTW.openIFrame") {
+				} else if (zmolds[zmoldind].graphics.webimages[0].jsfunction == "WTW.openIFrame") {
 					dGet("wtw_tmoldaddonclick").selectedIndex = 1;
-				} else if (molds[moldind].graphics.webimages[0].jsfunction != "") {
+				} else if (zmolds[zmoldind].graphics.webimages[0].jsfunction != "") {
 					dGet("wtw_tmoldaddonclick").selectedIndex = 3;
 				} else {
 					dGet("wtw_tmoldaddonclick").selectedIndex = 0;
 				}
 				WTW.changeOnClickEvent(dGet("wtw_tmoldaddonclick"));
-			} else if (shape == "image") {
+			} else if (zshape == "image") {
 				dGet('wtw_tmoldimageind').value = "0";
-			} else if (shape == "tube") {
-				WTW.loadPointList(molds[moldind].paths.path1, 1);
-			} else if (shape == "line") {
-				WTW.loadPointList(molds[moldind].paths.path1, 1);
+			} else if (zshape == "tube") {
+				WTW.loadPointList(zmolds[zmoldind].paths.path1, 1);
+			} else if (zshape == "line") {
+				WTW.loadPointList(zmolds[zmoldind].paths.path1, 1);
 			}	 
 			for (var i=0;i < WTW.moldList.length;i++) {
 				if (WTW.moldList[i] != null) {
-					var moldvalue = WTW.moldList[i].toLowerCase();
-					while (moldvalue.indexOf(" ") > -1) {
-						moldvalue = moldvalue.replace(" ","");
+					var zmoldvalue = WTW.moldList[i].toLowerCase();
+					while (zmoldvalue.indexOf(" ") > -1) {
+						zmoldvalue = zmoldvalue.replace(" ","");
 					}
-					if (shape == moldvalue) {
+					if (zshape == zmoldvalue) {
 						WTW.checkMoldTextureCSG();
 					}
 				}
 			}
 			dGet('wtw_selectedcsgshape').innerHTML = "";
 			if (dGet('wtw_tmoldcsgaction').selectedIndex != 0) {
-				var csgmoldind = -1;
-				csgmoldind = WTW.getMoldInd(molds, molds[moldind].csg.moldid, dGet('wtw_tconnectinggridind').value);
-				if (molds[csgmoldind] != null) {
-					var csgmainname = molds[csgmoldind].moldname;
-					dGet('wtw_selectedcsgshape').innerHTML += "<div class='wtw-secondcolcontent' onmouseover=\"WTW.hilightMold('" + csgmainname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + csgmainname + "');\">Merge with (" + molds[csgmoldind].shape + ") &nbsp;&nbsp;&nbsp;&nbsp; <a href='#' onclick=\"WTW.removeMerge('" + csgmainname + "')\">Remove</a></div><br /><br />";
+				var zcsgmoldind = -1;
+				zcsgmoldind = WTW.getMoldInd(zmolds, zmolds[zmoldind].csg.moldid, dGet('wtw_tconnectinggridind').value);
+				if (zmolds[zcsgmoldind] != null) {
+					var zcsgmainname = zmolds[zcsgmoldind].moldname;
+					dGet('wtw_selectedcsgshape').innerHTML += "<div class='wtw-secondcolcontent' onmouseover=\"WTW.hilightMold('" + zcsgmainname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + zcsgmainname + "');\">Merge with (" + zmolds[zcsgmoldind].shape + ") &nbsp;&nbsp;&nbsp;&nbsp; <a href='#' onclick=\"WTW.removeMerge('" + zcsgmainname + "')\">Remove</a></div><br /><br />";
 				}
 			}
-			var mold = scene.getMeshByID(molds[moldind].moldname);
-			if (mold != null) {
-				WTW.openEditPoles(mold);
+			var zmold = scene.getMeshByID(zmolds[zmoldind].moldname);
+			if (zmold != null) {
+				WTW.openEditPoles(zmold);
 			}
-			WTW.pluginsOpenMoldForm(molds[moldind].moldname);
+			WTW.pluginsOpenMoldForm(zmolds[zmoldind].moldname);
 		}
 		dGet('wtw_tmoldpositionz').focus();
 		WTW.setWindowSize();
@@ -287,143 +292,138 @@ WTWJS.prototype.openMoldForm = function(moldind, shape, moldgroup, saveprevious)
 	}
 }		
 
-WTWJS.prototype.loadMoldForm = function(molddef) {
+WTWJS.prototype.loadMoldForm = function(zmolddef) {
 	/* after mold form is opened, this function loads the existing information to edit the mold */
 	try {
-		var moldgroup = "";
-		var shape = molddef.shape;
-		if (molddef.moldname.indexOf("communitymolds") > -1) {
-			moldgroup = "community";
-		} else if (molddef.moldname.indexOf("buildingmolds") > -1) {
-			moldgroup = "building";
-		} else if (molddef.moldname.indexOf("thingmolds") > -1) {
-			moldgroup = "thing";
+		var zwebtype = "";
+		var zshape = zmolddef.shape;
+		if (zmolddef.moldname.indexOf("communitymolds") > -1) {
+			zwebtype = "community";
+		} else if (zmolddef.moldname.indexOf("buildingmolds") > -1) {
+			zwebtype = "building";
+		} else if (zmolddef.moldname.indexOf("thingmolds") > -1) {
+			zwebtype = "thing";
 		}
-		switch (moldgroup) {
+		switch (zwebtype) {
 			case "community":
-				dGet('wtw_tcommunityind').value = molddef.communityinfo.communityind;
+				dGet('wtw_tcommunityind').value = zmolddef.communityinfo.communityind;
 				break;
 			case "building":
-				dGet('wtw_teditbuildingind').value = molddef.buildinginfo.buildingind;
+				dGet('wtw_teditbuildingind').value = zmolddef.buildinginfo.buildingind;
 				break;
 			case "thing":
-				dGet('wtw_tthingind').value = molddef.thinginfo.thingind;
+				dGet('wtw_tthingind').value = zmolddef.thinginfo.thingind;
 				break;
 		}
-		WTW.getCoveringList(shape);
-		WTW.getLoadActionZoneList(molddef.loadactionzoneid);
-		WTW.getLoadZoneList(molddef.loadactionzoneid);
-		dGet('wtw_tmoldid').value = molddef.moldid;
-		dGet('wtw_tmoldind').value = molddef.moldind;
-		dGet('wtw_tmoldshape').value = molddef.shape;
-		dGet('wtw_tmoldmoldgroup').value = moldgroup;
-		dGet('wtw_tmoldname').value = molddef.moldname;
+		WTW.getCoveringList(zshape);
+		WTW.getLoadActionZoneList(zmolddef.loadactionzoneid);
+		WTW.getLoadZoneList(zmolddef.loadactionzoneid);
+		dGet('wtw_tmoldid').value = zmolddef.moldid;
+		dGet('wtw_tmoldind').value = zmolddef.moldind;
+		dGet('wtw_tmoldshape').value = zmolddef.shape;
+		dGet('wtw_tmoldwebtype').value = zwebtype;
+		dGet('wtw_tmoldname').value = zmolddef.moldname;
 		dGet('wtw_teditpointindex').value = "";
 		dGet('wtw_tmoldpath1points').value = "";
 		dGet('wtw_tmoldpath2points').value = "";
-		dGet('wtw_tmoldcoveringold').value = molddef.covering;
-		dGet('wtw_tmoldpositionx').value = molddef.position.x;
-		dGet('wtw_tmoldpositiony').value = molddef.position.y;
-		dGet('wtw_tmoldpositionz').value = molddef.position.z;
-		dGet('wtw_tmoldscalingx').value = molddef.scaling.x;
-		dGet('wtw_tmoldscalingy').value = molddef.scaling.y;
-		dGet('wtw_tmoldscalingz').value = molddef.scaling.z;
-		dGet('wtw_tmoldrotationx').value = molddef.rotation.x;
-		dGet('wtw_tmoldrotationy').value = molddef.rotation.y;
-		dGet('wtw_tmoldrotationz').value = molddef.rotation.z;
-		dGet('wtw_tmoldspecial1').value = molddef.scaling.special1;
-		dGet('wtw_tmoldspecial2').value = molddef.scaling.special2;
-		dGet('wtw_tmolduploadobjectid').value = molddef.object.uploadobjectid;
-		dGet('wtw_tmoldobjectfolder').value = molddef.object.folder;
-		dGet('wtw_tmoldobjectfile').value = molddef.object.file;
-		if (molddef.graphics.receiveshadows == '1') {
+		dGet('wtw_tmoldcoveringold').value = zmolddef.covering;
+		dGet('wtw_tmoldpositionx').value = zmolddef.position.x;
+		dGet('wtw_tmoldpositiony').value = zmolddef.position.y;
+		dGet('wtw_tmoldpositionz').value = zmolddef.position.z;
+		dGet('wtw_tmoldscalingx').value = zmolddef.scaling.x;
+		dGet('wtw_tmoldscalingy').value = zmolddef.scaling.y;
+		dGet('wtw_tmoldscalingz').value = zmolddef.scaling.z;
+		dGet('wtw_tmoldrotationx').value = zmolddef.rotation.x;
+		dGet('wtw_tmoldrotationy').value = zmolddef.rotation.y;
+		dGet('wtw_tmoldrotationz').value = zmolddef.rotation.z;
+		dGet('wtw_tmoldspecial1').value = zmolddef.scaling.special1;
+		dGet('wtw_tmoldspecial2').value = zmolddef.scaling.special2;
+		dGet('wtw_tmolduploadobjectid').value = zmolddef.object.uploadobjectid;
+		dGet('wtw_tmoldobjectfolder').value = zmolddef.object.folder;
+		dGet('wtw_tmoldobjectfile').value = zmolddef.object.file;
+		if (zmolddef.graphics.receiveshadows == '1') {
 			dGet('wtw_tmoldreceiveshadows').checked = true;
 		} else {
 			dGet('wtw_tmoldreceiveshadows').checked = false;
 		}
-		if (molddef.graphics.level == '1') {
+		if (zmolddef.graphics.level == '1') {
 			dGet('wtw_tmoldgraphiclevel').checked = true;
 		} else {
 			dGet('wtw_tmoldgraphiclevel').checked = false;
 		}
-		dGet('wtw_tmoldtextureid').value = molddef.graphics.texture.id;
-		dGet('wtw_tmoldtexturepath').value = molddef.graphics.texture.path;
-		dGet('wtw_tmoldtexturebumpid').value = molddef.graphics.texture.bumpid;
-		dGet('wtw_tmoldtexturebumppath').value = molddef.graphics.texture.bumppath;
-		dGet('wtw_tmoldvideoid').value = molddef.graphics.texture.videoid;
-		dGet('wtw_tmoldvideopath').value = molddef.graphics.texture.video;
-		dGet('wtw_tmoldvideoposterid').value = molddef.graphics.texture.videoposterid;
-		dGet('wtw_tmoldvideoposterpath').value = molddef.graphics.texture.videoposter;
-		dGet('wtw_tmoldheightmapid').value = molddef.graphics.heightmap.id;
-		dGet('wtw_tmoldheightmappath').value = molddef.graphics.heightmap.path;
-		dGet('wtw_tmoldmixmapid').value = molddef.graphics.heightmap.mixmapid;
-		dGet('wtw_tmoldmixmappath').value = molddef.graphics.heightmap.mixmappath;
-		dGet('wtw_tmoldtexturerid').value = molddef.graphics.heightmap.texturerid;
-		dGet('wtw_tmoldtexturerpath').value = molddef.graphics.heightmap.texturerpath;
-		dGet('wtw_tmoldtexturegid').value = molddef.graphics.heightmap.texturegid;
-		dGet('wtw_tmoldtexturegpath').value = molddef.graphics.heightmap.texturegpath;
-		dGet('wtw_tmoldtexturebid').value = molddef.graphics.heightmap.texturebid;
-		dGet('wtw_tmoldtexturebpath').value = molddef.graphics.heightmap.texturebpath;
-		dGet('wtw_tmoldtexturebumprid').value = molddef.graphics.heightmap.texturebumprid;
-		dGet('wtw_tmoldtexturebumprpath').value = molddef.graphics.heightmap.texturebumprpath;
-		dGet('wtw_tmoldtexturebumpgid').value = molddef.graphics.heightmap.texturebumpgid;
-		dGet('wtw_tmoldtexturebumpgpath').value = molddef.graphics.heightmap.texturebumpgpath;
-		dGet('wtw_tmoldtexturebumpbid').value = molddef.graphics.heightmap.texturebumpbid;
-		dGet('wtw_tmoldtexturebumpbpath').value = molddef.graphics.heightmap.texturebumpbpath;
-		dGet('wtw_tmoldsoundid').value = molddef.sound.id;
-		dGet('wtw_tmoldsoundpath').value = molddef.sound.path;
-		dGet('wtw_tmoldsoundname').value = molddef.sound.name;
-		dGet('wtw_soundicon').alt = molddef.sound.name;
-		dGet('wtw_soundicon').title = molddef.sound.name;
-		dGet('wtw_selectedsound').innerHTML = molddef.sound.name;
-		WTW.setDDLValue("wtw_tmoldsoundattenuation", molddef.sound.attenuation);
-		if (molddef.sound.loop == '1') {
+		dGet('wtw_tmoldtextureid').value = zmolddef.graphics.texture.id;
+		dGet('wtw_tmoldtexturepath').value = zmolddef.graphics.texture.path;
+		dGet('wtw_tmoldtexturebumpid').value = zmolddef.graphics.texture.bumpid;
+		dGet('wtw_tmoldtexturebumppath').value = zmolddef.graphics.texture.bumppath;
+		dGet('wtw_tmoldvideoid').value = zmolddef.graphics.texture.videoid;
+		dGet('wtw_tmoldvideopath').value = zmolddef.graphics.texture.video;
+		dGet('wtw_tmoldvideoposterid').value = zmolddef.graphics.texture.videoposterid;
+		dGet('wtw_tmoldvideoposterpath').value = zmolddef.graphics.texture.videoposter;
+		dGet('wtw_tmoldheightmapid').value = zmolddef.graphics.heightmap.id;
+		dGet('wtw_tmoldheightmappath').value = zmolddef.graphics.heightmap.path;
+		dGet('wtw_tmoldmixmapid').value = zmolddef.graphics.heightmap.mixmapid;
+		dGet('wtw_tmoldmixmappath').value = zmolddef.graphics.heightmap.mixmappath;
+		dGet('wtw_tmoldtexturerid').value = zmolddef.graphics.heightmap.texturerid;
+		dGet('wtw_tmoldtexturerpath').value = zmolddef.graphics.heightmap.texturerpath;
+		dGet('wtw_tmoldtexturegid').value = zmolddef.graphics.heightmap.texturegid;
+		dGet('wtw_tmoldtexturegpath').value = zmolddef.graphics.heightmap.texturegpath;
+		dGet('wtw_tmoldtexturebid').value = zmolddef.graphics.heightmap.texturebid;
+		dGet('wtw_tmoldtexturebpath').value = zmolddef.graphics.heightmap.texturebpath;
+		dGet('wtw_tmoldtexturebumprid').value = zmolddef.graphics.heightmap.texturebumprid;
+		dGet('wtw_tmoldtexturebumprpath').value = zmolddef.graphics.heightmap.texturebumprpath;
+		dGet('wtw_tmoldtexturebumpgid').value = zmolddef.graphics.heightmap.texturebumpgid;
+		dGet('wtw_tmoldtexturebumpgpath').value = zmolddef.graphics.heightmap.texturebumpgpath;
+		dGet('wtw_tmoldtexturebumpbid').value = zmolddef.graphics.heightmap.texturebumpbid;
+		dGet('wtw_tmoldtexturebumpbpath').value = zmolddef.graphics.heightmap.texturebumpbpath;
+		dGet('wtw_tmoldsoundid').value = zmolddef.sound.id;
+		dGet('wtw_tmoldsoundpath').value = zmolddef.sound.path;
+		dGet('wtw_tmoldsoundname').value = zmolddef.sound.name;
+		dGet('wtw_soundicon').alt = zmolddef.sound.name;
+		dGet('wtw_soundicon').title = zmolddef.sound.name;
+		dGet('wtw_selectedsound').innerHTML = zmolddef.sound.name;
+		WTW.setDDLValue("wtw_tmoldsoundattenuation", zmolddef.sound.attenuation);
+		if (zmolddef.sound.loop == '1') {
 			dGet('wtw_tmoldsoundloop').checked = true;
 			dGet('wtw_tmoldvideoloop').checked = true;
 		} else {
 			dGet('wtw_tmoldsoundloop').checked = false;
 			dGet('wtw_tmoldvideoloop').checked = false;
 		}
-		dGet('wtw_tmoldsoundmaxdistance').value = molddef.sound.maxdistance;
-		dGet('wtw_tmoldvideomaxdistance').value = molddef.sound.maxdistance;
-		dGet('wtw_tmoldsoundrollofffactor').value = molddef.sound.rollofffactor;
-		dGet('wtw_tmoldsoundrefdistance').value = molddef.sound.refdistance;
-		dGet('wtw_tmoldsoundconeinnerangle').value = molddef.sound.coneinnerangle;
-		dGet('wtw_tmoldsoundconeouterangle').value = molddef.sound.coneouterangle;
-		dGet('wtw_tmoldsoundconeoutergain').value = molddef.sound.coneoutergain;
-		dGet('wtw_tmoldmaxheight').value = molddef.graphics.heightmap.maxheight;
-		dGet('wtw_tmolduoffset').value = molddef.graphics.uoffset;
-		dGet('wtw_tmoldvoffset').value = molddef.graphics.voffset;
-		dGet('wtw_tmolduscale').value = molddef.graphics.uscale;
-		dGet('wtw_tmoldvscale').value = molddef.graphics.vscale;
-		dGet('wtw_tmoldopacity').value = molddef.opacity;
-		dGet('wtw_tmoldsubdivisions').value = molddef.subdivisions;
-		dGet('wtw_tmoldactionzoneid').value = molddef.actionzoneid;
-		dGet('wtw_tmoldcsgmoldid').value = molddef.csg.moldid;
+		dGet('wtw_tmoldsoundmaxdistance').value = zmolddef.sound.maxdistance;
+		dGet('wtw_tmoldvideomaxdistance').value = zmolddef.sound.maxdistance;
+		dGet('wtw_tmoldsoundrollofffactor').value = zmolddef.sound.rollofffactor;
+		dGet('wtw_tmoldsoundrefdistance').value = zmolddef.sound.refdistance;
+		dGet('wtw_tmoldsoundconeinnerangle').value = zmolddef.sound.coneinnerangle;
+		dGet('wtw_tmoldsoundconeouterangle').value = zmolddef.sound.coneouterangle;
+		dGet('wtw_tmoldsoundconeoutergain').value = zmolddef.sound.coneoutergain;
+		dGet('wtw_tmoldmaxheight').value = zmolddef.graphics.heightmap.maxheight;
+		dGet('wtw_tmolduoffset').value = zmolddef.graphics.uoffset;
+		dGet('wtw_tmoldvoffset').value = zmolddef.graphics.voffset;
+		dGet('wtw_tmolduscale').value = zmolddef.graphics.uscale;
+		dGet('wtw_tmoldvscale').value = zmolddef.graphics.vscale;
+		dGet('wtw_tmoldopacity').value = zmolddef.opacity;
+		dGet('wtw_tmoldsubdivisions').value = zmolddef.subdivisions;
+		dGet('wtw_tmoldactionzoneid').value = zmolddef.actionzoneid;
+		dGet('wtw_tmoldcsgmoldid').value = zmolddef.csg.moldid;
 		if (dGet('wtw_tmoldshape').value == '3dtext') {
-			dGet('wtw_tmoldwebtext').value = WTW.decode(molddef.webtext.webtext);
+			dGet('wtw_tmoldwebtext').value = WTW.decode(zmolddef.webtext.webtext);
 		} else {
 			dGet('wtw_tmoldwebtext').value = '';
 		}
-		dGet('wtw_tmoldwebstyle').value = molddef.webtext.webstyle;
-		dGet('wtw_tmoldalttag').value = WTW.decode(molddef.alttag.name);
-		dGet('wtw_tspecularcolorr').value = molddef.color.specular.r;
-		dGet('wtw_tspecularcolorg').value = molddef.color.specular.g;
-		dGet('wtw_tspecularcolorb').value = molddef.color.specular.b;
-		dGet('wtw_temissivecolorr').value = molddef.color.emissive.r;
-		dGet('wtw_temissivecolorg').value = molddef.color.emissive.g;
-		dGet('wtw_temissivecolorb').value = molddef.color.emissive.b;
-		dGet('wtw_tdiffusecolorr').value = molddef.color.diffuse.r;
-		dGet('wtw_tdiffusecolorg').value = molddef.color.diffuse.g;
-		dGet('wtw_tdiffusecolorb').value = molddef.color.diffuse.b;
+		dGet('wtw_tmoldwebstyle').value = zmolddef.webtext.webstyle;
+		dGet('wtw_tmoldalttag').value = WTW.decode(zmolddef.alttag.name);
+		dGet('wtw_tmolddiffusecolor').value = zmolddef.color.diffusecolor;
+		dGet('wtw_tmoldemissivecolor').value = zmolddef.color.emissivecolor;
+		dGet('wtw_tmoldspecularcolor').value = zmolddef.color.specularcolor;
+		dGet('wtw_tmoldambientcolor').value = zmolddef.color.ambientcolor;
 		dGet('wtw_moldaddimagepreview').src = "";
 		dGet('wtw_moldaddimagehoverpreview').src = "";
 		dGet('wtw_pointlist1').innerHTML = "";
 		dGet('wtw_pointlist2').innerHTML = "";
-		WTW.setDDLValue("wtw_tmoldcovering", molddef.covering);
-		WTW.setDDLValue("wtw_tmoldcsgaction", molddef.csg.action);
-		WTW.setDDLValue("wtw_tmoldloadactionzoneid", molddef.loadactionzoneid);
-		if (molddef.graphics.waterreflection == "1") {
+		WTW.setDDLValue("wtw_tmoldcovering", zmolddef.covering);
+		WTW.setDDLValue("wtw_tmoldcsgaction", zmolddef.csg.action);
+		WTW.setDDLValue("wtw_tmoldloadactionzoneid", zmolddef.loadactionzoneid);
+		if (zmolddef.graphics.waterreflection == "1") {
 			dGet('wtw_tmoldwaterreflection').checked = true;
 		} else {
 			dGet('wtw_tmoldwaterreflection').checked = false;
@@ -434,47 +434,47 @@ WTWJS.prototype.loadMoldForm = function(molddef) {
 			dGet('wtw_bselectcsgshape').innerHTML = "Pick Shape to Merge";
 			WTW.setDDLValue("wtw_tmoldcsgaction", "");
 		}
-		WTW.pluginsLoadMoldForm(moldgroup, dGet('wtw_tmoldshape').value, dGet('wtw_tmoldname').value);
+		WTW.pluginsLoadMoldForm(zwebtype, dGet('wtw_tmoldshape').value, dGet('wtw_tmoldname').value);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminmolds.js-loadMoldForm=" + ex.message);
 	}
 }
 
-WTWJS.prototype.loadPointList = function(patharray, pathnumber) {
+WTWJS.prototype.loadPointList = function(zpatharray, zpathnumber) {
 	/* some molds use points (like lines, ribons, and tubes) */
 	/* this functions loads the points for a given mold form for editing */
 	try {
-		var pointlist = "wtw_pointlist1";
-		var pathpoints = "wtw_tmoldpath1points";
-		var pathname = "Path 1";
-		var pointind = -1;
+		var zpointlist = "wtw_pointlist1";
+		var zpathpoints = "wtw_tmoldpath1points";
+		var zpathname = "Path 1";
+		var zpointind = -1;
 		if (WTW.isNumeric(dGet('wtw_teditpointindex').value)) {
-			pointind = Number(dGet('wtw_teditpointindex').value);
+			zpointind = Number(dGet('wtw_teditpointindex').value);
 		}
-		if (pathnumber == 2) {
-			pointlist = "wtw_pointlist2";
-			pathpoints = "wtw_tmoldpath2points";
-			pathname = "Path 2";
+		if (zpathnumber == 2) {
+			zpointlist = "wtw_pointlist2";
+			zpathpoints = "wtw_tmoldpath2points";
+			zpathname = "Path 2";
 		}
-		dGet(pointlist).innerHTML = "<hr /><h4>" + pathname + " Points (x,y,z)</h4><div id=\"wtw_bpointadd-\" class=\"wtw-menulevel00 wtw-center\" onmousedown=\"WTW.addPoint(this);\" >Add Point</div>";
-		if (patharray != null) {
-			if (patharray.length > 0) {
-				for (var i=0; i < patharray.length;i++) {
-					if (patharray[i] != null) {
-						if (pointind == i) {
-							dGet(pointlist).innerHTML += "<div id=\"wtw_bpointedit-" + i + "\" class=\"wtw-menulevel0selected wtw-center\" onmousedown=\"WTW.editPoint(this);\"><span style='font-size:.8em;color:#c0c0c0;'>(" + patharray[i].x + ", " + patharray[i].y + ", " + patharray[i].z + ")</span> Edit</div>";
+		dGet(zpointlist).innerHTML = "<hr /><h4>" + zpathname + " Points (x,y,z)</h4><div id=\"wtw_bpointadd-\" class=\"wtw-menulevel00 wtw-center\" onmousedown=\"WTW.addPoint(this);\" >Add Point</div>";
+		if (zpatharray != null) {
+			if (zpatharray.length > 0) {
+				for (var i=0; i < zpatharray.length;i++) {
+					if (zpatharray[i] != null) {
+						if (zpointind == i) {
+							dGet(zpointlist).innerHTML += "<div id=\"wtw_bpointedit-" + i + "\" class=\"wtw-menulevel0selected wtw-center\" onmousedown=\"WTW.editPoint(this);\"><span style='font-size:.8em;color:#c0c0c0;'>(" + zpatharray[i].x + ", " + zpatharray[i].y + ", " + zpatharray[i].z + ")</span> Edit</div>";
 						} else {
-							dGet(pointlist).innerHTML += "<div id=\"wtw_bpointedit-" + i + "\" class=\"wtw-menulevel0 wtw-center\" onmousedown=\"WTW.editPoint(this);\"><span style='font-size:.8em;color:#c0c0c0;'>(" + patharray[i].x + ", " + patharray[i].y + ", " + patharray[i].z + ")</span> Edit</div>";
+							dGet(zpointlist).innerHTML += "<div id=\"wtw_bpointedit-" + i + "\" class=\"wtw-menulevel0 wtw-center\" onmousedown=\"WTW.editPoint(this);\"><span style='font-size:.8em;color:#c0c0c0;'>(" + zpatharray[i].x + ", " + zpatharray[i].y + ", " + zpatharray[i].z + ")</span> Edit</div>";
 						}
-						dGet(pointlist).innerHTML += "<div id=\"wtw_bpointadd-" + i + "\" class=\"wtw-menulevel00 wtw-center\" onmousedown=\"WTW.addPoint(this);\" >Add Point</div>";
+						dGet(zpointlist).innerHTML += "<div id=\"wtw_bpointadd-" + i + "\" class=\"wtw-menulevel00 wtw-center\" onmousedown=\"WTW.addPoint(this);\" >Add Point</div>";
 					}
 				}
 			}
-			dGet(pathpoints).value = JSON.stringify(patharray);
+			dGet(zpathpoints).value = JSON.stringify(zpatharray);
 		} else {
-			dGet(pathpoints).value = "";
+			dGet(zpathpoints).value = "";
 		}
-		dGet(pointlist).innerHTML += "<hr /><br />";
+		dGet(zpointlist).innerHTML += "<hr /><br />";
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminmolds.js-loadPointList=" + ex.message);
 	}
@@ -483,34 +483,34 @@ WTWJS.prototype.loadPointList = function(patharray, pathnumber) {
 WTWJS.prototype.deletePoint = function() {
 	/* delete a point from a mold (lines, ribbons, and tubes) */
 	try {
-		var pointind = -1;
-		var moldind = -1;
-		var molds = null;
-		switch (dGet('wtw_tmoldmoldgroup').value) {
+		var zpointind = -1;
+		var zmoldind = -1;
+		var zmolds = null;
+		switch (dGet('wtw_tmoldwebtype').value) {
 			case "community":
-				molds = WTW.communitiesMolds;
+				zmolds = WTW.communitiesMolds;
 				break;
 			case "building":
-				molds = WTW.buildingMolds;
+				zmolds = WTW.buildingMolds;
 				break;
 			case "thing":
-				molds = WTW.thingMolds;
+				zmolds = WTW.thingMolds;
 				break;
 		}
 		if (WTW.isNumeric(dGet('wtw_tmoldind').value)) {
-			moldind = Number(dGet('wtw_tmoldind').value);
+			zmoldind = Number(dGet('wtw_tmoldind').value);
 		}
 		if (WTW.isNumeric(dGet('wtw_teditpointindex').value)) {
-			pointind = Number(dGet('wtw_teditpointindex').value);
+			zpointind = Number(dGet('wtw_teditpointindex').value);
 		}
-		if (molds[moldind] != null && pointind > -1) {
-			if (molds[moldind].paths.path1 != null) {
-				if (molds[moldind].paths.path1[pointind] != null) {
-					molds[moldind].paths.path1.splice(pointind, 1);
+		if (zmolds[zmoldind] != null && zpointind > -1) {
+			if (zmolds[zmoldind].paths.path1 != null) {
+				if (zmolds[zmoldind].paths.path1[zpointind] != null) {
+					zmolds[zmoldind].paths.path1.splice(zpointind, 1);
 				}
-				for (var i=0; i < molds[moldind].paths.path1.length;i++) {
-					if (molds[moldind].paths.path1[i] != null) {
-						molds[moldind].paths.path1[i].sorder = i;
+				for (var i=0; i < zmolds[zmoldind].paths.path1.length;i++) {
+					if (zmolds[zmoldind].paths.path1[i] != null) {
+						zmolds[zmoldind].paths.path1[i].sorder = i;
 					}
 				}
 			}
@@ -522,41 +522,41 @@ WTWJS.prototype.deletePoint = function() {
 	}
 }
 
-WTWJS.prototype.editPoint = function(obj) {
+WTWJS.prototype.editPoint = function(zobj) {
 	/* edit an existing point for a mold (lines, ribbons, and tubes) */
 	try {
 		dGet('wtw_tpointpositionx').value = "";
 		dGet('wtw_tpointpositiony').value = "";
 		dGet('wtw_tpointpositionz').value = "";
-		var moldind = -1;
-		var molds = null;
-		switch (dGet('wtw_tmoldmoldgroup').value) {
+		var zmoldind = -1;
+		var zmolds = null;
+		switch (dGet('wtw_tmoldwebtype').value) {
 			case "community":
-				molds = WTW.communitiesMolds;
+				zmolds = WTW.communitiesMolds;
 				break;
 			case "building":
-				molds = WTW.buildingMolds;
+				zmolds = WTW.buildingMolds;
 				break;
 			case "thing":
-				molds = WTW.thingMolds;
+				zmolds = WTW.thingMolds;
 				break;
 		}
 		if (WTW.isNumeric(dGet('wtw_tmoldind').value)) {
-			moldind = Number(dGet('wtw_tmoldind').value);
+			zmoldind = Number(dGet('wtw_tmoldind').value);
 		}
-		if (obj != null && molds != null) {
-			if (obj.id.indexOf('-') > -1 && molds[moldind] != null) {
-				var namepart = obj.id.split('-');
-				if (namepart[1] != null) {
-					dGet('wtw_teditpointindex').value = namepart[1];
-					var pointind = -1;
-					if (WTW.isNumeric(namepart[1])) {
-						pointind = Number(namepart[1]);
+		if (zobj != null && zmolds != null) {
+			if (zobj.id.indexOf('-') > -1 && zmolds[zmoldind] != null) {
+				var znamepart = zobj.id.split('-');
+				if (znamepart[1] != null) {
+					dGet('wtw_teditpointindex').value = znamepart[1];
+					var zpointind = -1;
+					if (WTW.isNumeric(znamepart[1])) {
+						zpointind = Number(znamepart[1]);
 					}
-					if (molds[moldind].paths.path1[pointind] != null) {
-						dGet('wtw_tpointpositionx').value = molds[moldind].paths.path1[pointind].x;
-						dGet('wtw_tpointpositiony').value = molds[moldind].paths.path1[pointind].y;
-						dGet('wtw_tpointpositionz').value = molds[moldind].paths.path1[pointind].z;
+					if (zmolds[zmoldind].paths.path1[zpointind] != null) {
+						dGet('wtw_tpointpositionx').value = zmolds[zmoldind].paths.path1[zpointind].x;
+						dGet('wtw_tpointpositiony').value = zmolds[zmoldind].paths.path1[zpointind].y;
+						dGet('wtw_tpointpositionz').value = zmolds[zmoldind].paths.path1[zpointind].z;
 						
 						WTW.show('wtw_pointeditdiv');
 					}
@@ -568,130 +568,130 @@ WTWJS.prototype.editPoint = function(obj) {
 	}
 }
 
-WTWJS.prototype.addPoint = function(obj) {
+WTWJS.prototype.addPoint = function(zobj) {
 	/* add a new point for a mold (lines, ribbons, and tubes) */
 	try {
-		var moldind = -1;
-		var molds = null;
-		switch (dGet('wtw_tmoldmoldgroup').value) {
+		var zmoldind = -1;
+		var zmolds = null;
+		switch (dGet('wtw_tmoldwebtype').value) {
 			case "community":
-				molds = WTW.communitiesMolds;
+				zmolds = WTW.communitiesMolds;
 				break;
 			case "building":
-				molds = WTW.buildingMolds;
+				zmolds = WTW.buildingMolds;
 				break;
 			case "thing":
-				molds = WTW.thingMolds;
+				zmolds = WTW.thingMolds;
 				break;
 		}
 		if (WTW.isNumeric(dGet('wtw_tmoldind').value)) {
-			moldind = Number(dGet('wtw_tmoldind').value);
+			zmoldind = Number(dGet('wtw_tmoldind').value);
 		}
-		if (obj != null && molds != null) {
-			if (obj.id.indexOf('-') > -1 && molds[moldind] != null) {
-				var pointind = -1;
-				var namepart = obj.id.split('-');
-				if (namepart[1] != null) {
-					if (WTW.isNumeric(namepart[1])) {
-						pointind = Number(namepart[1]);
+		if (zobj != null && zmolds != null) {
+			if (zobj.id.indexOf('-') > -1 && zmolds[zmoldind] != null) {
+				var zpointind = -1;
+				var znamepart = zobj.id.split('-');
+				if (znamepart[1] != null) {
+					if (WTW.isNumeric(znamepart[1])) {
+						zpointind = Number(znamepart[1]);
 					}
 				}
-				if (molds[moldind].paths.path1 != null) {
-					var x = null;
-					var y = null;
-					var z = null;
-					var x1 = null;
-					var y1 = null;
-					var z1 = null;
-					var minx = null;
-					var miny = null;
-					var minz = null;
-					var maxx = null;
-					var maxy = null;
-					var maxz = null;
-					var newx = null;
-					var newy = null;
-					var newz = null;
-					var maxind = molds[moldind].paths.path1.length - 1;
-					for (var i = molds[moldind].paths.path1.length - 1 ; i >= 0 ; i--) {
-						if (molds[moldind].paths.path1[i] != null) {
-							if (i == 0 && minx == null) {
-								minx = Number(molds[moldind].paths.path1[i].x);
-								miny = Number(molds[moldind].paths.path1[i].y);
-								minz = Number(molds[moldind].paths.path1[i].z);
+				if (zmolds[zmoldind].paths.path1 != null) {
+					var zx = null;
+					var zy = null;
+					var zz = null;
+					var zx1 = null;
+					var zy1 = null;
+					var zz1 = null;
+					var zminx = null;
+					var zminy = null;
+					var zminz = null;
+					var zmaxx = null;
+					var zmaxy = null;
+					var zmaxz = null;
+					var znewx = null;
+					var znewy = null;
+					var znewz = null;
+					var zmaxind = zmolds[zmoldind].paths.path1.length - 1;
+					for (var i = zmolds[zmoldind].paths.path1.length - 1 ; i >= 0 ; i--) {
+						if (zmolds[zmoldind].paths.path1[i] != null) {
+							if (i == 0 && zminx == null) {
+								zminx = Number(zmolds[zmoldind].paths.path1[i].x);
+								zminy = Number(zmolds[zmoldind].paths.path1[i].y);
+								zminz = Number(zmolds[zmoldind].paths.path1[i].z);
 							}
-							if (i == molds[moldind].paths.path1.length - 1 && maxx == null) {
-								maxx = Number(molds[moldind].paths.path1[i].x);
-								maxy = Number(molds[moldind].paths.path1[i].y);
-								maxz = Number(molds[moldind].paths.path1[i].z);
+							if (i == zmolds[zmoldind].paths.path1.length - 1 && zmaxx == null) {
+								zmaxx = Number(zmolds[zmoldind].paths.path1[i].x);
+								zmaxy = Number(zmolds[zmoldind].paths.path1[i].y);
+								zmaxz = Number(zmolds[zmoldind].paths.path1[i].z);
 							}
-							if (i == pointind) {
-								x = Number(molds[moldind].paths.path1[i].x);
-								y = Number(molds[moldind].paths.path1[i].y);
-								z = Number(molds[moldind].paths.path1[i].z);
-								molds[moldind].paths.path1[i + 1] = JSON.parse(JSON.stringify(molds[moldind].paths.path1[i]));
-								molds[moldind].paths.path1[i + 1].sorder = i + 1;
-							} else if (i > pointind) {
-								if (i == pointind + 1) {
-									x1 = Number(molds[moldind].paths.path1[i].x);
-									y1 = Number(molds[moldind].paths.path1[i].y);
-									z1 = Number(molds[moldind].paths.path1[i].z);
+							if (i == zpointind) {
+								zx = Number(zmolds[zmoldind].paths.path1[i].x);
+								zy = Number(zmolds[zmoldind].paths.path1[i].y);
+								zz = Number(zmolds[zmoldind].paths.path1[i].z);
+								zmolds[zmoldind].paths.path1[i + 1] = JSON.parse(JSON.stringify(zmolds[zmoldind].paths.path1[i]));
+								zmolds[zmoldind].paths.path1[i + 1].sorder = i + 1;
+							} else if (i > zpointind) {
+								if (i == zpointind + 1) {
+									zx1 = Number(zmolds[zmoldind].paths.path1[i].x);
+									zy1 = Number(zmolds[zmoldind].paths.path1[i].y);
+									zz1 = Number(zmolds[zmoldind].paths.path1[i].z);
 								}
-								molds[moldind].paths.path1[i + 1] = JSON.parse(JSON.stringify(molds[moldind].paths.path1[i]));
-								molds[moldind].paths.path1[i + 1].sorder = i + 1;
+								zmolds[zmoldind].paths.path1[i + 1] = JSON.parse(JSON.stringify(zmolds[zmoldind].paths.path1[i]));
+								zmolds[zmoldind].paths.path1[i + 1].sorder = i + 1;
 							}
 						}
 					}
-					if (pointind == -1) {
-						newx = minx;
-						newy = miny;
-						newz = minz;
-					} else if (pointind == maxind) {
-						newx = maxx;
-						newy = maxy;
-						newz = maxz;
+					if (zpointind == -1) {
+						znewx = zminx;
+						znewy = zminy;
+						znewz = zminz;
+					} else if (zpointind == zmaxind) {
+						znewx = zmaxx;
+						znewy = zmaxy;
+						znewz = zmaxz;
 					} else {
-						if (x != null && x1 != null) {
-							newx = (x + x1) / 2;
-							newy = (y + y1) / 2;
-							newz = (z + z1) / 2;
-						} else if (x != null) {
-							newx = x;
-							newy = y;
-							newz = z;
-						} else if (x1 != null) {
-							newx = x1;
-							newy = y1;
-							newz = z1;
+						if (zx != null && zx1 != null) {
+							znewx = (zx + zx1) / 2;
+							znewy = (zy + zy1) / 2;
+							znewz = (zz + zz1) / 2;
+						} else if (zx != null) {
+							znewx = zx;
+							znewy = zy;
+							znewz = zz;
+						} else if (zx1 != null) {
+							znewx = zx1;
+							znewy = zy1;
+							znewz = zz1;
 						} else {
-							var coords = WTW.getNewCoordinates(50);
-							newx = coords.positionX;
-							newy = coords.positionY;
-							newz = coords.positionZ;
+							var zcoords = WTW.getNewCoordinates(50);
+							znewx = zcoords.positionX;
+							znewy = zcoords.positionY;
+							znewz = zcoords.positionZ;
 						}
 					}
-					pointind += 1;
-					molds[moldind].paths.path1[pointind].x = newx;
-					molds[moldind].paths.path1[pointind].y = newy;
-					molds[moldind].paths.path1[pointind].z = newz;
-					molds[moldind].paths.path1[pointind].sorder = pointind;
+					zpointind += 1;
+					zmolds[zmoldind].paths.path1[zpointind].x = znewx;
+					zmolds[zmoldind].paths.path1[zpointind].y = znewy;
+					zmolds[zmoldind].paths.path1[zpointind].z = znewz;
+					zmolds[zmoldind].paths.path1[zpointind].sorder = zpointind;
 				} else {
-					pointind = 0;
-					var coords = WTW.getNewCoordinates(50);
-					newx = coords.positionX;
-					newy = coords.positionY;
-					newz = coords.positionZ;
-					molds[moldind].paths.path1[0] = WTW.newPathPoint();
-					molds[moldind].paths.path1[0].x = newx;
-					molds[moldind].paths.path1[0].y = newy;
-					molds[moldind].paths.path1[0].z = newz;
-					molds[moldind].paths.path1[0].sorder = 0;
+					zpointind = 0;
+					var zcoords = WTW.getNewCoordinates(50);
+					znewx = zcoords.positionX;
+					znewy = zcoords.positionY;
+					znewz = zcoords.positionZ;
+					zmolds[zmoldind].paths.path1[0] = WTW.newPathPoint();
+					zmolds[zmoldind].paths.path1[0].x = znewx;
+					zmolds[zmoldind].paths.path1[0].y = znewy;
+					zmolds[zmoldind].paths.path1[0].z = znewz;
+					zmolds[zmoldind].paths.path1[0].sorder = 0;
 				}
-				dGet('wtw_teditpointindex').value = pointind;
-				if (molds[moldind].paths.path1[pointind] != null) {
-					dGet('wtw_tpointpositionx').value = molds[moldind].paths.path1[pointind].x;
-					dGet('wtw_tpointpositiony').value = molds[moldind].paths.path1[pointind].y;
-					dGet('wtw_tpointpositionz').value = molds[moldind].paths.path1[pointind].z;
+				dGet('wtw_teditpointindex').value = zpointind;
+				if (zmolds[zmoldind].paths.path1[zpointind] != null) {
+					dGet('wtw_tpointpositionx').value = zmolds[zmoldind].paths.path1[zpointind].x;
+					dGet('wtw_tpointpositiony').value = zmolds[zmoldind].paths.path1[zpointind].y;
+					dGet('wtw_tpointpositionz').value = zmolds[zmoldind].paths.path1[zpointind].z;
 					WTW.show('wtw_pointeditdiv');
 				}
 				
@@ -715,51 +715,51 @@ WTWJS.prototype.editEndPoint = function() {
 	}
 }
 
-WTWJS.prototype.openAddNewMold = function(moldgroup, shape) {
+WTWJS.prototype.openAddNewMold = function(zwebtype, zshape) {
 	/* open add new mold will create a new mold and open the form using the default values for that type of mold */
 	try {
 		dGet('wtw_tnewmold').value = "1";
-		WTW.setMoldFormFields(shape);
-		WTW.getCoveringList(shape);
-		var moldind = -1;
-		var molds = WTW.buildingMolds;
-		switch (moldgroup) {
+		WTW.setMoldFormFields(zshape);
+		WTW.getCoveringList(zshape);
+		var zmoldind = -1;
+		var zmolds = WTW.buildingMolds;
+		switch (zwebtype) {
 			case "community":
-			    moldind = WTW.getNextCount(WTW.communitiesMolds);
-				molds = WTW.communitiesMolds;
-				molds[moldind] = WTW.newMold();
+			    zmoldind = WTW.getNextCount(WTW.communitiesMolds);
+				zmolds = WTW.communitiesMolds;
+				zmolds[zmoldind] = WTW.newMold();
 				dGet('wtw_tthingind').value = "-1";
 				dGet('wtw_tcommunityind').value= WTW.getCommunityInd(communityid);
-				molds[moldind].communityinfo.communityid = communityid;
-				molds[moldind].communityinfo.communityind = dGet('wtw_tcommunityind').value;
+				zmolds[zmoldind].communityinfo.communityid = communityid;
+				zmolds[zmoldind].communityinfo.communityind = dGet('wtw_tcommunityind').value;
 				break;
 			case "thing":
-			    moldind = WTW.getNextCount(WTW.thingMolds);
-				molds = WTW.thingMolds;
-				molds[moldind] = WTW.newMold();
+			    zmoldind = WTW.getNextCount(WTW.thingMolds);
+				zmolds = WTW.thingMolds;
+				zmolds[zmoldind] = WTW.newMold();
 				dGet('wtw_tthingind').value = WTW.getThingInd(thingid);
 				dGet('wtw_tcommunityind').value= "-1";
-				molds[moldind].thinginfo.thingid = thingid;
-				molds[moldind].thinginfo.thingind = dGet('wtw_tthingind').value;
+				zmolds[zmoldind].thinginfo.thingid = thingid;
+				zmolds[zmoldind].thinginfo.thingind = dGet('wtw_tthingind').value;
 				break;
 			default:
-			    moldind = WTW.getNextCount(WTW.buildingMolds);
-				molds = WTW.buildingMolds;
-				molds[moldind] = WTW.newMold();
+			    zmoldind = WTW.getNextCount(WTW.buildingMolds);
+				zmolds = WTW.buildingMolds;
+				zmolds[zmoldind] = WTW.newMold();
 				dGet('wtw_tthingind').value = "-1";
 				dGet('wtw_tcommunityind').value= "-1";
-				molds[moldind].buildinginfo.buildingid = buildingid;
-				molds[moldind].buildinginfo.buildingind = WTW.getBuildingInd(buildingid);
+				zmolds[zmoldind].buildinginfo.buildingid = buildingid;
+				zmolds[zmoldind].buildinginfo.buildingind = WTW.getBuildingInd(buildingid);
 				break;
 		}
-		var loadactionzoneid = WTW.getLoadActionZoneID("normal");
-		WTW.getLoadZoneList(loadactionzoneid);
-		var moldid = WTW.getRandomString(16);
-		molds[moldind].moldid = moldid;
-		dGet('wtw_tmoldmoldgroup').value = moldgroup;
-		dGet('wtw_tmoldshape').value = shape;
-		dGet('wtw_tmoldind').value = moldind.toString();
-		dGet('wtw_tmoldid').value = moldid.toString();
+		var zloadactionzoneid = WTW.getLoadActionZoneID("normal");
+		WTW.getLoadZoneList(zloadactionzoneid);
+		var zmoldid = WTW.getRandomString(16);
+		zmolds[zmoldind].moldid = zmoldid;
+		dGet('wtw_tmoldwebtype').value = zwebtype;
+		dGet('wtw_tmoldshape').value = zshape;
+		dGet('wtw_tmoldind').value = zmoldind.toString();
+		dGet('wtw_tmoldid').value = zmoldid.toString();
 		WTW.show('wtw_moldtexturetitle');
 		WTW.show('wtw_moldbumptexturetitle');
 		WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
@@ -772,142 +772,138 @@ WTWJS.prototype.openAddNewMold = function(moldgroup, shape) {
 		WTW.setPreviewImage('wtw_moldtexturebumprpreview', 'wtw_tmoldtexturebumprpath', 'wtw_tmoldtexturebumprid');
 		WTW.setPreviewImage('wtw_moldtexturebumpgpreview', 'wtw_tmoldtexturebumpgpath', 'wtw_tmoldtexturebumpgid');
 		WTW.setPreviewImage('wtw_moldtexturebumpbpreview', 'wtw_tmoldtexturebumpbpath', 'wtw_tmoldtexturebumpbid');
+		WTW.show('wtw_moldcolorsdiv');
 		WTW.show('wtw_moldbasictextureset2div');
-		molds[moldind].graphics.waterreflection = "0";
-		var mold = null;
-		WTW.setNewMoldDefaults(shape);
-		var coveringname = dGet('wtw_tmoldcoveringold').value;
-		molds[moldind].shape = shape;
-		molds[moldind].covering = coveringname;
-		molds[moldind].position.x = dGet('wtw_tmoldpositionx').value;
-		molds[moldind].position.y = dGet('wtw_tmoldpositiony').value;
-		molds[moldind].position.z = dGet('wtw_tmoldpositionz').value;
-		molds[moldind].scaling.x = dGet('wtw_tmoldscalingx').value;
-		molds[moldind].scaling.y = dGet('wtw_tmoldscalingy').value;
-		molds[moldind].scaling.z = dGet('wtw_tmoldscalingz').value;
-		molds[moldind].rotation.x = dGet('wtw_tmoldrotationx').value;
-		molds[moldind].rotation.y = dGet('wtw_tmoldrotationy').value;
-		molds[moldind].rotation.z = dGet('wtw_tmoldrotationz').value;
-		molds[moldind].scaling.special1 = dGet('wtw_tmoldspecial1').value;
-		molds[moldind].scaling.special2 = dGet('wtw_tmoldspecial2').value;
-		molds[moldind].graphics.uoffset = dGet('wtw_tmolduoffset').value;
-		molds[moldind].graphics.voffset = dGet('wtw_tmoldvoffset').value;
-		molds[moldind].graphics.uscale = dGet('wtw_tmolduscale').value;
-		molds[moldind].graphics.vscale = dGet('wtw_tmoldvscale').value;
-		molds[moldind].opacity = dGet('wtw_tmoldopacity').value;
-		molds[moldind].subdivisions = dGet('wtw_tmoldsubdivisions').value;
-		molds[moldind].object.uploadobjectid = dGet('wtw_tmolduploadobjectid').value;
-		molds[moldind].object.folder = dGet('wtw_tmoldobjectfolder').value;
-		molds[moldind].object.file = dGet('wtw_tmoldobjectfile').value;
-		molds[moldind].graphics.texture.backupid = "";
+		zmolds[zmoldind].graphics.waterreflection = "0";
+		var zmold = null;
+		WTW.setNewMoldDefaults(zshape);
+		var zcoveringname = dGet('wtw_tmoldcoveringold').value;
+		zmolds[zmoldind].shape = zshape;
+		zmolds[zmoldind].covering = zcoveringname;
+		zmolds[zmoldind].position.x = dGet('wtw_tmoldpositionx').value;
+		zmolds[zmoldind].position.y = dGet('wtw_tmoldpositiony').value;
+		zmolds[zmoldind].position.z = dGet('wtw_tmoldpositionz').value;
+		zmolds[zmoldind].scaling.x = dGet('wtw_tmoldscalingx').value;
+		zmolds[zmoldind].scaling.y = dGet('wtw_tmoldscalingy').value;
+		zmolds[zmoldind].scaling.z = dGet('wtw_tmoldscalingz').value;
+		zmolds[zmoldind].rotation.x = dGet('wtw_tmoldrotationx').value;
+		zmolds[zmoldind].rotation.y = dGet('wtw_tmoldrotationy').value;
+		zmolds[zmoldind].rotation.z = dGet('wtw_tmoldrotationz').value;
+		zmolds[zmoldind].scaling.special1 = dGet('wtw_tmoldspecial1').value;
+		zmolds[zmoldind].scaling.special2 = dGet('wtw_tmoldspecial2').value;
+		zmolds[zmoldind].graphics.uoffset = dGet('wtw_tmolduoffset').value;
+		zmolds[zmoldind].graphics.voffset = dGet('wtw_tmoldvoffset').value;
+		zmolds[zmoldind].graphics.uscale = dGet('wtw_tmolduscale').value;
+		zmolds[zmoldind].graphics.vscale = dGet('wtw_tmoldvscale').value;
+		zmolds[zmoldind].opacity = dGet('wtw_tmoldopacity').value;
+		zmolds[zmoldind].subdivisions = dGet('wtw_tmoldsubdivisions').value;
+		zmolds[zmoldind].object.uploadobjectid = dGet('wtw_tmolduploadobjectid').value;
+		zmolds[zmoldind].object.folder = dGet('wtw_tmoldobjectfolder').value;
+		zmolds[zmoldind].object.file = dGet('wtw_tmoldobjectfile').value;
+		zmolds[zmoldind].graphics.texture.backupid = "";
 		if (dGet('wtw_tmoldreceiveshadows').checked == true) {
-			molds[moldind].graphics.receiveshadows = '1';
+			zmolds[zmoldind].graphics.receiveshadows = '1';
 		} else {
-			molds[moldind].graphics.receiveshadows = '0';
+			zmolds[zmoldind].graphics.receiveshadows = '0';
 		}
 		if (dGet('wtw_tmoldgraphiclevel').checked == true) {
-			molds[moldind].graphics.level = '1';
+			zmolds[zmoldind].graphics.level = '1';
 		} else {
-			molds[moldind].graphics.level = '0';
+			zmolds[zmoldind].graphics.level = '0';
 		}
-		molds[moldind].graphics.texture.id = dGet('wtw_tmoldtextureid').value;
-		molds[moldind].graphics.texture.path = dGet('wtw_tmoldtexturepath').value;
-		molds[moldind].graphics.texture.bumpid = dGet('wtw_tmoldtexturebumpid').value;
-		molds[moldind].graphics.texture.bumppath = dGet('wtw_tmoldtexturebumppath').value;
-		molds[moldind].graphics.texture.videoid = dGet('wtw_tmoldvideoid').value;
-		molds[moldind].graphics.texture.videoposterid = dGet('wtw_tmoldvideoposterid').value;
-		molds[moldind].graphics.heightmap.id = dGet('wtw_tmoldheightmapid').value;
-		molds[moldind].graphics.heightmap.path = dGet('wtw_tmoldheightmappath').value;
-		molds[moldind].graphics.heightmap.mixmapid = dGet('wtw_tmoldmixmapid').value;
-		molds[moldind].graphics.heightmap.mixmappath = dGet('wtw_tmoldmixmappath').value;
-		molds[moldind].graphics.heightmap.texturerid = dGet('wtw_tmoldtexturerid').value;
-		molds[moldind].graphics.heightmap.texturerpath = dGet('wtw_tmoldtexturerpath').value;
-		molds[moldind].graphics.heightmap.texturegid = dGet('wtw_tmoldtexturegid').value;
-		molds[moldind].graphics.heightmap.texturegpath = dGet('wtw_tmoldtexturegpath').value;
-		molds[moldind].graphics.heightmap.texturebid = dGet('wtw_tmoldtexturebid').value;
-		molds[moldind].graphics.heightmap.texturebpath = dGet('wtw_tmoldtexturebpath').value;
-		molds[moldind].graphics.heightmap.texturebumprid = dGet('wtw_tmoldtexturebumprid').value;
-		molds[moldind].graphics.heightmap.texturebumprpath = dGet('wtw_tmoldtexturebumprpath').value;
-		molds[moldind].graphics.heightmap.texturebumpgid = dGet('wtw_tmoldtexturebumpgid').value;
-		molds[moldind].graphics.heightmap.texturebumpgpath = dGet('wtw_tmoldtexturebumpgpath').value;
-		molds[moldind].graphics.heightmap.texturebumpbid = dGet('wtw_tmoldtexturebumpbid').value;
-		molds[moldind].graphics.heightmap.texturebumpbpath = dGet('wtw_tmoldtexturebumpbpath').value;
-		molds[moldind].sound.id = dGet('wtw_tmoldsoundid').value;
-		molds[moldind].sound.path = dGet('wtw_tmoldsoundpath').value;
-		molds[moldind].sound.name = dGet('wtw_tmoldsoundname').value;
-		var soundattenuation = "none";
+		zmolds[zmoldind].graphics.texture.id = dGet('wtw_tmoldtextureid').value;
+		zmolds[zmoldind].graphics.texture.path = dGet('wtw_tmoldtexturepath').value;
+		zmolds[zmoldind].graphics.texture.bumpid = dGet('wtw_tmoldtexturebumpid').value;
+		zmolds[zmoldind].graphics.texture.bumppath = dGet('wtw_tmoldtexturebumppath').value;
+		zmolds[zmoldind].graphics.texture.videoid = dGet('wtw_tmoldvideoid').value;
+		zmolds[zmoldind].graphics.texture.videoposterid = dGet('wtw_tmoldvideoposterid').value;
+		zmolds[zmoldind].graphics.heightmap.id = dGet('wtw_tmoldheightmapid').value;
+		zmolds[zmoldind].graphics.heightmap.path = dGet('wtw_tmoldheightmappath').value;
+		zmolds[zmoldind].graphics.heightmap.mixmapid = dGet('wtw_tmoldmixmapid').value;
+		zmolds[zmoldind].graphics.heightmap.mixmappath = dGet('wtw_tmoldmixmappath').value;
+		zmolds[zmoldind].graphics.heightmap.texturerid = dGet('wtw_tmoldtexturerid').value;
+		zmolds[zmoldind].graphics.heightmap.texturerpath = dGet('wtw_tmoldtexturerpath').value;
+		zmolds[zmoldind].graphics.heightmap.texturegid = dGet('wtw_tmoldtexturegid').value;
+		zmolds[zmoldind].graphics.heightmap.texturegpath = dGet('wtw_tmoldtexturegpath').value;
+		zmolds[zmoldind].graphics.heightmap.texturebid = dGet('wtw_tmoldtexturebid').value;
+		zmolds[zmoldind].graphics.heightmap.texturebpath = dGet('wtw_tmoldtexturebpath').value;
+		zmolds[zmoldind].graphics.heightmap.texturebumprid = dGet('wtw_tmoldtexturebumprid').value;
+		zmolds[zmoldind].graphics.heightmap.texturebumprpath = dGet('wtw_tmoldtexturebumprpath').value;
+		zmolds[zmoldind].graphics.heightmap.texturebumpgid = dGet('wtw_tmoldtexturebumpgid').value;
+		zmolds[zmoldind].graphics.heightmap.texturebumpgpath = dGet('wtw_tmoldtexturebumpgpath').value;
+		zmolds[zmoldind].graphics.heightmap.texturebumpbid = dGet('wtw_tmoldtexturebumpbid').value;
+		zmolds[zmoldind].graphics.heightmap.texturebumpbpath = dGet('wtw_tmoldtexturebumpbpath').value;
+		zmolds[zmoldind].sound.id = dGet('wtw_tmoldsoundid').value;
+		zmolds[zmoldind].sound.path = dGet('wtw_tmoldsoundpath').value;
+		zmolds[zmoldind].sound.name = dGet('wtw_tmoldsoundname').value;
+		var zsoundattenuation = "none";
 		if (dGet('wtw_tmoldsoundattenuation').selectedIndex > -1) {
-			soundattenuation = dGet('wtw_tmoldsoundattenuation').options[dGet('wtw_tmoldsoundattenuation').selectedIndex].value;
+			zsoundattenuation = dGet('wtw_tmoldsoundattenuation').options[dGet('wtw_tmoldsoundattenuation').selectedIndex].value;
 		}
-		molds[moldind].sound.attenuation = soundattenuation;
+		zmolds[zmoldind].sound.attenuation = zsoundattenuation;
 		if (dGet('wtw_tmoldsoundloop').checked == true) {
-			molds[moldind].sound.loop = '1';
+			zmolds[zmoldind].sound.loop = '1';
 		} else {
-			molds[moldind].sound.loop = '0';
+			zmolds[zmoldind].sound.loop = '0';
 		}
-		molds[moldind].sound.maxdistance = dGet('wtw_tmoldsoundmaxdistance').value;
-		molds[moldind].sound.rollofffactor = dGet('wtw_tmoldsoundrollofffactor').value;
-		molds[moldind].sound.refdistance = dGet('wtw_tmoldsoundrefdistance').value;
-		molds[moldind].sound.coneinnerangle = dGet('wtw_tmoldsoundconeinnerangle').value;
-		molds[moldind].sound.coneouterangle = dGet('wtw_tmoldsoundconeouterangle').value;
-		molds[moldind].sound.coneoutergain = dGet('wtw_tmoldsoundconeoutergain').value;
-		molds[moldind].graphics.heightmap.maxheight = dGet('wtw_tmoldmaxheight').value;
-		molds[moldind].color.specular.r = dGet('wtw_tspecularcolorr').value;
-		molds[moldind].color.specular.g = dGet('wtw_tspecularcolorg').value;
-		molds[moldind].color.specular.b = dGet('wtw_tspecularcolorb').value;
-		molds[moldind].color.emissive.r = dGet('wtw_temissivecolorr').value;
-		molds[moldind].color.emissive.g = dGet('wtw_temissivecolorg').value;
-		molds[moldind].color.emissive.b = dGet('wtw_temissivecolorb').value;
-		molds[moldind].color.diffuse.r = dGet('wtw_tdiffusecolorr').value;
-		molds[moldind].color.diffuse.g = dGet('wtw_tdiffusecolorg').value;
-		molds[moldind].color.diffuse.b = dGet('wtw_tdiffusecolorb').value;
-		molds[moldind].moldname = moldgroup + "molds-" + moldind.toString() + "-" + moldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + shape;
-		molds[moldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
-		molds[moldind].connectinggridind = dGet('wtw_tconnectinggridind').value;
-		molds[moldind].parentname = dGet('wtw_tconnectinggridname').value;
-		molds[moldind].loadactionzoneid = loadactionzoneid;
-		molds[moldind].loadactionzoneind = WTW.getActionZoneInd(loadactionzoneid, Number(dGet('wtw_tconnectinggridind').value));
-		WTW.setDDLValue('wtw_tmoldcovering', coveringname);
-		mold = WTW.addMold(molds[moldind].moldname, molds[moldind], molds[moldind].parentname, coveringname);
-		mold.isPickable = true;
-		WTW.setCoveringFormFields(coveringname);
-		WTW.registerMouseOver(mold);
-		switch (shape.toLowerCase()) {
+		zmolds[zmoldind].sound.maxdistance = dGet('wtw_tmoldsoundmaxdistance').value;
+		zmolds[zmoldind].sound.rollofffactor = dGet('wtw_tmoldsoundrollofffactor').value;
+		zmolds[zmoldind].sound.refdistance = dGet('wtw_tmoldsoundrefdistance').value;
+		zmolds[zmoldind].sound.coneinnerangle = dGet('wtw_tmoldsoundconeinnerangle').value;
+		zmolds[zmoldind].sound.coneouterangle = dGet('wtw_tmoldsoundconeouterangle').value;
+		zmolds[zmoldind].sound.coneoutergain = dGet('wtw_tmoldsoundconeoutergain').value;
+		zmolds[zmoldind].graphics.heightmap.maxheight = dGet('wtw_tmoldmaxheight').value;
+		zmolds[zmoldind].color.diffusecolor = dGet('wtw_tmolddiffusecolor').value;
+		zmolds[zmoldind].color.emissivecolor = dGet('wtw_tmoldemissivecolor').value;
+		zmolds[zmoldind].color.specularcolor = dGet('wtw_tmoldspecularcolor').value;
+		zmolds[zmoldind].color.ambientcolor = dGet('wtw_tmoldambientcolor').value;
+		zmolds[zmoldind].moldname = zwebtype + "molds-" + zmoldind.toString() + "-" + zmoldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + zshape;
+		zmolds[zmoldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
+		zmolds[zmoldind].connectinggridind = dGet('wtw_tconnectinggridind').value;
+		zmolds[zmoldind].parentname = dGet('wtw_tconnectinggridname').value;
+		zmolds[zmoldind].loadactionzoneid = zloadactionzoneid;
+		zmolds[zmoldind].loadactionzoneind = WTW.getActionZoneInd(zloadactionzoneid, Number(dGet('wtw_tconnectinggridind').value));
+		WTW.setDDLValue('wtw_tmoldcovering', zcoveringname);
+		zmold = WTW.addMold(zmolds[zmoldind].moldname, zmolds[zmoldind], zmolds[zmoldind].parentname, zcoveringname);
+		zmold.isPickable = true;
+		WTW.setCoveringFormFields(zcoveringname);
+		WTW.registerMouseOver(zmold);
+		switch (zshape.toLowerCase()) {
 			case "tube":
-				var coords = WTW.getNewCoordinates(50);
-				var positionX = coords.positionX;
-				var positionY = coords.positionY;
-				var positionZ = coords.positionZ;
-				molds[moldind].paths.path1[0] = WTW.newPathPoint();
-				molds[moldind].paths.path1[0].x = positionX;
-				molds[moldind].paths.path1[0].y = positionY;
-				molds[moldind].paths.path1[0].z = positionZ;
-				molds[moldind].paths.path1[1] = WTW.newPathPoint();
-				molds[moldind].paths.path1[1].x = positionX;
-				molds[moldind].paths.path1[1].y = (Number(positionY) + 10);
-				molds[moldind].paths.path1[1].z = positionZ;
-				molds[moldind].paths.path1[1].sorder = 1;
+				var zcoords = WTW.getNewCoordinates(50);
+				var zpositionX = zcoords.positionX;
+				var zpositionY = zcoords.positionY;
+				var zpositionZ = zcoords.positionZ;
+				zmolds[zmoldind].paths.path1[0] = WTW.newPathPoint();
+				zmolds[zmoldind].paths.path1[0].x = zpositionX;
+				zmolds[zmoldind].paths.path1[0].y = zpositionY;
+				zmolds[zmoldind].paths.path1[0].z = zpositionZ;
+				zmolds[zmoldind].paths.path1[1] = WTW.newPathPoint();
+				zmolds[zmoldind].paths.path1[1].x = zpositionX;
+				zmolds[zmoldind].paths.path1[1].y = (Number(zpositionY) + 10);
+				zmolds[zmoldind].paths.path1[1].z = zpositionZ;
+				zmolds[zmoldind].paths.path1[1].sorder = 1;
 				break;
 			case "line":
-				var coords = WTW.getNewCoordinates(50);
-				var positionX = coords.positionX;
-				var positionY = coords.positionY;
-				var positionZ = coords.positionZ;
-				molds[moldind].paths.path1[0] = WTW.newPathPoint();
-				molds[moldind].paths.path1[0].x = positionX;
-				molds[moldind].paths.path1[0].y = positionY;
-				molds[moldind].paths.path1[0].z = positionZ;
-				molds[moldind].paths.path1[1] = WTW.newPathPoint();
-				molds[moldind].paths.path1[1].x = positionX;
-				molds[moldind].paths.path1[1].y = (Number(positionY) + 10);
-				molds[moldind].paths.path1[1].z = positionZ;
-				molds[moldind].paths.path1[1].sorder = 1;
+				var zcoords = WTW.getNewCoordinates(50);
+				var zpositionX = zcoords.positionX;
+				var zpositionY = zcoords.positionY;
+				var zpositionZ = zcoords.positionZ;
+				zmolds[zmoldind].paths.path1[0] = WTW.newPathPoint();
+				zmolds[zmoldind].paths.path1[0].x = zpositionX;
+				zmolds[zmoldind].paths.path1[0].y = zpositionY;
+				zmolds[zmoldind].paths.path1[0].z = zpositionZ;
+				zmolds[zmoldind].paths.path1[1] = WTW.newPathPoint();
+				zmolds[zmoldind].paths.path1[1].x = zpositionX;
+				zmolds[zmoldind].paths.path1[1].y = (Number(zpositionY) + 10);
+				zmolds[zmoldind].paths.path1[1].z = zpositionZ;
+				zmolds[zmoldind].paths.path1[1].sorder = 1;
 				break;
 			default:
-				WTW.openEditPoles(mold);
+				WTW.openEditPoles(zmold);
 				break;
 		}
-		WTW.pluginsOpenAddNewMold(moldgroup, shape, molds[moldind].moldname);
+		WTW.pluginsOpenAddNewMold(zwebtype, zshape, zmolds[zmoldind].moldname);
 		WTW.hideAdminMenu();
 		WTW.show('wtw_adminmenu11');
 		WTW.show('wtw_adminmenu11b');
@@ -920,11 +916,11 @@ WTWJS.prototype.openAddNewMold = function(moldgroup, shape) {
 WTWJS.prototype.setSoundFields = function() {
 	/* set sounds fields on the form based on drop down selection */
 	try {
-		var soundattenuation = "none";
+		var zsoundattenuation = "none";
 		if (dGet('wtw_tmoldsoundattenuation').selectedIndex > -1) {
-			soundattenuation = dGet('wtw_tmoldsoundattenuation').options[dGet('wtw_tmoldsoundattenuation').selectedIndex].value;
+			zsoundattenuation = dGet('wtw_tmoldsoundattenuation').options[dGet('wtw_tmoldsoundattenuation').selectedIndex].value;
 		}
-		switch (soundattenuation) {
+		switch (zsoundattenuation) {
 			case "none":
 				WTW.hide('wtw_moldsoundoffdiv');
 				WTW.hide('wtw_moldsoundmaxdistdiv');
@@ -952,30 +948,29 @@ WTWJS.prototype.setSoundFields = function() {
 WTWJS.prototype.changeCoveringType = function() {
 	/* chaneg covering (texture) form fields based on type selected - and default values available */
 	try {	
-		var settexture = '0';
-		var imageid = 'ij7fi8qv7dbgb6zc';
-		var imagepath = '/content/system/stock/stucco-512x512.jpg';
-		var coveringname = WTW.getDDLValue('wtw_tmoldcovering');
-		WTW.setCoveringFormFields(coveringname);
-		switch (coveringname) {
+		var zimageid = 'ij7fi8qv7dbgb6zc';
+		var zimagepath = '/content/system/stock/stucco-512x512.jpg';
+		var zcoveringname = WTW.getDDLValue('wtw_tmoldcovering');
+		WTW.setCoveringFormFields(zcoveringname);
+		switch (zcoveringname) {
 			case "directional texture": 
 			case "2d texture":
 			case "texture": 
 				if (dGet('wtw_tmoldtextureid').value == '') {
-					dGet('wtw_tmoldtextureid').value = imageid;
+					dGet('wtw_tmoldtextureid').value = zimageid;
 				}
 				if (dGet('wtw_tmoldtexturepath').value == '') {
-					dGet('wtw_tmoldtexturepath').value = imagepath;
+					dGet('wtw_tmoldtexturepath').value = zimagepath;
 				}
 				break; 
 			case "terrain":
-				imageid = '4to027vq39087bxr';
-				imagepath = '/content/system/stock/cement-512x512.jpg';
+				zimageid = '4to027vq39087bxr';
+				zimagepath = '/content/system/stock/cement-512x512.jpg';
 				if (dGet('wtw_tmoldtextureid').value == '') {
-					dGet('wtw_tmoldtextureid').value = imageid;
+					dGet('wtw_tmoldtextureid').value = zimageid;
 				}
 				if (dGet('wtw_tmoldtexturepath').value == '') {
-					dGet('wtw_tmoldtexturepath').value = imagepath;
+					dGet('wtw_tmoldtexturepath').value = zimagepath;
 				}
 				break;
 			default:
@@ -1007,42 +1002,42 @@ WTWJS.prototype.changeCoveringType = function() {
 	}
 }
 
-WTWJS.prototype.changeOnClickEvent = function(obj) {
+WTWJS.prototype.changeOnClickEvent = function(zobj) {
 	/* molds can have an onclick assigned to them */
 	/* this function enables the onclick and sets the form fields for input */
 	try {
 		if (WTW.isNumeric(dGet('wtw_tmoldind').value)) {
-			var moldgroup = dGet("wtw_tmoldmoldgroup").value;
-			var moldind = Number(dGet('wtw_tmoldind').value);
-			var molds;
-			switch (moldgroup) {
+			var zwebtype = dGet("wtw_tmoldwebtype").value;
+			var zmoldind = Number(dGet('wtw_tmoldind').value);
+			var zmolds;
+			switch (zwebtype) {
 				case "community":
-					molds = WTW.communitiesMolds;
+					zmolds = WTW.communitiesMolds;
 					break;
 				case "thing":
-					molds = WTW.thingMolds;
+					zmolds = WTW.thingMolds;
 					break;
 				default:
-					molds = WTW.buildingMolds;
+					zmolds = WTW.buildingMolds;
 					break;
 			}
-			if (molds[moldind] != null) {
-				if (molds[moldind].graphics.webimages[0] != undefined) {
-					dGet('wtw_tmoldimagejsfunction').value = molds[moldind].graphics.webimages[0].jsfunction;
-					dGet('wtw_tmoldimagejsparameters').value = molds[moldind].graphics.webimages[0].jsparameters;
+			if (zmolds[zmoldind] != null) {
+				if (zmolds[zmoldind].graphics.webimages[0] != undefined) {
+					dGet('wtw_tmoldimagejsfunction').value = zmolds[zmoldind].graphics.webimages[0].jsfunction;
+					dGet('wtw_tmoldimagejsparameters').value = zmolds[zmoldind].graphics.webimages[0].jsparameters;
 				}
 			}
 		}
 		WTW.showInline('wtw_onclickjavascriptdiv');
-		if (obj.selectedIndex == 1) {
+		if (zobj.selectedIndex == 1) {
 			dGet("wtw_tmoldimagejsfunction").value = "WTW.openIFrame";
 			dGet('wtw_moldjsparameterstitle').innerHTML = "Web Address (URL)";
 			dGet('wtw_moldjsparametersnote').innerHTML = "(Example: https://www.walktheweb.com)";
-		} else if (obj.selectedIndex == 2) {
+		} else if (zobj.selectedIndex == 2) {
 			dGet("wtw_tmoldimagejsfunction").value = "WTW.openWebpage";
 			dGet('wtw_moldjsparameterstitle').innerHTML = "Web Address (URL)";
 			dGet('wtw_moldjsparametersnote').innerHTML = "(Example: https://www.walktheweb.com)";
-		} else  if (obj.selectedIndex == 0) {
+		} else  if (zobj.selectedIndex == 0) {
 			dGet("wtw_tmoldimagejsfunction").value = "";
 			dGet('wtw_tmoldimagejsparameters').value = "";
 			WTW.hide('wtw_onclickjavascriptdiv');
@@ -1076,9 +1071,9 @@ WTWJS.prototype.setPreviewImage = function(zpreviewimageid, zimagepathid, zimage
 				WTW.getJSON("/connect/upload.php?uploadid=" + zimageid, 
 					function(response) {
 						WTW.loadUpload(JSON.parse(response),zimageid,0);
-						var imageinfo = WTW.getUploadFileData(zimageid);
-						imageinfo.image.onload = function() {	
-							dGet(zpreviewimageid).src = imageinfo.filedata;
+						var zimageinfo = WTW.getUploadFileData(zimageid);
+						zimageinfo.image.onload = function() {	
+							dGet(zpreviewimageid).src = zimageinfo.filedata;
 						}
 					}
 				);
@@ -1092,52 +1087,52 @@ WTWJS.prototype.setPreviewImage = function(zpreviewimageid, zimagepathid, zimage
 	}
 }
 
-WTWJS.prototype.submitMoldForm = function(w) {
+WTWJS.prototype.submitMoldForm = function(zselect) {
 	/* submit mold form after edit (or after create new mold) */
 	try {
-		WTW.closeColorSelector();
-		var moldgroup = dGet('wtw_tmoldmoldgroup').value;
-		var molds = null;
-		var shape = "wall";
-		var moldname = "";
+		WTW.closeColorSelector(true);
+		var zwebtype = dGet('wtw_tmoldwebtype').value;
+		var zmolds = null;
+		var zshape = "wall";
+		var zmoldname = "";
 		if (dGet('wtw_tmoldshape').value != "") {
-			shape = dGet('wtw_tmoldshape').value;
+			zshape = dGet('wtw_tmoldshape').value;
 		}
-		var moldind = Number(dGet('wtw_tmoldind').value);
-		switch (moldgroup) {
+		var zmoldind = Number(dGet('wtw_tmoldind').value);
+		switch (zwebtype) {
 			case "community":
-				molds = WTW.communitiesMolds;				
+				zmolds = WTW.communitiesMolds;				
 				break;
 			case "thing":
-				molds = WTW.thingMolds;
+				zmolds = WTW.thingMolds;
 				break;
 			default:
-				molds = WTW.buildingMolds;
+				zmolds = WTW.buildingMolds;
 				break;
 		}
-		moldname = moldgroup + "molds-" + moldind + "-" + dGet('wtw_tmoldid').value + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + shape;
+		zmoldname = zwebtype + "molds-" + zmoldind + "-" + dGet('wtw_tmoldid').value + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + zshape;
 		if (dGet('wtw_tmoldcsgmoldid').value == "") {
 			WTW.setDDLValue("wtw_tmoldcsgaction", "");
 		}		
-		if (w == 0) {
+		if (zselect == 0) {
 			/* cancel or delete mold */
 			/* note that molds are not deleted from the database, a delete flag is set so it is not loaded */
-			var basemoldind = -1;
-			var baseshape = "box";
-			if (molds[moldind].csg.moldid != '') {
-				for (var i=0;i<molds.length;i++) {
-					if (molds[i] != null) {
-						if (molds[i].moldid == molds[moldind].csg.moldid) {
-							basemoldind = i;
-							baseshape = molds[i].shape;
+			var zbasemoldind = -1;
+			var zbaseshape = "box";
+			if (zmolds[zmoldind].csg.moldid != '') {
+				for (var i=0;i<zmolds.length;i++) {
+					if (zmolds[i] != null) {
+						if (zmolds[i].moldid == zmolds[zmoldind].csg.moldid) {
+							zbasemoldind = i;
+							zbaseshape = zmolds[i].shape;
 						}
 					}
 				}
 			}
-			if (moldname != "") {
-				WTW.disposeClean(moldname);
+			if (zmoldname != "") {
+				WTW.disposeClean(zmoldname);
 			}
-			molds[moldind] = null;
+			zmolds[zmoldind] = null;
 			var zrequest = {
 				'communityid': communityid,
 				'buildingid': buildingid,
@@ -1153,20 +1148,20 @@ WTWJS.prototype.submitMoldForm = function(w) {
 					dGet('wtw_tnewmold').value = "0";
 				}
 			);
-			WTW.pluginsSubmitMoldForm(w);
+			WTW.pluginsSubmitMoldForm(zselect);
 			WTW.clearEditMold();
-			if (basemoldind > -1) {
-				WTW.openMoldForm(basemoldind,baseshape,moldgroup); 
+			if (zbasemoldind > -1) {
+				WTW.openMoldForm(zbasemoldind, zbaseshape, zwebtype); 
 			} else {
 				WTW.hideAdminMenu();
 				WTW.backToEdit();
 			}
-		} else if (w == -1) {
+		} else if (zselect == -1) {
 			/* cancel and undo changes to mold using WTW.moldBackup global variable */
 			if (WTW.moldBackup != null) {
-				molds[moldind] = WTW.moldBackup;
+				zmolds[zmoldind] = WTW.moldBackup;
 			}
-			WTW.loadMoldForm(molds[moldind]);
+			WTW.loadMoldForm(zmolds[zmoldind]);
 			WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 			WTW.setPreviewImage('wtw_moldtexturebumppreview', 'wtw_tmoldtexturebumppath', 'wtw_tmoldtexturebumpid');
 			WTW.setPreviewImage('wtw_moldheightmappreview', 'wtw_tmoldheightmappath', 'wtw_tmoldheightmapid');
@@ -1177,256 +1172,246 @@ WTWJS.prototype.submitMoldForm = function(w) {
 			WTW.setPreviewImage('wtw_moldtexturebumprpreview', 'wtw_tmoldtexturebumprpath', 'wtw_tmoldtexturebumprid');
 			WTW.setPreviewImage('wtw_moldtexturebumpgpreview', 'wtw_tmoldtexturebumpgpath', 'wtw_tmoldtexturebumpgid');
 			WTW.setPreviewImage('wtw_moldtexturebumpbpreview', 'wtw_tmoldtexturebumpbpath', 'wtw_tmoldtexturebumpbid');
-			WTW.disposeClean(molds[moldind].moldname);
+			WTW.disposeClean(zmolds[zmoldind].moldname);
 			if (dGet('wtw_tnewmold').value == "1") {
-				if (moldname != "") {
-					WTW.disposeClean(moldname);
+				if (zmoldname != "") {
+					WTW.disposeClean(zmoldname);
 				}
-				molds[moldind] = null;
+				zmolds[zmoldind] = null;
 			} else {
-				molds[moldind].shown = "0";
+				zmolds[zmoldind].shown = "0";
 				WTW.setShownMolds();
 			}
-			WTW.pluginsSubmitMoldForm(w);
+			WTW.pluginsSubmitMoldForm(zselect);
 			WTW.clearEditMold();
 			WTW.hideAdminMenu();
 			WTW.backToEdit();
 		} else {
 			/* save the mold (create new if needed) */
-			if (molds[moldind] == null) {
-				molds[moldind] = WTW.newMold();
+			if (zmolds[zmoldind] == null) {
+				zmolds[zmoldind] = WTW.newMold();
 			}
-			switch (moldgroup) {
+			switch (zwebtype) {
 				case "community":
-					molds[moldind].communityinfo.communityid = communityid;
-					molds[moldind].communityinfo.communityind = dGet('wtw_tcommunityind').value;
+					zmolds[zmoldind].communityinfo.communityid = communityid;
+					zmolds[zmoldind].communityinfo.communityind = dGet('wtw_tcommunityind').value;
 					break;
 				case "thing":
-					molds[moldind].thinginfo.communityid = thingid;
-					molds[moldind].thinginfo.thingind = dGet('wtw_tthingind').value;
+					zmolds[zmoldind].thinginfo.communityid = thingid;
+					zmolds[zmoldind].thinginfo.thingind = dGet('wtw_tthingind').value;
 					break;
 				default:
-					molds[moldind].buildinginfo.buildingid = buildingid;
-					molds[moldind].buildinginfo.buildingind = WTW.getBuildingInd(buildingid);
+					zmolds[zmoldind].buildinginfo.buildingid = buildingid;
+					zmolds[zmoldind].buildinginfo.buildingind = WTW.getBuildingInd(buildingid);
 					break;
 			}
-			molds[moldind].moldid = dGet('wtw_tmoldid').value;
-			molds[moldind].moldind = moldind;
-			molds[moldind].shape = dGet('wtw_tmoldshape').value;
+			zmolds[zmoldind].moldid = dGet('wtw_tmoldid').value;
+			zmolds[zmoldind].moldind = zmoldind;
+			zmolds[zmoldind].shape = dGet('wtw_tmoldshape').value;
 			if (dGet('wtw_tmoldcovering').options[dGet('wtw_tmoldcovering').selectedIndex] != undefined) {
-				molds[moldind].covering = dGet('wtw_tmoldcovering').options[dGet('wtw_tmoldcovering').selectedIndex].value;
+				zmolds[zmoldind].covering = dGet('wtw_tmoldcovering').options[dGet('wtw_tmoldcovering').selectedIndex].value;
 			} else {
-				molds[moldind].covering = dGet('wtw_tmoldcoveringold').value;
+				zmolds[zmoldind].covering = dGet('wtw_tmoldcoveringold').value;
 			}
-			molds[moldind].position.x = dGet('wtw_tmoldpositionx').value;
-			molds[moldind].position.y = dGet('wtw_tmoldpositiony').value;
-			molds[moldind].position.z = dGet('wtw_tmoldpositionz').value;
-			molds[moldind].scaling.x = dGet('wtw_tmoldscalingx').value;
-			molds[moldind].scaling.y = dGet('wtw_tmoldscalingy').value;
-			molds[moldind].scaling.z = dGet('wtw_tmoldscalingz').value;
-			molds[moldind].rotation.x = dGet('wtw_tmoldrotationx').value;
-			molds[moldind].rotation.y = dGet('wtw_tmoldrotationy').value;
-			molds[moldind].rotation.z = dGet('wtw_tmoldrotationz').value;
-			molds[moldind].scaling.special1 = dGet('wtw_tmoldspecial1').value;
-			molds[moldind].scaling.special2 = dGet('wtw_tmoldspecial2').value;
-			molds[moldind].graphics.uoffset = dGet('wtw_tmolduoffset').value;
-			molds[moldind].graphics.voffset = dGet('wtw_tmoldvoffset').value;
-			molds[moldind].graphics.uscale = dGet('wtw_tmolduscale').value;
-			molds[moldind].graphics.vscale = dGet('wtw_tmoldvscale').value;
-			if (molds[moldind].graphics.webimages[0] != undefined) {
-				molds[moldind].graphics.webimages[0].imagepath = dGet('wtw_tmoldaddimagepath').value;
-				molds[moldind].graphics.webimages[0].imageid = dGet('wtw_tmoldaddimageid').value;
-				molds[moldind].graphics.webimages[0].imagehoverpath = dGet('wtw_tmoldaddimagehoverpath').value;
-				molds[moldind].graphics.webimages[0].imagehoverid = dGet('wtw_tmoldaddimagehoverid').value;
-				molds[moldind].graphics.webimages[0].imageclickpath = dGet('wtw_tmoldaddimageclickpath').value;
-				molds[moldind].graphics.webimages[0].imageclickid = dGet('wtw_tmoldaddimageclickid').value;
-				molds[moldind].graphics.webimages[0].jsfunction = dGet('wtw_tmoldimagejsfunction').value;
-				molds[moldind].graphics.webimages[0].jsparameters = dGet('wtw_tmoldimagejsparameters').value;
+			zmolds[zmoldind].position.x = dGet('wtw_tmoldpositionx').value;
+			zmolds[zmoldind].position.y = dGet('wtw_tmoldpositiony').value;
+			zmolds[zmoldind].position.z = dGet('wtw_tmoldpositionz').value;
+			zmolds[zmoldind].scaling.x = dGet('wtw_tmoldscalingx').value;
+			zmolds[zmoldind].scaling.y = dGet('wtw_tmoldscalingy').value;
+			zmolds[zmoldind].scaling.z = dGet('wtw_tmoldscalingz').value;
+			zmolds[zmoldind].rotation.x = dGet('wtw_tmoldrotationx').value;
+			zmolds[zmoldind].rotation.y = dGet('wtw_tmoldrotationy').value;
+			zmolds[zmoldind].rotation.z = dGet('wtw_tmoldrotationz').value;
+			zmolds[zmoldind].scaling.special1 = dGet('wtw_tmoldspecial1').value;
+			zmolds[zmoldind].scaling.special2 = dGet('wtw_tmoldspecial2').value;
+			zmolds[zmoldind].graphics.uoffset = dGet('wtw_tmolduoffset').value;
+			zmolds[zmoldind].graphics.voffset = dGet('wtw_tmoldvoffset').value;
+			zmolds[zmoldind].graphics.uscale = dGet('wtw_tmolduscale').value;
+			zmolds[zmoldind].graphics.vscale = dGet('wtw_tmoldvscale').value;
+			if (zmolds[zmoldind].graphics.webimages[0] != undefined) {
+				zmolds[zmoldind].graphics.webimages[0].imagepath = dGet('wtw_tmoldaddimagepath').value;
+				zmolds[zmoldind].graphics.webimages[0].imageid = dGet('wtw_tmoldaddimageid').value;
+				zmolds[zmoldind].graphics.webimages[0].imagehoverpath = dGet('wtw_tmoldaddimagehoverpath').value;
+				zmolds[zmoldind].graphics.webimages[0].imagehoverid = dGet('wtw_tmoldaddimagehoverid').value;
+				zmolds[zmoldind].graphics.webimages[0].imageclickpath = dGet('wtw_tmoldaddimageclickpath').value;
+				zmolds[zmoldind].graphics.webimages[0].imageclickid = dGet('wtw_tmoldaddimageclickid').value;
+				zmolds[zmoldind].graphics.webimages[0].jsfunction = dGet('wtw_tmoldimagejsfunction').value;
+				zmolds[zmoldind].graphics.webimages[0].jsparameters = dGet('wtw_tmoldimagejsparameters').value;
 			} else {
-				molds[moldind].graphics.webimages[0] = WTW.newWebImage();
+				zmolds[zmoldind].graphics.webimages[0] = WTW.newWebImage();
 			}
 			if (dGet('wtw_tmoldgraphiclevel').checked) {
-				molds[moldind].graphics.level = '1';
+				zmolds[zmoldind].graphics.level = '1';
 			} else {
-				molds[moldind].graphics.level = '0';
+				zmolds[zmoldind].graphics.level = '0';
 			}
 			if (dGet('wtw_tmoldreceiveshadows').checked) {
-				molds[moldind].graphics.receiveshadows = '1';
+				zmolds[zmoldind].graphics.receiveshadows = '1';
 			} else {
-				molds[moldind].graphics.receiveshadows = '0';
+				zmolds[zmoldind].graphics.receiveshadows = '0';
 			}
-			molds[moldind].opacity = dGet('wtw_tmoldopacity').value;
-			molds[moldind].object.uploadobjectid = dGet('wtw_tmolduploadobjectid').value;
-			molds[moldind].object.folder = dGet('wtw_tmoldobjectfolder').value;
-			molds[moldind].object.file = dGet('wtw_tmoldobjectfile').value;
-			molds[moldind].subdivisions = dGet('wtw_tmoldsubdivisions').value;
-			molds[moldind].graphics.texture.id = dGet('wtw_tmoldtextureid').value;
-			molds[moldind].graphics.texture.path = dGet('wtw_tmoldtexturepath').value;
-			molds[moldind].graphics.texture.bumpid = dGet('wtw_tmoldtexturebumpid').value;
-			molds[moldind].graphics.texture.bumppath = dGet('wtw_tmoldtexturebumppath').value;
-			molds[moldind].graphics.texture.videoid = dGet('wtw_tmoldvideoid').value;
-			molds[moldind].graphics.texture.video = dGet('wtw_tmoldvideopath').value;
-			molds[moldind].graphics.texture.videoposterid = dGet('wtw_tmoldvideoposterid').value;
-			molds[moldind].graphics.texture.videoposter = dGet('wtw_tmoldvideoposterpath').value;
-			molds[moldind].graphics.heightmap.id = dGet('wtw_tmoldheightmapid').value;
-			molds[moldind].graphics.heightmap.path = dGet('wtw_tmoldheightmappath').value;
-			molds[moldind].graphics.heightmap.mixmapid = dGet('wtw_tmoldmixmapid').value;
-			molds[moldind].graphics.heightmap.mixmappath = dGet('wtw_tmoldmixmappath').value;
-			molds[moldind].graphics.heightmap.texturerid = dGet('wtw_tmoldtexturerid').value;
-			molds[moldind].graphics.heightmap.texturerpath = dGet('wtw_tmoldtexturerpath').value;
-			molds[moldind].graphics.heightmap.texturegid = dGet('wtw_tmoldtexturegid').value;
-			molds[moldind].graphics.heightmap.texturegpath = dGet('wtw_tmoldtexturegpath').value;
-			molds[moldind].graphics.heightmap.texturebid = dGet('wtw_tmoldtexturebid').value;
-			molds[moldind].graphics.heightmap.texturebpath = dGet('wtw_tmoldtexturebpath').value;
-			molds[moldind].graphics.heightmap.texturebumprid = dGet('wtw_tmoldtexturebumprid').value;
-			molds[moldind].graphics.heightmap.texturebumprpath = dGet('wtw_tmoldtexturebumprpath').value;
-			molds[moldind].graphics.heightmap.texturebumpgid = dGet('wtw_tmoldtexturebumpgid').value;
-			molds[moldind].graphics.heightmap.texturebumpgpath = dGet('wtw_tmoldtexturebumpgpath').value;
-			molds[moldind].graphics.heightmap.texturebumpbid = dGet('wtw_tmoldtexturebumpbid').value;
-			molds[moldind].graphics.heightmap.texturebumpbpath = dGet('wtw_tmoldtexturebumpbpath').value;
-			molds[moldind].graphics.heightmap.maxheight = dGet('wtw_tmoldmaxheight').value;
-			var iswaterreflection = "0";
+			zmolds[zmoldind].opacity = dGet('wtw_tmoldopacity').value;
+			zmolds[zmoldind].object.uploadobjectid = dGet('wtw_tmolduploadobjectid').value;
+			zmolds[zmoldind].object.folder = dGet('wtw_tmoldobjectfolder').value;
+			zmolds[zmoldind].object.file = dGet('wtw_tmoldobjectfile').value;
+			zmolds[zmoldind].subdivisions = dGet('wtw_tmoldsubdivisions').value;
+			zmolds[zmoldind].graphics.texture.id = dGet('wtw_tmoldtextureid').value;
+			zmolds[zmoldind].graphics.texture.path = dGet('wtw_tmoldtexturepath').value;
+			zmolds[zmoldind].graphics.texture.bumpid = dGet('wtw_tmoldtexturebumpid').value;
+			zmolds[zmoldind].graphics.texture.bumppath = dGet('wtw_tmoldtexturebumppath').value;
+			zmolds[zmoldind].graphics.texture.videoid = dGet('wtw_tmoldvideoid').value;
+			zmolds[zmoldind].graphics.texture.video = dGet('wtw_tmoldvideopath').value;
+			zmolds[zmoldind].graphics.texture.videoposterid = dGet('wtw_tmoldvideoposterid').value;
+			zmolds[zmoldind].graphics.texture.videoposter = dGet('wtw_tmoldvideoposterpath').value;
+			zmolds[zmoldind].graphics.heightmap.id = dGet('wtw_tmoldheightmapid').value;
+			zmolds[zmoldind].graphics.heightmap.path = dGet('wtw_tmoldheightmappath').value;
+			zmolds[zmoldind].graphics.heightmap.mixmapid = dGet('wtw_tmoldmixmapid').value;
+			zmolds[zmoldind].graphics.heightmap.mixmappath = dGet('wtw_tmoldmixmappath').value;
+			zmolds[zmoldind].graphics.heightmap.texturerid = dGet('wtw_tmoldtexturerid').value;
+			zmolds[zmoldind].graphics.heightmap.texturerpath = dGet('wtw_tmoldtexturerpath').value;
+			zmolds[zmoldind].graphics.heightmap.texturegid = dGet('wtw_tmoldtexturegid').value;
+			zmolds[zmoldind].graphics.heightmap.texturegpath = dGet('wtw_tmoldtexturegpath').value;
+			zmolds[zmoldind].graphics.heightmap.texturebid = dGet('wtw_tmoldtexturebid').value;
+			zmolds[zmoldind].graphics.heightmap.texturebpath = dGet('wtw_tmoldtexturebpath').value;
+			zmolds[zmoldind].graphics.heightmap.texturebumprid = dGet('wtw_tmoldtexturebumprid').value;
+			zmolds[zmoldind].graphics.heightmap.texturebumprpath = dGet('wtw_tmoldtexturebumprpath').value;
+			zmolds[zmoldind].graphics.heightmap.texturebumpgid = dGet('wtw_tmoldtexturebumpgid').value;
+			zmolds[zmoldind].graphics.heightmap.texturebumpgpath = dGet('wtw_tmoldtexturebumpgpath').value;
+			zmolds[zmoldind].graphics.heightmap.texturebumpbid = dGet('wtw_tmoldtexturebumpbid').value;
+			zmolds[zmoldind].graphics.heightmap.texturebumpbpath = dGet('wtw_tmoldtexturebumpbpath').value;
+			zmolds[zmoldind].graphics.heightmap.maxheight = dGet('wtw_tmoldmaxheight').value;
+			var ziswaterreflection = "0";
 			if (dGet('wtw_tmoldwaterreflection').checked) {
-				iswaterreflection = "1";
+				ziswaterreflection = "1";
 			}
-			molds[moldind].graphics.waterreflection = iswaterreflection;
-			molds[moldind].graphics.webimageind = dGet('wtw_tmoldimageind').value;
-			molds[moldind].sound.id = dGet('wtw_tmoldsoundid').value;
-			molds[moldind].sound.name = dGet('wtw_tmoldsoundname').value;
-			var soundattenuation = "none";
+			zmolds[zmoldind].graphics.waterreflection = ziswaterreflection;
+			zmolds[zmoldind].graphics.webimageind = dGet('wtw_tmoldimageind').value;
+			zmolds[zmoldind].sound.id = dGet('wtw_tmoldsoundid').value;
+			zmolds[zmoldind].sound.name = dGet('wtw_tmoldsoundname').value;
+			var zsoundattenuation = "none";
 			if (dGet('wtw_tmoldsoundattenuation').selectedIndex > -1) {
-				soundattenuation = dGet('wtw_tmoldsoundattenuation').options[dGet('wtw_tmoldsoundattenuation').selectedIndex].value;
+				zsoundattenuation = dGet('wtw_tmoldsoundattenuation').options[dGet('wtw_tmoldsoundattenuation').selectedIndex].value;
 			}
-			molds[moldind].sound.attenuation = soundattenuation;
+			zmolds[zmoldind].sound.attenuation = zsoundattenuation;
 			if (dGet('wtw_tmoldsoundloop').checked) {
-				molds[moldind].sound.loop = '1';
+				zmolds[zmoldind].sound.loop = '1';
 			} else {
-				molds[moldind].sound.loop = '0';
+				zmolds[zmoldind].sound.loop = '0';
 			}
-			molds[moldind].sound.maxdistance = dGet('wtw_tmoldsoundmaxdistance').value;
-			molds[moldind].sound.rollofffactor = dGet('wtw_tmoldsoundrollofffactor').value;
-			molds[moldind].sound.refdistance = dGet('wtw_tmoldsoundrefdistance').value;
-			molds[moldind].sound.coneinnerangle = dGet('wtw_tmoldsoundconeinnerangle').value;
-			molds[moldind].sound.coneouterangle = dGet('wtw_tmoldsoundconeouterangle').value;
-			molds[moldind].sound.coneoutergain = dGet('wtw_tmoldsoundconeoutergain').value;
-			molds[moldind].actionzoneid = dGet('wtw_tmoldactionzoneid').value;
-			molds[moldind].actionzoneind = WTW.getActionZoneInd(molds[moldind].actionzoneid,0);
-			molds[moldind].loadactionzoneid = dGet('wtw_tmoldloadactionzoneid').options[dGet('wtw_tmoldloadactionzoneid').selectedIndex].value;
-			molds[moldind].loadactionzoneind = WTW.getActionZoneInd(molds[moldind].loadactionzoneid,0);
-			molds[moldind].csg.moldid = dGet('wtw_tmoldcsgmoldid').value;
+			zmolds[zmoldind].sound.maxdistance = dGet('wtw_tmoldsoundmaxdistance').value;
+			zmolds[zmoldind].sound.rollofffactor = dGet('wtw_tmoldsoundrollofffactor').value;
+			zmolds[zmoldind].sound.refdistance = dGet('wtw_tmoldsoundrefdistance').value;
+			zmolds[zmoldind].sound.coneinnerangle = dGet('wtw_tmoldsoundconeinnerangle').value;
+			zmolds[zmoldind].sound.coneouterangle = dGet('wtw_tmoldsoundconeouterangle').value;
+			zmolds[zmoldind].sound.coneoutergain = dGet('wtw_tmoldsoundconeoutergain').value;
+			zmolds[zmoldind].actionzoneid = dGet('wtw_tmoldactionzoneid').value;
+			zmolds[zmoldind].actionzoneind = WTW.getActionZoneInd(zmolds[zmoldind].actionzoneid,0);
+			zmolds[zmoldind].loadactionzoneid = dGet('wtw_tmoldloadactionzoneid').options[dGet('wtw_tmoldloadactionzoneid').selectedIndex].value;
+			zmolds[zmoldind].loadactionzoneind = WTW.getActionZoneInd(zmolds[zmoldind].loadactionzoneid,0);
+			zmolds[zmoldind].csg.moldid = dGet('wtw_tmoldcsgmoldid').value;
 			if (dGet('wtw_tmoldcsgaction').selectedIndex > -1) {
-				molds[moldind].csg.action = dGet('wtw_tmoldcsgaction').options[dGet('wtw_tmoldcsgaction').selectedIndex].value;
+				zmolds[zmoldind].csg.action = dGet('wtw_tmoldcsgaction').options[dGet('wtw_tmoldcsgaction').selectedIndex].value;
 			} else {
-				molds[moldind].csg.action = "";
+				zmolds[zmoldind].csg.action = "";
 			}
 			if (dGet('wtw_tmoldshape').value == '3dtext') {
-				molds[moldind].webtext.webtext = WTW.encode(dGet('wtw_tmoldwebtext').value);
+				zmolds[zmoldind].webtext.webtext = WTW.encode(dGet('wtw_tmoldwebtext').value);
 			} else {
-				molds[moldind].webtext.webtext = '';
+				zmolds[zmoldind].webtext.webtext = '';
 			}
-			molds[moldind].webtext.webstyle = WTW.encode(dGet('wtw_tmoldwebstyle').value);
-			molds[moldind].color.specular.r = dGet('wtw_tspecularcolorr').value;
-			molds[moldind].color.specular.g = dGet('wtw_tspecularcolorg').value;
-			molds[moldind].color.specular.b = dGet('wtw_tspecularcolorb').value;
-			molds[moldind].color.emissive.r = dGet('wtw_temissivecolorr').value;
-			molds[moldind].color.emissive.g = dGet('wtw_temissivecolorg').value;
-			molds[moldind].color.emissive.b = dGet('wtw_temissivecolorb').value;
-			molds[moldind].color.diffuse.r = dGet('wtw_tdiffusecolorr').value;
-			molds[moldind].color.diffuse.g = dGet('wtw_tdiffusecolorg').value;
-			molds[moldind].color.diffuse.b = dGet('wtw_tdiffusecolorb').value;
-			molds[moldind].alttag.name = WTW.encode(dGet('wtw_tmoldalttag').value);
-			molds[moldind].shown = "0";
-			molds[moldind].graphics.texture.backupid = "";
-			molds[moldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
-			molds[moldind].moldname = moldname;
-			molds[moldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
-			molds[moldind].connectinggridind = dGet('wtw_tconnectinggridind').value;
+			zmolds[zmoldind].webtext.webstyle = WTW.encode(dGet('wtw_tmoldwebstyle').value);
+			zmolds[zmoldind].color.diffusecolor = dGet('wtw_tmolddiffusecolor').value;
+			zmolds[zmoldind].color.emissivecolor = dGet('wtw_tmoldemissivecolor').value;
+			zmolds[zmoldind].color.specularcolor = dGet('wtw_tmoldspecularcolor').value;
+			zmolds[zmoldind].color.ambientcolor = dGet('wtw_tmoldambientcolor').value;
+			zmolds[zmoldind].alttag.name = WTW.encode(dGet('wtw_tmoldalttag').value);
+			zmolds[zmoldind].shown = "0";
+			zmolds[zmoldind].graphics.texture.backupid = "";
+			zmolds[zmoldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
+			zmolds[zmoldind].moldname = zmoldname;
+			zmolds[zmoldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
+			zmolds[zmoldind].connectinggridind = dGet('wtw_tconnectinggridind').value;
 			
 			var zrequest = {
 				'communityid': communityid,
 				'buildingid': buildingid,
 				'thingid': thingid,
-				'moldid': molds[moldind].moldid,
-				'moldind': moldind,
-				'loadactionzoneid': molds[moldind].loadactionzoneid,
-				'moldgroup': moldgroup,
-				'shape': molds[moldind].shape,
-				'covering': molds[moldind].covering,
-				'positionx': molds[moldind].position.x,
-				'positiony': molds[moldind].position.y,
-				'positionz': molds[moldind].position.z,
-				'scalingx': molds[moldind].scaling.x,
-				'scalingy': molds[moldind].scaling.y,
-				'scalingz': molds[moldind].scaling.z,
-				'rotationx': molds[moldind].rotation.x,
-				'rotationy': molds[moldind].rotation.y,
-				'rotationz': molds[moldind].rotation.z,
-				'special1': molds[moldind].scaling.special1,
-				'special2': molds[moldind].scaling.special2,
-				'uoffset': molds[moldind].graphics.uoffset,
-				'voffset': molds[moldind].graphics.voffset,
-				'uscale': molds[moldind].graphics.uscale,
-				'vscale': molds[moldind].graphics.vscale,
-				'uploadobjectid': molds[moldind].object.uploadobjectid,
-				'objectfolder': molds[moldind].object.folder,
-				'objectfile': molds[moldind].object.file,
-				'receiveshadows': molds[moldind].graphics.receiveshadows,
-				'graphiclevel': molds[moldind].graphics.level,
-				'videoid': molds[moldind].graphics.texture.videoid,
-				'videoposterid': molds[moldind].graphics.texture.videoposterid,
-				'textureid': molds[moldind].graphics.texture.id,
-				'texturebumpid': molds[moldind].graphics.texture.bumpid,
-				'heightmapid': molds[moldind].graphics.heightmap.id,
-				'mixmapid': molds[moldind].graphics.heightmap.mixmapid,
-				'texturerid': molds[moldind].graphics.heightmap.texturerid,
-				'texturegid': molds[moldind].graphics.heightmap.texturegid,
-				'texturebid': molds[moldind].graphics.heightmap.texturebid,
-				'texturebumprid': molds[moldind].graphics.heightmap.texturebumprid,
-				'texturebumpgid': molds[moldind].graphics.heightmap.texturebumpgid,
-				'texturebumpbid': molds[moldind].graphics.heightmap.texturebumpbid,
-				'soundid': molds[moldind].sound.id,
-				'soundname': molds[moldind].sound.name,
-				'soundattenuation': molds[moldind].sound.attenuation,
-				'soundmaxdistance': molds[moldind].sound.maxdistance,
-				'soundrollofffactor': molds[moldind].sound.rollofffactor,
-				'soundrefdistance': molds[moldind].sound.refdistance,
-				'soundconeinnerangle': molds[moldind].sound.coneinnerangle,
-				'soundconeouterangle': molds[moldind].sound.coneouterangle,
-				'soundconeoutergain': molds[moldind].sound.coneoutergain,
-				'opacity': molds[moldind].opacity,
-				'subdivisions': molds[moldind].subdivisions,
-				'actionzoneid': molds[moldind].actionzoneid,
+				'moldid': zmolds[zmoldind].moldid,
+				'moldind': zmoldind,
+				'loadactionzoneid': zmolds[zmoldind].loadactionzoneid,
+				'webtype': zwebtype,
+				'shape': zmolds[zmoldind].shape,
+				'covering': zmolds[zmoldind].covering,
+				'positionx': zmolds[zmoldind].position.x,
+				'positiony': zmolds[zmoldind].position.y,
+				'positionz': zmolds[zmoldind].position.z,
+				'scalingx': zmolds[zmoldind].scaling.x,
+				'scalingy': zmolds[zmoldind].scaling.y,
+				'scalingz': zmolds[zmoldind].scaling.z,
+				'rotationx': zmolds[zmoldind].rotation.x,
+				'rotationy': zmolds[zmoldind].rotation.y,
+				'rotationz': zmolds[zmoldind].rotation.z,
+				'special1': zmolds[zmoldind].scaling.special1,
+				'special2': zmolds[zmoldind].scaling.special2,
+				'uoffset': zmolds[zmoldind].graphics.uoffset,
+				'voffset': zmolds[zmoldind].graphics.voffset,
+				'uscale': zmolds[zmoldind].graphics.uscale,
+				'vscale': zmolds[zmoldind].graphics.vscale,
+				'uploadobjectid': zmolds[zmoldind].object.uploadobjectid,
+				'objectfolder': zmolds[zmoldind].object.folder,
+				'objectfile': zmolds[zmoldind].object.file,
+				'receiveshadows': zmolds[zmoldind].graphics.receiveshadows,
+				'graphiclevel': zmolds[zmoldind].graphics.level,
+				'videoid': zmolds[zmoldind].graphics.texture.videoid,
+				'videoposterid': zmolds[zmoldind].graphics.texture.videoposterid,
+				'textureid': zmolds[zmoldind].graphics.texture.id,
+				'texturebumpid': zmolds[zmoldind].graphics.texture.bumpid,
+				'heightmapid': zmolds[zmoldind].graphics.heightmap.id,
+				'mixmapid': zmolds[zmoldind].graphics.heightmap.mixmapid,
+				'texturerid': zmolds[zmoldind].graphics.heightmap.texturerid,
+				'texturegid': zmolds[zmoldind].graphics.heightmap.texturegid,
+				'texturebid': zmolds[zmoldind].graphics.heightmap.texturebid,
+				'texturebumprid': zmolds[zmoldind].graphics.heightmap.texturebumprid,
+				'texturebumpgid': zmolds[zmoldind].graphics.heightmap.texturebumpgid,
+				'texturebumpbid': zmolds[zmoldind].graphics.heightmap.texturebumpbid,
+				'soundid': zmolds[zmoldind].sound.id,
+				'soundname': zmolds[zmoldind].sound.name,
+				'soundattenuation': zmolds[zmoldind].sound.attenuation,
+				'soundmaxdistance': zmolds[zmoldind].sound.maxdistance,
+				'soundrollofffactor': zmolds[zmoldind].sound.rollofffactor,
+				'soundrefdistance': zmolds[zmoldind].sound.refdistance,
+				'soundconeinnerangle': zmolds[zmoldind].sound.coneinnerangle,
+				'soundconeouterangle': zmolds[zmoldind].sound.coneouterangle,
+				'soundconeoutergain': zmolds[zmoldind].sound.coneoutergain,
+				'opacity': zmolds[zmoldind].opacity,
+				'subdivisions': zmolds[zmoldind].subdivisions,
+				'actionzoneid': zmolds[zmoldind].actionzoneid,
 				'minheight': '0',
-				'maxheight': molds[moldind].graphics.heightmap.maxheight,
+				'maxheight': zmolds[zmoldind].graphics.heightmap.maxheight,
 				'checkcollisions': '1',
 				'ispickable': '1',
-				'csgmoldid': molds[moldind].csg.moldid,
-				'csgaction': molds[moldind].csg.action,
+				'csgmoldid': zmolds[zmoldind].csg.moldid,
+				'csgaction': zmolds[zmoldind].csg.action,
 				'imageid': '',
-				'imageind': molds[moldind].graphics.webimageind,
+				'imageind': zmolds[zmoldind].graphics.webimageind,
 				'imagepath': '',
 				'imagehoverpath': '',
 				'imageclickid': '',
-				'alttagname': molds[moldind].alttag.name,
-				'webtext': molds[moldind].webtext.webtext,
-				'webstyle': molds[moldind].webtext.webstyle,
-				'specularcolorr': molds[moldind].color.specular.r,
-				'specularcolorg': molds[moldind].color.specular.g,
-				'specularcolorb': molds[moldind].color.specular.b,
-				'emissivecolorr': molds[moldind].color.emissive.r,
-				'emissivecolorg': molds[moldind].color.emissive.g,
-				'emissivecolorb': molds[moldind].color.emissive.b,
-				'diffusecolorr': molds[moldind].color.diffuse.r,
-				'diffusecolorg': molds[moldind].color.diffuse.g,
-				'diffusecolorb': molds[moldind].color.diffuse.b,
+				'alttagname': zmolds[zmoldind].alttag.name,
+				'webtext': zmolds[zmoldind].webtext.webtext,
+				'webstyle': zmolds[zmoldind].webtext.webstyle,
+				'diffusecolor': zmolds[zmoldind].color.diffusecolor,
+				'emissivecolor': zmolds[zmoldind].color.emissivecolor,
+				'specularcolor': zmolds[zmoldind].color.specularcolor,
+				'ambientcolor': zmolds[zmoldind].color.ambientcolor,
 				'path1points': dGet('wtw_tmoldpath1points').value,
 				'path2points': dGet('wtw_tmoldpath2points').value,
-				'imageid': molds[moldind].graphics.webimages[0].imageid,
-				'imagehoverid': molds[moldind].graphics.webimages[0].imagehoverid,
-				'imageclickid': molds[moldind].graphics.webimages[0].imageclickid,
-				'imagejsfunction': molds[moldind].graphics.webimages[0].jsfunction,
-				'imagejsparameters': molds[moldind].graphics.webimages[0].jsparameters,
-				'waterreflection': molds[moldind].graphics.waterreflection,
+				'imageid': zmolds[zmoldind].graphics.webimages[0].imageid,
+				'imagehoverid': zmolds[zmoldind].graphics.webimages[0].imagehoverid,
+				'imageclickid': zmolds[zmoldind].graphics.webimages[0].imageclickid,
+				'imagejsfunction': zmolds[zmoldind].graphics.webimages[0].jsfunction,
+				'imagejsparameters': zmolds[zmoldind].graphics.webimages[0].jsparameters,
+				'waterreflection': zmolds[zmoldind].graphics.waterreflection,
 				'deleted': '0',
 				'function':'savemold'
 			};
@@ -1438,7 +1423,7 @@ WTWJS.prototype.submitMoldForm = function(w) {
 			);
 			dGet('wtw_tnewmold').value = "0";
 			WTW.checkActionZones();
-			WTW.pluginsSubmitMoldForm(w);
+			WTW.pluginsSubmitMoldForm(zselect);
 			WTW.clearEditMold();
 			WTW.hideAdminMenu();
 			WTW.backToEdit();
@@ -1507,15 +1492,10 @@ WTWJS.prototype.clearEditMold = function() {
 		dGet('wtw_tmoldcsgmoldid').value = "";
 		dGet('wtw_tmoldcsgaction').selectedIndex = -1;
 		dGet('wtw_tmoldalttag').value = "";
-		dGet('wtw_tspecularcolorr').value = "1";
-		dGet('wtw_tspecularcolorg').value = "1";
-		dGet('wtw_tspecularcolorb').value = "1";
-		dGet('wtw_temissivecolorr').value = "1";
-		dGet('wtw_temissivecolorg').value = "1";
-		dGet('wtw_temissivecolorb').value = "1";
-		dGet('wtw_tdiffusecolorr').value = "1";
-		dGet('wtw_tdiffusecolorg').value = "1";
-		dGet('wtw_tdiffusecolorb').value = "1";
+		dGet('wtw_tmolddiffusecolor').value = "#ffffff";
+		dGet('wtw_tmoldemissivecolor').value = "#000000";
+		dGet('wtw_tmoldspecularcolor').value = "#686868";
+		dGet('wtw_tmoldambientcolor').value = "#575757";
 		dGet('wtw_tmoldwebstyle').value = "";
 		dGet('wtw_tmoldwebtext').value = "";
 		dGet('wtw_tmoldsoundid').value = "";
@@ -1560,23 +1540,23 @@ WTWJS.prototype.openEditPoles = function(mold) {
 		WTW.closeEditPoles();
 		scene.render();
 		if (mold != null) {
-			var px = mold.position.x;
-			var py = mold.position.y;
-			var pz = mold.position.z;
+			var zpx = mold.position.x;
+			var zpy = mold.position.y;
+			var zpz = mold.position.z;
 			if (mold.parent != null) {
 				if (mold.parent.id.indexOf("actionzoneaxle") > -1) {
-					px += mold.parent.position.x;
-					py += mold.parent.position.y;
-					pz += mold.parent.position.z;
+					zpx += mold.parent.position.x;
+					zpy += mold.parent.position.y;
+					zpz += mold.parent.position.z;
 				}
 			} 
-			var moldx = mold.scaling.x;
-			var moldy = mold.scaling.y;
-			var moldz = mold.scaling.z;
+			var zmoldx = mold.scaling.x;
+			var zmoldy = mold.scaling.y;
+			var zmoldz = mold.scaling.z;
 			if (WTW.lineX == null) {
-				WTW.lineZ = BABYLON.MeshBuilder.CreateLines("linez", {points: [new BABYLON.Vector3(px, py, pz-100),	new BABYLON.Vector3(px, py, pz+100)], useVertexAlpha: false, updatable: false}, scene);
-				WTW.lineX = BABYLON.MeshBuilder.CreateLines("linex", {points: [new BABYLON.Vector3(px-100, py, pz),	new BABYLON.Vector3(px+100, py, pz)], useVertexAlpha: false, updatable: false}, scene);
-				WTW.lineY = BABYLON.MeshBuilder.CreateLines("liney", {points: [new BABYLON.Vector3(px, py-100, pz),	new BABYLON.Vector3(px, py+100, pz)], useVertexAlpha: false, updatable: false}, scene);
+				WTW.lineZ = BABYLON.MeshBuilder.CreateLines("linez", {points: [new BABYLON.Vector3(zpx, zpy, zpz-100),	new BABYLON.Vector3(zpx, zpy, zpz+100)], useVertexAlpha: false, updatable: false}, scene);
+				WTW.lineX = BABYLON.MeshBuilder.CreateLines("linex", {points: [new BABYLON.Vector3(zpx-100, zpy, zpz),	new BABYLON.Vector3(zpx+100, zpy, zpz)], useVertexAlpha: false, updatable: false}, scene);
+				WTW.lineY = BABYLON.MeshBuilder.CreateLines("liney", {points: [new BABYLON.Vector3(zpx, zpy-100, zpz),	new BABYLON.Vector3(zpx, zpy+100, zpz)], useVertexAlpha: false, updatable: false}, scene);
 				WTW.lineZ.isPickable = false;
 				WTW.lineX.isPickable = false;
 				WTW.lineY.isPickable = false;
@@ -1679,13 +1659,13 @@ WTWJS.prototype.openEditPoles = function(mold) {
 				WTW.lineZ6.parent = mold;
 				WTW.lineZ7.parent = mold;
 				WTW.lineZ8.parent = mold;
-				var alphamold = 1;
-				var wx = .1;
-				var wy = 1;
-				var wz = 2;
+				var zalphamold = 1;
+				var zwx = .1;
+				var zwy = 1;
+				var zwz = 2;
 				if (WTW.moveZ == null) {
 					WTW.moveZ = BABYLON.MeshBuilder.CreateBox("movez", {height:1, width:.1, depth:2}, scene);
-					WTW.moveZ.position = new BABYLON.Vector3(px, py, (moldz / 2 + pz + 1.1));
+					WTW.moveZ.position = new BABYLON.Vector3(zpx, zpy, (zmoldz / 2 + zpz + 1.1));
 					//WTW.moveZ.scaling.x = .1;
 					//WTW.moveZ.scaling.y = 1;
 					//WTW.moveZ.scaling.z = 2;
@@ -1694,30 +1674,30 @@ WTWJS.prototype.openEditPoles = function(mold) {
 					var rMaterial = new BABYLON.StandardMaterial("rmoldmovez", scene);
 					rMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					rMaterial.diffuseTexture.wAng = WTW.getRadians(0);
-					rMaterial.diffuseTexture.alpha = alphamold;
+					rMaterial.diffuseTexture.alpha = zalphamold;
 					rMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					var lMaterial = new BABYLON.StandardMaterial("lmoldmovez", scene);
 					lMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					lMaterial.diffuseTexture.wAng = WTW.getRadians(180);
-					lMaterial.diffuseTexture.alpha = alphamold;
+					lMaterial.diffuseTexture.alpha = zalphamold;
 					lMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7); 
 					var fMaterial = new BABYLON.StandardMaterial("fmoldmovez", scene);
 					fMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					fMaterial.diffuseTexture.wAng = WTW.getRadians(90);
-					fMaterial.diffuseTexture.alpha = alphamold;
+					fMaterial.diffuseTexture.alpha = zalphamold;
 					fMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					var bMaterial = new BABYLON.StandardMaterial("bmoldmovez", scene);
 					bMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					bMaterial.diffuseTexture.wAng = WTW.getRadians(90);
-					bMaterial.diffuseTexture.alpha = alphamold;
+					bMaterial.diffuseTexture.alpha = zalphamold;
 					bMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					var uMaterial = new BABYLON.StandardMaterial("umoldmovez", scene);
 					uMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
-					uMaterial.diffuseTexture.alpha = alphamold;
+					uMaterial.diffuseTexture.alpha = zalphamold;
 					uMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					var dMaterial = new BABYLON.StandardMaterial("dmoldmovez", scene);
 					dMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
-					dMaterial.diffuseTexture.alpha = alphamold;
+					dMaterial.diffuseTexture.alpha = zalphamold;
 					dMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					var moldmulti = new BABYLON.MultiMaterial("multimoldmovez", scene);
 					moldmulti.subMaterials.push(lMaterial);
@@ -1736,12 +1716,12 @@ WTWJS.prototype.openEditPoles = function(mold) {
 					}
 					WTW.moveZ.material = moldmulti;
 				}
-				wx = .1;
-				wy = 1;
-				wz = 2;
+				zwx = .1;
+				zwy = 1;
+				zwz = 2;
 				if (WTW.moveY == null) {
 					WTW.moveY = BABYLON.MeshBuilder.CreateBox("movey", {height:1, width:2, depth:2}, scene);
-					WTW.moveY.position = new BABYLON.Vector3(px, (moldy / 2 + py + 1.1), pz);
+					WTW.moveY.position = new BABYLON.Vector3(zpx, (zmoldy / 2 + zpy + 1.1), zpz);
 					//WTW.moveY.scaling.x = 2;
 					//WTW.moveY.scaling.y = 1;
 					//WTW.moveY.scaling.z = 2;
@@ -1750,30 +1730,30 @@ WTWJS.prototype.openEditPoles = function(mold) {
 					rMaterial = new BABYLON.StandardMaterial("rmoldmovey", scene);
 					rMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					rMaterial.diffuseTexture.wAng = WTW.getRadians(0);
-					rMaterial.diffuseTexture.alpha = alphamold;
+					rMaterial.diffuseTexture.alpha = zalphamold;
 					rMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					lMaterial = new BABYLON.StandardMaterial("lmoldmovey", scene);
 					lMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					lMaterial.diffuseTexture.wAng = WTW.getRadians(180);
-					lMaterial.diffuseTexture.alpha = alphamold;
+					lMaterial.diffuseTexture.alpha = zalphamold;
 					lMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7); 
 					fMaterial = new BABYLON.StandardMaterial("fmoldmovey", scene);
 					fMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					fMaterial.diffuseTexture.wAng = WTW.getRadians(90);
-					fMaterial.diffuseTexture.alpha = alphamold;
+					fMaterial.diffuseTexture.alpha = zalphamold;
 					fMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					bMaterial = new BABYLON.StandardMaterial("bmoldmovey", scene);
 					bMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					bMaterial.diffuseTexture.wAng = WTW.getRadians(90);
-					bMaterial.diffuseTexture.alpha = alphamold;
+					bMaterial.diffuseTexture.alpha = zalphamold;
 					bMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					uMaterial = new BABYLON.StandardMaterial("umoldmovey", scene);
 					uMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
-					uMaterial.diffuseTexture.alpha = alphamold;
+					uMaterial.diffuseTexture.alpha = zalphamold;
 					uMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					dMaterial = new BABYLON.StandardMaterial("dmoldmovey", scene);
 					dMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
-					dMaterial.diffuseTexture.alpha = alphamold;
+					dMaterial.diffuseTexture.alpha = zalphamold;
 					dMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					moldmulti = new BABYLON.MultiMaterial("multimoldmovey", scene);
 					moldmulti.subMaterials.push(lMaterial);
@@ -1792,12 +1772,12 @@ WTWJS.prototype.openEditPoles = function(mold) {
 					}
 					WTW.moveY.material = moldmulti;
 				}
-				wx = 2;
-				wy = 1;
-				wz = .1;
+				zwx = 2;
+				zwy = 1;
+				zwz = .1;
 				if (WTW.moveX == null) {
 					WTW.moveX = BABYLON.MeshBuilder.CreateBox("movex", {height:1, width:2, depth:.1}, scene);
-					WTW.moveX.position = new BABYLON.Vector3((moldx / 2 + px + 1.1), py, pz);
+					WTW.moveX.position = new BABYLON.Vector3((zmoldx / 2 + zpx + 1.1), zpy, zpz);
 					//WTW.moveX.scaling.x = 2;
 					//WTW.moveX.scaling.y = 1;
 					//WTW.moveX.scaling.z = .1;
@@ -1806,30 +1786,30 @@ WTWJS.prototype.openEditPoles = function(mold) {
 					rMaterial = new BABYLON.StandardMaterial("rmoldmovex", scene);
 					rMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					rMaterial.diffuseTexture.wAng = WTW.getRadians(0);
-					rMaterial.diffuseTexture.alpha = alphamold;
+					rMaterial.diffuseTexture.alpha = zalphamold;
 					rMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					lMaterial = new BABYLON.StandardMaterial("lmoldmovex", scene);
 					lMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					lMaterial.diffuseTexture.wAng = WTW.getRadians(180);
-					lMaterial.diffuseTexture.alpha = alphamold;
+					lMaterial.diffuseTexture.alpha = zalphamold;
 					lMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7); 
 					fMaterial = new BABYLON.StandardMaterial("fmoldmovex", scene);
 					fMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					fMaterial.diffuseTexture.wAng = WTW.getRadians(90);
-					fMaterial.diffuseTexture.alpha = alphamold;
+					fMaterial.diffuseTexture.alpha = zalphamold;
 					fMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					bMaterial = new BABYLON.StandardMaterial("bmoldmovex", scene);
 					bMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					bMaterial.diffuseTexture.wAng = WTW.getRadians(90);
-					bMaterial.diffuseTexture.alpha = alphamold;
+					bMaterial.diffuseTexture.alpha = zalphamold;
 					bMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					uMaterial = new BABYLON.StandardMaterial("umoldmovex", scene);
 					uMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
-					uMaterial.diffuseTexture.alpha = alphamold;
+					uMaterial.diffuseTexture.alpha = zalphamold;
 					uMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					dMaterial = new BABYLON.StandardMaterial("dmoldmovex", scene);
 					dMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
-					dMaterial.diffuseTexture.alpha = alphamold;
+					dMaterial.diffuseTexture.alpha = zalphamold;
 					dMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
 					moldmulti = new BABYLON.MultiMaterial("multimoldmovex", scene);
 					moldmulti.subMaterials.push(lMaterial);
@@ -1849,15 +1829,15 @@ WTWJS.prototype.openEditPoles = function(mold) {
 					WTW.moveX.material = moldmulti;	
 				}
 			} else {
-				WTW.moveZ.position = new BABYLON.Vector3(px, py, (moldz / 2 + pz + 1.1));
+				WTW.moveZ.position = new BABYLON.Vector3(zpx, zpy, (zmoldz / 2 + zpz + 1.1));
 				WTW.moveZ.scaling.x = .1;
 				WTW.moveZ.scaling.y = 1;
 				WTW.moveZ.scaling.z = 2;
-				WTW.moveX.position = new BABYLON.Vector3((moldx / 2 + px + 1.1), py, pz);
+				WTW.moveX.position = new BABYLON.Vector3((zmoldx / 2 + zpx + 1.1), zpy, zpz);
 				WTW.moveX.scaling.x = 2;
 				WTW.moveX.scaling.y = 1;
 				WTW.moveX.scaling.z = .1;
-				WTW.moveY.position = new BABYLON.Vector3(px, (moldy / 2 + py + 1.1), pz);
+				WTW.moveY.position = new BABYLON.Vector3(zpx, (zmoldy / 2 + zpy + 1.1), zpz);
 				WTW.moveY.scaling.x = 2;
 				WTW.moveY.scaling.y = 1;
 				WTW.moveY.scaling.z = 2;
@@ -2074,23 +2054,23 @@ WTWJS.prototype.closeEditPoles = function() {
 WTWJS.prototype.openRecoverItems = function() {
 	/* open recover items form will search for any molds with the delete flag set; provides a list to view and select for recovery */
 	try {
-		var path = "";
+		var zpath = "";
 		if (buildingid != "") {
-			path = "/connect/buildingrecoveritems.php?buildingid=" + buildingid;
+			zpath = "/connect/buildingrecoveritems.php?buildingid=" + buildingid;
 		} else if (communityid != "") {
-			path = "/connect/communityrecoveritems.php?communityid=" + communityid;
+			zpath = "/connect/communityrecoveritems.php?communityid=" + communityid;
 		} else if (thingid != "") {
-			path = "/connect/thingrecoveritems.php?thingid=" + thingid;
+			zpath = "/connect/thingrecoveritems.php?thingid=" + thingid;
 		}
 		dGet('wtw_deleteditemslist').innerHTML = "";
-		if (path != "") {
-			WTW.getJSON(path, 
+		if (zpath != "") {
+			WTW.getJSON(zpath, 
 				function(response) {
-					var recoverylist = JSON.parse(response);
-					if (recoverylist != null) {
-						for (var i=0;i < recoverylist.length;i++) {
-							if (recoverylist[i].itemid != null) {
-								dGet("wtw_deleteditemslist").innerHTML += "<div id=\"wtw_brecover" + recoverylist[i].itemid + "\" name=\"wtw_brecover" + recoverylist[i].itemid + "\" onclick=\"WTW.recoverMold('" + recoverylist[i].itemid + "','" + recoverylist[i].itemtype + "');\" style='cursor: pointer;' class='wtw-menulevel2'>Recover '" + recoverylist[i].item + "'</div>\r\n";
+					var zrecoverylist = JSON.parse(response);
+					if (zrecoverylist != null) {
+						for (var i=0;i < zrecoverylist.length;i++) {
+							if (zrecoverylist[i].itemid != null) {
+								dGet("wtw_deleteditemslist").innerHTML += "<div id=\"wtw_brecover" + zrecoverylist[i].itemid + "\" name=\"wtw_brecover" + zrecoverylist[i].itemid + "\" onclick=\"WTW.recoverMold('" + zrecoverylist[i].itemid + "','" + zrecoverylist[i].itemtype + "');\" style='cursor: pointer;' class='wtw-menulevel2'>Recover '" + zrecoverylist[i].item + "'</div>\r\n";
 							}
 						}
 					}
@@ -2122,25 +2102,23 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 						/* note serror would contain errors */
 					}
 				);
-				var communityind = -1;
-				WTW.getJSON("/connect/communitymoldsrecover.php?communityid=" + communityid + "&communityind=" + communityind + "&communitymoldid=" + zmoldid, 
+				WTW.getJSON("/connect/communitymoldsrecover.php?communityid=" + communityid + "&communityind=-1&communitymoldid=" + zmoldid, 
 					function(response) {
-						var communitymold = JSON.parse(response);
-						var moldgroup = "community";
-						var moldind = WTW.getNextCount(WTW.communitiesMolds);
-						if (communitymold != null) {
-							if (communitymold.molds[0] != null) {
-								WTW.communitiesMolds[moldind] = communitymold.molds[0];
+						var zcommunitymold = JSON.parse(response);
+						var zmoldind = WTW.getNextCount(WTW.communitiesMolds);
+						if (zcommunitymold != null) {
+							if (zcommunitymold.molds[0] != null) {
+								WTW.communitiesMolds[zmoldind] = zcommunitymold.molds[0];
 							}
 						}
-						if (WTW.communitiesMolds[moldind] != null) {
-							WTW.communitiesMolds[moldind].moldind = moldind;
-							WTW.communitiesMolds[moldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
-							WTW.communitiesMolds[moldind].connectinggridind = Number(dGet('wtw_tconnectinggridind').value);
-							WTW.communitiesMolds[moldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
-							WTW.communitiesMolds[moldind].moldname = "communitymolds-" + moldind + "-" + WTW.communitiesMolds[moldind].moldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + WTW.communitiesMolds[moldind].shape;
-							WTW.communitiesMolds[moldind].shown = "0";
-							WTW.openMoldForm(moldind,WTW.communitiesMolds[moldind].shape,moldgroup);
+						if (WTW.communitiesMolds[zmoldind] != null) {
+							WTW.communitiesMolds[zmoldind].moldind = zmoldind;
+							WTW.communitiesMolds[zmoldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
+							WTW.communitiesMolds[zmoldind].connectinggridind = Number(dGet('wtw_tconnectinggridind').value);
+							WTW.communitiesMolds[zmoldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
+							WTW.communitiesMolds[zmoldind].moldname = "communitymolds-" + zmoldind + "-" + WTW.communitiesMolds[zmoldind].moldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + WTW.communitiesMolds[zmoldind].shape;
+							WTW.communitiesMolds[zmoldind].shown = "0";
+							WTW.openMoldForm(zmoldind,WTW.communitiesMolds[zmoldind].shape,'community');
 						}
 						WTW.setWindowSize();
 					}
@@ -2161,25 +2139,24 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 						/* note serror would contain errors */
 					}
 				);
-				var buildingind = WTW.getBuildingInd(buildingid);
-				WTW.getJSON("/connect/buildingmoldsrecover.php?buildingid=" + buildingid + "&buildingind=" + buildingind + "&buildingmoldid=" + zmoldid, 
+				var zbuildingind = WTW.getBuildingInd(buildingid);
+				WTW.getJSON("/connect/buildingmoldsrecover.php?buildingid=" + buildingid + "&buildingind=" + zbuildingind + "&buildingmoldid=" + zmoldid, 
 					function(response) {
-						var buildingmold = JSON.parse(response);
-						var moldgroup = "building";
-						var moldind = WTW.getNextCount(WTW.buildingMolds);
-						if (buildingmold != null) {
-							if (buildingmold.molds[0] != null) {
-								WTW.buildingMolds[moldind] = buildingmold.molds[0];
+						var zbuildingmold = JSON.parse(response);
+						var zmoldind = WTW.getNextCount(WTW.buildingMolds);
+						if (zbuildingmold != null) {
+							if (zbuildingmold.molds[0] != null) {
+								WTW.buildingMolds[zmoldind] = zbuildingmold.molds[0];
 							}
 						}
-						if (WTW.buildingMolds[moldind] != null) {
-							WTW.buildingMolds[moldind].moldind = moldind;
-							WTW.buildingMolds[moldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
-							WTW.buildingMolds[moldind].connectinggridind = Number(dGet('wtw_tconnectinggridind').value);
-							WTW.buildingMolds[moldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
-							WTW.buildingMolds[moldind].moldname = "buildingmolds-" + moldind + "-" + WTW.buildingMolds[moldind].moldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + WTW.buildingMolds[moldind].shape;
-							WTW.buildingMolds[moldind].shown = "0";
-							WTW.openMoldForm(moldind,WTW.buildingMolds[moldind].shape,moldgroup);
+						if (WTW.buildingMolds[zmoldind] != null) {
+							WTW.buildingMolds[zmoldind].moldind = zmoldind;
+							WTW.buildingMolds[zmoldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
+							WTW.buildingMolds[zmoldind].connectinggridind = Number(dGet('wtw_tconnectinggridind').value);
+							WTW.buildingMolds[zmoldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
+							WTW.buildingMolds[zmoldind].moldname = "buildingmolds-" + zmoldind + "-" + WTW.buildingMolds[zmoldind].moldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + WTW.buildingMolds[zmoldind].shape;
+							WTW.buildingMolds[zmoldind].shown = "0";
+							WTW.openMoldForm(zmoldind,WTW.buildingMolds[zmoldind].shape,'building');
 						}
 						WTW.setWindowSize();
 					}
@@ -2200,25 +2177,24 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 						/* note serror would contain errors */
 					}
 				);
-				var thingind = WTW.getThingInd(thingid);
-				WTW.getJSON("/connect/thingmoldsrecover.php?thingid=" + thingid + "&thingind=" + thingind + "&thingmoldid=" + zmoldid, 
+				var zthingind = WTW.getThingInd(thingid);
+				WTW.getJSON("/connect/thingmoldsrecover.php?thingid=" + thingid + "&thingind=" + zthingind + "&thingmoldid=" + zmoldid, 
 					function(response) {
-						var thingmold = JSON.parse(response);
-						var moldgroup = "thing";
-						var moldind = WTW.getNextCount(WTW.thingMolds);
-						if (thingmold != null) {
-							if (thingmold.molds[0] != null) {
-								WTW.thingMolds[moldind] = thingmold.molds[0];
+						var zthingmold = JSON.parse(response);
+						var zmoldind = WTW.getNextCount(WTW.thingMolds);
+						if (zthingmold != null) {
+							if (zthingmold.molds[0] != null) {
+								WTW.thingMolds[zmoldind] = zthingmold.molds[0];
 							}
 						}
-						if (WTW.thingMolds[moldind] != null) {
-							WTW.thingMolds[moldind].moldind = moldind;
-							WTW.thingMolds[moldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
-							WTW.thingMolds[moldind].connectinggridind = Number(dGet('wtw_tconnectinggridind').value);
-							WTW.thingMolds[moldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
-							WTW.thingMolds[moldind].moldname = "thingmolds-" + moldind + "-" + WTW.thingMolds[moldind].moldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + WTW.thingMolds[moldind].shape;
-							WTW.thingMolds[moldind].shown = "0";
-							WTW.openMoldForm(moldind,WTW.thingMolds[moldind].shape,moldgroup);
+						if (WTW.thingMolds[zmoldind] != null) {
+							WTW.thingMolds[zmoldind].moldind = zmoldind;
+							WTW.thingMolds[zmoldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
+							WTW.thingMolds[zmoldind].connectinggridind = Number(dGet('wtw_tconnectinggridind').value);
+							WTW.thingMolds[zmoldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
+							WTW.thingMolds[zmoldind].moldname = "thingmolds-" + zmoldind + "-" + WTW.thingMolds[zmoldind].moldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + WTW.thingMolds[zmoldind].shape;
+							WTW.thingMolds[zmoldind].shown = "0";
+							WTW.openMoldForm(zmoldind,WTW.thingMolds[zmoldind].shape,'thing');
 						}
 						WTW.setWindowSize();
 					}
@@ -2231,59 +2207,56 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 }
 
 
-/* create a duplicate Mold (shape) */
+/* create a duplicate Mold (zshape) */
 
 WTWJS.prototype.createDuplicateShape = function() {
 	/* when editing a mold, near the bottom of the form is a link to create a duplicate shape */
 	/* when clicked, a new mold is created in front of the camera with a new (x,z) coordinate, iid, and index value */
 	/* the rest of the settings including texture selections are copied to the new mold */
 	try {
-		var originalmoldind = Number(dGet('wtw_tmoldind').value);
-		var shape = dGet('wtw_tmoldshape').value;
-		var moldgroup = dGet('wtw_tmoldmoldgroup').value;
-		var molds = null;
-		var mold = null;
-		var moldind = -1;
-		var moldid = WTW.getRandomString(16);
-		var coords = WTW.getNewCoordinates(50);
-		var positionX = coords.positionX;
-		var positionY = coords.positionY;
-		var positionZ = coords.positionZ;
-		var rotationY = coords.rotationY;
-		switch (moldgroup) {
+		var zoriginalmoldind = Number(dGet('wtw_tmoldind').value);
+		var zshape = dGet('wtw_tmoldshape').value;
+		var zwebtype = dGet('wtw_tmoldwebtype').value;
+		var zmolds = null;
+		var zmoldind = -1;
+		var zmoldid = WTW.getRandomString(16);
+		var zcoords = WTW.getNewCoordinates(50);
+		var zpositionX = zcoords.positionX;
+		var zpositionZ = zcoords.positionZ;
+		switch (zwebtype) {
 			case "community":
-				molds = WTW.communitiesMolds;
+				zmolds = WTW.communitiesMolds;
 				break;
 			case "building":
-				molds = WTW.buildingMolds;
+				zmolds = WTW.buildingMolds;
 				break;
 			case "thing":
-				positionX = 0;
-				positionZ = 0;
-				molds = WTW.thingMolds;
+				zpositionX = 0;
+				zpositionZ = 0;
+				zmolds = WTW.thingMolds;
 				break;
 		}
-		if (molds != null) {
-			moldind = WTW.getNextCount(molds);
-			molds[moldind] = JSON.parse(JSON.stringify(molds[originalmoldind]));
-			molds[moldind].moldid = moldid;
-			molds[moldind].moldind = moldind;
-			molds[moldind].actionzoneid = "";
-			molds[moldind].actionzoneind = "";
-			molds[moldind].position.x = positionX;
-			molds[moldind].position.z = positionZ;
-			molds[moldind].moldname = moldgroup + "molds-" + moldind + "-" + moldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + molds[moldind].shape;
-			molds[moldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
-			molds[moldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
-			molds[moldind].connectinggridind = dGet('wtw_tconnectinggridind').value;
-			molds[moldind].shown = "0";
+		if (zmolds != null) {
+			zmoldind = WTW.getNextCount(zmolds);
+			zmolds[zmoldind] = JSON.parse(JSON.stringify(zmolds[zoriginalmoldind]));
+			zmolds[zmoldind].moldid = zmoldid;
+			zmolds[zmoldind].moldind = zmoldind;
+			zmolds[zmoldind].actionzoneid = "";
+			zmolds[zmoldind].actionzoneind = "";
+			zmolds[zmoldind].position.x = zpositionX;
+			zmolds[zmoldind].position.z = zpositionZ;
+			zmolds[zmoldind].moldname = zwebtype + "molds-" + zmoldind + "-" + zmoldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + zmolds[zmoldind].shape;
+			zmolds[zmoldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
+			zmolds[zmoldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
+			zmolds[zmoldind].connectinggridind = dGet('wtw_tconnectinggridind').value;
+			zmolds[zmoldind].shown = "0";
 			WTW.setShownMolds();
-			dGet('wtw_tmoldind').value = moldind;
-			dGet('wtw_tmoldid').value = moldid;
-			WTW.openMoldForm(moldind,shape,moldgroup,false);
+			dGet('wtw_tmoldind').value = zmoldind;
+			dGet('wtw_tmoldid').value = zmoldid;
+			WTW.openMoldForm(zmoldind,zshape,zwebtype,false);
 		}
-		dGet('wtw_tmoldpositionx').value = positionX;
-		dGet('wtw_tmoldpositionz').value = positionZ;
+		dGet('wtw_tmoldpositionx').value = zpositionX;
+		dGet('wtw_tmoldpositionz').value = zpositionZ;
 		dGet('wtw_tmoldactionzoneid').value = "";
 		dGet('wtw_tmoldcsgaction').selectedIndex = 0;
 		dGet('wtw_tmoldcsgmoldid').value = "";
@@ -2306,39 +2279,39 @@ WTWJS.prototype.addMergePart = function(mold) {
 	/* to merge more than 2, just edit the mold to add to the merge and follow the same steps */
 	try {		
 		if (mold != null) {
-			var moldind = -1;
-			var moldid = "";
-			var shape = "";
-			var moldgroup = dGet('wtw_tmoldmoldgroup').value;
-			var moldname = mold.name;
-			var namepart;
-			var molds = null;
-			if (moldname.indexOf("-") > -1) {
-				namepart = moldname.split('-');
+			var zmoldind = -1;
+			var zmoldid = "";
+			var zshape = "";
+			var zwebtype = dGet('wtw_tmoldwebtype').value;
+			var zmoldname = mold.name;
+			var znamepart;
+			var zmolds = null;
+			if (zmoldname.indexOf("-") > -1) {
+				znamepart = zmoldname.split('-');
 			}			
-			if (WTW.isNumeric(namepart[1])) {
-				if (namepart[0].indexOf("buildingmolds") > -1 && moldgroup == "building") {
-					molds = WTW.buildingMolds;
-				} else if (namepart[0].indexOf("thingmolds") > -1 && moldgroup == "thing") {
-					molds = WTW.thingMolds;
-				} else if (namepart[0].indexOf("communitymolds") > -1 && moldgroup == "community") {
-					molds = WTW.communitiesMolds;
+			if (WTW.isNumeric(znamepart[1])) {
+				if (znamepart[0].indexOf("buildingmolds") > -1 && zwebtype == "building") {
+					zmolds = WTW.buildingMolds;
+				} else if (znamepart[0].indexOf("thingmolds") > -1 && zwebtype == "thing") {
+					zmolds = WTW.thingMolds;
+				} else if (znamepart[0].indexOf("communitymolds") > -1 && zwebtype == "community") {
+					zmolds = WTW.communitiesMolds;
 				}
-				if (molds != null) {
-					moldind = Number(namepart[1]);
-					moldid = molds[moldind].moldid;
-					dGet('wtw_tmoldcsgmoldid').value = moldid;
-					shape = namepart[5];
-					WTW.setCSGCount(moldid);
+				if (zmolds != null) {
+					zmoldind = Number(znamepart[1]);
+					zmoldid = zmolds[zmoldind].moldid;
+					dGet('wtw_tmoldcsgmoldid').value = zmoldid;
+					zshape = znamepart[5];
+					WTW.setCSGCount(zmoldid);
 				}
 			}
-			if (moldid != "") {
-				WTW.hilightMoldFast(moldname,'yellow');
+			if (zmoldid != "") {
+				WTW.hilightMoldFast(zmoldname,'yellow');
 				dGet('wtw_selectedcsgshape').innerHTML = "";
-				dGet('wtw_selectedcsgshape').innerHTML += "<div class='wtw-secondcolcontent' onmouseover=\"WTW.hilightMold('" + moldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + moldname + "');\">Merge with (" + shape + ") &nbsp;&nbsp;&nbsp;&nbsp; <a href='#' onclick=\"WTW.removeMerge('" + moldname + "')\">Remove</a></div><br /><br />";
+				dGet('wtw_selectedcsgshape').innerHTML += "<div class='wtw-secondcolcontent' onmouseover=\"WTW.hilightMold('" + zmoldname + "','yellow');\" onmouseout=\"WTW.unhilightMold('" + zmoldname + "');\">Merge with (" + zshape + ") &nbsp;&nbsp;&nbsp;&nbsp; <a href='#' onclick=\"WTW.removeMerge('" + zmoldname + "')\">Remove</a></div><br /><br />";
 				dGet('wtw_bselectcsgshape').innerHTML = "Change Shape to Merge";
 			} else {
-				WTW.removeMerge(moldname);
+				WTW.removeMerge(zmoldname);
 			}
 		}
 		WTW.selectMergePart(2); 
@@ -2347,52 +2320,52 @@ WTWJS.prototype.addMergePart = function(mold) {
 	}
 }
 
-WTWJS.prototype.removeMerge = function(moldname) {
+WTWJS.prototype.removeMerge = function(zmoldname) {
 	/* remove a merge from a mold will undo a combine, subtract, or intersect */
 	try {
-		var oldcsgmainid = dGet('wtw_tmoldcsgmoldid').value;
-		var csgmainind = -1; 
-		var csgchildind = -1;
-		var moldind = -1;
-		var namepart;
-		var molds = null;
-		var moldgroup = dGet('wtw_tmoldmoldgroup').value;
+		var zoldcsgmainid = dGet('wtw_tmoldcsgmoldid').value;
+		var zcsgmainind = -1; 
+		var zcsgchildind = -1;
+		var zmoldind = -1;
+		var znamepart;
+		var zmolds = null;
+		var zwebtype = dGet('wtw_tmoldwebtype').value;
 		WTW.setDDLValue('wtw_tmoldcsgaction', ''); 
 		dGet('wtw_tmoldcsgmoldid').value = "";
 		dGet('wtw_selectedcsgshape').innerHTML = "";
 		dGet('wtw_bselectcsgshape').innerHTML = "Pick Shape to Merge";
-		if (moldname.indexOf("-") > -1) {
-			namepart = moldname.split('-');
+		if (zmoldname.indexOf("-") > -1) {
+			znamepart = zmoldname.split('-');
 		}			
-		if (WTW.isNumeric(namepart[1])) {
-			if (namepart[0].indexOf("buildingmolds") > -1 && moldgroup == "building") {
-				molds = WTW.buildingMolds;
-			} else if (namepart[0].indexOf("thingmolds") > -1 && moldgroup == "thing") {
-				molds = WTW.thingMolds;
-			} else if (namepart[0].indexOf("communitymolds") > -1 && moldgroup == "community") {
-				molds = WTW.communitiesMolds;
+		if (WTW.isNumeric(znamepart[1])) {
+			if (znamepart[0].indexOf("buildingmolds") > -1 && zwebtype == "building") {
+				zmolds = WTW.buildingMolds;
+			} else if (znamepart[0].indexOf("thingmolds") > -1 && zwebtype == "thing") {
+				zmolds = WTW.thingMolds;
+			} else if (znamepart[0].indexOf("communitymolds") > -1 && zwebtype == "community") {
+				zmolds = WTW.communitiesMolds;
 			}
-			if (molds != null) {
-				moldind = Number(dGet('wtw_tmoldind').value);
-				molds[moldind].csg.moldid = "";
-				molds[moldind].covering = "color";
-				molds[moldind].opacity = "100";
-				molds[moldind].shown = "0";
+			if (zmolds != null) {
+				zmoldind = Number(dGet('wtw_tmoldind').value);
+				zmolds[zmoldind].csg.moldid = "";
+				zmolds[zmoldind].covering = "color";
+				zmolds[zmoldind].opacity = "100";
+				zmolds[zmoldind].shown = "0";
 			}
 		}	
-		if (oldcsgmainid != "") {
-			csgmainind = WTW.getMoldInd(molds, oldcsgmainid, dGet('wtw_tconnectinggridind').value);
-			if (molds[csgmainind] != null) {
-				WTW.setCSGCount(oldcsgmainid);
-				if (molds[csgmainind].shown != undefined) {
-					molds[csgmainind].shown = "0";
+		if (zoldcsgmainid != "") {
+			zcsgmainind = WTW.getMoldInd(zmolds, zoldcsgmainid, dGet('wtw_tconnectinggridind').value);
+			if (zmolds[zcsgmainind] != null) {
+				WTW.setCSGCount(zoldcsgmainid);
+				if (zmolds[zcsgmainind].shown != undefined) {
+					zmolds[zcsgmainind].shown = "0";
 				}
-				if (molds[csgmainind].moldname != undefined) {
-					WTW.disposeClean(molds[csgmainind].moldname);
+				if (zmolds[zcsgmainind].moldname != undefined) {
+					WTW.disposeClean(zmolds[zcsgmainind].moldname);
 				}
 			}
 		}
-		WTW.disposeClean(moldname);
+		WTW.disposeClean(zmoldname);
 		WTW.setShownMolds();
 		WTW.setNewMold();
 	} catch (ex) {
@@ -2400,10 +2373,10 @@ WTWJS.prototype.removeMerge = function(moldname) {
 	}
 }
 
-WTWJS.prototype.selectMergePart = function(w) {
+WTWJS.prototype.selectMergePart = function(zselect) {
 	/* select the mold to merge with hte currently edited mold */
 	try {
-		if (w == 2) {
+		if (zselect == 2) {
 			WTW.pick = 0;
 			dGet('wtw_bselectcsgshape').innerHTML = "Pick Shape to Merge";
 		} else {
@@ -2419,11 +2392,13 @@ WTWJS.prototype.checkMoldTextureCSG = function() {
 	/* check the mold texture for the new mold to be created after merge */
 	try {
 		if (dGet('wtw_tmoldcsgaction').selectedIndex == 0) {
+			WTW.show('wtw_moldcolorsdiv');
 			WTW.show('wtw_moldtexturesetdiv');
 			WTW.show('wtw_moldbasictexturesetdiv');
 			WTW.show('wtw_moldbasictextureset2div');
 			dGet('wtw_tmoldcsgmoldid').value = "";
 		} else {
+			WTW.hide('wtw_moldcolorsdiv');
 			WTW.hide('wtw_moldtexturesetdiv');
 			WTW.hide('wtw_moldbasictexturesetdiv');
 			WTW.hide('wtw_moldbasictextureset2div');
@@ -2433,34 +2408,31 @@ WTWJS.prototype.checkMoldTextureCSG = function() {
 	}
 }
 
-WTWJS.prototype.setCSGCount = function(csgmainid) {
+WTWJS.prototype.setCSGCount = function(zcsgmainid) {
 	/* see if there are any molds requiring merge with the currently edited mold */
 	try {
-		var count = 0;
-		var csgmainind = -1;
-		var moldgroup = "community";
-		var molds = WTW.communitiesMolds;
+		var zcount = 0;
+		var zcsgmainind = -1;
+		var zmolds = WTW.communitiesMolds;
 		if (buildingid != "") {
-			moldgroup = "building";
-			molds = WTW.buildingMolds;
+			zmolds = WTW.buildingMolds;
 		} else if (thingid != "") {
-			moldgroup = "thing";
-			molds = WTW.thingMolds;
+			zmolds = WTW.thingMolds;
 		}
-		for (var i=0; i < molds.length; i++) {
-			if (molds[i] != null) {
-				var csgmoldid = molds[i].csg.moldid;
-				if (csgmoldid == csgmainid) {
-					count += 1;
+		for (var i=0; i < zmolds.length; i++) {
+			if (zmolds[i] != null) {
+				var zcsgmoldid = zmolds[i].csg.moldid;
+				if (zcsgmoldid == zcsgmainid) {
+					zcount += 1;
 				}
-				if (molds[i].moldid == csgmainid) {
-					csgmainind = i;
+				if (zmolds[i].moldid == zcsgmainid) {
+					zcsgmainind = i;
 				}
 			}
 		}
-		if (molds[csgmainind] != null) {
-			if (molds[csgmainind].csg.count != undefined) {
-				molds[csgmainind].csg.count = count;
+		if (zmolds[zcsgmainind] != null) {
+			if (zmolds[zcsgmainind].csg.count != undefined) {
+				zmolds[zcsgmainind].csg.count = zcount;
 			}
 		}
 	} catch (ex) {
@@ -2468,303 +2440,351 @@ WTWJS.prototype.setCSGCount = function(csgmainid) {
 	}
 }
 
-WTWJS.prototype.getNewCoordinates = function(dist) {
+WTWJS.prototype.getNewCoordinates = function(zdist) {
 	/* when a new mold is created, the coordinates use the current position of the avatar (or camera if detatched) */
 	/* and provide new coordinates (and rotation towards the user/camera) at a particular distance in front of the avatar or camera */
-	var positionX = 0;
-	var positionY = 0;
-	var positionZ = 0;
-	var rotationY = 0.00;
+	var zpositionX = 0;
+	var zpositionY = 0;
+	var zpositionZ = 0;
+	var zrotationY = 0.00;
 	try {
 		if (WTW.cameraFocus == 1) {
-			rotationY = WTW.getDegrees(WTW.myAvatar.rotation.y);
-			positionY = Math.round(WTW.myAvatar.position.y);
-			positionX = Math.round((WTW.myAvatar.position.x + dist * Math.cos(WTW.myAvatar.rotation.y)));
-			positionZ = Math.round((WTW.myAvatar.position.z - dist * Math.sin(WTW.myAvatar.rotation.y)));
+			zrotationY = WTW.getDegrees(WTW.myAvatar.rotation.y);
+			zpositionY = Math.round(WTW.myAvatar.position.y);
+			zpositionX = Math.round((WTW.myAvatar.position.x + zdist * Math.cos(WTW.myAvatar.rotation.y)));
+			zpositionZ = Math.round((WTW.myAvatar.position.z - zdist * Math.sin(WTW.myAvatar.rotation.y)));
 		} else {
-			rotationY = WTW.getDegrees(WTW.camera.rotation.y) - 90;
-			var adjrot = WTW.getRadians(rotationY);
-			positionY = Math.round(WTW.camera.position.y);
-			positionX = Math.round((WTW.camera.position.x + dist * Math.cos(adjrot)));
-			positionZ = Math.round((WTW.camera.position.z - dist * Math.sin(adjrot)));
+			zrotationY = WTW.getDegrees(WTW.camera.rotation.y) - 90;
+			var zadjrot = WTW.getRadians(zrotationY);
+			zpositionY = Math.round(WTW.camera.position.y);
+			zpositionX = Math.round((WTW.camera.position.x + zdist * Math.cos(zadjrot)));
+			zpositionZ = Math.round((WTW.camera.position.z - zdist * Math.sin(zadjrot)));
 		}
-		rotationY = WTW.cleanDegrees(rotationY);
-		if (rotationY > 135 && rotationY < 225) {
-			rotationY = 90.00;
-		} else if (rotationY >= 225 && rotationY < 315) {
-			rotationY = 180.00;
-		} else if ((rotationY >= 315 && rotationY <= 360) || (rotationY >= 0 && rotationY < 45)) {
-			rotationY = -90.00;
+		zrotationY = WTW.cleanDegrees(zrotationY);
+		if (zrotationY > 135 && zrotationY < 225) {
+			zrotationY = 90.00;
+		} else if (zrotationY >= 225 && zrotationY < 315) {
+			zrotationY = 180.00;
+		} else if ((zrotationY >= 315 && zrotationY <= 360) || (zrotationY >= 0 && zrotationY < 45)) {
+			zrotationY = -90.00;
 		} else {
-			rotationY = 0.00;
+			zrotationY = 0.00;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminmolds.js-getNewCoordinates=" + ex.message);
 	}
 	return {
-		positionX : positionX.toFixed(2),
-		positionY : positionY.toFixed(2),
-		positionZ : positionZ.toFixed(2),
-		rotationY : rotationY
+		positionX : zpositionX.toFixed(2),
+		positionY : zpositionY.toFixed(2),
+		positionZ : zpositionZ.toFixed(2),
+		rotationY : zrotationY
 	};
 }
 
-WTWJS.prototype.openColorSelector = function() {
+WTWJS.prototype.openColorSelector = function(zobj, ztitle, zcolorgroup) {
 	/* when form uses color as a texture, the color wheels are opened and set to the current color settings */
 	/* typical colors are a combination of emissive, diffuse, and specular color settings */
 	try {
-		var molds = null;
-		var moldind = -1;
-		if (WTW.isNumeric(dGet('wtw_tmoldind').value)) {
-			moldind = Number(dGet('wtw_tmoldind').value);
-		}
-		switch (dGet('wtw_tmoldmoldgroup').value) {
-			case "community":
-				molds = WTW.communitiesMolds;
-				break;
-			case "thing":
-				molds = WTW.thingMolds;
-				break;
-			default:
-				molds = WTW.buildingMolds;
-				break;
-		}
-		var moldname = dGet('wtw_tmoldmoldgroup').value + "molds-" + dGet('wtw_tmoldind').value + "-" + dGet('wtw_tmoldid').value + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + dGet('wtw_tmoldshape').value;
-		dGet('wtw_tmoldname').value = moldname;
-		var mold = scene.getMeshByID(moldname);
-		if (mold != null) {
-			try {
-				if (mold.material != undefined && mold.material != null) {
-					WTW.disposeDirectionalTexture(mold);
-						if (mold.material.diffuseTexture != undefined) {
-							if (mold.material.diffuseTexture != null) {
-								mold.material.diffuseTexture.dispose();
-								mold.material.diffuseTexture = null;
-							}
-						}
-					mold.material.dispose();
-					mold.material = null;
-				}
-			} catch (ex) {}
-			var covering = new BABYLON.StandardMaterial("mat" + moldname, scene);
-			if (molds[moldind] != null) {
-				covering.specularColor = new BABYLON.Color3(Number(molds[moldind].color.specular.r), Number(molds[moldind].color.specular.g), Number(molds[moldind].color.specular.b));
-				covering.emissiveColor = new BABYLON.Color3(Number(molds[moldind].color.emissive.r), Number(molds[moldind].color.emissive.g), Number(molds[moldind].color.emissive.b));
-				covering.diffuseColor = new BABYLON.Color3(Number(molds[moldind].color.diffuse.r), Number(molds[moldind].color.diffuse.g), Number(molds[moldind].color.diffuse.b));	
-				if (molds[moldind].covering == 'marble') {
-					if (molds[moldind].opacity != undefined) {
-						if (WTW.isNumeric(molds[moldind].opacity)) {
-							opacity = Number(molds[moldind].opacity) / 100;
-							if (opacity > 1) {
-								opacity = 1;
-							} else if (opacity < 0) {
-								opacity = 0;
-							}
-						}
-					}
-					var max = Math.max(Number(molds[moldind].scaling.x), Number(molds[moldind].scaling.y), Number(molds[moldind].scaling.z));
-					var uscale = 1/max;
-					var vscale = 1/max;
-					if (WTW.isNumeric(molds[moldind].graphics.uscale)) {
-						if (Number(molds[moldind].graphics.uscale) > 0) {
-							uscale = Number(molds[moldind].graphics.uscale);
-						}
-					}
-					if (WTW.isNumeric(molds[moldind].graphics.vscale)) {
-						if (Number(molds[moldind].graphics.vscale) > 0) {
-							vscale = Number(molds[moldind].graphics.vscale);
-						}
-					}
-					if (uscale < 1) {
-						uscale = 1;
-					}
-					if (vscale < 1) {
-						vscale = 1;
-					}
-					covering.alpha = opacity;
-					var marbleTexture = new BABYLON.MarbleProceduralTexture("matmarbletex" + moldname, 512, scene);
-					marbleTexture.numberOfTilesHeight = Number(uscale).toFixed(0);
-					marbleTexture.numberOfTilesWidth = Number(vscale).toFixed(0);
-					covering.ambientTexture = marbleTexture;
-				}
-				mold.material = covering;
-				dGet('wtw_tspecularcolorr').value = molds[moldind].color.specular.r;
-				dGet('wtw_tspecularcolorg').value = molds[moldind].color.specular.g;
-				dGet('wtw_tspecularcolorb').value = molds[moldind].color.specular.b;
-				dGet('wtw_temissivecolorr').value = molds[moldind].color.emissive.r;
-				dGet('wtw_temissivecolorg').value = molds[moldind].color.emissive.g;
-				dGet('wtw_temissivecolorb').value = molds[moldind].color.emissive.b;
-				dGet('wtw_tdiffusecolorr').value = molds[moldind].color.diffuse.r;
-				dGet('wtw_tdiffusecolorg').value = molds[moldind].color.diffuse.g;
-				dGet('wtw_tdiffusecolorb').value = molds[moldind].color.diffuse.b;
-			} else {
-				covering.specularColor = new BABYLON.Color3(1, 1, 1);
-				covering.emissiveColor = new BABYLON.Color3(1, 1, 1);
-				covering.diffuseColor = new BABYLON.Color3(1, 1, 1);	
-				mold.material = covering;
-				dGet('wtw_tspecularcolorr').value = 1;
-				dGet('wtw_tspecularcolorg').value = 1;
-				dGet('wtw_tspecularcolorb').value = 1;
-				dGet('wtw_temissivecolorr').value = 1;
-				dGet('wtw_temissivecolorg').value = 1;
-				dGet('wtw_temissivecolorb').value = 1;
-				dGet('wtw_tdiffusecolorr').value = 1;
-				dGet('wtw_tdiffusecolorg').value = 1;
-				dGet('wtw_tdiffusecolorb').value = 1;
+		var zmoldname = dGet('wtw_tmoldwebtype').value + "molds-" + dGet('wtw_tmoldind').value + "-" + dGet('wtw_tmoldid').value + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + dGet('wtw_tmoldshape').value;
+		dGet('wtw_tmoldname').value = zmoldname;
+		var zmold = scene.getMeshByID(zmoldname);
+		if (zmold != null) {
+			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
+			
+			/* reset the mold color and save settings to form fields and array */
+			WTW.setMoldColor(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor);
+			
+			if (WTW.guiAdminColors != null) {
+				WTW.guiAdminColors.dispose();
+				WTW.guiAdminColors = null;
 			}
-			if (WTW.guiAdminColors == null) {
-				WTW.guiAdminColors = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-				var panel = new BABYLON.GUI.StackPanel();
-				panel.width = "200px";
-				panel.isVertical = true;
-				panel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-				panel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-				WTW.guiAdminColors.addControl(panel);
+			WTW.guiAdminColors = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+			var zpanel = new BABYLON.GUI.StackPanel();
+			zpanel.width = "300px";
+			zpanel.isVertical = true;
+			zpanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+			zpanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+			WTW.guiAdminColors.addControl(zpanel);
 
-				var textdiffuse = new BABYLON.GUI.TextBlock();
-				textdiffuse.text = "Diffuse color:";
-				textdiffuse.height = "30px";
-				panel.addControl(textdiffuse);     
+			var zcolortitle = new BABYLON.GUI.TextBlock();
+			zcolortitle.text = ztitle;
+			zcolortitle.color = "#FFFFFF";
+			zcolortitle.fontSize = 20;
+			zcolortitle.height = "50px";
+			zpanel.addControl(zcolortitle);     
 
-				var diffuse = new BABYLON.GUI.ColorPicker();
-				diffuse.value = covering.diffuseColor;
-				diffuse.height = "150px";
-				diffuse.width = "150px";
-				diffuse.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-				diffuse.onValueChangedObservable.add(function(value) {
-					if (value != null) {
-						WTW.setColor(dGet('wtw_tmoldname').value, 'diffuse', value.r, value.g, value.b);
-						dGet('wtw_tdiffusecolorr').value = value.r;
-						dGet('wtw_tdiffusecolorg').value = value.g;
-						dGet('wtw_tdiffusecolorb').value = value.b;
-						WTW.pluginsOpenColorSelector(dGet('wtw_tmoldname').value, molds[moldind].shape, 'diffuse');
-					}
-				});
-				panel.addControl(diffuse); 
-				
-				var textspecular = new BABYLON.GUI.TextBlock();
-				textspecular.text = "Specular color:";
-				textspecular.height = "30px";
-				panel.addControl(textspecular);     
-
-				var specular = new BABYLON.GUI.ColorPicker();
-				specular.value = covering.specularColor;
-				specular.height = "150px";
-				specular.width = "150px";
-				specular.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-				specular.onValueChangedObservable.add(function(value) {
-					if (value != null) {
-						WTW.setColor(dGet('wtw_tmoldname').value, 'specular', value.r, value.g, value.b);
-						dGet('wtw_tspecularcolorr').value = value.r;
-						dGet('wtw_tspecularcolorg').value = value.g;
-						dGet('wtw_tspecularcolorb').value = value.b;
-						WTW.pluginsOpenColorSelector(dGet('wtw_tmoldname').value, molds[moldind].shape, 'emissive');
-					}
-				});
-				panel.addControl(specular); 
-
-				var textemissive = new BABYLON.GUI.TextBlock();
-				textemissive.text = "Emissive color:";
-				textemissive.height = "30px";
-				panel.addControl(textemissive);     
-
-				var emissive = new BABYLON.GUI.ColorPicker();
-				emissive.value = covering.emissiveColor;
-				emissive.height = "150px";
-				emissive.width = "150px";
-				emissive.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-				emissive.onValueChangedObservable.add(function(value) { 
-					if (value != null) {
-						WTW.setColor(dGet('wtw_tmoldname').value, 'emissive', value.r, value.g, value.b);
-						dGet('wtw_temissivecolorr').value = value.r;
-						dGet('wtw_temissivecolorg').value = value.g;
-						dGet('wtw_temissivecolorb').value = value.b;
-						WTW.pluginsOpenColorSelector(dGet('wtw_tmoldname').value, molds[moldind].shape, 'emissive');
-					}
-				});
-				panel.addControl(emissive);
+			var zcolorpicker = new BABYLON.GUI.ColorPicker();
+			if (zmold.material != null) {
+				switch (zcolorgroup) {
+					case "diffuse":
+						zcolorpicker.value = zmold.material.diffuseColor;
+						break;
+					case "specular":
+						zcolorpicker.value = zmold.material.specularColor;
+						break;
+					case "emissive":
+						zcolorpicker.value = zmold.material.emissiveColor;
+						break;
+					case "ambient":
+						zcolorpicker.value = zmold.material.ambientColor;
+						break;
+				}
 			}
+			zcolorpicker.height = "250px";
+			zcolorpicker.width = "250px";
+			zcolorpicker.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+			zcolorpicker.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+			zcolorpicker.onValueChangedObservable.add(function(value) {
+				if (value != null) {
+					WTW.setColor(dGet('wtw_tmoldname').value, zcolorgroup, value.r, value.g, value.b);
+					WTW.pluginsOpenColorSelector(dGet('wtw_tmoldname').value, zmoldnameparts.molds[zmoldnameparts.moldind].shape, zcolorgroup);
+				}
+			});
+			zpanel.addControl(zcolorpicker); 
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminmolds.js-openColorSelector=" + ex.message);
 	}
 }
 
-WTWJS.prototype.setColor = function(moldname, colorgroup, r, g, b) {
+WTWJS.prototype.setMoldColor = function(zmoldname, zspecularcolor, zemissivecolor, zdiffusecolor, zambientcolor) {
+	/* reset the mold color and save settings to form fields and array */
+	try {
+		var zmold = scene.getMeshByID(zmoldname);
+		if (zmold != null) {
+			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
+			try {
+				if (zmold.material != undefined && zmold.material != null) {
+					WTW.disposeDirectionalTexture(zmold);
+						if (zmold.material.diffuseTexture != undefined) {
+							if (zmold.material.diffuseTexture != null) {
+								zmold.material.diffuseTexture.dispose();
+								zmold.material.diffuseTexture = null;
+							}
+						}
+					zmold.material.dispose();
+					zmold.material = null;
+				}
+			} catch (ex) {}
+			
+			var zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+			if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
+				if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zspecularcolor)) {
+					zcovering.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
+				} else {
+					zcovering.specularColor = new BABYLON.Color3.FromHexString("#ffffff");
+				}
+				if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zemissivecolor)) {
+					zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
+				} else {
+					zcovering.emissiveColor = new BABYLON.Color3.FromHexString("#000000");
+				}
+				if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zdiffusecolor)) {
+					zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
+				} else {
+					zcovering.diffuseColor = new BABYLON.Color3.FromHexString("#686868");
+				}
+				if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zambientcolor)) {
+					zcovering.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
+				} else {
+					zcovering.ambientColor = new BABYLON.Color3.FromHexString("#575757");
+				}
+
+				if (zmoldnameparts.molds[zmoldnameparts.moldind].covering == 'marble') {
+					if (zmoldnameparts.molds[zmoldnameparts.moldind].opacity != undefined) {
+						if (WTW.isNumeric(zmoldnameparts.molds[zmoldnameparts.moldind].opacity)) {
+							var zopacity = Number(zmoldnameparts.molds[zmoldnameparts.moldind].opacity) / 100;
+							if (zopacity > 1) {
+								zopacity = 1;
+							} else if (zopacity < 0) {
+								zopacity = 0;
+							}
+						}
+					}
+					var zmax = Math.max(Number(zmoldnameparts.molds[zmoldnameparts.moldind].scaling.x), Number(zmoldnameparts.molds[zmoldnameparts.moldind].scaling.y), Number(zmoldnameparts.molds[zmoldnameparts.moldind].scaling.z));
+					var zuscale = 1/zmax;
+					var zvscale = 1/zmax;
+					if (WTW.isNumeric(zmoldnameparts.molds[zmoldnameparts.moldind].graphics.uscale)) {
+						if (Number(zmoldnameparts.molds[zmoldnameparts.moldind].graphics.uscale) > 0) {
+							zuscale = Number(zmoldnameparts.molds[zmoldnameparts.moldind].graphics.uscale);
+						}
+					}
+					if (WTW.isNumeric(zmoldnameparts.molds[zmoldnameparts.moldind].graphics.vscale)) {
+						if (Number(zmoldnameparts.molds[zmoldnameparts.moldind].graphics.vscale) > 0) {
+							zvscale = Number(zmoldnameparts.molds[zmoldnameparts.moldind].graphics.vscale);
+						}
+					}
+					if (zuscale < 1) {
+						zuscale = 1;
+					}
+					if (zvscale < 1) {
+						zvscale = 1;
+					}
+					zcovering.alpha = zopacity;
+					var zmarbletexture = new BABYLON.MarbleProceduralTexture("matmarbletex" + zmoldname, 512, scene);
+					zmarbletexture.numberOfTilesHeight = Number(zuscale).toFixed(0);
+					zmarbletexture.numberOfTilesWidth = Number(zvscale).toFixed(0);
+					zcovering.ambientTexture = zmarbletexture;
+				}
+				zmold.material = zcovering;
+
+				dGet('wtw_tmolddiffusecolor').value = zdiffusecolor;
+				dGet('wtw_tmoldemissivecolor').value = zemissivecolor;
+				dGet('wtw_tmoldspecularcolor').value = zspecularcolor;
+				dGet('wtw_tmoldambientcolor').value = zambientcolor;
+				zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor = zdiffusecolor;
+				zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor = zemissivecolor;
+				zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor = zspecularcolor;
+				zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor = zambientcolor;
+			} else {
+				zcovering.specularColor = new BABYLON.Color3.FromHexString("#ffffff");
+				zcovering.emissiveColor = new BABYLON.Color3.FromHexString("#000000");
+				zcovering.diffuseColor = new BABYLON.Color3.FromHexString("#686868");	
+				zcovering.ambientColor = new BABYLON.Color3.FromHexString("#575757");	
+				zmold.material = zcovering;
+				dGet('wtw_tmolddiffusecolor').value = "#ffffff";
+				dGet('wtw_tmoldemissivecolor').value = "#000000";
+				dGet('wtw_tmoldspecularcolor').value = "#686868";
+				dGet('wtw_tmoldambientcolor').value = "#575757";
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmolds.js-setMoldColor=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setColorDirect = function(zobj) {
+	/* set color after change is made on the text box */
+	try {
+		if (zobj != null) {
+			var zmoldname = dGet('wtw_tmoldwebtype').value + "molds-" + dGet('wtw_tmoldind').value + "-" + dGet('wtw_tmoldid').value + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + dGet('wtw_tmoldshape').value;
+			dGet('wtw_tmoldname').value = zmoldname;
+			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
+			var ztitle = '';
+			var zcolorgroup = '';
+			switch (zobj.id) {
+				case "wtw_tmolddiffusecolor":
+					ztitle = 'Diffuse Color (Base)';
+					zcolorgroup = 'diffuse';
+					/* reset the mold color and save settings to form fields and array */
+					WTW.setMoldColor(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor, zobj.value, zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor);
+					break;
+				case "wtw_tmoldemissivecolor":
+					ztitle = 'Emissive Color (Projected)';
+					zcolorgroup = 'emissive';
+					/* reset the mold color and save settings to form fields and array */
+					WTW.setMoldColor(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor, zobj.value, zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor);
+					break;
+				case "wtw_tmoldspecularcolor":
+					ztitle = 'Specular Color (Highlight)';
+					zcolorgroup = 'specular';
+					/* reset the mold color and save settings to form fields and array */
+					WTW.setMoldColor(zmoldname, zobj.value, zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor);
+					break;
+				case "wtw_tmoldambientcolor":
+					ztitle = 'Ambient Color (Environment)';
+					zcolorgroup = 'ambient';
+					/* reset the mold color and save settings to form fields and array */
+					WTW.setMoldColor(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor, zobj.value);
+					break;
+			}
+			WTW.closeColorSelector(true);
+			WTW.openColorSelector(zobj, ztitle, zcolorgroup);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmolds.js-setColorDirect=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setColor = function(zmoldname, zcolorgroup, zr, zg, zb) {
 	/* set color after change is made on the color wheels */
 	try {
-		var covering = scene.getMaterialByID("mat" + moldname);
-		if (covering != null) {
-			switch (colorgroup) {
-				case "diffuse":
-					covering.diffuseColor = new BABYLON.Color3(r,g,b);
-					break;
-				case "specular":
-					covering.specularColor = new BABYLON.Color3(r,g,b);
-					break;
-				case "emissive":
-					covering.emissiveColor = new BABYLON.Color3(r,g,b);
-					break;
-			}
-			var mold = scene.getMeshByID(moldname);
-			if (mold != null) {
-				mold.material = covering;
-			}
-		}
-		var molds = null;
-		var moldind = -1;
+		var zmolds = null;
+		var zmoldind = -1;
 		if (WTW.isNumeric(dGet('wtw_tmoldind').value)) {
-			moldind = Number(dGet('wtw_tmoldind').value);
+			zmoldind = Number(dGet('wtw_tmoldind').value);
 		}
-		switch (dGet('wtw_tmoldmoldgroup').value) {
+		switch (dGet('wtw_tmoldwebtype').value) {
 			case "community":
-				molds = WTW.communitiesMolds;
+				zmolds = WTW.communitiesMolds;
 				break;
 			case "thing":
-				molds = WTW.thingMolds;
+				zmolds = WTW.thingMolds;
 				break;
 			default:
-				molds = WTW.buildingMolds;
+				zmolds = WTW.buildingMolds;
 				break;
 		}
-		if (molds[moldind] != null) {
-			switch (colorgroup) {
+		if (zmolds[zmoldind] != null) {
+			var zmold = scene.getMeshByID(zmoldname);
+			if (zmold != null) {
+				var zcovering = zmold.material;
+				if (zcovering != null) {
+					switch (zcolorgroup) {
+						case "diffuse":
+							zcovering.diffuseColor = new BABYLON.Color3(zr,zg,zb);
+							zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+							zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+							zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+							break;
+						case "specular":
+							zcovering.specularColor = new BABYLON.Color3(zr,zg,zb);
+							zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+							zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
+							zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+							break;
+						case "emissive":
+							zcovering.emissiveColor = new BABYLON.Color3(zr,zg,zb);
+							zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+							zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
+							zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+							break;
+						case "ambient":
+							zcovering.ambientColor = new BABYLON.Color3(zr,zg,zb);
+							zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+							zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+							zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
+							break;
+					}
+					zmold.material.dispose();
+					zmold.material = zcovering;
+				}
+			}
+			switch (zcolorgroup) {
 				case "diffuse":
-					molds[moldind].color.diffuse.r = r;
-					molds[moldind].color.diffuse.g = g;
-					molds[moldind].color.diffuse.b = b;
-					dGet('wtw_tdiffusecolorr').value = r;
-					dGet('wtw_tdiffusecolorg').value = g;
-					dGet('wtw_tdiffusecolorb').value = b;
+					var zdiffusecolor = zcovering.diffuseColor.toHexString().toLowerCase();
+					zmolds[zmoldind].color.diffusecolor = zdiffusecolor;
+					dGet('wtw_tmolddiffusecolor').value = zcovering.diffuseColor.toHexString();
 					break;
 				case "specular":
-					molds[moldind].color.specular.r = r;
-					molds[moldind].color.specular.g = g;
-					molds[moldind].color.specular.b = b;
-					dGet('wtw_tspecularcolorr').value = r;
-					dGet('wtw_tspecularcolorg').value = g;
-					dGet('wtw_tspecularcolorb').value = b;
+					var zspecularcolor = zcovering.specularColor.toHexString().toLowerCase();
+					zmolds[zmoldind].color.specularcolor = zspecularcolor;
+					dGet('wtw_tmoldspecularcolor').value = zspecularcolor;
 					break;
 				case "emissive":
-					molds[moldind].color.emissive.r = r;
-					molds[moldind].color.emissive.g = g;
-					molds[moldind].color.emissive.b = b;
-					dGet('wtw_temissivecolorr').value = r;
-					dGet('wtw_temissivecolorg').value = g;
-					dGet('wtw_temissivecolorb').value = b;
+					var zemissivecolor = zcovering.emissiveColor.toHexString().toLowerCase();
+					zmolds[zmoldind].color.emissivecolor = zemissivecolor;
+					dGet('wtw_tmoldemissivecolor').value = zemissivecolor;
+					break;
+				case "ambient":
+					var zambientcolor = zcovering.ambientColor.toHexString().toLowerCase();
+					zmolds[zmoldind].color.ambientcolor = zambientcolor;
+					dGet('wtw_tmoldambientcolor').value = zambientcolor;
 					break;
 			}
 		}
-		/* WTW.resetMoldsOpacity(); */
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminmolds.js-setColor=" + ex.message);
 	}
 }
 
-WTWJS.prototype.closeColorSelector = function() {
+WTWJS.prototype.closeColorSelector = function(zcloseovercanvas) {
 	/* close and dispose color selector after use */
 	try {
-		if (WTW.guiAdminColors != null) {
+		if (zcloseovercanvas == undefined) {
+			zcloseovercanvas = true;
+		}
+		if ((zcloseovercanvas == false && WTW.guiAdminColors != null && WTW.canvasFocus == 0) || (zcloseovercanvas && WTW.guiAdminColors != null)) {
 			WTW.guiAdminColors.dispose();
 			WTW.guiAdminColors = null;
 		}
@@ -2773,317 +2793,343 @@ WTWJS.prototype.closeColorSelector = function() {
 	}
 }
 
+WTWJS.prototype.setTextColor = function(zbgcolor, zlightcolor, zdarkcolor) {
+	/* when the color is selected, the form updates the color to the background */
+	/* this also sets the text color to an opposite color than the background (default is black or white) */
+	var zcolor = "black";
+	try {
+		if (zlightcolor == undefined) {
+			zlightcolor = "#ffffff";
+		}
+		if (zdarkcolor == undefined) {
+			zdarkcolor = "#000000";
+		}
+		var zcolorstring = (zbgcolor.charAt(0) === '#') ? zbgcolor.substring(1, 7) : zbgcolor;
+		var zred = parseInt(zcolorstring.substring(0, 2), 16); // hexToR
+		var zgreen = parseInt(zcolorstring.substring(2, 4), 16); // hexToG
+		var zblue = parseInt(zcolorstring.substring(4, 6), 16); // hexToB
+		var zuicolors = [zred / 255, zgreen / 255, zblue / 255];
+		var zcols = zuicolors.map((zcol) => {
+			if (zcol <= 0.03928) {
+				return zcol / 12.92;
+			}
+			return Math.pow((zcol + 0.055) / 1.055, 2.4);
+		});
+		var zcompare = (0.2126 * zcols[0]) + (0.7152 * zcols[1]) + (0.0722 * zcols[2]);
+		zcolor = (zcompare > 0.179) ? zdarkcolor : zlightcolor;
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmolds.js-setTextColor=" + ex.message);
+	}
+	return zcolor;
+}
+
 
 /* the following process is designed to update the mold appearance directly while you are editing it */
 
-WTWJS.prototype.setNewMold = function(rebuildmold) {
+WTWJS.prototype.setNewMold = function(zrebuildmold) {
 	/* use the form settings to redraw the mold */
-	/* rebuildmold as true would force the mold to be deleted and rebuilt - some changes may require this anyways (set below) */
+	/* zrebuildmold as true would force the mold to be deleted and rebuilt - some changes may require this anyways (set below) */
 	try {
-		if (rebuildmold == undefined) {
-			rebuildmold = 0;
+		if (zrebuildmold == undefined) {
+			zrebuildmold = 0;
 		}
-		var moldname = "";
-		var moldgroup = "";
-		var molds = null;
-		var moldid = dGet('wtw_tmoldid').value;
-		var moldind = Number(dGet('wtw_tmoldind').value);
-		var shape = dGet('wtw_tmoldshape').value;
-		var coveringname = "texture";
-		switch (dGet('wtw_tmoldmoldgroup').value) {
+		var zmoldname = "";
+		var zwebtype = "";
+		var zmolds = null;
+		var zmoldid = dGet('wtw_tmoldid').value;
+		var zmoldind = Number(dGet('wtw_tmoldind').value);
+		var zshape = dGet('wtw_tmoldshape').value;
+		var zcoveringname = "texture";
+		switch (dGet('wtw_tmoldwebtype').value) {
 			case "community":
-				moldgroup = "community";
-				molds = WTW.communitiesMolds;
+				zwebtype = "community";
+				zmolds = WTW.communitiesMolds;
 				break;
 			case "thing":
-				moldgroup = "thing";
-				molds = WTW.thingMolds;
+				zwebtype = "thing";
+				zmolds = WTW.thingMolds;
 				break;
 			default:
-				moldgroup = "building";
-				molds = WTW.buildingMolds;
+				zwebtype = "building";
+				zmolds = WTW.buildingMolds;
 				break;
 		}
-		moldname = moldgroup + "molds-" + dGet('wtw_tmoldind').value + "-" + dGet('wtw_tmoldid').value + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + shape;
-		if (moldname != "") {
-			var posx = 0;
-			var posy = 0;
-			var posz = 0;
-			var rotx = 0;
-			var roty = 0;
-			var rotz = 0;
-			var lenx = 1;
-			var leny = 1;
-			var lenz = 1;
-			var special1 = 0;
-			var special2 = 0;
-			var uoffset = 0;
-			var voffset = 0;
-			var uscale = 0;
-			var vscale = 0;
-			var opacity = 0;
-			var subdivisions = 2;
-			var maxheight = 70;
-			var iswaterreflection = "0";
-			var alphamold = 1;
-			var mold = scene.getMeshByID(moldname);
-			var moldparent = null;
-			var parentname = "";
-			if (mold != null) {
+		zmoldname = zwebtype + "molds-" + dGet('wtw_tmoldind').value + "-" + dGet('wtw_tmoldid').value + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + zshape;
+		if (zmoldname != "") {
+			var zposx = 0;
+			var zposy = 0;
+			var zposz = 0;
+			var zrotx = 0;
+			var zroty = 0;
+			var zrotz = 0;
+			var zlenx = 1;
+			var zleny = 1;
+			var zlenz = 1;
+			var zspecial1 = 0;
+			var zspecial2 = 0;
+			var zuoffset = 0;
+			var zvoffset = 0;
+			var zuscale = 0;
+			var zvscale = 0;
+			var zopacity = 0;
+			var zsubdivisions = 2;
+			var zmaxheight = 70;
+			var zalphamold = 1;
+			var zmold = scene.getMeshByID(zmoldname);
+			var zmoldparent = null;
+			var zparentname = "";
+			if (zmold != null) {
 				try {
-					moldparent = mold.parent;
-					parentname = moldparent.name;
+					zmoldparent = zmold.parent;
+					zparentname = zmoldparent.name;
 				} catch (ex) {}
 			}
-			if (mold != null && molds[moldind] != null) {
+			if (zmold != null && zmolds[zmoldind] != null) {
 				if (WTW.isNumeric(dGet('wtw_tmoldsubdivisions').value)) {
 					if (Number(dGet('wtw_tmoldsubdivisions').value) < 2) {
 						dGet('wtw_tmoldsubdivisions').value = "2.00";
 					}
-					subdivisions = Number(dGet('wtw_tmoldsubdivisions').value);
+					zsubdivisions = Number(dGet('wtw_tmoldsubdivisions').value);
 				}			
-				if (molds[moldind].subdivisions != subdivisions) {
-					molds[moldind].subdivisions = subdivisions;
-					rebuildmold = 1;
+				if (zmolds[zmoldind].subdivisions != zsubdivisions) {
+					zmolds[zmoldind].subdivisions = zsubdivisions;
+					zrebuildmold = 1;
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldmaxheight').value)) {
 					if (Number(dGet('wtw_tmoldmaxheight').value) < 0) {
 						dGet('wtw_tmoldmaxheight').value = "0.00";
 					}
-					maxheight = Number(dGet('wtw_tmoldmaxheight').value);
-					molds[moldind].graphics.heightmap.maxheight = maxheight;
+					zmaxheight = Number(dGet('wtw_tmoldmaxheight').value);
+					zmolds[zmoldind].graphics.heightmap.maxheight = zmaxheight;
 				}			
 				if (dGet('wtw_tmoldcovering').options[dGet('wtw_tmoldcovering').selectedIndex] != undefined) {
-					coveringname = dGet('wtw_tmoldcovering').options[dGet('wtw_tmoldcovering').selectedIndex].value;
+					zcoveringname = dGet('wtw_tmoldcovering').options[dGet('wtw_tmoldcovering').selectedIndex].value;
 				}
 				dGet('wtw_pointlist1').innerHTML = "";
 				dGet('wtw_pointlist2').innerHTML = "";
-				if (shape == "image") {
-					coveringname = "hidden";
-					molds[moldind].graphics.webimages[0].imageid = dGet('wtw_tmoldaddimageid').value;
-					molds[moldind].graphics.webimages[0].imagehoverid = dGet('wtw_tmoldaddimagehoverid').value;
-					rebuildmold = 1;
-				} else if (shape == "terrain") {
-                    rebuildmold = 1;
-                } else if (shape == "video") {
-                    //rebuildmold = 1;
-                } else if (shape == "tube") {
-					rebuildmold = 1;
-					var pointind = -1;
+				if (zshape == "image") {
+					zcoveringname = "hidden";
+					zmolds[zmoldind].graphics.webimages[0].imageid = dGet('wtw_tmoldaddimageid').value;
+					zmolds[zmoldind].graphics.webimages[0].imagehoverid = dGet('wtw_tmoldaddimagehoverid').value;
+					zrebuildmold = 1;
+				} else if (zshape == "terrain") {
+                    zrebuildmold = 1;
+                } else if (zshape == "video") {
+                    //zrebuildmold = 1;
+                } else if (zshape == "tube") {
+					zrebuildmold = 1;
+					var zpointind = -1;
 					if (WTW.isNumeric(dGet('wtw_teditpointindex').value)) {
-						pointind = dGet('wtw_teditpointindex').value;
+						zpointind = dGet('wtw_teditpointindex').value;
 					}
-					if (pointind > -1) {
-						if (molds[moldind].paths.path1[pointind] == null) {
-							molds[moldind].paths.path1[pointind] = WTW.newPathPoint();
-							molds[moldind].paths.path1[pointind].sorder = pointind;
+					if (zpointind > -1) {
+						if (zmolds[zmoldind].paths.path1[zpointind] == null) {
+							zmolds[zmoldind].paths.path1[zpointind] = WTW.newPathPoint();
+							zmolds[zmoldind].paths.path1[zpointind].sorder = zpointind;
 						}
 						if (WTW.isNumeric(dGet('wtw_tpointpositionx').value)) {
-							molds[moldind].paths.path1[pointind].x = dGet('wtw_tpointpositionx').value;
+							zmolds[zmoldind].paths.path1[zpointind].x = dGet('wtw_tpointpositionx').value;
 						}
 						if (WTW.isNumeric(dGet('wtw_tpointpositiony').value)) {
-							molds[moldind].paths.path1[pointind].y = dGet('wtw_tpointpositiony').value;
+							zmolds[zmoldind].paths.path1[zpointind].y = dGet('wtw_tpointpositiony').value;
 						}
 						if (WTW.isNumeric(dGet('wtw_tpointpositionz').value)) {
-							molds[moldind].paths.path1[pointind].z = dGet('wtw_tpointpositionz').value;
+							zmolds[zmoldind].paths.path1[zpointind].z = dGet('wtw_tpointpositionz').value;
 						}
 					}
-					WTW.loadPointList(molds[moldind].paths.path1, 1);
+					WTW.loadPointList(zmolds[zmoldind].paths.path1, 1);
 				}
 				if (dGet('wtw_tmoldcoveringold').value == "") {
-					dGet('wtw_tmoldcoveringold').value = coveringname;
+					dGet('wtw_tmoldcoveringold').value = zcoveringname;
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldscalingx').value)) {
 					if (Number(dGet('wtw_tmoldscalingx').value) < .01) {
 						dGet('wtw_tmoldscalingx').value = ".01";
 					}
-					lenx = Number(dGet('wtw_tmoldscalingx').value);
+					zlenx = Number(dGet('wtw_tmoldscalingx').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldscalingy').value)) {
 					if (Number(dGet('wtw_tmoldscalingy').value) < .01) {
 						dGet('wtw_tmoldscalingy').value = ".01";
 					}
-					leny = Number(dGet('wtw_tmoldscalingy').value);
+					zleny = Number(dGet('wtw_tmoldscalingy').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldscalingz').value)) {
 					if (Number(dGet('wtw_tmoldscalingz').value) < .01) {
 						dGet('wtw_tmoldscalingz').value = ".01";
 					}
-					lenz = Number(dGet('wtw_tmoldscalingz').value);
+					zlenz = Number(dGet('wtw_tmoldscalingz').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldspecial1').value)) {
-					special1 = Number(dGet('wtw_tmoldspecial1').value);
+					zspecial1 = Number(dGet('wtw_tmoldspecial1').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldspecial2').value)) {
-					special2 = Number(dGet('wtw_tmoldspecial2').value);
+					zspecial2 = Number(dGet('wtw_tmoldspecial2').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tmolduoffset').value)) {
-					uoffset = Number(dGet('wtw_tmolduoffset').value);
+					zuoffset = Number(dGet('wtw_tmolduoffset').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldvoffset').value)) {
-					voffset = Number(dGet('wtw_tmoldvoffset').value);
+					zvoffset = Number(dGet('wtw_tmoldvoffset').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tmolduscale').value)) {
-					uscale = Number(dGet('wtw_tmolduscale').value);
+					zuscale = Number(dGet('wtw_tmolduscale').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldvscale').value)) {
-					vscale = Number(dGet('wtw_tmoldvscale').value);
+					zvscale = Number(dGet('wtw_tmoldvscale').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldopacity').value)) {
-					opacity = Number(dGet('wtw_tmoldopacity').value);
+					zopacity = Number(dGet('wtw_tmoldopacity').value);
 				}
-				if (opacity < 0) {
-					opacity = 0;
+				if (zopacity < 0) {
+					zopacity = 0;
 				}
-				if (opacity > 100) {
-					opacity = 100;
+				if (zopacity > 100) {
+					zopacity = 100;
 				}
-				dGet('wtw_tmoldopacity').value = (opacity.toFixed(2));
-				if (coveringname == "glass") {
-					molds[moldind].graphics.texture.id = "";
-					molds[moldind].graphics.texture.path = "";
-					molds[moldind].graphics.texture.bumpid = "";
-					molds[moldind].graphics.texture.bumppath = "";
+				dGet('wtw_tmoldopacity').value = (zopacity.toFixed(2));
+				if (zcoveringname == "glass") {
+					zmolds[zmoldind].graphics.texture.id = "";
+					zmolds[zmoldind].graphics.texture.path = "";
+					zmolds[zmoldind].graphics.texture.bumpid = "";
+					zmolds[zmoldind].graphics.texture.bumppath = "";
 					dGet('wtw_tmoldtextureid').value = "";
 					dGet('wtw_tmoldtexturepath').value = "";
 					dGet('wtw_tmoldtexturebumpid').value = "";
 					dGet('wtw_tmoldtexturebumppath').value = "";
-					opacity = .2;
+					zopacity = .2;
 				}
-				if (molds[moldind].scaling.special1 != special1) {
-					molds[moldind].scaling.special1 = special1;
-					rebuildmold = 1;
+				if (zmolds[zmoldind].scaling.special1 != zspecial1) {
+					zmolds[zmoldind].scaling.special1 = zspecial1;
+					zrebuildmold = 1;
 				}
-				if (molds[moldind].scaling.special2 != special2) {
-					molds[moldind].scaling.special2 = special2;
-					rebuildmold = 1;
+				if (zmolds[zmoldind].scaling.special2 != zspecial2) {
+					zmolds[zmoldind].scaling.special2 = zspecial2;
+					zrebuildmold = 1;
 				}
-				if (molds[moldind].graphics.uoffset != uoffset) {
-					molds[moldind].graphics.uoffset = uoffset;
-					//rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.uoffset != zuoffset) {
+					zmolds[zmoldind].graphics.uoffset = zuoffset;
+					//zrebuildmold = 1;
 				}
-				if (molds[moldind].graphics.voffset != voffset) {
-					molds[moldind].graphics.voffset = voffset;
-					//rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.voffset != zvoffset) {
+					zmolds[zmoldind].graphics.voffset = zvoffset;
+					//zrebuildmold = 1;
 				}
-				if (molds[moldind].graphics.uscale != uscale) {
-					molds[moldind].graphics.uscale = uscale;
-					rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.uscale != zuscale) {
+					zmolds[zmoldind].graphics.uscale = zuscale;
+					zrebuildmold = 1;
 				}
-				if (molds[moldind].graphics.vscale != vscale) {
-					molds[moldind].graphics.vscale = vscale;
-					rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.vscale != zvscale) {
+					zmolds[zmoldind].graphics.vscale = zvscale;
+					zrebuildmold = 1;
 				}
-				molds[moldind].opacity = opacity;
-				molds[moldind].scaling.x = lenx;
-				molds[moldind].scaling.y = leny;
-				molds[moldind].scaling.z = lenz;
-				mold.scaling.x = lenx;
-				mold.scaling.y = leny;
-				mold.scaling.z = lenz;
-				posx = molds[moldind].position.x;
-				posy = molds[moldind].position.y;
-				posz = molds[moldind].position.z;
+				zmolds[zmoldind].opacity = zopacity;
+				zmolds[zmoldind].scaling.x = zlenx;
+				zmolds[zmoldind].scaling.y = zleny;
+				zmolds[zmoldind].scaling.z = zlenz;
+				zmold.scaling.x = zlenx;
+				zmold.scaling.y = zleny;
+				zmold.scaling.z = zlenz;
+				zposx = zmolds[zmoldind].position.x;
+				zposy = zmolds[zmoldind].position.y;
+				zposz = zmolds[zmoldind].position.z;
 				if (dGet('wtw_tmoldwaterreflection').checked == true) {
-					molds[moldind].graphics.waterreflection = "1";
+					zmolds[zmoldind].graphics.waterreflection = "1";
 				} else {
-					molds[moldind].graphics.waterreflection = "0";
+					zmolds[zmoldind].graphics.waterreflection = "0";
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldpositionx').value)) {
-					posx = Number(dGet('wtw_tmoldpositionx').value);
+					zposx = Number(dGet('wtw_tmoldpositionx').value);
 				} else {
-					dGet('wtw_tmoldpositionx').value = posx;
+					dGet('wtw_tmoldpositionx').value = zposx;
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldpositiony').value)) {
-					posy = Number(dGet('wtw_tmoldpositiony').value);
+					zposy = Number(dGet('wtw_tmoldpositiony').value);
 				} else {
-					dGet('wtw_tmoldpositiony').value = posy;
+					dGet('wtw_tmoldpositiony').value = zposy;
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldpositionz').value)) {
-					posz = Number(dGet('wtw_tmoldpositionz').value);
+					zposz = Number(dGet('wtw_tmoldpositionz').value);
 				} else {
-					dGet('wtw_tmoldpositionz').value = posz;
+					dGet('wtw_tmoldpositionz').value = zposz;
 				}
-				molds[moldind].position.x = posx;
-				molds[moldind].position.y = posy;
-				molds[moldind].position.z = posz;
-				molds[moldind].color.specular.r = dGet('wtw_tspecularcolorr').value;
-				molds[moldind].color.specular.g = dGet('wtw_tspecularcolorg').value;
-				molds[moldind].color.specular.b = dGet('wtw_tspecularcolorb').value;
-				molds[moldind].color.emissive.r = dGet('wtw_temissivecolorr').value;
-				molds[moldind].color.emissive.g = dGet('wtw_temissivecolorg').value;
-				molds[moldind].color.emissive.b = dGet('wtw_temissivecolorb').value;
-				molds[moldind].color.diffuse.r = dGet('wtw_tdiffusecolorr').value;
-				molds[moldind].color.diffuse.g = dGet('wtw_tdiffusecolorg').value;
-				molds[moldind].color.diffuse.b = dGet('wtw_tdiffusecolorb').value;
-				if (mold.material != undefined) {
-					mold.material.specularColor = new BABYLON.Color3(Number(molds[moldind].color.specular.r), Number(molds[moldind].color.specular.g), Number(molds[moldind].color.specular.b));
-					mold.material.diffuseColor = new BABYLON.Color3(Number(molds[moldind].color.diffuse.r), Number(molds[moldind].color.diffuse.g), Number(molds[moldind].color.diffuse.b));	
-					mold.material.emissiveColor = new BABYLON.Color3(Number(molds[moldind].color.emissive.r), Number(molds[moldind].color.emissive.g), Number(molds[moldind].color.emissive.b));
+				zmolds[zmoldind].position.x = zposx;
+				zmolds[zmoldind].position.y = zposy;
+				zmolds[zmoldind].position.z = zposz;
+				zmolds[zmoldind].color.diffusecolor = dGet('wtw_tmolddiffusecolor').value;
+				zmolds[zmoldind].color.emissivecolor = dGet('wtw_tmoldemissivecolor').value;
+				zmolds[zmoldind].color.specularcolor = dGet('wtw_tmoldspecularcolor').value;
+				zmolds[zmoldind].color.ambientcolor = dGet('wtw_tmoldambientcolor').value;
+				if (zmold.material != undefined) {
+					zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
+					zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+					zmold.material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+					zmold.material.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
 				}
-				if (molds[moldind].covering == "color" || molds[moldind].covering == "marble") {
-					var moldimageframename = moldname + "-imageframe";
-					var moldimageframe = scene.getMeshByID(moldimageframename);
-					if (moldimageframe != null) {	
-						if (moldimageframe.material != undefined) {
-							moldimageframe.material.specularColor = new BABYLON.Color3(Number(molds[moldind].color.specular.r), Number(molds[moldind].color.specular.g), Number(molds[moldind].color.specular.b));
-							moldimageframe.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-							moldimageframe.material.diffuseColor = new BABYLON.Color3(Number(molds[moldind].color.diffuse.r), Number(molds[moldind].color.diffuse.g), Number(molds[moldind].color.diffuse.b));	
+				if (zmolds[zmoldind].covering == "color" || zmolds[zmoldind].covering == "marble") {
+					var zmoldimageframename = zmoldname + "-imageframe";
+					var zmoldimageframe = scene.getMeshByID(zmoldimageframename);
+					if (zmoldimageframe != null) {	
+						if (zmoldimageframe.material != undefined) {
+							zmoldimageframe.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
+							zmoldimageframe.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+							zmoldimageframe.material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+							zmoldimageframe.material.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
 						}
 					}
 				}
-				if (parentname.indexOf("actionzone") > -1) {
-					var actionzoneparts = parentname.split('-');
-					var actionzoneind = Number(actionzoneparts[1]);
-					if (WTW.actionZones[actionzoneind].actionzonetype.indexOf("seat") > -1) {
-						var actionzoneaxlebase2 = scene.getMeshByID("actionzoneaxlebase2-" + actionzoneind.toString() + "-" + WTW.actionZones[actionzoneind].actionzoneid + "-" + WTW.actionZones[actionzoneind].connectinggridind + "-" + WTW.actionZones[actionzoneind].connectinggridid + "-" + WTW.actionZones[actionzoneind].actionzonetype);
-						if (actionzoneaxlebase2 != null) {
-//							posx -= actionzoneaxlebase2.position.x;
-//							posy -= actionzoneaxlebase2.position.y;
-//							posz -= actionzoneaxlebase2.position.z;
+				if (zparentname.indexOf("actionzone") > -1) {
+					var zactionzoneparts = zparentname.split('-');
+					var zactionzoneind = Number(zactionzoneparts[1]);
+					if (WTW.actionZones[zactionzoneind].actionzonetype.indexOf("seat") > -1) {
+						var zactionzoneaxlebase2 = scene.getMeshByID("actionzoneaxlebase2-" + zactionzoneind.toString() + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+						if (zactionzoneaxlebase2 != null) {
+//							zposx -= zactionzoneaxlebase2.position.x;
+//							zposy -= zactionzoneaxlebase2.position.y;
+//							zposz -= zactionzoneaxlebase2.position.z;
 						}
 					} else {
-						var actionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + actionzoneind.toString() + "-" + WTW.actionZones[actionzoneind].actionzoneid + "-" + WTW.actionZones[actionzoneind].connectinggridind + "-" + WTW.actionZones[actionzoneind].connectinggridid + "-" + WTW.actionZones[actionzoneind].actionzonetype);
-						if (actionzoneaxlebase != null) {
-							posx -= actionzoneaxlebase.position.x;
-							posy -= actionzoneaxlebase.position.y;
-							posz -= actionzoneaxlebase.position.z;
+						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + zactionzoneind.toString() + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+						if (zactionzoneaxlebase != null) {
+							zposx -= zactionzoneaxlebase.position.x;
+							zposy -= zactionzoneaxlebase.position.y;
+							zposz -= zactionzoneaxlebase.position.z;
 						}
 					}
 				}
-				mold.position.x = posx;
-				mold.position.y = posy;
-				mold.position.z = posz;
+				zmold.position.x = zposx;
+				zmold.position.y = zposy;
+				zmold.position.z = zposz;
 				if (WTW.isNumeric(dGet('wtw_tmoldrotationx').value)) {
-					rotx = WTW.getRadians(Number(dGet('wtw_tmoldrotationx').value));
+					zrotx = WTW.getRadians(Number(dGet('wtw_tmoldrotationx').value));
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldrotationy').value)) {
-					roty = WTW.getRadians(Number(dGet('wtw_tmoldrotationy').value));
+					zroty = WTW.getRadians(Number(dGet('wtw_tmoldrotationy').value));
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldrotationz').value)) {
-					rotz = WTW.getRadians(Number(dGet('wtw_tmoldrotationz').value));
+					zrotz = WTW.getRadians(Number(dGet('wtw_tmoldrotationz').value));
 				}
-				molds[moldind].rotation.x = WTW.getDegrees(rotx);
-				molds[moldind].rotation.y = WTW.getDegrees(roty);
-				molds[moldind].rotation.z = WTW.getDegrees(rotz);
-				mold.rotation.x = rotx;
-				if (shape == "candleflame") { // billboardmode
-					mold.rotation.y = 0;
+				zmolds[zmoldind].rotation.x = WTW.getDegrees(zrotx);
+				zmolds[zmoldind].rotation.y = WTW.getDegrees(zroty);
+				zmolds[zmoldind].rotation.z = WTW.getDegrees(zrotz);
+				zmold.rotation.x = zrotx;
+				if (zshape == "candleflame") { // billboardmode
+					zmold.rotation.y = 0;
 					dGet('wtw_tmoldrotationy').value = '0.00';
 				} else {
-					mold.rotation.y = roty;				
+					zmold.rotation.y = zroty;				
 				}
-				mold.rotation.z = rotz;				
-				if ((shape == "box" || shape == "wall" || shape == "floor") && coveringname == "directional texture") {
-					coveringname = "directional texture";
-				} else if (shape != "box" && shape != "wall" && shape != "floor" && coveringname == "directional texture") {
-					coveringname = "texture";
+				zmold.rotation.z = zrotz;				
+				if ((zshape == "box" || zshape == "wall" || zshape == "floor") && zcoveringname == "directional texture") {
+					zcoveringname = "directional texture";
+				} else if (zshape != "box" && zshape != "wall" && zshape != "floor" && zcoveringname == "directional texture") {
+					zcoveringname = "texture";
 				}
-				if (shape == "3dtext") {
-					if (molds[moldind].webtext.webtext != undefined) {
-						if (molds[moldind].webtext.webtext != dGet('wtw_tmoldwebtext').value) {
-							molds[moldind].webtext.webtext = dGet('wtw_tmoldwebtext').value;
-							rebuildmold = 1;
+				if (zshape == "3dtext") {
+					if (zmolds[zmoldind].webtext.webtext != undefined) {
+						if (zmolds[zmoldind].webtext.webtext != dGet('wtw_tmoldwebtext').value) {
+							zmolds[zmoldind].webtext.webtext = dGet('wtw_tmoldwebtext').value;
+							zrebuildmold = 1;
 						}
 					}
 					if (dGet('wtw_tmoldwebtextheight').value == '' || WTW.isNumeric(dGet('wtw_tmoldwebtextheight').value) == false) {
@@ -3104,364 +3150,364 @@ WTWJS.prototype.setNewMold = function(rebuildmold) {
 					if (dGet('wtw_tmoldwebtextambient').value == '') {
 						dGet('wtw_tmoldwebtextambient').value = '#808080';
 					}
-					if (molds[moldind].webtext.webstyle != undefined) {
-						dGet('wtw_tmoldwebstyle').value = "{\"anchor\":\"" + dGet('wtw_tmoldwebtextalign').options[dGet('wtw_tmoldwebtextalign').selectedIndex].value + "\",\"letter-height\":" + dGet('wtw_tmoldwebtextheight').value + ",\"letter-thickness\":" + dGet('wtw_tmoldwebtextthick').value + ",\"color\":\"" + dGet('wtw_tmoldwebtextcolor').value + "\",\"alpha\":" + opacity/100 + ",\"colors\":{\"diffuse\":\"" + dGet('wtw_tmoldwebtextdiffuse').value + "\",\"specular\":\"" + dGet('wtw_tmoldwebtextspecular').value + "\",\"ambient\":\"" + dGet('wtw_tmoldwebtextambient').value + "\",\"emissive\":\"" + dGet('wtw_tmoldwebtextcolor').value + "\"}}";
-						if (molds[moldind].webtext.webstyle != dGet('wtw_tmoldwebstyle').value) {
-							molds[moldind].webtext.webstyle = dGet('wtw_tmoldwebstyle').value;
-							rebuildmold = 1;
+					if (zmolds[zmoldind].webtext.webstyle != undefined) {
+						dGet('wtw_tmoldwebstyle').value = "{\"anchor\":\"" + dGet('wtw_tmoldwebtextalign').options[dGet('wtw_tmoldwebtextalign').selectedIndex].value + "\",\"letter-height\":" + dGet('wtw_tmoldwebtextheight').value + ",\"letter-thickness\":" + dGet('wtw_tmoldwebtextthick').value + ",\"color\":\"" + dGet('wtw_tmoldwebtextcolor').value + "\",\"alpha\":" + zopacity/100 + ",\"colors\":{\"diffuse\":\"" + dGet('wtw_tmoldwebtextdiffuse').value + "\",\"specular\":\"" + dGet('wtw_tmoldwebtextspecular').value + "\",\"ambient\":\"" + dGet('wtw_tmoldwebtextambient').value + "\",\"emissive\":\"" + dGet('wtw_tmoldwebtextcolor').value + "\"}}";
+						if (zmolds[zmoldind].webtext.webstyle != dGet('wtw_tmoldwebstyle').value) {
+							zmolds[zmoldind].webtext.webstyle = dGet('wtw_tmoldwebstyle').value;
+							zrebuildmold = 1;
 						}
 					}
 				}
-				molds[moldind].csg.moldid = dGet('wtw_tmoldcsgmoldid').value;
-				var csgmainid = molds[moldind].csg.moldid;
+				zmolds[zmoldind].csg.moldid = dGet('wtw_tmoldcsgmoldid').value;
+				var zcsgmainid = zmolds[zmoldind].csg.moldid;
 
-				if (molds[moldind].object.uploadobjectid != undefined) {
-					if (molds[moldind].object.uploadobjectid != dGet('wtw_tmolduploadobjectid').value) {
-						molds[moldind].object.uploadobjectid = dGet('wtw_tmolduploadobjectid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].object.uploadobjectid != undefined) {
+					if (zmolds[zmoldind].object.uploadobjectid != dGet('wtw_tmolduploadobjectid').value) {
+						zmolds[zmoldind].object.uploadobjectid = dGet('wtw_tmolduploadobjectid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].object.folder != undefined) {
-					if (molds[moldind].object.folder != dGet('wtw_tmoldobjectfolder').value) {
-						molds[moldind].object.folder = dGet('wtw_tmoldobjectfolder').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].object.folder != undefined) {
+					if (zmolds[zmoldind].object.folder != dGet('wtw_tmoldobjectfolder').value) {
+						zmolds[zmoldind].object.folder = dGet('wtw_tmoldobjectfolder').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].object.file != undefined) {
-					if (molds[moldind].object.file != dGet('wtw_tmoldobjectfile').value) {
-						molds[moldind].object.file = dGet('wtw_tmoldobjectfile').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].object.file != undefined) {
+					if (zmolds[zmoldind].object.file != dGet('wtw_tmoldobjectfile').value) {
+						zmolds[zmoldind].object.file = dGet('wtw_tmoldobjectfile').value;
+						zrebuildmold = 1;
 					}
 				}
 
-				if (molds[moldind].graphics.receiveshadows != undefined) {
+				if (zmolds[zmoldind].graphics.receiveshadows != undefined) {
 					if (dGet('wtw_tmoldreceiveshadows').checked) {
-						molds[moldind].graphics.receiveshadows = '1';
+						zmolds[zmoldind].graphics.receiveshadows = '1';
 					} else {
-						molds[moldind].graphics.receiveshadows = '0';
+						zmolds[zmoldind].graphics.receiveshadows = '0';
 					}
 				}
-				if (molds[moldind].graphics.level != undefined) {
+				if (zmolds[zmoldind].graphics.level != undefined) {
 					if (dGet('wtw_tmoldgraphiclevel').checked) {
-						molds[moldind].graphics.level = '1';
+						zmolds[zmoldind].graphics.level = '1';
 					} else {
-						molds[moldind].graphics.level = '0';
+						zmolds[zmoldind].graphics.level = '0';
 					}
 				}
-				if (molds[moldind].graphics.texture.id != undefined) {
-					if (molds[moldind].graphics.texture.id != dGet('wtw_tmoldtextureid').value) {
-						molds[moldind].graphics.texture.id = dGet('wtw_tmoldtextureid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.texture.id != undefined) {
+					if (zmolds[zmoldind].graphics.texture.id != dGet('wtw_tmoldtextureid').value) {
+						zmolds[zmoldind].graphics.texture.id = dGet('wtw_tmoldtextureid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.texture.path != undefined) {
-					if (molds[moldind].graphics.texture.path != dGet('wtw_tmoldtexturepath').value) {
-						molds[moldind].graphics.texture.path = dGet('wtw_tmoldtexturepath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.texture.path != undefined) {
+					if (zmolds[zmoldind].graphics.texture.path != dGet('wtw_tmoldtexturepath').value) {
+						zmolds[zmoldind].graphics.texture.path = dGet('wtw_tmoldtexturepath').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.texture.bumpid != undefined) {
-					if (molds[moldind].graphics.texture.bumpid != dGet('wtw_tmoldtexturebumpid').value) {
-						molds[moldind].graphics.texture.bumpid = dGet('wtw_tmoldtexturebumpid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.texture.bumpid != undefined) {
+					if (zmolds[zmoldind].graphics.texture.bumpid != dGet('wtw_tmoldtexturebumpid').value) {
+						zmolds[zmoldind].graphics.texture.bumpid = dGet('wtw_tmoldtexturebumpid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.texture.bumppath != undefined) {
-					if (molds[moldind].graphics.texture.bumppath != dGet('wtw_tmoldtexturebumppath').value) {
-						molds[moldind].graphics.texture.bumppath = dGet('wtw_tmoldtexturebumppath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.texture.bumppath != undefined) {
+					if (zmolds[zmoldind].graphics.texture.bumppath != dGet('wtw_tmoldtexturebumppath').value) {
+						zmolds[zmoldind].graphics.texture.bumppath = dGet('wtw_tmoldtexturebumppath').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.id != undefined) {
-					if (molds[moldind].graphics.heightmap.id != dGet('wtw_tmoldheightmapid').value) {
-						molds[moldind].graphics.heightmap.id = dGet('wtw_tmoldheightmapid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.id != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.id != dGet('wtw_tmoldheightmapid').value) {
+						zmolds[zmoldind].graphics.heightmap.id = dGet('wtw_tmoldheightmapid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.path != undefined) {
-					if (molds[moldind].graphics.heightmap.path != dGet('wtw_tmoldheightmappath').value) {
-						molds[moldind].graphics.heightmap.path = dGet('wtw_tmoldheightmappath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.path != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.path != dGet('wtw_tmoldheightmappath').value) {
+						zmolds[zmoldind].graphics.heightmap.path = dGet('wtw_tmoldheightmappath').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.mixmapid != undefined) {
-					if (molds[moldind].graphics.heightmap.mixmapid != dGet('wtw_tmoldmixmapid').value) {
-						molds[moldind].graphics.heightmap.mixmapid = dGet('wtw_tmoldmixmapid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.mixmapid != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.mixmapid != dGet('wtw_tmoldmixmapid').value) {
+						zmolds[zmoldind].graphics.heightmap.mixmapid = dGet('wtw_tmoldmixmapid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.mixmappath != undefined) {
-					if (molds[moldind].graphics.heightmap.mixmappath != dGet('wtw_tmoldmixmappath').value) {
-						molds[moldind].graphics.heightmap.mixmappath = dGet('wtw_tmoldmixmappath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.mixmappath != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.mixmappath != dGet('wtw_tmoldmixmappath').value) {
+						zmolds[zmoldind].graphics.heightmap.mixmappath = dGet('wtw_tmoldmixmappath').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.texturerid != undefined) {
-					if (molds[moldind].graphics.heightmap.texturerid != dGet('wtw_tmoldtexturerid').value) {
-						molds[moldind].graphics.heightmap.texturerid = dGet('wtw_tmoldtexturerid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.texturerid != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.texturerid != dGet('wtw_tmoldtexturerid').value) {
+						zmolds[zmoldind].graphics.heightmap.texturerid = dGet('wtw_tmoldtexturerid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.texturerpath != undefined) {
-					if (molds[moldind].graphics.heightmap.texturerpath != dGet('wtw_tmoldtexturerpath').value) {
-						molds[moldind].graphics.heightmap.texturerpath = dGet('wtw_tmoldtexturerpath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.texturerpath != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.texturerpath != dGet('wtw_tmoldtexturerpath').value) {
+						zmolds[zmoldind].graphics.heightmap.texturerpath = dGet('wtw_tmoldtexturerpath').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.texturegid != undefined) {
-					if (molds[moldind].graphics.heightmap.texturegid != dGet('wtw_tmoldtexturegid').value) {
-						molds[moldind].graphics.heightmap.texturegid = dGet('wtw_tmoldtexturegid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.texturegid != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.texturegid != dGet('wtw_tmoldtexturegid').value) {
+						zmolds[zmoldind].graphics.heightmap.texturegid = dGet('wtw_tmoldtexturegid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.texturegpath != undefined) {
-					if (molds[moldind].graphics.heightmap.texturegpath != dGet('wtw_tmoldtexturegpath').value) {
-						molds[moldind].graphics.heightmap.texturegpath = dGet('wtw_tmoldtexturegpath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.texturegpath != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.texturegpath != dGet('wtw_tmoldtexturegpath').value) {
+						zmolds[zmoldind].graphics.heightmap.texturegpath = dGet('wtw_tmoldtexturegpath').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.texturebid != undefined) {
-					if (molds[moldind].graphics.heightmap.texturebid != dGet('wtw_tmoldtexturebid').value) {
-						molds[moldind].graphics.heightmap.texturebid = dGet('wtw_tmoldtexturebid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.texturebid != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.texturebid != dGet('wtw_tmoldtexturebid').value) {
+						zmolds[zmoldind].graphics.heightmap.texturebid = dGet('wtw_tmoldtexturebid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.texturebpath != undefined) {
-					if (molds[moldind].graphics.heightmap.texturebpath != dGet('wtw_tmoldtexturebpath').value) {
-						molds[moldind].graphics.heightmap.texturebpath = dGet('wtw_tmoldtexturebpath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.texturebpath != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.texturebpath != dGet('wtw_tmoldtexturebpath').value) {
+						zmolds[zmoldind].graphics.heightmap.texturebpath = dGet('wtw_tmoldtexturebpath').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.texturebumprid != undefined) {
-					if (molds[moldind].graphics.heightmap.texturebumprid != dGet('wtw_tmoldtexturebumprid').value) {
-						molds[moldind].graphics.heightmap.texturebumprid = dGet('wtw_tmoldtexturebumprid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.texturebumprid != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.texturebumprid != dGet('wtw_tmoldtexturebumprid').value) {
+						zmolds[zmoldind].graphics.heightmap.texturebumprid = dGet('wtw_tmoldtexturebumprid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.texturebumprpath != undefined) {
-					if (molds[moldind].graphics.heightmap.texturebumprpath != dGet('wtw_tmoldtexturebumprpath').value) {
-						molds[moldind].graphics.heightmap.texturebumprpath = dGet('wtw_tmoldtexturebumprpath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.texturebumprpath != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.texturebumprpath != dGet('wtw_tmoldtexturebumprpath').value) {
+						zmolds[zmoldind].graphics.heightmap.texturebumprpath = dGet('wtw_tmoldtexturebumprpath').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.texturebumpgid != undefined) {
-					if (molds[moldind].graphics.heightmap.texturebumpgid != dGet('wtw_tmoldtexturebumpgid').value) {
-						molds[moldind].graphics.heightmap.texturebumpgid = dGet('wtw_tmoldtexturebumpgid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.texturebumpgid != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.texturebumpgid != dGet('wtw_tmoldtexturebumpgid').value) {
+						zmolds[zmoldind].graphics.heightmap.texturebumpgid = dGet('wtw_tmoldtexturebumpgid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.texturebumpgpath != undefined) {
-					if (molds[moldind].graphics.heightmap.texturebumpgpath != dGet('wtw_tmoldtexturebumpgpath').value) {
-						molds[moldind].graphics.heightmap.texturebumpgpath = dGet('wtw_tmoldtexturebumpgpath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.texturebumpgpath != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.texturebumpgpath != dGet('wtw_tmoldtexturebumpgpath').value) {
+						zmolds[zmoldind].graphics.heightmap.texturebumpgpath = dGet('wtw_tmoldtexturebumpgpath').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.texturebumpbid != undefined) {
-					if (molds[moldind].graphics.heightmap.texturebumpbid != dGet('wtw_tmoldtexturebumpbid').value) {
-						molds[moldind].graphics.heightmap.texturebumpbid = dGet('wtw_tmoldtexturebumpbid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.texturebumpbid != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.texturebumpbid != dGet('wtw_tmoldtexturebumpbid').value) {
+						zmolds[zmoldind].graphics.heightmap.texturebumpbid = dGet('wtw_tmoldtexturebumpbid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.heightmap.texturebumpbpath != undefined) {
-					if (molds[moldind].graphics.heightmap.texturebumpbpath != dGet('wtw_tmoldtexturebumpbpath').value) {
-						molds[moldind].graphics.heightmap.texturebumpbpath = dGet('wtw_tmoldtexturebumpbpath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.heightmap.texturebumpbpath != undefined) {
+					if (zmolds[zmoldind].graphics.heightmap.texturebumpbpath != dGet('wtw_tmoldtexturebumpbpath').value) {
+						zmolds[zmoldind].graphics.heightmap.texturebumpbpath = dGet('wtw_tmoldtexturebumpbpath').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.texture.videoid != undefined) {
-					if (molds[moldind].graphics.texture.videoid != dGet('wtw_tmoldvideoid').value) {
-						molds[moldind].graphics.texture.videoid = dGet('wtw_tmoldvideoid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.texture.videoid != undefined) {
+					if (zmolds[zmoldind].graphics.texture.videoid != dGet('wtw_tmoldvideoid').value) {
+						zmolds[zmoldind].graphics.texture.videoid = dGet('wtw_tmoldvideoid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.texture.video != undefined) {
-					if (molds[moldind].graphics.texture.video != dGet('wtw_tmoldvideopath').value) {
-						molds[moldind].graphics.texture.video = dGet('wtw_tmoldvideopath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.texture.video != undefined) {
+					if (zmolds[zmoldind].graphics.texture.video != dGet('wtw_tmoldvideopath').value) {
+						zmolds[zmoldind].graphics.texture.video = dGet('wtw_tmoldvideopath').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.texture.videoposterid != undefined) {
-					if (molds[moldind].graphics.texture.videoposterid != dGet('wtw_tmoldvideoposterid').value) {
-						molds[moldind].graphics.texture.videoposterid = dGet('wtw_tmoldvideoposterid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.texture.videoposterid != undefined) {
+					if (zmolds[zmoldind].graphics.texture.videoposterid != dGet('wtw_tmoldvideoposterid').value) {
+						zmolds[zmoldind].graphics.texture.videoposterid = dGet('wtw_tmoldvideoposterid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].graphics.texture.videoposter != undefined) {
-					if (molds[moldind].graphics.texture.videoposter != dGet('wtw_tmoldvideoposterpath').value) {
-						molds[moldind].graphics.texture.videoposter = dGet('wtw_tmoldvideoposterpath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].graphics.texture.videoposter != undefined) {
+					if (zmolds[zmoldind].graphics.texture.videoposter != dGet('wtw_tmoldvideoposterpath').value) {
+						zmolds[zmoldind].graphics.texture.videoposter = dGet('wtw_tmoldvideoposterpath').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].sound.id != undefined) {
-					if (molds[moldind].sound.id != dGet('wtw_tmoldsoundid').value) {
-						molds[moldind].sound.id = dGet('wtw_tmoldsoundid').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].sound.id != undefined) {
+					if (zmolds[zmoldind].sound.id != dGet('wtw_tmoldsoundid').value) {
+						zmolds[zmoldind].sound.id = dGet('wtw_tmoldsoundid').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].sound.path != undefined) {
-					if (molds[moldind].sound.path != dGet('wtw_tmoldsoundpath').value) {
-						molds[moldind].sound.path = dGet('wtw_tmoldsoundpath').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].sound.path != undefined) {
+					if (zmolds[zmoldind].sound.path != dGet('wtw_tmoldsoundpath').value) {
+						zmolds[zmoldind].sound.path = dGet('wtw_tmoldsoundpath').value;
+						zrebuildmold = 1;
 					}
 				}
 				if (dGet('wtw_soundicon') != null && dGet('wtw_soundicon').alt != '') {
 					dGet('wtw_tmoldsoundname').value = dGet('wtw_soundicon').alt;
 					dGet('wtw_selectedsound').innerHTML = dGet('wtw_tmoldsoundname').value;
 				}
-				if (molds[moldind].sound.name != undefined) {
-					if (molds[moldind].sound.name != dGet('wtw_tmoldsoundname').value) {
-						molds[moldind].sound.name = dGet('wtw_tmoldsoundname').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].sound.name != undefined) {
+					if (zmolds[zmoldind].sound.name != dGet('wtw_tmoldsoundname').value) {
+						zmolds[zmoldind].sound.name = dGet('wtw_tmoldsoundname').value;
+						zrebuildmold = 1;
 					}
 				}
-				var soundattenuation = "none";
+				var zsoundattenuation = "none";
 				if (dGet('wtw_tmoldsoundattenuation').selectedIndex > -1) {
-					soundattenuation = dGet('wtw_tmoldsoundattenuation').options[dGet('wtw_tmoldsoundattenuation').selectedIndex].value;
+					zsoundattenuation = dGet('wtw_tmoldsoundattenuation').options[dGet('wtw_tmoldsoundattenuation').selectedIndex].value;
 				} else {
 					WTW.setDDLValue('wtw_tmoldsoundattenuation', "linear");
-					soundattenuation = "linear";
+					zsoundattenuation = "linear";
 				}
-				if (molds[moldind].sound.attenuation != undefined) {
-					if (molds[moldind].sound.attenuation != soundattenuation) {
-						molds[moldind].sound.attenuation = soundattenuation;
+				if (zmolds[zmoldind].sound.attenuation != undefined) {
+					if (zmolds[zmoldind].sound.attenuation != zsoundattenuation) {
+						zmolds[zmoldind].sound.attenuation = zsoundattenuation;
 						WTW.setSoundFields();
-						rebuildmold = 1;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].sound.loop != undefined) {
-					var soundloop = '0';
+				if (zmolds[zmoldind].sound.loop != undefined) {
+					var zsoundloop = '0';
 					if (dGet('wtw_tmoldsoundloop').checked == true) {
-						soundloop = '1';
+						zsoundloop = '1';
 					}
-					if (molds[moldind].sound.loop != soundloop) {
-						if (soundloop == '1') {
-							molds[moldind].sound.loop = '1';
+					if (zmolds[zmoldind].sound.loop != zsoundloop) {
+						if (zsoundloop == '1') {
+							zmolds[zmoldind].sound.loop = '1';
 						} else {
-							molds[moldind].sound.loop = '0';
+							zmolds[zmoldind].sound.loop = '0';
 						}
-						rebuildmold = 1;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].sound.maxdistance != undefined) {
-					if (molds[moldind].sound.maxdistance != dGet('wtw_tmoldsoundmaxdistance').value) {
-						molds[moldind].sound.maxdistance = dGet('wtw_tmoldsoundmaxdistance').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].sound.maxdistance != undefined) {
+					if (zmolds[zmoldind].sound.maxdistance != dGet('wtw_tmoldsoundmaxdistance').value) {
+						zmolds[zmoldind].sound.maxdistance = dGet('wtw_tmoldsoundmaxdistance').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].sound.rollofffactor != undefined) {
-					if (molds[moldind].sound.rollofffactor != dGet('wtw_tmoldsoundrollofffactor').value) {
-						molds[moldind].sound.rollofffactor = dGet('wtw_tmoldsoundrollofffactor').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].sound.rollofffactor != undefined) {
+					if (zmolds[zmoldind].sound.rollofffactor != dGet('wtw_tmoldsoundrollofffactor').value) {
+						zmolds[zmoldind].sound.rollofffactor = dGet('wtw_tmoldsoundrollofffactor').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].sound.refdistance != undefined) {
-					if (molds[moldind].sound.refdistance != dGet('wtw_tmoldsoundrefdistance').value) {
-						molds[moldind].sound.refdistance = dGet('wtw_tmoldsoundrefdistance').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].sound.refdistance != undefined) {
+					if (zmolds[zmoldind].sound.refdistance != dGet('wtw_tmoldsoundrefdistance').value) {
+						zmolds[zmoldind].sound.refdistance = dGet('wtw_tmoldsoundrefdistance').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].sound.coneinnerangle != undefined) {
-					if (molds[moldind].sound.coneinnerangle != dGet('wtw_tmoldsoundconeinnerangle').value) {
-						molds[moldind].sound.coneinnerangle = dGet('wtw_tmoldsoundconeinnerangle').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].sound.coneinnerangle != undefined) {
+					if (zmolds[zmoldind].sound.coneinnerangle != dGet('wtw_tmoldsoundconeinnerangle').value) {
+						zmolds[zmoldind].sound.coneinnerangle = dGet('wtw_tmoldsoundconeinnerangle').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].sound.coneouterangle != undefined) {
-					if (molds[moldind].sound.coneouterangle != dGet('wtw_tmoldsoundconeouterangle').value) {
-						molds[moldind].sound.coneouterangle = dGet('wtw_tmoldsoundconeouterangle').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].sound.coneouterangle != undefined) {
+					if (zmolds[zmoldind].sound.coneouterangle != dGet('wtw_tmoldsoundconeouterangle').value) {
+						zmolds[zmoldind].sound.coneouterangle = dGet('wtw_tmoldsoundconeouterangle').value;
+						zrebuildmold = 1;
 					}
 				}
-				if (molds[moldind].sound.coneoutergain != undefined) {
-					if (molds[moldind].sound.coneoutergain != dGet('wtw_tmoldsoundconeoutergain').value) {
-						molds[moldind].sound.coneoutergain = dGet('wtw_tmoldsoundconeoutergain').value;
-						rebuildmold = 1;
+				if (zmolds[zmoldind].sound.coneoutergain != undefined) {
+					if (zmolds[zmoldind].sound.coneoutergain != dGet('wtw_tmoldsoundconeoutergain').value) {
+						zmolds[zmoldind].sound.coneoutergain = dGet('wtw_tmoldsoundconeoutergain').value;
+						zrebuildmold = 1;
 					}
 				}
-				var csgaction = dGet('wtw_tmoldcsgaction').options[dGet('wtw_tmoldcsgaction').selectedIndex].value;
-				var csgmainind = -1; 
-				var csgchildind = -1;
-				if (csgmainid != "") {
-					csgmainind = WTW.getMoldInd(molds, csgmainid, dGet('wtw_tconnectinggridind').value);
-					WTW.setCSGCount(csgmainid);
-					csgchildind = WTW.getMoldInd(molds, moldid, dGet('wtw_tconnectinggridind').value);
-					molds[csgchildind].covering = "color";
-					molds[csgchildind].opacity = "30";
-					coveringname = "color";
+				var zcsgaction = dGet('wtw_tmoldcsgaction').options[dGet('wtw_tmoldcsgaction').selectedIndex].value;
+				var zcsgmainind = -1; 
+				var zcsgchildind = -1;
+				if (zcsgmainid != "") {
+					zcsgmainind = WTW.getMoldInd(zmolds, zcsgmainid, dGet('wtw_tconnectinggridind').value);
+					WTW.setCSGCount(zcsgmainid);
+					zcsgchildind = WTW.getMoldInd(zmolds, zmoldid, dGet('wtw_tconnectinggridind').value);
+					zmolds[zcsgchildind].covering = "color";
+					zmolds[zcsgchildind].opacity = "30";
+					zcoveringname = "color";
 				}
-				if (WTW.isNumeric(molds[moldind].csg.count)) {
-					if (Number(molds[moldind].csg.count) > 0) {
-						WTW.disposeClean(moldname);
-						molds[moldind].shown = "0";
-						csgmainid = "";
+				if (WTW.isNumeric(zmolds[zmoldind].csg.count)) {
+					if (Number(zmolds[zmoldind].csg.count) > 0) {
+						WTW.disposeClean(zmoldname);
+						zmolds[zmoldind].shown = "0";
+						zcsgmainid = "";
 					}
 				}
-				if (csgmainid != "" && molds[csgmainind] != null) {
-					var csgmainname = moldgroup + "molds-" + csgmainind + "-" + molds[csgmainind].moldid + "-" + molds[csgmainind].connectinggridind + "-" + molds[csgmainind].connectinggridid + "-" + molds[csgmainind].shape;
-					var csgmain = scene.getMeshByID(csgmainname);
-					if (csgmain != null) {
-						WTW.disposeClean(csgmainname);
-						//molds[csgmainind].shown = '0';
-						csgmain = WTW.addMold(molds[csgmainind].moldname, molds[csgmainind], molds[csgmainind].parentname, molds[csgmainind].covering);
-						csgmain = WTW.getMoldCSG(csgmain, molds[csgmainind]);
-						var receiveshadows = '0';
-						var waterreflection = '0';
-/*						if (molds[csgmainind].graphics.receiveshadows != undefined) {
-							if (molds[csgmainind].graphics.receiveshadows == '1') {
-								receiveshadows = '1';
+				if (zcsgmainid != "" && zmolds[zcsgmainind] != null) {
+					var zcsgmainname = zwebtype + "molds-" + zcsgmainind + "-" + zmolds[zcsgmainind].moldid + "-" + zmolds[zcsgmainind].connectinggridind + "-" + zmolds[zcsgmainind].connectinggridid + "-" + zmolds[zcsgmainind].shape;
+					var zcsgmain = scene.getMeshByID(zcsgmainname);
+					if (zcsgmain != null) {
+						WTW.disposeClean(zcsgmainname);
+						//zmolds[zcsgmainind].shown = '0';
+						zcsgmain = WTW.addMold(zmolds[zcsgmainind].moldname, zmolds[zcsgmainind], zmolds[zcsgmainind].parentname, zmolds[zcsgmainind].covering);
+						zcsgmain = WTW.getMoldCSG(zcsgmain, zmolds[zcsgmainind]);
+						var zreceiveshadows = '0';
+						var zwaterreflection = '0';
+/*						if (zmolds[zcsgmainind].graphics.receiveshadows != undefined) {
+							if (zmolds[zcsgmainind].graphics.receiveshadows == '1') {
+								zreceiveshadows = '1';
 							}
 						}
-						if (molds[csgmainind].graphics.waterreflection != undefined) {
-							if (molds[csgmainind].graphics.waterreflection == '1') {
-								waterreflection = '1';
+						if (zmolds[zcsgmainind].graphics.waterreflection != undefined) {
+							if (zmolds[zcsgmainind].graphics.waterreflection == '1') {
+								zwaterreflection = '1';
 							}
 						}
-						if (receiveshadows == '1') {
-							mold.receiveShadows = true;
+						if (zreceiveshadows == '1') {
+							zmold.receiveShadows = true;
 						} 
 						if (WTW.shadowSet > 0) {
-							WTW.shadows.getShadowMap().renderList.push(mold);
+							WTW.shadows.getShadowMap().renderList.push(zmold);
 						}
-*/						if (waterreflection == '1' && WTW.waterMat != null) {
-							WTW.waterMat.addToRenderList(mold);
+*/						if (zwaterreflection == '1' && WTW.waterMat != null) {
+							WTW.waterMat.addToRenderList(zmold);
 						}
-						csgmain.checkCollisions = false;
-						csgmain.isPickable = false;
-						if (molds[csgmainind].checkcollisions != undefined) {
-							if (molds[csgmainind].checkcollisions == "1") {
-								csgmain.checkCollisions = true;
+						zcsgmain.checkCollisions = false;
+						zcsgmain.isPickable = false;
+						if (zmolds[zcsgmainind].checkcollisions != undefined) {
+							if (zmolds[zcsgmainind].checkcollisions == "1") {
+								zcsgmain.checkCollisions = true;
 							}
 						}
-						if (molds[csgmainind].ispickable != undefined) {
-							if (molds[csgmainind].ispickable == "1") {
-								csgmain.isPickable = true;
+						if (zmolds[zcsgmainind].ispickable != undefined) {
+							if (zmolds[zcsgmainind].ispickable == "1") {
+								zcsgmain.isPickable = true;
 							}
 						}
 					}
 				}
-				var hasdependents = 0;
-				for (var i=0;i<molds.length;i++) {
-					if (molds[i] != null) {
-						if (molds[moldind].moldid == molds[i].csg.moldid) {
-							WTW.disposeClean(molds[i].moldname);
-							molds[i].shown = "0";
-							hasdependents = 1;
-							rebuildmold = 1;
+				var zhasdependents = 0;
+				for (var i=0;i<zmolds.length;i++) {
+					if (zmolds[i] != null) {
+						if (zmolds[zmoldind].moldid == zmolds[i].csg.moldid) {
+							WTW.disposeClean(zmolds[i].moldname);
+							zmolds[i].shown = "0";
+							zhasdependents = 1;
+							zrebuildmold = 1;
 						}
 					}
 				}
-				rebuildmold = WTW.pluginsSetNewMold(moldname, molds, moldind, rebuildmold);
-				if (rebuildmold == 1 || csgmainid != "") {
-					WTW.disposeClean(moldname);
-					mold = WTW.addMold(moldname, molds[moldind], parentname, coveringname);
-					if (hasdependents == 1) {
-						mold = WTW.getMoldCSG(mold, molds[moldind]);
+				zrebuildmold = WTW.pluginsSetNewMold(zmoldname, zmolds, zmoldind, zrebuildmold);
+				if (zrebuildmold == 1 || zcsgmainid != "") {
+					WTW.disposeClean(zmoldname);
+					zmold = WTW.addMold(zmoldname, zmolds[zmoldind], zparentname, zcoveringname);
+					if (zhasdependents == 1) {
+						zmold = WTW.getMoldCSG(zmold, zmolds[zmoldind]);
 					}
 				}
-				if (rebuildmold == 1 && shape != "image") {
-					WTW.registerMouseOver(mold);
+				if (zrebuildmold == 1 && zshape != "image") {
+					WTW.registerMouseOver(zmold);
 				}
-				WTW.openEditPoles(mold);
+				WTW.openEditPoles(zmold);
 			}
 		}	
 	} catch (ex) {

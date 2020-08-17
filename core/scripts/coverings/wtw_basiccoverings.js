@@ -6,1018 +6,1014 @@
 
 /* materials vs coverings - materials are loaded on the meshes in the scene, coverings are the definitions that create the materials to be added the mesh on demand */
 
-WTWJS.prototype.addCoveringWire = function(moldname, molddef) {
+WTWJS.prototype.addCoveringWire = function(zmoldname, zmolddef) {
 	/* wireframe the mold instead of adding a material */
-	var covering;
+	var zcovering;
 	try {
-		covering = "none";
-		var mold = scene.getMeshByID(moldname);
-		if (mold != null) {
-			mold.wireframe = true;
+		zcovering = "none";
+		var zmold = scene.getMeshByID(zmoldname);
+		if (zmold != null) {
+			zmold.wireframe = true;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringWire=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCoveringColor = function(moldname, molddef) {
+WTWJS.prototype.addCoveringColor = function(zmoldname, zmolddef) {
 	/* set the color of the mold - works alone and with a texture to tint the texture */
-	var covering;
+	var zcovering;
 	try {
-		var opacity = 1;
-		if (molddef.opacity != undefined) {
-			if (WTW.isNumeric(molddef.opacity)) {
-				opacity = Number(molddef.opacity) / 100;
-				if (opacity > 1) {
-					opacity = 1;
-				} else if (opacity < 0) {
-					opacity = 0;
+		var zopacity = 1;
+		if (zmolddef.opacity != undefined) {
+			if (WTW.isNumeric(zmolddef.opacity)) {
+				zopacity = Number(zmolddef.opacity) / 100;
+				if (zopacity > 1) {
+					zopacity = 1;
+				} else if (zopacity < 0) {
+					zopacity = 0;
 				}
 			}
 		}
-		covering = new BABYLON.StandardMaterial("mat" + moldname, scene);
-		covering.alpha = opacity;
-		covering.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		covering.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		covering.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));
-
-		//covering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		zcovering.alpha = zopacity;
+		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringColor=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCoveringGlass = function(moldname, molddef) {
+WTWJS.prototype.addCoveringGlass = function(zmoldname, zmolddef) {
 	/* basically a color material with an opacity of .2 (or 20%) */
 	/* you can also achieve this with a color or texture with an opacity set in advanced options on the form */
-	var covering;
+	var zcovering;
 	try {
-		WTW.disposeMaterial("mat" + moldname);		
-		covering = new BABYLON.StandardMaterial("mat" + moldname, scene);
-		var opacity = .2;
-		covering.alpha = opacity;
-		covering.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		covering.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		covering.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));
-
-		covering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+		WTW.disposeMaterial("mat" + zmoldname);		
+		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		var zopacity = .2;
+		zcovering.alpha = zopacity;
+		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringGlass=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCoveringMirror = function(moldname, molddef) {
+WTWJS.prototype.addCoveringMirror = function(zmoldname, zmolddef) {
 	/* work in progress - adds a mirror surface to a mold and will load the molds that will reflect in that surface */
-	var covering;
+	var zcovering;
 	try {
-		var mirrorLevel = .9;
-		var opacity = 1;
-/*		if (molddef.opacity != undefined) {
-			if (WTW.isNumeric(molddef.opacity)) {
-				opacity = Number(molddef.opacity) / 100;
-				if (opacity > 1) {
-					opacity = 1;
-				} else if (opacity < 0) {
-					opacity = 0;
+		var zmirrorLevel = .9;
+		var zopacity = 1;
+/*		if (zmolddef.opacity != undefined) {
+			if (WTW.isNumeric(zmolddef.opacity)) {
+				zopacity = Number(zmolddef.opacity) / 100;
+				if (zopacity > 1) {
+					zopacity = 1;
+				} else if (zopacity < 0) {
+					zopacity = 0;
 				}
 			}
 		}*/
-		covering = new BABYLON.StandardMaterial("mat" + moldname, scene);
-		covering.reflectionTexture = new BABYLON.MirrorTexture("matmirror" + moldname, 1024, scene, true);
-		covering.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, 0, 1, -10.0);
-		//covering.reflectionTexture.renderList = [WTW.sky, WTW.extraGround];
-		covering.reflectionTexture.level = mirrorLevel;
-		covering.alpha = opacity;
-		opacity = 0.0;
-		covering.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		covering.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		covering.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));
-
-		covering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		WTW.initMirrorLoadZone(moldname, molddef);
+		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		zcovering.reflectionTexture = new BABYLON.MirrorTexture("matmirror" + zmoldname, 1024, scene, true);
+		zcovering.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, 0, 1, -10.0);
+		//zcovering.reflectionTexture.renderList = [WTW.sky, WTW.extraGround];
+		zcovering.reflectionTexture.level = zmirrorLevel;
+		zcovering.alpha = zopacity;
+		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+		WTW.initMirrorLoadZone(zmoldname, zmolddef);
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringMirror=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCoveringTexture = function(moldname, molddef, lenx, leny, lenz, special1, special2) {
+WTWJS.prototype.addCoveringTexture = function(zmoldname, zmolddef, zlenx, zleny, zlenz, zspecial1, zspecial2) {
 	/* basic add texture material to mold - attempts to scale the texture on the surface (which can be overwritten in the advanced options of the form) */
-	var covering;
+	var zcovering;
 	try {
-		var shape = "box"; 
-		var uoffset = 0;
-		var voffset = 0;
-		var uscale = lenx/10;
-		var vscale = leny/10;
-		if (lenz > lenx) {
-			vscale = lenz/10;
-			uscale = leny/10;
+		var zshape = "box"; 
+		var zuoffset = 0;
+		var zvoffset = 0;
+		var zuscale = zlenx/10;
+		var zvscale = zleny/10;
+		if (zlenz > zlenx) {
+			zvscale = zlenz/10;
+			zuscale = zleny/10;
 		}
-		if (leny < lenx && leny < lenz) {
-			uscale = lenz/10;
-			vscale = lenx/10;
+		if (zleny < zlenx && zleny < zlenz) {
+			zuscale = zlenz/10;
+			zvscale = zlenx/10;
 		}
-		var imageid = "t1qlqxd6pzubzzzy";
-		var texturepath = "";
-		var bumpid = "";
-		var bumppath = "";
-		if (molddef != undefined) {
-			if (molddef.shape != "") {
-				shape = molddef.shape;
+		var zimageid = "t1qlqxd6pzubzzzy";
+		var ztexturepath = "";
+		var zbumpid = "";
+		var zbumppath = "";
+		if (zmolddef != undefined) {
+			if (zmolddef.shape != "") {
+				zshape = zmolddef.shape;
 			}
-			if (shape == "sphere" || shape == "dome" || shape == "cone") {
-				uscale = ((lenx/10 + lenz/10) / 2) * Math.PI;
-				vscale = vscale * Math.PI;
-			} else if (shape == "cylinder") {
-				uscale = ((lenx + lenz) / 2) / Math.PI;
-				vscale = 1;
-			} else if (shape == "half pipe") {
-				uscale = lenx / 10;
-				vscale = lenz / 10;
+			if (zshape == "sphere" || zshape == "dome" || zshape == "cone") {
+				zuscale = ((zlenx/10 + zlenz/10) / 2) * Math.PI;
+				zvscale = zvscale * Math.PI;
+			} else if (zshape == "cylinder") {
+				zuscale = ((zlenx + zlenz) / 2) / Math.PI;
+				zvscale = 1;
+			} else if (zshape == "half pipe") {
+				zuscale = zlenx / 10;
+				zvscale = zlenz / 10;
 			}
-			if (molddef.graphics != undefined) {
-				if (molddef.graphics.texture.id != undefined) {
-					imageid = molddef.graphics.texture.id;
+			if (zmolddef.graphics != undefined) {
+				if (zmolddef.graphics.texture.id != undefined) {
+					zimageid = zmolddef.graphics.texture.id;
 				}
-				if (molddef.graphics.texture.path != undefined) {
-					texturepath = molddef.graphics.texture.path;
-					texturepath = texturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+				if (zmolddef.graphics.texture.path != undefined) {
+					ztexturepath = zmolddef.graphics.texture.path;
+					ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
 				}
-				if (molddef.graphics.texture.bumpid != undefined) {
-					bumpid = molddef.graphics.texture.bumpid;
+				if (zmolddef.graphics.texture.bumpid != undefined) {
+					zbumpid = zmolddef.graphics.texture.bumpid;
 				}
-				if (molddef.graphics.texture.bumppath != undefined) {
-					bumppath = molddef.graphics.texture.bumppath;
-					bumppath = bumppath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+				if (zmolddef.graphics.texture.bumppath != undefined) {
+					zbumppath = zmolddef.graphics.texture.bumppath;
+					zbumppath = zbumppath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
 				}
-				if (WTW.isNumeric(molddef.graphics.uscale)) {
-					if (Number(molddef.graphics.uscale) > 0) {
-						uscale = uscale * Number(molddef.graphics.uscale);
+				if (WTW.isNumeric(zmolddef.graphics.uscale)) {
+					if (Number(zmolddef.graphics.uscale) > 0) {
+						zuscale = zuscale * Number(zmolddef.graphics.uscale);
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.vscale)) {
-					if (Number(molddef.graphics.vscale) > 0) {
-						vscale = vscale * Number(molddef.graphics.vscale);
+				if (WTW.isNumeric(zmolddef.graphics.vscale)) {
+					if (Number(zmolddef.graphics.vscale) > 0) {
+						zvscale = zvscale * Number(zmolddef.graphics.vscale);
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.uoffset)) {
-					if (Number(molddef.graphics.uoffset) != 0) {
-						uoffset = Number(molddef.graphics.uoffset);
+				if (WTW.isNumeric(zmolddef.graphics.uoffset)) {
+					if (Number(zmolddef.graphics.uoffset) != 0) {
+						zuoffset = Number(zmolddef.graphics.uoffset);
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.voffset)) {
-					if (Number(molddef.graphics.voffset) != 0) {
-						voffset = Number(molddef.graphics.voffset);
+				if (WTW.isNumeric(zmolddef.graphics.voffset)) {
+					if (Number(zmolddef.graphics.voffset) != 0) {
+						zvoffset = Number(zmolddef.graphics.voffset);
 					}
 				}	
 			}
 		}
-		WTW.disposeMaterial("mat" + moldname);		
-		covering = new BABYLON.StandardMaterial("mat" + moldname, scene);
-		covering.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		covering.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		covering.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));	
-		
-		covering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		var imageextension = "";
-		if (texturepath == '') {
-			var imageinfo = WTW.getUploadFileData(imageid);
-			imageextension = imageinfo.extension;
-			covering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.image.src, "mattexture" + imageid, scene);
+		WTW.disposeMaterial("mat" + zmoldname);		
+		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+
+		var zimageextension = "";
+		if (ztexturepath == '') {
+			var zimageinfo = WTW.getUploadFileData(zimageid);
+			zimageextension = zimageinfo.extension;
+			zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			covering.diffuseTexture = new BABYLON.Texture(texturepath, scene);
-			imageextension = texturepath.substr(texturepath.length - 3).toLowerCase();
+			zcovering.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
+			zimageextension = ztexturepath.substr(ztexturepath.length - 3).toLowerCase();
 		}
-		covering.diffuseTexture.uScale = uscale;
-		covering.diffuseTexture.vScale = vscale;
-		covering.diffuseTexture.uOffset = uoffset;
-		covering.diffuseTexture.vOffset = voffset;
-		if (imageextension.indexOf("gif") > -1 || imageextension.indexOf("png") > -1) {
-			covering.diffuseTexture.hasAlpha = true;
+		zcovering.diffuseTexture.uScale = zuscale;
+		zcovering.diffuseTexture.vScale = zvscale;
+		zcovering.diffuseTexture.uOffset = zuoffset;
+		zcovering.diffuseTexture.vOffset = zvoffset;
+		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
+			zcovering.diffuseTexture.hasAlpha = true;
 		}	
-		if (bumpid != '' || bumppath != '') {
-			if (bumppath != '') {
-				covering.bumpTexture = new BABYLON.Texture(bumppath, scene);
+		if (zbumpid != '' || zbumppath != '') {
+			if (zbumppath != '') {
+				zcovering.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
-				var imageinfobump = WTW.getUploadFileData(bumpid);
-				covering.bumpTexture = new BABYLON.Texture.CreateFromBase64String(imageinfobump.image.src, "mattexture" + bumpid, scene);
+				var zimageinfobump = WTW.getUploadFileData(zbumpid);
+				zcovering.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "mattexture" + zbumpid, scene);
 			}
-			covering.bumpTexture.uScale = uscale;
-			covering.bumpTexture.vScale = vscale;
-			covering.bumpTexture.uOffset = uoffset;
-			covering.bumpTexture.vOffset = voffset;
-			covering.useParallax = true;
-			covering.useParallaxOcclusion = true;
+			zcovering.bumpTexture.uScale = zuscale;
+			zcovering.bumpTexture.vScale = zvscale;
+			zcovering.bumpTexture.uOffset = zuoffset;
+			zcovering.bumpTexture.vOffset = zvoffset;
+			zcovering.useParallax = true;
+			zcovering.useParallaxOcclusion = true;
 		}
 
-		//covering.freeze();  // covering.unfreeze();
-		//covering.isBlocking = false;
-		//covering.forceCompilation(mold, function() {
+		//zcovering.freeze();  // zcovering.unfreeze();
+		//zcovering.isBlocking = false;
+		//zcovering.forceCompilation(mold, function() {
 //					mold.simplify([{ quality: 0.9, distance: 50 }, { quality: 0.5, distance: 80 }, { quality: 0.3, distance: 100 }, { quality: 0.1, distance: 180 }], true, BABYLON.SimplificationType.QUADRATIC, function() {
-//					covering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.image.src, "mattexture" + imageid, scene);
+//					zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 //				});
 		//});
-		if (moldname.indexOf("myavatar-") > -1 || moldname.indexOf("person-") > -1) {
-			covering.backFaceCulling = false;
+		if (zmoldname.indexOf("myavatar-") > -1 || zmoldname.indexOf("person-") > -1) {
+			zcovering.backFaceCulling = false;
 		} else {
-			covering.backFaceCulling = true;
+			zcovering.backFaceCulling = true;
 		}
-		var opacity = 1;
-		if (molddef.opacity != undefined) {
-			if (WTW.isNumeric(molddef.opacity)) {
-				opacity = Number(molddef.opacity) / 100;
-				if (opacity > 1) {
-					opacity = 1;
-				} else if (opacity < 0) {
-					opacity = 0;
+		var zopacity = 1;
+		if (zmolddef.opacity != undefined) {
+			if (WTW.isNumeric(zmolddef.opacity)) {
+				zopacity = Number(zmolddef.opacity) / 100;
+				if (zopacity > 1) {
+					zopacity = 1;
+				} else if (zopacity < 0) {
+					zopacity = 0;
 				}
 			}
 		}
-		covering.alpha = opacity;
+		zcovering.alpha = zopacity;
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringTexture=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCoveringDirectionalTexture = function(moldname, molddef, lenx, leny, lenz) {
+WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	/* texture applied to cubes that will make texture aling around the cube (like for a brick wall) */
-	var covering;
+	var zcovering;
 	try {
-		var alphawall = 1;
-		var uoffset = 0;
-		var voffset = 0;
-		var uscale = 0;
-		var vscale = 0;
-		var uscf = leny/10; 
-		var vscf = lenz/10;
-		var uscb = leny/10; 
-		var vscb = lenz/10; 
-		var uscl = lenx/10; 
-		var vscl = leny/10; 
-		var uscr = lenx/10; 
-		var vscr = leny/10; 
-		var uscu = lenz/10; 
-		var vscu = lenx/10; 
-		var uscd = lenz/10; 
-		var vscd = lenx/10; 
-		var uosf = 0; 
-		var vosf = 0; 
-		var uosb = 0; 
-		var vosb = 0; 
-		var uosl = 0; 
-		var vosl = 0; 
-		var uosr = 0; 
-		var vosr = 0; 
-		var uosu = 0; 
-		var vosu = 0; 
-		var uosd = 0; 
-		var vosd = 0; 
-		var imageid = "t1qlqxd6pzubzzzy";
-		var texturepath = "";
-		var bumpid = "";
-		var bumppath = "";
-		var opacity = 1;
-		var imageextension = "";
-		if (molddef != undefined) {
-			if (molddef.opacity != undefined) {
-				if (WTW.isNumeric(molddef.opacity)) {
-					opacity = Number(molddef.opacity) / 100;
-					if (opacity > 1) {
-						opacity = 1;
-					} else if (opacity < 0) {
-						opacity = 0;
+		var zalpha = 1;
+		var zuoffset = 0;
+		var zvoffset = 0;
+		var zuscale = 0;
+		var zvscale = 0;
+		var zuscf = zleny/10; 
+		var zvscf = zlenz/10;
+		var zuscb = zleny/10; 
+		var zvscb = zlenz/10; 
+		var zuscl = zlenx/10; 
+		var zvscl = zleny/10; 
+		var zuscr = zlenx/10; 
+		var zvscr = zleny/10; 
+		var zuscu = zlenz/10; 
+		var zvscu = zlenx/10; 
+		var zuscd = zlenz/10; 
+		var zvscd = zlenx/10; 
+		var zuosf = 0; 
+		var zvosf = 0; 
+		var zuosb = 0; 
+		var zvosb = 0; 
+		var zuosl = 0; 
+		var zvosl = 0; 
+		var zuosr = 0; 
+		var zvosr = 0; 
+		var zuosu = 0; 
+		var zvosu = 0; 
+		var zuosd = 0; 
+		var zvosd = 0; 
+		var zimageid = "t1qlqxd6pzubzzzy";
+		var ztexturepath = "";
+		var zbumpid = "";
+		var zbumppath = "";
+		var zopacity = 1;
+		var zimageextension = "";
+		if (zmolddef != undefined) {
+			if (zmolddef.opacity != undefined) {
+				if (WTW.isNumeric(zmolddef.opacity)) {
+					zopacity = Number(zmolddef.opacity) / 100;
+					if (zopacity > 1) {
+						zopacity = 1;
+					} else if (zopacity < 0) {
+						zopacity = 0;
 					}
 				}
 			}
-			if (molddef.graphics != undefined) {
-				if (molddef.graphics.texture.id != undefined) {
-					if (molddef.graphics.texture.id != "") {
-						imageid = molddef.graphics.texture.id;
+			if (zmolddef.graphics != undefined) {
+				if (zmolddef.graphics.texture.id != undefined) {
+					if (zmolddef.graphics.texture.id != "") {
+						zimageid = zmolddef.graphics.texture.id;
 					}
 				}
-				if (molddef.graphics.texture.path != undefined) {
-					if (molddef.graphics.texture.path != "") {
-						texturepath = molddef.graphics.texture.path;
-						texturepath = texturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+				if (zmolddef.graphics.texture.path != undefined) {
+					if (zmolddef.graphics.texture.path != "") {
+						ztexturepath = zmolddef.graphics.texture.path;
+						ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
 					}
 				}
-				if (molddef.graphics.texture.bumpid != undefined) {
-					bumpid = molddef.graphics.texture.bumpid;
+				if (zmolddef.graphics.texture.bumpid != undefined) {
+					zbumpid = zmolddef.graphics.texture.bumpid;
 				}
-				if (molddef.graphics.texture.bumppath != undefined) {
-					bumppath = molddef.graphics.texture.bumppath;
-					bumppath = bumppath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+				if (zmolddef.graphics.texture.bumppath != undefined) {
+					zbumppath = zmolddef.graphics.texture.bumppath;
+					zbumppath = zbumppath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
 				}
-				if (WTW.isNumeric(molddef.graphics.uscale)) {
-					if (Number(molddef.graphics.uscale) > 0) {
-						uscale = Number(molddef.graphics.uscale);
+				if (WTW.isNumeric(zmolddef.graphics.uscale)) {
+					if (Number(zmolddef.graphics.uscale) > 0) {
+						zuscale = Number(zmolddef.graphics.uscale);
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.vscale)) {
-					if (Number(molddef.graphics.vscale) > 0) {
-						vscale = Number(molddef.graphics.vscale);
+				if (WTW.isNumeric(zmolddef.graphics.vscale)) {
+					if (Number(zmolddef.graphics.vscale) > 0) {
+						zvscale = Number(zmolddef.graphics.vscale);
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.uoffset)) {
-					if (Number(molddef.graphics.uoffset) != 0) {
-						uoffset = Number(molddef.graphics.uoffset);
+				if (WTW.isNumeric(zmolddef.graphics.uoffset)) {
+					if (Number(zmolddef.graphics.uoffset) != 0) {
+						zuoffset = Number(zmolddef.graphics.uoffset);
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.voffset)) {
-					if (Number(molddef.graphics.voffset) != 0) {
-						voffset = Number(molddef.graphics.voffset);
+				if (WTW.isNumeric(zmolddef.graphics.voffset)) {
+					if (Number(zmolddef.graphics.voffset) != 0) {
+						zvoffset = Number(zmolddef.graphics.voffset);
 					}
 				}	
-				if (WTW.isNumeric(molddef.graphics.uscale)) {
-					if (Number(molddef.graphics.uscale) > 0) {
-						uscale = Number(molddef.graphics.uscale);
-						uscf = leny/10 * uscale; 
-						uscb = leny/10 * uscale; 
-						uscl = lenx/10 * uscale; 
-						uscr = lenx/10 * uscale; 
-						uscu = lenz/10 * uscale; 
-						uscd = lenz/10 * uscale; 
+				if (WTW.isNumeric(zmolddef.graphics.uscale)) {
+					if (Number(zmolddef.graphics.uscale) > 0) {
+						zuscale = Number(zmolddef.graphics.uscale);
+						zuscf = zleny/10 * zuscale; 
+						zuscb = zleny/10 * zuscale; 
+						zuscl = zlenx/10 * zuscale; 
+						zuscr = zlenx/10 * zuscale; 
+						zuscu = zlenz/10 * zuscale; 
+						zuscd = zlenz/10 * zuscale; 
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.vscale)) {
-					if (Number(molddef.graphics.vscale) > 0) {
-						vscale = Number(molddef.graphics.vscale);
-						vscf = lenz/10 * vscale;
-						vscb = lenz/10 * vscale; 
-						vscl = leny/10 * vscale; 
-						vscr = leny/10 * vscale; 
-						vscu = lenx/10 * vscale; 
-						vscd = lenx/10 * vscale; 
+				if (WTW.isNumeric(zmolddef.graphics.vscale)) {
+					if (Number(zmolddef.graphics.vscale) > 0) {
+						zvscale = Number(zmolddef.graphics.vscale);
+						zvscf = zlenz/10 * zvscale;
+						zvscb = zlenz/10 * zvscale; 
+						zvscl = zleny/10 * zvscale; 
+						zvscr = zleny/10 * zvscale; 
+						zvscu = zlenx/10 * zvscale; 
+						zvscd = zlenx/10 * zvscale; 
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.uoffset)) {
-					if (Number(molddef.graphics.uoffset) != 0) {
-						uoffset = Number(molddef.graphics.uoffset);
-						uosf = uoffset; 
-						uosb = uoffset; 
-						uosl = uoffset; 
-						uosr = uoffset; 
-						uosu = uoffset; 
-						uosd = uoffset; 
+				if (WTW.isNumeric(zmolddef.graphics.uoffset)) {
+					if (Number(zmolddef.graphics.uoffset) != 0) {
+						zuoffset = Number(zmolddef.graphics.uoffset);
+						zuosf = zuoffset; 
+						zuosb = zuoffset; 
+						zuosl = zuoffset; 
+						zuosr = zuoffset; 
+						zuosu = zuoffset; 
+						zuosd = zuoffset; 
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.voffset)) {
-					if (Number(molddef.graphics.voffset) != 0) {
-						voffset = Number(molddef.graphics.voffset);
-						vosf = voffset; 
-						vosb = voffset; 
-						vosl = voffset; 
-						vosr = voffset; 
-						vosu = voffset; 
-						vosd = voffset; 
+				if (WTW.isNumeric(zmolddef.graphics.voffset)) {
+					if (Number(zmolddef.graphics.voffset) != 0) {
+						zvoffset = Number(zmolddef.graphics.voffset);
+						zvosf = zvoffset; 
+						zvosb = zvoffset; 
+						zvosl = zvoffset; 
+						zvosr = zvoffset; 
+						zvosu = zvoffset; 
+						zvosd = zvoffset; 
 					}
 				}		
 			}
 		}
-		var mold = scene.getMeshByID(moldname);
-		if (mold != null) {
-			if (mold.material != null) {
-				if (mold.material.subMaterials != undefined) {
-					for (var i=0;i < mold.material.subMaterials.length;i++) {
-						if (mold.material.subMaterials[i].diffuseTexture != undefined) {
-							if (mold.material.subMaterials[i].diffuseTexture != null) {
-								mold.material.subMaterials[i].diffuseTexture.dispose();
-								mold.material.subMaterials[i].diffuseTexture = null;
+		var zmold = scene.getMeshByID(zmoldname);
+		if (zmold != null) {
+			if (zmold.material != null) {
+				if (zmold.material.subMaterials != undefined) {
+					for (var i=0;i < zmold.material.subMaterials.length;i++) {
+						if (zmold.material.subMaterials[i].diffuseTexture != undefined) {
+							if (zmold.material.subMaterials[i].diffuseTexture != null) {
+								zmold.material.subMaterials[i].diffuseTexture.dispose();
+								zmold.material.subMaterials[i].diffuseTexture = null;
 							}
 						}
 					}
 				}
 				
 			}
-			mold.subMeshes = [];
-			if (mold.subMeshes.length < 12) {
-				mold.subMeshes.push(new BABYLON.SubMesh(0, 0, 4, 0, 6, mold));
-				mold.subMeshes.push(new BABYLON.SubMesh(1, 4, 4, 6, 6, mold));
-				mold.subMeshes.push(new BABYLON.SubMesh(2, 8, 4, 12, 6, mold));
-				mold.subMeshes.push(new BABYLON.SubMesh(3, 12, 4, 18, 6, mold));
-				mold.subMeshes.push(new BABYLON.SubMesh(4, 16, 4, 24, 6, mold));
-				mold.subMeshes.push(new BABYLON.SubMesh(5, 20, 4, 30, 6, mold));
+			zmold.subMeshes = [];
+			if (zmold.subMeshes.length < 12) {
+				zmold.subMeshes.push(new BABYLON.SubMesh(0, 0, 4, 0, 6, zmold));
+				zmold.subMeshes.push(new BABYLON.SubMesh(1, 4, 4, 6, 6, zmold));
+				zmold.subMeshes.push(new BABYLON.SubMesh(2, 8, 4, 12, 6, zmold));
+				zmold.subMeshes.push(new BABYLON.SubMesh(3, 12, 4, 18, 6, zmold));
+				zmold.subMeshes.push(new BABYLON.SubMesh(4, 16, 4, 24, 6, zmold));
+				zmold.subMeshes.push(new BABYLON.SubMesh(5, 20, 4, 30, 6, zmold));
 			}		
 		}
-		covering = new BABYLON.MultiMaterial("cubemat" + moldname, scene);
-		var rMaterial = new BABYLON.StandardMaterial("rmat" + moldname, scene);
-		var imageinfo;
-		var imageextension = '';
-		if (texturepath == '') {
-			imageinfo = WTW.getUploadFileData(imageid);
-			imageextension = imageinfo.extension;
-			rMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.image.src, "mattexture" + imageid, scene);
+		zcovering = new BABYLON.MultiMaterial("cubemat" + zmoldname, scene);
+		var rMaterial = new BABYLON.StandardMaterial("rmat" + zmoldname, scene);
+		var zimageinfo;
+		var zimageextension = '';
+		if (ztexturepath == '') {
+			zimageinfo = WTW.getUploadFileData(zimageid);
+			zimageextension = zimageinfo.extension;
+			rMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			rMaterial.diffuseTexture = new BABYLON.Texture(texturepath, scene);
-			imageextension = texturepath.substr(texturepath.length - 3).toLowerCase();
+			rMaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
+			zimageextension = ztexturepath.substr(ztexturepath.length - 3).toLowerCase();
 		}
 		rMaterial.diffuseTexture.wAng = 0 * Math.PI / 180;
-		rMaterial.diffuseTexture.uScale = uscr;
-		rMaterial.diffuseTexture.vScale = vscr;
-		rMaterial.diffuseTexture.uOffset = uosr;
-		rMaterial.diffuseTexture.vOffset = vosr;
-		rMaterial.diffuseTexture.alpha = alphawall;
-		rMaterial.alpha = opacity;
-		rMaterial.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		rMaterial.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		rMaterial.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));	
-	
-		rMaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		if (imageextension.indexOf("gif") > -1 || imageextension.indexOf("png") > -1) {
+		rMaterial.diffuseTexture.uScale = zuscr;
+		rMaterial.diffuseTexture.vScale = zvscr;
+		rMaterial.diffuseTexture.uOffset = zuosr;
+		rMaterial.diffuseTexture.vOffset = zvosr;
+		rMaterial.diffuseTexture.alpha = zalpha;
+		rMaterial.alpha = zopacity;
+		rMaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		rMaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		rMaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		rMaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+
+		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
 			rMaterial.diffuseTexture.hasAlpha = true;
 			rMaterial.useAlphaFromDiffuseTexture = true;
 		}
-		if (bumpid != '' || bumppath != '') {
-			if (bumppath != '') {
-				rMaterial.bumpTexture = new BABYLON.Texture(bumppath, scene);
+		if (zbumpid != '' || zbumppath != '') {
+			if (zbumppath != '') {
+				rMaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
-				var imageinfobump = WTW.getUploadFileData(bumpid);
-				rMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(imageinfobump.image.src, "rMaterial" + moldname, scene);
+				var zimageinfobump = WTW.getUploadFileData(zbumpid);
+				rMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "rMaterial" + zmoldname, scene);
 			}
 			rMaterial.bumpTexture.wAng = 0 * Math.PI / 180;
-			rMaterial.bumpTexture.uScale = uscr;
-			rMaterial.bumpTexture.vScale = vscr;
-			rMaterial.bumpTexture.uOffset = uosr;
-			rMaterial.bumpTexture.vOffset = vosr;
+			rMaterial.bumpTexture.uScale = zuscr;
+			rMaterial.bumpTexture.vScale = zvscr;
+			rMaterial.bumpTexture.uOffset = zuosr;
+			rMaterial.bumpTexture.vOffset = zvosr;
 			rMaterial.useParallax = true;
 			rMaterial.useParallaxOcclusion = true;
 		}
-		var lMaterial = new BABYLON.StandardMaterial("lmat" + moldname, scene);
-		if (texturepath == '') {
-			lMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.image.src, "mattexture" + imageid, scene);
+		var lMaterial = new BABYLON.StandardMaterial("lmat" + zmoldname, scene);
+		if (ztexturepath == '') {
+			lMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			lMaterial.diffuseTexture = new BABYLON.Texture(texturepath, scene);
+			lMaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
 		lMaterial.diffuseTexture.wAng = 180 * Math.PI / 180;
-		lMaterial.diffuseTexture.uScale = uscl;
-		lMaterial.diffuseTexture.vScale = vscl;
-		lMaterial.diffuseTexture.uOffset = uosl;
-		lMaterial.diffuseTexture.vOffset = vosl;
-		lMaterial.alpha = opacity;
-		lMaterial.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		lMaterial.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		lMaterial.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));	
-	
-		lMaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		if (imageextension.indexOf("gif") > -1 || imageextension.indexOf("png") > -1) {
+		lMaterial.diffuseTexture.uScale = zuscl;
+		lMaterial.diffuseTexture.vScale = zvscl;
+		lMaterial.diffuseTexture.uOffset = zuosl;
+		lMaterial.diffuseTexture.vOffset = zvosl;
+		lMaterial.alpha = zopacity;
+		lMaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		lMaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		lMaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		lMaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+
+		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
 			lMaterial.diffuseTexture.hasAlpha = true;
 			lMaterial.useAlphaFromDiffuseTexture = true;
 		}
-		if (bumpid != '' || bumppath != '') {
-			if (bumppath != '') {
-				lMaterial.bumpTexture = new BABYLON.Texture(bumppath, scene);
+		if (zbumpid != '' || zbumppath != '') {
+			if (zbumppath != '') {
+				lMaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
-				var imageinfobump = WTW.getUploadFileData(bumpid);
-				lMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(imageinfobump.image.src, "lMaterial" + moldname, scene);
+				var zimageinfobump = WTW.getUploadFileData(zbumpid);
+				lMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "lMaterial" + zmoldname, scene);
 			}
 			lMaterial.bumpTexture.wAng = 180 * Math.PI / 180;
-			lMaterial.bumpTexture.uScale = uscl;
-			lMaterial.bumpTexture.vScale = vscl;
-			lMaterial.bumpTexture.uOffset = uosl;
-			lMaterial.bumpTexture.vOffset = vosl;
+			lMaterial.bumpTexture.uScale = zuscl;
+			lMaterial.bumpTexture.vScale = zvscl;
+			lMaterial.bumpTexture.uOffset = zuosl;
+			lMaterial.bumpTexture.vOffset = zvosl;
 			lMaterial.useParallax = true;
 			lMaterial.useParallaxOcclusion = true;
 		}
-		var imagename = "fmattexture" + moldname;
+		var imagename = "fmattexture" + zmoldname;
 		if (WTW.adminView == 1) {
 			imagename +=  WTW.getRandomString(16);
 		}
-		var fMaterial = new BABYLON.StandardMaterial("fmat" + moldname, scene);
-		if (texturepath == '') {
-			fMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.image.src, "mattexture" + imageid, scene);
+		var fMaterial = new BABYLON.StandardMaterial("fmat" + zmoldname, scene);
+		if (ztexturepath == '') {
+			fMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			fMaterial.diffuseTexture = new BABYLON.Texture(texturepath, scene);
+			fMaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
 		fMaterial.diffuseTexture.wAng = 90 * Math.PI / 180;
-		fMaterial.diffuseTexture.uScale = uscf;
-		fMaterial.diffuseTexture.vScale = vscf;
-		fMaterial.diffuseTexture.uOffset = uosf;
-		fMaterial.diffuseTexture.vOffset = vosf;
-		fMaterial.alpha = opacity;
-		fMaterial.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		fMaterial.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		fMaterial.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));	
-	
-		fMaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		if (imageextension.indexOf("gif") > -1 || imageextension.indexOf("png") > -1) {
+		fMaterial.diffuseTexture.uScale = zuscf;
+		fMaterial.diffuseTexture.vScale = zvscf;
+		fMaterial.diffuseTexture.uOffset = zuosf;
+		fMaterial.diffuseTexture.vOffset = zvosf;
+		fMaterial.alpha = zopacity;
+		fMaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		fMaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		fMaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		fMaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+
+		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
 			fMaterial.diffuseTexture.hasAlpha = true;
 			fMaterial.useAlphaFromDiffuseTexture = true;
 		}
-		if (bumpid != '' || bumppath != '') {
-			if (bumppath != '') {
-				fMaterial.bumpTexture = new BABYLON.Texture(bumppath, scene);
+		if (zbumpid != '' || zbumppath != '') {
+			if (zbumppath != '') {
+				fMaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
-				var imageinfobump = WTW.getUploadFileData(bumpid);
-				fMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(imageinfobump.image.src, "fMaterial" + moldname, scene);
+				var zimageinfobump = WTW.getUploadFileData(zbumpid);
+				fMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "fMaterial" + zmoldname, scene);
 			}
 			fMaterial.bumpTexture.wAng = 90 * Math.PI / 180;
-			fMaterial.bumpTexture.uScale = uscf;
-			fMaterial.bumpTexture.vScale = vscf;
-			fMaterial.bumpTexture.uOffset = uosf;
-			fMaterial.bumpTexture.vOffset = vosf;
+			fMaterial.bumpTexture.uScale = zuscf;
+			fMaterial.bumpTexture.vScale = zvscf;
+			fMaterial.bumpTexture.uOffset = zuosf;
+			fMaterial.bumpTexture.vOffset = zvosf;
 			fMaterial.useParallax = true;
 			fMaterial.useParallaxOcclusion = true;
 		}
-		var bMaterial = new BABYLON.StandardMaterial("bmat" + moldname, scene);
-		if (texturepath == '') {
-			bMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.image.src, "mattexture" + imageid, scene);
+		var bMaterial = new BABYLON.StandardMaterial("bmat" + zmoldname, scene);
+		if (ztexturepath == '') {
+			bMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			bMaterial.diffuseTexture = new BABYLON.Texture(texturepath, scene);
+			bMaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
 		bMaterial.diffuseTexture.wAng = 90 * Math.PI / 180;
-		bMaterial.diffuseTexture.uScale = uscb;
-		bMaterial.diffuseTexture.vScale = vscb;
-		bMaterial.diffuseTexture.uOffset = uosb;
-		bMaterial.diffuseTexture.vOffset = vosb;
-		bMaterial.diffuseTexture.alpha = alphawall;
-		bMaterial.alpha = opacity;
-		bMaterial.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		bMaterial.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		bMaterial.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));	
-	
-		bMaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		if (imageextension.indexOf("gif") > -1 || imageextension.indexOf("png") > -1) {
+		bMaterial.diffuseTexture.uScale = zuscb;
+		bMaterial.diffuseTexture.vScale = zvscb;
+		bMaterial.diffuseTexture.uOffset = zuosb;
+		bMaterial.diffuseTexture.vOffset = zvosb;
+		bMaterial.diffuseTexture.alpha = zalpha;
+		bMaterial.alpha = zopacity;
+		bMaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		bMaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		bMaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		bMaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+
+		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
 			bMaterial.diffuseTexture.hasAlpha = true;
 			bMaterial.useAlphaFromDiffuseTexture = true;
 		}
-		if (bumpid != '' || bumppath != '') {
-			if (bumppath != '') {
-				bMaterial.bumpTexture = new BABYLON.Texture(bumppath, scene);
+		if (zbumpid != '' || zbumppath != '') {
+			if (zbumppath != '') {
+				bMaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
-				var imageinfobump = WTW.getUploadFileData(bumpid);
-				bMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(imageinfobump.image.src, "bMaterial" + moldname, scene);
+				var zimageinfobump = WTW.getUploadFileData(zbumpid);
+				bMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "bMaterial" + zmoldname, scene);
 			}
 			bMaterial.bumpTexture.wAng = 90 * Math.PI / 180;
-			bMaterial.bumpTexture.uScale = uscb;
-			bMaterial.bumpTexture.vScale = vscb;
-			bMaterial.bumpTexture.uOffset = uosb;
-			bMaterial.bumpTexture.vOffset = vosb;
+			bMaterial.bumpTexture.uScale = zuscb;
+			bMaterial.bumpTexture.vScale = zvscb;
+			bMaterial.bumpTexture.uOffset = zuosb;
+			bMaterial.bumpTexture.vOffset = zvosb;
 			bMaterial.useParallax = true;
 			bMaterial.useParallaxOcclusion = true;
 		}
-		var uMaterial = new BABYLON.StandardMaterial("umat" + moldname, scene);
-		if (texturepath == '') {
-			uMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.image.src, "mattexture" + imageid, scene);
+		var uMaterial = new BABYLON.StandardMaterial("umat" + zmoldname, scene);
+		if (ztexturepath == '') {
+			uMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			uMaterial.diffuseTexture = new BABYLON.Texture(texturepath, scene);
+			uMaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
 		uMaterial.diffuseTexture.wAng = 180 * Math.PI / 180;
-		uMaterial.diffuseTexture.uScale = uscu;
-		uMaterial.diffuseTexture.vScale = vscu;
-		uMaterial.diffuseTexture.uOffset = uosu;
-		uMaterial.diffuseTexture.vOffset = vosu;
-		uMaterial.diffuseTexture.alpha = alphawall;
-		uMaterial.alpha = opacity;
-		uMaterial.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		uMaterial.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		uMaterial.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));	
-	
-		uMaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		if (imageextension.indexOf("gif") > -1 || imageextension.indexOf("png") > -1) {
+		uMaterial.diffuseTexture.uScale = zuscu;
+		uMaterial.diffuseTexture.vScale = zvscu;
+		uMaterial.diffuseTexture.uOffset = zuosu;
+		uMaterial.diffuseTexture.vOffset = zvosu;
+		uMaterial.diffuseTexture.alpha = zalpha;
+		uMaterial.alpha = zopacity;
+		uMaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		uMaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		uMaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		uMaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+
+		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
 			uMaterial.diffuseTexture.hasAlpha = true;
 			uMaterial.useAlphaFromDiffuseTexture = true;
 		}
-		if (bumpid != '' || bumppath != '') {
-			if (bumppath != '') {
-				uMaterial.bumpTexture = new BABYLON.Texture(bumppath, scene);
+		if (zbumpid != '' || zbumppath != '') {
+			if (zbumppath != '') {
+				uMaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
-				var imageinfobump = WTW.getUploadFileData(bumpid);
-				uMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(imageinfobump.image.src, "uMaterial" + moldname, scene);
+				var zimageinfobump = WTW.getUploadFileData(zbumpid);
+				uMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "uMaterial" + zmoldname, scene);
 			}
 			uMaterial.bumpTexture.wAng = 180 * Math.PI / 180;
-			uMaterial.bumpTexture.uScale = uscu;
-			uMaterial.bumpTexture.vScale = vscu;
-			uMaterial.bumpTexture.uOffset = uosu;
-			uMaterial.bumpTexture.vOffset = vosu;
+			uMaterial.bumpTexture.uScale = zuscu;
+			uMaterial.bumpTexture.vScale = zvscu;
+			uMaterial.bumpTexture.uOffset = zuosu;
+			uMaterial.bumpTexture.vOffset = zvosu;
 			uMaterial.useParallax = true;
 			uMaterial.useParallaxOcclusion = true;
 		}
-		var dMaterial = new BABYLON.StandardMaterial("dmat" + moldname, scene);
-		if (texturepath == '') {
-			dMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.image.src, "mattexture" + imageid, scene);
+		var dMaterial = new BABYLON.StandardMaterial("dmat" + zmoldname, scene);
+		if (ztexturepath == '') {
+			dMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			dMaterial.diffuseTexture = new BABYLON.Texture(texturepath, scene);
+			dMaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
 		dMaterial.diffuseTexture.wAng = 180 * Math.PI / 180;
-		dMaterial.diffuseTexture.uScale = uscd;
-		dMaterial.diffuseTexture.vScale = vscd;
-		dMaterial.diffuseTexture.uOffset = uosd;
-		dMaterial.diffuseTexture.vOffset = vosd;
-		dMaterial.diffuseTexture.alpha = alphawall;
-		dMaterial.alpha = opacity;
-		dMaterial.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		dMaterial.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		dMaterial.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));	
-	
-		dMaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		if (imageextension.indexOf("gif") > -1 || imageextension.indexOf("png") > -1) {
+		dMaterial.diffuseTexture.uScale = zuscd;
+		dMaterial.diffuseTexture.vScale = zvscd;
+		dMaterial.diffuseTexture.uOffset = zuosd;
+		dMaterial.diffuseTexture.vOffset = zvosd;
+		dMaterial.diffuseTexture.alpha = zalpha;
+		dMaterial.alpha = zopacity;
+		dMaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		dMaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		dMaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		dMaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+
+		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
 			dMaterial.diffuseTexture.hasAlpha = true;
 			dMaterial.useAlphaFromDiffuseTexture = true;
 		}
-		if (bumpid != '' || bumppath != '') {
-			if (bumppath != '') {
-				dMaterial.bumpTexture = new BABYLON.Texture(bumppath, scene);
+		if (zbumpid != '' || zbumppath != '') {
+			if (zbumppath != '') {
+				dMaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
-				var imageinfobump = WTW.getUploadFileData(bumpid);
-				dMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(imageinfobump.image.src, "dMaterial" + moldname, scene);
+				var zimageinfobump = WTW.getUploadFileData(zbumpid);
+				dMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "dMaterial" + zmoldname, scene);
 			}
 			dMaterial.bumpTexture.wAng = 180 * Math.PI / 180;
-			dMaterial.bumpTexture.uScale = uscd;
-			dMaterial.bumpTexture.vScale = vscd;
-			dMaterial.bumpTexture.uOffset = uosd;
-			dMaterial.bumpTexture.vOffset = vosd;
+			dMaterial.bumpTexture.uScale = zuscd;
+			dMaterial.bumpTexture.vScale = zvscd;
+			dMaterial.bumpTexture.uOffset = zuosd;
+			dMaterial.bumpTexture.vOffset = zvosd;
 			dMaterial.useParallax = true;
 			dMaterial.useParallaxOcclusion = true;
 		}
-		covering.subMaterials[0] = lMaterial;
-		covering.subMaterials[1] = rMaterial;
-		covering.subMaterials[2] = bMaterial;
-		covering.subMaterials[3] = fMaterial;
-		covering.subMaterials[4] = uMaterial;
-		covering.subMaterials[5] = dMaterial;
-		if (moldname.indexOf("myavatar-") > -1 || moldname.indexOf("person-") > -1) {
-			covering.backFaceCulling = false;
+		zcovering.subMaterials[0] = lMaterial;
+		zcovering.subMaterials[1] = rMaterial;
+		zcovering.subMaterials[2] = bMaterial;
+		zcovering.subMaterials[3] = fMaterial;
+		zcovering.subMaterials[4] = uMaterial;
+		zcovering.subMaterials[5] = dMaterial;
+		if (zmoldname.indexOf("myavatar-") > -1 || zmoldname.indexOf("person-") > -1) {
+			zcovering.backFaceCulling = false;
 		} else {
-			covering.backFaceCulling = true;
+			zcovering.backFaceCulling = true;
 		}
-		covering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		covering.alpha = 1;
-		//covering.freeze();  // covering.unfreeze();
-		//covering.isBlocking = false;
+		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+
+		zcovering.alpha = 1;
+		//zcovering.freeze();  // zcovering.unfreeze();
+		//zcovering.isBlocking = false;
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringDirectionalTexture=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCoveringWater = function(moldname, molddef) {
+WTWJS.prototype.addCoveringWater = function(zmoldname, zmolddef) {
 	/* water like surface material with reflection and refraction */
-	var covering;
+	var zcovering;
 	try {
-		covering = new BABYLON.WaterMaterial("mat" + moldname, scene, new BABYLON.Vector2(512, 512));
-		covering.backFaceCulling = true;
-		covering.bumpTexture = new BABYLON.Texture("/content/system/images/waterbump.png", scene);
-		covering.windForce = -15;
-		covering.waveHeight = .1;
-		//covering.windDirection = new BABYLON.Vector2(1, 1);
-		covering.waterColor = new BABYLON.Color3(0.2, 0.3, 0.7); // water color blended with the refraction (near)
-		covering.waterColor2 = new BABYLON.Color3(0.3, 0.4, 0.8); // water color blended with the reflection (far)
-		covering.colorBlendFactor = 0;
-		covering.bumpHeight = 0.5;
-		covering.waveLength = 0.5;			
-		covering.addToRenderList(WTW.sky);
-		covering.addToRenderList(WTW.extraGround);
-		WTW.addReflection(covering);
+		zcovering = new BABYLON.WaterMaterial("mat" + zmoldname, scene, new BABYLON.Vector2(512, 512));
+		zcovering.backFaceCulling = true;
+		zcovering.bumpTexture = new BABYLON.Texture("/content/system/images/waterbump.png", scene);
+		zcovering.windForce = -15;
+		zcovering.waveHeight = .1;
+		//zcovering.windDirection = new BABYLON.Vector2(1, 1);
+		zcovering.waterColor = new BABYLON.Color3(0.2, 0.3, 0.7); // water color blended with the refraction (near)
+		zcovering.waterColor2 = new BABYLON.Color3(0.3, 0.4, 0.8); // water color blended with the reflection (far)
+		zcovering.colorBlendFactor = 0;
+		zcovering.bumpHeight = 0.5;
+		zcovering.waveLength = 0.5;			
+		zcovering.addToRenderList(WTW.sky);
+		zcovering.addToRenderList(WTW.extraGround);
+		WTW.addReflection(zcovering);
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringWater=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCoveringFire = function(moldname, molddef) {
+WTWJS.prototype.addCoveringFire = function(zmoldname, zmolddef) {
 	/* fire procedural texture */
-	var covering;
+	var zcovering;
 	try {
-		covering = new BABYLON.StandardMaterial("mat" + moldname, scene);
-		var coveringfire = new BABYLON.FireProceduralTexture("matfiretex" + moldname, 256, scene);
-		covering.diffuseTexture = coveringfire;
-		covering.opacityTexture = coveringfire;
+		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		var zcoveringfire = new BABYLON.FireProceduralTexture("matfiretex" + zmoldname, 256, scene);
+		zcovering.diffuseTexture = zcoveringfire;
+		zcovering.opacityTexture = zcoveringfire;
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringFire=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCoveringMarble = function(moldname, molddef, lenx, leny, lenz) {
+WTWJS.prototype.addCoveringMarble = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	/* marble procedural texture */
-	var covering;
+	var zcovering;
 	try {
-		var max = Math.max(Number(lenx), Number(leny), Number(lenz));
-		var uscale = 1/max;
-		var vscale = 1/max;
-		var opacity = 1;
-		if (molddef.opacity != undefined) {
-			if (WTW.isNumeric(molddef.opacity)) {
-				opacity = Number(molddef.opacity) / 100;
-				if (opacity > 1) {
-					opacity = 1;
-				} else if (opacity < 0) {
-					opacity = 0;
+		var zmax = Math.max(Number(zlenx), Number(zleny), Number(zlenz));
+		var zuscale = 1/zmax;
+		var zvscale = 1/zmax;
+		var zopacity = 1;
+		if (zmolddef.opacity != undefined) {
+			if (WTW.isNumeric(zmolddef.opacity)) {
+				zopacity = Number(zmolddef.opacity) / 100;
+				if (zopacity > 1) {
+					zopacity = 1;
+				} else if (zopacity < 0) {
+					zopacity = 0;
 				}
 			}
 		}
-		if (WTW.isNumeric(molddef.graphics.uscale)) {
-			if (Number(molddef.graphics.uscale) > 0) {
-				uscale = Number(molddef.graphics.uscale);
+		if (WTW.isNumeric(zmolddef.graphics.uscale)) {
+			if (Number(zmolddef.graphics.uscale) > 0) {
+				zuscale = Number(zmolddef.graphics.uscale);
 			}
 		}
-		if (WTW.isNumeric(molddef.graphics.vscale)) {
-			if (Number(molddef.graphics.vscale) > 0) {
-				vscale = Number(molddef.graphics.vscale);
+		if (WTW.isNumeric(zmolddef.graphics.vscale)) {
+			if (Number(zmolddef.graphics.vscale) > 0) {
+				zvscale = Number(zmolddef.graphics.vscale);
 			}
 		}
-		if (uscale < 1) {
-			uscale = 1;
+		if (zuscale < 1) {
+			zuscale = 1;
 		}
-		if (vscale < 1) {
-			vscale = 1;
+		if (zvscale < 1) {
+			zvscale = 1;
 		}
-		var marbleTexture = new BABYLON.MarbleProceduralTexture("matmarbletex" + moldname, 512, scene);
-		marbleTexture.numberOfTilesHeight = Number(uscale).toFixed(0);
-		marbleTexture.numberOfTilesWidth = Number(vscale).toFixed(0);
-		covering = new BABYLON.StandardMaterial("mat" + moldname, scene);
-		covering.alpha = opacity;
-		covering.ambientTexture = marbleTexture;
-		covering.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		covering.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		covering.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));
-
-		covering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+		var zmarbletexture = new BABYLON.MarbleProceduralTexture("matmarbletex" + zmoldname, 512, scene);
+		zmarbletexture.numberOfTilesHeight = Number(zuscale).toFixed(0);
+		zmarbletexture.numberOfTilesWidth = Number(zvscale).toFixed(0);
+		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		zcovering.alpha = zopacity;
+		zcovering.ambientTexture = zmarbletexture;
+		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringMarble=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCoveringRoad = function(moldname, molddef) {
+WTWJS.prototype.addCoveringRoad = function(zmoldname, zmolddef) {
 	/* road procedural texture */
-	var covering;
+	var zcovering;
 	try {
-		covering = new BABYLON.StandardMaterial("mat" + moldname, scene);
-		var roadTexture = new BABYLON.RoadProceduralTexture("matroadtex" + moldname, 512, scene);
-		covering.diffuseTexture = roadTexture;
-		covering.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		covering.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		covering.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));
-
-		covering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		var zroadtexture = new BABYLON.RoadProceduralTexture("matroadtex" + zmoldname, 512, scene);
+		zcovering.diffuseTexture = zroadtexture;
+		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringRoad=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCoveringHidden = function(moldname, alpha) {
+WTWJS.prototype.addCoveringHidden = function(zmoldname, zalpha) {
 	/* hidden will make a transparent object */
-	var covering;
+	var zcovering;
 	try {
-		if (typeof alpha === "undefined") {
-			alpha = 0;
+		if (typeof zalpha === "undefined") {
+			zalpha = 0;
 		}
-		covering = new BABYLON.StandardMaterial("mat" + moldname, scene);
-		covering.alpha = alpha;
-		covering.specularColor = new BABYLON.Color3(alpha, alpha, alpha);
-		covering.emissiveColor = new BABYLON.Color3(alpha, alpha, alpha);
-		covering.diffuseColor = new BABYLON.Color3(alpha, alpha, alpha);	
+		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		zcovering.alpha = zalpha;
+		zcovering.specularColor = new BABYLON.Color3(zalpha, zalpha, zalpha);
+		zcovering.emissiveColor = new BABYLON.Color3(zalpha, zalpha, zalpha);
+		zcovering.diffuseColor = new BABYLON.Color3(zalpha, zalpha, zalpha);	
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringHidden=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCovering2D = function(moldname, molddef, lenx, leny, lenz) {
+WTWJS.prototype.addCovering2D = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	/* simple texture for a plane or disc */
-	var covering;
+	var zcovering;
 	try {
-		var uoffset = 0;
-		var voffset = 0;
-		var uscale = lenx / 10;
-		var vscale = leny / 10;
-		var textureid = "t1qlqxd6pzubzzzy";
-		var texturepath = "/content/system/stock/lightgray-512x447.jpg";
-		var imageextension = "";
-		if (molddef != undefined) {
-			if (molddef.graphics != undefined) {
-				if (molddef.graphics.texture.id != undefined) {
-					if (molddef.graphics.texture.id.length > 0) {
-						textureid = molddef.graphics.texture.id;
+		var zuoffset = 0;
+		var zvoffset = 0;
+		var zuscale = zlenx / 10;
+		var zvscale = zleny / 10;
+		var ztextureid = "t1qlqxd6pzubzzzy";
+		var ztexturepath = "/content/system/stock/lightgray-512x447.jpg";
+		var zimageextension = "";
+		if (zmolddef != undefined) {
+			if (zmolddef.graphics != undefined) {
+				if (zmolddef.graphics.texture.id != undefined) {
+					if (zmolddef.graphics.texture.id.length > 0) {
+						ztextureid = zmolddef.graphics.texture.id;
 					}
 				}
-				if (molddef.graphics.texture.path != undefined) {
-					if (molddef.graphics.texture.path.length > 0) {
-						texturepath = molddef.graphics.texture.path;
-						texturepath = texturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+				if (zmolddef.graphics.texture.path != undefined) {
+					if (zmolddef.graphics.texture.path.length > 0) {
+						ztexturepath = zmolddef.graphics.texture.path;
+						ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.uscale)) {
-					if (Number(molddef.graphics.uscale) > 0) {
-						uscale = uscale * Number(molddef.graphics.uscale);
+				if (WTW.isNumeric(zmolddef.graphics.uscale)) {
+					if (Number(zmolddef.graphics.uscale) > 0) {
+						zuscale = zuscale * Number(zmolddef.graphics.uscale);
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.vscale)) {
-					if (Number(molddef.graphics.vscale) > 0) {
-						vscale = vscale * Number(molddef.graphics.vscale);
+				if (WTW.isNumeric(zmolddef.graphics.vscale)) {
+					if (Number(zmolddef.graphics.vscale) > 0) {
+						zvscale = zvscale * Number(zmolddef.graphics.vscale);
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.uoffset)) {
-					if (Number(molddef.graphics.uoffset) != 0) {
-						uoffset = Number(molddef.graphics.uoffset);
+				if (WTW.isNumeric(zmolddef.graphics.uoffset)) {
+					if (Number(zmolddef.graphics.uoffset) != 0) {
+						zuoffset = Number(zmolddef.graphics.uoffset);
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.voffset)) {
-					if (Number(molddef.graphics.voffset) != 0) {
-						voffset = Number(molddef.graphics.voffset);
+				if (WTW.isNumeric(zmolddef.graphics.voffset)) {
+					if (Number(zmolddef.graphics.voffset) != 0) {
+						zvoffset = Number(zmolddef.graphics.voffset);
 					}
 				}		
 			}
 		}
-		covering = new BABYLON.StandardMaterial("mat" + moldname, scene);
-		if (texturepath == '') {
-			var imageinfo = WTW.getUploadFileData(textureid);
-			imageextension = imageinfo.extension;
-			texturepath = imageinfo.image.src;
+		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		if (ztexturepath == '') {
+			var zimageinfo = WTW.getUploadFileData(ztextureid);
+			zimageextension = zimageinfo.extension;
+			ztexturepath = zimageinfo.image.src;
 		} else {
-			imageextension = texturepath.substr(texturepath.length - 3).toLowerCase();
+			zimageextension = ztexturepath.substr(ztexturepath.length - 3).toLowerCase();
 		}
-		covering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(texturepath, "mattexture" + textureid, scene);
-		if (imageextension.indexOf("gif") > -1 || imageextension.indexOf("png") > -1) {
-			covering.diffuseTexture.hasAlpha = true;
+		zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(ztexturepath, "mattexture" + ztextureid, scene);
+		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
+			zcovering.diffuseTexture.hasAlpha = true;
 		}
-		covering.diffuseTexture.uScale = uscale;
-		covering.diffuseTexture.vScale = vscale;
-		covering.diffuseTexture.uOffset = uoffset;
-		covering.diffuseTexture.vOffset = voffset;
-		var opacity = 1;
-		if (molddef.opacity != undefined) {
-			if (WTW.isNumeric(molddef.opacity)) {
-				opacity = Number(molddef.opacity) / 100;
-				if (opacity > 1) {
-					opacity = 1;
-				} else if (opacity < 0) {
-					opacity = 0;
+		zcovering.diffuseTexture.uScale = zuscale;
+		zcovering.diffuseTexture.vScale = zvscale;
+		zcovering.diffuseTexture.uOffset = zuoffset;
+		zcovering.diffuseTexture.vOffset = zvoffset;
+		var zopacity = 1;
+		if (zmolddef.opacity != undefined) {
+			if (WTW.isNumeric(zmolddef.opacity)) {
+				zopacity = Number(zmolddef.opacity) / 100;
+				if (zopacity > 1) {
+					zopacity = 1;
+				} else if (zopacity < 0) {
+					zopacity = 0;
 				}
 			}
 		}
-		covering.alpha = opacity;
-		covering.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-		covering.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		covering.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));
-
-		covering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+		zcovering.alpha = zopacity;
+		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCovering2D=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCoveringTerrain = function(moldname, molddef, lenx, leny, lenz) {
+WTWJS.prototype.addCoveringTerrain = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	/* terrain allows a number of configuration options including heightmap, RGB tri-color map, bump maps, etc... */
 	/* the attempt was to make it work no matter what combination was supplied. so there are a lot of if-else conditions */
 	/* preloading images before render */
 	/* and advanced options */
-	var covering;
+	var zcovering;
 	try {
-		if (molddef.graphics.heightmap.mixmappath != '' && molddef.graphics.heightmap.texturerpath != '' && molddef.graphics.heightmap.texturegpath != '' && molddef.graphics.heightmap.texturebpath != '') {
-			covering = WTW.addCoveringTerrainAdvanced(moldname, lenx, leny, lenz, molddef, molddef.graphics.heightmap.heightmappath, molddef.graphics.heightmap.mixmappath, molddef.graphics.heightmap.texturerpath, molddef.graphics.heightmap.texturegpath, molddef.graphics.heightmap.texturebpath, molddef.graphics.heightmap.texturebumprpath, molddef.graphics.heightmap.texturebumpgpath, molddef.graphics.heightmap.texturebumpbpath);
-		} else if (molddef.graphics.heightmap.mixmapid != '' && molddef.graphics.heightmap.texturerid != '' && molddef.graphics.heightmap.texturegid != '' && molddef.graphics.heightmap.texturebid != '') {
-			covering = WTW.loadTerrainAdvancedImages(moldname, lenx, leny, lenz, molddef.graphics.heightmap.id, molddef.parentname, molddef, molddef.coveringname, molddef.graphics.heightmap.mixmapid, molddef.graphics.heightmap.texturerid, molddef.graphics.heightmap.texturegid, molddef.graphics.heightmap.texturebid, molddef.graphics.heightmap.texturebumprid, molddef.graphics.heightmap.texturebumpgid, molddef.graphics.heightmap.texturebumpbid);
+		if (zmolddef.graphics.heightmap.mixmappath != '' && zmolddef.graphics.heightmap.texturerpath != '' && zmolddef.graphics.heightmap.texturegpath != '' && zmolddef.graphics.heightmap.texturebpath != '') {
+			zcovering = WTW.addCoveringTerrainAdvanced(zmoldname, zlenx, zleny, zlenz, zmolddef, zmolddef.graphics.heightmap.heightmappath, zmolddef.graphics.heightmap.mixmappath, zmolddef.graphics.heightmap.texturerpath, zmolddef.graphics.heightmap.texturegpath, zmolddef.graphics.heightmap.texturebpath, zmolddef.graphics.heightmap.texturebumprpath, zmolddef.graphics.heightmap.texturebumpgpath, zmolddef.graphics.heightmap.texturebumpbpath);
+		} else if (zmolddef.graphics.heightmap.mixmapid != '' && zmolddef.graphics.heightmap.texturerid != '' && zmolddef.graphics.heightmap.texturegid != '' && zmolddef.graphics.heightmap.texturebid != '') {
+			zcovering = WTW.loadTerrainAdvancedImages(zmoldname, zlenx, zleny, zlenz, zmolddef.graphics.heightmap.id, zmolddef.parentname, zmolddef, zmolddef.coveringname, zmolddef.graphics.heightmap.mixmapid, zmolddef.graphics.heightmap.texturerid, zmolddef.graphics.heightmap.texturegid, zmolddef.graphics.heightmap.texturebid, zmolddef.graphics.heightmap.texturebumprid, zmolddef.graphics.heightmap.texturebumpgid, zmolddef.graphics.heightmap.texturebumpbid);
 		} else {
-			var uoffset = 0;
-			var voffset = 0;
-			var uscale = lenx / 10;
-			var vscale = lenz / 10;
-			var textureid = "t1qlqxd6pzubzzzy";
-			var texturepath = "/content/system/stock/lightgray-512x447.jpg";
-			if (molddef != undefined) {
-				if (molddef.graphics != undefined) {
-					if (molddef.graphics.texture.id != undefined) {
-						if (molddef.graphics.texture.id.length > 0) {
-							textureid = molddef.graphics.texture.id;
+			var zuoffset = 0;
+			var zvoffset = 0;
+			var zuscale = zlenx / 10;
+			var zvscale = zlenz / 10;
+			var ztextureid = "t1qlqxd6pzubzzzy";
+			var ztexturepath = "/content/system/stock/lightgray-512x447.jpg";
+			if (zmolddef != undefined) {
+				if (zmolddef.graphics != undefined) {
+					if (zmolddef.graphics.texture.id != undefined) {
+						if (zmolddef.graphics.texture.id.length > 0) {
+							ztextureid = zmolddef.graphics.texture.id;
 						}
 					}
-					if (molddef.graphics.texture.path != undefined) {
-						if (molddef.graphics.texture.path.length > 0) {
-							texturepath = molddef.graphics.texture.path;
-							texturepath = texturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+					if (zmolddef.graphics.texture.path != undefined) {
+						if (zmolddef.graphics.texture.path.length > 0) {
+							ztexturepath = zmolddef.graphics.texture.path;
+							ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
 						}
 					}
-					if (WTW.isNumeric(molddef.graphics.uscale)) {
-						if (Number(molddef.graphics.uscale) > 0) {
-							uscale = uscale * Number(molddef.graphics.uscale);
+					if (WTW.isNumeric(zmolddef.graphics.uscale)) {
+						if (Number(zmolddef.graphics.uscale) > 0) {
+							zuscale = zuscale * Number(zmolddef.graphics.uscale);
 						}
 					}
-					if (WTW.isNumeric(molddef.graphics.vscale)) {
-						if (Number(molddef.graphics.vscale) > 0) {
-							vscale = vscale * Number(molddef.graphics.vscale);
+					if (WTW.isNumeric(zmolddef.graphics.vscale)) {
+						if (Number(zmolddef.graphics.vscale) > 0) {
+							zvscale = zvscale * Number(zmolddef.graphics.vscale);
 						}
 					}
-					if (WTW.isNumeric(molddef.graphics.uoffset)) {
-						if (Number(molddef.graphics.uoffset) != 0) {
-							uoffset = Number(molddef.graphics.uoffset);
+					if (WTW.isNumeric(zmolddef.graphics.uoffset)) {
+						if (Number(zmolddef.graphics.uoffset) != 0) {
+							zuoffset = Number(zmolddef.graphics.uoffset);
 						}
 					}
-					if (WTW.isNumeric(molddef.graphics.voffset)) {
-						if (Number(molddef.graphics.voffset) != 0) {
-							voffset = Number(molddef.graphics.voffset);
+					if (WTW.isNumeric(zmolddef.graphics.voffset)) {
+						if (Number(zmolddef.graphics.voffset) != 0) {
+							zvoffset = Number(zmolddef.graphics.voffset);
 						}
 					}		
 				}
 			}
-			covering = new BABYLON.StandardMaterial("mat-" + moldname, scene);
-			if (textureid != "" || texturepath != "") {
-				covering.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-				covering.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-				covering.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));
-
-				covering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-				if (texturepath != '') {
-					covering.diffuseTexture = new BABYLON.Texture(texturepath, scene);
+			zcovering = new BABYLON.StandardMaterial("mat-" + zmoldname, scene);
+			if (ztextureid != "" || ztexturepath != "") {
+				zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+				zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+				zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+				zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+				if (ztexturepath != '') {
+					zcovering.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 				} else {
-					var imageinfo = WTW.getUploadFileData(textureid);
-					covering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.image.src, "mattexture" + textureid, scene);
+					var zimageinfo = WTW.getUploadFileData(ztextureid);
+					zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + ztextureid, scene);
 				}
-				covering.diffuseTexture.uScale = uscale;
-				covering.diffuseTexture.vScale = vscale;
-				covering.diffuseTexture.uOffset = uoffset;
-				covering.diffuseTexture.vOffset = voffset;
+				zcovering.diffuseTexture.uScale = zuscale;
+				zcovering.diffuseTexture.vScale = zvscale;
+				zcovering.diffuseTexture.uOffset = zuoffset;
+				zcovering.diffuseTexture.vOffset = zvoffset;
 			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringTerrain=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.loadTerrainAdvancedImages = function(moldname, lenx, leny, lenz, heightmapid, parentname, molddef, coveringname, mixmapid, texturerid, texturegid, texturebid, texturebumprid, texturebumpgid, texturebumpbid) {
+WTWJS.prototype.loadTerrainAdvancedImages = function(zmoldname, zlenx, zleny, zlenz, heightmapid, parentname, zmolddef, zcoveringname, mixmapid, texturerid, texturegid, texturebid, texturebumprid, texturebumpgid, texturebumpbid) {
 	/* terrain allows a number of configuration options including heightmap, RGB tri-color map, bump maps, etc... */
 	/* the attempt was to make it work no matter what combination was supplied. so there are a lot of if-else conditions */
 	/* preloading images before render */
 	/* and advanced options */
-	var covering;
+	var zcovering;
 	try {
-		var heightmappath = molddef.graphics.heightmap.path;
-		var mixmappath = molddef.graphics.heightmap.mixmappath;
-		var texturerpath = molddef.graphics.heightmap.texturerpath;
-		var texturegpath = molddef.graphics.heightmap.texturegpath;
-		var texturebpath = molddef.graphics.heightmap.texturebpath;
-		var texturebumprpath = molddef.graphics.heightmap.texturebumprpath;
-		var texturebumpgpath = molddef.graphics.heightmap.texturebumpgpath;
-		var texturebumpbpath = molddef.graphics.heightmap.texturebumpbpath;
-		heightmappath = heightmappath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+		var zheightmappath = zmolddef.graphics.heightmap.path;
+		var zmixmappath = zmolddef.graphics.heightmap.mixmappath;
+		var ztexturerpath = zmolddef.graphics.heightmap.texturerpath;
+		var ztexturegpath = zmolddef.graphics.heightmap.texturegpath;
+		var ztexturebpath = zmolddef.graphics.heightmap.texturebpath;
+		var ztexturebumprpath = zmolddef.graphics.heightmap.texturebumprpath;
+		var ztexturebumpgpath = zmolddef.graphics.heightmap.texturebumpgpath;
+		var ztexturebumpbpath = zmolddef.graphics.heightmap.texturebumpbpath;
+		zheightmappath = zheightmappath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
 
-		if ((heightmappath != '' || WTW.isUploadReady(heightmapid)) && (mixmappath != '' || WTW.isUploadReady(mixmapid)) && (texturerpath != '' || WTW.isUploadReady(texturerid)) && (texturegpath != '' || WTW.isUploadReady(texturegid)) && (texturebpath != '' || WTW.isUploadReady(texturebid)) && (texturebumprpath != '' || WTW.isUploadReady(texturebumprid) || texturebumprid == '') && (texturebumpgpath != '' || WTW.isUploadReady(texturebumpgid) || texturebumpgid == '') && (texturebumpbpath != '' || WTW.isUploadReady(texturebumpbid) || texturebumpbid == '')) {
-			var imageheightmapid = WTW.getUploadFileData(heightmapid);
-			var imagemixmapid = WTW.getUploadFileData(mixmapid);
-			if (mixmappath == '') {
-				mixmappath = imagemixmapid.image.src;
+		if ((zheightmappath != '' || WTW.isUploadReady(heightmapid)) && (zmixmappath != '' || WTW.isUploadReady(mixmapid)) && (ztexturerpath != '' || WTW.isUploadReady(texturerid)) && (ztexturegpath != '' || WTW.isUploadReady(texturegid)) && (ztexturebpath != '' || WTW.isUploadReady(texturebid)) && (ztexturebumprpath != '' || WTW.isUploadReady(texturebumprid) || texturebumprid == '') && (ztexturebumpgpath != '' || WTW.isUploadReady(texturebumpgid) || texturebumpgid == '') && (ztexturebumpbpath != '' || WTW.isUploadReady(texturebumpbid) || texturebumpbid == '')) {
+			var zimageheightmapid = WTW.getUploadFileData(heightmapid);
+			var zimagemixmapid = WTW.getUploadFileData(mixmapid);
+			if (zmixmappath == '') {
+				zmixmappath = zimagemixmapid.image.src;
 			}
-			var imagetexturerid = WTW.getUploadFileData(texturerid);
-			if (texturerpath == '') {
-				texturerpath = imagetexturerid.image.src;
+			var zimagetexturerid = WTW.getUploadFileData(texturerid);
+			if (ztexturerpath == '') {
+				ztexturerpath = zimagetexturerid.image.src;
 			}
-			var imagetexturegid = WTW.getUploadFileData(texturegid);
-			if (texturegpath == '') {
-				texturegpath = imagetexturegid.image.src;
+			var zimagetexturegid = WTW.getUploadFileData(texturegid);
+			if (ztexturegpath == '') {
+				ztexturegpath = zimagetexturegid.image.src;
 			}
-			var imagetexturebid = WTW.getUploadFileData(texturebid);
-			if (texturebpath == '') {
-				texturebpath = imagetexturebid.image.src;
+			var zimagetexturebid = WTW.getUploadFileData(texturebid);
+			if (ztexturebpath == '') {
+				ztexturebpath = zimagetexturebid.image.src;
 			}
-			if (molddef.graphics.heightmap.texturebumprid != '') {	
-				var imagetexturebumprid = WTW.getUploadFileData(texturebumprid);
-				if (molddef.graphics.heightmap.texturebumpgid != '') {	
-					var imagetexturebumpgid = WTW.getUploadFileData(texturebumpgid);
-					if (molddef.graphics.heightmap.texturebumpbid != '') {	
-						var imagetexturebumpbid = WTW.getUploadFileData(texturebumpbid);
-						covering = WTW.addCoveringTerrainAdvanced(moldname, lenx, leny, lenz, molddef, heightmappath, mixmappath, texturerpath, texturegpath, texturebpath, texturebumprpath, texturebumpgpath, texturebumpbpath);
+			if (zmolddef.graphics.heightmap.texturebumprid != '') {	
+				var zimagetexturebumprid = WTW.getUploadFileData(texturebumprid);
+				if (zmolddef.graphics.heightmap.texturebumpgid != '') {	
+					var zimagetexturebumpgid = WTW.getUploadFileData(texturebumpgid);
+					if (zmolddef.graphics.heightmap.texturebumpbid != '') {	
+						var zimagetexturebumpbid = WTW.getUploadFileData(texturebumpbid);
+						zcovering = WTW.addCoveringTerrainAdvanced(zmoldname, zlenx, zleny, zlenz, zmolddef, zheightmappath, zmixmappath, ztexturerpath, ztexturegpath, ztexturebpath, ztexturebumprpath, ztexturebumpgpath, ztexturebumpbpath);
 					} else {
-						var imagetexturebumpbid = null;
-						covering = WTW.addCoveringTerrainAdvanced(moldname, lenx, leny, lenz, molddef, heightmappath, mixmappath, texturerpath, texturegpath, texturebpath, texturebumprpath, texturebumpgpath, texturebumpbpath);
+						var zimagetexturebumpbid = null;
+						zcovering = WTW.addCoveringTerrainAdvanced(zmoldname, zlenx, zleny, zlenz, zmolddef, zheightmappath, zmixmappath, ztexturerpath, ztexturegpath, ztexturebpath, ztexturebumprpath, ztexturebumpgpath, ztexturebumpbpath);
 					}
 				} else {
-					var imagetexturebumpgid = null;
-					if (molddef.graphics.heightmap.texturebumpbid != '') {	
-						var imagetexturebumpbid = WTW.getUploadFileData(texturebumpbid);
-						covering = WTW.addCoveringTerrainAdvanced(moldname, lenx, leny, lenz, molddef, heightmappath, mixmappath, texturerpath, texturegpath, texturebpath, texturebumprpath, texturebumpgpath, texturebumpbpath);
+					var zimagetexturebumpgid = null;
+					if (zmolddef.graphics.heightmap.texturebumpbid != '') {	
+						var zimagetexturebumpbid = WTW.getUploadFileData(texturebumpbid);
+						zcovering = WTW.addCoveringTerrainAdvanced(zmoldname, zlenx, zleny, zlenz, zmolddef, zheightmappath, zmixmappath, ztexturerpath, ztexturegpath, ztexturebpath, ztexturebumprpath, ztexturebumpgpath, ztexturebumpbpath);
 					} else {
-						var imagetexturebumpbid = null;
-						covering = WTW.addCoveringTerrainAdvanced(moldname, lenx, leny, lenz, molddef, heightmappath, mixmappath, texturerpath, texturegpath, texturebpath, texturebumprpath, texturebumpgpath, texturebumpbpath);
+						var zimagetexturebumpbid = null;
+						zcovering = WTW.addCoveringTerrainAdvanced(zmoldname, zlenx, zleny, zlenz, zmolddef, zheightmappath, zmixmappath, ztexturerpath, ztexturegpath, ztexturebpath, ztexturebumprpath, ztexturebumpgpath, ztexturebumpbpath);
 					}
 				}
 			} else {
-				var imagetexturebumprid = null;
-				if (molddef.graphics.heightmap.texturebumpgid != '') {	
-					var imagetexturebumpgid = WTW.getUploadFileData(texturebumpgid);
-					if (molddef.graphics.heightmap.texturebumpbid != '') {	
-						var imagetexturebumpbid = WTW.getUploadFileData(texturebumpbid);
-						covering = WTW.addCoveringTerrainAdvanced(moldname, lenx, leny, lenz, molddef, heightmappath, mixmappath, texturerpath, texturegpath, texturebpath, texturebumprpath, texturebumpgpath, texturebumpbpath);
+				var zimagetexturebumprid = null;
+				if (zmolddef.graphics.heightmap.texturebumpgid != '') {	
+					var zimagetexturebumpgid = WTW.getUploadFileData(texturebumpgid);
+					if (zmolddef.graphics.heightmap.texturebumpbid != '') {	
+						var zimagetexturebumpbid = WTW.getUploadFileData(texturebumpbid);
+						zcovering = WTW.addCoveringTerrainAdvanced(zmoldname, zlenx, zleny, zlenz, zmolddef, zheightmappath, zmixmappath, ztexturerpath, ztexturegpath, ztexturebpath, ztexturebumprpath, ztexturebumpgpath, ztexturebumpbpath);
 					} else {
-						var imagetexturebumpbid = null;
-						covering = WTW.addCoveringTerrainAdvanced(moldname, lenx, leny, lenz, molddef, heightmappath, mixmappath, texturerpath, texturegpath, texturebpath, texturebumprpath, texturebumpgpath, texturebumpbpath);
+						var zimagetexturebumpbid = null;
+						zcovering = WTW.addCoveringTerrainAdvanced(zmoldname, zlenx, zleny, zlenz, zmolddef, zheightmappath, zmixmappath, ztexturerpath, ztexturegpath, ztexturebpath, ztexturebumprpath, ztexturebumpgpath, ztexturebumpbpath);
 					}
 				} else {
-					var imagetexturebumpgid = null;
-					if (molddef.graphics.heightmap.texturebumpbid != '') {	
-						var imagetexturebumpbid = WTW.getUploadFileData(texturebumpbid);
-						covering = WTW.addCoveringTerrainAdvanced(moldname, lenx, leny, lenz, molddef, heightmappath, mixmappath, texturerpath, texturegpath, texturebpath, texturebumprpath, texturebumpgpath, texturebumpbpath);
+					var zimagetexturebumpgid = null;
+					if (zmolddef.graphics.heightmap.texturebumpbid != '') {	
+						var zimagetexturebumpbid = WTW.getUploadFileData(texturebumpbid);
+						zcovering = WTW.addCoveringTerrainAdvanced(zmoldname, zlenx, zleny, zlenz, zmolddef, zheightmappath, zmixmappath, ztexturerpath, ztexturegpath, ztexturebpath, ztexturebumprpath, ztexturebumpgpath, ztexturebumpbpath);
 					} else {
-						var imagetexturebumpbid = null;
-						covering = WTW.addCoveringTerrainAdvanced(moldname, lenx, leny, lenz, molddef, heightmappath, mixmappath, texturerpath, texturegpath, texturebpath, texturebumprpath, texturebumpgpath, texturebumpbpath);
+						var zimagetexturebumpbid = null;
+						zcovering = WTW.addCoveringTerrainAdvanced(zmoldname, zlenx, zleny, zlenz, zmolddef, zheightmappath, zmixmappath, ztexturerpath, ztexturegpath, ztexturebpath, ztexturebumprpath, ztexturebumpgpath, ztexturebumpbpath);
 					}
 				}
 			}
@@ -1025,101 +1021,96 @@ WTWJS.prototype.loadTerrainAdvancedImages = function(moldname, lenx, leny, lenz,
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n loadTerrainAdvancedImages=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
-WTWJS.prototype.addCoveringTerrainAdvanced = function(moldname, lenx, leny, lenz, molddef, heightmappath, mixmappath, texturerpath, texturegpath, texturebpath, texturebumprpath, texturebumpgpath, texturebumpbpath) {
+WTWJS.prototype.addCoveringTerrainAdvanced = function(zmoldname, zlenx, zleny, zlenz, zmolddef, zheightmappath, zmixmappath, ztexturerpath, ztexturegpath, ztexturebpath, ztexturebumprpath, ztexturebumpgpath, ztexturebumpbpath) {
 	/* terrain allows a number of configuration options including heightmap, RGB tri-color map, bump maps, etc... */
 	/* the attempt was to make it work no matter what combination was supplied. so there are a lot of if-else conditions */
 	/* preloading images before render */
 	/* and advanced options */
-	var covering;
+	var zcovering;
 	try {
-		var uoffset = 0;
-		var voffset = 0;
-		var uscale = 10;
-		var vscale = 10;
-		if (molddef != undefined) {
-			if (molddef.graphics != undefined) {
-				if (WTW.isNumeric(molddef.graphics.uscale)) {
-					if (Number(molddef.graphics.uscale) > 0) {
-						uscale = Number(molddef.graphics.uscale);
+		var zuoffset = 0;
+		var zvoffset = 0;
+		var zuscale = 10;
+		var zvscale = 10;
+		if (zmolddef != undefined) {
+			if (zmolddef.graphics != undefined) {
+				if (WTW.isNumeric(zmolddef.graphics.uscale)) {
+					if (Number(zmolddef.graphics.uscale) > 0) {
+						zuscale = Number(zmolddef.graphics.uscale);
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.vscale)) {
-					if (Number(molddef.graphics.vscale) > 0) {
-						vscale = Number(molddef.graphics.vscale);
+				if (WTW.isNumeric(zmolddef.graphics.vscale)) {
+					if (Number(zmolddef.graphics.vscale) > 0) {
+						zvscale = Number(zmolddef.graphics.vscale);
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.uoffset)) {
-					if (Number(molddef.graphics.uoffset) != 0) {
-						uoffset = Number(molddef.graphics.uoffset);
+				if (WTW.isNumeric(zmolddef.graphics.uoffset)) {
+					if (Number(zmolddef.graphics.uoffset) != 0) {
+						zuoffset = Number(zmolddef.graphics.uoffset);
 					}
 				}
-				if (WTW.isNumeric(molddef.graphics.voffset)) {
-					if (Number(molddef.graphics.voffset) != 0) {
-						voffset = Number(molddef.graphics.voffset);
+				if (WTW.isNumeric(zmolddef.graphics.voffset)) {
+					if (Number(zmolddef.graphics.voffset) != 0) {
+						zvoffset = Number(zmolddef.graphics.voffset);
 					}
 				}		
 			}
 		}	
-		mixmappath = mixmappath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
-		texturerpath = texturerpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
-		texturegpath = texturegpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
-		texturebpath = texturebpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
-		texturebumprpath = texturebumprpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
-		texturebumpgpath = texturebumpgpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
-		texturebumpbpath = texturebumpbpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+		zmixmappath = zmixmappath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+		ztexturerpath = ztexturerpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+		ztexturegpath = ztexturegpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+		ztexturebpath = ztexturebpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+		ztexturebumprpath = ztexturebumprpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+		ztexturebumpgpath = ztexturebumpgpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+		ztexturebumpbpath = ztexturebumpbpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
 		
 		// Create terrain material
-		var covering = new BABYLON.TerrainMaterial("mat" + moldname, scene);
-		covering.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-//		covering.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
-		covering.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));
-		covering.specularPower = 64;
-		
-//		covering.emissiveColor = new BABYLON.Color3(1,1,1);
-//		covering.specularColor = new BABYLON.Color3(1,1,1);
-//		covering.diffuseColor = new BABYLON.Color3(1,1,1);
-
-		covering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+		var zcovering = new BABYLON.TerrainMaterial("mat" + zmoldname, scene);
+		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+		zcovering.specularPower = 64;
 
 		// Set the mix texture (represents the RGB values)
-		covering.mixTexture = new BABYLON.Texture(mixmappath, scene);
+		zcovering.mixTexture = new BABYLON.Texture(zmixmappath, scene);
 		// Diffuse textures following the RGB values of the mix map
 		// diffuseTexture1: Red
 		// diffuseTexture2: Green
 		// diffuseTexture3: Blue
-		covering.diffuseTexture1 = new BABYLON.Texture(texturerpath, scene);
-		covering.diffuseTexture2 = new BABYLON.Texture(texturegpath, scene);
-		covering.diffuseTexture3 = new BABYLON.Texture(texturebpath, scene);
+		zcovering.diffuseTexture1 = new BABYLON.Texture(ztexturerpath, scene);
+		zcovering.diffuseTexture2 = new BABYLON.Texture(ztexturegpath, scene);
+		zcovering.diffuseTexture3 = new BABYLON.Texture(ztexturebpath, scene);
 		
 		// Bump textures according to the previously set diffuse textures
-		if (molddef.graphics.heightmap.texturebumprid != '') {	
-			covering.bumpTexture1 = new BABYLON.Texture(texturebumprpath, scene);
+		if (zmolddef.graphics.heightmap.texturebumprid != '') {	
+			zcovering.bumpTexture1 = new BABYLON.Texture(ztexturebumprpath, scene);
 		}
-		if (molddef.graphics.heightmap.texturebumpgid != '') {	
-			covering.bumpTexture2 = new BABYLON.Texture(texturebumpgpath, scene);
+		if (zmolddef.graphics.heightmap.texturebumpgid != '') {	
+			zcovering.bumpTexture2 = new BABYLON.Texture(ztexturebumpgpath, scene);
 		}
-		if (molddef.graphics.heightmap.texturebumpbid != '') {	
-			covering.bumpTexture3 = new BABYLON.Texture(texturebumpbpath, scene);
+		if (zmolddef.graphics.heightmap.texturebumpbid != '') {	
+			zcovering.bumpTexture3 = new BABYLON.Texture(ztexturebumpbpath, scene);
 		}
 
 		// Rescale textures according to the terrain
-		covering.diffuseTexture1.uScale = uscale;
-		covering.diffuseTexture1.vScale = vscale;
-		covering.diffuseTexture2.uScale = uscale;
-		covering.diffuseTexture2.vScale = vscale;
-		covering.diffuseTexture3.uScale = uscale;
-		covering.diffuseTexture3.vScale = vscale;								
-		covering.diffuseTexture1.uOffset = uoffset;
-		covering.diffuseTexture1.vOffset = uoffset;
-		covering.diffuseTexture2.uOffset = uoffset;
-		covering.diffuseTexture2.vOffset = uoffset;
-		covering.diffuseTexture3.uOffset = uoffset;
-		covering.diffuseTexture3.vOffset = uoffset;								
+		zcovering.diffuseTexture1.uScale = zuscale;
+		zcovering.diffuseTexture1.vScale = zvscale;
+		zcovering.diffuseTexture2.uScale = zuscale;
+		zcovering.diffuseTexture2.vScale = zvscale;
+		zcovering.diffuseTexture3.uScale = zuscale;
+		zcovering.diffuseTexture3.vScale = zvscale;								
+		zcovering.diffuseTexture1.uOffset = zuoffset;
+		zcovering.diffuseTexture1.vOffset = zuoffset;
+		zcovering.diffuseTexture2.uOffset = zuoffset;
+		zcovering.diffuseTexture2.vOffset = zuoffset;
+		zcovering.diffuseTexture3.uOffset = zuoffset;
+		zcovering.diffuseTexture3.vOffset = zuoffset;								
 	} catch (ex) {
 		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringTerrainAdvanced=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }

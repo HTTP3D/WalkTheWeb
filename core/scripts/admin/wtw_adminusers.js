@@ -329,13 +329,13 @@ WTWJS.prototype.openPermissionsForm = function() {
 		WTW.hide('wtw_adminmenu60b');
 		WTW.hide('wtw_userdevaccesslist');
 		WTW.show('wtw_loadinguserdevaccessform');
-		var moldgroup = 'Community';
+		var zwebtype = 'Community';
 		if (buildingid != '') {
-			moldgroup = 'Building';
+			zwebtype = 'Building';
 		} else if (thingid != '') {
-			moldgroup = 'Thing';
+			zwebtype = 'Thing';
 		}
-		dGet('wtw_accessnote').innerHTML = "Dev: updates to 3D " + moldgroup + ".<br />Admin: Dev and set permissions.";
+		dGet('wtw_accessnote').innerHTML = "Dev: updates to 3D " + zwebtype + ".<br />Admin: Dev and set permissions.";
 		dGet('wtw_userdevaccesslist').innerHTML = "";
 		WTW.getJSON("/connect/useraccess.php?communityid=" + communityid + "&buildingid=" + buildingid + "&thingid=" + thingid, 
 			function(response) {

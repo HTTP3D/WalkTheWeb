@@ -181,20 +181,20 @@ WTWJS.prototype.changePick = function(w) {
 	}
 }
 
-WTWJS.prototype.loadPickedObject = function(mold) {
+WTWJS.prototype.loadPickedObject = function(zmold) {
 	/* after item is picked, load picked mold form */
 	try {
-		if (mold != null) {
-			if (mold.name.indexOf("-") > -1) {
-				let moldnameparts = WTW.getMoldnameParts(mold.name);
-				if (moldnameparts.moldind > -1) {
-					if (moldnameparts.cgind > 0) {
-						WTW.openConnectingGridsForm(moldnameparts.cgind);
-					} else if (moldnameparts.moldgroup == "thing" || moldnameparts.moldgroup == "building" || moldnameparts.moldgroup == "community") {
+		if (zmold != null) {
+			if (zmold.name.indexOf("-") > -1) {
+				let zmoldnameparts = WTW.getMoldnameParts(zmold.name);
+				if (zmoldnameparts.moldind > -1) {
+					if (zmoldnameparts.cgind > 0) {
+						WTW.openConnectingGridsForm(zmoldnameparts.cgind);
+					} else if (zmoldnameparts.webtype == "thing" || zmoldnameparts.webtype == "building" || zmoldnameparts.webtype == "community") {
 						/* selected object is a mold from the current object in edit mode */
 						dGet('wtw_tnewmold').value = "0";
 						/* open mold form for selected mold to edit it */
-						WTW.openMoldForm(moldnameparts.moldind,moldnameparts.shape,moldnameparts.moldgroup); 
+						WTW.openMoldForm(zmoldnameparts.moldind,zmoldnameparts.shape,zmoldnameparts.webtype); 
 					} else {
 						/* try again */
 						WTW.changePick(1);

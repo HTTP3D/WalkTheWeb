@@ -391,7 +391,7 @@ WTWJS.prototype.setUploadCovering = function(uploadid, refreshoption, moldname, 
 				}
 				var extraGroundMaterial = new BABYLON.StandardMaterial("egmat", scene);
 				WTW.extraGround.material = extraGroundMaterial;
-				extraGroundMaterial.specularColor = new BABYLON.Color3(.7, .7, .7);
+				extraGroundMaterial.specularColor = new BABYLON.Color3(.1, .1, .1);
 				extraGroundMaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
 				var imageinfo = WTW.getUploadFileData(uploadid);
 				extraGroundMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.filedata, "egmattexture", scene);

@@ -3,7 +3,7 @@
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
 /* These functions are used to download selected 3D Communities, 3D Buildings, 3D Things, or related content */
-/* downloads are hosted by 3dnet.walktheweb.com 3D Internet Hub */
+/* downloads are hosted by 3dnet.walktheweb.com 3D Internet (WalkTheWeb Downloads) */
 
 WTWJS.prototype.updateProgressText = function(ztext) {
 	/* note that updates the progress of the installation step */
@@ -12,7 +12,7 @@ WTWJS.prototype.updateProgressText = function(ztext) {
 			dGet('wtw_progresstext').innerHTML = ztext;
 		}
 	} catch (ex) {
-		WTW.log("install-updateProgressText=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_downloads.js-updateProgressText=" + ex.message);
 	}
 }
 
@@ -24,7 +24,7 @@ WTWJS.prototype.updateProgressBar = function(zprogress, ztotal) {
 			dGet('wtw_progressbar').style.width = zpercent + "%";
 		}
 	} catch (ex) {
-		WTW.log("install-updateProgressBar=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_downloads.js-updateProgressBar=" + ex.message);
 	}
 	return zprogress;
 }
@@ -33,124 +33,41 @@ WTWJS.prototype.communitySearch = function(search) {
 	/* keyword search to find a community to download to your instance */
 	try {
 		search = WTW.encode(search);
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/communitysearch.php?s=" + search, 
+		WTW.getJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=community", 
 			function(response) {
 				WTW.communitySearchReply(JSON.parse(response));
 			}
 		);
 	} catch (ex) {
-		WTW.log("install-communitySearch=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_downloads.js-communitySearch=" + ex.message);
 	}
 }
 
-WTWJS.prototype.communitySearchReply = function(response) {
+WTWJS.prototype.communitySearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
+		var ztempsearchresults = '';
 		dGet('wtw_commtempsearchresults').innerHTML = "";
-		for (var i=0; i < response.length; i++) {
-			dGet('wtw_commtempsearchresults').innerHTML += "<h3 class=\"wtw-black\">" + response[i].templatename + "</h3>";
-			dGet('wtw_commtempsearchresults').innerHTML += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + response[i].description + "</div><br />";
-			if (response[i].snapshotid != "") {
-				var zcommunityid = response[i].communityid;
-				dGet('wtw_commtempsearchresults').innerHTML += "<img id='wtw_search" + zcommunityid + "' src='' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.communitySearchSelect('" + zcommunityid + "');\" style=\"margin:5px;border:1px solid gray;cursor:pointer;width:250px;height:auto;\" />";
-				WTW.getJSON("https://3dnet.walktheweb.com/connect/upload.php?uploadid=" + response[i].snapshotid + "&setid=" + zcommunityid, 
-					function(response) {
-						var imageinfo = JSON.parse(response);
-						if (imageinfo[0] != null) {
-							dGet('wtw_search' + imageinfo[0].setid).src = imageinfo[0].data;
-						}
-					}
-				);
+		for (var i=0; i < zresponse.length; i++) {
+			var zdownloads = 0;
+			var zcommunityid = zresponse[i].servercommunityid;
+			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
+			if (WTW.isNumeric(zresponse[i].downloads)) {
+				zdownloads = zresponse[i].downloads;
 			}
-			dGet('wtw_commtempsearchresults').innerHTML += "<br /><input type='button' id='wtw_bcommtempselect" + i + "' class='wtw-searchresultbutton' value='Select' onclick=\"WTW.communitySearchSelect('" + response[i].communityid + "');\" />";
-			dGet('wtw_commtempsearchresults').innerHTML += "<br /><hr />";
+			ztempsearchresults += "<input type='button' id='wtw_bcommtempselect" + i + "' class='wtw-searchresultbutton' value='Download' onclick=\"WTW.downloadWeb('" + zcommunityid + "','community');\" />";
+			ztempsearchresults += "<h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
+			if (zresponse[i].imageurl != "") {
+				ztempsearchresults += "<div style=\"clear:both;\"></div><img id='wtw_search" + zcommunityid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('" + zcommunityid + "','community');\" style=\"margin:5px;border:1px solid gray;cursor:pointer;width:100%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+			}
+			ztempsearchresults += "<br /><hr />";
 		}
+		dGet('wtw_commtempsearchresults').innerHTML = ztempsearchresults;
 	} catch (ex) {
-		WTW.log("install-communitySearchReply=" + ex.message);
-	}
-}
-
-WTWJS.prototype.communitySearchSelect = function(zcopywebid) {
-	/* This process takes the selected 3D Community and downloads a copy of the 3D Community (3D Scene) to the local instance */
-	try {
-		WTW.hide('wtw_selectwebform');
-		WTW.show('wtw_installprogress');
-		WTW.updateProgressText("Fetching 3D Community Settings");
-		WTW.updateProgressBar(1,100);
-		
-		var zprogress = 5;
-		var zprogressbar = window.setInterval(function() {
-			zprogress = WTW.updateProgressBar(zprogress,100) + 5;
-			if (zprogress > 78) {
-				window.clearInterval(zprogressbar);
-			}
-		},300);
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/community.php?communityid=" + zcopywebid + "&serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverdomain=" + wtw_domainname, 
-			function(response) {
-				window.clearInterval(zprogressbar);
-				WTW.updateProgressBar(100,100);
-				WTW.updateProgressText("Writing 3D Community Settings");
-				WTW.updateProgressBar(10,100);
-				response = WTW.cleanInvalidCharacters(response);
-				response = JSON.parse(response);
-				if (response.communities[0] != undefined) {
-					var community = response.communities[0];
-					WTW.updateProgressBar(50,100);
-					WTW.updateProgressBar(75,100);
-					var zcommunityid = WTW.getRandomString(16);
-					var zrequest = {
-						'communityid': zcommunityid,
-						'pastcommunityid': zcopywebid,
-						'communityname': btoa(community.communityinfo.communityname),
-						'analyticsid': '',
-						'positionx': community.position.x,
-						'positiony': community.position.y,
-						'positionz': community.position.z,
-						'scalingx': community.scaling.x,
-						'scalingy': community.scaling.y,
-						'scalingz': community.scaling.z,
-						'rotationx': community.rotation.x,
-						'rotationy': community.rotation.y,
-						'rotationz': community.rotation.z,
-						'gravity': community.ground.gravity,
-						'textureid': community.graphics.texture.id,
-						'skydomeid': community.graphics.sky.id,
-						'skyinclination': community.graphics.sky.skyinclination,
-						'skyluminance': community.graphics.sky.skyluminance,
-						'skyazimuth': community.graphics.sky.skyazimuth,
-						'skyrayleigh': community.graphics.sky.skyrayleigh,
-						'skyturbidity': community.graphics.sky.skyturbidity,
-						'skymiedirectionalg': community.graphics.sky.skymiedirectionalg,
-						'skymiecoefficient': community.graphics.sky.skymiecoefficient,
-						'groundpositiony': community.ground.position.y,
-						'waterpositiony': community.water.position.y,
-						'alttag': community.communityinfo.alttag,
-						'function':'importcommunity'
-					};
-					WTW.postJSON("/core/handlers/communities.php", zrequest, 
-						function(zresponse) {
-							zresponse = JSON.parse(zresponse);
-							WTW.updateProgressBar(95,100);
-							/* note serror would contain errors */
-							WTW.completedCommunityImport('community', zcommunityid, zcopywebid);
-						}
-					);
-				}
-			}
-		);
-	} catch (ex) {
-		WTW.log("install-communitySearchSelect=" + ex.message);
-	}
-}
-
-WTWJS.prototype.completedCommunityImport = function(zmoldgroup, zwebid, zcopywebid) {
-	/* the basic 3D Community information is downloaded, next the supplimental parts are downloaded (action zones, molds, coverings, etc...) */
-	/* then starts downloading the Action Zones */
-	try {
-		WTW.updateProgressBar(100,100);
-		WTW.copyActionZones(zmoldgroup, zwebid, zcopywebid);
-	} catch (ex) {
-		WTW.log("install-completedCommunityImport=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_downloads.js-communitySearchReply=" + ex.message);
 	}
 }
 
@@ -158,110 +75,41 @@ WTWJS.prototype.buildingSearch = function(search) {
 	/* keyword search to find a building to download to your instance */
 	try {
 		search = WTW.encode(search);
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/buildingsearch.php?s=" + search, 
+		WTW.getJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=building", 
 			function(response) {
 				WTW.buildingSearchReply(JSON.parse(response));
 			}
 		);
 	} catch (ex) {
-		WTW.log("admineditor-buildingSearch=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_downloads.js-buildingSearch=" + ex.message);
 	}
 }
 
-WTWJS.prototype.buildingSearchReply = function(response) {
+WTWJS.prototype.buildingSearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
+		var ztempsearchresults = '';
 		dGet('wtw_buildtempsearchresults').innerHTML = "";
-		for (var i=0; i < response.length; i++) {
-			dGet('wtw_buildtempsearchresults').innerHTML += "<h3 class=\"wtw-black\">" + response[i].templatename + "</h3>";
-			dGet('wtw_buildtempsearchresults').innerHTML += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + response[i].description + "</div><br />";
-			if (response[i].snapshotid != "") {
-				var zbuildingid = response[i].buildingid;
-				dGet('wtw_buildtempsearchresults').innerHTML += "<img id='wtw_search" + zbuildingid + "' src='' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.buildingSearchSelect('" + zbuildingid + "');return (false);\" style=\"margin:5px;border:1px solid gray;cursor:pointer;width:250px;height:auto;\" />";
-				WTW.getJSON("https://3dnet.walktheweb.com/connect/upload.php?uploadid=" + response[i].snapshotid + "&setid=" + zbuildingid, 
-					function(response) {
-						var imageinfo = JSON.parse(response);
-						if (imageinfo[0] != null) {
-							dGet('wtw_search' + imageinfo[0].setid).src = imageinfo[0].data;
-						}
-					}
-				);
+		for (var i=0; i < zresponse.length; i++) {
+			var zdownloads = 0;
+			var zbuildingid = zresponse[i].serverbuildingid;
+			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
+			if (WTW.isNumeric(zresponse[i].downloads)) {
+				zdownloads = zresponse[i].downloads;
 			}
-			dGet('wtw_buildtempsearchresults').innerHTML += "<br /><input type='button' id='wtw_btempselect" + i + "' class='wtw-searchresultbutton' value='Select' onclick=\"WTW.buildingSearchSelect('" + response[i].buildingid + "');return (false);\" />";
-			dGet('wtw_buildtempsearchresults').innerHTML += "<br /><hr />";
+			ztempsearchresults += "<br /><input type='button' id='wtw_btempselect" + i + "' class='wtw-searchresultbutton' value='Download' onclick=\"WTW.downloadWeb('" + zbuildingid + "','building');return (false);\" />";
+			ztempsearchresults += "<h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
+			if (zresponse[i].imageurl != "") {
+				ztempsearchresults += "<img id='wtw_search" + zbuildingid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('" + zbuildingid + "','building');return (false);\" style=\"margin:5px;border:1px solid gray;cursor:pointer;width:100%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+			}
+			ztempsearchresults += "<br /><hr />";
 		}
+		dGet('wtw_buildtempsearchresults').innerHTML = ztempsearchresults;
 	} catch (ex) {
-		WTW.log("admineditor-buildingSearchReply=" + ex.message);
-	}
-}
-
-WTWJS.prototype.buildingSearchSelect = function(zcopywebid) {
-	/* This process takes the selected 3D Building and downloads a copy of the 3D Building to the local instance */
-	try {
-		WTW.hide('wtw_selectwebform');
-		WTW.show('wtw_installprogress');
-		WTW.updateProgressText("Fetching 3D Building Settings");
-		WTW.updateProgressBar(1,100);
-		
-		var zprogress = 5;
-		var zprogressbar = window.setInterval(function() {
-			zprogress = WTW.updateProgressBar(zprogress,100) + 5;
-			if (zprogress > 78) {
-				window.clearInterval(zprogressbar);
-			}
-		},300);
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/building.php?buildingid=" + zcopywebid + "&serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverdomain=" + wtw_domainname, 
-			function(response) {
-				window.clearInterval(zprogressbar);
-				WTW.updateProgressBar(100,100);
-				WTW.updateProgressText("Writing 3D Building Settings");
-				WTW.updateProgressBar(10,100);
-				response = WTW.cleanInvalidCharacters(response);
-				response = JSON.parse(response);
-				if (response.buildings[0] != undefined) {
-					var building = response.buildings[0];
-					var zbuildingid = WTW.getRandomString(16);
-					var zrequest = {
-						'buildingid': zbuildingid,
-						'pastbuildingid': zcopywebid,
-						'buildingname': building.buildinginfo.buildingname,
-						'analytics': '',
-						'positionx': building.position.x,
-						'positiony': building.position.y,
-						'positionz': building.position.z,
-						'scalingx': building.scaling.x,
-						'scalingy': building.scaling.y,
-						'scalingz': building.scaling.z,
-						'rotationx': building.rotation.x,
-						'rotationy': building.rotation.y,
-						'rotationz': building.rotation.z,
-						'gravity': building.gravity,
-						'alttag': building.buildinginfo.alttag,
-						'function':'importbuilding'
-					};
-					WTW.updateProgressBar(50,100);
-					WTW.postJSON("/core/handlers/buildings.php", zrequest, 
-						function(zresponse) {
-							WTW.updateProgressBar(95,100);
-							WTW.completedBuildingImport('building', zbuildingid, zcopywebid);
-						}
-					);
-				}
-			}
-		);
-	} catch (ex) {
-		WTW.log("install-buildingSearchSelect=" + ex.message);
-	}
-}
-
-WTWJS.prototype.completedBuildingImport = function(zmoldgroup, zwebid, zcopywebid) {
-	/* the basic 3D Building information is downloaded, next the supplimental parts are downloaded (action zones, molds, coverings, etc...) */
-	/* then starts downloading the Action Zones */
-	try {
-		WTW.updateProgressBar(100,100);
-		WTW.copyActionZones(zmoldgroup, zwebid, zcopywebid);
-	} catch (ex) {
-		WTW.log("install-completedBuildingImport=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_downloads.js-buildingSearchReply=" + ex.message);
 	}
 }
 
@@ -269,576 +117,69 @@ WTWJS.prototype.thingSearch = function(search) {
 	/* keyword search to find a thing to download to your instance */
 	try {
 		search = WTW.encode(search);
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/thingsearch.php?s=" + search + "&u=" + dGet("wtw_tuserid").value, 
+		WTW.getJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=thing", 
 			function(response) {
 				WTW.thingSearchReply(JSON.parse(response));
 			}
 		);
 	} catch (ex) {
-		WTW.log("admineditor-thingSearch=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_downloads.js-thingSearch=" + ex.message);
 	}
 }
 
-WTWJS.prototype.thingSearchReply = function(response) {
+WTWJS.prototype.thingSearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
+		var ztempsearchresults = '';
 		dGet('wtw_thingtempsearchresults').innerHTML = "";
-		for (var i=0; i < response.length; i++) {
-			dGet('wtw_thingtempsearchresults').innerHTML += "<h3 class=\"wtw-black\">" + response[i].templatename + "</h3>";
-			dGet('wtw_thingtempsearchresults').innerHTML += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + response[i].description + "</div><br />";
-			if (response[i].snapshotid != "") {
-				var zthingid = response[i].thingid;
-				dGet('wtw_thingtempsearchresults').innerHTML += "<img id='wtw_search" + zthingid + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.thingSearchSelect('" + zthingid + "');return (false);\" style=\"margin:5px;border:1px solid gray;cursor:pointer;width:250px;height:auto;\" />";
-				WTW.getJSON("https://3dnet.walktheweb.com/connect/upload.php?uploadid=" + response[i].snapshotid + "&setid=" + zthingid, 
-					function(response) {
-						var imageinfo = JSON.parse(response);
-						if (imageinfo[0] != null) {
-							dGet('wtw_search' + imageinfo[0].setid).src = imageinfo[0].data;
-						}
-					}
-				);
+		for (var i=0; i < zresponse.length; i++) {
+			var zdownloads = 0;
+			var zthingid = zresponse[i].serverthingid;
+			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
+			if (WTW.isNumeric(zresponse[i].downloads)) {
+				zdownloads = zresponse[i].downloads;
 			}
-			dGet('wtw_thingtempsearchresults').innerHTML += "<br /><input type='button' id='wtw_bthingtempselect" + i + "' class='wtw-searchresultbutton' value='Select' onclick=\"WTW.thingSearchSelect('" + response[i].thingid + "');return (false);\" />";
-			dGet('wtw_thingtempsearchresults').innerHTML += "<br /><hr />";
+			ztempsearchresults += "<br /><input type='button' id='wtw_bthingtempselect" + i + "' class='wtw-searchresultbutton' value='Download' onclick=\"WTW.downloadWeb('" + zthingid + "', 'thing');return (false);\" />";
+			ztempsearchresults += "<h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
+			if (zresponse[i].imageurl != "") {
+				ztempsearchresults += "<img id='wtw_search" + zthingid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('" + zthingid + "', 'thing');return (false);\" style=\"margin:5px;border:1px solid gray;cursor:pointer;width:100%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+			}
+			ztempsearchresults += "<br /><hr />";
 		}
+		dGet('wtw_thingtempsearchresults').innerHTML = ztempsearchresults;
 		WTW.setWindowSize();
 	} catch (ex) {
-		WTW.log("admineditor-thingSearchReply=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_downloads.js-thingSearchReply=" + ex.message);
 	}
 }
 
-WTWJS.prototype.thingSearchSelect = function(zcopywebid) {
-	/* This process takes the selected 3D Thing and downloads a copy of the 3D Thing to the local instance */
+WTWJS.prototype.downloadWeb = function(zcopywebid, zwebtype) {
+	/* This process takes the selected 3D Web and downloads a copy to the local instance */
 	try {
-		WTW.hide('wtw_selectwebform');
-		WTW.show('wtw_installprogress');
-		WTW.updateProgressText("Fetching 3D Thing Settings");
-		WTW.updateProgressBar(1,100);
-		
-		var zprogress = 5;
-		var zprogressbar = window.setInterval(function() {
-			zprogress = WTW.updateProgressBar(zprogress,100) + 5;
-			if (zprogress > 78) {
-				window.clearInterval(zprogressbar);
-			}
-		},300);
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/thing.php?thingid=" + zcopywebid + "&serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverdomain=" + wtw_domainname, 
-			function(response) {
-				window.clearInterval(zprogressbar);
-				WTW.updateProgressBar(100,100);
-				WTW.updateProgressText("Writing 3D Thing Settings");
-				WTW.updateProgressBar(10,100);
-				response = WTW.cleanInvalidCharacters(response);
-				response = JSON.parse(response);
-				if (response.things[0] != undefined) {
-					var thing = response.things[0];
-					WTW.updateProgressBar(50,100);
-					var zthingid = WTW.getRandomString(16);
-					var zrequest = {
-						'thingid': zthingid,
-						'pastthingid': zcopywebid,
-						'thingname': thing.thinginfo.thingname,
-						'analyticsid': '',
-						'positionx': thing.position.x,
-						'positiony': thing.position.y,
-						'positionz': thing.position.z,
-						'scalingx': thing.scaling.x,
-						'scalingy': thing.scaling.y,
-						'scalingz': thing.scaling.z,
-						'rotationx': thing.rotation.x,
-						'rotationy': thing.rotation.y,
-						'rotationz': thing.rotation.z,
-						'gravity': thing.gravity,
-						'alttag': thing.thinginfo.alttag,
-						'function':'importthing'
-					};
-					WTW.postJSON("/core/handlers/things.php", zrequest, 
-						function(zresponse) {
-							zresponse = JSON.parse(zresponse);
-							WTW.updateProgressBar(95,100);
-							/* note serror would contain errors */
-							WTW.completedThingImport('thing', zthingid, zcopywebid);
-						}
-					);
-				}
+		var zrequest = {
+			'webid': zcopywebid,
+			'webtype': zwebtype,
+			'function':'downloadweb'
+		};
+		WTW.postJSON("/core/handlers/communities.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.completedWebDownload(zresponse);
 			}
 		);
 	} catch (ex) {
-		WTW.log("install-thingSearchSelect=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_downloads.js-downloadWeb=" + ex.message);
 	}
 }
 
-WTWJS.prototype.completedThingImport = function(zmoldgroup, zwebid, zcopywebid) {
-	/* the basic 3D Thing information is downloaded, next the supplimental parts are downloaded (action zones, molds, coverings, etc...) */
-	/* then starts downloading the Action Zones */
+WTWJS.prototype.completedWebDownload = function(zresponse) {
+	/* download is complete, notidfy user */
 	try {
-		WTW.updateProgressBar(100,100);
-		WTW.copyActionZones(zmoldgroup, zwebid, zcopywebid);
-	} catch (ex) {
-		WTW.log("install-completedThingImport=" + ex.message);
-	}
-}
-
-WTWJS.prototype.copyActionZones = function(zmoldgroup, zwebid, zcopywebid) {
-	/* download and install Action Zones to local copy */
-	try {
-		WTW.updateProgressText("Fetching Action Zones");
-		WTW.updateProgressBar(1,100);
-		
-		var zprogress = 5;
-		var zprogressbar = window.setInterval(function() {
-			zprogress = WTW.updateProgressBar(zprogress,100) + 5;
-			if (zprogress > 78) {
-				window.clearInterval(zprogressbar);
-			}
-		},300);
-		var zfield = "";
-		var zcommunityid = '';
-		var zbuildingid = '';
-		var zthingid = '';
-		switch (zmoldgroup) {
-			case "community":
-				zfield = "communityid";
-				zcommunityid = zwebid;
-				break;
-			case "building":
-				zfield = "buildingid";
-				zbuildingid = zwebid;
-				break;
-			case "thing":
-				zfield = "thingid";
-				zthingid = zwebid;
-				break;
-		}
-		if (zfield != "" && zwebid != "" && zcopywebid != "") {
-			WTW.getJSON("https://3dnet.walktheweb.com/connect/actionzones.php?" + zfield + "=" + zcopywebid, 
-				function(response) {
-					window.clearInterval(zprogressbar);
-					WTW.updateProgressBar(100,100);
-					WTW.updateProgressText("Writing Action Zones");
-					WTW.updateProgressBar(10,100);
-					response = WTW.cleanInvalidCharacters(response);
-					testresponse = JSON.parse(response);
-					if (testresponse[0] != undefined) {
-						WTW.updateProgressBar(50,100);
-						var zrequest = {
-							'communityid': zcommunityid,
-							'buildingid': zbuildingid,
-							'thingid': zthingid,
-							'actionzonesbulk': btoa(response),
-							'function':'importactionzone'
-						};
-						WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
-							function(zresponse) {
-								WTW.updateProgressBar(95,100);
-								WTW.completedActionZonesImport(zmoldgroup, zwebid, zcopywebid);
-							}
-						);
-					} else {
-						WTW.completedActionZonesImport(zmoldgroup, zwebid, zcopywebid);
-					}
-				}
-			);
-		}
-	} catch (ex) {
-		WTW.log("install-copyActionZones=" + ex.message);
-	}
-}
-
-WTWJS.prototype.completedActionZonesImport = function(zmoldgroup, zwebid, zcopywebid) {
-	/* completed Action Zones to local copy */
-	/* then starts downloading the Connecting Grids */
-	try {
-		WTW.updateProgressBar(100,100);
-		WTW.copyParentConnectingGrids(zmoldgroup, zwebid, zcopywebid);
-	} catch (ex) {
-		WTW.log("install-completedActionZonesImport=" + ex.message);
-	}
-}
-
-WTWJS.prototype.copyParentConnectingGrids = function(zmoldgroup, zwebid, zcopywebid) {
-	/* download and install parent Connection Grids to local copy */
-	try {
-		WTW.updateProgressText("Fetching Connecting Grids");
-		WTW.updateProgressBar(1,100);
-		
-		var zprogress = 5;
-		var zprogressbar = window.setInterval(function() {
-			zprogress = WTW.updateProgressBar(zprogress,100) + 5;
-			if (zprogress > 78) {
-				window.clearInterval(zprogressbar);
-			}
-		},300);
-		if (zmoldgroup != "" && zwebid != "" && zcopywebid != "") {
-			WTW.getJSON("https://3dnet.walktheweb.com/connect/connectinggrids.php?parentwebtype=%25&childwebtype=" + zmoldgroup + "&childwebid=" + zcopywebid, 
-				function(response) {
-					window.clearInterval(zprogressbar);
-					WTW.updateProgressBar(100,100);
-					WTW.updateProgressText("Writing Connecting Grids");
-					WTW.updateProgressBar(10,100);
-					response = WTW.cleanInvalidCharacters(response);
-					testresponse = JSON.parse(response);
-					if (testresponse[0] != undefined) {
-						WTW.updateProgressBar(50,100);
-						var zrequest = {
-							'moldgroup': zmoldgroup,
-							'webid': zwebid,
-							'connectinggridsbulk': btoa(response),
-							'function':'importparentconnectinggrids'
-						};
-						WTW.postJSON("/core/handlers/connectinggrids.php", zrequest, 
-							function(zresponse) {
-								zresponse = JSON.parse(zresponse);
-								WTW.updateProgressBar(95,100);
-								/* note serror would contain errors */
-								WTW.completedParentConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
-							}
-						);
-					} else {
-						WTW.completedParentConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
-					}
-				}
-			);			
-		}
-	} catch (ex) {
-		WTW.log("install-copyParentConnectingGrids=" + ex.message);
-	}
-}
-
-WTWJS.prototype.completedParentConnectingGridsImport = function(zmoldgroup, zwebid, zcopywebid) {
-	/* completed parent Connecting Grids to local copy */
-	/* then starts downloading additional Connecting Grids (if they exist) */
-	try {
-		WTW.updateProgressBar(100,100);
-		WTW.copyConnectingGrids(zmoldgroup, zwebid, zcopywebid);
-	} catch (ex) {
-		WTW.log("install-completedParentConnectingGridsImport=" + ex.message);
-	}
-}
-
-WTWJS.prototype.copyConnectingGrids = function(zmoldgroup, zwebid, zcopywebid) {
-	/* download and install Connecting Grids to local copy */
-	try {
-		WTW.updateProgressText("Fetching Connecting Grids");
-		WTW.updateProgressBar(1,100);
-		
-		var zprogress = 5;
-		var zprogressbar = window.setInterval(function() {
-			zprogress = WTW.updateProgressBar(zprogress,100) + 5;
-			if (zprogress > 78) {
-				window.clearInterval(zprogressbar);
-			}
-		},300);
-		if (zmoldgroup != "" && zwebid != "" && zcopywebid != "") {
-			if (zmoldgroup == "community") {
-				WTW.getJSON("https://3dnet.walktheweb.com/connect/connectinggrids.php?parentwebtype=community&childwebtype=building&parentwebid=" + zcopywebid + "&limit=1", 
-					function(response) {
-						window.clearInterval(zprogressbar);
-						WTW.updateProgressBar(100,100);
-						WTW.updateProgressText("Writing Connecting Grids");
-						WTW.updateProgressBar(10,100);
-						response = WTW.cleanInvalidCharacters(response);
-						testresponse = JSON.parse(response);
-						if (testresponse[0] != undefined) {
-							WTW.updateProgressBar(50,100);
-							var zrequest = {
-								'moldgroup': zmoldgroup,
-								'webid': zwebid,
-								'connectinggridsbulk': btoa(response),
-								'function':'importconnectinggrids'
-							};
-							WTW.postJSON("/core/handlers/connectinggrids.php", zrequest, 
-								function(zresponse) {
-									zresponse = JSON.parse(zresponse);
-									WTW.updateProgressBar(95,100);
-									/* note serror would contain errors */
-									WTW.completedConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
-								}
-							);
-						} else {
-							WTW.completedConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
-						}
-					}
-				);
-			} else if (zmoldgroup == "building") {
-				WTW.updateProgressBar(50,100);
-				var zrequest = {
-					'moldgroup': zmoldgroup,
-					'webid': zwebid,
-					'function':'updatechildconnectinggrids'
-				};
-				WTW.postJSON("/core/handlers/connectinggrids.php", zrequest, 
-					function(zresponse) {
-						zresponse = JSON.parse(zresponse);
-						WTW.updateProgressBar(95,100);
-						/* note serror would contain errors */
-						WTW.completedConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
-					}
-				);
-			} else {
-				WTW.completedConnectingGridsImport(zmoldgroup, zwebid, zcopywebid);
-			}
-		}
-	} catch (ex) {
-		WTW.log("install-copyConnectingGrids=" + ex.message);
-	}
-}
-
-WTWJS.prototype.completedConnectingGridsImport = function(zmoldgroup, zwebid, zcopywebid) {
-	/* completed Connecting Grids to local copy */
-	/* then starts downloading Molds (if they exist) */
-	try {
-		WTW.updateProgressBar(100,100);
-		WTW.copyMolds(zmoldgroup, zwebid, zcopywebid);
-	} catch (ex) {
-		WTW.log("install-completedConnectingGridsImport=" + ex.message);
-	}
-}
-
-WTWJS.prototype.copyMolds = function(zmoldgroup, zwebid, zcopywebid) {
-	/* download and install Molds to local copy */
-	try {
-		WTW.updateProgressText("Fetching Molds");
-		WTW.updateProgressBar(1,100);
-		
-		var zprogress = 5;
-		var zprogressbar = window.setInterval(function() {
-			zprogress = WTW.updateProgressBar(zprogress,100) + 5;
-			if (zprogress > 78) {
-				window.clearInterval(zprogressbar);
-			}
-		},600);
-		if (zmoldgroup != "" && zwebid != "" && zcopywebid != "") {
-			WTW.getJSON("https://3dnet.walktheweb.com/connect/" + zmoldgroup + "molds.php?" + zmoldgroup + "id=" + zcopywebid, 
-				function(response) {
-					window.clearInterval(zprogressbar);
-					WTW.updateProgressBar(100,100);
-					WTW.updateProgressText("Writing Molds");
-					WTW.updateProgressBar(5,100);
-					response = WTW.cleanInvalidCharacters(response);
-					testresponse = JSON.parse(response);
-					if (testresponse[0] != undefined) {
-						WTW.updateProgressBar(10,100);
-						var zrequest = {
-							'moldgroup': zmoldgroup,
-							'webid': zwebid,
-							'copywebid': zcopywebid,
-							'moldsbulk': btoa(response),
-							'function':'importmolds'
-						};
-						WTW.postJSON("/core/handlers/molds.php", zrequest, 
-							function(zresponse) {
-								zresponse = JSON.parse(zresponse);
-								WTW.updateProgressBar(95,100);
-								/* note serror would contain errors */
-								WTW.completedMoldsImport(zmoldgroup, zwebid, zcopywebid);
-							}
-						);
-					} else {
-						WTW.completedMoldsImport(zmoldgroup, zwebid, zcopywebid);
-					}
-				}
-			);
-		}
-	} catch (ex) {
-		WTW.log("install-copyMolds=" + ex.message);
-	}
-}
-
-WTWJS.prototype.completedMoldsImport = function(zmoldgroup, zwebid, zcopywebid) {
-	/* completed Molds to local copy */
-	/* then starts downloading Web Images (if they exist) */
-	try {
-		WTW.updateProgressBar(100,100);
-		WTW.copyWebImages(zmoldgroup, zwebid, zcopywebid);
-	} catch (ex) {
-		WTW.log("install-completedMoldsImport=" + ex.message);
-	}
-}
-
-WTWJS.prototype.copyWebImages = function(zmoldgroup, zwebid, zcopywebid) {
-	/* download and install Web Images to local copy */
-	try {
-		WTW.updateProgressText("Fetching Web Image Settings");
-		WTW.updateProgressBar(1,100);
-		
-		var zprogress = 5;
-		var zprogressbar = window.setInterval(function() {
-			zprogress = WTW.updateProgressBar(zprogress,100) + 5;
-			if (zprogress > 78) {
-				window.clearInterval(zprogressbar);
-			}
-		},300);
-		if (zmoldgroup != "" && zwebid != "" && zcopywebid != "") {
-			WTW.getJSON("https://3dnet.walktheweb.com/connect/webimages.php?" + zmoldgroup + "id=" + zcopywebid, 
-				function(response) {
-					window.clearInterval(zprogressbar);
-					WTW.updateProgressBar(100,100);
-					WTW.updateProgressText("Writing Web Image Settings");
-					WTW.updateProgressBar(10,100);
-					response = WTW.cleanInvalidCharacters(response);
-					testresponse = JSON.parse(response);
-					if (testresponse[0] != undefined) {
-						WTW.updateProgressBar(50,100);
-						var zrequest = {
-							'moldgroup': zmoldgroup,
-							'webid': zwebid,
-							'copywebid': zcopywebid,
-							'webimagesbulk': btoa(response),
-							'function':'importwebimages'
-						};
-						WTW.postJSON("/core/handlers/uploads.php", zrequest, 
-							function(zresponse) {
-								zresponse = JSON.parse(zresponse);
-								WTW.updateProgressBar(95,100);
-								/* note serror would contain errors */
-								WTW.completedWebImagesImport(zmoldgroup, zwebid, zcopywebid);
-							}
-						);
-					} else {
-						WTW.completedWebImagesImport(zmoldgroup, zwebid, zcopywebid);
-					}
-				}
-			);
-		}
-	} catch (ex) {
-		WTW.log("install-copyWebImages=" + ex.message);
-	}
-}
-
-WTWJS.prototype.completedWebImagesImport = function(zmoldgroup, zwebid, zcopywebid) {
-	/* completed Web Images to local copy */
-	/* then starts downloading Uploads (if they exist) */
-	try {
-		WTW.updateProgressBar(100,100);
-		WTW.copyUploads(zmoldgroup, zwebid, zcopywebid);
-	} catch (ex) {
-		WTW.log("install-completedWebImagesImport=" + ex.message);
-	}
-}
-
-WTWJS.prototype.copyUploads = function(zmoldgroup, zwebid, zcopywebid) {
-	/* download and install Uploads to local copy */
-	try {
-		WTW.updateProgressText("Fetching Uploaded Files and Images");
-		WTW.updateProgressBar(1,100);
-		
-		var zprogress = 5;
-		var zprogressbar = window.setInterval(function() {
-			zprogress = WTW.updateProgressBar(zprogress,100) + 5;
-			if (zprogress > 78) {
-				window.clearInterval(zprogressbar);
-			}
-		},1000);
-		if (zmoldgroup != "" && zwebid != "" && zcopywebid != "") {
-			WTW.getJSON("https://3dnet.walktheweb.com/connect/" + zmoldgroup + "uploads.php?" + zmoldgroup + "id=" + zcopywebid, 
-				function(response) {
-					window.clearInterval(zprogressbar);
-					WTW.updateProgressBar(100,100);
-					WTW.updateProgressText("Writing Uploaded Files and Images");
-					zprogress = 5;
-					zprogressbar = window.setInterval(function() {
-						zprogress = WTW.updateProgressBar(zprogress,100) + 5;
-						if (zprogress > 78) {
-							window.clearInterval(zprogressbar);
-						}
-					},1000);
-					response = WTW.cleanInvalidCharacters(response);
-					testresponse = JSON.parse(response);
-					if (testresponse[0] != undefined) {
-						WTW.updateProgressBar(50,100);
-						var zrequest = {
-							'moldgroup': zmoldgroup,
-							'webid': zwebid,
-							'copywebid': zcopywebid,
-							'uploadsbulk': btoa(response),
-							'function':'importuploads'
-						};
-						WTW.postJSON("/core/handlers/uploads.php", zrequest, 
-							function(zresponse) {
-								zresponse = JSON.parse(zresponse);
-								WTW.updateProgressBar(95,100);
-								/* note serror would contain errors */
-								WTW.completedUploadsImport(zmoldgroup, zwebid, zcopywebid);
-							}
-						);
-					} else {
-						WTW.completedUploadsImport(zmoldgroup, zwebid, zcopywebid);
-					}
-				}
-			);
-		}
-	} catch (ex) {
-		WTW.log("install-copyUploads=" + ex.message);
-	}
-}
-
-WTWJS.prototype.completedUploadsImport = function(zmoldgroup, zwebid, zcopywebid) {
-	/* completed Uploads to local copy */
-	/* then starts downloading Mold Points (if they exist) */
-	try {
-		WTW.updateProgressBar(100,100);
-		WTW.copyMoldPoints(zmoldgroup, zwebid, zcopywebid);
-	} catch (ex) {
-		WTW.log("install-completedUploadsImport=" + ex.message);
-	}
-}
-
-WTWJS.prototype.copyMoldPoints = function(zmoldgroup, zwebid, zcopywebid) {
-	/* download and install Mold Points to local copy */
-	try {
-		WTW.updateProgressText("Fetching Mold Points");
-		WTW.updateProgressBar(1,100);
-		
-		var zprogress = 5;
-		var zprogressbar = window.setInterval(function() {
-			zprogress = WTW.updateProgressBar(zprogress,100) + 5;
-			if (zprogress > 78) {
-				window.clearInterval(zprogressbar);
-			}
-		},300);
-		if (zmoldgroup != "" && zwebid != "" && zcopywebid != "") {
-			WTW.getJSON("https://3dnet.walktheweb.com/connect/moldpoints.php?" + zmoldgroup + "id=" + zcopywebid, 
-				function(response) {
-					window.clearInterval(zprogressbar);
-					WTW.updateProgressBar(100,100);
-					WTW.updateProgressText("Writing Mold Points");
-					WTW.updateProgressBar(10,100);
-					response = WTW.cleanInvalidCharacters(response);
-					testresponse = JSON.parse(response);
-					if (testresponse[0] != undefined) {
-						WTW.updateProgressBar(50,100);
-						var zrequest = {
-							'moldgroup': zmoldgroup,
-							'webid': zwebid,
-							'copywebid': zcopywebid,
-							'moldsbulk': btoa(response),
-							'function':'importmoldpoints'
-						};
-						WTW.postJSON("/core/handlers/molds.php", zrequest, 
-							function(zresponse) {
-								zresponse = JSON.parse(zresponse);
-								WTW.updateProgressBar(95,100);
-								/* note serror would contain errors */
-								WTW.completedMoldPointsImport(zmoldgroup, zwebid, zcopywebid);
-							}
-						);
-					} else {
-						WTW.completedMoldPointsImport(zmoldgroup, zwebid, zcopywebid);
-					}
-				}
-			);
-		}
-	} catch (ex) {
-		WTW.log("install-copyMoldPoints=" + ex.message);
-	}
-}
-
-WTWJS.prototype.completedMoldPointsImport = function(zmoldgroup, zwebid, zcopywebid) {
-	/* completed Mold Points to local copy */
-	/* end of download process, opens appropriate admin menu */
-	try {
-		WTW.updateProgressText("3D Community Import Completed");
+		WTW.updateProgressText("WalkTheWeb Download Completed");
 		WTW.updateProgressBar(100,100);
 		var isinstall = true;
 		if (WTW.adminView != undefined) {
@@ -854,7 +195,7 @@ WTWJS.prototype.completedMoldPointsImport = function(zmoldgroup, zwebid, zcopywe
 			WTW.hide('wtw_buildtempsearchresults');
 			WTW.hide('wtw_thingtempsearchresults');
 			WTW.show('wtw_downloadcomplete');
-			switch (zmoldgroup) {
+			switch (zresponse.webtype) {
 				case "community":
 					dGet('wtw_downloadcompletemessage').innerHTML = "You can find your <b>New 3D Community</b> in the <b>Admin Menu</b><br />or select from the following:";
 					dGet('wtw_bopenwebdownload').value = "Open Your New 3D Community in the Editor";
@@ -880,10 +221,11 @@ WTWJS.prototype.completedMoldPointsImport = function(zmoldgroup, zwebid, zcopywe
 					WTW.show('wtw_adminmenu32');
 					break;
 			}
-			dGet('wtw_bopenwebdownload').onclick = function() { window.location.href = '/admin.php?'+ zmoldgroup + 'id=' + zwebid; };
+			dGet('wtw_bopenwebdownload').onclick = function() { window.location.href = '/admin.php?'+ zresponse.webtype + 'id=' + zresponse.webid; };
 			WTW.show('wtw_selectwebform');
-		}
+		}		
+		
 	} catch (ex) {
-		WTW.log("install-completedMoldPointsImport=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_downloads.js-completedWebDownload=" + ex.message);
 	}
 }

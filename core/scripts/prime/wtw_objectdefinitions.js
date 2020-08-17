@@ -305,21 +305,10 @@ WTWJS.prototype.newMold = function() {
 			},
 			'color':
 			{
-				'diffuse':{
-					'r':'1',
-					'g':'1',
-					'b':'1'
-				},
-				'specular':{
-					'r':'1',
-					'g':'1',
-					'b':'1'
-				},
-				'emissive':{
-					'r':'1',
-					'g':'1',
-					'b':'1'
-				}
+				'diffusecolor':'#ffffff',
+				'emissivecolor':'#000000',
+				'specularcolor':'#686868',
+				'ambientcolor':'#575757'
 			},
 			'paths':
 			{

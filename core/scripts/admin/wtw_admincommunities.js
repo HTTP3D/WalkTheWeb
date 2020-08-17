@@ -99,7 +99,6 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 						WTW.redirectParent('/admin.php');
 					}
 				);
-				WTW.deleteCookie("communityid");
 				break;
 			case 1:
 				/* save 3D Community settings */
@@ -134,7 +133,7 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 					'analyticsid': dGet('wtw_tcommunityanalyticsid').value,
 					'groundpositiony': dGet('wtw_tgroundpositiony').value,
 					'waterpositiony': dGet('wtw_twaterpositiony').value,
-					'alttag': WTW.encode(dGet('wtw_tcommunityalttag').value),
+					'alttag': btoa(dGet('wtw_tcommunityalttag').value),
 					'function':'savecommunity'
 				};
 				WTW.postJSON("/core/handlers/communities.php", zrequest, 
@@ -169,16 +168,31 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 WTWJS.prototype.copyMyCommunity = function() {
 	/* make a copy of an existing 3D Community (use as backup or as a new 3D Community to edit and use) */
 	try {
-		dGet('wtw_tcommunityind').value = "-1";
-		var communityname = WTW.encode(dGet('wtw_tcommunityname').value);
-		if (communityname == "") {
-			communityname = WTW.getCommunityName(communityid);
-		}
-		if (communityname != "") {
-			WTW.copyCommunity(communityid, communityname + " - Copy");
-		} else {
-			WTW.copyCommunity(communityid, "New 3D Community - Copy");
-		}
+		dGet('wtw_tcommunityname').value = '';
+		WTW.getJSON("/connect/communities.php?userid=" + dGet('wtw_tuserid').value, 
+			function(response) {
+				WTW.communities = JSON.parse(response);
+				if (WTW.communities != null) {
+					for (var i = 0; i < WTW.communities.length; i++) {
+						if (WTW.communities[i] != null) {
+							if (WTW.communities[i].communityinfo.communityid != undefined) {
+								if (WTW.communities[i].communityinfo.communityid != null) {
+									if (communityid == WTW.communities[i].communityinfo.communityid) {
+										dGet('wtw_tcommunityname').value = WTW.decode(WTW.communities[i].communityinfo.communityname) + " - Copy";
+										var zcommunityname = WTW.encode(dGet('wtw_tcommunityname').value);
+										if (zcommunityname != "") {
+											WTW.copyCommunity(communityid, zcommunityname + " - Copy");
+										} else {
+											WTW.copyCommunity(communityid, "New 3D Community - Copy");
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-copyMyCommunity=" + ex.message);
 	}
@@ -200,7 +214,7 @@ WTWJS.prototype.copyCommunity = function(zcopycommunityid, zcommunityname) {
 		}
 		var zrequest = {
 			'pastcommunityid': zcopycommunityid,
-			'communityname': WTW.encode(dGet('wtw_tcommunityname').value),
+			'communityname': btoa(dGet('wtw_tcommunityname').value),
 			'groundpositiony': dGet('wtw_tgroundpositiony').value,
 			'waterpositiony': dGet('wtw_twaterpositiony').value,
 			'alttag': '',
@@ -223,7 +237,6 @@ WTWJS.prototype.copyCommunityComplete = function(zcommunityid) {
 	try {
 		window.setTimeout(function() {
 			if (zcommunityid != "" && zcommunityid != communityid) {
-				WTW.setCookie("communityid", zcommunityid, 30);
 				window.location.href="/admin.php?communityid=" + zcommunityid + "&hmenu=25&newcommunity=1";
 			}
 		}, 2000);
@@ -247,7 +260,7 @@ WTWJS.prototype.getSelectCommunitiesList = function() {
 							if (WTW.communities[i].communityinfo.communityid == communityid) {
 								dGet("wtw_listcommunities").innerHTML += "<div id=\"wtw_beditcommunity" + WTW.communities[i].communityinfo.communityid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'>" + WTW.decode(WTW.communities[i].communityinfo.communityname) + "</div>\r\n";
 							} else {
-								dGet("wtw_listcommunities").innerHTML += "<div id=\"wtw_beditcommunity" + WTW.communities[i].communityinfo.communityid + "\" onclick=\"WTW.setCookie('communityid', '" + WTW.communities[i].communityinfo.communityid + "', 30);	window.location.href='admin.php?communityid=" + WTW.communities[i].communityinfo.communityid + "';\" class='wtw-menulevel2'>" + WTW.decode(WTW.communities[i].communityinfo.communityname) + "</div>\r\n";
+								dGet("wtw_listcommunities").innerHTML += "<div id=\"wtw_beditcommunity" + WTW.communities[i].communityinfo.communityid + "\" onclick=\"window.location.href='admin.php?communityid=" + WTW.communities[i].communityinfo.communityid + "';\" class='wtw-menulevel2'>" + WTW.decode(WTW.communities[i].communityinfo.communityname) + "</div>\r\n";
 							}
 						}
 					}
@@ -336,9 +349,9 @@ WTWJS.prototype.saveShareCommunityForm = function() {
 	try {
 		var zrequest = {
 			'communityid': communityid,
-			'communityname': dGet('wtw_tsharecommtempname').value,
-			'description': dGet('wtw_tsharecommdescription').value,
-			'tags': dGet('wtw_tsharecommtags').value,
+			'communityname': btoa(dGet('wtw_tsharecommtempname').value),
+			'description': btoa(dGet('wtw_tsharecommdescription').value),
+			'tags': btoa(dGet('wtw_tsharecommtags').value),
 			'function':'savecommunitytemplate'
 		};
 		WTW.postJSON("/core/handlers/communities.php", zrequest, 
@@ -479,40 +492,38 @@ WTWJS.prototype.openEditGroundSettings = function() {
 WTWJS.prototype.saveGround = function() {
 	/* save extended ground texture settings */
 	try {
-		var groundtextureid = WTW.init.groundTextureID;
-		var groundtexturepath = WTW.init.groundTexturePath;
+		var zgroundtextureid = WTW.init.groundTextureID;
+		var zgroundtexturepath = WTW.init.groundTexturePath;
 		if (dGet('wtw_textendedgroundtextureid').value != "") {
-			groundtextureid = dGet('wtw_textendedgroundtextureid').value;
+			zgroundtextureid = dGet('wtw_textendedgroundtextureid').value;
 		}
 		if (dGet('wtw_textendedgroundtexturepath').value != "") {
-			groundtexturepath = dGet('wtw_textendedgroundtexturepath').value;
+			zgroundtexturepath = dGet('wtw_textendedgroundtexturepath').value;
 		}
 		for (var i = 0; i < WTW.communities.length; i++) {
 			if (WTW.communities[i] != null) {
 				if (WTW.communities[i].communityinfo.communityid == communityid) {
 					if (WTW.communities[i].graphics.texture.id != null) {
 						WTW.communities[i].graphics.texture.backupid = "";
-						WTW.communities[i].graphics.texture.id = groundtextureid;
+						WTW.communities[i].graphics.texture.id = zgroundtextureid;
 					}
 					if (WTW.communities[i].graphics.texture.path != null) {
 						WTW.communities[i].graphics.texture.backuppath = "";
-						WTW.communities[i].graphics.texture.path = groundtexturepath;
+						WTW.communities[i].graphics.texture.path = zgroundtexturepath;
 					}
 				}
 			}
 		}
 		var zrequest = {
 			'communityid': communityid,
-			'groundtextureid': groundtextureid,
+			'groundtextureid': zgroundtextureid,
 			'function':'saveextendedground'
 		};
-		WTW.getJSON("/core/handlers/communities.php", 
+		WTW.postJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-			}, 
-			'POST', 
-			JSON.stringify(zrequest)
+			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-saveGround=" + ex.message);

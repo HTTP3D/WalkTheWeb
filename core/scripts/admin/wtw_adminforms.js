@@ -991,7 +991,7 @@ WTWJS.prototype.setSelectFileID = function(selectedobj, uploadid, originalid, we
 				//extraGroundMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.filedata, "egmattexture", scene);
 				extraGroundMaterial.diffuseTexture.uScale = eguscale;
 				extraGroundMaterial.diffuseTexture.vScale = egvscale;
-				extraGroundMaterial.specularColor = new BABYLON.Color3(.7, .7, .7);
+				extraGroundMaterial.specularColor = new BABYLON.Color3(.1, .1, .1);
 				extraGroundMaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
 				WTW.extraGround.material = extraGroundMaterial;
 				break;
@@ -1392,15 +1392,15 @@ WTWJS.prototype.resetUploadButton = function() {
 }
 
 /* media library - 3D Objects uploads */
-WTWJS.prototype.setSelectObject = function(uploadobjectid, objectfolder, objectfile) {
+WTWJS.prototype.setSelectObject = function(zuploadobjectid, zobjectfolder, zobjectfile) {
 	/* select the 3D Object to be used in mold form (when added to 3D Scene) */
 	/* when editing a 3D Community, Building or Thing, add a 3D Web Object -> Babylon File */
 	/* you will select the 3D Object form the media Library - and return to the edit form */
 	try {
 		WTW.hide('wtw_fullpageform');
-		dGet('wtw_tmolduploadobjectid').value = uploadobjectid;
-		dGet('wtw_tmoldobjectfolder').value = objectfolder;
-		dGet('wtw_tmoldobjectfile').value = objectfile;
+		dGet('wtw_tmolduploadobjectid').value = zuploadobjectid;
+		dGet('wtw_tmoldobjectfolder').value = zobjectfolder;
+		dGet('wtw_tmoldobjectfile').value = zobjectfile;
 		WTW.setNewMold();
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-setSelectObject=" + ex.message);
@@ -1518,11 +1518,11 @@ WTWJS.prototype.uploadObjectFiles = function(ztype) {
 			if (ztype == undefined) {
 				ztype = 'uploadobjectfiles';
 			}
-			var zmoldgroup = "communities";
+			var zwebtype = "communities";
 			if (buildingid != '') {
-				zmoldgroup = "buildings";
+				zwebtype = "buildings";
 			} else if (thingid != '') {
-				zmoldgroup = "things";
+				zwebtype = "things";
 			}
 			var zobjectfilepart = dGet('wtw_tobjectfile').value;
 			zobjectfilepart = zobjectfilepart.replace(".babylon","");
@@ -1534,7 +1534,7 @@ WTWJS.prototype.uploadObjectFiles = function(ztype) {
 			}
 			zformdata.append('action', 'POST');
 			zformdata.append('objectfilepart', zobjectfilepart);
-			zformdata.append('moldgroup', zmoldgroup);
+			zformdata.append('webtype', zwebtype);
 			zformdata.append('webid', communityid + buildingid + thingid);
 			zformdata.append('actionzoneid', dGet('wtw_tactionzoneid').value);
 			zformdata.append('function', ztype);

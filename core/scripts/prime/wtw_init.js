@@ -36,6 +36,8 @@ WTWJS.prototype.initEvents = function() {
 		} else if (window.attachEvent) {
 			window.attachEvent("onmessage", WTW.onMessage, false);
 		}
+
+		document.addEventListener("focus", WTW.checkFocus , true)
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_init.js-initEvents=" + ex.message);
 	}

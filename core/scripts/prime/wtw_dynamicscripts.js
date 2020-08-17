@@ -83,16 +83,16 @@ WTWJS.prototype.checkLoadScripts = function(zactionzoneind) {
 				for (var i=0;i<zscripts.length;i++) {
 					if (zscripts[i] != null) {
 						if (zscripts[i].loaded == '0') {
-							var zmoldgroup = "communities";
+							var zwebtype = "communities";
 							var zwebid = WTW.actionZones[zactionzoneind].communityinfo.communityid;
 							if (WTW.actionZones[zactionzoneind].buildinginfo.buildingid != '') {
-								zmoldgroup = "buildings";
+								zwebtype = "buildings";
 								zwebid = WTW.actionZones[zactionzoneind].buildinginfo.buildingid;
 							} else if (WTW.actionZones[zactionzoneind].thinginfo.thingid != '') {
-								zmoldgroup = "things";
+								zwebtype = "things";
 								zwebid = WTW.actionZones[zactionzoneind].thinginfo.thingid;
 							}
-							WTW.checkLoadJSFile("/content/uploads/" + zmoldgroup + "/" + zwebid + "/" + zscripts[i].scriptpath, 'js');
+							WTW.checkLoadJSFile("/content/uploads/" + zwebtype + "/" + zwebid + "/" + zscripts[i].scriptpath, 'js');
 							WTW.actionZones[zactionzoneind].scripts[i].loaded = '1';
 						}
 					}
@@ -114,16 +114,16 @@ WTWJS.prototype.checkUnloadScripts = function(zactionzoneind) {
 				for (var i=0;i<zscripts.length;i++) {
 					if (zscripts[i] != null) {
 						if (zscripts[i].loaded == '1') {
-							var zmoldgroup = "communities";
+							var zwebtype = "communities";
 							var zwebid = WTW.actionZones[zactionzoneind].communityinfo.communityid;
 							if (WTW.actionZones[zactionzoneind].buildinginfo.buildingid != '') {
-								zmoldgroup = "buildings";
+								zwebtype = "buildings";
 								zwebid = WTW.actionZones[zactionzoneind].buildinginfo.buildingid;
 							} else if (WTW.actionZones[zactionzoneind].thinginfo.thingid != '') {
-								zmoldgroup = "things";
+								zwebtype = "things";
 								zwebid = WTW.actionZones[zactionzoneind].thinginfo.thingid;
 							}
-							WTW.checkUnloadJSFile("/content/uploads/" + zmoldgroup + "/" + zwebid + "/" + zscripts[i].scriptpath, 'js');
+							WTW.checkUnloadJSFile("/content/uploads/" + zwebtype + "/" + zwebid + "/" + zscripts[i].scriptpath, 'js');
 							WTW.actionZones[zactionzoneind].scripts[i].loaded = '0';
 						}
 					}

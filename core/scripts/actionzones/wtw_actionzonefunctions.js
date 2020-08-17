@@ -204,10 +204,10 @@ WTWJS.prototype.initMirrorLoadZone = function(zmoldname, zmolddef) {
 			var znamepart;
 			if (zmoldname.indexOf("-") > -1) {
 				znamepart = zmoldname.split('-');
-				var zmoldgroup = znamepart[0];
+				var zwebtype = znamepart[0];
 				var zmoldind = Number(znamepart[1]);
 				var zmolds = null;
-				switch (zmoldgroup) {
+				switch (zwebtype) {
 					case "thingmolds":
 						zmolds = WTW.thingMolds;
 						break;
@@ -233,7 +233,7 @@ WTWJS.prototype.initMirrorLoadZone = function(zmoldname, zmolddef) {
 							WTW.actionZones[zactionzoneind].parentname = zmoldname;
 							if (communityid != "") {
 								var zbuildingid = "";
-								if (communityid != "" && zmoldgroup == "buildingmolds" && zmolds[zmoldind].buildinginfo.buildingid != undefined) {
+								if (communityid != "" && zwebtype == "buildingmolds" && zmolds[zmoldind].buildinginfo.buildingid != undefined) {
 									zbuildingid = zmolds[zmoldind].buildinginfo.buildingid;
 								}
 								WTW.actionZones[zactionzoneind].communityinfo.communityid = communityid;

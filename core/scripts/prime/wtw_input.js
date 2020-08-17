@@ -1909,12 +1909,12 @@ WTWJS.prototype.resetMoldsOpacity = function() {
 	}
 }
 
-WTWJS.prototype.resetMoldOpacity = function(zmoldgroup, zmoldind) {
+WTWJS.prototype.resetMoldOpacity = function(zwebtype, zmoldind) {
 	/* reset the opacity of a mold after a highlighting */
 	try {
 		var zmolds = WTW.buildingMolds;
 		var zshape = "box";
-		switch (zmoldgroup) {
+		switch (zwebtype) {
 			case "community":
 				zmolds = WTW.communitiesMolds;
 				break;
@@ -1946,18 +1946,16 @@ WTWJS.prototype.resetMoldOpacity = function(zmoldgroup, zmoldind) {
 			}
 			if (zmold.material != undefined) {
 				if (zmolds[zmoldind].covering != "none" && zmolds[zmoldind].covering != "hidden" && zmolds[zmoldind].moldname.indexOf('video') == -1) {
-					zmold.material.specularColor = new BABYLON.Color3(Number(zmolds[zmoldind].color.specular.r), Number(zmolds[zmoldind].color.specular.g), Number(zmolds[zmoldind].color.specular.b));
-					zmold.material.diffuseColor = new BABYLON.Color3(Number(zmolds[zmoldind].color.diffuse.r), Number(zmolds[zmoldind].color.diffuse.g), Number(zmolds[zmoldind].color.diffuse.b));	
-/*					if (zmold.receiveShadows == false) {
-						zmold.material.emissiveColor = new BABYLON.Color3(Number(zmolds[zmoldind].color.emissive.r), Number(zmolds[zmoldind].color.emissive.g), Number(zmolds[zmoldind].color.emissive.b));
-					} else {
-						zmold.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-					}
-*/				} else {
+					zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
+					zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+					zmold.material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+					zmold.material.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+				} else {
 					zopacity = 0;
 					zmold.material.specularColor = new BABYLON.Color3(zopacity, zopacity, zopacity);			
 					zmold.material.diffuseColor = new BABYLON.Color3(zopacity, zopacity, zopacity);	
 					zmold.material.emissiveColor = new BABYLON.Color3(zopacity, zopacity, zopacity);
+					zmold.material.ambientColor = new BABYLON.Color3(zopacity, zopacity, zopacity);
 				}
 				if (zmolds[zmoldind].covering == "glass") {
 					zopacity = .2;
@@ -1968,8 +1966,10 @@ WTWJS.prototype.resetMoldOpacity = function(zmoldgroup, zmoldind) {
 				if (zmold.material.subMaterials != undefined) {
 					for (var i = 0; i < zmold.material.subMaterials.length; i++) {
 						zmold.material.subMaterials[i].alpha = zopacity;
-						zmold.material.subMaterials[i].specularColor = new BABYLON.Color3(Number(zmolds[zmoldind].color.specular.r), Number(zmolds[zmoldind].color.specular.g), Number(zmolds[zmoldind].color.specular.b));
-						zmold.material.subMaterials[i].diffuseColor = new BABYLON.Color3(Number(zmolds[zmoldind].color.diffuse.r), Number(zmolds[zmoldind].color.diffuse.g), Number(zmolds[zmoldind].color.diffuse.b));	
+						zmold.material.subMaterials[i].diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
+						zmold.material.subMaterials[i].emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+						zmold.material.subMaterials[i].specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+						zmold.material.subMaterials[i].ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
 					}
 				}
 			}
@@ -1977,9 +1977,10 @@ WTWJS.prototype.resetMoldOpacity = function(zmoldgroup, zmoldind) {
 			var zmoldimageframe = scene.getMeshByID(zmoldimageframename);
 			if (zmoldimageframe != null) {	
 				if (zmoldimageframe.material != undefined) {
-					zmoldimageframe.material.specularColor = new BABYLON.Color3(Number(zmolds[zmoldind].color.specular.r), Number(zmolds[zmoldind].color.specular.g), Number(zmolds[zmoldind].color.specular.b));
-					zmoldimageframe.material.emissiveColor = new BABYLON.Color3(Number(zmolds[zmoldind].color.emissive.r), Number(zmolds[zmoldind].color.emissive.g), Number(zmolds[zmoldind].color.emissive.b));
-					zmoldimageframe.material.diffuseColor = new BABYLON.Color3(Number(zmolds[zmoldind].color.diffuse.r), Number(zmolds[zmoldind].color.diffuse.g), Number(zmolds[zmoldind].color.diffuse.b));	
+					zmoldimageframe.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
+					zmoldimageframe.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+					zmoldimageframe.material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+					zmoldimageframe.material.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
 				}
 			}
 		}		
@@ -2136,12 +2137,12 @@ WTWJS.prototype.resetMoldCoverings = function() {
 	}
 }
 
-WTWJS.prototype.resetMoldCovering = function(zmoldgroup, zmoldind) {
+WTWJS.prototype.resetMoldCovering = function(zwebtype, zmoldind) {
 	/* reload and reset the material on a mesh based on the mold def */
 	try {
 		var zmolds = WTW.buildingMolds;
 		var zshape = "box";
-		switch (zmoldgroup) {
+		switch (zwebtype) {
 			case "building":
 				break;
 			case "community":
@@ -2417,9 +2418,9 @@ WTWJS.prototype.checkToolTip = function(znamepart, zmoldind) {
 	/* this is the same as an alt tag on the mesh hover over */
 	try {
 		var zalttag = '';
-		var zmoldgroup = znamepart[0];
+		var zwebtype = znamepart[0];
 		var zmolds = null;
-		switch (zmoldgroup) {
+		switch (zwebtype) {
 			case "thingmolds":
 				zmolds = WTW.thingMolds;
 				break;
@@ -2448,7 +2449,7 @@ WTWJS.prototype.checkToolTip = function(znamepart, zmoldind) {
 					zalttag = zmolds[zmoldind].alttag.name;
 				}
 			}
-			if (zalttag == "" && thingid == "" && zmoldgroup == "thingmolds") {
+			if (zalttag == "" && thingid == "" && zwebtype == "thingmolds") {
 				znamepart = WTW.thingMolds[zmoldind].parentname.split('-');
 				zmoldind = Number(znamepart[1]);
 				while (znamepart[0].indexOf("actionzone") > -1) {

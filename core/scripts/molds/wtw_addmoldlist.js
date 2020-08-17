@@ -31,19 +31,19 @@ WTWJS.prototype.getMoldList = function() {
 		dGet("wtw_moldsbuttonlist").innerHTML = "";
 		for (var i=0;i < WTW.moldList.length;i++) {
 			if (WTW.moldList[i] != null) {
-				var moldvalue = WTW.moldList[i].toLowerCase();
-				while (moldvalue.indexOf(" ") > -1) {
-					moldvalue = moldvalue.replace(" ","");
+				var zmoldvalue = WTW.moldList[i].toLowerCase();
+				while (zmoldvalue.indexOf(" ") > -1) {
+					zmoldvalue = zmoldvalue.replace(" ","");
 				}
-				var option = document.createElement("option");
-				option.text = WTW.moldList[i];
-				option.value = moldvalue;
+				var zoption = document.createElement("option");
+				zoption.text = WTW.moldList[i];
+				zoption.value = zmoldvalue;
 				if (buildingid != "") {
-					dGet("wtw_moldsbuttonlist").innerHTML += "<div id=\"wtw_baddbuild" + moldvalue + "\" name=\"wtw_baddbuild" + moldvalue + "\" onclick=\"WTW.openAddNewMold('building','" + moldvalue + "');\" class='wtw-menulevel2'>" + WTW.moldList[i] + "</div>\r\n";
+					dGet("wtw_moldsbuttonlist").innerHTML += "<div id=\"wtw_baddbuild" + zmoldvalue + "\" name=\"wtw_baddbuild" + zmoldvalue + "\" onclick=\"WTW.openAddNewMold('building','" + zmoldvalue + "');\" class='wtw-menulevel2'>" + WTW.moldList[i] + "</div>\r\n";
 				} else if (communityid != "") {
-					dGet("wtw_moldsbuttonlist").innerHTML += "<div id=\"wtw_baddcomm" + moldvalue + "\" name=\"wtw_baddcomm" + moldvalue + "\" onclick=\"WTW.openAddNewMold('community','" + moldvalue + "');\" class='wtw-menulevel2'>" + WTW.moldList[i] + "</div>\r\n";
+					dGet("wtw_moldsbuttonlist").innerHTML += "<div id=\"wtw_baddcomm" + zmoldvalue + "\" name=\"wtw_baddcomm" + zmoldvalue + "\" onclick=\"WTW.openAddNewMold('community','" + zmoldvalue + "');\" class='wtw-menulevel2'>" + WTW.moldList[i] + "</div>\r\n";
 				} else if (thingid != "") {
-					dGet("wtw_moldsbuttonlist").innerHTML += "<div id=\"wtw_baddthing" + moldvalue + "\" name=\"wtw_baddthing" + moldvalue + "\" onclick=\"WTW.openAddNewMold('thing','" + moldvalue + "');\" class='wtw-menulevel2'>" + WTW.moldList[i] + "</div>\r\n";
+					dGet("wtw_moldsbuttonlist").innerHTML += "<div id=\"wtw_baddthing" + zmoldvalue + "\" name=\"wtw_baddthing" + zmoldvalue + "\" onclick=\"WTW.openAddNewMold('thing','" + zmoldvalue + "');\" class='wtw-menulevel2'>" + WTW.moldList[i] + "</div>\r\n";
 				}
 			}
 		}
@@ -57,441 +57,429 @@ WTWJS.prototype.getWebMoldList = function() {
 	/* Web Mold list is used by admin to populate the drop down list of possible Web Molds */
 	/* this is simplified into basic shapes (function above) and complex ones 3D Web Objects (here) */
 	/* these may be complex shapes and/or include uploaded objects, animation, lighting, or other functionality */
-	var webmoldlist = [];
+	var zwebmoldlist = [];
 	try {
-		webmoldlist[webmoldlist.length] = "3D Text";
-		webmoldlist[webmoldlist.length] = "Image";
-        webmoldlist[webmoldlist.length] = "Video";
-		webmoldlist[webmoldlist.length] = "Babylon File";
-        webmoldlist[webmoldlist.length] = "Lightbulb";
-/*	    webmoldlist[webmoldlist.length] = "Spot Light"; */
-        webmoldlist[webmoldlist.length] = "Candle Flame";
-        webmoldlist[webmoldlist.length] = "Tree";
-        webmoldlist[webmoldlist.length] = "Flag";
-        webmoldlist[webmoldlist.length] = "Partical Sphere";
-        webmoldlist[webmoldlist.length] = "Partical Shower";
-        webmoldlist[webmoldlist.length] = "Smoke";
-        webmoldlist[webmoldlist.length] = "Water Fountain";
-        webmoldlist[webmoldlist.length] = "Water Plane";
-        webmoldlist[webmoldlist.length] = "Water Disc";
-		webmoldlist[webmoldlist.length] = "View Blog";
-		webmoldlist[webmoldlist.length] = "Blog Posting";
-		webmoldlist = WTW.pluginsWebMolds(webmoldlist);
+		zwebmoldlist[zwebmoldlist.length] = "3D Text";
+		zwebmoldlist[zwebmoldlist.length] = "Image";
+        zwebmoldlist[zwebmoldlist.length] = "Video";
+		zwebmoldlist[zwebmoldlist.length] = "Babylon File";
+        zwebmoldlist[zwebmoldlist.length] = "Lightbulb";
+/*	    zwebmoldlist[zwebmoldlist.length] = "Spot Light"; */
+        zwebmoldlist[zwebmoldlist.length] = "Candle Flame";
+        zwebmoldlist[zwebmoldlist.length] = "Tree";
+        zwebmoldlist[zwebmoldlist.length] = "Flag";
+        zwebmoldlist[zwebmoldlist.length] = "Partical Sphere";
+        zwebmoldlist[zwebmoldlist.length] = "Partical Shower";
+        zwebmoldlist[zwebmoldlist.length] = "Smoke";
+        zwebmoldlist[zwebmoldlist.length] = "Water Fountain";
+        zwebmoldlist[zwebmoldlist.length] = "Water Plane";
+        zwebmoldlist[zwebmoldlist.length] = "Water Disc";
+		zwebmoldlist[zwebmoldlist.length] = "View Blog";
+		zwebmoldlist[zwebmoldlist.length] = "Blog Posting";
+		zwebmoldlist = WTW.pluginsWebMolds(zwebmoldlist);
 		dGet("wtw_webmoldsbuttonlist").innerHTML = "";
-		for (var i=0;i < webmoldlist.length;i++) {
-			if (webmoldlist[i] != null) {
-				var moldvalue = webmoldlist[i].toLowerCase();
-				while (moldvalue.indexOf(" ") > -1) {
-					moldvalue = moldvalue.replace(" ","");
+		for (var i=0;i < zwebmoldlist.length;i++) {
+			if (zwebmoldlist[i] != null) {
+				var zmoldvalue = zwebmoldlist[i].toLowerCase();
+				while (zmoldvalue.indexOf(" ") > -1) {
+					zmoldvalue = zmoldvalue.replace(" ","");
 				}
 				if (buildingid != "") {
-					dGet("wtw_webmoldsbuttonlist").innerHTML += "<div id=\"wtw_baddweb" + moldvalue + "\" name=\"wtw_baddweb" + moldvalue + "\" onclick=\"WTW.openAddNewMold('building','" + moldvalue + "');\" class='wtw-menulevel2'>" + webmoldlist[i] + "</div>\r\n";
+					dGet("wtw_webmoldsbuttonlist").innerHTML += "<div id=\"wtw_baddweb" + zmoldvalue + "\" name=\"wtw_baddweb" + zmoldvalue + "\" onclick=\"WTW.openAddNewMold('building','" + zmoldvalue + "');\" class='wtw-menulevel2'>" + zwebmoldlist[i] + "</div>\r\n";
 				} else if (communityid != "") {
-					dGet("wtw_webmoldsbuttonlist").innerHTML += "<div id=\"wtw_baddcommweb" + moldvalue + "\" name=\"wtw_baddcommweb" + moldvalue + "\" onclick=\"WTW.openAddNewMold('community','" + moldvalue + "');\" class='wtw-menulevel2'>" + webmoldlist[i] + "</div>\r\n";
+					dGet("wtw_webmoldsbuttonlist").innerHTML += "<div id=\"wtw_baddcommweb" + zmoldvalue + "\" name=\"wtw_baddcommweb" + zmoldvalue + "\" onclick=\"WTW.openAddNewMold('community','" + zmoldvalue + "');\" class='wtw-menulevel2'>" + zwebmoldlist[i] + "</div>\r\n";
 				} else if (thingid != "") {
-					dGet("wtw_webmoldsbuttonlist").innerHTML += "<div id=\"wtw_baddthingweb" + moldvalue + "\" name=\"wtw_baddthingweb" + moldvalue + "\" onclick=\"WTW.openAddNewMold('thing','" + moldvalue + "');\" class='wtw-menulevel2'>" + webmoldlist[i] + "</div>\r\n";
+					dGet("wtw_webmoldsbuttonlist").innerHTML += "<div id=\"wtw_baddthingweb" + zmoldvalue + "\" name=\"wtw_baddthingweb" + zmoldvalue + "\" onclick=\"WTW.openAddNewMold('thing','" + zmoldvalue + "');\" class='wtw-menulevel2'>" + zwebmoldlist[i] + "</div>\r\n";
 				}
 			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-molds-addmoldlist\r\n getWebMoldList=" + ex.message);
 	} 
-	return webmoldlist;
+	return zwebmoldlist;
 }
 		
-WTWJS.prototype.addMold = function(moldname, molddef, parentname, coveringname) {
+WTWJS.prototype.addMold = function(zmoldname, zmolddef, zparentname, zcoveringname) {
 	/* the ad mold process checks the values and creates the meshes, applies the coverings, and initiates colllisions, shadows, physics, etc... */
 	/* this process all molds into meshes in the 3D Scene (both basic and web molds lists above) */
-	var mold;
+	var zmold;
 	try {
-		var checkcollisions = "1";
-		try {
-			if (molddef.checkcollisions != null) {
-				checkcollisions = molddef.checkcollisions;
-			}
-		} catch(ex) {}
-		mold = scene.getMeshByID(moldname);
-		if (mold != null) {
-			WTW.disposeClean(moldname);
+		zmold = scene.getMeshByID(zmoldname);
+		if (zmold != null) {
+			WTW.disposeClean(zmoldname);
 		}
-		var shape = "box"; 
-		if (molddef.shape != undefined && molddef.shape != "") {
-			shape = molddef.shape.toLowerCase();
+		var zshape = "box"; 
+		if (zmolddef.shape != undefined && zmolddef.shape != "") {
+			zshape = zmolddef.shape.toLowerCase();
 		}
-		if (moldname.indexOf("communitybuildings") > -1 || moldname.indexOf("communitycommunities") > -1 || (moldname.indexOf("person-") > -1 && shape=="box") || (moldname.indexOf("myavatar-") > -1 && shape=="box")) {
-			coveringname = "hidden";
+		if (zmoldname.indexOf("communitybuildings") > -1 || zmoldname.indexOf("communitycommunities") > -1 || (zmoldname.indexOf("person-") > -1 && zshape=="box") || (zmoldname.indexOf("myavatar-") > -1 && zshape=="box")) {
+			zcoveringname = "hidden";
 		}
-		var iswaterreflection = "0";
-		try {
-			if (molddef.graphics.waterreflection != null) {
-				iswaterreflection = molddef.graphics.waterreflection;
-			}
-		} catch(ex) {}
-		var namepart = moldname.split('-');
-		var posx = Number(molddef.position.x);
-		var posy = Number(molddef.position.y);
-		var posz = Number(molddef.position.z);
-		var lenx = Number(molddef.scaling.x);
-		var leny = Number(molddef.scaling.y);
-		var lenz = Number(molddef.scaling.z);
-		var rotx = Number(molddef.rotation.x);
-		var roty = Number(molddef.rotation.y);
-		var rotz = Number(molddef.rotation.z);
-		var subdivisions = 12;
-		var special1 = 0;
-		var special2 = 0;
-		var minheight = 0;
-		var maxheight = 0;
-		var path1 = [];
-		var path2 = [];
-		if (molddef.paths != undefined) {
-			path1 = molddef.paths.path1;
+		var zposx = Number(zmolddef.position.x);
+		var zposy = Number(zmolddef.position.y);
+		var zposz = Number(zmolddef.position.z);
+		var zlenx = Number(zmolddef.scaling.x);
+		var zleny = Number(zmolddef.scaling.y);
+		var zlenz = Number(zmolddef.scaling.z);
+		var zrotx = Number(zmolddef.rotation.x);
+		var zroty = Number(zmolddef.rotation.y);
+		var zrotz = Number(zmolddef.rotation.z);
+		var zsubdivisions = 12;
+		var zspecial1 = 0;
+		var zspecial2 = 0;
+		var zminheight = 0;
+		var zmaxheight = 0;
+		var zpath1 = [];
+		var zpath2 = [];
+		if (zmolddef.paths != undefined) {
+			zpath1 = zmolddef.paths.path1;
 		}
-		if (molddef.paths != undefined) {
-			path2 = molddef.paths.path2;
+		if (zmolddef.paths != undefined) {
+			zpath2 = zmolddef.paths.path2;
 		}
 		try {
-			if (WTW.isNumeric(molddef.subdivisions)) {
-				subdivisions = Number(molddef.subdivisions);
+			if (WTW.isNumeric(zmolddef.subdivisions)) {
+				zsubdivisions = Number(zmolddef.subdivisions);
 			}
 		} catch(ex) {}
 		try {
-			if (WTW.isNumeric(molddef.scaling.special1)) {
-				special1 = Number(molddef.scaling.special1)
+			if (WTW.isNumeric(zmolddef.scaling.special1)) {
+				zspecial1 = Number(zmolddef.scaling.special1)
 			}
 		} catch(ex) {}
 		try {
-			if (WTW.isNumeric(molddef.scaling.special2)) {
-				special2 = Number(molddef.scaling.special2)
+			if (WTW.isNumeric(zmolddef.scaling.special2)) {
+				zspecial2 = Number(zmolddef.scaling.special2)
 			}
 		} catch(ex) {}
 		try {
-			if (WTW.isNumeric(molddef.graphics.heightmap.minheight)) {
-				minheight = Number(molddef.graphics.heightmap.minheight);
+			if (WTW.isNumeric(zmolddef.graphics.heightmap.minheight)) {
+				zminheight = Number(zmolddef.graphics.heightmap.minheight);
 			}
 		} catch(ex) {}
 		try {
-			if (WTW.isNumeric(molddef.graphics.heightmap.maxheight)) {
-				maxheight = Number(molddef.graphics.heightmap.maxheight);
+			if (WTW.isNumeric(zmolddef.graphics.heightmap.maxheight)) {
+				zmaxheight = Number(zmolddef.graphics.heightmap.maxheight);
 			}
 		} catch(ex) {}
-		var transformposition = WTW.transformPosition(molddef, posx, posy, posz); // accounts for alternate parenting
-		posx = transformposition.posx;
-		posy = transformposition.posy;
-		posz = transformposition.posz;
+		var ztransformposition = WTW.transformPosition(zmolddef, zposx, zposy, zposz); // accounts for alternate parenting
+		zposx = ztransformposition.posx;
+		zposy = ztransformposition.posy;
+		zposz = ztransformposition.posz;
 		/* select the function to create the mold based on "shape" which is the mold type */
-		switch (shape) {
+		switch (zshape) {
 			case "wall":
 				/* wall - a box set with defaults for common scaling */
-				mold = WTW.addMoldBox(moldname, lenx, leny, lenz);
+				zmold = WTW.addMoldBox(zmoldname, zlenx, zleny, zlenz);
 				break;
 			case "box":
 				/* box - a basic cube shape of various scaling */
-				mold = WTW.addMoldBox(moldname, lenx, leny, lenz);
+				zmold = WTW.addMoldBox(zmoldname, zlenx, zleny, zlenz);
 				break;
 			case "roundedbox":
 				/* roundedbox - a basic cube with round corners and various scaling */
-				mold = WTW.addMoldRoundedBox(moldname, lenx, leny, lenz);
+				zmold = WTW.addMoldRoundedBox(zmoldname, zlenx, zleny, zlenz);
 				break;
 			case "floor":
 				/* floor - a box set with defaults for common scaling */
-				mold = WTW.addMoldBox(moldname, lenx, leny, lenz);
+				zmold = WTW.addMoldBox(zmoldname, zlenx, zleny, zlenz);
 				break;
 			case "cylinder":
 				/* cylinder - canister with solid ends */
-				mold = WTW.addMoldCylinder(moldname, lenx, leny, lenz, subdivisions);
+				zmold = WTW.addMoldCylinder(zmoldname, zlenx, zleny, zlenz, zsubdivisions);
 				break;
 			case "halfpipe":
 				/* halfpipe - cylinder cut in half and carved out */
-				if (special1 < .01) {
-					special1 = .01;
+				if (zspecial1 < .01) {
+					zspecial1 = .01;
 				}
-				mold = WTW.addMoldHalfPipe(moldname, lenx, leny, lenz, subdivisions, special1);
+				zmold = WTW.addMoldHalfPipe(zmoldname, zlenx, zleny, zlenz, zsubdivisions, zspecial1);
 				break;
 			case "cone":
 				/* cone - cylinder with one end closed to a point. */
-				mold = WTW.addMoldCone(moldname, lenx, leny, lenz, subdivisions, special1, special2);
+				zmold = WTW.addMoldCone(zmoldname, zlenx, zleny, zlenz, zsubdivisions, zspecial1, zspecial2);
 				break;
 			case "polygon":
 				/* polygon - various polygons defined by the special setting */
-				mold = WTW.addMoldPolygon(moldname, lenx, leny, lenz, special1);
+				zmold = WTW.addMoldPolygon(zmoldname, zlenx, zleny, zlenz, zspecial1);
 				break; 
 			case "sphere":
 				/* sphere - ball with a setting for subdivisions that can make it smoother */
-				mold = WTW.addMoldSphere(moldname, lenx, leny, lenz, subdivisions);
+				zmold = WTW.addMoldSphere(zmoldname, zlenx, zleny, zlenz, zsubdivisions);
 				break;
 			case "dome":
 				/* dome - sphere cut in half and carved out */
-				mold = WTW.addMoldDome(moldname, lenx, leny, lenz, subdivisions, special1);
+				zmold = WTW.addMoldDome(zmoldname, zlenx, zleny, zlenz, zsubdivisions, zspecial1);
 				break;
 			case "triangle":
 				/* triangle - work in progress - needs to be able to adjust the points for various angles and thickness */
-				mold = WTW.addMoldTriangle(moldname, lenx, leny, lenz, special1);
+				zmold = WTW.addMoldTriangle(zmoldname, zlenx, zleny, zlenz, zspecial1);
 				break;
 			case "torus":
 				/* torus - donut shape */
-				mold = WTW.addMoldTorus(moldname, lenx, leny, lenz, subdivisions, special1);
+				zmold = WTW.addMoldTorus(zmoldname, zlenx, zleny, zlenz, zsubdivisions, zspecial1);
 				break;
 			case "plane":
 				/* plane - one sided flat box */
-				mold = WTW.addMoldPlane(moldname, lenx, leny, lenz);
+				zmold = WTW.addMoldPlane(zmoldname, zlenx, zleny, zlenz);
 				break;
 			case "disc":
 				/* disc - one sided flat oval */
-				mold = WTW.addMoldDisc(moldname, lenx, leny, lenz, subdivisions);
+				zmold = WTW.addMoldDisc(zmoldname, zlenx, zleny, zlenz, zsubdivisions);
 				break;
 			case "tube":
 				/* tube - length of tube that you can set the points to pass through to make any shape */
-				mold = WTW.addMoldTube(moldname, lenx, leny, lenz, subdivisions, special1, path1);
+				zmold = WTW.addMoldTube(zmoldname, zlenx, zleny, zlenz, zsubdivisions, zspecial1, zpath1);
 				break;
 			case "line":
 				/* line - tube without thickness - add points to pass through */
-				mold = WTW.addMoldLine(moldname, lenx, leny, lenz, path1);
+				zmold = WTW.addMoldLine(zmoldname, zlenx, zleny, zlenz, zpath1);
 				break;
 			case "terrain":
 				/* terrain - ground formations that can use heightmaps */
-				mold = WTW.addMoldTerrain(moldname, lenx, leny, lenz, subdivisions, molddef.graphics.heightmap.path, molddef.graphics.heightmap.id, minheight, maxheight, parentname, molddef, coveringname, posx, posy, posz);
+				zmold = WTW.addMoldTerrain(zmoldname, zlenx, zleny, zlenz, zsubdivisions, zmolddef.graphics.heightmap.path, zmolddef.graphics.heightmap.id, zminheight, zmaxheight, zparentname, zmolddef, zcoveringname, zposx, zposy, zposz);
 				break;
 			case "3dtext":
 				/* 3dtext - 3d text font you can add text to 3D Scenes */
-				mold = WTW.addMold3DText(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.addMold3DText(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
 			case "image":
 				/* image - with ability to hover over and change image */
-				mold = WTW.addMoldImage(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.addMoldImage(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
 			case "raisedimage":
 				/* raisedimage - image that uses a heightmap */
-				mold = WTW.addMoldRaisedImage(moldname, molddef, lenx, leny, lenz, subdivisions, molddef.graphics.heightmap.path, minheight, maxheight);
-				coveringname = "none";
+				zmold = WTW.addMoldRaisedImage(zmoldname, zmolddef, zlenx, zleny, zlenz, zsubdivisions, zmolddef.graphics.heightmap.path, zminheight, zmaxheight);
+				zcoveringname = "none";
 				break;
             case "video":
 				/* video - video player or screen - real videos with play, pause, stop , and rewind buttons */
-				mold = WTW.addMoldVideo(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.addMoldVideo(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
             case "lightbulb":
 				/* lightbulb - adds smaller light to scene - great for inside rooms */
-				mold = WTW.addMoldLightbulb(moldname, molddef, lenx, leny, lenz, posx, posy, posz, subdivisions);
+				zmold = WTW.addMoldLightbulb(zmoldname, zmolddef, zlenx, zleny, zlenz, zposx, zposy, zposz, zsubdivisions);
 				break;
             case "spotlight":
 				/* spotlight - adds a spot light to a scene */
-				mold = WTW.addMoldSpotLight(moldname, lenx, leny, lenz, subdivisions, special1, special2);
+				zmold = WTW.addMoldSpotLight(zmoldname, zlenx, zleny, zlenz, zsubdivisions, zspecial1, zspecial2);
 				break;
             case "candleflame":
 				/* candleflame - image simulation */
-				mold = WTW.addMoldCandleFlame(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.addMoldCandleFlame(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
             case "tree":
 				/* tree - dynamically created (depreciated soon to babylon 3D Objects) */
-				mold = WTW.addMoldTree(moldname, molddef, lenx, leny, lenz, posx, posy, posz, subdivisions);
-				coveringname = "none";
+				zmold = WTW.addMoldTree(zmoldname, zmolddef, zlenx, zleny, zlenz, zposx, zposy, zposz, zsubdivisions);
+				zcoveringname = "none";
 				break;
             case "flag":
 				/* flag - dynamic flowing flag - depreciated soon to babylon 3D Objects */
-				mold = WTW.addMoldFlag(moldname, molddef, lenx, leny, lenz, posx, posy, posz, subdivisions);
-				coveringname = "none";
+				zmold = WTW.addMoldFlag(zmoldname, zmolddef, zlenx, zleny, zlenz, zposx, zposy, zposz, zsubdivisions);
+				zcoveringname = "none";
 				break;
             case "smoke":
 				/* smoke - particle emitter for smoke effect */
-				mold = WTW.addMoldSmoke(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.addMoldSmoke(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
             case "waterfountain":
 				/* waterfountain - particle emitter for water effect */
-				mold = WTW.addMoldFountain(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.addMoldFountain(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
             case "particlesphere":
 				/* particlesphere - particle emitter for sphere effect */
-				mold = WTW.addMoldParticleSphere(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.addMoldParticleSphere(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
             case "particleshower":
 				/* particleshower - particle emitter for water shower effect */
-				mold = WTW.addMoldParticleShower(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.addMoldParticleShower(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
 			case "babylonfile":
 				/* babylonfile - upload your own 3D Object Molds and use them in your scene - uses the media library */
-				mold = WTW.addMoldBabylonFile(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.addMoldBabylonFile(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
             case "waterplane":
 				/* waterplane - plane with a water procedural texture applied */
-				mold = WTW.addMoldWaterPlane(moldname, molddef, lenx, leny, lenz);
-				coveringname = "water";
+				zmold = WTW.addMoldWaterPlane(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "water";
 				break;
             case "waterdisc":
 				/* waterdisc - disc with a water procedural texture applied */
-				mold = WTW.addMoldWaterDisc(moldname, molddef, lenx, leny, lenz, subdivisions);
-				coveringname = "water";
+				zmold = WTW.addMoldWaterDisc(zmoldname, zmolddef, zlenx, zleny, zlenz, zsubdivisions);
+				zcoveringname = "water";
 				break;
 			case "simpletextbox":
 				/* simpletextbox - add text to a box material surface to add to your scene */
-				mold = WTW.addMoldSimpleTextBox(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.addMoldSimpleTextBox(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
 			case "viewblog":
 				/* viewblog - work in progress - view a 3D Blog */
-				mold = WTW.addMoldViewBlog(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.addMoldViewBlog(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
 			case "blogposting":
 				/* blogposting - work in progress - write to a 3D Blog with a 3D Form */
-				mold = WTW.addMoldBlogPosting(moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.addMoldBlogPosting(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
 			default:
 				/* checks plugins for mold shape and custom functions */
-				mold = WTW.pluginsAddMolds(shape, moldname, molddef, lenx, leny, lenz);
-				coveringname = "none";
+				zmold = WTW.pluginsAddMolds(zshape, zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
 				break;
 		}
 		/* apply the coverings, properties, shadows, physics, etc... */
-		mold = WTW.completeMold(mold, moldname, parentname, molddef, coveringname, posx, posy, posz);
+		zmold = WTW.completeMold(zmold, zmoldname, zparentname, zmolddef, zcoveringname, zposx, zposy, zposz);
 	} catch (ex) {
 		WTW.log("core-scripts-molds-addmoldlist\r\n addMold=" + ex.message);
 	} 
-	return mold;
+	return zmold;
 }
 
-WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, coveringname, posx, posy, posz) {
+WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef, zcoveringname, zposx, zposy, zposz) {
 	/* apply the coverings, properties, shadows, physics, etc... */
 	try {
-		if (mold != null) {
-			var checkcollisions = "1";
-			var shape = "box"; 
-			var iswaterreflection = "0";
-			var namepart = moldname.split('-');
-			var lenx = Number(molddef.scaling.x);
-			var leny = Number(molddef.scaling.y);
-			var lenz = Number(molddef.scaling.z);
-			var rotx = Number(molddef.rotation.x);
-			var roty = Number(molddef.rotation.y);
-			var rotz = Number(molddef.rotation.z);
-			var special1 = 0;
-			var special2 = 0;
+		if (zmold != null) {
+			var zcheckcollisions = "1";
+			var zshape = "box"; 
+			var ziswaterreflection = "0";
+			var znamepart = zmoldname.split('-');
+			var zlenx = Number(zmolddef.scaling.x);
+			var zleny = Number(zmolddef.scaling.y);
+			var zlenz = Number(zmolddef.scaling.z);
+			var zrotx = Number(zmolddef.rotation.x);
+			var zroty = Number(zmolddef.rotation.y);
+			var zrotz = Number(zmolddef.rotation.z);
+			var zspecial1 = 0;
+			var zspecial2 = 0;
 			try {
-				if (molddef.checkcollisions != null) {
-					checkcollisions = molddef.checkcollisions;
+				if (zmolddef.checkcollisions != null) {
+					zcheckcollisions = zmolddef.checkcollisions;
 				}
 			} catch(ex) {}
-			if (molddef.shape != undefined && molddef.shape != "") {
-				shape = molddef.shape.toLowerCase();
+			if (zmolddef.shape != undefined && zmolddef.shape != "") {
+				zshape = zmolddef.shape.toLowerCase();
 			}
-			if (moldname.indexOf("communitybuildings") > -1 || moldname.indexOf("communitycommunities") > -1 || (moldname.indexOf("person-") > -1 && shape=="box") || (moldname.indexOf("myavatar-") > -1 && shape=="box")) {
-				coveringname = "hidden";
+			if (zmoldname.indexOf("communitybuildings") > -1 || zmoldname.indexOf("communitycommunities") > -1 || (zmoldname.indexOf("person-") > -1 && zshape=="box") || (zmoldname.indexOf("myavatar-") > -1 && zshape=="box")) {
+				zcoveringname = "hidden";
 			}
 			try {
-				if (molddef.graphics.waterreflection != null) {
-					iswaterreflection = molddef.graphics.waterreflection;
+				if (zmolddef.graphics.waterreflection != null) {
+					ziswaterreflection = zmolddef.graphics.waterreflection;
 				}
 			} catch(ex) {}
 			try {
-				if (WTW.isNumeric(molddef.scaling.special1)) {
-					special1 = Number(molddef.scaling.special1)
+				if (WTW.isNumeric(zmolddef.scaling.special1)) {
+					zspecial1 = Number(zmolddef.scaling.special1)
 				}
 			} catch(ex) {}
 			try {
-				if (WTW.isNumeric(molddef.scaling.special2)) {
-					special2 = Number(molddef.scaling.special2)
+				if (WTW.isNumeric(zmolddef.scaling.special2)) {
+					zspecial2 = Number(zmolddef.scaling.special2)
 				}
 			} catch(ex) {}
-			//mold.isVisible = false;
-			mold.position = new BABYLON.Vector3(posx, posy, posz);
-			mold.rotation = new BABYLON.Vector3(WTW.getRadians(rotx), WTW.getRadians(roty), WTW.getRadians(rotz));
-			mold.isPickable = true;
-			if (molddef.sound != undefined) {
-				if (molddef.sound.id != '') {
-					WTW.loadSoundToMold(mold, moldname, molddef.sound.id, molddef.sound.path, molddef.sound.loop, molddef.sound.attenuation, molddef.sound.maxdistance, molddef.sound.rollofffactor, molddef.sound.refdistance, -1);
+			//zmold.isVisible = false;
+			zmold.position = new BABYLON.Vector3(zposx, zposy, zposz);
+			zmold.rotation = new BABYLON.Vector3(WTW.getRadians(zrotx), WTW.getRadians(zroty), WTW.getRadians(zrotz));
+			zmold.isPickable = true;
+			if (zmolddef.sound != undefined) {
+				if (zmolddef.sound.id != '') {
+					WTW.loadSoundToMold(zmold, zmoldname, zmolddef.sound.id, zmolddef.sound.path, zmolddef.sound.loop, zmolddef.sound.attenuation, zmolddef.sound.maxdistance, zmolddef.sound.rollofffactor, zmolddef.sound.refdistance, -1);
 				}
 			}
-			if (coveringname == "hidden" || namepart[0] == "actionzone" || namepart[0] == "connectinggrid") {
+			if (zcoveringname == "hidden" || znamepart[0] == "actionzone" || znamepart[0] == "connectinggrid") {
 				/* some molds do not ned coverings (came with - or not necessary) */
-				mold.isVisible = false;
+				zmold.isVisible = false;
 			} else {
 				/* molds that require coverings to be added */
-				if (shape != "box" && shape != "wall" && shape != "floor" && coveringname == "directional texture") {
+				if (zshape != "box" && zshape != "wall" && zshape != "floor" && zcoveringname == "directional texture") {
 					/* correction for molds that cannot use directional covering */
-					coveringname = "texture";
+					zcoveringname = "texture";
 				}
-				if (coveringname != "none") {
+				if (zcoveringname != "none") {
 					/* molds that require coverings to be added */
-					if (coveringname == "directional texture") {
+					if (zcoveringname == "directional texture") {
 						/* clear out old covering on directional defined surfaces before recovering */
-						if (mold.material != null) {
-							if (mold.material.subMaterials != undefined) {
-								for (var i=0;i < mold.material.subMaterials.length;i++) {
-									if (mold.material.subMaterials[i].diffuseTexture != undefined) {
-										if (mold.material.subMaterials[i].diffuseTexture != null) {
-											mold.material.subMaterials[i].diffuseTexture.dispose();
-											mold.material.subMaterials[i].diffuseTexture = null;
+						if (zmold.material != null) {
+							if (zmold.material.subMaterials != undefined) {
+								for (var i=0;i < zmold.material.subMaterials.length;i++) {
+									if (zmold.material.subMaterials[i].diffuseTexture != undefined) {
+										if (zmold.material.subMaterials[i].diffuseTexture != null) {
+											zmold.material.subMaterials[i].diffuseTexture.dispose();
+											zmold.material.subMaterials[i].diffuseTexture = null;
 										}
 									}
 								}
 							}
 							
 						}
-						mold.subMeshes = [];
-						if (mold.subMeshes.length < 12) {
-							mold.subMeshes.push(new BABYLON.SubMesh(0, 0, 4, 0, 6, mold));
-							mold.subMeshes.push(new BABYLON.SubMesh(1, 4, 4, 6, 6, mold));
-							mold.subMeshes.push(new BABYLON.SubMesh(2, 8, 4, 12, 6, mold));
-							mold.subMeshes.push(new BABYLON.SubMesh(3, 12, 4, 18, 6, mold));
-							mold.subMeshes.push(new BABYLON.SubMesh(4, 16, 4, 24, 6, mold));
-							mold.subMeshes.push(new BABYLON.SubMesh(5, 20, 4, 30, 6, mold));
+						zmold.subMeshes = [];
+						if (zmold.subMeshes.length < 12) {
+							zmold.subMeshes.push(new BABYLON.SubMesh(0, 0, 4, 0, 6, zmold));
+							zmold.subMeshes.push(new BABYLON.SubMesh(1, 4, 4, 6, 6, zmold));
+							zmold.subMeshes.push(new BABYLON.SubMesh(2, 8, 4, 12, 6, zmold));
+							zmold.subMeshes.push(new BABYLON.SubMesh(3, 12, 4, 18, 6, zmold));
+							zmold.subMeshes.push(new BABYLON.SubMesh(4, 16, 4, 24, 6, zmold));
+							zmold.subMeshes.push(new BABYLON.SubMesh(5, 20, 4, 30, 6, zmold));
 						}			
 					} else {
 						/* clear old coverings that are not directional */
 						try {
-							if (mold.material != undefined) {
-								if (mold.material.diffuseTexture != null) {
-									mold.material.diffuseTexture.dispose();
-									mold.material.diffuseTexture = null;
+							if (zmold.material != undefined) {
+								if (zmold.material.diffuseTexture != null) {
+									zmold.material.diffuseTexture.dispose();
+									zmold.material.diffuseTexture = null;
 								}
 							}
 						} catch (ex) {}
 						try {
-							if (mold.material != null) {
-								mold.material.dispose();
-								mold.material = null;
+							if (zmold.material != null) {
+								zmold.material.dispose();
+								zmold.material = null;
 							}
 						} catch (ex) {}
 					}
 					/* add covering basedon covering name */
-					mold.material = WTW.addCovering(coveringname, moldname, molddef, lenx, leny, lenz, special1, special2);
-					if (mold.material != undefined) {
+					zmold.material = WTW.addCovering(zcoveringname, zmoldname, zmolddef, zlenx, zleny, zlenz, zspecial1, zspecial2);
+					if (zmold.material != undefined) {
 						/* set colors and color tinting mainly for textures just added */
-						mold.material.specularColor = new BABYLON.Color3(Number(molddef.color.specular.r), Number(molddef.color.specular.g), Number(molddef.color.specular.b));
-						mold.material.diffuseColor = new BABYLON.Color3(Number(molddef.color.diffuse.r), Number(molddef.color.diffuse.g), Number(molddef.color.diffuse.b));	
-						mold.material.emissiveColor = new BABYLON.Color3(Number(molddef.color.emissive.r), Number(molddef.color.emissive.g), Number(molddef.color.emissive.b));
+						zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);	
+						zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+						zmold.material.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+						zmold.material.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 					}
 				}
 			}
-			if (moldname.indexOf("terrain") > -1 || iswaterreflection == "1") {
+			if (zmoldname.indexOf("terrain") > -1 || ziswaterreflection == "1") {
 				/* if mold is set to add reflection, add mold to the reflections array */
-				WTW.addReflectionRefraction(mold);
+				WTW.addReflectionRefraction(zmold);
 			}
-			if (checkcollisions == "0" || coveringname == "none") {
-				molddef.checkcollisions = "0";
-				mold.checkCollisions = false;
+			if (zcheckcollisions == "0" || zcoveringname == "none") {
+				zmolddef.checkcollisions = "0";
+				zmold.checkCollisions = false;
 			} else {
 				/* if not intentionally set to off, use collisions */
-				mold.checkCollisions = true; 
+				zmold.checkCollisions = true; 
 			}
 			if (WTW.adminView == 1) {
 				/* mouse over covers hovers in the 3D Scene - for admin mode */
-				WTW.registerMouseOver(mold);
+				WTW.registerMouseOver(zmold);
 			}
 			/* work in progress - currently disabled, freeze world matrix can speed up the scene with less calculations */
-			if (WTW.AdminView == 0 && parentname.indexOf("connectinggrids") > -1 && (moldname.indexOf("building") > -1 || moldname.indexOf("community") > -1)) {
-				//mold.freezeWorldMatrix();
+			if (WTW.AdminView == 0 && zparentname.indexOf("connectinggrids") > -1 && (zmoldname.indexOf("building") > -1 || zmoldname.indexOf("community") > -1)) {
+				//zmold.freezeWorldMatrix();
 			} else {
-				//mold.unfreezeWorldMatrix();
+				//zmold.unfreezeWorldMatrix();
 			}
 			
 			/*
@@ -503,45 +491,45 @@ WTWJS.prototype.completeMold = function(mold, moldname, parentname, molddef, cov
 			 mesh.cullingStrategy = oneOfThePossibleValues;			
 			 */
 			
-			//if (shape == "box" && coveringname == "texture") {
-			//	mold.convertToUnIndexedMesh();
+			//if (zshape == "box" && zcoveringname == "texture") {
+			//	zmold.convertToUnIndexedMesh();
 			//}
 			
 			/* cleanup - remove any un-parented molds (sometimes the parent was deleted since the mold started to be created) */
-			if (parentname != "") {
-				var parentmold = scene.getMeshByID(parentname);
-				if (parentmold != null) {
-					mold.parent = parentmold;
+			if (zparentname != "") {
+				var zparentmold = scene.getMeshByID(zparentname);
+				if (zparentmold != null) {
+					zmold.parent = zparentmold;
 				} else {
-					WTW.disposeClean(moldname);
+					WTW.disposeClean(zmoldname);
 				}
 			}
 		}	
 	} catch (ex) {
 		WTW.log("core-scripts-molds-addmoldlist\r\n completeMold=" + ex.message);
 	} 
-	return mold;
+	return zmold;
 }
 
-WTWJS.prototype.setNewMoldDefaults = function(shape) {
+WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 	/* For each new mold and new web mold, these are the default values when created using the admin form */
 	try {
-		var coords = WTW.getNewCoordinates(50);
-		var positionX = coords.positionX;
-		var positionY = coords.positionY;
-		var positionZ = coords.positionZ;
-		var rotationY = coords.rotationY;
-		var shapevalue = shape.toLowerCase();
-		var imageid = "ij7fi8qv7dbgb6zc";
-		var imagepath = "/content/system/stock/stucco-512x512.jpg";
-		var heightmapid = "dxmbplwoocpg5df3";
-		var heightmappath = "/content/system/stock/heightmap-1500x1500.jpg";
-		while (shapevalue.indexOf(" ") > -1) {
-			shapevalue = shapevalue.replace(" ","");
+		var zcoords = WTW.getNewCoordinates(50);
+		var zpositionX = zcoords.positionX;
+		var zpositionY = zcoords.positionY;
+		var zpositionZ = zcoords.positionZ;
+		var zrotationY = zcoords.rotationY;
+		var zshapevalue = zshape.toLowerCase();
+		var zimageid = "ij7fi8qv7dbgb6zc";
+		var zimagepath = "/content/system/stock/stucco-512x512.jpg";
+		var zheightmapid = "dxmbplwoocpg5df3";
+		var zheightmappath = "/content/system/stock/heightmap-1500x1500.jpg";
+		while (zshapevalue.indexOf(" ") > -1) {
+			zshapevalue = zshapevalue.replace(" ","");
 		}
 		if (thingid != '') {
-			positionX = 0;
-			positionZ = 0;
+			zpositionX = 0;
+			zpositionZ = 0;
 		}
 		dGet('wtw_tmoldspecial1').value = "0.00";
 		dGet('wtw_moldaddimagepreview').src = "";
@@ -607,20 +595,15 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 		dGet('wtw_tmoldwebtextspecular').value = "";
 		dGet('wtw_tmoldwebtextdiffuse').value = "";
 		dGet('wtw_tmoldwebtextambient').value = "";
-		dGet('wtw_tdiffusecolorr').value = "1.000000000000000000";
-		dGet('wtw_tdiffusecolorg').value = "0.999990000000000000";
-		dGet('wtw_tdiffusecolorb').value = "0.999990000000000000";
-		dGet('wtw_tspecularcolorr').value = "1.000000000000000000";
-		dGet('wtw_tspecularcolorg').value = "0.999999723208150600";
-		dGet('wtw_tspecularcolorb').value = "0.999990000000000000";
-		dGet('wtw_temissivecolorr').value = "0.594280904158206200";
-		dGet('wtw_temissivecolorg').value = "0.594274961349164700";
-		dGet('wtw_temissivecolorb').value = "0.594274961349164700";
-		switch (shapevalue) {
+		dGet('wtw_tmolddiffusecolor').value = "#ffffff";
+		dGet('wtw_tmoldemissivecolor').value = "#000000";
+		dGet('wtw_tmoldspecularcolor').value = "#686868";
+		dGet('wtw_tmoldambientcolor').value = "#575757";
+		switch (zshapevalue) {
 			case "cylinder":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
@@ -635,14 +618,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "10";
 				break;
 			case "halfpipe":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "90.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "90.00";
 				dGet('wtw_tmoldspecial1').value = "1.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
@@ -653,9 +636,9 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "20";
 				break;
 			case "cone":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
@@ -670,14 +653,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "20";
 				break;
 			case "polygon":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial1').value = "1";
 				dGet('wtw_tmoldspecial2').value = "0";
@@ -688,9 +671,9 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "20";
 				break; 
 			case "sphere":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
@@ -705,14 +688,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "10";
 				break;
 			case "dome":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial1').value = "1.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
@@ -723,14 +706,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "10";
 				break;
 			case "triangle":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -740,9 +723,9 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 			case "torus":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY - 3;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "5.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
@@ -758,14 +741,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "16";
 				break;
 			case "plane":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "0.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY + 90;
+				dGet('wtw_tmoldrotationy').value = zrotationY + 90;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -775,9 +758,9 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "2";
 				break;
 			case "lightbulb":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 1;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "0.80";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "0.80";
@@ -792,9 +775,9 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "10";
 				break;
 			case "spotlight":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 1;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "2.00";
 				dGet('wtw_tmoldscalingy').value = "2.00";
 				dGet('wtw_tmoldscalingz').value = "2.00";
@@ -809,9 +792,9 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "20";
 				break;
 			case "candleflame":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY-4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 3;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "5.00";
 				dGet('wtw_tmoldscalingz').value = ".1";
@@ -825,14 +808,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "2";
 				dGet('wtw_tmoldcoveringold').value = "none";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "tree":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY-4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -846,14 +829,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "none";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "flag":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY-4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -867,14 +850,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "10";
 				dGet('wtw_tmoldcoveringold').value = "none";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "smoke":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY-4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -888,14 +871,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "none";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "waterfountain":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY-4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -909,14 +892,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "none";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "particlesphere":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY-4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "2.00";
 				dGet('wtw_tmoldscalingy').value = "2.00";
 				dGet('wtw_tmoldscalingz').value = "2.00";
@@ -930,14 +913,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "none";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "particleshower":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY-4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "2.00";
 				dGet('wtw_tmoldscalingy').value = "6.00";
 				dGet('wtw_tmoldscalingz').value = "2.00";
@@ -951,14 +934,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "none";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "babylonfile":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY-4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -972,19 +955,19 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "none";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "waterplane":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY-4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = ".1";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -993,19 +976,19 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "2";
 				dGet('wtw_tmoldcoveringold').value = "2d texture";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "waterdisc":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY-4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = ".1";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1015,19 +998,19 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldopacity').value = "100.00";
 				dGet('wtw_tmoldsubdivisions').value = "10";
 				dGet('wtw_tmoldcoveringold').value = "2d texture";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "disc":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "20.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "0.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY + 90;
+				dGet('wtw_tmoldrotationy').value = zrotationY + 90;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1037,9 +1020,9 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "16";
 				break;
 			case "line":
-				dGet('wtw_tmoldpositionx').value = "0.00";
-				dGet('wtw_tmoldpositiony').value = "0.00";
-				dGet('wtw_tmoldpositionz').value = "0.00";
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -1055,14 +1038,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldcoveringold').value = "color";
 				break;
 			case "wall":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 10;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "20.00";
 				dGet('wtw_tmoldscalingy').value = "20.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY + 90;
+				dGet('wtw_tmoldrotationy').value = zrotationY + 90;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1071,19 +1054,19 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "texture";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "floor":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY - 5;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + .5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "20.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "20.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1097,14 +1080,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "box":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1114,14 +1097,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 			case "roundedbox":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1131,14 +1114,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 			case "3dtext":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY-4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY + 90;
+				dGet('wtw_tmoldrotationy').value = zrotationY + 90;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1155,19 +1138,19 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldwebtextambient').value = "#808080";
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "none";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "image":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = ".25";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1177,14 +1160,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 			case "raisedimage":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = ".25";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1195,14 +1178,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldmaxheight').value = "2.00";
 				break;
 			case "video":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = ".25";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY + 180;
+				dGet('wtw_tmoldrotationy').value = zrotationY + 180;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1221,14 +1204,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvideoloop').checked = false;
 				break;
 			case "simpletextbox":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = ".25";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1238,18 +1221,18 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 			case "viewblog":
-				rotationY += 180;
-				if (rotationY > 360) {
-					rotationY -= 360;
+				zrotationY += 180;
+				if (zrotationY > 360) {
+					zrotationY -= 360;
 				}
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY - 4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "15.00";
 				dGet('wtw_tmoldscalingz').value = "15.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1258,23 +1241,23 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "texture";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;			
 			case "blogposting":
-				rotationY += 180;
-				if (rotationY > 360) {
-					rotationY -= 360;
+				zrotationY += 180;
+				if (zrotationY > 360) {
+					zrotationY -= 360;
 				}
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY - 4;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "15.00";
 				dGet('wtw_tmoldscalingz').value = "15.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1283,19 +1266,19 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				dGet('wtw_tmoldcoveringold').value = "texture";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "sharktank":
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY - 5;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "100.00";
 				dGet('wtw_tmoldscalingy').value = "50.00";
 				dGet('wtw_tmoldscalingz').value = "100.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial1').value = "7";
 				dGet('wtw_tmoldspecial2').value = "0.00";
@@ -1308,14 +1291,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldcoveringold').value = "glass";
 				break;
 			case "custom": 
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY - 5;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1325,14 +1308,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;	
 			case "terrain": 
-				dGet('wtw_tmoldpositionx').value = positionX;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
 				dGet('wtw_tmoldpositiony').value = -1;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1000.00";
 				dGet('wtw_tmoldscalingy').value = "1000.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1342,17 +1325,17 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "70";
 				dGet('wtw_tmoldmaxheight').value = "70.00";
 				dGet('wtw_tmoldcoveringold').value = "terrain";
-				dGet('wtw_tmoldtextureid').value = imageid;
-				dGet('wtw_tmoldtexturepath').value = imagepath;
-				dGet('wtw_tmoldheightmapid').value = heightmapid;
-				dGet('wtw_tmoldheightmappath').value = heightmappath;
+				dGet('wtw_tmoldtextureid').value = zimageid;
+				dGet('wtw_tmoldtexturepath').value = zimagepath;
+				dGet('wtw_tmoldheightmapid').value = zheightmapid;
+				dGet('wtw_tmoldheightmappath').value = zheightmappath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				WTW.setPreviewImage('wtw_moldheightmappreview', 'wtw_tmoldheightmappath', 'wtw_tmoldheightmapid');
 				break;	
 			case "tube":
-				dGet('wtw_tmoldpositionx').value = "0.00";
-				dGet('wtw_tmoldpositiony').value = "0.00";
-				dGet('wtw_tmoldpositionz').value = "0.00";
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -1368,14 +1351,14 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "8";
 				break;				
 			default:
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1385,7 +1368,7 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 		}
-		WTW.pluginsSetNewMoldDefaults(shape, positionX, positionY, positionZ, rotationY);
+		WTW.pluginsSetNewMoldDefaults(zshape, zpositionX, zpositionY, zpositionZ, zrotationY);
 		dGet('wtw_tmoldcsgmoldid').value = "";
 		WTW.setDDLValue("wtw_tmoldcsgaction", "");
 		dGet('wtw_selectedcsgshape').innerHTML = "";
@@ -1395,20 +1378,21 @@ WTWJS.prototype.setNewMoldDefaults = function(shape) {
 	} 
 }
 
-WTWJS.prototype.setMoldFormFields = function(shape) {
+WTWJS.prototype.setMoldFormFields = function(zshape) {
 	/* For each new mold and new web mold, these are the sections shown on the admin form per shape */
 	/* for example: sphere has subdivisions and a box does not, or babylon files allow uploads selections but have no added textures */
 	try {
-		var shapevalue = shape.toLowerCase();
-		while (shapevalue.indexOf(" ") > -1) {
-			shapevalue = shapevalue.replace(" ","");
+		var zshapevalue = zshape.toLowerCase();
+		while (zshapevalue.indexOf(" ") > -1) {
+			zshapevalue = zshapevalue.replace(" ","");
 		}
-		dGet('wtw_tmoldshape').value = shape;
+		dGet('wtw_tmoldshape').value = zshape;
 		WTW.hide('wtw_moldaddimagediv');
 		WTW.hide('wtw_moldscalediv');
 		WTW.hide('wtw_moldmergemoldsdiv');
 		dGet('wtw_tmoldcsgaction').selectedIndex = 0;
 		WTW.show('wtw_moldscalingydiv');
+		WTW.show('wtw_moldcolorsdiv');
 		WTW.show('wtw_moldtexturesetdiv');
 		WTW.show('wtw_moldbasictexturesetdiv');
 		WTW.show('wtw_moldbasictextureset2div');
@@ -1422,7 +1406,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 		WTW.hide('wtw_pointlistdiv');
 		WTW.hide('wtw_pointeditdiv');
 		WTW.hide('wtw_objectdiv');
-		switch (shapevalue) {
+		switch (zshapevalue) {
 			case "tube":
 				dGet('wtw_moldpositiontitle').innerHTML = "Tube Position";
 				dGet('wtw_moldscalingtitle').innerHTML = "Tube Length";
@@ -1649,6 +1633,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.hide('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.hide('wtw_moldbasictextureset2div');
@@ -1666,6 +1651,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.hide('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.hide('wtw_moldbasictextureset2div');
@@ -1683,6 +1669,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.show('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.show('wtw_moldbasictextureset2div');
@@ -1701,6 +1688,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.hide('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.hide('wtw_moldbasictextureset2div');
@@ -1718,6 +1706,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.hide('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.hide('wtw_moldbasictextureset2div');
@@ -1735,6 +1724,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.hide('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.hide('wtw_moldbasictextureset2div');
@@ -1752,6 +1742,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.hide('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.hide('wtw_moldbasictextureset2div');
@@ -1769,6 +1760,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.hide('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.hide('wtw_moldbasictextureset2div');
@@ -1787,6 +1779,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.hide('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.hide('wtw_moldbasictextureset2div');
@@ -1803,6 +1796,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				dGet('wtw_editmoldformtitle').innerHTML = "Edit Water Disc";
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
+				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.hide('wtw_moldbasictextureset2div');
@@ -1925,6 +1919,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.hide('wtw_moldsubdivisions');
+				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.hide('wtw_moldbasictextureset2div');
@@ -2109,7 +2104,7 @@ WTWJS.prototype.setMoldFormFields = function(shape) {
 				WTW.show('wtw_moldmergemoldsdiv');
 				break;
 		}
-		WTW.pluginsSetMoldFormFields(shape);
+		WTW.pluginsSetMoldFormFields(zshape);
 	} catch (ex) {
 		WTW.log("core-scripts-molds-addmoldlist\r\n setMoldFormFields=" + ex.message);
 	}
