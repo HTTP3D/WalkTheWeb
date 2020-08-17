@@ -14,9 +14,9 @@ class wtwdb {
 
 	}	
 
-	public function __call ($method, $arguments)  {
-		if (isset($this->$method)) {
-			call_user_func_array($this->$method, array_merge(array(&$this), $arguments));
+	public function __call ($zmethod, $zarguments)  {
+		if (isset($this->$zmethod)) {
+			call_user_func_array($this->$zmethod, array_merge(array(&$this), $zarguments));
 		}
 	}
 	
@@ -24,14 +24,14 @@ class wtwdb {
 	public $userid = "";
 	public $pagename = "";
 	
-	public function serror($message) {
+	public function serror($zmessage) {
 		try {
 			$this->query("
 				insert into ".wtw_tableprefix."errorlog 
 					(message,
 					logdate)
 					values
-					('".addslashes($message)."',
+					('".addslashes($zmessage)."',
 					'".date('Y-m-d H:i:s')."');");
 				try {
 					if (isset($_SERVER['PHP_SELF']) && !empty($_SERVER['PHP_SELF'])) {
@@ -40,33 +40,33 @@ class wtwdb {
 						$this->pagename = "index.php";
 					}
 					if ($this->pagename == "admin.php") {
-						$error = "<script type=\"text/javascript\">";
-						$error .= "console.log('".addslashes($message)."');";
-						$error .= "dGet('wtw_error').innerHTML = '".addslashes($message)."';";
-						$error .= "WTW.openFullPageForm('error','Error Found');";
-						$error .= "</script>";
-						echo $error;
+						$zerror = "<script type=\"text/javascript\">";
+						$zerror .= "console.log('".addslashes($zmessage)."');";
+						$zerror .= "dGet('wtw_error').innerHTML = '".addslashes($zmessage)."';";
+						$zerror .= "WTW.openFullPageForm('error','Error Found');";
+						$zerror .= "</script>";
+						echo $zerror;
 					}
 				} catch (Exception $e) { }
 		} catch (Exception $e) {
 		}
 	}
 	
-	public function query($sql) {
-		$data = array();
-		$num_rows = 0;
+	public function query($zsql) {
+		$zdata = array();
+		$znum_rows = 0;
 		try {
-			if (!empty($sql) && isset($sql)) {
+			if (!empty($zsql) && isset($zsql)) {
 				$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
 				if ($conn->connect_error) {
 					$this->serror("core-functons-class_wtwdb.php-query=".$conn->connect_error);
 				} else {
-					$zresults = $conn->query($sql);
+					$zresults = $conn->query($zsql);
 					if (is_object($zresults)) {
 						if ($zresults->num_rows > 0) {
 							while($zrow = $zresults->fetch_assoc()) {
-								$data[$num_rows] = $zrow;
-								$num_rows++;
+								$zdata[$znum_rows] = $zrow;
+								$znum_rows++;
 							}
 						}
 					}
@@ -76,7 +76,7 @@ class wtwdb {
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-query=".$e->getMessage());
 		}	
-		return $data;		
+		return $zdata;		
 	}
 	
 	public function deltaCreateTable($zsql) {
@@ -339,7 +339,7 @@ class wtwdb {
 		}	
 	}
 	
-	public function getRandomString($zlength,$zstringtype) {
+	public function getRandomString($zlength, $zstringtype) {
 		$zrandomstring = '';
 		try {
 			$zcharacters = '';
@@ -363,49 +363,94 @@ class wtwdb {
 		return $zrandomstring;
 	}
 
-	public function tableExists($tablename) {
-		$exists = false;
+	public function tableExists($ztablename) {
+		$zexists = false;
 		try {
-			$zresults = $this->query("show tables like '".$tablename."';");
+			$zresults = $this->query("show tables like '".$ztablename."';");
 			if (count($zresults) > 0) {
-				$exists = true;
+				$zexists = true;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-tableExists=".$e->getMessage());
 		}			
-		return $exists;
+		return $zexists;
 	}
 
-	public function keyExists($tablename, $zfieldid, $zkeyid) {
-		$exists = false;
+	public function keyExists($ztablename, $zfieldid, $zkeyid) {
+		$zexists = false;
 		try {
 			$zresults = $this->query("
 				select ".$zfieldid." 
-				from ".$tablename." 
+				from ".$ztablename." 
 				where ".$zfieldid."=".$zkeyid.";");
 			if (count($zresults) > 0) {
-				$exists = true;
+				$zexists = true;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-keyExists=".$e->getMessage());
 		}			
-		return $exists;
+		return $zexists;
 	}
 	
+	public function getNewKey($ztablename, $zfieldid, $zdefaultkeyid) {
+		/* pass the tablename without prefix, id field name, and (optional) if you want a starting test value */
+		$zkeyid = '';
+		try {
+			if (empty($zdefaultkeyid) || !isset($zdefaultkeyid)) {
+				$zdefaultkeyid = $this->getRandomString(16,1);
+			}
+			while (empty($zkeyid)) {
+				$zresults = $this->query("
+					select ".$zfieldid." 
+					from ".wtw_tableprefix.$ztablename." 
+					where ".$zfieldid."='".$zdefaultkeyid."';");
+				if (count($zresults) == 0) {
+					$zkeyid = $zdefaultkeyid;
+				} else {
+					$zdefaultkeyid = $this->getRandomString(16,1);
+				}
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getNewKey=".$e->getMessage());
+		}			
+		return $zkeyid;
+	}
+	
+	public function getIDByPastID($ztablename, $zfieldid, $zpastfieldid, $zpastid) {
+		$zkeyid = '';
+		try {
+			if (!empty($zpastid) && isset($zpastid)) {
+				$zresults = $this->query("
+					select ".$zfieldid." 
+					from ".wtw_tableprefix.$ztablename." 
+					where ".$zpastfieldid."='".$zpastid."'
+					order by updatedate desc
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zkeyid = $zrow[$zfieldid];
+				}
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getIDByPastID=".$e->getMessage());
+		}
+		return $zkeyid;
+	}
+	
+	
 	public function userExists($zuserid) {
-		$exists = false;
+		$zexists = false;
 		try {
 			$zresults = $this->query("
 				select userid 
 				from ".wtw_tableprefix."users 
 				where userid='".$zuserid."';");
 			if (count($zresults) > 0) {
-				$exists = true;
+				$zexists = true;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-userExists=".$e->getMessage());
 		}			
-		return $exists;
+		return $zexists;
 	}
 	
 	public function getSessionUserID() {
@@ -511,7 +556,7 @@ class wtwdb {
 	}
 
 	public function checkUpdateAccess($zcommunityid, $zbuildingid, $zthingid) {
-		$hasaccess = false;
+		$zhasaccess = false;
 		try {
 			global $wtwuser;
 			$zresults = null;
@@ -537,9 +582,9 @@ class wtwdb {
 			}
 			if (!empty($zresults) && isset($zresults)) {
 				foreach ($zresults as $zrow) {
-					$authorizationid = $zrow["userauthorizationid"];
-					if (!empty($authorizationid) && isset($authorizationid)) {
-						$hasaccess = true;
+					$zauthorizationid = $zrow["userauthorizationid"];
+					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
+						$zhasaccess = true;
 					}
 				}
 			}
@@ -558,9 +603,9 @@ class wtwdb {
 			}
 			if (!empty($zresults) && isset($zresults)) {
 				foreach ($zresults as $zrow) {
-					$authorizationid = $zrow["userauthorizationid"];
-					if (!empty($authorizationid) && isset($authorizationid)) {
-						$hasaccess = true;
+					$zauthorizationid = $zrow["userauthorizationid"];
+					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
+						$zhasaccess = true;
 					}
 				}
 			}
@@ -579,20 +624,20 @@ class wtwdb {
 			}
 			if (!empty($zresults) && isset($zresults)) {
 				foreach ($zresults as $zrow) {
-					$authorizationid = $zrow["userauthorizationid"];
-					if (!empty($authorizationid) && isset($authorizationid)) {
-						$hasaccess = true;
+					$zauthorizationid = $zrow["userauthorizationid"];
+					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
+						$zhasaccess = true;
 					}
 				}
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwbuildings.php-checkUpdateAccess=".$e->getMessage());
 		}
-		return $hasaccess;
+		return $zhasaccess;
 	}
 
 	public function checkAdminAccess($zcommunityid, $zbuildingid, $zthingid) {
-		$hasaccess = false;
+		$zhasaccess = false;
 		try {
 			global $wtwuser;
 			$zresults = null;
@@ -615,9 +660,9 @@ class wtwdb {
 			}
 			if (!empty($zresults) && isset($zresults)) {
 				foreach ($zresults as $zrow) {
-					$authorizationid = $zrow["userauthorizationid"];
-					if (!empty($authorizationid) && isset($authorizationid)) {
-						$hasaccess = true;
+					$zauthorizationid = $zrow["userauthorizationid"];
+					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
+						$zhasaccess = true;
 					}
 				}
 			}
@@ -633,9 +678,9 @@ class wtwdb {
 			}
 			if (!empty($zresults) && isset($zresults)) {
 				foreach ($zresults as $zrow) {
-					$authorizationid = $zrow["userauthorizationid"];
-					if (!empty($authorizationid) && isset($authorizationid)) {
-						$hasaccess = true;
+					$zauthorizationid = $zrow["userauthorizationid"];
+					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
+						$zhasaccess = true;
 					}
 				}
 			}
@@ -651,16 +696,16 @@ class wtwdb {
 			}
 			if (!empty($zresults) && isset($zresults)) {
 				foreach ($zresults as $zrow) {
-					$authorizationid = $zrow["userauthorizationid"];
-					if (!empty($authorizationid) && isset($authorizationid)) {
-						$hasaccess = true;
+					$zauthorizationid = $zrow["userauthorizationid"];
+					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
+						$zhasaccess = true;
 					}
 				}
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwbuildings.php-checkAdminAccess=".$e->getMessage());
 		}
-		return $hasaccess;
+		return $zhasaccess;
 	}
 	
 	public function getSetting($zsettingname) {
@@ -780,154 +825,154 @@ class wtwdb {
 		return $zsuccess;
 	}
 	
-	public function getVal($key, $defaultval) {
-		$value = $defaultval;
+	public function getVal($zkey, $zdefaultval) {
+		$zvalue = $zdefaultval;
 		try {
-			if(isset($_GET[$key])) {
-				$value = $_GET[$key];
+			if(isset($_GET[$zkey])) {
+				$zvalue = $_GET[$zkey];
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-getval=".$e->getMessage());
 		}
-		return $value;
+		return $zvalue;
 	}
 
-	public function getNumber($key, $defaultval) {
-		$value = $defaultval;
+	public function getNumber($zkey, $zdefaultval) {
+		$zvalue = $zdefaultval;
 		try {
-			if(isset($_GET[$key])) {
-				if (is_numeric($_GET[$key])) {
-					$value = $_GET[$key];
+			if(isset($_GET[$zkey])) {
+				if (is_numeric($_GET[$zkey])) {
+					$zvalue = $_GET[$zkey];
 				}
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-getNumber=".$e->getMessage());
 		}
-		return $value;
+		return $zvalue;
 	}
 	
 	public function checkIDFormat($zid) {
-		$validid = "";
+		$zvalidid = "";
 		try {
 			$zid = addslashes($zid);
 			if (preg_match('/[a-zA-Z0-9]/', $zid) == false) {
 				$zid = "";
 			}
 			if (strlen($zid) == 16) {
-				$validid = $zid;
+				$zvalidid = $zid;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-checkIDFormat=".$e->getMessage());
 		}			
-		return $validid;
+		return $zvalidid;
 	}
 
-	public function checkNumber($val, $defaultval) {
-		$checkval = $defaultval;
+	public function checkNumber($zval, $zdefaultval) {
+		$zcheckval = $zdefaultval;
 		try {
-			if (isset($val)) {
-				if (is_numeric($val)) {
-					$checkval = $val;
+			if (isset($zval)) {
+				if (is_numeric($zval)) {
+					$zcheckval = $zval;
 				}
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-checkNumber=".$e->getMessage());
 		}
-		return $checkval;
+		return $zcheckval;
 	}
 	
 	public function checkAlphaNumeric($zid) {
-		$validid = "";
+		$zvalidid = "";
 		try {
 			$zid = addslashes($zid);
 			if (preg_match('/[a-zA-Z0-9_-]/', $zid)) {
-				$validid = $zid;
+				$zvalidid = $zid;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-checkAlphaNumeric=".$e->getMessage());
 		}			
-		return $validid;
+		return $zvalidid;
 	}
 
 	public function checkDisplayName($zid, $zdefault) {
-		$validid = $zdefault;
+		$zvalidid = $zdefault;
 		try {
 			$zid = str_replace(" ","",addslashes($zid));
 			if (preg_match('/[a-zA-Z0-9_-]/', $zid)) {
-				$validid = $zid;
+				$zvalidid = $zid;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-checkDisplayName=".$e->getMessage());
 		}			
-		return $validid;
+		return $zvalidid;
 	}
 
 	public function checkFolderPath($zurl) {
-		$validurl = "";
+		$zvalidurl = "";
 		try {
 			if (preg_match('/[a-zA-Z0-9_.-\/\:]/', $zurl)) {
-				$validurl = $zurl;
+				$zvalidurl = $zurl;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-checkFolderPath=".$e->getMessage());
 		}			
-		return $validurl;
+		return $zvalidurl;
 	}
 
 	public function checkFileName($zid) {
-		$validid = "";
+		$zvalidid = "";
 		try {
 			$zid = addslashes($zid);
 			if (preg_match('/[a-zA-Z0-9_.-]/', $zid)) {
-				$validid = $zid;
+				$zvalidid = $zid;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-checkFileName=".$e->getMessage());
 		}			
-		return $validid;
+		return $zvalidid;
 	}
 
 	public function checkFunctionName($zid) {
-		$validid = "";
+		$zvalidid = "";
 		try {
 			$zid = addslashes($zid);
 			if (preg_match('/[a-zA-Z0-9_.]/', $zid)) {
-				$validid = $zid;
+				$zvalidid = $zid;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-checkFunctionName=".$e->getMessage());
 		}			
-		return $validid;
+		return $zvalidid;
 	}
 
 	public function checkPublishName($zdomainname, $zwebtype, $zpublishname) {
-		$exists = false;
+		$zexists = false;
 		try {
-			$sql = "
+			$zsql = "
 				select webaliasid
 				from ".wtw_tableprefix."webaliases
 				where domainname='".$zdomainname."'
 					and deleted=0 ";
 			switch ($zwebtype) {
 				case "community":
-					$sql .= " and (communitypublishname='".$zpublishname."' or communityid='".$zpublishname."') ";
+					$zsql .= " and (communitypublishname='".$zpublishname."' or communityid='".$zpublishname."') ";
 					break;
 				case "building":
-					$sql .= " and (buildingpublishname='".$zpublishname."' or buildingid='".$zpublishname."') ";
+					$zsql .= " and (buildingpublishname='".$zpublishname."' or buildingid='".$zpublishname."') ";
 					break;
 				case "thing":
-					$sql .= " and (thingpublishname='".$zpublishname."' or thingid='".$zpublishname."') ";
+					$zsql .= " and (thingpublishname='".$zpublishname."' or thingid='".$zpublishname."') ";
 					break;
 			}
-			$sql .=	"order by createdate limit 1;";
-			$zresults = $this->query($sql);
+			$zsql .=	"order by createdate limit 1;";
+			$zresults = $this->query($zsql);
 			if (count($zresults) > 0) {
-				$exists = true;
+				$zexists = true;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-checkPublishName=".$e->getMessage());
 		}			
-		return $exists;
+		return $zexists;
 	}
 
 	public function prepCheckDate($zdate) {
@@ -955,27 +1000,52 @@ class wtwdb {
 		return $zdatestring;
 	}
 	
-	public function escapeHTML($text) {
-		$checktext = "";
+	public function escapeHTML($ztext) {
+		$zchecktext = "";
 		try {
-			if (!empty($text) && isset($text)) {
-				$checktext = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+			if (!empty($ztext) && isset($ztext)) {
+				$zchecktext = htmlspecialchars($ztext, ENT_QUOTES, 'UTF-8');
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-escapeHTML=" . $e->getMessage());
 		}
-		return $checktext;
+		return $zchecktext;
 	}
 	
-	public function confirmKey($zkey, $zmoldgroup, $zwebid) {
+	public function getHexFromRGB($zred, $zgreen, $zblue) {
+		$zhex = "";
+		try {
+			if (is_numeric($zred)) {
+				$zred = $zred * 255;
+			} else {
+				$zred = 255;
+			}
+			if (is_numeric($zgreen)) {
+				$zgreen = $zgreen * 255;
+			} else {
+				$zgreen = 255;
+			}
+			if (is_numeric($zblue)) {
+				$zblue = $zblue * 255;
+			} else {
+				$zblue = 255;
+			}
+			$zhex =  sprintf("#%02x%02x%02x", $zred, $zgreen, $zblue);
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getHexFromRGB=" . $e->getMessage());
+		}
+		return $zhex;
+	}
+	
+	public function confirmKey($zkey, $zwebtype, $zwebid) {
 		global $wtwdb;
 		$zsuccess = false;
 		try {
 			if (!empty($zkey) && isset($zkey)) {
 				$zkey = base64_decode($zkey);
-				$sharehash = "";
+				$zsharehash = "";
 				$zresults = array();
-				switch ($zmoldgroup) {
+				switch ($zwebtype) {
 					case "community":
 						$zresults = $wtwdb->query("
 							select sharehash
@@ -996,15 +1066,15 @@ class wtwdb {
 						break;
 				}
 				foreach ($zresults as $zrow) {
-					$sharehash = $zrow["sharehash"];
+					$zsharehash = $zrow["sharehash"];
 				}
-				if (!empty($zkey) && isset($zkey) && !empty($sharehash) && isset($sharehash)) {
-					if (password_verify($zkey, $sharehash)) {
+				if (!empty($zkey) && isset($zkey) && !empty($zsharehash) && isset($zsharehash)) {
+					if (password_verify($zkey, $zsharehash)) {
 						$zsuccess = true;
 					}
 				}
 			}
-			switch ($zmoldgroup) {
+			switch ($zwebtype) {
 				case "community":
 					$zresults = $wtwdb->query("
 						update ".wtw_tableprefix."communities
@@ -1078,14 +1148,14 @@ class wtwdb {
 	}
 
 	public function getwebimages($zthingmoldid, $zbuildingmoldid, $zcommunitymoldid, $zgraphiclevel) {
-		$webimages = array();
+		$zwebimages = array();
 		try {
 			if (empty($zgraphiclevel) || !isset($zgraphiclevel)) {
 				$zgraphiclevel = -1;
 			} elseif (is_numeric($zgraphiclevel) == false) {
 				$zgraphiclevel = -1;
 			}
-			$webimages[0] = array(
+			$zwebimages[0] = array(
 				'imageid'=> '',
 				'imagepath'=> '',
 				'imagehoverid'=> '',
@@ -1398,7 +1468,7 @@ class wtwdb {
 			
 			$i = 0;
 			foreach ($zresults as $zrow) {
-				$webimages[$i] = array(
+				$zwebimages[$i] = array(
 					'imageid'=> $zrow["imageid"],
 					'imagepath'=> $zrow["imagepath"],
 					'imagehoverid'=> $zrow["imagehoverid"],
@@ -1416,11 +1486,11 @@ class wtwdb {
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-getwebimages=".$e->getMessage());
 		}
-		return $webimages;
+		return $zwebimages;
 	}
 	
 	public function getmoldpoints($zthingmoldid, $zbuildingmoldid, $zcommunitymoldid, $zpathnumber, $zshape) {
-		$pathpoints = array();
+		$zpathpoints = array();
 		$zmoldid = "";
 		try {
 			if ($zshape == 'tube') {
@@ -1442,7 +1512,7 @@ class wtwdb {
 
 				$i = 0;
 				foreach ($zresults as $zrow) {
-					$pathpoints[$i] = array(
+					$zpathpoints[$i] = array(
 						'x'=> $zrow["positionx"],
 						'y'=> $zrow["positiony"],
 						'z'=> $zrow["positionz"],
@@ -1451,22 +1521,22 @@ class wtwdb {
 					$i += 1;
 				}
 				if ($i == 0) {
-					$pathpoints[0] = null;
+					$zpathpoints[0] = null;
 				}
 			} else {
-				$pathpoints[0] = null;
+				$zpathpoints[0] = null;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-getmoldpoints=".$e->getMessage());
 		}
-		return $pathpoints;
+		return $zpathpoints;
 	}
 	
-	public function getWebAliases($zmoldgroup, $zwebid) {
+	public function getWebAliases($zwebtype, $zwebid) {
 		$zdomains = array();
 		try {
 			$ztablename = "";
-			switch ($zmoldgroup) {
+			switch ($zwebtype) {
 				case "community":
 					$ztablename = "communities";
 					break;
@@ -1485,8 +1555,8 @@ class wtwdb {
 						t1.analyticsid
 					from ".wtw_tableprefix."webaliases w1
 						left join ".wtw_tableprefix.$ztablename." t1
-							on w1.".$zmoldgroup."id=t1.".$zmoldgroup."id
-					where w1.".$zmoldgroup."id='".$zwebid."'
+							on w1.".$zwebtype."id=t1.".$zwebtype."id
+					where w1.".$zwebtype."id='".$zwebid."'
 					   and w1.deleted=0
 					order by w1.domainname, w1.webaliasid;");
 				foreach ($zresults as $zrow) {
@@ -1503,18 +1573,17 @@ class wtwdb {
 		return $zdomains;
 	}
 
-	public function trackPageView($currentpage) {
+	public function trackPageView($zcurrentpage) {
 		$zsuccess = false;
 		try {
 			if (defined('wtw_googleanalytics')) {
-				$currentpage = $currentpage;
-				$curl_handle=curl_init();
-				curl_setopt($curl_handle, CURLOPT_URL,'http://www.google-analytics.com/collect/v=1&tid='.wtw_googleanalytics.'&cid=555&t=pageview&dp='.$currentpage);
-				curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
-				curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Geoip tracker');
-				$query = curl_exec($curl_handle);
-				curl_close($curl_handle);
+				$zcurl=curl_init();
+				curl_setopt($zcurl, CURLOPT_URL,'http://www.google-analytics.com/collect/v=1&tid='.wtw_googleanalytics.'&cid=555&t=pageview&dp='.$zcurrentpage);
+				curl_setopt($zcurl, CURLOPT_CONNECTTIMEOUT, 2);
+				curl_setopt($zcurl, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($zcurl, CURLOPT_USERAGENT, 'Geoip tracker');
+				$zquery = curl_exec($zcurl);
+				curl_close($zcurl);
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {

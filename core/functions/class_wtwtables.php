@@ -95,6 +95,7 @@ class wtwtables {
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."avataranimations` (
 				  `avataranimationid` varchar(16) NOT NULL,
+				  `pastavataranimationid` varchar(16) DEFAULT '',
 				  `avatarid` varchar(16) DEFAULT '',
 				  `userid` varchar(16) DEFAULT '',
 				  `loadpriority` int(11) DEFAULT '0',
@@ -174,8 +175,6 @@ class wtwtables {
 				  `uscale` decimal(18,2) DEFAULT '0.00',
 				  `vscale` decimal(18,2) DEFAULT '0.00',
 				  `uploadobjectid` varchar(16) DEFAULT '',
-				  `objectfolder` varchar(255) DEFAULT '',
-				  `objectfile` varchar(255) DEFAULT '',
 				  `graphiclevel` int(11) DEFAULT '0',
 				  `textureid` varchar(16) DEFAULT '',
 				  `texturebumpid` varchar(16) DEFAULT '',
@@ -191,6 +190,10 @@ class wtwtables {
 				  `emissivecolorr` decimal(20,18) DEFAULT '1.000000000000000000',
 				  `emissivecolorg` decimal(20,18) DEFAULT '1.000000000000000000',
 				  `emissivecolorb` decimal(20,18) DEFAULT '1.000000000000000000',
+				  `diffusecolor` varchar(7) DEFAULT '',
+				  `specularcolor` varchar(7) DEFAULT '',
+				  `emissivecolor` varchar(7) DEFAULT '',
+				  `ambientcolor` varchar(7) DEFAULT '',
 				  `heightmapid` varchar(16) DEFAULT '',
 				  `mixmapid` varchar(16) DEFAULT '',
 				  `texturerid` varchar(16) DEFAULT '',
@@ -346,8 +349,6 @@ class wtwtables {
 				  `uscale` decimal(18,2) DEFAULT '0.00',
 				  `vscale` decimal(18,2) DEFAULT '0.00',
 				  `uploadobjectid` varchar(16) DEFAULT '',
-				  `objectfolder` varchar(255) DEFAULT '',
-				  `objectfile` varchar(255) DEFAULT '',
 				  `graphiclevel` int(11) DEFAULT '0',
 				  `textureid` varchar(16) DEFAULT '',
 				  `texturebumpid` varchar(16) DEFAULT '',
@@ -363,6 +364,10 @@ class wtwtables {
 				  `emissivecolorr` decimal(20,18) DEFAULT '1.000000000000000000',
 				  `emissivecolorg` decimal(20,18) DEFAULT '1.000000000000000000',
 				  `emissivecolorb` decimal(20,18) DEFAULT '1.000000000000000000',
+				  `diffusecolor` varchar(7) DEFAULT '',
+				  `specularcolor` varchar(7) DEFAULT '',
+				  `emissivecolor` varchar(7) DEFAULT '',
+				  `ambientcolor` varchar(7) DEFAULT '',
 				  `heightmapid` varchar(16) DEFAULT '',
 				  `mixmapid` varchar(16) DEFAULT '',
 				  `texturerid` varchar(16) DEFAULT '',
@@ -540,7 +545,7 @@ class wtwtables {
 				  `scriptid` varchar(16) NOT NULL,
 				  `pastscriptid` varchar(16) DEFAULT '',
 				  `actionzoneid` varchar(16) DEFAULT '',
-				  `moldgroup` varchar(15) DEFAULT '',
+				  `webtype` varchar(15) DEFAULT '',
 				  `webid` varchar(16) DEFAULT '',
 				  `scriptname` varchar(256) DEFAULT '',
 				  `scriptpath` varchar(256) DEFAULT '',
@@ -596,8 +601,6 @@ class wtwtables {
 				  `uscale` decimal(18,2) DEFAULT '0.00',
 				  `vscale` decimal(18,2) DEFAULT '0.00',
 				  `uploadobjectid` varchar(16) DEFAULT '',
-				  `objectfolder` varchar(255) DEFAULT '',
-				  `objectfile` varchar(255) DEFAULT '',
 				  `graphiclevel` int(11) DEFAULT '0',
 				  `textureid` varchar(16) DEFAULT '',
 				  `texturebumpid` varchar(16) DEFAULT '',
@@ -613,6 +616,10 @@ class wtwtables {
 				  `emissivecolorr` decimal(20,18) DEFAULT '1.000000000000000000',
 				  `emissivecolorg` decimal(20,18) DEFAULT '1.000000000000000000',
 				  `emissivecolorb` decimal(20,18) DEFAULT '1.000000000000000000',
+				  `diffusecolor` varchar(7) DEFAULT '',
+				  `specularcolor` varchar(7) DEFAULT '',
+				  `emissivecolor` varchar(7) DEFAULT '',
+				  `ambientcolor` varchar(7) DEFAULT '',
 				  `heightmapid` varchar(16) DEFAULT '',
 				  `mixmapid` varchar(16) DEFAULT '',
 				  `texturerid` varchar(16) DEFAULT '',
@@ -700,6 +707,7 @@ class wtwtables {
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."uploadobjectanimations` (
 				  `objectanimationid` varchar(16) NOT NULL,
+				  `pastobjectanimationid` varchar(16) DEFAULT '',
 				  `uploadobjectid` varchar(16) DEFAULT '',
 				  `userid` varchar(16) DEFAULT '',
 				  `animationname` varchar(255) DEFAULT '',
@@ -730,6 +738,7 @@ class wtwtables {
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."uploadobjects` (
 				  `uploadobjectid` varchar(16) NOT NULL,
+				  `pastuploadobjectid` varchar(16) DEFAULT '',
 				  `userid` varchar(16) DEFAULT '',
 				  `objectfolder` varchar(255) DEFAULT '',
 				  `objectfile` varchar(255) DEFAULT '',
@@ -853,6 +862,10 @@ class wtwtables {
 				  `diffusecolorr` decimal(20,18) DEFAULT '1.000000000000000000',
 				  `diffusecolorg` decimal(20,18) DEFAULT '1.000000000000000000',
 				  `diffusecolorb` decimal(20,18) DEFAULT '1.000000000000000000',
+				  `diffusecolor` varchar(7) DEFAULT '',
+				  `specularcolor` varchar(7) DEFAULT '',
+				  `emissivecolor` varchar(7) DEFAULT '',
+				  `ambientcolor` varchar(7) DEFAULT '',
 				  `createdate` datetime DEFAULT NULL,
 				  `createuserid` varchar(16) DEFAULT '',
 				  `updatedate` datetime DEFAULT NULL,
@@ -902,8 +915,9 @@ class wtwtables {
 			");
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."users` (
+				  `userid` varchar(16) NOT NULL,
+				  `pastuserid` varchar(16) DEFAULT '',
 				  `username` varchar(64) NOT NULL,
-				  `userid` varchar(16) DEFAULT '',
 				  `uploadpathid` varchar(16) DEFAULT '',
 				  `userpassword` varchar(255) NOT NULL,
 				  `recoverpassword` varchar(255) DEFAULT '',
@@ -921,8 +935,7 @@ class wtwtables {
 				  `deleteddate` datetime DEFAULT NULL,
 				  `deleteduserid` varchar(16) DEFAULT '',
 				  `deleted` int(11) DEFAULT '0',
-				  PRIMARY KEY (`username`),
-				  UNIQUE KEY `".wtw_tableprefix."username_UNIQUE` (`username`),
+				  PRIMARY KEY (`userid`),
 				  UNIQUE KEY `".wtw_tableprefix."userid_UNIQUE` (`userid`),
 				  KEY `".wtw_tableprefix."users_webid` (`userid`,`username`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1700,9 +1713,91 @@ class wtwtables {
 			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."plugins where pluginname='wtw-avatars';");
 			if (count($zresults) == 0) { $wtwdb->query("INSERT INTO ".wtw_tableprefix."plugins (pluginname, active, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES ('wtw-avatars',1,".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);"); }
 			
+			/* updated 3.3.4 - add hex versions of colors (phasing out rgb values in the database) */
+			$this->updateColorsHex($zuserid);
+			
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 		} catch (Exception $e) {
 			$wtw->serror("core-functions-tabledefs.php-checkDBVersionData=".$e->getMessage());
+		}
+	}
+	
+	public function updateColorsHex($zuserid) {
+		/* this process will check database for correct or new values for this version and future versions */
+		global $wtw;
+		try {
+			global $wtwdb;
+			$timestamp = date('Y/m/d H:i:s');
+			
+			$zresults = $wtwdb->query("
+				select * from ".wtw_tableprefix."communitymolds
+				where diffusecolor='';");
+			foreach ($zresults as $zrow) {
+				$zdiffusecolor = $wtwdb->getHexFromRGB($zrow["diffusecolorr"], $zrow["diffusecolorg"], $zrow["diffusecolorb"]);
+				$zspecularcolor = $wtwdb->getHexFromRGB($zrow["specularcolorr"], $zrow["specularcolorg"], $zrow["specularcolorb"]);
+				$zemissivecolor = $wtwdb->getHexFromRGB($zrow["emissivecolorr"], $zrow["emissivecolorg"], $zrow["emissivecolorb"]);
+				$zambientcolor = $zdiffusecolor;
+				$wtwdb->query("
+					update ".wtw_tableprefix."communitymolds
+					set diffusecolor='".$zdiffusecolor."',
+						specularcolor='".$zspecularcolor."',
+						emissivecolor='".$zemissivecolor."',
+						ambientcolor='".$zambientcolor."'
+					where communitymoldid='".$zrow["communitymoldid"]."';");
+			}
+			
+			$zresults = $wtwdb->query("
+				select * from ".wtw_tableprefix."buildingmolds
+				where diffusecolor='';");
+			foreach ($zresults as $zrow) {
+				$zdiffusecolor = $wtwdb->getHexFromRGB($zrow["diffusecolorr"], $zrow["diffusecolorg"], $zrow["diffusecolorb"]);
+				$zspecularcolor = $wtwdb->getHexFromRGB($zrow["specularcolorr"], $zrow["specularcolorg"], $zrow["specularcolorb"]);
+				$zemissivecolor = $wtwdb->getHexFromRGB($zrow["emissivecolorr"], $zrow["emissivecolorg"], $zrow["emissivecolorb"]);
+				$zambientcolor = $zdiffusecolor;
+				$wtwdb->query("
+					update ".wtw_tableprefix."buildingmolds
+					set diffusecolor='".$zdiffusecolor."',
+						specularcolor='".$zspecularcolor."',
+						emissivecolor='".$zemissivecolor."',
+						ambientcolor='".$zambientcolor."'
+					where buildingmoldid='".$zrow["buildingmoldid"]."';");
+			}
+			
+			$zresults = $wtwdb->query("
+				select * from ".wtw_tableprefix."thingmolds
+				where diffusecolor='';");
+			foreach ($zresults as $zrow) {
+				$zdiffusecolor = $wtwdb->getHexFromRGB($zrow["diffusecolorr"], $zrow["diffusecolorg"], $zrow["diffusecolorb"]);
+				$zspecularcolor = $wtwdb->getHexFromRGB($zrow["specularcolorr"], $zrow["specularcolorg"], $zrow["specularcolorb"]);
+				$zemissivecolor = $wtwdb->getHexFromRGB($zrow["emissivecolorr"], $zrow["emissivecolorg"], $zrow["emissivecolorb"]);
+				$zambientcolor = $zdiffusecolor;
+				$wtwdb->query("
+					update ".wtw_tableprefix."thingmolds
+					set diffusecolor='".$zdiffusecolor."',
+						specularcolor='".$zspecularcolor."',
+						emissivecolor='".$zemissivecolor."',
+						ambientcolor='".$zambientcolor."'
+					where thingmoldid='".$zrow["thingmoldid"]."';");
+			}
+
+			$zresults = $wtwdb->query("
+				select * from ".wtw_tableprefix."useravatarcolors
+				where diffusecolor='';");
+			foreach ($zresults as $zrow) {
+				$zdiffusecolor = $wtwdb->getHexFromRGB($zrow["diffusecolorr"], $zrow["diffusecolorg"], $zrow["diffusecolorb"]);
+				$zemissivecolor = $wtwdb->getHexFromRGB($zrow["emissivecolorr"], $zrow["emissivecolorg"], $zrow["emissivecolorb"]);
+				$zspecularcolor = $zemissivecolor;
+				$zambientcolor = $zdiffusecolor;
+				$wtwdb->query("
+					update ".wtw_tableprefix."useravatarcolors
+					set diffusecolor='".$zdiffusecolor."',
+						specularcolor='".$zspecularcolor."',
+						emissivecolor='".$zemissivecolor."',
+						ambientcolor='".$zambientcolor."'
+					where avatarpartid='".$zrow["avatarpartid"]."';");
+			}
+		} catch (Exception $e) {
+			$wtw->serror("core-functions-tabledefs.php-updateColorsHex=".$e->getMessage());
 		}
 	}
 }

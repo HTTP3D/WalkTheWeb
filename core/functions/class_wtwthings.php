@@ -98,8 +98,8 @@ class wtwthings {
 							 rotationz,
 							 gravity,
 							 templatename,
-							 tags,
 							 description,
+							 tags,
 							 snapshotid,
 							 shareuserid,
 							 sharetemplatedate,
@@ -124,8 +124,8 @@ class wtwthings {
 							 rotationz,
 							 gravity,
 							 templatename,
-							 tags,
 							 description,
+							 tags,
 							 snapshotid,
 							 shareuserid,
 							 sharetemplatedate,
@@ -439,6 +439,7 @@ class wtwthings {
 							 now(),
 							 '".$wtwhandlers->userid."');");
 				}
+				/* update action zone animations (animations that are loaded to your avatar when you walk into an action zone) */
 				$zresults = $wtwhandlers->query("
 					select t2.actionzoneanimationid as pastactionzoneanimationid,
 						 t2.avataranimationid,
@@ -471,10 +472,11 @@ class wtwthings {
 							 now(),
 							 '".$wtwhandlers->userid."');");
 				}
+				/* update action zone scripts (scripts that are loaded when you walk into an action zone) */
 				$zresults = $wtwhandlers->query("
 					select t2.scriptid as pastscriptid,
 						 t3.actionzoneid,
-						 t2.moldgroup,
+						 t2.webtype,
 						 '".$zthingid."' as webid,
 						 t2.scriptname,
 						 t2.scriptpath
@@ -491,7 +493,7 @@ class wtwthings {
 							(scriptid,
 							 pastscriptid,
 							 actionzoneid,
-							 moldgroup,
+							 webtype,
 							 webid,
 							 scriptname,
 							 scriptpath,
@@ -503,7 +505,7 @@ class wtwthings {
 							('".$zscriptid."',
 							 '".$zrow["pastscriptid"]."',
 							 '".$zrow["actionzoneid"]."',
-							 '".$zrow["moldgroup"]."',
+							 '".$zrow["webtype"]."',
 							 '".$zrow["webid"]."',
 							 '".$zrow["scriptname"]."',
 							 '".$zrow["scriptpath"]."',
@@ -512,6 +514,7 @@ class wtwthings {
 							 now(),
 							 '".$wtwhandlers->userid."');");
 				}
+				/* update connecting grids */
 				$zresults = $wtwhandlers->query("
 					select t2.connectinggridid as pastconnectinggridid,
 						 t2.parentwebid,
@@ -606,6 +609,7 @@ class wtwthings {
 							 now(),
 							 '".$wtwhandlers->userid."');");
 				}
+				/* update child connecting grids (3D Things placed in 3D Things) */
 				$zresults = $wtwhandlers->query("
 					select t2.connectinggridid as pastconnectinggridid,
 						 '".$zthingid."' as parentwebid,
@@ -832,23 +836,16 @@ class wtwthings {
 						t3.uscale,
 						t3.vscale,
 						t3.uploadobjectid,
-					t3.objectfolder,
-					t3.objectfile,
 						t3.graphiclevel,
 						t3.textureid,
 						t3.texturebumpid,
 						t3.texturehoverid,
 						t3.videoid,
 						t3.videoposterid,
-						t3.diffusecolorr,
-						t3.diffusecolorg,
-						t3.diffusecolorb,
-						t3.specularcolorr,
-						t3.specularcolorg,
-						t3.specularcolorb,
-						t3.emissivecolorr,
-						t3.emissivecolorg,
-						t3.emissivecolorb,
+						t3.diffusecolor,
+						t3.specularcolor,
+						t3.emissivecolor,
+						t3.ambientcolor,
 						t3.heightmapid,
 						t3.mixmapid,
 						t3.texturerid,
@@ -873,7 +870,7 @@ class wtwthings {
 						t3.sideorientation,
 						t3.billboard,
 						t3.waterreflection,
-					t3.receiveshadows,
+						t3.receiveshadows,
 						t3.subdivisions,
 						t3.minheight,
 						t3.maxheight,
@@ -883,10 +880,10 @@ class wtwthings {
 						t3.csgmoldid,
 						t3.csgaction,
 						t3.alttag,
-					t3.productid,
-					t3.slug,
-					t3.categoryid,
-					t3.allowsearch,
+						t3.productid,
+						t3.slug,
+						t3.categoryid,
+						t3.allowsearch,
 						t3.jsfunction,
 						t3.jsparameters
 					from ".wtw_tableprefix."thingmolds t3
@@ -926,23 +923,16 @@ class wtwthings {
 							uscale,
 							vscale,
 							uploadobjectid,
-							objectfolder,
-							objectfile,
 							graphiclevel,
 							textureid,
 							texturebumpid,
 							texturehoverid,
 							videoid,
 							videoposterid,
-							diffusecolorr,
-							diffusecolorg,
-							diffusecolorb,
-							specularcolorr,
-							specularcolorg,
-							specularcolorb,
-							emissivecolorr,
-							emissivecolorg,
-							emissivecolorb,
+							diffusecolor,
+							specularcolor,
+							emissivecolor,
+							ambientcolor,
 							heightmapid,
 							mixmapid,
 							texturerid,
@@ -1010,23 +1000,16 @@ class wtwthings {
 							".$wtwhandlers->checkNumber($zrow["uscale"],0).",
 							".$wtwhandlers->checkNumber($zrow["vscale"],0).",
 							'".$zrow["uploadobjectid"]."',
-							'".$zrow["objectfolder"]."',
-							'".$zrow["objectfile"]."',
 							".$wtwhandlers->checkNumber($zrow["graphiclevel"],0).",
 							'".$zrow["textureid"]."',
 							'".$zrow["texturebumpid"]."',
 							'".$zrow["texturehoverid"]."',
 							'".$zrow["videoid"]."',
 							'".$zrow["videoposterid"]."',
-							".$wtwhandlers->checkNumber($zrow["diffusecolorr"],1).",
-							".$wtwhandlers->checkNumber($zrow["diffusecolorg"],1).",
-							".$wtwhandlers->checkNumber($zrow["diffusecolorb"],1).",
-							".$wtwhandlers->checkNumber($zrow["specularcolorr"],1).",
-							".$wtwhandlers->checkNumber($zrow["specularcolorg"],1).",
-							".$wtwhandlers->checkNumber($zrow["specularcolorb"],1).",
-							".$wtwhandlers->checkNumber($zrow["emissivecolorr"],1).",
-							".$wtwhandlers->checkNumber($zrow["emissivecolorg"],1).",
-							".$wtwhandlers->checkNumber($zrow["emissivecolorb"],1).",
+							'".$zdiffusecolor."',
+							'".$zspecularcolor."',
+							'".$zemissivecolor."',
+							'".$zambientcolor."',
 							'".$zrow["heightmapid"]."',
 							'".$zrow["mixmapid"]."',
 							'".$zrow["texturerid"]."',
@@ -1470,38 +1453,6 @@ class wtwthings {
 		}
 		return $zresponse;
 	}	
-
-	public function saveTemplateThing($zpastthingid) {
-		/* save template thing settings for when it is shared */
-		global $wtwhandlers;
-		$newthingid = "";
-		try {
-			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
-			if ($conn->connect_error) {
-				serror("core-functions-things.php-saveTemplateThing=".$conn->connect_error);
-			} else {
-				$zuserid = "";
-				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
-					$zuserid = $_SESSION["wtw_userid"];
-				}
-				$sql = "CALL copytemplatetothing('".$zpastthingid."','".$zuserid."');";
-				$result = $conn->query($sql);
-				if (is_object($result)) {
-					if ($result->num_rows > 0) {
-						while($zrow = $result->fetch_assoc()) {
-							$newthingid = $zrow["thingid"];
-						}
-					} else {
-						serror("core-functions-things.php-saveTemplateThing=thing could not be created");
-					}		
-				}
-			}
-			$conn->close();
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwthings.php-saveTemplateThing=".$e->getMessage());
-		}
-		return $newthingid;
-	}
 }
 
 	function wtwthings() {

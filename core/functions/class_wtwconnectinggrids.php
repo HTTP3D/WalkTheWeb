@@ -160,7 +160,7 @@ class wtwconnectinggrids {
 		return $zsuccess;
 	}
 
-	public function importConnectingGrids($ztype, $zmoldgroup, $zwebid, $zconnectinggridsbulk) {
+	public function importConnectingGrids($ztype, $zwebtype, $zwebid, $zconnectinggridsbulk) {
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
@@ -225,7 +225,7 @@ class wtwconnectinggrids {
 									 '".$wtwhandlers->userid."',
 									 now(),
 									 '".$wtwhandlers->userid."');");
-						} else if ($ztype == 'child' && $zmoldgroup == "community") {
+						} else if ($ztype == 'child' && $zwebtype == "community") {
 							$wtwhandlers->query("
 								insert into ".wtw_tableprefix."connectinggrids
 									(connectinggridid, 
@@ -277,7 +277,7 @@ class wtwconnectinggrids {
 									 '".$wtwhandlers->userid."',
 									 now(),
 									 '".$wtwhandlers->userid."');");
-						} else if ($ztype == 'child' && $zmoldgroup == "building") {
+						} else if ($ztype == 'child' && $zwebtype == "building") {
 						}
 						$i += $zrecordeach;
 					}
@@ -287,8 +287,8 @@ class wtwconnectinggrids {
 							update ".wtw_tableprefix."connectinggrids t1
 								inner join (select * 
 									from ".wtw_tableprefix."actionzones 
-									where ".$zmoldgroup."id='".$zwebid."'
-										and (not ".$zmoldgroup."id='') and deleted=0) t2
+									where ".$zwebtype."id='".$zwebid."'
+										and (not ".$zwebtype."id='') and deleted=0) t2
 								on t1.loadactionzoneid=t2.pastactionzoneid
 							set t1.loadactionzoneid=t2.actionzoneid
 							where t1.childwebid='".$zwebid."'
@@ -298,8 +298,8 @@ class wtwconnectinggrids {
 							update ".wtw_tableprefix."connectinggrids t1
 								inner join (select * 
 									from ".wtw_tableprefix."actionzones 
-									where ".$zmoldgroup."id='".$zwebid."'
-										and (not ".$zmoldgroup."id='') and deleted=0) t2
+									where ".$zwebtype."id='".$zwebid."'
+										and (not ".$zwebtype."id='') and deleted=0) t2
 								on t1.unloadactionzoneid=t2.pastactionzoneid
 							set t1.unloadactionzoneid=t2.actionzoneid
 							where t1.childwebid='".$zwebid."'
@@ -309,8 +309,8 @@ class wtwconnectinggrids {
 							update ".wtw_tableprefix."connectinggrids t1
 								inner join (select * 
 									from ".wtw_tableprefix."actionzones 
-									where ".$zmoldgroup."id='".$zwebid."'
-										and (not ".$zmoldgroup."id='') and deleted=0) t2
+									where ".$zwebtype."id='".$zwebid."'
+										and (not ".$zwebtype."id='') and deleted=0) t2
 								on t1.attachactionzoneid=t2.pastactionzoneid
 							set t1.attachactionzoneid=t2.actionzoneid
 							where t1.parentwebid='".$zwebid."'
@@ -320,8 +320,8 @@ class wtwconnectinggrids {
 							update ".wtw_tableprefix."connectinggrids t1
 								inner join (select * 
 									from ".wtw_tableprefix."actionzones 
-									where ".$zmoldgroup."id='".$zwebid."'
-										and (not ".$zmoldgroup."id='') and deleted=0) t2
+									where ".$zwebtype."id='".$zwebid."'
+										and (not ".$zwebtype."id='') and deleted=0) t2
 								on t1.loadactionzoneid=t2.pastactionzoneid
 							set t1.loadactionzoneid=t2.actionzoneid
 							where t1.parentwebid='".$zwebid."'
@@ -331,8 +331,8 @@ class wtwconnectinggrids {
 							update ".wtw_tableprefix."connectinggrids t1
 								inner join (select * 
 									from ".wtw_tableprefix."actionzones 
-									where ".$zmoldgroup."id='".$zwebid."'
-										and (not ".$zmoldgroup."id='') and deleted=0) t2
+									where ".$zwebtype."id='".$zwebid."'
+										and (not ".$zwebtype."id='') and deleted=0) t2
 								on t1.unloadactionzoneid=t2.pastactionzoneid
 							set t1.unloadactionzoneid=t2.actionzoneid
 							where t1.parentwebid='".$zwebid."'
@@ -342,8 +342,8 @@ class wtwconnectinggrids {
 							update ".wtw_tableprefix."connectinggrids t1
 								inner join (select * 
 									from ".wtw_tableprefix."actionzones 
-									where ".$zmoldgroup."id='".$zwebid."'
-										and (not ".$zmoldgroup."id='') and deleted=0) t2
+									where ".$zwebtype."id='".$zwebid."'
+										and (not ".$zwebtype."id='') and deleted=0) t2
 								on t1.attachactionzoneid=t2.pastactionzoneid
 							set t1.attachactionzoneid=t2.actionzoneid
 							where t1.parentwebid='".$zwebid."'
@@ -358,7 +358,7 @@ class wtwconnectinggrids {
 		return $zsuccess;
 	}
 	
-	public function updateChildConnectingGrid($zmoldgroup, $zwebid) {
+	public function updateChildConnectingGrid($zwebtype, $zwebid) {
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {

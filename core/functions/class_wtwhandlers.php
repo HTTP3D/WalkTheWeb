@@ -143,29 +143,39 @@ class wtwhandlers {
 	}
 	
 	/* expose functions to this class from other functions so that the original function is only updated in one place */
-	public function serror($message) {
+	public function serror($zmessage) {
 		global $wtwdb;
-		$wtwdb->serror($message);
+		$wtwdb->serror($zmessage);
 	}
 	
-	public function query($sql) {
+	public function query($zsql) {
 		global $wtwdb;
-		return $wtwdb->query($sql);
+		return $wtwdb->query($zsql);
 	}
 
-	public function getRandomString($length,$stringtype) {
+	public function getRandomString($zlength, $zstringtype) {
 		global $wtwdb;
-		return $wtwdb->getRandomString($length,$stringtype);
+		return $wtwdb->getRandomString($zlength, $zstringtype);
 	}
 
-	public function tableExists($tablename) {
+	public function tableExists($ztablename) {
 		global $wtwdb;
-		return $wtwdb->tableExists($tablename);
+		return $wtwdb->tableExists($ztablename);
 	}
 
-	public function keyExists($tablename, $zfieldid, $zkeyid) {
+	public function keyExists($ztablename, $zfieldid, $zkeyid) {
 		global $wtwdb;
-		return $wtwdb->keyExists($tablename, $zfieldid, $zkeyid);
+		return $wtwdb->keyExists($ztablename, $zfieldid, $zkeyid);
+	}
+	
+	public function getNewKey($ztablename, $zfieldid, $zdefaultkeyid) {
+		global $wtwdb;
+		return $wtwdb->getNewKey($ztablename, $zfieldid, $zdefaultkeyid);
+	}
+		
+	public function getIDByPastID($ztablename, $zfieldid, $zpastfieldid, $zpastid) {
+		global $wtwdb;
+		return $wtwdb->getIDByPastID($ztablename, $zfieldid, $zpastfieldid, $zpastid);
 	}
 
 	public function userExists($zuserid) {
@@ -230,14 +240,14 @@ class wtwhandlers {
 		return $wtwdb->saveSettings($zsettings);
 	}
 
-	public function getVal($key, $defaultval) {
+	public function getVal($zkey, $zdefaultval) {
 		global $wtwdb;
-		return $wtwdb->getVal($key, $defaultval);
+		return $wtwdb->getVal($zkey, $zdefaultval);
 	}
 
-	public function getNumber($key, $defaultval) {
+	public function getNumber($zkey, $zdefaultval) {
 		global $wtwdb;
-		return $wtwdb->getNumber($key, $defaultval);
+		return $wtwdb->getNumber($zkey, $zdefaultval);
 	}
 
 	public function checkIDFormat($zid) {
@@ -245,9 +255,9 @@ class wtwhandlers {
 		return $wtwdb->checkIDFormat($zid);
 	}
 
-	public function checkNumber($val, $defaultval) {
+	public function checkNumber($zval, $zdefaultval) {
 		global $wtwdb;
-		return $wtwdb->checkNumber($val, $defaultval);
+		return $wtwdb->checkNumber($zval, $zdefaultval);
 	}
 
 	public function checkAlphaNumeric($zid) {
@@ -286,14 +296,14 @@ class wtwhandlers {
 		return $wtwdb->prepCheckDate($zdate);
 	}
 
-	public function escapeHTML($text) {
+	public function escapeHTML($ztext) {
 		global $wtwdb;
-		return $wtwdb->escapeHTML($text);
+		return $wtwdb->escapeHTML($ztext);
 	}
 
-	public function confirmKey($zkey, $zmoldgroup, $zwebid) {
+	public function confirmKey($zkey, $zwebtype, $zwebid) {
 		global $wtwdb;
-		return $wtwdb->confirmKey($zkey, $zmoldgroup, $zwebid);
+		return $wtwdb->confirmKey($zkey, $zwebtype, $zwebid);
 	}
 
 	public function getobjectanimations($zuploadobjectid) {
@@ -311,9 +321,9 @@ class wtwhandlers {
 		return $wtwdb->getmoldpoints($zthingmoldid, $zbuildingmoldid, $zcommunitymoldid, $zpathnumber, $zshape);
 	}
 	
-	public function getWebAliases($zmoldgroup, $zwebid) {
+	public function getWebAliases($zwebtype, $zwebid) {
 		global $wtwdb;
-		return $wtwdb->getWebAliases($zmoldgroup, $zwebid);
+		return $wtwdb->getWebAliases($zwebtype, $zwebid);
 	}
 
 	public function getPost($zfield, $zdefault) {
@@ -358,9 +368,9 @@ class wtwhandlers {
 		return $zheader;
 	}
 
-	public function trackPageView($currentpage) {
+	public function trackPageView($zcurrentpage) {
 		global $wtwdb;
-		return $wtwdb->trackPageView($currentpage);
+		return $wtwdb->trackPageView($zcurrentpage);
 	}
 }
 

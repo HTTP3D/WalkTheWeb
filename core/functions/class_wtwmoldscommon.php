@@ -185,7 +185,7 @@ class wtwmoldscommon {
 		return $zsuccess;
 	}
 
-	public function importMolds($zmoldgroup, $zwebid, $zcopywebid, $zmoldsbulk) {
+	public function importMolds($zwebtype, $zwebid, $zcopywebid, $zmoldsbulk) {
 		/* imports the molds to community, building, and thing when downloaded by the media library */
 		$zsuccess = false;
 		global $wtwhandlers;
@@ -199,7 +199,7 @@ class wtwmoldscommon {
 					$i = 10;
 					foreach ($zmolds as $zrow) {
 						$pastmoldid = "";
-						switch ($zmoldgroup) {
+						switch ($zwebtype) {
 							case "community":
 								$pastmoldid = $zrow->communitymoldid;
 								break;
@@ -212,10 +212,10 @@ class wtwmoldscommon {
 						}
 						$zmoldid = $wtwhandlers->getRandomString(16,1);
 						$wtwhandlers->query("
-							insert into ".wtw_tableprefix.$zmoldgroup."molds
-								(".$zmoldgroup."moldid,
-								 past".$zmoldgroup."moldid,
-								 ".$zmoldgroup."id, 
+							insert into ".wtw_tableprefix.$zwebtype."molds
+								(".$zwebtype."moldid,
+								 past".$zwebtype."moldid,
+								 ".$zwebtype."id, 
 								 loadactionzoneid, 
 								 shape, 
 								 covering, 
@@ -235,8 +235,6 @@ class wtwmoldscommon {
 								 uscale, 
 								 vscale, 
 								 uploadobjectid, 
-								 objectfolder, 
-								 objectfile, 
 								 graphiclevel, 
 								 textureid, 
 								 texturebumpid, 
@@ -264,15 +262,10 @@ class wtwmoldscommon {
 								 soundconeinnerangle, 
 								 soundconeouterangle, 
 								 soundconeoutergain, 
-								 diffusecolorr, 
-								 diffusecolorg, 
-								 diffusecolorb, 
-								 specularcolorr, 
-								 specularcolorg, 
-								 specularcolorb, 
-								 emissivecolorr, 
-								 emissivecolorg, 
-								 emissivecolorb, 
+								 diffusecolor,
+								 specularcolor,
+								 emissivecolor,
+								 ambientcolor,
 								 webtext, 
 								 webstyle, 
 								 opacity, 
@@ -315,8 +308,6 @@ class wtwmoldscommon {
 								 ".$wtwhandlers->checkNumber($zrow->uscale,0).", 
 								 ".$wtwhandlers->checkNumber($zrow->vscale,0).", 
 								 '".$zrow->uploadobjectid."', 
-								 '".$zrow->objectfolder."', 
-								 '".$zrow->objectfile."', 
 								 ".$wtwhandlers->checkNumber($zrow->graphiclevel,0).", 
 								 '".$zrow->textureid."', 
 								 '".$zrow->texturebumpid."', 
@@ -344,15 +335,10 @@ class wtwmoldscommon {
 								 ".$wtwhandlers->checkNumber($zrow->soundconeinnerangle,90).", 
 								 ".$wtwhandlers->checkNumber($zrow->soundconeouterangle,180).", 
 								 ".$wtwhandlers->checkNumber($zrow->soundconeoutergain,1).", 
-								 ".$wtwhandlers->checkNumber($zrow->diffusecolorr,1).", 
-								 ".$wtwhandlers->checkNumber($zrow->diffusecolorg,1).", 
-								 ".$wtwhandlers->checkNumber($zrow->diffusecolorb,1).", 
-								 ".$wtwhandlers->checkNumber($zrow->specularcolorr,1).", 
-								 ".$wtwhandlers->checkNumber($zrow->specularcolorg,1).", 
-								 ".$wtwhandlers->checkNumber($zrow->specularcolorb,1).", 
-								 ".$wtwhandlers->checkNumber($zrow->emissivecolorr,1).", 
-								 ".$wtwhandlers->checkNumber($zrow->emissivecolorg,1).", 
-								 ".$wtwhandlers->checkNumber($zrow->emissivecolorb,1).", 
+								 '".$zrow->diffusecolor."',
+								 '".$zrow->specularcolor."',
+								 '".$zrow->emissivecolor."',
+								 '".$zrow->ambientcolor."',
 								 '".$zrow->webtext."', 
 								 '".$zrow->webstyle."', 
 								 ".$wtwhandlers->checkNumber($zrow->opacity,100).", 
@@ -376,58 +362,58 @@ class wtwmoldscommon {
 					}
 					/* clean up data */
 					$wtwhandlers->query("
-						update ".wtw_tableprefix.$zmoldgroup."molds
+						update ".wtw_tableprefix.$zwebtype."molds
 						set actionzoneid=''
 						where actionzoneid is null 
-							and ".$zmoldgroup."id='".$zwebid."';");
+							and ".$zwebtype."id='".$zwebid."';");
 					$wtwhandlers->query("
-						update ".wtw_tableprefix.$zmoldgroup."molds
+						update ".wtw_tableprefix.$zwebtype."molds
 						set csgmoldid=''
 						where csgmoldid is null 
-							and ".$zmoldgroup."id='".$zwebid."';");
+							and ".$zwebtype."id='".$zwebid."';");
 					/* update foreign keys to new moldids */
 					$wtwhandlers->query("
-						update ".wtw_tableprefix.$zmoldgroup."molds t1 
+						update ".wtw_tableprefix.$zwebtype."molds t1 
 							inner join (select * 
-								from ".wtw_tableprefix.$zmoldgroup."molds 
-								where ".$zmoldgroup."id='".$zwebid."') t2
-							on t1.csgmoldid = t2.past".$zmoldgroup."moldid
-						set t1.csgmoldid = t2.".$zmoldgroup."moldid
+								from ".wtw_tableprefix.$zwebtype."molds 
+								where ".$zwebtype."id='".$zwebid."') t2
+							on t1.csgmoldid = t2.past".$zwebtype."moldid
+						set t1.csgmoldid = t2.".$zwebtype."moldid
 						where not t1.csgmoldid=''
-							and t1.".$zmoldgroup."id='".$zwebid."'
-							and (not t2.".$zmoldgroup."moldid is null);");
+							and t1.".$zwebtype."id='".$zwebid."'
+							and (not t2.".$zwebtype."moldid is null);");
 					$wtwhandlers->query("
-						update ".wtw_tableprefix.$zmoldgroup."molds t1 
+						update ".wtw_tableprefix.$zwebtype."molds t1 
 							inner join (select * 
 								from ".wtw_tableprefix."actionzones 
-								where ".$zmoldgroup."id='".$zwebid."'
-									and (not ".$zmoldgroup."id='')) t2
+								where ".$zwebtype."id='".$zwebid."'
+									and (not ".$zwebtype."id='')) t2
 							on t1.actionzoneid = t2.pastactionzoneid
 						set t1.actionzoneid = t2.actionzoneid
 						where not t1.actionzoneid=''
-							and t1.".$zmoldgroup."id='".$zwebid."'
+							and t1.".$zwebtype."id='".$zwebid."'
 							and not t2.actionzoneid is null;"); 
 					$wtwhandlers->query("
-						update ".wtw_tableprefix.$zmoldgroup."molds t1 
+						update ".wtw_tableprefix.$zwebtype."molds t1 
 							inner join (select * 
 								from ".wtw_tableprefix."actionzones 
-								where ".$zmoldgroup."id='".$zwebid."'
-									and (not ".$zmoldgroup."id='')) t2
+								where ".$zwebtype."id='".$zwebid."'
+									and (not ".$zwebtype."id='')) t2
 							on t1.loadactionzoneid = t2.pastactionzoneid
 						set t1.loadactionzoneid = t2.actionzoneid
 						where not t1.loadactionzoneid=''
-							and t1.".$zmoldgroup."id='".$zwebid."'
+							and t1.".$zwebtype."id='".$zwebid."'
 							and not t2.actionzoneid is null;"); 
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."actionzones t1
 							inner join (select * 
-								from ".wtw_tableprefix.$zmoldgroup."molds 
-								where ".$zmoldgroup."id='".$zwebid."' and deleted=0) t2
-							on t1.attachmoldid=t2.past".$zmoldgroup."moldid
-						set t1.attachmoldid=t2.".$zmoldgroup."moldid
-						where t1.".$zmoldgroup."id='".$zwebid."'
+								from ".wtw_tableprefix.$zwebtype."molds 
+								where ".$zwebtype."id='".$zwebid."' and deleted=0) t2
+							on t1.attachmoldid=t2.past".$zwebtype."moldid
+						set t1.attachmoldid=t2.".$zwebtype."moldid
+						where t1.".$zwebtype."id='".$zwebid."'
 							and (not t1.attachmoldid='')
-							and (not t2.".$zmoldgroup."moldid is null);"); 
+							and (not t2.".$zwebtype."moldid is null);"); 
 					$zsuccess = true;
 				}
 			}
@@ -437,7 +423,7 @@ class wtwmoldscommon {
 		return $zsuccess;
 	}
 	
-	public function importMoldPoints($zmoldgroup, $zwebid, $zcopywebid, $zmoldpointsbulk) {
+	public function importMoldPoints($zwebtype, $zwebid, $zcopywebid, $zmoldpointsbulk) {
 		/* downloads mold points for molds that are downloaded by the media library */
 		$zsuccess = false;
 		global $wtwhandlers;
@@ -447,7 +433,7 @@ class wtwmoldscommon {
 					$zcommunityid = "";
 					$zbuildingid = "";
 					$zthingid = "";
-					switch ($zmoldgroup) {
+					switch ($zwebtype) {
 						case "community":
 							$zcommunityid = $zwebid;
 							break;
@@ -497,15 +483,15 @@ class wtwmoldscommon {
 					}
 					/* update foreign keys to new moldpointids */
 					$wtwhandlers->query("
-						update ".wtw_tableprefix.$zmoldgroup."moldpoints t1 
+						update ".wtw_tableprefix.$zwebtype."moldpoints t1 
 							inner join (select * 
-								from ".wtw_tableprefix.$zmoldgroup."molds 
-								where ".$zmoldgroup."id='".$zwebid."') t2
-							on t1.moldid = t2.past".$zmoldgroup."moldid
-						set t1.moldid = t2.".$zmoldgroup."moldid
+								from ".wtw_tableprefix.$zwebtype."molds 
+								where ".$zwebtype."id='".$zwebid."') t2
+							on t1.moldid = t2.past".$zwebtype."moldid
+						set t1.moldid = t2.".$zwebtype."moldid
 						where not t1.moldid=''
-							and t1.".$zmoldgroup."id='".$zwebid."'
-							and (not t2.".$zmoldgroup."moldid is null);");
+							and t1.".$zwebtype."id='".$zwebid."'
+							and (not t2.".$zwebtype."moldid is null);");
 					$zsuccess = true;
 				}
 			}

@@ -22,7 +22,7 @@ class wtw {
 	
 	/* declare public $wtw variables */
 	public $version = "3.3.3";
-	public $dbversion = "1.1.4";
+	public $dbversion = "1.1.5";
 	public $versiondate = "2020-7-31";
 	public $serverinstanceid = "";
 	public $accesstoken = "";
@@ -1829,15 +1829,6 @@ class wtw {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationevent\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tattachavatarmoldname\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldname\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tdiffusecolorr\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tdiffusecolorg\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tdiffusecolorb\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tspecularcolorr\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tspecularcolorg\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tspecularcolorb\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_temissivecolorr\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_temissivecolorg\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_temissivecolorb\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tinvitationcode\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tfilepath\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tfilename\" />\r\n";

@@ -49,7 +49,7 @@ class wtwbuildings {
 				$zpastbuildingid = "";
 			}
 			$zresults = array();
-			if ($zbuildingid == "") {
+			if (empty($zbuildingid)) {
 				/* create new buildingid */
 				$zbuildingid = $wtwhandlers->getRandomString(16,1);
 				
@@ -97,6 +97,12 @@ class wtwbuildings {
 							 rotationy,
 							 rotationz,
 							 gravity,
+							 templatename,
+							 description,
+							 tags,
+							 snapshotid,
+							 shareuserid,
+							 sharetemplatedate,
 							 alttag,
 							 createdate,
 							 createuserid,
@@ -105,7 +111,7 @@ class wtwbuildings {
 						select '".$zbuildingid."' as buildingid,
 							 '".$zpastbuildingid."' as pastbuildingid,
 							 '".$wtwhandlers->escapeHTML($zbuildingname)."' as buildingname,
-							 '' as analyticsid,
+							 analyticsid,
 							 '".$wtwhandlers->userid."' as userid,
 							 positionx,
 							 positiony,
@@ -117,6 +123,12 @@ class wtwbuildings {
 							 rotationy,
 							 rotationz,
 							 gravity,
+							 templatename,
+							 description,
+							 tags,
+							 snapshotid,
+							 shareuserid,
+							 sharetemplatedate,
 							 alttag,
 							 now() as createdate,
 							 '".$wtwhandlers->userid."' as createuserid,
@@ -138,7 +150,7 @@ class wtwbuildings {
 						 updatedate,
 						 updateuserid)
 					values
-						('".$zuserauthorizationid."',,
+						('".$zuserauthorizationid."',
 						 '".$wtwhandlers->userid."',
 						 '".$zbuildingid."',
 						 'admin',
@@ -162,7 +174,9 @@ class wtwbuildings {
 		}
 		/* if you created a new building the return value is used to redirect and open the new building */
 		if (!empty($zpastbuildingid) && isset($zpastbuildingid) && !empty($zbuildingid) && isset($zbuildingid)) {
-			$zcopybuildingid = $this->copyBuilding($zbuildingid, $zpastbuildingid);
+			if ($this->copyBuilding($zbuildingid, $zpastbuildingid)) {
+				$zcopybuildingid = $zbuildingid;
+			}
 		}
 		/* if the new building errored or was not available (missing or permissions) this reloads your current building */
 		if (empty($zcopybuildingid) || !isset($zcopybuildingid)) {
@@ -219,14 +233,14 @@ class wtwbuildings {
 		return $zsuccess;
 	}
 
-	public function copyBuilding($zbuildingid, $zcopybuildingid) { 
+	public function copyBuilding($zbuildingid, $zfrombuildingid) { 
 		/* used to create a new building from media library templates or building to copy */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			/* new building has to already exist */
 			/* does user have access to copy building and new building */
-			if ($wtwhandlers->checkUpdateAccess("", $zbuildingid, "") && $wtwhandlers->checkUpdateAccess("", $zcopybuildingid, "")) {
+			if ($wtwhandlers->checkUpdateAccess("", $zbuildingid, "") && $wtwhandlers->checkUpdateAccess("", $zfrombuildingid, "")) {
 				/* update actionzones */
 				$zresults = $wtwhandlers->query("
 					select 
@@ -236,10 +250,12 @@ class wtwbuildings {
 						 t2.thingid,
 						 t2.attachmoldid,
 						 t2.loadactionzoneid,
+						 t2.parentactionzoneid,
 						 t2.actionzonename,
 						 t2.actionzonetype,
 						 t2.actionzoneshape,
 						 t2.movementtype,
+						 t2.movementdistance,
 						 t2.positionx,
 						 t2.positiony,
 						 t2.positionz,
@@ -259,8 +275,6 @@ class wtwbuildings {
 						 t2.rotatedegrees,
 						 t2.rotatedirection,
 						 t2.rotatespeed,
-						 t2.movementdistance,
-						 t2.parentactionzoneid,
 						 t2.jsfunction,
 						 t2.jsparameters,
 						 now() as createdate,
@@ -268,7 +282,7 @@ class wtwbuildings {
 						 now() as updatedate,
 						 '".$wtwhandlers->userid."' as updateuserid
 					from ".wtw_tableprefix."actionzones t2
-					where t2.buildingid='".$zcopybuildingid."'
+					where t2.buildingid='".$zfrombuildingid."'
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
 					$zactionzoneid = $wtwhandlers->getRandomString(16,1);
@@ -277,10 +291,12 @@ class wtwbuildings {
 					$zthingid = $zrow["thingid"];
 					$zattachmoldid = $zrow["attachmoldid"];
 					$zloadactionzoneid = $zrow["loadactionzoneid"];
+					$zparentactionzoneid = $zrow["parentactionzoneid"];
 					$zactionzonename = $zrow["actionzonename"];
 					$zactionzonetype = $zrow["actionzonetype"];
 					$zactionzoneshape = $zrow["actionzoneshape"];
 					$zmovementtype = $zrow["movementtype"];
+					$zmovementdistance = $zrow["movementdistance"];
 					$zpositionx = $zrow["positionx"];
 					$zpositiony = $zrow["positiony"];
 					$zpositionz = $zrow["positionz"];
@@ -300,8 +316,6 @@ class wtwbuildings {
 					$zrotatedegrees = $zrow["rotatedegrees"];
 					$zrotatedirection = $zrow["rotatedirection"];
 					$zrotatespeed = $zrow["rotatespeed"];
-					$zmovementdistance = $zrow["movementdistance"];
-					$zparentactionzoneid = $zrow["parentactionzoneid"];
 					$zjsfunction = $zrow["jsfunction"];
 					$zjsparameters = $zrow["jsparameters"];
 					
@@ -314,10 +328,12 @@ class wtwbuildings {
 							 thingid,
 							 attachmoldid,
 							 loadactionzoneid,
+							 parentactionzoneid,
 							 actionzonename,
 							 actionzonetype,
 							 actionzoneshape,
 							 movementtype,
+							 movementdistance,
 							 positionx,
 							 positiony,
 							 positionz,
@@ -337,8 +353,6 @@ class wtwbuildings {
 							 rotatedegrees,
 							 rotatedirection,
 							 rotatespeed,
-							 movementdistance,
-							 parentactionzoneid,
 							 jsfunction,
 							 jsparameters,
 							 createdate,
@@ -353,10 +367,12 @@ class wtwbuildings {
 							'".$zthingid."',
 							'".$zattachmoldid."',
 							'".$zloadactionzoneid."',
+							'".$zparentactionzoneid."',
 							'".$wtwhandlers->escapeHTML($zactionzonename)."',
 							'".$zactionzonetype."',
 							'".$zactionzoneshape."',
 							'".$zmovementtype."',
+							".$wtwhandlers->checkNumber($zmovementdistance,20).",
 							".$wtwhandlers->checkNumber($zpositionx,0).",
 							".$wtwhandlers->checkNumber($zpositiony,0).",
 							".$wtwhandlers->checkNumber($zpositionz,0).",
@@ -376,8 +392,6 @@ class wtwbuildings {
 							".$wtwhandlers->checkNumber($zrotatedegrees,90).",
 							".$wtwhandlers->checkNumber($zrotatedirection,1).",
 							".$wtwhandlers->checkNumber($zrotatespeed,0).",
-							".$wtwhandlers->checkNumber($zmovementdistance,20).",
-							'".$zparentactionzoneid."',
 							'".$zjsfunction."',
 							'".$zjsparameters."',
 							 now(),
@@ -385,11 +399,84 @@ class wtwbuildings {
 							 now(),
 							 '".$wtwhandlers->userid."');");
 				}
-
-				/* update children connecting grids */
+				/* update action zone animations (animations that are loaded to your avatar when you walk into an action zone) */
 				$zresults = $wtwhandlers->query("
-					select 
-						 t2.connectinggridid as pastconnectinggridid,
+					select t2.actionzoneanimationid as pastactionzoneanimationid,
+						 t2.avataranimationid,
+						 t3.actionzoneid
+					from ".wtw_tableprefix."actionzoneanimations t2
+					inner join (select actionzoneid, pastactionzoneid
+							from ".wtw_tableprefix."actionzones 
+							where buildingid='".$zbuildingid."' and (not buildingid='')) t3
+						on t3.pastactionzoneid = t2.actionzoneid
+					where t2.deleted=0;");
+				foreach ($zresults as $zrow) {
+					$zactionzoneanimationid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."actionzoneanimations
+							(actionzoneanimationid,
+							 pastactionzoneanimationid,
+							 actionzoneid,
+							 avataranimationid,
+							 createdate,
+							 createuserid,
+							 updatedate,
+							 updateuserid)
+						values
+							('".$zactionzoneanimationid."',
+							 '".$zrow["pastactionzoneanimationid"]."',
+							 '".$zrow["actionzoneid"]."',
+							 '".$zrow["avataranimationid"]."',
+							 now(),
+							 '".$wtwhandlers->userid."',
+							 now(),
+							 '".$wtwhandlers->userid."');");
+				}
+				/* update action zone scripts (scripts that are loaded when you walk into an action zone) */
+				$zresults = $wtwhandlers->query("
+					select t2.scriptid as pastscriptid,
+						 t3.actionzoneid,
+						 t2.webtype,
+						 '".$zbuildingid."' as webid,
+						 t2.scriptname,
+						 t2.scriptpath
+					from ".wtw_tableprefix."scripts t2
+					inner join (select actionzoneid, pastactionzoneid
+							from ".wtw_tableprefix."actionzones 
+							where buildingid='".$zbuildingid."' and (not buildingid='')) t3
+						on t3.pastactionzoneid = t2.actionzoneid
+					where t2.deleted=0;");
+				foreach ($zresults as $zrow) {
+					$zscriptid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."scripts
+							(scriptid,
+							 pastscriptid,
+							 actionzoneid,
+							 webtype,
+							 webid,
+							 scriptname,
+							 scriptpath,
+							 createdate,
+							 createuserid,
+							 updatedate,
+							 updateuserid)
+						values
+							('".$zscriptid."',
+							 '".$zrow["pastscriptid"]."',
+							 '".$zrow["actionzoneid"]."',
+							 '".$zrow["webtype"]."',
+							 '".$zrow["webid"]."',
+							 '".$zrow["scriptname"]."',
+							 '".$zrow["scriptpath"]."',
+							 now(),
+							 '".$wtwhandlers->userid."',
+							 now(),
+							 '".$wtwhandlers->userid."');");
+				}
+				/* update connecting grids */
+				$zresults = $wtwhandlers->query("
+					select t2.connectinggridid as pastconnectinggridid,
 						 t2.parentwebid,
 						 t2.parentwebtype,
 						 '".$zbuildingid."' as childwebid,
@@ -403,38 +490,33 @@ class wtwbuildings {
 						 t2.rotationx,
 						 t2.rotationy,
 						 t2.rotationz,
-						 t2.loadactionzoneid,
-						 t2.unloadactionzoneid,
-						 t2.attachactionzoneid,
-						 t2.alttag,
-						 now() as createdate,
-						 '".$wtwhandlers->userid."' as createuserid,
-						 now() as updatedate,
-						 '".$wtwhandlers->userid."' as updateuserid
+						 t3.actionzoneid as loadactionzoneid,
+						 t4.actionzoneid as unloadactionzoneid,
+						 t5.actionzoneid as attachactionzoneid,
+						 t6.actionzoneid as altloadactionzoneid,
+						 t2.alttag
 					from ".wtw_tableprefix."connectinggrids t2
-					where t2.childwebid='".$zcopybuildingid."'
-						and t2.parentwebid=''
+					left join (select actionzoneid, pastactionzoneid 
+							from ".wtw_tableprefix."actionzones 
+							where buildingid='".$zbuildingid."' and (not buildingid='')) t3
+						on t3.pastactionzoneid = t2.loadactionzoneid
+					left join (select actionzoneid, pastactionzoneid 
+							from ".wtw_tableprefix."actionzones 
+							where buildingid='".$zbuildingid."' and (not buildingid='')) t4
+						on t4.pastactionzoneid=t2.unloadactionzoneid
+					left join (select actionzoneid, pastactionzoneid 
+							from ".wtw_tableprefix."actionzones 
+							where buildingid='".$zbuildingid."' and (not buildingid='')) t5
+						on t5.pastactionzoneid=t2.attachactionzoneid
+					left join (select actionzoneid, pastactionzoneid 
+							from ".wtw_tableprefix."actionzones 
+							where buildingid='".$zbuildingid."' and (not buildingid='')) t6
+						on t6.pastactionzoneid=t2.altloadactionzoneid
+					where t2.childwebid='".$zfrombuildingid."'
+						and parentwebid=''
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
 					$zconnectinggridid = $wtwhandlers->getRandomString(16,1);
-					$zpastconnectinggridid = $zrow["pastconnectinggridid"];
-					$zparentwebid = $zrow["pastconnectinggridid"];
-					$zparentwebtype = $zrow["pastconnectinggridid"];
-					$zchildwebid = $zbuildingid;
-					$zchildwebtype = $zrow["pastconnectinggridid"];
-					$zpositionx = $zrow["pastconnectinggridid"];
-					$zpositiony = $zrow["pastconnectinggridid"];
-					$zpositionz = $zrow["pastconnectinggridid"];
-					$zscalingx = $zrow["pastconnectinggridid"];
-					$zscalingy = $zrow["pastconnectinggridid"];
-					$zscalingz = $zrow["pastconnectinggridid"];
-					$zrotationx = $zrow["pastconnectinggridid"];
-					$zrotationy = $zrow["pastconnectinggridid"];
-					$zrotationz = $zrow["pastconnectinggridid"];
-					$zloadactionzoneid = $zrow["pastconnectinggridid"];
-					$zunloadactionzoneid = $zrow["pastconnectinggridid"];
-					$zattachactionzoneid = $zrow["pastconnectinggridid"];
-					$zalttag = $zrow["pastconnectinggridid"];
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."connectinggrids
 							(connectinggridid,
@@ -455,6 +537,7 @@ class wtwbuildings {
 							 loadactionzoneid,
 							 unloadactionzoneid,
 							 attachactionzoneid,
+							 altloadactionzoneid,
 							 alttag,
 							 createdate,
 							 createuserid,
@@ -462,33 +545,33 @@ class wtwbuildings {
 							 updateuserid)
 						values
 							('".$zconnectinggridid."',
-							 '".$zpastconnectinggridid."',
-							 '".$zparentwebid."',
-							 '".$zparentwebtype."',
-							 '".$zchildwebid."',
-							 '".$zchildwebtype."',
-							 ".$wtwhandlers->checkNumber($zpositionx,0).",
-							 ".$wtwhandlers->checkNumber($zpositiony,0).",
-							 ".$wtwhandlers->checkNumber($zpositionz,0).",
-							 ".$wtwhandlers->checkNumber($zscalingx,1).",
-							 ".$wtwhandlers->checkNumber($zscalingy,1).",
-							 ".$wtwhandlers->checkNumber($zscalingz,1).",
-							 ".$wtwhandlers->checkNumber($zrotationx,0).",
-							 ".$wtwhandlers->checkNumber($zrotationy,0).",
-							 ".$wtwhandlers->checkNumber($zrotationz,0).",
-							 '".$zloadactionzoneid."',
-							 '".$zunloadactionzoneid."',
-							 '".$zattachactionzoneid."',
-							 '".$wtwhandlers->escapeHTML($zalttag)."',
+							 '".$zrow["pastconnectinggridid"]."',
+							 '".$zrow["parentwebid"]."',
+							 '".$zrow["parentwebtype"]."',
+							 '".$zrow["childwebid"]."',
+							 '".$zrow["childwebtype"]."',
+							 ".$wtwhandlers->checkNumber($zrow["positionx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positiony"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingx"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingy"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingz"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationy"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationz"],0).",
+							 '".$zrow["loadactionzoneid"]."',
+							 '".$zrow["unloadactionzoneid"]."',
+							 '".$zrow["attachactionzoneid"]."',
+							 '".$zrow["altloadactionzoneid"]."',
+							 '".$zrow["alttag"]."',
 							 now(),
 							 '".$wtwhandlers->userid."',
 							 now(),
 							 '".$wtwhandlers->userid."');");
 				}
-				/* update parent connecting grids */
+				/* update child connecting grids (3D Things placed in 3D Buildings) */
 				$zresults = $wtwhandlers->query("
-					select 
-						 t2.connectinggridid as pastconnectinggridid,
+					select t2.connectinggridid as pastconnectinggridid,
 						 '".$zbuildingid."' as parentwebid,
 						 t2.parentwebtype,
 						 t2.childwebid,
@@ -502,38 +585,32 @@ class wtwbuildings {
 						 t2.rotationx,
 						 t2.rotationy,
 						 t2.rotationz,
-						 t2.loadactionzoneid,
-						 t2.unloadactionzoneid,
-						 t2.attachactionzoneid,
-						 t2.alttag,
-						 now() as createdate,
-						 '".$wtwhandlers->userid."' as createuserid,
-						 now() as updatedate,
-						 '".$wtwhandlers->userid."' as updateuserid
+						 t3.actionzoneid as loadactionzoneid,
+						 t4.actionzoneid as unloadactionzoneid,
+						 t5.actionzoneid as attachactionzoneid,
+						 t6.actionzoneid as altloadactionzoneid,
+						 t2.alttag
 					from ".wtw_tableprefix."connectinggrids t2
-					where t2.parentwebid='".$zcopybuildingid."'
-						and t2.deleted=0;						
-						");
+					left join (select actionzoneid, pastactionzoneid 
+							from ".wtw_tableprefix."actionzones 
+							where buildingid='".$zbuildingid."' and (not buildingid='')) t3
+						on t3.pastactionzoneid=t2.loadactionzoneid
+					left join (select actionzoneid, pastactionzoneid 
+							from ".wtw_tableprefix."actionzones 
+							where buildingid='".$zbuildingid."' and (not buildingid='')) t4
+						on t4.pastactionzoneid=t2.unloadactionzoneid
+					left join (select actionzoneid, pastactionzoneid 
+							from ".wtw_tableprefix."actionzones 
+							where buildingid='".$zbuildingid."' and (not buildingid='')) t5
+						on t5.pastactionzoneid=t2.attachactionzoneid
+					left join (select actionzoneid, pastactionzoneid 
+							from ".wtw_tableprefix."actionzones 
+							where buildingid='".$zbuildingid."' and (not buildingid='')) t6
+						on t6.pastactionzoneid=t2.altloadactionzoneid
+					where t2.parentwebid='".$zfrombuildingid."'
+						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
 					$zconnectinggridid = $wtwhandlers->getRandomString(16,1);
-					$zpastconnectinggridid = $zrow["pastconnectinggridid"];
-					$zparentwebid = $zbuildingid;
-					$zparentwebtype = $zrow["pastconnectinggridid"];
-					$zchildwebid = $zrow["childwebid"];
-					$zchildwebtype = $zrow["pastconnectinggridid"];
-					$zpositionx = $zrow["pastconnectinggridid"];
-					$zpositiony = $zrow["pastconnectinggridid"];
-					$zpositionz = $zrow["pastconnectinggridid"];
-					$zscalingx = $zrow["pastconnectinggridid"];
-					$zscalingy = $zrow["pastconnectinggridid"];
-					$zscalingz = $zrow["pastconnectinggridid"];
-					$zrotationx = $zrow["pastconnectinggridid"];
-					$zrotationy = $zrow["pastconnectinggridid"];
-					$zrotationz = $zrow["pastconnectinggridid"];
-					$zloadactionzoneid = $zrow["pastconnectinggridid"];
-					$zunloadactionzoneid = $zrow["pastconnectinggridid"];
-					$zattachactionzoneid = $zrow["pastconnectinggridid"];
-					$zalttag = $zrow["pastconnectinggridid"];
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."connectinggrids
 							(connectinggridid,
@@ -554,6 +631,7 @@ class wtwbuildings {
 							 loadactionzoneid,
 							 unloadactionzoneid,
 							 attachactionzoneid,
+							 altloadactionzoneid,
 							 alttag,
 							 createdate,
 							 createuserid,
@@ -561,29 +639,30 @@ class wtwbuildings {
 							 updateuserid)
 						values
 							('".$zconnectinggridid."',
-							 '".$zpastconnectinggridid."',
-							 '".$zparentwebid."',
-							 '".$zparentwebtype."',
-							 '".$zchildwebid."',
-							 '".$zchildwebtype."',
-							 ".$wtwhandlers->checkNumber($zpositionx,0).",
-							 ".$wtwhandlers->checkNumber($zpositiony,0).",
-							 ".$wtwhandlers->checkNumber($zpositionz,0).",
-							 ".$wtwhandlers->checkNumber($zscalingx,1).",
-							 ".$wtwhandlers->checkNumber($zscalingy,1).",
-							 ".$wtwhandlers->checkNumber($zscalingz,1).",
-							 ".$wtwhandlers->checkNumber($zrotationx,0).",
-							 ".$wtwhandlers->checkNumber($zrotationy,0).",
-							 ".$wtwhandlers->checkNumber($zrotationz,0).",
-							 '".$zloadactionzoneid."',
-							 '".$zunloadactionzoneid."',
-							 '".$zattachactionzoneid."',
-							 '".$wtwhandlers->escapeHTML($zalttag)."',
+							 '".$zrow["pastconnectinggridid"]."',
+							 '".$zrow["parentwebid"]."',
+							 '".$zrow["parentwebtype"]."',
+							 '".$zrow["childwebid"]."',
+							 '".$zrow["childwebtype"]."',
+							 ".$wtwhandlers->checkNumber($zrow["positionx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positiony"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["positionz"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingx"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingy"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["scalingz"],1).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationx"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationy"],0).",
+							 ".$wtwhandlers->checkNumber($zrow["rotationz"],0).",
+							 '".$zrow["loadactionzoneid"]."',
+							 '".$zrow["unloadactionzoneid"]."',
+							 '".$zrow["attachactionzoneid"]."',
+							 '".$zrow["altloadactionzoneid"]."',
+							 '".$zrow["alttag"]."',
 							 now(),
 							 '".$wtwhandlers->userid."',
 							 now(),
 							 '".$wtwhandlers->userid."');");
-				}				
+				}
 				/* update automations */
 				$zresults = $wtwhandlers->query("
 					select
@@ -600,7 +679,7 @@ class wtwbuildings {
 						 now() as updatedate,
 						 '".$wtwhandlers->userid."' as updateuserid
 					from ".wtw_tableprefix."automations t2
-					where t2.buildingid='".$zcopybuildingid."'
+					where t2.buildingid='".$zfrombuildingid."'
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
 					$zautomationid = $wtwhandlers->getRandomString(16,1);
@@ -661,7 +740,7 @@ class wtwbuildings {
 						 now() as updatedate,
 						 '".$wtwhandlers->userid."' as updateuserid
 					from (select * from ".wtw_tableprefix."automations 
-								where buildingid='".$zcopybuildingid."' and deleted=0) t1
+								where buildingid='".$zfrombuildingid."' and deleted=0) t1
 							inner join ".wtw_tableprefix."automationsteps t2
 								on t1.automationid=t2.automationid
 							left join (select automationid, pastautomationid 
@@ -711,91 +790,89 @@ class wtwbuildings {
 				/* update building molds */
 				$zresults = $wtwhandlers->query("
 					select 
-						 t3.buildingmoldid as pastbuildingmoldid,
-						 '".$zbuildingid."' as buildingid,
-						 t3.loadactionzoneid,
-						 t3.shape,
-						 t3.covering,
-						 t3.positionx,
-						 t3.positiony,
-						 t3.positionz,
-						 t3.scalingx,
-						 t3.scalingy,
-						 t3.scalingz,
-						 t3.rotationx,
-						 t3.rotationy,
-						 t3.rotationz,
-						 t3.special1,
-						 t3.special2,
-						 t3.uoffset,
-						 t3.voffset,
-						 t3.uscale,
-						 t3.vscale,
-						 t3.uploadobjectid,
-						 t3.receiveshadows,
-						 t3.graphiclevel,
-						 t3.textureid,
-						 t3.texturebumpid,
-						 t3.texturehover,
-						 t3.texturehoverid,
-						 t3.videoid,
-						 t3.videoposterid,
-						 t3.heightmapid,
-						 t3.mixmapid,
-						 t3.texturerid,
-						 t3.texturegid,
-						 t3.texturebid,
-						 t3.texturebumprid,
-						 t3.texturebumpgid,
-						 t3.texturebumpbid,
-						 t3.soundid,
-						 t3.soundname,
-						 t3.soundattenuation,
-						 t3.soundloop,
-						 t3.soundmaxdistance,
-						 t3.soundrollofffactor,
-						 t3.soundrefdistance,
-						 t3.soundconeinnerangle,
-						 t3.soundconeouterangle,
-						 t3.soundconeoutergain,
-						 t3.webtext,
-						 t3.webstyle,
-						 t3.opacity,
-						 t3.sideorientation,
-						 t3.billboard,
-						 t3.waterreflection,
-						 t3.subdivisions,
-						 t3.minheight,
-						 t3.maxheight,
-						 t3.checkcollisions,
-						 t3.ispickable,
-						 t3.actionzoneid,
-						 t3.csgmoldid,
-						 t3.csgaction,
-						 t3.alttag,
-						 t3.jsfunction,
-						 t3.jsparameters,
-						 t3.diffusecolorr,
-						 t3.diffusecolorg,
-						 t3.diffusecolorb,
-						 t3.specularcolorr,
-						 t3.specularcolorg,
-						 t3.specularcolorb,
-						 t3.emissivecolorr,
-						 t3.emissivecolorg,
-						 t3.emissivecolorb,
-						 now() as createdate,
-						 '".$wtwhandlers->userid."' as createuserid,
-						 now() as updatedate,
-						 '".$wtwhandlers->userid."' as updateuserid
-						from ".wtw_tableprefix."buildingmolds t3
-						where t3.buildingid='".$zcopybuildingid."'
+						t3.buildingmoldid as pastbuildingmoldid,
+						'".$zbuildingid."' as buildingid,
+						t3.loadactionzoneid,
+						t3.shape,
+						t3.covering,
+						t3.positionx,
+						t3.positiony,
+						t3.positionz,
+						t3.scalingx,
+						t3.scalingy,
+						t3.scalingz,
+						t3.rotationx,
+						t3.rotationy,
+						t3.rotationz,
+						t3.special1,
+						t3.special2,
+						t3.uoffset,
+						t3.voffset,
+						t3.uscale,
+						t3.vscale,
+						t3.uploadobjectid,
+						t3.graphiclevel,
+						t3.textureid,
+						t3.texturebumpid,
+						t3.texturehoverid,
+						t3.videoid,
+						t3.videoposterid,
+						t3.diffusecolor,
+						t3.specularcolor,
+						t3.emissivecolor,
+						t3.ambientcolor,
+						t3.heightmapid,
+						t3.mixmapid,
+						t3.texturerid,
+						t3.texturegid,
+						t3.texturebid,
+						t3.texturebumprid,
+						t3.texturebumpgid,
+						t3.texturebumpbid,
+						t3.soundid,
+						t3.soundname,
+						t3.soundattenuation,
+						t3.soundloop,
+						t3.soundmaxdistance,
+						t3.soundrollofffactor,
+						t3.soundrefdistance,
+						t3.soundconeinnerangle,
+						t3.soundconeouterangle,
+						t3.soundconeoutergain,
+						t3.webtext,
+						t3.webstyle,
+						t3.opacity,
+						t3.sideorientation,
+						t3.billboard,
+						t3.waterreflection,
+						t3.receiveshadows,
+						t3.subdivisions,
+						t3.minheight,
+						t3.maxheight,
+						t3.checkcollisions,
+						t3.ispickable,
+						t3.actionzoneid,
+						t3.csgmoldid,
+						t3.csgaction,
+						t3.alttag,
+						t3.productid,
+						t3.slug,
+						t3.categoryid,
+						t3.allowsearch,
+						t3.jsfunction,
+						t3.jsparameters,
+						now() as createdate,
+						'".$wtwhandlers->userid."' as createuserid,
+						now() as updatedate,
+						'".$wtwhandlers->userid."' as updateuserid
+					from ".wtw_tableprefix."buildingmolds t3
+					where t3.buildingid='".$zfrombuildingid."'
 						and t3.deleted=0;");
 				foreach ($zresults as $zrow) {
 					$zbuildingmoldid = $wtwhandlers->getRandomString(16,1);
 					$zpastbuildingmoldid = $zrow["pastbuildingmoldid"];
 					$zloadactionzoneid = $zrow["loadactionzoneid"];
-					$zshape = $zrow["pastbuildingmoldid"];
+					$zshape = $zrow["shape"];
 					$zcovering = $zrow["covering"];
 					$zpositionx = $zrow["positionx"];
 					$zpositiony = $zrow["positiony"];
@@ -813,14 +890,16 @@ class wtwbuildings {
 					$zuscale = $zrow["uscale"];
 					$zvscale = $zrow["vscale"];
 					$zuploadobjectid = $zrow["uploadobjectid"];
-					$zreceiveshadows = $zrow["receiveshadows"];
 					$zgraphiclevel = $zrow["graphiclevel"];
 					$ztextureid = $zrow["textureid"];
 					$ztexturebumpid = $zrow["texturebumpid"];
-					$ztexturehover = $zrow["texturehover"];
 					$ztexturehoverid = $zrow["texturehoverid"];
 					$zvideoid = $zrow["videoid"];
 					$zvideoposterid = $zrow["videoposterid"];
+					$zdiffusecolor = $zrow["diffusecolor"];
+					$zspecularcolor = $zrow["specularcolor"];
+					$zemissivecolor = $zrow["emissivecolor"];
+					$zambientcolor = $zrow["ambientcolor"];
 					$zheightmapid = $zrow["heightmapid"];
 					$zmixmapid = $zrow["mixmapid"];
 					$ztexturerid = $zrow["texturerid"];
@@ -845,6 +924,7 @@ class wtwbuildings {
 					$zsideorientation = $zrow["sideorientation"];
 					$zbillboard = $zrow["billboard"];
 					$zwaterreflection = $zrow["waterreflection"];
+					$zreceiveshadows = $zrow["receiveshadows"];
 					$zsubdivisions = $zrow["subdivisions"];
 					$zminheight = $zrow["minheight"];
 					$zmaxheight = $zrow["maxheight"];
@@ -854,17 +934,12 @@ class wtwbuildings {
 					$zcsgmoldid = $zrow["csgmoldid"];
 					$zcsgaction = $zrow["csgaction"];
 					$zalttag = $zrow["alttag"];
+					$zproductid = $zrow["productid"];
+					$zslug = $zrow["slug"];
+					$zcategoryid = $zrow["categoryid"];
+					$zallowsearch = $zrow["allowsearch"];
 					$zjsfunction = $zrow["jsfunction"];
 					$zjsparameters = $zrow["jsparameters"];
-					$zdiffusecolorr = $zrow["diffusecolorr"];
-					$zdiffusecolorg = $zrow["diffusecolorg"];
-					$zdiffusecolorb = $zrow["diffusecolorb"];
-					$zspecularcolorr = $zrow["specularcolorr"];
-					$zspecularcolorg = $zrow["specularcolorg"];
-					$zspecularcolorb = $zrow["specularcolorb"];
-					$zemissivecolorr = $zrow["emissivecolorr"];
-					$zemissivecolorg = $zrow["emissivecolorg"];
-					$zemissivecolorb = $zrow["emissivecolorb"];
 
 					$wtwhandlers->query("
 						INSERT INTO ".wtw_tableprefix."buildingmolds
@@ -890,14 +965,16 @@ class wtwbuildings {
 							uscale,
 							vscale,
 							uploadobjectid,
-							receiveshadows,
 							graphiclevel,
 							textureid,
 							texturebumpid,
-							texturehover,
 							texturehoverid,
 							videoid,
 							videoposterid,
+							diffusecolor,
+							specularcolor,
+							emissivecolor,
+							ambientcolor,
 							heightmapid,
 							mixmapid,
 							texturerid,
@@ -922,6 +999,7 @@ class wtwbuildings {
 							sideorientation,
 							billboard,
 							waterreflection,
+							receiveshadows,
 							subdivisions,
 							minheight,
 							maxheight,
@@ -931,17 +1009,12 @@ class wtwbuildings {
 							csgmoldid,
 							csgaction,
 							alttag,
+							productid,
+							slug,
+							categoryid,
+							allowsearch,
 							jsfunction,
 							jsparameters,
-							diffusecolorr,
-							diffusecolorg,
-							diffusecolorb,
-							specularcolorr,
-							specularcolorg,
-							specularcolorb,
-							emissivecolorr,
-							emissivecolorg,
-							emissivecolorb,
 							createdate,
 							createuserid,
 							updatedate,
@@ -969,14 +1042,16 @@ class wtwbuildings {
 							".$wtwhandlers->checkNumber($zuscale,0).",
 							".$wtwhandlers->checkNumber($zvscale,0).",
 							'".$zuploadobjectid."',
-							'".$zreceiveshadows."',
 							".$wtwhandlers->checkNumber($zgraphiclevel,0).",
 							'".$ztextureid."',
 							'".$ztexturebumpid."',
-							'".$ztexturehover."',
 							'".$ztexturehoverid."',
 							'".$zvideoid."',
 							'".$zvideoposterid."',
+							'".$zdiffusecolor."',
+							'".$zspecularcolor."',
+							'".$zemissivecolor."',
+							'".$zambientcolor."',
 							'".$zheightmapid."',
 							'".$zmixmapid."',
 							'".$ztexturerid."',
@@ -1001,6 +1076,7 @@ class wtwbuildings {
 							'".$zsideorientation."',
 							".$wtwhandlers->checkNumber($zbillboard,0).",
 							".$wtwhandlers->checkNumber($zwaterreflection,0).",
+							".$wtwhandlers->checkNumber($zreceiveshadows,0).",
 							".$wtwhandlers->checkNumber($zsubdivisions,12).",
 							".$wtwhandlers->checkNumber($zminheight,0).",
 							".$wtwhandlers->checkNumber($zmaxheight,30).",
@@ -1010,17 +1086,12 @@ class wtwbuildings {
 							'".$zcsgmoldid."',
 							'".$zcsgaction."',
 							'".$wtwhandlers->escapeHTML($zalttag)."',
+							'".$zproductid."',
+							'".$zslug."',
+							'".$zcategoryid."',
+							".$wtwhandlers->checkNumber($zallowsearch,1).",
 							'".$zjsfunction."',
 							'".$zjsparameters."',
-							".$wtwhandlers->checkNumber($zdiffusecolorr,1).",
-							".$wtwhandlers->checkNumber($zdiffusecolorg,1).",
-							".$wtwhandlers->checkNumber($zdiffusecolorb,1).",
-							".$wtwhandlers->checkNumber($zspecularcolorr,1).",
-							".$wtwhandlers->checkNumber($zspecularcolorg,1).",
-							".$wtwhandlers->checkNumber($zspecularcolorb,1).",
-							".$wtwhandlers->checkNumber($zemissivecolorr,1).",
-							".$wtwhandlers->checkNumber($zemissivecolorg,1).",
-							".$wtwhandlers->checkNumber($zemissivecolorb,1).",
 							now(),
 							'".$wtwhandlers->userid."',
 							now(),
@@ -1037,6 +1108,7 @@ class wtwbuildings {
 						 t4.imageid,
 						 t4.imagehoverid,
 						 t4.imageclickid,
+						 t4.graphicslevel,
 						 t4.jsfunction,
 						 t4.jsparameters,
 						 t4.userid,
@@ -1052,7 +1124,7 @@ class wtwbuildings {
 								from ".wtw_tableprefix."buildingmolds 
 								where buildingid='".$zbuildingid."' and (not buildingid='')) t6
 							on t6.pastbuildingmoldid=t4.buildingmoldid
-					where t5.buildingid='".$zcopybuildingid."'
+					where t5.buildingid='".$zfrombuildingid."'
 							and not t4.buildingmoldid=''
 							and t5.deleted=0
 							and t4.deleted=0;");
@@ -1066,6 +1138,7 @@ class wtwbuildings {
 					$zimageid = $zrow["imageid"];
 					$zimagehoverid = $zrow["imagehoverid"];
 					$zimageclickid = $zrow["imageclickid"];
+					$zgraphicslevel = $zrow["graphicslevel"];
 					$zjsfunction = $zrow["jsfunction"];
 					$zjsparameters = $zrow["jsparameters"];
 					$zalttag = $zrow["alttag"];
@@ -1081,6 +1154,7 @@ class wtwbuildings {
 							 imageid,
 							 imagehoverid,
 							 imageclickid,
+							 graphicslevel,
 							 jsfunction,
 							 jsparameters,
 							 userid,
@@ -1099,6 +1173,7 @@ class wtwbuildings {
 							 '".$zimageid."',
 							 '".$zimagehoverid."',
 							 '".$zimageclickid."',
+							 ".$wtwhandlers->checkNumber($zgraphicslevel,0).",
 							 '".$zjsfunction."',
 							 '".$zjsparameters."',
 							 '".$wtwhandlers->userid."',
@@ -1128,7 +1203,7 @@ class wtwbuildings {
 								from ".wtw_tableprefix."buildingmolds 
 								where buildingid='".$zbuildingid."' and (not buildingid='')) t6
 							on t6.pastbuildingmoldid=t4.moldid
-					where t5.buildingid='".$zcopybuildingid."'
+					where t5.buildingid='".$zfrombuildingid."'
 						and (not t4.moldid='')
 						and t5.deleted=0
 						and t4.deleted=0;");
@@ -1171,94 +1246,71 @@ class wtwbuildings {
 					update ".wtw_tableprefix."buildingmolds
 					set actionzoneid=''
 					where actionzoneid is null 
-						and buildingid='".$zbuildingid,"';");
+						and buildingid='".$zbuildingid."';");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."buildingmolds
 					set csgmoldid=''
 					where csgmoldid is null 
-						and buildingid='".$zbuildingid,"';");
+						and buildingid='".$zbuildingid."';");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones
 					set attachmoldid=''
 					where attachmoldid is null 
-						and buildingid='".$zbuildingid,"' and (not buildingid='');");
+						and buildingid='".$zbuildingid."' and (not buildingid='');");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."buildingmolds t1 
-						left join (select * from ".wtw_tableprefix."buildingmolds where buildingid='".$zbuildingid,"' and deleted=0) t2
+						left join (select * from ".wtw_tableprefix."buildingmolds where buildingid='".$zbuildingid."' and deleted=0) t2
 						on t1.csgmoldid = t2.pastbuildingmoldid
 					set t1.csgmoldid = t2.buildingmoldid
-					where t1.buildingid='".$zbuildingid,"'
+					where t1.buildingid='".$zbuildingid."'
 						and (not t1.csgmoldid='')
 						and (not t2.buildingmoldid is null);");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."buildingmolds t1 
-						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid,"' and deleted=0) t2
+						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid."' and deleted=0) t2
 						on t1.actionzoneid = t2.pastactionzoneid
 					set t1.actionzoneid = t2.actionzoneid
-					where t1.buildingid='".$zbuildingid,"'
+					where t1.buildingid='".$zbuildingid."'
 						and (not t1.actionzoneid='')
 						and (not t2.actionzoneid is null);");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1
-						left join (select * from ".wtw_tableprefix."buildingmolds where buildingid='".$zbuildingid,"' and (not buildingid='') and deleted=0) t2
+						left join (select * from ".wtw_tableprefix."buildingmolds where buildingid='".$zbuildingid."' and (not buildingid='') and deleted=0) t2
 						on t1.attachmoldid=t2.pastbuildingmoldid
 					set t1.attachmoldid=t2.buildingmoldid
-					where t1.buildingid='".$zbuildingid,"'
+					where t1.buildingid='".$zbuildingid."'
 						and (not t1.attachmoldid='')
 						and (not t2.buildingmoldid is null);");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1
-						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid,"' and (not buildingid='') and deleted=0) t2
+						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid."' and (not buildingid='') and deleted=0) t2
 						on t1.parentactionzoneid=t2.pastactionzoneid
 					set t1.parentactionzoneid=t2.actionzoneid
-					where t1.buildingid='".$zbuildingid,"'
+					where t1.buildingid='".$zbuildingid."'
 						and (not t1.parentactionzoneid='')
 						and (not t2.actionzoneid is null);");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1
-						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid,"' and (not buildingid='') and deleted=0) t2
+						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid."' and (not buildingid='') and deleted=0) t2
 						on t1.loadactionzoneid=t2.pastactionzoneid
 					set t1.loadactionzoneid=t2.actionzoneid
-					where t1.buildingid='".$zbuildingid,"'
+					where t1.buildingid='".$zbuildingid."'
 						and (not t1.loadactionzoneid='')
 						and (not t2.actionzoneid is null);");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."automations t1
-						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid,"' and (not buildingid='') and deleted=0) t2
+						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid."' and (not buildingid='') and deleted=0) t2
 						on t1.loadactionzoneid=t2.pastactionzoneid
 					set t1.loadactionzoneid=t2.actionzoneid
-					where t1.buildingid='".$zbuildingid,"'
+					where t1.buildingid='".$zbuildingid."'
 						and (not t1.loadactionzoneid='');");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."buildingmolds t1
-						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid,"' and (not buildingid='') and deleted=0) t2
+						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid."' and (not buildingid='') and deleted=0) t2
 						on t1.loadactionzoneid=t2.pastactionzoneid
 					set t1.loadactionzoneid=t2.actionzoneid
-					where t1.buildingid='".$zbuildingid,"'
+					where t1.buildingid='".$zbuildingid."'
 						and (not t1.loadactionzoneid='');");
-				$wtwhandlers->query("
-					update ".wtw_tableprefix."connectinggrids t1
-						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid,"' and (not buildingid='') and deleted=0) t2
-						on t1.loadactionzoneid=t2.pastactionzoneid
-					set t1.loadactionzoneid=t2.actionzoneid
-					where t1.childwebid='".$zbuildingid,"'
-						and t1.parentwebid=''
-						and (not t1.loadactionzoneid='');");
-				$wtwhandlers->query("
-					update ".wtw_tableprefix."connectinggrids t1
-						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid,"' and (not buildingid='') and deleted=0) t2
-						on t1.unloadactionzoneid=t2.pastactionzoneid
-					set t1.unloadactionzoneid=t2.actionzoneid
-					where t1.childwebid='".$zbuildingid,"'
-						and t1.parentwebid=''
-						and (not t1.unloadactionzoneid='');");
-				$wtwhandlers->query("
-					update ".wtw_tableprefix."connectinggrids t1
-						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid,"' and (not buildingid='') and deleted=0) t2
-						on t1.attachactionzoneid=t2.pastactionzoneid
-					set t1.attachactionzoneid=t2.actionzoneid
-					where t1.parentwebid='".$zbuildingid,"'
-						and (not t1.attachactionzoneid='');");
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {
@@ -1597,9 +1649,40 @@ class wtwbuildings {
 							description='".$zdescription."',
 							sharehash='".$zsharehash."',
 							shareuserid='".$zuserid."',
+							sharetemplatedate=now(),
 							updatedate=now(),
 							updateuserid='".$zuserid."'
 						where buildingid='".$zbuildingid."'
+						limit 1;");
+				}
+				
+				/* allow child items to be downloaded with 3D Building */
+				$zresults = $wtwhandlers->query("
+					select * 
+					from ".wtw_tableprefix."connectinggrids 
+					where parentwebid='".$zbuildingid."'
+						and deleted=0;");
+				foreach ($zresults as $zrow) {
+					$zwebtypes = "";
+					switch ($zrow["childwebtype"]) {
+						case "community":
+							$zwebtypes = "communities";
+							break;
+						case "building":
+							$zwebtypes = "buildings";
+							break;
+						case "thing":
+							$zwebtypes = "things";
+							break;
+					}
+					$wtwhandlers->query("
+						update ".wtw_tableprefix.$zwebtypes."
+						set sharehash='".$zsharehash."',
+							shareuserid='".$zuserid."',
+							sharetemplatedate=now(),
+							updatedate=now(),
+							updateuserid='".$zuserid."'
+						where ".$zrow["childwebtype"]."id='".$zrow["childwebid"]."'
 						limit 1;");
 				}
 			} 

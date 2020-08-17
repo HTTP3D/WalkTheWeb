@@ -159,7 +159,7 @@ class wtwadmin {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tnewmold\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldid\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldind\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldmoldgroup\" />\r\n";	
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldwebtype\" />\r\n";	
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldshape\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmolduploadobjectid\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldobjectfolder\" />\r\n";

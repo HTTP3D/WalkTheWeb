@@ -379,13 +379,13 @@ class wtwactionzones {
 								 '".$wtwhandlers->userid."');");
 						$i += $zrecordeach;
 					}
-					$zmoldgroup = "thing";
+					$zwebtype = "thing";
 					$zwebid = $zthingid;
 					if (!empty($zcommunityid)) {
-						$zmoldgroup = "community";
+						$zwebtype = "community";
 						$zwebid = $zcommunityid;
 					} else if (!empty($zbuildingid)) {
-						$zmoldgroup = "building";
+						$zwebtype = "building";
 						$zwebid = $zbuildingid;
 					}
 					/* clean up data */
@@ -393,28 +393,28 @@ class wtwactionzones {
 						update ".wtw_tableprefix."actionzones
 						set attachmoldid=''
 						where attachmoldid is null 
-							and ".$zmoldgroup."id='".$zwebid."';");
+							and ".$zwebtype."id='".$zwebid."';");
 					/* update foreign keys to new actionzoneids */
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."actionzones t1
 							inner join (select * 
 								from ".wtw_tableprefix."actionzones 
-								where ".$zmoldgroup."id='".$zwebid."' 
-									and (not ".$zmoldgroup."id='') and deleted=0) t2
+								where ".$zwebtype."id='".$zwebid."' 
+									and (not ".$zwebtype."id='') and deleted=0) t2
 							on t1.parentactionzoneid=t2.pastactionzoneid
 						set t1.parentactionzoneid=t2.actionzoneid
-						where t1.".$zmoldgroup."id='".$zwebid."'
+						where t1.".$zwebtype."id='".$zwebid."'
 							and (not t1.parentactionzoneid='')
 							and (not t2.actionzoneid is null);");
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."actionzones t1
 							inner join (select * 
 								from ".wtw_tableprefix."actionzones 
-								where ".$zmoldgroup."id='".$zwebid."' 
-									and (not ".$zmoldgroup."id='') and deleted=0) t2
+								where ".$zwebtype."id='".$zwebid."' 
+									and (not ".$zwebtype."id='') and deleted=0) t2
 							on t1.loadactionzoneid=t2.pastactionzoneid
 						set t1.loadactionzoneid=t2.actionzoneid
-						where t1.".$zmoldgroup."id='".$zwebid."'
+						where t1.".$zwebtype."id='".$zwebid."'
 							and (not t1.loadactionzoneid='')
 							and (not t2.actionzoneid is null);");
 					$zsuccess = true;
