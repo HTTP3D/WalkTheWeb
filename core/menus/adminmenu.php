@@ -20,6 +20,7 @@
 					<div id="wtw_listbuildings"></div>
 					<br />
 					<div class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu4" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback4" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -27,6 +28,7 @@
 <?php				echo $wtwadminmenu->getAdminSubMenu('buildingoptions'); ?>
 					<br />
 					<div id="wtw_cancel4" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);"><div class="wtw-altkey2">ctrl+d</div><u>D</u>one</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu5" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback5" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -35,6 +37,7 @@
 <?php				include './core/forms/building.php'; ?>
 					<br />
 					<div id="wtw_cancel5" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu6" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback6" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -43,6 +46,7 @@
 <?php				echo $wtwadminmenu->getAdminSubMenu('editbuilding'); ?>
 					<br />
 					<div id="wtw_cancel6" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);"><div class="wtw-altkey2">ctrl+d</div><u>D</u>one Editing</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu9" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback9" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -53,6 +57,7 @@
 					<br />
 					<div id="wtw_bsharebuildingtemp" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;">Share 3D Building as Template</div>
 					<div id="wtw_adminmenubuildsharecancel" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu10" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback10" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -61,6 +66,7 @@
 					<div id="wtw_moldsbuttonlist"></div>
 					<br />
 					<div id="wtw_cancel10" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu11" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback11" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -80,6 +86,7 @@
 					<div id="wtw_webmoldsbuttonlist"></div>
 					<br />
 					<div id="wtw_cancel12" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu13" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback13" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -89,6 +96,7 @@
 					<div id="wtw_thingmoldsbuttonlist"></div>
 					<br />
 					<div id="wtw_cancel13" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu14" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback14" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -98,6 +106,7 @@
 					<div id="wtw_beditconnectinggrid" class="wtw-greenbutton" onclick="WTW.submitConnectingGridsForm(1);" style="font-size:1.4em;">Save Location</div>
 					<div id="wtw_bdelconnectinggrid" class="wtw-redbutton" onclick="WTW.openConfirmation('3');">Delete Building</div>
 					<div id="wtw_cancel14" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu15" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback15" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -115,6 +124,7 @@
 					<div id="wtw_actionzonesbuttonlist"></div>
 					<br />
 					<div id="wtw_cancel15" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu16" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback16" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -123,6 +133,7 @@
 					<div id="wtw_deleteditemslist"></div>
 					<br />
 					<div id="wtw_cancel16" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu20" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback20" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -132,6 +143,7 @@
 					<div id="wtw_beditactionzone" class="wtw-greenbutton" onclick="WTW.submitActionZoneForm(1);" style="font-size:1.4em;">Save Action Zone</div>
 					<div id="wtw_bdelactionzone" class="wtw-redbutton" onclick="WTW.submitActionZoneForm(0);">Delete Action Zone</div>
 					<div id="wtw_cancel20" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu22" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback22" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -141,6 +153,7 @@
 					<div id="wtw_listcommunities"></div>
 					<br />
 					<div id="wtw_cancel22" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu24" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback24" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -148,13 +161,14 @@
 <?php				echo $wtwadminmenu->getAdminSubMenu('communityoptions'); ?>
 					<br />
 					<div id="wtw_adminmenucommdone" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);"><div class="wtw-altkey2">ctrl+d</div><u>D</u>one</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu25" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback25" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
 					<div class="wtw-menuheader">3D Community<br />Information</div><br />
 					<div id="wtw_loadingcommunityform" class="wtw-loadingnotice" style="margin-left:auto;margin-right:auto;color:#000000;">Loading...</div>
 <?php				include './core/forms/community.php'; ?>
-					<br />
+					<br /><br />
 					<div id="wtw_cancel25" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
 				</div>
 				<div id="wtw_adminmenu26" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
@@ -164,6 +178,7 @@
 <?php				echo $wtwadminmenu->getAdminSubMenu('editcommunity'); ?>
 					<br />
 					<div id="wtw_adminmenucommdoneediting" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);"><div class="wtw-altkey2">ctrl+d</div><u>D</u>one Editing</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu27" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback27" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -179,6 +194,7 @@
 					</div>
 					<br />
 					<div id="wtw_cancel27" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu29" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback29" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -189,6 +205,7 @@
 					<br />
 					<div id="wtw_bsharecommunitytemp" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;">Share 3D Community as Template</div>
 					<div id="wtw_cancel29" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu30" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback30" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -197,6 +214,7 @@
 <?php				echo $wtwadminmenu->getAdminSubMenu('editlandscape'); ?>
 					<br />
 					<div id="wtw_cancel30" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);">Done with Scene</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu32" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback32" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -206,6 +224,7 @@
 					<div id="wtw_listthings"></div>
 					<br />
 					<div class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu34" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback34" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -213,6 +232,7 @@
 <?php				echo $wtwadminmenu->getAdminSubMenu('thingoptions'); ?>
 					<br />
 					<div id="wtw_adminmenuthingdone" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);"><div class="wtw-altkey2">ctrl+d</div><u>D</u>one</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu35" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback35" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -221,6 +241,7 @@
 <?php				include './core/forms/thing.php'; ?>
 					<br />
 					<div id="wtw_cancel35" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu36" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback36" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -229,6 +250,7 @@
 <?php				echo $wtwadminmenu->getAdminSubMenu('editthing'); ?>
 					<br />
 					<div id="wtw_adminmenuthingdoneediting" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);"><div class="wtw-altkey2">ctrl+d</div><u>D</u>one Editing</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu39" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback39" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -239,6 +261,7 @@
 					<br />
 					<div id="wtw_bsharethingtemplate" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;">Share 3D Thing as Template</div>
 					<div id="wtw_cancel39" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu40" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback40" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -249,6 +272,7 @@
 					<br />
 					<div id="wtw_bsaveeditskydome" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;">Save Sky</div>
 					<div id="wtw_cancel40" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu41" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback41" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -259,6 +283,7 @@
 					<br />
 					<div id="wtw_bsaveground" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;">Save Ground</div>
 					<div id="wtw_cancel41" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu42" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback42" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -269,6 +294,7 @@
 					<br />
 					<div id="wtw_bsavewaterdepth" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;">Save Depth</div>
 					<div id="wtw_cancel42" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu44" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback44" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -278,6 +304,7 @@
 					<br />
 					<div id="wtw_setstartposition" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;">Use Current Position</div>
 					<div id="wtw_cancel44" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Done</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu45" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback45" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -295,6 +322,7 @@
 					<br />
 					<div id="wtw_savecommgravity" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;">Save Gravity</div>
 					<div id="wtw_cancel45" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Done</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu60" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback60" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -303,6 +331,7 @@
 <?php				include './core/forms/userdevaccess.php'; ?>
 					<br />
 					<div id="wtw_cancel60" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu61" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback61" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -311,6 +340,7 @@
 <?php				include './core/forms/useraccess.php'; ?>
 					<br />
 					<div id="wtw_cancel61" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu69" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback69" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
@@ -319,13 +349,14 @@
 <?php				include './core/forms/updatesnapshot.php'; ?>
 					<br />
 					<div id="wtw_cancel69" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);">Done</div>
+					<br /><br />
 				</div>
 				<div id="wtw_adminmenu70" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback70" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
 					<div id="wtw_devtoolstitle" class="wtw-menuheader">List Loaded Objects</div><br />
 					<div class="wtw-menulevel0text">The following items List the current loaded objects and some of the parameters in the browser Console Log (in most browsers, press <strong>F12</strong> and choose <strong>Console</strong>).</div>
 <?php				echo $wtwadminmenu->getAdminSubMenu('devlistobjects'); ?>
-					<br />
+					<br /><br />
 				</div>
 <?php			echo $wtwadminmenu->getAdminMenuForms(); ?>
 			</div>
@@ -338,6 +369,7 @@
 					<div id="wtw_bmerged" onclick="WTW.setQuickEditorMerged(1);" class="wtw-quickbaroff" title="Merged Shapes are Hidden" alt="Merged Shapes are Hidden">Merged<br /><br />OFF</div>
 					<div id="wtw_bzones" onclick="WTW.setQuickEditorZones(1);" class="wtw-quickbaroff" title="Action Zones are Hidden" alt="Action Zones are Hidden">Zones<br /><br />OFF</div>
 					<div id="wtw_blines" onclick="WTW.setQuickEditorLines(0);" class="wtw-quickbar" title="Alignment Lines are Shown" alt="Alignment Lines are Shown">Lines<br /><br />ON</div>
+					<br /><br />
 				</div>
 			</div>
 <?php		} ?>

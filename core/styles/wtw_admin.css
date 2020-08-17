@@ -57,20 +57,25 @@ html, body {
 	visibility:hidden;
 }
 .wtw-searchresultbutton {
-	border:1px solid gray;
+	float:right;
+	border:2px solid gray;
+	border-radius:10px;
 	color:#000000;
 	font-weight:bold;
-	width:90px;
-	padding:0px;
+	width:120px;
+	padding:20px;
 	text-align:center;
 	vertical-align:top;
 	font-size:1em;
-	background-color:#efefef:
+	margin:15px 5px 5px 5px;
+	background-color:#ffffff;
+	cursor:default;
 }
 .wtw-searchresultbutton:hover {
-	border:1px solid yellow;
+	border:2px solid green;
 	color:green;
-	background-color:white:
+	background-color:#FCFFBD;
+	cursor:pointer;
 }
 .wtw-adminiconimage {
 	height:45px;
