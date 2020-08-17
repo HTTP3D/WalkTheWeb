@@ -26,7 +26,7 @@ try {
 	$zfilename = $wtwhandlers->getPost('filename','');
 	$zfiledata = $wtwhandlers->getPost('filedata','');
 	$zkey = $wtwhandlers->getPost('key','');
-	$zmoldgroup = $wtwhandlers->getPost('moldgroup','');
+	$zwebtype = $wtwhandlers->getPost('webtype','');
 	$zwebid = $wtwhandlers->getPost('webid','');
 	$zcopywebid = $wtwhandlers->getPost('copywebid','');
 	$zuploadsbulk = $wtwhandlers->getPost('uploadsbulk','');
@@ -76,27 +76,27 @@ try {
 			$zresponse = $wtwuploads->getCommunityImages($zcommunityid, $zbuildingid, $zthingid);
 			break;
 		case "saveimage":
-			$resp = $wtwuploads->saveImageFilePng(addslashes($zfilepath), $zfilename, $zfiledata, $zcommunityid, $zbuildingid, $zthingid);
+			$zresults = $wtwuploads->saveImageFilePng(addslashes($zfilepath), $zfilename, $zfiledata, $zcommunityid, $zbuildingid, $zthingid);
 			$zresponse = array(
-				'snapshotid'=> $resp['snapshotid'],
-				'snapshotpath'=> $resp['snapshotpath'],
-				'snapshotdata'=> $resp['snapshotdata']
+				'snapshotid'=> $zresults['snapshotid'],
+				'snapshotpath'=> $zresults['snapshotpath'],
+				'snapshotdata'=> $zresults['snapshotdata']
 			);
 			break;
 		case "togglehidemyimage":
 			$wtwuploads->toggleHideMyImage($zuploadid, $zhide);
 			break;
 		case "setkeyhash":
-			$zkeyhash = $wtwuploads->setKeyHash($zkey, $zmoldgroup, $zwebid);
+			$zkeyhash = $wtwuploads->setKeyHash($zkey, $zwebtype, $zwebid);
 			$zresponse = array(
 				'keyhash'=> $zkeyhash
 			);
 			break;
 		case "importuploads":
-			$wtwuploads->importUploads($zmoldgroup, $zwebid, $zcopywebid, $zuploadsbulk);
+			$wtwuploads->importUploads($zwebtype, $zwebid, $zcopywebid, $zuploadsbulk);
 			break;
 		case "importwebimages":
-			$wtwuploads->importWebImages($zmoldgroup, $zwebid, $zcopywebid, $zwebimagesbulk);
+			$wtwuploads->importWebImages($zwebtype, $zwebid, $zcopywebid, $zwebimagesbulk);
 			break;
 	}
 

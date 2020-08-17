@@ -13,13 +13,15 @@ try {
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zcommunityid = $wtwhandlers->getPost('communityid','');
 	$zpastcommunityid = $wtwhandlers->getPost('pastcommunityid','');
+	$zwebid = $wtwhandlers->getPost('webid','');
+	$zwebtype = $wtwhandlers->getPost('webtype','');
 	$zcommunityname = base64_decode($wtwhandlers->getPost('communityname',''));
-	$zdescription = $wtwhandlers->getPost('description','');
-	$ztags = $wtwhandlers->getPost('tags','');
+	$zdescription = base64_decode($wtwhandlers->getPost('description',''));
+	$ztags = base64_decode($wtwhandlers->getPost('tags',''));
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
 	$zgroundpositiony = $wtwhandlers->getPost('groundpositiony','');
 	$zwaterpositiony = $wtwhandlers->getPost('waterpositiony','');
-	$zalttag = $wtwhandlers->getPost('alttag','');
+	$zalttag = base64_decode($wtwhandlers->getPost('alttag',''));
 	$zpositionx = $wtwhandlers->getPost('positionx','0');
 	$zpositiony = $wtwhandlers->getPost('positiony','0');
 	$zpositionz = $wtwhandlers->getPost('positionz','0');
@@ -66,14 +68,19 @@ try {
 		case "saveextendedground":
 			$wtwcommunities->saveCommunityGround($zcommunityid, $zgroundtextureid);
 			break;
-
 		case "savecommunitytemplate":
 			$zresponse = $wtwcommunities->saveCommunityTemplate($zcommunityid, $zcommunityname, $zdescription, $ztags);
 			break;
 		case "sharecommunitytemplate":
 			$zresponse = $wtwcommunities->shareCommunityTemplate($zcommunityid, $zsharehash);
 			break;
-
+		case "downloadweb":
+			$znewwebid = $wtwcommunities->downloadWeb($zwebid, $zwebid, $zwebtype);
+			$zresponse = array(
+				'webid'=> $znewwebid,
+				'webtype'=> $zwebtype
+			);
+			break;
 		case "importcommunity":
 			$zcommunityid = $wtwcommunities->importCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag);
 			$zresponse = array(

@@ -13,11 +13,11 @@ try {
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zbuildingid = $wtwhandlers->getPost('buildingid','');
 	$zpastbuildingid = $wtwhandlers->getPost('pastbuildingid','');
-	$zbuildingname = $wtwhandlers->getPost('buildingname','');
-	$zdescription = $wtwhandlers->getPost('description','');
-	$ztags = $wtwhandlers->getPost('tags','');
+	$zbuildingname = base64_decode($wtwhandlers->getPost('buildingname',''));
+	$zdescription = base64_decode($wtwhandlers->getPost('description',''));
+	$ztags = base64_decode($wtwhandlers->getPost('tags',''));
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
-	$zalttag = $wtwhandlers->getPost('alttag','');
+	$zalttag = base64_decode($wtwhandlers->getPost('alttag',''));
 	$zpositionx = $wtwhandlers->getPost('positionx','0');
 	$zpositiony = $wtwhandlers->getPost('positiony','0');
 	$zpositionz = $wtwhandlers->getPost('positionz','0');
@@ -34,7 +34,10 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savebuilding":
-			$zbuildingid = $wtwbuildings->saveBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zanalyticsid, $zalttag, 0);
+			$zbuildingid = $wtwbuildings->saveBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zanalyticsid, $zalttag);
+			$zresponse = array(
+				'buildingid'=> $zbuildingid
+			);
 			break;
 		case "deletebuilding":
 			$wtwbuildings->deleteBuilding($zbuildingid);
@@ -54,6 +57,9 @@ try {
 			break;
 		case "importbuilding":
 			$zbuildingid = $wtwbuildings->importBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $zalttag);
+			$zresponse = array(
+				'buildingid'=> $zbuildingid
+			);
 			break;
 	}
 

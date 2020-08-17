@@ -13,9 +13,9 @@ try {
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zthingid = $wtwhandlers->getPost('thingid','');
 	$zpastthingid = $wtwhandlers->getPost('pastthingid','');
-	$zthingname = $wtwhandlers->getPost('thingname','');
+	$zthingname = base64_decode($wtwhandlers->getPost('thingname',''));
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
-	$zalttag = $wtwhandlers->getPost('alttag','');
+	$zalttag = base64_decode($wtwhandlers->getPost('alttag',''));
 	$zpositionx = $wtwhandlers->getPost('positionx','0');
 	$zpositiony = $wtwhandlers->getPost('positiony','0');;
 	$zpositionz = $wtwhandlers->getPost('positionz','0');;
@@ -26,8 +26,8 @@ try {
 	$zrotationy = $wtwhandlers->getPost('rotationy','0');;
 	$zrotationz = $wtwhandlers->getPost('rotationz','0');;
 	$zgravity = $wtwhandlers->getPost('gravity','9.8');
-	$zdescription = $wtwhandlers->getPost('description','');
-	$ztags = $wtwhandlers->getPost('tags','');
+	$zdescription = base64_decode($wtwhandlers->getPost('description',''));
+	$ztags = base64_decode($wtwhandlers->getPost('tags',''));
 	$zsharehash = $wtwhandlers->getPost('sharehash','');
 	
 	/* select the function called */
@@ -56,6 +56,9 @@ try {
 			break;
 		case "importthing":
 			$zthingid = $wtwthings->importThing($zthingid, $zpastthingid, $zthingname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $zalttag);
+			$zresponse = array(
+				'thingid'=> $zthingid
+			);
 			break;
 		case "savethingtemplate":
 			$zresponse = $wtwthings->saveThingTemplate($zthingid, $zthingname, $zdescription, $ztags);

@@ -28,7 +28,7 @@ try {
 	$zrotationy = $wtwhandlers->getPost('rotationy','0');
 	$zrotationz = $wtwhandlers->getPost('rotationz','0');
 	$zalttag = $wtwhandlers->getPost('alttag','');
-	$zmoldgroup = $wtwhandlers->getPost('moldgroup','');
+	$zwebtype = $wtwhandlers->getPost('webtype','');
 	$zwebid = $wtwhandlers->getPost('webid','');
 	$zconnectinggridsbulk = $wtwhandlers->getPost('connectinggridsbulk','');
 	
@@ -42,13 +42,13 @@ try {
 			$wtwconnectinggrids->deleteConnectingGrid($zconnectinggridid);
 			break;
 		case "updatechildconnectinggrids":
-			$wtwconnectinggrids->updateChildConnectingGrid($zmoldgroup, $zwebid);
+			$wtwconnectinggrids->updateChildConnectingGrid($zwebtype, $zwebid);
 			break;
 		case "importconnectinggrids":
-			$wtwconnectinggrids->importConnectingGrids('child', $zmoldgroup, $zwebid, $zconnectinggridsbulk);
+			$wtwconnectinggrids->importConnectingGrids('child', $zwebtype, $zwebid, $zconnectinggridsbulk);
 			break;
 		case "importparentconnectinggrids":
-			$wtwconnectinggrids->importConnectingGrids('parent', $zmoldgroup, $zwebid, $zconnectinggridsbulk);
+			$wtwconnectinggrids->importConnectingGrids('parent', $zwebtype, $zwebid, $zconnectinggridsbulk);
 			break;
 	}
 

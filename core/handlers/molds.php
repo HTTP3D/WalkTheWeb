@@ -63,15 +63,10 @@ try {
 	$zwebstyle = $wtwhandlers->getPost('webstyle','');
 	$zpath1points = $wtwhandlers->getPost('path1points','');
 	$zpath2points = $wtwhandlers->getPost('path2points','');
-	$zdiffusecolorr = $wtwhandlers->getPost('diffusecolorr','1');
-	$zdiffusecolorg = $wtwhandlers->getPost('diffusecolorg','1');
-	$zdiffusecolorb = $wtwhandlers->getPost('diffusecolorb','1');
-	$zspecularcolorr = $wtwhandlers->getPost('specularcolorr','1');
-	$zspecularcolorg = $wtwhandlers->getPost('specularcolorg','1');
-	$zspecularcolorb = $wtwhandlers->getPost('specularcolorb','');
-	$zemissivecolorr = $wtwhandlers->getPost('emissivecolorr','1');
-	$zemissivecolorg = $wtwhandlers->getPost('emissivecolorg','1');
-	$zemissivecolorb = $wtwhandlers->getPost('emissivecolorb','');
+	$zdiffusecolor = $wtwhandlers->getPost('diffusecolor','#ffffff');
+	$zspecularcolor = $wtwhandlers->getPost('specularcolor','#bcbcbc');
+	$zemissivecolor = $wtwhandlers->getPost('emissivecolor','#686868');
+	$zambientcolor = $wtwhandlers->getPost('ambientcolor','#575757');
 	$zsoundid = $wtwhandlers->getPost('soundid','');
 	$zsoundname = $wtwhandlers->getPost('soundname','');
 	$zsoundattenuation = $wtwhandlers->getPost('soundattenuation','');
@@ -89,7 +84,7 @@ try {
 	$zjsfunction = $wtwhandlers->getPost('jsfunction','');
 	$zjsparameters = $wtwhandlers->getPost('jsparameters','');
 	$zdeleted = $wtwhandlers->getPost('deleted','0');
-	$zmoldgroup = $wtwhandlers->getPost('moldgroup','');
+	$zwebtype = $wtwhandlers->getPost('webtype','');
 	$zwebid = $wtwhandlers->getPost('webid','');
 	$zcopywebid = $wtwhandlers->getPost('copywebid','');
 	$zmoldsbulk = $wtwhandlers->getPost('moldsbulk','');
@@ -101,21 +96,21 @@ try {
 			if (!empty($zcommunityid)) {
 				require_once(wtw_rootpath.'/core/functions/class_wtwcommunitymolds.php');
 				global $wtwcommunitymolds;
-				$zmoldid = $wtwcommunitymolds->saveCommunityMold($zmoldid, $zcommunityid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zsubdivisions, $zminheight, $zmaxheight, $zcheckcollisions, $zispickable, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zpath1points, $zpath2points, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb, $zspecularcolorr, $zspecularcolorg, $zspecularcolorb, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain);
+				$zmoldid = $wtwcommunitymolds->saveCommunityMold($zmoldid, $zcommunityid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zsubdivisions, $zminheight, $zmaxheight, $zcheckcollisions, $zispickable, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zpath1points, $zpath2points, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain);
 				if ($zimageind != "-1") {
 					$wtwmoldscommon->saveWebImage('', '', $zmoldid, $zimageind, $zimageid, $zimagehoverid, $zimageclickid, $zjsfunction, $zjsparameters);
 				}
 			} else if (!empty($zbuildingid)) {
 				require_once(wtw_rootpath.'/core/functions/class_wtwbuildingmolds.php');
 				global $wtwbuildingmolds;
-				$zmoldid = $wtwbuildingmolds->saveBuildingMold($zmoldid, $zbuildingid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zsubdivisions, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zpath1points, $zpath2points, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb, $zspecularcolorr, $zspecularcolorg, $zspecularcolorb, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain);
+				$zmoldid = $wtwbuildingmolds->saveBuildingMold($zmoldid, $zbuildingid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zsubdivisions, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zpath1points, $zpath2points, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain);
 				if ($zimageind != "-1") {
 					$wtwmoldscommon->saveWebImage('', $zmoldid, '', $zimageind, $zimageid, $zimagehoverid, $zimageclickid, $zjsfunction, $zjsparameters);
 				}
 			} else if (!empty($zthingid)) {
 				require_once(wtw_rootpath.'/core/functions/class_wtwthingmolds.php');
 				global $wtwthingmolds;
-				$zmoldid = $wtwthingmolds->saveThingMold($zmoldid, $zthingid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zsubdivisions, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zpath1points, $zpath2points, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb, $zspecularcolorr, $zspecularcolorg, $zspecularcolorb, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain);
+				$zmoldid = $wtwthingmolds->saveThingMold($zmoldid, $zthingid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zsubdivisions, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zpath1points, $zpath2points, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain);
 				if ($zimageind != "-1") {
 					$wtwmoldscommon->saveWebImage($zmoldid, '', '', $zimageind, $zimageid, $zimagehoverid, $zimageclickid, $zjsfunction, $zjsparameters);
 				}
@@ -152,10 +147,10 @@ try {
 			}
 			break;
 		case "importmolds":
-			$wtwmoldscommon->importMolds($zmoldgroup, $zwebid, $zcopywebid, $zmoldsbulk);
+			$wtwmoldscommon->importMolds($zwebtype, $zwebid, $zcopywebid, $zmoldsbulk);
 			break;
 		case "importmoldpoints":
-			$wtwmoldscommon->importMoldPoints($zmoldgroup, $zwebid, $zcopywebid, $zmoldsbulk);
+			$wtwmoldscommon->importMoldPoints($zwebtype, $zwebid, $zcopywebid, $zmoldsbulk);
 			break;
 	}
 
