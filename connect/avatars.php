@@ -20,7 +20,7 @@ try {
 				SELECT ua1.useravatarid, ua1.avatarid, ua1.gender, ua1.displayname, 
 					ua1.objectfolder as avatarfolder, ua1.objectfile as avatarfile,  
 					ua1.scalingx, ua1.scalingy, ua1.scalingz, ua1.startframe, ua1.endframe,
-					a1.avatargroup, a1.imagefull, a1.imageface, a1.sortorder  
+					a1.avatargroup, a1.imagefull, a1.imageface, a1.sortorder, '' as defaultdisplayname 
 				FROM ".wtw_tableprefix."useravatars ua1 left join ".wtw_tableprefix."avatars a1
 				on ua1.avatarid = a1.avatarid
 				where ua1.userid='".$wtwconnect->userid."'
@@ -28,36 +28,42 @@ try {
 				order by ua1.displayname, ua1.avatarid, ua1.useravatarid;");
 		} else {
 			/* pull a group of available avatars */
-			$zwhere = "deleted=0  and (";
+			$zwhere = "a1.deleted=0  and (";
 			if (strpos($zgroups, ',') !== false) {
 				$zgrouplist = explode(",", $zgroups);
 				$i = 0;
 				foreach ($zgrouplist as $zgroup) {
 					if ($i == 0) {
-						$zwhere .= "avatargroup='".$zgroup."' ";
+						$zwhere .= "a1.avatargroup='".$zgroup."' ";
 					} else {
-						$zwhere .= "or avatargroup='".$zgroup."' ";
+						$zwhere .= "or a1.avatargroup='".$zgroup."' ";
 					}
 					$i += 1;
 				}
 				$zwhere .= ")";
 			} else {
-				$zwhere .= "avatargroup='".$zgroups."') ";
+				$zwhere .= "a1.avatargroup='".$zgroups."') ";
 			}
 			$zresults = $wtwconnect->query("
-				select *,
-					'' as useravatarid
-				from ".wtw_tableprefix."avatars 
+				select a1.*,
+					'' as useravatarid,
+					u1.displayname as defaultdisplayname
+				from ".wtw_tableprefix."avatars a1
+				left join (select displayname from ".wtw_tableprefix."users where userid='".$wtwconnect->userid."') u1
+				on 1=1
 				where ".$zwhere." 
-				order by avatargroup, sortorder, displayname;");
+				order by a1.avatargroup, a1.sortorder, a1.displayname;");
 		}
 	} else {
 		$zresults = $wtwconnect->query("
-			select *,
-				'' as useravatarid
-			from ".wtw_tableprefix."avatars 
-			where deleted=0 
-			order by avatargroup, sortorder, displayname;");
+			select a1.*,
+				'' as useravatarid,
+				u1.displayname as defaultdisplayname
+			from ".wtw_tableprefix."avatars a1
+				left join (select displayname from ".wtw_tableprefix."users where userid='".$wtwconnect->userid."') u1
+				on 1=1
+			where a1.deleted=0 
+			order by a1.avatargroup, a1.sortorder, a1.displayname;");
 	}
 	$i = 0;
 	$zavatars = array();
@@ -70,6 +76,7 @@ try {
 			'avatarid'=> $zrow["avatarid"],
 			'avatargroup'=> $zrow["avatargroup"],
 			'displayname'=> $zrow["displayname"],
+			'defaultdisplayname'=> $zrow["defaultdisplayname"],
 			'gender'=> $zrow["gender"],
 			'object'=> array(
 				'folder'=> $zrow["avatarfolder"],
