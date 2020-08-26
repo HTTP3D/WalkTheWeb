@@ -281,7 +281,7 @@ WTWJS.prototype.saveUser = function() {
 			var zrequest = {
 				'userid':zuserid,
 				'username':zusername,
-				'email':zemail,
+				'useremail':zemail,
 				'function':'saveuser'
 			};
 			WTW.postJSON("/core/handlers/users.php", zrequest, 

@@ -1971,15 +1971,6 @@ WTWJS.prototype.editWebAlias = function(zwebaliasid) {
 						}
 					}
 				}
-				if (zcommunityid != "") {
-					WTW.setAliasCommunities(zcommunityid);
-				}
-				if (zbuildingid != "") {
-					WTW.setAliasBuildings(zcommunityid, zbuildingid);
-				}
-				if (zthingid != "") {
-					WTW.setAliasThings(zcommunityid, zbuildingid, zthingid);
-				}
 				var zpathtype = -1;
 				if (zcommunityid != "") {
 					if (zbuildingid != "") {
@@ -2016,6 +2007,15 @@ WTWJS.prototype.editWebAlias = function(zwebaliasid) {
 				}
 				WTW.setDDLValue('wtw_taliaspathtype', zpathtype);
 				WTW.setAliasForm(dGet('wtw_taliaspathtype'));
+				if (zcommunityid != "") {
+					WTW.setAliasCommunities(zcommunityid);
+				}
+				if (zbuildingid != "") {
+					WTW.setAliasBuildings(zbuildingid);
+				}
+				if (zthingid != "") {
+					WTW.setAliasThings(zthingid);
+				}
 				if (zforcehttps == "1") {
 					dGet('wtw_aliasforcehttps').selectedIndex = 0;
 				} else {
@@ -2027,10 +2027,116 @@ WTWJS.prototype.editWebAlias = function(zwebaliasid) {
 				dGet("wtw_taliasbuildingpublishname").value = zbuildingpub;
 				dGet("wtw_taliasthingpublishname").value = zthingpub;
 				WTW.show('wtw_baliasdelete');
+				dGet('wtw_taliaspathtype').focus();
 			}
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-openWebAliasSettings=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setAliasCommunities = function(zcommunityid) {
+	/* drop down list of 3D Communities to select a 3D Community to map */
+	try {
+		if (zcommunityid == undefined) {
+			zcommunityid = '';
+		}
+		WTW.clearDDL("wtw_aliasdomaincommunityid");
+		WTW.clearDDL("wtw_aliascommunityid");
+		WTW.getJSON("/connect/communitynames.php", 
+			function(response) {
+				response = JSON.parse(response);
+				if (response != null) {
+					for (var i=0;i<response.length;i++) {
+						if (response[i] != null) {
+							if (response[i].communityid != undefined && response[i].communityname != undefined) {
+								var zoption = document.createElement("option");
+								zoption.text = response[i].communityname;
+								zoption.value = response[i].communityid;
+								if (i == 0 && zcommunityid == '') {
+									zoption.selected = true;
+								} else if (zcommunityid == response[i].communityid) {
+									zoption.selected = true;
+								}
+								var zoption2 = zoption.cloneNode(true);
+								dGet("wtw_aliasdomaincommunityid").add(zoption);
+								dGet("wtw_aliascommunityid").add(zoption2);
+							}
+						}
+					}
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-setAliasCommunities=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setAliasBuildings = function(zbuildingid) {
+	/* drop down list of 3D Buildings to select a 3D Building to map */
+	try {
+		if (zbuildingid == undefined) {
+			zbuildingid = '';
+		}
+		WTW.clearDDL("wtw_aliasbuildingid");
+		WTW.getJSON("/connect/buildingnames.php", 
+			function(response) {
+				response = JSON.parse(response);
+				if (response != null) {
+					for (var i=0;i<response.length;i++) {
+						if (response[i] != null) {
+							if (response[i].buildingid != undefined && response[i].buildingname != undefined) {
+								var zoption = document.createElement("option");
+								zoption.text = response[i].buildingname;
+								zoption.value = response[i].buildingid;
+								if (i == 0 && zbuildingid == '') {
+									zoption.selected = true;
+								} else if (zbuildingid == response[i].buildingid) {
+									zoption.selected = true;
+								}
+								dGet("wtw_aliasbuildingid").add(zoption);
+							}
+						}
+					}
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-setAliasBuildings=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setAliasThings = function(zthingid) {
+	/* drop down list of 3D Things to select a 3D Thing to map */
+	try {
+		if (zthingid == undefined) {
+			zthingid = '';
+		}
+		WTW.clearDDL("wtw_aliasthingid");
+		WTW.getJSON("/connect/thingnames.php", 
+			function(response) {
+				response = JSON.parse(response);
+				if (response != null) {
+					for (var i=0;i<response.length;i++) {
+						if (response[i] != null) {
+							if (response[i].thingid != undefined && response[i].thingname != undefined) {
+								var zoption = document.createElement("option");
+								zoption.text = response[i].thingname;
+								zoption.value = response[i].thingid;
+								if (i == 0 && zthingid == '') {
+									zoption.selected = true;
+								} else if (zthingid == response[i].thingid) {
+									zoption.selected = true;
+								}
+								dGet("wtw_aliasthingid").add(zoption);
+							}
+						}
+					}
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-setAliasThings=" + ex.message);
 	}
 }
 
@@ -2042,7 +2148,6 @@ WTWJS.prototype.openAliasForm = function() {
 		dGet('wtw_aliaslevel1').style.visibility = "visible";
 		dGet('wtw_aliastext1').style.visibility = "visible";
 		dGet('wtw_aliasselect1').style.visibility = "visible";
-		WTW.setAliasCommunities();
 		WTW.show('wtw_addwebaliasdiv');
 		WTW.hide('wtw_addwebalias');
 		WTW.hide('wtw_baliasdelete');
@@ -2217,96 +2322,6 @@ WTWJS.prototype.setAliasForm = function(zobj) {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-setAliasForm=" + ex.message);
-	}
-}
-
-WTWJS.prototype.setAliasCommunities = function() {
-	/* drop down list of 3D Communities to select a 3D Community to map */
-	try {
-		WTW.clearDDL("wtw_aliasdomaincommunityid");
-		WTW.clearDDL("wtw_aliascommunityid");
-		WTW.getJSON("/connect/communitynames.php", 
-			function(response) {
-				response = JSON.parse(response);
-				if (response != null) {
-					for (var i=0;i<response.length;i++) {
-						if (response[i] != null) {
-							if (response[i].communityid != undefined && response[i].communityname != undefined) {
-								var option = document.createElement("option");
-								option.text = response[i].communityname;
-								option.value = response[i].communityid;
-								if (i == 0) {
-									option.selected = true;
-								}
-								var option2 = option.cloneNode(true);
-								dGet("wtw_aliasdomaincommunityid").add(option);
-								dGet("wtw_aliascommunityid").add(option2);
-							}
-						}
-					}
-				}
-			}
-		);
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminforms.js-setAliasCommunities=" + ex.message);
-	}
-}
-
-WTWJS.prototype.setAliasBuildings = function() {
-	/* drop down list of 3D Buildings to select a 3D Building to map */
-	try {
-		WTW.clearDDL("wtw_aliasbuildingid");
-		WTW.getJSON("/connect/buildingnames.php", 
-			function(response) {
-				response = JSON.parse(response);
-				if (response != null) {
-					for (var i=0;i<response.length;i++) {
-						if (response[i] != null) {
-							if (response[i].buildingid != undefined && response[i].buildingname != undefined) {
-								var option = document.createElement("option");
-								option.text = response[i].buildingname;
-								option.value = response[i].buildingid;
-								if (i == 0) {
-									option.selected = true;
-								}
-								dGet("wtw_aliasbuildingid").add(option);
-							}
-						}
-					}
-				}
-			}
-		);
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminforms.js-setAliasBuildings=" + ex.message);
-	}
-}
-
-WTWJS.prototype.setAliasThings = function() {
-	/* drop down list of 3D Things to select a 3D Thing to map */
-	try {
-		WTW.clearDDL("wtw_aliasthingid");
-		WTW.getJSON("/connect/thingnames.php", 
-			function(response) {
-				response = JSON.parse(response);
-				if (response != null) {
-					for (var i=0;i<response.length;i++) {
-						if (response[i] != null) {
-							if (response[i].thingid != undefined && response[i].thingname != undefined) {
-								var option = document.createElement("option");
-								option.text = response[i].thingname;
-								option.value = response[i].thingid;
-								if (i == 0) {
-									option.selected = true;
-								}
-								dGet("wtw_aliasthingid").add(option);
-							}
-						}
-					}
-				}
-			}
-		);
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminforms.js-setAliasThings=" + ex.message);
 	}
 }
 

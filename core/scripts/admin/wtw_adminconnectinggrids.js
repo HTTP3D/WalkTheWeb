@@ -386,7 +386,7 @@ WTWJS.prototype.addConnectingGrid = function(childwebtype, childwebid, childwebn
 			var rotationz = 0;
 			var newcoords = WTW.getNewCoordinates(dist);
 			positionx = newcoords.positionX;
-			positiony = newcoords.positionY - 12;
+			positiony = newcoords.positionY;
 			positionz = newcoords.positionZ;
 			rotationy = newcoords.rotationY;
 			WTW.getJSON("/connect/actionzones.php?thingid=" + childwebid + "&buildingid=" + childwebid + "&communityid=&parentname=" + parentname + "&connectinggridid=" + connectinggridid + "&connectinggridind=" + connectinggridind, 
