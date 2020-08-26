@@ -20,6 +20,10 @@ try {
 	$zuseravatarid = $wtwhandlers->getPost('useravatarid','');
 	$zinstanceid = $wtwhandlers->getPost('instanceid','');
 	$zdisplayname = $wtwhandlers->getPost('displayname','');
+	$zfirstname = $wtwhandlers->getPost('firstname','');
+	$zlastname = $wtwhandlers->getPost('lastname','');
+	$zgender = $wtwhandlers->getPost('gender','');
+	$zdob = $wtwhandlers->getPost('dob','');
 	$zroleid = $wtwhandlers->getPost('roleid','');
 	$zuserinroleid = $wtwhandlers->getPost('userinroleid','');
 	$zcommunityid = $wtwhandlers->getPost('communityid','');
@@ -68,6 +72,12 @@ try {
 			break;
 		case "logout":
 			$wtwusers->logout();
+			break;
+		case "savemyprofile":
+			$zserror = $wtwusers->saveMyProfile($zuserid, $zdisplayname, $zuseremail, $zfirstname, $zlastname, $zgender, $zdob);
+			$zresponse = array(
+				'serror'=> $zserror
+			);
 			break;
 		case "saveprofile":
 			$zserror = $wtwusers->saveProfile($zuseravatarid, $zinstanceid, $zusername, $zdisplayname, $zuseremail);
