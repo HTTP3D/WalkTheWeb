@@ -1877,6 +1877,19 @@ h2.wtw-login {
 	margin-bottom:25px;
 	background-image:linear-gradient(rgba(200, 200, 200, .2), rgba(14, 115, 237, .6)); 
 }
+.wtw-profiletext {
+	float:right;
+	cursor: default;
+	font-size:1.2em;
+	text-align:left;
+	width:240px;
+	min-height:30px;
+	margin-right:10px;
+	padding:5px;
+	color:#ffffff;
+	background-color:rgba(25, 25, 25, .4);
+}
+
 input.wtw-textbox {
 	width:240px;
 	font-size:1.2em;
