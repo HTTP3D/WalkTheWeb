@@ -1047,7 +1047,7 @@ WTWJS.prototype.returnCloseDesigner = function() {
 				}, "*");
 			}, 2000);
 		} else {
-			WTW.openLocalLogin('Select My Avatar',.3,.6);
+			WTW.openLocalLogin('Select Avatar',.4,.6);
 		}
 	} catch (ex) {
 		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-returnCloseDesigner=" + ex.message);
@@ -2015,24 +2015,30 @@ WTWJS.prototype.setMyAvatarColor = function(r, g, b) {
 	}
 }
 
-WTWJS.prototype.setTextColor = function(bgColor, lightColor, darkColor) {
+WTWJS.prototype.setTextColor = function(zbgcolor, zlightcolor, zdarkcolor) {
 	/* when the color is selected, the form updates the color to the background */
-	/* this also sets the text color to an opposite color than the background (black or white) */
+	/* this also sets the text color to an opposite color than the background (default is black or white) */
 	var zcolor = "black";
 	try {
-		var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
-		var r = parseInt(color.substring(0, 2), 16); // hexToR
-		var g = parseInt(color.substring(2, 4), 16); // hexToG
-		var b = parseInt(color.substring(4, 6), 16); // hexToB
-		var uicolors = [r / 255, g / 255, b / 255];
-		var c = uicolors.map((col) => {
-			if (col <= 0.03928) {
-				return col / 12.92;
+		if (zlightcolor == undefined) {
+			zlightcolor = "#ffffff";
+		}
+		if (zdarkcolor == undefined) {
+			zdarkcolor = "#000000";
+		}
+		var zcolorstring = (zbgcolor.charAt(0) === '#') ? zbgcolor.substring(1, 7) : zbgcolor;
+		var zred = parseInt(zcolorstring.substring(0, 2), 16); // hexToR
+		var zgreen = parseInt(zcolorstring.substring(2, 4), 16); // hexToG
+		var zblue = parseInt(zcolorstring.substring(4, 6), 16); // hexToB
+		var zuicolors = [zred / 255, zgreen / 255, zblue / 255];
+		var zcols = zuicolors.map((zcol) => {
+			if (zcol <= 0.03928) {
+				return zcol / 12.92;
 			}
-			return Math.pow((col + 0.055) / 1.055, 2.4);
+			return Math.pow((zcol + 0.055) / 1.055, 2.4);
 		});
-		var L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
-		zcolor = (L > 0.179) ? darkColor : lightColor;
+		var zcompare = (0.2126 * zcols[0]) + (0.7152 * zcols[1]) + (0.0722 * zcols[2]);
+		zcolor = (zcompare > 0.179) ? zdarkcolor : zlightcolor;
 	} catch (ex) {
 		WTW.log("avatars-loadavatar-setTextColor=" + ex.message);
 	}

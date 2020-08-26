@@ -1,11 +1,11 @@
-WTW_AVATARS.prototype.addMoldMyCustomMold = function(moldname, molddef, lenx, leny, lenz) {
-	let mold;
+WTW_AVATARS.prototype.addMoldMyCustomMold = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
+	let zmold;
 	try {
 		/* each custom mold will have a separate function */
-		mold = BABYLON.MeshBuilder.CreateBox(moldname, {}, scene);
-		mold.scaling = new BABYLON.Vector3(lenx,leny,lenz);
-		mold.material = new BABYLON.StandardMaterial("mat" + moldname, scene);
-		mold.material.alpha = 0;
+		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
+		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
+		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		zmold.material.alpha = 0;
 		
 		/* everything you create in this function should be parented to the above invisible Box: */
 		/* yourobject.parent = mold;
@@ -14,30 +14,30 @@ WTW_AVATARS.prototype.addMoldMyCustomMold = function(moldname, molddef, lenx, le
 		/* examples of existing 3D Objects can be found at /core/scripts/molds/wtw_basicmolds.js */
 		/* you can use one of the 3D Objects as a base and build off it as needed */
 		/* names of your child objects and materials should be: */
-		/* moldname + "-DEVIDpartname" */
+		/* zmoldname + "-DEVIDpartname" */
 		/* where partname is whatever you want it to be. */
 
 	} catch (ex) {
 		WTW.log("plugins:wtw-avatars:scripts-custom_molds.js-addMoldMyCustomMold=" + ex.message);
 	}
-	return mold;
+	return zmold;
 }
 
-WTW_AVATARS.prototype.setNewMoldDefaults = function(shape, positionX, positionY, positionZ, rotationY) {
+WTW_AVATARS.prototype.setNewMoldDefaults = function(zshape, zpositionX, zpositionY, zpositionZ, zrotationY) {
 	try {
 		/* add each custom mold to this one function as a case - no need to add additional hooks */
-		/* shape is name of my custom mold - all lowercase and no spaces */
-		switch (shape) {
+		/* zshape is name of my custom mold - all lowercase and no spaces */
+		switch (zshape) {
 			case "mycustommold":
 				/* position x, y, x and rotationy are calculated from the current camera position so it is in front of the camera */
-				dGet('wtw_tmoldpositionx').value = positionX;
-				dGet('wtw_tmoldpositiony').value = positionY;
-				dGet('wtw_tmoldpositionz').value = positionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = rotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationY;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -52,11 +52,11 @@ WTW_AVATARS.prototype.setNewMoldDefaults = function(shape, positionX, positionY,
 	}
 }
 
-WTW_AVATARS.prototype.setMoldFormFields = function(shape) {
+WTW_AVATARS.prototype.setMoldFormFields = function(zshape) {
 	try {
 		/* add each custom mold to this one function as a case - no need to add additional hooks */
-		/* shape is name of my custom mold - all lowercase and no spaces */
-		switch (shape) {
+		/* zshape is name of my custom mold - all lowercase and no spaces */
+		switch (zshape) {
 			case "mycustommold":
 				/* define the labels and button names used on the form */
 				dGet('wtw_editmoldformtitle').innerHTML = "Edit MyCustomMold";
@@ -80,5 +80,4 @@ WTW_AVATARS.prototype.setMoldFormFields = function(shape) {
 	} catch (ex) {
 		WTW.log("plugins:wtw-avatars:scripts-custom_molds.js-setMoldFormFields=" + ex.message);
 	}
-	return mold;
 }

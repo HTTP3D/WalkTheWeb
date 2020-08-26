@@ -29,7 +29,7 @@ WTW_AVATARS.prototype.onClick = function(zpickedname) {
           moldnameparts.communityid is the unique ID for the 3D Community related to this 3D Object (only has a value when is a WTW.communityMolds).
           moldnameparts.buildingid is the unique ID for the 3D Building related to this 3D Object (only has a value when is a WTW.buildingMolds).
           moldnameparts.thingid is the unique ID for the 3D Thing related to this 3D Object (only has a value when is a WTW.thingMolds).
-          moldnameparts.moldgroup identifies what kind of 3D object it is; building, community, or thing.
+          moldnameparts.webtype identifies what kind of 3D object it is; building, community, or thing.
           moldnameparts.molds is the Array for the Mold; WTW.communityMolds, WTW.buildingMolds, or WTW.thingMolds.
           moldnameparts.shape is the Mold shape which identifies the function used to create the Mold (mesh).
           moldnameparts.namepart is an array of the segments of the name split by the hyphen '-'. This is useful for checking the additional optional values and current state.
@@ -118,12 +118,12 @@ WTW_AVATARS.prototype.setAvatarMovement = function(zavatar, zevent, zweight) {
 	return zweight;
 }
 
-WTW_AVATARS.prototype.checkHovers = function(moldname, shape) {
+WTW_AVATARS.prototype.checkHovers = function(zmoldname, zshape) {
 	try {
 		/* this function activates on hover over a 3D Object */
 		/* useful if you want to change material, highlighting, or prompt a response */
-		moldname = moldname.toLowerCase();
-		if (moldname.indexOf("golfball") > -1) {
+		zmoldname = zmoldname.toLowerCase();
+		if (zmoldname.indexOf("golfball") > -1) {
 			
 		}
 	} catch (ex) {
@@ -131,12 +131,12 @@ WTW_AVATARS.prototype.checkHovers = function(moldname, shape) {
 	} 
 }
 
-WTW_AVATARS.prototype.resetHovers = function(moldname, shape) {
+WTW_AVATARS.prototype.resetHovers = function(zmoldname, zshape) {
 	try {
 		/* this function activates on lost focus (end hover) from a 3D Object */
 		/* useful if you want to change material back, unhighlighting, or close a prompt */
-		moldname = moldname.toLowerCase();
-		if (moldname.indexOf("golfball") > -1) {
+		zmoldname = zmoldname.toLowerCase();
+		if (zmoldname.indexOf("golfball") > -1) {
 			
 		}
 	} catch (ex) {

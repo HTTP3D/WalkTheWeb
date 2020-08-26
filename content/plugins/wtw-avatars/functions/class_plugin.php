@@ -74,10 +74,16 @@ class wtwavatars {
 				/* $wtwplugins->addAdminMenuItem('wtw_adminpaintball', '3D Stores', 95, 'wtw_paintball', 0, '', wtwavatars_URL.'/assets/images/menustore.png', array('admin','developer','architect'), null); */
 				/* $wtwplugins->addAdminMenuItem('wtw_adminliststores', 'List Stores', 95, 'wtw_paintball', 1, 'wtw_liststores', '', array('admin','developer','architect'), "WTW.openFullPageForm('fullpage','List Stores','wtw_liststorespage');wtwavatars.getStores();"); */
 				
+				$wtwplugins->addAdminMenuItem('wtw_avatarsmenu', 'Avatars', 51, 'wtw_avatarsmenu', 0, '', '/content/system/images/menuavatars.png', array('admin','developer'), null);
+				$wtwplugins->addAdminMenuItem('wtw_avatarlist', 'Avatar List', 51, 'wtw_avatarsmenu', 1, 'wtw_avatarlist', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','Avatar List','wtw_avatarlistpage');");
+				$wtwplugins->addAdminMenuItem('wtw_avatargroups', 'Avatar Groups', 51, 'wtw_avatarsmenu', 3, 'wtw_avatargroups', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','Avatar Groups','wtw_avatargroupspage');");
+
 				/* admin full page settings forms */
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
 				/* $wtwplugins->addFullPageForm('wtw_liststorespage', array('admin','developer','architect'), $this->listStoresPage()); */
 				
+				$wtwplugins->addFullPageForm('wtw_avatarlistpage', array('admin','developer'), $this->adminAvatarListForm());
+				$wtwplugins->addFullPageForm('wtw_avatargroupspage', array('admin','developer'), $this->adminAvatarGroupsForm());
 			}
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-avatars:functions-class_plugin.php-initAdminOnlyHooks=".$e->getMessage());
@@ -101,35 +107,35 @@ class wtwavatars {
 			/* $wtwplugins->addScriptFunction('hookname', 'function(parameters);'); */
 			/* examples: */
 			/* $wtwplugins->addScriptFunction("onclick", "wtwavatars.onClick(zpickedname);"); */
-			/* $wtwplugins->addScriptFunction("setnewactionzonedefaults", "wtwavatars.setNewActionZoneDefaults(actionzonetype);"); */
-			/* $wtwplugins->addScriptFunction("setactionzoneformfields", "wtwavatars.setNewActionZoneFormFields(actionzonetype);"); */
+			/* $wtwplugins->addScriptFunction("setnewactionzonedefaults", "wtwavatars.setNewActionZoneDefaults(zactionzonetype);"); */
+			/* $wtwplugins->addScriptFunction("setactionzoneformfields", "wtwavatars.setNewActionZoneFormFields(zactionzonetype);"); */
 			/* $wtwplugins->addScriptFunction("checkactionzone", "wtwavatars.checkActionZone(zactionzonename, zactionzoneind, zmeinzone, zothersinzone);"); */
 			/* $wtwplugins->addScriptFunction("setavatarmovement", "wtwavatars.setAvatarMovement(zavatar, zevent, zweight);"); */
-			/* $wtwplugins->addScriptFunction("checkhovers", "wtwavatars.checkHovers(moldname, shape);"); */
-			/* $wtwplugins->addScriptFunction("resethovers", "wtwavatars.resetHovers(moldname, shape);"); */
+			/* $wtwplugins->addScriptFunction("checkhovers", "wtwavatars.checkHovers(zmoldname, zshape);"); */
+			/* $wtwplugins->addScriptFunction("resethovers", "wtwavatars.resetHovers(zmoldname, zshape);"); */
 			/* $wtwplugins->addScriptFunction("disposeclean", "wtwavatars.disposeClean(zmoldname);"); */
 			
 			
 			/* Custom Molds (meshes) */
 			/* The following create the list of new molds added by this plugin and assign the script to create the mold */
 			/* $wtwplugins->addMoldDef("My Custom Mold - NAME FOR THE LIST", "webmold or mold - LIST", "wtwavatars.functionname(passed, values);"); */
-			/* $wtwplugins->addMoldDef("My Custom Mold", "webmold", "wtwavatars.addMoldMyCustomMold(moldname, molddef, lenx, leny, lenz);"); */
+			/* $wtwplugins->addMoldDef("My Custom Mold", "webmold", "wtwavatars.addMoldMyCustomMold(zmoldname, zmolddef, zlenx, zleny, zlenz);"); */
 			/* Set the custom mold defaults and show-hide form fields as needed */
-			/* $wtwplugins->addScriptFunction("setnewmolddefaults", "wtwavatars.setNewMoldDefaults(shape, positionX, positionY, positionZ, rotationY);"); */
-			/* $wtwplugins->addScriptFunction("setmoldformfields", "wtwavatars.setMoldFormFields(shape);"); */
+			/* $wtwplugins->addScriptFunction("setnewmolddefaults", "wtwavatars.setNewMoldDefaults(zshape, zpositionX, zpositionY, zpositionZ, zrotationY);"); */
+			/* $wtwplugins->addScriptFunction("setmoldformfields", "wtwavatars.setMoldFormFields(zshape);"); */
 
 			/* Custom action zones */
 			/* The following create the list of new action zones added by this plugin and assign the script to create the action zone */
-			/* $wtwplugins->addActionZoneDef("My Custom Zone", "wtwavatars.addActionZoneMyCustomZone(actionzonename, actionzoneind, actionzonedef);"); */
+			/* $wtwplugins->addActionZoneDef("My Custom Zone", "wtwavatars.addActionZoneMyCustomZone(zactionzonename, zactionzoneind, zactionzonedef);"); */
 			/* Set the custom action zone defaults and show-hide form fields as needed */
-			/* $wtwplugins->addScriptFunction("setnewactionzonedefaults", "wtwavatars.setNewActionZoneDefaults(actionzonetype);"); */
-			/* $wtwplugins->addScriptFunction("setactionzoneformfields", "wtwavatars.setActionZoneFormFields(actionzonetype);"); */
+			/* $wtwplugins->addScriptFunction("setnewactionzonedefaults", "wtwavatars.setNewActionZoneDefaults(zactionzonetype);"); */
+			/* $wtwplugins->addScriptFunction("setactionzoneformfields", "wtwavatars.setActionZoneFormFields(zactionzonetype);"); */
 			
 			/* Custom coverings (materials) */
 			/* The following create the list of new coverings added by this plugin and assign the script to create the covering */
-			/* $wtwplugins->addCoveringDef("My Custom Covering", "wtwavatars.addCoveringMyCustomCovering(moldname, molddef, lenx, leny, lenz, special1, special2);"); */
+			/* $wtwplugins->addCoveringDef("My Custom Covering", "wtwavatars.addCoveringMyCustomCovering(zmoldname, zmolddef, zlenx, zleny, zlenz, zspecial1, zspecial2);"); */
 			/* Set the custom covering defaults and show-hide mold form fields as needed */
-			/* $wtwplugins->addScriptFunction("setcoveringformfields", "wtwavatars.setCoveringFormFields(coveringname);"); */
+			/* $wtwplugins->addScriptFunction("setcoveringformfields", "wtwavatars.setCoveringFormFields(zcoveringname);"); */
 			
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-avatars:functions-class_plugin.php.php-initHooks=".$e->getMessage());
@@ -172,6 +178,74 @@ class wtwavatars {
 			$wtwplugins->serror("plugins:wtw-avatars:functions-class_plugin.php-checkTablesForUpdates=".$e->getMessage());
 		}
 	}
+	
+	public function adminAvatarListForm() {
+		global $wtwplugins;
+		$zformdata = "";
+		try {
+			$zformdata .= "	<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardboxtitle\">Avatar List</div>\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardbox\">\r\n";
+			
+			$zavatargroup = '';
+			$i = 0;
+			$zresults = $wtwplugins->query("
+				select * 
+				from ".wtw_tableprefix."avatars
+				where deleted=0
+				order by avatargroup, sortorder, displayname;");
+			foreach ($zresults as $zrow) {
+				if ($zavatargroup != $zrow["avatargroup"]) {
+					if ($i == 0) {
+						$zformdata .= "			<div class=\"wtw3dinternet-controlpaneldiv\">\r\n";
+						$zformdata .= "				<div class=\"wtw3dinternet-controlpaneltitlediv\">".$zrow["avatargroup"]."</div>\r\n";
+					} else {
+						$zformdata .= "			</div>\r\n";
+						$zformdata .= "			<div class=\"wtw3dinternet-controlpaneldiv\">\r\n";
+						$zformdata .= "				<div class=\"wtw3dinternet-controlpaneltitlediv\">".$zrow["avatargroup"]."</div>\r\n";
+					}
+					$zavatargroup = $zrow["avatargroup"];
+				}
+				$zformdata .= "<div><img src=\"".$zrow["avatarfolder"].$zrow["imageface"]."\" title=\"".$zrow["displayname"]."\" alt=\"".$zrow["displayname"]."\" class=\"wtw-imagesavatar\" style=\"float:left;\" /><img src=\"".$zrow["avatarfolder"].$zrow["imagefull"]."\" title=\"".$zrow["displayname"]."\" alt=\"".$zrow["displayname"]."\" class=\"wtw-imagesavatar\" style=\"float:left;\" /><div style=\"float:left;margin-left:10px;\"><h3 class=\"wtw-black\">".$zrow["displayname"]."</h3></div></div><div class=\"wtw-clear\"></div>";
+
+				$i += 1;
+			}
+			if ($i > 0) {
+				$zformdata .= "			</div>\r\n";
+			}
+			$zformdata .= "		</div>\r\n";
+			$zformdata .= "	</div>\r\n";
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins:wtw-avatars:functions-class_plugin.php-adminAvatarListForm=".$e->getMessage());
+		}
+		return $zformdata;
+	}
+		
+	public function adminAvatarGroupsForm() {
+		global $wtwplugins;
+		$zformdata = "";
+		try {
+			$zformdata .= "	<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardboxtitle\">Avatar Groups</div>\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardbox\">\r\n";
+			
+			$zavatargroup = '';
+			$zresults = $wtwplugins->query("
+				select * 
+				from ".wtw_tableprefix."avatargroups
+				where deleted=0
+				order by avatargroup, avatargroupid;");
+			foreach ($zresults as $zrow) {
+				$zformdata .= "<div><div style=\"float:left;margin-left:10px;\"><h3 class=\"wtw-black\">".$zrow["avatargroup"]."</h3></div></div><div class=\"wtw-clear\"></div>";
+			}
+			$zformdata .= "		</div>\r\n";
+			$zformdata .= "	</div>\r\n";
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins:wtw-avatars:functions-class_plugin.php-adminAvatarGroupsForm=".$e->getMessage());
+		}
+		return $zformdata;
+	}
+		
 
 }
 

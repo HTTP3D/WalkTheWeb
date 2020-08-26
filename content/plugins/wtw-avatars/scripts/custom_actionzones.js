@@ -51,11 +51,11 @@ WTW_AVATARS.prototype.addActionZoneMyCustomZone = function(actionzonename, actio
 	return actionzone;
 }
 
-WTW_AVATARS.prototype.setNewActionZoneDefaults = function(actionzonetype) {
+WTW_AVATARS.prototype.setNewActionZoneDefaults = function(zactionzonetype) {
 	try {
 		/* add each custom action zone to this one function as a case - no need to add additional hooks */
-		/* actionzonetype is name of 'My Custom Zone' - all lowercase and no spaces */
-		switch (actionzonetype) {
+		/* zactionzonetype is name of 'My Custom Zone' - all lowercase and no spaces */
+		switch (zactionzonetype) {
 			case "mycustomzone":
 				dGet('wtw_tactionzonename').value = "New My Custom Zone";
 				break;
@@ -65,11 +65,11 @@ WTW_AVATARS.prototype.setNewActionZoneDefaults = function(actionzonetype) {
 	}
 }
 		
-WTW_AVATARS.prototype.setActionZoneFormFields = function(actionzonetype) {
+WTW_AVATARS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 	try {
 		/* add each custom action zone to this one function as a case - no need to add additional hooks */
-		/* actionzonetype is name of my custom action zone - all lowercase and no spaces */
-		switch (actionzonetype) {
+		/* zactionzonetype is name of my custom action zone - all lowercase and no spaces */
+		switch (zactionzonetype) {
 			case "mycustomzone":
 				/* define the labels and button names used on the form */
 				dGet('wtw_editactionzoneformtitle').innerHTML = "Add My Custom Zone";
