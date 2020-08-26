@@ -406,8 +406,13 @@ class wtwdb {
 					where ".$zfieldid."='".$zdefaultkeyid."';");
 				if (count($zresults) == 0) {
 					$zkeyid = $zdefaultkeyid;
+				} else if ($ztablename == 'users') {
+					$zkeyid = $zdefaultkeyid;
 				} else {
-					$zdefaultkeyid = $this->getRandomString(16,1);
+					$zkeyid = $this->getRandomString(16,1);
+					while ($this->keyExists($ztablename, $zfieldid, $zkeyid)) {
+						$zkeyid = $this->getRandomString(16,1);
+					}
 				}
 			}
 		} catch (Exception $e) {
@@ -436,6 +441,45 @@ class wtwdb {
 		return $zkeyid;
 	}
 	
+	public function getUserIDfromPastID($zpastid) {
+		$zkeyid = '';
+		try {
+			if (!empty($zpastid) && isset($zpastid)) {
+				$zresults = $this->query("
+					select userid 
+					from ".wtw_tableprefix."users 
+					where pastuserid='".$zpastid."'
+						or (userid='".$zpastid."' and pastuserid='')
+					order by updatedate desc
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zkeyid = $zrow["userid"];
+				}
+			}
+			if (empty($zkeyid)) {
+				$zkeyid = $zpastid;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getUserIDfromPastID=".$e->getMessage());
+		}
+		return $zkeyid;
+	}
+	
+	public function tableFieldExists($ztable, $zfield) {
+		$zexists = false;
+		try {
+			$zresults = $this->query("
+				show columns
+				from ".wtw_tableprefix.$ztable." 
+				like '".$zfield."';");
+			if (count($zresults) > 0) {
+				$zexists = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-tableFieldExists=".$e->getMessage());
+		}			
+		return $zexists;
+	}
 	
 	public function userExists($zuserid) {
 		$zexists = false;

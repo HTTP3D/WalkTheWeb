@@ -222,11 +222,68 @@ class wtwplugins {
 		return $wtwdb->escapeHTML($text);
 	}
 
+	public function getNewKey($ztablename, $zfieldid, $zdefaultkeyid) {
+		global $wtwdb;
+		return $wtwdb->getNewKey($ztablename, $zfieldid, $zdefaultkeyid);
+	}
+
+	public function getIDByPastID($ztablename, $zfieldid, $zpastfieldid, $zpastid) {
+		global $wtwdb;
+		return $wtwdb->getIDByPastID($ztablename, $zfieldid, $zpastfieldid, $zpastid);
+	}
+
+	public function getUserIDfromPastID($zpastid) {
+		global $wtwdb;
+		return $wtwdb->getUserIDfromPastID($zpastid);
+	}
+
+	public function tableFieldExists($ztable, $zfield) {
+		global $wtwdb;
+		return $wtwdb->tableFieldExists($ztable, $zfield);
+	}
+
+	public function userExists($zuserid) {
+		global $wtwdb;
+		return $wtwdb->userExists($zuserid);
+	}
+
+	public function getSessionUserID() {
+		global $wtwdb;
+		try {
+			$this->userid = $wtwdb->getSessionUserID();
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwconnect.php-getSessionUserID=" . $e->getMessage());
+		}
+		return $this->userid;
+	}
+	
 	public function isUserInRole($zrole) {
 		global $wtwdb;
 		return $wtwdb->isUserInRole($zrole);
 	}
 	
+	public function getUserRoles($zuserid = '') {
+		/* defaults to current user unless called with admin role access */
+		global $wtwdb;
+		return $wtwdb->getUserRoles($zuserid);
+	}
+	
+	public function hasPermission($zaccessrequired) {
+		/* array of access required will be compared to array of current user roles */
+		global $wtwdb;
+		return $wtwdb->hasPermission($zaccessrequired);
+	}
+	
+	public function checkUpdateAccess($zcommunityid, $zbuildingid, $zthingid) {
+		global $wtwdb;
+		return $wtwdb->checkUpdateAccess($zcommunityid, $zbuildingid, $zthingid);
+	}
+
+	public function checkAdminAccess($zcommunityid, $zbuildingid, $zthingid) {
+		global $wtwdb;
+		return $wtwdb->checkAdminAccess($zcommunityid, $zbuildingid, $zthingid);
+	}
+
 	public function addStylesheet($zstylesheetid, $zadminonly, $zstylesheeturl) {
 		/* function to add a stylsheet to the page load */
 		global $wtw;

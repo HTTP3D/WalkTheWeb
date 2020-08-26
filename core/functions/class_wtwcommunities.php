@@ -1297,7 +1297,7 @@ class wtwcommunities {
 					break;
 			}
 			
-			/* fetch the 3D Web data structure fro the repository (all of the associated records) */
+			/* fetch the 3D Web data structure for the repository (all of the associated records) */
 			$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zwebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
 
 			if (!empty($zurl)) {
@@ -1321,32 +1321,40 @@ class wtwcommunities {
 				$znewuserid = $wtwhandlers->getNewKey('users', 'userid', $zuser->userid);
 				$znewuploadpathid = $wtwhandlers->getNewKey('users', "uploadpathid", $zuser->uploadpathid);
 				$zuserpassword = $wtwhandlers->getRandomString(16,1);
-
-				$wtwhandlers->query("
-					insert into ".wtw_tableprefix."users 
-					   (userid,
-					    pastuserid,
-						username,
-						displayname,
-						email,
-						uploadpathid,
-						userpassword,
-						createdate,
-						createuserid,
-						updatedate,
-						updateuserid)
-					values
-					   ('".$znewuserid."',
-						'".$zuser->userid."',
-						'".$zuser->username."',
-						'".$zuser->displayname."',
-						'',
-						'".$znewuploadpathid."',
-						'".$zuserpassword."',
-						now(),
-						'".$zuser->userid."',
-						now(),
-						'".$zuser->userid."');");
+$wtwhandlers->serror("znewuserid(getNewKey)=".$znewuserid);
+				$zresults = $wtwhandlers->query("
+					select userid
+					from ".wtw_tableprefix."users 
+					where userid='".$znewuserid."'
+					limit 1;
+					");
+				if (count($zresults) == 0) {
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."users 
+						   (userid,
+							pastuserid,
+							username,
+							displayname,
+							email,
+							uploadpathid,
+							userpassword,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						values
+						   ('".$znewuserid."',
+							'".$zuser->userid."',
+							'".$zuser->username."',
+							'".$zuser->displayname."',
+							'',
+							'".$znewuploadpathid."',
+							'".$zuserpassword."',
+							now(),
+							'".$znewuserid."',
+							now(),
+							'".$znewuserid."');");
+				}
 			}
 
 
@@ -1403,9 +1411,12 @@ class wtwcommunities {
 				
 				/* get new foreign keys */
 				/* lookup foreign key values to new assigned values using "past" field prefix */
-				$znewuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zupload->userid);
-				$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zupload->createuserid);
-				$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zupload->updateuserid);
+				$znewuserid = $wtwhandlers->getUserIDfromPastID($zupload->userid);
+				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zupload->createuserid);
+				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zupload->updateuserid);
+$wtwhandlers->serror("znewuserid(zupload)=".$znewuserid." from ".$zupload->userid);
+$wtwhandlers->serror("znewuserid(zupload)=".$znewcreateuserid." from ".$zupload->createuserid);
+$wtwhandlers->serror("znewuserid(zupload)=".$znewupdateuserid." from ".$zupload->updateuserid);
 				
 				$zhidedate = "null";
 				$zhide = "0";
@@ -1501,10 +1512,10 @@ class wtwcommunities {
 			/* write main web record */
 			/* get new foreign keys */
 			$znewsnapshotid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zrequest->snapshotid);
-			$znewuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zrequest->userid);
-			$znewshareuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zrequest->shareuserid);
-			$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zrequest->createuserid);
-			$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zrequest->updateuserid);
+			$znewuserid = $wtwhandlers->getUserIDfromPastID($zrequest->userid);
+			$znewshareuserid = $wtwhandlers->getUserIDfromPastID($zrequest->shareuserid);
+			$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zrequest->createuserid);
+			$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zrequest->updateuserid);
 			
 			switch($zwebtype) {
 				case "community":
@@ -1809,9 +1820,9 @@ class wtwcommunities {
 				/* get new foreign keys */
 				$znewsoundid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zavataranimation->soundid);
 				
-				$znewuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zavataranimation->userid);
-				$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zavataranimation->createuserid);
-				$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zavataranimation->updateuserid);
+				$znewuserid = $wtwhandlers->getUserIDfromPastID($zavataranimation->userid);
+				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zavataranimation->createuserid);
+				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zavataranimation->updateuserid);
 				
 				/* insert new record into avataranimations table */
 				$wtwhandlers->query("
@@ -1866,8 +1877,8 @@ class wtwcommunities {
 				$znewactionzoneid = $wtwhandlers->getNewKey('actionzones', "actionzoneid", $zactionzone->actionzoneid);
 				
 				/* get new foreign keys */
-				$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zactionzone->createuserid);
-				$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zactionzone->updateuserid);
+				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zactionzone->createuserid);
+				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zactionzone->updateuserid);
 				
 				/* insert new record into actionzones table */
 				$wtwhandlers->query("
@@ -1957,8 +1968,8 @@ class wtwcommunities {
 					/* get new foreign keys */
 					$znewavataranimationid = $wtwhandlers->getIDByPastID('avataranimations', 'avataranimationid', 'pastavataranimationid', $zazanimation->avataranimationid);
 					
-					$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zazanimation->createuserid);
-					$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zazanimation->updateuserid);
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zazanimation->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zazanimation->updateuserid);
 					
 					/* insert new record into actionzoneanimations table */
 					$wtwhandlers->query("
@@ -2036,8 +2047,8 @@ class wtwcommunities {
 				/* get new foreign keys */
 				$znewactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zscript->actionzoneid);
 				
-				$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zscript->createuserid);
-				$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zscript->updateuserid);
+				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zscript->createuserid);
+				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zscript->updateuserid);
 				
 				/* insert new record into scripts table */
 				$wtwhandlers->query("
@@ -2077,8 +2088,8 @@ class wtwcommunities {
 				$znewunloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->unloadactionzoneid);
 				$znewattachactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->attachactionzoneid);
 				
-				$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zconnectinggrid->createuserid);
-				$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zconnectinggrid->updateuserid);
+				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->createuserid);
+				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->updateuserid);
 				
 				/* insert new record into connectinggrids table */
 				$wtwhandlers->query("
@@ -2154,9 +2165,9 @@ class wtwcommunities {
 					$znewobjecturl = $znewurl.'/objects/'.str_replace(".babylon","",$zuploadobject->objectfile)."/";
 					
 					/* get new foreign keys */
-					$znewuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zuploadobject->userid);
-					$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zuploadobject->createuserid);
-					$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zuploadobject->updateuserid);
+					$znewuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->userid);
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->updateuserid);
 					
 					/* insert new record into uploadobjects table */
 					$wtwhandlers->query("
@@ -2205,9 +2216,9 @@ class wtwcommunities {
 						/* get new foreign keys */
 						$znewsoundid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zuploadobjectanimation->soundid);
 						
-						$znewuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zuploadobjectanimation->userid);
-						$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zuploadobjectanimation->createuserid);
-						$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zuploadobjectanimation->updateuserid);
+						$znewuserid = $wtwhandlers->getUserIDfromPastID($zuploadobjectanimation->userid);
+						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobjectanimation->createuserid);
+						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobjectanimation->updateuserid);
 						
 						/* insert new record into uploadobjectanimations table */
 						$wtwhandlers->query("
@@ -2342,8 +2353,8 @@ class wtwcommunities {
 					
 					$znewuploadobjectid = $wtwhandlers->getIDByPastID('uploadobjects', 'uploadobjectid', 'pastuploadobjectid', $zmold->uploadobjectid);
 					
-					$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zmold->createuserid);
-					$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zmold->updateuserid);
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zmold->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zmold->updateuserid);
 					
 					/* remainder fo the common fields for communitymolds, buildingmolds, and thingmolds */
 					$zsql .= "
@@ -2505,8 +2516,8 @@ class wtwcommunities {
 						$znewmoldpointid = $wtwhandlers->getNewKey('moldpoints', 'moldpointid', $zmoldpoint->moldpointid);
 						
 						/* get new foreign keys */
-						$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zmoldpoint->createuserid);
-						$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zmoldpoint->updateuserid);
+						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zmoldpoint->createuserid);
+						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zmoldpoint->updateuserid);
 						
 						/* insert new record into moldpoints table */
 						$wtwhandlers->query("
@@ -2598,9 +2609,9 @@ class wtwcommunities {
 						$znewimagehoverid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zwebimage->imagehoverid);
 						$znewimageclickid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zwebimage->imageclickid);
 						
-						$znewuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zwebimage->userid);
-						$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zwebimage->createuserid);
-						$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zwebimage->updateuserid);
+						$znewuserid = $wtwhandlers->getUserIDfromPastID($zwebimage->userid);
+						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zwebimage->createuserid);
+						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zwebimage->updateuserid);
 						
 						/* insert new record into webimages table */
 						$wtwhandlers->query("
@@ -2694,8 +2705,8 @@ class wtwcommunities {
 						$znewunloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->unloadactionzoneid);
 						$znewattachactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->attachactionzoneid);
 						
-						$znewcreateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zconnectinggrid->createuserid);
-						$znewupdateuserid = $wtwhandlers->getIDByPastID('users', 'userid', 'pastuserid', $zconnectinggrid->updateuserid);
+						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->createuserid);
+						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->updateuserid);
 						
 						/* insert new record into connectinggrids table (additional 3D Webs in the current 3D Web) */
 						$wtwhandlers->query("

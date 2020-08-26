@@ -179,6 +179,16 @@ class wtwconnect {
 		return $wtwdb->getIDByPastID($ztablename, $zfieldid, $zpastfieldid, $zpastid);
 	}
 
+	public function getUserIDfromPastID($zpastid) {
+		global $wtwdb;
+		return $wtwdb->getUserIDfromPastID($zpastid);
+	}
+
+	public function tableFieldExists($ztable, $zfield) {
+		global $wtwdb;
+		return $wtwdb->tableFieldExists($ztable, $zfield);
+	}
+
 	public function userExists($zuserid) {
 		global $wtwdb;
 		return $wtwdb->userExists($zuserid);

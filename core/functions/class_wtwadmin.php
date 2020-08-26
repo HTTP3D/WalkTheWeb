@@ -615,7 +615,7 @@ class wtwadmin {
 			/* settings page - web aliases */
 			$pagedata .= "		<div id=\"wtw_webaliassettings\" class=\"wtw-fullpage\">\r\n";
 			$pagedata .= "			<div class=\"wtw-dashboardboxleftfull\">\r\n";
-			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\"><div id='wtw_addwebalias' class='wtw-greenbuttonright' onclick=\"WTW.openAliasForm();\">Add New</div>Web Alias Settings</div>\r\n";
+			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\"><div id='wtw_addwebalias' class='wtw-greenbuttonright' onclick=\"WTW.openAliasForm();WTW.setAliasCommunities();WTW.setAliasBuildings();WTW.setAliasThings();\">Add New</div>Web Alias Settings</div>\r\n";
 			$pagedata .= "				<div class=\"wtw-dashboardbox\">\r\n";
 			$pagedata .= "					<div id='wtw_addwebaliasdiv' class=\"wtw-dashboardboxleftfull wtw-hide\">\r\n";
 			$pagedata .= "						<div class=\"wtw-dashboardboxtitle\">Add Web Alias</div>\r\n";

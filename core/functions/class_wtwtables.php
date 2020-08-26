@@ -125,6 +125,41 @@ class wtwtables {
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;				
 			");
 			$wtwdb->deltaCreateTable("			
+				CREATE TABLE `".wtw_tableprefix."avatarcolors` (
+				  `avatarpartid` varchar(40) NOT NULL,
+				  `avatarid` varchar(16) NOT NULL,
+				  `avatarpart` varchar(255) DEFAULT '',
+				  `diffusecolor` varchar(7) DEFAULT '',
+				  `specularcolor` varchar(7) DEFAULT '',
+				  `emissivecolor` varchar(7) DEFAULT '',
+				  `ambientcolor` varchar(7) DEFAULT '',
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int DEFAULT '0',
+				  PRIMARY KEY (`avatarpartid`),
+				  UNIQUE KEY `".wtw_tableprefix."avatarcolorid_unique` (`avatarpartid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			");
+			$wtwdb->deltaCreateTable("
+				CREATE TABLE `".wtw_tableprefix."avatargroups` (
+				  `avatargroupid` varchar(16) NOT NULL,
+				  `avatargroup` varchar(255) NOT NULL,
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int DEFAULT '0',
+				  PRIMARY KEY (`avatargroupid`),
+				  UNIQUE KEY `".wtw_tableprefix."avatargroupid_UNIQUE` (`avatargroupid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			");
+			$wtwdb->deltaCreateTable("			
 				CREATE TABLE `".wtw_tableprefix."avatars` (
 				  `avatarid` varchar(16) NOT NULL,
 				  `avatargroup` varchar(64) DEFAULT 'Default',
@@ -928,6 +963,10 @@ class wtwtables {
 				  `email` varchar(255) DEFAULT '',
 				  `emailconfirm` varchar(64) DEFAULT '',
 				  `emailconfirmdate` datetime DEFAULT NULL,
+				  `firstname` varchar(255) DEFAULT '',
+				  `lastname` varchar(255) DEFAULT '',
+				  `gender` varchar(45) DEFAULT '',
+				  `dob` datetime DEFAULT NULL,
 				  `createdate` datetime DEFAULT NULL,
 				  `createuserid` varchar(16) DEFAULT '',
 				  `updatedate` datetime DEFAULT NULL,
@@ -1019,6 +1058,11 @@ class wtwtables {
 			/* ini_set('max_execution_time', 300); */
 			global $wtwdb;
 			$timestamp = date('Y/m/d H:i:s');
+			$wtwdb->query("
+				INSERT INTO `".wtw_tableprefix."avatargroups` ('avatargroupid', 'avatargroup', 'createdate', 'createuserid', 'updatedate', 'updateuserid', 'deleteddate', 'deleteduserid', 'deleted') VALUES 
+				('cphaz1acsziosye6','Anonymous','".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+				('ot45ejgp5oxl6420','Default','".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);
+			");
 			$wtwdb->query("
 				INSERT INTO `".wtw_tableprefix."avatars` ('avatarid', 'avatargroup', 'displayname', 'avatarfolder', 'avatarfile', 'gender', 'scalingx', 'scalingy', 'scalingz', 'imagefull', 'imageface', 'sortorder', 'createdate', 'createuserid', 'updatedate', 'updateuserid', 'deleteddate', 'deleteduserid', 'deleted') VALUES 
 				('3b9bt5c70igtmqux','Anonymous','Anonymous Male','/content/system/avatars/male/','maleidle.babylon','male',0.0800,0.0800,0.0800,'malefull.png','maleface.png',2,'".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
@@ -1694,20 +1738,6 @@ class wtwtables {
 				CHANGE COLUMN `scalingy` `scalingy` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
 			$wtwdb->query("ALTER TABLE `".wtw_tableprefix."useravatars` 
 				CHANGE COLUMN `scalingz` `scalingz` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
-
-
-
-
-/* add code to modify and add columns
-				  `emissivecolorr` decimal(20,18) DEFAULT '0.000000000000000000',
-				  `emissivecolorg` decimal(20,18) DEFAULT '0.000000000000000000',
-				  `emissivecolorb` decimal(20,18) DEFAULT '0.000000000000000000',
-				  `diffusecolorr` decimal(20,18) DEFAULT '1.000000000000000000',
-				  `diffusecolorg` decimal(20,18) DEFAULT '1.000000000000000000',
-				  `diffusecolorb` decimal(20,18) DEFAULT '1.000000000000000000',
-*/
-
-
 			
 			/* updated v3.3.0 - avatar designer was moved to a plugin - needs to be enabled on first run */
 			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."plugins where pluginname='wtw-avatars';");
@@ -1715,6 +1745,26 @@ class wtwtables {
 			
 			/* updated 3.3.4 - add hex versions of colors (phasing out rgb values in the database) */
 			$this->updateColorsHex($zuserid);
+			
+			/* updated 3.3.4 - added avatar groups as categories for avatars */
+			$zresults = $wtwdb->query("
+				select * 
+				from ".wtw_tableprefix."avatargroups;");
+			if (count($zresults) == 0) {
+				$wtwdb->query("
+					INSERT INTO `".wtw_tableprefix."avatargroups` ('avatargroupid', 'avatargroup', 'createdate', 'createuserid', 'updatedate', 'updateuserid', 'deleteddate', 'deleteduserid', 'deleted') VALUES 
+					('cphaz1acsziosye6','Anonymous','".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0),
+					('ot45ejgp5oxl6420','Default','".$timestamp."','".$zuserid."','".$timestamp."','".$zuserid."',NULL,'',0);
+				");
+			}
+			/* 
+				updated 3.3.4 - profile fields update
+				"ALTER TABLE `".wtw_tableprefix."users` 
+				ADD COLUMN `firstname` VARCHAR(255) NULL DEFAULT '' AFTER `emailconfirmdate`,
+				ADD COLUMN `lastname` VARCHAR(255) NULL DEFAULT '' AFTER `firstname`,
+				ADD COLUMN `gender` VARCHAR(45) NULL DEFAULT '' AFTER `lastname`,
+				ADD COLUMN `dob` DATETIME NULL DEFAULT NULL AFTER `gender`;"
+			*/
 			
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 		} catch (Exception $e) {
@@ -1729,72 +1779,117 @@ class wtwtables {
 			global $wtwdb;
 			$timestamp = date('Y/m/d H:i:s');
 			
-			$zresults = $wtwdb->query("
-				select * from ".wtw_tableprefix."communitymolds
-				where diffusecolor='';");
-			foreach ($zresults as $zrow) {
-				$zdiffusecolor = $wtwdb->getHexFromRGB($zrow["diffusecolorr"], $zrow["diffusecolorg"], $zrow["diffusecolorb"]);
-				$zspecularcolor = $wtwdb->getHexFromRGB($zrow["specularcolorr"], $zrow["specularcolorg"], $zrow["specularcolorb"]);
-				$zemissivecolor = $wtwdb->getHexFromRGB($zrow["emissivecolorr"], $zrow["emissivecolorg"], $zrow["emissivecolorb"]);
-				$zambientcolor = $zdiffusecolor;
-				$wtwdb->query("
-					update ".wtw_tableprefix."communitymolds
-					set diffusecolor='".$zdiffusecolor."',
-						specularcolor='".$zspecularcolor."',
-						emissivecolor='".$zemissivecolor."',
-						ambientcolor='".$zambientcolor."'
-					where communitymoldid='".$zrow["communitymoldid"]."';");
-			}
+			$zhasdiffusecolorr = $wtwdb->tableFieldExists('communitymolds', 'diffusecolorr');
+			$zhasdiffusecolorg = $wtwdb->tableFieldExists('communitymolds', 'diffusecolorg');
+			$zhasdiffusecolorb = $wtwdb->tableFieldExists('communitymolds', 'diffusecolorb');
+			$zhasspecularcolorr = $wtwdb->tableFieldExists('communitymolds', 'specularcolorr');
+			$zhasspecularcolorg = $wtwdb->tableFieldExists('communitymolds', 'specularcolorg');
+			$zhasspecularcolorb = $wtwdb->tableFieldExists('communitymolds', 'specularcolorb');
+			$zhasemissivecolorr = $wtwdb->tableFieldExists('communitymolds', 'emissivecolorr');
+			$zhasemissivecolorg = $wtwdb->tableFieldExists('communitymolds', 'emissivecolorg');
+			$zhasemissivecolorb = $wtwdb->tableFieldExists('communitymolds', 'emissivecolorb');
 			
-			$zresults = $wtwdb->query("
-				select * from ".wtw_tableprefix."buildingmolds
-				where diffusecolor='';");
-			foreach ($zresults as $zrow) {
-				$zdiffusecolor = $wtwdb->getHexFromRGB($zrow["diffusecolorr"], $zrow["diffusecolorg"], $zrow["diffusecolorb"]);
-				$zspecularcolor = $wtwdb->getHexFromRGB($zrow["specularcolorr"], $zrow["specularcolorg"], $zrow["specularcolorb"]);
-				$zemissivecolor = $wtwdb->getHexFromRGB($zrow["emissivecolorr"], $zrow["emissivecolorg"], $zrow["emissivecolorb"]);
-				$zambientcolor = $zdiffusecolor;
-				$wtwdb->query("
-					update ".wtw_tableprefix."buildingmolds
-					set diffusecolor='".$zdiffusecolor."',
-						specularcolor='".$zspecularcolor."',
-						emissivecolor='".$zemissivecolor."',
-						ambientcolor='".$zambientcolor."'
-					where buildingmoldid='".$zrow["buildingmoldid"]."';");
-			}
-			
-			$zresults = $wtwdb->query("
-				select * from ".wtw_tableprefix."thingmolds
-				where diffusecolor='';");
-			foreach ($zresults as $zrow) {
-				$zdiffusecolor = $wtwdb->getHexFromRGB($zrow["diffusecolorr"], $zrow["diffusecolorg"], $zrow["diffusecolorb"]);
-				$zspecularcolor = $wtwdb->getHexFromRGB($zrow["specularcolorr"], $zrow["specularcolorg"], $zrow["specularcolorb"]);
-				$zemissivecolor = $wtwdb->getHexFromRGB($zrow["emissivecolorr"], $zrow["emissivecolorg"], $zrow["emissivecolorb"]);
-				$zambientcolor = $zdiffusecolor;
-				$wtwdb->query("
-					update ".wtw_tableprefix."thingmolds
-					set diffusecolor='".$zdiffusecolor."',
-						specularcolor='".$zspecularcolor."',
-						emissivecolor='".$zemissivecolor."',
-						ambientcolor='".$zambientcolor."'
-					where thingmoldid='".$zrow["thingmoldid"]."';");
+			if ($zhasdiffusecolorr && $zhasdiffusecolorg && $zhasdiffusecolorb && $zhasspecularcolorr && $zhasspecularcolorg && $zhasspecularcolorb && $zhasemissivecolorr && $zhasemissivecolorg && $zhasemissivecolorb) {
+				$zresults = $wtwdb->query("
+					select * from ".wtw_tableprefix."communitymolds
+					where diffusecolor='';");
+				foreach ($zresults as $zrow) {
+					$zdiffusecolor = $wtwdb->getHexFromRGB($zrow["diffusecolorr"], $zrow["diffusecolorg"], $zrow["diffusecolorb"]);
+					$zspecularcolor = $wtwdb->getHexFromRGB($zrow["specularcolorr"], $zrow["specularcolorg"], $zrow["specularcolorb"]);
+					$zemissivecolor = $wtwdb->getHexFromRGB($zrow["emissivecolorr"], $zrow["emissivecolorg"], $zrow["emissivecolorb"]);
+					$zambientcolor = $zdiffusecolor;
+					$wtwdb->query("
+						update ".wtw_tableprefix."communitymolds
+						set diffusecolor='".$zdiffusecolor."',
+							specularcolor='".$zspecularcolor."',
+							emissivecolor='".$zemissivecolor."',
+							ambientcolor='".$zambientcolor."'
+						where communitymoldid='".$zrow["communitymoldid"]."';");
+				}
 			}
 
-			$zresults = $wtwdb->query("
-				select * from ".wtw_tableprefix."useravatarcolors
-				where diffusecolor='';");
-			foreach ($zresults as $zrow) {
-				$zdiffusecolor = $wtwdb->getHexFromRGB($zrow["diffusecolorr"], $zrow["diffusecolorg"], $zrow["diffusecolorb"]);
-				$zemissivecolor = $wtwdb->getHexFromRGB($zrow["emissivecolorr"], $zrow["emissivecolorg"], $zrow["emissivecolorb"]);
-				$zspecularcolor = $zemissivecolor;
-				$zambientcolor = $zdiffusecolor;
-				$wtwdb->query("
-					update ".wtw_tableprefix."useravatarcolors
-					set diffusecolor='".$zdiffusecolor."',
-						specularcolor='".$zspecularcolor."',
-						emissivecolor='".$zemissivecolor."',
-						ambientcolor='".$zambientcolor."'
-					where avatarpartid='".$zrow["avatarpartid"]."';");
+			$zhasdiffusecolorr = $wtwdb->tableFieldExists('buildingmolds', 'diffusecolorr');
+			$zhasdiffusecolorg = $wtwdb->tableFieldExists('buildingmolds', 'diffusecolorg');
+			$zhasdiffusecolorb = $wtwdb->tableFieldExists('buildingmolds', 'diffusecolorb');
+			$zhasspecularcolorr = $wtwdb->tableFieldExists('buildingmolds', 'specularcolorr');
+			$zhasspecularcolorg = $wtwdb->tableFieldExists('buildingmolds', 'specularcolorg');
+			$zhasspecularcolorb = $wtwdb->tableFieldExists('buildingmolds', 'specularcolorb');
+			$zhasemissivecolorr = $wtwdb->tableFieldExists('buildingmolds', 'emissivecolorr');
+			$zhasemissivecolorg = $wtwdb->tableFieldExists('buildingmolds', 'emissivecolorg');
+			$zhasemissivecolorb = $wtwdb->tableFieldExists('buildingmolds', 'emissivecolorb');
+			
+			if ($zhasdiffusecolorr && $zhasdiffusecolorg && $zhasdiffusecolorb && $zhasspecularcolorr && $zhasspecularcolorg && $zhasspecularcolorb && $zhasemissivecolorr && $zhasemissivecolorg && $zhasemissivecolorb) {
+				$zresults = $wtwdb->query("
+					select * from ".wtw_tableprefix."buildingmolds
+					where diffusecolor='';");
+				foreach ($zresults as $zrow) {
+					$zdiffusecolor = $wtwdb->getHexFromRGB($zrow["diffusecolorr"], $zrow["diffusecolorg"], $zrow["diffusecolorb"]);
+					$zspecularcolor = $wtwdb->getHexFromRGB($zrow["specularcolorr"], $zrow["specularcolorg"], $zrow["specularcolorb"]);
+					$zemissivecolor = $wtwdb->getHexFromRGB($zrow["emissivecolorr"], $zrow["emissivecolorg"], $zrow["emissivecolorb"]);
+					$zambientcolor = $zdiffusecolor;
+					$wtwdb->query("
+						update ".wtw_tableprefix."buildingmolds
+						set diffusecolor='".$zdiffusecolor."',
+							specularcolor='".$zspecularcolor."',
+							emissivecolor='".$zemissivecolor."',
+							ambientcolor='".$zambientcolor."'
+						where buildingmoldid='".$zrow["buildingmoldid"]."';");
+				}
+			}
+			
+			$zhasdiffusecolorr = $wtwdb->tableFieldExists('thingmolds', 'diffusecolorr');
+			$zhasdiffusecolorg = $wtwdb->tableFieldExists('thingmolds', 'diffusecolorg');
+			$zhasdiffusecolorb = $wtwdb->tableFieldExists('thingmolds', 'diffusecolorb');
+			$zhasspecularcolorr = $wtwdb->tableFieldExists('thingmolds', 'specularcolorr');
+			$zhasspecularcolorg = $wtwdb->tableFieldExists('thingmolds', 'specularcolorg');
+			$zhasspecularcolorb = $wtwdb->tableFieldExists('thingmolds', 'specularcolorb');
+			$zhasemissivecolorr = $wtwdb->tableFieldExists('thingmolds', 'emissivecolorr');
+			$zhasemissivecolorg = $wtwdb->tableFieldExists('thingmolds', 'emissivecolorg');
+			$zhasemissivecolorb = $wtwdb->tableFieldExists('thingmolds', 'emissivecolorb');
+			
+			if ($zhasdiffusecolorr && $zhasdiffusecolorg && $zhasdiffusecolorb && $zhasspecularcolorr && $zhasspecularcolorg && $zhasspecularcolorb && $zhasemissivecolorr && $zhasemissivecolorg && $zhasemissivecolorb) {
+				$zresults = $wtwdb->query("
+					select * from ".wtw_tableprefix."thingmolds
+					where diffusecolor='';");
+				foreach ($zresults as $zrow) {
+					$zdiffusecolor = $wtwdb->getHexFromRGB($zrow["diffusecolorr"], $zrow["diffusecolorg"], $zrow["diffusecolorb"]);
+					$zspecularcolor = $wtwdb->getHexFromRGB($zrow["specularcolorr"], $zrow["specularcolorg"], $zrow["specularcolorb"]);
+					$zemissivecolor = $wtwdb->getHexFromRGB($zrow["emissivecolorr"], $zrow["emissivecolorg"], $zrow["emissivecolorb"]);
+					$zambientcolor = $zdiffusecolor;
+					$wtwdb->query("
+						update ".wtw_tableprefix."thingmolds
+						set diffusecolor='".$zdiffusecolor."',
+							specularcolor='".$zspecularcolor."',
+							emissivecolor='".$zemissivecolor."',
+							ambientcolor='".$zambientcolor."'
+						where thingmoldid='".$zrow["thingmoldid"]."';");
+				}
+			}
+			
+			$zhasdiffusecolorr = $wtwdb->tableFieldExists('useravatarcolors', 'diffusecolorr');
+			$zhasdiffusecolorg = $wtwdb->tableFieldExists('useravatarcolors', 'diffusecolorg');
+			$zhasdiffusecolorb = $wtwdb->tableFieldExists('useravatarcolors', 'diffusecolorb');
+			$zhasemissivecolorr = $wtwdb->tableFieldExists('useravatarcolors', 'emissivecolorr');
+			$zhasemissivecolorg = $wtwdb->tableFieldExists('useravatarcolors', 'emissivecolorg');
+			$zhasemissivecolorb = $wtwdb->tableFieldExists('useravatarcolors', 'emissivecolorb');
+			
+			if ($zhasdiffusecolorr && $zhasdiffusecolorg && $zhasdiffusecolorb && $zhasemissivecolorr && $zhasemissivecolorg && $zhasemissivecolorb) {
+				$zresults = $wtwdb->query("
+					select * from ".wtw_tableprefix."useravatarcolors
+					where diffusecolor='';");
+				foreach ($zresults as $zrow) {
+					$zdiffusecolor = $wtwdb->getHexFromRGB($zrow["diffusecolorr"], $zrow["diffusecolorg"], $zrow["diffusecolorb"]);
+					$zemissivecolor = $wtwdb->getHexFromRGB($zrow["emissivecolorr"], $zrow["emissivecolorg"], $zrow["emissivecolorb"]);
+					$zspecularcolor = $zemissivecolor;
+					$zambientcolor = $zdiffusecolor;
+					$wtwdb->query("
+						update ".wtw_tableprefix."useravatarcolors
+						set diffusecolor='".$zdiffusecolor."',
+							specularcolor='".$zspecularcolor."',
+							emissivecolor='".$zemissivecolor."',
+							ambientcolor='".$zambientcolor."'
+						where avatarpartid='".$zrow["avatarpartid"]."';");
+				}
 			}
 		} catch (Exception $e) {
 			$wtw->serror("core-functions-tabledefs.php-updateColorsHex=".$e->getMessage());

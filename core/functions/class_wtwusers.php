@@ -983,6 +983,39 @@ class wtwusers {
 		return $zresponse;
 	}
 	
+	public function saveMyProfile($zuserid, $zdisplayname, $zuseremail, $zfirstname, $zlastname, $zgender, $zdob) {
+		/* update the local user profile */
+		global $wtwhandlers;
+		$zresponse = "";
+		try {
+			if (!empty($wtwhandlers->getSessionUserID())) {
+
+				if (isset($zdob) && !empty($zdob)) {
+					$zdob = date('Y-m-d', strtotime($zdob));
+					$zdob = "'".$zdob."'";
+				} else {
+					$zdob = "null";
+				}
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."users
+					set displayname='".addslashes($zdisplayname)."',
+						email='".$zuseremail."',
+						firstname='".addslashes($zfirstname)."',
+						lastname='".addslashes($zlastname)."',
+						gender='".addslashes($zgender)."',
+						dob=".$zdob.",
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where userid='".$wtwhandlers->userid."'
+						and deleted=0;");
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-saveMyProfile=".$e->getMessage());
+			$zresponse = "<span style=\"color:red;\">Could not update.</span><br />";
+		}
+		return $zresponse;
+	}
+	
 	public function saveProfile($zuseravatarid,$zinstanceid,$zusername,$zdisplayname,$zuseremail) {
 		/* update the user profile */
 		global $wtwhandlers;
