@@ -22,7 +22,7 @@ WTWJS.prototype.loadAvatarPlaceholder = function() {
 		/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
 		/* is it set to delete after 5 seconds */
 		var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
-		zstartstand.scaling = new BABYLON.Vector3(4, 1, 4);
+		zstartstand.scaling = new BABYLON.Vector3(25, 1, 25);
 		zstartstand.position = new BABYLON.Vector3(WTW.init.startPositionX + zrand1, WTW.init.startPositionY - .5, WTW.init.startPositionZ + zrand2);
 		zstartstand.checkCollisions = true;
 		zcovering = new BABYLON.StandardMaterial("matstartstand", scene);
@@ -30,7 +30,7 @@ WTWJS.prototype.loadAvatarPlaceholder = function() {
 		zstartstand.material.alpha = 0;
 		WTW.myAvatar = WTW.addAvatarPlaceholder(zavatardef.name, zavatardef);
 		WTW.myAvatar.rotation.y = WTW.getRadians(WTW.init.startRotationY);
-		window.setTimeout(function() {zstartstand.dispose();},5000);
+		window.setTimeout(function() {zstartstand.dispose();},10000);
     } catch (ex) {
 		WTW.log("core-scripts-avatars-wtw_loadavatar.js-loadAvatarPlaceholder=" + ex.message);
     }
