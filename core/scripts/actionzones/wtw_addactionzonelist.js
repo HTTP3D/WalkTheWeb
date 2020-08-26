@@ -56,151 +56,147 @@ WTWJS.prototype.getActionZoneList = function() {
 	return zactionzonelist;
 }
 
-WTWJS.prototype.addActionZone = function(actionzonename, actionzonedef) {
+WTWJS.prototype.addActionZone = function(zactionzonename, zactionzonedef) {
 	/* function selects which function will create the action zone - by actionzonetype */
-	var actionzone = null;
+	var zactionzone = null;
 	try {
-		var actionzoneind = -1;
-		if (WTW.isNumeric(actionzonedef.actionzoneind)) {
-			actionzoneind = Number(actionzonedef.actionzoneind);
+		var zactionzoneind = -1;
+		if (WTW.isNumeric(zactionzonedef.actionzoneind)) {
+			zactionzoneind = Number(zactionzonedef.actionzoneind);
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		/* only create if action zone is not already in the scene (by unique actionzonename) */
-		if (actionzone == null) {
-			if (WTW.actionZones[actionzoneind] != null) {
+		zactionzone = scene.getMeshByID(zactionzonename);
+		/* only create if action zone is not already in the scene (by unique zactionzonename) */
+		if (zactionzone == null) {
+			if (WTW.actionZones[zactionzoneind] != null) {
 				/* some action zones require position adjustments based on parent mold */
-				var axispositionx = Number(actionzonedef.axis.position.x);
-				var axispositiony = Number(actionzonedef.axis.position.y);
-				var axispositionz = Number(actionzonedef.axis.position.z);
-				var parentactionzoneind = -1;
-				var parentactionzone = null;
-				var actionzoneparent = WTW.actionZones[actionzoneind].parentname;
-				if (WTW.actionZones[actionzoneind].parentactionzoneid != "") {
-					parentactionzoneind = WTW.getActionZoneInd(WTW.actionZones[actionzoneind].parentactionzoneid, WTW.actionZones[actionzoneind].connectinggridind);
-					if (parentactionzoneind > -1) {
-						if (WTW.actionZones[parentactionzoneind] != null) {
-							var parentactionzonename = "actionzone-" + parentactionzoneind.toString() + "-" + WTW.actionZones[parentactionzoneind].actionzoneid + "-" + WTW.actionZones[parentactionzoneind].connectinggridind + "-" + WTW.actionZones[parentactionzoneind].connectinggridid + "-" + WTW.actionZones[parentactionzoneind].actionzonetype;
-							var parentactionzone = scene.getMeshByID(parentactionzonename);
-							if (parentactionzone == null) {
-								parentactionzone = WTW.addActionZone(parentactionzonename, WTW.actionZones[parentactionzoneind]);
+				var zparentactionzoneind = -1;
+				var zparentactionzone = null;
+				if (WTW.actionZones[zactionzoneind].parentactionzoneid != "") {
+					zparentactionzoneind = WTW.getActionZoneInd(WTW.actionZones[zactionzoneind].parentactionzoneid, WTW.actionZones[zactionzoneind].connectinggridind);
+					if (zparentactionzoneind > -1) {
+						if (WTW.actionZones[zparentactionzoneind] != null) {
+							var zparentactionzonename = "actionzone-" + zparentactionzoneind.toString() + "-" + WTW.actionZones[zparentactionzoneind].actionzoneid + "-" + WTW.actionZones[zparentactionzoneind].connectinggridind + "-" + WTW.actionZones[zparentactionzoneind].connectinggridid + "-" + WTW.actionZones[zparentactionzoneind].actionzonetype;
+							var zparentactionzone = scene.getMeshByID(zparentactionzonename);
+							if (zparentactionzone == null) {
+								zparentactionzone = WTW.addActionZone(zparentactionzonename, WTW.actionZones[zparentactionzoneind]);
 							}
-							WTW.actionZones[actionzoneind].parentname = "actionzoneaxlebase2-" + parentactionzoneind.toString() + "-" + WTW.actionZones[parentactionzoneind].actionzoneid + "-" + WTW.actionZones[parentactionzoneind].connectinggridind + "-" + WTW.actionZones[parentactionzoneind].connectinggridid + "-" + WTW.actionZones[parentactionzoneind].actionzonetype;
+							WTW.actionZones[zactionzoneind].parentname = "actionzoneaxlebase2-" + zparentactionzoneind.toString() + "-" + WTW.actionZones[zparentactionzoneind].actionzoneid + "-" + WTW.actionZones[zparentactionzoneind].connectinggridind + "-" + WTW.actionZones[zparentactionzoneind].connectinggridid + "-" + WTW.actionZones[zparentactionzoneind].actionzonetype;
 							
 						}
 					}
 				}
-				if (parentactionzone != null) {
-					var parentactionzoneaxlebasename = "actionzoneaxlebase-" + parentactionzoneind.toString() + "-" + WTW.actionZones[parentactionzoneind].actionzoneid + "-" + WTW.actionZones[parentactionzoneind].connectinggridind + "-" + WTW.actionZones[parentactionzoneind].connectinggridid + "-" + WTW.actionZones[parentactionzoneind].actionzonetype;
-					var parentactionzoneaxlebase2name = "actionzoneaxlebase2-" + parentactionzoneind.toString() + "-" + WTW.actionZones[parentactionzoneind].actionzoneid + "-" + WTW.actionZones[parentactionzoneind].connectinggridind + "-" + WTW.actionZones[parentactionzoneind].connectinggridid + "-" + WTW.actionZones[parentactionzoneind].actionzonetype;
-					var parentactionzoneaxlebase = scene.getMeshByID(parentactionzoneaxlebasename);
-					actionzonedef.axis.position.x -= (parentactionzoneaxlebase.position.x);
-					actionzonedef.axis.position.y -= (parentactionzoneaxlebase.position.y);
-					actionzonedef.axis.position.z -= (parentactionzoneaxlebase.position.z);
-					actionzonedef.position.x -= (parentactionzoneaxlebase.position.x);
-					actionzonedef.position.y -= (parentactionzoneaxlebase.position.y);
-					actionzonedef.position.z -= (parentactionzoneaxlebase.position.z);
-					actionzonedef.parentname = parentactionzoneaxlebase2name;
+				if (zparentactionzone != null) {
+					var zparentactionzoneaxlebasename = "actionzoneaxlebase-" + zparentactionzoneind.toString() + "-" + WTW.actionZones[zparentactionzoneind].actionzoneid + "-" + WTW.actionZones[zparentactionzoneind].connectinggridind + "-" + WTW.actionZones[zparentactionzoneind].connectinggridid + "-" + WTW.actionZones[zparentactionzoneind].actionzonetype;
+					var zparentactionzoneaxlebase2name = "actionzoneaxlebase2-" + zparentactionzoneind.toString() + "-" + WTW.actionZones[zparentactionzoneind].actionzoneid + "-" + WTW.actionZones[zparentactionzoneind].connectinggridind + "-" + WTW.actionZones[zparentactionzoneind].connectinggridid + "-" + WTW.actionZones[zparentactionzoneind].actionzonetype;
+					var zparentactionzoneaxlebase = scene.getMeshByID(zparentactionzoneaxlebasename);
+					zactionzonedef.axis.position.x -= (zparentactionzoneaxlebase.position.x);
+					zactionzonedef.axis.position.y -= (zparentactionzoneaxlebase.position.y);
+					zactionzonedef.axis.position.z -= (zparentactionzoneaxlebase.position.z);
+					zactionzonedef.position.x -= (zparentactionzoneaxlebase.position.x);
+					zactionzonedef.position.y -= (zparentactionzoneaxlebase.position.y);
+					zactionzonedef.position.z -= (zparentactionzoneaxlebase.position.z);
+					zactionzonedef.parentname = zparentactionzoneaxlebase2name;
 				}
 				/* all action zone types are converted to lowercase and no spaces for the type comparison */ 
-				var actionzonetype = actionzonedef.actionzonetype.toLowerCase();
-				while (actionzonetype.indexOf(" ") > -1) {
-					actionzonetype = actionzonetype.replace(" ","");
+				var zactionzonetype = zactionzonedef.actionzonetype.toLowerCase();
+				while (zactionzonetype.indexOf(" ") > -1) {
+					zactionzonetype = zactionzonetype.replace(" ","");
 				}
-				/* select proper function to create the action zone based on actionzonetype */
+				/* select proper function to create the action zone based on zactionzonetype */
 				/* action zones are designed to trigger an animation or javascript event onload, onclick, on avatar in zone, etc... */
-				switch (actionzonetype) {
+				switch (zactionzonetype) {
 					case "loadzone":
 						/* load zone = shape often box by default - triggers molds to load when your avatar enters the load zone */
-						actionzone = WTW.addActionzoneLoadzone(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneLoadzone(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "loadanimations":
 						/* load animations = shape often box by default - triggers to load avatar animations to your avatar when it enters the zone */
-						actionzone = WTW.addActionzoneLoadAnimations(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneLoadAnimations(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "slidingdoor":
 						/* sliding door zone = shape often box by default - triggers molds to move in a defined axis direction when any avatar enters the zone */
-						actionzone = WTW.addActionzoneSlidingDoor(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneSlidingDoor(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "swingingdoor":
 						/* swinging door zone = shape often box by default - triggers molds to move in a rotation around a defined axis direction when any avatar enters the zone */
-						actionzone = WTW.addActionzoneSwingingDoor(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneSwingingDoor(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "clickactivatedslidingdoor":
 						/* click to sliding door zone = (work in progress) selected mold to click - triggers molds to move in a defined axis direction when any avatar enters the zone */
-						actionzone = WTW.addActionzoneClickSlidingDoor(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneClickSlidingDoor(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "mirror":
 						/* mirror - (work in progress) molds in this zone will automatically have a reflection in the mirrored surface of a selected mold */
-						actionzone = WTW.addActionzoneMirror(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneMirror(zactionzonename, zactionzoneind, zactionzonedef);
 						break; 
 					case "ridealong":
 						/* ridealong - (work in progress) shape often box by default - attaches to a parent mold and moves with the parent mold - any avatar in the zone will automatically parent and move with the parent mold - picture a ride on a boat where the avatar can still walk around the boat */
-						actionzone = WTW.addActionzoneRidealong(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneRidealong(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "rotate":
 						/* rotate - rotating axle that molds can be attached so that they rotate around the selected axle */
-						actionzone = WTW.addActionzoneRotate(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneRotate(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "peoplemover":
 						/* people mover - (work in progress) shape often box by default - when avatar is in the zone they will move at a defined pace in a direction of the axis. This is useful for things like moving sidewalks, elevators, and escalators. */
-						actionzone = WTW.addActionzonePeoplemover(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzonePeoplemover(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "elevator":
 						/* elevator - (work in progress) shape often box by default - extenson of people mover to include button activated moves, timing with doors, and stopping movement on floors */
-						actionzone = WTW.addActionzoneElevator(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneElevator(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "seat":
 						/* seat - (work in progress) selected mold to click - trigers an animation of your avatar to move in front of the seat and sit */
-						actionzone = WTW.addActionzoneSeat(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneSeat(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "passengerseat":
 						/* passengerseat - (work in progress) combo of seat and ridealong - seat functionality with the addition of parenting to mold for ridealong movement */
-						actionzone = WTW.addActionzonePassengerSeat(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzonePassengerSeat(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "driverseat":
 						/* driverseat - (work in progress) seat expansion with heads up display for driving, animations for steering, and ridealong */
-						actionzone = WTW.addActionzoneDriverSeat(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneDriverSeat(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "driverturnangle":
 						/* driverturnangle - (work in progress) axis used as a parent mold for any mold that should rotate with the driver turning angle */
-						actionzone = WTW.addActionzoneDriverTurnAngle(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneDriverTurnAngle(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "driverturningwheel":
 						/* driverturningwheel - (work in progress) axis used as a parent mold for any mold that should rotate with the driver turning angle with the additional rotation of movement tires */
-						actionzone = WTW.addActionzoneDriverTurningWheel(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneDriverTurningWheel(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "driverwheel":
 						/* driverwheel - (work in progress) rotation of movement tires tied to the acceleration */
-						actionzone = WTW.addActionzoneDriverWheel(actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.addActionzoneDriverWheel(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					default:
 						/* this function is the hook so that plugins can define their own action zones */
-						actionzone = WTW.pluginsAddActionZones(actionzonetype, actionzonename, actionzoneind, actionzonedef);
+						zactionzone = WTW.pluginsAddActionZones(zactionzonetype, zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 				}
 			}
 		} else {
-			if (WTW.actionZones[actionzoneind] != null) {
-				WTW.actionZones[actionzoneind].shown = "2";
+			if (WTW.actionZones[zactionzoneind] != null) {
+				WTW.actionZones[zactionzoneind].shown = "2";
 			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-addactionzonelist\r\n addActionZone=" + ex.message);
 	} 
-	return actionzone;
+	return zactionzone;
 }
 
 WTWJS.prototype.setNewActionZoneDefaults = function(zactionzonetype) {
 	/* selected by actionzonetype - defines the default values and zone names for admin edit of a zone */
 	try {
-		var coords = WTW.getNewCoordinates(50);
-		var positionX = coords.positionX;
-		var positionY = coords.positionY;
-		var positionZ = coords.positionZ;
-		var rotationY = coords.rotationY;
+		var zcoords = WTW.getNewCoordinates(50);
+		var zpositionx = zcoords.positionX;
+		var zpositiony = zcoords.positionY;
+		var zpositionz = zcoords.positionZ;
+		var zrotationy = zcoords.rotationY;
 		if (thingid != "") {
-			positionX = "0.00";
-			positionZ = "0.00";
+			zpositionx = "0.00";
+			zpositionz = "0.00";
 		}
 		zactionzonetype = zactionzonetype.toLowerCase();
 		while (zactionzonetype.indexOf(" ") > -1) {
@@ -208,18 +204,18 @@ WTWJS.prototype.setNewActionZoneDefaults = function(zactionzonetype) {
 		}
 		dGet('wtw_tactionzonetype').value = zactionzonetype;
 		dGet('wtw_tactionzoneshape').value = "box";
-		dGet('wtw_taxispositionx').value = positionX; //.toFixed(2);
-		dGet('wtw_taxispositiony').value = positionY; //.toFixed(2);
-		dGet('wtw_taxispositionz').value = positionZ; //.toFixed(2);
+		dGet('wtw_taxispositionx').value = zpositionx; //.toFixed(2);
+		dGet('wtw_taxispositiony').value = zpositiony; //.toFixed(2);
+		dGet('wtw_taxispositionz').value = zpositionz; //.toFixed(2);
 		dGet('wtw_taxisscalingx').value = "0.20";
 		dGet('wtw_taxisscalingy').value = "0.20";
 		dGet('wtw_taxisscalingz').value = "20.00";
 		dGet('wtw_taxisrotationx').value = "0.00";
-		dGet('wtw_taxisrotationy').value = rotationY; //.toFixed(2);
+		dGet('wtw_taxisrotationy').value = zrotationy; //.toFixed(2);
 		dGet('wtw_taxisrotationz').value = "0.00";
-		dGet('wtw_tactionzoneposx').value = positionX; //.toFixed(2);
-		dGet('wtw_tactionzoneposy').value = positionY; //.toFixed(2);
-		dGet('wtw_tactionzoneposz').value = positionZ; //.toFixed(2);
+		dGet('wtw_tactionzoneposx').value = zpositionx; //.toFixed(2);
+		dGet('wtw_tactionzoneposy').value = zpositiony; //.toFixed(2);
+		dGet('wtw_tactionzoneposz').value = zpositionz; //.toFixed(2);
 		dGet('wtw_tactionzonescalingx').value = "20.00";
 		dGet('wtw_tactionzonescalingy').value = "20.00";
 		dGet('wtw_tactionzonescalingz').value = "20.00";

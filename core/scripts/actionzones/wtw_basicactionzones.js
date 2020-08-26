@@ -4,790 +4,772 @@
 
 /* these functions create the various action zones */
 
-WTWJS.prototype.addActionzoneLoadzone = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneLoadzone = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* load zone = shape often box by default - triggers molds to load when your avatar enters the load zone */
-	var actionzone;
+	var zactionzone;
 	try {
 		/* create the shape for the load zone */
 		/* default actionzoneshape is cube and hidden (opacity 0) */
-		var molddef = WTW.newMold();
-		molddef.shape = actionzonedef.actionzoneshape;
-		molddef.covering = "hidden";
+		var zmolddef = WTW.newMold();
+		zmolddef.shape = zactionzonedef.actionzoneshape;
+		zmolddef.covering = "hidden";
 		/* position, scaling, and rotation of zone */
-		molddef.position.x = actionzonedef.position.x;
-		molddef.position.y = actionzonedef.position.y;
-		molddef.position.z = actionzonedef.position.z;
-		molddef.scaling.x = actionzonedef.scaling.x;
-		molddef.scaling.y = actionzonedef.scaling.y;
-		molddef.scaling.z = actionzonedef.scaling.z;
-		molddef.rotation.x = actionzonedef.rotation.x;
-		molddef.rotation.y = actionzonedef.rotation.y;
-		molddef.rotation.z = actionzonedef.rotation.z;
+		zmolddef.position.x = zactionzonedef.position.x;
+		zmolddef.position.y = zactionzonedef.position.y;
+		zmolddef.position.z = zactionzonedef.position.z;
+		zmolddef.scaling.x = zactionzonedef.scaling.x;
+		zmolddef.scaling.y = zactionzonedef.scaling.y;
+		zmolddef.scaling.z = zactionzonedef.scaling.z;
+		zmolddef.rotation.x = zactionzonedef.rotation.x;
+		zmolddef.rotation.y = zactionzonedef.rotation.y;
+		zmolddef.rotation.z = zactionzonedef.rotation.z;
 		/* subdivisions are only used for some shapes like spheres */
-		molddef.subdivisions = 12;
+		zmolddef.subdivisions = 12;
 		/* set transparent in 3D Scene */
-		molddef.opacity = 0;
+		zmolddef.opacity = 0;
 		/* every mold has a parent except for the main scene mold cube - most times it is the 3D Community, Building or Thing */
-		molddef.parentname = actionzonedef.parentname;
+		zmolddef.parentname = zactionzonedef.parentname;
 		/* actionzoneid refers to the database saved unique identifier (definition of what is being built. */
 		/* but since each 3D Object can be added to 3D Scenes multiple times, repeating the same actionzoneid, */
-		/* actionzoneind (notice ind is for index) refers to the instance of the 3d object when added to the 3D Scene */
-		molddef.actionzoneind = actionzoneind;
+		/* zactionzoneind (notice ind is for index) refers to the instance of the 3d object when added to the 3D Scene */
+		zmolddef.actionzoneind = zactionzoneind;
 		/* by default zones do not have collisions - avatars can walk into them */
-		molddef.checkcollisions = "0";
+		zmolddef.checkcollisions = "0";
 		/* even in admin mode, zones are not pickable in the 3D S, use the menu to select and edit a zone */
-		molddef.ispickable = "0";
-		WTW.addMoldToQueue(actionzonename, molddef, molddef.parentname, molddef.covering, null);
-		WTW.actionZones[actionzoneind].shown = "2";
+		zmolddef.ispickable = "0";
+		WTW.addMoldToQueue(zactionzonename, zmolddef, zmolddef.parentname, zmolddef.covering, null);
+		WTW.actionZones[zactionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneLoadzone=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzoneLoadAnimations = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneLoadAnimations = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* load animations = shape often box by default - triggers to load avatar animations to your avatar when it enters the zone */
-	var actionzone;
+	var zactionzone;
 	try {
 		/* create the shape for the animation zone */
 		/* default actionzoneshape is cube and hidden (opacity 0) */
-		var molddef = WTW.newMold();
-		molddef.shape = actionzonedef.actionzoneshape;
-		molddef.covering = "hidden";
-		molddef.position.x = actionzonedef.position.x;
-		molddef.position.y = actionzonedef.position.y;
-		molddef.position.z = actionzonedef.position.z;
-		molddef.scaling.x = actionzonedef.scaling.x;
-		molddef.scaling.y = actionzonedef.scaling.y;
-		molddef.scaling.z = actionzonedef.scaling.z;
-		molddef.rotation.x = actionzonedef.rotation.x;
-		molddef.rotation.y = actionzonedef.rotation.y;
-		molddef.rotation.z = actionzonedef.rotation.z;
-		molddef.subdivisions = 12;
-		molddef.opacity = 0;
-		molddef.parentname = actionzonedef.parentname;
-		molddef.actionzoneind = actionzoneind;
-		molddef.checkcollisions = "0";
-		molddef.ispickable = "0";
-		WTW.addMoldToQueue(actionzonename, molddef, molddef.parentname, molddef.covering, null);
+		var zmolddef = WTW.newMold();
+		zmolddef.shape = zactionzonedef.actionzoneshape;
+		zmolddef.covering = "hidden";
+		zmolddef.position.x = zactionzonedef.position.x;
+		zmolddef.position.y = zactionzonedef.position.y;
+		zmolddef.position.z = zactionzonedef.position.z;
+		zmolddef.scaling.x = zactionzonedef.scaling.x;
+		zmolddef.scaling.y = zactionzonedef.scaling.y;
+		zmolddef.scaling.z = zactionzonedef.scaling.z;
+		zmolddef.rotation.x = zactionzonedef.rotation.x;
+		zmolddef.rotation.y = zactionzonedef.rotation.y;
+		zmolddef.rotation.z = zactionzonedef.rotation.z;
+		zmolddef.subdivisions = 12;
+		zmolddef.opacity = 0;
+		zmolddef.parentname = zactionzonedef.parentname;
+		zmolddef.actionzoneind = zactionzoneind;
+		zmolddef.checkcollisions = "0";
+		zmolddef.ispickable = "0";
+		WTW.addMoldToQueue(zactionzonename, zmolddef, zmolddef.parentname, zmolddef.covering, null);
 		if (WTW.adminView == 1) {
-			if (dGet('wtw_bzones').title == "Action Zones are Shown" || actionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
-				WTW.setOpacity(actionzonename, .2);
+			if (dGet('wtw_bzones').title == "Action Zones are Shown" || zactionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
+				WTW.setOpacity(zactionzonename, .2);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";
+		WTW.actionZones[zactionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneLoadAnimations=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzoneSlidingDoor = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneSlidingDoor = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* sliding door zone = shape often box by default - triggers molds to move in a defined axis direction when any avatar enters the zone */
-	var actionzone;
+	var zactionzone;
 	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = Number(actionzonedef.axis.position.x);
-		var axispositiony = Number(actionzonedef.axis.position.y);
-		var axispositionz = Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var buildingind = -1;
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-		} else if (actionzonedef.thinginfo.thingid != "") {
+		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		var zaxispositionx = Number(zactionzonedef.axis.position.x);
+		var zaxispositiony = Number(zactionzonedef.axis.position.y);
+		var zaxispositionz = Number(zactionzonedef.axis.position.z);
+		var zaxisrotx = Number(zactionzonedef.axis.rotation.x);
+		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
+		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
+		zactionzone = scene.getMeshByID(zactionzonename);
+		var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle-"));
+		var zactionzoneaxlepole = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var zactionzoneaxlebase2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (zactionzoneaxlebase == null) {
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = "box";
+			zmolddef.covering = "hidden";
+			zmolddef.opacity = 0;
+			zmolddef.parentname = zparentname;
+			zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzoneaxlebase.position.x = zaxispositionx;
+			zactionzoneaxlebase.position.y = zaxispositiony;
+			zactionzoneaxlebase.position.z = zaxispositionz;
+			zactionzoneaxlebase.isPickable = false;
+			zactionzoneaxlebase.checkCollisions = false;
+			zactionzoneaxlebase.rotation.x = WTW.getRadians(zaxisrotx);
+			zactionzoneaxlebase.rotation.y = WTW.getRadians(zaxisroty);
+			zactionzoneaxlebase.rotation.z = WTW.getRadians(zaxisrotz);
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.position.x = axispositionx;
-			actionzoneaxlebase.position.y = axispositiony;
-			actionzoneaxlebase.position.z = axispositionz;
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
-			actionzoneaxlebase.rotation.x = WTW.getRadians(axisrotx);
-			actionzoneaxlebase.rotation.y = WTW.getRadians(axisroty);
-			actionzoneaxlebase.rotation.z = WTW.getRadians(axisrotz);
+		if (zactionzoneaxle == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef1 = WTW.newMold();
+			zmolddef1.shape = "box";
+			zmolddef1.covering = "hidden";
+			zmolddef1.scaling.x = 1;
+			zmolddef1.scaling.y = 1;
+			zmolddef1.scaling.z = 1;
+			zmolddef1.opacity = 0;
+			zmolddef1.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+			zactionzoneaxle = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle-"), zmolddef1, zmolddef1.parentname, zmolddef1.covering);
+			zactionzoneaxle.position.x = 0;
+			zactionzoneaxle.position.y = 0;
+			zactionzoneaxle.position.z = 0;
+			zactionzoneaxle.isPickable = false;
+			zactionzoneaxle.checkCollisions = false;
 		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = 0;
-			actionzoneaxle.position.y = 0;
-			actionzoneaxle.position.z = 0;
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
+		if (zactionzoneaxlepole == null && WTW.adminView == 1) {
+			var zmolddef4 = WTW.newMold();
+			zmolddef4.shape = "box";
+			zmolddef4.covering = "texture";
+			zmolddef4.scaling.x = .20;
+			zmolddef4.scaling.y = .20;
+			zmolddef4.scaling.z = Number(zactionzonedef.movementdistance);
+			zmolddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef4.opacity = 0;
+			zmolddef4.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zactionzoneaxlepole.isPickable = false;
+			zactionzoneaxlepole.checkCollisions = false;
 		}
-		if (actionzoneaxlepole == null && WTW.adminView == 1) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = .20;
-			molddef4.scaling.z = Number(actionzonedef.movementdistance);
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 0;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
+		if (zactionzoneaxlebase2 == null) {
+			var zmolddef2 = WTW.newMold();
+			zmolddef2.shape = "box";
+			zmolddef2.covering = "hidden";
+			zmolddef2.opacity = 0;
+			zmolddef2.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlebase2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"), zmolddef2, zmolddef2.parentname, zmolddef2.covering);
+			zactionzoneaxlebase2.position.x = 0;
+			zactionzoneaxlebase2.position.y = 0;
+			zactionzoneaxlebase2.position.z = 0;
+			zactionzoneaxlebase2.isPickable = false;
+			zactionzoneaxlebase2.checkCollisions = false;
+			zactionzoneaxlebase2.rotation.x = WTW.getRadians(-zaxisrotx);
+			zactionzoneaxlebase2.rotation.y = WTW.getRadians(-zaxisroty);
+			zactionzoneaxlebase2.rotation.z = WTW.getRadians(-zaxisrotz);
 		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.position.x = 0;
-			actionzoneaxlebase2.position.y = 0;
-			actionzoneaxlebase2.position.z = 0;
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-			actionzoneaxlebase2.rotation.x = WTW.getRadians(-axisrotx);
-			actionzoneaxlebase2.rotation.y = WTW.getRadians(-axisroty);
-			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotz);
-		}
-		if (actionzone == null) {
+		if (zactionzone == null) {
 			/* create the shape for the zone that avatars enter to trigger the action */
 			/* default actionzoneshape is cube and hidden (opacity 0) */
-			var molddef5 = WTW.newMold();
-			molddef5.shape = actionzonedef.actionzoneshape;
-			molddef5.covering = "hidden";
-			molddef5.scaling.x = actionzonedef.scaling.x;
-			molddef5.scaling.y = actionzonedef.scaling.y;
-			molddef5.scaling.z = actionzonedef.scaling.z;
-			molddef5.subdivisions = 20;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+			var zmolddef5 = WTW.newMold();
+			zmolddef5.shape = zactionzonedef.actionzoneshape;
+			zmolddef5.covering = "hidden";
+			zmolddef5.scaling.x = zactionzonedef.scaling.x;
+			zmolddef5.scaling.y = zactionzonedef.scaling.y;
+			zmolddef5.scaling.z = zactionzonedef.scaling.z;
+			zmolddef5.subdivisions = 20;
+			zmolddef5.opacity = 0;
+			zmolddef5.parentname = zparentname;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
+			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 			var movementtype = "slide";
 			var movementdistance = 0;
-			if (actionzonedef.movementtype != null) {
-				movementtype = actionzonedef.movementtype;
+			if (zactionzonedef.movementtype != null) {
+				movementtype = zactionzonedef.movementtype;
 			}
-			if (WTW.isNumeric(actionzonedef.movementdistance)) {
-				movementdistance = Number(actionzonedef.movementdistance);
+			if (WTW.isNumeric(zactionzonedef.movementdistance)) {
+				movementdistance = Number(zactionzonedef.movementdistance);
 			}
 			try {
-				var condition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var test = true;
-					var currentactionzoneind = actionzoneind;
-					if (WTW.actionZones[currentactionzoneind] != null) {
-						var offsetz = 0; //Number(WTW.actionZones[currentactionzoneind].axis.position.z);
-						var currentdoor = actionzoneaxle;
-						var currenttest = currentdoor.position.z - offsetz;
-						var currentmovementdistance = Number(WTW.actionZones[currentactionzoneind].movementdistance);
-						var doorparts = currentdoor.getChildren();
-						if (WTW.actionZones[currentactionzoneind] != null) {
-							if (WTW.actionZones[currentactionzoneind].status == 3) {
-								if (Math.round(currenttest * 1000) / 1000 >= Math.round(currentmovementdistance * 1000) / 1000) {
-									WTW.actionZones[currentactionzoneind].status = 4;
+				var zcondition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var ztest = true;
+					var zcurrentactionzoneind = zactionzoneind;
+					if (WTW.actionZones[zcurrentactionzoneind] != null) {
+						var zoffsetz = 0; //Number(WTW.actionZones[zcurrentactionzoneind].axis.position.z);
+						var zcurrentdoor = zactionzoneaxle;
+						var zcurrenttest = zcurrentdoor.position.z - zoffsetz;
+						var zcurrentmovementdistance = Number(WTW.actionZones[zcurrentactionzoneind].movementdistance);
+						var zdoorparts = zcurrentdoor.getChildren();
+						if (WTW.actionZones[zcurrentactionzoneind] != null) {
+							if (WTW.actionZones[zcurrentactionzoneind].status == 3) {
+								if (Math.round(zcurrenttest * 1000) / 1000 >= Math.round(zcurrentmovementdistance * 1000) / 1000) {
+									WTW.actionZones[zcurrentactionzoneind].status = 4;
 								}
-								test = (currenttest < currentmovementdistance);
+								ztest = (zcurrenttest < zcurrentmovementdistance);
 							} else {
-								test = false;
+								ztest = false;
 							}
 						} else {
-							test = false;
+							ztest = false;
 						}
 					} else {
-						test = false;
+						ztest = false;
 					}
-					return test;
+					return ztest;
 				});
-				var condition2 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var test = true;
-					var currentactionzoneind = actionzoneind;
-					if (WTW.actionZones[currentactionzoneind] != null) {
-						var offsetz = 0; //Number(WTW.actionZones[currentactionzoneind].axis.position.z);
-						var currentdoor = actionzoneaxle;
-						var currenttest = currentdoor.position.z - offsetz;
-						var currentmovementdistance = Number(WTW.actionZones[currentactionzoneind].movementdistance);
-						var doorparts = currentdoor.getChildren();
-						if (WTW.actionZones[currentactionzoneind] != null) {
-							if (WTW.actionZones[currentactionzoneind].status == 2) {
-								if (currenttest <= 0) {
-									currentdoor.position.z = offsetz;
-									WTW.actionZones[currentactionzoneind].status = 1;
+				var zcondition2 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var ztest = true;
+					var zcurrentactionzoneind = zactionzoneind;
+					if (WTW.actionZones[zcurrentactionzoneind] != null) {
+						var zoffsetz = 0; //Number(WTW.actionZones[zcurrentactionzoneind].axis.position.z);
+						var zcurrentdoor = zactionzoneaxle;
+						var zcurrenttest = zcurrentdoor.position.z - zoffsetz;
+						var zcurrentmovementdistance = Number(WTW.actionZones[zcurrentactionzoneind].movementdistance);
+						var zdoorparts = zcurrentdoor.getChildren();
+						if (WTW.actionZones[zcurrentactionzoneind] != null) {
+							if (WTW.actionZones[zcurrentactionzoneind].status == 2) {
+								if (zcurrenttest <= 0) {
+									zcurrentdoor.position.z = zoffsetz;
+									WTW.actionZones[zcurrentactionzoneind].status = 1;
 								}
-								test = (currenttest > 0);
+								ztest = (zcurrenttest > 0);
 							} else {
-								test = false;
+								ztest = false;
 							}
 						} else {
-							test = false;
+							ztest = false;
 						}
 					} else {
-						test = false;
+						ztest = false;
 					}
-					return test;
+					return ztest;
 				});
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "position.z", 0.5, condition1)); 
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "position.z", 0.5, zcondition1)); 
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "position.z", -0.5, condition2));
-				WTW.actionZones[actionzoneind].status = 1;
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "position.z", -0.5, zcondition2));
+				WTW.actionZones[zactionzoneind].status = 1;
 			} catch (ex) {
 			}
 		}
-		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+		if (WTW.adminView == 1) {
+			if (dGet('wtw_bzones').title == "Action Zones are Shown" || zactionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
+				WTW.setOpacity(zactionzonename, .2);
+				WTW.setOpacity(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";
+		WTW.actionZones[zactionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneSlidingDoor=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzoneSwingingDoor = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneSwingingDoor = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* swinging door zone = shape often box by default - triggers molds to move in a rotation around a defined axis direction when any avatar enters the zone */
-	var actionzone;
+	var zactionzone;
 	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = Number(actionzonedef.axis.position.x);
-		var axispositiony = Number(actionzonedef.axis.position.y);
-		var axispositionz = Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var buildingind = -1;
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-		} else if (actionzonedef.thinginfo.thingid != "") {
+		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		var zaxispositionx = Number(zactionzonedef.axis.position.x);
+		var zaxispositiony = Number(zactionzonedef.axis.position.y);
+		var zaxispositionz = Number(zactionzonedef.axis.position.z);
+		var zaxisrotx = Number(zactionzonedef.axis.rotation.x);
+		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
+		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
+		zactionzone = scene.getMeshByID(zactionzonename);
+		var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle-"));
+		var zactionzoneaxlepole = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var zactionzoneaxlebase2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (zactionzoneaxlebase == null) {
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = "box";
+			zmolddef.covering = "hidden";
+			zmolddef.opacity = 0;
+			zmolddef.parentname = zparentname;
+			zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzoneaxlebase.position.x = zaxispositionx;
+			zactionzoneaxlebase.position.y = zaxispositiony;
+			zactionzoneaxlebase.position.z = zaxispositionz;
+			zactionzoneaxlebase.isPickable = false;
+			zactionzoneaxlebase.checkCollisions = false;
+			zactionzoneaxlebase.rotation.x = WTW.getRadians(zaxisrotx);
+			zactionzoneaxlebase.rotation.y = WTW.getRadians(zaxisroty);
+			zactionzoneaxlebase.rotation.z = WTW.getRadians(zaxisrotz);
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.position.x = axispositionx;
-			actionzoneaxlebase.position.y = axispositiony;
-			actionzoneaxlebase.position.z = axispositionz;
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
-			actionzoneaxlebase.rotation.x = WTW.getRadians(axisrotx);
-			actionzoneaxlebase.rotation.y = WTW.getRadians(axisroty);
-			actionzoneaxlebase.rotation.z = WTW.getRadians(axisrotz);
+		if (zactionzoneaxle == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef1 = WTW.newMold();
+			zmolddef1.shape = "box";
+			zmolddef1.covering = "hidden";
+			zmolddef1.scaling.x = 1;
+			zmolddef1.scaling.y = 1;
+			zmolddef1.scaling.z = 1;
+			zmolddef1.opacity = 0;
+			zmolddef1.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+			zactionzoneaxle = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle-"), zmolddef1, zmolddef1.parentname, zmolddef1.covering);
+			zactionzoneaxle.position.x = 0;
+			zactionzoneaxle.position.y = 0;
+			zactionzoneaxle.position.z = 0;
+			zactionzoneaxle.isPickable = false;
+			zactionzoneaxle.checkCollisions = false;
 		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = 0;
-			actionzoneaxle.position.y = 0;
-			actionzoneaxle.position.z = 0;
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
+		if (zactionzoneaxlepole == null && WTW.adminView == 1) {
+			var zmolddef4 = WTW.newMold();
+			zmolddef4.shape = "box";
+			zmolddef4.covering = "texture";
+			zmolddef4.scaling.x = .20;
+			zmolddef4.scaling.y = 20;
+			zmolddef4.scaling.z = .20;
+			zmolddef4.rotation.x = Number(zactionzonedef.axis.rotation.x);
+			zmolddef4.rotation.y = 0;
+			zmolddef4.rotation.z = Number(zactionzonedef.axis.rotation.z);
+			zmolddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef4.opacity = 0;
+			zmolddef4.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zactionzoneaxlepole.isPickable = false;
+			zactionzoneaxlepole.checkCollisions = false;
 		}
-		if (actionzoneaxlepole == null && WTW.adminView == 1) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = 20;
-			molddef4.scaling.z = .20;
-			molddef4.rotation.x = Number(actionzonedef.axis.rotation.x);
-			molddef4.rotation.y = 0;
-			molddef4.rotation.z = Number(actionzonedef.axis.rotation.z);
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 0;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
+		if (zactionzoneaxlebase2 == null) {
+			var zmolddef2 = WTW.newMold();
+			zmolddef2.shape = "box";
+			zmolddef2.covering = "hidden";
+			zmolddef2.opacity = 0;
+			zmolddef2.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlebase2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"), zmolddef2, zmolddef2.parentname, zmolddef2.covering);
+			zactionzoneaxlebase2.position.x = 0;
+			zactionzoneaxlebase2.position.y = 0;
+			zactionzoneaxlebase2.position.z = 0;
+			zactionzoneaxlebase2.isPickable = false;
+			zactionzoneaxlebase2.checkCollisions = false;
+			zactionzoneaxlebase2.rotation.x = WTW.getRadians(-zaxisrotx);
+			zactionzoneaxlebase2.rotation.y = WTW.getRadians(-zaxisroty);
+			zactionzoneaxlebase2.rotation.z = WTW.getRadians(-zaxisrotz);
 		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.position.x = 0;
-			actionzoneaxlebase2.position.y = 0;
-			actionzoneaxlebase2.position.z = 0;
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-			actionzoneaxlebase2.rotation.x = WTW.getRadians(-axisrotx);
-			actionzoneaxlebase2.rotation.y = WTW.getRadians(-axisroty);
-			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotz);
-		}
-		if (actionzone == null) {
+		if (zactionzone == null) {
 			/* create the shape for the zone that avatars enter to trigger the action */
 			/* default actionzoneshape is cube and hidden (opacity 0) */
-			var molddef5 = WTW.newMold();
-			molddef5.shape = actionzonedef.actionzoneshape;
-			molddef5.covering = "hidden";
-			molddef5.scaling.x = actionzonedef.scaling.x;
-			molddef5.scaling.y = actionzonedef.scaling.y;
-			molddef5.scaling.z = actionzonedef.scaling.z;
-			molddef5.subdivisions = 20;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
-			var movementtype = "swing";
-			var movementdistance = 0;
-			if (actionzonedef.movementtype != null) {
-				movementtype = actionzonedef.movementtype;
+			var zmolddef5 = WTW.newMold();
+			zmolddef5.shape = zactionzonedef.actionzoneshape;
+			zmolddef5.covering = "hidden";
+			zmolddef5.scaling.x = zactionzonedef.scaling.x;
+			zmolddef5.scaling.y = zactionzonedef.scaling.y;
+			zmolddef5.scaling.z = zactionzonedef.scaling.z;
+			zmolddef5.subdivisions = 20;
+			zmolddef5.opacity = 0;
+			zmolddef5.parentname = zparentname;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
+			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+			var zmovementtype = "swing";
+			var zmovementdistance = 0;
+			if (zactionzonedef.movementtype != null) {
+				zmovementtype = zactionzonedef.movementtype;
 			}
-			if (WTW.isNumeric(actionzonedef.movementdistance)) {
-				movementdistance = Number(actionzonedef.movementdistance);
+			if (WTW.isNumeric(zactionzonedef.movementdistance)) {
+				zmovementdistance = Number(zactionzonedef.movementdistance);
 			}
-			var axlename = actionzonename.replace("actionzone-","actionzoneaxle-");
-			var axledir = "rotation.y";
-			var swingdir = 1;
-			var swingdist = 90;
-			switch (actionzonedef.axis.rotateaxis) {
+			var zaxlename = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			var zaxledir = "rotation.y";
+			var zswingdir = 1;
+			var zswingdist = 90;
+			switch (zactionzonedef.axis.rotateaxis) {
 				case "x":
-					axledir = "rotation.x";
+					zaxledir = "rotation.x";
 					break;
 				case "z":
-					axledir = "rotation.z";
+					zaxledir = "rotation.z";
 					break;
 				default:
-					axledir = "rotation.y";
+					zaxledir = "rotation.y";
 					break;
 			}
-			if (actionzonedef.axis.rotatedirection == "-1") {
-				swingdir = -1;
+			if (zactionzonedef.axis.rotatedirection == "-1") {
+				zswingdir = -1;
 			}
-			if (WTW.isNumeric(actionzonedef.axis.rotatedegrees)) {
-				swingdist =  Number(actionzonedef.axis.rotatedegrees);
+			if (WTW.isNumeric(zactionzonedef.axis.rotatedegrees)) {
+				zswingdist =  Number(zactionzonedef.axis.rotatedegrees);
 			}			
 			try {
-				var condition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var test = true;
-					var currentactionzoneind = actionzoneind;
-					var currentaxlename = axlename;
-					var currentaxledir = axledir;
-					var currentswingdist = swingdist;
-					var currentrotatetest = 0;
-					var currentswingdir = swingdir;
-					var currentdoor = actionzoneaxle;
-					var doorparts = currentdoor.getChildren();
-					if (WTW.actionZones[currentactionzoneind] != null) {
-						if (WTW.isNumeric(WTW.actionZones[currentactionzoneind].axis.rotatedegrees)) {
-							currentswingdist =  Number(WTW.actionZones[currentactionzoneind].axis.rotatedegrees);
+				var zcondition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var ztest = true;
+					var zcurrentactionzoneind = zactionzoneind;
+					var zcurrentaxlename = zaxlename;
+					var zcurrentaxledir = zaxledir;
+					var zcurrentswingdist = zswingdist;
+					var zcurrentrotatetest = 0;
+					var zcurrentswingdir = zswingdir;
+					var zcurrentdoor = zactionzoneaxle;
+					var zdoorparts = zcurrentdoor.getChildren();
+					if (WTW.actionZones[zcurrentactionzoneind] != null) {
+						if (WTW.isNumeric(WTW.actionZones[zcurrentactionzoneind].axis.rotatedegrees)) {
+							zcurrentswingdist =  Number(WTW.actionZones[zcurrentactionzoneind].axis.rotatedegrees);
 						}
-						if (Number(WTW.actionZones[currentactionzoneind].axis.rotatedirection) == -1) {
-							currentswingdir = -1;
-						} else if (Number(WTW.actionZones[currentactionzoneind].axis.rotatedirection) == 1) {
-							currentswingdir = 1;
+						if (Number(WTW.actionZones[zcurrentactionzoneind].axis.rotatedirection) == -1) {
+							zcurrentswingdir = -1;
+						} else if (Number(WTW.actionZones[zcurrentactionzoneind].axis.rotatedirection) == 1) {
+							zcurrentswingdir = 1;
 						}
-						currentaxledir =  WTW.actionZones[currentactionzoneind].axis.rotateaxis;
-						switch (currentaxledir) {
+						zcurrentaxledir =  WTW.actionZones[zcurrentactionzoneind].axis.rotateaxis;
+						switch (zcurrentaxledir) {
 							case "rotation.x":
-								currentrotatetest = currentdoor.rotation.x;
+								zcurrentrotatetest = zcurrentdoor.rotation.x;
 								break;
 							case "rotation.z":
-								currentrotatetest = currentdoor.rotation.z;
+								zcurrentrotatetest = zcurrentdoor.rotation.z;
 								break;
 							default:
-								currentrotatetest = currentdoor.rotation.y;
+								zcurrentrotatetest = zcurrentdoor.rotation.y;
 								break;
 						}
-						if (WTW.actionZones[currentactionzoneind].status == 3) {
-							if (currentswingdir == 1) {
-								if (Math.round(currentrotatetest * 1000) / 1000 >= Math.round(WTW.getRadians(currentswingdist) * 1000) / 1000) {
-									WTW.actionZones[currentactionzoneind].status = 4;
+						if (WTW.actionZones[zcurrentactionzoneind].status == 3) {
+							if (zcurrentswingdir == 1) {
+								if (Math.round(zcurrentrotatetest * 1000) / 1000 >= Math.round(WTW.getRadians(zcurrentswingdist) * 1000) / 1000) {
+									WTW.actionZones[zcurrentactionzoneind].status = 4;
 								}
-								test = (currentrotatetest < WTW.getRadians(currentswingdist));
+								ztest = (zcurrentrotatetest < WTW.getRadians(zcurrentswingdist));
 							} else {
-								if (Math.round(currentrotatetest * 1000) / 1000 <= Math.round(WTW.getRadians(currentswingdir * currentswingdist) * 1000) / 1000) {
-									WTW.actionZones[currentactionzoneind].status = 4;
+								if (Math.round(zcurrentrotatetest * 1000) / 1000 <= Math.round(WTW.getRadians(zcurrentswingdir * zcurrentswingdist) * 1000) / 1000) {
+									WTW.actionZones[zcurrentactionzoneind].status = 4;
 								}
-								test = (currentrotatetest > WTW.getRadians(currentswingdir * currentswingdist));
+								ztest = (zcurrentrotatetest > WTW.getRadians(zcurrentswingdir * zcurrentswingdist));
 							}
 						} else {
-							test = false;
+							ztest = false;
 						}
 					} else {
-						test = false;
+						ztest = false;
 					}
-					return test;
+					return ztest;
 				});
-				var condition2 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var test = true;
-					var currentactionzoneind = actionzoneind;
-					var currentaxlename = axlename;
-					var currentaxledir = axledir;
-					var currentrotatetest = 0;
-					var currentswingdir = -swingdir;
-					var currentdoor = actionzoneaxle;
-					var doorparts = currentdoor.getChildren();
-					if (WTW.actionZones[currentactionzoneind] != null) {
-						if (Number(WTW.actionZones[currentactionzoneind].axis.rotatedirection) == -1) {
-							currentswingdir = 1;
-						} else if (Number(WTW.actionZones[currentactionzoneind].axis.rotatedirection) == 1) {
-							currentswingdir = -1;
+				var zcondition2 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var ztest = true;
+					var zcurrentactionzoneind = zactionzoneind;
+					var zcurrentaxlename = zaxlename;
+					var zcurrentaxledir = zaxledir;
+					var zcurrentrotatetest = 0;
+					var zcurrentswingdir = -zswingdir;
+					var zcurrentdoor = zactionzoneaxle;
+					var zdoorparts = zcurrentdoor.getChildren();
+					if (WTW.actionZones[zcurrentactionzoneind] != null) {
+						if (Number(WTW.actionZones[zcurrentactionzoneind].axis.rotatedirection) == -1) {
+							zcurrentswingdir = 1;
+						} else if (Number(WTW.actionZones[zcurrentactionzoneind].axis.rotatedirection) == 1) {
+							zcurrentswingdir = -1;
 						}
-						currentaxledir =  WTW.actionZones[currentactionzoneind].axis.rotateaxis;
-						switch (currentaxledir) {
+						zcurrentaxledir =  WTW.actionZones[zcurrentactionzoneind].axis.rotateaxis;
+						switch (zcurrentaxledir) {
 							case "rotation.x":
-								currentrotatetest = currentdoor.rotation.x;
+								zcurrentrotatetest = zcurrentdoor.rotation.x;
 								break;
 							case "rotation.z":
-								currentrotatetest = currentdoor.rotation.z;
+								zcurrentrotatetest = zcurrentdoor.rotation.z;
 								break;
 							default:
-								currentrotatetest = currentdoor.rotation.y;
+								zcurrentrotatetest = zcurrentdoor.rotation.y;
 								break;
 						}
-						if (WTW.actionZones[currentactionzoneind].status == 2) {
-							if (currentswingdir == 1) {
-								if (currentrotatetest >= WTW.getRadians(0)) {
-									currentdoor.rotation.y = WTW.getRadians(0);
-									WTW.actionZones[currentactionzoneind].status = 1;
+						if (WTW.actionZones[zcurrentactionzoneind].status == 2) {
+							if (zcurrentswingdir == 1) {
+								if (zcurrentrotatetest >= WTW.getRadians(0)) {
+									zcurrentdoor.rotation.y = WTW.getRadians(0);
+									WTW.actionZones[zcurrentactionzoneind].status = 1;
 								}
-								test = (currentrotatetest < WTW.getRadians(0));
+								ztest = (zcurrentrotatetest < WTW.getRadians(0));
 							} else {
-								if (currentrotatetest <= WTW.getRadians(0)) {
-									currentdoor.rotation.y = WTW.getRadians(0);
-									WTW.actionZones[currentactionzoneind].status = 1;
+								if (zcurrentrotatetest <= WTW.getRadians(0)) {
+									zcurrentdoor.rotation.y = WTW.getRadians(0);
+									WTW.actionZones[zcurrentactionzoneind].status = 1;
 								}
-								test = (currentrotatetest > WTW.getRadians(0));
+								ztest = (zcurrentrotatetest > WTW.getRadians(0));
 							}
 						} else {
-							test = false;
+							ztest = false;
 						}
 					} else {
-						test = false;
+						ztest = false;
 					}
-					return test;
+					return ztest;
 				});
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, axledir, (swingdir * 0.1), condition1)); 
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, zaxledir, (zswingdir * 0.1), zcondition1)); 
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, axledir, (-swingdir * 0.1), condition2));
-				WTW.actionZones[actionzoneind].status = 1;
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, zaxledir, (-zswingdir * 0.1), zcondition2));
+				WTW.actionZones[zactionzoneind].status = 1;
 			} catch (ex) {
 			}
 		}
-		if (dGet('wtw_bzones') != null) {
-			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+		if (WTW.adminView == 1) {
+			if (dGet('wtw_bzones').title == "Action Zones are Shown" || zactionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
+				WTW.setOpacity(zactionzonename, .2);
+				WTW.setOpacity(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";
+		WTW.actionZones[zactionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneSwingingDoor=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzoneClickSlidingDoor = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneClickSlidingDoor = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* click to sliding door zone = (work in progress) selected mold to click - triggers molds to move in a defined axis direction when any avatar enters the zone */
-	var actionzone;
+	var zactionzone;
 	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = Number(actionzonedef.axis.position.x);
-		var axispositiony = Number(actionzonedef.axis.position.y);
-		var axispositionz = Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var buildingind = -1;
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-		} else if (actionzonedef.thinginfo.thingid != "") {
+		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		var zaxispositionx = Number(zactionzonedef.axis.position.x);
+		var zaxispositiony = Number(zactionzonedef.axis.position.y);
+		var zaxispositionz = Number(zactionzonedef.axis.position.z);
+		var zaxisrotx = Number(zactionzonedef.axis.rotation.x);
+		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
+		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
+		zactionzone = scene.getMeshByID(zactionzonename);
+		var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle-"));
+		var zactionzoneaxlepole = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var zactionzoneaxlebase2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (zactionzoneaxlebase == null) {
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = "box";
+			zmolddef.covering = "hidden";
+			zmolddef.opacity = 0;
+			zmolddef.parentname = zparentname;
+			zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzoneaxlebase.position.x = zaxispositionx;
+			zactionzoneaxlebase.position.y = zaxispositiony;
+			zactionzoneaxlebase.position.z = zaxispositionz;
+			zactionzoneaxlebase.isPickable = false;
+			zactionzoneaxlebase.checkCollisions = false;
+			zactionzoneaxlebase.rotation.x = WTW.getRadians(zaxisrotx);
+			zactionzoneaxlebase.rotation.y = WTW.getRadians(zaxisroty);
+			zactionzoneaxlebase.rotation.z = WTW.getRadians(zaxisrotz);
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.position.x = axispositionx;
-			actionzoneaxlebase.position.y = axispositiony;
-			actionzoneaxlebase.position.z = axispositionz;
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
-			actionzoneaxlebase.rotation.x = WTW.getRadians(axisrotx);
-			actionzoneaxlebase.rotation.y = WTW.getRadians(axisroty);
-			actionzoneaxlebase.rotation.z = WTW.getRadians(axisrotz);
+		if (zactionzoneaxle == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef1 = WTW.newMold();
+			zmolddef1.shape = "box";
+			zmolddef1.covering = "hidden";
+			zmolddef1.scaling.x = 1;
+			zmolddef1.scaling.y = 1;
+			zmolddef1.scaling.z = 1;
+			zmolddef1.opacity = 0;
+			zmolddef1.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+			zactionzoneaxle = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle-"), zmolddef1, zmolddef1.parentname, zmolddef1.covering);
+			zactionzoneaxle.position.x = 0;
+			zactionzoneaxle.position.y = 0;
+			zactionzoneaxle.position.z = 0;
+			zactionzoneaxle.isPickable = false;
+			zactionzoneaxle.checkCollisions = false;
 		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = 0;
-			actionzoneaxle.position.y = 0;
-			actionzoneaxle.position.z = 0;
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
+		if (zactionzoneaxlepole == null && WTW.adminView == 1) {
+			var zmolddef4 = WTW.newMold();
+			zmolddef4.shape = "box";
+			zmolddef4.covering = "texture";
+			zmolddef4.scaling.x = .20;
+			zmolddef4.scaling.y = .20;
+			zmolddef4.scaling.z = Number(zactionzonedef.movementdistance);
+			zmolddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef4.opacity = 0;
+			zmolddef4.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zactionzoneaxlepole.isPickable = false;
+			zactionzoneaxlepole.checkCollisions = false;
 		}
-		if (actionzoneaxlepole == null && WTW.adminView == 1) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = .20;
-			molddef4.scaling.z = Number(actionzonedef.movementdistance);
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 0;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
+		if (zactionzoneaxlebase2 == null) {
+			var zmolddef2 = WTW.newMold();
+			zmolddef2.shape = "box";
+			zmolddef2.covering = "hidden";
+			zmolddef2.opacity = 0;
+			zmolddef2.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlebase2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"), zmolddef2, zmolddef2.parentname, zmolddef2.covering);
+			zactionzoneaxlebase2.position.x = 0;
+			zactionzoneaxlebase2.position.y = 0;
+			zactionzoneaxlebase2.position.z = 0;
+			zactionzoneaxlebase2.isPickable = false;
+			zactionzoneaxlebase2.checkCollisions = false;
+			zactionzoneaxlebase2.rotation.x = WTW.getRadians(-zaxisrotx);
+			zactionzoneaxlebase2.rotation.y = WTW.getRadians(-zaxisroty);
+			zactionzoneaxlebase2.rotation.z = WTW.getRadians(-zaxisrotz);
 		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.position.x = 0;
-			actionzoneaxlebase2.position.y = 0;
-			actionzoneaxlebase2.position.z = 0;
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-			actionzoneaxlebase2.rotation.x = WTW.getRadians(-axisrotx);
-			actionzoneaxlebase2.rotation.y = WTW.getRadians(-axisroty);
-			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotz);
-		}
-		if (actionzone == null) {
-			var molddef5 = WTW.newMold();
-			molddef5.shape = actionzonedef.actionzoneshape;
-			molddef5.covering = "hidden";
-			molddef5.scaling.x = .001; //actionzonedef.scaling.x;
-			molddef5.scaling.y = .001; //actionzonedef.scaling.y;
-			molddef5.scaling.z = .001; //actionzonedef.scaling.z;
-			molddef5.subdivisions = 20;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-			actionzone.isVisible = false;
-			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
-			var movementtype = "slide";
-			var movementdistance = 0;
-			if (actionzonedef.movementtype != null) {
-				movementtype = actionzonedef.movementtype;
+		if (zactionzone == null) {
+			var zmolddef5 = WTW.newMold();
+			zmolddef5.shape = zactionzonedef.actionzoneshape;
+			zmolddef5.covering = "hidden";
+			zmolddef5.scaling.x = .001; //zactionzonedef.scaling.x;
+			zmolddef5.scaling.y = .001; //zactionzonedef.scaling.y;
+			zmolddef5.scaling.z = .001; //zactionzonedef.scaling.z;
+			zmolddef5.subdivisions = 20;
+			zmolddef5.opacity = 0;
+			zmolddef5.parentname = zparentname;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
+			zactionzone.isVisible = false;
+			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+			var zmovementtype = "slide";
+			var zmovementdistance = 0;
+			if (zactionzonedef.movementtype != null) {
+				zmovementtype = zactionzonedef.movementtype;
 			}
-			if (WTW.isNumeric(actionzonedef.movementdistance)) {
-				movementdistance = Number(actionzonedef.movementdistance);
+			if (WTW.isNumeric(zactionzonedef.movementdistance)) {
+				zmovementdistance = Number(zactionzonedef.movementdistance);
 			}
 			try {
-				var condition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var test = true;
-					var currentactionzoneind = actionzoneind;
-					if (WTW.actionZones[currentactionzoneind] != null) {
-						var offsetz = 0; //Number(WTW.actionZones[currentactionzoneind].axis.position.z);
-						var currentdoor = actionzoneaxle;
-						var currenttest = currentdoor.position.z - offsetz;
-						var currentmovementdistance = Number(WTW.actionZones[currentactionzoneind].movementdistance);
-						var doorparts = currentdoor.getChildren();
-						if (WTW.actionZones[currentactionzoneind] != null) {
-							if (WTW.actionZones[currentactionzoneind].status == 3) {
-								if (Math.round(currenttest * 1000) / 1000 >= Math.round(currentmovementdistance * 1000) / 1000) {
-									WTW.actionZones[currentactionzoneind].status = 4;
+				var zcondition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var ztest = true;
+					var zcurrentactionzoneind = zactionzoneind;
+					if (WTW.actionZones[zcurrentactionzoneind] != null) {
+						var zoffsetz = 0; //Number(WTW.actionZones[zcurrentactionzoneind].axis.position.z);
+						var zcurrentdoor = zactionzoneaxle;
+						var zcurrenttest = zcurrentdoor.position.z - zoffsetz;
+						var zcurrentmovementdistance = Number(WTW.actionZones[zcurrentactionzoneind].movementdistance);
+						var zdoorparts = zcurrentdoor.getChildren();
+						if (WTW.actionZones[zcurrentactionzoneind] != null) {
+							if (WTW.actionZones[zcurrentactionzoneind].status == 3) {
+								if (Math.round(zcurrenttest * 1000) / 1000 >= Math.round(zcurrentmovementdistance * 1000) / 1000) {
+									WTW.actionZones[zcurrentactionzoneind].status = 4;
 								}
-								test = (currenttest < currentmovementdistance);
+								ztest = (zcurrenttest < zcurrentmovementdistance);
 							} else {
-								test = false;
+								ztest = false;
 							}
 						} else {
-							test = false;
+							ztest = false;
 						}
 					} else {
-						test = false;
+						ztest = false;
 					}
-					return test;
+					return ztest;
 				});
-				var condition2 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var test = true;
-					var currentactionzoneind = actionzoneind;
-					if (WTW.actionZones[currentactionzoneind] != null) {
-						var offsetz = 0; //Number(WTW.actionZones[currentactionzoneind].axis.position.z);
-						var currentdoor = actionzoneaxle;
-						var currenttest = currentdoor.position.z - offsetz;
-						var currentmovementdistance = Number(WTW.actionZones[currentactionzoneind].movementdistance);
-						var doorparts = currentdoor.getChildren();
-						if (WTW.actionZones[currentactionzoneind] != null) {
-							if (WTW.actionZones[currentactionzoneind].status == 2) {
-								if (currenttest <= 0) {
-									currentdoor.position.z = offsetz;
-									WTW.actionZones[currentactionzoneind].status = 1;
+				var zcondition2 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var ztest = true;
+					var zcurrentactionzoneind = zactionzoneind;
+					if (WTW.actionZones[zcurrentactionzoneind] != null) {
+						var zoffsetz = 0; //Number(WTW.actionZones[zcurrentactionzoneind].axis.position.z);
+						var zcurrentdoor = zactionzoneaxle;
+						var zcurrenttest = zcurrentdoor.position.z - zoffsetz;
+						var zcurrentmovementdistance = Number(WTW.actionZones[zcurrentactionzoneind].movementdistance);
+						var zdoorparts = zcurrentdoor.getChildren();
+						if (WTW.actionZones[zcurrentactionzoneind] != null) {
+							if (WTW.actionZones[zcurrentactionzoneind].status == 2) {
+								if (zcurrenttest <= 0) {
+									zcurrentdoor.position.z = zoffsetz;
+									WTW.actionZones[zcurrentactionzoneind].status = 1;
 								}
-								test = (currenttest > 0);
+								ztest = (zcurrenttest > 0);
 							} else {
-								test = false;
+								ztest = false;
 							}
 						} else {
-							test = false;
+							ztest = false;
 						}
 					} else {
-						test = false;
+						ztest = false;
 					}
-					return test;
+					return ztest;
 				});
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "position.z", 0.5, condition1)); 
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "position.z", 0.5, zcondition1)); 
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "position.z", -0.5, condition2));
-				WTW.actionZones[actionzoneind].status = 1;
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "position.z", -0.5, zcondition2));
+				WTW.actionZones[zactionzoneind].status = 1;
 			} catch (ex) {
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+				WTW.setOpacity(zactionzonename, .2);
+				WTW.setOpacity(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";
+		WTW.actionZones[zactionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneClickSlidingDoor=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzoneMirror = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneMirror = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* mirror - (work in progress) molds in this zone will automatically have a reflection in the mirrored surface of a selected mold */
-	var actionzone;
+	var zactionzone;
 	try {
-		if (WTW.actionZones[actionzoneind].shown == "0") {
-			var parentname = actionzonedef.parentname;
-			var zpositionx = Number(actionzonedef.position.x);
-			var zpositiony = Number(actionzonedef.position.y);
-			var zpositionz = Number(actionzonedef.position.z);
-			actionzone = scene.getMeshByID(actionzonename);
-			if (actionzone == null) {
+		if (WTW.actionZones[zactionzoneind].shown == "0") {
+			var zparentname = zactionzonedef.parentname;
+			var zpositionx = Number(zactionzonedef.position.x);
+			var zpositiony = Number(zactionzonedef.position.y);
+			var zpositionz = Number(zactionzonedef.position.z);
+			zactionzone = scene.getMeshByID(zactionzonename);
+			if (zactionzone == null) {
 				/* create the shape for the zone that watches for reflections of molds */
 				/* default actionzoneshape is cube and hidden (opacity 0) */
-				var molddef5 = WTW.newMold();
-				molddef5.shape = actionzonedef.actionzoneshape;
-				molddef5.covering = "hidden";
-				molddef5.scaling.x = actionzonedef.scaling.x;
-				molddef5.scaling.y = actionzonedef.scaling.y;
-				molddef5.scaling.z = actionzonedef.scaling.z;
-				molddef5.subdivisions = 12;
-				molddef5.opacity = 0;
-				molddef5.parentname = actionzonedef.parentname;
-				actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-				actionzone.isPickable = false;
-				actionzone.checkCollisions = false;
-				actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+				var zmolddef5 = WTW.newMold();
+				zmolddef5.shape = zactionzonedef.actionzoneshape;
+				zmolddef5.covering = "hidden";
+				zmolddef5.scaling.x = zactionzonedef.scaling.x;
+				zmolddef5.scaling.y = zactionzonedef.scaling.y;
+				zmolddef5.scaling.z = zactionzonedef.scaling.z;
+				zmolddef5.subdivisions = 12;
+				zmolddef5.opacity = 0;
+				zmolddef5.parentname = zactionzonedef.parentname;
+				zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+				zactionzone.isPickable = false;
+				zactionzone.checkCollisions = false;
+				zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 			}
 			if (dGet('wtw_bzones') != null) {
 				if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-					WTW.setOpacity(actionzonename, .2);
+					WTW.setOpacity(zactionzonename, .2);
 				}
 			}
-			WTW.actionZones[actionzoneind].shown = "2";
+			WTW.actionZones[zactionzoneind].shown = "2";
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneMirror=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzoneRidealong = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneRidealong = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* ridealong - (work in progress) shape often box by default - attaches to a parent mold and moves with the parent mold - any avatar in the zone will automatically parent and move with the parent mold - picture a ride on a boat where the avatar can still walk around the boat */
-	var actionzone;
+	var zactionzone;
 	try {
 
 		/* create the shape for the animation zone */
 		/* default actionzoneshape is cube and hidden (opacity 0) */
-		var molddef = WTW.newMold();
-		molddef.shape = actionzonedef.actionzoneshape;
-		molddef.covering = "hidden";
-		molddef.position.x = actionzonedef.position.x;
-		molddef.position.y = actionzonedef.position.y;
-		molddef.position.z = actionzonedef.position.z;
-		molddef.scaling.x = actionzonedef.scaling.x;
-		molddef.scaling.y = actionzonedef.scaling.y;
-		molddef.scaling.z = actionzonedef.scaling.z;
-		molddef.rotation.x = actionzonedef.rotation.x;
-		molddef.rotation.y = actionzonedef.rotation.y;
-		molddef.rotation.z = actionzonedef.rotation.z;
-		molddef.subdivisions = 12;
-		molddef.opacity = 0;
-		molddef.parentname = actionzonedef.parentname;
-		molddef.actionzoneind = actionzoneind;
-		molddef.checkcollisions = "0";
-		molddef.ispickable = "0";
-		WTW.addMoldToQueue(actionzonename, molddef, molddef.parentname, molddef.covering, null);
+		var zmolddef = WTW.newMold();
+		zmolddef.shape = zactionzonedef.actionzoneshape;
+		zmolddef.covering = "hidden";
+		zmolddef.position.x = zactionzonedef.position.x;
+		zmolddef.position.y = zactionzonedef.position.y;
+		zmolddef.position.z = zactionzonedef.position.z;
+		zmolddef.scaling.x = zactionzonedef.scaling.x;
+		zmolddef.scaling.y = zactionzonedef.scaling.y;
+		zmolddef.scaling.z = zactionzonedef.scaling.z;
+		zmolddef.rotation.x = zactionzonedef.rotation.x;
+		zmolddef.rotation.y = zactionzonedef.rotation.y;
+		zmolddef.rotation.z = zactionzonedef.rotation.z;
+		zmolddef.subdivisions = 12;
+		zmolddef.opacity = 0;
+		zmolddef.parentname = zactionzonedef.parentname;
+		zmolddef.actionzoneind = zactionzoneind;
+		zmolddef.checkcollisions = "0";
+		zmolddef.ispickable = "0";
+		WTW.addMoldToQueue(zactionzonename, zmolddef, zmolddef.parentname, zmolddef.covering, null);
 		if (WTW.adminView == 1) {
-			if (dGet('wtw_bzones').title == "Action Zones are Shown" || actionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
-				WTW.setOpacity(actionzonename, .2);
+			if (dGet('wtw_bzones').title == "Action Zones are Shown" || zactionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
+				WTW.setOpacity(zactionzonename, .2);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";
+		WTW.actionZones[zactionzoneind].shown = "2";
 
 
 
@@ -795,109 +777,109 @@ WTWJS.prototype.addActionzoneRidealong = function(actionzonename, actionzoneind,
 
 
 
-/*		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		//var attachmoldid = actionzonedef.attachmoldid;
-		var parentmold = scene.getMeshByID(parentname);
-		if (parentmold != null) {
-			if (parentname.indexOf("molds") > -1) {
-				var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-				if (actionzoneaxlebase == null) {
-					var molddef = WTW.newMold();
-					molddef.shape = "box";
-					molddef.covering = "hidden";
-					molddef.opacity = 0;
-					molddef.parentname = parentname;
-					actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-					actionzoneaxlebase.position.x = 0;
-					actionzoneaxlebase.position.y = 0;
-					actionzoneaxlebase.position.z = 0;
-					actionzoneaxlebase.isPickable = false;
-					actionzoneaxlebase.checkCollisions = false;
-					actionzoneaxlebase.scaling.x = 1/parentmold.scaling.x;
-					actionzoneaxlebase.scaling.y = 1/parentmold.scaling.y;
-					actionzoneaxlebase.scaling.z = 1/parentmold.scaling.z;
-					actionzoneaxlebase.rotation.x = -parentmold.rotation.x;
-					actionzoneaxlebase.rotation.y = -parentmold.rotation.y;
-					actionzoneaxlebase.rotation.z = -parentmold.rotation.z;
+/*		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		//var zattachmoldid = zactionzonedef.attachmoldid;
+		var zparentmold = scene.getMeshByID(zparentname);
+		if (zparentmold != null) {
+			if (zparentname.indexOf("molds") > -1) {
+				var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+				if (zactionzoneaxlebase == null) {
+					var zmolddef = WTW.newMold();
+					zmolddef.shape = "box";
+					zmolddef.covering = "hidden";
+					zmolddef.opacity = 0;
+					zmolddef.parentname = zparentname;
+					zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+					zactionzoneaxlebase.position.x = 0;
+					zactionzoneaxlebase.position.y = 0;
+					zactionzoneaxlebase.position.z = 0;
+					zactionzoneaxlebase.isPickable = false;
+					zactionzoneaxlebase.checkCollisions = false;
+					zactionzoneaxlebase.scaling.x = 1/zparentmold.scaling.x;
+					zactionzoneaxlebase.scaling.y = 1/zparentmold.scaling.y;
+					zactionzoneaxlebase.scaling.z = 1/zparentmold.scaling.z;
+					zactionzoneaxlebase.rotation.x = -zparentmold.rotation.x;
+					zactionzoneaxlebase.rotation.y = -zparentmold.rotation.y;
+					zactionzoneaxlebase.rotation.z = -zparentmold.rotation.z;
 				}
-				actionzone = scene.getMeshByID(actionzonename);
-				if (actionzone == null) {
+				zactionzone = scene.getMeshByID(zactionzonename);
+				if (zactionzone == null) {
 					/ * create the shape for the zone that avatars enter to ride along * /
 					/ * default actionzoneshape is cube and hidden (opacity 0) * /
-					var molddef5 = WTW.newMold();
-					molddef5.shape = actionzonedef.actionzoneshape;
-					molddef5.covering = "hidden";
-					molddef5.position.x = zpositionx - actionzoneaxlebase.position.x;
-					molddef5.position.y = zpositiony - actionzoneaxlebase.position.y;
-					molddef5.position.z = zpositionz - actionzoneaxlebase.position.z;
-					molddef5.scaling.x = actionzonedef.scaling.x;
-					molddef5.scaling.y = actionzonedef.scaling.y;
-					molddef5.scaling.z = actionzonedef.scaling.z;
-					molddef5.rotation.x = actionzonedef.rotation.x;
-					molddef5.rotation.y = actionzonedef.rotation.y;
-					molddef5.rotation.z = actionzonedef.rotation.z;
-					molddef5.subdivisions = 12;
-					molddef5.opacity = 0;
-					molddef5.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-					actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-					actionzone.isPickable = false;
-					actionzone.checkCollisions = false;
+					var zmolddef5 = WTW.newMold();
+					zmolddef5.shape = zactionzonedef.actionzoneshape;
+					zmolddef5.covering = "hidden";
+					zmolddef5.position.x = zpositionx - zactionzoneaxlebase.position.x;
+					zmolddef5.position.y = zpositiony - zactionzoneaxlebase.position.y;
+					zmolddef5.position.z = zpositionz - zactionzoneaxlebase.position.z;
+					zmolddef5.scaling.x = zactionzonedef.scaling.x;
+					zmolddef5.scaling.y = zactionzonedef.scaling.y;
+					zmolddef5.scaling.z = zactionzonedef.scaling.z;
+					zmolddef5.rotation.x = zactionzonedef.rotation.x;
+					zmolddef5.rotation.y = zactionzonedef.rotation.y;
+					zmolddef5.rotation.z = zactionzonedef.rotation.z;
+					zmolddef5.subdivisions = 12;
+					zmolddef5.opacity = 0;
+					zmolddef5.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+					zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+					zactionzone.isPickable = false;
+					zactionzone.checkCollisions = false;
 				}
 			} else {
-				var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-				if (actionzoneaxlebase == null) {
-					var molddef = WTW.newMold();
-					molddef.shape = "box";
-					molddef.covering = "hidden";
-					molddef.opacity = 0;
-					molddef.parentname = parentname;
-					actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-					actionzoneaxlebase.position.x = 0;
-					actionzoneaxlebase.position.y = 0;
-					actionzoneaxlebase.position.z = 0;
-					actionzoneaxlebase.isPickable = false;
-					actionzoneaxlebase.checkCollisions = false;
-					actionzoneaxlebase.scaling.x = 1;
-					actionzoneaxlebase.scaling.y = 1;
-					actionzoneaxlebase.scaling.z = 1;
-					actionzoneaxlebase.rotation.x = 0;
-					actionzoneaxlebase.rotation.y = 0;
-					actionzoneaxlebase.rotation.z = 0;
+				var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+				if (zactionzoneaxlebase == null) {
+					var zmolddef = WTW.newMold();
+					zmolddef.shape = "box";
+					zmolddef.covering = "hidden";
+					zmolddef.opacity = 0;
+					zmolddef.parentname = zparentname;
+					zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+					zactionzoneaxlebase.position.x = 0;
+					zactionzoneaxlebase.position.y = 0;
+					zactionzoneaxlebase.position.z = 0;
+					zactionzoneaxlebase.isPickable = false;
+					zactionzoneaxlebase.checkCollisions = false;
+					zactionzoneaxlebase.scaling.x = 1;
+					zactionzoneaxlebase.scaling.y = 1;
+					zactionzoneaxlebase.scaling.z = 1;
+					zactionzoneaxlebase.rotation.x = 0;
+					zactionzoneaxlebase.rotation.y = 0;
+					zactionzoneaxlebase.rotation.z = 0;
 				}
-				actionzone = scene.getMeshByID(actionzonename);
-				if (actionzone == null) {
+				zactionzone = scene.getMeshByID(zactionzonename);
+				if (zactionzone == null) {
 					/ * create the shape for the zone that avatars enter to ride along this instance is parented to another action zone (example farris wheel car attached to a spinning wheel) * /
 					/ * default actionzoneshape is cube and hidden (opacity 0) * /
-					var molddef5 = WTW.newMold();
-					molddef5.shape = actionzonedef.actionzoneshape;
-					molddef5.covering = "hidden";
-					molddef5.position.x = zpositionx;
-					molddef5.position.y = zpositiony;
-					molddef5.position.z = zpositionz;
-					molddef5.scaling.x = actionzonedef.scaling.x;
-					molddef5.scaling.y = actionzonedef.scaling.y;
-					molddef5.scaling.z = actionzonedef.scaling.z;
-					molddef5.rotation.x = actionzonedef.rotation.x;
-					molddef5.rotation.y = actionzonedef.rotation.y;
-					molddef5.rotation.z = actionzonedef.rotation.z;
-					molddef5.subdivisions = 12;
-					molddef5.opacity = 0;
-					molddef5.parentname = actionzonedef.parentname;
-					actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-					actionzone.isPickable = false;
-					actionzone.checkCollisions = false;
-					actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+					var zmolddef5 = WTW.newMold();
+					zmolddef5.shape = zactionzonedef.actionzoneshape;
+					zmolddef5.covering = "hidden";
+					zmolddef5.position.x = zpositionx;
+					zmolddef5.position.y = zpositiony;
+					zmolddef5.position.z = zpositionz;
+					zmolddef5.scaling.x = zactionzonedef.scaling.x;
+					zmolddef5.scaling.y = zactionzonedef.scaling.y;
+					zmolddef5.scaling.z = zactionzonedef.scaling.z;
+					zmolddef5.rotation.x = zactionzonedef.rotation.x;
+					zmolddef5.rotation.y = zactionzonedef.rotation.y;
+					zmolddef5.rotation.z = zactionzonedef.rotation.z;
+					zmolddef5.subdivisions = 12;
+					zmolddef5.opacity = 0;
+					zmolddef5.parentname = zactionzonedef.parentname;
+					zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+					zactionzone.isPickable = false;
+					zactionzone.checkCollisions = false;
+					zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 				}
 			}
 			if (dGet('wtw_bzones') != null) {
 				if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-					WTW.setOpacity(actionzonename, .2);
+					WTW.setOpacity(zactionzonename, .2);
 				}
 			}
-			WTW.actionZones[actionzoneind].shown = "2";
+			WTW.actionZones[zactionzoneind].shown = "2";
 		}
 		
 		*/
@@ -907,643 +889,395 @@ WTWJS.prototype.addActionzoneRidealong = function(actionzonename, actionzoneind,
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneRidealong=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzoneRotate = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneRotate = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* rotate - rotating axle that molds can be attached so that they rotate around the selected axle */
-	var actionzone;
+	var zactionzone;
 	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = Number(actionzonedef.axis.position.x);
-		var axispositiony = Number(actionzonedef.axis.position.y);
-		var axispositionz = Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var rotatespeed = Number(actionzonedef.rotatespeed);
-		var buildingind = -1;
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-		} else if (actionzonedef.thinginfo.thingid != "") {
+		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		var zaxispositionx = Number(zactionzonedef.axis.position.x);
+		var zaxispositiony = Number(zactionzonedef.axis.position.y);
+		var zaxispositionz = Number(zactionzonedef.axis.position.z);
+		var zaxisrotx = Number(zactionzonedef.axis.rotation.x);
+		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
+		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
+		var zrotatespeed = Number(zactionzonedef.rotatespeed);
+		zactionzone = scene.getMeshByID(zactionzonename);
+		var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle-"));
+		var zactionzoneaxlepole = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var zactionzoneaxlebase2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (zactionzoneaxlebase == null) {
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = "box";
+			zmolddef.covering = "hidden";
+			zmolddef.opacity = 0;
+			zmolddef.parentname = zparentname;
+			zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzoneaxlebase.position.x = zaxispositionx;
+			zactionzoneaxlebase.position.y = zaxispositiony;
+			zactionzoneaxlebase.position.z = zaxispositionz;
+			zactionzoneaxlebase.isPickable = false;
+			zactionzoneaxlebase.checkCollisions = false;
+			zactionzoneaxlebase.rotation.x = WTW.getRadians(zaxisrotx);
+			zactionzoneaxlebase.rotation.y = WTW.getRadians(0);
+			zactionzoneaxlebase.rotation.z = WTW.getRadians(zaxisrotz);
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.position.x = axispositionx;
-			actionzoneaxlebase.position.y = axispositiony;
-			actionzoneaxlebase.position.z = axispositionz;
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
-			actionzoneaxlebase.rotation.x = WTW.getRadians(axisrotx);
-			actionzoneaxlebase.rotation.y = WTW.getRadians(0);
-			actionzoneaxlebase.rotation.z = WTW.getRadians(axisrotz);
+		if (zactionzoneaxle == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef1 = WTW.newMold();
+			zmolddef1.shape = "box";
+			zmolddef1.covering = "hidden";
+			zmolddef1.scaling.x = 1;
+			zmolddef1.scaling.y = 1;
+			zmolddef1.scaling.z = 1;
+			zmolddef1.opacity = 0;
+			zmolddef1.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+			zactionzoneaxle = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle-"), zmolddef1, zmolddef1.parentname, zmolddef1.covering);
+			zactionzoneaxle.position.x = 0;
+			zactionzoneaxle.position.y = 0;
+			zactionzoneaxle.position.z = 0;
+			zactionzoneaxle.rotation.y = WTW.getRadians(zaxisroty);
+			zactionzoneaxle.isPickable = false;
+			zactionzoneaxle.checkCollisions = false;
 		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = 0;
-			actionzoneaxle.position.y = 0;
-			actionzoneaxle.position.z = 0;
-			actionzoneaxle.rotation.y = WTW.getRadians(axisroty);
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
+		if (zactionzoneaxlepole == null) {
+			var zmolddef4 = WTW.newMold();
+			zmolddef4.shape = "box";
+			zmolddef4.covering = "texture";
+			zmolddef4.scaling.x = .20;
+			zmolddef4.scaling.y = 20;
+			zmolddef4.scaling.z = .20;
+			zmolddef4.rotation.x = Number(zactionzonedef.axis.rotation.x);
+			zmolddef4.rotation.y = 0;
+			zmolddef4.rotation.z = Number(zactionzonedef.axis.rotation.z);
+			zmolddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef4.opacity = 0;
+			zmolddef4.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zactionzoneaxlepole.isPickable = false;
+			zactionzoneaxlepole.checkCollisions = false;
 		}
-		if (actionzoneaxlepole == null) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = 20;
-			molddef4.scaling.z = .20;
-			molddef4.rotation.x = Number(actionzonedef.axis.rotation.x);
-			molddef4.rotation.y = 0;
-			molddef4.rotation.z = Number(actionzonedef.axis.rotation.z);
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 0;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
+		if (zactionzoneaxlebase2 == null) {
+			var zmolddef2 = WTW.newMold();
+			zmolddef2.shape = "box";
+			zmolddef2.covering = "hidden";
+			zmolddef2.opacity = 0;
+			zmolddef2.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlebase2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"), zmolddef2, zmolddef2.parentname, zmolddef2.covering);
+			zactionzoneaxlebase2.position.x = 0;
+			zactionzoneaxlebase2.position.y = 0;
+			zactionzoneaxlebase2.position.z = 0;
+			zactionzoneaxlebase2.isPickable = false;
+			zactionzoneaxlebase2.checkCollisions = false;
+			zactionzoneaxlebase2.rotation.x = WTW.getRadians(-zaxisrotx);
+			zactionzoneaxlebase2.rotation.y = WTW.getRadians(0);
+			zactionzoneaxlebase2.rotation.z = WTW.getRadians(-zaxisrotz);
 		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.position.x = 0;
-			actionzoneaxlebase2.position.y = 0;
-			actionzoneaxlebase2.position.z = 0;
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-			actionzoneaxlebase2.rotation.x = WTW.getRadians(-axisrotx);
-			actionzoneaxlebase2.rotation.y = WTW.getRadians(0);
-			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotz);
-		}
-		if (actionzone == null) {
-			var molddef5 = WTW.newMold();
-			molddef5.shape = "box";
-			molddef5.covering = "hidden";
-			molddef5.position.x = 0;
-			molddef5.position.y = 0;
-			molddef5.position.z = 0;
-			molddef5.scaling.x = 1;
-			molddef5.scaling.y = 1;
-			molddef5.scaling.z = 1;
-			molddef5.subdivisions = 20;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.rotation.x = 0;
-			actionzone.rotation.y = 0;
-			actionzone.rotation.z = 0;
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+		if (zactionzone == null) {
+			var zmolddef5 = WTW.newMold();
+			zmolddef5.shape = "box";
+			zmolddef5.covering = "hidden";
+			zmolddef5.position.x = 0;
+			zmolddef5.position.y = 0;
+			zmolddef5.position.z = 0;
+			zmolddef5.scaling.x = 1;
+			zmolddef5.scaling.y = 1;
+			zmolddef5.scaling.z = 1;
+			zmolddef5.subdivisions = 20;
+			zmolddef5.opacity = 0;
+			zmolddef5.parentname = zparentname;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+			zactionzone.rotation.x = 0;
+			zactionzone.rotation.y = 0;
+			zactionzone.rotation.z = 0;
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
+			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 			try {
-				var condition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var test = false;
-					var currentactionzoneind = actionzoneind;
-					if (WTW.actionZones[currentactionzoneind] != null) {
-						if (WTW.actionZones[currentactionzoneind].status == 1) {
-							test = true;
+				var zcondition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var ztest = false;
+					var zcurrentactionzoneind = zactionzoneind;
+					if (WTW.actionZones[zcurrentactionzoneind] != null) {
+						if (WTW.actionZones[zcurrentactionzoneind].status == 1) {
+							ztest = true;
 						}
 					}
-					return test;
+					return ztest;
 				});
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "rotation.y", Number(WTW.actionZones[actionzoneind].rotatespeed)/100, condition1)); 
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "rotation.y", Number(WTW.actionZones[zactionzoneind].zrotatespeed)/100, zcondition1)); 
 			} catch (ex) {
 				WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneRotate=" + ex.message);
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+				WTW.setOpacity(zactionzonename, .2);
+				WTW.setOpacity(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
 		}
-		WTW.actionZones[actionzoneind].status = 1;
-		WTW.actionZones[actionzoneind].shown = "2";
+		WTW.actionZones[zactionzoneind].status = 1;
+		WTW.actionZones[zactionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneRotate=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzonePeoplemover = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzonePeoplemover = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* people mover - (work in progress) shape often box by default - when avatar is in the zone they will move at a defined pace in a direction of the axis. This is useful for things like moving sidewalks, elevators, and escalators. */
-	var actionzone;
+	var zactionzone;
 	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = Number(actionzonedef.axis.position.x);
-		var axispositiony = Number(actionzonedef.axis.position.y);
-		var axispositionz = Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var rotx = Number(actionzonedef.rotation.x);
-		var roty = Number(actionzonedef.rotation.y);
-		var rotz = Number(actionzonedef.rotation.z);
-		var buildingind = -1;
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-		} else if (actionzonedef.thinginfo.thingid != "") {
+		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		var zaxispositionx = Number(zactionzonedef.axis.position.x);
+		var zaxispositiony = Number(zactionzonedef.axis.position.y);
+		var zaxispositionz = Number(zactionzonedef.axis.position.z);
+		var zaxisrotx = Number(zactionzonedef.axis.rotation.x);
+		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
+		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
+		var zrotx = Number(zactionzonedef.rotation.x);
+		var zroty = Number(zactionzonedef.rotation.y);
+		var zrotz = Number(zactionzonedef.rotation.z);
+		zactionzone = scene.getMeshByID(zactionzonename);
+		var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle-"));
+		var zactionzoneaxlepole = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var zactionzoneaxlebase2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (zactionzoneaxlebase == null) {
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = "box";
+			zmolddef.covering = "hidden";
+			zmolddef.opacity = 0;
+			zmolddef.parentname = zparentname;
+			zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzoneaxlebase.position.x = zaxispositionx;
+			zactionzoneaxlebase.position.y = zaxispositiony;
+			zactionzoneaxlebase.position.z = zaxispositionz;
+			zactionzoneaxlebase.isPickable = false;
+			zactionzoneaxlebase.checkCollisions = false;
+			zactionzoneaxlebase.rotation.x = WTW.getRadians(zaxisrotx);
+			zactionzoneaxlebase.rotation.y = WTW.getRadians(zaxisroty);
+			zactionzoneaxlebase.rotation.z = WTW.getRadians(zaxisrotz);
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.position.x = axispositionx;
-			actionzoneaxlebase.position.y = axispositiony;
-			actionzoneaxlebase.position.z = axispositionz;
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
-			actionzoneaxlebase.rotation.x = WTW.getRadians(axisrotx);
-			actionzoneaxlebase.rotation.y = WTW.getRadians(axisroty);
-			actionzoneaxlebase.rotation.z = WTW.getRadians(axisrotz);
-		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = 0;
-			actionzoneaxle.position.y = 0;
-			actionzoneaxle.position.z = 0;
-			if (axisroty == 90) {
-				actionzoneaxle.rotation.x -= WTW.getRadians(90);
+		if (zactionzoneaxle == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef1 = WTW.newMold();
+			zmolddef1.shape = "box";
+			zmolddef1.covering = "hidden";
+			zmolddef1.scaling.x = 1;
+			zmolddef1.scaling.y = 1;
+			zmolddef1.scaling.z = 1;
+			zmolddef1.opacity = 0;
+			zmolddef1.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+			zactionzoneaxle = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle-"), zmolddef1, zmolddef1.parentname, zmolddef1.covering);
+			zactionzoneaxle.position.x = 0;
+			zactionzoneaxle.position.y = 0;
+			zactionzoneaxle.position.z = 0;
+			if (zaxisroty == 90) {
+				zactionzoneaxle.rotation.x -= WTW.getRadians(90);
 			}
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
+			zactionzoneaxle.isPickable = false;
+			zactionzoneaxle.checkCollisions = false;
 		}
-		if (actionzoneaxlepole == null && WTW.adminView == 1) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = .20;
-			molddef4.scaling.z = Number(actionzonedef.movementdistance);
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 0;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
+		if (zactionzoneaxlepole == null && WTW.adminView == 1) {
+			var zmolddef4 = WTW.newMold();
+			zmolddef4.shape = "box";
+			zmolddef4.covering = "texture";
+			zmolddef4.scaling.x = .20;
+			zmolddef4.scaling.y = .20;
+			zmolddef4.scaling.z = Number(zactionzonedef.movementdistance);
+			zmolddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef4.opacity = 0;
+			zmolddef4.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zactionzoneaxlepole.isPickable = false;
+			zactionzoneaxlepole.checkCollisions = false;
 		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.position.x = 0;
-			actionzoneaxlebase2.position.y = 0;
-			actionzoneaxlebase2.position.z = 0;
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-			actionzoneaxlebase2.rotation.x = WTW.getRadians(0);
-			actionzoneaxlebase2.rotation.y = WTW.getRadians(-axisroty);
-			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotx); // note this is a fix z==x - wont work for all
+		if (zactionzoneaxlebase2 == null) {
+			var zmolddef2 = WTW.newMold();
+			zmolddef2.shape = "box";
+			zmolddef2.covering = "hidden";
+			zmolddef2.opacity = 0;
+			zmolddef2.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlebase2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"), zmolddef2, zmolddef2.parentname, zmolddef2.covering);
+			zactionzoneaxlebase2.position.x = 0;
+			zactionzoneaxlebase2.position.y = 0;
+			zactionzoneaxlebase2.position.z = 0;
+			zactionzoneaxlebase2.isPickable = false;
+			zactionzoneaxlebase2.checkCollisions = false;
+			zactionzoneaxlebase2.rotation.x = WTW.getRadians(0);
+			zactionzoneaxlebase2.rotation.y = WTW.getRadians(-zaxisroty);
+			zactionzoneaxlebase2.rotation.z = WTW.getRadians(-zaxisrotx); // note this is a fix z==x - wont work for all
 		}
-		if (actionzone == null) {
+		if (zactionzone == null) {
 			/* create the shape for the zone that avatars enter to move from one location to another along a defined axis */
 			/* default actionzoneshape is cube and hidden (opacity 0) */
-			var molddef5 = WTW.newMold();
-			molddef5.shape = actionzonedef.actionzoneshape;
-			molddef5.covering = "hidden";
-			molddef5.scaling.x = actionzonedef.scaling.x;
-			molddef5.scaling.y = actionzonedef.scaling.y;
-			molddef5.scaling.z = actionzonedef.scaling.z;
-			molddef5.subdivisions = 20;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.rotation.x = WTW.getRadians(rotx);
-			actionzone.rotation.y = WTW.getRadians(roty);
-			actionzone.rotation.z = WTW.getRadians(rotz);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
-			var movementtype = "slide";
-			var movementdistance = 0;
-			if (actionzonedef.movementtype != null) {
-				movementtype = actionzonedef.movementtype;
+			var zmolddef5 = WTW.newMold();
+			zmolddef5.shape = zactionzonedef.actionzoneshape;
+			zmolddef5.covering = "hidden";
+			zmolddef5.scaling.x = zactionzonedef.scaling.x;
+			zmolddef5.scaling.y = zactionzonedef.scaling.y;
+			zmolddef5.scaling.z = zactionzonedef.scaling.z;
+			zmolddef5.subdivisions = 20;
+			zmolddef5.opacity = 0;
+			zmolddef5.parentname = zparentname;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+			zactionzone.rotation.x = WTW.getRadians(zrotx);
+			zactionzone.rotation.y = WTW.getRadians(zroty);
+			zactionzone.rotation.z = WTW.getRadians(zrotz);
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
+			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+			var zmovementtype = "slide";
+			var zmovementdistance = 0;
+			if (zactionzonedef.movementtype != null) {
+				zmovementtype = zactionzonedef.movementtype;
 			}
-			if (WTW.isNumeric(actionzonedef.movementdistance)) {
-				movementdistance = Number(actionzonedef.movementdistance);
+			if (WTW.isNumeric(zactionzonedef.movementdistance)) {
+				zmovementdistance = Number(zactionzonedef.movementdistance);
 			}
 			try {
-/*				var condition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var test = true;
-					var currentactionzoneaxlebase = actionzoneaxlebase;
-					if (currentactionzoneaxlebase != null) {
-						var azbaseabspos = WTW.getWorldPosition(currentactionzoneaxlebase);
-						var currentactionzoneind = actionzoneind;
-						if (WTW.actionZones[currentactionzoneind] != null) {
-							var currentmove = actionzoneaxle;
-							var currenttest = currentmove.position.z;
-							var currentmovementdistance = Number(WTW.actionZones[currentactionzoneind].movementdistance);
-							var hix = null;
-							var hiy = null;
-							var hiz = null;
-							var lox = null;
-							var loy = null;
-							var loz = null;
-							var rangez = 0;
-							var rangex = 0;
-							var rangey = 0;
-							var moverotx = axisrotx;
-							var moveroty = axisroty;
-							var moverotz = axisrotz;
-							var moveparts = actionzoneaxlebase2.getChildren();
-							if (moveparts != null) {
-								if (moveparts.length > 0) {
-									for (var i=0;i < moveparts.length;i++) {
-										if (moveparts[i] != null) {
-											if (moveparts[i].id.indexOf("molds") > -1) {
-												var abspos = WTW.getWorldPosition(moveparts[i]);
-												if (hiy != null) {
-													if (abspos.y > hiy) {
-														hiy = abspos.y;
-													}
-												} else {
-													hiy = abspos.y;
-												}
-												if (loy != null) {
-													if (abspos.y < loy) {
-														loy = abspos.y;
-													}
-												} else {
-													loy = abspos.y;
-												}
-												if (hix != null) {
-													if (abspos.x > hix) {
-														hix = abspos.x;
-													}
-												} else {
-													hix = abspos.x;
-												}
-												if (lox != null) {
-													if (abspos.x < lox) {
-														lox = abspos.x;
-													}
-												} else {
-													lox = abspos.x;
-												}
-												if (hiz != null) {
-													if (abspos.z > hiz) {
-														hiz = abspos.z;
-													}
-												} else {
-													hiz = abspos.z;
-												}
-												if (loz != null) {
-													if (abspos.z < loz) {
-														loz = abspos.z;
-													}
-												} else {
-													loz = abspos.z;
-												}
-											}
-										}
-									}
-								} else {
-									hix = 0;
-									hiy = 0;
-									hiz = 0;
-									lox = 0;
-									loy = 0;
-									loz = 0;
-								}
-							} else {
-								hix = 0;
-								hiy = 0;
-								hiz = 0;
-								lox = 0;
-								loy = 0;
-								loz = 0;
-							}
-							rangez = hiz - loz;
-							rangex = hix - lox;
-							rangey = hiy - loy;
-							if (WTW.actionZones[currentactionzoneind].status > 0) {
-								if (rangez > 0 && rangey < 3) {
-									var cutoffz = rangez / 2;
-									var cutoffx = rangex / 2;
-									if (moveparts != null) {
-										if (moveparts.length > 0) {
-											for (var i=0;i < moveparts.length;i++) {
-												if (moveparts[i] != null) {
-													if (moveparts[i].id.indexOf("molds") > -1) {
-														var abspos = WTW.getWorldPosition(moveparts[i]);
-														if ((abspos.z) < (azbaseabspos.z - cutoffz)) {
-															moveparts[i].position.z += currentmovementdistance;
-														} else if ((abspos.z) > (azbaseabspos.z + cutoffz)) {
-															moveparts[i].position.z -= currentmovementdistance;
-														} else if ((abspos.x) < (azbaseabspos.x - currentmovementdistance/2)) {
-															moveparts[i].position.z -= currentmovementdistance;
-														} else if ((abspos.x) > (azbaseabspos.x + currentmovementdistance/2)) {
-															moveparts[i].position.z += currentmovementdistance;
-														}
-													}
-												}
-											}
-										}
-									}
-								} else if (rangex > 0 && rangey < 3) {
-									var cutoffx = rangex / 2;
-									if (moveparts != null) {
-										if (moveparts.length > 0) {
-											for (var i=0;i < moveparts.length;i++) {
-												if (moveparts[i] != null) {
-													if (moveparts[i].id.indexOf("molds") > -1) {
-														var abspos = WTW.getWorldPosition(moveparts[i]);
-														if ((abspos.x) < (azbaseabspos.x - cutoffx)) {
-															moveparts[i].position.x += currentmovementdistance;
-														} else if ((abspos.x) > (azbaseabspos.x + cutoffx)) {
-															moveparts[i].position.x -= currentmovementdistance;
-														}
-													}
-												}
-											}
-										}
-									}
-								} else {
-									if (moverotx < 0) {
-										hiy = 29;
-										rangey = 42;
-										rangex = 42;
-										var currentpos = Math.round(currenttest * 1000) / 1000;
-										var fullpos = Math.round(currentmovementdistance * 1000) / 1000;
-										var cutoffy = hiy - ((currentpos / fullpos) * rangey);
-										if (currentpos >= fullpos) {
-											currentmove.position.z = 0;
-											if (moveparts != null) {
-												if (moveparts.length > 0) {
-													for (var i=0;i < moveparts.length;i++) {
-														if (moveparts[i] != null) {
-															if (moveparts[i].id.indexOf("molds") > -1) {
-																if (moveparts[i].position.y <= cutoffy) {
-																	moveparts[i].position.x -= rangex;
-																	moveparts[i].position.y += rangey;
-																	moveparts[i].position.z += (hiz-loz);
-																}
-															}
-														}
-													}
-												}
+				var zcondition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var ztest = true;
+					var zcurrentactionzoneind = zactionzoneind;
+					if (WTW.actionZones[zcurrentactionzoneind] != null) {
+						var zcurrentmove = zactionzoneaxle;
+						var zcurrenttest = zcurrentmove.position.z;
+						var zcurrentmovementdistance = Number(WTW.actionZones[zcurrentactionzoneind].movementdistance);
+						var zhix = null;
+						var zhiy = null;
+						var zhiz = null;
+						var zlox = null;
+						var zloy = null;
+						var zloz = null;
+						var zmoverotx = zaxisrotx;
+						var zmoveroty = zaxisroty;
+						var zmoverotz = zaxisrotz;
+						var zmoveparts = zactionzoneaxlebase2.getChildren();
+						if (zmoveparts != null) {
+							if (zmoveparts.length > 0) {
+								for (var i=0;i < zmoveparts.length;i++) {
+									if (zmoveparts[i].id.indexOf("molds") > -1) {
+										if (zhiy != null) {
+											if (zmoveparts[i].position.y > zhiy) {
+												zhiy = zmoveparts[i].position.y;
+												zhix = zmoveparts[i].position.x;
+												zhiz = zmoveparts[i].position.z;
 											}
 										} else {
-											test = (currenttest < currentmovementdistance);
-											if (moveparts != null) {
-												if (moveparts.length > 0) {
-													for (var i=0;i < moveparts.length;i++) {
-														if (moveparts[i] != null) {
-															if (moveparts[i].id.indexOf("molds") > -1) {
-																if (moveparts[i].position.y >= cutoffy) {
-																	moveparts[i].position.x += rangex;
-																	moveparts[i].position.y -= rangey;
-																	moveparts[i].position.z -= (hiz-loz);
-																}
-															}
-														}
-													}
-												}
-											}
+											zhiy = zmoveparts[i].position.y;
+											zhix = zmoveparts[i].position.x;
+											zhiz = zmoveparts[i].position.z;
 										}
-									} else if (moverotx > 0) {
-										loy = -52.75;
-										rangey = 42;
-										rangex = 42;
-										var currentpos = Math.round(currenttest * 1000) / 1000;
-										var fullpos = Math.round(currentmovementdistance * 1000) / 1000;
-										var cutoffy = loy + ((currentpos / fullpos) * rangey);
-										if (currentpos >= fullpos) {
-											currentmove.position.z = 0;
-											if (moveparts != null) {
-												if (moveparts.length > 0) {
-													for (var i=0;i < moveparts.length;i++) {
-														if (moveparts[i] != null) {
-															if (moveparts[i].id.indexOf("molds") > -1) {
-																if (moveparts[i].position.y >= cutoffy) {
-																	moveparts[i].position.x += rangex;
-																	moveparts[i].position.y -= rangey;
-																	moveparts[i].position.z -= (hiz-loz);
-																}
-															}
-														}
-													}
-												}
+										if (zloy != null) {
+											if (zmoveparts[i].position.y < zloy) {
+												zloy = zmoveparts[i].position.y;
+												zlox = zmoveparts[i].position.x;
+												zloz = zmoveparts[i].position.z;
 											}
 										} else {
-											test = (currenttest < currentmovementdistance);
-											if (moveparts != null) {
-												if (moveparts.length > 0) {
-													for (var i=0;i < moveparts.length;i++) {
-														if (moveparts[i] != null) {
-															if (moveparts[i].id.indexOf("molds") > -1) {
-																if (moveparts[i].position.y <= cutoffy) {
-																	moveparts[i].position.x -= rangex;
-																	moveparts[i].position.y += rangey;
-																	moveparts[i].position.z += (hiz-loz);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								} 
-							} else {
-								test = false;
-							}
-						} else {
-							test = false;
-						}
-					} else {
-						test = false;
-					}
-					
-					//test = false;
-					
-					return test;
-				}); */
-				var condition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var test = true;
-					var currentactionzoneind = actionzoneind;
-					if (WTW.actionZones[currentactionzoneind] != null) {
-						var currentmove = actionzoneaxle;
-						var currenttest = currentmove.position.z;
-						var currentmovementdistance = Number(WTW.actionZones[currentactionzoneind].movementdistance);
-						var hix = null;
-						var hiy = null;
-						var hiz = null;
-						var lox = null;
-						var loy = null;
-						var loz = null;
-						var moverotx = axisrotx;
-						var moveroty = axisroty;
-						var moverotz = axisrotz;
-						var moveparts = actionzoneaxlebase2.getChildren();
-						if (moveparts != null) {
-							if (moveparts.length > 0) {
-								for (var i=0;i < moveparts.length;i++) {
-									if (moveparts[i].id.indexOf("molds") > -1) {
-										if (hiy != null) {
-											if (moveparts[i].position.y > hiy) {
-												hiy = moveparts[i].position.y;
-												hix = moveparts[i].position.x;
-												hiz = moveparts[i].position.z;
-											}
-										} else {
-											hiy = moveparts[i].position.y;
-											hix = moveparts[i].position.x;
-											hiz = moveparts[i].position.z;
-										}
-										if (loy != null) {
-											if (moveparts[i].position.y < loy) {
-												loy = moveparts[i].position.y;
-												lox = moveparts[i].position.x;
-												loz = moveparts[i].position.z;
-											}
-										} else {
-											loy = moveparts[i].position.y;
-											lox = moveparts[i].position.x;
-											loz = moveparts[i].position.z;
+											zloy = zmoveparts[i].position.y;
+											zlox = zmoveparts[i].position.x;
+											zloz = zmoveparts[i].position.z;
 										}
 									}
 								}
 							}
 						}
-						if (WTW.actionZones[currentactionzoneind].status > 0) {
-							var rangex = 0;
-							var rangey = 0;
-							var rangez = 0;
+						if (WTW.actionZones[zcurrentactionzoneind].status > 0) {
+							var zrangex = 0;
+							var zrangey = 0;
+							var zrangez = 0;
 							
-							rangez = hiz - loz;
-							rangex = hix - lox;
-							rangey = hiy - loy;
+							zrangez = zhiz - zloz;
+							zrangex = zhix - zlox;
+							zrangey = zhiy - zloy;
 							
-							if (rangez == 0) {
+							if (zrangez == 0) {
 								//escalators
-								if (moverotx < 0) {
-									hiy = 29;
-									rangey = 42;
-									rangex = 42;
-									var currentpos = Math.round(currenttest * 1000) / 1000;
-									var fullpos = Math.round(currentmovementdistance * 1000) / 1000;
-									var cutoffy = hiy - ((currentpos / fullpos) * rangey);
-									if (currentpos >= fullpos) {
-										currentmove.position.z = 0;
-										if (moveparts != null) {
-											if (moveparts.length > 0) {
-												for (var i=0;i < moveparts.length;i++) {
-													if (moveparts[i].id.indexOf("molds") > -1) {
-														if (moveparts[i].position.y <= cutoffy) {
-															moveparts[i].position.x -= rangex;
-															moveparts[i].position.y += rangey;
-															moveparts[i].position.z += (hiz-loz);
+								if (zmoverotx < 0) {
+									zhiy = 29;
+									zrangey = 42;
+									zrangex = 42;
+									var zcurrentpos = Math.round(zcurrenttest * 1000) / 1000;
+									var zfullpos = Math.round(zcurrentmovementdistance * 1000) / 1000;
+									var zcutoffy = zhiy - ((zcurrentpos / zfullpos) * zrangey);
+									if (zcurrentpos >= zfullpos) {
+										zcurrentmove.position.z = 0;
+										if (zmoveparts != null) {
+											if (zmoveparts.length > 0) {
+												for (var i=0;i < zmoveparts.length;i++) {
+													if (zmoveparts[i].id.indexOf("molds") > -1) {
+														if (zmoveparts[i].position.y <= zcutoffy) {
+															zmoveparts[i].position.x -= zrangex;
+															zmoveparts[i].position.y += zrangey;
+															zmoveparts[i].position.z += (zhiz-zloz);
 														}
 													}
 												}
 											}
 										}
 									} else {
-										test = (currenttest < currentmovementdistance);
-										if (moveparts != null) {
-											if (moveparts.length > 0) {
-												for (var i=0;i < moveparts.length;i++) {
-													if (moveparts[i].id.indexOf("molds") > -1) {
-														if (moveparts[i].position.y >= cutoffy) {
-															moveparts[i].position.x += rangex;
-															moveparts[i].position.y -= rangey;
-															moveparts[i].position.z -= (hiz-loz);
+										ztest = (zcurrenttest < zcurrentmovementdistance);
+										if (zmoveparts != null) {
+											if (zmoveparts.length > 0) {
+												for (var i=0;i < zmoveparts.length;i++) {
+													if (zmoveparts[i].id.indexOf("molds") > -1) {
+														if (zmoveparts[i].position.y >= zcutoffy) {
+															zmoveparts[i].position.x += zrangex;
+															zmoveparts[i].position.y -= zrangey;
+															zmoveparts[i].position.z -= (zhiz-zloz);
 														}
 													}
 												}
 											}
 										}
 									}
-								} else if (moverotx > 0) {
-									//	hiy=-10.75 == -53.25
-									//hiy = -10.25;
-									loy = -52.75;
-									rangey = 42;
-									rangex = 42;
-									var currentpos = Math.round(currenttest * 1000) / 1000;
-									var fullpos = Math.round(currentmovementdistance * 1000) / 1000;
-									var cutoffy = loy + ((currentpos / fullpos) * rangey);
-									if (currentpos >= fullpos) {
-										currentmove.position.z = 0;
-										if (moveparts != null) {
-											if (moveparts.length > 0) {
-												for (var i=0;i < moveparts.length;i++) {
-													if (moveparts[i].id.indexOf("molds") > -1) {
-														if (moveparts[i].position.y >= cutoffy) {
-															moveparts[i].position.x += rangex;
-															moveparts[i].position.y -= rangey;
-															moveparts[i].position.z -= (hiz-loz);
+								} else if (zmoverotx > 0) {
+									//	zhiy=-10.75 == -53.25
+									//zhiy = -10.25;
+									zloy = -52.75;
+									zrangey = 42;
+									zrangex = 42;
+									var zcurrentpos = Math.round(zcurrenttest * 1000) / 1000;
+									var zfullpos = Math.round(zcurrentmovementdistance * 1000) / 1000;
+									var zcutoffy = zloy + ((zcurrentpos / zfullpos) * zrangey);
+									if (zcurrentpos >= zfullpos) {
+										zcurrentmove.position.z = 0;
+										if (zmoveparts != null) {
+											if (zmoveparts.length > 0) {
+												for (var i=0;i < zmoveparts.length;i++) {
+													if (zmoveparts[i].id.indexOf("molds") > -1) {
+														if (zmoveparts[i].position.y >= zcutoffy) {
+															zmoveparts[i].position.x += zrangex;
+															zmoveparts[i].position.y -= zrangey;
+															zmoveparts[i].position.z -= (zhiz-zloz);
 														}
 													}
 												}
 											}
 										}
 									} else {
-										test = (currenttest < currentmovementdistance);
-										if (moveparts != null) {
-											if (moveparts.length > 0) {
-												for (var i=0;i < moveparts.length;i++) {
-													if (moveparts[i].id.indexOf("molds") > -1) {
-														if (moveparts[i].position.y <= cutoffy) {
-															moveparts[i].position.x -= rangex;
-															moveparts[i].position.y += rangey;
-															moveparts[i].position.z += (hiz-loz);
+										ztest = (zcurrenttest < zcurrentmovementdistance);
+										if (zmoveparts != null) {
+											if (zmoveparts.length > 0) {
+												for (var i=0;i < zmoveparts.length;i++) {
+													if (zmoveparts[i].id.indexOf("molds") > -1) {
+														if (zmoveparts[i].position.y <= zcutoffy) {
+															zmoveparts[i].position.x -= zrangex;
+															zmoveparts[i].position.y += zrangey;
+															zmoveparts[i].position.z += (zhiz-zloz);
 														}
 													}
 												}
@@ -1554,39 +1288,39 @@ WTWJS.prototype.addActionzonePeoplemover = function(actionzonename, actionzonein
 							
 							} else {
 								// conveyor
-								var currentactionzoneaxlebase = actionzoneaxlebase;
-								if (currentactionzoneaxlebase != null) {
-									var azbaseabspos = WTW.getWorldPosition(currentactionzoneaxlebase);
+								var zcurrentactionzoneaxlebase = zactionzoneaxlebase;
+								if (zcurrentactionzoneaxlebase != null) {
+									var zazbaseabspos = WTW.getWorldPosition(zcurrentactionzoneaxlebase);
 
-									if (Math.abs(rangez) > 0 && Math.abs(rangey) < 3) {
-										var cutoffz = rangez / 2;
-										var cutoffx = rangex / 2;
-										if (moveparts != null) {
-											if (moveparts.length > 0) {
-												for (var i=0;i < moveparts.length;i++) {
-													if (moveparts[i] != null) {
-														if (moveparts[i].id.indexOf("molds") > -1) {
-															var abspos = WTW.getWorldPosition(moveparts[i]);
-															if (Math.sqrt(Math.pow(abspos.x - azbaseabspos.x, 2) + Math.pow(abspos.y - azbaseabspos.y, 2) + Math.pow(abspos.z - azbaseabspos.z, 2)) > currentmovementdistance/2) {
-																moveparts[i].position.z += (currentmovementdistance * .95);
+									if (Math.abs(zrangez) > 0 && Math.abs(zrangey) < 3) {
+										var zcutoffz = zrangez / 2;
+										var zcutoffx = zrangex / 2;
+										if (zmoveparts != null) {
+											if (zmoveparts.length > 0) {
+												for (var i=0;i < zmoveparts.length;i++) {
+													if (zmoveparts[i] != null) {
+														if (zmoveparts[i].id.indexOf("molds") > -1) {
+															var zabspos = WTW.getWorldPosition(zmoveparts[i]);
+															if (Math.sqrt(Math.pow(zabspos.x - zazbaseabspos.x, 2) + Math.pow(zabspos.y - zazbaseabspos.y, 2) + Math.pow(zabspos.z - zazbaseabspos.z, 2)) > zcurrentmovementdistance/2) {
+																zmoveparts[i].position.z += (zcurrentmovementdistance * .95);
 															}
 														}
 													}
 												}
 											}
 										}
-									} else if (rangex > 0 && rangey < 3) {
-/*										var cutoffx = rangex / 2;
-										if (moveparts != null) {
-											if (moveparts.length > 0) {
-												for (var i=0;i < moveparts.length;i++) {
-													if (moveparts[i] != null) {
-														if (moveparts[i].id.indexOf("molds") > -1) {
-															var abspos = WTW.getWorldPosition(moveparts[i]);
-															if ((abspos.x) < (azbaseabspos.x - cutoffx)) {
-																moveparts[i].position.x += currentmovementdistance;
-															} else if ((abspos.x) > (azbaseabspos.x + cutoffx)) {
-																moveparts[i].position.x -= currentmovementdistance;
+									} else if (zrangex > 0 && zrangey < 3) {
+/*										var zcutoffx = zrangex / 2;
+										if (zmoveparts != null) {
+											if (zmoveparts.length > 0) {
+												for (var i=0;i < zmoveparts.length;i++) {
+													if (zmoveparts[i] != null) {
+														if (zmoveparts[i].id.indexOf("molds") > -1) {
+															var zabspos = WTW.getWorldPosition(zmoveparts[i]);
+															if ((zabspos.x) < (zazbaseabspos.x - zcutoffx)) {
+																zmoveparts[i].position.x += zcurrentmovementdistance;
+															} else if ((zabspos.x) > (zazbaseabspos.x + zcutoffx)) {
+																zmoveparts[i].position.x -= zcurrentmovementdistance;
 															} else {
 																
 															}
@@ -1597,1314 +1331,1272 @@ WTWJS.prototype.addActionzonePeoplemover = function(actionzonename, actionzonein
 										}
 */									}	
 								} else {
-									test = false;
+									ztest = false;
 								}									
 							}
 						} else {
-							test = false;
+							ztest = false;
 						}
 					} else {
-						test = false;
+						ztest = false;
 					}
-					return test;
+					return ztest;
 				});				
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "position.z", 0.1, condition1)); 
-				WTW.actionZones[actionzoneind].status = 1;
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "position.z", 0.1, zcondition1)); 
+				WTW.actionZones[zactionzoneind].status = 1;
 			} catch (ex) {
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+				WTW.setOpacity(zactionzonename, .2);
+				WTW.setOpacity(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";
+		WTW.actionZones[zactionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzonePeoplemover=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
 var testx = 0;
 
-WTWJS.prototype.addActionzoneElevator = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneElevator = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* elevator - (work in progress) shape often box by default - extenson of people mover to include button activated moves, timing with doors, and stopping movement on floors */
-	var actionzone;
+	var zactionzone;
 	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = Number(actionzonedef.axis.position.x);
-		var axispositiony = Number(actionzonedef.axis.position.y);
-		var axispositionz = Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var buildingind = -1;
-		var connectinggridind = -1;
-		var namepart = actionzonename.split('-');
-		if (namepart[3] != null) {
-			if (WTW.isNumeric(namepart[3])) {
-				connectinggridind = Number(namepart[3]);
+		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		var zaxispositionx = Number(zactionzonedef.axis.position.x);
+		var zaxispositiony = Number(zactionzonedef.axis.position.y);
+		var zaxispositionz = Number(zactionzonedef.axis.position.z);
+		var zaxisrotx = Number(zactionzonedef.axis.rotation.x);
+		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
+		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
+		var zconnectinggridind = -1;
+		var znamepart = zactionzonename.split('-');
+		if (znamepart[3] != null) {
+			if (WTW.isNumeric(znamepart[3])) {
+				zconnectinggridind = Number(znamepart[3]);
 			}
 		}
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-		} else if (actionzonedef.thinginfo.thingid != "") {
+		zactionzone = scene.getMeshByID(zactionzonename);
+		var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle-"));
+		var zactionzoneaxlepole = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var zactionzoneaxlebase2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (zactionzoneaxlebase == null) {
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = "box";
+			zmolddef.covering = "hidden";
+			zmolddef.opacity = 0;
+			zmolddef.parentname = zparentname;
+			zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzoneaxlebase.position.x = zaxispositionx;
+			zactionzoneaxlebase.position.y = zaxispositiony;
+			zactionzoneaxlebase.position.z = zaxispositionz;
+			zactionzoneaxlebase.isPickable = false;
+			zactionzoneaxlebase.checkCollisions = false;
+			zactionzoneaxlebase.rotation.x = WTW.getRadians(zaxisrotx);
+			zactionzoneaxlebase.rotation.y = WTW.getRadians(zaxisroty);
+			zactionzoneaxlebase.rotation.z = WTW.getRadians(zaxisrotz);
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.position.x = axispositionx;
-			actionzoneaxlebase.position.y = axispositiony;
-			actionzoneaxlebase.position.z = axispositionz;
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
-			actionzoneaxlebase.rotation.x = WTW.getRadians(axisrotx);
-			actionzoneaxlebase.rotation.y = WTW.getRadians(axisroty);
-			actionzoneaxlebase.rotation.z = WTW.getRadians(axisrotz);
+		if (zactionzoneaxle == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef1 = WTW.newMold();
+			zmolddef1.shape = "box";
+			zmolddef1.covering = "hidden";
+			zmolddef1.scaling.x = 1;
+			zmolddef1.scaling.y = 1;
+			zmolddef1.scaling.z = 1;
+			zmolddef1.opacity = 0;
+			zmolddef1.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+			zactionzoneaxle = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle-"), zmolddef1, zmolddef1.parentname, zmolddef1.covering);
+			zactionzoneaxle.position.x = 0;
+			zactionzoneaxle.position.y = 0;
+			zactionzoneaxle.position.z = 0;
+			zactionzoneaxle.isPickable = false;
+			zactionzoneaxle.checkCollisions = false;
 		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = 0;
-			actionzoneaxle.position.y = 0;
-			actionzoneaxle.position.z = 0;
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
+		if (zactionzoneaxlepole == null && WTW.adminView == 1) {
+			var zmolddef4 = WTW.newMold();
+			zmolddef4.shape = "box";
+			zmolddef4.covering = "texture";
+			zmolddef4.position.y = Number(zactionzonedef.movementdistance)/2;
+			zmolddef4.scaling.x = .20;
+			zmolddef4.scaling.y = Number(zactionzonedef.movementdistance);
+			zmolddef4.scaling.z = .20;
+			zmolddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef4.opacity = 0;
+			zmolddef4.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zactionzoneaxlepole.isPickable = false;
+			zactionzoneaxlepole.checkCollisions = false;
 		}
-		if (actionzoneaxlepole == null && WTW.adminView == 1) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.position.y = Number(actionzonedef.movementdistance)/2;
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = Number(actionzonedef.movementdistance);
-			molddef4.scaling.z = .20;
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 0;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
+		if (zactionzoneaxlebase2 == null) {
+			var zmolddef2 = WTW.newMold();
+			zmolddef2.shape = "box";
+			zmolddef2.covering = "hidden";
+			zmolddef2.opacity = 0;
+			zmolddef2.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlebase2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"), zmolddef2, zmolddef2.parentname, zmolddef2.covering);
+			zactionzoneaxlebase2.position.x = 0;
+			zactionzoneaxlebase2.position.y = 0;
+			zactionzoneaxlebase2.position.z = 0;
+			zactionzoneaxlebase2.isPickable = false;
+			zactionzoneaxlebase2.checkCollisions = false;
+			zactionzoneaxlebase2.rotation.x = WTW.getRadians(-zaxisrotx);
+			zactionzoneaxlebase2.rotation.y = WTW.getRadians(-zaxisroty);
+			zactionzoneaxlebase2.rotation.z = WTW.getRadians(-zaxisrotz);
 		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.position.x = 0;
-			actionzoneaxlebase2.position.y = 0;
-			actionzoneaxlebase2.position.z = 0;
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-			actionzoneaxlebase2.rotation.x = WTW.getRadians(-axisrotx);
-			actionzoneaxlebase2.rotation.y = WTW.getRadians(-axisroty);
-			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotz);
-		}
-		if (actionzone == null) {
+		if (zactionzone == null) {
 			/* create the shape for the zone that avatars enter to ride the elevator (parent to and move with) */
 			/* default actionzoneshape is cube and hidden (opacity 0) */
-			var molddef5 = WTW.newMold();
-			molddef5.shape = actionzonedef.actionzoneshape;
-			molddef5.covering = "hidden";
-			molddef5.scaling.x = actionzonedef.scaling.x;
-			molddef5.scaling.y = actionzonedef.scaling.y;
-			molddef5.scaling.z = actionzonedef.scaling.z;
-			molddef5.subdivisions = 20;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-			actionzone.isVisible = false;
-			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
-			var movementtype = "slide";
-			var movementdistance = 0;
-			if (actionzonedef.movementtype != null) {
-				movementtype = actionzonedef.movementtype;
+			var zmolddef5 = WTW.newMold();
+			zmolddef5.shape = zactionzonedef.actionzoneshape;
+			zmolddef5.covering = "hidden";
+			zmolddef5.scaling.x = zactionzonedef.scaling.x;
+			zmolddef5.scaling.y = zactionzonedef.scaling.y;
+			zmolddef5.scaling.z = zactionzonedef.scaling.z;
+			zmolddef5.subdivisions = 20;
+			zmolddef5.opacity = 0;
+			zmolddef5.parentname = zparentname;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
+			zactionzone.isVisible = false;
+			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+			var zmovementtype = "slide";
+			var zmovementdistance = 0;
+			if (zactionzonedef.movementtype != null) {
+				zmovementtype = zactionzonedef.movementtype;
 			}
-			if (WTW.isNumeric(actionzonedef.movementdistance)) {
-				movementdistance = Number(actionzonedef.movementdistance);
+			if (WTW.isNumeric(zactionzonedef.movementdistance)) {
+				zmovementdistance = Number(zactionzonedef.movementdistance);
 			}
 			try {
-				var condition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var test = true;
-					var currentactionzoneind = actionzoneind;
-					if (WTW.actionZones[currentactionzoneind] != null) {
-						var elevatorpath = actionzoneaxle;
-						var elevatorbase = actionzoneaxlebase;
-						var elevatorridealong = actionzone;
-						var currenttest = elevatorpath.position.y;
-						var currentmovementdistance = Number(WTW.actionZones[currentactionzoneind].movementdistance);
-						var doorparts = elevatorpath.getChildren();
-						var cgind = connectinggridind;
+				var zcondition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var ztest = true;
+					var zcurrentactionzoneind = zactionzoneind;
+					if (WTW.actionZones[zcurrentactionzoneind] != null) {
+						var zelevatorpath = zactionzoneaxle;
+						var zelevatorbase = zactionzoneaxlebase;
+						var zelevatorridealong = zactionzone;
+						var zcurrenttest = zelevatorpath.position.y;
+						var zcurrentmovementdistance = Number(WTW.actionZones[zcurrentactionzoneind].movementdistance);
+						var zdoorparts = zelevatorpath.getChildren();
+						var zcgind = zconnectinggridind;
 						for (var i=0; i < WTW.actionZones.length; i++) {
 							if (WTW.actionZones[i] != null) {
-								if (cgind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == "clickactivatedslidingdoor") {
-									var dooractionzoneaxlebase = scene.getMeshByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxlebase-"));
-									if (dooractionzoneaxlebase != null) {
-										if (dooractionzoneaxlebase.position.x == elevatorbase.position.x && dooractionzoneaxlebase.position.z == elevatorbase.position.z) {
-											elevatorridealong.position.y = elevatorpath.position.y + (elevatorridealong.scaling.y/2);
-											dooractionzoneaxlebase.position.y = elevatorpath.position.y;
-											WTW.actionZones[i].axis.position.y = dooractionzoneaxlebase.position.y;
+								if (zcgind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == "clickactivatedslidingdoor") {
+									var zdooractionzoneaxlebase = scene.getMeshByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxlebase-"));
+									if (zdooractionzoneaxlebase != null) {
+										if (zdooractionzoneaxlebase.position.x == zelevatorbase.position.x && zdooractionzoneaxlebase.position.z == zelevatorbase.position.z) {
+											zelevatorridealong.position.y = zelevatorpath.position.y + (zelevatorridealong.scaling.y/2);
+											zdooractionzoneaxlebase.position.y = zelevatorpath.position.y;
+											WTW.actionZones[i].axis.position.y = zdooractionzoneaxlebase.position.y;
 										}
 									}				
 								}
 							}
 						}
-						if (WTW.actionZones[currentactionzoneind] != null) {
-							if (WTW.actionZones[currentactionzoneind].status == 3) {
-								if (Math.round(currenttest * 1000) / 1000 >= Math.round(currentmovementdistance * 1000) / 1000) {
-									elevatorpath.position.y = currentmovementdistance;
-									WTW.actionZones[currentactionzoneind].status = 4;
+						if (WTW.actionZones[zcurrentactionzoneind] != null) {
+							if (WTW.actionZones[zcurrentactionzoneind].status == 3) {
+								if (Math.round(zcurrenttest * 1000) / 1000 >= Math.round(zcurrentmovementdistance * 1000) / 1000) {
+									zelevatorpath.position.y = zcurrentmovementdistance;
+									WTW.actionZones[zcurrentactionzoneind].status = 4;
 								}
-								test = (currenttest < currentmovementdistance);
+								ztest = (zcurrenttest < zcurrentmovementdistance);
 							} else {
-								test = false;
+								ztest = false;
 							}
 						} else {
-							test = false;
+							ztest = false;
 						}
 					} else {
-						test = false;
+						ztest = false;
 					}
-					return test;
+					return ztest;
 				});
-				var condition2 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var test = true;
-					var currentactionzoneind = actionzoneind;
-					if (WTW.actionZones[currentactionzoneind] != null) {
-						var elevatorpath = actionzoneaxle;
-						var elevatorbase = actionzoneaxlebase;
-						var elevatorridealong = actionzone;
-						var currenttest = elevatorpath.position.y;
-						var currentmovementdistance = Number(WTW.actionZones[currentactionzoneind].movementdistance);
-						var doorparts = elevatorpath.getChildren();
-						var cgind = connectinggridind;
+				var zcondition2 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var ztest = true;
+					var zcurrentactionzoneind = zactionzoneind;
+					if (WTW.actionZones[zcurrentactionzoneind] != null) {
+						var zelevatorpath = zactionzoneaxle;
+						var zelevatorbase = zactionzoneaxlebase;
+						var zelevatorridealong = zactionzone;
+						var zcurrenttest = zelevatorpath.position.y;
+						var zcurrentmovementdistance = Number(WTW.actionZones[zcurrentactionzoneind].movementdistance);
+						var zdoorparts = zelevatorpath.getChildren();
+						var zcgind = zconnectinggridind;
 						for (var i=0; i < WTW.actionZones.length; i++) {
 							if (WTW.actionZones[i] != null) {
-								if (cgind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == "clickactivatedslidingdoor") {
-									var dooractionzoneaxlebase = scene.getMeshByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxlebase-"));
-									if (dooractionzoneaxlebase != null) {
-										if (dooractionzoneaxlebase.position.x == elevatorbase.position.x && dooractionzoneaxlebase.position.z == elevatorbase.position.z) {
-											elevatorridealong.position.y = elevatorpath.position.y + (elevatorridealong.scaling.y/2);
-											dooractionzoneaxlebase.position.y = elevatorpath.position.y;
-											WTW.actionZones[i].axis.position.y = dooractionzoneaxlebase.position.y;
+								if (zcgind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == "clickactivatedslidingdoor") {
+									var zdooractionzoneaxlebase = scene.getMeshByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxlebase-"));
+									if (zdooractionzoneaxlebase != null) {
+										if (zdooractionzoneaxlebase.position.x == zelevatorbase.position.x && zdooractionzoneaxlebase.position.z == zelevatorbase.position.z) {
+											zelevatorridealong.position.y = zelevatorpath.position.y + (zelevatorridealong.scaling.y/2);
+											zdooractionzoneaxlebase.position.y = zelevatorpath.position.y;
+											WTW.actionZones[i].axis.position.y = zdooractionzoneaxlebase.position.y;
 										}
 									}				
 								}
 							}
 						}
-						if (WTW.actionZones[currentactionzoneind] != null) {
-							if (WTW.actionZones[currentactionzoneind].status == 2) {
-								if (currenttest <= 0) {
-									elevatorpath.position.y = 0;
-									WTW.actionZones[currentactionzoneind].status = 1;
+						if (WTW.actionZones[zcurrentactionzoneind] != null) {
+							if (WTW.actionZones[zcurrentactionzoneind].status == 2) {
+								if (zcurrenttest <= 0) {
+									zelevatorpath.position.y = 0;
+									WTW.actionZones[zcurrentactionzoneind].status = 1;
 								}
-								test = (currenttest > 0);
+								ztest = (zcurrenttest > 0);
 							} else {
-								test = false;
+								ztest = false;
 							}
 						} else {
-							test = false;
+							ztest = false;
 						}
 					} else {
-						test = false;
+						ztest = false;
 					}
-					return test;
+					return ztest;
 				});
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "position.y", 0.5, condition1)); 
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "position.y", 0.5, zcondition1)); 
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "position.y", -0.5, condition2));
-				WTW.actionZones[actionzoneind].status = 1;
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "position.y", -0.5, zcondition2));
+				WTW.actionZones[zactionzoneind].status = 1;
 			} catch (ex) {
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+				WTW.setOpacity(zactionzonename, .2);
+				WTW.setOpacity(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";
+		WTW.actionZones[zactionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneElevator=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzoneSeat = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneSeat = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* seat - (work in progress) selected mold to click - trigers an animation of your avatar to move in front of the seat and sit */
-	var actionzone;
+	var zactionzone;
 	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = zpositionx; //Number(actionzonedef.axis.position.x);
-		var axispositiony = zpositiony; //Number(actionzonedef.axis.position.y);
-		var axispositionz = zpositionz; //Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var buildingind = -1;
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-		} else if (actionzonedef.thinginfo.thingid != "") {
+		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		var zaxispositionx = zpositionx; //Number(zactionzonedef.axis.position.x);
+		var zaxispositiony = zpositiony; //Number(zactionzonedef.axis.position.y);
+		var zaxispositionz = zpositionz; //Number(zactionzonedef.axis.position.z);
+		var zaxisrotx = Number(zactionzonedef.axis.rotation.x);
+		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
+		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
+		zactionzone = scene.getMeshByID(zactionzonename);
+		var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle-"));
+		var zactionzoneaxlepole = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var zactionzoneaxlebase2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (zactionzoneaxlebase == null) {
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = "box";
+			zmolddef.covering = "hidden";
+			zmolddef.opacity = 0;
+			zmolddef.scaling.x = 1;
+			zmolddef.scaling.y = 1;
+			zmolddef.scaling.z = 1;
+			zmolddef.parentname = zparentname;
+			zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzoneaxlebase.isPickable = false;
+			zactionzoneaxlebase.checkCollisions = false;
+			zactionzoneaxlebase.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.scaling.x = 1;
-			molddef.scaling.y = 1;
-			molddef.scaling.z = 1;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
-			actionzoneaxlebase.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+		if (zactionzoneaxle == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef1 = WTW.newMold();
+			zmolddef1.shape = "box";
+			zmolddef1.covering = "hidden";
+			zmolddef1.scaling.x = 1;
+			zmolddef1.scaling.y = 1;
+			zmolddef1.scaling.z = 1;
+			zmolddef1.opacity = 0;
+			zmolddef1.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+			zactionzoneaxle = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle-"), zmolddef1, zmolddef1.parentname, zmolddef1.covering);
+			zactionzoneaxle.position.x = zaxispositionx;
+			zactionzoneaxle.position.y = zaxispositiony;
+			zactionzoneaxle.position.z = zaxispositionz;
+			//zactionzoneaxle.rotation.x = WTW.getRadians(zaxisrotx);
+			//zactionzoneaxle.rotation.y = WTW.getRadians(zaxisroty);
+			//zactionzoneaxle.rotation.z = WTW.getRadians(zaxisrotz);
+			zactionzoneaxle.isPickable = false;
+			zactionzoneaxle.checkCollisions = false;
+			zactionzoneaxle.position.y -= 8;
+			zactionzoneaxle.position.x += 4;
+			zactionzoneaxle.rotation.y = WTW.getRadians(-90);
 		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = axispositionx;
-			actionzoneaxle.position.y = axispositiony;
-			actionzoneaxle.position.z = axispositionz;
-			//actionzoneaxle.rotation.x = WTW.getRadians(axisrotx);
-			//actionzoneaxle.rotation.y = WTW.getRadians(axisroty);
-			//actionzoneaxle.rotation.z = WTW.getRadians(axisrotz);
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
-			actionzoneaxle.position.y -= 8;
-			actionzoneaxle.position.x += 4;
-			actionzoneaxle.rotation.y = WTW.getRadians(-90);
+		if (zactionzoneaxlepole == null && WTW.adminView == 1) {
+			var zmolddef4 = WTW.newMold();
+			zmolddef4.shape = "box";
+			zmolddef4.covering = "texture";
+			zmolddef4.scaling.x = .20;
+			zmolddef4.scaling.y = .20;
+			zmolddef4.scaling.z = 10;
+			zmolddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef4.opacity = 1;
+			zmolddef4.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zactionzoneaxlepole.isPickable = false;
+			zactionzoneaxlepole.checkCollisions = false;
+			zactionzoneaxlepole.rotation.x = WTW.getRadians(90);
+			zactionzoneaxlepole.position.y += 5;
 		}
-		if (actionzoneaxlepole == null && WTW.adminView == 1) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = .20;
-			molddef4.scaling.z = 10;
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 1;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
-			actionzoneaxlepole.rotation.x = WTW.getRadians(90);
-			actionzoneaxlepole.position.y += 5;
+		if (zactionzoneaxlebase2 == null) {
+			var zmolddef2 = WTW.newMold();
+			zmolddef2.shape = "box";
+			zmolddef2.covering = "hidden";
+			zmolddef2.scaling.x = 1;
+			zmolddef2.scaling.y = 1;
+			zmolddef2.scaling.z = 1;
+			zmolddef2.opacity = 0;
+			zmolddef2.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlebase2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"), zmolddef2, zmolddef2.parentname, zmolddef2.covering);
+			zactionzoneaxlebase2.isPickable = false;
+			zactionzoneaxlebase2.checkCollisions = false;
+			zactionzoneaxlebase2.rotation.y = WTW.getRadians(-90);
 		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.scaling.x = 1;
-			molddef2.scaling.y = 1;
-			molddef2.scaling.z = 1;
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-			actionzoneaxlebase2.rotation.y = WTW.getRadians(-90);
-		}
-		if (actionzone == null) {
-			var molddef5 = WTW.newMold();
-			molddef5.shape = actionzonedef.actionzoneshape;
-			molddef5.covering = "hidden";
-			molddef5.position.x = zpositionx;
-			molddef5.position.y = zpositiony;
-			molddef5.position.z = zpositionz;
-			molddef5.scaling.x = actionzonedef.scaling.x;
-			molddef5.scaling.y = actionzonedef.scaling.y;
-			molddef5.scaling.z = actionzonedef.scaling.z;
-			molddef5.subdivisions = 12;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
+		if (zactionzone == null) {
+			var zmolddef5 = WTW.newMold();
+			zmolddef5.shape = zactionzonedef.actionzoneshape;
+			zmolddef5.covering = "hidden";
+			zmolddef5.position.x = zpositionx;
+			zmolddef5.position.y = zpositiony;
+			zmolddef5.position.z = zpositionz;
+			zmolddef5.scaling.x = zactionzonedef.scaling.x;
+			zmolddef5.scaling.y = zactionzonedef.scaling.y;
+			zmolddef5.scaling.z = zactionzonedef.scaling.z;
+			zmolddef5.subdivisions = 12;
+			zmolddef5.opacity = 0;
+			zmolddef5.parentname = zparentname;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
 		}
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+				WTW.setOpacity(zactionzonename, .2);
+				WTW.setOpacity(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";	
+		WTW.actionZones[zactionzoneind].shown = "2";	
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneSeat=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzonePassengerSeat = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzonePassengerSeat = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* passengerseat - (work in progress) combo of seat and ridealong - seat functionality with the addition of parenting to mold for ridealong movement */
-	var actionzone;
+	var zactionzone;
 	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = Number(actionzonedef.axis.position.x);
-		var axispositiony = Number(actionzonedef.axis.position.y);
-		var axispositionz = Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var buildingind = -1;
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-		} else if (actionzonedef.thinginfo.thingid != "") {
+		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		var zaxispositionx = Number(zactionzonedef.axis.position.x);
+		var zaxispositiony = Number(zactionzonedef.axis.position.y);
+		var zaxispositionz = Number(zactionzonedef.axis.position.z);
+		var zaxisrotx = Number(zactionzonedef.axis.rotation.x);
+		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
+		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
+		zactionzone = scene.getMeshByID(zactionzonename);
+		var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle-"));
+		var zactionzoneaxlepole = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var zactionzoneaxlebase2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (zactionzoneaxlebase == null) {
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = "box";
+			zmolddef.covering = "hidden";
+			zmolddef.opacity = 0;
+			zmolddef.scaling.x = 1;
+			zmolddef.scaling.y = 1;
+			zmolddef.scaling.z = 1;
+			zmolddef.parentname = zparentname;
+			zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzoneaxlebase.isPickable = false;
+			zactionzoneaxlebase.checkCollisions = false;
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.scaling.x = 1;
-			molddef.scaling.y = 1;
-			molddef.scaling.z = 1;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
+		if (zactionzoneaxle == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef1 = WTW.newMold();
+			zmolddef1.shape = "box";
+			zmolddef1.covering = "hidden";
+			zmolddef1.scaling.x = 1;
+			zmolddef1.scaling.y = 1;
+			zmolddef1.scaling.z = 1;
+			zmolddef1.opacity = 0;
+			zmolddef1.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+			zactionzoneaxle = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle-"), zmolddef1, zmolddef1.parentname, zmolddef1.covering);
+			zactionzoneaxle.position.x = zaxispositionx;
+			zactionzoneaxle.position.y = zaxispositiony;
+			zactionzoneaxle.position.z = zaxispositionz;
+			zactionzoneaxle.rotation.x = WTW.getRadians(zaxisrotx);
+			zactionzoneaxle.rotation.y = WTW.getRadians(zaxisroty);
+			zactionzoneaxle.rotation.z = WTW.getRadians(zaxisrotz);
+			zactionzoneaxle.isPickable = false;
+			zactionzoneaxle.checkCollisions = false;
 		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = axispositionx;
-			actionzoneaxle.position.y = axispositiony;
-			actionzoneaxle.position.z = axispositionz;
-			actionzoneaxle.rotation.x = WTW.getRadians(axisrotx);
-			actionzoneaxle.rotation.y = WTW.getRadians(axisroty);
-			actionzoneaxle.rotation.z = WTW.getRadians(axisrotz);
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
+		if (zactionzoneaxlepole == null && WTW.adminView == 1) {
+			var zmolddef4 = WTW.newMold();
+			zmolddef4.shape = "box";
+			zmolddef4.covering = "texture";
+			zmolddef4.scaling.x = .20;
+			zmolddef4.scaling.y = .20;
+			zmolddef4.scaling.z = 10;
+			zmolddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef4.opacity = 0;
+			zmolddef4.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zactionzoneaxlepole.position.z = 5;
+			zactionzoneaxlepole.isPickable = false;
+			zactionzoneaxlepole.checkCollisions = false;
 		}
-		if (actionzoneaxlepole == null && WTW.adminView == 1) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = .20;
-			molddef4.scaling.z = 10;
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 0;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.position.z = 5;
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
+		if (zactionzoneaxlebase2 == null) {
+			var zmolddef2 = WTW.newMold();
+			zmolddef2.shape = "box";
+			zmolddef2.covering = "hidden";
+			zmolddef2.scaling.x = 1;
+			zmolddef2.scaling.y = 1;
+			zmolddef2.scaling.z = 1;
+			zmolddef2.opacity = 0;
+			zmolddef2.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlebase2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"), zmolddef2, zmolddef2.parentname, zmolddef2.covering);
+			zactionzoneaxlebase2.isPickable = false;
+			zactionzoneaxlebase2.checkCollisions = false;
 		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.scaling.x = 1;
-			molddef2.scaling.y = 1;
-			molddef2.scaling.z = 1;
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-		}
-		if (actionzone == null) {
-			var molddef5 = WTW.newMold();
-			molddef5.shape = actionzonedef.actionzoneshape;
-			molddef5.covering = "hidden";
-			molddef5.position.x = zpositionx;
-			molddef5.position.y = zpositiony;
-			molddef5.position.z = zpositionz;
-			molddef5.scaling.x = actionzonedef.scaling.x;
-			molddef5.scaling.y = actionzonedef.scaling.y;
-			molddef5.scaling.z = actionzonedef.scaling.z;
-			molddef5.subdivisions = 12;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+		if (zactionzone == null) {
+			var zmolddef5 = WTW.newMold();
+			zmolddef5.shape = zactionzonedef.actionzoneshape;
+			zmolddef5.covering = "hidden";
+			zmolddef5.position.x = zpositionx;
+			zmolddef5.position.y = zpositiony;
+			zmolddef5.position.z = zpositionz;
+			zmolddef5.scaling.x = zactionzonedef.scaling.x;
+			zmolddef5.scaling.y = zactionzonedef.scaling.y;
+			zmolddef5.scaling.z = zactionzonedef.scaling.z;
+			zmolddef5.subdivisions = 12;
+			zmolddef5.opacity = 0;
+			zmolddef5.parentname = zparentname;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
+			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 		}
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+				WTW.setOpacity(zactionzonename, .2);
+				WTW.setOpacity(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";		
+		WTW.actionZones[zactionzoneind].shown = "2";		
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzonePassengerSeat=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzoneDriverSeat = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneDriverSeat = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* driverseat - (work in progress) seat expansion with heads up display for driving, animations for steering, and ridealong */
-	var actionzone;
+	var zactionzone;
 	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = Number(actionzonedef.axis.position.x);
-		var axispositiony = Number(actionzonedef.axis.position.y);
-		var axispositionz = Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var buildingind = -1;
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-		} else if (actionzonedef.thinginfo.thingid != "") {
+		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		var zaxispositionx = Number(zactionzonedef.axis.position.x);
+		var zaxispositiony = Number(zactionzonedef.axis.position.y);
+		var zaxispositionz = Number(zactionzonedef.axis.position.z);
+		var zaxisrotx = Number(zactionzonedef.axis.rotation.x);
+		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
+		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
+		zactionzone = scene.getMeshByID(zactionzonename);
+		var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle-"));
+		var zactionzoneaxlepole = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var zactionzoneaxlebase2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (zactionzoneaxlebase == null) {
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = "box";
+			zmolddef.covering = "hidden";
+			zmolddef.opacity = 0;
+			zmolddef.scaling.x = 1;
+			zmolddef.scaling.y = 1;
+			zmolddef.scaling.z = 1;
+			zmolddef.parentname = zparentname;
+			zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzoneaxlebase.isPickable = false;
+			zactionzoneaxlebase.checkCollisions = false;
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.scaling.x = 1;
-			molddef.scaling.y = 1;
-			molddef.scaling.z = 1;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
+		if (zactionzoneaxle == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef1 = WTW.newMold();
+			zmolddef1.shape = "box";
+			zmolddef1.covering = "hidden";
+			zmolddef1.scaling.x = 1;
+			zmolddef1.scaling.y = 1;
+			zmolddef1.scaling.z = 1;
+			zmolddef1.opacity = 0;
+			zmolddef1.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+			zactionzoneaxle = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle-"), zmolddef1, zmolddef1.parentname, zmolddef1.covering);
+			zactionzoneaxle.position.x = zaxispositionx;
+			zactionzoneaxle.position.y = zaxispositiony;
+			zactionzoneaxle.position.z = zaxispositionz;
+			zactionzoneaxle.rotation.x = WTW.getRadians(zaxisrotx);
+			zactionzoneaxle.rotation.y = WTW.getRadians(zaxisroty);
+			zactionzoneaxle.rotation.z = WTW.getRadians(zaxisrotz);
+			zactionzoneaxle.isPickable = false;
+			zactionzoneaxle.checkCollisions = false;
 		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = axispositionx;
-			actionzoneaxle.position.y = axispositiony;
-			actionzoneaxle.position.z = axispositionz;
-			actionzoneaxle.rotation.x = WTW.getRadians(axisrotx);
-			actionzoneaxle.rotation.y = WTW.getRadians(axisroty);
-			actionzoneaxle.rotation.z = WTW.getRadians(axisrotz);
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
+		if (zactionzoneaxlepole == null && WTW.adminView == 1) {
+			var zmolddef4 = WTW.newMold();
+			zmolddef4.shape = "box";
+			zmolddef4.covering = "texture";
+			zmolddef4.scaling.x = .20;
+			zmolddef4.scaling.y = .20;
+			zmolddef4.scaling.z = 10;
+			zmolddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef4.opacity = 0;
+			zmolddef4.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zactionzoneaxlepole.position.z = 5;
+			zactionzoneaxlepole.isPickable = false;
+			zactionzoneaxlepole.checkCollisions = false;
 		}
-		if (actionzoneaxlepole == null && WTW.adminView == 1) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = .20;
-			molddef4.scaling.z = 10;
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 0;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.position.z = 5;
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
+		if (zactionzoneaxlebase2 == null) {
+			var zmolddef2 = WTW.newMold();
+			zmolddef2.shape = "box";
+			zmolddef2.covering = "hidden";
+			zmolddef2.scaling.x = 1;
+			zmolddef2.scaling.y = 1;
+			zmolddef2.scaling.z = 1;
+			zmolddef2.opacity = 0;
+			zmolddef2.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlebase2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"), zmolddef2, zmolddef2.parentname, zmolddef2.covering);
+			zactionzoneaxlebase2.isPickable = false;
+			zactionzoneaxlebase2.checkCollisions = false;
 		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.scaling.x = 1;
-			molddef2.scaling.y = 1;
-			molddef2.scaling.z = 1;
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-		}
-		if (actionzone == null) {
-			var molddef5 = WTW.newMold();
-			molddef5.shape = actionzonedef.actionzoneshape;
-			molddef5.covering = "hidden";
-			molddef5.position.x = zpositionx;
-			molddef5.position.y = zpositiony;
-			molddef5.position.z = zpositionz;
-			molddef5.scaling.x = actionzonedef.scaling.x;
-			molddef5.scaling.y = actionzonedef.scaling.y;
-			molddef5.scaling.z = actionzonedef.scaling.z;
-			molddef5.subdivisions = 12;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+		if (zactionzone == null) {
+			var zmolddef5 = WTW.newMold();
+			zmolddef5.shape = zactionzonedef.actionzoneshape;
+			zmolddef5.covering = "hidden";
+			zmolddef5.position.x = zpositionx;
+			zmolddef5.position.y = zpositiony;
+			zmolddef5.position.z = zpositionz;
+			zmolddef5.scaling.x = zactionzonedef.scaling.x;
+			zmolddef5.scaling.y = zactionzonedef.scaling.y;
+			zmolddef5.scaling.z = zactionzonedef.scaling.z;
+			zmolddef5.subdivisions = 12;
+			zmolddef5.opacity = 0;
+			zmolddef5.parentname = zparentname;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
+			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 		}
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+				WTW.setOpacity(zactionzonename, .2);
+				WTW.setOpacity(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";		
+		WTW.actionZones[zactionzoneind].shown = "2";		
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneDriverSeat=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzoneDriverTurnAngle = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneDriverTurnAngle = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* driverturnangle - (work in progress) axis used as a parent mold for any mold that should rotate with the driver turning angle */
-	var actionzone;
+	var zactionzone;
 	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = Number(actionzonedef.axis.position.x);
-		var axispositiony = Number(actionzonedef.axis.position.y);
-		var axispositionz = Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var buildingind = -1;
-		var namepart = parentname.split('-');
-		var connectinggridind = -1;
-		if (namepart[1] != null) {
-			connectinggridind = Number(namepart[1]);
+		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		var zaxispositionx = Number(zactionzonedef.axis.position.x);
+		var zaxispositiony = Number(zactionzonedef.axis.position.y);
+		var zaxispositionz = Number(zactionzonedef.axis.position.z);
+		var zaxisrotx = Number(zactionzonedef.axis.rotation.x);
+		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
+		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
+		var znamepart = zparentname.split('-');
+		var zconnectinggridind = -1;
+		if (znamepart[1] != null) {
+			zconnectinggridind = Number(znamepart[1]);
 		}
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-		} else if (actionzonedef.thinginfo.thingid != "") {
+		zactionzone = scene.getMeshByID(zactionzonename);
+		var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle-"));
+		var zactionzoneaxle2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle2-"));
+		var zactionzoneaxlepole = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var zactionzoneaxlepole2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole2-"));
+		var zactionzoneaxlebase2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (zactionzoneaxlebase == null) {
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = "box";
+			zmolddef.covering = "hidden";
+			zmolddef.opacity = 0;
+			zmolddef.parentname = zparentname;
+			zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzoneaxlebase.position.x = zaxispositionx;
+			zactionzoneaxlebase.position.y = zaxispositiony;
+			zactionzoneaxlebase.position.z = zaxispositionz;
+			zactionzoneaxlebase.isPickable = false;
+			zactionzoneaxlebase.checkCollisions = false;
+			zactionzoneaxlebase.rotation.x = WTW.getRadians(zaxisrotx);
+			zactionzoneaxlebase.rotation.y = WTW.getRadians(zaxisroty);
+			zactionzoneaxlebase.rotation.z = WTW.getRadians(zaxisrotz);
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxle2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle2-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlepole2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole2-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.position.x = axispositionx;
-			actionzoneaxlebase.position.y = axispositiony;
-			actionzoneaxlebase.position.z = axispositionz;
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
-			actionzoneaxlebase.rotation.x = WTW.getRadians(axisrotx);
-			actionzoneaxlebase.rotation.y = WTW.getRadians(axisroty);
-			actionzoneaxlebase.rotation.z = WTW.getRadians(axisrotz);
+		if (zactionzoneaxle == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef1 = WTW.newMold();
+			zmolddef1.shape = "box";
+			zmolddef1.covering = "hidden";
+			zmolddef1.scaling.x = 1;
+			zmolddef1.scaling.y = 1;
+			zmolddef1.scaling.z = 1;
+			zmolddef1.opacity = 0;
+			zmolddef1.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+			zactionzoneaxle = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle-"), zmolddef1, zmolddef1.parentname, zmolddef1.covering);
+			zactionzoneaxle.position.x = 0;
+			zactionzoneaxle.position.y = 0;
+			zactionzoneaxle.position.z = 0;
+			zactionzoneaxle.isPickable = false;
+			zactionzoneaxle.checkCollisions = false;
 		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = 0;
-			actionzoneaxle.position.y = 0;
-			actionzoneaxle.position.z = 0;
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
+		if (zactionzoneaxlepole == null && WTW.adminView == 1) {
+			var zmolddef4 = WTW.newMold();
+			zmolddef4.shape = "box";
+			zmolddef4.covering = "texture";
+			zmolddef4.scaling.x = .20;
+			zmolddef4.scaling.y = 20;
+			zmolddef4.scaling.z = .20;
+			zmolddef4.rotation.x = Number(zactionzonedef.axis.rotation.x);
+			zmolddef4.rotation.y = Number(zactionzonedef.axis.rotation.y);
+			zmolddef4.rotation.z = Number(zactionzonedef.axis.rotation.z);
+			zmolddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef4.opacity = 0;
+			zmolddef4.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zactionzoneaxlepole.isPickable = false;
+			zactionzoneaxlepole.checkCollisions = false;
 		}
-		if (actionzoneaxlepole == null && WTW.adminView == 1) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = 20;
-			molddef4.scaling.z = .20;
-			molddef4.rotation.x = Number(actionzonedef.axis.rotation.x);
-			molddef4.rotation.y = Number(actionzonedef.axis.rotation.y);
-			molddef4.rotation.z = Number(actionzonedef.axis.rotation.z);
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 0;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
+		if (zactionzoneaxlebase2 == null) {
+			var zmolddef2 = WTW.newMold();
+			zmolddef2.shape = "box";
+			zmolddef2.covering = "hidden";
+			zmolddef2.opacity = 0;
+			zmolddef2.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlebase2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"), zmolddef2, zmolddef2.parentname, zmolddef2.covering);
+			zactionzoneaxlebase2.position.x = 0;
+			zactionzoneaxlebase2.position.y = 0;
+			zactionzoneaxlebase2.position.z = 0;
+			zactionzoneaxlebase2.isPickable = false;
+			zactionzoneaxlebase2.checkCollisions = false;
+			zactionzoneaxlebase2.rotation.x = WTW.getRadians(-zaxisrotx);
+			zactionzoneaxlebase2.rotation.y = WTW.getRadians(-zaxisroty);
+			zactionzoneaxlebase2.rotation.z = WTW.getRadians(-zaxisrotz);
 		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.position.x = 0;
-			actionzoneaxlebase2.position.y = 0;
-			actionzoneaxlebase2.position.z = 0;
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-			actionzoneaxlebase2.rotation.x = WTW.getRadians(-axisrotx);
-			actionzoneaxlebase2.rotation.y = WTW.getRadians(-axisroty);
-			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotz);
-		}
-		if (actionzone == null) {
-			var molddef5 = WTW.newMold();
-			molddef5.shape = actionzonedef.actionzoneshape;
-			molddef5.covering = "hidden";
-			molddef5.scaling.x = actionzonedef.scaling.x;
-			molddef5.scaling.y = actionzonedef.scaling.y;
-			molddef5.scaling.z = actionzonedef.scaling.z;
-			molddef5.subdivisions = 20;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
-			var axlename = actionzonename.replace("actionzone-","actionzoneaxle-"); 
+		if (zactionzone == null) {
+			var zmolddef5 = WTW.newMold();
+			zmolddef5.shape = zactionzonedef.actionzoneshape;
+			zmolddef5.covering = "hidden";
+			zmolddef5.scaling.x = zactionzonedef.scaling.x;
+			zmolddef5.scaling.y = zactionzonedef.scaling.y;
+			zmolddef5.scaling.z = zactionzonedef.scaling.z;
+			zmolddef5.subdivisions = 20;
+			zmolddef5.opacity = 0;
+			zmolddef5.parentname = zparentname;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
+			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+			var zaxlename = zactionzonename.replace("actionzone-","actionzoneaxle-"); 
 			try {
-				var condition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var currentfactor = Number(actionzonedef.axis.rotatedegrees);
-					var currentturn = 0;
-					var currentconnectinggridind = connectinggridind;
-					var testconnectinggridind = -2;
-					var test = false;
+				var zcondition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var zcurrentfactor = Number(zactionzonedef.axis.rotatedegrees);
+					var zcurrentturn = 0;
+					var zcurrentconnectinggridind = zconnectinggridind;
+					var ztestconnectinggridind = -2;
+					var ztest = false;
 					if (WTW.drive != null) {
 						if (WTW.isNumeric(WTW.drive.currentturn)) {
-							currentturn = Number(WTW.drive.currentturn);
+							zcurrentturn = Number(WTW.drive.currentturn);
 						}
 						if (WTW.isNumeric(WTW.drive.connectinggridind)) {
-							testconnectinggridind = Number(WTW.drive.connectinggridind);
+							ztestconnectinggridind = Number(WTW.drive.connectinggridind);
 						}
-						currentturn = currentturn * currentfactor;
-						var currentactionzoneind = actionzoneind;
-						var currentdoor = actionzoneaxle;
-						var currentdoorroty = Math.round(WTW.getDegrees(currentdoor.rotation.y) * 100) / 100;
-						if (currentdoorroty > 180) {
-							currentdoorroty -= 360;
+						zcurrentturn = zcurrentturn * zcurrentfactor;
+						var zcurrentactionzoneind = zactionzoneind;
+						var zcurrentdoor = zactionzoneaxle;
+						var zcurrentdoorroty = Math.round(WTW.getDegrees(zcurrentdoor.rotation.y) * 100) / 100;
+						if (zcurrentdoorroty > 180) {
+							zcurrentdoorroty -= 360;
 						}
-						if (currentconnectinggridind == testconnectinggridind) {
-							if (WTW.actionZones[currentactionzoneind] != null) {
-								if (currentdoorroty < Math.round(currentturn * 100) / 100) {
-									test = true;
+						if (zcurrentconnectinggridind == ztestconnectinggridind) {
+							if (WTW.actionZones[zcurrentactionzoneind] != null) {
+								if (zcurrentdoorroty < Math.round(zcurrentturn * 100) / 100) {
+									ztest = true;
 								}
 							}
 						}
 					}
-					return test;
+					return ztest;
 				});
-				var condition2 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var currentfactor = Number(actionzonedef.axis.rotatedegrees);
-					var currentturn = 0;
-					var currentconnectinggridind = connectinggridind;
-					var testconnectinggridind = -2;
-					var test = false;
+				var zcondition2 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var zcurrentfactor = Number(zactionzonedef.axis.rotatedegrees);
+					var zcurrentturn = 0;
+					var zcurrentconnectinggridind = zconnectinggridind;
+					var ztestconnectinggridind = -2;
+					var ztest = false;
 					if (WTW.drive != null) {
 						if (WTW.isNumeric(WTW.drive.currentturn)) {
-							currentturn = Number(WTW.drive.currentturn);
+							zcurrentturn = Number(WTW.drive.currentturn);
 						}
 						if (WTW.isNumeric(WTW.drive.connectinggridind)) {
-							testconnectinggridind = Number(WTW.drive.connectinggridind);
+							ztestconnectinggridind = Number(WTW.drive.connectinggridind);
 						}
-						currentturn = currentturn * currentfactor;
-						var currentactionzoneind = actionzoneind;
-						var currentdoor = actionzoneaxle;
-						var currentdoorroty = Math.round(WTW.getDegrees(currentdoor.rotation.y) * 100) / 100;
-						if (currentdoorroty > 180) {
-							currentdoorroty -= 360;
+						zcurrentturn = zcurrentturn * zcurrentfactor;
+						var zcurrentactionzoneind = zactionzoneind;
+						var zcurrentdoor = zactionzoneaxle;
+						var zcurrentdoorroty = Math.round(WTW.getDegrees(zcurrentdoor.rotation.y) * 100) / 100;
+						if (zcurrentdoorroty > 180) {
+							zcurrentdoorroty -= 360;
 						}
-						if (currentconnectinggridind == testconnectinggridind) {
-							if (WTW.actionZones[currentactionzoneind] != null) {
-								if (currentdoorroty > Math.round(currentturn * 100) / 100) {
-									test = true;
+						if (zcurrentconnectinggridind == ztestconnectinggridind) {
+							if (WTW.actionZones[zcurrentactionzoneind] != null) {
+								if (zcurrentdoorroty > Math.round(zcurrentturn * 100) / 100) {
+									ztest = true;
 								}
 							}
 						}
 					}
-					return test;
+					return ztest;
 				});
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "rotation.y", 0.1, condition1)); 
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "rotation.y", 0.1, zcondition1)); 
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "rotation.y", -0.1, condition2));
-				WTW.actionZones[actionzoneind].status = 1;
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "rotation.y", -0.1, zcondition2));
+				WTW.actionZones[zactionzoneind].status = 1;
 			} catch (ex) {
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+				WTW.setOpacity(zactionzonename, .2);
+				WTW.setOpacity(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";
+		WTW.actionZones[zactionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneDriverTurnAngle=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzoneDriverTurningWheel = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneDriverTurningWheel = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* driverturningwheel - (work in progress) axis used as a parent mold for any mold that should rotate with the driver turning angle with the additional rotation of movement tires */
-	var actionzone;
+	var zactionzone;
 	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = Number(actionzonedef.axis.position.x);
-		var axispositiony = Number(actionzonedef.axis.position.y);
-		var axispositionz = Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var buildingind = -1;
-		var namepart = parentname.split('-');
-		var connectinggridind = -1;
-		if (namepart[1] != null) {
-			connectinggridind = Number(namepart[1]);
+		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		var zaxispositionx = Number(zactionzonedef.axis.position.x);
+		var zaxispositiony = Number(zactionzonedef.axis.position.y);
+		var zaxispositionz = Number(zactionzonedef.axis.position.z);
+		var zaxisrotx = Number(zactionzonedef.axis.rotation.x);
+		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
+		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
+		var znamepart = zparentname.split('-');
+		var zconnectinggridind = -1;
+		if (znamepart[1] != null) {
+			zconnectinggridind = Number(znamepart[1]);
 		}
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-		} else if (actionzonedef.thinginfo.thingid != "") {
+		zactionzone = scene.getMeshByID(zactionzonename);
+		var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle-"));
+		var zactionzoneaxle2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle2-"));
+		var zactionzoneaxlepole = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var zactionzoneaxlepole2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole2-"));
+		var zactionzoneaxlebase2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (zactionzoneaxlebase == null) {
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = "box";
+			zmolddef.covering = "hidden";
+			zmolddef.opacity = 0;
+			zmolddef.parentname = zparentname;
+			zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzoneaxlebase.position.x = zaxispositionx;
+			zactionzoneaxlebase.position.y = zaxispositiony;
+			zactionzoneaxlebase.position.z = zaxispositionz;
+			zactionzoneaxlebase.isPickable = false;
+			zactionzoneaxlebase.checkCollisions = false;
+			zactionzoneaxlebase.rotation.x = WTW.getRadians(zaxisrotx);
+			zactionzoneaxlebase.rotation.y = WTW.getRadians(zaxisroty);
+			zactionzoneaxlebase.rotation.z = WTW.getRadians(zaxisrotz);
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxle2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle2-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlepole2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole2-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.position.x = axispositionx;
-			actionzoneaxlebase.position.y = axispositiony;
-			actionzoneaxlebase.position.z = axispositionz;
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
-			actionzoneaxlebase.rotation.x = WTW.getRadians(axisrotx);
-			actionzoneaxlebase.rotation.y = WTW.getRadians(axisroty);
-			actionzoneaxlebase.rotation.z = WTW.getRadians(axisrotz);
+		if (zactionzoneaxle == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef1 = WTW.newMold();
+			zmolddef1.shape = "box";
+			zmolddef1.covering = "hidden";
+			zmolddef1.scaling.x = 1;
+			zmolddef1.scaling.y = 1;
+			zmolddef1.scaling.z = 1;
+			zmolddef1.opacity = 0;
+			zmolddef1.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+			zactionzoneaxle = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle-"), zmolddef1, zmolddef1.parentname, zmolddef1.covering);
+			zactionzoneaxle.position.x = 0;
+			zactionzoneaxle.position.y = 0;
+			zactionzoneaxle.position.z = 0;
+			zactionzoneaxle.isPickable = false;
+			zactionzoneaxle.checkCollisions = false;
 		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = 0;
-			actionzoneaxle.position.y = 0;
-			actionzoneaxle.position.z = 0;
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
+		if (zactionzoneaxlepole == null && WTW.adminView == 1) {
+			var zmolddef4 = WTW.newMold();
+			zmolddef4.shape = "box";
+			zmolddef4.covering = "texture";
+			zmolddef4.scaling.x = .20;
+			zmolddef4.scaling.y = 20;
+			zmolddef4.scaling.z = .20;
+			zmolddef4.rotation.x = Number(zactionzonedef.axis.rotation.x);
+			zmolddef4.rotation.y = Number(zactionzonedef.axis.rotation.y);
+			zmolddef4.rotation.z = Number(zactionzonedef.axis.rotation.z);
+			zmolddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef4.opacity = 0;
+			zmolddef4.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zactionzoneaxlepole.isPickable = false;
+			zactionzoneaxlepole.checkCollisions = false;
 		}
-		if (actionzoneaxlepole == null && WTW.adminView == 1) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = 20;
-			molddef4.scaling.z = .20;
-			molddef4.rotation.x = Number(actionzonedef.axis.rotation.x);
-			molddef4.rotation.y = Number(actionzonedef.axis.rotation.y);
-			molddef4.rotation.z = Number(actionzonedef.axis.rotation.z);
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 0;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
+		if (zactionzoneaxlebase2 == null) {
+			var zmolddef2 = WTW.newMold();
+			zmolddef2.shape = "box";
+			zmolddef2.covering = "hidden";
+			zmolddef2.opacity = 0;
+			zmolddef2.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlebase2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"), zmolddef2, zmolddef2.parentname, zmolddef2.covering);
+			zactionzoneaxlebase2.position.x = 0;
+			zactionzoneaxlebase2.position.y = 0;
+			zactionzoneaxlebase2.position.z = 0;
+			zactionzoneaxlebase2.isPickable = false;
+			zactionzoneaxlebase2.checkCollisions = false;
+			zactionzoneaxlebase2.rotation.x = WTW.getRadians(-zaxisrotx);
+			zactionzoneaxlebase2.rotation.y = WTW.getRadians(-zaxisroty);
+			zactionzoneaxlebase2.rotation.z = WTW.getRadians(-zaxisrotz);
 		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.position.x = 0;
-			actionzoneaxlebase2.position.y = 0;
-			actionzoneaxlebase2.position.z = 0;
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-			actionzoneaxlebase2.rotation.x = WTW.getRadians(-axisrotx);
-			actionzoneaxlebase2.rotation.y = WTW.getRadians(-axisroty);
-			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotz);
-		}
-		if (actionzoneaxle2 == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef6 = WTW.newMold();
-			molddef6.shape = "box";
-			molddef6.covering = "hidden";
-			molddef6.scaling.x = 1;
-			molddef6.scaling.y = 1;
-			molddef6.scaling.z = 1;
-			molddef6.opacity = 0;
-			molddef6.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase2-");
-			actionzoneaxle2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle2-"), molddef6, molddef6.parentname, molddef6.covering);
-			actionzoneaxle2.position.x = 0;
-			actionzoneaxle2.position.y = 0;
-			actionzoneaxle2.position.z = 0;
-			actionzoneaxle2.isPickable = false;
-			actionzoneaxle2.checkCollisions = false;
+		if (zactionzoneaxle2 == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef6 = WTW.newMold();
+			zmolddef6.shape = "box";
+			zmolddef6.covering = "hidden";
+			zmolddef6.scaling.x = 1;
+			zmolddef6.scaling.y = 1;
+			zmolddef6.scaling.z = 1;
+			zmolddef6.opacity = 0;
+			zmolddef6.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase2-");
+			zactionzoneaxle2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle2-"), zmolddef6, zmolddef6.parentname, zmolddef6.covering);
+			zactionzoneaxle2.position.x = 0;
+			zactionzoneaxle2.position.y = 0;
+			zactionzoneaxle2.position.z = 0;
+			zactionzoneaxle2.isPickable = false;
+			zactionzoneaxle2.checkCollisions = false;
 			try {
-				var condition3 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var currentfactor = Number(actionzonedef.axis.rotatedegrees);
-					var currentspeed = 0;
-					var currentdirection = 1;
-					var currentconnectinggridind = connectinggridind;
-					var testconnectinggridind = -2;
+				var zcondition3 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var zcurrentfactor = Number(zactionzonedef.axis.rotatedegrees);
+					var zcurrentspeed = 0;
+					var zcurrentdirection = 1;
+					var zcurrentconnectinggridind = zconnectinggridind;
+					var ztestconnectinggridind = -2;
 					if (WTW.drive != null) {
 						if (WTW.isNumeric(WTW.drive.currentspeed)) {
-							currentspeed = Number(WTW.drive.currentspeed);
+							zcurrentspeed = Number(WTW.drive.currentspeed);
 						}
 						if (WTW.isNumeric(WTW.drive.currentdirection)) {
-							currentdirection = Number(WTW.drive.currentdirection);
+							zcurrentdirection = Number(WTW.drive.currentdirection);
 						}
 						if (WTW.isNumeric(WTW.drive.connectinggridind)) {
-							testconnectinggridind = Number(WTW.drive.connectinggridind);
+							ztestconnectinggridind = Number(WTW.drive.connectinggridind);
 						}
-						currentspeed = currentspeed / 100;
-						var test = false;
-						var currentactionzoneind = actionzoneind;
-						if (currentconnectinggridind == testconnectinggridind) {
-							if (currentdirection == 1) {
-								if (WTW.actionZones[currentactionzoneind] != null) {
-									if (currentspeed != 0) {
-										test = true;
+						zcurrentspeed = zcurrentspeed / 100;
+						var ztest = false;
+						var zcurrentactionzoneind = zactionzoneind;
+						if (zcurrentconnectinggridind == ztestconnectinggridind) {
+							if (zcurrentdirection == 1) {
+								if (WTW.actionZones[zcurrentactionzoneind] != null) {
+									if (zcurrentspeed != 0) {
+										ztest = true;
 									}
 								}
 							}
 						}
 					}
-					return test;
+					return ztest;
 				});
-				var condition4 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var currentfactor = Number(actionzonedef.axis.rotatedegrees);
-					var currentspeed = 0;
-					var currentdirection = 1;
-					var currentconnectinggridind = connectinggridind;
-					var testconnectinggridind = -2;
-					var test = false;
+				var zcondition4 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var zcurrentfactor = Number(zactionzonedef.axis.rotatedegrees);
+					var zcurrentspeed = 0;
+					var zcurrentdirection = 1;
+					var zcurrentconnectinggridind = zconnectinggridind;
+					var ztestconnectinggridind = -2;
+					var ztest = false;
 					if (WTW.drive != null) {
 						if (WTW.isNumeric(WTW.drive.currentspeed)) {
-							currentspeed = Number(WTW.drive.currentspeed);
+							zcurrentspeed = Number(WTW.drive.currentspeed);
 						}
 						if (WTW.isNumeric(WTW.drive.currentdirection)) {
-							currentdirection = Number(WTW.drive.currentdirection);
+							zcurrentdirection = Number(WTW.drive.currentdirection);
 						}
 						if (WTW.isNumeric(WTW.drive.connectinggridind)) {
-							testconnectinggridind = Number(WTW.drive.connectinggridind);
+							ztestconnectinggridind = Number(WTW.drive.connectinggridind);
 						}
-						currentspeed = currentspeed / 100;
-						var currentactionzoneind = actionzoneind;
-						if (currentconnectinggridind == testconnectinggridind) {
-							if (currentdirection == -1) {
-								if (WTW.actionZones[currentactionzoneind] != null) {
-									if (currentspeed != 0) {
-										test = true;
+						zcurrentspeed = zcurrentspeed / 100;
+						var zcurrentactionzoneind = zactionzoneind;
+						if (zcurrentconnectinggridind == ztestconnectinggridind) {
+							if (zcurrentdirection == -1) {
+								if (WTW.actionZones[zcurrentactionzoneind] != null) {
+									if (zcurrentspeed != 0) {
+										ztest = true;
 									}
 								}
 							}
 						}
 					}
-					return test;
+					return ztest;
 				});
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "rotation.z", -1, condition3)); 
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "rotation.z", -1, zcondition3)); 
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "rotation.z", 1, condition4)); 
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "rotation.z", 1, zcondition4)); 
 			} catch (ex) {
 			}
 		}
-		if (actionzoneaxlepole2 == null && WTW.adminView == 1) {
-			var molddef7 = WTW.newMold();
-			molddef7.shape = "box";
-			molddef7.covering = "texture";
-			molddef7.scaling.x = .20;
-			molddef7.scaling.y = .20;
-			molddef7.scaling.z = 20;
-			molddef7.rotation.x = Number(actionzonedef.axis.rotation.x);
-			molddef7.rotation.y = Number(actionzonedef.axis.rotation.y);
-			molddef7.rotation.z = Number(actionzonedef.axis.rotation.z);
-			molddef7.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef7.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef7.opacity = 0;
-			molddef7.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole2-"), molddef7, molddef7.parentname, molddef7.covering);
-			actionzoneaxlepole2.isPickable = false;
-			actionzoneaxlepole2.checkCollisions = false;
+		if (zactionzoneaxlepole2 == null && WTW.adminView == 1) {
+			var zmolddef7 = WTW.newMold();
+			zmolddef7.shape = "box";
+			zmolddef7.covering = "texture";
+			zmolddef7.scaling.x = .20;
+			zmolddef7.scaling.y = .20;
+			zmolddef7.scaling.z = 20;
+			zmolddef7.rotation.x = Number(zactionzonedef.axis.rotation.x);
+			zmolddef7.rotation.y = Number(zactionzonedef.axis.rotation.y);
+			zmolddef7.rotation.z = Number(zactionzonedef.axis.rotation.z);
+			zmolddef7.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef7.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef7.opacity = 0;
+			zmolddef7.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole2-"), zmolddef7, zmolddef7.parentname, zmolddef7.covering);
+			zactionzoneaxlepole2.isPickable = false;
+			zactionzoneaxlepole2.checkCollisions = false;
 		}
-		if (actionzone == null) {
-			var molddef5 = WTW.newMold();
-			molddef5.shape = actionzonedef.actionzoneshape;
-			molddef5.covering = "hidden";
-			molddef5.scaling.x = actionzonedef.scaling.x;
-			molddef5.scaling.y = actionzonedef.scaling.y;
-			molddef5.scaling.z = actionzonedef.scaling.z;
-			molddef5.subdivisions = 20;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
-			var axlename = actionzonename.replace("actionzone-","actionzoneaxle-"); 
+		if (zactionzone == null) {
+			var zmolddef5 = WTW.newMold();
+			zmolddef5.shape = zactionzonedef.actionzoneshape;
+			zmolddef5.covering = "hidden";
+			zmolddef5.scaling.x = zactionzonedef.scaling.x;
+			zmolddef5.scaling.y = zactionzonedef.scaling.y;
+			zmolddef5.scaling.z = zactionzonedef.scaling.z;
+			zmolddef5.subdivisions = 20;
+			zmolddef5.opacity = 0;
+			zmolddef5.parentname = zparentname;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
+			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+			var zaxlename = zactionzonename.replace("actionzone-","actionzoneaxle-"); 
 			try {
-				var condition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var currentfactor = Number(actionzonedef.axis.rotatedegrees);
-					var currentturn = 0;
-					var currentconnectinggridind = connectinggridind;
-					var testconnectinggridind = -2;
-					var test = false;
+				var zcondition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var zcurrentfactor = Number(zactionzonedef.axis.rotatedegrees);
+					var zcurrentturn = 0;
+					var zcurrentconnectinggridind = zconnectinggridind;
+					var ztestconnectinggridind = -2;
+					var ztest = false;
 					if (WTW.drive != null) {
 						if (WTW.isNumeric(WTW.drive.currentturn)) {
-							currentturn = Number(WTW.drive.currentturn);
+							zcurrentturn = Number(WTW.drive.currentturn);
 						}
 						if (WTW.isNumeric(WTW.drive.connectinggridind)) {
-							testconnectinggridind = Number(WTW.drive.connectinggridind);
+							ztestconnectinggridind = Number(WTW.drive.connectinggridind);
 						}
-						currentturn = currentturn * currentfactor;
-						var currentactionzoneind = actionzoneind;
-						var currentdoor = actionzoneaxle;
-						var currentdoorroty = Math.round(WTW.getDegrees(currentdoor.rotation.y) * 100) / 100;
-						if (currentdoorroty > 180) {
-							currentdoorroty -= 360;
+						zcurrentturn = zcurrentturn * zcurrentfactor;
+						var zcurrentactionzoneind = zactionzoneind;
+						var zcurrentdoor = zactionzoneaxle;
+						var zcurrentdoorroty = Math.round(WTW.getDegrees(zcurrentdoor.rotation.y) * 100) / 100;
+						if (zcurrentdoorroty > 180) {
+							zcurrentdoorroty -= 360;
 						}
-						if (currentconnectinggridind == testconnectinggridind) {
-							if (WTW.actionZones[currentactionzoneind] != null) {
-								if (currentdoorroty < Math.round(currentturn * 100) / 100) {
-									test = true;
+						if (zcurrentconnectinggridind == ztestconnectinggridind) {
+							if (WTW.actionZones[zcurrentactionzoneind] != null) {
+								if (zcurrentdoorroty < Math.round(zcurrentturn * 100) / 100) {
+									ztest = true;
 								}
 							}
 						}
 					}
-					return test;
+					return ztest;
 				});
-				var condition2 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var currentfactor = Number(actionzonedef.axis.rotatedegrees);
-					var currentturn = 0;
-					var currentconnectinggridind = connectinggridind;
-					var testconnectinggridind = -2;
-					var test = false;
+				var zcondition2 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var zcurrentfactor = Number(zactionzonedef.axis.rotatedegrees);
+					var zcurrentturn = 0;
+					var zcurrentconnectinggridind = zconnectinggridind;
+					var ztestconnectinggridind = -2;
+					var ztest = false;
 					if (WTW.drive != null) {
 						if (WTW.isNumeric(WTW.drive.currentturn)) {
-							currentturn = Number(WTW.drive.currentturn);
+							zcurrentturn = Number(WTW.drive.currentturn);
 						}
 						if (WTW.isNumeric(WTW.drive.connectinggridind)) {
-							testconnectinggridind = Number(WTW.drive.connectinggridind);
+							ztestconnectinggridind = Number(WTW.drive.connectinggridind);
 						}
-						currentturn = currentturn * currentfactor;
-						var currentactionzoneind = actionzoneind;
-						var currentdoor = actionzoneaxle;
-						var currentdoorroty = Math.round(WTW.getDegrees(currentdoor.rotation.y) * 100) / 100;
-						if (currentdoorroty > 180) {
-							currentdoorroty -= 360;
+						zcurrentturn = zcurrentturn * zcurrentfactor;
+						var zcurrentactionzoneind = zactionzoneind;
+						var zcurrentdoor = zactionzoneaxle;
+						var zcurrentdoorroty = Math.round(WTW.getDegrees(zcurrentdoor.rotation.y) * 100) / 100;
+						if (zcurrentdoorroty > 180) {
+							zcurrentdoorroty -= 360;
 						}
-						if (currentconnectinggridind == testconnectinggridind) {
-							if (WTW.actionZones[currentactionzoneind] != null) {
-								if (currentdoorroty > Math.round(currentturn * 100) / 100) {
-									test = true;
+						if (zcurrentconnectinggridind == ztestconnectinggridind) {
+							if (WTW.actionZones[zcurrentactionzoneind] != null) {
+								if (zcurrentdoorroty > Math.round(zcurrentturn * 100) / 100) {
+									ztest = true;
 								}
 							}
 						}
 					}
-					return test;
+					return ztest;
 				});
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "rotation.y", 0.1, condition1)); 
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "rotation.y", 0.1, zcondition1)); 
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "rotation.y", -0.1, condition2));
-				WTW.actionZones[actionzoneind].status = 1;
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "rotation.y", -0.1, zcondition2));
+				WTW.actionZones[zactionzoneind].status = 1;
 			} catch (ex) {
 			}
 		}
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+				WTW.setOpacity(zactionzonename, .2);
+				WTW.setOpacity(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";
+		WTW.actionZones[zactionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneDriverTurningWheel=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
-WTWJS.prototype.addActionzoneDriverWheel = function(actionzonename, actionzoneind, actionzonedef) {
+WTWJS.prototype.addActionzoneDriverWheel = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* driverwheel - (work in progress) rotation of movement tires tied to the acceleration */
-	var actionzone;
+	var zactionzone;
 	try {
-		var parentname = actionzonedef.parentname;
-		var zpositionx = Number(actionzonedef.position.x);
-		var zpositiony = Number(actionzonedef.position.y);
-		var zpositionz = Number(actionzonedef.position.z);
-		var axispositionx = Number(actionzonedef.axis.position.x);
-		var axispositiony = Number(actionzonedef.axis.position.y);
-		var axispositionz = Number(actionzonedef.axis.position.z);
-		var axisrotx = Number(actionzonedef.axis.rotation.x);
-		var axisroty = Number(actionzonedef.axis.rotation.y);
-		var axisrotz = Number(actionzonedef.axis.rotation.z);
-		var buildingind = -1;
-		var namepart = parentname.split('-');
-		var connectinggridind = -1;
-		if (namepart[1] != null) {
-			connectinggridind = Number(namepart[1]);
+		var zparentname = zactionzonedef.parentname;
+		var zpositionx = Number(zactionzonedef.position.x);
+		var zpositiony = Number(zactionzonedef.position.y);
+		var zpositionz = Number(zactionzonedef.position.z);
+		var zaxispositionx = Number(zactionzonedef.axis.position.x);
+		var zaxispositiony = Number(zactionzonedef.axis.position.y);
+		var zaxispositionz = Number(zactionzonedef.axis.position.z);
+		var zaxisrotx = Number(zactionzonedef.axis.rotation.x);
+		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
+		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
+		var znamepart = zparentname.split('-');
+		var zconnectinggridind = -1;
+		if (znamepart[1] != null) {
+			zconnectinggridind = Number(znamepart[1]);
 		}
-		if (actionzonedef.buildinginfo.buildingid != "") {
-			buildingind = WTW.getConnectingGridInd(actionzonedef.buildinginfo.buildingid);
-		} else if (actionzonedef.communityinfo.communityid != "") {
-		} else if (actionzonedef.thinginfo.thingid != "") {
+		zactionzone = scene.getMeshByID(zactionzonename);
+		var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
+		var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxle-"));
+		var zactionzoneaxlepole = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlepole-"));
+		var zactionzoneaxlebase2 = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"));
+		if (zactionzoneaxlebase == null) {
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = "box";
+			zmolddef.covering = "hidden";
+			zmolddef.opacity = 0;
+			zmolddef.parentname = zparentname;
+			zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzoneaxlebase.position.x = zaxispositionx;
+			zactionzoneaxlebase.position.y = zaxispositiony;
+			zactionzoneaxlebase.position.z = zaxispositionz;
+			zactionzoneaxlebase.isPickable = false;
+			zactionzoneaxlebase.checkCollisions = false;
+			zactionzoneaxlebase.rotation.x = WTW.getRadians(zaxisrotx);
+			zactionzoneaxlebase.rotation.y = WTW.getRadians(zaxisroty);
+			zactionzoneaxlebase.rotation.z = WTW.getRadians(zaxisrotz);
 		}
-		actionzone = scene.getMeshByID(actionzonename);
-		var actionzoneaxlebase = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase-"));
-		var actionzoneaxle = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxle-"));
-		var actionzoneaxlepole = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlepole-"));
-		var actionzoneaxlebase2 = scene.getMeshByID(actionzonename.replace("actionzone-","actionzoneaxlebase2-"));
-		if (actionzoneaxlebase == null) {
-			var molddef = WTW.newMold();
-			molddef.shape = "box";
-			molddef.covering = "hidden";
-			molddef.opacity = 0;
-			molddef.parentname = parentname;
-			actionzoneaxlebase = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase-"), molddef, molddef.parentname, molddef.covering);
-			actionzoneaxlebase.position.x = axispositionx;
-			actionzoneaxlebase.position.y = axispositiony;
-			actionzoneaxlebase.position.z = axispositionz;
-			actionzoneaxlebase.isPickable = false;
-			actionzoneaxlebase.checkCollisions = false;
-			actionzoneaxlebase.rotation.x = WTW.getRadians(axisrotx);
-			actionzoneaxlebase.rotation.y = WTW.getRadians(axisroty);
-			actionzoneaxlebase.rotation.z = WTW.getRadians(axisrotz);
-		}
-		if (actionzoneaxle == null) {
-			WTW.actionZones[actionzoneind].status = 0;
-			var molddef1 = WTW.newMold();
-			molddef1.shape = "box";
-			molddef1.covering = "hidden";
-			molddef1.scaling.x = 1;
-			molddef1.scaling.y = 1;
-			molddef1.scaling.z = 1;
-			molddef1.opacity = 0;
-			molddef1.parentname = actionzonename.replace("actionzone-","actionzoneaxlebase-");
-			actionzoneaxle = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxle-"), molddef1, molddef1.parentname, molddef1.covering);
-			actionzoneaxle.position.x = 0;
-			actionzoneaxle.position.y = 0;
-			actionzoneaxle.position.z = 0;
-			actionzoneaxle.isPickable = false;
-			actionzoneaxle.checkCollisions = false;
+		if (zactionzoneaxle == null) {
+			WTW.actionZones[zactionzoneind].status = 0;
+			var zmolddef1 = WTW.newMold();
+			zmolddef1.shape = "box";
+			zmolddef1.covering = "hidden";
+			zmolddef1.scaling.x = 1;
+			zmolddef1.scaling.y = 1;
+			zmolddef1.scaling.z = 1;
+			zmolddef1.opacity = 0;
+			zmolddef1.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
+			zactionzoneaxle = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxle-"), zmolddef1, zmolddef1.parentname, zmolddef1.covering);
+			zactionzoneaxle.position.x = 0;
+			zactionzoneaxle.position.y = 0;
+			zactionzoneaxle.position.z = 0;
+			zactionzoneaxle.isPickable = false;
+			zactionzoneaxle.checkCollisions = false;
 			try {
-				var condition3 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var currentfactor = Number(actionzonedef.axis.rotatedegrees);
-					var currentspeed = 0;
-					var currentdirection = 1;
-					var currentconnectinggridind = connectinggridind;
-					var testconnectinggridind = -2;
-					var test = false;
+				var zcondition3 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var zcurrentfactor = Number(zactionzonedef.axis.rotatedegrees);
+					var zcurrentspeed = 0;
+					var zcurrentdirection = 1;
+					var zcurrentconnectinggridind = zconnectinggridind;
+					var ztestconnectinggridind = -2;
+					var ztest = false;
 					if (WTW.drive != null) {
 						if (WTW.isNumeric(WTW.drive.currentspeed)) {
-							currentspeed = Number(WTW.drive.currentspeed);
+							zcurrentspeed = Number(WTW.drive.currentspeed);
 						}
 						if (WTW.isNumeric(WTW.drive.currentdirection)) {
-							currentdirection = Number(WTW.drive.currentdirection);
+							zcurrentdirection = Number(WTW.drive.currentdirection);
 						}
 						if (WTW.isNumeric(WTW.drive.connectinggridind)) {
-							testconnectinggridind = Number(WTW.drive.connectinggridind);
+							ztestconnectinggridind = Number(WTW.drive.connectinggridind);
 						}
-						currentspeed = currentspeed / 100;
-						var currentactionzoneind = actionzoneind;
-						if (currentconnectinggridind == testconnectinggridind) {
-							if (currentdirection == 1) {
-								if (WTW.actionZones[currentactionzoneind] != null) {
-									if (currentspeed != 0) {
-										test = true;
+						zcurrentspeed = zcurrentspeed / 100;
+						var zcurrentactionzoneind = zactionzoneind;
+						if (zcurrentconnectinggridind == ztestconnectinggridind) {
+							if (zcurrentdirection == 1) {
+								if (WTW.actionZones[zcurrentactionzoneind] != null) {
+									if (zcurrentspeed != 0) {
+										ztest = true;
 									}
 								}
 							}
 						}
 					}
-					return test;
+					return ztest;
 				});
-				var condition4 = new BABYLON.PredicateCondition(scene.actionManager, function () {
-					var currentfactor = Number(actionzonedef.axis.rotatedegrees);
-					var currentspeed = 0;
-					var currentdirection = 1;
-					var currentconnectinggridind = connectinggridind;
-					var testconnectinggridind = -2;
-					var test = false;
+				var zcondition4 = new BABYLON.PredicateCondition(scene.actionManager, function () {
+					var zcurrentfactor = Number(zactionzonedef.axis.rotatedegrees);
+					var zcurrentspeed = 0;
+					var zcurrentdirection = 1;
+					var zcurrentconnectinggridind = zconnectinggridind;
+					var ztestconnectinggridind = -2;
+					var ztest = false;
 					if (WTW.drive != null) {
 						if (WTW.isNumeric(WTW.drive.currentspeed)) {
-							currentspeed = Number(WTW.drive.currentspeed);
+							zcurrentspeed = Number(WTW.drive.currentspeed);
 						}
 						if (WTW.isNumeric(WTW.drive.currentdirection)) {
-							currentdirection = Number(WTW.drive.currentdirection);
+							zcurrentdirection = Number(WTW.drive.currentdirection);
 						}
 						if (WTW.isNumeric(WTW.drive.connectinggridind)) {
-							testconnectinggridind = Number(WTW.drive.connectinggridind);
+							ztestconnectinggridind = Number(WTW.drive.connectinggridind);
 						}
-						currentspeed = currentspeed / 100;
-						var currentactionzoneind = actionzoneind;
-						if (currentconnectinggridind == testconnectinggridind) {
-							if (currentdirection == -1) {
-								if (WTW.actionZones[currentactionzoneind] != null) {
-									if (currentspeed != 0) {
-										test = true;
+						zcurrentspeed = zcurrentspeed / 100;
+						var zcurrentactionzoneind = zactionzoneind;
+						if (zcurrentconnectinggridind == ztestconnectinggridind) {
+							if (zcurrentdirection == -1) {
+								if (WTW.actionZones[zcurrentactionzoneind] != null) {
+									if (zcurrentspeed != 0) {
+										ztest = true;
 									}
 								}
 							}
 						}
 					}
-					return test;
+					return ztest;
 				});
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "rotation.z", 1, condition3)); 
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "rotation.z", 1, zcondition3)); 
 				scene.actionManager.registerAction(new BABYLON.IncrementValueAction(
-				BABYLON.ActionManager.OnEveryFrameTrigger, actionzoneaxle, "rotation.z", -1, condition4)); 
+				BABYLON.ActionManager.OnEveryFrameTrigger, zactionzoneaxle, "rotation.z", -1, zcondition4)); 
 			} catch (ex) {
 			}			
 		}
-		if (actionzoneaxlepole == null && WTW.adminView == 1) {
-			var molddef4 = WTW.newMold();
-			molddef4.shape = "box";
-			molddef4.covering = "texture";
-			molddef4.scaling.x = .20;
-			molddef4.scaling.y = .20;
-			molddef4.scaling.z = 20;
-			molddef4.rotation.x = Number(actionzonedef.axis.rotation.x);
-			molddef4.rotation.y = Number(actionzonedef.axis.rotation.y);
-			molddef4.rotation.z = Number(actionzonedef.axis.rotation.z);
-			molddef4.graphics.texture.id = "7orpcjosyct5b1bf";
-			molddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
-			molddef4.opacity = 0;
-			molddef4.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlepole = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlepole-"), molddef4, molddef4.parentname, molddef4.covering);
-			actionzoneaxlepole.isPickable = false;
-			actionzoneaxlepole.checkCollisions = false;
+		if (zactionzoneaxlepole == null && WTW.adminView == 1) {
+			var zmolddef4 = WTW.newMold();
+			zmolddef4.shape = "box";
+			zmolddef4.covering = "texture";
+			zmolddef4.scaling.x = .20;
+			zmolddef4.scaling.y = .20;
+			zmolddef4.scaling.z = 20;
+			zmolddef4.rotation.x = Number(zactionzonedef.axis.rotation.x);
+			zmolddef4.rotation.y = Number(zactionzonedef.axis.rotation.y);
+			zmolddef4.rotation.z = Number(zactionzonedef.axis.rotation.z);
+			zmolddef4.graphics.texture.id = "7orpcjosyct5b1bf";
+			zmolddef4.graphics.texture.path = "/content/system/stock/vaxis-512x512.png";
+			zmolddef4.opacity = 0;
+			zmolddef4.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zactionzoneaxlepole.isPickable = false;
+			zactionzoneaxlepole.checkCollisions = false;
 		}
-		if (actionzoneaxlebase2 == null) {
-			var molddef2 = WTW.newMold();
-			molddef2.shape = "box";
-			molddef2.covering = "hidden";
-			molddef2.opacity = 0;
-			molddef2.parentname = actionzonename.replace("actionzone-","actionzoneaxle-");
-			actionzoneaxlebase2 = WTW.addMold(actionzonename.replace("actionzone-","actionzoneaxlebase2-"), molddef2, molddef2.parentname, molddef2.covering);
-			actionzoneaxlebase2.position.x = 0;
-			actionzoneaxlebase2.position.y = 0;
-			actionzoneaxlebase2.position.z = 0;
-			actionzoneaxlebase2.isPickable = false;
-			actionzoneaxlebase2.checkCollisions = false;
-			actionzoneaxlebase2.rotation.x = WTW.getRadians(-axisrotx);
-			actionzoneaxlebase2.rotation.y = WTW.getRadians(-axisroty);
-			actionzoneaxlebase2.rotation.z = WTW.getRadians(-axisrotz);
+		if (zactionzoneaxlebase2 == null) {
+			var zmolddef2 = WTW.newMold();
+			zmolddef2.shape = "box";
+			zmolddef2.covering = "hidden";
+			zmolddef2.opacity = 0;
+			zmolddef2.parentname = zactionzonename.replace("actionzone-","actionzoneaxle-");
+			zactionzoneaxlebase2 = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase2-"), zmolddef2, zmolddef2.parentname, zmolddef2.covering);
+			zactionzoneaxlebase2.position.x = 0;
+			zactionzoneaxlebase2.position.y = 0;
+			zactionzoneaxlebase2.position.z = 0;
+			zactionzoneaxlebase2.isPickable = false;
+			zactionzoneaxlebase2.checkCollisions = false;
+			zactionzoneaxlebase2.rotation.x = WTW.getRadians(-zaxisrotx);
+			zactionzoneaxlebase2.rotation.y = WTW.getRadians(-zaxisroty);
+			zactionzoneaxlebase2.rotation.z = WTW.getRadians(-zaxisrotz);
 		}
-		if (actionzone == null) {
-			var molddef5 = WTW.newMold();
-			molddef5.shape = actionzonedef.actionzoneshape;
-			molddef5.covering = "hidden";
-			molddef5.scaling.x = actionzonedef.scaling.x;
-			molddef5.scaling.y = actionzonedef.scaling.y;
-			molddef5.scaling.z = actionzonedef.scaling.z;
-			molddef5.subdivisions = 20;
-			molddef5.opacity = 0;
-			molddef5.parentname = parentname;
-			actionzone = WTW.addMold(actionzonename, molddef5, molddef5.parentname, molddef5.covering);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-			actionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+		if (zactionzone == null) {
+			var zmolddef5 = WTW.newMold();
+			zmolddef5.shape = zactionzonedef.actionzoneshape;
+			zmolddef5.covering = "hidden";
+			zmolddef5.scaling.x = zactionzonedef.scaling.x;
+			zmolddef5.scaling.y = zactionzonedef.scaling.y;
+			zmolddef5.scaling.z = zactionzonedef.scaling.z;
+			zmolddef5.subdivisions = 20;
+			zmolddef5.opacity = 0;
+			zmolddef5.parentname = zparentname;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
+			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 		}
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-				WTW.setOpacity(actionzonename, .2);
-				WTW.setOpacity(actionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
+				WTW.setOpacity(zactionzonename, .2);
+				WTW.setOpacity(zactionzonename.replace("actionzone-","actionzoneaxlepole-"), 1);
 			}
 		}
-		WTW.actionZones[actionzoneind].shown = "2";
+		WTW.actionZones[zactionzoneind].shown = "2";
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneDriverWheel=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
