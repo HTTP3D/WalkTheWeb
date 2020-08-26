@@ -14,6 +14,60 @@ try {
 
 	$zstoremold = array();
 	if ((!empty($zcommunityid) && isset($zcommunityid)) || (!empty($zbuildingid) && isset($zbuildingid)) || (!empty($zthingid) && isset($zthingid))) {
+		/* make sure every shopping related mold has a cooresponding shopping mold record */
+		$zwebtype = '';
+		$zwebid = '';
+		if (!empty($zcommunityid)) {
+			$zwebtype = 'community';
+			$zwebid = $zcommunityid;
+		} else if (!empty($zbuildingid)) {
+			$zwebtype = 'building';
+			$zwebid = $zbuildingid;
+		} else if (!empty($zthingid)) {
+			$zwebtype = 'thing';
+			$zwebid = $zthingid;
+		}
+		$zresults = $wtwconnect->query("
+			select m1.".$zwebtype."moldid as moldid,
+				m1.".$zwebtype."id as webid,
+				sm1.shoppingmoldid
+			from (select * from ".wtw_tableprefix.$zwebtype."molds where shape like '%store%' and ".$zwebtype."id='".$zwebid."') m1
+				left join (select * from ".WTWSHOPPING_PREFIX."molds where ".$zwebtype."id='".$zwebid."') sm1
+				on m1.".$zwebtype."moldid=sm1.moldid
+			where m1.communityid='".$zcommunityid."'
+				and m1.buildingid='".$zbuildingid."'
+				and m1.thingid='".$zthingid."'
+				and m1.deleted=0;");
+		foreach ($zresults as $zrow) {
+			if (empty($zrow["shoppingmoldid"]) || !isset($zrow["shoppingmoldid"])) {
+				$znewshoppingmoldid = $wtwconnect->getRandomString(16,1);
+				$wtwconnect->query("
+					insert into ".WTWSHOPPING_PREFIX."molds 
+					   (shoppingmoldid,
+					    moldid, 
+						communityid, 
+						buildingid,
+						thingid,
+						allowsearch,
+						createdate,
+						createuserid,
+						updatedate,
+						updateuserid)
+					values
+					   ('".$znewshoppingmoldid."',
+					    '".$zrow[$zwebtype."moldid"]."',
+						'".$zcommunityid."',
+						'".$zbuildingid."',
+						'".$zthingid."',
+						1,
+						now(),
+						'".$wtwconnect->userid."',
+						now(),
+						'".$wtwconnect->userid."');");
+			}
+		}
+		
+		/* get shopping molds */
 		$zresults = $wtwconnect->query("
 			select *
 			from ".WTWSHOPPING_PREFIX."molds  

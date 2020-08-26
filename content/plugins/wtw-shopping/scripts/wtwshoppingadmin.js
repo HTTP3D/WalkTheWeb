@@ -72,10 +72,10 @@ wtwshopping.prototype.cancelSaveStore = function(zredirect) {
 	} 
 }
 
-wtwshopping.prototype.saveConnectStore = function(zmoldgroup) {
+wtwshopping.prototype.saveConnectStore = function(zwebtype) {
 	try {
 		var zrequest = {
-			'storeid':WTW.getDDLValue('wtwshopping_' + zmoldgroup + 'connectstore'),
+			'storeid':WTW.getDDLValue('wtwshopping_' + zwebtype + 'connectstore'),
 			'communityid':communityid,
 			'buildingid':buildingid,
 			'thingid':thingid,
@@ -127,13 +127,13 @@ wtwshopping.prototype.getStores = function() {
 	} 
 }
 
-wtwshopping.prototype.getStoresDropdown = function(moldgroup) {
+wtwshopping.prototype.getStoresDropdown = function(zwebtype) {
 	try {
-		WTW.clearDDL('wtwshopping_' + moldgroup + 'connectstore');
+		WTW.clearDDL('wtwshopping_' + zwebtype + 'connectstore');
 		var option0 = document.createElement("option");
 		option0.text = "Not Connected";
 		option0.value = "";
-		dGet('wtwshopping_' + moldgroup + 'connectstore').add(option0);
+		dGet('wtwshopping_' + zwebtype + 'connectstore').add(option0);
 		WTWShopping.stores = [];
 		WTW.getJSON("/connect/wtw-shopping-getstores.php", 
 			function(zresponse) {
@@ -144,12 +144,12 @@ wtwshopping.prototype.getStoresDropdown = function(moldgroup) {
 							var option = document.createElement("option");
 							option.text = atob(zresponse[i].storename);
 							option.value = zresponse[i].storeid;
-							dGet('wtwshopping_' + moldgroup + 'connectstore').add(option);
+							dGet('wtwshopping_' + zwebtype + 'connectstore').add(option);
 						}
 					}
 				}
-				WTWShopping.setConnectStore(moldgroup);
-				WTW.show('wtwshopping_admin' + moldgroup + 'storesdiv');
+				WTWShopping.setConnectStore(zwebtype);
+				WTW.show('wtwshopping_admin' + zwebtype + 'storesdiv');
 			}
 		); 
 	} catch (ex) {
@@ -157,7 +157,7 @@ wtwshopping.prototype.getStoresDropdown = function(moldgroup) {
 	} 
 }
 
-wtwshopping.prototype.setConnectStore = function(moldgroup) {
+wtwshopping.prototype.setConnectStore = function(zwebtype) {
 	try {
 		WTW.getJSON("/connect/wtw-shopping-getconnectstore.php?communityid=" + communityid + "&buildingid=" + buildingid + "&thingid=" + thingid, 
 			function(zresponse) {
@@ -165,7 +165,7 @@ wtwshopping.prototype.setConnectStore = function(moldgroup) {
 				if (zresponse != null) {
 					for (var i=0;i<zresponse.length;i++) {
 						if (zresponse[i] != null) {
-							WTW.setDDLValue('wtwshopping_' + moldgroup + 'connectstore', zresponse[i].storeid);
+							WTW.setDDLValue('wtwshopping_' + zwebtype + 'connectstore', zresponse[i].storeid);
 						}
 					}
 				}
