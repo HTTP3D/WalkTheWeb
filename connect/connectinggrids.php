@@ -577,7 +577,8 @@ try {
 					'shown'=>'0',
 					'status'=> '0');
 				$i += 1;
-			} else if (($zconnectinggridid != $zrow["connectinggridid"] || $zsubconnectinggridid != $zrow["subconnectinggridid"]) && isset($zrow["subconnectinggridid"]) && !empty($zrow["subconnectinggridid"])) {
+			}
+			if ($zrow["parentwebtype"] == 'community' && $zsubconnectinggridid != $zrow["subconnectinggridid"] && isset($zrow["subconnectinggridid"]) && !empty($zrow["subconnectinggridid"])) {
 				if(isset($zrow["parentcommunityid"]) && !empty($zrow["parentcommunityid"])) {
 					$zcommunityinfo = array(
 						'communityid'=> $zrow["parentcommunityid"],
