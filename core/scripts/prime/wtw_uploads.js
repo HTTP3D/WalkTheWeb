@@ -19,7 +19,7 @@ WTWJS.prototype.getUploadFileData = function(imageid) {
 	var originalid = 'wwq1yppbimir7tgv';
 	var websizeid = 't1qlqxd6pzubzzzy';
 	var thumbnailid = 't1qlqxd6pzubzzzy';
-	var filepath = '/content/system/stock/lightgray-512x447.jpg';
+	var filepath = '/content/system/stock/lightgray-512x512.jpg';
 	var newimage = new Image();
 	try {
 		if (wtw_uploads != null && imageid != '') {

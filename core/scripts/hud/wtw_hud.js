@@ -519,6 +519,13 @@ WTWJS.prototype.toggleFPS = function() {
 WTWJS.prototype.showSettingsMenu = function(zmenuitem) {
 	/* show or hide sections of the browse menu (bottom menu bar) */
 	try {
+		switch (zmenuitem) {
+			case "wtw_menuprofile":
+				WTW.openLoginMenu();WTW.closeMenus();
+				return true;
+				break;
+		}
+		
 		WTW.show(zmenuitem);
 		if (zmenuitem == 'wtw_menuprofile') {
 			if (dGet('wtw_tuserid').value != '') {

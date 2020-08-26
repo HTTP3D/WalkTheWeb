@@ -1005,6 +1005,9 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 			case "text":
 				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_-+={[}]\\:;\"'<,>.?/ ";
 				break;
+			case "safetext":
+				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz~!@#$%^&*()_-+={[}]:;\"',.? ";
+				break;
 			case "password":
 				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz~!@#$%^&*()_-+={[}]:;<,>.? ";
 				break;
@@ -1184,6 +1187,27 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 				}
 				break;
 			case "text":
+				break;
+			case "safetext":
+				if (zcomplete == 1) {
+					if (znewtext.length > 0) {
+						while (znewtext.indexOf("  ") > -1) {
+							znewtext = znewtext.replace("  "," ");
+							zcaretstart -= 1;
+							zcaretend -= 1;
+						}
+						while (znewtext.indexOf(",,") > -1) {
+							znewtext = znewtext.replace(",,",",");
+							zcaretstart -= 1;
+							zcaretend -= 1;
+						}
+						while (znewtext.indexOf("--") > -1) {
+							znewtext = znewtext.replace("--","-");
+							zcaretstart -= 1;
+							zcaretend -= 1;
+						}
+					}
+				}
 				break;
 			case "password":
 				break;

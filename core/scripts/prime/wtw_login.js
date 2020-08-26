@@ -48,7 +48,7 @@ WTWJS.prototype.globalLogin = function(zparameters) {
 					zresponse = JSON.parse(zresponse);
 					/* continue if no errors */
 					if (WTW.globalLoginResponse(zresponse)) {
-						WTW.openLocalLogin('Select My Avatar',.3,.6);
+						WTW.openLocalLogin('Select Avatar',.4,.6);
 					}
 				}
 			);
@@ -106,7 +106,7 @@ WTWJS.prototype.openLoginMenu = function() {
 	/* open login menu for login or show profile as needed */
 	try {
 		if (dGet('wtw_tuserid').value != '') {
-			WTW.openLocalLogin('Local Profile', .3, .5);
+			WTW.openLocalLogin('Local Profile', .4, .6);
 		} else {
 			WTW.openLocalLogin('Login Menu', .3, .5);
 		}
@@ -129,10 +129,17 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 		dGet('wtw_browsetitle').innerHTML = zitem;
 		dGet('wtw_browseheaderclose').onclick = function() {WTW.closeIFrame();};
 		switch (zitem) {
-			case "Local Profile":	
+			case "Local Profile":
 				zpagediv += "<h2 class=\"wtw-login\">Profile</h2>";
-				
+				zpagediv += "<div class=\"wtw-loadingmenu\">Loading</div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				WTW.getLocalProfile(false);
+				break;
+			case "Edit Profile":
+				zpagediv += "<h2 class=\"wtw-login\">Edit Profile</h2>";
+				zpagediv += "<div class=\"wtw-loadingmenu\">Loading</div>";
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				WTW.getLocalProfile(true);
 				break;
 			case "Login Menu":
 				zpagediv += "<h2 class=\"wtw-login\">Login Menu</h2>";
@@ -150,7 +157,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 			case "3D Website Login":
 				zpagediv += "<h2 class=\"wtw-login\">3D Website Login</h2>" +
 					"<div class=\"wtw-loginlabel\">User Name</div><div><input type=\"text\" id=\"wtw_tlogin\" autocomplete=\"username\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>" +
-					"<div class=\"wtw-loginlabel\">Password</div><div><input type=\"password\" id=\"wtw_tpassword\" autocomplete=\"current-password\" class=\"wtw-textbox\" maxlength=\"256\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabel\">Password</div><div><input type=\"password\" id=\"wtw_tpassword\" autocomplete=\"current-password\" class=\"wtw-textbox\" maxlength=\"255\" /></div><div style=\"clear:both;\"></div>" +
 					"<div class=\"wtw-loginlabelspace\">&nbsp;</div><div class=\"wtw-logintext\"><input type=\"checkbox\" id=\"wtw_trememberlogin\" class=\"wtw-checkbox\" /> Remember Me</div><div style=\"clear:both;\"></div><br />" +
 					"<div id=\"wtw_loginerrortext\" class=\"wtw-errortext\">&nbsp;</div><br />" +
 					"<div class=\"wtw-loginbutton\" onclick=\"WTW.loginAttempt();\"><img src=\"/content/system/images/icon-128x128.jpg\" alt=\"HTTP3D Inc.\" title=\"HTTP3D Inc.\" class=\"wtw-loginlogo\"/><div style=\"margin-top:10px;\">3D Website Login</div></div>" +
@@ -168,7 +175,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				break;
 			case "Recover Login":
 				zpagediv += "<h2 class=\"wtw-login\">Recover Login</h2>" +
-					"<div class=\"wtw-loginlabel\">Email</div><div><input type=\"text\" id=\"wtw_trecoverbyemail\" autocomplete=\"email\" class=\"wtw-textbox\" maxlength=\"256\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabel\">Email</div><div><input type=\"text\" id=\"wtw_trecoverbyemail\" autocomplete=\"email\" class=\"wtw-textbox\" maxlength=\"255\" /></div><div style=\"clear:both;\"></div>" +
 					"<div id=\"wtw_recovererrortext\" class=\"wtw-errortext\">&nbsp;</div><br />" +
 					"<div class=\"wtw-loginbutton\" onclick=\"WTW.recoverLogin();\"><div style=\"margin-top:10px;\">Recover my Password</div></div>" +
 					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('3D Website Login', .3, .6);\">Return to Login</div>&nbsp;&nbsp;";
@@ -177,10 +184,10 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 			case "Create Login":
 				zpagediv += "<h2 class=\"wtw-login\">Create 3D Website Login</h2>" +
 					"<div class=\"wtw-loginlabel\">User Name</div><div><input type=\"text\" id=\"wtw_tnewlogin\" autocomplete=\"username\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>" +
-					"<div class=\"wtw-loginlabel\">Email</div><div><input type=\"text\" id=\"wtw_tnewemail\" autocomplete=\"email\" class=\"wtw-textbox\" maxlength=\"256\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabel\">Email</div><div><input type=\"text\" id=\"wtw_tnewemail\" autocomplete=\"email\" class=\"wtw-textbox\" maxlength=\"255\" /></div><div style=\"clear:both;\"></div>" +
 					"<div class=\"wtw-loginlabelspace\" id=\"wtw_passwordstrengthdiv\" style=\"visibility:hidden;text-align:center;margin-left:220px;margin-top:0px;\"><input type=\"text\" id=\"wtw_tpasswordstrength\" style=\"visibility:hidden;\" /></div><div style=\"clear:both;\"></div>" +
-					"<div class=\"wtw-loginlabel\">Password</div><div><input type=\"password\" id=\"wtw_tnewpassword\" autocomplete=\"new-password\" class=\"wtw-textbox\" maxlength=\"256\" onkeyup=\"WTW.checkPassword(this,'wtw_tpasswordstrength');WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');\" onfocus=\"WTW.registerPasswordFocus();\" onblur=\"WTW.registerPasswordBlur();\" /></div><div style=\"clear:both;\"></div>" +
-					"<div class=\"wtw-loginlabel\">Confirm Password</div><div><input type=\"password\" id=\"wtw_tnewpassword2\" autocomplete=\"new-password\" class=\"wtw-textbox\" maxlength=\"256\" onkeyup=\"WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabel\">Password</div><div><input type=\"password\" id=\"wtw_tnewpassword\" autocomplete=\"new-password\" class=\"wtw-textbox\" maxlength=\"255\" onkeyup=\"WTW.checkPassword(this,'wtw_tpasswordstrength');WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');\" onfocus=\"WTW.registerPasswordFocus();\" onblur=\"WTW.registerPasswordBlur();\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabel\">Confirm Password</div><div><input type=\"password\" id=\"wtw_tnewpassword2\" autocomplete=\"new-password\" class=\"wtw-textbox\" maxlength=\"255\" onkeyup=\"WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');\" /></div><div style=\"clear:both;\"></div>" +
 					"<div id=\"wtw_registererrortext\" class=\"wtw-errortext\">&nbsp;</div><br />" +
 					"<div class=\"wtw-loginbutton\" onclick=\"WTW.createAccount();\"><div style=\"margin-top:10px;\">Create Login</div></div>" +
 					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('3D Website Login', .3, .6);\">Cancel</div>";
@@ -189,17 +196,24 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 			case "Select My Avatar":
 				zpagediv += "<h2 class=\"wtw-login\">Select My Avatar</h2>" +
 					"<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:38%;\"><div id=\"wtw_myavatars\"></div></div><br />" + 
-					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Select an Avatar', .3, .55);\"><div style=\"margin-top:4px;\">Quick-Start Avatars</div></div><br />" + 
+					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Select an Avatar', .3, .6);\"><div style=\"margin-top:4px;\">Quick-Start Avatars</div></div><br />" + 
 					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openAvatarDesigner();\"><div style=\"margin-top:4px;\">Create a New Avatar</div></div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 				WTW.getMyAvatarList();
+				break;
+			case "Select Avatar":
+				zpagediv += "<h2 class=\"wtw-login\">Select My Avatar</h2>" + 
+					"<div class=\"wtw-loadingmenu\">Loading</div>" + 
+					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Local Profile', .3, .6);\">Cancel</div>";
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				WTW.getFullAvatarList(true);
 				break;
 			case "Select an Avatar":
 				zpagediv += "<h2 class=\"wtw-login\">Select an Avatar</h2>" + 
 					"<div class=\"wtw-loadingmenu\">Loading</div>" + 
 					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Select My Avatar', .3, .6);\">Cancel</div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				WTW.getFullAvatarList();
+				WTW.getFullAvatarList(false);
 				break;
 			case "Select an Anonymous Avatar":
 				zpagediv += "<h2 class=\"wtw-login\">Select an Anonymous Avatar</h2>" + 
@@ -222,6 +236,95 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-openLocalLogin=" + ex.message);
 		WTW.closeIFrame();
+	}
+}
+
+WTWJS.prototype.getLocalProfile = function(zedit) {
+	try {
+		let zpagediv = "";
+		WTW.getJSON("/connect/userprofile.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				var zdob = '';
+				if (zresponse.dob != 'null' && zresponse.dob != null) {
+					zdob = zresponse.dob;
+				}
+				if (zedit) {
+					zpagediv += "<h2 class=\"wtw-login\">Edit Local Profile</h2>";
+					zpagediv += "<div class=\"wtw-loginlabel\">Display Name</div><div><input type=\"text\" id=\"wtw_tprofiledisplayname\" autocomplete=\"nickname\" value=\"" + zresponse.displayname + "\" class=\"wtw-textbox\" maxlength=\"255\" /></div><div style=\"clear:both;\"></div>";
+					zpagediv += "<div class=\"wtw-loginlabel\">Email</div><div><input type=\"text\" id=\"wtw_tprofileemail\" autocomplete=\"email\" value=\"" + zresponse.email + "\"  class=\"wtw-textbox\" maxlength=\"255\" /></div><div style=\"clear:both;\"></div>";
+					zpagediv += "<div class=\"wtw-loginlabel\">First Name</div><div><input type=\"text\" id=\"wtw_tprofilefirstname\" autocomplete=\"given-name\" value=\"" + zresponse.firstname + "\" class=\"wtw-textbox\" maxlength=\"255\" /></div><div style=\"clear:both;\"></div>";
+					zpagediv += "<div class=\"wtw-loginlabel\">Last Name</div><div><input type=\"text\" id=\"wtw_tprofilelastname\" autocomplete=\"family-name\" value=\"" + zresponse.lastname + "\" class=\"wtw-textbox\" maxlength=\"255\" /></div><div style=\"clear:both;\"></div>";
+					zpagediv += "<div class=\"wtw-loginlabel\">Gender</div><div><input type=\"text\" id=\"wtw_tprofilegender\" autocomplete=\"sex\" value=\"" + zresponse.gender + "\" class=\"wtw-textbox\" maxlength=\"45\" /></div><div style=\"clear:both;\"></div>";
+					zpagediv += "<div class=\"wtw-loginlabel\">Birth Date</div><div><input type=\"text\" id=\"wtw_tprofiledob\" autocomplete=\"bday\" value=\"" + zdob + "\" class=\"wtw-textbox\" maxlength=\"10\" /></div><div style=\"clear:both;\"></div>";
+					zpagediv += "<div id=\"wtw_errortext\" class=\"wtw-errortext\">&nbsp;</div><br />";
+					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.saveMyProfile();\"><div style=\"margin-top:4px;\">Save Profile</div></div>";
+
+					zpagediv += "<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Local Profile', .4, .6);\">Cancel</div>";
+				} else {
+					zpagediv += "<h2 class=\"wtw-login\">Local Profile</h2>";
+					zpagediv += "<div class=\"wtw-loginlabel\">Display Name</div><div class=\"wtw-profiletext\">" + zresponse.displayname + "</div><div style=\"clear:both;\"></div>";
+					zpagediv += "<div class=\"wtw-loginlabel\">Email</div><div class=\"wtw-profiletext\">" + zresponse.email + "</div><div style=\"clear:both;\"></div>";
+					zpagediv += "<div class=\"wtw-loginlabel\">First Name</div><div class=\"wtw-profiletext\">" + zresponse.firstname + "</div><div style=\"clear:both;\"></div>";
+					zpagediv += "<div class=\"wtw-loginlabel\">Last Name</div><div class=\"wtw-profiletext\">" + zresponse.lastname + "</div><div style=\"clear:both;\"></div>";
+					zpagediv += "<div class=\"wtw-loginlabel\">Gender</div><div class=\"wtw-profiletext\">" + zresponse.gender + "</div><div style=\"clear:both;\"></div>";
+					zpagediv += "<div class=\"wtw-loginlabel\">Birth Date</div><div class=\"wtw-profiletext\">" + zdob + "</div><div style=\"clear:both;\"></div>";
+
+					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Edit Profile', .4, .6);\"><div style=\"margin-top:4px;\">Edit Profile</div></div>";
+					
+					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Select Avatar', .4, .6);\"><div style=\"margin-top:4px;\">Select My Avatar</div></div>";
+					
+					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.logout();\"><div style=\"margin-top:4px;\">Log Out</div></div>";
+				}
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_login.js-getLocalProfile=" + ex.message);
+	}
+}
+
+WTWJS.prototype.saveMyProfile = function() {
+	/* save local server user profile */
+	try {
+		/* validate entries... */
+		var zrequest = {
+			'userid': dGet('wtw_tuserid').value,
+			'displayname': dGet('wtw_tprofiledisplayname').value,
+			'useremail': dGet('wtw_tprofileemail').value,
+			'firstname': dGet('wtw_tprofilefirstname').value,
+			'lastname': dGet('wtw_tprofilelastname').value,
+			'gender': dGet('wtw_tprofilegender').value,
+			'dob': dGet('wtw_tprofiledob').value,
+			'function':'savemyprofile'
+		};
+
+
+		WTW.postJSON("/core/handlers/users.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.saveMyProfileComplete(zresponse.serror);
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_login.js-saveProfile=" + ex.message);
+	}
+}
+
+WTWJS.prototype.saveMyProfileComplete = function(zresponse) {
+	/* save local server user profile complete */
+	try {
+		if (zresponse == '') {
+			WTW.openLocalLogin('Local Profile', .4, .6);
+		} else {
+			dGet('wtw_errortext').innerHTML = zresponse;
+			window.setTimeout(function() {
+				dGet('wtw_errortext').innerHTML = '';
+			},5000);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_login.js-saveMyProfileComplete=" + ex.message);
 	}
 }
 
@@ -284,7 +387,7 @@ WTWJS.prototype.getAnonymousAvatarList = function() {
 	}
 }
 
-WTWJS.prototype.getFullAvatarList = function() {
+WTWJS.prototype.getFullAvatarList = function(zshowmyavatars) {
 	/* provides a formatted list of all available avatars to select and use in the scene (for logged in users) */
 	try {
 		WTW.getJSON("/connect/avatars.php?groups=", 
@@ -301,6 +404,7 @@ WTWJS.prototype.getFullAvatarList = function() {
 									'avatarid': zresponse.avatars[i].avatarid,
 									'avatargroup': zresponse.avatars[i].avatargroup,
 									'displayname': zresponse.avatars[i].displayname,
+									'defaultdisplayname': zresponse.avatars[i].defaultdisplayname,
 									'gender': zresponse.avatars[i].gender,
 									'object': {
 										'folder': zresponse.avatars[i].object.folder,
@@ -322,8 +426,16 @@ WTWJS.prototype.getFullAvatarList = function() {
 						}
 					}
 				}
+				var zdefaultdisplayname = dGet('wtw_tusername').value;
+				if (zfullavatars[0].defaultdisplayname != '') {
+					zdefaultdisplayname = zfullavatars[0].defaultdisplayname;
+				}
 				var zpagediv = "<h2 class=\"wtw-login\">Select an Avatar</h2>";
-				zpagediv += "<div class=\"wtw-loginlabel\">Display Name</div><div><input type=\"text\" id=\"wtw_tdisplayname\" value=\"" + dGet('wtw_tusername').value + "\" autocomplete=\"username\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>";
+				if (zshowmyavatars) {
+					zpagediv = "<h2 class=\"wtw-login\">Select My Avatar</h2>";
+					zpagediv += "<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:38%;\"><div id=\"wtw_myavatars\"></div></div>";
+				}
+				zpagediv += "<div class=\"wtw-loginlabel\">Display Name</div><div><input type=\"text\" id=\"wtw_tdisplayname\" value=\"" + zdefaultdisplayname + "\" autocomplete=\"username\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>";
 				zpagediv += "<div class=\"wtw-imagescrollhorizontal\">";
 				if (zfullavatars.length > 0) {
 					for (var i=0;i<zfullavatars.length;i++) {
@@ -331,12 +443,19 @@ WTWJS.prototype.getFullAvatarList = function() {
 							zpagediv += "<div class=\"wtw-imagescroll\" onclick=\"WTW.onMyAvatarSaveSelect('" + zfullavatars[i].globalavatarid + "', '" + zfullavatars[i].useravatarid + "', '" + zfullavatars[i].avatarid + "');\"><img src=\"" + zfullavatars[i].object.folder + zfullavatars[i].thumbnails.imageface + "\" title=\"" + zfullavatars[i].displayname + "\" alt=\"" + zfullavatars[i].displayname + "\" class=\"wtw-imagesavatar\" /></div>";
 						}
 					}
-				} else {
+				} else if (zshowmyavatars == false) {
 					zpagediv += "No Avatars Available";
 				}
 				zpagediv += "</div>";
-				zpagediv += "<br /><div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Select My Avatar', .3, .6);\">Cancel</div>";
+				if (zshowmyavatars) {
+					zpagediv += "<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Local Profile', .4, .6);\">Cancel</div>";
+				} else {
+					zpagediv += "<br /><div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Select My Avatar', .3, .6);\">Cancel</div>";
+				}
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				if (zshowmyavatars) {
+					WTW.getMyAvatarList();
+				}
 			}
 		);
 	} catch (ex) {
@@ -557,7 +676,7 @@ WTWJS.prototype.loginAttemptResponse = function(zresults) {
 					WTW.hide('wtw_menulogin');
 					WTW.show('wtw_menuloggedin');
 					WTW.setLoginValues(zresults.userid, zresults.username, zresults.displayname, zresults.email, zresults.userimageurl);
-					WTW.openLocalLogin('Select My Avatar',.3,.6);
+					WTW.openLocalLogin('Select Avatar',.4,.6);
 				} else {
 					WTW.hide('wtw_menuloggedin');
 					WTW.show('wtw_menulogin');
@@ -989,7 +1108,7 @@ WTWJS.prototype.switchAvatarMenu = function(zmenu) {
 				WTW.hide('wtw_menuavatardisplaynamediv');
 				WTW.hide('wtw_menuavataranimationsdiv');
 				if (dGet('wtw_menuavatarchangediv').style.display == 'none') {
-					WTW.closeMenus();WTW.openLocalLogin('Select My Avatar',.3,.6);
+					WTW.closeMenus();WTW.openLocalLogin('Select Avatar',.4,.6);
 					WTW.show('wtw_menuavatarchangediv');
 				} else {
 					WTW.hide('wtw_menuavatarchangediv');

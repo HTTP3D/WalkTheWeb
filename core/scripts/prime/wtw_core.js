@@ -242,11 +242,11 @@ WTWJS.prototype.loadLoginAvatarSelect = function() {
 					WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobalavatarid, zuseravatarid, '', false);
 				} else {
 					/* avatar not saved, open avatar select window */
-					WTW.openLocalLogin('Select My Avatar',.3,.6);
+					WTW.openLocalLogin('Select Avatar',.4,.6);
 				}
 			} else {
 				/* avatar not saved, open avatar select window */
-				WTW.openLocalLogin('Select My Avatar',.3,.6);
+				WTW.openLocalLogin('Select Avatar',.4,.6);
 			}
 		}
 	} catch (ex) {
@@ -763,9 +763,11 @@ WTWJS.prototype.getConnectingGrids = function() {
 	/* fetch the connecting grids */
 	/* connecting grids are pin drops in the 3D Scene that define the position, rotation, and scaling for each web object added to the 3D Scene */
 	try {
+		var zparentwebid = '';
 		/* default the parent web id to a 3D Community - but check if the parent most web object is a community, building, or thing (only one value is set per loaded 3D Scene) */
-		var zparentwebid = communityid;
-		if (buildingid != "") {
+		if (communityid != "") {
+			zparentwebid = communityid;
+		} else if (buildingid != "") {
 			zparentwebid = buildingid;
 		} else if (thingid != "") {
 			zparentwebid = thingid;

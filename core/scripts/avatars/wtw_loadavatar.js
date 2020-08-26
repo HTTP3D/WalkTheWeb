@@ -648,16 +648,16 @@ WTWJS.prototype.getLastAnimationKey = function(zavatar) {
 	/* allows us to identify the start from of the next animation added */
 	let zmaxkey = 0;
 	try {
-		var bone;
-		var anim;
-		var whichbone;
-		var whichanim;
-		for (whichbone in zavatar.WTW.skeleton.bones) {
-			bone = zavatar.WTW.skeleton.bones[whichbone];
-			for (whichanim in bone.animations) {
-				anim = bone.animations[whichanim];
-				if (anim._keys.length > zmaxkey) {
-					zmaxkey = anim._keys.length;
+		var zbone;
+		var zanim;
+		var zwhichbone;
+		var zwhichanim;
+		for (zwhichbone in zavatar.WTW.skeleton.bones) {
+			zbone = zavatar.WTW.skeleton.bones[zwhichbone];
+			for (zwhichanim in zbone.animations) {
+				zanim = zbone.animations[zwhichanim];
+				if (zanim._keys.length > zmaxkey) {
+					zmaxkey = zanim._keys.length;
 				}
 			}
 		}
