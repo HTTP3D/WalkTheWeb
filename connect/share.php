@@ -753,6 +753,10 @@ try {
 			$zskymiecoefficient = '';
 			$zgroundpositiony = '';
 			$zwaterpositiony = '';
+			$zbuildingpositionx = 0;
+			$zbuildingpositiony = 0;
+			$zbuildingpositionz = 0;
+			$zbuildingrotationy = 0;
 			
 			if ($zwebtype == 'community') {
 				/* these fields only apply to 3D Community Scenes */
@@ -767,6 +771,10 @@ try {
 				$zskymiecoefficient = $zrow["skymiecoefficient"];
 				$zgroundpositiony = $zrow["groundpositiony"];
 				$zwaterpositiony = $zrow["waterpositiony"];
+				$zbuildingpositionx = $zrow["buildingpositionx"];
+				$zbuildingpositiony = $zrow["buildingpositiony"];
+				$zbuildingpositionz = $zrow["buildingpositionz"];
+				$zbuildingrotationy = $zrow["buildingrotationy"];
 
 				addUploadID($ztextureid, true);
 				addUploadID($zskydomeid, true);
@@ -806,6 +814,10 @@ try {
 				'snapshotid' => $zrow["snapshotid"],
 				'shareuserid' => $zrow["shareuserid"],
 				'alttag' => htmlspecialchars($zrow["alttag"], ENT_QUOTES, 'UTF-8'),
+				'buildingpositionx' => $zbuildingpositionx,
+				'buildingpositiony' => $zbuildingpositiony,
+				'buildingpositionz' => $zbuildingpositionz,
+				'buildingrotationy' => $zbuildingrotationy,
 				'createdate' => $zrow["createdate"],
 				'createuserid' => $zrow["createuserid"],
 				'updatedate' => $zrow["updatedate"],
