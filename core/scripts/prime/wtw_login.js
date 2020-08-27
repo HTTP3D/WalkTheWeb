@@ -274,6 +274,8 @@ WTWJS.prototype.getLocalProfile = function(zedit) {
 					
 					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Select Avatar', .4, .6);\"><div style=\"margin-top:4px;\">Select My Avatar</div></div>";
 					
+					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.closeIFrame();WTW.openAvatarDesigner();\"><div style=\"margin-top:4px;\">Edit My Avatar</div></div>";
+					
 					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.logout();\"><div style=\"margin-top:4px;\">Log Out</div></div>";
 				}
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
