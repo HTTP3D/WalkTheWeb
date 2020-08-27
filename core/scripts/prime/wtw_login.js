@@ -549,7 +549,7 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars) {
 							ztext = "WalkTheWeb Avatar";
 						}
 						if (zmyavatars[i].thumbnails.imageface != '') {
-							zicon = zmyavatars[i].thumbnails.imageface;
+							zicon = zmyavatars[i].object.folder + zmyavatars[i].thumbnails.imageface;
 						}
 						zmylist += "<div class=\"wtw-loginbutton\" style=\"text-align:left;\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.onMyAvatarSelect('" + zmyavatars[i].globalavatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\"><img src=\"" + zicon + "\" class=\"wtw-icon\" title=\"" + ztext + "\" alt=\"" + ztext + "\" />" + zmyavatars[i].displayname + "</div>\r\n";
 					}
