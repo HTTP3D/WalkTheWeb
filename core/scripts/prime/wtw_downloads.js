@@ -61,9 +61,9 @@ WTWJS.prototype.communitySearchReply = function(zresponse) {
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
 			if (zresponse[i].imageurl != "") {
-				ztempsearchresults += "<div style=\"clear:both;\"></div><img id='wtw_search" + zcommunityid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('" + zcommunityid + "','community');\" style=\"margin:5px;border:1px solid gray;cursor:pointer;width:100%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+				ztempsearchresults += "<div style=\"clear:both;\"></div><img id='wtw_search" + zcommunityid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('" + zcommunityid + "','community');\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
 			}
-			ztempsearchresults += "<br /><hr />";
+			ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 		}
 		dGet('wtw_commtempsearchresults').innerHTML = ztempsearchresults;
 	} catch (ex) {
@@ -103,9 +103,9 @@ WTWJS.prototype.buildingSearchReply = function(zresponse) {
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
 			if (zresponse[i].imageurl != "") {
-				ztempsearchresults += "<img id='wtw_search" + zbuildingid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('" + zbuildingid + "','building');return (false);\" style=\"margin:5px;border:1px solid gray;cursor:pointer;width:100%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+				ztempsearchresults += "<img id='wtw_search" + zbuildingid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('" + zbuildingid + "','building');return (false);\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
 			}
-			ztempsearchresults += "<br /><hr />";
+			ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 		}
 		dGet('wtw_buildtempsearchresults').innerHTML = ztempsearchresults;
 	} catch (ex) {
@@ -145,9 +145,9 @@ WTWJS.prototype.thingSearchReply = function(zresponse) {
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
 			if (zresponse[i].imageurl != "") {
-				ztempsearchresults += "<img id='wtw_search" + zthingid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('" + zthingid + "', 'thing');return (false);\" style=\"margin:5px;border:1px solid gray;cursor:pointer;width:100%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+				ztempsearchresults += "<img id='wtw_search" + zthingid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('" + zthingid + "', 'thing');return (false);\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
 			}
-			ztempsearchresults += "<br /><hr />";
+			ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 		}
 		dGet('wtw_thingtempsearchresults').innerHTML = ztempsearchresults;
 		WTW.setWindowSize();
@@ -159,9 +159,35 @@ WTWJS.prototype.thingSearchReply = function(zresponse) {
 WTWJS.prototype.downloadWeb = function(zcopywebid, zwebtype) {
 	/* This process takes the selected 3D Web and downloads a copy to the local instance */
 	try {
+		var isinstall = true;
+		var zcommunityid = '';
+		var zbuildingpositionx = 0;
+		var zbuildingpositiony = 0;
+		var zbuildingpositionz = 0;
+		var zbuildingrotationy = 0;
+		if (WTW.adminView != undefined) {
+			if (WTW.adminView == 1) {
+				isinstall = false;
+			}
+		}
+		if (isinstall && zwebtype == 'building') {
+			if (dGet('wtw_tcommunityid') != null) {
+				zcommunityid = dGet('wtw_tcommunityid').value;
+				zbuildingpositionx = dGet('wtw_tbuildingpositionx').value;
+				zbuildingpositiony = dGet('wtw_tbuildingpositiony').value;
+				zbuildingpositionz = dGet('wtw_tbuildingpositionz').value;
+				zbuildingrotationy = dGet('wtw_tbuildingrotationy').value;
+			}
+			
+		}
 		var zrequest = {
 			'webid': zcopywebid,
 			'webtype': zwebtype,
+			'communityid': zcommunityid,
+			'buildingpositionx': zbuildingpositionx,
+			'buildingpositiony': zbuildingpositiony,
+			'buildingpositionz': zbuildingpositionz,
+			'buildingrotationy': zbuildingrotationy,
 			'function':'downloadweb'
 		};
 		WTW.postJSON("/core/handlers/communities.php", zrequest, 

@@ -195,7 +195,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				break;
 			case "Select My Avatar":
 				zpagediv += "<h2 class=\"wtw-login\">Select My Avatar</h2>" +
-					"<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:38%;\"><div id=\"wtw_myavatars\"></div></div><br />" + 
+					"<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:auto;min-height:1%;max-height:38%;\"><div id=\"wtw_myavatars\"></div></div><br />" + 
 					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Select an Avatar', .3, .6);\"><div style=\"margin-top:4px;\">Quick-Start Avatars</div></div><br />" + 
 					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openAvatarDesigner();\"><div style=\"margin-top:4px;\">Create a New Avatar</div></div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
@@ -429,13 +429,15 @@ WTWJS.prototype.getFullAvatarList = function(zshowmyavatars) {
 					}
 				}
 				var zdefaultdisplayname = dGet('wtw_tusername').value;
-				if (zfullavatars[0].defaultdisplayname != '') {
-					zdefaultdisplayname = zfullavatars[0].defaultdisplayname;
+				if (zfullavatars.length > 0) {
+					if (zfullavatars[0].defaultdisplayname != '') {
+						zdefaultdisplayname = zfullavatars[0].defaultdisplayname;
+					}
 				}
 				var zpagediv = "<h2 class=\"wtw-login\">Select an Avatar</h2>";
 				if (zshowmyavatars) {
 					zpagediv = "<h2 class=\"wtw-login\">Select My Avatar</h2>";
-					zpagediv += "<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:38%;\"><div id=\"wtw_myavatars\"></div></div>";
+					zpagediv += "<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:auto;min-height:1%;max-height:38%;\"><div id=\"wtw_myavatars\"></div></div>";
 				}
 				zpagediv += "<div class=\"wtw-loginlabel\">Display Name</div><div><input type=\"text\" id=\"wtw_tdisplayname\" value=\"" + zdefaultdisplayname + "\" autocomplete=\"username\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>";
 				zpagediv += "<div class=\"wtw-imagescrollhorizontal\">";
@@ -558,7 +560,7 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars) {
 				}
 			}
 		} else {
-			WTW.openAvatarDesigner();
+			//WTW.openAvatarDesigner();
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-showMyAvatarList=" + ex.message);

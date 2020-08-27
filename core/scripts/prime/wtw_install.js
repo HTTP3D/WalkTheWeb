@@ -214,3 +214,25 @@ WTWJS.prototype.getRandomString = function(length) {
 	}
     return result;
 }
+
+WTWJS.prototype.formatDate = function(date) {
+	/* format date as month/day/year */
+	if (date != "") {
+		var d = new Date(date),
+			month = '' + (d.getMonth() + 1),
+			day = '' + d.getDate(),
+			year = d.getFullYear();
+
+		if (month.length < 2) month = '0' + month;
+		if (day.length < 2) day = '0' + day;
+		return [month,day,year].join('/');
+	} else {
+		return "";
+	}
+}
+
+WTWJS.prototype.isNumeric = function(n) {
+	/* boolean - is a text string a number */
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
