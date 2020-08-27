@@ -568,14 +568,62 @@ class wtw {
 					} catch (Exception $e){}
 				}
 			}
+			$zcommunityid = '';
+			$zbuildingpositionx = '0';
+			$zbuildingpositiony = '0';
+			$zbuildingpositionz = '0';
+			$zbuildingrotationy = '0';
 			if ($zsetupstep == 0) {
 				/* check if first 3D Community is created */
 				global $wtwdb;
 				$scount = 0;
-				$zresults = $wtwdb->query("select count(*) scount 
-					from ".wtw_tableprefix."communities;");
+				$zresults = $wtwdb->query("select t1.*, 
+						t2.scount 
+					from ".wtw_tableprefix."communities t1
+						left join (select count(*) as scount  from ".wtw_tableprefix."communities) t2
+						on 1=1
+					order by t1.createdate desc
+					limit 1;");
 				foreach ($zresults as $zrow) {
 					$scount = $zrow["scount"];
+					$zcommunityid = $zrow["communityid"];
+					$zbuildingpositionx = $zrow["buildingpositionx"];
+					$zbuildingpositiony = $zrow["buildingpositiony"];
+					$zbuildingpositionz = $zrow["buildingpositionz"];
+					$zbuildingrotationy = $zrow["buildingrotationy"];
+					
+					$zresultsweb = $wtwdb->query("
+						select * from ".wtw_tableprefix."webaliases
+						where domainname='".$this->domainname."'
+							and deleted=0;");
+					if (count($zresultsweb) == 0) {
+						$zwebaliasid = $wtwdb->getRandomString(16,1);
+						$zforcehttps = 0;
+						if ($this->protocol == "https://") {
+							$zforcehttps = 1;
+						}
+						$wtwdb->query("
+							insert into ".wtw_tableprefix."webaliases
+							   (webaliasid,
+								domainname,
+								communityid,
+								webalias,
+								forcehttps,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							   values
+							   ('".$zwebaliasid."',
+								'".$this->domainname."',
+								'".$zcommunityid."',
+								'".$this->domainname."',
+								".$zforcehttps.",
+								now(),
+								'".$this->userid."',
+								now(),
+								'".$this->userid."');");
+					}
 				}
 				if ($scount == 0) {
 					if (empty($_SESSION["wtw_userid"]) || !isset($_SESSION["wtw_userid"])) {
@@ -601,7 +649,8 @@ class wtw {
 				global $wtwdb;
 				$scount = 0;
 				$zresults = $wtwdb->query("select count(*) scount 
-					from ".wtw_tableprefix."buildings;");
+					from ".wtw_tableprefix."buildings
+					where downloadparentwebid='';");
 				foreach ($zresults as $zrow) {
 					$scount = $zrow["scount"];
 				}
@@ -750,7 +799,7 @@ class wtw {
 					echo "<script src=\"/core/scripts/prime/wtw_install.js\"></script>";
 					echo "<script src=\"/core/scripts/prime/wtw_downloads.js\"></script>";
 					echo "</head><body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
-					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:80%;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;text-align:center;'>";
+					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:90%;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;text-align:center;'>";
 					echo "<img src='/content/system/images/wtwlogo.png' />";
 					echo "<input type=\"hidden\" id=\"wtw_serverinstanceid\" value=\"".$this->serverinstanceid."\" />";
 
@@ -778,9 +827,14 @@ class wtw {
 					echo "<script src=\"/core/scripts/prime/wtw_install.js\"></script>";
 					echo "<script src=\"/core/scripts/prime/wtw_downloads.js\"></script>";
 					echo "</head><body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
-					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:80%;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;text-align:center;'>";
+					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:90%;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;text-align:center;'>";
 					echo "<img src='/content/system/images/wtwlogo.png' />";
 					echo "<input type=\"hidden\" id=\"wtw_serverinstanceid\" value=\"".$this->serverinstanceid."\" />";
+					echo "<input type=\"hidden\" id=\"wtw_tcommunityid\" value=\"".$zcommunityid."\" />";
+					echo "<input type=\"hidden\" id=\"wtw_tbuildingpositionx\" value=\"".$zbuildingpositionx."\" />";
+					echo "<input type=\"hidden\" id=\"wtw_tbuildingpositiony\" value=\"".$zbuildingpositiony."\" />";
+					echo "<input type=\"hidden\" id=\"wtw_tbuildingpositionz\" value=\"".$zbuildingpositionz."\" />";
+					echo "<input type=\"hidden\" id=\"wtw_tbuildingrotationy\" value=\"".$zbuildingrotationy."\" />";
 
 					echo "<div id=\"wtw_selectwebform\">";
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Select Your First 3D Building Scene</h3>";

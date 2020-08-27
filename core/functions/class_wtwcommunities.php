@@ -886,10 +886,6 @@ class wtwcommunities {
 						 t3.csgmoldid,
 						 t3.csgaction,
 						 t3.alttag,
-						 t3.productid,
-						 t3.slug,
-						 t3.categoryid,
-						 t3.allowsearch,
 						 t3.jsfunction,
 						 t3.jsparameters
 					from ".wtw_tableprefix."communitymolds t3
@@ -965,10 +961,6 @@ class wtwcommunities {
 							csgmoldid,
 							csgaction,
 							alttag,
-							productid,
-							slug,
-							categoryid,
-							allowsearch,
 							jsfunction,
 							jsparameters,
 							createdate,
@@ -1042,10 +1034,6 @@ class wtwcommunities {
 							'".$zrow["csgmoldid"]."',
 							'".$zrow["csgaction"]."',
 							'".$zrow["alttag"]."',
-							'".$zrow["productid"]."',
-							'".$zrow["slug"]."',
-							'".$zrow["categoryid"]."',
-							".$wtwhandlers->checkNumber($zrow["allowsearch"],1).",
 							'".$zrow["jsfunction"]."',
 							'".$zrow["jsparameters"]."',
 							now(),
@@ -1255,7 +1243,7 @@ class wtwcommunities {
 		return $zsuccess;
 	}
 	
-	public function downloadWeb($zwebid, $znewwebid, $zwebtype) {
+	public function downloadWeb($zwebid, $znewwebid, $zwebtype, $zdownloadparentwebid, $zdownloadparentwebtype, $zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingrotationy) {
 		/* this process downloads 3D Web and dependent objects form https://3dnet.walktheweb.com (WalkTheWeb repository)*/
 		/* this is the response after you select a 3D Item to domwload in the search */
 		/* $zwebid is the item selected (3D Community, 3D Bulding, or 3D Thing) */
@@ -1524,6 +1512,8 @@ class wtwcommunities {
 						insert into ".wtw_tableprefix."communities 
 						   (communityid,
 							pastcommunityid,
+							downloadparentwebid,
+							downloadparentwebtype,
 							communityname,
 							userid,
 							positionx,
@@ -1564,6 +1554,8 @@ class wtwcommunities {
 						values
 						   ('".$znewcommunityid."',
 							'".$zrequest->communityid."',
+							'".$zdownloadparentwebid."',
+							'".$zdownloadparentwebtype."',
 							'".$zrequest->communityname."',
 							'".$zuserid."',
 							".$zrequest->positionx.",
@@ -1597,10 +1589,10 @@ class wtwcommunities {
 							".$zrequest->buildingpositiony.",
 							".$zrequest->buildingpositionz.",
 							".$zrequest->buildingrotationy.",
-							'".$zrequest->createdate."',
-							'".$znewcreateuserid."',
 							now(),
-							'".$znewupdateuserid."');");
+							'".$zuserid."',
+							now(),
+							'".$zuserid."');");
 							
 					$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
 					$wtwhandlers->query("
@@ -1629,6 +1621,8 @@ class wtwcommunities {
 						insert into ".wtw_tableprefix."buildings 
 						   (buildingid,
 							pastbuildingid,
+							downloadparentwebid,
+							downloadparentwebtype,
 							buildingname,
 							userid,
 							positionx,
@@ -1654,6 +1648,8 @@ class wtwcommunities {
 						values
 						   ('".$znewbuildingid."',
 							'".$zrequest->buildingid."',
+							'".$zdownloadparentwebid."',
+							'".$zdownloadparentwebtype."',
 							'".$zrequest->buildingname."',
 							'".$zuserid."',
 							".$zrequest->positionx.",
@@ -1672,10 +1668,10 @@ class wtwcommunities {
 							'".$znewsnapshotid."',
 							'".$znewshareuserid."',
 							'".$zrequest->alttag."',
-							'".$zrequest->createdate."',
-							'".$znewcreateuserid."',
 							now(),
-							'".$znewupdateuserid."');");
+							'".$zuserid."',
+							now(),
+							'".$zuserid."');");
 					$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."userauthorizations
@@ -1703,6 +1699,8 @@ class wtwcommunities {
 						insert into ".wtw_tableprefix."things 
 						   (thingid,
 							pastthingid,
+							downloadparentwebid,
+							downloadparentwebtype,
 							thingname,
 							userid,
 							positionx,
@@ -1728,6 +1726,8 @@ class wtwcommunities {
 						values
 						   ('".$znewthingid."',
 							'".$zrequest->thingid."',
+							'".$zdownloadparentwebid."',
+							'".$zdownloadparentwebtype."',
 							'".$zrequest->thingname."',
 							'".$zuserid."',
 							".$zrequest->positionx.",
@@ -1746,10 +1746,10 @@ class wtwcommunities {
 							'".$znewsnapshotid."',
 							'".$znewshareuserid."',
 							'".$zrequest->alttag."',
-							'".$zrequest->createdate."',
-							'".$znewcreateuserid."',
 							now(),
-							'".$znewupdateuserid."');");
+							'".$zuserid."',
+							now(),
+							'".$zuserid."');");
 					$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."userauthorizations
@@ -2425,10 +2425,6 @@ class wtwcommunities {
 						csgmoldid,
 						csgaction,
 						alttag,
-						productid,
-						slug,
-						categoryid,
-						allowsearch,
 						jsfunction,
 						jsparameters,
 						createdate,
@@ -2501,17 +2497,13 @@ class wtwcommunities {
 						'".$zmold->csgmoldid."',
 						'".$zmold->csgaction."',
 						'".$zmold->alttag."',
-						'',
-						'',
-						'',
-						1,
 						'".$zmold->jsfunction."',
 						'".$zmold->jsparameters."',
 						'".$zmold->createdate."',
 						'".$znewcreateuserid."',
 						now(),
 						'".$znewupdateuserid."');";
-						
+
 					$wtwhandlers->query($zsql.$zsqlvalues);
 					
 					
@@ -2662,6 +2654,91 @@ class wtwcommunities {
 			}
 
 
+			/* if part of the new install process, add the first building to the first community */
+			if ($zwebtype == 'building' && !empty($zcommunityid) && isset($zcommunityid)) {
+				$znewconnectinggridid = $wtwhandlers->getNewKey('connectinggrids', 'connectinggridid', '');
+				$zloadactionzoneid = '';
+				if (is_numeric($zbuildingpositionx) == false) {
+					$zbuildingpositionx = 0;
+				}
+				if (is_numeric($zbuildingpositiony) == false) {
+					$zbuildingpositiony = 0;
+				}
+				if (is_numeric($zbuildingpositionz) == false) {
+					$zbuildingpositionz = 0;
+				}
+				if (is_numeric($zbuildingrotationy) == false) {
+					$zbuildingrotationy = 0;
+				}
+				
+				/* get the extreme loadzone for the new building */
+				$zresultsaz = $wtwhandlers->query("
+					select * 
+					from ".wtw_tableprefix."actionzones 
+					where buildingid='".$znewwebid."'
+						and actionzonename='Extreme Load Zone'
+						and deleted=0
+					limit 1;");
+				foreach ($zresultsaz as $zrowaz) {
+					$zloadactionzoneid = $zrowaz["actionzoneid"];
+				}
+				
+				/* add connecting grid to place the building into the community during first time installs */
+				if (!empty($zloadactionzoneid) && isset($zloadactionzoneid)) {
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."connectinggrids 
+						   (connectinggridid,
+							pastconnectinggridid,
+							parentwebid,
+							parentwebtype,
+							childwebid,
+							childwebtype,
+							positionx,
+							positiony,
+							positionz,
+							scalingx,
+							scalingy,
+							scalingz,
+							rotationx,
+							rotationy,
+							rotationz,
+							loadactionzoneid,
+							altloadactionzoneid,
+							unloadactionzoneid,
+							attachactionzoneid,
+							alttag,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						values
+						   ('".$znewconnectinggridid."',
+							'',
+							'".$zcommunityid."',
+							'community',
+							'".$znewwebid."',
+							'building',
+							".$zbuildingpositionx.",
+							".$zbuildingpositiony.",
+							".$zbuildingpositionz.",
+							1,
+							1,
+							1,
+							0,
+							".$zbuildingrotationy.",
+							0,
+							'".$zloadactionzoneid."',
+							'',
+							'',
+							'',
+							'',
+							now(),
+							'".$zuserid."',
+							now(),
+							'".$zuserid."');");
+				}
+			}
+
 			/* process child connecting grids */
 			if ($zwebtype != 'thing') {
 				$zdiffwebid = '';
@@ -2766,7 +2843,7 @@ class wtwcommunities {
 								'".$znewupdateuserid."');");
 						if ($zfetchweb) {
 							/* assign newchildwebid, but also need to pass the webid... */
-							$this->downloadWeb($zconnectinggrid->childwebid, $znewchildwebid, $zconnectinggrid->childwebtype);
+							$this->downloadWeb($zconnectinggrid->childwebid, $znewchildwebid, $zconnectinggrid->childwebtype, $znewwebid, $zconnectinggrid->parentwebtype, '', 0, 0, 0, 0);
 						}
 					}
 				}

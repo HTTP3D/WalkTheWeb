@@ -42,6 +42,10 @@ try {
 	$zskymiedirectionalg = $wtwhandlers->getPost('skymiedirectionalg','');
 	$zskymiecoefficient = $wtwhandlers->getPost('skymiecoefficient','');
 	$zgroundtextureid = $wtwhandlers->getPost('groundtextureid','');
+	$zbuildingpositionx = $wtwhandlers->getPost('buildingpositionx','0');
+	$zbuildingpositiony = $wtwhandlers->getPost('buildingpositiony','0');
+	$zbuildingpositionz = $wtwhandlers->getPost('buildingpositionz','0');
+	$zbuildingrotationy = $wtwhandlers->getPost('buildingrotationy','0');
 	$zsharehash = $wtwhandlers->getPost('sharehash','');
 	
 	/* select the function called */
@@ -75,7 +79,7 @@ try {
 			$zresponse = $wtwcommunities->shareCommunityTemplate($zcommunityid, $zsharehash);
 			break;
 		case "downloadweb":
-			$znewwebid = $wtwcommunities->downloadWeb($zwebid, $zwebid, $zwebtype);
+			$znewwebid = $wtwcommunities->downloadWeb($zwebid, $zwebid, $zwebtype, '', '', $zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingrotationy);
 			$zresponse = array(
 				'webid'=> $znewwebid,
 				'webtype'=> $zwebtype

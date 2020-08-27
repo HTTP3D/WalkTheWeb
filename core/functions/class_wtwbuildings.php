@@ -855,10 +855,6 @@ class wtwbuildings {
 						t3.csgmoldid,
 						t3.csgaction,
 						t3.alttag,
-						t3.productid,
-						t3.slug,
-						t3.categoryid,
-						t3.allowsearch,
 						t3.jsfunction,
 						t3.jsparameters,
 						now() as createdate,
@@ -934,10 +930,6 @@ class wtwbuildings {
 					$zcsgmoldid = $zrow["csgmoldid"];
 					$zcsgaction = $zrow["csgaction"];
 					$zalttag = $zrow["alttag"];
-					$zproductid = $zrow["productid"];
-					$zslug = $zrow["slug"];
-					$zcategoryid = $zrow["categoryid"];
-					$zallowsearch = $zrow["allowsearch"];
 					$zjsfunction = $zrow["jsfunction"];
 					$zjsparameters = $zrow["jsparameters"];
 
@@ -1009,10 +1001,6 @@ class wtwbuildings {
 							csgmoldid,
 							csgaction,
 							alttag,
-							productid,
-							slug,
-							categoryid,
-							allowsearch,
 							jsfunction,
 							jsparameters,
 							createdate,
@@ -1086,10 +1074,6 @@ class wtwbuildings {
 							'".$zcsgmoldid."',
 							'".$zcsgaction."',
 							'".$wtwhandlers->escapeHTML($zalttag)."',
-							'".$zproductid."',
-							'".$zslug."',
-							'".$zcategoryid."',
-							".$wtwhandlers->checkNumber($zallowsearch,1).",
 							'".$zjsfunction."',
 							'".$zjsparameters."',
 							now(),
