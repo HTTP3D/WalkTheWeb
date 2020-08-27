@@ -1321,7 +1321,6 @@ class wtwcommunities {
 				$znewuserid = $wtwhandlers->getNewKey('users', 'userid', $zuser->userid);
 				$znewuploadpathid = $wtwhandlers->getNewKey('users', "uploadpathid", $zuser->uploadpathid);
 				$zuserpassword = $wtwhandlers->getRandomString(16,1);
-$wtwhandlers->serror("znewuserid(getNewKey)=".$znewuserid);
 				$zresults = $wtwhandlers->query("
 					select userid
 					from ".wtw_tableprefix."users 
@@ -1414,9 +1413,6 @@ $wtwhandlers->serror("znewuserid(getNewKey)=".$znewuserid);
 				$znewuserid = $wtwhandlers->getUserIDfromPastID($zupload->userid);
 				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zupload->createuserid);
 				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zupload->updateuserid);
-$wtwhandlers->serror("znewuserid(zupload)=".$znewuserid." from ".$zupload->userid);
-$wtwhandlers->serror("znewuserid(zupload)=".$znewcreateuserid." from ".$zupload->createuserid);
-$wtwhandlers->serror("znewuserid(zupload)=".$znewupdateuserid." from ".$zupload->updateuserid);
 				
 				$zhidedate = "null";
 				$zhide = "0";
@@ -1557,6 +1553,10 @@ $wtwhandlers->serror("znewuserid(zupload)=".$znewupdateuserid." from ".$zupload-
 							snapshotid,
 							shareuserid,
 							alttag,
+							buildingpositionx,
+							buildingpositiony,
+							buildingpositionz,
+							buildingrotationy,
 							createdate,
 							createuserid,
 							updatedate,
@@ -1593,6 +1593,10 @@ $wtwhandlers->serror("znewuserid(zupload)=".$znewupdateuserid." from ".$zupload-
 							'".$znewsnapshotid."',
 							'".$znewshareuserid."',
 							'".$zrequest->alttag."',
+							".$zrequest->buildingpositionx.",
+							".$zrequest->buildingpositiony.",
+							".$zrequest->buildingpositionz.",
+							".$zrequest->buildingrotationy.",
 							'".$zrequest->createdate."',
 							'".$znewcreateuserid."',
 							now(),
