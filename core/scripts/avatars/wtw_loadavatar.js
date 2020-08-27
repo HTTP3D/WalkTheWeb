@@ -20,7 +20,7 @@ WTWJS.prototype.loadAvatarPlaceholder = function() {
 		zavatardef.rotation.y = WTW.init.startRotationY;
 		zavatardef.rotation.z = 0;
 		/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
-		/* is it set to delete after 5 seconds */
+		/* is it set to delete after 10 seconds */
 		var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
 		zstartstand.scaling = new BABYLON.Vector3(25, 1, 25);
 		zstartstand.position = new BABYLON.Vector3(WTW.init.startPositionX + zrand1, WTW.init.startPositionY - .5, WTW.init.startPositionZ + zrand2);
@@ -155,6 +155,15 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 			WTW.disposeAnimations(zavatarname);
 			/* transfer avatar sets the avatar scale old box as parent and renames the old meshes */
 			WTW.transferAvatar(zavatarname);
+			/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
+			/* is it set to delete after 10 seconds */
+			var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
+			zstartstand.scaling = new BABYLON.Vector3(25, 1, 25);
+			zstartstand.position = new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY - .5, WTW.init.startPositionZ);
+			zstartstand.checkCollisions = true;
+			zcovering = new BABYLON.StandardMaterial("matstartstand", scene);
+			zstartstand.material = new BABYLON.StandardMaterial("matstartstand", scene);
+			zstartstand.material.alpha = 0;
 			/* new avatar is called and built in place - then the old avatar will be removed when done */
 			zavatar = WTW.addAvatar(zavatardef.name, zavatardef, zavatardef.parentname);
 			zavatar.rotation.y = WTW.getRadians(WTW.init.startRotationY);
@@ -162,6 +171,7 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 				/* global variable for current user's avatar */
 				WTW.myAvatar = zavatar;
 			}
+			window.setTimeout(function() {zstartstand.dispose();},10000);
 		} else {
 			/* if the avatar meshes are the same, only update the colors and animations */
 			WTW.updateAvatarColors(zavatarname, zavatardef);
