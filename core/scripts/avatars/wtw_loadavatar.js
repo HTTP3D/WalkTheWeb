@@ -23,7 +23,7 @@ WTWJS.prototype.loadAvatarPlaceholder = function() {
 		/* is it set to delete after 10 seconds */
 		var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
 		zstartstand.scaling = new BABYLON.Vector3(25, 1, 25);
-		zstartstand.position = new BABYLON.Vector3(WTW.init.startPositionX + zrand1, WTW.init.startPositionY - .5, WTW.init.startPositionZ + zrand2);
+		zstartstand.position = new BABYLON.Vector3(WTW.init.startPositionX + zrand1, WTW.init.startPositionY - .57, WTW.init.startPositionZ + zrand2);
 		zstartstand.checkCollisions = true;
 		zcovering = new BABYLON.StandardMaterial("matstartstand", scene);
 		zstartstand.material = new BABYLON.StandardMaterial("matstartstand", scene);
@@ -159,7 +159,7 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 			/* is it set to delete after 10 seconds */
 			var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
 			zstartstand.scaling = new BABYLON.Vector3(25, 1, 25);
-			zstartstand.position = new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY - .5, WTW.init.startPositionZ);
+			zstartstand.position = new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY - .57, WTW.init.startPositionZ);
 			zstartstand.checkCollisions = true;
 			zcovering = new BABYLON.StandardMaterial("matstartstand", scene);
 			zstartstand.material = new BABYLON.StandardMaterial("matstartstand", scene);
