@@ -718,6 +718,8 @@ WTWJS.prototype.onMessage = function (zevent) {
 			zsafe = true;
 		} else if (zevent.origin == "https://3d.http3d.net") {
 			zsafe = true;
+		} else if (zevent.origin == wtw_domainurl) {
+			zsafe = true;
 		}
 		if (zsafe) {
 			let zfunctionname = '';
