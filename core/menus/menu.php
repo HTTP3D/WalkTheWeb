@@ -76,7 +76,7 @@
 				<li class="wtw-submenuli"><hr /></li>
 				<li class="wtw-menuli" class="wtw-clear" onclick="WTW.editProfile();"><img src="/content/system/images/menueditprofile.png" alt="Edit My Profile" title="Edit My Profile" class='wtw-menulefticon' />Edit My Profile</li>
 				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openAvatarDesigner();"><img src="/content/system/images/menueditavatar.png" alt="Edit My Avatar" title="Edit My Avatar" class='wtw-menulefticon' />Edit My Avatar</li>
-				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openLocalLogin('Select Avatar',.4,.6);"><img src="/content/system/images/menueditavatar.png" alt="Select My Avatar" title="Select My Avatar" class='wtw-menulefticon' />Select My Avatar</li>
+				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openLocalLogin('Select Avatar',.4,.9);"><img src="/content/system/images/menueditavatar.png" alt="Select My Avatar" title="Select My Avatar" class='wtw-menulefticon' />Select My Avatar</li>
 				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/my-3d-stats/','_blank');"><img src="/content/system/images/menustats.png" alt="My 3D Stats" title="My 3D Stats" class='wtw-menulefticon' />My 3D Stats</li>
 				<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/account/password/','_blank');"><img src="/content/system/images/menupassword.png" alt="Change Password" title="Change Password" class='wtw-menulefticon' />Change Password</li>
 				<li class="wtw-menuli" onclick="WTW.openLoginMenu();WTW.closeMenus();"><img src="/content/system/images/menulogin.png" alt="Login Menu" title="Login Menu" class='wtw-menulefticon' /><div style="color:yellow;">Login Menu</div></li>
@@ -146,13 +146,13 @@
 		<ul class="wtw-menuli">
 			<li class="wtw-menuliholder"><img src="/content/system/images/menuwalk.png" alt="Walk Animation Speed" title="Walk Animation Speed" class='wtw-menulefticon' />Walk Animation Speed</li>
 			<li class="wtw-submenuli">
-				<input id="wtw_twalkanimationspeed" type="range" min=".1" max="1.9" value="1" step=".01" style="direction: ltr;width:240px;cursor:pointer;" onchange="WTW.changeWalkAnimationSpeed();this.blur();"/>
+				<input id="wtw_twalkanimationspeed" type="range" min=".1" max="2.9" value="1.5" step=".01" style="direction: ltr;width:240px;cursor:pointer;" onchange="WTW.changeWalkAnimationSpeed();this.blur();"/>
 			</li>
 		</ul>
 		<ul class="wtw-menuli">
 			<li class="wtw-menuliholder"><img src="/content/system/images/menuwalk.png" alt="Walk Speed" title="Walk Speed" class='wtw-menulefticon' />Walk Distance Traveled</li>
 			<li class="wtw-submenuli">
-				<input id="wtw_twalkspeed" type="range" min=".1" max="1.9" value="1" step=".01" style="direction: ltr;width:240px;cursor:pointer;" onchange="WTW.changeWalkSpeed();this.blur();"/>
+				<input id="wtw_twalkspeed" type="range" min=".1" max="2.9" value="1.5" step=".01" style="direction: ltr;width:240px;cursor:pointer;" onchange="WTW.changeWalkSpeed();this.blur();"/>
 			</li>
 		</ul>
 		<ul class="wtw-menuli">
