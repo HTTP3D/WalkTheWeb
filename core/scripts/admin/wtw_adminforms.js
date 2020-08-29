@@ -798,7 +798,7 @@ WTWJS.prototype.openMediaPageForm = function(uploadid) {
 }
 
 /* media library - file uploads */
-WTWJS.prototype.setImageMenu = function(w) {
+WTWJS.prototype.setImageMenu = function(zmenu) {
 	/* set the image menu to community, my files, or stock menu page form */
 	try {
 		dGet('wtw_menuimagecommunity').className = 'wtw-menutabtop';
@@ -812,8 +812,8 @@ WTWJS.prototype.setImageMenu = function(w) {
 		WTW.hide('wtw_menuimagestockdiv');
 		WTW.hide('wtw_menuuploadedobjectsdiv');
 		WTW.show('wtw_bstartimageupload');
-		if (WTW.isNumeric(w)) {
-			switch (Number(w)) {
+		if (WTW.isNumeric(zmenu)) {
+			switch (Number(zmenu)) {
 				case 2:
 					dGet('wtw_menuimagemy').className = 'wtw-menutabtopselected';
 					WTW.showInline('wtw_menuimagemydiv');
@@ -840,15 +840,15 @@ WTWJS.prototype.setImageMenu = function(w) {
 	}
 }
 
-WTWJS.prototype.selectFileForm = function(obj) {
+WTWJS.prototype.selectFileForm = function(zobj) {
 	/* filter the page form to show images, docs, sounds, or videos */
 	/* while cross referencing the existing files in the edit object, My files, or stock */
 	try {
 		var zitem = dGet('wtw_tfileitem').value;
-		var category = WTW.getDDLValue('wtw_fileselectcategory');
-		var hide = '0';
-		if (obj != undefined) {
-			if (obj.id == 'wtw_showhiddenimagesdiv') {
+		var zcategory = WTW.getDDLValue('wtw_fileselectcategory');
+		var zhide = '0';
+		if (zobj != undefined) {
+			if (zobj.id == 'wtw_showhiddenimagesdiv') {
 				if (dGet('wtw_bshowhiddenimages').checked) {
 					dGet('wtw_bshowhiddenimages').checked = false;
 				} else {
@@ -857,7 +857,7 @@ WTWJS.prototype.selectFileForm = function(obj) {
 			}
 		}
 		if (dGet('wtw_bshowhiddenimages').checked) {
-			hide = '1';
+			zhide = '1';
 		}		
 		WTW.hide('wtw_menuimagecommunity');
 		WTW.showInline('wtw_menuimagemy');
@@ -872,9 +872,9 @@ WTWJS.prototype.selectFileForm = function(obj) {
 		} else if (thingid != '') {
 			dGet('wtw_menuimagecommunity').innerHTML = "3D Thing Files";
 		}
-		switch (category) {
+		switch (zcategory) {
 			case '':
-				WTW.loadMyFilesPage(zitem, category, hide);
+				WTW.loadMyFilesPage(zitem, zcategory, zhide);
 				WTW.loadUploadedObjectsDiv(false);
 				WTW.loadStockPage(zitem);
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Media Library</div>";
@@ -886,7 +886,7 @@ WTWJS.prototype.selectFileForm = function(obj) {
 				WTW.showInline('wtw_menuuploadedobjects');
 				break;
 			case 'image':
-				WTW.loadMyFilesPage(zitem, category, hide);
+				WTW.loadMyFilesPage(zitem, zcategory, zhide);
 				WTW.loadStockPage(zitem);
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Select Image</div>";
 				WTW.showInline('wtw_menuimagestock');
@@ -896,11 +896,11 @@ WTWJS.prototype.selectFileForm = function(obj) {
 				}
 				break;
 			case 'video':
-				WTW.loadMyFilesPage(zitem, category, hide);
+				WTW.loadMyFilesPage(zitem, zcategory, zhide);
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Select Video</div>";
 				break;
 			case 'audio':
-				WTW.loadMyFilesPage(zitem, category, hide);
+				WTW.loadMyFilesPage(zitem, zcategory, zhide);
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Select Sound</div>";
 				break;
 			case 'object':
@@ -910,26 +910,26 @@ WTWJS.prototype.selectFileForm = function(obj) {
 				WTW.setImageMenu(4);
 				break;
 			case 'doc':
-				WTW.loadMyFilesPage(zitem, category, hide);
+				WTW.loadMyFilesPage(zitem, zcategory, zhide);
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Select Document</div>";
 				break;
 			default:
-				WTW.loadMyFilesPage(zitem, category, hide);
+				WTW.loadMyFilesPage(zitem, zcategory, zhide);
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Select File</div>";
 				break;
 		}
-		if (category != 'object') {
+		if (zcategory != 'object') {
 			WTW.setImageMenu(2);
 			if (zitem == 'blogimage') {
 				if (WTW.selectedMoldName.indexOf("-") > -1) {
 					var zthingid = '';
 					var zbuildingid = '';
 					var zcommunityid = '';
-					var namepart = WTW.selectedMoldName.split('-');
-					var i = Number(namepart[1]);
-					if (namepart[0] == 'thingmolds') {
+					var znamepart = WTW.selectedMoldName.split('-');
+					var i = Number(znamepart[1]);
+					if (znamepart[0] == 'thingmolds') {
 						zthingid = WTW.thingMolds[i].thinginfo.thingid;
-					} else if (namepart[0] == 'buildingmolds') {
+					} else if (znamepart[0] == 'buildingmolds') {
 						zbuildingid = WTW.buildingMolds[i].buildinginfo.buildingid;
 					} else {
 						zcommunityid = communityid;
@@ -943,29 +943,29 @@ WTWJS.prototype.selectFileForm = function(obj) {
 	}
 }	
 
-WTWJS.prototype.setSelectFileID = function(selectedobj, uploadid, originalid, websizeid, fileextension, filesize, filetitle, filename, filepath) {
+WTWJS.prototype.setSelectFileID = function(zselectedobj, zuploadid, zoriginalid, zwebsizeid, zfileextension, zfilesize, zfiletitle, zfilename, zfilepath) {
 	/* after selcting a file, implement the changes in the 3D Scene as necessary */
 	try {
-		var category = WTW.getDDLValue('wtw_fileselectcategory');
+		var zcategory = WTW.getDDLValue('wtw_fileselectcategory');
 		var zitem = dGet('wtw_tfileitem').value;
-		var itemname = dGet('wtw_tfileitemname').value;
-		var itemnamepath = dGet('wtw_tfileitemnamepath').value;
-		var previewname = dGet('wtw_tfileitempreviewname').value;
-		if (dGet(itemname) != null) {
-			dGet(itemname).value = originalid;
+		var zitemname = dGet('wtw_tfileitemname').value;
+		var zitemnamepath = dGet('wtw_tfileitemnamepath').value;
+		var zpreviewname = dGet('wtw_tfileitempreviewname').value;
+		if (dGet(zitemname) != null) {
+			dGet(zitemname).value = zoriginalid;
 		}
-		if (dGet(itemnamepath) != null) {
-			dGet(itemnamepath).value = filepath;
+		if (dGet(zitemnamepath) != null) {
+			dGet(zitemnamepath).value = zfilepath;
 		}
-		if (dGet(previewname) != null) {
-			dGet(previewname).alt = filename;
-			dGet(previewname).title = filename;
-			if (category == 'image') {
-				dGet(previewname).src = selectedobj.src;
-				WTW.show(previewname);
+		if (dGet(zpreviewname) != null) {
+			dGet(zpreviewname).alt = zfilename;
+			dGet(zpreviewname).title = zfilename;
+			if (zcategory == 'image') {
+				dGet(zpreviewname).src = zselectedobj.src;
+				WTW.show(zpreviewname);
 			}
 		}
-		switch (category) {
+		switch (zcategory) {
 			case 'video':
 				WTW.setDDLValue('wtw_tmoldsoundattenuation', "linear");
 				WTW.setSoundFields();
@@ -983,20 +983,20 @@ WTWJS.prototype.setSelectFileID = function(selectedobj, uploadid, originalid, we
 						WTW.extraGround.material = null;
 					}
 				}
-				var eguscale = 500;
-				var egvscale = 500;
-				var extraGroundMaterial = new BABYLON.StandardMaterial("egmat", scene);
-				extraGroundMaterial.diffuseTexture = new BABYLON.Texture(dGet(itemnamepath).value, scene);
-				//var imageinfo = WTW.getUploadFileData(uploadid);
-				//extraGroundMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.filedata, "egmattexture", scene);
-				extraGroundMaterial.diffuseTexture.uScale = eguscale;
-				extraGroundMaterial.diffuseTexture.vScale = egvscale;
-				extraGroundMaterial.specularColor = new BABYLON.Color3(.1, .1, .1);
-				extraGroundMaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-				WTW.extraGround.material = extraGroundMaterial;
+				var zeguscale = 500;
+				var zegvscale = 500;
+				var zextragroundmaterial = new BABYLON.StandardMaterial("egmat", scene);
+				zextragroundmaterial.diffuseTexture = new BABYLON.Texture(dGet(zitemnamepath).value, scene);
+				//var zimageinfo = WTW.getUploadFileData(zuploadid);
+				//zextragroundmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.filedata, "egmattexture", scene);
+				zextragroundmaterial.diffuseTexture.uScale = zeguscale;
+				zextragroundmaterial.diffuseTexture.vScale = zegvscale;
+				zextragroundmaterial.specularColor = new BABYLON.Color3(.1, .1, .1);
+				zextragroundmaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+				WTW.extraGround.material = zextragroundmaterial;
 				break;
 		}
-		if (itemname != 'wtw_tobjectsoundid') {
+		if (zitemname != 'wtw_tobjectsoundid') {
 			document.activeElement.blur();
 			WTW.closeFullPageForm();
 			if (WTW.adminView == 1) {
