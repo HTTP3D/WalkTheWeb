@@ -19,9 +19,11 @@ class wtwshopping {
 		}
 	}	
 	
-	public $version = "1.0.0";
+	public $version = "1.0.1";
 
-	public $dbversion = "1.0.0";
+	public $dbversion = "1.0.1";
+
+	public $versiondate = "2020-8-29";
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -71,9 +73,9 @@ class wtwshopping {
 			if ($wtwplugins->pagename == "admin.php") {
 				/* admin menu items */
 				/* wtwplugins class -> addAdminMenuItem function (menu item id, menu text, level 1 sort, level 1 id, level 2 sort, level 2 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
-				$wtwplugins->addAdminMenuItem('wtw_adminshopping', '3D Stores', 95, 'wtw_shopping', 0, '', WTWSHOPPING_URL.'/assets/images/menustore.png', array('admin','developer','architect'), null);
-				$wtwplugins->addAdminMenuItem('wtw_adminliststores', 'List Stores', 95, 'wtw_shopping', 1, 'wtw_liststores', '', array('admin','developer','architect'), "WTW.openFullPageForm('fullpage','List Stores','wtw_liststorespage');WTWShopping.getStores();");
-				$wtwplugins->addAdminMenuItem('wtw_adminaddstore', 'Add Store', 95, 'wtw_shopping', 2, 'wtw_addstore', '', array('admin','developer','architect'), "WTW.openFullPageForm('fullpage','Add Store','wtw_addstoresettingspage');");
+				$wtwplugins->addAdminMenuItem('wtw_adminshopping', '3D Stores', 25, 'wtw_shopping', 0, '', WTWSHOPPING_URL.'/assets/images/menustore.png', array('admin','developer','architect'), null);
+				$wtwplugins->addAdminMenuItem('wtw_adminliststores', 'List Stores', 25, 'wtw_shopping', 1, 'wtw_liststores', '', array('admin','developer','architect'), "WTW.openFullPageForm('fullpage','List Stores','wtw_liststorespage');WTWShopping.getStores();");
+				$wtwplugins->addAdminMenuItem('wtw_adminaddstore', 'Add Store', 25, 'wtw_shopping', 2, 'wtw_addstore', '', array('admin','developer','architect'), "WTW.openFullPageForm('fullpage','Add Store','wtw_addstoresettingspage');");
 				
 				/* admin full page settings forms */
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
@@ -228,7 +230,7 @@ class wtwshopping {
 		/* Table definitions for plugin - used for new installs and updates */
 		global $wtwplugins;
 		try {
-			if ($wtwplugins->pagename == "admin.php") {
+			//if ($wtwplugins->pagename == "admin.php") {
 				$dbversion = $wtwplugins->getSetting(WTWSHOPPING_PREFIX."dbversion");
 				if ($dbversion != $this->dbversion) {
 					$wtwplugins->deltaCreateTable("
@@ -302,7 +304,7 @@ class wtwshopping {
 					");
 					$wtwplugins->saveSetting(WTWSHOPPING_PREFIX."dbversion", $this->dbversion);
 				}
-			}
+			//}
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-shopping:functions-class_wtwshopping.php-checkTablesForUpdates=".$e->getMessage());
 		}
