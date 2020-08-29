@@ -452,6 +452,7 @@ WTWJS.prototype.openIFrame = function(url, zwidth, zheight, ztitle) {
 		dGet('wtw_ibrowsediv').style.display = "inline-block";
 		dGet('wtw_ibrowsediv').style.visibility = "visible";
 		dGet('wtw_ibrowsediv').style.zIndex = 3000;
+		dGet('wtw_ibrowsediv').style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
 		if (url == '/core/pages/help.php') {
 			iframe.onload = function() { WTW.setHelp();	};
 			dGet('wtw_browsetitle').innerHTML = "WalkTheWeb - Help";
@@ -493,6 +494,7 @@ WTWJS.prototype.closeIFrame = function() {
 		var iframe = dGet('wtw_ibrowseframe');
 		iframe.onload = function() {};
 		dGet('wtw_ibrowsediv').style.zIndex = 0;
+		dGet('wtw_ibrowsediv').style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
 		dGet('wtw_ibrowsediv').style.display = "none";
 		dGet('wtw_ibrowsediv').style.visibility = "hidden";
 		dGet('wtw_browsetitle').innerHTML = "";

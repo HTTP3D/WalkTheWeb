@@ -242,11 +242,11 @@ WTWJS.prototype.loadLoginAvatarSelect = function() {
 					WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobalavatarid, zuseravatarid, '', false);
 				} else {
 					/* avatar not saved, open avatar select window */
-					WTW.openLocalLogin('Select Avatar',.4,.6);
+					WTW.openLocalLogin('Select Avatar',.4,.9);
 				}
 			} else {
 				/* avatar not saved, open avatar select window */
-				WTW.openLocalLogin('Select Avatar',.4,.6);
+				WTW.openLocalLogin('Select Avatar',.4,.9);
 			}
 		}
 	} catch (ex) {

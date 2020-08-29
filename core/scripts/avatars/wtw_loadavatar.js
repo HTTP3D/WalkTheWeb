@@ -23,7 +23,7 @@ WTWJS.prototype.loadAvatarPlaceholder = function() {
 		/* is it set to delete after 10 seconds */
 		var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
 		zstartstand.scaling = new BABYLON.Vector3(25, 1, 25);
-		zstartstand.position = new BABYLON.Vector3(WTW.init.startPositionX + zrand1, WTW.init.startPositionY - .57, WTW.init.startPositionZ + zrand2);
+		zstartstand.position = new BABYLON.Vector3(zavatardef.position.x, zavatardef.position.y - .57, zavatardef.position.z);
 		zstartstand.checkCollisions = true;
 		zcovering = new BABYLON.StandardMaterial("matstartstand", scene);
 		zstartstand.material = new BABYLON.StandardMaterial("matstartstand", scene);
@@ -122,7 +122,6 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 			WTW.setCookie("useravatarid", zavatardef.useravatarid, 365);
 			dGet("wtw_tuseravatarid").value = zavatardef.useravatarid;
 			WTW.setCookie("useravatarid", zavatardef.useravatarid, 365);
-			WTW.placeHolder = 0;
 		}
 		if (zavatar != null) {
 			/* get the previously loaded avatarid (avatar definition from the database avatars table) */
@@ -150,7 +149,8 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 		zavatardef.rotation.x = 0;
 		zavatardef.rotation.y = WTW.init.startRotationY;
 		zavatardef.rotation.z = 0;
-		if (zavatarid != zavataridold) {
+		/* colors are not updating (updateAvatarColors) so temporarily making all changes refresh the entire avatar with 1==1, this will be changed in a future release as we go to hex colors in the database */
+		if (zavatarid != zavataridold || 1==1) {
 			/* if the previously loaded avatar is not the same as the new avatar meshes - fully reload */
 			WTW.disposeAnimations(zavatarname);
 			/* transfer avatar sets the avatar scale old box as parent and renames the old meshes */
@@ -181,6 +181,9 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 			zavatardef.avataranimationdefs = WTW.loadAvatarAnimationDefinitions(zavatardef.avataranimationdefs);
 			/* reloads avatar animations except for the onwait that stays loaded */
 			WTW.reloadAvatarAnimations(zavatarname, zavatardef.avataranimationdefs);
+		}
+		if (zavatarname.indexOf("myavatar") > -1) {
+			WTW.placeHolder = 0;
 		}
 		/* this extends this function for plugins to hook code into this function */
 		WTW.pluginsSavedAvatarRetrieved(zavatarname, zsendrefresh);

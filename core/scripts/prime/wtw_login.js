@@ -48,7 +48,7 @@ WTWJS.prototype.globalLogin = function(zparameters) {
 					zresponse = JSON.parse(zresponse);
 					/* continue if no errors */
 					if (WTW.globalLoginResponse(zresponse)) {
-						WTW.openLocalLogin('Select Avatar',.4,.6);
+						WTW.openLocalLogin('Select Avatar',.4,.9);
 					}
 				}
 			);
@@ -133,13 +133,13 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				zpagediv += "<h2 class=\"wtw-login\">Profile</h2>";
 				zpagediv += "<div class=\"wtw-loadingmenu\">Loading</div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				WTW.getLocalProfile(false);
+				WTW.getLocalProfile(false, zwidth, zheight);
 				break;
 			case "Edit Profile":
 				zpagediv += "<h2 class=\"wtw-login\">Edit Profile</h2>";
 				zpagediv += "<div class=\"wtw-loadingmenu\">Loading</div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				WTW.getLocalProfile(true);
+				WTW.getLocalProfile(true, zwidth, zheight);
 				break;
 			case "Login Menu":
 				zpagediv += "<h2 class=\"wtw-login\">Login Menu</h2>";
@@ -195,25 +195,25 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				break;
 			case "Select My Avatar":
 				zpagediv += "<h2 class=\"wtw-login\">Select My Avatar</h2>" +
-					"<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:auto;min-height:1%;max-height:38%;\"><div id=\"wtw_myavatars\"></div></div><br />" + 
+					"<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:auto;min-height:1%;max-height:200px;\"><div id=\"wtw_myavatars\"></div></div><br />" + 
 					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Select an Avatar', .3, .6);\"><div style=\"margin-top:4px;\">Quick-Start Avatars</div></div><br />" + 
 					"<div class=\"wtw-loginbutton\" onclick=\"WTW.openAvatarDesigner();\"><div style=\"margin-top:4px;\">Create a New Avatar</div></div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				WTW.getMyAvatarList();
+				WTW.getMyAvatarList(zwidth, zheight);
 				break;
 			case "Select Avatar":
 				zpagediv += "<h2 class=\"wtw-login\">Select My Avatar</h2>" + 
 					"<div class=\"wtw-loadingmenu\">Loading</div>" + 
 					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Local Profile', .3, .6);\">Cancel</div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				WTW.getFullAvatarList(true);
+				WTW.getFullAvatarList(true, zwidth, zheight);
 				break;
 			case "Select an Avatar":
 				zpagediv += "<h2 class=\"wtw-login\">Select an Avatar</h2>" + 
 					"<div class=\"wtw-loadingmenu\">Loading</div>" + 
 					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('Select My Avatar', .3, .6);\">Cancel</div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				WTW.getFullAvatarList(false);
+				WTW.getFullAvatarList(false, zwidth, zheight);
 				break;
 			case "Select an Anonymous Avatar":
 				zpagediv += "<h2 class=\"wtw-login\">Select an Anonymous Avatar</h2>" + 
@@ -226,7 +226,17 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 		WTW.pluginsOpenLocalLogin(zitem, zwidth, zheight);
 		WTW.hide('wtw_ibrowseframe');
 		WTW.show('wtw_ipagediv');
+		WTW.setBrowseDiv(zwidth, zheight);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_login.js-openLocalLogin=" + ex.message);
+		WTW.closeIFrame();
+	}
+}
+
+WTWJS.prototype.setBrowseDiv = function(zwidth, zheight) {
+	try {
 		dGet('wtw_ibrowsediv').style.width = Math.round(WTW.sizeX * zwidth) + "px";
+		dGet('wtw_ibrowsediv').style.height = "auto";
 		dGet('wtw_ibrowsediv').style.height = Math.round(WTW.sizeY * zheight) + "px";
 		dGet('wtw_ibrowsediv').style.left = Math.round((WTW.sizeX * (1 - zwidth)) / 2) + "px";
 		dGet('wtw_ibrowsediv').style.top = Math.round((WTW.sizeY * (1 - zheight)) / 2) + "px";
@@ -234,15 +244,14 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 		dGet('wtw_ibrowsediv').style.visibility = "visible";
 		dGet('wtw_ibrowsediv').style.zIndex = 3000;
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_login.js-openLocalLogin=" + ex.message);
-		WTW.closeIFrame();
+		WTW.log("core-scripts-prime-wtw_login.js-setBrowseDiv=" + ex.message);
 	}
 }
 
-WTWJS.prototype.getLocalProfile = function(zedit) {
+WTWJS.prototype.getLocalProfile = function(zedit, zwidth, zheight) {
 	try {
 		let zpagediv = "";
-		WTW.getJSON("/connect/userprofile.php", 
+		WTW.getJSON("/connect/userprofile.php?useravatarid=" + dGet('wtw_tuseravatarid').value, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				var zdob = '';
@@ -272,13 +281,14 @@ WTWJS.prototype.getLocalProfile = function(zedit) {
 
 					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Edit Profile', .4, .6);\"><div style=\"margin-top:4px;\">Edit Profile</div></div>";
 					
-					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Select Avatar', .4, .6);\"><div style=\"margin-top:4px;\">Select My Avatar</div></div>";
+					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.openLocalLogin('Select Avatar', .4, .9);\"><div style=\"margin-top:4px;\">Select My Avatar</div></div>";
 					
 					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.closeIFrame();WTW.openAvatarDesigner();\"><div style=\"margin-top:4px;\">Edit My Avatar</div></div>";
 					
 					zpagediv += "<div class=\"wtw-loginbutton\" onclick=\"WTW.logout();\"><div style=\"margin-top:4px;\">Log Out</div></div>";
 				}
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				WTW.setBrowseDiv(zwidth, zheight);
 			}
 		);
 	} catch (ex) {
@@ -389,7 +399,7 @@ WTWJS.prototype.getAnonymousAvatarList = function() {
 	}
 }
 
-WTWJS.prototype.getFullAvatarList = function(zshowmyavatars) {
+WTWJS.prototype.getFullAvatarList = function(zshowmyavatars, zwidth, zheight) {
 	/* provides a formatted list of all available avatars to select and use in the scene (for logged in users) */
 	try {
 		WTW.getJSON("/connect/avatars.php?groups=", 
@@ -437,8 +447,9 @@ WTWJS.prototype.getFullAvatarList = function(zshowmyavatars) {
 				var zpagediv = "<h2 class=\"wtw-login\">Select an Avatar</h2>";
 				if (zshowmyavatars) {
 					zpagediv = "<h2 class=\"wtw-login\">Select My Avatar</h2>";
-					zpagediv += "<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:auto;min-height:1%;max-height:38%;\"><div id=\"wtw_myavatars\"></div></div>";
+					zpagediv += "<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:auto;min-height:1%;max-height:200px;\"><div id=\"wtw_myavatars\"></div></div>";
 				}
+				zpagediv += "<h2 id=\"wtw_createnewavatar\" class=\"wtw-login\" style=\"display:none;visibility:hidden;\">Add New Avatar</h2>";
 				zpagediv += "<div class=\"wtw-loginlabel\">Display Name</div><div><input type=\"text\" id=\"wtw_tdisplayname\" value=\"" + zdefaultdisplayname + "\" autocomplete=\"username\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>";
 				zpagediv += "<div class=\"wtw-imagescrollhorizontal\">";
 				if (zfullavatars.length > 0) {
@@ -458,7 +469,10 @@ WTWJS.prototype.getFullAvatarList = function(zshowmyavatars) {
 				}
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 				if (zshowmyavatars) {
-					WTW.getMyAvatarList();
+					WTW.getMyAvatarList(zwidth, zheight);
+					WTW.setBrowseDiv(zwidth, zheight);
+				} else {
+					WTW.setBrowseDiv(zwidth, .6);
 				}
 			}
 		);
@@ -467,7 +481,7 @@ WTWJS.prototype.getFullAvatarList = function(zshowmyavatars) {
 	}
 }
 
-WTWJS.prototype.getMyAvatarList = function() {
+WTWJS.prototype.getMyAvatarList = function(zwidth, zheight) {
 	/* gets a list of my avatars to select and use in the scene (only if user is logged in) */
 	try {
 		var zloaddefault = true;
@@ -511,7 +525,8 @@ WTWJS.prototype.getMyAvatarList = function() {
 								}
 							}
 						}
-						WTW.showMyAvatarList(zmyavatars);
+						WTW.showMyAvatarList(zmyavatars, zwidth, zheight);
+						WTW.setBrowseDiv(zwidth, zheight);
 					}
 				);
 			}
@@ -521,7 +536,7 @@ WTWJS.prototype.getMyAvatarList = function() {
 	}
 }
 
-WTWJS.prototype.showMyAvatarList = function(zmyavatars) {
+WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight) {
 	/* formats the list of avatars to select and use in the scene */
 	try {
 		let zmyavatarcount = 0;
@@ -542,16 +557,28 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars) {
 							dGet('wtw_browseheaderclose').onclick = function() {WTW.onMyAvatarSelect(zglobalavatarid, zuseravatarid, zavatarid);};
 							zdefault = i;
 						}
+						let zicon2 = "/content/system/images/avatarselect.png";;
 						let zicon = "/content/system/images/localserver.png";
-						let ztext = "3D Website Avatar";
+						let ztext = "3D Website Local Avatar";
+						let ztext2 = "My Avatar";
 						if (zmyavatars[i].globalavatarid != '') {
 							zicon = "/content/system/images/global.png";
-							ztext = "WalkTheWeb Avatar";
+							ztext = "WalkTheWeb Global Avatar";
 						}
 						if (zmyavatars[i].thumbnails.imageface != '') {
-							zicon = zmyavatars[i].object.folder + zmyavatars[i].thumbnails.imageface;
+							if (zmyavatars[i].thumbnails.imageface.indexOf('://') > -1) {
+								zicon2 = zmyavatars[i].thumbnails.imageface;
+							} else {
+								zicon2 = zmyavatars[i].object.folder + zmyavatars[i].thumbnails.imageface;
+							}
 						}
-						zmylist += "<div class=\"wtw-loginbutton\" style=\"text-align:left;\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.onMyAvatarSelect('" + zmyavatars[i].globalavatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\"><img src=\"" + zicon + "\" class=\"wtw-icon\" title=\"" + ztext + "\" alt=\"" + ztext + "\" />" + zmyavatars[i].displayname + "</div>\r\n";
+						if (zmyavatars[i].displayname != '') {
+							ztext2 = zmyavatars[i].displayname;
+						}
+						zmylist += "<div class=\"wtw-loginbutton\" style=\"text-align:left;\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.onMyAvatarSelect('" + zmyavatars[i].globalavatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\">";
+						zmylist += "<img src=\"" + zicon + "\" class=\"wtw-icon\" title=\"" + ztext + "\" alt=\"" + ztext + "\" />";
+						zmylist += "<img src=\"" + zicon2 + "\" class=\"wtw-icon\" title=\"" + ztext2 + "\" alt=\"" + ztext2 + "\" />";
+						zmylist += ztext2 + "</div>\r\n";
 					}
 				}
 				dGet('wtw_myavatars').innerHTML = zmylist;
@@ -559,6 +586,8 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars) {
 					dGet('wtw_browseheaderclose').onclick = function() {WTW.openAvatarDesigner();};
 				}
 			}
+			WTW.show('wtw_createnewavatar');
+			WTW.setBrowseDiv(zwidth, zheight);
 		} else {
 			//WTW.openAvatarDesigner();
 		}
@@ -680,7 +709,7 @@ WTWJS.prototype.loginAttemptResponse = function(zresults) {
 					WTW.hide('wtw_menulogin');
 					WTW.show('wtw_menuloggedin');
 					WTW.setLoginValues(zresults.userid, zresults.username, zresults.displayname, zresults.email, zresults.userimageurl);
-					WTW.openLocalLogin('Select Avatar',.4,.6);
+					WTW.openLocalLogin('Select Avatar',.4,.9);
 				} else {
 					WTW.hide('wtw_menuloggedin');
 					WTW.show('wtw_menulogin');
@@ -839,7 +868,8 @@ WTWJS.prototype.setLoginValues = function(zuserid, zusername, zdisplayname, zema
 WTWJS.prototype.openAvatarDesigner = function() {
 	/* opens the Avatar Designer and loads your current avatar for changes */
 	try {
-		WTW.openIFrame("/content/plugins/wtw-avatars/pages/designer.php?globaluserid=" + dGet('wtw_tglobaluserid').value + "&globalavatarid=" + dGet('wtw_tglobalavatarid').value + "&useravatarid=" + dGet('wtw_tuseravatarid').value, .95, .95, "Avatar Desiger");
+		WTW.openIFrame("/content/plugins/wtw-avatars/pages/designer.php?globaluserid=" + dGet('wtw_tglobaluserid').value + "&globalavatarid=" + dGet('wtw_tglobalavatarid').value + "&useravatarid=" + dGet('wtw_tuseravatarid').value, .9, .9, "Avatar Desiger");
+		dGet('wtw_ibrowsediv').style.backgroundColor = 'rgba(0, 0, 0, 1)';
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-openAvatarDesigner=" + ex.message);
 	}
@@ -1112,7 +1142,7 @@ WTWJS.prototype.switchAvatarMenu = function(zmenu) {
 				WTW.hide('wtw_menuavatardisplaynamediv');
 				WTW.hide('wtw_menuavataranimationsdiv');
 				if (dGet('wtw_menuavatarchangediv').style.display == 'none') {
-					WTW.closeMenus();WTW.openLocalLogin('Select Avatar',.4,.6);
+					WTW.closeMenus();WTW.openLocalLogin('Select Avatar',.4,.9);
 					WTW.show('wtw_menuavatarchangediv');
 				} else {
 					WTW.hide('wtw_menuavatarchangediv');

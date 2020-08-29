@@ -435,34 +435,27 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 								results.meshes[i].isVisible = false;
 								
 								/* set custom colors to avatar parts */
-								let zemissivecolorr = 0;
-								let zemissivecolorg = 0;
-								let zemissivecolorb = 0;
-								let zdiffusecolorr = 1;
-								let zdiffusecolorg = 1;
-								let zdiffusecolorb = 1;
+								
+								let zdiffusecolor = '#ffffff';
+								let zemissivecolor = '#000000';
+								let zspecularcolor = '#000000';
+								let zambientcolor = '#ffffff';
 								if (zavatarparts != null) {
 									for (var j=0;j<zavatarparts.length;j++) {
 										if (zavatarparts[j] != null) {
 											var zavatarpart = zavatarparts[j].avatarpart;
 											if (zavatarpart == zmeshname) {
-												if (zavatarparts[j].emissivecolorr != undefined) {
-													zemissivecolorr = zavatarparts[j].emissivecolorr;
+												if (zavatarparts[j].diffusecolor != undefined) {
+													zdiffusecolor = zavatarparts[j].diffusecolor;
 												}
-												if (zavatarparts[j].emissivecolorg != undefined) {
-													zemissivecolorg = zavatarparts[j].emissivecolorg;
+												if (zavatarparts[j].emissivecolor != undefined) {
+													zemissivecolor = zavatarparts[j].emissivecolor;
 												}
-												if (zavatarparts[j].emissivecolorb != undefined) {
-													zemissivecolorb = zavatarparts[j].emissivecolorb;
+												if (zavatarparts[j].specularcolor != undefined) {
+													zspecularcolor = zavatarparts[j].specularcolor;
 												}
-												if (zavatarparts[j].diffusecolorr != undefined) {
-													zdiffusecolorr = zavatarparts[j].diffusecolorr;
-												}
-												if (zavatarparts[j].diffusecolorg != undefined) {
-													zdiffusecolorg = zavatarparts[j].diffusecolorg;
-												}
-												if (zavatarparts[j].diffusecolorb != undefined) {
-													zdiffusecolorb = zavatarparts[j].diffusecolorb;
+												if (zavatarparts[j].ambientcolor != undefined) {
+													zambientcolor = zavatarparts[j].ambientcolor;
 												}
 											}
 										}
@@ -470,11 +463,11 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 								}
 								if (results.meshes[i].material != null) {
 									/* emissive and specular currently share colors */
-									results.meshes[i].material.emissiveColor = new BABYLON.Color3(zemissivecolorr,zemissivecolorg,zemissivecolorb);
-									results.meshes[i].material.specularColor = new BABYLON.Color3(zemissivecolorr,zemissivecolorg,zemissivecolorb);
+									results.meshes[i].material.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
+									results.meshes[i].material.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
 									/* diffuse and ambient currently share colors */
-									results.meshes[i].material.diffuseColor = new BABYLON.Color3(zdiffusecolorr,zdiffusecolorg,zdiffusecolorb);
-									results.meshes[i].material.ambientColor = new BABYLON.Color3(zdiffusecolorr,zdiffusecolorg,zdiffusecolorb);
+									results.meshes[i].material.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
+									results.meshes[i].material.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
 									/* refresh the materials to apply colors */
 									var zcovering = results.meshes[i].material;
 									results.meshes[i].material.dispose();
@@ -667,6 +660,10 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 							}
 						}
 					} 
+				}
+				/* make my avatar match the camera angle if first entering a 3D Scene */
+				if (WTW.myAvatar.name == zavatarname && WTW.placeHolder == 1) {
+					WTW.init.startRotationY = WTW.getDegrees(WTW.camera.rotation.y);
 				}
 			}
 		);

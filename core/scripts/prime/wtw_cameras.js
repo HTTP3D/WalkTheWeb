@@ -31,7 +31,7 @@ WTWJS.prototype.loadPrimaryCamera = function(parentmold) {
 		WTW.camera.position.x = WTW.init.startPositionX;
 		WTW.camera.position.y = WTW.init.startPositionY + 16;
 		WTW.camera.position.z = WTW.init.startPositionZ;
-		WTW.camera.rotation.y = WTW.getRadians(WTW.init.startRotationY);
+		WTW.camera.rotation.y = WTW.getRadians(WTW.init.startRotationY + 90);
 		WTW.camera.rotation.x = WTW.getRadians(10);
 		WTW.camera.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 		WTW.addActiveCamera(WTW.camera);
