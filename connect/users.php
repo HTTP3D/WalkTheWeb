@@ -8,18 +8,29 @@ try {
 	/* google analytics tracking (if defined in wtw_config.php) */
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/users.php");
 	
+	/* get values from querystring or session */
+	$zall = $wtwconnect->getVal('all','0');
+
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 	
 	$i = 0;
 	$zusers = array();
 	
 	if ($wtwconnect->hasPermission(array("admin"))) {
-		/* get users information */
-		$zresults = $wtwconnect->query("
-			select * 
+		$zsql = "select * 
 			from ".wtw_tableprefix."users
 			where deleted=0
-			order by username, email, userid;");
+				and pastuserid=''
+			order by username, email, userid;";
+		if ($zall == 1) {
+			$zsql = "select * 
+				from ".wtw_tableprefix."users
+				where deleted=0
+				order by username, email, userid;";
+		}
+		
+		/* get users information */
+		$zresults = $wtwconnect->query($zsql);
 		
 		/* format json return dataset */
 		foreach ($zresults as $zrow) {
