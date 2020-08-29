@@ -19,9 +19,11 @@ class wtwavatars {
 		}
 	}	
 	
-	public $version = "1.0.0";
+	public $version = "1.0.1";
 
-	public $dbversion = "1.0.0";
+	public $dbversion = "1.0.1";
+
+	public $versiondate = "2020-8-29";
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -74,9 +76,9 @@ class wtwavatars {
 				/* $wtwplugins->addAdminMenuItem('wtw_adminpaintball', '3D Stores', 95, 'wtw_paintball', 0, '', wtwavatars_URL.'/assets/images/menustore.png', array('admin','developer','architect'), null); */
 				/* $wtwplugins->addAdminMenuItem('wtw_adminliststores', 'List Stores', 95, 'wtw_paintball', 1, 'wtw_liststores', '', array('admin','developer','architect'), "WTW.openFullPageForm('fullpage','List Stores','wtw_liststorespage');wtwavatars.getStores();"); */
 				
-				$wtwplugins->addAdminMenuItem('wtw_avatarsmenu', 'Avatars', 51, 'wtw_avatarsmenu', 0, '', '/content/system/images/menuavatars.png', array('admin','developer'), null);
-				$wtwplugins->addAdminMenuItem('wtw_avatarlist', 'Avatar List', 51, 'wtw_avatarsmenu', 1, 'wtw_avatarlist', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','Avatar List','wtw_avatarlistpage');");
-				$wtwplugins->addAdminMenuItem('wtw_avatargroups', 'Avatar Groups', 51, 'wtw_avatarsmenu', 3, 'wtw_avatargroups', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','Avatar Groups','wtw_avatargroupspage');");
+				$wtwplugins->addAdminMenuItem('wtw_avatarsmenu', '3D Avatars', -75, 'wtw_avatarsmenu', 0, '', '/content/system/images/menuavatars.png', array('admin','developer'), null);
+				$wtwplugins->addAdminMenuItem('wtw_avatarlist', 'Avatar List', -75, 'wtw_avatarsmenu', 1, 'wtw_avatarlist', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','Avatar List','wtw_avatarlistpage');");
+				$wtwplugins->addAdminMenuItem('wtw_avatargroups', 'Avatar Groups', -75, 'wtw_avatarsmenu', 3, 'wtw_avatargroups', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','Avatar Groups','wtw_avatargroupspage');");
 
 				/* admin full page settings forms */
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
@@ -150,7 +152,7 @@ class wtwavatars {
 			/* then update the $this->dbversion variable at the top of this file */
 			/* deltaCreateTable will add, alter, or remove fields or add the table if it doesnt exist */
 			/* check core/functions/class_wtwdb.php deltaCreateTable function for full support */
-			if ($wtwplugins->pagename == "admin.php") {
+			//if ($wtwplugins->pagename == "admin.php") {
 				$dbversion = $wtwplugins->getSetting(WTW_AVATARS_PREFIX."dbversion");
 				if ($dbversion != $this->dbversion) {
 /*					$wtwplugins->deltaCreateTable("
@@ -173,7 +175,7 @@ class wtwavatars {
 
 					$wtwplugins->saveSetting(WTW_AVATARS_PREFIX."dbversion", $this->dbversion);
 				}
-			}
+			//}
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-avatars:functions-class_plugin.php-checkTablesForUpdates=".$e->getMessage());
 		}

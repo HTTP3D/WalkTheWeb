@@ -112,7 +112,7 @@ class wtwavatars_functions {
 		return $zuseravatarid;
 	}
 
-	public function saveAvatarColor($zuseravatarid, $zinstanceid, $zavatarpart, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb) {
+	public function saveAvatarColor($zuseravatarid, $zinstanceid, $zavatarpart, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor) {
 		global $wtwplugins;
 		$zfoundavatarpartid = '';
 		try {
@@ -135,12 +135,10 @@ class wtwavatars_functions {
 							userid,
 							instanceid,
 							avatarpart,
-							emissivecolorr,
-							emissivecolorg,
-							emissivecolorb,
-							diffusecolorr,
-							diffusecolorg,
-							diffusecolorb,
+							diffusecolor,
+							specularcolor,
+							emissivecolor,
+							ambientcolor,
 							createdate,
 							createuserid,
 							updatedate,
@@ -151,12 +149,10 @@ class wtwavatars_functions {
 							'".$wtwplugins->userid."',
 							'".$zinstanceid."',
 							'".$zavatarpart."',
-							".$wtwplugins->checkNumber($zemissivecolorr,0).",
-							".$wtwplugins->checkNumber($zemissivecolorg,0).",
-							".$wtwplugins->checkNumber($zemissivecolorb,0).",
-							".$wtwplugins->checkNumber($zdiffusecolorr,1).",
-							".$wtwplugins->checkNumber($zdiffusecolorg,1).",
-							".$wtwplugins->checkNumber($zdiffusecolorb,1).",
+							'".$zdiffusecolor."',
+							'".$zspecularcolor."',
+							'".$zemissivecolor."',
+							'".$zambientcolor."',
 							now(),
 							'".$wtwplugins->userid."',
 							now(),
@@ -166,12 +162,10 @@ class wtwavatars_functions {
 						update ".wtw_tableprefix."useravatarcolors
 						set 
 							instanceid='".$zinstanceid."',
-							emissivecolorr=".$wtwplugins->checkNumber($zemissivecolorr,0).",
-							emissivecolorg=".$wtwplugins->checkNumber($zemissivecolorg,0).",
-							emissivecolorb=".$wtwplugins->checkNumber($zemissivecolorb,0).",
-							diffusecolorr=".$wtwplugins->checkNumber($zdiffusecolorr,1).",
-							diffusecolorg=".$wtwplugins->checkNumber($zdiffusecolorg,1).",
-							diffusecolorb=".$wtwplugins->checkNumber($zdiffusecolorb,1).",
+							diffusecolor='".$zdiffusecolor."',
+							specularcolor='".$zspecularcolor."',
+							emissivecolor='".$zemissivecolor."',
+							ambientcolor='".$zambientcolor."',
 							updatedate=now(),
 							updateuserid='".$wtwplugins->userid."'					
 						where avatarpartid='".$zfoundavatarpartid."';");

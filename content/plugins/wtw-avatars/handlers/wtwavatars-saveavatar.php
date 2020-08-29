@@ -26,12 +26,10 @@ try {
 	$zscalingz = $wtwhandlers->getPost('scalingz','.07');
 	$zdisplayname = $wtwhandlers->getPost('displayname','');
 	$zavatarpart = $wtwhandlers->getPost('avatarpart','');
-	$zemissivecolorr = $wtwhandlers->getPost('emissivecolorr','0');
-	$zemissivecolorg = $wtwhandlers->getPost('emissivecolorg','0');
-	$zemissivecolorb = $wtwhandlers->getPost('emissivecolorb','0');
-	$zdiffusecolorr = $wtwhandlers->getPost('diffusecolorr','1');
-	$zdiffusecolorg = $wtwhandlers->getPost('diffusecolorg','1');
-	$zdiffusecolorb = $wtwhandlers->getPost('diffusecolorb','1');
+	$zdiffusecolor = $wtwhandlers->getPost('diffusecolor','#ffffff');
+	$zspecularcolor = $wtwhandlers->getPost('specularcolor','#000000');
+	$zemissivecolor = $wtwhandlers->getPost('emissivecolor','#000000');
+	$zambientcolor = $wtwhandlers->getPost('ambientcolor','#ffffff');
 	$zavataranimationid = $wtwhandlers->getPost('avataranimationid','');
 	$zavataranimationevent = $wtwhandlers->getPost('avataranimationevent','');
 
@@ -54,16 +52,14 @@ try {
 			);
 			break;
 		case "saveavatarcolor":
-			$zavatarpartid = $wtwavatars_functions->saveAvatarColor($zuseravatarid, $zinstanceid, $zavatarpart, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb, $zdiffusecolorr, $zdiffusecolorg, $zdiffusecolorb);
+			$zavatarpartid = $wtwavatars_functions->saveAvatarColor($zuseravatarid, $zinstanceid, $zavatarpart, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor);
 			$zresponse = array(
 				'avatarpartid'=> $zavatarpartid,
 				'avatarpart'=> $zavatarpart,
-				'emissivecolorr'=> $zemissivecolorr,
-				'emissivecolorg'=> $zemissivecolorg,
-				'emissivecolorb'=> $zemissivecolorb,
-				'diffusecolorr'=> $zdiffusecolorr,
-				'diffusecolorg'=> $zdiffusecolorg,
-				'diffusecolorb'=> $zdiffusecolorb,
+				'diffusecolor'=> $zdiffusecolor,
+				'specularcolor'=> $zspecularcolor,
+				'emissivecolor'=> $zemissivecolor,
+				'ambientcolor'=> $zambientcolor,
 				'index'=> $zindex,
 				'serror'=> ''
 			);

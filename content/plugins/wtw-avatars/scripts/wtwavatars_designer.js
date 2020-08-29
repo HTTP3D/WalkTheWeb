@@ -443,9 +443,9 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 								button1.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarPart(state.currentTarget.name.split('-')[0]);WTW.loadLeftMenu(2);});
 								rightMenu.addControl(button1, i+1, 0);
 								
-								var zhex = WTW.avatarParts[i].emissivehex;
+								var zhex = WTW.avatarParts[i].emissivecolor;
 								if (dGet('wtw_tcolortype').value  == 'Diffuse') {
-									zhex = WTW.avatarParts[i].diffusehex;
+									zhex = WTW.avatarParts[i].diffusecolor;
 								}
 
 								if (dGet('wtw_tavatarpart').value  == WTW.avatarParts[i].part) {
@@ -875,12 +875,10 @@ WTWJS.prototype.saveMyAvatarColors = function() {
 					'instanceid':dGet('wtw_tinstanceid').value,
 					'avatarpartid':'',
 					'avatarpart':WTW.avatarParts[i].part,
-					'emissivecolorr':WTW.avatarParts[i].emissivecolorr,
-					'emissivecolorg':WTW.avatarParts[i].emissivecolorg,
-					'emissivecolorb':WTW.avatarParts[i].emissivecolorb,
-					'diffusecolorr':WTW.avatarParts[i].diffusecolorr,
-					'diffusecolorg':WTW.avatarParts[i].diffusecolorg,
-					'diffusecolorb':WTW.avatarParts[i].diffusecolorb,
+					'diffusecolor':WTW.avatarParts[i].diffusecolor,
+					'specularcolor':WTW.avatarParts[i].specularcolor,
+					'emissivecolor':WTW.avatarParts[i].emissivecolor,
+					'ambientcolor':WTW.avatarParts[i].ambientcolor,
 					'index':i,
 					'function':'saveavatarcolor'
 				};
@@ -896,12 +894,10 @@ WTWJS.prototype.saveMyAvatarColors = function() {
 							'instanceid':dGet('wtw_tinstanceid').value,
 							'avatarpartid':zresponse.avatarpartid,
 							'avatarpart':zresponse.avatarpart,
-							'emissivecolorr':zresponse.emissivecolorr,
-							'emissivecolorg':zresponse.emissivecolorg,
-							'emissivecolorb':zresponse.emissivecolorb,
-							'diffusecolorr':zresponse.diffusecolorr,
-							'diffusecolorg':zresponse.diffusecolorg,
-							'diffusecolorb':zresponse.diffusecolorb,
+							'diffusecolor':zresponse.diffusecolor,
+							'specularcolor':zresponse.specularcolor,
+							'emissivecolor':zresponse.emissivecolor,
+							'ambientcolor':zresponse.ambientcolor,
 							'index':zresponse.index,
 							'function':'saveavatarcolor'
 						};
@@ -1047,7 +1043,7 @@ WTWJS.prototype.returnCloseDesigner = function() {
 				}, "*");
 			}, 2000);
 		} else {
-			WTW.openLocalLogin('Select Avatar',.4,.6);
+			WTW.openLocalLogin('Select Avatar',.4,.9);
 		}
 	} catch (ex) {
 		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-returnCloseDesigner=" + ex.message);
@@ -1472,67 +1468,51 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 									results.meshes[i].material.alpha = 1;
 								}
 								/* load any color settings or set defaults */
-								let zemissivecolorr = 0;
-								let zemissivecolorg = 0;
-								let zemissivecolorb = 0;
-								let zdiffusecolorr = 1;
-								let zdiffusecolorg = 1;
-								let zdiffusecolorb = 1;
+								let zdiffusecolor = '#ffffff';
+								let zemissivecolor = '#000000';
+								let zspecularcolor = '#000000';
+								let zambientcolor = '#ffffff';
 								if (zavatardef.avatarparts != null) {
 									if (zavatardef.avatarparts.length > 0) {
 										for (var j=0;j<zavatardef.avatarparts.length;j++) {
 											if (zavatardef.avatarparts[j] != undefined) {
 												if (zavatardef.avatarparts[j].avatarpart == meshname) {
-													if (zavatardef.avatarparts[j].emissivecolorr != undefined) {
-														zemissivecolorr = zavatardef.avatarparts[j].emissivecolorr;
+													if (zavatardef.avatarparts[j].diffusecolor != undefined) {
+														zdiffusecolor = zavatardef.avatarparts[j].diffusecolor;
 													}
-													if (zavatardef.avatarparts[j].emissivecolorg != undefined) {
-														zemissivecolorg = zavatardef.avatarparts[j].emissivecolorg;
+													if (zavatardef.avatarparts[j].emissivecolor != undefined) {
+														zemissivecolor = zavatardef.avatarparts[j].emissivecolor;
 													}
-													if (zavatardef.avatarparts[j].emissivecolorb != undefined) {
-														zemissivecolorb = zavatardef.avatarparts[j].emissivecolorb;
+													if (zavatardef.avatarparts[j].specularcolor != undefined) {
+														zspecularcolor = zavatardef.avatarparts[j].specularcolor;
 													}
-													if (zavatardef.avatarparts[j].diffusecolorr != undefined) {
-														zdiffusecolorr = zavatardef.avatarparts[j].diffusecolorr;
-													}
-													if (zavatardef.avatarparts[j].diffusecolorg != undefined) {
-														zdiffusecolorg = zavatardef.avatarparts[j].diffusecolorg;
-													}
-													if (zavatardef.avatarparts[j].diffusecolorb != undefined) {
-														zdiffusecolorb = zavatardef.avatarparts[j].diffusecolorb;
+													if (zavatardef.avatarparts[j].ambientcolor != undefined) {
+														zambientcolor = zavatardef.avatarparts[j].ambientcolor;
 													}
 												}
 											}
 										}
 									}
 								}
-								let zemissivehex = "#000000";
-								let zdiffusehex = "#ffffff";
 								/* emissive and specular currently share colors */
-								results.meshes[i].material.emissiveColor = new BABYLON.Color3(zemissivecolorr,zemissivecolorg,zemissivecolorb);
-								results.meshes[i].material.specularColor = new BABYLON.Color3(zemissivecolorr,zemissivecolorg,zemissivecolorb);
+								results.meshes[i].material.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
+								results.meshes[i].material.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
 								/* diffuse and ambient currently share colors */
-								results.meshes[i].material.diffuseColor = new BABYLON.Color3(zdiffusecolorr,zdiffusecolorg,zdiffusecolorb);
-								results.meshes[i].material.ambientColor = new BABYLON.Color3(zdiffusecolorr,zdiffusecolorg,zdiffusecolorb);
+								results.meshes[i].material.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
+								results.meshes[i].material.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
 								/* refresh the materials to apply colors */
 								var covering = results.meshes[i].material;
 								results.meshes[i].material.dispose();
 								results.meshes[i].material = covering;
-								zemissivehex = results.meshes[i].material.emissiveColor.toHexString();
-								zdiffusehex = results.meshes[i].material.diffuseColor.toHexString();
 								
 								/* set local array of color values per avatar mesh part for editor and save process */
 								WTW.avatarParts[i] = {
 									'moldname':childmoldname,
 									'part':meshname,
-									'emissivecolorr':zemissivecolorr,
-									'emissivecolorg':zemissivecolorg,
-									'emissivecolorb':zemissivecolorb,
-									'emissivehex':zemissivehex,
-									'diffusecolorr':zdiffusecolorr,
-									'diffusecolorg':zdiffusecolorg,
-									'diffusecolorb':zdiffusecolorb,
-									'diffusehex':zdiffusehex
+									'diffusecolor':zdiffusecolor,
+									'emissivecolor':zemissivecolor,
+									'specularcolor':zspecularcolor,
+									'ambientcolor':zambientcolor
 								};
 							}
 							WTW.registerMouseOver(results.meshes[i]);
@@ -1898,12 +1878,12 @@ WTWJS.prototype.updateColorByHex = function(zhex) {
 			if (dGet('wtw_tcolortype').value  == 'Diffuse') {
 				zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zhex);
 				zmold.material.ambientColor = new BABYLON.Color3.FromHexString(zhex);
-				WTW.updateAvatarPartColor(zmold.material.diffuseColor.r, zmold.material.diffuseColor.g, zmold.material.diffuseColor.b, zhex);
+				WTW.updateAvatarPartColor(zhex);
 				colorpicker.value = zmold.material.diffuseColor;
 			} else {
 				zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zhex);
 				zmold.material.specularColor = new BABYLON.Color3.FromHexString(zhex);
-				WTW.updateAvatarPartColor(zmold.material.emissiveColor.r, zmold.material.emissiveColor.g, zmold.material.emissiveColor.b, zhex);
+				WTW.updateAvatarPartColor(zhex);
 				colorpicker.value = zmold.material.emissiveColor;
 			}
 			if (activeinput != null) {
@@ -1952,22 +1932,18 @@ WTWJS.prototype.getMyAvatarPart = function(zpart) {
 	return zmoldname;
 }
 
-WTWJS.prototype.updateAvatarPartColor = function(r, g, b, hex) {
+WTWJS.prototype.updateAvatarPartColor = function(zhex) {
 	/* update the color selected to the local array of color settings (used for saving) */
 	try {
 		for (var i=0;i<WTW.avatarParts.length;i++) {
 			if (WTW.avatarParts[i] != null) {
 				if (WTW.avatarParts[i].part == dGet('wtw_tavatarpart').value) {
 					if (dGet('wtw_tcolortype').value == 'Diffuse') {
-						WTW.avatarParts[i].diffusecolorr = r;
-						WTW.avatarParts[i].diffusecolorg = g;
-						WTW.avatarParts[i].diffusecolorb = b;
-						WTW.avatarParts[i].diffusehex = hex;
+						WTW.avatarParts[i].ambientcolor = zhex;
+						WTW.avatarParts[i].diffusecolor = zhex;
 					} else {
-						WTW.avatarParts[i].emissivecolorr = r;
-						WTW.avatarParts[i].emissivecolorg = g;
-						WTW.avatarParts[i].emissivecolorb = b;
-						WTW.avatarParts[i].emissivehex = hex;
+						WTW.avatarParts[i].emissivecolor = zhex;
+						WTW.avatarParts[i].specularcolor = zhex;
 					}
 				}
 			}
@@ -1989,10 +1965,18 @@ WTWJS.prototype.setMyAvatarColor = function(r, g, b) {
 					zmold.material.ambientColor = new BABYLON.Color3(r,g,b);
 					zpartcolor = zmold.material.diffuseColor.toHexString();
 					break;
+				case "Specular":
+					zmold.material.specularColor = new BABYLON.Color3(r,g,b);
+					zpartcolor = zmold.material.specularColor.toHexString();
+					break;
 				case "Emissive":
 					zmold.material.specularColor = new BABYLON.Color3(r,g,b);
 					zmold.material.emissiveColor = new BABYLON.Color3(r,g,b);
 					zpartcolor = zmold.material.emissiveColor.toHexString();
+					break;
+				case "Ambient":
+					zmold.material.ambientColor = new BABYLON.Color3(r,g,b);
+					zpartcolor = zmold.material.ambientColor.toHexString();
 					break;
 			}
 			var zcovering = zmold.material;
@@ -2006,7 +1990,7 @@ WTWJS.prototype.setMyAvatarColor = function(r, g, b) {
 				if (activeinput.color == "#000000") {
 					activeinput.focusedBackground = "#ffffff";
 				}
-				WTW.updateAvatarPartColor(r, g, b, zpartcolor);
+				WTW.updateAvatarPartColor(zpartcolor);
 			}
 		}
 		scene.render();
