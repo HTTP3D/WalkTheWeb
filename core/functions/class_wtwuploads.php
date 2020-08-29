@@ -1646,6 +1646,8 @@ class wtwuploads {
 				where u1.deleted=0
 					and u1.userid='".$wtwhandlers->userid."'
 					and u1.hide=".$zhide."
+					and u1.pastuploadid=''
+					and u1.stock=0
 					and case when '".$zcategory."' = 'image' then 
 							(u1.thumbnailid = u1.uploadid and u1.filetype like '%image%')
 						when '".$zcategory."' = 'video' then
@@ -1681,6 +1683,7 @@ class wtwuploads {
 					select * 
 					from ".wtw_tableprefix."uploads
 					where deleted=0
+						and pastuploadid=''
 						and stock='1'
 						and uploads.filetype like '%audio%'
 					order by updatedate desc, createdate desc, filename, uploadid;");

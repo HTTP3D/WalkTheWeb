@@ -99,12 +99,16 @@ class wtwusers {
 					$zresults = $wtwdb->query("
 							select * from ".wtw_tableprefix."users 
 							where username='".$zusername."'
-								and deleted=0 limit 1;");
+								and pastuserid=''
+								and deleted=0 
+							limit 1;");
 				} else if (!empty($zemail) && isset($zemail)) {
 					$zresults = $wtwdb->query("
 							select * from ".wtw_tableprefix."users 
 							where email='".$zemail."'
-								and deleted=0 limit 1;");
+								and pastuserid=''
+								and deleted=0 
+							limit 1;");
 				}
 				foreach ($zresults as $zrow) {
 					$passwordhash = $zrow["userpassword"];

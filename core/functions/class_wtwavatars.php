@@ -227,6 +227,44 @@ class wtwavatars {
 								 now(),
 								 '".$wtwhandlers->userid."');");
 
+						/* add default avatar colors for new user avatar */
+						$zresults = $wtwhandlers->query("
+							select * 
+							from ".wtw_tableprefix."avatarcolors 
+							where avatarid='".$zavatarid."' 
+								and deleted=0;");
+						foreach ($zresults as $zrow) {
+							$wtwhandlers->query("
+								insert into ".wtw_tableprefix."useravatarcolors
+								   (avatarpartid,
+									userid,
+									useravatarid,
+									instanceid,
+									avatarpart,
+									diffusecolor,
+									specularcolor,
+									emissivecolor,
+									ambientcolor,
+									createdate,
+									createuserid,
+									updatedate,
+									updateuserid)
+								   values
+								   ('".$wtwhandlers->getRandomString(16,1)."',
+								    '".$wtwhandlers->userid."',
+									'".$zfounduseravatarid."',
+									'".$zinstanceid."',
+									'".$zrow["avatarpart"]."',
+									'".$zrow["diffusecolor"]."',
+									'".$zrow["specularcolor"]."',
+									'".$zrow["emissivecolor"]."',
+									'".$zrow["ambientcolor"]."',
+									now(),
+									'".$wtwhandlers->userid."',
+									now(),
+									'".$wtwhandlers->userid."');");
+						}
+
 						/* add default animations for new user avatar */
 						$zresults = $wtwhandlers->query("
 							select * 

@@ -138,7 +138,6 @@ class wtwpluginloader {
 		$zsuccess = false;
 		try {
 			if ($wtwdb->isUserInRole('admin') || $wtwdb->isUserInRole('developer')) {
-				$zpluginid = "";
 				$zactiveold = "0";
 				$zdeletedold = "0";
 				$zfound = "";
