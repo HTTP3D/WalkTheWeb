@@ -45,3 +45,31 @@
 	font-size:1.2em;
 	text-align:center;
 }
+.wtw-searchresultbutton {
+	float:right;
+	border:2px solid gray;
+	border-radius:10px;
+	color:#000000;
+	font-weight:bold;
+	width:120px;
+	padding:20px;
+	text-align:center;
+	vertical-align:top;
+	font-size:1em;
+	margin:15px 5px 5px 5px;
+	background-color:#ffffff;
+	cursor:default;
+}
+.wtw-searchresultbutton:hover {
+	border:2px solid green;
+	color:green;
+	background-color:#FCFFBD;
+	cursor:pointer;
+}
+h3.wtw-black {
+	font-weight: bold;
+	color: #000000;
+	font-size: 1.2em;
+	margin-bottom: 2px;
+	background-color:transparent;
+}
