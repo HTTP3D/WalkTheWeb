@@ -3,7 +3,7 @@
 #	title = WalkTheWeb Avatars Plugin
 #	description = WalkTheWeb Avatar Creator and Editor
 #	author = Aaron Dishno Ed.D.
-# 	version = 1.0.0
+# 	version = 1.0.1
 
 /* change the information above for your plugin */
 /* then search and replace the following with your DEVID and PLUGIN Name: */
