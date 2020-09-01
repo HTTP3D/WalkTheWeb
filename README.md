@@ -21,6 +21,9 @@ INSTALLATION
 
 That is it! 
 
+Check out this video of the Install and Getting Started Walk-Through:
+https://www.youtube.com/watch?v=EMrBnzfAMZM
+
 
 Note: on Linux systems, add a .htaccess file in the root (or use site config) with the following:
 
