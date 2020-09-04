@@ -237,13 +237,8 @@ WTWJS.prototype.loadLoginAvatarSelect = function() {
 				if (WTW.getCookie("globalavatarid") != null) {
 					zglobalavatarid = WTW.getCookie("globalavatarid");
 				}
-				if (zglobalavatarid != '') {
-					/* if global avatar saved, load avatar */
-					WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobalavatarid, zuseravatarid, '', false);
-				} else {
-					/* avatar not saved, open avatar select window */
-					WTW.openLocalLogin('Select Avatar',.4,.9);
-				}
+				/* if avatar saved, load avatar */
+				WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobalavatarid, zuseravatarid, '', false);
 			} else {
 				/* avatar not saved, open avatar select window */
 				WTW.openLocalLogin('Select Avatar',.4,.9);

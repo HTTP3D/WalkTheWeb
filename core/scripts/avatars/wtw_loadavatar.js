@@ -432,60 +432,62 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 										walkresults.meshes[m].dispose();
 									}
 								}
-								/* copy the animation frame range to the current avatar */
-								zavatar.WTW.skeleton.copyAnimationRange(zwalkskeleton, zanimation.animationevent, true);
-								/* easing function defines how an animation starts and stops */
-								var zeasingfunction = new BABYLON.QuinticEase(); /* alternative is QuadraticEase() */
-								zeasingfunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+								if (zavatar.WTW.skeleton != undefined) {
+									/* copy the animation frame range to the current avatar */
+									zavatar.WTW.skeleton.copyAnimationRange(zwalkskeleton, zanimation.animationevent, true);
+									/* easing function defines how an animation starts and stops */
+									var zeasingfunction = new BABYLON.QuinticEase(); /* alternative is QuadraticEase() */
+									zeasingfunction.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
 
-								if (zeasingfunction != undefined && zeasingfunction != null) {
-									for (let c=0; c<zavatar.WTW.skeleton.bones.length; c++) {
-										zavatar.WTW.skeleton.bones[c].animations[0].setEasingFunction(zeasingfunction);
+									if (zeasingfunction != undefined && zeasingfunction != null) {
+										for (let c=0; c<zavatar.WTW.skeleton.bones.length; c++) {
+											zavatar.WTW.skeleton.bones[c].animations[0].setEasingFunction(zeasingfunction);
+										}
 									}
-								}
-								let ztotalframes = Number(zanimation.endframe);
-								let ztotalendframe = (zframetotal + Number(zanimation.endframe) - Number(zanimation.startframe));
-								let ztotalstartframe = ztotalendframe - zanimation.endframe;
-								if (zavatar.WTW.animations[zanimationind] != null) {
-									zavatar.WTW.animations[zanimationind].totalframes = zanimation.endframe;
-									zavatar.WTW.animations[zanimationind].totalstartframe = ztotalstartframe;
-									zavatar.WTW.animations[zanimationind].totalendframe = ztotalendframe;
-								}
-								/* start animation - may be set to weight 0 and not executing, but running */
-								if (zenteranimate) {
-									zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio));
-								}
-								if (zenteranimate == false) {
-									zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio));
-									//zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, Number(zavatar.WTW.animations[zanimationind].totalstartframe), Number(zavatar.WTW.animations[zanimationind].totalendframe), zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio), zanimation.onanimationend);
-								} else if (zavatar.WTW.animations[zanimationind + 1] != null) {
-									/* there are more animations to load - so load the next one */
-									WTW.loadAvatarAnimations(zavatarname, zanimationind + 1);
-								} else if (zavatarname.indexOf('myavatar-') > -1) {
-									/* it is current user's avatar and all animations are loaded */
-									WTW.toggleMenuAnimations();
-									WTW.toggleMenuAnimations();
-									WTW.showAvatarDisplayName(false);
-									/* allow plugins to execute code after the avatar is fully loaded, rigt before it is shown */
-									WTW.pluginsMyAnimationsLoaded();
-									/* run enter animation to show the avatar */
+									let ztotalframes = Number(zanimation.endframe);
+									let ztotalendframe = (zframetotal + Number(zanimation.endframe) - Number(zanimation.startframe));
+									let ztotalstartframe = ztotalendframe - zanimation.endframe;
+									if (zavatar.WTW.animations[zanimationind] != null) {
+										zavatar.WTW.animations[zanimationind].totalframes = zanimation.endframe;
+										zavatar.WTW.animations[zanimationind].totalstartframe = ztotalstartframe;
+										zavatar.WTW.animations[zanimationind].totalendframe = ztotalendframe;
+									}
+									/* start animation - may be set to weight 0 and not executing, but running */
 									if (zenteranimate) {
-										WTW.avatarEnter(zavatarname);
-									} else {
-										WTW.avatarShowVisible(zavatarname);
+										zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio));
 									}
-									/* clean up the old avatar meshes if there were any */
-									WTW.disposeOldAvatar(zavatarname);
-								} else {
-									/* other users' avatar is done loading */
-									/* play enter animation to show avatar */
-									if (zenteranimate) {
-										WTW.avatarEnter(zavatarname);
+									if (zenteranimate == false) {
+										zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio));
+										//zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, Number(zavatar.WTW.animations[zanimationind].totalstartframe), Number(zavatar.WTW.animations[zanimationind].totalendframe), zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio), zanimation.onanimationend);
+									} else if (zavatar.WTW.animations[zanimationind + 1] != null) {
+										/* there are more animations to load - so load the next one */
+										WTW.loadAvatarAnimations(zavatarname, zanimationind + 1);
+									} else if (zavatarname.indexOf('myavatar-') > -1) {
+										/* it is current user's avatar and all animations are loaded */
+										WTW.toggleMenuAnimations();
+										WTW.toggleMenuAnimations();
+										WTW.showAvatarDisplayName(false);
+										/* allow plugins to execute code after the avatar is fully loaded, rigt before it is shown */
+										WTW.pluginsMyAnimationsLoaded();
+										/* run enter animation to show the avatar */
+										if (zenteranimate) {
+											WTW.avatarEnter(zavatarname);
+										} else {
+											WTW.avatarShowVisible(zavatarname);
+										}
+										/* clean up the old avatar meshes if there were any */
+										WTW.disposeOldAvatar(zavatarname);
 									} else {
-										WTW.avatarShowVisible(zavatarname);
+										/* other users' avatar is done loading */
+										/* play enter animation to show avatar */
+										if (zenteranimate) {
+											WTW.avatarEnter(zavatarname);
+										} else {
+											WTW.avatarShowVisible(zavatarname);
+										}
+										/* clean up the old avatar meshes if there were any */
+										WTW.disposeOldAvatar(zavatarname);
 									}
-									/* clean up the old avatar meshes if there were any */
-									WTW.disposeOldAvatar(zavatarname);
 								}
 							}); 
 						}
@@ -665,12 +667,14 @@ WTWJS.prototype.getLastAnimationKey = function(zavatar) {
 		var zanim;
 		var zwhichbone;
 		var zwhichanim;
-		for (zwhichbone in zavatar.WTW.skeleton.bones) {
-			zbone = zavatar.WTW.skeleton.bones[zwhichbone];
-			for (zwhichanim in zbone.animations) {
-				zanim = zbone.animations[zwhichanim];
-				if (zanim._keys.length > zmaxkey) {
-					zmaxkey = zanim._keys.length;
+		if (zavatar.WTW.skeleton != undefined) {
+			for (zwhichbone in zavatar.WTW.skeleton.bones) {
+				zbone = zavatar.WTW.skeleton.bones[zwhichbone];
+				for (zwhichanim in zbone.animations) {
+					zanim = zbone.animations[zwhichanim];
+					if (zanim._keys.length > zmaxkey) {
+						zmaxkey = zanim._keys.length;
+					}
 				}
 			}
 		}
