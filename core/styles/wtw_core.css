@@ -606,6 +606,26 @@ select.wtw-fileselectcategory {
 	border:#454545 solid 1px;
 	background-color: #366E26;
 }
+.wtw-graymenubutton {
+	margin:15px;
+	height:34px;
+	line-height:34px;
+	font-weight:bold;
+	font-size:1em;
+	color:#ffffff;
+	border:#afafaf solid 1px;
+	border-radius:10px;
+	background-color: #c0c0c0;
+	text-align:center;
+	vertical-align:middle;
+	display:block;
+}
+.wtw-graymenubutton:hover {
+	cursor:pointer;
+	color:#ffffff;
+	border:#454545 solid 1px;
+	background-color: #366E26;
+}
 .wtw-greenbutton {
 	margin:0px;
 	padding:7px 5px 7px 5px;
@@ -1420,6 +1440,28 @@ a.wtw-helplink2:hover {
 	color:#ffffff;
 	vertical-align:middle;
 	text-align:center;
+}
+.wtw-wtwmessage {
+	z-index:500;
+	position:absolute;
+	bottom:33px;
+	left:0px;
+	min-height: 32px;
+	width:100%;
+	background-color:transparent;
+	color:#ffffff;
+	vertical-align:middle;
+	text-align:center;
+	pointer-events:none;
+	touch-action: none;
+}
+.wtw-wtwmessagetext {
+	color:yellow;
+	font-size:1.4em;
+}
+.wtw-messagetext {
+	color:white;
+	font-size:1.4em;
 }
 .wtw-menurighticon {
 	float:right;
