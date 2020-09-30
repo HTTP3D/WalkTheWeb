@@ -13,10 +13,9 @@ try {
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zglobaluserid = $wtwhandlers->getPost('globaluserid','');
 	$zuserid = $wtwhandlers->getPost('userid','');
-	$zusername = $wtwhandlers->getPost('username','');
 	$zuseremail = $wtwhandlers->getPost('useremail','');
 	$zpassword = $wtwhandlers->getPost('password','');
-	$zaccesstoken = $wtwhandlers->getPost('accesstoken','');
+	$zusertoken = $wtwhandlers->getPost('usertoken','');
 	$zuseravatarid = $wtwhandlers->getPost('useravatarid','');
 	$zinstanceid = $wtwhandlers->getPost('instanceid','');
 	$zdisplayname = $wtwhandlers->getPost('displayname','');
@@ -36,33 +35,22 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "saveuser":
-			$wtwusers->saveUser($zuserid, $zusername, $zuseremail);
+			$wtwusers->saveUser($zuserid, $zdisplayname, $zuseremail);
 			break;
 		case "savenewuser":	
-			$wtwusers->saveNewUser($zusername, $zpassword, $zuseremail);
+			$wtwusers->saveNewUser($zdisplayname, $zpassword, $zuseremail);
 			break;
 		case "deleteuser":
 			$wtwusers->deleteUser($zuserid);
 			break;
 		case "login":
-			$zresponse = $wtwusers->loginAttempt($zusername, $zuseremail, $zpassword);
+			$zresponse = $wtwusers->loginAttempt($zuseremail, $zpassword);
 			break;
 		case "globallogin":
-			$zresponse = $wtwusers->globalLogin($zusername, $zglobaluserid, $zuseremail, $zaccesstoken);
+			$zresponse = $wtwusers->globalLogin($zglobaluserid, $zuseremail, $zusertoken, $zdisplayname);
 			break;
 		case "register":
-			$zserror = '';
-			$zresults = $wtwusers->createAccount($zusername, $zuseremail, $zpassword);
-			if (isset($zresults->serror)) {
-				$zserror = $zresults->serror;
-			}
-			if (!empty($zserror)) {
-			} else if ($zresults->success == false) {
-				$zserror = "Could not Create Account";
-			}
-			$zresponse = array(
-				'serror'=> $zserror
-			);
+			$zresponse = $wtwusers->createAccount($zuseremail, $zpassword, $zdisplayname);
 			break;
 		case "recoverloginbyemail":
 			$zloginresponse = $wtwusers->recoverLoginByEmail($zuseremail);
@@ -80,7 +68,7 @@ try {
 			);
 			break;
 		case "saveprofile":
-			$zserror = $wtwusers->saveProfile($zuseravatarid, $zinstanceid, $zusername, $zdisplayname, $zuseremail);
+			$zserror = $wtwusers->saveProfile($zuseravatarid, $zinstanceid, $zdisplayname, $zuseremail);
 			$zresponse = array(
 				'serror'=> $zserror
 			);

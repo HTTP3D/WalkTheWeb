@@ -48,12 +48,6 @@ try {
 		case "savegravity":
 			//$wtwthings->saveThingGravity($zthingid, $zgravity);
 			break;
-		case "addmusthave":
-			$zthings = $wtwthings->addMustHave();
-			$zresponse = array(
-				'things'=> $zthings
-			);
-			break;
 		case "importthing":
 			$zthingid = $wtwthings->importThing($zthingid, $zpastthingid, $zthingname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $zalttag);
 			$zresponse = array(
