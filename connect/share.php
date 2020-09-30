@@ -328,7 +328,6 @@ function addUserID($zuserid) {
 				foreach ($zresults as $zrow) {
 					$zusers[$zuser] = array (
 						'userid'=>$zrow["userid"],
-						'username'=>htmlspecialchars($zrow["username"], ENT_QUOTES, 'UTF-8'),
 						'displayname'=>htmlspecialchars($zrow["displayname"], ENT_QUOTES, 'UTF-8'),
 						'email'=>$zrow["email"],
 						'uploadpathid'=>$zrow["uploadpathid"]

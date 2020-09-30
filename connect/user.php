@@ -27,10 +27,14 @@ try {
 		foreach ($zresults as $zrow) {
 			$zuser = array(
 				'userid' => $zrow["userid"],
-				'username' => $zrow["username"],
 				'uploadpathid' => $zrow["uploadpathid"],
 				'userimageurl' => $zrow["userimageurl"],
 				'email' => $zrow["email"],
+				'displayname' => $zrow["displayname"],
+				'firstname' => $zrow["firstname"],
+				'lastname' => $zrow["lastname"],
+				'gender' => $zrow["gender"],
+				'dob' => $zrow["dob"],
 				'createdate' => $zrow["createdate"],
 				'createuserid' => $zrow["createuserid"],
 				'updatedate' => $zrow["updatedate"],

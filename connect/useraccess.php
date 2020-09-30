@@ -33,7 +33,6 @@ try {
 	if (!empty($hasaccess) && isset($hasaccess)) {
 		$zresults = $wtwconnect->query("
 			select ua1.userauthorizationid,
-				u1.username,
 				u1.email,
 				u1.displayname,
 				ua1.userid,
@@ -46,11 +45,10 @@ try {
 				and ua1.thingid='".$zthingid."'
 				and ua1.deleted=0
 				and (u1.deleted=0 or u1.deleted is null)
-			order by u1.username,ua1.userid,ua1.userauthorizationid;");
+			order by u1.displayname,ua1.userid,ua1.userauthorizationid;");
 	} else {
 		$zresults = $wtwconnect->query("
 			select userauthorizationid,
-				'' as username,
 				'' as email,
 				'' as displayname,
 				userid,
@@ -60,7 +58,7 @@ try {
 				and communityid='".$zcommunityid."'
 				and thingid='".$zthingid."'
 				and deleted=0
-			order by username,userid,userauthorizationid;");
+			order by userid,userauthorizationid;");
 	}
 
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
@@ -71,7 +69,6 @@ try {
 	foreach ($zresults as $zrow) {
 		$suser = array(
 			'userauthorizationid' => $zrow["userauthorizationid"],
-			'username' => $zrow["username"],
 			'email' => $zrow["email"],
 			'displayname' => $zrow["displayname"],
 			'userid' => $zrow["userid"],

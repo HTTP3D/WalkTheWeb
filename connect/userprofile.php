@@ -47,7 +47,6 @@ try {
 		}
 		$zuser = array(
 			'userid' => $zrow["userid"],
-			'username' => $zrow["username"],
 			'uploadpathid' => $zrow["uploadpathid"],
 			'userimageurl' => $zrow["userimageurl"],
 			'email' => $zrow["email"],

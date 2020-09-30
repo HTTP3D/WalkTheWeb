@@ -21,12 +21,12 @@ try {
 			from ".wtw_tableprefix."users
 			where deleted=0
 				and pastuserid=''
-			order by username, email, userid;";
+			order by email, userid;";
 		if ($zall == 1) {
 			$zsql = "select * 
 				from ".wtw_tableprefix."users
 				where deleted=0
-				order by username, email, userid;";
+				order by email, userid;";
 		}
 		
 		/* get users information */
@@ -36,10 +36,14 @@ try {
 		foreach ($zresults as $zrow) {
 			$zusers[$i] = array(
 				'userid' => $zrow["userid"],
-				'username' => $zrow["username"],
 				'uploadpathid' => $zrow["uploadpathid"],
 				'userimageurl' => $zrow["userimageurl"],
 				'email' => $zrow["email"],
+				'displayname' => $zrow["displayname"],
+				'firstname' => $zrow["firstname"],
+				'lastname' => $zrow["lastname"],
+				'gender' => $zrow["gender"],
+				'dob' => $zrow["dob"],
 				'createdate' => $zrow["createdate"],
 				'createuserid' => $zrow["createuserid"],
 				'updatedate' => $zrow["updatedate"],
