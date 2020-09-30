@@ -5,6 +5,7 @@
 	echo $wtwmenus->getMainMenu();
 ?>
 </div>
+<div id="wtw_wtwmessage" class="wtw-wtwmessage"></div>
 <div id="wtw_menusettings" class="wtw-slideupmenuright" style="display:none;visibility:hidden;" >
 	<img onclick="WTW.closeMenus();" class="wtw-closeright" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
 	<div class="wtw-menuheading">Settings Menu</div>
@@ -64,11 +65,8 @@
 				<li class="wtw-submenuli">Avatar Display Name</li>
 				<li class="wtw-submenuli"><div id="wtw_menudisplayname" class="wtw-indentbold" onclick="WTW.editProfile();"></div>
 					<input type="text" id="wtw_teditdisplayname" class="wtw-hide" /></li>
-				<li class="wtw-submenuli">User Name</li>
-				<li class="wtw-submenuli"><div id="wtw_menuusername" class="wtw-indentbold" onclick="WTW.editProfile();">UserName</div>
-					<input type="text" id="wtw_teditusername" autocomplete="username" class="wtw-hide" /></li>
-				<li class="wtw-submenuli">Email Address</li>
-				<li class="wtw-submenuli"><div id="wtw_menuemail" class="wtw-indentbold" onclick="WTW.editProfile();">UserName</div>
+				<li class="wtw-submenuli">User Information</li>
+				<li class="wtw-submenuli"><div id="wtw_menuemail" class="wtw-indentbold" onclick="WTW.editProfile();">Email</div>
 					<input type="text" id="wtw_teditemail" autocomplete="email" class="wtw-hide" /></li>
 				<li class="wtw-menuliholder"><div id="wtw_profileerrortext" style="color:red;margin-left:10px;"></div></li>
 				<li id="wtw_menusaveprofile" class="wtw-menuli wtw-hide" onclick="WTW.saveProfile();"><img src="/content/system/images/menulogin.png" alt="Save Profile" title="Save Profile" class='wtw-menulefticon' /><div style="color:yellow;">Save Profile</div></li>
