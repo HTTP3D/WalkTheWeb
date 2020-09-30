@@ -6,8 +6,8 @@
 		Visitors are all users.<br />
 		Architects can edit the 3D Community.<br />
 		Admins can Add or Remove Architects, Change Community Access, and edit the 3D Community.</div>
-	<h2>User Email or Username</h2>
-	<input type="text" id="wtw_tadduseridname" maxlength="64" width="250" onclick="WTW.checkKey(this, 'usernameoremail', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'usernameoremail', 0, 0);WTW.setAccessValid(2);" onblur="WTW.checkKey(this, 'usernameoremail', 0, 1);" /><div id="wtw_reqtadduseraccess" class="wtw-required">&nbsp;* Required</div><br />
+	<h2>User Email</h2>
+	<input type="text" id="wtw_tadduseridname" maxlength="64" width="250" onclick="WTW.checkKey(this, 'email', 0, 0);WTW.blockPassThrough();" onkeyup="WTW.checkKey(this, 'email', 0, 0);WTW.setAccessValid(2);" onblur="WTW.checkKey(this, 'email', 0, 1);" /><div id="wtw_reqtadduseraccess" class="wtw-required">&nbsp;* Required</div><br />
 	<br /><br />
 	<div value="Add User" onclick="WTW.addAccess();WTW.blockPassThrough(); return (false);" style="cursor: pointer;" class='wtw-menulevel2'></div>
 	<hr /><br />
