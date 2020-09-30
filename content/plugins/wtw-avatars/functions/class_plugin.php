@@ -100,10 +100,6 @@ class wtwavatars {
 			/* javascripts */
 			/* wtwplugins class -> addScript function (script id, '1' for admin only, script browse url) */
 			$wtwplugins->addScript('wtw-avatars-script', null, WTW_AVATARS_URL . "/scripts/class_main.js");
-			/* $wtwplugins->addScript('wtw-avatars-creatorscript', null, WTW_AVATARS_URL . "/scripts/wtwavatars_designer.js"); */
-			/* $wtwplugins->addScript('wtw-avatars-moldsscript', null, WTW_AVATARS_URL . "/scripts/custom_molds.js"); */
-			/* $wtwplugins->addScript('wtw-avatars-actionzonesscript', null, WTW_AVATARS_URL . "/scripts/custom_actionzones.js"); */
-			/* $wtwplugins->addScript('wtw-avatars-coveringsscript', null, WTW_AVATARS_URL . "/scripts/custom_coverings.js"); */
 			
 			/* hook plugin script functions into existing wtw functions */
 			/* $wtwplugins->addScriptFunction('hookname', 'function(parameters);'); */

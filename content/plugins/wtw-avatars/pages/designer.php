@@ -92,10 +92,10 @@ $zver = date("Y-m-d-H-i-s");
 		<input type="hidden" id="wtw_tglobalavatarid" value="" />
 		<input type="hidden" id="wtw_tglobalavatar" value="1" />
 		<input type="hidden" id="wtw_tinstanceid" />
-		<input type="hidden" id="wtw_taccesstoken" />
+		<input type="hidden" id="wtw_tusertoken" />
 		<input type="hidden" id="wtw_tavatarid" />
 		<input type="hidden" id="wtw_tuseravatarid" />
-		<input type="hidden" id="wtw_tdisplayname" value="Anonymous" />
+		<input type="hidden" id="wtw_tnewavatardisplayname" value="Anonymous" />
 		<input type="hidden" id="wtw_tmoldname" />
 		<input type="hidden" id="wtw_tavatarpart" />
 		<input type="hidden" id="wtw_teditanimationevent" />

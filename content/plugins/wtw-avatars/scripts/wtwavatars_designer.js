@@ -262,7 +262,7 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 					text1.height = "30px";
 					rightMenu.addControl(text1, 0, 0);
 					
-					var zdisplayname = dGet('wtw_tdisplayname').value;
+					var zdisplayname = dGet('wtw_tnewavatardisplayname').value;
 					if (zdisplayname == '') {
 						zdisplayname = "Anonymous";
 					}
@@ -618,7 +618,7 @@ WTWJS.prototype.loadDesignerAvatar = function(zglobalavatarid, zuseravatarid) {
 					zresponse = JSON.parse(zresponse);
 					if (zresponse.avatar != null) {
 						avatardef = zresponse.avatar;
-						dGet('wtw_tdisplayname').value = zresponse.avatar.displayname;
+						dGet('wtw_tnewavatardisplayname').value = zresponse.avatar.displayname;
 						dGet('wtw_tavatarid').value = zresponse.avatar.avatarid;
 						dGet("wtw_tglobalavatarid").value = zresponse.avatar.globalavatarid;
 						dGet("wtw_tuseravatarid").value = zresponse.avatar.useravatarid;
@@ -641,7 +641,7 @@ WTWJS.prototype.loadDesignerAvatar = function(zglobalavatarid, zuseravatarid) {
 						}
 						WTW.avatars = [];
 						var zrequest2 = {
-							'accesstoken':dGet('wtw_taccesstoken').value,
+							'usertoken':dGet('wtw_tusertoken').value,
 							'globaluserid':btoa(dGet('wtw_tglobaluserid').value),
 							'serverinstanceid':btoa(dGet('wtw_serverinstanceid').value),
 							'groups':'',
@@ -694,7 +694,7 @@ WTWJS.prototype.loadDesignerAvatar = function(zglobalavatarid, zuseravatarid) {
 					if (zresponse != null) {
 						if (zresponse.avatar != null) {
 							avatardef = zresponse.avatar;
-							dGet('wtw_tdisplayname').value = zresponse.avatar.displayname;
+							dGet('wtw_tnewavatardisplayname').value = zresponse.avatar.displayname;
 							dGet('wtw_tavatarid').value = zresponse.avatar.avatarid;
 							dGet("wtw_tglobalavatarid").value = '';
 							dGet('wtw_tuseravatarid').value = zresponse.avatar.useravatarid;
@@ -799,7 +799,7 @@ WTWJS.prototype.saveMyAvatar = function() {
 			'scalingx':zscalingx,
 			'scalingy':zscalingy,
 			'scalingz':zscalingz,
-			'displayname':dGet('wtw_tdisplayname').value,
+			'displayname':dGet('wtw_tnewavatardisplayname').value,
 			'function':'saveavatar'
 		};
 		WTW.postJSON("/core/handlers/wtwavatars-saveavatar.php", zrequest, 
@@ -817,7 +817,7 @@ WTWJS.prototype.saveMyAvatar = function() {
 							zresponse.objectfolder = "https://3dnet.walktheweb.com" + zresponse.objectfolder;
 						}
 						var zrequest2 = {
-							'accesstoken':dGet('wtw_taccesstoken').value,
+							'usertoken':dGet('wtw_tusertoken').value,
 							'globaluserid':btoa(dGet('wtw_tglobaluserid').value),
 							'serverinstanceid':dGet('wtw_serverinstanceid').value,
 							'useravatarid':dGet('wtw_tuseravatarid').value,
@@ -843,7 +843,7 @@ WTWJS.prototype.saveMyAvatar = function() {
 							'walkanimationspeed':WTW.walkAnimationSpeed,
 							'turnspeed':WTW.turnSpeed,
 							'turnanimationspeed':WTW.turnAnimationSpeed,
-							'displayname':dGet('wtw_tdisplayname').value,
+							'displayname':dGet('wtw_tnewavatardisplayname').value,
 							'function':'saveavatar'
 						};
 						WTW.postJSON("https://3dnet.walktheweb.com/connect/globalsaveavatar.php", zrequest2, 
@@ -887,7 +887,7 @@ WTWJS.prototype.saveMyAvatarColors = function() {
 						zresponse = JSON.parse(zresponse);
 						var zrequest2 = {
 							'serverinstanceid':dGet('wtw_serverinstanceid').value,
-							'accesstoken':dGet('wtw_taccesstoken').value,
+							'usertoken':dGet('wtw_tusertoken').value,
 							'globaluserid':btoa(dGet('wtw_tglobaluserid').value),
 							'useravatarid':dGet('wtw_tuseravatarid').value,
 							'userid':dGet('wtw_tuserid').value,
@@ -972,7 +972,7 @@ WTWJS.prototype.saveMyAvatarAnimations = function() {
 										}
 										var zrequest2 = {
 											'serverinstanceid':dGet('wtw_serverinstanceid').value,
-											'accesstoken':dGet('wtw_taccesstoken').value,
+											'usertoken':dGet('wtw_tusertoken').value,
 											'globaluserid':btoa(dGet('wtw_tglobaluserid').value),
 											'useravatarid':dGet('wtw_tuseravatarid').value,
 											'userid':dGet('wtw_tuserid').value,
@@ -1729,7 +1729,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 				}
 				baseanimationframes = WTW.getLastAnimationKey(WTW.myAvatar);
 				WTW.stopLoading();
-				WTW.updateDisplayName(dGet('wtw_tdisplayname').value);
+				WTW.updateDisplayName(dGet('wtw_tnewavatardisplayname').value);
 			}
 		);
 	} catch (ex) {
@@ -2032,7 +2032,7 @@ WTWJS.prototype.setTextColor = function(zbgcolor, zlightcolor, zdarkcolor) {
 WTWJS.prototype.updateDisplayName = function(ztext) {
 	/* update text name over avatar to match profile name */
 	try {
-		dGet('wtw_tdisplayname').value = ztext;
+		dGet('wtw_tnewavatardisplayname').value = ztext;
 		WTW.showIDs(ztext);
 	} catch (ex) {
 		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-updateDisplayName=" + ex.message);
@@ -2080,7 +2080,7 @@ WTWJS.prototype.preloadAvatar = function(zavatarid) {
 					zresponse = JSON.parse(zresponse);
 					if (zresponse.avatar != null) {
 						WTW.loadAvatarMeshes(zresponse.avatar);
-						WTW.showIDs(dGet('wtw_tdisplayname').value);
+						WTW.showIDs(dGet('wtw_tnewavatardisplayname').value);
 					}
 				}
 			}
