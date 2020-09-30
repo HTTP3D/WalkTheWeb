@@ -1814,7 +1814,7 @@ WTWJS.prototype.openEmailServerSettings = function() {
 		WTW.show('wtw_loadingemailserver');
 		WTW.show('wtw_settingspage');
 		WTW.show('wtw_emailserversettings');
-		WTW.getSettings("smtphost, smtpport, smtplogin, smtppassword", "WTW.loadEmailServerSettings");
+		WTW.getSettings("smtphost, smtpport, smtpusername, smtppassword", "WTW.loadEmailServerSettings");
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-openEmailServerSettings=" + ex.message);
 	}
@@ -1831,8 +1831,8 @@ WTWJS.prototype.loadEmailServerSettings = function(zsettings, zparameters) {
 		if (zsetting.smtpport != undefined) {
 			dGet('wtw_tsmtpport').value = zsetting.smtpport;					
 		}
-		if (zsetting.smtplogin != undefined) {
-			dGet('wtw_tsmtplogin').value = zsetting.smtplogin;					
+		if (zsetting.smtpusername != undefined) {
+			dGet('wtw_tsmtpusername').value = zsetting.smtpusername;					
 		}
 		if (zsetting.smtppassword != undefined) {
 			dGet('wtw_tsmtppassword').value = atob(zsetting.smtppassword);					
@@ -1847,13 +1847,13 @@ WTWJS.prototype.saveEmailServerSettings = function() {
 	try {
 		var zsmtphost = dGet('wtw_tsmtphost').value;
 		var zsmtpport = dGet('wtw_tsmtpport').value;
-		var zsmtplogin = dGet('wtw_tsmtplogin').value;
+		var zsmtpusername = dGet('wtw_tsmtpusername').value;
 		var zsmtppassword = btoa(dGet('wtw_tsmtppassword').value);
 		
 		var zsettings = {
 			'smtphost': zsmtphost,
 			'smtpport': zsmtpport,
-			'smtplogin': zsmtplogin,
+			'smtpusername': zsmtpusername,
 			'smtppassword': zsmtppassword
 		};
 		WTW.saveSettings(zsettings, "WTW.saveEmailServerSettingsComplete");
@@ -1877,6 +1877,30 @@ WTWJS.prototype.saveEmailServerSettingsComplete = function(zsuccess) {
 		},5000);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-saveEmailServerSettingsComplete=" + ex.message);
+	}
+}
+
+WTWJS.prototype.testEmailServerSettings = function() {
+	/* test Email Server Settings */
+	try {
+		var zrequest = {
+			'sendto': 'adishno@gmail.com',
+			'subject': 'Test Message from WalkTheWeb',
+			'message':'This is a test message',
+			'function':'sendadminemail'
+		};
+		WTW.postJSON("/core/handlers/tools.php", zrequest, 
+			function(zresponse) {
+WTW.log(zresponse);
+				zresponse = JSON.parse(zresponse);
+				
+				
+				/* note serror would contain errors */
+				//WTW.returnSettings(zresponse.settings, zjsfunction, zjsparameters);
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-testEmailServerSettings=" + ex.message);
 	}
 }
 

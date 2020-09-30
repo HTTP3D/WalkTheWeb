@@ -33,8 +33,10 @@ WTWJS.prototype.checkActionZones = function() {
 							}
 							/* loads JavaScripts specifically for action zone */
 							WTW.checkLoadScripts(i);
-							/* trigger a pageview in analytics if set */
-							WTW.checkAnalytics(i);
+							try {
+								/* trigger a pageview in analytics if set */
+								WTW.checkAnalytics(i);
+							} catch (ex) {}
 							/* status 2 means loaded */
 							WTW.actionZones[i].status = 2;
 						} else if (zmeinzone == false && zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {

@@ -248,55 +248,6 @@ WTWJS.prototype.copyThingComplete = function(zthingid) {
 	} 
 }
 
-WTWJS.prototype.setUserThings = function(addthings, added) {
-	/* check if new user has any preloaded 3D Things */
-	try {
-		if (added == undefined) {
-			added = 0;
-		}
-		var tryaddthings = 0;
-		window.setTimeout(function() {
-			WTW.hide("wtw_loadingthingid");
-		},1500);
-		WTW.things = addthings;
-		if (WTW.things != null && WTW.adminMenu == 7) {
-			if (WTW.things.length > 0) {
-			} else if (added == 0) {
-				tryaddthings = 1;
-			}
-		} else if (WTW.things != null && added == 0) {
-			if (WTW.things.length == 0) {
-				tryaddthings = 1;
-			}
-		} else if (WTW.things == null) {
-			tryaddthings = 1;
-		}
-		if (tryaddthings == 1 && added == 0) {
-			WTW.addThingsMustHave();
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminthings.js-setUserThings=" + ex.message);
-	}
-}
-
-WTWJS.prototype.addThingsMustHave = function() {
-	/* get a list of common 3D Things to start with */
-	try {
-		var zrequest = {
-			'function':'addmusthave'
-		};
-		WTW.postJSON("/core/handlers/things.php", zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				/* note serror would contain errors */
-				WTW.setUserThings(JSON.parse(zresponse.things), 1);
-			}
-		);
-	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminthings.js-addThingsMustHave=" + ex.message);
-	}
-}
-
 WTWJS.prototype.getSelectThingsList = function() {
 	/* populates the admin menu for My 3D Things to load and edit */
 	try {

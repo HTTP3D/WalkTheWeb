@@ -694,110 +694,115 @@ WTWJS.prototype.getCookie = function(name) {
 	return value;
 }
 
-WTWJS.prototype.deleteCookie = function(name) {
+WTWJS.prototype.deleteCookie = function(zname) {
 	/* delete cookie by name (expire immediately) */
-    WTW.setCookie(name,"",-1);
+    WTW.setCookie(zname,"",-1);
 }
 
 
 /* validate and format text, numbers, dates, url, email, etc... */
 
 /* strings */
-WTWJS.prototype.getRandomString = function(length) {
+WTWJS.prototype.getRandomString = function(zlength) {
 	/* gets a random alpha numeric string - often used as ID fields */
-    var result = '';
+    var zresult = '';
 	try {
-		var chars = '0123456789abcdefghijklmnopqrstuvwxyz';
-		for (var i = length; i > 0; --i) {
-			result += chars[Math.floor(Math.random() * chars.length)];
+		var zchars = '0123456789abcdefghijklmnopqrstuvwxyz';
+		for (var i = zlength; i > 0; --i) {
+			zresult += zchars[Math.floor(Math.random() * zchars.length)];
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-randomString=" + ex.message);
 	}
-    return result;
+    return zresult;
 }
 
 /* numbers */
-WTWJS.prototype.isNumeric = function(n) {
+WTWJS.prototype.isNumeric = function(zval) {
 	/* boolean - is a text string a number */
-    return !isNaN(parseFloat(n)) && isFinite(n);
+    return !isNaN(parseFloat(zval)) && isFinite(zval);
 }
 
-WTWJS.prototype.isOdd = function(num) {
+WTWJS.prototype.isOdd = function(zval) {
 	/* boolean - check if odd (true) or even (false) number */
-	return num % 2;
+	return zval % 2;
 }
 
-WTWJS.prototype.randomBetween = function(min,max) {
+WTWJS.prototype.randomBetween = function(zmin,zmax) {
 	/* get a random number between min and max numbers */
-    return Math.floor(Math.random()*(max-min+1)+min);
+    return Math.floor(Math.random()*(zmax-zmin+1)+zmin);
 }
 
-WTWJS.prototype.formatNumber = function(n, dp) {
-	/* format a number with #,###.## (n is number and dp is number of decimal points) */
-	var numbertext = "";
+WTWJS.prototype.formatNumber = function(zval, zdecimalpoints) {
+	/* format a number with #,###.## (zval is the number and zdecimalpoints is number of decimal points) */
+	var znumbertext = "";
 	try {
-		if (WTW.isNumeric(n)) {
-			n = Number(n);
-			var w = n.toFixed(dp), k = w|0, b = n < 0 ? 1 : 0,
-			u = Math.abs(w-k), d = ('' + u.toFixed(dp)).substr(2, dp),
-			s = '' + k, i = s.length, r = '';
+		if (WTW.isNumeric(zval)) {
+			zval = Number(zval);
+			var zdecimal = '';
+			var zround = '';
+			var zval1 = 0;
+			var zval4 = 0;
+			var zval3 = 0;
+			var zval2 = zval.toFixed(zdecimalpoints), zval3 = zval2|0, b = zval < 0 ? 1 : 0,
+			zval4 = Math.abs(zval2-zval3), zdecimal = ('' + zval4.toFixed(zdecimalpoints)).substr(2, zdecimalpoints),
+			zval1 = '' + zval3, i = zval1.length, zround = '';
 			while ( (i-=3) > b ) { 
-				r = ',' + s.substr(i, 3) + r; 
+				zround = ',' + zval1.substr(i, 3) + zround; 
 			}
-			numbertext = s.substr(0, i + 3) + r + (d ? '.' + d: '');
+			znumbertext = zval1.substr(0, i + 3) + zround + (zdecimal ? '.' + zdecimal: '');
 		}
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-formatNumber=" + ex.message);
     }  
-	return numbertext;
+	return znumbertext;
 }
 
-WTWJS.prototype.formatDataSize = function(num) {
+WTWJS.prototype.formatDataSize = function(zval) {
 	/* format number with commas */
-	var snum = '';
+	var znumbertext = '';
 	try {
-		if (WTW.isNumeric(num)) {
-			num = Number(num);
-			if (num > 999999) {
-				num = (Math.round(num * 10000) / 10000) / 1000000;
-				snum = WTW.formatNumber(num,2) + ' mb';
-			} else if (num > 999) {
-				num = (Math.round(num * 100) / 100) / 1000;
-				snum = WTW.formatNumber(num,2) + ' kb';
+		if (WTW.isNumeric(zval)) {
+			zval = Number(zval);
+			if (zval > 999999) {
+				zval = (Math.round(zval * 10000) / 10000) / 1000000;
+				znumbertext = WTW.formatNumber(zval,2) + ' mb';
+			} else if (zval > 999) {
+				zval = (Math.round(zval * 100) / 100) / 1000;
+				znumbertext = WTW.formatNumber(zval,2) + ' kb';
 			} else {
-				num = num / 1000;
-				snum = WTW.formatNumber(num,3) + ' kb';
+				zval = zval / 1000;
+				znumbertext = WTW.formatNumber(zval,3) + ' kb';
 			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-formatDataSize=" + ex.message);
 	}
-	return snum;
+	return znumbertext;
 }
 
 /* dates */
-WTWJS.prototype.isDate = function(val) {
+WTWJS.prototype.isDate = function(zval) {
 	/* check if text is valid date */
-	if (val != null) {
-		var d = new Date(val);
-		return !isNaN(d.valueOf());
+	if (zval != null) {
+		var zdate = new Date(zval);
+		return !isNaN(zdate.valueOf());
 	} else {
 		return false;
 	}
 }
 
-WTWJS.prototype.formatDate = function(date) {
-	/* format date as month/day/year */
-	if (date != "") {
-		var d = new Date(date),
-			month = '' + (d.getMonth() + 1),
-			day = '' + d.getDate(),
-			year = d.getFullYear();
+WTWJS.prototype.formatDate = function(zdatetext) {
+	/* format zdatetext as month/day/year */
+	if (zdatetext != "") {
+		var zdate = new Date(zdatetext);
+		var	zmonth = '' + (zdate.getMonth() + 1);
+		var	zday = '' + zdate.getDate();
+		var	zyear = zdate.getFullYear();
 
-		if (month.length < 2) month = '0' + month;
-		if (day.length < 2) day = '0' + day;
-		return [month,day,year].join('/');
+		if (zmonth.length < 2) zmonth = '0' + zmonth;
+		if (zday.length < 2) zday = '0' + zday;
+		return [zmonth,zday,zyear].join('/');
 	} else {
 		return "";
 	}

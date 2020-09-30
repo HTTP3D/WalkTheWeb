@@ -8,7 +8,7 @@
 WTWJS.prototype.openGlobalLogin = function() {
 	/* opens login for 3dnet.walktheweb.com - as a global WalkTheWeb login option */
 	try {
-		WTW.openIFrame("https://3dnet.walktheweb.com/core/login/login.php?serverinstance=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&webid=" + btoa(communityid + buildingid + thingid), .3, .6, "Login Menu");
+		WTW.openIFrame("https://3dnet.walktheweb.com/core/login/login.php?serverinstance=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&domainurl=" + btoa(wtw_domainurl) + "&websiteurl=" + btoa(wtw_websiteurl) + "&webid=" + btoa(communityid + buildingid + thingid), .3, .6, "Login Menu");
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-openGlobalLogin=" + ex.message);
 	}
@@ -17,7 +17,7 @@ WTWJS.prototype.openGlobalLogin = function() {
 WTWJS.prototype.logoutGlobal = function() {
 	/* references 3dnet.walktheweb.com - logout of global WalkTheWeb login */
 	try {
-		WTW.openIFrame("https://3dnet.walktheweb.com/core/login/login.php?logout=1&serverinstance=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&webid=" + btoa(communityid + buildingid + thingid), .3, .6, "Login Menu");
+		WTW.openIFrame("https://3dnet.walktheweb.com/core/login/login.php?logout=1&serverinstance=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&domainurl=" + btoa(wtw_domainurl) + "&websiteurl=" + btoa(wtw_websiteurl) + "&webid=" + btoa(communityid + buildingid + thingid), .3, .6, "Login Menu");
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-logoutGlobal=" + ex.message);
 	}
@@ -26,21 +26,22 @@ WTWJS.prototype.logoutGlobal = function() {
 WTWJS.prototype.globalLogin = function(zparameters) {
 	/* references 3dnet.walktheweb.com - global WalkTheWeb login complete and confirms the local values from login */
 	try {
-		let zusername = "";
 		let zglobaluserid = "-1";
-		let zemail = "";
-		let zaccesstoken = "";
+		let zdisplayname = "";
+		let zusertoken = "";
+		let zuseremail = "";
 		if (zparameters.indexOf('|') > -1) {
 			let zparameter = zparameters.split('|');
-			zemail = atob(zparameter[0]);
-			zglobaluserid = atob(zparameter[1]);
-			zaccesstoken = atob(zparameter[2]);
-			zusername = zemail.split('@')[0];
+			zglobaluserid = atob(zparameter[0]);
+			zusertoken = atob(zparameter[1]);
+			zuseremail = atob(zparameter[2]);
+			zdisplayname = atob(zparameter[3]);
+
 			var zrequest = {
-				'username':btoa(zusername),
 				'globaluserid':btoa(zglobaluserid),
-				'useremail':btoa(zemail),
-				'accesstoken':btoa(zaccesstoken),
+				'usertoken':btoa(zusertoken),
+				'displayname':btoa(zdisplayname),
+				'useremail':btoa(zuseremail),
 				'function':'globallogin'
 			};
 			WTW.postJSON("/core/handlers/users.php", zrequest,
@@ -70,22 +71,20 @@ WTWJS.prototype.globalLoginResponse = function(zresults) {
 					serror = zresults.serror;
 					dGet('wtw_tglobaluserid').value = '';
 					dGet('wtw_tuserid').value = '';
-					dGet('wtw_tusername').value = '';
 					dGet('wtw_tuseremail').value = '';
 					dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
 					dGet('wtw_menudisplayname').innerHTML = 'Login';
 					dGet('wtw_tuserimageurl').value = "";
-					dGet('wtw_menuusername').innerHTML = 'Login';
 					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
-					dGet('wtw_taccesstoken').value = '';
+					dGet('wtw_tusertoken').value = '';
 				}
 				if (zresults.userid != '') {
-					dGet('wtw_taccesstoken').value = zresults.accesstoken;
+					dGet('wtw_tusertoken').value = zresults.usertoken;
 					dGet('wtw_tglobaluserid').value = zresults.globaluserid;
 					WTW.hide('wtw_menulogin');
 					WTW.show('wtw_menuloggedin');
-					WTW.setLoginValues(zresults.userid, zresults.username, zresults.displayname, zresults.email, zresults.userimageurl);
+					WTW.setLoginValues(zresults.userid, zresults.displayname, zresults.email, zresults.userimageurl);
 				} else {
 					WTW.hide('wtw_menuloggedin');
 					WTW.show('wtw_menulogin');
@@ -156,7 +155,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				break;
 			case "3D Website Login":
 				zpagediv += "<h2 class=\"wtw-login\">3D Website Login</h2>" +
-					"<div class=\"wtw-loginlabel\">User Name</div><div><input type=\"text\" id=\"wtw_tlogin\" autocomplete=\"username\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabel\">Email</div><div><input type=\"text\" id=\"wtw_temail\" autocomplete=\"email\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>" +
 					"<div class=\"wtw-loginlabel\">Password</div><div><input type=\"password\" id=\"wtw_tpassword\" autocomplete=\"current-password\" class=\"wtw-textbox\" maxlength=\"255\" /></div><div style=\"clear:both;\"></div>" +
 					"<div class=\"wtw-loginlabelspace\">&nbsp;</div><div class=\"wtw-logintext\"><input type=\"checkbox\" id=\"wtw_trememberlogin\" class=\"wtw-checkbox\" /> Remember Me</div><div style=\"clear:both;\"></div><br />" +
 					"<div id=\"wtw_loginerrortext\" class=\"wtw-errortext\">&nbsp;</div><br />" +
@@ -167,7 +166,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 				var zlogin = WTW.getCookie("rememberlogin");
 				if (zlogin != '') {
-					dGet('wtw_tlogin').value = zlogin;
+					dGet('wtw_temail').value = zlogin;
 					dGet('wtw_trememberlogin').checked = true;
 				} else {
 					dGet('wtw_trememberlogin').checked = false;
@@ -183,7 +182,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				break;
 			case "Create Login":
 				zpagediv += "<h2 class=\"wtw-login\">Create 3D Website Login</h2>" +
-					"<div class=\"wtw-loginlabel\">User Name</div><div><input type=\"text\" id=\"wtw_tnewlogin\" autocomplete=\"username\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>" +
+					"<div class=\"wtw-loginlabel\">Display Name</div><div><input type=\"text\" id=\"wtw_tnewdisplayname\" autocomplete=\"nickname\" class=\"wtw-textbox\" maxlength=\"255\" /></div><div style=\"clear:both;\"></div>" +
 					"<div class=\"wtw-loginlabel\">Email</div><div><input type=\"text\" id=\"wtw_tnewemail\" autocomplete=\"email\" class=\"wtw-textbox\" maxlength=\"255\" /></div><div style=\"clear:both;\"></div>" +
 					"<div class=\"wtw-loginlabelspace\" id=\"wtw_passwordstrengthdiv\" style=\"visibility:hidden;text-align:center;margin-left:220px;margin-top:0px;\"><input type=\"text\" id=\"wtw_tpasswordstrength\" style=\"visibility:hidden;\" /></div><div style=\"clear:both;\"></div>" +
 					"<div class=\"wtw-loginlabel\">Password</div><div><input type=\"password\" id=\"wtw_tnewpassword\" autocomplete=\"new-password\" class=\"wtw-textbox\" maxlength=\"255\" onkeyup=\"WTW.checkPassword(this,'wtw_tpasswordstrength');WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');\" onfocus=\"WTW.registerPasswordFocus();\" onblur=\"WTW.registerPasswordBlur();\" /></div><div style=\"clear:both;\"></div>" +
@@ -438,7 +437,7 @@ WTWJS.prototype.getFullAvatarList = function(zshowmyavatars, zwidth, zheight) {
 						}
 					}
 				}
-				var zdefaultdisplayname = dGet('wtw_tusername').value;
+				var zdefaultdisplayname = 'Anonymous';
 				if (zfullavatars.length > 0) {
 					if (zfullavatars[0].defaultdisplayname != '') {
 						zdefaultdisplayname = zfullavatars[0].defaultdisplayname;
@@ -450,7 +449,7 @@ WTWJS.prototype.getFullAvatarList = function(zshowmyavatars, zwidth, zheight) {
 					zpagediv += "<div class=\"wtw-ipagediv\" style=\"margin-left:5%;width:90%;height:auto;min-height:1%;max-height:200px;\"><div id=\"wtw_myavatars\"></div></div>";
 				}
 				zpagediv += "<h2 id=\"wtw_createnewavatar\" class=\"wtw-login\" style=\"display:none;visibility:hidden;\">Add New Avatar</h2>";
-				zpagediv += "<div class=\"wtw-loginlabel\">Display Name</div><div><input type=\"text\" id=\"wtw_tdisplayname\" value=\"" + zdefaultdisplayname + "\" autocomplete=\"username\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>";
+				zpagediv += "<div class=\"wtw-loginlabel\">Display Name</div><div><input type=\"text\" id=\"wtw_tnewavatardisplayname\" value=\"" + zdefaultdisplayname + "\" autocomplete=\"nickname\" class=\"wtw-textbox\" maxlength=\"64\" /></div><div style=\"clear:both;\"></div>";
 				zpagediv += "<div class=\"wtw-imagescrollhorizontal\">";
 				if (zfullavatars.length > 0) {
 					for (var i=0;i<zfullavatars.length;i++) {
@@ -599,13 +598,10 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight) {
 WTWJS.prototype.onMyAvatarSaveSelect = function(zglobalavatarid, zuseravatarid, zavatarid) {
 	/* process to enter the 3D Scene when the avatar is selected (save my selection) */
 	try {
-		if (dGet('wtw_tdisplayname') != null) {
-			if (dGet('wtw_menudisplayname').innerHTML == '' && dGet('wtw_tdisplayname').value != '') {
-				dGet('wtw_menudisplayname').innerHTML = dGet('wtw_tdisplayname').value;
+		if (dGet('wtw_tnewavatardisplayname') != null) {
+			if (dGet('wtw_menudisplayname').innerHTML == '' && dGet('wtw_tnewavatardisplayname').value != '') {
+				dGet('wtw_menudisplayname').innerHTML = dGet('wtw_tnewavatardisplayname').value;
 			}
-		}
-		if (dGet('wtw_menudisplayname').innerHTML == '' && dGet('wtw_tusername').value != '') {
-			dGet('wtw_menudisplayname').innerHTML = dGet('wtw_tusername').value;
 		}
 		if (dGet('wtw_menudisplayname').innerHTML == '' && dGet('wtw_tuseremail').value != '') {
 			var zemailbase = dGet('wtw_tuseremail').value.split('@');
@@ -618,7 +614,7 @@ WTWJS.prototype.onMyAvatarSaveSelect = function(zglobalavatarid, zuseravatarid, 
 		var zrequest = {
 			'instanceid': dGet("wtw_tinstanceid").value,
 			'userip': dGet('wtw_tuserip').value,
-			'displayname':btoa(dGet('wtw_tdisplayname').value),
+			'displayname':btoa(dGet('wtw_tnewavatardisplayname').value),
 			'avatarid':zavatarid,
 			'function':'quicksaveavatar'
 		};
@@ -657,21 +653,13 @@ WTWJS.prototype.loginAttempt = function() {
 	/* process a local server login attempt */
 	try {
 		if (dGet('wtw_trememberlogin').checked == true) {
-			WTW.setCookie("rememberlogin", dGet('wtw_tlogin').value, 365);
+			WTW.setCookie("rememberlogin", dGet('wtw_temail').value, 365);
 		} else {
 			WTW.deleteCookie("rememberlogin");
 		}
 		dGet('wtw_loginerrortext').innerHTML = "";
-		var zemail = "";
-		var zusername = "";
-		if (dGet('wtw_tlogin').value.indexOf('@') > -1) {
-			zemail = dGet('wtw_tlogin').value;
-		} else {
-			zusername = dGet('wtw_tlogin').value;
-		}
 		var zrequest = {
-			'username':btoa(zusername),
-			'useremail':btoa(zemail),
+			'useremail':btoa(dGet('wtw_temail').value),
 			'password':btoa(dGet('wtw_tpassword').value),
 			'function':'login'
 		};
@@ -696,19 +684,17 @@ WTWJS.prototype.loginAttemptResponse = function(zresults) {
 				if (zresults.serror != '') {
 					serror = zresults.serror;
 					dGet('wtw_tuserid').value = '';
-					dGet('wtw_tusername').value = '';
 					dGet('wtw_tuseremail').value = '';
 					dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
 					dGet('wtw_menudisplayname').innerHTML = 'Login';
 					dGet('wtw_tuserimageurl').value = "";
-					dGet('wtw_menuusername').innerHTML = 'Login';
 					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 				}
 				if (zresults.userid != '') {
 					WTW.hide('wtw_menulogin');
 					WTW.show('wtw_menuloggedin');
-					WTW.setLoginValues(zresults.userid, zresults.username, zresults.displayname, zresults.email, zresults.userimageurl);
+					WTW.setLoginValues(zresults.userid, zresults.displayname, zresults.email, zresults.userimageurl);
 					WTW.openLocalLogin('Select Avatar',.4,.9);
 				} else {
 					WTW.hide('wtw_menuloggedin');
@@ -737,13 +723,11 @@ WTWJS.prototype.logout = function() {
 		WTW.hide('wtw_menuloggedin');
 		WTW.show('wtw_menulogin');
 		dGet('wtw_tuserid').value = "";
-		dGet('wtw_taccesstoken').value = "";
-		dGet('wtw_tusername').value = "";
+		dGet('wtw_tusertoken').value = "";
 		dGet('wtw_tuploadpathid').value = "";
 		dGet('wtw_mainmenudisplayname').innerHTML = "Login";
 		dGet('wtw_menudisplayname').innerHTML = '';
 		dGet('wtw_tuseremail').value = "";
-		dGet('wtw_menuusername').innerHTML = "";
 		dGet('wtw_profileimagelg').src = "/content/system/images/menuprofilebig.png";
 		dGet('wtw_profileimagesm').src = "/content/system/images/menuprofile32.png";
 		if (dGet('wtw_mainadminmode') != null) {
@@ -786,16 +770,16 @@ WTWJS.prototype.createAccount = function() {
 	try {
 		/* NEEDED add validation */
 		var zrequest = {
-			'newlogin':btoa(dGet('wtw_tnewlogin').value),
-			'newemail':btoa(dGet('wtw_tnewemail').value),
-			'newpassword':btoa(dGet('wtw_tnewpassword').value),
+			'displayname':btoa(dGet('wtw_tnewdisplayname').value),
+			'useremail':btoa(dGet('wtw_tnewemail').value),
+			'password':btoa(dGet('wtw_tnewpassword').value),
 			'function':'register'
 		};
 		WTW.postJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-				WTW.createAccountComplete(zresponse.serror);
+				WTW.createAccountComplete(zresponse);
 			}
 		);
 	} catch (ex) {
@@ -803,27 +787,27 @@ WTWJS.prototype.createAccount = function() {
 	}
 }
 
-WTWJS.prototype.createAccountComplete = function(serror) {
+WTWJS.prototype.createAccountComplete = function(zresponse) {
 	/* local server registration complete response */
 	try {
 		/* show if error */
+		if (zresponse.serror != '') {
+			dGet('wtw_registererrortext').innerHTML = zresponse.serror;
+		} else {
+			dGet('wtw_teditdisplayname').value = zresponse.displayname;
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-createAccountComplete=" + ex.message);
 	}
 }
 
-WTWJS.prototype.setLoginValues = function(zuserid, zusername, zdisplayname, zemail, zuserimageurl) {
+WTWJS.prototype.setLoginValues = function(zuserid, zdisplayname, zemail, zuserimageurl) {
 	/* after a successful login, set the related visual and reference browser login values */
 	try {
 		if (zuserid == undefined) {
 			zuserid = dGet('wtw_tuserid').value;
 		} else {
 			dGet('wtw_tuserid').value = zuserid;
-		}
-		if (zusername == undefined) {
-			zusername = dGet('wtw_tusername').value;
-		} else {
-			dGet('wtw_tusername').value = zusername;
 		}
 		if (zdisplayname == undefined) {
 			zdisplayname = dGet('wtw_tavatardisplayname').value;
@@ -843,14 +827,8 @@ WTWJS.prototype.setLoginValues = function(zuserid, zusername, zdisplayname, zema
 		if (zdisplayname != '' && zdisplayname != undefined && zdisplayname != 'undefined') {
 			dGet('wtw_mainmenudisplayname').innerHTML = zdisplayname;
 			dGet('wtw_menudisplayname').innerHTML = zdisplayname;
-		} else if (zusername != '' && zusername != undefined && zusername != 'undefined') {
-			dGet('wtw_mainmenudisplayname').innerHTML = zusername;
-			dGet('wtw_menudisplayname').innerHTML = zusername;
-			zdisplayname = zusername;
 		}
 		dGet('wtw_teditdisplayname').value = zdisplayname;
-		dGet('wtw_teditusername').value = zusername;
-		dGet('wtw_menuusername').innerHTML = zusername;
 		dGet('wtw_teditemail').value = zemail;
 		dGet('wtw_menuemail').innerHTML = zemail;
 		if (zuserimageurl != '' && zuserimageurl != undefined) {	
@@ -879,10 +857,8 @@ WTWJS.prototype.editProfile = function() {
 	/* edit local user profile */
 	try {
 		WTW.hide('wtw_menudisplayname');
-		WTW.hide('wtw_menuusername');
 		WTW.hide('wtw_menuemail');
 		WTW.showInline('wtw_teditdisplayname');
-		WTW.showInline('wtw_teditusername');
 		WTW.showInline('wtw_teditemail');
 		WTW.show('wtw_menusaveprofile');
 		WTW.show('wtw_menucancelsaveprofile');
@@ -897,11 +873,10 @@ WTWJS.prototype.saveProfile = function() {
 	try {
 		/* validate entries... */
 		var zrequest = {
-			'useravatarid': dGet('wtw_tuseravatarid').value,
-			'instanceid': dGet('wtw_tinstanceid').value,
-			'username': dGet('wtw_teditusername').value,
-			'useremail': dGet('wtw_teditemail').value,
-			'displayname': dGet('wtw_teditdisplayname').value,
+			'useravatarid': btoa(dGet('wtw_tuseravatarid').value),
+			'instanceid': btoa(dGet('wtw_tinstanceid').value),
+			'useremail': btoa(dGet('wtw_teditemail').value),
+			'displayname': btoa(dGet('wtw_teditdisplayname').value),
 			'function':'saveprofile'
 		};
 		WTW.postJSON("/core/handlers/users.php", zrequest, 
@@ -912,16 +887,13 @@ WTWJS.prototype.saveProfile = function() {
 			}
 		);
 		WTW.hide('wtw_teditdisplayname');
-		WTW.hide('wtw_teditusername');
 		WTW.hide('wtw_teditemail');
 		WTW.hide('wtw_menusaveprofile');
 		WTW.hide('wtw_menucancelsaveprofile');
 		dGet('wtw_menudisplayname').innerHTML = dGet('wtw_teditdisplayname').value;
 		dGet('wtw_tavatardisplayname').value = dGet('wtw_teditdisplayname').value;
-		dGet('wtw_menuusername').innerHTML = dGet('wtw_teditusername').value;
 		dGet('wtw_menuemail').innerHTML = dGet('wtw_teditemail').value;
 		WTW.showInline('wtw_menudisplayname');
-		WTW.showInline('wtw_menuusername');
 		WTW.showInline('wtw_menuemail');
 		WTW.showSettingsMenu('wtw_menuprofile');
 	} catch (ex) {
@@ -947,15 +919,12 @@ WTWJS.prototype.cancelEditProfile = function() {
 	/* cancel changes to local server profile */
 	try {
 		WTW.hide('wtw_teditdisplayname');
-		WTW.hide('wtw_teditusername');
 		WTW.hide('wtw_teditemail');
 		WTW.hide('wtw_menusaveprofile');
 		WTW.hide('wtw_menucancelsaveprofile');
 		WTW.showInline('wtw_menudisplayname');
-		WTW.showInline('wtw_menuusername');
 		WTW.showInline('wtw_menuemail');
 		dGet('wtw_teditdisplayname').value = dGet('wtw_menudisplayname').innerHTML;
-		dGet('wtw_teditusername').value = dGet('wtw_menuusername').innerHTML;
 		dGet('wtw_teditemail').value = dGet('wtw_menuemail').innerHTML;
 		WTW.showSettingsMenu('wtw_menuprofile');
 	} catch (ex) {

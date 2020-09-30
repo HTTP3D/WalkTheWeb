@@ -872,9 +872,6 @@ WTWJS.prototype.saveAvatarDisplayName = function() {
 			if (dGet('wtw_tavatardisplayname').value == '') {
 				dGet('wtw_tavatardisplayname').value = dGet('wtw_menudisplayname').innerHTML;
 			}
-			if (dGet('wtw_tavatardisplayname').value == '') {
-				dGet('wtw_tavatardisplayname').value = dGet('wtw_tusername').value;
-			}
 			dGet('wtw_menudisplayname').innerHTML = dGet('wtw_tavatardisplayname').value;
 			dGet('wtw_teditdisplayname').value = dGet('wtw_tavatardisplayname').value;
 			var zrequest = {

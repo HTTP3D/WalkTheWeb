@@ -71,11 +71,11 @@ WTWJS.prototype.communitySearchReply = function(zresponse) {
 	}
 }
 
-WTWJS.prototype.buildingSearch = function(search) {
+WTWJS.prototype.buildingSearch = function(zsearch) {
 	/* keyword search to find a building to download to your instance */
 	try {
-		search = WTW.encode(search);
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=building", 
+		zsearch = WTW.encode(zsearch);
+		WTW.getJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + zsearch + "&webtype=building", 
 			function(response) {
 				WTW.buildingSearchReply(JSON.parse(response));
 			}

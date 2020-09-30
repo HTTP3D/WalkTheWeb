@@ -25,10 +25,10 @@ WTWJS.prototype.openAllUsers = function() {
 				zresponse = JSON.parse(zresponse);
 				var zuserlist = "";
 				if (zresponse != null) {
-					zuserlist += "<table class=\"wtw-table\"><tr><td class=\"wtw-tablecolumnheading\">User Name</td><td class=\"wtw-tablecolumnheading\">Email</td><td class=\"wtw-tablecolumnheading\">User ID</td><td class=\"wtw-tablecolumnheading\">User Roles</td><td class=\"wtw-tablecolumnheading\">Create Date</td><td class=\"wtw-tablecolumnheading\">&nbsp;</td></tr>";
+					zuserlist += "<table class=\"wtw-table\"><tr><td class=\"wtw-tablecolumnheading\">Display Name</td><td class=\"wtw-tablecolumnheading\">Email</td><td class=\"wtw-tablecolumnheading\">User ID</td><td class=\"wtw-tablecolumnheading\">User Roles</td><td class=\"wtw-tablecolumnheading\">Create Date</td><td class=\"wtw-tablecolumnheading\">&nbsp;</td></tr>";
 					for (var i=0;i<zresponse.length;i++) {
 						if (zresponse[i].userid != undefined) {
-							zuserlist += "<tr><td class=\"wtw-tablecolumns\">" + zresponse[i].username + "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].email + "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].userid + "</td><td class=\"wtw-tablecolumns\">";
+							zuserlist += "<tr><td class=\"wtw-tablecolumns\">" + zresponse[i].displayname + "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].email + "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].userid + "</td><td class=\"wtw-tablecolumns\">";
 							for (var j=0;j<zresponse[i].roles.length;j++) {
 								if (zresponse[i].roles[j] != undefined) {
 									if (j == 0) {
@@ -70,9 +70,9 @@ WTWJS.prototype.getUser = function(zuserid) {
 				zresponse = JSON.parse(zresponse);
 				var zuserlist = "";
 				if (zresponse != null) {
-					dGet('wtw_alluserstitle').innerHTML = "User: " + zresponse.username;
-					zuserlist += "<div class=\"wtw-dashboardlabel\">User Name</div>";
-					zuserlist += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuserusername\" type=\"text\" value=\"" + zresponse.username + "\" maxlength=\"64\"/></div>";
+					dGet('wtw_alluserstitle').innerHTML = "User: " + zresponse.email;
+					zuserlist += "<div class=\"wtw-dashboardlabel\">Display Name</div>";
+					zuserlist += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuserdisplayname\" type=\"text\" value=\"" + zresponse.displayname + "\" maxlength=\"64\"/></div>";
 					zuserlist += "<div class=\"wtw-clear\"></div>";
 					zuserlist += "<div class=\"wtw-dashboardlabel\">User ID</div>";
 					zuserlist += "<div id=\"wtw_tuseruserid\" class=\"wtw-dashboardvalue\">" + zresponse.userid + "</div>";
@@ -194,8 +194,8 @@ WTWJS.prototype.addUser = function() {
 		dGet('wtw_useradd').innerHTML = "";
 		dGet('wtw_alluserswidth').className = "wtw-dashboardboxleft";
 		dGet('wtw_alluserstitle').innerHTML = "New User";
-		zuserlist += "<div class=\"wtw-dashboardlabel\">User Name</div>";
-		zuserlist += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuserusername2\" type=\"text\" maxlength=\"64\"/></div>";
+		zuserlist += "<div class=\"wtw-dashboardlabel\">Display Name</div>";
+		zuserlist += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuserdisplayname2\" type=\"text\" maxlength=\"64\"/></div>";
 		zuserlist += "<div class=\"wtw-clear\"></div>";
 		zuserlist += "<div class=\"wtw-dashboardlabel\">Email</div>";
 		zuserlist += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuseruseremail2\" type=\"text\" maxlength=\"255\"/></div>";
@@ -232,21 +232,21 @@ WTWJS.prototype.cancelSaveUser = function() {
 WTWJS.prototype.saveNewUser = function() {
 	/* save new user settings */
 	try {	
-		zusername = dGet("wtw_tuserusername2").value;
+		var zemail = dGet("wtw_tuseruseremail2").value;
+		var zdisplayname = dGet("wtw_tuserdisplayname2").value;
 		dGet('wtw_errorusersave2').innerHTML = "";
 
-		if (zusername.length > 2) {
+		if (zemail.length > 2) {
 			dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_adduserbutton' class='wtw-greenbuttonright' onclick=\"WTW.addUser();\">Add New</div>All Users";
 			WTW.hide('wtw_userlist');
 			WTW.hide('wtw_userinfo');
 			WTW.hide('wtw_useradd');
 			dGet('wtw_alluserswidth').className = "wtw-dashboardboxleftfull";
-			zemail = dGet("wtw_tuseruseremail2").value;
-			zpassword = btoa(dGet("wtw_tuseruserpassword2").value);
+			var zpassword = btoa(dGet("wtw_tuseruserpassword2").value);
 			var zrequest = {
-				'username': zusername,
-				'password': zpassword,
-				'email': zemail,
+				'displayname': btoa(zdisplayname),
+				'password': btoa(zpassword),
+				'useremail': btoa(zemail),
 				'function':'savenewuser'
 			};
 			WTW.postJSON("/core/handlers/users.php", zrequest, 
@@ -267,21 +267,21 @@ WTWJS.prototype.saveNewUser = function() {
 WTWJS.prototype.saveUser = function() {
 	/* save (update) user settings */
 	try {	
-		zusername = dGet("wtw_tuserusername").value;
+		var zdisplayname = dGet("wtw_tuserdisplayname").value;
+		var zuserid = dGet("wtw_tuseruserid").innerText;
 		dGet('wtw_errorusersave').innerHTML = "";
 
-		if (zusername.length > 2) {
+		if (zuserid.length > 2) {
 			dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_adduserbutton' class='wtw-greenbuttonright' onclick=\"WTW.addUser();\">Add New</div>All Users";
 			WTW.hide('wtw_userlist');
 			WTW.hide('wtw_userinfo');
 			WTW.hide('wtw_useradd');
 			dGet('wtw_alluserswidth').className = "wtw-dashboardboxleftfull";
-			zuserid = dGet("wtw_tuseruserid").innerText;
-			zemail = dGet("wtw_tuseruseremail").value;
+			var zemail = dGet("wtw_tuseruseremail").value;
 			var zrequest = {
 				'userid':zuserid,
-				'username':zusername,
-				'useremail':zemail,
+				'displayname':btoa(zdisplayname),
+				'useremail':btoa(zemail),
 				'function':'saveuser'
 			};
 			WTW.postJSON("/core/handlers/users.php", zrequest, 
@@ -345,15 +345,12 @@ WTWJS.prototype.openPermissionsForm = function() {
 						if (useraccess[i] != null) {
 							var displayname = useraccess[i].displayname;
 							if (displayname == '') {
-								displayname = useraccess[i].username;
-							}
-							if (displayname == '') {
 								displayname = useraccess[i].email;
 							}
 							if (displayname == '') {
 								displayname = useraccess[i].userid;
 							}
-							dGet('wtw_userdevaccesslist').innerHTML += "<div class='wtw-menulevel0' onclick=\"WTW.toggle('wtw_div-" + useraccess[i].userauthorizationid + "');\"><div class='wtw-altkey'>" + useraccess[i].useraccess + "</div>" + displayname + "</div><div id='wtw_div-" + useraccess[i].userauthorizationid + "' class='wtw-detailprint' style='display:none;visibility:hidden;'>User Name: " + useraccess[i].username + "<br />Display Name: " + useraccess[i].displayname + "<br /><div id=\"wtw_bdelete-" + useraccess[i].userauthorizationid + "\" class='wtw-redbutton' onclick=\"dGet('wtw_tadduserdevaccess').value='" + useraccess[i].userid + "';WTW.deleteDevAccess();\" style='margin-left:30px;margin-right:20px;'>Delete</div><div id=\"wtw_bcancel-" + useraccess[i].userauthorizationid + "\" class='wtw-yellowbutton' onclick=\"WTW.toggle('wtw_div-" + useraccess[i].userauthorizationid + "');\">Cancel</div></div>";
+							dGet('wtw_userdevaccesslist').innerHTML += "<div class='wtw-menulevel0' onclick=\"WTW.toggle('wtw_div-" + useraccess[i].userauthorizationid + "');\"><div class='wtw-altkey'>" + useraccess[i].useraccess + "</div>" + displayname + "</div><div id='wtw_div-" + useraccess[i].userauthorizationid + "' class='wtw-detailprint' style='display:none;visibility:hidden;'>Display Name: " + useraccess[i].displayname + "<br /><div id=\"wtw_bdelete-" + useraccess[i].userauthorizationid + "\" class='wtw-redbutton' onclick=\"dGet('wtw_tadduserdevaccess').value='" + useraccess[i].userid + "';WTW.deleteDevAccess();\" style='margin-left:30px;margin-right:20px;'>Delete</div><div id=\"wtw_bcancel-" + useraccess[i].userauthorizationid + "\" class='wtw-yellowbutton' onclick=\"WTW.toggle('wtw_div-" + useraccess[i].userauthorizationid + "');\">Cancel</div></div>";
 						}
 					}
 				}

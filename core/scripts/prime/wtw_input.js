@@ -710,13 +710,11 @@ WTWJS.prototype.onMessage = function (zevent) {
 		zevent = zevent || window.event;
 		let zsafe = false;
 		// Check sender origin to be trusted
-		if (zevent.origin == "https://secure.walktheweb.com") {
-			zsafe = true;
-		} else if (zevent.origin == "https://3d.walktheweb.com") {
+		if (zevent.origin == "https://3d.walktheweb.com") {
 			zsafe = true;
 		} else if (zevent.origin == "https://3dnet.walktheweb.com") {
 			zsafe = true;
-		} else if (zevent.origin == "https://3d.http3d.net") {
+		} else if (zevent.origin == "https://3dnet.walktheweb.network") {
 			zsafe = true;
 		} else if (zevent.origin == wtw_domainurl) {
 			zsafe = true;
@@ -995,9 +993,6 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 		var znewtext = "";
 		var zpossible = "";
 		switch (zvalidtype) {
-			case "username":
-				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz-_.";
-				break;
 			case "number":
 				zpossible = "1234567890.-";
 				break;
@@ -1020,16 +1015,13 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz-_.";
 				break;
 			case "displayname":
-				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz-_. ',";
+				zpossible = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_. ',";
 				break;
 			case "web":
 				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_-+={[}]\\:;\"'<,>.?/ ";
 				break;
-			case "usernameoremail":
-				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz@.!#$%&'*+-/=?^_`{|}~";
-				break;
-			case "displaynameoremail":
-				zpossible = "1234567890 abcdefghijklmnopqrstuvwxyz@.!#$%&'*+-/=?^_`{|}~";
+			case "idoremail":
+				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz@.-_";
 				break;
 		}
 		if (ztext.length > 0 && zpossible != "") {
@@ -1077,57 +1069,6 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 		ztextinput.style.backgroundColor = "#ffffff";
 		ztextinput.style.color = "#000000";
 		switch (zvalidtype) {
-			case "username":
-				if (znewtext.length > 0) {
-					while (znewtext.indexOf("..") > -1) {
-						znewtext = znewtext.replace("..",".");
-						zcaretstart -= 1;
-						zcaretend -= 1;
-					}
-					if (znewtext.substr(0,1) == ".") {
-						znewtext = znewtext.substr(1,znewtext.length - 1);
-						zcaretstart -= 1;
-						zcaretend -= 1;
-					}
-					while (znewtext.indexOf("--") > -1) {
-						znewtext = znewtext.replace("--","-");
-						zcaretstart -= 1;
-						zcaretend -= 1;
-					}
-					if (znewtext.substr(0,1) == "-") {
-						znewtext = znewtext.substr(1,znewtext.length - 1);
-						zcaretstart -= 1;
-						zcaretend -= 1;
-					}
-					while (znewtext.indexOf("__") > -1) {
-						znewtext = znewtext.replace("__","_");
-						zcaretstart -= 1;
-						zcaretend -= 1;
-					}
-					if (znewtext.substr(0,1) == "_") {
-						znewtext = znewtext.substr(1,znewtext.length - 1);
-						zcaretstart -= 1;
-						zcaretend -= 1;
-					}
-				}
-				if (zcomplete == 1) {
-					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == ".") {
-							znewtext = znewtext.substr(0,znewtext.length - 1)
-						}
-					}
-					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == "-") {
-							znewtext = znewtext.substr(0,znewtext.length - 1)
-						}
-					}
-					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == "_") {
-							znewtext = znewtext.substr(0,znewtext.length - 1)
-						}
-					}
-				}
-				break;
 			case "number":
 				if (znewtext.indexOf(".") > -1) {
 					var zparts = znewtext.split('.');
@@ -1430,158 +1371,7 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 					}
 				}
 				break;
-			case "usernameoremail":
-				if (znewtext.length > 0) {
-					while (znewtext.indexOf("..") > -1) {
-						znewtext = znewtext.replace("..",".");
-						zcaretstart -= 1;
-						zcaretend -= 1;
-					}
-					if (znewtext.substr(0,1) == ".") {
-						znewtext = znewtext.substr(1,znewtext.length - 1);
-						zcaretstart -= 1;
-						zcaretend -= 1;
-					}
-					while (znewtext.indexOf("@@") > -1) {
-						znewtext = znewtext.replace("@@","@");
-						zcaretstart -= 1;
-						zcaretend -= 1;
-					}
-					if (znewtext.substr(0,1) == "@") {
-						znewtext = znewtext.substr(1,znewtext.length - 1);
-						zcaretstart -= 1;
-						zcaretend -= 1;
-					}
-				}
-				var zserverpossible = "abcdefghijklmnopqrstuvwxyz0123456789-.";
-				if (znewtext.indexOf("@") > -1) {
-					var zparts = znewtext.split('@');
-					if (zparts.length > 1) {
-						znewtext = zparts[0] + "@" + zparts[1];
-						for (i = 2;i < zparts.length;i++) {
-							znewtext += zparts[i];
-						}
-					}
-					zparts = znewtext.split('@');
-					znewtext = zparts[0] + "@";
-					ztext = zparts[1];
-					if (ztext.length > 0 && zpossible != "") {
-						for (var i = 0, len = ztext.length; i < len; i++) {
-							if (zpossible.indexOf(ztext[i].toLowerCase()) > -1) {
-								znewtext += ztext[i];
-							}
-						}
-					}
-				}
-				if (zcomplete == 1) {
-					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == ".") {
-							znewtext = znewtext.substr(0,znewtext.length - 1)
-						}
-					}
-					if (WTW.isEmail(znewtext) == false) {
-						if (znewtext.length > 0) {
-							while (znewtext.indexOf("..") > -1) {
-								znewtext = znewtext.replace("..",".");
-								zcaretstart -= 1;
-								zcaretend -= 1;
-							}
-							if (znewtext.substr(0,1) == ".") {
-								znewtext = znewtext.substr(1,znewtext.length - 1);
-								zcaretstart -= 1;
-								zcaretend -= 1;
-							}
-							while (znewtext.indexOf("--") > -1) {
-								znewtext = znewtext.replace("--","-");
-								zcaretstart -= 1;
-								zcaretend -= 1;
-							}
-							if (znewtext.substr(0,1) == "-") {
-								znewtext = znewtext.substr(1,znewtext.length - 1);
-								zcaretstart -= 1;
-								zcaretend -= 1;
-							}
-							while (znewtext.indexOf("__") > -1) {
-								znewtext = znewtext.replace("__","_");
-								zcaretstart -= 1;
-								zcaretend -= 1;
-							}
-							if (znewtext.substr(0,1) == "_") {
-								znewtext = znewtext.substr(1,znewtext.length - 1);
-								zcaretstart -= 1;
-								zcaretend -= 1;
-							}
-						}
-						while (znewtext.indexOf("!") > -1) {
-							znewtext = znewtext.replace("!","");
-						}
-						while (znewtext.indexOf("#") > -1) {
-							znewtext = znewtext.replace("#","");
-						}
-						while (znewtext.indexOf("$") > -1) {
-							znewtext = znewtext.replace("$","");
-						}
-						while (znewtext.indexOf("%") > -1) {
-							znewtext = znewtext.replace("%","");
-						}
-						while (znewtext.indexOf("&") > -1) {
-							znewtext = znewtext.replace("&","");
-						}
-						while (znewtext.indexOf("'") > -1) {
-							znewtext = znewtext.replace("'","");
-						}
-						while (znewtext.indexOf("*") > -1) {
-							znewtext = znewtext.replace("*","");
-						}
-						while (znewtext.indexOf("+") > -1) {
-							znewtext = znewtext.replace("+","");
-						}
-						while (znewtext.indexOf("/") > -1) {
-							znewtext = znewtext.replace("/","");
-						}
-						while (znewtext.indexOf("=") > -1) {
-							znewtext = znewtext.replace("=","");
-						}
-						while (znewtext.indexOf("?") > -1) {
-							znewtext = znewtext.replace("?","");
-						}
-						while (znewtext.indexOf("^") > -1) {
-							znewtext = znewtext.replace("^","");
-						}
-						while (znewtext.indexOf("`") > -1) {
-							znewtext = znewtext.replace("`","");
-						}
-						while (znewtext.indexOf("{") > -1) {
-							znewtext = znewtext.replace("{","");
-						}
-						while (znewtext.indexOf("}") > -1) {
-							znewtext = znewtext.replace("}","");
-						}
-						while (znewtext.indexOf("|") > -1) {
-							znewtext = znewtext.replace("|","");
-						}
-						while (znewtext.indexOf("~") > -1) {
-							znewtext = znewtext.replace("~","");
-						}
-						if (znewtext.length > 0) {
-							if (znewtext.substr(znewtext.length - 1,1) == ".") {
-								znewtext = znewtext.substr(0,znewtext.length - 1)
-							}
-						}
-						if (znewtext.length > 0) {
-							if (znewtext.substr(znewtext.length - 1,1) == "-") {
-								znewtext = znewtext.substr(0,znewtext.length - 1)
-							}
-						}
-						if (znewtext.length > 0) {
-							if (znewtext.substr(znewtext.length - 1,1) == "_") {
-								znewtext = znewtext.substr(0,znewtext.length - 1)
-							}
-						}
-					}
-				}
-				break;
-			case "displaynameoremail":
+			case "idoremail":
 				if (znewtext.length > 0) {
 					while (znewtext.indexOf("..") > -1) {
 						znewtext = znewtext.replace("..",".");
