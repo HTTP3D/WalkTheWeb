@@ -25,13 +25,15 @@ class wtw {
 	public $dbversion = "1.1.6";
 	public $versiondate = "2020-8-29";
 	public $serverinstanceid = "";
-	public $accesstoken = "";
+	public $usertoken = "";
 	public $rootpath = "";
 	public $contentpath = "";
 	public $contenturl = "";
 	public $protocol = "http://";
 	public $domainname = "";
 	public $domainurl = "";
+	public $websiteurl = "";
+	public $serverip = '';
 	public $pagename = "";
 	public $userid = "";
 	public $globaluserid = -1;
@@ -112,6 +114,7 @@ class wtw {
 			global $wtwuser;
 			/* load class variables */
 			$host= gethostname();
+			/* get server local IP for load balancer check */
 			$serverip = gethostbyname($host);
 			if (defined('wtw_defaultdomain')) {
 				$this->domainname = strtolower(wtw_defaultdomain);
@@ -124,6 +127,10 @@ class wtw {
 				echo $serverip." server is up.";
 				exit();
 			} 
+			/* replace server IP with Public IP */
+			$serverip = gethostbyname($this->domainname);
+			$this->serverip = $serverip;
+
 			$this->protocol = "http://";
 			if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
 				if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == "https") {
@@ -166,11 +173,8 @@ class wtw {
 					$wtwuser->userid = $zuserid;
 				}
 			}
-			if (!empty($_SESSION["wtw_username"]) && isset($_SESSION["wtw_username"])) {
-				$wtwuser->username = $_SESSION["wtw_username"];
-			}
-			if (!empty($_SESSION["wtw_accesstoken"]) && isset($_SESSION["wtw_accesstoken"])) {
-				$this->accesstoken = $_SESSION["wtw_accesstoken"];
+			if (!empty($_SESSION["wtw_usertoken"]) && isset($_SESSION["wtw_usertoken"])) {
+				$this->usertoken = $_SESSION["wtw_usertoken"];
 			}
 			if (!empty($_SESSION["wtw_globaluserid"]) && isset($_SESSION["wtw_globaluserid"])) {
 				$this->globaluserid = $_SESSION["wtw_globaluserid"];
@@ -212,12 +216,15 @@ class wtw {
 		/* parse the URL and check for web aliases, connect files, or handler files */
 		try {
 			if (!empty($this->uri) && isset($this->uri)) {
+				$this->websiteurl = $this->uri;
 				$root =  explode('?', $this->uri);
 				$pathdef = explode("/", $root[0]);
 				if (trim($pathdef[1]) == "" || trim($pathdef[1]) == "index.php" || trim($pathdef[1]) == "admin.php" || trim($pathdef[1]) == "core" || trim($pathdef[1]) == "connect" || trim($pathdef[1]) == "content" || trim($pathdef[1]) == "config") {
 					$this->community = "";
 					$this->building = "";
 					$this->thing = "";
+					$this->websiteurl = $this->domainurl;
+					
 					if (trim($pathdef[1]) == "connect") {
 						require_once(wtw_rootpath.'/core/functions/class_wtwpluginloader.php');
 						global $wtwpluginloader;
@@ -237,26 +244,32 @@ class wtw {
 					$this->community = trim($pathdef[2]);
 					$this->building = "";
 					$this->thing = "";
+					$this->websiteurl = $this->domainurl."/".$this->community;
 				} else if (trim($pathdef[1]) == "building" || trim($pathdef[1]) == "buildings") {
 					$this->community = "";
 					$this->building = trim($pathdef[2]);
 					$this->thing = "";
+					$this->websiteurl = $this->domainurl."/buildings/".$this->building;
 				} else if (trim($pathdef[1]) == "thing" || trim($pathdef[1]) == "things") {
 					$this->community = "";
 					$this->building = "";
 					$this->thing = trim($pathdef[2]);
+					$this->websiteurl = $this->domainurl."/things/".$this->thing;
 				} else if (isset($pathdef[3]) && !empty($pathdef[3])) {
 					$this->community = trim($pathdef[1]);
 					$this->building = trim($pathdef[2]);
 					$this->thing = trim($pathdef[3]);
+					$this->websiteurl = $this->domainurl."/".$this->community."/".$this->building."/".$this->thing;
 				} else if (isset($pathdef[2]) && !empty($pathdef[2])) {
 					$this->community = trim($pathdef[1]);
 					$this->building = trim($pathdef[2]);
 					$this->thing = "";
+					$this->websiteurl = $this->domainurl."/".$this->community."/".$this->building;
 				} else {
 					$this->community = trim($pathdef[1]);
 					$this->building = "";
 					$this->thing = "";
+					$this->websiteurl = $this->domainurl."/".$this->community;
 				}
 			} else {
 				if (defined("wtw_defaultdomain")) {
@@ -266,6 +279,7 @@ class wtw {
 						$this->thing = "";
 					}
 				}
+				$this->websiteurl = $this->domainurl;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-getDomainInfo=" . $e->getMessage());
@@ -538,7 +552,7 @@ class wtw {
 						global $wtwtables;
 						$zsitename = $_POST["wtw_tsitename"];
 						$zanalytics = $_POST["wtw_tanalytics"];
-						$zadminuser = $_POST["wtw_tadminuser"];
+						$zadmindisplayname = base64_encode($_POST["wtw_tadmindisplayname"]);
 						$zadminpassword = $_POST["wtw_tadminpassword"];
 						$zadminpassword2 = $_POST["wtw_tadminpassword2"];
 						$zadminemail = $_POST["wtw_tadminemail"];
@@ -558,7 +572,7 @@ class wtw {
 							chmod(wtw_rootpath.'/config/wtw_config.php', 0755);
 						}
 						/* set up initial admin user - from installation process */
-						$zuserid = $wtwusers->firstAdminUser($zadminuser,$zadminpassword,$zadminemail);
+						$zuserid = $wtwusers->firstAdminUser($zadmindisplayname,$zadminpassword,$zadminemail);
 						/* load initial tables form install */
 						$wtwtables->loadInitDbData($zuserid);
 						/* set user as admin role */
@@ -631,9 +645,9 @@ class wtw {
 						$zsetupstep = 5;
 						if ($_SERVER['REQUEST_METHOD']=='POST') {
 							global $wtwusers;
-							$zadminuser = base64_encode($_POST["wtw_tadminuser"]);
+							$zadminemail = base64_encode($_POST["wtw_tadminemail"]);
 							$zadminpassword = base64_encode($_POST["wtw_tadminpassword"]);
-							$zuser = $wtwusers->loginAttempt($zadminuser,'',$zadminpassword);
+							$zuser = $wtwusers->loginAttempt($zadminemail,$zadminpassword);
 							if (!empty($_SESSION["wtw_userid"]) && isset($_SESSION["wtw_userid"])) {
 								$zsetupstep = 0;
 							}
@@ -660,9 +674,9 @@ class wtw {
 						$zsetupstep = 5;
 						if ($_SERVER['REQUEST_METHOD']=='POST') {
 							global $wtwusers;
-							$zadminuser = base64_encode($_POST["wtw_tadminuser"]);
+							$zadminemail = base64_encode($_POST["wtw_tadminemail"]);
 							$zadminpassword = base64_encode($_POST["wtw_tadminpassword"]);
-							$zuser = $wtwusers->loginAttempt($zadminuser,'',$zadminpassword);
+							$zuser = $wtwusers->loginAttempt($zadminemail,$zadminpassword);
 							if (!empty($_SESSION["wtw_userid"]) && isset($_SESSION["wtw_userid"])) {
 								$zsetupstep = 0;
 							}
@@ -730,8 +744,8 @@ class wtw {
 					echo "<img src='/content/system/images/wtwlogo.png' style='margin-left:40px;margin-right:40px;' />";
 
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Admin Account</h3>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Username:</b></div>";
-					echo "<input name='wtw_tadminuser' type='text' value='' size='20' maxlength='255' autocomplete='username' />";
+					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Email:</b></div>";
+					echo "<input name='wtw_tadminemail' type='text' value='' size='20' maxlength='255' autocomplete='email' />";
 					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
 					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Password:</b></div>";
 					echo "<input name='wtw_tadminpassword' type='password' value='' size='20' maxlength='24' autocomplete='new-password' />";
@@ -739,8 +753,8 @@ class wtw {
 					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Confirm Password:</b></div>";
 					echo "<input name='wtw_tadminpassword2' type='password' value='' size='20' maxlength='24' autocomplete='new-password' />";
 					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Email:</b></div>";
-					echo "<input name='wtw_tadminemail' type='text' value='' size='20' maxlength='255' autocomplete='email' />";
+					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Display Name:</b></div>";
+					echo "<input name='wtw_tadmindisplayname' type='text' value='' size='20' maxlength='255' autocomplete='nickname' />";
 					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
 
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Site Settings</h3>";
@@ -781,8 +795,8 @@ class wtw {
 					echo "<img src='/content/system/images/wtwlogo.png' style='margin-left:40px;margin-right:40px;' />";
 
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Admin Login</h3>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Username:</b></div>";
-					echo "<input name='wtw_tadminuser' type='text' value='' size='20' maxlength='255' autocomplete='username' />";
+					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Email:</b></div>";
+					echo "<input name='wtw_tadminemail' type='text' value='' size='20' maxlength='255' autocomplete='email' />";
 					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
 					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Password:</b></div>";
 					echo "<input name='wtw_tadminpassword' type='password' value='' size='20' maxlength='24' autocomplete='current-password' />";
@@ -894,6 +908,31 @@ class wtw {
 					$this->thingid = "";
 				} else if (!empty($this->buildingid)) {
 					$this->thingid = "";
+				}
+				/* Get the web alias for the loaded web if available */
+				$this->websiteurl = $this->domainurl;
+				$zresults = $wtwdb->query("
+					select * from ".wtw_tableprefix."webaliases
+					where communityid='".$this->communityid."'
+						and buildingid='".$this->buildingid."'
+						and thingid='".$this->thingid."'
+						and deleted=0
+					order by createdate, communitypublishname, buildingpublishname, thingpublishname, webaliasid
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zwebsiteurl = "http://";
+					if ($zrow["forcehttps"] == '1') {
+						$zwebsiteurl = "https://";
+					}
+					$zwebsiteurl .= $zrow["webalias"];
+					if (!empty($zrow["communitypublishname"]) && isset($zrow["communitypublishname"])) {
+						$zwebsiteurl .= "/".$zrow["communitypublishname"];
+					} else if (!empty($zrow["buildingpublishname"]) && isset($zrow["buildingpublishname"])) {
+						$zwebsiteurl .= "/buildings/".$zrow["buildingpublishname"];
+					} else if (!empty($zrow["thingpublishname"]) && isset($zrow["thingpublishname"])) {
+						$zwebsiteurl .= "/things/".$zrow["thingpublishname"];
+					}
+					$this->websiteurl = $zwebsiteurl;
 				}
 			} else if ($this->pagename == "admin.php") {
 				/* user does not have admin.php access so redirect to public home page */
@@ -1720,6 +1759,7 @@ class wtw {
 			}
 			$jsdata .= "	var wtw_protocol = '".$this->protocol."';\r\n";
 			$jsdata .= "	var wtw_domainurl = '".$this->domainurl."';\r\n";
+			$jsdata .= "	var wtw_websiteurl = '".$this->websiteurl."';\r\n";
 			$jsdata .= "	var wtw_domainname = '".$this->domainname."';\r\n";
 			$jsdata .= "	var community = '".$this->community."';\r\n";
 			$jsdata .= "	var building = '".$this->building."';\r\n";
@@ -1866,11 +1906,12 @@ class wtw {
 		global $wtwuser;
 		try {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_serverinstanceid\" value=\"".$this->serverinstanceid."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_taccesstoken\" value=\"".$this->accesstoken."\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_serverip\" value=\"".$this->serverip."\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tusertoken\" value=\"".$this->usertoken."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tglobaluserid\" value=\"".$this->globaluserid."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserid\" value=\"".$wtwuser->userid."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserip\" value=\"".$wtwuser->userip."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tusername\" value=\"".$wtwuser->username."\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tdisplayname\" value=\"".addslashes($wtwuser->displayname)."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseremail\" value=\"".$wtwuser->email."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserimageurl\" value=\"".$wtwuser->userimageurl."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseraccess\" value=\"".$wtwuser->useraccess."\" />\r\n";

@@ -16,9 +16,9 @@ class wtwuser {
 	
 	/* declare public $wtwuser variables */
 	public $userid = "";
-	public $username = "";
 	public $userip = "";
 	public $email = "";
+	public $displayname = "";
 	public $userimageurl = "";
 	public $uploadpathid = "";
 	public $contentpath = "";

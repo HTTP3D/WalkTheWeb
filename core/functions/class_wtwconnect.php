@@ -30,7 +30,7 @@ class wtwconnect {
 	
 	/* declare public $wtwconnect variables */
 	public $serverinstanceid = "";
-	public $accesstoken = "";
+	public $usertoken = "";
 	public $globaluserid = -1;
 	public $rootpath = "";
 	public $contentpath = "";
@@ -92,8 +92,8 @@ class wtwconnect {
 				$this->protocol = "https://";
 				$_SERVER['HTTPS']='on';
 			}
-			if (!empty($_SESSION["wtw_accesstoken"]) && isset($_SESSION["wtw_accesstoken"])) {
-				$this->accesstoken = $_SESSION["wtw_accesstoken"];
+			if (!empty($_SESSION["wtw_usertoken"]) && isset($_SESSION["wtw_usertoken"])) {
+				$this->usertoken = $_SESSION["wtw_usertoken"];
 			}
 			if (!empty($_SESSION["wtw_globaluserid"]) && isset($_SESSION["wtw_globaluserid"])) {
 				$this->globaluserid = $_SESSION["wtw_globaluserid"];
@@ -249,6 +249,16 @@ class wtwconnect {
 	public function saveSettings($zsettings) {
 		global $wtwdb;
 		return $wtwdb->saveSettings($zsettings);
+	}
+
+	public function getPost($zfield, $zdefault) {
+		global $wtwdb;
+		return $wtwdb->getPost($zfield, $zdefault);
+	}
+	
+	public function getFiles($zfield, $zdefault) {
+		global $wtwdb;
+		return $wtwdb->getFiles($zfield, $zdefault);
 	}
 
 	public function getVal($zkey, $zdefaultval) {

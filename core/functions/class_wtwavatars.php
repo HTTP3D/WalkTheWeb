@@ -105,7 +105,6 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zavatar = array(
 						'userid'=> $zrow["userid"],
-						'username'=> $zrow["username"],
 						'useravatarid'=> $zrow["useravatarid"],
 						'uploadpathid'=> $zrow["uploadpathid"],
 						'displayname'=> $zrow["displayname"],
@@ -124,7 +123,6 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zavatar = array(
 						'userid'=> '',
-						'username'=> 'Anonymous',
 						'useravatarid'=> $zrow["useravatarid"],
 						'uploadpathid'=> '',
 						'displayname'=> 'Anonymous',

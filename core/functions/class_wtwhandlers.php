@@ -29,7 +29,7 @@ class wtwhandlers {
 	
 	/* declare public $wtwhandlers variables */
 	public $serverinstanceid = "";
-	public $accesstoken = "";
+	public $usertoken = "";
 	public $globaluserid = -1;
 	public $rootpath = "";
 	public $contentpath = "";
@@ -91,8 +91,8 @@ class wtwhandlers {
 				$this->protocol = "https://";
 				$_SERVER['HTTPS']='on';
 			}
-			if (!empty($_SESSION["wtw_accesstoken"]) && isset($_SESSION["wtw_accesstoken"])) {
-				$this->accesstoken = $_SESSION["wtw_accesstoken"];
+			if (!empty($_SESSION["wtw_usertoken"]) && isset($_SESSION["wtw_usertoken"])) {
+				$this->usertoken = $_SESSION["wtw_usertoken"];
 			}
 			if (!empty($_SESSION["wtw_globaluserid"]) && isset($_SESSION["wtw_globaluserid"])) {
 				$this->globaluserid = $_SESSION["wtw_globaluserid"];
@@ -337,29 +337,13 @@ class wtwhandlers {
 	}
 
 	public function getPost($zfield, $zdefault) {
-		/* get the posed data with a fall back default value */
-		$zvalue = $zdefault;
-		try {
-			if (isset($_POST[$zfield])) {
-				$zvalue = $_POST[$zfield];
-			}
-		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwhandlers.php-getPost=".$e->getMessage());
-		}
-		return $zvalue;
+		global $wtwdb;
+		return $wtwdb->getPost($zfield, $zdefault);
 	}
-
+	
 	public function getFiles($zfield, $zdefault) {
-		/* get the posed file data with a fall back default value */
-		$zvalue = $zdefault;
-		try {
-			if (isset($_FILES[$zfield])) {
-				$zvalue = $_FILES[$zfield];
-			}
-		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwhandlers.php-getFiles=".$e->getMessage());
-		}
-		return $zvalue;
+		global $wtwdb;
+		return $wtwdb->getFiles($zfield, $zdefault);
 	}
 
 	public function addHandlerHeader($zavailabledomains) {

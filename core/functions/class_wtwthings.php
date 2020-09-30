@@ -1309,59 +1309,6 @@ class wtwthings {
 		return $zthingid;
 	}		
 	
-	public function addMustHave() {
-		/* downloads and adds a few 3D Things for an initial install (depreciated) */
-		global $wtwhandlers;
-		$returntext = array();
-		try {
-			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
-			if ($conn->connect_error) {
-				serror("core-functions-things.php-addMustHave=".$conn->connect_error);
-			} else {
-				$zuserid = "";
-				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
-					$zuserid = $_SESSION["wtw_userid"];
-				}
-				$sql = "CALL insertthingsmusthave('".$zuserid."');";
-				try {
-					$i = 0;
-					$result = $conn->query($sql);
-					if (is_object($result)) {
-						if ($result->num_rows > 0) {
-							while($zrow = $result->fetch_assoc()) {
-								$zauthorizedusers = array('userid'=> $zrow["userid"]);
-								$zthinginfo = array(
-									'thingid' => $zrow["thingid"],
-									'thingname' => htmlspecialchars($zrow["thingname"], ENT_QUOTES, 'UTF-8'),
-									'createdate' => $zrow["createdate"]
-								);
-								$zshare = array(
-									'templatename' => htmlspecialchars($zrow["templatename"], ENT_QUOTES, 'UTF-8'),
-									'description' => htmlspecialchars($zrow["description"], ENT_QUOTES, 'UTF-8'),
-									'tags' => htmlspecialchars($zrow["tags"], ENT_QUOTES, 'UTF-8')
-								);
-								$returntext[$i] = array(
-									'thinginfo'=> $zthinginfo,
-									'share'=> $zshare,
-									'authorizedusers'=> $zauthorizedusers
-								);
-								$i += 1;
-							}
-						} else {
-							serror("core-functions-class_wtwthings.php-addMustHave=Must Have Things could not be Added");
-						}
-					}
-				} catch (Exception $e) {
-					
-				}
-			}
-			$conn->close();
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwthings.php-addMustHave=".$e->getMessage());
-		}
-		return htmlspecialchars(json_encode($returntext), ENT_QUOTES, 'UTF-8');
-	}
-
 	public function saveThingTemplate($zthingid, $ztemplatename, $zdescription, $ztags) {
 		/* save thing as a template to the media library */
 		global $wtwhandlers;

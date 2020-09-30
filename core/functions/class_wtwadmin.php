@@ -347,9 +347,9 @@ class wtwadmin {
 			$pagedata .= "				<div id=\"wtw_downloadcomplete\" class=\"wtw-hide\">\r\n";
 			$pagedata .= "					<h3 class=\"wtw-black\">Download Complete</h3><br />\r\n";
 			$pagedata .= "					<div id=\"wtw_downloadcompletemessage\">You can find your <b>New 3D Community</b> in the <b>Admin Menu</b><br />or select from the following:</div><br />\r\n";
-			$pagedata .= "					<input id='wtw_bopenwebdownload' type='button' value='Open Your New 3D Community in the Editor' onclick=\"\" style='font-size:1.4em;border-radius:10px;' /><br /><br />\r\n";
-			$pagedata .= "					<input id='wtw_bcontinuewebdownload' type='button' value='Continue Searching for Downloads' onclick=\"\" style='font-size:1.4em;border-radius:10px;' /><br /><br />\r\n";
-			$pagedata .= "					<input id='wtw_bclosewebdownload' type='button' value='Close WalkTheWeb Downloads' onclick=\"WTW.closeFullPageForm();\" style='font-size:1.4em;border-radius:10px;' /><br /><br />\r\n";
+			$pagedata .= "					<input id='wtw_bopenwebdownload' type='button' value='Open Your New 3D Community in the Editor' onclick=\"\" style='font-size:1.4em;border-radius:10px;cursor:pointer;' /><br /><br />\r\n";
+			$pagedata .= "					<input id='wtw_bcontinuewebdownload' type='button' value='Continue Searching for Downloads' onclick=\"\" style='font-size:1.4em;border-radius:10px;cursor:pointer;' /><br /><br />\r\n";
+			$pagedata .= "					<input id='wtw_bclosewebdownload' type='button' value='Close WalkTheWeb Downloads' onclick=\"WTW.closeFullPageForm();\" style='font-size:1.4em;border-radius:10px;cursor:pointer;' /><br /><br />\r\n";
 			$pagedata .= "				</div>\r\n";
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "				<div id=\"wtw_installprogress\" class=\"wtw-hide wtw-iprogresssection\">\r\n";
@@ -598,8 +598,8 @@ class wtwadmin {
 			$pagedata .= "					<div class=\"wtw-dashboardlabel\">SMTP Port</div>\r\n";
 			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tsmtpport\" maxlength=\"7\" /></div>\r\n";
 			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$pagedata .= "					<div class=\"wtw-dashboardlabel\">SMTP Login (Optional)</div>\r\n";
-			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tsmtplogin\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">SMTP User Name</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tsmtpusername\" maxlength=\"255\" /></div>\r\n";
 			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$pagedata .= "					<div class=\"wtw-dashboardlabel\">SMTP Password</div>\r\n";
 			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"password\" id=\"wtw_tsmtppassword\" maxlength=\"255\" /></div>\r\n";
@@ -607,6 +607,7 @@ class wtwadmin {
 			$pagedata .= "					<div id=\"wtw_emailservercomplete\"></div><br />\r\n";
 			$pagedata .= "					<div id=\"wtw_loadingemailserver\" class=\"wtw-loadingnotice\" style=\"margin-left:auto;margin-right:auto;color:#000000;\">Loading...</div>\r\n";
 			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-graymenubutton\" onclick=\"WTW.testEmailServerSettings();\">Send Test Email</div>\r\n";
 			$pagedata .= "					<div class=\"wtw-greenmenubutton\" onclick=\"WTW.saveEmailServerSettings();\">Save Settings</div>\r\n";
 			$pagedata .= "				</div>\r\n";
 			$pagedata .= "			</div>\r\n";
@@ -748,6 +749,7 @@ class wtwadmin {
 		}
 		return $zsuccess;
 	}
+	
 }
 
 	function wtwadmin() {

@@ -869,6 +869,32 @@ class wtwdb {
 		return $zsuccess;
 	}
 	
+	public function getPost($zfield, $zdefault) {
+		/* get the posed data with a fall back default value */
+		$zvalue = $zdefault;
+		try {
+			if (isset($_POST[$zfield])) {
+				$zvalue = $_POST[$zfield];
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getPost=".$e->getMessage());
+		}
+		return $zvalue;
+	}
+
+	public function getFiles($zfield, $zdefault) {
+		/* get the posed file data with a fall back default value */
+		$zvalue = $zdefault;
+		try {
+			if (isset($_FILES[$zfield])) {
+				$zvalue = $_FILES[$zfield];
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getFiles=".$e->getMessage());
+		}
+		return $zvalue;
+	}
+
 	public function getVal($zkey, $zdefaultval) {
 		$zvalue = $zdefaultval;
 		try {

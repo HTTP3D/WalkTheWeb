@@ -20,19 +20,21 @@ class wtwusers {
 		}
 	}
 
-	public function firstAdminUser($zusername, $zpassword, $zemail) {
+	public function firstAdminUser($zdisplayname, $zpassword, $zemail) {
 		/* used in install to create the first admin user account - that installed it */
 		global $wtwdb;
 		$zuserid = "";
 		try {
 			$zuserid = $wtwdb->getRandomString(16,1);
 			$zuploadpathid = $wtwdb->getRandomString(16,1);
+			if (!empty($zdisplayname) && isset($zdisplayname)) {
+				$zdisplayname = base64_decode($zdisplayname);
+			}
 			$options = ['cost' => 11];
 			$passwordhash = password_hash($zpassword, PASSWORD_DEFAULT, $options);
 			$wtwdb->query("
 				insert into ".wtw_tableprefix."users 
-					(username,
-					 userid,
+					(userid,
 					 uploadpathid, 
 					 userpassword,
 					 email,
@@ -42,18 +44,16 @@ class wtwusers {
 					 updatedate,
 					 updateuserid)
 				  values
-					('".$zusername."',
-					 '".$zuserid."',
+					('".$zuserid."',
 					 '".$zuploadpathid."', 
 					 '".$passwordhash."',
 					 '".$zemail."',
-					 '".$zusername."',
+					 '".addslashes($zdisplayname)."',
 					 now(),
 					 '".$zuserid."',
 					 now(),
 					 '".$zuserid."');
 			");
-			$_SESSION["wtw_username"] = $zusername;
 			$_SESSION["wtw_userid"] = $zuserid;
 			$_SESSION["wtw_uploadpathid"] = $zuploadpathid;
 			if (!empty($zuserid) && isset($zuserid)) {
@@ -70,22 +70,18 @@ class wtwusers {
 		return $zuserid;
 	}
 
-	public function loginAttempt($zusername, $zemail, $zpassword) {
+	public function loginAttempt($zemail, $zpassword) {
 		/* process a local server login attempt */
 		global $wtwdb;
 		$zuser = array(
 			'userid'=>'',
-			'username'=>'',
 			'email'=>'',
 			'uploadpathid'=>'',
 			'displayname'=>'',
 			'userimageurl'=>'',
-			'serror'=>'Invalid Username or Password'
+			'serror'=>'Invalid Email or Password'
 		);
 		try {
-			if (!empty($zusername) && isset($zusername)) {
-				$zusername = base64_decode($zusername);
-			}
 			if (!empty($zemail) && isset($zemail)) {
 				$zemail = base64_decode($zemail);
 			}
@@ -93,16 +89,8 @@ class wtwusers {
 				$zpassword = base64_decode($zpassword);
 			}
 			if (!empty($zpassword) && isset($zpassword)) {
-				/*$serror = "Invalid Username or Password";*/
 				$zresults = array();
-				if (!empty($zusername) && isset($zusername)) {
-					$zresults = $wtwdb->query("
-							select * from ".wtw_tableprefix."users 
-							where username='".$zusername."'
-								and pastuserid=''
-								and deleted=0 
-							limit 1;");
-				} else if (!empty($zemail) && isset($zemail)) {
+				if (!empty($zemail) && isset($zemail)) {
 					$zresults = $wtwdb->query("
 							select * from ".wtw_tableprefix."users 
 							where email='".$zemail."'
@@ -118,14 +106,12 @@ class wtwusers {
 					if (password_verify($zpassword, $passwordhash)) {
 						$zuser = array(
 							'userid'=>$zrow["userid"],
-							'username'=>$zrow["username"],
 							'email'=>$zrow["email"],
 							'uploadpathid'=>$zrow["uploadpathid"],
 							'displayname'=>addslashes($zrow["displayname"]),
 							'userimageurl'=>addslashes($zrow["userimageurl"]),
 							'serror'=>''
 						);
-						$_SESSION["wtw_username"] = $zrow["username"];
 						$_SESSION["wtw_userid"] = $zrow["userid"];
 						$_SESSION["wtw_uploadpathid"] = $zrow["uploadpathid"];
 						if (!empty($zuserid) && isset($zuserid)) {
@@ -137,7 +123,6 @@ class wtwusers {
 							}
 						}
 					} else {
-						$_SESSION["wtw_username"] = '';
 						$_SESSION["wtw_userid"] = '';
 						$_SESSION["wtw_uploadpathid"] = '';
 						try {
@@ -153,7 +138,7 @@ class wtwusers {
 		return $zuser;
 	}
 
-	public function globalLogin($zusername, $zglobaluserid, $zemail, $zaccesstoken) {
+	public function globalLogin($zglobaluserid, $zemail, $zusertoken, $zdisplayname) {
 		/* update local login and session based on a global login attempt */
 		global $wtwdb;
 		global $wtw;
@@ -161,8 +146,7 @@ class wtwusers {
 		$zuser = array(
 			'globaluserid'=>'',
 			'userid'=>'',
-			'username'=>'',
-			'accesstoken'=>'',
+			'usertoken'=>'',
 			'email'=>'',
 			'uploadpathid'=>'',
 			'displayname'=>'',
@@ -174,11 +158,11 @@ class wtwusers {
 			if (!empty($zglobaluserid) && isset($zglobaluserid)) {
 				$zglobaluserid = base64_decode($zglobaluserid);
 			}
-			if (!empty($zusername) && isset($zusername)) {
-				$zusername = base64_decode($zusername);
-			}
 			if (!empty($zemail) && isset($zemail)) {
 				$zemail = base64_decode($zemail);
+			}
+			if (!empty($zdisplayname) && isset($zdisplayname)) {
+				$zdisplayname = base64_decode($zdisplayname);
 			}
 			if (!empty($zemail) && isset($zemail)) {
 				$zresults = $wtwdb->query("
@@ -194,23 +178,22 @@ class wtwusers {
 						$zuser = array(
 							'globaluserid'=>$zglobaluserid,
 							'userid'=>$zrow["userid"],
-							'username'=>$zrow["username"],
 							'email'=>$zrow["email"],
-							'accesstoken'=>$zaccesstoken,
+							'usertoken'=>$zusertoken,
 							'uploadpathid'=>$zrow["uploadpathid"],
-							'displayname'=>addslashes($zrow["displayname"]),
+							'displayname'=>addslashes($zdisplayname),
 							'userimageurl'=>addslashes($zrow["userimageurl"]),
 							'serror'=>''
 						);
-						$_SESSION["wtw_username"] = $zrow["username"];
 						$_SESSION["wtw_userid"] = $zrow["userid"];
 						$_SESSION["wtw_globaluserid"] = $zglobaluserid;
-						$_SESSION["wtw_accesstoken"] = $zaccesstoken;
+						$_SESSION["wtw_usertoken"] = $zusertoken;
 						$_SESSION["wtw_uploadpathid"] = $zrow["uploadpathid"];
-						if (!empty($zaccesstoken) && isset($zaccesstoken)) {
+						if (!empty($zusertoken) && isset($zusertoken)) {
 							$wtwdb->query("
 								update ".wtw_tableprefix."users
-								set accesstoken='".$zaccesstoken."'
+								set usertoken='".$zusertoken."',
+									displayname='".addslashes($zdisplayname)."'
 								where userid='".$zuserid."';");
 						}
 						if (!empty($zuserid) && isset($zuserid)) {
@@ -220,10 +203,9 @@ class wtwusers {
 							} catch (Exception $e) {}
 						}
 					} else {
-						$_SESSION["wtw_username"] = '';
 						$_SESSION["wtw_userid"] = '';
 						$_SESSION["wtw_globaluserid"] = '';
-						$_SESSION["wtw_accesstoken"] = '';
+						$_SESSION["wtw_usertoken"] = '';
 						$_SESSION["wtw_uploadpathid"] = '';
 						try {
 							$wtw->userid = $zuserid;
@@ -232,10 +214,10 @@ class wtwusers {
 					}
 				}
 			} else {
-				if (!empty($zaccesstoken) && isset($zaccesstoken)) {
+				if (!empty($zusertoken) && isset($zusertoken)) {
 					$zresults = $wtwdb->query("
 						select * from ".wtw_tableprefix."users 
-						where accesstoken='".$zaccesstoken."'
+						where usertoken='".$zusertoken."'
 						order by createdate
 						limit 1;");
 				} else {
@@ -248,22 +230,21 @@ class wtwusers {
 							$zuser = array(
 								'globaluserid'=>$zglobaluserid,
 								'userid'=>$zrow["userid"],
-								'username'=>$zrow["username"],
 								'email'=>$zrow["email"],
-								'accesstoken'=>$zaccesstoken,
+								'usertoken'=>$zusertoken,
 								'uploadpathid'=>$zrow["uploadpathid"],
-								'displayname'=>addslashes($zrow["displayname"]),
+								'displayname'=>addslashes($zdisplayname),
 								'userimageurl'=>addslashes($zrow["userimageurl"]),
 								'serror'=>''
 							);
-							$_SESSION["wtw_username"] = $zrow["username"];
 							$_SESSION["wtw_userid"] = $zrow["userid"];
 							$_SESSION["wtw_globaluserid"] = $zglobaluserid;
-							$_SESSION["wtw_accesstoken"] = $zaccesstoken;
+							$_SESSION["wtw_usertoken"] = $zusertoken;
 							$_SESSION["wtw_uploadpathid"] = $zrow["uploadpathid"];
 							$wtwdb->query("
 								update ".wtw_tableprefix."users
-								set accesstoken='".$zaccesstoken."'
+								set usertoken='".$zusertoken."',
+									displayname='".addslashes($zdisplayname)."'
 								where userid='".$zuserid."';");
 							if (!empty($zuserid) && isset($zuserid)) {
 								try {
@@ -272,10 +253,9 @@ class wtwusers {
 								} catch (Exception $e) {}
 							}
 						} else {
-							$_SESSION["wtw_username"] = '';
 							$_SESSION["wtw_userid"] = '';
 							$_SESSION["wtw_globaluserid"] = '';
-							$_SESSION["wtw_accesstoken"] = '';
+							$_SESSION["wtw_usertoken"] = '';
 							$_SESSION["wtw_uploadpathid"] = '';
 							try {
 								$wtw->userid = '';
@@ -284,25 +264,15 @@ class wtwusers {
 						}
 					}					
 				} else {
-					if ($this->isUserNameAvailable($zusername) == false) {
-						$i = 1;
-						$zusernametest = $zusername.$i;
-						while ($this->isUserNameAvailable($zusernametest) == false) {
-							$i += 1;
-							$zusernametest = $zusername.$i;
-						}
-						$zusername = $zusernametest;
-					}
 					$zuserid = $wtwdb->getRandomString(16,1);
 					$zuploadpathid = $wtwdb->getRandomString(16,1);
 					$ztimestamp = date('Y/m/d H:i:s');
 					$wtwdb->query("
 						insert into ".wtw_tableprefix."users 
-							(username,
-							 userid,
+							(userid,
 							 uploadpathid, 
 							 userpassword,
-							 accesstoken,
+							 usertoken,
 							 email,
 							 displayname,
 							 createdate,
@@ -310,13 +280,12 @@ class wtwusers {
 							 updatedate,
 							 updateuserid)
 						  values
-							('".$zusername."',
-							 '".$zuserid."',
+							('".$zuserid."',
 							 '".$zuploadpathid."', 
 							 '',
-							 '".$zaccesstoken."',
+							 '".$zusertoken."',
 							 '".$zemail."',
-							 '".$zusername."',
+							 '".addslashes($zdisplayname)."',
 							 '".$ztimestamp."',
 							 '".$zuserid."',
 							 '".$ztimestamp."',
@@ -325,18 +294,16 @@ class wtwusers {
 					$zuser = array(
 						'globaluserid'=>$zglobaluserid,
 						'userid'=>$zuserid,
-						'username'=>$zusername,
 						'email'=>$zemail,
-						'accesstoken'=>$zaccesstoken,
+						'usertoken'=>$zusertoken,
 						'uploadpathid'=>$zuploadpathid,
-						'displayname'=>addslashes($zusername),
+						'displayname'=>addslashes($zdisplayname),
 						'userimageurl'=>'',
 						'serror'=>''
 					);
-					$_SESSION["wtw_username"] = $zusername;
-					$_SESSION["wtw_globaluserid"] = $zglobaluserid;
 					$_SESSION["wtw_userid"] = $zuserid;
-					$_SESSION["wtw_accesstoken"] = $zaccesstoken;
+					$_SESSION["wtw_globaluserid"] = $zglobaluserid;
+					$_SESSION["wtw_usertoken"] = $zusertoken;
 					$_SESSION["wtw_uploadpathid"] = $zuploadpathid;
 					try {
 						$wtw->userid = $zuserid;
@@ -358,8 +325,9 @@ class wtwusers {
 			if (session_status() == PHP_SESSION_NONE) {
 				session_start();
 			}
-			$_SESSION["wtw_username"] = '';
 			$_SESSION["wtw_userid"] = '';
+			$_SESSION["wtw_globaluserid"] = '';
+			$_SESSION["wtw_usertoken"] = '';
 			$_SESSION["wtw_uploadpathid"] = '';
 			$_SESSION = array();
 			try {
@@ -621,7 +589,7 @@ class wtwusers {
 					$zresults = $wtwhandlers->query("
 						select userid 
 						from ".wtw_tableprefix."users 
-						where username='".$zusersearch."' 
+						where displayname='".$zusersearch."' 
 							and deleted=0 
 						order by createdate desc 
 						limit 1");
@@ -740,12 +708,15 @@ class wtwusers {
 			if ($wtwhandlers->checkAdminAccess($zcommunityid, $zbuildingid, $zthingid)) {
 				$zresults = $wtwhandlers->query("
 					select u1.*,
+						u2.displayname,
 						browseauth.browsecount,
 						inviteeauth.invitecount,
 						neighborauth.neighborcount,
 						architectauth.architectcount,
 						adminauth.admincount
 					from ".wtw_tableprefix."userauthorizations u1
+						left join ".wtw_tableprefix."users u2
+							on u1.userid=u2.userid
 						left join 
 						(select count(userauthorizationid) as browsecount 
 							from ".wtw_tableprefix."userauthorizations 
@@ -787,7 +758,7 @@ class wtwusers {
 					$zpermissions[$i] = array(
 						'counts'=> $counts,
 						'authorizationid'=> $zrow["userauthorizationid"],
-						'username'=> $zrow["username"],
+						'displayname'=> $zrow["displayname"],
 						'userid'=> $zrow["userid"],
 						'useraccess'=> $zrow["useraccess"]
 					);
@@ -801,38 +772,6 @@ class wtwusers {
 		return $zresponse;
 	}		
 	
-	public function isUserNameAvailable($zusername) {
-		/* validate a user name is available (depreciated) */
-		global $wtwhandlers;
-		$zsuccess = true;
-		$zserror = "";
-		try {
-			if (empty($zusername) || !isset($zusername)) {
-				$zsuccess = false;
-			} else {
-				$zresults = array();
-				if (!empty($wtwhandlers->getSessionUserID())) {
-					$zresults = $wtwhandlers->query("
-						select * from ".wtw_tableprefix."users
-						where username like '".$zusername."'
-							and not userid='".$wtwhandlers->userid."'
-						limit 1;");
-				} else {
-					$zresults = $wtwhandlers->query("
-						select * from ".wtw_tableprefix."users
-						where username like '".$zusername."'
-						limit 1;");
-				}
-				foreach ($zresults as $zrow) {
-					$zsuccess = false;
-				}
-			}
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwusers.php-isUserNameAvailable=".$e->getMessage());
-		}
-		return $zsuccess;
-	}
-
 	public function isEmailAvailable($zemail) {
 		/* validate if an email is not already used on the local server */
 		global $wtwhandlers;
@@ -862,14 +801,14 @@ class wtwusers {
 	}
 	
 	
-	public function createAccount($zusername, $zemail, $zpassword) {
+	public function createAccount($zuseremail, $zpassword, $zdisplayname) {
 		/* creates a local user account - does not mean they have access to anything including Admin */
 		global $wtwhandlers;
 		$zsuccess = false;
 		$zserror = "";
 		try {
-			if (!empty($zusername) && isset($zusername)) {
-				$zusername = base64_decode($zusername);
+			if (!empty($zdisplayname) && isset($zdisplayname)) {
+				$zdisplayname = base64_decode($zdisplayname);
 			}
 			if (!empty($zemail) && isset($zemail)) {
 				$zemail = base64_decode($zemail);
@@ -877,57 +816,53 @@ class wtwusers {
 			if (!empty($zpassword) && isset($zpassword)) {
 				$zpassword = base64_decode($zpassword);
 			}
-			if ($this->isUserNameAvailable($zusername)) {
-				if ($this->isEmailAvailable($zemail)) {
-					$zuserid = $wtwhandlers->getRandomString(16,1);
-					$zuploadpathid = $wtwhandlers->getRandomString(16,1);
-					$zoptions = ['cost' => 11];
-					$zpasswordhash = password_hash($zpassword, PASSWORD_DEFAULT, $zoptions);
-					$ztimestamp = date('Y/m/d H:i:s');
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."users 
-							(username,
-							 userid,
-							 uploadpathid, 
-							 userpassword,
-							 email,
-							 displayname,
-							 createdate,
-							 createuserid,
-							 updatedate,
-							 updateuserid)
-						  values
-							('".$zusername."',
-							 '".$zuserid."',
-							 '".$zuploadpathid."', 
-							 '".$zpasswordhash."',
-							 '".$zemail."',
-							 '".$zusername."',
-							 '".$ztimestamp."',
-							 '".$zuserid."',
-							 '".$ztimestamp."',
-							 '".$zuserid."');
-					");
-					$_SESSION["wtw_username"] = $zusername;
-					$_SESSION["wtw_userid"] = $zuserid;
-					$_SESSION["wtw_uploadpathid"] = $zuploadpathid;			
-					global $wtw;
-					global $wtwuser;
-					$wtw->userid = $zuserid;
-					$wtwuser->userid = $zuserid;
-					$zsuccess = true;
-				} else {
-					$zserror = "Email is already in use.";
-				}
+			if ($this->isEmailAvailable($zemail)) {
+				$zuserid = $wtwhandlers->getRandomString(16,1);
+				$zuploadpathid = $wtwhandlers->getRandomString(16,1);
+				$zoptions = ['cost' => 11];
+				$zpasswordhash = password_hash($zpassword, PASSWORD_DEFAULT, $zoptions);
+				$ztimestamp = date('Y/m/d H:i:s');
+				$wtwhandlers->query("
+					insert into ".wtw_tableprefix."users 
+						(userid,
+						 uploadpathid, 
+						 userpassword,
+						 email,
+						 displayname,
+						 createdate,
+						 createuserid,
+						 updatedate,
+						 updateuserid)
+					  values
+						('".$zuserid."',
+						 '".$zuploadpathid."', 
+						 '".$zpasswordhash."',
+						 '".$zemail."',
+						 '".addslashes($zdisplayname)."',
+						 '".$ztimestamp."',
+						 '".$zuserid."',
+						 '".$ztimestamp."',
+						 '".$zuserid."');
+				");
+				$_SESSION["wtw_userid"] = $zuserid;
+				$_SESSION["wtw_uploadpathid"] = $zuploadpathid;			
+				global $wtw;
+				global $wtwuser;
+				$wtw->userid = $zuserid;
+				$wtwuser->userid = $zuserid;
+				$zsuccess = true;
 			} else {
-				$zserror = "User Name is already in use.";
+				$zserror = "Email is already in use.";
 			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwusers.php-createAccount=".$e->getMessage());
+			$zserror = "Could not Create Account";
 		}
 		return array( 
 			'success' => $zsuccess,
-			'serror'  => $zserror);
+			'serror'  => $zserror,
+			'email'  => $zemail,
+			'displayname'  => addslashes($zdisplayname));
 	}
 	
 	public function emailExists($zuseremail) {
@@ -949,23 +884,23 @@ class wtwusers {
 		return $zfound;
 	}
 
-	public function getUserNameByEmail($zuseremail) {
+	public function getUserIdByEmail($zuseremail) {
 		/* use email to find a user name */
 		global $wtwhandlers;
-		$zusername = "";
+		$zuserid = "";
 		try {
 			$zresults = $wtwhandlers->query("
-				select userid, username
+				select userid
 				from ".wtw_tableprefix."users
 				where email='".$zuseremail."'
 				limit 1;");
 			foreach ($zresults as $zrow) {
-				$zusername = $zrow["username"];
+				$zuserid = $zrow["userid"];
 			}
 		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwusers.php-getUserNameByEmail=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-getUserIdByEmail=".$e->getMessage());
 		}
-		return $zusername;
+		return $zuserid;
 	}
 
 	public function recoverLoginByEmail($zuseremail) {
@@ -973,9 +908,13 @@ class wtwusers {
 		global $wtwhandlers;
 		$zresponse = "";
 		try {
-			$zusername = $this->getUserNameByEmail($zuseremail);
-			if (!empty($zusername) && isset($zusername)) {
+			$zuserid = $this->getUserIdByEmail($zuseremail);
+			if (!empty($zuserid) && isset($zuserid)) {
 				/* send email */
+				
+				
+				
+				
 				
 				$zresponse = "<span style=\"color:green;\">Login sent to Email Address</span>";
 			} else {
@@ -1000,10 +939,21 @@ class wtwusers {
 				} else {
 					$zdob = "null";
 				}
+				if ($this->isEmailAvailable($zuseremail)) {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."users
+						set useremail='".$zuseremail."',
+							updatedate=now(),
+							updateuserid='".$wtwhandlers->userid."'
+						where userid='".$wtwhandlers->userid."'
+							and deleted=0;");
+					$zsuccess = true;
+				} else {
+					$zresponse .= "Email already in use<br />";
+				}
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."users
 					set displayname='".addslashes($zdisplayname)."',
-						email='".$zuseremail."',
 						firstname='".addslashes($zfirstname)."',
 						lastname='".addslashes($zlastname)."',
 						gender='".addslashes($zgender)."',
@@ -1020,30 +970,30 @@ class wtwusers {
 		return $zresponse;
 	}
 	
-	public function saveProfile($zuseravatarid,$zinstanceid,$zusername,$zdisplayname,$zuseremail) {
+	public function saveProfile($zuseravatarid,$zinstanceid,$zdisplayname,$zemail) {
 		/* update the user profile */
 		global $wtwhandlers;
 		$zresponse = "";
 		try {
 			$zsuccess = false;
 			if (!empty($wtwhandlers->getSessionUserID())) {
-				if ($this->isUserNameAvailable($zusername)) {
-					$wtwhandlers->query("
-						update ".wtw_tableprefix."users
-						set username='".$zusername."',
-							updatedate=now(),
-							updateuserid='".$wtwhandlers->userid."'
-						where userid='".$wtwhandlers->userid."'
-							and deleted=0;");
-					$_SESSION["wtw_username"] = $zusername;
-					$zsuccess = true;
-				} else {
-					$zresponse .= "User Name already in use<br />";
+				if (!empty($zuseravatarid) && isset($zuseravatarid)) {
+					$zuseravatarid = base64_decode($zuseravatarid);
 				}
-				if ($this->isEmailAvailable($zuseremail)) {
+				if (!empty($zinstanceid) && isset($zinstanceid)) {
+					$zinstanceid = base64_decode($zinstanceid);
+				}
+				if (!empty($zdisplayname) && isset($zdisplayname)) {
+					$zdisplayname = base64_decode($zdisplayname);
+				}
+				if (!empty($zemail) && isset($zemail)) {
+					$zemail = base64_decode($zemail);
+				}
+				
+				if ($this->isEmailAvailable($zemail)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."users
-						set useremail='".$zuseremail."',
+						set useremail='".$zemail."',
 							updatedate=now(),
 							updateuserid='".$wtwhandlers->userid."'
 						where userid='".$wtwhandlers->userid."'
@@ -1055,7 +1005,7 @@ class wtwusers {
 				if (!empty($zuseravatarid) && isset($zuseravatarid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."useravatars
-						set displayname='".$zdisplayname."',
+						set displayname='".addslashes($zdisplayname)."',
 							updatedate=now(),
 							updateuserid='".$wtwhandlers->userid."'
 						where userid='".$wtwhandlers->userid."'
@@ -1073,28 +1023,25 @@ class wtwusers {
 		return $zresponse;
 	}
 	
-	public function saveUser($zuserid, $zusername, $zuseremail) {
+	public function saveUser($zuserid, $zdisplayname, $zemail) {
 		/* save the user and email */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			if ($wtwhandlers->isUserInRole("admin")) {
+				if (!empty($zdisplayname) && isset($zdisplayname)) {
+					$zdisplayname = base64_decode($zdisplayname);
+				}
+				if (!empty($zemail) && isset($zemail)) {
+					$zemail = base64_decode($zemail);
+				}
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."users
-					set username='".$zusername."',
-						email='".$zuseremail."'
+					set displayname='".addslashes($zdisplayname)."',
+						email='".$zemail."'
 					where userid='".$zuserid."'
 					limit 1;");
-				$zresults = $wtwhandlers->query("
-					select *
-					from ".wtw_tableprefix."users
-					where userid='".$zuserid."'
-					limit 1;");
-				foreach ($zresults as $zrow) {
-					if ($zusername == $zrow["username"] && $zuseremail == $zrow["email"]) {
-						$zsuccess = true;
-					}
-				}
+				$zsuccess = true;
 			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwusers.php-saveUser=".$e->getMessage());
@@ -1102,7 +1049,7 @@ class wtwusers {
 		return $zsuccess;
 	}
 
-	public function saveNewUser($zusername, $zpassword, $zemail) {
+	public function saveNewUser($zdisplayname, $zpassword, $zemail) {
 		/* add new user to database - does not add permissions or roles */
 		global $wtwhandlers;
 		$zsuccess = false;
@@ -1111,37 +1058,39 @@ class wtwusers {
 				if (!empty($zpassword) && isset($zpassword)) {
 					$zpassword = base64_decode($zpassword);
 				}
-				if ($this->isUserNameAvailable($zusername)) {
-					if ($this->isEmailAvailable($zemail)) {
-						$zuserid = $wtwhandlers->getRandomString(16,1);
-						$zuploadpathid = $wtwhandlers->getRandomString(16,1);
-						$zoptions = ['cost' => 11];
-						$zpasswordhash = password_hash($zpassword, PASSWORD_DEFAULT, $zoptions);
-						$wtwhandlers->query("
-							insert into ".wtw_tableprefix."users 
-								(username,
-								 userid,
-								 uploadpathid, 
-								 userpassword,
-								 email,
-								 displayname,
-								 createdate,
-								 createuserid,
-								 updatedate,
-								 updateuserid)
-							  values
-								('".$zusername."',
-								 '".$zuserid."',
-								 '".$zuploadpathid."', 
-								 '".$zpasswordhash."',
-								 '".$zemail."',
-								 '".$zusername."',
-								 now(),
-								 '".$wtwhandlers->userid."',
-								 now(),
-								 '".$wtwhandlers->userid."');");
-						$zsuccess = true;
-					}
+				if (!empty($zdisplayname) && isset($zdisplayname)) {
+					$zdisplayname = base64_decode($zdisplayname);
+				}
+				if (!empty($zemail) && isset($zemail)) {
+					$zemail = base64_decode($zemail);
+				}
+				if ($this->isEmailAvailable($zemail)) {
+					$zuserid = $wtwhandlers->getRandomString(16,1);
+					$zuploadpathid = $wtwhandlers->getRandomString(16,1);
+					$zoptions = ['cost' => 11];
+					$zpasswordhash = password_hash($zpassword, PASSWORD_DEFAULT, $zoptions);
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."users 
+							(userid,
+							 uploadpathid, 
+							 userpassword,
+							 email,
+							 displayname,
+							 createdate,
+							 createuserid,
+							 updatedate,
+							 updateuserid)
+						  values
+							('".$zuserid."',
+							 '".$zuploadpathid."', 
+							 '".$zpasswordhash."',
+							 '".$zemail."',
+							 '".addslashes($zdisplayname)."',
+							 now(),
+							 '".$wtwhandlers->userid."',
+							 now(),
+							 '".$wtwhandlers->userid."');");
+					$zsuccess = true;
 				}
 			}
 		} catch (Exception $e) {

@@ -12,7 +12,7 @@ class wtwtables {
 	
 	public function __construct() {
 
-	}	
+	}
 
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -855,7 +855,6 @@ class wtwtables {
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."userauthorizations` (
 				  `userauthorizationid` varchar(16) NOT NULL,
-				  `username` varchar(64) DEFAULT '',
 				  `userid` varchar(16) DEFAULT '',
 				  `communityid` varchar(16) DEFAULT '',
 				  `buildingid` varchar(16) DEFAULT '',
@@ -955,21 +954,20 @@ class wtwtables {
 				CREATE TABLE `".wtw_tableprefix."users` (
 				  `userid` varchar(16) NOT NULL,
 				  `pastuserid` varchar(16) DEFAULT '',
-				  `username` varchar(64) NOT NULL,
 				  `uploadpathid` varchar(16) DEFAULT '',
 				  `userpassword` varchar(255) NOT NULL,
 				  `recoverpassword` varchar(255) DEFAULT '',
 				  `recoverpassworddate` datetime DEFAULT NULL,
-				  `accesstoken` varchar(2048) DEFAULT '',
-				  `displayname` varchar(255) DEFAULT '',
-				  `userimageurl` varchar(255) DEFAULT '',
+				  `usertoken` varchar(2048) DEFAULT '',
 				  `email` varchar(255) DEFAULT '',
 				  `emailconfirm` varchar(64) DEFAULT '',
 				  `emailconfirmdate` datetime DEFAULT NULL,
+				  `displayname` varchar(255) DEFAULT '',
 				  `firstname` varchar(255) DEFAULT '',
 				  `lastname` varchar(255) DEFAULT '',
 				  `gender` varchar(45) DEFAULT '',
 				  `dob` datetime DEFAULT NULL,
+				  `userimageurl` varchar(255) DEFAULT '',
 				  `createdate` datetime DEFAULT NULL,
 				  `createuserid` varchar(16) DEFAULT '',
 				  `updatedate` datetime DEFAULT NULL,
@@ -979,7 +977,7 @@ class wtwtables {
 				  `deleted` int(11) DEFAULT '0',
 				  PRIMARY KEY (`userid`),
 				  UNIQUE KEY `".wtw_tableprefix."userid_UNIQUE` (`userid`),
-				  KEY `".wtw_tableprefix."users_webid` (`userid`,`username`)
+				  KEY `".wtw_tableprefix."users_webid` (`userid`,`email`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 			");
 			$wtwdb->deltaCreateTable("
@@ -1618,6 +1616,7 @@ class wtwtables {
 					('".$wtwdb->getRandomString(16,1)."','Graphics Artist','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'','0'),
 					('".$wtwdb->getRandomString(16,1)."','Developer','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'','0'),
 					('".$wtwdb->getRandomString(16,1)."','Subscriber','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'','0'),
+					('".$wtwdb->getRandomString(16,1)."','Host','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'','0'),
 					('".$wtwdb->getRandomString(16,1)."','Guest','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'','0');
 			");
 			$wtwdb->query("
@@ -2382,6 +2381,18 @@ class wtwtables {
 
 			/* updated 3.3.4 - add hex versions of colors (phasing out rgb values in the database) */
 			$this->updateColorsHex($zuserid);
+			
+			/* updated 3.3.5 - added Host role for sites that are hosted on the server */
+			$zresults = $wtwdb->query("
+				select * 
+				from ".wtw_tableprefix."roles
+				where rolename like 'host';");
+			if (count($zresults) == 0) {
+				$wtwdb->query("
+					INSERT INTO `".wtw_tableprefix."roles` VALUES 
+						('".$wtwdb->getRandomString(16,1)."','Host','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'','0');
+				");
+			}
 			
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 		} catch (Exception $e) {

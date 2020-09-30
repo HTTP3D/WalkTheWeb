@@ -1250,7 +1250,34 @@ class wtwcommunities {
 		/* $znewwebid is a proposed new value for the web id (optional) */
 		/* $zwebtype is 'community', 'building', or 'thing' */
 		global $wtwhandlers;
+		global $wtwconnect;
 		try {
+			if (isset($wtwhandlers) == false && isset($wtwconnect)) {
+				$wtwhandlers = $wtwconnect;
+			}
+
+			if (empty($zdownloadparentwebid) || !isset($zdownloadparentwebid)) {
+				$zdownloadparentwebid = '';
+			}
+			if (empty($zdownloadparentwebtype) || !isset($zdownloadparentwebtype)) {
+				$zdownloadparentwebtype = '';
+			}
+			if (empty($zcommunityid) || !isset($zcommunityid)) {
+				$zcommunityid = '';
+			}
+			if (empty($zbuildingpositionx) || !isset($zbuildingpositionx)) {
+				$zbuildingpositionx = 0;
+			}
+			if (empty($zbuildingpositiony) || !isset($zbuildingpositiony)) {
+				$zbuildingpositiony = 0;
+			}
+			if (empty($zbuildingpositionz) || !isset($zbuildingpositionz)) {
+				$zbuildingpositionz = 0;
+			}
+			if (empty($zbuildingrotationy) || !isset($zbuildingrotationy)) {
+				$zbuildingrotationy = 0;
+			}
+			
 			$zwebtypes = "";
 			$znewcommunityid = "";
 			$znewbuildingid = "";
@@ -1320,7 +1347,6 @@ class wtwcommunities {
 						insert into ".wtw_tableprefix."users 
 						   (userid,
 							pastuserid,
-							username,
 							displayname,
 							email,
 							uploadpathid,
@@ -1332,9 +1358,8 @@ class wtwcommunities {
 						values
 						   ('".$znewuserid."',
 							'".$zuser->userid."',
-							'".$zuser->username."',
-							'".$zuser->displayname."',
-							'',
+							'".addslashes($zuser->displayname)."',
+							'".$zuser->email."',
 							'".$znewuploadpathid."',
 							'".$zuserpassword."',
 							now(),
