@@ -26,7 +26,8 @@ try {
 	foreach ($zresults as $zrow) {
 		$zthings[$i] = array(
 			'thingid' => $zrow["thingid"],
-			'thingname' => htmlspecialchars($zrow["thingname"], ENT_QUOTES, 'UTF-8')
+			'thingname' => htmlspecialchars($zrow["thingname"], ENT_QUOTES, 'UTF-8'),
+			'thingdescription' => htmlspecialchars($zrow["thingdescription"], ENT_QUOTES, 'UTF-8')
 		);
 		$i += 1;
 	}

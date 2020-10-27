@@ -44,6 +44,7 @@ try {
 		$zthinginfo = array(
 			'thingid' => $zrow["thingid"],
 			'thingname' => htmlspecialchars($zrow["thingname"], ENT_QUOTES, 'UTF-8'),
+			'thingdescription' => htmlspecialchars($zrow["thingdescription"], ENT_QUOTES, 'UTF-8'),
 			'createdate' => $zrow["createdate"],
 			'snapshotid' => $zrow["snapshotid"],
 			'snapshotpath' => $zrow["filepath"],

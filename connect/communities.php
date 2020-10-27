@@ -13,6 +13,7 @@ try {
 		select ua1.useraccess,
 			c1.communityid,
 			c1.communityname,
+			c1.communitydescription,
 			c1.snapshotid,
 			c1.analyticsid,
 			c1.gravity,
@@ -48,6 +49,7 @@ try {
 			ua1.useraccess,
 			c1.communityid,
 			c1.communityname,
+			c1.communitydescription,
 			c1.snapshotid,
 			c1.analyticsid,
 			c1.gravity,
@@ -85,6 +87,7 @@ try {
 		$zcommunityinfo = array(
 			'communityid' => $zrow["communityid"],
 			'communityname' => htmlspecialchars($zrow["communityname"], ENT_QUOTES, 'UTF-8'),
+			'communitydescription' => htmlspecialchars($zrow["communitydescription"], ENT_QUOTES, 'UTF-8'),
 			'createdate' => $zrow["createdate"],
 			'snapshotid' => $zrow["snapshotid"],
 			'snapshotpath' => $zrow["filepath"],

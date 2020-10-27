@@ -2,9 +2,6 @@
 /* these /connect files are designed to extend data to other servers - like having your 3D Building in their 3D Community Scene */
 /* permissions are required for access to some data */
 /* this connect file provides web aliases information */
-if (session_status() == PHP_SESSION_NONE) {
-	session_start();
-}
 require_once('../core/functions/class_wtwconnect.php');
 require_once('../core/functions/class_wtwcommunities.php');
 global $wtwconnect;
@@ -43,9 +40,6 @@ try {
 	$zdomainname = '';
 	$zforcehttps = '1';
 	$serror = '';
-	$_SESSION["wtw_userid"] = '';
-	$_SESSION["wtw_usertoken"] = '';
-	$_SESSION["wtw_uploadpathid"] = '';
 	
 	if (!empty($zwpinstanceid) && isset($zwpinstanceid)) {
 		$zwpinstanceid = base64_decode($zwpinstanceid);
@@ -140,9 +134,6 @@ try {
 			$zuserid = $zrow["userid"];
 			$zpastuserid = $zrow["pastuserid"];
 			$zuploadpathid = $zrow["uploadpathid"];
-			$_SESSION["wtw_userid"] = $zuserid;
-			$_SESSION["wtw_usertoken"] = $zwtwusertoken;
-			$_SESSION["wtw_uploadpathid"] = $zuploadpathid;
 			/* user found by access token, update the pastuserid (wtwuserid) to the user account as a reference */
 			if (!empty($zuserid) && isset($zuserid) && (empty($zpastuserid) || !isset($zpastuserid))) {
 				$zresults = $wtwconnect->query("
@@ -191,7 +182,7 @@ try {
 	
 	if ($zauthenticationok && $zwebnameok) {
 		/* download community */
-		$znewcommunityid = $wtwcommunities->downloadWeb($zcommunityid, $zcommunityid, 'community', '', '', '', 0, 0, 0, 0);
+		$znewcommunityid = $wtwcommunities->downloadWeb($zcommunityid, $zcommunityid, 'community', $zwtwusertoken, '', '', '', 0, 0, 0, 0);
 		
 		if (empty($znewcommunityid) || !isset($znewcommunityid)) {
 			$serror = '3D Community Scene could not be created.';
@@ -211,7 +202,7 @@ try {
 		}
 		
 		/* download building */
-		$znewbuildingid = $wtwcommunities->downloadWeb($zbuildingid, $zbuildingid, 'building', $znewcommunityid, 'community', $znewcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingrotationy);
+		$znewbuildingid = $wtwcommunities->downloadWeb($zbuildingid, $zbuildingid, 'building', $zwtwusertoken, $znewcommunityid, 'community', $znewcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingrotationy);
 		
 		if (empty($znewbuildingid) || !isset($znewbuildingid)) {
 			$serror = '3D Shopping Building could not be created.';

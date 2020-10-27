@@ -147,7 +147,55 @@ try {
 			$zenteranimationparameter = $zrow["enteranimationparameter"];
 			$zexitanimationparameter = $zrow["exitanimationparameter"];
 			$zavatarparts[$i] = array(
-				'serverpartid'=>'',
+				'globalpartid'=>'',
+				'avatarpartid'=> $zrow["avatarpartid"],
+				'avatarpart'=> $zrow["avatarpart"],
+				'diffusecolor'=> $zrow["diffusecolor"],
+				'emissivecolor'=> $zrow["emissivecolor"],
+				'specularcolor'=> $zrow["specularcolor"],
+				'ambientcolor'=> $zrow["ambientcolor"]
+			);
+			$i += 1;
+		}
+	} else {
+
+		/* get avatar and color settings */
+		$zresults = $wtwconnect->query("
+			select a.*,
+				c.avatarpartid,
+				c.avatarpart,
+				c.diffusecolor,
+				c.specularcolor,
+				c.emissivecolor,
+				c.ambientcolor
+			from ".wtw_tableprefix."avatars a 
+				left join (select * from ".wtw_tableprefix."avatarcolors 
+						where deleted=0) c
+					on a.avatarid = c.avatarid
+			where a.avatarid='".$zavatarid."'
+				and (c.deleted is null or c.deleted=0)
+			order by c.avatarpart, c.updatedate desc;");
+		foreach ($zresults as $zrow) {
+			if (empty($zuserid) || !isset($zuserid)) {
+				$zanonymous = '1';
+			}
+			$zuseravatarid = '';
+			$zscalingx = $zrow["scalingx"];
+			$zscalingy = $zrow["scalingy"];
+			$zscalingz = $zrow["scalingz"];
+			$zobjectfolder = $zrow["avatarfolder"];
+			$zobjectfile = $zrow["avatarfile"];
+			$zstartframe = $zrow["startframe"];
+			$zendframe = $zrow["endframe"];
+			$zdisplayname = $zrow["displayname"];
+			$zprivacy = '0';
+			$zenteranimation = '0';
+			$zexitanimation = '0';
+			$zenteranimationparameter = '';
+			$zexitanimationparameter = '';
+
+			$zavatarparts[$i] = array(
+				'globalpartid'=>'',
 				'avatarpartid'=> $zrow["avatarpartid"],
 				'avatarpart'=> $zrow["avatarpart"],
 				'diffusecolor'=> $zrow["diffusecolor"],
@@ -158,6 +206,7 @@ try {
 			$i += 1;
 		}
 	}
+
 	$zavataranimationdefs[0] = array(
 		'animationind'=> 0,
 		'useravataranimationid'=> '',
@@ -271,7 +320,7 @@ try {
 		'name'=> '',
 		'userid'=> $zuserid,
 		'anonymous'=>$zanonymous,
-		'globalavatarid'=> '',
+		'globaluseravatarid'=> '',
 		'useravatarid'=> $zuseravatarid,
 		'instanceid'=> $zinstanceid,
 		'avatarid'=> $zavatarid,

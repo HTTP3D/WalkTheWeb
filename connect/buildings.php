@@ -46,6 +46,7 @@ try {
 		$zbuildinginfo = array(
 			'buildingid' => $zrow["buildingid"],
 			'buildingname' => htmlspecialchars($zrow["buildingname"], ENT_QUOTES, 'UTF-8'),
+			'buildingdescription' => htmlspecialchars($zrow["buildingdescription"], ENT_QUOTES, 'UTF-8'),
 			'createdate' => $zrow["createdate"],
 			'snapshotid' => $zrow["snapshotid"],
 			'snapshotpath' => $zrow["filepath"],

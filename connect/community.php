@@ -61,6 +61,7 @@ try {
 		$zcommunityinfo = array(
 			'communityid' => $zrow["communityid"],
 			'communityname' => htmlspecialchars($zrow["communityname"], ENT_QUOTES, 'UTF-8'),
+			'communitydescription' => htmlspecialchars($zrow["communitydescription"], ENT_QUOTES, 'UTF-8'),
 			'snapshotid' => $zrow["snapshotid"],
 			'analyticsid'=> $zrow["analyticsid"],
 			'access'=> $zrow["communityaccess"]
