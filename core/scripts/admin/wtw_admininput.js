@@ -97,34 +97,36 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
 WTWJS.prototype.mouseOverMoldAdmin = function(tagmesh, currentid) {
 	/* mouse hover over mold (mesh) in 3D Scene */
 	try {
-		if (dGet('wtw_bfocus').title == "Focus Highlight is On") {
-			if ((WTW.currentID.indexOf("communitymold") > -1 && communityid != "") || (WTW.currentID.indexOf("buildingmold") > -1 && buildingid != "") || (WTW.currentID.indexOf("thingmold") > -1 && thingid != "")) {
-				WTW.hilightMold(WTW.currentID, 'green');
-			}
-			var namepart;
-			if (currentid.indexOf("-") > -1) {
-				namepart = currentid.split('-');
-			}
-			var mold = null;
-			if (namepart[0].indexOf("buildingmolds") > -1 && buildingid == "") {
-				if (tagmesh.meshUnderPointer.parent != null) {
-					mold = tagmesh.meshUnderPointer.parent;
-					while (mold.name.indexOf("connectinggrids") == -1 && mold.parent != null) {
-						mold = mold.parent;
-					}
+		if (dGet('wtw_bfocus') != null) {
+			if (dGet('wtw_bfocus').title == "Focus Highlight is On") {
+				if ((WTW.currentID.indexOf("communitymold") > -1 && communityid != "") || (WTW.currentID.indexOf("buildingmold") > -1 && buildingid != "") || (WTW.currentID.indexOf("thingmold") > -1 && thingid != "")) {
+					WTW.hilightMold(WTW.currentID, 'green');
 				}
-			} else if (namepart[0].indexOf("thingmolds") > -1 && thingid == "") {
-				if (tagmesh.meshUnderPointer.parent != null) {
-					mold = tagmesh.meshUnderPointer.parent;
-					while (mold.name.indexOf("connectinggrids") == -1 && mold.parent != null) {
-						mold = mold.parent;
-					}
+				var namepart;
+				if (currentid.indexOf("-") > -1) {
+					namepart = currentid.split('-');
 				}
-			} else if (namepart[0].indexOf("molds") > -1) {
-				mold = tagmesh.meshUnderPointer;
-			}
-			if (mold != null) {
-				//add code to get parent mold (connecting grid) from moldname part
+				var mold = null;
+				if (namepart[0].indexOf("buildingmolds") > -1 && buildingid == "") {
+					if (tagmesh.meshUnderPointer.parent != null) {
+						mold = tagmesh.meshUnderPointer.parent;
+						while (mold.name.indexOf("connectinggrids") == -1 && mold.parent != null) {
+							mold = mold.parent;
+						}
+					}
+				} else if (namepart[0].indexOf("thingmolds") > -1 && thingid == "") {
+					if (tagmesh.meshUnderPointer.parent != null) {
+						mold = tagmesh.meshUnderPointer.parent;
+						while (mold.name.indexOf("connectinggrids") == -1 && mold.parent != null) {
+							mold = mold.parent;
+						}
+					}
+				} else if (namepart[0].indexOf("molds") > -1) {
+					mold = tagmesh.meshUnderPointer;
+				}
+				if (mold != null) {
+					//add code to get parent mold (connecting grid) from moldname part
+				}
 			}
 		}
 	} catch (ex) {

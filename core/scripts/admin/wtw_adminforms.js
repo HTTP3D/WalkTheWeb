@@ -1814,7 +1814,7 @@ WTWJS.prototype.openEmailServerSettings = function() {
 		WTW.show('wtw_loadingemailserver');
 		WTW.show('wtw_settingspage');
 		WTW.show('wtw_emailserversettings');
-		WTW.getSettings("smtphost, smtpport, smtpusername, smtppassword", "WTW.loadEmailServerSettings");
+		WTW.getSettings("smtphost, smtpport, smtpusername, smtppassword, smtpencryption, fromemail, fromemailname, enableemailvalidation", "WTW.loadEmailServerSettings");
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-openEmailServerSettings=" + ex.message);
 	}
@@ -1824,18 +1824,50 @@ WTWJS.prototype.loadEmailServerSettings = function(zsettings, zparameters) {
 	/* load any existing email server settings */
 	try {
 		WTW.hide('wtw_loadingemailserver');
-		zsetting = JSON.parse(zsettings);
-		if (zsetting.smtphost != undefined) {
-			dGet('wtw_tsmtphost').value = zsetting.smtphost;					
+		zsettings = JSON.parse(zsettings);
+		if (zsettings.smtphost != undefined) {
+			dGet('wtw_tsmtphost').value = zsettings.smtphost;					
 		}
-		if (zsetting.smtpport != undefined) {
-			dGet('wtw_tsmtpport').value = zsetting.smtpport;					
+		if (zsettings.smtpport != undefined) {
+			dGet('wtw_tsmtpport').value = zsettings.smtpport;					
 		}
-		if (zsetting.smtpusername != undefined) {
-			dGet('wtw_tsmtpusername').value = zsetting.smtpusername;					
+		if (zsettings.smtpusername != undefined) {
+			dGet('wtw_tsmtpusername').value = zsettings.smtpusername;					
 		}
-		if (zsetting.smtppassword != undefined) {
-			dGet('wtw_tsmtppassword').value = atob(zsetting.smtppassword);					
+		if (zsettings.smtppassword != undefined) {
+			dGet('wtw_tsmtppassword').value = atob(zsettings.smtppassword);					
+		}
+		if (zsettings.fromemail != undefined) {
+			dGet('wtw_tfromemail').value = zsettings.fromemail;					
+		}
+		if (zsettings.fromemailname != undefined) {
+			dGet('wtw_tfromemailname').value = zsettings.fromemailname;					
+		}
+		if (zsettings.smtpencryption != undefined) {
+			dGet('wtw_tsmtpencryptionnone').checked = false;
+			dGet('wtw_tsmtpencryptionssl').checked = false;
+			dGet('wtw_tsmtpencryptiontls').checked = false;
+			if (zsettings.smtpencryption == 'tls') {
+				dGet('wtw_tsmtpencryptiontls').checked = true;
+			} else if (zsettings.smtpencryption == 'ssl') {
+				dGet('wtw_tsmtpencryptionssl').checked = true;
+			} else {
+				dGet('wtw_tsmtpencryptionnone').checked = true;
+			}
+		}
+		if (zsettings.enableemailvalidation != undefined) {
+			WTW.enableEmailValidation = Number(zsettings.enableemailvalidation);
+			if (dGet('wtw_emailvalidation') != null) {
+				if (WTW.enableEmailValidation == 1) {
+					dGet('wtw_emailvalidation').checked = true;
+					dGet('wtw_emailvalidationtext').className = 'wtw-enablelabel';
+					dGet('wtw_emailvalidationtext').innerHTML = 'User Email Validation Enabled';
+				} else {
+					dGet('wtw_emailvalidation').checked = false;
+					dGet('wtw_emailvalidationtext').className = 'wtw-disabledlabel';
+					dGet('wtw_emailvalidationtext').innerHTML = 'User Email Validation Disabled';
+				}
+			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-loadEmailServerSettings=" + ex.message);
@@ -1849,12 +1881,23 @@ WTWJS.prototype.saveEmailServerSettings = function() {
 		var zsmtpport = dGet('wtw_tsmtpport').value;
 		var zsmtpusername = dGet('wtw_tsmtpusername').value;
 		var zsmtppassword = btoa(dGet('wtw_tsmtppassword').value);
+		var zencryption = '';
+		var zfromemail = dGet('wtw_tfromemail').value;
+		var zfromemailname = dGet('wtw_tfromemailname').value;
+		if (dGet('wtw_tsmtpencryptionssl').checked) {
+			zencryption = 'ssl';
+		} else if (dGet('wtw_tsmtpencryptiontls').checked) {
+			zencryption = 'tls';
+		}
 		
 		var zsettings = {
 			'smtphost': zsmtphost,
 			'smtpport': zsmtpport,
 			'smtpusername': zsmtpusername,
-			'smtppassword': zsmtppassword
+			'smtppassword': zsmtppassword,
+			'smtpencryption': zencryption,
+			'fromemail': zfromemail,
+			'fromemailname': zfromemailname
 		};
 		WTW.saveSettings(zsettings, "WTW.saveEmailServerSettingsComplete");
 	} catch (ex) {
@@ -1884,19 +1927,24 @@ WTWJS.prototype.testEmailServerSettings = function() {
 	/* test Email Server Settings */
 	try {
 		var zrequest = {
-			'sendto': 'adishno@gmail.com',
+			'sendto': dGet('wtw_ttestemail').value,
 			'subject': 'Test Message from WalkTheWeb',
 			'message':'This is a test message',
 			'function':'sendadminemail'
 		};
 		WTW.postJSON("/core/handlers/tools.php", zrequest, 
 			function(zresponse) {
-WTW.log(zresponse);
 				zresponse = JSON.parse(zresponse);
-				
-				
-				/* note serror would contain errors */
-				//WTW.returnSettings(zresponse.settings, zjsfunction, zjsparameters);
+				if (zresponse.serror != '') {
+					dGet('wtw_emailservercomplete').innerHTML = zresponse.serror;
+					dGet('wtw_emailservercomplete').style.color = "red";
+				} else {
+					dGet('wtw_emailservercomplete').innerHTML = "Email Sent Successfully";
+					dGet('wtw_emailservercomplete').style.color = "green";
+				}
+				window.setTimeout(function() {
+					dGet('wtw_emailservercomplete').innerHTML = "";
+				},5000);
 			}
 		);
 	} catch (ex) {
@@ -1904,6 +1952,25 @@ WTW.log(zresponse);
 	}
 }
 
+WTWJS.prototype.changeEmailSwitch = function() {
+	/* enable user email verification process */
+	try {
+		if (dGet('wtw_emailvalidation') != null) {
+			if (dGet('wtw_emailvalidation').checked) {
+				dGet('wtw_emailvalidationtext').className = 'wtw-enablelabel';
+				dGet('wtw_emailvalidationtext').innerHTML = 'User Email Validation Enabled';
+				WTW.enableEmailValidation = 1;
+			} else {
+				dGet('wtw_emailvalidationtext').className = 'wtw-disabledlabel';
+				dGet('wtw_emailvalidationtext').innerHTML = 'User Email Validation Disabled';
+				WTW.enableEmailValidation = 0;
+			}
+			WTW.saveSetting("enableemailvalidation", WTW.enableEmailValidation + '');
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-changeEmailSwitch=" + ex.message);
+	}
+}
 
 /* web aliases - mapping urls to 3D Communities, 3D Buildings, and 3D Things */
 

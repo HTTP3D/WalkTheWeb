@@ -65,7 +65,6 @@ WTWJS.prototype.initEnvironment = function() {
 		}
 		WTW.setCookie("instanceid", zinstanceid, 365);
 		window.name = zinstanceid;
-		
 		/* add mouse over for canvas */
 		/* sets WTW.canvasFocus variable to allow avatar movement only when canvas has focus */
 		/* also prevents animations an movement to keep going when mouse leaves the window */
@@ -233,12 +232,12 @@ WTWJS.prototype.loadLoginAvatarSelect = function() {
 			WTW.hide('wtw_menuloggedin');
 			var zuseravatarid = WTW.getCookie("useravatarid");
 			if (zuseravatarid != null) {
-				var zglobalavatarid = '';
-				if (WTW.getCookie("globalavatarid") != null) {
-					zglobalavatarid = WTW.getCookie("globalavatarid");
+				var zglobaluseravatarid = '';
+				if (WTW.getCookie("globaluseravatarid") != null) {
+					zglobaluseravatarid = WTW.getCookie("globaluseravatarid");
 				}
 				/* if avatar saved, load avatar */
-				WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobalavatarid, zuseravatarid, '', false);
+				WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobaluseravatarid, zuseravatarid, '', false);
 			} else {
 				/* avatar not saved, open avatar select window */
 				WTW.openLocalLogin('Select Avatar',.4,.9);
@@ -287,6 +286,9 @@ WTWJS.prototype.loadInitSettings = function() {
 				WTW.init.startRotationZ = Number(wtw_domain.startlocation.rotation.z);
 				WTW.editCommunityAccess = wtw_domain.communityinfo.access;
 				WTW.editBuildingAccess = wtw_domain.buildinginfo.access;
+				if (WTW.isNumeric(wtw_domain.enableemailvalidation)) {
+					WTW.enableEmailValidation = Number(wtw_domain.enableemailvalidation);
+				}
 				try {
 					WTW.init.gravity = wtw_domain.domaininfo.gravity;
 				} catch (ex) {}
@@ -448,7 +450,7 @@ WTWJS.prototype.loadUserSettings = function() {
 		switch (WTW.shadowSet) {
 			case 0:
                 if (WTW.gpuSetting == 'low') {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (None - Low Resolution)<br><b>This is your recommended setting.<b/>";
+                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (None - Low Resolution)<br /><b>This is your recommended setting.<b/>";
                 }
                 else {
                     dGet('wtw_shadowhelptitle').innerHTML = "Shadows (None - Low Resolution)";
@@ -456,7 +458,7 @@ WTWJS.prototype.loadUserSettings = function() {
 				break;
 			case 1:
                 if (WTW.gpuSetting == 'medium') {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (Some - Medium Resolution)<br><b>This is your recommended setting.<b/>";
+                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (Some - Medium Resolution)<br /><b>This is your recommended setting.<b/>";
                 }
                 else {
                     dGet('wtw_shadowhelptitle').innerHTML = "Shadows (Some - Medium Resolution)";
@@ -467,7 +469,7 @@ WTWJS.prototype.loadUserSettings = function() {
 				break;
 			case 3:
                 if (WTW.gpuSetting == 'high') {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (All - Ultimate Resolution)<br><b>This is your recommended setting.<b/>";
+                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (All - Ultimate Resolution)<br /><b>This is your recommended setting.<b/>";
                 }
                 else {
                     dGet('wtw_shadowhelptitle').innerHTML = "Shadows (All - Ultimate Resolution)";

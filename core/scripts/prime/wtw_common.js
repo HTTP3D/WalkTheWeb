@@ -1412,6 +1412,9 @@ WTWJS.prototype.saveSetting = function(zsetting, zvalue, zjsfunction, zjsparamet
 	/* zjsparameters = additional parameters you want to send to the JavaScript when the function completes */
 	/* example it will excute on completion: zjsfunction('success', zjsparameters); */
 	try {
+		if (zjsfunction == undefined) {
+			zjsfunction = null;
+		}
 		if (zjsparameters == undefined) {
 			zjsparameters = "";
 		}
@@ -1442,6 +1445,9 @@ WTWJS.prototype.saveSettings = function(zsettings, zjsfunction, zjsparameters) {
 	/* note each setting is saved as an individual record and can be retrieved individually WTW.getSetting(...) */
 	/* or in a set WTW.getSettings(...); */
 	try {
+		if (zjsfunction == undefined) {
+			zjsfunction = null;
+		}
 		if (zjsparameters == undefined) {
 			zjsparameters = "";
 		}

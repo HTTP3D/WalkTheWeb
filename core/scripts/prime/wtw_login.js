@@ -8,7 +8,7 @@
 WTWJS.prototype.openGlobalLogin = function() {
 	/* opens login for 3dnet.walktheweb.com - as a global WalkTheWeb login option */
 	try {
-		WTW.openIFrame("https://3dnet.walktheweb.com/core/login/login.php?serverinstance=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&domainurl=" + btoa(wtw_domainurl) + "&websiteurl=" + btoa(wtw_websiteurl) + "&webid=" + btoa(communityid + buildingid + thingid), .3, .6, "Login Menu");
+		WTW.openIFrame("https://3dnet.walktheweb.com/core/login/login.php?serverinstanceid=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&domainurl=" + btoa(wtw_domainurl) + "&websiteurl=" + btoa(wtw_websiteurl) + "&webid=" + btoa(communityid + buildingid + thingid), .3, .6, "Login Menu");
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-openGlobalLogin=" + ex.message);
 	}
@@ -17,7 +17,7 @@ WTWJS.prototype.openGlobalLogin = function() {
 WTWJS.prototype.logoutGlobal = function() {
 	/* references 3dnet.walktheweb.com - logout of global WalkTheWeb login */
 	try {
-		WTW.openIFrame("https://3dnet.walktheweb.com/core/login/login.php?logout=1&serverinstance=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&domainurl=" + btoa(wtw_domainurl) + "&websiteurl=" + btoa(wtw_websiteurl) + "&webid=" + btoa(communityid + buildingid + thingid), .3, .6, "Login Menu");
+		WTW.openIFrame("https://3dnet.walktheweb.com/core/login/login.php?logout=1&serverinstanceid=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&domainurl=" + btoa(wtw_domainurl) + "&websiteurl=" + btoa(wtw_websiteurl) + "&webid=" + btoa(communityid + buildingid + thingid), .3, .6, "Login Menu");
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-logoutGlobal=" + ex.message);
 	}
@@ -36,7 +36,6 @@ WTWJS.prototype.globalLogin = function(zparameters) {
 			zusertoken = atob(zparameter[1]);
 			zuseremail = atob(zparameter[2]);
 			zdisplayname = atob(zparameter[3]);
-
 			var zrequest = {
 				'globaluserid':btoa(zglobaluserid),
 				'usertoken':btoa(zusertoken),
@@ -49,6 +48,7 @@ WTWJS.prototype.globalLogin = function(zparameters) {
 					zresponse = JSON.parse(zresponse);
 					/* continue if no errors */
 					if (WTW.globalLoginResponse(zresponse)) {
+						WTW.hide('wtw_menuloggedin');
 						WTW.openLocalLogin('Select Avatar',.4,.9);
 					}
 				}
@@ -83,8 +83,8 @@ WTWJS.prototype.globalLoginResponse = function(zresults) {
 					dGet('wtw_tusertoken').value = zresults.usertoken;
 					dGet('wtw_tglobaluserid').value = zresults.globaluserid;
 					WTW.hide('wtw_menulogin');
-					WTW.show('wtw_menuloggedin');
 					WTW.setLoginValues(zresults.userid, zresults.displayname, zresults.email, zresults.userimageurl);
+					WTW.show('wtw_menuloggedin');
 				} else {
 					WTW.hide('wtw_menuloggedin');
 					WTW.show('wtw_menulogin');
@@ -174,9 +174,16 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				break;
 			case "Recover Login":
 				zpagediv += "<h2 class=\"wtw-login\">Recover Login</h2>" +
-					"<div class=\"wtw-loginlabel\">Email</div><div><input type=\"text\" id=\"wtw_trecoverbyemail\" autocomplete=\"email\" class=\"wtw-textbox\" maxlength=\"255\" /></div><div style=\"clear:both;\"></div>" +
-					"<div id=\"wtw_recovererrortext\" class=\"wtw-errortext\">&nbsp;</div><br />" +
-					"<div class=\"wtw-loginbutton\" onclick=\"WTW.recoverLogin();\"><div style=\"margin-top:10px;\">Recover my Password</div></div>" +
+					"<div class=\"wtw-loginlabel\">Email</div><div><input type=\"text\" id=\"wtw_temailrecover\" autocomplete=\"email\" class=\"wtw-textbox\" maxlength=\"255\" /></div><div style=\"clear:both;\"></div>" +
+					"<div id=\"wtw_reseterrortext\" class=\"wtw-errortext\">&nbsp;</div><br />" +
+					"<div class=\"wtw-loginbutton\" onclick=\"WTW.passwordReset();\"><div style=\"margin-top:10px;\">Recover my Password</div></div>" +
+					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('3D Website Login', .3, .6);\">Return to Login</div>&nbsp;&nbsp;";
+				dGet('wtw_ipagediv').innerHTML = zpagediv;
+				break;
+			case "Email Verification":
+				zpagediv += "<h2 class=\"wtw-login\">Email Verification</h2>" +
+					"<h2 style=\"color:#FDFFCE;\">WalkTheWeb would like to confirm your email before continuing. Please check your email for the latest validation link.<br /><br />If you cannot find the email, click <i>Continue</i> to resend it.<br /><br />After you confirm your email, click <i>Continue</i> to complete the login.</h2>" + 
+					"<div class=\"wtw-loginbutton\" onclick=\"WTW.checkEmailValidation('');\"><img src=\"/content/system/images/wtwlogo.png\" alt=\"HTTP3D Inc.\" title=\"HTTP3D Inc.\" class=\"wtw-loginlogo\"/><div style=\"margin-top:10px;\">Continue</div></div>" +
 					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('3D Website Login', .3, .6);\">Return to Login</div>&nbsp;&nbsp;";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 				break;
@@ -351,7 +358,7 @@ WTWJS.prototype.getAnonymousAvatarList = function() {
 						for (var i=0;i<zresponse.avatars.length;i++) {
 							if (zresponse.avatars[i] != null) {
 								zanonavatars[zanonavatars.length] = {
-									'globalavatarid': '',
+									'globaluseravatarid': '',
 									'useravatarid': zresponse.avatars[i].useravatarid,
 									'avatarid': zresponse.avatars[i].avatarid,
 									'avatargroup': zresponse.avatars[i].avatargroup,
@@ -410,7 +417,7 @@ WTWJS.prototype.getFullAvatarList = function(zshowmyavatars, zwidth, zheight) {
 						for (var i=0;i<zresponse.avatars.length;i++) {
 							if (zresponse.avatars[i] != null) {
 								zfullavatars[zfullavatars.length] = {
-									'globalavatarid': '',
+									'globaluseravatarid': '',
 									'useravatarid': zresponse.avatars[i].useravatarid,
 									'avatarid': zresponse.avatars[i].avatarid,
 									'avatargroup': zresponse.avatars[i].avatargroup,
@@ -454,7 +461,7 @@ WTWJS.prototype.getFullAvatarList = function(zshowmyavatars, zwidth, zheight) {
 				if (zfullavatars.length > 0) {
 					for (var i=0;i<zfullavatars.length;i++) {
 						if (zfullavatars[i] != null) {
-							zpagediv += "<div class=\"wtw-imagescroll\" onclick=\"WTW.onMyAvatarSaveSelect('" + zfullavatars[i].globalavatarid + "', '" + zfullavatars[i].useravatarid + "', '" + zfullavatars[i].avatarid + "');\"><img src=\"" + zfullavatars[i].object.folder + zfullavatars[i].thumbnails.imageface + "\" title=\"" + zfullavatars[i].displayname + "\" alt=\"" + zfullavatars[i].displayname + "\" class=\"wtw-imagesavatar\" /></div>";
+							zpagediv += "<div class=\"wtw-imagescroll\" onclick=\"WTW.onMyAvatarSaveSelect('" + zfullavatars[i].globaluseravatarid + "', '" + zfullavatars[i].useravatarid + "', '" + zfullavatars[i].avatarid + "');\"><img src=\"" + zfullavatars[i].object.folder + zfullavatars[i].thumbnails.imageface + "\" title=\"" + zfullavatars[i].displayname + "\" alt=\"" + zfullavatars[i].displayname + "\" class=\"wtw-imagesavatar\" /></div>";
 						}
 					}
 				} else if (zshowmyavatars == false) {
@@ -497,7 +504,7 @@ WTWJS.prototype.getMyAvatarList = function(zwidth, zheight) {
 									for (var i=0;i<zresponse.avatars.length;i++) {
 										if (zresponse.avatars[i] != null) {
 											zmyavatars[zmyavatars.length] = {
-												'globalavatarid': '',
+												'globaluseravatarid': '',
 												'useravatarid': zresponse.avatars[i].useravatarid,
 												'avatarid': zresponse.avatars[i].avatarid,
 												'avatargroup': zresponse.avatars[i].avatargroup,
@@ -551,16 +558,16 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight) {
 					if (zmyavatars[i] != null) {
 						if (zdefault == -1) {
 							let zuseravatarid = zmyavatars[i].useravatarid;
-							let zglobalavatarid = zmyavatars[i].globalavatarid;
+							let zglobaluseravatarid = zmyavatars[i].globaluseravatarid;
 							let zavatarid = zmyavatars[i].avatarid;
-							dGet('wtw_browseheaderclose').onclick = function() {WTW.onMyAvatarSelect(zglobalavatarid, zuseravatarid, zavatarid);};
+							dGet('wtw_browseheaderclose').onclick = function() {WTW.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);};
 							zdefault = i;
 						}
 						let zicon2 = "/content/system/images/avatarselect.png";;
 						let zicon = "/content/system/images/localserver.png";
 						let ztext = "3D Website Local Avatar";
 						let ztext2 = "My Avatar";
-						if (zmyavatars[i].globalavatarid != '') {
+						if (zmyavatars[i].globaluseravatarid != '') {
 							zicon = "/content/system/images/global.png";
 							ztext = "WalkTheWeb Global Avatar";
 						}
@@ -574,7 +581,7 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight) {
 						if (zmyavatars[i].displayname != '') {
 							ztext2 = zmyavatars[i].displayname;
 						}
-						zmylist += "<div class=\"wtw-loginbutton\" style=\"text-align:left;\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.onMyAvatarSelect('" + zmyavatars[i].globalavatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\">";
+						zmylist += "<div class=\"wtw-loginbutton\" style=\"text-align:left;\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.onMyAvatarSelect('" + zmyavatars[i].globaluseravatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\">";
 						zmylist += "<img src=\"" + zicon + "\" class=\"wtw-icon\" title=\"" + ztext + "\" alt=\"" + ztext + "\" />";
 						zmylist += "<img src=\"" + zicon2 + "\" class=\"wtw-icon\" title=\"" + ztext2 + "\" alt=\"" + ztext2 + "\" />";
 						zmylist += ztext2 + "</div>\r\n";
@@ -595,7 +602,7 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight) {
 	}
 }
 
-WTWJS.prototype.onMyAvatarSaveSelect = function(zglobalavatarid, zuseravatarid, zavatarid) {
+WTWJS.prototype.onMyAvatarSaveSelect = function(zglobaluseravatarid, zuseravatarid, zavatarid) {
 	/* process to enter the 3D Scene when the avatar is selected (save my selection) */
 	try {
 		if (dGet('wtw_tnewavatardisplayname') != null) {
@@ -624,7 +631,7 @@ WTWJS.prototype.onMyAvatarSaveSelect = function(zglobalavatarid, zuseravatarid, 
 				/* note serror would contain errors */
 				if (zresponse.useravatarid != undefined) {
 					zuseravatarid = zresponse.useravatarid;
-					WTW.onMyAvatarSelect(zglobalavatarid, zuseravatarid, zavatarid);
+					WTW.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);
 				}
 			}
 		);
@@ -633,17 +640,19 @@ WTWJS.prototype.onMyAvatarSaveSelect = function(zglobalavatarid, zuseravatarid, 
 	}
 }
 
-WTWJS.prototype.onMyAvatarSelect = function(zglobalavatarid, zuseravatarid, zavatarid) {
+WTWJS.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, zavatarid) {
 	/* process to enter the 3D Scene when the avatar is selected */
 	try {
 		dGet('wtw_tuseravatarid').value = zuseravatarid;
-		dGet('wtw_tglobalavatarid').value = zglobalavatarid;
+		dGet('wtw_tglobaluseravatarid').value = zglobaluseravatarid;
 		dGet('wtw_tavatarid').value = zavatarid;
-		WTW.setCookie("globalavatarid", zglobalavatarid, 365);
+		WTW.setCookie("globaluseravatarid", zglobaluseravatarid, 365);
 		WTW.setCookie("useravatarid", zuseravatarid, 365);
 		WTW.closeIFrame();
-		WTW.getSavedAvatar("myavatar-" + dGet("wtw_tinstanceid").value, zglobalavatarid, zuseravatarid, zavatarid, true);
-		WTW.pluginsOnMyAvatarSelect(zglobalavatarid, zuseravatarid, zavatarid);
+		var zloading = WTW.pluginsOnMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);
+		if (zloading == false) {
+			WTW.getSavedAvatar("myavatar-" + dGet("wtw_tinstanceid").value, zglobaluseravatarid, zuseravatarid, zavatarid, true);
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-onMyAvatarSelect=" + ex.message);
 	}
@@ -695,7 +704,11 @@ WTWJS.prototype.loginAttemptResponse = function(zresults) {
 					WTW.hide('wtw_menulogin');
 					WTW.show('wtw_menuloggedin');
 					WTW.setLoginValues(zresults.userid, zresults.displayname, zresults.email, zresults.userimageurl);
-					WTW.openLocalLogin('Select Avatar',.4,.9);
+					if (WTW.enableEmailValidation == 1) {
+						WTW.checkEmailValidation(zresults.email);
+					} else {
+						WTW.openLocalLogin('Select Avatar',.4,.9);
+					}
 				} else {
 					WTW.hide('wtw_menuloggedin');
 					WTW.show('wtw_menulogin');
@@ -795,9 +808,22 @@ WTWJS.prototype.createAccountComplete = function(zresponse) {
 			dGet('wtw_registererrortext').innerHTML = zresponse.serror;
 		} else {
 			dGet('wtw_teditdisplayname').value = zresponse.displayname;
+			if (WTW.enableEmailValidation == 1) {
+				WTW.checkEmailValidation(zresponse.email);
+			} else {
+				WTW.openLocalLogin('Select Avatar',.4,.9);
+			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-createAccountComplete=" + ex.message);
+	}
+}
+
+WTWJS.prototype.resetPassword = function() {
+	try {
+		dGet('wtw_submit').click();
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_login.js-resetPassword=" + ex.message);
 	}
 }
 
@@ -843,10 +869,60 @@ WTWJS.prototype.setLoginValues = function(zuserid, zdisplayname, zemail, zuserim
 	}
 }
 
+WTWJS.prototype.checkEmailValidation = function(zuseremail) {
+	try {
+		if (zuseremail == '') {
+			zuseremail = dGet('wtw_tuseremail').value;
+		}
+		var zrequest = {
+			'useremail': zuseremail,
+			'userid':btoa(dGet('wtw_tuserid').value),
+			'function':'checkemailvalidation'
+		};
+		WTW.postJSON("/core/handlers/users.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+
+				var zuserid = '';
+				var zdisplayname = '';
+				if (zresponse.userid != undefined) {
+					zuserid = zresponse.userid;
+				}
+				if (zresponse.displayname != undefined) {
+					zdisplayname = zresponse.displayname;
+				}
+				if (zresponse.valid != '1') {
+					WTW.openLocalLogin('Email Verification', .4, .6);
+					
+					/* sendto accepts either single email string or comma separated values */
+					var zrequest = {
+						'sendto': zuseremail,
+						'subject': wtw_domainname + ' - Email Verification',
+						'htmlmessage':'You have recently created a ' + wtw_domainname + ' account using this email address.<br />Please click this link to complete the email validation.<br /><br /><a href="' + wtw_domainurl + '/core/pages/validate.php?email=' + zuseremail + '&confirm=' + zresponse.emailconfirm + '">Validate My Email</a><br /><br /><b>Welcome to WalkTheWeb 3D Internet!</b>',
+						'message':'You have recently created a ' + wtw_domainname + ' account using this email address.\r\nPlease click this link to complete the email validation.\r\n\r\nPlease copy and paste this link into your browser to Validate your Email:\r\n ' + wtw_domainurl + '/core/pages/validate.php?email=' + zuseremail + '&confirm=' + zresponse.emailconfirm + '\r\n\r\nWelcome to WalkTheWeb 3D Internet!',
+						'function':'sendemail'
+					};
+					WTW.postJSON("/core/handlers/tools.php", zrequest, 
+						function(zresponse) {
+							zresponse = JSON.parse(zresponse);
+							WTW.openLocalLogin('Email Verification', .4, .6);
+						}
+					);
+				} else {
+					WTW.hide('wtw_menuloggedin');
+					WTW.openLocalLogin('Select Avatar',.4,.9);
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_login.js-checkEmailValidation=" + ex.message);
+	}
+}
+
 WTWJS.prototype.openAvatarDesigner = function() {
 	/* opens the Avatar Designer and loads your current avatar for changes */
 	try {
-		WTW.openIFrame("/content/plugins/wtw-avatars/pages/designer.php?globaluserid=" + dGet('wtw_tglobaluserid').value + "&globalavatarid=" + dGet('wtw_tglobalavatarid').value + "&useravatarid=" + dGet('wtw_tuseravatarid').value, .9, .9, "Avatar Desiger");
+		WTW.openIFrame("/content/plugins/wtw-avatars/pages/designer.php?globaluserid=" + dGet('wtw_tglobaluserid').value + "&globaluseravatarid=" + dGet('wtw_tglobaluseravatarid').value + "&useravatarid=" + dGet('wtw_tuseravatarid').value, .9, .9, "Avatar Desiger");
 		dGet('wtw_ibrowsediv').style.backgroundColor = 'rgba(0, 0, 0, 1)';
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-openAvatarDesigner=" + ex.message);
@@ -1124,35 +1200,31 @@ WTWJS.prototype.switchAvatarMenu = function(zmenu) {
 	}
 }
 
-WTWJS.prototype.recoverLogin = function() {
+WTWJS.prototype.passwordReset = function() {
 	/* process to recover a local login */
 	try {
-		if (dGet('wtw_trecoverbyemail').value.length > 7 && dGet('wtw_trecoverbyemail').value.indexOf('@') > -1 && dGet('wtw_trecoverbyemail').value.indexOf('.') > -1) {
+		dGet('wtw_reseterrortext').innerHTML = "";
+		if (dGet('wtw_temailrecover').value.length > 4 && dGet('wtw_temailrecover').value.indexOf('@') > -1 && dGet('wtw_temailrecover').value.indexOf('.') > -1) {
 			var zrequest = {
-				'email':dGet('wtw_trecoverbyemail').value,
-				'function':'recoverloginbyemail'
+				'useremail':dGet('wtw_temailrecover').value,
+				'function':'passwordrecovery'
 			};
 			WTW.postJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
-					WTW.recoverLoginComplete(zresponse.loginresponse);
+					if (zresponse.serror == '') {
+						dGet('wtw_reseterrortext').innerHTML = "<span style='color:#FDFFCE;'>Reset Password Email Sent.<br />Please check your email for further instructions.</span>";
+					} else {
+						dGet('wtw_reseterrortext').innerHTML = zresponse.serror;
+					}
 				}
 			);
 		} else {
-			dGet('wtw_recovererrortext').innerHTML = "Not a valid Email Address";
+			dGet('wtw_reseterrortext').innerHTML = "Not a valid Email Address";
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_login.js-recoverLogin=" + ex.message);
-	}
-}
-
-WTWJS.prototype.recoverLoginComplete = function(response) {
-	/* response from a request to recover a local login */
-	try {
-		dGet('wtw_recovererrortext').innerHTML = response;
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_login.js-recoverLoginComplete=" + ex.message);
+		WTW.log("core-scripts-prime-wtw_login.js-passwordReset=" + ex.message);
 	}
 }
 

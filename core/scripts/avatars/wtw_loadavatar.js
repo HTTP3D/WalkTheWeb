@@ -39,20 +39,20 @@ WTWJS.prototype.loadAvatarPlaceholder = function() {
 WTWJS.prototype.reloadAvatar = function() {
 	/* used by the global login page to trigger an avatar reload after changes are made */
 	try {
-		WTW.getSavedAvatar("myavatar-" + dGet("wtw_tinstanceid").value, dGet('wtw_tglobalavatarid').value, dGet("wtw_tuseravatarid").value, '', true);
+		WTW.getSavedAvatar("myavatar-" + dGet("wtw_tinstanceid").value, dGet('wtw_tglobaluseravatarid').value, dGet("wtw_tuseravatarid").value, '', true);
     } catch (ex) {
 		WTW.log("core-scripts-avatars-wtw_loadavatar.js-reloadAvatar=" + ex.message);
     }
 }
 
-WTWJS.prototype.getSavedAvatar = function(zavatarname, zglobalavatarid, zuseravatarid, zavatarid, zsendrefresh) {
+WTWJS.prototype.getSavedAvatar = function(zavatarname, zglobaluseravatarid, zuseravatarid, zavatarid, zsendrefresh) {
 	/* fetches the avatar definition for either the global avatar, local logged in avatar, or anonymous avatar */
 	try {
-		if (zglobalavatarid == undefined) {
-			zglobalavatarid = '';
+		if (zglobaluseravatarid == undefined) {
+			zglobaluseravatarid = '';
 		}
-		if (zglobalavatarid == null) {
-			zglobalavatarid = '';
+		if (zglobaluseravatarid == null) {
+			zglobaluseravatarid = '';
 		}
 		if (zuseravatarid == undefined) {
 			zuseravatarid = '';
@@ -60,11 +60,11 @@ WTWJS.prototype.getSavedAvatar = function(zavatarname, zglobalavatarid, zuserava
 		if (zavatarid == undefined || zavatarid == 'undefined') {
 			zavatarid = '';
 		}
-		if (zglobalavatarid != '' || zuseravatarid != '' || zavatarid != '') {
-			if (zglobalavatarid != '') {
+		if (zglobaluseravatarid != '' || zuseravatarid != '' || zavatarid != '') {
+			if (zglobaluseravatarid != '') {
 				/* global avatar - uses a secure post method to 3dnet.walktheweb.com */
 				var zrequest = {
-					'globalavatarid':btoa(zglobalavatarid),
+					'globaluseravatarid':btoa(zglobaluseravatarid),
 					'serverinstanceid':btoa(dGet('wtw_serverinstanceid').value),
 					'function':'getglobalavatar'
 				};
@@ -117,8 +117,8 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 		}
 		if (zavatarname.indexOf("myavatar") > -1) {
 			dGet('wtw_tavatarid').value = zavatardef.avatarid;
-			WTW.setCookie("globalavatarid", zavatardef.globalavatarid, 365);
-			dGet("wtw_tglobalavatarid").value = '';
+			WTW.setCookie("globaluseravatarid", zavatardef.globaluseravatarid, 365);
+			dGet("wtw_tglobaluseravatarid").value = '';
 			WTW.setCookie("useravatarid", zavatardef.useravatarid, 365);
 			dGet("wtw_tuseravatarid").value = zavatardef.useravatarid;
 			WTW.setCookie("useravatarid", zavatardef.useravatarid, 365);

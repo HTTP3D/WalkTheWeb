@@ -47,6 +47,9 @@ function WTWJS() {
 	/* enable physics engine */
 	this.enablePhysics = 1;
 
+	/* enable user email validation */
+	this.enableEmailValidation = 0;
+
 	/* WTW.isInitCycle - value changes to zero after 8 seconds from the initial loading. This allows the 3D Scene to render before certain extras are implemented. */
 	this.isInitCycle = 1;
 
@@ -288,10 +291,10 @@ function WTWJS() {
 /* user settings */	
 
 	/* WTW.walkSpeed - Avatar Related - value set by the menu to adjust the avatar walk speed movement */
-	this.walkSpeed = 1;
+	this.walkSpeed = 2;
 	
 	/* WTW.walkAnimationSpeed - Avatar Related - value set by the menu to adjust the avatar walk animation speed */
-	this.walkAnimationSpeed = 1;
+	this.walkAnimationSpeed = 2;
 	
 	/* WTW.turnSpeed - Avatar Related - value set by the menu to adjust the avatar turn speed movement */
 	this.turnSpeed = 1;

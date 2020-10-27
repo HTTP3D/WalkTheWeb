@@ -395,7 +395,7 @@ WTWJS.prototype.getWebpage = function(zurl, zcallback) {
 		Httpreq.open('GET', zurl, true);
 		Httpreq.onreadystatechange = function () {
 			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
-				if (callback != null) {
+				if (zcallback != null) {
 					zcallback(Httpreq.responseText);
 				}
 			}

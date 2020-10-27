@@ -34,6 +34,7 @@ WTWJS.prototype.openConnectingGridsForm = function(connectinggridind) {
 				dGet('wtw_tchildwebtype').value = WTW.connectingGrids[connectinggridind].childwebtype;
 				dGet('wtw_teditloadactionzoneid').value = WTW.connectingGrids[connectinggridind].loadactionzoneid;
 				dGet('wtw_tcommunityname').value = WTW.decode(WTW.connectingGrids[connectinggridind].communityinfo.communityname);
+				dGet('wtw_tcommunitydescription').value = WTW.decode(WTW.connectingGrids[connectinggridind].communityinfo.communitydescription);
 				dGet('wtw_tcommunityanalyticsid').value = WTW.connectingGrids[connectinggridind].communityinfo.analyticsid;
 				dGet('wtw_tconngridpositionx').value = WTW.connectingGrids[connectinggridind].position.x;
 				dGet('wtw_tconngridpositiony').value = WTW.connectingGrids[connectinggridind].position.y;
@@ -347,12 +348,14 @@ WTWJS.prototype.addConnectingGrid = function(childwebtype, childwebid, childwebn
 						if (WTW.communities[i] != null) {
 							if (communityid == WTW.communities[i].communityinfo.communityid) {
 								dGet('wtw_tcommunityname').value = WTW.decode(WTW.communities[i].communityinfo.communityname);
+								dGet('wtw_tcommunitydescription').value = WTW.decode(WTW.communities[i].communityinfo.communitydescription);
 								dGet('wtw_tcommunityanalyticsid').value = WTW.communities[i].communityinfo.analyticsid;
 							}
 						}
 					}
 				}
 				dGet('wtw_tbuildingname').value = '';
+				dGet('wtw_tbuildingdescription').value = '';
 				dGet('wtw_tbuildinganalyticsid').value = '';
 			} else {
 				if (WTW.buildings != null) {
@@ -360,12 +363,14 @@ WTWJS.prototype.addConnectingGrid = function(childwebtype, childwebid, childwebn
 						if (WTW.buildings[i] != null) {
 							if (buildingid == WTW.buildings[i].buildinginfo.buildingid) {
 								dGet('wtw_tbuildingname').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
+								dGet('wtw_tbuildingdescription').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingdescription);
 								dGet('wtw_tbuildinganalyticsid').value = WTW.buildings[i].buildinginfo.analyticsid;
 							}
 						}
 					}
 				}
 				dGet('wtw_tcommunityname').value = "Walk the Web";
+				dGet('wtw_tcommunitydescription').value = '';
 				dGet('wtw_tcommunityanalyticsid').value = '';
 			}
 			if (childwebtype == "thing") {
@@ -431,6 +436,7 @@ WTWJS.prototype.addConnectingGrid = function(childwebtype, childwebid, childwebn
 						WTW.connectingGrids[connectinggridind].buildinginfo.buildingname = '';
 						WTW.connectingGrids[connectinggridind].communityinfo.communityid = parentwebid;
 						WTW.connectingGrids[connectinggridind].communityinfo.communityname = WTW.encode(dGet('wtw_tcommunityname').value);
+						WTW.connectingGrids[connectinggridind].communityinfo.communitydescription = WTW.encode(dGet('wtw_tcommunitydescription').value);
 						WTW.connectingGrids[connectinggridind].communityinfo.analyticsid = dGet('wtw_tcommunityanalyticsid').value;
 					} else {
 						WTW.connectingGrids[connectinggridind].communityinfo.communityid = '';

@@ -16,6 +16,7 @@ WTWJS.prototype.openBuildingForm = function(w) {
 			dGet('wtw_tbuildingid').value = buildingid;
 		}
 		dGet('wtw_tbuildingname').value = "";
+		dGet('wtw_tbuildingdescription').value = "";
 		dGet('wtw_tbuildingalttag').value = "";
 		WTW.show('wtw_loadingbuildingform');
 		WTW.hide('wtw_adminmenu5b');
@@ -29,6 +30,7 @@ WTWJS.prototype.openBuildingForm = function(w) {
 								if (WTW.buildings[i].buildinginfo.buildingid != null) {
 									if (dGet("wtw_tbuildingid").value == WTW.buildings[i].buildinginfo.buildingid) {
 										dGet('wtw_tbuildingname').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
+										dGet('wtw_tbuildingdescription').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingdescription);
 										dGet('wtw_tbuildingsnapshotid').value = WTW.buildings[i].buildinginfo.snapshotid;
 										dGet('wtw_tbuildinganalyticsid').value = WTW.buildings[i].buildinginfo.analyticsid;
 										dGet('wtw_tbuildingalttag').value = WTW.decode(WTW.buildings[i].alttag.name);
@@ -67,6 +69,7 @@ WTWJS.prototype.loadBuildingForm = function(w) {
 			dGet('wtw_tbuildingid').value = buildingid;
 		}
 		dGet('wtw_tbuildingname').value = "";
+		dGet('wtw_tbuildingdescription').value = "";
 		dGet('wtw_tbuildingalttag').value = "";
 		WTW.getJSON("/connect/buildings.php", 
 			function(response) {
@@ -78,6 +81,7 @@ WTWJS.prototype.loadBuildingForm = function(w) {
 								if (WTW.buildings[i].buildinginfo.buildingid != null) {
 									if (dGet("wtw_tbuildingid").value == WTW.buildings[i].buildinginfo.buildingid) {
 										dGet('wtw_tbuildingname').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
+										dGet('wtw_tbuildingdescription').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingdescription);
 										dGet('wtw_tbuildingsnapshotid').value = WTW.buildings[i].buildinginfo.snapshotid;
 										dGet('wtw_tbuildinganalyticsid').value = WTW.buildings[i].buildinginfo.analyticsid;
 										dGet('wtw_tbuildingalttag').value = WTW.decode(WTW.buildings[i].alttag.name);
@@ -129,6 +133,7 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 					if (WTW.buildings[i] != null) {
 						if (WTW.buildings[i].buildinginfo.buildingid == dGet('wtw_tbuildingid').value) {
 							WTW.buildings[i].buildinginfo.buildingname = WTW.encode(dGet('wtw_tbuildingname').value);
+							WTW.buildings[i].buildinginfo.buildingdescription = WTW.encode(dGet('wtw_tbuildingdescription').value);
 							WTW.buildings[i].buildinginfo.analyticsid = dGet('wtw_tbuildinganalyticsid').value;
 							WTW.buildings[i].alttag.name = WTW.encode(dGet('wtw_tbuildingalttag').value);
 							dGet('wtw_showbuildingname').innerHTML = dGet('wtw_tbuildingname').value;
@@ -138,6 +143,7 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 				var zrequest = {
 					'buildingid': buildingid,
 					'buildingname':btoa(dGet('wtw_tbuildingname').value),
+					'buildingdescription':btoa(dGet('wtw_tbuildingdescription').value),
 					'alttag':btoa(dGet('wtw_tbuildingalttag').value),
 					'analyticsid':dGet('wtw_tbuildinganalyticsid').value,
 					'function':'savebuilding'
@@ -153,6 +159,7 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 					if (WTW.buildings[i] != null) {
 					    if (WTW.buildings[i].buildinginfo.buildingid == dGet('wtw_tbuildingid').value) {
 							dGet('wtw_tbuildingname').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
+							dGet('wtw_tbuildingdescription').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingdescription);
 							dGet('wtw_tbuildinganalyticsid').value = WTW.buildings[i].buildinginfo.analyticsid;
 							dGet('wtw_tbuildingalttag').value = WTW.decode(WTW.buildings[i].alttag.name);
 						}
@@ -210,6 +217,7 @@ WTWJS.prototype.copyBuilding = function(zcopybuildingid, zbuildingname) {
 		var zrequest = {
 			'pastbuildingid': zcopybuildingid,
 			'buildingname':btoa(dGet('wtw_tbuildingname').value),
+			'buildingdescription':btoa(dGet('wtw_tbuildingdescription').value),
 			'function':'savebuilding'
 		};
 		WTW.postJSON("/core/handlers/buildings.php", zrequest, 

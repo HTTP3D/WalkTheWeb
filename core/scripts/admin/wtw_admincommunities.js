@@ -26,6 +26,7 @@ WTWJS.prototype.openCommunityForm = function(zcommunityid) {
 							if (WTW.communities[i].communityinfo.communityid != undefined) {
 								if (zcommunityid == WTW.communities[i].communityinfo.communityid) {
 									dGet('wtw_tcommunityname').value = WTW.decode(WTW.communities[i].communityinfo.communityname);
+									dGet('wtw_tcommunitydescription').value = WTW.decode(WTW.communities[i].communityinfo.communitydescription);
 									dGet('wtw_tcommunitysnapshotid').value = WTW.communities[i].communityinfo.snapshotid;
 									dGet('wtw_tcommunityanalyticsid').value = WTW.communities[i].communityinfo.analyticsid;
 									dGet('wtw_tgroundpositiony').value = Number(WTW.communities[i].groundpositiony).toFixed(2);
@@ -64,6 +65,7 @@ WTWJS.prototype.loadCommunityForm = function(zcommunityid) {
 							if (WTW.communities[i].communityinfo.communityid != undefined) {
 								if (zcommunityid == WTW.communities[i].communityinfo.communityid) {
 									dGet('wtw_tcommunityname').value = WTW.decode(WTW.communities[i].communityinfo.communityname);
+									dGet('wtw_tcommunitydescription').value = WTW.decode(WTW.communities[i].communityinfo.communitydescription);
 									dGet('wtw_tcommunitysnapshotid').value = WTW.communities[i].communityinfo.snapshotid;
 									dGet('wtw_tcommunityanalyticsid').value = WTW.communities[i].communityinfo.analyticsid;
 									dGet('wtw_tgroundpositiony').value = Number(WTW.communities[i].groundpositiony).toFixed(2);
@@ -112,6 +114,7 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 					if (WTW.communities[i] != null) {
 						if (WTW.communities[i].communityinfo.communityid == communityid) {
 							WTW.communities[i].communityinfo.communityname = WTW.encode(dGet('wtw_tcommunityname').value);
+							WTW.communities[i].communityinfo.communitydescription = WTW.encode(dGet('wtw_tcommunitydescription').value);
 							WTW.communities[i].communityinfo.analyticsid = dGet('wtw_tcommunityanalyticsid').value;
 							WTW.communities[i].groundpositiony = dGet('wtw_tgroundpositiony').value;
 							WTW.communities[i].waterpositiony = dGet('wtw_twaterpositiony').value;
@@ -130,6 +133,7 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 				var zrequest = {
 					'communityid': communityid,
 					'communityname': btoa(dGet('wtw_tcommunityname').value),
+					'communitydescription': btoa(dGet('wtw_tcommunitydescription').value),
 					'analyticsid': dGet('wtw_tcommunityanalyticsid').value,
 					'groundpositiony': dGet('wtw_tgroundpositiony').value,
 					'waterpositiony': dGet('wtw_twaterpositiony').value,
@@ -149,6 +153,7 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 					if (WTW.communities[i] != null) {
 						if (WTW.communities[i].communityinfo.communityid == communityid) {
 							dGet('wtw_tcommunityname').value = WTW.decode(WTW.communities[i].communityinfo.communityname);
+							dGet('wtw_tcommunitydescription').value = WTW.decode(WTW.communities[i].communityinfo.communitydescription);
 							dGet('wtw_tcommunityanalyticsid').value = WTW.communities[i].communityinfo.analyticsid;
 							dGet('wtw_tcommunityalttag').value = WTW.decode(WTW.communities[i].alttag.name);
 						}
@@ -215,6 +220,7 @@ WTWJS.prototype.copyCommunity = function(zcopycommunityid, zcommunityname) {
 		var zrequest = {
 			'pastcommunityid': zcopycommunityid,
 			'communityname': btoa(dGet('wtw_tcommunityname').value),
+			'communitydescription': btoa(dGet('wtw_tcommunitydescription').value),
 			'groundpositiony': dGet('wtw_tgroundpositiony').value,
 			'waterpositiony': dGet('wtw_twaterpositiony').value,
 			'alttag': '',

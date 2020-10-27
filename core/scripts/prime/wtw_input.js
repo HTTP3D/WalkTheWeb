@@ -689,8 +689,10 @@ WTWJS.prototype.mouseOutMold = function(zmold) {
 		if (WTW.canvasFocus == 1) {
 			WTW.hide('wtw_itooltip');
 			if (WTW.adminView == 1) {
-				if (dGet('wtw_bfocus').title == "Focus Highlight is On" || WTW.highlightLayer != null) {
-					WTW.unhilightMold(WTW.currentID);
+				if (dGet('wtw_bfocus') != null) {
+					if (dGet('wtw_bfocus').title == "Focus Highlight is On" || WTW.highlightLayer != null) {
+						WTW.unhilightMold(WTW.currentID);
+					}
 				}
 			}
 			document.body.style.cursor = "default";
@@ -732,7 +734,9 @@ WTWJS.prototype.onMessage = function (zevent) {
 			if (zevent.data.message != undefined) {
 				zmessage = zevent.data.message;
 			}
-			WTW.executeFunctionByName(zfunctionname, window, zparameters);
+			if (zfunctionname != '') {
+				WTW.executeFunctionByName(zfunctionname, window, zparameters);
+			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_input.js-onMessage=" + ex.message);
