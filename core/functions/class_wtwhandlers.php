@@ -354,6 +354,7 @@ class wtwhandlers {
 			$zheader .= header('Content-type: application/json');
 			$zheader .= header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 			$zheader .= header('Access-Control-Request-Headers: Content-Type');
+			$zheader .= header('Set-Cookie: cross-site-cookie=name; SameSite=Lax;');
 			//$zheader .= header('Content-type: application/json; charset=iso-8859-1');
 			//$zheader .= header('Content-Language: en');
 		} catch (Exception $e) {

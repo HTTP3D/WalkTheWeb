@@ -39,7 +39,7 @@ class wtwcommunities {
 		return $found;
 	}
 
-	public function saveCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag) {
+	public function saveCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zcommunitydescription, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag) {
 		/* save community settings to the database */
 		global $wtwhandlers;
 		$copycommunityid = "";
@@ -59,6 +59,7 @@ class wtwcommunities {
 							(communityid,
 							 pastcommunityid,
 							 communityname,
+							 communitydescription,
 							 analyticsid,
 							 userid,
 							 groundpositiony,
@@ -72,6 +73,7 @@ class wtwcommunities {
 							('".$zcommunityid."',
 							 '".$zpastcommunityid."',
 							 '".$wtwhandlers->escapeHTML($zcommunityname)."',
+							 '".$wtwhandlers->escapeHTML($zcommunitydescription)."',
 							 '".$zanalyticsid."',
 							 '".$wtwhandlers->userid."',
 							 ".$wtwhandlers->checkNumber($zgroundpositiony,0).",
@@ -88,6 +90,7 @@ class wtwcommunities {
 							(communityid,
 							 pastcommunityid,
 							 communityname,
+							 communitydescription,
 							 analyticsid,
 							 userid,
 							 positionx,
@@ -125,6 +128,7 @@ class wtwcommunities {
 						select '".$zcommunityid."' as communityid,
 							 '".$zpastcommunityid."' as pastcommunityid,
 							 '".$wtwhandlers->escapeHTML($zcommunityname)."' as communityname,
+							 '".$wtwhandlers->escapeHTML($zcommunitydescription)."' as communitydescription,
 							 analyticsid,
 							 '".$wtwhandlers->userid."' as userid,
 							 positionx,
@@ -189,6 +193,7 @@ class wtwcommunities {
 					update ".wtw_tableprefix."communities
 					set 
 						communityname='".$wtwhandlers->escapeHTML($zcommunityname)."',
+						communitydescription='".$wtwhandlers->escapeHTML($zcommunitydescription)."',
 						analyticsid='".$zanalyticsid."',
 						groundpositiony=".$wtwhandlers->checkNumber($zgroundpositiony,0).",
 						waterpositiony=".$wtwhandlers->checkNumber($zwaterpositiony,-1).",
@@ -1243,7 +1248,7 @@ class wtwcommunities {
 		return $zsuccess;
 	}
 	
-	public function downloadWeb($zwebid, $znewwebid, $zwebtype, $zdownloadparentwebid, $zdownloadparentwebtype, $zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingrotationy) {
+	public function downloadWeb($zwebid, $znewwebid, $zwebtype, $zusertoken, $zdownloadparentwebid, $zdownloadparentwebtype, $zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingrotationy) {
 		/* this process downloads 3D Web and dependent objects form https://3dnet.walktheweb.com (WalkTheWeb repository)*/
 		/* this is the response after you select a 3D Item to domwload in the search */
 		/* $zwebid is the item selected (3D Community, 3D Bulding, or 3D Thing) */
@@ -1287,1429 +1292,855 @@ class wtwcommunities {
 			$znewfolder = '';
 			$zurl = '';
 			
-			/* $zwebtypes is the plural version of webtype (used in table names) */
-			switch($zwebtype) {
-				case "community":
-					$zwebtypes = "communities";
-					break;
-				case "building":
-					$zwebtypes = "buildings";
-					break;
-				case "thing":
-					$zwebtypes = "things";
-					break;
-			}
-			$znewwebid = $wtwhandlers->getNewKey($zwebtypes, $zwebtype."id", $znewwebid);
-			switch($zwebtype) {
-				case "community":
-					$znewcommunityid = $znewwebid;
-					break;
-				case "building":
-					$znewbuildingid = $znewwebid;
-					break;
-				case "thing":
-					$znewthingid = $znewwebid;
-					break;
-			}
-			
-			/* fetch the 3D Web data structure for the repository (all of the associated records) */
-			$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zwebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
-
-			if (!empty($zurl)) {
-				$zrequest = file_get_contents($zurl);
-			}
-			if (!empty($zrequest) && isset($zrequest)) {
-				$zrequest = json_decode($zrequest);
-			}
-			
-			/* determine the new local path for uploaded files associated with this download */
-			$znewfolder = $wtwhandlers->contentpath.'/uploads/'.$zwebtypes.'/'.$znewwebid;
-			$znewurl = $wtwhandlers->contenturl.'/uploads/'.$zwebtypes.'/'.$znewwebid;
-			if (!file_exists($znewfolder)) {
-				mkdir($znewfolder, 0755, true);
-				chmod($znewfolder, 0755);
-			}
-			
-			/* process all users associated to this download (for your reference) */
-			foreach ($zrequest->users as $zuser) {
-				/* check if the userid is already in use */
-				$znewuserid = $wtwhandlers->getNewKey('users', 'userid', $zuser->userid);
-				$znewuploadpathid = $wtwhandlers->getNewKey('users', "uploadpathid", $zuser->uploadpathid);
-				$zuserpassword = $wtwhandlers->getRandomString(16,1);
+			/* allow usertoken authentication */
+			if ((empty($zuserid) || !isset($zuserid)) && !empty($zusertoken) && isset($zusertoken)) {
 				$zresults = $wtwhandlers->query("
 					select userid
 					from ".wtw_tableprefix."users 
-					where userid='".$znewuserid."'
-					limit 1;
-					");
-				if (count($zresults) == 0) {
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."users 
-						   (userid,
-							pastuserid,
-							displayname,
-							email,
-							uploadpathid,
-							userpassword,
-							createdate,
-							createuserid,
-							updatedate,
-							updateuserid)
-						values
-						   ('".$znewuserid."',
-							'".$zuser->userid."',
-							'".addslashes($zuser->displayname)."',
-							'".$zuser->email."',
-							'".$znewuploadpathid."',
-							'".$zuserpassword."',
-							now(),
-							'".$znewuserid."',
-							now(),
-							'".$znewuserid."');");
-				}
-			}
-
-
-			/* process all uploads related to this download */
-			foreach ($zrequest->uploads as $zupload) {
-				/* assign a new uploadid if it is already in use */
-				$znewuploadid = $wtwhandlers->getNewKey('uploads', "uploadid", $zupload->uploadid);
-
-				$zneworiginalid = '';
-				$znewwebsizeid = '';
-				$znewthumbnailid = '';
-				$znewfileurl = '';
-				
-				/* each image has 3 associated records for original, websize, and thumbnail */
-				if ($zupload->uploadid == $zupload->originalid) {
-					$zneworiginalid = $znewuploadid;
-				} else if ($zupload->uploadid == $zupload->websizeid) {
-					$znewwebsizeid = $znewuploadid;
-				} else if ($zupload->uploadid == $zupload->thumbnailid) {
-					$znewthumbnailid = $znewuploadid;
-				}
-				
-				/* each image gets its own new ID if the initial one is already in use */
-				if (empty($zneworiginalid)) {
-					$zneworiginalid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zupload->originalid);
-				}
-				if (empty($znewwebsizeid)) {
-					$znewwebsizeid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zupload->websizeid);
-				}
-				if (empty($znewthumbnailid)) {
-					$znewthumbnailid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zupload->thumbnailid);
-				}
-				
-				$znewuploadsfolder = $znewfolder.'/uploads';
-				$znewuploadsurl = $znewurl.'/uploads';
-				if (!file_exists($znewuploadsfolder)) {
-					mkdir($znewuploadsfolder, 0755, true);
-					chmod($znewuploadsfolder, 0755);
-				}
-				if (!empty($zupload->filepath)) {
-					try {
-						/* check file types for valid downloads */
-						$zfileext = strtolower(pathinfo($zupload->filepath, PATHINFO_EXTENSION));
-						if ($zfileext == 'babylon' || $zfileext == 'manifest' || $zfileext == 'blend' || $zfileext == 'obj' || $zfileext == 'glb' || $zfileext == 'glbt' || $zfileext == 'fbx' || $zfileext == 'dae' || $zfileext == 'stl' || $zfileext == 'jpg' || $zfileext == 'jpeg' || $zfileext == 'bmp' || $zfileext == 'tif' || $zfileext == 'tiff' || $zfileext == 'png' || $zfileext == 'gif' || $zfileext == 'webp' || $zfileext == 'wav' || $zfileext == 'mp3' || $zfileext == 'mp4' || $zfileext == 'wma' || $zfileext == 'aac' || $zfileext == 'flac' || $zfileext == 'webm' || $zfileext == 'ogg' || $zfileext == 'mpg' || $zfileext == 'avi' || $zfileext == 'mov' || $zfileext == 'wmv' || $zfileext == 'flv' || $zfileext == 'swf' || $zfileext == 'mtl' || $zfileext == '3ds' || $zfileext == 'c4d' || $zfileext == 'txt' || $zfileext == 'log' || $zfileext == 'pdf') {
-							/* download each file */
-							file_put_contents($znewuploadsfolder.'/'.$zupload->filename, fopen($zupload->filepath, 'r'));
-							chmod($znewuploadsfolder.'/'.$zupload->filename, 0755);
-							$znewfileurl = $znewuploadsurl.'/'.$zupload->filename;
-						}
-					} catch (Exception $e) {
-						$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile=".$e->getMessage());
-					}	
-				}
-				
-				/* get new foreign keys */
-				/* lookup foreign key values to new assigned values using "past" field prefix */
-				$znewuserid = $wtwhandlers->getUserIDfromPastID($zupload->userid);
-				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zupload->createuserid);
-				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zupload->updateuserid);
-				
-				$zhidedate = "null";
-				$zhide = "0";
-				$zcheckeddate = "null";
-				if (isset($zupload->hidedate)) {
-					$zhidedate = "'".$zupload->hidedate."'";
-				}
-				if ($zupload->hide == 1) {
-					$zhide = "1";
-				}
-				/* insert new record into uploads table */
-				$wtwhandlers->query("
-					insert into ".wtw_tableprefix."uploads 
-					   (uploadid,
-						pastuploadid,
-						originalid,
-						websizeid,
-						thumbnailid,
-						userid,
-						filetitle,
-						filename,
-						fileextension,
-						filesize,
-						filetype,
-						filepath,
-						filedata,
-						imagewidth,
-						imageheight,
-						stock,
-						hidedate,
-						hideuserid,
-						hide,
-						createdate,
-						createuserid,
-						updatedate,
-						updateuserid)
-					values
-					   ('".$znewuploadid."',
-						'".$zupload->uploadid."',
-						'".$zneworiginalid."',
-						'".$znewwebsizeid."',
-						'".$znewthumbnailid."',
-						'".$znewuserid."',
-						'".$zupload->filetitle."',
-						'".$zupload->filename."',
-						'".$zupload->fileextension."',
-						".$zupload->filesize.",
-						'".$zupload->filetype."',
-						'".$znewfileurl."',
-						'".$zupload->filedata."',
-						".$zupload->imagewidth.",
-						".$zupload->imageheight.",
-						0,
-						".$zhidedate.",
-						'".$zupload->hideuserid."',
-						".$zhide.",
-						'".$zupload->createdate."',
-						'".$znewcreateuserid."',
-						now(),
-						'".$znewupdateuserid."');");
-				
-				/* update foreign keys as needed */
-				if (!empty($zneworiginalid)) {
-					$wtwhandlers->query("
-						update ".wtw_tableprefix."uploads 
-						set originalid='".$zneworiginalid."'
-						where (pastuploadid='".$zupload->originalid."'
-								or (websizeid='".$znewwebsizeid."' and not '".$znewwebsizeid."'='')
-								or (thumbnailid='".$znewthumbnailid."' and not '".$znewthumbnailid."'=''))
-							and originalid = '';");
-				}
-				if (!empty($znewwebsizeid)) {
-					$wtwhandlers->query("
-						update ".wtw_tableprefix."uploads 
-						set websizeid='".$znewwebsizeid."'
-						where (pastuploadid = '".$zupload->websizeid."'
-								or (originalid='".$zneworiginalid."' and not '".$zneworiginalid."'='')
-								or (thumbnailid='".$znewthumbnailid."' and not '".$znewthumbnailid."'=''))
-							and websizeid = '';");
-				}
-				if (!empty($znewthumbnailid)) {
-					$wtwhandlers->query("
-						update ".wtw_tableprefix."uploads 
-						set thumbnailid='".$znewthumbnailid."'
-						where (pastuploadid='".$zupload->thumbnailid."'
-								or (originalid='".$zneworiginalid."' and not '".$zneworiginalid."'='')
-								or (websizeid='".$zneworiginalid."' and not '".$zneworiginalid."'=''))
-							and thumbnailid = '';");
-				}
-			}
-
-	
-			/* write main web record */
-			/* get new foreign keys */
-			$znewsnapshotid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zrequest->snapshotid);
-			$znewuserid = $wtwhandlers->getUserIDfromPastID($zrequest->userid);
-			$znewshareuserid = $wtwhandlers->getUserIDfromPastID($zrequest->shareuserid);
-			$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zrequest->createuserid);
-			$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zrequest->updateuserid);
-			
-			switch($zwebtype) {
-				case "community":
-					/* get new foreign keys */
-					$znewtextureid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zrequest->textureid);
-					$znewskydomeid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zrequest->skydomeid);
-					
-					/* insert new record into communities table */
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."communities 
-						   (communityid,
-							pastcommunityid,
-							downloadparentwebid,
-							downloadparentwebtype,
-							communityname,
-							userid,
-							positionx,
-							positiony,
-							positionz,
-							scalingx,
-							scalingy,
-							scalingz,
-							rotationx,
-							rotationy,
-							rotationz,
-							gravity,
-							groundpositiony,
-							waterpositiony,
-							textureid,
-							skydomeid,
-							skyinclination,
-							skyluminance,
-							skyazimuth,
-							skyrayleigh,
-							skyturbidity,
-							skymiedirectionalg,
-							skymiecoefficient,
-							templatename,
-							tags,
-							description,
-							snapshotid,
-							shareuserid,
-							alttag,
-							buildingpositionx,
-							buildingpositiony,
-							buildingpositionz,
-							buildingrotationy,
-							createdate,
-							createuserid,
-							updatedate,
-							updateuserid)
-						values
-						   ('".$znewcommunityid."',
-							'".$zrequest->communityid."',
-							'".$zdownloadparentwebid."',
-							'".$zdownloadparentwebtype."',
-							'".$zrequest->communityname."',
-							'".$zuserid."',
-							".$zrequest->positionx.",
-							".$zrequest->positiony.",
-							".$zrequest->positionz.",
-							".$zrequest->scalingx.",
-							".$zrequest->scalingy.",
-							".$zrequest->scalingz.",
-							".$zrequest->rotationx.",
-							".$zrequest->rotationy.",
-							".$zrequest->rotationz.",
-							".$zrequest->gravity.",
-							".$zrequest->groundpositiony.",
-							".$zrequest->waterpositiony.",
-							'".$znewtextureid."',
-							'".$znewskydomeid."',
-							".$zrequest->skyinclination.",
-							".$zrequest->skyluminance.",
-							".$zrequest->skyazimuth.",
-							".$zrequest->skyrayleigh.",
-							".$zrequest->skyturbidity.",
-							".$zrequest->skymiedirectionalg.",
-							".$zrequest->skymiecoefficient.",
-							'".$zrequest->templatename."',
-							'".$zrequest->tags."',
-							'".$zrequest->description."',
-							'".$znewsnapshotid."',
-							'".$znewshareuserid."',
-							'".$zrequest->alttag."',
-							".$zrequest->buildingpositionx.",
-							".$zrequest->buildingpositiony.",
-							".$zrequest->buildingpositionz.",
-							".$zrequest->buildingrotationy.",
-							now(),
-							'".$zuserid."',
-							now(),
-							'".$zuserid."');");
-							
-					$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."userauthorizations
-							(userauthorizationid,
-							 userid,
-							 communityid,
-							 useraccess,
-							 createdate,
-							 createuserid,
-							 updatedate,
-							 updateuserid)
-						values
-							('".$zuserauthorizationid."',
-							 '".$wtwhandlers->userid."',
-							 '".$znewcommunityid."',
-							 'admin',
-							 now(),
-							 '".$wtwhandlers->userid."',
-							 now(),
-							 '".$wtwhandlers->userid."');");
-					break;
-				case "building":
-					/* insert new record into buildings table */
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."buildings 
-						   (buildingid,
-							pastbuildingid,
-							downloadparentwebid,
-							downloadparentwebtype,
-							buildingname,
-							userid,
-							positionx,
-							positiony,
-							positionz,
-							scalingx,
-							scalingy,
-							scalingz,
-							rotationx,
-							rotationy,
-							rotationz,
-							gravity,
-							templatename,
-							tags,
-							description,
-							snapshotid,
-							shareuserid,
-							alttag,
-							createdate,
-							createuserid,
-							updatedate,
-							updateuserid)
-						values
-						   ('".$znewbuildingid."',
-							'".$zrequest->buildingid."',
-							'".$zdownloadparentwebid."',
-							'".$zdownloadparentwebtype."',
-							'".$zrequest->buildingname."',
-							'".$zuserid."',
-							".$zrequest->positionx.",
-							".$zrequest->positiony.",
-							".$zrequest->positionz.",
-							".$zrequest->scalingx.",
-							".$zrequest->scalingy.",
-							".$zrequest->scalingz.",
-							".$zrequest->rotationx.",
-							".$zrequest->rotationy.",
-							".$zrequest->rotationz.",
-							".$zrequest->gravity.",
-							'".$zrequest->templatename."',
-							'".$zrequest->tags."',
-							'".$zrequest->description."',
-							'".$znewsnapshotid."',
-							'".$znewshareuserid."',
-							'".$zrequest->alttag."',
-							now(),
-							'".$zuserid."',
-							now(),
-							'".$zuserid."');");
-					$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."userauthorizations
-							(userauthorizationid,
-							 userid,
-							 buildingid,
-							 useraccess,
-							 createdate,
-							 createuserid,
-							 updatedate,
-							 updateuserid)
-						values
-							('".$zuserauthorizationid."',
-							 '".$wtwhandlers->userid."',
-							 '".$znewbuildingid."',
-							 'admin',
-							 now(),
-							 '".$wtwhandlers->userid."',
-							 now(),
-							 '".$wtwhandlers->userid."');");
-					break;
-				case "thing":
-					/* insert new record into things table */
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."things 
-						   (thingid,
-							pastthingid,
-							downloadparentwebid,
-							downloadparentwebtype,
-							thingname,
-							userid,
-							positionx,
-							positiony,
-							positionz,
-							scalingx,
-							scalingy,
-							scalingz,
-							rotationx,
-							rotationy,
-							rotationz,
-							gravity,
-							templatename,
-							tags,
-							description,
-							snapshotid,
-							shareuserid,
-							alttag,
-							createdate,
-							createuserid,
-							updatedate,
-							updateuserid)
-						values
-						   ('".$znewthingid."',
-							'".$zrequest->thingid."',
-							'".$zdownloadparentwebid."',
-							'".$zdownloadparentwebtype."',
-							'".$zrequest->thingname."',
-							'".$zuserid."',
-							".$zrequest->positionx.",
-							".$zrequest->positiony.",
-							".$zrequest->positionz.",
-							".$zrequest->scalingx.",
-							".$zrequest->scalingy.",
-							".$zrequest->scalingz.",
-							".$zrequest->rotationx.",
-							".$zrequest->rotationy.",
-							".$zrequest->rotationz.",
-							".$zrequest->gravity.",
-							'".$zrequest->templatename."',
-							'".$zrequest->tags."',
-							'".$zrequest->description."',
-							'".$znewsnapshotid."',
-							'".$znewshareuserid."',
-							'".$zrequest->alttag."',
-							now(),
-							'".$zuserid."',
-							now(),
-							'".$zuserid."');");
-					$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."userauthorizations
-							(userauthorizationid,
-							 userid,
-							 thingid,
-							 useraccess,
-							 createdate,
-							 createuserid,
-							 updatedate,
-							 updateuserid)
-						values
-							('".$zuserauthorizationid."',
-							 '".$wtwhandlers->userid."',
-							 '".$znewthingid."',
-							 'admin',
-							 now(),
-							 '".$wtwhandlers->userid."',
-							 now(),
-							 '".$wtwhandlers->userid."');");
-					break;
-			}	
-			
-
-			/* process all avatar animations */
-			foreach ($zrequest->avataranimations as $zavataranimation) {
-			
-				/* check if the avataranimationid is already in use */
-				$znewavataranimationid = $wtwhandlers->getNewKey('avataranimations', "avataranimationid", $zavataranimation->avataranimationid);
-				
-				$znewanimationicon = '';
-				
-				$znewobjectfolder = $znewfolder.'/avataranimations';
-				if (!file_exists($znewobjectfolder)) {
-					mkdir($znewobjectfolder, 0755, true);
-					chmod($znewobjectfolder, 0755);
-				}
-				if (!empty($zavataranimation->objectfolder) && !empty($zavataranimation->objectfile)) {
-					$znewobjectfolder = $znewfolder.'/avataranimations/'.str_replace(".babylon","",$zavataranimation->objectfile);
-					if (!file_exists($znewobjectfolder)) {
-						mkdir($znewobjectfolder, 0755, true);
-						chmod($znewobjectfolder, 0755);
-					}
-					$zfileext = strtolower(pathinfo($znewobjectfolder."/".$zavataranimation->objectfile, PATHINFO_EXTENSION));
-					if ($zfileext == 'babylon') {
-						try {
-							file_put_contents($znewobjectfolder."/".$zavataranimation->objectfile, fopen($zavataranimation->objectfolder.$zavataranimation->objectfile, 'r'));
-							chmod($znewobjectfolder."/".$zavataranimation->objectfile, 0755);
-						} catch (Exception $e) {
-							$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-babylon=".$e->getMessage());
-						}	
-						try {
-							file_put_contents($znewobjectfolder."/".$zavataranimation->objectfile.".manifest", fopen($zavataranimation->objectfolder.$zavataranimation->objectfile.".manifest", 'r'));
-							chmod($znewobjectfolder."/".$zavataranimation->objectfile.".manifest", 0755);
-						} catch (Exception $e) {
-							$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-manifest=".$e->getMessage());
-						}	
-						
-						if (!empty($zavataranimation->animationicon)) {
-							try {
-								$ziconfilename = basename($zavataranimation->animationicon);  
-								$znewanimationicon = $znewobjectfolder."/".$ziconfilename;
-								file_put_contents($znewanimationicon, fopen($zavataranimation->animationicon, 'r'));
-								chmod($znewanimationicon, 0755);
-							} catch (Exception $e) {
-								$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-icon=".$e->getMessage());
-							}	
-						}
-					}
-				}
-				
-				/* get new foreign keys */
-				$znewsoundid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zavataranimation->soundid);
-				
-				$znewuserid = $wtwhandlers->getUserIDfromPastID($zavataranimation->userid);
-				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zavataranimation->createuserid);
-				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zavataranimation->updateuserid);
-				
-				/* insert new record into avataranimations table */
-				$wtwhandlers->query("
-					insert into ".wtw_tableprefix."avataranimations 
-					   (avataranimationid,
-						pastavataranimationid,
-						userid,
-						loadpriority,
-						animationevent,
-						animationfriendlyname,
-						setdefault,
-						animationicon,
-						objectfolder,
-						objectfile,
-						startframe,
-						endframe,
-						animationloop,
-						speedratio,
-						soundid,
-						soundmaxdistance,
-						createdate,
-						createuserid,
-						updatedate,
-						updateuserid)
-					values
-					   ('".$znewavataranimationid."',
-						'".$zavataranimation->avataranimationid."',
-						'".$znewuserid."',
-						".$zavataranimation->loadpriority.",
-						'".$zavataranimation->animationevent."',
-						'".$zavataranimation->animationfriendlyname."',
-						".$zavataranimation->setdefault.",
-						'".$znewanimationicon."',
-						'".$znewobjectfolder."',
-						'".$zavataranimation->objectfile."',
-						".$zavataranimation->startframe.",
-						".$zavataranimation->endframe.",
-						".$zavataranimation->animationloop.",
-						".$zavataranimation->speedratio.",
-						'".$znewsoundid."',
-						'".$zavataranimation->soundmaxdistance."',
-						'".$zavataranimation->createdate."',
-						'".$znewcreateuserid."',
-						now(),
-						'".$znewupdateuserid."');");
-			}			
-			
-
-			/* process all action zones */
-			foreach ($zrequest->actionzones as $zactionzone) {
-				/* check if the actionzoneid is already in use */
-				$znewactionzoneid = $wtwhandlers->getNewKey('actionzones', "actionzoneid", $zactionzone->actionzoneid);
-				
-				/* get new foreign keys */
-				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zactionzone->createuserid);
-				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zactionzone->updateuserid);
-				
-				/* insert new record into actionzones table */
-				$wtwhandlers->query("
-					insert into ".wtw_tableprefix."actionzones 
-					   (actionzoneid,
-						pastactionzoneid,
-						communityid,
-						buildingid,
-						thingid,
-						attachmoldid,
-						loadactionzoneid,
-						parentactionzoneid,
-						actionzonename,
-						actionzonetype,
-						actionzoneshape,
-						movementtype,
-						movementdistance,
-						positionx,
-						positiony,
-						positionz,
-						scalingx,
-						scalingy,
-						scalingz,
-						rotationx,
-						rotationy,
-						rotationz,
-						axispositionx,
-						axispositiony,
-						axispositionz,
-						axisrotationx,
-						axisrotationy,
-						axisrotationz,
-						rotateaxis,
-						rotatedegrees,
-						rotatedirection,
-						rotatespeed,
-						jsfunction,
-						jsparameters,
-						createdate,
-						createuserid,
-						updatedate,
-						updateuserid)
-					values
-					   ('".$znewactionzoneid."',
-						'".$zactionzone->actionzoneid."',
-						'".$znewcommunityid."',
-						'".$znewbuildingid."',
-						'".$znewthingid."',
-						'".$zactionzone->attachmoldid."',
-						'".$zactionzone->loadactionzoneid."',
-						'".$zactionzone->parentactionzoneid."',
-						'".$zactionzone->actionzonename."',
-						'".$zactionzone->actionzonetype."',
-						'".$zactionzone->actionzoneshape."',
-						'".$zactionzone->movementtype."',
-						".$zactionzone->movementdistance.",				
-						".$zactionzone->positionx.",
-						".$zactionzone->positiony.",
-						".$zactionzone->positionz.",
-						".$zactionzone->scalingx.",
-						".$zactionzone->scalingy.",
-						".$zactionzone->scalingz.",
-						".$zactionzone->rotationx.",
-						".$zactionzone->rotationy.",
-						".$zactionzone->rotationz.",
-						".$zactionzone->axispositionx.",
-						".$zactionzone->axispositiony.",
-						".$zactionzone->axispositionz.",
-						".$zactionzone->axisrotationx.",
-						".$zactionzone->axisrotationy.",
-						".$zactionzone->axisrotationz.",
-						'".$zactionzone->rotateaxis."',
-						".$zactionzone->rotatedegrees.",
-						".$zactionzone->rotatedirection.",
-						".$zactionzone->rotatespeed.",
-						'".$zactionzone->jsfunction."',
-						'".$zactionzone->jsparameters."',
-						'".$zactionzone->createdate."',
-						'".$znewcreateuserid."',
-						now(),
-						'".$znewupdateuserid."');");
-					
-				foreach ($zactionzone->animations as $zazanimation) {
-					/* check if the actionzoneanimationid is already in use */
-					$znewactionzoneanimationid = $wtwhandlers->getNewKey('actionzoneanimations', "actionzoneanimationid", $zazanimation->actionzoneanimationid);
-					
-					/* get new foreign keys */
-					$znewavataranimationid = $wtwhandlers->getIDByPastID('avataranimations', 'avataranimationid', 'pastavataranimationid', $zazanimation->avataranimationid);
-					
-					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zazanimation->createuserid);
-					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zazanimation->updateuserid);
-					
-					/* insert new record into actionzoneanimations table */
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."actionzoneanimations 
-						   (actionzoneanimationid,
-						    pastactionzoneanimationid,
-							actionzoneid,
-							communityid,
-							buildingid,
-							thingid,
-							avataranimationid,
-							createdate,
-							createuserid,
-							updatedate,
-							updateuserid)
-						values
-						   ('".$znewactionzoneanimationid."',
-							'".$zazanimation->actionzoneanimationid."',
-							'".$znewactionzoneid."',
-							'".$znewcommunityid."',
-							'".$znewbuildingid."',
-							'".$znewthingid."',
-							'".$znewavataranimationid."',
-							'".$zazanimation->createdate."',
-							'".$znewcreateuserid."',
-							now(),
-							'".$znewupdateuserid."');");	
-					
-				}
-			}
-
-			/* process action zone foreign action zones */
-			$zresults = $wtwhandlers->query("
-				select *  from ".wtw_tableprefix."actionzones 
-				where communityid='".$znewcommunityid."'
-					and buildingid='".$znewbuildingid."'
-					and thingid='".$znewthingid."';");
-			foreach ($zresults as $zrow) {
-				/* get new foreign keys */
-				$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zrow["loadactionzoneid"]);
-				$znewparentactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zrow["parentactionzoneid"]);
-
-				$wtwhandlers->query("
-					update ".wtw_tableprefix."actionzones
-					set loadactionzoneid='".$znewloadactionzoneid."',
-						parentactionzoneid='".$znewparentactionzoneid."'
-					where actionzoneid='".$zrow["actionzoneid"]."'
+					where CONVERT(from_base64(usertoken) USING utf8)='".$zusertoken."'
 					limit 1;");
-			}
-
-
-			/* process all scripts */
-			foreach ($zrequest->scripts as $zscript) {
-			
-				/* check if the scriptid is already in use */
-				$znewscriptid = $wtwhandlers->getNewKey('scripts', "scriptid", $zscript->scriptid);
-				
-				$znewscriptfolder = $znewfolder.'/scripts';
-				if (!file_exists($znewscriptfolder)) {
-					mkdir($znewscriptfolder, 0755, true);
-					chmod($znewscriptfolder, 0755);
+				foreach ($zresults as $zrow) {
+					$zuserid = $zrow["userid"];
 				}
-				if (!empty($zscript->scriptpath)) {
-					$zfileext = strtolower(pathinfo($znewscriptfolder."/".$zscript->scriptfilename, PATHINFO_EXTENSION));
-					if ($zfileext == 'js') {
+			}
+			
+			/* only add download if the userid exists */
+			if (!empty($zuserid) && isset($zuserid)) {
+				
+				/* $zwebtypes is the plural version of webtype (used in table names) */
+				switch($zwebtype) {
+					case "community":
+						$zwebtypes = "communities";
+						break;
+					case "building":
+						$zwebtypes = "buildings";
+						break;
+					case "thing":
+						$zwebtypes = "things";
+						break;
+				}
+				$znewwebid = $wtwhandlers->getNewKey($zwebtypes, $zwebtype."id", $znewwebid);
+				switch($zwebtype) {
+					case "community":
+						$znewcommunityid = $znewwebid;
+						break;
+					case "building":
+						$znewbuildingid = $znewwebid;
+						break;
+					case "thing":
+						$znewthingid = $znewwebid;
+						break;
+				}
+				
+				/* fetch the 3D Web data structure for the repository (all of the associated records) */
+				$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zwebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
+
+				if (!empty($zurl)) {
+					$zrequest = file_get_contents($zurl);
+				}
+				if (!empty($zrequest) && isset($zrequest)) {
+					$zrequest = json_decode($zrequest);
+				}
+				
+				/* determine the new local path for uploaded files associated with this download */
+				$znewfolder = $wtwhandlers->contentpath.'/uploads/'.$zwebtypes.'/'.$znewwebid;
+				$znewurl = $wtwhandlers->contenturl.'/uploads/'.$zwebtypes.'/'.$znewwebid;
+				if (!file_exists($znewfolder)) {
+					mkdir($znewfolder, 0755, true);
+					chmod($znewfolder, 0755);
+				}
+				
+				/* process all users associated to this download (for your reference) */
+				foreach ($zrequest->users as $zuser) {
+					/* check if the userid is already in use */
+					$znewuserid = $wtwhandlers->getNewKey('users', 'userid', $zuser->userid);
+					$znewuploadpathid = $wtwhandlers->getNewKey('users', "uploadpathid", $zuser->uploadpathid);
+					$zuserpassword = $wtwhandlers->getRandomString(16,1);
+					$zresults = $wtwhandlers->query("
+						select userid
+						from ".wtw_tableprefix."users 
+						where userid='".$znewuserid."'
+						limit 1;
+						");
+					if (count($zresults) == 0) {
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."users 
+							   (userid,
+								pastuserid,
+								displayname,
+								email,
+								uploadpathid,
+								userpassword,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$znewuserid."',
+								'".$zuser->userid."',
+								'".addslashes($zuser->displayname)."',
+								'".$zuser->email."',
+								'".$znewuploadpathid."',
+								'".$zuserpassword."',
+								now(),
+								'".$znewuserid."',
+								now(),
+								'".$znewuserid."');");
+					}
+				}
+
+
+				/* process all uploads related to this download */
+				foreach ($zrequest->uploads as $zupload) {
+					/* assign a new uploadid if it is already in use */
+					$znewuploadid = $wtwhandlers->getNewKey('uploads', "uploadid", $zupload->uploadid);
+
+					$zneworiginalid = '';
+					$znewwebsizeid = '';
+					$znewthumbnailid = '';
+					$znewfileurl = '';
+					
+					/* each image has 3 associated records for original, websize, and thumbnail */
+					if ($zupload->uploadid == $zupload->originalid) {
+						$zneworiginalid = $znewuploadid;
+					} else if ($zupload->uploadid == $zupload->websizeid) {
+						$znewwebsizeid = $znewuploadid;
+					} else if ($zupload->uploadid == $zupload->thumbnailid) {
+						$znewthumbnailid = $znewuploadid;
+					}
+					
+					/* each image gets its own new ID if the initial one is already in use */
+					if (empty($zneworiginalid)) {
+						$zneworiginalid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zupload->originalid);
+					}
+					if (empty($znewwebsizeid)) {
+						$znewwebsizeid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zupload->websizeid);
+					}
+					if (empty($znewthumbnailid)) {
+						$znewthumbnailid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zupload->thumbnailid);
+					}
+					
+					$znewuploadsfolder = $znewfolder.'/uploads';
+					$znewuploadsurl = $znewurl.'/uploads';
+					if (!file_exists($znewuploadsfolder)) {
+						mkdir($znewuploadsfolder, 0755, true);
+						chmod($znewuploadsfolder, 0755);
+					}
+					if (!empty($zupload->filepath)) {
 						try {
-							file_put_contents($znewscriptfolder."/".$zscript->scriptfilename, fopen($zscript->scriptpath, 'r'));
-							chmod($znewscriptfolder."/".$zscript->scriptfilename, 0755);
+							/* check file types for valid downloads */
+							$zfileext = strtolower(pathinfo($zupload->filepath, PATHINFO_EXTENSION));
+							if ($zfileext == 'babylon' || $zfileext == 'manifest' || $zfileext == 'blend' || $zfileext == 'obj' || $zfileext == 'glb' || $zfileext == 'glbt' || $zfileext == 'fbx' || $zfileext == 'dae' || $zfileext == 'stl' || $zfileext == 'jpg' || $zfileext == 'jpeg' || $zfileext == 'bmp' || $zfileext == 'tif' || $zfileext == 'tiff' || $zfileext == 'png' || $zfileext == 'gif' || $zfileext == 'webp' || $zfileext == 'wav' || $zfileext == 'mp3' || $zfileext == 'mp4' || $zfileext == 'wma' || $zfileext == 'aac' || $zfileext == 'flac' || $zfileext == 'webm' || $zfileext == 'ogg' || $zfileext == 'mpg' || $zfileext == 'avi' || $zfileext == 'mov' || $zfileext == 'wmv' || $zfileext == 'flv' || $zfileext == 'swf' || $zfileext == 'mtl' || $zfileext == '3ds' || $zfileext == 'c4d' || $zfileext == 'txt' || $zfileext == 'log' || $zfileext == 'pdf') {
+								/* download each file */
+								file_put_contents($znewuploadsfolder.'/'.$zupload->filename, fopen($zupload->filepath, 'r'));
+								chmod($znewuploadsfolder.'/'.$zupload->filename, 0755);
+								$znewfileurl = $znewuploadsurl.'/'.$zupload->filename;
+							}
 						} catch (Exception $e) {
-							$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-js=".$e->getMessage());
+							$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile=".$e->getMessage());
 						}	
 					}
-				}
-				
-				/* get new foreign keys */
-				$znewactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zscript->actionzoneid);
-				
-				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zscript->createuserid);
-				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zscript->updateuserid);
-				
-				/* insert new record into scripts table */
-				$wtwhandlers->query("
-					insert into ".wtw_tableprefix."scripts 
-					   (scriptid,
-					    pastscriptid,
-						actionzoneid,
-						webtype,
-						scriptname,
-						scriptpath,
-						createdate,
-						createuserid,
-						updatedate,
-						updateuserid)
-					values
-					   ('".$znewscriptid."',
-						'".$zscript->scriptid."',
-						'".$znewactionzoneid."',
-						'".$zscript->webtype."',
-						'".$zscript->scriptname."',
-						'".$znewscriptfolder."/".$zscript->scriptfilename."',
-						'".$zscript->createdate."',
-						'".$znewcreateuserid."',
-						now(),
-						'".$znewupdateuserid."');");		
-			}
-
-
-			/* process parent connecting grids */
-			foreach ($zrequest->connectinggrids as $zconnectinggrid) {
-				/* check if the connectinggridid is already in use */
-				$znewconnectinggridid = $wtwhandlers->getNewKey('connectinggrids', "connectinggridid", $zconnectinggrid->connectinggridid);
-				
-				/* get new foreign keys */
-				$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->loadactionzoneid);
-				$znewaltloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->altloadactionzoneid);
-				$znewunloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->unloadactionzoneid);
-				$znewattachactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->attachactionzoneid);
-				
-				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->createuserid);
-				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->updateuserid);
-				
-				/* insert new record into connectinggrids table */
-				$wtwhandlers->query("
-					insert into ".wtw_tableprefix."connectinggrids 
-					   (connectinggridid,
-						pastconnectinggridid,
-						parentwebid,
-						parentwebtype,
-						childwebid,
-						childwebtype,
-						positionx,
-						positiony,
-						positionz,
-						scalingx,
-						scalingy,
-						scalingz,
-						rotationx,
-						rotationy,
-						rotationz,
-						loadactionzoneid,
-						altloadactionzoneid,
-						unloadactionzoneid,
-						attachactionzoneid,
-						alttag,
-						createdate,
-						createuserid,
-						updatedate,
-						updateuserid)
-					values
-					   ('".$znewconnectinggridid."',
-						'".$zconnectinggrid->connectinggridid."',
-						'',
-						'".$zconnectinggrid->parentwebtype."',
-						'".$znewwebid."',
-						'".$zconnectinggrid->childwebtype."',
-						".$zconnectinggrid->positionx.",
-						".$zconnectinggrid->positiony.",
-						".$zconnectinggrid->positionz.",
-						".$zconnectinggrid->scalingx.",
-						".$zconnectinggrid->scalingy.",
-						".$zconnectinggrid->scalingz.",
-						".$zconnectinggrid->rotationx.",
-						".$zconnectinggrid->rotationy.",
-						".$zconnectinggrid->rotationz.",
-						'".$znewloadactionzoneid."',
-						'".$znewaltloadactionzoneid."',
-						'".$znewunloadactionzoneid."',
-						'".$znewattachactionzoneid."',
-						'".$zconnectinggrid->alttag."',
-						'".$zconnectinggrid->createdate."',
-						'".$znewcreateuserid."',
-						now(),
-						'".$znewupdateuserid."');");
-			}
-
-
-			/* process uploaded objects */
-			foreach ($zrequest->uploadobjects as $zuploadobject) {
-				$znewuploadobjectid = $wtwhandlers->getNewKey('uploadobjects', "uploadobjectid", $zuploadobject->uploadobjectid);
-
-				if (!empty($zuploadobject->uploadobjectid) && isset($zuploadobject->uploadobjectid)) {
-					
-					$znewobjectfolder = $znewfolder.'/objects';
-					if (!file_exists($znewobjectfolder)) {
-						mkdir($znewobjectfolder, 0755, true);
-						chmod($znewobjectfolder, 0755);
-					}
-					$znewobjectfolder = $znewfolder.'/objects/'.str_replace(".babylon","",$zuploadobject->objectfile);
-					if (!file_exists($znewobjectfolder)) {
-						mkdir($znewobjectfolder, 0755, true);
-						chmod($znewobjectfolder, 0755);
-					}
-					$znewobjecturl = $znewurl.'/objects/'.str_replace(".babylon","",$zuploadobject->objectfile)."/";
 					
 					/* get new foreign keys */
-					$znewuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->userid);
-					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->createuserid);
-					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->updateuserid);
+					/* lookup foreign key values to new assigned values using "past" field prefix */
+					$znewuserid = $wtwhandlers->getUserIDfromPastID($zupload->userid);
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zupload->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zupload->updateuserid);
 					
-					/* insert new record into uploadobjects table */
+					$zhidedate = "null";
+					$zhide = "0";
+					$zcheckeddate = "null";
+					if (isset($zupload->hidedate)) {
+						$zhidedate = "'".$zupload->hidedate."'";
+					}
+					if ($zupload->hide == 1) {
+						$zhide = "1";
+					}
+					/* insert new record into uploads table */
 					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."uploadobjects 
-						   (uploadobjectid,
-							pastuploadobjectid,
+						insert into ".wtw_tableprefix."uploads 
+						   (uploadid,
+							pastuploadid,
+							originalid,
+							websizeid,
+							thumbnailid,
 							userid,
-							objectfolder,
-							objectfile,
+							filetitle,
+							filename,
+							fileextension,
+							filesize,
+							filetype,
+							filepath,
+							filedata,
+							imagewidth,
+							imageheight,
 							stock,
+							hidedate,
+							hideuserid,
+							hide,
 							createdate,
 							createuserid,
 							updatedate,
 							updateuserid)
 						values
-						   ('".$znewuploadobjectid."',
-							'".$zuploadobject->uploadobjectid."',
-							'".$zuserid."',
-							'".$znewobjecturl."',
-							'".$zuploadobject->objectfile."',
-							".$zuploadobject->stock.",
-							'".$zuploadobject->createdate."',
+						   ('".$znewuploadid."',
+							'".$zupload->uploadid."',
+							'".$zneworiginalid."',
+							'".$znewwebsizeid."',
+							'".$znewthumbnailid."',
+							'".$znewuserid."',
+							'".$zupload->filetitle."',
+							'".$zupload->filename."',
+							'".$zupload->fileextension."',
+							".$zupload->filesize.",
+							'".$zupload->filetype."',
+							'".$znewfileurl."',
+							'".$zupload->filedata."',
+							".$zupload->imagewidth.",
+							".$zupload->imageheight.",
+							0,
+							".$zhidedate.",
+							'".$zupload->hideuserid."',
+							".$zhide.",
+							'".$zupload->createdate."',
 							'".$znewcreateuserid."',
 							now(),
 							'".$znewupdateuserid."');");
 					
-					foreach($zuploadobject->objectfiles as $zfile) {
-						try {
-							$zfileext = strtolower(pathinfo($zfile->filepath, PATHINFO_EXTENSION));
-							if ($zfileext == 'babylon' || $zfileext == 'manifest' || $zfileext == 'blend' || $zfileext == 'obj' || $zfileext == 'glb' || $zfileext == 'glbt' || $zfileext == 'fbx' || $zfileext == 'dae' || $zfileext == 'stl' || $zfileext == 'jpg' || $zfileext == 'jpeg' || $zfileext == 'bmp' || $zfileext == 'tif' || $zfileext == 'tiff' || $zfileext == 'png' || $zfileext == 'gif' || $zfileext == 'webp' || $zfileext == 'wav' || $zfileext == 'mp3' || $zfileext == 'mp4' || $zfileext == 'wma' || $zfileext == 'aac' || $zfileext == 'flac' || $zfileext == 'webm' || $zfileext == 'ogg' || $zfileext == 'mpg' || $zfileext == 'avi' || $zfileext == 'mov' || $zfileext == 'wmv' || $zfileext == 'flv' || $zfileext == 'swf' || $zfileext == 'mtl' || $zfileext == '3ds' || $zfileext == 'c4d' || $zfileext == 'txt' || $zfileext == 'log' || $zfileext == 'pdf') {
-								file_put_contents($znewobjectfolder.'/'.$zfile->filename, fopen($zfile->filepath, 'r'));
-								chmod($znewobjectfolder.'/'.$zfile->filename, 0755);
-							}
-						} catch (Exception $e) {
-							$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfiles=".$e->getMessage());
-						}	
-					}
-					
-					
-					/* process upload object animations */
-					foreach ($zuploadobject->uploadobjectanimations as $zuploadobjectanimation) {
-					
-						/* check if the upload object animation id (objectanimationid) is already in use */
-						$znewobjectanimationid = $wtwhandlers->getNewKey('uploadobjectanimations', "objectanimationid", $zuploadobjectanimation->objectanimationid);
-						
-						/* get new foreign keys */
-						$znewsoundid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zuploadobjectanimation->soundid);
-						
-						$znewuserid = $wtwhandlers->getUserIDfromPastID($zuploadobjectanimation->userid);
-						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobjectanimation->createuserid);
-						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobjectanimation->updateuserid);
-						
-						/* insert new record into uploadobjectanimations table */
+					/* update foreign keys as needed */
+					if (!empty($zneworiginalid)) {
 						$wtwhandlers->query("
-							insert into ".wtw_tableprefix."uploadobjectanimations 
-							   (objectanimationid,
-							    pastobjectanimationid,
-								uploadobjectid,
-								userid,
-								animationname,
-								moldnamepart,
-								moldevent,
-								startframe,
-								endframe,
-								animationloop,
-								speedratio,
-								animationendscript,
-								animationendparameters,
-								stopcurrentanimations,
-								additionalscript,
-								additionalparameters,
-								soundid,
-								soundmaxdistance,
-								createdate,
-								createuserid,
-								updatedate,
-								updateuserid)
-							values
-							   ('".$znewobjectanimationid."',
-								'".$zuploadobjectanimation->objectanimationid."',
-								'".$znewuploadobjectid."',
-								'".$znewuserid."',
-								'".$zuploadobjectanimation->animationname."',
-								'".$zuploadobjectanimation->moldnamepart."',
-								'".$zuploadobjectanimation->moldevent."',
-								".$zuploadobjectanimation->startframe.",
-								".$zuploadobjectanimation->endframe.",
-								".$zuploadobjectanimation->animationloop.",
-								".$zuploadobjectanimation->speedratio.",
-								'".$zuploadobjectanimation->animationendscript."',
-								'".$zuploadobjectanimation->animationendparameters."',
-								".$zuploadobjectanimation->stopcurrentanimations.",
-								'".$zuploadobjectanimation->additionalscript."',
-								'".$zuploadobjectanimation->additionalparameters."',
-								'".$znewsoundid."',
-								".$zuploadobjectanimation->soundmaxdistance.",
-								'".$zuploadobjectanimation->createdate."',
-								'".$znewcreateuserid."',
-								now(),
-								'".$znewupdateuserid."');");
+							update ".wtw_tableprefix."uploads 
+							set originalid='".$zneworiginalid."'
+							where (pastuploadid='".$zupload->originalid."'
+									or (websizeid='".$znewwebsizeid."' and not '".$znewwebsizeid."'='')
+									or (thumbnailid='".$znewthumbnailid."' and not '".$znewthumbnailid."'=''))
+								and originalid = '';");
+					}
+					if (!empty($znewwebsizeid)) {
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."uploads 
+							set websizeid='".$znewwebsizeid."'
+							where (pastuploadid = '".$zupload->websizeid."'
+									or (originalid='".$zneworiginalid."' and not '".$zneworiginalid."'='')
+									or (thumbnailid='".$znewthumbnailid."' and not '".$znewthumbnailid."'=''))
+								and websizeid = '';");
+					}
+					if (!empty($znewthumbnailid)) {
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."uploads 
+							set thumbnailid='".$znewthumbnailid."'
+							where (pastuploadid='".$zupload->thumbnailid."'
+									or (originalid='".$zneworiginalid."' and not '".$zneworiginalid."'='')
+									or (websizeid='".$zneworiginalid."' and not '".$zneworiginalid."'=''))
+								and thumbnailid = '';");
 					}
 				}
-			}			
 
-
-			/* process all molds */
-			foreach ($zrequest->molds as $zmold) {
-				/* check if the moldid is already in use */
-				$znewmoldid = '';
-				$zsql = '';
-				$zsqlvalues = '';
+		
+				/* write main web record */
+				/* get new foreign keys */
+				$znewsnapshotid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zrequest->snapshotid);
+				$znewuserid = $wtwhandlers->getUserIDfromPastID($zrequest->userid);
+				$znewshareuserid = $wtwhandlers->getUserIDfromPastID($zrequest->shareuserid);
+				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zrequest->createuserid);
+				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zrequest->updateuserid);
+				
 				switch($zwebtype) {
 					case "community":
-						$znewmoldid = $wtwhandlers->getNewKey($zwebtype.'molds', $zwebtype.'moldid', $zmold->communitymoldid);
-						/* insert new record into communitymolds table */
-						$zsql = "insert into ".wtw_tableprefix."communitymolds
-						   (communitymoldid,
-							pastcommunitymoldid,
-							communityid,";
-						$zsqlvalues = "('".$znewmoldid."',
-							'".$zmold->communitymoldid."',
-							'".$znewcommunityid."',";
-						break;
-					case "building":
-						$znewmoldid = $wtwhandlers->getNewKey($zwebtype.'molds', $zwebtype.'moldid', $zmold->buildingmoldid);
-						/* insert new record into buildingmolds table */
-						$zsql = "insert into ".wtw_tableprefix."buildingmolds
-						   (buildingmoldid,
-							pastbuildingmoldid,
-							buildingid,";
-						$zsqlvalues = "('".$znewmoldid."',
-							'".$zmold->buildingmoldid."',
-							'".$znewbuildingid."',";
-						break;
-					case "thing":
-						$znewmoldid = $wtwhandlers->getNewKey($zwebtype.'molds', $zwebtype.'moldid', $zmold->thingmoldid);
-						/* insert new record into thingmolds table */
-						$zsql = "insert into ".wtw_tableprefix."thingmolds
-						   (thingmoldid,
-							pastthingmoldid,
-							thingid,";
-						$zsqlvalues = "('".$znewmoldid."',
-							'".$zmold->pastthingmoldid."',
-							'".$znewthingid."',";
-						break;
-				}
-
-				if (!empty($zsql)) {
-					$znewtextureid = '';
-					$znewtexturebumpid = '';
-					$znewtexturehoverid = '';
-					$znewvideoid = '';
-					$znewvideoposterid = '';
-					$znewheightmapid = '';
-					$znewmixmapid = '';
-					$znewtexturerid = '';
-					$znewtexturegid = '';
-					$znewtexturebid = '';
-					$znewtexturebumprid = '';
-					$znewtexturebumpgid = '';
-					$znewtexturebumpbid = '';
-					$znewsoundid = '';
-					$znewtextureid = '';
-					
-					/* get new foreign keys */
-					$znewtextureid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->textureid);
-					$znewtexturebumpid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebumpid);
-					$znewtexturehoverid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturehoverid);
-					$znewvideoid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->videoid);
-					$znewvideoposterid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->videoposterid);
-					$znewheightmapid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->heightmapid);
-					$znewmixmapid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->mixmapid);
-					$znewtexturerid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturerid);
-					$znewtexturegid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturegid);
-					$znewtexturebid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebid);
-					$znewtexturebumprid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebumprid);
-					$znewtexturebumpgid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebumpgid);
-					$znewtexturebumpbid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebumpbid);
-					$znewsoundid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->soundid);
-
-					$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zmold->loadactionzoneid);
-					$znewactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zmold->actionzoneid);
-					
-					$znewuploadobjectid = $wtwhandlers->getIDByPastID('uploadobjects', 'uploadobjectid', 'pastuploadobjectid', $zmold->uploadobjectid);
-					
-					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zmold->createuserid);
-					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zmold->updateuserid);
-					
-					/* remainder fo the common fields for communitymolds, buildingmolds, and thingmolds */
-					$zsql .= "
-						loadactionzoneid,
-						shape,
-						covering,
-						positionx,
-						positiony,
-						positionz,
-						scalingx,
-						scalingy,
-						scalingz,
-						rotationx,
-						rotationy,
-						rotationz,
-						special1,
-						special2,
-						uoffset,
-						voffset,
-						uscale,
-						vscale,
-						uploadobjectid,
-						graphiclevel,
-						textureid,
-						texturebumpid,
-						texturehoverid,
-						videoid,
-						videoposterid,
-						diffusecolor,
-						specularcolor,
-						emissivecolor,
-						ambientcolor,
-						heightmapid,
-						mixmapid,
-						texturerid,
-						texturegid,
-						texturebid,
-						texturebumprid,
-						texturebumpgid,
-						texturebumpbid,
-						soundid,
-						soundname,
-						soundattenuation,
-						soundloop,
-						soundmaxdistance,
-						soundrollofffactor,
-						soundrefdistance,
-						soundconeinnerangle,
-						soundconeouterangle,
-						soundconeoutergain,
-						webtext,
-						webstyle,
-						opacity,
-						sideorientation,
-						billboard,
-						waterreflection,
-						receiveshadows,
-						subdivisions,
-						minheight,
-						maxheight,
-						checkcollisions,
-						ispickable,
-						actionzoneid,
-						csgmoldid,
-						csgaction,
-						alttag,
-						jsfunction,
-						jsparameters,
-						createdate,
-						createuserid,
-						updatedate,
-						updateuserid)
-						values ";
-					
-					$zsqlvalues .= "
-						'".$znewloadactionzoneid."',
-						'".$zmold->shape."',
-						'".$zmold->covering."',
-						".$zmold->positionx.",
-						".$zmold->positiony.",
-						".$zmold->positionz.",
-						".$zmold->scalingx.",
-						".$zmold->scalingy.",
-						".$zmold->scalingz.",
-						".$zmold->rotationx.",
-						".$zmold->rotationy.",
-						".$zmold->rotationz.",
-						".$zmold->special1.",
-						".$zmold->special2.",
-						".$zmold->uoffset.",
-						".$zmold->voffset.",
-						".$zmold->uscale.",
-						".$zmold->vscale.",
-						'".$znewuploadobjectid."',
-						".$zmold->graphiclevel.",
-						'".$znewtextureid."',
-						'".$znewtexturebumpid."',
-						'".$znewtexturehoverid."',
-						'".$znewvideoid."',
-						'".$znewvideoposterid."',
-						'".$zmold->diffusecolor."',
-						'".$zmold->specularcolor."',
-						'".$zmold->emissivecolor."',
-						'".$zmold->ambientcolor."',
-						'".$znewheightmapid."',
-						'".$znewmixmapid."',
-						'".$znewtexturerid."',
-						'".$znewtexturegid."',
-						'".$znewtexturebid."',
-						'".$znewtexturebumprid."',
-						'".$znewtexturebumpgid."',
-						'".$znewtexturebumpbid."',
-						'".$znewsoundid."',
-						'".$zmold->soundname."',
-						'".$zmold->soundattenuation."',
-						".$zmold->soundloop.",
-						".$zmold->soundmaxdistance.",
-						".$zmold->soundrollofffactor.",
-						".$zmold->soundrefdistance.",
-						".$zmold->soundconeinnerangle.",
-						".$zmold->soundconeouterangle.",
-						".$zmold->soundconeoutergain.",
-						'".$zmold->webtext."',
-						'".$zmold->webstyle."',
-						".$zmold->opacity.",
-						'".$zmold->sideorientation."',
-						".$zmold->billboard.",
-						".$zmold->waterreflection.",
-						".$zmold->receiveshadows.",
-						".$zmold->subdivisions.",
-						".$zmold->minheight.",
-						".$zmold->maxheight.",
-						".$zmold->checkcollisions.",
-						".$zmold->ispickable.",
-						'".$znewactionzoneid."',
-						'".$zmold->csgmoldid."',
-						'".$zmold->csgaction."',
-						'".$zmold->alttag."',
-						'".$zmold->jsfunction."',
-						'".$zmold->jsparameters."',
-						'".$zmold->createdate."',
-						'".$znewcreateuserid."',
-						now(),
-						'".$znewupdateuserid."');";
-
-					$wtwhandlers->query($zsql.$zsqlvalues);
-					
-					
-					/*  get mold points */
-					foreach ($zmold->moldpoints as $zmoldpoint) {
-						$znewmoldpointid = $wtwhandlers->getNewKey('moldpoints', 'moldpointid', $zmoldpoint->moldpointid);
-						
 						/* get new foreign keys */
-						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zmoldpoint->createuserid);
-						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zmoldpoint->updateuserid);
+						$znewtextureid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zrequest->textureid);
+						$znewskydomeid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zrequest->skydomeid);
 						
-						/* insert new record into moldpoints table */
+						/* insert new record into communities table */
 						$wtwhandlers->query("
-							insert into ".wtw_tableprefix."moldpoints 
-							   (moldpointid,
-								pastmoldpointid,
-								moldid,
-								pathnumber,
-								sorder,
+							insert into ".wtw_tableprefix."communities 
+							   (communityid,
+								pastcommunityid,
+								downloadparentwebid,
+								downloadparentwebtype,
+								communityname,
+								userid,
 								positionx,
 								positiony,
 								positionz,
+								scalingx,
+								scalingy,
+								scalingz,
+								rotationx,
+								rotationy,
+								rotationz,
+								gravity,
+								groundpositiony,
+								waterpositiony,
+								textureid,
+								skydomeid,
+								skyinclination,
+								skyluminance,
+								skyazimuth,
+								skyrayleigh,
+								skyturbidity,
+								skymiedirectionalg,
+								skymiecoefficient,
+								templatename,
+								tags,
+								description,
+								snapshotid,
+								shareuserid,
+								alttag,
+								buildingpositionx,
+								buildingpositiony,
+								buildingpositionz,
+								buildingrotationy,
 								createdate,
 								createuserid,
 								updatedate,
 								updateuserid)
 							values
-							   ('".$znewmoldpointid."',
-								'".$zmoldpoint->moldpointid."',
-								'".$znewmoldid."',
-								".$zmoldpoint->pathnumber.",
-								".$zmoldpoint->sorder.",
-								".$zmoldpoint->positionx.",
-								".$zmoldpoint->positiony.",
-								".$zmoldpoint->positionz.",
-								'".$zmoldpoint->createdate."',
-								'".$znewcreateuserid."',
+							   ('".$znewcommunityid."',
+								'".$zrequest->communityid."',
+								'".$zdownloadparentwebid."',
+								'".$zdownloadparentwebtype."',
+								'".$zrequest->communityname."',
+								'".$zuserid."',
+								".$zrequest->positionx.",
+								".$zrequest->positiony.",
+								".$zrequest->positionz.",
+								".$zrequest->scalingx.",
+								".$zrequest->scalingy.",
+								".$zrequest->scalingz.",
+								".$zrequest->rotationx.",
+								".$zrequest->rotationy.",
+								".$zrequest->rotationz.",
+								".$zrequest->gravity.",
+								".$zrequest->groundpositiony.",
+								".$zrequest->waterpositiony.",
+								'".$znewtextureid."',
+								'".$znewskydomeid."',
+								".$zrequest->skyinclination.",
+								".$zrequest->skyluminance.",
+								".$zrequest->skyazimuth.",
+								".$zrequest->skyrayleigh.",
+								".$zrequest->skyturbidity.",
+								".$zrequest->skymiedirectionalg.",
+								".$zrequest->skymiecoefficient.",
+								'".$zrequest->templatename."',
+								'".$zrequest->tags."',
+								'".$zrequest->description."',
+								'".$znewsnapshotid."',
+								'".$znewshareuserid."',
+								'".$zrequest->alttag."',
+								".$zrequest->buildingpositionx.",
+								".$zrequest->buildingpositiony.",
+								".$zrequest->buildingpositionz.",
+								".$zrequest->buildingrotationy.",
 								now(),
-								'".$znewupdateuserid."');");
-					}
-					
-					
-					/* process csg molds */
-					$zresults = $wtwhandlers->query("
-						select *  from ".wtw_tableprefix.$zwebtype."molds 
-						where ".$zwebtype."moldid='".$znewmoldid."'
-							and not csgmoldid='';");
-					foreach ($zresults as $zrow) {
-						/* get new foreign keys */
-						$znewcsgmoldid = $wtwhandlers->getIDByPastID($zwebtype.'molds', $zwebtype.'moldid', 'past'.$zwebtype.'moldid', $zrow["csgmoldid"]);
-						
+								'".$zuserid."',
+								now(),
+								'".$zuserid."');");
+								
+						$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
 						$wtwhandlers->query("
-							update ".wtw_tableprefix.$zwebtype."molds
-							set csgmoldid='".$znewcsgmoldid."'
-							where ".$zwebtype."moldid='".$zrow[$zwebtype."moldid"]."'
-								and not csgmoldid=''
-							limit 1;");
-					}
-
-
-					/* process action zone attach molds */
-					$zresults = $wtwhandlers->query("
-						select *  from ".wtw_tableprefix."actionzones 
-						where ".$zwebtype."id='".$znewwebid."'
-							and not attachmoldid='';");
-					foreach ($zresults as $zrow) {
-						/* get new foreign keys */
-						$znewattachmoldid = $wtwhandlers->getIDByPastID($zwebtype.'molds', $zwebtype.'moldid', 'past'.$zwebtype.'moldid', $zrow["attachmoldid"]);
-						
+							insert into ".wtw_tableprefix."userauthorizations
+								(userauthorizationid,
+								 userid,
+								 communityid,
+								 useraccess,
+								 createdate,
+								 createuserid,
+								 updatedate,
+								 updateuserid)
+							values
+								('".$zuserauthorizationid."',
+								 '".$zuserid."',
+								 '".$znewcommunityid."',
+								 'admin',
+								 now(),
+								 '".$zuserid."',
+								 now(),
+								 '".$zuserid."');");
+						break;
+					case "building":
+						/* insert new record into buildings table */
 						$wtwhandlers->query("
-							update ".wtw_tableprefix."actionzones
-							set attachmoldid='".$znewattachmoldid."'
-							where actionzoneid='".$zrow["actionzoneid"]."'
-								and not attachmoldid=''
-							limit 1;");
-					}
-
-
-					/* get webimages */
-					foreach ($zmold->webimages as $zwebimage) {
-						$znewwebimageid = $wtwhandlers->getNewKey('webimages', 'webimageid', $zwebimage->webimageid);
-
-						$znewcommunitymoldid = '';
-						$znewbuildingmoldid = '';
-						$znewthingmoldid = '';
-						switch ($zwebtype) {
-							case 'community':
-								$znewcommunitymoldid = $znewmoldid;
-								break;
-							case 'building':
-								$znewbuildingmoldid = $znewmoldid;
-								break;
-							case 'thing':
-								$znewthingmoldid = $znewmoldid;
-								break;
-						}
-						/* get new foreign keys */
-						$znewimageid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zwebimage->imageid);
-						$znewimagehoverid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zwebimage->imagehoverid);
-						$znewimageclickid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zwebimage->imageclickid);
-						
-						$znewuserid = $wtwhandlers->getUserIDfromPastID($zwebimage->userid);
-						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zwebimage->createuserid);
-						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zwebimage->updateuserid);
-						
-						/* insert new record into webimages table */
-						$wtwhandlers->query("
-							insert into ".wtw_tableprefix."webimages 
-							   (webimageid,
-								pastwebimageid,
-								communitymoldid,
-								buildingmoldid,
-								thingmoldid,
-								imageindex,
-								imageid,
-								imagehoverid,
-								imageclickid,
-								graphiclevel,
-								jsfunction,
-								jsparameters,
+							insert into ".wtw_tableprefix."buildings 
+							   (buildingid,
+								pastbuildingid,
+								downloadparentwebid,
+								downloadparentwebtype,
+								buildingname,
 								userid,
+								positionx,
+								positiony,
+								positionz,
+								scalingx,
+								scalingy,
+								scalingz,
+								rotationx,
+								rotationy,
+								rotationz,
+								gravity,
+								templatename,
+								tags,
+								description,
+								snapshotid,
+								shareuserid,
 								alttag,
 								createdate,
 								createuserid,
 								updatedate,
 								updateuserid)
 							values
-							   ('".$znewwebimageid."',
-								'".$zwebimage->webimageid."',
-								'".$znewcommunitymoldid."',
-								'".$znewbuildingmoldid."',
-								'".$znewthingmoldid."',
-								".$zwebimage->imageindex.",
-								'".$znewimageid."',
-								'".$znewimagehoverid."',
-								'".$znewimageclickid."',
-								".$zwebimage->graphiclevel.",
-								'".$zwebimage->jsfunction."',
-								'".$zwebimage->jsparameters."',
-								'".$znewuserid."',
-								'".$zwebimage->alttag."',
-								'".$zwebimage->createdate."',
+							   ('".$znewbuildingid."',
+								'".$zrequest->buildingid."',
+								'".$zdownloadparentwebid."',
+								'".$zdownloadparentwebtype."',
+								'".$zrequest->buildingname."',
+								'".$zuserid."',
+								".$zrequest->positionx.",
+								".$zrequest->positiony.",
+								".$zrequest->positionz.",
+								".$zrequest->scalingx.",
+								".$zrequest->scalingy.",
+								".$zrequest->scalingz.",
+								".$zrequest->rotationx.",
+								".$zrequest->rotationy.",
+								".$zrequest->rotationz.",
+								".$zrequest->gravity.",
+								'".$zrequest->templatename."',
+								'".$zrequest->tags."',
+								'".$zrequest->description."',
+								'".$znewsnapshotid."',
+								'".$znewshareuserid."',
+								'".$zrequest->alttag."',
+								now(),
+								'".$zuserid."',
+								now(),
+								'".$zuserid."');");
+						$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."userauthorizations
+								(userauthorizationid,
+								 userid,
+								 buildingid,
+								 useraccess,
+								 createdate,
+								 createuserid,
+								 updatedate,
+								 updateuserid)
+							values
+								('".$zuserauthorizationid."',
+								 '".$zuserid."',
+								 '".$znewbuildingid."',
+								 'admin',
+								 now(),
+								 '".$zuserid."',
+								 now(),
+								 '".$zuserid."');");
+						break;
+					case "thing":
+						/* insert new record into things table */
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."things 
+							   (thingid,
+								pastthingid,
+								downloadparentwebid,
+								downloadparentwebtype,
+								thingname,
+								userid,
+								positionx,
+								positiony,
+								positionz,
+								scalingx,
+								scalingy,
+								scalingz,
+								rotationx,
+								rotationy,
+								rotationz,
+								gravity,
+								templatename,
+								tags,
+								description,
+								snapshotid,
+								shareuserid,
+								alttag,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$znewthingid."',
+								'".$zrequest->thingid."',
+								'".$zdownloadparentwebid."',
+								'".$zdownloadparentwebtype."',
+								'".$zrequest->thingname."',
+								'".$zuserid."',
+								".$zrequest->positionx.",
+								".$zrequest->positiony.",
+								".$zrequest->positionz.",
+								".$zrequest->scalingx.",
+								".$zrequest->scalingy.",
+								".$zrequest->scalingz.",
+								".$zrequest->rotationx.",
+								".$zrequest->rotationy.",
+								".$zrequest->rotationz.",
+								".$zrequest->gravity.",
+								'".$zrequest->templatename."',
+								'".$zrequest->tags."',
+								'".$zrequest->description."',
+								'".$znewsnapshotid."',
+								'".$znewshareuserid."',
+								'".$zrequest->alttag."',
+								now(),
+								'".$zuserid."',
+								now(),
+								'".$zuserid."');");
+						$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."userauthorizations
+								(userauthorizationid,
+								 userid,
+								 thingid,
+								 useraccess,
+								 createdate,
+								 createuserid,
+								 updatedate,
+								 updateuserid)
+							values
+								('".$zuserauthorizationid."',
+								 '".$zuserid."',
+								 '".$znewthingid."',
+								 'admin',
+								 now(),
+								 '".$zuserid."',
+								 now(),
+								 '".$zuserid."');");
+						break;
+				}	
+				
+
+				/* process all avatar animations */
+				foreach ($zrequest->avataranimations as $zavataranimation) {
+				
+					/* check if the avataranimationid is already in use */
+					$znewavataranimationid = $wtwhandlers->getNewKey('avataranimations', "avataranimationid", $zavataranimation->avataranimationid);
+					
+					$znewanimationicon = '';
+					
+					$znewobjectfolder = $znewfolder.'/avataranimations';
+					if (!file_exists($znewobjectfolder)) {
+						mkdir($znewobjectfolder, 0755, true);
+						chmod($znewobjectfolder, 0755);
+					}
+					if (!empty($zavataranimation->objectfolder) && !empty($zavataranimation->objectfile)) {
+						$znewobjectfolder = $znewfolder.'/avataranimations/'.str_replace(".babylon","",$zavataranimation->objectfile);
+						if (!file_exists($znewobjectfolder)) {
+							mkdir($znewobjectfolder, 0755, true);
+							chmod($znewobjectfolder, 0755);
+						}
+						$zfileext = strtolower(pathinfo($znewobjectfolder."/".$zavataranimation->objectfile, PATHINFO_EXTENSION));
+						if ($zfileext == 'babylon') {
+							try {
+								file_put_contents($znewobjectfolder."/".$zavataranimation->objectfile, fopen($zavataranimation->objectfolder.$zavataranimation->objectfile, 'r'));
+								chmod($znewobjectfolder."/".$zavataranimation->objectfile, 0755);
+							} catch (Exception $e) {
+								$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-babylon=".$e->getMessage());
+							}	
+							try {
+								file_put_contents($znewobjectfolder."/".$zavataranimation->objectfile.".manifest", fopen($zavataranimation->objectfolder.$zavataranimation->objectfile.".manifest", 'r'));
+								chmod($znewobjectfolder."/".$zavataranimation->objectfile.".manifest", 0755);
+							} catch (Exception $e) {
+								$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-manifest=".$e->getMessage());
+							}	
+							
+							if (!empty($zavataranimation->animationicon)) {
+								try {
+									$ziconfilename = basename($zavataranimation->animationicon);  
+									$znewanimationicon = $znewobjectfolder."/".$ziconfilename;
+									file_put_contents($znewanimationicon, fopen($zavataranimation->animationicon, 'r'));
+									chmod($znewanimationicon, 0755);
+								} catch (Exception $e) {
+									$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-icon=".$e->getMessage());
+								}	
+							}
+						}
+					}
+					
+					/* get new foreign keys */
+					$znewsoundid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zavataranimation->soundid);
+					
+					$znewuserid = $wtwhandlers->getUserIDfromPastID($zavataranimation->userid);
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zavataranimation->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zavataranimation->updateuserid);
+					
+					/* insert new record into avataranimations table */
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."avataranimations 
+						   (avataranimationid,
+							pastavataranimationid,
+							userid,
+							loadpriority,
+							animationevent,
+							animationfriendlyname,
+							setdefault,
+							animationicon,
+							objectfolder,
+							objectfile,
+							startframe,
+							endframe,
+							animationloop,
+							speedratio,
+							soundid,
+							soundmaxdistance,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						values
+						   ('".$znewavataranimationid."',
+							'".$zavataranimation->avataranimationid."',
+							'".$znewuserid."',
+							".$zavataranimation->loadpriority.",
+							'".$zavataranimation->animationevent."',
+							'".$zavataranimation->animationfriendlyname."',
+							".$zavataranimation->setdefault.",
+							'".$znewanimationicon."',
+							'".$znewobjectfolder."',
+							'".$zavataranimation->objectfile."',
+							".$zavataranimation->startframe.",
+							".$zavataranimation->endframe.",
+							".$zavataranimation->animationloop.",
+							".$zavataranimation->speedratio.",
+							'".$znewsoundid."',
+							'".$zavataranimation->soundmaxdistance."',
+							'".$zavataranimation->createdate."',
+							'".$znewcreateuserid."',
+							now(),
+							'".$znewupdateuserid."');");
+				}			
+				
+
+				/* process all action zones */
+				foreach ($zrequest->actionzones as $zactionzone) {
+					/* check if the actionzoneid is already in use */
+					$znewactionzoneid = $wtwhandlers->getNewKey('actionzones', "actionzoneid", $zactionzone->actionzoneid);
+					
+					/* get new foreign keys */
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zactionzone->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zactionzone->updateuserid);
+					
+					/* insert new record into actionzones table */
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."actionzones 
+						   (actionzoneid,
+							pastactionzoneid,
+							communityid,
+							buildingid,
+							thingid,
+							attachmoldid,
+							loadactionzoneid,
+							parentactionzoneid,
+							actionzonename,
+							actionzonetype,
+							actionzoneshape,
+							movementtype,
+							movementdistance,
+							positionx,
+							positiony,
+							positionz,
+							scalingx,
+							scalingy,
+							scalingz,
+							rotationx,
+							rotationy,
+							rotationz,
+							axispositionx,
+							axispositiony,
+							axispositionz,
+							axisrotationx,
+							axisrotationy,
+							axisrotationz,
+							rotateaxis,
+							rotatedegrees,
+							rotatedirection,
+							rotatespeed,
+							jsfunction,
+							jsparameters,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						values
+						   ('".$znewactionzoneid."',
+							'".$zactionzone->actionzoneid."',
+							'".$znewcommunityid."',
+							'".$znewbuildingid."',
+							'".$znewthingid."',
+							'".$zactionzone->attachmoldid."',
+							'".$zactionzone->loadactionzoneid."',
+							'".$zactionzone->parentactionzoneid."',
+							'".$zactionzone->actionzonename."',
+							'".$zactionzone->actionzonetype."',
+							'".$zactionzone->actionzoneshape."',
+							'".$zactionzone->movementtype."',
+							".$zactionzone->movementdistance.",				
+							".$zactionzone->positionx.",
+							".$zactionzone->positiony.",
+							".$zactionzone->positionz.",
+							".$zactionzone->scalingx.",
+							".$zactionzone->scalingy.",
+							".$zactionzone->scalingz.",
+							".$zactionzone->rotationx.",
+							".$zactionzone->rotationy.",
+							".$zactionzone->rotationz.",
+							".$zactionzone->axispositionx.",
+							".$zactionzone->axispositiony.",
+							".$zactionzone->axispositionz.",
+							".$zactionzone->axisrotationx.",
+							".$zactionzone->axisrotationy.",
+							".$zactionzone->axisrotationz.",
+							'".$zactionzone->rotateaxis."',
+							".$zactionzone->rotatedegrees.",
+							".$zactionzone->rotatedirection.",
+							".$zactionzone->rotatespeed.",
+							'".$zactionzone->jsfunction."',
+							'".$zactionzone->jsparameters."',
+							'".$zactionzone->createdate."',
+							'".$znewcreateuserid."',
+							now(),
+							'".$znewupdateuserid."');");
+						
+					foreach ($zactionzone->animations as $zazanimation) {
+						/* check if the actionzoneanimationid is already in use */
+						$znewactionzoneanimationid = $wtwhandlers->getNewKey('actionzoneanimations', "actionzoneanimationid", $zazanimation->actionzoneanimationid);
+						
+						/* get new foreign keys */
+						$znewavataranimationid = $wtwhandlers->getIDByPastID('avataranimations', 'avataranimationid', 'pastavataranimationid', $zazanimation->avataranimationid);
+						
+						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zazanimation->createuserid);
+						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zazanimation->updateuserid);
+						
+						/* insert new record into actionzoneanimations table */
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."actionzoneanimations 
+							   (actionzoneanimationid,
+								pastactionzoneanimationid,
+								actionzoneid,
+								communityid,
+								buildingid,
+								thingid,
+								avataranimationid,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$znewactionzoneanimationid."',
+								'".$zazanimation->actionzoneanimationid."',
+								'".$znewactionzoneid."',
+								'".$znewcommunityid."',
+								'".$znewbuildingid."',
+								'".$znewthingid."',
+								'".$znewavataranimationid."',
+								'".$zazanimation->createdate."',
 								'".$znewcreateuserid."',
 								now(),
 								'".$znewupdateuserid."');");	
-					}			
+						
+					}
 				}
-			}
+
+				/* process action zone foreign action zones */
+				$zresults = $wtwhandlers->query("
+					select *  from ".wtw_tableprefix."actionzones 
+					where communityid='".$znewcommunityid."'
+						and buildingid='".$znewbuildingid."'
+						and thingid='".$znewthingid."';");
+				foreach ($zresults as $zrow) {
+					/* get new foreign keys */
+					$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zrow["loadactionzoneid"]);
+					$znewparentactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zrow["parentactionzoneid"]);
+
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."actionzones
+						set loadactionzoneid='".$znewloadactionzoneid."',
+							parentactionzoneid='".$znewparentactionzoneid."'
+						where actionzoneid='".$zrow["actionzoneid"]."'
+						limit 1;");
+				}
 
 
-			/* if part of the new install process, add the first building to the first community */
-			if ($zwebtype == 'building' && !empty($zcommunityid) && isset($zcommunityid)) {
-				$znewconnectinggridid = $wtwhandlers->getNewKey('connectinggrids', 'connectinggridid', '');
-				$zloadactionzoneid = '';
-				if (is_numeric($zbuildingpositionx) == false) {
-					$zbuildingpositionx = 0;
-				}
-				if (is_numeric($zbuildingpositiony) == false) {
-					$zbuildingpositiony = 0;
-				}
-				if (is_numeric($zbuildingpositionz) == false) {
-					$zbuildingpositionz = 0;
-				}
-				if (is_numeric($zbuildingrotationy) == false) {
-					$zbuildingrotationy = 0;
-				}
+				/* process all scripts */
+				foreach ($zrequest->scripts as $zscript) {
 				
-				/* get the extreme loadzone for the new building */
-				$zresultsaz = $wtwhandlers->query("
-					select * 
-					from ".wtw_tableprefix."actionzones 
-					where buildingid='".$znewwebid."'
-						and actionzonename='Extreme Load Zone'
-						and deleted=0
-					limit 1;");
-				foreach ($zresultsaz as $zrowaz) {
-					$zloadactionzoneid = $zrowaz["actionzoneid"];
+					/* check if the scriptid is already in use */
+					$znewscriptid = $wtwhandlers->getNewKey('scripts', "scriptid", $zscript->scriptid);
+					
+					$znewscriptfolder = $znewfolder.'/scripts';
+					if (!file_exists($znewscriptfolder)) {
+						mkdir($znewscriptfolder, 0755, true);
+						chmod($znewscriptfolder, 0755);
+					}
+					if (!empty($zscript->scriptpath)) {
+						$zfileext = strtolower(pathinfo($znewscriptfolder."/".$zscript->scriptfilename, PATHINFO_EXTENSION));
+						if ($zfileext == 'js') {
+							try {
+								file_put_contents($znewscriptfolder."/".$zscript->scriptfilename, fopen($zscript->scriptpath, 'r'));
+								chmod($znewscriptfolder."/".$zscript->scriptfilename, 0755);
+							} catch (Exception $e) {
+								$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-js=".$e->getMessage());
+							}	
+						}
+					}
+					
+					/* get new foreign keys */
+					$znewactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zscript->actionzoneid);
+					
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zscript->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zscript->updateuserid);
+					
+					/* insert new record into scripts table */
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."scripts 
+						   (scriptid,
+							pastscriptid,
+							actionzoneid,
+							webtype,
+							scriptname,
+							scriptpath,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						values
+						   ('".$znewscriptid."',
+							'".$zscript->scriptid."',
+							'".$znewactionzoneid."',
+							'".$zscript->webtype."',
+							'".$zscript->scriptname."',
+							'".$znewscriptfolder."/".$zscript->scriptfilename."',
+							'".$zscript->createdate."',
+							'".$znewcreateuserid."',
+							now(),
+							'".$znewupdateuserid."');");		
 				}
-				
-				/* add connecting grid to place the building into the community during first time installs */
-				if (!empty($zloadactionzoneid) && isset($zloadactionzoneid)) {
+
+
+				/* process parent connecting grids */
+				foreach ($zrequest->connectinggrids as $zconnectinggrid) {
+					/* check if the connectinggridid is already in use */
+					$znewconnectinggridid = $wtwhandlers->getNewKey('connectinggrids', "connectinggridid", $zconnectinggrid->connectinggridid);
+					
+					/* get new foreign keys */
+					$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->loadactionzoneid);
+					$znewaltloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->altloadactionzoneid);
+					$znewunloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->unloadactionzoneid);
+					$znewattachactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->attachactionzoneid);
+					
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->updateuserid);
+					
+					/* insert new record into connectinggrids table */
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."connectinggrids 
 						   (connectinggridid,
@@ -2738,83 +2169,567 @@ class wtwcommunities {
 							updateuserid)
 						values
 						   ('".$znewconnectinggridid."',
+							'".$zconnectinggrid->connectinggridid."',
 							'',
-							'".$zcommunityid."',
-							'community',
+							'".$zconnectinggrid->parentwebtype."',
 							'".$znewwebid."',
-							'building',
-							".$zbuildingpositionx.",
-							".$zbuildingpositiony.",
-							".$zbuildingpositionz.",
-							1,
-							1,
-							1,
-							0,
-							".$zbuildingrotationy.",
-							0,
-							'".$zloadactionzoneid."',
-							'',
-							'',
-							'',
-							'',
+							'".$zconnectinggrid->childwebtype."',
+							".$zconnectinggrid->positionx.",
+							".$zconnectinggrid->positiony.",
+							".$zconnectinggrid->positionz.",
+							".$zconnectinggrid->scalingx.",
+							".$zconnectinggrid->scalingy.",
+							".$zconnectinggrid->scalingz.",
+							".$zconnectinggrid->rotationx.",
+							".$zconnectinggrid->rotationy.",
+							".$zconnectinggrid->rotationz.",
+							'".$znewloadactionzoneid."',
+							'".$znewaltloadactionzoneid."',
+							'".$znewunloadactionzoneid."',
+							'".$znewattachactionzoneid."',
+							'".$zconnectinggrid->alttag."',
+							'".$zconnectinggrid->createdate."',
+							'".$znewcreateuserid."',
 							now(),
-							'".$zuserid."',
-							now(),
-							'".$zuserid."');");
+							'".$znewupdateuserid."');");
 				}
-			}
 
-			/* process child connecting grids */
-			if ($zwebtype != 'thing') {
-				$zdiffwebid = '';
-				foreach ($zrequest->childconnectinggrids as $zconnectinggrid) {
-				
-					/* check if the connectinggridid is already in use */
-					$znewconnectinggridid = $wtwhandlers->getNewKey('connectinggrids', 'connectinggridid', $zconnectinggrid->connectinggridid);
 
-					if (($zwebtype == 'community' && ($zconnectinggrid->childwebtype == 'building' || $zconnectinggrid->childwebtype == 'thing')) || ($zwebtype == 'building' && $zconnectinggrid->childwebtype == 'thing')) {
-						$zfetchweb = false;
+				/* process uploaded objects */
+				foreach ($zrequest->uploadobjects as $zuploadobject) {
+					$znewuploadobjectid = $wtwhandlers->getNewKey('uploadobjects', "uploadobjectid", $zuploadobject->uploadobjectid);
+
+					if (!empty($zuploadobject->uploadobjectid) && isset($zuploadobject->uploadobjectid)) {
 						
-						/* look out for duplicates, while making sure we get each 3D webs */
-						$znewchildwebid = '';
-						$znewchildwebtypes = '';
-						switch ($zconnectinggrid->childwebtype) {
-							case "community":
-								$znewchildwebtypes = 'communities';
-								break;
-							case "building":
-								$znewchildwebtypes = 'buildings';
-								break;
-							case "thing":
-								$znewchildwebtypes = 'things';
-								break;
+						$znewobjectfolder = $znewfolder.'/objects';
+						if (!file_exists($znewobjectfolder)) {
+							mkdir($znewobjectfolder, 0755, true);
+							chmod($znewobjectfolder, 0755);
 						}
-						$znewchildwebid = $wtwhandlers->getNewKey($znewchildwebtypes, $zconnectinggrid->childwebtype.'id', $zconnectinggrid->childwebid);
-						
-						if ($zdiffwebid != $zconnectinggrid->childwebid) {
-							$zfetchweb = true;
-							$zdiffwebid = $zconnectinggrid->childwebid;
-						} else {
-							$zresults = $wtwhandlers->query("
-								select *  from ".wtw_tableprefix.$znewchildwebtypes." 
-								where past".$zconnectinggrid->childwebtype."id='".$zconnectinggrid->childwebid."'
-								order by createdate desc
-								limit 1;");
-							foreach ($zresults as $zrow) {
-								$znewchildwebid = $zrow[$zconnectinggrid->childwebtype."id"];
-							}
+						$znewobjectfolder = $znewfolder.'/objects/'.str_replace(".babylon","",$zuploadobject->objectfile);
+						if (!file_exists($znewobjectfolder)) {
+							mkdir($znewobjectfolder, 0755, true);
+							chmod($znewobjectfolder, 0755);
 						}
+						$znewobjecturl = $znewurl.'/objects/'.str_replace(".babylon","",$zuploadobject->objectfile)."/";
 						
 						/* get new foreign keys */
-						$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->loadactionzoneid);
-						$znewaltloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->altloadactionzoneid);
-						$znewunloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->unloadactionzoneid);
-						$znewattachactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->attachactionzoneid);
+						$znewuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->userid);
+						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->createuserid);
+						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->updateuserid);
 						
-						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->createuserid);
-						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->updateuserid);
+						/* insert new record into uploadobjects table */
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."uploadobjects 
+							   (uploadobjectid,
+								pastuploadobjectid,
+								userid,
+								objectfolder,
+								objectfile,
+								stock,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$znewuploadobjectid."',
+								'".$zuploadobject->uploadobjectid."',
+								'".$zuserid."',
+								'".$znewobjecturl."',
+								'".$zuploadobject->objectfile."',
+								".$zuploadobject->stock.",
+								'".$zuploadobject->createdate."',
+								'".$znewcreateuserid."',
+								now(),
+								'".$znewupdateuserid."');");
 						
-						/* insert new record into connectinggrids table (additional 3D Webs in the current 3D Web) */
+						foreach($zuploadobject->objectfiles as $zfile) {
+							try {
+								$zfileext = strtolower(pathinfo($zfile->filepath, PATHINFO_EXTENSION));
+								if ($zfileext == 'babylon' || $zfileext == 'manifest' || $zfileext == 'blend' || $zfileext == 'obj' || $zfileext == 'glb' || $zfileext == 'glbt' || $zfileext == 'fbx' || $zfileext == 'dae' || $zfileext == 'stl' || $zfileext == 'jpg' || $zfileext == 'jpeg' || $zfileext == 'bmp' || $zfileext == 'tif' || $zfileext == 'tiff' || $zfileext == 'png' || $zfileext == 'gif' || $zfileext == 'webp' || $zfileext == 'wav' || $zfileext == 'mp3' || $zfileext == 'mp4' || $zfileext == 'wma' || $zfileext == 'aac' || $zfileext == 'flac' || $zfileext == 'webm' || $zfileext == 'ogg' || $zfileext == 'mpg' || $zfileext == 'avi' || $zfileext == 'mov' || $zfileext == 'wmv' || $zfileext == 'flv' || $zfileext == 'swf' || $zfileext == 'mtl' || $zfileext == '3ds' || $zfileext == 'c4d' || $zfileext == 'txt' || $zfileext == 'log' || $zfileext == 'pdf') {
+									file_put_contents($znewobjectfolder.'/'.$zfile->filename, fopen($zfile->filepath, 'r'));
+									chmod($znewobjectfolder.'/'.$zfile->filename, 0755);
+								}
+							} catch (Exception $e) {
+								$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfiles=".$e->getMessage());
+							}	
+						}
+						
+						
+						/* process upload object animations */
+						foreach ($zuploadobject->uploadobjectanimations as $zuploadobjectanimation) {
+						
+							/* check if the upload object animation id (objectanimationid) is already in use */
+							$znewobjectanimationid = $wtwhandlers->getNewKey('uploadobjectanimations', "objectanimationid", $zuploadobjectanimation->objectanimationid);
+							
+							/* get new foreign keys */
+							$znewsoundid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zuploadobjectanimation->soundid);
+							
+							$znewuserid = $wtwhandlers->getUserIDfromPastID($zuploadobjectanimation->userid);
+							$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobjectanimation->createuserid);
+							$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobjectanimation->updateuserid);
+							
+							/* insert new record into uploadobjectanimations table */
+							$wtwhandlers->query("
+								insert into ".wtw_tableprefix."uploadobjectanimations 
+								   (objectanimationid,
+									pastobjectanimationid,
+									uploadobjectid,
+									userid,
+									animationname,
+									moldnamepart,
+									moldevent,
+									startframe,
+									endframe,
+									animationloop,
+									speedratio,
+									animationendscript,
+									animationendparameters,
+									stopcurrentanimations,
+									additionalscript,
+									additionalparameters,
+									soundid,
+									soundmaxdistance,
+									createdate,
+									createuserid,
+									updatedate,
+									updateuserid)
+								values
+								   ('".$znewobjectanimationid."',
+									'".$zuploadobjectanimation->objectanimationid."',
+									'".$znewuploadobjectid."',
+									'".$znewuserid."',
+									'".$zuploadobjectanimation->animationname."',
+									'".$zuploadobjectanimation->moldnamepart."',
+									'".$zuploadobjectanimation->moldevent."',
+									".$zuploadobjectanimation->startframe.",
+									".$zuploadobjectanimation->endframe.",
+									".$zuploadobjectanimation->animationloop.",
+									".$zuploadobjectanimation->speedratio.",
+									'".$zuploadobjectanimation->animationendscript."',
+									'".$zuploadobjectanimation->animationendparameters."',
+									".$zuploadobjectanimation->stopcurrentanimations.",
+									'".$zuploadobjectanimation->additionalscript."',
+									'".$zuploadobjectanimation->additionalparameters."',
+									'".$znewsoundid."',
+									".$zuploadobjectanimation->soundmaxdistance.",
+									'".$zuploadobjectanimation->createdate."',
+									'".$znewcreateuserid."',
+									now(),
+									'".$znewupdateuserid."');");
+						}
+					}
+				}			
+
+
+				/* process all molds */
+				foreach ($zrequest->molds as $zmold) {
+					/* check if the moldid is already in use */
+					$znewmoldid = '';
+					$zsql = '';
+					$zsqlvalues = '';
+					switch($zwebtype) {
+						case "community":
+							$znewmoldid = $wtwhandlers->getNewKey($zwebtype.'molds', $zwebtype.'moldid', $zmold->communitymoldid);
+							/* insert new record into communitymolds table */
+							$zsql = "insert into ".wtw_tableprefix."communitymolds
+							   (communitymoldid,
+								pastcommunitymoldid,
+								communityid,";
+							$zsqlvalues = "('".$znewmoldid."',
+								'".$zmold->communitymoldid."',
+								'".$znewcommunityid."',";
+							break;
+						case "building":
+							$znewmoldid = $wtwhandlers->getNewKey($zwebtype.'molds', $zwebtype.'moldid', $zmold->buildingmoldid);
+							/* insert new record into buildingmolds table */
+							$zsql = "insert into ".wtw_tableprefix."buildingmolds
+							   (buildingmoldid,
+								pastbuildingmoldid,
+								buildingid,";
+							$zsqlvalues = "('".$znewmoldid."',
+								'".$zmold->buildingmoldid."',
+								'".$znewbuildingid."',";
+							break;
+						case "thing":
+							$znewmoldid = $wtwhandlers->getNewKey($zwebtype.'molds', $zwebtype.'moldid', $zmold->thingmoldid);
+							/* insert new record into thingmolds table */
+							$zsql = "insert into ".wtw_tableprefix."thingmolds
+							   (thingmoldid,
+								pastthingmoldid,
+								thingid,";
+							$zsqlvalues = "('".$znewmoldid."',
+								'".$zmold->pastthingmoldid."',
+								'".$znewthingid."',";
+							break;
+					}
+
+					if (!empty($zsql)) {
+						$znewtextureid = '';
+						$znewtexturebumpid = '';
+						$znewtexturehoverid = '';
+						$znewvideoid = '';
+						$znewvideoposterid = '';
+						$znewheightmapid = '';
+						$znewmixmapid = '';
+						$znewtexturerid = '';
+						$znewtexturegid = '';
+						$znewtexturebid = '';
+						$znewtexturebumprid = '';
+						$znewtexturebumpgid = '';
+						$znewtexturebumpbid = '';
+						$znewsoundid = '';
+						$znewtextureid = '';
+						
+						/* get new foreign keys */
+						$znewtextureid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->textureid);
+						$znewtexturebumpid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebumpid);
+						$znewtexturehoverid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturehoverid);
+						$znewvideoid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->videoid);
+						$znewvideoposterid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->videoposterid);
+						$znewheightmapid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->heightmapid);
+						$znewmixmapid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->mixmapid);
+						$znewtexturerid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturerid);
+						$znewtexturegid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturegid);
+						$znewtexturebid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebid);
+						$znewtexturebumprid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebumprid);
+						$znewtexturebumpgid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebumpgid);
+						$znewtexturebumpbid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebumpbid);
+						$znewsoundid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->soundid);
+
+						$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zmold->loadactionzoneid);
+						$znewactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zmold->actionzoneid);
+						
+						$znewuploadobjectid = $wtwhandlers->getIDByPastID('uploadobjects', 'uploadobjectid', 'pastuploadobjectid', $zmold->uploadobjectid);
+						
+						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zmold->createuserid);
+						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zmold->updateuserid);
+						
+						/* remainder fo the common fields for communitymolds, buildingmolds, and thingmolds */
+						$zsql .= "
+							loadactionzoneid,
+							shape,
+							covering,
+							positionx,
+							positiony,
+							positionz,
+							scalingx,
+							scalingy,
+							scalingz,
+							rotationx,
+							rotationy,
+							rotationz,
+							special1,
+							special2,
+							uoffset,
+							voffset,
+							uscale,
+							vscale,
+							uploadobjectid,
+							graphiclevel,
+							textureid,
+							texturebumpid,
+							texturehoverid,
+							videoid,
+							videoposterid,
+							diffusecolor,
+							specularcolor,
+							emissivecolor,
+							ambientcolor,
+							heightmapid,
+							mixmapid,
+							texturerid,
+							texturegid,
+							texturebid,
+							texturebumprid,
+							texturebumpgid,
+							texturebumpbid,
+							soundid,
+							soundname,
+							soundattenuation,
+							soundloop,
+							soundmaxdistance,
+							soundrollofffactor,
+							soundrefdistance,
+							soundconeinnerangle,
+							soundconeouterangle,
+							soundconeoutergain,
+							webtext,
+							webstyle,
+							opacity,
+							sideorientation,
+							billboard,
+							waterreflection,
+							receiveshadows,
+							subdivisions,
+							minheight,
+							maxheight,
+							checkcollisions,
+							ispickable,
+							actionzoneid,
+							csgmoldid,
+							csgaction,
+							alttag,
+							jsfunction,
+							jsparameters,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+							values ";
+						
+						$zsqlvalues .= "
+							'".$znewloadactionzoneid."',
+							'".$zmold->shape."',
+							'".$zmold->covering."',
+							".$zmold->positionx.",
+							".$zmold->positiony.",
+							".$zmold->positionz.",
+							".$zmold->scalingx.",
+							".$zmold->scalingy.",
+							".$zmold->scalingz.",
+							".$zmold->rotationx.",
+							".$zmold->rotationy.",
+							".$zmold->rotationz.",
+							".$zmold->special1.",
+							".$zmold->special2.",
+							".$zmold->uoffset.",
+							".$zmold->voffset.",
+							".$zmold->uscale.",
+							".$zmold->vscale.",
+							'".$znewuploadobjectid."',
+							".$zmold->graphiclevel.",
+							'".$znewtextureid."',
+							'".$znewtexturebumpid."',
+							'".$znewtexturehoverid."',
+							'".$znewvideoid."',
+							'".$znewvideoposterid."',
+							'".$zmold->diffusecolor."',
+							'".$zmold->specularcolor."',
+							'".$zmold->emissivecolor."',
+							'".$zmold->ambientcolor."',
+							'".$znewheightmapid."',
+							'".$znewmixmapid."',
+							'".$znewtexturerid."',
+							'".$znewtexturegid."',
+							'".$znewtexturebid."',
+							'".$znewtexturebumprid."',
+							'".$znewtexturebumpgid."',
+							'".$znewtexturebumpbid."',
+							'".$znewsoundid."',
+							'".$zmold->soundname."',
+							'".$zmold->soundattenuation."',
+							".$zmold->soundloop.",
+							".$zmold->soundmaxdistance.",
+							".$zmold->soundrollofffactor.",
+							".$zmold->soundrefdistance.",
+							".$zmold->soundconeinnerangle.",
+							".$zmold->soundconeouterangle.",
+							".$zmold->soundconeoutergain.",
+							'".$zmold->webtext."',
+							'".$zmold->webstyle."',
+							".$zmold->opacity.",
+							'".$zmold->sideorientation."',
+							".$zmold->billboard.",
+							".$zmold->waterreflection.",
+							".$zmold->receiveshadows.",
+							".$zmold->subdivisions.",
+							".$zmold->minheight.",
+							".$zmold->maxheight.",
+							".$zmold->checkcollisions.",
+							".$zmold->ispickable.",
+							'".$znewactionzoneid."',
+							'".$zmold->csgmoldid."',
+							'".$zmold->csgaction."',
+							'".$zmold->alttag."',
+							'".$zmold->jsfunction."',
+							'".$zmold->jsparameters."',
+							'".$zmold->createdate."',
+							'".$znewcreateuserid."',
+							now(),
+							'".$znewupdateuserid."');";
+
+						$wtwhandlers->query($zsql.$zsqlvalues);
+						
+						
+						/*  get mold points */
+						foreach ($zmold->moldpoints as $zmoldpoint) {
+							$znewmoldpointid = $wtwhandlers->getNewKey('moldpoints', 'moldpointid', $zmoldpoint->moldpointid);
+							
+							/* get new foreign keys */
+							$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zmoldpoint->createuserid);
+							$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zmoldpoint->updateuserid);
+							
+							/* insert new record into moldpoints table */
+							$wtwhandlers->query("
+								insert into ".wtw_tableprefix."moldpoints 
+								   (moldpointid,
+									pastmoldpointid,
+									moldid,
+									pathnumber,
+									sorder,
+									positionx,
+									positiony,
+									positionz,
+									createdate,
+									createuserid,
+									updatedate,
+									updateuserid)
+								values
+								   ('".$znewmoldpointid."',
+									'".$zmoldpoint->moldpointid."',
+									'".$znewmoldid."',
+									".$zmoldpoint->pathnumber.",
+									".$zmoldpoint->sorder.",
+									".$zmoldpoint->positionx.",
+									".$zmoldpoint->positiony.",
+									".$zmoldpoint->positionz.",
+									'".$zmoldpoint->createdate."',
+									'".$znewcreateuserid."',
+									now(),
+									'".$znewupdateuserid."');");
+						}
+						
+						
+						/* process csg molds */
+						$zresults = $wtwhandlers->query("
+							select *  from ".wtw_tableprefix.$zwebtype."molds 
+							where ".$zwebtype."moldid='".$znewmoldid."'
+								and not csgmoldid='';");
+						foreach ($zresults as $zrow) {
+							/* get new foreign keys */
+							$znewcsgmoldid = $wtwhandlers->getIDByPastID($zwebtype.'molds', $zwebtype.'moldid', 'past'.$zwebtype.'moldid', $zrow["csgmoldid"]);
+							
+							$wtwhandlers->query("
+								update ".wtw_tableprefix.$zwebtype."molds
+								set csgmoldid='".$znewcsgmoldid."'
+								where ".$zwebtype."moldid='".$zrow[$zwebtype."moldid"]."'
+									and not csgmoldid=''
+								limit 1;");
+						}
+
+
+						/* process action zone attach molds */
+						$zresults = $wtwhandlers->query("
+							select *  from ".wtw_tableprefix."actionzones 
+							where ".$zwebtype."id='".$znewwebid."'
+								and not attachmoldid='';");
+						foreach ($zresults as $zrow) {
+							/* get new foreign keys */
+							$znewattachmoldid = $wtwhandlers->getIDByPastID($zwebtype.'molds', $zwebtype.'moldid', 'past'.$zwebtype.'moldid', $zrow["attachmoldid"]);
+							
+							$wtwhandlers->query("
+								update ".wtw_tableprefix."actionzones
+								set attachmoldid='".$znewattachmoldid."'
+								where actionzoneid='".$zrow["actionzoneid"]."'
+									and not attachmoldid=''
+								limit 1;");
+						}
+
+
+						/* get webimages */
+						foreach ($zmold->webimages as $zwebimage) {
+							$znewwebimageid = $wtwhandlers->getNewKey('webimages', 'webimageid', $zwebimage->webimageid);
+
+							$znewcommunitymoldid = '';
+							$znewbuildingmoldid = '';
+							$znewthingmoldid = '';
+							switch ($zwebtype) {
+								case 'community':
+									$znewcommunitymoldid = $znewmoldid;
+									break;
+								case 'building':
+									$znewbuildingmoldid = $znewmoldid;
+									break;
+								case 'thing':
+									$znewthingmoldid = $znewmoldid;
+									break;
+							}
+							/* get new foreign keys */
+							$znewimageid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zwebimage->imageid);
+							$znewimagehoverid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zwebimage->imagehoverid);
+							$znewimageclickid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zwebimage->imageclickid);
+							
+							$znewuserid = $wtwhandlers->getUserIDfromPastID($zwebimage->userid);
+							$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zwebimage->createuserid);
+							$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zwebimage->updateuserid);
+							
+							/* insert new record into webimages table */
+							$wtwhandlers->query("
+								insert into ".wtw_tableprefix."webimages 
+								   (webimageid,
+									pastwebimageid,
+									communitymoldid,
+									buildingmoldid,
+									thingmoldid,
+									imageindex,
+									imageid,
+									imagehoverid,
+									imageclickid,
+									graphiclevel,
+									jsfunction,
+									jsparameters,
+									userid,
+									alttag,
+									createdate,
+									createuserid,
+									updatedate,
+									updateuserid)
+								values
+								   ('".$znewwebimageid."',
+									'".$zwebimage->webimageid."',
+									'".$znewcommunitymoldid."',
+									'".$znewbuildingmoldid."',
+									'".$znewthingmoldid."',
+									".$zwebimage->imageindex.",
+									'".$znewimageid."',
+									'".$znewimagehoverid."',
+									'".$znewimageclickid."',
+									".$zwebimage->graphiclevel.",
+									'".$zwebimage->jsfunction."',
+									'".$zwebimage->jsparameters."',
+									'".$znewuserid."',
+									'".$zwebimage->alttag."',
+									'".$zwebimage->createdate."',
+									'".$znewcreateuserid."',
+									now(),
+									'".$znewupdateuserid."');");	
+						}			
+					}
+				}
+
+
+				/* if part of the new install process, add the first building to the first community */
+				if ($zwebtype == 'building' && !empty($zcommunityid) && isset($zcommunityid)) {
+					$znewconnectinggridid = $wtwhandlers->getNewKey('connectinggrids', 'connectinggridid', '');
+					$zloadactionzoneid = '';
+					if (is_numeric($zbuildingpositionx) == false) {
+						$zbuildingpositionx = 0;
+					}
+					if (is_numeric($zbuildingpositiony) == false) {
+						$zbuildingpositiony = 0;
+					}
+					if (is_numeric($zbuildingpositionz) == false) {
+						$zbuildingpositionz = 0;
+					}
+					if (is_numeric($zbuildingrotationy) == false) {
+						$zbuildingrotationy = 0;
+					}
+					
+					/* get the extreme loadzone for the new building */
+					$zresultsaz = $wtwhandlers->query("
+						select * 
+						from ".wtw_tableprefix."actionzones 
+						where buildingid='".$znewwebid."'
+							and actionzonename='Extreme Load Zone'
+							and deleted=0
+						limit 1;");
+					foreach ($zresultsaz as $zrowaz) {
+						$zloadactionzoneid = $zrowaz["actionzoneid"];
+					}
+					
+					/* add connecting grid to place the building into the community during first time installs */
+					if (!empty($zloadactionzoneid) && isset($zloadactionzoneid)) {
 						$wtwhandlers->query("
 							insert into ".wtw_tableprefix."connectinggrids 
 							   (connectinggridid,
@@ -2843,32 +2758,138 @@ class wtwcommunities {
 								updateuserid)
 							values
 							   ('".$znewconnectinggridid."',
-								'".$zconnectinggrid->connectinggridid."',
+								'',
+								'".$zcommunityid."',
+								'community',
 								'".$znewwebid."',
-								'".$zconnectinggrid->parentwebtype."',
-								'".$znewchildwebid."',
-								'".$zconnectinggrid->childwebtype."',
-								".$zconnectinggrid->positionx.",
-								".$zconnectinggrid->positiony.",
-								".$zconnectinggrid->positionz.",
-								".$zconnectinggrid->scalingx.",
-								".$zconnectinggrid->scalingy.",
-								".$zconnectinggrid->scalingz.",
-								".$zconnectinggrid->rotationx.",
-								".$zconnectinggrid->rotationy.",
-								".$zconnectinggrid->rotationz.",
-								'".$znewloadactionzoneid."',
-								'".$znewaltloadactionzoneid."',
-								'".$znewunloadactionzoneid."',
-								'".$znewattachactionzoneid."',
-								'".$zconnectinggrid->alttag."',
-								'".$zconnectinggrid->createdate."',
-								'".$znewcreateuserid."',
+								'building',
+								".$zbuildingpositionx.",
+								".$zbuildingpositiony.",
+								".$zbuildingpositionz.",
+								1,
+								1,
+								1,
+								0,
+								".$zbuildingrotationy.",
+								0,
+								'".$zloadactionzoneid."',
+								'',
+								'',
+								'',
+								'',
 								now(),
-								'".$znewupdateuserid."');");
-						if ($zfetchweb) {
-							/* assign newchildwebid, but also need to pass the webid... */
-							$this->downloadWeb($zconnectinggrid->childwebid, $znewchildwebid, $zconnectinggrid->childwebtype, $znewwebid, $zconnectinggrid->parentwebtype, '', 0, 0, 0, 0);
+								'".$zuserid."',
+								now(),
+								'".$zuserid."');");
+					}
+				}
+
+				/* process child connecting grids */
+				if ($zwebtype != 'thing') {
+					$zdiffwebid = '';
+					foreach ($zrequest->childconnectinggrids as $zconnectinggrid) {
+					
+						/* check if the connectinggridid is already in use */
+						$znewconnectinggridid = $wtwhandlers->getNewKey('connectinggrids', 'connectinggridid', $zconnectinggrid->connectinggridid);
+
+						if (($zwebtype == 'community' && ($zconnectinggrid->childwebtype == 'building' || $zconnectinggrid->childwebtype == 'thing')) || ($zwebtype == 'building' && $zconnectinggrid->childwebtype == 'thing')) {
+							$zfetchweb = false;
+							
+							/* look out for duplicates, while making sure we get each 3D webs */
+							$znewchildwebid = '';
+							$znewchildwebtypes = '';
+							switch ($zconnectinggrid->childwebtype) {
+								case "community":
+									$znewchildwebtypes = 'communities';
+									break;
+								case "building":
+									$znewchildwebtypes = 'buildings';
+									break;
+								case "thing":
+									$znewchildwebtypes = 'things';
+									break;
+							}
+							$znewchildwebid = $wtwhandlers->getNewKey($znewchildwebtypes, $zconnectinggrid->childwebtype.'id', $zconnectinggrid->childwebid);
+							
+							if ($zdiffwebid != $zconnectinggrid->childwebid) {
+								$zfetchweb = true;
+								$zdiffwebid = $zconnectinggrid->childwebid;
+							} else {
+								$zresults = $wtwhandlers->query("
+									select *  from ".wtw_tableprefix.$znewchildwebtypes." 
+									where past".$zconnectinggrid->childwebtype."id='".$zconnectinggrid->childwebid."'
+									order by createdate desc
+									limit 1;");
+								foreach ($zresults as $zrow) {
+									$znewchildwebid = $zrow[$zconnectinggrid->childwebtype."id"];
+								}
+							}
+							
+							/* get new foreign keys */
+							$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->loadactionzoneid);
+							$znewaltloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->altloadactionzoneid);
+							$znewunloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->unloadactionzoneid);
+							$znewattachactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->attachactionzoneid);
+							
+							$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->createuserid);
+							$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->updateuserid);
+							
+							/* insert new record into connectinggrids table (additional 3D Webs in the current 3D Web) */
+							$wtwhandlers->query("
+								insert into ".wtw_tableprefix."connectinggrids 
+								   (connectinggridid,
+									pastconnectinggridid,
+									parentwebid,
+									parentwebtype,
+									childwebid,
+									childwebtype,
+									positionx,
+									positiony,
+									positionz,
+									scalingx,
+									scalingy,
+									scalingz,
+									rotationx,
+									rotationy,
+									rotationz,
+									loadactionzoneid,
+									altloadactionzoneid,
+									unloadactionzoneid,
+									attachactionzoneid,
+									alttag,
+									createdate,
+									createuserid,
+									updatedate,
+									updateuserid)
+								values
+								   ('".$znewconnectinggridid."',
+									'".$zconnectinggrid->connectinggridid."',
+									'".$znewwebid."',
+									'".$zconnectinggrid->parentwebtype."',
+									'".$znewchildwebid."',
+									'".$zconnectinggrid->childwebtype."',
+									".$zconnectinggrid->positionx.",
+									".$zconnectinggrid->positiony.",
+									".$zconnectinggrid->positionz.",
+									".$zconnectinggrid->scalingx.",
+									".$zconnectinggrid->scalingy.",
+									".$zconnectinggrid->scalingz.",
+									".$zconnectinggrid->rotationx.",
+									".$zconnectinggrid->rotationy.",
+									".$zconnectinggrid->rotationz.",
+									'".$znewloadactionzoneid."',
+									'".$znewaltloadactionzoneid."',
+									'".$znewunloadactionzoneid."',
+									'".$znewattachactionzoneid."',
+									'".$zconnectinggrid->alttag."',
+									'".$zconnectinggrid->createdate."',
+									'".$znewcreateuserid."',
+									now(),
+									'".$znewupdateuserid."');");
+							if ($zfetchweb) {
+								/* assign newchildwebid, but also need to pass the webid... */
+								$this->downloadWeb($zconnectinggrid->childwebid, $znewchildwebid, $zconnectinggrid->childwebtype, $zusertoken, $znewwebid, $zconnectinggrid->parentwebtype, '', 0, 0, 0, 0);
+							}
 						}
 					}
 				}
@@ -2946,11 +2967,11 @@ class wtwcommunities {
 							 ".$zgroundpositiony.", 
 							 ".$zwaterpositiony.", 
 							 '".$zalttag."',
-							 '".$wtwhandlers->userid."',
+							 '".$zuserid."',
 							 now(),
-							 '".$wtwhandlers->userid."',
+							 '".$zuserid."',
 							 now(),
-							 '".$wtwhandlers->userid."');");
+							 '".$zuserid."');");
 					$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."userauthorizations

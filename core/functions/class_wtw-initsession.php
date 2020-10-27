@@ -1569,6 +1569,20 @@ class wtw {
 			$initialscene['thinginfo'] = $zthinginfo;
 			$initialscene['startlocation'] = $startlocation;
 			$initialscene['useraccesslist'] = null;
+			/* get main 3D Thing settings */
+			$zresults = $wtwdb->query("
+				select settingvalue
+				from ".wtw_tableprefix."settings
+				where settingname='enableemailvalidation'
+					and deleted=0
+				limit 1;");
+			if (count($zresults) > 0) {
+				foreach ($zresults as $zrow) {
+					$initialscene['enableemailvalidation'] = $zrow["settingvalue"];
+				}
+			} else {
+				$initialscene['enableemailvalidation'] = '0';
+			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-getSceneSetting=".$e->getMessage());
 		}
@@ -1611,14 +1625,14 @@ class wtw {
 							then u1.imageheight
 							else u2.imageheight
 							end as previewheight,
-						communityname as webname,
-						communitydescription as webdescription
+						c1.communityname as webname,
+						c1.communitydescription as webdescription
 					from ".wtw_tableprefix."communities c1 
 					inner join ".wtw_tableprefix."uploads u1 
 						on c1.snapshotid=u1.uploadid 
 					left join ".wtw_tableprefix."uploads u2 
 						on u1.originalid=u2.uploadid 
-					where c1.communityid=".$this->communityid." limit 1);");
+					where c1.communityid='".$this->communityid."' limit 1;");
 			} else if (!empty($this->buildingid)) {
 				/* get meta data values based on 3D Building as root level */
 				$zresults = $wtwdb->query("
@@ -1639,14 +1653,14 @@ class wtw {
 							then u1.imageheight
 							else u2.imageheight
 							end as previewheight,
-						buildingname as webname,
-						buildingdescription as webdescription
+						b1.buildingname as webname,
+						b1.buildingdescription as webdescription
 					from ".wtw_tableprefix."buildings b1 
 					inner join ".wtw_tableprefix."uploads u1 
 						on b1.snapshotid=u1.uploadid 
 					left join ".wtw_tableprefix."uploads u2 
 						on u1.originalid=u2.uploadid 
-					where b1.buildingid=".$this->buildingid." limit 1);");
+					where b1.buildingid='".$this->buildingid."' limit 1;");
 			} else if (!empty($this->thingid)) {
 				/* get meta data values based on 3D Thing as root level */
 				$zresults = $wtwdb->query("
@@ -1667,14 +1681,14 @@ class wtw {
 							then u1.imageheight
 							else u2.imageheight
 							end as previewheight,
-							thingname as webname,
-							thingdescription as webdescription
+							t1.thingname as webname,
+							t1.thingdescription as webdescription
 					from ".wtw_tableprefix."things t1 
 					inner join ".wtw_tableprefix."uploads u1 
 						on t1.snapshotid=u1.uploadid 
 					left join ".wtw_tableprefix."uploads u2 
 						on u1.originalid=u2.uploadid 
-					where t1.thingid=".$this->thingid." limit 1);");
+					where t1.thingid='".$this->thingid."' limit 1;");
 			}
 			foreach ($zresults as $zrow) {
 				$previewpath = $zrow["previewpath"]."?time=".date_timestamp_get(date_create());
@@ -1684,7 +1698,8 @@ class wtw {
 				$webtitle = $zrow["webname"];
 				$webdescription = $zrow["webdescription"];
 			}
-			if (!file_exists($this->contentpath.$testpreviewpath)) {
+
+			if (!file_exists($this->contentpath.$testpreviewpath) && !empty($testpreviewpath)) {
 				$previewpath = $this->domainurl."/content/system/stock/wtw-3dinternet.jpg";
 			}
 			if ($this->pagename == 'admin.php') {
@@ -1693,7 +1708,7 @@ class wtw {
 			}
 			if (empty($webtitle) || !isset($webtitle)) {
 				$webtitle = "WalkTheWeb 3D Internet";
-			} 
+			}
 			if (empty($webdescription) || !isset($webdescription)) {
 				$webdescription = "WalkTheWeb: Internationally Patented 3D Internet Browsing and 3D Website hosting. WalkTheWeb (R), http://3d (TM), https://3d (TM), and HTTP3D (TM).";
 			} 
@@ -1716,7 +1731,7 @@ class wtw {
 			$metadata .= "<meta property=\"og:type\" content=\"business.business\" />\r\n";
 			$metadata .= "<meta property=\"og:title\" content=\"".$webtitle."\" />\r\n";
 			/* additional optional meta data - should be defined on the /config/wtw_config.php file */
-			if (defined('domainverify')) {
+/*			if (defined('domainverify')) {
 				$metadata .= "<meta name=\"p:domain_verify\" content=\"".domainverify."\"/>\r\n";
 			}
 			if (defined('fbappid')) {
@@ -1725,7 +1740,7 @@ class wtw {
 			if (defined('contactemail')) {
 				$metadata .= "<meta property=\"business:contact_data\" content=\"".contactemail."\" />\r\n";
 			}
-		} catch (Exception $e) {
+*/		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadMetaData=".$e->getMessage());
 		}
 		return $metadata;
@@ -1918,7 +1933,7 @@ class wtw {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tcontentpath\" value=\"".$wtwuser->contentpath."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuploadpathid\" value=\"".$wtwuser->uploadpathid."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tinstanceid\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tglobalavatarid\" value=\"\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tglobaluseravatarid\" value=\"\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseravatarid\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarid\" value=\"\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationevent\" />\r\n";

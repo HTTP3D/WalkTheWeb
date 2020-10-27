@@ -39,7 +39,7 @@ class wtwbuildings {
 		return $found;
 	}
 
-	public function saveBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zanalyticsid, $zalttag) {
+	public function saveBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zbuildingdescription, $zanalyticsid, $zalttag) {
 		/* save building settings */
 		global $wtwhandlers;
 		$zcopybuildingid = "";
@@ -60,6 +60,7 @@ class wtwbuildings {
 							(buildingid,
 							 pastbuildingid,
 							 buildingname,
+							 buildingdescription,
 							 analyticsid,
 							 userid,
 							 alttag,
@@ -71,6 +72,7 @@ class wtwbuildings {
 							('".$zbuildingid."',
 							 '',
 							 '".$wtwhandlers->escapeHTML($zbuildingname)."',
+							 '".$wtwhandlers->escapeHTML($zbuildingdescription)."',
 							 '".$zanalyticsid."',
 							 '".$wtwhandlers->userid."',
 							 '".$wtwhandlers->escapeHTML($zalttag)."',
@@ -85,6 +87,7 @@ class wtwbuildings {
 							(buildingid,
 							 pastbuildingid,
 							 buildingname,
+							 buildingdescription,
 							 analyticsid,
 							 userid,
 							 positionx,
@@ -111,6 +114,7 @@ class wtwbuildings {
 						select '".$zbuildingid."' as buildingid,
 							 '".$zpastbuildingid."' as pastbuildingid,
 							 '".$wtwhandlers->escapeHTML($zbuildingname)."' as buildingname,
+							 '".$wtwhandlers->escapeHTML($zbuildingdescription)."' as buildingdescription,
 							 analyticsid,
 							 '".$wtwhandlers->userid."' as userid,
 							 positionx,
@@ -162,11 +166,12 @@ class wtwbuildings {
 				/* only updates if you have access */
 				 $wtwhandlers->query("
 					update ".wtw_tableprefix."buildings
-					set  buildingname='".$wtwhandlers->escapeHTML($zbuildingname)."',
-						 analyticsid='".$zanalyticsid."',
-						 alttag='".$wtwhandlers->escapeHTML($zalttag)."',
-						 updatedate=now(),
-						 updateuserid='".$wtwhandlers->userid."'
+					set buildingname='".$wtwhandlers->escapeHTML($zbuildingname)."',
+						buildingdescription='".$wtwhandlers->escapeHTML($zbuildingdescription)."',
+						analyticsid='".$zanalyticsid."',
+						alttag='".$wtwhandlers->escapeHTML($zalttag)."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
 					where buildingid='".$zbuildingid."';"); 
 			}
 		} catch (Exception $e) {

@@ -785,12 +785,14 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsOnMyAvatarSelect = function(zglobalavatarid, zuseravatarid, zavatarid) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsOnMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, zavatarid) {\r\n";
+			$jsdata .= "		var zloading = false;\r\n";
 			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->getScriptFunction('onmyavatarselect');
+			$jsdata .= 	$this->returnScriptFunction('onmyavatarselect', 'zloading');
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsOnMyAvatarSelect=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zloading;\r\n";
 			$jsdata .= "	}\r\n";
 
 			$jsdata .= "	WTWJS.prototype.pluginsBeforeUnload = function() {\r\n";

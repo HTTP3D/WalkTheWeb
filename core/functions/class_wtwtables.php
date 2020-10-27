@@ -960,7 +960,7 @@ class wtwtables {
 				  `recoverpassworddate` datetime DEFAULT NULL,
 				  `usertoken` varchar(2048) DEFAULT '',
 				  `email` varchar(255) DEFAULT '',
-				  `emailconfirm` varchar(64) DEFAULT '',
+				  `emailconfirm` varchar(255) DEFAULT '',
 				  `emailconfirmdate` datetime DEFAULT NULL,
 				  `displayname` varchar(255) DEFAULT '',
 				  `firstname` varchar(255) DEFAULT '',

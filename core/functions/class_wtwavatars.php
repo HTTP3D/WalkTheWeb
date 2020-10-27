@@ -165,6 +165,8 @@ class wtwavatars {
 					$zscalingx = .04;
 					$zscalingy = .04;
 					$zscalingz = .04;
+					$zstartframe = 0;
+					$zendframe = 0;
 					$zdisplayname = base64_decode($zdisplayname);
 					/* get default avatar definition from avatars table */
 					$zresults = $wtwhandlers->query("
@@ -182,6 +184,8 @@ class wtwavatars {
 						$zscalingx = $zrow["scalingx"];
 						$zscalingy = $zrow["scalingy"];
 						$zscalingz = $zrow["scalingz"];
+						$zstartframe = $zrow["startframe"];
+						$zendframe = $zrow["endframe"];
 					}
 					
 					if (isset($zfoundavatarid) && !empty($zfoundavatarid)) {
@@ -201,7 +205,11 @@ class wtwavatars {
 								 scalingx,
 								 scalingy,
 								 scalingz,
+								 startframe,
+								 endframe,
 								 displayname,
+								 lastdate,
+								 lastip,
 								 createdate,
 								 createuserid,
 								 updatedate,
@@ -219,7 +227,11 @@ class wtwavatars {
 								 ".$wtwhandlers->checkNumber($zscalingx,.04).",
 								 ".$wtwhandlers->checkNumber($zscalingy,.04).",
 								 ".$wtwhandlers->checkNumber($zscalingz,.04).",
+								 ".$wtwhandlers->checkNumber($zstartframe,0).",
+								 ".$wtwhandlers->checkNumber($zendframe,0).",
 								 '".$wtwhandlers->checkDisplayName($zdisplayname, 'Anonymous')."',
+								 now(),
+								 '".$zuserip."',
 								 now(),
 								 '".$wtwhandlers->userid."',
 								 now(),

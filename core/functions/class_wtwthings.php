@@ -39,7 +39,7 @@ class wtwthings {
 		return $found;
 	}
 
-	public function saveThing($zthingid, $zpastthingid, $zthingname, $zanalyticsid, $zalttag) {
+	public function saveThing($zthingid, $zpastthingid, $zthingname, $zthingdescription, $zanalyticsid, $zalttag) {
 		/* save thing settings */
 		global $wtwhandlers;
 		$copythingid = "";
@@ -60,6 +60,7 @@ class wtwthings {
 							(thingid,
 							 pastthingid,
 							 thingname,
+							 thingdescription,
 							 analyticsid,
 							 userid,
 							 alttag,
@@ -71,6 +72,7 @@ class wtwthings {
 							('".$zthingid."',
 							 '',
 							 '".$wtwhandlers->escapeHTML($zthingname)."',
+							 '".$wtwhandlers->escapeHTML($zthingdescription)."',
 							 '".$zanalyticsid."',
 							 '".$wtwhandlers->userid."',
 							 '".$wtwhandlers->escapeHTML($zalttag)."',
@@ -85,6 +87,7 @@ class wtwthings {
 							(thingid,
 							 pastthingid,
 							 thingname,
+							 thingdescription,
 							 analyticsid,
 							 userid,
 							 positionx,
@@ -111,6 +114,7 @@ class wtwthings {
 						select '".$zthingid."' as thingid,
 							 '".$zpastthingid."' as pastthingid,
 							 '".$wtwhandlers->escapeHTML($zthingname)."' as thingname,
+							 '".$wtwhandlers->escapeHTML($zthingdescription)."' as thingdescription,
 							 analyticsid,
 							 '".$wtwhandlers->userid."' as userid,
 							 positionx,
@@ -163,6 +167,7 @@ class wtwthings {
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."things
 					set  thingname='".$wtwhandlers->escapeHTML($zthingname)."',
+						 thingdescription='".$wtwhandlers->escapeHTML($zthingdescription)."',
 						 analyticsid='".$zanalyticsid."',
 						 alttag='".$wtwhandlers->escapeHTML($zalttag)."',
 						 updatedate=now(),

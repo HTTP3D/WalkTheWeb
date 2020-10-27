@@ -93,7 +93,7 @@ class wtwusers {
 				if (!empty($zemail) && isset($zemail)) {
 					$zresults = $wtwdb->query("
 							select * from ".wtw_tableprefix."users 
-							where email='".$zemail."'
+							where email like '".$zemail."'
 								and pastuserid=''
 								and deleted=0 
 							limit 1;");
@@ -167,7 +167,7 @@ class wtwusers {
 			if (!empty($zemail) && isset($zemail)) {
 				$zresults = $wtwdb->query("
 					select * from ".wtw_tableprefix."users 
-					where email='".$zemail."'
+					where email like '".$zemail."'
 					order by createdate
 					limit 1;");
 			}
@@ -577,7 +577,7 @@ class wtwusers {
 					$zresults = $wtwhandlers->query("
 						select userid 
 						from ".wtw_tableprefix."users 
-						where email='".$zusersearch."' 
+						where email like '".$zusersearch."' 
 							and deleted=0 
 						order by createdate desc 
 						limit 1");
@@ -810,13 +810,13 @@ class wtwusers {
 			if (!empty($zdisplayname) && isset($zdisplayname)) {
 				$zdisplayname = base64_decode($zdisplayname);
 			}
-			if (!empty($zemail) && isset($zemail)) {
-				$zemail = base64_decode($zemail);
+			if (!empty($zuseremail) && isset($zuseremail)) {
+				$zuseremail = base64_decode($zuseremail);
 			}
 			if (!empty($zpassword) && isset($zpassword)) {
 				$zpassword = base64_decode($zpassword);
 			}
-			if ($this->isEmailAvailable($zemail)) {
+			if ($this->isEmailAvailable($zuseremail)) {
 				$zuserid = $wtwhandlers->getRandomString(16,1);
 				$zuploadpathid = $wtwhandlers->getRandomString(16,1);
 				$zoptions = ['cost' => 11];
@@ -837,7 +837,7 @@ class wtwusers {
 						('".$zuserid."',
 						 '".$zuploadpathid."', 
 						 '".$zpasswordhash."',
-						 '".$zemail."',
+						 '".$zuseremail."',
 						 '".addslashes($zdisplayname)."',
 						 '".$ztimestamp."',
 						 '".$zuserid."',
@@ -861,7 +861,7 @@ class wtwusers {
 		return array( 
 			'success' => $zsuccess,
 			'serror'  => $zserror,
-			'email'  => $zemail,
+			'email'  => $zuseremail,
 			'displayname'  => addslashes($zdisplayname));
 	}
 	
@@ -873,7 +873,7 @@ class wtwusers {
 			$zresults = $wtwhandlers->query("
 				select userid
 				from ".wtw_tableprefix."users
-				where email='".$zuseremail."'
+				where email like '".$zuseremail."'
 				limit 1;");
 			foreach ($zresults as $zrow) {
 				$zfound = true;
@@ -892,7 +892,7 @@ class wtwusers {
 			$zresults = $wtwhandlers->query("
 				select userid
 				from ".wtw_tableprefix."users
-				where email='".$zuseremail."'
+				where email like '".$zuseremail."'
 				limit 1;");
 			foreach ($zresults as $zrow) {
 				$zuserid = $zrow["userid"];
@@ -903,29 +903,84 @@ class wtwusers {
 		return $zuserid;
 	}
 
-	public function recoverLoginByEmail($zuseremail) {
-		/* recover account by email */
+	public function passwordRecovery($zuseremail) {
 		global $wtwhandlers;
-		$zresponse = "";
+		$zresponse = array(
+			'serror'=>''
+		);
 		try {
 			$zuserid = $this->getUserIdByEmail($zuseremail);
 			if (!empty($zuserid) && isset($zuserid)) {
+				$zrecoverpassword = $wtwhandlers->getRandomString(128,1);
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."users
+					set recoverpassword='".$zrecoverpassword."',
+						recoverpassworddate=now()
+					where userid like '".$zuserid."';");
 				/* send email */
-				
-				
-				
-				
-				
-				$zresponse = "<span style=\"color:green;\">Login sent to Email Address</span>";
+				global $wtwtools;
+				$zhtmlmessage = "You have requested to Reset Your Password on your ".$wtwhandlers->domainname." account using this email address.<br /><br />If you did not request to recover your password, ignore this email.<br /><br />Otherwise, to Reset your Password, please click this link:<br /><br /><a href='".$wtwhandlers->domainurl."/core/pages/passwordreset.php?email=".$zuseremail."&confirm=".$zrecoverpassword."'>Reset My Password</a><br /><br /><b>Welcome to WalkTheWeb 3D Internet!</b>";
+				$zmessage = "You have requested to Reset Your Password on your ".$wtwhandlers->domainname." account using this email address.\r\n\r\nIf you did not request to recover your password, ignore this email.\r\n\r\nOtherwise, to Reset your Password, please copy and paste this link into your browser:\r\n\r\n".$wtwhandlers->domainurl."/core/pages/passwordreset.php?email=".$zuseremail."&confirm=".$zrecoverpassword."\r\n\r\nWelcome to WalkTheWeb 3D Internet!";
+				$zresponse = $wtwtools->sendEmail(array($zuseremail), '', '', $wtwhandlers->domainname.' - Password Recovery', $zhtmlmessage, $zmessage);
 			} else {
-				$zresponse = "Email Address Not Found";
+				$zresponse = array(
+					'serror'=>'User Account Not Found or Not Validated'
+				);
 			}
 		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwusers.php-recoverLoginByEmail=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-passwordRecovery=".$e->getMessage());
 		}
 		return $zresponse;
 	}
-	
+
+	public function checkEmailValidation($zemail, $zuserid) {
+		global $wtwhandlers;
+		$zresponse = array(
+			'valid'=>'0',
+			'emailconfirm'=>'',
+			'userid'=>'',
+			'displayname'=>''
+		);
+		try {
+			if (!empty($zuserid) && isset($zuserid)) {
+				$zuserid = base64_decode($zuserid);
+			}
+			$zresults = $wtwhandlers->query("
+				select *
+				from ".wtw_tableprefix."users
+				where email like '".$zemail."'
+					and userid='".$zuserid."'
+					and deleted=0
+				order by createdate
+				limit 1;");
+			foreach ($zresults as $zrow) {
+				if (!empty($zrow["emailconfirmdate"]) && isset($zrow["emailconfirmdate"])) {
+					$zresponse = array(
+						'valid'=>'1',
+						'emailconfirm'=>'',
+						'userid'=>$zrow["userid"],
+						'displayname'=>$zrow["displayname"]
+					);
+				} else {
+					$zemailconfirm = $wtwhandlers->getRandomString(128,1);
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."users
+						set emailconfirm='".$zemailconfirm."'
+						where userid like '".$zrow["userid"]."';");
+					$zresponse = array(
+						'valid'=>'0',
+						'emailconfirm'=>$zemailconfirm,
+						'userid'=>'',
+						'displayname'=>''
+					);
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-checkEmailValidation=".$e->getMessage());
+		}
+		return $zresponse;
+	}
+
 	public function saveMyProfile($zuserid, $zdisplayname, $zuseremail, $zfirstname, $zlastname, $zgender, $zdob) {
 		/* update the local user profile */
 		global $wtwhandlers;
