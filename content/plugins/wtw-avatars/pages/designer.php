@@ -89,7 +89,7 @@ $zver = date("Y-m-d-H-i-s");
 		<input type="hidden" id="wtw_tuserid" value="<?php echo $wtw->userid; ?>" />
 		<input type="hidden" id="wtw_tuserip" value="<?php echo $wtw->userip; ?>" />
 		<input type="hidden" id="wtw_tglobaluserid" value="" />
-		<input type="hidden" id="wtw_tglobalavatarid" value="" />
+		<input type="hidden" id="wtw_tglobaluseravatarid" value="" />
 		<input type="hidden" id="wtw_tglobalavatar" value="1" />
 		<input type="hidden" id="wtw_tinstanceid" />
 		<input type="hidden" id="wtw_tusertoken" />
