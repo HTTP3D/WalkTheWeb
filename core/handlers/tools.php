@@ -12,14 +12,43 @@ try {
 	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zsendto = $wtwhandlers->getPost('sendto','');
+	$zcopyto = $wtwhandlers->getPost('copyto','');
+	$zbccto = $wtwhandlers->getPost('bccto','');
 	$zsubject = $wtwhandlers->getPost('subject','');
+	$zhtmlmessage = $wtwhandlers->getPost('htmlmessage','');
 	$zmessage = $wtwhandlers->getPost('message','');
 	
+	/* convert any comma seperated email lists into arrays */
+	if (!empty($zsendto) && isset($zsendto)) {
+		if (strpos($zsendto,",") === false) {
+			$zsendto = array($zsendto);
+		} else {
+			$zsendto = explode(',',$zsendto);
+		}
+	}
+	if (!empty($zcopyto) && isset($zcopyto)) {
+		if (strpos($zcopyto,",") === false) {
+			$zcopyto = array($zcopyto);
+		} else {
+			$zcopyto = explode(',',$zcopyto);
+		}
+	}
+	if (!empty($zbccto) && isset($zbccto)) {
+		if (strpos($zbccto,",") === false) {
+			$zbccto = array($zbccto);
+		} else {
+			$zbccto = explode(',',$zbccto);
+		}
+	}
+
 	/* select the function called */
 	$zresponse = array();
 	switch ($zfunction) {
 		case "sendadminemail":
 			$zresponse = $wtwtools->sendAdminEmail($zsendto, $zsubject, $zmessage);
+			break;
+		case "sendemail":
+			$zresponse = $wtwtools->sendEmail($zsendto, $zcopyto, $zbccto, $zsubject, $zhtmlmessage, $zmessage);
 			break;
 	}
 

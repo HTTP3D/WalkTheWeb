@@ -1,3 +1,6 @@
+<?php
+header('Set-Cookie: cross-site-cookie=name; SameSite=Lax;');
+?>
 <html>
 <head>
 <title>Analytics - 3D Community Loaded at Near Distance</title>

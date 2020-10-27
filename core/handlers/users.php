@@ -52,11 +52,12 @@ try {
 		case "register":
 			$zresponse = $wtwusers->createAccount($zuseremail, $zpassword, $zdisplayname);
 			break;
-		case "recoverloginbyemail":
-			$zloginresponse = $wtwusers->recoverLoginByEmail($zuseremail);
-			$zresponse = array(
-				'loginresponse'=> $zloginresponse
-			);
+		case "checkemailvalidation":
+			$zresponse = $wtwusers->checkEmailValidation($zuseremail, $zuserid);
+			break;
+		case "passwordrecovery":
+			require_once(wtw_rootpath.'/core/functions/class_wtwtools.php');
+			$zresponse = $wtwusers->passwordRecovery($zuseremail);
 			break;
 		case "logout":
 			$wtwusers->logout();

@@ -52,7 +52,7 @@ try {
 			);
 			break;
 		case "savesetting":
-			$zsuccess = $wtwuploads->saveSetting($zsetting, $zvalue);
+			$zsuccess = $wtwuploads->saveSetting($zsettings, $zvalue);
 			$zresponse = array(
 				'success'=> $zsuccess
 			);

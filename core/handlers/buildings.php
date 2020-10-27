@@ -14,6 +14,7 @@ try {
 	$zbuildingid = $wtwhandlers->getPost('buildingid','');
 	$zpastbuildingid = $wtwhandlers->getPost('pastbuildingid','');
 	$zbuildingname = base64_decode($wtwhandlers->getPost('buildingname',''));
+	$zbuildingdescription = base64_decode($wtwhandlers->getPost('buildingdescription',''));
 	$zdescription = base64_decode($wtwhandlers->getPost('description',''));
 	$ztags = base64_decode($wtwhandlers->getPost('tags',''));
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
@@ -34,7 +35,7 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savebuilding":
-			$zbuildingid = $wtwbuildings->saveBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zanalyticsid, $zalttag);
+			$zbuildingid = $wtwbuildings->saveBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zbuildingdescription, $zanalyticsid, $zalttag);
 			$zresponse = array(
 				'buildingid'=> $zbuildingid
 			);

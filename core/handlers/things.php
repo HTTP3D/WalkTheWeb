@@ -14,6 +14,7 @@ try {
 	$zthingid = $wtwhandlers->getPost('thingid','');
 	$zpastthingid = $wtwhandlers->getPost('pastthingid','');
 	$zthingname = base64_decode($wtwhandlers->getPost('thingname',''));
+	$zthingdescription = base64_decode($wtwhandlers->getPost('thingdescription',''));
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
 	$zalttag = base64_decode($wtwhandlers->getPost('alttag',''));
 	$zpositionx = $wtwhandlers->getPost('positionx','0');
@@ -34,7 +35,7 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savething":
-			$zthingid = $wtwthings->saveThing($zthingid, $zpastthingid, $zthingname, $zanalyticsid, $zalttag);
+			$zthingid = $wtwthings->saveThing($zthingid, $zpastthingid, $zthingname, $zthingdescription, $zanalyticsid, $zalttag);
 			$zresponse = array(
 				'thingid'=> $zthingid
 			);

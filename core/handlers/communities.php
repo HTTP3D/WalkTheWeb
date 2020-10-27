@@ -16,6 +16,7 @@ try {
 	$zwebid = $wtwhandlers->getPost('webid','');
 	$zwebtype = $wtwhandlers->getPost('webtype','');
 	$zcommunityname = base64_decode($wtwhandlers->getPost('communityname',''));
+	$zcommunitydescription = base64_decode($wtwhandlers->getPost('communitydescription',''));
 	$zdescription = base64_decode($wtwhandlers->getPost('description',''));
 	$ztags = base64_decode($wtwhandlers->getPost('tags',''));
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
@@ -52,7 +53,7 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savecommunity":
-			$zcommunityid = $wtwcommunities->saveCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag);
+			$zcommunityid = $wtwcommunities->saveCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zcommunitydescription, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag);
 			$zresponse = array(
 				'communityid'=> $zcommunityid
 			);
@@ -79,7 +80,7 @@ try {
 			$zresponse = $wtwcommunities->shareCommunityTemplate($zcommunityid, $zsharehash);
 			break;
 		case "downloadweb":
-			$znewwebid = $wtwcommunities->downloadWeb($zwebid, $zwebid, $zwebtype, '', '', $zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingrotationy);
+			$znewwebid = $wtwcommunities->downloadWeb($zwebid, $zwebid, $zwebtype, '', '', '', $zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingrotationy);
 			$zresponse = array(
 				'webid'=> $znewwebid,
 				'webtype'=> $zwebtype
