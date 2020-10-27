@@ -1919,6 +1919,15 @@ h2.wtw-login {
 	margin-bottom:25px;
 	background-image:linear-gradient(rgba(200, 200, 200, .2), rgba(14, 115, 237, .6)); 
 }
+.wtw-loginlabelwidth {
+	width:160px;
+	float:left;
+	font-size:1.2em;
+	text-align:center;
+	padding:10px;
+	margin-left:5px;
+	margin-bottom:5px;
+}
 .wtw-profiletext {
 	float:right;
 	cursor: default;
@@ -1985,7 +1994,7 @@ input[type=checkbox].wtw-checkbox:hover {
 }
 .wtw-errortext {
 	color:red;
-	font-size:1.2;
+	font-size:1.2em;
 	font-weight:bold;
 }
 .wtw-loginlogo {
@@ -1998,6 +2007,47 @@ input[type=checkbox].wtw-checkbox:hover {
 	float:right;
 	width:40px;
 	height:40px;
+}
+.wtw-servicelisting-invoice {
+	width:96%;
+	margin:10px auto 10px auto;
+	padding:10px;
+	color:#000000;
+	border-top:1px solid #0000ff;
+	border-left:1px solid #0000ff;
+	border-right:1px solid #000000;
+	border-bottom:1px solid #000000;
+	border-radius:10px;
+	box-shadow: 2px 5px #777777;
+	background-color:#ffffff;
+	vertical-align:middle;
+	text-align:center;
+}
+.wtw-notice {
+	font-size:.8em;
+	color:#000000;
+	text-align:left;
+}
+h2.wtw-categoryheading {
+	background:#000000;
+	color:#ffffff;
+	border:1px solid #000000;
+	border-radius:15px;
+	padding:5px;
+	margin:10px auto 5px auto;
+}
+h3.wtw-categoryheading {
+	background:#000000;
+	color:#ffffff;
+	border:1px solid #000000;
+	border-radius:15px;
+	padding:5px;
+	margin:10px auto 5px auto;
+}
+h3.wtw-categoryheading:hover {
+	background:#777777;
+	color:#ffffcc;
+	cursor:pointer;
 }
 @keyframes wtw-blinker {
   50% {
