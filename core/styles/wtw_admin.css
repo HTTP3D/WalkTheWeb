@@ -287,3 +287,28 @@ input:checked + .wtw-slider:before {
 	padding-top:5px;
 	font-size:1.3em;
 }
+.wtw-versionheader {
+	border:1px solid black;
+	background-color:#0036FF;
+	color:white;
+	font-size:1.2em;
+	text-align:left;
+	margin:5px;
+	padding:8px;
+}
+.wtw-versionheader:hover {
+	cursor:pointer;
+	background-color:#001359;
+	color:#FDFFB9
+}
+.wtw-versionsummary {
+	border:1px solid gray;
+	border-radius:15px;
+	background-color:#FDFFB9;
+	color:#000000;
+	font-size:1.2em;
+	text-align:left;
+	margin:5px;
+	padding:8px;
+	white-space: normal;
+}
