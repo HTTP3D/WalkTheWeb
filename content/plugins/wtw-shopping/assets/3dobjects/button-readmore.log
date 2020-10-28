@@ -32,20 +32,22 @@ Exporter version: 6.4.4, Blender version: 2.90.0
 		num uvs2           :  0
 		num colors         :  0
 		num triangles      :  178
-	processing begun of mesh:  buynow
+	processing begun of mesh:  readmore
+		animation processing begun
+			processing action TextAction:  in[1 - 35], out[0 - 35]
 		processing begun of material:  text material
-		num positions      :  1516
-		num normals        :  1516
+		num positions      :  2823
+		num normals        :  2823
 		num tangents       :  0
-		num uvs            :  3032
+		num uvs            :  5646
 		num uvs2           :  0
 		num colors         :  0
-		num triangles      :  1469
+		num triangles      :  2782
 	processing begun of light (POINT):  Light
 ========= Writing of JSON file started =========
 	writing mesh:  case
 	writing mesh:  button
-	writing mesh:  buynow
+	writing mesh:  readmore
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 0.3319 secs
+elapsed time:  0 min, 0.5392 secs
