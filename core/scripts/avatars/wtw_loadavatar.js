@@ -118,7 +118,7 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 		if (zavatarname.indexOf("myavatar") > -1) {
 			dGet('wtw_tavatarid').value = zavatardef.avatarid;
 			WTW.setCookie("globaluseravatarid", zavatardef.globaluseravatarid, 365);
-			dGet("wtw_tglobaluseravatarid").value = '';
+			dGet("wtw_tglobaluseravatarid").value = zavatardef.globaluseravatarid;
 			WTW.setCookie("useravatarid", zavatardef.useravatarid, 365);
 			dGet("wtw_tuseravatarid").value = zavatardef.useravatarid;
 			WTW.setCookie("useravatarid", zavatardef.useravatarid, 365);
