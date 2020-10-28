@@ -26,7 +26,7 @@ WTWJS.prototype.logoutGlobal = function() {
 WTWJS.prototype.globalLogin = function(zparameters) {
 	/* references 3dnet.walktheweb.com - global WalkTheWeb login complete and confirms the local values from login */
 	try {
-		let zglobaluserid = "-1";
+		let zglobaluserid = "";
 		let zdisplayname = "";
 		let zusertoken = "";
 		let zuseremail = "";
