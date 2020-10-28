@@ -376,7 +376,7 @@ wtwshopping.prototype.addMoldStoreButton = function(zmoldname, zmolddef, zlenx, 
 				zfile = 'button-checkout.babylon';
 				break;
 			case "storereadmore":
-				zfile = 'buttonflat-readmore.babylon';
+				zfile = 'button-readmore.babylon';
 				break;
 			case "storeviewcart":
 				zfile = 'button-viewcart.babylon';
