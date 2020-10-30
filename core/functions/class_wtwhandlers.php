@@ -30,7 +30,7 @@ class wtwhandlers {
 	/* declare public $wtwhandlers variables */
 	public $serverinstanceid = "";
 	public $usertoken = "";
-	public $globaluserid = -1;
+	public $globaluserid = "";
 	public $rootpath = "";
 	public $contentpath = "";
 	public $contenturl = "";

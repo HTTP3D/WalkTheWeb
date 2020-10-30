@@ -312,6 +312,8 @@ class wtwadmin {
 			$pagedata .= "						<div id=\"wtw_updatedetailslist\"></div>\r\n";
 			$pagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
 			$pagedata .= "						<div id=\"wtw_updatepluginlist\"></div>\r\n";
+			$pagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "						<div id=\"wtw_archiveupdateslist\"></div>\r\n";
 			$pagedata .= "					</div>\r\n";
 			$pagedata .= "				</div>\r\n";
 			$pagedata .= "			</div>\r\n";

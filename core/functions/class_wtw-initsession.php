@@ -21,9 +21,9 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = "3.3.5";
-	public $dbversion = "1.1.7";
-	public $versiondate = "2020-9-30";
+	public $version = "3.4.0";
+	public $dbversion = "1.1.8";
+	public $versiondate = "2020-10-30";
 	public $serverinstanceid = "";
 	public $usertoken = "";
 	public $rootpath = "";
@@ -36,7 +36,7 @@ class wtw {
 	public $serverip = '';
 	public $pagename = "";
 	public $userid = "";
-	public $globaluserid = -1;
+	public $globaluserid = "";
 	public $userip = "";
 	public $uri = "";
 	public $community = "";
