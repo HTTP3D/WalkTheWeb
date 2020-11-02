@@ -22,7 +22,15 @@ class wtwtools {
 	
 	public function sendAdminEmail($zsendto, $zsubject, $zmessage) {
 		/* send Admin email */
-		/* $zsendto is a single email string */
+		/* $zsendto, $zcopyto, and $zbccto accept array of email addresses */
+		/* it can be a mix of email addresses and/or email address with Name using => */
+		/* example: 
+			$zsendto = array(
+				'email1@domain1.com', 
+				'email2@domain2.com', 
+				'email3@domain3.com'=>'Email 3 Name', 
+				'email4@domain4.com'); 
+		*/
 		global $wtwhandlers;
 		$zresponse = array('serror'=>'');
 		try {
@@ -59,7 +67,7 @@ class wtwtools {
 					
 					$zemail = (new Swift_Message($zsubject))
 					  ->setFrom(array($zfromemail => $zfromemailname))
-					  ->setTo(array($zsendto))
+					  ->setTo($zsendto)
 					  ->setBody($zmessage);
 					
 					$result = $zmailer->send($zemail);
