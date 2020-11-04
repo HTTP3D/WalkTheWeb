@@ -127,6 +127,9 @@ WTWJS.prototype.openFullPageForm = function(pageid, setcategory, item, itemname,
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Settings</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + setcategory + "</div>";
 				WTW.show('wtw_showfilepage');
 				switch (setcategory) {
+					case "Server Settings":
+						WTW.openServerSettings();
+						break;
 					case "Email Server":
 						WTW.openEmailServerSettings();
 						break;
@@ -2025,18 +2028,18 @@ WTWJS.prototype.openWebAliasSettings = function() {
 		WTW.show('wtw_webaliassettings');
 		dGet('wtw_webaliaslist').innerHTML = "";
 		WTW.getJSON("/connect/webaliases.php", 
-			function(response) {
-				response = JSON.parse(response);
-				if (response != null) {
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
 					var zwebaliaslist = "<table class=\"wtw-table\"><tr><td class=\"wtw-tablecolumnheading\"><b>Web URL</b></td><td class=\"wtw-tablecolumnheading\"><b>Domain Name</b></td><td class=\"wtw-tablecolumnheading\"><b>Community</b></td><td class=\"wtw-tablecolumnheading\"><b>Building</b></td><td class=\"wtw-tablecolumnheading\"><b>Thing</b></td><td class=\"wtw-tablecolumnheading\"><b>&nbsp;</b></td></tr>";
-					for (var i=0;i<response.length;i++) {
-						if (response[i] != null) {
-							if (response[i].webaliasid != undefined) {
-								var zforcehttps = response[i].forcehttps;
-								var zdomainname = response[i].domainname;
-								var zcommunitypub = response[i].communitypublishname;
-								var zbuildingpub = response[i].buildingpublishname;
-								var zthingpub = response[i].thingpublishname;
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							if (zresponse[i].webaliasid != undefined) {
+								var zforcehttps = zresponse[i].forcehttps;
+								var zdomainname = zresponse[i].domainname;
+								var zcommunitypub = zresponse[i].communitypublishname;
+								var zbuildingpub = zresponse[i].buildingpublishname;
+								var zthingpub = zresponse[i].thingpublishname;
 								var zurl = "http://" + zdomainname;
 								if (zforcehttps == "1" || zforcehttps == 1) {
 									zurl = "https://" + zdomainname;
@@ -2059,7 +2062,7 @@ WTWJS.prototype.openWebAliasSettings = function() {
 								} else if (zthingpub != "") {
 									zurl += "/things/" + zthingpub;
 								}
-								zwebaliaslist += "<tr><td class=\"wtw-tablecolumns\"><a href='" + zurl + "' target='_blank'>" + zurl + "</a></td><td class=\"wtw-tablecolumns\">" + zdomainname + "</td><td class=\"wtw-tablecolumns\">" + zcommunitypub + "</td><td class=\"wtw-tablecolumns\">" + zbuildingpub + "</td><td class=\"wtw-tablecolumns\">" + zthingpub + "</td><td class=\"wtw-tablecolumns\"><div class='wtw-bluebuttonright' onclick=\"WTW.editWebAlias('" + response[i].webaliasid + "');\">Edit</div></td></tr>";
+								zwebaliaslist += "<tr><td class=\"wtw-tablecolumns\"><a href='" + zurl + "' target='_blank'>" + zurl + "</a></td><td class=\"wtw-tablecolumns\">" + zdomainname + "</td><td class=\"wtw-tablecolumns\">" + zcommunitypub + "</td><td class=\"wtw-tablecolumns\">" + zbuildingpub + "</td><td class=\"wtw-tablecolumns\">" + zthingpub + "</td><td class=\"wtw-tablecolumns\"><div class='wtw-bluebuttonright' onclick=\"WTW.editWebAlias('" + zresponse[i].webaliasid + "');\">Edit</div></td></tr>";
 							}
 						}
 					}
@@ -2165,7 +2168,7 @@ WTWJS.prototype.editWebAlias = function(zwebaliasid) {
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminforms.js-openWebAliasSettings=" + ex.message);
+		WTW.log("core-scripts-admin-wtw_adminforms.js-editWebAlias=" + ex.message);
 	}
 }
 
@@ -2556,5 +2559,173 @@ WTWJS.prototype.saveAliasForm = function(w) {
 		WTW.show('wtw_addwebalias');
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-saveAliasForm=" + ex.message);
+	}
+}
+
+/* server settings */
+
+WTWJS.prototype.openServerSettings = function() {
+	/* open server settings page form */
+	try {
+		WTW.show('wtw_loadingserversettings');
+		WTW.show('wtw_settingspage');
+		WTW.show('wtw_serversettings');
+		var zrequest = {
+			'function':'getserversettings'
+		};
+		WTW.postJSON("/core/handlers/tools.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
+					/* load values into form */
+					var zumask = '0027';
+					var zchmod = '755';
+					dGet('wtw_tserverinstanceid').disabled = false;
+					if (zresponse.serverinstanceid != undefined) {
+						dGet('wtw_tserverinstanceid').value = zresponse.serverinstanceid;
+					} else {
+						dGet('wtw_tserverinstanceid').value = '';
+					}
+					dGet('wtw_tserverinstanceid').disabled = true;
+					if (zresponse.dbserver != undefined) {
+						dGet('wtw_dbserver').value = zresponse.dbserver;
+					} else {
+						dGet('wtw_dbserver').value = '';
+					}
+					if (zresponse.dbname != undefined) {
+						dGet('wtw_dbname').value = zresponse.dbname;
+					} else {
+						dGet('wtw_dbname').value = '';
+					}
+					if (zresponse.dbusername != undefined) {
+						dGet('wtw_dbusername').value = zresponse.dbusername;
+					} else {
+						dGet('wtw_dbusername').value = '';
+					}
+					if (zresponse.dbpassword != undefined) {
+						dGet('wtw_dbpassword').value = atob(zresponse.dbpassword);
+					} else {
+						dGet('wtw_dbpassword').value = '';
+					}
+					dGet('wtw_tableprefix').disabled = false;
+					if (zresponse.tableprefix != undefined) {
+						dGet('wtw_tableprefix').value = zresponse.tableprefix;
+					} else {
+						dGet('wtw_tableprefix').value = '';
+					}
+					dGet('wtw_tableprefix').disabled = true;
+					if (zresponse.adminemail != undefined) {
+						dGet('wtw_adminemail').value = zresponse.adminemail;
+					} else {
+						dGet('wtw_adminemail').value = '';
+					}
+					if (zresponse.adminname != undefined) {
+						dGet('wtw_adminname').value = zresponse.adminname;
+					} else {
+						dGet('wtw_adminname').value = '';
+					}
+					if (zresponse.defaultdomain != undefined) {
+						dGet('wtw_defaultdomain').value = zresponse.defaultdomain;
+					} else {
+						dGet('wtw_defaultdomain').value = '';
+					}
+					if (zresponse.defaultsitename != undefined) {
+						dGet('wtw_defaultsitename').value = zresponse.defaultsitename;
+					} else {
+						dGet('wtw_defaultsitename').value = '';
+					}
+					if (zresponse.googleanalytics != undefined) {
+						dGet('wtw_googleanalytics').value = zresponse.googleanalytics;
+					} else {
+						dGet('wtw_googleanalytics').value = '';
+					}
+					if (zresponse.contentpath != undefined) {
+						dGet('wtw_contentpath').value = zresponse.contentpath;
+					} else {
+						dGet('wtw_contentpath').value = '';
+					}
+					dGet('wtw_contenturl').disabled = false;
+					if (zresponse.contenturl != undefined) {
+						dGet('wtw_contenturl').value = zresponse.contenturl;
+					} else {
+						dGet('wtw_contenturl').value = '';
+					}
+					dGet('wtw_contenturl').disabled = true;
+					if (zresponse.umask != undefined) {
+						zumask = zresponse.umask;
+					}
+					dGet('wtw_umask').value = zumask;
+					if (zresponse.chmod != undefined) {
+						zchmod = zresponse.chmod;
+					}
+					dGet('wtw_chmod').value = zchmod;
+					if (zresponse.ftphost != undefined) {
+						dGet('wtw_ftphost').value = zresponse.ftphost;
+					} else {
+						dGet('wtw_ftphost').value = '';
+					}
+					if (zresponse.ftpuser != undefined) {
+						dGet('wtw_ftpuser').value = zresponse.ftpuser;
+					} else {
+						dGet('wtw_ftpuser').value = '';
+					}
+					if (zresponse.ftppassword != undefined) {
+						dGet('wtw_ftppassword').value = atob(zresponse.ftppassword);
+					} else {
+						dGet('wtw_ftppassword').value = '';
+					}
+					if (zresponse.ftpbase != undefined) {
+						dGet('wtw_ftpbase').value = zresponse.ftpbase;
+					} else {
+						dGet('wtw_ftpbase').value = '';
+					}
+					WTW.hide('wtw_loadingserversettings');
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-openServerSettings=" + ex.message);
+	}
+}
+
+WTWJS.prototype.saveServerSettings = function() {
+	/* save Server Settings to the Config file */
+	try {
+		var zrequest = {
+			'dbserver': dGet('wtw_dbserver').value,
+			'dbname': dGet('wtw_dbname').value,
+			'dbusername': dGet('wtw_dbusername').value,
+			'dbpassword': btoa(dGet('wtw_dbpassword').value),
+			'contentpath': dGet('wtw_contentpath').value,
+			'defaultdomain': dGet('wtw_defaultdomain').value,
+			'defaultsitename': dGet('wtw_defaultsitename').value,
+			'googleanalytics': dGet('wtw_googleanalytics').value,
+			'adminemail': dGet('wtw_adminemail').value,
+			'adminname': dGet('wtw_adminname').value,
+			'umask': dGet('wtw_umask').value,
+			'chmod': dGet('wtw_chmod').value,
+			'ftpuser': dGet('wtw_ftpuser').value,
+			'ftppassword': btoa(dGet('wtw_ftppassword').value),
+			'ftpbase': dGet('wtw_ftpbase').value,
+			'function':'saveserversettings'
+		};
+		WTW.postJSON("/core/handlers/tools.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				if (zresponse.serror != '') {
+					dGet('wtw_serversettingscomplete').innerHTML = zresponse.serror;
+					dGet('wtw_serversettingscomplete').style.color = 'red';
+				} else {
+					dGet('wtw_serversettingscomplete').innerHTML = 'Server Settings Saved';
+					dGet('wtw_serversettingscomplete').style.color = 'green';
+				}
+				window.setTimeout(function() {
+					dGet('wtw_serversettingscomplete').innerHTML = '';
+				},5000);
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-saveServerSettings=" + ex.message);
 	}
 }

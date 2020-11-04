@@ -657,6 +657,9 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.openFullPageForm('plugins','All Plugins');
 						break;
 				/* Settings Admin Items */
+					case 'wtw_adminserversettings':
+						WTW.openFullPageForm('settings','Server Settings');
+						break;
 					case 'wtw_adminemailserver':
 						WTW.openFullPageForm('settings','Email Server');
 						break;
