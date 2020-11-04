@@ -42,8 +42,8 @@ class wtwpluginloader {
 					}
 				}
 			} else {
-				mkdir($zfilepath, 0755, true);
-				chmod($zfilepath, 0755);
+				mkdir($zfilepath, octdec(wtw_chmod), true);
+				chmod($zfilepath, octdec(wtw_chmod));
 			}
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwpluginloader.php-getAllPlugins=".$e->getMessage());
@@ -198,16 +198,16 @@ class wtwpluginloader {
 			$ztempfilename = $zpluginname.str_replace(".","-",$zversion).".zip";
 			$ztempfilepath = $wtwhandlers->contentpath."/system/updates/".$zpluginname."/";
 			if (!file_exists($wtwhandlers->contentpath."/system")) {
-				mkdir($wtwhandlers->contentpath."/system", 0755, true);
-				chmod($wtwhandlers->contentpath."/system", 0755);
+				mkdir($wtwhandlers->contentpath."/system", octdec(wtw_chmod), true);
+				chmod($wtwhandlers->contentpath."/system", octdec(wtw_chmod));
 			}
 			if (!file_exists($wtwhandlers->contentpath."/system/updates")) {
-				mkdir($wtwhandlers->contentpath."/system/updates", 0755, true);
-				chmod($wtwhandlers->contentpath."/system/updates", 0755);
+				mkdir($wtwhandlers->contentpath."/system/updates", octdec(wtw_chmod), true);
+				chmod($wtwhandlers->contentpath."/system/updates", octdec(wtw_chmod));
 			}
 			if (!file_exists($wtwhandlers->contentpath."/system/updates/".$zpluginname)) {
-				mkdir($wtwhandlers->contentpath."/system/updates/".$zpluginname, 0755, true);
-				chmod($wtwhandlers->contentpath."/system/updates/".$zpluginname, 0755);
+				mkdir($wtwhandlers->contentpath."/system/updates/".$zpluginname, octdec(wtw_chmod), true);
+				chmod($wtwhandlers->contentpath."/system/updates/".$zpluginname, octdec(wtw_chmod));
 			}
 			if(ini_get('allow_url_fopen') ) {
 				$zdata1 = file_get_contents($zupdateurl);
@@ -222,6 +222,7 @@ class wtwpluginloader {
 				fclose($openfile);
 			}
 			if (file_exists($ztempfilepath.$ztempfilename)) {
+				chmod($ztempfilepath.$ztempfilename, octdec(wtw_chmod));
 				$zip = new ZipArchive;
 				$res = $zip->open($ztempfilepath.$ztempfilename);
 				if ($res === true) {

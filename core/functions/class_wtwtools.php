@@ -19,6 +19,159 @@ class wtwtools {
 			call_user_func_array($this->$method, array_merge(array(&$this), $arguments));
 		}
 	}
+
+	public function getServerSettings() {
+		global $wtwhandlers;
+		$zresponse = array(
+			'serverinstanceid'=>'',
+			'dbserver'=>'',
+			'dbname'=>'',
+			'dbusername'=>'',
+			'dbpassword'=>'',
+			'tableprefix'=>'',
+			'contentpath'=>'',
+			'contenturl'=>'',
+			'defaultdomain'=>'',
+			'defaultsitename'=>'',
+			'googleanalytics'=>'',
+			'adminemail'=>'',
+			'adminname'=>'',
+			'ftphost'=>'',
+			'ftpuser'=>'',
+			'ftppassword'=>'',
+			'ftpbase'=>'',
+			'umask'=>'0027',
+			'chmod'=>'755'
+		);
+		try {
+			/* confirm still logged in */
+			$wtwhandlers->getSessionUserID();
+			if ($wtwhandlers->hasPermission(array("admin"))) {
+				if (defined('wtw_serverinstanceid')) {
+					$zresponse["serverinstanceid"] = wtw_serverinstanceid;
+				}
+				if (defined('wtw_dbserver')) {
+					$zresponse["dbserver"] = wtw_dbserver;
+				}
+				if (defined('wtw_dbname')) {
+					$zresponse["dbname"] = wtw_dbname;
+				}
+				if (defined('wtw_dbusername')) {
+					$zresponse["dbusername"] = wtw_dbusername;
+				}
+				if (defined('wtw_dbpassword')) {
+					$zresponse["dbpassword"] = wtw_dbpassword;
+				}
+				if (defined('wtw_tableprefix')) {
+					$zresponse["tableprefix"] = wtw_tableprefix;
+				}
+				if (defined('wtw_contentpath')) {
+					$zresponse["contentpath"] = wtw_contentpath;
+				}
+				if (defined('wtw_contenturl')) {
+					$zresponse["contenturl"] = wtw_contenturl;
+				}
+				if (defined('wtw_defaultdomain')) {
+					$zresponse["defaultdomain"] = wtw_defaultdomain;
+				}
+				if (defined('wtw_defaultsitename')) {
+					$zresponse["defaultsitename"] = wtw_defaultsitename;
+				}
+				if (defined('wtw_googleanalytics')) {
+					$zresponse["googleanalytics"] = wtw_googleanalytics;
+				}
+				if (defined('wtw_adminemail')) {
+					$zresponse["adminemail"] = wtw_adminemail;
+				}
+				if (defined('wtw_adminname')) {
+					$zresponse["adminname"] = wtw_adminname;
+				}
+				if (defined('wtw_ftphost')) {
+					$zresponse["ftphost"] = wtw_ftphost;
+				}
+				if (defined('wtw_ftpuser')) {
+					$zresponse["ftpuser"] = wtw_ftpuser;
+				}
+				if (defined('wtw_ftppassword')) {
+					$zresponse["ftppassword"] = wtw_ftppassword;
+				}
+				if (defined('wtw_ftpbase')) {
+					$zresponse["ftpbase"] = wtw_ftpbase;
+				}
+				if (defined('wtw_umask')) {
+					$zresponse["umask"] = wtw_umask;
+				}
+				if (defined('wtw_chmod')) {
+					$zresponse["chmod"] = wtw_chmod;
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwtools.php-getServerSettings=".$e->getMessage());
+		}
+		return $zresponse;
+	}
+
+	public function saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zftpuser, $zftppassword, $zftpbase) {
+		global $wtwhandlers;
+		$zresponse = array('serror'=>'');
+		try {
+			$wtwhandlers->getSessionUserID();
+			if ($wtwhandlers->hasPermission(array("admin"))) {
+				$this->updateConfigSetting('wtw_dbserver', $zdbserver);
+				$this->updateConfigSetting('wtw_dbname', $zdbname);
+				$this->updateConfigSetting('wtw_dbusername', $zdbusername);
+				$this->updateConfigSetting('wtw_dbpassword', $zdbpassword);
+				$this->updateConfigSetting('wtw_contentpath', $zcontentpath);
+				$this->updateConfigSetting('wtw_defaultdomain', $zdefaultdomain);
+				$this->updateConfigSetting('wtw_defaultsitename', $zdefaultsitename);
+				$this->updateConfigSetting('wtw_googleanalytics', $zgoogleanalytics);
+				$this->updateConfigSetting('wtw_adminemail', $zadminemail);
+				$this->updateConfigSetting('wtw_adminname', $zadminname);
+				$this->updateConfigSetting('wtw_umask', $zumask);
+				$this->updateConfigSetting('wtw_chmod', $zchmod);
+				$this->updateConfigSetting('wtw_ftpuser', $zftpuser);
+				$this->updateConfigSetting('wtw_ftppassword', $zftppassword);
+				$this->updateConfigSetting('wtw_ftpbase', $zftpbase);
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwtools.php-saveServerSettings=".$e->getMessage());
+			$zresponse = array('serror'=>'Error savingfiles: '.$e->getMessage());
+		}
+		return $zresponse;
+	}
+
+	public function updateConfigSetting($zsetting, $zvalue) {
+		global $wtwhandlers;
+		$zresponse = array('serror'=>'');
+		try {
+			$wtwhandlers->getSessionUserID();
+			if ($wtwhandlers->hasPermission(array("admin"))) {
+				$zfound = false;
+				$lines = file(wtw_rootpath.'/config/wtw_config.php');
+				$cfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
+				foreach ($lines as $line) {
+					if (strpos($line, $zsetting) !== false) {
+						fwrite($cfile, "    define(\"".$zsetting."\", \"".$zvalue."\");\r\n");
+						$zfound = true;
+					} else {
+						if ($zfound == false && strpos($line, '?') !== false && strpos($line, '>') !== false) {
+							fwrite($cfile, "    define(\"".$zsetting."\", \"".$zvalue."\");\r\n");
+							fwrite($cfile, $line);
+						} else {
+							fwrite($cfile, $line);
+						}
+					}
+				}
+				fclose($cfile);
+				chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwtools.php-updateConfigSetting=".$e->getMessage());
+		}
+	}
+
+
+
 	
 	public function sendAdminEmail($zsendto, $zsubject, $zmessage) {
 		/* send Admin email */

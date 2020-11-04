@@ -587,9 +587,90 @@ class wtwadmin {
 			$pagedata .= "		</div>\r\n";
 			$pagedata .= "	</div>\r\n";
 			
-			/* settings page - email server */
+			/* settings page */
 			$pagedata .= "	<div id=\"wtw_settingspage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_loadingsettings\" class=\"wtw-loadingnotice\">Loading...</div>\r\n";
+			
+			/* settings page - server settings */
+			$pagedata .= "		<div id=\"wtw_serversettings\" class=\"wtw-fullpage\">\r\n";
+			$pagedata .= "			<div class=\"wtw-dashboardboxleft\">\r\n";
+			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\">WalkTheWeb Server Settings</div>\r\n";
+			$pagedata .= "				<div class=\"wtw-dashboardbox\">\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Server Instance ID</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tserverinstanceid\" maxlength=\"16\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Database Server</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_dbserver\" maxlength=\"7\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Database Name</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_dbname\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Database User Name</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_dbusername\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Database Password</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"password\" id=\"wtw_dbpassword\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Table Prefix</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tableprefix\" maxlength=\"255\" /></div>\r\n";
+
+			$pagedata .= "					<div class=\"wtw-clear\"></div><hr />\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Admin Email</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_adminemail\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Admin Email Name</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_adminname\" maxlength=\"255\" /></div>\r\n";
+
+			$pagedata .= "					<div class=\"wtw-clear\"></div><hr />\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Default Domain</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_defaultdomain\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Default Site Name</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_defaultsitename\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Google Analytics ID<br />(default)</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_googleanalytics\" maxlength=\"255\" /></div>\r\n";
+
+			$pagedata .= "					<div class=\"wtw-clear\"></div><hr />\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Content Path</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_contentpath\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Content URL</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_contenturl\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">Folder Permissions<br />(default umask is 0027)</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_umask\" maxlength=\"4\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">File Permissions<br />(default is 755)</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_chmod\" maxlength=\"15\" /></div>\r\n";
+
+			$pagedata .= "					<div class=\"wtw-clear\"></div><hr />\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">FTP Host<br />(Server:port)</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_ftphost\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">FTP User</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_ftpuser\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">FTP Password</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"password\" id=\"wtw_ftppassword\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardlabel\">FTP Base<br />(Subfolder for 3D Website)</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_ftpbase\" maxlength=\"255\" /></div>\r\n";
+
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div id=\"wtw_serversettingscomplete\"></div><br />\r\n";
+			$pagedata .= "					<div id=\"wtw_loadingserversettings\" class=\"wtw-loadingnotice\" style=\"margin-left:auto;margin-right:auto;color:#000000;\">Loading...</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-greenmenubutton\" onclick=\"WTW.saveServerSettings();\">Save Server Settings</div>\r\n";
+			$pagedata .= "				</div>\r\n";
+			$pagedata .= "			</div>\r\n";
+			$pagedata .= "		</div>\r\n";
+			
+
+			
+			
+			
+			/* settings page - email server */
 			$pagedata .= "		<div id=\"wtw_emailserversettings\" class=\"wtw-fullpage\">\r\n";
 			$pagedata .= "			<div class=\"wtw-dashboardboxleft\">\r\n";
 			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\">Email Server Settings</div>\r\n";

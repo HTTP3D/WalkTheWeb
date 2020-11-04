@@ -138,6 +138,28 @@ class wtwconnect {
 			if (defined('wtw_serverinstanceid')) {
 				$this->serverinstanceid = wtw_serverinstanceid;
 			}
+			if (defined('wtw_adminemail') == false) {
+				define("wtw_adminemail", '');
+			}
+			if (defined('wtw_adminname') == false) {
+				define("wtw_adminname", '');
+			}
+			if (defined('wtw_ftpuser') == false) {
+				define("wtw_ftpuser", '');
+			}
+			if (defined('wtw_ftppassword') == false) {
+				define("wtw_ftppassword", '');
+			}
+			if (defined('wtw_ftpbase') == false) {
+				define("wtw_ftpbase", '');
+			}
+			if (defined('wtw_umask') == false) {
+				define("wtw_umask", "0027");
+			}
+			umask(octdec(wtw_umask));
+			if (defined('wtw_chmod') == false) {
+				define("wtw_chmod", "755");
+			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwconnect.php-initClass=" . $e->getMessage());
 		}
@@ -389,7 +411,7 @@ class wtwconnect {
 			if (isset($error['type']) && in_array($error['type'], $errors, true)) {
 				$message = addslashes(str_replace("\n","",str_replace("\r","",$error['message'])));
 				try {
-					$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
+					$conn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
 					if ($conn->connect_error) {
 						$error = "console.log('Connection failed: ".str_replace("'","\'",$conn->connect_error)."');";
 					} else {

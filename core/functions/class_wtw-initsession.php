@@ -62,7 +62,7 @@ class wtw {
 		/* reports errors and writes them to the database errorlog table */
 		$returntext = "";
 		try {
-			$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
+			$conn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
 			if ($conn->connect_error) {
 				$returntext = "Connection failed: " . $conn->connect_error;
 			} else {
@@ -206,6 +206,28 @@ class wtw {
 				$this->serverinstanceid = wtw_serverinstanceid;
 			} else {
 				$this->serverinstanceid = $this->getRandomString(16,1);
+			}
+			if (defined('wtw_adminemail') == false) {
+				define("wtw_adminemail", '');
+			}
+			if (defined('wtw_adminname') == false) {
+				define("wtw_adminname", '');
+			}
+			if (defined('wtw_ftpuser') == false) {
+				define("wtw_ftpuser", '');
+			}
+			if (defined('wtw_ftppassword') == false) {
+				define("wtw_ftppassword", '');
+			}
+			if (defined('wtw_ftpbase') == false) {
+				define("wtw_ftpbase", '');
+			}
+			if (defined('wtw_umask') == false) {
+				define("wtw_umask", "0027");
+			}
+			umask(octdec(wtw_umask));
+			if (defined('wtw_chmod') == false) {
+				define("wtw_chmod", "755");
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-checkHost=" . $e->getMessage());
@@ -378,14 +400,14 @@ class wtw {
 				if ($_SERVER['REQUEST_METHOD']=='POST') {
 					/* database connectivity values submitted and processed */
 					if (!file_exists(wtw_rootpath.'/config')) {
-						mkdir(wtw_rootpath.'/config', 0755, true);
-						chmod(wtw_rootpath.'/config', 0755);
+						mkdir(wtw_rootpath.'/config', octdec(wtw_chmod), true);
+						chmod(wtw_rootpath.'/config', octdec(wtw_chmod));
 					}
-					$server = $_POST["wtw_tserver"];
-					$database = $_POST["wtw_tdatabase"];
-					$dbuser = $_POST["wtw_tdbuser"];
-					$dbpassword = $_POST["wtw_tdbpassword"];
-					$prefix = $_POST["wtw_tprefix"];
+					$server = $_POST["wtw_dbserver"];
+					$database = $_POST["wtw_dbname"];
+					$dbuser = $_POST["wtw_dbusername"];
+					$dbpassword = $_POST["wtw_dbpassword"];
+					$prefix = $_POST["wtw_tableprefix"];
 					$contentpath = wtw_rootpath."/content";
 					$contenturl = "/content";
 					$zdomainname = "";
@@ -399,7 +421,7 @@ class wtw {
 						define("wtw_dbserver", $server);
 						define("wtw_dbname", $database);
 						define("wtw_dbusername", $dbuser);
-						define("wtw_dbpassword", $dbpassword);
+						define("wtw_dbpassword", base64_encode($dbpassword));
 						define("wtw_tableprefix", $prefix);
 						define("wtw_devmode", "1");
 						define("wtw_contentpath", $contentpath);
@@ -414,7 +436,7 @@ class wtw {
 						fwrite($cfile,"    define(\"wtw_dbserver\", \"".$server."\");\r\n");
 						fwrite($cfile,"    define(\"wtw_dbname\", \"".$database."\");\r\n");
 						fwrite($cfile,"    define(\"wtw_dbusername\", \"".$dbuser."\");\r\n");
-						fwrite($cfile,"    define(\"wtw_dbpassword\", \"".$dbpassword."\");\r\n");
+						fwrite($cfile,"    define(\"wtw_dbpassword\", \"".base64_encode($dbpassword)."\");\r\n");
 						fwrite($cfile,"    define(\"wtw_tableprefix\", \"".$prefix."\");\r\n\r\n");
 						fwrite($cfile,"    define(\"wtw_devmode\", \"1\");\r\n\r\n");
 						fwrite($cfile,"    define(\"wtw_contentpath\", \"".$contentpath."\");\r\n");
@@ -422,7 +444,7 @@ class wtw {
 						fwrite($cfile,"    define(\"wtw_defaultdomain\", \"".$zdomainname."\");\r\n\r\n");
 						fwrite($cfile,"?>");
 						fclose($cfile);
-						chmod(wtw_rootpath.'/config/wtw_config.php', 0755);
+						chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
 						$zsetupstep = 0;
 						header("Location: ".$this->domainurl."/"); 
 						exit();
@@ -445,7 +467,49 @@ class wtw {
 					fwrite($cfile,"    define(\"wtw_serverinstanceid\", \"".$this->serverinstanceid."\");\r\n");
 					fwrite($cfile,"?>");
 					fclose($cfile);
-					chmod(wtw_rootpath.'/config/wtw_config.php', 0755);
+					chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
+				}
+			}
+			/* if using plain text password - convert plain text password to encoded password */
+			if (defined('wtw_dbserver') && defined('wtw_dbname') && defined('wtw_dbusername') && defined('wtw_dbpassword')) {
+				$zupdatepassword = false;
+				/* check if password looks like it is encoded */
+				if (base64_decode(wtw_dbpassword, true) !== false) {
+					/* try to make a connection with decoded password */
+					$conn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
+					if ($conn->connect_error) {
+						/* connection did not work, try connection without decoding */
+						$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
+						if ($conn->connect_error == false) {
+							/* connection worked, now encode password */
+							$zupdatepassword = true;
+						}
+					}
+				} else {
+					/* connection did not work, try connection without decoding */
+					$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
+					if ($conn->connect_error == false) {
+						/* connection worked, now encode password */
+						$zupdatepassword = true;
+					}
+				}
+				if ($zupdatepassword == true) {
+					/* update password with encoded password */
+					$lines = file(wtw_rootpath.'/config/wtw_config.php');
+					$cfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
+					foreach ($lines as $line) {
+						if (strpos($line, 'wtw_dbpassword') !== false) {
+							fwrite($cfile, "    define(\"wtw_dbpassword\", \"".base64_encode(wtw_dbpassword)."\");\r\n");
+						} else if (strpos($line, 'wtw_defaultfromemail') !== false) {
+							fwrite($cfile, str_replace("wtw_defaultfromemail","wtw_adminemail",$line));
+						} else {
+							fwrite($cfile, $line);
+						}
+					}
+					fclose($cfile);
+					chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
+					header("Location: ".$this->domainurl."/"); 
+					exit();
 				}
 			}
 			if ($zsetupstep == 0) {
@@ -453,7 +517,7 @@ class wtw {
 				require_once(wtw_rootpath.'/core/functions/class_wtwdb.php');
 				require_once(wtw_rootpath.'/core/functions/class_wtwusers.php');
 				require_once(wtw_rootpath.'/core/functions/class_wtwpluginloader.php');
-				$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
+				$conn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
 				if ($conn->connect_error) {
 					$zsetupstep = 2;
 				} else {
@@ -551,7 +615,7 @@ class wtw {
 						global $wtwusers;
 						global $wtwtables;
 						$zsitename = $_POST["wtw_tsitename"];
-						$zanalytics = $_POST["wtw_tanalytics"];
+						$zanalytics = $_POST["wtw_googleanalytics"];
 						$zadmindisplayname = base64_encode($_POST["wtw_tadmindisplayname"]);
 						$zadminpassword = $_POST["wtw_tadminpassword"];
 						$zadminpassword2 = $_POST["wtw_tadminpassword2"];
@@ -566,10 +630,10 @@ class wtw {
 							fwrite($cfile, implode('', $lines));
 							fwrite($cfile,"    define(\"wtw_defaultsitename\", \"".$zsitename."\");\r\n");
 							fwrite($cfile,"    define(\"wtw_googleanalytics\", \"".$zanalytics."\");\r\n");
-							fwrite($cfile,"    define(\"wtw_defaultfromemail\", \"".$zadminemail."\");\r\n");
+							fwrite($cfile,"    define(\"wtw_adminemail\", \"".$zadminemail."\");\r\n");
 							fwrite($cfile,"?>");
 							fclose($cfile);
-							chmod(wtw_rootpath.'/config/wtw_config.php', 0755);
+							chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
 						}
 						/* set up initial admin user - from installation process */
 						$zuserid = $wtwusers->firstAdminUser($zadmindisplayname,$zadminpassword,$zadminemail);
@@ -697,19 +761,19 @@ class wtw {
 					echo "<img src='/content/system/images/wtwlogo.png' style='margin-left:40px;margin-right:40px;' />";
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Database Setup</h3>";
 					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Server:</b></div>";
-					echo "<input name='wtw_tserver' type='text' value='127.0.0.1:3306' size='20' maxlength='255' />";
+					echo "<input name='wtw_dbserver' type='text' value='127.0.0.1:3306' size='20' maxlength='255' />";
 					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
 					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Database Name:</b></div>";
-					echo "<input name='wtw_tdatabase' type='text' value='' size='20' maxlength='255' />";
+					echo "<input name='wtw_dbname' type='text' value='' size='20' maxlength='255' />";
 					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
 					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Database User:</b></div>";
-					echo "<input name='wtw_tdbuser' type='text' value='' size='20' maxlength='255' />";
+					echo "<input name='wtw_dbusername' type='text' value='' size='20' maxlength='255' />";
 					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
 					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Database Password:</b></div>";
-					echo "<input name='wtw_tdbpassword' type='password' value='' size='20' maxlength='64' />";
+					echo "<input name='wtw_dbpassword' type='password' value='' size='20' maxlength='64' />";
 					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
 					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Table Prefix:</b></div>";
-					echo "<input name='wtw_tprefix' type='text' value='wtw_' size='20' maxlength='24' />";
+					echo "<input name='wtw_tableprefix' type='text' value='wtw_' size='20' maxlength='24' />";
 					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
 					echo "<div class=\"wtw-icenter\"><input name='wtw_bsave' type='submit' value='Save' style='font-size:1.4em;width:120px;border-radius:10px;' /></div>";
 					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
@@ -762,7 +826,7 @@ class wtw {
 					echo "<input name='wtw_tsitename' type='text' value='My 3D Website' size='20' maxlength='255' />";
 					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
 					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Google Analytics (Optional):</b></div>";
-					echo "<input name='wtw_tanalytics' type='text' value='' size='20' maxlength='24' />";
+					echo "<input name='wtw_googleanalytics' type='text' value='' size='20' maxlength='24' />";
 					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
 					
 					echo "<div class=\"wtw-icenter\"><input name='wtw_bsave' type='submit' value='Save' style='font-size:1.4em;width:120px;border-radius:10px;' /></div>";
@@ -1989,7 +2053,7 @@ class wtw {
 					$error .= "}";
 				} catch (Exception $e) { }
 				try {
-					$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
+					$conn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
 					if ($conn->connect_error) {
 						$error .= "console.log('Connection failed: ".str_replace("'","\'",$conn->connect_error)."');";
 					} else {

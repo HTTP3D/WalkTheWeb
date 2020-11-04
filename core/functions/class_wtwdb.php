@@ -57,7 +57,7 @@ class wtwdb {
 		$znum_rows = 0;
 		try {
 			if (!empty($zsql) && isset($zsql)) {
-				$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
+				$conn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
 				if ($conn->connect_error) {
 					$this->serror("core-functons-class_wtwdb.php-query=".$conn->connect_error);
 				} else {
