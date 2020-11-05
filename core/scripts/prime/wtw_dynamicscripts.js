@@ -225,7 +225,6 @@ WTWJS.prototype.executeFunctionByName = function(zjsfunction, context /*, args *
 }
 
 WTWJS.prototype.executeAnimationByName = function(animationname) {
-WTW.log("animationname=" + animationname);
 	/* run a mold animation (triggered by event) */
 	try {
 		for (var i=0;i < WTW.moldEvents.length;i++) {
