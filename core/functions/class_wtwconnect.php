@@ -395,6 +395,22 @@ class wtwconnect {
 	$GLOBALS['wtwconnect'] = wtwconnect();
 	
 	if (session_status() == PHP_SESSION_NONE) {
+		$zdomainname = strtolower($_SERVER['HTTP_HOST']);
+		$zprotocol = "http://";
+		if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+			if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == "https") {
+				$zprotocol = "https://";
+			}
+		} else if (empty($_SERVER['HTTPS']) || !isset($_SERVER['HTTPS'])){
+		} else if ($_SERVER['HTTPS'] == "off") {
+		} else {
+			$zprotocol = "https://";
+		}
+		if ($zprotocol == "https://"){
+			session_set_cookie_params($lifetime = 0, $path = '/', $zdomainname, $secure = true, $httponly = true);
+		} else {
+			session_set_cookie_params($lifetime = 0, $path = '/', $zdomainname, $secure = false, $httponly = true);
+		}
 		session_start();
 	}
 	function shutdownOnErrorConnect() {
