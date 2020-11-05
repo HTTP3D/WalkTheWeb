@@ -1491,6 +1491,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 					WTW.pluginsDisposeClean(zmoldname);
 				} catch (ex) {}
 				try {
+					WTW.disposeMoldEvent(zmoldname);
 					if (zmoldname.indexOf("myavatar") > -1 || zmoldname.indexOf("selectavatar") > -1) {
 						/* dispose of avatar parts / animations */
 						WTW.disposeAnimations(zmoldname);
@@ -1594,7 +1595,6 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 				zmold = null;
 				if (zcheck) {
 					/* dispose of action zone components (axle, pole, hinge, bases) */
-					WTW.disposeMoldEvent(zmoldname);
 					if (zmoldname.indexOf("actionzone") > -1) {
 						WTW.disposeClean(zmoldname.replace("actionzone","actionzoneaxle"),false);
 						WTW.disposeClean(zmoldname.replace("actionzone","actionzoneaxlepole"),false);

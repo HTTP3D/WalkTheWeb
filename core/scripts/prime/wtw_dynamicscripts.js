@@ -225,6 +225,7 @@ WTWJS.prototype.executeFunctionByName = function(zjsfunction, context /*, args *
 }
 
 WTWJS.prototype.executeAnimationByName = function(animationname) {
+WTW.log("animationname=" + animationname);
 	/* run a mold animation (triggered by event) */
 	try {
 		for (var i=0;i < WTW.moldEvents.length;i++) {
@@ -355,7 +356,7 @@ WTWJS.prototype.addMoldAnimation = function(zmoldname, zchildname, zmold, zobjec
 						if (zobjectanimations[i].stopcurrentanimations+'' == '1' || zobjectanimations[i].stopcurrentanimations == true) {
 							zstopcurrentanimations = true;
 						}
-						
+
 						var znewanimation = true;
 						var zeventind = -1;
 						for (var j=0;j<WTW.moldEvents.length;j++) {
