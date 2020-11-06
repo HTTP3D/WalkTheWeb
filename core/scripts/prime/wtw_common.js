@@ -1492,6 +1492,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 				} catch (ex) {}
 				try {
 					WTW.disposeMoldEvent(zmoldname);
+					WTW.disposeSoundAndLights(zmoldname);
 					if (zmoldname.indexOf("myavatar") > -1 || zmoldname.indexOf("selectavatar") > -1) {
 						/* dispose of avatar parts / animations */
 						WTW.disposeAnimations(zmoldname);
@@ -1608,7 +1609,6 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 					WTW.disposeClean(zmoldname + "-far");
 				}
 			}
-			WTW.disposeSoundAndLights(zmoldname);
 			scene.blockfreeActiveMeshesAndRenderingGroups = false;
 		}
 	} catch (ex) {
