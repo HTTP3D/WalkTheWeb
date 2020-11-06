@@ -808,54 +808,54 @@ WTWJS.prototype.formatDate = function(zdatetext) {
 	}
 }
 
-WTWJS.prototype.formatDateLong = function(date) {
+WTWJS.prototype.formatDateLong = function(zdatetext) {
 	/* format long date spelled out month */
 	try {
-		if (date != "") {
-			var d = new Date(date);
-			var month = (d.getMonth() + 1);
-			var day = d.getDate() + ', ';
-			var year = d.getFullYear();
-			var smonth = '';
-			switch (month) {
+		if (zdatetext != "") {
+			var zdate = new Date(zdatetext);
+			var zmonth = (zdate.getMonth() + 1);
+			var zday = zdate.getDate() + ', ';
+			var zyear = zdate.getFullYear();
+			var zmonthtext = '';
+			switch (zmonth) {
 				case 1:
-					smonth = "January ";
+					zmonthtext = "January ";
 					break;
 				case 2:
-					smonth = "February ";
+					zmonthtext = "February ";
 					break;
 				case 3:
-					smonth = "March ";
+					zmonthtext = "March ";
 					break;
 				case 4:
-					smonth = "April ";
+					zmonthtext = "April ";
 					break;
 				case 5:
-					smonth = "May ";
+					zmonthtext = "May ";
 					break;
 				case 6:
-					smonth = "June ";
+					zmonthtext = "June ";
 					break;
 				case 7:
-					smonth = "July ";
+					zmonthtext = "July ";
 					break;
 				case 8:
-					smonth = "August ";
+					zmonthtext = "August ";
 					break;
 				case 9:
-					smonth = "September ";
+					zmonthtext = "September ";
 					break;
 				case 10:
-					smonth = "October ";
+					zmonthtext = "October ";
 					break;
 				case 11:
-					smonth = "November ";
+					zmonthtext = "November ";
 					break;
 				case 12:
-					smonth = "December ";
+					zmonthtext = "December ";
 					break;
 			}
-			return smonth + day + year;
+			return zmonthtext + zday + zyear;
 		} else {
 			return "";
 		}
@@ -864,69 +864,69 @@ WTWJS.prototype.formatDateLong = function(date) {
 	}
 }
 
-WTWJS.prototype.addDays = function(date, days) {
+WTWJS.prototype.addDays = function(zdate, zdays) {
 	/* add days to date */
-    var result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
+    var zresult = new Date(zdate);
+    zresult.setDate(zresult.getDate() + zdays);
+    return zresult;
 }
 
 /* url and links */
-WTWJS.prototype.isURL = function(url) {
+WTWJS.prototype.isURL = function(zurl) {
 	/* boolean - is a text string an URL */
 	var pattern = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-	return pattern.test(url);
+	return pattern.test(zurl);
 }
 
 /* email */
-WTWJS.prototype.isEmail = function(email) {
+WTWJS.prototype.isEmail = function(zemail) {
 	/* boolean - is a text string an email address */
 	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	return re.test(email);
+	return re.test(zemail);
 }
 
 /* angles (degrees and radians) */
-WTWJS.prototype.getRadians = function(degrees) {
+WTWJS.prototype.getRadians = function(zdegrees) {
 	/* converts degrees to radians */
-	var radians = 0;
+	var zradians = 0;
 	try {
-		if (WTW.isNumeric(degrees)) {
-			radians = degrees * Math.PI / 180;
+		if (WTW.isNumeric(zdegrees)) {
+			zradians = zdegrees * Math.PI / 180;
 		}
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getRadians=" + ex.message);
     }
-	return radians;
+	return zradians;
 }
 
-WTWJS.prototype.getDegrees = function(radians) {
+WTWJS.prototype.getDegrees = function(zradians) {
 	/* converts radians to degrees */
-	var degrees = 0;
+	var zdegrees = 0;
 	try {
-		if (WTW.isNumeric(radians)) {
-			degrees = WTW.cleanDegrees(radians * 180 / Math.PI);
+		if (WTW.isNumeric(zradians)) {
+			zdegrees = WTW.cleanDegrees(zradians * 180 / Math.PI);
 		}
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getDegrees=" + ex.message);
     }
-	return degrees;
+	return zdegrees;
 }
 
-WTWJS.prototype.cleanDegrees = function(degrees) {
+WTWJS.prototype.cleanDegrees = function(zdegrees) {
 	/* converts degrees to between 0 and 360 (eliminates higher or negative degrees for easier comparisons) */
 	try {
-		if (WTW.isNumeric(degrees)) {
-			while (degrees < 0) {
-				degrees += 360;
+		if (WTW.isNumeric(zdegrees)) {
+			while (zdegrees < 0) {
+				zdegrees += 360;
 			}
-			while (degrees > 360) {
-				degrees -= 360;
+			while (zdegrees > 360) {
+				zdegrees -= 360;
 			}
 		}
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-cleanDegrees=" + ex.message);
     }
-	return degrees;
+	return zdegrees;
 }
 
 
@@ -976,20 +976,20 @@ WTWJS.prototype.blockPassThrough = function(zevent) {
     }
 }
 
-WTWJS.prototype.setDDLValue = function(ddlname, value) {
+WTWJS.prototype.setDDLValue = function(zddlname, zvalue) {
 	/* set the drop-down list selected value by value */
 	try {
-		if (dGet(ddlname) != null) {
-			var ddl = dGet(ddlname);
+		if (dGet(zddlname) != null) {
+			var ddl = dGet(zddlname);
 			ddl.selectedIndex = -1;
 			for (var i = 0; i < ddl.options.length; i++){
 				if (ddl.options[i].value != undefined && ddl.options[i].value != null) {
-					if (WTW.isNumeric(ddl.options[i].value) && WTW.isNumeric(value)) {
-						if (Number(ddl.options[i].value) == Number(value)) {
+					if (WTW.isNumeric(ddl.options[i].value) && WTW.isNumeric(zvalue)) {
+						if (Number(ddl.options[i].value) == Number(zvalue)) {
 							ddl.selectedIndex = i;
 						}
 					} else {
-						if (ddl.options[i].value.toLowerCase() == value.toLowerCase()){
+						if (ddl.options[i].value.toLowerCase() == zvalue.toLowerCase()){
 							ddl.selectedIndex = i;
 						}
 					}
@@ -1001,15 +1001,15 @@ WTWJS.prototype.setDDLValue = function(ddlname, value) {
     }
 }
 
-WTWJS.prototype.setDDLText = function(ddlname, stext) {
+WTWJS.prototype.setDDLText = function(zddlname, ztext) {
 	/* set the drop-down list selected value by text */
 	try {
-		if (dGet(ddlname) != null) {
-			var ddl = dGet(ddlname);
+		if (dGet(zddlname) != null) {
+			var ddl = dGet(zddlname);
 			ddl.selectedIndex = -1;
 			for (var i = 0; i < ddl.options.length; i++){
 				if (ddl.options[i].text != undefined && ddl.options[i].text != null) {
-					if (ddl.options[i].text.toLowerCase() == stext.toLowerCase()){
+					if (ddl.options[i].text.toLowerCase() == ztext.toLowerCase()){
 						ddl.selectedIndex = i;
 					}
 				}
@@ -1020,12 +1020,12 @@ WTWJS.prototype.setDDLText = function(ddlname, stext) {
     }
 }
 
-WTWJS.prototype.getDDLValue = function(ddlname) {
+WTWJS.prototype.getDDLValue = function(zddlname) {
 	/* get the drop-down list selected value */
 	var ddlvalue = "";
 	try {
-		if (dGet(ddlname).options[dGet(ddlname).selectedIndex] != undefined) {
-			ddlvalue = dGet(ddlname).options[dGet(ddlname).selectedIndex].value;
+		if (dGet(zddlname).options[dGet(zddlname).selectedIndex] != undefined) {
+			ddlvalue = dGet(zddlname).options[dGet(zddlname).selectedIndex].value;
 		}
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-setDDLValue=" + ex.message);
@@ -1033,12 +1033,12 @@ WTWJS.prototype.getDDLValue = function(ddlname) {
 	return ddlvalue;
 }
 
-WTWJS.prototype.getDDLText = function(ddlname) {
+WTWJS.prototype.getDDLText = function(zddlname) {
 	/* get the drop-down list selected text */
 	var ddltext = "";
 	try {
-		if (dGet(ddlname).options[dGet(ddlname).selectedIndex] != undefined) {
-			ddltext = dGet(ddlname).options[dGet(ddlname).selectedIndex].text;
+		if (dGet(zddlname).options[dGet(zddlname).selectedIndex] != undefined) {
+			ddltext = dGet(zddlname).options[dGet(zddlname).selectedIndex].text;
 		}
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getDDLText=" + ex.message);
@@ -1046,11 +1046,11 @@ WTWJS.prototype.getDDLText = function(ddlname) {
 	return ddltext;
 }
 
-WTWJS.prototype.clearDDL = function(ddlname) {
+WTWJS.prototype.clearDDL = function(zddlname) {
 	/* clear a drop-down list - remove all values (often used to prepare for reloading) */
 	try {
-		if (dGet(ddlname) != null) {
-			var ddl = dGet(ddlname);
+		if (dGet(zddlname) != null) {
+			var ddl = dGet(zddlname);
 			for (var i = ddl.options.length - 1 ; i >= 0 ; i--) {
 				ddl.remove(i);
 			}
@@ -1060,58 +1060,62 @@ WTWJS.prototype.clearDDL = function(ddlname) {
     }
 }
 
-WTWJS.prototype.changeNumberValue = function(item, dn, zrefresh) {
+WTWJS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 	/* when a number is changed in the forms, this automates the number counting as the button is held down */
 	try {
 		if (zrefresh == undefined) {
 			zrefresh = 0;
 		}
 		WTW.changeStop();
-		var vali = dGet(item).value;
+		var vali = dGet(zitem).value;
 		var nvali = 0;
 		var ndn = 0;
-		if (WTW.isNumeric(dn)) {
-			ndni = parseFloat(dn);
+		if (WTW.isNumeric(zdn)) {
+			ndni = parseFloat(zdn);
 		}
 		if (WTW.isNumeric(vali)) {
 			nvali = parseFloat(Math.round(Number(vali) * 100) / 100) + ndni;
 			if (WTW.adminView == 1) {
-				dGet(item).value = (nvali.toFixed(2));
-				if (item == "wtw_tgroundpositiony") {
+				dGet(zitem).value = (nvali.toFixed(2));
+				if (zitem == "wtw_tgroundpositiony") {
 					WTW.setGroundWater();
-				} else if (item.indexOf("axis") > -1 || item.indexOf("actionzone") > -1) {
+				} else if (zitem.indexOf("axis") > -1 || zitem.indexOf("actionzone") > -1) {
 					WTW.setNewActionZone();
-				} else if (item.indexOf("tconngrid") > -1) {
+				} else if (zitem.indexOf("tconngrid") > -1) {
 					WTW.setNewConnectingGrid();
+				} else if (zitem.indexOf("wtw_tfirstbuild") > -1) {
+					WTW.setFirstBuilding();
 				} else {
 					WTW.setNewMold(zrefresh);
 				}
 			} else {
-				dGet(item).value = (nvali.toFixed(0));
+				dGet(zitem).value = (nvali.toFixed(0));
 			}
 		}
 		WTW.mouseTimer = window.setInterval(function () {
-			var val = dGet(item).value;
+			var val = dGet(zitem).value;
 			var nval = 0;
 			var ndn = 0;
-			if (WTW.isNumeric(dn)) {
-				ndn = parseFloat(dn);
+			if (WTW.isNumeric(zdn)) {
+				ndn = parseFloat(zdn);
 			}
 			if (WTW.isNumeric(val)) {
 				nval = parseFloat(Math.round(Number(val) * 100) / 100) + ndn;
 				if (WTW.adminView == 1) {
-					dGet(item).value = (nval.toFixed(2));
-					if (item == "wtw_tgroundpositiony") {
+					dGet(zitem).value = (nval.toFixed(2));
+					if (zitem == "wtw_tgroundpositiony") {
 						WTW.setGroundWater();
-					} else if (item.indexOf("axis") > -1 || item.indexOf("actionzone") > -1) {
+					} else if (zitem.indexOf("axis") > -1 || zitem.indexOf("actionzone") > -1) {
 						WTW.setNewActionZone();
-					} else if (item.indexOf("tconngrid") > -1) {
+					} else if (zitem.indexOf("tconngrid") > -1) {
 						WTW.setNewConnectingGrid();
+					} else if (zitem.indexOf("wtw_tfirstbuild") > -1) {
+						WTW.setFirstBuilding();
 					} else {
 						WTW.setNewMold(zrefresh);
 					}
 				} else {
-					dGet(item).value = (nval.toFixed(0));
+					dGet(zitem).value = (nval.toFixed(0));
 				}
 			}
 		}, 100);

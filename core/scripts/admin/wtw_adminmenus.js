@@ -161,6 +161,11 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu44');
 						break;
+					case 'wtw_admincommunityfirstbuilding':
+						WTW.hideAdminMenu();
+						WTW.openFirstBuildingForm();
+						WTW.show('wtw_adminmenu28');
+						break;
 					case 'wtw_admincommunitygravity':
 						WTW.hideAdminMenu();
 						dGet('wtw_tcommgravity').value = WTW.init.gravity;
@@ -750,9 +755,11 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.listUploads();
 						break;
 				/* close and exit Admin Items */
+					case "wtw_bback28":
 					case "wtw_bback44":
 					case "wtw_bback60":
 					case "wtw_bback61":
+					case "wtw_cancel28":
 					case "wtw_cancel44":
 					case "wtw_cancel60":
 					case "wtw_cancel61":
@@ -1457,6 +1464,9 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 							break;
 						case 68: // d
 							dGet('wtw_adminmenucommdone').click();
+							break;
+						case 70: // f
+							dGet('wtw_admincommunityfirstbuilding').click();
 							break;
 						case 71: // g
 							dGet('wtw_admincommunitygravity').click();

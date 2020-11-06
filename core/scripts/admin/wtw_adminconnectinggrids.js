@@ -283,16 +283,16 @@ WTWJS.prototype.openListConnectingGridsForm = function() {
 		WTW.clearDDL('wtw_addcommunitybuildingid');
 		dGet('wtw_commbuildinglist').innerHTML = "";
 		WTW.getJSON("/connect/buildings.php", 
-			function(response) {
-				WTW.buildings = JSON.parse(response);
+			function(zresponse) {
+				WTW.buildings = JSON.parse(zresponse);
 				if (WTW.buildings != null) {
 					for (var i = 0; i < WTW.buildings.length; i++) {
 						if (WTW.buildings[i] != null) {
 							if (WTW.buildings[i].buildinginfo.buildingid != undefined) {
-								var option = document.createElement("option");
-								option.text = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
-								option.value = WTW.buildings[i].buildinginfo.buildingid;
-								dGet('wtw_addcommunitybuildingid').add(option);
+								var zoption = document.createElement("option");
+								zoption.text = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
+								zoption.value = WTW.buildings[i].buildinginfo.buildingid;
+								dGet('wtw_addcommunitybuildingid').add(zoption);
 							}
 						}
 					}
@@ -604,6 +604,258 @@ WTWJS.prototype.setNewConnectingGrid = function() {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminconnectinggrids.js-setNewConnectingGrid=" + ex.message);
+	}
+}
+
+/* the following processes are used to set and save the first 3D Building location in a 3D Community - used in automated 3D Scene creation processes */
+
+WTWJS.prototype.openFirstBuildingForm = function() {
+	/* open the form settings to position, scale, and rotate the first bulding marker */
+	try {
+		WTW.hide('wtw_adminmenu28b');
+		WTW.getJSON("/connect/communities.php?communityid=" + communityid,
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse[0].firstbuilding.position.x != undefined) {
+					dGet('wtw_tfirstbuildpositionx').value = zresponse[0].firstbuilding.position.x;
+				} 
+				if (zresponse[0].firstbuilding.position.y != undefined) {
+					dGet('wtw_tfirstbuildpositiony').value = zresponse[0].firstbuilding.position.y;
+				} 
+				if (zresponse[0].firstbuilding.position.z != undefined) {
+					dGet('wtw_tfirstbuildpositionz').value = zresponse[0].firstbuilding.position.z;
+				} 
+				if (zresponse[0].firstbuilding.scaling.x != undefined) {
+					dGet('wtw_tfirstbuildscalingx').value = zresponse[0].firstbuilding.scaling.x;
+				} 
+				if (zresponse[0].firstbuilding.scaling.y != undefined) {
+					dGet('wtw_tfirstbuildscalingy').value = zresponse[0].firstbuilding.scaling.y;
+				} 
+				if (zresponse[0].firstbuilding.scaling.z != undefined) {
+					dGet('wtw_tfirstbuildscalingz').value = zresponse[0].firstbuilding.scaling.z;
+				} 
+				if (zresponse[0].firstbuilding.rotation.x != undefined) {
+					dGet('wtw_tfirstbuildrotationx').value = zresponse[0].firstbuilding.rotation.x;
+				} 
+				if (zresponse[0].firstbuilding.rotation.y != undefined) {
+					dGet('wtw_tfirstbuildrotationy').value = zresponse[0].firstbuilding.rotation.y;
+				} 
+				if (zresponse[0].firstbuilding.rotation.z != undefined) {
+					dGet('wtw_tfirstbuildrotationz').value = zresponse[0].firstbuilding.rotation.z;
+				} 
+				WTW.show('wtw_adminmenu28b');
+				WTW.setFirstBuilding();
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminconnectinggrids.js-openFirstBuildingForm=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setFirstBuilding = function() {
+	/* use the form settings to position, scale, and rotate the first bulding marker */
+	try {	
+		var zmold = null;
+		zmold = scene.getMeshByID('firstbuilding-----babylonfile');
+		if (zmold != null) {
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildpositionx').value)) {
+				zmold.position.x = Number(dGet('wtw_tfirstbuildpositionx').value);
+			}
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildpositiony').value)) {
+				zmold.position.y = Number(dGet('wtw_tfirstbuildpositiony').value);
+			}
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildpositionz').value)) {
+				zmold.position.z = Number(dGet('wtw_tfirstbuildpositionz').value);
+			}
+
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildscalingx').value)) {
+				if (Number(dGet('wtw_tfirstbuildscalingx').value) < .01) {
+					dGet('wtw_tfirstbuildscalingx').value = ".01";
+				}
+				zmold.scaling.x = Number(dGet('wtw_tfirstbuildscalingx').value);
+			}
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildscalingy').value)) {
+				if (Number(dGet('wtw_tfirstbuildscalingy').value) < .01) {
+					dGet('wtw_tfirstbuildscalingy').value = ".01";
+				}
+				zmold.scaling.y = Number(dGet('wtw_tfirstbuildscalingy').value);
+			}
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildscalingz').value)) {
+				if (Number(dGet('wtw_tfirstbuildscalingz').value) < .01) {
+					dGet('wtw_tfirstbuildscalingz').value = ".01";
+				}
+				zmold.scaling.z = Number(dGet('wtw_tfirstbuildscalingz').value);
+			}
+
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildrotationx').value)) {
+				zmold.rotation.x = WTW.getRadians(Number(dGet('wtw_tfirstbuildrotationx').value));
+			}
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildrotationy').value)) {
+				zmold.rotation.y = WTW.getRadians(Number(dGet('wtw_tfirstbuildrotationy').value));
+			}
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildrotationz').value)) {
+				zmold.rotation.z = WTW.getRadians(Number(dGet('wtw_tfirstbuildrotationz').value));
+			}
+		} else {
+			var zbuildingpositionx = 0;
+			var zbuildingpositiony = 0;
+			var zbuildingpositionz = 0;
+			var zbuildingscalingx = 1;
+			var zbuildingscalingy = 1;
+			var zbuildingscalingz = 1;
+			var zbuildingrotationx = 0;
+			var zbuildingrotationy = 0;
+			var zbuildingrotationz = 0;
+			
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildpositionx').value)) {
+				zbuildingpositionx = Number(dGet('wtw_tfirstbuildpositionx').value);
+			}
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildpositiony').value)) {
+				zbuildingpositiony = Number(dGet('wtw_tfirstbuildpositiony').value);
+			}
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildpositionz').value)) {
+				zbuildingpositionz = Number(dGet('wtw_tfirstbuildpositionz').value);
+			}
+
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildscalingx').value)) {
+				if (Number(dGet('wtw_tfirstbuildscalingx').value) < .01) {
+					dGet('wtw_tfirstbuildscalingx').value = ".01";
+				}
+				zbuildingscalingx = Number(dGet('wtw_tfirstbuildscalingx').value);
+			}
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildscalingy').value)) {
+				if (Number(dGet('wtw_tfirstbuildscalingy').value) < .01) {
+					dGet('wtw_tfirstbuildscalingy').value = ".01";
+				}
+				zbuildingscalingy = Number(dGet('wtw_tfirstbuildscalingy').value);
+			}
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildscalingz').value)) {
+				if (Number(dGet('wtw_tfirstbuildscalingz').value) < .01) {
+					dGet('wtw_tfirstbuildscalingz').value = ".01";
+				}
+				zbuildingscalingz = Number(dGet('wtw_tfirstbuildscalingz').value);
+			}
+
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildrotationx').value)) {
+				zbuildingrotationx = Number(dGet('wtw_tfirstbuildrotationx').value);
+			}
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildrotationy').value)) {
+				zbuildingrotationy = Number(dGet('wtw_tfirstbuildrotationy').value);
+			}
+			if (WTW.isNumeric(dGet('wtw_tfirstbuildrotationz').value)) {
+				zbuildingrotationz = Number(dGet('wtw_tfirstbuildrotationz').value);
+			}
+			
+			var zmolddef = WTW.newMold();
+			zmolddef.shape = 'babylonfile';
+			zmolddef.covering = "none";
+			zmolddef.scaling.x = zbuildingscalingx;
+			zmolddef.scaling.y = zbuildingscalingy;
+			zmolddef.scaling.z = zbuildingscalingz;
+			zmolddef.subdivisions = 12;
+			zmolddef.opacity = 1;
+			zmolddef.parentname = WTW.mainParent;
+			zmolddef.checkcollisions = "0";
+			zmolddef.ispickable = "0";
+			zmolddef.object.folder = '/content/system/babylon/buildingmarker/';
+			zmolddef.object.file = 'buildingmarker.babylon';
+			/* create the First Building Placemarker using the mold definition above */
+			zmold = WTW.addMold('firstbuilding-----babylonfile', zmolddef, zmolddef.parentname, zmolddef.covering);
+			zmold.rotation.x = WTW.getRadians(zbuildingrotationx);
+			zmold.rotation.y = WTW.getRadians(zbuildingrotationy);
+			zmold.rotation.z = WTW.getRadians(zbuildingrotationz);
+			zmold.isPickable = false;
+			zmold.checkCollisions = false;
+			zmold.position.x = zbuildingpositionx;
+			zmold.position.y = zbuildingpositiony;
+			zmold.position.z = zbuildingpositionz;			
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminconnectinggrids.js-setFirstBuilding=" + ex.message);
+	}
+}
+
+WTWJS.prototype.submitFirstBuildingForm = function(w) {
+	/* submit the form settings to position, scale, and rotate the first bulding marker */
+	try {	
+		switch(w) {
+			case 1:
+				var zbuildingpositionx = 0;
+				var zbuildingpositiony = 0;
+				var zbuildingpositionz = 0;
+				var zbuildingscalingx = 1;
+				var zbuildingscalingy = 1;
+				var zbuildingscalingz = 1;
+				var zbuildingrotationx = 0;
+				var zbuildingrotationy = 0;
+				var zbuildingrotationz = 0;
+				
+				if (WTW.isNumeric(dGet('wtw_tfirstbuildpositionx').value)) {
+					zbuildingpositionx = Number(dGet('wtw_tfirstbuildpositionx').value);
+				}
+				if (WTW.isNumeric(dGet('wtw_tfirstbuildpositiony').value)) {
+					zbuildingpositiony = Number(dGet('wtw_tfirstbuildpositiony').value);
+				}
+				if (WTW.isNumeric(dGet('wtw_tfirstbuildpositionz').value)) {
+					zbuildingpositionz = Number(dGet('wtw_tfirstbuildpositionz').value);
+				}
+
+				if (WTW.isNumeric(dGet('wtw_tfirstbuildscalingx').value)) {
+					if (Number(dGet('wtw_tfirstbuildscalingx').value) < .01) {
+						dGet('wtw_tfirstbuildscalingx').value = ".01";
+					}
+					zbuildingscalingx = Number(dGet('wtw_tfirstbuildscalingx').value);
+				}
+				if (WTW.isNumeric(dGet('wtw_tfirstbuildscalingy').value)) {
+					if (Number(dGet('wtw_tfirstbuildscalingy').value) < .01) {
+						dGet('wtw_tfirstbuildscalingy').value = ".01";
+					}
+					zbuildingscalingy = Number(dGet('wtw_tfirstbuildscalingy').value);
+				}
+				if (WTW.isNumeric(dGet('wtw_tfirstbuildscalingz').value)) {
+					if (Number(dGet('wtw_tfirstbuildscalingz').value) < .01) {
+						dGet('wtw_tfirstbuildscalingz').value = ".01";
+					}
+					zbuildingscalingz = Number(dGet('wtw_tfirstbuildscalingz').value);
+				}
+
+				if (WTW.isNumeric(dGet('wtw_tfirstbuildrotationx').value)) {
+					zbuildingrotationx = Number(dGet('wtw_tfirstbuildrotationx').value);
+				}
+				if (WTW.isNumeric(dGet('wtw_tfirstbuildrotationy').value)) {
+					zbuildingrotationy = Number(dGet('wtw_tfirstbuildrotationy').value);
+				}
+				if (WTW.isNumeric(dGet('wtw_tfirstbuildrotationz').value)) {
+					zbuildingrotationz = Number(dGet('wtw_tfirstbuildrotationz').value);
+				}
+				var zrequest = {
+					'communityid': communityid,
+					'buildingpositionx': zbuildingpositionx,
+					'buildingpositiony': zbuildingpositiony,
+					'buildingpositionz': zbuildingpositionz,
+					'buildingscalingx': zbuildingscalingx,
+					'buildingscalingy': zbuildingscalingy,
+					'buildingscalingz': zbuildingscalingz,
+					'buildingrotationx': zbuildingrotationx,
+					'buildingrotationy': zbuildingrotationy,
+					'buildingrotationz': zbuildingrotationz,
+					'function':'updatefirstbuilding'
+				};
+				WTW.postJSON("/core/handlers/communities.php", zrequest, 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+					}
+				);
+				break;
+			case -1:
+				break;
+		}
+		WTW.disposeClean('firstbuilding-----babylonfile');
+		WTW.hideAdminMenu();
+		WTW.backToTools();
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminconnectinggrids.js-submitFirstBuildingForm=" + ex.message);
 	}
 }
 

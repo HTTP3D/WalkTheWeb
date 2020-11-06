@@ -164,7 +164,12 @@ WTWJS.prototype.downloadWeb = function(zcopywebid, zwebtype) {
 		var zbuildingpositionx = 0;
 		var zbuildingpositiony = 0;
 		var zbuildingpositionz = 0;
+		var zbuildingscalingx = 1;
+		var zbuildingscalingy = 1;
+		var zbuildingscalingz = 1;
+		var zbuildingrotationx = 0;
 		var zbuildingrotationy = 0;
+		var zbuildingrotationz = 0;
 		if (WTW.adminView != undefined) {
 			if (WTW.adminView == 1) {
 				isinstall = false;
@@ -176,7 +181,12 @@ WTWJS.prototype.downloadWeb = function(zcopywebid, zwebtype) {
 				zbuildingpositionx = dGet('wtw_tbuildingpositionx').value;
 				zbuildingpositiony = dGet('wtw_tbuildingpositiony').value;
 				zbuildingpositionz = dGet('wtw_tbuildingpositionz').value;
+				zbuildingscalingx = dGet('wtw_tbuildingscalingx').value;
+				zbuildingscalingy = dGet('wtw_tbuildingscalingy').value;
+				zbuildingscalingz = dGet('wtw_tbuildingscalingz').value;
+				zbuildingrotationx = dGet('wtw_tbuildingrotationx').value;
 				zbuildingrotationy = dGet('wtw_tbuildingrotationy').value;
+				zbuildingrotationz = dGet('wtw_tbuildingrotationz').value;
 			}
 			
 		}
@@ -187,7 +197,12 @@ WTWJS.prototype.downloadWeb = function(zcopywebid, zwebtype) {
 			'buildingpositionx': zbuildingpositionx,
 			'buildingpositiony': zbuildingpositiony,
 			'buildingpositionz': zbuildingpositionz,
+			'buildingscalingx': zbuildingscalingx,
+			'buildingscalingy': zbuildingscalingy,
+			'buildingscalingz': zbuildingscalingz,
+			'buildingrotationx': zbuildingrotationx,
 			'buildingrotationy': zbuildingrotationy,
+			'buildingrotationz': zbuildingrotationz,
 			'function':'downloadweb'
 		};
 		WTW.postJSON("/core/handlers/communities.php", zrequest, 
