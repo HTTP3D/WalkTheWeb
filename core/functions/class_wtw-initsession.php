@@ -650,7 +650,12 @@ class wtw {
 			$zbuildingpositionx = '0';
 			$zbuildingpositiony = '0';
 			$zbuildingpositionz = '0';
+			$zbuildingscalingx = '1';
+			$zbuildingscalingy = '1';
+			$zbuildingscalingz = '1';
+			$zbuildingrotationx = '0';
 			$zbuildingrotationy = '0';
+			$zbuildingrotationz = '0';
 			if ($zsetupstep == 0) {
 				/* check if first 3D Community is created */
 				global $wtwdb;
@@ -668,7 +673,12 @@ class wtw {
 					$zbuildingpositionx = $zrow["buildingpositionx"];
 					$zbuildingpositiony = $zrow["buildingpositiony"];
 					$zbuildingpositionz = $zrow["buildingpositionz"];
+					$zbuildingscalingx = $zrow["buildingscalingx"];
+					$zbuildingscalingy = $zrow["buildingscalingy"];
+					$zbuildingscalingz = $zrow["buildingscalingz"];
+					$zbuildingrotationx = $zrow["buildingrotationx"];
 					$zbuildingrotationy = $zrow["buildingrotationy"];
+					$zbuildingrotationz = $zrow["buildingrotationz"];
 					
 					$zresultsweb = $wtwdb->query("
 						select * from ".wtw_tableprefix."webaliases
@@ -912,7 +922,12 @@ class wtw {
 					echo "<input type=\"hidden\" id=\"wtw_tbuildingpositionx\" value=\"".$zbuildingpositionx."\" />";
 					echo "<input type=\"hidden\" id=\"wtw_tbuildingpositiony\" value=\"".$zbuildingpositiony."\" />";
 					echo "<input type=\"hidden\" id=\"wtw_tbuildingpositionz\" value=\"".$zbuildingpositionz."\" />";
+					echo "<input type=\"hidden\" id=\"wtw_tbuildingscalingx\" value=\"".$zbuildingscalingx."\" />";
+					echo "<input type=\"hidden\" id=\"wtw_tbuildingscalingy\" value=\"".$zbuildingscalingy."\" />";
+					echo "<input type=\"hidden\" id=\"wtw_tbuildingscalingz\" value=\"".$zbuildingscalingz."\" />";
+					echo "<input type=\"hidden\" id=\"wtw_tbuildingrotationx\" value=\"".$zbuildingrotationx."\" />";
 					echo "<input type=\"hidden\" id=\"wtw_tbuildingrotationy\" value=\"".$zbuildingrotationy."\" />";
+					echo "<input type=\"hidden\" id=\"wtw_tbuildingrotationz\" value=\"".$zbuildingrotationz."\" />";
 
 					echo "<div id=\"wtw_selectwebform\">";
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Select Your First 3D Building Scene</h3>";

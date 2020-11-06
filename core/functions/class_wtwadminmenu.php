@@ -146,9 +146,10 @@ class wtwadminmenu {
 
 			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityinfo', '<div class="wtw-altkey">ctrl+i</div>3D Community <u>I</u>nformation', 5, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitystart', '<div class="wtw-altkey">ctrl+s</div>Set <u>S</u>tarting Position', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitygravity', '<div class="wtw-altkey">ctrl+g</div>3D Community <u>G</u>ravity', 15, $updateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityaccess', '<div class="wtw-altkey">ctrl+p</div><u>P</u>ermissions', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitysnapshot', '<div class="wtw-altkey">ctrl+a</div>3D Community Sn<u>a</u>pshot', 25, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityfirstbuilding', '<div class="wtw-altkey">ctrl+f</div>Set <u>F</u>irst 3D Building', 15, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitygravity', '<div class="wtw-altkey">ctrl+g</div>3D Community <u>G</u>ravity', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityaccess', '<div class="wtw-altkey">ctrl+p</div><u>P</u>ermissions', 25, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitysnapshot', '<div class="wtw-altkey">ctrl+a</div>3D Community Sn<u>a</u>pshot', 30, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('communityoptions', '', '<hr class="wtw-menuhr" />', 50, $updateroles, "");
 			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitycopy', '<div class="wtw-altkey">ctrl+c</div><u>C</u>opy 3D Community', 55, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityshare', '<div class="wtw-altkey">ctrl+h</div>S<u>h</u>are 3D Community', 60, $updateroles, "WTW.adminMenuItemSelected(this);"); 

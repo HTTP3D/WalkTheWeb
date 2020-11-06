@@ -196,6 +196,15 @@
 					<div id="wtw_cancel27" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
 					<br /><br />
 				</div>
+				<div id="wtw_adminmenu28" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
+					<div id="wtw_bback28" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
+					<div class="wtw-menuheader">Set First 3D Building</div><br />
+<?php				include './core/forms/firstbuilding.php'; ?>
+					<br />
+					<div id="wtw_beditfirstbuilding" class="wtw-greenbutton" onclick="WTW.submitFirstBuildingForm(1);" style="font-size:1.4em;">Save Location</div>
+					<div id="wtw_cancel28" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
+					<br /><br />
+				</div>
 				<div id="wtw_adminmenu29" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback29" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
 					<div class="wtw-menuheader">Share My<br />3D Community<br />as Template</div><br />

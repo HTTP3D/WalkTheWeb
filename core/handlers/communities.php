@@ -46,7 +46,12 @@ try {
 	$zbuildingpositionx = $wtwhandlers->getPost('buildingpositionx','0');
 	$zbuildingpositiony = $wtwhandlers->getPost('buildingpositiony','0');
 	$zbuildingpositionz = $wtwhandlers->getPost('buildingpositionz','0');
+	$zbuildingscalingx = $wtwhandlers->getPost('buildingscalingx','1');
+	$zbuildingscalingy = $wtwhandlers->getPost('buildingscalingy','1');
+	$zbuildingscalingz = $wtwhandlers->getPost('buildingscalingz','1');
+	$zbuildingrotationx = $wtwhandlers->getPost('buildingrotationx','0');
 	$zbuildingrotationy = $wtwhandlers->getPost('buildingrotationy','0');
+	$zbuildingrotationz = $wtwhandlers->getPost('buildingrotationz','0');
 	$zsharehash = $wtwhandlers->getPost('sharehash','');
 	
 	/* select the function called */
@@ -64,6 +69,9 @@ try {
 		case "savestartposition":
 			$wtwcommunities->saveCommunityStartPosition($zcommunityid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz);
 			break;
+		case "updatefirstbuilding":
+			$wtwcommunities->saveFirstBuilding($zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);
+			break;
 		case "savegravity":
 			$wtwcommunities->saveCommunityGravity($zcommunityid, $zgravity);
 			break;
@@ -80,7 +88,7 @@ try {
 			$zresponse = $wtwcommunities->shareCommunityTemplate($zcommunityid, $zsharehash);
 			break;
 		case "downloadweb":
-			$znewwebid = $wtwcommunities->downloadWeb($zwebid, $zwebid, $zwebtype, '', '', '', $zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingrotationy);
+			$znewwebid = $wtwcommunities->downloadWeb($zwebid, $zwebid, $zwebtype, '', '', '', $zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);
 			$zresponse = array(
 				'webid'=> $znewwebid,
 				'webtype'=> $zwebtype

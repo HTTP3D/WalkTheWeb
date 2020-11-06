@@ -121,6 +121,15 @@ class wtwcommunities {
 							 shareuserid,
 							 sharetemplatedate,
 							 alttag,
+							 buildingpositionx,
+							 buildingpositiony,
+							 buildingpositionz,
+							 buildingscalingx,
+							 buildingscalingy,
+							 buildingscalingz,
+							 buildingrotationx,
+							 buildingrotationy,
+							 buildingrotationz,
 							 createdate,
 							 createuserid,
 							 updatedate,
@@ -159,6 +168,15 @@ class wtwcommunities {
 							 shareuserid,
 							 sharetemplatedate,
 							 alttag,
+							 buildingpositionx,
+							 buildingpositiony,
+							 buildingpositionz,
+							 buildingscalingx,
+							 buildingscalingy,
+							 buildingscalingz,
+							 buildingrotationx,
+							 buildingrotationy,
+							 buildingrotationz,
 							 now() as createdate,
 							 '".$wtwhandlers->userid."' as createuserid,
 							 now() as updatedate,
@@ -241,6 +259,34 @@ class wtwcommunities {
 			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveCommunityStartPosition=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+
+	public function saveFirstBuilding($zcommunityid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz) {
+		/* this sets the avatar start position in a 3D Community scene */
+		global $wtwhandlers;
+		$zsuccess = false;
+		try {
+			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."communities
+					set buildingpositionx=".$wtwhandlers->checkNumber($zpositionx,0).",
+						buildingpositiony=".$wtwhandlers->checkNumber($zpositiony,0).",
+						buildingpositionz=".$wtwhandlers->checkNumber($zpositionz,0).",
+						buildingscalingx=".$wtwhandlers->checkNumber($zscalingx,1).",
+						buildingscalingy=".$wtwhandlers->checkNumber($zscalingy,1).",
+						buildingscalingz=".$wtwhandlers->checkNumber($zscalingz,1).",
+						buildingrotationx=".$wtwhandlers->checkNumber($zrotationx,0).",
+						buildingrotationy=".$wtwhandlers->checkNumber($zrotationy,0).",
+						buildingrotationz=".$wtwhandlers->checkNumber($zrotationz,0).",
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where communityid='".$zcommunityid."';");
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveFirstBuilding=".$e->getMessage());
 		}
 		return $zsuccess;
 	}
@@ -1248,7 +1294,7 @@ class wtwcommunities {
 		return $zsuccess;
 	}
 	
-	public function downloadWeb($zwebid, $znewwebid, $zwebtype, $zusertoken, $zdownloadparentwebid, $zdownloadparentwebtype, $zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingrotationy) {
+	public function downloadWeb($zwebid, $znewwebid, $zwebtype, $zusertoken, $zdownloadparentwebid, $zdownloadparentwebtype, $zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz) {
 		/* this process downloads 3D Web and dependent objects form https://3dnet.walktheweb.com (WalkTheWeb repository)*/
 		/* this is the response after you select a 3D Item to domwload in the search */
 		/* $zwebid is the item selected (3D Community, 3D Bulding, or 3D Thing) */
@@ -1279,8 +1325,23 @@ class wtwcommunities {
 			if (empty($zbuildingpositionz) || !isset($zbuildingpositionz)) {
 				$zbuildingpositionz = 0;
 			}
+			if (empty($zbuildingscalingx) || !isset($zbuildingscalingx)) {
+				$zbuildingscalingx = 1;
+			}
+			if (empty($zbuildingscalingy) || !isset($zbuildingscalingy)) {
+				$zbuildingscalingy = 1;
+			}
+			if (empty($zbuildingscalingz) || !isset($zbuildingscalingz)) {
+				$zbuildingscalingz = 1;
+			}
+			if (empty($zbuildingrotationx) || !isset($zbuildingrotationx)) {
+				$zbuildingrotationx = 0;
+			}
 			if (empty($zbuildingrotationy) || !isset($zbuildingrotationy)) {
 				$zbuildingrotationy = 0;
+			}
+			if (empty($zbuildingrotationz) || !isset($zbuildingrotationz)) {
+				$zbuildingrotationz = 0;
 			}
 			
 			$zwebtypes = "";
@@ -1591,7 +1652,12 @@ class wtwcommunities {
 								buildingpositionx,
 								buildingpositiony,
 								buildingpositionz,
+								buildingscalingx,
+								buildingscalingy,
+								buildingscalingz,
+								buildingrotationx,
 								buildingrotationy,
+								buildingrotationz,
 								createdate,
 								createuserid,
 								updatedate,
@@ -1633,7 +1699,12 @@ class wtwcommunities {
 								".$zrequest->buildingpositionx.",
 								".$zrequest->buildingpositiony.",
 								".$zrequest->buildingpositionz.",
+								".$zrequest->buildingscalingx.",
+								".$zrequest->buildingscalingy.",
+								".$zrequest->buildingscalingz.",
+								".$zrequest->buildingrotationx.",
 								".$zrequest->buildingrotationy.",
+								".$zrequest->buildingrotationz.",
 								now(),
 								'".$zuserid."',
 								now(),
@@ -2712,8 +2783,23 @@ class wtwcommunities {
 					if (is_numeric($zbuildingpositionz) == false) {
 						$zbuildingpositionz = 0;
 					}
+					if (is_numeric($zbuildingscalingx) == false) {
+						$zbuildingscalingx = 1;
+					}
+					if (is_numeric($zbuildingscalingy) == false) {
+						$zbuildingscalingy = 1;
+					}
+					if (is_numeric($zbuildingscalingz) == false) {
+						$zbuildingscalingz = 1;
+					}
+					if (is_numeric($zbuildingrotationx) == false) {
+						$zbuildingrotationx = 0;
+					}
 					if (is_numeric($zbuildingrotationy) == false) {
 						$zbuildingrotationy = 0;
+					}
+					if (is_numeric($zbuildingrotationz) == false) {
+						$zbuildingrotationz = 0;
 					}
 					
 					/* get the extreme loadzone for the new building */
@@ -2766,12 +2852,12 @@ class wtwcommunities {
 								".$zbuildingpositionx.",
 								".$zbuildingpositiony.",
 								".$zbuildingpositionz.",
-								1,
-								1,
-								1,
-								0,
+								".$zbuildingscalingx.",
+								".$zbuildingscalingy.",
+								".$zbuildingscalingz.",
+								".$zbuildingrotationx.",
 								".$zbuildingrotationy.",
-								0,
+								".$zbuildingrotationz.",
 								'".$zloadactionzoneid."',
 								'',
 								'',
