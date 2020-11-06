@@ -751,7 +751,12 @@ try {
 			$zbuildingpositionx = 0;
 			$zbuildingpositiony = 0;
 			$zbuildingpositionz = 0;
+			$zbuildingscalingx = 1;
+			$zbuildingscalingy = 1;
+			$zbuildingscalingz = 1;
+			$zbuildingrotationx = 0;
 			$zbuildingrotationy = 0;
+			$zbuildingrotationz = 0;
 			
 			if ($zwebtype == 'community') {
 				/* these fields only apply to 3D Community Scenes */
@@ -770,6 +775,22 @@ try {
 				$zbuildingpositiony = $zrow["buildingpositiony"];
 				$zbuildingpositionz = $zrow["buildingpositionz"];
 				$zbuildingrotationy = $zrow["buildingrotationy"];
+
+				if (isset($zrow["buildingscalingx"])) {
+					$zbuildingscalingx = $zrow["buildingscalingx"];
+				}
+				if (isset($zrow["buildingscalingy"])) {
+					$zbuildingscalingy = $zrow["buildingscalingy"];
+				}
+				if (isset($zrow["buildingscalingz"])) {
+					$zbuildingscalingz = $zrow["buildingscalingz"];
+				}
+				if (isset($zrow["buildingrotationx"])) {
+					$zbuildingrotationx = $zrow["buildingrotationx"];
+				}
+				if (isset($zrow["buildingrotationz"])) {
+					$zbuildingrotationz = $zrow["buildingrotationz"];
+				}
 
 				addUploadID($ztextureid, true);
 				addUploadID($zskydomeid, true);
@@ -812,7 +833,12 @@ try {
 				'buildingpositionx' => $zbuildingpositionx,
 				'buildingpositiony' => $zbuildingpositiony,
 				'buildingpositionz' => $zbuildingpositionz,
+				'buildingscalingx' => $zbuildingscalingx,
+				'buildingscalingy' => $zbuildingscalingy,
+				'buildingscalingz' => $zbuildingscalingz,
+				'buildingrotationx' => $zbuildingrotationx,
 				'buildingrotationy' => $zbuildingrotationy,
+				'buildingrotationz' => $zbuildingrotationz,
 				'createdate' => $zrow["createdate"],
 				'createuserid' => $zrow["createuserid"],
 				'updatedate' => $zrow["updatedate"],

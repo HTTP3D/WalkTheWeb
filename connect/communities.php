@@ -26,6 +26,15 @@ try {
 			c1.groundpositiony,
 			c1.waterpositiony,
 			c1.alttag,
+			c1.buildingpositionx,
+			c1.buildingpositiony,
+			c1.buildingpositionz,
+			c1.buildingscalingx,
+			c1.buildingscalingy,
+			c1.buildingscalingz,
+			c1.buildingrotationx,
+			c1.buildingrotationy,
+			c1.buildingrotationz,
 			c1.createdate,
 			c1.createuserid,
 			c1.updatedate,
@@ -62,6 +71,15 @@ try {
 			c1.groundpositiony,
 			c1.waterpositiony,
 			c1.alttag,
+			c1.buildingpositionx,
+			c1.buildingpositiony,
+			c1.buildingpositionz,
+			c1.buildingscalingx,
+			c1.buildingscalingy,
+			c1.buildingscalingz,
+			c1.buildingrotationx,
+			c1.buildingrotationy,
+			c1.buildingrotationz,
 			c1.createdate,
 			c1.createuserid,
 			c1.updatedate,
@@ -114,12 +132,30 @@ try {
 		$zalttag = array(
 			'name' => $zrow["alttag"]
 		);
+		$zfirstbuilding = array(
+			'position' => array(
+				'x'=> $zrow["buildingpositionx"], 
+				'y'=> $zrow["buildingpositiony"], 
+				'z'=> $zrow["buildingpositionz"]
+			),
+			'scaling' => array(
+				'x'=> $zrow["buildingscalingx"], 
+				'y'=> $zrow["buildingscalingy"], 
+				'z'=> $zrow["buildingscalingz"]
+			),
+			'rotation' => array(
+				'x'=> $zrow["buildingrotationx"], 
+				'y'=> $zrow["buildingrotationy"], 
+				'z'=> $zrow["buildingrotationz"]
+			)
+		);
 		$zresponse[$i] = array(
 			'communityinfo' => $zcommunityinfo,
 			'share'=> $zshare,
 			'graphics' => $zgraphics,
 			'authorizedusers'=> $zauthorizedusers,
 			'alttag'=> $zalttag,
+			'firstbuilding'=> $zfirstbuilding,
 			'gravity'=> $zrow["gravity"],
 			'groundpositiony'=> $zrow["groundpositiony"],
 			'waterpositiony'=> $zrow["waterpositiony"]

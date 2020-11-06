@@ -182,13 +182,22 @@ try {
 	
 	if ($zauthenticationok && $zwebnameok) {
 		/* download community */
-		$znewcommunityid = $wtwcommunities->downloadWeb($zcommunityid, $zcommunityid, 'community', $zwtwusertoken, '', '', '', 0, 0, 0, 0);
+		$znewcommunityid = $wtwcommunities->downloadWeb($zcommunityid, $zcommunityid, 'community', $zwtwusertoken, '', '', '', 0, 0, 0, 1, 1, 1, 0, 0, 0);
 		
 		if (empty($znewcommunityid) || !isset($znewcommunityid)) {
 			$serror = '3D Community Scene could not be created.';
 		}
 		
 		/* get building start position and rotation */
+		$zbuildingpositionx = 0;
+		$zbuildingpositiony = 0;
+		$zbuildingpositionz = 0;
+		$zbuildingscalingx = 1;
+		$zbuildingscalingy = 1;
+		$zbuildingscalingz = 1;
+		$zbuildingrotationx = 0;
+		$zbuildingrotationy = 0;
+		$zbuildingrotationz = 0;
 		$zresults = $wtwconnect->query("
 			select c1.*
 			from ".wtw_tableprefix."communities c1
@@ -198,11 +207,16 @@ try {
 			$zbuildingpositionx = $zrow["buildingpositionx"];
 			$zbuildingpositiony = $zrow["buildingpositiony"];
 			$zbuildingpositionz = $zrow["buildingpositionz"];
+			$zbuildingscalingx = $zrow["buildingscalingx"];
+			$zbuildingscalingy = $zrow["buildingscalingy"];
+			$zbuildingscalingz = $zrow["buildingscalingz"];
+			$zbuildingrotationx = $zrow["buildingrotationx"];
 			$zbuildingrotationy = $zrow["buildingrotationy"];
+			$zbuildingrotationz = $zrow["buildingrotationz"];
 		}
 		
 		/* download building */
-		$znewbuildingid = $wtwcommunities->downloadWeb($zbuildingid, $zbuildingid, 'building', $zwtwusertoken, $znewcommunityid, 'community', $znewcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingrotationy);
+		$znewbuildingid = $wtwcommunities->downloadWeb($zbuildingid, $zbuildingid, 'building', $zwtwusertoken, $znewcommunityid, 'community', $znewcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);
 		
 		if (empty($znewbuildingid) || !isset($znewbuildingid)) {
 			$serror = '3D Shopping Building could not be created.';

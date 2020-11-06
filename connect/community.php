@@ -94,9 +94,27 @@ try {
 				'y'=> $zrow["waterpositiony"]
 			)
 		);
+		$zfirstbuilding = array(
+			'position' => array(
+				'x'=> $zrow["buildingpositionx"], 
+				'y'=> $zrow["buildingpositiony"], 
+				'z'=> $zrow["buildingpositionz"]
+			),
+			'scaling' => array(
+				'x'=> $zrow["buildingscalingx"], 
+				'y'=> $zrow["buildingscalingy"], 
+				'z'=> $zrow["buildingscalingz"]
+			),
+			'rotation' => array(
+				'x'=> $zrow["buildingrotationx"], 
+				'y'=> $zrow["buildingrotationy"], 
+				'z'=> $zrow["buildingrotationz"]
+			)
+		);
 		$communities[$i] = array(
 			'communityinfo' => $zcommunityinfo,
 			'share'=> $zshare,
+			'firstbuilding'=> $zfirstbuilding,
 			'graphics' => $zgraphics,
 			'ground' => $zground,
 			'water' => $zwater,
