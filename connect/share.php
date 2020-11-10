@@ -802,6 +802,7 @@ try {
 				$zwebtype.'id' => $zrow[$zwebtype."id"],
 				'past'.$zwebtype.'id' => $zrow["past".$zwebtype."id"],
 				$zwebtype.'name' => htmlspecialchars($zrow[$zwebtype."name"], ENT_QUOTES, 'UTF-8'),
+				$zwebtype.'description' => htmlspecialchars($zrow[$zwebtype."description"], ENT_QUOTES, 'UTF-8'),
 				'userid' => $zrow["userid"],
 				'positionx' => $zrow["positionx"],
 				'positiony' => $zrow["positiony"],
