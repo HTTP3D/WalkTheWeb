@@ -21,7 +21,7 @@ class wtwshopping {
 	
 	public $version = "1.0.1";
 
-	public $dbversion = "1.0.1";
+	public $dbversion = "1.0.2";
 
 	public $versiondate = "2020-8-29";
 	
@@ -247,6 +247,8 @@ class wtwshopping {
 						  `woocommerceapiurl` varchar(255) DEFAULT '',
 						  `woocommercekey` varchar(255) DEFAULT '',
 						  `woocommercesecret` varchar(255) DEFAULT '',
+						  `woocommercekeynew` varchar(255) DEFAULT '',
+						  `woocommercesecretnew` varchar(255) DEFAULT '',
 						  `approveddate` datetime DEFAULT NULL,
 						  `approveduserid` varchar(16) DEFAULT '',
 						  `createdate` datetime DEFAULT NULL,
