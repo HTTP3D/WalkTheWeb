@@ -11,7 +11,7 @@ try {
 	$zwebname = $wtwconnect->getVal('webname','');
 
 	if (!empty($zwebname) && isset($zwebname)) {
-		$zwebname = strtolower(base64_decode($zwebname));
+		$zwebname = strtolower($wtwconnect->decode64($zwebname));
 	}
 	
 	$zresponse = array(

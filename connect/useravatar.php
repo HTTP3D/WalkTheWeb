@@ -9,11 +9,11 @@ try {
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/useravatar.php");
 
 	/* get values from querystring or session */
-	$zinstanceid = base64_decode($wtwconnect->getVal('i',''));
-	$zuserid = base64_decode($wtwconnect->getVal('d',''));
-	$zuserip = base64_decode($wtwconnect->getVal('p',''));
-	$zuseravatarid = base64_decode($wtwconnect->getVal('a',''));
-	$zavatarid = base64_decode($wtwconnect->getVal('id',''));
+	$zinstanceid = $wtwconnect->decode64($wtwconnect->getVal('i',''));
+	$zuserid = $wtwconnect->decode64($wtwconnect->getVal('d',''));
+	$zuserip = $wtwconnect->decode64($wtwconnect->getVal('p',''));
+	$zuseravatarid = $wtwconnect->decode64($wtwconnect->getVal('a',''));
+	$zavatarid = $wtwconnect->decode64($wtwconnect->getVal('id',''));
 	
 	if (!empty($zuseravatarid) && isset($zuseravatarid) && !empty($zuserid) && isset($zuserid)) {
 		/* check for avatar for logged in user (latest used) */
