@@ -272,6 +272,11 @@ class wtwhandlers {
 		return $wtwdb->saveSettings($zsettings);
 	}
 
+	public function decode64($ztext) {
+		global $wtwdb;
+		return $wtwdb->decode64($ztext);
+	}
+
 	public function getVal($zkey, $zdefaultval) {
 		global $wtwdb;
 		return $wtwdb->getVal($zkey, $zdefaultval);

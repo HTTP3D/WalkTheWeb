@@ -248,6 +248,7 @@ class wtwadmin {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tobjectsoundid\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tobjectsoundpath\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_twebaliasid\" maxlength=\"16\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tapikeyid\" maxlength=\"16\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tbackupfullpageformtitle\" />\r\n";
 			$hiddenfields .= "<img id=\"wtw_tobjectsoundicon\" style=\"visibility:hidden;display:none;\" />\r\n";
 		} catch (Exception $e) {
@@ -297,6 +298,18 @@ class wtwadmin {
 			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$pagedata .= "				</div>\r\n";
 			$pagedata .= "			</div>\r\n";
+
+			$pagedata .= "			<div id=\"wtw_videolinks\" class=\"wtw-dashboardboxleftdouble\" style=\"display:none;visibility:hidden;\">\r\n";
+			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\" onclick=\"WTW.toggleDashboardBox('wtw_videolinksdiv');\"><div id=\"wtw_videolinksdivarrow\" class=\"wtw-divarrow\">⯅</div>WalkTheWeb Videos</div>\r\n";
+			$pagedata .= "				<div id=\"wtw_videolinksdiv\" class=\"wtw-dashboardboxmax\" style=\"min-height:550px;\">\r\n";
+			$pagedata .= "					<div id=\"wtw_latestvideo\"></div>\r\n";
+			$pagedata .= "					<h3 id=\"wtw_latestvideotitle\" class=\"wtw-black\">WalkTheWeb Video</h3>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div id=\"wtw_latestvideodetails\" class=\"wtw-dashboardlabel\">Latest Video</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "				</div>\r\n";
+			$pagedata .= "			</div>\r\n";
+
 			$pagedata .= "		</div>\r\n";
 			$pagedata .= "	</div>\r\n";
 			
@@ -666,10 +679,6 @@ class wtwadmin {
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "		</div>\r\n";
 			
-
-			
-			
-			
 			/* settings page - email server */
 			$pagedata .= "		<div id=\"wtw_emailserversettings\" class=\"wtw-fullpage\">\r\n";
 			$pagedata .= "			<div class=\"wtw-dashboardboxleft\">\r\n";
@@ -789,6 +798,65 @@ class wtwadmin {
 			$pagedata .= "		</div>\r\n";
 			$pagedata .= "	</div>\r\n";
 			
+			/* settings page - api keys */
+			$pagedata .= "		<div id=\"wtw_apikeyssettings\" class=\"wtw-fullpage\">\r\n";
+			$pagedata .= "			<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\"><div id='wtw_addapikey' class='wtw-greenbuttonright' onclick=\"WTW.openAPIKeyForm('');\">Add New</div>API Keys Access</div>\r\n";
+			$pagedata .= "				<div class=\"wtw-dashboardbox\">\r\n";
+			$pagedata .= " 						<div>API Key set is a login and password used to allow outside applications limited access to perform select functions. For example, an API Key set can allow your <b>WalkTheWeb WordPress Plugin</b> to create and manage your 3D Community Scenes, 3D Buildings, and 3D Shopping Stores.</div>\r\n";
+			$pagedata .= "						<div id=\"wtw_apikeyerror\" class=\"wtw-error\"></div>\r\n";
+			
+			$pagedata .= "					<div id='wtw_addapikeydiv' class=\"wtw-dashboardboxleftdouble wtw-hide\">\r\n";
+			$pagedata .= "						<div class=\"wtw-dashboardboxtitle\">Add API Key</div>\r\n";
+			$pagedata .= "						<div class=\"wtw-dashboardbox\">\r\n";
+
+			$pagedata .= "							<div class=\"wtw-dashboardlabel\">App Friendly Name</div>\r\n";
+			$pagedata .= "							<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tapiappname\" maxlength=\"255\" style=\"width:360px;\" /></div>\r\n";
+			$pagedata .= "							<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "							<div class=\"wtw-dashboardlabel\">App URL (https recommended)</div>\r\n";
+			$pagedata .= "							<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tapiappurl\" maxlength=\"255\" style=\"width:360px;\" /></div>\r\n";
+			$pagedata .= "							<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "							<div class=\"wtw-dashboardlabel\">App ID (May be Required: Example WordPress App ID)</div>\r\n";
+			$pagedata .= "							<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tapiappid\" maxlength=\"255\" /></div>\r\n";
+			$pagedata .= "							<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "							<div class=\"wtw-dashboardlabel\">WalkTheWeb Key</div>\r\n";
+			$pagedata .= "							<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tapiwtwkey\" maxlength=\"255\" style=\"width:360px;\" /></div>\r\n";
+			$pagedata .= "							<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "							<div class=\"wtw-dashboardlabel\">WalkTheWeb Secret</div>\r\n";
+			$pagedata .= "							<div class=\"wtw-dashboardvalue\"><input type=\"password\" id=\"wtw_tapiwtwsecret\" maxlength=\"255\" style=\"width:360px;\" /></div>\r\n";
+			$pagedata .= "							<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= " 							<div id=\"wtw_apicopynote\" class=\"wtw-error\">Make sure you copy the WalkTheWeb Key and Secret now. You will not be able to view this information again after Saving.</div>\r\n";
+
+			$pagedata .= " 						</div>\r\n";
+			$pagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "						<div id=\"wtw_bapikeydelete\" class='wtw-redbuttonleft wtw-hide' onclick=\"WTW.saveAPIKeyForm(0);\">Delete API Key</div>\r\n";
+			$pagedata .= "						<div id=\"wtw_bapikeyrekey\" class='wtw-yellowbuttonleft wtw-hide' onclick=\"WTW.newAPIKey();\">Assign New API Key</div>\r\n";
+			$pagedata .= "						<div id=\"wtw_bapikeysave\" class='wtw-greenbuttonright' onclick=\"WTW.saveAPIKeyForm(1);\">Save API Key</div>\r\n";
+			$pagedata .= "						<div class='wtw-yellowbuttonright' onclick=\"WTW.saveAPIKeyForm(-1);\">Cancel</div>\r\n";
+			$pagedata .= " 					</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$pagedata .= "						<div id=\"wtw_apikeystitle\" class=\"wtw-dashboardboxtitle\">API Keys</div>\r\n";
+			$pagedata .= "						<div id=\"wtw_apikeyslist\"></div><br />\r\n";
+			$pagedata .= " 					</div>\r\n";
+			$pagedata .= "					<div id=\"wtw_loadingapikeys\" class=\"wtw-loadingnotice\" style=\"margin-left:auto;margin-right:auto;color:#000000;\">Loading...</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "				</div>\r\n";
+			$pagedata .= "			</div>\r\n";
+			$pagedata .= "		</div>\r\n";
+			$pagedata .= "	</div>\r\n";
+			
+
+
+
+
+
+
+
+
+
+
+
 			/* troubleshooting - display error page */
 			$pagedata .= "	<div id=\"wtw_errorpage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_showerror\" class=\"wtw-fullpage\">\r\n";

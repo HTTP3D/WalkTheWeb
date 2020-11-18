@@ -207,11 +207,11 @@ class wtwtools {
 					if (empty($zresults["smtpencryption"]) || !isset($zresults["smtpencryption"])) {
 						$ztransport = (new Swift_SmtpTransport($zresults["smtphost"], $zresults["smtpport"]))
 						  ->setUsername($zresults["smtpusername"])
-						  ->setPassword(base64_decode($zresults["smtppassword"]));
+						  ->setPassword($wtwhandlers->decode64($zresults["smtppassword"]));
 					} else {
 						$ztransport = (new Swift_SmtpTransport($zresults["smtphost"], $zresults["smtpport"], $zresults["smtpencryption"]))
 						  ->setUsername($zresults["smtpusername"])
-						  ->setPassword(base64_decode($zresults["smtppassword"]));
+						  ->setPassword($wtwhandlers->decode64($zresults["smtppassword"]));
 					}
 					
 					$zmailer = new Swift_Mailer($ztransport);
@@ -271,11 +271,11 @@ class wtwtools {
 					if (empty($zresults["smtpencryption"]) || !isset($zresults["smtpencryption"])) {
 						$ztransport = (new Swift_SmtpTransport($zresults["smtphost"], $zresults["smtpport"]))
 						  ->setUsername($zresults["smtpusername"])
-						  ->setPassword(base64_decode($zresults["smtppassword"]));
+						  ->setPassword($wtwhandlers->decode64($zresults["smtppassword"]));
 					} else {
 						$ztransport = (new Swift_SmtpTransport($zresults["smtphost"], $zresults["smtpport"], $zresults["smtpencryption"]))
 						  ->setUsername($zresults["smtpusername"])
-						  ->setPassword(base64_decode($zresults["smtppassword"]));
+						  ->setPassword($wtwhandlers->decode64($zresults["smtppassword"]));
 					}
 					
 					$zmailer = new Swift_Mailer($ztransport);

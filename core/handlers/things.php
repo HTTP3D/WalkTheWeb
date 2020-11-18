@@ -13,10 +13,10 @@ try {
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zthingid = $wtwhandlers->getPost('thingid','');
 	$zpastthingid = $wtwhandlers->getPost('pastthingid','');
-	$zthingname = base64_decode($wtwhandlers->getPost('thingname',''));
-	$zthingdescription = base64_decode($wtwhandlers->getPost('thingdescription',''));
+	$zthingname = $wtwhandlers->decode64($wtwhandlers->getPost('thingname',''));
+	$zthingdescription = $wtwhandlers->decode64($wtwhandlers->getPost('thingdescription',''));
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
-	$zalttag = base64_decode($wtwhandlers->getPost('alttag',''));
+	$zalttag = $wtwhandlers->decode64($wtwhandlers->getPost('alttag',''));
 	$zpositionx = $wtwhandlers->getPost('positionx','0');
 	$zpositiony = $wtwhandlers->getPost('positiony','0');;
 	$zpositionz = $wtwhandlers->getPost('positionz','0');;
@@ -27,8 +27,8 @@ try {
 	$zrotationy = $wtwhandlers->getPost('rotationy','0');;
 	$zrotationz = $wtwhandlers->getPost('rotationz','0');;
 	$zgravity = $wtwhandlers->getPost('gravity','9.8');
-	$zdescription = base64_decode($wtwhandlers->getPost('description',''));
-	$ztags = base64_decode($wtwhandlers->getPost('tags',''));
+	$zdescription = $wtwhandlers->decode64($wtwhandlers->getPost('description',''));
+	$ztags = $wtwhandlers->decode64($wtwhandlers->getPost('tags',''));
 	$zsharehash = $wtwhandlers->getPost('sharehash','');
 	
 	/* select the function called */

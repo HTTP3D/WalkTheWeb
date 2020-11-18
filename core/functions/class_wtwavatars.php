@@ -167,7 +167,7 @@ class wtwavatars {
 					$zscalingz = .04;
 					$zstartframe = 0;
 					$zendframe = 0;
-					$zdisplayname = base64_decode($zdisplayname);
+					$zdisplayname = $wtwhandlers->decode64($zdisplayname);
 					/* get default avatar definition from avatars table */
 					$zresults = $wtwhandlers->query("
 						select * 

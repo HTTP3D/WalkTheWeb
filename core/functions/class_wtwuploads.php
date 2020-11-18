@@ -257,7 +257,7 @@ class wtwuploads {
 			}
 			$zfiledata = str_replace('data:image/png;base64,', '', $zfiledata);
 			$zfiledata = str_replace(' ', '+', $zfiledata);
-			$zdata1 = base64_decode($zfiledata);
+			$zdata1 = $wtwhandlers->decode64($zfiledata);
 			$zfile1 = $zfilepath1.$zfilename1;
 			$zsuccess = file_put_contents($zfile1, $zdata1);
 			chmod($zfile1, octdec(wtw_chmod));
@@ -665,7 +665,7 @@ class wtwuploads {
 			/* ini_set('max_execution_time', 300); */
 			if (!empty($wtwhandlers->getSessionUserID())) {
 				if (!empty($zwebimagesbulk)) {
-					$zwebimagesbulk = base64_decode($zwebimagesbulk);
+					$zwebimagesbulk = $wtwhandlers->decode64($zwebimagesbulk);
 					$zwebimages = json_decode($zwebimagesbulk);
 					$zrecordeach = 50 / count($zwebimages);
 					$i = 50;
@@ -738,7 +738,7 @@ class wtwuploads {
 			/* ini_set('max_execution_time', 300); */
 			if (!empty($wtwhandlers->getSessionUserID())) {
 				if (!empty($zuploadsbulk)) {
-					$zuploadsbulk = base64_decode($zuploadsbulk);
+					$zuploadsbulk = $wtwhandlers->decode64($zuploadsbulk);
 					$zuploads = json_decode($zuploadsbulk);
 					$zcommunityid = '';
 					$zbuildingid = '';
@@ -761,7 +761,7 @@ class wtwuploads {
 						$zuploadid = $wtwhandlers->getRandomString(16,1);
 						$zfiledata = null;
 						if (isset($zrow->filedata) && !empty($zrow->filedata)) {
-							$zfiledata = addslashes(base64_decode($zrow->filedata));
+							$zfiledata = addslashes($wtwhandlers->decode64($zrow->filedata));
 						}
 						if(isset($zfiledata) && !empty($zfiledata)) {
 							$zfileresults = $this->writeDataToFile($zrow->filedata, $zwebtype, $zwebid, $zrow->filename);
@@ -1063,7 +1063,7 @@ class wtwuploads {
 			$zfilepath = $wtwhandlers->contentpath."/uploads/".$zwebtypes."/".$zwebid."/";
 			$zbrowsepath = $wtwhandlers->contenturl."/uploads/".$zwebtypes."/".$zwebid."/";
 			$znewfilename = $this->avoidDuplicateFileNames($zfilepath, $zfilename);
-			$zdata1 = base64_decode($zbase64data);
+			$zdata1 = $wtwhandlers->decode64($zbase64data);
 			$znewfilepath = $zbrowsepath.$znewfilename;
 			$zsuccess = file_put_contents($zfilepath.$znewfilename, $zdata1);	
 			chmod($zfilepath.$znewfilename, octdec(wtw_chmod));			
@@ -1152,7 +1152,7 @@ class wtwuploads {
 		global $wtwhandlers;
 		try {
 			if (!empty($zkey) && isset($zkey)) {
-				$zkey = base64_decode($zkey);
+				$zkey = $wtwhandlers->decode64($zkey);
 				$zoptions = ['cost' => 11];
 				$zkeyhash = password_hash($zkey, PASSWORD_DEFAULT, $zoptions);
 				switch ($zwebtype) {

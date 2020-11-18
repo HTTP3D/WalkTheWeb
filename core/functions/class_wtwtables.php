@@ -93,6 +93,28 @@ class wtwtables {
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;				
 			");
 			$wtwdb->deltaCreateTable("
+				CREATE TABLE `".wtw_tableprefix."apikeys` (
+				  `apikeyid` varchar(16) NOT NULL,
+				  `appid` varchar(32) DEFAULT '',
+				  `appname` varchar(255) DEFAULT '',
+				  `appurl` varchar(255) DEFAULT '',
+				  `wtwkey` varchar(255) DEFAULT '',
+				  `wtwsecret` varchar(255) DEFAULT '',
+				  `approved` int DEFAULT '0',
+				  `approveddate` datetime DEFAULT NULL,
+				  `approveduserid` varchar(16) DEFAULT '',
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int DEFAULT '0',
+				  PRIMARY KEY (`apikeyid`),
+				  UNIQUE KEY `".wtw_tableprefix."apikeyid_UNIQUE` (`apikeyid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			");
+			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."avataranimations` (
 				  `avataranimationid` varchar(16) NOT NULL,
 				  `pastavataranimationid` varchar(16) DEFAULT '',
@@ -840,24 +862,6 @@ class wtwtables {
 				  PRIMARY KEY (`uploadid`),
 				  UNIQUE KEY `".wtw_tableprefix."uploadid_UNIQUE` (`uploadid`),
 				  KEY `".wtw_tableprefix."idx_uploads_quickselect` (`uploadid`,`originalid`,`websizeid`,`thumbnailid`,`userid`,`filetype`,`stock`,`hide`)
-				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-			");
-			$wtwdb->deltaCreateTable("
-				CREATE TABLE `".wtw_tableprefix."userapikeys` (
-				  `userapikeyid` varchar(16) NOT NULL,
-				  `userid` varchar(16) NOT NULL DEFAULT '',
-				  `wtwapikey` varchar(45) NOT NULL DEFAULT '',
-				  `wtwapisecret` varchar(45) NOT NULL DEFAULT '',
-				  `apiurl` varchar(255) NOT NULL DEFAULT '',
-				  `createdate` datetime DEFAULT NULL,
-				  `createuserid` varchar(16) DEFAULT '',
-				  `updatedate` datetime DEFAULT NULL,
-				  `updateuserid` varchar(16) DEFAULT '',
-				  `deleteddate` datetime DEFAULT NULL,
-				  `deleteduserid` varchar(16) DEFAULT '',
-				  `deleted` int(11) DEFAULT '0',
-				  PRIMARY KEY (`userapikeyid`),
-				  UNIQUE KEY `".wtw_tableprefix."userapikeyid_UNIQUE` (`userapikeyid`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 			");
 			$wtwdb->deltaCreateTable("

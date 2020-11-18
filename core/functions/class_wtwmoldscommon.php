@@ -193,7 +193,7 @@ class wtwmoldscommon {
 			/* ini_set('max_execution_time', 300); */
 			if (!empty($wtwhandlers->getSessionUserID())) {
 				if (!empty($zmoldsbulk)) {
-					$zmoldsbulk = base64_decode($zmoldsbulk);
+					$zmoldsbulk = $wtwhandlers->decode64($zmoldsbulk);
 					$zmolds = json_decode($zmoldsbulk);
 					$zrecordeach = 90 / count($zmolds);
 					$i = 10;
@@ -444,7 +444,7 @@ class wtwmoldscommon {
 							$zthingid = $zwebid;
 							break;
 					}
-					$zmoldpointsbulk = base64_decode($zmoldpointsbulk);
+					$zmoldpointsbulk = $wtwhandlers->decode64($zmoldpointsbulk);
 					$zmoldpoints = json_decode($zmoldpointsbulk);
 					$zrecordeach = 50 / count($zmoldpoints);
 					$i = 50;

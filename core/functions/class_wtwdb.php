@@ -869,6 +869,20 @@ class wtwdb {
 		return $zsuccess;
 	}
 	
+	public function decode64($ztext) {
+		/* attempt to base64_decode the text, if not, return blank */
+		try {
+			if (!empty($ztext) && isset($ztext)) {
+				$ztext = base64_decode($ztext);
+			} else {
+				$ztext = '';
+			}
+		} catch (Exception $e) {
+			$ztext = '';
+		}			
+		return $ztext;
+	}
+	
 	public function getPost($zfield, $zdefault) {
 		/* get the posed data with a fall back default value */
 		$zvalue = $zdefault;
@@ -1112,7 +1126,7 @@ class wtwdb {
 		$zsuccess = false;
 		try {
 			if (!empty($zkey) && isset($zkey)) {
-				$zkey = base64_decode($zkey);
+				$zkey = $this->decode64($zkey);
 				$zsharehash = "";
 				$zresults = array();
 				switch ($zwebtype) {

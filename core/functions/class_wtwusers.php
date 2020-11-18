@@ -28,7 +28,7 @@ class wtwusers {
 			$zuserid = $wtwdb->getRandomString(16,1);
 			$zuploadpathid = $wtwdb->getRandomString(16,1);
 			if (!empty($zdisplayname) && isset($zdisplayname)) {
-				$zdisplayname = base64_decode($zdisplayname);
+				$zdisplayname = $wtwdb->decode64($zdisplayname);
 			}
 			$options = ['cost' => 11];
 			$passwordhash = password_hash($zpassword, PASSWORD_DEFAULT, $options);
@@ -83,10 +83,10 @@ class wtwusers {
 		);
 		try {
 			if (!empty($zemail) && isset($zemail)) {
-				$zemail = base64_decode($zemail);
+				$zemail = $wtwdb->decode64($zemail);
 			}
 			if (!empty($zpassword) && isset($zpassword)) {
-				$zpassword = base64_decode($zpassword);
+				$zpassword = $wtwdb->decode64($zpassword);
 			}
 			if (!empty($zpassword) && isset($zpassword)) {
 				$zresults = array();
@@ -156,13 +156,13 @@ class wtwusers {
 		try {
 			$zresults = array();
 			if (!empty($zglobaluserid) && isset($zglobaluserid)) {
-				$zglobaluserid = base64_decode($zglobaluserid);
+				$zglobaluserid = $wtwdb->decode64($zglobaluserid);
 			}
 			if (!empty($zemail) && isset($zemail)) {
-				$zemail = base64_decode($zemail);
+				$zemail = $wtwdb->decode64($zemail);
 			}
 			if (!empty($zdisplayname) && isset($zdisplayname)) {
-				$zdisplayname = base64_decode($zdisplayname);
+				$zdisplayname = $wtwdb->decode64($zdisplayname);
 			}
 			if (!empty($zemail) && isset($zemail)) {
 				$zresults = $wtwdb->query("
@@ -808,13 +808,13 @@ class wtwusers {
 		$zserror = "";
 		try {
 			if (!empty($zdisplayname) && isset($zdisplayname)) {
-				$zdisplayname = base64_decode($zdisplayname);
+				$zdisplayname = $wtwhandlers->decode64($zdisplayname);
 			}
 			if (!empty($zuseremail) && isset($zuseremail)) {
-				$zuseremail = base64_decode($zuseremail);
+				$zuseremail = $wtwhandlers->decode64($zuseremail);
 			}
 			if (!empty($zpassword) && isset($zpassword)) {
-				$zpassword = base64_decode($zpassword);
+				$zpassword = $wtwhandlers->decode64($zpassword);
 			}
 			if ($this->isEmailAvailable($zuseremail)) {
 				$zuserid = $wtwhandlers->getRandomString(16,1);
@@ -943,7 +943,7 @@ class wtwusers {
 		);
 		try {
 			if (!empty($zuserid) && isset($zuserid)) {
-				$zuserid = base64_decode($zuserid);
+				$zuserid = $wtwhandlers->decode64($zuserid);
 			}
 			$zresults = $wtwhandlers->query("
 				select *
@@ -1033,16 +1033,16 @@ class wtwusers {
 			$zsuccess = false;
 			if (!empty($wtwhandlers->getSessionUserID())) {
 				if (!empty($zuseravatarid) && isset($zuseravatarid)) {
-					$zuseravatarid = base64_decode($zuseravatarid);
+					$zuseravatarid = $wtwhandlers->decode64($zuseravatarid);
 				}
 				if (!empty($zinstanceid) && isset($zinstanceid)) {
-					$zinstanceid = base64_decode($zinstanceid);
+					$zinstanceid = $wtwhandlers->decode64($zinstanceid);
 				}
 				if (!empty($zdisplayname) && isset($zdisplayname)) {
-					$zdisplayname = base64_decode($zdisplayname);
+					$zdisplayname = $wtwhandlers->decode64($zdisplayname);
 				}
 				if (!empty($zemail) && isset($zemail)) {
-					$zemail = base64_decode($zemail);
+					$zemail = $wtwhandlers->decode64($zemail);
 				}
 				
 				if ($this->isEmailAvailable($zemail)) {
@@ -1085,10 +1085,10 @@ class wtwusers {
 		try {
 			if ($wtwhandlers->isUserInRole("admin")) {
 				if (!empty($zdisplayname) && isset($zdisplayname)) {
-					$zdisplayname = base64_decode($zdisplayname);
+					$zdisplayname = $wtwhandlers->decode64($zdisplayname);
 				}
 				if (!empty($zemail) && isset($zemail)) {
-					$zemail = base64_decode($zemail);
+					$zemail = $wtwhandlers->decode64($zemail);
 				}
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."users
@@ -1111,13 +1111,13 @@ class wtwusers {
 		try {
 			if ($wtwhandlers->isUserInRole("admin")) {
 				if (!empty($zpassword) && isset($zpassword)) {
-					$zpassword = base64_decode($zpassword);
+					$zpassword = $wtwhandlers->decode64($zpassword);
 				}
 				if (!empty($zdisplayname) && isset($zdisplayname)) {
-					$zdisplayname = base64_decode($zdisplayname);
+					$zdisplayname = $wtwhandlers->decode64($zdisplayname);
 				}
 				if (!empty($zemail) && isset($zemail)) {
-					$zemail = base64_decode($zemail);
+					$zemail = $wtwhandlers->decode64($zemail);
 				}
 				if ($this->isEmailAvailable($zemail)) {
 					$zuserid = $wtwhandlers->getRandomString(16,1);

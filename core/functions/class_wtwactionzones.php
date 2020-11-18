@@ -292,7 +292,7 @@ class wtwactionzones {
 			/* ini_set('max_execution_time', 300); */
 			if (!empty($wtwhandlers->getSessionUserID())) {
 				if (!empty($zactionzonesbulk)) {
-					$zactionzonesbulk = base64_decode($zactionzonesbulk);
+					$zactionzonesbulk = $wtwhandlers->decode64($zactionzonesbulk);
 					$zactionzones = json_decode($zactionzonesbulk);
 					$zrecordeach = 50 / count($zactionzones);
 					$i = 50;

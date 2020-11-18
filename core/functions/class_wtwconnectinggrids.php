@@ -167,7 +167,7 @@ class wtwconnectinggrids {
 			/* ini_set('max_execution_time', 300); */
 			if (!empty($wtwhandlers->getSessionUserID())) {
 				if (!empty($zconnectinggridsbulk)) {
-					$zconnectinggridsbulk = base64_decode($zconnectinggridsbulk);
+					$zconnectinggridsbulk = $wtwhandlers->decode64($zconnectinggridsbulk);
 					$zconnectinggrids = json_decode($zconnectinggridsbulk);
 					$zrecordeach = 50 / count($zconnectinggrids);
 					$i = 50;

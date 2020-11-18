@@ -13,12 +13,12 @@ try {
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zbuildingid = $wtwhandlers->getPost('buildingid','');
 	$zpastbuildingid = $wtwhandlers->getPost('pastbuildingid','');
-	$zbuildingname = base64_decode($wtwhandlers->getPost('buildingname',''));
-	$zbuildingdescription = base64_decode($wtwhandlers->getPost('buildingdescription',''));
-	$zdescription = base64_decode($wtwhandlers->getPost('description',''));
-	$ztags = base64_decode($wtwhandlers->getPost('tags',''));
+	$zbuildingname = $wtwhandlers->decode64($wtwhandlers->getPost('buildingname',''));
+	$zbuildingdescription = $wtwhandlers->decode64($wtwhandlers->getPost('buildingdescription',''));
+	$zdescription = $wtwhandlers->decode64($wtwhandlers->getPost('description',''));
+	$ztags = $wtwhandlers->decode64($wtwhandlers->getPost('tags',''));
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
-	$zalttag = base64_decode($wtwhandlers->getPost('alttag',''));
+	$zalttag = $wtwhandlers->decode64($wtwhandlers->getPost('alttag',''));
 	$zpositionx = $wtwhandlers->getPost('positionx','0');
 	$zpositiony = $wtwhandlers->getPost('positiony','0');
 	$zpositionz = $wtwhandlers->getPost('positionz','0');

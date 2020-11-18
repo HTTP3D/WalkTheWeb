@@ -273,6 +273,11 @@ class wtwconnect {
 		return $wtwdb->saveSettings($zsettings);
 	}
 
+	public function decode64($ztext) {
+		global $wtwdb;
+		return $wtwdb->decode64($ztext);
+	}
+
 	public function getPost($zfield, $zdefault) {
 		global $wtwdb;
 		return $wtwdb->getPost($zfield, $zdefault);

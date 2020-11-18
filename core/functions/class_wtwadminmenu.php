@@ -87,6 +87,7 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminserversettings', 'Server Settings', 100, 'wtw_settings', 1, 'wtw_serversettings', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminwebalias', 'Web Aliases', 100, 'wtw_settings', 2, 'wtw_webalias', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminemailserver', 'Email Server', 100, 'wtw_settings', 3, 'wtw_emailserver', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminapikeys', 'API Keys Access', 100, 'wtw_settings', 4, 'wtw_apikeys', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 
 				$this->addAdminMenuItem('wtw_admindevtools', 'Developer Tools', 998, 'wtw_devtools', 0, '', '/content/system/images/menutools.png', $developerroles, "WTW.toggleAdminMenuLevel('tools');");
 				$this->addAdminMenuItem('wtw_adminavatarcamera', 'Avatar Camera ON', 998, 'wtw_devtools', 1, 'wtw_avatarcamera', '', $developerroles, "WTW.adminMenuItemSelected(this);");

@@ -1170,6 +1170,14 @@ a.wtw-helplink2:hover {
 	margin:1%;
 	background-color:#ffffff;
 }
+.wtw-dashboardboxleftdouble {
+	float:left;
+	width:62%;
+	border:1px solid #454545;
+	padding:0px;
+	margin:1%;
+	background-color:#ffffff;
+}
 .wtw-dashboardboxleftfull {
 	float:left;
 	width:96%;
