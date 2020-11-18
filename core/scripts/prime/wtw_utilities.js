@@ -355,8 +355,6 @@ WTWJS.prototype.getJSON = function(zurl, zcallback, zaction, zrequest) {
 		Httpreq.onreadystatechange = function () {
 			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
 				zcallback(Httpreq.responseText);
-			} else if (zurl.indexOf("wtw-multiplayer-tracking.php") > -1 && Httpreq.status == "404") {
-				WTWMultiplayer.trackMovement = 0;
 			}
 		};
 		Httpreq.send(zrequest);  

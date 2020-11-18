@@ -1449,23 +1449,6 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 									if (zobjectanimations != null) {
 										WTW.addMoldAnimation(zmoldname, zmeshname, results.meshes[i], zobjectanimations);
 									}
-									if (results.meshes[i].material != null) {
-//										results.meshes[i].material.id = zchildmoldname + "mat";
-//										results.meshes[i].material.name = zchildmoldname + "mat";
-//WTW.log("zchildmoldname=" + zchildmoldname);
-//										results.meshes[i].material.ambientColor = new BABYLON.Color3(.3, .3, .3);
-//										results.meshes[i].material.diffuseColor = new BABYLON.Color3(.3, .3, .3);
-//										results.meshes[i].material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-//										results.meshes[i].material.specularColor = new BABYLON.Color3(1, 1, 1);
-//										var zcovering = results.meshes[i].material;
-//										results.meshes[i].material.dispose();
-//										results.meshes[i].material = zcovering;
-									}
-
-//									results.meshes[i].material.ambientColor = new BABYLON.Color3(.3, .3, .3);
-/*									
-*/
-
 									if (zmold == null || zmold.parent == null) {
 										/* if the parent has been deleted after this async process began (avoiding orphaned objects)*/
 										results.meshes[i].dispose();
@@ -1473,6 +1456,7 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 								}
 							}
 						}
+
 						if (results.skeletons != null)	{
 							/* load any skeletons (most often avatars) */
 							for (var i=0; i < results.skeletons.length; i++) {

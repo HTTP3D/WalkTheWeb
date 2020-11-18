@@ -136,6 +136,9 @@ WTWJS.prototype.openFullPageForm = function(pageid, setcategory, item, itemname,
 					case "Web Aliases":
 						WTW.openWebAliasSettings();
 						break;
+					case "API Keys Access":
+						WTW.openAPIKeys();
+						break;
 				}
 				break;
 			case "fullpage":
@@ -681,6 +684,7 @@ WTWJS.prototype.openDashboardForm = function(item) {
 	try {
 		WTW.hide('wtw_dashboard');
 		WTW.show('wtw_loadingdashboard');
+		WTW.hide('wtw_videolinks');
 		dGet("wtw_mycommcount").innerHTML = '0';
 		dGet("wtw_mybuildcount").innerHTML = '0';
 		dGet("wtw_mythingcount").innerHTML = '0';
@@ -688,28 +692,28 @@ WTWJS.prototype.openDashboardForm = function(item) {
 		dGet("wtw_otherbuildcount").innerHTML = '0';
 		dGet("wtw_otherthingcount").innerHTML = '0';
 		WTW.getJSON("/connect/dashboard.php", 
-			function(response) {
-				var dashboard = JSON.parse(response);
-				if (dashboard != null) {
-					for (var i = 0; i < dashboard.length; i++) {
-						if (dashboard[i] != null) {
-							if (dashboard[i].mycommunitycount != undefined) {
-								dGet('wtw_mycommcount').innerHTML = WTW.formatNumber(Number(dashboard[i].mycommunitycount),0);
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
+					for (var i = 0; i < zresponse.length; i++) {
+						if (zresponse[i] != null) {
+							if (zresponse[i].mycommunitycount != undefined) {
+								dGet('wtw_mycommcount').innerHTML = WTW.formatNumber(Number(zresponse[i].mycommunitycount),0);
 							}
-							if (dashboard[i].mybuildingcount != undefined) {
-								dGet('wtw_mybuildcount').innerHTML = WTW.formatNumber(Number(dashboard[i].mybuildingcount),0);
+							if (zresponse[i].mybuildingcount != undefined) {
+								dGet('wtw_mybuildcount').innerHTML = WTW.formatNumber(Number(zresponse[i].mybuildingcount),0);
 							}
-							if (dashboard[i].mythingcount != undefined) {
-								dGet('wtw_mythingcount').innerHTML = WTW.formatNumber(Number(dashboard[i].mythingcount),0);
+							if (zresponse[i].mythingcount != undefined) {
+								dGet('wtw_mythingcount').innerHTML = WTW.formatNumber(Number(zresponse[i].mythingcount),0);
 							}
-							if (dashboard[i].othercommunitycount != undefined) {
-								dGet('wtw_othercommcount').innerHTML = WTW.formatNumber(Number(dashboard[i].othercommunitycount),0);
+							if (zresponse[i].othercommunitycount != undefined) {
+								dGet('wtw_othercommcount').innerHTML = WTW.formatNumber(Number(zresponse[i].othercommunitycount),0);
 							}
-							if (dashboard[i].otherbuildingcount != undefined) {
-								dGet('wtw_otherbuildcount').innerHTML = WTW.formatNumber(Number(dashboard[i].otherbuildingcount),0);
+							if (zresponse[i].otherbuildingcount != undefined) {
+								dGet('wtw_otherbuildcount').innerHTML = WTW.formatNumber(Number(zresponse[i].otherbuildingcount),0);
 							}
-							if (dashboard[i].otherthingcount != undefined) {
-								dGet('wtw_otherthingcount').innerHTML = WTW.formatNumber(Number(dashboard[i].otherthingcount),0);
+							if (zresponse[i].otherthingcount != undefined) {
+								dGet('wtw_otherthingcount').innerHTML = WTW.formatNumber(Number(zresponse[i].otherthingcount),0);
 							}
 						}
 					}
@@ -718,6 +722,26 @@ WTWJS.prototype.openDashboardForm = function(item) {
 					WTW.hide('wtw_loadingdashboard');
 					WTW.show('wtw_dashboard');
 				},500);
+			}
+		);
+		WTW.getJSON("https://3dnet.walktheweb.com/connect/videolinks.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				for (var i=0;i<zresponse.length;i++) {
+					if (zresponse[i] != null) {
+						if (i == 0) {
+							dGet('wtw_latestvideotitle').innerHTML = atob(zresponse[i].videotitle);
+							dGet('wtw_latestvideodetails').innerHTML = "Presented by: " + zresponse[i].presenter + " on " + WTW.formatDate(zresponse[i].updatedate) + "<br /><br />" + atob(zresponse[i].description);
+							if (zresponse[i].videourl.indexOf('?v=') > -1) {
+								var zyoutubeid = zresponse[i].videourl.split('?v=')[1];
+								dGet('wtw_latestvideo').innerHTML = "<iframe width=\"100%\" height=\"auto\" src=\"https://www.youtube.com/embed/" + zyoutubeid + "?list=PLnMgA5ebbr8KXw9z5vp4E202e-RTKa9X-\" frameborder=\"0\" allowfullscreen style=\"min-height:350px;\"></iframe>";
+							}
+						} else {
+							
+						}
+					}
+				}
+				WTW.show('wtw_videolinks');
 			}
 		);
 	} catch (ex) {
@@ -2023,7 +2047,7 @@ WTWJS.prototype.changeEmailSwitch = function() {
 WTWJS.prototype.openWebAliasSettings = function() {
 	/* open web aliases page form */
 	try {
-		WTW.show('wtw_loadingwtw_loadingwebalias');
+		WTW.show('wtw_loadingwebalias');
 		WTW.show('wtw_settingspage');
 		WTW.show('wtw_webaliassettings');
 		dGet('wtw_webaliaslist').innerHTML = "";
@@ -2068,6 +2092,7 @@ WTWJS.prototype.openWebAliasSettings = function() {
 					}
 					zwebaliaslist += "</table>"
 					dGet('wtw_webaliaslist').innerHTML = zwebaliaslist;
+					WTW.hide('wtw_loadingwebalias');
 				}
 			}
 		);
@@ -2559,6 +2584,252 @@ WTWJS.prototype.saveAliasForm = function(w) {
 		WTW.show('wtw_addwebalias');
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-saveAliasForm=" + ex.message);
+	}
+}
+
+/* API Keys Admin */
+
+WTWJS.prototype.openAPIKeys = function(zdeleted) {
+	/* open API Keys page form */
+	try {
+		if (zdeleted == undefined) {
+			zdeleted = 0;
+		}
+		WTW.show('wtw_loadingapikeys');
+		WTW.show('wtw_settingspage');
+		WTW.show('wtw_apikeyssettings');
+		dGet('wtw_apikeyslist').innerHTML = "";
+		var zrequest = {
+			'deleted':zdeleted,
+			'function':'getapikeys'
+		};
+		WTW.postJSON("/core/handlers/api.php", zrequest,
+			function(zresponse) {
+				if (zresponse != null) {
+					zresponse = JSON.parse(zresponse);
+					/* send JSON results to be formated on the form */
+					WTW.displayAPIKeys(zresponse, zdeleted);
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-openAPIKeys=" + ex.message);
+	}
+}
+
+WTWJS.prototype.displayAPIKeys = function(zresponse, zdeleted) {
+	/* display API Keys on the full page form */
+	try {
+		if (zdeleted == undefined) {
+			zdeleted = 0;
+		}
+		if (zdeleted == 0) {
+			dGet('wtw_apikeystitle').innerHTML = "<div class='wtw-bluebuttonright' onclick=\"WTW.openAPIKeys(1);\">Show Deleted API Keys</div>Active API Keys";
+		} else {
+			dGet('wtw_apikeystitle').innerHTML = "<div class='wtw-bluebuttonright' onclick=\"WTW.openAPIKeys(0);\">Show Active API Keys</div>Deleted API Keys";
+		}
+		if (zresponse != null) {
+			var zapikeyslist = "<table class=\"wtw-table\"><tr><td class=\"wtw-tablecolumnheading\"><b>App URL</b></td><td class=\"wtw-tablecolumnheading\"><b>App Name</b></td><td class=\"wtw-tablecolumnheading\"><b>WalkTheWeb Key</b></td><td class=\"wtw-tablecolumnheading\"><b>Approved</b></td><td class=\"wtw-tablecolumnheading\"><b>Date</b></td><td class=\"wtw-tablecolumnheading\"><b>&nbsp;</b></td></tr>";
+			if (zresponse.apikeys != undefined) {
+				for (var i=0;i<zresponse.apikeys.length;i++) {
+					if (zresponse.apikeys[i] != null) {
+						if (zresponse.apikeys[i].appurl != undefined) {
+							var zapprovetext = '';
+							if (zresponse.apikeys[i].approved == '1') {
+								zapprovetext = WTW.formatDate(zresponse.apikeys[i].approveddate);
+							} else if (zresponse.apikeys[i].approveddate != null) {
+								zapprovetext = "<span style='red'>Denied</span>";
+							}
+							zapikeyslist += "<tr><td class=\"wtw-tablecolumns\"><a href='" + zresponse.apikeys[i].appurl + "' target='_blank'>" + zresponse.apikeys[i].appurl + "</a></td><td class=\"wtw-tablecolumns\">" + zresponse.apikeys[i].appname + "</td><td class=\"wtw-tablecolumns\">" + zresponse.apikeys[i].wtwkey + "</td><td class=\"wtw-tablecolumns\">" + zapprovetext + "</td><td class=\"wtw-tablecolumns\">" + WTW.formatDate(zresponse.apikeys[i].createdate) + "</td>";
+							if (zresponse.apikeys[i].approveddate != null) {
+								zapikeyslist += "<td class=\"wtw-tablecolumns\"><div class='wtw-bluebuttonright' onclick=\"WTW.openAPIKeyForm('" + zresponse.apikeys[i].apikeyid + "');\">Edit</div></td>";
+							} else {
+								zapikeyslist += "<td class=\"wtw-tablecolumns\"><div class='wtw-redbuttonright' onclick=\"WTW.approveAPIKey('" + zresponse.apikeys[i].apikeyid + "','0');\">Deny</div><div class='wtw-greenbuttonright' onclick=\"WTW.approveAPIKey('" + zresponse.apikeys[i].apikeyid + "','1');\">Approve</div></td>";
+							}
+							zapikeyslist += "</tr>";
+						}
+					}
+				}
+			}
+			zapikeyslist += "</table>"
+			dGet('wtw_apikeyslist').innerHTML = zapikeyslist;
+			WTW.hide('wtw_loadingapikeys');
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-displayAPIKeys=" + ex.message);
+	}
+}
+
+WTWJS.prototype.approveAPIKey = function(zapikeyid, zapproved) {
+	/* save API Key approval, 0 is denied, 1 is approved */
+	try {
+		dGet('wtw_apikeyerror').innerHTML = '';
+		var zrequest = {
+			'apikeyid':btoa(zapikeyid),
+			'approved':zapproved,
+			'function':'approveapikey'
+		};
+		WTW.postJSON("/core/handlers/api.php", zrequest,
+			function(zresponse) {
+				if (zresponse != null) {
+					zresponse = JSON.parse(zresponse);
+					if (zresponse.serror == '') {
+						/* no error, refresh display list */
+						WTW.displayAPIKeys(zresponse, 0);
+					} else {
+						/* if error, show error mesage for 5 seconds */
+						dGet('wtw_apikeyerror').innerHTML = zresponse.serror;
+						window.setTimeout(function(){
+							dGet('wtw_apikeyerror').innerHTML = '';
+						},5000);
+					}
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-approveAPIKey=" + ex.message);
+	}
+}
+
+WTWJS.prototype.openAPIKeyForm = function(zapikeyid) {
+	/* open edit API Key form */
+	try {
+		if (zapikeyid == undefined) {
+			zapikeyid = '';
+		}
+		WTW.clearAPIKeyForm();
+		WTW.hide('wtw_addapikey');
+		if (zapikeyid == '') {
+			dGet("wtw_tapikeyid").value = '';
+			dGet('wtw_tapiappname').value = 'New App';
+			dGet('wtw_tapiappurl').value = 'https://';
+			dGet('wtw_tapiwtwkey').value = 'ck_' + WTW.getRandomString(40,1);
+			dGet('wtw_tapiwtwsecret').value = 'cs_' + WTW.getRandomString(40,1);
+			dGet('wtw_tapiwtwsecret').type = 'text';
+			dGet('wtw_tapiwtwkey').disabled = false;
+			dGet('wtw_tapiwtwsecret').disabled = false;
+			dGet('wtw_bapikeysave').innerHTML = 'Save API Key';
+			WTW.hide('wtw_bapikeydelete');
+			WTW.hide('wtw_bapikeyrekey');
+			WTW.show('wtw_apicopynote');
+			WTW.show('wtw_addapikeydiv');
+		} else {
+			dGet("wtw_tapikeyid").value = zapikeyid;
+			dGet('wtw_tapiwtwsecret').type = 'password';
+			WTW.hide('wtw_apicopynote');
+
+			var zrequest = {
+				'apikeyid':btoa(zapikeyid),
+				'function':'getapikey'
+			};
+			WTW.postJSON("/core/handlers/api.php", zrequest,
+				function(zresponse) {
+					if (zresponse != null) {
+						zresponse = JSON.parse(zresponse);
+						if (zresponse.apikeys[0] != null) {
+							dGet('wtw_tapiwtwkey').disabled = false;
+							dGet('wtw_tapiwtwsecret').disabled = false;
+							dGet('wtw_tapiappname').value = zresponse.apikeys[0].appname;
+							dGet('wtw_tapiappurl').value = zresponse.apikeys[0].appurl;
+							dGet('wtw_tapiwtwkey').value = zresponse.apikeys[0].wtwkey;
+							dGet('wtw_tapiwtwsecret').value = '*******************************************';
+							dGet('wtw_tapiwtwkey').disabled = true;
+							dGet('wtw_tapiwtwsecret').disabled = true;
+							if (zresponse.apikeys[0].deleted == 1) {
+								WTW.hide('wtw_bapikeydelete');
+								WTW.hide('wtw_bapikeyrekey');
+								dGet('wtw_bapikeysave').innerHTML = 'Restore API Key';
+							} else {
+								WTW.show('wtw_bapikeydelete');
+								WTW.show('wtw_bapikeyrekey');
+								dGet('wtw_bapikeysave').innerHTML = 'Save API Key';
+							}
+						}
+					}
+					WTW.show('wtw_addapikeydiv');
+				}
+			);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-openAPIKeyForm=" + ex.message);
+	}
+}
+
+WTWJS.prototype.clearAPIKeyForm = function() {
+	/* clear API Key edit form */
+	try {
+		dGet("wtw_tapikeyid").value = '';
+		dGet('wtw_tapiappid').value = '';
+		dGet('wtw_tapiappurl').value = '';
+		dGet('wtw_tapiwtwkey').value = '';
+		dGet('wtw_tapiwtwsecret').value = '';
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-clearAPIKeyForm=" + ex.message);
+	}
+}
+
+WTWJS.prototype.newAPIKey = function() {
+	/* assign New API Key on edit form */
+	try {
+		dGet('wtw_tapiwtwkey').disabled = false;
+		dGet('wtw_tapiwtwsecret').disabled = false;
+		dGet('wtw_tapiwtwkey').value = 'ck_' + WTW.getRandomString(40,1);
+		dGet('wtw_tapiwtwsecret').value = 'cs_' + WTW.getRandomString(40,1);
+		dGet('wtw_tapiwtwsecret').type = 'text';
+		WTW.show('wtw_apicopynote');
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-newAPIKey=" + ex.message);
+	}
+}
+
+WTWJS.prototype.saveAPIKeyForm = function(w) {
+	/* save API Key form */
+	try {
+		var zapikeyid = dGet('wtw_tapikeyid').value;
+		switch (w) {
+			case 1: /* save */
+				dGet('wtw_tapiwtwkey').disabled = false;
+				dGet('wtw_tapiwtwsecret').disabled = false;
+				var zrequest = {
+					'apikeyid': btoa(zapikeyid),
+					'appid': btoa(dGet('wtw_tapiappid').value),
+					'appname': btoa(dGet('wtw_tapiappname').value),
+					'appurl': btoa(dGet('wtw_tapiappurl').value),
+					'wtwkey': btoa(dGet('wtw_tapiwtwkey').value),
+					'wtwsecret': btoa(dGet('wtw_tapiwtwsecret').value),
+					'function':'saveapikey'
+				};
+				WTW.postJSON("/core/handlers/api.php", zrequest, 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+						/* send JSON results to be formated on the form */
+						WTW.displayAPIKeys(zresponse, 0);
+					}
+				);
+				break;
+			case -1: /* cancel */
+				break;
+			case 0: /* delete */
+				var zrequest = {
+					'apikeyid': btoa(zapikeyid),
+					'function':'deleteapikey'
+				};
+				WTW.postJSON("/core/handlers/api.php", zrequest, 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+						/* send JSON results to be formated on the form */
+						WTW.displayAPIKeys(zresponse, 0);
+					}
+				);
+				break;
+		}
+		WTW.clearAPIKeyForm();
+		WTW.hide('wtw_addapikeydiv');
+		WTW.show('wtw_addapikey');
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-saveAPIKeyForm=" + ex.message);
 	}
 }
 

@@ -665,11 +665,14 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 					case 'wtw_adminserversettings':
 						WTW.openFullPageForm('settings','Server Settings');
 						break;
+					case 'wtw_adminwebalias':
+						WTW.openFullPageForm('settings','Web Aliases');
+						break;
 					case 'wtw_adminemailserver':
 						WTW.openFullPageForm('settings','Email Server');
 						break;
-					case 'wtw_adminwebalias':
-						WTW.openFullPageForm('settings','Web Aliases');
+					case "wtw_adminapikeys":
+						WTW.openFullPageForm('settings','API Keys Access');
 						break;
 				/* Dev Tools Admin Items */
 					case "wtw_adminfocus":
