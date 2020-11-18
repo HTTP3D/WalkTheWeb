@@ -5,7 +5,7 @@ try {
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/wtw-shopping-connect.php");
 	
 	/* get values from querystring or session */
-	$zstoreid = base64_decode($wtwconnect->getVal('storeid',''));
+	$zstoreid = $wtwconnect->decode64($wtwconnect->getVal('storeid',''));
 	
 	/* select useravatarid data */
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);

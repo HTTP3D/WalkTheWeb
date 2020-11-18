@@ -6,7 +6,7 @@ try {
 	
 	/* get values from querystring or session */
 	$zfieldname = $wtwconnect->getVal('fieldname','');
-	$zprotectedname = base64_decode($wtwconnect->getVal('protectedname',''));
+	$zprotectedname = $wtwconnect->decode64($wtwconnect->getVal('protectedname',''));
 	
 	/* select useravatarid data */
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
