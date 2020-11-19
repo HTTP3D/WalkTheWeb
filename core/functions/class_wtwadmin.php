@@ -393,6 +393,11 @@ class wtwadmin {
 			$pagedata .= "					<option value=\"object\">3D Objects</option>\r\n";
 			$pagedata .= "				</select>\r\n";
 			$pagedata .= "			</div>\r\n";
+
+			$pagedata .= "			<div id=\"wtw_menufilter\" class=\"wtw-menufileselect\" >\r\n";
+			$pagedata .= "			<input type=\"text\" id=\"wtw_objectfilter\" onkeyup=\"WTW.filterObjects(2);\" onfocus=\"WTW.filterObjects(1);\" onblur=\"WTW.filterObjects(0);\" value=\"Name Filter\" />\r\n";
+			$pagedata .= "			</div>\r\n";
+			
 			$pagedata .= "			<div id=\"wtw_menuimagecommunity\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(1);\">3D Community Files</div>\r\n";
 			$pagedata .= "			<div id=\"wtw_menuimagemy\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(2);\">My Files</div>\r\n";
 			$pagedata .= "			<div id=\"wtw_menuimagestock\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(3);\">Stock Files</div>\r\n";
