@@ -907,7 +907,7 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 			zdescimage2.parent = zbasemold;
 			WTW.registerMouseOver(zdescimage2);
 
-		} else { /* all other displays are loaded 3D Objects */
+		} else { /* all other displays are loaded 3D Models */
 			var zfolder = '/content/plugins/wtw-shopping/assets/3dobjects/';
 			var zfile = '';
 			switch (zspecial1) {
