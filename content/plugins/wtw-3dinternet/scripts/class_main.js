@@ -152,7 +152,7 @@ WTW_3DINTERNET.prototype.loadLoginSettings = function(zloaddefault) {
 	return zloaddefault;
 }
 
-WTW_3DINTERNET.prototype.responseLoadLoginSettings = function(zsettings, zparameters) {
+WTW_3DINTERNET.prototype.responseLoadLoginSettings = async function(zsettings, zparameters) {
 	try {
 		zsetting = JSON.parse(zsettings);
 		if (zsetting.wtw3dinternet_enableGlobal != undefined) {
@@ -192,7 +192,7 @@ WTW_3DINTERNET.prototype.responseLoadLoginSettings = function(zsettings, zparame
 		WTW.loadLoginAvatarSelect();
 
 		/* check for purchased services */
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/myservices.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value, 
+		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/myservices.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				wtw3dinternet.setActiveText(zresponse);
@@ -346,9 +346,9 @@ WTW_3DINTERNET.prototype.changeSwitch = function(zobj) {
 	} 
 }
 
-WTW_3DINTERNET.prototype.serviceCheck = function(zservice) {
+WTW_3DINTERNET.prototype.serviceCheck = async function(zservice) {
 	try {
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/servicecheck.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value + "&service=" + zservice + "&userid=" + dGet('wtw_tuserid').value, 
+		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/servicecheck.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value + "&service=" + zservice + "&userid=" + dGet('wtw_tuserid').value, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.serror != undefined) {
@@ -426,13 +426,13 @@ WTW_3DINTERNET.prototype.enableMultiplayer = function(zchecked) {
 	} 
 }
 
-WTW_3DINTERNET.prototype.purchaseComplete = function() {
+WTW_3DINTERNET.prototype.purchaseComplete = async function() {
 	try {
 		/* close purchase window */
 		WTW.closeIFrame();
 
 		/* check for purchased services */
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/myservices.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value, 
+		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/myservices.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				wtw3dinternet.setActiveText(zresponse);
@@ -451,12 +451,12 @@ WTW_3DINTERNET.prototype.openActivateWindow = function() {
 	} 
 }
 		
-WTW_3DINTERNET.prototype.enableChat = function(zchecked) {
+WTW_3DINTERNET.prototype.enableChat = async function(zchecked) {
 	try {
 		wtw3dinternet.masterChat = zchecked;
 		if (wtw3dinternet.masterChat == '1') {
 			/* attempt to turn on chat (hold off) */
-			WTW.getJSON("https://3dnet.walktheweb.com/connect/servicehold.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value + "&service=chat&hold=0&userid=" + dGet('wtw_tuserid').value, 
+			await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/servicehold.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value + "&service=chat&hold=0&userid=" + dGet('wtw_tuserid').value, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					wtw3dinternet.setActiveText(zresponse);
@@ -465,7 +465,7 @@ WTW_3DINTERNET.prototype.enableChat = function(zchecked) {
 			wtw3dinternet.initChatSocket();
 		} else {
 			/* set chat on hold */
-			WTW.getJSON("https://3dnet.walktheweb.com/connect/servicehold.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value + "&service=chat&hold=1&userid=" + dGet('wtw_tuserid').value, 
+			await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/servicehold.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value + "&service=chat&hold=1&userid=" + dGet('wtw_tuserid').value, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					wtw3dinternet.setActiveText(zresponse);
@@ -665,7 +665,7 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault) {
 	return zloaddefault;
 }
 
-WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, zavatarid) {
+WTW_3DINTERNET.prototype.onMyAvatarSelect = async function(zglobaluseravatarid, zuseravatarid, zavatarid) {
 	var zloading = false;
 	try {
 		if (wtw3dinternet.globalLogins == '1') {
@@ -691,7 +691,7 @@ WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zusera
 					'displayname':btoa(zdisplayname),
 					'function':'quicksaveavatar'
 				};
-				WTW.postJSON("https://3dnet.walktheweb.com/connect/globalquicksaveavatar.php", zrequest, 
+				await WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalquicksaveavatar.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */

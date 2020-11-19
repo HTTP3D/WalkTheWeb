@@ -215,7 +215,7 @@ wtwshopping.prototype.resetHovers = function(zmoldname, zshape) {
 	}
 }
 
-wtwshopping.prototype.getStoreMolds = function(zmoldname) {
+wtwshopping.prototype.getStoreMolds = async function(zmoldname) {
 	/* for each mold that is a store mold, there are settings stored in the database. */
 	/* they can be a preset category (like for a section of a store), preset product (like a sale item) */
 	/* and the allow search flag to decide if the product display can be overwritten by search results */
@@ -237,7 +237,7 @@ wtwshopping.prototype.getStoreMolds = function(zmoldname) {
 				/* mark the fetch queue as loading (in progress) so that it does not start multiple times */
 				WTWShopping.updateStoreMoldsLoaded(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid, 1);
 				/* fetch the store settings */
-				WTW.getJSON("/connect/wtw-shopping-getmolds.php?communityid=" + zmoldnameparts.communityid + "&buildingid=" + zmoldnameparts.buildingid + "&thingid=" + zmoldnameparts.thingid, 
+				await WTW.getAsyncJSON("/connect/wtw-shopping-getmolds.php?communityid=" + zmoldnameparts.communityid + "&buildingid=" + zmoldnameparts.buildingid + "&thingid=" + zmoldnameparts.thingid, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						if (zresponse != null) {
@@ -417,7 +417,7 @@ wtwshopping.prototype.getStoreMoldProperties = function(zcommunityid, zbuildingi
 	return zmoldproperties;
 }
 
-wtwshopping.prototype.setProduct = function(zcategoryid, zproductid, zproductname, zslug, zmoldname) {
+wtwshopping.prototype.setProduct = async function(zcategoryid, zproductid, zproductname, zslug, zmoldname) {
 	try {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		var zstoreinfo = WTWShopping.getStoreID(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
@@ -429,7 +429,7 @@ wtwshopping.prototype.setProduct = function(zcategoryid, zproductid, zproductnam
 		
 		if (zmoldnameparts.molds[zmoldnameparts.moldind] != undefined) {
 			if (zstoreinfo.woocommerceapiurl != "" && zproductid != '' && zproductid != undefined) {
-				WTW.getJSON(zstoreinfo.woocommerceapiurl + "products/" + zproductid + "/?consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret), 
+				await WTW.getAsyncJSON(zstoreinfo.woocommerceapiurl + "products/" + zproductid + "/?consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret), 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						var zimageurl = '';
@@ -535,7 +535,7 @@ wtwshopping.prototype.setFetchQueue = function(zconnectinggridid, zconnectinggri
 	}
 }
 
-wtwshopping.prototype.productFetchProducts = function(zmoldname, zcategoryid) {
+wtwshopping.prototype.productFetchProducts = async function(zmoldname, zcategoryid) {
 	try {
 		if (zcategoryid == undefined) {
 			zcategoryid = '';
@@ -556,7 +556,7 @@ wtwshopping.prototype.productFetchProducts = function(zmoldname, zcategoryid) {
 					/* alternate, get products by categoryid */
 					zurl = zstoreinfo.woocommerceapiurl + "products/?per_page=50&category=" + zcategoryid + "&consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret);
 				}
-				WTW.getJSON(zurl, 
+				await WTW.getAsyncJSON(zurl, 
 					function(zresponse) {
 						if (zresponse != null) {
 							/* process results */
@@ -689,13 +689,13 @@ wtwshopping.prototype.productClearFetchProducts = function(zmoldname) {
 	}  
 }
 
-wtwshopping.prototype.productFetchCategories = function(zmoldname) {
+wtwshopping.prototype.productFetchCategories = async function(zmoldname) {
 	try {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		var zstoreinfo = WTWShopping.getStoreID(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
 		if (zstoreinfo.woocommerceapiurl != "") {
 			var zurl = zstoreinfo.woocommerceapiurl + "products/categories/?per_page=50&orderby=slug&consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret);
-			WTW.getJSON(zurl, 
+			await WTW.getAsyncJSON(zurl, 
 				function(zresponse) {
 					if (zresponse != null) {
 						WTWShopping.productLoadCategories(zmoldname, JSON.parse(zresponse));
@@ -810,7 +810,7 @@ wtwshopping.prototype.productLoadSearchResults = function(zmoldname, zconnecting
 
 
 
-wtwshopping.prototype.loadProductDisplay = function(zmoldname, zproductname, zprice, zproductid, zslug, zimageurl, zshortdescription, zdescription) {
+wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductname, zprice, zproductid, zslug, zimageurl, zshortdescription, zdescription) {
 	try {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		var zcommunityid = zmoldnameparts.communityid;
@@ -819,8 +819,7 @@ wtwshopping.prototype.loadProductDisplay = function(zmoldname, zproductname, zpr
 		var zstoreinfo = WTWShopping.getStoreID(zcommunityid, zbuildingid, zthingid);
 		if (zstoreinfo.storeurl != "") {
 			if (zimageurl != '') {
-				//WTW.getJSON(zstoreinfo.storeurl + "/walktheweb/image.php?walktheweb_image_url=" + zimageurl, 
-				WTW.getJSON(zstoreinfo.storeurl + "/image.php?walktheweb_image_url=" + zimageurl, 
+				await WTW.getAsyncJSON(zstoreinfo.storeurl + "/image.php?walktheweb_image_url=" + zimageurl, 
 					function(response2) {
 						if (response2 != null) {
 							var zpimage = scene.getMeshByID(zmoldname + "-clickimage");
@@ -1568,7 +1567,7 @@ wtwshopping.prototype.productClearForSearchResults = function(zmoldname, zconnec
 	}  
 }
 
-wtwshopping.prototype.getStoreInfo = function(zmoldname) {
+wtwshopping.prototype.getStoreInfo = async function(zmoldname) {
 	try {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		var zcommunityid = zmoldnameparts.communityid;
@@ -1579,7 +1578,7 @@ wtwshopping.prototype.getStoreInfo = function(zmoldname) {
 		if (zstoreinfo.woocommerceapiurl != "" && zbuildingname == '') {
 			//var zurl = zstoreinfo.storeurl + "/walktheweb/storeinfo.php?walktheweb_store_info=1"; /* new plugin */
 			var zurl = zstoreinfo.storeurl + "/storeinfo.php?walktheweb_store_info=1";
-			WTW.getJSON(zurl, 
+			await WTW.getAsyncJSON(zurl, 
 				function(zresponse) {
 					WTWShopping.setStoreInfo(zmoldname, JSON.parse(zresponse));
 				}
@@ -1671,11 +1670,11 @@ wtwshopping.prototype.setStoreInfo = function(zmoldname, zresponse) {
 	}  
 }
 
-wtwshopping.prototype.getCategoriesList = function() {
+wtwshopping.prototype.getCategoriesList = async function() {
 	try {
 		var zstoreinfo = WTWShopping.getStoreID(communityid, buildingid, thingid);
 		if (zstoreinfo.woocommerceapiurl != "") {
-			WTW.getJSON(zstoreinfo.woocommerceapiurl + "products/categories/?per_page=50&consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret), 
+			await WTW.getAsyncJSON(zstoreinfo.woocommerceapiurl + "products/categories/?per_page=50&consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret), 
 				function(zresponse) {
 					WTWShopping.loadCategoriesList(JSON.parse(zresponse));
 				}
@@ -1721,7 +1720,7 @@ wtwshopping.prototype.setCategory = function(zcategoryid) {
 	}
 }
 
-wtwshopping.prototype.getProductsList = function(zcategoryid) {
+wtwshopping.prototype.getProductsList = async function(zcategoryid) {
 	try {
 		if (zcategoryid == undefined) {
 			zcategoryid = "";
@@ -1732,7 +1731,7 @@ wtwshopping.prototype.getProductsList = function(zcategoryid) {
 			if (zcategoryid != "") {
 				zurl = zstoreinfo.woocommerceapiurl + "products/?per_page=50&category=" + zcategoryid + "&consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret);
 			}
-			WTW.getJSON(zurl, 
+			await WTW.getAsyncJSON(zurl, 
 				function(zresponse) {
 					WTWShopping.loadProductsList(JSON.parse(zresponse));
 				}
@@ -1891,10 +1890,10 @@ wtwshopping.prototype.checkStoreID = function(zcommunityid, zbuildingid, zthingi
 	return zfound;
 }
 
-wtwshopping.prototype.loadConnectingGrids = function(zconnectinggridind, zcommunityid, zbuildingid, zthingid) {
+wtwshopping.prototype.loadConnectingGrids = async function(zconnectinggridind, zcommunityid, zbuildingid, zthingid) {
 	try {
 		if (WTWShopping.checkStoreID(zcommunityid, zbuildingid, zthingid) == false) {
-			WTW.getJSON("/connect/wtw-shopping-getconnectstore.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid, 
+			await WTW.getAsyncJSON("/connect/wtw-shopping-getconnectstore.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					if (zresponse != null) {
@@ -2002,7 +2001,7 @@ wtwshopping.prototype.openMoldForm = function(zmoldname, zmolds, zmoldind, zshap
 	}
 }
 
-wtwshopping.prototype.submitMoldForm = function(zselect) {
+wtwshopping.prototype.submitMoldForm = async function(zselect) {
 	try {
 		switch (zselect) {
 			case 0: /* delete mold */
@@ -2013,7 +2012,7 @@ wtwshopping.prototype.submitMoldForm = function(zselect) {
 					'moldid':dGet('wtw_tmoldid').value,
 					'function':'deletemold'
 				};
-				WTW.postJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note: zresponse.serror would contain any error text */
@@ -2039,7 +2038,7 @@ wtwshopping.prototype.submitMoldForm = function(zselect) {
 					'allowsearch':zallowsearch,
 					'function':'savemold'
 				};
-				WTW.postJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note: zresponse.serror would contain any error text */

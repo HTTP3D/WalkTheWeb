@@ -419,7 +419,7 @@ WTW_3DINTERNET.prototype.savedAvatarRetrieved = function(zavatarname, zsendrefre
 	} 
 }
 
-WTW_3DINTERNET.prototype.initMultiuser = function(zsendrefresh) {
+WTW_3DINTERNET.prototype.initMultiuser = async function(zsendrefresh) {
 	try {
 		var avatarid = '';
 		var objectfolder = "";
@@ -501,7 +501,7 @@ WTW_3DINTERNET.prototype.initMultiuser = function(zsendrefresh) {
 			"&si=" + btoa(dGet('wtw_serverinstanceid').value) +
 			"&at=" + dGet('wtw_tusertoken').value +
 			"&refresh=" + zsendrefresh;
-		WTW.getJSON(surl, 
+		await WTW.getAsyncJSON(surl, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.refresh) {
@@ -514,7 +514,7 @@ WTW_3DINTERNET.prototype.initMultiuser = function(zsendrefresh) {
 	} 
 }
 
-WTW_3DINTERNET.prototype.clearMultiuser = function(zuseravatarid, zinstance, zuserid) {
+WTW_3DINTERNET.prototype.clearMultiuser = async function(zuseravatarid, zinstance, zuserid) {
 	try {
 		for (var i = 0; i < scene.meshes.length; i++) {
 			var moldname = scene.meshes[i].name;
@@ -540,7 +540,7 @@ WTW_3DINTERNET.prototype.clearMultiuser = function(zuseravatarid, zinstance, zus
 				"&d=" + btoa(zuserid) + 
 				"&c=" + btoa(communityid) + 
 				"&b=" + btoa(buildingid);
-			WTW.getJSON(surl, 
+			await WTW.getAsyncJSON(surl, 
 				function(zresponse) {
 					//zresponse = JSON.parse(zresponse);
 				}

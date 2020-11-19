@@ -71,6 +71,31 @@ WTWJS.prototype.getJSON = function(zurl, zcallback, zaction, zrequest) {
 	}
 }
 
+WTWJS.prototype.getAsyncJSON = function(zurl, zcallback, zaction, zrequest) {
+	/* performs a JSON call for data in async mode */
+	try {
+		return new Promise(function () {
+			if (zaction == undefined) {
+				zaction = 'GET';
+			}
+			if (zrequest == undefined) {
+				zrequest = null;
+			}
+			var Httpreq = new XMLHttpRequest();
+			Httpreq.overrideMimeType("application/json");
+			Httpreq.open(zaction, zurl, true);
+			Httpreq.onreadystatechange = function () {
+				if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+					zcallback(Httpreq.responseText);
+				}
+			};
+			Httpreq.send(zrequest);
+		});
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-getAsyncJSON=" + ex.message);
+	}
+}
+
 WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
 	try {
 		var form1 = document.createElement('form');
@@ -89,6 +114,30 @@ WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
 		Httpreq.send(zformdata);  
 	} catch (ex) {
 		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-postJSON=" + ex.message);
+	}
+}
+
+WTWJS.prototype.postAsyncJSON = function(zurl, zrequest, zcallback) {
+	/* performs a form POST based JSON call for data in async mode */
+	try {
+		return new Promise(function () {
+			var form1 = document.createElement('form');
+			var Httpreq = new XMLHttpRequest();
+			var zformdata = new FormData(form1);
+			for(var zkey in zrequest) {
+				zformdata.append(zkey, zrequest[zkey]);
+			}
+			zformdata.append('action', 'POST');
+			Httpreq.open('POST', zurl);
+			Httpreq.onreadystatechange = function () {
+				if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+					zcallback(Httpreq.responseText);
+				}
+			};
+			Httpreq.send(zformdata);
+		});
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-postAsyncJSON=" + ex.message);
 	}
 }
 
