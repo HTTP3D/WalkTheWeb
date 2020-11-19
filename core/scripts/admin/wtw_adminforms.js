@@ -881,6 +881,7 @@ WTWJS.prototype.setImageMenu = function(zmenu) {
 		WTW.hide('wtw_hiddenimagesoption');
 		WTW.hide('wtw_menuimagestockdiv');
 		WTW.hide('wtw_menuuploadedobjectsdiv');
+		WTW.hide('wtw_menufilter');
 		WTW.show('wtw_bstartimageupload');
 		if (WTW.isNumeric(zmenu)) {
 			switch (Number(zmenu)) {
@@ -896,6 +897,7 @@ WTWJS.prototype.setImageMenu = function(zmenu) {
 				case 4:
 					dGet('wtw_menuuploadedobjects').className = 'wtw-menutabtopselected';
 					WTW.showInline('wtw_menuuploadedobjectsdiv');
+					WTW.showInline('wtw_menufilter');
 					WTW.loadUploadedObjectsDiv(true);
 					break;
 				default: 
@@ -1477,6 +1479,47 @@ WTWJS.prototype.setSelectObject = function(zuploadobjectid, zobjectfolder, zobje
 	}
 }
 
+WTWJS.prototype.filterObjects = function(zevent) {
+	/* open file selection based on one or more files available to select */
+	try {
+		var ztext = dGet('wtw_objectfilter').value;
+		switch (zevent) {
+			case 0: /* onblur */
+				if (ztext == '') {
+					dGet('wtw_objectfilter').value = 'Name Filter';
+				}
+				break;
+			case 1: /* onfocus */
+				if (ztext == "Name Filter") {
+					dGet('wtw_objectfilter').value = '';
+				}
+				break;
+			case 2: /* onkeydown */
+				if (ztext == 'Name Filter') {
+					ztext = '';
+				}
+				if (ztext != '') {
+					ztext = ztext.toLowerCase();
+				}
+				if (dGet('wtw_uploadedobjectsdiv').childNodes != null) {
+					var zuploadedobjects = dGet('wtw_uploadedobjectsdiv').childNodes;
+					for (var i=0;i<zuploadedobjects.length;i++) {
+						if (zuploadedobjects[i].id != undefined) {
+							if ((zuploadedobjects[i].id.indexOf(ztext) > -1 || ztext == '') && zuploadedobjects[i].id.indexOf("wtw_obj_") > -1) {
+								WTW.showInline(zuploadedobjects[i].id);
+							} else {
+								WTW.hide(zuploadedobjects[i].id);
+							}
+						}
+					}
+				}
+				break;
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-filterObjects=" + ex.message);
+	}
+}
+
 WTWJS.prototype.openObjectPageForm = function(zuploadobjectid, zfilename) {
 	/* 3D Objects page form */
 	try {
@@ -1504,7 +1547,7 @@ WTWJS.prototype.loadUploadedObjectsDiv = function(showloading) {
 			WTW.hide('wtw_uploadedobjectsdiv');
 			WTW.show('wtw_loadingselectimage');
 		}
-		dGet('wtw_uploadedobjectsdiv').innerHTML = "";
+		dGet('wtw_uploadedobjectsdiv').innerHTML = '';
 		var zrequest = {
 			'function':'getuploadedfiles'
 		};
@@ -1512,6 +1555,7 @@ WTWJS.prototype.loadUploadedObjectsDiv = function(showloading) {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				var zitem = dGet('wtw_tfileitem').value;
+				var zuploadedobjectsdiv = '';
 				for (var i=0;i<zresponse.length;i++) {
 					zcreatedate = zresponse[i].createdate;
 					//zcreatedate = date('m/d/Y', strtotime($zcreatedate));
@@ -1521,17 +1565,19 @@ WTWJS.prototype.loadUploadedObjectsDiv = function(showloading) {
 					}
 					if (zitem == "3dobject") {
 						zlinktext = "Select";
-						dGet('wtw_uploadedobjectsdiv').innerHTML += "<div class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.setSelectObject('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.setSelectObject('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">Edit</div><div class='wtw-clear'></div></div></div>";
+						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.setSelectObject('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.setSelectObject('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">Edit</div><div class='wtw-clear'></div></div></div>";
 					} else {
-						dGet('wtw_uploadedobjectsdiv').innerHTML += "<div class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-clear'></div></div></div>";
+						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-clear'></div></div></div>";
 					}
 				}
+				dGet('wtw_uploadedobjectsdiv').innerHTML = zuploadedobjectsdiv;
 				dGet('wtw_uploadedobjectsdiv').style.height = (WTW.sizeY - 160) + 'px';
 				WTW.show('wtw_uploadedobjectsdiv');
 				if (showloading) {
 					WTW.hide('wtw_loadingselectimage');
 				}
 				WTW.resetUploadButton();
+				WTW.filterObjects(2);
 			}
 		);
 	} catch (ex) {
