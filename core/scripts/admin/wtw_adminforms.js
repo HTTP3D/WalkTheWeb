@@ -193,7 +193,7 @@ WTWJS.prototype.hideFullPages = function() {
 /* WalkTheWeb and 3D Plugin Updates */
 
 /* check for updates */
-WTWJS.prototype.checkForUpdates = function(zshow) {
+WTWJS.prototype.checkForUpdates = async function(zshow) {
 	/* check for updates call */
 	try {
 		switch (zshow) {
@@ -217,7 +217,7 @@ WTWJS.prototype.checkForUpdates = function(zshow) {
 		var zrequest = {
 			'function':'getplugininfo'
 		};
-		WTW.postJSON("/core/handlers/pluginloader.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/pluginloader.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note zresponse.serror would contain any errors */
@@ -230,7 +230,7 @@ WTWJS.prototype.checkForUpdates = function(zshow) {
 	}
 }
 
-WTWJS.prototype.getPluginInfoComplete = function(zmyplugins, zshow) {
+WTWJS.prototype.getPluginInfoComplete = async function(zmyplugins, zshow) {
 	/* process the retrieved 3D Plugins information */
 	try {
 		zplugins = '';
@@ -259,7 +259,7 @@ WTWJS.prototype.getPluginInfoComplete = function(zmyplugins, zshow) {
 			}
 		}
 		/* get update information for 3D Plugins */
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/checkforupdates.php?pluginnames=" + zplugins, 
+		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/checkforupdates.php?pluginnames=" + zplugins, 
 			function(zupdateinfo) {
 				zupdateinfo = JSON.parse(zupdateinfo);
 				WTW.checkForUpdatesComplete(zmyplugins, zupdateinfo, zshow);
@@ -408,11 +408,11 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 	}
 }
 
-WTWJS.prototype.getVersionDetails = function(zupdateid) {
+WTWJS.prototype.getVersionDetails = async function(zupdateid) {
 	/* get version details on a particular 3D Plugin */
 	try {
 		dGet('wtw_updatedetailslist').innerHTML = "";
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/versiondetails.php?updateid=" + zupdateid, 
+		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/versiondetails.php?updateid=" + zupdateid, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse[0] != null) {
@@ -433,11 +433,11 @@ WTWJS.prototype.getVersionDetails = function(zupdateid) {
 	}
 }
 
-WTWJS.prototype.loadArchiveUpdates = function() {
+WTWJS.prototype.loadArchiveUpdates = async function() {
 	/* get all archive version details for WalkTheWeb */
 	try {
 		dGet('wtw_archiveupdateslist').innerHTML = "";
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/wtwupdates.php", 
+		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/wtwupdates.php", 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse[0] != null) {
@@ -476,7 +476,7 @@ WTWJS.prototype.loadArchiveUpdates = function() {
 
 
 /* 3D Plugins */
-WTWJS.prototype.openAllPlugins = function(zpluginname, zactive) {
+WTWJS.prototype.openAllPlugins = async function(zpluginname, zactive) {
 	/* open a list of all 3D Plugins found in the file system */
 	try {
 		WTW.show('wtw_pluginspage');
@@ -487,7 +487,7 @@ WTWJS.prototype.openAllPlugins = function(zpluginname, zactive) {
 		var zrequest = {
 			'function':'getallplugins'
 		};
-		WTW.postJSON("/core/handlers/pluginloader.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/pluginloader.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -542,7 +542,7 @@ WTWJS.prototype.openAllPluginsComplete = function(zresponse, zpluginname, zactiv
 	}
 }
 
-WTWJS.prototype.activatePlugin = function(zpluginname, zactive) {
+WTWJS.prototype.activatePlugin = async function(zpluginname, zactive) {
 	/* activate or deactivate a 3D Plugin */
 	try {
 		var zrequest = {
@@ -550,7 +550,7 @@ WTWJS.prototype.activatePlugin = function(zpluginname, zactive) {
 			'active': zactive,
 			'function':'activateplugin'
 		};
-		WTW.postJSON("/core/handlers/pluginloader.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/pluginloader.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -571,7 +571,7 @@ WTWJS.prototype.activatePluginComplete = function() {
 	}
 }
 
-WTWJS.prototype.updatePlugin = function(zpluginname, zversion, zupdatedate, zupdateurl, zshow) {
+WTWJS.prototype.updatePlugin = async function(zpluginname, zversion, zupdatedate, zupdateurl, zshow) {
 	try {
 		if (dGet('updateplugin' + zpluginname) != null) {
 			dGet('updateplugin' + zpluginname).innerHTML = "Updating";
@@ -582,7 +582,7 @@ WTWJS.prototype.updatePlugin = function(zpluginname, zversion, zupdatedate, zupd
 			'updateurl': zupdateurl,
 			'function':'getupdate'
 		};
-		WTW.postJSON("/core/handlers/pluginloader.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/pluginloader.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -602,10 +602,10 @@ WTWJS.prototype.updatePluginComplete = function(zpluginname, zversion, zupdateda
 	}
 }
 
-WTWJS.prototype.getPluginLatestVersion = function(zpluginname) {
+WTWJS.prototype.getPluginLatestVersion = async function(zpluginname) {
 	var zversion = "";
 	try {
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/versioncheck.php?pluginname=" + zpluginname, 
+		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/versioncheck.php?pluginname=" + zpluginname, 
 			function(response) {
 				response = JSON.parse(response);
 				var zupdates = 0;
@@ -624,7 +624,7 @@ WTWJS.prototype.getPluginLatestVersion = function(zpluginname) {
 	return zversion;
 }
 
-WTWJS.prototype.updateWalkTheWeb = function(zpluginname, zversion, zupdatedate, zupdateurl) {
+WTWJS.prototype.updateWalkTheWeb = async function(zpluginname, zversion, zupdatedate, zupdateurl) {
 	try {
 		var zupdatesloading = "<div class=\"wtw-dashboardboxleft\">";
 		zupdatesloading += "<div class=\"wtw-dashboardboxtitle\">WalkTheWeb is up to date!</div><div class=\"wtw-dashboardbox\"><b>Your Version:</b><hr />";
@@ -639,7 +639,7 @@ WTWJS.prototype.updateWalkTheWeb = function(zpluginname, zversion, zupdatedate, 
 			'updateurl': zupdateurl,
 			'function':'getupdate'
 		};
-		WTW.postJSON("/core/handlers/pluginloader.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/pluginloader.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -679,7 +679,7 @@ WTWJS.prototype.updateWalkTheWebComplete = function(zpluginname, zversion, zupda
 
 /* dashboard and WalkTheWeb & 3D Plugin updates forms */
 
-WTWJS.prototype.openDashboardForm = function(item) {
+WTWJS.prototype.openDashboardForm = async function(item) {
 	/* load dashboard form */
 	try {
 		WTW.hide('wtw_dashboard');
@@ -691,7 +691,7 @@ WTWJS.prototype.openDashboardForm = function(item) {
 		dGet("wtw_othercommcount").innerHTML = '0';
 		dGet("wtw_otherbuildcount").innerHTML = '0';
 		dGet("wtw_otherthingcount").innerHTML = '0';
-		WTW.getJSON("/connect/dashboard.php", 
+		await WTW.getAsyncJSON("/connect/dashboard.php", 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse != null) {
@@ -724,7 +724,7 @@ WTWJS.prototype.openDashboardForm = function(item) {
 				},500);
 			}
 		);
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/videolinks.php", 
+		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/videolinks.php", 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				for (var i=0;i<zresponse.length;i++) {
@@ -753,7 +753,7 @@ WTWJS.prototype.openDashboardForm = function(item) {
 /* media library forms */
 
 /* media library - main media page form */
-WTWJS.prototype.openMediaPageForm = function(uploadid) {
+WTWJS.prototype.openMediaPageForm = async function(uploadid) {
 	try {
 		var category = WTW.getDDLValue('wtw_fileselectcategory');
 		WTW.hide('wtw_mediapage');
@@ -772,7 +772,7 @@ WTWJS.prototype.openMediaPageForm = function(uploadid) {
 		dGet("wtw_mediaoriginaldimensions").innerHTML = '';
 		dGet("wtw_mediaoriginalpath").innerHTML = '';
 		dGet('wtw_mediaoriginal').src = '';
-		WTW.getJSON("/connect/uploadmedia.php?uploadid=" + uploadid, 
+		await WTW.getAsyncJSON("/connect/uploadmedia.php?uploadid=" + uploadid, 
 			function(response) {
 				var uploadinfo = JSON.parse(response);
 				if (uploadinfo != null) {
@@ -1106,7 +1106,7 @@ WTWJS.prototype.setSelectFileID = function(zselectedobj, zuploadid, zoriginalid,
 	}
 }
 
-WTWJS.prototype.loadMyFilesPage = function(zitem, zcategory, zhide) {
+WTWJS.prototype.loadMyFilesPage = async function(zitem, zcategory, zhide) {
 	/* my uploaded files (images, docs, sounds, and videos) page form */
 	try {
 		WTW.hide('wtw_myimagesdiv');
@@ -1117,7 +1117,7 @@ WTWJS.prototype.loadMyFilesPage = function(zitem, zcategory, zhide) {
 			'hide': zhide,
 			'function':'getmyimages'
 		};
-		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				var zmyimagesdiv = '';
 				zresponse = JSON.parse(zresponse);
@@ -1196,7 +1196,7 @@ WTWJS.prototype.loadMyFilesPage = function(zitem, zcategory, zhide) {
 	}
 }	
 
-WTWJS.prototype.toggleHideMyImage = function(zuploadid, zitem, zcategory, zpagehide) {
+WTWJS.prototype.toggleHideMyImage = async function(zuploadid, zitem, zcategory, zpagehide) {
 	/* some images are used only a few times */
 	/* this functions lets you hide them from normal viewing to keep the list of reusable textures and images smaller */
 	/* they are still available by clicking the show hidden checkbox */
@@ -1210,7 +1210,7 @@ WTWJS.prototype.toggleHideMyImage = function(zuploadid, zitem, zcategory, zpageh
 			'hide': zhide,
 			'function':'togglehidemyimage'
 		};
-		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				var zstockimagesdiv = '';
 				zresponse = JSON.parse(zresponse);
@@ -1222,7 +1222,7 @@ WTWJS.prototype.toggleHideMyImage = function(zuploadid, zitem, zcategory, zpageh
 	}
 }	
 
-WTWJS.prototype.loadStockPage = function(zitem) {
+WTWJS.prototype.loadStockPage = async function(zitem) {
 	/* this pagge form shows stock images, sounds, and videos as necessary */
 	try {
 		WTW.hide('wtw_stockimagesdiv');
@@ -1232,7 +1232,7 @@ WTWJS.prototype.loadStockPage = function(zitem) {
 			'item': zitem,
 			'function':'getstockimages'
 		};
-		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				var zstockimagesdiv = '';
 				zresponse = JSON.parse(zresponse);
@@ -1269,7 +1269,7 @@ WTWJS.prototype.loadStockPage = function(zitem) {
 	}
 }	
 
-WTWJS.prototype.loadCommunityPage = function(zcommunityid, zbuildingid, zthingid, zitem) {
+WTWJS.prototype.loadCommunityPage = async function(zcommunityid, zbuildingid, zthingid, zitem) {
 	/* this page form shows any images, documents, sounds, or video files currently in use on the 3D Community, 3D Building, or 3D Thing being edited */
 	try {
 		WTW.hide('wtw_communityimagesdiv');
@@ -1281,7 +1281,7 @@ WTWJS.prototype.loadCommunityPage = function(zcommunityid, zbuildingid, zthingid
 			'thingid': zthingid,
 			'function':'getcommunityimages'
 		};
-		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				var zcommunityimagesdiv = '';
 				zresponse = JSON.parse(zresponse);
@@ -1538,7 +1538,7 @@ WTWJS.prototype.openObjectPageForm = function(zuploadobjectid, zfilename) {
 	}
 }
 
-WTWJS.prototype.loadUploadedObjectsDiv = function(showloading) {
+WTWJS.prototype.loadUploadedObjectsDiv = async function(showloading) {
 	/* load the settings (and list) for the 3D Models div */
 	try {
 		dGet('wtw_bstartimageupload').innerHTML = 'Upload Primary 3D File';
@@ -1551,7 +1551,7 @@ WTWJS.prototype.loadUploadedObjectsDiv = function(showloading) {
 		var zrequest = {
 			'function':'getuploadedfiles'
 		};
-		WTW.postJSON("/core/handlers/uploadedfiles.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploadedfiles.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				var zitem = dGet('wtw_tfileitem').value;
@@ -1585,7 +1585,7 @@ WTWJS.prototype.loadUploadedObjectsDiv = function(showloading) {
 	}
 }
 
-WTWJS.prototype.loadObjectDetailsName = function(zuploadobjectid) {
+WTWJS.prototype.loadObjectDetailsName = async function(zuploadobjectid) {
 	/* if an object is opened, this details page form shows */
 	try {
 		if (zuploadobjectid == undefined) {
@@ -1597,7 +1597,7 @@ WTWJS.prototype.loadObjectDetailsName = function(zuploadobjectid) {
 			'uploadobjectid': zuploadobjectid,
 			'function':'getuploadedfilenamedetails'
 		};
-		WTW.postJSON("/core/handlers/uploadedfiles.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploadedfiles.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.length > 0) {
@@ -1676,7 +1676,7 @@ WTWJS.prototype.uploadObjectFiles = function(ztype) {
 	}
 }
 
-WTWJS.prototype.deleteObjectFile = function() {
+WTWJS.prototype.deleteObjectFile = async function() {
 	/* delete 3D Mold Object file */
 	try {
 		var zobjectfilepart = dGet('wtw_tobjectfile').value;
@@ -1686,7 +1686,7 @@ WTWJS.prototype.deleteObjectFile = function() {
 			'objectfilepart': zobjectfilepart,
 			'function':'deleteobjectfile'
 		};
-		WTW.postJSON("/core/handlers/uploadedfiles.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploadedfiles.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -1700,7 +1700,7 @@ WTWJS.prototype.deleteObjectFile = function() {
 	}
 }
 
-WTWJS.prototype.loadObjectDetailsFiles = function(zuploadobjectid, zobjectfolder, zfilename) {
+WTWJS.prototype.loadObjectDetailsFiles = async function(zuploadobjectid, zobjectfolder, zfilename) {
 	/* files list included on the 3D Object details page form */
 	try {
 		dGet('wtw_uploadedmodelsfilesdiv').innerHTML = "";
@@ -1709,7 +1709,7 @@ WTWJS.prototype.loadObjectDetailsFiles = function(zuploadobjectid, zobjectfolder
 			'objectfolder': zobjectfolder,
 			'function':'getuploadedfilefilesdetails'
 		};
-		WTW.postJSON("/core/handlers/uploadedfiles.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploadedfiles.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				zfilesdiv += "<div class='wtw-clear'></div>";
@@ -1737,7 +1737,7 @@ WTWJS.prototype.loadObjectDetailsFiles = function(zuploadobjectid, zobjectfolder
 	}
 }
 
-WTWJS.prototype.loadObjectDetailsAnimations = function(zuploadobjectid) {
+WTWJS.prototype.loadObjectDetailsAnimations = async function(zuploadobjectid) {
 	/* animations list included on the 3D Object details page form */
 	try {
 		dGet('wtw_uploadedmodelsanimationsdiv').innerHTML = "";
@@ -1746,7 +1746,7 @@ WTWJS.prototype.loadObjectDetailsAnimations = function(zuploadobjectid) {
 			'uploadobjectid': zuploadobjectid,
 			'function':'getuploadedfileanimationsdetails'
 		};
-		WTW.postJSON("/core/handlers/animations.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/animations.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				zanimationsdiv += "<div class='wtw-clear'></div><div class='wtw-objectcontainer'><div class='wtw-objectfile'>Animations</div><div class='wtw-objectfolder'>";
@@ -1774,7 +1774,7 @@ WTWJS.prototype.loadObjectDetailsAnimations = function(zuploadobjectid) {
 	}
 }
 
-WTWJS.prototype.loadObjectAnimation = function(zobjectanimationid) {
+WTWJS.prototype.loadObjectAnimation = async function(zobjectanimationid) {
 	/* load the 3D Object animation to the edit form (included on the 3D Object details page form) */
 	try {
 		WTW.hide('wtw_deleteanimation');
@@ -1784,7 +1784,7 @@ WTWJS.prototype.loadObjectAnimation = function(zobjectanimationid) {
 			'objectanimationid': zobjectanimationid,
 			'function':'getobjectanimation'
 		};
-		WTW.postJSON("/core/handlers/animations.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/animations.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse[0] != null) {
@@ -1823,7 +1823,7 @@ WTWJS.prototype.loadObjectAnimation = function(zobjectanimationid) {
 	}
 }
 
-WTWJS.prototype.deleteObjectAnimation = function(zobjectanimationid, zuploadobjectid) {
+WTWJS.prototype.deleteObjectAnimation = async function(zobjectanimationid, zuploadobjectid) {
 	/* delete the 3D Object animation on the edit form (included on the 3D Object details page form) */
 	try {
 		WTW.hide('wtw_addanimationdiv');
@@ -1832,7 +1832,7 @@ WTWJS.prototype.deleteObjectAnimation = function(zobjectanimationid, zuploadobje
 				'objectanimationid': zobjectanimationid,
 				'function':'deleteobjectanimation'
 			};
-			WTW.postJSON("/core/handlers/animations.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/animations.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					WTW.hide('wtw_addanimationdiv');
@@ -1847,7 +1847,7 @@ WTWJS.prototype.deleteObjectAnimation = function(zobjectanimationid, zuploadobje
 	}
 }
 
-WTWJS.prototype.saveObjectAnimation = function() {
+WTWJS.prototype.saveObjectAnimation = async function() {
 	/* save the 3D Object animation on the edit form (included on the 3D Object details page form) */
 	try {
 		WTW.hide('wtw_addanimationdiv');
@@ -1877,7 +1877,7 @@ WTWJS.prototype.saveObjectAnimation = function() {
 				'objectsoundid': dGet('wtw_tobjectsoundid').value,
 				'function':'saveobjectanimation'
 			};
-			WTW.postJSON("/core/handlers/animations.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/animations.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					WTW.hide('wtw_addanimationdiv');
@@ -2039,7 +2039,7 @@ WTWJS.prototype.saveEmailServerSettingsComplete = function(zsuccess) {
 	}
 }
 
-WTWJS.prototype.testEmailServerSettings = function() {
+WTWJS.prototype.testEmailServerSettings = async function() {
 	/* test Email Server Settings */
 	try {
 		var zrequest = {
@@ -2048,7 +2048,7 @@ WTWJS.prototype.testEmailServerSettings = function() {
 			'message':'This is a test message',
 			'function':'sendadminemail'
 		};
-		WTW.postJSON("/core/handlers/tools.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.serror != '') {
@@ -2090,14 +2090,14 @@ WTWJS.prototype.changeEmailSwitch = function() {
 
 /* web aliases - mapping urls to 3D Communities, 3D Buildings, and 3D Things */
 
-WTWJS.prototype.openWebAliasSettings = function() {
+WTWJS.prototype.openWebAliasSettings = async function() {
 	/* open web aliases page form */
 	try {
 		WTW.show('wtw_loadingwebalias');
 		WTW.show('wtw_settingspage');
 		WTW.show('wtw_webaliassettings');
 		dGet('wtw_webaliaslist').innerHTML = "";
-		WTW.getJSON("/connect/webaliases.php", 
+		await WTW.getAsyncJSON("/connect/webaliases.php", 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse != null) {
@@ -2147,11 +2147,11 @@ WTWJS.prototype.openWebAliasSettings = function() {
 	}
 }
 
-WTWJS.prototype.editWebAlias = function(zwebaliasid) {
+WTWJS.prototype.editWebAlias = async function(zwebaliasid) {
 	/* load to edit a web alias */
 	try {
 		WTW.openAliasForm();
-		WTW.getJSON("/connect/webalias.php?webaliasid=" + zwebaliasid, 
+		await WTW.getAsyncJSON("/connect/webalias.php?webaliasid=" + zwebaliasid, 
 			function(response) {
 				var zcommunityid = "";
 				var zbuildingid = "";
@@ -2243,7 +2243,7 @@ WTWJS.prototype.editWebAlias = function(zwebaliasid) {
 	}
 }
 
-WTWJS.prototype.setAliasCommunities = function(zcommunityid) {
+WTWJS.prototype.setAliasCommunities = async function(zcommunityid) {
 	/* drop down list of 3D Communities to select a 3D Community to map */
 	try {
 		if (zcommunityid == undefined) {
@@ -2251,7 +2251,7 @@ WTWJS.prototype.setAliasCommunities = function(zcommunityid) {
 		}
 		WTW.clearDDL("wtw_aliasdomaincommunityid");
 		WTW.clearDDL("wtw_aliascommunityid");
-		WTW.getJSON("/connect/communitynames.php", 
+		await WTW.getAsyncJSON("/connect/communitynames.php", 
 			function(response) {
 				response = JSON.parse(response);
 				if (response != null) {
@@ -2280,14 +2280,14 @@ WTWJS.prototype.setAliasCommunities = function(zcommunityid) {
 	}
 }
 
-WTWJS.prototype.setAliasBuildings = function(zbuildingid) {
+WTWJS.prototype.setAliasBuildings = async function(zbuildingid) {
 	/* drop down list of 3D Buildings to select a 3D Building to map */
 	try {
 		if (zbuildingid == undefined) {
 			zbuildingid = '';
 		}
 		WTW.clearDDL("wtw_aliasbuildingid");
-		WTW.getJSON("/connect/buildingnames.php", 
+		await WTW.getAsyncJSON("/connect/buildingnames.php", 
 			function(response) {
 				response = JSON.parse(response);
 				if (response != null) {
@@ -2314,14 +2314,14 @@ WTWJS.prototype.setAliasBuildings = function(zbuildingid) {
 	}
 }
 
-WTWJS.prototype.setAliasThings = function(zthingid) {
+WTWJS.prototype.setAliasThings = async function(zthingid) {
 	/* drop down list of 3D Things to select a 3D Thing to map */
 	try {
 		if (zthingid == undefined) {
 			zthingid = '';
 		}
 		WTW.clearDDL("wtw_aliasthingid");
-		WTW.getJSON("/connect/thingnames.php", 
+		await WTW.getAsyncJSON("/connect/thingnames.php", 
 			function(response) {
 				response = JSON.parse(response);
 				if (response != null) {
@@ -2533,7 +2533,7 @@ WTWJS.prototype.setAliasForm = function(zobj) {
 	}
 }
 
-WTWJS.prototype.saveAliasForm = function(w) {
+WTWJS.prototype.saveAliasForm = async function(w) {
 	/* save web alias url */
 	try {
 		var zwebaliasid = dGet('wtw_twebaliasid').value;
@@ -2601,7 +2601,7 @@ WTWJS.prototype.saveAliasForm = function(w) {
 					'forcehttps': zforcehttps,
 					'function':'savewebalias'
 				};
-				WTW.postJSON("/core/handlers/uploads.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -2616,7 +2616,7 @@ WTWJS.prototype.saveAliasForm = function(w) {
 					'webaliasid': zwebaliasid,
 					'function':'deletewebalias'
 				};
-				WTW.postJSON("/core/handlers/uploads.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -2635,7 +2635,7 @@ WTWJS.prototype.saveAliasForm = function(w) {
 
 /* API Keys Admin */
 
-WTWJS.prototype.openAPIKeys = function(zdeleted) {
+WTWJS.prototype.openAPIKeys = async function(zdeleted) {
 	/* open API Keys page form */
 	try {
 		if (zdeleted == undefined) {
@@ -2649,7 +2649,7 @@ WTWJS.prototype.openAPIKeys = function(zdeleted) {
 			'deleted':zdeleted,
 			'function':'getapikeys'
 		};
-		WTW.postJSON("/core/handlers/api.php", zrequest,
+		await WTW.postAsyncJSON("/core/handlers/api.php", zrequest,
 			function(zresponse) {
 				if (zresponse != null) {
 					zresponse = JSON.parse(zresponse);
@@ -2706,7 +2706,7 @@ WTWJS.prototype.displayAPIKeys = function(zresponse, zdeleted) {
 	}
 }
 
-WTWJS.prototype.approveAPIKey = function(zapikeyid, zapproved) {
+WTWJS.prototype.approveAPIKey = async function(zapikeyid, zapproved) {
 	/* save API Key approval, 0 is denied, 1 is approved */
 	try {
 		dGet('wtw_apikeyerror').innerHTML = '';
@@ -2715,7 +2715,7 @@ WTWJS.prototype.approveAPIKey = function(zapikeyid, zapproved) {
 			'approved':zapproved,
 			'function':'approveapikey'
 		};
-		WTW.postJSON("/core/handlers/api.php", zrequest,
+		await WTW.postAsyncJSON("/core/handlers/api.php", zrequest,
 			function(zresponse) {
 				if (zresponse != null) {
 					zresponse = JSON.parse(zresponse);
@@ -2737,7 +2737,7 @@ WTWJS.prototype.approveAPIKey = function(zapikeyid, zapproved) {
 	}
 }
 
-WTWJS.prototype.openAPIKeyForm = function(zapikeyid) {
+WTWJS.prototype.openAPIKeyForm = async function(zapikeyid) {
 	/* open edit API Key form */
 	try {
 		if (zapikeyid == undefined) {
@@ -2768,7 +2768,7 @@ WTWJS.prototype.openAPIKeyForm = function(zapikeyid) {
 				'apikeyid':btoa(zapikeyid),
 				'function':'getapikey'
 			};
-			WTW.postJSON("/core/handlers/api.php", zrequest,
+			await WTW.postAsyncJSON("/core/handlers/api.php", zrequest,
 				function(zresponse) {
 					if (zresponse != null) {
 						zresponse = JSON.parse(zresponse);
@@ -2828,7 +2828,7 @@ WTWJS.prototype.newAPIKey = function() {
 	}
 }
 
-WTWJS.prototype.saveAPIKeyForm = function(w) {
+WTWJS.prototype.saveAPIKeyForm = async function(w) {
 	/* save API Key form */
 	try {
 		var zapikeyid = dGet('wtw_tapikeyid').value;
@@ -2845,7 +2845,7 @@ WTWJS.prototype.saveAPIKeyForm = function(w) {
 					'wtwsecret': btoa(dGet('wtw_tapiwtwsecret').value),
 					'function':'saveapikey'
 				};
-				WTW.postJSON("/core/handlers/api.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/api.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -2861,7 +2861,7 @@ WTWJS.prototype.saveAPIKeyForm = function(w) {
 					'apikeyid': btoa(zapikeyid),
 					'function':'deleteapikey'
 				};
-				WTW.postJSON("/core/handlers/api.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/api.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -2881,7 +2881,7 @@ WTWJS.prototype.saveAPIKeyForm = function(w) {
 
 /* server settings */
 
-WTWJS.prototype.openServerSettings = function() {
+WTWJS.prototype.openServerSettings = async function() {
 	/* open server settings page form */
 	try {
 		WTW.show('wtw_loadingserversettings');
@@ -2890,7 +2890,7 @@ WTWJS.prototype.openServerSettings = function() {
 		var zrequest = {
 			'function':'getserversettings'
 		};
-		WTW.postJSON("/core/handlers/tools.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse != null) {
@@ -3005,7 +3005,7 @@ WTWJS.prototype.openServerSettings = function() {
 	}
 }
 
-WTWJS.prototype.saveServerSettings = function() {
+WTWJS.prototype.saveServerSettings = async function() {
 	/* save Server Settings to the Config file */
 	try {
 		var zrequest = {
@@ -3026,7 +3026,7 @@ WTWJS.prototype.saveServerSettings = function() {
 			'ftpbase': dGet('wtw_ftpbase').value,
 			'function':'saveserversettings'
 		};
-		WTW.postJSON("/core/handlers/tools.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */

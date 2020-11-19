@@ -109,7 +109,7 @@ WTWJS.prototype.openConnectingGridsForm = function(connectinggridind) {
 	}
 }
 
-WTWJS.prototype.submitConnectingGridsForm = function(w) {
+WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 	/* submit the connecting grids form */
 	try {
 		var connectinggridind = -1;
@@ -191,7 +191,7 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 						'connectinggridid': dGet("wtw_teditconnectinggridid").value,
 						'function':'deleteconnectinggrid'
 					};
-					WTW.postJSON("/core/handlers/connectinggrids.php", zrequest, 
+					await WTW.postAsyncJSON("/core/handlers/connectinggrids.php", zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							/* note serror would contain errors */
@@ -259,7 +259,7 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 						'alttag': dGet('wtw_tconngridalttag').value,
 						'function':'saveconnectinggrid'
 					};
-					WTW.postJSON("/core/handlers/connectinggrids.php", zrequest, 
+					await WTW.postAsyncJSON("/core/handlers/connectinggrids.php", zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							/* note serror would contain errors */
@@ -276,13 +276,13 @@ WTWJS.prototype.submitConnectingGridsForm = function(w) {
 	}
 }
 
-WTWJS.prototype.openListConnectingGridsForm = function() {
+WTWJS.prototype.openListConnectingGridsForm = async function() {
 	/* admin menu related - loads a drop down list of 3D Buildings that can be added to the current 3D Community Scene */
 	/* creates a list of 3D Buildings already added to the current 3D Community being edited */
 	try {
 		WTW.clearDDL('wtw_addcommunitybuildingid');
 		dGet('wtw_commbuildinglist').innerHTML = "";
-		WTW.getJSON("/connect/buildings.php", 
+		await WTW.getAsyncJSON("/connect/buildings.php", 
 			function(zresponse) {
 				WTW.buildings = JSON.parse(zresponse);
 				if (WTW.buildings != null) {
@@ -323,7 +323,7 @@ WTWJS.prototype.openListConnectingGridsForm = function() {
 	}		
 }
 
-WTWJS.prototype.addConnectingGrid = function(childwebtype, childwebid, childwebname) {
+WTWJS.prototype.addConnectingGrid = async function(childwebtype, childwebid, childwebname) {
 	/* add a connecting grid (add 3D Building to a 3D Community, or 3D Thing in a 3D Community or 3D Building) */
 	try {
 		WTW.hideAdminMenu();
@@ -394,8 +394,8 @@ WTWJS.prototype.addConnectingGrid = function(childwebtype, childwebid, childwebn
 			positiony = newcoords.positionY;
 			positionz = newcoords.positionZ;
 			rotationy = newcoords.rotationY;
-			WTW.getJSON("/connect/actionzones.php?thingid=" + childwebid + "&buildingid=" + childwebid + "&communityid=&parentname=" + parentname + "&connectinggridid=" + connectinggridid + "&connectinggridind=" + connectinggridind, 
-				function(response) {
+			await WTW.getAsyncJSON("/connect/actionzones.php?thingid=" + childwebid + "&buildingid=" + childwebid + "&communityid=&parentname=" + parentname + "&connectinggridid=" + connectinggridid + "&connectinggridind=" + connectinggridind, 
+				async function(response) {
 					var addactionzones = JSON.parse(response);
 					for (var j = 0; j < addactionzones.actionzones.length; j++) {
 						var actionzoneind = WTW.getNextCount(WTW.actionZones);
@@ -485,7 +485,7 @@ WTWJS.prototype.addConnectingGrid = function(childwebtype, childwebid, childwebn
 					dGet('wtw_tconngridrotationy').value = rotationy;
 					dGet('wtw_tconngridrotationz').value = rotationz;	
 					if (childwebtype == "building") {
-						WTW.getJSON("/connect/connectinggrids.php?parentwebid=" + childwebid + "&startpositionx=0&startpositiony=0&startpositionz=0&parentname=" + WTW.connectingGrids[connectinggridind].moldname, 
+						await WTW.getAsyncJSON("/connect/connectinggrids.php?parentwebid=" + childwebid + "&startpositionx=0&startpositiony=0&startpositionz=0&parentname=" + WTW.connectingGrids[connectinggridind].moldname, 
 							function(response) {
 								WTW.loadBuildingConnectingGrids(JSON.parse(response));
 							}
@@ -508,7 +508,7 @@ WTWJS.prototype.addConnectingGrid = function(childwebtype, childwebid, childwebn
 	}
 }
 
-WTWJS.prototype.loadBuildingConnectingGrids = function(addconnectinggrids) {
+WTWJS.prototype.loadBuildingConnectingGrids = async function(addconnectinggrids) {
 	/* load any connecting grids for 3D Things that are in the 3D Building */
 	try {
 		var parentname = "";
@@ -530,7 +530,7 @@ WTWJS.prototype.loadBuildingConnectingGrids = function(addconnectinggrids) {
 							WTW.connectingGrids[connectinggridind].shown = "0";
 							WTW.connectingGrids[connectinggridind].status = 2;
 							WTW.addMoldToQueue(WTW.connectingGrids[connectinggridind].moldname, WTW.connectingGrids[connectinggridind], WTW.connectingGrids[connectinggridind].parentname, "hidden",null);
-							WTW.getJSON("/connect/actionzone.php?actionzoneid=" + WTW.connectingGrids[connectinggridind].loadactionzoneid + "&parentname=" + WTW.connectingGrids[connectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[connectinggridind].connectinggridid + "&connectinggridind=" + connectinggridind, 
+							await WTW.getAsyncJSON("/connect/actionzone.php?actionzoneid=" + WTW.connectingGrids[connectinggridind].loadactionzoneid + "&parentname=" + WTW.connectingGrids[connectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[connectinggridind].connectinggridid + "&connectinggridind=" + connectinggridind, 
 								function(response) {
 									WTW.loadBuildingThingsLoadZones(JSON.parse(response));
 								}
@@ -609,11 +609,11 @@ WTWJS.prototype.setNewConnectingGrid = function() {
 
 /* the following processes are used to set and save the first 3D Building location in a 3D Community - used in automated 3D Scene creation processes */
 
-WTWJS.prototype.openFirstBuildingForm = function() {
+WTWJS.prototype.openFirstBuildingForm = async function() {
 	/* open the form settings to position, scale, and rotate the first bulding marker */
 	try {
 		WTW.hide('wtw_adminmenu28b');
-		WTW.getJSON("/connect/communities.php?communityid=" + communityid,
+		await WTW.getAsyncJSON("/connect/communities.php?communityid=" + communityid,
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse[0].firstbuilding.position.x != undefined) {
@@ -775,7 +775,7 @@ WTWJS.prototype.setFirstBuilding = function() {
 	}
 }
 
-WTWJS.prototype.submitFirstBuildingForm = function(w) {
+WTWJS.prototype.submitFirstBuildingForm = async function(w) {
 	/* submit the form settings to position, scale, and rotate the first bulding marker */
 	try {	
 		switch(w) {
@@ -841,7 +841,7 @@ WTWJS.prototype.submitFirstBuildingForm = function(w) {
 					'buildingrotationz': zbuildingrotationz,
 					'function':'updatefirstbuilding'
 				};
-				WTW.postJSON("/core/handlers/communities.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */

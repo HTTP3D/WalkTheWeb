@@ -365,11 +365,11 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 	}
 }		
 
-WTWJS.prototype.getAZFormScripts = function() {
+WTWJS.prototype.getAZFormScripts = async function() {
 	/* some action zones add javascripts when the avatar enters the zone */
 	/* this function checks for scripts needing to be loaded */
 	try {
-		WTW.getJSON("/connect/scripts.php?actionzoneid=" + dGet('wtw_tactionzoneid').value, 
+		await WTW.getAsyncJSON("/connect/scripts.php?actionzoneid=" + dGet('wtw_tactionzoneid').value, 
 			function(zresponse) {
 				if (zresponse != null) {
 					zresponse = JSON.parse(zresponse);
@@ -404,7 +404,7 @@ WTWJS.prototype.loadAZFormScripts = function(zscripts) {
 	}
 }		
 
-WTWJS.prototype.deleteAZFormScript = function(zscriptid, zscriptpath) {
+WTWJS.prototype.deleteAZFormScript = async function(zscriptid, zscriptpath) {
 	/* remove a script from the list of scripts to be loaded with a zone */
 	try {
 		var zwebtype = "communities";
@@ -421,7 +421,7 @@ WTWJS.prototype.deleteAZFormScript = function(zscriptid, zscriptpath) {
 			'scriptpath': zscriptpath,
 			'function':'deletejavascriptfile'
 		};
-		WTW.postJSON("/core/handlers/uploadedfiles.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploadedfiles.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -433,12 +433,12 @@ WTWJS.prototype.deleteAZFormScript = function(zscriptid, zscriptpath) {
 	}
 }		
 
-WTWJS.prototype.loadAZAnimationsList = function() {
+WTWJS.prototype.loadAZAnimationsList = async function() {
 	/* some action zones add animations to the avatar when the avatar enters the zone */
 	/* this function lists the animations that are loaded in this zone */
 	try {
 		dGet('wtw_azavataranimations').innerHTML = '';
-		WTW.getJSON("/connect/actionzone.php?actionzoneid=" + dGet('wtw_tactionzoneid').value, 
+		await WTW.getAsyncJSON("/connect/actionzone.php?actionzoneid=" + dGet('wtw_tactionzoneid').value, 
 			function(zresponse) {
 				if (zresponse != null) {
 					zresponse = JSON.parse(zresponse);
@@ -458,7 +458,7 @@ WTWJS.prototype.loadAZAnimationsList = function() {
 	}
 }		
 
-WTWJS.prototype.deleteAZAvatarAnimation = function(zactionzoneanimationid) {
+WTWJS.prototype.deleteAZAvatarAnimation = async function(zactionzoneanimationid) {
 	/* remove an animation from the list of animations to be loaded with a zone */
 	try {
 		var zrequest = {
@@ -469,7 +469,7 @@ WTWJS.prototype.deleteAZAvatarAnimation = function(zactionzoneanimationid) {
 			'avataranimationid': zactionzoneanimationid,
 			'function':'deleteazavataranimation'
 		};
-		WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/actionzones.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -481,11 +481,11 @@ WTWJS.prototype.deleteAZAvatarAnimation = function(zactionzoneanimationid) {
 	}
 }		
 
-WTWJS.prototype.loadAZAvatarAnimations = function() {
+WTWJS.prototype.loadAZAvatarAnimations = async function() {
 	/* load avatar animations list to select from when adding to a zone */
 	try {
 		WTW.clearDDL('wtw_tazavataranimationid');
-		WTW.getJSON("/connect/avataranimations.php", 
+		await WTW.getAsyncJSON("/connect/avataranimations.php", 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				for (var i=0;i<zresponse.avataranimations.length;i++) {
@@ -503,7 +503,7 @@ WTWJS.prototype.loadAZAvatarAnimations = function() {
 	}
 }		
 
-WTWJS.prototype.saveAZAvatarAnimation = function() {
+WTWJS.prototype.saveAZAvatarAnimation = async function() {
 	/* save an avatar animation to the list for a zone */
 	try {
 		var zrequest = {
@@ -514,7 +514,7 @@ WTWJS.prototype.saveAZAvatarAnimation = function() {
 			'avataranimationid':WTW.getDDLValue('wtw_tazavataranimationid'),
 			'function':'saveazavataranimation'
 		};
-		WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/actionzones.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -540,7 +540,7 @@ WTWJS.prototype.setActionZonePosition = function() {
 	}
 }
 
-WTWJS.prototype.submitActionZoneForm = function(w) {
+WTWJS.prototype.submitActionZoneForm = async function(w) {
 	/* submit the action zone form */
 	try {
 		if (w != 2) {
@@ -629,7 +629,7 @@ WTWJS.prototype.submitActionZoneForm = function(w) {
 					'thingid': thingid,
 					'function':'deleteactionzone'
 				};
-				WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/actionzones.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -717,7 +717,7 @@ WTWJS.prototype.submitActionZoneForm = function(w) {
 				'jsparameters':dGet('wtw_tactionzonejsparameters').value,
 				'function':'saveactionzone'
 			};
-			WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/actionzones.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -759,7 +759,7 @@ WTWJS.prototype.closeActionZoneForm = function() {
 	}
 }
 
-WTWJS.prototype.clearActionZone = function(zmoldswithactionzones, zactionzoneid) {
+WTWJS.prototype.clearActionZone = async function(zmoldswithactionzones, zactionzoneid) {
 	/* when a load action zone is deleted, the molds that use it are automatically updated to another common load zone (so they can still load to the scene) */
 	try {
 		var zrequest = {
@@ -770,7 +770,7 @@ WTWJS.prototype.clearActionZone = function(zmoldswithactionzones, zactionzoneid)
 			'moldswithactionzones':zmoldswithactionzones,
 			'function':'removeactionzone'
 		};
-		WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/actionzones.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -781,7 +781,7 @@ WTWJS.prototype.clearActionZone = function(zmoldswithactionzones, zactionzoneid)
 	}
 }
 
-WTWJS.prototype.addActionZonePart = function(actionzoneid, mold) {
+WTWJS.prototype.addActionZonePart = async function(actionzoneid, mold) {
 	/* some action zones apply movement or rotation (like a swinging or sliding door) */
 	/* molds (parts like a door and handle) are parented to the moving axle of the action zones */
 	/* this function adds a mold and lists the molds that are now part of the action zone axle */
@@ -826,7 +826,7 @@ WTWJS.prototype.addActionZonePart = function(actionzoneid, mold) {
 					'actionzoneid': moldnameparts.molds[moldnameparts.moldind].actionzoneid,
 					'function':'savemoldactionzone'
 				};
-				WTW.postJSON("/core/handlers/molds.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/molds.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -862,7 +862,7 @@ WTWJS.prototype.addActionZonePart = function(actionzoneid, mold) {
 	}
 }
 
-WTWJS.prototype.selectAddActionZonePart = function(w) {
+WTWJS.prototype.selectAddActionZonePart = async function(w) {
 	/* some action zones apply movement or rotation (like a swinging or sliding door) */
 	/* molds (parts like a door and handle) are parented to the moving axle of the action zones */
 	/* this function adds a mold to the action zone axle (continues the save and update process) */
@@ -946,7 +946,7 @@ WTWJS.prototype.selectAddActionZonePart = function(w) {
 					'jsparameters':dGet('wtw_tactionzonejsparameters').value,
 					'function':'saveactionzone'
 				};
-				WTW.postJSON("/core/handlers/actionzones.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/actionzones.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 					}
@@ -963,7 +963,7 @@ WTWJS.prototype.selectAddActionZonePart = function(w) {
 	}
 }
 
-WTWJS.prototype.removeActionZonePart = function(moldname) {
+WTWJS.prototype.removeActionZonePart = async function(moldname) {
 	/* some action zones apply movement or rotation (like a swinging or sliding door) */
 	/* molds (parts like a door and handle) are parented to the moving axle of the action zones */
 	/* this function removes a mold from the action zone axle */
@@ -985,7 +985,7 @@ WTWJS.prototype.removeActionZonePart = function(moldname) {
 					'actionzoneid': '',
 					'function':'savemoldactionzone'
 				};
-				WTW.postJSON("/core/handlers/molds.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/molds.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */

@@ -7,7 +7,7 @@
 /* these functions administer 3D Things as a whole (mold functions are in wtw_adminmolds.js) */
 /* name, alt tags, set analytics, etc... */
 
-WTWJS.prototype.openThingForm = function(zthingid) {
+WTWJS.prototype.openThingForm = async function(zthingid) {
 	/* open the 3D Thing Information form */
 	try {
 		WTW.hide('wtw_reqeditthingname');
@@ -18,7 +18,7 @@ WTWJS.prototype.openThingForm = function(zthingid) {
 		WTW.hide('wtw_adminmenu35b');
 		WTW.show('wtw_loadingthingform');
 		dGet('wtw_tthingalttag').value = "";
-		WTW.getJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+		await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.things = JSON.parse(response);
 				if (WTW.things != null) {
@@ -57,14 +57,14 @@ WTWJS.prototype.openThingForm = function(zthingid) {
 	}
 }
 
-WTWJS.prototype.loadThingForm = function(zthingid) {
+WTWJS.prototype.loadThingForm = async function(zthingid) {
 	/* load settings to the 3D Thing Information Form */
 	try {
 		dGet('wtw_tthingind').value = '-1';
 		dGet('wtw_tthingname').value = '';
 		dGet('wtw_tthingdescription').value = '';
 		dGet('wtw_tthingalttag').value = "";
-		WTW.getJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+		await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.things = JSON.parse(response);
 				if (WTW.things != null) {
@@ -98,7 +98,7 @@ WTWJS.prototype.loadThingForm = function(zthingid) {
 	}
 }
 
-WTWJS.prototype.submitthingForm = function(w) {
+WTWJS.prototype.submitthingForm = async function(w) {
 	/* submit the 3D Thing Information Form */
 	try {
 		var validate = 1;
@@ -110,7 +110,7 @@ WTWJS.prototype.submitthingForm = function(w) {
 					'thingid': thingid,
 					'function':'deletething'
 				};
-				WTW.postJSON("/core/handlers/things.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -146,7 +146,7 @@ WTWJS.prototype.submitthingForm = function(w) {
 						'alttag': btoa(dGet('wtw_tthingalttag').value),
 						'function':'savething'
 					};
-					WTW.postJSON("/core/handlers/things.php", zrequest, 
+					await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							/* note serror would contain errors */
@@ -180,12 +180,12 @@ WTWJS.prototype.submitthingForm = function(w) {
 	}
 }
 
-WTWJS.prototype.copyMyThing = function() {
+WTWJS.prototype.copyMyThing = async function() {
 	/* make a copy of an existing 3D Thing (use as backup or as a new 3D Thing to edit and use) */
 	try {
 		dGet('wtw_tthingind').value = '-1';
 		dGet('wtw_tthingname').value = '';
-		WTW.getJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+		await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.things = JSON.parse(response);
 				if (WTW.things != null) {
@@ -214,7 +214,7 @@ WTWJS.prototype.copyMyThing = function() {
 	}
 }
 
-WTWJS.prototype.copyThing = function(zcopythingid, zthingname) {
+WTWJS.prototype.copyThing = async function(zcopythingid, zthingname) {
 	/* submit the copy process to the database to duplicate */
 	try {
 		if (zthingname != "" && dGet('wtw_tthingname').value == "") {
@@ -231,7 +231,7 @@ WTWJS.prototype.copyThing = function(zcopythingid, zthingname) {
 			'alttag': btoa(dGet('wtw_tthingalttag').value),
 			'function':'savething'
 		};
-		WTW.postJSON("/core/handlers/things.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -256,13 +256,13 @@ WTWJS.prototype.copyThingComplete = function(zthingid) {
 	} 
 }
 
-WTWJS.prototype.getSelectThingsList = function() {
+WTWJS.prototype.getSelectThingsList = async function() {
 	/* populates the admin menu for My 3D Things to load and edit */
 	try {
 		WTW.hide('wtw_listthings');
 		WTW.show('wtw_loadingthingid');
 		dGet("wtw_listthings").innerHTML = "";
-		WTW.getJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+		await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.things = JSON.parse(response);
 				if (WTW.things != null) {
@@ -287,14 +287,14 @@ WTWJS.prototype.getSelectThingsList = function() {
 	}		
 }
 
-WTWJS.prototype.getThingMoldList = function() {
+WTWJS.prototype.getThingMoldList = async function() {
 	/* 3D Things can be added to 3D Communities and 3D Buildings */
 	/* this function creates a list of 3D Things to add */
 	try {
 		WTW.hide('wtw_thingmoldsbuttonlist');
 		WTW.show('wtw_loadingthingmoldsbuttonlist');
 		dGet("wtw_thingmoldsbuttonlist").innerHTML = "";
-		WTW.getJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+		await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.things = JSON.parse(response);
 				if (WTW.things != null) {
@@ -332,7 +332,7 @@ WTWJS.prototype.thingSearchShowThing = function(newthingid) {
 	}
 }
 
-WTWJS.prototype.openShareThingForm = function() {
+WTWJS.prototype.openShareThingForm = async function() {
 	/* share 3D Thing is used to send a copy to WalkTheWeb for others to search and download copies of their own */
 	try {
 		dGet("wtw_tsharethingtempname").value = "";
@@ -340,7 +340,7 @@ WTWJS.prototype.openShareThingForm = function() {
 		dGet('wtw_tsharethingtags').value = "";
 		WTW.hide('wtw_adminmenu39b');
 		WTW.show('wtw_loadingsharethingform');
-		WTW.getJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+		await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.things = JSON.parse(response);
 				if (WTW.things != null) {
@@ -387,7 +387,7 @@ WTWJS.prototype.openShareThingForm = function() {
 	}
 }
 
-WTWJS.prototype.saveShareThingForm = function() {
+WTWJS.prototype.saveShareThingForm = async function() {
 	/* process the share 3D Thing and Save the settings locally for next Share */
 	try {
 		var zrequest = {
@@ -398,7 +398,7 @@ WTWJS.prototype.saveShareThingForm = function() {
 			'tags': btoa(dGet('wtw_tsharethingtags').value),
 			'function':'savethingtemplate'
 		};
-		WTW.postJSON("/core/handlers/things.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				dGet('wtw_sharehash').value = zresponse.sharehash;
@@ -409,7 +409,7 @@ WTWJS.prototype.saveShareThingForm = function() {
 	}
 }
 
-WTWJS.prototype.shareThingTemplate = function() {
+WTWJS.prototype.shareThingTemplate = async function() {
 	/* after user is sent to confirm form to make sure they want to Share the 3D Thing */
 	/* this will process the share */
 	try {
@@ -420,7 +420,7 @@ WTWJS.prototype.shareThingTemplate = function() {
 			'sharehash': dGet('wtw_sharehash').value,
 			'function':'sharethingtemplate'
 		};
-		WTW.postJSON("/core/handlers/things.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 

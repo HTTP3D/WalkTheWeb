@@ -8,7 +8,7 @@
 /* 		roles - give server wide access to levels of functionality */
 /* 		dev access - provides direct access to a given 3D Community, 3D Building, or 3D Thing */
 
-WTWJS.prototype.openAllUsers = function() {
+WTWJS.prototype.openAllUsers = async function() {
 	/* open admin page form for users and role access */
 	try {
 		dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_adduserbutton' class='wtw-greenbuttonright' onclick=\"WTW.addUser();\">Add New</div>All Users";
@@ -20,7 +20,7 @@ WTWJS.prototype.openAllUsers = function() {
 		WTW.hide('wtw_useradd');
 		dGet('wtw_userlist').innerHTML = "";
 		dGet('wtw_alluserswidth').className = "wtw-dashboardboxleftfull";
-		WTW.getJSON("/connect/users.php", 
+		await WTW.getAsyncJSON("/connect/users.php", 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				var zuserlist = "";
@@ -56,7 +56,7 @@ WTWJS.prototype.openAllUsers = function() {
 	}
 }
 
-WTWJS.prototype.getUser = function(zuserid) {
+WTWJS.prototype.getUser = async function(zuserid) {
 	/* select user form list and display user information and roles edit form */
 	try {
 		WTW.show('wtw_loadingusers');
@@ -65,8 +65,8 @@ WTWJS.prototype.getUser = function(zuserid) {
 		WTW.hide('wtw_userinfo');
 		dGet('wtw_userinfo').innerHTML = "";
 		dGet('wtw_alluserswidth').className = "wtw-dashboardboxleft";
-		WTW.getJSON("/connect/user.php?userid=" + zuserid, 
-			function(zresponse) {
+		await WTW.getAsyncJSON("/connect/user.php?userid=" + zuserid, 
+			async function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				var zuserlist = "";
 				if (zresponse != null) {
@@ -114,7 +114,7 @@ WTWJS.prototype.getUser = function(zuserid) {
 				WTW.show('wtw_userinfo');
 				if (dGet('wtw_adduserrole') != null) {
 					WTW.clearDDL('wtw_adduserrole');
-					WTW.getJSON("/connect/roles.php", 
+					await WTW.getAsyncJSON("/connect/roles.php", 
 						function(zresponse) {
 							if (zresponse != null) {
 								zresponse = JSON.parse(zresponse);
@@ -135,7 +135,7 @@ WTWJS.prototype.getUser = function(zuserid) {
 	}
 }
 
-WTWJS.prototype.deleteUserRole = function(zuserid, zuserinroleid) {
+WTWJS.prototype.deleteUserRole = async function(zuserid, zuserinroleid) {
 	/* delete a role from a user */
 	try {	
 		if (zuserinroleid != "") {
@@ -145,7 +145,7 @@ WTWJS.prototype.deleteUserRole = function(zuserid, zuserinroleid) {
 				'userid':zuserid,
 				'function':'deleteuserrole'
 			};
-			WTW.postJSON("/core/handlers/users.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -158,7 +158,7 @@ WTWJS.prototype.deleteUserRole = function(zuserid, zuserinroleid) {
 	}
 }	
 
-WTWJS.prototype.addUserRole = function(zuserid) {
+WTWJS.prototype.addUserRole = async function(zuserid) {
 	/* add a role to a user */
 	try {	
 		var zroleid = WTW.getDDLValue('wtw_adduserrole');
@@ -169,7 +169,7 @@ WTWJS.prototype.addUserRole = function(zuserid) {
 				'roleid': zroleid,
 				'function':'saveuserrole'
 			};
-			WTW.postJSON("/core/handlers/users.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -229,7 +229,7 @@ WTWJS.prototype.cancelSaveUser = function() {
 	}
 }	
 
-WTWJS.prototype.saveNewUser = function() {
+WTWJS.prototype.saveNewUser = async function() {
 	/* save new user settings */
 	try {	
 		var zemail = dGet("wtw_tuseruseremail2").value;
@@ -249,7 +249,7 @@ WTWJS.prototype.saveNewUser = function() {
 				'useremail': btoa(zemail),
 				'function':'savenewuser'
 			};
-			WTW.postJSON("/core/handlers/users.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -264,7 +264,7 @@ WTWJS.prototype.saveNewUser = function() {
 	}
 }	
 
-WTWJS.prototype.saveUser = function() {
+WTWJS.prototype.saveUser = async function() {
 	/* save (update) user settings */
 	try {	
 		var zdisplayname = dGet("wtw_tuserdisplayname").value;
@@ -284,7 +284,7 @@ WTWJS.prototype.saveUser = function() {
 				'useremail':btoa(zemail),
 				'function':'saveuser'
 			};
-			WTW.postJSON("/core/handlers/users.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -299,7 +299,7 @@ WTWJS.prototype.saveUser = function() {
 	}
 }	
 
-WTWJS.prototype.deleteUser = function(zuserid) {
+WTWJS.prototype.deleteUser = async function(zuserid) {
 	/* delete user and refresh user list */
 	try {	
 		if (zuserid != "") {
@@ -307,7 +307,7 @@ WTWJS.prototype.deleteUser = function(zuserid) {
 				'userid': zuserid,
 				'function':'deleteuser'
 			};
-			WTW.postJSON("/core/handlers/users.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -323,7 +323,7 @@ WTWJS.prototype.deleteUser = function(zuserid) {
 
 /* dev access - provides direct access to a given 3D Community, 3D Building, or 3D Thing */
 
-WTWJS.prototype.openPermissionsForm = function() {
+WTWJS.prototype.openPermissionsForm = async function() {
 	/* open permissions form to edit users with access */
 	try {
 		WTW.hide('wtw_adminmenu60b');
@@ -337,7 +337,7 @@ WTWJS.prototype.openPermissionsForm = function() {
 		}
 		dGet('wtw_accessnote').innerHTML = "Dev: updates to 3D " + zwebtype + ".<br />Admin: Dev and set permissions.";
 		dGet('wtw_userdevaccesslist').innerHTML = "";
-		WTW.getJSON("/connect/useraccess.php?communityid=" + communityid + "&buildingid=" + buildingid + "&thingid=" + thingid, 
+		await WTW.getAsyncJSON("/connect/useraccess.php?communityid=" + communityid + "&buildingid=" + buildingid + "&thingid=" + thingid, 
 			function(response) {
 				var useraccess = JSON.parse(response);
 				if (useraccess != null) {
@@ -403,7 +403,7 @@ WTWJS.prototype.updateDevAccessList = function(permissionslist) {
 	}		
 }
 
-WTWJS.prototype.addAccess = function() {
+WTWJS.prototype.addAccess = async function() {
 	/* add user access to 3D Community, 3D Building, or 3D Thing */
 	try {
 		var zrequest = {
@@ -414,7 +414,7 @@ WTWJS.prototype.addAccess = function() {
 			'usersearch': dGet('wtw_tadduseridname').value,
 			'function':'savepermissions'
 		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -427,7 +427,7 @@ WTWJS.prototype.addAccess = function() {
 	}		
 }
 
-WTWJS.prototype.deleteAccess = function() {
+WTWJS.prototype.deleteAccess = async function() {
 	/* delete user access to 3D Community, 3D Building, or 3D Thing */
 	try {
 		var zrequest = {
@@ -437,7 +437,7 @@ WTWJS.prototype.deleteAccess = function() {
 			'usersearch': dGet('wtw_tadduseridname').value,
 			'function':'deletepermissions'
 		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -452,7 +452,7 @@ WTWJS.prototype.deleteAccess = function() {
 
 
 
-WTWJS.prototype.addDevAccess = function() {
+WTWJS.prototype.addDevAccess = async function() {
 	try {
 		var zrequest = {
 			'communityid': communityid,
@@ -462,7 +462,7 @@ WTWJS.prototype.addDevAccess = function() {
 			'usersearch': dGet('wtw_tadduserdevaccess').value,
 			'function':'savepermissions'
 		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -511,7 +511,7 @@ WTWJS.prototype.setAccessValid = function(w) {
 	}		
 }
 
-WTWJS.prototype.deleteDevAccess = function() {
+WTWJS.prototype.deleteDevAccess = async function() {
 	try {
 		var zrequest = {
 			'communityid': communityid,
@@ -520,7 +520,7 @@ WTWJS.prototype.deleteDevAccess = function() {
 			'usersearch': dGet('wtw_tadduserdevaccess').value,
 			'function':'deletepermissions'
 		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */

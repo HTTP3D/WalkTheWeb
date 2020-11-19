@@ -549,7 +549,7 @@ WTWJS.prototype.addMoldImage = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 	return zmold;
 }
 
-WTWJS.prototype.addMoldRaisedImage = function(zmoldname, zmolddef, zlenx, zleny, zlenz, zsubdivisions, zheightmappath, zminheight, zmaxheight) {
+WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, zleny, zlenz, zsubdivisions, zheightmappath, zminheight, zmaxheight) {
 	var zmold;
 	try {
 		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
@@ -622,7 +622,7 @@ WTWJS.prototype.addMoldRaisedImage = function(zmoldname, zmolddef, zlenx, zleny,
 		var zuscale = 1;
 		var zvscale = 1;
 		var zcovering = new BABYLON.StandardMaterial("mat-" + zmoldname + "-raised", scene);
-		function loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset) {
+		async function loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset) {
 			var zimageinfo = WTW.getUploadFileData(zimageid);
 			var zimageextension = zimageinfo.extension;
 			zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.filedata, "mattexture" + zmoldname + "-raised", scene);
@@ -640,7 +640,7 @@ WTWJS.prototype.addMoldRaisedImage = function(zmoldname, zmolddef, zlenx, zleny,
 		if (WTW.isUploadReady(zimageid)) {
 			loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset);
 		} else {
-			WTW.getJSON("/connect/upload.php?uploadid=" + zimageid, 
+			await WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zimageid, 
 				function(response) {
 					WTW.loadUpload(JSON.parse(response), zimageid, 0);
 					loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset);
@@ -2385,7 +2385,7 @@ WTWJS.prototype.addMoldTree = function(zmoldname, zmolddef, zlenx, zleny, zlenz,
 	return zmold;
 }
 
-WTWJS.prototype.addMoldFlag = function(zmoldname, zmolddef, zlenx, zleny, zlenz, zposx, zposy, zposz, zsubdivisions) {
+WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, zlenz, zposx, zposy, zposz, zsubdivisions) {
 	var zmold;
 	try {
 		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
@@ -2456,7 +2456,7 @@ WTWJS.prototype.addMoldFlag = function(zmoldname, zmolddef, zlenx, zleny, zlenz,
 				}	
 			}
 		}
-		function loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset, zmold) {
+		async function loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset, zmold) {
 			var zimageinfo = WTW.getUploadFileData(zimageid);
 			var zimageextension = zimageinfo.extension;
 			zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.filedata, "mattexture" + zmoldname + "-raised", scene);
@@ -2508,7 +2508,7 @@ WTWJS.prototype.addMoldFlag = function(zmoldname, zmolddef, zlenx, zleny, zlenz,
 		if (WTW.isUploadReady(zimageid)) {
 			loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset, zmold);
 		} else {
-			WTW.getJSON("/connect/upload.php?uploadid=" + zimageid, 
+			await WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zimageid, 
 				function(response) {
 					WTW.loadUpload(JSON.parse(response), zimageid, 0);
 					loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset, zmold);

@@ -4,7 +4,7 @@
 
 /* these functions are related to transitions of avatars in and out of scenes */
 
-WTWJS.prototype.saveAvatarEnterAnimation = function() {
+WTWJS.prototype.saveAvatarEnterAnimation = async function() {
 	/* saves the avatar enter animation to the database - depreciated by the new avatar designer plugin */
 	try {
 		var zavataranimationid = WTW.getDDLValue('wtw_tselectavataranimation-enter');
@@ -18,7 +18,7 @@ WTWJS.prototype.saveAvatarEnterAnimation = function() {
 			'transport': '1',
 			'function':'savetransportanimation'
 		};
-		WTW.postJSON("/core/handlers/avatars.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -118,7 +118,7 @@ WTWJS.prototype.updateAnimSelectValue = function(zuseravataranimationidfield, zu
     }
 }
 
-WTWJS.prototype.deleteUserAnimation = function(zselectname) {
+WTWJS.prototype.deleteUserAnimation = async function(zselectname) {
 	/* deletes an optional animation - depreciated by the new avatar designer plugin */
 	try {
 		var zuseravataranimationid = "";
@@ -159,7 +159,7 @@ WTWJS.prototype.deleteUserAnimation = function(zselectname) {
 				'avataranimationid':zavataranimationid,
 				'function':'deleteavataranimation'
 			};
-			WTW.postJSON("/core/handlers/avatars.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -218,7 +218,7 @@ WTWJS.prototype.toggleMenuAnimations = function() {
 	}
 }
 
-WTWJS.prototype.getAvatarAnimationsAll = function() {
+WTWJS.prototype.getAvatarAnimationsAll = async function() {
 	/* loads all available animation definitions - will be depreciated soon */
 	try {
 		var zrequest = {
@@ -226,7 +226,7 @@ WTWJS.prototype.getAvatarAnimationsAll = function() {
 			'instanceid': dGet("wtw_tinstanceid").value,
 			'function':'getavataranimationsall'
 		};
-		WTW.postJSON("/core/handlers/avatars.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */

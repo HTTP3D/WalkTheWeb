@@ -7,7 +7,7 @@
 /* these functions administer 3D Buildings as a whole (mold functions are in wtw_adminmolds.js) */
 /* name, alt tags, set analytics, etc... */
 
-WTWJS.prototype.openBuildingForm = function(w) {
+WTWJS.prototype.openBuildingForm = async function(w) {
 	/* open the 3D Building Information form */
 	try {
 		dGet('wtw_tbuildingname').focus();
@@ -20,7 +20,7 @@ WTWJS.prototype.openBuildingForm = function(w) {
 		dGet('wtw_tbuildingalttag').value = "";
 		WTW.show('wtw_loadingbuildingform');
 		WTW.hide('wtw_adminmenu5b');
-		WTW.getJSON("/connect/buildings.php", 
+		await WTW.getAsyncJSON("/connect/buildings.php", 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -61,7 +61,7 @@ WTWJS.prototype.openBuildingForm = function(w) {
 	}
 }	
 
-WTWJS.prototype.loadBuildingForm = function(w) {
+WTWJS.prototype.loadBuildingForm = async function(w) {
 	/* load settings to the 3D Building Information Form */
 	try {
 		dGet("wtw_tbuildingid").value = w;
@@ -71,7 +71,7 @@ WTWJS.prototype.loadBuildingForm = function(w) {
 		dGet('wtw_tbuildingname').value = "";
 		dGet('wtw_tbuildingdescription').value = "";
 		dGet('wtw_tbuildingalttag').value = "";
-		WTW.getJSON("/connect/buildings.php", 
+		await WTW.getAsyncJSON("/connect/buildings.php", 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -107,7 +107,7 @@ WTWJS.prototype.loadBuildingForm = function(w) {
 	}
 }	
 
-WTWJS.prototype.submitBuildingForm = function(w) {
+WTWJS.prototype.submitBuildingForm = async function(w) {
 	/* submit the 3D Building Information Form */
 	try {
 		if (dGet('wtw_tbuildingid').value == '') {
@@ -121,7 +121,7 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 					'buildingid': buildingid,
 					'function':'deletebuilding'
 				};
-				WTW.postJSON("/core/handlers/buildings.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 					function(zresponse) {
 						WTW.redirectParent('/admin.php');
 					}
@@ -148,7 +148,7 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 					'analyticsid':dGet('wtw_tbuildinganalyticsid').value,
 					'function':'savebuilding'
 				};
-				WTW.postJSON("/core/handlers/buildings.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 					function(zresponse) {
 					}
 				);
@@ -173,11 +173,11 @@ WTWJS.prototype.submitBuildingForm = function(w) {
 	}
 }
 
-WTWJS.prototype.copyMyBuilding = function() {
+WTWJS.prototype.copyMyBuilding = async function() {
 	/* make a copy of an existing 3D Building (use as backup or as a new 3D Building to edit and use) */
 	try {
 		dGet('wtw_tbuildingname').value = '';
-		WTW.getJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
+		await WTW.getAsyncJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -206,7 +206,7 @@ WTWJS.prototype.copyMyBuilding = function() {
 	}
 }
 
-WTWJS.prototype.copyBuilding = function(zcopybuildingid, zbuildingname) {
+WTWJS.prototype.copyBuilding = async function(zcopybuildingid, zbuildingname) {
 	/* submit the copy process to the database to duplicate */
 	try {
 		if (zbuildingname != "" && dGet('wtw_tbuildingname').value == "") {
@@ -220,7 +220,7 @@ WTWJS.prototype.copyBuilding = function(zcopybuildingid, zbuildingname) {
 			'buildingdescription':btoa(dGet('wtw_tbuildingdescription').value),
 			'function':'savebuilding'
 		};
-		WTW.postJSON("/core/handlers/buildings.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				WTW.copyBuildingComplete(zresponse.buildingid);
@@ -244,13 +244,13 @@ WTWJS.prototype.copyBuildingComplete = function(zbuildingid) {
 	} 
 }
 
-WTWJS.prototype.getSelectBuildingsList = function() {
+WTWJS.prototype.getSelectBuildingsList = async function() {
 	/* populates the admin menu for My 3D Buildings to load and edit */
 	try {
 		WTW.hide('wtw_listbuildings');
 		WTW.show('wtw_loadingbuildingid');
 		dGet("wtw_listbuildings").innerHTML = "";
-		WTW.getJSON("/connect/buildings.php", 
+		await WTW.getAsyncJSON("/connect/buildings.php", 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -284,7 +284,7 @@ WTWJS.prototype.editBuilding = function(zbuildingid) {
 	}
 }
 
-WTWJS.prototype.openShareBuildingForm = function() {
+WTWJS.prototype.openShareBuildingForm = async function() {
 	/* share 3D Building is used to send a copy to WalkTheWeb for others to search and download copies of their own */
 	try {
 		dGet("wtw_tsharebuildtempname").value = "";
@@ -292,7 +292,7 @@ WTWJS.prototype.openShareBuildingForm = function() {
 		dGet('wtw_tsharebuildtags').value = "";
 		WTW.hide('wtw_adminmenu9b');
 		WTW.show('wtw_loadingsharebuildingform');
-		WTW.getJSON("/connect/buildings.php", 
+		await WTW.getAsyncJSON("/connect/buildings.php", 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -334,7 +334,7 @@ WTWJS.prototype.openShareBuildingForm = function() {
 	}
 }	
 
-WTWJS.prototype.saveShareBuildingForm = function() {
+WTWJS.prototype.saveShareBuildingForm = async function() {
 	/* process the share 3D Building and Save the settings locally for next Share */
 	try {
 		var zrequest = {
@@ -344,7 +344,7 @@ WTWJS.prototype.saveShareBuildingForm = function() {
 			'tags': btoa(dGet('wtw_tsharebuildtags').value),
 			'function':'savebuildingtemplate'
 		};
-		WTW.postJSON("/core/handlers/buildings.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				dGet('wtw_sharehash').value = zresponse.sharehash;
@@ -355,7 +355,7 @@ WTWJS.prototype.saveShareBuildingForm = function() {
 	}
 }
 
-WTWJS.prototype.shareBuildingTemplate = function() {
+WTWJS.prototype.shareBuildingTemplate = async function() {
 	/* after user is sent to confirm form to make sure they want to Share the 3D Building */
 	/* this process the share */
 	try {
@@ -366,7 +366,7 @@ WTWJS.prototype.shareBuildingTemplate = function() {
 			'sharehash': dGet('wtw_sharehash').value,
 			'function':'sharebuildingtemplate'
 		};
-		WTW.postJSON("/core/handlers/buildings.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 

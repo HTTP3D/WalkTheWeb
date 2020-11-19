@@ -1365,7 +1365,7 @@ WTWJS.prototype.getSetting = function(zsetting, zjsfunction, zjsparameters) {
 	}
 }
 
-WTWJS.prototype.getSettings = function(zsettings, zjsfunction, zjsparameters) {
+WTWJS.prototype.getSettings = async function(zsettings, zjsfunction, zjsparameters) {
 	/* get a set of settings from the database by names */
 	/* zsettings = comma separated names of the variables */
 	/* zjsfunction = JavaScript function to run after the setting is retrieved */
@@ -1380,7 +1380,7 @@ WTWJS.prototype.getSettings = function(zsettings, zjsfunction, zjsparameters) {
 			'settings': zsettings,
 			'function':'getsettings'
 		};
-		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -1405,7 +1405,7 @@ WTWJS.prototype.returnSettings = function(zsettings, zjsfunction, zjsparameters)
 	}
 }
 
-WTWJS.prototype.saveSetting = function(zsetting, zvalue, zjsfunction, zjsparameters) {
+WTWJS.prototype.saveSetting = async function(zsetting, zvalue, zjsfunction, zjsparameters) {
 	/* save a setting to the database by name */
 	/* zsetting = name of the variable */
 	/* zjsfunction = JavaScript function to run after the setting is saved */
@@ -1423,7 +1423,7 @@ WTWJS.prototype.saveSetting = function(zsetting, zvalue, zjsfunction, zjsparamet
 			'value':zvalue,
 			'function':'savesetting'
 		};
-		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zjsfunction != null) {
@@ -1436,7 +1436,7 @@ WTWJS.prototype.saveSetting = function(zsetting, zvalue, zjsfunction, zjsparamet
 	}
 }
 
-WTWJS.prototype.saveSettings = function(zsettings, zjsfunction, zjsparameters) {
+WTWJS.prototype.saveSettings = async function(zsettings, zjsfunction, zjsparameters) {
 	/* save a set of settings to the database by names:values */
 	/* zsettings = names of the variables names and values, as in JSON formatted list of pairs like {name1: value1, name2:value2 } */
 	/* zjsfunction = JavaScript function to run after the settings are saved */
@@ -1455,7 +1455,7 @@ WTWJS.prototype.saveSettings = function(zsettings, zjsfunction, zjsparameters) {
 			'settings': JSON.stringify(zsettings),
 			'function':'savesettings'
 		};
-		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zjsfunction != null) {

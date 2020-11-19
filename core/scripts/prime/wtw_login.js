@@ -23,7 +23,7 @@ WTWJS.prototype.logoutGlobal = function() {
 	}
 }
 
-WTWJS.prototype.globalLogin = function(zparameters) {
+WTWJS.prototype.globalLogin = async function(zparameters) {
 	/* references 3dnet.walktheweb.com - global WalkTheWeb login complete and confirms the local values from login */
 	try {
 		let zglobaluserid = "";
@@ -43,7 +43,7 @@ WTWJS.prototype.globalLogin = function(zparameters) {
 				'useremail':btoa(zuseremail),
 				'function':'globallogin'
 			};
-			WTW.postJSON("/core/handlers/users.php", zrequest,
+			await WTW.postAsyncJSON("/core/handlers/users.php", zrequest,
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* continue if no errors */
@@ -254,10 +254,10 @@ WTWJS.prototype.setBrowseDiv = function(zwidth, zheight) {
 	}
 }
 
-WTWJS.prototype.getLocalProfile = function(zedit, zwidth, zheight) {
+WTWJS.prototype.getLocalProfile = async function(zedit, zwidth, zheight) {
 	try {
 		let zpagediv = "";
-		WTW.getJSON("/connect/userprofile.php?useravatarid=" + dGet('wtw_tuseravatarid').value, 
+		await WTW.getAsyncJSON("/connect/userprofile.php?useravatarid=" + dGet('wtw_tuseravatarid').value, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				var zdob = '';
@@ -302,7 +302,7 @@ WTWJS.prototype.getLocalProfile = function(zedit, zwidth, zheight) {
 	}
 }
 
-WTWJS.prototype.saveMyProfile = function() {
+WTWJS.prototype.saveMyProfile = async function() {
 	/* save local server user profile */
 	try {
 		/* validate entries... */
@@ -316,9 +316,7 @@ WTWJS.prototype.saveMyProfile = function() {
 			'dob': dGet('wtw_tprofiledob').value,
 			'function':'savemyprofile'
 		};
-
-
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -346,10 +344,10 @@ WTWJS.prototype.saveMyProfileComplete = function(zresponse) {
 	}
 }
 
-WTWJS.prototype.getAnonymousAvatarList = function() {
+WTWJS.prototype.getAnonymousAvatarList = async function() {
 	/* provides a formatted list of anonymous avatars to select and use in the scene */
 	try {
-		WTW.getJSON("/connect/avatars.php?groups=anonymous", 
+		await WTW.getAsyncJSON("/connect/avatars.php?groups=anonymous", 
 			function(zresponse) {
 				var zanonavatars = [];
 				if (zresponse != null) {
@@ -405,10 +403,10 @@ WTWJS.prototype.getAnonymousAvatarList = function() {
 	}
 }
 
-WTWJS.prototype.getFullAvatarList = function(zshowmyavatars, zwidth, zheight) {
+WTWJS.prototype.getFullAvatarList = async function(zshowmyavatars, zwidth, zheight) {
 	/* provides a formatted list of all available avatars to select and use in the scene (for logged in users) */
 	try {
-		WTW.getJSON("/connect/avatars.php?groups=", 
+		await WTW.getAsyncJSON("/connect/avatars.php?groups=", 
 			function(zresponse) {
 				var zfullavatars = [];
 				if (zresponse != null) {
@@ -487,7 +485,7 @@ WTWJS.prototype.getFullAvatarList = function(zshowmyavatars, zwidth, zheight) {
 	}
 }
 
-WTWJS.prototype.getMyAvatarList = function(zwidth, zheight) {
+WTWJS.prototype.getMyAvatarList = async function(zwidth, zheight) {
 	/* gets a list of my avatars to select and use in the scene (only if user is logged in) */
 	try {
 		var zloaddefault = true;
@@ -495,7 +493,7 @@ WTWJS.prototype.getMyAvatarList = function(zwidth, zheight) {
 		if (zloaddefault) {
 			let zmyavatars = [];
 			if (dGet('wtw_myavatars') != null) {
-				WTW.getJSON("/connect/avatars.php?groups=my", 
+				await WTW.getAsyncJSON("/connect/avatars.php?groups=my", 
 					function(zresponse) {
 						if (zresponse != null) {
 							zresponse = JSON.parse(zresponse);
@@ -602,7 +600,7 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight) {
 	}
 }
 
-WTWJS.prototype.onMyAvatarSaveSelect = function(zglobaluseravatarid, zuseravatarid, zavatarid) {
+WTWJS.prototype.onMyAvatarSaveSelect = async function(zglobaluseravatarid, zuseravatarid, zavatarid) {
 	/* process to enter the 3D Scene when the avatar is selected (save my selection) */
 	try {
 		if (dGet('wtw_tnewavatardisplayname') != null) {
@@ -625,7 +623,7 @@ WTWJS.prototype.onMyAvatarSaveSelect = function(zglobaluseravatarid, zuseravatar
 			'avatarid':zavatarid,
 			'function':'quicksaveavatar'
 		};
-		WTW.postJSON("/core/handlers/avatars.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -658,7 +656,7 @@ WTWJS.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, 
 	}
 }
 
-WTWJS.prototype.loginAttempt = function() {
+WTWJS.prototype.loginAttempt = async function() {
 	/* process a local server login attempt */
 	try {
 		if (dGet('wtw_trememberlogin').checked == true) {
@@ -672,7 +670,7 @@ WTWJS.prototype.loginAttempt = function() {
 			'password':btoa(dGet('wtw_tpassword').value),
 			'function':'login'
 		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -729,7 +727,7 @@ WTWJS.prototype.loginAttemptResponse = function(zresults) {
 	}
 }
 
-WTWJS.prototype.logout = function() {
+WTWJS.prototype.logout = async function() {
 	/* local server log out and clear login values from 3D Scene and browse window */
 	try {
 		WTW.hide('wtw_mainadminmode');
@@ -766,7 +764,7 @@ WTWJS.prototype.logout = function() {
 		var zrequest = {
 			'function':'logout'
 		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -778,7 +776,7 @@ WTWJS.prototype.logout = function() {
 	}
 }
 
-WTWJS.prototype.createAccount = function() {
+WTWJS.prototype.createAccount = async function() {
 	/* local server registration (add new user) attempt */
 	try {
 		/* NEEDED add validation */
@@ -788,7 +786,7 @@ WTWJS.prototype.createAccount = function() {
 			'password':btoa(dGet('wtw_tnewpassword').value),
 			'function':'register'
 		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -869,7 +867,7 @@ WTWJS.prototype.setLoginValues = function(zuserid, zdisplayname, zemail, zuserim
 	}
 }
 
-WTWJS.prototype.checkEmailValidation = function(zuseremail) {
+WTWJS.prototype.checkEmailValidation = async function(zuseremail) {
 	try {
 		if (zuseremail == '') {
 			zuseremail = dGet('wtw_tuseremail').value;
@@ -879,8 +877,8 @@ WTWJS.prototype.checkEmailValidation = function(zuseremail) {
 			'userid':btoa(dGet('wtw_tuserid').value),
 			'function':'checkemailvalidation'
 		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
-			function(zresponse) {
+		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+			async function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 
 				var zuserid = '';
@@ -902,7 +900,7 @@ WTWJS.prototype.checkEmailValidation = function(zuseremail) {
 						'message':'You have recently created a ' + wtw_domainname + ' account using this email address.\r\nPlease click this link to complete the email validation.\r\n\r\nPlease copy and paste this link into your browser to Validate your Email:\r\n ' + wtw_domainurl + '/core/pages/validate.php?email=' + zuseremail + '&confirm=' + zresponse.emailconfirm + '\r\n\r\nWelcome to WalkTheWeb 3D Internet!',
 						'function':'sendemail'
 					};
-					WTW.postJSON("/core/handlers/tools.php", zrequest, 
+					await WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							WTW.openLocalLogin('Email Verification', .4, .6);
@@ -944,7 +942,7 @@ WTWJS.prototype.editProfile = function() {
 	}
 }
 
-WTWJS.prototype.saveProfile = function() {
+WTWJS.prototype.saveProfile = async function() {
 	/* save local server user profile */
 	try {
 		/* validate entries... */
@@ -955,7 +953,7 @@ WTWJS.prototype.saveProfile = function() {
 			'displayname': btoa(dGet('wtw_teditdisplayname').value),
 			'function':'saveprofile'
 		};
-		WTW.postJSON("/core/handlers/users.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -1200,7 +1198,7 @@ WTWJS.prototype.switchAvatarMenu = function(zmenu) {
 	}
 }
 
-WTWJS.prototype.passwordReset = function() {
+WTWJS.prototype.passwordReset = async function() {
 	/* process to recover a local login */
 	try {
 		dGet('wtw_reseterrortext').innerHTML = "";
@@ -1209,7 +1207,7 @@ WTWJS.prototype.passwordReset = function() {
 				'useremail':dGet('wtw_temailrecover').value,
 				'function':'passwordrecovery'
 			};
-			WTW.postJSON("/core/handlers/users.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */

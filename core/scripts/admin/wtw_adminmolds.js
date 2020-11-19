@@ -7,7 +7,7 @@
 /* mold functions are used by 3D Communities, 3D Buildings, and 3D Things */
 /* molds are definition files that create meshes on demand */
 
-WTWJS.prototype.openMoldForm = function(zmoldind, zshape, zwebtype, zsaveprevious) {
+WTWJS.prototype.openMoldForm = async function(zmoldind, zshape, zwebtype, zsaveprevious) {
 	/* open mold form to create new or edit existing mold */
 	try { 
 		var zmolds;
@@ -220,7 +220,7 @@ WTWJS.prototype.openMoldForm = function(zmoldind, zshape, zwebtype, zsavepreviou
 				dGet('wtw_tmoldaddimagehoverid').value = zimagehoverid;				
 				dGet('wtw_tmoldaddimageclickid').value = zimageclickid;	
 				if (dGet('wtw_tmoldaddimageid').value != "") {
-					WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldaddimageid').value, 
+					await WTW.getAsyncJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldaddimageid').value, 
 						function(response) {
 							WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldaddimageid').value,0);
 							var zimageinfo = WTW.getUploadFileData(dGet('wtw_tmoldaddimageid').value);
@@ -231,7 +231,7 @@ WTWJS.prototype.openMoldForm = function(zmoldind, zshape, zwebtype, zsavepreviou
 					);
 				}
 				if (dGet('wtw_tmoldaddimagehoverid').value != "") {
-					WTW.getJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldaddimagehoverid').value, 
+					await WTW.getAsyncJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldaddimagehoverid').value, 
 						function(response) {
 							WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldaddimagehoverid').value,0);
 							var zimageinfo = WTW.getUploadFileData(dGet('wtw_tmoldaddimagehoverid').value);
@@ -1050,7 +1050,7 @@ WTWJS.prototype.changeOnClickEvent = function(zobj) {
 	}
 }
 
-WTWJS.prototype.setPreviewImage = function(zpreviewimageid, zimagepathid, zimageidid) {
+WTWJS.prototype.setPreviewImage = async function(zpreviewimageid, zimagepathid, zimageidid) {
 	/* images have a preview thumbnail on the form */
 	/* this function loads a preview image if it exists */
 	try {
@@ -1068,7 +1068,7 @@ WTWJS.prototype.setPreviewImage = function(zpreviewimageid, zimagepathid, zimage
 			if (zimagepath != '') {
 				dGet(zpreviewimageid).src = zimagepath;
 			} else if (zimageid != "") {
-				WTW.getJSON("/connect/upload.php?uploadid=" + zimageid, 
+				await WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zimageid, 
 					function(response) {
 						WTW.loadUpload(JSON.parse(response),zimageid,0);
 						var zimageinfo = WTW.getUploadFileData(zimageid);
@@ -1087,7 +1087,7 @@ WTWJS.prototype.setPreviewImage = function(zpreviewimageid, zimagepathid, zimage
 	}
 }
 
-WTWJS.prototype.submitMoldForm = function(zselect) {
+WTWJS.prototype.submitMoldForm = async function(zselect) {
 	/* submit mold form after edit (or after create new mold) */
 	try {
 		WTW.closeColorSelector(true);
@@ -1141,7 +1141,7 @@ WTWJS.prototype.submitMoldForm = function(zselect) {
 				'deleted': '1',
 				'function':'deletemold'
 			};
-			WTW.postJSON("/core/handlers/molds.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/molds.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -1415,7 +1415,7 @@ WTWJS.prototype.submitMoldForm = function(zselect) {
 				'deleted': '0',
 				'function':'savemold'
 			};
-			WTW.postJSON("/core/handlers/molds.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/molds.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -2051,7 +2051,7 @@ WTWJS.prototype.closeEditPoles = function() {
 
 /* recover deleted molds */
 
-WTWJS.prototype.openRecoverItems = function() {
+WTWJS.prototype.openRecoverItems = async function() {
 	/* open recover items form will search for any molds with the delete flag set; provides a list to view and select for recovery */
 	try {
 		var zpath = "";
@@ -2064,7 +2064,7 @@ WTWJS.prototype.openRecoverItems = function() {
 		}
 		dGet('wtw_deleteditemslist').innerHTML = "";
 		if (zpath != "") {
-			WTW.getJSON(zpath, 
+			await WTW.getAsyncJSON(zpath, 
 				function(response) {
 					var zrecoverylist = JSON.parse(response);
 					if (zrecoverylist != null) {
@@ -2083,7 +2083,7 @@ WTWJS.prototype.openRecoverItems = function() {
 	}
 }
 
-WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
+WTWJS.prototype.recoverMold = async function(zmoldid, zmoldtype) {
 	/* mold selected for recovery, undo the delete flag and add the mold back into the 3D Scene for edit */
 	try {
 		switch (zmoldtype) {
@@ -2096,13 +2096,13 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 					'deleted': '0',
 					'function':'deletemold'
 				};
-				WTW.postJSON("/core/handlers/molds.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/molds.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
 					}
 				);
-				WTW.getJSON("/connect/communitymoldsrecover.php?communityid=" + communityid + "&communityind=-1&communitymoldid=" + zmoldid, 
+				await WTW.getAsyncJSON("/connect/communitymoldsrecover.php?communityid=" + communityid + "&communityind=-1&communitymoldid=" + zmoldid, 
 					function(response) {
 						var zcommunitymold = JSON.parse(response);
 						var zmoldind = WTW.getNextCount(WTW.communitiesMolds);
@@ -2133,14 +2133,14 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 					'deleted': '0',
 					'function':'deletemold'
 				};
-				WTW.postJSON("/core/handlers/molds.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/molds.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
 					}
 				);
 				var zbuildingind = WTW.getBuildingInd(buildingid);
-				WTW.getJSON("/connect/buildingmoldsrecover.php?buildingid=" + buildingid + "&buildingind=" + zbuildingind + "&buildingmoldid=" + zmoldid, 
+				await WTW.getAsyncJSON("/connect/buildingmoldsrecover.php?buildingid=" + buildingid + "&buildingind=" + zbuildingind + "&buildingmoldid=" + zmoldid, 
 					function(response) {
 						var zbuildingmold = JSON.parse(response);
 						var zmoldind = WTW.getNextCount(WTW.buildingMolds);
@@ -2171,14 +2171,14 @@ WTWJS.prototype.recoverMold = function(zmoldid, zmoldtype) {
 					'deleted': '0',
 					'function':'deletemold'
 				};
-				WTW.postJSON("/core/handlers/molds.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/molds.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
 					}
 				);
 				var zthingind = WTW.getThingInd(thingid);
-				WTW.getJSON("/connect/thingmoldsrecover.php?thingid=" + thingid + "&thingind=" + zthingind + "&thingmoldid=" + zmoldid, 
+				await WTW.getAsyncJSON("/connect/thingmoldsrecover.php?thingid=" + thingid + "&thingind=" + zthingind + "&thingmoldid=" + zmoldid, 
 					function(response) {
 						var zthingmold = JSON.parse(response);
 						var zmoldind = WTW.getNextCount(WTW.thingMolds);

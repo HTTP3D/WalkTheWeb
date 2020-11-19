@@ -9,7 +9,7 @@
 /* also includes 3D Scene settings: sky, gravity, water level, extended ground, etc... */
 /* 		and common functions for 3D Communities, 3D Buildings, and 3D Things */
 
-WTWJS.prototype.openCommunityForm = function(zcommunityid) {
+WTWJS.prototype.openCommunityForm = async function(zcommunityid) {
 	/* open the 3D Community Information form */
 	try {
 		WTW.show('wtw_loadingcommunityform');
@@ -17,7 +17,7 @@ WTWJS.prototype.openCommunityForm = function(zcommunityid) {
 		WTW.hide('wtw_adminmenu25b');
 		WTW.hide('wtw_adminmenu42b');
 		dGet('wtw_tcommunityalttag').value = "";
-		WTW.getJSON("/connect/communities.php", 
+		await WTW.getAsyncJSON("/connect/communities.php", 
 			function(response) {
 				WTW.communities = JSON.parse(response);
 				if (WTW.communities != null) {
@@ -52,11 +52,11 @@ WTWJS.prototype.openCommunityForm = function(zcommunityid) {
 	}
 }		
 
-WTWJS.prototype.loadCommunityForm = function(zcommunityid) {
+WTWJS.prototype.loadCommunityForm = async function(zcommunityid) {
 	/* load settings to the 3D Community Information Form */
 	try {
 		dGet('wtw_tcommunityalttag').value = "";
-		WTW.getJSON("/connect/communities.php", 
+		await WTW.getAsyncJSON("/connect/communities.php", 
 			function(response) {
 				WTW.communities = JSON.parse(response);
 				if (WTW.communities != null) {
@@ -83,7 +83,7 @@ WTWJS.prototype.loadCommunityForm = function(zcommunityid) {
 	}
 }		
 
-WTWJS.prototype.submitCommunityForm = function(w) {
+WTWJS.prototype.submitCommunityForm = async function(w) {
 	/* submit the 3D Community Information Form */
 	try {
 		switch (w) {
@@ -94,7 +94,7 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 					'communityid': communityid,
 					'function':'deletecommunity'
 				};
-				WTW.postJSON("/core/handlers/communities.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -140,7 +140,7 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 					'alttag': btoa(dGet('wtw_tcommunityalttag').value),
 					'function':'savecommunity'
 				};
-				WTW.postJSON("/core/handlers/communities.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -170,11 +170,11 @@ WTWJS.prototype.submitCommunityForm = function(w) {
 	}
 }
 
-WTWJS.prototype.copyMyCommunity = function() {
+WTWJS.prototype.copyMyCommunity = async function() {
 	/* make a copy of an existing 3D Community (use as backup or as a new 3D Community to edit and use) */
 	try {
 		dGet('wtw_tcommunityname').value = '';
-		WTW.getJSON("/connect/communities.php?userid=" + dGet('wtw_tuserid').value, 
+		await WTW.getAsyncJSON("/connect/communities.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.communities = JSON.parse(response);
 				if (WTW.communities != null) {
@@ -203,7 +203,7 @@ WTWJS.prototype.copyMyCommunity = function() {
 	}
 }
 
-WTWJS.prototype.copyCommunity = function(zcopycommunityid, zcommunityname) {
+WTWJS.prototype.copyCommunity = async function(zcopycommunityid, zcommunityname) {
 	/* submit the copy process to the database to duplicate */
 	try {
 		if (zcommunityname != "" && dGet('wtw_tcommunityname').value == "") {
@@ -226,7 +226,7 @@ WTWJS.prototype.copyCommunity = function(zcopycommunityid, zcommunityname) {
 			'alttag': '',
 			'function':'savecommunity'
 		};
-		WTW.postJSON("/core/handlers/communities.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -251,13 +251,13 @@ WTWJS.prototype.copyCommunityComplete = function(zcommunityid) {
 	} 
 }
 
-WTWJS.prototype.getSelectCommunitiesList = function() {
+WTWJS.prototype.getSelectCommunitiesList = async function() {
 	/* populates the admin menu for My 3D Community to load and edit */
 	try {
 		WTW.hide('wtw_listcommunities');
 		WTW.show('wtw_loadingcommunityid');
 		dGet("wtw_listcommunities").innerHTML = "";
-		WTW.getJSON("/connect/communities.php", 
+		await WTW.getAsyncJSON("/connect/communities.php", 
 			function(response) {
 				WTW.communities = JSON.parse(response);
 				if (WTW.communities != null) {
@@ -300,7 +300,7 @@ WTWJS.prototype.communitySearchShowCommunity = function(newcommunityid) {
 	}
 }
 
-WTWJS.prototype.openShareCommunityForm = function() {
+WTWJS.prototype.openShareCommunityForm = async function() {
 	/* share 3D Community is used to send a copy to WalkTheWeb for others to search and download copies of their own */
 	try {
 		dGet("wtw_tsharecommtempname").value = "";
@@ -308,7 +308,7 @@ WTWJS.prototype.openShareCommunityForm = function() {
 		dGet('wtw_tsharecommtags').value = "";
 		WTW.hide('wtw_adminmenu29b');
 		WTW.show('wtw_loadingsharecommunityform');
-		WTW.getJSON("/connect/communities.php", 
+		await WTW.getAsyncJSON("/connect/communities.php", 
 			function(response) {
 				WTW.communities = JSON.parse(response);
 				if (WTW.communities != null) {
@@ -350,7 +350,7 @@ WTWJS.prototype.openShareCommunityForm = function() {
 	}
 }		
 
-WTWJS.prototype.saveShareCommunityForm = function() {
+WTWJS.prototype.saveShareCommunityForm = async function() {
 	/* process the share 3D Community and Save the settings locally for next Share */
 	try {
 		var zrequest = {
@@ -360,7 +360,7 @@ WTWJS.prototype.saveShareCommunityForm = function() {
 			'tags': btoa(dGet('wtw_tsharecommtags').value),
 			'function':'savecommunitytemplate'
 		};
-		WTW.postJSON("/core/handlers/communities.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				dGet('wtw_sharehash').value = zresponse.sharehash;
@@ -371,7 +371,7 @@ WTWJS.prototype.saveShareCommunityForm = function() {
 	}
 }
 
-WTWJS.prototype.shareCommunityTemplate = function() {
+WTWJS.prototype.shareCommunityTemplate = async function() {
 	/* after user is sent to confirm form to make sure they want to Share the 3D Community */
 	/* this process the share */
 	try {
@@ -382,7 +382,7 @@ WTWJS.prototype.shareCommunityTemplate = function() {
 			'sharehash': dGet('wtw_sharehash').value,
 			'function':'sharecommunitytemplate'
 		};
-		WTW.postJSON("/core/handlers/communities.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 
@@ -495,7 +495,7 @@ WTWJS.prototype.openEditGroundSettings = function() {
 	}		
 }
 
-WTWJS.prototype.saveGround = function() {
+WTWJS.prototype.saveGround = async function() {
 	/* save extended ground texture settings */
 	try {
 		var zgroundtextureid = WTW.init.groundTextureID;
@@ -525,7 +525,7 @@ WTWJS.prototype.saveGround = function() {
 			'groundtextureid': zgroundtextureid,
 			'function':'saveextendedground'
 		};
-		WTW.postJSON("/core/handlers/communities.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -748,7 +748,7 @@ WTWJS.prototype.cancelSkyDome = function() {
 	}
 }
 
-WTWJS.prototype.saveSkyDome = function() {
+WTWJS.prototype.saveSkyDome = async function() {
 	/* save skydome sky changes */
 	try {
 		var skydomeid = WTW.init.skyTextureID;
@@ -777,7 +777,7 @@ WTWJS.prototype.saveSkyDome = function() {
 			'skymiecoefficient': WTW.init.skyMieCoefficient,
 			'function':'saveskydome'
 		};
-		WTW.postJSON("/core/handlers/communities.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -789,7 +789,7 @@ WTWJS.prototype.saveSkyDome = function() {
 }
 
 /* 3D Community Scene gravity */
-WTWJS.prototype.saveGravity = function() {
+WTWJS.prototype.saveGravity = async function() {
 	/* save community gravity (applies to scene when loaded) */
 	try {
 		if (communityid != "") {
@@ -798,7 +798,7 @@ WTWJS.prototype.saveGravity = function() {
 				'gravity':WTW.init.gravity,
 				'function':'savegravity'
 			};
-			WTW.postJSON("/core/handlers/communities.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -810,7 +810,7 @@ WTWJS.prototype.saveGravity = function() {
 				'gravity':WTW.init.gravity,
 				'function':'savegravity'
 			};
-			WTW.postJSON("/core/handlers/buildings.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 				function(zresponse) {
 				}
 			);
@@ -820,7 +820,7 @@ WTWJS.prototype.saveGravity = function() {
 				'gravity':WTW.init.gravity,
 				'function':'savegravity'
 			};
-			WTW.postJSON("/core/handlers/things.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -981,7 +981,7 @@ WTWJS.prototype.closeConfirmation = function(w) {
 }
 
 /* start position */
-WTWJS.prototype.setStartPosition = function(zcommunityid, zbuildingid, zthingid) {
+WTWJS.prototype.setStartPosition = async function(zcommunityid, zbuildingid, zthingid) {
 	/* sets start position for 3D COmmuity, 3D Building, or 3D Thing */
 	try {
 		if (WTW.myAvatar!= null) {
@@ -1001,7 +1001,7 @@ WTWJS.prototype.setStartPosition = function(zcommunityid, zbuildingid, zthingid)
 					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
 					'function':'savestartposition'
 				};
-				WTW.postJSON("/core/handlers/communities.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -1021,7 +1021,7 @@ WTWJS.prototype.setStartPosition = function(zcommunityid, zbuildingid, zthingid)
 					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
 					'function':'savestartposition'
 				};
-				WTW.postJSON("/core/handlers/buildings.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 					function(zresponse) {
 					}
 				);
@@ -1039,7 +1039,7 @@ WTWJS.prototype.setStartPosition = function(zcommunityid, zbuildingid, zthingid)
 					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
 					'function':'savestartposition'
 				};
-				WTW.postJSON("/core/handlers/things.php", zrequest, 
+				await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -1059,13 +1059,13 @@ WTWJS.prototype.setStartPosition = function(zcommunityid, zbuildingid, zthingid)
 
 /* screen capture for babylon canvas of 3D Scene */
 
-WTWJS.prototype.openUpdateSnapshotForm = function() {
+WTWJS.prototype.openUpdateSnapshotForm = async function() {
 	/* open stapshot form view  and load current snapshot if any */
 	try {
 		WTW.hide('wtw_adminmenu69b');
 		WTW.show('wtw_loadingupdatesnapshot');
 		if (communityid != '') {
-			WTW.getJSON("/connect/communities.php", 
+			await WTW.getAsyncJSON("/connect/communities.php", 
 				function(response) {
 					WTW.communities = JSON.parse(response);
 					if (WTW.communities != null) {
@@ -1096,7 +1096,7 @@ WTWJS.prototype.openUpdateSnapshotForm = function() {
 				}
 			);
 		} else if (buildingid != '') {
-			WTW.getJSON("/connect/buildings.php", 
+			await WTW.getAsyncJSON("/connect/buildings.php", 
 				function(response) {
 					WTW.buildings = JSON.parse(response);
 					if (WTW.buildings != null) {
@@ -1127,7 +1127,7 @@ WTWJS.prototype.openUpdateSnapshotForm = function() {
 				}
 			);
 		} else if (thingid != '') {
-			WTW.getJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+			await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 				function(response) {
 					WTW.things = JSON.parse(response);
 					if (WTW.things != null) {
@@ -1163,7 +1163,7 @@ WTWJS.prototype.openUpdateSnapshotForm = function() {
 	}
 }
 
-WTWJS.prototype.snapshot3D = function(zfilepath, zfilename) {
+WTWJS.prototype.snapshot3D = async function(zfilepath, zfilename) {
 	/* capture 3D Scene and save file to server */
 	try {
 		dGet('wtw_bupdatesnapshot').onclick = "";
@@ -1189,7 +1189,7 @@ WTWJS.prototype.snapshot3D = function(zfilepath, zfilename) {
 			'filedata': filedata,
 			'function':'saveimage'
 		};
-		WTW.postJSON("/core/handlers/uploads.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */

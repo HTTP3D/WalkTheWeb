@@ -29,11 +29,11 @@ WTWJS.prototype.updateProgressBar = function(zprogress, ztotal) {
 	return zprogress;
 }
 
-WTWJS.prototype.communitySearch = function(search) {
+WTWJS.prototype.communitySearch = async function(search) {
 	/* keyword search to find a community to download to your instance */
 	try {
 		search = WTW.encode(search);
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=community", 
+		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=community", 
 			function(response) {
 				WTW.communitySearchReply(JSON.parse(response));
 			}
@@ -71,11 +71,11 @@ WTWJS.prototype.communitySearchReply = function(zresponse) {
 	}
 }
 
-WTWJS.prototype.buildingSearch = function(zsearch) {
+WTWJS.prototype.buildingSearch = async function(zsearch) {
 	/* keyword search to find a building to download to your instance */
 	try {
 		zsearch = WTW.encode(zsearch);
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + zsearch + "&webtype=building", 
+		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + zsearch + "&webtype=building", 
 			function(response) {
 				WTW.buildingSearchReply(JSON.parse(response));
 			}
@@ -113,11 +113,11 @@ WTWJS.prototype.buildingSearchReply = function(zresponse) {
 	}
 }
 
-WTWJS.prototype.thingSearch = function(search) {
+WTWJS.prototype.thingSearch = async function(search) {
 	/* keyword search to find a thing to download to your instance */
 	try {
 		search = WTW.encode(search);
-		WTW.getJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=thing", 
+		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=thing", 
 			function(response) {
 				WTW.thingSearchReply(JSON.parse(response));
 			}
@@ -156,7 +156,7 @@ WTWJS.prototype.thingSearchReply = function(zresponse) {
 	}
 }
 
-WTWJS.prototype.downloadWeb = function(zcopywebid, zwebtype) {
+WTWJS.prototype.downloadWeb = async function(zcopywebid, zwebtype) {
 	/* This process takes the selected 3D Web and downloads a copy to the local instance */
 	try {
 		var isinstall = true;
@@ -205,7 +205,7 @@ WTWJS.prototype.downloadWeb = function(zcopywebid, zwebtype) {
 			'buildingrotationz': zbuildingrotationz,
 			'function':'downloadweb'
 		};
-		WTW.postJSON("/core/handlers/communities.php", zrequest, 
+		await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */

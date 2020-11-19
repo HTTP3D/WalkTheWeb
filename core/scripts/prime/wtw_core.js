@@ -543,11 +543,11 @@ WTWJS.prototype.loadUserCanvas = function() {
 	} 
 }
 
-WTWJS.prototype.loadScene = function() {
+WTWJS.prototype.loadScene = async function() {
 	/* if a community, fetch the community scene settings */
 	try {
 		if (communityid != 0) {
-			WTW.getJSON("/connect/community.php?communityid=" + communityid, 
+			await WTW.getAsyncJSON("/connect/community.php?communityid=" + communityid, 
 				function(response) {
 					WTW.loadCommunity(JSON.parse(response));
 				}
@@ -756,7 +756,7 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 	} 
 }
 
-WTWJS.prototype.getConnectingGrids = function() {
+WTWJS.prototype.getConnectingGrids = async function() {
 	/* fetch the connecting grids */
 	/* connecting grids are pin drops in the 3D Scene that define the position, rotation, and scaling for each web object added to the 3D Scene */
 	try {
@@ -782,7 +782,7 @@ WTWJS.prototype.getConnectingGrids = function() {
 			}
 			/* fetch all connecting grids that are in the primary web object loaded */
 			/* example, in a 3D Community, get any 3D Buildings, 3D Things, and 3D Things in the 3D Buildings in the 3D Community */
-			WTW.getJSON("/connect/connectinggrids.php?parentwebid=" + zparentwebid + "&startpositionx=" + zpositionx + "&startpositiony=" + zpositiony + "&startpositionz=" + zpositionz + "&userid=" + dGet('wtw_tuserid').value, 
+			await WTW.getAsyncJSON("/connect/connectinggrids.php?parentwebid=" + zparentwebid + "&startpositionx=" + zpositionx + "&startpositiony=" + zpositiony + "&startpositionz=" + zpositionz + "&userid=" + dGet('wtw_tuserid').value, 
 				function(zresponse) {
 					WTW.loadConnectingGrids(JSON.parse(zresponse));
 				}
@@ -895,7 +895,7 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 	} 
 }
 
-WTWJS.prototype.getActionZones = function(zconnectinggridind) {
+WTWJS.prototype.getActionZones = async function(zconnectinggridind) {
 	/* fetch action zones for a connecting grid */
 	/* action zones are areas or events that trigger functions to execute */
 	/* Load Zone is the main action zone that fetches molds (mesh definitions) from web servers when your avatar enters the Load Zone (often a rectangle cube) */
@@ -927,7 +927,7 @@ WTWJS.prototype.getActionZones = function(zconnectinggridind) {
 			}
 			/* fetch the action zones from the internet for a given web object */
 			if (zaltloadactionzoneid == "") {
-				WTW.getJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + WTW.connectingGrids[zconnectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "&connectinggridind=" + zconnectinggridind, 
+				await WTW.getAsyncJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + WTW.connectingGrids[zconnectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "&connectinggridind=" + zconnectinggridind, 
 					function(response) {
 						WTW.loadActionZones(JSON.parse(response));
 					}
@@ -1101,7 +1101,7 @@ WTWJS.prototype.getMoldsByWebID = function(zactionzoneind) {
 			}
 		);
 		/* fetch automations (automated sequences) to be loaded by the load zone (temporarily disabled - until they are added to the admin interface) */
-/*		WTW.getJSON("/connect/automationsbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + parentname + "&connectinggridid=" + zconnectinggridid + "&connectinggridind=" + zconnectinggridind, 
+/*		await WTW.getAsyncJSON("/connect/automationsbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + parentname + "&connectinggridid=" + zconnectinggridid + "&connectinggridind=" + zconnectinggridind, 
 			function(response) {
 				WTW.loadAutomations(JSON.parse(response));
 			}

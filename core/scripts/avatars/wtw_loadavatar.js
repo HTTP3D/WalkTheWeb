@@ -45,7 +45,7 @@ WTWJS.prototype.reloadAvatar = function() {
     }
 }
 
-WTWJS.prototype.getSavedAvatar = function(zavatarname, zglobaluseravatarid, zuseravatarid, zavatarid, zsendrefresh) {
+WTWJS.prototype.getSavedAvatar = async function(zavatarname, zglobaluseravatarid, zuseravatarid, zavatarid, zsendrefresh) {
 	/* fetches the avatar definition for either the global avatar, local logged in avatar, or anonymous avatar */
 	try {
 		if (zglobaluseravatarid == undefined) {
@@ -68,7 +68,7 @@ WTWJS.prototype.getSavedAvatar = function(zavatarname, zglobaluseravatarid, zuse
 					'serverinstanceid':btoa(dGet('wtw_serverinstanceid').value),
 					'function':'getglobalavatar'
 				};
-				WTW.postJSON("https://3dnet.walktheweb.com/connect/globalavatar.php", zrequest, 
+				await WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalavatar.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						if (zresponse.avatar != null) {
@@ -82,7 +82,7 @@ WTWJS.prototype.getSavedAvatar = function(zavatarname, zglobaluseravatarid, zuse
 				if (zavatarname.indexOf("-") > -1) {
 					zinstanceid = zavatarname.split('-')[1];
 				}
-				WTW.getJSON("/connect/useravatar.php?id=" + btoa(zavatarid) + "&a=" + btoa(zuseravatarid) + "&i=" + btoa(zinstanceid), 
+				await WTW.getAsyncJSON("/connect/useravatar.php?id=" + btoa(zavatarid) + "&a=" + btoa(zuseravatarid) + "&i=" + btoa(zinstanceid), 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						if (zresponse != null) {
@@ -566,7 +566,7 @@ WTWJS.prototype.loadAvatarAnimation = function(zavatarname, zuseravataranimation
     }
 }
 
-WTWJS.prototype.changeAvatarAnimation = function(zselobj) {
+WTWJS.prototype.changeAvatarAnimation = async function(zselobj) {
 	/* allows the menu to select an animation for an event */
 	try {
 		var zanimationdata = WTW.getDDLValue(zselobj.id);
@@ -611,7 +611,7 @@ WTWJS.prototype.changeAvatarAnimation = function(zselobj) {
 				'speedratio':zspeedratio,
 				'function':'saveavataranimation'
 			};
-			WTW.postJSON("/core/handlers/avatars.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -864,7 +864,7 @@ WTWJS.prototype.showAvatarDisplayName = function(zopen) {
 	}
 }
 
-WTWJS.prototype.saveAvatarDisplayName = function() {
+WTWJS.prototype.saveAvatarDisplayName = async function() {
 	/* updates the displayname from the menu - writes it to the database */
 	try {
 		if (dGet('wtw_tuserid').value != '') {
@@ -880,7 +880,7 @@ WTWJS.prototype.saveAvatarDisplayName = function() {
 				'avatardisplayname': dGet('wtw_tavatardisplayname').value,
 				'function':'saveavatardisplayname'
 			};
-			WTW.postJSON("/core/handlers/avatars.php", zrequest, 
+			await WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
