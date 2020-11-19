@@ -51,7 +51,7 @@ class wtwanimations {
 	}
 
 	public function getObjectAnimation($zobjectanimationid) {
-		/* animations can be assigned to any mold in the scene (not only 3D Objects) */
+		/* animations can be assigned to any mold in the scene (not only 3D Models) */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
@@ -81,7 +81,7 @@ class wtwanimations {
 	}
 
 	public function saveObjectAnimation($zobjectanimationid, $zuploadobjectid, $zanimationname, $zmoldevent, $zmoldnamepart, $zstartframe, $zendframe, $zanimationloop, $zspeedratio, $zanimationendscript, $zanimationendparameters, $zstopcurrentanimations, $zsoundid, $zsoundmaxdistance) {
-		/* found on the media library, 3D Objects upload pages, animation section */
+		/* found on the media library, 3D Models upload pages, animation section */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {

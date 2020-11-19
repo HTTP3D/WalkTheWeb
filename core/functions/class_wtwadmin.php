@@ -273,6 +273,20 @@ class wtwadmin {
 			$pagedata .= "	<div id=\"wtw_dashboardpage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$pagedata .= "		<div id=\"wtw_loadingdashboard\" class=\"wtw-loadingnotice\">Loading...</div>\r\n";
 			$pagedata .= "		<div id=\"wtw_dashboard\">\r\n";
+
+			$pagedata .= "			<div id=\"wtw_videolinks\" class=\"wtw-dashboardboxleftdouble\" style=\"display:none;visibility:hidden;\">\r\n";
+			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\" onclick=\"WTW.toggleDashboardBox('wtw_videolinksdiv');\"><div id=\"wtw_videolinksdivarrow\" class=\"wtw-divarrow\">⯅</div>WalkTheWeb Videos</div>\r\n";
+			$pagedata .= "				<div id=\"wtw_videolinksdiv\" class=\"wtw-dashboardboxmax\" style=\"min-height:550px;\">\r\n";
+			$pagedata .= "					<div id=\"wtw_latestvideo\"></div>\r\n";
+			$pagedata .= "					<h3 id=\"wtw_latestvideotitle\" class=\"wtw-black\">WalkTheWeb Video</h3>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<div id=\"wtw_latestvideodetails\" class=\"wtw-dashboardlabel\">Latest Video</div>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "					<h2><a href='https://www.youtube.com/channel/UCEcaZ947Mv1ylLd_MYS1ivg' target='_blank'>View More WalkTheWeb Videos</a></h2>\r\n";
+			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$pagedata .= "				</div>\r\n";
+			$pagedata .= "			</div>\r\n";
+
 			$pagedata .= "			<div id=\"wtw_userwebcount\" class=\"wtw-dashboardboxleft\">\r\n";
 			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\" onclick=\"WTW.toggleDashboardBox('wtw_webcountdiv');\"><div id=\"wtw_webcountdivarrow\" class=\"wtw-divarrow\">⯅</div>3D Website Count</div>\r\n";
 			$pagedata .= "				<div id=\"wtw_webcountdiv\" class=\"wtw-dashboardboxmax\">\r\n";
@@ -295,17 +309,6 @@ class wtwadmin {
 			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$pagedata .= "					<div class=\"wtw-dashboardlabel\">3D Things</div>\r\n";
 			$pagedata .= "					<div id=\"wtw_otherthingcount\" class=\"wtw-dashboardvalue\"></div>\r\n";
-			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$pagedata .= "				</div>\r\n";
-			$pagedata .= "			</div>\r\n";
-
-			$pagedata .= "			<div id=\"wtw_videolinks\" class=\"wtw-dashboardboxleftdouble\" style=\"display:none;visibility:hidden;\">\r\n";
-			$pagedata .= "				<div class=\"wtw-dashboardboxtitle\" onclick=\"WTW.toggleDashboardBox('wtw_videolinksdiv');\"><div id=\"wtw_videolinksdivarrow\" class=\"wtw-divarrow\">⯅</div>WalkTheWeb Videos</div>\r\n";
-			$pagedata .= "				<div id=\"wtw_videolinksdiv\" class=\"wtw-dashboardboxmax\" style=\"min-height:550px;\">\r\n";
-			$pagedata .= "					<div id=\"wtw_latestvideo\"></div>\r\n";
-			$pagedata .= "					<h3 id=\"wtw_latestvideotitle\" class=\"wtw-black\">WalkTheWeb Video</h3>\r\n";
-			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$pagedata .= "					<div id=\"wtw_latestvideodetails\" class=\"wtw-dashboardlabel\">Latest Video</div>\r\n";
 			$pagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$pagedata .= "				</div>\r\n";
 			$pagedata .= "			</div>\r\n";
@@ -341,16 +344,16 @@ class wtwadmin {
 			$pagedata .= "			<div id=\"wtw_menuwtwbuildings\" class=\"wtw-menutabtop\" onclick=\"WTW.openFullPageForm('importpage','buildings');\">3D Buildings</div>\r\n";
 			$pagedata .= "			<div id=\"wtw_menuwtwthings\" class=\"wtw-menutabtop\" onclick=\"WTW.openFullPageForm('importpage','things');\">3D Things</div>\r\n";
 			$pagedata .= "			<div id=\"searchcommunitiesdiv\" class=\"wtw-searchbar\">\r\n";
-			$pagedata .= "				<b>Search:</b> <input id='wtw_tcommunitysearch' type='text' value='' size='20' maxlength='255' />\r\n";
-			$pagedata .= "				<input id='wtw_bcommunitysearch' type='button' value='Go' onclick=\"WTW.communitySearch(dGet('wtw_tcommunitysearch').value);\" style='font-size:1.4em;border-radius:10px;' />\r\n";
+			$pagedata .= "				<b>Search:</b> <input id='wtw_tcommunitysearch' type='text' value='' size='20' maxlength='255' class='wtw-gotext' />\r\n";
+			$pagedata .= "				<input id='wtw_bcommunitysearch' type='button' value='Go' onclick=\"WTW.communitySearch(dGet('wtw_tcommunitysearch').value);\" class='wtw-gobutton' />\r\n";
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "			<div id=\"searchbuildingsdiv\" class=\"wtw-searchbar\">\r\n";
-			$pagedata .= "				<b>Search:</b> <input id='wtw_tbuildingsearch' type='text' value='' size='20' maxlength='255' />\r\n";
-			$pagedata .= "				<input id='wtw_bbuildingsearch' type='button' value='Go' onclick=\"WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);\" style='font-size:1.4em;border-radius:10px;' />\r\n";
+			$pagedata .= "				<b>Search:</b> <input id='wtw_tbuildingsearch' type='text' value='' size='20' maxlength='255' class='wtw-gotext' />\r\n";
+			$pagedata .= "				<input id='wtw_bbuildingsearch' type='button' value='Go' onclick=\"WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);\" class='wtw-gobutton' />\r\n";
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "			<div id=\"searchthingsdiv\" class=\"wtw-searchbar\">\r\n";
-			$pagedata .= "				<b>Search:</b> <input id='wtw_tthingsearch' type='text' value='' size='20' maxlength='255' />\r\n";
-			$pagedata .= "				<input id='wtw_bthingsearch' type='button' value='Go' onclick=\"WTW.thingSearch(dGet('wtw_tthingsearch').value);\" style='font-size:1.4em;border-radius:10px;' />\r\n";
+			$pagedata .= "				<b>Search:</b> <input id='wtw_tthingsearch' type='text' value='' size='20' maxlength='255' class='wtw-gotext' />\r\n";
+			$pagedata .= "				<input id='wtw_bthingsearch' type='button' value='Go' onclick=\"WTW.thingSearch(dGet('wtw_tthingsearch').value);\" class='wtw-gobutton' />\r\n";
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "		</div><div class=\"wtw-clear\"></div><hr />\r\n";
 			$pagedata .= "		<div style='width:100%;margin:0px;text-align:center;'>\r\n";
@@ -390,19 +393,19 @@ class wtwadmin {
 			$pagedata .= "					<option value=\"video\">Videos</option>\r\n";
 			$pagedata .= "					<option value=\"audio\">Sounds</option>\r\n";
 			$pagedata .= "					<option value=\"doc\">Documents</option>\r\n";
-			$pagedata .= "					<option value=\"object\">3D Objects</option>\r\n";
+			$pagedata .= "					<option value=\"object\">3D Models</option>\r\n";
 			$pagedata .= "				</select>\r\n";
 			$pagedata .= "			</div>\r\n";
 
 			$pagedata .= "			<div id=\"wtw_menufilter\" class=\"wtw-menufileselect\" >\r\n";
-			$pagedata .= "			<input type=\"text\" id=\"wtw_objectfilter\" onkeyup=\"WTW.filterObjects(2);\" onfocus=\"WTW.filterObjects(1);\" onblur=\"WTW.filterObjects(0);\" value=\"Name Filter\" />\r\n";
+			$pagedata .= "			<input type=\"text\" id=\"wtw_modelfilter\" onkeyup=\"WTW.filterModels(2);\" onfocus=\"WTW.filterModels(1);\" onblur=\"WTW.filterModels(0);\" value=\"Name Filter\" />\r\n";
 			$pagedata .= "			</div>\r\n";
 			
 			$pagedata .= "			<div id=\"wtw_menuimagecommunity\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(1);\">3D Community Files</div>\r\n";
 			$pagedata .= "			<div id=\"wtw_menuimagemy\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(2);\">My Files</div>\r\n";
 			$pagedata .= "			<div id=\"wtw_menuimagestock\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(3);\">Stock Files</div>\r\n";
-			$pagedata .= "			<div id=\"wtw_menuuploadedobjects\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(4);\">3D Objects</div>\r\n";
-			$pagedata .= "			<div id=\"wtw_menuwtwdownloads\" class=\"wtw-menutabtop\" onclick=\"WTW.openFullPageForm('importpage','communities');;\">WalkTheWeb Downloads</div>\r\n";
+			$pagedata .= "			<div id=\"wtw_menuuploadedobjects\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(4);\">3D Models</div>\r\n";
+			$pagedata .= "			<div id=\"wtw_menuwtwdownloads\" class=\"wtw-menutabtop\" onclick=\"WTW.openFullPageForm('importpage','communities');\">WalkTheWeb Downloads</div>\r\n";
 			$pagedata .= "			<div id=\"wtw_hiddenimagesoption\" class=\"wtw-hiddenimageoption\">\r\n";
 			$pagedata .= "				<input type=\"checkbox\" id=\"wtw_bshowhiddenimages\" onchange=\"WTW.selectFileForm(this);\" class=\"wtw-cursorpointer\" /> <div id=\"wtw_showhiddenimagesdiv\" onclick=\"WTW.selectFileForm(this);\" class=\"wtw-showimageoption\">Show Hidden Images</div>\r\n";
 			$pagedata .= "			</div>\r\n";
@@ -420,11 +423,11 @@ class wtwadmin {
 			$pagedata .= "				<div id=\"wtw_stockimagesdiv\" class=\"wtw-fullpage\"></div>\r\n";
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "			<div id=\"wtw_menuuploadedobjectsdiv\" class=\"wtw-subdiv\">\r\n";
-			$pagedata .= "				<div id=\"wtw_uploadedobjectsdiv\" class=\"wtw-fullpage\" style=\"display:none;\"></div>\r\n";
-			$pagedata .= "				<div id=\"wtw_uploadedobjectdetailsdiv\" class=\"wtw-fullpage\" style=\"display:none;\">\r\n";
-			$pagedata .= "					<div id=\"wtw_uploadedobjectsnamediv\"></div>\r\n";
-			$pagedata .= "					<div id=\"wtw_uploadedobjectsfilesdiv\"></div>\r\n";
-			$pagedata .= "					<div id=\"wtw_uploadedobjectsanimationsdiv\"></div>\r\n";
+			$pagedata .= "				<div id=\"wtw_uploadedmodelsdiv\" class=\"wtw-fullpage\" style=\"display:none;\"></div>\r\n";
+			$pagedata .= "				<div id=\"wtw_uploadedmodeldetailsdiv\" class=\"wtw-fullpage\" style=\"display:none;\">\r\n";
+			$pagedata .= "					<div id=\"wtw_uploadedmodelsnamediv\"></div>\r\n";
+			$pagedata .= "					<div id=\"wtw_uploadedmodelsfilesdiv\"></div>\r\n";
+			$pagedata .= "					<div id=\"wtw_uploadedmodelsanimationsdiv\"></div>\r\n";
 			$pagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$pagedata .= "					<div id='wtw_addanimationdiv' class='wtw-objectcontainer' style='display:none;visibility:hidden;'><div id='wtw_addanimationtitle' class='wtw-objectfile'>Edit Animation</div>\r\n";
 			$pagedata .= "						<div class='wtw-objectfolder'>\r\n";
