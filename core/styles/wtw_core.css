@@ -350,7 +350,7 @@ input.wtw-smallprintinput {
 .wtw-menutabtop:hover {
 	cursor:pointer;
 	color:#41593D;
-	background-color:#ffffff;
+	background-color:#feffce;
 	border:1px solid #41593D;
 }
 .wtw-menutabtopselected {
@@ -2057,6 +2057,25 @@ h3.wtw-categoryheading:hover {
 	color:#ffffcc;
 	cursor:pointer;
 }
+.wtw-gobutton {
+	font-size:1.4em;
+	border-radius:10px;
+	background-color:#ffffff;
+	color:#000000;
+	border:1px solid #000000;
+}
+.wtw-gobutton:hover {
+	background-color:#feffce;
+	color:#41593D;
+	cursor:pointer;
+	border:1px solid #41593D;
+}
+.wtw-gotext {
+	min-height:32px;
+	min-width:300px;
+	font-size:1.4em;
+}
+
 @keyframes wtw-blinker {
   50% {
     opacity: 0;
