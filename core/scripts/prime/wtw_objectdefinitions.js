@@ -521,7 +521,7 @@ WTWJS.prototype.newUpload = function() {
 }
 
 WTWJS.prototype.newObjectAnimation = function() {
-	/* create an instance for the Object Animation (Animation defined for 3D Objects like Babylon Files) */
+	/* create an instance for the Object Animation (Animation defined for 3D Models like Babylon Files) */
 	var objectanimation = '';
 	try {
 		objectanimation = {

@@ -1449,8 +1449,8 @@ WTWJS.prototype.resetUploadButton = function() {
 				category = 'object';
 			}
 			dGet('wtw_bstartimageupload').innerHTML = "Upload File(s)";
-			if ((category == '' || category == 'object') && dGet('wtw_menuuploadedobjects').className == 'wtw-menutabtopselected' && dGet('wtw_uploadedobjectsdiv').style.display != 'none') {
-				if (dGet('wtw_uploadedobjectdetailsdiv').style.display == 'none') {
+			if ((category == '' || category == 'object') && dGet('wtw_menuuploadedobjects').className == 'wtw-menutabtopselected' && dGet('wtw_uploadedmodelsdiv').style.display != 'none') {
+				if (dGet('wtw_uploadedmodeldetailsdiv').style.display == 'none') {
 					dGet('wtw_bstartimageupload').innerHTML = 'Upload Primary 3D File';
 				} else {
 					dGet('wtw_bstartimageupload').innerHTML = 'Upload or Replace File(s)';
@@ -1463,8 +1463,8 @@ WTWJS.prototype.resetUploadButton = function() {
 	}
 }
 
-/* media library - 3D Objects uploads */
-WTWJS.prototype.setSelectObject = function(zuploadobjectid, zobjectfolder, zobjectfile) {
+/* media library - 3D Models uploads */
+WTWJS.prototype.setSelectModel = function(zuploadobjectid, zobjectfolder, zobjectfile) {
 	/* select the 3D Object to be used in mold form (when added to 3D Scene) */
 	/* when editing a 3D Community, Building or Thing, add a 3D Web Object -> Babylon File */
 	/* you will select the 3D Object form the media Library - and return to the edit form */
@@ -1475,23 +1475,23 @@ WTWJS.prototype.setSelectObject = function(zuploadobjectid, zobjectfolder, zobje
 		dGet('wtw_tmoldobjectfile').value = zobjectfile;
 		WTW.setNewMold();
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminforms.js-setSelectObject=" + ex.message);
+		WTW.log("core-scripts-admin-wtw_adminforms.js-setSelectModel=" + ex.message);
 	}
 }
 
-WTWJS.prototype.filterObjects = function(zevent) {
+WTWJS.prototype.filterModels = function(zevent) {
 	/* open file selection based on one or more files available to select */
 	try {
-		var ztext = dGet('wtw_objectfilter').value;
+		var ztext = dGet('wtw_modelfilter').value;
 		switch (zevent) {
 			case 0: /* onblur */
 				if (ztext == '') {
-					dGet('wtw_objectfilter').value = 'Name Filter';
+					dGet('wtw_modelfilter').value = 'Name Filter';
 				}
 				break;
 			case 1: /* onfocus */
 				if (ztext == "Name Filter") {
-					dGet('wtw_objectfilter').value = '';
+					dGet('wtw_modelfilter').value = '';
 				}
 				break;
 			case 2: /* onkeydown */
@@ -1501,8 +1501,8 @@ WTWJS.prototype.filterObjects = function(zevent) {
 				if (ztext != '') {
 					ztext = ztext.toLowerCase();
 				}
-				if (dGet('wtw_uploadedobjectsdiv').childNodes != null) {
-					var zuploadedobjects = dGet('wtw_uploadedobjectsdiv').childNodes;
+				if (dGet('wtw_uploadedmodelsdiv').childNodes != null) {
+					var zuploadedobjects = dGet('wtw_uploadedmodelsdiv').childNodes;
 					for (var i=0;i<zuploadedobjects.length;i++) {
 						if (zuploadedobjects[i].id != undefined) {
 							if ((zuploadedobjects[i].id.indexOf(ztext) > -1 || ztext == '') && zuploadedobjects[i].id.indexOf("wtw_obj_") > -1) {
@@ -1516,20 +1516,20 @@ WTWJS.prototype.filterObjects = function(zevent) {
 				break;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminforms.js-filterObjects=" + ex.message);
+		WTW.log("core-scripts-admin-wtw_adminforms.js-filterModels=" + ex.message);
 	}
 }
 
 WTWJS.prototype.openObjectPageForm = function(zuploadobjectid, zfilename) {
-	/* 3D Objects page form */
+	/* 3D Models page form */
 	try {
 		var category = WTW.getDDLValue('wtw_fileselectcategory');
 		dGet('wtw_tbackupfullpageformtitle').value = dGet('wtw_fullpageformtitle').innerHTML;
 		dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','" + category + "','');WTW.setImageMenu(4);\">Media Library</div><img id='wtw_arrowicon2' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zfilename + "</div>";
-		WTW.hide('wtw_uploadedobjectsdiv');
+		WTW.hide('wtw_uploadedmodelsdiv');
 		WTW.hide('wtw_loadingselectimage');
-		dGet('wtw_uploadedobjectdetailsdiv').style.height = (WTW.sizeY - 160) + 'px';
-		WTW.show('wtw_uploadedobjectdetailsdiv');
+		dGet('wtw_uploadedmodeldetailsdiv').style.height = (WTW.sizeY - 160) + 'px';
+		WTW.show('wtw_uploadedmodeldetailsdiv');
 		WTW.loadObjectDetailsName(zuploadobjectid);
 		WTW.loadObjectDetailsAnimations(zuploadobjectid);
 		dGet('wtw_bstartimageupload').innerHTML = 'Upload or Replace File(s)';
@@ -1539,15 +1539,15 @@ WTWJS.prototype.openObjectPageForm = function(zuploadobjectid, zfilename) {
 }
 
 WTWJS.prototype.loadUploadedObjectsDiv = function(showloading) {
-	/* load the settings (and list) for the 3D Objects div */
+	/* load the settings (and list) for the 3D Models div */
 	try {
 		dGet('wtw_bstartimageupload').innerHTML = 'Upload Primary 3D File';
-		WTW.hide('wtw_uploadedobjectdetailsdiv');
+		WTW.hide('wtw_uploadedmodeldetailsdiv');
 		if (showloading) {
-			WTW.hide('wtw_uploadedobjectsdiv');
+			WTW.hide('wtw_uploadedmodelsdiv');
 			WTW.show('wtw_loadingselectimage');
 		}
-		dGet('wtw_uploadedobjectsdiv').innerHTML = '';
+		dGet('wtw_uploadedmodelsdiv').innerHTML = '';
 		var zrequest = {
 			'function':'getuploadedfiles'
 		};
@@ -1565,19 +1565,19 @@ WTWJS.prototype.loadUploadedObjectsDiv = function(showloading) {
 					}
 					if (zitem == "3dobject") {
 						zlinktext = "Select";
-						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.setSelectObject('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.setSelectObject('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">Edit</div><div class='wtw-clear'></div></div></div>";
+						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.setSelectModel('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.setSelectModel('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">Edit</div><div class='wtw-clear'></div></div></div>";
 					} else {
 						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-clear'></div></div></div>";
 					}
 				}
-				dGet('wtw_uploadedobjectsdiv').innerHTML = zuploadedobjectsdiv;
-				dGet('wtw_uploadedobjectsdiv').style.height = (WTW.sizeY - 160) + 'px';
-				WTW.show('wtw_uploadedobjectsdiv');
+				dGet('wtw_uploadedmodelsdiv').innerHTML = zuploadedobjectsdiv;
+				dGet('wtw_uploadedmodelsdiv').style.height = (WTW.sizeY - 160) + 'px';
+				WTW.show('wtw_uploadedmodelsdiv');
 				if (showloading) {
 					WTW.hide('wtw_loadingselectimage');
 				}
 				WTW.resetUploadButton();
-				WTW.filterObjects(2);
+				WTW.filterModels(2);
 			}
 		);
 	} catch (ex) {
@@ -1591,7 +1591,7 @@ WTWJS.prototype.loadObjectDetailsName = function(zuploadobjectid) {
 		if (zuploadobjectid == undefined) {
 			zuploadobjectid = dGet('wtw_tuploadobjectid').value;
 		}
-		dGet('wtw_uploadedobjectsnamediv').innerHTML = "";
+		dGet('wtw_uploadedmodelsnamediv').innerHTML = "";
 		var znamediv = "";
 		var zrequest = {
 			'uploadobjectid': zuploadobjectid,
@@ -1619,7 +1619,7 @@ WTWJS.prototype.loadObjectDetailsName = function(zuploadobjectid) {
 				} else {
 					znamediv += "<h1 style='color:red;margin-left:20px;'>3D Object not found</h1>";
 				}
-				dGet('wtw_uploadedobjectsnamediv').innerHTML = znamediv;
+				dGet('wtw_uploadedmodelsnamediv').innerHTML = znamediv;
 			}
 		);
 	} catch (ex) {
@@ -1703,7 +1703,7 @@ WTWJS.prototype.deleteObjectFile = function() {
 WTWJS.prototype.loadObjectDetailsFiles = function(zuploadobjectid, zobjectfolder, zfilename) {
 	/* files list included on the 3D Object details page form */
 	try {
-		dGet('wtw_uploadedobjectsfilesdiv').innerHTML = "";
+		dGet('wtw_uploadedmodelsfilesdiv').innerHTML = "";
 		var zfilesdiv = "";
 		var zrequest = {
 			'objectfolder': zobjectfolder,
@@ -1729,7 +1729,7 @@ WTWJS.prototype.loadObjectDetailsFiles = function(zuploadobjectid, zobjectfolder
 				zfilesdiv += "<br /><br /><div id='wtw_uploadbutton' class='wtw-greenbutton' style='width:318px;' onclick=\"WTW.startUploadImage('Upload or Replace File(s)');\">Upload or Replace File(s)</div>";
 				zfilesdiv += "<div id='wtw_deletefile' class='wtw-redbutton' style='width:150px;display:none;visibility:hidden;text-align:center;margin-right:13px;cursor:pointer;' onclick=\"WTW.deleteObjectFile();\">Delete File</div><div id='wtw_canceldelete' class='wtw-yellowbutton' style='width:150px;display:none;visibility:hidden;text-align:center;cursor:pointer;' onclick=\"dGet('wtw_tdeletefile').value='';WTW.hide('wtw_deletefile');WTW.hide('wtw_canceldelete');WTW.show('wtw_uploadbutton');\">Cancel</div>";
 				zfilesdiv += "</div></div>";
-				dGet('wtw_uploadedobjectsfilesdiv').innerHTML = zfilesdiv;
+				dGet('wtw_uploadedmodelsfilesdiv').innerHTML = zfilesdiv;
 			}
 		);
 	} catch (ex) {
@@ -1740,7 +1740,7 @@ WTWJS.prototype.loadObjectDetailsFiles = function(zuploadobjectid, zobjectfolder
 WTWJS.prototype.loadObjectDetailsAnimations = function(zuploadobjectid) {
 	/* animations list included on the 3D Object details page form */
 	try {
-		dGet('wtw_uploadedobjectsanimationsdiv').innerHTML = "";
+		dGet('wtw_uploadedmodelsanimationsdiv').innerHTML = "";
 		var zanimationsdiv = "";
 		var zrequest = {
 			'uploadobjectid': zuploadobjectid,
@@ -1766,7 +1766,7 @@ WTWJS.prototype.loadObjectDetailsAnimations = function(zuploadobjectid) {
 				zanimationsdiv += "<br /><br /><div id='wtw_addanimation' class='wtw-greenbutton' style='width:318px;' onclick=\"WTW.addAnimation('" + zuploadobjectid + "');\">Add Animation</div>";
 				zanimationsdiv += "<div id='wtw_deleteanimation' class='wtw-redbutton' style='width:150px;display:none;visibility:hidden;text-align:center;margin-right:13px;cursor:pointer;' onclick=\"WTW.deleteObjectAnimation(dGet('wtw_tdeleteanimation').value, '" + zuploadobjectid + "');\">Delete Animation</div><div id='wtw_canceldeleteanimation' class='wtw-yellowbutton' style='width:150px;display:none;visibility:hidden;text-align:center;cursor:pointer;' onclick=\"dGet('wtw_tdeleteanimation').value='';WTW.hide('wtw_deleteanimation');WTW.hide('wtw_canceldeleteanimation');\">Cancel</div>";
 				zanimationsdiv += "</div></div>";
-				dGet('wtw_uploadedobjectsanimationsdiv').innerHTML = zanimationsdiv;
+				dGet('wtw_uploadedmodelsanimationsdiv').innerHTML = zanimationsdiv;
 			}
 		);
 	} catch (ex) {

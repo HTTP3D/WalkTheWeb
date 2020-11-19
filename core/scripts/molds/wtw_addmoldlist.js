@@ -273,12 +273,12 @@ WTWJS.prototype.addMold = function(zmoldname, zmolddef, zparentname, zcoveringna
 				zcoveringname = "none";
 				break;
             case "tree":
-				/* tree - dynamically created (depreciated soon to babylon 3D Objects) */
+				/* tree - dynamically created (depreciated soon to babylon 3D Models) */
 				zmold = WTW.addMoldTree(zmoldname, zmolddef, zlenx, zleny, zlenz, zposx, zposy, zposz, zsubdivisions);
 				zcoveringname = "none";
 				break;
             case "flag":
-				/* flag - dynamic flowing flag - depreciated soon to babylon 3D Objects */
+				/* flag - dynamic flowing flag - depreciated soon to babylon 3D Models */
 				zmold = WTW.addMoldFlag(zmoldname, zmolddef, zlenx, zleny, zlenz, zposx, zposy, zposz, zsubdivisions);
 				zcoveringname = "none";
 				break;
