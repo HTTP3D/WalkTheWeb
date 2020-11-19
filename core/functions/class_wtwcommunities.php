@@ -1294,7 +1294,7 @@ class wtwcommunities {
 		return $zsuccess;
 	}
 	
-	public function downloadWeb($zwebid, $znewwebid, $zwebtype, $zusertoken, $zdownloadparentwebid, $zdownloadparentwebtype, $zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz) {
+	public function downloadWeb($zwebid, $znewwebid, $zwebtype, $zusertoken, $zdownloadparentwebid, $zdownloadparentwebtype, $zcommunityid, $zbuildingpositionx = 0, $zbuildingpositiony = 0, $zbuildingpositionz = 0, $zbuildingscalingx = 1, $zbuildingscalingy = 1, $zbuildingscalingz = 1, $zbuildingrotationx = 0, $zbuildingrotationy = 0, $zbuildingrotationz = 0) {
 		/* this process downloads 3D Web and dependent objects form https://3dnet.walktheweb.com (WalkTheWeb repository)*/
 		/* this is the response after you select a 3D Item to domwload in the search */
 		/* $zwebid is the item selected (3D Community, 3D Bulding, or 3D Thing) */
