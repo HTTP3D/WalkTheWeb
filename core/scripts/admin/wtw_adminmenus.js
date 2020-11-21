@@ -218,6 +218,11 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.getWebMoldList();
 						WTW.show('wtw_adminmenu12');
 						break;
+					case 'wtw_admincommunityaddbuilding':
+						WTW.hideAdminMenu();
+						WTW.getBuildingMoldList()
+						WTW.show('wtw_adminmenu27');
+						break;
 					case 'wtw_admincommunityaddthing':
 						WTW.hideAdminMenu();
 						WTW.getThingMoldList()
@@ -232,16 +237,6 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.hideAdminMenu();
 						WTW.openRecoverItems();
 						WTW.show('wtw_adminmenu16');
-						break;
-					case 'wtw_admincommunityaddbuilding':
-						WTW.hideAdminMenu();
-						WTW.openListConnectingGridsForm();
-						WTW.show('wtw_adminmenu27');
-						break;
-					case "wtw_addbuildingtocommunity":
-						var zbuildingid = WTW.getDDLValue('wtw_addcommunitybuildingid');
-						var zbuildingname = WTW.encode(WTW.getDDLText('wtw_addcommunitybuildingid'));
-						WTW.addConnectingGrid('building',zbuildingid, zbuildingname);
 						break;
 					case "wtw_bback27":
 					case "wtw_cancel27":	
@@ -1512,9 +1507,6 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 						case 68: // d
 							dGet('wtw_adminmenucommdoneediting').click();
 							break;
-						case 69: // e
-							dGet('wtw_admincommunityaddbuilding').click();
-							break;
 						case 72: // h
 							dGet('wtw_admincommunityaddthing').click();
 							break;
@@ -1526,6 +1518,9 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 							break;
 						case 82: // r
 							dGet('wtw_admincommunityrecover').click();
+							break;
+						case 85: // u
+							dGet('wtw_admincommunityaddbuilding').click();
 							break;
 					}
 					break;
