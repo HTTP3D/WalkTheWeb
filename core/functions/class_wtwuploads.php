@@ -105,6 +105,10 @@ class wtwuploads {
 					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects", octdec(wtw_chmod), true);
 					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects", octdec(wtw_chmod));
 				}
+				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media")) {
+					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media", octdec(wtw_chmod), true);
+					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media", octdec(wtw_chmod));
+				}
 			}
 
 			

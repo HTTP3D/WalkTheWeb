@@ -804,7 +804,6 @@ class wtwadmin {
 			$pagedata .= "				</div>\r\n";
 			$pagedata .= "			</div>\r\n";
 			$pagedata .= "		</div>\r\n";
-			$pagedata .= "	</div>\r\n";
 			
 			/* settings page - api keys */
 			$pagedata .= "		<div id=\"wtw_apikeyssettings\" class=\"wtw-fullpage\">\r\n";
