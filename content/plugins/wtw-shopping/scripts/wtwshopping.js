@@ -222,99 +222,92 @@ wtwshopping.prototype.getStoreMolds = async function(zmoldname) {
 	try {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		var zstore = WTWShopping.getStoreData(zmoldname);
-/*		if (zstore != null && zstore.price != undefined) {
-			if (zmoldnameparts.molds[zmoldnameparts.moldind].shown == '2') {
-				/ * reloads from mold-store settings if it has already been loaded * /
-				WTWShopping.loadProductDisplay(zmoldname, zstore.productname, zstore.price, zstore.productid, zstore.slug, zstore.imageurl, zstore.short_description, zstore.description);
-			}
-		} else {
-*/
-			/* set up the mold-store settings for first display */
-			var zmoldsloaded = WTWShopping.checkStoreMoldsLoaded(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
-			/* molds loaded: 0 means no, 1 means loading, and 2 means already fully loaded for this community, building, or thing */
-			if (zmoldsloaded == 0) {
-				/* mold-store settings have not been fetched - so fetch them from local WalkTheWeb site */
-				/* mark the fetch queue as loading (in progress) so that it does not start multiple times */
-				WTWShopping.updateStoreMoldsLoaded(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid, 1);
-				/* fetch the store settings */
-				await WTW.getAsyncJSON("/connect/wtw-shopping-getmolds.php?communityid=" + zmoldnameparts.communityid + "&buildingid=" + zmoldnameparts.buildingid + "&thingid=" + zmoldnameparts.thingid, 
-					function(zresponse) {
+		/* set up the mold-store settings for first display */
+		var zmoldsloaded = WTWShopping.checkStoreMoldsLoaded(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
+		/* molds loaded: 0 means no, 1 means loading, and 2 means already fully loaded for this community, building, or thing */
+		if (zmoldsloaded == 0) {
+			/* mold-store settings have not been fetched - so fetch them from local WalkTheWeb site */
+			/* mark the fetch queue as loading (in progress) so that it does not start multiple times */
+			WTWShopping.updateStoreMoldsLoaded(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid, 1);
+			/* fetch the store settings */
+			WTW.getAsyncJSON("/connect/wtw-shopping-getmolds.php?communityid=" + zmoldnameparts.communityid + "&buildingid=" + zmoldnameparts.buildingid + "&thingid=" + zmoldnameparts.thingid, 
+				function(zresponse) {
+					if (zresponse != null) {
 						zresponse = JSON.parse(zresponse);
-						if (zresponse != null) {
-							if (zresponse.length > 0) {
-								var zstoreinfo = WTWShopping.getStoreID(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
-								for (var i=0;i<zresponse.length;i++) {
-									if (zresponse[i] != null) {
-										if (zresponse[i].shoppingmoldid != undefined) {
-											if (WTWShopping.checkStoreMold(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid, zresponse[i].moldid) == false) {
-												/* this array is all ofthe molds that have store product functions - they will be added to the mold def - can be reused for multiple instances */
-												WTWShopping.molds[WTWShopping.molds.length] = {
-													'communityid': zmoldnameparts.communityid,
-													'buildingid': zmoldnameparts.buildingid,
-													'thingid': zmoldnameparts.thingid,
-													'storeurl':zstoreinfo.storeurl,
-													'wpplugin':'walktheweb',
-													'storeiframes':zstoreinfo.storeiframes,
-													'search':'',
-													'moldid':zresponse[i].moldid,
-													'productid':zresponse[i].productid,
-													'productname':zresponse[i].productname,
-													'slug':zresponse[i].slug,
-													'price':'',
-													'categoryid':'',
-													'description':'',
-													'shortdescription':'',
-													'imageurl':'',
-													'allowsearch':zresponse[i].allowsearch,
-													'loaded': 0
-												}
+						if (zresponse.length > 0) {
+							var zstoreinfo = WTWShopping.getStoreID(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
+							for (var i=0;i<zresponse.length;i++) {
+								if (zresponse[i] != null) {
+									if (zresponse[i].shoppingmoldid != undefined) {
+										if (WTWShopping.checkStoreMold(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid, zresponse[i].moldid) == false) {
+											/* this array is all ofthe molds that have store product functions - they will be added to the mold def - can be reused for multiple instances */
+											WTWShopping.molds[WTWShopping.molds.length] = {
+												'communityid': zmoldnameparts.communityid,
+												'buildingid': zmoldnameparts.buildingid,
+												'thingid': zmoldnameparts.thingid,
+												'storeurl':zstoreinfo.storeurl,
+												'wpplugin':'walktheweb',
+												'storeiframes':zstoreinfo.storeiframes,
+												'search':'',
+												'moldid':zresponse[i].moldid,
+												'productid':zresponse[i].productid,
+												'productname':zresponse[i].productname,
+												'slug':zresponse[i].slug,
+												'price':'',
+												'categoryid':'',
+												'description':'',
+												'shortdescription':'',
+												'imageurl':'',
+												'allowsearch':zresponse[i].allowsearch,
+												'loaded': 0
 											}
 										}
 									}
 								}
-								/* set settings for any previously loaded mold to the mold defs */
-								if (zmoldnameparts.molds != null) {
-									for (var i=0;i< zmoldnameparts.molds.length;i++) {
-										if (zmoldnameparts.molds[i] != null) {
-											if (zmoldnameparts.molds[i].store == undefined && zmoldnameparts.molds[i].moldid != undefined) {
-												/* check if shape is a store product type */
-												switch (zmoldnameparts.molds[i].shape) {
-													case "storeproduct":
-													case "storeaddtocart":
-													case "storebuynow":
-													case "storereadmore":
-														var zmoldproperties = WTWShopping.getStoreMoldProperties(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid, zmoldnameparts.molds[i].moldid);
-														if (zmoldproperties != undefined) {
-															zmoldnameparts.molds[i].store = zmoldproperties;
-															if (zmoldproperties.loaded == 0) {
-																WTWShopping.setProduct(zmoldproperties.categoryid, zmoldproperties.productid, zmoldproperties.productname, zmoldproperties.slug, zmoldnameparts.molds[i].moldname);
-															}
-														}
-														break;
-												}
-											}
-										}
-									}
-								}
-								WTWShopping.updateStoreMoldsLoaded(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid, 2);
 							}
-						}
-					}
-				); 
-			} else if (zmoldsloaded == 2) {
-				var zmoldproperties = WTWShopping.getStoreMoldProperties(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid, zmoldnameparts.moldid);
-				if (zmoldproperties != undefined) {
-					if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
-						if (zmoldnameparts.molds[zmoldnameparts.moldind].store == undefined) {
-							zmoldnameparts.molds[zmoldnameparts.moldind].store = zmoldproperties;
-						}
-						if (zmoldproperties.loaded == 0) {
-							WTWShopping.setProduct(zmoldproperties.categoryid, zmoldproperties.productid, zmoldproperties.productname, zmoldproperties.slug, zmoldname);
+							/* set settings for any previously loaded mold to the mold defs */
+							if (zmoldnameparts.molds != null) {
+								for (var i=0;i< zmoldnameparts.molds.length;i++) {
+									if (zmoldnameparts.molds[i] != null) {
+										if (zmoldnameparts.molds[i].store == undefined && zmoldnameparts.molds[i].moldid != undefined) {
+											/* check if shape is a store product type */
+											switch (zmoldnameparts.molds[i].shape) {
+												case "storeproduct":
+												case "storeaddtocart":
+												case "storebuynow":
+												case "storereadmore":
+													var zmoldproperties = WTWShopping.getStoreMoldProperties(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid, zmoldnameparts.molds[i].moldid);
+													if (zmoldproperties != undefined) {
+														zmoldnameparts.molds[i].store = zmoldproperties;
+														if (zmoldproperties.loaded == 0) {
+															WTWShopping.setProduct(zmoldproperties.categoryid, zmoldproperties.productid, zmoldproperties.productname, zmoldproperties.slug, zmoldnameparts.molds[i].moldname);
+														}
+													}
+													break;
+											}
+										}
+									}
+								}
+							}
+							WTWShopping.updateStoreMoldsLoaded(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid, 2);
+							WTWShopping.getStoreMolds(zmoldname);
 						}
 					}
 				}
-			}	
-//		}		
+			); 
+		} else if (zmoldsloaded == 2) {
+			var zmoldproperties = WTWShopping.getStoreMoldProperties(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid, zmoldnameparts.moldid);
+			if (zmoldproperties != undefined) {
+				if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
+					if (zmoldnameparts.molds[zmoldnameparts.moldind].store == undefined) {
+						zmoldnameparts.molds[zmoldnameparts.moldind].store = zmoldproperties;
+					}
+					if (zmoldproperties.loaded == 0) {
+						WTWShopping.setProduct(zmoldproperties.categoryid, zmoldproperties.productid, zmoldproperties.productname, zmoldproperties.slug, zmoldname);
+					}
+				}
+			}
+		}	
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-getStoreMolds=" + ex.message);
 	}
@@ -429,7 +422,7 @@ wtwshopping.prototype.setProduct = async function(zcategoryid, zproductid, zprod
 		
 		if (zmoldnameparts.molds[zmoldnameparts.moldind] != undefined) {
 			if (zstoreinfo.woocommerceapiurl != "" && zproductid != '' && zproductid != undefined) {
-				await WTW.getAsyncJSON(zstoreinfo.woocommerceapiurl + "products/" + zproductid + "/?consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret), 
+				WTW.getAsyncJSON(zstoreinfo.woocommerceapiurl + "products/" + zproductid + "/?consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret), 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						var zimageurl = '';
@@ -556,7 +549,7 @@ wtwshopping.prototype.productFetchProducts = async function(zmoldname, zcategory
 					/* alternate, get products by categoryid */
 					zurl = zstoreinfo.woocommerceapiurl + "products/?per_page=50&category=" + zcategoryid + "&consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret);
 				}
-				await WTW.getAsyncJSON(zurl, 
+				WTW.getAsyncJSON(zurl, 
 					function(zresponse) {
 						if (zresponse != null) {
 							/* process results */
@@ -695,7 +688,7 @@ wtwshopping.prototype.productFetchCategories = async function(zmoldname) {
 		var zstoreinfo = WTWShopping.getStoreID(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
 		if (zstoreinfo.woocommerceapiurl != "") {
 			var zurl = zstoreinfo.woocommerceapiurl + "products/categories/?per_page=50&orderby=slug&consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret);
-			await WTW.getAsyncJSON(zurl, 
+			WTW.getAsyncJSON(zurl, 
 				function(zresponse) {
 					if (zresponse != null) {
 						WTWShopping.productLoadCategories(zmoldname, JSON.parse(zresponse));
@@ -803,13 +796,6 @@ wtwshopping.prototype.productLoadSearchResults = function(zmoldname, zconnecting
 	}  
 }
 
-
-
-
-
-
-
-
 wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductname, zprice, zproductid, zslug, zimageurl, zshortdescription, zdescription) {
 	try {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
@@ -818,8 +804,121 @@ wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductnam
 		var zthingid = zmoldnameparts.thingid;
 		var zstoreinfo = WTWShopping.getStoreID(zcommunityid, zbuildingid, zthingid);
 		if (zstoreinfo.storeurl != "") {
+			var zlineheigth = "34px";
+			var zfontheight = "40px";
+			var ztitleimage = scene.getMeshByID(zmoldname + "-titleimagesm");
+			var ztitleimage2 = scene.getMeshByID(zmoldname + "-titleimage2sm");
+
+			var znamelength = WTW.cleanHTMLText(zproductname).length;
+			
+			if (znamelength > 224) {
+				zlineheigth = "10px";
+				zfontheight = "12px";
+			} else if (znamelength > 120) {
+				zlineheigth = "14px";
+				zfontheight = "16px";
+			} else if (znamelength > 50) {
+				zlineheigth = "18px";
+				zfontheight = "20px";
+			} else if (znamelength > 32) {
+				zlineheigth = "20px";
+				zfontheight = "24px";
+			} else if (znamelength > 27) {
+				zlineheigth = "24px";
+				zfontheight = "30px";
+			} else if (znamelength > 22) {
+				zlineheigth = "30px";
+				zfontheight = "36px";
+			}
+			if (ztitleimage != null) {
+				try {
+					if (ztitleimage.material.diffuseTexture != null) {
+						ztitleimage.material.diffuseTexture.dispose();
+						ztitleimage.material.diffuseTexture = null;
+					}
+				} catch(ex) {}
+				try {
+					if (ztitleimage.material != null) {
+						ztitleimage.material.dispose();
+						ztitleimage.material = null;
+					}
+				} catch(ex) {}
+
+				var coveringtitle = new BABYLON.StandardMaterial("mat" + zmoldname + "-titleimagetexture", scene);
+				coveringtitle.alpha = 1;
+				
+				var contentTexture = new BABYLON.DynamicTexture(zmoldname + "-titleimagetexture", {width: 512,height: 512}, scene, true);
+				contentTexture.name = zmoldname + "-titleimagetexture";
+				coveringtitle.diffuseTexture = contentTexture;
+				ztitleimage.material = coveringtitle;
+				WTW.wrapText(ztitleimage, WTW.cleanHTMLText(zproductname), zlineheigth, zfontheight, "center", "top", "yellow", 5, 0);
+				coveringtitle.emissiveColor = new BABYLON.Color3(1, 1, 1);
+				coveringtitle.diffuseTexture.vScale = .2
+				coveringtitle.diffuseTexture.vOffset = .85
+				if (ztitleimage2 != null) {
+					try {
+						if (ztitleimage2.material.diffuseTexture != null) {
+							ztitleimage2.material.diffuseTexture.dispose();
+							ztitleimage2.material.diffuseTexture = null;
+						}
+					} catch(ex) {}
+					try {
+						if (ztitleimage2.material != null) {
+							ztitleimage2.material.dispose();
+							ztitleimage2.material = null;
+						}
+					} catch(ex) {}
+					ztitleimage2.material = coveringtitle;
+				}
+			}
+			var zprice1 = scene.getMeshByID(zmoldname + "-price1");
+			var zprice2 = scene.getMeshByID(zmoldname + "-price2");
+			if (zprice1 != null) {
+				try {
+					if (zprice1.material.diffuseTexture != null) {
+						zprice1.material.diffuseTexture.dispose();
+						zprice1.material.diffuseTexture = null;
+					}
+				} catch(ex) {}
+				try {
+					if (zprice1.material != null) {
+						zprice1.material.dispose();
+						zprice1.material = null;
+					}
+				} catch(ex) {}
+				var zcoveringprice1 = new BABYLON.StandardMaterial("mat" + zmoldname + "-coveringprice1texture", scene);
+				zcoveringprice1.alpha = 1;
+				zcoveringprice1.specularColor = new BABYLON.Color3(.2, .2, .2);
+				zcoveringprice1.emissiveColor = new BABYLON.Color3(1, 1, 1);
+				zcoveringprice1.diffuseColor = new BABYLON.Color3(.9, .9, .9);
+				var zpricetexture1 = new BABYLON.DynamicTexture(zmoldname + "-coveringprice1texture", {width: 512,height: 512}, scene, true);
+				zpricetexture1.name = zmoldname + "-coveringprice1texture";
+				zcoveringprice1.diffuseTexture = zpricetexture1;
+				zcoveringprice1.diffuseTexture.uScale = 1;
+				zcoveringprice1.diffuseTexture.vScale = .08;
+				zcoveringprice1.diffuseTexture.vOffset = .92;
+				zprice1.material = zcoveringprice1;
+				WTW.wrapText(zprice1, "$" + Number(zprice).toFixed(2), zlineheigth, zfontheight, "center", "top", "white", 0, 0);
+				zprice1.material.diffuseTexture.uScale = .5
+				zprice1.material.diffuseTexture.uOffset = .25
+				if (zprice2 != null) {
+					try {
+						if (zprice2.material.diffuseTexture != null) {
+							zprice2.material.diffuseTexture.dispose();
+							zprice2.material.diffuseTexture = null;
+						}
+					} catch(ex) {}
+					try {
+						if (zprice2.material != null) {
+							zprice2.material.dispose();
+							zprice2.material = null;
+						}
+					} catch(ex) {}
+					zprice2.material = zcoveringprice1;
+				}
+			}
 			if (zimageurl != '') {
-				await WTW.getAsyncJSON(zstoreinfo.storeurl + "/image.php?walktheweb_image_url=" + zimageurl, 
+				WTW.getAsyncJSON(zstoreinfo.storeurl + "/image.php?walktheweb_image_url=" + zimageurl, 
 					function(response2) {
 						if (response2 != null) {
 							var zpimage = scene.getMeshByID(zmoldname + "-clickimage");
@@ -881,296 +980,13 @@ wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductnam
 					}
 				);
 			}
-			var zlineheigth = "34px";
-			var zfontheight = "40px";
-			var ztitleimage = scene.getMeshByID(zmoldname + "-titleimagesm");
-			var ztitleimage2 = scene.getMeshByID(zmoldname + "-titleimage2sm");
-
-			var znamelength = WTW.cleanHTMLText(zproductname).length;
-			
-			if (znamelength > 224) {
-				zlineheigth = "10px";
-				zfontheight = "12px";
-			} else if (znamelength > 120) {
-				zlineheigth = "14px";
-				zfontheight = "16px";
-			} else if (znamelength > 50) {
-				zlineheigth = "18px";
-				zfontheight = "20px";
-			} else if (znamelength > 32) {
-				zlineheigth = "20px";
-				zfontheight = "24px";
-			} else if (znamelength > 27) {
-				zlineheigth = "24px";
-				zfontheight = "30px";
-			} else if (znamelength > 22) {
-				zlineheigth = "30px";
-				zfontheight = "36px";
-			}
-			if (ztitleimage != null) {
-				try {
-					if (ztitleimage.material.diffuseTexture != null) {
-						ztitleimage.material.diffuseTexture.dispose();
-						ztitleimage.material.diffuseTexture = null;
-					}
-				} catch(ex) {}
-				try {
-					if (ztitleimage.material != null) {
-						ztitleimage.material.dispose();
-						ztitleimage.material = null;
-					}
-				} catch(ex) {}
-
-				var coveringtitle = new BABYLON.StandardMaterial("mat" + zmoldname + "-titleimagetexture", scene);
-				coveringtitle.alpha = 1;
-				
-				var contentTexture = new BABYLON.DynamicTexture(zmoldname + "-titleimagetexture", {width: 512,height: 512}, scene, true);
-				contentTexture.name = zmoldname + "-titleimagetexture";
-				coveringtitle.diffuseTexture = contentTexture;
-				ztitleimage.material = coveringtitle;
-				WTW.wrapText(ztitleimage, WTW.cleanHTMLText(zproductname), zlineheigth, zfontheight, "center", "top", "yellow", 5, 0); // was 5,0
-				coveringtitle.emissiveColor = new BABYLON.Color3(1, 1, 1);
-				coveringtitle.diffuseTexture.vScale = .2
-				coveringtitle.diffuseTexture.vOffset = .85
-				if (ztitleimage2 != null) {
-					try {
-						if (ztitleimage2.material.diffuseTexture != null) {
-							ztitleimage2.material.diffuseTexture.dispose();
-							ztitleimage2.material.diffuseTexture = null;
-						}
-					} catch(ex) {}
-					try {
-						if (ztitleimage2.material != null) {
-							ztitleimage2.material.dispose();
-							ztitleimage2.material = null;
-						}
-					} catch(ex) {}
-					ztitleimage2.material = coveringtitle;
-				}
-			}
-
-
-			
-			
-/*			var ztitleimage2 = scene.getMeshByID(zmoldname + "-titleimage2");
-			if (ztitleimage2 == null) {
-				ztitleimage2 = scene.getMeshByID(zmoldname + "-titleimage2sm");
-			}
-*/
-/*			if (ztitleimage2 != null) {
-				try {
-					if (ztitleimage2.material.diffuseTexture != null) {
-						ztitleimage2.material.diffuseTexture.dispose();
-						ztitleimage2.material.diffuseTexture = null;
-					}
-				} catch(ex) {}
-				try {
-					if (ztitleimage2.material != null) {
-						ztitleimage2.material.dispose();
-						ztitleimage2.material = null;
-					}
-				} catch(ex) {}
-				var zcoveringtitle2 = new BABYLON.StandardMaterial("mat" + zmoldname + "-titleimage2texture", scene);
-				zcoveringtitle2.alpha = 1;
-				zcoveringtitle2.specularColor = new BABYLON.Color3(.7, .7, .7);
-				/ * zcoveringtitle2.emissiveColor = new BABYLON.Color3(.7, .7, .7); * /
-				zcoveringtitle2.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-				zcoveringtitle2.diffuseColor = new BABYLON.Color3(.7, .7, .7);
-				var zcontenttexture2 = new BABYLON.DynamicTexture(zmoldname + "-titleimage2texture", {width: 512,height: 512}, scene, true);
-				zcontenttexture2.name = zmoldname + "-titleimage2texture";
-				zcoveringtitle2.diffuseTexture = zcontenttexture2;
-				ztitleimage2.material = zcoveringtitle2;
-				WTW.wrapText(ztitleimage2, WTW.cleanHTMLText(zproductname), zlineheigth, zfontheight, "center", "top", "white", 0, 0);
-				if (ztitleimage2.name.indexOf("-titleimage2sm") > -1) {
-					zcoveringtitle2.diffuseTexture.vScale = .1;
-					zcoveringtitle2.diffuseTexture.vOffset = .9;
-				}
-			}
-			var zdesctext = "";
-			if (zshortdescription != null) {
-				if (zshortdescription != undefined) {
-					if (zshortdescription.length > 0) {
-						zdesctext = zshortdescription;
-					}
-				}
-			}
-			if (zdesctext == "") {
-				if (zdescription != null) {
-					if (zdescription != undefined) {
-						if (zdescription.length > 0) {
-							zdesctext = zdescription;
-						}
-					}
-				}
-			}
-			var zdescimage1 = scene.getMeshByID(zmoldname + "-descimage1");
-			if (zdescimage1 != null) {
-				try {
-					if (zdescimage1.material.diffuseTexture != null) {
-						zdescimage1.material.diffuseTexture.dispose();
-						zdescimage1.material.diffuseTexture = null;
-					}
-				} catch(ex) {}
-				try {
-					if (zdescimage1.material != null) {
-						zdescimage1.material.dispose();
-						zdescimage1.material = null;
-					}
-				} catch(ex) {}
-				var zcoveringdesc1 = new BABYLON.StandardMaterial("mat" + zmoldname + "-descimage1texture", scene);
-				zcoveringdesc1.alpha = 0;
-				zcoveringdesc1.specularColor = new BABYLON.Color3(.7, .7, .7);
-				/ * zcoveringdesc1.emissiveColor = new BABYLON.Color3(.7, .7, .7); * /
-				zcoveringdesc1.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-				zcoveringdesc1.diffuseColor = new BABYLON.Color3(.7, .7, .7);
-				var zcontenttexture3 = new BABYLON.DynamicTexture(zmoldname + "-descimage1texture", {width: 512,height: 512}, scene, true);
-				zcontenttexture3.name = zmoldname + "-descimage1texture";
-				zcoveringdesc1.diffuseTexture = zcontenttexture3;
-				zdescimage1.material = zcoveringdesc1;
-				WTW.wrapText(zdescimage1, WTW.cleanHTMLText(zdesctext), "30px", "30px", "left", "top", "white", 0, 0, "90%", "20px", "10px"); // , tmaxwidth, tmarginleft, tmarginright, tfloat, tfloatwidth, tfloatheight
-			}
-
-			var zdescimage2 = scene.getMeshByID(zmoldname + "-descimage2");
-			if (zdescimage2 != null) {
-				try {
-					if (zdescimage2.material.diffuseTexture != null) {
-						zdescimage2.material.diffuseTexture.dispose();
-						zdescimage2.material.diffuseTexture = null;
-					}
-				} catch(ex) {}
-				try {
-					if (zdescimage2.material != null) {
-						zdescimage2.material.dispose();
-						zdescimage2.material = null;
-					}
-				} catch(ex) {}
-				var zcoveringdesc2 = new BABYLON.StandardMaterial("mat" + zmoldname + "-descimage2texture", scene);
-				zcoveringdesc2.alpha = 0;
-				zcoveringdesc2.specularColor = new BABYLON.Color3(.7, .7, .7);
-				/ * zcoveringdesc2.emissiveColor = new BABYLON.Color3(.7, .7, .7); * /
-				zcoveringdesc2.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-				zcoveringdesc2.diffuseColor = new BABYLON.Color3(.7, .7, .7);
-				var zcontenttexture4 = new BABYLON.DynamicTexture(zmoldname + "-descimage2texture", {width: 512,height: 512}, scene, true);
-				zcontenttexture4.name = zmoldname + "-descimage2texture";
-				zcoveringdesc2.diffuseTexture = zcontenttexture4;
-				zdescimage2.material = zcoveringdesc2;
-				WTW.wrapText(zdescimage2, WTW.cleanHTMLText(zdesctext), "30px", "30px", "left", "top", "white", 0, 0, "90%", "20px", "10px");
-			}
-
-			var zreadmore1 = scene.getMeshByID(zmoldname + "-readmore1");
-			if (zreadmore1 != null) {
-				try {
-					if (zreadmore1.material.diffuseTexture != null) {
-						zreadmore1.material.diffuseTexture.dispose();
-						zreadmore1.material.diffuseTexture = null;
-					}
-				} catch(ex) {}
-				try {
-					if (zreadmore1.material != null) {
-						zreadmore1.material.dispose();
-						zreadmore1.material = null;
-					}
-				} catch(ex) {}
-				var zcoveringread1 = new BABYLON.StandardMaterial("mat" + zmoldname + "-readimage1texture", scene);
-				zcoveringread1.alpha = 1;
-				zcoveringread1.specularColor = new BABYLON.Color3(.2, .2, .2);
-				/ * zcoveringread1.emissiveColor = new BABYLON.Color3(1, 1, 1); * /
-				zcoveringread1.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-				zcoveringread1.diffuseColor = new BABYLON.Color3(.9, .9, .9);
-				var zreadtexture1 = new BABYLON.DynamicTexture(zmoldname + "-readimage1texture", {width: 512,height: 512}, scene, true);
-				zreadtexture1.name = zmoldname + "-readimage1texture";
-				/ * zreadtexture1.hasAlpha = true; * /
-				zcoveringread1.diffuseTexture = zreadtexture1;
-				zcoveringread1.diffuseTexture.vScale = .2;
-				zcoveringread1.diffuseTexture.uScale = 1;
-				zcoveringread1.diffuseTexture.vOffset = .85;
-				zreadmore1.material = zcoveringread1;
-				WTW.wrapText(zreadmore1, "$" + Number(zprice).toFixed(2), zlineheigth, zfontheight, "center", "top", "white", 0, 0);
-			}							
-			
-			var zreadmore2 = scene.getMeshByID(zmoldname + "-readmore2");
-			if (zreadmore2 != null) {
-				try {
-					if (zreadmore2.material.diffuseTexture != null) {
-						zreadmore2.material.diffuseTexture.dispose();
-						zreadmore2.material.diffuseTexture = null;
-					}
-				} catch(ex) {}
-				try {
-					if (zreadmore2.material != null) {
-						zreadmore2.material.dispose();
-						zreadmore2.material = null;
-					}
-				} catch(ex) {}
-				var zcoveringread2 = new BABYLON.StandardMaterial("mat" + zmoldname + "-readimage2texture", scene);
-				zcoveringread2.alpha = 1;
-				zcoveringread2.specularColor = new BABYLON.Color3(.2, .2, .2);
-				/ * zcoveringread2.emissiveColor = new BABYLON.Color3(1, 1, 1); * /
-				zcoveringread2.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-				zcoveringread2.diffuseColor = new BABYLON.Color3(.9, .9, .9);
-				var zreadtexture2 = new BABYLON.DynamicTexture(zmoldname + "-readimage2texture", {width: 512,height: 512}, scene, true);
-				zreadtexture2.name = zmoldname + "-readimage2texture";
-				/ * zreadtexture2.hasAlpha = true; * /
-				zcoveringread2.diffuseTexture = zreadtexture2;
-				zcoveringread2.diffuseTexture.vScale = .2;
-				zcoveringread2.diffuseTexture.uScale = 1;
-				zcoveringread2.diffuseTexture.vOffset = .85;
-				zreadmore2.material = zcoveringread2;
-				WTW.wrapText(zreadmore2, "$" + Number(zprice).toFixed(2), zlineheigth, zfontheight, "center", "top", "white", 0, 0);
-			}
-*/			var zprice1 = scene.getMeshByID(zmoldname + "-price1");
-			var zprice2 = scene.getMeshByID(zmoldname + "-price2");
-			if (zprice1 != null) {
-				try {
-					if (zprice1.material.diffuseTexture != null) {
-						zprice1.material.diffuseTexture.dispose();
-						zprice1.material.diffuseTexture = null;
-					}
-				} catch(ex) {}
-				try {
-					if (zprice1.material != null) {
-						zprice1.material.dispose();
-						zprice1.material = null;
-					}
-				} catch(ex) {}
-				var zcoveringprice1 = new BABYLON.StandardMaterial("mat" + zmoldname + "-coveringprice1texture", scene);
-				zcoveringprice1.alpha = 1;
-				zcoveringprice1.specularColor = new BABYLON.Color3(.2, .2, .2);
-				zcoveringprice1.emissiveColor = new BABYLON.Color3(1, 1, 1);
-				zcoveringprice1.diffuseColor = new BABYLON.Color3(.9, .9, .9);
-				var zpricetexture1 = new BABYLON.DynamicTexture(zmoldname + "-coveringprice1texture", {width: 512,height: 512}, scene, true);
-				zpricetexture1.name = zmoldname + "-coveringprice1texture";
-				zcoveringprice1.diffuseTexture = zpricetexture1;
-				zcoveringprice1.diffuseTexture.uScale = 1;
-				zcoveringprice1.diffuseTexture.vScale = .08;
-				zcoveringprice1.diffuseTexture.vOffset = .92;
-				zprice1.material = zcoveringprice1;
-				WTW.wrapText(zprice1, "$" + Number(zprice).toFixed(2), zlineheigth, zfontheight, "center", "top", "white", 0, 0);
-				zprice1.material.diffuseTexture.uScale = .5
-				zprice1.material.diffuseTexture.uOffset = .25
-				if (zprice2 != null) {
-					try {
-						if (zprice2.material.diffuseTexture != null) {
-							zprice2.material.diffuseTexture.dispose();
-							zprice2.material.diffuseTexture = null;
-						}
-					} catch(ex) {}
-					try {
-						if (zprice2.material != null) {
-							zprice2.material.dispose();
-							zprice2.material = null;
-						}
-					} catch(ex) {}
-					zprice2.material = zcoveringprice1;
-				}
-			}
 		}
 	} catch (ex) { 
 		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-loadProductDisplay=" + ex.message);
 	}
 }
 
-wtwshopping.prototype.productReadMore = function(zmoldname) {
+wtwshopping.prototype.productReadMore = async function(zmoldname) {
 	try {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		var zstoreinfo = WTWShopping.getStoreID(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
@@ -1178,10 +994,10 @@ wtwshopping.prototype.productReadMore = function(zmoldname) {
 			if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
 				if (zstoreinfo.storeiframes == '1') {
 					window.setTimeout(function() {
-						WTW.openIFrame(zstoreinfo.storeproducturl + zmoldnameparts.molds[zmoldnameparts.moldind].store.slug + "/", .8, .8, "Read More...");
+						WTW.openAsyncIFrame(zstoreinfo.storeproducturl + zmoldnameparts.molds[zmoldnameparts.moldind].store.slug + "/", .8, .8, "Read More...");
 					},500);
 				} else {
-					WTW.openWebpage(zstoreinfo.storeproducturl + zmoldnameparts.molds[zmoldnameparts.moldind].store.slug + "/", '_blank');
+					WTW.openAsyncWebpage(zstoreinfo.storeproducturl + zmoldnameparts.molds[zmoldnameparts.moldind].store.slug + "/", '_blank');
 				}
 			}
 		}
@@ -1190,7 +1006,7 @@ wtwshopping.prototype.productReadMore = function(zmoldname) {
 	}  
 }
 
-wtwshopping.prototype.productAddToCart = function(zmoldname) {
+wtwshopping.prototype.productAddToCart = async function(zmoldname) {
 	try {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		var zstoreinfo = WTWShopping.getStoreID(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
@@ -1199,10 +1015,10 @@ wtwshopping.prototype.productAddToCart = function(zmoldname) {
 				var zproductid = zmoldnameparts.molds[zmoldnameparts.moldind].store.productid;
 				if (zstoreinfo.storeiframes == '1') {
 					window.setTimeout(function() {
-						WTW.openIFrame(zstoreinfo.storecarturl + "?add-to-cart=" + zproductid, .8, .8, "Shopping Cart");
+						WTW.openAsyncIFrame(zstoreinfo.storecarturl + "?add-to-cart=" + zproductid, .8, .8, "Shopping Cart");
 					},500);
 				} else {
-					WTW.openWebpage(zstoreinfo.storecarturl + "?add-to-cart=" + zproductid, '_blank');
+					WTW.openAsyncWebpage(zstoreinfo.storecarturl + "?add-to-cart=" + zproductid, '_blank');
 				}
 			}
 		}
@@ -1211,15 +1027,15 @@ wtwshopping.prototype.productAddToCart = function(zmoldname) {
 	}  
 }
 
-wtwshopping.prototype.productShowCart = function(zmoldname) {
+wtwshopping.prototype.productShowCart = async function(zmoldname) {
 	try {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		var zstoreinfo = WTWShopping.getStoreID(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
 		if (zstoreinfo.storecarturl != "") {
 			if (zstoreinfo.storeiframes == '1') {
-				WTW.openIFrame(zstoreinfo.storecarturl, .8, .8, "Shopping Cart");
+				WTW.openAsyncIFrame(zstoreinfo.storecarturl, .8, .8, "Shopping Cart");
 			} else {
-				WTW.openWebpage(zstoreinfo.storecarturl, '_blank');
+				WTW.openAsyncWebpage(zstoreinfo.storecarturl, '_blank');
 			}
 		}
 	} catch (ex) {
@@ -1496,6 +1312,11 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 				}
 			}
 		}
+		/* check to see if the mold still exists since the time it was requested */
+		var zmold = scene.getMeshByID(zmoldname);
+		if (zmold == null) {
+			WTW.disposeClean(zmoldname);
+		}
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-productLoadCategories=" + ex.message);
 	}  
@@ -1511,6 +1332,14 @@ wtwshopping.prototype.disposeClean = function(zmoldname) {
 					if (zmoldnameparts.molds[zmoldnameparts.moldind].store.loaded != undefined) {
 						zmoldnameparts.molds[zmoldnameparts.moldind].store.loaded = 0;
 					}
+				}
+			}
+		}
+		/* check for child parts of the 3D Model that are still in the 3D Scene and delete them */
+		if (zmoldname.indexOf('store') > -1) {
+			for (var i = 0; i < scene.meshes.length;i++) {
+				if (scene.meshes[i].name.indexOf(zmoldname) > -1) {
+					scene.meshes[i].dispose();
 				}
 			}
 		}
@@ -1578,7 +1407,7 @@ wtwshopping.prototype.getStoreInfo = async function(zmoldname) {
 		if (zstoreinfo.woocommerceapiurl != "" && zbuildingname == '') {
 			//var zurl = zstoreinfo.storeurl + "/walktheweb/storeinfo.php?walktheweb_store_info=1"; /* new plugin */
 			var zurl = zstoreinfo.storeurl + "/storeinfo.php?walktheweb_store_info=1";
-			await WTW.getAsyncJSON(zurl, 
+			WTW.getAsyncJSON(zurl, 
 				function(zresponse) {
 					WTWShopping.setStoreInfo(zmoldname, JSON.parse(zresponse));
 				}
@@ -1674,7 +1503,7 @@ wtwshopping.prototype.getCategoriesList = async function() {
 	try {
 		var zstoreinfo = WTWShopping.getStoreID(communityid, buildingid, thingid);
 		if (zstoreinfo.woocommerceapiurl != "") {
-			await WTW.getAsyncJSON(zstoreinfo.woocommerceapiurl + "products/categories/?per_page=50&consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret), 
+			WTW.getAsyncJSON(zstoreinfo.woocommerceapiurl + "products/categories/?per_page=50&consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret), 
 				function(zresponse) {
 					WTWShopping.loadCategoriesList(JSON.parse(zresponse));
 				}
@@ -1731,7 +1560,7 @@ wtwshopping.prototype.getProductsList = async function(zcategoryid) {
 			if (zcategoryid != "") {
 				zurl = zstoreinfo.woocommerceapiurl + "products/?per_page=50&category=" + zcategoryid + "&consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret);
 			}
-			await WTW.getAsyncJSON(zurl, 
+			WTW.getAsyncJSON(zurl, 
 				function(zresponse) {
 					WTWShopping.loadProductsList(JSON.parse(zresponse));
 				}
@@ -1893,7 +1722,7 @@ wtwshopping.prototype.checkStoreID = function(zcommunityid, zbuildingid, zthingi
 wtwshopping.prototype.loadConnectingGrids = async function(zconnectinggridind, zcommunityid, zbuildingid, zthingid) {
 	try {
 		if (WTWShopping.checkStoreID(zcommunityid, zbuildingid, zthingid) == false) {
-			await WTW.getAsyncJSON("/connect/wtw-shopping-getconnectstore.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid, 
+			WTW.getAsyncJSON("/connect/wtw-shopping-getconnectstore.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					if (zresponse != null) {
@@ -2012,7 +1841,7 @@ wtwshopping.prototype.submitMoldForm = async function(zselect) {
 					'moldid':dGet('wtw_tmoldid').value,
 					'function':'deletemold'
 				};
-				await WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
+				WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note: zresponse.serror would contain any error text */
@@ -2038,7 +1867,7 @@ wtwshopping.prototype.submitMoldForm = async function(zselect) {
 					'allowsearch':zallowsearch,
 					'function':'savemold'
 				};
-				await WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
+				WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note: zresponse.serror would contain any error text */

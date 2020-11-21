@@ -16,15 +16,15 @@ wtwshopping.prototype.addStore = async function() {
 			'woocommercesecret':btoa(dGet('wtw_tstorewoosecret').value),
 			'function':'savestore'
 		};
-		await WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note: zresponse.serror would contain any error text */
+				WTWShopping.cancelSaveStore(false);
 				WTW.openFullPageForm('fullpage','List Stores','wtw_liststorespage');
 				WTWShopping.getStores();
 			}
 		);
-		WTWShopping.cancelSaveStore(false);
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshoppingadmin.js-addStore=" + ex.message);
 	} 
@@ -36,15 +36,15 @@ wtwshopping.prototype.deleteStore = async function() {
 			'storeid':dGet('wtw_tstoreid').value,
 			'function':'deletestore'
 		};
-		await WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note: zresponse.serror would contain any error text */
+				WTWShopping.cancelSaveStore(false);
 				WTW.openFullPageForm('fullpage','List Stores','wtw_liststorespage');
 				WTWShopping.getStores();
 			}
 		);
-		WTWShopping.cancelSaveStore(false);
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshoppingadmin.js-deleteStore=" + ex.message);
 	} 
@@ -81,23 +81,23 @@ wtwshopping.prototype.saveConnectStore = async function(zwebtype) {
 			'thingid':thingid,
 			'function':'saveconnectstore'
 		};
-		await WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note: zresponse.serror would contain any error text */
+				WTW.hideAdminMenu();
+				WTW.backToTools();
 			}
 		);
-		WTW.hideAdminMenu();
-		WTW.backToTools();
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshoppingadmin.js-saveConnectStore=" + ex.message);
 	} 
 }
 
-wtwshopping.prototype.getStores = async function() {
+wtwshopping.prototype.getStores = function() {
 	try {
 		WTWShopping.stores = [];
-		await WTW.getAsyncJSON("/connect/wtw-shopping-getstores.php", 
+		WTW.getJSON("/connect/wtw-shopping-getstores.php", 
 			function(zresponse) {
 				dGet('wtw_shopping_liststores').innerHTML = "";
 				var zliststores = "<table class=\"wtw-table\"><tr><td class=\"wtw-tablecolumnheading\"><b>Store Name</b></td><td class=\"wtw-tablecolumnheading\"><b>Store URL</b></td><td class=\"wtw-tablecolumnheading\"><b>&nbsp;</b></td></tr>";
@@ -135,7 +135,7 @@ wtwshopping.prototype.getStoresDropdown = async function(zwebtype) {
 		option0.value = "";
 		dGet('wtwshopping_' + zwebtype + 'connectstore').add(option0);
 		WTWShopping.stores = [];
-		await WTW.getAsyncJSON("/connect/wtw-shopping-getstores.php", 
+		WTW.getAsyncJSON("/connect/wtw-shopping-getstores.php", 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse != null) {
@@ -157,9 +157,9 @@ wtwshopping.prototype.getStoresDropdown = async function(zwebtype) {
 	} 
 }
 
-wtwshopping.prototype.setConnectStore = async function(zwebtype) {
+wtwshopping.prototype.setConnectStore = function(zwebtype) {
 	try {
-		await WTW.getAsyncJSON("/connect/wtw-shopping-getconnectstore.php?communityid=" + communityid + "&buildingid=" + buildingid + "&thingid=" + thingid, 
+		WTW.getJSON("/connect/wtw-shopping-getconnectstore.php?communityid=" + communityid + "&buildingid=" + buildingid + "&thingid=" + thingid, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse != null) {
@@ -213,7 +213,7 @@ wtwshopping.prototype.updateStoreKey = async function(zstoreid) {
 			'storeid':zstoreid,
 			'function':'updatestorekey'
 		};
-		await WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note: zresponse.serror would contain any error text */
@@ -225,13 +225,13 @@ wtwshopping.prototype.updateStoreKey = async function(zstoreid) {
 	} 
 }
 
-wtwshopping.prototype.allowConnection = async function(zstoreid) {
+wtwshopping.prototype.allowConnection = function(zstoreid) {
 	try {
 		var zrequest = {
 			'storeid':zstoreid,
 			'function':'allowconnection'
 		};
-		await WTW.postAsyncJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
+		WTW.postJSON("/core/handlers/wtwshopping-stores.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note: zresponse.serror would contain any error text */

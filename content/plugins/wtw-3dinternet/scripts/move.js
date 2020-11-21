@@ -501,7 +501,7 @@ WTW_3DINTERNET.prototype.initMultiuser = async function(zsendrefresh) {
 			"&si=" + btoa(dGet('wtw_serverinstanceid').value) +
 			"&at=" + dGet('wtw_tusertoken').value +
 			"&refresh=" + zsendrefresh;
-		await WTW.getAsyncJSON(surl, 
+		WTW.getAsyncJSON(surl, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.refresh) {
@@ -540,7 +540,7 @@ WTW_3DINTERNET.prototype.clearMultiuser = async function(zuseravatarid, zinstanc
 				"&d=" + btoa(zuserid) + 
 				"&c=" + btoa(communityid) + 
 				"&b=" + btoa(buildingid);
-			await WTW.getAsyncJSON(surl, 
+			WTW.getAsyncJSON(surl, 
 				function(zresponse) {
 					//zresponse = JSON.parse(zresponse);
 				}

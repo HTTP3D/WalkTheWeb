@@ -352,11 +352,9 @@ wtwshopping.prototype.addMoldStoreButton = function(zmoldname, zmolddef, zlenx, 
 		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
 		zmold.material.alpha = 0;
 		var zbasemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-base", {}, scene);
-//		zbasemold.scaling = new BABYLON.Vector3(1,1,1);
 		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
 		zbasemold.material = new BABYLON.StandardMaterial("matbase" + zmoldname, scene);
 		zbasemold.material.alpha = 0;
-//		zbasemold.position.z = -zlenz*.3
 		zbasemold.parent = zmold;
 		var zshape = 'storereadmore';
 		var zfolder = '/content/plugins/wtw-shopping/assets/3dobjects/';
@@ -530,45 +528,19 @@ wtwshopping.prototype.addMoldStoreButton = function(zmoldname, zmolddef, zlenx, 
 							if (zobjectanimations != null) {
 								WTW.addMoldAnimation(zmoldname, zmeshname, results.meshes[i], zobjectanimations);
 							}
-/*							if (zmeshname == 'displayframe') {
-								var zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-								zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
-								zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
-								zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
-								zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
-							}
-*/						}
+						}
 					}
-					zmold.isPickable = false;
-					WTWShopping.getStoreMolds(zmoldname); 
+					/* check to see if the mold still exists since the time it was requested */
+					zmold = scene.getMeshByID(zmoldname);
+					if (zmold == null) {
+						WTW.disposeClean(zmoldname);
+					} else {
+						zmold.isPickable = false;
+						WTWShopping.getStoreMolds(zmoldname); 
+					}
 				}
 			}
 		);
-/*
-		var ztitlemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-titleimagesm", {}, scene);
-		ztitlemold.scaling = new BABYLON.Vector3(zlenx * .1, zlenz * .86,zleny * .1);
-		ztitlemold.position = new BABYLON.Vector3(zlenx * .36, -zleny * .16, 0);
-		ztitlemold.rotation.x = WTW.getRadians(90);
-		ztitlemold.parent = zbasemold;
-
-		var ztitlemold2 = BABYLON.MeshBuilder.CreateBox(zmoldname + "-titleimage2sm", {}, scene);
-		ztitlemold2.scaling = new BABYLON.Vector3(zlenx * .1, zlenz * .86,zleny * .1);
-		ztitlemold2.position = new BABYLON.Vector3(-zlenx * .36, -zleny * .16, 0);
-		ztitlemold2.rotation.x = WTW.getRadians(-90);
-		ztitlemold2.parent = zbasemold;
-		
-		var zpricemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-price1", {}, scene);
-		zpricemold.scaling = new BABYLON.Vector3(zlenx * .1, zlenz * .65,zleny * .08);
-		zpricemold.position = new BABYLON.Vector3(zlenx * .36, -zleny * .36, 0);
-		zpricemold.rotation.x = WTW.getRadians(90);
-		zpricemold.parent = zbasemold;
-
-		var zpricemold2 = BABYLON.MeshBuilder.CreateBox(zmoldname + "-price2", {}, scene);
-		zpricemold2.scaling = new BABYLON.Vector3(zlenx * .1, zlenz * .65,zleny * .08);
-		zpricemold2.position = new BABYLON.Vector3(-zlenx * .36, -zleny * .36, 0);
-		zpricemold2.rotation.x = WTW.getRadians(-90);
-		zpricemold2.parent = zbasemold;
-*/
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshoppingmolds.js-addMoldStoreButton=" + ex.message);
 	}
@@ -1183,12 +1155,7 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 								WTW.registerMouseOver(zresults.meshes[i]);
 								if (zresults.meshes[i].parent == null) {
 									zresults.meshes[i].parent = zmold;
-									/* zresults.meshes[i].rotation.x = WTW.getRadians(0); */
-									/* zresults.meshes[i].rotation.y = WTW.getRadians(180); */
-/*									zresults.meshes[i].scaling.y = .5;
-									zresults.meshes[i].scaling.x = .5;
-									zresults.meshes[i].scaling.z = .5;
-*/								}
+								}
 								if (zresults.meshes[i].material != null) {
 									if (zmeshname == 'readmore1' || zmeshname == 'readmore2' || zmeshname == 'addtocart1' || zmeshname == 'addtocart2') {
 										zresults.meshes[i].material.emissiveColor = new BABYLON.Color3(.7,.7,.7);
@@ -1215,8 +1182,14 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 								}
 							}
 						}
-						zmold.isPickable = false;
-						WTWShopping.getStoreMolds(zmoldname);
+						/* check to see if the mold still exists since the time it was requested */
+						zmold = scene.getMeshByID(zmoldname);
+						if (zmold != null) {
+							zmold.isPickable = false;
+							WTWShopping.getStoreMolds(zmoldname);
+						} else {
+							WTW.disposeClean(zmoldname);
+						}
 					}
 				}
 			);		

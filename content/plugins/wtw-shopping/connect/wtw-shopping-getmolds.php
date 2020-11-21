@@ -34,10 +34,7 @@ try {
 			from (select * from ".wtw_tableprefix.$zwebtype."molds where shape like '%store%' and ".$zwebtype."id='".$zwebid."') m1
 				left join (select * from ".WTWSHOPPING_PREFIX."molds where ".$zwebtype."id='".$zwebid."') sm1
 				on m1.".$zwebtype."moldid=sm1.moldid
-			where m1.communityid='".$zcommunityid."'
-				and m1.buildingid='".$zbuildingid."'
-				and m1.thingid='".$zthingid."'
-				and m1.deleted=0;");
+			where m1.deleted=0;");
 		foreach ($zresults as $zrow) {
 			if (empty($zrow["shoppingmoldid"]) || !isset($zrow["shoppingmoldid"])) {
 				$znewshoppingmoldid = $wtwconnect->getRandomString(16,1);
@@ -55,7 +52,7 @@ try {
 						updateuserid)
 					values
 					   ('".$znewshoppingmoldid."',
-					    '".$zrow[$zwebtype."moldid"]."',
+					    '".$zrow["moldid"]."',
 						'".$zcommunityid."',
 						'".$zbuildingid."',
 						'".$zthingid."',
