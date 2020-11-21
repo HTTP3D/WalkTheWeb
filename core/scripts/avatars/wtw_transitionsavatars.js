@@ -18,7 +18,7 @@ WTWJS.prototype.saveAvatarEnterAnimation = async function() {
 			'transport': '1',
 			'function':'savetransportanimation'
 		};
-		await WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -159,7 +159,7 @@ WTWJS.prototype.deleteUserAnimation = async function(zselectname) {
 				'avataranimationid':zavataranimationid,
 				'function':'deleteavataranimation'
 			};
-			await WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+			WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -226,7 +226,7 @@ WTWJS.prototype.getAvatarAnimationsAll = async function() {
 			'instanceid': dGet("wtw_tinstanceid").value,
 			'function':'getavataranimationsall'
 		};
-		await WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */

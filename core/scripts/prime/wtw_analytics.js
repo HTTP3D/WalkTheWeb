@@ -59,7 +59,7 @@ WTWJS.prototype.checkAnalyticsQueue = function() {
 	}
 }
 
-WTWJS.prototype.trackPageView = function(zactionzoneind, zdistancename) {
+WTWJS.prototype.trackPageView = async function(zactionzoneind, zdistancename) {
 	/* process the page view to analytics */
 	try {
 		var zcommunityid = WTW.actionZones[Number(zactionzoneind)].communityinfo.communityid;
@@ -111,7 +111,7 @@ WTWJS.prototype.trackPageView = function(zactionzoneind, zdistancename) {
 					break;
 			} 
 			if (zsrc != "") {
-				WTW.getWebpage(zsrc, null);
+				WTW.getAsycnWebpage(zsrc, null);
 			}
 		} 
 		

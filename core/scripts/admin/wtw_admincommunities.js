@@ -17,7 +17,7 @@ WTWJS.prototype.openCommunityForm = async function(zcommunityid) {
 		WTW.hide('wtw_adminmenu25b');
 		WTW.hide('wtw_adminmenu42b');
 		dGet('wtw_tcommunityalttag').value = "";
-		await WTW.getAsyncJSON("/connect/communities.php", 
+		WTW.getAsyncJSON("/connect/communities.php", 
 			function(response) {
 				WTW.communities = JSON.parse(response);
 				if (WTW.communities != null) {
@@ -56,7 +56,7 @@ WTWJS.prototype.loadCommunityForm = async function(zcommunityid) {
 	/* load settings to the 3D Community Information Form */
 	try {
 		dGet('wtw_tcommunityalttag').value = "";
-		await WTW.getAsyncJSON("/connect/communities.php", 
+		WTW.getAsyncJSON("/connect/communities.php", 
 			function(response) {
 				WTW.communities = JSON.parse(response);
 				if (WTW.communities != null) {
@@ -94,7 +94,7 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 					'communityid': communityid,
 					'function':'deletecommunity'
 				};
-				await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+				WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -140,10 +140,13 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 					'alttag': btoa(dGet('wtw_tcommunityalttag').value),
 					'function':'savecommunity'
 				};
-				await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+				WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
+						WTW.hideAdminMenu();
+						WTW.show('wtw_adminmenu24');
+						WTW.setMenuBarSelectText();
 					}
 				);
 				break;
@@ -160,11 +163,11 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 					}
 				}
 				//need rollback on scene
+				WTW.hideAdminMenu();
+				WTW.show('wtw_adminmenu24');
+				WTW.setMenuBarSelectText();
 				break;
 		}
-		WTW.hideAdminMenu();
-		WTW.show('wtw_adminmenu24');
-		WTW.setMenuBarSelectText();
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-submitCommunityForm=" + ex.message);
 	}
@@ -174,7 +177,7 @@ WTWJS.prototype.copyMyCommunity = async function() {
 	/* make a copy of an existing 3D Community (use as backup or as a new 3D Community to edit and use) */
 	try {
 		dGet('wtw_tcommunityname').value = '';
-		await WTW.getAsyncJSON("/connect/communities.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getAsyncJSON("/connect/communities.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.communities = JSON.parse(response);
 				if (WTW.communities != null) {
@@ -226,7 +229,7 @@ WTWJS.prototype.copyCommunity = async function(zcopycommunityid, zcommunityname)
 			'alttag': '',
 			'function':'savecommunity'
 		};
-		await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -257,7 +260,7 @@ WTWJS.prototype.getSelectCommunitiesList = async function() {
 		WTW.hide('wtw_listcommunities');
 		WTW.show('wtw_loadingcommunityid');
 		dGet("wtw_listcommunities").innerHTML = "";
-		await WTW.getAsyncJSON("/connect/communities.php", 
+		WTW.getAsyncJSON("/connect/communities.php", 
 			function(response) {
 				WTW.communities = JSON.parse(response);
 				if (WTW.communities != null) {
@@ -308,7 +311,7 @@ WTWJS.prototype.openShareCommunityForm = async function() {
 		dGet('wtw_tsharecommtags').value = "";
 		WTW.hide('wtw_adminmenu29b');
 		WTW.show('wtw_loadingsharecommunityform');
-		await WTW.getAsyncJSON("/connect/communities.php", 
+		WTW.getAsyncJSON("/connect/communities.php", 
 			function(response) {
 				WTW.communities = JSON.parse(response);
 				if (WTW.communities != null) {
@@ -360,7 +363,7 @@ WTWJS.prototype.saveShareCommunityForm = async function() {
 			'tags': btoa(dGet('wtw_tsharecommtags').value),
 			'function':'savecommunitytemplate'
 		};
-		await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				dGet('wtw_sharehash').value = zresponse.sharehash;
@@ -382,7 +385,7 @@ WTWJS.prototype.shareCommunityTemplate = async function() {
 			'sharehash': dGet('wtw_sharehash').value,
 			'function':'sharecommunitytemplate'
 		};
-		await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 
@@ -525,7 +528,7 @@ WTWJS.prototype.saveGround = async function() {
 			'groundtextureid': zgroundtextureid,
 			'function':'saveextendedground'
 		};
-		await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -777,7 +780,7 @@ WTWJS.prototype.saveSkyDome = async function() {
 			'skymiecoefficient': WTW.init.skyMieCoefficient,
 			'function':'saveskydome'
 		};
-		await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -798,7 +801,7 @@ WTWJS.prototype.saveGravity = async function() {
 				'gravity':WTW.init.gravity,
 				'function':'savegravity'
 			};
-			await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+			WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -810,7 +813,7 @@ WTWJS.prototype.saveGravity = async function() {
 				'gravity':WTW.init.gravity,
 				'function':'savegravity'
 			};
-			await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
+			WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 				function(zresponse) {
 				}
 			);
@@ -820,7 +823,7 @@ WTWJS.prototype.saveGravity = async function() {
 				'gravity':WTW.init.gravity,
 				'function':'savegravity'
 			};
-			await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
+			WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -1001,10 +1004,14 @@ WTWJS.prototype.setStartPosition = async function(zcommunityid, zbuildingid, zth
 					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
 					'function':'savestartposition'
 				};
-				await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+				WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
+						dGet('wtw_startsaved').style.visibility = "visible";
+						window.setTimeout(function(){
+							dGet('wtw_startsaved').style.visibility = "hidden";
+						}, 3000);
 					}
 				);
 			} else if (zbuildingid != "") {
@@ -1021,8 +1028,12 @@ WTWJS.prototype.setStartPosition = async function(zcommunityid, zbuildingid, zth
 					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
 					'function':'savestartposition'
 				};
-				await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
+				WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 					function(zresponse) {
+						dGet('wtw_startsaved').style.visibility = "visible";
+						window.setTimeout(function(){
+							dGet('wtw_startsaved').style.visibility = "hidden";
+						}, 3000);
 					}
 				);
 			} else if (zthingid != "") {
@@ -1039,17 +1050,17 @@ WTWJS.prototype.setStartPosition = async function(zcommunityid, zbuildingid, zth
 					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
 					'function':'savestartposition'
 				};
-				await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
+				WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
+						dGet('wtw_startsaved').style.visibility = "visible";
+						window.setTimeout(function(){
+							dGet('wtw_startsaved').style.visibility = "hidden";
+						}, 3000);
 					}
 				);
 			}
-			dGet('wtw_startsaved').style.visibility = "visible";
-			window.setTimeout(function(){
-				dGet('wtw_startsaved').style.visibility = "hidden";
-			}, 3000);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-setStartPosition=" + ex.message);
@@ -1065,7 +1076,7 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 		WTW.hide('wtw_adminmenu69b');
 		WTW.show('wtw_loadingupdatesnapshot');
 		if (communityid != '') {
-			await WTW.getAsyncJSON("/connect/communities.php", 
+			WTW.getAsyncJSON("/connect/communities.php", 
 				function(response) {
 					WTW.communities = JSON.parse(response);
 					if (WTW.communities != null) {
@@ -1096,7 +1107,7 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 				}
 			);
 		} else if (buildingid != '') {
-			await WTW.getAsyncJSON("/connect/buildings.php", 
+			WTW.getAsyncJSON("/connect/buildings.php", 
 				function(response) {
 					WTW.buildings = JSON.parse(response);
 					if (WTW.buildings != null) {
@@ -1127,7 +1138,7 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 				}
 			);
 		} else if (thingid != '') {
-			await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+			WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 				function(response) {
 					WTW.things = JSON.parse(response);
 					if (WTW.things != null) {
@@ -1189,7 +1200,7 @@ WTWJS.prototype.snapshot3D = async function(zfilepath, zfilename) {
 			'filedata': filedata,
 			'function':'saveimage'
 		};
-		await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */

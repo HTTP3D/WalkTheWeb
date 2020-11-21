@@ -68,7 +68,7 @@ WTWJS.prototype.getSavedAvatar = async function(zavatarname, zglobaluseravatarid
 					'serverinstanceid':btoa(dGet('wtw_serverinstanceid').value),
 					'function':'getglobalavatar'
 				};
-				await WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalavatar.php", zrequest, 
+				WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalavatar.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						if (zresponse.avatar != null) {
@@ -82,7 +82,7 @@ WTWJS.prototype.getSavedAvatar = async function(zavatarname, zglobaluseravatarid
 				if (zavatarname.indexOf("-") > -1) {
 					zinstanceid = zavatarname.split('-')[1];
 				}
-				await WTW.getAsyncJSON("/connect/useravatar.php?id=" + btoa(zavatarid) + "&a=" + btoa(zuseravatarid) + "&i=" + btoa(zinstanceid), 
+				WTW.getAsyncJSON("/connect/useravatar.php?id=" + btoa(zavatarid) + "&a=" + btoa(zuseravatarid) + "&i=" + btoa(zinstanceid), 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						if (zresponse != null) {
@@ -611,18 +611,18 @@ WTWJS.prototype.changeAvatarAnimation = async function(zselobj) {
 				'speedratio':zspeedratio,
 				'function':'saveavataranimation'
 			};
-			await WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+			WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
 					if (zresponse.useravataranimationid != undefined) {
 						zuseravataranimationid = zresponse.useravataranimationid;
 					}
+					zselobj.blur();
 					WTW.updateAnimSelectValue(zselobj.id + '-value', zuseravataranimationid);
 				}
 			);
 		}
-		zselobj.blur();
     } catch (ex) {
 		WTW.log("core-scripts-avatars-wtw_loadavatar.js-changeAvatarAnimation=" + ex.message);
     }
@@ -880,7 +880,7 @@ WTWJS.prototype.saveAvatarDisplayName = async function() {
 				'avatardisplayname': dGet('wtw_tavatardisplayname').value,
 				'function':'saveavatardisplayname'
 			};
-			await WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+			WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */

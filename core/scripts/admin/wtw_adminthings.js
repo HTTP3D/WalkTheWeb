@@ -18,7 +18,7 @@ WTWJS.prototype.openThingForm = async function(zthingid) {
 		WTW.hide('wtw_adminmenu35b');
 		WTW.show('wtw_loadingthingform');
 		dGet('wtw_tthingalttag').value = "";
-		await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.things = JSON.parse(response);
 				if (WTW.things != null) {
@@ -64,7 +64,7 @@ WTWJS.prototype.loadThingForm = async function(zthingid) {
 		dGet('wtw_tthingname').value = '';
 		dGet('wtw_tthingdescription').value = '';
 		dGet('wtw_tthingalttag').value = "";
-		await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.things = JSON.parse(response);
 				if (WTW.things != null) {
@@ -110,7 +110,7 @@ WTWJS.prototype.submitthingForm = async function(w) {
 					'thingid': thingid,
 					'function':'deletething'
 				};
-				await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
+				WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -146,10 +146,14 @@ WTWJS.prototype.submitthingForm = async function(w) {
 						'alttag': btoa(dGet('wtw_tthingalttag').value),
 						'function':'savething'
 					};
-					await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
+					WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							/* note serror would contain errors */
+							/* return to previous menu */
+							WTW.hideAdminMenu();
+							WTW.backToEdit();
+							WTW.setMenuBarSelectText();
 						}
 					);
 				}
@@ -166,15 +170,12 @@ WTWJS.prototype.submitthingForm = async function(w) {
 						}
 					}
 				}
-				validate = 1;
+				/* return to previous menu */
+				WTW.hideAdminMenu();
+				WTW.backToEdit();
+				WTW.setMenuBarSelectText();
 				break;
 		}
-		if (validate == 1) {
-			/* return to previous menu */
-			WTW.hideAdminMenu();
-			WTW.backToEdit();
-		} 
-		WTW.setMenuBarSelectText();
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminthings.js-submitthingForm=" + ex.message);
 	}
@@ -185,7 +186,7 @@ WTWJS.prototype.copyMyThing = async function() {
 	try {
 		dGet('wtw_tthingind').value = '-1';
 		dGet('wtw_tthingname').value = '';
-		await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.things = JSON.parse(response);
 				if (WTW.things != null) {
@@ -231,7 +232,7 @@ WTWJS.prototype.copyThing = async function(zcopythingid, zthingname) {
 			'alttag': btoa(dGet('wtw_tthingalttag').value),
 			'function':'savething'
 		};
-		await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -262,7 +263,7 @@ WTWJS.prototype.getSelectThingsList = async function() {
 		WTW.hide('wtw_listthings');
 		WTW.show('wtw_loadingthingid');
 		dGet("wtw_listthings").innerHTML = "";
-		await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.things = JSON.parse(response);
 				if (WTW.things != null) {
@@ -294,7 +295,7 @@ WTWJS.prototype.getThingMoldList = async function() {
 		WTW.hide('wtw_thingmoldsbuttonlist');
 		WTW.show('wtw_loadingthingmoldsbuttonlist');
 		dGet("wtw_thingmoldsbuttonlist").innerHTML = "";
-		await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.things = JSON.parse(response);
 				if (WTW.things != null) {
@@ -340,7 +341,7 @@ WTWJS.prototype.openShareThingForm = async function() {
 		dGet('wtw_tsharethingtags').value = "";
 		WTW.hide('wtw_adminmenu39b');
 		WTW.show('wtw_loadingsharethingform');
-		await WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.things = JSON.parse(response);
 				if (WTW.things != null) {
@@ -398,7 +399,7 @@ WTWJS.prototype.saveShareThingForm = async function() {
 			'tags': btoa(dGet('wtw_tsharethingtags').value),
 			'function':'savethingtemplate'
 		};
-		await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				dGet('wtw_sharehash').value = zresponse.sharehash;
@@ -420,7 +421,7 @@ WTWJS.prototype.shareThingTemplate = async function() {
 			'sharehash': dGet('wtw_sharehash').value,
 			'function':'sharethingtemplate'
 		};
-		await WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 

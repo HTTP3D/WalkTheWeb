@@ -637,16 +637,6 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 				zthisraisedmold.material = zcovering;
 			}
 		}
-		if (WTW.isUploadReady(zimageid)) {
-			loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset);
-		} else {
-			await WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zimageid, 
-				function(response) {
-					WTW.loadUpload(JSON.parse(response), zimageid, 0);
-					loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset);
-				}
-			);
-		}
 		var zmolddefimage = WTW.newMold();
 		zmolddefimage.shape = "box";
 		zmolddefimage.covering = "directional texture";
@@ -715,7 +705,17 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 			zimageframemold.material = WTW.addCovering("directional texture", zmoldname + "-imageframe", zmolddefframe, .2, zleny * 1.02, zlenz * 1.02, '0', '0');
 			zimageframemold.parent = zbasemold;	
 			zimageframemold.material.alpha = 1;	
-		}		
+		}
+		if (WTW.isUploadReady(zimageid)) {
+			loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset);
+		} else {
+			WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zimageid, 
+				function(response) {
+					WTW.loadUpload(JSON.parse(response), zimageid, 0);
+					loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset);
+				}
+			);
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldRaisedImage=" + ex.message);
 	}
@@ -967,6 +967,11 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 							}
 						}
 					}
+				}
+				/* check to see if the mold still exists since the time it was requested */
+				var zmold = scene.getMeshByID(zmoldname);
+				if (zmold == null) {
+					WTW.disposeClean(zmoldname);
 				}
 			}
 		);		
@@ -1483,6 +1488,7 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 								}
 							}
 						}
+						zmold = scene.getMeshByID(zmoldname);
 						if (zmold == null || zmold.parent == null) {
 							/* if the parent has been deleted after this async process began (avoiding orphaned bjects) */
 							WTW.disposeClean(zmoldname);
@@ -2508,7 +2514,7 @@ WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, 
 		if (WTW.isUploadReady(zimageid)) {
 			loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset, zmold);
 		} else {
-			await WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zimageid, 
+			WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zimageid, 
 				function(response) {
 					WTW.loadUpload(JSON.parse(response), zimageid, 0);
 					loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset, zmold);

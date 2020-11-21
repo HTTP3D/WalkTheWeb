@@ -191,10 +191,13 @@ WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 						'connectinggridid': dGet("wtw_teditconnectinggridid").value,
 						'function':'deleteconnectinggrid'
 					};
-					await WTW.postAsyncJSON("/core/handlers/connectinggrids.php", zrequest, 
+					WTW.postAsyncJSON("/core/handlers/connectinggrids.php", zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							/* note serror would contain errors */
+							WTW.hideAdminMenu();
+							WTW.backToEdit();
+							WTW.closeEditPoles();
 						}
 					);
 					break;
@@ -215,6 +218,9 @@ WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 						WTW.setDDLValue('wtw_taltloadactionzoneid',WTW.connectingGrids[connectinggridind].altloadactionzoneid);
 						WTW.setNewConnectingGrid();
 					}
+					WTW.hideAdminMenu();
+					WTW.backToEdit();
+					WTW.closeEditPoles();
 					break;
 				case 1: 
 					/* save connecting grid */
@@ -259,18 +265,18 @@ WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 						'alttag': dGet('wtw_tconngridalttag').value,
 						'function':'saveconnectinggrid'
 					};
-					await WTW.postAsyncJSON("/core/handlers/connectinggrids.php", zrequest, 
+					WTW.postAsyncJSON("/core/handlers/connectinggrids.php", zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							/* note serror would contain errors */
+							WTW.hideAdminMenu();
+							WTW.backToEdit();
+							WTW.closeEditPoles();
 						}
 					);
 					break;
 			}
-			WTW.hideAdminMenu();
-			WTW.backToEdit();
 		}
-		WTW.closeEditPoles();
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminconnectinggrids.js-submitConnectingGridsForm=" + ex.message);
 	}
@@ -282,23 +288,6 @@ WTWJS.prototype.openListConnectingGridsForm = async function() {
 	try {
 		WTW.clearDDL('wtw_addcommunitybuildingid');
 		dGet('wtw_commbuildinglist').innerHTML = "";
-		await WTW.getAsyncJSON("/connect/buildings.php", 
-			function(zresponse) {
-				WTW.buildings = JSON.parse(zresponse);
-				if (WTW.buildings != null) {
-					for (var i = 0; i < WTW.buildings.length; i++) {
-						if (WTW.buildings[i] != null) {
-							if (WTW.buildings[i].buildinginfo.buildingid != undefined) {
-								var zoption = document.createElement("option");
-								zoption.text = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
-								zoption.value = WTW.buildings[i].buildinginfo.buildingid;
-								dGet('wtw_addcommunitybuildingid').add(zoption);
-							}
-						}
-					}
-				}
-			}
-		);
 		if (WTW.connectingGrids.length > 0) {
 			for (var i=0; i < WTW.connectingGrids.length; i++) {
 				if (WTW.connectingGrids[i] != null) {
@@ -318,6 +307,23 @@ WTWJS.prototype.openListConnectingGridsForm = async function() {
 		} else {
 			WTW.show('wtw_adminmenu27b');
 		}
+		WTW.getAsyncJSON("/connect/buildings.php", 
+			function(zresponse) {
+				WTW.buildings = JSON.parse(zresponse);
+				if (WTW.buildings != null) {
+					for (var i = 0; i < WTW.buildings.length; i++) {
+						if (WTW.buildings[i] != null) {
+							if (WTW.buildings[i].buildinginfo.buildingid != undefined) {
+								var zoption = document.createElement("option");
+								zoption.text = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
+								zoption.value = WTW.buildings[i].buildinginfo.buildingid;
+								dGet('wtw_addcommunitybuildingid').add(zoption);
+							}
+						}
+					}
+				}
+			}
+		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminconnectinggrids.js-openListConnectingGridsForm=" + ex.message);
 	}		
@@ -394,8 +400,8 @@ WTWJS.prototype.addConnectingGrid = async function(childwebtype, childwebid, chi
 			positiony = newcoords.positionY;
 			positionz = newcoords.positionZ;
 			rotationy = newcoords.rotationY;
-			await WTW.getAsyncJSON("/connect/actionzones.php?thingid=" + childwebid + "&buildingid=" + childwebid + "&communityid=&parentname=" + parentname + "&connectinggridid=" + connectinggridid + "&connectinggridind=" + connectinggridind, 
-				async function(response) {
+			WTW.getAsyncJSON("/connect/actionzones.php?thingid=" + childwebid + "&buildingid=" + childwebid + "&communityid=&parentname=" + parentname + "&connectinggridid=" + connectinggridid + "&connectinggridind=" + connectinggridind, 
+				function(response) {
 					var addactionzones = JSON.parse(response);
 					for (var j = 0; j < addactionzones.actionzones.length; j++) {
 						var actionzoneind = WTW.getNextCount(WTW.actionZones);
@@ -484,13 +490,6 @@ WTWJS.prototype.addConnectingGrid = async function(childwebtype, childwebid, chi
 					dGet('wtw_tconngridrotationx').value = rotationx;
 					dGet('wtw_tconngridrotationy').value = rotationy;
 					dGet('wtw_tconngridrotationz').value = rotationz;	
-					if (childwebtype == "building") {
-						await WTW.getAsyncJSON("/connect/connectinggrids.php?parentwebid=" + childwebid + "&startpositionx=0&startpositiony=0&startpositionz=0&parentname=" + WTW.connectingGrids[connectinggridind].moldname, 
-							function(response) {
-								WTW.loadBuildingConnectingGrids(JSON.parse(response));
-							}
-						);
-					}
 					if (WTW.myAvatar != null) {
 						WTW.holdPosition = WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + .1 + "|" + WTW.myAvatar.position.z;
 					} else {
@@ -500,6 +499,13 @@ WTWJS.prototype.addConnectingGrid = async function(childwebtype, childwebid, chi
 					WTW.setNewConnectingGrid();
 					WTW.openConnectingGridsForm(connectinggridind);
 					WTW.setWindowSize();
+					if (childwebtype == "building") {
+						WTW.getAsyncJSON("/connect/connectinggrids.php?parentwebid=" + childwebid + "&startpositionx=0&startpositiony=0&startpositionz=0&parentname=" + WTW.connectingGrids[connectinggridind].moldname, 
+							function(zresponse) {
+								WTW.loadChildConnectingGrids(JSON.parse(zresponse));
+							}
+						);
+					}
 				}
 			);
 		} 
@@ -508,8 +514,8 @@ WTWJS.prototype.addConnectingGrid = async function(childwebtype, childwebid, chi
 	}
 }
 
-WTWJS.prototype.loadBuildingConnectingGrids = async function(addconnectinggrids) {
-	/* load any connecting grids for 3D Things that are in the 3D Building */
+WTWJS.prototype.loadChildConnectingGrids = async function(addconnectinggrids) {
+	/* load any connecting grids for 3D Things that are in the 3D Building or 3D Community */
 	try {
 		var parentname = "";
 		var found = 0;
@@ -530,9 +536,9 @@ WTWJS.prototype.loadBuildingConnectingGrids = async function(addconnectinggrids)
 							WTW.connectingGrids[connectinggridind].shown = "0";
 							WTW.connectingGrids[connectinggridind].status = 2;
 							WTW.addMoldToQueue(WTW.connectingGrids[connectinggridind].moldname, WTW.connectingGrids[connectinggridind], WTW.connectingGrids[connectinggridind].parentname, "hidden",null);
-							await WTW.getAsyncJSON("/connect/actionzone.php?actionzoneid=" + WTW.connectingGrids[connectinggridind].loadactionzoneid + "&parentname=" + WTW.connectingGrids[connectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[connectinggridind].connectinggridid + "&connectinggridind=" + connectinggridind, 
+							WTW.getAsyncJSON("/connect/actionzone.php?actionzoneid=" + WTW.connectingGrids[connectinggridind].loadactionzoneid + "&parentname=" + WTW.connectingGrids[connectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[connectinggridind].connectinggridid + "&connectinggridind=" + connectinggridind, 
 								function(response) {
-									WTW.loadBuildingThingsLoadZones(JSON.parse(response));
+									WTW.loadChildLoadZones(JSON.parse(response));
 								}
 							);
 						}
@@ -541,7 +547,7 @@ WTWJS.prototype.loadBuildingConnectingGrids = async function(addconnectinggrids)
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminconnectinggrids.js-loadBuildingConnectingGrids=" + ex.message);
+		WTW.log("core-scripts-admin-wtw_adminconnectinggrids.js-loadChildConnectingGrids=" + ex.message);
 	} 
 }
 
@@ -613,35 +619,35 @@ WTWJS.prototype.openFirstBuildingForm = async function() {
 	/* open the form settings to position, scale, and rotate the first bulding marker */
 	try {
 		WTW.hide('wtw_adminmenu28b');
-		await WTW.getAsyncJSON("/connect/communities.php?communityid=" + communityid,
+		WTW.getAsyncJSON("/connect/community.php?communityid=" + communityid,
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
-				if (zresponse[0].firstbuilding.position.x != undefined) {
-					dGet('wtw_tfirstbuildpositionx').value = zresponse[0].firstbuilding.position.x;
+				if (zresponse.communities[0].firstbuilding.position.x != undefined) {
+					dGet('wtw_tfirstbuildpositionx').value = zresponse.communities[0].firstbuilding.position.x;
 				} 
-				if (zresponse[0].firstbuilding.position.y != undefined) {
-					dGet('wtw_tfirstbuildpositiony').value = zresponse[0].firstbuilding.position.y;
+				if (zresponse.communities[0].firstbuilding.position.y != undefined) {
+					dGet('wtw_tfirstbuildpositiony').value = zresponse.communities[0].firstbuilding.position.y;
 				} 
-				if (zresponse[0].firstbuilding.position.z != undefined) {
-					dGet('wtw_tfirstbuildpositionz').value = zresponse[0].firstbuilding.position.z;
+				if (zresponse.communities[0].firstbuilding.position.z != undefined) {
+					dGet('wtw_tfirstbuildpositionz').value = zresponse.communities[0].firstbuilding.position.z;
 				} 
-				if (zresponse[0].firstbuilding.scaling.x != undefined) {
-					dGet('wtw_tfirstbuildscalingx').value = zresponse[0].firstbuilding.scaling.x;
+				if (zresponse.communities[0].firstbuilding.scaling.x != undefined) {
+					dGet('wtw_tfirstbuildscalingx').value = zresponse.communities[0].firstbuilding.scaling.x;
 				} 
-				if (zresponse[0].firstbuilding.scaling.y != undefined) {
-					dGet('wtw_tfirstbuildscalingy').value = zresponse[0].firstbuilding.scaling.y;
+				if (zresponse.communities[0].firstbuilding.scaling.y != undefined) {
+					dGet('wtw_tfirstbuildscalingy').value = zresponse.communities[0].firstbuilding.scaling.y;
 				} 
-				if (zresponse[0].firstbuilding.scaling.z != undefined) {
-					dGet('wtw_tfirstbuildscalingz').value = zresponse[0].firstbuilding.scaling.z;
+				if (zresponse.communities[0].firstbuilding.scaling.z != undefined) {
+					dGet('wtw_tfirstbuildscalingz').value = zresponse.communities[0].firstbuilding.scaling.z;
 				} 
-				if (zresponse[0].firstbuilding.rotation.x != undefined) {
-					dGet('wtw_tfirstbuildrotationx').value = zresponse[0].firstbuilding.rotation.x;
+				if (zresponse.communities[0].firstbuilding.rotation.x != undefined) {
+					dGet('wtw_tfirstbuildrotationx').value = zresponse.communities[0].firstbuilding.rotation.x;
 				} 
-				if (zresponse[0].firstbuilding.rotation.y != undefined) {
-					dGet('wtw_tfirstbuildrotationy').value = zresponse[0].firstbuilding.rotation.y;
+				if (zresponse.communities[0].firstbuilding.rotation.y != undefined) {
+					dGet('wtw_tfirstbuildrotationy').value = zresponse.communities[0].firstbuilding.rotation.y;
 				} 
-				if (zresponse[0].firstbuilding.rotation.z != undefined) {
-					dGet('wtw_tfirstbuildrotationz').value = zresponse[0].firstbuilding.rotation.z;
+				if (zresponse.communities[0].firstbuilding.rotation.z != undefined) {
+					dGet('wtw_tfirstbuildrotationz').value = zresponse.communities[0].firstbuilding.rotation.z;
 				} 
 				WTW.show('wtw_adminmenu28b');
 				WTW.setFirstBuilding();
@@ -841,19 +847,22 @@ WTWJS.prototype.submitFirstBuildingForm = async function(w) {
 					'buildingrotationz': zbuildingrotationz,
 					'function':'updatefirstbuilding'
 				};
-				await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+				WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
+						WTW.disposeClean('firstbuilding-----babylonfile');
+						WTW.hideAdminMenu();
+						WTW.backToTools();
 					}
 				);
 				break;
 			case -1:
+				WTW.disposeClean('firstbuilding-----babylonfile');
+				WTW.hideAdminMenu();
+				WTW.backToTools();
 				break;
 		}
-		WTW.disposeClean('firstbuilding-----babylonfile');
-		WTW.hideAdminMenu();
-		WTW.backToTools();
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminconnectinggrids.js-submitFirstBuildingForm=" + ex.message);
 	}

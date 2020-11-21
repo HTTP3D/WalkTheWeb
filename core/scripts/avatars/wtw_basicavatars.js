@@ -661,9 +661,14 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 						}
 					} 
 				}
-				/* make my avatar match the camera angle if first entering a 3D Scene */
-				if (WTW.myAvatar.name == zavatarname && WTW.placeHolder == 1) {
-					WTW.init.startRotationY = WTW.getDegrees(WTW.camera.rotation.y);
+				zavatar = scene.getMeshByID(zavatarname);
+				if (zavatar == null) {
+					WTW.disposeClean(zavatarname);
+				} else {
+					/* make my avatar match the camera angle if first entering a 3D Scene */
+					if (WTW.myAvatar.name == zavatarname && WTW.placeHolder == 1) {
+						WTW.init.startRotationY = WTW.getDegrees(WTW.camera.rotation.y);
+					}
 				}
 			}
 		);

@@ -20,7 +20,7 @@ WTWJS.prototype.openAllUsers = async function() {
 		WTW.hide('wtw_useradd');
 		dGet('wtw_userlist').innerHTML = "";
 		dGet('wtw_alluserswidth').className = "wtw-dashboardboxleftfull";
-		await WTW.getAsyncJSON("/connect/users.php", 
+		WTW.getAsyncJSON("/connect/users.php", 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				var zuserlist = "";
@@ -39,7 +39,7 @@ WTWJS.prototype.openAllUsers = async function() {
 								}
 							}
 							zuserlist += "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].createdate + "</td><td class=\"wtw-tablecolumns\">";
-							zuserlist += "<div id='getuser" + zresponse[i].userid + "' class='wtw-bluebuttonright' onclick=\"WTW.getUser('" + zresponse[i].userid + "');\">View User</div>";
+							zuserlist += "<div id='getuser" + zresponse[i].userid + "' class='wtw-bluebuttonright' onclick=\"WTW.getUser('" + zresponse[i].userid + "');\">Edit User</div>";
 							zuserlist += "</td></tr>";
 						}
 					}
@@ -65,7 +65,7 @@ WTWJS.prototype.getUser = async function(zuserid) {
 		WTW.hide('wtw_userinfo');
 		dGet('wtw_userinfo').innerHTML = "";
 		dGet('wtw_alluserswidth').className = "wtw-dashboardboxleft";
-		await WTW.getAsyncJSON("/connect/user.php?userid=" + zuserid, 
+		WTW.getAsyncJSON("/connect/user.php?userid=" + zuserid, 
 			async function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				var zuserlist = "";
@@ -114,7 +114,7 @@ WTWJS.prototype.getUser = async function(zuserid) {
 				WTW.show('wtw_userinfo');
 				if (dGet('wtw_adduserrole') != null) {
 					WTW.clearDDL('wtw_adduserrole');
-					await WTW.getAsyncJSON("/connect/roles.php", 
+					WTW.getAsyncJSON("/connect/roles.php", 
 						function(zresponse) {
 							if (zresponse != null) {
 								zresponse = JSON.parse(zresponse);
@@ -145,7 +145,7 @@ WTWJS.prototype.deleteUserRole = async function(zuserid, zuserinroleid) {
 				'userid':zuserid,
 				'function':'deleteuserrole'
 			};
-			await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+			WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -169,7 +169,7 @@ WTWJS.prototype.addUserRole = async function(zuserid) {
 				'roleid': zroleid,
 				'function':'saveuserrole'
 			};
-			await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+			WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -249,7 +249,7 @@ WTWJS.prototype.saveNewUser = async function() {
 				'useremail': btoa(zemail),
 				'function':'savenewuser'
 			};
-			await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+			WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -284,7 +284,7 @@ WTWJS.prototype.saveUser = async function() {
 				'useremail':btoa(zemail),
 				'function':'saveuser'
 			};
-			await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+			WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -307,7 +307,7 @@ WTWJS.prototype.deleteUser = async function(zuserid) {
 				'userid': zuserid,
 				'function':'deleteuser'
 			};
-			await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+			WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -337,7 +337,7 @@ WTWJS.prototype.openPermissionsForm = async function() {
 		}
 		dGet('wtw_accessnote').innerHTML = "Dev: updates to 3D " + zwebtype + ".<br />Admin: Dev and set permissions.";
 		dGet('wtw_userdevaccesslist').innerHTML = "";
-		await WTW.getAsyncJSON("/connect/useraccess.php?communityid=" + communityid + "&buildingid=" + buildingid + "&thingid=" + thingid, 
+		WTW.getAsyncJSON("/connect/useraccess.php?communityid=" + communityid + "&buildingid=" + buildingid + "&thingid=" + thingid, 
 			function(response) {
 				var useraccess = JSON.parse(response);
 				if (useraccess != null) {
@@ -414,14 +414,14 @@ WTWJS.prototype.addAccess = async function() {
 			'usersearch': dGet('wtw_tadduseridname').value,
 			'function':'savepermissions'
 		};
-		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
+				dGet('wtw_tadduseridname').value = "";
 				WTW.openPermissionsForm();
 			}
 		);
-		dGet('wtw_tadduseridname').value = "";
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminusers.js-addAccess=" + ex.message);
 	}		
@@ -437,7 +437,7 @@ WTWJS.prototype.deleteAccess = async function() {
 			'usersearch': dGet('wtw_tadduseridname').value,
 			'function':'deletepermissions'
 		};
-		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -462,14 +462,14 @@ WTWJS.prototype.addDevAccess = async function() {
 			'usersearch': dGet('wtw_tadduserdevaccess').value,
 			'function':'savepermissions'
 		};
-		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
+				dGet('wtw_tadduserdevaccess').value = "";
 				WTW.openPermissionsForm();
 			}
 		);
-		dGet('wtw_tadduserdevaccess').value = "";
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminusers.js-addDevAccess=" + ex.message);
 	}		
@@ -520,14 +520,14 @@ WTWJS.prototype.deleteDevAccess = async function() {
 			'usersearch': dGet('wtw_tadduserdevaccess').value,
 			'function':'deletepermissions'
 		};
-		await WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
+				dGet('wtw_tadduserdevaccess').value = "";
 				WTW.openPermissionsForm();
 			}
 		);
-		dGet('wtw_tadduserdevaccess').value = "";
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminusers.js-deleteDevAccess=" + ex.message);
 	}		

@@ -20,7 +20,7 @@ WTWJS.prototype.openBuildingForm = async function(w) {
 		dGet('wtw_tbuildingalttag').value = "";
 		WTW.show('wtw_loadingbuildingform');
 		WTW.hide('wtw_adminmenu5b');
-		await WTW.getAsyncJSON("/connect/buildings.php", 
+		WTW.getAsyncJSON("/connect/buildings.php", 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -71,7 +71,7 @@ WTWJS.prototype.loadBuildingForm = async function(w) {
 		dGet('wtw_tbuildingname').value = "";
 		dGet('wtw_tbuildingdescription').value = "";
 		dGet('wtw_tbuildingalttag').value = "";
-		await WTW.getAsyncJSON("/connect/buildings.php", 
+		WTW.getAsyncJSON("/connect/buildings.php", 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -121,7 +121,7 @@ WTWJS.prototype.submitBuildingForm = async function(w) {
 					'buildingid': buildingid,
 					'function':'deletebuilding'
 				};
-				await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
+				WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 					function(zresponse) {
 						WTW.redirectParent('/admin.php');
 					}
@@ -148,8 +148,9 @@ WTWJS.prototype.submitBuildingForm = async function(w) {
 					'analyticsid':dGet('wtw_tbuildinganalyticsid').value,
 					'function':'savebuilding'
 				};
-				await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
+				WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 					function(zresponse) {
+						WTW.setMenuBarSelectText();
 					}
 				);
 				break;
@@ -165,9 +166,9 @@ WTWJS.prototype.submitBuildingForm = async function(w) {
 						}
 					}
 				}
+				WTW.setMenuBarSelectText();
 				break;
 		}
-		WTW.setMenuBarSelectText();
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminbuildings.js-submitBuildingForm=" + ex.message);
 	}
@@ -177,7 +178,7 @@ WTWJS.prototype.copyMyBuilding = async function() {
 	/* make a copy of an existing 3D Building (use as backup or as a new 3D Building to edit and use) */
 	try {
 		dGet('wtw_tbuildingname').value = '';
-		await WTW.getAsyncJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getAsyncJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -220,7 +221,7 @@ WTWJS.prototype.copyBuilding = async function(zcopybuildingid, zbuildingname) {
 			'buildingdescription':btoa(dGet('wtw_tbuildingdescription').value),
 			'function':'savebuilding'
 		};
-		await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				WTW.copyBuildingComplete(zresponse.buildingid);
@@ -250,7 +251,7 @@ WTWJS.prototype.getSelectBuildingsList = async function() {
 		WTW.hide('wtw_listbuildings');
 		WTW.show('wtw_loadingbuildingid');
 		dGet("wtw_listbuildings").innerHTML = "";
-		await WTW.getAsyncJSON("/connect/buildings.php", 
+		WTW.getAsyncJSON("/connect/buildings.php", 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -292,7 +293,7 @@ WTWJS.prototype.openShareBuildingForm = async function() {
 		dGet('wtw_tsharebuildtags').value = "";
 		WTW.hide('wtw_adminmenu9b');
 		WTW.show('wtw_loadingsharebuildingform');
-		await WTW.getAsyncJSON("/connect/buildings.php", 
+		WTW.getAsyncJSON("/connect/buildings.php", 
 			function(response) {
 				WTW.buildings = JSON.parse(response);
 				if (WTW.buildings != null) {
@@ -344,7 +345,7 @@ WTWJS.prototype.saveShareBuildingForm = async function() {
 			'tags': btoa(dGet('wtw_tsharebuildtags').value),
 			'function':'savebuildingtemplate'
 		};
-		await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				dGet('wtw_sharehash').value = zresponse.sharehash;
@@ -366,7 +367,7 @@ WTWJS.prototype.shareBuildingTemplate = async function() {
 			'sharehash': dGet('wtw_sharehash').value,
 			'function':'sharebuildingtemplate'
 		};
-		await WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 

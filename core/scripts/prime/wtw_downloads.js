@@ -33,7 +33,7 @@ WTWJS.prototype.communitySearch = async function(search) {
 	/* keyword search to find a community to download to your instance */
 	try {
 		search = WTW.encode(search);
-		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=community", 
+		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=community", 
 			function(response) {
 				WTW.communitySearchReply(JSON.parse(response));
 			}
@@ -75,7 +75,7 @@ WTWJS.prototype.buildingSearch = async function(zsearch) {
 	/* keyword search to find a building to download to your instance */
 	try {
 		zsearch = WTW.encode(zsearch);
-		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + zsearch + "&webtype=building", 
+		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + zsearch + "&webtype=building", 
 			function(response) {
 				WTW.buildingSearchReply(JSON.parse(response));
 			}
@@ -117,7 +117,7 @@ WTWJS.prototype.thingSearch = async function(search) {
 	/* keyword search to find a thing to download to your instance */
 	try {
 		search = WTW.encode(search);
-		await WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=thing", 
+		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=thing", 
 			function(response) {
 				WTW.thingSearchReply(JSON.parse(response));
 			}
@@ -205,7 +205,7 @@ WTWJS.prototype.downloadWeb = async function(zcopywebid, zwebtype) {
 			'buildingrotationz': zbuildingrotationz,
 			'function':'downloadweb'
 		};
-		await WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */

@@ -1220,6 +1220,7 @@ WTWJS.prototype.processMoldQueue = function() {
 							break;
 						case "addactionzone":
 							WTW.addActionZone(zmoldname, WTW.loadMoldQueue[i].molddef);
+							WTW.checkZones = true;
 							break;
 						case "dispose":
 							WTW.disposeClean(zmoldname, WTW.loadMoldQueue[i].check);
@@ -1380,7 +1381,7 @@ WTWJS.prototype.getSettings = async function(zsettings, zjsfunction, zjsparamete
 			'settings': zsettings,
 			'function':'getsettings'
 		};
-		await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -1423,7 +1424,7 @@ WTWJS.prototype.saveSetting = async function(zsetting, zvalue, zjsfunction, zjsp
 			'value':zvalue,
 			'function':'savesetting'
 		};
-		await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zjsfunction != null) {
@@ -1455,7 +1456,7 @@ WTWJS.prototype.saveSettings = async function(zsettings, zjsfunction, zjsparamet
 			'settings': JSON.stringify(zsettings),
 			'function':'savesettings'
 		};
-		await WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
+		WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zjsfunction != null) {
@@ -1483,82 +1484,85 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 			/* dispose mold (mesh) from shadow and reflection arrays */
 			WTW.disposeShadowFromMold(zmoldname);
 			WTW.disposeReflectionFromMold(zmoldname);
+			try {
+				/* plugin hook for custom code */
+				WTW.pluginsDisposeClean(zmoldname);
+			} catch (ex) {}
+			try {
+				WTW.disposeMoldEvent(zmoldname);
+				WTW.disposeSoundAndLights(zmoldname);
+				if (zmoldname.indexOf("myavatar") > -1 || zmoldname.indexOf("person") > -1) {
+					/* dispose of avatar parts / animations */
+					WTW.disposeAnimations(zmoldname);
+				} else if (znamepart[5] == 'video') {
+					/* stop and clear the video before it is deleted */
+					var zstrtemp = zmoldname;
+					zstrtemp = zstrtemp.replace("-base","-mainvideo");
+					var zvideomold = scene.getMeshByID(zstrtemp);
+					if (zvideomold != null){
+						if (zvideomold.material.diffuseTexture.video != undefined) {
+							zvideomold.material.diffuseTexture.video.pause();
+							zvideomold.material.diffuseTexture.video.src = "";
+						}
+						if (zvideomold.material.diffuseTexture.video != null) {
+							zvideomold.material.diffuseTexture.video = null;
+						}
+				   }
+				} else if (znamepart[5].indexOf('water') > -1) {
+					/* remove mold from reflection and refraction arrays */
+					var zstrtemp = zmoldname;
+					if (zstrtemp.indexOf('-base') > -1) {
+						zstrtemp = zstrtemp.replace("-base","");
+					}
+					var zwatermat = scene.getMaterialByID(zstrtemp + "-watermat");
+					if (zwatermat != null) {
+						if (zwatermat.reflectionTexture.renderList != null) {
+							if (zwatermat.reflectionTexture.renderList.length > 0) {
+								zwatermat.reflectionTexture.renderList.splice(0, zwatermat.reflectionTexture.renderList.length);
+							}
+						}
+						if (zwatermat.refractionTexture.renderList != null) {
+							if (zwatermat.refractionTexture.renderList.length > 0) {
+								zwatermat.refractionTexture.renderList.splice(0, zwatermat.refractionTexture.renderList.length);
+							}
+						}
+					}
+					try {
+						if (zwatermat.reflectionTexture != null) {
+							zwatermat.reflectionTexture.dispose();
+							zwatermat.reflectionTexture = null;
+						}
+					} catch(ex) {}
+					try {
+						if (zwatermat.refractionTexture != null) {
+							zwatermat.refractionTexture.dispose();
+							zwatermat.refractionTexture = null;
+						}
+						zwatermat.dispose();
+					} catch(ex) {}
+					if (zcheck) {
+						WTW.disposeClean(zstrtemp + "-water", false);
+					}
+				} else if (znamepart[5].indexOf('image') > -1) {
+					/* dispose of hover over and click image mold layers */
+					var zstrtemp = zmoldname;
+					if (zstrtemp.indexOf('-base') > -1) {
+						zstrtemp = zstrtemp.replace("-base","-mainimage");
+					} else {
+						zstrtemp += "-mainimage";
+					}
+					if (zcheck) {
+						WTW.disposeClean(zstrtemp, false);
+						WTW.disposeClean(zstrtemp.replace("-mainimage","-hoverimage"), false);
+						WTW.disposeClean(zstrtemp.replace("-mainimage","-clickimage"), false);
+					}
+				}
+			} catch (ex) {}
 			var zmold = scene.getMeshByID(zmoldname);
 			/* confirm mold is in the scene */
 			if (zmold != null) {
 				try {
-					/* plugin hook for custom code */
-					WTW.pluginsDisposeClean(zmoldname);
-				} catch (ex) {}
-				try {
-					WTW.disposeMoldEvent(zmoldname);
-					WTW.disposeSoundAndLights(zmoldname);
-					if (zmoldname.indexOf("myavatar") > -1 || zmoldname.indexOf("selectavatar") > -1) {
-						/* dispose of avatar parts / animations */
-						WTW.disposeAnimations(zmoldname);
-					} else if (znamepart[5] == 'video') {
-						/* stop and clear the video before it is deleted */
-						var zstrtemp = zmoldname;
-						zstrtemp = zstrtemp.replace("-base","-mainvideo");
-						var zvideomold = scene.getMeshByID(zstrtemp);
-						if (zvideomold != null){
-							if (zvideomold.material.diffuseTexture.video != undefined) {
-								zvideomold.material.diffuseTexture.video.pause();
-								zvideomold.material.diffuseTexture.video.src = "";
-							}
-							if (zvideomold.material.diffuseTexture.video != null) {
-								zvideomold.material.diffuseTexture.video = null;
-							}
-					   }
-					} else if (znamepart[5].indexOf('water') > -1) {
-						/* remove mold from reflection and refraction arrays */
-						var zstrtemp = zmoldname;
-						if (zstrtemp.indexOf('-base') > -1) {
-							zstrtemp = zstrtemp.replace("-base","");
-						}
-						var zwatermat = scene.getMaterialByID(zstrtemp + "-watermat");
-						if (zwatermat != null) {
-							if (zwatermat.reflectionTexture.renderList != null) {
-								if (zwatermat.reflectionTexture.renderList.length > 0) {
-									zwatermat.reflectionTexture.renderList.splice(0, zwatermat.reflectionTexture.renderList.length);
-								}
-							}
-							if (zwatermat.refractionTexture.renderList != null) {
-								if (zwatermat.refractionTexture.renderList.length > 0) {
-									zwatermat.refractionTexture.renderList.splice(0, zwatermat.refractionTexture.renderList.length);
-								}
-							}
-						}
-						try {
-							if (zwatermat.reflectionTexture != null) {
-								zwatermat.reflectionTexture.dispose();
-								zwatermat.reflectionTexture = null;
-							}
-						} catch(ex) {}
-						try {
-							if (zwatermat.refractionTexture != null) {
-								zwatermat.refractionTexture.dispose();
-								zwatermat.refractionTexture = null;
-							}
-							zwatermat.dispose();
-						} catch(ex) {}
-						if (zcheck) {
-							WTW.disposeClean(zstrtemp + "-water", false);
-						}
-					} else if (znamepart[5].indexOf('image') > -1) {
-						/* dispose of hover over and click image mold layers */
-						var zstrtemp = zmoldname;
-						if (zstrtemp.indexOf('-base') > -1) {
-							zstrtemp = zstrtemp.replace("-base","-mainimage");
-						} else {
-							zstrtemp += "-mainimage";
-						}
-						if (zcheck) {
-							WTW.disposeClean(zstrtemp, false);
-							WTW.disposeClean(zstrtemp.replace("-mainimage","-hoverimage"), false);
-							WTW.disposeClean(zstrtemp.replace("-mainimage","-clickimage"), false);
-						}
-					} else if (znamepart[5].indexOf('babylonfile') > -1 || znamepart[0] == 'myavatar') {
+					if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1) {
 						/* dispose of child objects from imported meshes */
 						var zchildmeshes = zmold.getChildren();
 						if (zchildmeshes != null) {
@@ -1569,7 +1573,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 							}
 						}
 					}
-				} catch (ex) {}
+				} catch(ex) {}
 				try {
 					/* dispose of any action managers (animations) */
 					if (zmold.actionManager != null) {
@@ -1607,6 +1611,14 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 				var zmoldfar = scene.getMeshByID(zmoldname + "-far");
 				if (zmoldfar != null) {
 					WTW.disposeClean(zmoldname + "-far");
+				}
+			}
+			if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1) {
+				for (var i = 0; i < scene.meshes.length;i++) {
+					/* check for child parts of the 3D Model that are still in the 3D Scene and delete them */
+					if (scene.meshes[i].name.indexOf(zmoldname) > -1) {
+						scene.meshes[i].dispose();
+					}
 				}
 			}
 			scene.blockfreeActiveMeshesAndRenderingGroups = false;

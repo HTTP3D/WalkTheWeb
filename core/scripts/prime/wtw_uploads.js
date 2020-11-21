@@ -184,7 +184,7 @@ WTWJS.prototype.isUploadReadyOrAdd = async function(uploadid) {
 				wtw_uploads[uploadind].uploadid = uploadid;
 				wtw_uploads[uploadind].queue = "1";
 				/* if (WTW.getBrowser()=='ie') { */
-					await WTW.getAsyncJSON("/connect/upload.php?uploadid=" + uploadid, 
+					WTW.getAsyncJSON("/connect/upload.php?uploadid=" + uploadid, 
 						function(response) {
 							WTW.loadFileUpload(JSON.parse(response), uploadid);
 						}
@@ -195,7 +195,7 @@ WTWJS.prototype.isUploadReadyOrAdd = async function(uploadid) {
 						adduploads[0] = response1; 
 						WTW.loadFileUpload(adduploads, adduploads[0].uploadid);
 					}).catch(function (error) {
-						await WTW.getAsyncJSON("/connect/upload.php?uploadid=" + uploadid, 
+						WTW.getAsyncJSON("/connect/upload.php?uploadid=" + uploadid, 
 							function(response) {
 								WTW.loadFileUpload(JSON.parse(response), uploadid);
 							}
@@ -277,7 +277,7 @@ WTWJS.prototype.initLoadUpload = async function(uploadid, tempid, refreshoption,
 				wtw_uploads[uploadind] = uploadid;
 				wtw_uploads[uploadind].queue = "1";
 				/* if (WTW.getBrowser()=='ie') { */
-					await WTW.getAsyncJSON("/connect/upload.php?uploadid=" + uploadid, 
+					WTW.getAsyncJSON("/connect/upload.php?uploadid=" + uploadid, 
 						function(response) {
 							WTW.loadUpload(JSON.parse(response), uploadid, refreshoption, false, moldname, molddef, parentname);
 						}
@@ -288,7 +288,7 @@ WTWJS.prototype.initLoadUpload = async function(uploadid, tempid, refreshoption,
 						adduploads[0] = response1; 
 						WTW.loadUpload(adduploads, adduploads[0].uploadid, refreshoption, false, moldname, molddef, parentname);
 					}).catch(function (error) {
-						await WTW.getAsyncJSON("/connect/upload.php?uploadid=" + uploadid, 
+						WTW.getAsyncJSON("/connect/upload.php?uploadid=" + uploadid, 
 							function(response) {
 								WTW.loadUpload(JSON.parse(response), uploadid, refreshoption, false, moldname, molddef, parentname);
 							}

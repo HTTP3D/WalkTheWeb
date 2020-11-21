@@ -453,6 +453,27 @@ WTWJS.prototype.getWebpage = function(zurl, zcallback) {
 	}
 }
 
+WTWJS.prototype.getAsycnWebpage = function(zurl, zcallback) {
+	/* retrieves a full webpage content */
+	try {
+		return new Promise(function () {
+			var Httpreq = new XMLHttpRequest();
+			Httpreq.responseType = 'document';
+			Httpreq.open('GET', zurl, true);
+			Httpreq.onreadystatechange = function () {
+				if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+					if (zcallback != null) {
+						zcallback(Httpreq.responseText);
+					}
+				}
+			};
+			Httpreq.send(null);  
+		});
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-getAsycnWebpage=" + ex.message);
+	}
+}
+
 WTWJS.prototype.openWebpage = function(url, target) {
 	/* open webpage - with target option */
 	try {
@@ -470,6 +491,28 @@ WTWJS.prototype.openWebpage = function(url, target) {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-openWebpage=" + ex.message);
+	}
+}
+
+WTWJS.prototype.openAsyncWebpage = function(url, target) {
+	/* open webpage - with target option */
+	try {
+		return new Promise(function () {
+			if (target == undefined) {
+				if (url.toLowerCase().indexOf("//" + wtw_domainname + "/") > -1) {
+					target = '';
+				} else {
+					target = '_blank';
+				}
+			}
+			if (target == '') {
+				window.parent.parent.window.location = url;
+			} else {
+				window.open(url,target);
+			}
+		});
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-openAsyncWebpage=" + ex.message);
 	}
 }
 
@@ -510,6 +553,48 @@ WTWJS.prototype.openIFrame = function(url, zwidth, zheight, ztitle) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-openIFrame=" + ex.message);
 		WTW.closeIFrame();
 		WTW.openWebpage(url, '_blank');
+	}
+}
+
+WTWJS.prototype.openAsyncIFrame = async function(url, zwidth, zheight, ztitle) {
+	/* open iframe page with frame window (includes title and close x), height and width (values should be between .1 and 1) */
+	try {
+		if (ztitle == undefined) {
+			ztitle = "";
+		}
+		return new Promise(function () {
+			WTW.setWindowSize();
+			if (typeof zwidth === "undefined" || zwidth === null) {
+				zwidth = .9; 
+			}
+			if (typeof zheight === "undefined" || zheight === null) {
+				zheight = .9; 
+			}
+			WTW.hide('wtw_ipagediv');
+			WTW.show('wtw_ibrowseframe');
+			var iframe = dGet('wtw_ibrowseframe');
+			if (iframe.src != url) {
+				iframe.src = url;
+			}
+			dGet('wtw_ibrowsediv').style.width = Math.round(WTW.sizeX * zwidth) + "px";
+			dGet('wtw_ibrowsediv').style.height = Math.round(WTW.sizeY * zheight) + "px";
+			dGet('wtw_ibrowsediv').style.left = Math.round((WTW.sizeX * (1 - zwidth)) / 2) + "px";
+			dGet('wtw_ibrowsediv').style.top = Math.round((WTW.sizeY * (1 - zheight)) / 2) + "px";
+			dGet('wtw_ibrowsediv').style.display = "inline-block";
+			dGet('wtw_ibrowsediv').style.visibility = "visible";
+			dGet('wtw_ibrowsediv').style.zIndex = 3000;
+			dGet('wtw_ibrowsediv').style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+			if (url == '/core/pages/help.php') {
+				iframe.onload = function() { WTW.setHelp();	};
+				dGet('wtw_browsetitle').innerHTML = "WalkTheWeb - Help";
+			} else {
+				dGet('wtw_browsetitle').innerHTML = ztitle;
+			}
+		});
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-openAsyncIFrame=" + ex.message);
+		WTW.closeIFrame();
+		WTW.openAsyncWebpage(url, '_blank');
 	}
 }
 

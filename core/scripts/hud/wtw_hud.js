@@ -770,9 +770,7 @@ WTWJS.prototype.listMeshes = function() {
 			var zparentname = "";
 			var zmoldname = scene.meshes[i].name;
 			var zvisible = scene.meshes[i].isVisible;
-			if (zmoldname.toLowerCase().indexOf('selectavatar') > -1) {
-				zcolor = "red";
-			} else if (zmoldname.toLowerCase().indexOf("connectinggrid") > -1) {
+			if (zmoldname.toLowerCase().indexOf("connectinggrid") > -1) {
 				zcolor = "green";
 				var zmold = scene.getMeshByID(zmoldname);
 				if (zmold != null && zmold.parent != null) {
