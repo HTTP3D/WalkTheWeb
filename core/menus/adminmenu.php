@@ -182,16 +182,10 @@
 				</div>
 				<div id="wtw_adminmenu27" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback27" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
-					<div class="wtw-menuheader">Edit 3D Buildings in this 3D Community</div><br />
-					<a href="https://www.walktheweb.com/wiki/add-3d-buildings-to-a-3d-community/" title="Help" alt="Help" class="wtw-helplink" target="_blank">?</a>
-					<h2 style="margin-bottom:3px;">Add My 3D Building</h2>
-					<select id="wtw_addcommunitybuildingid" style="cursor: pointer;"></select>
-					<div id="wtw_addbuildingtocommunity" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);">Add 3D Building</div>
-					<hr class="wtw-menuhr" />
-					<div id="wtw_adminmenu27b">
-						<h2 style="margin-bottom:3px;">3D Buildings in this 3D Community</h2>
-						<div id="wtw_commbuildinglist"></div>
-					</div>
+					<div class="wtw-menuheader">Add 3D Building</div><br />
+					<a href="https://www.walktheweb.com/wiki/" title="Help" alt="Help" class="wtw-helplink" target="_blank">?</a>
+					<div id="wtw_loadingbuildingmoldsbuttonlist" class="wtw-loadingnotice" style="margin-left:auto;margin-right:auto;color:#000000;">Loading...</div>
+					<div id="wtw_buildingmoldsbuttonlist"></div>
 					<br />
 					<div id="wtw_cancel27" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);">Cancel</div>
 					<br /><br />

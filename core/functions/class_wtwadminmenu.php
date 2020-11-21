@@ -162,11 +162,11 @@ class wtwadminmenu {
 
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddblock', '<div class="wtw-altkey">ctrl+b</div>Add 3D Building <u>B</u>lock', 10, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddweb', '<div class="wtw-altkey">ctrl+o</div>Add 3D Web <u>O</u>bject', 20, $updateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddbuilding', '<div class="wtw-altkey">ctrl+u</div>Add 3D B<b>u</b>ilding', 30, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddthing', '<div class="wtw-altkey">ctrl+h</div>Add 3D T<u>h</u>ing', 30, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityactionzones', '<div class="wtw-altkey">ctrl+a</div>Add or Edit <u>A</u>ctions', 40, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editcommunity', '', '<hr class="wtw-menuhr" />', 60, $updateroles, "");
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunitylandscape', '<div class="wtw-altkey">ctrl+l</div>Edit <u>L</u>andscape and Scene', 65, $updateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddbuilding', '<div class="wtw-altkey">ctrl+e</div>Add or <u>E</u>dit 3D Buildings<br />in this 3D Community', 70, $updateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editcommunity', '', '<hr class="wtw-menuhr" />', 80, $updateroles, "");
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 100, $updateroles, "WTW.adminMenuItemSelected(this);");
 
