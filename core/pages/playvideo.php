@@ -49,16 +49,16 @@
 			  document.getElementById('wtw_videoplayer').webkitRequestFullscreen();
 			} */
 			
-/*			var p = document.getElementById('wtw_videoplayer');
+/*			var zplayer = document.getElementById('wtw_videoplayer');
 
 			if (!window.isFs) {
 				window.isFs = true;
-				var fn_enter = p.requestFullscreen || p.webkitRequestFullscreen || p.mozRequestFullScreen || p.oRequestFullscreen || p.msRequestFullscreen;
-				fn_enter.call(p);
+				var zenter = zplayer.requestFullscreen || zplayer.webkitRequestFullscreen || zplayer.mozRequestFullScreen || zplayer.oRequestFullscreen || zplayer.msRequestFullscreen;
+				zenter.call(zplayer);
 			} else {
 				window.isFs = false;
-				var fn_exit = p.exitFullScreen || p.webkitExitFullScreen || p.mozExitFullScreen || p.oExitFullScreen || p.msExitFullScreen;
-				fn_exit.call(p);
+				var zexit = zplayer.exitFullScreen || zplayer.webkitExitFullScreen || zplayer.mozExitFullScreen || zplayer.oExitFullScreen || zplayer.msExitFullScreen;
+				zexit.call(zplayer);
 			}
 */			
 		} catch(ex) {}

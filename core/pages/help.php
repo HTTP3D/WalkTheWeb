@@ -16,39 +16,39 @@
 			return document.getElementById(k);
 		}
 
-		function WTW.log(txt) {
+		function WTW.log(ztxt) {
 			if (wtw_devmode == '1') {
-				console.log(txt);
+				console.log(ztxt);
 			}
 		}
 
-		WTWJS.prototype.getQuerystring = function(key, default_) {
-			var squery = "";
+		WTWJS.prototype.getQuerystring = function(zkey, zdefault) {
+			var zquery = "";
 			try {
-				if (default_ == null) default_ = "";
-				key = key.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-				var regex = new RegExp("[\\?&]" + key + "=([^&#]*)");
-				var qs = regex.exec(window.location.href);
-				if (qs == null) {
-					squery = default_;
+				if (zdefault == null) zdefault = "";
+				zkey = zkey.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+				var zregex = new RegExp("[\\?&]" + zkey + "=([^&#]*)");
+				var zqs = zregex.exec(window.location.href);
+				if (zqs == null) {
+					zquery = zdefault;
 				} else {
-					squery = qs[1];
+					zquery = zqs[1];
 				}
 			} catch (ex) {
 				WTW.log("core-pages-help.php-getQuerystring=" + ex.message);
 			}
-			return squery;
+			return zquery;
 		}
 
-		function sethelp(helptab) {
-			var divs = document.getElementsByClassName('wtw-helpdiv');
-			for (var i=0;i < divs.length;i++) {
-				divs[i].style.display = "none";
-				divs[i].style.visibility = "hidden";
+		function sethelp(zhelptab) {
+			var zdivs = document.getElementsByClassName('wtw-helpdiv');
+			for (var i=0;i < zdivs.length;i++) {
+				zdivs[i].style.display = "none";
+				zdivs[i].style.visibility = "hidden";
 			}
-			if (dGet(helptab) != null) {
-				dGet(helptab).style.display = "block";
-				dGet(helptab).style.visibility = "visible";
+			if (dGet(zhelptab) != null) {
+				dGet(zhelptab).style.display = "block";
+				dGet(zhelptab).style.visibility = "visible";
 			} else {
 				dGet('wtw_helpmenudiv').style.display = "block";
 				dGet('wtw_helpmenudiv').style.visibility = "visible";
@@ -204,9 +204,9 @@
 	<script type="text/javascript">
 		window.onload = function () {
 			try {
-				var helptab = WTW.getQuerystring("helptab", "");
-				if (helptab != "") {
-					sethelp(helptab);
+				var zhelptab = WTW.getQuerystring("helptab", "");
+				if (zhelptab != "") {
+					sethelp(zhelptab);
 				}
 			} catch (ex) {
 				WTW.log("core-pages-help.php=" + ex.message);

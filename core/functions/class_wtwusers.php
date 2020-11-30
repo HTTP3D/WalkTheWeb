@@ -1122,8 +1122,10 @@ class wtwusers {
 				if ($this->isEmailAvailable($zemail)) {
 					$zuserid = $wtwhandlers->getRandomString(16,1);
 					$zuploadpathid = $wtwhandlers->getRandomString(16,1);
+
 					$zoptions = ['cost' => 11];
 					$zpasswordhash = password_hash($zpassword, PASSWORD_DEFAULT, $zoptions);
+
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."users 
 							(userid,
@@ -1179,7 +1181,7 @@ class wtwusers {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwusers.php-saveNewUser=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-deleteUser=".$e->getMessage());
 		}
 		return $zsuccess;
 	}

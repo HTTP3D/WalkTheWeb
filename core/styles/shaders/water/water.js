@@ -51,12 +51,12 @@ var WORLDMONGER = WORLDMONGER || {};
 
     // Methods   
     WORLDMONGER.WaterMaterial.prototype.getRenderTargetTextures = function () {
-        var results = [];
+        var zresults = [];
 
-        results.push(this.reflectionTexture);
-        results.push(this.refractionTexture);
+        zresults.push(this.reflectionTexture);
+        zresults.push(this.refractionTexture);
 
-        return results;
+        return zresults;
     };
 
     WORLDMONGER.WaterMaterial.prototype.isReady = function (mesh) {

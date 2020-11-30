@@ -2405,6 +2405,15 @@ class wtwtables {
 						('".$wtwdb->getRandomString(16,1)."','Host','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'','0');
 				");
 			}
+
+			/* updated 3.4.1 - removed username from users - replaced by userid and displayname */
+			$zresults = $wtwdb->query("
+				show columns from `".wtw_tableprefix."users` like 'username';");
+			if (count($zresults) > 0) {
+				$wtwdb->query("
+					alter table ".wtw_tableprefix."users 
+					drop column username;");
+			}
 			
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 		} catch (Exception $e) {

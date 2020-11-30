@@ -5,7 +5,7 @@
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
 	<script>
-		var accesstoken = "";
+		var zaccesstoken = "";
 		function onRegister() {
 			try {
 				var zrequest = {
@@ -20,7 +20,7 @@
 						if (zresponse.success != null) {
 							if (zresponse.success.token != null) {
 //console.log("token=" + zresponse.success.token);
-								accesstoken = zresponse.success.token;
+								zaccesstoken = zresponse.success.token;
 							}
 						}
 					}
@@ -42,7 +42,7 @@
 						if (zresponse.success != null) {
 							if (zresponse.success.token != null) {
 //console.log("token=" + zresponse.success.token);
-								accesstoken = zresponse.success.token;
+								zaccesstoken = zresponse.success.token;
 							}
 						}
 					}
@@ -80,9 +80,9 @@
 
 		function postJSON(zurl, zrequest, zauth, zcallback) {
 			try {
-				var form1 = document.createElement('form');
+				var zform1 = document.createElement('form');
 				var Httpreq = new XMLHttpRequest();
-				var zformdata = new FormData(form1);
+				var zformdata = new FormData(zform1);
 				for(var zkey in zrequest) {
 					zformdata.append(zkey, zrequest[zkey]);
 				}
@@ -90,14 +90,14 @@
 				Httpreq.open('POST', zurl);
 				if (zauth == true) {
 					Httpreq.setRequestHeader('Accept','application/json');
-					Httpreq.setRequestHeader('Authorization','Bearer ' + accesstoken);
+					Httpreq.setRequestHeader('Authorization','Bearer ' + zaccesstoken);
 				}
 				Httpreq.onreadystatechange = function () {
 					if (Httpreq.readyState == 4 && Httpreq.status == "200") {
 						zcallback(Httpreq.responseText);
 					} else if (Httpreq.readyState == 4 && (Httpreq.status == "401" || Httpreq.status == "405")) {
-						var serror = "{\"error\": \"Unauthorized\"}";
-						zcallback(serror);
+						var zerror = "{\"error\": \"Unauthorized\"}";
+						zcallback(zerror);
 					}
 				};
 				Httpreq.send(zformdata);  
@@ -118,13 +118,13 @@
 				Httpreq.overrideMimeType("application/json");
 				Httpreq.open(zaction, zurl, true);
 				Httpreq.setRequestHeader('Accept','application/json');
-				Httpreq.setRequestHeader('Authorization','Bearer ' + accesstoken);
+				Httpreq.setRequestHeader('Authorization','Bearer ' + zaccesstoken);
 				Httpreq.onreadystatechange = function () {
 					if (Httpreq.readyState == 4 && Httpreq.status == "200") {
 						zcallback(Httpreq.responseText);
 					} else if (Httpreq.readyState == 4 && (Httpreq.status == "401" || Httpreq.status == "405")) {
-						var serror = "{\"error\": \"Unauthorized\"}";
-						zcallback(serror);
+						var zerror = "{\"error\": \"Unauthorized\"}";
+						zcallback(zerror);
 					}
 				};
 				Httpreq.send(zrequest);  
