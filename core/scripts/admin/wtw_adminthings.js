@@ -19,8 +19,8 @@ WTWJS.prototype.openThingForm = async function(zthingid) {
 		WTW.show('wtw_loadingthingform');
 		dGet('wtw_tthingalttag').value = "";
 		WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
-			function(response) {
-				WTW.things = JSON.parse(response);
+			function(zresponse) {
+				WTW.things = JSON.parse(zresponse);
 				if (WTW.things != null) {
 					for (var i = 0; i < WTW.things.length; i++) {
 						if (WTW.things[i] != null) {
@@ -65,8 +65,8 @@ WTWJS.prototype.loadThingForm = async function(zthingid) {
 		dGet('wtw_tthingdescription').value = '';
 		dGet('wtw_tthingalttag').value = "";
 		WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
-			function(response) {
-				WTW.things = JSON.parse(response);
+			function(zresponse) {
+				WTW.things = JSON.parse(zresponse);
 				if (WTW.things != null) {
 					for (var i = 0; i < WTW.things.length; i++) {
 						if (WTW.things[i] != null) {
@@ -101,7 +101,7 @@ WTWJS.prototype.loadThingForm = async function(zthingid) {
 WTWJS.prototype.submitthingForm = async function(w) {
 	/* submit the 3D Thing Information Form */
 	try {
-		var validate = 1;
+		var zvalidate = 1;
 		switch (w) {
 			case 0:
 				/* delete 3D Thing */
@@ -123,11 +123,11 @@ WTWJS.prototype.submitthingForm = async function(w) {
 				if (dGet('wtw_tthingname').value.trim().length == 0) {
 					WTW.showInline('wtw_reqeditthingname');
 					dGet('wtw_tthingname').focus();
-					validate = 0;
+					zvalidate = 0;
 				} else {
 					WTW.hide('wtw_reqeditthingname');
 				}
-				if (validate == 1) {
+				if (zvalidate == 1) {
 					for (var i = 0; i < WTW.things.length; i++) {
 						if (WTW.things[i] != null) {
 						    if (WTW.things[i].thinginfo.thingid == dGet('wtw_tthingid').value) {
@@ -187,8 +187,8 @@ WTWJS.prototype.copyMyThing = async function() {
 		dGet('wtw_tthingind').value = '-1';
 		dGet('wtw_tthingname').value = '';
 		WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
-			function(response) {
-				WTW.things = JSON.parse(response);
+			function(zresponse) {
+				WTW.things = JSON.parse(zresponse);
 				if (WTW.things != null) {
 					for (var i = 0; i < WTW.things.length; i++) {
 						if (WTW.things[i] != null) {
@@ -196,9 +196,9 @@ WTWJS.prototype.copyMyThing = async function() {
 								if (WTW.things[i].thinginfo.thingid != null) {
 									if (thingid == WTW.things[i].thinginfo.thingid) {
 										dGet('wtw_tthingname').value = WTW.decode(WTW.things[i].thinginfo.thingname) + " - Copy";
-										var thingname = WTW.encode(dGet('wtw_tthingname').value);
-										if (thingname != "") {
-											WTW.copyThing(thingid, thingname + " - Copy");
+										var zthingname = WTW.encode(dGet('wtw_tthingname').value);
+										if (zthingname != "") {
+											WTW.copyThing(thingid, zthingname + " - Copy");
 										} else {
 											WTW.copyThing(thingid, "New 3D Thing - Copy");
 										}
@@ -264,8 +264,8 @@ WTWJS.prototype.getSelectThingsList = async function() {
 		WTW.show('wtw_loadingthingid');
 		dGet("wtw_listthings").innerHTML = "";
 		WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
-			function(response) {
-				WTW.things = JSON.parse(response);
+			function(zresponse) {
+				WTW.things = JSON.parse(zresponse);
 				if (WTW.things != null) {
 					for (var i = 0; i < WTW.things.length; i++) {
 						if (WTW.things[i] != null) {
@@ -296,8 +296,8 @@ WTWJS.prototype.getThingMoldList = async function() {
 		WTW.show('wtw_loadingthingmoldsbuttonlist');
 		dGet("wtw_thingmoldsbuttonlist").innerHTML = "";
 		WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
-			function(response) {
-				WTW.things = JSON.parse(response);
+			function(zresponse) {
+				WTW.things = JSON.parse(zresponse);
 				if (WTW.things != null) {
 					for (var i = 0; i < WTW.things.length; i++) {
 						if (WTW.things[i] != null) {
@@ -342,8 +342,8 @@ WTWJS.prototype.openShareThingForm = async function() {
 		WTW.hide('wtw_adminmenu39b');
 		WTW.show('wtw_loadingsharethingform');
 		WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
-			function(response) {
-				WTW.things = JSON.parse(response);
+			function(zresponse) {
+				WTW.things = JSON.parse(zresponse);
 				if (WTW.things != null) {
 					for (var i = 0; i < WTW.things.length; i++) {
 						if (WTW.things[i] != null) {

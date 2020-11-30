@@ -710,8 +710,8 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 			loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset);
 		} else {
 			WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zimageid, 
-				function(response) {
-					WTW.loadUpload(JSON.parse(response), zimageid, 0);
+				function(zresponse) {
+					WTW.loadUpload(JSON.parse(zresponse), zimageid, 0);
 					loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset);
 				}
 			);
@@ -2515,8 +2515,8 @@ WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, 
 			loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset, zmold);
 		} else {
 			WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zimageid, 
-				function(response) {
-					WTW.loadUpload(JSON.parse(response), zimageid, 0);
+				function(zresponse) {
+					WTW.loadUpload(JSON.parse(zresponse), zimageid, 0);
 					loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset, zmold);
 				}
 			);

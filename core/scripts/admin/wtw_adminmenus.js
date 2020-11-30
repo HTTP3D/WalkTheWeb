@@ -4,40 +4,40 @@
 
 /* these functions are for the admin menu in admin mode only */
 
-WTWJS.prototype.toggleAdminMenu = function(buttonid) {
+WTWJS.prototype.toggleAdminMenu = function(zbuttonid) {
 	/* open and closes the admin menu (slide from the left) */
 	try {
-		if (dGet(buttonid).style.left == "0px") {
+		if (dGet(zbuttonid).style.left == "0px") {
 			var x = 0;
-			var menutimer = window.setInterval(function() {
+			var zmenutimer = window.setInterval(function() {
 				if (x < 325) {
-					dGet(buttonid).style.left = x + 'px';
+					dGet(zbuttonid).style.left = x + 'px';
 					x += 40;
 				} else {
-					dGet(buttonid).style.left = '315px';
-					dGet(buttonid.replace("button","")).style.left = '0px';
-					dGet(buttonid.replace("button","") + 'left').style.visibility = 'visible';
-					dGet(buttonid.replace("button","") + 'right').style.visibility = 'hidden';
-					window.clearInterval(menutimer);
-					menutimer = null;
-					WTW.show(buttonid.replace("button",""));
+					dGet(zbuttonid).style.left = '315px';
+					dGet(zbuttonid.replace("button","")).style.left = '0px';
+					dGet(zbuttonid.replace("button","") + 'left').style.visibility = 'visible';
+					dGet(zbuttonid.replace("button","") + 'right').style.visibility = 'hidden';
+					window.clearInterval(zmenutimer);
+					zmenutimer = null;
+					WTW.show(zbuttonid.replace("button",""));
 				}
 				WTW.setWindowSize();
 			},1);
 		} else {
-			WTW.hide(buttonid.replace("button",""));
+			WTW.hide(zbuttonid.replace("button",""));
 			var x = 325;
-			var menutimer = window.setInterval(function() {
+			var zmenutimer = window.setInterval(function() {
 				if (x > 0) {
-					dGet(buttonid).style.left = x + 'px';
+					dGet(zbuttonid).style.left = x + 'px';
 					x -= 40;
 				} else {
-					dGet(buttonid).style.left = '0px';
-					dGet(buttonid.replace("button","")).style.left = '-315px';
-					dGet(buttonid.replace("button","") + 'left').style.visibility = 'hidden';
-					dGet(buttonid.replace("button","") + 'right').style.visibility = 'visible';
-					window.clearInterval(menutimer);
-					menutimer = null;
+					dGet(zbuttonid).style.left = '0px';
+					dGet(zbuttonid.replace("button","")).style.left = '-315px';
+					dGet(zbuttonid.replace("button","") + 'left').style.visibility = 'hidden';
+					dGet(zbuttonid.replace("button","") + 'right').style.visibility = 'visible';
+					window.clearInterval(zmenutimer);
+					zmenutimer = null;
 				}
 				WTW.setWindowSize();
 			},1);
@@ -73,19 +73,19 @@ WTWJS.prototype.toggleAdminMenu = function(buttonid) {
 	}
 }
 
-WTWJS.prototype.toggleAdminMenuLevel = function(sectionname) {
+WTWJS.prototype.toggleAdminMenuLevel = function(zsectionname) {
 	/* opens and closes the main secions of the admin menu */
 	try {
-		var obj = dGet("wtw_adminmenu" + sectionname + "div");
-		if (obj != null) {
-			var current = obj.style.display;
+		var zobj = dGet("wtw_adminmenu" + zsectionname + "div");
+		if (zobj != null) {
+			var zcurrent = zobj.style.display;
 			WTW.hide('wtw_fullpageform');
-			if (current == "none") {
-				obj.style.display = "block";
-				obj.style.visibility = "visible";
+			if (zcurrent == "none") {
+				zobj.style.display = "block";
+				zobj.style.visibility = "visible";
 			} else {
-				obj.style.display = "none";
-				obj.style.visibility = "hidden";
+				zobj.style.display = "none";
+				zobj.style.visibility = "hidden";
 			}
 		}
 	} catch (ex) {
@@ -96,11 +96,11 @@ WTWJS.prototype.toggleAdminMenuLevel = function(sectionname) {
 WTWJS.prototype.hideAdminMenu = function() {
 	/* closes all sections of the admin menu */
 	try {
-		var menusubdivs = document.getElementsByClassName('wtw-adminmenuform');
-		for (var i=0;i<menusubdivs.length;i++) {
-			if (menusubdivs[i] != null) {
-				if (menusubdivs[i].id != undefined) {
-					WTW.hide(menusubdivs[i].id);
+		var zmenusubdivs = document.getElementsByClassName('wtw-adminmenuform');
+		for (var i = 0;i < zmenusubdivs.length;i++) {
+			if (zmenusubdivs[i] != null) {
+				if (zmenusubdivs[i].id != undefined) {
+					WTW.hide(zmenusubdivs[i].id);
 				}
 			}
 		}
@@ -852,12 +852,12 @@ WTWJS.prototype.adminOpenSubmenu = function(zobj) {
 	try {
 		WTW.hide('wtw_fullpageform');
 		var zobjid = zobj.id+'div';
-		var menusubdivs = document.getElementsByClassName('wtw-adminmenudiv');
-		for (var i=0;i<menusubdivs.length;i++) {
-			if (menusubdivs[i] != null) {
-				if (menusubdivs[i].id != undefined) {
-					if (menusubdivs[i].id != zobjid) {
-						WTW.hide(menusubdivs[i].id);
+		var zmenusubdivs = document.getElementsByClassName('wtw-adminmenudiv');
+		for (var i = 0;i < zmenusubdivs.length;i++) {
+			if (zmenusubdivs[i] != null) {
+				if (zmenusubdivs[i].id != undefined) {
+					if (zmenusubdivs[i].id != zobjid) {
+						WTW.hide(zmenusubdivs[i].id);
 					}
 				}
 			}
@@ -935,16 +935,16 @@ WTWJS.prototype.toggleAdminMenuMediaLibrary = function() {
 
 /* admin menu 'quick edit menu' (bottom left) toggle on/off features */
 
-WTWJS.prototype.setQuickEditorAvatarCamera = function(value) {
+WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 	/* toggle camera - attach to avatar or release for free movement */
 	try {
-		if (value == 1) {
+		if (zvalue == 1) {
 			WTW.cameraFocus = 1;
-			var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
-			var headtop = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-headtop");
-			if (avatarcamera != null && headtop != null) {
-				WTW.camera.parent = avatarcamera;
-				avatarcamera.parent = headtop;
+			var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
+			var zheadtop = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-headtop");
+			if (zavatarcamera != null && zheadtop != null) {
+				WTW.camera.parent = zavatarcamera;
+				zavatarcamera.parent = zheadtop;
 				WTW.camera.position.x = 0;
 				WTW.camera.position.y = 0;
 				WTW.camera.position.z = 0;
@@ -965,16 +965,16 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(value) {
 			WTW.setCookie("wtw_bavatarcamera","1",30);
 		} else {
 			WTW.cameraFocus = 0;
-			var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
-			if (avatarcamera != null) {
-				var abspos = WTW.getWorldPosition(avatarcamera);
-				var avatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
-				if (avatar != null && WTW.mainParentMold != null) {
-					avatarcamera.parent = WTW.mainParentMold;
-					WTW.camera.position.x = abspos.x;
-					WTW.camera.position.y = abspos.y;
-					WTW.camera.position.z = abspos.z;
-					WTW.camera.rotation.y = WTW.getRadians(WTW.getDegrees(avatar.rotation.y) + 90);
+			var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
+			if (zavatarcamera != null) {
+				var zabspos = WTW.getWorldPosition(zavatarcamera);
+				var zavatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
+				if (zavatar != null && WTW.mainParentMold != null) {
+					zavatarcamera.parent = WTW.mainParentMold;
+					WTW.camera.position.x = zabspos.x;
+					WTW.camera.position.y = zabspos.y;
+					WTW.camera.position.z = zabspos.z;
+					WTW.camera.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + 90);
 				}
 			}
 			WTW.camera.inputs.attachInput(WTW.camera.inputs.attached.mouse);
@@ -997,10 +997,10 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(value) {
 	}
 }
 
-WTWJS.prototype.setQuickEditorFocus = function(value) {
+WTWJS.prototype.setQuickEditorFocus = function(zvalue) {
 	/* toggle off or on highlight molds on mouse over */
 	try {
-		if (value == 1) {
+		if (zvalue == 1) {
 			if (dGet('wtw_bfocus') != null) {
 				dGet('wtw_bfocus').innerHTML = "Focus<br /><br />ON";
 				dGet('wtw_bfocus').onclick = function() { WTW.setQuickEditorFocus(0); };
@@ -1031,10 +1031,10 @@ WTWJS.prototype.setQuickEditorFocus = function(value) {
 	}
 }
 
-WTWJS.prototype.setQuickEditorMerged = function(value) {
+WTWJS.prototype.setQuickEditorMerged = function(zvalue) {
 	/* show or hide the complete molds that were merged (using opacity) */
 	try {
-		if (value == 1) {
+		if (zvalue == 1) {
 			WTW.setShowCSG();
 			if (dGet('wtw_bmerged') != null) {
 				dGet('wtw_bmerged').innerHTML = "Merged<br /><br />ON";
@@ -1069,23 +1069,23 @@ WTWJS.prototype.setQuickEditorMerged = function(value) {
 WTWJS.prototype.setShowCSG = function() {
 	/* show merged molds (show originals in opacity) */
 	try {
-		var molds = WTW.communitiesMolds;
+		var zmolds = WTW.communitiesMolds;
 		if (buildingid != "") {
-			molds = WTW.buildingMolds;
+			zmolds = WTW.buildingMolds;
 		} else if (thingid != "") {
-			molds = WTW.thingMolds;
+			zmolds = WTW.thingMolds;
 		}
-		for (var i=0; i < molds.length; i++) {
-			if (molds[i] != null) {
-				var csgmoldid = molds[i].csg.moldid;
-				if (csgmoldid != "" && molds[i].shown == "2") {
-					var csgmoldname = molds[i].moldname;
-					var csgmold = scene.getMeshByID(csgmoldname);
-					if (csgmold == null) {
-						molds[i].covering = "color";
-						molds[i].opacity = "30";
-						csgmold = WTW.addMold(csgmoldname, molds[i], molds[i].parentname, "color");
-						WTW.registerMouseOver(csgmold);
+		for (var i=0; i < zmolds.length; i++) {
+			if (zmolds[i] != null) {
+				var zcsgmoldid = zmolds[i].csg.moldid;
+				if (zcsgmoldid != "" && zmolds[i].shown == "2") {
+					var zcsgmoldname = zmolds[i].moldname;
+					var zcsgmold = scene.getMeshByID(zcsgmoldname);
+					if (zcsgmold == null) {
+						zmolds[i].covering = "color";
+						zmolds[i].opacity = "30";
+						zcsgmold = WTW.addMold(zcsgmoldname, zmolds[i], zmolds[i].parentname, "color");
+						WTW.registerMouseOver(zcsgmold);
 					}
 				}
 			}
@@ -1098,22 +1098,22 @@ WTWJS.prototype.setShowCSG = function() {
 WTWJS.prototype.setHideCSG = function() {
 	/* hide merged molds */
 	try {
-		var molds = WTW.communitiesMolds;
+		var zmolds = WTW.communitiesMolds;
 		if (buildingid != "") {
-			molds = WTW.buildingMolds;
+			zmolds = WTW.buildingMolds;
 		} else if (thingid != "") {
-			molds = WTW.thingMolds;
+			zmolds = WTW.thingMolds;
 		}
-		for (var i=0; i < molds.length; i++) {
-			if (molds[i] != null) {
-				var csgmoldid = molds[i].csg.moldid;
-				if (csgmoldid != "" && molds[i].shown == "2") {
-					var csgmoldname = molds[i].moldname;
-					var csgmold = scene.getMeshByID(csgmoldname);
-					if (csgmold != null) {
-						var moldnameparts = WTW.getMoldnameParts(csgmoldname);
-						moldnameparts.molds[moldnameparts.moldind].shown = '0';
-						WTW.disposeClean(csgmoldname);
+		for (var i=0; i < zmolds.length; i++) {
+			if (zmolds[i] != null) {
+				var zcsgmoldid = zmolds[i].csg.moldid;
+				if (zcsgmoldid != "" && zmolds[i].shown == "2") {
+					var zcsgmoldname = zmolds[i].moldname;
+					var zcsgmold = scene.getMeshByID(zcsgmoldname);
+					if (zcsgmold != null) {
+						var zmoldnameparts = WTW.getMoldnameParts(zcsgmoldname);
+						zmoldnameparts.molds[zmoldnameparts.moldind].shown = '0';
+						WTW.disposeClean(zcsgmoldname);
 					}
 				}
 			}

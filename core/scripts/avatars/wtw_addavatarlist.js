@@ -7,39 +7,39 @@
 /* currently not in use, these functions will hold the ability to add auto bot avatars to scenes */
 WTWJS.prototype.getAvatarList = function() {
 	/* list of autobot avatars */
-	var avatarlist = [];
+	var zavatarlist = [];
 	try {
-		avatarlist[avatarlist.length] = "Anonymous";
-		avatarlist[avatarlist.length] = "Female";
-		avatarlist[avatarlist.length] = "Male";
+		zavatarlist[zavatarlist.length] = "Anonymous";
+		zavatarlist[zavatarlist.length] = "Female";
+		zavatarlist[zavatarlist.length] = "Male";
 	} catch (ex) {
 		WTW.log("core-scripts-avatars-addavatarlist\r\n getAvatarList=" + ex.message);
 	} 
-	return avatarlist;
+	return zavatarlist;
 }
 
-WTWJS.prototype.addAvatar = function(avatarname, avatardef, parentname) {
+WTWJS.prototype.addAvatar = function(zavatarname, zavatardef, zparentname) {
 	/* functions to add the autobot avatars selected by avatartype (avatar) */
-	var avatar;
+	var zavatar;
 	try {
-		if (avatardef.avatar == undefined) {
-			avatardef.avatar = "";
+		if (zavatardef.avatar == undefined) {
+			zavatardef.avatar = "";
 		}
-		switch (avatardef.avatar.toLowerCase()) {
+		switch (zavatardef.avatar.toLowerCase()) {
 			case "shark":
-				avatar = WTW.addAvatarShark(avatarname, avatardef);
+				zavatar = WTW.addAvatarShark(zavatarname, zavatardef);
 				break;
 			default:
-				avatardef.avatar = '';
-				avatar = WTW.addAvatar3DObject(avatarname, avatardef);
+				zavatardef.avatar = '';
+				zavatar = WTW.addAvatar3DObject(zavatarname, zavatardef);
 				break;
 		}
-		var avatarparent = scene.getMeshByID(avatardef.parentname);
-		if (avatarparent != null) {
-			avatar.parent = avatarparent;
+		var zavatarparent = scene.getMeshByID(zavatardef.parentname);
+		if (zavatarparent != null) {
+			zavatar.parent = zavatarparent;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-avatars-addavatarlist\r\n addAvatar=" + ex.message);
 	} 
-	return avatar;
+	return zavatar;
 }

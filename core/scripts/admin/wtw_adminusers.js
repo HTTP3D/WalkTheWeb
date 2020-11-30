@@ -119,10 +119,10 @@ WTWJS.prototype.getUser = async function(zuserid) {
 							if (zresponse != null) {
 								zresponse = JSON.parse(zresponse);
 								for (var i=0;i<zresponse.length;i++) {
-									var option = document.createElement("option");
-									option.text = zresponse[i].rolename;
-									option.value = zresponse[i].roleid;
-									dGet('wtw_adduserrole').add(option);
+									var zoption = document.createElement("option");
+									zoption.text = zresponse[i].rolename;
+									zoption.value = zresponse[i].roleid;
+									dGet('wtw_adduserrole').add(zoption);
 								}
 							}
 						}
@@ -190,7 +190,7 @@ WTWJS.prototype.addUser = function() {
 		WTW.hide('wtw_useradd');
 		WTW.hide('wtw_userinfo');
 		var zuserlist = "";
-		var samplepassword = WTW.getRandomString(20);
+		var zsamplepassword = WTW.getRandomString(20);
 		dGet('wtw_useradd').innerHTML = "";
 		dGet('wtw_alluserswidth').className = "wtw-dashboardboxleft";
 		dGet('wtw_alluserstitle').innerHTML = "New User";
@@ -201,7 +201,7 @@ WTWJS.prototype.addUser = function() {
 		zuserlist += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuseruseremail2\" type=\"text\" maxlength=\"255\"/></div>";
 		zuserlist += "<div class=\"wtw-clear\"></div>";
 		zuserlist += "<div class=\"wtw-dashboardlabel\">Password</div>";
-		zuserlist += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuseruserpassword2\" type=\"text\" value=\"" + samplepassword + "\" maxlength=\"255\"/></div>";
+		zuserlist += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuseruserpassword2\" type=\"text\" value=\"" + zsamplepassword + "\" maxlength=\"255\"/></div>";
 		zuserlist += "<div class=\"wtw-clear\"></div>";
 
 		zuserlist += "<div id=\"wtw_errorusersave2\" class=\"wtw-dashboardlabel wtw-red\"></div>";
@@ -242,7 +242,7 @@ WTWJS.prototype.saveNewUser = async function() {
 			WTW.hide('wtw_userinfo');
 			WTW.hide('wtw_useradd');
 			dGet('wtw_alluserswidth').className = "wtw-dashboardboxleftfull";
-			var zpassword = btoa(dGet("wtw_tuseruserpassword2").value);
+			var zpassword = dGet("wtw_tuseruserpassword2").value;
 			var zrequest = {
 				'displayname': btoa(zdisplayname),
 				'password': btoa(zpassword),
@@ -338,19 +338,19 @@ WTWJS.prototype.openPermissionsForm = async function() {
 		dGet('wtw_accessnote').innerHTML = "Dev: updates to 3D " + zwebtype + ".<br />Admin: Dev and set permissions.";
 		dGet('wtw_userdevaccesslist').innerHTML = "";
 		WTW.getAsyncJSON("/connect/useraccess.php?communityid=" + communityid + "&buildingid=" + buildingid + "&thingid=" + thingid, 
-			function(response) {
-				var useraccess = JSON.parse(response);
-				if (useraccess != null) {
-					for (var i = 0; i < useraccess.length; i++) {
-						if (useraccess[i] != null) {
-							var displayname = useraccess[i].displayname;
-							if (displayname == '') {
-								displayname = useraccess[i].email;
+			function(zresponse) {
+				var zuseraccess = JSON.parse(zresponse);
+				if (zuseraccess != null) {
+					for (var i = 0; i < zuseraccess.length; i++) {
+						if (zuseraccess[i] != null) {
+							var zdisplayname = zuseraccess[i].displayname;
+							if (zdisplayname == '') {
+								zdisplayname = zuseraccess[i].email;
 							}
-							if (displayname == '') {
-								displayname = useraccess[i].userid;
+							if (zdisplayname == '') {
+								zdisplayname = zuseraccess[i].userid;
 							}
-							dGet('wtw_userdevaccesslist').innerHTML += "<div class='wtw-menulevel0' onclick=\"WTW.toggle('wtw_div-" + useraccess[i].userauthorizationid + "');\"><div class='wtw-altkey'>" + useraccess[i].useraccess + "</div>" + displayname + "</div><div id='wtw_div-" + useraccess[i].userauthorizationid + "' class='wtw-detailprint' style='display:none;visibility:hidden;'>Display Name: " + useraccess[i].displayname + "<br /><div id=\"wtw_bdelete-" + useraccess[i].userauthorizationid + "\" class='wtw-redbutton' onclick=\"dGet('wtw_tadduserdevaccess').value='" + useraccess[i].userid + "';WTW.deleteDevAccess();\" style='margin-left:30px;margin-right:20px;'>Delete</div><div id=\"wtw_bcancel-" + useraccess[i].userauthorizationid + "\" class='wtw-yellowbutton' onclick=\"WTW.toggle('wtw_div-" + useraccess[i].userauthorizationid + "');\">Cancel</div></div>";
+							dGet('wtw_userdevaccesslist').innerHTML += "<div class='wtw-menulevel0' onclick=\"WTW.toggle('wtw_div-" + zuseraccess[i].userauthorizationid + "');\"><div class='wtw-altkey'>" + zuseraccess[i].useraccess + "</div>" + zdisplayname + "</div><div id='wtw_div-" + zuseraccess[i].userauthorizationid + "' class='wtw-detailprint' style='display:none;visibility:hidden;'>Display Name: " + zuseraccess[i].displayname + "<br /><div id=\"wtw_bdelete-" + zuseraccess[i].userauthorizationid + "\" class='wtw-redbutton' onclick=\"dGet('wtw_tadduserdevaccess').value='" + zuseraccess[i].userid + "';WTW.deleteDevAccess();\" style='margin-left:30px;margin-right:20px;'>Delete</div><div id=\"wtw_bcancel-" + zuseraccess[i].userauthorizationid + "\" class='wtw-yellowbutton' onclick=\"WTW.toggle('wtw_div-" + zuseraccess[i].userauthorizationid + "');\">Cancel</div></div>";
 						}
 					}
 				}
@@ -366,35 +366,35 @@ WTWJS.prototype.openPermissionsForm = async function() {
 	}		
 }
 
-WTWJS.prototype.updateDevAccessList = function(permissionslist) {
+WTWJS.prototype.updateDevAccessList = function(zresponse) {
 	/* update developer access list (work in progress) */
 	try {
-		var totals = "";
+		var ztotals = "";
 		dGet('wtw_useraccesslist').innerHTML = "";
 		dGet('wtw_userdevaccesslist').innerHTML = "";
-		var permissions = JSON.parse(permissionslist);
-		if (permissions != null) {
-			if (permissions.length > 0) {
-				for (var i = 0; i < permissions.length; i++) {
-					if (permissions[i] != null) {
-						switch (permissions[i].useraccess) {
+		var zpermissions = JSON.parse(zresponse);
+		if (zpermissions != null) {
+			if (zpermissions.length > 0) {
+				for (var i = 0; i < zpermissions.length; i++) {
+					if (zpermissions[i] != null) {
+						switch (zpermissions[i].useraccess) {
 							case "admin":
-//								dGet('wtw_userdevaccesslist').innerHTML += "<div style='white-space:nowrap;'><div style='float:right;text-align:right;'><input type=\"checkbox\" id=\"wtw_taccesslevel1-" + permissions[i].authorizationid + "\" name=\"taccesslevel1-" + permissions[i].authorizationid + "\" class=\"smallprint\" value=\"1\" checked=\"true\" onchange=\"WTW.setDevAccessValid('taccesslevel1-" + permissions[i].authorizationid + "','taccesslevel2-" + permissions[i].authorizationid + "',0);dGet('wtw_tadduserdevaccess').value='" + permissions[i].userid + "';WTW.addDevAccess();\" /> Dev &nbsp;&nbsp;&nbsp;<input type=\"checkbox\" id=\"wtw_taccesslevel2-" + permissions[i].authorizationid + "\" name=\"wtw_taccesslevel2-" + permissions[i].authorizationid + "\" class=\"smallprint\" value=\"1\" checked=\"true\" onchange=\"WTW.setDevAccessValid('taccesslevel1-" + permissions[i].authorizationid + "','taccesslevel2-" + permissions[i].authorizationid + "',1);dGet('wtw_tadduserdevaccess').value='" + permissions[i].userid + "';WTW.addDevAccess();\" /> Admin &nbsp;&nbsp;&nbsp;<input id='wtw_bdeleteauthorization" + permissions[i].authorizationid + "' type='button' value='delete' onclick=\"dGet('wtw_tadduserdevaccess').value='" + permissions[i].userid + "';WTW.deleteDevAccess();return (false);\" /></div><div><b>" + permissions[i].userid + "</b></div></div><br />";
+//								dGet('wtw_userdevaccesslist').innerHTML += "<div style='white-space:nowrap;'><div style='float:right;text-align:right;'><input type=\"checkbox\" id=\"wtw_taccesslevel1-" + zpermissions[i].authorizationid + "\" name=\"taccesslevel1-" + zpermissions[i].authorizationid + "\" class=\"smallprint\" value=\"1\" checked=\"true\" onchange=\"WTW.setDevAccessValid('taccesslevel1-" + zpermissions[i].authorizationid + "','taccesslevel2-" + zpermissions[i].authorizationid + "',0);dGet('wtw_tadduserdevaccess').value='" + zpermissions[i].userid + "';WTW.addDevAccess();\" /> Dev &nbsp;&nbsp;&nbsp;<input type=\"checkbox\" id=\"wtw_taccesslevel2-" + zpermissions[i].authorizationid + "\" name=\"wtw_taccesslevel2-" + zpermissions[i].authorizationid + "\" class=\"smallprint\" value=\"1\" checked=\"true\" onchange=\"WTW.setDevAccessValid('taccesslevel1-" + zpermissions[i].authorizationid + "','taccesslevel2-" + zpermissions[i].authorizationid + "',1);dGet('wtw_tadduserdevaccess').value='" + zpermissions[i].userid + "';WTW.addDevAccess();\" /> Admin &nbsp;&nbsp;&nbsp;<input id='wtw_bdeleteauthorization" + zpermissions[i].authorizationid + "' type='button' value='delete' onclick=\"dGet('wtw_tadduserdevaccess').value='" + zpermissions[i].userid + "';WTW.deleteDevAccess();return (false);\" /></div><div><b>" + zpermissions[i].userid + "</b></div></div><br />";
 								break;
 							case "architect":
-//								dGet('wtw_userdevaccesslist').innerHTML += "<div style='white-space:nowrap;'><div style='float:right;text-align:right;'><input type=\"checkbox\" id=\"wtw_taccesslevel1-" + permissions[i].authorizationid + "\" name=\"taccesslevel1-" + permissions[i].authorizationid + "\" class=\"smallprint\" value=\"1\" checked=\"true\" onchange=\"WTW.setDevAccessValid('taccesslevel1-" + permissions[i].authorizationid + "','taccesslevel2-" + permissions[i].authorizationid + "',0);dGet('wtw_tadduserdevaccess').value='" + permissions[i].userid + "';WTW.addDevAccess();\" /> Dev &nbsp;&nbsp;&nbsp;<input type=\"checkbox\" id=\"wtw_taccesslevel2-" + permissions[i].authorizationid + "\" name=\"wtw_taccesslevel2-" + permissions[i].authorizationid + "\" class=\"smallprint\" value=\"1\" onchange=\"WTW.setDevAccessValid('taccesslevel1-" + permissions[i].authorizationid + "','wtw_taccesslevel2-" + permissions[i].authorizationid + "',1);dGet('wtw_tadduserdevaccess').value='" + permissions[i].userid + "';WTW.addDevAccess();\" /> Admin &nbsp;&nbsp;&nbsp;<input id='wtw_bdeleteauthorization" + permissions[i].authorizationid + "' type='button' value='delete' onclick=\"dGet('wtw_tadduserdevaccess').value='" + permissions[i].userid + "';WTW.deleteDevAccess();return (false);\" /></div><div><b>" + permissions[i].userid + "</b></div></div><br />";
+//								dGet('wtw_userdevaccesslist').innerHTML += "<div style='white-space:nowrap;'><div style='float:right;text-align:right;'><input type=\"checkbox\" id=\"wtw_taccesslevel1-" + zpermissions[i].authorizationid + "\" name=\"taccesslevel1-" + zpermissions[i].authorizationid + "\" class=\"smallprint\" value=\"1\" checked=\"true\" onchange=\"WTW.setDevAccessValid('taccesslevel1-" + zpermissions[i].authorizationid + "','taccesslevel2-" + zpermissions[i].authorizationid + "',0);dGet('wtw_tadduserdevaccess').value='" + zpermissions[i].userid + "';WTW.addDevAccess();\" /> Dev &nbsp;&nbsp;&nbsp;<input type=\"checkbox\" id=\"wtw_taccesslevel2-" + zpermissions[i].authorizationid + "\" name=\"wtw_taccesslevel2-" + zpermissions[i].authorizationid + "\" class=\"smallprint\" value=\"1\" onchange=\"WTW.setDevAccessValid('taccesslevel1-" + zpermissions[i].authorizationid + "','wtw_taccesslevel2-" + zpermissions[i].authorizationid + "',1);dGet('wtw_tadduserdevaccess').value='" + zpermissions[i].userid + "';WTW.addDevAccess();\" /> Admin &nbsp;&nbsp;&nbsp;<input id='wtw_bdeleteauthorization" + zpermissions[i].authorizationid + "' type='button' value='delete' onclick=\"dGet('wtw_tadduserdevaccess').value='" + zpermissions[i].userid + "';WTW.deleteDevAccess();return (false);\" /></div><div><b>" + zpermissions[i].userid + "</b></div></div><br />";
 								break;
 							default:
-//								dGet('wtw_useraccesslist').innerHTML += "<div style='white-space:nowrap;'><div style='float:right;text-align:right;'><input id='wtw_bdeletebrowseauthorization" + permissions[i].authorizationid + "' type='button' value='delete' onclick=\"dGet('wtw_tadduseridname').value='" + permissions[i].userid + "';WTW.deleteAccess();return (false);\" /></div><div><b>" + permissions[i].userid + "</b></div></div><br />";
+//								dGet('wtw_useraccesslist').innerHTML += "<div style='white-space:nowrap;'><div style='float:right;text-align:right;'><input id='wtw_bdeletebrowseauthorization" + zpermissions[i].authorizationid + "' type='button' value='delete' onclick=\"dGet('wtw_tadduseridname').value='" + zpermissions[i].userid + "';WTW.deleteAccess();return (false);\" /></div><div><b>" + zpermissions[i].userid + "</b></div></div><br />";
 								break;
 						}
-						totals = "<hr />Browsers = " + permissions[i].counts.browse + "<br />Invitees = " + permissions[i].counts.invitees + "<br />Neighbors = " + permissions[i].counts.neighbors + "<br />Architects = " + permissions[i].counts.architects + "<br />Administrators = " + permissions[i].counts.admins;
+						ztotals = "<hr />Browsers = " + zpermissions[i].counts.browse + "<br />Invitees = " + zpermissions[i].counts.invitees + "<br />Neighbors = " + zpermissions[i].counts.neighbors + "<br />Architects = " + zpermissions[i].counts.architects + "<br />Administrators = " + zpermissions[i].counts.admins;
 					}
 				}
 			}
 		}
-		dGet('wtw_useraccesslist').innerHTML += totals;
-		dGet('wtw_userdevaccesslist').innerHTML += totals;
+		dGet('wtw_useraccesslist').innerHTML += ztotals;
+		dGet('wtw_userdevaccesslist').innerHTML += ztotals;
 		WTW.hide('wtw_loadinguserdevaccessform');
 		WTW.show('wtw_adminmenu60b');
 		WTW.setWindowSize();

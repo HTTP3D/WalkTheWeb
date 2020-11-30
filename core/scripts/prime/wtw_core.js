@@ -853,8 +853,8 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 						/* fetch action zones for the connecting grid item - triggers further loading of web object */
 						if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid == "") {
 							WTW.getJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + WTW.connectingGrids[zconnectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "&connectinggridind=" + zconnectinggridind, 
-								function(response) {
-									WTW.loadActionZones(JSON.parse(response));
+								function(zresponse) {
+									WTW.loadActionZones(JSON.parse(zresponse));
 								}
 							);
 						}
@@ -871,8 +871,8 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 						/* fetch action zones for the connecting grid item - triggers further loading of web object */
 						if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid == "") {
 							WTW.getJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + WTW.connectingGrids[zconnectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "&connectinggridind=" + zconnectinggridind, 
-								function(response) {
-									WTW.loadActionZones(JSON.parse(response));
+								function(zresponse) {
+									WTW.loadActionZones(JSON.parse(zresponse));
 								}
 							);
 						}
@@ -928,8 +928,8 @@ WTWJS.prototype.getActionZones = async function(zconnectinggridind) {
 			/* fetch the action zones from the internet for a given web object */
 			if (zaltloadactionzoneid == "") {
 				WTW.getAsyncJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + WTW.connectingGrids[zconnectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "&connectinggridind=" + zconnectinggridind, 
-					function(response) {
-						WTW.loadActionZones(JSON.parse(response));
+					function(zresponse) {
+						WTW.loadActionZones(JSON.parse(zresponse));
 					}
 				);
 			}
@@ -1066,8 +1066,8 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 		/* fetch action zones to be loaded by the load zone */
 		if (zaltloadactionzoneid == "") {
 			WTW.getAsyncJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + zparentname + "&connectinggridid=" + zconnectinggridid + "&connectinggridind=" + zconnectinggridind, 
-				function(response) {
-					WTW.loadActionZones(JSON.parse(response));
+				function(zresponse) {
+					WTW.loadActionZones(JSON.parse(zresponse));
 				}
 			);
 		}
@@ -1096,14 +1096,14 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 		}
 		/* fetch molds (mesh definitions) to be loaded by the load zone */
 		WTW.getAsyncJSON("/connect/moldsbywebid.php?webcommunityid=" + communityid + "&webbuildingid=" + buildingid + "&communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentactionzoneind=" + zactionzoneind + "&actionzoneid=" + zactionzoneid + "&parentname=" + WTW.actionZones[zactionzoneind].parentname + "&connectinggridid=" + zconnectinggridid + "&connectinggridind=" + zconnectinggridind + "&userid=" + dGet("wtw_tuserid").value + "&graphiclevel=" + zgraphiclevel, 
-			function(response) {
-				WTW.loadMolds(JSON.parse(response));
+			function(zresponse) {
+				WTW.loadMolds(JSON.parse(zresponse));
 			}
 		);
 		/* fetch automations (automated sequences) to be loaded by the load zone (temporarily disabled - until they are added to the admin interface) */
 /*		WTW.getAsyncJSON("/connect/automationsbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + parentname + "&connectinggridid=" + zconnectinggridid + "&connectinggridind=" + zconnectinggridind, 
-			function(response) {
-				WTW.loadAutomations(JSON.parse(response));
+			function(zresponse) {
+				WTW.loadAutomations(JSON.parse(zresponse));
 			}
 		); */
 	} catch (ex) {

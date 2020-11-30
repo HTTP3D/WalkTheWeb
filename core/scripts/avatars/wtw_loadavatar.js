@@ -197,11 +197,11 @@ WTWJS.prototype.disposeAvatar = function(zavatarname) {
 	try {
 		var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
 		if (zavatarscale != null) {
-			var childmeshes = zavatarscale.getChildren();
-			if (childmeshes != null) {
-				for (var i=0; i < childmeshes.length; i++) {
-					if (childmeshes[i] != null) {
-						childmeshes[i].dispose();
+			var zchildmeshes = zavatarscale.getChildren();
+			if (zchildmeshes != null) {
+				for (var i=0; i < zchildmeshes.length; i++) {
+					if (zchildmeshes[i] != null) {
+						zchildmeshes[i].dispose();
 					}
 				}
 			}
@@ -220,14 +220,14 @@ WTWJS.prototype.transferAvatar = function(zavatarname) {
 		var zavatarscaleold = scene.getMeshByID(zavatarname + "-scaleold");
 		if (zavatarscale != null && zavatarscaleold != null) {
 			zavatarscaleold.scaling = zavatarscale.scaling;
-			var childmeshes = zavatarscale.getChildren();
-			if (childmeshes != null) {
-				for (var i=0; i < childmeshes.length; i++) {
-					if (childmeshes[i] != null) {
-						var znewname = childmeshes[i].id + "-wtwold";
-						childmeshes[i].name = znewname;
-						childmeshes[i].id = znewname;
-						childmeshes[i].parent = zavatarscaleold;
+			var zchildmeshes = zavatarscale.getChildren();
+			if (zchildmeshes != null) {
+				for (var i=0; i < zchildmeshes.length; i++) {
+					if (zchildmeshes[i] != null) {
+						var znewname = zchildmeshes[i].id + "-wtwold";
+						zchildmeshes[i].name = znewname;
+						zchildmeshes[i].id = znewname;
+						zchildmeshes[i].parent = zavatarscaleold;
 					}
 				}
 			}
@@ -242,14 +242,14 @@ WTWJS.prototype.disposeOldAvatar = function(zavatarname) {
 	try {
 		var zavatarscaleold = scene.getMeshByID(zavatarname + "-scaleold");
 		if (zavatarscaleold != null) {
-			var childmeshes = zavatarscaleold.getChildren();
-			if (childmeshes != null) {
-				for (var i=0; i < childmeshes.length; i++) {
-					if (childmeshes[i] != null) {
-						if (childmeshes[i].id.indexOf('-') > -1) {
-							var zmoldnames = childmeshes[i].id.split('-');
+			var zchildmeshes = zavatarscaleold.getChildren();
+			if (zchildmeshes != null) {
+				for (var i=0; i < zchildmeshes.length; i++) {
+					if (zchildmeshes[i] != null) {
+						if (zchildmeshes[i].id.indexOf('-') > -1) {
+							var zmoldnames = zchildmeshes[i].id.split('-');
 							if (zmoldnames[3] == 'wtwold') {
-								childmeshes[i].dispose();
+								zchildmeshes[i].dispose();
 							}
 						}
 					}

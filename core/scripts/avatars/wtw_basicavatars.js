@@ -490,8 +490,8 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 									if (zobjectanimations != null) {
 										for (var j=0; j < zobjectanimations.length;j++) {
 											if (zobjectanimations[j] != null) {
-												var moldnamepart = zobjectanimations[j].moldnamepart;
-												if (moldnamepart == zmeshname) {
+												var zmoldnamepart = zobjectanimations[j].moldnamepart;
+												if (zmoldnamepart == zmeshname) {
 													var zmoldevent = zobjectanimations[j].moldevent;
 													var zstartframe = Number(zobjectanimations[j].startframe);
 													var zendframe = Number(zobjectanimations[j].endframe);
@@ -678,253 +678,253 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 	return zavatar;
 }
 
-WTWJS.prototype.addAvatarShark = function(avatarname, avatardef) {
+WTWJS.prototype.addAvatarShark = function(zavatarname, zavatardef) {
 	/* robo avatar as a shark - early test kept as template, may need to be retested with latest code before use */
-	var avatar;
+	var zavatar;
 	try {
-		var imageskinid = "v1n3kix1hb2ern02";
-		var imageeyesid = "hhyd114h30sybrv4";
-		avatar = scene.getMeshByID(avatarname);
-		var tank = scene.getMeshByID(avatardef.parentname);
-		var tailball = scene.getMeshByID(avatarname + "-tailball");
-		var avatarshark = scene.getMeshByID(avatarname + "-avatarshark");
-		if (avatar == null && tank != null) {
-			var basicmold = WTW.newMold();
-			basicmold.covering = "hidden";
-			basicmold.position.x = avatardef.position.x;
-			basicmold.position.y = avatardef.position.y;
-			basicmold.position.z = avatardef.position.z;
-			basicmold.scaling.x = 1 / Number(avatardef.scaling.x);
-			basicmold.scaling.y = 1 / Number(avatardef.scaling.y);
-			basicmold.scaling.z = 1 / Number(avatardef.scaling.z);
-			basicmold.rotation.y = avatardef.rotation.y;
-			basicmold.checkcollisions = "0";
-			avatar = WTW.addMold(avatarname, basicmold, avatardef.parentname, basicmold.covering);
+		var zimageskinid = "v1n3kix1hb2ern02";
+		var zimageeyesid = "hhyd114h30sybrv4";
+		zavatar = scene.getMeshByID(zavatarname);
+		var ztank = scene.getMeshByID(zavatardef.parentname);
+		var ztailball = scene.getMeshByID(zavatarname + "-tailball");
+		var zavatarshark = scene.getMeshByID(zavatarname + "-avatarshark");
+		if (zavatar == null && ztank != null) {
+			var zbasicmold = WTW.newMold();
+			zbasicmold.covering = "hidden";
+			zbasicmold.position.x = zavatardef.position.x;
+			zbasicmold.position.y = zavatardef.position.y;
+			zbasicmold.position.z = zavatardef.position.z;
+			zbasicmold.scaling.x = 1 / Number(zavatardef.scaling.x);
+			zbasicmold.scaling.y = 1 / Number(zavatardef.scaling.y);
+			zbasicmold.scaling.z = 1 / Number(zavatardef.scaling.z);
+			zbasicmold.rotation.y = zavatardef.rotation.y;
+			zbasicmold.checkcollisions = "0";
+			zavatar = WTW.addMold(zavatarname, zbasicmold, zavatardef.parentname, zbasicmold.covering);
 			
-			basicmold = WTW.newMold();
-			basicmold.covering = "hidden";
-			basicmold.position.x = 0;
-			basicmold.position.y = 0;
-			basicmold.position.z = 0;
-			basicmold.rotation.y = 0;
-			basicmold.parentname = avatarname;
-			basicmold.checkcollisions = "0";
-			avatarshark = WTW.addMold(avatarname + "-avatarshark", basicmold, basicmold.parentname, basicmold.covering);
+			zbasicmold = WTW.newMold();
+			zbasicmold.covering = "hidden";
+			zbasicmold.position.x = 0;
+			zbasicmold.position.y = 0;
+			zbasicmold.position.z = 0;
+			zbasicmold.rotation.y = 0;
+			zbasicmold.parentname = zavatarname;
+			zbasicmold.checkcollisions = "0";
+			zavatarshark = WTW.addMold(zavatarname + "-avatarshark", zbasicmold, zbasicmold.parentname, zbasicmold.covering);
 
-			basicmold = WTW.newMold();
-			basicmold.covering = "hidden";
-			basicmold.position.x = 6;
-			basicmold.position.y = 0;
-			basicmold.position.z = 0;
-			basicmold.parentname = avatarname + "-avatarshark";
-			basicmold.checkcollisions = "0";
-			WTW.addMold(avatarname + "-checkfront", basicmold, basicmold.parentname, basicmold.covering);
+			zbasicmold = WTW.newMold();
+			zbasicmold.covering = "hidden";
+			zbasicmold.position.x = 6;
+			zbasicmold.position.y = 0;
+			zbasicmold.position.z = 0;
+			zbasicmold.parentname = zavatarname + "-avatarshark";
+			zbasicmold.checkcollisions = "0";
+			WTW.addMold(zavatarname + "-checkfront", zbasicmold, zbasicmold.parentname, zbasicmold.covering);
 
-			basicmold = WTW.newMold();
-			basicmold.covering = "hidden";
-			basicmold.position.x = 4;
-			basicmold.position.y = 0;
-			basicmold.position.z = 4;
-			basicmold.parentname = avatarname + "-avatarshark";
-			basicmold.checkcollisions = "0";
-			WTW.addMold(avatarname + "-checkleft", basicmold, basicmold.parentname, basicmold.covering);
+			zbasicmold = WTW.newMold();
+			zbasicmold.covering = "hidden";
+			zbasicmold.position.x = 4;
+			zbasicmold.position.y = 0;
+			zbasicmold.position.z = 4;
+			zbasicmold.parentname = zavatarname + "-avatarshark";
+			zbasicmold.checkcollisions = "0";
+			WTW.addMold(zavatarname + "-checkleft", zbasicmold, zbasicmold.parentname, zbasicmold.covering);
 
-			basicmold = WTW.newMold();
-			basicmold.covering = "hidden";
-			basicmold.position.x = 4;
-			basicmold.position.y = 0;
-			basicmold.position.z = -4;
-			basicmold.parentname = avatarname + "-avatarshark";
-			basicmold.checkcollisions = "0";
-			WTW.addMold(avatarname + "-checkright", basicmold, basicmold.parentname, basicmold.covering);
+			zbasicmold = WTW.newMold();
+			zbasicmold.covering = "hidden";
+			zbasicmold.position.x = 4;
+			zbasicmold.position.y = 0;
+			zbasicmold.position.z = -4;
+			zbasicmold.parentname = zavatarname + "-avatarshark";
+			zbasicmold.checkcollisions = "0";
+			WTW.addMold(zavatarname + "-checkright", zbasicmold, zbasicmold.parentname, zbasicmold.covering);
 			
-			var skinmat = new BABYLON.StandardMaterial(avatarname + "-skinmat",scene);
-			var imageinfo = WTW.getUploadFileData(imageskinid);
-			skinmat.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.filedata, avatarname + "-skinmattexture", scene);
-			skinmat.specularColor = new BABYLON.Color3(.5,.5,.5);
-			skinmat.emissiveColor = new BABYLON.Color3(.8,.8,.8);
-			skinmat.diffuseColor = new BABYLON.Color3(.5,.5,.5);
-			skinmat.diffuseTexture.uScale = .7;
+			var zskinmat = new BABYLON.StandardMaterial(zavatarname + "-skinmat",scene);
+			var zimageinfo = WTW.getUploadFileData(zimageskinid);
+			zskinmat.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.filedata, zavatarname + "-skinmattexture", scene);
+			zskinmat.specularColor = new BABYLON.Color3(.5,.5,.5);
+			zskinmat.emissiveColor = new BABYLON.Color3(.8,.8,.8);
+			zskinmat.diffuseColor = new BABYLON.Color3(.5,.5,.5);
+			zskinmat.diffuseTexture.uScale = .7;
 			
-			var eyemat = new BABYLON.StandardMaterial(avatarname + "-eyemat",scene);
-			var imageinfo = WTW.getUploadFileData(imageeyesid);
-			eyemat.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.filedata, avatarname + "-eyemattexture", scene);
-			eyemat.specularColor = new BABYLON.Color3(.5,.5,.5);
-			eyemat.emissiveColor = new BABYLON.Color3(.8,.8,.8);
-			eyemat.diffuseColor = new BABYLON.Color3(.5,.5,.5);
+			var zeyemat = new BABYLON.StandardMaterial(zavatarname + "-eyemat",scene);
+			var zimageinfo2 = WTW.getUploadFileData(zimageeyesid);
+			zeyemat.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo2.filedata, zavatarname + "-eyemattexture", scene);
+			zeyemat.specularColor = new BABYLON.Color3(.5,.5,.5);
+			zeyemat.emissiveColor = new BABYLON.Color3(.8,.8,.8);
+			zeyemat.diffuseColor = new BABYLON.Color3(.5,.5,.5);
 			
-			var shark = BABYLON.MeshBuilder.CreateSphere(avatarname + "-shark",{segments: 20, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
-			shark.position.x = 0;
-			shark.position.y = .9;
-			shark.position.z = 0;
-			shark.scaling.x = 8;
-			shark.scaling.y = 1.5;
-			shark.scaling.z = .9;
-			shark.material = skinmat;
-			shark.material.diffuseTexture.uOffset = .5;
-			shark.parent = avatarshark;
-			WTW.addReflectionToMold(WTW.waterMat, shark);
+			var zshark = BABYLON.MeshBuilder.CreateSphere(zavatarname + "-shark",{segments: 20, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
+			zshark.position.x = 0;
+			zshark.position.y = .9;
+			zshark.position.z = 0;
+			zshark.scaling.x = 8;
+			zshark.scaling.y = 1.5;
+			zshark.scaling.z = .9;
+			zshark.material = zskinmat;
+			zshark.material.diffuseTexture.uOffset = .5;
+			zshark.parent = zavatarshark;
+			WTW.addReflectionToMold(WTW.waterMat, zshark);
 
-			var fins1 = BABYLON.MeshBuilder.CreateSphere(avatarname + "-fins1",{segments: 20, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
-			fins1.position.x = .5;
-			fins1.position.y = .4;
-			fins1.position.z = .5;
-			fins1.scaling.x = .4;
-			fins1.scaling.y = 1.5;
-			fins1.scaling.z = .3;
-			fins1.rotation.x = WTW.getRadians(120);
-			fins1.material = skinmat;
-			fins1.material.diffuseTexture.uOffset = .5;
-			fins1.parent = avatarshark;
-			WTW.addReflectionToMold(WTW.waterMat, fins1);
-			var fins2 = BABYLON.MeshBuilder.CreateSphere(avatarname + "-fins2",{segments: 20, diameter:.8, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
-			fins2.position.x = .5;
-			fins2.position.y = .4;
-			fins2.position.z = -.5;
-			fins2.scaling.x = .4;
-			fins2.scaling.y = 1.5;
-			fins2.scaling.z = .3;
-			fins2.rotation.x = WTW.getRadians(-120);
-			fins2.material = skinmat;
-			fins2.parent = avatarshark;
-			WTW.addReflectionToMold(WTW.waterMat, fins2);
-			var fins3 = BABYLON.MeshBuilder.CreateSphere(avatarname + "-fins3",{segments: 20, diameter:.8, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
-			fins3.position.x = -2;
-			fins3.position.y = .5;
-			fins3.position.z = -.5;
-			fins3.scaling.x = .5;
-			fins3.scaling.y = .7;
-			fins3.scaling.z = .1;
-			fins3.rotation.x = WTW.getRadians(-120);
-			fins3.material = skinmat;
-			fins3.parent = avatarshark;
-			WTW.addReflectionToMold(WTW.waterMat, fins3);
-			var fins4 = BABYLON.MeshBuilder.CreateSphere(avatarname + "-fins4",{segments: 20, diameter:.8, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
-			fins4.position.x = -2;
-			fins4.position.y = .5;
-			fins4.position.z = .5;
-			fins4.scaling.x = .5;
-			fins4.scaling.y = .7;
-			fins4.scaling.z = .1;
-			fins4.rotation.x = WTW.getRadians(120);
-			fins4.material = skinmat;
-			fins4.parent = avatarshark;
-			WTW.addReflectionToMold(WTW.waterMat, fins4);
-			var head_fin = BABYLON.MeshBuilder.CreateCylinder(avatarname + "-hfin",{height: 1, diameterTop: 0, diameterBottom: 1, tessellation: 30, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE},scene);
-			head_fin.position.x = -.5;
-			head_fin.position.y = 1.85;
-			head_fin.position.z = 0;
-			head_fin.scaling.z = .12;
-			head_fin.scaling.x = 2;
-			head_fin.material = skinmat;
-			head_fin.parent = avatarshark;
-			WTW.addReflectionToMold(WTW.waterMat, head_fin);
-			var sharkeye = BABYLON.MeshBuilder.CreateSphere(avatarname + "-eye1",{segments: 20, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
-			sharkeye.position.x = 3.3;
-			sharkeye.position.y = 1;
-			sharkeye.position.z = .22;
-			sharkeye.scaling.x = .15;
-			sharkeye.scaling.y = .15;
-			sharkeye.scaling.z = .15;
-			sharkeye.material = eyemat;
-			sharkeye.parent = avatarshark;
-			var sharkeye2 = BABYLON.MeshBuilder.CreateSphere(avatarname + "-eye2",{segments: 20, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
-			sharkeye2.position.x = 3.3;
-			sharkeye2.position.y = 1;
-			sharkeye2.position.z = -.22;
-			sharkeye2.scaling.x = .15;
-			sharkeye2.scaling.y = .15;
-			sharkeye2.scaling.z = .15;
-			sharkeye2.material = eyemat;
-			sharkeye2.parent = avatarshark;
+			var zfins1 = BABYLON.MeshBuilder.CreateSphere(zavatarname + "-fins1",{segments: 20, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
+			zfins1.position.x = .5;
+			zfins1.position.y = .4;
+			zfins1.position.z = .5;
+			zfins1.scaling.x = .4;
+			zfins1.scaling.y = 1.5;
+			zfins1.scaling.z = .3;
+			zfins1.rotation.x = WTW.getRadians(120);
+			zfins1.material = zskinmat;
+			zfins1.material.diffuseTexture.uOffset = .5;
+			zfins1.parent = zavatarshark;
+			WTW.addReflectionToMold(WTW.waterMat, zfins1);
+			var zfins2 = BABYLON.MeshBuilder.CreateSphere(zavatarname + "-fins2",{segments: 20, diameter:.8, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
+			zfins2.position.x = .5;
+			zfins2.position.y = .4;
+			zfins2.position.z = -.5;
+			zfins2.scaling.x = .4;
+			zfins2.scaling.y = 1.5;
+			zfins2.scaling.z = .3;
+			zfins2.rotation.x = WTW.getRadians(-120);
+			zfins2.material = zskinmat;
+			zfins2.parent = zavatarshark;
+			WTW.addReflectionToMold(WTW.waterMat, zfins2);
+			var zfins3 = BABYLON.MeshBuilder.CreateSphere(zavatarname + "-fins3",{segments: 20, diameter:.8, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
+			zfins3.position.x = -2;
+			zfins3.position.y = .5;
+			zfins3.position.z = -.5;
+			zfins3.scaling.x = .5;
+			zfins3.scaling.y = .7;
+			zfins3.scaling.z = .1;
+			zfins3.rotation.x = WTW.getRadians(-120);
+			zfins3.material = zskinmat;
+			zfins3.parent = zavatarshark;
+			WTW.addReflectionToMold(WTW.waterMat, zfins3);
+			var zfins4 = BABYLON.MeshBuilder.CreateSphere(zavatarname + "-fins4",{segments: 20, diameter:.8, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
+			zfins4.position.x = -2;
+			zfins4.position.y = .5;
+			zfins4.position.z = .5;
+			zfins4.scaling.x = .5;
+			zfins4.scaling.y = .7;
+			zfins4.scaling.z = .1;
+			zfins4.rotation.x = WTW.getRadians(120);
+			zfins4.material = zskinmat;
+			zfins4.parent = zavatarshark;
+			WTW.addReflectionToMold(WTW.waterMat, zfins4);
+			var zheadfin = BABYLON.MeshBuilder.CreateCylinder(zavatarname + "-hfin",{height: 1, diameterTop: 0, diameterBottom: 1, tessellation: 30, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE},scene);
+			zheadfin.position.x = -.5;
+			zheadfin.position.y = 1.85;
+			zheadfin.position.z = 0;
+			zheadfin.scaling.z = .12;
+			zheadfin.scaling.x = 2;
+			zheadfin.material = zskinmat;
+			zheadfin.parent = zavatarshark;
+			WTW.addReflectionToMold(WTW.waterMat, zheadfin);
+			var zsharkeye = BABYLON.MeshBuilder.CreateSphere(zavatarname + "-eye1",{segments: 20, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
+			zsharkeye.position.x = 3.3;
+			zsharkeye.position.y = 1;
+			zsharkeye.position.z = .22;
+			zsharkeye.scaling.x = .15;
+			zsharkeye.scaling.y = .15;
+			zsharkeye.scaling.z = .15;
+			zsharkeye.material = zeyemat;
+			zsharkeye.parent = zavatarshark;
+			var zsharkeye2 = BABYLON.MeshBuilder.CreateSphere(zavatarname + "-eye2",{segments: 20, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
+			zsharkeye2.position.x = 3.3;
+			zsharkeye2.position.y = 1;
+			zsharkeye2.position.z = -.22;
+			zsharkeye2.scaling.x = .15;
+			zsharkeye2.scaling.y = .15;
+			zsharkeye2.scaling.z = .15;
+			zsharkeye2.material = zeyemat;
+			zsharkeye2.parent = zavatarshark;
 			
-			var basicmold = WTW.newMold();
-			basicmold.shape = "sphere";
-			basicmold.covering = "hidden";
-			basicmold.position.x = -3.6;
-			basicmold.position.y = .9;
-			basicmold.position.z = 0;
-			basicmold.subdivisions = 12;
-			basicmold.parentname = avatarname + "-avatarshark";
-			basicmold.checkcollisions = "0";
-			tailball = WTW.addMold(avatarname + "-tailball", basicmold, basicmold.parentname, basicmold.covering);
+			var zbasicmold = WTW.newMold();
+			zbasicmold.shape = "sphere";
+			zbasicmold.covering = "hidden";
+			zbasicmold.position.x = -3.6;
+			zbasicmold.position.y = .9;
+			zbasicmold.position.z = 0;
+			zbasicmold.subdivisions = 12;
+			zbasicmold.parentname = zavatarname + "-avatarshark";
+			zbasicmold.checkcollisions = "0";
+			ztailball = WTW.addMold(zavatarname + "-tailball", zbasicmold, zbasicmold.parentname, zbasicmold.covering);
 
-			basicmold = WTW.newMold();
-			basicmold.shape = "cone";
-			basicmold.covering = "texture";
-			basicmold.position.x = -.6;
-			basicmold.position.y = 0;
-			basicmold.position.z = 0;
-			basicmold.scaling.x = .8;
-			basicmold.scaling.y = 1.7;
-			basicmold.scaling.z = .3;
-			basicmold.rotation.z = 90;
-			basicmold.subdivisions = 12;
-			basicmold.graphics.texture.id = imageskinid;
-			basicmold.parentname = avatarname + "-tailball";
-			basicmold.checkcollisions = "0";
-			var tailcone = WTW.addMold(avatarname + "-tailcone", basicmold, basicmold.parentname, basicmold.covering);
-			WTW.addReflectionToMold(WTW.waterMat, tailcone);
+			zbasicmold = WTW.newMold();
+			zbasicmold.shape = "cone";
+			zbasicmold.covering = "texture";
+			zbasicmold.position.x = -.6;
+			zbasicmold.position.y = 0;
+			zbasicmold.position.z = 0;
+			zbasicmold.scaling.x = .8;
+			zbasicmold.scaling.y = 1.7;
+			zbasicmold.scaling.z = .3;
+			zbasicmold.rotation.z = 90;
+			zbasicmold.subdivisions = 12;
+			zbasicmold.graphics.texture.id = zimageskinid;
+			zbasicmold.parentname = zavatarname + "-tailball";
+			zbasicmold.checkcollisions = "0";
+			var ztailcone = WTW.addMold(zavatarname + "-tailcone", zbasicmold, zbasicmold.parentname, zbasicmold.covering);
+			WTW.addReflectionToMold(WTW.waterMat, ztailcone);
 			
-			var tail_fin2 = BABYLON.MeshBuilder.CreateCylinder(avatarname + "-tail2",{height: 2, diameterTop: 0, diameterBottom: 1, tessellation: 10, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE},scene);
-			tail_fin2.position.x = -4;
-			tail_fin2.position.y = .9;
-			tail_fin2.position.z = 0;
-			tail_fin2.scaling.x = .15;
-			tail_fin2.scaling.y = 1;
-			tail_fin2.scaling.z = 1.7;
-			tail_fin2.rotation.z = WTW.getRadians(-90);
-			tail_fin2.rotation.x = WTW.getRadians(90);
-			var tail_fin3 = BABYLON.MeshBuilder.CreateCylinder(avatarname + "-tail3",{height: .7, diameterTop: 0, diameterBottom: 1, tessellation: 10, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
-			tail_fin3.position.x = -5.8;
-			tail_fin3.position.y = .9;
-			tail_fin3.position.z = 0;
-			tail_fin3.scaling.x = .2;
-			tail_fin3.scaling.y = 1;
-			tail_fin3.scaling.z = 1;
-			tail_fin3.rotation.z = WTW.getRadians(-90);
-			tail_fin3.rotation.x = WTW.getRadians(90);
-			var aCSG = BABYLON.CSG.FromMesh(tail_fin2);
-			var bCSG = BABYLON.CSG.FromMesh(tail_fin3);
-			var real_tail = aCSG.subtract(bCSG);
-			tail_fin2.dispose();
-			tail_fin3.dispose();
+			var ztailfin2 = BABYLON.MeshBuilder.CreateCylinder(zavatarname + "-tail2",{height: 2, diameterTop: 0, diameterBottom: 1, tessellation: 10, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE},scene);
+			ztailfin2.position.x = -4;
+			ztailfin2.position.y = .9;
+			ztailfin2.position.z = 0;
+			ztailfin2.scaling.x = .15;
+			ztailfin2.scaling.y = 1;
+			ztailfin2.scaling.z = 1.7;
+			ztailfin2.rotation.z = WTW.getRadians(-90);
+			ztailfin2.rotation.x = WTW.getRadians(90);
+			var ztailfin3 = BABYLON.MeshBuilder.CreateCylinder(zavatarname + "-tail3",{height: .7, diameterTop: 0, diameterBottom: 1, tessellation: 10, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE},scene);
+			ztailfin3.position.x = -5.8;
+			ztailfin3.position.y = .9;
+			ztailfin3.position.z = 0;
+			ztailfin3.scaling.x = .2;
+			ztailfin3.scaling.y = 1;
+			ztailfin3.scaling.z = 1;
+			ztailfin3.rotation.z = WTW.getRadians(-90);
+			ztailfin3.rotation.x = WTW.getRadians(90);
+			var zaCSG = BABYLON.CSG.FromMesh(ztailfin2);
+			var zbCSG = BABYLON.CSG.FromMesh(ztailfin3);
+			var zrealtail = zaCSG.subtract(zbCSG);
+			ztailfin2.dispose();
+			ztailfin3.dispose();
 
-			var tailfin = real_tail.toMesh(avatarname + "-tailfin",skinmat,scene);
-			tailfin.position.x = -.5;
-			tailfin.position.y = 0;
-			tailfin.position.z = 0;
-			tailfin.parent = tailball;
-			WTW.addReflectionToMold(WTW.waterMat, tailfin);
-		} else if (avatar != null && tailball != null && avatarshark != null && tank != null) {
+			var ztailfin = zrealtail.toMesh(zavatarname + "-tailfin",zskinmat,scene);
+			ztailfin.position.x = -.5;
+			ztailfin.position.y = 0;
+			ztailfin.position.z = 0;
+			ztailfin.parent = ztailball;
+			WTW.addReflectionToMold(WTW.waterMat, ztailfin);
+		} else if (zavatar != null && ztailball != null && zavatarshark != null && ztank != null) {
 			// position changed - forward
-			var tailrot = Math.round(WTW.getDegrees(tailball.rotation.y));
-			if (tailrot > 90) {
-				tailrot -= 360;
+			var ztailrot = Math.round(WTW.getDegrees(ztailball.rotation.y));
+			if (ztailrot > 90) {
+				ztailrot -= 360;
 			}
-			if (tailrot >= 30 && WTW.isOdd(Math.round(tailrot))) {
-				tailball.rotation.y = WTW.getRadians(tailrot - 1);
-			} else if (tailrot <= -30 && WTW.isOdd(Math.round(tailrot)) == false) {
-				tailball.rotation.y = WTW.getRadians(tailrot + 1);
-			} else if (tailrot < 30 && WTW.isOdd(tailrot)) {
-				tailball.rotation.y = WTW.getRadians(tailrot + 4);
+			if (ztailrot >= 30 && WTW.isOdd(Math.round(ztailrot))) {
+				ztailball.rotation.y = WTW.getRadians(ztailrot - 1);
+			} else if (ztailrot <= -30 && WTW.isOdd(Math.round(ztailrot)) == false) {
+				ztailball.rotation.y = WTW.getRadians(ztailrot + 1);
+			} else if (ztailrot < 30 && WTW.isOdd(ztailrot)) {
+				ztailball.rotation.y = WTW.getRadians(ztailrot + 4);
 			} else {
-				tailball.rotation.y = WTW.getRadians(tailrot - 4);
+				ztailball.rotation.y = WTW.getRadians(ztailrot - 4);
 			}
-			avatar.rotation.y = WTW.getRadians(Number(avatardef.rotation.y));
-			avatarshark.rotation.y = -(tailball.rotation.y)/4;
-			avatar.position.x = Number(avatardef.position.x);
-			avatar.position.y = Number(avatardef.position.y);
-			avatar.position.z = Number(avatardef.position.z); 
-			avatarshark.position.z = -Number(tailball.rotation.y);
+			zavatar.rotation.y = WTW.getRadians(Number(zavatardef.rotation.y));
+			zavatarshark.rotation.y = -(ztailball.rotation.y)/4;
+			zavatar.position.x = Number(zavatardef.position.x);
+			zavatar.position.y = Number(zavatardef.position.y);
+			zavatar.position.z = Number(zavatardef.position.z); 
+			zavatarshark.position.z = -Number(ztailball.rotation.y);
 		} else {
 			try {
-				window.clearInterval(avatardef.movetimer);
-				avatardef.movetimer = null;
+				window.clearInterval(zavatardef.movetimer);
+				zavatardef.movetimer = null;
 			} catch (ex) {}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-avatars-customavatars\r\n addAvatarShark=" + ex.message);
 	}
-	return avatar;
+	return zavatar;
 }

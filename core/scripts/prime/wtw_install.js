@@ -86,9 +86,9 @@ WTWJS.prototype.getAsyncJSON = function(zurl, zcallback, zaction, zrequest) {
 WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
 	/* performs a form POST based JSON call for data */
 	try {
-		var form1 = document.createElement('form');
+		var zform1 = document.createElement('form');
 		var Httpreq = new XMLHttpRequest();
-		var zformdata = new FormData(form1);
+		var zformdata = new FormData(zform1);
 		for(var zkey in zrequest) {
 			zformdata.append(zkey, zrequest[zkey]);
 		}
@@ -109,9 +109,9 @@ WTWJS.prototype.postAsyncJSON = function(zurl, zrequest, zcallback) {
 	/* performs a form POST based JSON call for data in async mode */
 	try {
 		return new Promise(function () {
-			var form1 = document.createElement('form');
+			var zform1 = document.createElement('form');
 			var Httpreq = new XMLHttpRequest();
-			var zformdata = new FormData(form1);
+			var zformdata = new FormData(zform1);
 			for(var zkey in zrequest) {
 				zformdata.append(zkey, zrequest[zkey]);
 			}
@@ -129,72 +129,72 @@ WTWJS.prototype.postAsyncJSON = function(zurl, zrequest, zcallback) {
 	}
 }
 
-WTWJS.prototype.encode = function(value) {
+WTWJS.prototype.encode = function(zvalue) {
 	/* simplified version of escape text */
 	try {
-		if (value != null) {
-			while (value.indexOf('"') > -1) {
-				value = value.replace(/"/g, '&quot;');
+		if (zvalue != null) {
+			while (zvalue.indexOf('"') > -1) {
+				zvalue = zvalue.replace(/"/g, '&quot;');
 			}
-			while (value.indexOf("'") > -1) {
-				value = value.replace(/'/g, '&#039;');
+			while (zvalue.indexOf("'") > -1) {
+				zvalue = zvalue.replace(/'/g, '&#039;');
 			}
-			while (value.indexOf("'") > -1) {
-				value = value.replace(/'/g, '&#39;');
+			while (zvalue.indexOf("'") > -1) {
+				zvalue = zvalue.replace(/'/g, '&#39;');
 			}
-			while (value.indexOf("<") > -1) {
-				value = value.replace(/</g, '&lt;');
+			while (zvalue.indexOf("<") > -1) {
+				zvalue = zvalue.replace(/</g, '&lt;');
 			}
-			while (value.indexOf(">") > -1) {
-				value = value.replace(/>/g, '&gt;');
+			while (zvalue.indexOf(">") > -1) {
+				zvalue = zvalue.replace(/>/g, '&gt;');
 			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_install.js-encode=" + ex.message);
     }
-    return String(value);
+    return String(zvalue);
 }
 
-WTWJS.prototype.decode = function(value) {
+WTWJS.prototype.decode = function(zvalue) {
 	/* decifer simplified version of escape text */
 	try {
-		if (value != null) {
-			while (value.indexOf('&amp;') > -1) {
-				value = value.replace('&amp;', "&");
+		if (zvalue != null) {
+			while (zvalue.indexOf('&amp;') > -1) {
+				zvalue = zvalue.replace('&amp;', "&");
 			}
-			while (value.indexOf('&quot;') > -1) {
-				value = value.replace('&quot;', '"');
+			while (zvalue.indexOf('&quot;') > -1) {
+				zvalue = zvalue.replace('&quot;', '"');
 			}
-			while (value.indexOf("&#039;") > -1) {
-				value = value.replace('&#039;', "'");
+			while (zvalue.indexOf("&#039;") > -1) {
+				zvalue = zvalue.replace('&#039;', "'");
 			}
-			while (value.indexOf("&#39;") > -1) {
-				value = value.replace('&#39;', "'");
+			while (zvalue.indexOf("&#39;") > -1) {
+				zvalue = zvalue.replace('&#39;', "'");
 			}
-			while (value.indexOf("&lt;") > -1) {
-				value = value.replace('&lt;', "<");
+			while (zvalue.indexOf("&lt;") > -1) {
+				zvalue = zvalue.replace('&lt;', "<");
 			}
-			while (value.indexOf("&gt;") > -1) {
-				value = value.replace('&gt;', ">");
+			while (zvalue.indexOf("&gt;") > -1) {
+				zvalue = zvalue.replace('&gt;', ">");
 			}
-			while (value.indexOf("\\") > -1) {
-				value = value.replace('\\', "");
+			while (zvalue.indexOf("\\") > -1) {
+				zvalue = zvalue.replace('\\', "");
 			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_install.js-decode=" + ex.message);
     }
-    return String(value);
+    return String(zvalue);
 }
 
-WTWJS.prototype.show = function(item) {
+WTWJS.prototype.show = function(zelement) {
 	/* show HTML element from its id */
 	try {
-		if (dGet(item) != null) {
-			dGet(item).style.display = 'block';
-			dGet(item).style.visibility = 'visible';
-			if (item.indexOf("wtw_adminmenu") > -1 && WTW.adminView == 1) {
-				var menu = item.replace("wtw_adminmenu","");
+		if (dGet(zelement) != null) {
+			dGet(zelement).style.display = 'block';
+			dGet(zelement).style.visibility = 'visible';
+			if (zelement.indexOf("wtw_adminmenu") > -1 && WTW.adminView == 1) {
+				var menu = zelement.replace("wtw_adminmenu","");
 				if (WTW.isNumeric(menu)) {
 					WTW.adminMenu = Number(menu);
 				}
@@ -205,35 +205,35 @@ WTWJS.prototype.show = function(item) {
 	}
 }
 
-WTWJS.prototype.showInline = function(item) {
+WTWJS.prototype.showInline = function(zelement) {
 	/* show HTML element inline-block from its id */
 	try {
-		if (dGet(item) != null) {
-			dGet(item).style.display = 'inline-block';
-			dGet(item).style.visibility = 'visible';
+		if (dGet(zelement) != null) {
+			dGet(zelement).style.display = 'inline-block';
+			dGet(zelement).style.visibility = 'visible';
 		}
 	} catch (ex) { 
 		WTW.log("core-scripts-prime-wtw_install.js-showInline=" + ex.message);
 	}
 }
 
-WTWJS.prototype.hide = function(item) {
+WTWJS.prototype.hide = function(zelement) {
 	/* hide HTML element from its id */
 	try {
-		if (dGet(item) != null) {
-			dGet(item).style.display = 'none';
-			dGet(item).style.visibility = 'hidden';
+		if (dGet(zelement) != null) {
+			dGet(zelement).style.display = 'none';
+			dGet(zelement).style.visibility = 'hidden';
 		}
 	} catch (ex) { 
 		WTW.log("core-scripts-prime-wtw_install.js-hide=" + ex.message);
 	}
 }
 
-WTWJS.prototype.cleanInvalidCharacters = function(value) {
+WTWJS.prototype.cleanInvalidCharacters = function(zvalue) {
 	/* remove line breaks and other select non text characters from string */
 	try {
-		if (value != null) {
-			value = value.replace(/\\n/g, "\\n")  
+		if (zvalue != null) {
+			zvalue = zvalue.replace(/\\n/g, "\\n")  
                .replace(/\\'/g, "\\'")
                .replace(/\\"/g, '\\"')
                .replace(/\\&/g, "\\&")
@@ -242,39 +242,39 @@ WTWJS.prototype.cleanInvalidCharacters = function(value) {
                .replace(/\\b/g, "\\b")
                .replace(/\\f/g, "\\f");
 			// remove non-printable and other non-valid JSON chars
-			value = value.replace(/[\u0000-\u0019]+/g,""); 
+			zvalue = zvalue.replace(/[\u0000-\u0019]+/g,""); 
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_install.js-cleanInvalidCharacters=" + ex.message);
     }
-    return value;
+    return zvalue;
 }
 
-WTWJS.prototype.getRandomString = function(length) {
+WTWJS.prototype.getRandomString = function(zlength) {
 	/* gets a random alpha numeric string - often used as ID fields */
-    var result = '';
+    var zresults = '';
 	try {
-		var chars = '0123456789abcdefghijklmnopqrstuvwxyz';
-		for (var i = length; i > 0; --i) {
-			result += chars[Math.floor(Math.random() * chars.length)];
+		var zchars = '0123456789abcdefghijklmnopqrstuvwxyz';
+		for (var i = zlength; i > 0; --i) {
+			zresults += zchars[Math.floor(Math.random() * zchars.length)];
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_install.js-randomString=" + ex.message);
 	}
-    return result;
+    return zresults;
 }
 
-WTWJS.prototype.formatDate = function(date) {
+WTWJS.prototype.formatDate = function(zdate) {
 	/* format date as month/day/year */
-	if (date != "") {
-		var d = new Date(date),
-			month = '' + (d.getMonth() + 1),
-			day = '' + d.getDate(),
-			year = d.getFullYear();
+	if (zdate != "") {
+		var zsdate = new Date(zdate),
+			zmonth = '' + (zsdate.getMonth() + 1),
+			zday = '' + zsdate.getDate(),
+			zyear = zsdate.getFullYear();
 
-		if (month.length < 2) month = '0' + month;
-		if (day.length < 2) day = '0' + day;
-		return [month,day,year].join('/');
+		if (zmonth.length < 2) zmonth = '0' + zmonth;
+		if (zday.length < 2) zday = '0' + zday;
+		return [zmonth, zday, zyear].join('/');
 	} else {
 		return "";
 	}

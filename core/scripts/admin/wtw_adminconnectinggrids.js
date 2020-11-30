@@ -6,57 +6,57 @@
 /* connecting grids are transparent cubes that set the position, rotation, and scaling for all 3D Communities, 3D Buildings, and 3D Things */
 /* 		FYI: all molds and action zones parent to the connecting grids */
 
-WTWJS.prototype.openConnectingGridsForm = function(connectinggridind) {
+WTWJS.prototype.openConnectingGridsForm = function(zconnectinggridind) {
 	/* open the connecting grids form to add a new or edit an existing connecting grid */
 	try {
 		WTW.hideAdminMenu();
-		if (connectinggridind == undefined && dGet("wtw_teditconnectinggridind").value != "") {
-			connectinggridind = dGet("wtw_teditconnectinggridind").value;
-		} else if (connectinggridind == undefined) {
-			connectinggridind = -1;
+		if (zconnectinggridind == undefined && dGet("wtw_teditconnectinggridind").value != "") {
+			zconnectinggridind = dGet("wtw_teditconnectinggridind").value;
+		} else if (zconnectinggridind == undefined) {
+			zconnectinggridind = -1;
 		}
-		var parentwebid = "";
-		var parentwebtype = "community";
-		var childwebid = "";
-		var childwebtype = "building";
+		var zparentwebid = "";
+		var zparentwebtype = "community";
+		var zchildwebid = "";
+		var zchildwebtype = "building";
 		WTW.loadAltActionZones('wtw_taltloadactionzoneid');
-		if (connectinggridind > -1) {
-			if (WTW.connectingGrids[connectinggridind] != null) {
-				dGet("wtw_teditconnectinggridid").value = WTW.connectingGrids[connectinggridind].connectinggridid;
-				dGet('wtw_teditconnectinggridind').value = connectinggridind;
-				dGet('wtw_tmoldname').value = WTW.connectingGrids[connectinggridind].moldname;
-				dGet('wtw_tcommunityid').value = WTW.connectingGrids[connectinggridind].communityinfo.communityid;
-				dGet('wtw_tbuildingid').value = WTW.connectingGrids[connectinggridind].buildinginfo.buildingid;
-				dGet('wtw_tthingid').value = WTW.connectingGrids[connectinggridind].thinginfo.thingid;
-				dGet('wtw_tparentwebid').value = WTW.connectingGrids[connectinggridind].parentwebid;
-				dGet('wtw_tparentwebtype').value = WTW.connectingGrids[connectinggridind].parentwebtype;
-				dGet('wtw_tchildwebid').value = WTW.connectingGrids[connectinggridind].childwebid;
-				dGet('wtw_tchildwebtype').value = WTW.connectingGrids[connectinggridind].childwebtype;
-				dGet('wtw_teditloadactionzoneid').value = WTW.connectingGrids[connectinggridind].loadactionzoneid;
-				dGet('wtw_tcommunityname').value = WTW.decode(WTW.connectingGrids[connectinggridind].communityinfo.communityname);
-				dGet('wtw_tcommunitydescription').value = WTW.decode(WTW.connectingGrids[connectinggridind].communityinfo.communitydescription);
-				dGet('wtw_tcommunityanalyticsid').value = WTW.connectingGrids[connectinggridind].communityinfo.analyticsid;
-				dGet('wtw_tconngridpositionx').value = WTW.connectingGrids[connectinggridind].position.x;
-				dGet('wtw_tconngridpositiony').value = WTW.connectingGrids[connectinggridind].position.y;
-				dGet('wtw_tconngridpositionz').value = WTW.connectingGrids[connectinggridind].position.z;
-				dGet('wtw_tconngridscalingx').value = WTW.connectingGrids[connectinggridind].scaling.x;
-				dGet('wtw_tconngridscalingy').value = WTW.connectingGrids[connectinggridind].scaling.y;
-				dGet('wtw_tconngridscalingz').value = WTW.connectingGrids[connectinggridind].scaling.z;
-				dGet('wtw_tconngridrotationx').value = WTW.connectingGrids[connectinggridind].rotation.x;
-				dGet('wtw_tconngridrotationy').value = WTW.connectingGrids[connectinggridind].rotation.y;
-				dGet('wtw_tconngridrotationz').value = WTW.connectingGrids[connectinggridind].rotation.z; 
-				dGet('wtw_tconngridalttag').value = WTW.connectingGrids[connectinggridind].alttag.name;
-				WTW.setDDLValue('wtw_taltloadactionzoneid', WTW.connectingGrids[connectinggridind].altloadactionzoneid);
-				parentwebtype = WTW.connectingGrids[connectinggridind].parentwebtype;
-				parentwebid = WTW.connectingGrids[connectinggridind].parentwebid;
-				childwebtype = WTW.connectingGrids[connectinggridind].childwebtype;
-				childwebid = WTW.connectingGrids[connectinggridind].childwebid;
-				switch (childwebtype) {
+		if (zconnectinggridind > -1) {
+			if (WTW.connectingGrids[zconnectinggridind] != null) {
+				dGet("wtw_teditconnectinggridid").value = WTW.connectingGrids[zconnectinggridind].connectinggridid;
+				dGet('wtw_teditconnectinggridind').value = zconnectinggridind;
+				dGet('wtw_tmoldname').value = WTW.connectingGrids[zconnectinggridind].moldname;
+				dGet('wtw_tcommunityid').value = WTW.connectingGrids[zconnectinggridind].communityinfo.communityid;
+				dGet('wtw_tbuildingid').value = WTW.connectingGrids[zconnectinggridind].buildinginfo.buildingid;
+				dGet('wtw_tthingid').value = WTW.connectingGrids[zconnectinggridind].thinginfo.thingid;
+				dGet('wtw_tparentwebid').value = WTW.connectingGrids[zconnectinggridind].parentwebid;
+				dGet('wtw_tparentwebtype').value = WTW.connectingGrids[zconnectinggridind].parentwebtype;
+				dGet('wtw_tchildwebid').value = WTW.connectingGrids[zconnectinggridind].childwebid;
+				dGet('wtw_tchildwebtype').value = WTW.connectingGrids[zconnectinggridind].childwebtype;
+				dGet('wtw_teditloadactionzoneid').value = WTW.connectingGrids[zconnectinggridind].loadactionzoneid;
+				dGet('wtw_tcommunityname').value = WTW.decode(WTW.connectingGrids[zconnectinggridind].communityinfo.communityname);
+				dGet('wtw_tcommunitydescription').value = WTW.decode(WTW.connectingGrids[zconnectinggridind].communityinfo.communitydescription);
+				dGet('wtw_tcommunityanalyticsid').value = WTW.connectingGrids[zconnectinggridind].communityinfo.analyticsid;
+				dGet('wtw_tconngridpositionx').value = WTW.connectingGrids[zconnectinggridind].position.x;
+				dGet('wtw_tconngridpositiony').value = WTW.connectingGrids[zconnectinggridind].position.y;
+				dGet('wtw_tconngridpositionz').value = WTW.connectingGrids[zconnectinggridind].position.z;
+				dGet('wtw_tconngridscalingx').value = WTW.connectingGrids[zconnectinggridind].scaling.x;
+				dGet('wtw_tconngridscalingy').value = WTW.connectingGrids[zconnectinggridind].scaling.y;
+				dGet('wtw_tconngridscalingz').value = WTW.connectingGrids[zconnectinggridind].scaling.z;
+				dGet('wtw_tconngridrotationx').value = WTW.connectingGrids[zconnectinggridind].rotation.x;
+				dGet('wtw_tconngridrotationy').value = WTW.connectingGrids[zconnectinggridind].rotation.y;
+				dGet('wtw_tconngridrotationz').value = WTW.connectingGrids[zconnectinggridind].rotation.z; 
+				dGet('wtw_tconngridalttag').value = WTW.connectingGrids[zconnectinggridind].alttag.name;
+				WTW.setDDLValue('wtw_taltloadactionzoneid', WTW.connectingGrids[zconnectinggridind].altloadactionzoneid);
+				zparentwebtype = WTW.connectingGrids[zconnectinggridind].parentwebtype;
+				zparentwebid = WTW.connectingGrids[zconnectinggridind].parentwebid;
+				zchildwebtype = WTW.connectingGrids[zconnectinggridind].childwebtype;
+				zchildwebid = WTW.connectingGrids[zconnectinggridind].childwebid;
+				switch (zchildwebtype) {
 					case "building":
-						dGet('wtw_buildingnametitle').innerHTML = WTW.connectingGrids[connectinggridind].buildinginfo.buildingname;
+						dGet('wtw_buildingnametitle').innerHTML = WTW.connectingGrids[zconnectinggridind].buildinginfo.buildingname;
 						break;
 					case "thing":
-						dGet('wtw_buildingnametitle').innerHTML = WTW.connectingGrids[connectinggridind].thinginfo.thingname;
+						dGet('wtw_buildingnametitle').innerHTML = WTW.connectingGrids[zconnectinggridind].thinginfo.thingname;
 						break;
 					default:
 						dGet('wtw_buildingnametitle').innerHTML = "";
@@ -67,16 +67,16 @@ WTWJS.prototype.openConnectingGridsForm = function(connectinggridind) {
 				}
 				WTW.show('wtw_adminmenu14');
 				WTW.show('wtw_adminmenu14b');
-				if (parentwebtype == "community" && childwebtype == "building") {
+				if (zparentwebtype == "community" && zchildwebtype == "building") {
 					dGet('wtw_bdelconnectinggrid').onclick = function() {WTW.openConfirmation('3');};
-				} else if (parentwebtype == "community") {
+				} else if (zparentwebtype == "community") {
 					dGet('wtw_bdelconnectinggrid').onclick = function() {WTW.submitConnectingGridsForm(0);};
 				} else {
 					dGet('wtw_bdelconnectinggrid').onclick = function() {WTW.submitConnectingGridsForm(0);};
 				}
 			}
 		}	
-		switch (childwebtype) {
+		switch (zchildwebtype) {
 			case "thing":
 				dGet('wtw_editconnectinggridsformtitle').innerHTML = 'Edit 3D Thing Location';
 				dGet('wtw_buildingpositiontitle').innerHTML = '3D Thing Position';
@@ -85,7 +85,7 @@ WTWJS.prototype.openConnectingGridsForm = function(connectinggridind) {
 				dGet('wtw_beditconnectinggrid').innerHTML = 'Save 3D Thing';
 				dGet('wtw_bdelconnectinggrid').innerHTML = 'Delete 3D Thing';
 				dGet('wtw_beditthisbuilding').innerHTML = 'Open 3D Thing in Editor';
-				dGet('wtw_beditthisbuilding').onclick = function(){WTW.editThing(childwebid);WTW.blockPassThrough(); return (false);};
+				dGet('wtw_beditthisbuilding').onclick = function(){WTW.editThing(zchildwebid);WTW.blockPassThrough(); return (false);};
 				break;
 			default:
 				dGet('wtw_editconnectinggridsformtitle').innerHTML = 'Edit 3D Building Location';
@@ -95,13 +95,13 @@ WTWJS.prototype.openConnectingGridsForm = function(connectinggridind) {
 				dGet('wtw_beditconnectinggrid').innerHTML = 'Save 3D Building';
 				dGet('wtw_bdelconnectinggrid').innerHTML = 'Delete 3D Building';
 				dGet('wtw_beditthisbuilding').innerHTML = 'Open 3D Building in Editor';
-				dGet('wtw_beditthisbuilding').onclick = function(){WTW.editBuilding(childwebid);WTW.blockPassThrough(); return (false);};
+				dGet('wtw_beditthisbuilding').onclick = function(){WTW.editBuilding(zchildwebid);WTW.blockPassThrough(); return (false);};
 				break;
 		}
-		if (WTW.connectingGrids[connectinggridind] != null) {
-			var mold = scene.getMeshByID(WTW.connectingGrids[connectinggridind].moldname);
-			if (mold != null) {
-				WTW.openEditPoles(mold);
+		if (WTW.connectingGrids[zconnectinggridind] != null) {
+			var zmold = scene.getMeshByID(WTW.connectingGrids[zconnectinggridind].moldname);
+			if (zmold != null) {
+				WTW.openEditPoles(zmold);
 			}
 		}
 	} catch (ex) {
@@ -112,25 +112,25 @@ WTWJS.prototype.openConnectingGridsForm = function(connectinggridind) {
 WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 	/* submit the connecting grids form */
 	try {
-		var connectinggridind = -1;
+		var zconnectinggridind = -1;
 		if (WTW.isNumeric(dGet("wtw_teditconnectinggridind").value)) {
-			connectinggridind = Number(dGet("wtw_teditconnectinggridind").value);
+			zconnectinggridind = Number(dGet("wtw_teditconnectinggridind").value);
 		}
-		if (connectinggridind > -1) {
+		if (zconnectinggridind > -1) {
 			switch (w) {
 				case 0: 
 					/* delect connecting grid */
-					if (WTW.connectingGrids[connectinggridind] != null) {
-						if (WTW.connectingGrids[connectinggridind] != null) {
-							if (WTW.connectingGrids[connectinggridind].moldname != undefined) {
-								WTW.disposeClean(WTW.connectingGrids[connectinggridind].moldname);
+					if (WTW.connectingGrids[zconnectinggridind] != null) {
+						if (WTW.connectingGrids[zconnectinggridind] != null) {
+							if (WTW.connectingGrids[zconnectinggridind].moldname != undefined) {
+								WTW.disposeClean(WTW.connectingGrids[zconnectinggridind].moldname);
 							}
 						}
-						WTW.connectingGrids[connectinggridind] = null;
+						WTW.connectingGrids[zconnectinggridind] = null;
 						if (WTW.automations != null) {
 							for (var i = 0; i < WTW.automations.length; i++) {
 								if (WTW.automations[i] != null) {
-									if (WTW.automations[i].connectinggridind == connectinggridind) {
+									if (WTW.automations[i].connectinggridind == zconnectinggridind) {
 										if (WTW.automations[i].step.timer != null) {
 											window.clearInterval(WTW.automations[i].step.timer);
 											WTW.automations[i].step.timer = null;
@@ -143,7 +143,7 @@ WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 						if (WTW.actionZones != null) {
 							for (var i = 0; i < WTW.actionZones.length; i++) {
 								if (WTW.actionZones[i] != null) {
-									if (WTW.actionZones[i].connectinggridind == connectinggridind) {
+									if (WTW.actionZones[i].connectinggridind == zconnectinggridind) {
 										WTW.addDisposeMoldToQueue(WTW.actionZones[i].moldname);
 										WTW.actionZones[i] = null;
 									}
@@ -153,7 +153,7 @@ WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 						if (WTW.thingMolds != null) {
 							for (var i = 0; i < WTW.thingMolds.length; i++) {
 								if (WTW.thingMolds[i] != null) {
-									if (WTW.thingMolds[i].connectinggridind == connectinggridind) {
+									if (WTW.thingMolds[i].connectinggridind == zconnectinggridind) {
 										WTW.addDisposeMoldToQueue(WTW.thingMolds[i].moldname);
 										WTW.thingMolds[i] = null;
 									}
@@ -163,7 +163,7 @@ WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 						if (WTW.buildingMolds != null) {
 							for (var i = 0; i < WTW.buildingMolds.length; i++) {
 								if (WTW.buildingMolds[i] != null) {
-									if (WTW.buildingMolds[i].connectinggridind == connectinggridind) {
+									if (WTW.buildingMolds[i].connectinggridind == zconnectinggridind) {
 										WTW.addDisposeMoldToQueue(WTW.buildingMolds[i].moldname);
 										WTW.buildingMolds[i] = null;
 									}
@@ -188,19 +188,19 @@ WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 					break;
 				case -1: 
 					/* cancel change connecting grid */
-					if (WTW.connectingGrids[connectinggridind] != null) {
-						dGet('wtw_teditconnectinggridid').value = WTW.connectingGrids[connectinggridind].connectinggridid;
-						dGet('wtw_tconngridpositionx').value = WTW.connectingGrids[connectinggridind].position.x;
-						dGet('wtw_tconngridpositiony').value = WTW.connectingGrids[connectinggridind].position.y;
-						dGet('wtw_tconngridpositionz').value = WTW.connectingGrids[connectinggridind].position.z;
-						dGet('wtw_tconngridscalingx').value = WTW.connectingGrids[connectinggridind].scaling.x;
-						dGet('wtw_tconngridscalingy').value = WTW.connectingGrids[connectinggridind].scaling.y;
-						dGet('wtw_tconngridscalingz').value = WTW.connectingGrids[connectinggridind].scaling.z;
-						dGet('wtw_tconngridrotationx').value = WTW.connectingGrids[connectinggridind].rotation.x;
-						dGet('wtw_tconngridrotationy').value = WTW.connectingGrids[connectinggridind].rotation.y;
-						dGet('wtw_tconngridrotationz').value = WTW.connectingGrids[connectinggridind].rotation.z; 
-						dGet('wtw_tconngridalttag').value = WTW.connectingGrids[connectinggridind].alttag.name; 
-						WTW.setDDLValue('wtw_taltloadactionzoneid',WTW.connectingGrids[connectinggridind].altloadactionzoneid);
+					if (WTW.connectingGrids[zconnectinggridind] != null) {
+						dGet('wtw_teditconnectinggridid').value = WTW.connectingGrids[zconnectinggridind].connectinggridid;
+						dGet('wtw_tconngridpositionx').value = WTW.connectingGrids[zconnectinggridind].position.x;
+						dGet('wtw_tconngridpositiony').value = WTW.connectingGrids[zconnectinggridind].position.y;
+						dGet('wtw_tconngridpositionz').value = WTW.connectingGrids[zconnectinggridind].position.z;
+						dGet('wtw_tconngridscalingx').value = WTW.connectingGrids[zconnectinggridind].scaling.x;
+						dGet('wtw_tconngridscalingy').value = WTW.connectingGrids[zconnectinggridind].scaling.y;
+						dGet('wtw_tconngridscalingz').value = WTW.connectingGrids[zconnectinggridind].scaling.z;
+						dGet('wtw_tconngridrotationx').value = WTW.connectingGrids[zconnectinggridind].rotation.x;
+						dGet('wtw_tconngridrotationy').value = WTW.connectingGrids[zconnectinggridind].rotation.y;
+						dGet('wtw_tconngridrotationz').value = WTW.connectingGrids[zconnectinggridind].rotation.z; 
+						dGet('wtw_tconngridalttag').value = WTW.connectingGrids[zconnectinggridind].alttag.name; 
+						WTW.setDDLValue('wtw_taltloadactionzoneid',WTW.connectingGrids[zconnectinggridind].altloadactionzoneid);
 						WTW.setNewConnectingGrid();
 					}
 					WTW.hideAdminMenu();
@@ -209,22 +209,22 @@ WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 					break;
 				case 1: 
 					/* save connecting grid */
-					if (WTW.connectingGrids[connectinggridind] != null) {
-						WTW.connectingGrids[connectinggridind].position.x = dGet('wtw_tconngridpositionx').value;
-						WTW.connectingGrids[connectinggridind].position.y = dGet('wtw_tconngridpositiony').value;
-						WTW.connectingGrids[connectinggridind].position.z = dGet('wtw_tconngridpositionz').value;
-						WTW.connectingGrids[connectinggridind].scaling.x = dGet('wtw_tconngridscalingx').value;
-						WTW.connectingGrids[connectinggridind].scaling.y = dGet('wtw_tconngridscalingy').value;
-						WTW.connectingGrids[connectinggridind].scaling.z = dGet('wtw_tconngridscalingz').value;
-						WTW.connectingGrids[connectinggridind].rotation.x = dGet('wtw_tconngridrotationx').value;
-						WTW.connectingGrids[connectinggridind].rotation.y = dGet('wtw_tconngridrotationy').value;
-						WTW.connectingGrids[connectinggridind].rotation.z = dGet('wtw_tconngridrotationz').value;
-						WTW.connectingGrids[connectinggridind].alttag.name = dGet('wtw_tconngridalttag').value;
-						WTW.connectingGrids[connectinggridind].altloadactionzoneid = dGet('wtw_taltloadactionzoneid').options[dGet('wtw_taltloadactionzoneid').selectedIndex].value;
+					if (WTW.connectingGrids[zconnectinggridind] != null) {
+						WTW.connectingGrids[zconnectinggridind].position.x = dGet('wtw_tconngridpositionx').value;
+						WTW.connectingGrids[zconnectinggridind].position.y = dGet('wtw_tconngridpositiony').value;
+						WTW.connectingGrids[zconnectinggridind].position.z = dGet('wtw_tconngridpositionz').value;
+						WTW.connectingGrids[zconnectinggridind].scaling.x = dGet('wtw_tconngridscalingx').value;
+						WTW.connectingGrids[zconnectinggridind].scaling.y = dGet('wtw_tconngridscalingy').value;
+						WTW.connectingGrids[zconnectinggridind].scaling.z = dGet('wtw_tconngridscalingz').value;
+						WTW.connectingGrids[zconnectinggridind].rotation.x = dGet('wtw_tconngridrotationx').value;
+						WTW.connectingGrids[zconnectinggridind].rotation.y = dGet('wtw_tconngridrotationy').value;
+						WTW.connectingGrids[zconnectinggridind].rotation.z = dGet('wtw_tconngridrotationz').value;
+						WTW.connectingGrids[zconnectinggridind].alttag.name = dGet('wtw_tconngridalttag').value;
+						WTW.connectingGrids[zconnectinggridind].altloadactionzoneid = dGet('wtw_taltloadactionzoneid').options[dGet('wtw_taltloadactionzoneid').selectedIndex].value;
 					}
-					var altloadactionzoneid = "";
+					var zaltloadactionzoneid = "";
 					if (dGet('wtw_taltloadactionzoneid').selectedIndex > -1) {
-						altloadactionzoneid = dGet('wtw_taltloadactionzoneid').options[dGet('wtw_taltloadactionzoneid').selectedIndex].value
+						zaltloadactionzoneid = dGet('wtw_taltloadactionzoneid').options[dGet('wtw_taltloadactionzoneid').selectedIndex].value
 					}
 					var zrequest = {
 						'connectinggridid': dGet("wtw_teditconnectinggridid").value,
@@ -232,12 +232,12 @@ WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 						'buildingid': buildingid,
 						'thingid': thingid,
 						'loadactionzoneid': dGet('wtw_teditloadactionzoneid').value,
-						'altloadactionzoneid': altloadactionzoneid,
+						'altloadactionzoneid': zaltloadactionzoneid,
 						'parentwebid': dGet('wtw_tparentwebid').value,
 						'parentwebtype': dGet('wtw_tparentwebtype').value,
 						'childwebid': dGet('wtw_tchildwebid').value,
 						'childwebtype': dGet('wtw_tchildwebtype').value,
-						'connectinggridind': connectinggridind,
+						'connectinggridind': zconnectinggridind,
 						'positionx': dGet('wtw_tconngridpositionx').value,
 						'positiony': dGet('wtw_tconngridpositiony').value,
 						'positionz': dGet('wtw_tconngridpositionz').value,
@@ -339,8 +339,8 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 			zpositionz = znewcoords.positionZ;
 			zrotationy = znewcoords.rotationY;
 			WTW.getAsyncJSON("/connect/actionzones.php?thingid=" + zchildwebid + "&buildingid=" + zchildwebid + "&communityid=&parentname=" + zparentname + "&connectinggridid=" + zconnectinggridid + "&connectinggridind=" + zconnectinggridind, 
-				function(response) {
-					var zaddactionzones = JSON.parse(response);
+				function(zresponse) {
+					var zaddactionzones = JSON.parse(zresponse);
 					for (var j = 0; j < zaddactionzones.actionzones.length; j++) {
 						var zactionzoneind = WTW.getNextCount(WTW.actionZones);
 						WTW.actionZones[zactionzoneind] = zaddactionzones.actionzones[j];
@@ -452,31 +452,29 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 	}
 }
 
-WTWJS.prototype.loadChildConnectingGrids = async function(addconnectinggrids) {
+WTWJS.prototype.loadChildConnectingGrids = async function(zaddconnectinggrids) {
 	/* load any connecting grids for 3D Things that are in the 3D Building or 3D Community */
 	try {
-		var parentname = "";
-		var found = 0;
-		var parentconnectinggridind = -1;
-		var parentconnectinggridid = "";
-		if (addconnectinggrids.webitems != undefined) {
-			for (var i = 0; i < addconnectinggrids.webitems.length; i++) {
-				if (addconnectinggrids.webitems[i] != null) {
-					if (addconnectinggrids.webitems[i].loadlevel == "1") {
-						if (addconnectinggrids.webitems[i].parentwebid == "") {
-							parentconnectinggridind = Number(dGet('wtw_teditconnectinggridind').value);
-							parentconnectinggridid = dGet('wtw_teditconnectinggridid').value;
-						} else if (parentconnectinggridind != -1) {
-							var connectinggridind = WTW.getNextCount(WTW.connectingGrids);
-							WTW.connectingGrids[connectinggridind] = addconnectinggrids.webitems[i];
-							WTW.connectingGrids[connectinggridind].connectinggridind = connectinggridind;
-							WTW.connectingGrids[connectinggridind].moldname = "connectinggrids-" + connectinggridind + "-" + WTW.connectingGrids[connectinggridind].connectinggridid + "-" + Number(dGet('wtw_teditconnectinggridind').value) + "-" + dGet('wtw_teditconnectinggridid').value;
-							WTW.connectingGrids[connectinggridind].shown = "0";
-							WTW.connectingGrids[connectinggridind].status = 2;
-							WTW.addMoldToQueue(WTW.connectingGrids[connectinggridind].moldname, WTW.connectingGrids[connectinggridind], WTW.connectingGrids[connectinggridind].parentname, "hidden",null);
-							WTW.getAsyncJSON("/connect/actionzone.php?actionzoneid=" + WTW.connectingGrids[connectinggridind].loadactionzoneid + "&parentname=" + WTW.connectingGrids[connectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[connectinggridind].connectinggridid + "&connectinggridind=" + connectinggridind, 
-								function(response) {
-									WTW.loadChildLoadZones(JSON.parse(response));
+		var zparentconnectinggridind = -1;
+		var zparentconnectinggridid = "";
+		if (zaddconnectinggrids.webitems != undefined) {
+			for (var i = 0; i < zaddconnectinggrids.webitems.length; i++) {
+				if (zaddconnectinggrids.webitems[i] != null) {
+					if (zaddconnectinggrids.webitems[i].loadlevel == "1") {
+						if (zaddconnectinggrids.webitems[i].parentwebid == "") {
+							zparentconnectinggridind = Number(dGet('wtw_teditconnectinggridind').value);
+							zparentconnectinggridid = dGet('wtw_teditconnectinggridid').value;
+						} else if (zparentconnectinggridind != -1) {
+							var zconnectinggridind = WTW.getNextCount(WTW.connectingGrids);
+							WTW.connectingGrids[zconnectinggridind] = zaddconnectinggrids.webitems[i];
+							WTW.connectingGrids[zconnectinggridind].connectinggridind = zconnectinggridind;
+							WTW.connectingGrids[zconnectinggridind].moldname = "connectinggrids-" + zconnectinggridind + "-" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "-" + Number(dGet('wtw_teditconnectinggridind').value) + "-" + dGet('wtw_teditconnectinggridid').value;
+							WTW.connectingGrids[zconnectinggridind].shown = "0";
+							WTW.connectingGrids[zconnectinggridind].status = 2;
+							WTW.addMoldToQueue(WTW.connectingGrids[zconnectinggridind].moldname, WTW.connectingGrids[zconnectinggridind], WTW.connectingGrids[zconnectinggridind].parentname, "hidden",null);
+							WTW.getAsyncJSON("/connect/actionzone.php?actionzoneid=" + WTW.connectingGrids[zconnectinggridind].loadactionzoneid + "&parentname=" + WTW.connectingGrids[zconnectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "&connectinggridind=" + zconnectinggridind, 
+								function(zresponse) {
+									WTW.loadChildLoadZones(JSON.parse(zresponse));
 								}
 							);
 						}
@@ -496,53 +494,53 @@ WTWJS.prototype.loadChildConnectingGrids = async function(addconnectinggrids) {
 WTWJS.prototype.setNewConnectingGrid = function() {
 	/* use the form settings to redraw the connecting grid and child molds and action zones */
 	try {	
-		var connectinggridind = -1;
+		var zconnectinggridind = -1;
 		if (WTW.isNumeric(dGet('wtw_teditconnectinggridind').value)) {
-			connectinggridind = dGet('wtw_teditconnectinggridind').value;
+			zconnectinggridind = dGet('wtw_teditconnectinggridind').value;
 		}
-		if (connectinggridind > -1) {
-			var mold = null;
-			if (WTW.connectingGrids[connectinggridind].moldname != undefined) {
-				mold = scene.getMeshByID(WTW.connectingGrids[connectinggridind].moldname);
+		if (zconnectinggridind > -1) {
+			var zmold = null;
+			if (WTW.connectingGrids[zconnectinggridind].moldname != undefined) {
+				zmold = scene.getMeshByID(WTW.connectingGrids[zconnectinggridind].moldname);
 			}
-			if (mold != null) {
+			if (zmold != null) {
 				if (WTW.isNumeric(dGet('wtw_tconngridpositionx').value)) {
-					mold.position.x = Number(dGet('wtw_tconngridpositionx').value);
+					zmold.position.x = Number(dGet('wtw_tconngridpositionx').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tconngridpositiony').value)) {
-					mold.position.y = Number(dGet('wtw_tconngridpositiony').value);
+					zmold.position.y = Number(dGet('wtw_tconngridpositiony').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tconngridpositionz').value)) {
-					mold.position.z = Number(dGet('wtw_tconngridpositionz').value);
+					zmold.position.z = Number(dGet('wtw_tconngridpositionz').value);
 				}
 
 				if (WTW.isNumeric(dGet('wtw_tconngridscalingx').value)) {
 					if (Number(dGet('wtw_tconngridscalingx').value) < .01) {
 						dGet('wtw_tconngridscalingx').value = ".01";
 					}
-					mold.scaling.x = Number(dGet('wtw_tconngridscalingx').value);
+					zmold.scaling.x = Number(dGet('wtw_tconngridscalingx').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tconngridscalingy').value)) {
 					if (Number(dGet('wtw_tconngridscalingy').value) < .01) {
 						dGet('wtw_tconngridscalingy').value = ".01";
 					}
-					mold.scaling.y = Number(dGet('wtw_tconngridscalingy').value);
+					zmold.scaling.y = Number(dGet('wtw_tconngridscalingy').value);
 				}
 				if (WTW.isNumeric(dGet('wtw_tconngridscalingz').value)) {
 					if (Number(dGet('wtw_tconngridscalingz').value) < .01) {
 						dGet('wtw_tconngridscalingz').value = ".01";
 					}
-					mold.scaling.z = Number(dGet('wtw_tconngridscalingz').value);
+					zmold.scaling.z = Number(dGet('wtw_tconngridscalingz').value);
 				}
 
 				if (WTW.isNumeric(dGet('wtw_tconngridrotationx').value)) {
-					mold.rotation.x = WTW.getRadians(Number(dGet('wtw_tconngridrotationx').value));
+					zmold.rotation.x = WTW.getRadians(Number(dGet('wtw_tconngridrotationx').value));
 				}
 				if (WTW.isNumeric(dGet('wtw_tconngridrotationy').value)) {
-					mold.rotation.y = WTW.getRadians(Number(dGet('wtw_tconngridrotationy').value));
+					zmold.rotation.y = WTW.getRadians(Number(dGet('wtw_tconngridrotationy').value));
 				}
 				if (WTW.isNumeric(dGet('wtw_tconngridrotationz').value)) {
-					mold.rotation.z = WTW.getRadians(Number(dGet('wtw_tconngridrotationz').value));
+					zmold.rotation.z = WTW.getRadians(Number(dGet('wtw_tconngridrotationz').value));
 				}
 			}
 		}

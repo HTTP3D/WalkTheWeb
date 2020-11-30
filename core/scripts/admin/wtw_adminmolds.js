@@ -256,8 +256,8 @@ WTWJS.prototype.openMoldForm = async function(zmoldind, zshape, zwebtype, zsavep
 				WTW.changeOnClickEvent(dGet("wtw_tmoldaddonclick"));
 				if (dGet('wtw_tmoldaddimageid').value != "") {
 					WTW.getAsyncJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldaddimageid').value, 
-						function(response) {
-							WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldaddimageid').value,0);
+						function(zresponse) {
+							WTW.loadUpload(JSON.parse(zresponse),dGet('wtw_tmoldaddimageid').value,0);
 							var zimageinfo = WTW.getUploadFileData(dGet('wtw_tmoldaddimageid').value);
 							zimageinfo.image.onload = function() {	
 								dGet('wtw_moldaddimagepreview').src = zimageinfo.filedata;
@@ -267,8 +267,8 @@ WTWJS.prototype.openMoldForm = async function(zmoldind, zshape, zwebtype, zsavep
 				}
 				if (dGet('wtw_tmoldaddimagehoverid').value != "") {
 					WTW.getAsyncJSON("/connect/upload.php?uploadid=" + dGet('wtw_tmoldaddimagehoverid').value, 
-						function(response) {
-							WTW.loadUpload(JSON.parse(response),dGet('wtw_tmoldaddimagehoverid').value,0);
+						function(zresponse) {
+							WTW.loadUpload(JSON.parse(zresponse),dGet('wtw_tmoldaddimagehoverid').value,0);
 							var zimageinfo = WTW.getUploadFileData(dGet('wtw_tmoldaddimagehoverid').value);
 							zimageinfo.image.onload = function() {	
 								dGet('wtw_moldaddimagehoverpreview').src = zimageinfo.filedata;
@@ -1075,8 +1075,8 @@ WTWJS.prototype.setPreviewImage = async function(zpreviewimageid, zimagepathid, 
 				}
 			} else if (zimageid != "") {
 				WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zimageid, 
-					function(response) {
-						WTW.loadUpload(JSON.parse(response),zimageid,0);
+					function(zresponse) {
+						WTW.loadUpload(JSON.parse(zresponse),zimageid,0);
 						var zimageinfo = WTW.getUploadFileData(zimageid);
 						zimageinfo.image.onload = function() {	
 							dGet(zpreviewimageid).src = zimageinfo.filedata;
@@ -1540,25 +1540,25 @@ WTWJS.prototype.clearEditMold = function() {
 
 /* edit poles to help align molds when editing */
 
-WTWJS.prototype.openEditPoles = function(mold) {
+WTWJS.prototype.openEditPoles = function(zmold) {
 	/* open edit pole lines and position, rotation, and scale to mold */
 	try {
 		WTW.closeEditPoles();
 		scene.render();
-		if (mold != null) {
-			var zpx = mold.position.x;
-			var zpy = mold.position.y;
-			var zpz = mold.position.z;
-			if (mold.parent != null) {
-				if (mold.parent.id.indexOf("actionzoneaxle") > -1) {
-					zpx += mold.parent.position.x;
-					zpy += mold.parent.position.y;
-					zpz += mold.parent.position.z;
+		if (zmold != null) {
+			var zpx = zmold.position.x;
+			var zpy = zmold.position.y;
+			var zpz = zmold.position.z;
+			if (zmold.parent != null) {
+				if (zmold.parent.id.indexOf("actionzoneaxle") > -1) {
+					zpx += zmold.parent.position.x;
+					zpy += zmold.parent.position.y;
+					zpz += zmold.parent.position.z;
 				}
 			} 
-			var zmoldx = mold.scaling.x;
-			var zmoldy = mold.scaling.y;
-			var zmoldz = mold.scaling.z;
+			var zmoldx = zmold.scaling.x;
+			var zmoldy = zmold.scaling.y;
+			var zmoldz = zmold.scaling.z;
 			if (WTW.lineX == null) {
 				WTW.lineZ = BABYLON.MeshBuilder.CreateLines("linez", {points: [new BABYLON.Vector3(zpx, zpy, zpz-100),	new BABYLON.Vector3(zpx, zpy, zpz+100)], useVertexAlpha: false, updatable: false}, scene);
 				WTW.lineX = BABYLON.MeshBuilder.CreateLines("linex", {points: [new BABYLON.Vector3(zpx-100, zpy, zpz),	new BABYLON.Vector3(zpx+100, zpy, zpz)], useVertexAlpha: false, updatable: false}, scene);
@@ -1591,14 +1591,14 @@ WTWJS.prototype.openEditPoles = function(mold) {
 				WTW.lineX6.color = new BABYLON.Color3(0, 1, 0);
 				WTW.lineX7.color = new BABYLON.Color3(0, 1, 0);
 				WTW.lineX8.color = new BABYLON.Color3(0, 1, 0);
-				WTW.lineX1.parent = mold;
-				WTW.lineX2.parent = mold;
-				WTW.lineX3.parent = mold;
-				WTW.lineX4.parent = mold;
-				WTW.lineX5.parent = mold;
-				WTW.lineX6.parent = mold;
-				WTW.lineX7.parent = mold;
-				WTW.lineX8.parent = mold;
+				WTW.lineX1.parent = zmold;
+				WTW.lineX2.parent = zmold;
+				WTW.lineX3.parent = zmold;
+				WTW.lineX4.parent = zmold;
+				WTW.lineX5.parent = zmold;
+				WTW.lineX6.parent = zmold;
+				WTW.lineX7.parent = zmold;
+				WTW.lineX8.parent = zmold;
 
 				WTW.lineY1 = BABYLON.MeshBuilder.CreateLines("liney1", {points: [new BABYLON.Vector3(-.5, -100, -.5), new BABYLON.Vector3(-.5, 100, -.5)], useVertexAlpha: false, updatable: false}, scene);
 				WTW.lineY2 = BABYLON.MeshBuilder.CreateLines("liney2", {points: [new BABYLON.Vector3(-.5, -100, .5), new BABYLON.Vector3(-.5, 100, .5)], useVertexAlpha: false, updatable: false}, scene);
@@ -1624,14 +1624,14 @@ WTWJS.prototype.openEditPoles = function(mold) {
 				WTW.lineY6.color = new BABYLON.Color3(1, 0, 0);
 				WTW.lineY7.color = new BABYLON.Color3(1, 0, 0);
 				WTW.lineY8.color = new BABYLON.Color3(1, 0, 0);
-				WTW.lineY1.parent = mold;
-				WTW.lineY2.parent = mold;
-				WTW.lineY3.parent = mold;
-				WTW.lineY4.parent = mold;
-				WTW.lineY5.parent = mold;
-				WTW.lineY6.parent = mold;
-				WTW.lineY7.parent = mold;
-				WTW.lineY8.parent = mold;
+				WTW.lineY1.parent = zmold;
+				WTW.lineY2.parent = zmold;
+				WTW.lineY3.parent = zmold;
+				WTW.lineY4.parent = zmold;
+				WTW.lineY5.parent = zmold;
+				WTW.lineY6.parent = zmold;
+				WTW.lineY7.parent = zmold;
+				WTW.lineY8.parent = zmold;
 
 				WTW.lineZ1 = BABYLON.MeshBuilder.CreateLines("linez1", {points: [new BABYLON.Vector3(-100, -.5, -.5), new BABYLON.Vector3(100, -.5, -.5)], useVertexAlpha: false, updatable: false}, scene);
 				WTW.lineZ2 = BABYLON.MeshBuilder.CreateLines("linez2", {points: [new BABYLON.Vector3(-100, -.5, .5), new BABYLON.Vector3(100, -.5, .5)], useVertexAlpha: false, updatable: false}, scene);
@@ -1657,14 +1657,14 @@ WTWJS.prototype.openEditPoles = function(mold) {
 				WTW.lineZ6.color = new BABYLON.Color3(0, 0, 1);
 				WTW.lineZ7.color = new BABYLON.Color3(0, 0, 1);
 				WTW.lineZ8.color = new BABYLON.Color3(0, 0, 1);
-				WTW.lineZ1.parent = mold;
-				WTW.lineZ2.parent = mold;
-				WTW.lineZ3.parent = mold;
-				WTW.lineZ4.parent = mold;
-				WTW.lineZ5.parent = mold;
-				WTW.lineZ6.parent = mold;
-				WTW.lineZ7.parent = mold;
-				WTW.lineZ8.parent = mold;
+				WTW.lineZ1.parent = zmold;
+				WTW.lineZ2.parent = zmold;
+				WTW.lineZ3.parent = zmold;
+				WTW.lineZ4.parent = zmold;
+				WTW.lineZ5.parent = zmold;
+				WTW.lineZ6.parent = zmold;
+				WTW.lineZ7.parent = zmold;
+				WTW.lineZ8.parent = zmold;
 				var zalphamold = 1;
 				var zwx = .1;
 				var zwy = 1;
@@ -1705,13 +1705,13 @@ WTWJS.prototype.openEditPoles = function(mold) {
 					dMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					dMaterial.diffuseTexture.alpha = zalphamold;
 					dMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
-					var moldmulti = new BABYLON.MultiMaterial("multimoldmovez", scene);
-					moldmulti.subMaterials.push(lMaterial);
-					moldmulti.subMaterials.push(rMaterial);
-					moldmulti.subMaterials.push(bMaterial);
-					moldmulti.subMaterials.push(fMaterial);
-					moldmulti.subMaterials.push(uMaterial);
-					moldmulti.subMaterials.push(dMaterial);
+					var zmoldmulti = new BABYLON.MultiMaterial("multimoldmovez", scene);
+					zmoldmulti.subMaterials.push(lMaterial);
+					zmoldmulti.subMaterials.push(rMaterial);
+					zmoldmulti.subMaterials.push(bMaterial);
+					zmoldmulti.subMaterials.push(fMaterial);
+					zmoldmulti.subMaterials.push(uMaterial);
+					zmoldmulti.subMaterials.push(dMaterial);
 					if (WTW.moveZ.subMeshes.length < 12) {
 						WTW.moveZ.subMeshes.push(new BABYLON.SubMesh(0, 0,  4,  0, 6, WTW.moveZ));
 						WTW.moveZ.subMeshes.push(new BABYLON.SubMesh(1, 4,  4,  6, 6, WTW.moveZ));
@@ -1720,7 +1720,7 @@ WTWJS.prototype.openEditPoles = function(mold) {
 						WTW.moveZ.subMeshes.push(new BABYLON.SubMesh(4, 16, 4, 24, 6, WTW.moveZ));
 						WTW.moveZ.subMeshes.push(new BABYLON.SubMesh(5, 20, 4, 30, 6, WTW.moveZ));
 					}
-					WTW.moveZ.material = moldmulti;
+					WTW.moveZ.material = zmoldmulti;
 				}
 				zwx = .1;
 				zwy = 1;
@@ -1761,13 +1761,13 @@ WTWJS.prototype.openEditPoles = function(mold) {
 					dMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					dMaterial.diffuseTexture.alpha = zalphamold;
 					dMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
-					moldmulti = new BABYLON.MultiMaterial("multimoldmovey", scene);
-					moldmulti.subMaterials.push(lMaterial);
-					moldmulti.subMaterials.push(rMaterial);
-					moldmulti.subMaterials.push(bMaterial);
-					moldmulti.subMaterials.push(fMaterial);
-					moldmulti.subMaterials.push(uMaterial);
-					moldmulti.subMaterials.push(dMaterial);
+					var zmoldmulti = new BABYLON.MultiMaterial("multimoldmovey", scene);
+					zmoldmulti.subMaterials.push(lMaterial);
+					zmoldmulti.subMaterials.push(rMaterial);
+					zmoldmulti.subMaterials.push(bMaterial);
+					zmoldmulti.subMaterials.push(fMaterial);
+					zmoldmulti.subMaterials.push(uMaterial);
+					zmoldmulti.subMaterials.push(dMaterial);
 					if (WTW.moveY.subMeshes.length < 12) {
 						WTW.moveY.subMeshes.push(new BABYLON.SubMesh(0, 0,  4,  0, 6, WTW.moveY));
 						WTW.moveY.subMeshes.push(new BABYLON.SubMesh(1, 4,  4,  6, 6, WTW.moveY));
@@ -1776,7 +1776,7 @@ WTWJS.prototype.openEditPoles = function(mold) {
 						WTW.moveY.subMeshes.push(new BABYLON.SubMesh(4, 16, 4, 24, 6, WTW.moveY));
 						WTW.moveY.subMeshes.push(new BABYLON.SubMesh(5, 20, 4, 30, 6, WTW.moveY));
 					}
-					WTW.moveY.material = moldmulti;
+					WTW.moveY.material = zmoldmulti;
 				}
 				zwx = 2;
 				zwy = 1;
@@ -1817,13 +1817,13 @@ WTWJS.prototype.openEditPoles = function(mold) {
 					dMaterial.diffuseTexture = new BABYLON.Texture(image, scene);
 					dMaterial.diffuseTexture.alpha = zalphamold;
 					dMaterial.emissiveColor = new BABYLON.Color3(.7, .7, .7);
-					moldmulti = new BABYLON.MultiMaterial("multimoldmovex", scene);
-					moldmulti.subMaterials.push(lMaterial);
-					moldmulti.subMaterials.push(rMaterial);
-					moldmulti.subMaterials.push(bMaterial);
-					moldmulti.subMaterials.push(fMaterial);
-					moldmulti.subMaterials.push(uMaterial);
-					moldmulti.subMaterials.push(dMaterial);
+					var zmoldmulti = new BABYLON.MultiMaterial("multimoldmovex", scene);
+					zmoldmulti.subMaterials.push(lMaterial);
+					zmoldmulti.subMaterials.push(rMaterial);
+					zmoldmulti.subMaterials.push(bMaterial);
+					zmoldmulti.subMaterials.push(fMaterial);
+					zmoldmulti.subMaterials.push(uMaterial);
+					zmoldmulti.subMaterials.push(dMaterial);
 					if (WTW.moveX.subMeshes.length < 12) {
 						WTW.moveX.subMeshes.push(new BABYLON.SubMesh(0, 0,  4,  0, 6, WTW.moveX));
 						WTW.moveX.subMeshes.push(new BABYLON.SubMesh(1, 4,  4,  6, 6, WTW.moveX));
@@ -1832,7 +1832,7 @@ WTWJS.prototype.openEditPoles = function(mold) {
 						WTW.moveX.subMeshes.push(new BABYLON.SubMesh(4, 16, 4, 24, 6, WTW.moveX));
 						WTW.moveX.subMeshes.push(new BABYLON.SubMesh(5, 20, 4, 30, 6, WTW.moveX));
 					}
-					WTW.moveX.material = moldmulti;	
+					WTW.moveX.material = zmoldmulti;	
 				}
 			} else {
 				WTW.moveZ.position = new BABYLON.Vector3(zpx, zpy, (zmoldz / 2 + zpz + 1.1));
@@ -2071,8 +2071,8 @@ WTWJS.prototype.openRecoverItems = async function() {
 		dGet('wtw_deleteditemslist').innerHTML = "";
 		if (zpath != "") {
 			WTW.getAsyncJSON(zpath, 
-				function(response) {
-					var zrecoverylist = JSON.parse(response);
+				function(zresponse) {
+					var zrecoverylist = JSON.parse(zresponse);
 					if (zrecoverylist != null) {
 						for (var i=0;i < zrecoverylist.length;i++) {
 							if (zrecoverylist[i].itemid != null) {
@@ -2107,8 +2107,8 @@ WTWJS.prototype.recoverMold = async function(zmoldid, zmoldtype) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
 						WTW.getJSON("/connect/communitymoldsrecover.php?communityid=" + communityid + "&communityind=-1&communitymoldid=" + zmoldid, 
-							function(response) {
-								var zcommunitymold = JSON.parse(response);
+							function(zresponse) {
+								var zcommunitymold = JSON.parse(zresponse);
 								var zmoldind = WTW.getNextCount(WTW.communitiesMolds);
 								if (zcommunitymold != null) {
 									if (zcommunitymold.molds[0] != null) {
@@ -2145,8 +2145,8 @@ WTWJS.prototype.recoverMold = async function(zmoldid, zmoldtype) {
 						/* note serror would contain errors */
 						var zbuildingind = WTW.getBuildingInd(buildingid);
 						WTW.getJSON("/connect/buildingmoldsrecover.php?buildingid=" + buildingid + "&buildingind=" + zbuildingind + "&buildingmoldid=" + zmoldid, 
-							function(response) {
-								var zbuildingmold = JSON.parse(response);
+							function(zresponse) {
+								var zbuildingmold = JSON.parse(zresponse);
 								var zmoldind = WTW.getNextCount(WTW.buildingMolds);
 								if (zbuildingmold != null) {
 									if (zbuildingmold.molds[0] != null) {
@@ -2183,8 +2183,8 @@ WTWJS.prototype.recoverMold = async function(zmoldid, zmoldtype) {
 						/* note serror would contain errors */
 						var zthingind = WTW.getThingInd(thingid);
 						WTW.getJSON("/connect/thingmoldsrecover.php?thingid=" + thingid + "&thingind=" + zthingind + "&thingmoldid=" + zmoldid, 
-							function(response) {
-								var zthingmold = JSON.parse(response);
+							function(zresponse) {
+								var zthingmold = JSON.parse(zresponse);
 								var zmoldind = WTW.getNextCount(WTW.thingMolds);
 								if (zthingmold != null) {
 									if (zthingmold.molds[0] != null) {

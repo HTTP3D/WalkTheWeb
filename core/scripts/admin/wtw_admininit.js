@@ -53,9 +53,9 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 		/* set window size */
 		WTW.setWindowSize();
 
-		var snapshot = WTW.getQuerystring('snapshot','0');
-		var hmenu = WTW.getQuerystring('hmenu',1);
-		if (snapshot != '1') {
+		var zsnapshot = WTW.getQuerystring('snapshot','0');
+		var zhmenu = WTW.getQuerystring('hmenu',1);
+		if (zsnapshot != '1') {
 			/* default startup (not returning from a Babylon screen shot) */
 			/* show updates page if returning from an update reload */
 			var zshowupdates = WTW.getQuerystring('showupdates','0');
@@ -70,10 +70,10 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 					WTW.checkForUpdates();
 					break;
 			}
-			if (WTW.isNumeric(hmenu)) {
+			if (WTW.isNumeric(zhmenu)) {
 				/* if a particular menu is referenced, open it */
 				WTW.hideAdminMenu();
-				switch (Number(hmenu)) {
+				switch (Number(zhmenu)) {
 					case 5:
 						WTW.openBuildingForm(buildingid);
 						break;
@@ -84,13 +84,13 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 						WTW.openThingForm(thingid);
 						break;
 				}
-				WTW.show('wtw_adminmenu' + hmenu);
+				WTW.show('wtw_adminmenu' + zhmenu);
 				if (dGet('wtw_adminmenubutton').style.left == "0px") {
 					WTW.toggleAdminMenu('wtw_adminmenubutton');
 				}
-			} else if (hmenu != "") {
+			} else if (zhmenu != "") {
 				/* open default page (dashboard) */
-				if (hmenu == "updates") {
+				if (zhmenu == "updates") {
 					WTW.openFullPageForm('updates','','');
 				}
 				if (dGet('wtw_adminmenubutton').style.left == "0px") {
@@ -102,7 +102,7 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 		} else {
 			/* page is returning from a babylon screen shot */
 			/* open the appropriate menu option */
-			hmenu = 69;
+			zhmenu = 69;
 			if (communityid != '') {
 				WTW.hideAdminMenu();
 				dGet('wtw_snapshottitle').innerHTML = "3D Community Snapshot";

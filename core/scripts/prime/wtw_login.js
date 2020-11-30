@@ -63,12 +63,12 @@ WTWJS.prototype.globalLoginResponse = function(zresults) {
 	/* references 3dnet.walktheweb.com - global WalkTheWeb login complete and returns the local values from login */
 	let znoerror = true;
 	try {
-		var serror = "";
+		var zerror = "";
 		if (zresults != null) {
 			if (zresults.serror != undefined) {
 				if (zresults.serror != '') {
 					znoerror = false;
-					serror = zresults.serror;
+					zerror = zresults.serror;
 					dGet('wtw_tglobaluserid').value = '';
 					dGet('wtw_tuserid').value = '';
 					dGet('wtw_tuseremail').value = '';
@@ -93,7 +93,7 @@ WTWJS.prototype.globalLoginResponse = function(zresults) {
 		}
 		var ziframe = dGet('wtw_ibrowseframe');
 		window.parent.postMessage({
-			'message': serror
+			'message': zerror
 		}, "*");
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-globalLoginResponse=" + ex.message);

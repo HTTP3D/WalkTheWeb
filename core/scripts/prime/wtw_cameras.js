@@ -46,36 +46,36 @@ WTWJS.prototype.loadPrimaryCamera = function(parentmold) {
 WTWJS.prototype.loadCameraSettings = function() {
 	/* retrieve the camera settings from cookies if they are set */
 	try {
-		var firstcamera = WTW.getCookie("firstcamera");
-		if (firstcamera == null) {
-			firstcamera = "Follow Camera";
-		} else if (firstcamera == '') {
-			firstcamera = "Follow Camera";
+		var zfirstcamera = WTW.getCookie("firstcamera");
+		if (zfirstcamera == null) {
+			zfirstcamera = "Follow Camera";
+		} else if (zfirstcamera == '') {
+			zfirstcamera = "Follow Camera";
 		}
-		WTW.setDDLValue('wtw_firstcamera',firstcamera);
-		var dimensions = WTW.getCookie("dimensions");
-		if (dimensions == null) {
-			dimensions = "";
-		} else if (dimensions == '') {
-			dimensions = "";
+		WTW.setDDLValue('wtw_firstcamera',zfirstcamera);
+		var zdimensions = WTW.getCookie("dimensions");
+		if (zdimensions == null) {
+			zdimensions = "";
+		} else if (zdimensions == '') {
+			zdimensions = "";
 		}
-		WTW.setDDLValue('wtw_cameradimensions',dimensions);
+		WTW.setDDLValue('wtw_cameradimensions',zdimensions);
 		//WTW.switchCamera(1);
-		var showcameratwo = WTW.getCookie("showcameratwo");
-		if (showcameratwo != null) {
-			if (showcameratwo == "1") {
+		var zshowcameratwo = WTW.getCookie("showcameratwo");
+		if (zshowcameratwo != null) {
+			if (zshowcameratwo == "1") {
 				dGet('wtw_cameratwotext').innerHTML = "Second Camera On";
 				dGet('wtw_cameratwoicon').src = "/content/system/images/menucamera.png";
 				dGet('wtw_cameratwoicon').alt = "Hide Second Camera";
 				dGet('wtw_cameratwoicon').title = "Hide Second Camera";
 				WTW.show('wtw_cameratwoselect');
-				var secondcamera = WTW.getCookie("secondcamera");
-				if (secondcamera == null) {
-					secondcamera = "Scene Camera";
-				} else if (secondcamera == "") {
-					secondcamera = "Scene Camera";
+				var zsecondcamera = WTW.getCookie("secondcamera");
+				if (zsecondcamera == null) {
+					zsecondcamera = "Scene Camera";
+				} else if (zsecondcamera == "") {
+					zsecondcamera = "Scene Camera";
 				}
-				WTW.setDDLValue('wtw_secondcamera',secondcamera);
+				WTW.setDDLValue('wtw_secondcamera',zsecondcamera);
 				//WTW.switchCamera(2);
 			}
 		}
@@ -88,55 +88,55 @@ WTWJS.prototype.switchCamera = function(w) {
 	/* switch camera for your avatar - includes various combinations of cameras and positions */
 	try {
 		WTW.cameraYOffset = 0;
-		var avatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
-		var avatarcenter = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
-		var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
-		var firstcamera = WTW.getDDLValue('wtw_firstcamera');
-		var secondcamera = WTW.getDDLValue('wtw_secondcamera');
-		var dimensions = WTW.getDDLValue('wtw_cameradimensions');
+		var zavatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
+		var zavatarcenter = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+		var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
+		var zfirstcamera = WTW.getDDLValue('wtw_firstcamera');
+		var zsecondcamera = WTW.getDDLValue('wtw_secondcamera');
+		var zdimensions = WTW.getDDLValue('wtw_cameradimensions');
 		document.activeElement.blur();
 		if (w == 1) {
-			if (firstcamera == "First-Person Camera") {
+			if (zfirstcamera == "First-Person Camera") {
 				WTW.setCookie("firstcamera","Follow Camera",30);
-				dimensions = '';
-				WTW.setDDLValue('wtw_cameradimensions',dimensions);
+				zdimensions = '';
+				WTW.setDDLValue('wtw_cameradimensions',zdimensions);
 			} else {
-				WTW.setCookie("firstcamera",firstcamera,30);
-				WTW.setCookie("dimensions",dimensions,30);
+				WTW.setCookie("firstcamera",zfirstcamera,30);
+				WTW.setCookie("dimensions",zdimensions,30);
 			}
-			var step = -25;
+			var zstep = -25;
 			WTW.cameraYOffset = 5;
-			switch (firstcamera) {
+			switch (zfirstcamera) {
 				case 'First-Person Camera':
-					step = 0;
+					zstep = 0;
 					WTW.cameraYOffset = 2;
 					break;
 				case 'Scene Camera':
-					step = -40;
+					zstep = -40;
 					WTW.cameraYOffset = 15;
 					break;
 				case 'Self Camera':
-					step = 30;
+					zstep = 30;
 					WTW.cameraYOffset = 8;
 					break;
 			}
-			if (firstcamera == 'First-Person Camera') {
-				var headtop = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-headtop");
-				switch (dimensions) {
+			if (zfirstcamera == 'First-Person Camera') {
+				var zheadtop = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-headtop");
+				switch (zdimensions) {
 					case 'Anaglyph':
 						if (WTW.cameraAnaglyph == null) {
 							WTW.initAnaglyphCamera();
 						}
-						if (WTW.cameraAnaglyph != null && avatar != null && avatarcamera != null) {
+						if (WTW.cameraAnaglyph != null && zavatar != null && zavatarcamera != null) {
 							WTW.cameraAnaglyph.lockedTarget = null;
 							//WTW.cameraAnaglyph.yOffset = 180;
-							//WTW.cameraAnaglyph.rotation.y = WTW.getRadians(WTW.getDegrees(avatar.rotation.y) + WTW.cameraAnaglyph.yOffset);
-							//WTW.cameraAnaglyph.position = new BABYLON.Vector3(avatar.position.x + parseFloat(Math.sin(avatar.rotation.y)) * step, avatar.position.y + avatarcamera.position.y + WTW.cameraYOffset, avatar.position.z + parseFloat(Math.cos(avatar.rotation.y)) * step);
+							//WTW.cameraAnaglyph.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + WTW.cameraAnaglyph.yOffset);
+							//WTW.cameraAnaglyph.position = new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.sin(zavatar.rotation.y)) * zstep, zavatar.position.y + zavatarcamera.position.y + WTW.cameraYOffset, zavatar.position.z + parseFloat(Math.cos(zavatar.rotation.y)) * zstep);
 
-							if (WTW.cameraFocus == 1 && headtop != null) {
+							if (WTW.cameraFocus == 1 && zheadtop != null) {
 								WTW.cameraAnaglyph.parent = WTW.camera;
-								//WTW.cameraAnaglyph.parent = avatarcamera;
-								//avatarcamera.parent = headtop;
+								//WTW.cameraAnaglyph.parent = zavatarcamera;
+								//zavatarcamera.parent = zheadtop;
 								WTW.cameraAnaglyph.position.x = 0;
 								WTW.cameraAnaglyph.position.y = 0;
 								WTW.cameraAnaglyph.position.z = 0;
@@ -162,29 +162,29 @@ WTWJS.prototype.switchCamera = function(w) {
 						if (WTW.cameraVR == null) {
 							WTW.initVRCamera();
 						}
-						if (avatar != null && avatarcamera != null) {
+						if (zavatar != null && zavatarcamera != null) {
 							WTW.cameraVR.lockedTarget = null;
 							WTW.cameraVR.yOffset = 180;
-							WTW.cameraVR.rotation.y = WTW.getRadians(WTW.getDegrees(avatar.rotation.y) + WTW.cameraVR.yOffset);
-							WTW.cameraVR.position = new BABYLON.Vector3(avatar.position.x + parseFloat(Math.sin(avatar.rotation.y)) * step, avatar.position.y + avatarcamera.position.y + WTW.cameraYOffset, avatar.position.z + parseFloat(Math.cos(avatar.rotation.y)) * step);
+							WTW.cameraVR.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + WTW.cameraVR.yOffset);
+							WTW.cameraVR.position = new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.sin(zavatar.rotation.y)) * zstep, zavatar.position.y + zavatarcamera.position.y + WTW.cameraYOffset, zavatar.position.z + parseFloat(Math.cos(zavatar.rotation.y)) * zstep);
 						}
 						break;
 					case 'VR Gamepad':
 						if (WTW.cameraVRGamepad == null) {
 							WTW.initVRGamepadCamera();
 						}
-						if (avatar != null && avatarcamera != null) {
+						if (zavatar != null && zavatarcamera != null) {
 							WTW.cameraVRGamepad.lockedTarget = null;
 							WTW.cameraVRGamepad.yOffset = 180;
-							WTW.cameraVRGamepad.rotation.y = WTW.getRadians(WTW.getDegrees(avatar.rotation.y) + WTW.cameraVRGamepad.yOffset);
-							WTW.cameraVRGamepad.position = new BABYLON.Vector3(avatar.position.x + parseFloat(Math.sin(avatar.rotation.y)) * step, avatar.position.y + avatarcamera.position.y + WTW.cameraYOffset, avatar.position.z + parseFloat(Math.cos(avatar.rotation.y)) * step);
+							WTW.cameraVRGamepad.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + WTW.cameraVRGamepad.yOffset);
+							WTW.cameraVRGamepad.position = new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.sin(zavatar.rotation.y)) * zstep, zavatar.position.y + zavatarcamera.position.y + WTW.cameraYOffset, zavatar.position.z + parseFloat(Math.cos(zavatar.rotation.y)) * zstep);
 						}
 						break;
 					default:
-						if (WTW.camera != null && avatar != null && avatarcamera != null) {
-							if (WTW.cameraFocus == 1 && headtop != null) {
-								WTW.camera.parent = avatarcamera;
-								avatarcamera.parent = headtop;
+						if (WTW.camera != null && zavatar != null && zavatarcamera != null) {
+							if (WTW.cameraFocus == 1 && zheadtop != null) {
+								WTW.camera.parent = zavatarcamera;
+								zavatarcamera.parent = zheadtop;
 								WTW.camera.position.x = 0;
 								WTW.camera.position.y = 0;
 								WTW.camera.position.z = 0;
@@ -207,14 +207,14 @@ WTWJS.prototype.switchCamera = function(w) {
 						break;
 				}
 			} else {
-				switch (dimensions) {
+				switch (zdimensions) {
 					case 'Anaglyph':
 						if (WTW.cameraAnaglyph == null) {
 							WTW.initAnaglyphCamera();
 						}
-						if (avatar != null && avatarcenter != null) {
+						if (zavatar != null && zavatarcenter != null) {
 							WTW.cameraAnaglyph.lockedTarget = null;
-							WTW.cameraAnaglyph.lockedTarget = avatarcenter;
+							WTW.cameraAnaglyph.lockedTarget = zavatarcenter;
 						}
 						if (WTW.mainParentMold != null) {
 							WTW.cameraAnaglyph.parent = WTW.mainParentMold;
@@ -232,9 +232,9 @@ WTWJS.prototype.switchCamera = function(w) {
 						if (WTW.cameraVR == null) {
 							WTW.initVRCamera();
 						}
-						if (avatar != null && avatarcenter != null) {
+						if (zavatar != null && zavatarcenter != null) {
 							WTW.cameraVR.lockedTarget = null;
-							WTW.cameraVR.lockedTarget = avatarcenter;
+							WTW.cameraVR.lockedTarget = zavatarcenter;
 						}
 						if (WTW.cameraFollow != null) {
 							WTW.cameraFollow.viewport = new BABYLON.Viewport(0, 0, 0, 0);
@@ -249,10 +249,10 @@ WTWJS.prototype.switchCamera = function(w) {
 						if (WTW.cameraVRGamepad == null) {
 							WTW.initVRGamepadCamera();
 						}
-						if (avatar != null && avatarcenter != null) {
+						if (zavatar != null && zavatarcenter != null) {
 							WTW.cameraVRGamepad.lockedTarget = null;
-							WTW.cameraVRGamepad.lockedTarget = avatarcenter;
-							WTW.cameraVRGamepad.position = new BABYLON.Vector3(avatar.position.x + parseFloat(Math.sin(avatar.rotation.y)) * -step, avatar.position.y + avatarcenter.position.y + WTW.cameraYOffset, avatar.position.z + parseFloat(Math.cos(avatar.rotation.y)) * -step);
+							WTW.cameraVRGamepad.lockedTarget = zavatarcenter;
+							WTW.cameraVRGamepad.position = new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.sin(zavatar.rotation.y)) * -zstep, zavatar.position.y + zavatarcenter.position.y + WTW.cameraYOffset, zavatar.position.z + parseFloat(Math.cos(zavatar.rotation.y)) * -zstep);
 						}
 						if (WTW.cameraFollow != null) {
 							WTW.cameraFollow.viewport = new BABYLON.Viewport(0, 0, 0, 0);
@@ -267,9 +267,9 @@ WTWJS.prototype.switchCamera = function(w) {
 						if (WTW.cameraFollow == null) {
 							WTW.initFollowCamera(1);
 						}
-						if (avatar != null && avatarcenter != null) {
+						if (zavatar != null && zavatarcenter != null) {
 							WTW.cameraFollow.lockedTarget = null;
-							WTW.cameraFollow.lockedTarget = avatarcenter;
+							WTW.cameraFollow.lockedTarget = zavatarcenter;
 						}
 						WTW.setCameraDistance(); // how far from the object to follow
 						WTW.cameraFollow.heightOffset = WTW.cameraYOffset; // how high above the object to place the camera
@@ -289,31 +289,31 @@ WTWJS.prototype.switchCamera = function(w) {
 			if (WTW.cameraArc == null) {
 				WTW.initArcCamera();
 			}
-			step = 30;
+			zstep = 30;
 			WTW.cameraYOffset = 20;
-			if (avatar != null && avatarcenter != null) {
+			if (zavatar != null && zavatarcenter != null) {
 				WTW.cameraArc.lockedTarget = null;
-				WTW.cameraArc.lockedTarget = avatarcenter;
-				WTW.cameraArc.position = new BABYLON.Vector3(avatar.position.x + parseFloat(Math.sin(avatar.rotation.y)) * step, avatar.position.y + avatarcenter.position.y + WTW.cameraYOffset, avatar.position.z + parseFloat(Math.cos(avatar.rotation.y)) * step);
+				WTW.cameraArc.lockedTarget = zavatarcenter;
+				WTW.cameraArc.position = new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.sin(zavatar.rotation.y)) * zstep, zavatar.position.y + zavatarcenter.position.y + WTW.cameraYOffset, zavatar.position.z + parseFloat(Math.cos(zavatar.rotation.y)) * zstep);
 			}
-			WTW.cameraArc.radius = -step; // how far from the object to follow
+			WTW.cameraArc.radius = -zstep; // how far from the object to follow
 			WTW.cameraArc.beta = -Math.PI/3; // how high above the object to place the camera
 			WTW.cameraArc.alpha = 0; // the viewing angle		
 			WTW.cameraArc.yOffset = 0;
 			WTW.cameraArc.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 			scene.activeCameras[0] = WTW.cameraArc;
 		} else {
-			WTW.setCookie("secondcamera",secondcamera,30);
+			WTW.setCookie("secondcamera",zsecondcamera,30);
 			if (dGet('wtw_cameratwotext').innerHTML == "Second Camera On") {
 				if (WTW.cameraFollowTwo == null) {
 					WTW.initFollowCamera(2);
 				}
-				var step = 25;
+				var zstep = 25;
 				WTW.cameraFollowTwo.lockedTarget = null;
-				switch (secondcamera) {
+				switch (zsecondcamera) {
 					case 'First-Person Camera':
-						step = 1;
-						WTW.cameraFollowTwo.radius = step; // how far from the object to follow
+						zstep = 1;
+						WTW.cameraFollowTwo.radius = zstep; // how far from the object to follow
 						WTW.cameraFollowTwo.heightOffset = 0; // how high above the object to place the camera
 						WTW.cameraFollowTwo.yOffset = 0;
 						WTW.cameraFollowTwo.inertia = .005;
@@ -324,59 +324,59 @@ WTWJS.prototype.switchCamera = function(w) {
 						WTW.cameraFollowTwo.moveSensibility = 0;
 						WTW.cameraFollowTwo.viewport = new BABYLON.Viewport(0.7, 0.7, 0.3, 0.3);
 						scene.activeCameras[1] = WTW.cameraFollowTwo;
-						WTW.cameraFollowTwo.rotation.y = avatar.rotation.y;
-						WTW.cameraFollowTwo.position.x = avatar.position.x;
-						WTW.cameraFollowTwo.position.y = avatar.position.y + avatarcamera.position.y;
-						WTW.cameraFollowTwo.position.z = avatar.position.z;
+						WTW.cameraFollowTwo.rotation.y = zavatar.rotation.y;
+						WTW.cameraFollowTwo.position.x = zavatar.position.x;
+						WTW.cameraFollowTwo.position.y = zavatar.position.y + zavatarcamera.position.y;
+						WTW.cameraFollowTwo.position.z = zavatar.position.z;
 						break;
 					case 'Scene Camera':
-						step = 40;
-						WTW.cameraFollowTwo.radius = step; // how far from the object to follow
+						zstep = 40;
+						WTW.cameraFollowTwo.radius = zstep; // how far from the object to follow
 						WTW.cameraFollowTwo.heightOffset = 15; // how high above the object to place the camera
 						WTW.cameraFollowTwo.yOffset = 0;
 						WTW.cameraFollowTwo.inertia = .25;
 						WTW.cameraFollowTwo.cameraAcceleration = 0.3;
 						WTW.cameraFollowTwo.maxCameraSpeed = 800;
-						if (avatarcenter != null) {
-							WTW.cameraFollowTwo.lockedTarget = avatarcenter;
+						if (zavatarcenter != null) {
+							WTW.cameraFollowTwo.lockedTarget = zavatarcenter;
 						}
 						WTW.cameraFollowTwo.viewport = new BABYLON.Viewport(0.7, 0.7, 0.3, 0.3);
 						scene.activeCameras[1] = WTW.cameraFollowTwo;
-						if (avatar != null) {
-							WTW.cameraFollowTwo.rotationOffset = WTW.getDegrees(avatar.rotation.y) + WTW.cameraFollowTwo.yOffset;
+						if (zavatar != null) {
+							WTW.cameraFollowTwo.rotationOffset = WTW.getDegrees(zavatar.rotation.y) + WTW.cameraFollowTwo.yOffset;
 						}
 						break;
 					case 'Self Camera':
-						step = 30;
-						WTW.cameraFollowTwo.radius = step; // how far from the object to follow
+						zstep = 30;
+						WTW.cameraFollowTwo.radius = zstep; // how far from the object to follow
 						WTW.cameraFollowTwo.heightOffset = 8; // how high above the object to place the camera
 						WTW.cameraFollowTwo.yOffset = 180;
 						WTW.cameraFollowTwo.inertia = .10;
 						WTW.cameraFollowTwo.cameraAcceleration = 0.5;
 						WTW.cameraFollowTwo.maxCameraSpeed = 1000;
-						if (avatarcenter != null) {
-							WTW.cameraFollowTwo.lockedTarget = avatarcenter;
+						if (zavatarcenter != null) {
+							WTW.cameraFollowTwo.lockedTarget = zavatarcenter;
 						}
 						WTW.cameraFollowTwo.viewport = new BABYLON.Viewport(0.7, 0.7, 0.3, 0.3);
 						scene.activeCameras[1] = WTW.cameraFollowTwo;
-						if (avatar != null) {
-							WTW.cameraFollowTwo.rotationOffset = WTW.getDegrees(avatar.rotation.y) + WTW.cameraFollowTwo.yOffset;
+						if (zavatar != null) {
+							WTW.cameraFollowTwo.rotationOffset = WTW.getDegrees(zavatar.rotation.y) + WTW.cameraFollowTwo.yOffset;
 						}
 						break;
 					default:
-						WTW.cameraFollowTwo.radius = step; // how far from the object to follow
+						WTW.cameraFollowTwo.radius = zstep; // how far from the object to follow
 						WTW.cameraFollowTwo.heightOffset = 0; // how high above the object to place the camera
 						WTW.cameraFollowTwo.yOffset = 0;
 						WTW.cameraFollowTwo.inertia = .10;
 						WTW.cameraFollowTwo.cameraAcceleration = 0.5;
 						WTW.cameraFollowTwo.maxCameraSpeed = 1000;
-						if (avatarcenter != null) {
-							WTW.cameraFollowTwo.lockedTarget = avatarcenter;
+						if (zavatarcenter != null) {
+							WTW.cameraFollowTwo.lockedTarget = zavatarcenter;
 						}
 						WTW.cameraFollowTwo.viewport = new BABYLON.Viewport(0.7, 0.7, 0.3, 0.3);
 						scene.activeCameras[1] = WTW.cameraFollowTwo;
-						if (avatar != null) {
-							WTW.cameraFollowTwo.rotationOffset = WTW.getDegrees(avatar.rotation.y) + WTW.cameraFollowTwo.yOffset;
+						if (zavatar != null) {
+							WTW.cameraFollowTwo.rotationOffset = WTW.getDegrees(zavatar.rotation.y) + WTW.cameraFollowTwo.yOffset;
 						}
 						break;
 				}
@@ -397,25 +397,25 @@ WTWJS.prototype.switchCamera = function(w) {
 
 		}
 		try {
-			if (dimensions != 'Anaglyph') {
+			if (zdimensions != 'Anaglyph') {
 				WTW.cameraAnaglyph.dispose();
 				WTW.cameraAnaglyph = null;
 			}
 		} catch (ex) {}
 		try {
-			if (dimensions != 'VR') {
+			if (zdimensions != 'VR') {
 				WTW.cameraVR.dispose();
 				WTW.cameraVR = null;
 			}
 		} catch (ex) {}
 		try {
-			if (dimensions != 'VR Gamepad') {
+			if (zdimensions != 'VR Gamepad') {
 				WTW.cameraVRGamepad.dispose();
 				WTW.cameraVRGamepad = null;
 			}
 		} catch (ex) {}
 		try {
-			if (w != 3 && firstcamera != 'Arc Rotation Camera') {
+			if (w != 3 && zfirstcamera != 'Arc Rotation Camera') {
 				WTW.cameraArc.dispose();
 				WTW.cameraArc = null;
 			}
@@ -468,40 +468,40 @@ WTWJS.prototype.addActiveCamera = function(zcamera) {
 	}
 }
 		
-WTWJS.prototype.initFollowCamera = function(viewport) {
+WTWJS.prototype.initFollowCamera = function(zviewport) {
 	/* create a follow camera */
 	try {
-		if (viewport == undefined) {
-			viewport = 2;
+		if (zviewport == undefined) {
+			zviewport = 2;
 		}
-		var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
-		if (viewport == 2) {
-			/* viewport 2 is the top right small scene window */
-			var startposition = new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY, WTW.init.startPositionZ);
+		var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+		if (zviewport == 2) {
+			/* zviewport 2 is the top right small scene window */
+			var zstartposition = new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY, WTW.init.startPositionZ);
 			if (WTW.myAvatar != null) {
-				startposition = new BABYLON.Vector3(WTW.myAvatar.position.x, WTW.myAvatar.position.y, WTW.myAvatar.position.z);
+				zstartposition = new BABYLON.Vector3(WTW.myAvatar.position.x, WTW.myAvatar.position.y, WTW.myAvatar.position.z);
 			}
-			WTW.cameraFollowTwo = new BABYLON.FollowCamera("followcameratwo", startposition, scene);
+			WTW.cameraFollowTwo = new BABYLON.FollowCamera("followcameratwo", zstartposition, scene);
 			/* remove camera inputs to replace with custom controls */
 			WTW.cameraFollowTwo.inputs.clear();
 			//WTW.cameraFollowTwo.inputs.remove(WTW.cameraFollowTwo.inputs.attached.keyboard); 
 			//WTW.cameraFollowTwo.inputs.remove(WTW.cameraFollowTwo.inputs.attached.mouse); 
-			if (avatarcamera != null) {
-				WTW.cameraFollowTwo.lockedTarget = avatarcamera;
+			if (zavatarcamera != null) {
+				WTW.cameraFollowTwo.lockedTarget = zavatarcamera;
 			}
 			WTW.cameraFollowTwo.yOffset = 0;
 			WTW.cameraFollowTwo.viewport = new BABYLON.Viewport(0.7, 0.7, 0.3, 0.3);
 			WTW.cameraFollowTwo.id = "followcameratwo";
 			WTW.addActiveCamera(WTW.cameraFollowTwo);
 		} else {
-			/* viewport 1 is the main full scene window */
+			/* zviewport 1 is the main full scene window */
 			WTW.cameraFollow = new BABYLON.FollowCamera("followcamera", WTW.camera.position, scene);
 			/* remove camera inputs to replace with custom controls */
 			WTW.cameraFollow.inputs.clear();
 			//WTW.cameraFollow.inputs.remove(WTW.cameraFollow.inputs.attached.keyboard); 
 			//WTW.cameraFollow.inputs.remove(WTW.cameraFollow.inputs.attached.mouse); 
-			if (avatarcamera != null) {
-				WTW.cameraFollow.lockedTarget = avatarcamera;
+			if (zavatarcamera != null) {
+				WTW.cameraFollow.lockedTarget = zavatarcamera;
 			}
 			WTW.cameraFollow.yOffset = 180;
 			WTW.cameraFollow.viewport = new BABYLON.Viewport(0, 0, 1, 1);
@@ -544,9 +544,9 @@ WTWJS.prototype.initAnaglyphCamera = function() {
 		WTW.cameraAnaglyph.inputs.clear();
 		//WTW.cameraAnaglyph.inputs.remove(WTW.cameraAnaglyph.inputs.attached.keyboard); 
 		//WTW.cameraAnaglyph.inputs.remove(WTW.cameraAnaglyph.inputs.attached.mouse); 
-		var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
-		if (avatarcamera != null) {
-			WTW.cameraAnaglyph.lockedTarget = avatarcamera;
+		var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+		if (zavatarcamera != null) {
+			WTW.cameraAnaglyph.lockedTarget = zavatarcamera;
 		}
 		WTW.cameraAnaglyph.yOffset = 180;
 /*		WTW.cameraAnaglyph.inertia = .10;
@@ -569,9 +569,9 @@ WTWJS.prototype.initVRCamera = function() {
 		//WTW.cameraVR.inputs.clear();
 		WTW.cameraVR.inputs.remove(WTW.cameraVR.inputs.attached.keyboard); 
 		WTW.cameraVR.inputs.remove(WTW.cameraVR.inputs.attached.mouse);
-		var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
-		if (avatarcamera != null) {
-			WTW.cameraVR.lockedTarget = avatarcamera;
+		var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+		if (zavatarcamera != null) {
+			WTW.cameraVR.lockedTarget = zavatarcamera;
 		}
 		WTW.cameraVR.yOffset = 180;
 /*		WTW.cameraVR.inertia = .10;
@@ -594,9 +594,9 @@ WTWJS.prototype.initVRGamepadCamera = function() {
 		//WTW.cameraVRGamepad.inputs.clear();
 		WTW.cameraVRGamepad.inputs.remove(WTW.cameraVRGamepad.inputs.attached.keyboard); 
 		WTW.cameraVRGamepad.inputs.remove(WTW.cameraVRGamepad.inputs.attached.mouse);
-		var avatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
-		if (avatarcamera != null) {
-			WTW.cameraVRGamepad.lockedTarget = avatarcamera;
+		var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+		if (zavatarcamera != null) {
+			WTW.cameraVRGamepad.lockedTarget = zavatarcamera;
 		}
 		WTW.cameraVRGamepad.yOffset = 180;
 /*		WTW.cameraVRGamepad.inertia = .10;

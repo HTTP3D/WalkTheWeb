@@ -2,42 +2,42 @@ WTWJS.prototype.openHUDFollow = function() {
 	/* new feature just beginning to be coded */
 	try {
 WTW.log("OPEN HUD");
-		var anchor = new BABYLON.TransformNode("");
-		var manager = new BABYLON.GUI.GUI3DManager(scene);
+		var zanchor = new BABYLON.TransformNode("");
+		var zmanager = new BABYLON.GUI.GUI3DManager(scene);
 
-		var panel = new BABYLON.GUI.PlanePanel();
-		panel.margin = .25;
-		panel.columns = 1;
+		var zpanel = new BABYLON.GUI.PlanePanel();
+		zpanel.margin = .25;
+		zpanel.columns = 1;
 		
-		manager.addControl(panel);
-		panel.linkToTransformNode(anchor);
-		panel.position.z = -1.5;
-		panel.scaling = new BABYLON.Vector3(3,3,3);
-		//panel.position.y = 10;
-		panel.blockLayout = true;
-//		var button = new BABYLON.GUI.HolographicButton("orientation");
+		zmanager.addControl(zpanel);
+		zpanel.linkToTransformNode(zanchor);
+		zpanel.position.z = -1.5;
+		zpanel.scaling = new BABYLON.Vector3(3,3,3);
+		//zpanel.position.y = 10;
+		zpanel.blockLayout = true;
+//		var zbutton = new BABYLON.GUI.HolographicButton("orientation");
 		
 		
-		manager.parent = WTW.myAvatar;
+		zmanager.parent = WTW.myAvatar;
 		
-		var button = new BABYLON.GUI.Button3D("reset");
+		var zbutton = new BABYLON.GUI.Button3D("reset");
 
-		var text = new BABYLON.GUI.TextBlock();
-		text.text = "HERE I AM";
-		text.color = "white";
-		text.fontSize = 50;
-		button.content = text;
+		var ztext = new BABYLON.GUI.TextBlock();
+		ztext.text = "HERE I AM";
+		ztext.color = "white";
+		ztext.fontSize = 50;
+		zbutton.content = ztext;
 		
 		
-		panel.addControl(button);
+		zpanel.addControl(zbutton);
 
-		button.text = "Button #" + panel.children.length;
+		zbutton.text = "Button #" + zpanel.children.length;
 		
-		var button2 = new BABYLON.GUI.HolographicButton("orientation");
-		panel.addControl(button2);
+		var zbutton2 = new BABYLON.GUI.HolographicButton("orientation");
+		zpanel.addControl(zbutton2);
 
-		button.text = "Button #" + panel.children.length;
-		panel.blockLayout = false;
+		zbutton.text = "Button #" + zpanel.children.length;
+		zpanel.blockLayout = false;
 
 		scene.render();
 	} catch (ex) {

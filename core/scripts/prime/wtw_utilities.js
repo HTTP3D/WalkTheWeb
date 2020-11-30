@@ -95,7 +95,6 @@ WTWJS.prototype.setWindowSize = function() {
 
 WTWJS.prototype.checkFocus = function() {
 	/* globally checks focus for all document events */
-	var y = 0;
 	try {
 		if (WTW.adminView == 1) {
 			document.activeElement.focus();
@@ -110,23 +109,24 @@ WTWJS.prototype.checkFocus = function() {
 
 WTWJS.prototype.getScrollY = function() {
 	/* returns the amount of scroll of a window scrollbar */
-	var y = 0;
+	var zy = 0;
 	try {
-		var doc = document, w = window;
-		var x, y, docEl;
+		var zdoc = document, w = window;
+		var zx = 0; 
+		var zdocument;
 		if (typeof w.pageYOffset === 'number') {
-			x = w.pageXOffset;
-			y = w.pageYOffset;
+			zx = w.pageXOffset;
+			zy = w.pageYOffset;
 		} else {
-			docEl = (doc.compatMode && doc.compatMode === 'CSS1Compat') ?
-					doc.documentElement : doc.body;
-			x = docEl.scrollLeft;
-			y = docEl.scrollTop;
+			zdocument = (zdoc.compatMode && zdoc.compatMode === 'CSS1Compat') ?
+					zdoc.documentElement : zdoc.body;
+			zx = zdocument.scrollLeft;
+			zy = zdocument.scrollTop;
 		}
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getScrollY=" + ex.message);
     }
-    return y;
+    return zy;
 }
 
 WTWJS.prototype.getMoldnameParts = function(zmoldname) {
@@ -233,25 +233,25 @@ WTWJS.prototype.getMoldnameParts = function(zmoldname) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getMoldnameParts=" + ex.message);
 	}  
 	return {
-		moldname:zmoldname,
-		moldind:zmoldind,
-		moldid:zmoldid,
-		cgind:zcgind,
-		cgid:zcgid,
-		communityid:zcommunityid,
-		buildingid:zbuildingid,
-		thingid:zthingid,
-		instanceid:zinstanceid,
-		webtype:zwebtype,
-		molds:zmolds,
-		shape:zshape,
-		avatarpart:zavatarpart,
-		loadactionzoneid:zloadactionzoneid,
-		actionzoneid:zactionzoneid,
-		coveringname:zcoveringname,
-		namepart:znamepart,
-		moldnamebase:zmoldnamebase,
-		parentname:zparentname
+		'moldname':zmoldname,
+		'moldind':zmoldind,
+		'moldid':zmoldid,
+		'cgind':zcgind,
+		'cgid':zcgid,
+		'communityid':zcommunityid,
+		'buildingid':zbuildingid,
+		'thingid':zthingid,
+		'instanceid':zinstanceid,
+		'webtype':zwebtype,
+		'molds':zmolds,
+		'shape':zshape,
+		'avatarpart':zavatarpart,
+		'loadactionzoneid':zloadactionzoneid,
+		'actionzoneid':zactionzoneid,
+		'coveringname':zcoveringname,
+		'namepart':znamepart,
+		'moldnamebase':zmoldnamebase,
+		'parentname':zparentname
 	}
 }
 
@@ -391,9 +391,9 @@ WTWJS.prototype.getAsyncJSON = function(zurl, zcallback, zaction, zrequest) {
 WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
 	/* performs a form POST based JSON call for data */
 	try {
-		var form1 = document.createElement('form');
+		var zform1 = document.createElement('form');
 		var Httpreq = new XMLHttpRequest();
-		var zformdata = new FormData(form1);
+		var zformdata = new FormData(zform1);
 		for(var zkey in zrequest) {
 			zformdata.append(zkey, zrequest[zkey]);
 		}
@@ -414,9 +414,9 @@ WTWJS.prototype.postAsyncJSON = function(zurl, zrequest, zcallback) {
 	/* performs a form POST based JSON call for data in async mode  */
 	try {
 		return new Promise(function () {
-			var form1 = document.createElement('form');
+			var zform1 = document.createElement('form');
 			var Httpreq = new XMLHttpRequest();
-			var zformdata = new FormData(form1);
+			var zformdata = new FormData(zform1);
 			for(var zkey in zrequest) {
 				zformdata.append(zkey, zrequest[zkey]);
 			}
@@ -474,41 +474,41 @@ WTWJS.prototype.getAsycnWebpage = function(zurl, zcallback) {
 	}
 }
 
-WTWJS.prototype.openWebpage = function(url, target) {
+WTWJS.prototype.openWebpage = function(zurl, ztarget) {
 	/* open webpage - with target option */
 	try {
-		if (target == undefined) {
-			if (url.toLowerCase().indexOf("//" + wtw_domainname + "/") > -1) {
-				target = '';
+		if (ztarget == undefined) {
+			if (zurl.toLowerCase().indexOf("//" + wtw_domainname + "/") > -1) {
+				ztarget = '';
 			} else {
-				target = '_blank';
+				ztarget = '_blank';
 			}
 		}
-		if (target == '') {
-			window.parent.parent.window.location = url;
+		if (ztarget == '') {
+			window.parent.parent.window.location = zurl;
 		} else {
-			window.open(url,target);
+			window.open(zurl,ztarget);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-openWebpage=" + ex.message);
 	}
 }
 
-WTWJS.prototype.openAsyncWebpage = function(url, target) {
+WTWJS.prototype.openAsyncWebpage = function(zurl, ztarget) {
 	/* open webpage - with target option */
 	try {
 		return new Promise(function () {
-			if (target == undefined) {
-				if (url.toLowerCase().indexOf("//" + wtw_domainname + "/") > -1) {
-					target = '';
+			if (ztarget == undefined) {
+				if (zurl.toLowerCase().indexOf("//" + wtw_domainname + "/") > -1) {
+					ztarget = '';
 				} else {
-					target = '_blank';
+					ztarget = '_blank';
 				}
 			}
-			if (target == '') {
-				window.parent.parent.window.location = url;
+			if (ztarget == '') {
+				window.parent.parent.window.location = zurl;
 			} else {
-				window.open(url,target);
+				window.open(zurl,ztarget);
 			}
 		});
 	} catch (ex) {
@@ -516,7 +516,7 @@ WTWJS.prototype.openAsyncWebpage = function(url, target) {
 	}
 }
 
-WTWJS.prototype.openIFrame = function(url, zwidth, zheight, ztitle) {
+WTWJS.prototype.openIFrame = function(zurl, zwidth, zheight, ztitle) {
 	/* open iframe page with frame window (includes title and close x), height and width (values should be between .1 and 1) */
 	try {
 		if (ztitle == undefined) {
@@ -531,9 +531,9 @@ WTWJS.prototype.openIFrame = function(url, zwidth, zheight, ztitle) {
 		}
 		WTW.hide('wtw_ipagediv');
 		WTW.show('wtw_ibrowseframe');
-		var iframe = dGet('wtw_ibrowseframe');
-		if (iframe.src != url) {
-			iframe.src = url;
+		var ziframe = dGet('wtw_ibrowseframe');
+		if (ziframe.src != zurl) {
+			ziframe.src = zurl;
 		}
 		dGet('wtw_ibrowsediv').style.width = Math.round(WTW.sizeX * zwidth) + "px";
 		dGet('wtw_ibrowsediv').style.height = Math.round(WTW.sizeY * zheight) + "px";
@@ -543,8 +543,8 @@ WTWJS.prototype.openIFrame = function(url, zwidth, zheight, ztitle) {
 		dGet('wtw_ibrowsediv').style.visibility = "visible";
 		dGet('wtw_ibrowsediv').style.zIndex = 3000;
 		dGet('wtw_ibrowsediv').style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
-		if (url == '/core/pages/help.php') {
-			iframe.onload = function() { WTW.setHelp();	};
+		if (zurl == '/core/pages/help.php') {
+			ziframe.onload = function() { WTW.setHelp();	};
 			dGet('wtw_browsetitle').innerHTML = "WalkTheWeb - Help";
 		} else {
 			dGet('wtw_browsetitle').innerHTML = ztitle;
@@ -552,11 +552,11 @@ WTWJS.prototype.openIFrame = function(url, zwidth, zheight, ztitle) {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-openIFrame=" + ex.message);
 		WTW.closeIFrame();
-		WTW.openWebpage(url, '_blank');
+		WTW.openWebpage(zurl, '_blank');
 	}
 }
 
-WTWJS.prototype.openAsyncIFrame = async function(url, zwidth, zheight, ztitle) {
+WTWJS.prototype.openAsyncIFrame = async function(zurl, zwidth, zheight, ztitle) {
 	/* open iframe page with frame window (includes title and close x), height and width (values should be between .1 and 1) */
 	try {
 		if (ztitle == undefined) {
@@ -572,9 +572,9 @@ WTWJS.prototype.openAsyncIFrame = async function(url, zwidth, zheight, ztitle) {
 			}
 			WTW.hide('wtw_ipagediv');
 			WTW.show('wtw_ibrowseframe');
-			var iframe = dGet('wtw_ibrowseframe');
-			if (iframe.src != url) {
-				iframe.src = url;
+			var ziframe = dGet('wtw_ibrowseframe');
+			if (ziframe.src != zurl) {
+				ziframe.src = zurl;
 			}
 			dGet('wtw_ibrowsediv').style.width = Math.round(WTW.sizeX * zwidth) + "px";
 			dGet('wtw_ibrowsediv').style.height = Math.round(WTW.sizeY * zheight) + "px";
@@ -584,8 +584,8 @@ WTWJS.prototype.openAsyncIFrame = async function(url, zwidth, zheight, ztitle) {
 			dGet('wtw_ibrowsediv').style.visibility = "visible";
 			dGet('wtw_ibrowsediv').style.zIndex = 3000;
 			dGet('wtw_ibrowsediv').style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
-			if (url == '/core/pages/help.php') {
-				iframe.onload = function() { WTW.setHelp();	};
+			if (zurl == '/core/pages/help.php') {
+				ziframe.onload = function() { WTW.setHelp();	};
 				dGet('wtw_browsetitle').innerHTML = "WalkTheWeb - Help";
 			} else {
 				dGet('wtw_browsetitle').innerHTML = ztitle;
@@ -594,7 +594,7 @@ WTWJS.prototype.openAsyncIFrame = async function(url, zwidth, zheight, ztitle) {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-openAsyncIFrame=" + ex.message);
 		WTW.closeIFrame();
-		WTW.openAsyncWebpage(url, '_blank');
+		WTW.openAsyncWebpage(zurl, '_blank');
 	}
 }
 
@@ -623,8 +623,8 @@ WTWJS.prototype.resizeIFrame = function(zdimensions) {
 WTWJS.prototype.closeIFrame = function() {
 	/* closes the iframe window frame */
 	try {
-		var iframe = dGet('wtw_ibrowseframe');
-		iframe.onload = function() {};
+		var ziframe = dGet('wtw_ibrowseframe');
+		ziframe.onload = function() {};
 		dGet('wtw_ibrowsediv').style.zIndex = 0;
 		dGet('wtw_ibrowsediv').style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
 		dGet('wtw_ibrowsediv').style.display = "none";
@@ -760,70 +760,70 @@ WTWJS.prototype.cleanInvalidCharacters = function(zvalue) {
 
 WTWJS.prototype.getQuerystring = function(zkey, zdefault) {
 	/* get web page querystring value by key name */
-    var squery = "";
+    var zquery = "";
     try {
         if (zdefault == null) zdefault = "";
         zkey = zkey.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-        var regex = new RegExp("[\\?&]" + zkey + "=([^&#]*)");
-        var qs = regex.exec(window.location.href);
-        if (qs == null) {
-            squery = zdefault;
+        var zregex = new RegExp("[\\?&]" + zkey + "=([^&#]*)");
+        var zqs = zregex.exec(window.location.href);
+        if (zqs == null) {
+            zquery = zdefault;
         } else {
-            squery = qs[1];
+            zquery = zqs[1];
         }
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getQuerystring=" + ex.message);
     }
-    return squery;
+    return zquery;
 }
 
-WTWJS.prototype.setCookie = function(name,value,days) {
+WTWJS.prototype.setCookie = function(zname, zvalue, zdays) {
 	/* set cookie will use https if available */
 	try {
-		var expires = "";
-		if (days) {
-			var date = new Date();
-			date.setTime(date.getTime() + (days*24*60*60*1000));
-			var expires = "; expires=" + date.toGMTString();
+		var zexpires = "";
+		if (zdays) {
+			var zdate = new Date();
+			zdate.setTime(zdate.getTime() + (zdays*24*60*60*1000));
+			zexpires = "; expires=" + zdate.toGMTString();
 		}
 		if (wtw_protocol == "https://") {
-			document.cookie = name + "=" + value + expires + "; domain=" + wtw_domainname + ";SameSite=Strict;path=/;secure";
+			document.cookie = zname + "=" + zvalue + zexpires + "; domain=" + wtw_domainname + ";SameSite=Strict;path=/;secure";
 		} else {
-			document.cookie = name + "non=" + value + expires + ";SameSite=Strict;path=/";
+			document.cookie = zname + "non=" + zvalue + zexpires + ";SameSite=Strict;path=/";
 		}
     } catch (ex) {
         WTW.log("core-scripts-prime-wtw_utilities.js-setCookie=" +ex.message);
     }
 }
 
-WTWJS.prototype.getCookie = function(name) {
+WTWJS.prototype.getCookie = function(zname) {
 	/* get cookie by name */
-	var value = "";
+	var zvalue = "";
 	try {
 		if (wtw_protocol != "https://") {
-			name += "non=";
+			zname += "non=";
 		}
-		var cookies = document.cookie.split(';');
-		for(var i=0;i < cookies.length;i++) {
-			var cook = cookies[i];
-			while (cook.charAt(0)==' ') {
-				cook = cook.substring(1,cook.length);
+		var zcookies = document.cookie.split(';');
+		for(var i=0;i < zcookies.length;i++) {
+			var zcook = zcookies[i];
+			while (zcook.charAt(0)==' ') {
+				zcook = zcook.substring(1,zcook.length);
 			}
-			if (cook.indexOf(name) == 0) {
-				value = cook.substring(name.length,cook.length);
+			if (zcook.indexOf(zname) == 0) {
+				zvalue = zcook.substring(zname.length,zcook.length);
 			}
 		}
-		if (value == "") {
-			value = null;
-		} else if (value.indexOf("non=") > -1) {
-			value = value.replace("non=","");
-		} else if (value.indexOf("=") > -1) {
-			value = value.replace("=","");
+		if (zvalue == "") {
+			zvalue = null;
+		} else if (zvalue.indexOf("non=") > -1) {
+			zvalue = zvalue.replace("non=","");
+		} else if (zvalue.indexOf("=") > -1) {
+			zvalue = zvalue.replace("=","");
 		}
     } catch (ex) {
         WTW.log("core-scripts-prime-wtw_utilities.js-getCookie=" +ex.message);
     }
-	return value;
+	return zvalue;
 }
 
 WTWJS.prototype.deleteCookie = function(zname) {
@@ -837,16 +837,16 @@ WTWJS.prototype.deleteCookie = function(zname) {
 /* strings */
 WTWJS.prototype.getRandomString = function(zlength) {
 	/* gets a random alpha numeric string - often used as ID fields */
-    var zresult = '';
+    var zresults = '';
 	try {
 		var zchars = '0123456789abcdefghijklmnopqrstuvwxyz';
 		for (var i = zlength; i > 0; --i) {
-			zresult += zchars[Math.floor(Math.random() * zchars.length)];
+			zresults += zchars[Math.floor(Math.random() * zchars.length)];
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-randomString=" + ex.message);
 	}
-    return zresult;
+    return zresults;
 }
 
 /* numbers */
@@ -934,7 +934,7 @@ WTWJS.prototype.formatDate = function(zdatetext) {
 
 		if (zmonth.length < 2) zmonth = '0' + zmonth;
 		if (zday.length < 2) zday = '0' + zday;
-		return [zmonth,zday,zyear].join('/');
+		return [zmonth, zday, zyear].join('/');
 	} else {
 		return "";
 	}
@@ -998,23 +998,23 @@ WTWJS.prototype.formatDateLong = function(zdatetext) {
 
 WTWJS.prototype.addDays = function(zdate, zdays) {
 	/* add days to date */
-    var zresult = new Date(zdate);
-    zresult.setDate(zresult.getDate() + zdays);
-    return zresult;
+    var zresults = new Date(zdate);
+    zresults.setDate(zresults.getDate() + zdays);
+    return zresults;
 }
 
 /* url and links */
 WTWJS.prototype.isURL = function(zurl) {
 	/* boolean - is a text string an URL */
-	var pattern = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-	return pattern.test(zurl);
+	var zresults = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
+	return zresults.test(zurl);
 }
 
 /* email */
 WTWJS.prototype.isEmail = function(zemail) {
 	/* boolean - is a text string an email address */
-	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	return re.test(zemail);
+	var zresults = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	return zresults.test(zemail);
 }
 
 /* angles (degrees and radians) */
@@ -1112,17 +1112,17 @@ WTWJS.prototype.setDDLValue = function(zddlname, zvalue) {
 	/* set the drop-down list selected value by value */
 	try {
 		if (dGet(zddlname) != null) {
-			var ddl = dGet(zddlname);
-			ddl.selectedIndex = -1;
-			for (var i = 0; i < ddl.options.length; i++){
-				if (ddl.options[i].value != undefined && ddl.options[i].value != null) {
-					if (WTW.isNumeric(ddl.options[i].value) && WTW.isNumeric(zvalue)) {
-						if (Number(ddl.options[i].value) == Number(zvalue)) {
-							ddl.selectedIndex = i;
+			var zddl = dGet(zddlname);
+			zddl.selectedIndex = -1;
+			for (var i = 0; i < zddl.options.length; i++){
+				if (zddl.options[i].value != undefined && zddl.options[i].value != null) {
+					if (WTW.isNumeric(zddl.options[i].value) && WTW.isNumeric(zvalue)) {
+						if (Number(zddl.options[i].value) == Number(zvalue)) {
+							zddl.selectedIndex = i;
 						}
 					} else {
-						if (ddl.options[i].value.toLowerCase() == zvalue.toLowerCase()){
-							ddl.selectedIndex = i;
+						if (zddl.options[i].value.toLowerCase() == zvalue.toLowerCase()){
+							zddl.selectedIndex = i;
 						}
 					}
 				}
@@ -1137,12 +1137,12 @@ WTWJS.prototype.setDDLText = function(zddlname, ztext) {
 	/* set the drop-down list selected value by text */
 	try {
 		if (dGet(zddlname) != null) {
-			var ddl = dGet(zddlname);
-			ddl.selectedIndex = -1;
-			for (var i = 0; i < ddl.options.length; i++){
-				if (ddl.options[i].text != undefined && ddl.options[i].text != null) {
-					if (ddl.options[i].text.toLowerCase() == ztext.toLowerCase()){
-						ddl.selectedIndex = i;
+			var zddl = dGet(zddlname);
+			zddl.selectedIndex = -1;
+			for (var i = 0; i < zddl.options.length; i++){
+				if (zddl.options[i].text != undefined && zddl.options[i].text != null) {
+					if (zddl.options[i].text.toLowerCase() == ztext.toLowerCase()){
+						zddl.selectedIndex = i;
 					}
 				}
 			}
@@ -1154,37 +1154,37 @@ WTWJS.prototype.setDDLText = function(zddlname, ztext) {
 
 WTWJS.prototype.getDDLValue = function(zddlname) {
 	/* get the drop-down list selected value */
-	var ddlvalue = "";
+	var zddlvalue = "";
 	try {
 		if (dGet(zddlname).options[dGet(zddlname).selectedIndex] != undefined) {
-			ddlvalue = dGet(zddlname).options[dGet(zddlname).selectedIndex].value;
+			zddlvalue = dGet(zddlname).options[dGet(zddlname).selectedIndex].value;
 		}
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-setDDLValue=" + ex.message);
     }
-	return ddlvalue;
+	return zddlvalue;
 }
 
 WTWJS.prototype.getDDLText = function(zddlname) {
 	/* get the drop-down list selected text */
-	var ddltext = "";
+	var zddltext = "";
 	try {
 		if (dGet(zddlname).options[dGet(zddlname).selectedIndex] != undefined) {
-			ddltext = dGet(zddlname).options[dGet(zddlname).selectedIndex].text;
+			zddltext = dGet(zddlname).options[dGet(zddlname).selectedIndex].text;
 		}
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getDDLText=" + ex.message);
     }
-	return ddltext;
+	return zddltext;
 }
 
 WTWJS.prototype.clearDDL = function(zddlname) {
 	/* clear a drop-down list - remove all values (often used to prepare for reloading) */
 	try {
 		if (dGet(zddlname) != null) {
-			var ddl = dGet(zddlname);
-			for (var i = ddl.options.length - 1 ; i >= 0 ; i--) {
-				ddl.remove(i);
+			var zddl = dGet(zddlname);
+			for (var i = zddl.options.length - 1 ; i >= 0 ; i--) {
+				zddl.remove(i);
 			}
 		}
     } catch (ex) {
@@ -1199,16 +1199,16 @@ WTWJS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 			zrefresh = 0;
 		}
 		WTW.changeStop();
-		var vali = dGet(zitem).value;
-		var nvali = 0;
-		var ndn = 0;
+		var zvali = dGet(zitem).value;
+		var znvali = 0;
+		var zndn = 0;
 		if (WTW.isNumeric(zdn)) {
 			ndni = parseFloat(zdn);
 		}
-		if (WTW.isNumeric(vali)) {
-			nvali = parseFloat(Math.round(Number(vali) * 100) / 100) + ndni;
+		if (WTW.isNumeric(zvali)) {
+			znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
 			if (WTW.adminView == 1) {
-				dGet(zitem).value = (nvali.toFixed(2));
+				dGet(zitem).value = (znvali.toFixed(2));
 				if (zitem == "wtw_tgroundpositiony") {
 					WTW.setGroundWater();
 				} else if (zitem.indexOf("axis") > -1 || zitem.indexOf("actionzone") > -1) {
@@ -1221,20 +1221,20 @@ WTWJS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 					WTW.setNewMold(zrefresh);
 				}
 			} else {
-				dGet(zitem).value = (nvali.toFixed(0));
+				dGet(zitem).value = (znvali.toFixed(0));
 			}
 		}
 		WTW.mouseTimer = window.setInterval(function () {
-			var val = dGet(zitem).value;
-			var nval = 0;
-			var ndn = 0;
+			var zval = dGet(zitem).value;
+			var znval = 0;
+			zndn = 0;
 			if (WTW.isNumeric(zdn)) {
-				ndn = parseFloat(zdn);
+				zndn = parseFloat(zdn);
 			}
-			if (WTW.isNumeric(val)) {
-				nval = parseFloat(Math.round(Number(val) * 100) / 100) + ndn;
+			if (WTW.isNumeric(zval)) {
+				znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
 				if (WTW.adminView == 1) {
-					dGet(zitem).value = (nval.toFixed(2));
+					dGet(zitem).value = (znval.toFixed(2));
 					if (zitem == "wtw_tgroundpositiony") {
 						WTW.setGroundWater();
 					} else if (zitem.indexOf("axis") > -1 || zitem.indexOf("actionzone") > -1) {
@@ -1247,7 +1247,7 @@ WTWJS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 						WTW.setNewMold(zrefresh);
 					}
 				} else {
-					dGet(zitem).value = (nval.toFixed(0));
+					dGet(zitem).value = (znval.toFixed(0));
 				}
 			}
 		}, 100);
@@ -1373,8 +1373,8 @@ WTWJS.prototype.angleToTarget = function(zsourcename, ztargetname) {
 			if (zline != null) {
 				zline.dispose();
 			}
-			var dx = ztarget.position.x - zsource.position.x;
-			var dz = ztarget.position.z - zsource.position.z;
+			var zdx = ztarget.position.x - zsource.position.x;
+			var zdz = ztarget.position.z - zsource.position.z;
 			var zlinecolors = [];
 			zlinecolors.push(new BABYLON.Color4(0, 1, 0, 1));
 			zlinecolors.push(new BABYLON.Color4(0, 1, 0, 1));
@@ -1382,7 +1382,7 @@ WTWJS.prototype.angleToTarget = function(zsourcename, ztargetname) {
 			zlinepath.push(new BABYLON.Vector3(zsource.position.x, .5, zsource.position.z));
 			zlinepath.push(new BABYLON.Vector3(ztarget.position.x, .5, ztarget.position.z));
 			zline = BABYLON.MeshBuilder.CreateLines("zline", {points: zlinepath, colors: zlinecolors, useVertexAlpha: true, updatable: true}, scene);
-			var zlineangleradians = -Math.atan2(dz,dx);
+			var zlineangleradians = -Math.atan2(zdz,zdx);
 			var zlineangledegrees = WTW.getDegrees(zlineangleradians);
 		}
 	} catch (ex) {
@@ -1400,8 +1400,8 @@ WTWJS.prototype.rotateToTarget = function(zsourcename, ztargetname, zdegreeincre
 			if (zline != null) {
 				zline.dispose();
 			}
-			var dx = ztarget.position.x - zsource.position.x;
-			var dz = ztarget.position.z - zsource.position.z;
+			var zdx = ztarget.position.x - zsource.position.x;
+			var zdz = ztarget.position.z - zsource.position.z;
 			var zlinecolors = [];
 			zlinecolors.push(new BABYLON.Color4(0, 1, 0, 1));
 			zlinecolors.push(new BABYLON.Color4(0, 1, 0, 1));
@@ -1409,16 +1409,16 @@ WTWJS.prototype.rotateToTarget = function(zsourcename, ztargetname, zdegreeincre
 			zlinepath.push(new BABYLON.Vector3(zsource.position.x, .5, zsource.position.z));
 			zlinepath.push(new BABYLON.Vector3(ztarget.position.x, .5, ztarget.position.z));
 			zline = BABYLON.MeshBuilder.CreateLines("zline", {points: zlinepath, colors: zlinecolors, useVertexAlpha: true, updatable: true}, scene);
-			var zlineangleradians = -Math.atan2(dz,dx);
+			var zlineangleradians = -Math.atan2(zdz,zdx);
 			var zlineangledegrees = WTW.getDegrees(zlineangleradians);
 			var zsourcedegrees = WTW.getDegrees(zsource.rotation.y);
-			var dir = 1;
+			var zdir = 1;
 			if (zlineangledegrees < 180 && zsourcedegrees > zlineangledegrees && zsourcedegrees < zlineangledegrees + 180) {
-				dir = -1;
+				zdir = -1;
 			} else if (zlineangledegrees > 180 && zsourcedegrees < zlineangledegrees - 180) {
-				dir = - 1;
+				zdir = - 1;
 			} else if (zsourcedegrees > zlineangledegrees && zlineangledegrees > zsourcedegrees - 180) {
-				dir = - 1;
+				zdir = - 1;
 			}
 			if (zlineangledegrees > zsourcedegrees && zlineangledegrees - zsourcedegrees < zdegreeincrement) {
 				zdegreeincrement = zlineangledegrees - zsourcedegrees;
@@ -1427,7 +1427,7 @@ WTWJS.prototype.rotateToTarget = function(zsourcename, ztargetname, zdegreeincre
 				zdegreeincrement = zsourcedegrees - zlineangledegrees;
 			}
 			if (zsourcedegrees != zlineangledegrees) {
-				zsource.rotation.y = WTW.getRadians(zsourcedegrees + (dir * zdegreeincrement));
+				zsource.rotation.y = WTW.getRadians(zsourcedegrees + (zdir * zdegreeincrement));
 			}
 		}
 	} catch (ex) {
@@ -1435,51 +1435,51 @@ WTWJS.prototype.rotateToTarget = function(zsourcename, ztargetname, zdegreeincre
 	}
 }
 
-WTWJS.prototype.rotatePoint = function(cx, cz, px, pz, rad) {
-	/* in a plane, rotate a point (x,z) around a center (cx, cz) */
-	var nx = px;
-	var nz = pz;
+WTWJS.prototype.rotatePoint = function(zcx, zcz, zpx, zpz, zrad) {
+	/* in a plane, rotate a point (zpx,zpz) around a center (zcx, zcz) */
+	var znx = zpx;
+	var znz = zpz;
 	try {
-		var cos = Math.cos(rad);
-		var sin = Math.sin(rad);
-		nx = (cos * (px - cx)) + (sin * (pz - cz)) + cx;
-		nz = (cos * (pz - cz)) - (sin * (px - cx)) + cz;
+		var cos = Math.cos(zrad);
+		var sin = Math.sin(zrad);
+		znx = (cos * (zpx - zcx)) + (sin * (zpz - zcz)) + zcx;
+		znz = (cos * (zpz - zcz)) - (sin * (zpx - zcx)) + zcz;
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-rotatePoint=" + ex.message);
 	}
     return {
-		nx:nx,
-		nz:nz
+		'nx':znx,
+		'nz':znz
 	};
 }
 
-WTWJS.prototype.getMyAngleToPoint = function(x,z) {
+WTWJS.prototype.getMyAngleToPoint = function(zx,zz) {
 	/* calculate an angle from my avatar heading to a given point in a horizontal plane */
 	var zangle = 0;
 	try {
-		var px = WTW.myAvatar.position.x;
-		var pz = WTW.myAvatar.position.z;
-		var avatarangle = WTW.getDegrees(WTW.myAvatar.rotation.y);
-		var buildingangle = WTW.getAngleToPoint(px, pz, x, z);
-		zangle = WTW.cleanDegrees(avatarangle + buildingangle);
+		var zpx = WTW.myAvatar.position.x;
+		var zpz = WTW.myAvatar.position.z;
+		var zavatarangle = WTW.getDegrees(WTW.myAvatar.rotation.y);
+		var zbuildingangle = WTW.getAngleToPoint(zpx, zpz, zx, zz);
+		zangle = WTW.cleanDegrees(zavatarangle + zbuildingangle);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getMyAngleToPoint=" + ex.message);
 	}
 	return zangle;
 }
 
-WTWJS.prototype.getAngleToPoint = function(cx, cz, px, pz) {
-	/* calculate an angle from point (cx,cz) assumed 0 angle - to a given point (px,pz) in a horizontal plane */
-	var pointangle = 0;
+WTWJS.prototype.getAngleToPoint = function(zcx, zcz, zpx, zpz) {
+	/* calculate an angle from point (zcx,zcz) assumed 0 angle - to a given point (zpx,zpz) in a horizontal plane */
+	var zpointangle = 0;
 	try {
-		var dz = pz - cz;
-		var dx = px - cx;
-		var pointangle = Math.atan2(dz, dx);
-		pointangle *= 180 / Math.PI;
+		var zdz = zpz - zcz;
+		var zdx = zpx - zcx;
+		zpointangle = Math.atan2(zdz, zdx);
+		zpointangle *= 180 / Math.PI;
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getAngleToPoint=" + ex.message);
 	}
-	return pointangle;
+	return zpointangle;
 }
 
 WTWJS.prototype.getDirectionVector = function(zsourcename, zdegreeoffset) {
@@ -1491,10 +1491,10 @@ WTWJS.prototype.getDirectionVector = function(zsourcename, zdegreeoffset) {
 		}
 		var zsource = scene.getMeshByID(zsourcename);
 		if (zsource != null) {
-			var rot = WTW.getRadians(WTW.getDegrees(zsource.rotation.y) + zdegreeoffset);
-			var positionx = zsource.position.x + (Math.cos(rot) * 10.5);
-			var positionz = zsource.position.z - (Math.sin(rot) * 10.5);
-			zdirection = new BABYLON.Vector3(positionx, 0, positionz);
+			var zrot = WTW.getRadians(WTW.getDegrees(zsource.rotation.y) + zdegreeoffset);
+			var zpositionx = zsource.position.x + (Math.cos(zrot) * 10.5);
+			var zpositionz = zsource.position.z - (Math.sin(zrot) * 10.5);
+			zdirection = new BABYLON.Vector3(zpositionx, 0, zpositionz);
 			var zlineangleradians = -Math.atan2(dz,dx);
 			var zlineangledegrees = WTW.getDegrees(zlineangleradians);
 		}
@@ -1518,57 +1518,57 @@ WTWJS.prototype.getMoveVector = function(zsourcename, zdegreeoffset, zstride, ze
 		var zsource = scene.getMeshByID(zsourcename);
 		if (zsource != null) {
 			var zdist = 200;
-			var rot = WTW.getRadians(WTW.getDegrees(zsource.rotation.y) + zdegreeoffset);
-			var positionx = zsource.position.x + (Math.cos(rot) * zdist);
-			var positionz = zsource.position.z - (Math.sin(rot) * zdist);
-			var zdirection = new BABYLON.Vector3(positionx, zsource.position.y, positionz);
-			zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, 0, -parseFloat(Math.sin(rot)) * zstride);
-			var raystart = new BABYLON.Vector3(zsource.position.x, zsource.position.y, zsource.position.z);
-			var ray = new BABYLON.Ray(raystart, zdirection, zdist);
-			var hits = scene.multiPickWithRay(ray);
-			var dist = 100;
-			var moldname = '';
-			for (var i=0; i<hits.length; i++){
-				if (hits[i].pickedMesh.name.indexOf("molds-") > -1) {
-					if (hits[i].distance < dist) {
-						dist = hits[i].distance;
-						moldname = hits[i].pickedMesh.name;
+			var zrot = WTW.getRadians(WTW.getDegrees(zsource.rotation.y) + zdegreeoffset);
+			var zpositionx = zsource.position.x + (Math.cos(zrot) * zdist);
+			var zpositionz = zsource.position.z - (Math.sin(zrot) * zdist);
+			var zdirection = new BABYLON.Vector3(zpositionx, zsource.position.y, zpositionz);
+			zmove = new BABYLON.Vector3(parseFloat(Math.cos(zrot)) * zstride, 0, -parseFloat(Math.sin(zrot)) * zstride);
+			var zraystart = new BABYLON.Vector3(zsource.position.x, zsource.position.y, zsource.position.z);
+			var zray = new BABYLON.Ray(zraystart, zdirection, zdist);
+			var zhits = scene.multiPickWithRay(zray);
+			var zdist = 100;
+			var zmoldname = '';
+			for (var i = 0; i < zhits.length; i++){
+				if (zhits[i].pickedMesh.name.indexOf("molds-") > -1) {
+					if (zhits[i].distance < zdist) {
+						zdist = zhits[i].distance;
+						zmoldname = zhits[i].pickedMesh.name;
 						
 					}
 				}
 			}
-			var slope = 0;
-			var mold = scene.getMeshByID(moldname);
-			if (mold != null) {
-				var raystart2 = new BABYLON.Vector3(zsource.position.x, zsource.position.y+.2, zsource.position.z);
-				var ray2 = new BABYLON.Ray(raystart2, zdirection, zdist);
-				var hits2 = scene.multiPickWithRay(ray2);
-				var dist2 = 100;
-				for (var i=0; i<hits2.length; i++){
-					if (hits2[i].pickedMesh.name == moldname) {
-						if (hits2[i].distance < dist2) {
-							dist2 = hits2[i].distance;
+			var zslope = 0;
+			var zmold = scene.getMeshByID(zmoldname);
+			if (zmold != null) {
+				var zraystart2 = new BABYLON.Vector3(zsource.position.x, zsource.position.y+.2, zsource.position.z);
+				var zray2 = new BABYLON.Ray(zraystart2, zdirection, zdist);
+				var zhits2 = scene.multiPickWithRay(zray2);
+				var zdist2 = 100;
+				for (var i = 0; i < zhits2.length; i++){
+					if (zhits2[i].pickedMesh.name == zmoldname) {
+						if (zhits2[i].distance < zdist2) {
+							zdist2 = zhits2[i].distance;
 						}
 					}
 				}
-				slope = (Math.abs(dist2)-Math.abs(dist))/.2;
+				zslope = (Math.abs(zdist2)-Math.abs(zdist))/.2;
 			}
 			if (zsource.WTW != undefined) {
 				if (zevent.indexOf('jump') > -1) {
-					zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, 0, -parseFloat(Math.sin(rot)) * zstride);
+					zmove = new BABYLON.Vector3(parseFloat(Math.cos(zrot)) * zstride, 0, -parseFloat(Math.sin(zrot)) * zstride);
 					zsource.WTW.lastupdate = true;
-				} else if (dist < 2 && slope < .2) {
-					zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, 1.1, -parseFloat(Math.sin(rot)) * zstride);
+				} else if (zdist < 2 && zslope < .2) {
+					zmove = new BABYLON.Vector3(parseFloat(Math.cos(zrot)) * zstride, 1.1, -parseFloat(Math.sin(zrot)) * zstride);
 					zsource.WTW.lastupdate = true;
-				} else if (dist < 5 && (slope > 3 || slope == 0)) {
-					zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, 0, -parseFloat(Math.sin(rot)) * zstride);
+				} else if (zdist < 5 && (zslope > 3 || zslope == 0)) {
+					zmove = new BABYLON.Vector3(parseFloat(Math.cos(zrot)) * zstride, 0, -parseFloat(Math.sin(zrot)) * zstride);
 					zsource.WTW.lastupdate = true;
 				} else {
 					if (zsource.WTW.lastupdate) {
-						zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, 0, -parseFloat(Math.sin(rot)) * zstride);
+						zmove = new BABYLON.Vector3(parseFloat(Math.cos(zrot)) * zstride, 0, -parseFloat(Math.sin(zrot)) * zstride);
 						zsource.WTW.lastupdate = false;
 					} else {
-						zmove = new BABYLON.Vector3(parseFloat(Math.cos(rot)) * zstride, -WTW.init.gravity, -parseFloat(Math.sin(rot)) * zstride);
+						zmove = new BABYLON.Vector3(parseFloat(Math.cos(zrot)) * zstride, -WTW.init.gravity, -parseFloat(Math.sin(zrot)) * zstride);
 					}
 				}
 			}
@@ -1659,28 +1659,28 @@ WTWJS.prototype.getMoveDownVector = function(zsourcename, zstride) {
 	return zmove;
 }
 
-WTWJS.prototype.getNewPoint = function(x, z, angle, distance) {
+WTWJS.prototype.getNewPoint = function(zx, zz, zangle, zdistance) {
 	/* from any point (x,z) get a new point on the plane for an angle at a distance (rounded) */
-    var result = {};
+    var zresults = {};
 	try {
-		result.x = Math.round(Math.cos((Math.PI / 2 - WTW.getRadians(angle))) * distance + x);
-		result.z = Math.round(Math.sin((Math.PI / 2 - WTW.getRadians(angle))) * distance + z);
+		zresults.x = Math.round(Math.cos((Math.PI / 2 - WTW.getRadians(zangle))) * zdistance + zx);
+		zresults.z = Math.round(Math.sin((Math.PI / 2 - WTW.getRadians(zangle))) * zdistance + zz);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getNewPoint=" + ex.message);
 	}
-    return result;
+    return zresults;
 }
 
-WTWJS.prototype.getNewPointDecimal = function(x, z, angle, distance) {
+WTWJS.prototype.getNewPointDecimal = function(zx, zz, zangle, zdistance) {
 	/* from any point (x,z) get a new point on the plane for an angle at a distance (not rounded) */
-    var result = {};
+    var zresults = {};
 	try {
-		result.x = Math.cos((Math.PI / 2 - WTW.getRadians(angle))) * distance + x;
-		result.z = Math.sin((Math.PI / 2 - WTW.getRadians(angle))) * distance + z;
+		zresults.x = Math.cos((Math.PI / 2 - WTW.getRadians(zangle))) * zdistance + zx;
+		zresults.z = Math.sin((Math.PI / 2 - WTW.getRadians(zangle))) * zdistance + zz;
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getNewPointDecimal=" + ex.message);
 	}
-    return result;
+    return zresults;
 }
 
 WTWJS.prototype.adjustOffset = function(zmoldname, zorientation, zdirection, zvalue) {
@@ -1728,52 +1728,52 @@ WTWJS.prototype.adjustOffset = function(zmoldname, zorientation, zdirection, zva
 	}
 }
 
-WTWJS.prototype.transformPosition = function(molddef, posx, posy, posz) {
+WTWJS.prototype.transformPosition = function(zmolddef, zposx, zposy, zposz) {
 	/* transform position when a mold is added that uses an action zone as a parent (like swinging doors) */
 	try {
-		if (molddef.actionzoneid != "") {
+		if (zmolddef.actionzoneid != "") {
 			for (var j = 0; j < WTW.actionZones.length; j++) {
 				if (WTW.actionZones[j] != null) {
-					if (WTW.actionZones[j].actionzoneid == molddef.actionzoneid && (WTW.actionZones[j].actionzonetype == "door" || WTW.actionZones[j].actionzonetype == "slidingdoor" || WTW.actionZones[j].actionzonetype == "clickactivatedslidingdoor" || WTW.actionZones[j].actionzonetype == "swingingdoor" || WTW.actionZones[j].actionzonetype == "rotate" || WTW.actionZones[j].actionzonetype == "elevator" || WTW.actionZones[j].actionzonetype == "driverturnangle" || WTW.actionZones[j].actionzonetype == "driverturningwheel" || WTW.actionZones[j].actionzonetype == "driverwheel")) {
-						var actionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + WTW.actionZones[j].actionzonetype);
-						if (actionzoneaxlebase != null) {
-							posx -= actionzoneaxlebase.position.x;
-							posy -= actionzoneaxlebase.position.y;
-							posz -= actionzoneaxlebase.position.z;
-							//rotx -= WTW.getDegrees(actionzoneaxlebase.rotation.x);
-							//roty -= WTW.getDegrees(actionzoneaxlebase.rotation.y);
-							//rotz -= WTW.getDegrees(actionzoneaxlebase.rotation.z);
+					if (WTW.actionZones[j].actionzoneid == zmolddef.actionzoneid && (WTW.actionZones[j].actionzonetype == "door" || WTW.actionZones[j].actionzonetype == "slidingdoor" || WTW.actionZones[j].actionzonetype == "clickactivatedslidingdoor" || WTW.actionZones[j].actionzonetype == "swingingdoor" || WTW.actionZones[j].actionzonetype == "rotate" || WTW.actionZones[j].actionzonetype == "elevator" || WTW.actionZones[j].actionzonetype == "driverturnangle" || WTW.actionZones[j].actionzonetype == "driverturningwheel" || WTW.actionZones[j].actionzonetype == "driverwheel")) {
+						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + WTW.actionZones[j].actionzonetype);
+						if (zactionzoneaxlebase != null) {
+							zposx -= zactionzoneaxlebase.position.x;
+							zposy -= zactionzoneaxlebase.position.y;
+							zposz -= zactionzoneaxlebase.position.z;
+							//rotx -= WTW.getDegrees(zactionzoneaxlebase.rotation.x);
+							//roty -= WTW.getDegrees(zactionzoneaxlebase.rotation.y);
+							//rotz -= WTW.getDegrees(zactionzoneaxlebase.rotation.z);
 						}
 						if (WTW.actionZones[j].parentactionzoneid != "") {
-							var parentactionzoneind = WTW.getActionZoneInd(WTW.actionZones[j].parentactionzoneid, WTW.actionZones[j].connectinggridind);
-							var parentactionzoneaxlebasename = "actionzoneaxlebase-" + parentactionzoneind.toString() + "-" + WTW.actionZones[parentactionzoneind].actionzoneid + "-" + WTW.actionZones[parentactionzoneind].connectinggridind + "-" + WTW.actionZones[parentactionzoneind].connectinggridid + "-" + WTW.actionZones[parentactionzoneind].actionzonetype;
-							var parentactionzoneaxlebase = scene.getMeshByID(parentactionzoneaxlebasename);
-							if (parentactionzoneaxlebase == null) {
-								WTW.addActionZone(parentactionzoneaxlebasename.replace("actionzoneaxlebase-","actionzone-"), WTW.actionZones[parentactionzoneind]);
-								parentactionzoneaxlebase = scene.getMeshByID(parentactionzoneaxlebasename);
+							var zparentactionzoneind = WTW.getActionZoneInd(WTW.actionZones[j].parentactionzoneid, WTW.actionZones[j].connectinggridind);
+							var zparentactionzoneaxlebasename = "actionzoneaxlebase-" + zparentactionzoneind.toString() + "-" + WTW.actionZones[zparentactionzoneind].actionzoneid + "-" + WTW.actionZones[zparentactionzoneind].connectinggridind + "-" + WTW.actionZones[zparentactionzoneind].connectinggridid + "-" + WTW.actionZones[zparentactionzoneind].actionzonetype;
+							var zparentactionzoneaxlebase = scene.getMeshByID(zparentactionzoneaxlebasename);
+							if (zparentactionzoneaxlebase == null) {
+								WTW.addActionZone(zparentactionzoneaxlebasename.replace("actionzoneaxlebase-","actionzone-"), WTW.actionZones[zparentactionzoneind]);
+								zparentactionzoneaxlebase = scene.getMeshByID(zparentactionzoneaxlebasename);
 							}
-							if (parentactionzoneaxlebase != null) {
-								posx -= parentactionzoneaxlebase.position.x;
-								posy -= parentactionzoneaxlebase.position.y;
-								posz -= parentactionzoneaxlebase.position.z;
-								//rotx -= WTW.getDegrees(parentactionzoneaxlebase.rotation.x);
-								//roty -= WTW.getDegrees(parentactionzoneaxlebase.rotation.y);
-								//rotz -= WTW.getDegrees(parentactionzoneaxlebase.rotation.z);
+							if (zparentactionzoneaxlebase != null) {
+								zposx -= zparentactionzoneaxlebase.position.x;
+								zposy -= zparentactionzoneaxlebase.position.y;
+								zposz -= zparentactionzoneaxlebase.position.z;
+								//rotx -= WTW.getDegrees(zparentactionzoneaxlebase.rotation.x);
+								//roty -= WTW.getDegrees(zparentactionzoneaxlebase.rotation.y);
+								//rotz -= WTW.getDegrees(zparentactionzoneaxlebase.rotation.z);
 							}
 						}
-					} else if (WTW.actionZones[j].actionzoneid == molddef.actionzoneid && WTW.actionZones[j].actionzonetype == "peoplemover") {
-						var actionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + WTW.actionZones[j].actionzonetype);
-						if (actionzoneaxlebase != null) {
-							posx -= actionzoneaxlebase.position.x;
-							posy -= actionzoneaxlebase.position.y;
-							posz -= actionzoneaxlebase.position.z;
+					} else if (WTW.actionZones[j].actionzoneid == zmolddef.actionzoneid && WTW.actionZones[j].actionzonetype == "peoplemover") {
+						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + WTW.actionZones[j].actionzonetype);
+						if (zactionzoneaxlebase != null) {
+							zposx -= zactionzoneaxlebase.position.x;
+							zposy -= zactionzoneaxlebase.position.y;
+							zposz -= zactionzoneaxlebase.position.z;
 						}
-					} else if (WTW.actionZones[j].actionzoneid == molddef.actionzoneid && WTW.actionZones[j].actionzonetype.indexOf("seat") > -1) {
-						var actionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + WTW.actionZones[j].actionzonetype);
-						if (actionzoneaxlebase != null) {
-							posx -= actionzoneaxlebase.position.x;
-							posy -= actionzoneaxlebase.position.y;
-							posz -= actionzoneaxlebase.position.z;
+					} else if (WTW.actionZones[j].actionzoneid == zmolddef.actionzoneid && WTW.actionZones[j].actionzonetype.indexOf("seat") > -1) {
+						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + WTW.actionZones[j].actionzonetype);
+						if (zactionzoneaxlebase != null) {
+							zposx -= zactionzoneaxlebase.position.x;
+							zposy -= zactionzoneaxlebase.position.y;
+							zposz -= zactionzoneaxlebase.position.z;
 						}
 					}
 				}
@@ -1783,157 +1783,157 @@ WTWJS.prototype.transformPosition = function(molddef, posx, posy, posz) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-transformPosition=" + ex.message);
 	} 
 	return {
-		posx: posx,
-		posy: posy,
-		posz: posz
+		'posx': zposx,
+		'posy': zposy,
+		'posz': zposz
 	}
 }
 
-WTWJS.prototype.distance = function(zx0,zy0,zz0,zx1,zy1,zz1) {
+WTWJS.prototype.distance = function(zsx0,zsy0,zsz0,zsx1,zsy1,zsz1) {
 	/* distance between 2 points in 3d space */
-	var distance = 0;
+	var zdistance = 0;
 	try {
-		var x0 = Number(zx0);
-		var y0 = Number(zy0);
-		var z0 = Number(zz0);
-		var x1 = Number(zx1);
-		var y1 = Number(zy1);
-		var z1 = Number(zz1);
-		deltaX = x1 - x0;
-		deltaY = y1 - y0;
-		deltaZ = z1 - z0;
-		distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+		var zx0 = Number(zsx0);
+		var zy0 = Number(zsy0);
+		var zz0 = Number(zsz0);
+		var zx1 = Number(zsx1);
+		var zy1 = Number(zsy1);
+		var zz1 = Number(zsz1);
+		var zdeltax = zx1 - zx0;
+		var zdeltay = zy1 - zy0;
+		var zdeltaz = zz1 - zz0;
+		zdistance = Math.sqrt(zdeltax * zdeltax + zdeltay * zdeltay + zdeltaz * zdeltaz);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-distance=" + ex.message);
 	}
-	return distance;
+	return zdistance;
 }
 
-WTWJS.prototype.getMyDistance = function(sx1,sy1,sz1) {
+WTWJS.prototype.getMyDistance = function(zsx1,zsy1,zsz1) {
 	/* distance form point to my avatar current position */
-	var distance = 0;
+	var zdistance = 0;
 	try {
 		if (WTW.myAvatar != null) {
-			var x0 = WTW.myAvatar.position.x;
-			var y0 = WTW.myAvatar.position.y;
-			var z0 = WTW.myAvatar.position.z;
-			var x1 = Number(sx1);
-			var y1 = Number(sy1);
-			var z1 = Number(sz1);
-			deltaX = x1 - x0;
-			deltaY = y1 - y0;
-			deltaZ = z1 - z0;
-			distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+			var zx0 = WTW.myAvatar.position.x;
+			var zy0 = WTW.myAvatar.position.y;
+			var zz0 = WTW.myAvatar.position.z;
+			var zx1 = Number(zsx1);
+			var zy1 = Number(zsy1);
+			var zz1 = Number(zsz1);
+			var zdeltax = zx1 - zx0;
+			var zdeltay = zy1 - zy0;
+			var zdeltaz = zz1 - zz0;
+			zdistance = Math.sqrt(zdeltax * zdeltax + zdeltay * zdeltay + zdeltaz * zdeltaz);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getMyDistance=" + ex.message);
 	}
-	return distance;
+	return zdistance;
 }
 
-WTWJS.prototype.getBuildingDistance = function(bx, by, bz, posx, posy, posz, brotx, broty, brotz) {
+WTWJS.prototype.getBuildingDistance = function(zbx, zby, zbz, zposx, zposy, zposz, zbrotx, zbroty, zbrotz) {
 	/* distance form my avatar to a particular building */
-	var distance = 0;
+	var zdistance = 0;
 	try {
-		var x0 = WTW.myAvatar.position.x;
-		var y0 = WTW.myAvatar.position.y;
-		var z0 = WTW.myAvatar.position.z;
-		var deltax = (-Math.sin((Math.PI / 2 - WTW.getRadians(broty))) * posx + Math.cos((Math.PI / 2 - WTW.getRadians(broty))) * posz + bx - x0);
-		var deltaz = (Math.sin((Math.PI / 2 - WTW.getRadians(broty))) * posz + -Math.cos((Math.PI / 2 - WTW.getRadians(broty))) * posx + bz - z0);
-		var deltay = Number(posy) + by - y0;
-		distance = Math.sqrt(deltax * deltax + deltaz * deltaz + deltay * deltay);
+		var zx0 = WTW.myAvatar.position.x;
+		var zy0 = WTW.myAvatar.position.y;
+		var zz0 = WTW.myAvatar.position.z;
+		var deltax = (-Math.sin((Math.PI / 2 - WTW.getRadians(zbroty))) * zposx + Math.cos((Math.PI / 2 - WTW.getRadians(zbroty))) * zposz + zbx - zx0);
+		var deltaz = (Math.sin((Math.PI / 2 - WTW.getRadians(zbroty))) * zposz + -Math.cos((Math.PI / 2 - WTW.getRadians(zbroty))) * zposx + zbz - zz0);
+		var deltay = Number(zposy) + zby - zy0;
+		zdistance = Math.sqrt(deltax * deltax + deltaz * deltaz + deltay * deltay);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getBuildingDistance=" + ex.message);
 	}
-	return distance;
+	return zdistance;
 }
 
 
 /* get or set parent object */
 
-WTWJS.prototype.getParentName = function(connectinggridind) {
+WTWJS.prototype.getParentName = function(zconnectinggridind) {
 	/* get a parent name (Connecting Grid) based on the index in the array of loaded Connecting Grids */
-	var parentname = "";
+	var zparentname = "";
 	try {
-		if (WTW.isNumeric(connectinggridind)) {
-			if (WTW.connectingGrids[connectinggridind] != null) {
-				parentname = WTW.connectingGrids[connectinggridind].moldname;
+		if (WTW.isNumeric(zconnectinggridind)) {
+			if (WTW.connectingGrids[zconnectinggridind] != null) {
+				zparentname = WTW.connectingGrids[zconnectinggridind].moldname;
 			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getParentName=" + ex.message);
 	}
-	return parentname;	
+	return zparentname;	
 }
 
-WTWJS.prototype.getParentActionZoneName = function(actionzoneind, connectinggridind) {
+WTWJS.prototype.getParentActionZoneName = function(zactionzoneind, zconnectinggridind) {
 	/* get the Parent Name of a mold that parents an Action Zone (example part of a door) */
-	var parentname = "";
+	var zparentname = "";
 	try {
-		if (WTW.isNumeric(actionzoneind)) {
-			if (WTW.actionZones[actionzoneind] != null) {
-				parentname = WTW.actionZones[actionzoneind].moldname.replace("actionzone-", "actionzoneaxlebase2-");
+		if (WTW.isNumeric(zactionzoneind)) {
+			if (WTW.actionZones[zactionzoneind] != null) {
+				zparentname = WTW.actionZones[zactionzoneind].moldname.replace("actionzone-", "actionzoneaxlebase2-");
 			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getParentActionZoneName=" + ex.message);
 	}
-	return parentname;
+	return zparentname;
 }
 
-WTWJS.prototype.attachParent = function(child, parent) {
+WTWJS.prototype.attachParent = function(zchild, zparent) {
 	/* work in progress - attach to new parent and recalculate the transition position, rotation, and scaling for consistency */
-	var rotation = BABYLON.Quaternion.Identity();
-	var position = BABYLON.Vector3.Zero();
-	var m1 = BABYLON.Matrix.Identity();
-	var m2 = BABYLON.Matrix.Identity();
-	parent.getWorldMatrix().decompose(BABYLON.Vector3.Zero(), rotation, position);
-	rotation.toRotationMatrix(m1);
-	m2.setTranslation(position);
-	m2.multiplyToRef(m1, m1);
-	var invParentMatrix = BABYLON.Matrix.Invert(m1);
-	var m = child.getWorldMatrix().multiply(invParentMatrix);
-	m.decompose(BABYLON.Vector3.Zero(), child.rotationQuaternion, position);
-	invParentMatrix = BABYLON.Matrix.Invert(parent.getWorldMatrix());
-	var m = child.getWorldMatrix().multiply(invParentMatrix);
-	m.decompose(BABYLON.Vector3.Zero(), BABYLON.Quaternion.Identity(), position);
-	child.position.x = position.x * parent.scaling.x;
-	child.position.y = position.y * parent.scaling.y;
-	child.position.z = position.z * parent.scaling.z;
-	if (parent.scaling.x != 1 || parent.scaling.y != 1 || parent.scaling.z != 1) {
-		var children = parent.getChildren();
-		var scaleFixMesh;
-		for (var i = 0; i < children.length; i++) {
-			if (children[i].name == 'scaleFixMesh') {
-				scaleFixMesh = children[i];
+	var zrotation = BABYLON.Quaternion.Identity();
+	var zposition = BABYLON.Vector3.Zero();
+	var zm1 = BABYLON.Matrix.Identity();
+	var zm2 = BABYLON.Matrix.Identity();
+	zparent.getWorldMatrix().decompose(BABYLON.Vector3.Zero(), zrotation, zposition);
+	zrotation.toRotationMatrix(zm1);
+	zm2.setTranslation(zposition);
+	zm2.multiplyToRef(zm1, zm1);
+	var zinvparentmatrix = BABYLON.Matrix.Invert(zm1);
+	var zm3 = zchild.getWorldMatrix().multiply(zinvparentmatrix);
+	zm3.decompose(BABYLON.Vector3.Zero(), zchild.rotationQuaternion, zposition);
+	zinvparentmatrix = BABYLON.Matrix.Invert(zparent.getWorldMatrix());
+	var zm4 = zchild.getWorldMatrix().multiply(zinvparentmatrix);
+	zm4.decompose(BABYLON.Vector3.Zero(), BABYLON.Quaternion.Identity(), zposition);
+	zchild.position.x = zposition.x * zparent.scaling.x;
+	zchild.position.y = zposition.y * zparent.scaling.y;
+	zchild.position.z = zposition.z * zparent.scaling.z;
+	if (zparent.scaling.x != 1 || zparent.scaling.y != 1 || zparent.scaling.z != 1) {
+		var zchildren = zparent.getChildren();
+		var zscalefixmesh;
+		for (var i = 0; i < zchildren.length; i++) {
+			if (zchildren[i].name == 'scaleFixMesh') {
+				zscalefixmesh = zchildren[i];
 				break;
 			}
 		}
-		if (scaleFixMesh == undefined) {
-			scaleFixMesh = new BABYLON.Mesh('scaleFixMesh', parent.getScene());
-			scaleFixMesh.parent = parent;
+		if (zscalefixmesh == undefined) {
+			zscalefixmesh = new BABYLON.Mesh('scaleFixMesh', zparent.getScene());
+			zscalefixmesh.parent = zparent;
 		}
-		scaleFixMesh.scaling.x = 1 / parent.scaling.x;
-		scaleFixMesh.scaling.y = 1 / parent.scaling.y;
-		scaleFixMesh.scaling.z = 1 / parent.scaling.z;
-		child.parent = scaleFixMesh;
+		zscalefixmesh.scaling.x = 1 / zparent.scaling.x;
+		zscalefixmesh.scaling.y = 1 / zparent.scaling.y;
+		zscalefixmesh.scaling.z = 1 / zparent.scaling.z;
+		zchild.parent = zscalefixmesh;
 	} else {
-		child.parent = parent;
+		zchild.parent = zparent;
 	}
 }
 
-WTWJS.prototype.detachParent = function(object, parent) {
+WTWJS.prototype.detachParent = function(zobject, zparent) {
 	/* work in progress - deattach to new parent and recalculate the transition position, rotation, and scaling for consistency */
-/*  //var parentMatrix = Matrix.Invert(parent.getWorldMatrix());  
-  var newMatrix = object.getWorldMatrix(); //.multiply(parentMatrix);
-  object.parent = null;
-  object.getAbsolutePosition()
-  newMatrix.decompose(object.scaling, object.rotationQuaternion, object.position);
+/*  //var zparentmatrix = Matrix.Invert(zparent.getWorldMatrix());  
+  var znewmatrix = zobject.getWorldMatrix(); //.multiply(zparentmatrix);
+  zobject.parent = null;
+  zobject.getAbsolutePosition()
+  znewmatrix.decompose(zobject.scaling, zobject.rotationQuaternion, zobject.position);
  */ 
-	object.computeWorldMatrix(true);
-	var abspos = object.getAbsolutePosition();
-	object.parent = null;
-	object.setAbsolutePosition(abspos);
+	zobject.computeWorldMatrix(true);
+	var abspos = zobject.getAbsolutePosition();
+	zobject.parent = null;
+	zobject.setAbsolutePosition(abspos);
 }
 
 WTWJS.prototype.getMoldConnectingGrid = function(zmoldname) {
@@ -1962,26 +1962,26 @@ WTWJS.prototype.getMoldConnectingGrid = function(zmoldname) {
 	return zmold;
 }
 
-WTWJS.prototype.getMoldBase = function(mold) {
+WTWJS.prototype.getMoldBase = function(zmold) {
 	/* some molds (3D Models) are made up of multiple meshes */
 	/* this process gets the base (parent mold) for the 3D Object model */
 	/* the base (parent mold) is used to scale and place the 3D Model as a whole to the web object (just like a connecting grid) */
 	try {
-		var moldname = mold.name;
-		if (mold.parent != null) {
-			var moldnameparts = WTW.getMoldnameParts(moldname);
-			var moldparent = mold.parent;
-			var parentnameparts = WTW.getMoldnameParts(moldparent.name);
-			while (moldnameparts.moldnamebase == parentnameparts.moldnamebase && mold.parent != null) {
-				mold = moldparent;
-				moldparent = moldparent.parent;
-				parentnameparts = WTW.getMoldnameParts(moldparent.name);
+		var moldname = zmold.name;
+		if (zmold.parent != null) {
+			var zmoldnameparts = WTW.getMoldnameParts(moldname);
+			var zmoldparent = zmold.parent;
+			var zparentnameparts = WTW.getMoldnameParts(zmoldparent.name);
+			while (zmoldnameparts.moldnamebase == zparentnameparts.moldnamebase && zmold.parent != null) {
+				zmold = zmoldparent;
+				zmoldparent = zmoldparent.parent;
+				zparentnameparts = WTW.getMoldnameParts(zmoldparent.name);
 			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getMoldBase=" + ex.message);
 	}
-	return mold;
+	return zmold;
 }
 
 
@@ -2615,14 +2615,14 @@ WTWJS.prototype.getConnectingGridInd = function(zconnectinggridid) {
 	return zconnectinggridind;
 }
 
-WTWJS.prototype.getActionZoneInd = function(zactionzoneid, connectinggridind) {
+WTWJS.prototype.getActionZoneInd = function(zactionzoneid, zconnectinggridind) {
 	/* get action zone Index by id and connecting grid (connecting grids create the instance) */
 	var zactionzoneind = -1;
 	try {
 		if (WTW.actionZones != null && zactionzoneid != "") {
 			for (var i = 0; i < WTW.actionZones.length; i++) {
 				if (WTW.actionZones[i] != null) {
-					if (WTW.actionZones[i].actionzoneid == zactionzoneid && Number(WTW.actionZones[i].connectinggridind) == Number(connectinggridind)) {
+					if (WTW.actionZones[i].actionzoneid == zactionzoneid && Number(WTW.actionZones[i].connectinggridind) == Number(zconnectinggridind)) {
 						zactionzoneind = i;
 						i = WTW.actionZones.length;
 					}
@@ -2636,25 +2636,25 @@ WTWJS.prototype.getActionZoneInd = function(zactionzoneid, connectinggridind) {
 }
 
 /* add to array */
-WTWJS.prototype.setUploadInQueue = function(uploadid, value) {
+WTWJS.prototype.setUploadInQueue = function(zuploadid, zvalue) {
 	/* add upload to queue */
 	try {
-		var found = -1;
-		if (wtw_uploads != null && uploadid != "") {
+		var zfound = -1;
+		if (wtw_uploads != null && zuploadid != "") {
 			for (var i = 0; i < wtw_uploads.length; i++) {
 				if (wtw_uploads[i] != null) {
-					if (wtw_uploads[i].uploadid == uploadid) {
-						wtw_uploads[i].queue = value;
-						found = i;
+					if (wtw_uploads[i].uploadid == zuploadid) {
+						wtw_uploads[i].queue = zvalue;
+						zfound = i;
 					}
 				}
 			}
 		}
-		if (found == -1 && value == "1") {
-			var uploadind = WTW.getNextCount(wtw_uploads);
-			wtw_uploads[uploadind] = WTW.newUpload();
-			wtw_uploads[uploadind].uploadid = uploadid;
-			wtw_uploads[uploadind].queue = "1";
+		if (zfound == -1 && zvalue == "1") {
+			var zuploadind = WTW.getNextCount(wtw_uploads);
+			wtw_uploads[zuploadind] = WTW.newUpload();
+			wtw_uploads[zuploadind].uploadid = zuploadid;
+			wtw_uploads[zuploadind].queue = "1";
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-setUploadInQueue=" + ex.message);
@@ -2662,15 +2662,15 @@ WTWJS.prototype.setUploadInQueue = function(uploadid, value) {
 }
 
 /* delete from array (splice or null the value) */
-WTWJS.prototype.deleteIdFromArray = function(array, stext) {
+WTWJS.prototype.deleteIdFromArray = function(zarray, ztext) {
 	/* remove a select id from a given Array */
 	try {
-		if (array != null) {
-			if (array.length > 0) {
-				for (var i=array.length;0>array.length;i--) {
-					if (array[i] != null) {
-						if (array[i].id == stext) {
-							array.splice(i,1);
+		if (zarray != null) {
+			if (zarray.length > 0) {
+				for (var i=zarray.length;0>zarray.length;i--) {
+					if (zarray[i] != null) {
+						if (zarray[i].id == ztext) {
+							zarray.splice(i,1);
 						}
 					}
 				}
@@ -2684,13 +2684,13 @@ WTWJS.prototype.deleteIdFromArray = function(array, stext) {
 
 /* physics engine related functions */
 
-WTWJS.prototype.createJoint = function(imp1, imp2, distanceBetweenPoints) {
+WTWJS.prototype.createJoint = function(zimp1, zimp2, zdistanceBetweenPoints) {
 	/* joints used by physics engine that relatively connect molds */
 	try {
-		var joint = new BABYLON.DistanceJoint({
-			maxDistance: distanceBetweenPoints
+		var zjoint = new BABYLON.DistanceJoint({
+			maxDistance: zdistanceBetweenPoints
 		})
-		imp1.addJoint(imp2, joint);
+		zimp1.addJoint(zimp2, zjoint);
     } catch (ex) {
         WTW.log("core-scripts-prime-wtw_utilities.js-createJoint=" + ex.message);
     }

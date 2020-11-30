@@ -1361,8 +1361,6 @@ WTWJS.prototype.addActionzonePeoplemover = function(zactionzonename, zactionzone
 	return zactionzone;
 }
 
-var testx = 0;
-
 WTWJS.prototype.addActionzoneElevator = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* elevator - (work in progress) shape often box by default - extenson of people mover to include button activated moves, timing with doors, and stopping movement on floors */
 	var zactionzone;

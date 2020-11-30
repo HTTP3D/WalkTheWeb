@@ -138,44 +138,44 @@ WTWJS.prototype.checkUnloadScripts = function(zactionzoneind) {
 
 /* set or execute JavaScript functions from text function names - for molds */
 
-WTWJS.prototype.setFunctionName = function(moldname) {
+WTWJS.prototype.setFunctionName = function(zmoldname) {
 	/* create new function name (or new name for repeated instances of the same object) */
-	var functionname = "";
+	var zfunctionname = "";
 	try {
-		functionname = "f" + moldname;
-		while (functionname.indexOf(' ') > -1) {
-			functionname = functionname.replace(' ','');
+		zfunctionname = "f" + zmoldname;
+		while (zfunctionname.indexOf(' ') > -1) {
+			zfunctionname = zfunctionname.replace(' ','');
 		}
-		while (functionname.indexOf('-') > -1) {
-			functionname = functionname.replace('-','');
+		while (zfunctionname.indexOf('-') > -1) {
+			zfunctionname = zfunctionname.replace('-','');
 		}
-		if (typeof window[functionname] != "undefined") {
-			var basename = functionname;
+		if (typeof window[zfunctionname] != "undefined") {
+			var zbasename = zfunctionname;
 			var i = 0;
-			while (typeof window[functionname] != "undefined") {
+			while (typeof window[zfunctionname] != "undefined") {
 				i += 1;
-				functionname = basename + i;
+				zfunctionname = zbasename + i;
 			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-setFunctionName=" + ex.message);
 	}
-	return functionname;
+	return zfunctionname;
 }
 
-WTWJS.prototype.setFunctionAndExecute = function(functionname, parameters, moldname) {
+WTWJS.prototype.setFunctionAndExecute = function(zfunctionname, zparameters, zmoldname) {
 	/* convert function name and parameters to executable function and execute it */
 	try {
-		if (moldname != undefined) {
-			parameters += "," + moldname;
+		if (zmoldname != undefined) {
+			zparameters += "," + zmoldname;
 		}
-		if (parameters.indexOf(',') > -1) {
-			var values = parameters.split(',');
-			WTW.executeFunctionByName(functionname, window, values);
-		} else if (parameters != null) {
-			WTW.executeFunctionByName(functionname, window, parameters);
+		if (zparameters.indexOf(',') > -1) {
+			var zvalues = zparameters.split(',');
+			WTW.executeFunctionByName(zfunctionname, window, zvalues);
+		} else if (zparameters != null) {
+			WTW.executeFunctionByName(zfunctionname, window, zparameters);
 		} else {
-			WTW.executeFunctionByName(functionname, window, null);
+			WTW.executeFunctionByName(zfunctionname, window, null);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-setFunctionAndExecute=" + ex.message);
@@ -198,23 +198,23 @@ WTWJS.prototype.checkMoldFunctionAndExecute = function(zmoldname) {
     }
 }
 
-WTWJS.prototype.executeFunctionByName = function(zjsfunction, context /*, args */) {
-	/* allows a name of a javascript function to be passed (even with class like WTW.testScript) with parameters string (context) to be executed */
+WTWJS.prototype.executeFunctionByName = function(zjsfunction, zcontext /*, args */) {
+	/* allows a name of a javascript function to be passed (even with class like WTW.testScript) with parameters string (zcontext) to be executed */
 	/* example: WTW.executeFunctionByName('WTW.testScript', 'arg1', 'arg2', 'arg3', 'arg4');   executes: WTW.testScript('arg1', 'arg2', 'arg3', 'arg4'); */
-	var func = null;
-	var args = null;
+	var zfunc = null;
+	var zargs = null;
 	var zfunction = null;
 	try {
 		if (zjsfunction != null) {
 			if (zjsfunction != '') {
-				args = Array.prototype.slice.call(arguments, 2);
-				var namespaces = zjsfunction.split(".");
-				func = namespaces.pop();
-				for(var i = 0; i < namespaces.length; i++) {
-					context = context[namespaces[i]];
+				zargs = Array.prototype.slice.call(arguments, 2);
+				var znamespaces = zjsfunction.split(".");
+				zfunc = znamespaces.pop();
+				for(var i = 0; i < znamespaces.length; i++) {
+					zcontext = zcontext[znamespaces[i]];
 				}
-				if (typeof context[func] == 'function') {
-					zfunction = context[func].apply(context, args);
+				if (typeof zcontext[zfunc] == 'function') {
+					zfunction = zcontext[zfunc].apply(zcontext, zargs);
 				}
 			}
 		}
@@ -232,31 +232,31 @@ WTWJS.prototype.executeAnimationByName = function(animationname) {
 				if (WTW.moldEvents[i].animationname == animationname) {
 					if (WTW.moldEvents[i].mold != null) {
 						if (WTW.moldEvents[i].loaded) {
-							var endscript = WTW.moldEvents[i].animationendscript;
-							var startframe = Number(WTW.moldEvents[i].startframe);
-							var endframe = Number(WTW.moldEvents[i].endframe);
+							var zendscript = WTW.moldEvents[i].animationendscript;
+							var zstartframe = Number(WTW.moldEvents[i].startframe);
+							var zendframe = Number(WTW.moldEvents[i].endframe);
 							if (WTW.moldEvents[i].moldevent == 'onclicktoggle') {
 								if (WTW.moldEvents[i].stage == '0') {
 									WTW.moldEvents[i].stage = '1';
 								} else {
-									startframe = Number(WTW.moldEvents[i].endframe);
-									endframe = Number(WTW.moldEvents[i].startframe);
+									zstartframe = Number(WTW.moldEvents[i].endframe);
+									zendframe = Number(WTW.moldEvents[i].startframe);
 									WTW.moldEvents[i].stage = '0';
 								}
 							}
 							/* temp for demo - sync 2 animations */
 							if (WTW.moldEvents[i].mold.name == "buildingmolds-0-h3ecuos3uff4t8gl-0-2202l5q2xiaogwn5-babylonfile-OccupyGuy_MouthAnimGeo") {
-								WTW.temp1 = scene.beginAnimation(WTW.moldEvents[i].mold, startframe, endframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[endscript] == "function") {window[endscript](endscript);}}, WTW.moldEvents[i].stopcurrentanimations);
+								WTW.temp1 = scene.beginAnimation(WTW.moldEvents[i].mold, zstartframe, zendframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[zendscript] == "function") {window[zendscript](zendscript);}}, WTW.moldEvents[i].stopcurrentanimations);
 								if (WTW.temp2 != null) {
 									WTW.temp1.syncWith(WTW.temp2);
 								}
 							} else if (WTW.moldEvents[i].mold.name == "buildingmolds-0-h3ecuos3uff4t8gl-0-2202l5q2xiaogwn5-babylonfile-Guitar") {
-								WTW.temp2 = scene.beginAnimation(WTW.moldEvents[i].mold, startframe, endframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[endscript] == "function") {window[endscript](endscript);}}, WTW.moldEvents[i].stopcurrentanimations);
+								WTW.temp2 = scene.beginAnimation(WTW.moldEvents[i].mold, zstartframe, zendframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[zendscript] == "function") {window[zendscript](zendscript);}}, WTW.moldEvents[i].stopcurrentanimations);
 								if (WTW.temp1 != null) {
 									WTW.temp2.syncWith(WTW.temp1);
 								}
 							} else {
-								scene.beginAnimation(WTW.moldEvents[i].mold, startframe, endframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[endscript] == "function") {window[endscript](endscript);}}, WTW.moldEvents[i].stopcurrentanimations);
+								scene.beginAnimation(WTW.moldEvents[i].mold, zstartframe, zendframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[zendscript] == "function") {window[zendscript](zendscript);}}, WTW.moldEvents[i].stopcurrentanimations);
 							}
 							if (WTW.moldEvents[i].soundid != '' && WTW.soundMute == false) {
 								if (typeof WTW.moldEvents[i].sound.play == 'function') {

@@ -29,13 +29,13 @@ WTWJS.prototype.updateProgressBar = function(zprogress, ztotal) {
 	return zprogress;
 }
 
-WTWJS.prototype.communitySearch = async function(search) {
+WTWJS.prototype.communitySearch = async function(zsearch) {
 	/* keyword search to find a community to download to your instance */
 	try {
-		search = WTW.encode(search);
-		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=community", 
-			function(response) {
-				WTW.communitySearchReply(JSON.parse(response));
+		zsearch = WTW.encode(zsearch);
+		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + zsearch + "&webtype=community", 
+			function(zresponse) {
+				WTW.communitySearchReply(JSON.parse(zresponse));
 			}
 		);
 	} catch (ex) {
@@ -76,8 +76,8 @@ WTWJS.prototype.buildingSearch = async function(zsearch) {
 	try {
 		zsearch = WTW.encode(zsearch);
 		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + zsearch + "&webtype=building", 
-			function(response) {
-				WTW.buildingSearchReply(JSON.parse(response));
+			function(zresponse) {
+				WTW.buildingSearchReply(JSON.parse(zresponse));
 			}
 		);
 	} catch (ex) {
@@ -113,13 +113,13 @@ WTWJS.prototype.buildingSearchReply = function(zresponse) {
 	}
 }
 
-WTWJS.prototype.thingSearch = async function(search) {
+WTWJS.prototype.thingSearch = async function(zsearch) {
 	/* keyword search to find a thing to download to your instance */
 	try {
-		search = WTW.encode(search);
-		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + search + "&webtype=thing", 
-			function(response) {
-				WTW.thingSearchReply(JSON.parse(response));
+		zsearch = WTW.encode(zsearch);
+		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + zsearch + "&webtype=thing", 
+			function(zresponse) {
+				WTW.thingSearchReply(JSON.parse(zresponse));
 			}
 		);
 	} catch (ex) {
@@ -159,7 +159,7 @@ WTWJS.prototype.thingSearchReply = function(zresponse) {
 WTWJS.prototype.downloadWeb = async function(zcopywebid, zwebtype) {
 	/* This process takes the selected 3D Web and downloads a copy to the local instance */
 	try {
-		var isinstall = true;
+		var zisinstall = true;
 		var zcommunityid = '';
 		var zbuildingpositionx = 0;
 		var zbuildingpositiony = 0;
@@ -172,10 +172,10 @@ WTWJS.prototype.downloadWeb = async function(zcopywebid, zwebtype) {
 		var zbuildingrotationz = 0;
 		if (WTW.adminView != undefined) {
 			if (WTW.adminView == 1) {
-				isinstall = false;
+				zisinstall = false;
 			}
 		}
-		if (isinstall && zwebtype == 'building') {
+		if (zisinstall && zwebtype == 'building') {
 			if (dGet('wtw_tcommunityid') != null) {
 				zcommunityid = dGet('wtw_tcommunityid').value;
 				zbuildingpositionx = dGet('wtw_tbuildingpositionx').value;
@@ -222,13 +222,13 @@ WTWJS.prototype.completedWebDownload = function(zresponse) {
 	try {
 		WTW.updateProgressText("WalkTheWeb Download Completed");
 		WTW.updateProgressBar(100,100);
-		var isinstall = true;
+		var zisinstall = true;
 		if (WTW.adminView != undefined) {
 			if (WTW.adminView == 1) {
-				isinstall = false;
+				zisinstall = false;
 			}
 		}
-		if (isinstall) {
+		if (zisinstall) {
 			window.location.href = "/";
 		} else {
 			WTW.hide('wtw_installprogress');

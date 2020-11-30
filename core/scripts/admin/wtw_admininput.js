@@ -40,52 +40,52 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
 	/* mouse right click event */
 	try {
 		WTW.pick = 1;
-		var pickedname = "";
-		var pickedResult = scene.pick(e.clientX, e.clientY);
-		if (pickedResult.pickedMesh == null) {
-			pickedResult.pickedMesh = scene.getMeshByID(WTW.currentID);
-			pickedname = WTW.currentID;
+		var zpickedname = "";
+		var zpickedresult = scene.pick(e.clientX, e.clientY);
+		if (zpickedresult.pickedMesh == null) {
+			zpickedresult.pickedMesh = scene.getMeshByID(WTW.currentID);
+			zpickedname = WTW.currentID;
 		} else {
-				pickedname = pickedResult.pickedMesh.name;
+				zpickedname = zpickedresult.pickedMesh.name;
 		}
-		if (pickedname.indexOf('babylonfile-') > -1 && pickedResult.pickedMesh == null) {
-			var nameparts = pickedname.split('-');
-			pickedname = nameparts[0] + "-" + nameparts[1] + "-" + nameparts[2] + "-" + nameparts[3] + "-" + nameparts[4] + "-" + nameparts[5];
-			pickedResult.pickedMesh = scene.getMeshByID(pickedname);
+		if (zpickedname.indexOf('babylonfile-') > -1 && zpickedresult.pickedMesh == null) {
+			var znameparts = zpickedname.split('-');
+			zpickedname = znameparts[0] + "-" + znameparts[1] + "-" + znameparts[2] + "-" + znameparts[3] + "-" + znameparts[4] + "-" + znameparts[5];
+			zpickedresult.pickedMesh = scene.getMeshByID(zpickedname);
 		}
-		if (pickedResult.pickedMesh != null) {
-			var pickedmesh = pickedResult.pickedMesh;
+		if (zpickedresult.pickedMesh != null) {
+			var zpickedmesh = zpickedresult.pickedMesh;
 			if (dGet('wtw_tmoldname').value != '') {
-				var firstmold = null;
-				var nextmoldind = -1;
-				var found = 0;
-				var result = scene.multiPick(e.clientX, e.clientY);
-				for (var i=0;i < result.length;i++) {
-					firstmold = WTW.getMoldBase(result[0].pickedMesh);
-					var resultmold = WTW.getMoldBase(result[i].pickedMesh);
-					if (resultmold.name == dGet('wtw_tmoldname').value) {
-						nextmoldind = i + 1;
-						found = 1;
+				var zfirstmold = null;
+				var znextmoldind = -1;
+				var zfound = 0;
+				var zresults = scene.multiPick(e.clientX, e.clientY);
+				for (var i=0;i < zresults.length;i++) {
+					zfirstmold = WTW.getMoldBase(zresults[0].pickedMesh);
+					var zresultmold = WTW.getMoldBase(zresults[i].pickedMesh);
+					if (zresultmold.name == dGet('wtw_tmoldname').value) {
+						znextmoldind = i + 1;
+						zfound = 1;
 					}
 				}
-				if (found == 0) {
-				} else if (result[nextmoldind] != null) {
-					pickedmesh = WTW.getMoldBase(result[nextmoldind].pickedMesh);
-				} else if (firstmold != null) {
-					pickedmesh = firstmold;
+				if (zfound == 0) {
+				} else if (zresults[znextmoldind] != null) {
+					zpickedmesh = WTW.getMoldBase(zresults[znextmoldind].pickedMesh);
+				} else if (zfirstmold != null) {
+					zpickedmesh = zfirstmold;
 				}
 			}
-			var mold = WTW.getMoldBase(pickedmesh);
-			if (mold != null) {
-				dGet('wtw_tmoldname').value = mold.name;
-				WTW.loadPickedObject(mold);
+			var zmold = WTW.getMoldBase(zpickedmesh);
+			if (zmold != null) {
+				dGet('wtw_tmoldname').value = zmold.name;
+				WTW.loadPickedObject(zmold);
 			}
-		} else if (pickedname != '') {
-			var nameparts = pickedname.split('-');
-			pickedname = nameparts[0] + "-" + nameparts[1] + "-" + nameparts[2] + "-" + nameparts[3] + "-" + nameparts[4] + "-" + nameparts[5];
-			dGet('wtw_tmoldname').value = pickedname;
-			var mold = scene.getMeshByID(pickedname);
-			WTW.loadPickedObject(mold);
+		} else if (zpickedname != '') {
+			var znameparts = zpickedname.split('-');
+			zpickedname = znameparts[0] + "-" + znameparts[1] + "-" + znameparts[2] + "-" + znameparts[3] + "-" + znameparts[4] + "-" + znameparts[5];
+			dGet('wtw_tmoldname').value = zpickedname;
+			var zmold = scene.getMeshByID(zpickedname);
+			WTW.loadPickedObject(zmold);
 		}
 		e.preventDefault();
 		return false;
@@ -94,7 +94,7 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
     }
 }
 
-WTWJS.prototype.mouseOverMoldAdmin = function(tagmesh, currentid) {
+WTWJS.prototype.mouseOverMoldAdmin = function(ztagmesh, zcurrentid) {
 	/* mouse hover over mold (mesh) in 3D Scene */
 	try {
 		if (dGet('wtw_bfocus') != null) {
@@ -102,29 +102,29 @@ WTWJS.prototype.mouseOverMoldAdmin = function(tagmesh, currentid) {
 				if ((WTW.currentID.indexOf("communitymold") > -1 && communityid != "") || (WTW.currentID.indexOf("buildingmold") > -1 && buildingid != "") || (WTW.currentID.indexOf("thingmold") > -1 && thingid != "")) {
 					WTW.hilightMold(WTW.currentID, 'green');
 				}
-				var namepart;
-				if (currentid.indexOf("-") > -1) {
-					namepart = currentid.split('-');
+				var znamepart;
+				if (zcurrentid.indexOf("-") > -1) {
+					znamepart = zcurrentid.split('-');
 				}
-				var mold = null;
-				if (namepart[0].indexOf("buildingmolds") > -1 && buildingid == "") {
-					if (tagmesh.meshUnderPointer.parent != null) {
-						mold = tagmesh.meshUnderPointer.parent;
-						while (mold.name.indexOf("connectinggrids") == -1 && mold.parent != null) {
-							mold = mold.parent;
+				var zmold = null;
+				if (znamepart[0].indexOf("buildingmolds") > -1 && buildingid == "") {
+					if (ztagmesh.meshUnderPointer.parent != null) {
+						zmold = ztagmesh.meshUnderPointer.parent;
+						while (zmold.name.indexOf("connectinggrids") == -1 && zmold.parent != null) {
+							zmold = zmold.parent;
 						}
 					}
-				} else if (namepart[0].indexOf("thingmolds") > -1 && thingid == "") {
-					if (tagmesh.meshUnderPointer.parent != null) {
-						mold = tagmesh.meshUnderPointer.parent;
-						while (mold.name.indexOf("connectinggrids") == -1 && mold.parent != null) {
-							mold = mold.parent;
+				} else if (znamepart[0].indexOf("thingmolds") > -1 && thingid == "") {
+					if (ztagmesh.meshUnderPointer.parent != null) {
+						zmold = ztagmesh.meshUnderPointer.parent;
+						while (zmold.name.indexOf("connectinggrids") == -1 && zmold.parent != null) {
+							zmold = zmold.parent;
 						}
 					}
-				} else if (namepart[0].indexOf("molds") > -1) {
-					mold = tagmesh.meshUnderPointer;
+				} else if (znamepart[0].indexOf("molds") > -1) {
+					zmold = ztagmesh.meshUnderPointer;
 				}
-				if (mold != null) {
+				if (zmold != null) {
 					//add code to get parent mold (connecting grid) from moldname part
 				}
 			}
@@ -143,23 +143,23 @@ WTWJS.prototype.selectPick = function(e) {
 			/* nothing picked or no mold clicked on in 3D Scene */
 		} else if (WTW.pick == 2) {
 			/* mold selected */
-			var pickedResult = scene.pick(WTW.mouseX, WTW.mouseY);
-			if (pickedResult.pickedMesh == null) {
-				pickedResult.pickedMesh = scene.getMeshByID(WTW.currentID);
+			var zpickedresult = scene.pick(WTW.mouseX, WTW.mouseY);
+			if (zpickedresult.pickedMesh == null) {
+				zpickedresult.pickedMesh = scene.getMeshByID(WTW.currentID);
 			}
-			var mold = null;
-			if (pickedResult.pickedMesh != null) {
-				if (pickedResult.pickedMesh.name.indexOf("molds-") > -1) {
-					mold = pickedResult.pickedMesh;
+			var zmold = null;
+			if (zpickedresult.pickedMesh != null) {
+				if (zpickedresult.pickedMesh.name.indexOf("molds-") > -1) {
+					zmold = zpickedresult.pickedMesh;
 				}
 			}
-			if (mold != null && mold != undefined) {
+			if (zmold != null && zmold != undefined) {
 				if (dGet('wtw_baddactionzonepart').innerHTML == "Cancel Pick Shape") {
 					/* pick came from action zone form */
-					WTW.addActionZonePart(dGet('wtw_tactionzoneid').value, mold);
+					WTW.addActionZonePart(dGet('wtw_tactionzoneid').value, zmold);
 				} else if (dGet('wtw_bselectcsgshape').innerHTML == "Cancel Pick Shape") {
 					/* pick came from mold form */
-					WTW.addMergePart(mold);
+					WTW.addMergePart(zmold);
 				}
 			}
 		} else {

@@ -18,8 +18,8 @@ WTWJS.prototype.openCommunityForm = async function(zcommunityid) {
 		WTW.hide('wtw_adminmenu42b');
 		dGet('wtw_tcommunityalttag').value = "";
 		WTW.getAsyncJSON("/connect/communities.php", 
-			function(response) {
-				WTW.communities = JSON.parse(response);
+			function(zresponse) {
+				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
 					for (var i = 0; i < WTW.communities.length; i++) {
 						if (WTW.communities[i] != null) {
@@ -57,8 +57,8 @@ WTWJS.prototype.loadCommunityForm = async function(zcommunityid) {
 	try {
 		dGet('wtw_tcommunityalttag').value = "";
 		WTW.getAsyncJSON("/connect/communities.php", 
-			function(response) {
-				WTW.communities = JSON.parse(response);
+			function(zresponse) {
+				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
 					for (var i = 0; i < WTW.communities.length; i++) {
 						if (WTW.communities[i] != null) {
@@ -178,8 +178,8 @@ WTWJS.prototype.copyMyCommunity = async function() {
 	try {
 		dGet('wtw_tcommunityname').value = '';
 		WTW.getAsyncJSON("/connect/communities.php?userid=" + dGet('wtw_tuserid').value, 
-			function(response) {
-				WTW.communities = JSON.parse(response);
+			function(zresponse) {
+				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
 					for (var i = 0; i < WTW.communities.length; i++) {
 						if (WTW.communities[i] != null) {
@@ -261,8 +261,8 @@ WTWJS.prototype.getSelectCommunitiesList = async function() {
 		WTW.show('wtw_loadingcommunityid');
 		dGet("wtw_listcommunities").innerHTML = "";
 		WTW.getAsyncJSON("/connect/communities.php", 
-			function(response) {
-				WTW.communities = JSON.parse(response);
+			function(zresponse) {
+				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
 					for (var i = 0; i < WTW.communities.length; i++) {
 						if (WTW.communities[i] != null) {
@@ -312,8 +312,8 @@ WTWJS.prototype.openShareCommunityForm = async function() {
 		WTW.hide('wtw_adminmenu29b');
 		WTW.show('wtw_loadingsharecommunityform');
 		WTW.getAsyncJSON("/connect/communities.php", 
-			function(response) {
-				WTW.communities = JSON.parse(response);
+			function(zresponse) {
+				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
 					for (var i = 0; i < WTW.communities.length; i++) {
 						if (WTW.communities[i] != null) {
@@ -408,56 +408,56 @@ WTWJS.prototype.shareCommunityTemplate = async function() {
 WTWJS.prototype.openAddGroundTerrain = function() {
 	/* add terrain and height map generated molds */
 	try {
-		var moldind = WTW.getNextCount(WTW.communitiesMolds);
-		WTW.communitiesMolds[moldind] = WTW.newMold();
-		var shape = "terrain";
-		var moldid = WTW.getRandomString(16);
-		var settingx = 700;
-		var settingz = 800;
-		var positionx = 0;
-		var positiony = -1;
-		var positionz = 0;
-		var rotationx = 0;
-		var rotationy = 0;
-		var rotationz = 0;
-		var newcoords = WTW.getNewCoordinates(500);
-		positionx = newcoords.positionX;
-		positionz = newcoords.positionZ;
-		rotationy = newcoords.rotationY;
-		WTW.communitiesMolds[moldind].moldid = moldid;
-		WTW.communitiesMolds[moldind].moldind = moldind;
-		WTW.communitiesMolds[moldind].communityinfo.communityid = communityid;
-		WTW.communitiesMolds[moldind].communityinfo.communityind = "-1";
-		WTW.communitiesMolds[moldind].position.x = positionx;
-		WTW.communitiesMolds[moldind].position.y = positiony;
-		WTW.communitiesMolds[moldind].position.z = positionz;
-		WTW.communitiesMolds[moldind].scaling.x = settingx;
-		WTW.communitiesMolds[moldind].scaling.y = 1;
-		WTW.communitiesMolds[moldind].scaling.z = settingz;
-		WTW.communitiesMolds[moldind].rotation.x = rotationx;
-		WTW.communitiesMolds[moldind].rotation.y = rotationy;
-		WTW.communitiesMolds[moldind].rotation.z = rotationz;
-		WTW.communitiesMolds[moldind].graphics.texture.id = 'p3a7548r37pzqpev';
-		WTW.communitiesMolds[moldind].graphics.heightmap.id = 'dxmbplwoocpg5df3';
-		WTW.communitiesMolds[moldind].graphics.heightmap.minheight = 0;
-		WTW.communitiesMolds[moldind].graphics.heightmap.maxheight = 70;
-		WTW.communitiesMolds[moldind].graphics.uscale = settingx / 10
-		WTW.communitiesMolds[moldind].graphics.vscale = settingz / 10
-		WTW.communitiesMolds[moldind].subdivisions = 70;
-		WTW.communitiesMolds[moldind].shape = shape;
-		WTW.communitiesMolds[moldind].covering = "terrain";
-		WTW.communitiesMolds[moldind].checkcollisions = "0";
-		WTW.communitiesMolds[moldind].ispickable = "1";	
-		WTW.communitiesMolds[moldind].loadactionzoneid = WTW.getLoadActionZoneID("Extreme");		
-		WTW.communitiesMolds[moldind].loadactionzoneind = WTW.getActionZoneInd(WTW.communitiesMolds[moldind].loadactionzoneid, Number(dGet('wtw_tconnectinggridind').value));
-		WTW.communitiesMolds[moldind].connectinggridind = Number(dGet("wtw_tconnectinggridind").value);		
-		WTW.communitiesMolds[moldind].connectinggridid = dGet("wtw_tconnectinggridid").value;		
-		WTW.communitiesMolds[moldind].parentname = dGet("wtw_tconnectinggridname").value;		
-		WTW.communitiesMolds[moldind].moldname = "communitymolds-" + moldind + "-" + moldid + "-" + dGet("wtw_tconnectinggridind").value + "-" + dGet("wtw_tconnectinggridid").value + "-" + shape;		
-		var imageinfo = WTW.getUploadFileData('fcg9ws5gsjd7x2ko');
-		var imageinfo2 = WTW.getUploadFileData('rb89jzbm4qepbimm');
-		dGet('wtw_moldheightmappreview').src = imageinfo2.filedata;
-		WTW.openMoldForm(moldind, 'terrain', 'community', false);
+		var zmoldind = WTW.getNextCount(WTW.communitiesMolds);
+		WTW.communitiesMolds[zmoldind] = WTW.newMold();
+		var zshape = "terrain";
+		var zmoldid = WTW.getRandomString(16);
+		var zsettingx = 700;
+		var zsettingz = 800;
+		var zpositionx = 0;
+		var zpositiony = -1;
+		var zpositionz = 0;
+		var zrotationx = 0;
+		var zrotationy = 0;
+		var zrotationz = 0;
+		var znewcoords = WTW.getNewCoordinates(500);
+		zpositionx = znewcoords.positionX;
+		zpositionz = znewcoords.positionZ;
+		zrotationy = znewcoords.rotationY;
+		WTW.communitiesMolds[zmoldind].moldid = zmoldid;
+		WTW.communitiesMolds[zmoldind].moldind = zmoldind;
+		WTW.communitiesMolds[zmoldind].communityinfo.communityid = communityid;
+		WTW.communitiesMolds[zmoldind].communityinfo.communityind = "-1";
+		WTW.communitiesMolds[zmoldind].position.x = zpositionx;
+		WTW.communitiesMolds[zmoldind].position.y = zpositiony;
+		WTW.communitiesMolds[zmoldind].position.z = zpositionz;
+		WTW.communitiesMolds[zmoldind].scaling.x = zsettingx;
+		WTW.communitiesMolds[zmoldind].scaling.y = 1;
+		WTW.communitiesMolds[zmoldind].scaling.z = zsettingz;
+		WTW.communitiesMolds[zmoldind].rotation.x = zrotationx;
+		WTW.communitiesMolds[zmoldind].rotation.y = zrotationy;
+		WTW.communitiesMolds[zmoldind].rotation.z = zrotationz;
+		WTW.communitiesMolds[zmoldind].graphics.texture.id = 'p3a7548r37pzqpev';
+		WTW.communitiesMolds[zmoldind].graphics.heightmap.id = 'dxmbplwoocpg5df3';
+		WTW.communitiesMolds[zmoldind].graphics.heightmap.minheight = 0;
+		WTW.communitiesMolds[zmoldind].graphics.heightmap.maxheight = 70;
+		WTW.communitiesMolds[zmoldind].graphics.uscale = zsettingx / 10
+		WTW.communitiesMolds[zmoldind].graphics.vscale = zsettingz / 10
+		WTW.communitiesMolds[zmoldind].subdivisions = 70;
+		WTW.communitiesMolds[zmoldind].shape = zshape;
+		WTW.communitiesMolds[zmoldind].covering = "terrain";
+		WTW.communitiesMolds[zmoldind].checkcollisions = "0";
+		WTW.communitiesMolds[zmoldind].ispickable = "1";	
+		WTW.communitiesMolds[zmoldind].loadactionzoneid = WTW.getLoadActionZoneID("Extreme");		
+		WTW.communitiesMolds[zmoldind].loadactionzoneind = WTW.getActionZoneInd(WTW.communitiesMolds[zmoldind].loadactionzoneid, Number(dGet('wtw_tconnectinggridind').value));
+		WTW.communitiesMolds[zmoldind].connectinggridind = Number(dGet("wtw_tconnectinggridind").value);		
+		WTW.communitiesMolds[zmoldind].connectinggridid = dGet("wtw_tconnectinggridid").value;		
+		WTW.communitiesMolds[zmoldind].parentname = dGet("wtw_tconnectinggridname").value;		
+		WTW.communitiesMolds[zmoldind].moldname = "communitymolds-" + zmoldind + "-" + zmoldid + "-" + dGet("wtw_tconnectinggridind").value + "-" + dGet("wtw_tconnectinggridid").value + "-" + zshape;		
+		var zimageinfo = WTW.getUploadFileData('fcg9ws5gsjd7x2ko');
+		var zimageinfo2 = WTW.getUploadFileData('rb89jzbm4qepbimm');
+		dGet('wtw_moldheightmappreview').src = zimageinfo2.filedata;
+		WTW.openMoldForm(zmoldind, 'terrain', 'community', false);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-openAddGroundTerrain=" + ex.message);
 	}		
@@ -466,8 +466,8 @@ WTWJS.prototype.openAddGroundTerrain = function() {
 WTWJS.prototype.openEditGroundSettings = function() {
 	/* edit extended ground texture settings */
 	try {
-		var groundtextureid = WTW.init.groundTextureID;
-		var groundtexturepath = WTW.init.groundTexturePath;
+		var zgroundtextureid = WTW.init.groundTextureID;
+		var zgroundtexturepath = WTW.init.groundTexturePath;
 		WTW.hide('wtw_adminmenu41b');
 		WTW.show('wtw_loadinggroundsettingsform');
 		for (var i = 0; i < WTW.communities.length; i++) {
@@ -477,21 +477,21 @@ WTWJS.prototype.openEditGroundSettings = function() {
 						if (WTW.communities[i].graphics.texture.backupid == "") {
 							WTW.communities[i].graphics.texture.backupid = WTW.communities[i].graphics.texture.id;
 						}
-						groundtextureid = WTW.communities[i].graphics.texture.id;
+						zgroundtextureid = WTW.communities[i].graphics.texture.id;
 					}
 					if (WTW.communities[i].graphics.texture.path != null) {
 						if (WTW.communities[i].graphics.texture.backuppath == "") {
 							WTW.communities[i].graphics.texture.backuppath = WTW.communities[i].graphics.texture.path;
 						}
-						groundtexturepath = WTW.communities[i].graphics.texture.path;
+						zgroundtexturepath = WTW.communities[i].graphics.texture.path;
 					}
 				}
 			}
 		}
 		WTW.hide('wtw_loadinggroundsettingsform');
 		WTW.show('wtw_adminmenu41b');
-		dGet('wtw_textendedgroundtextureid').value = groundtextureid;
-		dGet('wtw_textendedgroundtexturepath').value = groundtexturepath;
+		dGet('wtw_textendedgroundtextureid').value = zgroundtextureid;
+		dGet('wtw_textendedgroundtexturepath').value = zgroundtexturepath;
 		WTW.setPreviewImage('wtw_showextendedgroundpreview', 'wtw_textendedgroundtexturepath', 'wtw_textendedgroundtextureid');
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-openEditGroundSettings=" + ex.message);
@@ -542,8 +542,8 @@ WTWJS.prototype.saveGround = async function() {
 WTWJS.prototype.cancelGround = function() {
 	/* cancel and undo extended ground texture settings */
 	try {
-		var groundtextureid = WTW.init.groundTextureID;
-		var groundtexturepath = WTW.init.groundTexturePath;
+		var zgroundtextureid = WTW.init.groundTextureID;
+		var zgroundtexturepath = WTW.init.groundTexturePath;
 		for (var i = 0; i < WTW.communities.length; i++) {
 			if (WTW.communities[i] != null) {
 				if (WTW.communities[i].communityinfo.communityid == communityid) {
@@ -552,18 +552,18 @@ WTWJS.prototype.cancelGround = function() {
 							WTW.communities[i].graphics.texture.id = WTW.communities[i].graphics.texture.backupid;
 							WTW.communities[i].graphics.texture.backupid = "";
 						}
-						groundtextureid = WTW.communities[i].graphics.texture.id;
+						zgroundtextureid = WTW.communities[i].graphics.texture.id;
 						if (WTW.communities[i].graphics.texture.backuppath != "") {
 							WTW.communities[i].graphics.texture.path = WTW.communities[i].graphics.texture.backuppath;
 							WTW.communities[i].graphics.texture.backuppath = "";
 						}
-						groundtexturepath = WTW.communities[i].graphics.texture.path;
+						zgroundtexturepath = WTW.communities[i].graphics.texture.path;
 					}
 				}
 			}
 		}
-		dGet('wtw_textendedgroundtextureid').value = groundtextureid;
-		dGet('wtw_textendedgroundtexturepath').value = groundtexturepath;
+		dGet('wtw_textendedgroundtextureid').value = zgroundtextureid;
+		dGet('wtw_textendedgroundtexturepath').value = zgroundtexturepath;
 		WTW.setPreviewImage('wtw_showextendedgroundpreview', 'wtw_textendedgroundtexturepath', 'wtw_textendedgroundtextureid');
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-cancelGround=" + ex.message);
@@ -575,7 +575,7 @@ WTWJS.prototype.openSkyDomeForm = function() {
 	/* edit sky dome appearance */
 	/* this sky dome uses sky procedure texture */
 	try {
-		var skydomeid = WTW.init.skyTextureID;
+		var zskydomeid = WTW.init.skyTextureID;
 		WTW.hide('wtw_adminmenu40b');
 		WTW.show('wtw_loadingskysettingsform');
 		WTW.loadSkyScene(WTW.init.skyInclination, WTW.init.skyLuminance, WTW.init.skyAzimuth, WTW.init.skyRayleigh, WTW.init.skyTurbidity, WTW.init.skyMieDirectionalG, WTW.init.skyMieCoefficient, 1);
@@ -593,7 +593,7 @@ WTWJS.prototype.openSkyDomeForm = function() {
 						if (WTW.communities[i].graphics.sky.backupid == "") {
 							WTW.communities[i].graphics.sky.backupid = WTW.communities[i].graphics.sky.id;
 						}
-						skydomeid = WTW.communities[i].graphics.sky.id;
+						zskydomeid = WTW.communities[i].graphics.sky.id;
 					}
 				}
 			}
@@ -605,114 +605,112 @@ WTWJS.prototype.openSkyDomeForm = function() {
 	}
 }
 
-WTWJS.prototype.setSkyScene = function (key, newvalue, increment) {
+WTWJS.prototype.setSkyScene = function (zkey, znewvalue, zincrement) {
 	/* set sky dome based on form settings (one value at a time updates) */
 	try {
-		var lastvalue = 0;
-		var property = '';
-		var field = '';
-		var min = 0;
-		var max = 1;
-		switch (key) {
+		var zfield = '';
+		var zmin = 0;
+		var zmax = 1;
+		switch (zkey) {
 			case 'inclination':
-				field = 'wtw_tskyinclination';
-				if (newvalue == null) {
-					min = Number(dGet(field).min) - .6;
-					max = Number(dGet(field).max) - .6;
-					newvalue = (Number(WTW.init.skyInclination) + increment).toFixed(2);
-					if (newvalue < min) {
-						newvalue = min;
-					} else if (newvalue > max) {
-						newvalue = max;
+				zfield = 'wtw_tskyinclination';
+				if (znewvalue == null) {
+					zmin = Number(dGet(zfield).min) - .6;
+					zmax = Number(dGet(zfield).max) - .6;
+					znewvalue = (Number(WTW.init.skyInclination) + zincrement).toFixed(2);
+					if (znewvalue < zmin) {
+						znewvalue = zmin;
+					} else if (znewvalue > zmax) {
+						znewvalue = zmax;
 					} 
 				} else {
-					newvalue = Number(newvalue) - .6;
+					znewvalue = Number(znewvalue) - .6;
 				}
-				WTW.init.skyInclination = Number(newvalue).toFixed(2);
+				WTW.init.skyInclination = Number(znewvalue).toFixed(2);
 				break;
 			case 'luminance':
-				field = 'wtw_tskyluminance';
-				if (newvalue == null) {
-					min = Number(dGet(field).min);
-					max = Number(dGet(field).max);
-					newvalue = (Number(WTW.init.skyLuminance) + increment).toFixed(2);
-					if (newvalue < min) {
-						newvalue = min;
-					} else if (newvalue > max) {
-						newvalue = max;
+				zfield = 'wtw_tskyluminance';
+				if (znewvalue == null) {
+					zmin = Number(dGet(zfield).min);
+					zmax = Number(dGet(zfield).max);
+					znewvalue = (Number(WTW.init.skyLuminance) + zincrement).toFixed(2);
+					if (znewvalue < zmin) {
+						znewvalue = zmin;
+					} else if (znewvalue > zmax) {
+						znewvalue = zmax;
 					} 
 				}
-				WTW.init.skyLuminance = Number(newvalue).toFixed(2);
+				WTW.init.skyLuminance = Number(znewvalue).toFixed(2);
 				break;
 			case 'azimuth':
-				field = 'wtw_tskyazimuth';
-				if (newvalue == null) {
-					min = Number(dGet(field).min);
-					max = Number(dGet(field).max);
-					newvalue = (Number(WTW.init.skyAzimuth) + increment).toFixed(2);
-					if (newvalue < min) {
-						newvalue = min;
-					} else if (newvalue > max) {
-						newvalue = max;
+				zfield = 'wtw_tskyazimuth';
+				if (znewvalue == null) {
+					zmin = Number(dGet(zfield).min);
+					zmax = Number(dGet(zfield).max);
+					znewvalue = (Number(WTW.init.skyAzimuth) + zincrement).toFixed(2);
+					if (znewvalue < zmin) {
+						znewvalue = zmin;
+					} else if (znewvalue > zmax) {
+						znewvalue = zmax;
 					} 
 				}
-				WTW.init.skyAzimuth = Number(newvalue).toFixed(2);
+				WTW.init.skyAzimuth = Number(znewvalue).toFixed(2);
 				break;
 			case 'rayleigh':
-				field = 'wtw_tskyrayleigh';
-				if (newvalue == null) {
-					min = Number(dGet(field).min);
-					max = Number(dGet(field).max);
-					newvalue = (Number(WTW.init.skyRayleigh) + increment).toFixed(2);
-					if (newvalue < min) {
-						newvalue = min;
-					} else if (newvalue > max) {
-						newvalue = max;
+				zfield = 'wtw_tskyrayleigh';
+				if (znewvalue == null) {
+					zmin = Number(dGet(zfield).min);
+					zmax = Number(dGet(zfield).max);
+					znewvalue = (Number(WTW.init.skyRayleigh) + zincrement).toFixed(2);
+					if (znewvalue < zmin) {
+						znewvalue = zmin;
+					} else if (znewvalue > zmax) {
+						znewvalue = zmax;
 					} 
 				}
-				WTW.init.skyRayleigh = Number(newvalue).toFixed(2);
+				WTW.init.skyRayleigh = Number(znewvalue).toFixed(2);
 				break;
 			case 'turbidity':
-				field = 'wtw_tskyturbidity';
-				if (newvalue == null) {
-					min = Number(dGet(field).min);
-					max = Number(dGet(field).max);
-					newvalue = (Number(WTW.init.skyTurbidity) + increment).toFixed(0);
-					if (newvalue < min) {
-						newvalue = min;
-					} else if (newvalue > max) {
-						newvalue = max;
+				zfield = 'wtw_tskyturbidity';
+				if (znewvalue == null) {
+					zmin = Number(dGet(zfield).min);
+					zmax = Number(dGet(zfield).max);
+					znewvalue = (Number(WTW.init.skyTurbidity) + zincrement).toFixed(0);
+					if (znewvalue < zmin) {
+						znewvalue = zmin;
+					} else if (znewvalue > zmax) {
+						znewvalue = zmax;
 					} 
 				}
-				WTW.init.skyTurbidity = Number(newvalue).toFixed(0);
+				WTW.init.skyTurbidity = Number(znewvalue).toFixed(0);
 				break;
 			case 'miedirectionalg':
-				field = 'wtw_tskymiedirectionalg';
-				if (newvalue == null) {
-					min = Number(dGet(field).min);
-					max = Number(dGet(field).max);
-					newvalue = (Number(WTW.init.skyMieDirectionalG) + increment).toFixed(2);
-					if (newvalue < min) {
-						newvalue = min;
-					} else if (newvalue > max) {
-						newvalue = max;
+				zfield = 'wtw_tskymiedirectionalg';
+				if (znewvalue == null) {
+					zmin = Number(dGet(zfield).min);
+					zmax = Number(dGet(zfield).max);
+					znewvalue = (Number(WTW.init.skyMieDirectionalG) + zincrement).toFixed(2);
+					if (znewvalue < zmin) {
+						znewvalue = zmin;
+					} else if (znewvalue > zmax) {
+						znewvalue = zmax;
 					} 
 				}
-				WTW.init.skyMieDirectionalG = Number(newvalue).toFixed(2);
+				WTW.init.skyMieDirectionalG = Number(znewvalue).toFixed(2);
 				break;
 			case 'miecoefficient':
-				field = 'wtw_tskymiecoefficient';
-				if (newvalue == null) {
-					min = Number(dGet(field).min);
-					max = Number(dGet(field).max);
-					newvalue = (Number(WTW.init.skyMieCoefficient) + increment).toFixed(3);
-					if (newvalue < min) {
-						newvalue = min;
-					} else if (newvalue > max) {
-						newvalue = max;
+				zfield = 'wtw_tskymiecoefficient';
+				if (znewvalue == null) {
+					zmin = Number(dGet(zfield).min);
+					zmax = Number(dGet(zfield).max);
+					znewvalue = (Number(WTW.init.skyMieCoefficient) + zincrement).toFixed(3);
+					if (znewvalue < zmin) {
+						znewvalue = zmin;
+					} else if (znewvalue > zmax) {
+						znewvalue = zmax;
 					} 
 				}
-				WTW.init.skyMieCoefficient = Number(newvalue).toFixed(3);
+				WTW.init.skyMieCoefficient = Number(znewvalue).toFixed(3);
 				break;
 		}
 		WTW.loadSkyScene(WTW.init.skyInclination, WTW.init.skyLuminance, WTW.init.skyAzimuth, WTW.init.skyRayleigh, WTW.init.skyTurbidity, WTW.init.skyMieDirectionalG, WTW.init.skyMieCoefficient, 1);
@@ -724,7 +722,7 @@ WTWJS.prototype.setSkyScene = function (key, newvalue, increment) {
 WTWJS.prototype.cancelSkyDome = function() {
 	/* cancel and undo sky dome form changes */
 	try {
-		var skydomeid = WTW.init.skyTextureID;
+		var zskydomeid = WTW.init.skyTextureID;
 		WTW.init.skyInclination = dGet('wtw_tskyinclinationbackup').value;
 		WTW.init.skyLuminance = dGet('wtw_tskyluminancebackup').value;
 		WTW.init.skyAzimuth = dGet('wtw_tskyazimuthbackup').value;
@@ -742,7 +740,7 @@ WTWJS.prototype.cancelSkyDome = function() {
 							WTW.communities[i].graphics.sky.backupid = "";
 						}
 					}
-					skydomeid = WTW.communities[i].graphics.sky.id;
+					zskydomeid = WTW.communities[i].graphics.sky.id;
 				}
 			}
 		}
@@ -754,23 +752,23 @@ WTWJS.prototype.cancelSkyDome = function() {
 WTWJS.prototype.saveSkyDome = async function() {
 	/* save skydome sky changes */
 	try {
-		var skydomeid = WTW.init.skyTextureID;
+		var zskydomeid = WTW.init.skyTextureID;
 		if (dGet('wtw_tskydomeid').value != "") {
-			skydomeid = dGet('wtw_tskydomeid').value;
+			zskydomeid = dGet('wtw_tskydomeid').value;
 		}
 		for (var i = 0; i < WTW.communities.length; i++) {
 			if (WTW.communities[i] != null) {
 				if (WTW.communities[i].communityinfo.communityid == communityid) {
 					if (WTW.communities[i].graphics.sky.id != null) {
 						WTW.communities[i].graphics.sky.backupid = "";
-						WTW.communities[i].graphics.sky.id = skydomeid;
+						WTW.communities[i].graphics.sky.id = zskydomeid;
 					}
 				}
 			}
 		}
 		var zrequest = {
 			'communityid': communityid,
-			'skydomeid': skydomeid,
+			'skydomeid': zskydomeid,
 			'skyinclination': WTW.init.skyInclination,
 			'skyluminance': WTW.init.skyLuminance,
 			'skyazimuth': WTW.init.skyAzimuth,
@@ -857,25 +855,25 @@ WTWJS.prototype.setGroundWater = function() {
 	/* set ground level and water from form */
 	try {
 		if (communityid != "") {
-			var groundpositiony = 0;
-			var waterpositiony = -1;
+			var zgroundpositiony = 0;
+			var zwaterpositiony = -1;
 			if (WTW.isNumeric(dGet('wtw_tgroundpositiony').value)) {
-				groundpositiony = Number(dGet('wtw_tgroundpositiony').value);
+				zgroundpositiony = Number(dGet('wtw_tgroundpositiony').value);
 			}
-			if (groundpositiony > 0) {
-				groundpositiony = 0;
+			if (zgroundpositiony > 0) {
+				zgroundpositiony = 0;
 				dGet('wtw_tgroundpositiony').value = "0.00";
 			}
-			if (groundpositiony != 0) {
-				waterpositiony = 0;
+			if (zgroundpositiony != 0) {
+				zwaterpositiony = 0;
 			}
 			if (WTW.extraGround != null) {
-				WTW.extraGround.position.y = groundpositiony;
+				WTW.extraGround.position.y = zgroundpositiony;
 			}
 			if (WTW.water != null) {
-				WTW.water.position.y = waterpositiony;
+				WTW.water.position.y = zwaterpositiony;
 			}
-			dGet('wtw_twaterpositiony').value = waterpositiony;
+			dGet('wtw_twaterpositiony').value = zwaterpositiony;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-setGroundWater=" + ex.message);
@@ -988,8 +986,6 @@ WTWJS.prototype.setStartPosition = async function(zcommunityid, zbuildingid, zth
 	/* sets start position for 3D COmmuity, 3D Building, or 3D Thing */
 	try {
 		if (WTW.myAvatar!= null) {
-			var iframe = null;
-			var ipage = null;
 			if (zcommunityid != "") {
 				var zrequest = {
 					'communityid': communityid,
@@ -1077,8 +1073,8 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 		WTW.show('wtw_loadingupdatesnapshot');
 		if (communityid != '') {
 			WTW.getAsyncJSON("/connect/communities.php", 
-				function(response) {
-					WTW.communities = JSON.parse(response);
+				function(zresponse) {
+					WTW.communities = JSON.parse(zresponse);
 					if (WTW.communities != null) {
 						for (var i = 0; i < WTW.communities.length; i++) {
 							if (WTW.communities[i] != null) {
@@ -1108,8 +1104,8 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 			);
 		} else if (buildingid != '') {
 			WTW.getAsyncJSON("/connect/buildings.php", 
-				function(response) {
-					WTW.buildings = JSON.parse(response);
+				function(zresponse) {
+					WTW.buildings = JSON.parse(zresponse);
 					if (WTW.buildings != null) {
 						for (var i = 0; i < WTW.buildings.length; i++) {
 							if (WTW.buildings[i] != null) {
@@ -1139,8 +1135,8 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 			);
 		} else if (thingid != '') {
 			WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
-				function(response) {
-					WTW.things = JSON.parse(response);
+				function(zresponse) {
+					WTW.things = JSON.parse(zresponse);
 					if (WTW.things != null) {
 						for (var i = 0; i < WTW.things.length; i++) {
 							if (WTW.things[i] != null) {
@@ -1189,7 +1185,7 @@ WTWJS.prototype.snapshot3D = async function(zfilepath, zfilename) {
 		dGet('wtw_tfilepath').value = zfilepath;
 		var zcontext = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
 		scene.render();
-		var filedata = canvas.toDataURL("image/png");
+		var zfiledata = canvas.toDataURL("image/png");
 		zcontext = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: false});
 		var zrequest = {
 			'communityid': communityid,
@@ -1197,7 +1193,7 @@ WTWJS.prototype.snapshot3D = async function(zfilepath, zfilename) {
 			'thingid': thingid,
 			'filename': dGet('wtw_tfilename').value,
 			'filepath': dGet('wtw_tfilepath').value,
-			'filedata': filedata,
+			'filedata': zfiledata,
 			'function':'saveimage'
 		};
 		WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 

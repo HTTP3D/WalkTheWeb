@@ -21,8 +21,8 @@ WTWJS.prototype.openBuildingForm = async function(w) {
 		WTW.show('wtw_loadingbuildingform');
 		WTW.hide('wtw_adminmenu5b');
 		WTW.getAsyncJSON("/connect/buildings.php", 
-			function(response) {
-				WTW.buildings = JSON.parse(response);
+			function(zresponse) {
+				WTW.buildings = JSON.parse(zresponse);
 				if (WTW.buildings != null) {
 					for (var i = 0; i < WTW.buildings.length; i++) {
 						if (WTW.buildings[i] != null) {
@@ -72,8 +72,8 @@ WTWJS.prototype.loadBuildingForm = async function(w) {
 		dGet('wtw_tbuildingdescription').value = "";
 		dGet('wtw_tbuildingalttag').value = "";
 		WTW.getAsyncJSON("/connect/buildings.php", 
-			function(response) {
-				WTW.buildings = JSON.parse(response);
+			function(zresponse) {
+				WTW.buildings = JSON.parse(zresponse);
 				if (WTW.buildings != null) {
 					for (var i = 0; i < WTW.buildings.length; i++) {
 						if (WTW.buildings[i] != null) {
@@ -179,8 +179,8 @@ WTWJS.prototype.copyMyBuilding = async function() {
 	try {
 		dGet('wtw_tbuildingname').value = '';
 		WTW.getAsyncJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
-			function(response) {
-				WTW.buildings = JSON.parse(response);
+			function(zresponse) {
+				WTW.buildings = JSON.parse(zresponse);
 				if (WTW.buildings != null) {
 					for (var i = 0; i < WTW.buildings.length; i++) {
 						if (WTW.buildings[i] != null) {
@@ -252,8 +252,8 @@ WTWJS.prototype.getSelectBuildingsList = async function() {
 		WTW.show('wtw_loadingbuildingid');
 		dGet("wtw_listbuildings").innerHTML = "";
 		WTW.getAsyncJSON("/connect/buildings.php", 
-			function(response) {
-				WTW.buildings = JSON.parse(response);
+			function(zresponse) {
+				WTW.buildings = JSON.parse(zresponse);
 				if (WTW.buildings != null) {
 					for (var i = 0; i < WTW.buildings.length; i++) {
 						if (WTW.buildings[i] != null) {
@@ -284,8 +284,8 @@ WTWJS.prototype.getBuildingMoldList = async function() {
 		WTW.show('wtw_loadingbuildingmoldsbuttonlist');
 		dGet("wtw_buildingmoldsbuttonlist").innerHTML = "";
 		WTW.getAsyncJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
-			function(response) {
-				WTW.buildings = JSON.parse(response);
+			function(zresponse) {
+				WTW.buildings = JSON.parse(zresponse);
 				if (WTW.buildings != null) {
 					for (var i = 0; i < WTW.buildings.length; i++) {
 						if (WTW.buildings[i] != null) {
@@ -321,8 +321,8 @@ WTWJS.prototype.openShareBuildingForm = async function() {
 		WTW.hide('wtw_adminmenu9b');
 		WTW.show('wtw_loadingsharebuildingform');
 		WTW.getAsyncJSON("/connect/buildings.php", 
-			function(response) {
-				WTW.buildings = JSON.parse(response);
+			function(zresponse) {
+				WTW.buildings = JSON.parse(zresponse);
 				if (WTW.buildings != null) {
 					for (var i = 0; i < WTW.buildings.length; i++) {
 						if (WTW.buildings[i] != null) {

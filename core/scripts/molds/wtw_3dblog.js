@@ -14,7 +14,7 @@ WTWJS.prototype.refreshTextBox = function() {
 				if (zscrollboxbodytext != null) {
 					if (zscrollboxbodytext.WTW != undefined) {
 						if (zscrollboxbodytext.WTW.webtext != undefined) {
-							/* var webtext = zscrollboxbodytext.WTW.webtext.webtext; */
+							/* note: zwebtext = zscrollboxbodytext.WTW.webtext.webtext; */
 							if (WTW.isNumeric(zscrollboxbodytext.WTW.webtext.scrollpos)) {
 								var zscrollpos = Number(zscrollboxbodytext.WTW.webtext.scrollpos);
 								WTW.scrollBoxRepaint(WTW.selectedMoldName.replace("-scrollboxbodytext",""), zscrollpos);
@@ -1209,9 +1209,6 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 						var zscrollboxtab = scene.getMeshByID(zmoldname + "-scrollboxtab");
 						if (zparagraph.height > zparagraph.maxheight) {
 							if (zscrollboxtab == null) {
-								//var groovetexture = "/content/stock/walls/lightgray.jpg";
-								//var buttontexture = "/content/stock/walls/blue.jpg";
-								//var zgroovetextureid = "t1qlqxd6pzubzzzy";
 								var zbuttontextureid = "vvpzrv2pae3bbkwv";
 								var zbuttontexturehoverid = "yxs6lcxokr6lhll3";
 								var zarrowdownid = "hj9oly198c17x086";

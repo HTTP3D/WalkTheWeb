@@ -10,17 +10,17 @@
 WTWJS.prototype.initAutomations = function() {
 	/* load any existing automations when load zone (action zone) is entered */
 	try {
-		var checkautomationid = '';
-		var checkconnectinggridid = '';
+		var zcheckautomationid = '';
+		var zcheckconnectinggridid = '';
 		for (var i = 0; i < WTW.automations.length; i++) {
 			if (WTW.automations[i] != null) {
-				if (checkautomationid != WTW.automations[i].automationid || checkconnectinggridid != WTW.automations[i].connectinggridid) {
+				if (zcheckautomationid != WTW.automations[i].automationid || zcheckconnectinggridid != WTW.automations[i].connectinggridid) {
 					if (WTW.automations[i].running == '0') {
 						WTW.automations[i].automationind = i;
 						WTW.startAutomation(WTW.automations[i].automationid, WTW.automations[i].connectinggridind, WTW.automations[i].step.step);					
 					}
-					checkautomationid = WTW.automations[i].automationid;
-					checkconnectinggridid = WTW.automations[i].connectinggridid;
+					zcheckautomationid = WTW.automations[i].automationid;
+					zcheckconnectinggridid = WTW.automations[i].connectinggridid;
 				}
 			}
 		}
@@ -29,38 +29,38 @@ WTWJS.prototype.initAutomations = function() {
 	}
 }
 
-WTWJS.prototype.nextStepAutomation = function(automationid, connectinggridind, completedstep) {
+WTWJS.prototype.nextStepAutomation = function(zautomationid, zconnectinggridind, zcompletedstep) {
 	/* each step runs sequentially after the previous step concludes */
 	try {
-		var nextstep = 1000;
+		var znextstep = 1000;
 		for (var i = 0; i < WTW.automations.length; i++) {
 			if (WTW.automations[i] != null) {
-				if (WTW.automations[i].automationid == automationid && WTW.automations[i].connectinggridind == connectinggridind && Number(WTW.automations[i].step.step) > Number(completedstep)) {
-					if (Number(WTW.automations[i].step.step) < nextstep) {
-						nextstep = Number(WTW.automations[i].step.step);
+				if (WTW.automations[i].automationid == zautomationid && WTW.automations[i].connectinggridind == zconnectinggridind && Number(WTW.automations[i].step.step) > Number(zcompletedstep)) {
+					if (Number(WTW.automations[i].step.step) < znextstep) {
+						znextstep = Number(WTW.automations[i].step.step);
 						i = WTW.automations.length;
 					}
 				}
 			}
 		}
-		if (nextstep > -1) {
-			WTW.startAutomation(automationid, connectinggridind, nextstep, true);
+		if (znextstep > -1) {
+			WTW.startAutomation(zautomationid, zconnectinggridind, znextstep, true);
 		}
 	} catch (ex) {
 		WTW.log("core-nextStepAutomation=" + ex.message);
 	}
 }
 
-WTWJS.prototype.startAutomation = function(automationid, connectinggridind, step, ignorerunning) {
+WTWJS.prototype.startAutomation = function(zautomationid, zconnectinggridind, zstep, zignorerunning) {
 	/* start the automation with step 1 */
 	try {
-		if (ignorerunning == undefined) {
-			ignorerunning = false;
+		if (zignorerunning == undefined) {
+			zignorerunning = false;
 		}
 		for (var i = 0; i < WTW.automations.length; i++) {
 			if (WTW.automations[i] != null) {
-				if (WTW.automations[i].automationid == automationid && WTW.automations[i].connectinggridind == connectinggridind && WTW.automations[i].step.step == step) {
-					if (WTW.automations[i].running == '0' || ignorerunning) {
+				if (WTW.automations[i].automationid == zautomationid && WTW.automations[i].connectinggridind == zconnectinggridind && WTW.automations[i].step.step == zstep) {
+					if (WTW.automations[i].running == '0' || zignorerunning) {
 						switch(WTW.automations[i].step.automationtype){
 							case "pause":
 								automationpause(WTW.automations[i]);
@@ -88,60 +88,56 @@ WTWJS.prototype.startAutomation = function(automationid, connectinggridind, step
 	}
 }
 
-WTWJS.prototype.addAutomation = function(automationname, automationdef) {
+WTWJS.prototype.addAutomation = function(zautomationname, zautomationdef) {
 	/* temporarily disabled - work in progress */
-/*	var automation = null;
+/*	var zautomation = null;
 	try {
-		automation = scene.getMeshByID(automationname);
-		if (automation == null) {
-			var automationind = -1;
-			if (WTW.isNumeric(automationdef.automationind)) {
-				automationind = Number(automationdef.automationind);
+		zautomation = scene.getMeshByID(zautomationname);
+		if (zautomation == null) {
+			var zautomationind = -1;
+			if (WTW.isNumeric(zautomationdef.automationind)) {
+				zautomationind = Number(zautomationdef.automationind);
 			}
-			if (automationind > -1) {
-				var axispositionx = Number(automationdef.axis.position.x);
-				var axispositiony = Number(automationdef.axis.position.y);
-				var axispositionz = Number(automationdef.axis.position.z);
-				var namepart = automationname.split('-');
-				var parentautomationind = -1;
-				var parentautomation = null;
-				var automationparent = WTW.automations[automationind].parentname;
-				if (WTW.automations[automationind].parentautomationid != "") {
-					parentautomationind = getautomationind(WTW.automations[automationind].parentautomationid);
-					if (parentautomationind > -1) {
-						if (WTW.automations[parentautomationind] != null) {
-							var parentautomationname = "automation-" + parentautomationind.toString() + "-" + WTW.automations[parentautomationind].automationid + "-" + WTW.automations[parentautomationind].connectinggridind + "-" + WTW.automations[parentautomationind].connectinggridid + "-" + WTW.automations[parentautomationind].automationtype;
-							var parentautomation = scene.getMeshByID(parentautomationname);
-							if (parentautomation == null) {
-								parentautomation = WTW.addAutomation(parentautomationname, WTW.automations[parentautomationind]);
+			if (zautomationind > -1) {
+				var zparentautomationind = -1;
+				var zparentautomation = null;
+				var zautomationparent = WTW.automations[zautomationind].parentname;
+				if (WTW.automations[zautomationind].parentautomationid != "") {
+					zparentautomationind = getautomationind(WTW.automations[zautomationind].parentautomationid);
+					if (zparentautomationind > -1) {
+						if (WTW.automations[zparentautomationind] != null) {
+							var parentautomationname = "automation-" + zparentautomationind.toString() + "-" + WTW.automations[zparentautomationind].automationid + "-" + WTW.automations[zparentautomationind].connectinggridind + "-" + WTW.automations[zparentautomationind].connectinggridid + "-" + WTW.automations[zparentautomationind].automationtype;
+							zparentautomation = scene.getMeshByID(parentautomationname);
+							if (zparentautomation == null) {
+								zparentautomation = WTW.addAutomation(parentautomationname, WTW.automations[zparentautomationind]);
 							}
-							WTW.automations[automationind].parentname = "automationaxlebase2-" + parentautomationind.toString() + "-" + WTW.automations[parentautomationind].automationid + "-" + WTW.automations[parentautomationind].connectinggridind + "-" + WTW.automations[parentautomationind].connectinggridid + "-" + WTW.automations[parentautomationind].automationtype;
+							WTW.automations[zautomationind].parentname = "automationaxlebase2-" + zparentautomationind.toString() + "-" + WTW.automations[zparentautomationind].automationid + "-" + WTW.automations[zparentautomationind].connectinggridind + "-" + WTW.automations[zparentautomationind].connectinggridid + "-" + WTW.automations[zparentautomationind].automationtype;
 							
 						}
 					}
 				}
-				if (parentautomation != null) {
-					var parentautomationaxlebasename = "automationaxlebase-" + parentautomationind.toString() + "-" + WTW.automations[parentautomationind].automationid + "-" + WTW.automations[parentautomationind].connectinggridind + "-" + WTW.automations[parentautomationind].connectinggridid + "-" + WTW.automations[parentautomationind].automationtype;
-					var parentautomationaxlebase2name = "automationaxlebase2-" + parentautomationind.toString() + "-" + WTW.automations[parentautomationind].automationid + "-" + WTW.automations[parentautomationind].connectinggridind + "-" + WTW.automations[parentautomationind].connectinggridid + "-" + WTW.automations[parentautomationind].automationtype;
-					var parentautomationaxlebase = scene.getMeshByID(parentautomationaxlebasename);
-					automationdef.axis.position.x -= (parentautomationaxlebase.position.x);
-					automationdef.axis.position.y -= (parentautomationaxlebase.position.y);
-					automationdef.axis.position.z -= (parentautomationaxlebase.position.z);
-					automationdef.position.x -= (parentautomationaxlebase.position.x);
-					automationdef.position.y -= (parentautomationaxlebase.position.y);
-					automationdef.position.z -= (parentautomationaxlebase.position.z);
-					automationdef.parentname = parentautomationaxlebase2name;
+				if (zparentautomation != null) {
+					var zparentautomationaxlebasename = "automationaxlebase-" + zparentautomationind.toString() + "-" + WTW.automations[zparentautomationind].automationid + "-" + WTW.automations[zparentautomationind].connectinggridind + "-" + WTW.automations[zparentautomationind].connectinggridid + "-" + WTW.automations[zparentautomationind].automationtype;
+					var zparentautomationaxlebase2name = "automationaxlebase2-" + zparentautomationind.toString() + "-" + WTW.automations[zparentautomationind].automationid + "-" + WTW.automations[zparentautomationind].connectinggridind + "-" + WTW.automations[zparentautomationind].connectinggridid + "-" + WTW.automations[zparentautomationind].automationtype;
+					var zparentautomationaxlebase = scene.getMeshByID(zparentautomationaxlebasename);
+					zautomationdef.axis.position.x -= (zparentautomationaxlebase.position.x);
+					zautomationdef.axis.position.y -= (zparentautomationaxlebase.position.y);
+					zautomationdef.axis.position.z -= (zparentautomationaxlebase.position.z);
+					zautomationdef.position.x -= (zparentautomationaxlebase.position.x);
+					zautomationdef.position.y -= (zparentautomationaxlebase.position.y);
+					zautomationdef.position.z -= (zparentautomationaxlebase.position.z);
+					zautomationdef.parentname = zparentautomationaxlebase2name;
 				}
-				var automationtype = automationdef.automationtype.toLowerCase();
-				while (automationtype.indexOf(" ") > -1) {
-					automationtype = automationtype.replace(" ","");
+				var zautomationtype = zautomationdef.automationtype.toLowerCase();
+				while (zautomationtype.indexOf(" ") > -1) {
+					zautomationtype = zautomationtype.replace(" ","");
 				}
-				switch (automationtype) {
+				switch (zautomationtype) {
 					case "loadzone":
-						automation = addautomationloadzone(automationname, automationind, automationdef);
+						zautomation = addautomationloadzone(zautomationname, zautomationind, zautomationdef);
 						break;
 					default:
-						automation = addautomationloadzone(automationname, automationind, automationdef);
+						zautomation = addautomationloadzone(zautomationname, zautomationind, zautomationdef);
 						break;
 				}
 			}
@@ -149,5 +145,5 @@ WTWJS.prototype.addAutomation = function(automationname, automationdef) {
 	} catch (ex) {
 		WTW.log("core-scripts-automations-addautomationlist\r\n addAutomation=" + ex.message);
 	} 
-	return automation;*/
+	return zautomation;*/
 }

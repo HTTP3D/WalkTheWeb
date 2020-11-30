@@ -401,241 +401,241 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 			}		
 		}
 		zcovering = new BABYLON.MultiMaterial("cubemat" + zmoldname, scene);
-		var rMaterial = new BABYLON.StandardMaterial("rmat" + zmoldname, scene);
+		var zrmaterial = new BABYLON.StandardMaterial("rmat" + zmoldname, scene);
 		var zimageinfo;
 		var zimageextension = '';
 		if (ztexturepath == '') {
 			zimageinfo = WTW.getUploadFileData(zimageid);
 			zimageextension = zimageinfo.extension;
-			rMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zrmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			rMaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
+			zrmaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 			zimageextension = ztexturepath.substr(ztexturepath.length - 3).toLowerCase();
 		}
-		rMaterial.diffuseTexture.wAng = 0 * Math.PI / 180;
-		rMaterial.diffuseTexture.uScale = zuscr;
-		rMaterial.diffuseTexture.vScale = zvscr;
-		rMaterial.diffuseTexture.uOffset = zuosr;
-		rMaterial.diffuseTexture.vOffset = zvosr;
-		rMaterial.diffuseTexture.alpha = zalpha;
-		rMaterial.alpha = zopacity;
-		rMaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
-		rMaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
-		rMaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
-		rMaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+		zrmaterial.diffuseTexture.wAng = 0 * Math.PI / 180;
+		zrmaterial.diffuseTexture.uScale = zuscr;
+		zrmaterial.diffuseTexture.vScale = zvscr;
+		zrmaterial.diffuseTexture.uOffset = zuosr;
+		zrmaterial.diffuseTexture.vOffset = zvosr;
+		zrmaterial.diffuseTexture.alpha = zalpha;
+		zrmaterial.alpha = zopacity;
+		zrmaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zrmaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zrmaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zrmaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 
 		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
-			rMaterial.diffuseTexture.hasAlpha = true;
-			rMaterial.useAlphaFromDiffuseTexture = true;
+			zrmaterial.diffuseTexture.hasAlpha = true;
+			zrmaterial.useAlphaFromDiffuseTexture = true;
 		}
 		if (zbumpid != '' || zbumppath != '') {
 			if (zbumppath != '') {
-				rMaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
+				zrmaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				rMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "rMaterial" + zmoldname, scene);
+				zrmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "rMaterial" + zmoldname, scene);
 			}
-			rMaterial.bumpTexture.wAng = 0 * Math.PI / 180;
-			rMaterial.bumpTexture.uScale = zuscr;
-			rMaterial.bumpTexture.vScale = zvscr;
-			rMaterial.bumpTexture.uOffset = zuosr;
-			rMaterial.bumpTexture.vOffset = zvosr;
-			rMaterial.useParallax = true;
-			rMaterial.useParallaxOcclusion = true;
+			zrmaterial.bumpTexture.wAng = 0 * Math.PI / 180;
+			zrmaterial.bumpTexture.uScale = zuscr;
+			zrmaterial.bumpTexture.vScale = zvscr;
+			zrmaterial.bumpTexture.uOffset = zuosr;
+			zrmaterial.bumpTexture.vOffset = zvosr;
+			zrmaterial.useParallax = true;
+			zrmaterial.useParallaxOcclusion = true;
 		}
-		var lMaterial = new BABYLON.StandardMaterial("lmat" + zmoldname, scene);
+		var zlmaterial = new BABYLON.StandardMaterial("lmat" + zmoldname, scene);
 		if (ztexturepath == '') {
-			lMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zlmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			lMaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
+			zlmaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
-		lMaterial.diffuseTexture.wAng = 180 * Math.PI / 180;
-		lMaterial.diffuseTexture.uScale = zuscl;
-		lMaterial.diffuseTexture.vScale = zvscl;
-		lMaterial.diffuseTexture.uOffset = zuosl;
-		lMaterial.diffuseTexture.vOffset = zvosl;
-		lMaterial.alpha = zopacity;
-		lMaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
-		lMaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
-		lMaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
-		lMaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+		zlmaterial.diffuseTexture.wAng = 180 * Math.PI / 180;
+		zlmaterial.diffuseTexture.uScale = zuscl;
+		zlmaterial.diffuseTexture.vScale = zvscl;
+		zlmaterial.diffuseTexture.uOffset = zuosl;
+		zlmaterial.diffuseTexture.vOffset = zvosl;
+		zlmaterial.alpha = zopacity;
+		zlmaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zlmaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zlmaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zlmaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 
 		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
-			lMaterial.diffuseTexture.hasAlpha = true;
-			lMaterial.useAlphaFromDiffuseTexture = true;
+			zlmaterial.diffuseTexture.hasAlpha = true;
+			zlmaterial.useAlphaFromDiffuseTexture = true;
 		}
 		if (zbumpid != '' || zbumppath != '') {
 			if (zbumppath != '') {
-				lMaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
+				zlmaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				lMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "lMaterial" + zmoldname, scene);
+				zlmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "lMaterial" + zmoldname, scene);
 			}
-			lMaterial.bumpTexture.wAng = 180 * Math.PI / 180;
-			lMaterial.bumpTexture.uScale = zuscl;
-			lMaterial.bumpTexture.vScale = zvscl;
-			lMaterial.bumpTexture.uOffset = zuosl;
-			lMaterial.bumpTexture.vOffset = zvosl;
-			lMaterial.useParallax = true;
-			lMaterial.useParallaxOcclusion = true;
+			zlmaterial.bumpTexture.wAng = 180 * Math.PI / 180;
+			zlmaterial.bumpTexture.uScale = zuscl;
+			zlmaterial.bumpTexture.vScale = zvscl;
+			zlmaterial.bumpTexture.uOffset = zuosl;
+			zlmaterial.bumpTexture.vOffset = zvosl;
+			zlmaterial.useParallax = true;
+			zlmaterial.useParallaxOcclusion = true;
 		}
 		var imagename = "fmattexture" + zmoldname;
 		if (WTW.adminView == 1) {
 			imagename +=  WTW.getRandomString(16);
 		}
-		var fMaterial = new BABYLON.StandardMaterial("fmat" + zmoldname, scene);
+		var zfmaterial = new BABYLON.StandardMaterial("fmat" + zmoldname, scene);
 		if (ztexturepath == '') {
-			fMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zfmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			fMaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
+			zfmaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
-		fMaterial.diffuseTexture.wAng = 90 * Math.PI / 180;
-		fMaterial.diffuseTexture.uScale = zuscf;
-		fMaterial.diffuseTexture.vScale = zvscf;
-		fMaterial.diffuseTexture.uOffset = zuosf;
-		fMaterial.diffuseTexture.vOffset = zvosf;
-		fMaterial.alpha = zopacity;
-		fMaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
-		fMaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
-		fMaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
-		fMaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+		zfmaterial.diffuseTexture.wAng = 90 * Math.PI / 180;
+		zfmaterial.diffuseTexture.uScale = zuscf;
+		zfmaterial.diffuseTexture.vScale = zvscf;
+		zfmaterial.diffuseTexture.uOffset = zuosf;
+		zfmaterial.diffuseTexture.vOffset = zvosf;
+		zfmaterial.alpha = zopacity;
+		zfmaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zfmaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zfmaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zfmaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 
 		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
-			fMaterial.diffuseTexture.hasAlpha = true;
-			fMaterial.useAlphaFromDiffuseTexture = true;
+			zfmaterial.diffuseTexture.hasAlpha = true;
+			zfmaterial.useAlphaFromDiffuseTexture = true;
 		}
 		if (zbumpid != '' || zbumppath != '') {
 			if (zbumppath != '') {
-				fMaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
+				zfmaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				fMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "fMaterial" + zmoldname, scene);
+				zfmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "fMaterial" + zmoldname, scene);
 			}
-			fMaterial.bumpTexture.wAng = 90 * Math.PI / 180;
-			fMaterial.bumpTexture.uScale = zuscf;
-			fMaterial.bumpTexture.vScale = zvscf;
-			fMaterial.bumpTexture.uOffset = zuosf;
-			fMaterial.bumpTexture.vOffset = zvosf;
-			fMaterial.useParallax = true;
-			fMaterial.useParallaxOcclusion = true;
+			zfmaterial.bumpTexture.wAng = 90 * Math.PI / 180;
+			zfmaterial.bumpTexture.uScale = zuscf;
+			zfmaterial.bumpTexture.vScale = zvscf;
+			zfmaterial.bumpTexture.uOffset = zuosf;
+			zfmaterial.bumpTexture.vOffset = zvosf;
+			zfmaterial.useParallax = true;
+			zfmaterial.useParallaxOcclusion = true;
 		}
-		var bMaterial = new BABYLON.StandardMaterial("bmat" + zmoldname, scene);
+		var zbmaterial = new BABYLON.StandardMaterial("bmat" + zmoldname, scene);
 		if (ztexturepath == '') {
-			bMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zbmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			bMaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
+			zbmaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
-		bMaterial.diffuseTexture.wAng = 90 * Math.PI / 180;
-		bMaterial.diffuseTexture.uScale = zuscb;
-		bMaterial.diffuseTexture.vScale = zvscb;
-		bMaterial.diffuseTexture.uOffset = zuosb;
-		bMaterial.diffuseTexture.vOffset = zvosb;
-		bMaterial.diffuseTexture.alpha = zalpha;
-		bMaterial.alpha = zopacity;
-		bMaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
-		bMaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
-		bMaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
-		bMaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+		zbmaterial.diffuseTexture.wAng = 90 * Math.PI / 180;
+		zbmaterial.diffuseTexture.uScale = zuscb;
+		zbmaterial.diffuseTexture.vScale = zvscb;
+		zbmaterial.diffuseTexture.uOffset = zuosb;
+		zbmaterial.diffuseTexture.vOffset = zvosb;
+		zbmaterial.diffuseTexture.alpha = zalpha;
+		zbmaterial.alpha = zopacity;
+		zbmaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zbmaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zbmaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zbmaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 
 		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
-			bMaterial.diffuseTexture.hasAlpha = true;
-			bMaterial.useAlphaFromDiffuseTexture = true;
+			zbmaterial.diffuseTexture.hasAlpha = true;
+			zbmaterial.useAlphaFromDiffuseTexture = true;
 		}
 		if (zbumpid != '' || zbumppath != '') {
 			if (zbumppath != '') {
-				bMaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
+				zbmaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				bMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "bMaterial" + zmoldname, scene);
+				zbmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "bMaterial" + zmoldname, scene);
 			}
-			bMaterial.bumpTexture.wAng = 90 * Math.PI / 180;
-			bMaterial.bumpTexture.uScale = zuscb;
-			bMaterial.bumpTexture.vScale = zvscb;
-			bMaterial.bumpTexture.uOffset = zuosb;
-			bMaterial.bumpTexture.vOffset = zvosb;
-			bMaterial.useParallax = true;
-			bMaterial.useParallaxOcclusion = true;
+			zbmaterial.bumpTexture.wAng = 90 * Math.PI / 180;
+			zbmaterial.bumpTexture.uScale = zuscb;
+			zbmaterial.bumpTexture.vScale = zvscb;
+			zbmaterial.bumpTexture.uOffset = zuosb;
+			zbmaterial.bumpTexture.vOffset = zvosb;
+			zbmaterial.useParallax = true;
+			zbmaterial.useParallaxOcclusion = true;
 		}
-		var uMaterial = new BABYLON.StandardMaterial("umat" + zmoldname, scene);
+		var zumaterial = new BABYLON.StandardMaterial("umat" + zmoldname, scene);
 		if (ztexturepath == '') {
-			uMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zumaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			uMaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
+			zumaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
-		uMaterial.diffuseTexture.wAng = 180 * Math.PI / 180;
-		uMaterial.diffuseTexture.uScale = zuscu;
-		uMaterial.diffuseTexture.vScale = zvscu;
-		uMaterial.diffuseTexture.uOffset = zuosu;
-		uMaterial.diffuseTexture.vOffset = zvosu;
-		uMaterial.diffuseTexture.alpha = zalpha;
-		uMaterial.alpha = zopacity;
-		uMaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
-		uMaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
-		uMaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
-		uMaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+		zumaterial.diffuseTexture.wAng = 180 * Math.PI / 180;
+		zumaterial.diffuseTexture.uScale = zuscu;
+		zumaterial.diffuseTexture.vScale = zvscu;
+		zumaterial.diffuseTexture.uOffset = zuosu;
+		zumaterial.diffuseTexture.vOffset = zvosu;
+		zumaterial.diffuseTexture.alpha = zalpha;
+		zumaterial.alpha = zopacity;
+		zumaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zumaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zumaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zumaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 
 		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
-			uMaterial.diffuseTexture.hasAlpha = true;
-			uMaterial.useAlphaFromDiffuseTexture = true;
+			zumaterial.diffuseTexture.hasAlpha = true;
+			zumaterial.useAlphaFromDiffuseTexture = true;
 		}
 		if (zbumpid != '' || zbumppath != '') {
 			if (zbumppath != '') {
-				uMaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
+				zumaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				uMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "uMaterial" + zmoldname, scene);
+				zumaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "uMaterial" + zmoldname, scene);
 			}
-			uMaterial.bumpTexture.wAng = 180 * Math.PI / 180;
-			uMaterial.bumpTexture.uScale = zuscu;
-			uMaterial.bumpTexture.vScale = zvscu;
-			uMaterial.bumpTexture.uOffset = zuosu;
-			uMaterial.bumpTexture.vOffset = zvosu;
-			uMaterial.useParallax = true;
-			uMaterial.useParallaxOcclusion = true;
+			zumaterial.bumpTexture.wAng = 180 * Math.PI / 180;
+			zumaterial.bumpTexture.uScale = zuscu;
+			zumaterial.bumpTexture.vScale = zvscu;
+			zumaterial.bumpTexture.uOffset = zuosu;
+			zumaterial.bumpTexture.vOffset = zvosu;
+			zumaterial.useParallax = true;
+			zumaterial.useParallaxOcclusion = true;
 		}
-		var dMaterial = new BABYLON.StandardMaterial("dmat" + zmoldname, scene);
+		var zdmaterial = new BABYLON.StandardMaterial("dmat" + zmoldname, scene);
 		if (ztexturepath == '') {
-			dMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zdmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
 		} else {
-			dMaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
+			zdmaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
-		dMaterial.diffuseTexture.wAng = 180 * Math.PI / 180;
-		dMaterial.diffuseTexture.uScale = zuscd;
-		dMaterial.diffuseTexture.vScale = zvscd;
-		dMaterial.diffuseTexture.uOffset = zuosd;
-		dMaterial.diffuseTexture.vOffset = zvosd;
-		dMaterial.diffuseTexture.alpha = zalpha;
-		dMaterial.alpha = zopacity;
-		dMaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
-		dMaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
-		dMaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
-		dMaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+		zdmaterial.diffuseTexture.wAng = 180 * Math.PI / 180;
+		zdmaterial.diffuseTexture.uScale = zuscd;
+		zdmaterial.diffuseTexture.vScale = zvscd;
+		zdmaterial.diffuseTexture.uOffset = zuosd;
+		zdmaterial.diffuseTexture.vOffset = zvosd;
+		zdmaterial.diffuseTexture.alpha = zalpha;
+		zdmaterial.alpha = zopacity;
+		zdmaterial.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+		zdmaterial.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+		zdmaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+		zdmaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 
 		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
-			dMaterial.diffuseTexture.hasAlpha = true;
-			dMaterial.useAlphaFromDiffuseTexture = true;
+			zdmaterial.diffuseTexture.hasAlpha = true;
+			zdmaterial.useAlphaFromDiffuseTexture = true;
 		}
 		if (zbumpid != '' || zbumppath != '') {
 			if (zbumppath != '') {
-				dMaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
+				zdmaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				dMaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "dMaterial" + zmoldname, scene);
+				zdmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "dMaterial" + zmoldname, scene);
 			}
-			dMaterial.bumpTexture.wAng = 180 * Math.PI / 180;
-			dMaterial.bumpTexture.uScale = zuscd;
-			dMaterial.bumpTexture.vScale = zvscd;
-			dMaterial.bumpTexture.uOffset = zuosd;
-			dMaterial.bumpTexture.vOffset = zvosd;
-			dMaterial.useParallax = true;
-			dMaterial.useParallaxOcclusion = true;
+			zdmaterial.bumpTexture.wAng = 180 * Math.PI / 180;
+			zdmaterial.bumpTexture.uScale = zuscd;
+			zdmaterial.bumpTexture.vScale = zvscd;
+			zdmaterial.bumpTexture.uOffset = zuosd;
+			zdmaterial.bumpTexture.vOffset = zvosd;
+			zdmaterial.useParallax = true;
+			zdmaterial.useParallaxOcclusion = true;
 		}
-		zcovering.subMaterials[0] = lMaterial;
-		zcovering.subMaterials[1] = rMaterial;
-		zcovering.subMaterials[2] = bMaterial;
-		zcovering.subMaterials[3] = fMaterial;
-		zcovering.subMaterials[4] = uMaterial;
-		zcovering.subMaterials[5] = dMaterial;
+		zcovering.subMaterials[0] = zlmaterial;
+		zcovering.subMaterials[1] = zrmaterial;
+		zcovering.subMaterials[2] = zbmaterial;
+		zcovering.subMaterials[3] = zfmaterial;
+		zcovering.subMaterials[4] = zumaterial;
+		zcovering.subMaterials[5] = zdmaterial;
 		if (zmoldname.indexOf("myavatar-") > -1 || zmoldname.indexOf("person-") > -1) {
 			zcovering.backFaceCulling = false;
 		} else {

@@ -22,7 +22,7 @@ WTWJS.prototype.openHUDFollow = function() {
 		zpanel.scaling = new BABYLON.Vector3(3,3,3);
 		//zpanel.position.y = 10;
 		zpanel.blockLayout = true;
-//		var button = new BABYLON.GUI.HolographicButton("orientation");
+//		var zbutton = new BABYLON.GUI.HolographicButton("orientation");
 		
 		
 		zmanager.parent = WTW.myAvatar;

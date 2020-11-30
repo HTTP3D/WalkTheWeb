@@ -589,7 +589,7 @@ WTWJS.prototype.loadSoundToMold = function(zmold, zmoldname, zsoundid, zsoundpat
 
 WTWJS.prototype.getSoundVolumeLinear = function(zmoldname, zmaxdistance) {
 	/* returns volume based on linear distance from sound source */
-	var volume = 0;
+	var zvolume = 0;
 	try {
 		if (WTW.soundMute == false) {
 			var zmold = scene.getMeshByID(zmoldname);
@@ -602,9 +602,9 @@ WTWJS.prototype.getSoundVolumeLinear = function(zmoldname, zmaxdistance) {
 				zmold.computeWorldMatrix(true);
 				var zabspos = zmold.getAbsolutePosition();
 				if (WTW.myAvatar != null) {
-					var dist = Math.round(Math.sqrt(Math.pow(zabspos.x-WTW.myAvatar.position.x, 2) + Math.pow(zabspos.y-WTW.myAvatar.position.y, 2) + Math.pow(zabspos.z-WTW.myAvatar.position.z, 2)));
-					if (dist < zmaxdistance) {
-						volume = 1 - (1 / zmaxdistance * dist);
+					var zdist = Math.round(Math.sqrt(Math.pow(zabspos.x-WTW.myAvatar.position.x, 2) + Math.pow(zabspos.y-WTW.myAvatar.position.y, 2) + Math.pow(zabspos.z-WTW.myAvatar.position.z, 2)));
+					if (zdist < zmaxdistance) {
+						zvolume = 1 - (1 / zmaxdistance * zdist);
 					}
 				}
 			}
@@ -612,7 +612,7 @@ WTWJS.prototype.getSoundVolumeLinear = function(zmoldname, zmaxdistance) {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-getSoundVolumeLinear=" + ex.message);
 	}
-	return volume;
+	return zvolume;
 }
 
 

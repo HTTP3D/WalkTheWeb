@@ -10,9 +10,9 @@
 WTWJS.prototype.newConnectingGrid = function() {
 	/* create an instance for a Connecting Grid - defined the position, scaling, and rotation of a web item in another web item. */
 	/* Example: placement of a 3D Building in a 3D Community Scene */
-	var connectinggrid = '';
+	var zconnectinggrid = '';
 	try {
-		connectinggrid = {
+		zconnectinggrid = {
 			'communityinfo':
 			{
 				'communityid':'',
@@ -86,15 +86,15 @@ WTWJS.prototype.newConnectingGrid = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newConnectingGrid=" + ex.message);
 	}
-	return connectinggrid;
+	return zconnectinggrid;
 }
 
 WTWJS.prototype.newActionZone = function() {
 	/* create an instance for an Action Zone */
 	/* Action Zones provide a trigger in the 3D Scene to execute an action of usually animation or JavaScript function */
-	var actionzone = '';
+	var zactionzone = '';
 	try {
-		actionzone = {
+		zactionzone = {
 			'communityinfo':
 			{
 				'communityid':'',
@@ -181,19 +181,19 @@ WTWJS.prototype.newActionZone = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newActionZone=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
 WTWJS.prototype.newMold = function() {
 	/* create an instance for a Mold */
 	/* molds are definitions for meshes to be loaded or unloaded in the 3D Scene */
-	var molddef = '';
-	var path1 = [];
-	var path2 = [];
-	var webimages = [];
+	var zmolddef = '';
+	var zpath1 = [];
+	var zpath2 = [];
+	var zwebimages = [];
 	try {
-		webimages[0] = WTW.newWebImage();
-		molddef = {
+		zwebimages[0] = WTW.newWebImage();
+		zmolddef = {
 			'communityinfo':
 			{
 				'communityid':'',
@@ -295,7 +295,7 @@ WTWJS.prototype.newMold = function() {
 				'receiveshadows':'0',
 				'waterreflection':'0',
 				'webimageind':'0',
-				'webimages':webimages
+				'webimages':zwebimages
 			},
 			'webtext':{
 				'webtext':'',
@@ -312,8 +312,8 @@ WTWJS.prototype.newMold = function() {
 			},
 			'paths':
 			{
-				'path1':path1,
-				'path2':path2
+				'path1':zpath1,
+				'path2':zpath2
 			},
 			'alttag':
 			{
@@ -368,15 +368,15 @@ WTWJS.prototype.newMold = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newmold=" + ex.message);
 	}
-	return molddef;
+	return zmolddef;
 }
 
 WTWJS.prototype.newPathPoint = function() {
 	/* create an instance for a Path Point */
 	/* points are used for Tubes, Lines, and other molds that use a series of points as part of their use */
-	var pathpoint = '';
+	var zpathpoint = '';
 	try {
-		var pathpoint = {
+		var zpathpoint = {
 			'x':'0',
 			'y':'0',
 			'z':'0',
@@ -385,14 +385,14 @@ WTWJS.prototype.newPathPoint = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newPathPoint=" + ex.message);
 	}
-	return pathpoint;
+	return zpathpoint;
 }
 
 WTWJS.prototype.newMoldEvent = function() {
 	/* create an instance for the mold event (animation tied to a mold) */
-	var moldevent = '';
+	var zmoldevent = '';
 	try {
-		moldevent = {
+		zmoldevent = {
 			'animationevent':'',
 			'moldevent':'onclick',
 			'moldname':'',
@@ -418,13 +418,13 @@ WTWJS.prototype.newMoldEvent = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newMoldEvent=" + ex.message);
 	}
-	return moldevent;
+	return zmoldevent;
 }
 
 WTWJS.prototype.newWebImage = function() {
-	var webimage = '';
+	var zwebimage = '';
 	try {
-		var webimage = {
+		var zwebimage = {
 			'imageid':'',
 			'imagepath':'',
 			'imagehoverid':'',
@@ -440,14 +440,14 @@ WTWJS.prototype.newWebImage = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newWebImage=" + ex.message);
 	}
-	return webimage;
+	return zwebimage;
 }
 
 WTWJS.prototype.newHTMLSegment = function() {
 	/* create an instance for HTML segments of text to be converted into 3D Elements in the 3D Scene */
-	var htmlsegment = '';
+	var zhtmlsegment = '';
 	try {
-		htmlsegment = {
+		zhtmlsegment = {
 			'tagname':'',
 			'src':'',
 			'style':
@@ -486,14 +486,14 @@ WTWJS.prototype.newHTMLSegment = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newHTMLSegment=" + ex.message);
 	}
-	return htmlsegment;
+	return zhtmlsegment;
 }
 
 WTWJS.prototype.newUpload = function() {
 	/* create an instance for an Uploaded File (depreciated - used for database stored files) */
-	var upload = '';
+	var zupload = '';
 	try {
-		upload = {
+		zupload = {
 			'uploadinfo':
 			{
 				'title':'',
@@ -517,14 +517,14 @@ WTWJS.prototype.newUpload = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newUpload=" + ex.message);
 	}
-	return upload;
+	return zupload;
 }
 
 WTWJS.prototype.newObjectAnimation = function() {
 	/* create an instance for the Object Animation (Animation defined for 3D Models like Babylon Files) */
-	var objectanimation = '';
+	var zobjectanimation = '';
 	try {
-		objectanimation = {
+		zobjectanimation = {
 			'objectanimationid':'',
 			'objectfolder':'',
 			'objectfile':'',
@@ -547,7 +547,7 @@ WTWJS.prototype.newObjectAnimation = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newObjectAnimation=" + ex.message);
 	}
-	return objectanimation;
+	return zobjectanimation;
 }
 
 WTWJS.prototype.newOffset = function() {
@@ -584,9 +584,9 @@ WTWJS.prototype.newOffset = function() {
 WTWJS.prototype.newMoldQueue = function() {
 	/* create an instance for the mold Queue */
 	/* mold queue is used to spread mold creation over frames more evenly for smoother animation */
-	var moldqueue = '';
+	var zmoldqueue = '';
 	try {
-		moldqueue = {
+		zmoldqueue = {
 			'moldname':'',
 			'queprocess':'add',
 			'actionzoneind':'-1',
@@ -602,15 +602,15 @@ WTWJS.prototype.newMoldQueue = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newMoldQueue=" + ex.message);
 	}
-	return moldqueue;
+	return zmoldqueue;
 }
 
 WTWJS.prototype.newAnalyticsQueue = function() {
 	/* create an instance for the analytics Queue */
 	/* each instance will result in a page view for Analytics */
-	var analyticsqueue = '';
+	var zanalyticsqueue = '';
 	try {
-		analyticsqueue = {
+		zanalyticsqueue = {
 			'actionzoneind':'-1',
 			'distancename':'',
 			'connectinggridind':'-1',
@@ -619,7 +619,7 @@ WTWJS.prototype.newAnalyticsQueue = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAnalyticsQueue=" + ex.message);
 	}
-	return analyticsqueue;
+	return zanalyticsqueue;
 }
 
 
@@ -627,12 +627,12 @@ WTWJS.prototype.newAnalyticsQueue = function() {
 
 WTWJS.prototype.newAvatarDef = function() {
 	/* create an instance for an Avatar definition */
-	var avatardef = '';
-	var avatarparts = [];
-	var animations = [];
-	var avataranimationdefs = [];
+	var zavatardef = '';
+	var zavatarparts = [];
+	var zanimations = [];
+	var zavataranimationdefs = [];
 	try {
-		avatardef = {
+		zavatardef = {
 			'position':
 			{
 				'x':WTW.init.startPositionX,
@@ -688,9 +688,9 @@ WTWJS.prototype.newAvatarDef = function() {
 				'lastframecount':0
 				
 			},
-			'avatarparts': avatarparts,
-			'avataranimationdefs': avataranimationdefs,
-			'animations': animations,
+			'avatarparts': zavatarparts,
+			'avataranimationdefs': zavataranimationdefs,
+			'animations': zanimations,
 			'name':'',
 			'globaluseravatarid':'',
 			'useravatarid':'',
@@ -725,14 +725,14 @@ WTWJS.prototype.newAvatarDef = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAvatarDef=" + ex.message);
 	}
-	return avatardef;
+	return zavatardef;
 }
 
 WTWJS.prototype.newAvatarAnimationDef = function() {
 	/* create an instance for an Avatar Animation Definition */
-	var animationdef = '';
+	var zanimationdef = '';
 	try {
-		animationdef = {
+		zanimationdef = {
 			'animationind':-1,
 			'useravataranimationid':'',
 			'avataranimationid':'',
@@ -757,14 +757,14 @@ WTWJS.prototype.newAvatarAnimationDef = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAvatarAnimationDef=" + ex.message);
 	}
-	return animationdef;
+	return zanimationdef;
 }
 
 WTWJS.prototype.newAvatarAnimationDefs = function() {
 	/* create an instance of an Array of default Avatar Animations that includes all of the basic functionality */
-	var animationdefs = [];
+	var zanimationdefs = [];
 	try {
-		animationdefs[0] = {
+		zanimationdefs[0] = {
 			'useravataranimationid':'',
 			'avataranimationid':'r9087b004i9ptv0e',
 			'animationevent':'onwait',
@@ -783,7 +783,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[1] = {
+		zanimationdefs[1] = {
 			'useravataranimationid':'',
 			'avataranimationid':'b03ftsjbxr0sxam8',
 			'animationevent':'onwalk',
@@ -802,7 +802,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[2] = {
+		zanimationdefs[2] = {
 			'useravataranimationid':'',
 			'avataranimationid':'0ikarv3xbs0n7544',
 			'animationevent':'onwalkbackwards',
@@ -821,7 +821,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[3] = {
+		zanimationdefs[3] = {
 			'useravataranimationid':'',
 			'avataranimationid':'9xworrh44cbkwq1y',
 			'animationevent':'onturnleft',
@@ -840,7 +840,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[4] = {
+		zanimationdefs[4] = {
 			'useravataranimationid':'',
 			'avataranimationid':'mbpjld4fttowgnt6',
 			'animationevent':'onturnright',
@@ -859,7 +859,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[5] = {
+		zanimationdefs[5] = {
 			'useravataranimationid':'',
 			'avataranimationid':'hur9z71kpv6b2bgb',
 			'animationevent':'onstrafeleft',
@@ -878,7 +878,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[6] = {
+		zanimationdefs[6] = {
 			'useravataranimationid':'',
 			'avataranimationid':'6x3o6sh2u1m1bjnq',
 			'animationevent':'onstraferight',
@@ -897,7 +897,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[7] = {
+		zanimationdefs[7] = {
 			'useravataranimationid':'',
 			'avataranimationid':'mz182mwpsvx1f1va',
 			'animationevent':'onrun',
@@ -916,7 +916,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[8] = {
+		zanimationdefs[8] = {
 			'useravataranimationid':'',
 			'avataranimationid':'rzn9d3dihtq4h2v5',
 			'animationevent':'onrunbackwards',
@@ -935,7 +935,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[9] = {
+		zanimationdefs[9] = {
 			'useravataranimationid':'',
 			'avataranimationid':'45dh9tcbikbvhqa9',
 			'animationevent':'onrunturnleft',
@@ -954,7 +954,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[10] = {
+		zanimationdefs[10] = {
 			'useravataranimationid':'',
 			'avataranimationid':'gi7iwy1cobjpzqpf',
 			'animationevent':'onrunturnright',
@@ -973,7 +973,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[11] = {
+		zanimationdefs[11] = {
 			'useravataranimationid':'',
 			'avataranimationid':'xd3eqg21webe0wff',
 			'animationevent':'onrunstrafeleft',
@@ -992,7 +992,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[12] = {
+		zanimationdefs[12] = {
 			'useravataranimationid':'',
 			'avataranimationid':'w547k8hrbbn89k4v',
 			'animationevent':'onrunstraferight',
@@ -1011,7 +1011,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[13] = {
+		zanimationdefs[13] = {
 			'useravataranimationid':'',
 			'avataranimationid':'i547k8hrtbn89k4s',
 			'animationevent':'onjump',
@@ -1030,7 +1030,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[14] = {
+		zanimationdefs[14] = {
 			'useravataranimationid':'',
 			'avataranimationid':'j548k8hrtbs89k4t',
 			'animationevent':'onwalkjump',
@@ -1049,7 +1049,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 			'totalstartframe':'0',
 			'totalendframe':'0'
 		};
-		animationdefs[15] = {
+		zanimationdefs[15] = {
 			'useravataranimationid':'',
 			'avataranimationid':'h748k8hqtbs87k4r',
 			'animationevent':'onrunjump',
@@ -1071,7 +1071,7 @@ WTWJS.prototype.newAvatarAnimationDefs = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAvatarAnimationsMale=" + ex.message);
 	}
-	return animationdefs;
+	return zanimationdefs;
 }
 
 
@@ -1167,9 +1167,9 @@ WTWJS.prototype.newDriveVehicle = function() {
 
 WTWJS.prototype.newRideAlong = function() {
 	/* work in progress - create an instance for the Ride Along (avatar riding on a vehicle) */
-	var ridealong = '';
+	var zridealong = '';
 	try {
-		ridealong = {
+		zridealong = {
 			'ridealongmoldname':'',
 			'attachmoldid':'',
 			'attachmoldname':'',
@@ -1190,7 +1190,7 @@ WTWJS.prototype.newRideAlong = function() {
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newRideAlong=" + ex.message);
 	}
-	return ridealong;
+	return zridealong;
 }
 
 

@@ -6,42 +6,42 @@
 /* file uploads and browser database functions (work in progress) */
 
 /* store file data in the database (optional) */
-WTWJS.prototype.getUploadFileData = function(imageid) {
+WTWJS.prototype.getUploadFileData = function(zimageid) {
 	/* get upload file data information if it is in the array */
-	var filedata = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gA+Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2OTApLCBkZWZhdWx0IHF1YWxpdHkK/9sAQwAIBgYHBgUIBwcHCQkICgwUDQwLCwwZEhMPFB0aHx4dGhwcICQuJyAiLCMcHCg3KSwwMTQ0NB8nOT04MjwuMzQy/9sAQwEJCQkMCwwYDQ0YMiEcITIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIy/8AAEQgARgBQAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/aAAwDAQACEQMRAD8A9DooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKSgBaKKKACiiigAooooAKSiigAooooAWiiigApKKKACiiigD//Z';
-	var title = 'default.jpg';
-	var name = 'default.jpg';
-	var extension = 'jpg';
-	var type = 'image/jpeg';
-	var size = '792.00';
-	var width = '80';
-	var height = '80';
-	var originalid = 'wwq1yppbimir7tgv';
-	var websizeid = 't1qlqxd6pzubzzzy';
-	var thumbnailid = 't1qlqxd6pzubzzzy';
-	var filepath = '/content/system/stock/lightgray-512x512.jpg';
-	var newimage = new Image();
+	var zfiledata = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD//gA+Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcgSlBFRyB2OTApLCBkZWZhdWx0IHF1YWxpdHkK/9sAQwAIBgYHBgUIBwcHCQkICgwUDQwLCwwZEhMPFB0aHx4dGhwcICQuJyAiLCMcHCg3KSwwMTQ0NB8nOT04MjwuMzQy/9sAQwEJCQkMCwwYDQ0YMiEcITIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIy/8AAEQgARgBQAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/aAAwDAQACEQMRAD8A9DooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKSgBaKKKACiiigAooooAKSiigAooooAWiiigApKKKACiiigD//Z';
+	var ztitle = 'default.jpg';
+	var zname = 'default.jpg';
+	var zextension = 'jpg';
+	var ztype = 'image/jpeg';
+	var zsize = '792.00';
+	var zwidth = '80';
+	var zheight = '80';
+	var zoriginalid = 'wwq1yppbimir7tgv';
+	var zwebsizeid = 't1qlqxd6pzubzzzy';
+	var zthumbnailid = 't1qlqxd6pzubzzzy';
+	var zfilepath = '/content/system/stock/lightgray-512x512.jpg';
+	var znewimage = new Image();
 	try {
-		if (wtw_uploads != null && imageid != '') {
+		if (wtw_uploads != null && zimageid != '') {
 			if (wtw_uploads.length > 0) {
 				for (var i=0;i < wtw_uploads.length;i++) {
-					if (wtw_uploads[i].uploadid == imageid) {
-						filedata = wtw_uploads[i].data;
+					if (wtw_uploads[i].uploadid == zimageid) {
+						zfiledata = wtw_uploads[i].data;
 						if (wtw_uploads[i].uploadinfo != undefined) {
-							title = wtw_uploads[i].uploadinfo.title;
-							name = wtw_uploads[i].uploadinfo.name;
-							extension = wtw_uploads[i].uploadinfo.extension;
-							type = wtw_uploads[i].uploadinfo.type;
-							size = wtw_uploads[i].uploadinfo.size;
-							width = wtw_uploads[i].uploadinfo.width;
-							height = wtw_uploads[i].uploadinfo.height;
+							ztitle = wtw_uploads[i].uploadinfo.title;
+							zname = wtw_uploads[i].uploadinfo.name;
+							zextension = wtw_uploads[i].uploadinfo.extension;
+							ztype = wtw_uploads[i].uploadinfo.type;
+							zsize = wtw_uploads[i].uploadinfo.size;
+							zwidth = wtw_uploads[i].uploadinfo.width;
+							zheight = wtw_uploads[i].uploadinfo.height;
 						}
-						originalid = wtw_uploads[i].originalid;
-						websizeid = wtw_uploads[i].websizeid;
-						thumbnailid = wtw_uploads[i].thumbnailid;
-						filepath = wtw_uploads[i].filepath;
-						newimage.id = imageid;
-						newimage.src = filedata;
+						zoriginalid = wtw_uploads[i].originalid;
+						zwebsizeid = wtw_uploads[i].websizeid;
+						zthumbnailid = wtw_uploads[i].thumbnailid;
+						zfilepath = wtw_uploads[i].filepath;
+						znewimage.id = zimageid;
+						znewimage.src = zfiledata;
 					}
 				}
 			}
@@ -50,47 +50,47 @@ WTWJS.prototype.getUploadFileData = function(imageid) {
 		WTW.log("core-scripts-prime-wtw_uploads.js-getUploadFileData=" + ex.message);
 	}
 	return {
-		filedata:filedata,
-		title:title,
-		name:name,
-		extension:extension,
-		type:type,
-		size:size,
-		width:width,
-		height:height,
-		originalid:originalid,
-		websizeid:websizeid,
-		thumbnailid:thumbnailid,
-		filepath:filepath,
-		image:newimage
+		'filedata':zfiledata,
+		'title':ztitle,
+		'name':zname,
+		'extension':zextension,
+		'type':ztype,
+		'size':zsize,
+		'width':zwidth,
+		'height':zheight,
+		'originalid':zoriginalid,
+		'websizeid':zwebsizeid,
+		'thumbnailid':zthumbnailid,
+		'filepath':zfilepath,
+		'image':znewimage
 	}
 }
 
-WTWJS.prototype.loadFromLocalDB = function(storename, id) {
+WTWJS.prototype.loadFromLocalDB = function(zstorename, zid) {
 	/* loads files from local browser database */
 	return new Promise(
-		function(resolve, reject) {
-			var dbRequest = indexedDB.open(storename);
-			dbRequest.onerror = function(event) {
-				reject(Error('False'));
+		function(zresolve, zreject) {
+			var zdbrequest = indexedDB.open(zstorename);
+			zdbrequest.onerror = function(event) {
+				zreject(Error('False'));
 			};
-			dbRequest.onupgradeneeded = function(event) {
+			zdbrequest.onupgradeneeded = function(event) {
 				event.target.transaction.abort();
-				reject(Error('False'));
+				zreject(Error('False'));
 			};
-			dbRequest.onsuccess = function(event) {
-				var database      = event.target.result;
-				var transaction   = database.transaction([storename]);
-				var objectStore   = transaction.objectStore(storename);
-				var objectRequest = objectStore.get(id);
-				objectRequest.onerror = function(event) {
-					reject(Error('False'));
+			zdbrequest.onsuccess = function(event) {
+				var zdatabase      = event.target.result;
+				var ztransaction   = zdatabase.transaction([zstorename]);
+				var zobjectstore   = ztransaction.objectStore(zstorename);
+				var zobjectrequest = zobjectstore.get(zid);
+				zobjectrequest.onerror = function(event) {
+					zreject(Error('False'));
 				};
-				objectRequest.onsuccess = function(event) {
-					if (objectRequest.result) {
-						resolve(objectRequest.result);
+				zobjectrequest.onsuccess = function(event) {
+					if (zobjectrequest.result) {
+						zresolve(zobjectrequest.result);
 					} else {
-						reject(Error('False'));
+						zreject(Error('False'));
 					}
 				};
 			};
@@ -98,29 +98,29 @@ WTWJS.prototype.loadFromLocalDB = function(storename, id) {
 	);
 }
 
-WTWJS.prototype.saveToLocalDB = function(storename, object) {
+WTWJS.prototype.saveToLocalDB = function(zstorename, zobject) {
 	/* saves files to local browser database */
 	return new Promise(
-		function(resolve, reject) {
-			if (object.id === undefined) reject(Error(''));
-			var dbRequest = indexedDB.open(storename);
-			dbRequest.onerror = function(event) {
-				reject(Error(''));
+		function(zresolve, zreject) {
+			if (zobject.id === undefined) zreject(Error(''));
+			var zdbrequest = indexedDB.open(zstorename);
+			zdbrequest.onerror = function(event) {
+				zreject(Error(''));
 			};
-			dbRequest.onupgradeneeded = function(event) {
-				var database    = event.target.result;
-				var objectStore = database.createObjectStore(storename, {keyPath: "id"});
+			zdbrequest.onupgradeneeded = function(event) {
+				var zdatabase    = event.target.result;
+				var zobjectstore = zdatabase.createObjectStore(zstorename, {keyPath: "id"});
 			};
-			dbRequest.onsuccess = function(event) {
-				var database      = event.target.result;
-				var transaction   = database.transaction([storename], 'readwrite');
-				var objectStore   = transaction.objectStore(storename);
-				var objectRequest = objectStore.put(object); // Overwrite if exists
-				objectRequest.onerror = function(event) {
-					reject(Error(''));
+			zdbrequest.onsuccess = function(event) {
+				var zdatabase      = event.target.result;
+				var ztransaction   = zdatabase.transaction([zstorename], 'readwrite');
+				var zobjectstore   = ztransaction.objectStore(zstorename);
+				var zobjectrequest = zobjectstore.put(zobject); // Overwrite if exists
+				zobjectrequest.onerror = function(event) {
+					zreject(Error(''));
 				};
-				objectRequest.onsuccess = function(event) {
-					/* resolve('Data saved OK'); */
+				zobjectrequest.onsuccess = function(event) {
+					/* zresolve('Data saved OK'); */
 				};
 			};
 		}
@@ -128,122 +128,122 @@ WTWJS.prototype.saveToLocalDB = function(storename, object) {
 }
 
 /* need -getCountDB- tool currently not in use */
-WTWJS.prototype.getCountDB = function(storename) {
+WTWJS.prototype.getCountDB = function(zstorename) {
 	/* counts files in local browser database */
 	return new Promise(
-		function(resolve, reject) {
-			var dbRequest = indexedDB.open(storename);
-			dbRequest.onerror = function(event) {
-				reject(Error(''));
+		function(zresolve, zreject) {
+			var zdbrequest = indexedDB.open(zstorename);
+			zdbrequest.onerror = function(event) {
+				zreject(Error(''));
 			};
-			dbRequest.onupgradeneeded = function(event) {
-				var database    = event.target.result;
-				var objectStore = database.createObjectStore(storename, {keyPath: "id"});
+			zdbrequest.onupgradeneeded = function(event) {
+				var zdatabase    = event.target.result;
+				var zobjectstore = zdatabase.createObjectStore(zstorename, {keyPath: "id"});
 			};
-			dbRequest.onsuccess = function(event) {
-				var database      = event.target.result;
-				var transaction   = database.transaction([storename], 'readonly');
-				var objectStore   = transaction.objectStore(storename);
-				var count = objectStore.count();
-				count.onsuccess = function() {
-					console.log("db count=" + count.result);
+			zdbrequest.onsuccess = function(event) {
+				var zdatabase      = event.target.result;
+				var ztransaction   = zdatabase.transaction([zstorename], 'readonly');
+				var zobjectstore   = ztransaction.objectStore(zstorename);
+				var zcount = zobjectstore.count();
+				zcount.onsuccess = function() {
+					console.log("db count=" + zcount.result);
 				};
 			};
 		}
 	);
 }
 
-WTWJS.prototype.isUploadReadyOrAdd = async function(uploadid) {
+WTWJS.prototype.isUploadReadyOrAdd = async function(zuploadid) {
 	/* checks if the uploaded file is preloaded and ready to load to scene */
-	var ready = false;
+	var zready = false;
 	try {
-		if (uploadid != '') {
+		if (zuploadid != '') {
 			/* var localdbname = wtw_domainname.replace(".",""); */
-			var queue = null;
-			var found = false;
-			if (wtw_uploads != null && uploadid != "") {
+			var zqueue = null;
+			var zfound = false;
+			if (wtw_uploads != null && zuploadid != "") {
 				for (var i = 0; i < wtw_uploads.length; i++) {
 					if (wtw_uploads[i] != null) {
-						if (wtw_uploads[i].uploadid == uploadid) {
-							queue = wtw_uploads[i].queue;
+						if (wtw_uploads[i].uploadid == zuploadid) {
+							zqueue = wtw_uploads[i].queue;
 							i = wtw_uploads.length;
-							found = true;
+							zfound = true;
 						}
 					}
 				}
 			}
-			if (found) {
-				if (queue != null) {
-					if (queue == '0') {
-						ready = true;
+			if (zfound) {
+				if (zqueue != null) {
+					if (zqueue == '0') {
+						zready = true;
 					}
 				}
 			} else {
-				var uploadind = WTW.getNextCount(wtw_uploads);
-				wtw_uploads[uploadind] = WTW.newUpload();
-				wtw_uploads[uploadind].uploadid = uploadid;
-				wtw_uploads[uploadind].queue = "1";
+				var zuploadind = WTW.getNextCount(wtw_uploads);
+				wtw_uploads[zuploadind] = WTW.newUpload();
+				wtw_uploads[zuploadind].uploadid = zuploadid;
+				wtw_uploads[zuploadind].queue = "1";
 				/* if (WTW.getBrowser()=='ie') { */
-					WTW.getAsyncJSON("/connect/upload.php?uploadid=" + uploadid, 
-						function(response) {
-							WTW.loadFileUpload(JSON.parse(response), uploadid);
+					WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zuploadid, 
+						function(zresponse) {
+							WTW.loadFileUpload(JSON.parse(zresponse), zuploadid);
 						}
 					);
 				/* } else {
-					WTW.loadFromLocalDB(localdbname, uploadid).then(function (response1) {
-						var adduploads = [];
-						adduploads[0] = response1; 
-						WTW.loadFileUpload(adduploads, adduploads[0].uploadid);
+					WTW.loadFromLocalDB(localdbname, zuploadid).then(function (zresponse1) {
+						var zadduploads = [];
+						zadduploads[0] = zresponse1; 
+						WTW.loadFileUpload(zadduploads, zadduploads[0].uploadid);
 					}).catch(function (error) {
-						WTW.getAsyncJSON("/connect/upload.php?uploadid=" + uploadid, 
-							function(response) {
-								WTW.loadFileUpload(JSON.parse(response), uploadid);
+						WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zuploadid, 
+							function(zresponse) {
+								WTW.loadFileUpload(JSON.parse(zresponse), zuploadid);
 							}
 						);
 					}); 
 				} */
 			}
 		} else {
-			ready = true;
+			zready = true;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_uploads.js-isUploadReadyOrAdd=" + ex.message);
 	}
-	return ready;
+	return zready;
 }
 
-WTWJS.prototype.loadFileUpload = function(adduploads, uploadid, savelocal) {
+WTWJS.prototype.loadFileUpload = function(zadduploads, zuploadid, zsavelocal) {
 	/* flag to load a particular file to memory ready for use */
 	try {
-		/* if (savelocal == undefined) {
-			savelocal = true;
+		/* if (zsavelocal == undefined) {
+			zsavelocal = true;
 		}
 		var localdbname = wtw_domainname.replace(".",""); */
-		var h3duploadind = WTW.getUploadInd(uploadid);
-		if (adduploads != null) {
-			for (var i=0;i < adduploads.length;i++) {
-				if (adduploads[i].uploadid != "") {
-					if (WTW.isUploadAdded(adduploads[i].uploadid) == false) {
-						var uploadind = WTW.getNextCount(wtw_uploads);
-						wtw_uploads[uploadind] = adduploads[i];
-						var imageinfo = WTW.getUploadFileData(uploadid);
-						imageinfo.image.onload = function() {
-							wtw_uploads[uploadind].queue = "0";
+		var zh3duploadind = WTW.getUploadInd(zuploadid);
+		if (zadduploads != null) {
+			for (var i=0;i < zadduploads.length;i++) {
+				if (zadduploads[i].uploadid != "") {
+					if (WTW.isUploadAdded(zadduploads[i].uploadid) == false) {
+						var zuploadind = WTW.getNextCount(wtw_uploads);
+						wtw_uploads[zuploadind] = zadduploads[i];
+						var zimageinfo = WTW.getUploadFileData(zuploadid);
+						zimageinfo.image.onload = function() {
+							wtw_uploads[zuploadind].queue = "0";
 						}
 						/* if (WTW.getBrowser()!='ie') {
-							if (savelocal) {
-								WTW.saveToLocalDB(localdbname, wtw_uploads[uploadind]);
+							if (zsavelocal) {
+								WTW.saveToLocalDB(localdbname, wtw_uploads[zuploadind]);
 							}
 						} */
-					} else if (adduploads[i].uploadid == uploadid && wtw_uploads[h3duploadind] != null) {
-						wtw_uploads[h3duploadind] = adduploads[i];
-						var imageinfo = WTW.getUploadFileData(uploadid);
-						imageinfo.image.onload = function() {
-							wtw_uploads[h3duploadind].queue = "0";
+					} else if (zadduploads[i].uploadid == zuploadid && wtw_uploads[zh3duploadind] != null) {
+						wtw_uploads[zh3duploadind] = zadduploads[i];
+						var zimageinfo = WTW.getUploadFileData(zuploadid);
+						zimageinfo.image.onload = function() {
+							wtw_uploads[zh3duploadind].queue = "0";
 						}
 						/* if (WTW.getBrowser()!='ie') {
-							if (savelocal) {
-								WTW.saveToLocalDB(localdbname, wtw_uploads[h3duploadind]);
+							if (zsavelocal) {
+								WTW.saveToLocalDB(localdbname, wtw_uploads[zh3duploadind]);
 							}
 						} */
 					}
@@ -255,42 +255,42 @@ WTWJS.prototype.loadFileUpload = function(adduploads, uploadid, savelocal) {
 	}
 }
 
-WTWJS.prototype.initLoadUpload = async function(uploadid, tempid, refreshoption, moldname, molddef, parentname) {
+WTWJS.prototype.initLoadUpload = async function(zuploadid, ztempid, zrefreshoption, zmoldname, zmolddef, zparentname) {
 	/* start fetch for file */
 	try {
-		if (moldname == undefined) {
-			moldname = null;
+		if (zmoldname == undefined) {
+			zmoldname = null;
 		}
-		if (molddef == undefined) {
-			molddef = null;
+		if (zmolddef == undefined) {
+			zmolddef = null;
 		}
-		if (parentname == undefined) {
-			parentname = null;
+		if (zparentname == undefined) {
+			zparentname = null;
 		}
 		/* var localdbname = wtw_domainname.replace(".",""); */
-		if (uploadid != "") {
-			if (WTW.isUploadReady(uploadid)) {
-				WTW.setUploadCovering(uploadid, refreshoption, moldname, molddef, parentname);
-			} else if (WTW.isUploadInQueue(uploadid)) {
+		if (zuploadid != "") {
+			if (WTW.isUploadReady(zuploadid)) {
+				WTW.setUploadCovering(zuploadid, zrefreshoption, zmoldname, zmolddef, zparentname);
+			} else if (WTW.isUploadInQueue(zuploadid)) {
 			} else {
-				var uploadind = WTW.getNextCount(wtw_uploads);
-				wtw_uploads[uploadind] = uploadid;
-				wtw_uploads[uploadind].queue = "1";
+				var zuploadind = WTW.getNextCount(wtw_uploads);
+				wtw_uploads[zuploadind] = zuploadid;
+				wtw_uploads[zuploadind].queue = "1";
 				/* if (WTW.getBrowser()=='ie') { */
-					WTW.getAsyncJSON("/connect/upload.php?uploadid=" + uploadid, 
-						function(response) {
-							WTW.loadUpload(JSON.parse(response), uploadid, refreshoption, false, moldname, molddef, parentname);
+					WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zuploadid, 
+						function(zresponse) {
+							WTW.loadUpload(JSON.parse(zresponse), zuploadid, zrefreshoption, false, zmoldname, zmolddef, zparentname);
 						}
 					);
 				/* } else {
-					WTW.loadFromLocalDB(localdbname, uploadid).then(function (response1) {
-						var adduploads = [];
-						adduploads[0] = response1; 
-						WTW.loadUpload(adduploads, adduploads[0].uploadid, refreshoption, false, moldname, molddef, parentname);
+					WTW.loadFromLocalDB(localdbname, zuploadid).then(function (zresponse1) {
+						var zadduploads = [];
+						zadduploads[0] = zresponse1; 
+						WTW.loadUpload(zadduploads, zadduploads[0].uploadid, zrefreshoption, false, zmoldname, zmolddef, zparentname);
 					}).catch(function (error) {
-						WTW.getAsyncJSON("/connect/upload.php?uploadid=" + uploadid, 
-							function(response) {
-								WTW.loadUpload(JSON.parse(response), uploadid, refreshoption, false, moldname, molddef, parentname);
+						WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zuploadid, 
+							function(zresponse) {
+								WTW.loadUpload(JSON.parse(zresponse), zuploadid, zrefreshoption, false, zmoldname, zmolddef, zparentname);
 							}
 						);
 					}); 
@@ -302,73 +302,74 @@ WTWJS.prototype.initLoadUpload = async function(uploadid, tempid, refreshoption,
 	}
 }
 
-WTWJS.prototype.loadUpload = function(adduploads, uploadid, refreshoption, savelocal, moldname, molddef, parentname) {
+WTWJS.prototype.loadUpload = function(zadduploads, zuploadid, zrefreshoption, zsavelocal, zmoldname, zmolddef, zparentname) {
 	/* load uploaded file */
 	try {
-		if (savelocal == undefined) {
-			savelocal = true;
+		var zuploadind = -1;
+		if (zsavelocal == undefined) {
+			zsavelocal = true;
 		}
-		if (moldname == undefined) {
-			moldname = null;
+		if (zmoldname == undefined) {
+			zmoldname = null;
 		}
-		if (molddef == undefined) {
-			molddef = null;
+		if (zmolddef == undefined) {
+			zmolddef = null;
 		}
-		if (parentname == undefined) {
-			parentname = null;
+		if (zparentname == undefined) {
+			zparentname = null;
 		}
 		/* var localdbname = wtw_domainname.replace(".",""); */
-		var h3duploadind = WTW.getUploadInd(uploadid);
-		if (adduploads != null) {
-			for (var i=0;i < adduploads.length;i++) {
-				if (adduploads[i].uploadid != "") {
-					if (WTW.isUploadReady(adduploads[i].uploadid) == false) {
-						var uploadind = WTW.getNextCount(wtw_uploads);
-						wtw_uploads[uploadind] = adduploads[i];
-						var imageinfo = WTW.getUploadFileData(uploadid);
-						imageinfo.image.onload = function() {
-							wtw_uploads[uploadind].queue = "0";
+		var zh3duploadind = WTW.getUploadInd(zuploadid);
+		if (zadduploads != null) {
+			for (var i=0;i < zadduploads.length;i++) {
+				if (zadduploads[i].uploadid != "") {
+					if (WTW.isUploadReady(zadduploads[i].uploadid) == false) {
+						zuploadind = WTW.getNextCount(wtw_uploads);
+						wtw_uploads[zuploadind] = zadduploads[i];
+						var zimageinfo = WTW.getUploadFileData(zuploadid);
+						zimageinfo.image.onload = function() {
+							wtw_uploads[zuploadind].queue = "0";
 						}
 						/* if (WTW.getBrowser()!='ie') {
-							if (savelocal) {
-								WTW.saveToLocalDB(localdbname, wtw_uploads[uploadind]);
+							if (zsavelocal) {
+								WTW.saveToLocalDB(localdbname, wtw_uploads[zuploadind]);
 							}
 						} */
-					} else if (adduploads[i].uploadid == uploadid && wtw_uploads[uploadind] != null) {
-						wtw_uploads[h3duploadind] = adduploads[i];
-						var imageinfo = WTW.getUploadFileData(uploadid);
-						imageinfo.image.onload = function() {
-							wtw_uploads[h3duploadind].queue = "0";
+					} else if (zadduploads[i].uploadid == zuploadid && wtw_uploads[zuploadind] != null) {
+						wtw_uploads[zh3duploadind] = zadduploads[i];
+						var zimageinfo = WTW.getUploadFileData(zuploadid);
+						zimageinfo.image.onload = function() {
+							wtw_uploads[zh3duploadind].queue = "0";
 						}
 						/* if (WTW.getBrowser()!='ie') {
-							if (savelocal) {
-								WTW.saveToLocalDB(localdbname, wtw_uploads[h3duploadind]);
+							if (zsavelocal) {
+								WTW.saveToLocalDB(localdbname, wtw_uploads[zh3duploadind]);
 							}
 						} */
 					}
 				}
 			}
 		}
-		WTW.setUploadCovering(uploadid, refreshoption, moldname, molddef, parentname);
+		WTW.setUploadCovering(zuploadid, zrefreshoption, zmoldname, zmolddef, zparentname);
 		WTW.setShownMolds();
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_uploads.js-loadUpload=" + ex.message);
 	}
 }
 
-WTWJS.prototype.setUploadCovering = function(uploadid, refreshoption, moldname, molddef, parentname) {
+WTWJS.prototype.setUploadCovering = function(zuploadid, zrefreshoption, zmoldname, zmolddef, zparentname) {
 	/* update the material after a mold is created using the admin (limited use for certain meshes only) */
 	try {
-		if (moldname == undefined) {
-			moldname = null;
+		if (zmoldname == undefined) {
+			zmoldname = null;
 		}
-		if (molddef == undefined) {
-			molddef = null;
+		if (zmolddef == undefined) {
+			zmolddef = null;
 		}
-		if (parentname == undefined) {
-			parentname = null;
+		if (zparentname == undefined) {
+			zparentname = null;
 		}
-		switch (refreshoption) {
+		switch (zrefreshoption) {
 			case 1:
 				if (WTW.adminView == 1) {
 					WTW.setNewMold(1);
@@ -389,16 +390,16 @@ WTWJS.prototype.setUploadCovering = function(uploadid, refreshoption, moldname, 
 					WTW.extraGround.material.dispose();
 					WTW.extraGround.material = null;
 				}
-				var extraGroundMaterial = new BABYLON.StandardMaterial("egmat", scene);
-				WTW.extraGround.material = extraGroundMaterial;
-				extraGroundMaterial.specularColor = new BABYLON.Color3(.1, .1, .1);
-				extraGroundMaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-				var imageinfo = WTW.getUploadFileData(uploadid);
-				extraGroundMaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(imageinfo.filedata, "egmattexture", scene);
-				var eguscale = 500;
-				var egvscale = 500;
-				extraGroundMaterial.diffuseTexture.uScale = eguscale;
-				extraGroundMaterial.diffuseTexture.vScale = egvscale;
+				var zextragroundmaterial = new BABYLON.StandardMaterial("egmat", scene);
+				WTW.extraGround.material = zextragroundmaterial;
+				zextragroundmaterial.specularColor = new BABYLON.Color3(.1, .1, .1);
+				zextragroundmaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+				var zimageinfo = WTW.getUploadFileData(zuploadid);
+				zextragroundmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.filedata, "egmattexture", scene);
+				var zeguscale = 500;
+				var zegvscale = 500;
+				zextragroundmaterial.diffuseTexture.uScale = zeguscale;
+				zextragroundmaterial.diffuseTexture.vScale = zegvscale;
 				break;
 			case 5:
 				/* WTW.resetMoldCoverings(); */
@@ -408,38 +409,38 @@ WTWJS.prototype.setUploadCovering = function(uploadid, refreshoption, moldname, 
 			case 7:
 				break;
 			case 8: /* advanced terrain material */
-				var posx = Number(molddef.position.x);
-				var posy = Number(molddef.position.y);
-				var posz = Number(molddef.position.z);
-				var scalingx = Number(molddef.scaling.x);
-				var scalingy = Number(molddef.scaling.y);
-				var scalingz = Number(molddef.scaling.z);
-				var rotx = Number(molddef.rotation.x);
-				var roty = Number(molddef.rotation.y);
-				var rotz = Number(molddef.rotation.z);
-				var subdivisions = 12;
-				var minheight = 0;
-				var maxheight = 0;
+				var zposx = Number(zmolddef.position.x);
+				var zposy = Number(zmolddef.position.y);
+				var zposz = Number(zmolddef.position.z);
+				var zscalingx = Number(zmolddef.scaling.x);
+				var zscalingy = Number(zmolddef.scaling.y);
+				var zscalingz = Number(zmolddef.scaling.z);
+				var zrotx = Number(zmolddef.rotation.x);
+				var zroty = Number(zmolddef.rotation.y);
+				var zrotz = Number(zmolddef.rotation.z);
+				var zsubdivisions = 12;
+				var zminheight = 0;
+				var zmaxheight = 0;
 				try {
-					if (WTW.isNumeric(molddef.subdivisions)) {
-						subdivisions = Number(molddef.subdivisions);
+					if (WTW.isNumeric(zmolddef.subdivisions)) {
+						zsubdivisions = Number(zmolddef.subdivisions);
 					}
 				} catch(ex) {}
 				try {
-					if (WTW.isNumeric(molddef.graphics.heightmap.minheight)) {
-						minheight = Number(molddef.graphics.heightmap.minheight);
+					if (WTW.isNumeric(zmolddef.graphics.heightmap.minheight)) {
+						zminheight = Number(zmolddef.graphics.heightmap.minheight);
 					}
 				} catch(ex) {}
 				try {
-					if (WTW.isNumeric(molddef.graphics.heightmap.maxheight)) {
-						maxheight = Number(molddef.graphics.heightmap.maxheight);
+					if (WTW.isNumeric(zmolddef.graphics.heightmap.maxheight)) {
+						zmaxheight = Number(zmolddef.graphics.heightmap.maxheight);
 					}
 				} catch(ex) {}
-				var transformposition = WTW.transformPosition(molddef, posx, posy, posz);
-				posx = transformposition.posx;
-				posy = transformposition.posy;
-				posz = transformposition.posz;
-				WTW.loadTerrainAdvancedImages(moldname, scalingx, scalingy, scalingz, subdivisions, '', molddef.graphics.heightmap.id, minheight, maxheight, parentname, molddef, "terrainadvanced", posx, posy, posz, molddef.graphics.heightmap.mixmapid, molddef.graphics.heightmap.texturerid, molddef.graphics.heightmap.texturegid, molddef.graphics.heightmap.texturebid, molddef.graphics.heightmap.texturebumprid, molddef.graphics.heightmap.texturebumpgid, molddef.graphics.heightmap.texturebumpbid);
+				var ztransformposition = WTW.transformPosition(zmolddef, zposx, zposy, zposz);
+				zposx = ztransformposition.posx;
+				zposy = ztransformposition.posy;
+				zposz = ztransformposition.posz;
+				WTW.loadTerrainAdvancedImages(zmoldname, zscalingx, zscalingy, zscalingz, zsubdivisions, '', zmolddef.graphics.heightmap.id, zminheight, zmaxheight, zparentname, zmolddef, "terrainadvanced", zposx, zposy, zposz, zmolddef.graphics.heightmap.mixmapid, zmolddef.graphics.heightmap.texturerid, zmolddef.graphics.heightmap.texturegid, zmolddef.graphics.heightmap.texturebid, zmolddef.graphics.heightmap.texturebumprid, zmolddef.graphics.heightmap.texturebumpgid, zmolddef.graphics.heightmap.texturebumpbid);
 				break;
 			default:
 

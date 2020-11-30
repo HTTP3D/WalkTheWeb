@@ -168,19 +168,19 @@ WTWJS.prototype.closeFullPageForm = function() {
 WTWJS.prototype.hideFullPages = function() {
 	/* hides all full page forms (prep before showing another form) */
 	try {
-		var fullpages = document.getElementsByClassName('wtw-dashboardpage');
-		for (var i=0;i<fullpages.length;i++) {
-			if (fullpages[i] != null) {
-				if (fullpages[i].id != undefined) {
-					WTW.hide(fullpages[i].id);
+		var zfullpages = document.getElementsByClassName('wtw-dashboardpage');
+		for (var i=0;i<zfullpages.length;i++) {
+			if (zfullpages[i] != null) {
+				if (zfullpages[i].id != undefined) {
+					WTW.hide(zfullpages[i].id);
 				}
 			}
 		}
-		fullpages = document.getElementsByClassName('wtw-fullpage');
-		for (var i=0;i<fullpages.length;i++) {
-			if (fullpages[i] != null) {
-				if (fullpages[i].id != undefined) {
-					WTW.hide(fullpages[i].id);
+		zfullpages = document.getElementsByClassName('wtw-fullpage');
+		for (var i=0;i<zfullpages.length;i++) {
+			if (zfullpages[i] != null) {
+				if (zfullpages[i].id != undefined) {
+					WTW.hide(zfullpages[i].id);
 				}
 			}
 		}
@@ -314,27 +314,27 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 					if (zmyplugins[i] != null) {
 						if (zmyplugins[i].pluginname != undefined && zmyplugins[i].version != undefined && zmyplugins[i].latestversion != undefined) {
 							if (zmyplugins[i].pluginname == "walktheweb") {
-								var updatedate = new Date(zmyplugins[i].updatedate);
-								var datestring = (updatedate.getMonth()+1) + "/" + updatedate.getDate() + "/" + updatedate.getFullYear();
+								var zupdatedate = new Date(zmyplugins[i].updatedate);
+								var zdatestring = (zupdatedate.getMonth()+1) + "/" + zupdatedate.getDate() + "/" + zupdatedate.getFullYear();
 								if (zmyplugins[i].latestversion == wtw_version) {
 									zupdateslist += "<div class=\"wtw-dashboardboxtitle\">WalkTheWeb is up to date!</div><div class=\"wtw-dashboardbox\"><b>Your Version:</b><hr />";
 									zupdateslist += "App Name=" + zmyplugins[i].pluginname + "<br />";
 									zupdateslist += "App Version=" + zmyplugins[i].latestversion + "<br />";
-									zupdateslist += "Last Update=" + datestring + "<br />";
+									zupdateslist += "Last Update=" + zdatestring + "<br />";
 								} else {
-									var versiondate = new Date(wtw_versiondate);
-									var versiondatestring = (versiondate.getMonth()+1) + "/" + versiondate.getDate() + "/" + versiondate.getFullYear();
-									zupdateslist += "<div class=\"wtw-dashboardboxtitle\">WalkTheWeb has an update!</div><div class=\"wtw-dashboardbox\">Your Version: " + wtw_version + " (" + versiondatestring + ")<br /><br />";
+									var zversiondate = new Date(wtw_versiondate);
+									var zversiondatestring = (zversiondate.getMonth()+1) + "/" + zversiondate.getDate() + "/" + zversiondate.getFullYear();
+									zupdateslist += "<div class=\"wtw-dashboardboxtitle\">WalkTheWeb has an update!</div><div class=\"wtw-dashboardbox\">Your Version: " + wtw_version + " (" + zversiondatestring + ")<br /><br />";
 									zupdateslist += "<b>New Version Available:</b><hr />";
 									zupdateslist += "App Name=" + zmyplugins[i].pluginname + "<br />";
 									zupdateslist += "App Version=" + zmyplugins[i].latestversion + "<br />";
-									zupdateslist += "App Update=" + datestring + "<br />";
+									zupdateslist += "App Update=" + zdatestring + "<br />";
 									zupdateslist += "Backup your files and database before updating!<br />";
 									zupdatewtw += 1;
 								}
 								zupdateslist += "<div id=\"wtw_loadingupdating\" class=\"wtw-loadingnotice\">Updating...</div>";
 								if (zmyplugins[i].latestversion != wtw_version) {
-									zupdateslist += "<div class=\"wtw-greenmenubutton\" onclick=\"WTW.updateWalkTheWeb('" + zmyplugins[i].pluginname + "','" + zmyplugins[i].latestversion + "','" + datestring + "','" + zmyplugins[i].updateurl + "');\">Update Now!</div>";
+									zupdateslist += "<div class=\"wtw-greenmenubutton\" onclick=\"WTW.updateWalkTheWeb('" + zmyplugins[i].pluginname + "','" + zmyplugins[i].latestversion + "','" + zdatestring + "','" + zmyplugins[i].updateurl + "');\">Update Now!</div>";
 									WTW.getVersionDetails(zmyplugins[i].updateid);
 								}
 								zupdateslist += "</div>";
@@ -442,30 +442,30 @@ WTWJS.prototype.loadArchiveUpdates = async function() {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse[0] != null) {
 					var zupdateid = '';
-					var archiveupdateslist = "<div class=\"wtw-dashboardboxleftfull\">";
-					archiveupdateslist += "<div class=\"wtw-dashboardboxtitle\">Archive - WalkTheWeb Update Details</div><div class=\"wtw-dashboardbox\">";
+					var zarchiveupdateslist = "<div class=\"wtw-dashboardboxleftfull\">";
+					zarchiveupdateslist += "<div class=\"wtw-dashboardboxtitle\">Archive - WalkTheWeb Update Details</div><div class=\"wtw-dashboardbox\">";
 					for (var i=0; i < zresponse.length;i++) {
 						if (zresponse[i] != null) {
 							if (zresponse[i].updateid != zupdateid) {
 								if (zupdateid != '') {
-									archiveupdateslist += "</ul></div>";
+									zarchiveupdateslist += "</ul></div>";
 								}
 								if (zresponse[i].deleted == 1) {
-									archiveupdateslist += "<div class=\"wtw-versionheader\" onclick=\"WTW.toggle('versiondiv" + zresponse[i].updateid + "');\"><strong>" + zresponse[i].appname + " " + zresponse[i].appversion + "</strong> (Preview of Next Release)</div><div id=\"versiondiv" + zresponse[i].updateid + "\" style=\"display:block;visibility:visible;\"><ul>";
+									zarchiveupdateslist += "<div class=\"wtw-versionheader\" onclick=\"WTW.toggle('versiondiv" + zresponse[i].updateid + "');\"><strong>" + zresponse[i].appname + " " + zresponse[i].appversion + "</strong> (Preview of Next Release)</div><div id=\"versiondiv" + zresponse[i].updateid + "\" style=\"display:block;visibility:visible;\"><ul>";
 								} else {
-									archiveupdateslist += "<div class=\"wtw-versionheader\" onclick=\"WTW.toggle('versiondiv" + zresponse[i].updateid + "');\"><strong>" + zresponse[i].appname + " " + zresponse[i].appversion + "</strong> (Released on: " + WTW.formatDate(zresponse[i].updatedate) + ")</div><div id=\"versiondiv" + zresponse[i].updateid + "\" style=\"display:none;visibility:hidden;\">";
+									zarchiveupdateslist += "<div class=\"wtw-versionheader\" onclick=\"WTW.toggle('versiondiv" + zresponse[i].updateid + "');\"><strong>" + zresponse[i].appname + " " + zresponse[i].appversion + "</strong> (Released on: " + WTW.formatDate(zresponse[i].updatedate) + ")</div><div id=\"versiondiv" + zresponse[i].updateid + "\" style=\"display:none;visibility:hidden;\">";
 									if (zresponse[i].updatesummary != '') {
-										archiveupdateslist += "<div class=\"wtw-versionsummary\"><strong>Summary:</strong> " + zresponse[i].updatesummary + "</div>";
+										zarchiveupdateslist += "<div class=\"wtw-versionsummary\"><strong>Summary:</strong> " + zresponse[i].updatesummary + "</div>";
 									}
-									archiveupdateslist += "<br /><br />Updated in this release:<br /><ul>";
+									zarchiveupdateslist += "<br /><br />Updated in this release:<br /><ul>";
 								}
 								zupdateid = zresponse[i].updateid;
 							}
-							archiveupdateslist += "<li class='wtw-normalwrap'><b>" + zresponse[i].updatetitle + "</b> - " + zresponse[i].updateby + " (" + WTW.formatDate(zresponse[i].detaildate) + ")<br /><div style='margin-left:20px;margin-bottom:10px;'>" + zresponse[i].updatedetails + "</div></li>";
+							zarchiveupdateslist += "<li class='wtw-normalwrap'><b>" + zresponse[i].updatetitle + "</b> - " + zresponse[i].updateby + " (" + WTW.formatDate(zresponse[i].detaildate) + ")<br /><div style='margin-left:20px;margin-bottom:10px;'>" + zresponse[i].updatedetails + "</div></li>";
 						}
 					}
-					archiveupdateslist += "</ul></div></div></div>";
-					dGet('wtw_archiveupdateslist').innerHTML = archiveupdateslist;
+					zarchiveupdateslist += "</ul></div></div></div>";
+					dGet('wtw_archiveupdateslist').innerHTML = zarchiveupdateslist;
 				}
 			}
 		);
@@ -753,9 +753,9 @@ WTWJS.prototype.openDashboardForm = async function(item) {
 /* media library forms */
 
 /* media library - main media page form */
-WTWJS.prototype.openMediaPageForm = async function(uploadid) {
+WTWJS.prototype.openMediaPageForm = async function(zuploadid) {
 	try {
-		var category = WTW.getDDLValue('wtw_fileselectcategory');
+		var zcategory = WTW.getDDLValue('wtw_fileselectcategory');
 		WTW.hide('wtw_mediapage');
 		WTW.show('wtw_loadingmediapage');
 		dGet("wtw_uploadfilename").innerHTML = '';
@@ -772,77 +772,77 @@ WTWJS.prototype.openMediaPageForm = async function(uploadid) {
 		dGet("wtw_mediaoriginaldimensions").innerHTML = '';
 		dGet("wtw_mediaoriginalpath").innerHTML = '';
 		dGet('wtw_mediaoriginal').src = '';
-		WTW.getAsyncJSON("/connect/uploadmedia.php?uploadid=" + uploadid, 
-			function(response) {
-				var uploadinfo = JSON.parse(response);
-				if (uploadinfo != null) {
-					for (var i = 0; i < uploadinfo.length; i++) {
-						if (uploadinfo[i] != null) {
-							var filetitle = "File Information";
-							if (uploadinfo[i].uploadinfo != null) {
-								if (uploadinfo[i].uploadinfo.title != undefined) {
-									filetitle = uploadinfo[i].uploadinfo.title;
-									dGet('wtw_uploadfiletitle').innerHTML = uploadinfo[i].uploadinfo.title;
+		WTW.getAsyncJSON("/connect/uploadmedia.php?uploadid=" + zuploadid, 
+			function(zresponse) {
+				var zuploadinfo = JSON.parse(zresponse);
+				if (zuploadinfo != null) {
+					for (var i = 0; i < zuploadinfo.length; i++) {
+						if (zuploadinfo[i] != null) {
+							var zfiletitle = "File Information";
+							if (zuploadinfo[i].uploadinfo != null) {
+								if (zuploadinfo[i].uploadinfo.title != undefined) {
+									zfiletitle = zuploadinfo[i].uploadinfo.title;
+									dGet('wtw_uploadfiletitle').innerHTML = zuploadinfo[i].uploadinfo.title;
 								}
-								if (uploadinfo[i].uploadinfo.name != undefined) {
-									dGet('wtw_uploadfilename').innerHTML = uploadinfo[i].uploadinfo.name;
+								if (zuploadinfo[i].uploadinfo.name != undefined) {
+									dGet('wtw_uploadfilename').innerHTML = zuploadinfo[i].uploadinfo.name;
 								}
-								if (uploadinfo[i].uploadinfo.type != undefined) {
-									dGet('wtw_uploadfiletype').innerHTML = uploadinfo[i].uploadinfo.type;
+								if (zuploadinfo[i].uploadinfo.type != undefined) {
+									dGet('wtw_uploadfiletype').innerHTML = zuploadinfo[i].uploadinfo.type;
 								}
-								if (uploadinfo[i].uploadinfo.updatedate != undefined) {
-									dGet('wtw_uploadupdatedate').innerHTML = WTW.formatDateLong(uploadinfo[i].uploadinfo.updatedate);
+								if (zuploadinfo[i].uploadinfo.updatedate != undefined) {
+									dGet('wtw_uploadupdatedate').innerHTML = WTW.formatDateLong(zuploadinfo[i].uploadinfo.updatedate);
 								}
 							}
 							
-							dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','" + category + "','');WTW.setImageMenu(2);\">Media Library</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + filetitle + "</div>";
+							dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','" + zcategory + "','');WTW.setImageMenu(2);\">Media Library</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zfiletitle + "</div>";
 							if (dGet('wtw_uploadfiletype').innerHTML.indexOf('image') > -1) {
-								if (uploadinfo[i].thumbnail != null) {
-									if (uploadinfo[i].thumbnail.data != undefined) {
-										dGet('wtw_mediathumbnail').src = uploadinfo[i].thumbnail.data;
+								if (zuploadinfo[i].thumbnail != null) {
+									if (zuploadinfo[i].thumbnail.data != undefined) {
+										dGet('wtw_mediathumbnail').src = zuploadinfo[i].thumbnail.data;
 									}
-									if (uploadinfo[i].thumbnail.size != undefined) {
-										dGet('wtw_mediathumbnailsize').innerHTML = WTW.formatDataSize(uploadinfo[i].thumbnail.size);
+									if (zuploadinfo[i].thumbnail.size != undefined) {
+										dGet('wtw_mediathumbnailsize').innerHTML = WTW.formatDataSize(zuploadinfo[i].thumbnail.size);
 									}
-									if (uploadinfo[i].thumbnail.width != undefined && uploadinfo[i].thumbnail.height != undefined) {
-										dGet('wtw_mediathumbnaildimensions').innerHTML = WTW.formatNumber(uploadinfo[i].thumbnail.width,0) + ' x ' + WTW.formatNumber(uploadinfo[i].thumbnail.height,0);
+									if (zuploadinfo[i].thumbnail.width != undefined && zuploadinfo[i].thumbnail.height != undefined) {
+										dGet('wtw_mediathumbnaildimensions').innerHTML = WTW.formatNumber(zuploadinfo[i].thumbnail.width,0) + ' x ' + WTW.formatNumber(zuploadinfo[i].thumbnail.height,0);
 									}
-									if (uploadinfo[i].thumbnail.path != undefined) {
-										dGet('wtw_mediathumbnail').src = uploadinfo[i].thumbnail.path;
-										dGet('wtw_mediathumbnailpath').innerHTML = "<a href='" + uploadinfo[i].thumbnail.path + "' target='_blank'>" + uploadinfo[i].thumbnail.path + "</a>";
-										dGet('wtw_mediathumbnaildownload').href = uploadinfo[i].thumbnail.path;
-									}
-								}
-								if (uploadinfo[i].original != null) {
-									if (uploadinfo[i].original.data != undefined) {
-										dGet('wtw_mediaoriginal').src = uploadinfo[i].original.data;
-									}
-									if (uploadinfo[i].original.size != undefined) {
-										dGet('wtw_mediaoriginalsize').innerHTML = WTW.formatDataSize(uploadinfo[i].original.size);
-									}
-									if (uploadinfo[i].original.width != undefined && uploadinfo[i].original.height != undefined) {
-										dGet('wtw_mediaoriginaldimensions').innerHTML = WTW.formatNumber(uploadinfo[i].original.width,0) + ' x ' + WTW.formatNumber(uploadinfo[i].original.height,0);
-									}
-									if (uploadinfo[i].original.path != undefined) {
-										dGet('wtw_mediaoriginal').src = uploadinfo[i].original.path;
-										dGet('wtw_mediaoriginalpath').innerHTML = "<a href='" + uploadinfo[i].original.path + "' target='_blank'>" + uploadinfo[i].original.path + "</a>";
-										dGet('wtw_mediaoriginaldownload').href = uploadinfo[i].original.path;
+									if (zuploadinfo[i].thumbnail.path != undefined) {
+										dGet('wtw_mediathumbnail').src = zuploadinfo[i].thumbnail.path;
+										dGet('wtw_mediathumbnailpath').innerHTML = "<a href='" + zuploadinfo[i].thumbnail.path + "' target='_blank'>" + zuploadinfo[i].thumbnail.path + "</a>";
+										dGet('wtw_mediathumbnaildownload').href = zuploadinfo[i].thumbnail.path;
 									}
 								}
-								if (uploadinfo[i].websize != null) {
-									if (uploadinfo[i].websize.data != undefined) {
-										dGet('wtw_mediawebsize').src = uploadinfo[i].websize.data;
+								if (zuploadinfo[i].original != null) {
+									if (zuploadinfo[i].original.data != undefined) {
+										dGet('wtw_mediaoriginal').src = zuploadinfo[i].original.data;
 									}
-									if (uploadinfo[i].websize.size != undefined) {
-										dGet('wtw_mediawebsizesize').innerHTML = WTW.formatDataSize(uploadinfo[i].websize.size);
+									if (zuploadinfo[i].original.size != undefined) {
+										dGet('wtw_mediaoriginalsize').innerHTML = WTW.formatDataSize(zuploadinfo[i].original.size);
 									}
-									if (uploadinfo[i].websize.width != undefined && uploadinfo[i].websize.height != undefined) {
-										dGet('wtw_mediawebsizedimensions').innerHTML = WTW.formatNumber(uploadinfo[i].websize.width,0) + ' x ' + WTW.formatNumber(uploadinfo[i].websize.height,0);
+									if (zuploadinfo[i].original.width != undefined && zuploadinfo[i].original.height != undefined) {
+										dGet('wtw_mediaoriginaldimensions').innerHTML = WTW.formatNumber(zuploadinfo[i].original.width,0) + ' x ' + WTW.formatNumber(zuploadinfo[i].original.height,0);
 									}
-									if (uploadinfo[i].websize.path != undefined) {
-										dGet('wtw_mediawebsize').src = uploadinfo[i].websize.path;
-										dGet('wtw_mediawebsizepath').innerHTML = "<a href='" + uploadinfo[i].websize.path + "' target='_blank'>" + uploadinfo[i].websize.path + "</a>";
-										dGet('wtw_mediawebsizedownload').href = uploadinfo[i].websize.path;
+									if (zuploadinfo[i].original.path != undefined) {
+										dGet('wtw_mediaoriginal').src = zuploadinfo[i].original.path;
+										dGet('wtw_mediaoriginalpath').innerHTML = "<a href='" + zuploadinfo[i].original.path + "' target='_blank'>" + zuploadinfo[i].original.path + "</a>";
+										dGet('wtw_mediaoriginaldownload').href = zuploadinfo[i].original.path;
+									}
+								}
+								if (zuploadinfo[i].websize != null) {
+									if (zuploadinfo[i].websize.data != undefined) {
+										dGet('wtw_mediawebsize').src = zuploadinfo[i].websize.data;
+									}
+									if (zuploadinfo[i].websize.size != undefined) {
+										dGet('wtw_mediawebsizesize').innerHTML = WTW.formatDataSize(zuploadinfo[i].websize.size);
+									}
+									if (zuploadinfo[i].websize.width != undefined && zuploadinfo[i].websize.height != undefined) {
+										dGet('wtw_mediawebsizedimensions').innerHTML = WTW.formatNumber(zuploadinfo[i].websize.width,0) + ' x ' + WTW.formatNumber(zuploadinfo[i].websize.height,0);
+									}
+									if (zuploadinfo[i].websize.path != undefined) {
+										dGet('wtw_mediawebsize').src = zuploadinfo[i].websize.path;
+										dGet('wtw_mediawebsizepath').innerHTML = "<a href='" + zuploadinfo[i].websize.path + "' target='_blank'>" + zuploadinfo[i].websize.path + "</a>";
+										dGet('wtw_mediawebsizedownload').href = zuploadinfo[i].websize.path;
 									}
 								}
 								WTW.show('wtw_imagethumbnailinfo');
@@ -1162,28 +1162,28 @@ WTWJS.prototype.loadMyFilesPage = async function(zitem, zcategory, zhide) {
 						}
 					}
 				} else {
-					var serror = "";
+					var zerror = "";
 					switch (zcategory) {
 						case 'image':
-							serror += "<h1 class='wtw-red'>No Uploaded Images Found</h1>Use the <strong>Stock Files</strong> button above or<br /><br />the <strong>Upload</strong> button on the top right to <strong>Add an Image</strong>.";
+							zerror += "<h1 class='wtw-red'>No Uploaded Images Found</h1>Use the <strong>Stock Files</strong> button above or<br /><br />the <strong>Upload</strong> button on the top right to <strong>Add an Image</strong>.";
 							break;
 						case 'video':
-							serror += "<h1 class='wtw-red'>No Uploaded Videos Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a Video File</strong>.";
+							zerror += "<h1 class='wtw-red'>No Uploaded Videos Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a Video File</strong>.";
 							break;
 						case 'audio':
-							serror += "<h1 class='wtw-red'>No Uploaded Sound Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add an Audio File</strong>.";
+							zerror += "<h1 class='wtw-red'>No Uploaded Sound Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add an Audio File</strong>.";
 							break;
 						case 'doc':
-							serror += "<h1 class='wtw-red'>No Uploaded Document Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a Document File</strong>.";
+							zerror += "<h1 class='wtw-red'>No Uploaded Document Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a Document File</strong>.";
 							break;
 						case 'object':
-							serror += "<h1 class='wtw-red'>No 3D Object Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a 3D Object File</strong>.";
+							zerror += "<h1 class='wtw-red'>No 3D Object Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a 3D Object File</strong>.";
 							break;
 						default:
-							serror += "<h1 class='wtw-red'>No Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a File</strong>.";
+							zerror += "<h1 class='wtw-red'>No Files Found</h1>Use the <strong>Upload</strong> button on the top right to <strong>Add a File</strong>.";
 							break;
 					}
-					zmyimagesdiv += "<div class='wtw-warningmessage'>" + serror + "<br /><br /></div>";
+					zmyimagesdiv += "<div class='wtw-warningmessage'>" + zerror + "<br /><br /></div>";
 				}
 				dGet('wtw_myimagesdiv').innerHTML = zmyimagesdiv;
 				WTW.show('wtw_myimagesdiv');
@@ -1370,9 +1370,9 @@ WTWJS.prototype.uploadFile = function() {
 	/* upload file form post */
 	try {
 		if (dGet('wtw_fileupload').value != null) {
-			var form1 = document.createElement('form');
+			var zform1 = document.createElement('form');
 			var Httpreq = new XMLHttpRequest();
-			var zformdata = new FormData(form1);
+			var zformdata = new FormData(zform1);
 			zformdata.append('wtw_uploadfile', dGet('wtw_fileupload').files[0], dGet('wtw_fileupload').files[0].name);
 			zformdata.append('action', 'POST');
 			zformdata.append('function', 'uploadfile');
@@ -1398,9 +1398,9 @@ WTWJS.prototype.uploadAsyncFile = function() {
 	try {
 		if (dGet('wtw_fileupload').value != null) {
 			return new Promise(function () {
-				var form1 = document.createElement('form');
+				var zform1 = document.createElement('form');
 				var Httpreq = new XMLHttpRequest();
-				var zformdata = new FormData(form1);
+				var zformdata = new FormData(zform1);
 				zformdata.append('wtw_uploadfile', dGet('wtw_fileupload').files[0], dGet('wtw_fileupload').files[0].name);
 				zformdata.append('action', 'POST');
 				zformdata.append('function', 'uploadfile');
@@ -1442,9 +1442,9 @@ WTWJS.prototype.uploadFiles = function() {
 			var zobjectfilepart = dGet('wtw_tobjectfile').value;
 			var zitem = dGet('wtw_tfileitem').value;
 			zobjectfilepart = zobjectfilepart.replace(".babylon","");
-			var form1 = document.createElement('form');
+			var zform1 = document.createElement('form');
 			var Httpreq = new XMLHttpRequest();
-			var zformdata = new FormData(form1);
+			var zformdata = new FormData(zform1);
 			for (var i=0;i < dGet('wtw_filesupload').files.length;i++) {
 				zformdata.append('wtw_uploadfiles[]', dGet('wtw_filesupload').files[i], dGet('wtw_filesupload').files[i].name);
 			}
@@ -1477,9 +1477,9 @@ WTWJS.prototype.uploadAsyncFiles = function() {
 				var zobjectfilepart = dGet('wtw_tobjectfile').value;
 				var zitem = dGet('wtw_tfileitem').value;
 				zobjectfilepart = zobjectfilepart.replace(".babylon","");
-				var form1 = document.createElement('form');
+				var zform1 = document.createElement('form');
 				var Httpreq = new XMLHttpRequest();
-				var zformdata = new FormData(form1);
+				var zformdata = new FormData(zform1);
 				for (var i=0;i < dGet('wtw_filesupload').files.length;i++) {
 					zformdata.append('wtw_uploadfiles[]', dGet('wtw_filesupload').files[i], dGet('wtw_filesupload').files[i].name);
 				}
@@ -1509,12 +1509,12 @@ WTWJS.prototype.resetUploadButton = function() {
 	/* reset the upload button after an upload (in case you want to upload the same file name again) */
 	try {
 		if (dGet('wtw_bstartimageupload') != null) {
-			var category = WTW.getDDLValue('wtw_fileselectcategory');
+			var zcategory = WTW.getDDLValue('wtw_fileselectcategory');
 			if (dGet('wtw_menuuploadedobjectsdiv').style.display != 'none') {
-				category = 'object';
+				zcategory = 'object';
 			}
 			dGet('wtw_bstartimageupload').innerHTML = "Upload File(s)";
-			if ((category == '' || category == 'object') && dGet('wtw_menuuploadedobjects').className == 'wtw-menutabtopselected' && dGet('wtw_uploadedmodelsdiv').style.display != 'none') {
+			if ((zcategory == '' || zcategory == 'object') && dGet('wtw_menuuploadedobjects').className == 'wtw-menutabtopselected' && dGet('wtw_uploadedmodelsdiv').style.display != 'none') {
 				if (dGet('wtw_uploadedmodeldetailsdiv').style.display == 'none') {
 					dGet('wtw_bstartimageupload').innerHTML = 'Upload Primary 3D File';
 				} else {
@@ -1588,9 +1588,9 @@ WTWJS.prototype.filterModels = function(zevent) {
 WTWJS.prototype.openObjectPageForm = function(zuploadobjectid, zfilename) {
 	/* 3D Models page form */
 	try {
-		var category = WTW.getDDLValue('wtw_fileselectcategory');
+		var zcategory = WTW.getDDLValue('wtw_fileselectcategory');
 		dGet('wtw_tbackupfullpageformtitle').value = dGet('wtw_fullpageformtitle').innerHTML;
-		dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','" + category + "','');WTW.setImageMenu(4);\">Media Library</div><img id='wtw_arrowicon2' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zfilename + "</div>";
+		dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','" + zcategory + "','');WTW.setImageMenu(4);\">Media Library</div><img id='wtw_arrowicon2' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zfilename + "</div>";
 		WTW.hide('wtw_uploadedmodelsdiv');
 		WTW.hide('wtw_loadingselectimage');
 		dGet('wtw_uploadedmodeldetailsdiv').style.height = (WTW.sizeY - 160) + 'px';
@@ -1707,9 +1707,9 @@ WTWJS.prototype.uploadObjectFiles = function(ztype) {
 			}
 			var zobjectfilepart = dGet('wtw_tobjectfile').value;
 			zobjectfilepart = zobjectfilepart.replace(".babylon","");
-			var form1 = document.createElement('form');
+			var zform1 = document.createElement('form');
 			var Httpreq = new XMLHttpRequest();
-			var zformdata = new FormData(form1);
+			var zformdata = new FormData(zform1);
 			for (var i=0;i < dGet('wtw_filesupload').files.length;i++) {
 				zformdata.append('wtw_uploadfiles[]', dGet('wtw_filesupload').files[i], dGet('wtw_filesupload').files[i].name);
 			}
@@ -1757,9 +1757,9 @@ WTWJS.prototype.uploadAsyncObjectFiles = function(ztype) {
 				}
 				var zobjectfilepart = dGet('wtw_tobjectfile').value;
 				zobjectfilepart = zobjectfilepart.replace(".babylon","");
-				var form1 = document.createElement('form');
+				var zform1 = document.createElement('form');
 				var Httpreq = new XMLHttpRequest();
-				var zformdata = new FormData(form1);
+				var zformdata = new FormData(zform1);
 				for (var i=0;i < dGet('wtw_filesupload').files.length;i++) {
 					zformdata.append('wtw_uploadfiles[]', dGet('wtw_filesupload').files[i], dGet('wtw_filesupload').files[i].name);
 				}
@@ -2268,7 +2268,7 @@ WTWJS.prototype.editWebAlias = async function(zwebaliasid) {
 	try {
 		WTW.openAliasForm();
 		WTW.getAsyncJSON("/connect/webalias.php?webaliasid=" + zwebaliasid, 
-			function(response) {
+			function(zresponse) {
 				var zcommunityid = "";
 				var zbuildingid = "";
 				var zthingid = "";
@@ -2278,19 +2278,19 @@ WTWJS.prototype.editWebAlias = async function(zwebaliasid) {
 				var zbuildingpub = "";
 				var zthingpub = "";
 				
-				response = JSON.parse(response);
-				if (response != null) {
-					for (var i=0;i<response.length;i++) {
-						if (response[i] != null) {
-							if (response[i].webaliasid != undefined) {
-								zforcehttps = response[i].forcehttps;
-								zdomainname = response[i].domainname;
-								zcommunitypub = response[i].communitypublishname;
-								zbuildingpub = response[i].buildingpublishname;
-								zthingpub = response[i].thingpublishname;
-								zcommunityid = response[i].communityid;
-								zbuildingid = response[i].buildingid;
-								zthingid = response[i].thingid;
+				zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							if (zresponse[i].webaliasid != undefined) {
+								zforcehttps = zresponse[i].forcehttps;
+								zdomainname = zresponse[i].domainname;
+								zcommunitypub = zresponse[i].communitypublishname;
+								zbuildingpub = zresponse[i].buildingpublishname;
+								zthingpub = zresponse[i].thingpublishname;
+								zcommunityid = zresponse[i].communityid;
+								zbuildingid = zresponse[i].buildingid;
+								zthingid = zresponse[i].thingid;
 							}
 						}
 					}
@@ -2368,18 +2368,18 @@ WTWJS.prototype.setAliasCommunities = async function(zcommunityid) {
 		WTW.clearDDL("wtw_aliasdomaincommunityid");
 		WTW.clearDDL("wtw_aliascommunityid");
 		WTW.getAsyncJSON("/connect/communitynames.php", 
-			function(response) {
-				response = JSON.parse(response);
-				if (response != null) {
-					for (var i=0;i<response.length;i++) {
-						if (response[i] != null) {
-							if (response[i].communityid != undefined && response[i].communityname != undefined) {
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							if (zresponse[i].communityid != undefined && zresponse[i].communityname != undefined) {
 								var zoption = document.createElement("option");
-								zoption.text = response[i].communityname;
-								zoption.value = response[i].communityid;
+								zoption.text = zresponse[i].communityname;
+								zoption.value = zresponse[i].communityid;
 								if (i == 0 && zcommunityid == '') {
 									zoption.selected = true;
-								} else if (zcommunityid == response[i].communityid) {
+								} else if (zcommunityid == zresponse[i].communityid) {
 									zoption.selected = true;
 								}
 								var zoption2 = zoption.cloneNode(true);
@@ -2404,18 +2404,18 @@ WTWJS.prototype.setAliasBuildings = async function(zbuildingid) {
 		}
 		WTW.clearDDL("wtw_aliasbuildingid");
 		WTW.getAsyncJSON("/connect/buildingnames.php", 
-			function(response) {
-				response = JSON.parse(response);
-				if (response != null) {
-					for (var i=0;i<response.length;i++) {
-						if (response[i] != null) {
-							if (response[i].buildingid != undefined && response[i].buildingname != undefined) {
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							if (zresponse[i].buildingid != undefined && zresponse[i].buildingname != undefined) {
 								var zoption = document.createElement("option");
-								zoption.text = response[i].buildingname;
-								zoption.value = response[i].buildingid;
+								zoption.text = zresponse[i].buildingname;
+								zoption.value = zresponse[i].buildingid;
 								if (i == 0 && zbuildingid == '') {
 									zoption.selected = true;
-								} else if (zbuildingid == response[i].buildingid) {
+								} else if (zbuildingid == zresponse[i].buildingid) {
 									zoption.selected = true;
 								}
 								dGet("wtw_aliasbuildingid").add(zoption);
@@ -2438,18 +2438,18 @@ WTWJS.prototype.setAliasThings = async function(zthingid) {
 		}
 		WTW.clearDDL("wtw_aliasthingid");
 		WTW.getAsyncJSON("/connect/thingnames.php", 
-			function(response) {
-				response = JSON.parse(response);
-				if (response != null) {
-					for (var i=0;i<response.length;i++) {
-						if (response[i] != null) {
-							if (response[i].thingid != undefined && response[i].thingname != undefined) {
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							if (zresponse[i].thingid != undefined && zresponse[i].thingname != undefined) {
 								var zoption = document.createElement("option");
-								zoption.text = response[i].thingname;
-								zoption.value = response[i].thingid;
+								zoption.text = zresponse[i].thingname;
+								zoption.value = zresponse[i].thingid;
 								if (i == 0 && zthingid == '') {
 									zoption.selected = true;
-								} else if (zthingid == response[i].thingid) {
+								} else if (zthingid == zresponse[i].thingid) {
 									zoption.selected = true;
 								}
 								dGet("wtw_aliasthingid").add(zoption);

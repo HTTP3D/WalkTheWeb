@@ -584,7 +584,7 @@ WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
 				zavatarparts[i].isVisible = true;
 			}
 		}
-		var timername  = window.setInterval(function(){
+		var ztimername  = window.setInterval(function(){
 			var zavatar = scene.getMeshByID(zavatarname);
 			if (zavatar != null) {
 				var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
@@ -619,7 +619,7 @@ WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
 					if (zchildalpha == 1) {
 						WTW.disposeClean(zavatarname + "-torus1");
 						WTW.disposeClean(zavatarname + "-torus2");
-						window.clearInterval(timername);
+						window.clearInterval(ztimername);
 						WTW.myAvatarLoadComplete(zavatarname);
 					}
 				}
@@ -1035,28 +1035,28 @@ WTWJS.prototype.avatarShowGrowGlow = function(zavatarname, zavatarparts) {
 				}
 				var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
 				if (zavatarscale != null) {
-					var setscalingx = zavatarscale.scaling.x;
-					var setscalingy = zavatarscale.scaling.y;
-					var setscalingz = zavatarscale.scaling.z;
-					if (setscalingx < zscalingx) {
+					var zsetscalingx = zavatarscale.scaling.x;
+					var zsetscalingy = zavatarscale.scaling.y;
+					var zsetscalingz = zavatarscale.scaling.z;
+					if (zsetscalingx < zscalingx) {
 						zavatarscale.scaling.x += .001;
 					} else {
-						setscalingx = zscalingx;
+						zsetscalingx = zscalingx;
 						zavatarscale.scaling.x = zscalingx;
 					}
-					if (setscalingy < zscalingy) {
+					if (zsetscalingy < zscalingy) {
 						zavatarscale.scaling.y += .001;
 					} else {
-						setscalingy = zscalingy;
+						zsetscalingy = zscalingy;
 						zavatarscale.scaling.y = zscalingy;
 					}
-					if (setscalingz < zscalingz) {
+					if (zsetscalingz < zscalingz) {
 						zavatarscale.scaling.z += .001;
 					} else {
-						setscalingz = zscalingz;
+						zsetscalingz = zscalingz;
 						zavatarscale.scaling.z = zscalingz;
 					}
-					if (setscalingx == zscalingx && setscalingy == zscalingy && setscalingz == zscalingz) {
+					if (zsetscalingx == zscalingx && zsetscalingy == zscalingy && zsetscalingz == zscalingz) {
 						var zavatarparts = zavatarscale.getChildren();
 						for (var i=0; i<zavatarparts.length;i++) {
 							if (zavatarparts[i] != null) {
@@ -1292,8 +1292,8 @@ WTWJS.prototype.walkToPosition = function(zavatarname, zmoldtomatch, zfunctionna
 			if (zavatar.position != zabspos) {
 				var zangledegy = WTW.cleanDegrees(WTW.getDegrees(Math.atan((zabspos.x-zavatar.position.x)/(zabspos.z-zavatar.position.z))) + 180);
 				var zavatardeg = WTW.getDegrees(zavatar.rotation.y);
-				var moveavatar = window.setInterval(function(){
-					var targetangle = WTW.getMyAngleToPoint(zabspos.x,zabspos.z);
+				var zmoveavatar = window.setInterval(function(){
+					var ztargetangle = WTW.getMyAngleToPoint(zabspos.x,zabspos.z);
 					var zavatardeg = WTW.getDegrees(zavatar.rotation.y);
 					var zdir = 1;
 					var zdegleft = 0;
@@ -1301,28 +1301,28 @@ WTWJS.prototype.walkToPosition = function(zavatarname, zmoldtomatch, zfunctionna
 					var zdx = (zabspos.x - zavatar.position.x);
 					var zdz = (zabspos.z - zavatar.position.z);
 					var zdist = Math.sqrt((zdx * zdx) + (zdz * zdz));
-					if (Math.round(targetangle) == 0 || Math.round(targetangle) == 360 || zdist < 3) {
+					if (Math.round(ztargetangle) == 0 || Math.round(ztargetangle) == 360 || zdist < 3) {
 						zdir = 0;
-					} else if (targetangle < 1) {
+					} else if (ztargetangle < 1) {
 						zdir = -.1;
-						zdegleft = targetangle;
-					} else if (targetangle < 2) {
+						zdegleft = ztargetangle;
+					} else if (ztargetangle < 2) {
 						zdir = -.5;
-						zdegleft = targetangle;
-					} else if (targetangle < 10) {
+						zdegleft = ztargetangle;
+					} else if (ztargetangle < 10) {
 						zdir = -1;
-						zdegleft = targetangle;
-					} else if (targetangle < 30) {
+						zdegleft = ztargetangle;
+					} else if (ztargetangle < 30) {
 						zdir = -5;
-						zdegleft = targetangle;
-					} else if (targetangle < 90) {
+						zdegleft = ztargetangle;
+					} else if (ztargetangle < 90) {
 						zdir = -10;
-						zdegleft = targetangle;
-					} else if (targetangle < 180) {
+						zdegleft = ztargetangle;
+					} else if (ztargetangle < 180) {
 						zdir = -15;
-						zdegleft = targetangle;
+						zdegleft = ztargetangle;
 					} else {
-						zdegleft = 360 - targetangle;
+						zdegleft = 360 - ztargetangle;
 					}
 					zavatardeg += zdir;
 					zavatar.rotation.y = WTW.getRadians(zavatardeg);
@@ -1333,7 +1333,7 @@ WTWJS.prototype.walkToPosition = function(zavatarname, zmoldtomatch, zfunctionna
 						WTW.keyPressedAdd('onwalk');
 					}
 					if (zdegleft < 3 && zwalk == 0) {
-						window.clearInterval(moveavatar);
+						window.clearInterval(zmoveavatar);
 						zavatar.position.x = zabspos.x;
 						zavatar.position.z = zabspos.z;
 						WTW.executeFunctionByName(zfunctionname, window, zparameters);

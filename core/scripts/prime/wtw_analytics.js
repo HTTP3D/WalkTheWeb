@@ -34,10 +34,10 @@ WTWJS.prototype.checkAnalytics = function(zactionzoneind) {
 WTWJS.prototype.queueAnalytics = function(zactionzoneind, zdistancename) {
 	/* queue a pageview to be sent to analytics */
 	try {
-		var analyticsqueueind = WTW.getNextCount(WTW.analyticsQueue);
-		WTW.analyticsQueue[analyticsqueueind] = WTW.newAnalyticsQueue();
-		WTW.analyticsQueue[analyticsqueueind].actionzoneind = zactionzoneind;
-		WTW.analyticsQueue[analyticsqueueind].distancename = zdistancename;
+		var zanalyticsqueueind = WTW.getNextCount(WTW.analyticsQueue);
+		WTW.analyticsQueue[zanalyticsqueueind] = WTW.newAnalyticsQueue();
+		WTW.analyticsQueue[zanalyticsqueueind].actionzoneind = zactionzoneind;
+		WTW.analyticsQueue[zanalyticsqueueind].distancename = zdistancename;
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_analytics.js-queueAnalytics=" + ex.message);
 	}
