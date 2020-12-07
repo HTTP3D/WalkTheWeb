@@ -50,5 +50,4 @@ DEVID_PLUGINTEMPLATE.prototype.setCoveringFormFields = function(zcoveringname) {
 	} catch (ex) {
 		WTW.log("plugins:devid-plugintemplate:scripts-custom_molds.js-setCoveringFormFields=" + ex.message);
 	}
-	return mold;
 }
