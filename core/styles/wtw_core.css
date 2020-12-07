@@ -2075,7 +2075,26 @@ h3.wtw-categoryheading:hover {
 	min-width:300px;
 	font-size:1.4em;
 }
-
+.wtw-videohidden {
+/*	position: absolute;
+	z-index:9001;
+	bottom:40px;
+	right:40px;
+	margin:0px;
+	padding:0px;
+	width:30%;
+	height:auto;
+	min-height:240px;
+*/
+	margin:0px;
+	padding:0px;
+	width:1px;
+	height:1px;
+	display:none;
+	visibility:hidden;
+	pointer-events:none;
+	touch-action: none;
+}
 @keyframes wtw-blinker {
   50% {
     opacity: 0;

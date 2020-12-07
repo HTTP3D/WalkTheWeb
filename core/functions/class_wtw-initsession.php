@@ -1882,6 +1882,7 @@ class wtw {
             $jsdata .= "	}\r\n";
 			$jsdata .= "</script>"; 
 			$jsdata .= "<script src=\"/core/scripts/engine/socket.io.js\"></script>\r\n";
+			$jsdata .= "<script src=\"/core/scripts/engine/socket.io-stream.js\"></script>\r\n";
 			$jsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$this->version."\"></script>\r\n";
 			$jsdata .= $wtwplugins->getScriptFunctions();
 		} catch (Exception $e) {
@@ -1988,6 +1989,7 @@ class wtw {
 			$mainelements .= "  <div id=\"wtw_ipagediv\" class=\"wtw-ipagediv\"></div>\r\n";
 			$mainelements .= "	<iframe id=\"wtw_ibrowseframe\" class=\"wtw-ibrowseframe\" src=\"/core/pages/loading.php\"></iframe>\r\n";
 			$mainelements .= "</div>\r\n";
+			$mainelements .= "<div id=\"wtw_streaming\" class=\"wtw-hide\"></div>\r\n";
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadMainElements=".$e->getMessage());
 		}

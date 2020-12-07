@@ -133,7 +133,14 @@ class wtwadmin {
 			$mainelements .= "			</div>\r\n";
 			$mainelements .= "		</div>\r\n";
 			$mainelements .= "	</div>\r\n";
-			$mainelements .= "</div>\r\n";	
+			$mainelements .= "</div>\r\n";
+			
+			/* added for video preview and streaming to 3D Scenes */
+			$mainelements .= "<div id=\"wtw_videopreview\" class=\"wtw-videopreview\">";
+			$mainelements .= "	<div><video id=\"wtw_camerapreview\" class=\"wtw-camerapreview\"></video></div><br />";
+			$mainelements .= "	<button id=\"wtw_startrecording\" disabled onclick=\"wtw3dinternet.startRecording();\" class=\"wtw-videobuttons\">Start Video</button> &nbsp;&nbsp;&nbsp; ";
+			$mainelements .= "	<button id=\"wtw_stoprecording\" disabled onclick=\"wtw3dinternet.stopRecording();\" class=\"wtw-videobuttons\">Stop Video</button>";
+			$mainelements .= "</div>";
 		} catch (Exception $e) {
 			$wtw->serror("core-functions-class_wtwadmin.php-loadMainElementsAdmin=".$e->getMessage());
 		}
