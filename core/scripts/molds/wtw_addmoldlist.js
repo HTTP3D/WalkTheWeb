@@ -62,6 +62,7 @@ WTWJS.prototype.getWebMoldList = function() {
 		zwebmoldlist[zwebmoldlist.length] = "3D Text";
 		zwebmoldlist[zwebmoldlist.length] = "Image";
         zwebmoldlist[zwebmoldlist.length] = "Video";
+		zwebmoldlist[zwebmoldlist.length] = "Video Stream";
 		zwebmoldlist[zwebmoldlist.length] = "Babylon File";
         zwebmoldlist[zwebmoldlist.length] = "Lightbulb";
 /*	    zwebmoldlist[zwebmoldlist.length] = "Spot Light"; */
@@ -257,6 +258,11 @@ WTWJS.prototype.addMold = function(zmoldname, zmolddef, zparentname, zcoveringna
             case "video":
 				/* video - video player or screen - real videos with play, pause, stop , and rewind buttons */
 				zmold = WTW.addMoldVideo(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = "none";
+				break;
+			case "videostream":
+				/* plane - one sided flat box, streaming video will display on it */
+				zmold = WTW.addVideoStream(zmoldname, zlenx, zleny, zlenz);
 				zcoveringname = "none";
 				break;
             case "lightbulb":
@@ -515,10 +521,10 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 	/* For each new mold and new web mold, these are the default values when created using the admin form */
 	try {
 		var zcoords = WTW.getNewCoordinates(50);
-		var zpositionX = zcoords.positionX;
-		var zpositionY = zcoords.positionY;
-		var zpositionZ = zcoords.positionZ;
-		var zrotationY = zcoords.rotationY;
+		var zpositionX = Number(zcoords.positionX);
+		var zpositionY = Number(zcoords.positionY);
+		var zpositionZ = Number(zcoords.positionZ);
+		var zrotationY = Number(zcoords.rotationY);
 		var zshapevalue = zshape.toLowerCase();
 		var zimageid = "ij7fi8qv7dbgb6zc";
 		var zimagepath = "/content/system/stock/stucco-512x512.jpg";
@@ -1202,6 +1208,23 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsoundloop').checked = false;
 				dGet('wtw_tmoldvideomaxdistance').value = "100.00";
 				dGet('wtw_tmoldvideoloop').checked = false;
+				break;
+			case "videostream":
+				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositiony').value = zpositionY + 10;
+				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldscalingx').value = "10.00";
+				dGet('wtw_tmoldscalingy').value = "8.00";
+				dGet('wtw_tmoldscalingz').value = "0.00";
+				dGet('wtw_tmoldrotationx').value = "180.00";
+				dGet('wtw_tmoldrotationy').value = zrotationY + 180;
+				dGet('wtw_tmoldrotationz').value = "0.00";
+				dGet('wtw_tmoldspecial2').value = "0.00";
+				dGet('wtw_tmolduoffset').value = "0.00";
+				dGet('wtw_tmoldvoffset').value = "0.00";
+				dGet('wtw_tmolduscale').value = "0.00";
+				dGet('wtw_tmoldvscale').value = "0.00";
+				dGet('wtw_tmoldsubdivisions').value = "2";
 				break;
 			case "simpletextbox":
 				dGet('wtw_tmoldpositionx').value = zpositionX;
@@ -1962,6 +1985,23 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.show('wtw_moldtexturetitle');
 				WTW.show('wtw_moldtexturepreview');
+				break;
+			case "videostream":
+				dGet('wtw_moldpositiontitle').innerHTML = "Video Position";
+				dGet('wtw_moldscalingtitle').innerHTML = "Video Length";
+				dGet('wtw_moldrotationtitle').innerHTML = "Video Rotation";
+				dGet('wtw_moldtexturetitle').innerHTML = "Video Texture Image";
+				dGet('wtw_moldbumptexturetitle').innerHTML = "Video Bump Image";
+				dGet('wtw_bsavethismold').innerHTML = "<u>S</u>ave Video";
+				dGet('wtw_bdelmold').innerHTML = "<u>D</u>elete Video";
+				dGet('wtw_editmoldformtitle').innerHTML = "Edit Video";
+				WTW.hide('wtw_moldspecial1');
+				WTW.hide('wtw_moldspecial2');
+				WTW.hide('wtw_moldsubdivisions');
+				WTW.show('wtw_moldtexturetitle');
+				WTW.show('wtw_moldtexturepreview');
+				WTW.show('wtw_moldscalediv');
+				WTW.show('wtw_moldmergemoldsdiv');
 				break;
 			case "raisedimage":
 				dGet('wtw_moldpositiontitle').innerHTML = "Position";

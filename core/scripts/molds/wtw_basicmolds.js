@@ -1389,8 +1389,8 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 			}
 			if (zobjectfile.indexOf('.babylon') > -1) {
 				BABYLON.SceneLoader.ImportMeshAsync("", zobjectfolder, zobjectfile, scene).then(
-					function (results) {
-						if (results.meshes != null) {
+					function (zresults) {
+						if (zresults.meshes != null) {
 							/* make sure the 3D Object is positioned over parent (if transformations are all applied, there is no position adjustment) */
 							var ztotalx = 0;
 							var ztotaly = 0;
@@ -1398,92 +1398,92 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 							var zavex = 0;
 							var zavey = 0;
 							var zavez = 0;
-							for (var i=0; i < results.meshes.length; i++) {
-								if (results.meshes[i] != null) {
-									//results.meshes[i].setEnabled(false);
-									ztotalx += results.meshes[i].position.x;
-									ztotaly += results.meshes[i].position.y;
-									ztotalz += results.meshes[i].position.z;
+							for (var i=0; i < zresults.meshes.length; i++) {
+								if (zresults.meshes[i] != null) {
+									//zresults.meshes[i].setEnabled(false);
+									ztotalx += zresults.meshes[i].position.x;
+									ztotaly += zresults.meshes[i].position.y;
+									ztotalz += zresults.meshes[i].position.z;
 								}
 							}
-							if (results.meshes.length > 0) {
-								zavex = ztotalx/results.meshes.length;
-								zavey = ztotaly/results.meshes.length;
-								zavez = ztotalz/results.meshes.length;
+							if (zresults.meshes.length > 0) {
+								zavex = ztotalx/zresults.meshes.length;
+								zavey = ztotaly/zresults.meshes.length;
+								zavez = ztotalz/zresults.meshes.length;
 							}
-							for (var i=0; i < results.meshes.length; i++) {
-								if (results.meshes[i] != null) {
+							for (var i=0; i < zresults.meshes.length; i++) {
+								if (zresults.meshes[i] != null) {
 									/* add the base mold name to each of the child meshes */
-									var zmeshname = results.meshes[i].name;
+									var zmeshname = zresults.meshes[i].name;
 									var zchildmoldname = zmoldname + "-" + zmeshname;
 									zchildmoldname = zchildmoldname.replace(" ","_").toLowerCase();
-									results.meshes[i].id = zchildmoldname;
-									results.meshes[i].name = zchildmoldname;
-									results.meshes[i].position.x -= zavex;
-									results.meshes[i].position.y -= zavey;
-									results.meshes[i].position.z -= zavez;
+									zresults.meshes[i].id = zchildmoldname;
+									zresults.meshes[i].name = zchildmoldname;
+									zresults.meshes[i].position.x -= zavex;
+									zresults.meshes[i].position.y -= zavey;
+									zresults.meshes[i].position.z -= zavez;
 									/* this if statement will be moved to a plugin hook (minigolf related test) */
-									if (results.meshes[i].name.indexOf('ground') > -1) {
-										results.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(results.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.3 }, scene);
-									} else if (results.meshes[i].name.indexOf('sides') > -1) {
-										results.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(results.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.9 }, scene);
-									} else if (results.meshes[i].name.indexOf('hull') > -1) {
-//										zmold.physicsImpostor = new BABYLON.PhysicsImpostor(results.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, {ignoreParent: false,  mass: 1, friction: 1, restitution: .5 }, scene);
+									if (zresults.meshes[i].name.indexOf('ground') > -1) {
+										zresults.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(zresults.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.3 }, scene);
+									} else if (zresults.meshes[i].name.indexOf('sides') > -1) {
+										zresults.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(zresults.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.9 }, scene);
+									} else if (zresults.meshes[i].name.indexOf('hull') > -1) {
+//										zmold.physicsImpostor = new BABYLON.PhysicsImpostor(zresults.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, {ignoreParent: false,  mass: 1, friction: 1, restitution: .5 }, scene);
 									}
 									/* overwrite material to wireframe if selected */
 									if (zmeshname.indexOf("WireFrame") > -1) {
-										results.meshes[i].material.wireframe = true;
+										zresults.meshes[i].material.wireframe = true;
 									}
 									/* make sure chile meshes are pickable */
-									results.meshes[i].isPickable = true;
-									WTW.registerMouseOver(results.meshes[i]);
+									zresults.meshes[i].isPickable = true;
+									WTW.registerMouseOver(zresults.meshes[i]);
 									/* make sure all object meshes have a parent */
-									if (results.meshes[i].parent == null) {
+									if (zresults.meshes[i].parent == null) {
 										if (zbillboard == '1') {
-											results.meshes[i].parent = zmoldrot;
+											zresults.meshes[i].parent = zmoldrot;
 										} else {
-											results.meshes[i].parent = zmold;
+											zresults.meshes[i].parent = zmold;
 										}
 									}
 									if (WTW.shadows != null) {
 										/* add mesh to world shadow map */
-										WTW.shadows.getShadowMap().renderList.push(results.meshes[i]);
+										WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
 									}
-									results.meshes[i].receiveShadows = true;
+									zresults.meshes[i].receiveShadows = true;
 									/* initiate and preload any event driven animations */
 									if (zobjectanimations != null) {
-										WTW.addMoldAnimation(zmoldname, zmeshname, results.meshes[i], zobjectanimations);
+										WTW.addMoldAnimation(zmoldname, zmeshname, zresults.meshes[i], zobjectanimations);
 									}
 									if (zmold == null || zmold.parent == null) {
 										/* if the parent has been deleted after this async process began (avoiding orphaned objects)*/
-										results.meshes[i].dispose();
+										zresults.meshes[i].dispose();
 									}
 								}
 							}
 						}
 
-						if (results.skeletons != null)	{
+						if (zresults.skeletons != null)	{
 							/* load any skeletons (most often avatars) */
-							for (var i=0; i < results.skeletons.length; i++) {
-								if (results.skeletons[i] != null) {
-									var zbone = results.skeletons[i];
-									var zmeshname = results.skeletons[i].name;
+							for (var i=0; i < zresults.skeletons.length; i++) {
+								if (zresults.skeletons[i] != null) {
+									var zbone = zresults.skeletons[i];
+									var zmeshname = zresults.skeletons[i].name;
 									zbone.isVisible = false;
 									/* append zmoldname to all child skeleton names */
 									var zchildmoldname = zmoldname + "-" + zmeshname;
-									results.skeletons[i].name = zchildmoldname;
-									/* WTW.registerMouseOver(results.skeletons[i]); */
+									zresults.skeletons[i].name = zchildmoldname;
+									/* WTW.registerMouseOver(zresults.skeletons[i]); */
 									/* make sure all bones have a parent set */
-									if (results.skeletons[i].parent == null) {
+									if (zresults.skeletons[i].parent == null) {
 										if (zbillboard == '1') {
-											results.skeletons[i].parent = zmoldrot;
+											zresults.skeletons[i].parent = zmoldrot;
 										} else {
-											results.skeletons[i].parent = zmold;
+											zresults.skeletons[i].parent = zmold;
 										}
 									}
 									if (zmold == null || zmold.parent == null) {
 										/* if the parent has been deleted after this async process began (avoiding orphaned bjects) */
-										results.skeletons[i].dispose();
+										zresults.skeletons[i].dispose();
 									}
 								}
 							}
@@ -1498,38 +1498,38 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 			} else if (zobjectfile.indexOf('.gltf') > -1 || zobjectfile.indexOf('.obj') > -1) {
 				/* babylon can natively load gltf or obj files, but this is not fully tested or complete (animations not loaded) */
 				BABYLON.SceneLoader.ImportMeshAsync("", zobjectfolder, zobjectfile, scene).then(
-					function (results) {
-						if (results.meshes != null) {
+					function (zresults) {
+						if (zresults.meshes != null) {
 							var ztotalx = 0;
 							var ztotaly = 0;
 							var ztotalz = 0;
 							var zavex = 0;
 							var zavey = 0;
 							var zavez = 0;
-							for (var i=0; i < results.meshes.length; i++) {
-								if (results.meshes[i] != null) {
-									ztotalx += results.meshes[i].position.x;
-									ztotaly += results.meshes[i].position.y;
-									ztotalz += results.meshes[i].position.z;
+							for (var i=0; i < zresults.meshes.length; i++) {
+								if (zresults.meshes[i] != null) {
+									ztotalx += zresults.meshes[i].position.x;
+									ztotaly += zresults.meshes[i].position.y;
+									ztotalz += zresults.meshes[i].position.z;
 								}
 							}
-							if (results.meshes.length > 0) {
-								zavex = ztotalx/results.meshes.length;
-								zavey = ztotaly/results.meshes.length;
-								zavez = ztotalz/results.meshes.length;
+							if (zresults.meshes.length > 0) {
+								zavex = ztotalx/zresults.meshes.length;
+								zavey = ztotaly/zresults.meshes.length;
+								zavez = ztotalz/zresults.meshes.length;
 							}
-							for (var i=0; i < results.meshes.length; i++) {
-								if (results.meshes[i] != null) {
-									results.meshes[i].name = zmoldname + "-file" + i;
-									results.meshes[i].position.x -= zavex;
-									results.meshes[i].position.y -= zavey;
-									results.meshes[i].position.z -= zavez;
-									WTW.registerMouseOver(results.meshes[i]);
-									if (results.meshes[i].parent == null) {
+							for (var i=0; i < zresults.meshes.length; i++) {
+								if (zresults.meshes[i] != null) {
+									zresults.meshes[i].name = zmoldname + "-file" + i;
+									zresults.meshes[i].position.x -= zavex;
+									zresults.meshes[i].position.y -= zavey;
+									zresults.meshes[i].position.z -= zavez;
+									WTW.registerMouseOver(zresults.meshes[i]);
+									if (zresults.meshes[i].parent == null) {
 										if (zbillboard == '1') {
-											results.meshes[i].parent = zmoldrot;
+											zresults.meshes[i].parent = zmoldrot;
 										} else {
-											results.meshes[i].parent = zmold;
+											zresults.meshes[i].parent = zmold;
 										}
 									}
 								}
@@ -2549,5 +2549,41 @@ WTWJS.prototype.addMoldRoundedBox = function(zmoldname, zlenx, zleny, zlenz) {
 	}
 	return zmold;
 }
+
+WTWJS.prototype.addVideoStream = function(zmoldname, zlenx, zleny, zlenz) {
+	var zmold;
+	try {
+		zmold = BABYLON.MeshBuilder.CreatePlane(zmoldname, {updatable: false, sideOrientation: BABYLON.Mesh.DEFAULT}, scene);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+		/* get webid */
+		var zwebid = '';
+		
+		/* add video player if needed */
+		if (dGet('wtw_streaming-' + zwebid) == null) {
+//<div><video id=\"wtw_camerapreview\" class=\"wtw-camerapreview\"></video></div>
+			var zdiv = document.createElement("div");
+			zdiv.id = 'wtw_streamingdiv-' + zwebid;
+			var zvideo = document.createElement("video");
+			zvideo.id = 'wtw_streaming-' + zwebid;
+			zvideo.className = 'wtw-videohidden';
+			zdiv.appendChild(zvideo);
+			dGet("wtw_streaming").appendChild(zdiv);
+		}
+		
+		
+		if (dGet('wtw_streaming-' + zwebid) != null) {
+			var zvideomat = new BABYLON.StandardMaterial(zmoldname + "-streammat", scene);
+			var zvideotexture = new BABYLON.VideoTexture(zmoldname + "-streamtexture", dGet('wtw_streaming-' + zwebid), scene, true, true);
+			zvideomat.backFaceCulling = false;
+			zvideomat.diffuseTexture = zvideotexture;
+			zvideomat.emissiveColor = BABYLON.Color3.White();
+			zmold.material = zvideomat;
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-molds-basicmolds\r\n addVideoStream=" + ex.message);
+	}
+	return zmold;
+}
+
 
 /* check for new mesh types, need to add molds for lathe, ribbon, etc */
