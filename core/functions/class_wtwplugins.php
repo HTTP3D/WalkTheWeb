@@ -344,7 +344,7 @@ class wtwplugins {
 				}
 			}			
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-getPluginStylesheets=".$e->getMessage());
+			$this->serror("core-functions-class_wtwplugins.php-getPluginStylesheets=".$e->getMessage());
 		}
 		return $zstylesheettext;
 	}	
@@ -409,7 +409,7 @@ class wtwplugins {
 				}
 			}			
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-getPluginScripts=".$e->getMessage());
+			$this->serror("core-functions-class_wtwplugins.php-getPluginScripts=".$e->getMessage());
 		}
 		return $zscripttext;
 	}	
@@ -661,7 +661,7 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsSetNewMoldDefaults = function(zshape, zpositionX, zpositionY, zpositionZ, zrotationY) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsSetNewMoldDefaults = function(zshape, zpositionx, zpositiony, zpositionz, zrotationy) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->getScriptFunction('setnewmolddefaults');
 			$jsdata .= "		} catch (ex) {\r\n";
@@ -805,7 +805,7 @@ class wtwplugins {
 
 			$jsdata .= "</script>"; 
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-getScriptFunctions=".$e->getMessage());
+			$this->serror("core-functions-class_wtwplugins.php-getScriptFunctions=".$e->getMessage());
 		}
 		return $jsdata;
 	}	
@@ -830,7 +830,7 @@ class wtwplugins {
 				}
 			}			
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-getScriptFunction=".$e->getMessage());
+			$this->serror("core-functions-class_wtwplugins.php-getScriptFunction=".$e->getMessage());
 		}
 		return $zscripttext;
 	}	
@@ -853,7 +853,7 @@ class wtwplugins {
 				}
 			}			
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-returnScriptFunction=".$e->getMessage());
+			$this->serror("core-functions-class_wtwplugins.php-returnScriptFunction=".$e->getMessage());
 		}
 		return $zscripttext;
 	}	
@@ -905,7 +905,7 @@ class wtwplugins {
 				}
 			}			
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-returnMoldDefs=".$e->getMessage());
+			$this->serror("core-functions-class_wtwplugins.php-returnMoldDefs=".$e->getMessage());
 		}
 		return $zscripttext;
 	}	
@@ -934,7 +934,7 @@ class wtwplugins {
 			$zscripttext .= "zmold = WTW.addMoldBox(zmoldname, zlenx, zleny, zlenz);\r\n";
 			$zscripttext .= "break;\r\n";
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-returnMoldDefs=".$e->getMessage());
+			$this->serror("core-functions-class_wtwplugins.php-returnMoldDefs=".$e->getMessage());
 		}
 		$zscripttext .= "}\r\n";
 		return $zscripttext;
@@ -985,7 +985,7 @@ class wtwplugins {
 				}
 			}			
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-returnActionZoneDefsList=".$e->getMessage());
+			$this->serror("core-functions-class_wtwplugins.php-returnActionZoneDefsList=".$e->getMessage());
 		}
 		return $zscripttext;
 	}	
@@ -1013,7 +1013,7 @@ class wtwplugins {
 			$zscripttext .= "zactionzone = WTW.addActionzoneLoadzone(zactionzonename, zactionzoneind, zactionzonedef);\r\n";
 			$zscripttext .= "break;\r\n";
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-returnActionZoneDefsFunctions=".$e->getMessage());
+			$this->serror("core-functions-class_wtwplugins.php-returnActionZoneDefsFunctions=".$e->getMessage());
 		}
 		$zscripttext .= "}\r\n";
 		return $zscripttext;
@@ -1053,7 +1053,7 @@ class wtwplugins {
 		try {
 			foreach ($wtw->pluginCoveringDefs as $zcoveringdef) {
 				$zcoveringtitle = trim($zcoveringdef["coveringtitle"]);
-				$zjsfunction = trim($zactionzonedef["jsfunction"]);
+				$zjsfunction = trim($zcoveringdef["jsfunction"]);
 				if (!empty($zjsfunction) && isset($zjsfunction)) {
 					if (strpos($zjsfunction,";") === false) {
 						$zjsfunction .= ";";
@@ -1064,7 +1064,7 @@ class wtwplugins {
 				}
 			}			
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-returnCoveringDefsList=".$e->getMessage());
+			$this->serror("core-functions-class_wtwplugins.php-returnCoveringDefsList=".$e->getMessage());
 		}
 		return $zscripttext;
 	}	
@@ -1092,7 +1092,7 @@ class wtwplugins {
 			$zscripttext .= "zcovering = WTW.addCoveringColor(zmoldname, zmolddef);\r\n";
 			$zscripttext .= "break;\r\n";
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwmenus.php-returnCoveringDefsFunctions=".$e->getMessage());
+			$this->serror("core-functions-class_wtwplugins.php-returnCoveringDefsFunctions=".$e->getMessage());
 		}
 		$zscripttext .= "}\r\n";
 		return $zscripttext;
