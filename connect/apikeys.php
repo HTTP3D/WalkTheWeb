@@ -39,9 +39,63 @@ try {
 	$zresponse = array(
 		'serror'=>'',
 		'hostid'=>'',
-		'apikeys'=>array()
+		'wtwkey'=>''
 	);
 	switch ($zfunction) {
+		case "checkhost":
+			echo $wtwconnect->addConnectHeader('*');
+			$zapikeyid = '';
+			$zappid = '';
+			$zwtwsecrethash = '';
+			$zdeleted = '';
+			$zapproved = '';
+			$zkey = "...".substr($zwtwkey, -7);
+			
+			$zresults = $wtwconnect->query("
+				select * 
+				from ".wtw_tableprefix."apikeys
+				where wtwkey='".base64_encode($zwtwkey)."'
+				limit 1;");
+			foreach ($zresults as $zrow) {
+				$zapikeyid = $zrow["apikeyid"];
+				$zappid = $zrow["appid"];
+				$zwtwsecrethash = $zrow["wtwsecret"];
+				$zdeleted = $zrow["deleted"];
+				$zapproved = $zrow["approved"];
+			}
+			if (empty($zwtwsecrethash) || !isset($zwtwsecrethash)) {
+				/* key not found */
+				$zresponse = array(
+					'serror'=>'Invalid Key',
+					'hostid'=>'',
+					'wtwkey'=>$zkey
+				);
+			} else {
+				if (password_verify($zwtwsecret, $zwtwsecrethash)) {
+					/* secret is correct */
+					$zerror = 'Valid Key';
+					if ($zdeleted != 0) {
+						$zerror = 'Invalid Key';
+						$zapikeyid = '';
+					} else if ($zapproved != 1) {
+						$zerror = 'Waiting on Approval';
+						$zapikeyid = '';
+					}
+					$zresponse = array(
+						'serror'=>$zerror,
+						'hostid'=>$zapikeyid,
+						'wtwkey'=>$zkey
+					);
+				} else {
+					/* could not validate secret */
+					$zresponse = array(
+						'serror'=>'Invalid Key',
+						'hostid'=>'',
+						'wtwkey'=>$zkey
+					);
+				}
+			}
+			break;
 		case "hostrequest":
 			echo $wtwconnect->addConnectHeader('*');
 			if (!empty($zreferer) && isset($zreferer) && !empty($zappid) && isset($zappid)) {
