@@ -16,39 +16,39 @@ let devidplugintemplate = new DEVID_PLUGINTEMPLATE();
 /* activate it with the core WTW.onclick function hook */
 /* in the plugin/functions/class_plugin.php initHooks and initAdminOnlyHooks functions. */
 
-DEVID_PLUGINTEMPLATE.prototype.onClick = function(pickedname) {
+DEVID_PLUGINTEMPLATE.prototype.onClick = function(zpickedname) {
 	try {
-		pickedname = pickedname.toLowerCase();
-		let moldnameparts = WTW.getMoldnameParts(pickedname);
-		/* using moldnameparts, you can get the following values:
-          moldnameparts.moldname is the moldname (pickedname)
-          moldnameparts.moldind is the index number for the mold array
-          moldnameparts.moldid is the unique ID of the mold (database table key value reference)
-          moldnameparts.cgind is the connecting grid index number (WTW.connectingGrids[moldnameparts.cgind] gives you the 3D Object definition)
-          moldnameparts.cgid is the unique ID of the Connecting Grid (database table key value reference)
-          moldnameparts.communityid is the unique ID for the 3D Community related to this 3D Object (only has a value when is a WTW.communityMolds).
-          moldnameparts.buildingid is the unique ID for the 3D Building related to this 3D Object (only has a value when is a WTW.buildingMolds).
-          moldnameparts.thingid is the unique ID for the 3D Thing related to this 3D Object (only has a value when is a WTW.thingMolds).
-          moldnameparts.moldgroup identifies what kind of 3D object it is; building, community, or thing.
-          moldnameparts.molds is the Array for the Mold; WTW.communityMolds, WTW.buildingMolds, or WTW.thingMolds.
-          moldnameparts.shape is the Mold shape which identifies the function used to create the Mold (mesh).
-          moldnameparts.namepart is an array of the segments of the name split by the hyphen '-'. This is useful for checking the additional optional values and current state.
-          moldnameparts.parentname is the full name of the parent 3D Object.
+		zpickedname = zpickedname.toLowerCase();
+		let zmoldnameparts = WTW.getMoldnameParts(zpickedname);
+		/* using zmoldnameparts, you can get the following values:
+          zmoldnameparts.moldname is the moldname (zpickedname)
+          zmoldnameparts.moldind is the index number for the mold array
+          zmoldnameparts.moldid is the unique ID of the mold (database table key value reference)
+          zmoldnameparts.cgind is the connecting grid index number (WTW.connectingGrids[zmoldnameparts.cgind] gives you the 3D Object definition)
+          zmoldnameparts.cgid is the unique ID of the Connecting Grid (database table key value reference)
+          zmoldnameparts.communityid is the unique ID for the 3D Community related to this 3D Object (only has a value when is a WTW.communityMolds).
+          zmoldnameparts.buildingid is the unique ID for the 3D Building related to this 3D Object (only has a value when is a WTW.buildingMolds).
+          zmoldnameparts.thingid is the unique ID for the 3D Thing related to this 3D Object (only has a value when is a WTW.thingMolds).
+          zmoldnameparts.moldgroup identifies what kind of 3D object it is; building, community, or thing.
+          zmoldnameparts.molds is the Array for the Mold; WTW.communityMolds, WTW.buildingMolds, or WTW.thingMolds.
+          zmoldnameparts.shape is the Mold shape which identifies the function used to create the Mold (mesh).
+          zmoldnameparts.namepart is an array of the segments of the name split by the hyphen '-'. This is useful for checking the additional optional values and current state.
+          zmoldnameparts.parentname is the full name of the parent 3D Object.
 
-		  moldnameparts.molds[moldnameparts.moldind] provides the whole 3D Object definition
+		  zmoldnameparts.molds[zmoldnameparts.moldind] provides the whole 3D Object definition
 		  see /core/scripts/prime/wtw_objectdefinitions.js for full object references
 		  
 
 		*/		
-		/* use indexOf function or the moldnameparts to set conditional code for the selected 3D Object */
-		/* in this example, the pickedname has a name part "wtwpaintballgun1a" */
+		/* use indexOf function or the zmoldnameparts to set conditional code for the selected 3D Object */
+		/* in this example, the zpickedname has a name part "wtwpaintballgun1a" */
 		/* when the 3D Object is clicked, the Avatar picks up the 3D Object in the righthand */
 		/* using the offset Position, Scaling, and Rotation set below */
 		/* note the offset is from an avatar in the T-Pose with palm of the hand facing down */
 		/* 		x = arm to finger tips axis direction */
 		/* 		y = palm to back of hand axis direction */
 		/* 		z = first finger to forth finger axis direction */
-		if (pickedname.indexOf("wtwpaintballgun1a") > -1) {
+		if (zpickedname.indexOf("wtwpaintballgun1a") > -1) {
 			let zoffset = {
 				'position': {
 					'x':-.77,
@@ -69,7 +69,7 @@ DEVID_PLUGINTEMPLATE.prototype.onClick = function(pickedname) {
 			/* the current user avatar is named "myavatar-" + dGet("wtw_tinstanceid").value */
 			/* pick up object function (avatarname, objectname, attachpoint, offset) */
 			/* attachpoints can be found /core/scripts/avatars/basicavatars.js */
-			WTW.pickUpObject("myavatar-" + dGet("wtw_tinstanceid").value, pickedname, 'righthand', zoffset);
+			WTW.pickUpObject("myavatar-" + dGet("wtw_tinstanceid").value, zpickedname, 'righthand', zoffset);
 		}
 	} catch (ex) {
 		WTW.log("plugins:devid-plugintemplate:scripts-class_main.js-onClick=" + ex.message);
@@ -120,27 +120,39 @@ DEVID_PLUGINTEMPLATE.prototype.setAvatarMovement = function(zavatar, zkey, zweig
 	return zweight;
 }
 
-DEVID_PLUGINTEMPLATE.prototype.checkHovers = function(moldname, shape) {
+DEVID_PLUGINTEMPLATE.prototype.checkHovers = function(zmoldname, zshape) {
 	try {
 		/* this function activates on hover over a 3D Object */
 		/* useful if you want to change material, highlighting, or prompt a response */
-		moldname = moldname.toLowerCase();
-		if (moldname.indexOf("golfball") > -1) {
-			
-		}
+		zmoldname = zmoldname.toLowerCase();
+		/* example:
+			if (zmoldname.indexOf("golfball") > -1) {
+				//... code to make it do something when mouse hovers the mesh
+			}
+		  or where the zshape is defined as golfball (zshape is the type, like cube, sphere, etc...):
+		    if (zshape == 'golfball') {
+				//... code to make it do something when mouse hovers the mesh
+			}
+		*/
 	} catch (ex) {
 		WTW.log("plugins:devid-plugintemplate:scripts-class_main.js-checkHovers=" + ex.message);
 	} 
 }
 
-DEVID_PLUGINTEMPLATE.prototype.resetHovers = function(moldname, shape) {
+DEVID_PLUGINTEMPLATE.prototype.resetHovers = function(zmoldname, zshape) {
 	try {
 		/* this function activates on lost focus (end hover) from a 3D Object */
 		/* useful if you want to change material back, unhighlighting, or close a prompt */
-		moldname = moldname.toLowerCase();
-		if (moldname.indexOf("golfball") > -1) {
-			
-		}
+		zmoldname = zmoldname.toLowerCase();
+		/* example:
+			if (zmoldname.indexOf("golfball") > -1) {
+				//... code to make it do something - reset hovers
+			}
+		  or where the zshape is defined as golfball (zshape is the type, like cube, sphere, etc...):
+		    if (zshape == 'golfball') {
+				//... code to make it do something - reset hovers
+			}
+		*/
 	} catch (ex) {
 		WTW.log("plugins:devid-plugintemplate:scripts-class_main.js-resetHovers=" + ex.message);
 	} 

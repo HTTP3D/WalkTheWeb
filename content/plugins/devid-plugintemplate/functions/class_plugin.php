@@ -99,36 +99,36 @@ class devidplugintemplate {
 			/* hook plugin script functions into existing wtw functions */
 			/* $wtwplugins->addScriptFunction('hookname', 'function(parameters);'); */
 			/* examples: */
-			/* $wtwplugins->addScriptFunction("onclick", "devidplugintemplate.onClick(pickedname);"); */
-			/* $wtwplugins->addScriptFunction("setnewactionzonedefaults", "devidplugintemplate.setNewActionZoneDefaults(actionzonetype);"); */
-			/* $wtwplugins->addScriptFunction("setactionzoneformfields", "devidplugintemplate.setNewActionZoneFormFields(actionzonetype);"); */
+			/* $wtwplugins->addScriptFunction("onclick", "devidplugintemplate.onClick(zpickedname);"); */
+			/* $wtwplugins->addScriptFunction("setnewactionzonedefaults", "devidplugintemplate.setNewActionZoneDefaults(zactionzonetype);"); */
+			/* $wtwplugins->addScriptFunction("setactionzoneformfields", "devidplugintemplate.setNewActionZoneFormFields(zactionzonetype);"); */
 			/* $wtwplugins->addScriptFunction("checkactionzone", "devidplugintemplate.checkActionZone(zactionzonename, zactionzoneind, zmeinzone, zothersinzone);"); */
 			/* $wtwplugins->addScriptFunction("setavatarmovement", "devidplugintemplate.setAvatarMovement(zavatar, zkey, zweight);"); */
-			/* $wtwplugins->addScriptFunction("checkhovers", "devidplugintemplate.checkHovers(moldname, shape);"); */
-			/* $wtwplugins->addScriptFunction("resethovers", "devidplugintemplate.resetHovers(moldname, shape);"); */
-			/* $wtwplugins->addScriptFunction("disposeclean", "devidplugintemplate.disposeClean(moldname);"); */
+			/* $wtwplugins->addScriptFunction("checkhovers", "devidplugintemplate.checkHovers(zmoldname, zshape);"); */
+			/* $wtwplugins->addScriptFunction("resethovers", "devidplugintemplate.resetHovers(zmoldname, zshape);"); */
+			/* $wtwplugins->addScriptFunction("disposeclean", "devidplugintemplate.disposeClean(zmoldname);"); */
 			
 			
 			/* Custom Molds (meshes) */
 			/* The following create the list of new molds added by this plugin and assign the script to create the mold */
 			/* $wtwplugins->addMoldDef("My Custom Mold - NAME FOR THE LIST", "webmold or mold - LIST", "devidplugintemplate.functionname(passed, values);"); */
-			$wtwplugins->addMoldDef("My Custom Mold", "webmold", "devidplugintemplate.addMoldMyCustomMold(moldname, molddef, lenx, leny, lenz);");
+			$wtwplugins->addMoldDef("My Custom Mold", "webmold", "devidplugintemplate.addMoldMyCustomMold(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 			/* Set the custom mold defaults and show-hide form fields as needed */
-			$wtwplugins->addScriptFunction("setnewmolddefaults", "devidplugintemplate.setNewMoldDefaults(shape, positionX, positionY, positionZ, rotationY);");
-			$wtwplugins->addScriptFunction("setmoldformfields", "devidplugintemplate.setMoldFormFields(shape);");
+			$wtwplugins->addScriptFunction("setnewmolddefaults", "devidplugintemplate.setNewMoldDefaults(zshape, zpositionx, zpositiony, zpositionz, zrotationy);");
+			$wtwplugins->addScriptFunction("setmoldformfields", "devidplugintemplate.setMoldFormFields(zshape);");
 
 			/* Custom action zones */
 			/* The following create the list of new action zones added by this plugin and assign the script to create the action zone */
-			$wtwplugins->addActionZoneDef("My Custom Zone", "devidplugintemplate.addActionZoneMyCustomZone(actionzonename, actionzoneind, actionzonedef);");
+			$wtwplugins->addActionZoneDef("My Custom Zone", "devidplugintemplate.addActionZoneMyCustomZone(zactionzonename, zactionzoneind, zactionzonedef);");
 			/* Set the custom action zone defaults and show-hide form fields as needed */
-			$wtwplugins->addScriptFunction("setnewactionzonedefaults", "devidplugintemplate.setNewActionZoneDefaults(actionzonetype);");
-			$wtwplugins->addScriptFunction("setactionzoneformfields", "devidplugintemplate.setActionZoneFormFields(actionzonetype);");
+			$wtwplugins->addScriptFunction("setnewactionzonedefaults", "devidplugintemplate.setNewActionZoneDefaults(zactionzonetype);");
+			$wtwplugins->addScriptFunction("setactionzoneformfields", "devidplugintemplate.setActionZoneFormFields(zactionzonetype);");
 			
 			/* Custom coverings (materials) */
 			/* The following create the list of new coverings added by this plugin and assign the script to create the covering */
-			$wtwplugins->addCoveringDef("My Custom Covering", "devidplugintemplate.addCoveringMyCustomCovering(moldname, molddef, lenx, leny, lenz, special1, special2);");
+			$wtwplugins->addCoveringDef("My Custom Covering", "devidplugintemplate.addCoveringMyCustomCovering(zmoldname, zmolddef, zlenx, zleny, zlenz, zspecial1, zspecial2);");
 			/* Set the custom covering defaults and show-hide mold form fields as needed */
-			$wtwplugins->addScriptFunction("setcoveringformfields", "devidplugintemplate.setCoveringFormFields(coveringname);");
+			$wtwplugins->addScriptFunction("setcoveringformfields", "devidplugintemplate.setCoveringFormFields(zcoveringname);");
 			
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:devid-plugintemplate:functions-class_plugin.php.php-initHooks=".$e->getMessage());
