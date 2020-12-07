@@ -89,7 +89,7 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 			wtw3dinternet.move.on('avatar movement', function(zmovedata) {
 				/* process runs when another avatar in the scene moves */
 				if (wtw3dinternet.masterMove == '1') {
-					var avatarname = "person-" + zmovedata.instanceid;
+					var zavatarname = "person-" + zmovedata.instanceid;
 					let zavatarind = wtw3dinternet.getAvatarInd(zmovedata.instanceid);
 					if (wtw3dinternet.avatars[zavatarind] == null) {
 						zavatarind = wtw3dinternet.avatars.length;
@@ -118,7 +118,7 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 							}
 						}
 					}
-					var zavatar = scene.getMeshByID(avatarname);
+					var zavatar = scene.getMeshByID(zavatarname);
 					if (zavatar != null) {
 						if (zavatar.position.x != zmovedata.position.x || zavatar.position.y != zmovedata.position.y || zavatar.position.z != zmovedata.position.z) {
 							zavatar.position.x = zmovedata.position.x;
@@ -421,36 +421,36 @@ WTW_3DINTERNET.prototype.savedAvatarRetrieved = function(zavatarname, zsendrefre
 
 WTW_3DINTERNET.prototype.initMultiuser = async function(zsendrefresh) {
 	try {
-		var avatarid = '';
-		var objectfolder = "";
-		var objectfile = "";
-		var httpsecure = "0";
-		var scalingx = "1";
-		var scalingy = "1";
-		var scalingz = "1";
-		var privacy = "0";
+		var zavatarid = '';
+		var zobjectfolder = "";
+		var zobjectfile = "";
+		var zhttpsecure = "0";
+		var zscalingx = "1";
+		var zscalingy = "1";
+		var zscalingz = "1";
+		var zprivacy = "0";
 		if (WTW.myAvatar != null) {
 			if (WTW.myAvatar.WTW != null) {
 				if (WTW.myAvatar.WTW.avatarid != undefined) {
-					avatarid = WTW.myAvatar.WTW.avatarid;
+					zavatarid = WTW.myAvatar.WTW.avatarid;
 				}
 				if (WTW.myAvatar.WTW.object != null) {
 					if (WTW.myAvatar.WTW.object.folder != undefined) {
-						objectfolder = WTW.myAvatar.WTW.object.folder;
+						zobjectfolder = WTW.myAvatar.WTW.object.folder;
 					}
 					if (WTW.myAvatar.WTW.object.file != undefined) {
-						objectfile = WTW.myAvatar.WTW.object.file;
+						zobjectfile = WTW.myAvatar.WTW.object.file;
 					}
 				}
 				if (WTW.myAvatar.WTW.scaling != null) {
 					if (WTW.myAvatar.WTW.scaling.x != undefined) {
-						scalingx = WTW.myAvatar.WTW.scaling.x;
+						zscalingx = WTW.myAvatar.WTW.scaling.x;
 					}
 					if (WTW.myAvatar.WTW.scaling.y != undefined) {
-						scalingy = WTW.myAvatar.WTW.scaling.y;
+						zscalingy = WTW.myAvatar.WTW.scaling.y;
 					}
 					if (WTW.myAvatar.WTW.scaling.z != undefined) {
-						scalingz = WTW.myAvatar.WTW.scaling.z;
+						zscalingz = WTW.myAvatar.WTW.scaling.z;
 					}
 				}
 			}
@@ -460,13 +460,13 @@ WTW_3DINTERNET.prototype.initMultiuser = async function(zsendrefresh) {
 			dGet('wtw_menudisplayname').innerHTML = dGet('wtw_tdisplayname').value;
 		}
 		if (dGet('wtw_menudisplayname').innerHTML == '' && dGet('wtw_tuseremail').value != '') {
-			var emailbase = dGet('wtw_tuseremail').value.split('@');
-			dGet('wtw_menudisplayname').innerHTML = emailbase[0];
+			var zemailbase = dGet('wtw_tuseremail').value.split('@');
+			dGet('wtw_menudisplayname').innerHTML = zemailbase[0];
 		}
 		if (dGet('wtw_menudisplayname').innerHTML == '') {
 			dGet('wtw_menudisplayname').innerHTML = 'Anonymous';
 		}
-		if (wtw_protocol.toLowerCase().indexOf('https') > -1) { httpsecure = "1"; }
+		if (wtw_protocol.toLowerCase().indexOf('https') > -1) { zhttpsecure = "1"; }
 		var zenteranimation = WTW.getDDLValue('wtw_tselectavataranimation-enter');
 		var zenteranimationparameter = "";
 		var zexitanimation = "1";
@@ -474,21 +474,21 @@ WTW_3DINTERNET.prototype.initMultiuser = async function(zsendrefresh) {
 		if (WTW.isNumeric(zenteranimation) == false) {
 			zenteranimation = '1';
 		}
-		var surl = wtw_domainurl + "/connect/wtw-3dinternet-updateavatar.php?" +
+		var zurl = wtw_domainurl + "/connect/wtw-3dinternet-updateavatar.php?" +
 			"&i=" + btoa(dGet('wtw_tinstanceid').value) + 
 			"&g=" + btoa(dGet('wtw_tglobaluseravatarid').value) + 
 			"&u=" + btoa(dGet('wtw_tuseravatarid').value) + 
-			"&ad=" + btoa(avatarid) + 
+			"&ad=" + btoa(zavatarid) + 
 			"&d=" + btoa(dGet('wtw_tuserid').value) + 
-			"&o=" + btoa(objectfolder) + 
-			"&f=" + btoa(objectfile) + 
+			"&o=" + btoa(zobjectfolder) + 
+			"&f=" + btoa(zobjectfile) + 
 			"&m=" + btoa(wtw_domainname) + 
-			"&s=" + btoa(httpsecure) + 
-			"&x=" + btoa(scalingx) + 
-			"&y=" + btoa(scalingy) + 
-			"&z=" + btoa(scalingz) + 
+			"&s=" + btoa(zhttpsecure) + 
+			"&x=" + btoa(zscalingx) + 
+			"&y=" + btoa(zscalingy) + 
+			"&z=" + btoa(zscalingz) + 
 			"&n=" + btoa(dGet('wtw_menudisplayname').innerHTML) + 
-			"&p=" + btoa(privacy) + 
+			"&p=" + btoa(zprivacy) + 
 			"&en=" + btoa(zenteranimation) + 
 			"&enp=" + btoa(zenteranimationparameter) + 
 			"&ex=" + btoa(zexitanimation) + 
@@ -501,7 +501,7 @@ WTW_3DINTERNET.prototype.initMultiuser = async function(zsendrefresh) {
 			"&si=" + btoa(dGet('wtw_serverinstanceid').value) +
 			"&at=" + dGet('wtw_tusertoken').value +
 			"&refresh=" + zsendrefresh;
-		WTW.getAsyncJSON(surl, 
+		WTW.getAsyncJSON(zurl, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.refresh) {
@@ -517,9 +517,9 @@ WTW_3DINTERNET.prototype.initMultiuser = async function(zsendrefresh) {
 WTW_3DINTERNET.prototype.clearMultiuser = async function(zuseravatarid, zinstance, zuserid) {
 	try {
 		for (var i = 0; i < scene.meshes.length; i++) {
-			var moldname = scene.meshes[i].name;
-			if (moldname.indexOf("person-") > -1) {
-				WTW.addDisposeMoldToQueue(moldname);
+			var zmoldname = scene.meshes[i].name;
+			if (zmoldname.indexOf("person-") > -1) {
+				WTW.addDisposeMoldToQueue(zmoldname);
 			}
 		}
 		if (wtw3dinternet.move != null) {
@@ -534,13 +534,13 @@ WTW_3DINTERNET.prototype.clearMultiuser = async function(zuseravatarid, zinstanc
 				'displayname':btoa(dGet('wtw_tdisplayname').value)
 			});
 			wtw3dinternet.sendCommand('', 'scene command', 'leave scene');
-			var surl = wtw_domainurl + "/connect/wtw-3dinternet-clearavatar.php?" + 
+			var zurl = wtw_domainurl + "/connect/wtw-3dinternet-clearavatar.php?" + 
 				"a=" + btoa(zuseravatarid) + 
 				"&i=" + btoa(zinstance) + 
 				"&d=" + btoa(zuserid) + 
 				"&c=" + btoa(communityid) + 
 				"&b=" + btoa(buildingid);
-			WTW.getAsyncJSON(surl, 
+			WTW.getAsyncJSON(zurl, 
 				function(zresponse) {
 					//zresponse = JSON.parse(zresponse);
 				}
@@ -587,7 +587,7 @@ WTW_3DINTERNET.prototype.toggleMultiPlayer = function() {
 
 WTW_3DINTERNET.prototype.toggleAvatarIDs = function() {
 	try {
-		var setvisibility = false;
+		var zsetvisibility = false;
 		if (dGet('wtw_submenuavataridstext').innerHTML == 'Avatar IDs are Off') {
 			dGet('wtw_submenuavataridstext').innerHTML = 'Avatar IDs are On';
 			dGet('wtw_submenuavatarids').src = '/content/system/images/menuavataridson.png';
@@ -595,7 +595,7 @@ WTW_3DINTERNET.prototype.toggleAvatarIDs = function() {
 			dGet('wtw_submenuavatarids').title = 'Turn Avatar IDs Off';
 			wtw3dinternet.AvatarIDs = 1;
 			WTW.setCookie("AvatarIDs",wtw3dinternet.AvatarIDs,30);
-			setvisibility = true;
+			zsetvisibility = true;
 		} else {
 			dGet('wtw_submenuavataridstext').innerHTML = 'Avatar IDs are Off';
 			dGet('wtw_submenuavatarids').src = '/content/system/images/menuavataridsoff.png';
@@ -604,12 +604,12 @@ WTW_3DINTERNET.prototype.toggleAvatarIDs = function() {
 			wtw3dinternet.AvatarIDs = 0;
 			WTW.setCookie("AvatarIDs",wtw3dinternet.AvatarIDs,30);
 		}
-		var meshes = scene.meshes;
-		if (meshes != null) {
-			for (var i=0;i<meshes.length;i++) {
-				if (meshes[i] != null) {
-					if (meshes[i].name.indexOf("person-") > -1 && meshes[i].name.indexOf("-nameplate") > -1) {
-						meshes[i].isVisible = setvisibility;
+		var zmeshes = scene.meshes;
+		if (zmeshes != null) {
+			for (var i = 0;i < zmeshes.length;i++) {
+				if (zmeshes[i] != null) {
+					if (zmeshes[i].name.indexOf("person-") > -1 && zmeshes[i].name.indexOf("-nameplate") > -1) {
+						zmeshes[i].isVisible = zsetvisibility;
 					}
 				}
 			}
@@ -677,10 +677,10 @@ WTW_3DINTERNET.prototype.multiPersonInActionZone = function(zactionzone) {
 	try {
 		for (var i=0; i < wtw3dinternet.avatars.length; i++) {
 			if (wtw3dinternet.avatars[i] != null) {
-				var avatarname = "person-" + wtw3dinternet.avatars[i].instanceid;
-				var avatar1 = scene.getMeshByID(avatarname);
-				if (avatar1 != null) {
-					zintersects = avatar1.intersectsMesh(zactionzone, false); // precise false
+				var zavatarname = "person-" + wtw3dinternet.avatars[i].instanceid;
+				var zavatar = scene.getMeshByID(zavatarname);
+				if (zavatar != null) {
+					zintersects = zavatar.intersectsMesh(zactionzone, false); // precise false
 				}
 				if (zintersects) {
 					i = wtw3dinternet.avatars.length;

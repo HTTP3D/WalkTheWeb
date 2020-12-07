@@ -8,6 +8,7 @@ function WTW_3DINTERNET() {
 	this.checkConnection = null;
 	this.masterMove = '0';
 	this.masterChat = '0';
+	this.masterVoiceChat = '0';
 	this.masterFranchising = '0';
 	this.globalLogins = '0';
 	this.localLogins = '1';
@@ -15,12 +16,17 @@ function WTW_3DINTERNET() {
 	this.admin = null;
 	this.move = null;
 	this.chat = null;
+	this.voicechat = null;
 	this.lastAnimations = '';
 	this.avatars = [];
 	this.AvatarIDs = 1;
 	this.multiPlayer = 20;
 	this.multiPlayerOn = 1;
 	this.typingTimer = null;
+	this.mediaStream = null;
+	this.recordAudio = null;
+	this.recordVideo = null;
+	this.mediaSocket = null;
 }
 
 /* Create the class instance */
@@ -47,7 +53,7 @@ WTW_3DINTERNET.prototype.avatarConnectMenu = function(ztoinstanceid) {
 					"<div class='wtw3dinternet-chatdisplayname'>" + zdisplayname + "</div><div style=\"clear:both;\"></div>" + 
 					"<div class='wtw3dinternet-chatuserinstance'>ID: " + ztoinstanceid + "</div><div style=\"clear:both;\"></div>" + 
 					"<div id=\"wtw_startchat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" onclick=\"wtw3dinternet.closeAvatarConnectMenu('" + ztoinstanceid + "');wtw3dinternet.startChat('" + ztoinstanceid + "');\">Private Chat</div>" +
-			
+					"<div id=\"wtw_startvoicechat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" onclick=\"wtw3dinternet.closeAvatarConnectMenu('" + ztoinstanceid + "');wtw3dinternet.startVoiceChat('" + ztoinstanceid + "');\">Private Voice Chat</div>" +
 				"</div>";
 			dGet('wtw_startconnect').innerHTML += zform;
 		}
@@ -77,7 +83,7 @@ WTW_3DINTERNET.prototype.closeAvatarConnectMenu = function(ztoinstanceid) {
 WTW_3DINTERNET.prototype.checkHovers = function(zmoldname, zshape) {
 	try {
 		if (zmoldname.indexOf('person-') > -1) {
-			if (wtw3dinternet.masterChat == '1') {
+			if (wtw3dinternet.masterChat == '1' || wtw3dinternet.masterVoiceChat == '1') {
 				WTW.showToolTip('Click to Chat');
 			}
 		}
@@ -103,6 +109,9 @@ WTW_3DINTERNET.prototype.loadUserSettingsAfterEngine = function() {
 		if (wtw3dinternet.masterChat == '1') {
 			wtw3dinternet.initChatSocket();
 		}
+		if (wtw3dinternet.masterVoiceChat == '1') {
+			wtw3dinternet.initVoiceChatSocket();
+		}
 	} catch (ex) {
 		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-loadUserSettingsAfterEngine=" + ex.message);
 	} 
@@ -110,7 +119,7 @@ WTW_3DINTERNET.prototype.loadUserSettingsAfterEngine = function() {
 
 WTW_3DINTERNET.prototype.loadLoginSettings = function(zloaddefault) {
 	try {
-		WTW.getSettings("wtw3dinternet_enableGlobal, wtw3dinternet_enableLocal, wtw3dinternet_enableAnonymous, wtw3dinternet_masterMove, wtw3dinternet_masterChat, wtw3dinternet_masterFranchising", "wtw3dinternet.responseLoadLoginSettings");
+		WTW.getSettings("wtw3dinternet_enableGlobal, wtw3dinternet_enableLocal, wtw3dinternet_enableAnonymous, wtw3dinternet_masterMove, wtw3dinternet_masterChat, wtw3dinternet_masterVoiceChat, wtw3dinternet_masterFranchising", "wtw3dinternet.responseLoadLoginSettings");
 		
 		var zavatarids = WTW.getCookie("AvatarIDs");
 		if (zavatarids != null) {
@@ -180,6 +189,11 @@ WTW_3DINTERNET.prototype.responseLoadLoginSettings = async function(zsettings, z
 				wtw3dinternet.masterChat = zsetting.wtw3dinternet_masterChat;
 			}
 		}
+		if (zsetting.wtw3dinternet_masterVoiceChat != undefined) {
+			if (zsetting.wtw3dinternet_masterVoiceChat != '') {
+				wtw3dinternet.masterVoiceChat = zsetting.wtw3dinternet_masterVoiceChat;
+			}
+		}
 		if (zsetting.wtw3dinternet_masterFranchising != undefined) {
 			if (zsetting.wtw3dinternet_masterFranchising != '') {
 				wtw3dinternet.masterFranchising = zsetting.wtw3dinternet_masterFranchising;
@@ -221,6 +235,13 @@ WTW_3DINTERNET.prototype.setActiveText = function(zresponse) {
 							if (zresponse[i].expiredate != '') {
 								if (dGet('wtw3dinternet_chattext') != null) {
 									dGet('wtw3dinternet_chattext').innerHTML = "<b>" + zresponse[i].maxusers + " Users</b> Chat Active<br />Expires on " + WTW.formatDate(zresponse[i].expiredate);
+								}
+							}
+							break;
+						case 'voicechat':
+							if (zresponse[i].expiredate != '') {
+								if (dGet('wtw3dinternet_voicechattext') != null) {
+									dGet('wtw3dinternet_voicechattext').innerHTML = "<b>" + zresponse[i].maxusers + " Users</b> Voice Chat Active<br />Expires on " + WTW.formatDate(zresponse[i].expiredate);
 								}
 							}
 							break;
@@ -283,6 +304,15 @@ WTW_3DINTERNET.prototype.setControlPanelSwitches = function() {
 					dGet('wtw3dinternet_enablechattext').innerHTML = 'Multiplayer Chat Disabled';
 					dGet('wtw3dinternet_enablechat').checked = false;
 				}
+				if (wtw3dinternet.masterVoiceChat == '1') {
+					dGet('wtw3dinternet_enablevoicechattext').className = 'wtw3dinternet-enablelabel';
+					dGet('wtw3dinternet_enablevoicechattext').innerHTML = 'Multiplayer Voice Chat Enabled';
+					dGet('wtw3dinternet_enablevoicechat').checked = true;
+				} else {
+					dGet('wtw3dinternet_enablevoicechattext').className = 'wtw3dinternet-disabledlabel';
+					dGet('wtw3dinternet_enablevoicechattext').innerHTML = 'Multiplayer Voice Chat Disabled';
+					dGet('wtw3dinternet_enablevoicechat').checked = false;
+				}
 				if (wtw3dinternet.masterFranchising == '1') {
 					dGet('wtw3dinternet_enablefranchisebuildingstext').className = 'wtw3dinternet-enablelabel';
 					dGet('wtw3dinternet_enablefranchisebuildingstext').innerHTML = '3D Buildings Franchising Enabled';
@@ -327,6 +357,9 @@ WTW_3DINTERNET.prototype.changeSwitch = function(zobj) {
 			case "wtw3dinternet_enablechat":
 				wtw3dinternet.enableChat(zchecked);
 				break;
+			case "wtw3dinternet_enablevoicechat":
+				wtw3dinternet.enableVoiceChat(zchecked);
+				break;
 			case "masterFranchising":
 				wtw3dinternet.masterFranchising = zchecked;
 				break;
@@ -338,6 +371,7 @@ WTW_3DINTERNET.prototype.changeSwitch = function(zobj) {
 			'wtw3dinternet_enableAnonymous': wtw3dinternet.anonymousLogins,
 			'wtw3dinternet_masterMove': wtw3dinternet.masterMove,
 			'wtw3dinternet_masterChat': wtw3dinternet.masterChat,
+			'wtw3dinternet_masterVoiceChat': wtw3dinternet.masterVoiceChat,
 			'wtw3dinternet_masterFranchising': wtw3dinternet.masterFranchising
 		};
 		WTW.saveSettings(zsettings, null);		
@@ -352,20 +386,23 @@ WTW_3DINTERNET.prototype.serviceCheck = async function(zservice) {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.serror != undefined) {
-					if (zresponse.serror != '') {
-						dGet('wtw3dinternet_multiplayertext').innerHTML = zresponse.serror;
-						dGet('wtw3dinternet_enablechat').disabled = true;
-						if (zresponse.serror == 'Service Activation not found') {
-							dGet('wtw3dinternet_multiplayertext').innerHTML += "<div class='wtw3dinternet-chatbuttonaccept' onclick=\"wtw3dinternet.openActivateWindow();\">Activate</div>";
-						} else if (zresponse.serror.indexOf('suspended') > -1) {
-						} else if (zresponse.serror.indexOf('banned') > -1) {
-						} else if (zresponse.serror.indexOf('hold') > -1) {
-						} else if (zresponse.serror.indexOf('expired') > -1) {
-							dGet('wtw3dinternet_multiplayertext').innerHTML += "<div class='wtw3dinternet-chatbuttonaccept' onclick=\"wtw3dinternet.openActivateWindow();\">Renew</div>";
+					if (zresponse.service == 'multiplayer') {
+						if (zresponse.serror != '') {
+							dGet('wtw3dinternet_multiplayertext').innerHTML = zresponse.serror;
+							dGet('wtw3dinternet_enablechat').disabled = true;
+							dGet('wtw3dinternet_enablevoicechat').disabled = true;
+							if (zresponse.serror == 'Service Activation not found') {
+								dGet('wtw3dinternet_multiplayertext').innerHTML += "<div class='wtw3dinternet-chatbuttonaccept' onclick=\"wtw3dinternet.openActivateWindow();\">Activate</div>";
+							} else if (zresponse.serror.indexOf('suspended') > -1) {
+							} else if (zresponse.serror.indexOf('banned') > -1) {
+							} else if (zresponse.serror.indexOf('hold') > -1) {
+							} else if (zresponse.serror.indexOf('expired') > -1) {
+								dGet('wtw3dinternet_multiplayertext').innerHTML += "<div class='wtw3dinternet-chatbuttonaccept' onclick=\"wtw3dinternet.openActivateWindow();\">Renew</div>";
+							}
+						} else {
+							dGet('wtw3dinternet_enablechat').disabled = false;
+							dGet('wtw3dinternet_enablevoicechat').disabled = false;
 						}
-					} else {
-						dGet('wtw3dinternet_enablechat').disabled = false;
-						
 					}
 				} else {
 					dGet('wtw3dinternet_multiplayertext').innerHTML = 'service temporarily unavailable';
@@ -450,7 +487,7 @@ WTW_3DINTERNET.prototype.openActivateWindow = function() {
 		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-openActivateWindow=" + ex.message);
 	} 
 }
-		
+
 WTW_3DINTERNET.prototype.enableChat = async function(zchecked) {
 	try {
 		wtw3dinternet.masterChat = zchecked;
@@ -473,7 +510,33 @@ WTW_3DINTERNET.prototype.enableChat = async function(zchecked) {
 			);
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-enableMultiplayer=" + ex.message);
+		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-enableChat=" + ex.message);
+	} 
+}
+
+WTW_3DINTERNET.prototype.enableVoiceChat = async function(zchecked) {
+	try {
+		wtw3dinternet.masterVoiceChat = zchecked;
+		if (wtw3dinternet.masterVoiceChat == '1') {
+			/* attempt to turn on voice chat (hold off) */
+			wtw3dinternet.initVoiceChatSocket();
+			WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/servicehold.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value + "&service=voicechat&hold=0&userid=" + dGet('wtw_tuserid').value, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					wtw3dinternet.setActiveText(zresponse);
+				}
+			);
+		} else {
+			/* set voice chat on hold */
+			WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/servicehold.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value + "&service=voicechat&hold=1&userid=" + dGet('wtw_tuserid').value, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					wtw3dinternet.setActiveText(zresponse);
+				}
+			);
+		}
+	} catch (ex) {
+		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-enableVoiceChat=" + ex.message);
 	} 
 }
 

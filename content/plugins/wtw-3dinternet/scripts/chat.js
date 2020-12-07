@@ -194,26 +194,26 @@ WTW_3DINTERNET.prototype.sendMessage = function(zchatid, ztoinstanceid, zaction,
 	} 
 }
 
-WTW_3DINTERNET.prototype.addChatBox = function(chatid, displayname, stext) {
-	var chatbox = "";
+WTW_3DINTERNET.prototype.addChatBox = function(zchatid, zdisplayname, ztext) {
+	var zchatbox = "";
 	try {
 		if (wtw3dinternet.masterChat == '1') {
-			chatbox = 
-				"<div id='wtw_chatbox-" + chatid + "' class='wtw3dinternet-chatbox'>" + 
+			zchatbox = 
+				"<div id='wtw_chatbox-" + zchatid + "' class='wtw3dinternet-chatbox'>" + 
 					"<div class='wtw3dinternet-chatboxshadow'>" +
-						"<img class='wtw-closeright' onclick=\"wtw3dinternet.closeChat('" + chatid + "',true);\" src='/content/system/images/menuclosegrey.png' alt='Leave Chat' title='Leave Chat' onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclosegrey.png';\" />" + 
-						"<img id='wtw_chatmin" + chatid + "' class='wtw-closeright' onclick=\"WTW.hide('wtw_chatmaxdiv" + chatid + "');WTW.hide('wtw_chatmin" + chatid + "');WTW.show('wtw_chatmax" + chatid + "');wtw3dinternet.chatSetScroll('" + chatid + "', true);\" src='/content/system/images/menuminimizegrey.png' alt='Minimize Chat' title='Minimize Chat' onmouseover=\"this.src='/content/system/images/menuminimizehover.png';\" onmouseout=\"this.src='/content/system/images/menuminimizegrey.png';\" />" + 
-						"<img id='wtw_chatmax" + chatid + "' class='wtw-closeright' onclick=\"WTW.show('wtw_chatmaxdiv" + chatid + "');WTW.hide('wtw_chatmax" + chatid + "');WTW.show('wtw_chatmin" + chatid + "');wtw3dinternet.chatSetScroll('" + chatid + "', true);\" src='/content/system/images/menumaximizegrey.png' alt='Maximize Chat' title='Maximize Chat' onmouseover=\"this.src='/content/system/images/menumaximizehover.png';\" onmouseout=\"this.src='/content/system/images/menumaximizegrey.png';\" style='display:none;visibility:hidden;' />" +
-						"<div id='wtw_chatdisplayname" + chatid + "' class='wtw3dinternet-chatdisplayname'>" + displayname + "</div>" + 
-						"<div id='wtw_chatmaxdiv" + chatid + "'>" +
-							"<div id='wtw_chattext-" + chatid + "' class='wtw3dinternet-chattext'>" + stext + "</div>" + 
+						"<img class='wtw-closeright' onclick=\"wtw3dinternet.closeChat('" + zchatid + "',true);\" src='/content/system/images/menuclosegrey.png' alt='Leave Chat' title='Leave Chat' onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclosegrey.png';\" />" + 
+						"<img id='wtw_chatmin" + zchatid + "' class='wtw-closeright' onclick=\"WTW.hide('wtw_chatmaxdiv" + zchatid + "');WTW.hide('wtw_chatmin" + zchatid + "');WTW.show('wtw_chatmax" + zchatid + "');wtw3dinternet.chatSetScroll('" + zchatid + "', true);\" src='/content/system/images/menuminimizegrey.png' alt='Minimize Chat' title='Minimize Chat' onmouseover=\"this.src='/content/system/images/menuminimizehover.png';\" onmouseout=\"this.src='/content/system/images/menuminimizegrey.png';\" />" + 
+						"<img id='wtw_chatmax" + zchatid + "' class='wtw-closeright' onclick=\"WTW.show('wtw_chatmaxdiv" + zchatid + "');WTW.hide('wtw_chatmax" + zchatid + "');WTW.show('wtw_chatmin" + zchatid + "');wtw3dinternet.chatSetScroll('" + zchatid + "', true);\" src='/content/system/images/menumaximizegrey.png' alt='Maximize Chat' title='Maximize Chat' onmouseover=\"this.src='/content/system/images/menumaximizehover.png';\" onmouseout=\"this.src='/content/system/images/menumaximizegrey.png';\" style='display:none;visibility:hidden;' />" +
+						"<div id='wtw_chatdisplayname" + zchatid + "' class='wtw3dinternet-chatdisplayname'>" + zdisplayname + "</div>" + 
+						"<div id='wtw_chatmaxdiv" + zchatid + "'>" +
+							"<div id='wtw_chattext-" + zchatid + "' class='wtw3dinternet-chattext'>" + ztext + "</div>" + 
 							"<div class='wtw3dinternet-chatcenter'>" + 
-								"<div id='wtw_chattyping-" + chatid + "' class='wtw3dinternet-chattyping'></div>" +
-								"<textarea id='wtw_chatadd-" + chatid + "' rows='2' cols='39' class='wtw3dinternet-chattextarea' autocomplete='new-password' onkeyup=\"wtw3dinternet.chatCheckKey(this,'" + chatid + "');\" onfocus=\"wtw3dinternet.setChatNewInfo('" + chatid + "',false);\" style='display:none;visibility:hidden;'></textarea>" + 
-								"<div id='wtw_chattextsend-" + chatid + "' class='wtw3dinternet-chattextsend' onclick=\"wtw3dinternet.sendChat('" + chatid + "');\" style='display:none;visibility:hidden;'>Send</div>" +
-								"<div id='wtw_chataccept-" + chatid + "' class='wtw3dinternet-chatbuttonaccept' onclick=\"wtw3dinternet.acceptChat('" + chatid + "', '" + displayname + "', true);\" style='display:none;visibility:hidden;'>Accept</div>" + 
-								"<div id='wtw_chatdecline-" + chatid + "' class='wtw3dinternet-chatbuttondecline' onclick=\"wtw3dinternet.closeChat('" + chatid + "',true,true);\" style='display:none;visibility:hidden;'>Decline</div>" + 
-								"<div id='wtw_chatok-" + chatid + "' class='wtw3dinternet-chatbuttonaccept' onclick=\"wtw3dinternet.closeChat('" + chatid + "');\" style='display:none;visibility:hidden;'>OK</div>" + 
+								"<div id='wtw_chattyping-" + zchatid + "' class='wtw3dinternet-chattyping'></div>" +
+								"<textarea id='wtw_chatadd-" + zchatid + "' rows='2' cols='39' class='wtw3dinternet-chattextarea' autocomplete='new-password' onkeyup=\"wtw3dinternet.chatCheckKey(this,'" + zchatid + "');\" onfocus=\"wtw3dinternet.setChatNewInfo('" + zchatid + "',false);\" style='display:none;visibility:hidden;'></textarea>" + 
+								"<div id='wtw_chattextsend-" + zchatid + "' class='wtw3dinternet-chattextsend' onclick=\"wtw3dinternet.sendChat('" + zchatid + "');\" style='display:none;visibility:hidden;'>Send</div>" +
+								"<div id='wtw_chataccept-" + zchatid + "' class='wtw3dinternet-chatbuttonaccept' onclick=\"wtw3dinternet.acceptChat('" + zchatid + "', '" + zdisplayname + "', true);\" style='display:none;visibility:hidden;'>Accept</div>" + 
+								"<div id='wtw_chatdecline-" + zchatid + "' class='wtw3dinternet-chatbuttondecline' onclick=\"wtw3dinternet.closeChat('" + zchatid + "',true,true);\" style='display:none;visibility:hidden;'>Decline</div>" + 
+								"<div id='wtw_chatok-" + zchatid + "' class='wtw3dinternet-chatbuttonaccept' onclick=\"wtw3dinternet.closeChat('" + zchatid + "');\" style='display:none;visibility:hidden;'>OK</div>" + 
 							"</div>" +
 						"</div>" +
 					"</div>" +
@@ -222,7 +222,7 @@ WTW_3DINTERNET.prototype.addChatBox = function(chatid, displayname, stext) {
 	} catch(ex) {
 		WTW.log("plugins:wtw-3dinternet:scripts-chat.js-addChatBox=" + ex.message);
 	}
-	return chatbox;
+	return zchatbox;
 }
 
 WTW_3DINTERNET.prototype.acceptChat = function(zchatid, zdisplayname, zresponse) {
@@ -239,8 +239,8 @@ WTW_3DINTERNET.prototype.acceptChat = function(zchatid, zdisplayname, zresponse)
 		WTW.showInline('wtw_chatadd-' + zchatid);
 		WTW.showInline('wtw_chattextsend-' + zchatid);
 		if (dGet('wtw_chattext-' + zchatid) != null) {
-			var sdate = new Date();
-			dGet('wtw_chattext-' + zchatid).innerHTML = "<span class='wtw3dinternet-chatgreennote'><b>" + zdisplayname + "</b> Entered Chat: " + sdate.toLocaleString() + "</span><hr class='wtw3dinternet-chathr' />";
+			var zdate = new Date();
+			dGet('wtw_chattext-' + zchatid).innerHTML = "<span class='wtw3dinternet-chatgreennote'><b>" + zdisplayname + "</b> Entered Chat: " + zdate.toLocaleString() + "</span><hr class='wtw3dinternet-chathr' />";
 		}
 		wtw3dinternet.chatSetScroll(zchatid, true);
 	} catch(ex) {
