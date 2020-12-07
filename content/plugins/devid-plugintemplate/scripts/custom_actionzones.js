@@ -1,43 +1,43 @@
 DEVID_PLUGINTEMPLATE.prototype.addActionZoneMyCustomZone = function(zactionzonename, zactionzoneind, zactionzonedef) {
-	let actionzone;
+	let zactionzone;
 	try {
 		/* each custom Action Zone will have a separate function */
 		/* example is a Load Zone (but not built from queue) */
-		actionzone = scene.getMeshById(zactionzonename);
-		if (actionzone == null) {
+		zactionzone = scene.getMeshById(zactionzonename);
+		if (zactionzone == null) {
 			/* WTW.newMold() provides a basic shape definition object */
-			let molddef = WTW.newMold();
+			let zmolddef = WTW.newMold();
 			/* Shape, Position, Scaling, Rotation, and Parent Name are passed to the object on creation */
-			molddef.shape = zactionzonedef.actionzoneshape;
-			molddef.covering = "hidden";
-			molddef.scaling.x = zactionzonedef.scaling.x;
-			molddef.scaling.y = zactionzonedef.scaling.y;
-			molddef.scaling.z = zactionzonedef.scaling.z;
-			molddef.subdivisions = 12;
-			molddef.opacity = 0;
-			molddef.parentname = zactionzonedef.parentname;
-			molddef.actionzoneind = zactionzoneind;
-			molddef.checkcollisions = "0";
-			molddef.ispickable = "0";
+			zmolddef.shape = zactionzonedef.actionzoneshape;
+			zmolddef.covering = "hidden";
+			zmolddef.scaling.x = zactionzonedef.scaling.x;
+			zmolddef.scaling.y = zactionzonedef.scaling.y;
+			zmolddef.scaling.z = zactionzonedef.scaling.z;
+			zmolddef.subdivisions = 12;
+			zmolddef.opacity = 0;
+			zmolddef.parentname = zactionzonedef.parentname;
+			zmolddef.actionzoneind = zactionzoneind;
+			zmolddef.checkcollisions = "0";
+			zmolddef.ispickable = "0";
 			/* create the action zone using the mold definition above */
-			actionzone = WTW.addMold(zactionzonename, molddef, molddef.parentname, molddef.covering);
-			actionzone.rotation.x = WTW.getRadians(zactionzonedef.rotation.x);
-			actionzone.rotation.y = WTW.getRadians(zactionzonedef.rotation.y);
-			actionzone.rotation.z = WTW.getRadians(zactionzonedef.rotation.z);
-			actionzone.isPickable = false;
-			actionzone.checkCollisions = false;
-			actionzone.position.x = zactionzonedef.position.x;
-			actionzone.position.y = zactionzonedef.position.y;
-			actionzone.position.z = zactionzonedef.position.z;
+			zactionzone = WTW.addMold(zactionzonename, zmolddef, zmolddef.parentname, zmolddef.covering);
+			zactionzone.rotation.x = WTW.getRadians(zactionzonedef.rotation.x);
+			zactionzone.rotation.y = WTW.getRadians(zactionzonedef.rotation.y);
+			zactionzone.rotation.z = WTW.getRadians(zactionzonedef.rotation.z);
+			zactionzone.isPickable = false;
+			zactionzone.checkCollisions = false;
+			zactionzone.position.x = zactionzonedef.position.x;
+			zactionzone.position.y = zactionzonedef.position.y;
+			zactionzone.position.z = zactionzonedef.position.z;
 		}
 		/* shown = "2" will keep it from adding a duplicate object while it is in the queue */
 		WTW.actionZones[zactionzoneind].shown = "2";
 		
 		
 		/* everything you create in this function should be parented to the above or using the basic Action Zones */
-		/* yourobject.parent = actionzone;
+		/* yourobject.parent = zactionzone;
 		/* so that your 3D Objects position, scaling, and rotatation work as child objects */
-		/* if needed you can replace the actionzone directly with your 3D Object. */
+		/* if needed you can replace the zactionzone directly with your 3D Object. */
 		/* examples of existing 3D Objects can be found at /core/scripts/actionzones/wtw_basicactionzones.js */
 		/* you can use one of the Action Zones as a base and build off it as needed */
 		/* names of your child objects and materials should be: */
@@ -48,7 +48,7 @@ DEVID_PLUGINTEMPLATE.prototype.addActionZoneMyCustomZone = function(zactionzonen
 	} catch (ex) {
 		WTW.log("plugins:devid-plugintemplate:scripts-custom_actionzones.js-addActionZoneMyCustomZone=" + ex.message);
 	}
-	return actionzone;
+	return zactionzone;
 }
 
 DEVID_PLUGINTEMPLATE.prototype.setNewActionZoneDefaults = function(zactionzonetype) {

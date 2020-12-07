@@ -1,5 +1,5 @@
 DEVID_PLUGINTEMPLATE.prototype.addCoveringMyCustomCovering = function(zmoldname, zmolddef, zlenx, zleny, zlenz, zspecial1, zspecial2) {
-	let covering;
+	let zcovering;
 	try {
 		/* each custom Covering will have a separate function */
 		let zopacity = 1;
@@ -13,13 +13,13 @@ DEVID_PLUGINTEMPLATE.prototype.addCoveringMyCustomCovering = function(zmoldname,
 				}
 			}
 		}
-		covering = new BABYLON.StandardMaterial(zmoldname + "mat", scene);
-		covering.alpha = zopacity;
-		covering.specularColor = new BABYLON.Color3(Number(zmolddef.color.specular.r), Number(zmolddef.color.specular.g), Number(zmolddef.color.specular.b));
-		covering.emissiveColor = new BABYLON.Color3(Number(zmolddef.color.emissive.r), Number(zmolddef.color.emissive.g), Number(zmolddef.color.emissive.b));
-		covering.diffuseColor = new BABYLON.Color3(Number(zmolddef.color.diffuse.r), Number(zmolddef.color.diffuse.g), Number(zmolddef.color.diffuse.b));
+		zcovering = new BABYLON.StandardMaterial(zmoldname + "mat", scene);
+		zcovering.alpha = zopacity;
+		zcovering.specularColor = new BABYLON.Color3(Number(zmolddef.color.specular.r), Number(zmolddef.color.specular.g), Number(zmolddef.color.specular.b));
+		zcovering.emissiveColor = new BABYLON.Color3(Number(zmolddef.color.emissive.r), Number(zmolddef.color.emissive.g), Number(zmolddef.color.emissive.b));
+		zcovering.diffuseColor = new BABYLON.Color3(Number(zmolddef.color.diffuse.r), Number(zmolddef.color.diffuse.g), Number(zmolddef.color.diffuse.b));
 
-		/* replace the covering directly with your material. */
+		/* replace the zcovering directly with your material. */
 		/* examples of existing coverings (materials) can be found at /core/scripts/coverings/wtw_basiccoverings.js */
 		/* you can use one of the coverings as a base and build off it as needed */
 		/* names of your additions should be: */
@@ -29,7 +29,7 @@ DEVID_PLUGINTEMPLATE.prototype.addCoveringMyCustomCovering = function(zmoldname,
 	} catch (ex) {
 		WTW.log("plugins:devid-plugintemplate:scripts-custom_coverings.js-addCoveringMyCustomCovering=" + ex.message);
 	}
-	return covering;
+	return zcovering;
 }
 
 DEVID_PLUGINTEMPLATE.prototype.setCoveringFormFields = function(zcoveringname) {
