@@ -35,9 +35,9 @@ var wtw3dinternet = new WTW_3DINTERNET();
 WTW_3DINTERNET.prototype.onClick = function(zpickedname) {
 	try {
 		zpickedname = zpickedname.toLowerCase();
-		let moldnameparts = WTW.getMoldnameParts(zpickedname);
+		let zmoldnameparts = WTW.getMoldnameParts(zpickedname);
 		if (zpickedname.indexOf('person') > -1) {
-			wtw3dinternet.avatarConnectMenu(moldnameparts.instanceid);
+			wtw3dinternet.avatarConnectMenu(zmoldnameparts.instanceid);
 		}
 	} catch (ex) {
 		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-onClick=" + ex.message);

@@ -155,7 +155,7 @@ WTW_3DINTERNET.prototype.beforeUnloadVoiceChat = function() {
 					if (zvoicechats[i].id.indexOf('wtw_voicechatbox-') > -1) {
 						let nameparts = zvoicechats[i].id.split('-');
 						if (nameparts[1] != null) {
-							wtw3dinternet.sendMessage(nameparts[1], '', 'voicechat command', 'leave voicechat');
+							wtw3dinternet.sendMessage('voicechat', nameparts[1], '', 'voicechat command', 'leave voicechat');
 						}
 					}
 				}
@@ -218,31 +218,10 @@ WTW_3DINTERNET.prototype.startVoiceChat = function(zinstanceid) {
 			}
 			wtw3dinternet.voiceChatSetScroll(zvoicechatid, true);
 			WTW.show('wtw_3dinternetvoicechatform');
-			wtw3dinternet.sendMessage(zvoicechatid, zinstanceid, 'start voicechat', '');
+			wtw3dinternet.sendMessage('voicechat', zvoicechatid, zinstanceid, 'start voicechat', '');
 		}
 	} catch (ex) {
 		WTW.log("plugins:wtw-3dinternet:scripts-voicechat.js-startVoiceChat=" + ex.message);
-	} 
-}
-
-WTW_3DINTERNET.prototype.sendMessage = function(zvoicechatid, ztoinstanceid, zaction, ztext) {
-	try {
-		if (wtw3dinternet.masterVoiceChat == '1') {
-			let zroomid = communityid + buildingid + thingid;
-			wtw3dinternet.voicechat.emit(zaction, {
-				'serverinstanceid':dGet('wtw_serverinstanceid').value,
-				'serverip':dGet('wtw_serverip').value,
-				'roomid':zroomid,
-				'voicechatid':zvoicechatid,
-				'userid':dGet('wtw_tuserid').value,
-				'displayname':btoa(dGet('wtw_tdisplayname').value),
-				'frominstanceid':dGet('wtw_tinstanceid').value,
-				'toinstanceid':ztoinstanceid,
-				'text':ztext
-			});
-		}
-	} catch (ex) {
-		WTW.log("plugins:wtw-3dinternet:scripts-voicechat.js-sendMessage=" + ex.message);
 	} 
 }
 
@@ -283,7 +262,7 @@ WTW_3DINTERNET.prototype.acceptVoiceChat = function(zvoicechatid, zdisplayname, 
 			zresponse == false;
 		}
 		if (zresponse) {
-			wtw3dinternet.sendMessage(zvoicechatid, '', 'voicechat command', 'accept voicechat');
+			wtw3dinternet.sendMessage('voicechat', zvoicechatid, '', 'voicechat command', 'accept voicechat');
 		}
 		WTW.hide('wtw_voicechataccept-' + zvoicechatid);
 		WTW.hide('wtw_voicechatdecline-' + zvoicechatid);
@@ -309,7 +288,7 @@ WTW_3DINTERNET.prototype.sendVoiceChat = function(zvoicechatid) {
 		if (ztext.length > 0 && dGet('wtw_voicechattext-' + zvoicechatid) != null) {
 			dGet('wtw_voicechattext-' + zvoicechatid).innerHTML += "<span class='wtw3dinternet-chatme'>Me:</span> " + WTW.encode(ztext) + "<hr class='wtw3dinternet-chathr' />";
 			dGet('wtw_voicechatadd-' + zvoicechatid).value = "";
-			wtw3dinternet.sendMessage(zvoicechatid, '', 'send voicechat', WTW.encode(ztext));
+			wtw3dinternet.sendMessage('voicechat', zvoicechatid, '', 'send voicechat', WTW.encode(ztext));
 		}
 		wtw3dinternet.voiceChatSetScroll(zvoicechatid, true);
 	} catch(ex) {
@@ -330,9 +309,9 @@ WTW_3DINTERNET.prototype.closeVoiceChat = function(zvoicechatid, zresponse, zdec
 			ztext = 'decline voicechat';
 		}
 		if (zresponse) {
-			wtw3dinternet.sendMessage(zvoicechatid, '', 'voicechat command', ztext);
+			wtw3dinternet.sendMessage('voicechat', zvoicechatid, '', 'voicechat command', ztext);
 		} else if (ztext == 'leave voicechat') {
-			wtw3dinternet.sendMessage(zvoicechatid, '', 'voicechat command', 'left voicechat');
+			wtw3dinternet.sendMessage('voicechat', zvoicechatid, '', 'voicechat command', 'left voicechat');
 		}
 		if (dGet('wtw_voicechatsendrequests') != null && dGet('wtw_voicechatbox-' + zvoicechatid) != null) {
 			dGet('wtw_voicechatsendrequests').removeChild(dGet('wtw_voicechatbox-' + zvoicechatid));
@@ -347,29 +326,6 @@ WTW_3DINTERNET.prototype.closeVoiceChat = function(zvoicechatid, zresponse, zdec
 	}
 }
 
-WTW_3DINTERNET.prototype.closeMenus = function(zmenuid) {
-	try {
-		if (zmenuid == 'wtw_menuvoicechat') {
-			var zvoicechats = dGet('wtw_voicechatsendrequests').childNodes;
-			for (var i=0; i<zvoicechats.length; i++) {
-				if (zvoicechats[i] != null) {
-					if (zvoicechats[i].id != undefined) {
-						if (zvoicechats[i].id.indexOf('wtw_voicechatbox-') > -1) {
-							let nameparts = zvoicechats[i].id.split('-');
-							if (nameparts[1] != null) {
-								wtw3dinternet.closeVoiceChat(nameparts[1], true, false);
-							}
-						}
-					}
-				}
-			}
-			dGet('wtw_startconnect').innerHTML = "";
-		}
-	} catch(ex) {
-		WTW.log("plugins:wtw-3dinternet:scripts-voicechat.js-closeMenus=" + ex.message);
-	}
-}
-	
 WTW_3DINTERNET.prototype.voiceChatCheckKey = function(obj, zvoicechatid) {
 	try {
 		var e = window.event;
