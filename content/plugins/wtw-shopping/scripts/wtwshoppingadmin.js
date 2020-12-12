@@ -1,13 +1,13 @@
 wtwshopping.prototype.addStore = async function() {
 	try {
-		var storeiframes = '0';
+		var zstoreiframes = '0';
 		if (dGet('wtw_tstoreiframes').checked) {
-			storeiframes = '1';
+			zstoreiframes = '1';
 		}
 		var zrequest = {
 			'storeid':dGet('wtw_tstoreid').value,
 			'storename':btoa(dGet('wtw_tstorename').value),
-			'storeiframes':storeiframes,
+			'storeiframes':zstoreiframes,
 			'storeurl':dGet('wtw_tstoreurl').value,
 			'storecarturl':dGet('wtw_tstorecarturl').value,
 			'storeproducturl':dGet('wtw_tstoreproducturl').value,
@@ -130,10 +130,10 @@ wtwshopping.prototype.getStores = function() {
 wtwshopping.prototype.getStoresDropdown = async function(zwebtype) {
 	try {
 		WTW.clearDDL('wtwshopping_' + zwebtype + 'connectstore');
-		var option0 = document.createElement("option");
-		option0.text = "Not Connected";
-		option0.value = "";
-		dGet('wtwshopping_' + zwebtype + 'connectstore').add(option0);
+		var zoption = document.createElement("option");
+		zoption.text = "Not Connected";
+		zoption.value = "";
+		dGet('wtwshopping_' + zwebtype + 'connectstore').add(zoption);
 		WTWShopping.stores = [];
 		WTW.getAsyncJSON("/connect/wtw-shopping-getstores.php", 
 			function(zresponse) {

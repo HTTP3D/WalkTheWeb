@@ -186,29 +186,29 @@ wtwshopping.prototype.setMoldFormFields = function(zshape) {
 wtwshopping.prototype.setNewMoldDefaults = function(zshape) {
 	try {
 		var zcoords = WTW.getNewCoordinates(50);
-		var zpositionX = zcoords.positionX;
-		var zpositionY = zcoords.positionY;
-		var zpositionZ = zcoords.positionZ;
-		var zrotationY = zcoords.rotationY;
+		var zpositionx = zcoords.positionX;
+		var zpositiony = zcoords.positionY;
+		var zpositionz = zcoords.positionZ;
+		var zrotationy = zcoords.rotationY;
 		var zshapevalue = zshape.toLowerCase();
 		var zimagepath = "/content/system/stock/stucco-512x512.jpg";
 		while (zshapevalue.indexOf(" ") > -1) {
 			zshapevalue = zshapevalue.replace(" ","");
 		}
 		if (thingid != '') {
-			zpositionX = 0;
-			zpositionZ = 0;
+			zpositionx = 0;
+			zpositionz = 0;
 		}
 		switch (zshapevalue) {
 			case "storeproduct":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "5.00";
 				dGet('wtw_tmoldscalingy').value = "5.00";
 				dGet('wtw_tmoldscalingz').value = "5.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -222,15 +222,15 @@ wtwshopping.prototype.setNewMoldDefaults = function(zshape) {
 			case "storebuynow":
 			case "storecheckout":
 			case "storereadmore":
-				zrotationY = WTW.cleanDegrees(Number(zrotationY) + 180);
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = Number(zpositionY) + 7;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				zrotationy = WTW.cleanDegrees(Number(zrotationy) + 180);
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = Number(zpositiony) + 7;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "4.84";
 				dGet('wtw_tmoldscalingy').value = "1.98";
 				dGet('wtw_tmoldscalingz').value = "0.60";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -241,14 +241,14 @@ wtwshopping.prototype.setNewMoldDefaults = function(zshape) {
 				break;
 
 			case "storesign":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "3.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "30.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -258,14 +258,14 @@ wtwshopping.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;			
 			case "store3dsign":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY-4;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony-4;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY + 90;
+				dGet('wtw_tmoldrotationy').value = zrotationy + 90;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -287,14 +287,14 @@ wtwshopping.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "storeviewcart":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "0.25";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "5.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -304,14 +304,14 @@ wtwshopping.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;			
 			case "storecategories":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "14.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -321,14 +321,14 @@ wtwshopping.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;			
 			case "storesearch":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "14.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";

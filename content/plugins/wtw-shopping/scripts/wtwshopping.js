@@ -844,17 +844,17 @@ wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductnam
 					}
 				} catch(ex) {}
 
-				var coveringtitle = new BABYLON.StandardMaterial("mat" + zmoldname + "-titleimagetexture", scene);
-				coveringtitle.alpha = 1;
+				var zcoveringtitle = new BABYLON.StandardMaterial("mat" + zmoldname + "-titleimagetexture", scene);
+				zcoveringtitle.alpha = 1;
 				
-				var contentTexture = new BABYLON.DynamicTexture(zmoldname + "-titleimagetexture", {width: 512,height: 512}, scene, true);
-				contentTexture.name = zmoldname + "-titleimagetexture";
-				coveringtitle.diffuseTexture = contentTexture;
-				ztitleimage.material = coveringtitle;
+				var zcontenttexture = new BABYLON.DynamicTexture(zmoldname + "-titleimagetexture", {width: 512,height: 512}, scene, true);
+				zcontenttexture.name = zmoldname + "-titleimagetexture";
+				zcoveringtitle.diffuseTexture = zcontenttexture;
+				ztitleimage.material = zcoveringtitle;
 				WTW.wrapText(ztitleimage, WTW.cleanHTMLText(zproductname), zlineheigth, zfontheight, "center", "top", "yellow", 5, 0);
-				coveringtitle.emissiveColor = new BABYLON.Color3(1, 1, 1);
-				coveringtitle.diffuseTexture.vScale = .2
-				coveringtitle.diffuseTexture.vOffset = .85
+				zcoveringtitle.emissiveColor = new BABYLON.Color3(1, 1, 1);
+				zcoveringtitle.diffuseTexture.vScale = .2
+				zcoveringtitle.diffuseTexture.vOffset = .85
 				if (ztitleimage2 != null) {
 					try {
 						if (ztitleimage2.material.diffuseTexture != null) {
@@ -868,7 +868,7 @@ wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductnam
 							ztitleimage2.material = null;
 						}
 					} catch(ex) {}
-					ztitleimage2.material = coveringtitle;
+					ztitleimage2.material = zcoveringtitle;
 				}
 			}
 			var zprice1 = scene.getMeshByID(zmoldname + "-price1");
@@ -919,8 +919,8 @@ wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductnam
 			}
 			if (zimageurl != '') {
 				WTW.getAsyncJSON(zstoreinfo.storeurl + "/image.php?walktheweb_image_url=" + zimageurl, 
-					function(response2) {
-						if (response2 != null) {
+					function(zresponse2) {
+						if (zresponse2 != null) {
 							var zpimage = scene.getMeshByID(zmoldname + "-clickimage");
 							if (zpimage != null) {
 								try {
@@ -951,7 +951,7 @@ wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductnam
 									}
 								} catch(ex) {}
 							}
-							var zimagedata = JSON.parse(response2);
+							var zimagedata = JSON.parse(zresponse2);
 							var znewimage = new Image();
 							znewimage.src = zimagedata[0].url;
 							znewimage.onload = function() {
