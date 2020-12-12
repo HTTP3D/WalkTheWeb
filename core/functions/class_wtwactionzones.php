@@ -40,7 +40,7 @@ class wtwactionzones {
 		return $zactionzoneid;
 	}
 	
-	public function saveActionZone($zactionzoneid, $zcommunityid, $zbuildingid, $zthingid, $zactionzonename, $zactionzonetype, $zactionzoneshape, $zattachmoldid, $zmovementtype, $zrotatespeed, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zaxispositionx, $zaxispositiony, $zaxispositionz, $zaxisrotationx, $zaxisrotationy, $zaxisrotationz, $zrotateaxis, $zrotatedegrees, $zrotatedirection, $zmovementdistance, $zloadactionzoneid, $zjsfunction, $zjsparameters) {
+	public function saveActionZone($zactionzoneid, $zcommunityid, $zbuildingid, $zthingid, $zactionzonename, $zactionzonetype, $zactionzoneshape, $zattachmoldid, $zmovementtype, $zrotatespeed, $zvalue1, $zvalue2, $zdefaulteditform, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zaxispositionx, $zaxispositiony, $zaxispositionz, $zaxisrotationx, $zaxisrotationy, $zaxisrotationz, $zrotateaxis, $zrotatedegrees, $zrotatedirection, $zmovementdistance, $zloadactionzoneid, $zjsfunction, $zjsparameters) {
 		/* save an action zone to the actionzones table */
 		$zsuccess = false;
 		global $wtwhandlers;
@@ -78,6 +78,9 @@ class wtwactionzones {
 							rotatedegrees=".$wtwhandlers->checkNumber($zrotatedegrees,90).",
 							rotatedirection=".$wtwhandlers->checkNumber($zrotatedirection,1).",
 							rotatespeed=".$wtwhandlers->checkNumber($zrotatespeed,1).",
+							value1=".$wtwhandlers->checkNumber($zvalue1,0).",
+							value2=".$wtwhandlers->checkNumber($zvalue2,0).",
+							defaulteditform=".$wtwhandlers->checkNumber($zdefaulteditform,0).",
 							movementdistance=".$wtwhandlers->checkNumber($zmovementdistance,20).",
 							loadactionzoneid='".$zloadactionzoneid."',
 							jsfunction='".$zjsfunction."',
@@ -122,6 +125,9 @@ class wtwactionzones {
 							rotatedegrees,
 							rotatedirection,
 							rotatespeed,
+							value1,
+							value2,
+							defaulteditform,
 							movementdistance,
 							loadactionzoneid,
 							jsfunction,
@@ -159,6 +165,9 @@ class wtwactionzones {
 							".$wtwhandlers->checkNumber($zrotatedegrees,90).",
 							".$wtwhandlers->checkNumber($zrotatedirection,1).",
 							".$wtwhandlers->checkNumber($zrotatespeed,1).",
+							".$wtwhandlers->checkNumber($zvalue1,0).",
+							".$wtwhandlers->checkNumber($zvalue2,0).",
+							".$wtwhandlers->checkNumber($zdefaulteditform,0).",
 							".$wtwhandlers->checkNumber($zmovementdistance,20).",
 							'".$zloadactionzoneid."',
 							'".$zjsfunction."',
@@ -330,6 +339,9 @@ class wtwactionzones {
 								 rotatedegrees, 
 								 rotatedirection, 
 								 rotatespeed, 
+								 value1,
+								 value2,
+								 defaulteditform,
 								 movementdistance, 
 								 parentactionzoneid, 
 								 jsfunction, 
@@ -369,6 +381,9 @@ class wtwactionzones {
 								 ".$wtwhandlers->checkNumber($zrow->rotatedegrees,90).", 
 								 ".$wtwhandlers->checkNumber($zrow->rotatedirection,1).", 
 								 ".$wtwhandlers->checkNumber($zrow->rotatespeed,1).", 
+								 ".$wtwhandlers->checkNumber($zrow->value1,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->value2,0).", 
+								 ".$wtwhandlers->checkNumber($zrow->defaulteditform,0).", 
 								 ".$wtwhandlers->checkNumber($zrow->movementdistance,20).", 
 								 '".$zrow->parentactionzoneid."', 
 								 '".$zrow->jsfunction."', 

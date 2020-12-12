@@ -227,6 +227,10 @@ class wtwadmin {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tactionzoneind\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tactionzonemovementtype\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tactionzonerotateaxis\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tactionzonevalue1\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tactionzonevalue2\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tactionzonedefaulteditform\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tactionzonerotationdirection\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tattachmoldid\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_taxisscalingx\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_taxisscalingy\" />\r\n";

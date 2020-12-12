@@ -2095,6 +2095,24 @@ h3.wtw-categoryheading:hover {
 	pointer-events:none;
 	touch-action: none;
 }
+.wtw-playerstats {
+	position: absolute;
+	z-index:2490;
+	top:0px;
+	right:0px;
+	margin:10px;
+	padding:8px;
+	min-width:250px;
+	max-width:350px;
+	border:#d9dab9 solid 1px;
+	border-radius:10px;
+	background: rgba(33,33,33,0.2);
+	white-space:nowrap;
+	display:none;
+	visibility:hidden;
+	pointer-events:none;
+	touch-action: none;
+}
 @keyframes wtw-blinker {
   50% {
     opacity: 0;

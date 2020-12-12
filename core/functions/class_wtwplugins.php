@@ -21,29 +21,31 @@ class wtwplugins {
 	}
 	
 	/* declare public $wtwplugins variables */
-	public $serverinstanceid = "";
-	public $rootpath = "";
-	public $contentpath = "";
-	public $contenturl = "";
-	public $protocol = "http://";
-	public $domainname = "";
-	public $domainurl = "";
-	public $pagename = "";
-	public $userid = "";
-	public $userip = "";
-	public $uri = "";
-	public $community = "";
-	public $building = "";
-	public $thing = "";
-	public $communityid = "";
-	public $buildingid = "";
-	public $thingid = "";
+	public $serverinstanceid = '';
+	public $serverip = '';
+	public $rootpath = '';
+	public $contentpath = '';
+	public $contenturl = '';
+	public $protocol = 'http://';
+	public $domainname = '';
+	public $domainurl = '';
+	public $pagename = '';
+	public $userid = '';
+	public $userip = '';
+	public $uri = '';
+	public $community = '';
+	public $building = '';
+	public $thing = '';
+	public $communityid = '';
+	public $buildingid = '';
+	public $thingid = '';
 
 	public function initClass() {
 		/* set the global variables */
 		global $wtw;
 		if ($wtw != null) {
 			$this->serverinstanceid = $wtw->serverinstanceid;
+			$this->serverip = $wtw->serverip;
 			$this->rootpath = wtw_rootpath;
 			$this->contentpath = $wtw->contentpath;
 			$this->contenturl = $wtw->contenturl;
@@ -450,7 +452,7 @@ class wtwplugins {
 
 			$jsdata .= "	WTWJS.prototype.pluginsLoadUserSettingsAfterEngine = function() {\r\n";
 			$jsdata .= "		try {\r\n";
-			$jsdata .= $this->getScriptFunction('pluginsloadusersettingsafterengine');
+			$jsdata .= $this->getScriptFunction('loadusersettingsafterengine');
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsLoadUserSettingsAfterEngine=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
@@ -554,6 +556,14 @@ class wtwplugins {
 			$jsdata .= 	$this->getScriptFunction('onclick');
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsOnClick=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsMouseClickRightAdmin = function(e, zpickedname) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('mouseclickrightadmin');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsMouseClickRightAdmin=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
@@ -940,7 +950,7 @@ class wtwplugins {
 		return $zscripttext;
 	}	
 
-	public function addActionZoneDef($zactionzonetitle, $zjsfunction) {
+	public function addActionZoneDef($zactionzonetitle, $zjsfunction, $zdefaulteditform = '0') {
 		/* plugins can create custom action zone types and add them to the admin options to use */
 		global $wtw;
 		$zsuccess = false;
@@ -956,7 +966,8 @@ class wtwplugins {
 			if ($zfound == false) {
 				$zactionzone = array(
 					'actionzonetitle' => $zactionzonetitle,
-					'jsfunction' => $zjsfunction
+					'jsfunction' => $zjsfunction,
+					'defaulteditform' => $zdefaulteditform
 				);
 				$wtw->pluginActionZoneDefs[count($wtw->pluginActionZoneDefs)] = $zactionzone;
 				$zsuccess = true;
@@ -975,12 +986,13 @@ class wtwplugins {
 			foreach ($wtw->pluginActionZoneDefs as $zactionzonedef) {
 				$zactionzonetitle = trim($zactionzonedef["actionzonetitle"]);
 				$zjsfunction = trim($zactionzonedef["jsfunction"]);
+				$zdefaulteditform = trim($zactionzonedef["defaulteditform"]);
 				if (!empty($zjsfunction) && isset($zjsfunction)) {
 					if (strpos($zjsfunction,";") === false) {
 						$zjsfunction .= ";";
 					}
 					if (strlen($zactionzonetitle) > 1) {
-						$zscripttext .= "zactionzonelist[zactionzonelist.length] = {'name':'".$zactionzonetitle."','helpurl':''};\r\n";
+						$zscripttext .= "zactionzonelist[zactionzonelist.length] = {'name':'".$zactionzonetitle."','helpurl':'', 'defaulteditform':'".$zdefaulteditform."'};\r\n";
 					}
 				}
 			}			

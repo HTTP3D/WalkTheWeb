@@ -28,19 +28,20 @@ class wtwhandlers {
 	}
 	
 	/* declare public $wtwhandlers variables */
-	public $serverinstanceid = "";
-	public $usertoken = "";
-	public $globaluserid = "";
-	public $rootpath = "";
-	public $contentpath = "";
-	public $contenturl = "";
-	public $protocol = "http://";
-	public $domainname = "";
-	public $domainurl = "";
-	public $pagename = "";
-	public $userid = "";
-	public $userip = "";
-	public $uri = "";
+	public $serverinstanceid = '';
+	public $serverip = '';
+	public $usertoken = '';
+	public $globaluserid = '';
+	public $rootpath = '';
+	public $contentpath = '';
+	public $contenturl = '';
+	public $protocol = 'http://';
+	public $domainname = '';
+	public $domainurl = '';
+	public $pagename = '';
+	public $userid = '';
+	public $userip = '';
+	public $uri = '';
 
 	public function getClientIP(){
 		/* returns the current user IP address - also attempts to include IP if server is behind load balancers */
@@ -91,6 +92,10 @@ class wtwhandlers {
 				$this->protocol = "https://";
 				$_SERVER['HTTPS']='on';
 			}
+			/* server IP is Public IP */
+			$zserverip = gethostbyname($this->domainname);
+			$this->serverip = $zserverip;
+
 			if (!empty($_SESSION["wtw_usertoken"]) && isset($_SESSION["wtw_usertoken"])) {
 				$this->usertoken = $_SESSION["wtw_usertoken"];
 			}

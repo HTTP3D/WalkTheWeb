@@ -280,6 +280,9 @@ class wtwbuildings {
 						 t2.rotatedegrees,
 						 t2.rotatedirection,
 						 t2.rotatespeed,
+						 t2.value1,
+						 t2.value2,
+						 t2.defaulteditform,
 						 t2.jsfunction,
 						 t2.jsparameters,
 						 now() as createdate,
@@ -321,6 +324,9 @@ class wtwbuildings {
 					$zrotatedegrees = $zrow["rotatedegrees"];
 					$zrotatedirection = $zrow["rotatedirection"];
 					$zrotatespeed = $zrow["rotatespeed"];
+					$zvalue1 = $zrow["value1"];
+					$zvalue2 = $zrow["value2"];
+					$zdefaulteditform = $zrow["defaulteditform"];
 					$zjsfunction = $zrow["jsfunction"];
 					$zjsparameters = $zrow["jsparameters"];
 					
@@ -358,6 +364,9 @@ class wtwbuildings {
 							 rotatedegrees,
 							 rotatedirection,
 							 rotatespeed,
+							 value1,
+							 value2,
+							 defaulteditform,
 							 jsfunction,
 							 jsparameters,
 							 createdate,
@@ -397,6 +406,9 @@ class wtwbuildings {
 							".$wtwhandlers->checkNumber($zrotatedegrees,90).",
 							".$wtwhandlers->checkNumber($zrotatedirection,1).",
 							".$wtwhandlers->checkNumber($zrotatespeed,0).",
+							".$wtwhandlers->checkNumber($zvalue1,0).",
+							".$wtwhandlers->checkNumber($zvalue2,0).",
+							".$wtwhandlers->checkNumber($zdefaulteditform,0).",
 							'".$zjsfunction."',
 							'".$zjsparameters."',
 							 now(),

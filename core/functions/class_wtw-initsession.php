@@ -113,9 +113,9 @@ class wtw {
 		try {
 			global $wtwuser;
 			/* load class variables */
-			$host= gethostname();
+			$zhost= gethostname();
 			/* get server local IP for load balancer check */
-			$serverip = gethostbyname($host);
+			$zserverip = gethostbyname($zhost);
 			if (defined('wtw_defaultdomain')) {
 				$this->domainname = strtolower(wtw_defaultdomain);
 			}
@@ -123,13 +123,13 @@ class wtw {
 				$this->domainname = strtolower($_SERVER['HTTP_HOST']);
 			}
 			/* load balancer checking the site - set load balancer to check site by ip address. This will avoid a full page load for health check */
-			if ($this->domainname == $serverip) { 
-				echo $serverip." server is up.";
+			if ($this->domainname == $zserverip) { 
+				echo $zserverip." server is up.";
 				exit();
 			} 
 			/* replace server IP with Public IP */
-			$serverip = gethostbyname($this->domainname);
-			$this->serverip = $serverip;
+			$zserverip = gethostbyname($this->domainname);
+			$this->serverip = $zserverip;
 
 			$this->protocol = "http://";
 			if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
@@ -1990,6 +1990,7 @@ class wtw {
 			$mainelements .= "	<iframe id=\"wtw_ibrowseframe\" class=\"wtw-ibrowseframe\" src=\"/core/pages/loading.php\"></iframe>\r\n";
 			$mainelements .= "</div>\r\n";
 			$mainelements .= "<div id=\"wtw_streaming\" class=\"wtw-hide\"></div>\r\n";
+			$mainelements .= "<div id=\"wtw_playerstats\" class=\"wtw-playerstats\"></div>\r\n";
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadMainElements=".$e->getMessage());
 		}

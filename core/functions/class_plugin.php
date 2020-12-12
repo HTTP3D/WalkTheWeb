@@ -120,7 +120,7 @@ class wtwavatars {
 
 			/* Custom action zones */
 			/* The following create the list of new action zones added by this plugin and assign the script to create the action zone */
-			/* $wtwplugins->addActionZoneDef("My Custom Zone", "wtwavatars.addActionZoneMyCustomZone(actionzonename, actionzoneind, actionzonedef);"); */
+			/* $wtwplugins->addActionZoneDef("My Custom Zone", "wtwavatars.addActionZoneMyCustomZone(actionzonename, actionzoneind, actionzonedef);", "0"); */
 			/* Set the custom action zone defaults and show-hide form fields as needed */
 			/* $wtwplugins->addScriptFunction("setnewactionzonedefaults", "wtwavatars.setNewActionZoneDefaults(actionzonetype);"); */
 			/* $wtwplugins->addScriptFunction("setactionzoneformfields", "wtwavatars.setActionZoneFormFields(actionzonetype);"); */
