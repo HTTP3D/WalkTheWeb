@@ -208,8 +208,10 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 			WTW.actionZones[zactionzoneind].attachmoldid = dGet('wtw_tattachmoldid').value;
 			WTW.actionZones[zactionzoneind].movementtype = dGet('wtw_tactionzonemovementtype').value;
 			WTW.actionZones[zactionzoneind].rotatespeed = dGet('wtw_tactionzonerotatespeed').value;
+			WTW.actionZones[zactionzoneind].value1 = dGet('wtw_tactionzonevalue1').value;
+			WTW.actionZones[zactionzoneind].value2 = dGet('wtw_tactionzonevalue2').value;
+			WTW.actionZones[zactionzoneind].defaulteditform = dGet('wtw_tactionzonedefaulteditform').value;
 			WTW.actionZones[zactionzoneind].movementdistance = dGet('wtw_taxisscalingz').value;
-			WTW.actionZones[zactionzoneind].parentname = zparentname;
 			WTW.actionZones[zactionzoneind].jsfunction = dGet('wtw_tactionzonejsfunction').value;
 			WTW.actionZones[zactionzoneind].jsparameters = dGet('wtw_tactionzonejsparameters').value;
 			WTW.actionZones[zactionzoneind].loadactionzoneid = zdefaultloadactionzoneid;
@@ -272,6 +274,9 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 				dGet('wtw_tattachmoldid').value = WTW.actionZones[zactionzoneind].attachmoldid;
 				dGet('wtw_taxisscalingz').value = WTW.actionZones[zactionzoneind].movementdistance;
 				dGet('wtw_tactionzonerotatespeed').value = WTW.actionZones[zactionzoneind].rotatespeed;
+				dGet('wtw_tactionzonevalue1').value = WTW.actionZones[zactionzoneind].value1;
+				dGet('wtw_tactionzonevalue2').value = WTW.actionZones[zactionzoneind].value2;
+				dGet('wtw_tactionzonedefaulteditform').value = WTW.actionZones[zactionzoneind].defaulteditform;
 				dGet('wtw_tactionzonejsfunction').value = WTW.actionZones[zactionzoneind].jsfunction;
 				dGet('wtw_tactionzonejsparameters').value = WTW.actionZones[zactionzoneind].jsparameters;
 				if (WTW.actionZones[zactionzoneind].scripts != null) {
@@ -660,6 +665,9 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 				WTW.actionZones[zactionzoneind].attachmoldid = dGet('wtw_tattachmoldid').value;
 				WTW.actionZones[zactionzoneind].movementtype = dGet('wtw_tactionzonemovementtype').value;
 				WTW.actionZones[zactionzoneind].rotatespeed = dGet('wtw_tactionzonerotatespeed').value;
+				WTW.actionZones[zactionzoneind].value1 = dGet('wtw_tactionzonevalue1').value;
+				WTW.actionZones[zactionzoneind].value2 = dGet('wtw_tactionzonevalue2').value;
+				WTW.actionZones[zactionzoneind].defaulteditform = dGet('wtw_tactionzonedefaulteditform').value;
 				WTW.actionZones[zactionzoneind].position.x = dGet('wtw_tactionzoneposx').value;
 				WTW.actionZones[zactionzoneind].position.y = dGet('wtw_tactionzoneposy').value;
 				WTW.actionZones[zactionzoneind].position.z = dGet('wtw_tactionzoneposz').value;
@@ -696,6 +704,9 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 				'attachmoldid':dGet('wtw_tattachmoldid').value,
 				'movementtype':dGet('wtw_tactionzonemovementtype').value,
 				'rotatespeed':dGet('wtw_tactionzonerotatespeed').value,
+				'value1':dGet('wtw_tactionzonevalue1').value,
+				'value2':dGet('wtw_tactionzonevalue2').value,
+				'defaulteditform':dGet('wtw_tactionzonedefaulteditform').value,
 				'positionx':dGet('wtw_tactionzoneposx').value,
 				'positiony':dGet('wtw_tactionzoneposy').value,
 				'positionz':dGet('wtw_tactionzoneposz').value,
@@ -893,6 +904,9 @@ WTWJS.prototype.selectAddActionZonePart = async function(w) {
 				WTW.actionZones[zactionzoneind].loadactionzoneid = zloadactionzoneid;
 				WTW.actionZones[zactionzoneind].movementtype = dGet('wtw_tactionzonemovementtype').value;
 				WTW.actionZones[zactionzoneind].rotatespeed = dGet('wtw_tactionzonerotatespeed').value;
+				WTW.actionZones[zactionzoneind].value1 = dGet('wtw_tactionzonevalue1').value;
+				WTW.actionZones[zactionzoneind].value2 = dGet('wtw_tactionzonevalue2').value;
+				WTW.actionZones[zactionzoneind].defaulteditform = dGet('wtw_tactionzonedefaulteditform').value;
 				WTW.actionZones[zactionzoneind].position.x = dGet('wtw_tactionzoneposx').value;
 				WTW.actionZones[zactionzoneind].position.y = dGet('wtw_tactionzoneposy').value;
 				WTW.actionZones[zactionzoneind].position.z = dGet('wtw_tactionzoneposz').value;
@@ -926,6 +940,9 @@ WTWJS.prototype.selectAddActionZonePart = async function(w) {
 					'attachmoldid':dGet('wtw_tattachmoldid').value,
 					'movementtype':dGet('wtw_tactionzonemovementtype').value,
 					'rotatespeed':dGet('wtw_tactionzonerotatespeed').value,
+					'value1':dGet('wtw_tactionzonevalue1').value,
+					'value2':dGet('wtw_tactionzonevalue2').value,
+					'defaulteditform':dGet('wtw_tactionzonedefaulteditform').value,
 					'positionx':dGet('wtw_tactionzoneposx').value,
 					'positiony':dGet('wtw_tactionzoneposy').value,
 					'positionz':dGet('wtw_tactionzoneposz').value,
@@ -1124,7 +1141,7 @@ WTWJS.prototype.openSelectActionZoneForm = function() {
 			for (var i = 0; i < WTW.actionZones.length; i++) {
 				if (WTW.actionZones[i] != null) {
 					if ((WTW.actionZones[i].communityinfo.communityid == communityid && communityid != "") || (WTW.actionZones[i].buildinginfo.buildingid == buildingid && buildingid != "") || (WTW.actionZones[i].thinginfo.thingid == thingid && thingid != "")) {
-						if (WTW.actionZones[i].actionzonename.length > 0) { /* ( && WTW.actionZones[i].actionzonename != 'Extreme Load Zone' && WTW.actionZones[i].actionzonename != 'High - Load when far' && WTW.actionZones[i].actionzonename != 'Normal - Load when near')  */
+						if (WTW.actionZones[i].actionzonename.length > 0 && WTW.actionZones[i].defaulteditform == '0') {
 							dGet("wtw_selectactionzoneid").options[actionzonecount] = new Option(WTW.actionZones[i].actionzonename, WTW.actionZones[i].actionzoneid);
 							actionzonecount += 1;
 						}
@@ -1250,7 +1267,10 @@ WTWJS.prototype.setNewActionZone = function() {
 		var zrotationx = WTW.getRadians(Number(dGet('wtw_tactionzonerotx').value));
 		var zrotationy = WTW.getRadians(Number(dGet('wtw_tactionzoneroty').value));
 		var zrotationz = WTW.getRadians(Number(dGet('wtw_tactionzonerotz').value));
-		var zrotatespeed = Number(dGet('wtw_tactionzonerotatespeed').value);		
+		var zrotatespeed = Number(dGet('wtw_tactionzonerotatespeed').value);
+		var zvalue1 = Number(dGet('wtw_tactionzonevalue1').value);
+		var zvalue2 = Number(dGet('wtw_tactionzonevalue2').value);
+		var zdefaulteditform = Number(dGet('wtw_tactionzonedefaulteditform').value);
 		if (dGet('wtw_tactionzonetype').value == "swingingdoor" || dGet('wtw_tactionzonetype').value == "rotate" || dGet('wtw_tactionzonetype').value == "driverturnangle" || dGet('wtw_tactionzonetype').value == "driverturningwheel") {
 			dGet('wtw_taxisscalingx').value = ".2";
 			dGet('wtw_taxisscalingy').value = "20";
@@ -1275,6 +1295,9 @@ WTWJS.prototype.setNewActionZone = function() {
 			var zactionzoneind = Number(dGet('wtw_tactionzoneind').value);
 			if (WTW.actionZones[zactionzoneind] != null) {
 				WTW.actionZones[zactionzoneind].rotatespeed = zrotatespeed;
+				WTW.actionZones[zactionzoneind].value1 = zvalue1;
+				WTW.actionZones[zactionzoneind].value2 = zvalue2;
+				WTW.actionZones[zactionzoneind].defaulteditform = zdefaulteditform;
 				WTW.actionZones[zactionzoneind].axis.rotatedegrees = zdoorrotatedegrees;
 				WTW.actionZones[zactionzoneind].axis.rotatedirection = zdoorrotatedirection;
 				var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);

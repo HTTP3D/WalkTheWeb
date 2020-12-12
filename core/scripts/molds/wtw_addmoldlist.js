@@ -521,10 +521,10 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 	/* For each new mold and new web mold, these are the default values when created using the admin form */
 	try {
 		var zcoords = WTW.getNewCoordinates(50);
-		var zpositionX = Number(zcoords.positionX);
-		var zpositionY = Number(zcoords.positionY);
-		var zpositionZ = Number(zcoords.positionZ);
-		var zrotationY = Number(zcoords.rotationY);
+		var zpositionx = Number(zcoords.positionX);
+		var zpositiony = Number(zcoords.positionY);
+		var zpositionz = Number(zcoords.positionZ);
+		var zrotationy = Number(zcoords.rotationY);
 		var zshapevalue = zshape.toLowerCase();
 		var zimageid = "ij7fi8qv7dbgb6zc";
 		var zimagepath = "/content/system/stock/stucco-512x512.jpg";
@@ -534,8 +534,8 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 			zshapevalue = zshapevalue.replace(" ","");
 		}
 		if (thingid != '') {
-			zpositionX = 0;
-			zpositionZ = 0;
+			zpositionx = 0;
+			zpositionz = 0;
 		}
 		dGet('wtw_tmoldspecial1').value = "0.00";
 		dGet('wtw_moldaddimagepreview').src = "";
@@ -607,9 +607,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 		dGet('wtw_tmoldambientcolor').value = "#575757";
 		switch (zshapevalue) {
 			case "cylinder":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
@@ -624,14 +624,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "10";
 				break;
 			case "halfpipe":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "90.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "90.00";
 				dGet('wtw_tmoldspecial1').value = "1.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
@@ -642,9 +642,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "20";
 				break;
 			case "cone":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
@@ -659,14 +659,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "20";
 				break;
 			case "polygon":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial1').value = "1";
 				dGet('wtw_tmoldspecial2').value = "0";
@@ -677,9 +677,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "20";
 				break; 
 			case "sphere":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
@@ -694,14 +694,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "10";
 				break;
 			case "dome":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial1').value = "1.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
@@ -712,14 +712,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "10";
 				break;
 			case "triangle":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -729,9 +729,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 			case "torus":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "5.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
@@ -747,14 +747,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "16";
 				break;
 			case "plane":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "0.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY + 90;
+				dGet('wtw_tmoldrotationy').value = zrotationy + 90;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -764,9 +764,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "2";
 				break;
 			case "lightbulb":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 1;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 1;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "0.80";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "0.80";
@@ -781,9 +781,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "10";
 				break;
 			case "spotlight":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 1;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 1;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "2.00";
 				dGet('wtw_tmoldscalingy').value = "2.00";
 				dGet('wtw_tmoldscalingz').value = "2.00";
@@ -798,9 +798,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "20";
 				break;
 			case "candleflame":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 3;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 3;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "5.00";
 				dGet('wtw_tmoldscalingz').value = ".1";
@@ -819,9 +819,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "tree":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -840,9 +840,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "flag":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -861,9 +861,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "smoke":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -882,9 +882,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "waterfountain":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -903,9 +903,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "particlesphere":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "2.00";
 				dGet('wtw_tmoldscalingy').value = "2.00";
 				dGet('wtw_tmoldscalingz').value = "2.00";
@@ -924,9 +924,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "particleshower":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "2.00";
 				dGet('wtw_tmoldscalingy').value = "6.00";
 				dGet('wtw_tmoldscalingz').value = "2.00";
@@ -945,9 +945,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "babylonfile":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -966,14 +966,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "waterplane":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = ".1";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -987,14 +987,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "waterdisc":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = ".1";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1009,14 +1009,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "disc":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "20.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "0.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY + 90;
+				dGet('wtw_tmoldrotationy').value = zrotationy + 90;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1026,9 +1026,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "16";
 				break;
 			case "line":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -1044,14 +1044,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldcoveringold').value = "color";
 				break;
 			case "wall":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 10;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 10;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "20.00";
 				dGet('wtw_tmoldscalingy').value = "20.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY + 90;
+				dGet('wtw_tmoldrotationy').value = zrotationy + 90;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1065,14 +1065,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "floor":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + .5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + .5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "20.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "20.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1086,14 +1086,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "box":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1103,14 +1103,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 			case "roundedbox":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1120,14 +1120,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 			case "3dtext":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY + 90;
+				dGet('wtw_tmoldrotationy').value = zrotationy + 90;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1149,14 +1149,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "image":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = ".25";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1166,14 +1166,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 			case "raisedimage":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = ".25";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1184,14 +1184,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldmaxheight').value = "2.00";
 				break;
 			case "video":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = ".25";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY + 180;
+				dGet('wtw_tmoldrotationy').value = zrotationy + 180;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1210,14 +1210,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldvideoloop').checked = false;
 				break;
 			case "videostream":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 10;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 10;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "8.00";
 				dGet('wtw_tmoldscalingz').value = "0.00";
 				dGet('wtw_tmoldrotationx').value = "180.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY + 180;
+				dGet('wtw_tmoldrotationy').value = zrotationy + 180;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1227,14 +1227,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "2";
 				break;
 			case "simpletextbox":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = ".25";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1244,18 +1244,18 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 			case "viewblog":
-				zrotationY += 180;
-				if (zrotationY > 360) {
-					zrotationY -= 360;
+				zrotationy += 180;
+				if (zrotationy > 360) {
+					zrotationy -= 360;
 				}
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "15.00";
 				dGet('wtw_tmoldscalingz').value = "15.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1269,18 +1269,18 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;			
 			case "blogposting":
-				zrotationY += 180;
-				if (zrotationY > 360) {
-					zrotationY -= 360;
+				zrotationy += 180;
+				if (zrotationy > 360) {
+					zrotationy -= 360;
 				}
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "15.00";
 				dGet('wtw_tmoldscalingz').value = "15.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1294,14 +1294,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
 			case "sharktank":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "100.00";
 				dGet('wtw_tmoldscalingy').value = "50.00";
 				dGet('wtw_tmoldscalingz').value = "100.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial1').value = "7";
 				dGet('wtw_tmoldspecial2').value = "0.00";
@@ -1314,14 +1314,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldcoveringold').value = "glass";
 				break;
 			case "custom": 
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1331,14 +1331,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;	
 			case "terrain": 
-				dGet('wtw_tmoldpositionx').value = zpositionX;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
 				dGet('wtw_tmoldpositiony').value = -1;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1000.00";
 				dGet('wtw_tmoldscalingy').value = "1000.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1356,9 +1356,9 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				WTW.setPreviewImage('wtw_moldheightmappreview', 'wtw_tmoldheightmappath', 'wtw_tmoldheightmapid');
 				break;	
 			case "tube":
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
@@ -1374,14 +1374,14 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "8";
 				break;				
 			default:
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY + 5;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 5;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "10.00";
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "10.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1391,7 +1391,7 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
 		}
-		WTW.pluginsSetNewMoldDefaults(zshape, zpositionX, zpositionY, zpositionZ, zrotationY);
+		WTW.pluginsSetNewMoldDefaults(zshape, zpositionx, zpositiony, zpositionz, zrotationy);
 		dGet('wtw_tmoldcsgmoldid').value = "";
 		WTW.setDDLValue("wtw_tmoldcsgaction", "");
 		dGet('wtw_selectedcsgshape').innerHTML = "";

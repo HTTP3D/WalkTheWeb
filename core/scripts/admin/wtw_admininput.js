@@ -40,19 +40,24 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
 	/* mouse right click event */
 	try {
 		WTW.pick = 1;
-		var zpickedname = "";
+		var zpickedname = '';
 		var zpickedresult = scene.pick(e.clientX, e.clientY);
 		if (zpickedresult.pickedMesh == null) {
 			zpickedresult.pickedMesh = scene.getMeshByID(WTW.currentID);
 			zpickedname = WTW.currentID;
 		} else {
-				zpickedname = zpickedresult.pickedMesh.name;
+			zpickedname = zpickedresult.pickedMesh.name;
 		}
 		if (zpickedname.indexOf('babylonfile-') > -1 && zpickedresult.pickedMesh == null) {
 			var znameparts = zpickedname.split('-');
-			zpickedname = znameparts[0] + "-" + znameparts[1] + "-" + znameparts[2] + "-" + znameparts[3] + "-" + znameparts[4] + "-" + znameparts[5];
+			zpickedname = znameparts[0] + '-' + znameparts[1] + '-' + znameparts[2] + '-' + znameparts[3] + '-' + znameparts[4] + '-' + znameparts[5];
 			zpickedresult.pickedMesh = scene.getMeshByID(zpickedname);
 		}
+
+		/* allow plugins to use the picked name */
+		WTW.pluginsMouseClickRightAdmin(e, zpickedname);
+		
+		/* WalkTheWeb built-in right mouse click functions */
 		if (zpickedresult.pickedMesh != null) {
 			var zpickedmesh = zpickedresult.pickedMesh;
 			if (dGet('wtw_tmoldname').value != '') {

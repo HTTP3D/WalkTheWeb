@@ -1562,7 +1562,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 			/* confirm mold is in the scene */
 			if (zmold != null) {
 				try {
-					if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1) {
+					if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf("actionzone") > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1) {
 						/* dispose of child objects from imported meshes */
 						var zchildmeshes = zmold.getChildren();
 						if (zchildmeshes != null) {

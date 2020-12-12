@@ -35,7 +35,7 @@ WTWJS.prototype.addActionzoneLoadzone = function(zactionzonename, zactionzoneind
 		zmolddef.actionzoneind = zactionzoneind;
 		/* by default zones do not have collisions - avatars can walk into them */
 		zmolddef.checkcollisions = "0";
-		/* even in admin mode, zones are not pickable in the 3D S, use the menu to select and edit a zone */
+		/* even in admin mode, zones are not pickable in the 3D Scene, use the menu to select and edit a zone */
 		zmolddef.ispickable = "0";
 		WTW.addMoldToQueue(zactionzonename, zmolddef, zmolddef.parentname, zmolddef.covering, null);
 		WTW.actionZones[zactionzoneind].shown = "2";

@@ -874,32 +874,32 @@ WTWJS.prototype.openAddNewMold = function(zwebtype, zshape) {
 		switch (zshape.toLowerCase()) {
 			case "tube":
 				var zcoords = WTW.getNewCoordinates(50);
-				var zpositionX = zcoords.positionX;
-				var zpositionY = zcoords.positionY;
-				var zpositionZ = zcoords.positionZ;
+				var zpositionx = zcoords.positionX;
+				var zpositiony = zcoords.positionY;
+				var zpositionz = zcoords.positionZ;
 				zmolds[zmoldind].paths.path1[0] = WTW.newPathPoint();
-				zmolds[zmoldind].paths.path1[0].x = zpositionX;
-				zmolds[zmoldind].paths.path1[0].y = zpositionY;
-				zmolds[zmoldind].paths.path1[0].z = zpositionZ;
+				zmolds[zmoldind].paths.path1[0].x = zpositionx;
+				zmolds[zmoldind].paths.path1[0].y = zpositiony;
+				zmolds[zmoldind].paths.path1[0].z = zpositionz;
 				zmolds[zmoldind].paths.path1[1] = WTW.newPathPoint();
-				zmolds[zmoldind].paths.path1[1].x = zpositionX;
-				zmolds[zmoldind].paths.path1[1].y = (Number(zpositionY) + 10);
-				zmolds[zmoldind].paths.path1[1].z = zpositionZ;
+				zmolds[zmoldind].paths.path1[1].x = zpositionx;
+				zmolds[zmoldind].paths.path1[1].y = (Number(zpositiony) + 10);
+				zmolds[zmoldind].paths.path1[1].z = zpositionz;
 				zmolds[zmoldind].paths.path1[1].sorder = 1;
 				break;
 			case "line":
 				var zcoords = WTW.getNewCoordinates(50);
-				var zpositionX = zcoords.positionX;
-				var zpositionY = zcoords.positionY;
-				var zpositionZ = zcoords.positionZ;
+				var zpositionx = zcoords.positionX;
+				var zpositiony = zcoords.positionY;
+				var zpositionz = zcoords.positionZ;
 				zmolds[zmoldind].paths.path1[0] = WTW.newPathPoint();
-				zmolds[zmoldind].paths.path1[0].x = zpositionX;
-				zmolds[zmoldind].paths.path1[0].y = zpositionY;
-				zmolds[zmoldind].paths.path1[0].z = zpositionZ;
+				zmolds[zmoldind].paths.path1[0].x = zpositionx;
+				zmolds[zmoldind].paths.path1[0].y = zpositiony;
+				zmolds[zmoldind].paths.path1[0].z = zpositionz;
 				zmolds[zmoldind].paths.path1[1] = WTW.newPathPoint();
-				zmolds[zmoldind].paths.path1[1].x = zpositionX;
-				zmolds[zmoldind].paths.path1[1].y = (Number(zpositionY) + 10);
-				zmolds[zmoldind].paths.path1[1].z = zpositionZ;
+				zmolds[zmoldind].paths.path1[1].x = zpositionx;
+				zmolds[zmoldind].paths.path1[1].y = (Number(zpositiony) + 10);
+				zmolds[zmoldind].paths.path1[1].z = zpositionz;
 				zmolds[zmoldind].paths.path1[1].sorder = 1;
 				break;
 			default:
@@ -2227,8 +2227,8 @@ WTWJS.prototype.createDuplicateShape = function() {
 		var zmoldind = -1;
 		var zmoldid = WTW.getRandomString(16);
 		var zcoords = WTW.getNewCoordinates(50);
-		var zpositionX = zcoords.positionX;
-		var zpositionZ = zcoords.positionZ;
+		var zpositionx = zcoords.positionX;
+		var zpositionz = zcoords.positionZ;
 		switch (zwebtype) {
 			case "community":
 				zmolds = WTW.communitiesMolds;
@@ -2237,8 +2237,8 @@ WTWJS.prototype.createDuplicateShape = function() {
 				zmolds = WTW.buildingMolds;
 				break;
 			case "thing":
-				zpositionX = 0;
-				zpositionZ = 0;
+				zpositionx = 0;
+				zpositionz = 0;
 				zmolds = WTW.thingMolds;
 				break;
 		}
@@ -2249,8 +2249,8 @@ WTWJS.prototype.createDuplicateShape = function() {
 			zmolds[zmoldind].moldind = zmoldind;
 			zmolds[zmoldind].actionzoneid = "";
 			zmolds[zmoldind].actionzoneind = "";
-			zmolds[zmoldind].position.x = zpositionX;
-			zmolds[zmoldind].position.z = zpositionZ;
+			zmolds[zmoldind].position.x = zpositionx;
+			zmolds[zmoldind].position.z = zpositionz;
 			zmolds[zmoldind].moldname = zwebtype + "molds-" + zmoldind + "-" + zmoldid + "-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "-" + zmolds[zmoldind].shape;
 			zmolds[zmoldind].parentname = "connectinggrids-" + dGet('wtw_tconnectinggridind').value + "-" + dGet('wtw_tconnectinggridid').value + "--";
 			zmolds[zmoldind].connectinggridid = dGet('wtw_tconnectinggridid').value;
@@ -2261,8 +2261,8 @@ WTWJS.prototype.createDuplicateShape = function() {
 			dGet('wtw_tmoldid').value = zmoldid;
 			WTW.openMoldForm(zmoldind,zshape,zwebtype,false);
 		}
-		dGet('wtw_tmoldpositionx').value = zpositionX;
-		dGet('wtw_tmoldpositionz').value = zpositionZ;
+		dGet('wtw_tmoldpositionx').value = zpositionx;
+		dGet('wtw_tmoldpositionz').value = zpositionz;
 		dGet('wtw_tmoldactionzoneid').value = "";
 		dGet('wtw_tmoldcsgaction').selectedIndex = 0;
 		dGet('wtw_tmoldcsgmoldid').value = "";
@@ -2449,41 +2449,41 @@ WTWJS.prototype.setCSGCount = function(zcsgmainid) {
 WTWJS.prototype.getNewCoordinates = function(zdist) {
 	/* when a new mold is created, the coordinates use the current position of the avatar (or camera if detatched) */
 	/* and provide new coordinates (and rotation towards the user/camera) at a particular distance in front of the avatar or camera */
-	var zpositionX = 0;
-	var zpositionY = 0;
-	var zpositionZ = 0;
-	var zrotationY = 0.00;
+	var zpositionx = 0;
+	var zpositiony = 0;
+	var zpositionz = 0;
+	var zrotationy = 0.00;
 	try {
 		if (WTW.cameraFocus == 1) {
-			zrotationY = WTW.getDegrees(WTW.myAvatar.rotation.y);
-			zpositionY = Math.round(WTW.myAvatar.position.y);
-			zpositionX = Math.round((WTW.myAvatar.position.x + zdist * Math.cos(WTW.myAvatar.rotation.y)));
-			zpositionZ = Math.round((WTW.myAvatar.position.z - zdist * Math.sin(WTW.myAvatar.rotation.y)));
+			zrotationy = WTW.getDegrees(WTW.myAvatar.rotation.y);
+			zpositiony = Math.round(WTW.myAvatar.position.y);
+			zpositionx = Math.round((WTW.myAvatar.position.x + zdist * Math.cos(WTW.myAvatar.rotation.y)));
+			zpositionz = Math.round((WTW.myAvatar.position.z - zdist * Math.sin(WTW.myAvatar.rotation.y)));
 		} else {
-			zrotationY = WTW.getDegrees(WTW.camera.rotation.y) - 90;
-			var zadjrot = WTW.getRadians(zrotationY);
-			zpositionY = Math.round(WTW.camera.position.y);
-			zpositionX = Math.round((WTW.camera.position.x + zdist * Math.cos(zadjrot)));
-			zpositionZ = Math.round((WTW.camera.position.z - zdist * Math.sin(zadjrot)));
+			zrotationy = WTW.getDegrees(WTW.camera.rotation.y) - 90;
+			var zadjrot = WTW.getRadians(zrotationy);
+			zpositiony = Math.round(WTW.camera.position.y);
+			zpositionx = Math.round((WTW.camera.position.x + zdist * Math.cos(zadjrot)));
+			zpositionz = Math.round((WTW.camera.position.z - zdist * Math.sin(zadjrot)));
 		}
-		zrotationY = WTW.cleanDegrees(zrotationY);
-		if (zrotationY > 135 && zrotationY < 225) {
-			zrotationY = 90.00;
-		} else if (zrotationY >= 225 && zrotationY < 315) {
-			zrotationY = 180.00;
-		} else if ((zrotationY >= 315 && zrotationY <= 360) || (zrotationY >= 0 && zrotationY < 45)) {
-			zrotationY = -90.00;
+		zrotationy = WTW.cleanDegrees(zrotationy);
+		if (zrotationy > 135 && zrotationy < 225) {
+			zrotationy = 90.00;
+		} else if (zrotationy >= 225 && zrotationy < 315) {
+			zrotationy = 180.00;
+		} else if ((zrotationy >= 315 && zrotationy <= 360) || (zrotationy >= 0 && zrotationy < 45)) {
+			zrotationy = -90.00;
 		} else {
-			zrotationY = 0.00;
+			zrotationy = 0.00;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminmolds.js-getNewCoordinates=" + ex.message);
 	}
 	return {
-		positionX : zpositionX.toFixed(2),
-		positionY : zpositionY.toFixed(2),
-		positionZ : zpositionZ.toFixed(2),
-		rotationY : zrotationY
+		positionX : zpositionx.toFixed(2),
+		positionY : zpositiony.toFixed(2),
+		positionZ : zpositionz.toFixed(2),
+		rotationY : zrotationy
 	};
 }
 

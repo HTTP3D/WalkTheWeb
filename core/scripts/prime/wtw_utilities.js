@@ -130,53 +130,54 @@ WTWJS.prototype.getScrollY = function() {
 }
 
 WTWJS.prototype.getMoldnameParts = function(zmoldname) {
-	/* get mold name parts - the name reeals a lot of information about the mold and this breaks down the parts that you may use from it */
+	/* get mold name parts - the name reveals a lot of information about the mold and this breaks down the parts that you may use from it */
 	var zmoldind = -1;
-	var zmoldid = "";
+	var zmoldid = '';
 	var zcgind = -1;
-	var zcgid = "";
-	var zcommunityid = "";
-	var zbuildingid = "";
-	var zthingid = "";
-	var zwebtype = "building";
+	var zcgid = '';
+	var zcommunityid = '';
+	var zbuildingid = '';
+	var zthingid = '';
+	var zwebid = '';
+	var zwebtype = 'building';
 	var zmolds = [];
 	var znamepart = [];
-	var zavatarpart = "";
-	var zshape = "";
-	var zinstanceid = "";
-	var zloadactionzoneid = "";
-	var zactionzoneid = "";
-	var zcoveringname = "";
-	var zmoldnamebase = "";
-	var zparentname = "";
+	var zavatarpart = '';
+	var zshape = '';
+	var zinstanceid = '';
+	var zloadactionzoneid = '';
+	var zactionzoneid = '';
+	var zcoveringname = '';
+	var zmoldnamebase = '';
+	var zparentname = '';
 	try {
 		if (zmoldname == undefined) {
 			zmoldname = dGet('wtw_tmoldname').value;
 		}
-		if (zmoldname.indexOf("-") > -1) {
+		if (zmoldname.indexOf('-') > -1) {
 			znamepart = zmoldname.split('-');
 			if (znamepart[0] != null) {
 				if (znamepart[0].indexOf('molds') > -1) {
-					zwebtype = znamepart[0].replace("molds","");
+					zwebtype = znamepart[0].replace('molds','');
 					switch (zwebtype) {
-						case "community":
+						case 'community':
 							zmolds = WTW.communitiesMolds;
 							break;
-						case "building":
+						case 'building':
 							zmolds = WTW.buildingMolds;
 							break;
-						case "thing":
+						case 'thing':
 							zmolds = WTW.thingMolds;
 							break;
 					}
 				} else if (znamepart[0].indexOf('actionzone') > -1) {
-					zwebtype = "actionzone";
+					zwebtype = 'actionzone';
 					zmolds = WTW.actionZones;
 				} else if (znamepart[0].indexOf('connectinggrid') > -1) {
-					zwebtype = "connectinggrid";
+					zwebtype = 'connectinggrid';
 					zmolds = WTW.connectingGrids;
 				} else if (znamepart[0].indexOf('myavatar') > -1 || znamepart[0].indexOf('person') > -1) {
-					zwebtype = "avatars";
+					zwebtype = 'avatars';
 				}
 			}
 			if (znamepart[1] != null) {
@@ -206,17 +207,27 @@ WTWJS.prototype.getMoldnameParts = function(zmoldname) {
 			if (znamepart[5] != null) {
 				zshape = znamepart[5];
 			}
-			zmoldnamebase = znamepart[0] + "-" + znamepart[1] + "-" + znamepart[2] + "-" + znamepart[3] + "-";
+			zmoldnamebase = znamepart[0] + '-' + znamepart[1] + '-' + znamepart[2] + '-' + znamepart[3] + '-';
 			if (zmolds[zmoldind] != null) {
 				if (zmolds[zmoldind].communityinfo.communityid != undefined) {
 					zcommunityid = zmolds[zmoldind].communityinfo.communityid;
+					if (zcommunityid != '') {
+						zwebid = zcommunityid;
+					}
 				}
 				if (zmolds[zmoldind].buildinginfo.buildingid != undefined) {
 					zbuildingid = zmolds[zmoldind].buildinginfo.buildingid;
+					if (zbuildingid != '') {
+						zwebid = zbuildingid;
+					}
 				}
 				if (zmolds[zmoldind].thinginfo.thingid != undefined) {
 					zthingid = zmolds[zmoldind].thinginfo.thingid;
+					if (zthingid != '') {
+						zwebid = zthingid;
+					}
 				}
+
 				zloadactionzoneid = zmolds[zmoldind].loadactionzoneid;
 				zactionzoneid = zmolds[zmoldind].actionzoneid;
 				zcoveringname = zmolds[zmoldind].covering;
@@ -242,6 +253,7 @@ WTWJS.prototype.getMoldnameParts = function(zmoldname) {
 		'buildingid':zbuildingid,
 		'thingid':zthingid,
 		'instanceid':zinstanceid,
+		'webid':zwebid,
 		'webtype':zwebtype,
 		'molds':zmolds,
 		'shape':zshape,

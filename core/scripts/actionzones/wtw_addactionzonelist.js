@@ -9,24 +9,24 @@ WTWJS.prototype.getActionZoneList = function() {
 	var zactionzonelist = null;
 	zactionzonelist = [];
 	try {
-		zactionzonelist[zactionzonelist.length] = {"name":"Load Zone","helpurl":"https://www.walktheweb.com/wiki/load-zone-action-zones/"};
-		zactionzonelist[zactionzonelist.length] = {"name":"Sliding Door","helpurl":"https://www.walktheweb.com/wiki/sliding-doors-action-zones/"};
-		zactionzonelist[zactionzonelist.length] = {"name":"Swinging Door","helpurl":"https://www.walktheweb.com/wiki/swinging-doors-action-zone/"};
-		zactionzonelist[zactionzonelist.length] = {"name":"Click Activated Sliding Door","helpurl":""};
-		zactionzonelist[zactionzonelist.length] = {"name":"Rotate","helpurl":""};
-		zactionzonelist[zactionzonelist.length] = {"name":"Load Animations","helpurl":""};
-		zactionzonelist[zactionzonelist.length] = {"name":"Ride Along","helpurl":""};
+		zactionzonelist[zactionzonelist.length] = {"name":"Load Zone","helpurl":"https://www.walktheweb.com/wiki/load-zone-action-zones/", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Sliding Door","helpurl":"https://www.walktheweb.com/wiki/sliding-doors-action-zones/", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Swinging Door","helpurl":"https://www.walktheweb.com/wiki/swinging-doors-action-zone/", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Click Activated Sliding Door","helpurl":"", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Rotate","helpurl":"", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Load Animations","helpurl":"", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Ride Along","helpurl":"", "defaulteditform":"0"};
 /* the following are works in progress and conceptual ideas */
-/*		zactionzonelist[zactionzonelist.length] = {"name":"Seat","helpurl":""}; */
+/*		zactionzonelist[zactionzonelist.length] = {"name":"Seat","helpurl":"", "defaulteditform":"0"}; */
 		/* currently in testing or under development */
-/*		zactionzonelist[zactionzonelist.length] = {"name":"Mirror","helpurl":""}; 
-		zactionzonelist[zactionzonelist.length] = {"name":"Elevator","helpurl":""};
-		zactionzonelist[zactionzonelist.length] = {"name":"People Mover","helpurl":""};
-		zactionzonelist[zactionzonelist.length] = {"name":"Passenger Seat","helpurl":""};
-		zactionzonelist[zactionzonelist.length] = {"name":"Driver Seat","helpurl":""};
-		zactionzonelist[zactionzonelist.length] = {"name":"Driver Turn Angle","helpurl":""};
-		zactionzonelist[zactionzonelist.length] = {"name":"Driver Turning Wheel","helpurl":""};
-		zactionzonelist[zactionzonelist.length] = {"name":"Driver Wheel","helpurl":""}; */
+/*		zactionzonelist[zactionzonelist.length] = {"name":"Mirror","helpurl":"", "defaulteditform":"0"}; 
+		zactionzonelist[zactionzonelist.length] = {"name":"Elevator","helpurl":"", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"People Mover","helpurl":"", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Passenger Seat","helpurl":"", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Driver Seat","helpurl":"", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Driver Turn Angle","helpurl":"", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Driver Turning Wheel","helpurl":"", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Driver Wheel","helpurl":"", "defaulteditform":"0"}; */
 		zactionzonelist = WTW.pluginsActionZones(zactionzonelist);
 		/* clear drop down list before reloading */
 		WTW.clearDDL('wtw_tactionzonetypelist');
@@ -34,19 +34,24 @@ WTWJS.prototype.getActionZoneList = function() {
 		dGet("wtw_actionzonesbuttonlist").innerHTML = "";
 		for (var i=0;i < zactionzonelist.length;i++) {
 			if (zactionzonelist[i] != null) {
-				var zactionzonevalue = zactionzonelist[i].name.toLowerCase();
-				while (zactionzonevalue.indexOf(" ") > -1) {
-					zactionzonevalue = zactionzonevalue.replace(" ","");
+				if (zactionzonelist[i].defaulteditform == undefined) {
+					zactionzonelist[i].defaulteditform = "0";
 				}
-				if (zactionzonelist[i].helpurl != "") {
-					dGet("wtw_actionzonesbuttonlist").innerHTML += "<a href=\"" + zactionzonelist[i].helpurl + "\" title=\"Help\" alt=\"Help\" class=\"wtw-helplink\" target=\"_blank\" onclick=\"WTW.blockPassThrough();\">?</a>";
+				if (zactionzonelist[i].defaulteditform == "0") {
+					var zactionzonevalue = zactionzonelist[i].name.toLowerCase();
+					while (zactionzonevalue.indexOf(" ") > -1) {
+						zactionzonevalue = zactionzonevalue.replace(" ","");
+					}
+					if (zactionzonelist[i].helpurl != "") {
+						dGet("wtw_actionzonesbuttonlist").innerHTML += "<a href=\"" + zactionzonelist[i].helpurl + "\" title=\"Help\" alt=\"Help\" class=\"wtw-helplink\" target=\"_blank\" onclick=\"WTW.blockPassThrough();\">?</a>";
+					}
+					dGet("wtw_actionzonesbuttonlist").innerHTML += "<div id=\"wtw_baddzones" + zactionzonevalue + "\" name=\"wtw_baddzones" + zactionzonevalue + "\" onclick=\"WTW.openActionZoneForm('" + zactionzonevalue + "');\" style='cursor: pointer;' class='wtw-menulevel2'>" + zactionzonelist[i].name + "</div>\r\n";
+					/* option for drop down list */
+					var zoption = document.createElement("option");
+					zoption.text = zactionzonelist[i].name;
+					zoption.value = zactionzonevalue;
+					dGet('wtw_tactionzonetypelist').add(zoption);
 				}
-				dGet("wtw_actionzonesbuttonlist").innerHTML += "<div id=\"wtw_baddzones" + zactionzonevalue + "\" name=\"wtw_baddzones" + zactionzonevalue + "\" onclick=\"WTW.openActionZoneForm('" + zactionzonevalue + "');\" style='cursor: pointer;' class='wtw-menulevel2'>" + zactionzonelist[i].name + "</div>\r\n";
-				/* option for drop down list */
-				var zoption = document.createElement("option");
-				zoption.text = zactionzonelist[i].name;
-				zoption.value = zactionzonevalue;
-				dGet('wtw_tactionzonetypelist').add(zoption);
 			}
 		}		
 		
@@ -228,6 +233,9 @@ WTWJS.prototype.setNewActionZoneDefaults = function(zactionzonetype) {
 		dGet('wtw_tactionzonejsfunction').value = "";
 		dGet('wtw_tactionzonejsparameters').value = "";
 		dGet('wtw_tactionzonerotatespeed').value = "0.00";
+		dGet('wtw_tactionzonevalue1').value = "0.00";
+		dGet('wtw_tactionzonevalue2').value = "0.00";
+		dGet('wtw_tactionzonedefaulteditform').value = "0";
 		dGet('wtw_tcopyaxletoactionzone').checked = true;
 		switch (zactionzonetype) {
 			case "loadzone":

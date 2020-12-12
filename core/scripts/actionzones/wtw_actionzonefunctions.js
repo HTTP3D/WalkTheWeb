@@ -12,90 +12,92 @@ WTWJS.prototype.checkActionZones = function() {
 			if (WTW.actionZones[i] != null) {
 				var zmoldname = WTW.actionZones[i].moldname;
 				var zactionzone = scene.getMeshByID(zmoldname);
-				if (zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].shown != "2") {
-					WTW.actionZones[i].status = 0;
-				} else if (zactionzone != null) {
-					var zmeinzone = false;
-					if (WTW.myAvatar != null) {
-						zmeinzone = WTW.myAvatar.intersectsMesh(zactionzone, false);
-					}
-					var zothersinzone = false;
-					/* check if others are in the zone */
-					
-					zothersinzone = WTW.pluginsCheckActionZoneTrigger(zactionzone);
-					if (zmeinzone || zothersinzone) {
-						if (zmeinzone && zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 2) {
-							/* my avatar in load zone - triggers loading of molds */
-							if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
-								if (WTW.actionZones[i].status == 0) {
-									WTW.addLoadZoneToQueue(i);
-								}
-							}
-							/* loads JavaScripts specifically for action zone */
-							WTW.checkLoadScripts(i);
-							try {
-								/* trigger a pageview in analytics if set */
-								WTW.checkAnalytics(i);
-							} catch (ex) {}
-							/* status 2 means loaded */
-							WTW.actionZones[i].status = 2;
-						} else if (zmeinzone == false && zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {
-							if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
-								/* if avatar left zone, unload zone */
-								if (WTW.actionZones[i].status == 2) {
-									WTW.addUnloadZoneToQueue(i);
-								}
-							}
-							/* status 0 means unloaded */
-							WTW.actionZones[i].status = 0;
-						} else if (zmoldname.indexOf("loadanimations") > -1) {
-							/* when in zone, see if there are animations defined to load */
-							WTW.checkLoadAnimations(i);
-						} else if (zmoldname.indexOf("clickactivated") > -1) {
-							/* action zone for click activated items (not in use yet) */
-						} else if (zmoldname.indexOf("door") > -1 && WTW.actionZones[i].status != 4 && WTW.actionZones[i].status != 3) {
-							/* status 3 means opening door - status 4 means door is fully open */
-							WTW.actionZones[i].status = 3;
-						} else if (zmoldname.indexOf("mirror") > -1 && WTW.actionZones[i].status != 2) {
-							/* mirror zone loads objects into the mirror reflection */
-							WTW.actionZones[i].status = 2;
-							WTW.checkMirrorReflectionList(i);
-						} else if (zmeinzone && zmoldname.indexOf("ridealong") > -1) {
-							/* when in ride along zone, set the avatar parent to zone parent to move with the parent and recalculate relative position */
-							WTW.checkRideAlongZone(zactionzone, i, zmeinzone, zothersinzone);
+				if (zmoldname != undefined) {
+					if (zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].shown != "2") {
+						WTW.actionZones[i].status = 0;
+					} else if (zactionzone != null) {
+						var zmeinzone = false;
+						if (WTW.myAvatar != null) {
+							zmeinzone = WTW.myAvatar.intersectsMesh(zactionzone, false);
 						}
-					} else {
-						if (zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {
-							/* if avatar is not in the load zone, unload molds identified by that zone */
-							if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
-								/* if avatar is not in parent zone, unload the zone itself */
-								if (WTW.actionZones[i].status == 2) {
-									WTW.addUnloadZoneToQueue(i);
+						var zothersinzone = false;
+						/* check if others are in the zone */
+						
+						zothersinzone = WTW.pluginsCheckActionZoneTrigger(zactionzone);
+						if (zmeinzone || zothersinzone) {
+							if (zmeinzone && zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 2) {
+								/* my avatar in load zone - triggers loading of molds */
+								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
+									if (WTW.actionZones[i].status == 0) {
+										WTW.addLoadZoneToQueue(i);
+									}
 								}
+								/* loads JavaScripts specifically for action zone */
+								WTW.checkLoadScripts(i);
+								try {
+									/* trigger a pageview in analytics if set */
+									WTW.checkAnalytics(i);
+								} catch (ex) {}
+								/* status 2 means loaded */
+								WTW.actionZones[i].status = 2;
+							} else if (zmeinzone == false && zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {
+								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
+									/* if avatar left zone, unload zone */
+									if (WTW.actionZones[i].status == 2) {
+										WTW.addUnloadZoneToQueue(i);
+									}
+								}
+								/* status 0 means unloaded */
+								WTW.actionZones[i].status = 0;
+							} else if (zmoldname.indexOf("loadanimations") > -1) {
+								/* when in zone, see if there are animations defined to load */
+								WTW.checkLoadAnimations(i);
+							} else if (zmoldname.indexOf("clickactivated") > -1) {
+								/* action zone for click activated items (not in use yet) */
+							} else if (zmoldname.indexOf("door") > -1 && WTW.actionZones[i].status != 4 && WTW.actionZones[i].status != 3) {
+								/* status 3 means opening door - status 4 means door is fully open */
+								WTW.actionZones[i].status = 3;
+							} else if (zmoldname.indexOf("mirror") > -1 && WTW.actionZones[i].status != 2) {
+								/* mirror zone loads objects into the mirror reflection */
+								WTW.actionZones[i].status = 2;
+								WTW.checkMirrorReflectionList(i);
+							} else if (zmeinzone && zmoldname.indexOf("ridealong") > -1) {
+								/* when in ride along zone, set the avatar parent to zone parent to move with the parent and recalculate relative position */
+								WTW.checkRideAlongZone(zactionzone, i, zmeinzone, zothersinzone);
 							}
-							/* if there were JavaScripts loaded with the zone, unload them */
-							WTW.checkUnloadScripts(i);
-							/* status 0 means not in zone */
-							WTW.actionZones[i].status = 0;
-						} else if (zmoldname.indexOf("clickactivated") > -1) {
-							/* action zone for click activated items (not in use yet) */
-						} else if (zmoldname.indexOf("door") > -1 && WTW.actionZones[i].status != 2 && WTW.actionZones[i].status != 1 && WTW.actionZones[i].status != 0) {
-							/* door status 2 means closing door, status 0 means door closed */
-							WTW.actionZones[i].status = 2;
-						} else if (zmoldname.indexOf("mirror") > -1 && WTW.actionZones[i].status != 2) {
-							/* mirror status 0 means not in zone, unload reflection list */
-							WTW.actionZones[i].status = 0;
-							WTW.checkMirrorReflectionList(i);
-						} else if (zmeinzone == false && zmoldname.indexOf("ridealong") > -1) {
-							/* when avatar returns from ride along zone, set the avatar parent to scene parent and recalculate position */
-							WTW.checkRideAlongZone(zactionzone, i, zmeinzone, zothersinzone);
+						} else {
+							if (zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {
+								/* if avatar is not in the load zone, unload molds identified by that zone */
+								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
+									/* if avatar is not in parent zone, unload the zone itself */
+									if (WTW.actionZones[i].status == 2) {
+										WTW.addUnloadZoneToQueue(i);
+									}
+								}
+								/* if there were JavaScripts loaded with the zone, unload them */
+								WTW.checkUnloadScripts(i);
+								/* status 0 means not in zone */
+								WTW.actionZones[i].status = 0;
+							} else if (zmoldname.indexOf("clickactivated") > -1) {
+								/* action zone for click activated items (not in use yet) */
+							} else if (zmoldname.indexOf("door") > -1 && WTW.actionZones[i].status != 2 && WTW.actionZones[i].status != 1 && WTW.actionZones[i].status != 0) {
+								/* door status 2 means closing door, status 0 means door closed */
+								WTW.actionZones[i].status = 2;
+							} else if (zmoldname.indexOf("mirror") > -1 && WTW.actionZones[i].status != 2) {
+								/* mirror status 0 means not in zone, unload reflection list */
+								WTW.actionZones[i].status = 0;
+								WTW.checkMirrorReflectionList(i);
+							} else if (zmeinzone == false && zmoldname.indexOf("ridealong") > -1) {
+								/* when avatar returns from ride along zone, set the avatar parent to scene parent and recalculate position */
+								WTW.checkRideAlongZone(zactionzone, i, zmeinzone, zothersinzone);
+							}
 						}
+						/* allow hooks for plugins to add code on check zone (mostly for custom zones or to add functions to an existing zone) */
+						WTW.pluginsCheckActionZone(zmoldname, i, zmeinzone, zothersinzone);
+					} else if (zmoldname.indexOf("loadzone") > -1) {
+						/* if loadzone not otherwise defined, set status to avaatr not in zone */
+						WTW.actionZones[i].status = 0;
 					}
-					/* allow hooks for plugins to add code on check zone (mostly for custom zones or to add functions to an existing zone) */
-					WTW.pluginsCheckActionZone(zmoldname, i, zmeinzone, zothersinzone);
-				} else if (zmoldname.indexOf("loadzone") > -1) {
-					/* if loadzone not otherwise defined, set status to avaatr not in zone */
-					WTW.actionZones[i].status = 0;
 				}
 			}
 		}
@@ -180,14 +182,12 @@ WTWJS.prototype.checkRideAlongZone = function(zactionzone, zactionzoneind, zmein
 			zactionzoneparentname = zactionzone.parent.id;
 		}
 		if (zmeinzone && zavatarparentname != zactionzoneparentname) {
-WTW.log("add parent");
 			WTW.myAvatar.position.x -= zactionzone.parent.position.x;
 			WTW.myAvatar.position.y -= zactionzone.parent.position.y;
 			WTW.myAvatar.position.z -= zactionzone.parent.position.z;
 			WTW.myAvatar.parent = zactionzone.parent;
 			
 		} else if (zmeinzone == false && zavatarparentname == zactionzoneparentname) {
-WTW.log("remove parent");
 			WTW.myAvatar.position.x += zactionzone.parent.position.x;
 			WTW.myAvatar.position.y += zactionzone.parent.position.y;
 			WTW.myAvatar.position.z += zactionzone.parent.position.z;
