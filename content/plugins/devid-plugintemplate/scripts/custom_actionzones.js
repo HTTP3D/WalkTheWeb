@@ -3,7 +3,7 @@ DEVID_PLUGINTEMPLATE.prototype.addActionZoneMyCustomZone = function(zactionzonen
 	try {
 		/* each custom Action Zone will have a separate function */
 		/* example is a Load Zone (but not built from queue) */
-		zactionzone = scene.getMeshById(zactionzonename);
+		zactionzone = scene.getMeshByID(zactionzonename);
 		if (zactionzone == null) {
 			/* WTW.newMold() provides a basic shape definition object */
 			let zmolddef = WTW.newMold();

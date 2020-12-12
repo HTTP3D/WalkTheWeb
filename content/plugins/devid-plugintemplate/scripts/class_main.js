@@ -26,9 +26,9 @@ DEVID_PLUGINTEMPLATE.prototype.onClick = function(zpickedname) {
           zmoldnameparts.moldid is the unique ID of the mold (database table key value reference)
           zmoldnameparts.cgind is the connecting grid index number (WTW.connectingGrids[zmoldnameparts.cgind] gives you the 3D Object definition)
           zmoldnameparts.cgid is the unique ID of the Connecting Grid (database table key value reference)
-          zmoldnameparts.communityid is the unique ID for the 3D Community related to this 3D Object (only has a value when is a WTW.communityMolds).
-          zmoldnameparts.buildingid is the unique ID for the 3D Building related to this 3D Object (only has a value when is a WTW.buildingMolds).
-          zmoldnameparts.thingid is the unique ID for the 3D Thing related to this 3D Object (only has a value when is a WTW.thingMolds).
+          zmoldnameparts.communityid is the unique ID for the 3D Community related to this 3D Object (only has a value when it is a WTW.communityMolds).
+          zmoldnameparts.buildingid is the unique ID for the 3D Building related to this 3D Object (only has a value when it is a WTW.buildingMolds).
+          zmoldnameparts.thingid is the unique ID for the 3D Thing related to this 3D Object (only has a value when it is a WTW.thingMolds).
           zmoldnameparts.moldgroup identifies what kind of 3D object it is; building, community, or thing.
           zmoldnameparts.molds is the Array for the Mold; WTW.communityMolds, WTW.buildingMolds, or WTW.thingMolds.
           zmoldnameparts.shape is the Mold shape which identifies the function used to create the Mold (mesh).

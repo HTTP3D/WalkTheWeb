@@ -131,7 +131,7 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("avatarbeforecreate", "wtw3dinternet.showAvatarIDs(zavatarname, zavatardef);");
 			$wtwplugins->addScriptFunction("checkactionzonetrigger", "wtw3dinternet.multiPersonInActionZone(zactionzone);");
 
-			$wtwplugins->addScriptFunction("pluginsloadusersettingsafterengine", "wtw3dinternet.loadUserSettingsAfterEngine();"); 
+			$wtwplugins->addScriptFunction("loadusersettingsafterengine", "wtw3dinternet.loadUserSettingsAfterEngine();"); 
 
 			$wtwplugins->addScriptFunction("loadloginsettings", "wtw3dinternet.loadLoginSettings(zloaddefault);");
 

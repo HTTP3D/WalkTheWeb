@@ -11,10 +11,14 @@
 /*		devidplugintemplate */
 /*		devid-plugintemplate */
 
-/* for more information about 3D plugins and the latest updates, see: */
-/* https://www.walktheweb.com/wiki/3d-plugin-template/ */
-/* WalkTheWeb uses BabylonJS.com game engine */
-/* https://doc.babylonjs.com/babylon101/ */
+/* For more information about 3D plugins and the latest updates, see: 	*/
+/* https://www.walktheweb.com/wiki/3d-plugin-template/ 					*/
+/*																		*/
+/* Download the 3D Plugin Template at: 									*/
+/* https://github.com/HTTP3D/3DPluginTemplate 							*/
+/*																		*/
+/* WalkTheWeb uses BabylonJS.com game engine 							*/
+/* https://doc.babylonjs.com/start 										*/
 
 global $wtwplugins;
 

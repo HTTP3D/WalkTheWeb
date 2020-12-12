@@ -1,13 +1,13 @@
 /* avatar designer scripts - works menus and avatar settings */
 /* global values used for the avatar designer only (page loads as iframe) */
 var scene, canvas, engine, camera, gui;
-var avatarSelector, leftMenu, rightMenu, rightMenuLower, colorMenu, colorpicker, activeinput, loadingtext, loadingtimer, activeMenu;
-var runningevent = '';
-var lasteditavatarid = '';
-var editmode = false;
-var baseanimationframes = 0;
-var showglobal = true;
-var avatardef = null;
+var wtw_avatarselector, wtw_leftmenu, wtw_rightmenu, wtw_rightmenulower, wtw_colormenu, wtw_colorpicker, wtw_activeinput, wtw_loadingtext, wtw_loadingtimer, wtw_activemenu;
+var wtw_runningevent = '';
+var wtw_lasteditavatarid = '';
+var wtw_editmode = false;
+var wtw_baseanimationframes = 0;
+var wtw_showglobal = true;
+var wtw_avatardef = null;
 
 WTWJS.prototype.createScene = function() {
 	/* create the avatar designer scene - lighting designed to match the default WalkTheWeb scene */
@@ -15,17 +15,17 @@ WTWJS.prototype.createScene = function() {
 		console.log("%c\r\n\r\nWalkTheWeb 3D Avatar Designer\r\nHTTP3D Inc. (v1.0.0) 04-17-2020", "color:green;font-weight:bold;");
 		if (BABYLON.Engine.isSupported()) {
 			WTW.loadAnimations();
-			var instanceid = WTW.getCookie("instanceid");
-			if (dGet('wtw_tinstanceid').value == '' && instanceid != null) {
-				if (instanceid.length == 24) {
-					dGet('wtw_tinstanceid').value = instanceid;
+			var zinstanceid = WTW.getCookie("instanceid");
+			if (dGet('wtw_tinstanceid').value == '' && zinstanceid != null) {
+				if (zinstanceid.length == 24) {
+					dGet('wtw_tinstanceid').value = zinstanceid;
 				}
 			}
 			if (dGet('wtw_tinstanceid').value.length != 24) {
-				instanceid = WTW.getRandomString(24);
-				dGet('wtw_tinstanceid').value = instanceid;
+				zinstanceid = WTW.getRandomString(24);
+				dGet('wtw_tinstanceid').value = zinstanceid;
 			}
-			WTW.setCookie("instanceid", instanceid, 365);
+			WTW.setCookie("instanceid", zinstanceid, 365);
 			scene = new BABYLON.Scene(engine);
 			scene.autoClear = false;
 			scene.autoClearDepthAndStencil = false;
@@ -54,9 +54,9 @@ WTWJS.prototype.createScene = function() {
 			zsetupparent.material.alpha = 0;
 			zsetupparent.position.y = -5;
 			
-			var bgsphere = BABYLON.MeshBuilder.CreateSphere("bgsphere", {segments: 16, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
-			bgsphere.scaling = new BABYLON.Vector3(600, 600, 600); 
-			bgsphere.isPickable = false;
+			var zbgsphere = BABYLON.MeshBuilder.CreateSphere("bgsphere", {segments: 16, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
+			zbgsphere.scaling = new BABYLON.Vector3(600, 600, 600); 
+			zbgsphere.isPickable = false;
 
 			WTW.mouseOver = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, WTW.mouseOverMold);
 			WTW.mouseOut = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, WTW.mouseOutMold);
@@ -102,110 +102,110 @@ WTWJS.prototype.loadLeftMenu = function(zactive) {
 			zactive = 1;
 		}
 		WTW.closeMenu();
-		if (zactive != 3 && runningevent != '' && WTW.myAvatar.WTW.animations.running[runningevent] != undefined) {
-			WTW.myAvatar.WTW.animations.running[runningevent].weight = 0;
+		if (zactive != 3 && wtw_runningevent != '' && WTW.myAvatar.WTW.animations.running[wtw_runningevent] != undefined) {
+			WTW.myAvatar.WTW.animations.running[wtw_runningevent].weight = 0;
 			WTW.myAvatar.WTW.animations.running['onwait'].weight = 1;
-			runningevent = '';
+			wtw_runningevent = '';
 			dGet('wtw_tavataranimationevent').value = '';
 			dGet('wtw_tanimationfriendlyname').value = '';
 			dGet('wtw_tanimationind').value = '';
 		}
 		dGet('wtw_activemenu').value = zactive;
-		leftMenu = new BABYLON.GUI.Grid();
-		leftMenu.width = "330px";
-		leftMenu.height = "450px";
-		leftMenu.leftInPixels = 20;
-		leftMenu.addColumnDefinition(1);
-		leftMenu.addRowDefinition(1/5);
-		leftMenu.addRowDefinition(1/5);
-		leftMenu.addRowDefinition(1/5);
-		leftMenu.addRowDefinition(1/5);
-		leftMenu.addRowDefinition(1/5);
-		leftMenu.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-		leftMenu.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-		gui.addControl(leftMenu);
+		wtw_leftmenu = new BABYLON.GUI.Grid();
+		wtw_leftmenu.width = "330px";
+		wtw_leftmenu.height = "450px";
+		wtw_leftmenu.leftInPixels = 20;
+		wtw_leftmenu.addColumnDefinition(1);
+		wtw_leftmenu.addRowDefinition(1/5);
+		wtw_leftmenu.addRowDefinition(1/5);
+		wtw_leftmenu.addRowDefinition(1/5);
+		wtw_leftmenu.addRowDefinition(1/5);
+		wtw_leftmenu.addRowDefinition(1/5);
+		wtw_leftmenu.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+		wtw_leftmenu.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+		gui.addControl(wtw_leftmenu);
 		
 		/* select my avatar button */
-		var button0 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("selectavatar-button", 'Select My Avatar', 'image');
-		button0.width = "330px";
-		button0.height = "60px";
+		var zbutton0 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("selectavatar-button", 'Select My Avatar', 'image');
+		zbutton0.width = "330px";
+		zbutton0.height = "60px";
 		if (zactive  == 0) {
 			/* set active button blue with yellow text */
-			button0.color = "yellow";
-			button0.background = "blue";
+			zbutton0.color = "yellow";
+			zbutton0.background = "blue";
 			if (dGet('wtw_tavatarid').value == "") {
-				button0.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(0);});
+				zbutton0.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(0);});
 			} else {
-				button0.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
+				zbutton0.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
 			}
 		} else {
-			button0.color = "white";
-			button0.background = "green";
-			button0.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(0);});
+			zbutton0.color = "white";
+			zbutton0.background = "green";
+			zbutton0.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(0);});
 		}
-		leftMenu.addControl(button0, 1, 0);
+		wtw_leftmenu.addControl(zbutton0, 1, 0);
 		
 		if (dGet('wtw_tavatarid').value != "") {
 			/* avatar profile button */
-			var button1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarprofile-button", 'Avatar Profile', 'image');
-			button1.width = "330px";
-			button1.height = "60px";
+			var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarprofile-button", 'Avatar Profile', 'image');
+			zbutton1.width = "330px";
+			zbutton1.height = "60px";
 			if (zactive  == 1) {
 				/* set active button blue with yellow text */
-				button1.color = "yellow";
-				button1.background = "blue";
+				zbutton1.color = "yellow";
+				zbutton1.background = "blue";
 			} else {
-				button1.color = "white";
-				button1.background = "green";
+				zbutton1.color = "white";
+				zbutton1.background = "green";
 			}
-			button1.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
-			leftMenu.addControl(button1, 0, 0);
+			zbutton1.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
+			wtw_leftmenu.addControl(zbutton1, 0, 0);
 
 			/* avatar colors button */
-			var button2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarcolors-button", 'Avatar Colors', 'image');
-			button2.width = "330px";
-			button2.height = "60px";
+			var zbutton2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarcolors-button", 'Avatar Colors', 'image');
+			zbutton2.width = "330px";
+			zbutton2.height = "60px";
 			if (zactive  == 2) {
 				/* set active button blue with yellow text */
-				button2.color = "yellow";
-				button2.background = "blue";
-				button2.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
+				zbutton2.color = "yellow";
+				zbutton2.background = "blue";
+				zbutton2.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
 			} else {
-				button2.color = "white";
-				button2.background = "green";
-				button2.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(2);});
+				zbutton2.color = "white";
+				zbutton2.background = "green";
+				zbutton2.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(2);});
 			}
-			leftMenu.addControl(button2, 2, 0);
+			wtw_leftmenu.addControl(zbutton2, 2, 0);
 
 			/* avatar animations button */
-			var button3 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avataranimations-button", 'Avatar Animations', 'image');
-			button3.width = "330px";
-			button3.height = "60px";
+			var zbutton3 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avataranimations-button", 'Avatar Animations', 'image');
+			zbutton3.width = "330px";
+			zbutton3.height = "60px";
 			if (zactive  == 3) {
 				/* set active button blue with yellow text */
-				button3.color = "yellow";
-				button3.background = "blue";
-				button3.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
+				zbutton3.color = "yellow";
+				zbutton3.background = "blue";
+				zbutton3.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
 			} else {
-				button3.color = "white";
-				button3.background = "green";
-				button3.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(3);});
+				zbutton3.color = "white";
+				zbutton3.background = "green";
+				zbutton3.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(3);});
 			}
-			leftMenu.addControl(button3, 3, 0);
+			wtw_leftmenu.addControl(zbutton3, 3, 0);
 
 			/* save and continue button */
-			var button4 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("save-button", 'Save and Continue', 'image');
-			button4.width = "330px";
-			button4.height = "60px";
+			var zbutton4 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("save-button", 'Save and Continue', 'image');
+			zbutton4.width = "330px";
+			zbutton4.height = "60px";
 			if (zactive  == 4) {
-				button4.color = "yellow";
-				button4.background = "blue";
+				zbutton4.color = "yellow";
+				zbutton4.background = "blue";
 			} else {
-				button4.color = "white";
-				button4.background = "green";
+				zbutton4.color = "white";
+				zbutton4.background = "green";
 			}
-			button4.onPointerClickObservable.add(function(ev, state) {WTW.saveMyAvatar();WTW.loadLeftMenu(4);});
-			leftMenu.addControl(button4, 4, 0);
+			zbutton4.onPointerClickObservable.add(function(ev, state) {WTW.saveMyAvatar();WTW.loadLeftMenu(4);});
+			wtw_leftmenu.addControl(zbutton4, 4, 0);
 		}
 		WTW.loadRightMenu(zactive);
 	} catch (ex) {
@@ -219,155 +219,155 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 		if (zactive == undefined) {
 			zactive = -1;
 		}
-		activeMenu = zactive;
-		if (rightMenu != null) {
-			rightMenu.dispose();
-			rightMenu = null;
-			if (loadingtimer != null) {
-				window.clearTimeout(loadingtimer);
-				loadingtimer = null;
+		wtw_activemenu = zactive;
+		if (wtw_rightmenu != null) {
+			wtw_rightmenu.dispose();
+			wtw_rightmenu = null;
+			if (wtw_loadingtimer != null) {
+				window.clearTimeout(wtw_loadingtimer);
+				wtw_loadingtimer = null;
 			}
 		}
-		rightMenu = new BABYLON.GUI.Grid();
-		rightMenu.rightInPixels = 20;
-		rightMenu.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-		rightMenu.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+		wtw_rightmenu = new BABYLON.GUI.Grid();
+		wtw_rightmenu.rightInPixels = 20;
+		wtw_rightmenu.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+		wtw_rightmenu.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 	
 		switch (zactive) {
 			case 0:   /* select avatar options */
-				rightMenu.width = "330px";
-				rightMenu.height = "200px";
+				wtw_rightmenu.width = "330px";
+				wtw_rightmenu.height = "200px";
 				WTW.chooseAvatar();
 				break;
 			case 1:   /* select avatar profile settings */
 				if (dGet('wtw_tavatarid').value != "") {
-					rightMenu.width = "330px";
-					rightMenu.height = "400px";
-					rightMenu.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-					rightMenu.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-					rightMenu.addColumnDefinition(1);
-					rightMenu.addRowDefinition(1/8);
-					rightMenu.addRowDefinition(1/8);
-					rightMenu.addRowDefinition(1/8);
-					rightMenu.addRowDefinition(1/8);
-					rightMenu.addRowDefinition(1/8);
-					rightMenu.addRowDefinition(1/8);
-					rightMenu.addRowDefinition(1/8);
-					rightMenu.addRowDefinition(1/8);
+					wtw_rightmenu.width = "330px";
+					wtw_rightmenu.height = "400px";
+					wtw_rightmenu.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+					wtw_rightmenu.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+					wtw_rightmenu.addColumnDefinition(1);
+					wtw_rightmenu.addRowDefinition(1/8);
+					wtw_rightmenu.addRowDefinition(1/8);
+					wtw_rightmenu.addRowDefinition(1/8);
+					wtw_rightmenu.addRowDefinition(1/8);
+					wtw_rightmenu.addRowDefinition(1/8);
+					wtw_rightmenu.addRowDefinition(1/8);
+					wtw_rightmenu.addRowDefinition(1/8);
+					wtw_rightmenu.addRowDefinition(1/8);
 					
-					var text1 = new BABYLON.GUI.TextBlock();
-					text1.text = "Display Name:";
-					text1.color = "white";
-					text1.fontSize = 24;
-					text1.height = "30px";
-					rightMenu.addControl(text1, 0, 0);
+					var ztext1 = new BABYLON.GUI.TextBlock();
+					ztext1.text = "Display Name:";
+					ztext1.color = "white";
+					ztext1.fontSize = 24;
+					ztext1.height = "30px";
+					wtw_rightmenu.addControl(ztext1, 0, 0);
 					
 					var zdisplayname = dGet('wtw_tnewavatardisplayname').value;
 					if (zdisplayname == '') {
 						zdisplayname = "Anonymous";
 					}
-					var input = new BABYLON.GUI.InputText();
-					input.promptMessage = "Display Name";
-					input.width = "300px";
-					input.height = "40px";
-					input.text = zdisplayname;
-					input.color = "white";
-					input.background = "#2F4720";
-					input.onFocusSelectAll = true;
-					input.onTextChangedObservable.add(function(value) {WTW.updateDisplayName(value.text);});
-					rightMenu.addControl(input, 1, 0);
+					var zinput = new BABYLON.GUI.InputText();
+					zinput.promptMessage = "Display Name";
+					zinput.width = "300px";
+					zinput.height = "40px";
+					zinput.text = zdisplayname;
+					zinput.color = "white";
+					zinput.background = "#2F4720";
+					zinput.onFocusSelectAll = true;
+					zinput.onTextChangedObservable.add(function(value) {WTW.updateDisplayName(value.text);});
+					wtw_rightmenu.addControl(zinput, 1, 0);
 					
-					if (showglobal) {
-						var button1 = new BABYLON.GUI.RadioButton();
-						button1.name = "globalavatar";
-						button1.width = "30px";
-						button1.height = "30px";
-						button1.color = "white";
-						button1.group = "global";
-						var text2 = new BABYLON.GUI.TextBlock();
+					if (wtw_showglobal) {
+						var zbutton1 = new BABYLON.GUI.RadioButton();
+						zbutton1.name = "globalavatar";
+						zbutton1.width = "30px";
+						zbutton1.height = "30px";
+						zbutton1.color = "white";
+						zbutton1.group = "global";
+						var ztext2 = new BABYLON.GUI.TextBlock();
 						if (dGet('wtw_tglobaluserid').value != '') {
-							button1.isChecked = true;
+							zbutton1.isChecked = true;
 							WTW.updateGlobalAvatar("1");
-							button1.background = "green";
-							button1.onIsCheckedChangedObservable.add(function(state) {if (state) {WTW.updateGlobalAvatar("1");}}); 
-							text2.text = "Works on most WalkTheWeb 3D Websites Globally";
-							text2.color = "#afafaf";
+							zbutton1.background = "green";
+							zbutton1.onIsCheckedChangedObservable.add(function(state) {if (state) {WTW.updateGlobalAvatar("1");}}); 
+							ztext2.text = "Works on most WalkTheWeb 3D Websites Globally";
+							ztext2.color = "#afafaf";
 						} else {
-							button1.isChecked = false;
+							zbutton1.isChecked = false;
 							WTW.updateGlobalAvatar("0");
-							button1.background = "red";
-							button1.onIsCheckedChangedObservable.add(function(state) {if (state) {WTW.updateGlobalAvatar("0");state.checked=false;}}); 
-							text2.text = "Requires Global Login";
-							text2.color = "red";
+							zbutton1.background = "red";
+							zbutton1.onIsCheckedChangedObservable.add(function(state) {if (state) {WTW.updateGlobalAvatar("0");state.checked=false;}}); 
+							ztext2.text = "Requires Global Login";
+							ztext2.color = "red";
 						}
-						var label1 = BABYLON.GUI.Control.AddHeader(button1, 'WalkTheWeb Global Avatar', "270px", { isHorizontal: true, controlFirst: true });
-						label1.height = "40px";
-						label1.width = "270px";
-						label1.color = "white";
-						rightMenu.addControl(label1, 3, 0);
+						var zlabel1 = BABYLON.GUI.Control.AddHeader(zbutton1, 'WalkTheWeb Global Avatar', "270px", { isHorizontal: true, controlFirst: true });
+						zlabel1.height = "40px";
+						zlabel1.width = "270px";
+						zlabel1.color = "white";
+						wtw_rightmenu.addControl(zlabel1, 3, 0);
 
-						text2.fontSize = 20;
-						text2.height = "100px";
-						text2.textWrapping = true;
-						text2.textHorizontalAlignment = 3;
-						rightMenu.addControl(text2, 4, 0);
+						ztext2.fontSize = 20;
+						ztext2.height = "100px";
+						ztext2.textWrapping = true;
+						ztext2.textHorizontalAlignment = 3;
+						wtw_rightmenu.addControl(ztext2, 4, 0);
 
-						var button2 = new BABYLON.GUI.RadioButton();
-						button2.name = "localavatar";
-						button2.width = "30px";
-						button2.height = "30px";
-						button2.color = "white";
-						button2.background = "green";     
-						button2.group = "global";
+						var zbutton2 = new BABYLON.GUI.RadioButton();
+						zbutton2.name = "localavatar";
+						zbutton2.width = "30px";
+						zbutton2.height = "30px";
+						zbutton2.color = "white";
+						zbutton2.background = "green";     
+						zbutton2.group = "global";
 						if (dGet('wtw_tglobaluserid').value == '') {
-							button2.isChecked = true;
+							zbutton2.isChecked = true;
 						}
-						button2.onIsCheckedChangedObservable.add(function(state) {if (state) {WTW.updateGlobalAvatar("0");}}); 
-						var label2 = BABYLON.GUI.Control.AddHeader(button2, 'Local 3D Website Avatar', "270px", { isHorizontal: true, controlFirst: true });
-						label2.height = "40px";
-						label2.width = "270px";
-						label2.color = "white";
-						rightMenu.addControl(label2, 6, 0);
+						zbutton2.onIsCheckedChangedObservable.add(function(state) {if (state) {WTW.updateGlobalAvatar("0");}}); 
+						var zlabel2 = BABYLON.GUI.Control.AddHeader(zbutton2, 'Local 3D Website Avatar', "270px", { isHorizontal: true, controlFirst: true });
+						zlabel2.height = "40px";
+						zlabel2.width = "270px";
+						zlabel2.color = "white";
+						wtw_rightmenu.addControl(zlabel2, 6, 0);
 
-						var text3 = new BABYLON.GUI.TextBlock();
-						text3.text = "Works on Local 3D Websites on the same Web Server";
-						text3.color = "#afafaf";
-						text3.fontSize = 20;
-						text3.height = "100px";
-						text3.textWrapping = true;
-						text3.textHorizontalAlignment = 3;
-						rightMenu.addControl(text3, 7, 0);
+						var ztext3 = new BABYLON.GUI.TextBlock();
+						ztext3.text = "Works on Local 3D Websites on the same Web Server";
+						ztext3.color = "#afafaf";
+						ztext3.fontSize = 20;
+						ztext3.height = "100px";
+						ztext3.textWrapping = true;
+						ztext3.textHorizontalAlignment = 3;
+						wtw_rightmenu.addControl(ztext3, 7, 0);
 					}
 				}
 				break;
 			case 2:   /* avatar colors settings */
 				if (dGet('wtw_tavatarid').value != "") {
-					if (colorMenu != null) {
-						colorMenu.dispose();
+					if (wtw_colormenu != null) {
+						wtw_colormenu.dispose();
 					}
-					colorMenu = new BABYLON.GUI.Grid();
-					colorMenu.topInPixels = 75;
-					colorMenu.rightInPixels = 340;
-					colorMenu.width = "510px";
-					colorMenu.height = "150px";
-					colorMenu.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-					colorMenu.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-					colorMenu.addColumnDefinition(1/3);
-					colorMenu.addColumnDefinition(1/3);
-					colorMenu.addColumnDefinition(1/3);
-					colorMenu.addRowDefinition(1);
+					wtw_colormenu = new BABYLON.GUI.Grid();
+					wtw_colormenu.topInPixels = 75;
+					wtw_colormenu.rightInPixels = 340;
+					wtw_colormenu.width = "510px";
+					wtw_colormenu.height = "150px";
+					wtw_colormenu.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+					wtw_colormenu.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+					wtw_colormenu.addColumnDefinition(1/3);
+					wtw_colormenu.addColumnDefinition(1/3);
+					wtw_colormenu.addColumnDefinition(1/3);
+					wtw_colormenu.addRowDefinition(1);
 				
-					rightMenu.topInPixels = 20;
-					rightMenu.width = "330px";
+					wtw_rightmenu.topInPixels = 20;
+					wtw_rightmenu.width = "330px";
 					if (WTW.avatarParts != null) {
 						if (WTW.avatarParts.length > 0) {
-							rightMenu.height = ((WTW.avatarParts.length + 2.5) * 100) + "px";
-							rightMenu.addColumnDefinition(2/3);
-							rightMenu.addColumnDefinition(1/3);
-							rightMenu.addRowDefinition(1/(WTW.avatarParts.length + 1));
+							wtw_rightmenu.height = ((WTW.avatarParts.length + 2.5) * 100) + "px";
+							wtw_rightmenu.addColumnDefinition(2/3);
+							wtw_rightmenu.addColumnDefinition(1/3);
+							wtw_rightmenu.addRowDefinition(1/(WTW.avatarParts.length + 1));
 							for (var i=0;i<WTW.avatarParts.length;i++) {
 								if (WTW.avatarParts[i] != null) {
-									rightMenu.addRowDefinition(1/(WTW.avatarParts.length + 1));
+									wtw_rightmenu.addRowDefinition(1/(WTW.avatarParts.length + 1));
 								}
 							}
 							WTW.avatarParts.sort(function(a,b){return a.part < b.part ? -1 : 1}); 
@@ -376,29 +376,29 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 					var zmoldname = WTW.getMyAvatarPart(dGet('wtw_tavatarpart').value);
 					dGet('wtw_tmoldname').value = zmoldname;
 					var zmold = scene.getMeshByID(zmoldname);
-					if (colorpicker == null) {
-						colorpicker = new BABYLON.GUI.ColorPicker();
-						colorpicker.name = "avatarcolorpicker";
-						colorpicker.id = "avatarcolorpicker";
+					if (wtw_colorpicker == null) {
+						wtw_colorpicker = new BABYLON.GUI.ColorPicker();
+						wtw_colorpicker.name = "avatarcolorpicker";
+						wtw_colorpicker.id = "avatarcolorpicker";
 						if (zmold != null) {
 							if (dGet('wtw_tcolortype').value  == 'Diffuse') {
-								colorpicker.value = zmold.material.diffuseColor;
+								wtw_colorpicker.value = zmold.material.diffuseColor;
 							} else {
-								colorpicker.value = zmold.material.emissiveColor;
+								wtw_colorpicker.value = zmold.material.emissiveColor;
 							}
 						} else {
-							colorpicker.value = new BABYLON.Vector3(1, 1, 1);
+							wtw_colorpicker.value = new BABYLON.Vector3(1, 1, 1);
 						}
-						colorpicker.height = "150px";
-						colorpicker.width = "150px";
-						colorpicker.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-						colorpicker.onValueChangedObservable.add(function(value) {
+						wtw_colorpicker.height = "150px";
+						wtw_colorpicker.width = "150px";
+						wtw_colorpicker.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+						wtw_colorpicker.onValueChangedObservable.add(function(value) {
 							if (value != null) {
 								WTW.setMyAvatarColor(value.r, value.g, value.b);
 							}
 						});
 					}
-					colorMenu.addControl(colorpicker,0,0);
+					wtw_colormenu.addControl(wtw_colorpicker,0,0);
 
 					var zdiffusebutton = BABYLON.GUI.Button.CreateImageWithCenterTextButton('diffuse-button', 'Diffuse', 'image');
 					zdiffusebutton.width = "210px";
@@ -411,7 +411,7 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 						zdiffusebutton.background = "green";
 					}
 					zdiffusebutton.onPointerClickObservable.add(function(ev, state) { dGet('wtw_tcolortype').value='Diffuse';WTW.loadLeftMenu(2);});
-					rightMenu.addControl(zdiffusebutton, 0, 0);
+					wtw_rightmenu.addControl(zdiffusebutton, 0, 0);
 
 					var zemissivebutton = BABYLON.GUI.Button.CreateImageWithCenterTextButton('emissive-button', 'Emissive', 'image');
 					zemissivebutton.width = "210px";
@@ -424,24 +424,24 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 						zemissivebutton.background = "green";
 					}
 					zemissivebutton.onPointerClickObservable.add(function(ev, state) { dGet('wtw_tcolortype').value='Emissive';WTW.loadLeftMenu(2);});
-					rightMenu.addControl(zemissivebutton, 0, 1);
+					wtw_rightmenu.addControl(zemissivebutton, 0, 1);
 
 					if (WTW.avatarParts != null) {
 						for (var i=0;i<WTW.avatarParts.length;i++) {
 							if (WTW.avatarParts[i] != null) {
-								rightMenu.addRowDefinition(1/(WTW.avatarParts.length + 1));
-								var button1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarParts[i].part + "-color-button", WTW.avatarParts[i].part, 'image');
-								button1.width = "210px";
-								button1.height = "50px";
+								wtw_rightmenu.addRowDefinition(1/(WTW.avatarParts.length + 1));
+								var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarParts[i].part + "-color-button", WTW.avatarParts[i].part, 'image');
+								zbutton1.width = "210px";
+								zbutton1.height = "50px";
 								if (dGet('wtw_tavatarpart').value  == WTW.avatarParts[i].part) {
-									button1.color = "black";
-									button1.background = "yellow";
+									zbutton1.color = "black";
+									zbutton1.background = "yellow";
 								} else {
-									button1.color = "black";
-									button1.background = "white";
+									zbutton1.color = "black";
+									zbutton1.background = "white";
 								}
-								button1.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarPart(state.currentTarget.name.split('-')[0]);WTW.loadLeftMenu(2);});
-								rightMenu.addControl(button1, i+1, 0);
+								zbutton1.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarPart(state.currentTarget.name.split('-')[0]);WTW.loadLeftMenu(2);});
+								wtw_rightmenu.addControl(zbutton1, i+1, 0);
 								
 								var zhex = WTW.avatarParts[i].emissivecolor;
 								if (dGet('wtw_tcolortype').value  == 'Diffuse') {
@@ -449,52 +449,52 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 								}
 
 								if (dGet('wtw_tavatarpart').value  == WTW.avatarParts[i].part) {
-									activeinput = new BABYLON.GUI.InputText(WTW.avatarParts[i].part + "-color-input");
-									activeinput.promptMessage = "Color (hex)";
-									activeinput.width = "110px";
-									activeinput.height = "50px";
-									activeinput.text = zhex;
-									activeinput.color = WTW.setTextColor(zhex, "#ffffff", "#000000");
-									activeinput.background = zhex;
-									activeinput.focusedBackground = "#000000";
-									if (activeinput.color == "#000000") {
-										activeinput.focusedBackground = "#ffffff";
+									wtw_activeinput = new BABYLON.GUI.InputText(WTW.avatarParts[i].part + "-color-input");
+									wtw_activeinput.promptMessage = "Color (hex)";
+									wtw_activeinput.width = "110px";
+									wtw_activeinput.height = "50px";
+									wtw_activeinput.text = zhex;
+									wtw_activeinput.color = WTW.setTextColor(zhex, "#ffffff", "#000000");
+									wtw_activeinput.background = zhex;
+									wtw_activeinput.focusedBackground = "#000000";
+									if (wtw_activeinput.color == "#000000") {
+										wtw_activeinput.focusedBackground = "#ffffff";
 									}
-									activeinput.onFocusSelectAll = true;
-									activeinput.onBlurObservable.add(function(value) {WTW.updateColorByHex(value.text);});
-									activeinput.onTextPasteObservable.add(function(value) {WTW.updateColorByHex(value.text);});
-									rightMenu.addControl(activeinput, i+1, 1);
+									wtw_activeinput.onFocusSelectAll = true;
+									wtw_activeinput.onBlurObservable.add(function(value) {WTW.updateColorByHex(value.text);});
+									wtw_activeinput.onTextPasteObservable.add(function(value) {WTW.updateColorByHex(value.text);});
+									wtw_rightmenu.addControl(wtw_activeinput, i+1, 1);
 								} else {
-									var inputtext = new BABYLON.GUI.InputText(WTW.avatarParts[i].part + "-color-input");
-									inputtext.promptMessage = "Color (hex)";
-									inputtext.width = "110px";
-									inputtext.height = "50px";
-									inputtext.text = zhex;
-									inputtext.color = WTW.setTextColor(zhex, "#ffffff", "#000000");
-									inputtext.background = zhex;
-									inputtext.focusedBackground = "#000000";
-									if (inputtext.color == "#000000") {
-										inputtext.focusedBackground = "#ffffff";
+									var zinputtext = new BABYLON.GUI.InputText(WTW.avatarParts[i].part + "-color-input");
+									zinputtext.promptMessage = "Color (hex)";
+									zinputtext.width = "110px";
+									zinputtext.height = "50px";
+									zinputtext.text = zhex;
+									zinputtext.color = WTW.setTextColor(zhex, "#ffffff", "#000000");
+									zinputtext.background = zhex;
+									zinputtext.focusedBackground = "#000000";
+									if (zinputtext.color == "#000000") {
+										zinputtext.focusedBackground = "#ffffff";
 									}
-									inputtext.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarPart(state.currentTarget.name.split('-')[0]);WTW.loadLeftMenu(2);});
-									rightMenu.addControl(inputtext, i+1, 1);
+									zinputtext.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarPart(state.currentTarget.name.split('-')[0]);WTW.loadLeftMenu(2);});
+									wtw_rightmenu.addControl(zinputtext, i+1, 1);
 								}
 							}
 						}
 					}
-					gui.addControl(colorMenu);
+					gui.addControl(wtw_colormenu);
 				}
 				break;
 			case 3:   /* avatar animation settings */
 				if (dGet('wtw_tavatarid').value != "") {
-					rightMenu.topInPixels = 10;
-					rightMenu.rightInPixels = 20;
-					rightMenu.width = "350px";
-					rightMenu.height = "60px";
-					rightMenu.addColumnDefinition(2/3);
-					rightMenu.addColumnDefinition(1/3);
-					rightMenu.addRowDefinition(1);
-					if (editmode && dGet('wtw_teditanimationevent').value == '') {
+					wtw_rightmenu.topInPixels = 10;
+					wtw_rightmenu.rightInPixels = 20;
+					wtw_rightmenu.width = "350px";
+					wtw_rightmenu.height = "60px";
+					wtw_rightmenu.addColumnDefinition(2/3);
+					wtw_rightmenu.addColumnDefinition(1/3);
+					wtw_rightmenu.addRowDefinition(1);
+					if (wtw_editmode && dGet('wtw_teditanimationevent').value == '') {
 						if (dGet('wtw_tavataranimationevent').value != '') {
 							dGet('wtw_teditanimationevent').value = dGet('wtw_tavataranimationevent').value;
 						} else {
@@ -502,92 +502,92 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 						}
 					}
 					var zanimationname = 'Walk';
-					if (editmode) {
+					if (wtw_editmode) {
 						zanimationname = WTW.getAnimationEventName(dGet('wtw_teditanimationevent').value);
 					}
-					if (dGet('wtw_teditanimationevent').value != '' && editmode) {
-						var button2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("animationevent-button", zanimationname, 'image');
-						button2.width = "220px";
-						button2.height = "50px";
-						button2.color = "yellow";
-						button2.background = "blue";
-						button2.onPointerClickObservable.add(function(ev, state) {WTW.selectAnimationEvent(dGet('wtw_teditanimationevent').value);});
-						rightMenu.addControl(button2, 0, 0);
+					if (dGet('wtw_teditanimationevent').value != '' && wtw_editmode) {
+						var zbutton2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("animationevent-button", zanimationname, 'image');
+						zbutton2.width = "220px";
+						zbutton2.height = "50px";
+						zbutton2.color = "yellow";
+						zbutton2.background = "blue";
+						zbutton2.onPointerClickObservable.add(function(ev, state) {WTW.selectAnimationEvent(dGet('wtw_teditanimationevent').value);});
+						wtw_rightmenu.addControl(zbutton2, 0, 0);
 						WTW.selectAnimationEvent(dGet('wtw_teditanimationevent').value);
 					} else {
 						let zlabel = 'Select to Start & Stop:';
-						if (editmode) {
+						if (wtw_editmode) {
 							zlabel = zanimationname;
 						}
-						var button2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("animationevent-button", zlabel, 'image');
-						button2.width = "220px";
-						button2.height = "50px";
-						if (editmode) {
-							button2.color = "#ffffff";
-							button2.background = "green";
+						var zbutton3 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("animationevent-button", zlabel, 'image');
+						zbutton3.width = "220px";
+						zbutton3.height = "50px";
+						if (wtw_editmode) {
+							zbutton3.color = "#ffffff";
+							zbutton3.background = "green";
 						} else {
-							button2.color = "yellow";
-							button2.background = "blue";
+							zbutton3.color = "yellow";
+							zbutton3.background = "blue";
 						}
-						button2.onPointerClickObservable.add(function(ev, state) {WTW.selectAnimationEvent(dGet('wtw_tavataranimationevent').value);});
-						rightMenu.addControl(button2, 0, 0);
+						zbutton3.onPointerClickObservable.add(function(ev, state) {WTW.selectAnimationEvent(dGet('wtw_tavataranimationevent').value);});
+						wtw_rightmenu.addControl(zbutton3, 0, 0);
 						WTW.selectAnimationEvent(dGet('wtw_tavataranimationevent').value);
 					}
 					let zbuttonedit = "Edit";
-					if (editmode) {
+					if (wtw_editmode) {
 						zbuttonedit = "Save";
 					}
-					var button1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("editanimation-button", zbuttonedit, 'image');
-					button1.width = "110px";
-					button1.height = "50px";
-					if (editmode) {
-						button1.color = "yellow";
-						button1.background = "blue";
+					var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("editanimation-button", zbuttonedit, 'image');
+					zbutton1.width = "110px";
+					zbutton1.height = "50px";
+					if (wtw_editmode) {
+						zbutton1.color = "yellow";
+						zbutton1.background = "blue";
 					} else {
-						button1.color = "#ffffff";
-						button1.background = "green";
+						zbutton1.color = "#ffffff";
+						zbutton1.background = "green";
 					}
-					button1.onPointerClickObservable.add(function(ev, state) {WTW.toggleEditAnimations();WTW.selectAnimationEvent(dGet('wtw_tavataranimationevent').value);});
-					rightMenu.addControl(button1, 0, 1);
+					zbutton1.onPointerClickObservable.add(function(ev, state) {WTW.toggleEditAnimations();WTW.selectAnimationEvent(dGet('wtw_tavataranimationevent').value);});
+					wtw_rightmenu.addControl(zbutton1, 0, 1);
 					
 				}
 				break;
 			case 4:   /* save avatar settings */
 				if (dGet('wtw_tavatarid').value != "") {
-					rightMenu.topInPixels = 10;
-					rightMenu.rightInPixels = 20;
-					rightMenu.width = "350px";
-					rightMenu.height = "300px";
-					rightMenu.addColumnDefinition(1);
-					rightMenu.addRowDefinition(1/2);
-					rightMenu.addRowDefinition(1/2);
+					wtw_rightmenu.topInPixels = 10;
+					wtw_rightmenu.rightInPixels = 20;
+					wtw_rightmenu.width = "350px";
+					wtw_rightmenu.height = "300px";
+					wtw_rightmenu.addColumnDefinition(1);
+					wtw_rightmenu.addRowDefinition(1/2);
+					wtw_rightmenu.addRowDefinition(1/2);
 				
-					var text1 = new BABYLON.GUI.TextBlock();
-					text1.text = "Avatar Saved";
-					text1.color = "green";
-					text1.fontSize = 50;
-					text1.height = "400px";
-					text1.textWrapping = true;
-					text1.textHorizontalAlignment = 3;
-					rightMenu.addControl(text1, 0, 0);
+					var ztext1 = new BABYLON.GUI.TextBlock();
+					ztext1.text = "Avatar Saved";
+					ztext1.color = "green";
+					ztext1.fontSize = 50;
+					ztext1.height = "400px";
+					ztext1.textWrapping = true;
+					ztext1.textHorizontalAlignment = 3;
+					wtw_rightmenu.addControl(ztext1, 0, 0);
 					
 					let zsaved = "WalkTheWeb Global and the Local 3D Websites";
 					if (dGet('wtw_tglobalavatar').value == '0') {
 						zsaved = "Local 3D Websites on the same Web Server";
 					}
-					var text2 = new BABYLON.GUI.TextBlock();
-					text2.text = zsaved;
-					text2.color = "green";
-					text2.fontSize = 30;
-					text2.height = "400px";
-					text2.textWrapping = true;
-					text2.textHorizontalAlignment = 3;
-					rightMenu.addControl(text2, 1, 0);
+					var ztext2 = new BABYLON.GUI.TextBlock();
+					ztext2.text = zsaved;
+					ztext2.color = "green";
+					ztext2.fontSize = 30;
+					ztext2.height = "400px";
+					ztext2.textWrapping = true;
+					ztext2.textHorizontalAlignment = 3;
+					wtw_rightmenu.addControl(ztext2, 1, 0);
 					
-					loadingtimer = window.setTimeout(function(){
-						if (rightMenu != null && activeMenu == 4) {
-							rightMenu.dispose();
-							rightMenu = null;
+					wtw_loadingtimer = window.setTimeout(function(){
+						if (wtw_rightmenu != null && wtw_activemenu == 4) {
+							wtw_rightmenu.dispose();
+							wtw_rightmenu = null;
 						}
 					},3000);
 				}				
@@ -596,7 +596,7 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 				
 				break;
 		}
-		gui.addControl(rightMenu);
+		gui.addControl(wtw_rightmenu);
 	} catch (ex) {
 		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-loadRightMenu=" + ex.message);
 	}
@@ -617,19 +617,19 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 				async function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					if (zresponse.avatar != null) {
-						avatardef = zresponse.avatar;
+						wtw_avatardef = zresponse.avatar;
 						dGet('wtw_tnewavatardisplayname').value = zresponse.avatar.displayname;
 						dGet('wtw_tavatarid').value = zresponse.avatar.avatarid;
 						dGet("wtw_tglobaluseravatarid").value = zresponse.avatar.globaluseravatarid;
 						dGet("wtw_tuseravatarid").value = zresponse.avatar.useravatarid;
-						if (WTW.avatarAnimations != null && avatardef.avataranimationdefs != null) {
+						if (WTW.avatarAnimations != null && wtw_avatardef.avataranimationdefs != null) {
 							if (WTW.avatarAnimations.length > 0) {
 								for (var i=0;i<WTW.avatarAnimations.length;i++) {
 									if (WTW.avatarAnimations[i] != undefined) {
 										if (WTW.avatarAnimations[i].avataranimationid != undefined) {
-											for (var j=0;j<avatardef.avataranimationdefs.length;j++) {
-												if (avatardef.avataranimationdefs[j] != null) {
-													if (WTW.avatarAnimations[i].avataranimationid == avatardef.avataranimationdefs[j].avataranimationid) {
+											for (var j=0;j<wtw_avatardef.avataranimationdefs.length;j++) {
+												if (wtw_avatardef.avataranimationdefs[j] != null) {
+													if (WTW.avatarAnimations[i].avataranimationid == wtw_avatardef.avataranimationdefs[j].avataranimationid) {
 														WTW.avatarAnimations[i].selected = true;
 													}
 												}
@@ -693,19 +693,19 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 					zresponse = JSON.parse(zresponse);
 					if (zresponse != null) {
 						if (zresponse.avatar != null) {
-							avatardef = zresponse.avatar;
+							wtw_avatardef = zresponse.avatar;
 							dGet('wtw_tnewavatardisplayname').value = zresponse.avatar.displayname;
 							dGet('wtw_tavatarid').value = zresponse.avatar.avatarid;
 							dGet("wtw_tglobaluseravatarid").value = '';
 							dGet('wtw_tuseravatarid').value = zresponse.avatar.useravatarid;
-							if (WTW.avatarAnimations != null && avatardef.avataranimationdefs != null) {
+							if (WTW.avatarAnimations != null && wtw_avatardef.avataranimationdefs != null) {
 								if (WTW.avatarAnimations.length > 0) {
 									for (var i=0;i<WTW.avatarAnimations.length;i++) {
 										if (WTW.avatarAnimations[i] != undefined) {
 											if (WTW.avatarAnimations[i].avataranimationid != undefined) {
-												for (var j=0;j<avatardef.avataranimationdefs.length;j++) {
-													if (avatardef.avataranimationdefs[j] != null) {
-														if (WTW.avatarAnimations[i].avataranimationid == avatardef.avataranimationdefs[j].avataranimationid) {
+												for (var j=0;j<wtw_avatardef.avataranimationdefs.length;j++) {
+													if (wtw_avatardef.avataranimationdefs[j] != null) {
+														if (WTW.avatarAnimations[i].avataranimationid == wtw_avatardef.avataranimationdefs[j].avataranimationid) {
 															WTW.avatarAnimations[i].selected = true;
 														}
 													}
@@ -1072,11 +1072,11 @@ WTWJS.prototype.editMyAvatarAnimations = function(zevent) {
 WTWJS.prototype.toggleEditAnimations = function() {
 	/* set menu to edit or stop editing animations (used by button click event) */
 	try {
-		if (editmode) {
-			editmode = false;
+		if (wtw_editmode) {
+			wtw_editmode = false;
 			dGet('wtw_teditanimationevent').value = '';
 		} else {
-			editmode = true;
+			wtw_editmode = true;
 		}
 		WTW.loadRightMenu(3);
 	} catch (ex) {
@@ -1091,7 +1091,7 @@ WTWJS.prototype.selectAnimationEvent = function(zevent) {
 		let zrows = 0;
 		let zcatrows = 0;
 		let showcategories = false;
-		if (editmode && dGet('wtw_teditanimationevent').value == '') {
+		if (wtw_editmode && dGet('wtw_teditanimationevent').value == '') {
 			zevent = 'onwalk';
 			dGet('wtw_teditanimationevent').value = zevent;
 		}
@@ -1107,24 +1107,24 @@ WTWJS.prototype.selectAnimationEvent = function(zevent) {
 				}
 			}
 		}
-		if (editmode == false) {
+		if (wtw_editmode == false) {
 			showcategories = true;
 			zrows = zcatrows;
 		}
 		zlastanimationevent = '';
-		if (rightMenuLower != null) {
-			rightMenuLower.dispose();
+		if (wtw_rightmenulower != null) {
+			wtw_rightmenulower.dispose();
 		}
-		rightMenuLower = new BABYLON.GUI.Grid();
-		rightMenuLower.topInPixels = 70;
-		rightMenuLower.rightInPixels = 20;
-		rightMenuLower.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-		rightMenuLower.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-		rightMenuLower.addColumnDefinition(1);
-		rightMenuLower.width = "350px";
+		wtw_rightmenulower = new BABYLON.GUI.Grid();
+		wtw_rightmenulower.topInPixels = 70;
+		wtw_rightmenulower.rightInPixels = 20;
+		wtw_rightmenulower.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+		wtw_rightmenulower.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+		wtw_rightmenulower.addColumnDefinition(1);
+		wtw_rightmenulower.width = "350px";
 		if (zrows > 0) {
 			let j = 0;
-			rightMenuLower.height = (zrows * 50) + "px";
+			wtw_rightmenulower.height = (zrows * 50) + "px";
 			for(var i=0;i<WTW.avatarAnimations.length;i++) {
 				if (WTW.avatarAnimations[i] != null) {
 					let zbuttonname = WTW.avatarAnimations[i].animationeventname;
@@ -1138,55 +1138,55 @@ WTWJS.prototype.selectAnimationEvent = function(zevent) {
 						}
 					}
 					if (WTW.avatarAnimations[i].animationevent != zlastanimationevent && showcategories) {
-						rightMenuLower.addRowDefinition(1/zrows);
-						if (dGet('wtw_tavataranimationevent').value == WTW.avatarAnimations[i].animationevent && editmode == false) {
+						wtw_rightmenulower.addRowDefinition(1/zrows);
+						if (dGet('wtw_tavataranimationevent').value == WTW.avatarAnimations[i].animationevent && wtw_editmode == false) {
 							if (zweight != 1) {
 								zbuttonname += ": " + dGet('wtw_tanimationfriendlyname').value;
 								zcolor = "yellow";
 							}
-						} else if (dGet('wtw_teditanimationevent').value == WTW.avatarAnimations[i].animationevent && editmode) {
+						} else if (dGet('wtw_teditanimationevent').value == WTW.avatarAnimations[i].animationevent && wtw_editmode) {
 							zbuttonname += ": " + dGet('wtw_tanimationfriendlyname').value;
 							zcolor = "yellow";
 						}
-						var button1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarAnimations[i].animationevent + "-animation-button", zbuttonname, 'image');
-						button1.width = "330px";
-						button1.height = "50px";
-						button1.color = "#000000";
-						button1.background = zcolor;
-						if (editmode) {
-							button1.onPointerClickObservable.add(function(ev, state) {WTW.editMyAvatarAnimations(state.currentTarget.name.split('-')[0]);});
+						var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarAnimations[i].animationevent + "-animation-button", zbuttonname, 'image');
+						zbutton1.width = "330px";
+						zbutton1.height = "50px";
+						zbutton1.color = "#000000";
+						zbutton1.background = zcolor;
+						if (wtw_editmode) {
+							zbutton1.onPointerClickObservable.add(function(ev, state) {WTW.editMyAvatarAnimations(state.currentTarget.name.split('-')[0]);});
 						} else {
-							button1.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarAnimations(state.currentTarget.name.split('-')[0]);});
+							zbutton1.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarAnimations(state.currentTarget.name.split('-')[0]);});
 						}
-						rightMenuLower.addControl(button1, j, 0);
+						wtw_rightmenulower.addControl(zbutton1, j, 0);
 						j += 1;
 						zlastanimationevent = WTW.avatarAnimations[i].animationevent;
 					} else if (showcategories == false) {
 						if (WTW.avatarAnimations[i].animationevent == zevent) {
-							rightMenuLower.addRowDefinition(1/zrows);
+							wtw_rightmenulower.addRowDefinition(1/zrows);
 							zbuttonname = WTW.avatarAnimations[i].animationfriendlyname;
 							if (WTW.avatarAnimations[i].selected) {
 								zcolor = "yellow";
 							} else {
 								zcolor = "#ffffff";
 							}
-							var button1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarAnimations[i].avataranimationid + "-animation-button", zbuttonname, 'image');
-							button1.width = "330px";
-							button1.height = "50px";
-							button1.color = "#000000";
-							button1.background = zcolor;
-							button1.onPointerClickObservable.add(function(ev, state) {WTW.changeMyAvatarAnimation(state.currentTarget.name.split('-')[0]);});
-							rightMenuLower.addControl(button1, j, 0);
+							var zbutton2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarAnimations[i].avataranimationid + "-animation-button", zbuttonname, 'image');
+							zbutton2.width = "330px";
+							zbutton2.height = "50px";
+							zbutton2.color = "#000000";
+							zbutton2.background = zcolor;
+							zbutton2.onPointerClickObservable.add(function(ev, state) {WTW.changeMyAvatarAnimation(state.currentTarget.name.split('-')[0]);});
+							wtw_rightmenulower.addControl(zbutton2, j, 0);
 							j += 1;
 						}
 					}
 					if (dGet('wtw_tanimationind').value != '') {
 						if (Number(dGet('wtw_tanimationind').value) == i) {
-							if (runningevent != '' && WTW.myAvatar.WTW.animations.running[runningevent] != undefined) {
-								WTW.myAvatar.WTW.animations.running[runningevent].weight = 0;
-								runningevent = '';
+							if (wtw_runningevent != '' && WTW.myAvatar.WTW.animations.running[wtw_runningevent] != undefined) {
+								WTW.myAvatar.WTW.animations.running[wtw_runningevent].weight = 0;
+								wtw_runningevent = '';
 							}
-							if (zweight == 0 || (editmode && dGet('wtw_teditanimationevent').value != lasteditavatarid)) {
+							if (zweight == 0 || (wtw_editmode && dGet('wtw_teditanimationevent').value != wtw_lasteditavatarid)) {
 								WTW.clearAnimations(WTW.myAvatar.name);
 								zweight = 0;
 							}
@@ -1194,19 +1194,19 @@ WTWJS.prototype.selectAnimationEvent = function(zevent) {
 								WTW.loadAvatarAnimation(WTW.myAvatar.name, '', WTW.avatarAnimations[i].animationfriendlyname, WTW.avatarAnimations[i].animationicon, WTW.avatarAnimations[i].avataranimationid, WTW.avatarAnimations[i].animationevent, WTW.avatarAnimations[i].objectfolder, WTW.avatarAnimations[i].objectfile, WTW.avatarAnimations[i].startframe, WTW.avatarAnimations[i].endframe, WTW.avatarAnimations[i].speedratio, 0, 0, true, '');
 							}
 
-							if (zweight == 0 && (editmode == false || (editmode && dGet('wtw_teditanimationevent').value != '')))  {
+							if (zweight == 0 && (wtw_editmode == false || (wtw_editmode && dGet('wtw_teditanimationevent').value != '')))  {
 								var zrunAnimationTimer = window.setInterval(function() {
 									if (WTW.myAvatar.WTW.animations.running[zevent] != null) {
 										window.clearInterval(zrunAnimationTimer);
 										WTW.myAvatar.WTW.animations.running[zevent].weight = 1;
 										WTW.myAvatar.WTW.animations.running['onwait'].weight = 0;
-										runningevent = zevent;
+										wtw_runningevent = zevent;
 									}
 								}, 100);
 							} else {
 								if (WTW.myAvatar.WTW.animations.running[zevent] != null) {
 									WTW.myAvatar.WTW.animations.running[zevent].weight = 0;
-									if (editmode == false) {
+									if (wtw_editmode == false) {
 										dGet('wtw_tavataranimationevent').value = '';
 									}
 								}
@@ -1217,10 +1217,10 @@ WTWJS.prototype.selectAnimationEvent = function(zevent) {
 				}
 			}
 		} else {
-			rightMenuLower.height = "60px";
-			rightMenuLower.addRowDefinition(1);
+			wtw_rightmenulower.height = "60px";
+			wtw_rightmenulower.addRowDefinition(1);
 		}
-		gui.addControl(rightMenuLower);
+		gui.addControl(wtw_rightmenulower);
 	} catch (ex) {
 		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-selectAnimationEvent=" + ex.message);
 	}
@@ -1262,7 +1262,7 @@ WTWJS.prototype.clearAnimations = function(zavatarname) {
 WTWJS.prototype.changeMyAvatarAnimation = function(zavataranimationid) {
 	/* change the selected animation */
 	try {
-		lasteditavatarid = zavataranimationid;
+		wtw_lasteditavatarid = zavataranimationid;
 		let zavataranimationind = -1;
 		if (dGet('wtw_teditanimationevent').value != '') {
 			for (var i=0;i<WTW.avatarAnimations.length;i++) {
@@ -1288,7 +1288,7 @@ WTWJS.prototype.changeMyAvatarAnimation = function(zavataranimationid) {
 WTWJS.prototype.getMyAvatarAnimations = function(zanimationevent) {
 	/* get my avatar animations or select the default animation for each animation event */
 	try {
-		if (editmode) {
+		if (wtw_editmode) {
 			dGet('wtw_teditanimationevent').value = zanimationevent;
 		} else {
 			dGet('wtw_tavataranimationevent').value = zanimationevent;
@@ -1336,88 +1336,88 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 	try {
 		WTW.startLoading();
 		if (dGet('wtw_tavatarid').value == '') {
-			var button0 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("selectavatar-button", 'Select My Avatar', 'image');
-			button0.width = "330px";
-			button0.height = "60px";
-			button0.color = "yellow";
-			button0.background = "blue";
-			button0.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
-			leftMenu.addControl(button0, 1, 0);
+			var zbutton0 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("selectavatar-button", 'Select My Avatar', 'image');
+			zbutton0.width = "330px";
+			zbutton0.height = "60px";
+			zbutton0.color = "yellow";
+			zbutton0.background = "blue";
+			zbutton0.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
+			wtw_leftmenu.addControl(zbutton0, 1, 0);
 
-			var button1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarprofile-button", 'Avatar Profile', 'image');
-			button1.width = "330px";
-			button1.height = "60px";
-			button1.color = "white";
-			button1.background = "green";
-			button1.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
-			leftMenu.addControl(button1, 0, 0);
+			var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarprofile-button", 'Avatar Profile', 'image');
+			zbutton1.width = "330px";
+			zbutton1.height = "60px";
+			zbutton1.color = "white";
+			zbutton1.background = "green";
+			zbutton1.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
+			wtw_leftmenu.addControl(zbutton1, 0, 0);
 
-			var button2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarcolors-button", 'Avatar Colors', 'image');
-			button2.width = "330px";
-			button2.height = "60px";
-			button2.color = "white";
-			button2.background = "green";
-			button2.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(2);});
-			leftMenu.addControl(button2, 2, 0);
+			var zbutton2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarcolors-button", 'Avatar Colors', 'image');
+			zbutton2.width = "330px";
+			zbutton2.height = "60px";
+			zbutton2.color = "white";
+			zbutton2.background = "green";
+			zbutton2.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(2);});
+			wtw_leftmenu.addControl(zbutton2, 2, 0);
 
-			var button3 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avataranimations-button", 'Avatar Animations', 'image');
-			button3.width = "330px";
-			button3.height = "60px";
-			button3.color = "white";
-			button3.background = "green";
-			button3.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(3);});
-			leftMenu.addControl(button3, 3, 0);
+			var zbutton3 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avataranimations-button", 'Avatar Animations', 'image');
+			zbutton3.width = "330px";
+			zbutton3.height = "60px";
+			zbutton3.color = "white";
+			zbutton3.background = "green";
+			zbutton3.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(3);});
+			wtw_leftmenu.addControl(zbutton3, 3, 0);
 
-			var button4 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("save-button", 'Save Avatar', 'image');
-			button4.width = "330px";
-			button4.height = "60px";
-			button4.color = "white";
-			button4.background = "green";
-			button4.onPointerClickObservable.add(function(ev, state) {WTW.saveMyAvatar();WTW.loadLeftMenu(4);});
-			leftMenu.addControl(button4, 4, 0);
+			var zbutton4 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("save-button", 'Save Avatar', 'image');
+			zbutton4.width = "330px";
+			zbutton4.height = "60px";
+			zbutton4.color = "white";
+			zbutton4.background = "green";
+			zbutton4.onPointerClickObservable.add(function(ev, state) {WTW.saveMyAvatar();WTW.loadLeftMenu(4);});
+			wtw_leftmenu.addControl(zbutton4, 4, 0);
 		}
 		dGet('wtw_tavatarid').value = zavatardef.avatarid;
 		WTW.avatarParts = [];
 		zsetupparent = scene.getMeshByID("setupparent-0");
-		var avatarname = "myavatar-" + dGet('wtw_tinstanceid').value;
-		WTW.myAvatar = scene.getMeshByID(avatarname);
+		var zavatarname = "myavatar-" + dGet('wtw_tinstanceid').value;
+		WTW.myAvatar = scene.getMeshByID(zavatarname);
 		if (WTW.myAvatar != null) {
 			WTW.myAvatar.dispose();
 		}
-		var scalingx = 1;
-		var scalingy = 1;
-		var scalingz = 1;
-		var objectanimations = null;
-		var objectfolder = "/content/system/avatars/male/";
-		var objectfile = "maleidle.babylon";
-		var avataranimationdefs = [];
+		var zscalingx = 1;
+		var zscalingy = 1;
+		var zscalingz = 1;
+		var zobjectanimations = null;
+		var zobjectfolder = "/content/system/avatars/male/";
+		var zobjectfile = "maleidle.babylon";
+		var zavataranimationdefs = [];
 		if (zavatardef.scaling.x != undefined) {
 			if (WTW.isNumeric(zavatardef.scaling.x)) {
-				scalingx = Number(zavatardef.scaling.x);
+				zscalingx = Number(zavatardef.scaling.x);
 			}
 		}
 		if (zavatardef.scaling.y != undefined) {
 			if (WTW.isNumeric(zavatardef.scaling.y)) {
-				scalingy = Number(zavatardef.scaling.y);
+				zscalingy = Number(zavatardef.scaling.y);
 			}
 		}
 		if (zavatardef.scaling.z != undefined) {
 			if (WTW.isNumeric(zavatardef.scaling.z)) {
-				scalingz = Number(zavatardef.scaling.z);
+				zscalingz = Number(zavatardef.scaling.z);
 			}
 		} 
 		if (zavatardef.object.folder != undefined) {
 			if (zavatardef.object.folder != '') {
-				objectfolder = zavatardef.object.folder;
+				zobjectfolder = zavatardef.object.folder;
 			}
 		}
 		if (zavatardef.object.file != undefined) {
 			if (zavatardef.object.file != '') {
-				objectfile = zavatardef.object.file;
+				zobjectfile = zavatardef.object.file;
 			}
 		}
-		WTW.myAvatar = BABYLON.MeshBuilder.CreateBox(avatarname, {}, scene);
-		WTW.myAvatar.material = new BABYLON.StandardMaterial("matmyavatar" + avatarname, scene);
+		WTW.myAvatar = BABYLON.MeshBuilder.CreateBox(zavatarname, {}, scene);
+		WTW.myAvatar.material = new BABYLON.StandardMaterial("matmyavatar" + zavatarname, scene);
 		WTW.myAvatar.material.alpha = 0;
 		WTW.myAvatar.parent = zsetupparent;
 		WTW.myAvatar.applyGravity = true;
@@ -1428,44 +1428,44 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 		WTW.myAvatar.isPickable = false;
 		WTW.myAvatar.WTW = zavatardef;
 
-		var avatarscale = BABYLON.MeshBuilder.CreateBox(avatarname + '-scale', {}, scene);
-		avatarscale.material = new BABYLON.StandardMaterial("matscale" + avatarname, scene);
-		avatarscale.material.alpha = 0;
-		avatarscale.isPickable = false;
-		avatarscale.parent = WTW.myAvatar;
-		avatarscale.scaling = new BABYLON.Vector3(scalingx, scalingy, scalingz);
-		avatarscale.rotation.y = WTW.getRadians(-90);
+		var zavatarscale = BABYLON.MeshBuilder.CreateBox(zavatarname + '-scale', {}, scene);
+		zavatarscale.material = new BABYLON.StandardMaterial("matscale" + zavatarname, scene);
+		zavatarscale.material.alpha = 0;
+		zavatarscale.isPickable = false;
+		zavatarscale.parent = WTW.myAvatar;
+		zavatarscale.scaling = new BABYLON.Vector3(zscalingx, zscalingy, zscalingz);
+		zavatarscale.rotation.y = WTW.getRadians(-90);
 
-		var avatarcamera = BABYLON.MeshBuilder.CreateBox(avatarname + "-camera", {}, scene);
-		avatarcamera.material = new BABYLON.StandardMaterial("matcamera" + avatarname, scene);
-		avatarcamera.material.alpha = 0;
-		avatarcamera.parent = WTW.myAvatar;
-		avatarcamera.position.y = 12;
-		avatarcamera.rotation.y = WTW.getRadians(-90);
+		var zavatarcamera = BABYLON.MeshBuilder.CreateBox(zavatarname + "-camera", {}, scene);
+		zavatarcamera.material = new BABYLON.StandardMaterial("matcamera" + zavatarname, scene);
+		zavatarcamera.material.alpha = 0;
+		zavatarcamera.parent = WTW.myAvatar;
+		zavatarcamera.position.y = 12;
+		zavatarcamera.rotation.y = WTW.getRadians(-90);
 
-		var avatarcenter = BABYLON.MeshBuilder.CreateBox(avatarname + "-center", {}, scene);
-		avatarcenter.material = new BABYLON.StandardMaterial("matcenter" + avatarname, scene);
-		avatarcenter.material.alpha = 0;
-		avatarcenter.parent = WTW.myAvatar;
-		avatarcenter.position.y = 10;
-		avatarcenter.rotation.y = WTW.getRadians(-90);
+		var zavatarcenter = BABYLON.MeshBuilder.CreateBox(zavatarname + "-center", {}, scene);
+		zavatarcenter.material = new BABYLON.StandardMaterial("matcenter" + zavatarname, scene);
+		zavatarcenter.material.alpha = 0;
+		zavatarcenter.parent = WTW.myAvatar;
+		zavatarcenter.position.y = 10;
+		zavatarcenter.rotation.y = WTW.getRadians(-90);
 
-		BABYLON.SceneLoader.ImportMeshAsync(null, objectfolder, objectfile, scene).then(
-			function (results) {
-				if (results.meshes != null) {
-					for (var i=0; i < results.meshes.length; i++) {
-						if (results.meshes[i] != null) {
-							var mesh = results.meshes[i];
-							var meshname = results.meshes[i].name;
-							var childmoldname = avatarname + "-" + meshname;
-							results.meshes[i].isPickable = true;
-							results.meshes[i].name = childmoldname;
-							results.meshes[i].id = childmoldname;
-							results.meshes[i].isVisible = true;
+		BABYLON.SceneLoader.ImportMeshAsync(null, zobjectfolder, zobjectfile, scene).then(
+			function (zresponse) {
+				if (zresponse.meshes != null) {
+					for (var i=0; i < zresponse.meshes.length; i++) {
+						if (zresponse.meshes[i] != null) {
+							var zmesh = zresponse.meshes[i];
+							var zmeshname = zresponse.meshes[i].name;
+							var zchildmoldname = zavatarname + "-" + zmeshname;
+							zresponse.meshes[i].isPickable = true;
+							zresponse.meshes[i].name = zchildmoldname;
+							zresponse.meshes[i].id = zchildmoldname;
+							zresponse.meshes[i].isVisible = true;
 							
-							if (results.meshes[i].material != null) {
-								if (results.meshes[i].material.alpha != undefined) {
-									results.meshes[i].material.alpha = 1;
+							if (zresponse.meshes[i].material != null) {
+								if (zresponse.meshes[i].material.alpha != undefined) {
+									zresponse.meshes[i].material.alpha = 1;
 								}
 								/* load any color settings or set defaults */
 								let zdiffusecolor = '#ffffff';
@@ -1476,7 +1476,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 									if (zavatardef.avatarparts.length > 0) {
 										for (var j=0;j<zavatardef.avatarparts.length;j++) {
 											if (zavatardef.avatarparts[j] != undefined) {
-												if (zavatardef.avatarparts[j].avatarpart == meshname) {
+												if (zavatardef.avatarparts[j].avatarpart == zmeshname) {
 													if (zavatardef.avatarparts[j].diffusecolor != undefined) {
 														zdiffusecolor = zavatardef.avatarparts[j].diffusecolor;
 													}
@@ -1495,61 +1495,61 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 									}
 								}
 								/* emissive and specular currently share colors */
-								results.meshes[i].material.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
-								results.meshes[i].material.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
+								zresponse.meshes[i].material.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
+								zresponse.meshes[i].material.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
 								/* diffuse and ambient currently share colors */
-								results.meshes[i].material.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
-								results.meshes[i].material.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
+								zresponse.meshes[i].material.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
+								zresponse.meshes[i].material.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
 								/* refresh the materials to apply colors */
-								var covering = results.meshes[i].material;
-								results.meshes[i].material.dispose();
-								results.meshes[i].material = covering;
+								var zcovering = zresponse.meshes[i].material;
+								zresponse.meshes[i].material.dispose();
+								zresponse.meshes[i].material = zcovering;
 								
 								/* set local array of color values per avatar mesh part for editor and save process */
 								WTW.avatarParts[i] = {
-									'moldname':childmoldname,
-									'part':meshname,
+									'moldname':zchildmoldname,
+									'part':zmeshname,
 									'diffusecolor':zdiffusecolor,
 									'emissivecolor':zemissivecolor,
 									'specularcolor':zspecularcolor,
 									'ambientcolor':zambientcolor
 								};
 							}
-							WTW.registerMouseOver(results.meshes[i]);
-							if (results.meshes[i].parent == null) {
-								results.meshes[i].parent = avatarscale;
+							WTW.registerMouseOver(zresponse.meshes[i]);
+							if (zresponse.meshes[i].parent == null) {
+								zresponse.meshes[i].parent = zavatarscale;
 							}
-							results.meshes[i].WTW = [];
-							results.meshes[i].WTW.animations = [];
-							if (objectanimations != null) {
-								if (objectanimations != null) {
-									for (var j=0; j < objectanimations.length;j++) {
-										if (objectanimations[j] != null) {
-											var moldnamepart = objectanimations[j].moldnamepart;
-											if (moldnamepart == meshname) {
-												var moldevent = objectanimations[j].moldevent;
-												var startframe = Number(objectanimations[j].startframe);
-												var endframe = Number(objectanimations[j].endframe);
-												var animationloop = false;
-												var speedratio = Number(objectanimations[j].speedratio);
-												if (objectanimations[j].animationloop+'' == '1') {
-													animationloop = true;
+							zresponse.meshes[i].WTW = [];
+							zresponse.meshes[i].WTW.animations = [];
+							if (zobjectanimations != null) {
+								if (zobjectanimations != null) {
+									for (var j=0; j < zobjectanimations.length;j++) {
+										if (zobjectanimations[j] != null) {
+											var zmoldnamepart = zobjectanimations[j].moldnamepart;
+											if (zmoldnamepart == zmeshname) {
+												var zmoldevent = zobjectanimations[j].moldevent;
+												var zstartframe = Number(zobjectanimations[j].startframe);
+												var zendframe = Number(zobjectanimations[j].endframe);
+												var zanimationloop = false;
+												var zspeedratio = Number(zobjectanimations[j].speedratio);
+												if (zobjectanimations[j].animationloop+'' == '1') {
+													zanimationloop = true;
 												}
-												if (moldevent == 'onload') {
-													animationloop = false;
-													if ((typeof mesh.WTW.animations.onwait) != "undefined") {
-														results.meshes[i].WTW.animations[moldevent] = scene.beginWeightedAnimation(mesh, startframe, endframe, 1, animationloop, speedratio, function() {mesh.WTW.animations.onload.weight=0; mesh.WTW.animations.onwait.weight=1;});
+												if (zmoldevent == 'onload') {
+													zanimationloop = false;
+													if ((typeof zmesh.WTW.animations.onwait) != "undefined") {
+														zresponse.meshes[i].WTW.animations[zmoldevent] = scene.beginWeightedAnimation(zmesh, zstartframe, zendframe, 1, zanimationloop, zspeedratio, function() {zmesh.WTW.animations.onload.weight=0; zmesh.WTW.animations.onwait.weight=1;});
 													} else {
-														results.meshes[i].WTW.animations[moldevent] = scene.beginWeightedAnimation(mesh, startframe, endframe, 1, animationloop, speedratio);
+														zresponse.meshes[i].WTW.animations[zmoldevent] = scene.beginWeightedAnimation(zmesh, zstartframe, zendframe, 1, zanimationloop, zspeedratio);
 													}
 												} else {
-													results.meshes[i].WTW.animations[moldevent] = scene.beginWeightedAnimation(mesh, startframe, endframe, 0, animationloop, speedratio);
+													zresponse.meshes[i].WTW.animations[zmoldevent] = scene.beginWeightedAnimation(zmesh, zstartframe, zendframe, 0, zanimationloop, zspeedratio);
 												}
 											}
 										}
 									}
-									if ((typeof mesh.WTW.animations.onload) == "undefined" && (typeof mesh.WTW.animations.onwait) != "undefined") {
-										mesh.WTW.animations.onwait.weight=1;
+									if ((typeof zmesh.WTW.animations.onload) == "undefined" && (typeof zmesh.WTW.animations.onwait) != "undefined") {
+										zmesh.WTW.animations.onwait.weight=1;
 									}
 								}
 							}
@@ -1557,138 +1557,138 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 					}
 				}
 				/* load skeleton for animations */
-				if (results.skeletons != null)	{
-					var skeleton = results.meshes[0].skeleton;
-					WTW.myAvatar.WTW.skeleton = results.meshes[0].skeleton;
-					for (var i=0; i < results.skeletons.length; i++) {
-						if (results.skeletons[i] != null) {
-							var mesh = results.skeletons[i];
-							var meshname = results.skeletons[i].name;
-							var childmoldname = avatarname + "-" + meshname;
-							results.skeletons[i].name = childmoldname;
-							results.skeletons[i].id = childmoldname;
-							WTW.registerMouseOver(results.skeletons[i]);
-							if (results.skeletons[i].parent == null) {
-								results.skeletons[i].scaling = new BABYLON.Vector3(scalingx,scalingy,scalingz);
+				if (zresponse.skeletons != null)	{
+					var zskeleton = zresponse.meshes[0].skeleton;
+					WTW.myAvatar.WTW.skeleton = zresponse.meshes[0].skeleton;
+					for (var i=0; i < zresponse.skeletons.length; i++) {
+						if (zresponse.skeletons[i] != null) {
+							var zmesh = zresponse.skeletons[i];
+							var zmeshname = zresponse.skeletons[i].name;
+							var zchildmoldname = zavatarname + "-" + zmeshname;
+							zresponse.skeletons[i].name = zchildmoldname;
+							zresponse.skeletons[i].id = zchildmoldname;
+							WTW.registerMouseOver(zresponse.skeletons[i]);
+							if (zresponse.skeletons[i].parent == null) {
+								zresponse.skeletons[i].scaling = new BABYLON.Vector3(zscalingx,zscalingy,zscalingz);
 							}
-							if (results.skeletons[i].bones != null) {
-								var headtopbone = -1;
-								var spine2bone = -1;
-								var righthandbone = -1;
-								var lefthandbone = -1;
-								var rightlegbone = -1;
-								var leftlegbone = -1;
-								var rightfootbone = -1;
-								var leftfootbone = -1;
-								for (var j=0; j < results.skeletons[i].bones.length; j++) {
-									if (results.skeletons[i].bones[j] != null) {
-										var bonename = results.skeletons[i].bones[j].name.toLowerCase();
-										if (bonename.indexOf("headtop") > -1 && headtopbone == -1) {
-											headtopbone = j;
-										} else if (bonename.indexOf("spine2") > -1 && spine2bone == -1) {
-											spine2bone = j;
-										} else if (bonename.indexOf("righthand") > -1 && righthandbone == -1) {
-											righthandbone = j;
-										} else if (bonename.indexOf("lefthand") > -1 && lefthandbone == -1) {
-											lefthandbone = j;
-										} else if (bonename.indexOf("rightupleg") > -1 && rightlegbone == -1) {
-											rightlegbone = j;
-										} else if (bonename.indexOf("leftupleg") > -1 && leftlegbone == -1) {
-											leftlegbone = j;
-										} else if (bonename.indexOf("rightfoot") > -1 && rightfootbone == -1) {
-											rightfootbone = j;
-										} else if (bonename.indexOf("leftfoot") > -1 && leftfootbone == -1) {
-											leftfootbone = j;
+							if (zresponse.skeletons[i].bones != null) {
+								var zheadtopbone = -1;
+								var zspine2bone = -1;
+								var zrighthandbone = -1;
+								var zlefthandbone = -1;
+								var zrightlegbone = -1;
+								var zleftlegbone = -1;
+								var zrightfootbone = -1;
+								var zleftfootbone = -1;
+								for (var j=0; j < zresponse.skeletons[i].bones.length; j++) {
+									if (zresponse.skeletons[i].bones[j] != null) {
+										var zbonename = zresponse.skeletons[i].bones[j].name.toLowerCase();
+										if (zbonename.indexOf("headtop") > -1 && zheadtopbone == -1) {
+											zheadtopbone = j;
+										} else if (zbonename.indexOf("spine2") > -1 && zspine2bone == -1) {
+											zspine2bone = j;
+										} else if (zbonename.indexOf("righthand") > -1 && zrighthandbone == -1) {
+											zrighthandbone = j;
+										} else if (zbonename.indexOf("lefthand") > -1 && zlefthandbone == -1) {
+											zlefthandbone = j;
+										} else if (zbonename.indexOf("rightupleg") > -1 && zrightlegbone == -1) {
+											zrightlegbone = j;
+										} else if (zbonename.indexOf("leftupleg") > -1 && zleftlegbone == -1) {
+											zleftlegbone = j;
+										} else if (zbonename.indexOf("rightfoot") > -1 && zrightfootbone == -1) {
+											zrightfootbone = j;
+										} else if (zbonename.indexOf("leftfoot") > -1 && zleftfootbone == -1) {
+											zleftfootbone = j;
 										}
 										if (j == 0) {
-											results.skeletons[i].bones[j].parent = avatarscale;
+											zresponse.skeletons[i].bones[j].parent = zavatarscale;
 										} else {
-											if (results.skeletons[i].bones[j].parent == null) {
-												results.skeletons[i].bones[j].parent = results.skeletons[i].bones[0];
+											if (zresponse.skeletons[i].bones[j].parent == null) {
+												zresponse.skeletons[i].bones[j].parent = zresponse.skeletons[i].bones[0];
 											}
 										}
 									}
 								}
-								if (headtopbone > -1) {
-									var headtop = BABYLON.MeshBuilder.CreateBox(avatarname + "-headtop", {}, scene);
-									headtop.scaling = new BABYLON.Vector3(1/scalingx, 1/scalingy, 1/scalingz);
-									headtop.material = covering = new BABYLON.StandardMaterial("mat" + avatarname + '-headtop', scene);
-									headtop.material.alpha = 0;
-									headtop.isPickable = true;
-									//WTW.registerMouseOver(headtop);
-									headtop.attachToBone(results.skeletons[i].bones[headtopbone], results.meshes[0]);
-									if (avatarname == "myavatar-" + dGet("wtw_tinstanceid").value) {
-										avatarcamera.parent = headtop;
-										avatarcamera.position.y = 0;
-										avatarcamera.rotation.y = WTW.getRadians(0);
+								if (zheadtopbone > -1) {
+									var zheadtop = BABYLON.MeshBuilder.CreateBox(zavatarname + "-headtop", {}, scene);
+									zheadtop.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+									zheadtop.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-headtop', scene);
+									zheadtop.material.alpha = 0;
+									zheadtop.isPickable = true;
+									//WTW.registerMouseOver(zheadtop);
+									zheadtop.attachToBone(zresponse.skeletons[i].bones[zheadtopbone], zresponse.meshes[0]);
+									if (zavatarname == "myavatar-" + dGet("wtw_tinstanceid").value) {
+										zavatarcamera.parent = zheadtop;
+										zavatarcamera.position.y = 0;
+										zavatarcamera.rotation.y = WTW.getRadians(0);
 									}
 								}
-								if (spine2bone > -1) {
-									var chest = BABYLON.MeshBuilder.CreateBox(avatarname + "-chest", {}, scene);
-									chest.scaling = new BABYLON.Vector3(1/scalingx, 1/scalingy, 1/scalingz);
-									chest.material = covering = new BABYLON.StandardMaterial("mat" + avatarname + '-chest', scene);
-									chest.material.alpha = 0;
-									chest.isPickable = true;
-									//WTW.registerMouseOver(chest);
-									chest.attachToBone(results.skeletons[i].bones[spine2bone], results.meshes[0]);
+								if (zspine2bone > -1) {
+									var zchest = BABYLON.MeshBuilder.CreateBox(zavatarname + "-chest", {}, scene);
+									zchest.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+									zchest.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-chest', scene);
+									zchest.material.alpha = 0;
+									zchest.isPickable = true;
+									//WTW.registerMouseOver(zchest);
+									zchest.attachToBone(zresponse.skeletons[i].bones[zspine2bone], zresponse.meshes[0]);
 								}
-								if (righthandbone > -1) {
-									var righthand = BABYLON.MeshBuilder.CreateBox(avatarname + "-righthand", {}, scene);
-									righthand.scaling = new BABYLON.Vector3(1/scalingx, 1/scalingz, 1/scalingz);
-									righthand.material = covering = new BABYLON.StandardMaterial("mat" + avatarname + '-righthand', scene);
-									righthand.material.alpha = 0;
-									righthand.isPickable = true;
-									//WTW.registerMouseOver(righthand);
-									righthand.attachToBone(results.skeletons[i].bones[righthandbone], results.meshes[0]);
+								if (zrighthandbone > -1) {
+									var zrighthand = BABYLON.MeshBuilder.CreateBox(zavatarname + "-righthand", {}, scene);
+									zrighthand.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingz, 1/zscalingz);
+									zrighthand.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-righthand', scene);
+									zrighthand.material.alpha = 0;
+									zrighthand.isPickable = true;
+									//WTW.registerMouseOver(zrighthand);
+									zrighthand.attachToBone(zresponse.skeletons[i].bones[zrighthandbone], zresponse.meshes[0]);
 								}
-								if (lefthandbone > -1) {
-									var lefthand = BABYLON.MeshBuilder.CreateBox(avatarname + "-lefthand", {}, scene);
-									lefthand.scaling = new BABYLON.Vector3(1/scalingx, 1/scalingy, 1/scalingz);
-									lefthand.material = covering = new BABYLON.StandardMaterial("mat" + avatarname + '-lefthand', scene);
-									lefthand.material.alpha = 0;
-									lefthand.isPickable = true;
-									//WTW.registerMouseOver(lefthand);
-									lefthand.attachToBone(results.skeletons[i].bones[lefthandbone], results.meshes[0]);
+								if (zlefthandbone > -1) {
+									var zlefthand = BABYLON.MeshBuilder.CreateBox(zavatarname + "-lefthand", {}, scene);
+									zlefthand.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+									zlefthand.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-lefthand', scene);
+									zlefthand.material.alpha = 0;
+									zlefthand.isPickable = true;
+									//WTW.registerMouseOver(zlefthand);
+									zlefthand.attachToBone(zresponse.skeletons[i].bones[zlefthandbone], zresponse.meshes[0]);
 								}
-								if (rightlegbone > -1) {
-									var rightleg = BABYLON.MeshBuilder.CreateBox(avatarname + "-righthip", {}, scene);
-									rightleg.scaling = new BABYLON.Vector3(1/scalingx, 1/scalingy, 1/scalingz);
-									rightleg.material = covering = new BABYLON.StandardMaterial("mat" + avatarname + '-rightleg', scene);
-									rightleg.material.alpha = 0;
-									rightleg.isPickable = true;
-									//WTW.registerMouseOver(rightleg);
-									rightleg.attachToBone(results.skeletons[i].bones[rightlegbone], results.meshes[0]);
+								if (zrightlegbone > -1) {
+									var zrightleg = BABYLON.MeshBuilder.CreateBox(zavatarname + "-righthip", {}, scene);
+									zrightleg.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+									zrightleg.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-rightleg', scene);
+									zrightleg.material.alpha = 0;
+									zrightleg.isPickable = true;
+									//WTW.registerMouseOver(zrightleg);
+									zrightleg.attachToBone(zresponse.skeletons[i].bones[zrightlegbone], zresponse.meshes[0]);
 								}
-								if (leftlegbone > -1) {
-									var leftleg = BABYLON.MeshBuilder.CreateBox(avatarname + "-lefthip", {}, scene);
-									leftleg.scaling = new BABYLON.Vector3(1/scalingx, 1/scalingy, 1/scalingz);
-									leftleg.material = covering = new BABYLON.StandardMaterial("mat" + avatarname + '-leftleg', scene);
-									leftleg.material.alpha = 0;
-									leftleg.isPickable = true;
-									//WTW.registerMouseOver(leftleg);
-									leftleg.attachToBone(results.skeletons[i].bones[leftlegbone], results.meshes[0]);
+								if (zleftlegbone > -1) {
+									var zleftleg = BABYLON.MeshBuilder.CreateBox(zavatarname + "-lefthip", {}, scene);
+									zleftleg.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+									zleftleg.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-leftleg', scene);
+									zleftleg.material.alpha = 0;
+									zleftleg.isPickable = true;
+									//WTW.registerMouseOver(zleftleg);
+									zleftleg.attachToBone(zresponse.skeletons[i].bones[zleftlegbone], zresponse.meshes[0]);
 								}
-								if (rightfootbone > -1) {
-									var rightfoot = BABYLON.MeshBuilder.CreateBox(avatarname + "-rightfoot", {}, scene);
-									rightfoot.scaling = new BABYLON.Vector3(1/scalingx, 1/scalingy, 1/scalingz);
-									rightfoot.material = covering = new BABYLON.StandardMaterial("mat" + avatarname + '-rightfoot', scene);
-									rightfoot.material.alpha = 0;
-									rightfoot.isPickable = true;
-									//WTW.registerMouseOver(rightfoot);
-									rightfoot.attachToBone(results.skeletons[i].bones[rightfootbone], results.meshes[0]);
+								if (zrightfootbone > -1) {
+									var zrightfoot = BABYLON.MeshBuilder.CreateBox(zavatarname + "-rightfoot", {}, scene);
+									zrightfoot.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+									zrightfoot.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-rightfoot', scene);
+									zrightfoot.material.alpha = 0;
+									zrightfoot.isPickable = true;
+									//WTW.registerMouseOver(zrightfoot);
+									zrightfoot.attachToBone(zresponse.skeletons[i].bones[zrightfootbone], zresponse.meshes[0]);
 								}
-								if (leftfootbone > -1) {
-									var leftfoot = BABYLON.MeshBuilder.CreateBox(avatarname + "-leftfoot", {}, scene);
-									leftfoot.scaling = new BABYLON.Vector3(1/scalingx, 1/scalingy, 1/scalingz);
-									leftfoot.material = covering = new BABYLON.StandardMaterial("mat" + avatarname + '-leftfoot', scene);
-									leftfoot.material.alpha = 0;
-									leftfoot.isPickable = true;
-									//WTW.registerMouseOver(leftfoot);
-									leftfoot.attachToBone(results.skeletons[i].bones[leftfootbone], results.meshes[0]);
+								if (zleftfootbone > -1) {
+									var zleftfoot = BABYLON.MeshBuilder.CreateBox(zavatarname + "-leftfoot", {}, scene);
+									zleftfoot.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
+									zleftfoot.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-leftfoot', scene);
+									zleftfoot.material.alpha = 0;
+									zleftfoot.isPickable = true;
+									//WTW.registerMouseOver(zleftfoot);
+									zleftfoot.attachToBone(zresponse.skeletons[i].bones[zleftfootbone], zresponse.meshes[0]);
 								}
 							}
 							let zendframe = WTW.getLastAnimationKey(WTW.myAvatar);
-							avataranimationdefs[0] = {
+							zavataranimationdefs[0] = {
 								'useravataranimationid':'',
 								'avataranimationid':'r9087b004i9ptv0e',
 								'animationevent':'onwait',
@@ -1696,8 +1696,8 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 								'animationfriendlyname':'',
 								'loadpriority':0,
 								'animationicon':'',
-								'objectfolder':objectfolder,
-								'objectfile':objectfile,
+								'objectfolder':zobjectfolder,
+								'objectfile':zobjectfile,
 								'startframe':'1',
 								'endframe':zendframe,
 								'animationloop':true,
@@ -1708,7 +1708,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 								'totalstartframe':1,
 								'totalendframe':zendframe
 							};
-							WTW.myAvatar.WTW.animations = avataranimationdefs;
+							WTW.myAvatar.WTW.animations = zavataranimationdefs;
 							WTW.myAvatar.WTW.animations.running = [];
 							WTW.myAvatar.WTW.animations.running['onrotateup'] = {
 								'weight':0,
@@ -1719,15 +1719,15 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 								'active':0
 							};
 							if (zendframe > 0) {
-								WTW.myAvatar.WTW.animations.running[avataranimationdefs[0].animationevent] = scene.beginWeightedAnimation(skeleton, Number(avataranimationdefs[0].startframe), Number(avataranimationdefs[0].endframe), 1, avataranimationdefs[0].animationloop, Number(avataranimationdefs[0].speedratio));
-								WTW.avatarMinLoadEnter(avatarname);
+								WTW.myAvatar.WTW.animations.running[zavataranimationdefs[0].animationevent] = scene.beginWeightedAnimation(zskeleton, Number(zavataranimationdefs[0].startframe), Number(zavataranimationdefs[0].endframe), 1, zavataranimationdefs[0].animationloop, Number(zavataranimationdefs[0].speedratio));
+								WTW.avatarMinLoadEnter(zavatarname);
 							} else {
-								WTW.loadAvatarAnimations(avatarname);
+								WTW.loadAvatarAnimations(zavatarname);
 							}
 						}
 					}
 				}
-				baseanimationframes = WTW.getLastAnimationKey(WTW.myAvatar);
+				wtw_baseanimationframes = WTW.getLastAnimationKey(WTW.myAvatar);
 				WTW.stopLoading();
 				WTW.updateDisplayName(dGet('wtw_tnewavatardisplayname').value);
 			}
@@ -1750,12 +1750,12 @@ WTWJS.prototype.loadAnimations = async function() {
 						let zeventname = WTW.getAnimationEventName(zresponse.avataranimations[i].animationevent);
 						if (zeventname != '') {
 							let zselected = false;
-							if (avatardef != null) {
-								if (avatardef.avataranimationdefs != null) {
-									if (avatardef.avataranimationdefs.length > 0) {
-										for (var k=0;k<avatardef.avataranimationdefs.length;k++) {
-											if (avatardef.avataranimationdefs[k] != undefined) {
-												if (avatardef.avataranimationdefs[k].avataranimationid == zresponse.avataranimations[i].avataranimationid) {
+							if (wtw_avatardef != null) {
+								if (wtw_avatardef.avataranimationdefs != null) {
+									if (wtw_avatardef.avataranimationdefs.length > 0) {
+										for (var k=0;k<wtw_avatardef.avataranimationdefs.length;k++) {
+											if (wtw_avatardef.avataranimationdefs[k] != undefined) {
+												if (wtw_avatardef.avataranimationdefs[k].avataranimationid == zresponse.avataranimations[i].avataranimationid) {
 													zselected = true;
 												}
 											}
@@ -1796,8 +1796,8 @@ WTWJS.prototype.chooseAvatar = async function() {
 	/* open horizontal scroll of avatar images to select the avatar */
 	try {
 		WTW.startLoading();
-		if (avatarSelector != null) {
-			avatarSelector.dispose();
+		if (wtw_avatarselector != null) {
+			wtw_avatarselector.dispose();
 		}
 		WTW.avatars = [];
 		WTW.getAsyncJSON("/connect/avatars.php", 
@@ -1806,33 +1806,33 @@ WTWJS.prototype.chooseAvatar = async function() {
 					zresponse = JSON.parse(zresponse);
 					if (zresponse.avatars != null) {
 						if (zresponse.avatars.length > 0) {
-							avatarSelector = new BABYLON.GUI.ScrollViewer("ChooseAvatar");
-							avatarSelector.width = .96;
-							avatarSelector.height = "225px";
-							avatarSelector.background = "gray";
-							avatarSelector.barColor = "tan";
-							avatarSelector.barBackground = "black";
-							avatarSelector.thumbLength = .5;
-							avatarSelector.barSize = 20;
-							avatarSelector.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-							gui.addControl(avatarSelector);
-							var grid = new BABYLON.GUI.Grid();
-							grid.width = (202 * zresponse.avatars.length) + "px";
-							grid.height = "200px";
+							wtw_avatarselector = new BABYLON.GUI.ScrollViewer("ChooseAvatar");
+							wtw_avatarselector.width = .96;
+							wtw_avatarselector.height = "225px";
+							wtw_avatarselector.background = "gray";
+							wtw_avatarselector.barColor = "tan";
+							wtw_avatarselector.barBackground = "black";
+							wtw_avatarselector.thumbLength = .5;
+							wtw_avatarselector.barSize = 20;
+							wtw_avatarselector.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+							gui.addControl(wtw_avatarselector);
+							var zgrid = new BABYLON.GUI.Grid();
+							zgrid.width = (202 * zresponse.avatars.length) + "px";
+							zgrid.height = "200px";
 							for (var i=0; i<zresponse.avatars.length;i++) {
-								grid.addColumnDefinition(1/zresponse.avatars.length);
+								zgrid.addColumnDefinition(1/zresponse.avatars.length);
 							}
-							grid.addRowDefinition(1);
-							avatarSelector.addControl(grid);
+							zgrid.addRowDefinition(1);
+							wtw_avatarselector.addControl(zgrid);
 							for (var i=0; i<zresponse.avatars.length;i++) {
 								var zavatarid = zresponse.avatars[i].avatarid;
-								var button = BABYLON.GUI.Button.CreateImageWithCenterTextButton(zavatarid + "-button", zresponse.avatars[i].displayname, zresponse.avatars[i].object.folder + zresponse.avatars[i].thumbnails.imagefull);
-								button.width = "200px";
-								button.height = "200px";
-								button.color = "white";
-								button.background = "green";
-								button.onPointerClickObservable.add(function(ev, state) {WTW.selectAvatar(state.currentTarget.name.split('-')[0]);});
-								grid.addControl(button, 0, i);
+								var zbutton = BABYLON.GUI.Button.CreateImageWithCenterTextButton(zavatarid + "-button", zresponse.avatars[i].displayname, zresponse.avatars[i].object.folder + zresponse.avatars[i].thumbnails.imagefull);
+								zbutton.width = "200px";
+								zbutton.height = "200px";
+								zbutton.color = "white";
+								zbutton.background = "green";
+								zbutton.onPointerClickObservable.add(function(ev, state) {WTW.selectAvatar(state.currentTarget.name.split('-')[0]);});
+								zgrid.addControl(zbutton, 0, i);
 								
 								WTW.avatars[i] = {
 									'avatarid': zresponse.avatars[i].avatarid,
@@ -1879,20 +1879,20 @@ WTWJS.prototype.updateColorByHex = function(zhex) {
 				zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zhex);
 				zmold.material.ambientColor = new BABYLON.Color3.FromHexString(zhex);
 				WTW.updateAvatarPartColor(zhex);
-				colorpicker.value = zmold.material.diffuseColor;
+				wtw_colorpicker.value = zmold.material.diffuseColor;
 			} else {
 				zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zhex);
 				zmold.material.specularColor = new BABYLON.Color3.FromHexString(zhex);
 				WTW.updateAvatarPartColor(zhex);
-				colorpicker.value = zmold.material.emissiveColor;
+				wtw_colorpicker.value = zmold.material.emissiveColor;
 			}
-			if (activeinput != null) {
-				activeinput.text = zhex.toUpperCase();
-				activeinput.background = zhex;
-				activeinput.color = WTW.setTextColor(zhex, "#ffffff", "#000000");
-				activeinput.focusedBackground = "#000000";
-				if (activeinput.color == "#000000") {
-					activeinput.focusedBackground = "#ffffff";
+			if (wtw_activeinput != null) {
+				wtw_activeinput.text = zhex.toUpperCase();
+				wtw_activeinput.background = zhex;
+				wtw_activeinput.color = WTW.setTextColor(zhex, "#ffffff", "#000000");
+				wtw_activeinput.focusedBackground = "#000000";
+				if (wtw_activeinput.color == "#000000") {
+					wtw_activeinput.focusedBackground = "#ffffff";
 				}
 			}
 		}
@@ -1915,11 +1915,11 @@ WTWJS.prototype.getMyAvatarPart = function(zpart) {
 					dGet('wtw_tmoldname').value = zmoldname;
 					dGet('wtw_tavatarpart').value = WTW.avatarParts[i].part;
 					var zmold = scene.getMeshByID(zmoldname);
-					if (zmold != null && colorpicker != null) {
+					if (zmold != null && wtw_colorpicker != null) {
 						if (dGet('wtw_tcolortype').value == 'Diffuse') {
-							colorpicker.value = zmold.material.diffuseColor;
+							wtw_colorpicker.value = zmold.material.diffuseColor;
 						} else {
-							colorpicker.value = zmold.material.emissiveColor;
+							wtw_colorpicker.value = zmold.material.emissiveColor;
 						}
 						WTW.hilightMoldFast(zmoldname, "yellow");
 					}
@@ -1982,13 +1982,13 @@ WTWJS.prototype.setMyAvatarColor = function(r, g, b) {
 			var zcovering = zmold.material;
 			zmold.material.dispose();
 			zmold.material = zcovering;
-			if (activeinput != null) {
-				activeinput.text = zpartcolor;
-				activeinput.background = zpartcolor;
-				activeinput.color = WTW.setTextColor(zpartcolor, "#ffffff", "#000000");
-				activeinput.focusedBackground = "#000000";
-				if (activeinput.color == "#000000") {
-					activeinput.focusedBackground = "#ffffff";
+			if (wtw_activeinput != null) {
+				wtw_activeinput.text = zpartcolor;
+				wtw_activeinput.background = zpartcolor;
+				wtw_activeinput.color = WTW.setTextColor(zpartcolor, "#ffffff", "#000000");
+				wtw_activeinput.focusedBackground = "#000000";
+				if (wtw_activeinput.color == "#000000") {
+					wtw_activeinput.focusedBackground = "#ffffff";
 				}
 				WTW.updateAvatarPartColor(zpartcolor);
 			}
@@ -2042,29 +2042,29 @@ WTWJS.prototype.updateDisplayName = function(ztext) {
 WTWJS.prototype.closeMenu = function() {
 	/* close all menus - prep for opening the next menu option */
 	try {
-		if (leftMenu != null) {
-			leftMenu.dispose();
-			leftMenu = null;
+		if (wtw_leftmenu != null) {
+			wtw_leftmenu.dispose();
+			wtw_leftmenu = null;
 		}
-		if (rightMenu != null) {
-			rightMenu.dispose();
-			rightMenu = null;
+		if (wtw_rightmenu != null) {
+			wtw_rightmenu.dispose();
+			wtw_rightmenu = null;
 		}
-		if (rightMenuLower != null) {
-			rightMenuLower.dispose();
-			rightMenuLower = null;
+		if (wtw_rightmenulower != null) {
+			wtw_rightmenulower.dispose();
+			wtw_rightmenulower = null;
 		}
-		if (colorMenu != null) {
-			colorMenu.dispose();
-			colorMenu = null;
+		if (wtw_colormenu != null) {
+			wtw_colormenu.dispose();
+			wtw_colormenu = null;
 		}
-		if (avatarSelector != null) {
-			avatarSelector.dispose();
-			avatarSelector = null;
+		if (wtw_avatarselector != null) {
+			wtw_avatarselector.dispose();
+			wtw_avatarselector = null;
 		}
-		if (colorpicker != null) {
-			colorpicker.dispose();
-			colorpicker = null;
+		if (wtw_colorpicker != null) {
+			wtw_colorpicker.dispose();
+			wtw_colorpicker = null;
 		}
 	} catch (ex) {
 		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-closeMenu=" + ex.message);
@@ -2093,21 +2093,21 @@ WTWJS.prototype.preloadAvatar = async function(zavatarid) {
 WTWJS.prototype.selectAvatar = function(zavatarid) {
 	/* on select avatar, this reloads the avatar by the selected avatar id */
 	try {
-		if (loadingtimer != null) {
+		if (wtw_loadingtimer != null) {
 			WTW.stopLoading();
 		}
 		for (var i=0;i<WTW.avatars.length;i++) {
 			if (WTW.avatars[i] != null) {
 				var zloadedavatarid = '';
-				if (avatardef != null) {
-					if (avatardef.avatarid != undefined) {
-						zloadedavatarid = avatardef.avatarid;
+				if (wtw_avatardef != null) {
+					if (wtw_avatardef.avatarid != undefined) {
+						zloadedavatarid = wtw_avatardef.avatarid;
 					}
 				}
 				if (WTW.avatars[i].avatarid == zavatarid) {
 					WTW.avatars[i].selected = true;
 					if (zloadedavatarid == zavatarid) {
-						WTW.loadAvatarMeshes(avatardef);
+						WTW.loadAvatarMeshes(wtw_avatardef);
 					} else {
 						WTW.loadAvatarMeshes(WTW.avatars[i]);
 					}
@@ -2124,18 +2124,18 @@ WTWJS.prototype.selectAvatar = function(zavatarid) {
 WTWJS.prototype.startLoading = function() {
 	/* show the blinking loading text */
 	try {
-		if (loadingtimer == null) {
-			loadingtimer = window.setInterval(function() {
-				if (loadingtext == null) {
-					loadingtext = new BABYLON.GUI.TextBlock();
-					loadingtext.text = "Loading...";
-					loadingtext.color = "yellow";
-					loadingtext.fontSize = 120;
-					loadingtext.height = "180px";
-					gui.addControl(loadingtext);
+		if (wtw_loadingtimer == null) {
+			wtw_loadingtimer = window.setInterval(function() {
+				if (wtw_loadingtext == null) {
+					wtw_loadingtext = new BABYLON.GUI.TextBlock();
+					wtw_loadingtext.text = "Loading...";
+					wtw_loadingtext.color = "yellow";
+					wtw_loadingtext.fontSize = 120;
+					wtw_loadingtext.height = "180px";
+					gui.addControl(wtw_loadingtext);
 				} else {
-					loadingtext.dispose();
-					loadingtext = null;
+					wtw_loadingtext.dispose();
+					wtw_loadingtext = null;
 				}
 			}, 500);
 		}
@@ -2147,13 +2147,13 @@ WTWJS.prototype.startLoading = function() {
 WTWJS.prototype.stopLoading = function() {
 	/* stop the blinking loading text */
 	try {
-		if (loadingtimer != null) {
-			window.clearInterval(loadingtimer);
-			loadingtimer = null;
+		if (wtw_loadingtimer != null) {
+			window.clearInterval(wtw_loadingtimer);
+			wtw_loadingtimer = null;
 		}
-		if (loadingtext != null) {
-			loadingtext.dispose();
-			loadingtext = null;
+		if (wtw_loadingtext != null) {
+			wtw_loadingtext.dispose();
+			wtw_loadingtext = null;
 		}
 	} catch (ex) {
 		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-stopLoading=" + ex.message);
@@ -2164,21 +2164,21 @@ WTWJS.prototype.mouseClick = function(e) {
 	/* on mouse click event, used to select the part of the avatar to color on the avatar color menu option */
 	try {
 		e = e || window.event;
-		var pickedResult = scene.pick(e.clientX, e.clientY);
-		var pickedname = "";
-		if (pickedResult.pickedMesh == null) {
+		var zpickedresult = scene.pick(e.clientX, e.clientY);
+		var zpickedname = "";
+		if (zpickedresult.pickedMesh == null) {
 			if (WTW.currentID != "") {
-				pickedResult.pickedMesh = scene.getMeshByID(WTW.currentID);
+				zpickedresult.pickedMesh = scene.getMeshByID(WTW.currentID);
 			}
-			pickedname = WTW.currentID;
+			zpickedname = WTW.currentID;
 		} else {
-			pickedname = pickedResult.pickedMesh.name;
+			zpickedname = zpickedresult.pickedMesh.name;
 		}
-		if (pickedname != '') {
+		if (zpickedname != '') {
 			switch (dGet('wtw_activemenu').value) {
 				case "2":
-					if (pickedname.indexOf('-') > -1) {
-						let part = pickedname.split('-')[2];
+					if (zpickedname.indexOf('-') > -1) {
+						let part = zpickedname.split('-')[2];
 						WTW.getMyAvatarPart(part);
 						WTW.loadLeftMenu(2);
 					}
@@ -2206,28 +2206,28 @@ window.onload = function () {
 		window.attachEvent("onmessage", WTW.onMessage, false);
 	}
 	/* get avatar speed settings */
-	var walkspeed = WTW.getCookie("walkspeed");
-	if (walkspeed != null) {
-		if (WTW.isNumeric(walkspeed)) {
-			WTW.walkSpeed = Number(walkspeed);
+	var zwalkspeed = WTW.getCookie("walkspeed");
+	if (zwalkspeed != null) {
+		if (WTW.isNumeric(zwalkspeed)) {
+			WTW.walkSpeed = Number(zwalkspeed);
 		}
 	}
-	var walkanimationspeed = WTW.getCookie("walkanimationspeed");
-	if (walkanimationspeed != null) {
-		if (WTW.isNumeric(walkanimationspeed)) {
-			WTW.walkAnimationSpeed = Number(walkanimationspeed);
+	var zwalkanimationspeed = WTW.getCookie("walkanimationspeed");
+	if (zwalkanimationspeed != null) {
+		if (WTW.isNumeric(zwalkanimationspeed)) {
+			WTW.walkAnimationSpeed = Number(zwalkanimationspeed);
 		}
 	}
-	var turnspeed = WTW.getCookie("turnspeed");
-	if (turnspeed != null) {
-		if (WTW.isNumeric(turnspeed)) {
-			WTW.turnSpeed = Number(turnspeed);
+	var zturnspeed = WTW.getCookie("turnspeed");
+	if (zturnspeed != null) {
+		if (WTW.isNumeric(zturnspeed)) {
+			WTW.turnSpeed = Number(zturnspeed);
 		}
 	}
-	var turnanimationspeed = WTW.getCookie("turnanimationspeed");
-	if (turnanimationspeed != null) {
-		if (WTW.isNumeric(turnanimationspeed)) {
-			WTW.turnAnimationSpeed = Number(turnanimationspeed);
+	var zturnanimationspeed = WTW.getCookie("turnanimationspeed");
+	if (zturnanimationspeed != null) {
+		if (WTW.isNumeric(zturnanimationspeed)) {
+			WTW.turnAnimationSpeed = Number(zturnanimationspeed);
 		}
 	}
 	/* get canvas and initiate the create scene function (and start render loop for animation) */

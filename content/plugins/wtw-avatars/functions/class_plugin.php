@@ -119,12 +119,12 @@ class wtwavatars {
 			/* $wtwplugins->addMoldDef("My Custom Mold - NAME FOR THE LIST", "webmold or mold - LIST", "wtwavatars.functionname(passed, values);"); */
 			/* $wtwplugins->addMoldDef("My Custom Mold", "webmold", "wtwavatars.addMoldMyCustomMold(zmoldname, zmolddef, zlenx, zleny, zlenz);"); */
 			/* Set the custom mold defaults and show-hide form fields as needed */
-			/* $wtwplugins->addScriptFunction("setnewmolddefaults", "wtwavatars.setNewMoldDefaults(zshape, zpositionX, zpositionY, zpositionZ, zrotationY);"); */
+			/* $wtwplugins->addScriptFunction("setnewmolddefaults", "wtwavatars.setNewMoldDefaults(zshape, zpositionx, zpositiony, zpositionz, zrotationy);"); */
 			/* $wtwplugins->addScriptFunction("setmoldformfields", "wtwavatars.setMoldFormFields(zshape);"); */
 
 			/* Custom action zones */
 			/* The following create the list of new action zones added by this plugin and assign the script to create the action zone */
-			/* $wtwplugins->addActionZoneDef("My Custom Zone", "wtwavatars.addActionZoneMyCustomZone(zactionzonename, zactionzoneind, zactionzonedef);"); */
+			/* $wtwplugins->addActionZoneDef("My Custom Zone", "wtwavatars.addActionZoneMyCustomZone(zactionzonename, zactionzoneind, zactionzonedef);", "0"); */
 			/* Set the custom action zone defaults and show-hide form fields as needed */
 			/* $wtwplugins->addScriptFunction("setnewactionzonedefaults", "wtwavatars.setNewActionZoneDefaults(zactionzonetype);"); */
 			/* $wtwplugins->addScriptFunction("setactionzoneformfields", "wtwavatars.setActionZoneFormFields(zactionzonetype);"); */

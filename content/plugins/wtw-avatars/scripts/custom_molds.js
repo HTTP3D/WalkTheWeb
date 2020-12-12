@@ -23,21 +23,21 @@ WTW_AVATARS.prototype.addMoldMyCustomMold = function(zmoldname, zmolddef, zlenx,
 	return zmold;
 }
 
-WTW_AVATARS.prototype.setNewMoldDefaults = function(zshape, zpositionX, zpositionY, zpositionZ, zrotationY) {
+WTW_AVATARS.prototype.setNewMoldDefaults = function(zshape, zpositionx, zpositiony, zpositionz, zrotationy) {
 	try {
 		/* add each custom mold to this one function as a case - no need to add additional hooks */
 		/* zshape is name of my custom mold - all lowercase and no spaces */
 		switch (zshape) {
 			case "mycustommold":
 				/* position x, y, x and rotationy are calculated from the current camera position so it is in front of the camera */
-				dGet('wtw_tmoldpositionx').value = zpositionX;
-				dGet('wtw_tmoldpositiony').value = zpositionY;
-				dGet('wtw_tmoldpositionz').value = zpositionZ;
+				dGet('wtw_tmoldpositionx').value = zpositionx;
+				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositionz').value = zpositionz;
 				dGet('wtw_tmoldscalingx').value = "1.00";
 				dGet('wtw_tmoldscalingy').value = "1.00";
 				dGet('wtw_tmoldscalingz').value = "1.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationY;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";

@@ -119,7 +119,7 @@ class devidplugintemplate {
 
 			/* Custom action zones */
 			/* The following create the list of new action zones added by this plugin and assign the script to create the action zone */
-			$wtwplugins->addActionZoneDef("My Custom Zone", "devidplugintemplate.addActionZoneMyCustomZone(zactionzonename, zactionzoneind, zactionzonedef);");
+			$wtwplugins->addActionZoneDef("My Custom Zone", "devidplugintemplate.addActionZoneMyCustomZone(zactionzonename, zactionzoneind, zactionzonedef);", "0");
 			/* Set the custom action zone defaults and show-hide form fields as needed */
 			$wtwplugins->addScriptFunction("setnewactionzonedefaults", "devidplugintemplate.setNewActionZoneDefaults(zactionzonetype);");
 			$wtwplugins->addScriptFunction("setactionzoneformfields", "devidplugintemplate.setActionZoneFormFields(zactionzonetype);");
