@@ -145,8 +145,8 @@ class wtwadminmenu {
 			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingaddweb', '<div class="wtw-altkey">ctrl+o</div>Add 3D Web <u>O</u>bject', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingaddthing', '<div class="wtw-altkey">ctrl+h</div>Add 3D T<u>h</u>ing', 30, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingactionzones', '<div class="wtw-altkey">ctrl+a</div>Add or Edit <u>A</u>ctions', 40, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('editbuilding', '', '<hr class="wtw-menuhr" />', 80, $zupdateroles, "");
-			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 100, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editbuilding', '', '<hr class="wtw-menuhr" />', 999, $zupdateroles, "");
+			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 1000, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			
 			$this->addAdminSubMenuItem('editmold', 'wtw_createduplicatemold', '<div class="wtw-altkey">ctrl+p</div>Create a Duplicate Item', 50, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 
@@ -168,8 +168,8 @@ class wtwadminmenu {
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityactionzones', '<div class="wtw-altkey">ctrl+a</div>Add or Edit <u>A</u>ctions', 40, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editcommunity', '', '<hr class="wtw-menuhr" />', 60, $zupdateroles, "");
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunitylandscape', '<div class="wtw-altkey">ctrl+l</div>Edit <u>L</u>andscape and Scene', 65, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('editcommunity', '', '<hr class="wtw-menuhr" />', 80, $zupdateroles, "");
-			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 100, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editcommunity', '', '<hr class="wtw-menuhr" />', 100, $zupdateroles, "");
+			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 1000, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 
 			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapesky', 'Sky', 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapeground', 'Extended Ground', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");
@@ -189,8 +189,8 @@ class wtwadminmenu {
 			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingaddblock', '<div class="wtw-altkey">ctrl+b</div>Add 3D Building <u>B</u>lock', 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingaddweb', '<div class="wtw-altkey">ctrl+o</div>Add 3D Web <u>O</u>bject', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingactions', '<div class="wtw-altkey">ctrl+a</div>Add or Edit <u>A</u>ctions', 40, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('editthing', '', '<hr class="wtw-menuhr" />', 80, $zupdateroles, "");
-			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 100, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editthing', '', '<hr class="wtw-menuhr" />', 100, $zupdateroles, "");
+			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 1000, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 
 			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listmeshes', 'List Current Meshes', 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listcgs', 'List Connecting Grids', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");
