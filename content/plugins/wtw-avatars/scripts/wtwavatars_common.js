@@ -846,7 +846,7 @@ WTWJS.prototype.onMessage = function (e) {
 		e = e || window.event;
 		zmessage = e.data.message;
 		if (zmessage != '') {
-WTW.log(zmessage.replace("<","&lt;").replace(">","&gt;"));
+//WTW.log(zmessage.replace("<","&lt;").replace(">","&gt;"));
 		}
 	} catch (ex) {
 		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-onMessage=" + ex.message);
