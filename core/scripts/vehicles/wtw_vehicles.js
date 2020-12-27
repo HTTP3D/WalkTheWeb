@@ -9,7 +9,7 @@ WTWJS.prototype.toggleStartVehicle = function(zpickedname) {
 		
 		if (WTW.animationSet == "") {
 			WTW.animationSet = "vehicle-boat";
-WTW.log("BOAT ON");
+//WTW.log("BOAT ON");
 			var zconnectinggrid = WTW.getMoldConnectingGrid(zpickedname);
 			WTW.drive = WTW.newDriveVehicle();
 			WTW.drive.vehicletype = 'boat';
@@ -26,7 +26,7 @@ WTW.log("BOAT ON");
 			WTW.drive.vehicle = null;
 			WTW.vehicleStopSpeed();
 			WTW.vehicleStopTurn();
-WTW.log("BOAT OFF");
+//WTW.log("BOAT OFF");
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-vehicles-wtw_vehicles.js-toggleStartVehicle=" + ex.message);

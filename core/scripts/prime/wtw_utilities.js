@@ -1343,7 +1343,10 @@ WTWJS.prototype.toggle = function(zelementname) {
 
 WTWJS.prototype.getWorldPosition = function(zmold) {
 	/* world position is useful when molds have alternate parent coordinates */
-	var zabspos = {'x':0,'y':0,'z':0};
+	var zabspos = {
+		'x':0,
+		'y':0,
+		'z':0};
 	try {
 		zmold.computeWorldMatrix(true);
 		zabspos = zmold.getAbsolutePosition();
@@ -1351,6 +1354,56 @@ WTWJS.prototype.getWorldPosition = function(zmold) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getWorldPosition=" + ex.message);
 	}
 	return zabspos;
+}
+
+WTWJS.prototype.getWorldData = function(zmold) {
+	/* world data is useful when molds have alternate parent coordinates */
+	/* rotation is in radians */
+	var zabs = {
+		'position':{
+			'x':0,
+			'y':0,
+			'z':0
+		},
+		'scaling':{
+			'x':1,
+			'y':1,
+			'z':1
+		},
+		'rotation':{
+			'x':0,
+			'y':0,
+			'z':0
+		}
+	};
+	try {
+		zmold.computeWorldMatrix(true);
+		var zworldmatrix = zmold.getWorldMatrix();
+		var zrotation =  new BABYLON.Quaternion();
+		var zposition = new BABYLON.Vector3();
+		var zscaling = new BABYLON.Vector3();
+		zworldmatrix.decompose(zscaling, zrotation, zposition);
+		zabs = {
+			'position':{
+				'x':Number(zposition.x),
+				'y':Number(zposition.y),
+				'z':Number(zposition.z)
+			},
+			'scaling':{
+				'x':Number(zscaling.x),
+				'y':Number(zscaling.y),
+				'z':Number(zscaling.z)
+			},
+			'rotation':{
+				'x':Number(zrotation.x),
+				'y':Number(zrotation.y),
+				'z':Number(zrotation.z)
+			}
+		};
+	} catch (ex){
+		WTW.log("core-scripts-prime-wtw_utilities.js-getWorldData=" + ex.message);
+	}
+	return zabs;
 }
 
 WTWJS.prototype.getWorldRotation = function(zmold) {
@@ -1584,7 +1637,10 @@ WTWJS.prototype.getMoveVector = function(zsourcename, zdegreeoffset, zstride, ze
 					}
 				}
 			}
-		}
+/*			if (WTW.myAvatar.ridealong != undefined && WTW.myAvatar.ridealong != null) {
+				zmove = new BABYLON.Vector3(parseFloat(Math.cos(zrot)) * zstride, 0, -parseFloat(Math.sin(zrot)) * zstride);
+			}
+*/		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getMoveVector=" + ex.message);
 	}
@@ -1664,7 +1720,10 @@ WTWJS.prototype.getMoveDownVector = function(zsourcename, zstride) {
 			if ((zdist1 < 1.2 || zdist2 < 1.2 || zdist3 < 1.2 || zdist4 < 1.2) && ((zslope1 > 0 && zslope1 < zcriticalslope) || (zslope2 > 0 && zslope2 < zcriticalslope))) {
 				zmove = new BABYLON.Vector3(0, 0, 0);
 			} 
-		}
+/*			if (WTW.myAvatar.ridealong != undefined && WTW.myAvatar.ridealong != null) {
+				zmove = new BABYLON.Vector3(0, 0, 0);
+			}
+*/		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getMoveDownVector=" + ex.message);
 	}

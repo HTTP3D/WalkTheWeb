@@ -1472,7 +1472,7 @@ WTWJS.prototype.startRender = function() {
 					}
 					/* sets the closest building on the menu bar */
 					WTW.setClosestBuilding();
-					if (WTW.checkZones || WTW.isInitCycle == 1) {
+					if (WTW.checkZones || WTW.isInitCycle == 1) { /* || (WTW.myAvatar.ridealong != undefined && WTW.myAvatar.ridealong != null) */
 						/* checks action zones when conditions change that require a check */
 						WTW.checkActionZones();
 					}

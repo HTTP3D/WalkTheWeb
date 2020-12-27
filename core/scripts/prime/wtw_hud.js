@@ -1,7 +1,7 @@
 WTWJS.prototype.openHUDFollow = function() {
 	/* new feature just beginning to be coded */
 	try {
-WTW.log("OPEN HUD");
+//WTW.log("OPEN HUD");
 		var zanchor = new BABYLON.TransformNode("");
 		var zmanager = new BABYLON.GUI.GUI3DManager(scene);
 

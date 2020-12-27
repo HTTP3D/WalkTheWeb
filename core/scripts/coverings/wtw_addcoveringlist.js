@@ -209,6 +209,14 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 				WTW.hide('wtw_moldtexturepreview');
 				WTW.hide('wtw_moldbasictextureset2div');
 				break;
+			case "none":
+				WTW.hide('wtw_moldcolorsdiv');
+				WTW.hide('wtw_moldtexturetitle');
+				WTW.hide('wtw_moldbumptexturetitle');
+				WTW.hide('wtw_moldbumptextureset2div');
+				WTW.hide('wtw_moldtexturepreview');
+				WTW.hide('wtw_moldbasictextureset2div');
+				break;
 			default:
 				WTW.hide('wtw_moldcolorsdiv');
 				WTW.show('wtw_moldtexturetitle');

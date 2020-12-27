@@ -722,6 +722,7 @@ WTWJS.prototype.newAvatarDef = function() {
 			'movetime':'',
 			'moveevents':'',
 			'updated':'',
+			'ridealong':null,
 			'lastupdate':false,
 			'loaded':false
 		};

@@ -616,13 +616,21 @@ WTWJS.prototype.setMovingCameras = function(zavatar) {
 	/* this function executes every time your avatar moves or turns - or - in the render cycle when you are driving a vehicle */
 	try {
 		if (zavatar != null && WTW.cameraFocus == 1) {
+			var zavatarradiansy = zavatar.rotation.y;
+			
+			
+			
 			/* these objects are used to focus the camera on parts of the avatar */
 			var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
 			var zavatarcenter = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
 			/* rotation of a parent object to the avatar (riding on a vehicle) is added to the camera rotation for world space */
 			var zrotation = 0;
 			if (zavatar.parent != null) {
-				zrotation = WTW.getDegrees(zavatar.parent.rotation.y);
+				if (zavatar.parent.name.indexOf('ridealong-parent') > -1) {
+					zrotation = WTW.getDegrees(zavatar.parent.parent.rotation.y);
+				} else {
+					zrotation = WTW.getDegrees(zavatar.parent.rotation.y);
+				}
 			}
 			
 			/* cameras only adjusts movement when focused on your avatar */

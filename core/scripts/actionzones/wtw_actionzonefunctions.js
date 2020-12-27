@@ -170,30 +170,68 @@ WTWJS.prototype.checkLoadAnimations = function(zactionzoneind) {
 	}
 }
 
+
 WTWJS.prototype.checkRideAlongZone = function(zactionzone, zactionzoneind, zmeinzone, zothersinzone) {
 	/* see if avatar entered a ride along zone - if so, change the parent and transpose the position and rotation */
 	try {
 		var zavatarparentname = '';
-		var zactionzoneparentname = '';
+		var zactionzoneparentname = zactionzone.name + '-parenttest';
+		var zactionzoneparent = scene.getMeshByID(zactionzoneparentname);
+//		var zactionzonepos = WTW.getWorldPosition(zactionzoneparent);
+		//var zcoords = WTW.getWorldData(zactionzoneparent);
+		
+		
 		if (WTW.myAvatar.parent != null) {
 			zavatarparentname = WTW.myAvatar.parent.id;
 		}
-		if (zactionzone.parent != null) {
-			zactionzoneparentname = zactionzone.parent.id;
+		if (zactionzoneparent != null) {
+			if (zmeinzone) {
+/*				var zcoords = WTW.getWorldData(zactionzoneparent);
+				if (WTW.myAvatar.ridealong != undefined && WTW.myAvatar.ridealong != null) {
+					if (WTW.isNumeric(zcoords.position.y) && WTW.isNumeric(WTW.myAvatar.ridealong.position.y)) {
+WTW.log("new=" + zactionzonepos.y);
+WTW.log("last=" + WTW.myAvatar.ridealong.position.y);
+WTW.log("dy=" + (zactionzonepos.y - WTW.myAvatar.ridealong.position.y));
+						WTW.myAvatar.position.y += (Number(zactionzonepos.y) - Number(WTW.myAvatar.ridealong.position.y));
+					}
+				}
+//				WTW.myAvatar.ridealong = zcoords;
+*/				
+
+				if (WTW.myAvatar.parent.name != zactionzoneparent.name) {
+					WTW.myAvatar.setParent(zactionzoneparent);
+					//WTW.myAvatar.parent = zactionzoneparent;
+//WTW.log("zactionzoneparent=" + zactionzoneparent.name);
+				}
+
+//WTW.log("avatar=" + WTW.myAvatar.parent.name);
+
+//				WTW.myAvatar.position.x -= (zcoords.position.x - zpositionx);
+//				WTW.myAvatar.position.y -= (zcoords.position.y - zpositiony);
+//				WTW.myAvatar.position.z -= (zcoords.position.z - zpositionz);
+				//WTW.myAvatar.rotation.x = (zrotationx - zcoords.rotation.x);
+
+//				WTW.myAvatar.rotation.y -= zcoords.rotation.y; //WTW.getRadians(Number(WTW.getDegrees(Number(zrotationy))) - Number(WTW.getDegrees(Number(zcoords.rotation.y))));
+				//WTW.myAvatar.rotation.z = (zrotationz - zcoords.rotation.z);
+//WTW.log("az-x=" + WTW.getDegrees(zrotationx) + " = " + WTW.getDegrees(zcoords.rotation.x));
+//WTW.log("az-y=" + WTW.getDegrees(zrotationy) + " = " + WTW.getDegrees(zcoords.rotation.y));
+//WTW.log("az-z=" + WTW.getDegrees(zrotationz) + " = " + WTW.getDegrees(zcoords.rotation.z));
+
+				
+			} else {
+//				WTW.myAvatar.ridealong = null;
+//				if (WTW.myAvatar.parent.name != WTW.mainParentMold.name) {
+//					WTW.myAvatar.setParent(WTW.mainParentMold);
+//WTW.log("parent=" + WTW.mainParentMold.name);		
+//				}
+//				WTW.myAvatar.position.x += (zpositionx - zcoords.position.x);
+//				WTW.myAvatar.position.y -= (zpositiony - zcoords.position.y);
+//WTW.log("zpositionz=" + zpositionz);
+//WTW.log("zazz=" + zcoords.position.z);
+
+//				WTW.myAvatar.position.z += (zpositionz - zcoords.position.z);
+			} 
 		}
-		if (zmeinzone && zavatarparentname != zactionzoneparentname) {
-			WTW.myAvatar.position.x -= zactionzone.parent.position.x;
-			WTW.myAvatar.position.y -= zactionzone.parent.position.y;
-			WTW.myAvatar.position.z -= zactionzone.parent.position.z;
-			WTW.myAvatar.parent = zactionzone.parent;
-			
-		} else if (zmeinzone == false && zavatarparentname == zactionzoneparentname) {
-			WTW.myAvatar.position.x += zactionzone.parent.position.x;
-			WTW.myAvatar.position.y += zactionzone.parent.position.y;
-			WTW.myAvatar.position.z += zactionzone.parent.position.z;
-			WTW.myAvatar.parent = WTW.mainParentMold;
-			
-		} 
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-checkRideAlongZone=" + ex.message);
 	}

@@ -742,150 +742,30 @@ WTWJS.prototype.addActionzoneRidealong = function(zactionzonename, zactionzonein
 	/* ridealong - (work in progress) shape often box by default - attaches to a parent mold and moves with the parent mold - any avatar in the zone will automatically parent and move with the parent mold - picture a ride on a boat where the avatar can still walk around the boat */
 	var zactionzone;
 	try {
+		zactionzone = BABYLON.MeshBuilder.CreateBox(zactionzonename, {}, scene);
+		zactionzone.position = new BABYLON.Vector3(zactionzonedef.position.x, zactionzonedef.position.y, zactionzonedef.position.z);
+		zactionzone.scaling = new BABYLON.Vector3(zactionzonedef.scaling.x, zactionzonedef.scaling.y, zactionzonedef.scaling.z);
+		zactionzone.rotation = new BABYLON.Vector3(WTW.getRadians(zactionzonedef.rotation.x), WTW.getRadians(zactionzonedef.rotation.y), WTW.getRadians(zactionzonedef.rotation.z));
+		zactionzone.material = new BABYLON.StandardMaterial("mat" + zactionzonename, scene);
+		zactionzone.material.alpha = .2;
+		zactionzone.isPickable = false;
+		zactionzone.checkCollisions = false;
 
-		/* create the shape for the animation zone */
-		/* default actionzoneshape is cube and hidden (opacity 0) */
-		var zmolddef = WTW.newMold();
-		zmolddef.shape = zactionzonedef.actionzoneshape;
-		zmolddef.covering = "hidden";
-		zmolddef.position.x = zactionzonedef.position.x;
-		zmolddef.position.y = zactionzonedef.position.y;
-		zmolddef.position.z = zactionzonedef.position.z;
-		zmolddef.scaling.x = zactionzonedef.scaling.x;
-		zmolddef.scaling.y = zactionzonedef.scaling.y;
-		zmolddef.scaling.z = zactionzonedef.scaling.z;
-		zmolddef.rotation.x = zactionzonedef.rotation.x;
-		zmolddef.rotation.y = zactionzonedef.rotation.y;
-		zmolddef.rotation.z = zactionzonedef.rotation.z;
-		zmolddef.subdivisions = 12;
-		zmolddef.opacity = 0;
-		zmolddef.parentname = zactionzonedef.parentname;
-		zmolddef.actionzoneind = zactionzoneind;
-		zmolddef.checkcollisions = "0";
-		zmolddef.ispickable = "0";
-		WTW.addMoldToQueue(zactionzonename, zmolddef, zmolddef.parentname, zmolddef.covering, null);
+		var zactionzoneparent = BABYLON.MeshBuilder.CreateBox(zactionzonename + '-parent', {}, scene);
+		zactionzoneparent.position = new BABYLON.Vector3(0,0,0);
+		zactionzoneparent.scaling = new BABYLON.Vector3(1/zactionzonedef.scaling.x, 1/zactionzonedef.scaling.y, 1/zactionzonedef.scaling.z);
+		zactionzoneparent.rotation = new BABYLON.Vector3(WTW.getRadians(0), WTW.getRadians(0), WTW.getRadians(0));
+		zactionzoneparent.material = new BABYLON.StandardMaterial("mat" + zactionzonename + '-parent', scene);
+		zactionzoneparent.material.alpha = .4;
+		zactionzoneparent.isPickable = false;
+		zactionzoneparent.checkCollisions = false;
+		zactionzoneparent.parent = zactionzone;
 		if (WTW.adminView == 1) {
 			if (dGet('wtw_bzones').title == "Action Zones are Shown" || zactionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
 				WTW.setOpacity(zactionzonename, .2);
 			}
 		}
 		WTW.actionZones[zactionzoneind].shown = "2";
-
-
-
-
-
-
-
-/*		var zparentname = zactionzonedef.parentname;
-		var zpositionx = Number(zactionzonedef.position.x);
-		var zpositiony = Number(zactionzonedef.position.y);
-		var zpositionz = Number(zactionzonedef.position.z);
-		//var zattachmoldid = zactionzonedef.attachmoldid;
-		var zparentmold = scene.getMeshByID(zparentname);
-		if (zparentmold != null) {
-			if (zparentname.indexOf("molds") > -1) {
-				var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
-				if (zactionzoneaxlebase == null) {
-					var zmolddef = WTW.newMold();
-					zmolddef.shape = "box";
-					zmolddef.covering = "hidden";
-					zmolddef.opacity = 0;
-					zmolddef.parentname = zparentname;
-					zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
-					zactionzoneaxlebase.position.x = 0;
-					zactionzoneaxlebase.position.y = 0;
-					zactionzoneaxlebase.position.z = 0;
-					zactionzoneaxlebase.isPickable = false;
-					zactionzoneaxlebase.checkCollisions = false;
-					zactionzoneaxlebase.scaling.x = 1/zparentmold.scaling.x;
-					zactionzoneaxlebase.scaling.y = 1/zparentmold.scaling.y;
-					zactionzoneaxlebase.scaling.z = 1/zparentmold.scaling.z;
-					zactionzoneaxlebase.rotation.x = -zparentmold.rotation.x;
-					zactionzoneaxlebase.rotation.y = -zparentmold.rotation.y;
-					zactionzoneaxlebase.rotation.z = -zparentmold.rotation.z;
-				}
-				zactionzone = scene.getMeshByID(zactionzonename);
-				if (zactionzone == null) {
-					/ * create the shape for the zone that avatars enter to ride along * /
-					/ * default actionzoneshape is cube and hidden (opacity 0) * /
-					var zmolddef5 = WTW.newMold();
-					zmolddef5.shape = zactionzonedef.actionzoneshape;
-					zmolddef5.covering = "hidden";
-					zmolddef5.position.x = zpositionx - zactionzoneaxlebase.position.x;
-					zmolddef5.position.y = zpositiony - zactionzoneaxlebase.position.y;
-					zmolddef5.position.z = zpositionz - zactionzoneaxlebase.position.z;
-					zmolddef5.scaling.x = zactionzonedef.scaling.x;
-					zmolddef5.scaling.y = zactionzonedef.scaling.y;
-					zmolddef5.scaling.z = zactionzonedef.scaling.z;
-					zmolddef5.rotation.x = zactionzonedef.rotation.x;
-					zmolddef5.rotation.y = zactionzonedef.rotation.y;
-					zmolddef5.rotation.z = zactionzonedef.rotation.z;
-					zmolddef5.subdivisions = 12;
-					zmolddef5.opacity = 0;
-					zmolddef5.parentname = zactionzonename.replace("actionzone-","actionzoneaxlebase-");
-					zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
-					zactionzone.isPickable = false;
-					zactionzone.checkCollisions = false;
-				}
-			} else {
-				var zactionzoneaxlebase = scene.getMeshByID(zactionzonename.replace("actionzone-","actionzoneaxlebase-"));
-				if (zactionzoneaxlebase == null) {
-					var zmolddef = WTW.newMold();
-					zmolddef.shape = "box";
-					zmolddef.covering = "hidden";
-					zmolddef.opacity = 0;
-					zmolddef.parentname = zparentname;
-					zactionzoneaxlebase = WTW.addMold(zactionzonename.replace("actionzone-","actionzoneaxlebase-"), zmolddef, zmolddef.parentname, zmolddef.covering);
-					zactionzoneaxlebase.position.x = 0;
-					zactionzoneaxlebase.position.y = 0;
-					zactionzoneaxlebase.position.z = 0;
-					zactionzoneaxlebase.isPickable = false;
-					zactionzoneaxlebase.checkCollisions = false;
-					zactionzoneaxlebase.scaling.x = 1;
-					zactionzoneaxlebase.scaling.y = 1;
-					zactionzoneaxlebase.scaling.z = 1;
-					zactionzoneaxlebase.rotation.x = 0;
-					zactionzoneaxlebase.rotation.y = 0;
-					zactionzoneaxlebase.rotation.z = 0;
-				}
-				zactionzone = scene.getMeshByID(zactionzonename);
-				if (zactionzone == null) {
-					/ * create the shape for the zone that avatars enter to ride along this instance is parented to another action zone (example farris wheel car attached to a spinning wheel) * /
-					/ * default actionzoneshape is cube and hidden (opacity 0) * /
-					var zmolddef5 = WTW.newMold();
-					zmolddef5.shape = zactionzonedef.actionzoneshape;
-					zmolddef5.covering = "hidden";
-					zmolddef5.position.x = zpositionx;
-					zmolddef5.position.y = zpositiony;
-					zmolddef5.position.z = zpositionz;
-					zmolddef5.scaling.x = zactionzonedef.scaling.x;
-					zmolddef5.scaling.y = zactionzonedef.scaling.y;
-					zmolddef5.scaling.z = zactionzonedef.scaling.z;
-					zmolddef5.rotation.x = zactionzonedef.rotation.x;
-					zmolddef5.rotation.y = zactionzonedef.rotation.y;
-					zmolddef5.rotation.z = zactionzonedef.rotation.z;
-					zmolddef5.subdivisions = 12;
-					zmolddef5.opacity = 0;
-					zmolddef5.parentname = zactionzonedef.parentname;
-					zactionzone = WTW.addMold(zactionzonename, zmolddef5, zmolddef5.parentname, zmolddef5.covering);
-					zactionzone.isPickable = false;
-					zactionzone.checkCollisions = false;
-					zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
-				}
-			}
-			if (dGet('wtw_bzones') != null) {
-				if (WTW.adminView == 1 && dGet('wtw_bzones').title == "Action Zones are Shown") {
-					WTW.setOpacity(zactionzonename, .2);
-				}
-			}
-			WTW.actionZones[zactionzoneind].shown = "2";
-		}
-		
-		*/
-		
-		
-		
 	} catch (ex) {
 		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneRidealong=" + ex.message);
 	}
