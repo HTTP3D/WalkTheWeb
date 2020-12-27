@@ -81,11 +81,19 @@ class wtwshopping {
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
 				$wtwplugins->addFullPageForm('wtw_liststorespage', array('admin','developer','architect'), $this->listStoresPage());
 				$wtwplugins->addFullPageForm('wtw_addstoresettingspage', array('admin','developer','architect'), $this->addStoreSettingsPage());
+
+				$wtwplugins->addAdminSubMenuItem('editcommunity', 'wtw_shopping_adminCommunityShoppingObjects', 'Add 3D Store Object', 110, array('admin','developer','architect'), "WTWShopping.openAdminStoreObjects();");
+				
+				$wtwplugins->addAdminSubMenuItem('editbuilding', 'wtw_shopping_adminBuildingShoppingObjects', 'Add 3D Store Object', 110, array('admin','developer','architect'), "WTWShopping.openAdminStoreObjects();");
+				
+				$wtwplugins->addAdminSubMenuItem('editthing', 'wtw_shopping_adminThingShoppingObjects', 'Add 3D Store Object', 110, array('admin','developer','architect'), "WTWShopping.openAdminStoreObjects();");
 				
 				$wtwplugins->addAdminSubMenuItem('communityoptions', 'wtwshopping_admincommunitystores', '3D Store Settings', 27, array('admin','developer','architect'), "WTWShopping.getStoresDropdown('community');");
 				$wtwplugins->addAdminSubMenuItem('buildingoptions', 'wtwshopping_adminbuildingstores', '3D Store Settings', 27, array('admin','developer','architect'), "WTWShopping.getStoresDropdown('building');");
 				$wtwplugins->addAdminSubMenuItem('thingoptions', 'wtwshopping_adminthingstores', '3D Store Settings', 27, array('admin','developer','architect'), "WTWShopping.getStoresDropdown('thing');");
 				
+				$wtwplugins->addAdminMenuForm('wtwshopping_adminMoldObjectsDiv', 'Add 3D Store Object', $this->storeObjectsForm(), array('admin','developer','architect'));
+
 				$wtwplugins->addAdminMenuForm('wtwshopping_admincommunitystoresdiv', '3D Store Settings', $this->storeSettingsForm('community'), array('admin','developer','architect'));
 				$wtwplugins->addAdminMenuForm('wtwshopping_adminbuildingstoresdiv', '3D Store Settings', $this->storeSettingsForm('building'), array('admin','developer','architect'));
 				$wtwplugins->addAdminMenuForm('wtwshopping_adminthingstoresdiv', '3D Store Settings', $this->storeSettingsForm('thing'), array('admin','developer','architect'));
@@ -132,18 +140,18 @@ class wtwshopping {
 			$wtwplugins->addScriptFunction("disposeclean", "WTWShopping.disposeClean(zmoldname);");
 			
 			/* The following create the list of new molds added by this plugin and assign the script to create the mold */
-			$wtwplugins->addMoldDef("Store Product", "webmold", "WTWShopping.addMoldStoreProduct(zmoldname, zmolddef, zlenx, zleny, zlenz);");
+			$wtwplugins->addMoldDef("Store Product", "custom", "WTWShopping.addMoldStoreProduct(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 
-			$wtwplugins->addMoldDef("Store Add to Cart", "webmold", "WTWShopping.addMoldStoreButton(zmoldname, zmolddef, zlenx, zleny, zlenz);");
-			$wtwplugins->addMoldDef("Store Buy Now", "webmold", "WTWShopping.addMoldStoreButton(zmoldname, zmolddef, zlenx, zleny, zlenz);");
-			$wtwplugins->addMoldDef("Store Checkout", "webmold", "WTWShopping.addMoldStoreButton(zmoldname, zmolddef, zlenx, zleny, zlenz);");
-			$wtwplugins->addMoldDef("Store Read More", "webmold", "WTWShopping.addMoldStoreButton(zmoldname, zmolddef, zlenx, zleny, zlenz);");
+			$wtwplugins->addMoldDef("Store Add to Cart", "custom", "WTWShopping.addMoldStoreButton(zmoldname, zmolddef, zlenx, zleny, zlenz);");
+			$wtwplugins->addMoldDef("Store Buy Now", "custom", "WTWShopping.addMoldStoreButton(zmoldname, zmolddef, zlenx, zleny, zlenz);");
+			$wtwplugins->addMoldDef("Store Checkout", "custom", "WTWShopping.addMoldStoreButton(zmoldname, zmolddef, zlenx, zleny, zlenz);");
+			$wtwplugins->addMoldDef("Store Read More", "custom", "WTWShopping.addMoldStoreButton(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 
-			$wtwplugins->addMoldDef("Store Sign", "webmold", "WTWShopping.addMoldStoreSign(zmoldname, zmolddef, zlenx, zleny, zlenz);");
-			$wtwplugins->addMoldDef("Store 3D Sign", "webmold", "WTWShopping.addMoldStore3DSign(zmoldname, zmolddef, zlenx, zleny, zlenz);");
-			$wtwplugins->addMoldDef("Store View Cart", "webmold", "WTWShopping.addMoldStoreViewCart(zmoldname, zmolddef, zlenx, zleny, zlenz);");
-			$wtwplugins->addMoldDef("Store Categories", "webmold", "WTWShopping.addMoldStoreCategories(zmoldname, zmolddef, zlenx, zleny, zlenz);");
-			$wtwplugins->addMoldDef("Store Search", "webmold", "WTWShopping.addMoldStoreSearch(zmoldname, zmolddef, zlenx, zleny, zlenz);");
+			$wtwplugins->addMoldDef("Store Sign", "custom", "WTWShopping.addMoldStoreSign(zmoldname, zmolddef, zlenx, zleny, zlenz);");
+			$wtwplugins->addMoldDef("Store 3D Sign", "custom", "WTWShopping.addMoldStore3DSign(zmoldname, zmolddef, zlenx, zleny, zlenz);");
+			$wtwplugins->addMoldDef("Store View Cart", "custom", "WTWShopping.addMoldStoreViewCart(zmoldname, zmolddef, zlenx, zleny, zlenz);");
+			$wtwplugins->addMoldDef("Store Categories", "custom", "WTWShopping.addMoldStoreCategories(zmoldname, zmolddef, zlenx, zleny, zlenz);");
+			$wtwplugins->addMoldDef("Store Search", "custom", "WTWShopping.addMoldStoreSearch(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 			
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-shopping:functions-class_wtwshopping.php-initHooks=".$e->getMessage());
@@ -208,6 +216,19 @@ class wtwshopping {
 			$zformdata .= "</div>\r\n";
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-shopping:functions-class_wtwshopping.php-listStoresPage=".$e->getMessage());
+		}
+		return $zformdata;
+	}
+	
+	public function storeObjectsForm() {
+		/* admin store settings form */
+		global $wtwplugins;
+		$zformdata = "";
+		try {
+			$zformdata .= "<div id=\"wtw_shopping_moldsbuttonlist\"></div><br />\r\n";
+			$zformdata .= "<div id=\"wtw_shopping_cancelstoreobject\" class=\"wtw-yellowbutton\" onclick=\"WTWShopping.closeAdminStoreObjects();\">Cancel</div><br /><br />\r\n\r\n";
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins:wtw-shopping:functions-class_wtwshopping.php-storeObjectsForm=".$e->getMessage());
 		}
 		return $zformdata;
 	}

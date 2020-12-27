@@ -243,3 +243,52 @@ wtwshopping.prototype.allowConnection = function(zstoreid) {
 	} 
 }
 
+wtwshopping.prototype.openAdminStoreObjects = function() {
+	/* open the 3D Store Molds Form */
+	try {
+		WTW.hideAdminMenu();
+		var zwebtype = 'community';
+		if (buildingid != '') {
+			zwebtype = 'building';
+		} else if (thingid != '') {
+			zwebtype = 'thing';
+		}
+		dGet("wtw_shopping_moldsbuttonlist").innerHTML = '';
+		
+		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "storeproduct\" name=\"wtw_badd" + zwebtype + "storeproduct\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','storeproduct');\" class='wtw-menulevel2'>Product Display</div>\r\n";
+		
+		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "storecategories\" name=\"wtw_badd" + zwebtype + "storecategories\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','storecategories');\" class='wtw-menulevel2'>Store Categories</div>\r\n";
+
+		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "storesearch\" name=\"wtw_badd" + zwebtype + "storesearch\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','storesearch');\" class='wtw-menulevel2'>Product Search</div>\r\n";
+		
+		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "storesign\" name=\"wtw_badd" + zwebtype + "storesign\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','storesign');\" class='wtw-menulevel2'>Store Sign Boxed</div>\r\n";
+
+		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "store3dsign\" name=\"wtw_badd" + zwebtype + "store3dsign\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','store3dsign');\" class='wtw-menulevel2'>Store 3D Sign</div>\r\n";
+
+		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "storeaddtocart\" name=\"wtw_badd" + zwebtype + "storeaddtocart\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','storeaddtocart');\" class='wtw-menulevel2'>Add to Cart Button</div>\r\n";
+
+		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "storebuynow\" name=\"wtw_badd" + zwebtype + "storebuynow\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','storebuynow');\" class='wtw-menulevel2'>Buy Now Button</div>\r\n";
+		
+		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "storecheckout\" name=\"wtw_badd" + zwebtype + "storecheckout\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','storecheckout');\" class='wtw-menulevel2'>Check Out Button</div>\r\n";
+
+		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "storereadmore\" name=\"wtw_badd" + zwebtype + "storereadmore\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','storereadmore');\" class='wtw-menulevel2'>Read More Button</div>\r\n";
+
+		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "storeviewcart\" name=\"wtw_badd" + zwebtype + "storeviewcart\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','storeviewcart');\" class='wtw-menulevel2'>View Cart Button</div>\r\n";
+
+		WTW.show('wtwshopping_adminMoldObjectsDiv');
+		
+	} catch (ex) {
+		WTW.log("plugins:wtw-shopping:scripts-wtwshoppingadmin.js-openAdminStoreObjects=" + ex.message);
+	} 
+}
+
+wtwshopping.prototype.closeAdminStoreObjects = function() {
+	/* close the 3D Store Molds Form */
+	try {
+		WTW.hideAdminMenu();
+		WTW.hide('wtwshopping_adminMoldObjectsDiv');
+		WTW.backToEdit();
+	} catch (ex) {
+		WTW.log("plugins:wtw-shopping:scripts-wtwshoppingadmin.js-closeAdminStoreObjects=" + ex.message);
+	} 
+}
