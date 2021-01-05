@@ -27,7 +27,8 @@ WTWJS.prototype.loadSequence = function() {
 			/* check if loading in admin mode, if so, the function is loaded - sets WTW.adminView variable */
 			WTW.adminView = 1;
 		}
-
+		/* load the content rating */
+		WTW.setContentRating();
 		/* sets up the environment with babylon engine */
 		WTW.initEnvironment();
 		/* see if user is logged in and set the associated settings */
@@ -44,6 +45,28 @@ WTWJS.prototype.loadSequence = function() {
 		WTW.loadUserSettingsAfterEngine();
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_core.js-continueLoadSequence=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.setContentRating = function() {
+	/* get the content rating */
+	try {
+		WTW.getAsyncJSON("/connect/rating.php?webid=" + communityid + buildingid + thingid, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse.unratedcontent == '1') {
+					dGet('wtw_rating').innerHTML = zresponse.rating + "*";
+				} else {
+					dGet('wtw_rating').innerHTML = zresponse.rating;
+				}
+				dGet('wtw_rating').onmouseover = function() {WTW.showToolTip('Content Rating - Click for more');};
+				dGet('wtw_rating').onmouseout = function() {WTW.hideToolTip();};
+				
+				dGet('wtw_contentrating').innerHTML = atob(zresponse.contentrating);
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_core.js-setContentRating=" + ex.message);
 	} 
 }
 

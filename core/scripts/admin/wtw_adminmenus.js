@@ -753,11 +753,15 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.listUploads();
 						break;
 				/* close and exit Admin Items */
+					case "wtw_cancel28":
+						WTW.disposeClean('firstbuilding-----babylonfile');
+						WTW.hideAdminMenu();
+						WTW.backToTools();
+						break;
 					case "wtw_bback28":
 					case "wtw_bback44":
 					case "wtw_bback60":
 					case "wtw_bback61":
-					case "wtw_cancel28":
 					case "wtw_cancel44":
 					case "wtw_cancel60":
 					case "wtw_cancel61":
@@ -1477,6 +1481,9 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 							break;
 						case 80: // p
 							dGet('wtw_adminbuildingaccess').click();
+							break;
+						case 82: // r
+							dGet('wtw_admincommunityrequirements').click();
 							break;
 						case 83: // s
 							dGet('wtw_admincommunitystart').click();

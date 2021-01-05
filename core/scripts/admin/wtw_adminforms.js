@@ -2038,6 +2038,158 @@ WTWJS.prototype.addAnimation = function(zuploadobjectid) {
 }
 
 
+/* Ratings and Requirements Full Page */
+
+WTWJS.prototype.openRequirements = function() {
+	/* open Ratings and Requirements form */
+	try {
+		WTW.getAsyncJSON("/connect/rating.php?extended=0&webid=" + communityid + buildingid + thingid, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse.unratedcontent == '1') {
+					dGet('wtw_enableparentalsettings').checked = false;
+					WTW.enableParentalSettings('0');
+					WTW.setDDLValue('wtw_webrating', 0);
+					WTW.changeRating();
+					dGet('wtw_webcontentwarning').value = '';
+				} else {
+					dGet('wtw_enableparentalsettings').checked = true;
+					WTW.enableParentalSettings('1');
+					WTW.setDDLValue('wtw_webrating', zresponse.ratingvalue);
+					WTW.changeRating();
+					dGet('wtw_webcontentwarning').value = atob(zresponse.contentwarning);
+				}
+				WTW.show('wtw_requirements');
+			}
+		);		
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-openRequirements=" + ex.message);
+	}
+}
+
+WTWJS.prototype.changeSwitch = function(zobj) {
+	try {
+		let zchecked = '0';
+		if (zobj.checked) {
+			zchecked = '1';
+		}
+		switch (zobj.id) {
+			case "wtw_enableparentalsettings":
+				WTW.enableParentalSettings(zchecked);
+				break;
+			case "wtw_enableavatargroups":
+				WTW.enableAvatarGroups(zchecked);
+				break;
+			case "wtw_enablepluginsrequired":
+				WTW.enablePluginsRequired(zchecked);
+				break;
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-changeSwitch=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.changeRating = function() {
+	try {
+		var zrating = WTW.getDDLText('wtw_webrating');
+		switch (zrating) {
+			case "Web-All":
+				dGet('wtw_webratingtext').innerHTML = "All Visitors - Safe for All Ages.";
+				break;
+			case "Web-P":
+				dGet('wtw_webratingtext').innerHTML = "Parental Oversight - Adult supervision suggested for Children.";
+				break;
+			case "Web-P13":
+				dGet('wtw_webratingtext').innerHTML = "Parental Caution for Children - Not recommended for Children under 13 Years Old.";
+				break;
+			case "Web-P17":
+				dGet('wtw_webratingtext').innerHTML = "Parental Oversight for Visitors - Adult supervision recommended for Visitors under 18 Years Old, not recommended for Children under 13 Years Old.";
+				break;
+			case "Web-Adult":
+				dGet('wtw_webratingtext').innerHTML = "Adult - Visitors must be at least 18 Years Old.";
+				break;
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-changeRating=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.enableParentalSettings = function(zchecked) {
+	try {
+		if (zchecked == '1') {
+			dGet('wtw_enableparentaltext').innerHTML = "This 3D Community has Age Restrictions.";
+			dGet('wtw_enableparentaltext2').innerHTML = "Visitors must exceed a minimum Age to browse this 3D Community Website.";
+			WTW.show('wtw_webratingdiv');
+		} else {
+			dGet('wtw_enableparentaltext').innerHTML = "Rating is not set for this 3D Community.";
+			dGet('wtw_enableparentaltext2').innerHTML = "No content warning will be displayed.";
+			WTW.hide('wtw_webratingdiv');
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-enableParentalSettings=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.enableAvatarGroups = function(zchecked) {
+	try {
+
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-enableAvatarGroups=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.enablePluginsRequired = function(zchecked) {
+	try {
+
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-enablePluginsRequired=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.saveCommunityRequirements = function(w) {
+	try {
+		switch (w) {
+			case 1: /* save parental controls */
+				dGet('wtw_parentalcontrolerror').innerHTML = "";
+				var zchecked = '0';
+				if (dGet('wtw_enableparentalsettings').checked) {
+					zchecked = '1';
+				}
+				var zwebrating = WTW.getDDLText('wtw_webrating');
+				var zwebratingvalue = WTW.getDDLValue('wtw_webrating');
+				var zcontentwarning = dGet('wtw_webcontentwarning').value;
+				var zrequest = {
+					'webid': communityid + buildingid + thingid,
+					'parentalcontrols': zchecked,
+					'rating': zwebrating,
+					'ratingvalue':zwebratingvalue,
+					'contentwarning':btoa(zcontentwarning),
+					'function':'savecontentrating'
+				};
+				WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						if (zresponse.serror != '') {
+							dGet('wtw_parentalcontrolerror').innerHTML = zresponse.serror;
+							dGet('wtw_parentalcontrolerror').style.color = "red";
+						} else {
+							dGet('wtw_parentalcontrolerror').innerHTML = "Content Ratings Saved";
+							dGet('wtw_parentalcontrolerror').style.color = "green";
+						}
+						WTW.setContentRating();
+						window.setTimeout(function() {
+							dGet('wtw_parentalcontrolerror').innerHTML = "";
+						},5000);
+					}
+				);
+				break;
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-saveCommunityRequirements=" + ex.message);
+	} 
+}
+
+
 /* email server settings */
 
 WTWJS.prototype.openEmailServerSettings = function() {
@@ -3174,3 +3326,5 @@ WTWJS.prototype.saveServerSettings = async function() {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-saveServerSettings=" + ex.message);
 	}
 }
+
+

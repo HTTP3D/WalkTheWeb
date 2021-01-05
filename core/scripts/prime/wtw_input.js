@@ -2293,9 +2293,9 @@ WTWJS.prototype.showToolTip = function(ztip) {
 	/* display the tooltip */
 	try {
 		if (ztip != "") {
-			WTW.setToolTipLocation();
 			dGet('wtw_itooltip').innerHTML = ztip;
 			WTW.show('wtw_itooltip');
+			WTW.setToolTipLocation();
 		} else {
 			WTW.hideToolTip();
 		}
@@ -2334,4 +2334,3 @@ WTWJS.prototype.setToolTipLocation = function() {
 		WTW.log("core-scripts-prime-wtw_input.js-setToolTipLocation=" + ex.message);
     }
 }
-
