@@ -374,6 +374,11 @@ class wtwconnect {
 		return $wtwdb->getWebAliases($zwebtype, $zwebid);
 	}
 
+	public function getRatingText($zrating) {
+		global $wtwdb;
+		return $wtwdb->getRatingText($zrating);
+	}
+
 	public function addConnectHeader($zavailabledomains) {
 		/* sets the domain allowed for cross script - only when allowed */
 		$zheader = "";

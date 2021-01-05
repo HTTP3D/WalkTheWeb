@@ -752,6 +752,32 @@ class wtwdb {
 		return $zhasaccess;
 	}
 	
+	public function getRatingText($zrating) {
+		$zratingtext = "Not Rated";
+		try {
+			switch ($zrating) {
+				case "Web-All":
+					$zratingtext = "All Visitors - Safe for All Ages.";
+					break;
+				case "Web-P":
+					$zratingtext = "Parental Oversight - Adult supervision suggested for Children.";
+					break;
+				case "Web-P13":
+					$zratingtext = "Parental Caution for Children - Not recommended for Children under 13 Years Old.";
+					break;
+				case "Web-P17":
+					$zratingtext = "Parental Oversight for Visitors - Adult supervision recommended for Visitors under 18 Years Old, not recommended for Children under 13 Years Old.";
+					break;
+				case "Web-Adult":
+					$zratingtext = "Adult - Visitors must be at least 18 Years Old.";
+					break;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getRatingText=".$e->getMessage());
+		}			
+		return $zratingtext;
+	}
+	
 	public function getSetting($zsettingname) {
 		$zsettingvalue = "";
 		try {

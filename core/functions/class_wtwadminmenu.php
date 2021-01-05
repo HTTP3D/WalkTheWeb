@@ -133,6 +133,7 @@ class wtwadminmenu {
 			*/
 
 			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildinginfo', '<div class="wtw-altkey">ctrl+i</div>3D Building <u>I</u>nformation', 5, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingrequirements', '<div class="wtw-altkey">ctrl+r</div><u>R</u>atings and Requirements', 6, $zupdateroles, "WTW.openFullPageForm('fullpage','Ratings and Requirements', 'wtw_requirementspage');WTW.openRequirements();");
 			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingstart', '<div class="wtw-altkey">ctrl+s</div>Set <u>S</u>tarting Position', 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingaccess', '<div class="wtw-altkey">ctrl+p</div><u>P</u>ermissions', 15, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('buildingoptions', 'wtw_adminbuildingsnapshot', '<div class="wtw-altkey">ctrl+a</div>3D Building Sn<u>a</u>pshot', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");
@@ -151,6 +152,7 @@ class wtwadminmenu {
 			$this->addAdminSubMenuItem('editmold', 'wtw_createduplicatemold', '<div class="wtw-altkey">ctrl+p</div>Create a Duplicate Item', 50, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 
 			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityinfo', '<div class="wtw-altkey">ctrl+i</div>3D Community <u>I</u>nformation', 5, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityrequirements', '<div class="wtw-altkey">ctrl+r</div><u>R</u>atings and Requirements', 6, $zupdateroles, "WTW.openFullPageForm('fullpage','Ratings and Requirements', 'wtw_requirementspage');WTW.openRequirements();");
 			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitystart', '<div class="wtw-altkey">ctrl+s</div>Set <u>S</u>tarting Position', 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunityfirstbuilding', '<div class="wtw-altkey">ctrl+f</div>Set <u>F</u>irst 3D Building', 15, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('communityoptions', 'wtw_admincommunitygravity', '<div class="wtw-altkey">ctrl+g</div>3D Community <u>G</u>ravity', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");
@@ -178,6 +180,7 @@ class wtwadminmenu {
 			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapeterrain', 'Add Ground Terrain', 50, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 
 			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthinginfo', '<div class="wtw-altkey">ctrl+i</div>3D Thing <u>I</u>nformation', 5, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingrequirements', '<div class="wtw-altkey">ctrl+r</div><u>R</u>atings and Requirements', 6, $zupdateroles, "WTW.openFullPageForm('fullpage','Ratings and Requirements', 'wtw_requirementspage');WTW.openRequirements();");
 			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingstart', '<div class="wtw-altkey">ctrl+s</div>Set <u>S</u>tarting Position', 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingaccess', '<div class="wtw-altkey">ctrl+p</div><u>P</u>ermissions', 15, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('thingoptions', 'wtw_adminthingsnapshot', '<div class="wtw-altkey">ctrl+a</div>3D Thing Sn<u>a</u>pshot', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");

@@ -773,6 +773,44 @@ class wtwcommunities {
 							 now(),
 							 '".$wtwhandlers->userid."');");
 				}
+				
+				/* copy contentratings */
+				$zresults = $wtwhandlers->query("
+					select t2.contentratingid as pastcontentratingid,
+						 t2.webid,
+						 '".$zcommunityid."' as webid,
+						 t2.rating,
+						 t2.ratingvalue,
+						 t2.contentwarning
+					from ".wtw_tableprefix."contentratings t2
+					where t2.webid='".$zfromcommunityid."'
+						and t2.deleted=0;");
+				foreach ($zresults as $zrow) {
+					$zcontentratingid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."automations
+							(contentratingid,
+							 pastcontentratingid,
+							 webid,
+							 rating,
+							 ratingvalue,
+							 contentwarning,
+							 createdate,
+							 createuserid,
+							 updatedate,
+							 updateuserid)
+						values
+							('".$zcontentratingid."',
+							 '".$zrow["pastcontentratingid"]."',
+							 '".$zrow["webid"]."',
+							 '".$zrow["rating"]."',
+							 ".$zrow["ratingvalue"].",
+							 '".$zrow["contentwarning"]."',
+							 now(),
+							 '".$wtwhandlers->userid."',
+							 now(),
+							 '".$wtwhandlers->userid."');");
+				}
 				/* update automations */
 				$zresults = $wtwhandlers->query("
 					select t2.automationid as pastautomationid,

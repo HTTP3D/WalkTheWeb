@@ -253,6 +253,13 @@
 		</div>
 	</div>
 </div>
+<div id="wtw_menucontentrating" class="wtw-slideupmenuright" style="display:none;visibility:hidden;">
+	<img class="wtw-closeright" onclick="WTW.closeMenus();" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
+	<div class="wtw-menuheading">Content Rating</div>
+	<div id="wtw_menucontentratingscroll" class="wtw-mainmenuscroll" style="min-height:300px;">
+		<div id="wtw_contentrating" class="wtw-menunote"></div>
+	</div>
+</div>
 <div id="wtw_menuoptionalanimations" class="wtw-slideupanimations" style="display:none;visibility:hidden;">
 	<img class="wtw-closeright" onclick="WTW.hide('wtw_menuoptionalanimations');" src="/content/system/images/menuclose.png" alt="Close Animations" title="Close Animations" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
 	<div class="wtw-menuheading">Press and Hold to Play</div>

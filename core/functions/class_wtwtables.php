@@ -526,6 +526,24 @@ class wtwtables {
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 			");
 			$wtwdb->deltaCreateTable("
+				CREATE TABLE `".wtw_tableprefix."contentratings` (
+				  `contentratingid` varchar(16) NOT NULL,
+				  `pastcontentratingid` varchar(16) DEFAULT '',
+				  `webid` varchar(16) DEFAULT NULL,
+				  `rating` varchar(10) DEFAULT NULL,
+				  `ratingvalue` int DEFAULT NULL,
+				  `contentwarning` varchar(1024) DEFAULT NULL,
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int DEFAULT '0',
+				  PRIMARY KEY (`contentratingid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			");
+			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."errorlog` (
 				  `errorid` int(11) NOT NULL AUTO_INCREMENT,
 				  `logdate` datetime DEFAULT NULL,

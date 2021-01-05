@@ -378,6 +378,11 @@ class wtwhandlers {
 		return $wtwdb->getFiles($zfield, $zdefault);
 	}
 
+	public function getRatingText($zrating) {
+		global $wtwdb;
+		return $wtwdb->getRatingText($zrating);
+	}
+
 	public function addHandlerHeader($zavailabledomains) {
 		/* sets the domain allowed for cross script - only when allowed */
 		$zheader = "";

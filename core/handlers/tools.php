@@ -11,6 +11,11 @@ try {
 	
 	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
+	$zwebid = $wtwhandlers->getPost('webid','');
+	$zparentalcontrols = $wtwhandlers->getPost('parentalcontrols','0');
+	$zrating = $wtwhandlers->getPost('rating','');
+	$zratingvalue = $wtwhandlers->getPost('ratingvalue','');
+	$zcontentwarning = $wtwhandlers->getPost('contentwarning','');
 	$zsendto = $wtwhandlers->getPost('sendto','');
 	$zcopyto = $wtwhandlers->getPost('copyto','');
 	$zbccto = $wtwhandlers->getPost('bccto','');
@@ -59,6 +64,9 @@ try {
 	/* select the function called */
 	$zresponse = array();
 	switch ($zfunction) {
+		case "savecontentrating":
+			$zresponse = $wtwtools->saveContentRating($zwebid, $zrating, $zratingvalue, $zcontentwarning, $zparentalcontrols);
+			break;
 		case "getserversettings":
 			$zresponse = $wtwtools->getServerSettings();
 			break;
