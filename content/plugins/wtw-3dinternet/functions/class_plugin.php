@@ -179,34 +179,34 @@ class wtw3dinternet {
 			$zformdata .= "		<div class=\"wtw-dashboardbox\">\r\n";
 			
 			/* login settings - optional WalkTheWeb global login and Local server Login */
-			$zformdata .= "			<div class=\"wtw3dinternet-controlpaneldiv\">\r\n";
-			$zformdata .= "				<div class=\"wtw3dinternet-controlpaneltitlediv\">Login / Avatar Settings</div>\r\n";
-			$zformdata .= "				<label class=\"wtw3dinternet-switch\"><input id=\"wtw3dinternet_enableglobal\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw3dinternet-slider wtw3dinternet-round\"></span></label><div id=\"wtw3dinternet_enableglobaltext\" class=\"wtw3dinternet-disabledlabel\">Global Login/Avatars Disabled</div> <br />These are stored on the WalkTheWeb Hub and work on all WalkTheWeb 3D Websites.<br /><br />\r\n";
-			$zformdata .= "				<label class=\"wtw3dinternet-switch\"><input id=\"wtw3dinternet_enablelocal\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw3dinternet-slider wtw3dinternet-round\"></span></label><div id=\"wtw3dinternet_enablelocaltext\" class=\"wtw3dinternet-disabledlabel\">Local Login/Avatars Disabled</div> <br />These are stored locally and only work on this server.<br /><br />\r\n";
-			$zformdata .= "				<label class=\"wtw3dinternet-switch\"><input id=\"wtw3dinternet_enableanonymous\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw3dinternet-slider wtw3dinternet-round\"></span></label><div id=\"wtw3dinternet_enableanonymoustext\" class=\"wtw3dinternet-disabledlabel\">Anonymous (Guest) Avatars Disabled</div> <br />These are visitors without a login.<br />\r\n";
+			$zformdata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
+			$zformdata .= "				<div class=\"wtw-controlpaneltitlediv\">Login / Avatar Settings</div>\r\n";
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enableglobal\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enableglobaltext\" class=\"wtw-disabledlabel\">Global Login/Avatars Disabled</div> <br />These are stored on the WalkTheWeb Hub and work on all WalkTheWeb 3D Websites.<br /><br />\r\n";
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablelocal\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablelocaltext\" class=\"wtw-disabledlabel\">Local Login/Avatars Disabled</div> <br />These are stored locally and only work on this server.<br /><br />\r\n";
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enableanonymous\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enableanonymoustext\" class=\"wtw-disabledlabel\">Anonymous (Guest) Avatars Disabled</div> <br />These are visitors without a login.<br />\r\n";
 			$zformdata .= "			</div>\r\n";
 
 			/* multiplayer setings conects to the multiplayer/chat hub server */
-			$zformdata .= "			<div class=\"wtw3dinternet-controlpaneldiv\">\r\n";
-			$zformdata .= "				<div class=\"wtw3dinternet-controlpaneltitlediv\">Multiplayer Settings</div>\r\n";
+			$zformdata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
+			$zformdata .= "				<div class=\"wtw-controlpaneltitlediv\">Multiplayer Settings</div>\r\n";
 
-			$zformdata .= "				<div id=\"wtw3dinternet_multiplayertext\" class=\"wtw3dinternet-disabledlabel\" style=\"float:right;\"></div>";
+			$zformdata .= "				<div id=\"wtw3dinternet_multiplayertext\" class=\"wtw-disabledlabel\" style=\"float:right;\"></div>";
 
-			$zformdata .= "				<label class=\"wtw3dinternet-switch\"><input id=\"wtw3dinternet_enablemultiplayer\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw3dinternet-slider wtw3dinternet-round\"></span></label><div id=\"wtw3dinternet_enablemultiplayertext\" class=\"wtw3dinternet-disabledlabel\">Multiplayer Disabled</div><div style=\"clear:both;\"></div><br />\r\n";
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablemultiplayer\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablemultiplayertext\" class=\"wtw-disabledlabel\">Multiplayer Disabled</div><div style=\"clear:both;\"></div><br />\r\n";
 
-			$zformdata .= "				<div id=\"wtw3dinternet_chattext\" class=\"wtw3dinternet-disabledlabel\" style=\"float:right;\"></div>";
+			$zformdata .= "				<div id=\"wtw3dinternet_chattext\" class=\"wtw-disabledlabel\" style=\"float:right;\"></div>";
 
-			$zformdata .= "				<label class=\"wtw3dinternet-switch\"><input id=\"wtw3dinternet_enablechat\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw3dinternet-slider wtw3dinternet-round\"></span></label><div id=\"wtw3dinternet_enablechattext\" class=\"wtw3dinternet-disabledlabel\">Multiplayer Chat Disabled</div><div style=\"clear:both;\"></div><br />\r\n";
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablechat\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablechattext\" class=\"wtw-disabledlabel\">Multiplayer Chat Disabled</div><div style=\"clear:both;\"></div><br />\r\n";
 
-			$zformdata .= "				<div id=\"wtw3dinternet_voicechattext\" class=\"wtw3dinternet-disabledlabel\" style=\"float:right;\"></div>";
+			$zformdata .= "				<div id=\"wtw3dinternet_voicechattext\" class=\"wtw-disabledlabel\" style=\"float:right;\"></div>";
 
-			$zformdata .= "				<label class=\"wtw3dinternet-switch\"><input id=\"wtw3dinternet_enablevoicechat\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw3dinternet-slider wtw3dinternet-round\"></span></label><div id=\"wtw3dinternet_enablevoicechattext\" class=\"wtw3dinternet-disabledlabel\">Multiplayer Voice Chat Disabled</div><div style=\"clear:both;\"></div>\r\n";
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablevoicechat\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablevoicechattext\" class=\"wtw-disabledlabel\">Multiplayer Voice Chat Disabled</div><div style=\"clear:both;\"></div>\r\n";
 			$zformdata .= "			</div>\r\n";
 			
 			/* for future use */
-			$zformdata .= "			<div class=\"wtw3dinternet-controlpaneldiv\" style=\"display:none;visibility:hidden;\">\r\n";
-			$zformdata .= "				<div class=\"wtw3dinternet-controlpaneltitlediv\">Franchising Settings</div>\r\n";
-			$zformdata .= "				<label class=\"wtw3dinternet-switch\"><input id=\"wtw3dinternet_enablefranchisebuildings\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw3dinternet-slider wtw3dinternet-round\"></span></label><div id=\"wtw3dinternet_enablefranchisebuildingstext\" class=\"wtw3dinternet-disabledlabel\">3D Buildings Franchising Disabled</div><br />\r\n";
+			$zformdata .= "			<div class=\"wtw-controlpaneldiv\" style=\"display:none;visibility:hidden;\">\r\n";
+			$zformdata .= "				<div class=\"wtw-controlpaneltitlediv\">Franchising Settings</div>\r\n";
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablefranchisebuildings\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablefranchisebuildingstext\" class=\"wtw-disabledlabel\">3D Buildings Franchising Disabled</div><br />\r\n";
 			$zformdata .= "			</div>\r\n";
 
 			$zformdata .= "			<br /><br /><div onclick=\"WTW.toggle('wtw_videopreview');\" class=\"wtw-logincancel\">TEST VIDEO</div>\r\n";

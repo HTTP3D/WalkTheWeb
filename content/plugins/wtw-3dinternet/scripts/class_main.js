@@ -259,66 +259,66 @@ WTW_3DINTERNET.prototype.setControlPanelSwitches = function() {
 		if (WTW.adminView == 1) {
 			if (dGet('wtw3dinternet_enableglobaltext') != null) {
 				if (wtw3dinternet.globalLogins == '1') {
-					dGet('wtw3dinternet_enableglobaltext').className = 'wtw3dinternet-enablelabel';
+					dGet('wtw3dinternet_enableglobaltext').className = 'wtw-enablelabel';
 					dGet('wtw3dinternet_enableglobaltext').innerHTML = 'Global Login/Avatars Enabled';
 					dGet('wtw3dinternet_enableglobal').checked = true;
 				} else {
-					dGet('wtw3dinternet_enableglobaltext').className = 'wtw3dinternet-disabledlabel';
+					dGet('wtw3dinternet_enableglobaltext').className = 'wtw-disabledlabel';
 					dGet('wtw3dinternet_enableglobaltext').innerHTML = 'Global Login/Avatars Disabled';
 					dGet('wtw3dinternet_enableglobal').checked = false;
 				}
 				if (wtw3dinternet.localLogins == '1') {
-					dGet('wtw3dinternet_enablelocaltext').className = 'wtw3dinternet-enablelabel';
+					dGet('wtw3dinternet_enablelocaltext').className = 'wtw-enablelabel';
 					dGet('wtw3dinternet_enablelocaltext').innerHTML = 'Local Login/Avatars Enabled';
 					dGet('wtw3dinternet_enablelocal').checked = true;
 				} else {
-					dGet('wtw3dinternet_enablelocaltext').className = 'wtw3dinternet-disabledlabel';
+					dGet('wtw3dinternet_enablelocaltext').className = 'wtw-disabledlabel';
 					dGet('wtw3dinternet_enablelocaltext').innerHTML = 'Local Login/Avatars Disabled';
 					dGet('wtw3dinternet_enablelocal').checked = false;
 				}
 				if (wtw3dinternet.anonymousLogins == '1') {
-					dGet('wtw3dinternet_enableanonymoustext').className = 'wtw3dinternet-enablelabel';
+					dGet('wtw3dinternet_enableanonymoustext').className = 'wtw-enablelabel';
 					dGet('wtw3dinternet_enableanonymoustext').innerHTML = 'Anonymous (Guest) Avatars Enabled';
 					dGet('wtw3dinternet_enableanonymous').checked = true;
 				} else {
-					dGet('wtw3dinternet_enableanonymoustext').className = 'wtw3dinternet-disabledlabel';
+					dGet('wtw3dinternet_enableanonymoustext').className = 'wtw-disabledlabel';
 					dGet('wtw3dinternet_enableanonymoustext').innerHTML = 'Anonymous (Guest) Avatars Disabled';
 					dGet('wtw3dinternet_enableanonymous').checked = false;
 				}
 				if (wtw3dinternet.masterMove == '1') {
-					dGet('wtw3dinternet_enablemultiplayertext').className = 'wtw3dinternet-enablelabel';
+					dGet('wtw3dinternet_enablemultiplayertext').className = 'wtw-enablelabel';
 					dGet('wtw3dinternet_enablemultiplayertext').innerHTML = 'Multiplayer Enabled';
 					dGet('wtw3dinternet_enablemultiplayer').checked = true;
 					wtw3dinternet.initMoveSocket();
 				} else {
-					dGet('wtw3dinternet_enablemultiplayertext').className = 'wtw3dinternet-disabledlabel';
+					dGet('wtw3dinternet_enablemultiplayertext').className = 'wtw-disabledlabel';
 					dGet('wtw3dinternet_enablemultiplayertext').innerHTML = 'Multiplayer Disabled';
 					dGet('wtw3dinternet_enablemultiplayer').checked = false;
 				}
 				if (wtw3dinternet.masterChat == '1') {
-					dGet('wtw3dinternet_enablechattext').className = 'wtw3dinternet-enablelabel';
+					dGet('wtw3dinternet_enablechattext').className = 'wtw-enablelabel';
 					dGet('wtw3dinternet_enablechattext').innerHTML = 'Multiplayer Chat Enabled';
 					dGet('wtw3dinternet_enablechat').checked = true;
 				} else {
-					dGet('wtw3dinternet_enablechattext').className = 'wtw3dinternet-disabledlabel';
+					dGet('wtw3dinternet_enablechattext').className = 'wtw-disabledlabel';
 					dGet('wtw3dinternet_enablechattext').innerHTML = 'Multiplayer Chat Disabled';
 					dGet('wtw3dinternet_enablechat').checked = false;
 				}
 				if (wtw3dinternet.masterVoiceChat == '1') {
-					dGet('wtw3dinternet_enablevoicechattext').className = 'wtw3dinternet-enablelabel';
+					dGet('wtw3dinternet_enablevoicechattext').className = 'wtw-enablelabel';
 					dGet('wtw3dinternet_enablevoicechattext').innerHTML = 'Multiplayer Voice Chat Enabled';
 					dGet('wtw3dinternet_enablevoicechat').checked = true;
 				} else {
-					dGet('wtw3dinternet_enablevoicechattext').className = 'wtw3dinternet-disabledlabel';
+					dGet('wtw3dinternet_enablevoicechattext').className = 'wtw-disabledlabel';
 					dGet('wtw3dinternet_enablevoicechattext').innerHTML = 'Multiplayer Voice Chat Disabled';
 					dGet('wtw3dinternet_enablevoicechat').checked = false;
 				}
 				if (wtw3dinternet.masterFranchising == '1') {
-					dGet('wtw3dinternet_enablefranchisebuildingstext').className = 'wtw3dinternet-enablelabel';
+					dGet('wtw3dinternet_enablefranchisebuildingstext').className = 'wtw-enablelabel';
 					dGet('wtw3dinternet_enablefranchisebuildingstext').innerHTML = '3D Buildings Franchising Enabled';
 					dGet('wtw3dinternet_enablefranchisebuildings').checked = true;
 				} else {
-					dGet('wtw3dinternet_enablefranchisebuildingstext').className = 'wtw3dinternet-disabledlabel';
+					dGet('wtw3dinternet_enablefranchisebuildingstext').className = 'wtw-disabledlabel';
 					dGet('wtw3dinternet_enablefranchisebuildingstext').innerHTML = '3D Buildings Franchising Disabled';
 					dGet('wtw3dinternet_enablefranchisebuildings').checked = false;
 				}
