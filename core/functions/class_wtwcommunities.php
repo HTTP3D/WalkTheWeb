@@ -2317,7 +2317,43 @@ class wtwcommunities {
 							now(),
 							'".$znewupdateuserid."');");
 				}
+				
 
+				/* process content ratings */
+				foreach ($zrequest->contentratings as $zcontentrating) {
+					/* check if the contentratingid is already in use */
+					$znewcontentratingid = $wtwhandlers->getNewKey('contentratings', "contentratingid", $zcontentrating->contentratingid);
+					
+					/* get new foreign keys */
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zcontentrating->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zcontentrating->updateuserid);
+					
+					/* insert new record into connectinggrids table */
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."contentratings 
+						   (contentratingid,
+							pastcontentratingid,
+							webid,
+							rating,
+							ratingvalue,
+							contentwarning,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						values
+						   ('".$znewcontentratingid."',
+							'".$zcontentrating->contentratingid."',
+							'".$znewwebid."',
+							'".$zcontentrating->rating."',
+							".$zcontentrating->ratingvalue.",
+							'".$zcontentrating->contentwarning."',
+							'".$zcontentrating->createdate."',
+							'".$znewcreateuserid."',
+							now(),
+							'".$znewupdateuserid."');");
+				}
+				
 
 				/* process uploaded objects */
 				foreach ($zrequest->uploadobjects as $zuploadobject) {

@@ -281,3 +281,13 @@ td.wtw-tddeactive {
 	padding-bottom:5px;
 	color:#000000;
 }
+.wtw-biglistleft {
+	float:left;
+	margin-left:10px;
+	font-weight: bold;
+	color: #000000;
+	font-size: 1.2em;
+	margin-bottom: 2px;
+	background-color:transparent;
+	min-height:32px;
+}

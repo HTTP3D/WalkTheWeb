@@ -654,6 +654,267 @@ class wtwavatars {
 		}
 		return $zsuccess;
 	}
+	
+	public function saveAvatarGroup($zavatargroupid, $zavatargroup) {
+		/* saves the avatar group - admin function */
+		global $wtwhandlers;
+		$zresponse = array(
+			'serror'=>''
+		);
+		try {
+			if ($wtwhandlers->hasPermission(array("admin"))) {
+				$zfoundavatargroupid = '';
+				$zresults = $wtwhandlers->query("
+					select avatargroupid
+					from ".wtw_tableprefix."avatargroups
+					where avatargroupid='".$zavatargroupid."'
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfoundavatargroupid = $zrow["avatargroupid"];
+				}
+				if (empty($zfoundavatargroupid) || !isset($zfoundavatargroupid)) {
+					if (empty($zavatargroupid) || !isset($zavatargroupid)) {
+						$zavatargroupid = $wtwhandlers->getRandomString(16,1);
+					}
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."avatargroups
+						   (avatargroupid,
+						    avatargroup,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						  values
+						   ('".$zavatargroupid."',
+						    '".$zavatargroup."',
+							now(),
+							'".$wtwhandlers->userid."',
+							now(),
+							'".$wtwhandlers->userid."');");
+					
+				} else {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."avatargroups
+						set avatargroup='".$zavatargroup."',
+							updatedate=now(),
+							updateuserid='".$wtwhandlers->userid."'
+						where avatargroupid='".$zavatargroupid."'
+						limit 1;
+					");
+				}
+			} else {
+				$zresponse = array(
+					'serror'=>'Requires Admin Permissions'
+				);
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwavatars.php-saveAvatarGroup=".$e->getMessage());
+			$zresponse = array(
+				'serror'=>$e->getMessage()
+			);
+		}
+		return $zresponse;
+	}
+	
+	public function deleteAvatarGroup($zavatargroupid) {
+		/* deletes the avatar group - admin function */
+		global $wtwhandlers;
+		$zresponse = array(
+			'serror'=>''
+		);
+		try {
+			if ($wtwhandlers->hasPermission(array("admin"))) {
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."avatargroups
+					set deleteddate=now(),
+						deleteduserid='".$wtwhandlers->userid."',
+						deleted=1
+					where avatargroupid='".$zavatargroupid."'
+					limit 1;
+				");
+			} else {
+				$zresponse = array(
+					'serror'=>'Requires Admin Permissions'
+				);
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwavatars.php-deleteAvatarGroup=".$e->getMessage());
+			$zresponse = array(
+				'serror'=>$e->getMessage()
+			);
+		}
+		return $zresponse;
+	}
+
+	public function getAvatarGroups() {
+		/* gets the avatar groups - admin function */
+		global $wtwhandlers;
+		$zresponse = array(
+			'serror'=>'',
+			'avatargroups'=>array()
+		);
+		try {
+			if ($wtwhandlers->hasPermission(array("admin"))) {
+				$zresults = $wtwhandlers->query("
+					select avatargroupid,
+						avatargroup
+					from ".wtw_tableprefix."avatargroups
+					where deleted=0
+					order by avatargroup, avatargroupid;
+				");
+				$zresponse = array(
+					'serror'=>'',
+					'avatargroups'=>$zresults
+				);
+			} else {
+				$zresponse = array(
+					'serror'=>'Requires Admin Permissions',
+					'avatargroups'=>array()
+				);
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwavatars.php-getAvatarGroups=".$e->getMessage());
+			$zresponse = array(
+				'serror'=>$e->getMessage(),
+				'avatargroups'=>array()
+			);
+		}
+		return $zresponse;
+	}
+
+	public function saveAvatarProfile($zavatarid, $zavatargroup, $zdisplayname, $zavatarfolder, $zavatarfile, $zgender, $zscalingx, $zscalingy, $zscalingz, $zstartframe, $zendframe, $zimagefull, $zimageface, $zsortorder) {
+		/* saves the avatar profile (Not User Avatar, just the starting avatar you can choose) - admin function */
+		global $wtwhandlers;
+		$zresponse = array(
+			'serror'=>'',
+			'avatarid'=>$zavatarid
+		);
+		try {
+			if ($wtwhandlers->hasPermission(array("admin"))) {
+				$zfoundavatarid = '';
+				$zresults = $wtwhandlers->query("
+					select avatarid
+					from ".wtw_tableprefix."avatars
+					where avatarid='".$zavatarid."'
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfoundavatarid = $zrow["avatarid"];
+				}
+				if (empty($zfoundavatarid) || !isset($zfoundavatarid)) {
+					if (empty($zavatarid) || !isset($zavatarid)) {
+						$zavatarid = $wtwhandlers->getRandomString(16,1);
+					}
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."avatars
+						   (avatarid,
+						    avatargroup,
+							displayname,
+							avatarfolder,
+							avatarfile,
+							gender,
+							scalingx,
+							scalingy,
+							scalingz,
+							startframe,
+							endframe,
+							imagefull,
+							imageface,
+							sortorder,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						  values
+						   ('".$zavatarid."',
+						    '".$zavatargroup."',
+						    '".$zdisplayname."',
+						    '".$zavatarfolder."',
+						    '".$zavatarfile."',
+						    '".$zgender."',
+						    ".$zscalingx.",
+						    ".$zscalingy.",
+						    ".$zscalingz.",
+						    ".$zstartframe.",
+						    ".$zendframe.",
+						    '".$zimagefull."',
+						    '".$zimageface."',
+						    ".$zsortorder.",
+							now(),
+							'".$wtwhandlers->userid."',
+							now(),
+							'".$wtwhandlers->userid."');");
+					$zresponse = array(
+						'serror'=>'',
+						'avatarid'=>$zavatarid
+					);
+				} else {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."avatars
+						set avatargroup='".$zavatargroup."',
+							displayname='".$zdisplayname."',
+							avatarfolder='".$zavatarfolder."',
+							avatarfile='".$zavatarfile."',
+							gender='".$zgender."',
+							scalingx=".$zscalingx.",
+							scalingy=".$zscalingy.",
+							scalingz=".$zscalingz.",
+							startframe=".$zstartframe.",
+							endframe=".$zendframe.",
+							imagefull='".$zimagefull."',
+							imageface='".$zimageface."',
+							sortorder=".$zsortorder.",
+							updatedate=now(),
+							updateuserid='".$wtwhandlers->userid."'
+						where avatarid='".$zavatarid."'
+						limit 1;
+					");
+				}
+			} else {
+				$zresponse = array(
+					'serror'=>'Requires Admin Permissions',
+					'avatarid'=>$zavatarid
+				);
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwavatars.php-saveAvatarProfile=".$e->getMessage());
+			$zresponse = array(
+				'serror'=>$e->getMessage(),
+				'avatarid'=>$zavatarid
+			);
+		}
+		return $zresponse;
+	}
+	
+	public function deleteAvatarProfile($zavatarid) {
+		/* deletes the avatar profile (Not User Avatar, just the starting avatar you can choose) - admin function */
+		global $wtwhandlers;
+		$zresponse = array(
+			'serror'=>''
+		);
+		try {
+			if ($wtwhandlers->hasPermission(array("admin"))) {
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."avatars
+					set deleteddate=now(),
+						deleteduserid='".$wtwhandlers->userid."',
+						deleted=1
+					where avatarid='".$zavatarid."'
+					limit 1;
+				");
+			} else {
+				$zresponse = array(
+					'serror'=>'Requires Admin Permissions'
+				);
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwavatars.php-deleteAvatarProfile=".$e->getMessage());
+			$zresponse = array(
+				'serror'=>$e->getMessage()
+			);
+		}
+		return $zresponse;
+	}
+	
 }
 
 	function wtwavatars() {

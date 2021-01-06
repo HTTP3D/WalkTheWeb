@@ -271,6 +271,7 @@ class wtwadmin {
 	public function loadFullPageFormAdmin() {
 		/* admin menu can trigger full page setings - these are different pages that can turn off-on (show/hide) */
 		global $wtwdb;
+		global $wtw;
 		$zpagedata = "";
 		try {
 			$zpagedata .= "<div id=\"wtw_fullpageform\" class=\"wtw-pageform\" style=\"display:none;\">\r\n";
@@ -900,19 +901,20 @@ class wtwadmin {
 			$zpagedata .= "				<div id=\"wtw_bparentalcontrolssave\" class='wtw-greenbuttonleft' onclick=\"WTW.saveCommunityRequirements(1);\">Save Parental Controls</div>\r\n";
 			$zpagedata .= "				<div class=\"wtw-clear\"></div><br />\r\n";
 			$zpagedata .= "			</div>\r\n";
-
-				/* Avatar Groups for this 3D Community */
-			$zpagedata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
-			$zpagedata .= "				<div class=\"wtw-controlpaneltitlediv\">Avatar Groups Allowed</div>\r\n";
-			$zpagedata .= "				<label class=\"wtw-switch\"><input id=\"wtw_enableavatargroups\" type=\"checkbox\" onclick=\"WTW.changeSwitch(this);\" checked><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw_enableavatargroupstext\" class=\"wtw-enablelabel\">All Avatar Groups Allowed</div> <br />All Avatar Groups are allowed on this 3D Community Website.<br /><br />\r\n";
-			$zpagedata .= "			</div>\r\n";
-
-				/* plugins required to load for this 3D Community */
-			$zpagedata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
-			$zpagedata .= "				<div class=\"wtw-controlpaneltitlediv\">Required Plugins for this 3D Community</div>\r\n";
-			$zpagedata .= "				<label class=\"wtw-switch\"><input id=\"wtw_enablepluginsrequired\" type=\"checkbox\" onclick=\"WTW.changeSwitch(this);\" checked><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw_enablepluginsrequiredtext\" class=\"wtw-enablelabel\">All 3D Plugins are Enabled</div> <br />All 3D Plugins are enabled for this 3D Community Website.<br /><br />\r\n";
-			$zpagedata .= "			</div>\r\n";
 			
+			if (!empty($wtw->communityid)) {
+				/* Avatar Groups for this 3D Community */
+				$zpagedata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
+				$zpagedata .= "				<div class=\"wtw-controlpaneltitlediv\">Avatar Groups Allowed</div>\r\n";
+				$zpagedata .= "				<label class=\"wtw-switch\"><input id=\"wtw_enableavatargroups\" type=\"checkbox\" onclick=\"WTW.changeSwitch(this);\" checked><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw_enableavatargroupstext\" class=\"wtw-enablelabel\">All Avatar Groups Allowed</div> <br />All Avatar Groups are allowed on this 3D Community Website.<br /><br />\r\n";
+				$zpagedata .= "			</div>\r\n";
+			}
+			
+				/* plugins required to load for this 3D */
+			$zpagedata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
+			$zpagedata .= "				<div class=\"wtw-controlpaneltitlediv\">Required 3D Plugins</div>\r\n";
+			$zpagedata .= "				<label class=\"wtw-switch\"><input id=\"wtw_enablepluginsrequired\" type=\"checkbox\" onclick=\"WTW.changeSwitch(this);\" checked><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw_enablepluginsrequiredtext\" class=\"wtw-enablelabel\">All 3D Plugins are Enabled</div> <br />All 3D Plugins are enabled for this 3D Website.<br /><br />\r\n";
+			$zpagedata .= "			</div>\r\n";
 
 			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";
