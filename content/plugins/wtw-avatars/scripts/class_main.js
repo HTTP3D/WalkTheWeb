@@ -143,3 +143,368 @@ WTW_AVATARS.prototype.resetHovers = function(zmoldname, zshape) {
 		WTW.log("plugins:wtw-avatars:scripts-class_main.js-resetHovers=" + ex.message);
 	} 
 }
+
+WTW_AVATARS.prototype.openAvatarGroupForm = function(zavatargroupid, zavatargroup) {
+	/* this function opens the Avatar Groups Form */
+	try {
+		if (zavatargroupid == undefined) {
+			zavatargroupid = '';
+		}
+		if (zavatargroup == undefined) {
+			zavatargroup = '';
+		}
+		dGet('wtw_avatargrouperror').innerHTML = '';
+		if (zavatargroup == '') {
+			/* add new avatar group */
+			WTW.hide('wtw_bavatargroupdelete');
+			dGet('wtw_addavatargrouptitle').innerHTML = 'Add Avatar Group';
+			dGet('wtw_tavatargroup').value = '';
+			dGet('wtw_tavatargroupid').value = WTW.getRandomString(16,1);
+		} else {
+			WTW.show('wtw_bavatargroupdelete');
+			dGet('wtw_addavatargrouptitle').innerHTML = 'Edit Avatar Group';
+			dGet('wtw_tavatargroup').value = zavatargroup;
+			dGet('wtw_tavatargroupid').value = zavatargroupid;
+		}
+		WTW.hide('wtw_addavatargroup');
+		WTW.show('wtw_addavatargroupdiv');
+		dGet('wtw_tavatargroup').focus();
+	} catch (ex) {
+		WTW.log("plugins:wtw-avatars:scripts-class_main.js-openAvatarGroupForm=" + ex.message);
+	} 
+}
+
+WTW_AVATARS.prototype.saveAvatarGroupForm = function(w) {
+	/* this function saves the Avatar Groups Form */
+	try {
+		dGet('wtw_avatargrouperror').innerHTML = '';
+		switch (w) {
+			case 1:
+				/* add avatar group */
+				var zrequest = {
+					'avatargroupid':dGet('wtw_tavatargroupid').value,
+					'avatargroup':dGet('wtw_tavatargroup').value,
+					'function':'saveavatargroup'
+				};
+				WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+						if (zresponse.serror == '') {
+							WTW.hide('wtw_addavatargroupdiv');
+							WTW.show('wtw_addavatargroup');
+							wtwavatars.loadAvatarGroups();
+						} else {
+							dGet('wtw_avatargrouperror').innerHTML = zresponse.serror;
+							dGet('wtw_avatargrouperror').style.color = 'red';
+						}
+					}
+				);
+				break;
+			case 0:
+				/* delete avatar group */
+				var zrequest = {
+					'avatargroupid':dGet('wtw_tavatargroupid').value,
+					'function':'deleteavatargroup'
+				};
+				WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+						WTW.hide('wtw_addavatargroupdiv');
+						WTW.show('wtw_addavatargroup');
+						wtwavatars.loadAvatarGroups();
+					}
+				);
+				break;
+			case -1:
+				/* cancel */
+				WTW.hide('wtw_addavatargroupdiv');
+				WTW.show('wtw_addavatargroup');
+				break;
+		}
+		
+	} catch (ex) {
+		WTW.log("plugins:wtw-avatars:scripts-class_main.js-saveAvatarGroupForm=" + ex.message);
+	} 
+}
+
+WTW_AVATARS.prototype.loadAvatarGroups = function() {
+	/* this function loads the Avatar Groups Form */
+	try {
+		var zrequest = {
+			'function':'getavatargroups'
+		};
+		WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+			function(zresponse) {
+WTW.log(zresponse);
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				if (zresponse.avatargroups != null) {
+					dGet('wtw_avatargroupslist').innerHTML = '';
+					for (var i=0;i < zresponse.avatargroups.length;i++) {
+						if (zresponse.avatargroups[i] != null) {
+							dGet('wtw_avatargroupslist').innerHTML += "<div class=\"wtw-biglistleft\">" + zresponse.avatargroups[i].avatargroup + "</div><div class=\"wtw-bluebuttonright\" onclick=\"wtwavatars.openAvatarGroupForm('" + zresponse.avatargroups[i].avatargroupid + "','" + zresponse.avatargroups[i].avatargroup + "');\">Edit</div><div class=\"wtw-clear\"></div>";
+						}
+					}
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("plugins:wtw-avatars:scripts-class_main.js-loadAvatarGroups=" + ex.message);
+	} 
+}
+
+WTW_AVATARS.prototype.loadAvatarEditDDL = function(zselectedavatarid) {
+	/* this function loads the Avatar Edit Form list of Avatars to Select to Edit */
+	try {
+		if (zselectedavatarid == undefined) {
+			zselectedavatarid = '';
+		}
+		WTW.clearDDL('wtw_selecteditavatar');
+		WTW.getAsyncJSON("/connect/avatars.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse.avatars != undefined) {
+					var zoption0 = document.createElement("option");
+					zoption0.text = '';
+					zoption0.value = '';
+					if (zselectedavatarid == '') {
+						zoption0.selected = true;
+					}
+					dGet('wtw_selecteditavatar').add(zoption0);
+					for (var i=0;i < zresponse.avatars.length;i++) {
+						if (zresponse.avatars[i] != null) {
+							var zoption = document.createElement("option");
+							zoption.text = zresponse.avatars[i].avatargroup + ": " + zresponse.avatars[i].displayname;
+							zoption.value = zresponse.avatars[i].avatarid;
+							if (zresponse.avatars[i].avatarid == zselectedavatarid) {
+								zoption.selected = true;
+							}
+							dGet('wtw_selecteditavatar').add(zoption);
+						}
+					}
+					if (zselectedavatarid != '' && zselectedavatarid != dGet('wtw_tavatarprofileavatarid').value) {
+						wtwavatars.loadEditAvatar();
+					}
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("plugins:wtw-avatars:scripts-class_main.js-loadAvatarEditDDL=" + ex.message);
+	} 
+}
+
+WTW_AVATARS.prototype.loadAvatarGroupDDL = function(zselectedavatargroup) {
+	/* this function loads the Avatar Edit Form list of Avatars to Select to Edit */
+	try {
+		if (zselectedavatargroup == undefined) {
+			zselectedavatargroup = '';
+		}
+		WTW.clearDDL('wtw_tavatarprofileavatargroup');
+		var zrequest = {
+			'function':'getavatargroups'
+		};
+		WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				if (zresponse.avatargroups != null) {
+					for (var i=0;i < zresponse.avatargroups.length;i++) {
+						if (zresponse.avatargroups[i] != null) {
+							var zoption = document.createElement("option");
+							zoption.text = zresponse.avatargroups[i].avatargroup;
+							zoption.value = zresponse.avatargroups[i].avatargroupid;
+							if (zresponse.avatargroups[i].avatargroup == zselectedavatargroup) {
+								zoption.selected = true;
+							}
+							dGet('wtw_tavatarprofileavatargroup').add(zoption);
+						}
+					}
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("plugins:wtw-avatars:scripts-class_main.js-loadAvatarGroupDDL=" + ex.message);
+	} 
+}
+
+WTW_AVATARS.prototype.addNewAvatar = function(zavatargroup) {
+	/* this function sets the Avatar Edit Form to create a new avatar profile */
+	try {
+		if (zavatargroup == undefined) {
+			zavatargroup = 'Default';
+		}
+		dGet('wtw_tavatarprofileavatarid').value = WTW.getRandomString(16,1);
+		dGet('wtw_tavatarprofiledisplayname').value = 'New Avatar';
+		dGet('wtw_tavatarprofilegender').value = '';
+		dGet('wtw_tavatarprofilefolder').value = '/content/avatars/newavatar/';
+		dGet('wtw_tavatarprofilefile').value = 'newavatar.babylon';
+		dGet('wtw_tavatarprofilescalingx').value = '1.0000';
+		dGet('wtw_tavatarprofilescalingy').value = '1.0000';
+		dGet('wtw_tavatarprofilescalingz').value = '1.0000';
+		dGet('wtw_tavatarprofilestartframe').value = '1';
+		dGet('wtw_tavatarprofileendframe').value = '100';
+		dGet('wtw_tavatarprofileimageface').value = 'imageface.png';
+		dGet('wtw_tavatarprofileimagefull').value = 'imagefull.png';
+		dGet('wtw_tavatarprofilesortorder').value = '0';
+		wtwavatars.loadAvatarGroupDDL(zavatargroup);
+		WTW.show('wtw_avatardetails');
+	} catch (ex) {
+		WTW.log("plugins:wtw-avatars:scripts-class_main.js-addNewAvatar=" + ex.message);
+	} 
+}
+
+WTW_AVATARS.prototype.loadEditAvatar = function() {
+	/* this function loads the Avatar Edit Form with the selected avatarid */
+	try {
+		WTW.hide('wtw_avatardetails');
+		var zavatarid = WTW.getDDLValue('wtw_selecteditavatar');
+		/* clear colors and animations */
+		dGet('wtw_avatarprofilecolorlist').innerHTML = '';
+		dGet('wtw_avatarprofileanimationlist').innerHTML = '';
+		/* get the avatar basics */
+		WTW.getAsyncJSON("/connect/avatar.php?avatarid=" + zavatarid, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse.avatar != undefined) {
+					if (zresponse.avatar.object != undefined) {
+						dGet('wtw_tavatarprofileavatarid').value = zresponse.avatar.avatarid;
+						dGet('wtw_tavatarprofiledisplayname').value = zresponse.avatar.displayname;
+						dGet('wtw_tavatarprofilegender').value = zresponse.avatar.gender;
+						dGet('wtw_tavatarprofilefolder').value = zresponse.avatar.object.folder;
+						dGet('wtw_tavatarprofilefile').value = zresponse.avatar.object.file;
+						dGet('wtw_tavatarprofilescalingx').value = zresponse.avatar.scaling.x;
+						dGet('wtw_tavatarprofilescalingy').value = zresponse.avatar.scaling.y;
+						dGet('wtw_tavatarprofilescalingz').value = zresponse.avatar.scaling.z;
+						dGet('wtw_tavatarprofilestartframe').value = zresponse.avatar.object.startframe;
+						dGet('wtw_tavatarprofileendframe').value = zresponse.avatar.object.endframe;
+						dGet('wtw_tavatarprofileimageface').value = zresponse.avatar.thumbnails.imageface;
+						dGet('wtw_tavatarprofileimagefull').value = zresponse.avatar.thumbnails.imagefull;
+						dGet('wtw_tavatarprofilesortorder').value = zresponse.avatar.sortorder;
+						wtwavatars.loadAvatarGroupDDL(zresponse.avatar.avatargroup);
+						WTW.show('wtw_avatardetails');
+						
+						if (zresponse.avatar.avatarparts != undefined) {
+							if (zresponse.avatar.avatarparts.length > 0) {
+								dGet('wtw_avatarprofilecolorlist').innerHTML += "<div class=\"wtw-dashboardlabel\" style=\"min-width:20%;font-weight:bold;\">Avatar Part</div>";
+								dGet('wtw_avatarprofilecolorlist').innerHTML += "<div style=\"display:inline-block;margin:10px;min-width:15%;font-weight:bold;\">Diffuse Color</div>";
+								dGet('wtw_avatarprofilecolorlist').innerHTML += "<div style=\"display:inline-block;margin:10px;min-width:15%;font-weight:bold;\">Specular Color</div>";
+								dGet('wtw_avatarprofilecolorlist').innerHTML += "<div style=\"display:inline-block;margin:10px;min-width:15%;font-weight:bold;\">Emissive Color</div>";
+								dGet('wtw_avatarprofilecolorlist').innerHTML += "<div style=\"display:inline-block;margin:10px;min-width:15%;font-weight:bold;\">Ambient Color</div>";
+								dGet('wtw_avatarprofilecolorlist').innerHTML += "</div><div class=\"wtw-clear\"></div><hr />";
+							}
+							for (var i=0;i < zresponse.avatar.avatarparts.length;i++) {
+								if (zresponse.avatar.avatarparts[i] != null) {
+									var zavatarpart = zresponse.avatar.avatarparts[i];
+									var zcolorlist = '<div>';
+									zcolorlist += "<div class=\"wtw-dashboardlabel\" style=\"min-width:20%;font-size:1.4em;font-weight:bold;\">" + zavatarpart.avatarpart + "</div>";
+									zcolorlist += "<div style=\"display:inline-block;margin:10px;min-width:15%;vertical-align:top;\"><div style=\"display:inline-block;margin-right:5px;width:24px;height:24px;border:1px solid #000000;background-color:" + zavatarpart.diffusecolor + ";\"></div>" + zavatarpart.diffusecolor + "</div>";
+									zcolorlist += "<div style=\"display:inline-block;margin:10px;min-width:15%;vertical-align:top;\"><div style=\"display:inline-block;margin-right:5px;width:24px;height:24px;border:1px solid #000000;background-color:" + zavatarpart.specularcolor + ";\"></div>" + zavatarpart.specularcolor + "</div>";
+									zcolorlist += "<div style=\"display:inline-block;margin:10px;min-width:15%;vertical-align:top;\"><div style=\"display:inline-block;margin-right:5px;width:24px;height:24px;border:1px solid #000000;background-color:" + zavatarpart.emissivecolor + ";\"></div>" + zavatarpart.emissivecolor + "</div>";
+									zcolorlist += "<div style=\"display:inline-block;margin:10px;min-width:15%;vertical-align:top;\"><div style=\"display:inline-block;margin-right:5px;width:24px;height:24px;border:1px solid #000000;background-color:" + zavatarpart.ambientcolor + ";\"></div>" + zavatarpart.ambientcolor + "</div>";
+									zcolorlist += "</div><div class=\"wtw-clear\"></div><hr />";
+									dGet('wtw_avatarprofilecolorlist').innerHTML += zcolorlist;
+								}
+							}
+						}
+						
+						if (zresponse.avatar.avataranimations != undefined) {
+							for (var i=0;i < zresponse.avatar.avataranimations.length;i++) {
+								if (zresponse.avatar.avataranimations[i] != null) {
+									var zavataranimation = zresponse.avatar.avataranimations[i];
+									var zanimationlist = '<div>';
+									zanimationlist += "<div class=\"wtw-dashboardlabel\" style=\"min-width:20%;\"><span style=\"font-size:1.6em;font-weight:bold;\">" + zavataranimation.animationevent + "</span><br /><br /></div>";
+									zanimationlist += "<div class=\"wtw-dashboardlabel\" style=\"min-width:20%;\">Files<span style=\"font-size:1.6em;font-weight:bold;\">&nbsp;</span><br />" + zavataranimation.objectfolder + "<br />" + zavataranimation.objectfile + "</div>";
+									zanimationlist += "<div class=\"wtw-dashboardlabel\" style=\"min-width:20%;display:inline-block;\">Frames<span style=\"font-size:1.6em;font-weight:bold;\">&nbsp;</span><br />" + zavataranimation.startframe + "<br />" + zavataranimation.endframe + "</div>";
+									zanimationlist += "<div class=\"wtw-dashboardlabel\" style=\"min-width:20%;display:inline-block;\">Speed Ratio<span style=\"font-size:1.6em;font-weight:bold;\">&nbsp;</span><br />" + zavataranimation.speedratio + "<br /></div>";
+									zanimationlist += "</div><div class=\"wtw-clear\"></div><hr />";
+									dGet('wtw_avatarprofileanimationlist').innerHTML += zanimationlist;
+								}
+							}
+						}
+					}
+				}
+			}
+		);
+		
+		
+	} catch (ex) {
+		WTW.log("plugins:wtw-avatars:scripts-class_main.js-loadEditAvatar=" + ex.message);
+	} 
+}
+
+WTW_AVATARS.prototype.saveAvatarProfileForm = function(w) {
+	/* this function saves the Avatar Edit Form (save, delete, cancel) */
+	try {
+		switch (w) {
+			case 1:
+				/* save avatar basics */
+				var zrequest = {
+					'avatarid':dGet('wtw_tavatarprofileavatarid').value,
+					'avatargroup':WTW.getDDLText('wtw_tavatarprofileavatargroup'),
+					'displayname':dGet('wtw_tavatarprofiledisplayname').value,
+					'objectfolder':dGet('wtw_tavatarprofilefolder').value,
+					'objectfile':dGet('wtw_tavatarprofilefile').value,
+					'gender':dGet('wtw_tavatarprofilegender').value,
+					'scalingx':dGet('wtw_tavatarprofilescalingx').value,
+					'scalingy':dGet('wtw_tavatarprofilescalingy').value,
+					'scalingz':dGet('wtw_tavatarprofilescalingz').value,
+					'startframe':dGet('wtw_tavatarprofilestartframe').value,
+					'endframe':dGet('wtw_tavatarprofileendframe').value,
+					'imagefull':dGet('wtw_tavatarprofileimagefull').value,
+					'imageface':dGet('wtw_tavatarprofileimageface').value,
+					'sortorder':dGet('wtw_tavatarprofilesortorder').value,
+					'function':'saveavatarprofile'
+				};
+				WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+						if (zresponse.serror == '') {
+							wtwavatars.loadAvatarEditDDL(zresponse.avatarid);
+							dGet('wtw_avatarprofileerror').innerHTML = 'Avatar Profile Saved';
+							dGet('wtw_avatarprofileerror').style.color = 'green';
+						} else {
+							dGet('wtw_avatarprofileerror').innerHTML = zresponse.serror;
+							dGet('wtw_avatarprofileerror').style.color = 'red';
+						}
+						window.setTimeout(function(){
+							dGet('wtw_avatarprofileerror').innerHTML = '';
+						},5000);
+					}
+				);
+				break;
+			case 0:
+				/* delete avatar */
+				var zrequest = {
+					'avatarid':dGet('wtw_tavatarprofileavatarid').value,
+					'function':'deleteavatarprofile'
+				};
+				WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+						if (zresponse.serror == '') {
+							WTW.hide('wtw_avatardetails');
+							WTW.openFullPageForm('fullpage','Avatar Profile','wtw_avatarprofilepage');
+							wtwavatars.loadAvatarEditDDL();
+						} else {
+							dGet('wtw_avatarprofileerror').innerHTML = zresponse.serror;
+							dGet('wtw_avatarprofileerror').style.color = 'red';
+							window.setTimeout(function(){
+								dGet('wtw_avatarprofileerror').innerHTML = '';
+							},5000);
+						}
+					}
+				);
+				break;
+			case -1:
+				/* cancel edit avatar basics */
+				
+				break;
+		}
+	} catch (ex) {
+		WTW.log("plugins:wtw-avatars:scripts-class_main.js-saveAvatarProfileForm=" + ex.message);
+	} 
+}

@@ -78,6 +78,7 @@ class wtwavatars {
 				
 				$wtwplugins->addAdminMenuItem('wtw_avatarsmenu', '3D Avatars', -75, 'wtw_avatarsmenu', 0, '', '/content/system/images/menuavatars.png', array('admin','developer'), null);
 				$wtwplugins->addAdminMenuItem('wtw_avatarlist', 'Avatar List', -75, 'wtw_avatarsmenu', 1, 'wtw_avatarlist', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','Avatar List','wtw_avatarlistpage');");
+				$wtwplugins->addAdminMenuItem('wtw_avatarprofile', 'Avatar Profiles', -75, 'wtw_avatarsmenu', 2, 'wtw_avatarprofile', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','Add or Edit Avatar','wtw_avatarprofilepage');wtwavatars.loadAvatarEditDDL();");
 				$wtwplugins->addAdminMenuItem('wtw_avatargroups', 'Avatar Groups', -75, 'wtw_avatarsmenu', 3, 'wtw_avatargroups', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','Avatar Groups','wtw_avatargroupspage');");
 
 				/* admin full page settings forms */
@@ -85,6 +86,7 @@ class wtwavatars {
 				/* $wtwplugins->addFullPageForm('wtw_liststorespage', array('admin','developer','architect'), $this->listStoresPage()); */
 				
 				$wtwplugins->addFullPageForm('wtw_avatarlistpage', array('admin','developer'), $this->adminAvatarListForm());
+				$wtwplugins->addFullPageForm('wtw_avatarprofilepage', array('admin','developer'), $this->adminAvatarProfileForm());
 				$wtwplugins->addFullPageForm('wtw_avatargroupspage', array('admin','developer'), $this->adminAvatarGroupsForm());
 			}
 		} catch (Exception $e) {
@@ -188,24 +190,38 @@ class wtwavatars {
 			$zavatargroup = '';
 			$i = 0;
 			$zresults = $wtwplugins->query("
-				select * 
-				from ".wtw_tableprefix."avatars
-				where deleted=0
-				order by avatargroup, sortorder, displayname;");
+				select a1.*,
+					ag1.avatargroupid,
+					ag1.avatargroup as baseavatargroup
+				from ".wtw_tableprefix."avatargroups ag1
+					left join (select * from ".wtw_tableprefix."avatars where deleted=0) a1
+					on ag1.avatargroup=a1.avatargroup
+				where ag1.deleted=0
+				order by ag1.avatargroup, a1.sortorder, a1.displayname;");
+			
 			foreach ($zresults as $zrow) {
-				if ($zavatargroup != $zrow["avatargroup"]) {
-					if ($i == 0) {
-						$zformdata .= "			<div class=\"wtw3dinternet-controlpaneldiv\">\r\n";
-						$zformdata .= "				<div class=\"wtw3dinternet-controlpaneltitlediv\">".$zrow["avatargroup"]."</div>\r\n";
-					} else {
+				if ($zavatargroup != $zrow["baseavatargroup"]) {
+					if ($i > 0) {
 						$zformdata .= "			</div>\r\n";
-						$zformdata .= "			<div class=\"wtw3dinternet-controlpaneldiv\">\r\n";
-						$zformdata .= "				<div class=\"wtw3dinternet-controlpaneltitlediv\">".$zrow["avatargroup"]."</div>\r\n";
 					}
-					$zavatargroup = $zrow["avatargroup"];
+					$zformdata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
+					$zformdata .= "				<div class=\"wtw-controlpaneltitlediv\" style=\"font-size:1.4em;\"><div id='wtw_addavatarprofile-".$zrow["avatargroupid"]."' class='wtw-greenbuttonright' onclick=\"WTW.openFullPageForm('fullpage','Avatar Profile','wtw_avatarprofilepage');wtwavatars.loadAvatarEditDDL('');wtwavatars.addNewAvatar('".$zrow["baseavatargroup"]."');\">Add New</div>".$zrow["baseavatargroup"]."</div>\r\n";
+					$zavatargroup = $zrow["baseavatargroup"];
 				}
-				$zformdata .= "<div><img src=\"".$zrow["avatarfolder"].$zrow["imageface"]."\" title=\"".$zrow["displayname"]."\" alt=\"".$zrow["displayname"]."\" class=\"wtw-imagesavatar\" style=\"float:left;\" /><img src=\"".$zrow["avatarfolder"].$zrow["imagefull"]."\" title=\"".$zrow["displayname"]."\" alt=\"".$zrow["displayname"]."\" class=\"wtw-imagesavatar\" style=\"float:left;\" /><div style=\"float:left;margin-left:10px;\"><h3 class=\"wtw-black\">".$zrow["displayname"]."</h3></div></div><div class=\"wtw-clear\"></div>";
-
+				if (!empty($zrow["avatarid"]) && isset($zrow["avatarid"])) {
+					$zformdata .= "		<div class=\"wtw-clear\"></div>\r\n";
+					if (!empty($zrow["imageface"]) && isset($zrow["imageface"])) {
+						$zformdata .= "<img src=\"".$zrow["avatarfolder"].$zrow["imageface"]."\" title=\"".$zrow["displayname"]."\" alt=\"".$zrow["displayname"]."\" class=\"wtw-imagesavatar\" style=\"float:left;\" />";
+						$zformdata .= "<img src=\"".$zrow["avatarfolder"].$zrow["imagefull"]."\" title=\"".$zrow["displayname"]."\" alt=\"".$zrow["displayname"]."\" class=\"wtw-imagesavatar\" style=\"float:left;margin-right:10px;\" />\r\n";
+					}
+					$zformdata .= "		<div style=\"margin-left:10px;margin-right:10px;\">\r\n";
+					$zformdata .= "			<div class=\"wtw-bluebuttonright\" onclick=\"WTW.openFullPageForm('fullpage','Avatar Profile','wtw_avatarprofilepage');wtwavatars.loadAvatarEditDDL('".$zrow["avatarid"]."');\">Edit</div>\r\n";
+					
+					$zformdata .= "			<h3 class=\"wtw-black\">".$zrow["displayname"]."</h3><br />\r\n";
+					$zformdata .= "			<div class=\"wtw-black\">Folder: ".$zrow["avatarfolder"]."</div><br /><br />\r\n";
+					$zformdata .= "			<div class=\"wtw-black\">File: ".$zrow["avatarfile"]."</div><br /><br />\r\n";
+					$zformdata .= "		</div><div class=\"wtw-clear\"></div>\r\n";
+				}
 				$i += 1;
 			}
 			if ($i > 0) {
@@ -218,14 +234,129 @@ class wtwavatars {
 		}
 		return $zformdata;
 	}
-		
+
+	public function adminAvatarProfileForm() {
+		global $wtwplugins;
+		$zformdata = "";
+		try {
+			$zformdata .= "	<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardboxtitle\"><div id='wtw_addavatarprofile' class='wtw-greenbuttonright' onclick=\"wtwavatars.addNewAvatar();\">Add New</div>Avatar Profile</div>\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardbox\">\r\n";
+			$zformdata .= "			<div id='wtw_addavatarprofilediv' class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zformdata .= "				<div id=\"wtw_addavatarprofiletitle\" class=\"wtw-dashboardboxtitle\">Edit Avatar</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardbox\">\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Select Avatar to Edit</div>\r\n";
+			$zformdata .= "					<select id=\"wtw_selecteditavatar\" onchange=\"wtwavatars.loadEditAvatar();\"></select>\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			/* avatar details div */
+			$zformdata .= "			<div id=\"wtw_avatardetails\" class=\"wtw-hide\">\r\n";
+				/* avatar settings section */
+			$zformdata .= "				<div class=\"wtw-controlpaneldiv\">\r\n";
+			$zformdata .= "					<div class=\"wtw-controlpaneltitlediv\" style=\"font-size:1.4em;\">Avatar Settings</div>\r\n";
+			$zformdata .= "					<input type=\"hidden\" id=\"wtw_tavatarprofileavatarid\" />\r\n";
+			$zformdata .= "					<input type=\"hidden\" id=\"wtw_tavatarprofilesortorder\" />\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Avatar Group</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><select id=\"wtw_tavatarprofileavatargroup\" onchange=\"\"></select></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Avatar Display Name</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatarprofiledisplayname\" maxlength=\"255\" /></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Gender (female, male, other, n/a, etc...)</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatarprofilegender\" maxlength=\"25\" /></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+				/* avatar scaling */
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\" style=\"font-size:1.2em;font-weight:bold;\">Avatar Scaling (Size)</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Scaling Z (left,-right)</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatarprofilescalingz\" maxlength=\"25\" /></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Scaling X (front,-back)</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatarprofilescalingx\" maxlength=\"25\" /></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Scaling Y (up,-down)</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatarprofilescalingy\" maxlength=\"25\" /></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+				/* avatar files */
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\" style=\"font-size:1.2em;font-weight:bold;\">Avatar Folder and Files</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Avatar Folder</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatarprofilefolder\" maxlength=\"255\" style=\"width:360px;\" /></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Avatar File</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatarprofilefile\" maxlength=\"255\" style=\"width:360px;\" /></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Face Image (Recommended 200px x 200px)</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatarprofileimageface\" maxlength=\"255\" style=\"width:360px;\" /></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Full Image (Recommended 200px x 200px)</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatarprofileimagefull\" maxlength=\"255\" style=\"width:360px;\" /></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+				/* avatar idle animation */
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\" style=\"font-size:1.2em;font-weight:bold;\">Initial Avatar Idle Animation (if included in main file)</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Start Frame</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatarprofilestartframe\" maxlength=\"25\" /></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">End Frame</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatarprofileendframe\" maxlength=\"25\" /></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+				/* save and delete buttons */
+			$zformdata .= " 				<div id=\"wtw_avatarprofileerror\" class=\"wtw-error\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div id=\"wtw_bavatarprofiledelete\" class='wtw-redbuttonleft' onclick=\"wtwavatars.saveAvatarProfileForm(0);\">Delete Avatar Profile</div>\r\n";
+			$zformdata .= "					<div id=\"wtw_bavatarprofilesave\" class='wtw-greenbuttonright' onclick=\"wtwavatars.saveAvatarProfileForm(1);\">Save Avatar Profile</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "				</div>\r\n";
+			
+			/* avatar colors section */
+			$zformdata .= "				<div class=\"wtw-controlpaneldiv\">\r\n";
+			$zformdata .= "					<div class=\"wtw-controlpaneltitlediv\" style=\"font-size:1.4em;\">Avatar Colors</div>\r\n";
+			$zformdata .= " 				<div id=\"wtw_avatarprofilecolorlist\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "				</div>\r\n";
+
+			/* avatar animations section */
+			$zformdata .= "				<div class=\"wtw-controlpaneldiv\">\r\n";
+			$zformdata .= "					<div class=\"wtw-controlpaneltitlediv\" style=\"font-size:1.4em;\">Avatar Animations</div>\r\n";
+			$zformdata .= " 				<div id=\"wtw_avatarprofileanimationlist\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "				</div>\r\n";
+
+
+			$zformdata .= "					</div>\r\n";
+			$zformdata .= "				</div>\r\n";
+			$zformdata .= "			</div>\r\n";
+			$zformdata .= "		</div>\r\n";
+			$zformdata .= "	</div>\r\n";
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins:wtw-avatars:functions-class_plugin.php-adminAvatarProfileForm=".$e->getMessage());
+		}
+		return $zformdata;
+	}
+	
 	public function adminAvatarGroupsForm() {
 		global $wtwplugins;
 		$zformdata = "";
 		try {
 			$zformdata .= "	<div class=\"wtw-dashboardboxleftfull\">\r\n";
-			$zformdata .= "		<div class=\"wtw-dashboardboxtitle\">Avatar Groups</div>\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardboxtitle\"><div id='wtw_addavatargroup' class='wtw-greenbuttonright' onclick=\"wtwavatars.openAvatarGroupForm();\">Add New</div>Avatar Groups</div>\r\n";
 			$zformdata .= "		<div class=\"wtw-dashboardbox\">\r\n";
+			$zformdata .= "			<div id='wtw_addavatargroupdiv' class=\"wtw-dashboardboxleftfull wtw-hide\">\r\n";
+			$zformdata .= "				<div id=\"wtw_addavatargrouptitle\" class=\"wtw-dashboardboxtitle\">Add Avatar Group</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardbox\">\r\n";
+
+			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Avatar Group Name</div>\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatargroup\" maxlength=\"255\" style=\"width:360px;\" /></div><br />\r\n";
+			$zformdata .= "					<input type=\"hidden\" id=\"wtw_tavatargroupid\"/>\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= " 				<div id=\"wtw_avatargrouperror\" class=\"wtw-error\"></div>\r\n";
+			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zformdata .= "					<div id=\"wtw_bavatargroupdelete\" class='wtw-redbuttonleft wtw-hide' onclick=\"wtwavatars.saveAvatarGroupForm(0);\">Delete Avatar Group</div>\r\n";
+			$zformdata .= "					<div id=\"wtw_bavatargroupsave\" class='wtw-greenbuttonright' onclick=\"wtwavatars.saveAvatarGroupForm(1);\">Save Avatar Group</div>\r\n";
+			$zformdata .= "					<div class='wtw-yellowbuttonright' onclick=\"wtwavatars.saveAvatarGroupForm(-1);\">Cancel</div>\r\n";
+			$zformdata .= "				</div>\r\n";
+			$zformdata .= "			</div>\r\n";
+			$zformdata .= "			<br /><br /><div id=\"wtw_avatargroupslist\">\r\n";
 			
 			$zavatargroup = '';
 			$zresults = $wtwplugins->query("
@@ -234,8 +365,9 @@ class wtwavatars {
 				where deleted=0
 				order by avatargroup, avatargroupid;");
 			foreach ($zresults as $zrow) {
-				$zformdata .= "<div><div style=\"float:left;margin-left:10px;\"><h3 class=\"wtw-black\">".$zrow["avatargroup"]."</h3></div></div><div class=\"wtw-clear\"></div>";
+				$zformdata .= "<div class=\"wtw-biglistleft\">".$zrow["avatargroup"]."</div><div class=\"wtw-bluebuttonright\" onclick=\"wtwavatars.openAvatarGroupForm('".$zrow["avatargroupid"]."','".$zrow["avatargroup"]."');\">Edit</div><div class=\"wtw-clear\"></div>";
 			}
+			$zformdata .= "			</div>\r\n";
 			$zformdata .= "		</div>\r\n";
 			$zformdata .= "	</div>\r\n";
 		} catch (Exception $e) {
