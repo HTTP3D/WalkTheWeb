@@ -466,6 +466,32 @@ try {
 				addUserID($zrowcg["updateuserid"]);
 			}
 
+			/* get content ratings */
+			$zresultscr = $wtwconnect->query("
+				select *
+				from ".wtw_tableprefix."contentratings
+				where webid='".$zwebid."'
+					and deleted=0;");
+			$zcr = 0;
+			$zcontentratings = array();
+			foreach ($zresultscr as $zrowcr) {
+				$zcontentratings[$zcr] = array(
+					'contentratingid'=>$zrowcr["contentratingid"],
+					'pastcontentratingid'=>$zrowcr["pastcontentratingid"],
+					'webid'=>$zrowcr["webid"],
+					'rating'=>$zrowcr["rating"],
+					'ratingvalue'=>$zrowcr["ratingvalue"],
+					'contentwarning'=>$zrowcr["contentwarning"],
+					'createdate'=>$zrowcr["createdate"],
+					'createuserid'=>$zrowcr["createuserid"],
+					'updatedate'=>$zrowcr["updatedate"],
+					'updateuserid'=>$zrowcr["updateuserid"]
+				);
+				$zcr += 1;
+				addUserID($zrowcr["createuserid"]);
+				addUserID($zrowcr["updateuserid"]);
+			}
+
 			/* get action zones */
 			$zresultsaz = $wtwconnect->query("
 				select *
@@ -854,6 +880,7 @@ try {
 				'uploadobjects'=>$zuploadobjects,
 				'uploads'=>$zuploads,
 				'scripts'=>$zscripts,
+				'contentratings'=>$zcontentratings,
 				'avataranimations'=>$zavataranimations,
 				'users'=>$zusers
 			);

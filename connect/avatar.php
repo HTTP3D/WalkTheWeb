@@ -10,8 +10,66 @@ try {
 
 	/* get values from querystring or session */
 	$zavatarid = $wtwconnect->getVal('avatarid','');
-	
+
+	$zavatarparts = array();
+	$zavataranimations = array();
+
 	/* pull avatar by id */
+
+	/* pull avatar colors by id */
+	$zresults = $wtwconnect->query("
+		select * 
+		from ".wtw_tableprefix."avatarcolors 
+		where deleted=0 
+			and avatarid='".$zavatarid."'
+		order by avatarpart, avatarpartid;");
+	$i = 0;
+	foreach ($zresults as $zrow) {
+		$zavatarparts[$i] = array(
+			'avatarpartid'=> $zrow["avatarpartid"],
+			'avatarpart'=> $zrow["avatarpart"],
+			'diffusecolor'=> $zrow["diffusecolor"],
+			'specularcolor'=> $zrow["specularcolor"],
+			'emissivecolor'=> $zrow["emissivecolor"],
+			'ambientcolor'=> $zrow["ambientcolor"]
+		);
+		$i += 1;
+	}
+
+	/* pull avatar animations by id */
+	$zresults = $wtwconnect->query("
+		select * 
+		from ".wtw_tableprefix."avataranimations
+		where (setdefault=1
+				and deleted=0)
+			or (avatarid='".$zavatarid."' 
+				and setdefault=0
+				and deleted=0)
+		order by loadpriority desc, animationevent, setdefault, avataranimationid;");
+	$i = 0;
+	foreach ($zresults as $zrow) {
+		$zavataranimations[$i] = array(
+			'avataranimationid'=> $zrow["avataranimationid"],
+			'avatarid'=> $zrow["avatarid"],
+			'loadpriority'=> $zrow["loadpriority"],
+			'animationevent'=> $zrow["animationevent"],
+			'animationfriendlyname'=> $zrow["animationfriendlyname"],
+			'setdefault'=> $zrow["setdefault"],
+			'animationicon'=> $zrow["animationicon"],
+			'objectfolder'=> $zrow["objectfolder"],
+			'objectfile'=> $zrow["objectfile"],
+			'startframe'=> $zrow["startframe"],
+			'endframe'=> $zrow["endframe"],
+			'animationloop'=> $zrow["animationloop"],
+			'speedratio'=> $zrow["speedratio"],
+			'soundid'=> $zrow["soundid"],
+			'soundpath'=> $zrow["soundpath"],
+			'soundmaxdistance'=> $zrow["soundmaxdistance"]
+		);
+		$i += 1;
+	}
+
+	/* pull main avatar profile by id */
 	$zresults = $wtwconnect->query("
 		select * 
 		from ".wtw_tableprefix."avatars 
@@ -43,7 +101,9 @@ try {
 				'imagefull'=> $zrow["imagefull"],
 				'imageface'=> $zrow["imageface"]
 			),
-			'sortorder'=> $zrow["sortorder"]
+			'sortorder'=> $zrow["sortorder"],
+			'avatarparts'=> $zavatarparts,
+			'avataranimations'=> $zavataranimations
 		);
 	}
 	$zresponse['avatar'] = $zavatar;
