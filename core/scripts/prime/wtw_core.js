@@ -54,15 +54,17 @@ WTWJS.prototype.setContentRating = function() {
 		WTW.getAsyncJSON("/connect/rating.php?webid=" + communityid + buildingid + thingid, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
-				if (zresponse.unratedcontent == '1') {
-					dGet('wtw_rating').innerHTML = zresponse.rating + "*";
-				} else {
-					dGet('wtw_rating').innerHTML = zresponse.rating;
+				if (dGet('wtw_rating') != null) {
+					if (zresponse.unratedcontent == '1') {
+						dGet('wtw_rating').innerHTML = zresponse.rating + "*";
+					} else {
+						dGet('wtw_rating').innerHTML = zresponse.rating;
+					}
+					dGet('wtw_rating').onmouseover = function() {WTW.showToolTip('Content Rating - Click for more');};
+					dGet('wtw_rating').onmouseout = function() {WTW.hideToolTip();};
+					
+					dGet('wtw_contentrating').innerHTML = atob(zresponse.contentrating);
 				}
-				dGet('wtw_rating').onmouseover = function() {WTW.showToolTip('Content Rating - Click for more');};
-				dGet('wtw_rating').onmouseout = function() {WTW.hideToolTip();};
-				
-				dGet('wtw_contentrating').innerHTML = atob(zresponse.contentrating);
 			}
 		);
 	} catch (ex) {
