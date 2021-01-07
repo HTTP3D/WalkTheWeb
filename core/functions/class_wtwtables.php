@@ -2435,6 +2435,18 @@ class wtwtables {
 					alter table ".wtw_tableprefix."users 
 					drop column username;");
 			}
+
+			/* updated 3.4.3 - added Content Rating to the Browse Menu */
+			$zresults = $wtwdb->query("
+				select * 
+				from ".wtw_tableprefix."menuitems
+				where menuitemname='wtw_rating';");
+			if (count($zresults) == 0) {
+				$wtwdb->query("
+					INSERT INTO `".wtw_tableprefix."menuitems` VALUES 
+						(null, 'wtw_rating', '[Not Rated]', 'main', 'right', -1001, 1, '', '', 'show-hide', 'wtw_menucontentrating', 1, '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', null, '', 0);
+				");
+			}
 			
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 		} catch (Exception $e) {
