@@ -20,7 +20,7 @@ class wtwtools {
 		}
 	}
 
-	public function saveContentRating($zwebid, $zrating, $zratingvalue, $zcontentwarning, $zparentalcontrols) {
+	public function saveContentRating($zwebid, $zwebtype, $zrating, $zratingvalue, $zcontentwarning, $zparentalcontrols) {
 		global $wtwhandlers;
 		$zresponse = array(
 			'serror'=>''
@@ -47,6 +47,7 @@ class wtwtools {
 							insert into ".wtw_tableprefix."contentratings
 							   (contentratingid,
 								webid,
+								webtype,
 								rating,
 								ratingvalue,
 								contentwarning,
@@ -57,6 +58,7 @@ class wtwtools {
 							  values
 							   ('".$zcontentratingid."',
 								'".$zwebid."',
+								'".$zwebtype."',
 								'".$zrating."',
 								".$zratingvalue.",
 								'".$zcontentwarning."',

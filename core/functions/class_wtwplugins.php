@@ -74,6 +74,15 @@ class wtwplugins {
 			return false;
 		}
 	}
+
+	public function getAdminSubMenu($zselectmenu) {
+		global $wtwadminmenu;
+		if (isset($wtwadminmenu)) {
+			return $wtwadminmenu->getAdminSubMenu($zselectmenu);
+		} else {
+			return false;
+		}
+	}
 	
 	public function addFullPageForm($zid, $zaccessrequired, $zfullpagedata) {
 		global $wtwadmin;

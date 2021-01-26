@@ -648,6 +648,26 @@ select.wtw-fileselectcategory {
 	border-bottom:#454545 solid 1px;
 	background-color: #366E26;
 }
+.wtw-greenbuttonnarrow {
+	margin:0px;
+	padding:7px 5px 7px 5px;
+	font-weight:normal;
+	font-size:1em;
+	color:#ffffff;
+	border-top:transparent solid 1px;
+	border-bottom:transparent solid 1px;
+	background-color: #697366;
+	text-align:left;
+	vertical-align:middle;
+	display:inline-block;
+}
+.wtw-greenbuttonnarrow:hover {
+	cursor:pointer;
+	color:#ffffff;
+	border-top:#454545 solid 1px;
+	border-bottom:#454545 solid 1px;
+	background-color: #366E26;
+}
 .wtw-redbutton {
 	margin:0px;
 	padding:7px 5px 7px 5px;
@@ -1413,7 +1433,7 @@ a.wtw-helplink2:hover {
 	overflow-y:auto;
 }
 .wtw-imagescrollhorizontal {
-	height:248px;
+	height:230px;
 	width:96%;
 	margin-left:3%;
 	overflow-x:auto;
@@ -1421,18 +1441,27 @@ a.wtw-helplink2:hover {
 	vertical-align:top;
 }
 .wtw-imagescroll {
-	width:204px;
 	height:204px;
+	width:auto;
 	display:inline-block;
-	border:2px solid #000000;
+	border:2px solid #c0c0c0;
 }
 .wtw-imagescroll:hover {
 	cursor:pointer;
 	border:2px solid yellow;
 }
 .wtw-imagesavatar {
-	width:200px;
-	height:200px;
+	height:180px;
+	width:auto;
+}
+.wtw_imagename {
+	background-color:#000000;
+	color:#ffffff;
+	text-align:center;
+	margin:0px;
+	padding:3px;
+	position:relative;
+	top: -5px;
 }
 .wtw-fullimage {
 	width:100px;
@@ -2202,4 +2231,49 @@ input:checked + .wtw-slider:before {
 	padding-top:5px;
 	font-size:1.3em;
 	min-width:40%;
+}
+/* file list */
+.wtw-filelistdiv {
+	text-align:left;
+	border:1px solid gray;
+	padding:5px;
+	margin:5px;
+	overflow-x:auto;
+	overflow-y:none;
+	background-color:#ffffff;
+}
+
+.wtw-filelist {
+	text-align:left;
+	color:#000000;
+}
+.wtw-colorlist {
+	text-align:left;
+	color:#c0c0c0;
+	border:1px solid gray;
+	border-radius:10px;
+}
+.wtw-colorlistitem {
+	margin-left:20px;
+	text-align:left;
+	color:#c0c0c0;
+}
+.wtw-colorlistvalue {
+	float:right;
+	margin-right:20px;
+}
+.wtw-animlist {
+	text-align:left;
+	color:#c0c0c0;
+	border:1px solid gray;
+	border-radius:10px;
+}
+.wtw-animlistitem {
+	margin-left:20px;
+	text-align:left;
+	color:#c0c0c0;
+}
+.wtw-animlistvalue {
+	float:right;
+	margin-right:20px;
 }

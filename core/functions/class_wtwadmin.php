@@ -78,6 +78,7 @@ class wtwadmin {
 			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_core.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/admin/wtw_adminconnectinggrids.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/admin/wtw_adminactionzones.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/admin/wtw_adminavatars.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/admin/wtw_admincommunities.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/admin/wtw_adminbuildings.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/admin/wtw_adminthings.js?x=".$zver."\"></script>\r\n";
@@ -163,6 +164,14 @@ class wtwadmin {
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tthingid\" value=\"".$wtw->thingid."\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tthingind\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tthingsnapshotid\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_teditavatarid\" value=\"".$wtw->avatarid."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarsnapshotid\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationid\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarfolder\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarsubfolder\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatargroupid\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationeventid\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarfolderdisplay\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tnewmold\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldid\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldind\" />\r\n";
@@ -355,6 +364,7 @@ class wtwadmin {
 			$zpagedata .= "			<div id=\"wtw_menuwtwcommunities\" class=\"wtw-menutabtopselected\" onclick=\"WTW.openFullPageForm('importpage','communities');\">3D Communities</div>\r\n";
 			$zpagedata .= "			<div id=\"wtw_menuwtwbuildings\" class=\"wtw-menutabtop\" onclick=\"WTW.openFullPageForm('importpage','buildings');\">3D Buildings</div>\r\n";
 			$zpagedata .= "			<div id=\"wtw_menuwtwthings\" class=\"wtw-menutabtop\" onclick=\"WTW.openFullPageForm('importpage','things');\">3D Things</div>\r\n";
+			$zpagedata .= "			<div id=\"wtw_menuwtwavatars\" class=\"wtw-menutabtop\" onclick=\"WTW.openFullPageForm('importpage','avatars');\">3D Avatars</div>\r\n";
 			$zpagedata .= "			<div id=\"searchcommunitiesdiv\" class=\"wtw-searchbar\">\r\n";
 			$zpagedata .= "				<b>Search:</b> <input id='wtw_tcommunitysearch' type='text' value='' size='20' maxlength='255' class='wtw-gotext' />\r\n";
 			$zpagedata .= "				<input id='wtw_bcommunitysearch' type='button' value='Go' onclick=\"WTW.communitySearch(dGet('wtw_tcommunitysearch').value);\" class='wtw-gobutton' />\r\n";
@@ -367,6 +377,10 @@ class wtwadmin {
 			$zpagedata .= "				<b>Search:</b> <input id='wtw_tthingsearch' type='text' value='' size='20' maxlength='255' class='wtw-gotext' />\r\n";
 			$zpagedata .= "				<input id='wtw_bthingsearch' type='button' value='Go' onclick=\"WTW.thingSearch(dGet('wtw_tthingsearch').value);\" class='wtw-gobutton' />\r\n";
 			$zpagedata .= "			</div>\r\n";
+			$zpagedata .= "			<div id=\"searchavatarsdiv\" class=\"wtw-searchbar\">\r\n";
+			$zpagedata .= "				<b>Search:</b> <input id='wtw_tavatarsearch' type='text' value='' size='20' maxlength='255' class='wtw-gotext' />\r\n";
+			$zpagedata .= "				<input id='wtw_bavatarsearch' type='button' value='Go' onclick=\"WTW.avatarSearch(dGet('wtw_tavatarsearch').value);\" class='wtw-gobutton' />\r\n";
+			$zpagedata .= "			</div>\r\n";
 			$zpagedata .= "		</div><div class=\"wtw-clear\"></div><hr />\r\n";
 			$zpagedata .= "		<div style='width:100%;margin:0px;text-align:center;'>\r\n";
 			$zpagedata .= "			<!--img src='/content/system/images/wtwlogo.png' / -->\r\n";
@@ -374,6 +388,7 @@ class wtwadmin {
 			$zpagedata .= "				<div id='wtw_commtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
 			$zpagedata .= "				<div id='wtw_buildtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
 			$zpagedata .= "				<div id='wtw_thingtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
+			$zpagedata .= "				<div id='wtw_avatartempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
 			$zpagedata .= "				<div id=\"wtw_downloadcomplete\" class=\"wtw-hide\">\r\n";
 			$zpagedata .= "					<h3 class=\"wtw-black\">Download Complete</h3><br />\r\n";
 			$zpagedata .= "					<div id=\"wtw_downloadcompletemessage\">You can find your <b>New 3D Community</b> in the <b>Admin Menu</b><br />or select from the following:</div><br />\r\n";
@@ -871,17 +886,17 @@ class wtwadmin {
 			$zpagedata .= "		<div id=\"wtw_loadingrequirements\" class=\"wtw-loadingnotice\">Loading...</div>\r\n";
 			$zpagedata .= "		<div id=\"wtw_requirements\" class=\"wtw-fullpage\">\r\n";
 			$zpagedata .= "			<div class=\"wtw-dashboardboxleftfull\">\r\n";
-			$zpagedata .= "				<div class=\"wtw-dashboardboxtitle\">3D Community Requirements</div>\r\n";
+			$zpagedata .= "				<div id=\"wtw_requirementstitle\" class=\"wtw-dashboardboxtitle\">Requirements</div>\r\n";
 			$zpagedata .= "				<div class=\"wtw-dashboardbox\">\r\n";
-			$zpagedata .= " 					<div>The settings below will only apply to this 3D Community.<br /><br /></div>\r\n";
+			$zpagedata .= " 					<div id=\"wtw_requirementsdesc\">The settings below will only apply to this 3D Website.</div><br /><br />\r\n";
 
 				/* Parental Controls and Ratings */
 			$zpagedata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
 			$zpagedata .= "				<div class=\"wtw-controlpaneltitlediv\">Parental Controls - Content Rating</div>\r\n";
-			$zpagedata .= "				<label class=\"wtw-switch\"><input id=\"wtw_enableparentalsettings\" type=\"checkbox\" onclick=\"WTW.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw_enableparentaltext\" class=\"wtw-disabledlabel\">Rating is not set for this 3D Community.</div><br /><div id=\"wtw_enableparentaltext2\">No content warning will be displayed.</div><br />\r\n";
+			$zpagedata .= "				<label class=\"wtw-switch\"><input id=\"wtw_enableparentalsettings\" type=\"checkbox\" onclick=\"WTW.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw_enableparentaltext\" class=\"wtw-disabledlabel\">Rating is not set for this 3D Website.</div><br /><div id=\"wtw_enableparentaltext2\">No content warning will be displayed.</div><br />\r\n";
 			$zpagedata .= "				<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "				<div id=\"wtw_webratingdiv\" class=\"wtw-hide\">\r\n";
-			$zpagedata .= "					<hr /><div class=\"wtw-dashboardlabel\" style=\"font-size:1.2em;font-weight:bold;\">3D Community Content Rating</div>\r\n";
+			$zpagedata .= "					<hr /><div id=\"wtw_requirementslabel\" class=\"wtw-dashboardlabel\" style=\"font-size:1.2em;font-weight:bold;\">3D Website Content Rating</div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "					<select id=\"wtw_webrating\" onchange=\"WTW.changeRating();\">
 												<option value=\"0\">Web-All</option>
@@ -910,11 +925,13 @@ class wtwadmin {
 				$zpagedata .= "			</div>\r\n";
 			}
 			
-				/* plugins required to load for this 3D */
-			$zpagedata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
-			$zpagedata .= "				<div class=\"wtw-controlpaneltitlediv\">Required 3D Plugins</div>\r\n";
-			$zpagedata .= "				<label class=\"wtw-switch\"><input id=\"wtw_enablepluginsrequired\" type=\"checkbox\" onclick=\"WTW.changeSwitch(this);\" checked><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw_enablepluginsrequiredtext\" class=\"wtw-enablelabel\">All 3D Plugins are Enabled</div> <br />All 3D Plugins are enabled for this 3D Website.<br /><br />\r\n";
-			$zpagedata .= "			</div>\r\n";
+			if (!empty($wtw->communityid) || !empty($wtw->buildingid) || !empty($wtw->thingid)) {
+					/* plugins required to load for this 3D Web */
+				$zpagedata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
+				$zpagedata .= "				<div class=\"wtw-controlpaneltitlediv\">Required 3D Plugins</div>\r\n";
+				$zpagedata .= "				<label class=\"wtw-switch\"><input id=\"wtw_enablepluginsrequired\" type=\"checkbox\" onclick=\"WTW.changeSwitch(this);\" checked><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw_enablepluginsrequiredtext\" class=\"wtw-enablelabel\">All 3D Plugins are Enabled</div> <br />All 3D Plugins are enabled for this 3D Website.<br /><br />\r\n";
+				$zpagedata .= "			</div>\r\n";
+			}
 
 			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";

@@ -12,6 +12,7 @@ try {
 	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zwebid = $wtwhandlers->getPost('webid','');
+	$zwebtype = $wtwhandlers->getPost('webtype','');
 	$zparentalcontrols = $wtwhandlers->getPost('parentalcontrols','0');
 	$zrating = $wtwhandlers->getPost('rating','');
 	$zratingvalue = $wtwhandlers->getPost('ratingvalue','');
@@ -65,7 +66,7 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savecontentrating":
-			$zresponse = $wtwtools->saveContentRating($zwebid, $zrating, $zratingvalue, $zcontentwarning, $zparentalcontrols);
+			$zresponse = $wtwtools->saveContentRating($zwebid, $zwebtype, $zrating, $zratingvalue, $zcontentwarning, $zparentalcontrols);
 			break;
 		case "getserversettings":
 			$zresponse = $wtwtools->getServerSettings();

@@ -101,7 +101,7 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminaxislabels', 'Axis Labels OFF', 998, 'wtw_devtools', 6, 'wtw_axislabels', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminloadedobjects', 'List Loaded Objects', 998, 'wtw_devtools', 10, 'wtw_loadedobjects', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 
-				if (!empty($wtw->communityid) || !empty($wtw->buildingid) || !empty($wtw->thingid)) {
+				if (!empty($wtw->communityid) || !empty($wtw->buildingid) || !empty($wtw->thingid) || !empty($wtw->avatarid)) {
 					$this->addAdminMenuItem('wtw_admincloseproject', 'Close 3D Project', 999, 'wtw_admincloseproject', 0, '', '/content/system/images/menuclosedoor.png', $updateroles, "WTW.adminMenuItemSelected(this);");
 				}
 				$this->addAdminMenuItem('wtw_adminexit', 'Exit Admin', 1000, 'wtw_adminexit', 0, '', '/content/system/images/menuexit.png', null, "WTW.adminMenuItemSelected(this);");
@@ -203,6 +203,7 @@ class wtwadminmenu {
 			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listthingmolds', 'List Thing Molds', 60, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listautomations', 'List Automations', 70, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listloadeduploads', 'List Loaded Uploads', 80, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listmyavatarlocation', 'My Avatar Location', 90, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwadminmenu.php-preloadAdminSubMenu=".$e->getMessage());

@@ -201,6 +201,26 @@ class wtwconnect {
 		return $wtwdb->getNewKey($ztablename, $zfieldid, $zdefaultkeyid);
 	}
 
+	public function startsWith($zhaystack, $zneedle) {
+		global $wtwdb;
+		return $wtwdb->startsWith($zhaystack, $zneedle);
+	}
+
+	public function endsWith($zhaystack, $zneedle) {
+		global $wtwdb;
+		return $wtwdb->endsWith($zhaystack, $zneedle);
+	}
+	
+	public function getAvatarFilesList($zfiles, $zdir) {
+		global $wtwdb;
+		return $wtwdb->getAvatarFilesList($zfiles, $zdir);
+	}
+	
+	public function getFilefromURL($zfromurl, $zfilepath, $zfilename) {
+		global $wtwdb;
+		return $wtwdb->getFilefromURL($zfromurl, $zfilepath, $zfilename);
+	}
+
 	public function getIDByPastID($ztablename, $zfieldid, $zpastfieldid, $zpastid) {
 		global $wtwdb;
 		return $wtwdb->getIDByPastID($ztablename, $zfieldid, $zpastfieldid, $zpastid);

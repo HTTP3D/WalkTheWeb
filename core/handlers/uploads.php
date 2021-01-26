@@ -14,6 +14,7 @@ try {
 	$zcommunityid = $wtwhandlers->getPost('communityid','');
 	$zbuildingid = $wtwhandlers->getPost('buildingid','');
 	$zthingid = $wtwhandlers->getPost('thingid','');
+	$zavatarid = $wtwhandlers->getPost('avatarid','');
 	$zsettings = $wtwhandlers->getPost('settings','');
 	$zvalue = $wtwhandlers->getPost('value','');
 	$zwebaliasid = $wtwhandlers->getPost('webaliasid','');
@@ -76,7 +77,7 @@ try {
 			$zresponse = $wtwuploads->getCommunityImages($zcommunityid, $zbuildingid, $zthingid);
 			break;
 		case "saveimage":
-			$zresults = $wtwuploads->saveImageFilePng(addslashes($zfilepath), $zfilename, $zfiledata, $zcommunityid, $zbuildingid, $zthingid);
+			$zresults = $wtwuploads->saveImageFilePng(addslashes($zfilepath), $zfilename, $zfiledata, $zcommunityid, $zbuildingid, $zthingid, $zavatarid);
 			$zresponse = array(
 				'snapshotid'=> $zresults['snapshotid'],
 				'snapshotpath'=> $zresults['snapshotpath'],

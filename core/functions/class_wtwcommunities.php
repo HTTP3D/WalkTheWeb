@@ -778,6 +778,7 @@ class wtwcommunities {
 				$zresults = $wtwhandlers->query("
 					select t2.contentratingid as pastcontentratingid,
 						 t2.webid,
+						 t2.webtype,
 						 '".$zcommunityid."' as webid,
 						 t2.rating,
 						 t2.ratingvalue,
@@ -792,6 +793,7 @@ class wtwcommunities {
 							(contentratingid,
 							 pastcontentratingid,
 							 webid,
+							 webtype,
 							 rating,
 							 ratingvalue,
 							 contentwarning,
@@ -803,6 +805,7 @@ class wtwcommunities {
 							('".$zcontentratingid."',
 							 '".$zrow["pastcontentratingid"]."',
 							 '".$zrow["webid"]."',
+							 '".$zrow["webtype"]."',
 							 '".$zrow["rating"]."',
 							 ".$zrow["ratingvalue"].",
 							 '".$zrow["contentwarning"]."',
@@ -1342,8 +1345,8 @@ class wtwcommunities {
 	}
 	
 	public function downloadWeb($zwebid, $znewwebid, $zwebtype, $zusertoken, $zdownloadparentwebid, $zdownloadparentwebtype, $zcommunityid, $zbuildingpositionx = 0, $zbuildingpositiony = 0, $zbuildingpositionz = 0, $zbuildingscalingx = 1, $zbuildingscalingy = 1, $zbuildingscalingz = 1, $zbuildingrotationx = 0, $zbuildingrotationy = 0, $zbuildingrotationz = 0) {
-		/* this process downloads 3D Web and dependent objects form https://3dnet.walktheweb.com (WalkTheWeb repository)*/
-		/* this is the response after you select a 3D Item to domwload in the search */
+		/* this process downloads 3D Web and dependent objects from https://3dnet.walktheweb.com (WalkTheWeb repository)*/
+		/* this is the response after you select a 3D Item to download in the search */
 		/* $zwebid is the item selected (3D Community, 3D Bulding, or 3D Thing) */
 		/* $znewwebid is a proposed new value for the web id (optional) */
 		/* $zwebtype is 'community', 'building', or 'thing' */
@@ -2000,7 +2003,6 @@ class wtwcommunities {
 							loadpriority,
 							animationevent,
 							animationfriendlyname,
-							setdefault,
 							animationicon,
 							objectfolder,
 							objectfile,
@@ -2021,7 +2023,6 @@ class wtwcommunities {
 							".$zavataranimation->loadpriority.",
 							'".$zavataranimation->animationevent."',
 							'".$zavataranimation->animationfriendlyname."',
-							".$zavataranimation->setdefault.",
 							'".$znewanimationicon."',
 							'".$znewobjectfolder."',
 							'".$zavataranimation->objectfile."',
@@ -2334,6 +2335,7 @@ class wtwcommunities {
 						   (contentratingid,
 							pastcontentratingid,
 							webid,
+							webtype,
 							rating,
 							ratingvalue,
 							contentwarning,
@@ -2345,6 +2347,7 @@ class wtwcommunities {
 						   ('".$znewcontentratingid."',
 							'".$zcontentrating->contentratingid."',
 							'".$znewwebid."',
+							'".$zcontentrating->webtype."',
 							'".$zcontentrating->rating."',
 							".$zcontentrating->ratingvalue.",
 							'".$zcontentrating->contentwarning."',

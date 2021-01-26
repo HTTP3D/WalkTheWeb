@@ -200,6 +200,16 @@ class wtwhandlers {
 		return $wtwdb->getNewKey($ztablename, $zfieldid, $zdefaultkeyid);
 	}
 		
+	public function startsWith($zhaystack, $zneedle) {
+		global $wtwdb;
+		return $wtwdb->startsWith($zhaystack, $zneedle);
+	}
+
+	public function endsWith($zhaystack, $zneedle) {
+		global $wtwdb;
+		return $wtwdb->endsWith($zhaystack, $zneedle);
+	}
+
 	public function getIDByPastID($ztablename, $zfieldid, $zpastfieldid, $zpastid) {
 		global $wtwdb;
 		return $wtwdb->getIDByPastID($ztablename, $zfieldid, $zpastfieldid, $zpastid);
@@ -398,6 +408,21 @@ class wtwhandlers {
 			$this->serror("core-functions-class_wtwhandlers.php-addHandlerHeader=".$e->getMessage());
 		}
 		return $zheader;
+	}
+
+	public function checkContentFolders($zcommunityid, $zbuildingid, $zthingid, $zavatarid) {
+		global $wtwdb;
+		return $wtwdb->checkContentFolders($zcommunityid, $zbuildingid, $zthingid, $zavatarid);
+	}
+	
+	public function copyContentSubFolderRecursive($zsourcefolder, $zdestinationfolder) { 
+		global $wtwdb;
+		return $wtwdb->copyContentSubFolderRecursive($zsourcefolder, $zdestinationfolder);
+	}
+
+	public function getFilefromURL($zfromurl, $zfilepath, $zfilename) {
+		global $wtwdb;
+		return $wtwdb->getFilefromURL($zfromurl, $zfilepath, $zfilename);
 	}
 
 	public function trackPageView($zcurrentpage) {

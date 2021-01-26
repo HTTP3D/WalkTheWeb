@@ -22,7 +22,7 @@ class wtw {
 	
 	/* declare public $wtw variables */
 	public $version = "3.4.2";
-	public $dbversion = "1.1.12";
+	public $dbversion = "1.1.14";
 	public $versiondate = "2020-12-27";
 	public $serverinstanceid = "";
 	public $usertoken = "";
@@ -45,6 +45,7 @@ class wtw {
 	public $communityid = "";
 	public $buildingid = "";
 	public $thingid = "";
+	public $avatarid = "";
 	public $pluginstylesheets = array();
 	public $pluginscripts = array();
 	public $pluginscriptfunctions = array();
@@ -973,6 +974,9 @@ class wtw {
 			}
 			if ($this->pagename == "admin.php" && ($wtwdb->isUserInRole('admin') || $wtwdb->isUserInRole('architect') || $wtwdb->isUserInRole('developer') || $wtwdb->isUserInRole('graphics artist'))) {
 				/* user has admin access, get item to edit from querystring */
+				if(isset($_GET["avatarid"]) && !empty($_GET["avatarid"])) {
+					$this->avatarid = $wtwdb->checkIDFormat($_GET["avatarid"]);
+				}
 				if(isset($_GET["communityid"]) && !empty($_GET["communityid"])) {
 					$this->communityid = $wtwdb->checkIDFormat($_GET["communityid"]);
 				}
@@ -1861,6 +1865,7 @@ class wtw {
 			$jsdata .= "	var communityid = '".$this->communityid."';\r\n";
 			$jsdata .= "	var buildingid = '".$this->buildingid."';\r\n";
 			$jsdata .= "	var thingid = '".$this->thingid."';\r\n";
+			$jsdata .= "	var avatarid = '".$this->avatarid."';\r\n";
 			$jsdata .= "	var wtw_domain;\r\n";
 			$jsdata .= "	var wtw_uploads = [];\r\n";
 			$jsdata .= "	var wtw_version = \"".$this->version."\";\r\n";
@@ -2012,6 +2017,7 @@ class wtw {
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseremail\" value=\"".$wtwuser->email."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserimageurl\" value=\"".$wtwuser->userimageurl."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseraccess\" value=\"".$wtwuser->useraccess."\" />\r\n";
+			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_trootpath\" value=\"".wtw_rootpath."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tcontentpath\" value=\"".$wtwuser->contentpath."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuploadpathid\" value=\"".$wtwuser->uploadpathid."\" />\r\n";
 			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tinstanceid\" />\r\n";

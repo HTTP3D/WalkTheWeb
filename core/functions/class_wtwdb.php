@@ -11,7 +11,11 @@ class wtwdb {
 	}
 	
 	public function __construct() {
-
+		if (defined('wtw_contentpath')) {
+			$this->contentpath = wtw_contentpath;
+		} else {
+			$this->contentpath = wtw_rootpath."/content";
+		}
 	}	
 
 	public function __call ($zmethod, $zarguments)  {
@@ -21,8 +25,9 @@ class wtwdb {
 	}
 	
 	/* declare public $wtwdb variables */
-	public $userid = "";
-	public $pagename = "";
+	public $userid = '';
+	public $pagename = '';
+	public $contentpath = '';
 	
 	public function serror($zmessage) {
 		try {
@@ -42,8 +47,8 @@ class wtwdb {
 					if ($this->pagename == "admin.php") {
 						$zerror = "<script type=\"text/javascript\">";
 						$zerror .= "console.log('".addslashes($zmessage)."');";
-						$zerror .= "dGet('wtw_error').innerHTML = '".addslashes($zmessage)."';";
-						$zerror .= "WTW.openFullPageForm('error','Error Found');";
+						$zerror .= "if (document.getElementById('wtw_error') != null) {document.getElementById('wtw_error').innerHTML = '".addslashes($zmessage)."';";
+						$zerror .= "WTW.openFullPageForm('error','Error Found');}";
 						$zerror .= "</script>";
 						echo $zerror;
 					}
@@ -79,8 +84,75 @@ class wtwdb {
 		return $zdata;		
 	}
 	
+	public function renameFieldIfExists($ztable, $zoldfield, $znewfield) {
+		/* rename field in table - keeps the type and preserves all of the data in the column */
+		try {
+			/* check if table exists */
+			if ($this->tableExists($ztable)) {
+				$zresults = $this->query("SHOW COLUMNS FROM ".$ztable." LIKE '".$zoldfield."';");
+				if (count($zresults) > 0) {
+					$zresults = $this->query("
+						describe `".$ztable."`");
+					foreach ($zresults as $zrow) {
+						$zfield = "";
+						$ztype = "";
+						$znull = "yes";
+						$zprikey = "";
+						$zdefault = "";
+						$zextra = "";
+						foreach ($zrow as $zkey=>$zvalue) { 
+							switch (strtolower($zkey)) {
+								case "field":
+									$zfield = strtolower($zvalue);
+									break;
+								case "type":
+									$ztype = strtolower($zvalue);
+									break;
+								case "null":
+									$znull = strtolower($zvalue);
+									break;
+								case "key":
+									$zprikey = strtolower($zvalue);
+									break;
+								case "default":
+									$zdefault = strtolower($zvalue);
+									break;
+								case "extra":
+									$zextra = strtolower($zvalue);
+									break;
+							}
+						}
+						
+						if ($zfield == $zoldfield) {
+							/* field changed, update field */
+							$zsql = "alter table ".$ztable." change `".$zoldfield."` `".$znewfield."` ".$ztype;
+							if ($znull == "no") {
+								$zsql .= " not null";
+							}
+							if (isset($zdefault)) {
+								if (strpos($zdefault,"null") !== false) {
+									$zsql .= " default null";
+								} else {
+									$zsql .= " default '".$zdefault."'";
+								}
+							}
+							if (!empty($zextra)) {
+								$zsql .= " ".$zextra;
+							}
+							$zsql .= ";";
+							$this->query($zsql);
+						}
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-renameFieldIfExists=".$e->getMessage());
+		}	
+	}
+			
 	public function deltaCreateTable($zsql) {
 		/* accepts a CREATE TABLE mysql statement and compares it to existing table (if it exists) and creates or updates the table schema */
+		$zsql1 = '';
 		try {
 			$ztable = "";
 			$zsql = str_replace("\n","",str_replace("\r","",$zsql));
@@ -129,6 +201,7 @@ class wtwdb {
 						if (!empty($zwords[0]) && isset($zwords[0])) {
 							if ($zwords[0] != "key") {
 								$znewfield = $zwords[0];
+								$znewfield = str_replace(")","",$znewfield);
 							}
 						}
 						if (!empty($zwords[1]) && isset($zwords[1])) {
@@ -159,15 +232,17 @@ class wtwdb {
 						if (strpos($zline,"auto_increment") !== false) {
 							$znewextra = "auto_increment";
 						}
-						$znewfields[count($znewfields)] = array(
-							'field' => $znewfield,
-							'type' => $znewtype,
-							'null' => $znewnull,
-							'prikey' => $znewprikey,
-							'default' => $znewdefault,
-							'extra' => $znewextra,
-							'found' => '0'
-						);
+						if (!empty($znewfield)) {
+							$znewfields[count($znewfields)] = array(
+								'field' => $znewfield,
+								'type' => $znewtype,
+								'null' => $znewnull,
+								'prikey' => $znewprikey,
+								'default' => $znewdefault,
+								'extra' => $znewextra,
+								'found' => '0'
+							);
+						}
 					} else if (strpos($zline,"primary key") !== false) {
 						$zprimarykey = str_replace(" ","",str_replace("(","",str_replace(")","",str_replace("primary key","",$zline))));
 					} else if (strpos($zline,"unique key") !== false) {
@@ -196,7 +271,6 @@ class wtwdb {
 					}
 				}
 			}
-			
 			/* check if table already exists */
 			if ($this->tableExists($ztable)) {
 				$znewprimarysql = "";
@@ -237,82 +311,86 @@ class wtwdb {
 					$foundfield = false;
 					for ($i=0; $i < count($znewfields); $i++) {
 						if ($znewfields[$i]["field"] == $zfield) {
-							$zneedsupdate = false;
 							$foundfield = true;
 							$znewfields[$i]["found"] = '1';
-							if ($zfield == $zprimarykey) {
-								$znewfields[$i]["prikey"] = "pri";
-							}
-							if ($znewfields[$i]["type"] != $ztype) {
-								$zneedsupdate = true;
-							}
-							if ($znewfields[$i]["null"] != $znull) {
-								$zneedsupdate = true;
-							}
-							if ($znewfields[$i]["prikey"] != $zprikey) {
-								$this->query("alter table ".$ztable." drop primary key;");
-								$znewprimarysql = "alter table ".$ztable." add primary key (".$zprimarykey.");";
-								if (empty($znewfields[$i]["prikey"]) && !empty($zprikey)) {
-									$znewuniquesql = "alter table ".$ztable." add unique ".$zuniquekey.";";
-									if (!empty($zindexkey)) {
-										$znewindexsql = "alter table ".$ztable." add index ".$zindexkey.";";
-									}
-								}
-								$zneedsupdate = true;
-							}
-							if ($znewfields[$i]["default"] != $zdefault && $znewfields[$i]["default"] != 'null' && $zdefault != '') {
-								$zneedsupdate = true;
-							}
-							if ($znewfields[$i]["extra"] != $zextra) {
-								$zneedsupdate = true;
-							}
-							if ($zneedsupdate) {
-								/* field changed, update field */
-								$zsql = "alter table ".$ztable." modify column ".$zfield." ".$znewfields[$i]["type"];
-								if ($znewfields[$i]["null"] == "no") {
-									$zsql .= " not null";
-								}
-								if (isset($znewfields[$i]["default"])) {
-									if (strpos($znewfields[$i]["default"],"null") !== false) {
-										$zsql .= " default null";
-									} else {
-										$zsql .= " default '".$znewfields[$i]["default"]."'";
-									}
-								}
-								if (!empty($znewfields[$i]["extra"])) {
-									$zsql .= " ".$znewfields[$i]["extra"];
-								}
-								$zsql .= ";";
-								$this->query($zsql);
-							}
 						}
 					}
 					if ($foundfield == false) {
-						/* field no longer in use, consider deleting field... not sure if I want to automate this...*/
+						/* field no longer in use, consider deleting field... not sure if I want to automate this...in case some developers use it in their code */
 					}
 				}
-				
+				/* update records */
 				for ($i=0; $i < count($znewfields); $i++) {
 					if ($znewfields[$i]["found"] == '0') {
 						/* insert new field */
-						$zsql = "alter table ".$ztable." add column ".$znewfields[$i]["field"]." ".$znewfields[$i]["type"];
+						$zsql = "alter table ".$ztable." add column `".$znewfields[$i]["field"]."` ".$znewfields[$i]["type"];
 						if ($znewfields[$i]["null"] == "no") {
 							$zsql .= " not null";
 						}
 						if (isset($znewfields[$i]["default"])) {
 							if (strpos($znewfields[$i]["default"],"null") !== false) {
 								$zsql .= " default null";
-							} else {
+							} else if (strpos($znewfields[$i]["type"] ,'text') === false && strpos($znewfields[$i]["type"] ,'blob') === false) {
 								$zsql .= " default '".$znewfields[$i]["default"]."'";
 							}
 						}
 						if (!empty($znewfields[$i]["extra"])) {
 							$zsql .= " ".$znewfields[$i]["extra"];
 						}
+						if ($i > 0) {
+							$zsql .= " AFTER `".$znewfields[$i-1]["field"]."` ";
+						} else {
+							$zsql .= " FIRST ";
+						}
 						$zsql .= ";";
-						$this->query($zsql);
+						if (strpos($zsql, 'engine=innodb') === false && strpos($zsql, 'auto_increment') === false) {
+							/* update if it is not an auto increment type and is a valid fieldname to update */
+							$zsql1 = $zsql;
+							$this->query($zsql);
+						}
+					} else {
+						if ($znewfields[$i]["field"] == $zprimarykey) {
+							$znewfields[$i]["prikey"] = "pri";
+						}
+						if ($znewfields[$i]["prikey"] != $zprikey) {
+							$this->query("alter table ".$ztable." drop primary key;");
+							$znewprimarysql = "alter table ".$ztable." add primary key (".$zprimarykey.");";
+							if (empty($znewfields[$i]["prikey"]) && !empty($zprikey)) {
+								$znewuniquesql = "alter table ".$ztable." add unique ".$zuniquekey.";";
+								if (!empty($zindexkey)) {
+									$znewindexsql = "alter table ".$ztable." add index ".$zindexkey.";";
+								}
+							}
+						}
+						/* field changed, update field */
+						$zsql = "alter table ".$ztable." modify column `".$znewfields[$i]["field"]."` ".$znewfields[$i]["type"];
+						if ($znewfields[$i]["null"] == "no") {
+							$zsql .= " not null";
+						}
+						if (isset($znewfields[$i]["default"])) {
+							if (strpos($znewfields[$i]["default"],"null") !== false) {
+								$zsql .= " default null";
+							} else if (strpos($znewfields[$i]["type"] ,'text') === false && strpos($znewfields[$i]["type"] ,'blob') === false) {
+								$zsql .= " default '".$znewfields[$i]["default"]."'";
+							}
+						}
+						if (!empty($znewfields[$i]["extra"])) {
+							$zsql .= " ".$znewfields[$i]["extra"];
+						}
+						if ($i > 0) {
+							$zsql .= " AFTER `".$znewfields[$i-1]["field"]."` ";
+						} else {
+							$zsql .= " FIRST ";
+						}
+						$zsql .= ";";
+						if (strpos($zsql, 'auto_increment') === false) {
+							/* update if it is not an auto increment type */
+							$zsql1 = $zsql;
+							$this->query($zsql);
+						}
 					}
 				}
+				
 				if (!empty($znewprimarysql)) {
 					$this->query($znewprimarysql);
 				}
@@ -335,8 +413,217 @@ class wtwdb {
 				$this->query($zsql);
 			}
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtwdb.php-deltaCreateTable=".$e->getMessage());
+			$this->serror("core-functions-class_wtwdb.php-deltaCreateTable=".$e->getMessage()." - ".$zsql1);
 		}	
+	}
+	
+	public function checkContentFolders($zcommunityid, $zbuildingid, $zthingid, $zavatarid) {
+		/* checks and adds content folders as needed for use with uploaded files */
+		try {
+			if (!file_exists($this->contentpath."/uploads")) {
+				mkdir($this->contentpath."/uploads", octdec(wtw_chmod), true);
+				chmod($this->contentpath."/uploads", octdec(wtw_chmod));
+			}
+			if (!file_exists($this->contentpath."/uploads/users")) {
+				mkdir($this->contentpath."/uploads/users", octdec(wtw_chmod), true);
+				chmod($this->contentpath."/uploads/users", octdec(wtw_chmod));
+			}
+			if (!file_exists($this->contentpath."/uploads/communities")) {
+				mkdir($this->contentpath."/uploads/communities", octdec(wtw_chmod), true);
+				chmod($this->contentpath."/uploads/communities", octdec(wtw_chmod));
+			}
+			if (!file_exists($this->contentpath."/uploads/buildings")) {
+				mkdir($this->contentpath."/uploads/buildings", octdec(wtw_chmod), true);
+				chmod($this->contentpath."/uploads/buildings", octdec(wtw_chmod));
+			}
+			if (!file_exists($this->contentpath."/uploads/things")) {
+				mkdir($this->contentpath."/uploads/things", octdec(wtw_chmod), true);
+				chmod($this->contentpath."/uploads/things", octdec(wtw_chmod));
+			}
+			if (!file_exists($this->contentpath."/uploads/avatars")) {
+				mkdir($this->contentpath."/uploads/avatars", octdec(wtw_chmod), true);
+				chmod($this->contentpath."/uploads/avatars", octdec(wtw_chmod));
+			}
+			if (!file_exists($this->contentpath."/uploads/useravatars")) {
+				mkdir($this->contentpath."/uploads/useravatars", octdec(wtw_chmod), true);
+				chmod($this->contentpath."/uploads/useravatars", octdec(wtw_chmod));
+			}
+			if (!empty($zcommunityid) && isset($zcommunityid)) {
+				if (!file_exists($this->contentpath."/uploads/communities/".$zcommunityid)) {
+					mkdir($this->contentpath."/uploads/communities/".$zcommunityid, octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/communities/".$zcommunityid, octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/communities/".$zcommunityid."/media")) {
+					mkdir($this->contentpath."/uploads/communities/".$zcommunityid."/media", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/communities/".$zcommunityid."/media", octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/communities/".$zcommunityid."/snapshots")) {
+					mkdir($this->contentpath."/uploads/communities/".$zcommunityid."/snapshots", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/communities/".$zcommunityid."/snapshots", octdec(wtw_chmod));
+				}
+			}
+			if (!empty($zbuildingid) && isset($zbuildingid)) {
+				if (!file_exists($this->contentpath."/uploads/buildings/".$zbuildingid)) {
+					mkdir($this->contentpath."/uploads/buildings/".$zbuildingid, octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/buildings/".$zbuildingid, octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/buildings/".$zbuildingid."/media")) {
+					mkdir($this->contentpath."/uploads/buildings/".$zbuildingid."/media", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/buildings/".$zbuildingid."/media", octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/buildings/".$zbuildingid."/snapshots")) {
+					mkdir($this->contentpath."/uploads/buildings/".$zbuildingid."/snapshots", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/buildings/".$zbuildingid."/snapshots", octdec(wtw_chmod));
+				}
+			}
+			if (!empty($zthingid) && isset($zthingid)) {
+				if (!file_exists($this->contentpath."/uploads/things/".$zthingid)) {
+					mkdir($this->contentpath."/uploads/things/".$zthingid, octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/things/".$zthingid, octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/things/".$zthingid."/media")) {
+					mkdir($this->contentpath."/uploads/things/".$zthingid."/media", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/things/".$zthingid."/media", octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/things/".$zthingid."/snapshots")) {
+					mkdir($this->contentpath."/uploads/things/".$zthingid."/snapshots", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/things/".$zthingid."/snapshots", octdec(wtw_chmod));
+				}
+			}
+			if (!empty($zavatarid) && isset($zavatarid)) {
+				if (!file_exists($this->contentpath."/uploads/avatars/".$zavatarid)) {
+					mkdir($this->contentpath."/uploads/avatars/".$zavatarid, octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/avatars/".$zavatarid, octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/avatars/".$zavatarid."/textures")) {
+					mkdir($this->contentpath."/uploads/avatars/".$zavatarid."/textures", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/avatars/".$zavatarid."/textures", octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/avatars/".$zavatarid."/animations")) {
+					mkdir($this->contentpath."/uploads/avatars/".$zavatarid."/animations", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/avatars/".$zavatarid."/animations", octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/avatars/".$zavatarid."/snapshots")) {
+					mkdir($this->contentpath."/uploads/avatars/".$zavatarid."/snapshots", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/avatars/".$zavatarid."/snapshots", octdec(wtw_chmod));
+				}
+			}
+			if(isset($_SESSION['wtw_uploadpathid']) && !empty($_SESSION['wtw_uploadpathid'])) {
+				$syear = date('Y');
+				$smonth = date('m');
+				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'])) {
+					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'], octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'], octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear)) {
+					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear, octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear, octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth)) {
+					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth, octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/".$syear."/".$smonth, octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects")) {
+					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects", octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media")) {
+					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media", octdec(wtw_chmod));
+				}
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-checkContentFolders=".$e->getMessage());
+		}
+	}
+
+	public function copyContentSubFolderRecursive($zsourcefolder, $zdestinationfolder) { 
+		/* copy folder recursively under contents to another folder under contents - and set permissions */
+		try {
+			if (strpos($zsourcefolder, $this->contentpath) !== false && strpos($zdestinationfolder, $this->contentpath) !== false) {
+				$zfolder = opendir($zsourcefolder);
+				if (!file_exists($zdestinationfolder)) {
+					mkdir($zdestinationfolder, octdec(wtw_chmod), true);
+					chmod($zdestinationfolder, octdec(wtw_chmod));
+				}
+				while(false !== ($zfile = readdir($zfolder))) {
+					if (($zfile != '.') && ($zfile != '..')) {
+						if (is_dir($zsourcefolder.'/'.$zfile)) {
+							$this->copyContentSubFolderRecursive($zsourcefolder.'/'.$zfile, $zdestinationfolder.'/'.$zfile);
+						}
+						else {
+							copy($zsourcefolder.'/'.$zfile, $zdestinationfolder.'/'.$zfile);
+							chmod($zdestinationfolder.'/'.$zfile, octdec(wtw_chmod));
+						}
+					}
+				} 
+				closedir($zfolder);
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-checkContentFolders=".$e->getMessage());
+		}
+	}
+
+	public function getAvatarFilesList($zfiles, $zdir) {
+		try {
+			$i = 0;
+			$zdir = rtrim($zdir, "/");
+			if (is_dir($zdir)) {
+				if ($zdirectory = opendir($zdir)) {
+					while (($zfile = readdir($zdirectory)) !== false) {
+						if ($zfile != '.' && $zfile != '..') {
+							if (is_dir($zdir.'/'.$zfile)) {
+								if ($zdirectory2 = opendir($zdir.'/'.$zfile)) {
+									while (($zfile2 = readdir($zdirectory2)) !== false) {
+										if ($zfile2 != '.' && $zfile2 != '..') {
+											if ($this->endsWith($zfile2, '.babylon') || $this->endsWith($zfile2, '.manifest') || $this->endsWith($zfile2, '.blend') || $this->endsWith($zfile2, '.blend1') || $this->endsWith($zfile2, '.log') || $this->endsWith($zfile2, '.jpg') || $this->endsWith($zfile2, '.gif') || $this->endsWith($zfile2, '.png') || $this->endsWith($zfile2, '.jpeg') || $this->endsWith($zfile2, '.obj') || $this->endsWith($zfile2, '.gtlf') || $this->endsWith($zfile2, '.glb')) {
+												$zfiles[$i] = array(
+													'file'=> $zfile.'/'.$zfile2
+												);
+												$i += 1;
+											}
+										}
+									}
+									closedir($zdirectory2);
+								}
+							} else {
+								if ($this->endsWith($zfile, '.babylon') || $this->endsWith($zfile, '.manifest') || $this->endsWith($zfile, '.blend') || $this->endsWith($zfile, '.blend1') || $this->endsWith($zfile, '.log') || $this->endsWith($zfile, '.jpg') || $this->endsWith($zfile, '.gif') || $this->endsWith($zfile, '.png') || $this->endsWith($zfile, '.jpeg') || $this->endsWith($zfile, '.obj') || $this->endsWith($zfile, '.gtlf') || $this->endsWith($zfile, '.glb')) {
+									$zfiles[$i] = array(
+										'file'=> $zfile
+									);
+									$i += 1;
+								}
+							}
+						}
+					}
+					closedir($zdirectory);
+				}
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getAvatarFilesList=".$e->getMessage());
+		}
+		return $zfiles;
+	}
+
+	public function getFilefromURL($zfromurl, $zfilepath, $zfilename) {
+		/* save file using any available method fopen, curl, or ftp (added soon) */
+		try {
+			if(ini_get('allow_url_fopen') ) {
+				$zdata1 = file_get_contents($zfromurl);
+				$zsuccess = file_put_contents($zfilepath.$zfilename, $zdata1);	
+			} else if (extension_loaded('curl')) {
+				$zgetfile = curl_init($zfromurl);
+				$zopenfile = fopen($zfilepath.$zfilename, 'wb');
+				curl_setopt($zgetfile, CURLOPT_FILE, $zopenfile);
+				curl_setopt($zgetfile, CURLOPT_HEADER, 0);
+				curl_exec($zgetfile);
+				curl_close($zgetfile);
+				fclose($zopenfile);
+			}
+			chmod($zfilepath.$zfilename, octdec(wtw_chmod));
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getFilefromURL=".$e->getMessage());
+		}
 	}
 	
 	public function getRandomString($zlength, $zstringtype) {
@@ -419,6 +706,22 @@ class wtwdb {
 			$this->serror("core-functions-class_wtwdb.php-getNewKey=".$e->getMessage());
 		}			
 		return $zkeyid;
+	}
+
+	public function startsWith($zhaystack, $zneedle) {
+		try {
+			return substr_compare(strtolower($zhaystack), strtolower($zneedle), 0, strlen($zneedle)) === 0;
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-startsWith=".$e->getMessage());
+		}			
+	}
+	
+	public function endsWith($zhaystack, $zneedle) {
+		try {
+			return substr_compare(strtolower($zhaystack), strtolower($zneedle), -strlen($zneedle)) === 0;
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-endsWith=".$e->getMessage());
+		}			
 	}
 	
 	public function getIDByPastID($ztablename, $zfieldid, $zpastfieldid, $zpastid) {

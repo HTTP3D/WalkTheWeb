@@ -13,41 +13,65 @@ try {
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zuseravatarid = $wtwhandlers->getPost('useravatarid','');
 	$zavatarid = $wtwhandlers->getPost('avatarid','');
+	$zwebid = $wtwhandlers->getPost('webid','');
+	$zwebtype = $wtwhandlers->getPost('webtype','');
 	$zinstanceid = $wtwhandlers->getPost('instanceid','');
 	$zuserip = $wtwhandlers->getPost('userip','');
 	$zobjectfolder = $wtwhandlers->getPost('objectfolder','');
 	$zobjectfile = $wtwhandlers->getPost('objectfile','');
+	$zanimationicon = $wtwhandlers->getPost('animationicon','');
 	$zdisplayname = $wtwhandlers->getPost('displayname','');
+	$zavatardescription = $wtwhandlers->getPost('avatardescription','');
 	$zgender = $wtwhandlers->getPost('gender','');
-	$zscalingx = $wtwhandlers->getPost('scalingx','.04');
-	$zscalingy = $wtwhandlers->getPost('scalingy','.04');
-	$zscalingz = $wtwhandlers->getPost('scalingz','.04');
+	$ztemplatename = $wtwhandlers->getPost('templatename','');
+	$zdescription = $wtwhandlers->getPost('description','');
+	$ztags = $wtwhandlers->getPost('tags','');
+	$zsharehash = $wtwhandlers->getPost('sharehash','');
+	$zpositionx = $wtwhandlers->getPost('positionx','0');
+	$zpositiony = $wtwhandlers->getPost('positiony','0');
+	$zpositionz = $wtwhandlers->getPost('positionz','0');
+	$zscalingx = $wtwhandlers->getPost('scalingx','1');
+	$zscalingy = $wtwhandlers->getPost('scalingy','1');
+	$zscalingz = $wtwhandlers->getPost('scalingz','1');
+	$zrotationx = $wtwhandlers->getPost('rotationx','0');
+	$zrotationy = $wtwhandlers->getPost('rotationy','0');
+	$zrotationz = $wtwhandlers->getPost('rotationz','0');
 	$zstartframe = $wtwhandlers->getPost('startframe','0');
 	$zendframe = $wtwhandlers->getPost('endframe','0');
-	$zimagefull = $wtwhandlers->getPost('imagefull','');
-	$zimageface = $wtwhandlers->getPost('imageface','');
 	$zsortorder = $wtwhandlers->getPost('sortorder','0');
+
+	$zavatarpartid = $wtwhandlers->getPost('avatarpartid','');
 	$zavatarpart = $wtwhandlers->getPost('avatarpart','');
 	$zemissivecolorr = $wtwhandlers->getPost('emissivecolorr','');
 	$zemissivecolorg = $wtwhandlers->getPost('emissivecolorg','');
 	$zemissivecolorb = $wtwhandlers->getPost('emissivecolorb','');
+
+	$zdiffusecolor = $wtwhandlers->getPost('diffusecolor','');
+	$zspecularcolor = $wtwhandlers->getPost('specularcolor','');
+	$zemissivecolor = $wtwhandlers->getPost('emissivecolor','');
+	$zambientcolor = $wtwhandlers->getPost('ambientcolor','');
 	$zavatardisplayname = $wtwhandlers->getPost('avatardisplayname','');
 	$zuseravataranimationid = $wtwhandlers->getPost('useravataranimationid','');
 	$zavataranimationid = $wtwhandlers->getPost('avataranimationid','');
-	$zavataranimationevent = $wtwhandlers->getPost('avataranimationevent','');
+	$zanimationevent = $wtwhandlers->getPost('animationevent','');
+	$zanimationfriendlyname = $wtwhandlers->getPost('animationfriendlyname','');
+	$zloadpriority = $wtwhandlers->getPost('loadpriority','0');
 	$zspeedratio = $wtwhandlers->getPost('speedratio','1');
 	$ztransport = $wtwhandlers->getPost('transport','1');
 	$zavatargroupid = $wtwhandlers->getPost('avatargroupid','');
 	$zavatargroup = $wtwhandlers->getPost('avatargroup','');
+	$zanimationeventid = $wtwhandlers->getPost('animationeventid','');
+	$zanimationevent = $wtwhandlers->getPost('animationevent','');
+
+	$zfilename = $wtwhandlers->getPost('filename','');
+	$zuploadfile = $wtwhandlers->getFiles('wtw_uploadfile',null);
+	$zuploadfiles = $wtwhandlers->getFiles('wtw_uploadfiles',null);
 	
 	/* select the function called */
 	$zresponse = array();
 	switch ($zfunction) {
 		case "quicksaveavatar":
-			$zuseravatarid = $wtwavatars->quicksaveAvatar($zinstanceid, $zuserip, $zavatarid, $zdisplayname);
-			$zresponse = array(
-				'useravatarid'=> $zuseravatarid
-			);
+			$zresponse = $wtwavatars->quicksaveAvatar($zinstanceid, $zuserip, $zavatarid, $zdisplayname);
 			break;
 		case "saveavatarcolor":
 			$wtwavatars->saveAvatarColor($zuseravatarid, $zinstanceid, $zavatarpart, $zemissivecolorr, $zemissivecolorg, $zemissivecolorb);
@@ -56,7 +80,7 @@ try {
 			$wtwavatars->saveAvatarDisplayName($zuseravatarid, $zinstanceid, $zavatardisplayname);
 			break;
 		case "saveavataranimation":
-			$zuseravataranimationid = $wtwavatars->saveAvatarAnimation($zuseravataranimationid, $zuseravatarid, $zinstanceid, $zavataranimationid, $zavataranimationevent, $zspeedratio);
+			$zuseravataranimationid = $wtwavatars->saveAvatarAnimation($zuseravataranimationid, $zuseravatarid, $zinstanceid, $zavataranimationid, $zanimationevent, $zspeedratio);
 			$zresponse = array(
 				'useravataranimationid'=> $zuseravataranimationid
 			);
@@ -88,11 +112,65 @@ try {
 		case "getavatargroups":
 			$zresponse = $wtwavatars->getAvatarGroups();
 			break;
+		case "saveavataranimationevent":
+			$zresponse = $wtwavatars->saveAvatarAnimationEvent($zanimationeventid, $zanimationevent, $zloadpriority);
+			break;
+		case "deleteavataranimationevent":
+			$zresponse = $wtwavatars->deleteAvatarAnimationEvent($zanimationeventid);
+			break;
+		case "getavataranimationevents":
+			$zresponse = $wtwavatars->getAvatarAnimationEvents();
+			break;
+		case "copyavatarprofile":
+			$zresponse = $wtwavatars->copyAvatarProfile($zavatarid);
+			break;
 		case "saveavatarprofile":
-			$zresponse = $wtwavatars->saveAvatarProfile($zavatarid, $zavatargroup, $zdisplayname, $zobjectfolder, $zobjectfile, $zgender, $zscalingx, $zscalingy, $zscalingz, $zstartframe, $zendframe, $zimagefull, $zimageface, $zsortorder);
+			$zresponse = $wtwavatars->saveAvatarProfile($zavatarid, $zavatargroup, $zdisplayname, $zobjectfolder, $zobjectfile, $zgender, $zscalingx, $zscalingy, $zscalingz, $zstartframe, $zendframe, $zsortorder);
 			break;
 		case "deleteavatarprofile":
 			$zresponse = $wtwavatars->deleteAvatarProfile($zavatarid);
+			break;
+		case "savenewavatar":
+			$zresponse = $wtwavatars->saveNewAvatar($zavatarid, $zavatargroup, $zdisplayname, $zavatardescription, $zgender, $zobjectfolder, $zobjectfile, $zstartframe, $zendframe);
+			break;
+		case "saveavatarinformation":
+			$zresponse = $wtwavatars->saveAvatarInformation($zavatarid, $zavatargroup, $zdisplayname, $zavatardescription, $zgender);
+			break;
+		case "saveavatarscaling":
+			$zresponse = $wtwavatars->saveAvatarScaling($zavatarid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz);
+			break;
+		case "saveavatardefinitioncolor":
+			$zresponse = $wtwavatars->saveAvatarDefinitionColor($zavatarid, $zavatarpartid, $zavatarpart, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor);
+			break;
+		case "saveavatardefinitionrootanimation":
+			$zresponse = $wtwavatars->saveAvatarDefinitionRootAnimation($zavatarid, $zstartframe, $zendframe);
+			break;
+		case "saveavatardefinitionanimation":
+			$zresponse = $wtwavatars->saveAvatarDefinitionAnimation($zavatarid, $zavataranimationid, $zloadpriority, $zanimationevent, $zanimationfriendlyname, $zanimationicon, $zobjectfolder, $zobjectfile, $zstartframe, $zendframe, $zspeedratio);
+			break;
+		case "deleteavatardefinitionanimation":
+			$zresponse = $wtwavatars->deleteAvatarDefinitionAnimation($zavatarid, $zavataranimationid);
+			break;
+		case "uploadavatarfile":
+			$zresponse = $wtwavatars->uploadAvatarFile($zuploadfile, $zobjectfolder, $zavatarid);
+			break;
+		case "uploadavatarfiles":
+			$zresponse = $wtwavatars->uploadAvatarFiles($zuploadfiles, $zobjectfolder, $zavatarid);
+			break;
+		case "deleteavatarfile":
+			$zresponse = $wtwavatars->deleteAvatarFile($zfilename, $zobjectfolder);
+			break;
+		case "saveavatartemplate":
+			$zresponse = $wtwavatars->saveAvatarTemplate($zavatarid, $ztemplatename, $zdescription, $ztags);
+			break;
+		case "shareavatartemplate":
+			$zresponse = $wtwavatars->shareAvatarTemplate($zavatarid, $zsharehash);
+			break;
+		case "setuseravatarglobalhash":
+			$zresponse = $wtwavatars->setUserAvatarGlobalHash($zuseravatarid);
+			break;
+		case "downloadweb":
+			$zresponse = $wtwavatars->downloadWeb($zwebid, $zwebid, $zwebtype, '');
 			break;
 	}
 

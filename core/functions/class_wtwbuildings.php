@@ -684,6 +684,7 @@ class wtwbuildings {
 				$zresults = $wtwhandlers->query("
 					select t2.contentratingid as pastcontentratingid,
 						 t2.webid,
+						 t2.webtype,
 						 '".$zbuildingid."' as webid,
 						 t2.rating,
 						 t2.ratingvalue,
@@ -698,6 +699,7 @@ class wtwbuildings {
 							(contentratingid,
 							 pastcontentratingid,
 							 webid,
+							 webtype,
 							 rating,
 							 ratingvalue,
 							 contentwarning,
@@ -709,6 +711,7 @@ class wtwbuildings {
 							('".$zcontentratingid."',
 							 '".$zrow["pastcontentratingid"]."',
 							 '".$zrow["webid"]."',
+							 '".$zrow["webtype"]."',
 							 '".$zrow["rating"]."',
 							 ".$zrow["ratingvalue"].",
 							 '".$zrow["contentwarning"]."',
