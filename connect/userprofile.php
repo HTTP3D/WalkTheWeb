@@ -19,6 +19,7 @@ try {
 	$zresults = $wtwconnect->query("
 		select u1.*,
 			ua1.displayname as avatardisplayname,
+			ua1.avatardescription,
 			ua1.gender as avatargender
 		from ".wtw_tableprefix."users u1 
 			left join (select * 
@@ -51,6 +52,7 @@ try {
 			'userimageurl' => $zrow["userimageurl"],
 			'email' => $zrow["email"],
 			'displayname' => $zdisplayname,
+			'avatardescription' => $zrow["avatardescription"],
 			'firstname' => $zrow["firstname"],
 			'lastname' => $zrow["lastname"],
 			'gender' => $zgender,

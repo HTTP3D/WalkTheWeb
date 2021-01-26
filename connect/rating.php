@@ -11,6 +11,7 @@ try {
 	
 	/* get values from querystring or session */
 	$zwebid = $wtwconnect->getVal('webid','');
+	$zwebtype = $wtwconnect->getVal('webtype','');
 	$zextended = $wtwconnect->getVal('extended','1');
 	
 	$zrating = 'Not Rated';
@@ -19,13 +20,14 @@ try {
 	$zcontentwarning = '';
 	$zunratedcontent = '0';
 	$zcontentrating = '';
-	
-	/* select base web content rating */
+
+	/* populate any missing webtype fields */
 	$zresults = $wtwconnect->query("
 		select cr1.*,
 			c1.communityname,
 			b1.buildingname,
-			t1.thingname
+			t1.thingname,
+			a1.displayname as avatarname
 		from ".wtw_tableprefix."contentratings cr1
 			left join ".wtw_tableprefix."communities c1
 				on c1.communityid=cr1.webid
@@ -33,7 +35,46 @@ try {
 				on b1.buildingid=cr1.webid
 			left join ".wtw_tableprefix."things t1
 				on t1.thingid=cr1.webid
+			left join ".wtw_tableprefix."avatars a1
+				on a1.avatarid=cr1.webid
+		where cr1.webtype='';");
+	foreach ($zresults as $zrow) {
+		$znewwebtype = '';
+		if (isset($zrow["communityname"]) && !empty($zrow["communityname"])) {
+			$znewwebtype = 'community';
+		} else if (isset($zrow["buildingname"]) && !empty($zrow["buildingname"])) {
+			$znewwebtype = 'building';
+		} else if (isset($zrow["thingname"]) && !empty($zrow["thingname"])) {
+			$znewwebtype = 'thing';
+		} else if (isset($zrow["avatarname"]) && !empty($zrow["avatarname"])) {
+			$znewwebtype = 'avatar';
+		}
+		$wtwconnect->query("
+			update ".wtw_tableprefix."contentratings
+			set webtype='".$znewwebtype."'
+			where contentratingid='".$zrow["contentratingid"]."'
+				and webtype=''
+			limit 1;");
+	}
+	
+	/* select base web content rating */
+	$zresults = $wtwconnect->query("
+		select cr1.*,
+			c1.communityname,
+			b1.buildingname,
+			t1.thingname,
+			a1.displayname as avatarname
+		from ".wtw_tableprefix."contentratings cr1
+			left join ".wtw_tableprefix."communities c1
+				on c1.communityid=cr1.webid
+			left join ".wtw_tableprefix."buildings b1
+				on b1.buildingid=cr1.webid
+			left join ".wtw_tableprefix."things t1
+				on t1.thingid=cr1.webid
+			left join ".wtw_tableprefix."avatars a1
+				on a1.avatarid=cr1.webid
 		where cr1.webid='".$zwebid."'
+			and cr1.webtype='".$zwebtype."'
 		order by cr1.createdate desc
 		limit 1;");
 	if (count($zresults) == 0) {
@@ -48,6 +89,8 @@ try {
 				$zsitename = $zrow["buildingname"];
 			} else if (isset($zrow["thingname"]) && !empty($zrow["thingname"])) {
 				$zsitename = $zrow["thingname"];
+			} else if (isset($zrow["avatarname"]) && !empty($zrow["avatarname"])) {
+				$zsitename = $zrow["avatarname"];
 			}
 			$zrating = $zrow["rating"];
 			$zratingtext = $wtwconnect->getRatingText($zrating);
@@ -78,7 +121,8 @@ try {
 				cr1.contentwarning,
 				c1.communityname,
 				b1.buildingname,
-				t1.thingname
+				t1.thingname,
+				a1.displayname as avatarname
 			from 
 				(select parentwebid, parentwebtype, childwebid, childwebtype 
 					from ".wtw_tableprefix."connectinggrids
@@ -92,6 +136,8 @@ try {
 					on b1.buildingid=cr1.webid
 				left join ".wtw_tableprefix."things t1
 					on t1.thingid=cr1.webid
+				left join ".wtw_tableprefix."avatars a1
+					on a1.avatarid=cr1.webid
 			where cg1.parentwebid='".$zwebid."';");
 		foreach ($zresults as $zrow) {
 			if (isset($zrow["ratingvalue"])) {
@@ -102,6 +148,8 @@ try {
 					$zsitename = $zrow["buildingname"];
 				} else if (isset($zrow["thingname"]) && !empty($zrow["thingname"])) {
 					$zsitename = $zrow["thingname"];
+				} else if (isset($zrow["avatarname"]) && !empty($zrow["avatarname"])) {
+					$zsitename = $zrow["avatarname"];
 				}
 				/* if rating is higher than base rating, update the base rating */
 				if (is_numeric($zrow["ratingvalue"])) {
@@ -133,7 +181,8 @@ try {
 						cr1.contentwarning,
 						c1.communityname,
 						b1.buildingname,
-						t1.thingname
+						t1.thingname,
+						a1.displayname as avatarname
 					from 
 						(select parentwebid, parentwebtype, childwebid, childwebtype 
 							from ".wtw_tableprefix."connectinggrids
@@ -147,6 +196,8 @@ try {
 							on b1.buildingid=cr1.webid
 						left join ".wtw_tableprefix."things t1
 							on t1.thingid=cr1.webid
+						left join ".wtw_tableprefix."avatars a1
+							on a1.avatarid=cr1.webid
 					where cg1.parentwebid='".$zrow["childwebid"]."';");
 				foreach ($zresults2 as $zrow2) {
 					if (isset($zrow2["ratingvalue"])) {
@@ -157,6 +208,8 @@ try {
 							$zsitename = $zrow2["buildingname"];
 						} else if (isset($zrow2["thingname"]) && !empty($zrow2["thingname"])) {
 							$zsitename = $zrow2["thingname"];
+						} else if (isset($zrow["avatarname"]) && !empty($zrow["avatarname"])) {
+							$zsitename = $zrow["avatarname"];
 						}
 						/* if rating is higher than base rating, update the base rating */
 						if (is_numeric($zrow2["ratingvalue"])) {

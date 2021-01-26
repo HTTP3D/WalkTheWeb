@@ -12,20 +12,22 @@ try {
 	$zgroups = $wtwconnect->getVal('groups','');
 	
 	$zresults = array();
-	
+	$zwebtype = 'avatars';
 	if (!empty($zgroups) && isset($zgroups)) {
 		if ($zgroups == 'my') {
 			/* pull a group of MY available avatars */
 			$zresults = $wtwconnect->query("
-				SELECT ua1.useravatarid, ua1.avatarid, ua1.gender, ua1.displayname, 
-					ua1.objectfolder as avatarfolder, ua1.objectfile as avatarfile,  
-					ua1.scalingx, ua1.scalingy, ua1.scalingz, ua1.startframe, ua1.endframe,
-					a1.avatargroup, a1.imagefull, a1.imageface, a1.sortorder, '' as defaultdisplayname 
-				FROM ".wtw_tableprefix."useravatars ua1 left join ".wtw_tableprefix."avatars a1
-				on ua1.avatarid = a1.avatarid
-				where ua1.userid='".$wtwconnect->userid."'
-					and not ua1.userid=''
-				order by ua1.displayname, ua1.avatarid, ua1.useravatarid;");
+				select *,
+					'' as templatename, 
+					'' as description, 
+					'' as tags, 
+					0 as sortorder, 
+					'' as defaultdisplayname 
+				from ".wtw_tableprefix."useravatars
+				where userid='".$wtwconnect->userid."'
+					and not userid=''
+				order by avatargroup, displayname, avatarid, useravatarid;");
+			$zwebtype = 'useravatars';
 		} else {
 			/* pull a group of available avatars */
 			$zwhere = "a1.deleted=0  and (";
@@ -52,7 +54,7 @@ try {
 				left join (select displayname from ".wtw_tableprefix."users where userid='".$wtwconnect->userid."') u1
 				on 1=1
 				where ".$zwhere." 
-				order by a1.avatargroup, a1.sortorder, a1.displayname;");
+				order by a1.avatargroup, a1.displayname;");
 		}
 	} else {
 		$zresults = $wtwconnect->query("
@@ -63,7 +65,7 @@ try {
 				left join (select displayname from ".wtw_tableprefix."users where userid='".$wtwconnect->userid."') u1
 				on 1=1
 			where a1.deleted=0 
-			order by a1.avatargroup, a1.sortorder, a1.displayname;");
+			order by a1.avatargroup, a1.displayname;");
 	}
 	$i = 0;
 	$zavatars = array();
@@ -71,27 +73,61 @@ try {
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
 	foreach ($zresults as $zrow) {
+		$webid = $zrow["avatarid"];
+		if ($zwebtype == 'useravatars') {
+			$webid = $zrow["useravatarid"];
+		}
+		$zsnapshot = '';
+		$zsnapshotthumbnail = '';
+		
+		if (file_exists(wtw_rootpath.'/content/uploads/'.$zwebtype.'/'.$webid.'/snapshots/defaultavatar.png')) {
+			$zsnapshot = '/content/uploads/'.$zwebtype.'/'.$webid.'/snapshots/defaultavatar.png';
+		} else {
+			$zsnapshot = '/content/system/images/profilebig.png';
+		}
+		if (file_exists(wtw_rootpath.'/content/uploads/'.$zwebtype.'/'.$webid.'/snapshots/defaultavatarsm.png')) {
+			$zsnapshotthumbnail = '/content/uploads/'.$zwebtype.'/'.$webid.'/snapshots/defaultavatarsm.png';
+		} else {
+			$zsnapshotthumbnail = '/content/system/images/menuprofilebig.png';
+		}
+		
 		$zavatars[$i] = array(
 			'useravatarid'=> $zrow["useravatarid"],
 			'avatarid'=> $zrow["avatarid"],
 			'avatargroup'=> $zrow["avatargroup"],
 			'displayname'=> $zrow["displayname"],
 			'defaultdisplayname'=> $zrow["defaultdisplayname"],
+			'avatardescription'=> htmlspecialchars($zrow["avatardescription"], ENT_QUOTES, 'UTF-8'),
 			'gender'=> $zrow["gender"],
-			'object'=> array(
-				'folder'=> $zrow["avatarfolder"],
-				'file'=> $zrow["avatarfile"],
+			'objects'=> array(
+				'folder'=> $zrow["objectfolder"],
+				'file'=> $zrow["objectfile"],
 				'startframe'=> $zrow["startframe"],
 				'endframe'=> $zrow["endframe"]
+			),
+			'position'=> array(
+				'x'=> $zrow["positionx"],
+				'y'=> $zrow["positiony"],
+				'z'=> $zrow["positionz"]
 			),
 			'scaling'=> array(
 				'x'=> $zrow["scalingx"],
 				'y'=> $zrow["scalingy"],
 				'z'=> $zrow["scalingz"]
 			),
-			'thumbnails'=> array(
-				'imagefull'=> $zrow["imagefull"],
-				'imageface'=> $zrow["imageface"]
+			'rotation'=> array(
+				'x'=> $zrow["rotationx"],
+				'y'=> $zrow["rotationy"],
+				'z'=> $zrow["rotationz"]
+			),
+			'snapshots'=> array(
+				'full'=> $zsnapshot,
+				'thumbnail'=> $zsnapshotthumbnail
+			),
+			'share'=> array(
+				'templatename' => htmlspecialchars($zrow["templatename"], ENT_QUOTES, 'UTF-8'),
+				'description' => htmlspecialchars($zrow["description"], ENT_QUOTES, 'UTF-8'),
+				'tags' => htmlspecialchars($zrow["tags"], ENT_QUOTES, 'UTF-8')
 			),
 			'sortorder'=> $zrow["sortorder"]
 		);

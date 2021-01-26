@@ -35,8 +35,7 @@ try {
 			'endframe'=> $zrow["endframe"],
 			'soundid'=> $zrow["soundid"],
 			'soundpath'=> $zrow["soundpath"],
-			'soundmaxdistance'=> $zrow["soundmaxdistance"],
-			'setdefault'=> $zrow["setdefault"]
+			'soundmaxdistance'=> $zrow["soundmaxdistance"]
 		);
 		$i += 1;
 	}

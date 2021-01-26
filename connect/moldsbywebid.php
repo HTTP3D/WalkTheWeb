@@ -2536,11 +2536,13 @@ try {
 			'action'=> $zrow["csgaction"], 
 			'count'=> $zrow["csgcount"] 
 		);
-		$zobject = array(
+		$zobjects = array(
 			'uploadobjectid'=> $zrow["uploadobjectid"], 
 			'folder'=> $zrow["objectfolder"], 
 			'file'=> $zrow["objectfile"],
-			'objectanimations'=> $zobjectanimations
+			'objectanimations'=> $zobjectanimations,
+			'light'=> '',
+			'shadows'=> ''
 		);
 		$zgraphics = array(
 			'texture'=> array(
@@ -2633,10 +2635,6 @@ try {
 				'name'=> $zrow['thingalttag']
 			);
 		}
-		$zobjects = array(
-			'light'=> '',
-			'shadows'=> ''
-		);
 		$zmolds[$i] = array(
 			'communityinfo'=> $zcommunityinfo, 
 			'buildinginfo'=> $zbuildinginfo, 
@@ -2649,14 +2647,13 @@ try {
 			'scaling'=> $zscaling,
 			'rotation'=> $zrotation,
 			'csg'=> $zcsg,
-			'object'=> $zobject,
+			'objects'=> $zobjects,
 			'graphics'=> $zgraphics, 
 			'webtext'=> $zwebtext, 
 			'alttag'=> $zalttag,
 			'paths'=> $zpaths,
 			'color'=> $zcolor,
 			'sound'=> $zsound,
-			'objects'=> $zobjects,
 			'subdivisions'=> $zrow["subdivisions"], 
 			'subdivisionsshown'=>'0',
 			'shown'=>'0',

@@ -9,56 +9,106 @@ try {
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/useravatar.php");
 
 	/* get values from querystring or session */
-	$zinstanceid = $wtwconnect->decode64($wtwconnect->getVal('i',''));
-	$zuserid = $wtwconnect->decode64($wtwconnect->getVal('d',''));
-	$zuserip = $wtwconnect->decode64($wtwconnect->getVal('p',''));
-	$zuseravatarid = $wtwconnect->decode64($wtwconnect->getVal('a',''));
-	$zavatarid = $wtwconnect->decode64($wtwconnect->getVal('id',''));
+	$zinstanceid = $wtwconnect->decode64($wtwconnect->getVal('instanceid',''));
+	$zuserid = $wtwconnect->decode64($wtwconnect->getVal('userid',''));
+	$zuserip = $wtwconnect->decode64($wtwconnect->getVal('userip',''));
+	$zuseravatarid = $wtwconnect->decode64($wtwconnect->getVal('useravatarid',''));
+	$zavatarid = $wtwconnect->decode64($wtwconnect->getVal('avatarid',''));
+	$zglobalhash = $wtwconnect->getVal('globalhash','');
 	
-	if (!empty($zuseravatarid) && isset($zuseravatarid) && !empty($zuserid) && isset($zuserid)) {
-		/* check for avatar for logged in user (latest used) */
+	$zfounduseravatarid = '';
+	$zfoundavatarid = '';
+	
+	if (!empty($zuseravatarid) && isset($zuseravatarid)) {
+		/* check for user avatar */
 		$zresults = $wtwconnect->query("
-			select useravatarid 
+			select useravatarid, avatarid 
 			from ".wtw_tableprefix."useravatars 
-			where userid='".$zuserid."' 
-				and useravatarid='".$zuseravatarid."' 
-				and deleted=0 
-			order by updatedate desc 
+			where useravatarid='".$zuseravatarid."' 
+				and deleted=0
 			limit 1;");
 		foreach ($zresults as $zrow) {
-			$zuseravatarid = $zrow["useravatarid"];
+			$zfounduseravatarid = $zrow["useravatarid"];
+			$zfoundavatarid = $zrow["avatarid"];
 		}
 	}
-	if ((empty($zuseravatarid) || !isset($zuseravatarid)) && !empty($zuserid) && isset($zuserid)) {
-		/* check for avatar for logged in user (latest used) */
+
+	if ((empty($zfounduseravatarid) || !isset($zfounduseravatarid)) && !empty($zuserid) && isset($zuserid)) {
+		/* check for user avatar for logged in user (latest used) */
 		$zresults = $wtwconnect->query("
-			select useravatarid 
+			select useravatarid, avatarid
 			from ".wtw_tableprefix."useravatars 
 			where userid='".$zuserid."' 
 				and deleted=0 
 			order by updatedate desc 
 			limit 1;");
 		foreach ($zresults as $zrow) {
-			$zuseravatarid = $zrow["useravatarid"];
+			$zfounduseravatarid = $zrow["useravatarid"];
+			$zfoundavatarid = $zrow["avatarid"];
+		}
+	}
+
+	if ((empty($zfounduseravatarid) || !isset($zfounduseravatarid)) && !empty($zinstanceid) && isset($zinstanceid)) {
+		/* check for user avatar for by instance (latest used) */
+		$zresults = $wtwconnect->query("
+			select useravatarid, avatarid
+			from ".wtw_tableprefix."useravatars 
+			where instanceid='".$zinstanceid."' 
+				and deleted=0 
+			order by updatedate desc 
+			limit 1;");
+		foreach ($zresults as $zrow) {
+			$zfounduseravatarid = $zrow["useravatarid"];
+			$zfoundavatarid = $zrow["avatarid"];
+		}
+	}
+
+	if ((empty($zfounduseravatarid) || !isset($zfounduseravatarid)) && !empty($zavatarid) && isset($zavatarid)) {
+		/* check for avatar selected */
+		$zresults = $wtwconnect->query("
+			select avatarid
+			from ".wtw_tableprefix."avatars 
+			where avatarid='".$zavatarid."' 
+				and deleted=0 
+			limit 1;");
+		foreach ($zresults as $zrow) {
+			$zfoundavatarid = $zrow["avatarid"];
 		}
 	}
 
 	$i = 0;
 	$zavatar = array();
 	$zavatarparts = array();
+	$zfiles = array();
+	$zusers = array();
 	$zresponse = null;
 	$zavataranimationdefs = array();
-	$zscalingx = '.07';
-	$zscalingy = '.07';
-	$zscalingz = '.07';
+	$zcontentratings = array();
+	$zpositionx = '0.00';
+	$zpositiony = '0.00';
+	$zpositionz = '0.00';
+	$zscalingx = '1.0000';
+	$zscalingy = '1.0000';
+	$zscalingz = '1.0000';
+	$zrotationx = '0.00';
+	$zrotationy = '0.00';
+	$zrotationz = '0.00';
 	$zobjectfolder = "";
 	$zobjectfile = "";
 	$zstartframe = '1';
 	$zendframe = '1';
 	$zgender = "female";
 	$zdisplayname = "Anonymous";
+	$zavatardescription = '';
+	$zavatargroup = 'Custom';
 	$zanonymous = '0';
 	$zprivacy = 0;
+	
+	$zwalkspeed = '1';
+	$zwalkanimationspeed = '1';
+	$zturnspeed = '1';
+	$zturnanimationspeed = '1';
+	
 	$zenteranimation = "1";
 	$zexitanimation = "1";
 	$zenteranimationparameter = "";
@@ -66,66 +116,14 @@ try {
 
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
-	if (!empty($zavatarid) && isset($zavatarid) && (empty($zuseravatarid) || !isset($zuseravatarid)) && (empty($zuserid) || !isset($zuserid))) {
-		$zuseravatarid = '';
-		/* get avatar by avatarid */
-		$zresults = $wtwconnect->query("
-			select * 
-			from ".wtw_tableprefix."avatars 
-			where avatarid='".$zavatarid."'
-				and deleted=0 
-			limit 1;");
-		foreach ($zresults as $zrow) {
-			$zscalingx = $zrow["scalingx"];
-			$zscalingy = $zrow["scalingy"];
-			$zscalingz = $zrow["scalingz"];
-			$zobjectfolder = $zrow["avatarfolder"];
-			$zobjectfile = $zrow["avatarfile"];
-			$zstartframe = $zrow["startframe"];
-			$zendframe = $zrow["endframe"];
-			$zgender = $zrow["gender"];
-		}
-		$zanonymous = '1';
-	} else if ((empty($zuseravatarid) || !isset($zuseravatarid)) && (empty($zuserid) || !isset($zuserid)) && !empty($zinstanceid) && isset($zinstanceid)) {
-		/* check for anonymous avatar with same instanceid - not logged in user (latest used) */
+	if (isset($zfounduseravatarid) && !empty($zfounduseravatarid)) {
+		/* get user avatar */
 		$zresults = $wtwconnect->query("
 			select * 
 			from ".wtw_tableprefix."useravatars 
-			where instanceid='".$zinstanceid."' 
-				and userid='' 
-				and deleted=0 
-			order by updatedate desc 
+			where useravatarid='".$zfounduseravatarid."' 
+				and deleted=0
 			limit 1;");
-		foreach ($zresults as $zrow) {
-			$zuseravatarid = $zrow["useravatarid"];
-			$zscalingx = $zrow["scalingx"];
-			$zscalingy = $zrow["scalingy"];
-			$zscalingz = $zrow["scalingz"];
-			$zobjectfolder = $zrow["avatarfolder"];
-			$zobjectfile = $zrow["avatarfile"];
-			$zstartframe = $zrow["startframe"];
-			$zendframe = $zrow["endframe"];
-			$zgender = $zrow["gender"];
-		}
-	}
-
-	if (!empty($zuseravatarid) && isset($zuseravatarid)) {
-		/* get avatar and color settings */
-		$zresults = $wtwconnect->query("
-			select a.*,
-				c.avatarpartid,
-				c.avatarpart,
-				c.diffusecolor,
-				c.specularcolor,
-				c.emissivecolor,
-				c.ambientcolor
-			from ".wtw_tableprefix."useravatars a 
-				left join (select * from ".wtw_tableprefix."useravatarcolors 
-						where deleted=0) c
-					on a.useravatarid = c.useravatarid
-			where a.useravatarid='".$zuseravatarid."'
-				and (c.deleted is null or c.deleted=0)
-			order by c.avatarpart, c.updatedate desc;");
 		foreach ($zresults as $zrow) {
 			if ($zrow["userid"] == '') {
 				$zanonymous = '1';
@@ -133,67 +131,58 @@ try {
 			$zuseravatarid = $zrow["useravatarid"];
 			$zinstanceid = $zrow["instanceid"];
 			$zavatarid = $zrow["avatarid"];
-			$zscalingx = $zrow["scalingx"];
-			$zscalingy = $zrow["scalingy"];
-			$zscalingz = $zrow["scalingz"];
+			$zfoundavatarid = $zrow["avatarid"];
+			$zuserid = $zrow["userid"];
 			$zobjectfolder = $zrow["objectfolder"];
 			$zobjectfile = $zrow["objectfile"];
 			$zstartframe = $zrow["startframe"];
 			$zendframe = $zrow["endframe"];
+			$zwalkspeed = $zrow["walkspeed"];
+			$zwalkanimationspeed = $zrow["walkanimationspeed"];
+			$zturnspeed = $zrow["turnspeed"];
+			$zturnanimationspeed = $zrow["turnanimationspeed"];
 			$zdisplayname = $zrow["displayname"];
+			$zavatardescription = $zrow["avatardescription"];
+			$zgender = $zrow["gender"];
+			$zavatargroup = $zrow["avatargroup"];
 			$zprivacy = $zrow["privacy"];
 			$zenteranimation = $zrow["enteranimation"];
 			$zexitanimation = $zrow["exitanimation"];
 			$zenteranimationparameter = $zrow["enteranimationparameter"];
 			$zexitanimationparameter = $zrow["exitanimationparameter"];
-			$zavatarparts[$i] = array(
-				'globalpartid'=>'',
-				'avatarpartid'=> $zrow["avatarpartid"],
-				'avatarpart'=> $zrow["avatarpart"],
-				'diffusecolor'=> $zrow["diffusecolor"],
-				'emissivecolor'=> $zrow["emissivecolor"],
-				'specularcolor'=> $zrow["specularcolor"],
-				'ambientcolor'=> $zrow["ambientcolor"]
-			);
-			$i += 1;
-		}
-	} else {
-
-		/* get avatar and color settings */
-		$zresults = $wtwconnect->query("
-			select a.*,
-				c.avatarpartid,
-				c.avatarpart,
-				c.diffusecolor,
-				c.specularcolor,
-				c.emissivecolor,
-				c.ambientcolor
-			from ".wtw_tableprefix."avatars a 
-				left join (select * from ".wtw_tableprefix."avatarcolors 
-						where deleted=0) c
-					on a.avatarid = c.avatarid
-			where a.avatarid='".$zavatarid."'
-				and (c.deleted is null or c.deleted=0)
-			order by c.avatarpart, c.updatedate desc;");
-		foreach ($zresults as $zrow) {
-			if (empty($zuserid) || !isset($zuserid)) {
-				$zanonymous = '1';
-			}
-			$zuseravatarid = '';
+			$zpositionx = $zrow["positionx"];
+			$zpositiony = $zrow["positiony"];
+			$zpositionz = $zrow["positionz"];
 			$zscalingx = $zrow["scalingx"];
 			$zscalingy = $zrow["scalingy"];
 			$zscalingz = $zrow["scalingz"];
-			$zobjectfolder = $zrow["avatarfolder"];
-			$zobjectfile = $zrow["avatarfile"];
+			$zrotationx = $zrow["rotationx"];
+			$zrotationy = $zrow["rotationy"];
+			$zrotationz = $zrow["rotationz"];
+			$zobjectfolder = $zrow["objectfolder"];
+			$zobjectfile = $zrow["objectfile"];
 			$zstartframe = $zrow["startframe"];
 			$zendframe = $zrow["endframe"];
-			$zdisplayname = $zrow["displayname"];
-			$zprivacy = '0';
-			$zenteranimation = '0';
-			$zexitanimation = '0';
-			$zenteranimationparameter = '';
-			$zexitanimationparameter = '';
+			$zwalkspeed = $zrow["walkspeed"];
+			$zwalkanimationspeed = $zrow["walkanimationspeed"];
+			$zturnspeed = $zrow["turnspeed"];
+			$zturnanimationspeed = $zrow["turnanimationspeed"];
+		}
 
+		/* get avatar and color settings */
+		$i = 0;
+		$zresults = $wtwconnect->query("
+			select avatarpartid,
+				avatarpart,
+				diffusecolor,
+				specularcolor,
+				emissivecolor,
+				ambientcolor
+			from ".wtw_tableprefix."useravatarcolors 
+			where useravatarid='".$zfounduseravatarid."'
+				and deleted=0
+			order by avatarpart, updatedate desc, avatarpartid;");
+		foreach ($zresults as $zrow) {
 			$zavatarparts[$i] = array(
 				'globalpartid'=>'',
 				'avatarpartid'=> $zrow["avatarpartid"],
@@ -205,64 +194,48 @@ try {
 			);
 			$i += 1;
 		}
-	}
-
-	$zavataranimationdefs[0] = array(
-		'animationind'=> 0,
-		'useravataranimationid'=> '',
-		'avataranimationid'=> '',
-		'animationevent'=> 'onwait',
-		'animationfriendlyname'=> 'Wait',
-		'loadpriority'=> 100,
-		'animationicon'=> '',
-		'defaultspeedratio'=> 1.00,
-		'speedratio'=> 1.00,
-		'objectfolder'=> $zobjectfolder,
-		'objectfile'=> $zobjectfile,
-		'startframe'=> $zstartframe,
-		'endframe'=> $zendframe,
-		'animationloop'=> 1,
-		'soundid'=> '',
-		'soundpath'=> '',
-		'soundmaxdistance'=> 100,
-		'walkspeed'=> '1',
-		'totalframes' => '0',
-		'totalstartframe' => '0',
-		'totalendframe' => '0'
-	);
-	if (!empty($zuseravatarid) && isset($zuseravatarid)) {
+		
+		/* get the user avatar animations (the wait idle is stored in the user avatars table) */
+		$zavataranimationdefs[0] = array(
+			'animationind'=> 0,
+			'useravataranimationid'=> '',
+			'avataranimationid'=> '',
+			'animationevent'=> 'onwait',
+			'animationfriendlyname'=> 'Wait',
+			'loadpriority'=> 100,
+			'animationicon'=> '',
+			'defaultspeedratio'=> 1.00,
+			'speedratio'=> 1.00,
+			'objectfolder'=> $zobjectfolder,
+			'objectfile'=> $zobjectfile,
+			'startframe'=> $zstartframe,
+			'endframe'=> $zendframe,
+			'animationloop'=> 1,
+			'soundid'=> '',
+			'soundmaxdistance'=> 100,
+			'walkspeed'=> '1',
+			'totalframes' => '0',
+			'totalstartframe' => '0',
+			'totalendframe' => '0'
+		);
+		/* get the user avatar animations (the rest are stored in the useravataranimations table) */
 		$i = 1;
-		/* get avatar animations */
 		$zresults = $wtwconnect->query("
-			select u.*,
-				a.loadpriority,
-				a.animationfriendlyname,
-				a.animationicon,
-				a.objectfolder,
-				a.objectfile,
-				a.startframe,
-				a.endframe,
-				a.animationloop,
-				a.speedratio as defaultspeedratio,
-				a.soundid,
-				a.soundpath,
-				a.soundmaxdistance
-			from ".wtw_tableprefix."useravataranimations u 
-				inner join ".wtw_tableprefix."avataranimations a
-					on u.avataranimationid=a.avataranimationid
-			where u.useravatarid='".$zuseravatarid."'
-				and u.deleted=0
-			order by a.loadpriority desc, u.avataranimationevent, u.avataranimationid, u.useravataranimationid;");
+			select *	
+			from ".wtw_tableprefix."useravataranimations
+			where useravatarid='".$zfounduseravatarid."'
+				and deleted=0
+			order by loadpriority desc, animationevent, avataranimationid, useravataranimationid;");
 		foreach ($zresults as $zrow) {
 			$zavataranimationdefs[$i] = array(
 				'animationind'=> $i,
 				'useravataranimationid'=> $zrow["useravataranimationid"],
 				'avataranimationid'=> $zrow["avataranimationid"],
-				'animationevent'=> $zrow["avataranimationevent"],
-				'animationfriendlyname'=> $zrow["animationfriendlyname"],
+				'animationevent'=> $zrow["animationevent"],
+				'animationfriendlyname'=> addslashes($zrow["animationfriendlyname"]),
 				'loadpriority'=> $zrow["loadpriority"],
 				'animationicon'=> $zrow["animationicon"],
-				'defaultspeedratio'=> $zrow["defaultspeedratio"],
+				'defaultspeedratio'=> $zrow["speedratio"],
 				'speedratio'=> $zrow["speedratio"],
 				'objectfolder'=> $zrow["objectfolder"],
 				'objectfile'=> $zrow["objectfile"],
@@ -271,7 +244,6 @@ try {
 				'animationloop'=> $zrow["animationloop"],
 				'walkspeed'=> $zrow["walkspeed"],
 				'soundid'=> $zrow["soundid"],
-				'soundpath'=> $zrow["soundpath"],
 				'soundmaxdistance'=> $zrow["soundmaxdistance"],
 				'totalframes' => '0',
 				'totalstartframe' => '0',
@@ -279,22 +251,120 @@ try {
 			);
 			$i += 1;
 		}
+
 	} else {
-		$i = 1;
+		if (!isset($zfoundavatarid) || empty($zfoundavatarid)) {
+			/* get the first anonymous avatar available (latest updated) */
+			$zresults = $wtwconnect->query("
+				select avatarid
+				from ".wtw_tableprefix."avatars 
+				where avatargroup='Anonymous' 
+					and deleted=0 
+				order by updatedate desc
+				limit 1;");
+			foreach ($zresults as $zrow) {
+				$zfoundavatarid = $zrow["avatarid"];
+			}
+		}
+		
 		/* get avatar by avatarid */
 		$zresults = $wtwconnect->query("
 			select * 
-			from ".wtw_tableprefix."avataranimations 
-			where setdefault=1
+			from ".wtw_tableprefix."avatars 
+			where avatarid='".$zfoundavatarid."'
+				and deleted=0 
+			limit 1;");
+		foreach ($zresults as $zrow) {
+			$zuseravatarid = '';
+			$zanonymous = '1';
+			$zpositionx = $zrow["positionx"];
+			$zpositiony = $zrow["positiony"];
+			$zpositionz = $zrow["positionz"];
+			$zscalingx = $zrow["scalingx"];
+			$zscalingy = $zrow["scalingy"];
+			$zscalingz = $zrow["scalingz"];
+			$zrotationx = $zrow["rotationx"];
+			$zrotationy = $zrow["rotationy"];
+			$zrotationz = $zrow["rotationz"];
+			$zobjectfolder = $zrow["objectfolder"];
+			$zobjectfile = $zrow["objectfile"];
+			$zstartframe = $zrow["startframe"];
+			$zendframe = $zrow["endframe"];
+			$zdisplayname = 'Anonymous';
+			$zavatardescription = $zrow["avatardescription"];
+			$zavatargroup = $zrow["avatargroup"];
+			$zgender = $zrow["gender"];
+			$zprivacy = '0';
+			$zenteranimation = '0';
+			$zexitanimation = '0';
+			$zenteranimationparameter = '';
+			$zexitanimationparameter = '';
+		}
+		
+		/* get avatar and color settings */
+		$i = 0;
+		$zresults = $wtwconnect->query("
+			select avatarpartid,
+				avatarpart,
+				diffusecolor,
+				specularcolor,
+				emissivecolor,
+				ambientcolor
+			from ".wtw_tableprefix."avatarcolors 
+			where avatarid='".$zfoundavatarid."'
 				and deleted=0
-			order by loadpriority desc, avaatranimationid;");
+			order by avatarpart, updatedate desc, avatarpartid;");
+		foreach ($zresults as $zrow) {
+			$zavatarparts[$i] = array(
+				'globalpartid'=>'',
+				'avatarpartid'=> $zrow["avatarpartid"],
+				'avatarpart'=> $zrow["avatarpart"],
+				'diffusecolor'=> $zrow["diffusecolor"],
+				'emissivecolor'=> $zrow["emissivecolor"],
+				'specularcolor'=> $zrow["specularcolor"],
+				'ambientcolor'=> $zrow["ambientcolor"]
+			);
+			$i += 1;
+		}
+		
+		/* get the avatar animations (the wait idle is stored in the avatars table) */
+		$zavataranimationdefs[0] = array(
+			'animationind'=> 0,
+			'useravataranimationid'=> '',
+			'avataranimationid'=> '',
+			'animationevent'=> 'onwait',
+			'animationfriendlyname'=> 'Wait',
+			'loadpriority'=> 100,
+			'animationicon'=> '',
+			'defaultspeedratio'=> 1.00,
+			'speedratio'=> 1.00,
+			'objectfolder'=> $zobjectfolder,
+			'objectfile'=> $zobjectfile,
+			'startframe'=> $zstartframe,
+			'endframe'=> $zendframe,
+			'animationloop'=> 1,
+			'soundid'=> '',
+			'soundmaxdistance'=> 100,
+			'walkspeed'=> '1',
+			'totalframes' => '0',
+			'totalstartframe' => '0',
+			'totalendframe' => '0'
+		);
+		$i = 1;
+		/* get the avatar animations (the rest are stored in the avataranimations table) */
+		$zresults = $wtwconnect->query("
+			select * 
+			from ".wtw_tableprefix."avataranimations 
+			where avatarid='".$zfoundavatarid."'
+				and deleted=0
+			order by loadpriority desc, avataranimationid;");
 		foreach ($zresults as $zrow) {
 			$zavataranimationdefs[$i] = array(
 				'animationind'=> $i,
 				'useravataranimationid'=> '',
 				'avataranimationid'=> $zrow["avataranimationid"],
 				'animationevent'=> $zrow["animationevent"],
-				'animationfriendlyname'=> $zrow["animationfriendlyname"],
+				'animationfriendlyname'=> addslashes($zrow["animationfriendlyname"]),
 				'loadpriority'=> $zrow["loadpriority"],
 				'animationicon'=> $zrow["animationicon"],
 				'defaultspeedratio'=> $zrow["speedratio"],
@@ -305,7 +375,6 @@ try {
 				'endframe'=> $zrow["endframe"],
 				'animationloop'=> $zrow["animationloop"],
 				'soundid'=> $zrow["soundid"],
-				'soundpath'=> $zrow["soundpath"],
 				'soundmaxdistance'=> $zrow["soundmaxdistance"],
 				'walkspeed'=> '1',
 				'totalframes' => '0',
@@ -314,27 +383,91 @@ try {
 			);
 			$i += 1;
 		}
+
 	}
+
+	$i = 0;
+	$zresults = $wtwconnect->query("
+		select * 
+		from ".wtw_tableprefix."contentratings
+		where (webid='".$zfounduseravatarid."' and not webid='' and webtype='useravatar')
+			or (webid='".$zfoundavatarid."' and not webid='' and webtype='avatar')
+		order by webtype desc, updatedate desc
+		limit 1;");
+	foreach ($zresults as $zrow) {
+		$zcontentratings[$i] = array(
+			'contentratingid'=> $zrow["contentratingid"],
+			'webidid'=> $zrow["webid"],
+			'webtype'=> $zrow["webtype"],
+			'rating'=> $zrow["rating"],
+			'ratingvalue'=> $zrow["ratingvalue"],
+			'contentwarning'=> addslashes($zrow["contentwarning"]),
+			'createdate'=> $zrow["createdate"],
+			'createuserid'=> $zrow["createuserid"],
+			'updatedate'=> $zrow["updatedate"],
+			'updateuserid'=> $zrow["updateuserid"]
+		);
+		$i += 1;
+	}
+	
+	if (isset($zglobalhash) && !empty($zglobalhash)) {
+		/* check to see if the files and users should be included in the result set */
+		$zresults = $wtwconnect->query("
+			select * 
+			from ".wtw_tableprefix."useravatars 
+			where globalhash='".$zglobalhash."'
+				and deleted=0
+			limit 1;");
+		foreach ($zresults as $zrow) {
+			/* add files */
+			$zfiles = $wtwconnect->getAvatarFilesList($zfiles, wtw_rootpath.$zrow["objectfolder"]);
+			
+			/* add user */
+			$i = 0;
+			$zresults2 = $wtwconnect->query("
+				select * 
+				from ".wtw_tableprefix."users 
+				where userid='".$zuserid."'
+					and deleted=0
+				limit 1;");
+			foreach ($zresults2 as $zrow2) {
+				$zusers[$i] = array(
+					'userid'=> $zrow2["userid"],
+					'displayname'=> addslashes($zrow2["displayname"]),
+					'email'=> $zrow2["email"],
+					'uploadpathid'=> $zrow2["uploadpathid"]
+				);
+				$i += 1;
+			}
+		}
+	}
+	
+	
 	/* combine avatar settings and animations for json return dataset */
 	$zavatar = array(
 		'name'=> '',
 		'userid'=> $zuserid,
 		'anonymous'=>$zanonymous,
 		'globaluseravatarid'=> '',
-		'useravatarid'=> $zuseravatarid,
+		'useravatarid'=> $zfounduseravatarid,
 		'instanceid'=> $zinstanceid,
-		'avatarid'=> $zavatarid,
-		'displayname'=> $zdisplayname,
+		'avatarid'=> $zfoundavatarid,
+		'displayname'=> addslashes($zdisplayname),
+		'avatardescription'=> addslashes($zavatardescription),
+		'gender'=> addslashes($zgender),
+		'avatargroup'=> addslashes($zavatargroup),
 		'privacy'=> $zprivacy,
 		'scalingx'=> $zscalingx,
 		'scalingy'=> $zscalingy,
 		'scalingz'=> $zscalingz,
 		'objectfolder'=> $zobjectfolder,
 		'objectfile'=> $zobjectfile,
+		'startframe'=> $zstartframe,
+		'endframe'=> $zendframe,
 		'position'=> array(
-			'x'=> 0,
-			'y'=> 0,
-			'z'=> 0
+			'x'=> $zpositionx,
+			'y'=> $zpositiony,
+			'z'=> $zpositionz
 		),
 		'scaling'=> array(
 			'x'=> $zscalingx,
@@ -342,27 +475,42 @@ try {
 			'z'=> $zscalingz
 		),
 		'rotation'=> array(
-			'x'=> 0,
-			'y'=> 0,
-			'z'=> 0
+			'x'=> $zrotationx,
+			'y'=> $zrotationy,
+			'z'=> $zrotationz
 		),
-		'object'=> array(
+		'objects'=> array(
 			'folder'=> $zobjectfolder,
 			'file'=> $zobjectfile,
 			'startframe'=> $zstartframe,
 			'endframe'=> $zendframe
 		),
+		'start'=> array(
+			'position'=> array(
+				'x'=> 0,
+				'y'=> 0,
+				'z'=> 0
+			),
+			'rotation'=> array(
+				'x'=> 0,
+				'y'=> 0,
+				'z'=> 0
+			)
+		),
 		'avatarparts'=> $zavatarparts,
 		'avataranimationdefs'=> $zavataranimationdefs,
 		'animations'=> array(),
+		'files'=> $zfiles,
+		'users'=> $zusers,
+		'contentratings'=> $zcontentratings,
 		'enteranimation'=> $zenteranimation,
 		'enteranimationparameter'=> $zenteranimationparameter,
 		'exitanimation'=> $zexitanimation,
 		'exitanimationparameter'=> $zexitanimationparameter,
-		'walkspeed'=> '1',
-		'walkanimationspeed'=> '1',
-		'turnspeed'=> '1',
-		'turnanimationspeed'=> '1',
+		'walkspeed'=> $zwalkspeed,
+		'walkanimationspeed'=> $zwalkanimationspeed,
+		'turnspeed'=> $zturnspeed,
+		'turnanimationspeed'=> $zturnanimationspeed,
 		'checkcollisions'=> '1',
 		'ispickable'=> '0',
 		'moveevents'=> '',
