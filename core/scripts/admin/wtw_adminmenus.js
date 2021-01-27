@@ -672,6 +672,9 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.show('wtw_adminSelectAvatarDiv');
 						break;
 					case "wtw_addnewavatar":
+						WTW.openFullPageForm('importpage','avatars');
+						break;
+					case "wtw_createavatar":
 						WTW.hideAdminMenu();
 						WTW.openAddNewAvatar();
 						WTW.show('wtw_adminAddNewAvatarDiv');
