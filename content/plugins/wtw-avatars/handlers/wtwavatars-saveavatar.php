@@ -20,6 +20,7 @@ try {
 	$zinstanceid = $wtwhandlers->getPost('instanceid','');
 	$zobjectfolder = $wtwhandlers->getPost('objectfolder','');
 	$zobjectfile = $wtwhandlers->getPost('objectfile','');
+	$zavatardescription = $wtwhandlers->getPost('avatardescription','');
 	$zgender = $wtwhandlers->getPost('gender','');
 	$zscalingx = $wtwhandlers->getPost('scalingx','.07');
 	$zscalingy = $wtwhandlers->getPost('scalingy','.07');
@@ -31,7 +32,7 @@ try {
 	$zemissivecolor = $wtwhandlers->getPost('emissivecolor','#000000');
 	$zambientcolor = $wtwhandlers->getPost('ambientcolor','#ffffff');
 	$zavataranimationid = $wtwhandlers->getPost('avataranimationid','');
-	$zavataranimationevent = $wtwhandlers->getPost('avataranimationevent','');
+	$zanimationevent = $wtwhandlers->getPost('animationevent','');
 
 	/* set response array of values - customize response as needed */
 	$zresponse = array(
@@ -39,7 +40,7 @@ try {
 	);
 	switch ($zfunction) {
 		case "saveavatar":
-			$zuseravatarid = $wtwavatars_functions->saveAvatar($zuseravatarid, $zinstanceid, $zavatarid, $zdisplayname, $zobjectfolder, $zobjectfile, $zgender, $zscalingx, $zscalingy, $zscalingz);
+			$zuseravatarid = $wtwavatars_functions->saveAvatar($zuseravatarid, $zinstanceid, $zavatarid, $zdisplayname, $zavatardescription, $zobjectfolder, $zobjectfile, $zgender, $zscalingx, $zscalingy, $zscalingz);
 			$zresponse = array(
 				'useravatarid'=> $zuseravatarid,
 				'objectfolder'=> $zobjectfolder,
@@ -48,6 +49,7 @@ try {
 				'scalingx'=> $zscalingx,
 				'scalingy'=> $zscalingy,
 				'scalingz'=> $zscalingz,
+				'avatardescription'=> $zavatardescription,
 				'serror'=> ''
 			);
 			break;
@@ -65,7 +67,7 @@ try {
 			);
 			break;
 		case "saveavataranimation":
-			$zuseravataranimationid = $wtwavatars_functions->saveAvatarAnimation($zuseravatarid, $zinstanceid, $zavataranimationid, $zavataranimationevent);
+			$zuseravataranimationid = $wtwavatars_functions->saveAvatarAnimation($zuseravatarid, $zinstanceid, $zavataranimationid, $zanimationevent);
 			
 			$zanimationevent = '';
 			$zanimationfriendlyname = '';
@@ -80,28 +82,14 @@ try {
 			$zanimationloop = 1;
 			$zwalkspeed = 1;
 			$zresults = $wtwhandlers->query("
-				select u.*,
-					a.loadpriority,
-					a.animationfriendlyname,
-					a.animationicon,
-					a.objectfolder,
-					a.objectfile,
-					a.startframe,
-					a.endframe,
-					a.animationloop,
-					a.speedratio as defaultspeedratio,
-					a.soundid,
-					a.soundpath,
-					a.soundmaxdistance
-				from ".wtw_tableprefix."useravataranimations u 
-					inner join ".wtw_tableprefix."avataranimations a
-						on u.avataranimationid=a.avataranimationid
-				where u.useravatarid='".$zuseravatarid."'
-					and u.avataranimationid='".$zavataranimationid."'
-					and u.deleted=0
+				select *
+				from ".wtw_tableprefix."useravataranimations
+				where useravatarid='".$zuseravatarid."'
+					and avataranimationid='".$zavataranimationid."'
+					and deleted=0
 				limit 1;");
 			foreach ($zresults as $zrow) {
-				$zavataranimationevent = $zrow["avataranimationevent"];
+				$zanimationevent = $zrow["animationevent"];
 				$zanimationfriendlyname = $zrow["animationfriendlyname"];
 				$zloadpriority = $zrow["loadpriority"];
 				$zanimationicon = $zrow["animationicon"];
@@ -117,7 +105,7 @@ try {
 			$zresponse = array(
 				'useravataranimationid'=> $zuseravataranimationid,
 				'avataranimationid'=> $zavataranimationid,
-				'avataranimationevent'=> $zavataranimationevent,
+				'animationevent'=> $zanimationevent,
 				'animationfriendlyname'=> $zanimationfriendlyname,
 				'loadpriority'=> $zloadpriority,
 				'animationicon'=> $zanimationicon,

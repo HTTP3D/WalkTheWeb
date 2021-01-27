@@ -658,19 +658,20 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 													'avatarid': zresponse2.avatars[i].avatarid,
 													'avatargroup': zresponse2.avatars[i].avatargroup,
 													'displayname': zresponse2.avatars[i].displayname,
+													'avatardescription': zresponse2.avatars[i].avatardescription,
 													'gender': zresponse2.avatars[i].gender,
-													'object': {
-														'folder': zresponse2.avatars[i].object.folder,
-														'file': zresponse2.avatars[i].object.file
+													'objects': {
+														'folder': zresponse2.avatars[i].objects.folder,
+														'file': zresponse2.avatars[i].objects.file
 													},
 													'scaling': {
 														'x': zresponse2.avatars[i].scaling.x,
 														'y': zresponse2.avatars[i].scaling.y,
 														'z': zresponse2.avatars[i].scaling.z
 													},
-													'thumbnails': {
-														'imagefull': zresponse2.avatars[i].thumbnails.imagefull,
-														'imageface': zresponse2.avatars[i].thumbnails.imageface
+													'snapshots': {
+														'full': zresponse2.avatars[i].snapshots.full,
+														'thumbnail': zresponse2.avatars[i].snapshots.thumbnail
 													},
 													'sortorder': zresponse2.avatars[i].sortorder,
 													'selected': false
@@ -688,7 +689,7 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 			);			
 		} else {
 			/* load local server user avatar */
-			WTW.getAsyncJSON("/connect/useravatar.php?a=" + btoa(zuseravatarid) + "&i=" + btoa(dGet('wtw_tinstanceid').value) + "&d=" + btoa(dGet('wtw_tuserid').value) + "&p=" + btoa(dGet('wtw_tuserip').value), 
+			WTW.getAsyncJSON("/connect/useravatar.php?useravatarid=" + btoa(zuseravatarid) + "&instanceid=" + btoa(dGet('wtw_tinstanceid').value) + "&userid=" + btoa(dGet('wtw_tuserid').value) + "&userip=" + btoa(dGet('wtw_tuserip').value), 
 				async function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					if (zresponse != null) {
@@ -727,19 +728,20 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 														'avatarid': zresponse2.avatars[i].avatarid,
 														'avatargroup': zresponse2.avatars[i].avatargroup,
 														'displayname': zresponse2.avatars[i].displayname,
+														'avatardesciption': zresponse2.avatars[i].avatardesciption,
 														'gender': zresponse2.avatars[i].gender,
-														'object': {
-															'folder': zresponse2.avatars[i].object.folder,
-															'file': zresponse2.avatars[i].object.file
+														'objects': {
+															'folder': zresponse2.avatars[i].objects.folder,
+															'file': zresponse2.avatars[i].objects.file
 														},
 														'scaling': {
 															'x': zresponse2.avatars[i].scaling.x,
 															'y': zresponse2.avatars[i].scaling.y,
 															'z': zresponse2.avatars[i].scaling.z
 														},
-														'thumbnails': {
-															'imagefull': zresponse2.avatars[i].thumbnails.imagefull,
-															'imageface': zresponse2.avatars[i].thumbnails.imageface
+														'snapshots': {
+															'full': zresponse2.avatars[i].snapshots.full,
+															'thumbnail': zresponse2.avatars[i].snapshots.thumbnail
 														},
 														'sortorder': zresponse2.avatars[i].sortorder,
 														'selected': false
@@ -772,17 +774,19 @@ WTWJS.prototype.saveMyAvatar = async function() {
 		let zscalingx = '';
 		let zscalingy = '';
 		let zscalingz = '';
+		let zavatardescription = '';
 		for (var i=0;i<WTW.avatars.length;i++) {
 			if (WTW.avatars[i] != null) {
 				if (WTW.avatars[i].avatarid != undefined) {
 					if (WTW.avatars[i].avatarid == dGet('wtw_tavatarid').value) {
 						zavatardef = WTW.avatars[i];
-						zobjectfolder = WTW.avatars[i].object.folder;
-						zobjectfile = WTW.avatars[i].object.file;
+						zobjectfolder = WTW.avatars[i].objects.folder;
+						zobjectfile = WTW.avatars[i].objects.file;
 						zgender = WTW.avatars[i].gender;
 						zscalingx = WTW.avatars[i].scaling.x;
 						zscalingy = WTW.avatars[i].scaling.y;
 						zscalingz = WTW.avatars[i].scaling.z;
+						zavatardescription = WTW.avatars[i].avatardescription;
 					}
 				}
 			}
@@ -800,6 +804,7 @@ WTWJS.prototype.saveMyAvatar = async function() {
 			'scalingy':zscalingy,
 			'scalingz':zscalingz,
 			'displayname':dGet('wtw_tnewavatardisplayname').value,
+			'avatardescription':zavatardescription,
 			'function':'saveavatar'
 		};
 		WTW.postAsyncJSON("/core/handlers/wtwavatars-saveavatar.php", zrequest, 
@@ -844,6 +849,7 @@ WTWJS.prototype.saveMyAvatar = async function() {
 							'turnspeed':WTW.turnSpeed,
 							'turnanimationspeed':WTW.turnAnimationSpeed,
 							'displayname':dGet('wtw_tnewavatardisplayname').value,
+							'avatardescription':zresponse.avatardescription,
 							'function':'saveavatar'
 						};
 						WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalsaveavatar.php", zrequest2, 
@@ -937,10 +943,6 @@ WTWJS.prototype.saveMyAvatarAnimations = async function() {
 					zselectedid = WTW.avatarAnimations[i].selected;
 					zselected = i;
 				}
-				if (zdefaultid == '' && WTW.avatarAnimations[i].setdefault) {
-					zdefaultid = WTW.avatarAnimations[i].setdefault;
-					zdefault = i;
-				}
 				
 				if (WTW.avatarAnimations[i].animationevent != zlastanimationevent || i == WTW.avatarAnimations.length-1) {
 					let zanimationind = -1;
@@ -962,7 +964,7 @@ WTWJS.prototype.saveMyAvatarAnimations = async function() {
 								'instanceid':dGet('wtw_tinstanceid').value,
 								'useravataranimationid':'',
 								'avataranimationid':WTW.avatarAnimations[zanimationind].avataranimationid,
-								'avataranimationevent':WTW.avatarAnimations[zanimationind].animationevent,
+								'animationevent':WTW.avatarAnimations[zanimationind].animationevent,
 								'index':i,
 								'function':'saveavataranimation'
 							};
@@ -983,8 +985,8 @@ WTWJS.prototype.saveMyAvatarAnimations = async function() {
 											'instanceid':dGet('wtw_tinstanceid').value,
 											'useravataranimationid':zresponse.useravataranimationid,
 											'avataranimationid':zresponse.avataranimationid,
-											'avataranimationname':WTW.getAnimationEventName(zresponse.avataranimationevent),
-											'avataranimationevent':zresponse.avataranimationevent,
+											'avataranimationname':WTW.getAnimationEventName(zresponse.animationevent),
+											'animationevent':zresponse.animationevent,
 											'animationfriendlyname':zresponse.animationfriendlyname,
 											'loadpriority':zresponse.loadpriority,
 											'animationicon':zresponse.animationicon,
@@ -1304,10 +1306,6 @@ WTWJS.prototype.getMyAvatarAnimations = function(zanimationevent) {
 						zselected = i;
 						zselectedname = WTW.avatarAnimations[i].animationfriendlyname;
 					}
-					if (WTW.avatarAnimations[i].setdefault + '' == '1') {
-						zdefault = i;
-						zdefaultname = WTW.avatarAnimations[i].animationfriendlyname;
-					}
 				}
 			}
 		}
@@ -1406,14 +1404,14 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 				zscalingz = Number(zavatardef.scaling.z);
 			}
 		} 
-		if (zavatardef.object.folder != undefined) {
-			if (zavatardef.object.folder != '') {
-				zobjectfolder = zavatardef.object.folder;
+		if (zavatardef.objects.folder != undefined) {
+			if (zavatardef.objects.folder != '') {
+				zobjectfolder = zavatardef.objects.folder;
 			}
 		}
-		if (zavatardef.object.file != undefined) {
-			if (zavatardef.object.file != '') {
-				zobjectfile = zavatardef.object.file;
+		if (zavatardef.objects.file != undefined) {
+			if (zavatardef.objects.file != '') {
+				zobjectfile = zavatardef.objects.file;
 			}
 		}
 		WTW.myAvatar = BABYLON.MeshBuilder.CreateBox(zavatarname, {}, scene);
@@ -1778,7 +1776,6 @@ WTWJS.prototype.loadAnimations = async function() {
 								'soundid': zresponse.avataranimations[i].soundid,
 								'soundpath': zresponse.avataranimations[i].soundpath,
 								'soundmaxdistance': zresponse.avataranimations[i].soundmaxdistance,
-								'setdefault': zresponse.avataranimations[i].setdefault,
 								'selected': zselected
 							}
 							j += 1;
@@ -1826,8 +1823,8 @@ WTWJS.prototype.chooseAvatar = async function() {
 							wtw_avatarselector.addControl(zgrid);
 							for (var i=0; i<zresponse.avatars.length;i++) {
 								var zavatarid = zresponse.avatars[i].avatarid;
-								var zbutton = BABYLON.GUI.Button.CreateImageWithCenterTextButton(zavatarid + "-button", zresponse.avatars[i].displayname, zresponse.avatars[i].object.folder + zresponse.avatars[i].thumbnails.imagefull);
-								zbutton.width = "200px";
+								var zbutton = BABYLON.GUI.Button.CreateImageWithCenterTextButton(zavatarid + "-button", zresponse.avatars[i].displayname, zresponse.avatars[i].objects.folder + zresponse.avatars[i].snapshots.thumbnail);
+								zbutton.width = "240px";
 								zbutton.height = "200px";
 								zbutton.color = "white";
 								zbutton.background = "green";
@@ -1838,19 +1835,20 @@ WTWJS.prototype.chooseAvatar = async function() {
 									'avatarid': zresponse.avatars[i].avatarid,
 									'avatargroup': zresponse.avatars[i].avatargroup,
 									'displayname': zresponse.avatars[i].displayname,
+									'avatardescription': zresponse.avatars[i].avatardescription,
 									'gender': zresponse.avatars[i].gender,
-									'object': {
-										'folder': zresponse.avatars[i].object.folder,
-										'file': zresponse.avatars[i].object.file
+									'objects': {
+										'folder': zresponse.avatars[i].objects.folder,
+										'file': zresponse.avatars[i].objects.file
 									},
 									'scaling': {
 										'x': zresponse.avatars[i].scaling.x,
 										'y': zresponse.avatars[i].scaling.y,
 										'z': zresponse.avatars[i].scaling.z
 									},
-									'thumbnails': {
-										'imagefull': zresponse.avatars[i].thumbnails.imagefull,
-										'imageface': zresponse.avatars[i].thumbnails.imageface
+									'snapshots': {
+										'full': zresponse.avatars[i].snapshots.full,
+										'thumbnail': zresponse.avatars[i].snapshots.thumbnail
 									},
 									'sortorder': zresponse.avatars[i].sortorder,
 									'selected': false

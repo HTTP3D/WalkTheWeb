@@ -25,7 +25,7 @@ class wtw3dinternet {
 	
 	public $version = "1.0.0";
 
-	public $dbversion = "1.0.4";
+	public $dbversion = "1.0.5";
 
 	public $versiondate = "2020-10-30";
 	
@@ -272,12 +272,19 @@ class wtw3dinternet {
 						  `objectfile` varchar(256) DEFAULT '',
 						  `domain` varchar(256) DEFAULT '3d.walktheweb.com',
 						  `secureprotocol` int(11) DEFAULT '1',
-						  `scalingx` decimal(18,2) DEFAULT '1.00',
-						  `scalingy` decimal(18,2) DEFAULT '1.00',
-						  `scalingz` decimal(18,2) DEFAULT '1.00',
+						  `positionx` decimal(18,2) DEFAULT '0.00',
+						  `positiony` decimal(18,2) DEFAULT '0.00',
+						  `positionz` decimal(18,2) DEFAULT '0.00',
+						  `scalingx` decimal(18,4) DEFAULT '1.0000',
+						  `scalingy` decimal(18,4) DEFAULT '1.0000',
+						  `scalingz` decimal(18,4) DEFAULT '1.0000',
+						  `rotationx` decimal(18,2) DEFAULT '0.00',
+						  `rotationy` decimal(18,2) DEFAULT '0.00',
+						  `rotationz` decimal(18,2) DEFAULT '0.00',
 						  `startframe` int(11) DEFAULT '0',
 						  `endframe` int(11) DEFAULT '0',
 						  `displayname` varchar(45) DEFAULT '',
+						  `avatardescription` varchar(255) DEFAULT '',
 						  `privacy` int(11) DEFAULT '0',
 						  `enteranimation` int(11) DEFAULT '0',
 						  `exitanimation` int(11) DEFAULT '0',
@@ -333,7 +340,7 @@ class wtw3dinternet {
 						  `useravatarid` varchar(16) DEFAULT NULL,
 						  `avatarid` varchar(16) DEFAULT '',
 						  `instanceid` varchar(24) DEFAULT '',
-						  `avataranimationevent` varchar(45) DEFAULT '',
+						  `animationevent` varchar(45) DEFAULT '',
 						  `speedratio` decimal(18,2) DEFAULT '1.00',
 						  `walkspeed` decimal(18,2) DEFAULT '1.00',
 						  `loadpriority` int(11) DEFAULT '0',
@@ -356,7 +363,7 @@ class wtw3dinternet {
 						  `deleted` int(11) DEFAULT '0',
 						  PRIMARY KEY (`useravataranimationid`),
 						  UNIQUE KEY `".WTW_3DINTERNET_PREFIX."useravataranimationid_UNIQUE` (`useravataranimationid`),
-						  KEY `".WTW_3DINTERNET_PREFIX."idx_useravataranimations` (`avataranimationid`,`useravatarid`,`avataranimationevent`)
+						  KEY `".WTW_3DINTERNET_PREFIX."idx_useravataranimations` (`avataranimationid`,`useravatarid`,`animationevent`)
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 					");
 					$wtwplugins->saveSetting(WTW_3DINTERNET_PREFIX."dbversion", $this->dbversion);

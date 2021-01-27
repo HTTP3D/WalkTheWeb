@@ -376,7 +376,7 @@ WTWJS.prototype.newMold = function() {
 				'action':'subtract',
 				'count':'0'
 			},
-			'object':
+			'objects':
 			{
 				'uploadobjectid':'',
 				'folder':'',

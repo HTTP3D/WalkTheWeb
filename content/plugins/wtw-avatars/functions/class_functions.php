@@ -33,7 +33,7 @@ class wtwavatars_functions {
 		}
 	}
 	
-	public function saveAvatar($zuseravatarid, $zinstanceid, $zavatarid, $zdisplayname, $zobjectfolder, $zobjectfile, $zgender, $zscalingx, $zscalingy, $zscalingz) {
+	public function saveAvatar($zuseravatarid, $zinstanceid, $zavatarid, $zdisplayname, $zavatardescription, $zobjectfolder, $zobjectfile, $zgender, $zscalingx, $zscalingy, $zscalingz) {
 		global $wtwplugins;
 		try {
 			$zfounduseravatarid = '';
@@ -57,6 +57,7 @@ class wtwavatars_functions {
 					    userip,
 					    avatarid,
 					    displayname,
+						avatardescription,
 						objectfolder,
 						objectfile,
 						gender,
@@ -76,6 +77,7 @@ class wtwavatars_functions {
 					    '".$wtwplugins->userip."',
 					    '".$zavatarid."',
 					    '".$zdisplayname."',
+					    '".$zavatardescription."',
 						'".$zobjectfolder."',
 						'".$zobjectfile."',
 						'".$zgender."',
@@ -94,6 +96,7 @@ class wtwavatars_functions {
 					set avatarid='".$zavatarid."',
 						instanceid='".$zinstanceid."',
 					    displayname='".$zdisplayname."',
+					    avatardescription='".$zavatardescription."',
 						objectfolder='".$zobjectfolder."',
 						objectfile='".$zobjectfile."',
 						gender='".$zgender."',
@@ -177,15 +180,15 @@ class wtwavatars_functions {
 		return $zfoundavatarpartid;
 	}
 
-	public function saveAvatarAnimation($zuseravatarid, $zinstanceid, $zavataranimationid, $zavataranimationevent) {
+	public function saveAvatarAnimation($zuseravatarid, $zinstanceid, $zavataranimationid, $zanimationevent) {
 		global $wtwplugins;
 		$zfounduseravataranimationid = '';
 		try {
-			if (!empty($zavataranimationevent) && isset($zavataranimationevent)) {
+			if (!empty($zanimationevent) && isset($zanimationevent)) {
 				$zresults = $wtwplugins->query("
 					select * 
 					from ".wtw_tableprefix."useravataranimations
-					where avataranimationevent='".$zavataranimationevent."'
+					where animationevent='".$zanimationevent."'
 						and useravatarid='".$zuseravatarid."';");
 				foreach ($zresults as $zrow) {
 					$zfounduseravataranimationid = $zrow["useravataranimationid"];
@@ -197,7 +200,7 @@ class wtwavatars_functions {
 						   (useravataranimationid,
 							avataranimationid,
 							useravatarid,
-							avataranimationevent,
+							animationevent,
 							createdate,
 							createuserid,
 							updatedate,
@@ -206,7 +209,7 @@ class wtwavatars_functions {
 						   ('".$zfounduseravataranimationid."',
 							'".$zavataranimationid."',
 							'".$zuseravatarid."',
-							'".$zavataranimationevent."',
+							'".$zanimationevent."',
 							now(),
 							'".$wtwplugins->userid."',
 							now(),

@@ -434,12 +434,12 @@ WTW_3DINTERNET.prototype.initMultiuser = async function(zsendrefresh) {
 				if (WTW.myAvatar.WTW.avatarid != undefined) {
 					zavatarid = WTW.myAvatar.WTW.avatarid;
 				}
-				if (WTW.myAvatar.WTW.object != null) {
-					if (WTW.myAvatar.WTW.object.folder != undefined) {
-						zobjectfolder = WTW.myAvatar.WTW.object.folder;
+				if (WTW.myAvatar.WTW.objects != null) {
+					if (WTW.myAvatar.WTW.objects.folder != undefined) {
+						zobjectfolder = WTW.myAvatar.WTW.objects.folder;
 					}
-					if (WTW.myAvatar.WTW.object.file != undefined) {
-						zobjectfile = WTW.myAvatar.WTW.object.file;
+					if (WTW.myAvatar.WTW.objects.file != undefined) {
+						zobjectfile = WTW.myAvatar.WTW.objects.file;
 					}
 				}
 				if (WTW.myAvatar.WTW.scaling != null) {

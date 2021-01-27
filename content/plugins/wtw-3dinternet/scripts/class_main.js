@@ -639,19 +639,20 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault) {
 												'avatarid': zresponse.avatars[i].avatarid,
 												'avatargroup': zresponse.avatars[i].avatargroup,
 												'displayname': zresponse.avatars[i].displayname,
+												'avatardescription': zresponse.avatars[i].avatardescription,
 												'gender': zresponse.avatars[i].gender,
-												'object': {
-													'folder': zresponse.avatars[i].object.folder,
-													'file': zresponse.avatars[i].object.file
+												'objects': {
+													'folder': zresponse.avatars[i].objects.folder,
+													'file': zresponse.avatars[i].objects.file
 												},
 												'scaling': {
 													'x': zresponse.avatars[i].scaling.x,
 													'y': zresponse.avatars[i].scaling.y,
 													'z': zresponse.avatars[i].scaling.z
 												},
-												'thumbnails': {
-													'imagefull': zresponse.avatars[i].thumbnails.imagefull,
-													'imageface': zresponse.avatars[i].thumbnails.imageface
+												'snapshots': {
+													'full': zresponse.avatars[i].snapshots.full,
+													'thumbnail': zresponse.avatars[i].snapshots.thumbnail
 												},
 												'sortorder': zresponse.avatars[i].sortorder,
 												'selected': false
@@ -692,19 +693,20 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault) {
 											'avatarid': zresponse.avatars[i].avatarid,
 											'avatargroup': zresponse.avatars[i].avatargroup,
 											'displayname': zresponse.avatars[i].displayname,
+											'avatardescription': zresponse.avatars[i].avatardescription,
 											'gender': zresponse.avatars[i].gender,
-											'object': {
-												'folder': zresponse.avatars[i].object.folder,
-												'file': zresponse.avatars[i].object.file
+											'objects': {
+												'folder': zresponse.avatars[i].objects.folder,
+												'file': zresponse.avatars[i].objects.file
 											},
 											'scaling': {
 												'x': zresponse.avatars[i].scaling.x,
 												'y': zresponse.avatars[i].scaling.y,
 												'z': zresponse.avatars[i].scaling.z
 											},
-											'thumbnails': {
-												'imagefull': zresponse.avatars[i].thumbnails.imagefull,
-												'imageface': zresponse.avatars[i].thumbnails.imageface
+											'snapshots': {
+												'full': zresponse.avatars[i].snapshots.full,
+												'thumbnail': zresponse.avatars[i].snapshots.thumbnail
 											},
 											'sortorder': zresponse.avatars[i].sortorder,
 											'selected': false
@@ -728,11 +730,11 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault) {
 	return zloaddefault;
 }
 
-WTW_3DINTERNET.prototype.onMyAvatarSelect = async function(zglobaluseravatarid, zuseravatarid, zavatarid) {
+WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, zavatarid) {
 	var zloading = false;
 	try {
 		if (wtw3dinternet.globalLogins == '1') {
-			if (zglobaluseravatarid == '') {
+			if (zglobaluseravatarid == '' && zuseravatarid != '') {
 				var zdisplayname = 'Anonymous';
 				if (dGet('wtw_tnewavatardisplayname') != null) {
 					zdisplayname = dGet('wtw_tnewavatardisplayname').value;
@@ -742,31 +744,49 @@ WTW_3DINTERNET.prototype.onMyAvatarSelect = async function(zglobaluseravatarid, 
 					zprotocol = '1';
 				}
 				zloading = true;
+
 				var zrequest = {
-					'serverinstanceid': dGet('wtw_serverinstanceid').value,
 					'useravatarid': zuseravatarid,
-					'globaluserid': btoa(dGet('wtw_tglobaluserid').value),
-					'userid': dGet('wtw_tuserid').value,
-					'userip': dGet('wtw_tuserip').value,
-					'avatarid':zavatarid,
-					'instanceid': dGet("wtw_tinstanceid").value,
-					'domain': wtw_domainname,
-					'secureprotocol': zprotocol,
-					'displayname':btoa(zdisplayname),
-					'function':'quicksaveavatar'
+					'function':'setuseravatarglobalhash'
 				};
-				WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalquicksaveavatar.php", zrequest, 
+				WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
-						if (zresponse.globaluseravatarid != undefined) {
-							WTW.getSavedAvatar("myavatar-" + dGet("wtw_tinstanceid").value, zresponse.globaluseravatarid, zuseravatarid, zavatarid, true);
+						var zglobalhash = '';
+						if (zresponse.globalhash != undefined) {
+							if (zresponse.globalhash != '') {
+								zglobalhash = zresponse.globalhash;
+								var zrequest = {
+									'serverinstanceid': dGet('wtw_serverinstanceid').value,
+									'useravatarid': zuseravatarid,
+									'globaluserid': btoa(dGet('wtw_tglobaluserid').value),
+									'globalhash': zglobalhash,
+									'userid': dGet('wtw_tuserid').value,
+									'userip': dGet('wtw_tuserip').value,
+									'avatarid':zavatarid,
+									'instanceid': dGet("wtw_tinstanceid").value,
+									'domain': wtw_domainname,
+									'secureprotocol': zprotocol,
+									'displayname':btoa(zdisplayname),
+									'function':'quicksaveavatar'
+								};
+								WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalquicksaveavatar.php", zrequest, 
+									function(zresponse) {
+										zresponse = JSON.parse(zresponse);
+										/* note serror would contain errors */
+										if (zresponse.globaluseravatarid != undefined) {
+											WTW.setCookie("globaluseravatarid", zresponse.globaluseravatarid, 365);
+											WTW.getSavedAvatar("myavatar-" + dGet("wtw_tinstanceid").value, zresponse.globaluseravatarid, zuseravatarid, zavatarid, true);
+										} else {
+											WTW.getSavedAvatar("myavatar-" + dGet("wtw_tinstanceid").value, zglobaluseravatarid, zuseravatarid, zavatarid, true);
+										}
+									}
+								);
+							}
 						}
 					}
 				);
-			} else {
-				WTW.getSavedAvatar("myavatar-" + dGet("wtw_tinstanceid").value, zglobaluseravatarid, zuseravatarid, zavatarid, true);
-				zloading = true;
 			}
 		}
 	} catch (ex) {

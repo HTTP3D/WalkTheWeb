@@ -14,9 +14,15 @@ try {
 	$zobjectfile = $wtwconnect->decode64($wtwconnect->getVal('f',''));
 	$zdomain = $wtwconnect->decode64($wtwconnect->getVal('m',''));
 	$zsecure = $wtwconnect->decode64($wtwconnect->getVal('s',''));
-	$zscalingx = $wtwconnect->decode64($wtwconnect->getVal('x',''));
-	$zscalingy = $wtwconnect->decode64($wtwconnect->getVal('y',''));
-	$zscalingz = $wtwconnect->decode64($wtwconnect->getVal('z',''));
+	$zpositionx = $wtwconnect->decode64($wtwconnect->getVal('px','0'));
+	$zpositiony = $wtwconnect->decode64($wtwconnect->getVal('py','0'));
+	$zpositionz = $wtwconnect->decode64($wtwconnect->getVal('pz','0'));
+	$zscalingx = $wtwconnect->decode64($wtwconnect->getVal('x','1'));
+	$zscalingy = $wtwconnect->decode64($wtwconnect->getVal('y','1'));
+	$zscalingz = $wtwconnect->decode64($wtwconnect->getVal('z','1'));
+	$zrotationx = $wtwconnect->decode64($wtwconnect->getVal('rx','0'));
+	$zrotationy = $wtwconnect->decode64($wtwconnect->getVal('ry','0'));
+	$zrotationz = $wtwconnect->decode64($wtwconnect->getVal('rz','0'));
 	$zdisplayname = $wtwconnect->decode64($wtwconnect->getVal('n',''));
 	$zprivacy = $wtwconnect->decode64($wtwconnect->getVal('p',''));
 	$zenteranimation = $wtwconnect->decode64($wtwconnect->getVal('en','1'));
@@ -41,14 +47,32 @@ try {
 	if (is_numeric($zprivacy) == false) {
 		$zprivacy = '0';
 	}
+	if (is_numeric($zpositionx) == false) {
+		$zpositionx = '0';
+	}
+	if (is_numeric($zpositiony) == false) {
+		$zpositiony = '0';
+	}
+	if (is_numeric($zpositionz) == false) {
+		$zpositionz = '0';
+	}
 	if (is_numeric($zscalingx) == false) {
-		$zscalingx = '0.07';
+		$zscalingx = '1';
 	}
 	if (is_numeric($zscalingy) == false) {
-		$zscalingy = '0.07';
+		$zscalingy = '1';
 	}
 	if (is_numeric($zscalingz) == false) {
-		$zscalingz = '0.07';
+		$zscalingz = '1';
+	}
+	if (is_numeric($zrotationx) == false) {
+		$zrotationx = '0';
+	}
+	if (is_numeric($zrotationy) == false) {
+		$zrotationy = '0';
+	}
+	if (is_numeric($zrotationz) == false) {
+		$zrotationz = '0';
 	}
 
 	$zfounduseravatarid = "";
@@ -106,9 +130,15 @@ try {
 				 objectfile='".$zobjectfile."',
 				 domain='".$wtwconnect->domainname."',
 				 secureprotocol='".$zsecure."',
+				 positionx=".$zpositionx.",
+				 positiony=".$zpositiony.",
+				 positionz=".$zpositionz.",
 				 scalingx=".$zscalingx.",
 				 scalingy=".$zscalingy.",
 				 scalingz=".$zscalingz.",
+				 rotationx=".$zrotationx.",
+				 rotationy=".$zrotationy.",
+				 rotationz=".$zrotationz.",
 				 displayname='".$zdisplayname."',
 				 privacy=".$zprivacy.",
 				 enteranimation=".$zenteranimation.",
@@ -143,9 +173,15 @@ try {
 				 objectfile,
 				 domain,
 				 secureprotocol,
+				 positionx,
+				 positiony,
+				 positionz,
 				 scalingx,
 				 scalingy,
 				 scalingz,
+				 rotationx,
+				 rotationy,
+				 rotationz,
 				 displayname,
 				 privacy,
 				 enteranimation,
@@ -173,9 +209,15 @@ try {
 				 '".$zobjectfile."',
 				 '".$wtwconnect->domainname."',
 				 '".$zsecure."',
+				 ".$zpositionx.",
+				 ".$zpositiony.",
+				 ".$zpositionz.",
 				 ".$zscalingx.",
 				 ".$zscalingy.",
 				 ".$zscalingz.",
+				 ".$zrotationx.",
+				 ".$zrotationy.",
+				 ".$zrotationz.",
 				 '".$zdisplayname."',
 				 ".$zprivacy.",
 				 ".$zenteranimation.",
@@ -201,7 +243,7 @@ try {
 	if(ini_get('allow_url_fopen') ) {
 		if (!isset($zglobaluseravatarid) || empty($zglobaluseravatarid)) {
 			/* get local avatar */
-			$avatarurl = $wtwconnect->domainurl."/connect/useravatar.php?a=".base64_encode($zuseravatarid)."&i=".base64_encode($zinstanceid)."&d=".base64_encode($zuserid)."&p=".base64_encode($zip);
+			$avatarurl = $wtwconnect->domainurl."/connect/useravatar.php?useravatarid=".base64_encode($zuseravatarid)."&instanceid=".base64_encode($zinstanceid)."&userid=".base64_encode($zuserid)."&userip=".base64_encode($zip);
 			$zavatardata = file_get_contents($avatarurl);
 		} else {
 			/* get global avatar */
@@ -268,7 +310,7 @@ try {
 						set avataranimationid = '".$zanimationdef->avataranimationid."',
 							globaluseravatarid = '".$zglobaluseravatarid."',
 							useravatarid='".$zuseravatarid."',
-							avataranimationevent='".$zanimationdef->animationevent."',
+							animationevent='".$zanimationdef->animationevent."',
 							speedratio=".$zanimationdef->speedratio.",
 							walkspeed=".$zanimationdef->walkspeed.",
 							loadpriority=".$zloadpriority.",
@@ -300,7 +342,7 @@ try {
 							globaluseravatarid,
 							instanceid,
 						    avataranimationid,
-							avataranimationevent,
+							animationevent,
 							speedratio,
 							walkspeed,
 							loadpriority,

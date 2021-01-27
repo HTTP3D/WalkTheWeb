@@ -58,14 +58,16 @@ try {
 	$zuseravatarid = "";
 	$zanonymous = '0';
 	$zavatarid = '';
-	$zobject = array();
+	$zobjects = array();
 	$zdisplayname = "Anonymous";
 	$zprivacy = 0;
 	$zenteranimation = "1";
 	$zenteranimationparameter = "";
 	$zexitanimation = "1";
 	$zexitanimationparameter = "";
+	$zposition = array();
 	$zscaling = array();
+	$zrotation = array();
 	$zgraphics = array(
 		'waterreflection'=>'1',
 		'receiveshadows'=>'0'
@@ -99,12 +101,22 @@ try {
 			$zenteranimationparameter = $zrow["enteranimationparameter"];
 			$zexitanimation = $zrow["exitanimation"];
 			$zexitanimationparameter = $zrow["exitanimationparameter"];
+			$zposition = array(
+				'x'=> $zrow["positionx"], 
+				'y'=> $zrow["positiony"], 
+				'z'=> $zrow["positionz"]
+			);
 			$zscaling = array(
 				'x'=> $zrow["scalingx"], 
 				'y'=> $zrow["scalingy"], 
 				'z'=> $zrow["scalingz"]
 			);
-			$zobject = array(
+			$zrotation = array(
+				'x'=> $zrow["rotationx"], 
+				'y'=> $zrow["rotationy"], 
+				'z'=> $zrow["rotationz"]
+			);
+			$zobjects = array(
 				'uploadobjectid'=>'',
 				'folder'=> $zrow["objectfolder"],
 				'file'=> $zrow["objectfile"],
@@ -137,18 +149,18 @@ try {
 			
 			/* retrieve avatar animations by useravatarid */
 			$zresults2 = $wtwconnect->query("
-				select u.*
-				from ".WTW_3DINTERNET_PREFIX."useravataranimations u 
-				where u.useravatarid='".$zfounduseravatarid."'
-					and u.deleted=0
-				order by u.loadpriority desc, u.avataranimationevent, u.avataranimationid, u.useravataranimationid;");
+				select *
+				from ".WTW_3DINTERNET_PREFIX."useravataranimations
+				where useravatarid='".$zfounduseravatarid."'
+					and deleted=0
+				order by loadpriority desc, animationevent, avataranimationid, useravataranimationid;");
 			$j = 0;
 			foreach ($zresults2 as $zrow2) {
 				$zavataranimationdefs[$j] = array(
 					'animationind'=> $j,
 					'useravataranimationid'=> $zrow2["useravataranimationid"],
 					'avataranimationid'=> $zrow2["avataranimationid"],
-					'animationevent'=> $zrow2["avataranimationevent"],
+					'animationevent'=> $zrow2["animationevent"],
 					'animationfriendlyname'=> $zrow2["animationfriendlyname"],
 					'loadpriority'=> $zrow2["loadpriority"],
 					'animationicon'=> $zrow2["animationicon"],
@@ -169,16 +181,10 @@ try {
 				'name'=> "person-".$zpersoninstanceid, 
 				'useravatarid'=> $zuseravatarid, 
 				'avatarid'=> $zavatarid,
-				'position'=>array(
-					'x'=>'0',
-					'y'=>'0',
-					'z'=>'0'),
+				'position'=> $zposition,
 				'scaling'=> $zscaling,
-				'rotation'=>array(
-					'x'=>'0',
-					'y'=>'0',
-					'z'=>'0'),
-				'object'=> $zobject,
+				'rotation'=> $zrotation,
+				'objects'=> $zobjects,
 				'instanceid'=> $zpersoninstanceid,
 				'userid'=> $zuserid, 
 				'anonymous'=>$zanonymous,
