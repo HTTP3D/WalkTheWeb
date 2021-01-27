@@ -2391,7 +2391,7 @@ class wtwavatars {
 					from ".wtw_tableprefix."avatargroups 
 					where avatargroup='".$zrequest->avatargroup."';");
 				if (count($zresults) == 0) {
-					$zavatargroupid = $wtwhandlers->getNewKey('avatargroups', 'avatargroupid', $zrequest->avatargroupid);
+					$zavatargroupid = $wtwhandlers->getNewKey('avatargroups', 'avatargroupid', $wtwhandlers->getRandomString(16,1));
 
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."avatargroups
