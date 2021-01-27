@@ -81,6 +81,7 @@ class wtwavatars {
 				$wtwplugins->addAdminMenuItem('wtw_avatarsmenu', '3D Avatars', -75, 'wtw_avatarsmenu', 0, '', '/content/system/images/menuavatars.png', $zdeveloperroles, null);
 				$wtwplugins->addAdminMenuItem('wtw_selectavatar', 'Select 3D Avatar', -75, 'wtw_avatarsmenu', 1, 'wtw_selectavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
 				$wtwplugins->addAdminMenuItem('wtw_addnewavatar', 'Add New 3D Avatar', -75, 'wtw_avatarsmenu', 2, 'wtw_addnewavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
+				$wtwplugins->addAdminMenuItem('wtw_createavatar', 'Create 3D Avatar', -75, 'wtw_avatarsmenu', 3, 'wtw_createavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
 				$wtwplugins->addAdminMenuItem('wtw_adminsettingsavatar', 'Options and Settings', -75, 'wtw_avatarsmenu', 5, 'wtw_adminsettingsavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
 				$wtwplugins->addAdminMenuItem('wtw_admineditavatar', 'Edit 3D Avatar', -75, 'wtw_avatarsmenu', 6, 'wtw_admineditavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
 
