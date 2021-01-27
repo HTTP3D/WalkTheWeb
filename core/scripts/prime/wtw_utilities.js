@@ -400,6 +400,27 @@ WTWJS.prototype.getAsyncJSON = function(zurl, zcallback, zaction, zrequest) {
 	}
 }
 
+WTWJS.prototype.getFileList = function(zfolderpath, zcallback) {
+	/* retrieve a list of files and folders in a select folder path */
+	try {
+		var zrequest = {
+			'objectfolder': zfolderpath,
+			'function':'getuploadedfilefilesdetails'
+		};
+		WTW.postAsyncJSON("/core/handlers/uploadedfiles.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				zcallback(zresponse);
+			}
+		);		
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-getFileList=" + ex.message);
+	}
+}
+
+
+
+
 WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
 	/* performs a form POST based JSON call for data */
 	try {
@@ -1195,8 +1216,10 @@ WTWJS.prototype.clearDDL = function(zddlname) {
 	try {
 		if (dGet(zddlname) != null) {
 			var zddl = dGet(zddlname);
-			for (var i = zddl.options.length - 1 ; i >= 0 ; i--) {
-				zddl.remove(i);
+			if (zddl.options != undefined) {
+				for (var i = zddl.options.length - 1 ; i >= 0 ; i--) {
+					zddl.remove(i);
+				}
 			}
 		}
     } catch (ex) {
@@ -1218,21 +1241,38 @@ WTWJS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 			ndni = parseFloat(zdn);
 		}
 		if (WTW.isNumeric(zvali)) {
-			znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
 			if (WTW.adminView == 1) {
-				dGet(zitem).value = (znvali.toFixed(2));
 				if (zitem == "wtw_tgroundpositiony") {
+					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
+					dGet(zitem).value = (znvali.toFixed(2));
 					WTW.setGroundWater();
 				} else if (zitem.indexOf("axis") > -1 || zitem.indexOf("actionzone") > -1) {
+					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
+					dGet(zitem).value = (znvali.toFixed(2));
 					WTW.setNewActionZone();
 				} else if (zitem.indexOf("tconngrid") > -1) {
+					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
+					dGet(zitem).value = (znvali.toFixed(2));
 					WTW.setNewConnectingGrid();
 				} else if (zitem.indexOf("wtw_tfirstbuild") > -1) {
+					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
+					dGet(zitem).value = (znvali.toFixed(2));
 					WTW.setFirstBuilding();
+				} else if (zitem.indexOf("wtw_tavatarscaling") > -1) {
+					znvali = parseFloat(Math.round(Number(zvali) * 10000) / 10000) + ndni;
+					dGet(zitem).value = (znvali.toFixed(4));
+					WTW.setNewAvatar();
+				} else if (zitem.indexOf("wtw_tavatar") > -1) {
+					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
+					dGet(zitem).value = (znvali.toFixed(2));
+					WTW.setNewAvatar();
 				} else {
+					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
+					dGet(zitem).value = (znvali.toFixed(2));
 					WTW.setNewMold(zrefresh);
 				}
 			} else {
+				znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
 				dGet(zitem).value = (znvali.toFixed(0));
 			}
 		}
@@ -1244,21 +1284,38 @@ WTWJS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 				zndn = parseFloat(zdn);
 			}
 			if (WTW.isNumeric(zval)) {
-				znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
 				if (WTW.adminView == 1) {
-					dGet(zitem).value = (znval.toFixed(2));
 					if (zitem == "wtw_tgroundpositiony") {
+						znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
+						dGet(zitem).value = (znval.toFixed(2));
 						WTW.setGroundWater();
 					} else if (zitem.indexOf("axis") > -1 || zitem.indexOf("actionzone") > -1) {
+						znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
+						dGet(zitem).value = (znval.toFixed(2));
 						WTW.setNewActionZone();
 					} else if (zitem.indexOf("tconngrid") > -1) {
+						znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
+						dGet(zitem).value = (znval.toFixed(2));
 						WTW.setNewConnectingGrid();
 					} else if (zitem.indexOf("wtw_tfirstbuild") > -1) {
+						znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
+						dGet(zitem).value = (znval.toFixed(2));
 						WTW.setFirstBuilding();
+					} else if (zitem.indexOf("wtw_tavatarscaling") > -1) {
+						znval = parseFloat(Math.round(Number(zval) * 10000) / 10000) + zndn;
+						dGet(zitem).value = (znval.toFixed(4));
+						WTW.setNewAvatar();
+					} else if (zitem.indexOf("wtw_tavatar") > -1) {
+						znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
+						dGet(zitem).value = (znval.toFixed(2));
+						WTW.setNewAvatar();
 					} else {
+						znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
+						dGet(zitem).value = (znval.toFixed(2));
 						WTW.setNewMold(zrefresh);
 					}
 				} else {
+					znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
 					dGet(zitem).value = (znval.toFixed(0));
 				}
 			}

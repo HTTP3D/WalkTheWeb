@@ -49,6 +49,7 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
 			zpickedname = zpickedresult.pickedMesh.name;
 		}
 		if (zpickedname.indexOf('babylonfile-') > -1 && zpickedresult.pickedMesh == null) {
+			/* if babylon file, get the root mold - base name */
 			var znameparts = zpickedname.split('-');
 			zpickedname = znameparts[0] + '-' + znameparts[1] + '-' + znameparts[2] + '-' + znameparts[3] + '-' + znameparts[4] + '-' + znameparts[5];
 			zpickedresult.pickedMesh = scene.getMeshByID(zpickedname);
@@ -58,7 +59,11 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
 		WTW.pluginsMouseClickRightAdmin(e, zpickedname);
 		
 		/* WalkTheWeb built-in right mouse click functions */
-		if (zpickedresult.pickedMesh != null) {
+		if (avatarid != '' && zpickedname.indexOf('editavatar') > -1) {
+			/* edit avatar - for setting a color of a mold */
+			var zmold = scene.getMeshByID(zpickedname);
+			WTW.loadPickedObject(zmold);
+		} else if (zpickedresult.pickedMesh != null) {
 			var zpickedmesh = zpickedresult.pickedMesh;
 			if (dGet('wtw_tmoldname').value != '') {
 				var zfirstmold = null;
@@ -193,22 +198,27 @@ WTWJS.prototype.loadPickedObject = function(zmold) {
 	try {
 		if (zmold != null) {
 			if (zmold.name.indexOf("-") > -1) {
-				let zmoldnameparts = WTW.getMoldnameParts(zmold.name);
-				if (zmoldnameparts.moldind > -1) {
-					if (zmoldnameparts.cgind > 0) {
-						WTW.openConnectingGridsForm(zmoldnameparts.cgind);
-					} else if (zmoldnameparts.webtype == "thing" || zmoldnameparts.webtype == "building" || zmoldnameparts.webtype == "community") {
-						/* selected object is a mold from the current object in edit mode */
-						dGet('wtw_tnewmold').value = "0";
-						/* open mold form for selected mold to edit it */
-						WTW.openMoldForm(zmoldnameparts.moldind,zmoldnameparts.shape,zmoldnameparts.webtype); 
+				/* check if you are editing an avatar part color */
+				if (avatarid != '' && zmold.name.indexOf("editavatar") > -1) {
+					WTW.openAvatarColorByMold(zmold);
+				} else {
+					let zmoldnameparts = WTW.getMoldnameParts(zmold.name);
+					if (zmoldnameparts.moldind > -1) {
+						if (zmoldnameparts.cgind > 0) {
+							WTW.openConnectingGridsForm(zmoldnameparts.cgind);
+						} else if (zmoldnameparts.webtype == "thing" || zmoldnameparts.webtype == "building" || zmoldnameparts.webtype == "community") {
+							/* selected object is a mold from the current object in edit mode */
+							dGet('wtw_tnewmold').value = "0";
+							/* open mold form for selected mold to edit it */
+							WTW.openMoldForm(zmoldnameparts.moldind,zmoldnameparts.shape,zmoldnameparts.webtype); 
+						} else {
+							/* try again */
+							WTW.changePick(1);
+						}
 					} else {
 						/* try again */
 						WTW.changePick(1);
 					}
-				} else {
-					/* try again */
-					WTW.changePick(1);
 				}
 			} else {
 				/* try again */

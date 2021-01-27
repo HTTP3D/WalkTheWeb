@@ -43,6 +43,10 @@ WTWJS.prototype.loadSequence = function() {
 		WTW.loadScene();
 		/* additional settings that are loaded after the scene is loaded - like initializing multiplayer functions */
 		WTW.loadUserSettingsAfterEngine();
+		/* load avatar for edit in admin mode only */
+		if (WTW.adminView == 1 && avatarid != '') {
+			WTW.loadAvatarForEdit();
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_core.js-continueLoadSequence=" + ex.message);
 	} 
@@ -51,7 +55,17 @@ WTWJS.prototype.loadSequence = function() {
 WTWJS.prototype.setContentRating = function() {
 	/* get the content rating */
 	try {
-		WTW.getAsyncJSON("/connect/rating.php?webid=" + communityid + buildingid + thingid, 
+		var zwebtype = '';
+		if (communityid != '') {
+			zwebtype = 'community';
+		} else if (buildingid != '') {
+			zwebtype = 'building';
+		} else if (thingid != '') {
+			zwebtype = 'thing';
+		} else if (avatarid != '') {
+			zwebtype = 'avatar';
+		}
+		WTW.getAsyncJSON("/connect/rating.php?webid=" + communityid + buildingid + thingid + avatarid + "&webtype=" + zwebtype, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (dGet('wtw_rating') != null) {

@@ -934,6 +934,18 @@ WTWJS.prototype.openConfirmation = function(w) {
 				dGet('wtw_confirmtext').innerHTML = "<br />Other Users will be able to use a Shared Copy of this design for their own 3D Thing. It will not affect your current 3D Thing. The Shared Copy cannot be undone once Shared.";
 				dGet('wtw_bconfirm').value = "Share My 3D Thing";
 				break;
+			case "8":
+				dGet('wtw_confirmformtitle').innerHTML = "Confirm Delete 3D Avatar";
+				dGet('wtw_confirmheading').innerHTML = "Are you sure you want to Delete the 3D Avatar?";
+				dGet('wtw_confirmtext').innerHTML = "<br />Deleting the 3D Avatar will also Delete all parts including Animations.";
+				dGet('wtw_bconfirm').value = "Delete 3D Avatar";
+				break;
+			case "9":
+				dGet('wtw_confirmformtitle').innerHTML = "Confirm Share 3D Avatar";
+				dGet('wtw_confirmheading').innerHTML = "Are you sure you want to Share this 3D Avatar?";
+				dGet('wtw_confirmtext').innerHTML = "<br />Other Users will be able to use a Shared Copy of this design for their own 3D Avatar. It will not affect your current 3D Avatar. The Shared Copy cannot be undone once Shared.";
+				dGet('wtw_bconfirm').value = "Share My 3D Avatar";
+				break;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-openConfirmation=" + ex.message);
@@ -964,6 +976,12 @@ WTWJS.prototype.completedConfirmation = function(w) {
 				break;
 			case "7":
 				WTW.shareThingTemplate();
+				break;
+			case "8":
+				WTW.deleteAvatar(0);
+				break;
+			case "9":
+				WTW.shareAvatarTemplate();
 				break;
 		}
 	} catch (ex) {
@@ -1164,6 +1182,26 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 					WTW.setWindowSize();
 				}
 			);
+		} else if (avatarid != '') {
+			WTW.getAsyncJSON("/connect/avatar.php?avatarid=" + avatarid, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					dGet('wtw_tavatarfolder').value = zresponse.avatar.objects.folder;
+					if (zresponse.avatar.snapshots.thumbnail != null) {
+						dGet('wtw_defaultsnapshot').src = zresponse.avatar.snapshots.thumbnail;
+						if (dGet('wtw_defaultsnapshot').src.length < 20) {
+							WTW.hide('wtw_defaultsnapshot');
+						} else {
+							WTW.show('wtw_defaultsnapshot');
+						}
+					} else {
+						WTW.hide('wtw_defaultsnapshot');
+					}
+					WTW.hide('wtw_loadingupdatesnapshot');
+					WTW.show('wtw_adminmenu69b');
+					WTW.setWindowSize();
+				}
+			);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-openUpdateSnapshotForm=" + ex.message);
@@ -1173,14 +1211,19 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 WTWJS.prototype.snapshot3D = async function(zfilepath, zfilename) {
 	/* capture 3D Scene and save file to server */
 	try {
-		dGet('wtw_bupdatesnapshot').onclick = "";
-		dGet('wtw_bupdatesnapshot').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
+		/* 3d web form */
 		dGet('wtw_bsnapshotthing').onclick = "";
 		dGet('wtw_bsnapshotthing').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
 		dGet('wtw_bsnapshotbuilding').onclick = "";
 		dGet('wtw_bsnapshotbuilding').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
 		dGet('wtw_bsnapshotcommunity').onclick = "";
 		dGet('wtw_bsnapshotcommunity').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
+		/* avatar forms */
+		dGet('wtw_bupdatesnapshot').onclick = "";
+		dGet('wtw_bupdatesnapshot').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
+		dGet('wtw_bsnapshotavatar').onclick = "";
+		dGet('wtw_bsnapshotavatar').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
+		
 		dGet('wtw_tfilename').value = zfilename;
 		dGet('wtw_tfilepath').value = zfilepath;
 		var zcontext = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
@@ -1191,6 +1234,7 @@ WTWJS.prototype.snapshot3D = async function(zfilepath, zfilename) {
 			'communityid': communityid,
 			'buildingid': buildingid,
 			'thingid': thingid,
+			'avatarid': avatarid,
 			'filename': dGet('wtw_tfilename').value,
 			'filepath': dGet('wtw_tfilepath').value,
 			'filedata': zfiledata,
@@ -1200,7 +1244,7 @@ WTWJS.prototype.snapshot3D = async function(zfilepath, zfilename) {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-				WTW.updateSnapshot3D(communityid, buildingid, thingid, zresponse.snapshotid, zresponse.snapshotpath, zresponse.snapshotdata);
+				WTW.updateSnapshot3D(communityid, buildingid, thingid, avatarid, zresponse.snapshotid, zresponse.snapshotpath, zresponse.snapshotdata);
 			}
 		);
 	} catch (ex) {
@@ -1208,7 +1252,7 @@ WTWJS.prototype.snapshot3D = async function(zfilepath, zfilename) {
 	} 
 }
 
-WTWJS.prototype.updateSnapshot3D = function(zcommunityid, zbuildingid, zthingid, zsnapshotid, zsnapshotpath, zfiledata) {
+WTWJS.prototype.updateSnapshot3D = function(zcommunityid, zbuildingid, zthingid, zavatarid, zsnapshotid, zsnapshotpath, zfiledata) {
 	/* update snapshot of 3D Community, 3D Building, or 3D Thing */
 	try {
 		if (WTW.adminView == 1) {
@@ -1282,32 +1326,48 @@ WTWJS.prototype.updateSnapshot3D = function(zcommunityid, zbuildingid, zthingid,
 				}
 			}
 		}
-		if (zsnapshotpath != "") {
-			dGet('wtw_defaultsnapshot').src = zsnapshotpath + "?" + WTW.getRandomString(5);
-		} else {
-			dGet('wtw_defaultsnapshot').src = zfiledata;
-		}
-		dGet('wtw_defaultsnapshot').style.display = "block";
-		dGet('wtw_defaultsnapshot').style.visibility = "visible";
-		dGet('wtw_bupdatesnapshot').onclick = function(){
-			if (WTW.adminView == 1) {
-				WTW.adminMenuItemSelected(this);
+		if (avatarid != '') {
+			/* update snapshot on avatar snapshot form */
+			if (zsnapshotpath != "") {
+				dGet('wtw_defaultsnapshot').src = zsnapshotpath + "?" + WTW.getRandomString(5);
+			} else {
+				dGet('wtw_defaultsnapshot').src = zfiledata;
 			}
-		};
-		dGet('wtw_bupdatesnapshot').innerHTML = "Set Default Snapshot";
+			dGet('wtw_defaultsnapshot').style.display = "block";
+			dGet('wtw_defaultsnapshot').style.visibility = "visible";
+			dGet('wtw_bupdatesnapshot').onclick = function(){
+				if (WTW.adminView == 1) {
+					WTW.adminMenuItemSelected(this);
+				}
+			};
+			dGet('wtw_bupdatesnapshot').innerHTML = "Set Default Snapshot";
+			/* update snapshot on avatar share form */
+			if (zsnapshotpath != "") {
+				dGet('wtw_defaultavatarsnapshot').src = zsnapshotpath + "?" + WTW.getRandomString(5);
+			} else {
+				dGet('wtw_defaultavatarsnapshot').src = zfiledata;
+			}
+			WTW.show('wtw_defaultavatarsnapshot');
+			
+			dGet('wtw_bsnapshotavatar').onclick = function(){
+				WTW.snapshot3D(dGet('wtw_trootpath').value + dGet('wtw_tavatarfolder').value + 'snapshots/', 'defaultavatar.png');
+			};
+			dGet('wtw_bsnapshotavatar').innerHTML = "Set Default Snapshot";
+		} else {
+			dGet('wtw_bsnapshotthing').onclick = function(){
+				WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/things/' + dGet('wtw_tthingid').value + '/snapshots/', 'defaultthing.png');
+			};
+			dGet('wtw_bsnapshotthing').innerHTML = "Set Default Snapshot";
+			dGet('wtw_bsnapshotbuilding').onclick = function(){
+				WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/buildings/' + dGet('wtw_tbuildingid').value + '/snapshots/', 'defaultbuilding.png');
+			};
+			dGet('wtw_bsnapshotbuilding').innerHTML = "Set Default Snapshot";
+			dGet('wtw_bsnapshotcommunity').onclick = function(){
+				WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/communities/' + dGet('wtw_tcommunityid').value + '/snapshots/', 'defaultcommunity.png');
+			};
+			dGet('wtw_bsnapshotcommunity').innerHTML = "Set Default Snapshot";
+		}
 
-		dGet('wtw_bsnapshotthing').onclick = function(){
-			WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/things/' + dGet('wtw_tthingid').value + '/snapshots/', 'defaultthing.png');
-		};
-		dGet('wtw_bsnapshotthing').innerHTML = "Set Default Snapshot";
-		dGet('wtw_bsnapshotbuilding').onclick = function(){
-			WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/buildings/' + dGet('wtw_tbuildingid').value + '/snapshots/', 'defaultbuilding.png');
-		};
-		dGet('wtw_bsnapshotbuilding').innerHTML = "Set Default Snapshot";
-		dGet('wtw_bsnapshotcommunity').onclick = function(){
-			WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/communities/' + dGet('wtw_tcommunityid').value + '/snapshots/', 'defaultcommunity.png');
-		};
-		dGet('wtw_bsnapshotcommunity').innerHTML = "Set Default Snapshot";
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_admincommunities.js-updateSnapshot3D=" + ex.message);
 	} 

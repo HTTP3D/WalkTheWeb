@@ -75,18 +75,22 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 					WTW.hide('searchcommunitiesdiv');
 					WTW.hide('searchbuildingsdiv');
 					WTW.hide('searchthingsdiv');
+					WTW.hide('searchavatarsdiv');
 					WTW.hide('wtw_commtempsearchresults');
 					WTW.hide('wtw_buildtempsearchresults');
 					WTW.hide('wtw_thingtempsearchresults');
+					WTW.hide('wtw_avatartempsearchresults');
 					WTW.showInline('wtw_menumedialibrary');
 					WTW.showInline('wtw_menuwtwcommunities');
 					WTW.showInline('wtw_menuwtwbuildings');
 					WTW.showInline('wtw_menuwtwthings');
+					WTW.showInline('wtw_menuwtwavatars');
 					WTW.show('wtw_showimportpage');
 					WTW.show('wtw_selectwebform');
 					dGet('wtw_menuwtwcommunities').className = 'wtw-menutabtop';
 					dGet('wtw_menuwtwbuildings').className = 'wtw-menutabtop';
 					dGet('wtw_menuwtwthings').className = 'wtw-menutabtop';
+					dGet('wtw_menuwtwavatars').className = 'wtw-menutabtop';
 					switch (zsetcategory) {
 						case "communities":
 							WTW.showInline('searchcommunitiesdiv');
@@ -108,6 +112,13 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 							dGet('wtw_thingtempsearchresults').style.height = (WTW.sizeY - 175) + "px";
 							WTW.thingSearch('');
 							WTW.show('wtw_thingtempsearchresults');
+							break;
+						case "avatars":
+							WTW.showInline('searchavatarsdiv');
+							dGet('wtw_menuwtwavatars').className = 'wtw-menutabtopselected';
+							dGet('wtw_avatartempsearchresults').style.height = (WTW.sizeY - 175) + "px";
+							WTW.avatarSearch('');
+							WTW.show('wtw_avatartempsearchresults');
 							break;
 					}
 				}
@@ -1833,7 +1844,7 @@ WTWJS.prototype.loadObjectDetailsFiles = async function(zuploadobjectid, zobject
 				if (zresponse.length > 0) {
 					for (var i=0;i < zresponse.length;i++) {
 						if (zresponse[i] != null) {
-							zfilesdiv += "<img src='/content/system/images/close2.png' alt='Delete' title='Delete' style='width:24px;height:auto;float:right;right-margin:10px;cursor:pointer;' onclick=\"dGet('wtw_tdeletefile').value='" + zresponse[i].file + "';WTW.hide('wtw_uploadbutton');WTW.showInline('wtw_deletefile');WTW.showInline('wtw_canceldelete');\" />";
+							zfilesdiv += "<img src='/content/system/images/close2.png' alt='Delete' title='Delete' style='width:24px;height:auto;float:right;cursor:pointer;' onclick=\"dGet('wtw_tdeletefile').value='" + zresponse[i].file + "';WTW.hide('wtw_uploadbutton');WTW.showInline('wtw_deletefile');WTW.showInline('wtw_canceldelete');\" />";
 							if (zresponse[i].file == zfilename) {
 								zfilesdiv += "<div class='wtw-floatright'>Primary</div><strong>" + zresponse[i].file + "</strong><br /><div class='wtw-clear'></div>";
 							} else {
@@ -2043,9 +2054,45 @@ WTWJS.prototype.addAnimation = function(zuploadobjectid) {
 WTWJS.prototype.openRequirements = function() {
 	/* open Ratings and Requirements form */
 	try {
-		WTW.getAsyncJSON("/connect/rating.php?extended=0&webid=" + communityid + buildingid + thingid, 
+		var zwebtype = '';
+		if (communityid != '') {
+			zwebtype = 'community';
+		} else if (buildingid != '') {
+			zwebtype = 'building';
+		} else if (thingid != '') {
+			zwebtype = 'thing';
+		} else if (avatarid != '') {
+			zwebtype = 'avatar';
+		}
+		WTW.getAsyncJSON("/connect/rating.php?extended=0&webid=" + communityid + buildingid + thingid + avatarid + "&webtype=" + zwebtype, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
+				switch (zwebtype) {
+					case 'community':
+						dGet('wtw_requirementstitle').innerHTML = '3D Community Requirements';
+						dGet('wtw_requirementsdesc').innerHTML = 'The settings below will only apply to this 3D Community.';
+						dGet('wtw_enableparentaltext').innerHTML = 'Rating is not set for this 3D Community.';
+						dGet('wtw_requirementslabel').innerHTML = '3D Community Content Rating';
+						break;
+					case 'building':
+						dGet('wtw_requirementstitle').innerHTML = '3D Building Requirements';
+						dGet('wtw_requirementsdesc').innerHTML = 'The settings below will only apply to this 3D Building.';
+						dGet('wtw_enableparentaltext').innerHTML = 'Rating is not set for this 3D Building.';
+						dGet('wtw_requirementslabel').innerHTML = '3D Building Content Rating';
+						break;
+					case 'thing':
+						dGet('wtw_requirementstitle').innerHTML = '3D Thing Requirements';
+						dGet('wtw_requirementsdesc').innerHTML = 'The settings below will only apply to this 3D Thing.';
+						dGet('wtw_enableparentaltext').innerHTML = 'Rating is not set for this 3D Thing.';
+						dGet('wtw_requirementslabel').innerHTML = '3D Thing Content Rating';
+						break;
+					case 'avatar':
+						dGet('wtw_requirementstitle').innerHTML = '3D Avatar Requirements';
+						dGet('wtw_requirementsdesc').innerHTML = 'The settings below will only apply to this 3D Avatar.';
+						dGet('wtw_enableparentaltext').innerHTML = 'Rating is not set for this 3D Avatar.';
+						dGet('wtw_requirementslabel').innerHTML = '3D Avatar Content Rating';
+						break;
+				}
 				if (zresponse.unratedcontent == '1') {
 					dGet('wtw_enableparentalsettings').checked = false;
 					WTW.enableParentalSettings('0');
@@ -2116,12 +2163,22 @@ WTWJS.prototype.changeRating = function() {
 
 WTWJS.prototype.enableParentalSettings = function(zchecked) {
 	try {
+		var zwebtype = '';
+		if (communityid != '') {
+			zwebtype = 'Community';
+		} else if (buildingid != '') {
+			zwebtype = 'Building';
+		} else if (thingid != '') {
+			zwebtype = 'Thing';
+		} else if (avatarid != '') {
+			zwebtype = 'Avatar';
+		}
 		if (zchecked == '1') {
-			dGet('wtw_enableparentaltext').innerHTML = "This 3D Community has Age Restrictions.";
-			dGet('wtw_enableparentaltext2').innerHTML = "Visitors must exceed a minimum Age to browse this 3D Community Website.";
+			dGet('wtw_enableparentaltext').innerHTML = "This 3D " + zwebtype + " has Age Restrictions.";
+			dGet('wtw_enableparentaltext2').innerHTML = "Visitors must exceed a minimum Age to browse this 3D " + zwebtype + " Website.";
 			WTW.show('wtw_webratingdiv');
 		} else {
-			dGet('wtw_enableparentaltext').innerHTML = "Rating is not set for this 3D Community.";
+			dGet('wtw_enableparentaltext').innerHTML = "Rating is not set for this 3D " + zwebtype + ".";
 			dGet('wtw_enableparentaltext2').innerHTML = "No content warning will be displayed.";
 			WTW.hide('wtw_webratingdiv');
 		}
@@ -2155,11 +2212,22 @@ WTWJS.prototype.saveCommunityRequirements = function(w) {
 				if (dGet('wtw_enableparentalsettings').checked) {
 					zchecked = '1';
 				}
+				var zwebtype = '';
+				if (communityid != '') {
+					zwebtype = 'community';
+				} else if (buildingid != '') {
+					zwebtype = 'building';
+				} else if (thingid != '') {
+					zwebtype = 'thing';
+				} else if (avatarid != '') {
+					zwebtype = 'avatar';
+				}
 				var zwebrating = WTW.getDDLText('wtw_webrating');
 				var zwebratingvalue = WTW.getDDLValue('wtw_webrating');
 				var zcontentwarning = dGet('wtw_webcontentwarning').value;
 				var zrequest = {
-					'webid': communityid + buildingid + thingid,
+					'webid': communityid + buildingid + thingid + avatarid,
+					'webtype': zwebtype,
 					'parentalcontrols': zchecked,
 					'rating': zwebrating,
 					'ratingvalue':zwebratingvalue,

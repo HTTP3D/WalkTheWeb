@@ -297,7 +297,7 @@ WTWJS.prototype.checkFunctionname = function(zfunctionname, zmoldname) {
 				}
 			}
 		}
-		if (typeof window[znewfunctionname] == "object") {
+		if (typeof window[znewfunctionname] == 'object') {
 			if (window[znewfunctionname] != null) {
 				znewfunctionname = '';
 			}

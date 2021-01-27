@@ -67,6 +67,20 @@ WTWJS.prototype.toggleAdminMenu = function(zbuttonid) {
 				WTW.hide('wtw_adminsettingsthing');
 				WTW.hide('wtw_admineditthing');
 			}
+			if (avatarid != "") {
+				var zedit = WTW.getQuerystring('edit','0');
+				if (zedit == '1') {
+					WTW.hideAdminMenu();
+					WTW.backToEdit();
+				} else {
+					WTW.show('wtw_avatarsmenudiv');
+					WTW.show('wtw_adminsettingsavatar');
+					WTW.show('wtw_admineditavatar');
+				}
+			} else {
+				WTW.hide('wtw_adminsettingsavatar');
+				WTW.hide('wtw_admineditavatar');
+			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminmenus.js-toggleAdminMenu=" + ex.message);
@@ -647,7 +661,83 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 							WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/buildings/' + dGet('wtw_tbuildingid').value + '/snapshots/', 'defaultbuilding.png');
 						} else if (thingid != '') {
 							WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/things/' + dGet('wtw_tthingid').value + '/snapshots/', 'defaultthing.png');
+						} else if (avatarid != '') {
+							WTW.snapshot3D(dGet('wtw_trootpath').value + dGet('wtw_tavatarfolder').value + 'snapshots/', 'defaultavatar.png');
 						}
+						break;
+				/* Avatar Admin Items */
+					case 'wtw_selectavatar':
+						WTW.hideAdminMenu();
+						WTW.openSelectAvatar();
+						WTW.show('wtw_adminSelectAvatarDiv');
+						break;
+					case "wtw_addnewavatar":
+						WTW.hideAdminMenu();
+						WTW.openAddNewAvatar();
+						WTW.show('wtw_adminAddNewAvatarDiv');
+						break;
+					case 'wtw_adminavatarsnapshot':	
+						WTW.hideAdminMenu();
+						dGet('wtw_snapshottitle').innerHTML = "3D Avatar Snapshot";
+						WTW.openUpdateSnapshotForm();
+						WTW.show('wtw_adminmenu69');
+						break;
+					case 'wtw_adminavatarcopy':
+						WTW.copyMyAvatar();
+						break;
+					case 'wtw_adminavatardelete':
+						WTW.openConfirmation('8');
+						break;
+					case 'wtw_adminavatarshare':
+						WTW.hideAdminMenu();
+						WTW.openShareAvatarForm();
+						WTW.show('wtw_adminShareAvatarDiv');
+						break;
+					case "wtw_bbackwtw_adminShareAvatarDiv":
+					case "wtw_cancelshareavatar":
+						WTW.hideAdminMenu();
+						WTW.saveShareAvatarForm();
+						WTW.backToTools();
+						break;
+					case "wtw_bshareavatartemplate":
+						WTW.saveShareAvatarForm();
+						WTW.openConfirmation('9');
+						break;
+					case "wtw_adminsettingsavatar":
+						WTW.hideAdminMenu();
+						WTW.show('wtw_adminSettingsAvatarDiv');
+						break;
+					case "wtw_bbackwtw_adminEditAvatarInformationDiv":
+					case "wtw_bbackwtw_adminEditAvatarFilesDiv":
+					case "wtw_bbackwtw_adminEditAvatarScalingDiv":
+					case "wtw_bbackwtw_adminEditAvatarColorsDiv":
+					case "wtw_bbackwtw_adminEditAvatarAnimationsDiv":
+					case "wtw_admineditavatar":
+						WTW.hideAdminMenu();
+						WTW.closeAvatarColorSelector();
+						WTW.disposeClean('avatarscale-0--0--babylonfile');
+						WTW.show('wtw_adminEditAvatarDiv');
+						break;
+					case "wtw_adminavatarinformation":
+						WTW.hideAdminMenu();
+						WTW.openEditAvatar();
+						break;
+					case "wtw_adminavatarfiles":
+						WTW.hideAdminMenu();
+						dGet('wtw_tavatarfolderdisplay').value = 'wtw_adminEditAvatarFilesDiv';
+						WTW.openEditAvatarFiles('','wtw_adminEditAvatarFilesDiv');
+						break;
+					case "wtw_adminavatarscaling":
+						WTW.hideAdminMenu();
+						WTW.openEditAvatarScaling();
+						break;
+					case "wtw_adminavatarcolors":
+						WTW.hideAdminMenu();
+						WTW.openEditAvatarColors();
+						break;
+					case "wtw_adminavataranimations":
+						WTW.hideAdminMenu();
+						WTW.openEditAvatarAnimations();
 						break;
 				/* user Admin Items */
 					case 'wtw_adminuserlist':
@@ -752,6 +842,9 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 					case "wtw_listloadeduploads":
 						WTW.listUploads();
 						break;
+					case "wtw_listmyavatarlocation":
+						WTW.listMyAvatarLocation();
+						break;
 				/* close and exit Admin Items */
 					case "wtw_cancel28":
 						WTW.disposeClean('firstbuilding-----babylonfile');
@@ -762,6 +855,8 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 					case "wtw_bback44":
 					case "wtw_bback60":
 					case "wtw_bback61":
+					case "wtw_bback69":
+					case "wtw_cancel69":
 					case "wtw_cancel44":
 					case "wtw_cancel60":
 					case "wtw_cancel61":
@@ -785,10 +880,8 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						break;
 					case "wtw_bback4":
 					case "wtw_bback6":
-					case "wtw_bback69":
 					case "wtw_cancel4":
 					case 'wtw_cancel6':
-					case "wtw_cancel69":
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu1');
 						if (communityid != '') {
@@ -826,6 +919,8 @@ WTWJS.prototype.backToEdit = function() {
 			WTW.show('wtw_adminmenu26');
 		} else if (thingid != "") {
 			WTW.show('wtw_adminmenu36');
+		} else if (avatarid != "") {
+			WTW.show('wtw_adminEditAvatarDiv');
 		} else {
 			WTW.show('wtw_adminmenu1');
 		}
@@ -843,6 +938,8 @@ WTWJS.prototype.backToTools = function() {
 			WTW.show('wtw_adminmenu24');
 		} else if (thingid != "") {
 			WTW.show('wtw_adminmenu34');
+		} else if (avatarid != "") {
+			WTW.show('wtw_adminSettingsAvatarDiv');
 		} else {
 			WTW.show('wtw_adminmenu1');
 		}

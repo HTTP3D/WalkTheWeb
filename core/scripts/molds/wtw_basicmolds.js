@@ -752,10 +752,10 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 				zvideoposter = zmolddef.graphics.texture.videoposter;
 			}
 		}
-		zmolddef.object.folder = "/content/system/babylon/tv/";
-		zmolddef.object.file = "tv.babylon";
+		zmolddef.objects.folder = "/content/system/babylon/tv/";
+		zmolddef.objects.file = "tv.babylon";
 		
-		BABYLON.SceneLoader.ImportMeshAsync("", zmolddef.object.folder, zmolddef.object.file, scene).then(
+		BABYLON.SceneLoader.ImportMeshAsync("", zmolddef.objects.folder, zmolddef.objects.file, scene).then(
 			function (results) {
 				if (results.meshes != null) {
 					var zobjectanimations = [];
@@ -1338,25 +1338,25 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 		var zrotationy = 0;
 		var zbillboard = '0';
 		/* read objectid, folder path, and file values */
-		if (zmolddef.object.uploadobjectid != undefined) {
-			if (zmolddef.object.uploadobjectid != '') {
-				zuploadobjectid = zmolddef.object.uploadobjectid;
+		if (zmolddef.objects.uploadobjectid != undefined) {
+			if (zmolddef.objects.uploadobjectid != '') {
+				zuploadobjectid = zmolddef.objects.uploadobjectid;
 			}
 		}
-		if (zmolddef.object.folder != undefined) {
-			if (zmolddef.object.folder != '') {
-				zobjectfolder = zmolddef.object.folder;
+		if (zmolddef.objects.folder != undefined) {
+			if (zmolddef.objects.folder != '') {
+				zobjectfolder = zmolddef.objects.folder;
 			}
 		}
-		if (zmolddef.object.file != undefined) {
-			if (zmolddef.object.file != '') {
-				zobjectfile = zmolddef.object.file;
+		if (zmolddef.objects.file != undefined) {
+			if (zmolddef.objects.file != '') {
+				zobjectfile = zmolddef.objects.file;
 			}
 		}
 		/* get array of animation defs */
-		if (zmolddef.object.objectanimations != undefined) {
-			if (zmolddef.object.objectanimations != '') {
-				zobjectanimations = zmolddef.object.objectanimations;
+		if (zmolddef.objects.objectanimations != undefined) {
+			if (zmolddef.objects.objectanimations != '') {
+				zobjectanimations = zmolddef.objects.objectanimations;
 			}
 		}
 		/* this rotation gets applied as offset to billboard mode */

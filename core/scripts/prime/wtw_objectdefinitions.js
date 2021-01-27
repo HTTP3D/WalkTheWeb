@@ -244,7 +244,7 @@ WTWJS.prototype.newMold = function() {
 				'action':'subtract',
 				'count':'0'
 			},
-			'object':
+			'objects':
 			{
 				'uploadobjectid':'',
 				'folder':'',
@@ -636,17 +636,10 @@ WTWJS.prototype.newAvatarDef = function() {
 	var zavataranimationdefs = [];
 	try {
 		zavatardef = {
-			'position':
-			{
-				'x':WTW.init.startPositionX,
-				'y':WTW.init.startPositionY,
-				'z':WTW.init.startPositionZ
-			},
-			'lastposition':
-			{
-				'x':'0.00',
-				'y':'0.00',
-				'z':'0.00'
+			'position': {
+				'x': 0,
+				'y': 0,
+				'z': 0
 			},
 			'scaling':
 			{
@@ -654,30 +647,17 @@ WTWJS.prototype.newAvatarDef = function() {
 				'y':'1.00',
 				'z':'1.00'
 			},
-			'lastscaling':
-			{
-				'x':'1.00',
-				'y':'1.00',
-				'z':'1.00'
-			},
-			'rotation':
-			{
-				'x':'0.00',
-				'y':WTW.init.startRotationY,
-				'z':'0.00'
-			},
-			'lastrotation':
-			{
-				'x':'0.00',
-				'y':'0.00',
-				'z':'0.00'
+			'rotation': {
+				'x': 0,
+				'y': 0,
+				'z': 0
 			},
 			'graphics':
 			{
 				'waterreflection':'1',
 				'receiveshadows':'0'
 			},
-			'object':
+			'objects':
 			{
 				'useravatarid':'',
 				'uploadobjectid':'',
@@ -690,6 +670,32 @@ WTWJS.prototype.newAvatarDef = function() {
 				'frametotal':0,
 				'lastframecount':0
 				
+			},
+			'start':
+			{
+				'position':
+				{
+					'x':WTW.init.startPositionX,
+					'y':WTW.init.startPositionY,
+					'z':WTW.init.startPositionZ
+				},
+				'rotation':
+				{
+					'x':'0.00',
+					'y':WTW.init.startRotationY,
+					'z':'0.00'
+				}
+			},
+			'snapshots':
+			{
+				'full':'',
+				'thumbnail':''
+			},
+			'share':
+			{
+				'templatename':'',
+				'description':'',
+				'tags':''
 			},
 			'avatarparts': zavatarparts,
 			'avataranimationdefs': zavataranimationdefs,
@@ -705,6 +711,9 @@ WTWJS.prototype.newAvatarDef = function() {
 			'anonymous':'1',
 			'avatar':'default',
 			'displayname':'',
+			'defaultdisplayname':'',
+			'avatardescription':'',
+			'alttag':'',
 			'privacy':'0',
 			'enteranimation':'1',
 			'enteranimationparameter':'',
@@ -762,320 +771,6 @@ WTWJS.prototype.newAvatarAnimationDef = function() {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAvatarAnimationDef=" + ex.message);
 	}
 	return zanimationdef;
-}
-
-WTWJS.prototype.newAvatarAnimationDefs = function() {
-	/* create an instance of an Array of default Avatar Animations that includes all of the basic functionality */
-	var zanimationdefs = [];
-	try {
-		zanimationdefs[0] = {
-			'useravataranimationid':'',
-			'avataranimationid':'r9087b004i9ptv0e',
-			'animationevent':'onwait',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'maleidle.babylon',
-			'startframe':'1',
-			'endframe':'213',
-			'animationloop':true,
-			'defaultspeedratio':'1.00',
-			'speedratio':'1.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[1] = {
-			'useravataranimationid':'',
-			'avataranimationid':'b03ftsjbxr0sxam8',
-			'animationevent':'onwalk',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'malewalk.babylon',
-			'startframe':'1',
-			'endframe':'26',
-			'animationloop':true,
-			'defaultspeedratio':'1.00',
-			'speedratio':'1.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[2] = {
-			'useravataranimationid':'',
-			'avataranimationid':'0ikarv3xbs0n7544',
-			'animationevent':'onwalkbackwards',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'malewalkback.babylon',
-			'startframe':'1',
-			'endframe':'29',
-			'animationloop':true,
-			'defaultspeedratio':'1.00',
-			'speedratio':'1.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[3] = {
-			'useravataranimationid':'',
-			'avataranimationid':'9xworrh44cbkwq1y',
-			'animationevent':'onturnleft',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'maleturnleft.babylon',
-			'startframe':'1',
-			'endframe':'29',
-			'animationloop':true,
-			'defaultspeedratio':'1.00',
-			'speedratio':'1.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[4] = {
-			'useravataranimationid':'',
-			'avataranimationid':'mbpjld4fttowgnt6',
-			'animationevent':'onturnright',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'maleturnright.babylon',
-			'startframe':'1',
-			'endframe':'29',
-			'animationloop':true,
-			'defaultspeedratio':'1.00',
-			'speedratio':'1.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[5] = {
-			'useravataranimationid':'',
-			'avataranimationid':'hur9z71kpv6b2bgb',
-			'animationevent':'onstrafeleft',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'malestrafeleft.babylon',
-			'startframe':'1',
-			'endframe':'45',
-			'animationloop':true,
-			'defaultspeedratio':'1.00',
-			'speedratio':'1.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[6] = {
-			'useravataranimationid':'',
-			'avataranimationid':'6x3o6sh2u1m1bjnq',
-			'animationevent':'onstraferight',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'malestraferight.babylon',
-			'startframe':'1',
-			'endframe':'45',
-			'animationloop':true,
-			'defaultspeedratio':'1.00',
-			'speedratio':'1.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[7] = {
-			'useravataranimationid':'',
-			'avataranimationid':'mz182mwpsvx1f1va',
-			'animationevent':'onrun',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'malerun.babylon',
-			'startframe':'1',
-			'endframe':'16',
-			'animationloop':true,
-			'defaultspeedratio':'1.00',
-			'speedratio':'1.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[8] = {
-			'useravataranimationid':'',
-			'avataranimationid':'rzn9d3dihtq4h2v5',
-			'animationevent':'onrunbackwards',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'malewalkback.babylon',
-			'startframe':'1',
-			'endframe':'29',
-			'animationloop':true,
-			'defaultspeedratio':'2.00',
-			'speedratio':'2.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[9] = {
-			'useravataranimationid':'',
-			'avataranimationid':'45dh9tcbikbvhqa9',
-			'animationevent':'onrunturnleft',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'maleturnleft.babylon',
-			'startframe':'1',
-			'endframe':'29',
-			'animationloop':true,
-			'defaultspeedratio':'2.00',
-			'speedratio':'2.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[10] = {
-			'useravataranimationid':'',
-			'avataranimationid':'gi7iwy1cobjpzqpf',
-			'animationevent':'onrunturnright',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'maleturnright.babylon',
-			'startframe':'1',
-			'endframe':'29',
-			'animationloop':true,
-			'defaultspeedratio':'2.00',
-			'speedratio':'2.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[11] = {
-			'useravataranimationid':'',
-			'avataranimationid':'xd3eqg21webe0wff',
-			'animationevent':'onrunstrafeleft',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'malestrafeleft.babylon',
-			'startframe':'1',
-			'endframe':'45',
-			'animationloop':true,
-			'defaultspeedratio':'2.00',
-			'speedratio':'2.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[12] = {
-			'useravataranimationid':'',
-			'avataranimationid':'w547k8hrbbn89k4v',
-			'animationevent':'onrunstraferight',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/avatars/male/',
-			'objectfile':'malestraferight.babylon',
-			'startframe':'1',
-			'endframe':'45',
-			'animationloop':true,
-			'defaultspeedratio':'2.00',
-			'speedratio':'2.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[13] = {
-			'useravataranimationid':'',
-			'avataranimationid':'i547k8hrtbn89k4s',
-			'animationevent':'onjump',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/animations/movement/',
-			'objectfile':'standjump.babylon',
-			'startframe':'1',
-			'endframe':'78',
-			'animationloop':true,
-			'defaultspeedratio':'1.00',
-			'speedratio':'1.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[14] = {
-			'useravataranimationid':'',
-			'avataranimationid':'j548k8hrtbs89k4t',
-			'animationevent':'onwalkjump',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/animations/movement/',
-			'objectfile':'runjump.babylon',
-			'startframe':'1',
-			'endframe':'25',
-			'animationloop':true,
-			'defaultspeedratio':'1.00',
-			'speedratio':'1.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-		zanimationdefs[15] = {
-			'useravataranimationid':'',
-			'avataranimationid':'h748k8hqtbs87k4r',
-			'animationevent':'onrunjump',
-			'animationfriendlyname':'',
-			'loadpriority':0,
-			'animationicon':'',
-			'objectfolder':'/content/system/animations/movement/',
-			'objectfile':'runjump.babylon',
-			'startframe':'1',
-			'endframe':'25',
-			'animationloop':true,
-			'defaultspeedratio':'1.00',
-			'speedratio':'1.00',
-			'walkspeed':'1',
-			'totalframes':'0',
-			'totalstartframe':'0',
-			'totalendframe':'0'
-		};
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAvatarAnimationsMale=" + ex.message);
-	}
-	return zanimationdefs;
 }
 
 

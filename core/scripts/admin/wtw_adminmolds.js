@@ -67,9 +67,9 @@ WTWJS.prototype.openMoldForm = async function(zmoldind, zshape, zwebtype, zsavep
 					break;
 			}
 			WTW.setCoveringFormFields(zmolds[zmoldind].covering);
-			dGet('wtw_tmolduploadobjectid').value = zmolds[zmoldind].object.uploadobjectid;
-			dGet('wtw_tmoldobjectfolder').value = zmolds[zmoldind].object.folder;
-			dGet('wtw_tmoldobjectfile').value = zmolds[zmoldind].object.file;
+			dGet('wtw_tmolduploadobjectid').value = zmolds[zmoldind].objects.uploadobjectid;
+			dGet('wtw_tmoldobjectfolder').value = zmolds[zmoldind].objects.folder;
+			dGet('wtw_tmoldobjectfile').value = zmolds[zmoldind].objects.file;
 			if (zmolds[zmoldind].graphics != null) {
 				if (zmolds[zmoldind].graphics.receiveshadows == '1') {
 					dGet('wtw_tmoldreceiveshadows').checked = true;
@@ -341,9 +341,9 @@ WTWJS.prototype.loadMoldForm = function(zmolddef) {
 		dGet('wtw_tmoldrotationz').value = zmolddef.rotation.z;
 		dGet('wtw_tmoldspecial1').value = zmolddef.scaling.special1;
 		dGet('wtw_tmoldspecial2').value = zmolddef.scaling.special2;
-		dGet('wtw_tmolduploadobjectid').value = zmolddef.object.uploadobjectid;
-		dGet('wtw_tmoldobjectfolder').value = zmolddef.object.folder;
-		dGet('wtw_tmoldobjectfile').value = zmolddef.object.file;
+		dGet('wtw_tmolduploadobjectid').value = zmolddef.objects.uploadobjectid;
+		dGet('wtw_tmoldobjectfolder').value = zmolddef.objects.folder;
+		dGet('wtw_tmoldobjectfile').value = zmolddef.objects.file;
 		if (zmolddef.graphics.receiveshadows == '1') {
 			dGet('wtw_tmoldreceiveshadows').checked = true;
 		} else {
@@ -800,9 +800,9 @@ WTWJS.prototype.openAddNewMold = function(zwebtype, zshape) {
 		zmolds[zmoldind].graphics.vscale = dGet('wtw_tmoldvscale').value;
 		zmolds[zmoldind].opacity = dGet('wtw_tmoldopacity').value;
 		zmolds[zmoldind].subdivisions = dGet('wtw_tmoldsubdivisions').value;
-		zmolds[zmoldind].object.uploadobjectid = dGet('wtw_tmolduploadobjectid').value;
-		zmolds[zmoldind].object.folder = dGet('wtw_tmoldobjectfolder').value;
-		zmolds[zmoldind].object.file = dGet('wtw_tmoldobjectfile').value;
+		zmolds[zmoldind].objects.uploadobjectid = dGet('wtw_tmolduploadobjectid').value;
+		zmolds[zmoldind].objects.folder = dGet('wtw_tmoldobjectfolder').value;
+		zmolds[zmoldind].objects.file = dGet('wtw_tmoldobjectfile').value;
 		zmolds[zmoldind].graphics.texture.backupid = "";
 		if (dGet('wtw_tmoldreceiveshadows').checked == true) {
 			zmolds[zmoldind].graphics.receiveshadows = '1';
@@ -1257,9 +1257,9 @@ WTWJS.prototype.submitMoldForm = async function(zselect) {
 				zmolds[zmoldind].graphics.receiveshadows = '0';
 			}
 			zmolds[zmoldind].opacity = dGet('wtw_tmoldopacity').value;
-			zmolds[zmoldind].object.uploadobjectid = dGet('wtw_tmolduploadobjectid').value;
-			zmolds[zmoldind].object.folder = dGet('wtw_tmoldobjectfolder').value;
-			zmolds[zmoldind].object.file = dGet('wtw_tmoldobjectfile').value;
+			zmolds[zmoldind].objects.uploadobjectid = dGet('wtw_tmolduploadobjectid').value;
+			zmolds[zmoldind].objects.folder = dGet('wtw_tmoldobjectfolder').value;
+			zmolds[zmoldind].objects.file = dGet('wtw_tmoldobjectfile').value;
 			zmolds[zmoldind].subdivisions = dGet('wtw_tmoldsubdivisions').value;
 			zmolds[zmoldind].graphics.texture.id = dGet('wtw_tmoldtextureid').value;
 			zmolds[zmoldind].graphics.texture.path = dGet('wtw_tmoldtexturepath').value;
@@ -1363,9 +1363,9 @@ WTWJS.prototype.submitMoldForm = async function(zselect) {
 				'voffset': zmolds[zmoldind].graphics.voffset,
 				'uscale': zmolds[zmoldind].graphics.uscale,
 				'vscale': zmolds[zmoldind].graphics.vscale,
-				'uploadobjectid': zmolds[zmoldind].object.uploadobjectid,
-				'objectfolder': zmolds[zmoldind].object.folder,
-				'objectfile': zmolds[zmoldind].object.file,
+				'uploadobjectid': zmolds[zmoldind].objects.uploadobjectid,
+				'objectfolder': zmolds[zmoldind].objects.folder,
+				'objectfile': zmolds[zmoldind].objects.file,
 				'receiveshadows': zmolds[zmoldind].graphics.receiveshadows,
 				'graphiclevel': zmolds[zmoldind].graphics.level,
 				'videoid': zmolds[zmoldind].graphics.texture.videoid,
@@ -3167,21 +3167,21 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 				zmolds[zmoldind].csg.moldid = dGet('wtw_tmoldcsgmoldid').value;
 				var zcsgmainid = zmolds[zmoldind].csg.moldid;
 
-				if (zmolds[zmoldind].object.uploadobjectid != undefined) {
-					if (zmolds[zmoldind].object.uploadobjectid != dGet('wtw_tmolduploadobjectid').value) {
-						zmolds[zmoldind].object.uploadobjectid = dGet('wtw_tmolduploadobjectid').value;
+				if (zmolds[zmoldind].objects.uploadobjectid != undefined) {
+					if (zmolds[zmoldind].objects.uploadobjectid != dGet('wtw_tmolduploadobjectid').value) {
+						zmolds[zmoldind].objects.uploadobjectid = dGet('wtw_tmolduploadobjectid').value;
 						zrebuildmold = 1;
 					}
 				}
-				if (zmolds[zmoldind].object.folder != undefined) {
-					if (zmolds[zmoldind].object.folder != dGet('wtw_tmoldobjectfolder').value) {
-						zmolds[zmoldind].object.folder = dGet('wtw_tmoldobjectfolder').value;
+				if (zmolds[zmoldind].objects.folder != undefined) {
+					if (zmolds[zmoldind].objects.folder != dGet('wtw_tmoldobjectfolder').value) {
+						zmolds[zmoldind].objects.folder = dGet('wtw_tmoldobjectfolder').value;
 						zrebuildmold = 1;
 					}
 				}
-				if (zmolds[zmoldind].object.file != undefined) {
-					if (zmolds[zmoldind].object.file != dGet('wtw_tmoldobjectfile').value) {
-						zmolds[zmoldind].object.file = dGet('wtw_tmoldobjectfile').value;
+				if (zmolds[zmoldind].objects.file != undefined) {
+					if (zmolds[zmoldind].objects.file != dGet('wtw_tmoldobjectfile').value) {
+						zmolds[zmoldind].objects.file = dGet('wtw_tmoldobjectfile').value;
 						zrebuildmold = 1;
 					}
 				}

@@ -1491,7 +1491,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 			try {
 				WTW.disposeMoldEvent(zmoldname);
 				WTW.disposeSoundAndLights(zmoldname);
-				if (zmoldname.indexOf("myavatar") > -1 || zmoldname.indexOf("person") > -1) {
+				if (zmoldname.indexOf("myavatar") > -1 || zmoldname.indexOf("person") > -1 || zmoldname.indexOf("editavatar") > -1) {
 					/* dispose of avatar parts / animations */
 					WTW.disposeAnimations(zmoldname);
 				} else if (znamepart[5] == 'video') {
@@ -1562,7 +1562,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 			/* confirm mold is in the scene */
 			if (zmold != null) {
 				try {
-					if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf("actionzone") > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1) {
+					if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf("actionzone") > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1 || zmoldname.indexOf("editavatar") > -1) {
 						/* dispose of child objects from imported meshes */
 						var zchildmeshes = zmold.getChildren();
 						if (zchildmeshes != null) {
@@ -1613,7 +1613,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 					WTW.disposeClean(zmoldname + "-far");
 				}
 			}
-			if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1) {
+			if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1 || zmoldname.indexOf("editavatar") > -1) {
 				for (var i = 0; i < scene.meshes.length;i++) {
 					/* check for child parts of the 3D Model that are still in the 3D Scene and delete them */
 					if (scene.meshes[i].name.indexOf(zmoldname) > -1) {

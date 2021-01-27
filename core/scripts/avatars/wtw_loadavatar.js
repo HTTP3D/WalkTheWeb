@@ -14,16 +14,16 @@ WTWJS.prototype.loadAvatarPlaceholder = function() {
 		var zavatardef = WTW.newAvatarDef();
 		zavatardef.name = "myavatar-" + dGet("wtw_tinstanceid").value;
 		zavatardef.instanceid = dGet("wtw_tinstanceid").value;
-		zavatardef.position.x += zrand1;
-		zavatardef.position.z += zrand2;
-		zavatardef.rotation.x = 0;
-		zavatardef.rotation.y = WTW.init.startRotationY;
-		zavatardef.rotation.z = 0;
+		zavatardef.start.position.x += zrand1;
+		zavatardef.start.position.z += zrand2;
+		zavatardef.start.rotation.x = 0;
+		zavatardef.start.rotation.y = WTW.init.startRotationY;
+		zavatardef.start.rotation.z = 0;
 		/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
 		/* is it set to delete after 10 seconds */
 		var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
 		zstartstand.scaling = new BABYLON.Vector3(25, 1, 25);
-		zstartstand.position = new BABYLON.Vector3(zavatardef.position.x, zavatardef.position.y - .57, zavatardef.position.z);
+		zstartstand.position = new BABYLON.Vector3(zavatardef.start.position.x, zavatardef.start.position.y - .57, zavatardef.start.position.z);
 		zstartstand.checkCollisions = true;
 		zcovering = new BABYLON.StandardMaterial("matstartstand", scene);
 		zstartstand.material = new BABYLON.StandardMaterial("matstartstand", scene);
@@ -48,16 +48,31 @@ WTWJS.prototype.reloadAvatar = function() {
 WTWJS.prototype.getSavedAvatar = async function(zavatarname, zglobaluseravatarid, zuseravatarid, zavatarid, zsendrefresh) {
 	/* fetches the avatar definition for either the global avatar, local logged in avatar, or anonymous avatar */
 	try {
+		if (zglobaluseravatarid == null) {
+			zglobaluseravatarid = '';
+		}
 		if (zglobaluseravatarid == undefined) {
 			zglobaluseravatarid = '';
 		}
-		if (zglobaluseravatarid == null) {
+		if (zglobaluseravatarid == 'undefined') {
 			zglobaluseravatarid = '';
+		}
+		if (zuseravatarid == null) {
+			zuseravatarid = '';
 		}
 		if (zuseravatarid == undefined) {
 			zuseravatarid = '';
 		}
-		if (zavatarid == undefined || zavatarid == 'undefined') {
+		if (zuseravatarid == 'undefined') {
+			zuseravatarid = '';
+		}
+		if (zavatarid == null) {
+			zavatarid = '';
+		}
+		if (zavatarid == undefined) {
+			zavatarid = '';
+		}
+		if (zavatarid == 'undefined') {
 			zavatarid = '';
 		}
 		if (zglobaluseravatarid != '' || zuseravatarid != '' || zavatarid != '') {
@@ -82,7 +97,7 @@ WTWJS.prototype.getSavedAvatar = async function(zavatarname, zglobaluseravatarid
 				if (zavatarname.indexOf("-") > -1) {
 					zinstanceid = zavatarname.split('-')[1];
 				}
-				WTW.getAsyncJSON("/connect/useravatar.php?id=" + btoa(zavatarid) + "&a=" + btoa(zuseravatarid) + "&i=" + btoa(zinstanceid), 
+				WTW.getAsyncJSON("/connect/useravatar.php?avatarid=" + btoa(zavatarid) + "&useravatarid=" + btoa(zuseravatarid) + "&instanceid=" + btoa(zinstanceid), 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						if (zresponse != null) {
@@ -93,6 +108,8 @@ WTWJS.prototype.getSavedAvatar = async function(zavatarname, zglobaluseravatarid
 					}	
 				);
 			}
+		} else {
+			WTW.openLocalLogin('Select Avatar', .4, .9);
 		}
     } catch (ex) {
 		WTW.log("core-scripts-avatars-wtw_loadavatar.js-getSavedAvatar=" + ex.message);
@@ -143,12 +160,12 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 		zavatardef.name = zavatarname;
 		zavatardef.instanceid = zinstanceid;
 		zavatardef.parentname = WTW.mainParent;
-		zavatardef.position.x = WTW.init.startPositionX;
-		zavatardef.position.y = WTW.init.startPositionY;
-		zavatardef.position.z = WTW.init.startPositionZ;
-		zavatardef.rotation.x = 0;
-		zavatardef.rotation.y = WTW.init.startRotationY;
-		zavatardef.rotation.z = 0;
+		zavatardef.start.position.x = WTW.init.startPositionX;
+		zavatardef.start.position.y = WTW.init.startPositionY;
+		zavatardef.start.position.z = WTW.init.startPositionZ;
+		zavatardef.start.rotation.x = 0;
+		zavatardef.start.rotation.y = WTW.init.startRotationY;
+		zavatardef.start.rotation.z = 0;
 		/* colors are not updating (updateAvatarColors) so temporarily making all changes refresh the entire avatar with 1==1, this will be changed in a future release as we go to hex colors in the database */
 		if (zavatarid != zavataridold || 1==1) {
 			/* if the previously loaded avatar is not the same as the new avatar meshes - fully reload */
@@ -176,9 +193,6 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 			/* if the avatar meshes are the same, only update the colors and animations */
 			WTW.updateAvatarColors(zavatarname, zavatardef);
 			WTW.disposeAnimations(zavatarname);
-			/* make sure the base functions are defined - otherwise adds default for that avatar event */
-			/* basic avatar animation events: (onwait, onwalk, onwalkbackwards, onturnleft, onturnright, onstrafeleft, onstraferight, onrun, onrunbackwards, onrunleft, onrunright, onrunstrafeleft, onrunstraferight) */
-			zavatardef.avataranimationdefs = WTW.loadAvatarAnimationDefinitions(zavatardef.avataranimationdefs);
 			/* reloads avatar animations except for the onwait that stays loaded */
 			WTW.reloadAvatarAnimations(zavatarname, zavatardef.avataranimationdefs);
 		}
@@ -189,6 +203,7 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 		WTW.pluginsSavedAvatarRetrieved(zavatarname, zsendrefresh);
     } catch (ex) {
 		WTW.log("core-scripts-avatars-wtw_loadavatar.js-updateAvatar=" + ex.message);
+		WTW.getSavedAvatar("myavatar-" + dGet("wtw_tinstanceid").value, zglobaluseravatarid, zuseravatarid, zavatarid, true);
     }
 }
 
@@ -334,10 +349,19 @@ WTWJS.prototype.reloadAvatarAnimations = function(zavatarname, zavataranimationd
 						'active':0
 					};
 					/* start the onwait animation */
+
 					zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent] = scene.beginWeightedAnimation(zskeleton, Number(zavataranimationdefs[0].startframe), Number(zavataranimationdefs[0].endframe), 0, zavataranimationdefs[0].animationloop, Number(zavataranimationdefs[0].speedratio));
 					zavatar.WTW.animations[0].totalframes = Number(zavataranimationdefs[0].endframe);
 					zavatar.WTW.animations[0].totalstartframe = 1;
 					zavatar.WTW.animations[0].totalendframe = Number(zavataranimationdefs[0].endframe);
+					
+					/* start the idle animation */
+					if (zavataranimationdefs[0].animationevent == 'onwait') {
+						zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent].weight = 1;
+						if (zavatarname.indexOf('editavatar') > -1) {
+							WTW.avatarShowVisible(zavatarname);
+						}
+					}
 				} catch (ex) {}
 			}
 			/* starts loading the rest of the animations starting with index 1 of the zavataranimationdefs */
@@ -346,47 +370,6 @@ WTWJS.prototype.reloadAvatarAnimations = function(zavatarname, zavataranimationd
     } catch (ex) {
 		WTW.log("core-scripts-avatars-wtw_loadavatar.js-reloadAvatarAnimations=" + ex.message);
     }
-}
-
-WTWJS.prototype.loadAvatarAnimationDefinitions = function(zcustomanimationdefs) {
-	/* checks the avatar animation definitions to make sure all base events are covered */
-	/* inserts the default animation for an event if a custom one is not provided */
-	try {
-		var zanimationdefs = [];
-		/* newAvatarAnimationDefs provides the defaults from the /core/scripts/prime/wtw_objectdefinitions.js file */
-		zanimationdefs = WTW.newAvatarAnimationDefs();
-		if (zcustomanimationdefs == null) {
-			zcustomanimationdefs = zanimationdefs;
-		} else {
-			if (zcustomanimationdefs.length > 0) {
-				/* cycle through default animations */
-				for (var i=0; i<zanimationdefs.length;i++) {
-					if (zanimationdefs[i] != null) {
-						var zanimname = zanimationdefs[i].animationevent;
-						var zfound = false;
-						/* check to see if default animation event is in the custom animations list */
-						for (var j=0; j<zcustomanimationdefs.length; j++) {
-							if (zcustomanimationdefs[j] != null) {
-								if (zcustomanimationdefs[j].animationevent == zanimname) {
-									/* found animation event in custom animations */
-									zfound = true;
-								}
-							}
-						}
-						if (zfound == false) {
-							/* if not found then add default animation to custom animations */
-							zcustomanimationdefs[zcustomanimationdefs.length] = zanimationdefs[i];
-						}
-					}
-				}
-			} else {
-				zcustomanimationdefs = zanimationdefs;
-			}
-		}
-    } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_loadavatar.js-loadAvatarAnimationDefinitions=" + ex.message);
-    }
-	return zcustomanimationdefs;
 }
 
 WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zenteranimate) {
@@ -497,7 +480,7 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 		}
     } catch (ex) {
 		WTW.log("core-scripts-avatars-wtw_loadavatar.js-loadAvatarAnimations=" + ex.message);
-    }
+	}
 }
 
 WTWJS.prototype.loadAvatarAnimation = function(zavatarname, zuseravataranimationid, zanimationfriendlyname, zanimationicon, zavataranimationid, zanimationevent, zobjectfolder, zobjectfile, zstartframe, zendframe, zspeedratio, zstartweight, zloadpriority, zanimationloop, zonanimationend) {
@@ -523,6 +506,11 @@ WTWJS.prototype.loadAvatarAnimation = function(zavatarname, zuseravataranimation
 					if (zavatar.WTW.animations[i] != null) {
 						/* if animation is already found, stop the animation and remove the frame range */
 						if (zavatar.WTW.animations[i].useravataranimationid == zuseravataranimationid && zanimationevent == "onoption" && zuseravataranimationid != '') {
+							if (zavatar.WTW.animations.running['onoption' + zavatar.WTW.animations[i].avataranimationid] != undefined) {
+								zavatar.WTW.animations.running['onoption' + zavatar.WTW.animations[i].avataranimationid].stop();
+							}
+							zfound = i;
+						} else if (zavatar.WTW.animations[i].avataranimationid == zuseravataranimationid && zanimationevent == "onoption" && zavataranimationid != '') {
 							if (zavatar.WTW.animations.running['onoption' + zavatar.WTW.animations[i].avataranimationid] != undefined) {
 								zavatar.WTW.animations.running['onoption' + zavatar.WTW.animations[i].avataranimationid].stop();
 							}
@@ -607,7 +595,7 @@ WTWJS.prototype.changeAvatarAnimation = async function(zselobj) {
 				'useravataranimationid': zuseravataranimationid,
 				'avataranimationid':zavataranimationid,
 				'instanceid': dGet("wtw_tinstanceid").value,
-				'avataranimationevent':dGet('wtw_tavataranimationevent').value,
+				'animationevent':dGet('wtw_tavataranimationevent').value,
 				'speedratio':zspeedratio,
 				'function':'saveavataranimation'
 			};

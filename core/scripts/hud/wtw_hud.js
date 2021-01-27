@@ -761,6 +761,22 @@ WTWJS.prototype.listUploads = function() {
 	WTW.log("----------------------");
 }
 
+WTWJS.prototype.listMyAvatarLocation = function() {
+	/* list myavatar location */
+	if (WTW.myAvatar != null) {
+		WTW.log("----------------------");
+		WTW.log('Position:');
+		WTW.log(' x=' + WTW.myAvatar.position.x);
+		WTW.log(' y=' + WTW.myAvatar.position.y);
+		WTW.log(' z=' + WTW.myAvatar.position.z);
+		WTW.log('Rotation:');
+		WTW.log(' x=' + WTW.getDegrees(WTW.myAvatar.rotation.x));
+		WTW.log(' y=' + WTW.getDegrees(WTW.myAvatar.rotation.y));
+		WTW.log(' z=' + WTW.getDegrees(WTW.myAvatar.rotation.z));
+	}		
+	WTW.log("----------------------");
+}
+
 WTWJS.prototype.listMeshes = function() {
 	/* list all displayed meshes */
 	try {

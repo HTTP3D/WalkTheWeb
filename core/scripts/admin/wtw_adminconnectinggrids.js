@@ -699,8 +699,8 @@ WTWJS.prototype.setFirstBuilding = function() {
 			zmolddef.parentname = WTW.mainParent;
 			zmolddef.checkcollisions = "0";
 			zmolddef.ispickable = "0";
-			zmolddef.object.folder = '/content/system/babylon/buildingmarker/';
-			zmolddef.object.file = 'buildingmarker.babylon';
+			zmolddef.objects.folder = '/content/system/babylon/buildingmarker/';
+			zmolddef.objects.file = 'buildingmarker.babylon';
 			/* create the First Building Placemarker using the mold definition above */
 			zmold = WTW.addMold('firstbuilding-----babylonfile', zmolddef, zmolddef.parentname, zmolddef.covering);
 			zmold.rotation.x = WTW.getRadians(zbuildingrotationx);

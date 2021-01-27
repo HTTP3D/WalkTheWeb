@@ -361,19 +361,20 @@ WTWJS.prototype.getAnonymousAvatarList = async function() {
 									'avatarid': zresponse.avatars[i].avatarid,
 									'avatargroup': zresponse.avatars[i].avatargroup,
 									'displayname': zresponse.avatars[i].displayname,
+									'avatardescription': zresponse.avatars[i].avatardescription,
 									'gender': zresponse.avatars[i].gender,
-									'object': {
-										'folder': zresponse.avatars[i].object.folder,
-										'file': zresponse.avatars[i].object.file
+									'objects': {
+										'folder': zresponse.avatars[i].objects.folder,
+										'file': zresponse.avatars[i].objects.file
 									},
 									'scaling': {
 										'x': zresponse.avatars[i].scaling.x,
 										'y': zresponse.avatars[i].scaling.y,
 										'z': zresponse.avatars[i].scaling.z
 									},
-									'thumbnails': {
-										'imagefull': zresponse.avatars[i].thumbnails.imagefull,
-										'imageface': zresponse.avatars[i].thumbnails.imageface
+									'snapshots': {
+										'full': zresponse.avatars[i].snapshots.full,
+										'thumbnail': zresponse.avatars[i].snapshots.thumbnail
 									},
 									'sortorder': zresponse.avatars[i].sortorder,
 									'selected': false
@@ -387,7 +388,7 @@ WTWJS.prototype.getAnonymousAvatarList = async function() {
 				if (zanonavatars.length > 0) {
 					for (var i=0;i<zanonavatars.length;i++) {
 						if (zanonavatars[i] != null) {
-							zpagediv += "<div class=\"wtw-imagescroll\" onclick=\"WTW.onMyAvatarSelect('', '', '" + zanonavatars[i].avatarid + "');\"><img src=\"" + zanonavatars[i].object.folder + zanonavatars[i].thumbnails.imageface + "\" title=\"" + zanonavatars[i].displayname + "\" alt=\"" + zanonavatars[i].displayname + "\" class=\"wtw-imagesavatar\" /></div>";
+							zpagediv += "<div class=\"wtw-imagescroll\" onclick=\"WTW.onMyAvatarSelect('', '', '" + zanonavatars[i].avatarid + "');\"><img src=\"" + zanonavatars[i].snapshots.thumbnail + "\" title=\"" + zanonavatars[i].displayname + "\" alt=\"" + zanonavatars[i].displayname + "\" class=\"wtw-imagesavatar\" /><br /><div class=\"wtw_imagename\">" + zanonavatars[i].displayname + "</div></div>";
 						}
 					}
 				} else {
@@ -421,19 +422,20 @@ WTWJS.prototype.getFullAvatarList = async function(zshowmyavatars, zwidth, zheig
 									'avatargroup': zresponse.avatars[i].avatargroup,
 									'displayname': zresponse.avatars[i].displayname,
 									'defaultdisplayname': zresponse.avatars[i].defaultdisplayname,
+									'avatardescription': zresponse.avatars[i].avatardescription,
 									'gender': zresponse.avatars[i].gender,
-									'object': {
-										'folder': zresponse.avatars[i].object.folder,
-										'file': zresponse.avatars[i].object.file
+									'objects': {
+										'folder': zresponse.avatars[i].objects.folder,
+										'file': zresponse.avatars[i].objects.file
 									},
 									'scaling': {
 										'x': zresponse.avatars[i].scaling.x,
 										'y': zresponse.avatars[i].scaling.y,
 										'z': zresponse.avatars[i].scaling.z
 									},
-									'thumbnails': {
-										'imagefull': zresponse.avatars[i].thumbnails.imagefull,
-										'imageface': zresponse.avatars[i].thumbnails.imageface
+									'snapshots': {
+										'full': zresponse.avatars[i].snapshots.full,
+										'thumbnail': zresponse.avatars[i].snapshots.thumbnail
 									},
 									'sortorder': zresponse.avatars[i].sortorder,
 									'selected': false
@@ -459,7 +461,7 @@ WTWJS.prototype.getFullAvatarList = async function(zshowmyavatars, zwidth, zheig
 				if (zfullavatars.length > 0) {
 					for (var i=0;i<zfullavatars.length;i++) {
 						if (zfullavatars[i] != null) {
-							zpagediv += "<div class=\"wtw-imagescroll\" onclick=\"WTW.onMyAvatarSaveSelect('" + zfullavatars[i].globaluseravatarid + "', '" + zfullavatars[i].useravatarid + "', '" + zfullavatars[i].avatarid + "');\"><img src=\"" + zfullavatars[i].object.folder + zfullavatars[i].thumbnails.imageface + "\" title=\"" + zfullavatars[i].displayname + "\" alt=\"" + zfullavatars[i].displayname + "\" class=\"wtw-imagesavatar\" /></div>";
+							zpagediv += "<div class=\"wtw-imagescroll\" onclick=\"WTW.onMyAvatarSaveSelect('" + zfullavatars[i].globaluseravatarid + "', '" + zfullavatars[i].useravatarid + "', '" + zfullavatars[i].avatarid + "');\"><img src=\"" + zfullavatars[i].snapshots.thumbnail + "\" title=\"" + zfullavatars[i].displayname + "\" alt=\"" + zfullavatars[i].displayname + "\" class=\"wtw-imagesavatar\" /><br /><div class=\"wtw_imagename\">" + zfullavatars[i].displayname + "</div></div>";
 						}
 					}
 				} else if (zshowmyavatars == false) {
@@ -507,19 +509,20 @@ WTWJS.prototype.getMyAvatarList = async function(zwidth, zheight) {
 												'avatarid': zresponse.avatars[i].avatarid,
 												'avatargroup': zresponse.avatars[i].avatargroup,
 												'displayname': zresponse.avatars[i].displayname,
+												'avatardescription': zresponse.avatars[i].avatardescription,
 												'gender': zresponse.avatars[i].gender,
-												'object': {
-													'folder': zresponse.avatars[i].object.folder,
-													'file': zresponse.avatars[i].object.file
+												'objects': {
+													'folder': zresponse.avatars[i].objects.folder,
+													'file': zresponse.avatars[i].objects.file
 												},
 												'scaling': {
 													'x': zresponse.avatars[i].scaling.x,
 													'y': zresponse.avatars[i].scaling.y,
 													'z': zresponse.avatars[i].scaling.z
 												},
-												'thumbnails': {
-													'imagefull': zresponse.avatars[i].thumbnails.imagefull,
-													'imageface': zresponse.avatars[i].thumbnails.imageface
+												'snapshots': {
+													'full': zresponse.avatars[i].snapshots.full,
+													'thumbnail': zresponse.avatars[i].snapshots.thumbnail
 												},
 												'sortorder': zresponse.avatars[i].sortorder,
 												'selected': false
@@ -565,19 +568,21 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight) {
 						let zicon = "/content/system/images/localserver.png";
 						let ztext = "3D Website Local Avatar";
 						let ztext2 = "My Avatar";
-						if (zmyavatars[i].globaluseravatarid != '') {
-							zicon = "/content/system/images/global.png";
-							ztext = "WalkTheWeb Global Avatar";
-						}
-						if (zmyavatars[i].thumbnails.imageface != '') {
-							if (zmyavatars[i].thumbnails.imageface.indexOf('://') > -1) {
-								zicon2 = zmyavatars[i].thumbnails.imageface;
-							} else {
-								zicon2 = zmyavatars[i].object.folder + zmyavatars[i].thumbnails.imageface;
+						if (zmyavatars[i].globaluseravatarid != undefined) {
+							if (zmyavatars[i].globaluseravatarid != '') {
+								zicon = "/content/system/images/global.png";
+								ztext = "WalkTheWeb Global Avatar";
 							}
 						}
-						if (zmyavatars[i].displayname != '') {
-							ztext2 = zmyavatars[i].displayname;
+						if (zmyavatars[i].snapshots.thumbnail != undefined) {
+							if (zmyavatars[i].snapshots.thumbnail != '') {
+								zicon2 = zmyavatars[i].snapshots.thumbnail;
+							}
+						}
+						if (zmyavatars[i].displayname != undefined) {
+							if (zmyavatars[i].displayname != '') {
+								ztext2 = zmyavatars[i].displayname;
+							}
 						}
 						zmylist += "<div class=\"wtw-loginbutton\" style=\"text-align:left;\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.onMyAvatarSelect('" + zmyavatars[i].globaluseravatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\">";
 						zmylist += "<img src=\"" + zicon + "\" class=\"wtw-icon\" title=\"" + ztext + "\" alt=\"" + ztext + "\" />";
@@ -626,8 +631,17 @@ WTWJS.prototype.onMyAvatarSaveSelect = async function(zglobaluseravatarid, zuser
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				if (zresponse.useravatarid != undefined) {
-					zuseravatarid = zresponse.useravatarid;
-					WTW.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);
+					if (zresponse.useravatarid == '') {
+						/* avatar could not be created, send back to selection */
+						WTW.openLocalLogin('Select Avatar', .4, .9);
+					} else {
+						/* avatar created, continue to loading the avatar */
+						zuseravatarid = zresponse.useravatarid;
+						WTW.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);
+					}
+				} else {
+					/* avatar could not be created, send back to selection */
+					WTW.openLocalLogin('Select Avatar', .4, .9);
 				}
 			}
 		);
@@ -637,7 +651,8 @@ WTWJS.prototype.onMyAvatarSaveSelect = async function(zglobaluseravatarid, zuser
 }
 
 WTWJS.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, zavatarid) {
-	/* process to enter the 3D Scene when the avatar is selected */
+	/* after the avatar is saved, this process loads the avatar */
+	/* and allows plugins to provide alternate loading and saving of changed avatars */
 	try {
 		dGet('wtw_tuseravatarid').value = zuseravatarid;
 		dGet('wtw_tglobaluseravatarid').value = zglobaluseravatarid;
@@ -648,7 +663,7 @@ WTWJS.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, 
 		var zloading = WTW.pluginsOnMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);
 		if (zloading == false) {
 			WTW.getSavedAvatar("myavatar-" + dGet("wtw_tinstanceid").value, zglobaluseravatarid, zuseravatarid, zavatarid, true);
-		}
+		} 
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_login.js-onMyAvatarSelect=" + ex.message);
 	}
