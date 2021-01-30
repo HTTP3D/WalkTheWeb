@@ -142,6 +142,8 @@ WTWJS.prototype.uploadAvatarFile = function() {
 	/* upload main 3D Avatar File */
 	try {
 		if (dGet('wtw_avatarfileupload').value != null) {
+			dGet('wtw_adminnewavatarupload').onclick = "";
+			dGet('wtw_adminnewavatarupload').innerHTML = "<span style='color:gray;'>Uploading File...</span>";
 			return new Promise(function () {
 				avatarid = dGet('wtw_teditavatarid').value;
 				var zform1 = document.createElement('form');
@@ -163,6 +165,10 @@ WTWJS.prototype.uploadAvatarFile = function() {
 						dGet('wtw_newavatarfilesfile').innerHTML = zresponse.objectfile;
 						WTW.hide('wtw_newavataruploadbutton');
 						WTW.show('wtw_newavataruploadfolder');
+						dGet('wtw_adminnewavatarupload').onclick = function() {
+							dGet('wtw_avatarfileupload').click();
+						};
+						dGet('wtw_adminnewavatarupload').innerHTML = "Upload Main Avatar File";
 					}
 				};
 				Httpreq.send(zformdata);  
@@ -375,10 +381,6 @@ WTWJS.prototype.shareAvatarTemplate = function() {
 	} 
 }
 
-
-
-
-
 WTWJS.prototype.openEditAvatar = function() {
 	/* open the 3D Avatar information for Edit */
 	try {
@@ -465,6 +467,9 @@ WTWJS.prototype.uploadAvatarFiles = function() {
 	/* upload 3D Avatar files using form post */
 	try {
 		if (dGet('wtw_avatarfilesupload').value != null) {
+			dGet('wtw_avataruploadbutton').onclick = "";
+			dGet('wtw_avataruploadbutton').innerHTML = "<span style='color:gray;'>Uploading Files...</span>";
+			
 			if (dGet('wtw_teditavatarid').value == '') {
 				dGet('wtw_teditavatarid').value = avatarid;
 			}
@@ -484,6 +489,10 @@ WTWJS.prototype.uploadAvatarFiles = function() {
 					var zresponse = JSON.parse(Httpreq.responseText);
 					dGet('wtw_avatarfilesupload').value = null;
 					WTW.openEditAvatarFiles(dGet('wtw_tavatarsubfolder').value.replace('/',''), dGet('wtw_tavatarfolderdisplay').value);
+					dGet('wtw_avataruploadbutton').onclick = function(){
+						dGet('wtw_avatarfilesupload').click();
+					};
+					dGet('wtw_avataruploadbutton').innerHTML = "Upload or Replace File(s)";
 				}
 			};
 			Httpreq.send(zformdata);
@@ -759,7 +768,7 @@ WTWJS.prototype.openAvatarColorSelector = function(zavatarpartid, zavatarpart) {
 		var zmold = scene.getMeshByID(zmoldname);
 		if (zmold != null) {
 			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
-
+			
 			if (WTW.guiAdminColors != null) {
 				WTW.guiAdminColors.dispose();
 				WTW.guiAdminColors = null;

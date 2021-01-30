@@ -538,6 +538,8 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 										}
 									}
 								}
+								
+								
 								if (results.meshes[i].material != null) {
 									/* emissive and specular currently share colors */
 									results.meshes[i].material.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
