@@ -154,6 +154,7 @@ class wtwavatars {
 					from ".wtw_tableprefix."useravatars 
 					where avatarid='".$zavatarid."'
 						and userid='".$wtwhandlers->userid."' 
+						and deleted=0
 					order by updatedate desc
 					limit 1;");
 				foreach ($zresults as $zrow) {
@@ -184,6 +185,7 @@ class wtwavatars {
 						select * 
 						from ".wtw_tableprefix."avatars 
 						where avatarid='".$zavatarid."'
+							and deleted=0
 						order by updatedate desc
 						limit 1;");
 					foreach ($zresults as $zrow) {
