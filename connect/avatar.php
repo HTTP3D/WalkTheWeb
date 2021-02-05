@@ -42,7 +42,7 @@ try {
 		from ".wtw_tableprefix."avataranimations
 		where avatarid='".$zavatarid."' 
 				and deleted=0
-		order by loadpriority desc, animationevent, avataranimationid;");
+		order by loadpriority desc, animationfriendlyname, animationevent, avataranimationid;");
 	$i = 0;
 	$zevent = '';
 	foreach ($zresults as $zrow) {
@@ -100,7 +100,7 @@ try {
 
 	function arraysort($a, $b) {
 		if ($a["loadpriority"] == $b["loadpriority"]) {
-			return 0;
+			return ($a["animationfriendlyname"] > $b["animationfriendlyname"]) ? 1 : -1;
 		}
 		return ($a["loadpriority"] < $b["loadpriority"]) ? 1 : -1;
 	}

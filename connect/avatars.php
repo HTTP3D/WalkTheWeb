@@ -25,7 +25,8 @@ try {
 					'' as defaultdisplayname 
 				from ".wtw_tableprefix."useravatars
 				where userid='".$wtwconnect->userid."'
-					and not userid=''
+					and (not userid='')
+					and deleted=0
 				order by avatargroup, displayname, avatarid, useravatarid;");
 			$zwebtype = 'useravatars';
 		} else {
