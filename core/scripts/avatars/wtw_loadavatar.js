@@ -187,6 +187,8 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 			if (zavatarname.indexOf("myavatar") > -1) {
 				/* global variable for current user's avatar */
 				WTW.myAvatar = zavatar;
+			} else if (zavatarname.indexOf("editavatar") > -1) {
+				WTW.editAvatar = zavatar;
 			}
 			window.setTimeout(function() {zstartstand.dispose();},10000);
 		} else {
@@ -349,10 +351,9 @@ WTWJS.prototype.reloadAvatarAnimations = function(zavatarname, zavataranimationd
 						'active':0
 					};
 					/* start the onwait animation */
-
 					zavatar.WTW.animations.running[zavataranimationdefs[0].animationevent] = scene.beginWeightedAnimation(zskeleton, Number(zavataranimationdefs[0].startframe), Number(zavataranimationdefs[0].endframe), 0, zavataranimationdefs[0].animationloop, Number(zavataranimationdefs[0].speedratio));
 					zavatar.WTW.animations[0].totalframes = Number(zavataranimationdefs[0].endframe);
-					zavatar.WTW.animations[0].totalstartframe = 1;
+					zavatar.WTW.animations[0].totalstartframe = Number(zavataranimationdefs[0].startframe);
 					zavatar.WTW.animations[0].totalendframe = Number(zavataranimationdefs[0].endframe);
 					
 					/* start the idle animation */
@@ -427,11 +428,11 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 											zavatar.WTW.skeleton.bones[c].animations[0].setEasingFunction(zeasingfunction);
 										}
 									}
-									let ztotalframes = Number(zanimation.endframe);
+									let ztotalframes = Number(zanimation.endframe) - Number(zanimation.startframe);
 									let ztotalendframe = (zframetotal + Number(zanimation.endframe) - Number(zanimation.startframe));
-									let ztotalstartframe = ztotalendframe - zanimation.endframe;
+									let ztotalstartframe = ztotalendframe - ztotalframes;
 									if (zavatar.WTW.animations[zanimationind] != null) {
-										zavatar.WTW.animations[zanimationind].totalframes = zanimation.endframe;
+										zavatar.WTW.animations[zanimationind].totalframes = ztotalframes;
 										zavatar.WTW.animations[zanimationind].totalstartframe = ztotalstartframe;
 										zavatar.WTW.animations[zanimationind].totalendframe = ztotalendframe;
 									}
@@ -441,7 +442,6 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 									}
 									if (zenteranimate == false) {
 										zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio));
-										//zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, Number(zavatar.WTW.animations[zanimationind].totalstartframe), Number(zavatar.WTW.animations[zanimationind].totalendframe), zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio), zanimation.onanimationend);
 									} else if (zavatar.WTW.animations[zanimationind + 1] != null) {
 										/* there are more animations to load - so load the next one */
 										WTW.loadAvatarAnimations(zavatarname, zanimationind + 1);

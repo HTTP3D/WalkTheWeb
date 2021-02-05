@@ -20,7 +20,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 		if (zavatar != null && WTW.cameraFocus == 1 && WTW.placeHolder == 0) {
 			zavatar.rotation.x = 0;
 			zavatar.rotation.z = 0;
-			var zincrement = .10;
+			var zincrement = .1;
 			var zactivecount = 0;
 			var zmoveevents = [];
 			if (zavatar.WTW != null) {
@@ -193,10 +193,10 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 						if (WTW.animationSet == "vehicle-boat") {
 							WTW.moveAvatarVehicle(zavatar, zkeyspressed);
 						} else {
+							let zanimset = WTW.checkAnimationSet(zavatar, 'onwait', WTW.animationSet);
 							if (zkeyspressed.length == 0) {
-								zanim = WTW.checkAnimationSet(zavatar, 'onwait', WTW.animationSet);
-								if (zavatar.WTW.animations.running[zanim] != undefined) {
-									zavatar.WTW.animations.running[zanim].active = 1;
+								if (zavatar.WTW.animations.running[zanimset] != undefined) {
+									zavatar.WTW.animations.running[zanimset].active = 1;
 								}
 								zactivecount += 1;
 							}
@@ -208,28 +208,27 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 							}
 							/* set the weight for each animation running */
 							var zweight = 0;
-							if (zavatar.WTW.animations.running['onwait'] != undefined) {
-								if (zavatar.WTW.animations.running['onwait'].active == 0) {
-									zavatar.WTW.animations.running['onwait'].weight = 0;
-								}
-							}
 							if (zavatar.WTW.animations.running['onwalkjump'] != undefined) {
 								if (zavatar.WTW.animations.running['onwalkjump'].active == 1) {
-									// clear other weights
 									zavatar.WTW.animations.running['onwalkjump'].weight = 1;
+									// clear other weights
+									zavatar.WTW.animations.running[zanimset].weight = 0;
 								}
 							}
 							if (zavatar.WTW.animations.running['onrunjump'] != undefined) {
 								if (zavatar.WTW.animations.running['onrunjump'].active == 1) {
-									// clear other weights
 									zavatar.WTW.animations.running['onrunjump'].weight = 1;
+									// clear other weights
+									zavatar.WTW.animations.running[zanimset].weight = 0;
 								}
 							}
 							for(var zevent in zavatar.WTW.animations.running) {
 								if (zavatar.WTW.animations.running[zevent] != undefined) {
 									if (zavatar.WTW.animations.running[zevent].active == 0) {
-										if (zavatar.WTW.animations.running[zevent].weight > 0) {
-											zavatar.WTW.animations.running[zevent].weight -= zincrement;
+										if (zavatar.WTW.animations.running[zevent].weight > zincrement) {
+											if (zevent != 'onwait') {
+												zavatar.WTW.animations.running[zevent].weight -= zincrement;
+											}
 										} else {
 											zavatar.WTW.animations.running[zevent].weight = 0;
 										}
@@ -254,6 +253,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 										'active':zavatar.WTW.animations.running[zevent].active
 									}
 									zweight += zavatar.WTW.animations.running[zevent].weight;
+
 									if (zavatar.WTW.animations.running[zevent].weight > 0) {
 										/* check for jump animation */
 										var zavatarscale = scene.getMeshByID(zavatar.name + "-scale");
@@ -437,13 +437,17 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 									}
 								}
 							}
-							if (zweight < 1) {
-								/* if the animation settings do not equal 1, add onwait for the difference */
-								let zanimset = WTW.checkAnimationSet(zavatar, 'onwait', WTW.animationSet);
-								if (zavatar.WTW.animations.running[zanimset] != null) {
-									zavatar.WTW.animations.running[zanimset].weight += (1-zweight);
-									zmoveevents = WTW.setMovementEventsKey(zmoveevents, zanimset, zavatar.WTW.animations.running[zanimset].weight);
+							if (zavatar.WTW.animations.running[zanimset] != undefined) {
+								if (zanimset != 'onwait') {
+									zavatar.WTW.animations.running['onwait'].weight = 0;
 								}
+								/* if the animation settings do not equal 1, add or remove onwait for the difference */
+								if (zweight < 1) {
+									zavatar.WTW.animations.running[zanimset].weight += 1 - zweight;
+								} else {
+									zavatar.WTW.animations.running[zanimset].weight -= zweight - 1;
+								}
+								zmoveevents = WTW.setMovementEventsKey(zmoveevents, zanimset, zavatar.WTW.animations.running[zanimset].weight);
 							}
 						}
 					}

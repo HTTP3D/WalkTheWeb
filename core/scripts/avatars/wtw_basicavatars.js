@@ -757,11 +757,11 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 										zleftfoot.attachToBone(results.skeletons[i].bones[zleftfootbone], results.meshes[0]);
 									}
 								}
-								/* load the avatar animations - note that the idle onwait animation is already loaded with the initial avatar object */
-								/* zavataranimationdefs is an array of animation definitions to be loaded index 0 is the idle onwait event */
-								WTW.reloadAvatarAnimations(zavatarname, zavataranimationdefs);
 							}
 						}
+						/* load the avatar animations - note that the idle onwait animation is already loaded with the initial avatar object */
+						/* zavataranimationdefs is an array of animation definitions to be loaded index 0 is the idle onwait event */
+						WTW.reloadAvatarAnimations(zavatarname, zavataranimationdefs);
 					} 
 				}
 				zavatar = scene.getMeshByID(zavatarname);
@@ -1005,7 +1005,7 @@ WTWJS.prototype.addAvatarForEdit = function(zavatarname, zavatardef) {
 								results.meshes[i].isPickable = true;
 								results.meshes[i].name = zchildmoldname;
 								results.meshes[i].id = zchildmoldname;
-								results.meshes[i].isVisible = false;
+								results.meshes[i].isVisible = true;
 								
 								/* set custom colors to avatar parts */
 								var zfoundpart = false;
@@ -1280,21 +1280,19 @@ WTWJS.prototype.addAvatarForEdit = function(zavatarname, zavatardef) {
 										zleftfoot.attachToBone(results.skeletons[i].bones[zleftfootbone], results.meshes[0]);
 									}
 								}
-								/* load the avatar animations - note that the idle onwait animation is already loaded with the initial avatar object */
-								/* zavataranimationdefs is an array of animation definitions to be loaded index 0 is the idle onwait event */
-								WTW.reloadAvatarAnimations(zavatarname, zavataranimationdefs);
+
+
 							}
 						}
+						/* load the avatar animations - note that the idle onwait animation is already loaded with the initial avatar object */
+						/* zavataranimationdefs is an array of animation definitions to be loaded index 0 is the idle onwait event */
+						WTW.reloadAvatarAnimations(zavatarname, zavataranimationdefs);
 					} 
 				}
+				WTW.editAvatar = zavatar;
 				zavatar = scene.getMeshByID(zavatarname);
 				if (zavatar == null) {
 					WTW.disposeClean(zavatarname);
-				} else {
-					/* make my avatar match the camera angle if first entering a 3D Scene */
-					if (WTW.myAvatar.name == zavatarname && WTW.placeHolder == 1) {
-						WTW.init.startRotationY = WTW.getDegrees(WTW.camera.rotation.y);
-					}
 				}
 			}
 		);

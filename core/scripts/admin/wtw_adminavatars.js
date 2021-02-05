@@ -1224,12 +1224,24 @@ WTWJS.prototype.testAnimation = function(zanimationid, zanimationevent) {
 	try {
 		var zeditavatar = scene.getMeshByID('editavatar-0');
 		if (zeditavatar != null) {
-			if (zanimationevent == 'onoption') {
-				zanimationevent += zanimationid;
-			}
-			if (zeditavatar.WTW.animations.running[zanimationevent] != undefined) {
-				zeditavatar.WTW.animations.running[zanimationevent].weight = 1;
-				zeditavatar.WTW.animations.running['onwait'].weight = 0;
+			if (WTW.testTimer == null) {
+				if (zanimationevent == 'onoption') {
+					zanimationevent += zanimationid;
+				}
+				var zincrement = .1;
+				WTW.testTimer = window.setInterval(function() {
+					if (zeditavatar.WTW.animations.running[zanimationevent] != undefined && zeditavatar.WTW.animations.running['onwait'] != undefined) {
+						if (zeditavatar.WTW.animations.running[zanimationevent].weight < 1) {
+							zeditavatar.WTW.animations.running[zanimationevent].weight += zincrement;
+							zeditavatar.WTW.animations.running['onwait'].weight = 1 - zeditavatar.WTW.animations.running[zanimationevent].weight;
+						} else {
+							zeditavatar.WTW.animations.running[zanimationevent].weight = 1;
+							zeditavatar.WTW.animations.running['onwait'].weight = 0;
+							window.clearInterval(WTW.testTimer);
+							WTW.testTimer = null;
+						}
+					}
+				},20);
 			}
 		}
 	} catch (ex) {
@@ -1242,13 +1254,34 @@ WTWJS.prototype.testAnimationStop = function(zanimationid, zanimationevent) {
 	try {
 		var zeditavatar = scene.getMeshByID('editavatar-0');
 		if (zeditavatar != null) {
+			if (WTW.testTimer != null) {
+				window.clearInterval(WTW.testTimer);
+				WTW.testTimer = null;
+			}
 			if (zanimationevent == 'onoption') {
 				zanimationevent += zanimationid;
 			}
-			if (zeditavatar.WTW.animations.running[zanimationevent] != undefined) {
-				zeditavatar.WTW.animations.running['onwait'].weight = 1;
-				zeditavatar.WTW.animations.running[zanimationevent].weight = 0;
-			}
+			var zincrement = .1;
+			WTW.testTimer = window.setInterval(function() {
+				if (zeditavatar.WTW.animations.running[zanimationevent] != undefined && zeditavatar.WTW.animations.running['onwait'] != undefined) {
+					if (zeditavatar.WTW.animations.running[zanimationevent].weight > 0) {
+						zeditavatar.WTW.animations.running[zanimationevent].weight -= zincrement;
+						zeditavatar.WTW.animations.running['onwait'].weight = 1 - zeditavatar.WTW.animations.running[zanimationevent].weight;
+					} else {
+						window.clearInterval(WTW.testTimer);
+						for(var zevent in zeditavatar.WTW.animations.running) {
+							if (zeditavatar.WTW.animations.running[zevent] != undefined) {
+								if (zevent == 'onwait') {
+									zeditavatar.WTW.animations.running['onwait'].weight = 1;
+								} else {
+									zeditavatar.WTW.animations.running[zevent].weight = 0;
+								}
+							}
+						}
+						WTW.testTimer = null;
+					}
+				}
+			},20);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminavatars.js-testAnimationStop=" + ex.message);

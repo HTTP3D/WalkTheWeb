@@ -267,15 +267,18 @@ function WTWJS() {
 	
 	/* WTW.myAvatar - this is your avatar object parent (cube at the base of the avatar) */
 	this.myAvatar = null; 
+	this.editAvatar = null; 
 	
 	/* WTW.animationSet - appends a name to the animation name running to temporarily change the animation running on command */
 	/* example: default onwait animation - if you set 
 			WTW.animationSet = 'sit'; 
-			the onwait is replaced by an animation called onwaitsit if it exists (fail back to the default if it is missing) */
+			the onwait is replaced by an animation called onwait-sit if it exists (fail back to the default onwait if it is missing) */
 	this.animationSet = '';
 	
 	/* WTW.keysPressed - keys pressed Array of values that are translated into movement and animation */
 	this.keysPressed = [];
+	
+	this.testTimer = null;
 	
 
 /* vehicle related */

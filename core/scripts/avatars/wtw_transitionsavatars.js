@@ -172,37 +172,46 @@ WTWJS.prototype.deleteUserAnimation = async function(zselectname) {
 }
 
 WTWJS.prototype.toggleMenuAnimations = function() {
-	/* opens and closes the execute animations box from the menu - will be depreciated soon */
+	/* opens and closes the execute animations box from the menu - will be depreciated soon (moved to HUD) */
 	try {
 		if (dGet('wtw_menuoptionalanimations').style.display == 'none') {
 			var zlistoptionalanimations = "";
 			var zavatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
 			if (zavatar != null) {
-				if (zavatar.WTW.animations != undefined) {
-					
-					for (var i=zavatar.WTW.animations.length; i>-1; i--) {
-						if (zavatar.WTW.animations[i] != null) {
-							var zanimdef = zavatar.WTW.animations[i];
+				if (zavatar.WTW.avataranimationdefs != undefined) {
+					for (var i=0; i < zavatar.WTW.avataranimationdefs.length; i++) {
+						if (zavatar.WTW.avataranimationdefs[i] != null) {
+							var zanimdef = zavatar.WTW.avataranimationdefs[i];
 							if (zanimdef.animationevent.indexOf('onoption') > -1) {
+								var zfriendlyname = zanimdef.animationfriendlyname;
+								var zmode = '';
 								var zicon = "/content/system/icons/animdefault.png";
 								if (zanimdef.animationicon != '') {
 									zicon = zanimdef.animationicon;
 								}
-								zlistoptionalanimations += "<div id='wtw_playanimation" + i + "' class='wtw-animationicondiv'";
+								if (zfriendlyname.toLowerCase().indexOf('fight') > -1) {
+									zmode = 'fight';
+								}
+								zfriendlyname = zfriendlyname.replace('Option - ','').replace('Option-','').replace('option - ','').replace('option-','').replace('Option -','').replace('option -','').replace('Option- ','').replace('option- ','');
+								zfriendlyname = zfriendlyname.replace('Fight - ','').replace('Fight-','').replace('fight - ','').replace('fight-','').replace('Fight -','').replace('fight -','').replace('Fight- ','').replace('fight- ','');
+								zlistoptionalanimations += "<div id='wtw_playanimation" + i + "-" + zmode + "' class='wtw-animationicondiv'";
+								if (zmode == 'fight') {
+									zlistoptionalanimations += " style='display:none;visibility:hidden;'"
+								}
 								zlistoptionalanimations += " onmousedown=\"WTW.runOptionalAnimation(this,'" + zanimdef.animationevent + "')\"";
 								zlistoptionalanimations += " onmouseup=\"WTW.stopOptionalAnimation(this,'" + zanimdef.animationevent + "')\"";
 								zlistoptionalanimations += " onpointerdown=\"WTW.runOptionalAnimation(this,'" + zanimdef.animationevent + "')\"";
 								zlistoptionalanimations += " onpointerup=\"WTW.stopOptionalAnimation(this,'" + zanimdef.animationevent + "')\"";
 								zlistoptionalanimations += " ontouchstart=\"WTW.runOptionalAnimation(this,'" + zanimdef.animationevent + "')\"";
 								zlistoptionalanimations += " ontouchend=\"WTW.stopOptionalAnimation(this,'" + zanimdef.animationevent + "')\">";
-								zlistoptionalanimations += "<img src='" + zicon + "' class='wtw-animationicon' alt='" + zanimdef.animationfriendlyname + "' title='" + zanimdef.animationfriendlyname + "' /></div>";
+								zlistoptionalanimations += "<img src='" + zicon + "' class='wtw-animationicon' alt='" + zfriendlyname + "' title='" + zfriendlyname + "' /><br /><div style='margin:3px;'>" +zfriendlyname  + "</div></div>";
+							} else if (zanimdef.animationevent.indexOf('onwait-fight') > -1) {
+								WTW.showInline('wtw_animationmodefight');
 							}
 						}
 					}
 				}
 			}
-			zlistoptionalanimations += "<div id='wtw_editplayanimations' class='wtw-animationicondiv' onclick=\"WTW.editPlayAnimations();\">";
-			zlistoptionalanimations += "<br />Select<br /><br />Animations<br /></div>";
 			dGet('wtw_listoptionalanimations').innerHTML = zlistoptionalanimations;
 			WTW.show('wtw_menuoptionalanimations');
 			var zmenuwidth = dGet('wtw_menuoptionalanimations').clientWidth;
@@ -215,6 +224,34 @@ WTWJS.prototype.toggleMenuAnimations = function() {
 		}
 	} catch (ex) { 
 		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-toggleMenuAnimations=" + ex.message);
+	}
+}
+
+WTWJS.prototype.avatarAnimationMode = function(zmode) {
+	/* selects the animation mode */
+	try {
+		WTW.animationSet = zmode;
+		if (zmode == 'fight') {
+			dGet('wtw_animationmodenormal').className = 'wtw-animationmode';
+			dGet('wtw_animationmodefight').className = 'wtw-animationmodeselected';
+			var zanimbuttons = document.getElementsByClassName('wtw-animationicondiv');
+			for (var i=0;i < zanimbuttons.length;i++) {
+				if (zanimbuttons[i].id.indexOf('fight') > -1) {
+					WTW.showInline(zanimbuttons[i].id);
+				}
+			}
+		} else {
+			dGet('wtw_animationmodefight').className = 'wtw-animationmode';
+			dGet('wtw_animationmodenormal').className = 'wtw-animationmodeselected';
+			var zanimbuttons = document.getElementsByClassName('wtw-animationicondiv');
+			for (var i=0;i < zanimbuttons.length;i++) {
+				if (zanimbuttons[i].id.indexOf('fight') > -1) {
+					WTW.hide(zanimbuttons[i].id);
+				}
+			}
+		}
+	} catch (ex) { 
+		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarAnimationMode=" + ex.message);
 	}
 }
 

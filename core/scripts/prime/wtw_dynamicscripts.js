@@ -448,7 +448,7 @@ WTWJS.prototype.checkAnimationSet = function(zavatar, zevent, zanimationset) {
 							if (zanimationset != '') {
 								zweightkey = zevent + "-" + zanimationset;
 							}
-							if (zavatar.WTW.animations.running[zweightkey] != null) {
+							if (zavatar.WTW.animations.running[zweightkey] != undefined) {
 								zevent = zweightkey;
 							}
 						}
