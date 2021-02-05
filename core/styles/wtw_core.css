@@ -1580,9 +1580,9 @@ a.wtw-helplink2:hover {
 	z-index:8999;
 	position:absolute;
 	bottom:31px;
+	min-height: 180px;
 	min-width:280px;
-	min-height: 140px;
-	max-width:540px;
+	max-width:865px;
 	white-space:nowrap;
 	text-align:center;
 	background-color:#111111;
@@ -1595,10 +1595,38 @@ a.wtw-helplink2:hover {
 	text-align:center;
 	white-space:nowrap;
 	min-width:280px;
-	max-width:540px;
-	min-height: 120px;
+	max-width:865px;
+	height: 140px;
 	overflow-y:hidden;
 	overflow-x:auto;
+}
+.wtw-avataranimationmode {
+	display:inline-block;
+	margin-left:40px;
+}
+.wtw-animationmode {
+	display:inline-block;
+	color:#000000;
+	background-color:#c0c0c0;
+	border:1px solid #000000;
+	border-radius:10px;
+	padding:4px;
+	margin-left:10px;
+	cursor:default;
+}
+.wtw-animationmode:hover {
+	background-color:#FEFFCE;
+	cursor:pointer;
+}
+.wtw-animationmodeselected {
+	display:inline-block;
+	color:#52821F;
+	background-color:#FFFFFF;
+	border:1px solid #52821F;
+	border-radius:10px;
+	padding:4px;
+	margin-left:10px;
+	cursor:default;
 }
 .wtw-deleteanimicon {
 	margin:0px 0px 0px 5px;

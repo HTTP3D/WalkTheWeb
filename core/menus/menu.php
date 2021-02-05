@@ -262,7 +262,7 @@
 </div>
 <div id="wtw_menuoptionalanimations" class="wtw-slideupanimations" style="display:none;visibility:hidden;">
 	<img class="wtw-closeright" onclick="WTW.hide('wtw_menuoptionalanimations');" src="/content/system/images/menuclose.png" alt="Close Animations" title="Close Animations" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
-	<div class="wtw-menuheading">Press and Hold to Play</div>
+	<div class="wtw-menuheading" style="text-align:left;">Press and Hold to Play<div id="wtw_avataranimationmode" class="wtw-avataranimationmode">Mode:<div id="wtw_animationmodenormal" class="wtw-animationmodeselected" onclick="WTW.avatarAnimationMode('');">Normal</div><div id="wtw_animationmodefight" class="wtw-animationmode" style="display:none;visibility:hidden;" onclick="WTW.avatarAnimationMode('fight');">Fight</div></div></div>
 	<div class="wtw-horizontalscroll" id="wtw_listoptionalanimations"></div>
 </div>
 <?php
