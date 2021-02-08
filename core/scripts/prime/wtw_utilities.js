@@ -1862,8 +1862,9 @@ WTWJS.prototype.transformPosition = function(zmolddef, zposx, zposy, zposz) {
 		if (zmolddef.actionzoneid != "") {
 			for (var j = 0; j < WTW.actionZones.length; j++) {
 				if (WTW.actionZones[j] != null) {
-					if (WTW.actionZones[j].actionzoneid == zmolddef.actionzoneid && (WTW.actionZones[j].actionzonetype == "door" || WTW.actionZones[j].actionzonetype == "slidingdoor" || WTW.actionZones[j].actionzonetype == "clickactivatedslidingdoor" || WTW.actionZones[j].actionzonetype == "swingingdoor" || WTW.actionZones[j].actionzonetype == "rotate" || WTW.actionZones[j].actionzonetype == "elevator" || WTW.actionZones[j].actionzonetype == "driverturnangle" || WTW.actionZones[j].actionzonetype == "driverturningwheel" || WTW.actionZones[j].actionzonetype == "driverwheel")) {
-						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + WTW.actionZones[j].actionzonetype);
+					var zactionzonetype = WTW.actionZones[j].actionzonetype;
+					if (WTW.actionZones[j].actionzoneid == zmolddef.actionzoneid && (zactionzonetype == "door" || zactionzonetype == "slidingdoor" || zactionzonetype == "clickactivatedslidingdoor" || zactionzonetype == "swingingdoor" || zactionzonetype == "rotate" || zactionzonetype == "elevator" || zactionzonetype == "driverturnangle" || zactionzonetype == "driverturningwheel" || zactionzonetype == "driverwheel")) {
+						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + zactionzonetype);
 						if (zactionzoneaxlebase != null) {
 							zposx -= zactionzoneaxlebase.position.x;
 							zposy -= zactionzoneaxlebase.position.y;
@@ -1889,15 +1890,15 @@ WTWJS.prototype.transformPosition = function(zmolddef, zposx, zposy, zposz) {
 								//rotz -= WTW.getDegrees(zparentactionzoneaxlebase.rotation.z);
 							}
 						}
-					} else if (WTW.actionZones[j].actionzoneid == zmolddef.actionzoneid && WTW.actionZones[j].actionzonetype == "peoplemover") {
-						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + WTW.actionZones[j].actionzonetype);
+					} else if (WTW.actionZones[j].actionzoneid == zmolddef.actionzoneid && zactionzonetype == "peoplemover") {
+						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + zactionzonetype);
 						if (zactionzoneaxlebase != null) {
 							zposx -= zactionzoneaxlebase.position.x;
 							zposy -= zactionzoneaxlebase.position.y;
 							zposz -= zactionzoneaxlebase.position.z;
 						}
-					} else if (WTW.actionZones[j].actionzoneid == zmolddef.actionzoneid && WTW.actionZones[j].actionzonetype.indexOf("seat") > -1) {
-						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + WTW.actionZones[j].actionzonetype);
+					} else if (WTW.actionZones[j].actionzoneid == zmolddef.actionzoneid && zactionzonetype.indexOf("seat") > -1) {
+						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + zactionzonetype);
 						if (zactionzoneaxlebase != null) {
 							zposx -= zactionzoneaxlebase.position.x;
 							zposy -= zactionzoneaxlebase.position.y;

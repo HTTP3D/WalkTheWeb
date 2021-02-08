@@ -377,11 +377,12 @@ WTWJS.prototype.setMoldActionZoneParent = function(zmolds, zmoldind) {
 			for (var j = 0; j < WTW.actionZones.length; j++) {
 				if (WTW.actionZones[j] != null) {
 					if (WTW.actionZones[j].parentname == zmolds[zmoldind].parentname) {
-						if (WTW.actionZones[j].actionzoneid == zmolds[zmoldind].actionzoneid && (WTW.actionZones[j].actionzonetype == "door" || WTW.actionZones[j].actionzonetype == "swingingdoor" || WTW.actionZones[j].actionzonetype == "slidingdoor" || WTW.actionZones[j].actionzonetype == "clickactivatedslidingdoor" || WTW.actionZones[j].actionzonetype == "peoplemover" || WTW.actionZones[j].actionzonetype == "rotate" || WTW.actionZones[j].actionzonetype == "elevator" || WTW.actionZones[j].actionzonetype == "driverturnangle" || WTW.actionZones[j].actionzonetype == "driverwheel")) {
+						var zactionzonetype = WTW.actionZones[j].actionzonetype;
+						if (WTW.actionZones[j].actionzoneid == zmolds[zmoldind].actionzoneid && (zactionzonetype == "door" || zactionzonetype == "swingingdoor" || zactionzonetype == "slidingdoor" || zactionzonetype == "clickactivatedslidingdoor" || zactionzonetype == "peoplemover" || zactionzonetype == "rotate" || zactionzonetype == "elevator" || zactionzonetype == "driverturnangle" || zactionzonetype == "driverwheel")) {
 							zparentname = WTW.actionZones[j].moldname.replace("actionzone-", "actionzoneaxlebase2-");
-						} else if (WTW.actionZones[j].actionzoneid == zmolds[zmoldind].actionzoneid && WTW.actionZones[j].actionzonetype.indexOf("seat") > -1) {
+						} else if (WTW.actionZones[j].actionzoneid == zmolds[zmoldind].actionzoneid && zactionzonetype.indexOf("seat") > -1) {
 							zparentname = WTW.actionZones[j].moldname.replace("actionzone-", "actionzoneaxlebase-");
-						} else if (WTW.actionZones[j].actionzoneid == zmolds[zmoldind].actionzoneid && WTW.actionZones[j].actionzonetype == "driverturningwheel") {
+						} else if (WTW.actionZones[j].actionzoneid == zmolds[zmoldind].actionzoneid && WTW.actionZones[j].zactionzonetype == "driverturningwheel") {
 							zparentname = WTW.actionZones[j].moldname.replace("actionzone-", "actionzoneaxle2-");
 						}
 						if (WTW.actionZones[j].attachmoldid == zmolds[zmoldind].moldid) {
