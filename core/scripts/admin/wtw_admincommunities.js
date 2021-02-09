@@ -1226,6 +1226,7 @@ WTWJS.prototype.snapshot3D = async function(zfilepath, zfilename) {
 		
 		dGet('wtw_tfilename').value = zfilename;
 		dGet('wtw_tfilepath').value = zfilepath;
+
 		var zcontext = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
 		scene.render();
 		var zfiledata = canvas.toDataURL("image/png");
@@ -1326,21 +1327,21 @@ WTWJS.prototype.updateSnapshot3D = function(zcommunityid, zbuildingid, zthingid,
 				}
 			}
 		}
-		if (avatarid != '') {
-			/* update snapshot on avatar snapshot form */
-			if (zsnapshotpath != "") {
-				dGet('wtw_defaultsnapshot').src = zsnapshotpath + "?" + WTW.getRandomString(5);
-			} else {
-				dGet('wtw_defaultsnapshot').src = zfiledata;
+		/* update snapshot on snapshot form */
+		if (zsnapshotpath != "") {
+			dGet('wtw_defaultsnapshot').src = zsnapshotpath + "?" + WTW.getRandomString(5);
+		} else {
+			dGet('wtw_defaultsnapshot').src = zfiledata;
+		}
+		dGet('wtw_defaultsnapshot').style.display = "block";
+		dGet('wtw_defaultsnapshot').style.visibility = "visible";
+		dGet('wtw_bupdatesnapshot').onclick = function(){
+			if (WTW.adminView == 1) {
+				WTW.adminMenuItemSelected(this);
 			}
-			dGet('wtw_defaultsnapshot').style.display = "block";
-			dGet('wtw_defaultsnapshot').style.visibility = "visible";
-			dGet('wtw_bupdatesnapshot').onclick = function(){
-				if (WTW.adminView == 1) {
-					WTW.adminMenuItemSelected(this);
-				}
-			};
-			dGet('wtw_bupdatesnapshot').innerHTML = "Set Default Snapshot";
+		};
+		dGet('wtw_bupdatesnapshot').innerHTML = "Set Default Snapshot";
+		if (avatarid != '') {
 			/* update snapshot on avatar share form */
 			if (zsnapshotpath != "") {
 				dGet('wtw_defaultavatarsnapshot').src = zsnapshotpath + "?" + WTW.getRandomString(5);
@@ -1354,6 +1355,7 @@ WTWJS.prototype.updateSnapshot3D = function(zcommunityid, zbuildingid, zthingid,
 			};
 			dGet('wtw_bsnapshotavatar').innerHTML = "Set Default Snapshot";
 		} else {
+			/* update snapshot on community, building, and thing forms */
 			dGet('wtw_bsnapshotthing').onclick = function(){
 				WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/things/' + dGet('wtw_tthingid').value + '/snapshots/', 'defaultthing.png');
 			};
