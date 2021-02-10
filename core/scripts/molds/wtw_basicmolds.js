@@ -341,7 +341,7 @@ WTWJS.prototype.addMoldSimpleTextBox = function(zmoldname, zmolddef, zlenx, zlen
 		zbasicmold1.scaling.z = 1;
 		zbasicmold1.rotation.x = -90;
 		zbasicmold1.subdivisions = 12;
-		zbasicmold1.webtext.webtext = zwebtext;
+		zbasicmold1.webtext.webtext = WTW.encode(zwebtext);
 		zbasicmold1.graphics.texture.id = zwebimageid;
 		zbasicmold1.parentname = zmoldname;
 		zbasicmold1.checkcollisions = "1";
@@ -1434,6 +1434,39 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 									if (zmeshname.indexOf("WireFrame") > -1) {
 										zresults.meshes[i].material.wireframe = true;
 									}
+/*
+									/ * set custom colors to avatar parts * /
+									let zdiffusecolor = '#ffffff';
+									let zemissivecolor = '#000000';
+									let zspecularcolor = '#000000';
+									let zambientcolor = '#ffffff';
+									if (zmolddef.color.diffusecolor != undefined) {
+										zdiffusecolor = zmolddef.color.diffusecolor;
+									}
+									if (zmolddef.color.emissivecolor != undefined) {
+										zemissivecolor = zmolddef.color.emissivecolor;
+									}
+									if (zmolddef.color.specularcolor != undefined) {
+										zspecularcolor = zmolddef.color.specularcolor;
+									}
+									if (zmolddef.color.ambientcolor != undefined) {
+										zambientcolor = zmolddef.color.ambientcolor;
+									}
+									
+									if (zresults.meshes[i].material != null) {
+										/ * set the color values * /
+										zresults.meshes[i].material.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
+										zresults.meshes[i].material.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
+										zresults.meshes[i].material.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
+										zresults.meshes[i].material.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
+										/ * refresh the materials to apply colors * /
+										var zcovering = zresults.meshes[i].material;
+										zresults.meshes[i].material.dispose();
+										zresults.meshes[i].material = zcovering;
+									}
+*/
+
+
 									/* make sure chile meshes are pickable */
 									zresults.meshes[i].isPickable = true;
 									WTW.registerMouseOver(zresults.meshes[i]);
@@ -1561,7 +1594,7 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 		zscalemold.parent = zmold;
 		var zwebtext = "";
 		if (zmolddef.webtext.webtext != undefined) {
-			zwebtext = zmolddef.webtext.webtext;
+			zwebtext = WTW.decode(zmolddef.webtext.webtext);
 		}
 		var zscrollpos = 0;
 		if (WTW.isNumeric(zmolddef.position.scroll)) {
@@ -1838,7 +1871,7 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		
 		var zwebtext = "";
 		if (zmolddef.webtext.webtext != undefined) {
-			zwebtext = zmolddef.webtext.webtext;
+			zwebtext = WTW.decode(zmolddef.webtext.webtext);
 		}
 		if (zwebtext == "") {
 			zwebtext = "<div style=\"color:green;\">Click Here to Post</div>";

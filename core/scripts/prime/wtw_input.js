@@ -43,6 +43,8 @@ WTWJS.prototype.touchDown = function(zevent) {
 	try {
 		WTW.isMouseDown = 0;
 		WTW.canvasFocus = 1;
+		WTW.clearSelectedMold();
+		WTW.clearSelectedMold();
 		//scene.activeCamera = scene.activeCameras[0];
 		if (zevent.originalEvent != undefined) {
 			if (zevent.originalEvent.touches != undefined) {
@@ -204,14 +206,17 @@ WTWJS.prototype.keyDown = function(zevent) {
 			zevent.preventDefault();
 			document.querySelector("#wtw_renderCanvas").requestFullscreen();
 		}
+		if (zevent.keyCode == 27) {
+			WTW.clearSelectedMold();
+		}
 		if (WTW.adminView == 1 && (zctrl || zevent.keyCode == 27)) {
 			WTW.adminMenuQuickKeys(zevent.keyCode);
 		} else if (WTW.canvasFocus == 1 && WTW.placeHolder == 0) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}
-			WTW.keyPressedAdd(zevent.keyCode);
 			if (WTW.selectedMoldName != "") {
+				/* user is interacting with a mesh and should not move on key pressed - click on something else to resume movement */
 				if (WTW.selectedMoldName.indexOf("-") > -1) {
 					if (WTW.selectedMoldName.indexOf("-scrollboxbodytext") > -1) {
 						var zscrollboxbodytext = scene.getMeshByID(WTW.selectedMoldName);
@@ -220,14 +225,15 @@ WTWJS.prototype.keyDown = function(zevent) {
 							zscrollboxbodytext.WTW.webtext.webtext = WTW.processKey(zscrollboxbodytext.WTW.webtext.webtext, zevent);
 							var zscrollpos = Number(zscrollboxbodytext.WTW.webtext.scrollpos);
 							WTW.scrollBoxRepaint(WTW.selectedMoldName.replace("-scrollboxbodytext",""), zscrollpos);
+							zevent.preventDefault();
 						}
 					}
+					WTW.pluginsKeyDownSelectedMold(zevent);
 				}
-				zevent.preventDefault();
 			} else {
+				WTW.keyPressedAdd(zevent.keyCode);
 				return true;
 			}
-			
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_input.js-keyDown=" + ex.message);
@@ -354,6 +360,7 @@ WTWJS.prototype.mouseClick = function(zevent) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}
+			WTW.clearSelectedMold();
 			if (zevent.clientX != undefined) {
 				WTW.mouseStartX = zevent.clientX; 
 				WTW.mouseStartY = zevent.clientY;
@@ -402,6 +409,7 @@ WTWJS.prototype.mouseRight = function(zevent) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}
+			WTW.clearSelectedMold();
 			if (WTW.adminView == 1) {
 				WTW.mouseClickRightAdmin(zevent);
 				return false;
@@ -703,6 +711,18 @@ WTWJS.prototype.mouseOutMold = function(zmold) {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_input.js-mouseOutMold=" + ex.message);
+	}
+}
+
+WTWJS.prototype.clearSelectedMold = function () {
+	/* selected mold pauses keyboard avatar movement - clearing will allow avatar to move again with the keyboard */
+	try {
+		/* allow plugins to clear items before the selected mold is cleared */
+		WTW.pluginsClearSelectedMold();
+		/* clear the selected mold */
+		WTW.selectedMoldName = '';
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_input.js-clearSelectedMold=" + ex.message);
 	}
 }
 

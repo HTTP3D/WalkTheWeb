@@ -512,7 +512,6 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 								results.meshes[i].isVisible = false;
 								
 								/* set custom colors to avatar parts */
-								
 								let zdiffusecolor = '#ffffff';
 								let zemissivecolor = '#000000';
 								let zspecularcolor = '#000000';
@@ -541,10 +540,9 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 								
 								
 								if (results.meshes[i].material != null) {
-									/* emissive and specular currently share colors */
+									/* set the color values */
 									results.meshes[i].material.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
 									results.meshes[i].material.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
-									/* diffuse and ambient currently share colors */
 									results.meshes[i].material.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
 									results.meshes[i].material.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
 									/* refresh the materials to apply colors */

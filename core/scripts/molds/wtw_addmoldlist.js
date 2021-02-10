@@ -1423,6 +1423,7 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 		WTW.show('wtw_moldbumptextureset2div');
 		WTW.show('wtw_alttagdiv');
 		WTW.hide('wtw_moldwebtextdiv');
+		WTW.hide('wtw_moldwebtextcolordiv');
 		WTW.hide('wtw_moldaddvideodiv');
 		WTW.hide('wtw_terrainheightdiv');
 		WTW.hide('wtw_moldheightmapdiv');
@@ -1949,6 +1950,7 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturesetdiv');
 				WTW.show('wtw_moldwebtextdiv');
+				WTW.show('wtw_moldwebtextcolordiv');
 				break;
 			case "image":
 				dGet('wtw_moldpositiontitle').innerHTML = "Position";

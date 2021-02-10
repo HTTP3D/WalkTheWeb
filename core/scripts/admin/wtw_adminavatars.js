@@ -706,13 +706,13 @@ WTWJS.prototype.openEditAvatarColors = function(zselectedavatarpart) {
 								zavatarpartslist += "<div id=\"wtw_beditavatarpartdiv-" + zavatarpart.avatarpartid + "\" class=\"wtw-colorlist\" style=\"display:none;visibility:hidden;\">\r\n";
 
 								zavatarpartslist += "<div class=\"wtw-clear\"></div><br />\r\n";
+								zavatarpartslist += "<div class=\"wtw-colorlistitem\"><input type=\"text\" id=\"wtw_tavataremissivecolor-" + zavatarpart.avatarpartid + "\" maxlength=\"16\" class=\"wtw-colorlistvalue wtw-smallprintinput\" value=\"" + zavatarpart.emissivecolor + "\"  onfocus=\"WTW.openAvatarColorSelector('" + zavatarpart.avatarpartid + "', '" + zavatarpart.avatarpart + "');\" onblur=\"WTW.closeAvatarColorSelector(false);WTW.setAvatarColorByText('" + zavatarpart.avatarpartid + "', '" + zavatarpart.avatarpart + "');\"/>Emissive Color</div>\r\n";
+
+								zavatarpartslist += "<div class=\"wtw-clear\"></div><br />\r\n";
 								zavatarpartslist += "<div class=\"wtw-colorlistitem\"><input type=\"text\" id=\"wtw_tavatardiffusecolor-" + zavatarpart.avatarpartid + "\" maxlength=\"16\" class=\"wtw-colorlistvalue wtw-smallprintinput\" value=\"" + zavatarpart.diffusecolor + "\" onfocus=\"WTW.openAvatarColorSelector('" + zavatarpart.avatarpartid + "', '" + zavatarpart.avatarpart + "');\" onblur=\"WTW.closeAvatarColorSelector(false);WTW.setAvatarColorByText('" + zavatarpart.avatarpartid + "', '" + zavatarpart.avatarpart + "');\" />Diffuse Color</div>\r\n";
 
 								zavatarpartslist += "<div class=\"wtw-clear\"></div><br />\r\n";
 								zavatarpartslist += "<div class=\"wtw-colorlistitem\"><input type=\"text\" id=\"wtw_tavatarspecularcolor-" + zavatarpart.avatarpartid + "\" maxlength=\"16\" class=\"wtw-colorlistvalue wtw-smallprintinput\" value=\"" + zavatarpart.specularcolor + "\" onfocus=\"WTW.openAvatarColorSelector('" + zavatarpart.avatarpartid + "', '" + zavatarpart.avatarpart + "');\" onblur=\"WTW.closeAvatarColorSelector(false);WTW.setAvatarColorByText('" + zavatarpart.avatarpartid + "', '" + zavatarpart.avatarpart + "');\" />Specular Color</div>\r\n";
-
-								zavatarpartslist += "<div class=\"wtw-clear\"></div><br />\r\n";
-								zavatarpartslist += "<div class=\"wtw-colorlistitem\"><input type=\"text\" id=\"wtw_tavataremissivecolor-" + zavatarpart.avatarpartid + "\" maxlength=\"16\" class=\"wtw-colorlistvalue wtw-smallprintinput\" value=\"" + zavatarpart.emissivecolor + "\"  onfocus=\"WTW.openAvatarColorSelector('" + zavatarpart.avatarpartid + "', '" + zavatarpart.avatarpart + "');\" onblur=\"WTW.closeAvatarColorSelector(false);WTW.setAvatarColorByText('" + zavatarpart.avatarpartid + "', '" + zavatarpart.avatarpart + "');\"/>Emissive Color</div>\r\n";
 
 								zavatarpartslist += "<div class=\"wtw-clear\"></div><br />\r\n";
 								zavatarpartslist += "<div class=\"wtw-colorlistitem\"><input type=\"text\" id=\"wtw_tavatarambientcolor-" + zavatarpart.avatarpartid + "\" maxlength=\"16\" class=\"wtw-colorlistvalue wtw-smallprintinput\" value=\"" + zavatarpart.ambientcolor + "\" onfocus=\"WTW.openAvatarColorSelector('" + zavatarpart.avatarpartid + "', '" + zavatarpart.avatarpart + "');\" onblur=\"WTW.closeAvatarColorSelector(false);WTW.setAvatarColorByText('" + zavatarpart.avatarpartid + "', '" + zavatarpart.avatarpart + "');\" />Ambient Color</div>\r\n";
@@ -768,7 +768,7 @@ WTWJS.prototype.openAvatarColorSelector = function(zavatarpartid, zavatarpart) {
 		var zmold = scene.getMeshByID(zmoldname);
 		if (zmold != null) {
 			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
-			
+
 			if (WTW.guiAdminColors != null) {
 				WTW.guiAdminColors.dispose();
 				WTW.guiAdminColors = null;
@@ -780,6 +780,26 @@ WTWJS.prototype.openAvatarColorSelector = function(zavatarpartid, zavatarpart) {
 			zpanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
 			zpanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 			WTW.guiAdminColors.addControl(zpanel);
+
+			var zcoloremissivetitle = new BABYLON.GUI.TextBlock();
+			zcoloremissivetitle.text = "Emissive Color";
+			zcoloremissivetitle.color = "#FFFFFF";
+			zcoloremissivetitle.fontSize = 20;
+			zcoloremissivetitle.height = "50px";
+			zpanel.addControl(zcoloremissivetitle);     
+
+			var zcoloremissive = new BABYLON.GUI.ColorPicker();
+			zcoloremissive.value = zmold.material.emissiveColor;
+			zcoloremissive.height = "150px";
+			zcoloremissive.width = "150px";
+			zcoloremissive.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+			zcoloremissive.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+			zcoloremissive.onValueChangedObservable.add(function(value) {
+				if (value != null) {
+					WTW.setAvatarColor(zavatarpart, zavatarpartid, 'emissive', value.r, value.g, value.b);
+				}
+			});
+			zpanel.addControl(zcoloremissive); 
 
 			var zcolordiffusetitle = new BABYLON.GUI.TextBlock();
 			zcolordiffusetitle.text = "Diffuse Color";
@@ -820,26 +840,6 @@ WTWJS.prototype.openAvatarColorSelector = function(zavatarpartid, zavatarpart) {
 				}
 			});
 			zpanel.addControl(zcolorspecular); 
-
-			var zcoloremissivetitle = new BABYLON.GUI.TextBlock();
-			zcoloremissivetitle.text = "Emissive Color";
-			zcoloremissivetitle.color = "#FFFFFF";
-			zcoloremissivetitle.fontSize = 20;
-			zcoloremissivetitle.height = "50px";
-			zpanel.addControl(zcoloremissivetitle);     
-
-			var zcoloremissive = new BABYLON.GUI.ColorPicker();
-			zcoloremissive.value = zmold.material.emissiveColor;
-			zcoloremissive.height = "150px";
-			zcoloremissive.width = "150px";
-			zcoloremissive.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-			zcoloremissive.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-			zcoloremissive.onValueChangedObservable.add(function(value) {
-				if (value != null) {
-					WTW.setAvatarColor(zavatarpart, zavatarpartid, 'emissive', value.r, value.g, value.b);
-				}
-			});
-			zpanel.addControl(zcoloremissive); 
 
 			var zcolorambienttitle = new BABYLON.GUI.TextBlock();
 			zcolorambienttitle.text = "Ambient Color";

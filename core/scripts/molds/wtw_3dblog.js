@@ -523,17 +523,44 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 	/* add 3d mold text */
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
-		var ztransparentmat = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		ztransparentmat.alpha = 0;
-		zmold.material = ztransparentmat;
-		var zwebtext = zmolddef.webtext.webtext;
-		var zwebstyle = zmolddef.webtext.webstyle;
+		zmold = scene.getMeshByID(zmoldname);
+		if (zmold == null) {
+			zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
+			zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+			var ztransparentmat = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+			ztransparentmat.alpha = 0;
+			zmold.material = ztransparentmat;
+		}
+		var zwebtext = WTW.decode(zmolddef.webtext.webtext);
+		var zwebstyle = WTW.decode(zmolddef.webtext.webstyle);
 		if (zwebtext == null || zwebtext == '') {
 			zwebtext = '-';
 		}
 		if (zwebstyle == null || zwebstyle == '') {
+			var zemissivecolor = '#ff0000';
+			var zdiffusecolor = '#f0f0f0';
+			var zspecularcolor = '#000000';
+			var zambientcolor = '#808080';
+			if (zmolddef.color.emissivecolor != undefined) {
+				if (zmolddef.color.emissivecolor != '') {
+					zemissivecolor = zmolddef.color.emissivecolor;
+				}
+			}
+			if (zmolddef.color.diffusecolor != undefined) {
+				if (zmolddef.color.diffusecolor != '') {
+					zdiffusecolor = zmolddef.color.diffusecolor;
+				}
+			}
+			if (zmolddef.color.specularcolor != undefined) {
+				if (zmolddef.color.specularcolor != '') {
+					zspecularcolor = zmolddef.color.specularcolor;
+				}
+			}
+			if (zmolddef.color.ambientcolor != undefined) {
+				if (zmolddef.color.ambientcolor != '') {
+					zambientcolor = zmolddef.color.ambientcolor;
+				}
+			}
 			zwebstyle = {
 				"anchor":"center",
 				"letter-height":6.00,
@@ -541,15 +568,16 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 				"color":"#ff0000",
 				"alpha":1.00,
 				"colors":{
-					"diffuse":"#f0f0f0",
-					"specular":"#000000",
-					"ambient":"#808080",
-					"emissive":"#ff0000"
+					"diffuse":zdiffusecolor,
+					"specular":zspecularcolor,
+					"ambient":zambientcolor,
+					"emissive":zemissivecolor
 				}
 			};
 		} else {
 			zwebstyle = JSON.parse(zwebstyle);
 		}
+		WTW.disposeClean(zmoldname + "-text");
 		Writer = BABYLON.MeshWriter(scene, {scale:1});
         var zdisplaytext  = new Writer(zwebtext, zwebstyle);
 		var zmytext = zdisplaytext.getMesh();
@@ -1188,7 +1216,7 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 					if (zscrollboxbodytext != null) {
 						zscrollboxbodytext.WTW.webtext.scrollpos = zscrollpos;
 						if (zmolds[zmoldind].webtext.webtext != undefined) {
-							zwebtext = zmolds[zmoldind].webtext.webtext;
+							zwebtext = WTW.decode(zmolds[zmoldind].webtext.webtext);
 						}
 						
 						if (zscrollboxbodytext.WTW.webtext.webtext != zwebtext) {

@@ -374,7 +374,7 @@ function WTWJS() {
 	/* WTW.lastID - last hovered mold name */
 	this.lastID = "";
 	
-	/* WTW.selectedMoldName - currently selected mold used for interacting with it (example: selct fill in the blank - adds text to mold). */
+	/* WTW.selectedMoldName - currently selected mold used for interacting with it (example: select fill in the blank - adds text to mold). */
 	this.selectedMoldName = "";
 	
 	/* temp global variables used to sync 2 animations in the demo scene (depreciated and will be removed soon) */

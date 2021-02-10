@@ -221,7 +221,8 @@ WTWJS.prototype.setShadowSettings = function() {
 		WTW.shadows = new BABYLON.ShadowGenerator(zshadowresolution, WTW.sun);
 		WTW.shadows.depthScale = 20000;
 		WTW.shadows.setDarkness(0);
-		WTW.shadows.bias = 0.0005;
+		WTW.shadows.bias = 0.01;
+		WTW.shadows.usePercentageCloserFiltering = true;
 		
 //		WTW.shadows.useKernelBlur = true;
 //		WTW.shadows.blurKernel = 64;
