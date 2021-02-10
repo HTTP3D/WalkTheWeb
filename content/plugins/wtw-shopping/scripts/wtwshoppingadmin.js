@@ -259,7 +259,7 @@ wtwshopping.prototype.openAdminStoreObjects = function() {
 		
 		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "storecategories\" name=\"wtw_badd" + zwebtype + "storecategories\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','storecategories');\" class='wtw-menulevel2'>Store Categories</div>\r\n";
 
-		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "storesearch\" name=\"wtw_badd" + zwebtype + "storesearch\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','storesearch');\" class='wtw-menulevel2'>Product Search</div>\r\n";
+		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "productsearch\" name=\"wtw_badd" + zwebtype + "productsearch\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','productsearch');\" class='wtw-menulevel2'>Product Search</div>\r\n";
 		
 		dGet("wtw_shopping_moldsbuttonlist").innerHTML += "<div id=\"wtw_badd" + zwebtype + "storesign\" name=\"wtw_badd" + zwebtype + "storesign\" onclick=\"WTW.openAddNewMold('" + zwebtype + "','storesign');\" class='wtw-menulevel2'>Store Sign Boxed</div>\r\n";
 

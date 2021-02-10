@@ -103,10 +103,11 @@ class wtwshopping {
 				
 				/* hook plugin admin script functions into existing wtw functions */
 				$wtwplugins->addScriptFunction("setnewmold", "WTWShopping.setNewMold(zmoldname, zmolds, zmoldind, zrebuildmold);");
+				$wtwplugins->addScriptFunction("setcolor", "WTWShopping.setColor(zmoldname, zcolorgroup, zemissivecolor, zdiffusecolor, zspecularcolor, zambientcolor);");
 				$wtwplugins->addScriptFunction("openaddnewmold", "WTWShopping.openAddNewMold(zwebtype, zshape, zmoldname);");
 				$wtwplugins->addScriptFunction("setnewmolddefaults", "WTWShopping.setNewMoldDefaults(zshape);");
 				$wtwplugins->addScriptFunction("setmoldformfields", "WTWShopping.setMoldFormFields(zshape);");
-				$wtwplugins->addScriptFunction("openmoldform", "WTWShopping.openMoldForm(zmoldname, zmolds, zmoldind, zshape);");
+				$wtwplugins->addScriptFunction("openmoldform", "WTWShopping.openMoldForm(zmoldname, zmoldind, zshape, zwebtype);");
 				$wtwplugins->addScriptFunction("loadmoldform", "WTWShopping.loadMoldForm(zwebtype, zshape, zmoldname);");
 				$wtwplugins->addScriptFunction("submitmoldform", "WTWShopping.submitMoldForm(zselect);");
 				$wtwplugins->addScriptFunction("cleareditmold", "WTWShopping.clearEditMold();");
@@ -132,7 +133,9 @@ class wtwshopping {
 			$wtwplugins->addScriptFunction("onclick", "WTWShopping.onClick(zpickedname);");
 			$wtwplugins->addScriptFunction("checkhovers", "WTWShopping.checkHovers(zmoldname, zshape);");
 			$wtwplugins->addScriptFunction("resethovers", "WTWShopping.resetHovers(zmoldname, zshape);");
-			$wtwplugins->addScriptFunction("opencolorselector", "WTWShopping.openColorSelector(zmoldname, zshape, zcolortype);");
+			$wtwplugins->addScriptFunction("opencolorselector", "WTWShopping.openColorSelector(zmold, zmoldname, zshape, zcolorgroup);");
+			$wtwplugins->addScriptFunction("keydownselectedmold", "WTWShopping.keyDownSelectedMold(zevent);");
+			$wtwplugins->addScriptFunction("clearselectedmold", "WTWShopping.clearSelectedMold();");
 
 			$wtwplugins->addScriptFunction("moldqueueadd", "WTWShopping.moldQueueAdd(zmoldname, zmold);");
 
@@ -151,7 +154,7 @@ class wtwshopping {
 			$wtwplugins->addMoldDef("Store 3D Sign", "custom", "WTWShopping.addMoldStore3DSign(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 			$wtwplugins->addMoldDef("Store View Cart", "custom", "WTWShopping.addMoldStoreViewCart(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 			$wtwplugins->addMoldDef("Store Categories", "custom", "WTWShopping.addMoldStoreCategories(zmoldname, zmolddef, zlenx, zleny, zlenz);");
-			$wtwplugins->addMoldDef("Store Search", "custom", "WTWShopping.addMoldStoreSearch(zmoldname, zmolddef, zlenx, zleny, zlenz);");
+			$wtwplugins->addMoldDef("Product Search", "custom", "WTWShopping.addMoldProductSearch(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 			
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-shopping:functions-class_wtwshopping.php-initHooks=".$e->getMessage());
@@ -348,9 +351,7 @@ class wtwshopping {
 			$zformdata .= "		<select id=\"wtw_tmoldspecial1set\" onchange=\"dGet('wtw_tmoldspecial1').value=dGet('wtw_tmoldspecial1set').options[dGet('wtw_tmoldspecial1set').selectedIndex].value;WTW.setNewMold(1);\">\r\n";
 			$zformdata .= "			<option value=\"0\">Rounded Box Display (2 Sides)</option>\r\n";
 			$zformdata .= "			<option value=\"1\">Rounded Box Display (1 Side)</option>\r\n";
-			$zformdata .= "			<option value=\"2\">Retro Box No Image</option>\r\n";
-			$zformdata .= "			<option value=\"3\">Retro Box Display (2 Sided)</option>\r\n";
-			$zformdata .= "			<option value=\"4\">Box Display (2 Sided)</option>\r\n";
+			$zformdata .= "			<option value=\"2\">Rounded Box No Image</option>\r\n";
 			$zformdata .= "		</select>\r\n";
 			$zformdata .= "		<h2 style=\"margin-bottom:3px;\">Product Selection</h2>\r\n";
 			$zformdata .= "		<h4>Product Category</h4>\r\n";
@@ -367,6 +368,17 @@ class wtwshopping {
 			$zformdata .= "		<div style=\"color:#c0c0c0;\">Connect the Store in Options and Settings to select a product.</div>\r\n";
 			$zformdata .= "		<hr class=\"wtw-menuhr\" />\r\n";
 			$zformdata .= "</div>\r\n";
+
+			$zformdata .= "	<div id=\"wtw_productsearchdiv\">\r\n";
+			$zformdata .= "		<h2 style=\"margin-bottom:3px;\">Product Search Type</h2>\r\n";
+			$zformdata .= "		<select id=\"wtw_tmoldspecial1set2\" onchange=\"dGet('wtw_tmoldspecial1').value=dGet('wtw_tmoldspecial1set2').options[dGet('wtw_tmoldspecial1set2').selectedIndex].value;WTW.setNewMold(1);\">\r\n";
+			$zformdata .= "			<option value=\"0\">Search Tablet</option>\r\n";
+			$zformdata .= "			<option value=\"1\">Search Tablet with Sign</option>\r\n";
+			$zformdata .= "			<option value=\"2\">Search Kiosk</option>\r\n";
+			$zformdata .= "			<option value=\"3\">Search Kiosk with Sign</option>\r\n";
+			$zformdata .= "		</select>\r\n";
+			$zformdata .= "</div>\r\n";
+
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-shopping:functions-class_wtwshopping.php-editMoldPage=".$e->getMessage());
 		}

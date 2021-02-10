@@ -7,6 +7,7 @@ function wtwshopping() {
 	this.molds = [];
 	this.products = [];
 	this.fetchQueue = [];
+	this.textTimer = null;
 }
 
 var WTWShopping = new wtwshopping();
@@ -67,6 +68,10 @@ wtwshopping.prototype.onClick = function(zpickedname) {
 			WTWShopping.productSelectCategoryScroll(zpickedname,1);
 		} else if (zpickedname.indexOf("-storecategories") > -1 && zpickedname.indexOf("-upbutton") > -1) {
 			WTWShopping.productSelectCategoryScroll(zpickedname,-1);
+		} else if (zpickedname.indexOf("-productsearch") > -1 && zpickedname.indexOf("-searchbutton") > -1) {
+			WTWShopping.searchProducts(zpickedname);
+		} else if (zpickedname.indexOf("-productsearch") > -1 && zpickedname.indexOf("-searchtext") > -1) {
+			WTWShopping.searchProductsText(zpickedname);
 		}
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-onClick=" + ex.message);
@@ -221,7 +226,7 @@ wtwshopping.prototype.getStoreMolds = async function(zmoldname) {
 	/* and the allow search flag to decide if the product display can be overwritten by search results */
 	try {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
-		var zstore = WTWShopping.getStoreData(zmoldname);
+//		var zstore = WTWShopping.getStoreData(zmoldname);
 		/* set up the mold-store settings for first display */
 		var zmoldsloaded = WTWShopping.checkStoreMoldsLoaded(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
 		/* molds loaded: 0 means no, 1 means loading, and 2 means already fully loaded for this community, building, or thing */
@@ -312,7 +317,7 @@ wtwshopping.prototype.getStoreMolds = async function(zmoldname) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-getStoreMolds=" + ex.message);
 	}
 }
-
+/*
 wtwshopping.prototype.getStoreData = function(zmoldname) {
 	var zstore = null;
 	try {
@@ -331,7 +336,7 @@ wtwshopping.prototype.getStoreData = function(zmoldname) {
 	}
 	return zstore;
 }
-
+*/
 wtwshopping.prototype.checkStoreMoldsLoaded = function(zcommunityid, zbuildingid, zthingid) {
 	var zmoldsloaded = 0;
 	try {
@@ -1336,10 +1341,23 @@ wtwshopping.prototype.disposeClean = function(zmoldname) {
 			}
 		}
 		/* check for child parts of the 3D Model that are still in the 3D Scene and delete them */
-		if (zmoldname.indexOf('store') > -1) {
+		if (zmoldname.indexOf('store') > -1 || zmoldname.indexOf('productsearch') > -1) {
 			for (var i = 0; i < scene.meshes.length;i++) {
 				if (scene.meshes[i].name.indexOf(zmoldname) > -1) {
 					scene.meshes[i].dispose();
+				}
+			}
+		}
+		if (zmoldname.indexOf('productsearch') > -1) {
+			var zsearchtextbox = zmoldname + "-searchtext-textbox";
+			if (dGet(zsearchtextbox) != null) {
+				/* remove the hidden textbox if it exists */
+				dGet(zsearchtextbox).parentNode.removeChild(dGet(zsearchtextbox));
+				if (dGet('wtwshopping_searchboxes') != null) {
+					/* remove the div container for search boxes if it is no longer in use */
+					if (dGet('wtwshopping_searchboxes').innerHTML == '') {
+						dGet('wtwshopping_searchboxes').parentNode.removeChild(dGet('wtwshopping_searchboxes'));
+					}
 				}
 			}
 		}
@@ -1399,12 +1417,26 @@ wtwshopping.prototype.productClearForSearchResults = function(zmoldname, zconnec
 wtwshopping.prototype.getStoreInfo = async function(zmoldname) {
 	try {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
-		var zcommunityid = zmoldnameparts.communityid;
-		var zbuildingid = zmoldnameparts.buildingid;
-		var zthingid = zmoldnameparts.thingid;
-		var zstoreinfo = WTWShopping.getStoreID(zcommunityid, zbuildingid, zthingid);
-		var zbuildingname = WTW.getBuildingName(zmoldnameparts.buildingid);
-		if (zstoreinfo.woocommerceapiurl != "" && zbuildingname == '') {
+		var zstoreinfo = WTWShopping.getStoreID(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
+		var zwebname = "";
+		if (zmoldnameparts.molds[zmoldnameparts.moldind].webtext.webtext != undefined) {
+			if (zmoldnameparts.molds[zmoldnameparts.moldind].webtext.webtext != '') {
+				zwebname = WTW.decode(zmoldnameparts.molds[zmoldnameparts.moldind].webtext.webtext);
+			}
+		}
+		if (zwebname == '') {
+			try {
+				if (zstoreinfo.storename != "") {
+					zwebname = atob(zstoreinfo.storename);
+				}
+			} catch(ex) {
+			}
+		}
+		if (zwebname == '') {
+			zwebname = "Store Name";
+		}
+		zmoldnameparts.molds[zmoldnameparts.moldind].webtext.webtext = WTW.encode(zwebname);
+		if (zstoreinfo.woocommerceapiurl != "" && zwebname == '') {
 			//var zurl = zstoreinfo.storeurl + "/walktheweb/storeinfo.php?walktheweb_store_info=1"; /* new plugin */
 			var zurl = zstoreinfo.storeurl + "/storeinfo.php?walktheweb_store_info=1";
 			WTW.getAsyncJSON(zurl, 
@@ -1412,7 +1444,13 @@ wtwshopping.prototype.getStoreInfo = async function(zmoldname) {
 					WTWShopping.setStoreInfo(zmoldname, JSON.parse(zresponse));
 				}
 			);
-		} 
+		} else {
+			var zresponse = [];
+			zresponse[0] = {
+				'storename':zwebname
+			};
+			WTWShopping.setStoreInfo(zmoldname, zresponse);
+		}
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-getStoreInfo=" + ex.message);
 	}  
@@ -1612,6 +1650,26 @@ wtwshopping.prototype.setAllowSearch = function() {
 wtwshopping.prototype.openAddNewMold = function(zwebtype, zshape, zmoldname) {
 	try {
 		switch (zshape.toLowerCase()) {
+			case "storesign":
+			case "store3dsign":
+				var zstoreinfo = WTWShopping.getStoreID(communityid, buildingid, thingid);
+				if (zstoreinfo.storeid != "") {
+					WTWShopping.getStoreMolds(zmoldname);
+					var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
+					if ((zshape == "store3dsign" || zshape == "storesign") && zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
+						dGet('wtw_tmoldwebtext').value = WTW.decode(zmoldnameparts.molds[zmoldnameparts.moldind].webtext.webtext);
+						if (dGet('wtw_tmoldwebtext').value == '') {
+							try {
+								if (zstoreinfo.storename != "") {
+									dGet('wtw_tmoldwebtext').value = atob(zstoreinfo.storename);
+								}
+							} catch(ex) {
+							}
+							zmoldnameparts.molds[zmoldnameparts.moldind].webtext.webtext = WTW.encode(dGet('wtw_tmoldwebtext').value);
+						}
+					}
+				}
+				break;
 			case "storeproduct":
 			case "storeaddtocart":
 			case "storebuynow":
@@ -1759,14 +1817,37 @@ wtwshopping.prototype.loadConnectingGrids = async function(zconnectinggridind, z
 	}
 }
 
-wtwshopping.prototype.openMoldForm = function(zmoldname, zmolds, zmoldind, zshape) {
+wtwshopping.prototype.openMoldForm = function(zmoldname, zmoldind, zshape, zwebtype) {
 	try {
 		var zstoreinfo = WTWShopping.getStoreID(communityid, buildingid, thingid);
 		if (zstoreinfo.storeid != "") {
 			WTWShopping.getStoreMolds(zmoldname);
+			var zmolds;
+			switch (zwebtype) {
+				case "community":
+					zmolds = WTW.communitiesMolds;
+					break;
+				case "thing":
+					zmolds = WTW.thingMolds;
+					break;
+				default:
+					zmolds = WTW.buildingMolds;
+					break;
+			}
+			if ((zshape == "store3dsign" || zshape == "storesign") && zmolds[zmoldind] != null) {
+				dGet('wtw_tmoldwebtext').value = WTW.decode(zmolds[zmoldind].webtext.webtext);
+				if (dGet('wtw_tmoldwebtext').value == '') {
+					try {
+						if (zstoreinfo.storename != "") {
+							dGet('wtw_tmoldwebtext').value = atob(zstoreinfo.storename);
+						}
+					} catch(ex) {
+					}
+					zmolds[zmoldind].webtext.webtext = WTW.encode(dGet('wtw_tmoldwebtext').value);
+				}
+			}
 			if (zshape == "store3dsign" && zmolds[zmoldind] != null) {
-				dGet('wtw_tmoldwebtext').value = zmolds[zmoldind].webtext.webtext;
-				dGet('wtw_tmoldwebstyle').value = zmolds[zmoldind].webtext.webstyle;
+				dGet('wtw_tmoldwebstyle').value = WTW.decode(zmolds[zmoldind].webtext.webstyle);
 				var zwebstyle = dGet('wtw_tmoldwebstyle').value;
 				var zwebtextalign = 'center';
 				var zwebtextheight = 6;
@@ -1945,60 +2026,76 @@ wtwshopping.prototype.clearEditMold = function() {
 	}
 }
 
-wtwshopping.prototype.openColorSelector = function(zmoldname, zshape, zcolortype) {
+wtwshopping.prototype.openColorSelector = function(zmold, zmoldname, zshape, zcolorgroup) {
 	try {
-		switch (zcolortype) {
-			case "diffuse":
-				if (zshape == "storeproduct") {
-					WTWShopping.setColor(zmoldname + "-imageframe", 'diffuse', dGet('wtw_tmolddiffusecolor').value, dGet('wtw_tmoldemissivecolor').value, dGet('wtw_tmoldspecularcolor').value, dGet('wtw_tmoldambientcolor').value);
-				}
-				break;
-			case "specular":
-				if (zshape == "storeproduct") {
-					WTWShopping.setColor(zmoldname + "-imageframe", 'specular', dGet('wtw_tmolddiffusecolor').value, dGet('wtw_tmoldemissivecolor').value, dGet('wtw_tmoldspecularcolor').value, dGet('wtw_tmoldambientcolor').value);
-				}
-				break;
-			case "emissive":
-				if (zshape == "storeproduct") {
-					WTWShopping.setColor(zmoldname + "-imageframe", 'emissive', dGet('wtw_tmolddiffusecolor').value, dGet('wtw_tmoldemissivecolor').value, dGet('wtw_tmoldspecularcolor').value, dGet('wtw_tmoldambientcolor').value);
-				}
-				break;
-			case "ambient":
-				if (zshape == "storeproduct") {
-					WTWShopping.setColor(zmoldname + "-imageframe", 'ambient', dGet('wtw_tmolddiffusecolor').value, dGet('wtw_tmoldemissivecolor').value, dGet('wtw_tmoldspecularcolor').value, dGet('wtw_tmoldambientcolor').value);
-				}
-				break;
-		}
+		//zmold = scene.getMeshByID(zmoldname + "-text");
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-openColorSelector=" + ex.message);
 	}
+	return zmold;
 }
 
-wtwshopping.prototype.setColor = function(zmoldname, zcolortype, zdiffusecolor, zemissivecolor, zspecularcolor, zambientcolor) {
+wtwshopping.prototype.setColor = function(zmoldname, zcolorgroup, zemissivecolor, zdiffusecolor, zspecularcolor, zambientcolor) {
 	try {
 		if (WTW.adminView == 1) {
 			var zmold = scene.getMeshByID(zmoldname);
 			if (zmold != null) {
-				try {
-					if (zmold.material != undefined && zmold.material != null) {
-						WTW.disposeDirectionalTexture(zmold);
-							if (zmold.material.diffuseTexture != undefined) {
-								if (zmold.material.diffuseTexture != null) {
-									zmold.material.diffuseTexture.dispose();
-									zmold.material.diffuseTexture = null;
-								}
-							}
-						zmold.material.dispose();
-						zmold.material = null;
+				var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
+				if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
+					zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor = zemissivecolor;
+					zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor = zdiffusecolor;
+					zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor = zspecularcolor;
+					zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor = zambientcolor;
+				}
+				if (zmoldnameparts.shape == 'store3dsign') {
+					dGet('wtw_tmoldwebtextcolor').value = zemissivecolor;
+					dGet('wtw_tmoldwebtextdiffuse').value = zdiffusecolor;
+					dGet('wtw_tmoldwebtextspecular').value = zspecularcolor;
+					dGet('wtw_tmoldwebtextambient').value = zambientcolor;
+					if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
+						var zlenx = 1;
+						var zleny = 1;
+						var zlenz = 1;
+						var zopacity = 100;
+						dGet('wtw_tmoldwebstyle').value = "{\"anchor\":\"" + dGet('wtw_tmoldwebtextalign').options[dGet('wtw_tmoldwebtextalign').selectedIndex].value + "\",\"letter-height\":" + dGet('wtw_tmoldwebtextheight').value + ",\"letter-thickness\":" + dGet('wtw_tmoldwebtextthick').value + ",\"color\":\"" + zemissivecolor + "\",\"alpha\":" + zopacity/100 + ",\"colors\":{\"diffuse\":\"" + zdiffusecolor + "\",\"specular\":\"" + zspecularcolor + "\",\"ambient\":\"" + zambientcolor + "\",\"emissive\":\"" + zemissivecolor + "\"}}";
+						zmoldnameparts.molds[zmoldnameparts.moldind].webtext.webstyle = dGet('wtw_tmoldwebstyle').value;
+						
+						if (zmoldnameparts.molds[zmoldnameparts.moldind].scaling.x != undefined) {
+							zlenx = zmoldnameparts.molds[zmoldnameparts.moldind].scaling.x;
+						}
+						if (zmoldnameparts.molds[zmoldnameparts.moldind].scaling.y != undefined) {
+							zleny = zmoldnameparts.molds[zmoldnameparts.moldind].scaling.y;
+						}
+						if (zmoldnameparts.molds[zmoldnameparts.moldind].scaling.z != undefined) {
+							zlenz = zmoldnameparts.molds[zmoldnameparts.moldind].scaling.z;
+						}
+						zmold = WTW.addMold3DText(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind], zlenx, zleny, zlenz)
 					}
-				} catch (ex) {}
-				
-				var zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-				zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
-				zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
-				zcovering.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
-				zcovering.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
-				zmold.material = zcovering;
+				} else if (zmoldnameparts.shape == "storeproduct" || zmoldnameparts.shape == "storesign" || zmoldnameparts.shape == "storecategories" || zmoldnameparts.shape == "productsearch") {
+					zmold = scene.getMeshByID(zmoldname + "-imageframe");
+				}
+				if (zmold != null && zmoldname.indexOf("store") > -1 && zmoldnameparts.shape != 'store3dsign') {
+					try {
+						if (zmold.material != undefined && zmold.material != null) {
+							WTW.disposeDirectionalTexture(zmold);
+								if (zmold.material.diffuseTexture != undefined) {
+									if (zmold.material.diffuseTexture != null) {
+										zmold.material.diffuseTexture.dispose();
+										zmold.material.diffuseTexture = null;
+									}
+								}
+							zmold.material.dispose();
+							zmold.material = null;
+						}
+					} catch (ex) {}
+					
+					var zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+					zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
+					zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
+					zcovering.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
+					zcovering.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
+					zmold.material = zcovering;
+				}
 			}
 		}
 	} catch (ex) {
@@ -2018,5 +2115,209 @@ wtwshopping.prototype.moldQueueAdd = function(zmoldname, zmold) {
 		}
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-moldQueueAdd=" + ex.message);
+	}
+}
+
+wtwshopping.prototype.searchProducts = async function(zmoldname) {
+	/* process to retrieve products when search button is pressed */
+	try {
+		var zinputid = zmoldname.replace('-searchbutton','-searchtext') + '-textbox';
+		var zsearch = '';
+		if (dGet(zinputid) != null) {
+			zsearch = dGet(zinputid).value;
+		}
+		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
+		var zstoreinfo = WTWShopping.getStoreID(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
+
+		if (zstoreinfo.woocommerceapiurl != "") {
+			var zurl = zstoreinfo.woocommerceapiurl + "products/?search=" + zsearch + "&per_page=50&consumer_key=" + atob(zstoreinfo.woocommercekey) + "&consumer_secret=" + atob(zstoreinfo.woocommercesecret);
+			WTW.getAsyncJSON(zurl, 
+				function(zresponse) {
+					if (zresponse != null) {
+						/* process results */
+						WTWShopping.productClearFetchProducts(zmoldname);
+						WTWShopping.productLoadProducts(zmoldname, '', JSON.parse(zresponse), zstoreinfo.storeurl, 'walktheweb');
+					}
+				}
+			);
+		} 
+	} catch (ex) { 
+		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-searchProducts=" + ex.message);
+	}
+}
+
+wtwshopping.prototype.searchProductsText = async function(zmoldname) {
+	/* search Text area is clicked or selected - starts selected mold as active and blinks a cursor */
+	try {
+		WTW.hilightMoldFast(zmoldname, 'green');
+		var ztextbox = zmoldname + '-textbox';
+		if (dGet(ztextbox) == null) {
+			if (dGet('wtwshopping_searchboxes') == null) {
+				var zsearchboxdiv = document.createElement('div');
+				zsearchboxdiv.id = 'wtwshopping_searchboxes';
+				zsearchboxdiv.className = 'wtw-hide';
+				document.getElementsByTagName('body')[0].appendChild(zsearchboxdiv);
+			}
+			var zinput = document.createElement('input');
+			zinput.id = ztextbox;
+			zinput.type = 'hidden';
+			zinput.value = '';
+			dGet('wtwshopping_searchboxes').appendChild(zinput);
+		}
+		if (WTW.selectedMoldName != zmoldname) {
+			WTW.selectedMoldName = zmoldname;
+			window.clearInterval(WTWShopping.textTimer);
+			WTWShopping.textTimer = null;
+		}
+		/* start blinking cursor at end of text typed */
+		if (WTWShopping.textTimer == null) {
+			WTWShopping.textTimer = window.setInterval(function(){
+				var zinputid = WTW.selectedMoldName + '-textbox';
+				var zwebstyle = {
+					"anchor":"left",
+					"letter-height":1.00,
+					"letter-thickness":.2,
+					"color":"#ffffff",
+					"alpha":1.00,
+					"colors":{
+						"diffuse":'#ffffff',
+						"specular":'#989e2c',
+						"ambient":'#888722',
+						"emissive":'#37370d'
+					}
+				};
+				var zmold = scene.getMeshByID(WTW.selectedMoldName);
+				if (zmold != null && dGet(zinputid) != null) {
+					WTW.disposeClean(WTW.selectedMoldName + "-text");
+					var zshowtext = dGet(zinputid).value;
+					/* if text is too long, trim text for display */
+					var zhaspipe = 0;
+					var zmaxlength = 10;
+					if (zshowtext.indexOf('|') > -1) {
+						zhaspipe = 1;
+						zshowtext = zshowtext.replace('|','');
+					}
+					/* W and M are wider and can not fit as many characters on the display screen */
+					if (zshowtext.indexOf('w') > -1 || zshowtext.indexOf('m') > -1 || zshowtext.indexOf('W') > -1 || zshowtext.indexOf('M') > -1) {
+						zmaxlength = 7;
+					}
+					if (zshowtext.length > zmaxlength) {
+						zshowtext = zshowtext.substr(zshowtext.length-zmaxlength-1,zshowtext.length-(zshowtext.length-zmaxlength-1));
+					}
+					/* decide if pipe key | should show or not */
+					if (zhaspipe == 0) {
+						zshowtext += '|';
+						dGet(zinputid).value += '|';
+					} else {
+						dGet(zinputid).value = dGet(zinputid).value.replace('|','');
+					}
+					/* create 3d text */
+					Writer = BABYLON.MeshWriter(scene, {scale:1});
+					var zdisplaytext = null;
+					if (zshowtext != '') {
+						zdisplaytext = new Writer(zshowtext, zwebstyle);
+						var zmytext = zdisplaytext.getMesh();
+						zmytext.rotation = new BABYLON.Vector3(WTW.getRadians(-45), 0, 0);
+						zmytext.position = new BABYLON.Vector3(-2.5, 10.25, 0);
+						zmytext.name = WTW.selectedMoldName + "-text";
+						zmytext.parent = zmold;
+						zmytext.isPickable = false;
+					}
+				} else {
+					window.clearInterval(WTWShopping.textTimer);
+					WTWShopping.textTimer = null;
+				}
+			},500);
+		}
+	} catch (ex) { 
+		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-searchProductsText=" + ex.message);
+	}
+}
+
+wtwshopping.prototype.keyDownSelectedMold = async function(zevent) {
+	/* process key when pressed */
+	try {
+		var zinputid = WTW.selectedMoldName + '-textbox';
+		if (dGet(zinputid) != null) {
+			dGet(zinputid).value = dGet(zinputid).value.replace('|','');
+			switch (zevent.key) {
+				case "Backspace":
+				case "Delete":
+					/* remove the last character */
+					var ztext = dGet(zinputid).value.substring(0, dGet(zinputid).value.length - 1);
+					dGet(zinputid).value = ztext;
+					break;
+				default:
+					/* only process accepted keys */
+					var zaccept = 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-+';
+					if (zaccept.indexOf(zevent.key) > -1) {
+						dGet(zinputid).value += zevent.key;
+					}
+					break;
+			}
+		}
+	} catch (ex) { 
+		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-keyDownSelectedMold=" + ex.message);
+	}
+}
+
+wtwshopping.prototype.clearSelectedMold = function () {
+	/* selected mold pauses keyboard avatar movement - clearing will allow avatar to move again */
+	try {
+		var zinputid = WTW.selectedMoldName + '-textbox';
+		if (dGet(zinputid) != null) {
+			dGet(zinputid).value = dGet(zinputid).value.replace('|','');
+		}
+		/* stop the timer if it is running */
+		if (WTWShopping.textTimer != null) {
+			window.clearInterval(WTWShopping.textTimer);
+			WTWShopping.textTimer = null;
+		}
+		/* in case the text still has the pipe | - repaint the text one last time */
+		var zinputid = WTW.selectedMoldName + '-textbox';
+		var zwebstyle = {
+			"anchor":"left",
+			"letter-height":1.00,
+			"letter-thickness":.2,
+			"color":"#ffffff",
+			"alpha":1.00,
+			"colors":{
+				"diffuse":'#ffffff',
+				"specular":'#989e2c',
+				"ambient":'#888722',
+				"emissive":'#37370d'
+			}
+		};
+		var zmold = scene.getMeshByID(WTW.selectedMoldName);
+		if (zmold != null && dGet(zinputid) != null) {
+			WTW.disposeClean(WTW.selectedMoldName + "-text");
+			var zshowtext = dGet(zinputid).value;
+			/* if text is too long, trim text for display */
+			var zmaxlength = 10;
+			if (zshowtext.indexOf('|') > -1) {
+				zshowtext = zshowtext.replace('|','');
+			}
+			/* W and M are wider and can not fit as many characters on the display screen */
+			if (zshowtext.indexOf('w') > -1 || zshowtext.indexOf('m') > -1 || zshowtext.indexOf('W') > -1 || zshowtext.indexOf('M') > -1) {
+				zmaxlength = 7;
+			}
+			if (zshowtext.length > zmaxlength) {
+				zshowtext = zshowtext.substr(zshowtext.length-zmaxlength-1,zshowtext.length-(zshowtext.length-zmaxlength-1));
+			}
+			/* create 3d text */
+			Writer = BABYLON.MeshWriter(scene, {scale:1});
+			var zdisplaytext = null;
+			if (zshowtext != '') {
+				zdisplaytext = new Writer(zshowtext, zwebstyle);
+				var zmytext = zdisplaytext.getMesh();
+				zmytext.rotation = new BABYLON.Vector3(WTW.getRadians(-45), 0, 0);
+				zmytext.position = new BABYLON.Vector3(-2.5, 10.25, 0);
+				zmytext.name = WTW.selectedMoldName + "-text";
+				zmytext.parent = zmold;
+				zmytext.isPickable = false;
+			}
+		}
+	} catch (ex) {
+		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-clearSelectedMold=" + ex.message);
 	}
 }
