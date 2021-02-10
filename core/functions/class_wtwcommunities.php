@@ -1349,7 +1349,7 @@ class wtwcommunities {
 		/* this is the response after you select a 3D Item to download in the search */
 		/* $zwebid is the item selected (3D Community, 3D Bulding, or 3D Thing) */
 		/* $znewwebid is a proposed new value for the web id (optional) */
-		/* $zwebtype is 'community', 'building', or 'thing' */
+		/* $zwebtype is 'community', 'building', or 'thing' */ // uploads
 		global $wtwhandlers;
 		global $wtwconnect;
 		try {
