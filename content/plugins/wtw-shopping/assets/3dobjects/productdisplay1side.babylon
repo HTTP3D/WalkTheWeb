@@ -1,4 +1,4 @@
-{"producer":{"name":"Blender","version":"2.82 (sub 7)","exporter_version":"6.3.1","file":"productdisplay1side.babylon"},
+{"producer":{"name":"Blender","version":"2.90.0","exporter_version":"2.80.1","file":"productdisplay1side.babylon"},
 "autoClear":true,"clearColor":[0.0509,0.0509,0.0509],"gravity":[0,-9.81,0],
 "materials":[{"name":"gray","id":"gray","customType":"BABYLON.PBRMaterial","backFaceCulling":true,"checkReadyOnlyOnce":false,"maxSimultaneousLights":4,"environmentIntensity":1,"albedo":[0.3264,0.3264,0.3264],"reflectivity":[0.5,0.5,0.5],"roughness":0.4,"alpha":1,"transparencyMode":0,"alphaCutOff":0.4,"metallic":0},
 {"name":"casemat","id":"casemat","customType":"BABYLON.PBRMaterial","backFaceCulling":true,"checkReadyOnlyOnce":false,"maxSimultaneousLights":4,"environmentIntensity":1,"albedo":[0.0497,0.3419,0.8],"reflectivity":[0.5,0.5,0.5],"roughness":0.4,"alpha":1,"transparencyMode":0,"alphaCutOff":0.4,"metallic":0},
@@ -7,7 +7,7 @@
 {"name":"black","id":"black","customType":"BABYLON.PBRMaterial","backFaceCulling":true,"checkReadyOnlyOnce":false,"maxSimultaneousLights":4,"environmentIntensity":1,"emissive":[0,0,0],"roughness":0.2,"alpha":1,"transparencyMode":0,"alphaCutOff":0.4,"emissiveIntensity":1}],
 "multiMaterials":[],
 "skeletons":[],
-"meshes":[{"name":"DIsplayCase","id":"DIsplayCase","parentId":"Product Display","materialId":"gray","billboardMode":0,"position":[0,0,0],"rotation":[0,0,0],"scaling":[1,1,1],"isVisible":true,"freezeWorldMatrix":false,"isEnabled":true,"checkCollisions":true,"receiveShadows":true,"pickable":true,"tags":""
+"meshes":[{"name":"DisplayCase","id":"DisplayCase","parentId":"Product Display","materialId":"gray","billboardMode":0,"position":[0,0,0],"rotation":[0,0,0],"scaling":[1,1,1],"isVisible":true,"freezeWorldMatrix":false,"isEnabled":true,"checkCollisions":true,"receiveShadows":true,"pickable":true,"tags":""
 ,"positions":[-0.572,0.572,-0.143,-0.572,1.716,-0.143,-0.6935,2.002,-0.143,0.572,0.286,-0.143,0.5464,0.0314,-0.143,0.572,0,-0.143,0.572,0,-0.143,-0.5464,0.0314,-0.143,-0.572,0,-0.143,-0.572,0,-0.143,-0.5464,0.2546,-0.143,-0.572,0.286,-0.143,0.572,0.572,-0.143,0.572,0.5434,-0.143,0.6935,0,-0.143,0,0.3146,-0.143,-0.572,0.3146,-0.143
 ,-0.572,0.286,-0.143,-0.6935,2.002,0.143,0.6935,0,0.143,-0.6935,0,0.143,0.0286,0.3146,-0.143,0,0.5434,-0.143,-0.5449,0.3254,-0.143,-0.572,1.716,-0.143,0.572,1.7446,-0.143,-0.572,1.7446,-0.143,-0.572,1.9734,-0.143,0.572,2.002,-0.143,-0.572,2.002,-0.143,-0.572,0.5434,-0.143,-0.0271,0.5326,-0.143,-0.0271,0.3254,-0.143,-0.5449,0.5326,-0.143
 ,-0.572,0.286,-0.143,0.5464,0.2546,-0.143,0.0286,0.5434,-0.143,0.572,1.9734,0.01,-0.572,1.7446,0.01,0.572,1.7446,0.01,0.572,0.5434,0.01,0.0286,0.3146,0.01,0.572,0.3146,0.01,0.572,1.716,0.0715,-0.572,0.572,0.0715,0.572,0.572,0.0715,-0.572,1.9734,-0.143,-0.572,1.9734,-0.143,-0.6935,0,-0.143,-0.572,0,-0.143,0.572,0,-0.143
@@ -25,7 +25,7 @@
 ,0,30,22,22,36,12,37,63,38,40,64,41,43,65,44]
 ,"subMeshes":[{"materialIndex":0,"verticesStart":0,"verticesCount":66,"indexStart":0,"indexCount":168}]
 ,"instances":[]}
-,{"name":"DisplayRim","id":"DisplayRim","parentId":"Product Display","materialId":"casemat","billboardMode":0,"position":[0,0,0],"rotation":[0,0,0],"scaling":[1,1,1],"isVisible":true,"freezeWorldMatrix":false,"isEnabled":true,"checkCollisions":true,"receiveShadows":true,"pickable":true,"tags":""
+,{"name":"ImageFrame","id":"ImageFrame","parentId":"Product Display","materialId":"casemat","billboardMode":0,"position":[0,0,0],"rotation":[0,0,0],"scaling":[1,1,1],"isVisible":true,"freezeWorldMatrix":false,"isEnabled":true,"checkCollisions":true,"receiveShadows":true,"pickable":true,"tags":""
 ,"positions":[-0.6935,2.002,-0.1144,-0.7068,2.002,-0.1347,-0.6935,2.002,-0.143,0.6935,0,-0.1144,0.7068,0,-0.1347,0.6935,0,-0.143,0.6935,2.002,-0.1144,0.7068,2.002,-0.1347,0.715,2.002,-0.1144,-0.6935,0,-0.1144,-0.7068,0,-0.1347,-0.715,0,-0.1144,-0.7068,0,0.1347,-0.6935,0,0.1144,-0.715,0,0.1144,0.715,0,0.1144,-0.715,0,-0.1144
 ,-0.715,0,0.1144,0.7068,2.002,0.1347,0.6935,2.002,0.1144,0.715,2.002,0.1144,0.6935,2.002,-0.143,-0.6935,0,-0.143,-0.6935,0,-0.1144,0.7068,0,0.1347,0.6935,0,0.1144,0.6935,0,0.143,-0.7068,2.002,0.1347,-0.6935,2.002,0.1144,-0.6935,2.002,0.143,0.715,0,-0.1144,0.6935,2.002,0.143,0.6935,0,0.143,0.6935,0,-0.143
 ,0.7068,0,-0.1347,-0.6935,2.002,-0.143,-0.7068,0,-0.1347,-0.6935,0,-0.143,-0.715,2.002,0.1144,-0.7068,0,0.1347,-0.715,0,0.1144,-0.6935,0,0.143,-0.6935,2.002,0.1144,0.6935,2.002,0.143,-0.715,2.002,-0.1144,-0.715,0,0.1144,-0.715,0,-0.1144,0.715,0,-0.1144,0.715,0,0.1144,0.7068,0,0.1347,-0.7068,2.002,0.1347

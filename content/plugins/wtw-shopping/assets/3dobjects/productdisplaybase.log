@@ -13,23 +13,23 @@ Exporter version: 2.80.1, Blender version: 2.90.0
 	Python World class constructor completed
 	processing begun of mesh:  DisplayCase
 		processing begun of material:  gray
-		num positions      :  124
-		num normals        :  124
+		num positions      :  112
+		num normals        :  112
 		num tangents       :  0
-		num uvs            :  248
+		num uvs            :  224
 		num uvs2           :  0
 		num colors         :  0
-		num triangles      :  108
+		num triangles      :  92
 	processing begun of camera (UniversalCamera):  Camera
 	processing begun of mesh:  ImageFrame
 		processing begun of material:  casemat
-		num positions      :  177
-		num normals        :  177
+		num positions      :  146
+		num normals        :  146
 		num tangents       :  0
-		num uvs            :  354
+		num uvs            :  292
 		num uvs2           :  0
 		num colors         :  0
-		num triangles      :  88
+		num triangles      :  78
 	processing begun of mesh:  ReadMore1
 		animation processing begun
 			processing action ReadMore1Action:  in[20 - 39], out[0 - 39]
@@ -130,4 +130,4 @@ Exporter version: 2.80.1, Blender version: 2.90.0
 	writing mesh:  AddToCartText2
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 1.9038 secs
+elapsed time:  0 min, 1.6803 secs

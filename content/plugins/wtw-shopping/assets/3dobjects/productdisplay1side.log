@@ -1,4 +1,4 @@
-Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
+Exporter version: 2.80.1, Blender version: 2.90.0
 ========= Conversion from Blender to Babylon.js =========
 	Scene settings used :
 		Inline textures     :  false
@@ -11,7 +11,7 @@ Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
 		Keep Z-up r-handed  :  no
 		Texture directory   :  D:\Data\HTTP3DInc\Blender\productdisplay\
 	Python World class constructor completed
-	processing begun of mesh:  DIsplayCase
+	processing begun of mesh:  DisplayCase
 		processing begun of material:  gray
 		num positions      :  66
 		num normals        :  66
@@ -19,9 +19,9 @@ Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
 		num uvs            :  132
 		num uvs2           :  0
 		num colors         :  0
-		num indices        :  168
+		num triangles      :  56
 	processing begun of camera (UniversalCamera):  Camera
-	processing begun of mesh:  DisplayRim
+	processing begun of mesh:  ImageFrame
 		processing begun of material:  casemat
 		num positions      :  139
 		num normals        :  139
@@ -29,7 +29,7 @@ Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
 		num uvs            :  278
 		num uvs2           :  0
 		num colors         :  0
-		num indices        :  228
+		num triangles      :  76
 	processing begun of mesh:  ReadMore1
 		animation processing begun
 			processing action ReadMore1Action:  in[20 - 39], out[0 - 39]
@@ -40,7 +40,7 @@ Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
 		num uvs            :  16
 		num uvs2           :  0
 		num colors         :  0
-		num indices        :  30
+		num triangles      :  10
 	processing begun of mesh:  AddToCart1
 		animation processing begun
 			processing action AddToCart1Action:  in[0 - 19], out[0 - 19]
@@ -51,7 +51,7 @@ Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
 		num uvs            :  50
 		num uvs2           :  0
 		num colors         :  0
-		num indices        :  30
+		num triangles      :  10
 	processing begun of mesh:  ReadMoreText1
 		processing begun of material:  black
 		num positions      :  2977
@@ -60,7 +60,7 @@ Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
 		num uvs            :  5954
 		num uvs2           :  0
 		num colors         :  0
-		num indices        :  8811
+		num triangles      :  2937
 	processing begun of mesh:  AddToCartText1
 		processing begun of material:  black
 		registered as also a user of material:  black
@@ -70,16 +70,16 @@ Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
 		num uvs            :  4502
 		num uvs2           :  0
 		num colors         :  0
-		num indices        :  6642
+		num triangles      :  2214
 	processing begun of node:  Product Display
 	processing begun of light (DIRECTIONAL):  Light
 ========= Writing of JSON file started =========
-	writing mesh:  DIsplayCase
-	writing mesh:  DisplayRim
+	writing mesh:  DisplayCase
+	writing mesh:  ImageFrame
 	writing mesh:  ReadMore1
 	writing mesh:  AddToCart1
 	writing mesh:  ReadMoreText1
 	writing mesh:  AddToCartText1
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 0.9932 secs
+elapsed time:  0 min, 1.1805 secs

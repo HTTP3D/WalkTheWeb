@@ -1,0 +1,76 @@
+Exporter version: 2.80.1, Blender version: 2.90.0
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  D:\Data\HTTP3DInc\Blender\productdisplay\
+	Python World class constructor completed
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  stand
+		processing begun of material:  Material
+		processing begun of material:  imageframemat
+		processing begun of material:  black
+		processing begun of multimaterial:  productsearch4.Multimaterial#0
+		num positions      :  8915
+		num normals        :  8915
+		num tangents       :  0
+		num uvs            :  17830
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  4832
+	processing begun of mesh:  searchbutton
+		animation processing begun
+			processing action searchbuttonAction:  in[0 - 20], out[0 - 20]
+		processing begun of material:  black
+		processing begun of material:  searchbuttontext
+		processing begun of material:  imageframemat
+		registered as also a user of material:  black
+		registered as also a user of material:  imageframemat
+		processing begun of multimaterial:  productsearch4.Multimaterial#1
+		num positions      :  4445
+		num normals        :  4445
+		num tangents       :  0
+		num uvs            :  8890
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2262
+	processing begun of mesh:  searchtext
+		processing begun of material:  black
+		registered as also a user of material:  black
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  imageframe
+		processing begun of material:  imageframemat
+		processing begun of material:  Material
+		processing begun of material:  black
+		registered as also a user of material:  imageframemat
+		registered as also a user of material:  Material
+		registered as also a user of material:  black
+		processing begun of multimaterial:  productsearch4.Multimaterial#2
+		num positions      :  241
+		num normals        :  241
+		num tangents       :  0
+		num uvs            :  482
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  366
+	processing begun of light (POINT):  Light
+========= Writing of JSON file started =========
+	writing mesh:  stand
+	writing mesh:  searchbutton
+	writing mesh:  searchtext
+	writing mesh:  imageframe
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 1.3944 secs
