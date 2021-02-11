@@ -149,10 +149,10 @@ class wtwshopping {
 			$wtwplugins->addMoldDef("Store Buy Now", "custom", "WTWShopping.addMoldStoreButton(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 			$wtwplugins->addMoldDef("Store Checkout", "custom", "WTWShopping.addMoldStoreButton(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 			$wtwplugins->addMoldDef("Store Read More", "custom", "WTWShopping.addMoldStoreButton(zmoldname, zmolddef, zlenx, zleny, zlenz);");
+			$wtwplugins->addMoldDef("Store View Cart", "custom", "WTWShopping.addMoldStoreButton(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 
 			$wtwplugins->addMoldDef("Store Sign", "custom", "WTWShopping.addMoldStoreSign(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 			$wtwplugins->addMoldDef("Store 3D Sign", "custom", "WTWShopping.addMoldStore3DSign(zmoldname, zmolddef, zlenx, zleny, zlenz);");
-			$wtwplugins->addMoldDef("Store View Cart", "custom", "WTWShopping.addMoldStoreViewCart(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 			$wtwplugins->addMoldDef("Store Categories", "custom", "WTWShopping.addMoldStoreCategories(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 			$wtwplugins->addMoldDef("Product Search", "custom", "WTWShopping.addMoldProductSearch(zmoldname, zmolddef, zlenx, zleny, zlenz);");
 			

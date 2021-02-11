@@ -145,6 +145,8 @@ wtwshopping.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldmergemoldsdiv');
 				WTW.hide('wtw_productsearchdiv');
+				WTW.hide('wtw_productdiv');
+				WTW.hide('wtw_productthingdiv');
 				WTW.show('wtw_moldcolorsdiv');
 				WTW.show('wtw_moldtexturetitle'); 
 				WTW.show('wtw_moldtexturepreview');
@@ -244,6 +246,7 @@ wtwshopping.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "12";
 				break;
+			case "storeviewcart":
 			case "storeaddtocart":
 			case "storebuynow":
 			case "storecheckout":
@@ -313,23 +316,6 @@ wtwshopping.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldtexturepath').value = zimagepath;
 				WTW.setPreviewImage('wtw_moldtexturepreview', 'wtw_tmoldtexturepath', 'wtw_tmoldtextureid');
 				break;
-			case "storeviewcart":
-				dGet('wtw_tmoldpositionx').value = zpositionx;
-				dGet('wtw_tmoldpositiony').value = zpositiony;
-				dGet('wtw_tmoldpositionz').value = zpositionz;
-				dGet('wtw_tmoldscalingx').value = "0.25";
-				dGet('wtw_tmoldscalingy').value = "1.00";
-				dGet('wtw_tmoldscalingz').value = "5.00";
-				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationy;
-				dGet('wtw_tmoldrotationz').value = "0.00";
-				dGet('wtw_tmoldspecial2').value = "0.00";
-				dGet('wtw_tmolduoffset').value = "0.00";
-				dGet('wtw_tmoldvoffset').value = "0.00";
-				dGet('wtw_tmolduscale').value = "0.00";
-				dGet('wtw_tmoldvscale').value = "0.00";
-				dGet('wtw_tmoldsubdivisions').value = "12";
-				break;			
 			case "storecategories":
 				zrotationy = WTW.cleanDegrees(zrotationy + 90);
 				dGet('wtw_tmoldpositionx').value = zpositionx;
@@ -519,7 +505,7 @@ wtwshopping.prototype.addMoldStoreButton = function(zmoldname, zmolddef, zlenx, 
 						case "storeviewcart":
 							/* onload makes sure the button is not in the pressed position */
 							zobjectanimations[0] = WTW.newObjectAnimation();
-							zobjectanimations[0].animationname = 'storeCheckOutOnLoad';
+							zobjectanimations[0].animationname = 'storeViewCartOnLoad';
 							zobjectanimations[0].moldevent = 'onload';
 							zobjectanimations[0].moldnamepart = 'button';
 							zobjectanimations[0].startframe = 0;
@@ -531,7 +517,7 @@ wtwshopping.prototype.addMoldStoreButton = function(zmoldname, zmolddef, zlenx, 
 
 							/* onclick plays animation and additional script with parameters */
 							zobjectanimations[1] = WTW.newObjectAnimation();
-							zobjectanimations[1].animationname = 'storeCheckOutOnClick';
+							zobjectanimations[1].animationname = 'storeViewCartOnClick';
 							zobjectanimations[1].moldevent = 'onclick';
 							zobjectanimations[1].moldnamepart = 'button';
 							zobjectanimations[1].startframe = 1;
@@ -959,12 +945,12 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 		}
 
 		var ztitlemold = BABYLON.MeshBuilder.CreatePlane(zmoldname + "-titleimagesm", {updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
-		ztitlemold.scaling = new BABYLON.Vector3(zlenx * 1.2, zlenz * .24, .1);
+		ztitlemold.scaling = new BABYLON.Vector3(zlenx * 1.2, zleny * .24, .1);
 		ztitlemold.position = new BABYLON.Vector3(0, ztitlepositiony, -ztitlepositionz);
 		ztitlemold.parent = zbasemold;
 
 		var zpricemold = BABYLON.MeshBuilder.CreatePlane(zmoldname + "-price1", {updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
-		zpricemold.scaling = new BABYLON.Vector3(zlenx * .55, zlenz * .24, .1);
+		zpricemold.scaling = new BABYLON.Vector3(zlenx * .55, zleny * .24, .1);
 		zpricemold.position = new BABYLON.Vector3(zlenx * .3, zleny * .43, -zpricepositionz);
 		zpricemold.parent = zbasemold;
 		
@@ -998,13 +984,13 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 			}
 
 			var ztitlemold2 = BABYLON.MeshBuilder.CreatePlane(zmoldname + "-titleimage2sm", {updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
-			ztitlemold2.scaling = new BABYLON.Vector3(zlenx * 1.2, zlenz * .24, .1);
+			ztitlemold2.scaling = new BABYLON.Vector3(zlenx * 1.2, zleny * .24, .1);
 			ztitlemold2.position = new BABYLON.Vector3(0, ztitlepositiony, ztitlepositionz);
 			ztitlemold2.rotation.y = WTW.getRadians(180);
 			ztitlemold2.parent = zbasemold;
 
 			var zpricemold2 = BABYLON.MeshBuilder.CreatePlane(zmoldname + "-price2", {updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
-			zpricemold2.scaling = new BABYLON.Vector3(zlenx * .55, zlenz * .24, .1);
+			zpricemold2.scaling = new BABYLON.Vector3(zlenx * .55, zleny * .24, .1);
 			zpricemold2.position = new BABYLON.Vector3(-zlenx * .3, zleny * .43, zpricepositionz);
 			zpricemold2.rotation.y = WTW.getRadians(180);
 			zpricemold2.parent = zbasemold;
