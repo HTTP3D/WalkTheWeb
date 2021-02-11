@@ -1,4 +1,4 @@
-Exporter version: 6.4.4, Blender version: 2.90.0
+Exporter version: 2.80.1, Blender version: 2.90.0
 ========= Conversion from Blender to Babylon.js =========
 	Scene settings used :
 		Inline textures     :  false
@@ -34,12 +34,12 @@ Exporter version: 6.4.4, Blender version: 2.90.0
 		num triangles      :  178
 	processing begun of mesh:  viewcart
 		animation processing begun
-			processing action TextAction.001:  in[1 - 35], out[0 - 35]
+			processing action viewcartAction:  in[1 - 35], out[0 - 35]
 		processing begun of material:  text material
-		num positions      :  1885
-		num normals        :  1885
+		num positions      :  3377
+		num normals        :  3377
 		num tangents       :  0
-		num uvs            :  3770
+		num uvs            :  6754
 		num uvs2           :  0
 		num colors         :  0
 		num triangles      :  1818
@@ -50,4 +50,4 @@ Exporter version: 6.4.4, Blender version: 2.90.0
 	writing mesh:  viewcart
 ========= Writing of JSON file completed =========
 ========= end of processing =========
-elapsed time:  0 min, 0.3966 secs
+elapsed time:  0 min, 0.6762 secs
