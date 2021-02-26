@@ -2674,6 +2674,7 @@ try {
 			'connectinggridind'=> $zconnectinggridind,
 			'attachmoldind'=> '-1',
 			'mirroractionzoneid'=> '',
+			'loaded'=> '0',
 			'parentname'=> $zparentname,
 			'moldname'=> '');
 		$i += 1;
