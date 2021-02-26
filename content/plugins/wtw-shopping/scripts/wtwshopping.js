@@ -7,7 +7,6 @@ function wtwshopping() {
 	this.molds = [];
 	this.products = [];
 	this.fetchQueue = [];
-	this.textTimer = null;
 }
 
 var WTWShopping = new wtwshopping();
@@ -84,8 +83,8 @@ wtwshopping.prototype.checkHovers = function(zmoldname, zshape) {
 			var znameparts = zmoldname.split('-');
 			var zmoldnameroot = znameparts[0] + "-" + znameparts[1] + "-" + znameparts[2] + "-" + znameparts[3] + "-" + znameparts[4] + "-" + znameparts[5];
 			if (zmoldname.indexOf("descimage1") > -1 || zmoldname.indexOf("descimage2") > -1) {
-				var zdescimage1 = scene.getMeshByID(zmoldnameroot + "-descimage1");
-				var zdescimage2 = scene.getMeshByID(zmoldnameroot + "-descimage2");
+				var zdescimage1 = WTW.getMeshOrNodeByID(zmoldnameroot + "-descimage1");
+				var zdescimage2 = WTW.getMeshOrNodeByID(zmoldnameroot + "-descimage2");
 				if (zdescimage1 != null && zdescimage2 != null) {
 					if (zdescimage1.material != undefined) {
 						zdescimage1.material.alpha = 1;
@@ -96,7 +95,7 @@ wtwshopping.prototype.checkHovers = function(zmoldname, zshape) {
 				}
 			}
 			if (zmoldname.indexOf("addtocart") > -1) {
-				var zaddtocart = scene.getMeshByID(zmoldname);
+				var zaddtocart = WTW.getMeshOrNodeByID(zmoldname);
 				if (zaddtocart != null) {
 					if (zaddtocart.material != undefined) {
 						zaddtocart.material.alpha = 0;
@@ -104,7 +103,7 @@ wtwshopping.prototype.checkHovers = function(zmoldname, zshape) {
 				}
 			}
 			if (zmoldname.indexOf("readmore") > -1) {
-				var zreadmore = scene.getMeshByID(zmoldname);
+				var zreadmore = WTW.getMeshOrNodeByID(zmoldname);
 				if (zreadmore != null) {
 					if (zreadmore.material != undefined) {
 						zreadmore.material.alpha = 0;
@@ -112,7 +111,7 @@ wtwshopping.prototype.checkHovers = function(zmoldname, zshape) {
 				}
 			}
 		} else if (zmoldname.indexOf("carthover") > -1) {
-			var zcarthover = scene.getMeshByID(zmoldnameroot + "-carthover");
+			var zcarthover = WTW.getMeshOrNodeByID(zmoldnameroot + "-carthover");
 			if (zcarthover != null) {
 				if (zcarthover.material != undefined) {
 					zcarthover.material.alpha = 1;
@@ -120,7 +119,7 @@ wtwshopping.prototype.checkHovers = function(zmoldname, zshape) {
 			}
 		} else if (zmoldname.indexOf("storecategories") > -1) {
 			if (zmoldname.indexOf("categorybuttonhover") > -1) {
-				var zcategoryhover = scene.getMeshByID(zmoldname);
+				var zcategoryhover = WTW.getMeshOrNodeByID(zmoldname);
 				if (zcategoryhover != null) {
 					if (zcategoryhover.material != undefined) {
 						zcategoryhover.material.alpha = 1;
@@ -128,7 +127,7 @@ wtwshopping.prototype.checkHovers = function(zmoldname, zshape) {
 				}
 			}
 			if (zmoldname.indexOf("downbuttonhover") > -1) {
-				var zdownbuttonhover = scene.getMeshByID(zmoldname);
+				var zdownbuttonhover = WTW.getMeshOrNodeByID(zmoldname);
 				if (zdownbuttonhover != null) {
 					if (zdownbuttonhover.material != undefined) {
 						zdownbuttonhover.material.alpha = 1;
@@ -136,7 +135,7 @@ wtwshopping.prototype.checkHovers = function(zmoldname, zshape) {
 				}
 			}
 			if (zmoldname.indexOf("upbuttonhover") > -1) {
-				var zupbuttonhover = scene.getMeshByID(zmoldname);
+				var zupbuttonhover = WTW.getMeshOrNodeByID(zmoldname);
 				if (zupbuttonhover != null) {
 					if (zupbuttonhover.material != undefined) {
 						zupbuttonhover.material.alpha = 1;
@@ -155,8 +154,8 @@ wtwshopping.prototype.resetHovers = function(zmoldname, zshape) {
 			var znameparts = WTW.lastID.split('-');
 			var zmoldnameroot = znameparts[0] + "-" + znameparts[1] + "-" + znameparts[2] + "-" + znameparts[3] + "-" + znameparts[4] + "-" + znameparts[5];
 			if (WTW.lastID.indexOf("descimage1") > -1 || WTW.lastID.indexOf("descimage2") > -1) {
-				var zdescimage1 = scene.getMeshByID(zmoldnameroot + "-descimage1");
-				var zdescimage2 = scene.getMeshByID(zmoldnameroot + "-descimage2");
+				var zdescimage1 = WTW.getMeshOrNodeByID(zmoldnameroot + "-descimage1");
+				var zdescimage2 = WTW.getMeshOrNodeByID(zmoldnameroot + "-descimage2");
 				if (zdescimage1 != null && zdescimage2 != null) {
 					if (zdescimage1.material != undefined) {
 						zdescimage1.material.alpha = 0;
@@ -167,7 +166,7 @@ wtwshopping.prototype.resetHovers = function(zmoldname, zshape) {
 				}
 			}
 			if (WTW.lastID.indexOf("addtocart") > -1) {
-				var zaddtocart = scene.getMeshByID(WTW.lastID);
+				var zaddtocart = WTW.getMeshOrNodeByID(WTW.lastID);
 				if (zaddtocart != null) {
 					if (zaddtocart.material != undefined) {
 						zaddtocart.material.alpha = 1;
@@ -175,7 +174,7 @@ wtwshopping.prototype.resetHovers = function(zmoldname, zshape) {
 				}
 			}
 			if (WTW.lastID.indexOf("readmore") > -1) {
-				var zreadmore = scene.getMeshByID(WTW.lastID);
+				var zreadmore = WTW.getMeshOrNodeByID(WTW.lastID);
 				if (zreadmore != null) {
 					if (zreadmore.material != undefined) {
 						zreadmore.material.alpha = 1;
@@ -183,7 +182,7 @@ wtwshopping.prototype.resetHovers = function(zmoldname, zshape) {
 				}
 			}
 		} else if (WTW.lastID.indexOf("carthover") > -1) {
-			var zcarthover = scene.getMeshByID(zmoldnameroot + "-carthover");
+			var zcarthover = WTW.getMeshOrNodeByID(zmoldnameroot + "-carthover");
 			if (zcarthover != null) {
 				if (zcarthover.material != undefined) {
 					zcarthover.material.alpha = 0;
@@ -191,7 +190,7 @@ wtwshopping.prototype.resetHovers = function(zmoldname, zshape) {
 			}
 		} else if (WTW.lastID.indexOf("storecategories") > -1) {
 			if (WTW.lastID.indexOf("categorybuttonhover") > -1) {
-				var zcategoryhover = scene.getMeshByID(WTW.lastID);
+				var zcategoryhover = WTW.getMeshOrNodeByID(WTW.lastID);
 				if (zcategoryhover != null) {
 					if (zcategoryhover.material != undefined) {
 						zcategoryhover.material.alpha = 0;
@@ -199,7 +198,7 @@ wtwshopping.prototype.resetHovers = function(zmoldname, zshape) {
 				}
 			}
 			if (WTW.lastID.indexOf("downbuttonhover") > -1) {
-				var zdownbuttonhover = scene.getMeshByID(WTW.lastID);
+				var zdownbuttonhover = WTW.getMeshOrNodeByID(WTW.lastID);
 				if (zdownbuttonhover != null) {
 					if (zdownbuttonhover.material != undefined) {
 						zdownbuttonhover.material.alpha = 0;
@@ -207,7 +206,7 @@ wtwshopping.prototype.resetHovers = function(zmoldname, zshape) {
 				}
 			}
 			if (WTW.lastID.indexOf("upbuttonhover") > -1) {
-				var zupbuttonhover = scene.getMeshByID(WTW.lastID);
+				var zupbuttonhover = WTW.getMeshOrNodeByID(WTW.lastID);
 				if (zupbuttonhover != null) {
 					if (zupbuttonhover.material != undefined) {
 						zupbuttonhover.material.alpha = 0;
@@ -811,8 +810,8 @@ wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductnam
 		if (zstoreinfo.storeurl != "") {
 			var zlineheigth = "34px";
 			var zfontheight = "40px";
-			var ztitleimage = scene.getMeshByID(zmoldname + "-titleimagesm");
-			var ztitleimage2 = scene.getMeshByID(zmoldname + "-titleimage2sm");
+			var ztitleimage = WTW.getMeshOrNodeByID(zmoldname + "-titleimagesm");
+			var ztitleimage2 = WTW.getMeshOrNodeByID(zmoldname + "-titleimage2sm");
 
 			var znamelength = WTW.cleanHTMLText(zproductname).length;
 			
@@ -876,8 +875,8 @@ wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductnam
 					ztitleimage2.material = zcoveringtitle;
 				}
 			}
-			var zprice1 = scene.getMeshByID(zmoldname + "-price1");
-			var zprice2 = scene.getMeshByID(zmoldname + "-price2");
+			var zprice1 = WTW.getMeshOrNodeByID(zmoldname + "-price1");
+			var zprice2 = WTW.getMeshOrNodeByID(zmoldname + "-price2");
 			if (zprice1 != null) {
 				try {
 					if (zprice1.material.diffuseTexture != null) {
@@ -926,7 +925,7 @@ wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductnam
 				WTW.getAsyncJSON(zstoreinfo.storeurl + "/image.php?walktheweb_image_url=" + zimageurl, 
 					function(zresponse2) {
 						if (zresponse2 != null) {
-							var zpimage = scene.getMeshByID(zmoldname + "-clickimage");
+							var zpimage = WTW.getMeshOrNodeByID(zmoldname + "-clickimage");
 							if (zpimage != null) {
 								try {
 									if (zpimage.material.diffuseTexture != null) {
@@ -941,7 +940,7 @@ wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductnam
 									}
 								} catch(ex) {}
 							}
-							var zpimage2 = scene.getMeshByID(zmoldname + "-clickimage2");
+							var zpimage2 = WTW.getMeshOrNodeByID(zmoldname + "-clickimage2");
 							if (zpimage2 != null) {
 								try {
 									if (zpimage2.material.diffuseTexture != null) {
@@ -960,8 +959,8 @@ wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductnam
 							var znewimage = new Image();
 							znewimage.src = zimagedata[0].url;
 							znewimage.onload = function() {
-								var zpimage = scene.getMeshByID(zmoldname + "-clickimage");
-								var zpimage2 = scene.getMeshByID(zmoldname + "-clickimage2");
+								var zpimage = WTW.getMeshOrNodeByID(zmoldname + "-clickimage");
+								var zpimage2 = WTW.getMeshOrNodeByID(zmoldname + "-clickimage2");
 								if (zpimage != null) {
 									var zrandom = WTW.getRandomString(6);
 									var zopacity = 1;
@@ -1066,11 +1065,11 @@ wtwshopping.prototype.productSelectCategoryScroll = function(zmoldname, zincreme
 	try {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		var zcatbuttonname = zmoldname.replace("downbuttonhover","categorybutton").replace("upbuttonhover","categorybutton");
-		var zstorecategories = scene.getMeshByID(zcatbuttonname.replace("-categorybutton",""));
-		var zupbutton = scene.getMeshByID(zcatbuttonname.replace("categorybutton","upbutton"));
-		var zupbuttonhover = scene.getMeshByID(zcatbuttonname.replace("categorybutton","upbuttonhover"));
-		var zdownbutton = scene.getMeshByID(zcatbuttonname.replace("categorybutton","downbutton"));
-		var zdownbuttonhover = scene.getMeshByID(zcatbuttonname.replace("categorybutton","downbuttonhover"));
+		var zstorecategories = WTW.getMeshOrNodeByID(zcatbuttonname.replace("-categorybutton",""));
+		var zupbutton = WTW.getMeshOrNodeByID(zcatbuttonname.replace("categorybutton","upbutton"));
+		var zupbuttonhover = WTW.getMeshOrNodeByID(zcatbuttonname.replace("categorybutton","upbuttonhover"));
+		var zdownbutton = WTW.getMeshOrNodeByID(zcatbuttonname.replace("categorybutton","downbutton"));
+		var zdownbuttonhover = WTW.getMeshOrNodeByID(zcatbuttonname.replace("categorybutton","downbuttonhover"));
 		var zmove = 0;
 		if (zupbutton != null && zupbuttonhover != null) {
 			if (zincrement < 0 && zupbutton.visibility == 1) {
@@ -1092,7 +1091,7 @@ wtwshopping.prototype.productSelectCategoryScroll = function(zmoldname, zincreme
 				if (scene.meshes[i] != null) {
 					if (scene.meshes[i].id != undefined) {
 						if (scene.meshes[i].id.indexOf(zcatbuttonname) > -1) {
-							var zcatbutton = scene.getMeshByID(scene.meshes[i].id);
+							var zcatbutton = WTW.getMeshOrNodeByID(scene.meshes[i].id);
 							if (zcatbutton != null) {
 								zcatbutton.position.y += zincrement;
 								if (zcatbutton.position.y > zfirsty) {
@@ -1144,7 +1143,7 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 		var zincy = 0;
 		var zlasty = -5;
 		var zonce = 0;
-		var zbasemold = scene.getMeshByID(zmoldname + "-base");
+		var zbasemold = WTW.getMeshOrNodeByID(zmoldname + "-base");
 		if (zmolddef != null) {
 			if (zmolddef.scaling != undefined) {
 				if (zmolddef.scaling.x != undefined) {
@@ -1318,7 +1317,7 @@ wtwshopping.prototype.productLoadCategories = function(zmoldname, zresponse) {
 			}
 		}
 		/* check to see if the mold still exists since the time it was requested */
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold == null) {
 			WTW.disposeClean(zmoldname);
 		}
@@ -1465,7 +1464,7 @@ wtwshopping.prototype.setStoreInfo = function(zmoldname, zresponse) {
 				if (zresponse[i].storename != undefined) {
 					zstorename = WTW.decode(zresponse[i].storename);
 				}
-				var ztitlemold2 = scene.getMeshByID(zmoldname + "-titleimage2");
+				var ztitlemold2 = WTW.getMeshOrNodeByID(zmoldname + "-titleimage2");
 				if (ztitlemold2 != null) {
 					try {
 						if (ztitlemold2.material.diffuseTexture != null) {
@@ -2028,7 +2027,7 @@ wtwshopping.prototype.clearEditMold = function() {
 
 wtwshopping.prototype.openColorSelector = function(zmold, zmoldname, zshape, zcolorgroup) {
 	try {
-		//zmold = scene.getMeshByID(zmoldname + "-text");
+		//zmold = WTW.getMeshOrNodeByID(zmoldname + "-text");
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshopping.js-openColorSelector=" + ex.message);
 	}
@@ -2038,7 +2037,7 @@ wtwshopping.prototype.openColorSelector = function(zmold, zmoldname, zshape, zco
 wtwshopping.prototype.setColor = function(zmoldname, zcolorgroup, zemissivecolor, zdiffusecolor, zspecularcolor, zambientcolor) {
 	try {
 		if (WTW.adminView == 1) {
-			var zmold = scene.getMeshByID(zmoldname);
+			var zmold = WTW.getMeshOrNodeByID(zmoldname);
 			if (zmold != null) {
 				var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 				if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
@@ -2072,7 +2071,7 @@ wtwshopping.prototype.setColor = function(zmoldname, zcolorgroup, zemissivecolor
 						zmold = WTW.addMold3DText(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind], zlenx, zleny, zlenz)
 					}
 				} else if (zmoldnameparts.shape == "storeproduct" || zmoldnameparts.shape == "storesign" || zmoldnameparts.shape == "storecategories" || zmoldnameparts.shape == "productsearch") {
-					zmold = scene.getMeshByID(zmoldname + "-imageframe");
+					zmold = WTW.getMeshOrNodeByID(zmoldname + "-imageframe");
 				}
 				if (zmold != null && zmoldname.indexOf("store") > -1 && zmoldnameparts.shape != 'store3dsign') {
 					try {
@@ -2166,12 +2165,12 @@ wtwshopping.prototype.searchProductsText = async function(zmoldname) {
 		}
 		if (WTW.selectedMoldName != zmoldname) {
 			WTW.selectedMoldName = zmoldname;
-			window.clearInterval(WTWShopping.textTimer);
-			WTWShopping.textTimer = null;
+			window.clearInterval(WTW.textTimer);
+			WTW.textTimer = null;
 		}
 		/* start blinking cursor at end of text typed */
-		if (WTWShopping.textTimer == null) {
-			WTWShopping.textTimer = window.setInterval(function(){
+		if (WTW.textTimer == null) {
+			WTW.textTimer = window.setInterval(function(){
 				var zinputid = WTW.selectedMoldName + '-textbox';
 				var zwebstyle = {
 					"anchor":"left",
@@ -2186,7 +2185,7 @@ wtwshopping.prototype.searchProductsText = async function(zmoldname) {
 						"emissive":'#37370d'
 					}
 				};
-				var zmold = scene.getMeshByID(WTW.selectedMoldName);
+				var zmold = WTW.getMeshOrNodeByID(WTW.selectedMoldName);
 				if (zmold != null && dGet(zinputid) != null) {
 					WTW.disposeClean(WTW.selectedMoldName + "-text");
 					var zshowtext = dGet(zinputid).value;
@@ -2224,8 +2223,8 @@ wtwshopping.prototype.searchProductsText = async function(zmoldname) {
 						zmytext.isPickable = false;
 					}
 				} else {
-					window.clearInterval(WTWShopping.textTimer);
-					WTWShopping.textTimer = null;
+					window.clearInterval(WTW.textTimer);
+					WTW.textTimer = null;
 				}
 			},500);
 		}
@@ -2269,9 +2268,9 @@ wtwshopping.prototype.clearSelectedMold = function () {
 			dGet(zinputid).value = dGet(zinputid).value.replace('|','');
 		}
 		/* stop the timer if it is running */
-		if (WTWShopping.textTimer != null) {
-			window.clearInterval(WTWShopping.textTimer);
-			WTWShopping.textTimer = null;
+		if (WTW.textTimer != null) {
+			window.clearInterval(WTW.textTimer);
+			WTW.textTimer = null;
 		}
 		/* in case the text still has the pipe | - repaint the text one last time */
 		var zinputid = WTW.selectedMoldName + '-textbox';
@@ -2288,7 +2287,7 @@ wtwshopping.prototype.clearSelectedMold = function () {
 				"emissive":'#37370d'
 			}
 		};
-		var zmold = scene.getMeshByID(WTW.selectedMoldName);
+		var zmold = WTW.getMeshOrNodeByID(WTW.selectedMoldName);
 		if (zmold != null && dGet(zinputid) != null) {
 			WTW.disposeClean(WTW.selectedMoldName + "-text");
 			var zshowtext = dGet(zinputid).value;

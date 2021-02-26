@@ -362,15 +362,17 @@ wtwshopping.prototype.setNewMoldDefaults = function(zshape) {
 wtwshopping.prototype.addMoldStoreButton = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-		var zbasemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-base", {}, scene);
-		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
-		zbasemold.material = new BABYLON.StandardMaterial("matbase" + zmoldname, scene);
-		zbasemold.material.alpha = 0;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny ,zlenz);
+
+		var zbasemold = new BABYLON.TransformNode(zmoldname + '-base');
+		zbasemold.position = new BABYLON.Vector3(0,0,0);
+		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
+		zbasemold.scaling = new BABYLON.Vector3(1/zlenx, 1/zleny, 1/zlenz);
 		zbasemold.parent = zmold;
+
 		var zshape = 'storereadmore';
 		var zfolder = '/content/plugins/wtw-shopping/assets/3dobjects/';
 		var zfile = 'button-readmore.babylon';
@@ -546,7 +548,7 @@ wtwshopping.prototype.addMoldStoreButton = function(zmoldname, zmolddef, zlenx, 
 						}
 					}
 					/* check to see if the mold still exists since the time it was requested */
-					zmold = scene.getMeshByID(zmoldname);
+					zmold = WTW.getMeshOrNodeByID(zmoldname);
 					if (zmold == null) {
 						WTW.disposeClean(zmoldname);
 					} else {
@@ -565,16 +567,17 @@ wtwshopping.prototype.addMoldStoreButton = function(zmoldname, zmolddef, zlenx, 
 wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-		var zbasemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-base", {}, scene);
-		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
-		zbasemold.material = new BABYLON.StandardMaterial("matbase" + zmoldname, scene);
-		zbasemold.material.alpha = 0;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny ,zlenz);
+
+		var zbasemold = new BABYLON.TransformNode(zmoldname + '-base');
+		zbasemold.position = new BABYLON.Vector3(0,0,0);
+		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
+		zbasemold.scaling = new BABYLON.Vector3(1/zlenx, 1/zleny, 1/zlenz);
 		zbasemold.parent = zmold;
-		
+
 		var zspecial1 = 0;
 		var ztextureid = "t1qlqxd6pzubzzzy";
 		var ztexturepath = "/content/system/stock/lightgray-512x512.jpg";
@@ -917,7 +920,7 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 						}
 					}
 					/* check to see if the mold still exists since the time it was requested */
-					zmold = scene.getMeshByID(zmoldname);
+					zmold = WTW.getMeshOrNodeByID(zmoldname);
 					if (zmold != null) {
 						zmold.isPickable = false;
 						WTWShopping.getStoreMolds(zmoldname);
@@ -1029,14 +1032,15 @@ wtwshopping.prototype.addMoldStoreProduct = function(zmoldname, zmolddef, zlenx,
 wtwshopping.prototype.addMoldStoreSign = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-		var zbasemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-base", {}, scene);
-		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
-		zbasemold.material = new BABYLON.StandardMaterial("matbase" + zmoldname, scene);
-		zbasemold.material.alpha = 0;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny ,zlenz);
+
+		var zbasemold = new BABYLON.TransformNode(zmoldname + '-base');
+		zbasemold.position = new BABYLON.Vector3(0,0,0);
+		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
+		zbasemold.scaling = new BABYLON.Vector3(1/zlenx, 1/zleny, 1/zlenz);
 		zbasemold.parent = zmold;
 
 		var ztextureid = "t1qlqxd6pzubzzzy";
@@ -1137,14 +1141,15 @@ wtwshopping.prototype.addMoldStore3DSign = function(zmoldname, zmolddef, zlenx, 
 wtwshopping.prototype.addMoldStoreViewCart = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-		var zbasemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-base", {}, scene);
-		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
-		zbasemold.material = new BABYLON.StandardMaterial("matbase" + zmoldname, scene);
-		zbasemold.material.alpha = 0;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny ,zlenz);
+
+		var zbasemold = new BABYLON.TransformNode(zmoldname + '-base');
+		zbasemold.position = new BABYLON.Vector3(0,0,0);
+		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
+		zbasemold.scaling = new BABYLON.Vector3(1/zlenx, 1/zleny, 1/zlenz);
 		zbasemold.parent = zmold;
 
 		var ztextureid = "t1qlqxd6pzubzzzy";
@@ -1242,16 +1247,15 @@ wtwshopping.prototype.addMoldStoreCategories = function(zmoldname, zmolddef, zle
 		if (zlenx < 1) {
 			zlenx = 1;
 		}
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx-.8,zleny-.01,zlenz-.01);
-		/* zmold.material = WTW.addCovering("hidden", zmoldname, zmolddef, zlenx-.8, zleny-.01, zlenz-.01, "0", "0"); */
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-		var zbasemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-base", {}, scene);
-		zbasemold.scaling = new BABYLON.Vector3(1/(zlenx-.8),1/(zleny-.01),1/(zlenz-.01));
-		/* zbasemold.material = WTW.addCovering("hidden", zmoldname + "-base", zmolddef, zlenx-.8, zleny-.01, zlenz-.01, "0", "0"); */
-		zbasemold.material = new BABYLON.StandardMaterial("matbase" + zmoldname, scene);
-		zbasemold.material.alpha = 0;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny ,zlenz);
+
+		var zbasemold = new BABYLON.TransformNode(zmoldname + '-base');
+		zbasemold.position = new BABYLON.Vector3(0,0,0);
+		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
+		zbasemold.scaling = new BABYLON.Vector3(1/zlenx, 1/zleny, 1/zlenz);
 		zbasemold.parent = zmold;
 
 		var ztextureid = "t1qlqxd6pzubzzzy";
@@ -1360,16 +1364,17 @@ wtwshopping.prototype.addMoldProductSearch = function(zmoldname, zmolddef, zlenx
 	/* not implemented yet */
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-		var zbasemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-base", {}, scene);
-		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
-		zbasemold.material = new BABYLON.StandardMaterial("matbase" + zmoldname, scene);
-		zbasemold.material.alpha = 0;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny ,zlenz);
+
+		var zbasemold = new BABYLON.TransformNode(zmoldname + '-base');
+		zbasemold.position = new BABYLON.Vector3(0,0,0);
+		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
+		zbasemold.scaling = new BABYLON.Vector3(1/zlenx, 1/zleny, 1/zlenz);
 		zbasemold.parent = zmold;
-		
+
 		var zspecial1 = 0;
 		var ztextureid = "t1qlqxd6pzubzzzy";
 		var ztexturepath = "/content/system/stock/lightgray-512x512.jpg";
@@ -1486,7 +1491,7 @@ wtwshopping.prototype.addMoldProductSearch = function(zmoldname, zmolddef, zlenx
 						}
 					}
 					/* check to see if the mold still exists since the time it was requested */
-					zmold = scene.getMeshByID(zmoldname);
+					zmold = WTW.getMeshOrNodeByID(zmoldname);
 					if (zmold != null) {
 						zmold.isPickable = false;
 					} else {
