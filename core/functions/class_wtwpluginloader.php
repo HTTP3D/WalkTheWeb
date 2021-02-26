@@ -45,6 +45,14 @@ class wtwpluginloader {
 				mkdir($zfilepath, octdec(wtw_chmod), true);
 				chmod($zfilepath, octdec(wtw_chmod));
 			}
+			/* sort the results by plugin name, then title */
+			function arraysort($a, $b) {
+				if ($a["pluginname"] == $b["pluginname"]) {
+					return ($a["title"] > $b["title"]) ? 1 : -1;
+				}
+				return ($a["pluginname"] > $b["pluginname"]) ? 1 : -1;
+			}
+			usort($zresponse, "arraysort");
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwpluginloader.php-getAllPlugins=".$e->getMessage());
 		}

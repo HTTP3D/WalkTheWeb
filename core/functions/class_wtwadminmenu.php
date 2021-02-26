@@ -58,8 +58,8 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminmenuupdates', 'Updates', -100, 'wtw_dashboard', 2, 'wtw_updates', '', $developerroles, "WTW.openFullPageForm('updates','Check for Updates','');");
 				
 				$this->addAdminMenuItem('wtw_adminmedia', 'Media Library', -95, 'wtw_medialibrary', 0, '', '/content/system/images/menumedia.png', $updateroles, "WTW.toggleAdminMenuMediaLibrary();");
-				$this->addAdminMenuItem('wtw_adminmediafiles', 'Files', -95, 'wtw_medialibrary', 1, 'wtw_viewfiles', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(2);");
-				$this->addAdminMenuItem('wtw_adminmediaobjects', '3D Models', -95, 'wtw_medialibrary', 2, 'wtw_viewobjects', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);");
+				$this->addAdminMenuItem('wtw_adminmediaobjects', '3D Models', -95, 'wtw_medialibrary', 1, 'wtw_viewobjects', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);");
+				$this->addAdminMenuItem('wtw_adminmediafiles', 'Files', -95, 'wtw_medialibrary', 2, 'wtw_viewfiles', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(2);");
 				$this->addAdminMenuItem('wtw_adminmediawtwdownloads', 'WalkTheWeb Downloads', -95, 'wtw_medialibrary', 3, 'wtw_viewwtwdownloads', '', $updateroles, "WTW.openFullPageForm('importpage','communities');");
 
 				$this->addAdminMenuItem('wtw_admincommunities', '3D Communities', -90, 'wtw_communities', 0, '', '/content/system/images/menucommunities.png', $updateroles, "WTW.toggleAdminMenuLevel('communities');");
@@ -196,6 +196,7 @@ class wtwadminmenu {
 			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 1000, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 
 			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listmeshes', 'List Current Meshes', 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listtransformnodes', 'List Transform Nodes', 15, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listcgs', 'List Connecting Grids', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listazs', 'List Action Zones', 30, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listcommmolds', 'List Community Molds', 40, $zupdateroles, "WTW.adminMenuItemSelected(this);");

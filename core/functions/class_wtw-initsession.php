@@ -21,9 +21,9 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = "3.4.3";
-	public $dbversion = "1.1.15";
-	public $versiondate = "2021-1-30";
+	public $version = "3.4.4";
+	public $dbversion = "1.1.16";
+	public $versiondate = "2021-2-26";
 	public $serverinstanceid = "";
 	public $usertoken = "";
 	public $rootpath = "";
@@ -61,52 +61,52 @@ class wtw {
 
 	public function serror($message) {
 		/* reports errors and writes them to the database errorlog table */
-		$returntext = "";
+		$zreturntext = "";
 		try {
-			$conn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
-			if ($conn->connect_error) {
-				$returntext = "Connection failed: " . $conn->connect_error;
+			$zconn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
+			if ($zconn->connect_error) {
+				$zreturntext = "Connection failed: " . $zconn->connect_error;
 			} else {
-				$sql = "insert into ".wtw_tableprefix."errorlog 
+				$zsql = "insert into ".wtw_tableprefix."errorlog 
 						(message,
 						 logdate)
 						values
 						('".addslashes(str_replace("'","\'",$message))."',
 						 '".date('Y-m-d H:i:s')."');";
 				try {
-					$conn->query($sql);
+					$zconn->query($zsql);
 				} catch (Exception $e) { }
 				try {
 					if ($this->pagename == "admin.php") {
-						$error = "<script type=\"text/javascript\">";
-						/* $error = "console.log('".addslashes($message)."');";
-						   $error .= "document.getElementById('wtw_error').innerHTML = '".addslashes($message)."';";
-						   $error .= "WTW.openFullPageForm('error','Error Found');"; */
-						$error .= "</script>";
-						echo $error;
+						$zerror = "<script type=\"text/javascript\">";
+						/* $zerror = "console.log('".addslashes($message)."');";
+						   $zerror .= "document.getElementById('wtw_error').innerHTML = '".addslashes($message)."';";
+						   $zerror .= "WTW.openFullPageForm('error','Error Found');"; */
+						$zerror .= "</script>";
+						echo $zerror;
 					}
 				} catch (Exception $e) { }
 			}
-			$conn->close();
+			$zconn->close();
 		} catch (Exception $e) {
-			$returntext = "core-functions-class_wtw-initsession.php-serror=" . $e->getMessage();
+			$zreturntext = "core-functions-class_wtw-initsession.php-serror=" . $e->getMessage();
 		}
-		return $returntext;
+		return $zreturntext;
 	}
 	
 	public function getClientIP(){
 		/* returns the current user IP address - also attempts to include IP if server is behind load balancers */
-		$clientip = "";
+		$zclientip = "";
 		try {
 			if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)){
-				$clientip =  $_SERVER["HTTP_X_FORWARDED_FOR"];  
+				$zclientip =  $_SERVER["HTTP_X_FORWARDED_FOR"];  
 			}else if (array_key_exists('REMOTE_ADDR', $_SERVER)) { 
-				$clientip = $_SERVER["REMOTE_ADDR"]; 
+				$zclientip = $_SERVER["REMOTE_ADDR"]; 
 			}else if (array_key_exists('HTTP_CLIENT_IP', $_SERVER)) {
-				$clientip = $_SERVER["HTTP_CLIENT_IP"]; 
+				$zclientip = $_SERVER["HTTP_CLIENT_IP"]; 
 			} 
 		} catch (Exception $e) {}
-		return $clientip; 
+		return $zclientip; 
 	}	
 
 	public function checkHost(){ 
@@ -240,56 +240,56 @@ class wtw {
 		try {
 			if (!empty($this->uri) && isset($this->uri)) {
 				$this->websiteurl = $this->uri;
-				$root =  explode('?', $this->uri);
-				$pathdef = explode("/", $root[0]);
-				if (trim($pathdef[1]) == "" || trim($pathdef[1]) == "index.php" || trim($pathdef[1]) == "admin.php" || trim($pathdef[1]) == "core" || trim($pathdef[1]) == "connect" || trim($pathdef[1]) == "content" || trim($pathdef[1]) == "config") {
+				$zroot =  explode('?', $this->uri);
+				$zpathdef = explode("/", $zroot[0]);
+				if (trim($zpathdef[1]) == "" || trim($zpathdef[1]) == "index.php" || trim($zpathdef[1]) == "admin.php" || trim($zpathdef[1]) == "core" || trim($zpathdef[1]) == "connect" || trim($zpathdef[1]) == "content" || trim($zpathdef[1]) == "config") {
 					$this->community = "";
 					$this->building = "";
 					$this->thing = "";
 					$this->websiteurl = $this->domainurl;
 					
-					if (trim($pathdef[1]) == "connect") {
+					if (trim($zpathdef[1]) == "connect") {
 						require_once(wtw_rootpath.'/core/functions/class_wtwpluginloader.php');
 						global $wtwpluginloader;
 						$wtwpluginloader->loadConnectURL();
-					} if (trim($pathdef[1]) == "core") {
-						if (isset($pathdef[2]) && !empty($pathdef[2])) {
+					} if (trim($zpathdef[1]) == "core") {
+						if (isset($zpathdef[2]) && !empty($zpathdef[2])) {
 							require_once(wtw_rootpath.'/core/functions/class_wtwpluginloader.php');
 							global $wtwpluginloader;
-							switch (trim($pathdef[2])) {
+							switch (trim($zpathdef[2])) {
 								case "handlers":
 									$wtwpluginloader->loadHandlersURL();
 									break;
 							}
 						}
 					}
-				} else if (trim($pathdef[1]) == "community" || trim($pathdef[1]) == "communities") {
-					$this->community = trim($pathdef[2]);
+				} else if (trim($zpathdef[1]) == "community" || trim($zpathdef[1]) == "communities") {
+					$this->community = trim($zpathdef[2]);
 					$this->building = "";
 					$this->thing = "";
 					$this->websiteurl = $this->domainurl."/".$this->community;
-				} else if (trim($pathdef[1]) == "building" || trim($pathdef[1]) == "buildings") {
+				} else if (trim($zpathdef[1]) == "building" || trim($zpathdef[1]) == "buildings") {
 					$this->community = "";
-					$this->building = trim($pathdef[2]);
+					$this->building = trim($zpathdef[2]);
 					$this->thing = "";
 					$this->websiteurl = $this->domainurl."/buildings/".$this->building;
-				} else if (trim($pathdef[1]) == "thing" || trim($pathdef[1]) == "things") {
+				} else if (trim($zpathdef[1]) == "thing" || trim($zpathdef[1]) == "things") {
 					$this->community = "";
 					$this->building = "";
-					$this->thing = trim($pathdef[2]);
+					$this->thing = trim($zpathdef[2]);
 					$this->websiteurl = $this->domainurl."/things/".$this->thing;
-				} else if (isset($pathdef[3]) && !empty($pathdef[3])) {
-					$this->community = trim($pathdef[1]);
-					$this->building = trim($pathdef[2]);
-					$this->thing = trim($pathdef[3]);
+				} else if (isset($zpathdef[3]) && !empty($zpathdef[3])) {
+					$this->community = trim($zpathdef[1]);
+					$this->building = trim($zpathdef[2]);
+					$this->thing = trim($zpathdef[3]);
 					$this->websiteurl = $this->domainurl."/".$this->community."/".$this->building."/".$this->thing;
-				} else if (isset($pathdef[2]) && !empty($pathdef[2])) {
-					$this->community = trim($pathdef[1]);
-					$this->building = trim($pathdef[2]);
+				} else if (isset($zpathdef[2]) && !empty($zpathdef[2])) {
+					$this->community = trim($zpathdef[1]);
+					$this->building = trim($zpathdef[2]);
 					$this->thing = "";
 					$this->websiteurl = $this->domainurl."/".$this->community."/".$this->building;
 				} else {
-					$this->community = trim($pathdef[1]);
+					$this->community = trim($zpathdef[1]);
 					$this->building = "";
 					$this->thing = "";
 					$this->websiteurl = $this->domainurl."/".$this->community;
@@ -309,60 +309,60 @@ class wtw {
 		}
 	}
 	
-	public function getVal($key, $defaultval) {
+	public function getVal($zkey, $zdefaultval) {
 		/* get querystring information with a default value if not found */
-		$value = $defaultval;
+		$zvalue = $zdefaultval;
 		try {
-			if(isset($_GET[$key]) && !empty($_GET[$key])) {
-				$value = $_GET[$key];
+			if(isset($_GET[$zkey]) && !empty($_GET[$zkey])) {
+				$zvalue = $_GET[$zkey];
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-getval=".$e->getMessage());
 		}
-		return $value;
+		return $zvalue;
 	}
 	
-	public function getNumber($key, $defaultval) {
+	public function getNumber($zkey, $zdefaultval) {
 		/* get querystring number information with a default value if not found */
-		$value = $defaultval;
+		$zvalue = $zdefaultval;
 		try {
-			if(isset($_GET[$key]) && !empty($_GET[$key])) {
-				if (is_numeric($_GET[$key])) {
-					$value = $_GET[$key];
+			if(isset($_GET[$zkey]) && !empty($_GET[$zkey])) {
+				if (is_numeric($_GET[$zkey])) {
+					$zvalue = $_GET[$zkey];
 				}
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-getNumber=".$e->getMessage());
 		}
-		return $value;
+		return $zvalue;
 	}
 	
-	public function checkNumber($val, $defaultval) {
+	public function checkNumber($zval, $zdefaultval) {
 		/* number validation function with fallback value */
-		$checkval = $defaultval;
+		$zcheckval = $zdefaultval;
 		try {
-			if (!empty($val) && isset($val)) {
-				if (is_numeric($val)) {
-					$checkval = $val;
+			if (!empty($zval) && isset($zval)) {
+				if (is_numeric($zval)) {
+					$zcheckval = $zval;
 				}
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-checkNumber=".$e->getMessage());
 		}
-		return $checkval;
+		return $zcheckval;
 	}
 
-	public function escapeHTML($text) {
+	public function escapeHTML($ztext) {
 		/* text validation function that handles special characters */
-		$checktext = "";
+		$zchecktext = "";
 		try {
-			if (!empty($text) && isset($text)) {
-				$checktext = htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+			if (!empty($ztext) && isset($ztext)) {
+				$zchecktext = htmlspecialchars($ztext, ENT_QUOTES, 'UTF-8');
 			}
 		} catch (Exception $e) {
 			$this->$serrorText = "core-functions-class_wtw-initsession.php-serror=" . $e->getMessage();
 		}
-		return $checktext;
+		return $zchecktext;
 	}	
 	
 	public function getRandomString($zlength,$zstringtype) {
@@ -404,13 +404,13 @@ class wtw {
 						mkdir(wtw_rootpath.'/config', octdec(wtw_chmod), true);
 						chmod(wtw_rootpath.'/config', octdec(wtw_chmod));
 					}
-					$server = $_POST["wtw_dbserver"];
-					$database = $_POST["wtw_dbname"];
-					$dbuser = $_POST["wtw_dbusername"];
-					$dbpassword = $_POST["wtw_dbpassword"];
-					$prefix = $_POST["wtw_tableprefix"];
-					$contentpath = wtw_rootpath."/content";
-					$contenturl = "/content";
+					$zserver = $_POST["wtw_dbserver"];
+					$zdatabase = $_POST["wtw_dbname"];
+					$zdbuser = $_POST["wtw_dbusername"];
+					$zdbpassword = $_POST["wtw_dbpassword"];
+					$zprefix = $_POST["wtw_tableprefix"];
+					$zcontentpath = wtw_rootpath."/content";
+					$zcontenturl = "/content";
 					$zdomainname = "";
 					if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
 						$zdomainname = strtolower($_SERVER['HTTP_HOST']);
@@ -419,32 +419,32 @@ class wtw {
 						/* create config text file /config/wtw_config.php if it does not exist */
 						/* set global variable values */
 						define("wtw_serverinstanceid", $this->serverinstanceid);
-						define("wtw_dbserver", $server);
-						define("wtw_dbname", $database);
-						define("wtw_dbusername", $dbuser);
-						define("wtw_dbpassword", base64_encode($dbpassword));
-						define("wtw_tableprefix", $prefix);
+						define("wtw_dbserver", $zserver);
+						define("wtw_dbname", $zdatabase);
+						define("wtw_dbusername", $zdbuser);
+						define("wtw_dbpassword", base64_encode($zdbpassword));
+						define("wtw_tableprefix", $zprefix);
 						define("wtw_devmode", "1");
-						define("wtw_contentpath", $contentpath);
-						define("wtw_contenturl", $contenturl);
+						define("wtw_contentpath", $zcontentpath);
+						define("wtw_contenturl", $zcontenturl);
 						define("wtw_defaultdomain", $zdomainname);
-						$this->contentpath = $contentpath;
-						$this->contenturl = $this->domainurl.$contenturl;
+						$this->contentpath = $zcontentpath;
+						$this->contenturl = $this->domainurl.$zcontenturl;
 						/* write global variable values to text file - will be used on page load after it is found */
-						$cfile = fopen(wtw_rootpath.'/config/wtw_config.php','wb');
-						fwrite($cfile,"<?php\r\n");
-						fwrite($cfile,"    define(\"wtw_serverinstanceid\", \"".$this->serverinstanceid."\");\r\n");
-						fwrite($cfile,"    define(\"wtw_dbserver\", \"".$server."\");\r\n");
-						fwrite($cfile,"    define(\"wtw_dbname\", \"".$database."\");\r\n");
-						fwrite($cfile,"    define(\"wtw_dbusername\", \"".$dbuser."\");\r\n");
-						fwrite($cfile,"    define(\"wtw_dbpassword\", \"".base64_encode($dbpassword)."\");\r\n");
-						fwrite($cfile,"    define(\"wtw_tableprefix\", \"".$prefix."\");\r\n\r\n");
-						fwrite($cfile,"    define(\"wtw_devmode\", \"1\");\r\n\r\n");
-						fwrite($cfile,"    define(\"wtw_contentpath\", \"".$contentpath."\");\r\n");
-						fwrite($cfile,"    define(\"wtw_contenturl\", \"".$contenturl."\");\r\n\r\n");
-						fwrite($cfile,"    define(\"wtw_defaultdomain\", \"".$zdomainname."\");\r\n\r\n");
-						fwrite($cfile,"?>");
-						fclose($cfile);
+						$zfile = fopen(wtw_rootpath.'/config/wtw_config.php','wb');
+						fwrite($zfile,"<?php\r\n");
+						fwrite($zfile,"    define(\"wtw_serverinstanceid\", \"".$this->serverinstanceid."\");\r\n");
+						fwrite($zfile,"    define(\"wtw_dbserver\", \"".$zserver."\");\r\n");
+						fwrite($zfile,"    define(\"wtw_dbname\", \"".$zdatabase."\");\r\n");
+						fwrite($zfile,"    define(\"wtw_dbusername\", \"".$zdbuser."\");\r\n");
+						fwrite($zfile,"    define(\"wtw_dbpassword\", \"".base64_encode($zdbpassword)."\");\r\n");
+						fwrite($zfile,"    define(\"wtw_tableprefix\", \"".$zprefix."\");\r\n\r\n");
+						fwrite($zfile,"    define(\"wtw_devmode\", \"1\");\r\n\r\n");
+						fwrite($zfile,"    define(\"wtw_contentpath\", \"".$zcontentpath."\");\r\n");
+						fwrite($zfile,"    define(\"wtw_contenturl\", \"".$zcontenturl."\");\r\n\r\n");
+						fwrite($zfile,"    define(\"wtw_defaultdomain\", \"".$zdomainname."\");\r\n\r\n");
+						fwrite($zfile,"?>");
+						fclose($zfile);
 						chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
 						$zsetupstep = 0;
 						header("Location: ".$this->domainurl."/"); 
@@ -460,14 +460,14 @@ class wtw {
 				if (!defined('wtw_serverinstanceid')) {
 					/* check for server instance id - create if not found */
 					define("wtw_serverinstanceid", $this->serverinstanceid);
-					$lines = file(wtw_rootpath.'/config/wtw_config.php');
-					$last = sizeof($lines) - 1 ; 
-					unset($lines[$last]); 
-					$cfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
-					fwrite($cfile, implode('', $lines));
-					fwrite($cfile,"    define(\"wtw_serverinstanceid\", \"".$this->serverinstanceid."\");\r\n");
-					fwrite($cfile,"?>");
-					fclose($cfile);
+					$zlines = file(wtw_rootpath.'/config/wtw_config.php');
+					$zlast = sizeof($zlines) - 1 ; 
+					unset($zlines[$zlast]); 
+					$zfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
+					fwrite($zfile, implode('', $zlines));
+					fwrite($zfile,"    define(\"wtw_serverinstanceid\", \"".$this->serverinstanceid."\");\r\n");
+					fwrite($zfile,"?>");
+					fclose($zfile);
 					chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
 				}
 			}
@@ -477,37 +477,37 @@ class wtw {
 				/* check if password looks like it is encoded */
 				if (base64_decode(wtw_dbpassword, true) !== false) {
 					/* try to make a connection with decoded password */
-					$conn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
-					if ($conn->connect_error) {
+					$zconn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
+					if ($zconn->connect_error) {
 						/* connection did not work, try connection without decoding */
-						$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
-						if ($conn->connect_error == false) {
+						$zconn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
+						if ($zconn->connect_error == false) {
 							/* connection worked, now encode password */
 							$zupdatepassword = true;
 						}
 					}
 				} else {
 					/* connection did not work, try connection without decoding */
-					$conn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
-					if ($conn->connect_error == false) {
+					$zconn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
+					if ($zconn->connect_error == false) {
 						/* connection worked, now encode password */
 						$zupdatepassword = true;
 					}
 				}
 				if ($zupdatepassword == true) {
 					/* update password with encoded password */
-					$lines = file(wtw_rootpath.'/config/wtw_config.php');
-					$cfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
-					foreach ($lines as $line) {
-						if (strpos($line, 'wtw_dbpassword') !== false) {
-							fwrite($cfile, "    define(\"wtw_dbpassword\", \"".base64_encode(wtw_dbpassword)."\");\r\n");
-						} else if (strpos($line, 'wtw_defaultfromemail') !== false) {
-							fwrite($cfile, str_replace("wtw_defaultfromemail","wtw_adminemail",$line));
+					$zlines = file(wtw_rootpath.'/config/wtw_config.php');
+					$zfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
+					foreach ($zlines as $zline) {
+						if (strpos($zline, 'wtw_dbpassword') !== false) {
+							fwrite($zfile, "    define(\"wtw_dbpassword\", \"".base64_encode(wtw_dbpassword)."\");\r\n");
+						} else if (strpos($zline, 'wtw_defaultfromemail') !== false) {
+							fwrite($zfile, str_replace("wtw_defaultfromemail","wtw_adminemail",$zline));
 						} else {
-							fwrite($cfile, $line);
+							fwrite($zfile, $zline);
 						}
 					}
-					fclose($cfile);
+					fclose($zfile);
 					chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
 					header("Location: ".$this->domainurl."/"); 
 					exit();
@@ -518,21 +518,21 @@ class wtw {
 				require_once(wtw_rootpath.'/core/functions/class_wtwdb.php');
 				require_once(wtw_rootpath.'/core/functions/class_wtwusers.php');
 				require_once(wtw_rootpath.'/core/functions/class_wtwpluginloader.php');
-				$conn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
-				if ($conn->connect_error) {
+				$zconn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
+				if ($zconn->connect_error) {
 					$zsetupstep = 2;
 				} else {
 					/* setup database if it does not exist */
 					$zsetupstep = 3; /* check if tables exist... using prefix ... 3 == not... */
-					$sql = "show tables like '".wtw_tableprefix."webimages';";
-					$result = $conn->query($sql);
-					if (is_object($result)) {
-						if ($result->num_rows > 0) {
+					$zsql = "show tables like '".wtw_tableprefix."webimages';";
+					$zresults = $zconn->query($zsql);
+					if (is_object($zresults)) {
+						if ($zresults->num_rows > 0) {
 							$zsetupstep = 0;
 						}
 					} 
 				}
-				$conn->close();
+				$zconn->close();
 				if ($zsetupstep == 3) { /* check for new install... previous Install with different prefix */
 					global $wtwdb;
 					$zresults = $wtwdb->query("select count(*) as scount 
@@ -545,13 +545,13 @@ class wtw {
 							}
 						}
 					}
-					$confirm = "";
+					$zconfirm = "";
 					if ($zsetupstep == 4 && $_SERVER['REQUEST_METHOD']=='POST') {
 						try {
-							$confirm = $_POST["wtw_tconfirm"];
+							$zconfirm = $_POST["wtw_tconfirm"];
 						} catch (Exception $e){}
 					}
-					if ($zsetupstep == 3 || ($confirm == "YES" && $zsetupstep == 4)) {
+					if ($zsetupstep == 3 || ($zconfirm == "YES" && $zsetupstep == 4)) {
 						/* run table setup and updates */
 						require_once(wtw_rootpath.'/core/functions/class_wtwtables.php');
 						global $wtwtables;
@@ -624,16 +624,16 @@ class wtw {
 						
 						/* write analytics and default email/sitename to config file */
 						if (file_exists(wtw_rootpath.'/config/wtw_config.php') && !defined('wtw_defaultsitename')) {
-							$lines = file(wtw_rootpath.'/config/wtw_config.php');
-							$last = sizeof($lines) - 1 ; 
-							unset($lines[$last]); 
-							$cfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
-							fwrite($cfile, implode('', $lines));
-							fwrite($cfile,"    define(\"wtw_defaultsitename\", \"".$zsitename."\");\r\n");
-							fwrite($cfile,"    define(\"wtw_googleanalytics\", \"".$zanalytics."\");\r\n");
-							fwrite($cfile,"    define(\"wtw_adminemail\", \"".$zadminemail."\");\r\n");
-							fwrite($cfile,"?>");
-							fclose($cfile);
+							$zlines = file(wtw_rootpath.'/config/wtw_config.php');
+							$zlast = sizeof($zlines) - 1 ; 
+							unset($zlines[$zlast]); 
+							$zfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
+							fwrite($zfile, implode('', $zlines));
+							fwrite($zfile,"    define(\"wtw_defaultsitename\", \"".$zsitename."\");\r\n");
+							fwrite($zfile,"    define(\"wtw_googleanalytics\", \"".$zanalytics."\");\r\n");
+							fwrite($zfile,"    define(\"wtw_adminemail\", \"".$zadminemail."\");\r\n");
+							fwrite($zfile,"?>");
+							fclose($zfile);
 							chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
 						}
 						/* set up initial admin user - from installation process */
@@ -736,14 +736,14 @@ class wtw {
 			if ($zsetupstep == 0) {
 				/* check if first 3D Building is created */
 				global $wtwdb;
-				$scount = 0;
+				$zcount = 0;
 				$zresults = $wtwdb->query("select count(*) scount 
 					from ".wtw_tableprefix."buildings
 					where downloadparentwebid='';");
 				foreach ($zresults as $zrow) {
-					$scount = $zrow["scount"];
+					$zcount = $zrow["scount"];
 				}
-				if ($scount == 0) {
+				if ($zcount == 0) {
 					if (empty($_SESSION["wtw_userid"]) || !isset($_SESSION["wtw_userid"])) {
 						/* if not logged in - log in admin user */
 						$zsetupstep = 5;
@@ -1023,29 +1023,29 @@ class wtw {
 				exit();
 			} else {
 				/* url may be a web alias - check for available 3D Website paths */
-				$sql = "
+				$zsql = "
 					select *
 					from ".wtw_tableprefix."webaliases
 					where domainname='".$this->domainname."'
 						and deleted=0";
 				if (!empty($this->community)) {
-					$sql .= " and (communitypublishname='".$this->community."' or communityid='".$this->community."')";
+					$zsql .= " and (communitypublishname='".$this->community."' or communityid='".$this->community."')";
 				} else {
-					$sql .= " and communitypublishname=''";
+					$zsql .= " and communitypublishname=''";
 				}
 				if (!empty($this->building)) {
-					$sql .= " and (buildingpublishname='".$this->building."' or buildingid='".$this->building."')";
+					$zsql .= " and (buildingpublishname='".$this->building."' or buildingid='".$this->building."')";
 				} else {
-					$sql .= " and buildingpublishname=''";
+					$zsql .= " and buildingpublishname=''";
 				}
 				if (!empty($this->thing)) {
-					$sql .= " and (thingpublishname='".$this->thing."' or thingid'".$this->thing."')";
+					$zsql .= " and (thingpublishname='".$this->thing."' or thingid'".$this->thing."')";
 				} else {
-					$sql .= " and thingpublishname=''";
+					$zsql .= " and thingpublishname=''";
 				}
-				$sql .= " order by createdate limit 1;";
+				$zsql .= " order by createdate limit 1;";
 				
-				$zresults = $wtwdb->query($sql);
+				$zresults = $wtwdb->query($zsql);
 				foreach ($zresults as $zrow) {
 					if (!empty($zrow["communityid"]) && isset($zrow["communityid"])) {
 						$this->communityid = $zrow["communityid"];
@@ -1098,22 +1098,22 @@ class wtw {
 
 	public function userHasArchitect($zrolename) {
 		/* check if user has the role of architect access */
-		$hasaccess = false;
+		$zhasaccess = false;
 		try {
 			if ($zrolename == 'Admin' || $zrolename == 'Architect' || $zrolename == 'Developer' || $zrolename == 'Graphics Artist') {
-				$hasaccess = true;
+				$zhasaccess = true;
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-userHasArchitect=".$e->getMessage());
 		}
-		return $hasaccess;
+		return $zhasaccess;
 	}
 		
 
 	public function getSceneSetting() {
 		/* get initial 3D COmmunity Scene settings (sky, water level, ground textures, and avatar start position) */
 		global $wtwdb;
-		$initialscene = array();
+		$zinitialscene = array();
 		try {
 			/* select initial avatar position based on path publish names (work in progress - includes prep for future use) */
 			$zpositionx = 0;
@@ -1646,12 +1646,12 @@ class wtw {
 				'position' => $zposition,
 				'scaling' => $zscaling,
 				'rotation' => $zrotation);
-			$initialscene['domaininfo'] = $zdomaininfo;
-			$initialscene['communityinfo'] = $zcommunityinfo;
-			$initialscene['buildinginfo'] = $zbuildinginfo;
-			$initialscene['thinginfo'] = $zthinginfo;
-			$initialscene['startlocation'] = $startlocation;
-			$initialscene['useraccesslist'] = null;
+			$zinitialscene['domaininfo'] = $zdomaininfo;
+			$zinitialscene['communityinfo'] = $zcommunityinfo;
+			$zinitialscene['buildinginfo'] = $zbuildinginfo;
+			$zinitialscene['thinginfo'] = $zthinginfo;
+			$zinitialscene['startlocation'] = $startlocation;
+			$zinitialscene['useraccesslist'] = null;
 			/* get main 3D Thing settings */
 			$zresults = $wtwdb->query("
 				select settingvalue
@@ -1661,31 +1661,31 @@ class wtw {
 				limit 1;");
 			if (count($zresults) > 0) {
 				foreach ($zresults as $zrow) {
-					$initialscene['enableemailvalidation'] = $zrow["settingvalue"];
+					$zinitialscene['enableemailvalidation'] = $zrow["settingvalue"];
 				}
 			} else {
-				$initialscene['enableemailvalidation'] = '0';
+				$zinitialscene['enableemailvalidation'] = '0';
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-getSceneSetting=".$e->getMessage());
 		}
-		return $initialscene;
+		return $zinitialscene;
 	}
 	
 	public function loadMetaData() {
 		/* sets the meta data for the web page */
 		global $wtwdb;
-		$metadata = "";
+		$zmetadata = "";
 		try {
 			/* domainverify = used by social media */
 			/* fbappid =  used by social media */
 			/* also check category and business contact email and setup image alt */
-			$previewpath = "";
-			$testpreviewpath = "";
-			$previewwidth = "512";
-			$previewheight = "300";
-			$webdescription = "";
-			$webtitle = "WalkTheWeb: 3D Internet";
+			$zpreviewpath = "";
+			$ztestpreviewpath = "";
+			$zpreviewwidth = "512";
+			$zpreviewheight = "300";
+			$zwebdescription = "";
+			$zwebtitle = "WalkTheWeb: 3D Internet";
 			$zresults = array();
 			/* get meta data values based on 3D Community, Building, or Thing */
 			if (!empty($this->communityid)) {
@@ -1774,276 +1774,278 @@ class wtw {
 					where t1.thingid='".$this->thingid."' limit 1;");
 			}
 			foreach ($zresults as $zrow) {
-				$previewpath = $zrow["previewpath"]."?time=".date_timestamp_get(date_create());
-				$testpreviewpath = $zrow["testpreviewpath"];
-				$previewwidth = $zrow["previewwidth"];
-				$previewheight = $zrow["previewheight"];
-				$webtitle = $zrow["webname"];
-				$webdescription = $zrow["webdescription"];
+				$zpreviewpath = $zrow["previewpath"]."?time=".date_timestamp_get(date_create());
+				$ztestpreviewpath = $zrow["testpreviewpath"];
+				$zpreviewwidth = $zrow["previewwidth"];
+				$zpreviewheight = $zrow["previewheight"];
+				$zwebtitle = $zrow["webname"];
+				$zwebdescription = $zrow["webdescription"];
 			}
 
-			if (!file_exists($this->contentpath.$testpreviewpath) && !empty($testpreviewpath)) {
-				$previewpath = $this->domainurl."/content/system/stock/wtw-3dinternet.jpg";
+			if (!file_exists($this->contentpath.$ztestpreviewpath) && !empty($ztestpreviewpath)) {
+				$zpreviewpath = $this->domainurl."/content/system/stock/wtw-3dinternet.jpg";
 			}
 			if ($this->pagename == 'admin.php') {
-				$webtitle = "WalkTheWeb: 3D Internet Admin";
-				$webdescription = "WalkTheWeb: Admin Site: Patented 3D Internet Browsing and 3D Website hosting. WalkTheWeb (R), http://3d (TM), https://3d (TM), and HTTP3D (TM).";
+				$zwebtitle = "WalkTheWeb: 3D Internet Admin";
+				$zwebdescription = "WalkTheWeb: Admin Site: Patented 3D Internet Browsing and 3D Website hosting. WalkTheWeb (R), http://3d (TM), https://3d (TM), and HTTP3D (TM).";
 			}
-			if (empty($webtitle) || !isset($webtitle)) {
-				$webtitle = "WalkTheWeb 3D Internet";
+			if (empty($zwebtitle) || !isset($zwebtitle)) {
+				$zwebtitle = "WalkTheWeb 3D Internet";
 			}
-			if (empty($webdescription) || !isset($webdescription)) {
-				$webdescription = "WalkTheWeb: Internationally Patented 3D Internet Browsing and 3D Website hosting. WalkTheWeb (R), http://3d (TM), https://3d (TM), and HTTP3D (TM).";
+			if (empty($zwebdescription) || !isset($zwebdescription)) {
+				$zwebdescription = "WalkTheWeb: Internationally Patented 3D Internet Browsing and 3D Website hosting. WalkTheWeb (R), http://3d (TM), https://3d (TM), and HTTP3D (TM).";
 			} 
 			/* meta data entries */
-			$metadata = "<title>".$webtitle."</title>\r\n";
-			$metadata .= "<meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\" />\r\n";
-			$metadata .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\r\n";
-			$metadata .= "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\">\r\n";
-			$metadata .= "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\r\n";
-			$metadata .= "<meta http-equiv=\"Expires\" content=\"-1\" />\r\n";
-			if (!empty($webdescription) && isset($webdescription)) {
-				$metadata .= "<meta name=\"description\" content=\"".$webdescription."\" />\r\n";
-				$metadata .= "<meta property=\"og:description\" content=\"".$webdescription."\" />\r\n";
+			$zmetadata = "<title>".$zwebtitle."</title>\r\n";
+			$zmetadata .= "<meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\" />\r\n";
+			$zmetadata .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\r\n";
+			$zmetadata .= "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\">\r\n";
+			$zmetadata .= "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\r\n";
+			$zmetadata .= "<meta http-equiv=\"Expires\" content=\"-1\" />\r\n";
+			if (!empty($zwebdescription) && isset($zwebdescription)) {
+				$zmetadata .= "<meta name=\"description\" content=\"".$zwebdescription."\" />\r\n";
+				$zmetadata .= "<meta property=\"og:description\" content=\"".$zwebdescription."\" />\r\n";
 			}
-			$metadata .= "<meta property=\"og:image\" content=\"".$previewpath."\" />\r\n";
-			$metadata .= "<meta property=\"og:image:width\" content=\"".$previewwidth."\"/>\r\n";
-			$metadata .= "<meta property=\"og:image:height\" content=\"".$previewheight."\"/>\r\n";
-			$metadata .= "<meta property=\"og:image:alt\" content=\"".$previewpath."\" />\r\n";
-			$metadata .= "<meta property=\"og:url\" content=\"".$this->protocol.$this->domainname.$this->uri."\" />\r\n";
-			$metadata .= "<meta property=\"og:type\" content=\"business.business\" />\r\n";
-			$metadata .= "<meta property=\"og:title\" content=\"".$webtitle."\" />\r\n";
+			$zmetadata .= "<meta property=\"og:image\" content=\"".$zpreviewpath."\" />\r\n";
+			$zmetadata .= "<meta property=\"og:image:width\" content=\"".$zpreviewwidth."\"/>\r\n";
+			$zmetadata .= "<meta property=\"og:image:height\" content=\"".$zpreviewheight."\"/>\r\n";
+			$zmetadata .= "<meta property=\"og:image:alt\" content=\"".$zpreviewpath."\" />\r\n";
+			$zmetadata .= "<meta property=\"og:url\" content=\"".$this->protocol.$this->domainname.$this->uri."\" />\r\n";
+			$zmetadata .= "<meta property=\"og:type\" content=\"business.business\" />\r\n";
+			$zmetadata .= "<meta property=\"og:title\" content=\"".$zwebtitle."\" />\r\n";
 			/* additional optional meta data - should be defined on the /config/wtw_config.php file */
 /*			if (defined('domainverify')) {
-				$metadata .= "<meta name=\"p:domain_verify\" content=\"".domainverify."\"/>\r\n";
+				$zmetadata .= "<meta name=\"p:domain_verify\" content=\"".domainverify."\"/>\r\n";
 			}
 			if (defined('fbappid')) {
-				$metadata .= "<meta property=\"fb:app_id\" content=\"".fbappid."\" />\r\n";
+				$zmetadata .= "<meta property=\"fb:app_id\" content=\"".fbappid."\" />\r\n";
 			}
 			if (defined('contactemail')) {
-				$metadata .= "<meta property=\"business:contact_data\" content=\"".contactemail."\" />\r\n";
+				$zmetadata .= "<meta property=\"business:contact_data\" content=\"".contactemail."\" />\r\n";
 			}
 */		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadMetaData=".$e->getMessage());
 		}
-		return $metadata;
+		return $zmetadata;
 	}
 	
 	public function loadInitJSData() {
 		/* global JavaScript variables passed from the Database using PHP */
 		global $wtwplugins;
-		$jsdata = "";
+		$zjsdata = "";
 		try {	
-			$jsdata = "<script type=\"text/javascript\">\r\n";
+			$zjsdata = "<script type=\"text/javascript\">\r\n";
 			if (defined('wtw_devmode')) {
-				$jsdata .= "	var wtw_devmode = '".wtw_devmode."';\r\n";
+				$zjsdata .= "	var wtw_devmode = '".wtw_devmode."';\r\n";
 			} else {
-				$jsdata .= "	var wtw_devmode = '0';\r\n";
+				$zjsdata .= "	var wtw_devmode = '0';\r\n";
 			}
 			if (defined('wtw_defaultdomain')) {
-				$jsdata .= "	var wtw_defaultdomain = '".wtw_defaultdomain."';\r\n";
+				$zjsdata .= "	var wtw_defaultdomain = '".wtw_defaultdomain."';\r\n";
 			} else {
-				$jsdata .= "	var wtw_defaultdomain = '';\r\n";
+				$zjsdata .= "	var wtw_defaultdomain = '';\r\n";
 			}
 			if (defined('wtw_defaultsitename')) {
-				$jsdata .= "	var wtw_defaultsitename = '".wtw_defaultsitename."';\r\n";
+				$zjsdata .= "	var wtw_defaultsitename = '".wtw_defaultsitename."';\r\n";
 			} else {
-				$jsdata .= "	var wtw_defaultsitename = '';\r\n";
+				$zjsdata .= "	var wtw_defaultsitename = '';\r\n";
 			}
 			if (defined('wtw_googleanalytics')) {
-				$jsdata .= "	var wtw_googleanalytics = '".wtw_googleanalytics."';\r\n";
+				$zjsdata .= "	var wtw_googleanalytics = '".wtw_googleanalytics."';\r\n";
 			} else {
-				$jsdata .= "	var wtw_googleanalytics = '';\r\n";
+				$zjsdata .= "	var wtw_googleanalytics = '';\r\n";
 			}
-			$jsdata .= "	var wtw_protocol = '".$this->protocol."';\r\n";
-			$jsdata .= "	var wtw_domainurl = '".$this->domainurl."';\r\n";
-			$jsdata .= "	var wtw_websiteurl = '".$this->websiteurl."';\r\n";
-			$jsdata .= "	var wtw_domainname = '".$this->domainname."';\r\n";
-			$jsdata .= "	var community = '".$this->community."';\r\n";
-			$jsdata .= "	var building = '".$this->building."';\r\n";
-			$jsdata .= "	var thinging = '".$this->thing."';\r\n";
-			$jsdata .= "	var communityid = '".$this->communityid."';\r\n";
-			$jsdata .= "	var buildingid = '".$this->buildingid."';\r\n";
-			$jsdata .= "	var thingid = '".$this->thingid."';\r\n";
-			$jsdata .= "	var avatarid = '".$this->avatarid."';\r\n";
-			$jsdata .= "	var wtw_domain;\r\n";
-			$jsdata .= "	var wtw_uploads = [];\r\n";
-			$jsdata .= "	var wtw_version = \"".$this->version."\";\r\n";
-			$jsdata .= "	var wtw_versiondate = \"".$this->versiondate."\";\r\n";
-			$jsdata .= "	var wtw_versiontext = \"HTTP3D Inc. (v".$this->version.") ".date('m-d-Y', strtotime($this->versiondate))."\";\r\n";
-			$jsdata .= "	try {\r\n";
-			$jsdata .= "		wtw_domain = JSON.stringify(".json_encode($this->getSceneSetting()).");\r\n";
-			$jsdata .= "	} catch(ex) {\r\n 			console.log('core-snippets-checkloadurl=' + ex.message);\r\n";
-			$jsdata .= "	}\r\n";
-            $jsdata .= "	if (window != top) {\r\n";
-            $jsdata .= "	    top.location.href = location.href;\r\n";
-            $jsdata .= "	}\r\n";
-            $jsdata .= "	if (top.frames.length != 0) {\r\n";
-            $jsdata .= "	    if (window.location.href.replace) {\r\n";
-            $jsdata .= "	    	top.location.replace(self.location.href);\r\n";
-            $jsdata .= "		} else {\r\n";
-            $jsdata .= "		    top.location.href = self.document.href;\r\n";
-			$jsdata .= "		}\r\n";
-            $jsdata .= "	}\r\n";
-			$jsdata .= "</script>"; 
-			$jsdata .= "<script src=\"/core/scripts/engine/socket.io.js\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/socket.io-stream.js\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$this->version."\"></script>\r\n";
-			$jsdata .= $wtwplugins->getScriptFunctions();
+			$zjsdata .= "	var wtw_protocol = '".$this->protocol."';\r\n";
+			$zjsdata .= "	var wtw_domainurl = '".$this->domainurl."';\r\n";
+			$zjsdata .= "	var wtw_websiteurl = '".$this->websiteurl."';\r\n";
+			$zjsdata .= "	var wtw_domainname = '".$this->domainname."';\r\n";
+			$zjsdata .= "	var community = '".$this->community."';\r\n";
+			$zjsdata .= "	var building = '".$this->building."';\r\n";
+			$zjsdata .= "	var thinging = '".$this->thing."';\r\n";
+			$zjsdata .= "	var communityid = '".$this->communityid."';\r\n";
+			$zjsdata .= "	var buildingid = '".$this->buildingid."';\r\n";
+			$zjsdata .= "	var thingid = '".$this->thingid."';\r\n";
+			$zjsdata .= "	var avatarid = '".$this->avatarid."';\r\n";
+			$zjsdata .= "	var wtw_domain;\r\n";
+			$zjsdata .= "	var wtw_uploads = [];\r\n";
+			$zjsdata .= "	var wtw_version = \"".$this->version."\";\r\n";
+			$zjsdata .= "	var wtw_versiondate = \"".$this->versiondate."\";\r\n";
+			$zjsdata .= "	var wtw_versiontext = \"HTTP3D Inc. (v".$this->version.") ".date('m-d-Y', strtotime($this->versiondate))."\";\r\n";
+			$zjsdata .= "	try {\r\n";
+			$zjsdata .= "		wtw_domain = JSON.stringify(".json_encode($this->getSceneSetting()).");\r\n";
+			$zjsdata .= "	} catch(ex) {\r\n 			console.log('core-snippets-checkloadurl=' + ex.message);\r\n";
+			$zjsdata .= "	}\r\n";
+            $zjsdata .= "	if (window != top) {\r\n";
+            $zjsdata .= "	    top.location.href = location.href;\r\n";
+            $zjsdata .= "	}\r\n";
+            $zjsdata .= "	if (top.frames.length != 0) {\r\n";
+            $zjsdata .= "	    if (window.location.href.replace) {\r\n";
+            $zjsdata .= "	    	top.location.replace(self.location.href);\r\n";
+            $zjsdata .= "		} else {\r\n";
+            $zjsdata .= "		    top.location.href = self.document.href;\r\n";
+			$zjsdata .= "		}\r\n";
+            $zjsdata .= "	}\r\n";
+			$zjsdata .= "</script>"; 
+			$zjsdata .= "<script src=\"/core/scripts/engine/socket.io.js\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/engine/socket.io-stream.js\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$this->version."\"></script>\r\n";
+			$zjsdata .= $wtwplugins->getScriptFunctions();
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadInitJSData=".$e->getMessage());
 		}
-		return $jsdata;
+		return $zjsdata;
 	}
 
 	public function loadJSBrowseData() {
 		/* these scripts are loaded when in the browse mode (for Admin scripts, see /core/functions/class_wtwadmin.php) */
 		/* note that admin also loads these same scripts, but adds additional scripts in a particular order */
-		$jsdata = "";
+		$zjsdata = "";
 		try {	
 			$zver = $this->version;
 			/* alternative used during development to force reload every time */
 			$zver = date("Y-m-d-H-i-s");
 			/* additional materials library available: https://github.com/BabylonJS/Babylon.js/tree/master/dist/materialsLibrary/ */
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_utilities.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_dynamicscripts.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_login.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_uploads.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_analytics.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_hud.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_basicavatars.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_addavatarlist.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_transitionsavatars.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/avatars/wtw_avatarfunctions.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/hud/wtw_hud.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$zver."\"></script>\r\n";
-			/* $jsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$zver."\"></script>\r\n"; */
-			$jsdata .= "<script src=\"/core/scripts/engine/cannon.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylonjs.loaders.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylonjs.postProcess.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.gui.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylonjs.proceduralTextures.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/babylon.materials.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/pep.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/loader.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/engine/meshwriter.min.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_input.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_basicactionzones.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_addactionzonelist.js?x=".$zver."\"></script>\r\n";			
-			$jsdata .= "<script src=\"/core/scripts/actionzones/wtw_actionzonefunctions.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/coverings/wtw_basiccoverings.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/coverings/wtw_addcoveringlist.js?x=".$zver."\"></script>\r\n";		
-			$jsdata .= "<script src=\"/core/scripts/molds/wtw_basicmolds.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/molds/wtw_addmoldlist.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/molds/wtw_3dblog.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/automations/wtw_basicautomations.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/automations/wtw_addautomationlist.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/vehicles/wtw_vehicles.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_core.js?x=".$zver."\"></script>\r\n";
-			$jsdata .= "<script src=\"/core/scripts/prime/wtw_init.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_utilities.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_dynamicscripts.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_login.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_uploads.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_analytics.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_basicavatars.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_addavatarlist.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_transitionsavatars.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_avatarfunctions.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/hud/wtw_hud.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/hud/wtw_hud_fields.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/hud/wtw_hud_cameras.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/hud/wtw_hud_profile.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$zver."\"></script>\r\n";
+			/* $zjsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$zver."\"></script>\r\n"; */
+			$zjsdata .= "<script src=\"/core/scripts/engine/cannon.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/engine/babylon.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/engine/babylonjs.loaders.min.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/engine/babylonjs.postProcess.min.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/engine/babylon.gui.min.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/engine/babylonjs.proceduralTextures.min.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/engine/babylon.materials.min.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/engine/pep.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/engine/loader.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/engine/meshwriter.min.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_input.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/actionzones/wtw_basicactionzones.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/actionzones/wtw_addactionzonelist.js?x=".$zver."\"></script>\r\n";			
+			$zjsdata .= "<script src=\"/core/scripts/actionzones/wtw_actionzonefunctions.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/coverings/wtw_basiccoverings.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/coverings/wtw_addcoveringlist.js?x=".$zver."\"></script>\r\n";		
+			$zjsdata .= "<script src=\"/core/scripts/molds/wtw_basicmolds.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/molds/wtw_addmoldlist.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/molds/wtw_3dblog.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/automations/wtw_basicautomations.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/automations/wtw_addautomationlist.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/vehicles/wtw_vehicles.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_core.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_init.js?x=".$zver."\"></script>\r\n";
 			global $wtwplugins;
-			$jsdata .= $wtwplugins->getPluginScripts('0', $zver);
+			$zjsdata .= $wtwplugins->getPluginScripts('0', $zver);
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadJSBrowseData=".$e->getMessage());
 		}
-		return $jsdata;
+		return $zjsdata;
 	}
 
 	public function loadCSSBrowseData() {
 		/* loads the CSS stylesheets */
 		global $wtwplugins;
-		$cssdata = "";
+		$zcssdata = "";
 		try {	
-			$cssdata .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_core.css\" />\r\n";
-			$cssdata .= $wtwplugins->getPluginStylesheets('0');
+			$zcssdata .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_core.css\" />\r\n";
+			$zcssdata .= $wtwplugins->getPluginStylesheets('0');
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadCSSBrowseData=".$e->getMessage());
 		}
-		return $cssdata;
+		return $zcssdata;
 	}
 	
 	public function loadMainElements() {
 		/* these are the main page elements such as canvases and graphic helpers */
-		$mainelements = "";
+		$zmainelements = "";
 		try {
-			$mainelements = "<div id=\"wtw_showmeshfps\"></div>\r\n";
-			$mainelements .= "<div id=\"wtw_iwalkarrow\" style=\"display:none;visibility:hidden;\"></div>\r\n";
-			$mainelements .= "<div id=\"wtw_iwalkarrow2\" style=\"display:none;visibility:hidden;\"></div>\r\n";
-			$mainelements .= "<div id=\"wtw_itooltip\"></div>\r\n";
-			$mainelements .= "<div id=\"wtw_itouchleft\"></div>\r\n";
-			$mainelements .= "<div id=\"wtw_itouchright\"></div>\r\n";
-			$mainelements .= "<img id=\"wtw_iwalkcompassarrow\" src=\"".$this->contenturl."/system/images/walkarrow.png\" border=\"0\" style=\"position: absolute; z-index: 0; visibility: hidden; position: absolute; top: 0px; left: 0px; height: 97px; width: 75px;\" />\r\n";
-			$mainelements .= "<img id=\"wtw_iwalkcompass\" src=\"".$this->contenturl."/system/images/compassrose.png\" border=\"0\" style=\"position: absolute; z-index: 0; visibility: hidden; position: absolute; top: 0px; left: 0px; height: 97px; width: 75px;\" />\r\n";
-			$mainelements .= "<div id=\"wtw_outlineselfcameradiv\" style=\"display:none;visibility:hidden;\"></div>\r\n";
-			$mainelements .= "<canvas id=\"wtw_uiCanvas\"></canvas>\r\n";
-			$mainelements .= "<canvas id=\"wtw_renderCanvas\" touch-action=\"none\"></canvas>\r\n";
-			$mainelements .= "<div id=\"wtw_greyout\"></div>\r\n";
-			$mainelements .= "<div id=\"wtw_ibrowsediv\" class=\"wtw-browsediv\" style=\"display:none;\">\r\n";
-			$mainelements .= "	<div id=\"wtw_browseheader\" class=\"wtw-browseheader\">\r\n";
-			$mainelements .= "		<div id=\"wtw_browseheaderclose\" class=\"wtw-browseclose\" onclick=\"WTW.closeIFrame();\">\r\n";
-			$mainelements .= "			<img src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />\r\n";
-			$mainelements .= "		</div>\r\n";
-			$mainelements .= "		<div id=\"wtw_browsetitle\"></div>\r\n";
-			$mainelements .= "	</div>\r\n";
-			$mainelements .= "  <div id=\"wtw_ipagediv\" class=\"wtw-ipagediv\"></div>\r\n";
-			$mainelements .= "	<iframe id=\"wtw_ibrowseframe\" class=\"wtw-ibrowseframe\" src=\"/core/pages/loading.php\"></iframe>\r\n";
-			$mainelements .= "</div>\r\n";
-			$mainelements .= "<div id=\"wtw_streaming\" class=\"wtw-hide\"></div>\r\n";
-			$mainelements .= "<div id=\"wtw_playerstats\" class=\"wtw-playerstats\"></div>\r\n";
+			$zmainelements = "<div id=\"wtw_showmeshfps\"></div>\r\n";
+			$zmainelements .= "<div id=\"wtw_iwalkarrow\" style=\"display:none;visibility:hidden;\"></div>\r\n";
+			$zmainelements .= "<div id=\"wtw_iwalkarrow2\" style=\"display:none;visibility:hidden;\"></div>\r\n";
+			$zmainelements .= "<div id=\"wtw_itooltip\"></div>\r\n";
+			$zmainelements .= "<div id=\"wtw_itouchleft\"></div>\r\n";
+			$zmainelements .= "<div id=\"wtw_itouchright\"></div>\r\n";
+			$zmainelements .= "<img id=\"wtw_iwalkcompassarrow\" src=\"".$this->contenturl."/system/images/walkarrow.png\" border=\"0\" style=\"position: absolute; z-index: 0; visibility: hidden; position: absolute; top: 0px; left: 0px; height: 97px; width: 75px;\" />\r\n";
+			$zmainelements .= "<img id=\"wtw_iwalkcompass\" src=\"".$this->contenturl."/system/images/compassrose.png\" border=\"0\" style=\"position: absolute; z-index: 0; visibility: hidden; position: absolute; top: 0px; left: 0px; height: 97px; width: 75px;\" />\r\n";
+			$zmainelements .= "<div id=\"wtw_outlineselfcameradiv\" style=\"display:none;visibility:hidden;\"></div>\r\n";
+			$zmainelements .= "<canvas id=\"wtw_uiCanvas\"></canvas>\r\n";
+			$zmainelements .= "<canvas id=\"wtw_renderCanvas\" touch-action=\"none\"></canvas>\r\n";
+			$zmainelements .= "<div id=\"wtw_greyout\"></div>\r\n";
+			$zmainelements .= "<div id=\"wtw_ibrowsediv\" class=\"wtw-browsediv\" style=\"display:none;\">\r\n";
+			$zmainelements .= "	<div id=\"wtw_browseheader\" class=\"wtw-browseheader\">\r\n";
+			$zmainelements .= "		<div id=\"wtw_browseheaderclose\" class=\"wtw-browseclose\" onclick=\"WTW.closeIFrame();\">\r\n";
+			$zmainelements .= "			<img src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />\r\n";
+			$zmainelements .= "		</div>\r\n";
+			$zmainelements .= "		<div id=\"wtw_browsetitle\"></div>\r\n";
+			$zmainelements .= "	</div>\r\n";
+			$zmainelements .= "  <div id=\"wtw_ipagediv\" class=\"wtw-ipagediv\"></div>\r\n";
+			$zmainelements .= "	<iframe id=\"wtw_ibrowseframe\" class=\"wtw-ibrowseframe\" src=\"/core/pages/loading.php\"></iframe>\r\n";
+			$zmainelements .= "</div>\r\n";
+			$zmainelements .= "<div id=\"wtw_streaming\" class=\"wtw-hide\"></div>\r\n";
+			$zmainelements .= "<div id=\"wtw_playerstats\" class=\"wtw-playerstats\"></div>\r\n";
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadMainElements=".$e->getMessage());
 		}
-		return $mainelements;
+		return $zmainelements;
 	}
 	
 	public function loadHiddenFields() {
 		/* these are used to pass information to and from the animated canvas and the database */
-		$hiddenfields = "";
+		$zhiddenfields = "";
 		global $wtwuser;
 		try {
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_serverinstanceid\" value=\"".$this->serverinstanceid."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_serverip\" value=\"".$this->serverip."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tusertoken\" value=\"".$this->usertoken."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tglobaluserid\" value=\"".$this->globaluserid."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserid\" value=\"".$wtwuser->userid."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserip\" value=\"".$wtwuser->userip."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tdisplayname\" value=\"".addslashes($wtwuser->displayname)."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseremail\" value=\"".$wtwuser->email."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserimageurl\" value=\"".$wtwuser->userimageurl."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseraccess\" value=\"".$wtwuser->useraccess."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_trootpath\" value=\"".wtw_rootpath."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tcontentpath\" value=\"".$wtwuser->contentpath."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuploadpathid\" value=\"".$wtwuser->uploadpathid."\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tinstanceid\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tglobaluseravatarid\" value=\"\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseravatarid\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarid\" value=\"\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationevent\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tattachavatarmoldname\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldname\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tinvitationcode\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tfilepath\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tfilename\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tfileitem\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tfileitemname\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tfileitemnamepath\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tfileitempreviewname\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_helptab\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tconnectinggridind\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tconnectinggridid\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_tconnectinggridname\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_eulaversion\" value=\"0\" />\r\n";
-			$hiddenfields .= "<input type=\"hidden\" id=\"wtw_eulaacceptdate\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_serverinstanceid\" value=\"".$this->serverinstanceid."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_serverip\" value=\"".$this->serverip."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tusertoken\" value=\"".$this->usertoken."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tglobaluserid\" value=\"".$this->globaluserid."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserid\" value=\"".$wtwuser->userid."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserip\" value=\"".$wtwuser->userip."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tdisplayname\" value=\"".addslashes($wtwuser->displayname)."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseremail\" value=\"".$wtwuser->email."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserimageurl\" value=\"".$wtwuser->userimageurl."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseraccess\" value=\"".$wtwuser->useraccess."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_trootpath\" value=\"".wtw_rootpath."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tcontentpath\" value=\"".$wtwuser->contentpath."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuploadpathid\" value=\"".$wtwuser->uploadpathid."\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tinstanceid\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tglobaluseravatarid\" value=\"\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseravatarid\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarid\" value=\"\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationevent\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tattachavatarmoldname\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldname\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tinvitationcode\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tfilepath\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tfilename\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tfileitem\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tfileitemname\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tfileitemnamepath\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tfileitempreviewname\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_helptab\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tconnectinggridind\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tconnectinggridid\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tconnectinggridname\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_eulaversion\" value=\"0\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_eulaacceptdate\" />\r\n";
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadHiddenFields=".$e->getMessage());
 		}
-		return $hiddenfields;
+		return $zhiddenfields;
 	}
 	
 }
@@ -2057,43 +2059,43 @@ class wtw {
 
 	function shutdownOnError() {
 		/* error trapping function */
-		$error = error_get_last();
-		if ($error != null) {
-			$errors = array(
+		$zerror = error_get_last();
+		if ($zerror != null) {
+			$zerrors = array(
 				E_PARSE,
 				E_COMPILE_ERROR,
 				E_RECOVERABLE_ERROR,
 				E_ERROR,
 				E_USER_ERROR
 			);
-			if (isset($error['type']) && in_array($error['type'], $errors, true)) {
-				$message = addslashes(str_replace("\n","",str_replace("\r","",$error['message'])));
-				$error = "<script type=\"text/javascript\">";
+			if (isset($zerror['type']) && in_array($zerror['type'], $zerrors, true)) {
+				$zmessage = addslashes(str_replace("\n","",str_replace("\r","",$zerror['message'])));
+				$zerror = "<script type=\"text/javascript\">";
 				try {
 					/* attempt to show error on page when available */
-					$error .= "if (document.getElementById('wtw_error') != null) {";
-					$error .= "document.getElementById('wtw_error').innerHTML = '".addslashes(str_replace("Stack trace","<br />Stack trace",$message))."';";
-					$error .= "WTW.openFullPageForm('error','Error Found');";
-					$error .= "}";
+					$zerror .= "if (document.getElementById('wtw_error') != null) {";
+					$zerror .= "document.getElementById('wtw_error').innerHTML = '".addslashes(str_replace("Stack trace","<br />Stack trace",$zmessage))."';";
+					$zerror .= "WTW.openFullPageForm('error','Error Found');";
+					$zerror .= "}";
 				} catch (Exception $e) { }
 				try {
-					$conn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
-					if ($conn->connect_error) {
-						$error .= "console.log('Connection failed: ".str_replace("'","\'",$conn->connect_error)."');";
+					$zconn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
+					if ($zconn->connect_error) {
+						$zerror .= "console.log('Connection failed: ".str_replace("'","\'",$zconn->connect_error)."');";
 					} else {
 						/* write error to errorlog table */
-						$sql = "insert into ".wtw_tableprefix."errorlog 
+						$zsql = "insert into ".wtw_tableprefix."errorlog 
 								(message,
 								 logdate)
 								values
-								('".addslashes(str_replace("'","\'",$message))."',
+								('".addslashes(str_replace("'","\'",$zmessage))."',
 								 '".date('Y-m-d H:i:s')."');";
-						$conn->query($sql);
+						$zconn->query($zsql);
 					}
-					$conn->close();
+					$zconn->close();
 				} catch (Exception $e) { }
-				$error .= "</script>";
-				echo $error;
+				$zerror .= "</script>";
+				echo $zerror;
 			}
 		}
 	}

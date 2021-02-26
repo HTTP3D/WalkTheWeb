@@ -1304,7 +1304,8 @@ class wtwuploads {
 					while (($zfile = readdir($zdh)) !== false) {
 						if ($zfile != '.' && $zfile != '..') {
 							$zresults[$i] = array(
-								'file'=> $zfile
+								'file'=> $zfile,
+								'folder'=> base64_encode($zobjectfolder)
 							);
 							$i += 1;
 						}

@@ -291,3 +291,12 @@ td.wtw-tddeactive {
 	background-color:transparent;
 	min-height:32px;
 }
+.wtw-download {
+	display:inline-block;
+	text-decoration:underline;
+	color:#000000;
+}
+.wtw-download:hover {
+	color:#375377;
+	cursor:pointer;
+}

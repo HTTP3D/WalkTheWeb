@@ -1828,7 +1828,18 @@ class wtwtables {
 				(12,'wtw_menuarrowicon','','main','left',-978,1,'','/content/system/images/menuarrow32.png','image','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				(13,'wtw_menuoptionanimations','Animations','main','center',-800,1,'','/content/system/images/menugestures32.png','WTW.toggleMenuAnimations','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				(14,'wtw_menuhomeicon','Home','main','left',-995,1,'','/content/system/images/menuhome32.png','navigate','/',3,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				(15,'wtw_rating','[Not Rated]','main','right',-1001,1,'','','show-hide','wtw_menucontentrating',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
+				
+				(15,'wtw_rating','[Not Rated]','main','right',-1001,1,'','','show-hide','wtw_menucontentrating',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				
+				(16,'','Player Stats','mainmenu','left',1,1,'','','WTW.hudOpenMenuItem','1',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				
+				(17,'','Settings','mainmenu','',50,1,'','','WTW.hudOpenMenuItem','50',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				
+				(18,'','<- Main Menu','settings','',1,1,'','','WTW.hudOpenMenuItem','51',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+
+				(19,'','Cameras','settings','left',10,1,'','','WTW.hudOpenMenuItem','60',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+
+				(20,'','Profile','settings','left',100,1,'','','WTW.hudOpenMenuItem','100',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
 			");
 			
 			/* add roles */
@@ -2873,16 +2884,48 @@ class wtwtables {
 			}
 
 			/* updated 3.4.3 - added Content Rating to the Browse Menu */
-			$zresults = $wtwdb->query("
-				select * 
-				from ".wtw_tableprefix."menuitems
-				where menuitemname='wtw_rating';");
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menuitemname='wtw_rating';");
 			if (count($zresults) == 0) {
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."menuitems 
-					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES 
+				$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
 						(null, 'wtw_rating', '[Not Rated]', 'main', 'right', -1001, 1, '', '', 'show-hide', 'wtw_menucontentrating', 1, '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', null, '', 0);
+				");
+			}
+
+			/* updated 3.4.4 - added items to the HUD Menu */
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='Player Stats' and menuset='mainmenu';");
+			if (count($zresults) == 0) {
+				$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+						(null,'','Player Stats','mainmenu','left',1,1,'','','WTW.hudOpenMenuItem','1',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
+				");
+			}
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='Settings' and menuset='mainmenu';");
+			if (count($zresults) == 0) {
+				$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+						(null,'','Settings','mainmenu','',50,1,'','','WTW.hudOpenMenuItem','50',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
+				");
+			}
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='<- Main Menu' and menuset='settings';");
+			if (count($zresults) == 0) {
+				$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+						(null,'','<- Main Menu','settings','',1,1,'','','WTW.hudOpenMenuItem','51',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
+				");
+			}
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='Cameras' and menuset='settings';");
+			if (count($zresults) == 0) {
+				$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+						(null,'','Cameras','settings','left',10,1,'','','WTW.hudOpenMenuItem','60',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
+				");
+			}
+			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='Profile' and menuset='settings';");
+			if (count($zresults) == 0) {
+				$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+						(null,'','Profile','settings','left',100,1,'','','WTW.hudOpenMenuItem','100',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
 				");
 			}
 			

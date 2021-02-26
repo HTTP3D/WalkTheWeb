@@ -42,13 +42,15 @@ class wtwadmin {
 			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_analytics.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_hud.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_basicavatars.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_addavatarlist.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_transitionsavatars.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_avatarfunctions.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/hud/wtw_hud.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/hud/wtw_hud_fields.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/hud/wtw_hud_cameras.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/hud/wtw_hud_profile.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$zver."\"></script>\r\n";
 			/* $zjsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$zver."\"></script>\r\n"; */
@@ -428,10 +430,10 @@ class wtwadmin {
 			$zpagedata .= "			<input type=\"text\" id=\"wtw_modelfilter\" onkeyup=\"WTW.filterModels(2);\" onfocus=\"WTW.filterModels(1);\" onblur=\"WTW.filterModels(0);\" value=\"Name Filter\" />\r\n";
 			$zpagedata .= "			</div>\r\n";
 			
+			$zpagedata .= "			<div id=\"wtw_menuuploadedobjects\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(4);\">3D Models</div>\r\n";
 			$zpagedata .= "			<div id=\"wtw_menuimagecommunity\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(1);\">3D Community Files</div>\r\n";
 			$zpagedata .= "			<div id=\"wtw_menuimagemy\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(2);\">My Files</div>\r\n";
 			$zpagedata .= "			<div id=\"wtw_menuimagestock\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(3);\">Stock Files</div>\r\n";
-			$zpagedata .= "			<div id=\"wtw_menuuploadedobjects\" class=\"wtw-menutabtop\" onclick=\"WTW.setImageMenu(4);\">3D Models</div>\r\n";
 			$zpagedata .= "			<div id=\"wtw_menuwtwdownloads\" class=\"wtw-menutabtop\" onclick=\"WTW.openFullPageForm('importpage','communities');\">WalkTheWeb Downloads</div>\r\n";
 			$zpagedata .= "			<div id=\"wtw_hiddenimagesoption\" class=\"wtw-hiddenimageoption\">\r\n";
 			$zpagedata .= "				<input type=\"checkbox\" id=\"wtw_bshowhiddenimages\" onchange=\"WTW.selectFileForm(this);\" class=\"wtw-cursorpointer\" /> <div id=\"wtw_showhiddenimagesdiv\" onclick=\"WTW.selectFileForm(this);\" class=\"wtw-showimageoption\">Show Hidden Images</div>\r\n";
