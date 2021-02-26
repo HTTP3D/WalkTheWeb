@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -128,7 +128,7 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 				zavatarid = zavatardef.avatarid;
 			}
 		}
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatarname.indexOf("-") > -1) {
 			zinstanceid = zavatarname.split('-')[1];
 		}
@@ -212,7 +212,7 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 WTWJS.prototype.disposeAvatar = function(zavatarname) {
 	/* clears the meshes and scale box for the avatar */
 	try {
-		var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+		var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 		if (zavatarscale != null) {
 			var zchildmeshes = zavatarscale.getChildren();
 			if (zchildmeshes != null) {
@@ -233,8 +233,8 @@ WTWJS.prototype.transferAvatar = function(zavatarname) {
 	/* sets the avatar scaleold box as parent and renames the old meshes */
 	/* allows the new avatar to load while the old one stays until it is complete */
 	try {
-		var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
-		var zavatarscaleold = scene.getMeshByID(zavatarname + "-scaleold");
+		var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
+		var zavatarscaleold = WTW.getMeshOrNodeByID(zavatarname + "-scaleold");
 		if (zavatarscale != null && zavatarscaleold != null) {
 			zavatarscaleold.scaling = zavatarscale.scaling;
 			var zchildmeshes = zavatarscale.getChildren();
@@ -257,7 +257,7 @@ WTWJS.prototype.transferAvatar = function(zavatarname) {
 WTWJS.prototype.disposeOldAvatar = function(zavatarname) {
 	/* clears the old avatar meshes - called after the new avatar is completely loaded */
 	try {
-		var zavatarscaleold = scene.getMeshByID(zavatarname + "-scaleold");
+		var zavatarscaleold = WTW.getMeshOrNodeByID(zavatarname + "-scaleold");
 		if (zavatarscaleold != null) {
 			var zchildmeshes = zavatarscaleold.getChildren();
 			if (zchildmeshes != null) {
@@ -281,7 +281,7 @@ WTWJS.prototype.disposeOldAvatar = function(zavatarname) {
 WTWJS.prototype.updateAvatarColors = function(zavatarname, zavatardef) {
 	/* cycles through the avatar meshes and applies the custom colors */
 	try {
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			var zavatarpartcolors = null;
 			if (zavatardef.avatarparts != null) {
@@ -289,7 +289,7 @@ WTWJS.prototype.updateAvatarColors = function(zavatarname, zavatardef) {
 					zavatarpartcolors = zavatardef.avatarparts;
 				}
 			}			
-			var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+			var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 			if (zavatarscale != null) {
 				var zavatarparts = zavatarscale.getChildren();
 				for (var i=0; i<zavatarparts.length;i++) {
@@ -335,7 +335,7 @@ WTWJS.prototype.reloadAvatarAnimations = function(zavatarname, zavataranimationd
 	/* zavataranimationdefs is an array of animation definitions to be loaded index 0 is the idle onwait event */
 	try {
 		var zskeleton = null;
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			zskeleton = zavatar.WTW.skeleton;
 			if (zavatar.WTW != undefined) {
@@ -384,7 +384,7 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 		if (zenteranimate == undefined) {
 			zenteranimate = true;
 		}
-		let zavatar = scene.getMeshByID(zavatarname);
+		let zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			if (zavatar.WTW != null) {
 				/* when avatar is loaded, animations and skeleton objects are set to zavatar.WTW */
@@ -394,7 +394,7 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 						if (zanimation.objectfolder != '' && zanimation.objectfile != '') {
 							/* fetch and load the animation file */
 							BABYLON.SceneLoader.ImportMeshAsync("", zanimation.objectfolder, zanimation.objectfile, scene).then( function (walkresults) {
-								let zavatarparent = scene.getMeshByID(zavatarname + "-scale");
+								let zavatarparent = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 								let zframetotal = WTW.getLastAnimationKey(zavatar) + zanimationind;
 								let zwalkskeleton = walkresults.skeletons[0];
 								if (zwalkskeleton.parent == null) {
@@ -444,6 +444,16 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 										zavatar.WTW.animations.running[zanimation.animationevent] = scene.beginWeightedAnimation(zavatar.WTW.skeleton, zframetotal, ztotalendframe, zanimation.startweight, zanimation.animationloop, Number(zanimation.speedratio));
 									} else if (zavatar.WTW.animations[zanimationind + 1] != null) {
 										/* there are more animations to load - so load the next one */
+										if (zanimationind == 11) {
+											/* after basic animations are loaded, start the idle and show the avatar - then wait one second and continue loading the animations */
+											zavatar.WTW.animations.running['onwait'].weight = 1;
+											WTW.disposeOldAvatar(zavatarname);
+											if (zenteranimate) {
+												WTW.avatarEnter(zavatarname);
+											} else {
+												WTW.avatarShowVisible(zavatarname);
+											}
+										}
 										WTW.loadAvatarAnimations(zavatarname, zanimationind + 1);
 									} else if (zavatarname.indexOf('myavatar-') > -1) {
 										/* it is current user's avatar and all animations are loaded */
@@ -453,23 +463,25 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 										/* allow plugins to execute code after the avatar is fully loaded, rigt before it is shown */
 										WTW.pluginsMyAnimationsLoaded();
 										/* run enter animation to show the avatar */
-										if (zenteranimate) {
-											WTW.avatarEnter(zavatarname);
-										} else {
-											WTW.avatarShowVisible(zavatarname);
+										if (zanimationind < 12) {
+											WTW.disposeOldAvatar(zavatarname);
+											if (zenteranimate) {
+												WTW.avatarEnter(zavatarname);
+											} else {
+												WTW.avatarShowVisible(zavatarname);
+											}
 										}
 										/* clean up the old avatar meshes if there were any */
-										WTW.disposeOldAvatar(zavatarname);
 									} else {
 										/* other users' avatar is done loading */
+										/* clean up the old avatar meshes if there were any */
+										WTW.disposeOldAvatar(zavatarname);
 										/* play enter animation to show avatar */
 										if (zenteranimate) {
 											WTW.avatarEnter(zavatarname);
 										} else {
 											WTW.avatarShowVisible(zavatarname);
 										}
-										/* clean up the old avatar meshes if there were any */
-										WTW.disposeOldAvatar(zavatarname);
 									}
 								}
 							}); 
@@ -499,7 +511,7 @@ WTWJS.prototype.loadAvatarAnimation = function(zavatarname, zuseravataranimation
 			zstartweight = 0;
 		}
 		var zfound = -1;
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			if (zavatar.WTW.animations != undefined) {
 				for (var i=zavatar.WTW.animations.length; i>-1; i--) {
@@ -619,7 +631,7 @@ WTWJS.prototype.changeAvatarAnimation = async function(zselobj) {
 WTWJS.prototype.disposeAnimations = function(zavatarname) {
 	/* clear animations and delete all frame ranges except the onwait animation */
 	try {
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			if (zavatar.WTW != null) {
 				if (zavatar.WTW.animations != null) {

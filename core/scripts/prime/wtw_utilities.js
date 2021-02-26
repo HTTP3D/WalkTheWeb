@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -233,7 +233,7 @@ WTWJS.prototype.getMoldnameParts = function(zmoldname) {
 				zcoveringname = zmolds[zmoldind].covering;
 			}
 		}
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			var zparentmold = zmold.parent;
 			if (zparentmold != null) {
@@ -418,9 +418,6 @@ WTWJS.prototype.getFileList = function(zfolderpath, zcallback) {
 	}
 }
 
-
-
-
 WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
 	/* performs a form POST based JSON call for data */
 	try {
@@ -464,6 +461,38 @@ WTWJS.prototype.postAsyncJSON = function(zurl, zrequest, zcallback) {
 		});
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-postAsyncJSON=" + ex.message);
+	}
+}
+
+WTWJS.prototype.downloadFile = function(zurl, zfilename) {
+	/* make a link download a file instead of open it  */
+	try {
+		if (!window.ActiveXObject) {
+			/* for non-IE */
+			var zsave = document.createElement('a');
+			zsave.href = zurl;
+			zsave.target = '_blank';
+			zsave.download = zfilename;
+			if (navigator.userAgent.toLowerCase().match(/(ipad|iphone|safari)/) && navigator.userAgent.search("Chrome") < 0) {
+				document.location = save.href; 
+			} else {
+				var zevent = new MouseEvent('click', {
+					'view': window,
+					'bubbles': true,
+					'cancelable': false
+				});
+				zsave.dispatchEvent(zevent);
+				(window.URL || window.webkitURL).revokeObjectURL(zsave.href);
+			}
+		} else if ( !! window.ActiveXObject && document.execCommand) {
+			/* for IE */
+			var zwindow = window.open(zurl, '_blank');
+			zwindow.document.close();
+			zwindow.document.execCommand('SaveAs', true, zfilename || zurl)
+			zwindow.close();
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-downloadFile=" + ex.message);
 	}
 }
 
@@ -1488,10 +1517,10 @@ WTWJS.prototype.getWorldRotation = function(zmold) {
 WTWJS.prototype.angleToTarget = function(zsourcename, ztargetname) {
 	/* check the angle from one source mold by name to another target mold by name*/
 	try {
-		var zsource = scene.getMeshByID(zsourcename);
-		var ztarget = scene.getMeshByID(ztargetname);
+		var zsource = WTW.getMeshOrNodeByID(zsourcename);
+		var ztarget = WTW.getMeshOrNodeByID(ztargetname);
 		if (zsource != null && ztarget != null) {
-			var zline = scene.getMeshByID("zline");
+			var zline = WTW.getMeshOrNodeByID("zline");
 			if (zline != null) {
 				zline.dispose();
 			}
@@ -1515,10 +1544,10 @@ WTWJS.prototype.angleToTarget = function(zsourcename, ztargetname) {
 WTWJS.prototype.rotateToTarget = function(zsourcename, ztargetname, zdegreeincrement) {
 	/* rotate the source by name to face the target mold by name using a degree increment */
 	try {
-		var zsource = scene.getMeshByID(zsourcename);
-		var ztarget = scene.getMeshByID(ztargetname);
+		var zsource = WTW.getMeshOrNodeByID(zsourcename);
+		var ztarget = WTW.getMeshOrNodeByID(ztargetname);
 		if (zsource != null && ztarget != null) {
-			var zline = scene.getMeshByID("zline");
+			var zline = WTW.getMeshOrNodeByID("zline");
 			if (zline != null) {
 				zline.dispose();
 			}
@@ -1611,7 +1640,7 @@ WTWJS.prototype.getDirectionVector = function(zsourcename, zdegreeoffset) {
 		if (zdegreeoffset == undefined) {
 			zdegreeoffset = 0;
 		}
-		var zsource = scene.getMeshByID(zsourcename);
+		var zsource = WTW.getMeshOrNodeByID(zsourcename);
 		if (zsource != null) {
 			var zrot = WTW.getRadians(WTW.getDegrees(zsource.rotation.y) + zdegreeoffset);
 			var zpositionx = zsource.position.x + (Math.cos(zrot) * 10.5);
@@ -1637,7 +1666,7 @@ WTWJS.prototype.getMoveVector = function(zsourcename, zdegreeoffset, zstride, ze
 		if (zdegreeoffset == undefined) {
 			zdegreeoffset = 0;
 		}
-		var zsource = scene.getMeshByID(zsourcename);
+		var zsource = WTW.getMeshOrNodeByID(zsourcename);
 		if (zsource != null) {
 			var zdist = 200;
 			var zrot = WTW.getRadians(WTW.getDegrees(zsource.rotation.y) + zdegreeoffset);
@@ -1660,7 +1689,7 @@ WTWJS.prototype.getMoveVector = function(zsourcename, zdegreeoffset, zstride, ze
 				}
 			}
 			var zslope = 0;
-			var zmold = scene.getMeshByID(zmoldname);
+			var zmold = WTW.getMeshOrNodeByID(zmoldname);
 			if (zmold != null) {
 				var zraystart2 = new BABYLON.Vector3(zsource.position.x, zsource.position.y+.2, zsource.position.z);
 				var zray2 = new BABYLON.Ray(zraystart2, zdirection, zdist);
@@ -1708,7 +1737,7 @@ WTWJS.prototype.getMoveDownVector = function(zsourcename, zstride) {
 	/* similar to move vector above, but applies gravity with the movement */
 	var zmove = null;
 	try {
-		var zsource = scene.getMeshByID(zsourcename);
+		var zsource = WTW.getMeshOrNodeByID(zsourcename);
 		if (zsource != null) {
 			zmove = new BABYLON.Vector3(0, zstride, 0);
 			var zdist = 6;
@@ -1815,7 +1844,7 @@ WTWJS.prototype.adjustOffset = function(zmoldname, zorientation, zdirection, zva
 	/* make adjustments to an offset for parenting objects */
 	/* example: avatar picks up a 3D Object and adjusts the position and rotation in their hand */
 	try {
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			if (zorientation == 'position') {
 				if (zdirection == 'x') {
@@ -1856,6 +1885,34 @@ WTWJS.prototype.adjustOffset = function(zmoldname, zorientation, zdirection, zva
 	}
 }
 
+WTWJS.prototype.getMeshOrNodeByID = function(zmoldname) {
+	/* return the object if it is a Mesh or TransformNode */
+	var zobject = null;
+	try {
+		zobject = scene.getMeshByID(zmoldname);
+		if (zobject == null) {
+			zobject = scene.getTransformNodeByID(zmoldname);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-getMeshOrNodeByID=" + ex.message);
+	}
+	return zobject;
+}
+
+WTWJS.prototype.setMoldLoaded = function(zmoldname, zloaded) {
+	/* set a mold as loaded '1' or not loaded '0' */
+	try {
+		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
+		if (zmoldnameparts.molds != null) {
+			if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
+				zmoldnameparts.molds[zmoldnameparts.moldind].loaded = zloaded;
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-setMoldLoaded=" + ex.message);
+	}
+}
+
 WTWJS.prototype.transformPosition = function(zmolddef, zposx, zposy, zposz) {
 	/* transform position when a mold is added that uses an action zone as a parent (like swinging doors) */
 	try {
@@ -1864,7 +1921,7 @@ WTWJS.prototype.transformPosition = function(zmolddef, zposx, zposy, zposz) {
 				if (WTW.actionZones[j] != null) {
 					var zactionzonetype = WTW.actionZones[j].actionzonetype;
 					if (WTW.actionZones[j].actionzoneid == zmolddef.actionzoneid && (zactionzonetype == "door" || zactionzonetype == "slidingdoor" || zactionzonetype == "clickactivatedslidingdoor" || zactionzonetype == "swingingdoor" || zactionzonetype == "rotate" || zactionzonetype == "elevator" || zactionzonetype == "driverturnangle" || zactionzonetype == "driverturningwheel" || zactionzonetype == "driverwheel")) {
-						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + zactionzonetype);
+						var zactionzoneaxlebase = WTW.getMeshOrNodeByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + zactionzonetype);
 						if (zactionzoneaxlebase != null) {
 							zposx -= zactionzoneaxlebase.position.x;
 							zposy -= zactionzoneaxlebase.position.y;
@@ -1876,10 +1933,10 @@ WTWJS.prototype.transformPosition = function(zmolddef, zposx, zposy, zposz) {
 						if (WTW.actionZones[j].parentactionzoneid != "") {
 							var zparentactionzoneind = WTW.getActionZoneInd(WTW.actionZones[j].parentactionzoneid, WTW.actionZones[j].connectinggridind);
 							var zparentactionzoneaxlebasename = "actionzoneaxlebase-" + zparentactionzoneind.toString() + "-" + WTW.actionZones[zparentactionzoneind].actionzoneid + "-" + WTW.actionZones[zparentactionzoneind].connectinggridind + "-" + WTW.actionZones[zparentactionzoneind].connectinggridid + "-" + WTW.actionZones[zparentactionzoneind].actionzonetype;
-							var zparentactionzoneaxlebase = scene.getMeshByID(zparentactionzoneaxlebasename);
+							var zparentactionzoneaxlebase = WTW.getMeshOrNodeByID(zparentactionzoneaxlebasename);
 							if (zparentactionzoneaxlebase == null) {
 								WTW.addActionZone(zparentactionzoneaxlebasename.replace("actionzoneaxlebase-","actionzone-"), WTW.actionZones[zparentactionzoneind]);
-								zparentactionzoneaxlebase = scene.getMeshByID(zparentactionzoneaxlebasename);
+								zparentactionzoneaxlebase = WTW.getMeshOrNodeByID(zparentactionzoneaxlebasename);
 							}
 							if (zparentactionzoneaxlebase != null) {
 								zposx -= zparentactionzoneaxlebase.position.x;
@@ -1891,14 +1948,14 @@ WTWJS.prototype.transformPosition = function(zmolddef, zposx, zposy, zposz) {
 							}
 						}
 					} else if (WTW.actionZones[j].actionzoneid == zmolddef.actionzoneid && zactionzonetype == "peoplemover") {
-						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + zactionzonetype);
+						var zactionzoneaxlebase = WTW.getMeshOrNodeByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + zactionzonetype);
 						if (zactionzoneaxlebase != null) {
 							zposx -= zactionzoneaxlebase.position.x;
 							zposy -= zactionzoneaxlebase.position.y;
 							zposz -= zactionzoneaxlebase.position.z;
 						}
 					} else if (WTW.actionZones[j].actionzoneid == zmolddef.actionzoneid && zactionzonetype.indexOf("seat") > -1) {
-						var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + zactionzonetype);
+						var zactionzoneaxlebase = WTW.getMeshOrNodeByID("actionzoneaxlebase-" + j.toString() + "-" + WTW.actionZones[j].actionzoneid + "-" + WTW.actionZones[j].connectinggridind + "-" + WTW.actionZones[j].connectinggridid + "-" + zactionzonetype);
 						if (zactionzoneaxlebase != null) {
 							zposx -= zactionzoneaxlebase.position.x;
 							zposy -= zactionzoneaxlebase.position.y;
@@ -2069,7 +2126,7 @@ WTWJS.prototype.getMoldConnectingGrid = function(zmoldname) {
 	/* gets the name of the connecting grid (most parent) of the mold */
 	/* connecting grid defines the web object (3D Community, 3D Building, or 3D Thing) that the mold is from */
 	try {
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			if (zmold.name.indexOf("communitymolds") > -1 && communityid == "") {
 				while (zmold.name.indexOf("connectinggrids") == -1) {

@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -224,12 +224,12 @@ WTWJS.prototype.executeFunctionByName = function(zjsfunction, zcontext /*, args 
 	return zfunction;
 }
 
-WTWJS.prototype.executeAnimationByName = function(animationname) {
+WTWJS.prototype.executeAnimationByName = function(zanimationname) {
 	/* run a mold animation (triggered by event) */
 	try {
 		for (var i=0;i < WTW.moldEvents.length;i++) {
 			if (WTW.moldEvents[i] != null) {
-				if (WTW.moldEvents[i].animationname == animationname) {
+				if (WTW.moldEvents[i].animationname == zanimationname) {
 					if (WTW.moldEvents[i].mold != null) {
 						if (WTW.moldEvents[i].loaded) {
 							var zendscript = WTW.moldEvents[i].animationendscript;
@@ -349,6 +349,7 @@ WTWJS.prototype.addMoldAnimation = function(zmoldname, zchildname, zmold, zobjec
 							zmoldname = zmoldname + "-" + zchildname;
 						}
 						var zanimationname = WTW.checkFunctionname(zobjectanimations[i].animationname, zmoldname);
+
 						if (zobjectanimations[i].animationloop+'' == '1' || zobjectanimations[i].animationloop == true) {
 							zanimationloop = true;
 						}
@@ -396,9 +397,11 @@ WTWJS.prototype.addMoldAnimation = function(zmoldname, zchildname, zmold, zobjec
 								if (WTW.moldEvents[zeventind].soundid != '') {
 									WTW.loadSoundToMold(zmold, zmoldname, zsoundid, zsoundpath, zanimationloop, 'linear', zsoundmaxdistance, 1, 1, zeventind);
 								}
+								
 								if (zmoldevent == 'onload') {
 									window[zanimationname](zanimationname);
 								}
+
 							}
 						}
 					}
@@ -511,9 +514,6 @@ WTWJS.prototype.checkMoldEvent = function(zmoldevent, zmoldname) {
 			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 			if (zmoldnameparts.parentname.indexOf('seat') > -1) {
 				WTW.startSit(zmoldname);
-			}
-			if (zmoldname.indexOf("myavatar") > -1) {
-				WTW.openHUDFollow();
 			}
 		}
 	} catch (ex) {

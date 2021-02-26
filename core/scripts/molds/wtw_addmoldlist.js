@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -105,7 +105,7 @@ WTWJS.prototype.addMold = function(zmoldname, zmolddef, zparentname, zcoveringna
 	/* this process all molds into meshes in the 3D Scene (both basic and web molds lists above) */
 	var zmold;
 	try {
-		zmold = scene.getMeshByID(zmoldname);
+		zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			WTW.disposeClean(zmoldname);
 		}
@@ -346,6 +346,9 @@ WTWJS.prototype.addMold = function(zmoldname, zmolddef, zparentname, zcoveringna
 		}
 		/* apply the coverings, properties, shadows, physics, etc... */
 		zmold = WTW.completeMold(zmold, zmoldname, zparentname, zmolddef, zcoveringname, zposx, zposy, zposz);
+		if (zshape != 'babylonfile') {
+			WTW.setMoldLoaded(zmoldname, '1');
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-molds-addmoldlist\r\n addMold=" + ex.message);
 	} 
@@ -482,10 +485,10 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 				WTW.registerMouseOver(zmold);
 			}
 			/* work in progress - currently disabled, freeze world matrix can speed up the scene with less calculations */
-			if (WTW.AdminView == 0 && zparentname.indexOf("connectinggrids") > -1 && (zmoldname.indexOf("building") > -1 || zmoldname.indexOf("community") > -1)) {
-				//zmold.freezeWorldMatrix();
+			if (WTW.AdminView == 0 && zparentname.indexOf("actionzone") == -1 && zparentname != '') {
+				zmold.freezeWorldMatrix();
 			} else {
-				//zmold.unfreezeWorldMatrix();
+				zmold.unfreezeWorldMatrix();
 			}
 			
 			/*
@@ -503,14 +506,17 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 			
 			/* cleanup - remove any un-parented molds (sometimes the parent was deleted since the mold started to be created) */
 			if (zparentname != "") {
-				var zparentmold = scene.getMeshByID(zparentname);
+				var zparentmold = WTW.getMeshOrNodeByID(zparentname);
 				if (zparentmold != null) {
 					zmold.parent = zparentmold;
 				} else {
 					WTW.disposeClean(zmoldname);
 				}
 			}
-		}	
+			if (WTW.cleanCachedTextureBuffer) {
+				scene.cleanCachedTextureBuffer();
+			}
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-molds-addmoldlist\r\n completeMold=" + ex.message);
 	} 

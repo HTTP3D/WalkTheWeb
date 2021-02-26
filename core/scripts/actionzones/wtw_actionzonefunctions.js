@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -11,7 +11,7 @@ WTWJS.prototype.checkActionZones = function() {
 		for (var i = 0; i < WTW.actionZones.length; i++) {
 			if (WTW.actionZones[i] != null) {
 				var zmoldname = WTW.actionZones[i].moldname;
-				var zactionzone = scene.getMeshByID(zmoldname);
+				var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
 				if (zmoldname != undefined) {
 					if (zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].shown != "2") {
 						WTW.actionZones[i].status = 0;
@@ -138,9 +138,9 @@ WTWJS.prototype.checkLoadAnimations = function(zactionzoneind) {
 					var zazanimations = WTW.actionZones[zactionzoneind].avataranimations;
 					for (var i=0;i < zazanimations.length;i++) {
 						if (zazanimations[i] != null) {
-							var zactionzone = scene.getMeshByID(WTW.actionZones[zactionzoneind].moldname);
+							var zactionzone = WTW.getMeshOrNodeByID(WTW.actionZones[zactionzoneind].moldname);
 							if (zactionzone != null) {
-								var zavatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
+								var zavatar = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value);
 								if (zavatar != null) {
 									var zmeinzone = zavatar.intersectsMesh(zactionzone, false);
 									if (zmeinzone) {
@@ -176,7 +176,7 @@ WTWJS.prototype.checkRideAlongZone = function(zactionzone, zactionzoneind, zmein
 	try {
 		var zavatarparentname = '';
 		var zactionzoneparentname = zactionzone.name + '-parenttest';
-		var zactionzoneparent = scene.getMeshByID(zactionzoneparentname);
+		var zactionzoneparent = WTW.getMeshOrNodeByID(zactionzoneparentname);
 //		var zactionzonepos = WTW.getWorldPosition(zactionzoneparent);
 		//var zcoords = WTW.getWorldData(zactionzoneparent);
 		
@@ -239,7 +239,7 @@ WTW.log("dy=" + (zactionzonepos.y - WTW.myAvatar.ridealong.position.y));
 
 WTWJS.prototype.initMirrorLoadZone = function(zmoldname, zmolddef) {
 	try {
-/*		var zmold = scene.getMeshByID(zmoldname);
+/*		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			var znamepart;
 			if (zmoldname.indexOf("-") > -1) {

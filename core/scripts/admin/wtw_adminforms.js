@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -129,7 +129,7 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				WTW.openAllUsers();
 				break;
 			case "plugins":
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Users</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zsetcategory + "</div>";
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>3D Plugins</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zsetcategory + "</div>";
 				WTW.show('wtw_showfilepage');
 				/* WTW.openAllPlugins('',''); */
 				WTW.checkForUpdates('2');
@@ -453,6 +453,8 @@ WTWJS.prototype.loadArchiveUpdates = async function() {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse[0] != null) {
 					var zupdateid = '';
+					var zupdatecounter = 0;
+					var zupdatecounts = [];
 					var zarchiveupdateslist = "<div class=\"wtw-dashboardboxleftfull\">";
 					zarchiveupdateslist += "<div class=\"wtw-dashboardboxtitle\">Archive - WalkTheWeb Update Details</div><div class=\"wtw-dashboardbox\">";
 					for (var i=0; i < zresponse.length;i++) {
@@ -461,10 +463,17 @@ WTWJS.prototype.loadArchiveUpdates = async function() {
 								if (zupdateid != '') {
 									zarchiveupdateslist += "</ul></div>";
 								}
+								if (zupdateid != '') {
+									zupdatecounts[zupdatecounts.length] = {
+										'id':'wtw_count-'+zupdateid,
+										'count':zupdatecounter
+									}
+									zupdatecounter = 0;
+								}
 								if (zresponse[i].deleted == 1) {
-									zarchiveupdateslist += "<div class=\"wtw-versionheader\" onclick=\"WTW.toggle('versiondiv" + zresponse[i].updateid + "');\"><strong>" + zresponse[i].appname + " " + zresponse[i].appversion + "</strong> (Preview of Next Release)</div><div id=\"versiondiv" + zresponse[i].updateid + "\" style=\"display:block;visibility:visible;\"><ul>";
+									zarchiveupdateslist += "<div class=\"wtw-versionheader\" onclick=\"WTW.toggle('versiondiv" + zresponse[i].updateid + "');\"><div id='wtw_count-" + zresponse[i].updateid + "' style='float:right;margin-right:5px;'></div><strong>" + zresponse[i].appname + " " + zresponse[i].appversion + "</strong> (Preview of Next Release)</div><div id=\"versiondiv" + zresponse[i].updateid + "\" style=\"display:block;visibility:visible;\"><ul>";
 								} else {
-									zarchiveupdateslist += "<div class=\"wtw-versionheader\" onclick=\"WTW.toggle('versiondiv" + zresponse[i].updateid + "');\"><strong>" + zresponse[i].appname + " " + zresponse[i].appversion + "</strong> (Released on: " + WTW.formatDate(zresponse[i].updatedate) + ")</div><div id=\"versiondiv" + zresponse[i].updateid + "\" style=\"display:none;visibility:hidden;\">";
+									zarchiveupdateslist += "<div class=\"wtw-versionheader\" onclick=\"WTW.toggle('versiondiv" + zresponse[i].updateid + "');\"><div id='wtw_count-" + zresponse[i].updateid + "' style='float:right;margin-right:5px;'></div><strong>" + zresponse[i].appname + " " + zresponse[i].appversion + "</strong> (Released on: " + WTW.formatDate(zresponse[i].updatedate) + ")</div><div id=\"versiondiv" + zresponse[i].updateid + "\" style=\"display:none;visibility:hidden;\">";
 									if (zresponse[i].updatesummary != '') {
 										zarchiveupdateslist += "<div class=\"wtw-versionsummary\"><strong>Summary:</strong> " + zresponse[i].updatesummary + "</div>";
 									}
@@ -472,11 +481,33 @@ WTWJS.prototype.loadArchiveUpdates = async function() {
 								}
 								zupdateid = zresponse[i].updateid;
 							}
-							zarchiveupdateslist += "<li class='wtw-normalwrap'><b>" + zresponse[i].updatetitle + "</b> - " + zresponse[i].updateby + " (" + WTW.formatDate(zresponse[i].detaildate) + ")<br /><div style='margin-left:20px;margin-bottom:10px;'>" + zresponse[i].updatedetails + "</div></li>";
+							var zimage = "";
+							if (zresponse[i].imageurl != '') {
+								zimage = "<img src='" + zresponse[i].imageurl + "' title='" + zresponse[i].updatetitle + "' alt='" + zresponse[i].updatetitle + "' style='width:120px;height:auto;float:left;margin:8px 18px 8px 0px;cursor:pointer;' onclick=\"WTW.openIFrame('/core/pages/imageviewer.php?imageurl=" + zresponse[i].imageurl + "', .8, .8, 'WalkTheWeb Update Image');\" />";
+							}
+							zarchiveupdateslist += "<div style='clear:both;'></div>" + zimage + "<li class='wtw-normalwrap'><b>" + zresponse[i].updatetitle + "</b> - " + zresponse[i].updateby + " (" + WTW.formatDate(zresponse[i].detaildate) + ")<br /><div style='margin-left:20px;margin-bottom:10px;'>" + zresponse[i].updatedetails + "</div></li><div style='clear:both;'></div>";
+							zupdatecounter += 1;
 						}
 					}
-					zarchiveupdateslist += "</ul></div></div></div>";
+					if (zupdateid != '') {
+						zupdatecounts[zupdatecounts.length] = {
+							'id':'wtw_count-'+zupdateid,
+							'count':zupdatecounter
+						}
+					}
+					zarchiveupdateslist += "</ul></div></div></div><div style='clear:both;'></div><br />";
 					dGet('wtw_archiveupdateslist').innerHTML = zarchiveupdateslist;
+					for (var i=0;i < zupdatecounts.length;i++) {
+						if (zupdatecounts[i] != null) {
+							if (dGet(zupdatecounts[i].id) != null) {
+								if (zupdatecounts[i].count == 1) {
+									dGet(zupdatecounts[i].id).innerHTML = zupdatecounts[i].count + " Update";
+								} else if (zupdatecounts[i].count > 1) {
+									dGet(zupdatecounts[i].id).innerHTML = zupdatecounts[i].count + " Updates";
+								}
+							}
+						}
+					}
 				}
 			}
 		);
@@ -1842,13 +1873,22 @@ WTWJS.prototype.loadObjectDetailsFiles = async function(zuploadobjectid, zobject
 				zfilesdiv += "<div class='wtw-clear'></div>";
 				zfilesdiv += "<div class='wtw-objectcontainer'><div class='wtw-objectfile'>File List</div><div class='wtw-objectfolder'>";
 				if (zresponse.length > 0) {
+					var zbgcolor = '#eeeeee';
 					for (var i=0;i < zresponse.length;i++) {
 						if (zresponse[i] != null) {
+							zfilesdiv += "<div style='background-color:" + zbgcolor + ";margin-bottom:8px;'>";
 							zfilesdiv += "<img src='/content/system/images/close2.png' alt='Delete' title='Delete' style='width:24px;height:auto;float:right;cursor:pointer;' onclick=\"dGet('wtw_tdeletefile').value='" + zresponse[i].file + "';WTW.hide('wtw_uploadbutton');WTW.showInline('wtw_deletefile');WTW.showInline('wtw_canceldelete');\" />";
+							var zfolder = atob(zresponse[i].folder) + zresponse[i].file;
 							if (zresponse[i].file == zfilename) {
-								zfilesdiv += "<div class='wtw-floatright'>Primary</div><strong>" + zresponse[i].file + "</strong><br /><div class='wtw-clear'></div>";
+								zfilesdiv += "<div class='wtw-download' onclick='WTW.downloadFile(\"" + zfolder + "\", \"" + zresponse[i].file + "\");'><div class='wtw-floatright'>Primary</div><strong>" + zresponse[i].file + "</strong></div><br /><div class='wtw-clear'></div>";
 							} else {
-								zfilesdiv += "<div>" + zresponse[i].file + "</div><br /><div class='wtw-clear'></div>";
+								zfilesdiv += "<div class='wtw-download' onclick='WTW.downloadFile(\"" + zfolder + "\", \"" + zresponse[i].file + "\");'>" + zresponse[i].file + "</div><br /><div class='wtw-clear'></div>";
+							}
+							zfilesdiv += "</div>";
+							if (zbgcolor == '#ffffff') {
+								zbgcolor = '#eeeeee';
+							} else {
+								zbgcolor = '#ffffff';
 							}
 						}
 					}

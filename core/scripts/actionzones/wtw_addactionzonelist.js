@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -69,7 +69,7 @@ WTWJS.prototype.addActionZone = function(zactionzonename, zactionzonedef) {
 		if (WTW.isNumeric(zactionzonedef.actionzoneind)) {
 			zactionzoneind = Number(zactionzonedef.actionzoneind);
 		}
-		zactionzone = scene.getMeshByID(zactionzonename);
+		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
 		/* only create if action zone is not already in the scene (by unique zactionzonename) */
 		if (zactionzone == null) {
 			if (WTW.actionZones[zactionzoneind] != null) {
@@ -81,7 +81,7 @@ WTWJS.prototype.addActionZone = function(zactionzonename, zactionzonedef) {
 					if (zparentactionzoneind > -1) {
 						if (WTW.actionZones[zparentactionzoneind] != null) {
 							var zparentactionzonename = "actionzone-" + zparentactionzoneind.toString() + "-" + WTW.actionZones[zparentactionzoneind].actionzoneid + "-" + WTW.actionZones[zparentactionzoneind].connectinggridind + "-" + WTW.actionZones[zparentactionzoneind].connectinggridid + "-" + WTW.actionZones[zparentactionzoneind].actionzonetype;
-							var zparentactionzone = scene.getMeshByID(zparentactionzonename);
+							var zparentactionzone = WTW.getMeshOrNodeByID(zparentactionzonename);
 							if (zparentactionzone == null) {
 								zparentactionzone = WTW.addActionZone(zparentactionzonename, WTW.actionZones[zparentactionzoneind]);
 							}
@@ -93,7 +93,7 @@ WTWJS.prototype.addActionZone = function(zactionzonename, zactionzonedef) {
 				if (zparentactionzone != null) {
 					var zparentactionzoneaxlebasename = "actionzoneaxlebase-" + zparentactionzoneind.toString() + "-" + WTW.actionZones[zparentactionzoneind].actionzoneid + "-" + WTW.actionZones[zparentactionzoneind].connectinggridind + "-" + WTW.actionZones[zparentactionzoneind].connectinggridid + "-" + WTW.actionZones[zparentactionzoneind].actionzonetype;
 					var zparentactionzoneaxlebase2name = "actionzoneaxlebase2-" + zparentactionzoneind.toString() + "-" + WTW.actionZones[zparentactionzoneind].actionzoneid + "-" + WTW.actionZones[zparentactionzoneind].connectinggridind + "-" + WTW.actionZones[zparentactionzoneind].connectinggridid + "-" + WTW.actionZones[zparentactionzoneind].actionzonetype;
-					var zparentactionzoneaxlebase = scene.getMeshByID(zparentactionzoneaxlebasename);
+					var zparentactionzoneaxlebase = WTW.getMeshOrNodeByID(zparentactionzoneaxlebasename);
 					zactionzonedef.axis.position.x -= (zparentactionzoneaxlebase.position.x);
 					zactionzonedef.axis.position.y -= (zparentactionzoneaxlebase.position.y);
 					zactionzonedef.axis.position.z -= (zparentactionzoneaxlebase.position.z);

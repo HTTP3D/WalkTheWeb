@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -15,6 +15,7 @@ WTWJS.prototype.addMoldBox = function(zmoldname, zlenx, zleny, zlenz) {
 		}
 		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {sideOrientation: zsideorientation}, scene);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldBox=" + ex.message);
 	}
@@ -26,6 +27,7 @@ WTWJS.prototype.addMoldCylinder = function(zmoldname, zlenx, zleny, zlenz, zsubd
 	try {
 		zmold = BABYLON.MeshBuilder.CreateCylinder(zmoldname, {height: 1, diameterTop: 1, diameterBottom: 1, tessellation: zsubdivisions, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldCylinder=" + ex.message);
 	}
@@ -37,6 +39,7 @@ WTWJS.prototype.addMoldCone = function(zmoldname, zlenx, zleny, zlenz, zsubdivis
 	try {
 		zmold = BABYLON.MeshBuilder.CreateCylinder(zmoldname, {height: 1, diameterTop: zspecial1, diameterBottom: zspecial2, tessellation: zsubdivisions, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldCone=" + ex.message);
 	}
@@ -68,6 +71,7 @@ WTWJS.prototype.addMoldPolygon = function(zmoldname, zlenx, zleny, zlenz, zspeci
 		}
 		zmold = BABYLON.MeshBuilder.CreatePolyhedron(zmoldname, {type: zspecial1, size: 1, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldPolygon=" + ex.message);
 	}
@@ -79,6 +83,7 @@ WTWJS.prototype.addMoldSphere = function(zmoldname, zlenx, zleny, zlenz, zsubdiv
 	try {
 		zmold = BABYLON.MeshBuilder.CreateSphere(zmoldname, {segments: zsubdivisions, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldSphere=" + ex.message);
 	}
@@ -101,6 +106,7 @@ WTWJS.prototype.addMoldTriangle = function(zmoldname, zlenx, zleny, zlenz, zspec
 		zvertexdata.uvs = zuvs;
 		zvertexdata.applyToMesh(zmold, true);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldTriangle=" + ex.message);
 	}
@@ -112,6 +118,7 @@ WTWJS.prototype.addMoldTorus = function(zmoldname, zlenx, zleny, zlenz, zsubdivi
 	try {
 		zmold = BABYLON.MeshBuilder.CreateTorus(zmoldname, {diameter: zspecial1, thickness: 1, tessellation: zsubdivisions, updatable: false, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldTorus=" + ex.message);
 	}
@@ -123,6 +130,7 @@ WTWJS.prototype.addMoldPlane = function(zmoldname, zlenx, zleny, zlenz) {
 	try {
 		zmold = BABYLON.MeshBuilder.CreatePlane(zmoldname, {updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldPlane=" + ex.message);
 	}
@@ -134,6 +142,7 @@ WTWJS.prototype.addMoldDisc = function(zmoldname, zlenx, zleny, zlenz, zsubdivis
 	try {
 		zmold = BABYLON.MeshBuilder.CreateDisc(zmoldname, {tessellation: zsubdivisions, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldDisc=" + ex.message);
 	}
@@ -170,6 +179,7 @@ WTWJS.prototype.addMoldTube = function(zmoldname, zlenx, zleny, zlenz, zsubdivis
 		zmold = BABYLON.Mesh.CreateTube(zmoldname, zpatha, zspecial1, zsubdivisions, null, BABYLON.Mesh.NO_CAP, scene, false, BABYLON.Mesh.DOUBLESIDE);
 		/* cap : BABYLON.Mesh.NO_CAP, BABYLON.Mesh.CAP_START, BABYLON.Mesh.CAP_END, BABYLON.Mesh.CAP_ALL, */
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldTube=" + ex.message);
 	}
@@ -204,6 +214,7 @@ WTWJS.prototype.addMoldLine = function(zmoldname, zlenx, zleny, zlenz, zpath1) {
 		zmold.enableEdgesRendering();
 		zmold.edgesWidth = zleny;
 		zmold.edgesColor = new BABYLON.Color4(0, 1, 0, 1);
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldLine=" + ex.message);
 	}
@@ -232,6 +243,7 @@ WTWJS.prototype.addMoldTerrain = function(zmoldname, zlenx, zleny, zlenz, zsubdi
 		} else {
 			zmold = BABYLON.MeshBuilder.CreateGroundFromHeightMap(zmoldname, zheightmappath, {width: zlenx, height: zlenz, subdivisions: zsubdivisions, minHeight: zminheight, maxHeight: zmaxheight, updatable: false}, scene);
 		}
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldTerrain=" + ex.message);
 	}
@@ -265,6 +277,7 @@ WTWJS.prototype.addMoldDome = function(zmoldname, zlenx, zleny, zlenz, zsubdivis
 		WTW.disposeClean(zmoldname + "-sphere1");
 		WTW.disposeClean(zmoldname + "-sphere2");
 		WTW.disposeClean(zmoldname + "-box1");
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldDome=" + ex.message);
 	}
@@ -300,6 +313,7 @@ WTWJS.prototype.addMoldHalfPipe = function(zmoldname, zlenx, zleny, zlenz, zsubd
 		WTW.disposeClean(zmoldname + "-cylinder1");
 		WTW.disposeClean(zmoldname + "-cylinder2");
 		WTW.disposeClean(zmoldname + "-box1");
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldHalfPipe=" + ex.message);
 	}
@@ -309,10 +323,11 @@ WTWJS.prototype.addMoldHalfPipe = function(zmoldname, zlenx, zleny, zlenz, zsubd
 WTWJS.prototype.addMoldSimpleTextBox = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
+
 		var zwebimageid = "t1qlqxd6pzubzzzy";
 		var zwebtext = "<div style=\"font-size:24px;color:blue;\">Community Blog</div>";
 		var zbasicmold = WTW.newMold();
@@ -368,15 +383,17 @@ WTWJS.prototype.addMoldSimpleTextBox = function(zmoldname, zmolddef, zlenx, zlen
 WTWJS.prototype.addMoldImage = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-		var zbasemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-base", {}, scene);
+		
+		var zbasemold = new BABYLON.TransformNode(zmoldname + '-base');
+		zbasemold.position = new BABYLON.Vector3(0,0,0);
+		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
 		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
-		zbasemold.material = new BABYLON.StandardMaterial("matbase" + zmoldname, scene);
-		zbasemold.material.alpha = 0;
 		zbasemold.parent = zmold;
+		
 		var zimageid = "t1qlqxd6pzubzzzy";
 		var zimagepath = "/content/system/stock/lightgray-512x512.jpg";
 		var ztextureid = "t1qlqxd6pzubzzzy";
@@ -552,15 +569,17 @@ WTWJS.prototype.addMoldImage = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, zleny, zlenz, zsubdivisions, zheightmappath, zminheight, zmaxheight) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-		var zbasemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-base", {}, scene);
+
+		var zbasemold = new BABYLON.TransformNode(zmoldname + "-base");
+		zbasemold.position = new BABYLON.Vector3(0,0,0);
+		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
 		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
-		zbasemold.material = new BABYLON.StandardMaterial("matbase" + zmoldname, scene);
-		zbasemold.material.alpha = 0;
 		zbasemold.parent = zmold;
+
 		var ztextureid = "t1qlqxd6pzubzzzy";
 		var ztexturepath = "/content/system/stock/lightgray-512x512.jpg";
 		var zimageid = "t1qlqxd6pzubzzzy";
@@ -617,6 +636,7 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 		zraisedmold.rotation.z = WTW.getRadians(90);
 		zraisedmold.rotation.x = WTW.getRadians(270);
 		zraisedmold.parent = zbasemold;
+		zraisedmold.convertToUnIndexedMesh();
 		var zuoffset = 0;
 		var zvoffset = 0;
 		var zuscale = 1;
@@ -632,7 +652,7 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 			zcovering.diffuseTexture.vOffset = zvoffset;
 			zcovering.specularColor = new BABYLON.Color3(.4, .4, .4);
 			zcovering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);	
-			var zthisraisedmold = scene.getMeshByID(zmoldname + "-raised");
+			var zthisraisedmold = WTW.getMeshOrNodeByID(zmoldname + "-raised");
 			if (zthisraisedmold != null) {
 				zthisraisedmold.material = zcovering;
 			}
@@ -725,15 +745,17 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
     var zmold;
     try {
-        zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-        zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-        var zbasemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-base", {}, scene);
-        zbasemold.scaling = new BABYLON.Vector3(1 / zlenx, 1 / zleny, 1 / zlenz);
-		zbasemold.material = new BABYLON.StandardMaterial("matbase" + zmoldname, scene);
-		zbasemold.material.alpha = 0;
-        zbasemold.parent = zmold;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
+
+		var zbasemold = new BABYLON.TransformNode(zmoldname + "-base");
+		zbasemold.position = new BABYLON.Vector3(0,0,0);
+		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
+		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
+		zbasemold.parent = zmold;
+
 		var zloop = false;
         var zvideo = "/content/system/images/enterwelcomecenter.mp4";
 		var zvideoposter = "/content/system/images/videoposter.jpg";
@@ -759,12 +781,6 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 			function (results) {
 				if (results.meshes != null) {
 					var zobjectanimations = [];
-					var ztotalx = 0;
-					var ztotaly = 0;
-					var ztotalz = 0;
-					var zavex = 0;
-					var zavey = 0;
-					var zavez = 0;
 					
 					// add object animations using WTW.newObjectAnimation();
 					zobjectanimations[0] = WTW.newObjectAnimation();
@@ -934,24 +950,10 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 
 					for (var i=0; i < results.meshes.length; i++) {
 						if (results.meshes[i] != null) {
-							ztotalx += results.meshes[i].position.x;
-							ztotaly += results.meshes[i].position.y;
-							ztotalz += results.meshes[i].position.z;
-						}
-					}
-					if (results.meshes.length > 0) {
-						zavex = ztotalx/results.meshes.length;
-						zavey = ztotaly/results.meshes.length;
-						zavez = ztotalz/results.meshes.length;
-					}
-					for (var i=0; i < results.meshes.length; i++) {
-						if (results.meshes[i] != null) {
 							var zmeshname = results.meshes[i].name;
 							var zchildmoldname = zmoldname + "-" + zmeshname;
 							results.meshes[i].name = zchildmoldname;
-							results.meshes[i].position.x -= zavex;
-							results.meshes[i].position.y -= zavey;
-							results.meshes[i].position.z -= zavez;
+							results.meshes[i].convertToUnIndexedMesh();
 							WTW.registerMouseOver(results.meshes[i]);
 							if (results.meshes[i].parent == null) {
 								results.meshes[i].parent = zmold;
@@ -969,7 +971,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					}
 				}
 				/* check to see if the mold still exists since the time it was requested */
-				var zmold = scene.getMeshByID(zmoldname);
+				var zmold = WTW.getMeshOrNodeByID(zmoldname);
 				if (zmold == null) {
 					WTW.disposeClean(zmoldname);
 				}
@@ -987,11 +989,13 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
         zvideomold.material.diffuseTexture.video.loop = zloop;
         zvideomold.WTW = {'videosrc':zvideo,'firstvideoclick':false};
         zvideomold.parent = zbasemold;
+		zvideomold.convertToUnIndexedMesh();
 
         var zvideopostermold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-videoposter", {}, scene);
         zvideopostermold.scaling = new BABYLON.Vector3(.1, zleny, zlenz);
         zvideopostermold.position.x = zvideomold.position.x -.1;
 		zvideopostermold.parent = zbasemold;
+		zvideopostermold.convertToUnIndexedMesh();
         var zpostermat = new BABYLON.StandardMaterial(zmoldname + "-postermat", scene);
         zpostermat.diffuseTexture = new BABYLON.Texture(zvideoposter, scene);
         zpostermat.diffuseTexture.hasAlpha = false;
@@ -1020,6 +1024,7 @@ WTWJS.prototype.addMoldCandleFlame = function(zmoldname, zmolddef, zlenx, zleny,
 		zcovering.opacityTexture = new BABYLON.Texture("/content/system/images/candleopacity.png", scene);
 		zcovering.speed = 5.0;
 		zmold.material = zcovering;
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldCandleFlame=" + ex.message);
 	}
@@ -1029,16 +1034,17 @@ WTWJS.prototype.addMoldCandleFlame = function(zmoldname, zmolddef, zlenx, zleny,
 WTWJS.prototype.addMoldWaterPlane = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx,1,zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-		var zbasemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-base", {}, scene);
-		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1,1/zlenz);
-		zbasemold.material = new BABYLON.StandardMaterial("matbase" + zmoldname, scene);
-		zbasemold.material.alpha = 0;
+
+		var zbasemold = new BABYLON.TransformNode(zmoldname + "-base");
+		zbasemold.position = new BABYLON.Vector3(0,0,0);
+		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
+		zbasemold.scaling = new BABYLON.Vector3(1/zlenx, 1, 1/zlenz);
 		zbasemold.parent = zmold;
-		
+
 		var zwatermold = BABYLON.MeshBuilder.CreatePlane(zmoldname + "-water", {updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zwatermold.scaling.x = zlenx;
 		zwatermold.scaling.y = zlenz;
@@ -1047,6 +1053,7 @@ WTWJS.prototype.addMoldWaterPlane = function(zmoldname, zmolddef, zlenx, zleny, 
 		zwatermold.isPickable = true;
 		zwatermold.checkCollisions = false;
 		zwatermold.position.y = 0;
+		zwatermold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldWaterPlane=" + ex.message);
 	}
@@ -1056,16 +1063,17 @@ WTWJS.prototype.addMoldWaterPlane = function(zmoldname, zmolddef, zlenx, zleny, 
 WTWJS.prototype.addMoldWaterDisc = function(zmoldname, zmolddef, zlenx, zleny, zlenz, zsubdivisions) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx,1,zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-		var zbasemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-base", {}, scene);
-		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1,1/zlenz);
-		zbasemold.material = new BABYLON.StandardMaterial("matbase" + zmoldname, scene);
-		zbasemold.material.alpha = 0;
+
+		var zbasemold = new BABYLON.TransformNode(zmoldname + "-base");
+		zbasemold.position = new BABYLON.Vector3(0,0,0);
+		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
+		zbasemold.scaling = new BABYLON.Vector3(1/zlenx, 1, 1/zlenz);
 		zbasemold.parent = zmold;
-		
+
 		var zwatermold = BABYLON.MeshBuilder.CreateDisc(zmoldname + "-water", {tessellation: zsubdivisions, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zwatermold.scaling.x = zlenx;
 		zwatermold.scaling.y = zlenz;
@@ -1074,6 +1082,7 @@ WTWJS.prototype.addMoldWaterDisc = function(zmoldname, zmolddef, zlenx, zleny, z
 		zwatermold.isPickable = true;
 		zwatermold.checkCollisions = false;
 		zwatermold.position.y = 0;
+		zwatermold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldWaterDisc=" + ex.message);
 	}
@@ -1083,12 +1092,11 @@ WTWJS.prototype.addMoldWaterDisc = function(zmoldname, zmolddef, zlenx, zleny, z
 WTWJS.prototype.addMoldParticleSphere = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		var ztransparentmat = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		ztransparentmat.alpha = 0;
-		zmold.material = ztransparentmat;
-		
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+
 		var zparticlesystem = new BABYLON.ParticleSystem(zmoldname + "-particles", 2000, scene);
 		zparticlesystem.parent = zmold;
 		zparticlesystem.particleTexture = new BABYLON.Texture("/content/system/images/flare.png", scene);
@@ -1138,11 +1146,10 @@ WTWJS.prototype.addMoldParticleSphere = function(zmoldname, zmolddef, zlenx, zle
 WTWJS.prototype.addMoldParticleShower = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		var ztransparentmat = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		ztransparentmat.alpha = 0;
-		zmold.material = ztransparentmat;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		
 		var zparticlesystem = new BABYLON.ParticleSystem(zmoldname + "-particles", 2000, scene);
 		zparticlesystem.parent = zmold;
@@ -1191,12 +1198,11 @@ WTWJS.prototype.addMoldParticleShower = function(zmoldname, zmolddef, zlenx, zle
 WTWJS.prototype.addMoldSmoke = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		var ztransparentmat = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		ztransparentmat.alpha = 0;
-		zmold.material = ztransparentmat;
-		
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+
 		var zsmokepillar = BABYLON.ParticleHelper.CreateDefault(new BABYLON.Vector3.Zero, 2000);
 		var zemittertype = zsmokepillar.createConeEmitter(0.6, 1);
 		zsmokepillar.emitRate = 20;
@@ -1253,11 +1259,10 @@ WTWJS.prototype.addMoldSmoke = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 WTWJS.prototype.addMoldFountain = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		var ztransparentmat = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		ztransparentmat.alpha = 0;
-		zmold.material = ztransparentmat;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny ,zlenz);
 
 		// Create a particle system
 		var zwater = new BABYLON.ParticleSystem("particles", 20000, scene);
@@ -1324,8 +1329,10 @@ WTWJS.prototype.addMoldFountain = function(zmoldname, zmolddef, zlenx, zleny, zl
 WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 
 //		if (zmoldname.indexOf('-vehicle') > -1) {
 //			zmold.physicsImpostor = new BABYLON.PhysicsImpostor(zmold, BABYLON.PhysicsImpostor.BoxImpostor, {ignoreParent: true,  mass: 1, friction: 1, restitution: 0.9 }, scene);
@@ -1335,6 +1342,7 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 		var zobjectfolder = '';
 		var zobjectfile = '';
 		var zobjectanimations = null;
+		var zparentname = '';
 		var zrotationy = 0;
 		var zbillboard = '0';
 		/* read objectid, folder path, and file values */
@@ -1351,6 +1359,11 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 		if (zmolddef.objects.file != undefined) {
 			if (zmolddef.objects.file != '') {
 				zobjectfile = zmolddef.objects.file;
+			}
+		}
+		if (zmolddef.parentname != undefined) {
+			if (zmolddef.parentname != '') {
+				zparentname = zmolddef.parentname;
 			}
 		}
 		/* get array of animation defs */
@@ -1372,45 +1385,22 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 				if (zbillboard == '1') {
 					zmold.billboardMode = BABYLON.Mesh.BILLBOARDMODE_Y;
 					/* create rotation box to parent 3D Object */
-					zmoldrot = BABYLON.MeshBuilder.CreateBox(zmoldname + "-moldrot", {}, scene);
+					zmoldrot = new BABYLON.TransformNode(zmoldname + '-moldrot');
+					zmoldrot.position = new BABYLON.Vector3(0,0,0);
+					zmoldrot.rotation = new BABYLON.Vector3(0,WTW.getRadians(-zrotationy),0);
 					zmoldrot.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
 					zmoldrot.parent = zmold;
-					zmoldrot.rotation.y = WTW.getRadians(-zrotationy);
 				}
 			}
 		}
 		if (zobjectfile != '') {
-			/* material for the invisible box parent */
-			var ztransparentmat = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-			ztransparentmat.alpha = 0;
-			zmold.material = ztransparentmat;
-			if (zmoldrot != null) {
-				zmoldrot.material = ztransparentmat;
-			}
 			if (zobjectfile.indexOf('.babylon') > -1) {
 				BABYLON.SceneLoader.ImportMeshAsync("", zobjectfolder, zobjectfile, scene).then(
 					function (zresults) {
+						var zhasanimation = false;
 						if (zresults.meshes != null) {
 							/* make sure the 3D Object is positioned over parent (if transformations are all applied, there is no position adjustment) */
-							var ztotalx = 0;
-							var ztotaly = 0;
-							var ztotalz = 0;
-							var zavex = 0;
-							var zavey = 0;
-							var zavez = 0;
-							for (var i=0; i < zresults.meshes.length; i++) {
-								if (zresults.meshes[i] != null) {
-									//zresults.meshes[i].setEnabled(false);
-									ztotalx += zresults.meshes[i].position.x;
-									ztotaly += zresults.meshes[i].position.y;
-									ztotalz += zresults.meshes[i].position.z;
-								}
-							}
-							if (zresults.meshes.length > 0) {
-								zavex = ztotalx/zresults.meshes.length;
-								zavey = ztotaly/zresults.meshes.length;
-								zavez = ztotalz/zresults.meshes.length;
-							}
+							var znode = WTW.getMeshOrNodeByID(zmoldname);
 							for (var i=0; i < zresults.meshes.length; i++) {
 								if (zresults.meshes[i] != null) {
 									/* add the base mold name to each of the child meshes */
@@ -1419,9 +1409,8 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 									zchildmoldname = zchildmoldname.replace(" ","_").toLowerCase();
 									zresults.meshes[i].id = zchildmoldname;
 									zresults.meshes[i].name = zchildmoldname;
-									zresults.meshes[i].position.x -= zavex;
-									zresults.meshes[i].position.y -= zavey;
-									zresults.meshes[i].position.z -= zavez;
+									zresults.meshes[i].convertToUnIndexedMesh();
+									zresults.meshes[i].cullingStrategy = BABYLON.AbstractMesh.CULLINGSTRATEGY_OPTIMISTIC_INCLUSION;
 									/* this if statement will be moved to a plugin hook (minigolf related test) */
 									if (zresults.meshes[i].name.indexOf('ground') > -1) {
 										zresults.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(zresults.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.3 }, scene);
@@ -1434,42 +1423,12 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 									if (zmeshname.indexOf("WireFrame") > -1) {
 										zresults.meshes[i].material.wireframe = true;
 									}
-/*
-									/ * set custom colors to avatar parts * /
-									let zdiffusecolor = '#ffffff';
-									let zemissivecolor = '#000000';
-									let zspecularcolor = '#000000';
-									let zambientcolor = '#ffffff';
-									if (zmolddef.color.diffusecolor != undefined) {
-										zdiffusecolor = zmolddef.color.diffusecolor;
-									}
-									if (zmolddef.color.emissivecolor != undefined) {
-										zemissivecolor = zmolddef.color.emissivecolor;
-									}
-									if (zmolddef.color.specularcolor != undefined) {
-										zspecularcolor = zmolddef.color.specularcolor;
-									}
-									if (zmolddef.color.ambientcolor != undefined) {
-										zambientcolor = zmolddef.color.ambientcolor;
-									}
-									
-									if (zresults.meshes[i].material != null) {
-										/ * set the color values * /
-										zresults.meshes[i].material.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
-										zresults.meshes[i].material.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
-										zresults.meshes[i].material.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
-										zresults.meshes[i].material.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
-										/ * refresh the materials to apply colors * /
-										var zcovering = zresults.meshes[i].material;
-										zresults.meshes[i].material.dispose();
-										zresults.meshes[i].material = zcovering;
-									}
-*/
 
-
-									/* make sure chile meshes are pickable */
+									/* make sure child meshes are pickable */
 									zresults.meshes[i].isPickable = true;
-									WTW.registerMouseOver(zresults.meshes[i]);
+									if (WTW.adminView == 1) {
+										WTW.registerMouseOver(zresults.meshes[i]);
+									}
 									/* make sure all object meshes have a parent */
 									if (zresults.meshes[i].parent == null) {
 										if (zbillboard == '1') {
@@ -1482,9 +1441,13 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 										/* add mesh to world shadow map */
 										WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
 									}
+									if (zresults.meshes[i].material != null) {
+										zresults.meshes[i].material.unfreeze();
+									}
 									zresults.meshes[i].receiveShadows = true;
 									/* initiate and preload any event driven animations */
 									if (zobjectanimations != null) {
+										zhasanimation = true;
 										WTW.addMoldAnimation(zmoldname, zmeshname, zresults.meshes[i], zobjectanimations);
 									}
 									if (zmold == null || zmold.parent == null) {
@@ -1499,6 +1462,7 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 							/* load any skeletons (most often avatars) */
 							for (var i=0; i < zresults.skeletons.length; i++) {
 								if (zresults.skeletons[i] != null) {
+									zhasanimation = true;
 									var zbone = zresults.skeletons[i];
 									var zmeshname = zresults.skeletons[i].name;
 									zbone.isVisible = false;
@@ -1515,17 +1479,27 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 										}
 									}
 									if (zmold == null || zmold.parent == null) {
-										/* if the parent has been deleted after this async process began (avoiding orphaned bjects) */
+										/* if the parent has been deleted after this async process began (avoiding orphaned objects) */
 										zresults.skeletons[i].dispose();
 									}
 								}
 							}
 						}
-						zmold = scene.getMeshByID(zmoldname);
+						zmold = WTW.getMeshOrNodeByID(zmoldname);
 						if (zmold == null || zmold.parent == null) {
-							/* if the parent has been deleted after this async process began (avoiding orphaned bjects) */
+							/* if the parent has been deleted after this async process began (avoiding orphaned objects) */
 							WTW.disposeClean(zmoldname);
+						} else {
+							/* if there is no animation included, freeze world matrix */
+							if (zhasanimation == false && WTW.adminView == 0 && zparentname.indexOf('actionzone') == -1) {
+								for (var i=0; i < zresults.meshes.length; i++) {
+									if (zresults.meshes[i] != null) {
+										zresults.meshes[i].freezeWorldMatrix();
+									}
+								}
+							}
 						}
+						WTW.setMoldLoaded(zmoldname, '1');
 					}
 				);
 			} else if (zobjectfile.indexOf('.gltf') > -1 || zobjectfile.indexOf('.obj') > -1) {
@@ -1533,30 +1507,9 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 				BABYLON.SceneLoader.ImportMeshAsync("", zobjectfolder, zobjectfile, scene).then(
 					function (zresults) {
 						if (zresults.meshes != null) {
-							var ztotalx = 0;
-							var ztotaly = 0;
-							var ztotalz = 0;
-							var zavex = 0;
-							var zavey = 0;
-							var zavez = 0;
-							for (var i=0; i < zresults.meshes.length; i++) {
-								if (zresults.meshes[i] != null) {
-									ztotalx += zresults.meshes[i].position.x;
-									ztotaly += zresults.meshes[i].position.y;
-									ztotalz += zresults.meshes[i].position.z;
-								}
-							}
-							if (zresults.meshes.length > 0) {
-								zavex = ztotalx/zresults.meshes.length;
-								zavey = ztotaly/zresults.meshes.length;
-								zavez = ztotalz/zresults.meshes.length;
-							}
 							for (var i=0; i < zresults.meshes.length; i++) {
 								if (zresults.meshes[i] != null) {
 									zresults.meshes[i].name = zmoldname + "-file" + i;
-									zresults.meshes[i].position.x -= zavex;
-									zresults.meshes[i].position.y -= zavey;
-									zresults.meshes[i].position.z -= zavez;
 									WTW.registerMouseOver(zresults.meshes[i]);
 									if (zresults.meshes[i].parent == null) {
 										if (zbillboard == '1') {
@@ -1569,6 +1522,7 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 							}
 							
 						}
+						WTW.setMoldLoaded(zmoldname, '1');
 					}
 				);				
 			}
@@ -1582,16 +1536,18 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-		var zscalemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-scale", {}, scene);
-		zscalemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
-		zscalemold.material = new BABYLON.StandardMaterial("matscalemold" + zmoldname, scene);
-		zscalemold.material.alpha = 0;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+
+		var zscalemold = new BABYLON.TransformNode(zmoldname + '-scale');
+		zscalemold.position = new BABYLON.Vector3(0,0,0);
+		zscalemold.rotation = new BABYLON.Vector3(0,0,0);
+		zscalemold.scaling = new BABYLON.Vector3(1/zlenx, 1/zleny, 1/zlenz);
 		zscalemold.WTW = zmolddef;
 		zscalemold.parent = zmold;
+
 		var zwebtext = "";
 		if (zmolddef.webtext.webtext != undefined) {
 			zwebtext = WTW.decode(zmolddef.webtext.webtext);
@@ -1856,19 +1812,19 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmold.WTW = zmolddef;
-		zmold.material.alpha = 0;
-		var zscalemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-scale", {}, scene);
-		zscalemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
-		zscalemold.position.x = .5;
-		zscalemold.material = new BABYLON.StandardMaterial("matscalemold" + zmoldname, scene);
-		zscalemold.material.alpha = 0;
+
+		var zscalemold = new BABYLON.TransformNode(zmoldname + '-scale');
+		zscalemold.position = new BABYLON.Vector3(.5,0,0);
+		zscalemold.rotation = new BABYLON.Vector3(0,0,0);
+		zscalemold.scaling = new BABYLON.Vector3(1/zlenx, 1/zleny, 1/zlenz);
 		zscalemold.WTW = zmolddef;
 		zscalemold.parent = zmold;
-		
+
 		var zwebtext = "";
 		if (zmolddef.webtext.webtext != undefined) {
 			zwebtext = WTW.decode(zmolddef.webtext.webtext);
@@ -2261,11 +2217,10 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 WTWJS.prototype.addMoldLightbulb = function(zmoldname, zmolddef, zlenx, zleny, zlenz, zposx, zposy, zposz, zsubdivisions) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmolddef.covering = "hidden";
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		
 		var zmoldbulb = WTW.newMold();
 		zmoldbulb.shape = "sphere";
@@ -2275,15 +2230,17 @@ WTWJS.prototype.addMoldLightbulb = function(zmoldname, zmolddef, zlenx, zleny, z
 		zmoldbulb.subdivisions = zmolddef.subdivisions;
 		zmoldbulb.parentname = zmoldname;
 		zmoldbulb.checkcollisions = "1";
-		bulbcenter = BABYLON.MeshBuilder.CreateSphere(zmoldname + "-bulbcenter", {segments: zsubdivisions, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.FRONTSIDE}, scene);
-		bulbcenter.scaling = new BABYLON.Vector3(zlenx * .3, zleny * .8, zlenz * .3);
-		bulbcenter.material = WTW.addCovering("color", zmoldname + "-bulbmat", zmoldbulb, zlenx * .3, zleny * .8, zlenz * .3, '0', '0');
-		bulbcenter.isPickable = true;
-		bulbcenter.parent = zmold;
+		var zbulbcenter = BABYLON.MeshBuilder.CreateSphere(zmoldname + "-bulbcenter", {segments: zsubdivisions, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.FRONTSIDE}, scene);
+		zbulbcenter.scaling = new BABYLON.Vector3(zlenx * .3, zleny * .8, zlenz * .3);
+		zbulbcenter.material = WTW.addCovering("color", zmoldname + "-bulbmat", zmoldbulb, zlenx * .3, zleny * .8, zlenz * .3, '0', '0');
+		zbulbcenter.isPickable = true;
+		zbulbcenter.parent = zmold;
+		zbulbcenter.convertToUnIndexedMesh();
 		
 		var zmoldglass = BABYLON.MeshBuilder.CreateSphere(zmoldname, {segments: zsubdivisions, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.FRONTSIDE}, scene);
 		zmoldglass.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmoldglass.parent = zmold;
+		zmoldglass.convertToUnIndexedMesh();
 		var zglassmat = new BABYLON.StandardMaterial(zmoldname + "-glassmat", scene);
 		zglassmat.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
 		zglassmat.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
@@ -2315,53 +2272,6 @@ WTWJS.prototype.addMoldLightbulb = function(zmoldname, zmolddef, zlenx, zleny, z
 			zmoldnameparts.molds[zmoldnameparts.moldind].objects.shadows = new BABYLON.ShadowGenerator(1024, zmoldnameparts.molds[zmoldnameparts.moldind].objects.light);
 			zmoldnameparts.molds[zmoldnameparts.moldind].objects.shadows.setDarkness(0.1);
 			zmoldnameparts.molds[zmoldnameparts.moldind].objects.shadows.usePoissonSampling = true;
-/*			
-			if (zmoldnameparts.webtype == 'community') {
-				for (var i=0; i < WTW.communitiesMolds.length;i++) {
-					if (WTW.communitiesMolds[i] != null) {
-						if (WTW.communitiesMolds[i].moldname != undefined) {
-							var zcommunitymoldnameparts = WTW.getMoldnameParts(WTW.communitiesMolds[i].moldname);
-							if (zmoldnameparts.cgid == zcommunitymoldnameparts.cgid) {
-								var zsmold = scene.getMeshByID(WTW.communitiesMolds[i].moldname);
-								if (zsmold != null) {
-									WTW.addShadowToMold(zsmold, zmoldnameparts.molds[zmoldnameparts.moldind].objects.shadows);
-								}
-							}
-						}
-					}
-				}
-			}
-			if (zmoldnameparts.webtype == 'building') {
-				for (var i=0; i < WTW.buildingMolds.length;i++) {
-					if (WTW.buildingMolds[i] != null) {
-						if (WTW.buildingMolds[i].moldname != undefined) {
-							var zbuildingmoldnameparts = WTW.getMoldnameParts(WTW.buildingMolds[i].moldname);
-							if (zmoldnameparts.cgid == zbuildingmoldnameparts.cgid) {
-								var zsmold = scene.getMeshByID(WTW.buildingMolds[i].moldname);
-								if (zsmold != null) {
-									WTW.addShadowToMold(zsmold, zmoldnameparts.molds[zmoldnameparts.moldind].objects.shadows);
-								}
-							}
-						}
-					}
-				}
-			}
-			if (zmoldnameparts.webtype == 'thing') {
-				for (var i=0; i < WTW.thingMolds.length;i++) {
-					if (WTW.thingMolds[i] != null) {
-						if (WTW.thingMolds[i].moldname != undefined) {
-							var zthingmoldnameparts = WTW.getMoldnameParts(WTW.thingMolds[i].moldname);
-							if (zmoldnameparts.cgid == zthingmoldnameparts.cgid) {
-								var zsmold = scene.getMeshByID(WTW.thingMolds[i].moldname);
-								if (zsmold != null) {
-									WTW.addShadowToMold(zsmold, zmoldnameparts.molds[zmoldnameparts.moldind].objects.shadows);
-								}
-							}
-						}
-					}
-				}
-			}
-*/
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldLightbulb=" + ex.message);
@@ -2376,17 +2286,15 @@ var coordSystem=function(b){var g=b.normalize();b=0==Math.abs(b.x)&&0==Math.abs(
 WTWJS.prototype.addMoldTree = function(zmoldname, zmolddef, zlenx, zleny, zlenz, zposx, zposy, zposz, zsubdivisions) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmolddef.covering = "hidden";
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmold.material.alpha = 0;
-		
-		var ztreebase = BABYLON.MeshBuilder.CreateBox(zmoldname + "-treebase", {}, scene);
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+
+		var ztreebase = new BABYLON.TransformNode(zmoldname + '-treebase');
+		ztreebase.position = new BABYLON.Vector3(0,3,0);
+		ztreebase.rotation = new BABYLON.Vector3(0,0,0);
 		ztreebase.scaling = new BABYLON.Vector3(zlenx + .2,6,zlenz + .2);
-		ztreebase.position.y = 3;
-		zmolddef.covering = "hidden";
-		ztreebase.material = new BABYLON.StandardMaterial("mattreebase" + zmoldname, scene);
 		ztreebase.parent = zmold;
 		
 		/* leaf material */
@@ -2427,12 +2335,11 @@ WTWJS.prototype.addMoldTree = function(zmoldname, zmolddef, zlenx, zleny, zlenz,
 WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, zlenz, zposx, zposy, zposz, zsubdivisions) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmolddef.covering = "hidden";
-		zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zmolddef.covering = "texture";
-		zmold.material.alpha = 0;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+
 		var zlenx = 10;
 		
 		var zdistancebetweenpoints = zlenx / zsubdivisions;	
@@ -2577,6 +2484,7 @@ WTWJS.prototype.addMoldRoundedBox = function(zmoldname, zlenx, zleny, zlenz) {
 		zvertexdata.uvs = zuvs;
 		zvertexdata.applyToMesh(zmold, true); 
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldRoundedBox=" + ex.message);
 	}
@@ -2612,6 +2520,7 @@ WTWJS.prototype.addVideoStream = function(zmoldname, zlenx, zleny, zlenz) {
 			zvideomat.emissiveColor = BABYLON.Color3.White();
 			zmold.material = zvideomat;
 		}
+		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addVideoStream=" + ex.message);
 	}

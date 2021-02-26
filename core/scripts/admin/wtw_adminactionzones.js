@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -61,11 +61,11 @@ WTWJS.prototype.showActionZone = function(zactionzoneind) {
 					WTW.setOpacity("actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype, .1);
 					break;
 			}
-			var zactionzone = scene.getMeshByID("actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
-			var zactionzoneaxle = scene.getMeshByID("actionzoneaxle-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
-			var zactionzoneaxlepole = scene.getMeshByID("actionzoneaxlepole-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
-			var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
-			var zactionzoneaxlebase2 = scene.getMeshByID("actionzoneaxlebase2-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+			var zactionzone = WTW.getMeshOrNodeByID("actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+			var zactionzoneaxle = WTW.getMeshOrNodeByID("actionzoneaxle-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+			var zactionzoneaxlepole = WTW.getMeshOrNodeByID("actionzoneaxlepole-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+			var zactionzoneaxlebase = WTW.getMeshOrNodeByID("actionzoneaxlebase-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+			var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID("actionzoneaxlebase2-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
 			if (zactionzone != null) {
 				zactionzone.isVisible = true;
 				zactionzone.enableEdgesRendering(); 
@@ -119,11 +119,11 @@ WTWJS.prototype.hideActionZone = function(zactionzoneind) {
 					WTW.setOpacity("actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype, 0);
 					break;
 			}
-			var zactionzone = scene.getMeshByID("actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
-			var zactionzoneaxle = scene.getMeshByID("actionzoneaxle-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
-			var zactionzoneaxlepole = scene.getMeshByID("actionzoneaxlepole-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
-			var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
-			var zactionzoneaxlebase2 = scene.getMeshByID("actionzoneaxlebase2-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+			var zactionzone = WTW.getMeshOrNodeByID("actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+			var zactionzoneaxle = WTW.getMeshOrNodeByID("actionzoneaxle-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+			var zactionzoneaxlepole = WTW.getMeshOrNodeByID("actionzoneaxlepole-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+			var zactionzoneaxlebase = WTW.getMeshOrNodeByID("actionzoneaxlebase-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+			var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID("actionzoneaxlebase2-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
 			if (zactionzone != null) {
 				zactionzone.isVisible = false;
 				zactionzone.disableEdgesRendering(); 
@@ -229,7 +229,7 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 			var zsafetyincrement = 0;
 			var znewaztimer = window.setInterval(function() {
 				zsafetyincrement += 1;
-				var zactionzone = scene.getMeshByID(WTW.actionZones[zactionzoneind].moldname);
+				var zactionzone = WTW.getMeshOrNodeByID(WTW.actionZones[zactionzoneind].moldname);
 				if (zactionzone != null || zsafetyincrement > 50) {
 					WTW.setNewActionZone();
 					window.clearInterval(znewaztimer);
@@ -287,13 +287,13 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 				if (zactionzonetype.indexOf("seat") > -1) {	
 					dGet('wtw_tattachavatarmoldname').value = WTW.actionZones[zactionzoneind].moldname.replace("actionzone-","actionzoneaxlebase2-");
 				}
-				var zactionzone = scene.getMeshByID(WTW.actionZones[zactionzoneind].moldname);
+				var zactionzone = WTW.getMeshOrNodeByID(WTW.actionZones[zactionzoneind].moldname);
 				if (zactionzone == null) {
 					WTW.addActionZone(WTW.actionZones[zactionzoneind].moldname, WTW.actionZones[zactionzoneind]);
 				}
 				WTW.showActionZone(zactionzoneind);
-				var zactionzoneaxlebase2 = scene.getMeshByID(WTW.actionZones[zactionzoneind].moldname.replace("actionzone-","actionzoneaxlebase2-"));
-				var zactionzoneaxle = scene.getMeshByID(WTW.actionZones[zactionzoneind].moldname.replace("actionzone-","actionzoneaxle-"));
+				var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(WTW.actionZones[zactionzoneind].moldname.replace("actionzone-","actionzoneaxlebase2-"));
+				var zactionzoneaxle = WTW.getMeshOrNodeByID(WTW.actionZones[zactionzoneind].moldname.replace("actionzone-","actionzoneaxle-"));
 				dGet('wtw_actionzonepartslist').innerHTML = "";
 				if (zactionzoneaxlebase2 != null) {
 					var zmoldparts1 = zactionzoneaxlebase2.getChildren();
@@ -564,9 +564,9 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 			/* delete action zone - note that even a new action zone is already saved in the database when editing starts */
 			/* (therefore there is no cancel or undo for the edit process) */
 			/* this process sets the delete flag for it to not be loaded with the 3D Scene */
-			var zactionzone = scene.getMeshByID("actionzone-" + dGet('wtw_tactionzoneind').value + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].actionzoneid + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridind + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridid + "-" + dGet('wtw_tactionzonetype').value);
-			var zactionzoneaxlebase2 = scene.getMeshByID("actionzoneaxlebase2-" + dGet('wtw_tactionzoneind').value + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].actionzoneid + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridind + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridid + "-" + dGet('wtw_tactionzonetype').value);
-			var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + dGet('wtw_tactionzoneind').value + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].actionzoneid + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridind + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridid + "-" + dGet('wtw_tactionzonetype').value);
+			var zactionzone = WTW.getMeshOrNodeByID("actionzone-" + dGet('wtw_tactionzoneind').value + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].actionzoneid + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridind + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridid + "-" + dGet('wtw_tactionzonetype').value);
+			var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID("actionzoneaxlebase2-" + dGet('wtw_tactionzoneind').value + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].actionzoneid + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridind + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridid + "-" + dGet('wtw_tactionzonetype').value);
+			var zactionzoneaxlebase = WTW.getMeshOrNodeByID("actionzoneaxlebase-" + dGet('wtw_tactionzoneind').value + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].actionzoneid + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridind + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridid + "-" + dGet('wtw_tactionzonetype').value);
 			if (zactionzoneaxlebase2 != null && zactionzoneaxlebase != null) {
 				var zactionzonepart = zactionzoneaxlebase2.getChildren();
 				var zmoldswithactionzones = "";
@@ -807,8 +807,8 @@ WTWJS.prototype.addActionZonePart = async function(zactionzoneid, zmold) {
 			for (var i = 0; i < WTW.actionZones.length; i++) {
 				if (WTW.actionZones[i] != null) {
 					if (WTW.actionZones[i].actionzoneid == zactionzoneid) {
-						var zactionzoneaxlebase = scene.getMeshByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxlebase-"));
-						var zactionzoneaxlebase2 = scene.getMeshByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxlebase2-"));
+						var zactionzoneaxlebase = WTW.getMeshOrNodeByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxlebase-"));
+						var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxlebase2-"));
 						if (zactionzoneaxlebase != null) {
 							if (zmold.parent.name != zactionzoneaxlebase2.name) {
 								zmold.parent = zactionzoneaxlebase2;
@@ -993,7 +993,7 @@ WTWJS.prototype.removeActionZonePart = async function(zmoldname) {
 	/* molds (parts like a door and handle) are parented to the moving axle of the action zones */
 	/* this function removes a mold from the action zone axle */
 	try {
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			zmold = WTW.getMoldBase(zmold);
 			var zmoldnameparts = WTW.getMoldnameParts(zmold.name);
@@ -1017,9 +1017,9 @@ WTWJS.prototype.removeActionZonePart = async function(zmoldname) {
 						for (var i = 0; i < WTW.actionZones.length; i++) {
 							if (WTW.actionZones[i] != null) {
 								if (WTW.actionZones[i].actionzoneid == zmoldnameparts.actionzoneid) {
-									var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + i + "-" + WTW.actionZones[i].actionzoneid + "-" + WTW.actionZones[i].connectinggridind + "-" + WTW.actionZones[i].connectinggridid + "-" + WTW.actionZones[i].actionzonetype);
-									var zactionzoneaxlebase2 = scene.getMeshByID("actionzoneaxlebase2-" + i + "-" + WTW.actionZones[i].actionzoneid + "-" + WTW.actionZones[i].connectinggridind + "-" + WTW.actionZones[i].connectinggridid + "-" + WTW.actionZones[i].actionzonetype);
-									var zactionzoneaxle = scene.getMeshByID("actionzoneaxle-" + i + "-" + WTW.actionZones[i].actionzoneid + "-" + WTW.actionZones[i].connectinggridind + "-" + WTW.actionZones[i].connectinggridid + "-" + WTW.actionZones[i].actionzonetype);
+									var zactionzoneaxlebase = WTW.getMeshOrNodeByID("actionzoneaxlebase-" + i + "-" + WTW.actionZones[i].actionzoneid + "-" + WTW.actionZones[i].connectinggridind + "-" + WTW.actionZones[i].connectinggridid + "-" + WTW.actionZones[i].actionzonetype);
+									var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID("actionzoneaxlebase2-" + i + "-" + WTW.actionZones[i].actionzoneid + "-" + WTW.actionZones[i].connectinggridind + "-" + WTW.actionZones[i].connectinggridid + "-" + WTW.actionZones[i].actionzonetype);
+									var zactionzoneaxle = WTW.getMeshOrNodeByID("actionzoneaxle-" + i + "-" + WTW.actionZones[i].actionzoneid + "-" + WTW.actionZones[i].connectinggridind + "-" + WTW.actionZones[i].connectinggridid + "-" + WTW.actionZones[i].actionzonetype);
 									if (zactionzoneaxlebase != null) {
 										if (zmold.parent != null) {
 											if (zmold.parent != zactionzoneaxlebase.parent) {
@@ -1300,11 +1300,11 @@ WTWJS.prototype.setNewActionZone = function() {
 				WTW.actionZones[zactionzoneind].defaulteditform = zdefaulteditform;
 				WTW.actionZones[zactionzoneind].axis.rotatedegrees = zdoorrotatedegrees;
 				WTW.actionZones[zactionzoneind].axis.rotatedirection = zdoorrotatedirection;
-				var zactionzoneaxlebase = scene.getMeshByID("actionzoneaxlebase-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
-				var zactionzoneaxle = scene.getMeshByID("actionzoneaxle-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
-				var zactionzoneaxlebase2 = scene.getMeshByID("actionzoneaxlebase2-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
-				var zactionzone = scene.getMeshByID("actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
-				var zactionzoneaxlepole = scene.getMeshByID("actionzoneaxlepole-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+				var zactionzoneaxlebase = WTW.getMeshOrNodeByID("actionzoneaxlebase-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+				var zactionzoneaxle = WTW.getMeshOrNodeByID("actionzoneaxle-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+				var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID("actionzoneaxlebase2-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+				var zactionzone = WTW.getMeshOrNodeByID("actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+				var zactionzoneaxlepole = WTW.getMeshOrNodeByID("actionzoneaxlepole-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
 				switch (WTW.actionZones[zactionzoneind].actionzonetype) {
 					case "driverseat":
 						if (zactionzoneaxle != null) {

@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -100,7 +100,7 @@ WTWJS.prototype.updateAnimSelectValue = function(zuseravataranimationidfield, zu
 					dGet(zselobjid).options[dGet(zselobjid).selectedIndex].value = znewselvalue;
 				}
 			}
-			var zavatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
+			var zavatar = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value);
 			if (zavatar != null) {
 				if (zavatar.WTW.animations != undefined) {
 					for (var i=zavatar.WTW.animations.length;i>-1;i--) {
@@ -132,7 +132,7 @@ WTWJS.prototype.deleteUserAnimation = async function(zselectname) {
 			zanimationevent = zcurrentvalues[3];
 		}
 		WTW.show('wtw_animation-add');
-		var zavatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
+		var zavatar = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value);
 		if (zavatar != null) {
 			if (zavatar.WTW.animations != undefined) {
 				for (var i=zavatar.WTW.animations.length;i>-1;i--) {
@@ -176,7 +176,7 @@ WTWJS.prototype.toggleMenuAnimations = function() {
 	try {
 		if (dGet('wtw_menuoptionalanimations').style.display == 'none') {
 			var zlistoptionalanimations = "";
-			var zavatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
+			var zavatar = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value);
 			if (zavatar != null) {
 				if (zavatar.WTW.avataranimationdefs != undefined) {
 					for (var i=0; i < zavatar.WTW.avataranimationdefs.length; i++) {
@@ -444,7 +444,7 @@ WTWJS.prototype.avatarEnter = function(zavatarname) {
 	/* selects the enter animation for an avatar and executes the appropriate function */
 	try {
 		var zavatarparts = [];
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		var zenteranimation = '1';
 		if (zavatar != null) {
 			if (zavatar.WTW != null) {
@@ -454,7 +454,7 @@ WTWJS.prototype.avatarEnter = function(zavatarname) {
 					}
 				}
 			}
-			var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+			var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 			if (zavatarscale != null) {
 				zavatarparts = zavatarscale.getChildren();
 			}
@@ -509,9 +509,9 @@ WTWJS.prototype.avatarMinLoadEnter = function(zavatarname) {
 	/* enter animation for an avatar - used for demo avatars in scene */
 	try {
 		var zavatarparts = [];
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
-			var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+			var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 			if (zavatarscale != null) {
 				zavatarparts = zavatarscale.getChildren();
 			}
@@ -527,7 +527,7 @@ WTWJS.prototype.avatarShowVisible = function(zavatarname, zavatarparts) {
 	try {
 		if (zavatarparts == undefined) {
 			zavatarparts = [];
-			var zavatar = scene.getMeshByID(zavatarname);
+			var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 			var zenteranimation = '1';
 			if (zavatar != null) {
 				if (zavatar.WTW != null) {
@@ -537,7 +537,7 @@ WTWJS.prototype.avatarShowVisible = function(zavatarname, zavatarparts) {
 						}
 					}
 				}
-				var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+				var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 				if (zavatarscale != null) {
 					zavatarparts = zavatarscale.getChildren();
 				}
@@ -566,9 +566,9 @@ WTWJS.prototype.avatarShowFade = function(zavatarname, zavatarparts) {
 			}
 		}
 		var ztimername  = window.setInterval(function(){
-			var zavatar = scene.getMeshByID(zavatarname);
+			var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 			if (zavatar != null) {
-				var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+				var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 				if (zavatarscale != null) {
 					var zavatarparts = zavatarscale.getChildren();
 					var zchildalpha = 0;
@@ -600,7 +600,7 @@ WTWJS.prototype.avatarShowFade = function(zavatarname, zavatarparts) {
 WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
 	/* enter animation for an avatar - fade to visible with 2 torus swirling arroud */
 	try {
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			var ztorus1 = WTW.addMoldTorus(zavatarname + "-torus1", .5, .5, .5, 24, 20)
 			ztorus1.isVisible = true;
@@ -622,9 +622,9 @@ WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
 			}
 		}
 		var ztimername  = window.setInterval(function(){
-			var zavatar = scene.getMeshByID(zavatarname);
+			var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 			if (zavatar != null) {
-				var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+				var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 				if (zavatarscale != null) {
 					var zavatarparts = zavatarscale.getChildren();
 					var zchildalpha = 0;
@@ -641,8 +641,8 @@ WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
 							}
 						}
 					} 
-					var ztorus1 = scene.getMeshByID(zavatarname + "-torus1");
-					var ztorus2 = scene.getMeshByID(zavatarname + "-torus2");
+					var ztorus1 = WTW.getMeshOrNodeByID(zavatarname + "-torus1");
+					var ztorus2 = WTW.getMeshOrNodeByID(zavatarname + "-torus2");
 					if (ztorus1 != null) {
 						ztorus1.rotation.y += WTW.getRadians(10);
 					} else {
@@ -670,7 +670,7 @@ WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
 WTWJS.prototype.avatarShowFadeSmoke = function(zavatarname, zavatarparts) {
 	/* enter animation for an avatar - fade to visible with smoke */
 	try {
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			var zsmoke = WTW.addMoldSmoke(zavatarname + "-smoke", null, .6, 1, .6);
 			zsmoke.parent = zavatar;
@@ -686,9 +686,9 @@ WTWJS.prototype.avatarShowFadeSmoke = function(zavatarname, zavatarparts) {
 		}
 		window.setTimeout(function() {
 			var ztimername  = window.setInterval(function(){
-				var zavatar = scene.getMeshByID(zavatarname);
+				var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 				if (zavatar != null) {
-					var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+					var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 					if (zavatarscale != null) {
 						var zavatarparts = zavatarscale.getChildren();
 						var zchildalpha = 0;
@@ -706,7 +706,7 @@ WTWJS.prototype.avatarShowFadeSmoke = function(zavatarname, zavatarparts) {
 							}
 						} 
 						if (zchildalpha == 1) {
-							var zsmoke = scene.getMeshByID(zavatarname + "-smoke");
+							var zsmoke = WTW.getMeshOrNodeByID(zavatarname + "-smoke");
 							if (zsmoke != null) {
 								zsmoke.position.y -= 1000;
 								window.setTimeout(function(){WTW.disposeClean(zavatarname + "-smoke");},7000);
@@ -726,7 +726,7 @@ WTWJS.prototype.avatarShowFadeSmoke = function(zavatarname, zavatarparts) {
 WTWJS.prototype.avatarShowFadeParticles = function(zavatarname, zavatarparts) {
 	/* enter animation for an avatar - fade to visible with particles then solid */
 	try {
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			var zsmoke = WTW.addMoldSmoke(zavatarname + "-smoke", null, .6, 1, .6);
 			zsmoke.parent = zavatar;
@@ -761,9 +761,9 @@ WTWJS.prototype.avatarShowFadeParticles = function(zavatarname, zavatarparts) {
 		}
 		window.setTimeout(function() {
 			var ztimername  = window.setInterval(function(){
-				var zavatar = scene.getMeshByID(zavatarname);
+				var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 				if (zavatar != null) {
-					var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+					var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 					if (zavatarscale != null) {
 						var zavatarparts = zavatarscale.getChildren();
 						var zchildalpha = 0;
@@ -781,7 +781,7 @@ WTWJS.prototype.avatarShowFadeParticles = function(zavatarname, zavatarparts) {
 							}
 						} 
 						if (zchildalpha == 1) {
-							var zsmoke = scene.getMeshByID(zavatarname + "-smoke");
+							var zsmoke = WTW.getMeshOrNodeByID(zavatarname + "-smoke");
 							if (zsmoke != null) {
 								zsmoke.position.y -= 1000;
 								window.setTimeout(function(){WTW.disposeClean(zavatarname + "-smoke");},7000);
@@ -805,7 +805,7 @@ WTWJS.prototype.avatarShowFadeParticles = function(zavatarname, zavatarparts) {
 WTWJS.prototype.avatarShowFadeSprite = function(zavatarname, zavatarparts) {
 	/* enter animation for an avatar - fade to visible with particle sprite shower */
 	try {
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			var zmold = WTW.addMoldParticleSphere(zavatarname + "-sprite", null, 2.2, 2.2, 2.2);
 			zmold.parent = zavatar;
@@ -824,9 +824,9 @@ WTWJS.prototype.avatarShowFadeSprite = function(zavatarname, zavatarparts) {
 		}
 		window.setTimeout(function() {
 			var ztimername  = window.setInterval(function(){
-				var zavatar = scene.getMeshByID(zavatarname);
+				var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 				if (zavatar != null) {
-					var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+					var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 					if (zavatarscale != null) {
 						var zavatarparts = zavatarscale.getChildren();
 						var zchildalpha = 0;
@@ -845,7 +845,7 @@ WTWJS.prototype.avatarShowFadeSprite = function(zavatarname, zavatarparts) {
 						} 
 						if (zchildalpha == 1) {
 							WTW.disposeClean(zavatarname + "-sprite");
-							var zsmoke = scene.getMeshByID(zavatarname + "-smoke");
+							var zsmoke = WTW.getMeshOrNodeByID(zavatarname + "-smoke");
 							if (zsmoke != null) {
 								zsmoke.position.y -= 1000;
 								window.setTimeout(function(){WTW.disposeClean(zavatarname + "-smoke");},7000);
@@ -865,7 +865,7 @@ WTWJS.prototype.avatarShowFadeSprite = function(zavatarname, zavatarparts) {
 WTWJS.prototype.avatarShowGrow = function(zavatarname, zavatarparts) {
 	/* enter animation for an avatar - start small and grow to scale */
 	try {
-		var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+		var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 		if (zavatarscale != null) {
 			zavatarscale.scaling.x = .001;
 			zavatarscale.scaling.y = .001;
@@ -878,7 +878,7 @@ WTWJS.prototype.avatarShowGrow = function(zavatarname, zavatarparts) {
 			}
 		}
 		var ztimername  = window.setInterval(function(){
-			var zavatar = scene.getMeshByID(zavatarname);
+			var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 			if (zavatar != null) {
 				var zscalingx = .04;
 				var zscalingy = .04;
@@ -902,7 +902,7 @@ WTWJS.prototype.avatarShowGrow = function(zavatarname, zavatarparts) {
 						}
 					}
 				}
-				var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+				var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 				if (zavatarscale != null) {
 					var zsetscalingx = zavatarscale.scaling.x;
 					var zsetscalingy = zavatarscale.scaling.y;
@@ -940,13 +940,13 @@ WTWJS.prototype.avatarShowGrow = function(zavatarname, zavatarparts) {
 WTWJS.prototype.avatarShowGrowSmoke = function(zavatarname, zavatarparts) {
 	/* enter animation for an avatar - start small and grow to scale with smoke */
 	try {
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			var zsmoke = WTW.addMoldSmoke(zavatarname + "-smoke", null, .6, .5, 2);
 			zsmoke.parent = zavatar;
 			zsmoke.position.y -= 2;
 		}
-		var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+		var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 		if (zavatarscale != null) {
 			zavatarscale.scaling.x = .001;
 			zavatarscale.scaling.y = .001;
@@ -960,7 +960,7 @@ WTWJS.prototype.avatarShowGrowSmoke = function(zavatarname, zavatarparts) {
 		}
 		window.setTimeout(function() {
 			var ztimername  = window.setInterval(function(){
-				var zavatar = scene.getMeshByID(zavatarname);
+				var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 				if (zavatar != null) {
 					var zscalingx = .04;
 					var zscalingy = .04;
@@ -984,7 +984,7 @@ WTWJS.prototype.avatarShowGrowSmoke = function(zavatarname, zavatarparts) {
 							}
 						}
 					}
-					var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+					var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 					if (zavatarscale != null) {
 						var zsetscalingx = zavatarscale.scaling.x;
 						var zsetscalingy = zavatarscale.scaling.y;
@@ -1008,7 +1008,7 @@ WTWJS.prototype.avatarShowGrowSmoke = function(zavatarname, zavatarparts) {
 							zavatarscale.scaling.z = zscalingz;
 						}
 						if (zsetscalingx == zscalingx && zsetscalingy == zscalingy && zsetscalingz == zscalingz) {
-							var zsmoke = scene.getMeshByID(zavatarname + "-smoke");
+							var zsmoke = WTW.getMeshOrNodeByID(zavatarname + "-smoke");
 							if (zsmoke != null) {
 								zsmoke.position.y -= 1000;
 								window.setTimeout(function(){WTW.disposeClean(zavatarname + "-smoke");},7000);
@@ -1031,7 +1031,7 @@ WTWJS.prototype.avatarShowGrowGlow = function(zavatarname, zavatarparts) {
 		if (WTW.highlightLayer == null) {
 			WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
 		}
-		var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+		var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 		if (zavatarscale != null) {
 			zavatarscale.scaling.x = .001;
 			zavatarscale.scaling.y = .001;
@@ -1046,7 +1046,7 @@ WTWJS.prototype.avatarShowGrowGlow = function(zavatarname, zavatarparts) {
 			} 
 		}
 		var ztimername  = window.setInterval(function(){
-			var zavatar = scene.getMeshByID(zavatarname);
+			var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 			if (zavatar != null) {
 				var zscalingx = .04;
 				var zscalingy = .04;
@@ -1070,7 +1070,7 @@ WTWJS.prototype.avatarShowGrowGlow = function(zavatarname, zavatarparts) {
 						}
 					}
 				}
-				var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+				var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 				if (zavatarscale != null) {
 					var zsetscalingx = zavatarscale.scaling.x;
 					var zsetscalingy = zavatarscale.scaling.y;
@@ -1116,13 +1116,13 @@ WTWJS.prototype.avatarShowGrowGlow = function(zavatarname, zavatarparts) {
 WTWJS.prototype.avatarShowGrowGlowSmoke = function(zavatarname, zavatarparts) {
 	/* enter animation for an avatar - start small and grow to scale with glow outline and smoke */
 	try {
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			var zsmoke = WTW.addMoldSmoke(zavatarname + "-smoke", null, .6, .5, 2);
 			zsmoke.parent = zavatar;
 			zsmoke.position.y -= 2;
 		}
-		var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+		var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 		if (zavatarscale != null) {
 			zavatarscale.scaling.x = .001;
 			zavatarscale.scaling.y = .001;
@@ -1143,7 +1143,7 @@ WTWJS.prototype.avatarShowGrowGlowSmoke = function(zavatarname, zavatarparts) {
 		}
 		window.setTimeout(function() {
 			var ztimername  = window.setInterval(function(){
-				var zavatar = scene.getMeshByID(zavatarname);
+				var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 				if (zavatar != null) {
 					var zscalingx = .04;
 					var zscalingy = .04;
@@ -1167,7 +1167,7 @@ WTWJS.prototype.avatarShowGrowGlowSmoke = function(zavatarname, zavatarparts) {
 							}
 						}
 					}
-					var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+					var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 					if (zavatarscale != null) {
 						var zsetscalingx = zavatarscale.scaling.x;
 						var zsetscalingy = zavatarscale.scaling.y;
@@ -1191,7 +1191,7 @@ WTWJS.prototype.avatarShowGrowGlowSmoke = function(zavatarname, zavatarparts) {
 							zavatarscale.scaling.z = zscalingz;
 						}
 						if (zsetscalingx == zscalingx && zsetscalingy == zscalingy && zsetscalingz == zscalingz) {
-							var zsmoke = scene.getMeshByID(zavatarname + "-smoke");
+							var zsmoke = WTW.getMeshOrNodeByID(zavatarname + "-smoke");
 							if (zsmoke != null) {
 								zsmoke.position.y -= 1000;
 								window.setTimeout(function(){WTW.disposeClean(zavatarname + "-smoke");},7000);
@@ -1219,7 +1219,7 @@ WTWJS.prototype.avatarShowGrowGlowSmoke = function(zavatarname, zavatarparts) {
 WTWJS.prototype.avatarShowBeam = function(zavatarname, zavatarparts) {
 	/* enter animation for an avatar - show within a beam */
 	try {
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			var zmold = WTW.addMoldParticleShower(zavatarname + "-sprite", null, 1, 2.4, 1);
 			zmold.parent = zavatar;
@@ -1235,9 +1235,9 @@ WTWJS.prototype.avatarShowBeam = function(zavatarname, zavatarparts) {
 		}
 		window.setTimeout(function() {
 			var ztimername  = window.setInterval(function(){
-				var zavatar = scene.getMeshByID(zavatarname);
+				var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 				if (zavatar != null) {
-					var zavatarscale = scene.getMeshByID(zavatarname + "-scale");
+					var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 					if (zavatarscale != null) {
 						var zavatarparts = zavatarscale.getChildren();
 						var zchildalpha = 0;
@@ -1283,11 +1283,11 @@ WTWJS.prototype.startSit = function(zmoldname) {
 	/* work in progress - start sit move by walk to position */
 	try {	
 		var zavatarname = "myavatar-" + dGet("wtw_tinstanceid").value;
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 			var zactionzonename = zmoldnameparts.parentname;
-			var zactionzoneaxle = scene.getMeshByID(zactionzonename.replace("actionzoneaxlebase-","actionzoneaxle-"));
+			var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace("actionzoneaxlebase-","actionzoneaxle-"));
 			if (zactionzoneaxle != null) {
 				WTW.walkToPosition(zavatarname, zactionzoneaxle, 'WTW.setSit', zactionzoneaxle);
 			}
@@ -1321,7 +1321,7 @@ WTWJS.prototype.setSit = function(zmoldtomatch) {
 WTWJS.prototype.walkToPosition = function(zavatarname, zmoldtomatch, zfunctionname, zparameters) {
 	/* work in progress - force avatar to walk to a position and rotation */
 	try {
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			var zabspos = WTW.getWorldPosition(zmoldtomatch);
 			var zabsrot = WTW.getWorldRotation(zmoldtomatch);
@@ -1388,7 +1388,7 @@ WTWJS.prototype.walkToPosition = function(zavatarname, zmoldtomatch, zfunctionna
 WTWJS.prototype.turnToRotation = function(zavatarname, zmoldtoface, zfunctionname, zparameters) {
 	/* work in progress - force avatar to turn to a set rotation */
 	try {
-		var zavatar = scene.getMeshByID(zavatarname);
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			var zabspos = WTW.getWorldPosition(zmoldtoface);
 			var zangle = WTW.getMyAngleToPoint(zabspos.x, zabspos.z);

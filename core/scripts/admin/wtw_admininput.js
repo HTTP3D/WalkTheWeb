@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -43,7 +43,7 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
 		var zpickedname = '';
 		var zpickedresult = scene.pick(e.clientX, e.clientY);
 		if (zpickedresult.pickedMesh == null) {
-			zpickedresult.pickedMesh = scene.getMeshByID(WTW.currentID);
+			zpickedresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
 			zpickedname = WTW.currentID;
 		} else {
 			zpickedname = zpickedresult.pickedMesh.name;
@@ -52,7 +52,7 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
 			/* if babylon file, get the root mold - base name */
 			var znameparts = zpickedname.split('-');
 			zpickedname = znameparts[0] + '-' + znameparts[1] + '-' + znameparts[2] + '-' + znameparts[3] + '-' + znameparts[4] + '-' + znameparts[5];
-			zpickedresult.pickedMesh = scene.getMeshByID(zpickedname);
+			zpickedresult.pickedMesh = WTW.getMeshOrNodeByID(zpickedname);
 		}
 
 		/* allow plugins to use the picked name */
@@ -61,7 +61,7 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
 		/* WalkTheWeb built-in right mouse click functions */
 		if (avatarid != '' && zpickedname.indexOf('editavatar') > -1) {
 			/* edit avatar - for setting a color of a mold */
-			var zmold = scene.getMeshByID(zpickedname);
+			var zmold = WTW.getMeshOrNodeByID(zpickedname);
 			WTW.loadPickedObject(zmold);
 		} else if (zpickedresult.pickedMesh != null) {
 			var zpickedmesh = zpickedresult.pickedMesh;
@@ -94,7 +94,7 @@ WTWJS.prototype.mouseClickRightAdmin = function(e) {
 			var znameparts = zpickedname.split('-');
 			zpickedname = znameparts[0] + "-" + znameparts[1] + "-" + znameparts[2] + "-" + znameparts[3] + "-" + znameparts[4] + "-" + znameparts[5];
 			dGet('wtw_tmoldname').value = zpickedname;
-			var zmold = scene.getMeshByID(zpickedname);
+			var zmold = WTW.getMeshOrNodeByID(zpickedname);
 			WTW.loadPickedObject(zmold);
 		}
 		e.preventDefault();
@@ -155,7 +155,7 @@ WTWJS.prototype.selectPick = function(e) {
 			/* mold selected */
 			var zpickedresult = scene.pick(WTW.mouseX, WTW.mouseY);
 			if (zpickedresult.pickedMesh == null) {
-				zpickedresult.pickedMesh = scene.getMeshByID(WTW.currentID);
+				zpickedresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
 			}
 			var zmold = null;
 			if (zpickedresult.pickedMesh != null) {

@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -67,7 +67,6 @@ WTWJS.prototype.loadAvatarForEdit = function() {
 		zavatardef.start.rotation.x = 0;
 		zavatardef.start.rotation.y = 0;
 		zavatardef.start.rotation.z = 0;
-		var editavatar = WTW.addAvatarPlaceholder(zavatardef.name, zavatardef);
 		
 		WTW.getAsyncJSON("/connect/avatar.php?avatarid=" + avatarid, 
 			function(zresponse) {
@@ -536,11 +535,18 @@ WTWJS.prototype.displayAvatarFiles = function(zresponse) {
 			zfilesdiv += "<div id='wtw_avatarcanceldelete' class='wtw-yellowbutton' style='width:100px;display:none;visibility:hidden;text-align:center;cursor:pointer;' onclick=\"dGet('wtw_tavatardeletefile').value='';WTW.hide('wtw_avatardeletefile');WTW.hide('wtw_avatarcanceldelete');WTW.show('wtw_avataruploadbutton');\">Cancel</div>";
 
 			zfilesdiv += "<div class='wtw-filelistdiv'><input type=\"hidden\" id=\"wtw_tavatardeletefile\" />";
+			var zbgcolor = '#ffffff';
 			for (var i=0;i < zresponse.length;i++) {
 				if (zresponse[i] != null) {
 					if (zresponse[i].file != undefined) {
 						if (zresponse[i].file != 'snapshots' && zresponse[i].file != 'textures' && zresponse[i].file != 'animations') {
-							zfilesdiv += "<div class='wtw-filelist'><img src=\"/content/system/images/close2.png\" alt=\"Delete\" title=\"Delete\" style=\"width:24px;height:auto;margin-right:5px;cursor:pointer;\" onclick=\"WTW.confirmDeleteAvatarFile('" + zresponse[i].file + "');\">" + zresponse[i].file + "</div><br />";
+							var zfolder = atob(zresponse[i].folder) + zresponse[i].file;
+							zfilesdiv += "<div class='wtw-filelist' style='background-color:" + zbgcolor + ";margin-bottom:8px;'><img src=\"/content/system/images/close2.png\" alt=\"Delete\" title=\"Delete\" style=\"float:right;width:24px;height:auto;margin-right:5px;cursor:pointer;\" onclick=\"WTW.confirmDeleteAvatarFile('" + zresponse[i].file + "');\"><div class='wtw-download' style='margin:5px;' onclick='WTW.downloadFile(\"" + zfolder + "\", \"" + zresponse[i].file + "\");'>" + zresponse[i].file + "</div></div>";
+							if (zbgcolor == '#ffffff') {
+								zbgcolor = '#eeeeee';
+							} else {
+								zbgcolor = '#ffffff';
+							}
 						}
 					}
 				}
@@ -765,7 +771,7 @@ WTWJS.prototype.openAvatarColorSelector = function(zavatarpartid, zavatarpart) {
 	/* typical colors are a combination of emissive, diffuse, and specular color settings */
 	try {
 		var zmoldname = "editavatar-0-" + zavatarpart;
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 
@@ -870,7 +876,7 @@ WTWJS.prototype.setAvatarColor = function(zavatarpart, zavatarpartid, zcolorgrou
 	/* set color after change is made on the color wheels */
 	try {
 		var zmoldname = "editavatar-0-" + zavatarpart;
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			var zcovering = zmold.material;
 			if (zcovering != null) {
@@ -931,7 +937,7 @@ WTWJS.prototype.setAvatarColorByText = function(zavatarpartid, zavatarpart) {
 	/* set the mold color by text box */
 	try {
 		var zmoldname = "editavatar-0-" + zavatarpart;
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			var zcovering = zmold.material;
 			if (zcovering != null) {
@@ -1222,7 +1228,7 @@ WTWJS.prototype.cancelAddNewAnimation = function() {
 WTWJS.prototype.testAnimation = function(zanimationid, zanimationevent) {
 	/* test animation on avatar */
 	try {
-		var zeditavatar = scene.getMeshByID('editavatar-0');
+		var zeditavatar = WTW.getMeshOrNodeByID('editavatar-0');
 		if (zeditavatar != null) {
 			if (WTW.testTimer == null) {
 				if (zanimationevent == 'onoption') {
@@ -1252,7 +1258,7 @@ WTWJS.prototype.testAnimation = function(zanimationid, zanimationevent) {
 WTWJS.prototype.testAnimationStop = function(zanimationid, zanimationevent) {
 	/* stop test animation on avatar and return to wait */
 	try {
-		var zeditavatar = scene.getMeshByID('editavatar-0');
+		var zeditavatar = WTW.getMeshOrNodeByID('editavatar-0');
 		if (zeditavatar != null) {
 			if (WTW.testTimer != null) {
 				window.clearInterval(WTW.testTimer);
@@ -1513,9 +1519,9 @@ WTWJS.prototype.saveAvatarAnimationDefinition = function(zavataranimationid) {
 WTWJS.prototype.setNewAvatar = function() {
 	/* Update Scene with Avatar Edit Changes */
 	try {
-		var editavatar = scene.getMeshByID('editavatar-0');
+		var editavatar = WTW.getMeshOrNodeByID('editavatar-0');
 		if (editavatar != null) {
-			var editavatarscale = scene.getMeshByID('editavatar-0-scale');
+			var editavatarscale = WTW.getMeshOrNodeByID('editavatar-0-scale');
 			if (editavatarscale != null) {
 				/* adjust scaling */
 				if (WTW.isNumeric(dGet('wtw_tavatarscalingx').value)) {

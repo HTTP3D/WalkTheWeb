@@ -1,33 +1,160 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
 /* These functions provide many of the common functions for browse and admin modes */
-/* heads up display (hud), menu options, and user settings */
+/* The heads up display (hud) provides menu options and user settings */
+/* These functions create the HUD, change the menu items, and select the page to show (you will also find the legacy menu items here until they are retired) */
 
 WTWJS.prototype.openHUD = function() {
 	/* Open the HUD */
 	try {
 		var zmoldname = 'hud';
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold == null) {
+			/* reset HUD layout */
+			WTW.hudLayout = '';
 			var zobjectfolder = '/content/system/babylon/hud/';
-			var zobjectfile = 'hud.babylon';
+			var zobjectfile = 'hud2.babylon';
 			var zobjectanimations = null;
 			
-			zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
+			zmold = new BABYLON.TransformNode(zmoldname);
+			zmold.position = new BABYLON.Vector3(8,0,0);
+			zmold.rotation = new BABYLON.Vector3(0,0,0);
 			zmold.scaling = new BABYLON.Vector3(1,1,1);
 			zmold.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-			var ztransparentmat = new BABYLON.StandardMaterial("hudmat", scene);
-			ztransparentmat.alpha = 0;
-			zmold.material = ztransparentmat;
-			
 			zmold.parent = scene.activeCameras[0];
-			zmold.position = new BABYLON.Vector3(8,0,0);
 			
 			BABYLON.SceneLoader.ImportMeshAsync("", zobjectfolder, zobjectfile, scene).then(
 				function (zresults) {
 					if (zresults.meshes != null) {
+						var zobjectanimations = [];
+
+						zobjectanimations[0] = WTW.newObjectAnimation();
+						zobjectanimations[0].animationname = 'HUDset';
+						zobjectanimations[0].moldevent = 'onload';
+						zobjectanimations[0].moldnamepart = '';
+						zobjectanimations[0].startframe = 0;
+						zobjectanimations[0].endframe = 0;
+						zobjectanimations[0].animationloop = false;
+						zobjectanimations[0].speedratio = 1.00;
+						zobjectanimations[0].additionalscript = '';
+						zobjectanimations[0].additionalparameters = '';
+						
+						zobjectanimations[1] = WTW.newObjectAnimation();
+						zobjectanimations[1].animationname = 'HUDleftopen';
+						zobjectanimations[1].moldevent = 'oncall';
+						zobjectanimations[1].moldnamepart = '';
+						zobjectanimations[1].startframe = 0;
+						zobjectanimations[1].endframe = 30;
+						zobjectanimations[1].animationloop = false;
+						zobjectanimations[1].speedratio = 1.00;
+						zobjectanimations[1].additionalscript = '';
+						zobjectanimations[1].additionalparameters = '';
+
+						zobjectanimations[2] = WTW.newObjectAnimation();
+						zobjectanimations[2].animationname = 'HUDleftclose';
+						zobjectanimations[2].moldevent = 'oncall';
+						zobjectanimations[2].moldnamepart = '';
+						zobjectanimations[2].startframe = 30;
+						zobjectanimations[2].endframe = 60;
+						zobjectanimations[2].animationloop = false;
+						zobjectanimations[2].speedratio = 1.00;
+						zobjectanimations[2].additionalscript = '';
+						zobjectanimations[2].additionalparameters = '';
+
+						zobjectanimations[3] = WTW.newObjectAnimation();
+						zobjectanimations[3].animationname = 'HUDrightopen';
+						zobjectanimations[3].moldevent = 'oncall';
+						zobjectanimations[3].moldnamepart = '';
+						zobjectanimations[3].startframe = 60;
+						zobjectanimations[3].endframe = 90;
+						zobjectanimations[3].animationloop = false;
+						zobjectanimations[3].speedratio = 1.00;
+						zobjectanimations[3].additionalscript = '';
+						zobjectanimations[3].additionalparameters = '';
+
+						zobjectanimations[4] = WTW.newObjectAnimation();
+						zobjectanimations[4].animationname = 'HUDrightclose';
+						zobjectanimations[4].moldevent = 'oncall';
+						zobjectanimations[4].moldnamepart = '';
+						zobjectanimations[4].startframe = 90;
+						zobjectanimations[4].endframe = 120;
+						zobjectanimations[4].animationloop = false;
+						zobjectanimations[4].speedratio = 1.00;
+						zobjectanimations[4].additionalscript = '';
+						zobjectanimations[4].additionalparameters = '';
+
+						zobjectanimations[5] = WTW.newObjectAnimation();
+						zobjectanimations[5].animationname = 'HUDbottomopen';
+						zobjectanimations[5].moldevent = 'oncall';
+						zobjectanimations[5].moldnamepart = '';
+						zobjectanimations[5].startframe = 120;
+						zobjectanimations[5].endframe = 150;
+						zobjectanimations[5].animationloop = false;
+						zobjectanimations[5].speedratio = 1.00;
+						zobjectanimations[5].additionalscript = '';
+						zobjectanimations[5].additionalparameters = '';
+
+						zobjectanimations[6] = WTW.newObjectAnimation();
+						zobjectanimations[6].animationname = 'HUDbottomclose';
+						zobjectanimations[6].moldevent = 'oncall';
+						zobjectanimations[6].moldnamepart = '';
+						zobjectanimations[6].startframe = 150;
+						zobjectanimations[6].endframe = 180;
+						zobjectanimations[6].animationloop = false;
+						zobjectanimations[6].speedratio = 1.00;
+						zobjectanimations[6].additionalscript = '';
+						zobjectanimations[6].additionalparameters = '';
+
+						zobjectanimations[7] = WTW.newObjectAnimation();
+						zobjectanimations[7].animationname = 'HUDbottomleftopen';
+						zobjectanimations[7].moldevent = 'oncall';
+						zobjectanimations[7].moldnamepart = '';
+						zobjectanimations[7].startframe = 210;
+						zobjectanimations[7].endframe = 240;
+						zobjectanimations[7].animationloop = false;
+						zobjectanimations[7].speedratio = 1.00;
+						zobjectanimations[7].additionalscript = '';
+						zobjectanimations[7].additionalparameters = '';
+
+						zobjectanimations[8] = WTW.newObjectAnimation();
+						zobjectanimations[8].animationname = 'HUDbottomleftclose';
+						zobjectanimations[8].moldevent = 'oncall';
+						zobjectanimations[8].moldnamepart = '';
+						zobjectanimations[8].startframe = 240;
+						zobjectanimations[8].endframe = 270;
+						zobjectanimations[8].animationloop = false;
+						zobjectanimations[8].speedratio = 1.00;
+						zobjectanimations[8].additionalscript = '';
+						zobjectanimations[8].additionalparameters = '';
+
+						zobjectanimations[9] = WTW.newObjectAnimation();
+						zobjectanimations[9].animationname = 'HUDlefttoright';
+						zobjectanimations[9].moldevent = 'oncall';
+						zobjectanimations[9].moldnamepart = '';
+						zobjectanimations[9].startframe = 30;
+						zobjectanimations[9].endframe = 90;
+						zobjectanimations[9].animationloop = false;
+						zobjectanimations[9].speedratio = 1.00;
+						zobjectanimations[9].additionalscript = '';
+						zobjectanimations[9].additionalparameters = '';
+
+						zobjectanimations[10] = WTW.newObjectAnimation();
+						zobjectanimations[10].animationname = 'HUDrighttoleft';
+						zobjectanimations[10].moldevent = 'oncall';
+						zobjectanimations[10].moldnamepart = '';
+						zobjectanimations[10].startframe = 90;
+						zobjectanimations[10].endframe = 30;
+						zobjectanimations[10].animationloop = false;
+						zobjectanimations[10].speedratio = 1.00;
+						zobjectanimations[10].additionalscript = '';
+						zobjectanimations[10].additionalparameters = '';
+						
+						zmold.WTW = {
+							'objectanimations':zobjectanimations
+						};
+						
 						for (var i=0; i < zresults.meshes.length; i++) {
 							if (zresults.meshes[i] != null) {
 								/* add the base mold name to each of the child meshes */
@@ -36,6 +163,11 @@ WTWJS.prototype.openHUD = function() {
 								zchildmoldname = zchildmoldname.replace(" ","_").toLowerCase();
 								zresults.meshes[i].id = zchildmoldname;
 								zresults.meshes[i].name = zchildmoldname;
+								
+								if (zobjectanimations != null) {
+//									WTW.addMoldAnimation(zmoldname, zmeshname, zresults.meshes[i], zobjectanimations);
+								}
+
 /*
 								/ * set custom colors to avatar parts * /
 								let zdiffusecolor = '#ffffff';
@@ -69,14 +201,19 @@ WTWJS.prototype.openHUD = function() {
 */
 
 								/* make sure child meshes are pickable */
-								if (zmeshname == 'hud' || zmeshname == 'imageframe') {
-									zresults.meshes[i].isPickable = false;
-								} else if (zmeshname == 'menuitemframe' || zmeshname == 'menuitem') {
+								if (zmeshname == 'menuitem' || zmeshname == 'textbox' || zmeshname.indexOf('slider') > -1) {
 									zresults.meshes[i].isPickable = false;
 									zresults.meshes[i].isVisible = false;
-								} else {
+								} else if (zmeshname == 'cornertopright') {
+									/* cornertopright is the close button */
 									zresults.meshes[i].isPickable = true;
 									WTW.registerMouseOver(zresults.meshes[i]);
+								} else if (zmeshname.indexOf('background') > -1) {
+									zresults.meshes[i].isPickable = true;
+									zresults.meshes[i].isVisible = true;
+									WTW.registerMouseOver(zresults.meshes[i]);
+								} else {
+									zresults.meshes[i].isPickable = false;
 								}
 								/* make sure all object meshes have a parent */
 								if (zresults.meshes[i].parent == null) {
@@ -98,34 +235,7 @@ WTWJS.prototype.openHUD = function() {
 							}
 						}
 					}
-
-					if (zresults.skeletons != null)	{
-						/* load any skeletons (most often avatars) */
-						for (var i=0; i < zresults.skeletons.length; i++) {
-							if (zresults.skeletons[i] != null) {
-								var zbone = zresults.skeletons[i];
-								var zmeshname = zresults.skeletons[i].name;
-								zbone.isVisible = false;
-								/* append zmoldname to all child skeleton names */
-								var zchildmoldname = zmoldname + "-" + zmeshname;
-								zresults.skeletons[i].name = zchildmoldname;
-								/* WTW.registerMouseOver(zresults.skeletons[i]); */
-								/* make sure all bones have a parent set */
-								if (zresults.skeletons[i].parent == null) {
-									if (zbillboard == '1') {
-										zresults.skeletons[i].parent = zmoldrot;
-									} else {
-										zresults.skeletons[i].parent = zmold;
-									}
-								}
-								if (zmold == null || zmold.parent == null) {
-									/* if the parent has been deleted after this async process began (avoiding orphaned objects) */
-									zresults.skeletons[i].dispose();
-								}
-							}
-						}
-					}
-					zmold = scene.getMeshByID(zmoldname);
+					zmold = WTW.getMeshOrNodeByID(zmoldname);
 					if (zmold == null || zmold.parent == null) {
 						/* if the parent has been deleted after this async process began (avoiding orphaned objects) */
 						WTW.disposeClean(zmoldname);
@@ -151,7 +261,7 @@ WTWJS.prototype.hudMenuText = function(zmenu, zselectedid) {
 		/* set menu title and menuset */
 		var zmenutitle = '';
 		var zmenuset = 'mainmenu';
-		var zmold = scene.getMeshByID('hud');
+		var zmold = WTW.getMeshOrNodeByID('hud-menuleft');
 		switch (zmenu) {
 			case "settings":
 				zmenuset = 'settings';
@@ -163,8 +273,9 @@ WTWJS.prototype.hudMenuText = function(zmenu, zselectedid) {
 		}
 		/* add Menu Name - top left of HUD */
 		var zwebstyle = {
-			"anchor":"left",
-			"letter-height":.6,
+			"font-family": "Arial",
+			"anchor":"center",
+			"letter-height":1.2,
 			"letter-thickness":.2,
 			"color":"#ffffff",
 			"alpha":1.00,
@@ -178,21 +289,21 @@ WTWJS.prototype.hudMenuText = function(zmenu, zselectedid) {
 		/* create 3d text menu name */
 		Writer = BABYLON.MeshWriter(scene, {scale:1});
 		if (zmenutitle != '') {
-			var zmytext = scene.getMeshByID("hud-menutitle");
+			var zmytext = WTW.getMeshOrNodeByID("hud-menutitle");
 			if (zmytext != null) {
 				zmytext.dispose();
 			}
 			var zdisplaytext = new Writer(zmenutitle, zwebstyle);
 			zmytext = zdisplaytext.getMesh();
 			zmytext.rotation = new BABYLON.Vector3(WTW.getRadians(-90), 0, 0);
-			zmytext.position = new BABYLON.Vector3(-4.7, 2.1, -.2);
+			zmytext.position.y = 4.1;
 			zmytext.id = "hud-menutitle";
 			zmytext.name = "hud-menutitle";
 			zmytext.parent = zmold;
 			zmytext.isPickable = false;
 		}
 		/* clear any menu items already shown - parent box makes it easier to locate menu items to clear */
-		var zmenuitemsparent = scene.getMeshByID('hud-menuitems');
+		var zmenuitemsparent = WTW.getMeshOrNodeByID('hud-menuitems');
 		if (zmenuitemsparent != null) {
 			var zmenuitems = zmenuitemsparent.getChildren();
 			for (var i=0;i < zmenuitems.length;i++) {
@@ -209,36 +320,34 @@ WTWJS.prototype.hudMenuText = function(zmenu, zselectedid) {
 			function(zresponse) {
 				if (zresponse != null) {
 					zresponse = JSON.parse(zresponse);
-					var zdisty = 1.18;
-					var zlasty = 0;
-					var zspacey = .7;
-					var zhud = scene.getMeshByID('hud');
-					/* menu base and base background (frame) is the masters for cloning each menu item */
-					var zmenuitemframemaster = scene.getMeshByID('hud-menuitemframe');
-					var zmenuitemmaster = scene.getMeshByID('hud-menuitem');
-					/* check for parent box for menu items */
-					var zmenuitems = scene.getMeshByID('hud-menuitems');
+					var zlasty = 2.7;
+					var zspacey = 1.6;
+					var zhud = WTW.getMeshOrNodeByID('hud-menuleft');
+					/* menu item master is the master for cloning each menu item */
+					var zmenuitemmaster = WTW.getMeshOrNodeByID('hud-menuitem');
+
+					/* dispose of any previous parent box for menu items */
+					WTW.disposeClean('hud-menuitems');
+					var zmenuitems = WTW.getMeshOrNodeByID('hud-menuitems');
+
 					if (zmenuitems == null) {
 						/* create parent box for menu items */
-						var ztransparentmat = new BABYLON.StandardMaterial("hudmenuitemsmat", scene);
-						ztransparentmat.alpha = 0;
-						zmenuitems = BABYLON.MeshBuilder.CreateBox('hud-menuitems', {}, scene);
+						zmenuitems = new BABYLON.TransformNode('hud-menuitems');
+						zmenuitems.position = new BABYLON.Vector3(0,0,0);
+						zmenuitems.rotation = new BABYLON.Vector3(0,0,0);
 						zmenuitems.scaling = new BABYLON.Vector3(1,1,1);
-						zmenuitems.material = ztransparentmat;
-						zmenuitems.parent = zhud;
 					}
+					zmenuitems.parent = zhud;
+
 					/* create the menu items */
 					for (var i=0;i < zresponse.length;i++) {
 						if (zresponse[i] != null) {
-							/* if selectedid is null, set it to the first menu item (that is not a return to main menu item) */
-							if (zselectedid == null && ((i == 0 && zresponse[i].menutext.indexOf('<-') == -1) || (i == 1 && zresponse[0].menutext.indexOf('<-') > -1))) {
-								zselectedid = zresponse[i].menuitemid;
-							}
 							/* menu item text style */
 							var zmenuitemstyle = {
-								"anchor":"left",
-								"letter-height":.4,
-								"letter-thickness":.2,
+								"font-family": "Arial",
+								"anchor":"center",
+								"letter-height":.8,
+								"letter-thickness":.3,
 								"color":"#ffffff",
 								"alpha":1.00,
 								"colors":{
@@ -251,9 +360,10 @@ WTWJS.prototype.hudMenuText = function(zmenu, zselectedid) {
 							/* selected menu item text style */
 							if (zselectedid == zresponse[i].menuitemid) {
 								zmenuitemstyle = {
-									"anchor":"left",
-									"letter-height":.4,
-									"letter-thickness":.2,
+									"font-family": "Arial",
+									"anchor":"center",
+									"letter-height":.8,
+									"letter-thickness":.3,
 									"color":"#ffffff",
 									"alpha":1.00,
 									"colors":{
@@ -266,40 +376,41 @@ WTWJS.prototype.hudMenuText = function(zmenu, zselectedid) {
 								/* load the selected menu item Form Page */
 								WTW.hudGetMenuItem('hud-menuitem-' + zresponse[i].menuitemid);
 							}
+							WTW.disposeClean("hud-menuitemtext-" + zresponse[i].menuitemid);
 							/* create 3d text for menu item */
 							var zmenuitemtextwriter = new Writer(zresponse[i].menutext, zmenuitemstyle);
 							var zmenuitemtext = zmenuitemtextwriter.getMesh();
 							zmenuitemtext.rotation = new BABYLON.Vector3(WTW.getRadians(-90), 0, 0);
-							zmenuitemtext.position = new BABYLON.Vector3(-4.7, zdisty, -.1);
+							zmenuitemtext.position.y = zlasty -.25;
 							zmenuitemtext.id = "hud-menuitemtext-" + zresponse[i].menuitemid;
 							zmenuitemtext.name = "hud-menuitemtext-" + zresponse[i].menuitemid;
 							zmenuitemtext.parent = zmenuitems;
 							zmenuitemtext.isPickable = false;
 							
-							/* create frame border for menu item */
-							var zmenuitemframe = zmenuitemframemaster.clone('hud-menuitemframe-' + zresponse[i].menuitemid);
-							zmenuitemframe.id = 'hud-menuitemframe-' + zresponse[i].menuitemid;
-							zmenuitemframe.name = 'hud-menuitemframe-' + zresponse[i].menuitemid;
-							zmenuitemframe.isVisible = true;
-							zmenuitemframe.parent = zmenuitems;
-							
 							/* create button for menu item */
+							WTW.disposeClean("hud-menuitem-" + zresponse[i].menuitemid);
 							var zmenuitem = zmenuitemmaster.clone('hud-menuitem-' + zresponse[i].menuitemid);
 							zmenuitem.id = 'hud-menuitem-' + zresponse[i].menuitemid;
-							zmenuitem.name = 'hud-menuitem-' + zresponse[i].menuitemid;
-							WTW.registerMouseOver(zmenuitem);
+							zmenuitem.position.y = zlasty;
 							zmenuitem.isPickable = true;
 							zmenuitem.isVisible = true;
 							zmenuitem.parent = zmenuitems;
+							WTW.registerMouseOver(zmenuitem);
+							/* check to see if it closed before it finished loading */
+							zhud = WTW.getMeshOrNodeByID('hud-menuleft');
+							if (zhud == null) {
+								zmenuitemtext.dispose();
+								zmenuitem.dispose();
+							}
 							
 							/* increment the position of the button and frame down the page */
-							if (i > 0) {
-								zmenuitemframe.position.y = zlasty;
-								zmenuitem.position.y = zlasty;
-							}
-							zdisty -= zspacey;
 							zlasty -= zspacey;
 						}
+					}
+					/* check to see if it closed before it finished loading */
+					zhud = WTW.getMeshOrNodeByID('hud-menuleft');
+					if (zhud == null) {
+						zmenuitems.dispose();
 					}
 				}
 			}
@@ -318,26 +429,159 @@ WTWJS.prototype.closeHUD = function() {
 	}
 }
 
+WTWJS.prototype.hudToggle = function() {
+	/* Toggles HUD open or Closed if already open */
+	try {
+		var zhud = WTW.getMeshOrNodeByID('hud');
+		if (zhud == null) {
+			WTW.openHUD();
+		} else {
+			WTW.closeHUD();
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-hud-wtw_hud.js-hudToggle=" + ex.message);
+	}
+}
+
 WTWJS.prototype.hudClick = function(zmoldname) {
 	/* handles click on HUD buttons */
 	try {
-		var zhud = scene.getMeshByID('hud');
+//WTW.log("zmoldname=" + zmoldname);
+		var zhud = WTW.getMeshOrNodeByID('hud');
 		if (zhud != null) {
 			switch (zmoldname) {
-				case "hud-hudclose":
+				case "hud-cornertopright":
 					/* close X on the top right of HUD */
 					WTW.closeHUD();
+					break;
+				case "hud-save-cameras":
+					WTW.hudSaveCameras();
+					break;
+				case "hud-cancel-cameras":
+					WTW.hudCheckLayout('');
+					WTW.hudMenuText('settings');
+					WTW.hudClearCameras();
+					break;
+				case "hud-imagebutton-camera1-follow":
+					WTW.hudChangeCamera(zmoldname, 1, 'Follow Camera', '');
+					break;
+				case "hud-imagebutton-camera1-first":
+					WTW.hudChangeCamera(zmoldname, 1, 'First-Person Camera', '');
+					break;
+				case "hud-imagebutton-camera1-firststable":
+					WTW.hudChangeCamera(zmoldname, 1, 'First-Person Camera', '');
+					break;
+				case "hud-imagebutton-camerastyle-picture":
+					WTW.hudChangeCamera(zmoldname, 1, '', '');
+					break;
+				case "hud-imagebutton-camerastyle-anaglyph":
+					WTW.hudChangeCamera(zmoldname, 1, '', 'Anaglyph');
+					break;
+				case "hud-imagebutton-camerastyle-vr":
+					WTW.hudChangeCamera(zmoldname, 1, '', 'VR');
+					break;
+				case "hud-imagebutton-camerastyle-vrgamepad":
+					WTW.hudChangeCamera(zmoldname, 1, '', 'VR Gamepad');
+					break;
+				case "hud-imagebutton-camera2-follow":
+					WTW.hudChangeCamera(zmoldname, 2, 'Follow Camera', '');
+					break;
+				case "hud-imagebutton-camera2-scene":
+					WTW.hudChangeCamera(zmoldname, 2, 'Scene Camera', '');
+					break;
+				case "hud-imagebutton-camera2-self":
+					WTW.hudChangeCamera(zmoldname, 2, 'Self Camera', '');
+					break;
+				case "hud-slider-camera1-dist":
+					
+					break;
+				case "hud-slider-camera1-dist-left":
+					
+					break;
+				case "hud-slider-camera1-dist-right":
+					
+					break;
+				case "hud-save-profile":
+					WTW.hudSaveProfile();
+					break;
+				case "hud-cancel-profile":
+					WTW.hudCheckLayout('');
+					WTW.hudMenuText('settings');
+					WTW.hudClearProfile();
 					break;
 				default:
 					if (zmoldname.indexOf('hud-menuitem-') > -1) {
 						/* process any HUD menu item */
 						WTW.hudGetMenuItem(zmoldname);
+					} else if (zmoldname.indexOf('hud-textbox-') > -1) {
+						/* set selected mold and allow keyboard to enter text to 3D Textbox */
+						WTW.hudEditText(zmoldname);
+					} else if (zmoldname.indexOf('background') > -1) {
+						/* do nothing on the background */
+					} else {
+						WTW.closeHUD();
 					}
 					break;
 			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-hud-wtw_hud.js-hudClick=" + ex.message);
+	}
+}
+
+WTWJS.prototype.hudCheckHovers = function(zmoldname, zactive) {
+	/* hud button hover and reset hover: zactive = 1 for hover, 0 for reset hover */
+	try {
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
+		if (zmoldname.indexOf('hud-menuitem-') > -1 || zmoldname.indexOf('hud-imagebutton-') > -1 || zmoldname.indexOf('hud-save-') > -1 || zmoldname.indexOf('hud-cancel-') > -1) {
+			if (zmold != null) {
+				if (Math.round(WTW.getDegrees(zmold.rotation.x)) == 0 && zactive == 1) {
+					zmold.rotation.x = WTW.getRadians(20);
+					zmold.position.z -= .2;
+				} else if (Math.round(WTW.getDegrees(zmold.rotation.x)) == 20 && zactive == 0) {
+					zmold.rotation.x = WTW.getRadians(0);
+					zmold.position.z += .2;
+				}
+			}
+			var zmoldtextname = zmoldname.replace('-menuitem-','-menuitemtext-').replace('-imagebutton-','-imagebutton-image-');
+			if (zmoldtextname.indexOf('hud-save-') > -1 || zmoldtextname.indexOf('hud-cancel-') > -1) {
+				zmoldtextname += '-text';
+			}
+			var zmoldtext = WTW.getMeshOrNodeByID(zmoldtextname);
+			if (zmoldtext != null) {
+				if (Math.round(WTW.getDegrees(zmoldtext.rotation.x)) == 0 && zactive == 1) {
+					zmoldtext.rotation.x = WTW.getRadians(20);
+					zmoldtext.position.z -= .3;
+				} else if (Math.round(WTW.getDegrees(zmoldtext.rotation.x)) == 20 && zactive == 0) {
+					zmoldtext.rotation.x = WTW.getRadians(0);
+					zmoldtext.position.z += .3;
+				} else if (Math.round(WTW.getDegrees(zmoldtext.rotation.x)) == 270 && zactive == 1) {
+					zmoldtext.rotation.x = WTW.getRadians(290);
+					zmoldtext.position.z -= .3;
+				} else if (Math.round(WTW.getDegrees(zmoldtext.rotation.x)) == 290 && zactive == 0) {
+					zmoldtext.rotation.x = WTW.getRadians(270);
+					zmoldtext.position.z += .3;
+				}
+			}
+		} else if (zmoldname.indexOf('hud-textbox-') > -1) {
+			if (zmold != null) {
+				if (zmold.scaling.y == 1 && zactive == 1) {
+					zmold.scaling.y = .9;
+				} else if (zmold.scaling.y == .9 && zactive == 0) {
+					zmold.scaling.y = 1;
+				}
+			}
+		} else if (zmoldname.indexOf('hud-slider') > -1) {
+			if (zmold != null) {
+				if (zmold.scaling.y == 1 && zactive == 1) {
+					zmold.scaling.y = 1.1;
+				} else if (zmold.scaling.y == 1.1 && zactive == 0) {
+					zmold.scaling.y = 1;
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-hud-wtw_hud.js-hudCheckHovers=" + ex.message);
 	}
 }
 
@@ -359,7 +603,7 @@ WTWJS.prototype.hudGetMenuItem = function(zmoldname) {
 					zresponse = JSON.parse(zresponse);
 					/* is Menu Action exists, execute the JavaScript function */
 					if (zresponse[0].menuaction != undefined && zresponse[0].menuproperty != undefined) {
-						WTW.executeFunctionByName(zresponse[0].menuaction, window, zresponse[0].menuproperty, zresponse[0].menuitemid);
+						WTW.executeFunctionByName(zresponse[0].menuaction, window, zresponse[0].menuproperty, zresponse[0].menuitemid, zresponse[0].menualignment);
 					}
 				}
 			);
@@ -369,49 +613,130 @@ WTWJS.prototype.hudGetMenuItem = function(zmoldname) {
 	}
 }
 
-WTWJS.prototype.hudOpenMenuItem = function(zmenuitem, zmenuitemid) {
+WTWJS.prototype.hudCheckLayout = function(zmenualignment) {
+	/* Change the HUD Layout as needed */
+	try {
+		if (WTW.hudLayout != zmenualignment) {
+			if (WTW.hudLayout == 'left') {
+				switch (zmenualignment) {
+					case '':
+						WTW.hudExecuteAnimation('HUDleftclose');
+						break;
+					case 'right':
+						WTW.hudExecuteAnimation('HUDlefttoright');
+						break;
+					case 'bottom':
+						WTW.hudExecuteAnimation('HUDbottomleftopen');
+						break;
+				}
+			} else if (WTW.hudLayout == 'right') {
+				switch (zmenualignment) {
+					case '':
+						WTW.hudExecuteAnimation('HUDrightclose');
+						break;
+					case 'left':
+						WTW.hudExecuteAnimation('HUDrighttoleft');
+						break;
+				}
+			} else if (WTW.hudLayout == 'bottom') {
+				switch (zmenualignment) {
+					case '':
+						WTW.hudExecuteAnimation('HUDbottomclose');
+						break;
+					case 'left':
+						WTW.hudExecuteAnimation('HUDbottomleftclose');
+						break;
+				}
+			} else { /* WTW.hudLayout == '' */
+				switch (zmenualignment) {
+					case 'left':
+						WTW.hudExecuteAnimation('HUDleftopen');
+						break;
+					case 'right':
+						WTW.hudExecuteAnimation('HUDrightopen');
+						break;
+					case 'bottom':
+						WTW.hudExecuteAnimation('HUDbottomopen');
+						break;
+				}
+			}
+			WTW.hudLayout = zmenualignment;
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-hud-wtw_hud.js-hudCheckLayout=" + ex.message);
+	}
+}
+
+
+WTWJS.prototype.hudExecuteAnimation = function(zanimationname) {
+	/* run the animaiton for all molds in the HUD */
+	try {
+		var zhud = WTW.getMeshOrNodeByID('hud');
+		if (zhud != null) {
+			var zanimationind = -1;
+			var zobjectanimations = zhud.WTW.objectanimations;
+			for (var i=0;i < zobjectanimations.length;i++) {
+				if (zobjectanimations[i] != null) {
+					if (zobjectanimations[i].animationname == zanimationname) {
+						zanimationind = i;
+					}
+				}
+			}
+		
+			var zhud = WTW.getMeshOrNodeByID('hud');
+			if (zhud != null) {
+				var zhudparts = zhud.getChildren();
+				for (var i=0;i < zhudparts.length;i++) {
+					if (zhudparts[i] != null) {
+						scene.beginAnimation(zhudparts[i], zobjectanimations[zanimationind].startframe, zobjectanimations[zanimationind].endframe, zobjectanimations[zanimationind].animationloop, Number(zobjectanimations[zanimationind].speedratio), null, null);
+					}
+				}
+			}		
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-hud-wtw_hud.js-hudExecuteAnimation=" + ex.message);
+	}
+}
+
+WTWJS.prototype.hudOpenMenuItem = function(zmenuitem, zmenuitemid, zmenualignment) {
 	/* get the menu form page for the menu item selected */
 	try {
 		WTW.hudClearForm();
-		var zhud = scene.getMeshByID('hud');
+		var zhud = WTW.getMeshOrNodeByID('hud');
+		var zmenuleft = WTW.getMeshOrNodeByID('hud-menuleft');
 		if (zhud != null) {
+			/* change HUD layout if needed */
+			WTW.hudCheckLayout(zmenualignment);
 			/* only create if the HUD is still open */
 			var zpageformtitle = '';
+			var zpageformtitley = 4.5;
+			var zpageformtitleparent = null;
+			var zopacity = 1;
 			var ztransparentmat = new BABYLON.StandardMaterial("hudmat", scene);
 			ztransparentmat.alpha = 0;
+			
 			/* create a parent box for any added items on the page, makes it easier to clear on page change */
+			var zmenucenter = WTW.getMeshOrNodeByID('hud-menucenter');
 			var zmoldname = 'hud-pageform';
-			var zmold = scene.getMeshByID(zmoldname);
+			var zmold = WTW.getMeshOrNodeByID(zmoldname);
 			if (zmold == null) {
-				zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
+				zmold = new BABYLON.TransformNode(zmoldname);
+				zmold.position = new BABYLON.Vector3(0,0,0);
+				zmold.rotation = new BABYLON.Vector3(0,0,0);
 				zmold.scaling = new BABYLON.Vector3(1,1,1);
-				zmold.material = ztransparentmat;
-				zmold.parent = zhud;
 			}
-
-			/* clear the menu items background to black and highlight the newly selected menu item */
-			var zmenuitemsparent = scene.getMeshByID('hud-menuitems');
-			if (zmenuitemsparent != null) {
-				var zmenuitems = zmenuitemsparent.getChildren();
-				for (var i=0;i < zmenuitems.length;i++) {
-					if (zmenuitems[i] != null) {
-						if (zmenuitems[i].name.indexOf('hud-menuitem-') > -1 ) {
-							var zbgcolor = '#000000';
-							/* need to check if it is selected */
-							if (zmenuitems[i].name == 'hud-menuitem-' + zmenuitemid) {
-								zbgcolor = '#09255F';
-							}
-							/* reset the material on the menu item button - blue for selected and black is default */
-							var zcovering = new BABYLON.StandardMaterial(zmenuitems[i].name + "mat", scene);
-							zcovering.alpha = 1;
-							zcovering.emissiveColor =  new BABYLON.Color3.FromHexString(zbgcolor);
-							zcovering.diffuseColor =  new BABYLON.Color3.FromHexString(zbgcolor);
-							zcovering.specularColor =  new BABYLON.Color3.FromHexString(zbgcolor);
-							zcovering.ambientColor =  new BABYLON.Color3.FromHexString(zbgcolor);
-							zmenuitems[i].material = zcovering;
-						}
-					}
-				}
+			zmold.parent = zmenucenter;
+			zpageformtitleparent = zmold;
+			
+			/* clear old form elements */
+			var zelements = zmold.getChildren();
+			for (var i=0;i < zelements.length;i++) {
+				zelements[i].dispose();
+			}
+			
+			var zmenutitle = WTW.getMeshOrNodeByID('hud-menutitle');
+			if (zmenutitle != null) {
+				zmenutitle.isVisible = true;
 			}
 			
 			switch (zmenuitem) {
@@ -419,11 +744,16 @@ WTWJS.prototype.hudOpenMenuItem = function(zmenuitem, zmenuitemid) {
 					zpageformtitle = 'Player Stats';
 					
 					
-					
 					break;
 				case '2': /* Inventory */
 					zpageformtitle = 'Inventory';
-
+					if (zmenutitle != null) {
+						zmenutitle.isVisible = false;
+					}
+					zpageformtitley = 2.1;
+					zpageformtitleparent = zmenuleft;
+					zopacity = 0;
+					WTW.hudGetInventory();
 					break;
 				case '50': /* Settings */
 					WTW.hudMenuText('settings');
@@ -437,7 +767,8 @@ WTWJS.prototype.hudOpenMenuItem = function(zmenuitem, zmenuitemid) {
 					break;
 				case '60': /* Cameras */
 					zpageformtitle = 'Cameras';
-
+					zpageformtitley = 4.7;
+					WTW.hudGetCameras();
 					break;
 				case '65': /* Sound */
 					zpageformtitle = 'Sound';
@@ -457,14 +788,48 @@ WTWJS.prototype.hudOpenMenuItem = function(zmenuitem, zmenuitemid) {
 					break;
 				case '100': /* Profile */
 					zpageformtitle = 'Profile';
-
+					zpageformtitley = 4.7;
+					WTW.hudGetProfile();
 					break;
+			}
+			/* clear the menu items background to black and highlight the newly selected menu item */
+			var zmenuitemsparent = WTW.getMeshOrNodeByID('hud-menuitems');
+			if (zmenuitemsparent != null) {
+				var zmenuitems = zmenuitemsparent.getChildren();
+				for (var i=0;i < zmenuitems.length;i++) {
+					if (zmenuitems[i] != null) {
+						if (zmenuitems[i].name.indexOf('hud-menuitem-') > -1) {
+							var zbgcolor = '#000000';
+							/* need to check if it is selected */
+							if (zmenuitems[i].name == 'hud-menuitem-' + zmenuitemid) {
+								zbgcolor = '#09255F';
+							}
+							/* reset the material on the menu item button - blue for selected and black is default */
+							var zcovering = new BABYLON.StandardMaterial(zmenuitems[i].name + "mat", scene);
+							zcovering.alpha = 1;
+							zcovering.emissiveColor =  new BABYLON.Color3.FromHexString(zbgcolor);
+							zcovering.diffuseColor =  new BABYLON.Color3.FromHexString(zbgcolor);
+							zcovering.specularColor =  new BABYLON.Color3.FromHexString(zbgcolor);
+							zcovering.ambientColor =  new BABYLON.Color3.FromHexString(zbgcolor);
+							zmenuitems[i].material = zcovering;
+							zcovering.alpha = zopacity;
+						} else if (zmenuitems[i].name.indexOf('hud-menuitemtext-') > -1) {
+							var zmenuitemtext = WTW.getMeshOrNodeByID(zmenuitems[i].name);
+							if (zmenuitemtext != null) {
+								if (zmenuitemtext.material != undefined) {
+									zmenuitemtext.material.alpha = zopacity;
+								}
+							}
+						}
+					}
+				}
 			}
 			if (zpageformtitle != '') {
 				/* create page form title */
 				var zpageformtitlestyle = {
-					"anchor":"left",
-					"letter-height":.6,
+					"font-family": "Arial",
+					"anchor":"center",
+					"letter-height":1.2,
 					"letter-thickness":.2,
 					"color":"#ffffff",
 					"alpha":1.00,
@@ -477,17 +842,17 @@ WTWJS.prototype.hudOpenMenuItem = function(zmenuitem, zmenuitemid) {
 				};
 				/* create 3d text */
 				Writer = BABYLON.MeshWriter(scene, {scale:1});
-				var zmytext = scene.getMeshByID(zmoldname + "-pageformtitle");
+				var zmytext = WTW.getMeshOrNodeByID(zmoldname + "-pageformtitle");
 				if (zmytext != null) {
 					zmytext.dispose();
 				}
 				var zdisplaytext = new Writer(zpageformtitle, zpageformtitlestyle);
 				zmytext = zdisplaytext.getMesh();
 				zmytext.rotation = new BABYLON.Vector3(WTW.getRadians(-90), 0, 0);
-				zmytext.position = new BABYLON.Vector3(0, 2.1, -.2);
+				zmytext.position.y = zpageformtitley;
 				zmytext.id = zmoldname + "-pageformtitle";
 				zmytext.name = zmoldname + "-pageformtitle";
-				zmytext.parent = zmold;
+				zmytext.parent = zpageformtitleparent;
 				zmytext.isPickable = false;
 			}
 
@@ -497,8 +862,19 @@ WTWJS.prototype.hudOpenMenuItem = function(zmenuitem, zmenuitemid) {
 	}
 }
 
+WTWJS.prototype.hudGetInventory = function() {
+	/* get Player inventory */
+	try {
+		
+		
+		
+	} catch (ex) {
+		WTW.log("core-scripts-hud-wtw_hud.js-hudGetInventory=" + ex.message);
+	}
+}
+
 WTWJS.prototype.hudClearForm = function() {
-	/* clear the HUD right side Form */
+	/* clear the HUD center Form */
 	try {
 		WTW.disposeClean('hud-pageform');
 		
@@ -508,6 +884,9 @@ WTWJS.prototype.hudClearForm = function() {
 		WTW.log("core-scripts-hud-wtw_hud.js-hudClearForm=" + ex.message);
 	}
 }
+
+
+
 
 /* User Menu Settings functions */
 
@@ -693,9 +1072,17 @@ WTWJS.prototype.setShadowSettings = function() {
 //			WTW.shadows.useBlurExponentialShadowMap = true;
 //		}
 		WTW.shadows.getShadowMap().renderList = zrenderlist;
-        if (WTW.shadowSet > 0) {
-			if (WTW.extraGround != null) {
+        
+		if (WTW.extraGround != null) {
+			if (WTW.shadowSet > 0) {
+				if (WTW.extraGround.material != null) {
+					WTW.extraGround.material.unfreeze();
+				}
 				WTW.extraGround.receiveShadows = true;
+			} else {
+				if (WTW.extraGround.material != null && WTW.adminView == 0) {
+					WTW.extraGround.material.freeze();
+				}
 			}
 		}
     } catch (ex) {
@@ -730,7 +1117,7 @@ WTWJS.prototype.toggleSoundMute = function() {
 						}
 					}
 					if (WTW.communitiesMolds[i].shape == 'video') {
-						var zvideomold = scene.getMeshByID(WTW.communitiesMolds[i].moldname + "-mainvideo");
+						var zvideomold = WTW.getMeshOrNodeByID(WTW.communitiesMolds[i].moldname + "-mainvideo");
 						if (zvideomold != null) {
 							if (typeof zvideomold.material.diffuseTexture.video.pause == 'function') {
 								zvideomold.material.diffuseTexture.video.volume = WTW.getSoundVolumeLinear(WTW.communitiesMolds[i].moldname, WTW.communitiesMolds[i].sound.maxdistance);
@@ -752,7 +1139,7 @@ WTWJS.prototype.toggleSoundMute = function() {
 						}
 					}
 					if (WTW.buildingMolds[i].shape == 'video') {
-						var zvideomold = scene.getMeshByID(WTW.buildingMolds[i].moldname + "-mainvideo");
+						var zvideomold = WTW.getMeshOrNodeByID(WTW.buildingMolds[i].moldname + "-mainvideo");
 						if (zvideomold != null) {
 							if (typeof zvideomold.material.diffuseTexture.video.pause == 'function') {
 								zvideomold.material.diffuseTexture.video.volume = WTW.getSoundVolumeLinear(WTW.buildingMolds[i].moldname, WTW.buildingMolds[i].sound.maxdistance);
@@ -774,7 +1161,7 @@ WTWJS.prototype.toggleSoundMute = function() {
 						}
 					}
 					if (WTW.thingMolds[i].shape == 'video') {
-						var zvideomold = scene.getMeshByID(WTW.thingMolds[i].moldname + "-mainvideo");
+						var zvideomold = WTW.getMeshOrNodeByID(WTW.thingMolds[i].moldname + "-mainvideo");
 						if (zvideomold != null) {
 							if (typeof zvideomold.material.diffuseTexture.video.pause == 'function') {
 								zvideomold.material.diffuseTexture.video.volume = WTW.getSoundVolumeLinear(WTW.thingMolds[i].moldname, WTW.thingMolds[i].sound.maxdistance);
@@ -822,7 +1209,7 @@ WTWJS.prototype.toggleSoundMute = function() {
 						}
 					} 
 					if (WTW.buildingMolds[i].shape == 'video') {
-						var zvideomold = scene.getMeshByID(WTW.buildingMolds[i].moldname + "-mainvideo");
+						var zvideomold = WTW.getMeshOrNodeByID(WTW.buildingMolds[i].moldname + "-mainvideo");
 						if (zvideomold != null) {
 							if (typeof zvideomold.material.diffuseTexture.video.pause == 'function') {
 								zvideomold.material.diffuseTexture.video.volume = 0;
@@ -1147,7 +1534,7 @@ WTWJS.prototype.listCommunityMolds = function() {
 	/* list community molds */
 	for (var i = 0; i < WTW.communitiesMolds.length; i++) {
 		if (WTW.communitiesMolds[i] != null) {
-			var zmold = scene.getMeshByID(WTW.communitiesMolds[i].moldname);
+			var zmold = WTW.getMeshOrNodeByID(WTW.communitiesMolds[i].moldname);
 			var zshadow = "false";
 			if (zmold != null) {
 				if (zmold.receiveShadows == true) {
@@ -1163,7 +1550,7 @@ WTWJS.prototype.listBuildingMolds = function() {
 	/* list building molds */
 	for (var i = 0; i < WTW.buildingMolds.length; i++) {
 		if (WTW.buildingMolds[i] != null) {
-			var zmold = scene.getMeshByID(WTW.buildingMolds[i].moldname);
+			var zmold = WTW.getMeshOrNodeByID(WTW.buildingMolds[i].moldname);
 			var zshadow = "false";
 			var zvisible = 'no';
 			if (zmold != null) {
@@ -1245,19 +1632,19 @@ WTWJS.prototype.listMeshes = function() {
 			var zvisible = scene.meshes[i].isVisible;
 			if (zmoldname.toLowerCase().indexOf("connectinggrid") > -1) {
 				zcolor = "green";
-				var zmold = scene.getMeshByID(zmoldname);
+				var zmold = WTW.getMeshOrNodeByID(zmoldname);
 				if (zmold != null && zmold.parent != null) {
 					zparentname = zmold.parent.name;
 				}
 			} else if (zmoldname.toLowerCase().indexOf("actionzone") > -1) {
 				zcolor = "lightblue";
-				var zmold = scene.getMeshByID(zmoldname);
+				var zmold = WTW.getMeshOrNodeByID(zmoldname);
 				if (zmold != null && zmold.parent != null) {
 					zparentname = zmold.parent.name;
 				}
 			} else if (zmoldname.toLowerCase().indexOf("person") > -1) {
 				zcolor = "red";
-				var zmold = scene.getMeshByID(zmoldname);
+				var zmold = WTW.getMeshOrNodeByID(zmoldname);
 				if (zmold != null && zmold.parent != null) {
 					zparentname = zmold.parent.name;
 				}
@@ -1266,7 +1653,7 @@ WTWJS.prototype.listMeshes = function() {
 			}
 			var zinmesh = "NO";
 			if (zmoldname.toLowerCase().indexOf("molds") > -1) {
-				var zmold = scene.getMeshByID(zmoldname);
+				var zmold = WTW.getMeshOrNodeByID(zmoldname);
 				if (zmold != null && WTW.myAvatar != null) {
 					if (WTW.myAvatar.intersectsMesh(zmold, false)) {
 						zinmesh = "YES";
@@ -1285,3 +1672,23 @@ WTWJS.prototype.listMeshes = function() {
 	}
 }
 
+WTWJS.prototype.listTransformNodes = function() {
+	/* list all created transform nodes */
+	try {
+		var zcolor = "gray";
+		WTW.log("---loaded Transform Nodes--------count=" + scene.transformNodes.length + "------------------------------");
+		for (var i=0; i < scene.transformNodes.length; i++) {
+			if (scene.transformNodes[i] != null) {
+				var zparentname = "";
+				var zmoldname = scene.transformNodes[i].name;
+				var zparentname = ''
+				if (scene.transformNodes[i].parent != null) {
+					zparentname = scene.transformNodes[i].parent.name;
+				}
+				WTW.log(i + "==" + zmoldname + " parent=" + zparentname, zcolor);
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-hud-wtw_hud.js-listTransformNodes=" + ex.message);
+	}
+}

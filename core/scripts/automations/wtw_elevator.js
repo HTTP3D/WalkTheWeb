@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -265,7 +265,7 @@ WTWJS.prototype.elevatorSelectFloor = function(zsetfloor, zmoldname) {
 							} else if (zestatus == 4 && zmolds[i].graphics.webimages[0].jsparameters == "2") {
 								WTW.setDirectionalOpacity(zmolds[i].moldname + "-clickimage",0);
 							} else {
-								var zemold = scene.getMeshByID(zmolds[i].moldname + "-clickimage");
+								var zemold = WTW.getMeshOrNodeByID(zmolds[i].moldname + "-clickimage");
 								zmoldname = zmolds[i].moldname + "-base";
 								if (zemold != null) {
 									if (zemold.material.subMaterials[0] != null) {
@@ -288,7 +288,7 @@ WTWJS.prototype.elevatorSelectFloor = function(zsetfloor, zmoldname) {
 						if (zmolds[i].shape == "image" && zmolds[i].graphics.webimages[0].jsfunction == "WTW.elevatorCall") {
 							var zjsparameters = zmolds[i].graphics.webimages[0].jsparameters.split(',');
 							var zjsparameter = zjsparameters[0];
-							var zemold = scene.getMeshByID(zmolds[i].moldname + "-clickimage");
+							var zemold = WTW.getMeshOrNodeByID(zmolds[i].moldname + "-clickimage");
 							var zeopacity = 0; 
 							if (zemold != null) {
 								if (zemold.material.subMaterials[0] != null) {
@@ -434,7 +434,7 @@ WTWJS.prototype.elevatorHeight = function(zconnectinggridind, zconnectinggridid)
 		for (var i=0; i < WTW.actionZones.length; i++) {
 			if (WTW.actionZones[i] != null) {
 				if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == "elevator") {
-					var zactionzoneaxle = scene.getMeshByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxle-"));
+					var zactionzoneaxle = WTW.getMeshOrNodeByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxle-"));
 					if (zactionzoneaxle != null) {
 						zeheight = zactionzoneaxle.position.y;
 					}

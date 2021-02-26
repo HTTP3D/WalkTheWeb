@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -824,6 +824,9 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 					case "wtw_listmeshes":
 						WTW.listMeshes();
 						break;
+					case "wtw_listtransformnodes":
+						WTW.listTransformNodes();
+						break;
 					case "wtw_listcgs":
 						WTW.listConnectingGrids();
 						break;
@@ -1027,7 +1030,7 @@ WTWJS.prototype.toggleAdminMenuMediaLibrary = function() {
 	/* open and close Media Library */
 	try {
 		if (dGet('wtw_fullpageform').style.display == "none" || dGet('wtw_selectimagepage').style.display == "none") {
-			WTW.openFullPageForm('medialibrary','','');
+			WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);
 		} else {
 			WTW.closeFullPageForm();
 		}
@@ -1044,8 +1047,8 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 	try {
 		if (zvalue == 1) {
 			WTW.cameraFocus = 1;
-			var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
-			var zheadtop = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-headtop");
+			var zavatarcamera = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
+			var zheadtop = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-headtop");
 			if (zavatarcamera != null && zheadtop != null) {
 				WTW.camera.parent = zavatarcamera;
 				zavatarcamera.parent = zheadtop;
@@ -1069,10 +1072,10 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 			WTW.setCookie("wtw_bavatarcamera","1",30);
 		} else {
 			WTW.cameraFocus = 0;
-			var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
+			var zavatarcamera = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
 			if (zavatarcamera != null) {
 				var zabspos = WTW.getWorldPosition(zavatarcamera);
-				var zavatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
+				var zavatar = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value);
 				if (zavatar != null && WTW.mainParentMold != null) {
 					zavatarcamera.parent = WTW.mainParentMold;
 					WTW.camera.position.x = zabspos.x;
@@ -1184,7 +1187,7 @@ WTWJS.prototype.setShowCSG = function() {
 				var zcsgmoldid = zmolds[i].csg.moldid;
 				if (zcsgmoldid != "" && zmolds[i].shown == "2") {
 					var zcsgmoldname = zmolds[i].moldname;
-					var zcsgmold = scene.getMeshByID(zcsgmoldname);
+					var zcsgmold = WTW.getMeshOrNodeByID(zcsgmoldname);
 					if (zcsgmold == null) {
 						zmolds[i].covering = "color";
 						zmolds[i].opacity = "30";
@@ -1213,7 +1216,7 @@ WTWJS.prototype.setHideCSG = function() {
 				var zcsgmoldid = zmolds[i].csg.moldid;
 				if (zcsgmoldid != "" && zmolds[i].shown == "2") {
 					var zcsgmoldname = zmolds[i].moldname;
-					var zcsgmold = scene.getMeshByID(zcsgmoldname);
+					var zcsgmold = WTW.getMeshOrNodeByID(zcsgmoldname);
 					if (zcsgmold != null) {
 						var zmoldnameparts = WTW.getMoldnameParts(zcsgmoldname);
 						zmoldnameparts.molds[zmoldnameparts.moldind].shown = '0';

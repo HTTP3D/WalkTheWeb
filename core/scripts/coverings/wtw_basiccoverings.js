@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -11,7 +11,7 @@ WTWJS.prototype.addCoveringWire = function(zmoldname, zmolddef) {
 	var zcovering;
 	try {
 		zcovering = "none";
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			zmold.wireframe = true;
 		}
@@ -375,7 +375,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 				}		
 			}
 		}
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			if (zmold.material != null) {
 				if (zmold.material.subMaterials != undefined) {

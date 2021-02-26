@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -50,7 +50,7 @@ function WTWJS() {
 	/* enable user email validation */
 	this.enableEmailValidation = 0;
 
-	/* WTW.isInitCycle - value changes to zero after 8 seconds from the initial loading. This allows the 3D Scene to render before certain extras are implemented. */
+	/* WTW.isInitCycle - value changes to zero after 5 seconds from the initial loading. This allows the 3D Scene to render before certain extras are implemented. */
 	this.isInitCycle = 1;
 
 	/* WTW.activityTimer - timer used to turn off the scene render if left alone (inactive) for an excessive amount of time (shorter time for mobile devices). */
@@ -82,7 +82,29 @@ function WTWJS() {
 
 	/* WTW.gpuSetting - identifies the GPU technology and resources available (preporation for future use) */
 	this.gpuSetting;
+	
+	/* WTW.hudLayout - identifies the current layout of the Heads Up Display (HUD): '' = center, 'left', 'right', or 'bottom' */
+	this.hudLayout = '';
 
+
+/* optimization settings */
+	
+	/* WTW.optimizeScene = 1; trigger the optimization process to run, resets to 0 on completion */
+	this.optimizeScene = 0;
+	
+	/* WTW.octree is used to speed up visible mesh selection in large scenes */
+	this.octree = null;
+	
+	/* reduce memory footprint - turn off IndexDB for caching images and assets */
+	/* Default: true (caching) for browe mode and false (no caching) for Admin Mode */
+	this.enableOfflineSupport = true;
+	this.enableOfflineSupportAdmin = false;
+	
+	/* Content Lost and Restore support - Babylon recreates in transparent way if the WebGL content is lost - consumes more memory - Default: true (off) */
+	this.doNotHandleContextLost = true;
+	
+	/* Texture caching buffers - set to true to clear buffer of texture paths to free up memory */
+	this.cleanCachedTextureBuffer = true;
 
 /* processing queues, helpers, and listeners */
 	
@@ -267,6 +289,8 @@ function WTWJS() {
 	
 	/* WTW.myAvatar - this is your avatar object parent (cube at the base of the avatar) */
 	this.myAvatar = null; 
+	
+	/* WTW.editAvatar - this is the avatar object parent (cube at the base of the avatar) when you edit a 3D Avatar */
 	this.editAvatar = null; 
 	
 	/* WTW.animationSet - appends a name to the animation name running to temporarily change the animation running on command */
@@ -377,6 +401,9 @@ function WTWJS() {
 	/* WTW.selectedMoldName - currently selected mold used for interacting with it (example: select fill in the blank - adds text to mold). */
 	this.selectedMoldName = "";
 	
+	/* WTW.textTimer - used to create a blinking cursor in the fill in the blank for editing the Selected Mold (above) */
+	this.textTimer = null;
+
 	/* temp global variables used to sync 2 animations in the demo scene (depreciated and will be removed soon) */
 	this.temp1 = null;
 	this.temp2 = null;

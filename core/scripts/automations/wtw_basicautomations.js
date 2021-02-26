@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -50,7 +50,7 @@ function automationcondition(zautomationdef) {
 			if (zactionzoneind > -1) {
 				switch (WTW.actionZones[zactionzoneind].actionzonetype) {
 					case "rotate":
-/*						var zactionzoneaxle = scene.getMeshByID("actionzoneaxle-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+/*						var zactionzoneaxle = WTW.getMeshOrNodeByID("actionzoneaxle-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
 						if (zactionzoneaxle != null) {
 							if (zautomationdef.step.conditionoperator == "<=") {
 								if (WTW.automations[zautomationind].step.timer != null) {

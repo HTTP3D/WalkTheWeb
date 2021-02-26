@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -116,9 +116,16 @@ WTWJS.prototype.initEnvironment = function() {
 		canvas.addEventListener("webglcontextrestored", function (event) {/*initializeResources();*/}, false);
 		
 		/* initialize babylon game engine */
-		engine = new BABYLON.Engine(canvas, true, {deterministicLockstep: false, lockstepMaxSteps: 4});
+		engine = new BABYLON.Engine(canvas, true, {deterministicLockstep: false, lockstepMaxSteps: 4, doNotHandleContextLost: WTW.doNotHandleContextLost});
 		/* add WalkTheWeb version to the console.log */
 		console.log("%c\r\n\r\nWalkTheWeb Open-Source 3D Internet\r\n" + wtw_versiontext + "\r\n", "color:green;font-weight:bold;");
+		
+		/* optional optimization settings */
+		if (WTW.adminView == 1) {
+			engine.enableOfflineSupport = WTW.enableOfflineSupportAdmin;
+		} else {
+			engine.enableOfflineSupport = WTW.enableOfflineSupport;
+		}
 		
 		/* initialize scene */
 		scene = new BABYLON.Scene(engine);        
@@ -131,6 +138,24 @@ WTWJS.prototype.initEnvironment = function() {
 		scene.autoClear = false;
 		scene.autoClearDepthAndStencil = false;
 		scene.collisionsEnabled = true;
+		
+		/* tested some caching options */
+//		scene.useGeometryIdsMap = true;
+//		scene.useMaterialMeshMap = true;
+//		scene.useClonedMeshMap = true;
+		
+		/* Add Scene Optimizer */
+		var zoptions = new BABYLON.SceneOptimizerOptions(30, 2000);
+		zoptions.addOptimization(new BABYLON.ShadowsOptimization(0));
+		zoptions.addOptimization(new BABYLON.LensFlaresOptimization(0));
+		zoptions.addOptimization(new BABYLON.PostProcessesOptimization(1));
+		zoptions.addOptimization(new BABYLON.ParticlesOptimization(1));
+		zoptions.addOptimization(new BABYLON.TextureOptimization(2, 256));
+		zoptions.addOptimization(new BABYLON.RenderTargetsOptimization(3));
+		zoptions.addOptimization(new BABYLON.HardwareScalingOptimization(4, 4));
+		var zoptimizer = new BABYLON.SceneOptimizer(scene, zoptions);
+		//zoptimizer.start();
+		
 		scene.ambientColor = new BABYLON.Color3(.3, .3, .3);
 		/* scene.clearColor = new BABYLON.Color3(0.1, 0.1, 0.1); //optional light setting  */
 		scene.fogEnabled = true;
@@ -355,13 +380,10 @@ WTWJS.prototype.loadInitSettings = function() {
 		}
 		/* create the parent most connecting grid box */
 		/* everything else parents to this reference point */
-		var zparent = BABYLON.MeshBuilder.CreateBox(WTW.mainParent, {}, scene);
-		zparent.material = new BABYLON.StandardMaterial(WTW.mainParent, scene);
-		zparent.material.alpha = 0;
-		zparent.position.x = 0;
-		zparent.position.y = 0;
-		zparent.position.z = 0;
-		zparent.rotation.y = WTW.getRadians(0);
+		var zparent = new BABYLON.TransformNode(WTW.mainParent);
+		zparent.position = new BABYLON.Vector3(0,0,0);
+		zparent.rotation = new BABYLON.Vector3(0,0,0);
+		zparent.scaling = new BABYLON.Vector3(1,1,1);
 		zparent.name = WTW.mainParent;
 		zparent.id = WTW.mainParent;
 		/* main parent name is WTW.mainParent */
@@ -613,15 +635,12 @@ WTWJS.prototype.loadUserSettingsAfterEngine = function() {
 			WTW.gpuSetting = WTW.getGPU();
 		}
 		WTW.setCookie("gpusetting", WTW.gpuSetting, 30);
+		/* allow animations to start before full scene loads */
+		scene.resetLastAnimationTimeFrame();
 		window.setTimeout(function() {
 			WTW.isInitCycle = 0;
-			/* BABYLON.SceneOptimizer.OptimizeAsync(scene, BABYLON.SceneOptimizerOptions.HighDegradationAllowed() ,	function(){	
-				console.log("Optimization successful");
-			}, function(){ 
-				console.log("Optimization failed");
-			});*/
 			WTW.pluginsLoadUserSettingsAfterEngine();
-		}, 8000);
+		}, 5000);
 	} catch (ex) { 
 		WTW.log("core-scripts-prime-wtw_core.js-loadUserSettingsAfterEngine=" + ex.message);
 	}
@@ -1200,7 +1219,7 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 							if (WTW.actionZones[zloadactionzoneind].inloadactionzone != undefined) {
 								zinloadactionzone = WTW.actionZones[zloadactionzoneind].inloadactionzone;
 							} else {
-								var zloadactionzone = scene.getMeshByID(WTW.actionZones[zloadactionzoneind].moldname);
+								var zloadactionzone = WTW.getMeshOrNodeByID(WTW.actionZones[zloadactionzoneind].moldname);
 								if (zloadactionzone != null) {
 									if (WTW.myAvatar.intersectsMesh(zloadactionzone, false)) { // (precise false)
 										zinloadactionzone = "1";

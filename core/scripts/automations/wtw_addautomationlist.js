@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -92,7 +92,7 @@ WTWJS.prototype.addAutomation = function(zautomationname, zautomationdef) {
 	/* temporarily disabled - work in progress */
 /*	var zautomation = null;
 	try {
-		zautomation = scene.getMeshByID(zautomationname);
+		zautomation = WTW.getMeshOrNodeByID(zautomationname);
 		if (zautomation == null) {
 			var zautomationind = -1;
 			if (WTW.isNumeric(zautomationdef.automationind)) {
@@ -107,7 +107,7 @@ WTWJS.prototype.addAutomation = function(zautomationname, zautomationdef) {
 					if (zparentautomationind > -1) {
 						if (WTW.automations[zparentautomationind] != null) {
 							var parentautomationname = "automation-" + zparentautomationind.toString() + "-" + WTW.automations[zparentautomationind].automationid + "-" + WTW.automations[zparentautomationind].connectinggridind + "-" + WTW.automations[zparentautomationind].connectinggridid + "-" + WTW.automations[zparentautomationind].automationtype;
-							zparentautomation = scene.getMeshByID(parentautomationname);
+							zparentautomation = WTW.getMeshOrNodeByID(parentautomationname);
 							if (zparentautomation == null) {
 								zparentautomation = WTW.addAutomation(parentautomationname, WTW.automations[zparentautomationind]);
 							}
@@ -119,7 +119,7 @@ WTWJS.prototype.addAutomation = function(zautomationname, zautomationdef) {
 				if (zparentautomation != null) {
 					var zparentautomationaxlebasename = "automationaxlebase-" + zparentautomationind.toString() + "-" + WTW.automations[zparentautomationind].automationid + "-" + WTW.automations[zparentautomationind].connectinggridind + "-" + WTW.automations[zparentautomationind].connectinggridid + "-" + WTW.automations[zparentautomationind].automationtype;
 					var zparentautomationaxlebase2name = "automationaxlebase2-" + zparentautomationind.toString() + "-" + WTW.automations[zparentautomationind].automationid + "-" + WTW.automations[zparentautomationind].connectinggridind + "-" + WTW.automations[zparentautomationind].connectinggridid + "-" + WTW.automations[zparentautomationind].automationtype;
-					var zparentautomationaxlebase = scene.getMeshByID(zparentautomationaxlebasename);
+					var zparentautomationaxlebase = WTW.getMeshOrNodeByID(zparentautomationaxlebasename);
 					zautomationdef.axis.position.x -= (zparentautomationaxlebase.position.x);
 					zautomationdef.axis.position.y -= (zparentautomationaxlebase.position.y);
 					zautomationdef.axis.position.z -= (zparentautomationaxlebase.position.z);

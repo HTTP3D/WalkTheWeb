@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -10,7 +10,7 @@ WTWJS.prototype.refreshTextBox = function() {
 	try {
 		if (WTW.selectedMoldName.indexOf("-") > -1) {
 			if (WTW.selectedMoldName.indexOf("-scrollboxbodytext") > -1) {
-				var zscrollboxbodytext = scene.getMeshByID(WTW.selectedMoldName);
+				var zscrollboxbodytext = WTW.getMeshOrNodeByID(WTW.selectedMoldName);
 				if (zscrollboxbodytext != null) {
 					if (zscrollboxbodytext.WTW != undefined) {
 						if (zscrollboxbodytext.WTW.webtext != undefined) {
@@ -32,7 +32,7 @@ WTWJS.prototype.refreshTextBox = function() {
 WTWJS.prototype.resetScrollBox = function(zmoldname) {
 	/* reset the scroll box textures */
 	try {
-		var zscrollboxtab = scene.getMeshByID(zmoldname + "-scrollboxtab");
+		var zscrollboxtab = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxtab");
 		if (zscrollboxtab != null && zscrollboxtab.WTW != undefined) {
 			try {
 				if (zscrollboxtab.material != null) {
@@ -42,7 +42,7 @@ WTWJS.prototype.resetScrollBox = function(zmoldname) {
 			} catch(ex) {}
 			zscrollboxtab.material = WTW.addCoveringTexture(zmoldname + "-scrollboxtab", zscrollboxtab.WTW, zscrollboxtab.scaling.x, zscrollboxtab.scaling.y, zscrollboxtab.scaling.z, zscrollboxtab.WTW.scaling.special1, zscrollboxtab.WTW.scaling.special1);
 		}
-		var zscrollboxup = scene.getMeshByID(zmoldname + "-scrollboxup");
+		var zscrollboxup = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxup");
 		if (zscrollboxup != null && zscrollboxup.WTW != undefined) {
 			try {
 				if (zscrollboxup.material != null) {
@@ -52,7 +52,7 @@ WTWJS.prototype.resetScrollBox = function(zmoldname) {
 			} catch(ex) {}
 			zscrollboxup.material = WTW.addCoveringTexture(zmoldname + "-scrollboxup", zscrollboxup.WTW, zscrollboxup.scaling.x, zscrollboxup.scaling.y, zscrollboxup.scaling.z, zscrollboxup.WTW.scaling.special1, zscrollboxup.WTW.scaling.special1);
 		}
-		var zscrollboxuparrow = scene.getMeshByID(zmoldname + "-scrollboxuparrow");
+		var zscrollboxuparrow = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxuparrow");
 		if (zscrollboxuparrow != null && zscrollboxuparrow.WTW != undefined) {
 			try {
 				if (zscrollboxuparrow.material != null) {
@@ -62,7 +62,7 @@ WTWJS.prototype.resetScrollBox = function(zmoldname) {
 			} catch(ex) {}
 			zscrollboxuparrow.material = WTW.addCoveringTexture(zmoldname + "-scrollboxuparrow", zscrollboxuparrow.WTW, zscrollboxuparrow.scaling.x, zscrollboxuparrow.scaling.y, zscrollboxuparrow.scaling.z, zscrollboxuparrow.WTW.scaling.special1, zscrollboxuparrow.WTW.scaling.special1);
 		}
-		var zscrollboxdown = scene.getMeshByID(zmoldname + "-scrollboxdown");
+		var zscrollboxdown = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxdown");
 		if (zscrollboxdown != null && zscrollboxdown.WTW != undefined) {
 			try {
 				if (zscrollboxdown.material != null) {
@@ -72,7 +72,7 @@ WTWJS.prototype.resetScrollBox = function(zmoldname) {
 			} catch(ex) {}
 			zscrollboxdown.material = WTW.addCoveringTexture(zmoldname + "-scrollboxdown", zscrollboxdown.WTW, zscrollboxdown.scaling.x, zscrollboxdown.scaling.y, zscrollboxdown.scaling.z, zscrollboxdown.WTW.scaling.special1, zscrollboxdown.WTW.scaling.special1);
 		}
-		var zscrollboxdownarrow = scene.getMeshByID(zmoldname + "-scrollboxdownarrow");
+		var zscrollboxdownarrow = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxdownarrow");
 		if (zscrollboxdownarrow != null && zscrollboxdownarrow.WTW != undefined) {
 			try {
 				if (zscrollboxdownarrow.material != null) {
@@ -523,13 +523,12 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 	/* add 3d mold text */
 	var zmold;
 	try {
-		zmold = scene.getMeshByID(zmoldname);
+		zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold == null) {
-			zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-			zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
-			var ztransparentmat = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-			ztransparentmat.alpha = 0;
-			zmold.material = ztransparentmat;
+			zmold = new BABYLON.TransformNode(zmoldname);
+			zmold.position = new BABYLON.Vector3(0,0,0);
+			zmold.rotation = new BABYLON.Vector3(0,0,0);
+			zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
 		}
 		var zwebtext = WTW.decode(zmolddef.webtext.webtext);
 		var zwebstyle = WTW.decode(zmolddef.webtext.webstyle);
@@ -586,8 +585,6 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 		zmytext.parent = zmold;
 		zmytext.isPickable = true;
 		WTW.registerMouseOver(zmytext);
-		zmold.isPickable = true;
-		WTW.registerMouseOver(zmold);
 	} catch (ex) {
 		WTW.log("core-scripts-molds-wtw_3dblog.js-addMold3DText=" + ex.message);
 	}
@@ -816,7 +813,7 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 			znamepart = zcontent.name.split('-');
 			zmoldname = znamepart[0] + "-" + znamepart[1] + "-" + znamepart[2] + "-"  + znamepart[3] + "-"  + znamepart[4] + "-"  + znamepart[5];
 		}
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			var zhtmlsegments = [];
 			var zhtmlind = 0;
@@ -1017,7 +1014,7 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 									break;
 								case "hr":
 									var zhrname = zmoldname + "-posttexthr" + zhrind;
-									var zhrbox = scene.getMeshByID(zhrname);
+									var zhrbox = WTW.getMeshOrNodeByID(zhrname);
 									if (zliney < -10 || zliney > 490) {
 										if (zhrbox != null) {
 											zhrbox.dispose();
@@ -1212,7 +1209,7 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 					}
 					var zwebtext = "";
 					zmoldname = znamepart[0] + "-" + znamepart[1] + "-" + znamepart[2] + "-" + znamepart[3] + "-" + znamepart[4] + "-" + znamepart[5];
-					var zscrollboxbodytext = scene.getMeshByID(zmoldname + "-scrollboxbodytext");
+					var zscrollboxbodytext = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxbodytext");
 					if (zscrollboxbodytext != null) {
 						zscrollboxbodytext.WTW.webtext.scrollpos = zscrollpos;
 						if (zmolds[zmoldind].webtext.webtext != undefined) {
@@ -1234,7 +1231,7 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 							zscrollpos -= zscrollmove;
 						}
 						zmolds[zmoldind].webtext.fullheight = zparagraph.height;
-						var zscrollboxtab = scene.getMeshByID(zmoldname + "-scrollboxtab");
+						var zscrollboxtab = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxtab");
 						if (zparagraph.height > zparagraph.maxheight) {
 							if (zscrollboxtab == null) {
 								var zbuttontextureid = "vvpzrv2pae3bbkwv";

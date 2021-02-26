@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -133,7 +133,7 @@ WTWJS.prototype.setShownConnectingGrids = function() {
 						zmydist = WTW.getMyDistance(Number(WTW.connectingGrids[i].position.x), Number(WTW.connectingGrids[i].position.y), Number(WTW.connectingGrids[i].position.z));
 					}
 				}
-				var zmold = scene.getMeshByID(WTW.connectingGrids[i].moldname);
+				var zmold = WTW.getMeshOrNodeByID(WTW.connectingGrids[i].moldname);
 				if (zloadlevel == "1" || zaltloadactionzoneid == "") {
 					if (zmydist < zlenmax && zshown == "0") {
 						WTW.connectingGrids[i].status = 2;
@@ -220,7 +220,7 @@ WTWJS.prototype.setShownActionZones = function() {
 				if (WTW.actionZones[i].loadactionzoneid == "") {
 					zloadazshown = "2";
 				}
-				var zmold = scene.getMeshByID(WTW.actionZones[i].moldname);
+				var zmold = WTW.getMeshOrNodeByID(WTW.actionZones[i].moldname);
 				if (WTW.actionZones[i].parentname != "") {
 					if (zloadazstatus > 1) {
 						if (zshown == "0") {
@@ -258,12 +258,42 @@ WTWJS.prototype.setShownMolds = function() {
 		WTW.setShownConnectingGrids();
 		/* load action zones as needed */
 		WTW.setShownActionZones();
-		
+		/* variable for seeing if anything is loading */
+		var zisloading = false;
 		/* load community molds first, then buildings and things */
 		/* false means that there were no more community molds loaded this cycle */
 		if (WTW.setShownMoldsByWeb("community") == false) {
-			WTW.setShownMoldsByWeb("building");
-			WTW.setShownMoldsByWeb("thing");
+			if (WTW.isInitCycle == 0 || communityid == '') {
+				if (WTW.setShownMoldsByWeb("building") == false) {
+					if (WTW.setShownMoldsByWeb("thing")) {
+						zisloading = true;
+						WTW.optimizeScene = 1;
+					}
+				} else {
+					zisloading = true;
+					WTW.optimizeScene = 1;
+				}
+			}
+		} else {
+			zisloading = true;
+			WTW.optimizeScene = 1;
+		}
+		if (zisloading) {
+			scene.blockMaterialDirtyMechanism = true;
+		} else {
+			scene.blockMaterialDirtyMechanism = false;
+			/* scene optimizer only runs after new objects are all loaded to the scene */
+			if (WTW.optimizeScene == 1 && WTW.isInitCycle == 0) {
+/*				BABYLON.SceneOptimizer.OptimizeAsync(scene); */
+/*				BABYLON.SceneOptimizer.OptimizeAsync(scene, BABYLON.SceneOptimizerOptions.ModerateDegradationAllowed(),
+				function() {
+				   // On success
+				}, function() {
+				   // FPS target not reached
+				});
+*/
+				WTW.optimizeScene = 0;
+			}
 		}
 		/* after process is complete, reset the global variable so it can be checked again */
 		WTW.checkShownMolds = 0;
@@ -294,68 +324,76 @@ WTWJS.prototype.setShownMoldsByWeb = function(zwebtype) {
 		if (zmolds != null) {
 			for (var i = 0; i < zmolds.length; i++) {
 				if (zmolds[i] != null) {
-					var zshown = "0";
+					var zshown = '0';
+					var zloaded = '0';
 					if (zmolds[i].shown != undefined) {
 						zshown = zmolds[i].shown;
 					}
-					var zparentmold = scene.getMeshByID(zmolds[i].parentname);
-					if (zparentmold != null) {
-						var zloadazind = -1;
-						var zloadazstatus = 0;
-						var zconnectinggridind = Number(zmolds[i].connectinggridind);
-						var zcsgmoldid = zmolds[i].csg.moldid;
-						if (zmolds[i].loadactionzoneind != undefined) {
-							zloadazind = zmolds[i].loadactionzoneind;
-						}
-						if (zloadazind == -1) {
-							zloadazind = WTW.getActionZoneInd(zmolds[i].loadactionzoneid, zconnectinggridind);
-							zmolds[i].loadactionzoneind = zloadazind;
-						}
-						if (WTW.actionZones[zloadazind] != null) {
+					if (zmolds[i].loaded != undefined) {
+						zloaded = zmolds[i].loaded;
+					}
+					var zparentmold = WTW.getMeshOrNodeByID(zmolds[i].parentname);
+					if (zmolds[i].moldname != undefined) {
+						var zmold = WTW.getMeshOrNodeByID(zmolds[i].moldname);
+						var znode = WTW.getMeshOrNodeByID(zmolds[i].moldname);
+						if (zparentmold != null) {
+							var zloadazind = -1;
+							var zloadazstatus = 0;
+							var zconnectinggridind = Number(zmolds[i].connectinggridind);
+							var zcsgmoldid = zmolds[i].csg.moldid;
+							if (zmolds[i].loadactionzoneind != undefined) {
+								zloadazind = zmolds[i].loadactionzoneind;
+							}
+							if (zloadazind == -1) {
+								zloadazind = WTW.getActionZoneInd(zmolds[i].loadactionzoneid, zconnectinggridind);
+								zmolds[i].loadactionzoneind = zloadazind;
+							}
 							if (WTW.actionZones[zloadazind] != null) {
-								zloadazstatus = WTW.actionZones[zloadazind].status;
-							}
-						}
-						var zmold = scene.getMeshByID(zmolds[i].moldname);
-						if (zloadazstatus == 0) {
-							if (zshown != "0") {
-								zmolds[i].shown = "0";
-								WTW.addDisposeMoldToQueue(zmolds[i].moldname);
-							}
-						} else if (zloadazstatus == 2 && zshown == "0" && zmold == null) {
-							WTW.setMoldActionZoneParent(zmolds, i);
-							if (zcsgmoldid == "") {
-								zmolds[i].shown = "1";
-								WTW.addMoldToQueue(zmolds[i].moldname, zmolds[i], zmolds[i].parentname, zmolds[i].covering,null);
-								zfound = true;
-							}
-						}
-						if (WTW.adminView == 1) {
-							if (dGet('wtw_bmerged') != null && zcsgmoldid != "") {
-								zmold = scene.getMeshByID(zmolds[i].moldname);
-								if (zwebid != "" && dGet('wtw_bmerged').title == "Merged Shapes are Shown" && zmold == null) {
-									zmolds[i].checkcollisions = "0";
-									WTW.addMold(zmolds[i].moldname, zmolds[i], zmolds[i].parentname, zmolds[i].covering);
-									zfound = true;
-								} else if (dGet('wtw_bmerged').title == "Merged Shapes are Hidden" && zmold != null) {
-									WTW.addDisposeMoldToQueue(zmolds[i].moldname);
+								if (WTW.actionZones[zloadazind] != null) {
+									zloadazstatus = WTW.actionZones[zloadazind].status;
 								}
 							}
+							if (zloadazstatus == 0) {
+								if (zshown != "0") {
+									zmolds[i].shown = "0";
+									WTW.addDisposeMoldToQueue(zmolds[i].moldname);
+								}
+							} else if (zloadazstatus == 2 && zshown == "0" && zmold == null) {
+								WTW.setMoldActionZoneParent(zmolds, i);
+								if (zcsgmoldid == "") {
+									zmolds[i].shown = "1";
+									WTW.addMoldToQueue(zmolds[i].moldname, zmolds[i], zmolds[i].parentname, zmolds[i].covering,null);
+									zfound = true;
+								}
+							} else if (zloadazstatus == 2 && zshown == "1" && zloaded == '0') {
+								/* mold has not finished loading */
+								zfound = true;
+							}
+							if (WTW.adminView == 1) {
+								if (dGet('wtw_bmerged') != null && zcsgmoldid != "") {
+									if (zwebid != "" && dGet('wtw_bmerged').title == "Merged Shapes are Shown" && zmold == null) {
+										zmolds[i].checkcollisions = "0";
+										WTW.addMold(zmolds[i].moldname, zmolds[i], zmolds[i].parentname, zmolds[i].covering);
+										zfound = true;
+									} else if (dGet('wtw_bmerged').title == "Merged Shapes are Hidden" && zmold != null) {
+										WTW.addDisposeMoldToQueue(zmolds[i].moldname);
+									}
+								}
+							}
+						} else {
+							if (zmold != null || znode != null) {
+								WTW.addDisposeMoldToQueue(zmolds[i].moldname);
+							}
+							if (zshown == "2") {
+								zmolds[i].shown = "0";
+							}
 						}
-					} else {
-						var zmold = scene.getMeshByID(zmolds[i].moldname);
-						if (zmold != null) {
-							WTW.addDisposeMoldToQueue(zmolds[i].moldname);
-						}
-						if (zshown == "2") {
-							zmolds[i].shown = "0";
-						}
-					}
-					if (zshown == "2" && zmolds[i].shape == 'video') {
-						var zvideomold = scene.getMeshByID(zmolds[i].moldname + "-mainvideo");
-						if (zvideomold != null) {
-							if (typeof zvideomold.material.diffuseTexture.video.pause == 'function') {
-								zvideomold.material.diffuseTexture.video.volume = WTW.getSoundVolumeLinear(zmolds[i].moldname, zmolds[i].sound.maxdistance);
+						if (zshown == "2" && zmolds[i].shape == 'video') {
+							var zvideomold = WTW.getMeshOrNodeByID(zmolds[i].moldname + "-mainvideo");
+							if (zvideomold != null) {
+								if (typeof zvideomold.material.diffuseTexture.video.pause == 'function') {
+									zvideomold.material.diffuseTexture.video.volume = WTW.getSoundVolumeLinear(zmolds[i].moldname, zmolds[i].sound.maxdistance);
+								}
 							}
 						}
 					}
@@ -414,7 +452,7 @@ WTWJS.prototype.getMoldCSG = function(zmold, zmolddef) {
 			for (var i=0;i < zmoldnameparts.molds.length;i++) {
 				if (zmoldnameparts.molds[i] != null) {
 					if (zmolddef.moldid == zmoldnameparts.molds[i].csg.moldid) {
-						var zcsgmold = scene.getMeshByID(zmoldnameparts.molds[i].moldname);
+						var zcsgmold = WTW.getMeshOrNodeByID(zmoldnameparts.molds[i].moldname);
 						if (zcsgmold == null) {
 							zcsgmold = WTW.addMold(zmoldnameparts.molds[i].moldname, zmoldnameparts.molds[i], zmoldnameparts.molds[i].parentname, 'hidden');
 						}
@@ -593,7 +631,7 @@ WTWJS.prototype.getSoundVolumeLinear = function(zmoldname, zmaxdistance) {
 	var zvolume = 0;
 	try {
 		if (WTW.soundMute == false) {
-			var zmold = scene.getMeshByID(zmoldname);
+			var zmold = WTW.getMeshOrNodeByID(zmoldname);
 			if (zmold != null) {
 				if (WTW.isNumeric(zmaxdistance)) {
 					zmaxdistance = Number(zmaxdistance);
@@ -670,7 +708,7 @@ WTWJS.prototype.addReflection = function(zwatermat) {
 			for (var i=0; i < WTW.communitiesMolds.length;i++) {
 				if (WTW.communitiesMolds[i] != null) {
 					if (WTW.communitiesMolds[i].graphics.waterreflection == "1" || WTW.communitiesMolds[i].moldname.indexOf("terrain") > -1 || WTW.communitiesMolds[i].shape == "floor" ) {
-						var zmold = scene.getMeshByID(WTW.communitiesMolds[i].moldname);
+						var zmold = WTW.getMeshOrNodeByID(WTW.communitiesMolds[i].moldname);
 						if (zmold != null) {
 							zwatermat.addToRenderList(zmold);
 						}
@@ -680,19 +718,19 @@ WTWJS.prototype.addReflection = function(zwatermat) {
 			for (var i=0; i < WTW.buildingMolds.length;i++) {
 				if (WTW.buildingMolds[i] != null) {
 					if (WTW.buildingMolds[i].graphics.waterreflection == "1") {
-						var zmold = scene.getMeshByID(WTW.buildingMolds[i].moldname);
+						var zmold = WTW.getMeshOrNodeByID(WTW.buildingMolds[i].moldname);
 						if (zmold != null) {
 							zwatermat.addToRenderList(zmold);
 							if (WTW.buildingMolds[i].shape == "image") {
-								var zimagemold = scene.getMeshByID(WTW.buildingMolds[i].moldname + "-mainimage");
+								var zimagemold = WTW.getMeshOrNodeByID(WTW.buildingMolds[i].moldname + "-mainimage");
 								if (zimagemold != null) {
 									zwatermat.addToRenderList(zimagemold);
 								}
-								var zimagehovermold = scene.getMeshByID(WTW.buildingMolds[i].moldname + "-hoverimage");
+								var zimagehovermold = WTW.getMeshOrNodeByID(WTW.buildingMolds[i].moldname + "-hoverimage");
 								if (zimagehovermold != null) {
 									zwatermat.addToRenderList(zimagehovermold);
 								}
-								var zimageclickmold = scene.getMeshByID(WTW.buildingMolds[i].moldname + "-clickimage");
+								var zimageclickmold = WTW.getMeshOrNodeByID(WTW.buildingMolds[i].moldname + "-clickimage");
 								if (zimageclickmold != null) {
 									zwatermat.addToRenderList(zimageclickmold);
 								}
@@ -704,7 +742,7 @@ WTWJS.prototype.addReflection = function(zwatermat) {
 			for (var i=0; i < WTW.thingMolds.length;i++) {
 				if (WTW.thingMolds[i] != null) {
 					if (WTW.thingMolds[i].graphics.waterreflection == "1") {
-						var zmold = scene.getMeshByID(WTW.thingMolds[i].moldname);
+						var zmold = WTW.getMeshOrNodeByID(WTW.thingMolds[i].moldname);
 						if (zmold != null) {
 							zwatermat.addToRenderList(zmold);
 						}
@@ -758,7 +796,7 @@ WTWJS.prototype.addReflectionRefraction = function(zmold) {
 		for (var i=0; i < WTW.communitiesMolds.length;i++) {
 			if (WTW.communitiesMolds[i] != null) {
 				if (WTW.communitiesMolds[i].shape == "waterplane" || WTW.communitiesMolds[i].shape == "waterdisc") {
-					var zrefmold = scene.getMeshByID(WTW.communitiesMolds[i].moldname);
+					var zrefmold = WTW.getMeshOrNodeByID(WTW.communitiesMolds[i].moldname);
 					if (zrefmold != null) {
 						var zwatermat = scene.getMaterialByID(WTW.communitiesMolds[i].moldname + "-watermat");
 						if (WTW.moldHasReflection(WTW.communitiesMolds[i].moldname, zwatermat) == false) {
@@ -772,7 +810,7 @@ WTWJS.prototype.addReflectionRefraction = function(zmold) {
 		for (var i=0; i < WTW.buildingMolds.length;i++) {
 			if (WTW.buildingMolds[i] != null) {
 				if (WTW.buildingMolds[i].shape == "waterplane" || WTW.buildingMolds[i].shape == "waterdisc") {
-					var zrefmold = scene.getMeshByID(WTW.buildingMolds[i].moldname);
+					var zrefmold = WTW.getMeshOrNodeByID(WTW.buildingMolds[i].moldname);
 					if (zrefmold != null) {
 						var zwatermat = scene.getMaterialByID(WTW.buildingMolds[i].moldname + "-watermat");
 						if (WTW.moldHasReflection(WTW.buildingMolds[i].moldname, zwatermat) == false) {
@@ -786,7 +824,7 @@ WTWJS.prototype.addReflectionRefraction = function(zmold) {
 		for (var i=0; i < WTW.thingMolds.length;i++) {
 			if (WTW.thingMolds[i] != null) {
 				if (WTW.thingMolds[i].shape == "waterplane" || WTW.thingMolds[i].shape == "waterdisc") {
-					var zrefmold = scene.getMeshByID(WTW.thingMolds[i].moldname);
+					var zrefmold = WTW.getMeshOrNodeByID(WTW.thingMolds[i].moldname);
 					if (zrefmold != null) {
 						var zwatermat = scene.getMaterialByID(WTW.thingMolds[i].moldname + "-watermat");
 						if (WTW.moldHasReflection(WTW.thingMolds[i].moldname, zwatermat) == false) {
@@ -797,15 +835,15 @@ WTWJS.prototype.addReflectionRefraction = function(zmold) {
 				}
 			}
 		}
-		var zimagemold = scene.getMeshByID(zmold.name + "-mainimage");
+		var zimagemold = WTW.getMeshOrNodeByID(zmold.name + "-mainimage");
 		if (zimagemold != null) {
 			WTW.addReflectionRefraction(zimagemold);
 		}
-		var zimagehovermold = scene.getMeshByID(zmold.name + "-hoverimage");
+		var zimagehovermold = WTW.getMeshOrNodeByID(zmold.name + "-hoverimage");
 		if (zimagehovermold != null) {
 			WTW.addReflectionRefraction(zimagehovermold);
 		}
-		var zimageclickmold = scene.getMeshByID(zmold.name + "-clickimage");
+		var zimageclickmold = WTW.getMeshOrNodeByID(zmold.name + "-clickimage");
 		if (zimageclickmold != null) {
 			WTW.addReflectionRefraction(zimageclickmold);
 		} */
@@ -892,7 +930,7 @@ WTWJS.prototype.checkMirrorReflectionList = function(zactionzoneind) {
 	try {
 		if (WTW.actionZones[zactionzoneind] != null) {
 			if (WTW.actionZones[zactionzoneind].actionzonetype == "mirror") {
-				var zactionzone = scene.getMeshByID("actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
+				var zactionzone = WTW.getMeshOrNodeByID("actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype);
 				if (zactionzone != null) {
 					var zmold = zactionzone.parent;
 					if (zmold != null) {
@@ -1230,15 +1268,16 @@ WTWJS.prototype.processMoldQueue = function() {
 							if (WTW.loadMoldQueue[i].molddef != null && WTW.loadMoldQueue[i].molddef != undefined) {
 								var zmolddef = WTW.loadMoldQueue[i].molddef;
 								var zattachmoldind = zmolddef.attachmoldind;
-								var zmold = scene.getMeshByID(zmoldname);
+								var zmold = WTW.getMeshOrNodeByID(zmoldname);
 								if (zmold == null) {
 									var zparentmold = null;
 									if (WTW.loadMoldQueue[i].parentname != "") {
-										zparentmold = scene.getMeshByID(WTW.loadMoldQueue[i].parentname);
+										zparentmold = WTW.getMeshOrNodeByID(WTW.loadMoldQueue[i].parentname);
 									}
 									if (WTW.loadMoldQueue[i].parentname == "" || zparentmold != null) {
 										zmold = WTW.addMold(zmoldname, zmolddef, WTW.loadMoldQueue[i].parentname, WTW.loadMoldQueue[i].coveringname);
 									}
+									var znode = scene.getTransformNodeByID(zmoldname);
 									var zwebtype = "";
 									var zmolds = null;
 									var zmoldind = -1; 
@@ -1298,17 +1337,36 @@ WTWJS.prototype.processMoldQueue = function() {
 												if (zcsgcount > 0) {
 													zmold = WTW.getMoldCSG(zmold, zmolddef);
 												}
-												if (zreceiveshadows == '1') {
+												if (zreceiveshadows == '1' && znode == null) {
+													zmold.material.unfreeze();
 													zmold.receiveShadows = true;
+												} else if (zmold.material != null && znode == null && WTW.adminView == 0) {
+													zmold.material.freeze();
 												}
 												if (WTW.shadowSet > 0 && zmoldname.indexOf('babylonfile') == -1) {
-													WTW.shadows.addShadowCaster(zmold, true);
+													if (znode == null) {
+														WTW.shadows.addShadowCaster(zmold, true);
+													} else {
+														/* add shadows to child meshes and child node child meshes */
+														var zchildnodes = zmold.getChildTransformNodes(true);
+														var zchildmeshes = zmold.getChildMeshes();
+														for (var k=0;k < zchildmeshes.length;k++) {
+															WTW.shadows.addShadowCaster(zchildmeshes[k], true);
+														}
+														for (var j=0;j < zchildnodes.length;j++) {
+															zchildmeshes = zchildnodes[j].getChildMeshes();
+															for (var k=0;k < zchildmeshes.length;k++) {
+																WTW.shadows.addShadowCaster(zchildmeshes[k], true);
+															}
+														}
+														
+													}
 												}
-												if (zwaterreflection == '1' && WTW.waterMat != null) {
+												if (zwaterreflection == '1' && WTW.waterMat != null && znode == null) {
 													WTW.waterMat.addToRenderList(zmold);
 												}
 											}
-											if (zmold != null) {
+											if (zmold != null && znode == null) {
 												zmold.checkCollisions = false;
 												zmold.isPickable = false;
 												if (zmolddef.checkcollisions != undefined) {
@@ -1499,7 +1557,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 					/* stop and clear the video before it is deleted */
 					var zstrtemp = zmoldname;
 					zstrtemp = zstrtemp.replace("-base","-mainvideo");
-					var zvideomold = scene.getMeshByID(zstrtemp);
+					var zvideomold = WTW.getMeshOrNodeByID(zstrtemp);
 					if (zvideomold != null){
 						if (zvideomold.material.diffuseTexture.video != undefined) {
 							zvideomold.material.diffuseTexture.video.pause();
@@ -1559,11 +1617,11 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 					}
 				}
 			} catch (ex) {}
-			var zmold = scene.getMeshByID(zmoldname);
+			var zmold = WTW.getMeshOrNodeByID(zmoldname);
 			/* confirm mold is in the scene */
 			if (zmold != null) {
 				try {
-					if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf("actionzone") > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1 || zmoldname.indexOf("editavatar") > -1) {
+					if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf('actionzone') > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1 || zmoldname.indexOf('editavatar') > -1 || zmoldname == 'hud') {
 						/* dispose of child objects from imported meshes */
 						var zchildmeshes = zmold.getChildren();
 						if (zchildmeshes != null) {
@@ -1599,6 +1657,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 				/* dispose of mold */
 				zmold.dispose();
 				zmold = null;
+				WTW.setMoldLoaded(zmoldname, '0');
 				if (zcheck) {
 					/* dispose of action zone components (axle, pole, hinge, bases) */
 					if (zmoldname.indexOf("actionzone") > -1) {
@@ -1609,7 +1668,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 					}
 				}
 				/* dispose of any dynamic meshes (changes subdivisions as get closer) */
-				var zmoldfar = scene.getMeshByID(zmoldname + "-far");
+				var zmoldfar = WTW.getMeshOrNodeByID(zmoldname + "-far");
 				if (zmoldfar != null) {
 					WTW.disposeClean(zmoldname + "-far");
 				}
@@ -1741,7 +1800,7 @@ WTWJS.prototype.disposeMoldEvent = function(zmoldname) {
 WTWJS.prototype.disposeShadowFromMold = function(zmoldname) {
 	/* dispose of a shadow from the global shadowmap */
 	try {
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null && WTW.shadows != null) {
 			WTW.shadows.removeShadowCaster(zmold, true);
 		}

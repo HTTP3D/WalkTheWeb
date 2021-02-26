@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -14,7 +14,7 @@ WTWJS.prototype.toggleStartVehicle = function(zpickedname) {
 			WTW.drive = WTW.newDriveVehicle();
 			WTW.drive.vehicletype = 'boat';
 			WTW.drive.connectinggridname = zconnectinggrid.name; /* will have to use an instanceid for multiplayer */
-			WTW.drive.vehicle = scene.getMeshByID(WTW.drive.connectinggridname);
+			WTW.drive.vehicle = WTW.getMeshOrNodeByID(WTW.drive.connectinggridname);
 			
 //			WTW.drive.vehicle.showBoundingBox = false;
 //			WTW.drive.vehicle.ellipsoid = new BABYLON.Vector3(10, 4, 5);

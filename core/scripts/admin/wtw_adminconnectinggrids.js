@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -99,7 +99,7 @@ WTWJS.prototype.openConnectingGridsForm = function(zconnectinggridind) {
 				break;
 		}
 		if (WTW.connectingGrids[zconnectinggridind] != null) {
-			var zmold = scene.getMeshByID(WTW.connectingGrids[zconnectinggridind].moldname);
+			var zmold = WTW.getMeshOrNodeByID(WTW.connectingGrids[zconnectinggridind].moldname);
 			if (zmold != null) {
 				WTW.openEditPoles(zmold);
 			}
@@ -406,7 +406,7 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 						}
 						dGet('wtw_tthinganalyticsid').value = "";
 					}
-					var zparentmold = scene.getMeshByID(WTW.connectingGrids[zconnectinggridind].parentname);
+					var zparentmold = WTW.getMeshOrNodeByID(WTW.connectingGrids[zconnectinggridind].parentname);
 					if (zparentmold != null) {
 						WTW.connectingGrids[zconnectinggridind].shown = "1";
 						WTW.connectingGrids[zconnectinggridind].status = 2;
@@ -501,7 +501,7 @@ WTWJS.prototype.setNewConnectingGrid = function() {
 		if (zconnectinggridind > -1) {
 			var zmold = null;
 			if (WTW.connectingGrids[zconnectinggridind].moldname != undefined) {
-				zmold = scene.getMeshByID(WTW.connectingGrids[zconnectinggridind].moldname);
+				zmold = WTW.getMeshOrNodeByID(WTW.connectingGrids[zconnectinggridind].moldname);
 			}
 			if (zmold != null) {
 				if (WTW.isNumeric(dGet('wtw_tconngridpositionx').value)) {
@@ -598,7 +598,7 @@ WTWJS.prototype.setFirstBuilding = function() {
 	/* use the form settings to position, scale, and rotate the first bulding marker */
 	try {	
 		var zmold = null;
-		zmold = scene.getMeshByID('firstbuilding-----babylonfile');
+		zmold = WTW.getMeshOrNodeByID('firstbuilding-----babylonfile');
 		if (zmold != null) {
 			if (WTW.isNumeric(dGet('wtw_tfirstbuildpositionx').value)) {
 				zmold.position.x = Number(dGet('wtw_tfirstbuildpositionx').value);

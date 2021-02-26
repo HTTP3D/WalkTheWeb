@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -88,9 +88,9 @@ WTWJS.prototype.switchCamera = function(w) {
 	/* switch camera for your avatar - includes various combinations of cameras and positions */
 	try {
 		WTW.cameraYOffset = 0;
-		var zavatar = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value);
-		var zavatarcenter = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
-		var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
+		var zavatar = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value);
+		var zavatarcenter = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+		var zavatarcamera = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
 		var zfirstcamera = WTW.getDDLValue('wtw_firstcamera');
 		var zsecondcamera = WTW.getDDLValue('wtw_secondcamera');
 		var zdimensions = WTW.getDDLValue('wtw_cameradimensions');
@@ -98,7 +98,6 @@ WTWJS.prototype.switchCamera = function(w) {
 		if (w == 1) {
 			if (zfirstcamera == "First-Person Camera") {
 				WTW.setCookie("firstcamera","Follow Camera",30);
-				zdimensions = '';
 				WTW.setDDLValue('wtw_cameradimensions',zdimensions);
 			} else {
 				WTW.setCookie("firstcamera",zfirstcamera,30);
@@ -121,7 +120,7 @@ WTWJS.prototype.switchCamera = function(w) {
 					break;
 			}
 			if (zfirstcamera == 'First-Person Camera') {
-				var zheadtop = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-headtop");
+				var zheadtop = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-headtop");
 				switch (zdimensions) {
 					case 'Anaglyph':
 						if (WTW.cameraAnaglyph == null) {
@@ -189,8 +188,8 @@ WTWJS.prototype.switchCamera = function(w) {
 								WTW.camera.position.y = 0;
 								WTW.camera.position.z = 0;
 								WTW.camera.rotation.x = WTW.getRadians(0);
-								WTW.camera.rotation.y = WTW.getRadians(0);
-								WTW.camera.rotation.z = WTW.getRadians(0);
+								WTW.camera.rotation.y = WTW.getRadians(180);
+								WTW.camera.rotation.z = WTW.getRadians(180);
 							} else if (WTW.cameraFocus != 1) {
 								if (WTW.mainParentMold != null) {
 									WTW.camera.parent = WTW.mainParentMold;
@@ -446,6 +445,7 @@ WTWJS.prototype.switchCamera = function(w) {
 			}
 		} catch (ex) {}
 		scene.cameraToUseForPointers = scene.activeCameras[0];
+		scene.activeCameras[0].attachControl(canvas, true);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_cameras.js-switchCamera=" + ex.message);
 	}
@@ -474,7 +474,7 @@ WTWJS.prototype.initFollowCamera = function(zviewport) {
 		if (zviewport == undefined) {
 			zviewport = 2;
 		}
-		var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+		var zavatarcamera = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
 		if (zviewport == 2) {
 			/* zviewport 2 is the top right small scene window */
 			var zstartposition = new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY, WTW.init.startPositionZ);
@@ -494,6 +494,7 @@ WTWJS.prototype.initFollowCamera = function(zviewport) {
 			WTW.cameraFollowTwo.id = "followcameratwo";
 			WTW.addActiveCamera(WTW.cameraFollowTwo);
 		} else {
+			var zposition = new BABYLON.Vector3(0,0,0);
 			/* zviewport 1 is the main full scene window */
 			WTW.cameraFollow = new BABYLON.FollowCamera("followcamera", WTW.camera.position, scene);
 			/* remove camera inputs to replace with custom controls */
@@ -544,7 +545,7 @@ WTWJS.prototype.initAnaglyphCamera = function() {
 		WTW.cameraAnaglyph.inputs.clear();
 		//WTW.cameraAnaglyph.inputs.remove(WTW.cameraAnaglyph.inputs.attached.keyboard); 
 		//WTW.cameraAnaglyph.inputs.remove(WTW.cameraAnaglyph.inputs.attached.mouse); 
-		var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+		var zavatarcamera = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
 		if (zavatarcamera != null) {
 			WTW.cameraAnaglyph.lockedTarget = zavatarcamera;
 		}
@@ -569,7 +570,7 @@ WTWJS.prototype.initVRCamera = function() {
 		//WTW.cameraVR.inputs.clear();
 		WTW.cameraVR.inputs.remove(WTW.cameraVR.inputs.attached.keyboard); 
 		WTW.cameraVR.inputs.remove(WTW.cameraVR.inputs.attached.mouse);
-		var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+		var zavatarcamera = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
 		if (zavatarcamera != null) {
 			WTW.cameraVR.lockedTarget = zavatarcamera;
 		}
@@ -594,7 +595,7 @@ WTWJS.prototype.initVRGamepadCamera = function() {
 		//WTW.cameraVRGamepad.inputs.clear();
 		WTW.cameraVRGamepad.inputs.remove(WTW.cameraVRGamepad.inputs.attached.keyboard); 
 		WTW.cameraVRGamepad.inputs.remove(WTW.cameraVRGamepad.inputs.attached.mouse);
-		var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+		var zavatarcamera = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
 		if (zavatarcamera != null) {
 			WTW.cameraVRGamepad.lockedTarget = zavatarcamera;
 		}
@@ -616,13 +617,12 @@ WTWJS.prototype.setMovingCameras = function(zavatar) {
 	/* this function executes every time your avatar moves or turns - or - in the render cycle when you are driving a vehicle */
 	try {
 		if (zavatar != null && WTW.cameraFocus == 1) {
+			var zhud = WTW.getMeshOrNodeByID('hud');
 			var zavatarradiansy = zavatar.rotation.y;
 			
-			
-			
 			/* these objects are used to focus the camera on parts of the avatar */
-			var zavatarcamera = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
-			var zavatarcenter = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+			var zavatarcamera = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
+			var zavatarcenter = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
 			/* rotation of a parent object to the avatar (riding on a vehicle) is added to the camera rotation for world space */
 			var zrotation = 0;
 			if (zavatar.parent != null) {
@@ -711,6 +711,31 @@ WTWJS.prototype.setMovingCameras = function(zavatar) {
 						WTW.scrollTimer = null;
 					}	
 				}
+				if (zhud != null) {
+					if (scene.activeCameras[0] != null) {
+						switch (scene.activeCameras[0].id) {
+							case 'maincamera':
+								if (zavatarcamera != null) {
+//									zhud.parent = zavatarcamera;
+								}
+								break;
+							default:
+								//zhud.parent = scene.activeCameras[0];
+								//var zray = scene.activeCameras[0].getForwardRay();
+								//zhud.position = zray.direction.scale(20);
+
+//		scene.cameraToUseForPointers = scene.activeCameras[0];
+//		scene.activeCameras[0].attachControl(canvas, true);
+
+
+								var zray = scene.activeCameras[0].getForwardRay(20);
+								//zhud.position = scene.activeCameras[0].position.add(zray.direction.scale(zray.length));
+								zhud.position = zray.direction.scale(zray.length);
+
+								break;
+						}
+					}
+				}
 			}
 		}
 	} catch(ex) {
@@ -726,7 +751,7 @@ WTWJS.prototype.setCameraDistance = function() {
 			var zdist = 100;
 			var zavatardistance = 100;
 			/* get camera focus point of avatar (center mass) */
-			var zavatarcenter = scene.getMeshByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+			var zavatarcenter = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
 			if (zavatarcenter != null) {
 				var zavatarcenterposition = WTW.getWorldPosition(zavatarcenter);
 				var zavatarpos = new BABYLON.Vector3(zavatarcenterposition.x, zavatarcenterposition.y, zavatarcenterposition.z);
