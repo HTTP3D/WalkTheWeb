@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -102,16 +102,19 @@ WTW_3DINTERNET.prototype.resetHovers = function(zmoldname, zshape) {
 
 WTW_3DINTERNET.prototype.loadUserSettingsAfterEngine = function() {
 	try {
-		wtw3dinternet.initAdminSocket();
-		if (wtw3dinternet.masterMove == '1') {
-			wtw3dinternet.initMoveSocket();
-		}
-		if (wtw3dinternet.masterChat == '1') {
-			wtw3dinternet.initChatSocket();
-		}
-		if (wtw3dinternet.masterVoiceChat == '1') {
-			wtw3dinternet.initVoiceChatSocket();
-		}
+		/* 10 second delay on starting multiplayer so that initial scene is completely loaded. */
+		window.setTimeout(function() {
+			wtw3dinternet.initAdminSocket();
+			if (wtw3dinternet.masterMove == '1') {
+				wtw3dinternet.initMoveSocket();
+			}
+			if (wtw3dinternet.masterChat == '1') {
+				wtw3dinternet.initChatSocket();
+			}
+			if (wtw3dinternet.masterVoiceChat == '1') {
+				wtw3dinternet.initVoiceChatSocket();
+			}
+		},10000);
 	} catch (ex) {
 		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-loadUserSettingsAfterEngine=" + ex.message);
 	} 
@@ -798,7 +801,7 @@ WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zusera
 WTW_3DINTERNET.prototype.getAvatarDisplayName = function(zinstanceid) {
 	var zdisplayname = "";
 	try {
-		var zavatar = scene.getMeshByID('person-' + zinstanceid);
+		var zavatar = WTW.getMeshOrNodeByID('person-' + zinstanceid);
 		if (zavatar != null) {
 			if (zavatar.WTW != null) {
 				if (zavatar.WTW.displayname != undefined) {

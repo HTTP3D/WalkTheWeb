@@ -293,7 +293,7 @@ WTWJS.prototype.showIDs = function(zdisplayname) {
 		if (zdisplayname == "") {
 			zdisplayname = 'Anonymous';
 		}
-		var znamemold = scene.getMeshByID("myavatar" + dGet('wtw_tinstanceid').value + '-nameplate');
+		var znamemold = WTW.getMeshOrNodeByID("myavatar" + dGet('wtw_tinstanceid').value + '-nameplate');
 		if (znamemold != null) {
 			znamemold.dispose();
 		}
@@ -542,11 +542,11 @@ WTWJS.prototype.newWebImage = function() {
 WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
-		var ztransparentmat = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		ztransparentmat.alpha = 0;
-		zmold.material = ztransparentmat;
+
 		var zwebtext = zmolddef.webtext.webtext;
 		var zwebstyle = zmolddef.webtext.webstyle;
 		if (zwebtext == null || zwebtext == '') {
@@ -577,8 +577,6 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 		zmytext.parent = zmold;
 		zmytext.isPickable = true;
 		WTW.registerMouseOver(zmytext);
-		zmold.isPickable = true;
-		WTW.registerMouseOver(zmold);
 	} catch (ex) {
 		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-addMold3DText=" + ex.message);
 	}
@@ -587,7 +585,7 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 
 WTWJS.prototype.hilightMoldFast = function(zmoldname, zcolor) {
 	try {
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			var zcolorcode = BABYLON.Color3.Yellow();
 			switch (zcolor.toLowerCase()) {
@@ -624,7 +622,7 @@ WTWJS.prototype.hilightMoldFast = function(zmoldname, zcolor) {
 
 WTWJS.prototype.hilightMold = function(zmoldname, zcolor) {
 	try {
-		var zmold = scene.getMeshByID(zmoldname);
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			var zcolorcode = BABYLON.Color3.Yellow();
 			switch (zcolor.toLowerCase()) {
@@ -657,7 +655,7 @@ WTWJS.prototype.hilightMold = function(zmoldname, zcolor) {
 WTWJS.prototype.unhilightMold = function(zmoldname) {
 	try {
 		if (WTW.highlightLayer != null) {
-			var zmold = scene.getMeshByID(zmoldname);
+			var zmold = WTW.getMeshOrNodeByID(zmoldname);
 			if (zmold != null) {
 				WTW.highlightLayer.removeMesh(zmold);
 			}
@@ -693,7 +691,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 					/* stop and clear the video before it is deleted */
 					var zstrtemp = zmoldname;
 					zstrtemp = zstrtemp.replace("-base","-mainvideo");
-					var zvideomold = scene.getMeshByID(zstrtemp);
+					var zvideomold = WTW.getMeshOrNodeByID(zstrtemp);
 					if (zvideomold != null){
 						if (zvideomold.material.diffuseTexture.video != undefined) {
 							zvideomold.material.diffuseTexture.video.pause();
@@ -753,7 +751,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 					}
 				}
 			} catch (ex) {}
-			var zmold = scene.getMeshByID(zmoldname);
+			var zmold = WTW.getMeshOrNodeByID(zmoldname);
 			/* confirm mold is in the scene */
 			if (zmold != null) {
 				try {
@@ -803,10 +801,15 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 					}
 				}
 				/* dispose of any dynamic meshes (changes subdivisions as get closer) */
-				var zmoldfar = scene.getMeshByID(zmoldname + "-far");
+				var zmoldfar = WTW.getMeshOrNodeByID(zmoldname + "-far");
 				if (zmoldfar != null) {
 					WTW.disposeClean(zmoldname + "-far");
 				}
+			}
+			/* added support to dispose of Transform Nodes */
+			var znode = WTW.getMeshOrNodeByID(zmoldname);
+			if (znode != null) {
+				znode.dispose();
 			}
 			if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1) {
 				for (var i = 0; i < scene.meshes.length;i++) {

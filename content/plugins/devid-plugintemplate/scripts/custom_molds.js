@@ -2,10 +2,10 @@ DEVID_PLUGINTEMPLATE.prototype.addMoldMyCustomMold = function(zmoldname, zmoldde
 	let zmold;
 	try {
 		/* each custom mold will have a separate function */
-		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {}, scene);
-		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-		zmold.material = WTW.addCovering("hidden", zmoldname, zmolddef, zlenx, zleny, zlenz, "0", "0");
-		zmold.material.alpha = 0;
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(0,0,0);
+		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		
 		/* everything you create in this function should be parented to the above invisible Box: */
 		/* yourobject.parent = zmold;

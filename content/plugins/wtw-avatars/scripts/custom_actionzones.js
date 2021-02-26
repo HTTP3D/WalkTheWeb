@@ -3,7 +3,7 @@ WTW_AVATARS.prototype.addActionZoneMyCustomZone = function(actionzonename, actio
 	try {
 		/* each custom Action Zone will have a separate function */
 		/* example is a Load Zone (but not built from queue) */
-		actionzone = scene.getMeshById(actionzonename);
+		actionzone = WTW.getMeshOrNodeByID(actionzonename);
 		if (actionzone == null) {
 			/* WTW.newMold() provides a basic shape definition object */
 			let molddef = WTW.newMold();

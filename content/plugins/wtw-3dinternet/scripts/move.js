@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2020 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -21,7 +21,7 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 			wtw3dinternet.move.on('user joined', function(data) {
 				if (wtw3dinternet.masterMove == '1') {
 					wtw3dinternet.addParticipantsMessage(data);
-					zavatar = scene.getMeshByID('person' + data.instanceid);
+					zavatar = WTW.getMeshOrNodeByID('person' + data.instanceid);
 					if (zavatar == null) {
 						if (data.instanceid != dGet('wtw_tinstanceid').value) {
 							let zavatarind = wtw3dinternet.getAvatarInd(data.instanceid);
@@ -118,7 +118,7 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 							}
 						}
 					}
-					var zavatar = scene.getMeshByID(zavatarname);
+					var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 					if (zavatar != null) {
 						if (zavatar.position.x != zmovedata.position.x || zavatar.position.y != zmovedata.position.y || zavatar.position.z != zmovedata.position.z) {
 							zavatar.position.x = zmovedata.position.x;
@@ -349,7 +349,7 @@ WTW_3DINTERNET.prototype.removeAvatar = function(zavatarname) {
 		}
 		var zfade = window.setInterval(function() {
 			var zfaded = true;
-			var zavatarparent = scene.getMeshByID(zavatarname + "-scale");
+			var zavatarparent = WTW.getMeshOrNodeByID(zavatarname + "-scale");
 			if (zavatarparent != null) {
 			var zavatarparts = zavatarparent.getChildren();
 				if (zavatarparts != null) {
@@ -369,7 +369,7 @@ WTW_3DINTERNET.prototype.removeAvatar = function(zavatarname) {
 			}
 			if (zfaded) {
 				window.clearInterval(zfade);
-				var zavatar = scene.getMeshByID(zavatarname);
+				var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 				if (zavatar != null) {
 					WTW.disposeClean(zavatarname);
 				}
@@ -401,7 +401,7 @@ WTW_3DINTERNET.prototype.savedAvatarRetrieved = function(zavatarname, zsendrefre
 			let zavatarind = wtw3dinternet.getAvatarInd(zinstanceid);
 			if (wtw3dinternet.avatars[zavatarind] != null) {
 				wtw3dinternet.avatars[zavatarind].loaded = '1';
-				let zavatar1 = scene.getMeshByID(zavatarname);
+				let zavatar1 = WTW.getMeshOrNodeByID(zavatarname);
 				if (zavatar1 != null) {
 					zavatar1.position.x = wtw3dinternet.avatars[zavatarind].position.x;
 					zavatar1.position.y = wtw3dinternet.avatars[zavatarind].position.y;
@@ -629,7 +629,7 @@ WTW_3DINTERNET.prototype.showAvatarIDs = function(zavatarname, zavatardef) {
 			zdisplayname = atob(zdisplayname);
 		} catch (ex) {}
 		if (zdisplayname != '' && zavatarname.indexOf('person-') > -1) {
-			var zavatar = scene.getMeshByID(zavatarname);
+			var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 			var zmolddef = WTW.newMold();
 			zmolddef.webtext.webtext = zdisplayname;
 			zmolddef.webtext.webstyle = JSON.stringify({
@@ -678,7 +678,7 @@ WTW_3DINTERNET.prototype.multiPersonInActionZone = function(zactionzone) {
 		for (var i=0; i < wtw3dinternet.avatars.length; i++) {
 			if (wtw3dinternet.avatars[i] != null) {
 				var zavatarname = "person-" + wtw3dinternet.avatars[i].instanceid;
-				var zavatar = scene.getMeshByID(zavatarname);
+				var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 				if (zavatar != null) {
 					zintersects = zavatar.intersectsMesh(zactionzone, false); // precise false
 				}

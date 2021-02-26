@@ -49,11 +49,11 @@ WTWJS.prototype.createScene = function() {
 			WTW.backLight = new BABYLON.DirectionalLight("backlight", new BABYLON.Vector3(1, -1, 1), scene);
 			WTW.backLight.intensity = WTW.sun.intensity / 1.5; //3;
 			
-			var zsetupparent = BABYLON.MeshBuilder.CreateBox("setupparent-0", {}, scene);
-			zsetupparent.material = new BABYLON.StandardMaterial("matsetupparent-0", scene);
-			zsetupparent.material.alpha = 0;
-			zsetupparent.position.y = -5;
-			
+			var zsetupparent = new BABYLON.TransformNode('setupparent-0');
+			zsetupparent.position = new BABYLON.Vector3(0, -5, 0);
+			zsetupparent.rotation = new BABYLON.Vector3(0,0,0);
+			zsetupparent.scaling = new BABYLON.Vector3(1,1,1);
+
 			var zbgsphere = BABYLON.MeshBuilder.CreateSphere("bgsphere", {segments: 16, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 			zbgsphere.scaling = new BABYLON.Vector3(600, 600, 600); 
 			zbgsphere.isPickable = false;
@@ -375,7 +375,7 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 					}
 					var zmoldname = WTW.getMyAvatarPart(dGet('wtw_tavatarpart').value);
 					dGet('wtw_tmoldname').value = zmoldname;
-					var zmold = scene.getMeshByID(zmoldname);
+					var zmold = WTW.getMeshOrNodeByID(zmoldname);
 					if (wtw_colorpicker == null) {
 						wtw_colorpicker = new BABYLON.GUI.ColorPicker();
 						wtw_colorpicker.name = "avatarcolorpicker";
@@ -1231,7 +1231,7 @@ WTWJS.prototype.selectAnimationEvent = function(zevent) {
 WTWJS.prototype.clearAnimations = function(zavatarname) {
 	/* clear the animations loaded (except the idle animation) so that it can be reloaded */
 	try {
-		let zavatar = scene.getMeshByID(zavatarname);
+		let zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			if (zavatar.WTW != null) {
 				if (zavatar.WTW.animations != null && zavatar.WTW.skeleton != null) {
@@ -1376,12 +1376,18 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 		}
 		dGet('wtw_tavatarid').value = zavatardef.avatarid;
 		WTW.avatarParts = [];
-		zsetupparent = scene.getMeshByID("setupparent-0");
+		zsetupparent = WTW.getMeshOrNodeByID("setupparent-0");
 		var zavatarname = "myavatar-" + dGet('wtw_tinstanceid').value;
-		WTW.myAvatar = scene.getMeshByID(zavatarname);
+		WTW.myAvatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (WTW.myAvatar != null) {
 			WTW.myAvatar.dispose();
 		}
+		var zpositionx = 0;
+		var zpositiony = 0;
+		var zpositionz = 0;
+		var zrotationx = 0;
+		var zrotationy = 0;
+		var zrotationz = 0;
 		var zscalingx = 1;
 		var zscalingy = 1;
 		var zscalingz = 1;
@@ -1389,6 +1395,37 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 		var zobjectfolder = "/content/system/avatars/male/";
 		var zobjectfile = "maleidle.babylon";
 		var zavataranimationdefs = [];
+		if (zavatardef.position.x != undefined) {
+			if (WTW.isNumeric(zavatardef.position.x)) {
+				zpositionx = Number(zavatardef.position.x);
+			}
+		}
+		if (zavatardef.position.y != undefined) {
+			if (WTW.isNumeric(zavatardef.position.y)) {
+				zpositiony = Number(zavatardef.position.y);
+			}
+		}
+		if (zavatardef.position.z != undefined) {
+			if (WTW.isNumeric(zavatardef.position.z)) {
+				zpositionz = Number(zavatardef.position.z);
+			}
+		} 
+		
+		if (zavatardef.rotation.x != undefined) {
+			if (WTW.isNumeric(zavatardef.rotation.x)) {
+				zrotationx = Number(zavatardef.rotation.x);
+			}
+		}
+		if (zavatardef.rotation.y != undefined) {
+			if (WTW.isNumeric(zavatardef.rotation.y)) {
+				zrotationy = Number(zavatardef.rotation.y);
+			}
+		}
+		if (zavatardef.rotation.z != undefined) {
+			if (WTW.isNumeric(zavatardef.rotation.z)) {
+				zrotationz = Number(zavatardef.rotation.z);
+			}
+		} 
 		if (zavatardef.scaling.x != undefined) {
 			if (WTW.isNumeric(zavatardef.scaling.x)) {
 				zscalingx = Number(zavatardef.scaling.x);
@@ -1426,13 +1463,11 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 		WTW.myAvatar.isPickable = false;
 		WTW.myAvatar.WTW = zavatardef;
 
-		var zavatarscale = BABYLON.MeshBuilder.CreateBox(zavatarname + '-scale', {}, scene);
-		zavatarscale.material = new BABYLON.StandardMaterial("matscale" + zavatarname, scene);
-		zavatarscale.material.alpha = 0;
-		zavatarscale.isPickable = false;
-		zavatarscale.parent = WTW.myAvatar;
+		var zavatarscale = new BABYLON.TransformNode(zavatarname + '-scale');
+		zavatarscale.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
+		zavatarscale.rotation = new BABYLON.Vector3(WTW.getRadians(zrotationx), WTW.getRadians(zrotationy), WTW.getRadians(zrotationz));
 		zavatarscale.scaling = new BABYLON.Vector3(zscalingx, zscalingy, zscalingz);
-		zavatarscale.rotation.y = WTW.getRadians(-90);
+		zavatarscale.parent = WTW.myAvatar;
 
 		var zavatarcamera = BABYLON.MeshBuilder.CreateBox(zavatarname + "-camera", {}, scene);
 		zavatarcamera.material = new BABYLON.StandardMaterial("matcamera" + zavatarname, scene);
@@ -1871,7 +1906,7 @@ WTWJS.prototype.updateColorByHex = function(zhex) {
 		if (/^#([0-9A-F]{3}){1,2}$/i.test(zhex) == false) {
 			zhex = "#FFFFFF";
 		}
-		var zmold = scene.getMeshByID(dGet('wtw_tmoldname').value);
+		var zmold = WTW.getMeshOrNodeByID(dGet('wtw_tmoldname').value);
 		if (zmold != null) {
 			if (dGet('wtw_tcolortype').value  == 'Diffuse') {
 				zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zhex);
@@ -1912,7 +1947,7 @@ WTWJS.prototype.getMyAvatarPart = function(zpart) {
 					zmoldname = WTW.avatarParts[i].moldname;
 					dGet('wtw_tmoldname').value = zmoldname;
 					dGet('wtw_tavatarpart').value = WTW.avatarParts[i].part;
-					var zmold = scene.getMeshByID(zmoldname);
+					var zmold = WTW.getMeshOrNodeByID(zmoldname);
 					if (zmold != null && wtw_colorpicker != null) {
 						if (dGet('wtw_tcolortype').value == 'Diffuse') {
 							wtw_colorpicker.value = zmold.material.diffuseColor;
@@ -1954,7 +1989,7 @@ WTWJS.prototype.updateAvatarPartColor = function(zhex) {
 WTWJS.prototype.setMyAvatarColor = function(r, g, b) {
 	/* on change of color, this function updates the avatar part with the color selected */
 	try {
-		var zmold = scene.getMeshByID(dGet('wtw_tmoldname').value);
+		var zmold = WTW.getMeshOrNodeByID(dGet('wtw_tmoldname').value);
 		var zpartcolor = "#ffffff";
 		if (zmold != null) {
 			switch (dGet('wtw_tcolortype').value) {
@@ -2166,7 +2201,7 @@ WTWJS.prototype.mouseClick = function(e) {
 		var zpickedname = "";
 		if (zpickedresult.pickedMesh == null) {
 			if (WTW.currentID != "") {
-				zpickedresult.pickedMesh = scene.getMeshByID(WTW.currentID);
+				zpickedresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
 			}
 			zpickedname = WTW.currentID;
 		} else {
