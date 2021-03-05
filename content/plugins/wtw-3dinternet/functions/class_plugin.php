@@ -267,6 +267,8 @@ class wtw3dinternet {
 						  `userip` varchar(64) DEFAULT '',
 						  `instanceid` varchar(24) DEFAULT '',
 						  `avatarid` varchar(16) DEFAULT '',
+						  `versionavatarid` varchar(16) DEFAULT '',
+						  `version` varchar(10) DEFAULT '1.0.0',
 						  `avatargroup` varchar(64) DEFAULT 'Default',
 						  `objectfolder` varchar(256) DEFAULT '',
 						  `objectfile` varchar(256) DEFAULT '',
@@ -366,6 +368,17 @@ class wtw3dinternet {
 						  KEY `".WTW_3DINTERNET_PREFIX."idx_useravataranimations` (`avataranimationid`,`useravatarid`,`animationevent`)
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 					");
+					
+					/* updated 3.4.5 - set initial values for new fields */
+					$wtwplugins->query("
+						update ".WTW_3DINTERNET_PREFIX."useravatars
+						set versionavatarid=avatarid,
+							version='1.0.0',
+							updatedate=now(),
+							updateuserid='".$wtwplugins->userid."'
+						where versionavatarid='';
+					");
+					
 					$wtwplugins->saveSetting(WTW_3DINTERNET_PREFIX."dbversion", $this->dbversion);
 				}
 			}

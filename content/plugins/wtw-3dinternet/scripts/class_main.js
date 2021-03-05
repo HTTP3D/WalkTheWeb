@@ -105,14 +105,18 @@ WTW_3DINTERNET.prototype.loadUserSettingsAfterEngine = function() {
 		/* 10 second delay on starting multiplayer so that initial scene is completely loaded. */
 		window.setTimeout(function() {
 			wtw3dinternet.initAdminSocket();
-			if (wtw3dinternet.masterMove == '1') {
-				wtw3dinternet.initMoveSocket();
-			}
-			if (wtw3dinternet.masterChat == '1') {
-				wtw3dinternet.initChatSocket();
-			}
-			if (wtw3dinternet.masterVoiceChat == '1') {
-				wtw3dinternet.initVoiceChatSocket();
+			/* only start the multiplayer services for browse mode */
+			/* this will give more resources to admin mode */
+			if (WTW.adminView == 0) {
+				if (wtw3dinternet.masterMove == '1') {
+					wtw3dinternet.initMoveSocket();
+				}
+				if (wtw3dinternet.masterChat == '1') {
+					wtw3dinternet.initChatSocket();
+				}
+				if (wtw3dinternet.masterVoiceChat == '1') {
+					wtw3dinternet.initVoiceChatSocket();
+				}
 			}
 		},10000);
 	} catch (ex) {
