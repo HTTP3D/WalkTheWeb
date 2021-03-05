@@ -98,7 +98,7 @@ function WTWJS() {
 	/* reduce memory footprint - turn off IndexDB for caching images and assets */
 	/* Default: true (caching) for browe mode and false (no caching) for Admin Mode */
 	this.enableOfflineSupport = true;
-	this.enableOfflineSupportAdmin = false;
+	this.enableOfflineSupportAdmin = true;
 	
 	/* Content Lost and Restore support - Babylon recreates in transparent way if the WebGL content is lost - consumes more memory - Default: true (off) */
 	this.doNotHandleContextLost = true;

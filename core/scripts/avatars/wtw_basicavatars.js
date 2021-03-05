@@ -520,6 +520,7 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 								if (i > 0) {
 									zresults.meshes[i].WTW = [];
 								}
+								WTW.addReflectionRefraction(zresults.meshes[i]);
 								/* avatar mesh based animations (not common, usually skeleton based) */
 								zresults.meshes[i].WTW.animations = [];
 								if (zobjectanimations != null) {

@@ -15,7 +15,6 @@ WTWJS.prototype.addMoldBox = function(zmoldname, zlenx, zleny, zlenz) {
 		}
 		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {sideOrientation: zsideorientation}, scene);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
-		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldBox=" + ex.message);
 	}
@@ -243,7 +242,6 @@ WTWJS.prototype.addMoldTerrain = function(zmoldname, zlenx, zleny, zlenz, zsubdi
 		} else {
 			zmold = BABYLON.MeshBuilder.CreateGroundFromHeightMap(zmoldname, zheightmappath, {width: zlenx, height: zlenz, subdivisions: zsubdivisions, minHeight: zminheight, maxHeight: zmaxheight, updatable: false}, scene);
 		}
-		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldTerrain=" + ex.message);
 	}
@@ -745,19 +743,57 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
     var zmold;
     try {
+		var zpositionx = 0;
+		var zpositiony = 0;
+		var zpositionz = 0;
+		var zrotationx = 0;
+		var zrotationy = 0;
+		var zrotationz = 0;
+		if (zmolddef.position.x != undefined) {
+			if (WTW.isNumeric(zmolddef.position.x)) {
+				zpositionx = Number(zmolddef.position.x);
+			}
+		}
+		if (zmolddef.position.y != undefined) {
+			if (WTW.isNumeric(zmolddef.position.y)) {
+				zpositiony = Number(zmolddef.position.y);
+			}
+		}
+		if (zmolddef.position.z != undefined) {
+			if (WTW.isNumeric(zmolddef.position.z)) {
+				zpositionz = Number(zmolddef.position.z);
+			}
+		}
+		if (zmolddef.rotation.x != undefined) {
+			if (WTW.isNumeric(zmolddef.rotation.x)) {
+				zrotationx = Number(zmolddef.rotation.x);
+			}
+		}
+		if (zmolddef.rotation.y != undefined) {
+			if (WTW.isNumeric(zmolddef.rotation.y)) {
+				zrotationy = Number(zmolddef.rotation.y);
+			}
+		}
+		if (zmolddef.rotation.z != undefined) {
+			if (WTW.isNumeric(zmolddef.rotation.z)) {
+				zrotationz = Number(zmolddef.rotation.z);
+			}
+		}
 		zmold = new BABYLON.TransformNode(zmoldname);
-		zmold.position = new BABYLON.Vector3(0,0,0);
-		zmold.rotation = new BABYLON.Vector3(0,0,0);
+		zmold.position = new BABYLON.Vector3(zpositionx,zpositiony,zpositionz);
+		zmold.rotation = new BABYLON.Vector3(WTW.getRadians(zrotationx),WTW.getRadians(zrotationy),WTW.getRadians(zrotationz));
 		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
-
-		var zbasemold = new BABYLON.TransformNode(zmoldname + "-base");
-		zbasemold.position = new BABYLON.Vector3(0,0,0);
-		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
-		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
-		zbasemold.parent = zmold;
+		
+		if (WTW.adminView == 1) {
+			var zbasemold = new BABYLON.TransformNode(zmoldname + '-guide');
+			zbasemold.position = new BABYLON.Vector3(0,0,0);
+			zbasemold.rotation = new BABYLON.Vector3(0,0,0);
+			zbasemold.scaling = new BABYLON.Vector3(.87,9.4,16.4);
+			zbasemold.parent = zmold;
+		}
 
 		var zloop = false;
-        var zvideo = "/content/system/images/enterwelcomecenter.mp4";
+        var zvideo = "/content/system/images/EnterWelcomeCenter.mp4";
 		var zvideoposter = "/content/system/images/videoposter.jpg";
 		if (zmolddef.sound.loop != undefined) {
 			if (zmolddef.sound.loop == '1') {
@@ -776,17 +812,16 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 		}
 		zmolddef.objects.folder = "/content/system/babylon/tv/";
 		zmolddef.objects.file = "tv.babylon";
-		
 		BABYLON.SceneLoader.ImportMeshAsync("", zmolddef.objects.folder, zmolddef.objects.file, scene).then(
-			function (results) {
-				if (results.meshes != null) {
+			function (zresults) {
+				if (zresults.meshes != null) {
 					var zobjectanimations = [];
 					
 					// add object animations using WTW.newObjectAnimation();
 					zobjectanimations[0] = WTW.newObjectAnimation();
 					zobjectanimations[0].animationname = 'playTV';
 					zobjectanimations[0].moldevent = 'onclick';
-					zobjectanimations[0].moldnamepart = 'Play';
+					zobjectanimations[0].moldnamepart = 'play';
 					zobjectanimations[0].startframe = 10;
 					zobjectanimations[0].endframe = 20;
 					zobjectanimations[0].animationloop = false;
@@ -797,7 +832,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[1] = WTW.newObjectAnimation();
 					zobjectanimations[1].animationname = 'pauseTV';
 					zobjectanimations[1].moldevent = 'onclick';
-					zobjectanimations[1].moldnamepart = 'Pause';
+					zobjectanimations[1].moldnamepart = 'pause';
 					zobjectanimations[1].startframe = 10;
 					zobjectanimations[1].endframe = 20;
 					zobjectanimations[1].animationloop = false;
@@ -808,7 +843,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[2] = WTW.newObjectAnimation();
 					zobjectanimations[2].animationname = 'stopTV';
 					zobjectanimations[2].moldevent = 'onclick';
-					zobjectanimations[2].moldnamepart = 'Stop';
+					zobjectanimations[2].moldnamepart = 'stop';
 					zobjectanimations[2].startframe = 10;
 					zobjectanimations[2].endframe = 20;
 					zobjectanimations[2].animationloop = false;
@@ -819,7 +854,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[3] = WTW.newObjectAnimation();
 					zobjectanimations[3].animationname = 'fullScreenTV';
 					zobjectanimations[3].moldevent = 'onclick';
-					zobjectanimations[3].moldnamepart = 'FullScreen';
+					zobjectanimations[3].moldnamepart = 'fullscreen';
 					zobjectanimations[3].startframe = 10;
 					zobjectanimations[3].endframe = 20;
 					zobjectanimations[3].animationloop = false;
@@ -830,7 +865,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[4] = WTW.newObjectAnimation();
 					zobjectanimations[4].animationname = 'startAgainTV';
 					zobjectanimations[4].moldevent = 'onclick';
-					zobjectanimations[4].moldnamepart = 'StartAgain';
+					zobjectanimations[4].moldnamepart = 'startagain';
 					zobjectanimations[4].startframe = 10;
 					zobjectanimations[4].endframe = 20;
 					zobjectanimations[4].animationloop = false;
@@ -841,7 +876,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[5] = WTW.newObjectAnimation();
 					zobjectanimations[5].animationname = 'onmouseoverPlayTV';
 					zobjectanimations[5].moldevent = 'onmouseover';
-					zobjectanimations[5].moldnamepart = 'Play';
+					zobjectanimations[5].moldnamepart = 'play';
 					zobjectanimations[5].startframe = 40;
 					zobjectanimations[5].endframe = 42;
 					zobjectanimations[5].animationloop = false;
@@ -852,7 +887,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[6] = WTW.newObjectAnimation();
 					zobjectanimations[6].animationname = 'onmouseoverPauseTV';
 					zobjectanimations[6].moldevent = 'onmouseover';
-					zobjectanimations[6].moldnamepart = 'Pause';
+					zobjectanimations[6].moldnamepart = 'pause';
 					zobjectanimations[6].startframe = 40;
 					zobjectanimations[6].endframe = 42;
 					zobjectanimations[6].animationloop = false;
@@ -863,7 +898,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[7] = WTW.newObjectAnimation();
 					zobjectanimations[7].animationname = 'onmouseoverStopTV';
 					zobjectanimations[7].moldevent = 'onmouseover';
-					zobjectanimations[7].moldnamepart = 'Stop';
+					zobjectanimations[7].moldnamepart = 'stop';
 					zobjectanimations[7].startframe = 40;
 					zobjectanimations[7].endframe = 42;
 					zobjectanimations[7].animationloop = false;
@@ -874,7 +909,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[8] = WTW.newObjectAnimation();
 					zobjectanimations[8].animationname = 'onmouseoverFullScreenTV';
 					zobjectanimations[8].moldevent = 'onmouseover';
-					zobjectanimations[8].moldnamepart = 'FullScreen';
+					zobjectanimations[8].moldnamepart = 'fullscreen';
 					zobjectanimations[8].startframe = 40;
 					zobjectanimations[8].endframe = 42;
 					zobjectanimations[8].animationloop = false;
@@ -885,7 +920,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[9] = WTW.newObjectAnimation();
 					zobjectanimations[9].animationname = 'onmouseoverStartAgainTV';
 					zobjectanimations[9].moldevent = 'onmouseover';
-					zobjectanimations[9].moldnamepart = 'StartAgain';
+					zobjectanimations[9].moldnamepart = 'startagain';
 					zobjectanimations[9].startframe = 40;
 					zobjectanimations[9].endframe = 42;
 					zobjectanimations[9].animationloop = false;
@@ -896,7 +931,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[10] = WTW.newObjectAnimation();
 					zobjectanimations[10].animationname = 'onmouseoutPlayTV';
 					zobjectanimations[10].moldevent = 'onmouseout';
-					zobjectanimations[10].moldnamepart = 'Play';
+					zobjectanimations[10].moldnamepart = 'play';
 					zobjectanimations[10].startframe = 50;
 					zobjectanimations[10].endframe = 52;
 					zobjectanimations[10].animationloop = false;
@@ -907,7 +942,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[11] = WTW.newObjectAnimation();
 					zobjectanimations[11].animationname = 'onmouseoutPauseTV';
 					zobjectanimations[11].moldevent = 'onmouseout';
-					zobjectanimations[11].moldnamepart = 'Pause';
+					zobjectanimations[11].moldnamepart = 'pause';
 					zobjectanimations[11].startframe = 50;
 					zobjectanimations[11].endframe = 52;
 					zobjectanimations[11].animationloop = false;
@@ -918,7 +953,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[12] = WTW.newObjectAnimation();
 					zobjectanimations[12].animationname = 'onmouseoutStopTV';
 					zobjectanimations[12].moldevent = 'onmouseout';
-					zobjectanimations[12].moldnamepart = 'Stop';
+					zobjectanimations[12].moldnamepart = 'stop';
 					zobjectanimations[12].startframe = 50;
 					zobjectanimations[12].endframe = 52;
 					zobjectanimations[12].animationloop = false;
@@ -929,7 +964,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[13] = WTW.newObjectAnimation();
 					zobjectanimations[13].animationname = 'onmouseoutFullScreenTV';
 					zobjectanimations[13].moldevent = 'onmouseout';
-					zobjectanimations[13].moldnamepart = 'FullScreen';
+					zobjectanimations[13].moldnamepart = 'fullscreen';
 					zobjectanimations[13].startframe = 50;
 					zobjectanimations[13].endframe = 52;
 					zobjectanimations[13].animationloop = false;
@@ -940,32 +975,28 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					zobjectanimations[14] = WTW.newObjectAnimation();
 					zobjectanimations[14].animationname = 'onmouseoutStartAgainTV';
 					zobjectanimations[14].moldevent = 'onmouseout';
-					zobjectanimations[14].moldnamepart = 'StartAgain';
+					zobjectanimations[14].moldnamepart = 'startagain';
 					zobjectanimations[14].startframe = 50;
 					zobjectanimations[14].endframe = 52;
 					zobjectanimations[14].animationloop = false;
 					zobjectanimations[14].speedratio = 2;
 					zobjectanimations[14].additionalscript = 'WTW.hide';
 					zobjectanimations[14].additionalparameters = 'wtw_itooltip';
+					
+					zmold = scene.getTransformNodeByID(zmoldname);
 
-					for (var i=0; i < results.meshes.length; i++) {
-						if (results.meshes[i] != null) {
-							var zmeshname = results.meshes[i].name;
+					for (var i=0; i < zresults.meshes.length; i++) {
+						if (zresults.meshes[i] != null) {
+							var zmeshname = zresults.meshes[i].name.toLowerCase();
 							var zchildmoldname = zmoldname + "-" + zmeshname;
-							results.meshes[i].name = zchildmoldname;
-							results.meshes[i].convertToUnIndexedMesh();
-							WTW.registerMouseOver(results.meshes[i]);
-							if (results.meshes[i].parent == null) {
-								results.meshes[i].parent = zmold;
-								results.meshes[i].rotation.x = WTW.getRadians(0);
-								results.meshes[i].rotation.y = WTW.getRadians(180);
-								results.meshes[i].scaling.y = .11;
-								results.meshes[i].scaling.x = 1;
-								results.meshes[i].scaling.z = .0633;
+							zresults.meshes[i].name = zchildmoldname;
+							zresults.meshes[i].id = zchildmoldname;
+							WTW.registerMouseOver(zresults.meshes[i]);
+							if (zresults.meshes[i].parent == null) {
+								zresults.meshes[i].parent = zmold;
 							}
 							if (zobjectanimations != null) {
-								WTW.addMoldAnimation(zmoldname, zmeshname, results.meshes[i], zobjectanimations);
-								/* results.meshes[i].isPickable = true; */
+								WTW.addMoldAnimation(zmoldname, zmeshname, zresults.meshes[i], zobjectanimations);
 							}
 						}
 					}
@@ -976,26 +1007,24 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					WTW.disposeClean(zmoldname);
 				}
 			}
-		);		
+		);
         var zvideomat = new BABYLON.StandardMaterial(zmoldname + "-mat", scene);
-        var zvideotexture = new BABYLON.VideoTexture(zmoldname + "-video", ["/content/stock/webvideos/blank.mp4"], scene, true, false);
+        var zvideotexture = new BABYLON.VideoTexture(zmoldname + "-video", zvideo, scene, false, false); /* generateMipMaps?: boolean, invertY?: boolean */
         zvideomat.diffuseTexture = zvideotexture;
         zvideomat.alpha = 1;
         zvideomat.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-        var zvideomold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-mainvideo", {}, scene);
-        zvideomold.scaling = new BABYLON.Vector3(.1, zleny, zlenz);
-        zvideomold.position.x = -(zlenx * .25);
+        var zvideomold = BABYLON.MeshBuilder.CreatePlane(zmoldname + "-mainvideo", {height: 9, width: 16, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
+        zvideomold.position.x = (zlenx * .1);
+		zvideomold.rotation.y = WTW.getRadians(-90);
         zvideomold.material = zvideomat;
         zvideomold.material.diffuseTexture.video.loop = zloop;
         zvideomold.WTW = {'videosrc':zvideo,'firstvideoclick':false};
-        zvideomold.parent = zbasemold;
-		zvideomold.convertToUnIndexedMesh();
+        zvideomold.parent = zmold;
 
-        var zvideopostermold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-videoposter", {}, scene);
-        zvideopostermold.scaling = new BABYLON.Vector3(.1, zleny, zlenz);
-        zvideopostermold.position.x = zvideomold.position.x -.1;
-		zvideopostermold.parent = zbasemold;
-		zvideopostermold.convertToUnIndexedMesh();
+        var zvideopostermold = BABYLON.MeshBuilder.CreatePlane(zmoldname + "-videoposter", {height: 9, width: 16.2, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
+        zvideopostermold.position.x = zvideomold.position.x + .1;
+		zvideopostermold.rotation.y = WTW.getRadians(-90);
+		zvideopostermold.parent = zmold;
         var zpostermat = new BABYLON.StandardMaterial(zmoldname + "-postermat", scene);
         zpostermat.diffuseTexture = new BABYLON.Texture(zvideoposter, scene);
         zpostermat.diffuseTexture.hasAlpha = false;
@@ -1004,8 +1033,6 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 		zpostermat.emissiveColor = new BABYLON.Color3(1,1,1);
 		zpostermat.diffuseColor = new BABYLON.Color3(1,1,1);
 		zvideopostermold.material = zpostermat;
-
-        zbasemold.rotation.x = WTW.getRadians(-90);
     } catch (ex) {
         WTW.log("core-scripts-molds-basicmolds\r\n addMoldVideo=" + ex.message);
     }
@@ -1334,6 +1361,15 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 
+/*		if (WTW.adminView == 1) {
+			var zbasemold = new BABYLON.TransformNode(zmoldname + '-guide');
+			zbasemold.position = new BABYLON.Vector3(0,0,0);
+			zbasemold.rotation = new BABYLON.Vector3(0,0,0);
+			zbasemold.scaling = new BABYLON.Vector3(1,1,1);
+			zbasemold.parent = zmold;
+		}
+*/
+
 //		if (zmoldname.indexOf('-vehicle') > -1) {
 //			zmold.physicsImpostor = new BABYLON.PhysicsImpostor(zmold, BABYLON.PhysicsImpostor.BoxImpostor, {ignoreParent: true,  mass: 1, friction: 1, restitution: 0.9 }, scene);
 //		}
@@ -1345,6 +1381,35 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 		var zparentname = '';
 		var zrotationy = 0;
 		var zbillboard = '0';
+		var zdiffusecolor = '#ffffff';
+		var zemissivecolor = '#000000';
+		var zspecularcolor = '#000000';
+		var zambientcolor = '#ffffff';
+		var zreceiveshadows = false;
+		var zwaterreflection = false;
+		if (zmolddef.color != undefined) {
+			if (zmolddef.color.diffusecolor != undefined) {
+				if (zmolddef.color.diffusecolor != '') {
+					zdiffusecolor = zmolddef.color.diffusecolor;
+				}
+			}
+			if (zmolddef.color.emissivecolor != undefined) {
+				if (zmolddef.color.emissivecolor != '') {
+					zemissivecolor = zmolddef.color.emissivecolor;
+				}
+			}
+			if (zmolddef.color.specularcolor != undefined) {
+				if (zmolddef.color.specularcolor != '') {
+					zspecularcolor = zmolddef.color.specularcolor;
+				}
+			}
+			if (zmolddef.color.ambientcolor != undefined) {
+				if (zmolddef.color.ambientcolor != '') {
+					zambientcolor = zmolddef.color.ambientcolor;
+				}
+			}
+		}
+		
 		/* read objectid, folder path, and file values */
 		if (zmolddef.objects.uploadobjectid != undefined) {
 			if (zmolddef.objects.uploadobjectid != '') {
@@ -1378,6 +1443,17 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 				zrotationy = zmolddef.rotation.y;
 			}
 		}
+		if (zmolddef.graphics.receiveshadows != undefined) {
+			if (zmolddef.graphics.receiveshadows == '1') {
+				zreceiveshadows = true;
+			}
+		}
+		if (zmolddef.graphics.waterreflection != undefined) {
+			if (zmolddef.graphics.waterreflection == '1') {
+				zwaterreflection = true;
+			}
+		}
+
 		/* when billboard enabled, it keeps the object orientated to your camera view (always facing the same direction to you) */
 		if (zmolddef.rotation.billboard != undefined) {
 			if (zmolddef.rotation.billboard != '') {
@@ -1409,8 +1485,51 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 									zchildmoldname = zchildmoldname.replace(" ","_").toLowerCase();
 									zresults.meshes[i].id = zchildmoldname;
 									zresults.meshes[i].name = zchildmoldname;
-									zresults.meshes[i].convertToUnIndexedMesh();
+//									zresults.meshes[i].convertToUnIndexedMesh();
 									zresults.meshes[i].cullingStrategy = BABYLON.AbstractMesh.CULLINGSTRATEGY_OPTIMISTIC_INCLUSION;
+									
+									var zcovering = null;
+									
+									if (zresults.meshes[i].material != null) {
+										zcovering = zresults.meshes[i].material;
+									} else {
+										zcovering = new BABYLON.StandardMaterial(zmoldname + 'mat', scene);
+									}
+									zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
+									zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
+									zcovering.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
+									zcovering.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
+									zresults.meshes[i].material = zcovering;
+									
+									if (WTW.shadows != null) {
+										/* add mesh to world shadow map */
+										WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
+									}
+									if (zresults.meshes[i].material != null) {
+										zresults.meshes[i].material.unfreeze();
+									}
+									/* turn on or off receive shadows */
+									zresults.meshes[i].receiveShadows = zreceiveshadows;
+									/* add reflection on water if set */
+									if (zwaterreflection && WTW.waterMat != null) {
+										WTW.addReflectionRefraction(zresults.meshes[i]);
+									}
+
+									/* make sure child meshes are pickable */
+									if (WTW.adminView == 1) {
+										zresults.meshes[i].isPickable = true;
+										WTW.registerMouseOver(zresults.meshes[i]);
+									}
+
+									/* make sure all object meshes have a parent */
+									if (zresults.meshes[i].parent == null) {
+										if (zbillboard == '1') {
+											zresults.meshes[i].parent = zmoldrot;
+										} else {
+											zresults.meshes[i].parent = zmold;
+										}
+									}
+
 									/* this if statement will be moved to a plugin hook (minigolf related test) */
 									if (zresults.meshes[i].name.indexOf('ground') > -1) {
 										zresults.meshes[i].physicsImpostor = new BABYLON.PhysicsImpostor(zresults.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, { mass: 0, friction: 1, restitution: 0.3 }, scene);
@@ -1424,27 +1543,6 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 										zresults.meshes[i].material.wireframe = true;
 									}
 
-									/* make sure child meshes are pickable */
-									zresults.meshes[i].isPickable = true;
-									if (WTW.adminView == 1) {
-										WTW.registerMouseOver(zresults.meshes[i]);
-									}
-									/* make sure all object meshes have a parent */
-									if (zresults.meshes[i].parent == null) {
-										if (zbillboard == '1') {
-											zresults.meshes[i].parent = zmoldrot;
-										} else {
-											zresults.meshes[i].parent = zmold;
-										}
-									}
-									if (WTW.shadows != null) {
-										/* add mesh to world shadow map */
-										WTW.shadows.getShadowMap().renderList.push(zresults.meshes[i]);
-									}
-									if (zresults.meshes[i].material != null) {
-										zresults.meshes[i].material.unfreeze();
-									}
-									zresults.meshes[i].receiveShadows = true;
 									/* initiate and preload any event driven animations */
 									if (zobjectanimations != null) {
 										zhasanimation = true;

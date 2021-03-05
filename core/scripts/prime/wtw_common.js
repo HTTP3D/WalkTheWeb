@@ -760,25 +760,40 @@ WTWJS.prototype.moldHasReflection = function(zmoldname, zwatermat) {
 	var zfound = false;
 	try {
 		if (zwatermat != null) {
-			if (zwatermat.reflectionTexture != null) {
-				for (var i=0; i < zwatermat.reflectionTexture.renderList.length; i++) {
-					if (zwatermat.reflectionTexture.renderList[i] != null) {
-						if (zwatermat.reflectionTexture.renderList[i].name == zmoldname) {
-							zfound = true;
+			var zrenderlist = zwatermat.getRenderList();
+			if (zrenderlist != null) {
+				for (var i=0;i < zrenderlist.length;i++) {
+					if (zrenderlist[i] != null) {
+						if (zrenderlist[i].name != undefined) {
+							if (zrenderlist[i].name == zmoldname) {
+								zfound = true;
+							}
 						}
 					}
 				}
 			}
-			if (zwatermat.refractionTexture != null) {
-				for (var i=0; i < zwatermat.refractionTexture.renderList.length; i++) {
-					if (zwatermat.refractionTexture.renderList[i] != null) {
-						if (zwatermat.refractionTexture.renderList[i].name == zmoldname) {
-							zfound = true;
-						}
+		}
+		
+		/* obsolete - uses old water texture that was replaced */
+/*		if (zwatermat.reflectionTexture != null) {
+			for (var i=0; i < zwatermat.reflectionTexture.renderList.length; i++) {
+				if (zwatermat.reflectionTexture.renderList[i] != null) {
+					if (zwatermat.reflectionTexture.renderList[i].name == zmoldname) {
+						zfound = true;
 					}
 				}
 			}
-		} 
+		}
+		if (zwatermat.refractionTexture != null) {
+			for (var i=0; i < zwatermat.refractionTexture.renderList.length; i++) {
+				if (zwatermat.refractionTexture.renderList[i] != null) {
+					if (zwatermat.refractionTexture.renderList[i].name == zmoldname) {
+						zfound = true;
+					}
+				}
+			}
+		}
+*/
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-moldHasReflection=" + ex.message);
 	} 
@@ -787,13 +802,14 @@ WTWJS.prototype.moldHasReflection = function(zmoldname, zwatermat) {
 
 WTWJS.prototype.addReflectionRefraction = function(zmold) {
 	try {
-/*		if (WTW.moldHasReflection(zmold.name, WTW.waterMat) == false) {
+		if (WTW.moldHasReflection(zmold.name, WTW.waterMat) == false) {
 			if (WTW.waterMat != null) {
 				WTW.addReflectionToMold(WTW.waterMat, zmold);
-				WTW.addRefractionToMold(WTW.waterMat, zmold);
+//				WTW.addRefractionToMold(WTW.waterMat, zmold);
 			}
 		}
-		for (var i=0; i < WTW.communitiesMolds.length;i++) {
+		/* obsolete, used old water procedure */
+/*		for (var i=0; i < WTW.communitiesMolds.length;i++) {
 			if (WTW.communitiesMolds[i] != null) {
 				if (WTW.communitiesMolds[i].shape == "waterplane" || WTW.communitiesMolds[i].shape == "waterdisc") {
 					var zrefmold = WTW.getMeshOrNodeByID(WTW.communitiesMolds[i].moldname);
@@ -854,38 +870,41 @@ WTWJS.prototype.addReflectionRefraction = function(zmold) {
 
 WTWJS.prototype.addReflectionToMold = function(zwatermat, zmold) {
 	try {
-/*		if (zwatermat != null && zmold != null) {
-			var zfound = false;
-			var zfoundind = -1;
-			var znextind = 0;
-			if (zwatermat.reflectionTexture != null) {
-				znextind = zwatermat.reflectionTexture.renderList.length;
-				for (var i=0; i < zwatermat.reflectionTexture.renderList.length; i++) {
-					if (zwatermat.reflectionTexture.renderList[i] == null) {
-						if (i < znextind) {
-							znextind = i;
-						}
-					} else {
-						if (zmold.name != undefined) {
-							if (zwatermat.reflectionTexture.renderList[i].name == zmold.name) {
-								zfound = true;
-								zfoundind = i;
-							}
+		if (zwatermat != null && zmold != null) {
+			zwatermat.addToRenderList(zmold);
+		}
+		
+		/* obsolete, used old water procedure */
+/*		var zfound = false;
+		var zfoundind = -1;
+		var znextind = 0;
+		if (zwatermat.reflectionTexture != null) {
+			znextind = zwatermat.reflectionTexture.renderList.length;
+			for (var i=0; i < zwatermat.reflectionTexture.renderList.length; i++) {
+				if (zwatermat.reflectionTexture.renderList[i] == null) {
+					if (i < znextind) {
+						znextind = i;
+					}
+				} else {
+					if (zmold.name != undefined) {
+						if (zwatermat.reflectionTexture.renderList[i].name == zmold.name) {
+							zfound = true;
+							zfoundind = i;
 						}
 					}
 				}
-				window.setTimeout(function() {
-					if (zfound == false) {
-						if (zwatermat.reflectionTexture != null) {
-							zwatermat.reflectionTexture.renderList[znextind] = zmold;
-						}
-					} else if (zfoundind > -1) {
-						if (zwatermat.reflectionTexture != null) {
-							zwatermat.reflectionTexture.renderList[zfoundind] = zmold;
-						}
-					}
-				},2000);
 			}
+			window.setTimeout(function() {
+				if (zfound == false) {
+					if (zwatermat.reflectionTexture != null) {
+						zwatermat.reflectionTexture.renderList[znextind] = zmold;
+					}
+				} else if (zfoundind > -1) {
+					if (zwatermat.reflectionTexture != null) {
+						zwatermat.reflectionTexture.renderList[zfoundind] = zmold;
+					}
+				}
+			},2000);
 		} */
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-addReflectionToMold=" + ex.message);
@@ -922,6 +941,27 @@ WTWJS.prototype.addRefractionToMold = function(zwatermat, zmold) {
 		} */
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-addRefractionToMold=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.removeReflectionRefraction = function(zmoldname) {
+	try {
+		if (WTW.waterMat != null) {
+			var zrenderlist = WTW.waterMat.getRenderList();
+			if (zrenderlist != null) {
+				for (var i=zrenderlist.length;i > 0;i--) {
+					if (zrenderlist[i] != null) {
+						if (zrenderlist[i].name != undefined) {
+							if (zrenderlist[i].name == zmoldname) {
+								zrenderlist.splice(i,1);
+							}
+						}
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-removeReflectionRefraction=" + ex.message);
 	} 
 }
 
@@ -1627,6 +1667,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 						if (zchildmeshes != null) {
 							for (var i=0; i < zchildmeshes.length; i++) {
 								if (zchildmeshes[i] != null) {
+									WTW.removeReflectionRefraction(zchildmeshes[i].name);
 									zchildmeshes[i].dispose();
 								}
 							}
@@ -1677,6 +1718,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 				for (var i = 0; i < scene.meshes.length;i++) {
 					/* check for child parts of the 3D Model that are still in the 3D Scene and delete them */
 					if (scene.meshes[i].name.indexOf(zmoldname) > -1) {
+						WTW.removeReflectionRefraction(scene.meshes[i].name);
 						scene.meshes[i].dispose();
 					}
 				}

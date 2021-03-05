@@ -426,6 +426,8 @@ WTWJS.prototype.mouseClick = function(zevent) {
 							WTW.hudClick(zpickedname);
 						} else if (zpickedname.indexOf("-image") > -1) {
 							WTW.checkImageClick(zpickedname);
+						} else if (zpickedname.indexOf("-videoposter") > -1 || zpickedname.indexOf("-video-screen") > -1) {
+							WTW.checkVideoClick(zpickedname);
 						} else if (zpickedname.indexOf("-vehicle") > -1) {
 							WTW.toggleStartVehicle(zpickedname);
 						} else {
@@ -2150,7 +2152,7 @@ WTWJS.prototype.checkVideoClick = function(zmoldname, zforce) {
 			zforce = 3;
 		}
 		/* get parent moldname */
-		zmoldname = zmoldname.replace('-base','').replace('-mainvideo','');
+		zmoldname = zmoldname.replace('-videoposter','').replace('-mainvideo','').replace('-screen','');
 		/* get mold with video player texture */
         var zvideomold = WTW.getMeshOrNodeByID(zmoldname + "-mainvideo");
 		/* get mold for video poster image (for when not playing) */
@@ -2165,7 +2167,7 @@ WTWJS.prototype.checkVideoClick = function(zmoldname, zforce) {
                 zvideomold.material.diffuseTexture.video.load();
                 zvideomold.material.diffuseTexture.video.pause();
 				/* move the video poster mold with the video texture (show it) */
-				zvideoposter.position.x = zvideomold.position.x -.1;
+				zvideoposter.position.x = zvideomold.position.x +.1;
             }
 			if (zforce == 9) { /* open in tab (full screen mode) */
 				/* stop the 3D Video Player */
@@ -2175,7 +2177,7 @@ WTWJS.prototype.checkVideoClick = function(zmoldname, zforce) {
 			} else {
 				if ((zvideomold.material.diffuseTexture.video.paused && zforce == 3) || zforce == 1 || zforce == 2) {
 					/* move the video poster mold with the video texture (hide it) */
-					zvideoposter.position.x = zvideomold.position.x +.1;
+					zvideoposter.position.x = zvideomold.position.x -.1;
 					if (zforce == 2) { /* start again */
 						zvideomold.material.diffuseTexture.video.load();
 					} else if (zforce == 1) {
@@ -2184,11 +2186,13 @@ WTWJS.prototype.checkVideoClick = function(zmoldname, zforce) {
 				} else { /* pause */
 					if (zforce == -1) { /* pause at start */
 						/* move the video poster mold with the video texture (show it) */
-						zvideoposter.position.x = zvideomold.position.x -.1;
+						zvideoposter.position.x = zvideomold.position.x +.1;
 						zvideomold.material.diffuseTexture.video.load();
+					} else if (zforce == 3) {
+						zvideoposter.position.x = zvideomold.position.x +.1;
 					} else {
 						/* move the video poster mold with the video texture (hide it) */
-						zvideoposter.position.x = zvideomold.position.x +.1;
+						zvideoposter.position.x = zvideomold.position.x -.1;
 					}
 					zvideomold.material.diffuseTexture.video.pause();
 				}

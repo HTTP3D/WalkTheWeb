@@ -371,6 +371,7 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 			var zrotz = Number(zmolddef.rotation.z);
 			var zspecial1 = 0;
 			var zspecial2 = 0;
+			var znode = scene.getTransformNodeByID(zmoldname);
 			try {
 				if (zmolddef.checkcollisions != null) {
 					zcheckcollisions = zmolddef.checkcollisions;
@@ -469,7 +470,7 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 					}
 				}
 			}
-			if (zmoldname.indexOf("terrain") > -1 || ziswaterreflection == "1") {
+			if (zmoldname.indexOf("terrain") > -1 || (ziswaterreflection == "1" && znode == null)) {
 				/* if mold is set to add reflection, add mold to the reflections array */
 				WTW.addReflectionRefraction(zmold);
 			}
@@ -1191,13 +1192,13 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				break;
 			case "video":
 				dGet('wtw_tmoldpositionx').value = zpositionx;
-				dGet('wtw_tmoldpositiony').value = zpositiony;
+				dGet('wtw_tmoldpositiony').value = zpositiony + 10;
 				dGet('wtw_tmoldpositionz').value = zpositionz;
-				dGet('wtw_tmoldscalingx').value = ".25";
-				dGet('wtw_tmoldscalingy').value = "10.00";
-				dGet('wtw_tmoldscalingz').value = "10.00";
+				dGet('wtw_tmoldscalingx').value = "1.00";
+				dGet('wtw_tmoldscalingy').value = "1.00";
+				dGet('wtw_tmoldscalingz').value = "1.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationy + 180;
+				dGet('wtw_tmoldrotationy').value = zrotationy - 90;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
@@ -1205,10 +1206,10 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmolduscale').value = "0.00";
 				dGet('wtw_tmoldvscale').value = "0.00";
 				dGet('wtw_tmoldsubdivisions').value = "12";
-				dGet('wtw_tmoldvideoid').value = "50lyz2cjpxhnt5az";
-				dGet('wtw_tmoldvideopath').value = "/content/system/images/enterwelcomecenter.mp4";
-				dGet('wtw_tmoldvideoposterid').value = "e0u9qw9mbrv0hfls";
-				dGet('wtw_tmoldvideoposterpath').value = "/content/system/images/videoposter.jpg";
+				dGet('wtw_tmoldvideoid').value = "";
+				dGet('wtw_tmoldvideopath').value = "";
+				dGet('wtw_tmoldvideoposterid').value = "";
+				dGet('wtw_tmoldvideoposterpath').value = "";
 				WTW.setDDLValue('wtw_tmoldsoundattenuation','linear');
 				dGet('wtw_tmoldsoundmaxdistance').value = "100.00";
 				dGet('wtw_tmoldsoundloop').checked = false;
@@ -1423,6 +1424,7 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 		WTW.show('wtw_moldscalingydiv');
 		WTW.show('wtw_moldcolorsdiv');
 		WTW.show('wtw_moldtexturesetdiv');
+		WTW.show('wtw_moldshadowreflectiondiv');
 		WTW.show('wtw_moldbasictexturesetdiv');
 		WTW.show('wtw_moldbasictextureset2div');
 		WTW.show('wtw_moldbumptexturetitle');
@@ -1669,6 +1671,7 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbasictextureset2div');
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturesetdiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
 				break;
 			case "tree":
 				dGet('wtw_moldpositiontitle').innerHTML = "Tree Position";
@@ -1687,6 +1690,7 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbasictextureset2div');
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturesetdiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
 				break;
 			case "flag":
 				dGet('wtw_moldpositiontitle').innerHTML = "Flag Position";
@@ -1705,6 +1709,7 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.show('wtw_moldbasictextureset2div');
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturesetdiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
 				WTW.show('wtw_moldscalediv');
 				break;
 			case "smoke":
@@ -1724,6 +1729,7 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbasictextureset2div');
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturesetdiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
 				break;
 			case "waterfountain":
 				dGet('wtw_moldpositiontitle').innerHTML = "Fountain Position";
@@ -1760,6 +1766,8 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbasictextureset2div');
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturesetdiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
 				break;
 			case "particleshower":
 				dGet('wtw_moldpositiontitle').innerHTML = "Shower Position";
@@ -1778,6 +1786,7 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbasictextureset2div');
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturesetdiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
 				break;
 			case "babylonfile":
 				dGet('wtw_moldpositiontitle').innerHTML = "3D Object Position";
@@ -1790,7 +1799,6 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldspecial1');
 				WTW.hide('wtw_moldspecial2');
 				WTW.hide('wtw_moldsubdivisions');
-				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.hide('wtw_moldbasictextureset2div');
@@ -1815,6 +1823,7 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbasictextureset2div');
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturesetdiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
 				break;
 			case "waterdisc":
 				dGet('wtw_moldpositiontitle').innerHTML = "Water Disc Position";
@@ -1832,6 +1841,7 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbasictextureset2div');
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturesetdiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
 				break;
 			case "disc":
 				dGet('wtw_moldpositiontitle').innerHTML = "Disc Position";
@@ -1955,6 +1965,7 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbasictextureset2div');
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturesetdiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
 				WTW.show('wtw_moldwebtextdiv');
 				WTW.show('wtw_moldwebtextcolordiv');
 				break;

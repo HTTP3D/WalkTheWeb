@@ -44,7 +44,6 @@ WTWJS.prototype.openMoldForm = async function(zmoldind, zshape, zwebtype, zsavep
 		if (dGet('wtw_adminmenubutton').style.left == "0px") {
 			WTW.toggleAdminMenu('wtw_adminmenubutton');
 		}
-		WTW.setMoldFormFields(zshape);
 		dGet('wtw_tmoldshape').value = zshape;
 		dGet('wtw_tmoldwebtype').value = zwebtype;
 		if (zmolds[zmoldind] != null) {
@@ -67,6 +66,7 @@ WTWJS.prototype.openMoldForm = async function(zmoldind, zshape, zwebtype, zsavep
 					break;
 			}
 			WTW.setCoveringFormFields(zmolds[zmoldind].covering);
+			WTW.setMoldFormFields(zshape);
 			dGet('wtw_tmolduploadobjectid').value = zmolds[zmoldind].objects.uploadobjectid;
 			dGet('wtw_tmoldobjectfolder').value = zmolds[zmoldind].objects.folder;
 			dGet('wtw_tmoldobjectfile').value = zmolds[zmoldind].objects.file;
@@ -80,6 +80,11 @@ WTWJS.prototype.openMoldForm = async function(zmoldind, zshape, zwebtype, zsavep
 					dGet('wtw_tmoldgraphiclevel').checked = true;
 				} else {
 					dGet('wtw_tmoldgraphiclevel').checked = false;
+				}
+				if (zmolds[zmoldind].graphics.waterreflection == '1') {
+					dGet('wtw_tmoldwaterreflection').checked = true;
+				} else {
+					dGet('wtw_tmoldwaterreflection').checked = false;
 				}
 			}
 			dGet('wtw_tmolddiffusecolor').value = zmolds[zmoldind].color.diffusecolor;
@@ -426,7 +431,7 @@ WTWJS.prototype.loadMoldForm = function(zmolddef) {
 		WTW.setDDLValue("wtw_tmoldcovering", zmolddef.covering);
 		WTW.setDDLValue("wtw_tmoldcsgaction", zmolddef.csg.action);
 		WTW.setDDLValue("wtw_tmoldloadactionzoneid", zmolddef.loadactionzoneid);
-		if (zmolddef.graphics.waterreflection == "1") {
+		if (zmolddef.graphics.waterreflection == '1') {
 			dGet('wtw_tmoldwaterreflection').checked = true;
 		} else {
 			dGet('wtw_tmoldwaterreflection').checked = false;
@@ -813,6 +818,11 @@ WTWJS.prototype.openAddNewMold = function(zwebtype, zshape) {
 			zmolds[zmoldind].graphics.level = '1';
 		} else {
 			zmolds[zmoldind].graphics.level = '0';
+		}
+		if (dGet('wtw_tmoldwaterreflection').checked == true) {
+			zmolds[zmoldind].graphics.waterreflection = '1';
+		} else {
+			zmolds[zmoldind].graphics.waterreflection = '0';
 		}
 		zmolds[zmoldind].graphics.texture.id = dGet('wtw_tmoldtextureid').value;
 		zmolds[zmoldind].graphics.texture.path = dGet('wtw_tmoldtexturepath').value;
@@ -1286,9 +1296,9 @@ WTWJS.prototype.submitMoldForm = async function(zselect) {
 			zmolds[zmoldind].graphics.heightmap.texturebumpbid = dGet('wtw_tmoldtexturebumpbid').value;
 			zmolds[zmoldind].graphics.heightmap.texturebumpbpath = dGet('wtw_tmoldtexturebumpbpath').value;
 			zmolds[zmoldind].graphics.heightmap.maxheight = dGet('wtw_tmoldmaxheight').value;
-			var ziswaterreflection = "0";
+			var ziswaterreflection = '0';
 			if (dGet('wtw_tmoldwaterreflection').checked) {
-				ziswaterreflection = "1";
+				ziswaterreflection = '1';
 			}
 			zmolds[zmoldind].graphics.waterreflection = ziswaterreflection;
 			zmolds[zmoldind].graphics.webimageind = dGet('wtw_tmoldimageind').value;
@@ -1320,11 +1330,7 @@ WTWJS.prototype.submitMoldForm = async function(zselect) {
 			} else {
 				zmolds[zmoldind].csg.action = "";
 			}
-			if (dGet('wtw_tmoldshape').value == '3dtext') {
-				zmolds[zmoldind].webtext.webtext = WTW.encode(dGet('wtw_tmoldwebtext').value);
-			} else {
-				zmolds[zmoldind].webtext.webtext = '';
-			}
+			zmolds[zmoldind].webtext.webtext = WTW.encode(dGet('wtw_tmoldwebtext').value);
 			zmolds[zmoldind].webtext.webstyle = WTW.encode(dGet('wtw_tmoldwebstyle').value);
 			zmolds[zmoldind].color.diffusecolor = dGet('wtw_tmolddiffusecolor').value;
 			zmolds[zmoldind].color.emissivecolor = dGet('wtw_tmoldemissivecolor').value;
@@ -1545,6 +1551,10 @@ WTWJS.prototype.openEditPoles = function(zmold) {
 	try {
 		WTW.closeEditPoles();
 		scene.render();
+		var zmoldguide = scene.getTransformNodeByID(zmold.name + '-guide');
+		if (zmoldguide != null) {
+			zmold = zmoldguide;
+		}
 		if (zmold != null) {
 			var zpx = zmold.position.x;
 			var zpy = zmold.position.y;
@@ -2400,12 +2410,14 @@ WTWJS.prototype.checkMoldTextureCSG = function() {
 		if (dGet('wtw_tmoldcsgaction').selectedIndex == 0) {
 			WTW.show('wtw_moldcolorsdiv');
 			WTW.show('wtw_moldtexturesetdiv');
+			WTW.show('wtw_moldshadowreflectiondiv');
 			WTW.show('wtw_moldbasictexturesetdiv');
 			WTW.show('wtw_moldbasictextureset2div');
 			dGet('wtw_tmoldcsgmoldid').value = "";
 		} else {
 			WTW.hide('wtw_moldcolorsdiv');
 			WTW.hide('wtw_moldtexturesetdiv');
+			WTW.hide('wtw_moldshadowreflectiondiv');
 			WTW.hide('wtw_moldbasictexturesetdiv');
 			WTW.hide('wtw_moldbasictextureset2div');
 		}
@@ -2934,6 +2946,10 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 			var zsubdivisions = 2;
 			var zmaxheight = 70;
 			var zalphamold = 1;
+			var zreceiveshadows = false;
+			var zreceiveshadowsupdate = false;
+			var zwaterreflection = false;
+			var zwaterreflectionupdate = false;
 			var zmold = WTW.getMeshOrNodeByID(zmoldname);
 			var zmoldparent = null;
 			var zparentname = "";
@@ -2954,6 +2970,34 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 					zmolds[zmoldind].subdivisions = zsubdivisions;
 					zrebuildmold = 1;
 				}
+				if (zmolds[zmoldind].graphics.receiveshadows != undefined) {
+					if (dGet('wtw_tmoldreceiveshadows').checked) {
+						if (zmolds[zmoldind].graphics.receiveshadows != '1') {
+							zreceiveshadowsupdate = true;
+						}
+						zmolds[zmoldind].graphics.receiveshadows = '1';
+						zreceiveshadows = true;
+					} else {
+						if (zmolds[zmoldind].graphics.receiveshadows != '0') {
+							zreceiveshadowsupdate = true;
+						}
+						zmolds[zmoldind].graphics.receiveshadows = '0';
+					}
+				}
+				if (zmolds[zmoldind].graphics.waterreflection != undefined) {
+					if (dGet('wtw_tmoldwaterreflection').checked == true) {
+						if (zmolds[zmoldind].graphics.waterreflection != '1') {
+							zwaterreflectionupdate = true;
+						}
+						zmolds[zmoldind].graphics.waterreflection = '1';
+						zwaterreflection = true;
+					} else {
+						if (zmolds[zmoldind].graphics.waterreflection != '0') {
+							zwaterreflectionupdate = true;
+						}
+						zmolds[zmoldind].graphics.waterreflection = '0';
+					}
+				}
 				if (WTW.isNumeric(dGet('wtw_tmoldmaxheight').value)) {
 					if (Number(dGet('wtw_tmoldmaxheight').value) < 0) {
 						dGet('wtw_tmoldmaxheight').value = "0.00";
@@ -2964,40 +3008,95 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 				if (dGet('wtw_tmoldcovering').options[dGet('wtw_tmoldcovering').selectedIndex] != undefined) {
 					zcoveringname = dGet('wtw_tmoldcovering').options[dGet('wtw_tmoldcovering').selectedIndex].value;
 				}
+				zmolds[zmoldind].color.diffusecolor = dGet('wtw_tmolddiffusecolor').value;
+				zmolds[zmoldind].color.emissivecolor = dGet('wtw_tmoldemissivecolor').value;
+				zmolds[zmoldind].color.specularcolor = dGet('wtw_tmoldspecularcolor').value;
+				zmolds[zmoldind].color.ambientcolor = dGet('wtw_tmoldambientcolor').value;
+				if (zmold.material != undefined) {
+					zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
+					zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+					zmold.material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+					zmold.material.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+				}
+				if (zmolds[zmoldind].covering == "color" || zmolds[zmoldind].covering == "marble") {
+					var zmoldimageframename = zmoldname + "-imageframe";
+					var zmoldimageframe = WTW.getMeshOrNodeByID(zmoldimageframename);
+					if (zmoldimageframe != null) {	
+						if (zmoldimageframe.material != undefined) {
+							zmoldimageframe.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
+							zmoldimageframe.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+							zmoldimageframe.material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+							zmoldimageframe.material.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+						}
+					}
+				}
 				dGet('wtw_pointlist1').innerHTML = "";
 				dGet('wtw_pointlist2').innerHTML = "";
-				if (zshape == "image") {
-					zcoveringname = "hidden";
-					zmolds[zmoldind].graphics.webimages[0].imageid = dGet('wtw_tmoldaddimageid').value;
-					zmolds[zmoldind].graphics.webimages[0].imagehoverid = dGet('wtw_tmoldaddimagehoverid').value;
-					zrebuildmold = 1;
-				} else if (zshape == "terrain") {
-                    zrebuildmold = 1;
-                } else if (zshape == "video") {
-                    //zrebuildmold = 1;
-                } else if (zshape == "tube") {
-					zrebuildmold = 1;
-					var zpointind = -1;
-					if (WTW.isNumeric(dGet('wtw_teditpointindex').value)) {
-						zpointind = dGet('wtw_teditpointindex').value;
-					}
-					if (zpointind > -1) {
-						if (zmolds[zmoldind].paths.path1[zpointind] == null) {
-							zmolds[zmoldind].paths.path1[zpointind] = WTW.newPathPoint();
-							zmolds[zmoldind].paths.path1[zpointind].sorder = zpointind;
+				switch (zshape) {
+					case 'image':
+						zcoveringname = "hidden";
+						zmolds[zmoldind].graphics.webimages[0].imageid = dGet('wtw_tmoldaddimageid').value;
+						zmolds[zmoldind].graphics.webimages[0].imagehoverid = dGet('wtw_tmoldaddimagehoverid').value;
+						zrebuildmold = 1;
+						break;
+					case 'tube':
+						zrebuildmold = 1;
+						var zpointind = -1;
+						if (WTW.isNumeric(dGet('wtw_teditpointindex').value)) {
+							zpointind = dGet('wtw_teditpointindex').value;
 						}
-						if (WTW.isNumeric(dGet('wtw_tpointpositionx').value)) {
-							zmolds[zmoldind].paths.path1[zpointind].x = dGet('wtw_tpointpositionx').value;
+						if (zpointind > -1) {
+							if (zmolds[zmoldind].paths.path1[zpointind] == null) {
+								zmolds[zmoldind].paths.path1[zpointind] = WTW.newPathPoint();
+								zmolds[zmoldind].paths.path1[zpointind].sorder = zpointind;
+							}
+							if (WTW.isNumeric(dGet('wtw_tpointpositionx').value)) {
+								zmolds[zmoldind].paths.path1[zpointind].x = dGet('wtw_tpointpositionx').value;
+							}
+							if (WTW.isNumeric(dGet('wtw_tpointpositiony').value)) {
+								zmolds[zmoldind].paths.path1[zpointind].y = dGet('wtw_tpointpositiony').value;
+							}
+							if (WTW.isNumeric(dGet('wtw_tpointpositionz').value)) {
+								zmolds[zmoldind].paths.path1[zpointind].z = dGet('wtw_tpointpositionz').value;
+							}
 						}
-						if (WTW.isNumeric(dGet('wtw_tpointpositiony').value)) {
-							zmolds[zmoldind].paths.path1[zpointind].y = dGet('wtw_tpointpositiony').value;
+						WTW.loadPointList(zmolds[zmoldind].paths.path1, 1);
+						break;
+					case 'terrain':
+						zrebuildmold = 1;
+						break;
+					case 'babylonfile':
+						var zchildmeshes = zmold.getChildMeshes();
+						if (zchildmeshes != null) {
+							for (var i=0;i < zchildmeshes.length;i++) {
+								if (zchildmeshes[i] != null) {
+									if (zchildmeshes[i].material != null) {
+										zchildmeshes[i].material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
+										zchildmeshes[i].material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+										zchildmeshes[i].material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+										zchildmeshes[i].material.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+									}
+									if (zreceiveshadowsupdate) {
+										zchildmeshes[i].receiveShadows = zreceiveshadows;
+									}
+									if (zwaterreflectionupdate && WTW.waterMat != null) {
+										if (zwaterreflection) {
+											WTW.addReflectionRefraction(zchildmeshes[i]);
+										} else {
+											WTW.removeReflectionRefraction(zchildmeshes[i].name);
+										}
+									}
+								}
+							}
 						}
-						if (WTW.isNumeric(dGet('wtw_tpointpositionz').value)) {
-							zmolds[zmoldind].paths.path1[zpointind].z = dGet('wtw_tpointpositionz').value;
+						break;
+					default:
+						if (zwaterreflection && WTW.waterMat != null) {
+							WTW.addReflectionRefraction(zmold);
 						}
-					}
-					WTW.loadPointList(zmolds[zmoldind].paths.path1, 1);
+						break;
 				}
+
 				if (dGet('wtw_tmoldcoveringold').value == "") {
 					dGet('wtw_tmoldcoveringold').value = zcoveringname;
 				}
@@ -3092,11 +3191,6 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 				zposx = zmolds[zmoldind].position.x;
 				zposy = zmolds[zmoldind].position.y;
 				zposz = zmolds[zmoldind].position.z;
-				if (dGet('wtw_tmoldwaterreflection').checked == true) {
-					zmolds[zmoldind].graphics.waterreflection = "1";
-				} else {
-					zmolds[zmoldind].graphics.waterreflection = "0";
-				}
 				if (WTW.isNumeric(dGet('wtw_tmoldpositionx').value)) {
 					zposx = Number(dGet('wtw_tmoldpositionx').value);
 				} else {
@@ -3115,28 +3209,6 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 				zmolds[zmoldind].position.x = zposx;
 				zmolds[zmoldind].position.y = zposy;
 				zmolds[zmoldind].position.z = zposz;
-				zmolds[zmoldind].color.diffusecolor = dGet('wtw_tmolddiffusecolor').value;
-				zmolds[zmoldind].color.emissivecolor = dGet('wtw_tmoldemissivecolor').value;
-				zmolds[zmoldind].color.specularcolor = dGet('wtw_tmoldspecularcolor').value;
-				zmolds[zmoldind].color.ambientcolor = dGet('wtw_tmoldambientcolor').value;
-				if (zmold.material != undefined) {
-					zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
-					zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
-					zmold.material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
-					zmold.material.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
-				}
-				if (zmolds[zmoldind].covering == "color" || zmolds[zmoldind].covering == "marble") {
-					var zmoldimageframename = zmoldname + "-imageframe";
-					var zmoldimageframe = WTW.getMeshOrNodeByID(zmoldimageframename);
-					if (zmoldimageframe != null) {	
-						if (zmoldimageframe.material != undefined) {
-							zmoldimageframe.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
-							zmoldimageframe.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
-							zmoldimageframe.material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
-							zmoldimageframe.material.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
-						}
-					}
-				}
 				if (zparentname.indexOf("actionzone") > -1) {
 					var zactionzoneparts = zparentname.split('-');
 					var zactionzoneind = Number(zactionzoneparts[1]);
@@ -3239,13 +3311,6 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 					}
 				}
 
-				if (zmolds[zmoldind].graphics.receiveshadows != undefined) {
-					if (dGet('wtw_tmoldreceiveshadows').checked) {
-						zmolds[zmoldind].graphics.receiveshadows = '1';
-					} else {
-						zmolds[zmoldind].graphics.receiveshadows = '0';
-					}
-				}
 				if (zmolds[zmoldind].graphics.level != undefined) {
 					if (dGet('wtw_tmoldgraphiclevel').checked) {
 						zmolds[zmoldind].graphics.level = '1';
@@ -3505,23 +3570,23 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 					var zcsgmainname = zwebtype + "molds-" + zcsgmainind + "-" + zmolds[zcsgmainind].moldid + "-" + zmolds[zcsgmainind].connectinggridind + "-" + zmolds[zcsgmainind].connectinggridid + "-" + zmolds[zcsgmainind].shape;
 					var zcsgmain = WTW.getMeshOrNodeByID(zcsgmainname);
 					if (zcsgmain != null) {
+						zreceiveshadows = false;
+						zwaterreflection = false;
 						WTW.disposeClean(zcsgmainname);
 						//zmolds[zcsgmainind].shown = '0';
 						zcsgmain = WTW.addMold(zmolds[zcsgmainind].moldname, zmolds[zcsgmainind], zmolds[zcsgmainind].parentname, zmolds[zcsgmainind].covering);
 						zcsgmain = WTW.getMoldCSG(zcsgmain, zmolds[zcsgmainind]);
-						var zreceiveshadows = '0';
-						var zwaterreflection = '0';
-/*						if (zmolds[zcsgmainind].graphics.receiveshadows != undefined) {
+						if (zmolds[zcsgmainind].graphics.receiveshadows != undefined) {
 							if (zmolds[zcsgmainind].graphics.receiveshadows == '1') {
-								zreceiveshadows = '1';
+								zreceiveshadows = true;
 							}
 						}
 						if (zmolds[zcsgmainind].graphics.waterreflection != undefined) {
 							if (zmolds[zcsgmainind].graphics.waterreflection == '1') {
-								zwaterreflection = '1';
+								zwaterreflection = true;
 							}
 						}
-						if (zreceiveshadows == '1') {
+/*						if (zreceiveshadows == '1') {
 							if (zmold.material != null) {
 								zmold.material.unfreeze();
 							}
@@ -3534,8 +3599,11 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 						if (WTW.shadowSet > 0) {
 							WTW.shadows.getShadowMap().renderList.push(zmold);
 						}
-*/						if (zwaterreflection == '1' && WTW.waterMat != null) {
-							WTW.waterMat.addToRenderList(zmold);
+*/
+						zmold.receiveShadows = zreceiveshadows;
+						if (zwaterreflection && WTW.waterMat != null) {
+							WTW.addReflectionRefraction(zmold);
+							//WTW.waterMat.addToRenderList(zmold);
 						}
 						zcsgmain.checkCollisions = false;
 						zcsgmain.isPickable = false;

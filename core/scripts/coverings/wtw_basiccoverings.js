@@ -121,6 +121,10 @@ WTWJS.prototype.addCoveringTexture = function(zmoldname, zmolddef, zlenx, zleny,
 		var ztexturepath = "";
 		var zbumpid = "";
 		var zbumppath = "";
+		var zdiffusecolor = '#ffffff';
+		var zemissivecolor = '#000000';
+		var zspecularcolor = '#000000';
+		var zambientcolor = '#ffffff';
 		if (zmolddef != undefined) {
 			if (zmolddef.shape != "") {
 				zshape = zmolddef.shape;
@@ -171,13 +175,35 @@ WTWJS.prototype.addCoveringTexture = function(zmoldname, zmolddef, zlenx, zleny,
 					}
 				}	
 			}
+			if (zmolddef.color != undefined) {
+				if (zmolddef.color.diffusecolor != undefined) {
+					if (zmolddef.color.diffusecolor != '') {
+						zdiffusecolor = zmolddef.color.diffusecolor;
+					}
+				}
+				if (zmolddef.color.emissivecolor != undefined) {
+					if (zmolddef.color.emissivecolor != '') {
+						zemissivecolor = zmolddef.color.emissivecolor;
+					}
+				}
+				if (zmolddef.color.specularcolor != undefined) {
+					if (zmolddef.color.specularcolor != '') {
+						zspecularcolor = zmolddef.color.specularcolor;
+					}
+				}
+				if (zmolddef.color.ambientcolor != undefined) {
+					if (zmolddef.color.ambientcolor != '') {
+						zambientcolor = zmolddef.color.ambientcolor;
+					}
+				}
+			}
 		}
 		WTW.disposeMaterial("mat" + zmoldname);		
 		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
-		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
-		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
-		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
+		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
+		zcovering.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
+		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
 
 		var zimageextension = "";
 		if (ztexturepath == '') {
