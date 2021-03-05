@@ -92,6 +92,7 @@ wtwshopping.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturesetdiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
 				WTW.hide('wtw_productdiv');
 				WTW.hide('wtw_productthingdiv');
 				WTW.hide('wtw_moldmergemoldsdiv');
@@ -120,6 +121,7 @@ wtwshopping.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldbasictextureset2div');
 				WTW.hide('wtw_moldbumptextureset2div');
 				WTW.hide('wtw_moldtexturesetdiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
 				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_productdiv');
 				WTW.hide('wtw_productthingdiv');
@@ -194,6 +196,7 @@ wtwshopping.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_productdiv');
 				WTW.hide('wtw_productthingdiv');
 				WTW.hide('wtw_moldtexturesetdiv');
+				WTW.hide('wtw_moldshadowreflectiondiv');
 				WTW.show('wtw_productsearchdiv');
 				WTW.show('wtw_moldcolorsdiv');
 				WTW.show('wtw_moldtexturetitle'); 
@@ -1079,7 +1082,7 @@ wtwshopping.prototype.addMoldStoreSign = function(zmoldname, zmolddef, zlenx, zl
 		zimageframemold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zimageframemold.position = new BABYLON.Vector3(0, 0, 0);
 		zimageframemold.material = WTW.addCovering(zmolddef.covering, zmoldname + "-imageframe", zmolddefframe, zlenx, zleny, zlenz, '0', '0');
-		zimageframemold.parent = zbasemold;			
+		zimageframemold.parent = zbasemold;
 	
 		var ztitlemold2 = BABYLON.MeshBuilder.CreateBox(zmoldname + "-titleimage2", {}, scene);
 		ztitlemold2.scaling = new BABYLON.Vector3(zlenx, zlenz * .9, zleny * .9);
@@ -1100,6 +1103,13 @@ wtwshopping.prototype.addMoldStoreSign = function(zmoldname, zmolddef, zlenx, zl
 		zcoveringtitle1.diffuseTexture.uScale = 1;
 		zcoveringtitle1.diffuseTexture.vOffset = .55;
 		ztitlemold2.material = zcoveringtitle1;
+
+		if (WTW.adminView == 1) {
+			zimageframemold.isPickable = true;
+			WTW.registerMouseOver(zimageframemold);
+			ztitlemold2.isPickable = true;
+			WTW.registerMouseOver(ztitlemold2);
+		}
 		
 		WTWShopping.getStoreInfo(zmoldname);
 	} catch (ex) {
@@ -1353,6 +1363,15 @@ wtwshopping.prototype.addMoldStoreCategories = function(zmoldname, zmolddef, zle
 		ztitlemold2.material = zcoveringtitle2;
 		WTW.wrapText(ztitlemold2, "Select to update Store Products", "35px", "30px", "center", "top", "white", 0, 0);
 		
+		if (WTW.adminView == 1) {
+			zimageframemold.isPickable = true;
+			WTW.registerMouseOver(zimageframemold);
+			ztitlemold.isPickable = true;
+			WTW.registerMouseOver(ztitlemold);
+			ztitlemold2.isPickable = true;
+			WTW.registerMouseOver(ztitlemold2);
+		}
+
 		WTWShopping.productFetchCategories(zmoldname);
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshoppingmolds.js-addMoldStoreCategories=" + ex.message);
