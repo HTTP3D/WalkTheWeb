@@ -97,8 +97,9 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminfocus', 'Focus ON', 998, 'wtw_devtools', 2, 'wtw_focus', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminmerged', 'Merged Molds ON', 998, 'wtw_devtools', 3, 'wtw_merged', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminzones', 'Action Zones ON', 998, 'wtw_devtools', 4, 'wtw_zones', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminlines', 'Alignment Lines ON', 998, 'wtw_devtools', 5, 'wtw_lines', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminaxislabels', 'Axis Labels OFF', 998, 'wtw_devtools', 6, 'wtw_axislabels', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminloadall', 'Load All Zones ON', 998, 'wtw_devtools', 5, 'wtw_loadall', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlines', 'Alignment Lines ON', 998, 'wtw_devtools', 6, 'wtw_lines', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminaxislabels', 'Axis Labels OFF', 998, 'wtw_devtools', 7, 'wtw_axislabels', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminloadedobjects', 'List Loaded Objects', 998, 'wtw_devtools', 10, 'wtw_loadedobjects', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 
 				if (!empty($wtw->communityid) || !empty($wtw->buildingid) || !empty($wtw->thingid) || !empty($wtw->avatarid)) {

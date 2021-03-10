@@ -371,6 +371,7 @@
 					<div id="wtw_bfocus" onclick="WTW.setQuickEditorFocus(0);" class="wtw-quickbar" title="Focus Highlight is On" alt="Focus Highlight is On">Focus<br /><br />ON</div>
 					<div id="wtw_bmerged" onclick="WTW.setQuickEditorMerged(1);" class="wtw-quickbaroff" title="Merged Shapes are Hidden" alt="Merged Shapes are Hidden">Merged<br /><br />OFF</div>
 					<div id="wtw_bzones" onclick="WTW.setQuickEditorZones(1);" class="wtw-quickbaroff" title="Action Zones are Hidden" alt="Action Zones are Hidden">Zones<br /><br />OFF</div>
+					<div id="wtw_bloadall" onclick="WTW.setQuickEditorLoadAll(1);" class="wtw-quickbaroff" title="Load Active Action Zones" alt="Load Active Action Zones">Load<br />All<br />OFF</div>
 					<div id="wtw_blines" onclick="WTW.setQuickEditorLines(0);" class="wtw-quickbar" title="Alignment Lines are Shown" alt="Alignment Lines are Shown">Lines<br /><br />ON</div>
 					<br /><br />
 				</div>
