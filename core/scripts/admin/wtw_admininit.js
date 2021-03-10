@@ -145,6 +145,11 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 				WTW.setQuickEditorZones(1);
 			}
 		}
+		if (WTW.getCookie("wtw_bloadall") != null) {
+			if (WTW.getCookie("wtw_bloadall") == '1') {
+				WTW.setQuickEditorLoadAll(1);
+			}
+		}
 		if (WTW.getCookie("wtw_blines") != null) {
 			if (WTW.getCookie("wtw_blines") == '0') {
 				WTW.setQuickEditorLines(0);

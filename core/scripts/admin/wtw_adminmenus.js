@@ -791,6 +791,13 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 							WTW.setQuickEditorZones(1);
 						}
 						break;
+					case "wtw_adminloadall":
+						if (dGet('wtw_adminloadall').innerHTML.indexOf('Load All Zones ON') > -1) {
+							WTW.setQuickEditorLoadAll(0);
+						} else {
+							WTW.setQuickEditorLoadAll(1);
+						}
+						break;
 					case "wtw_adminlines":
 						if (dGet('wtw_adminlines').innerHTML.indexOf('Alignment Lines ON') > -1) {
 							WTW.setQuickEditorLines(0);
@@ -1270,6 +1277,42 @@ WTWJS.prototype.setQuickEditorZones = function(value) {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminmenus.js-setQuickEditorZones=" + ex.message);
+	}
+}
+
+WTWJS.prototype.setQuickEditorLoadAll = function(value) {
+	/* load all action zones in the 3D Scene - great for getting snapshots and full images */
+	try {
+		if (value == 1) {
+			WTW.loadAllActionZones = 1;
+			if (dGet('wtw_bloadall') != null) {
+				dGet('wtw_bloadall').innerHTML = "Load<br />All<br />ON";
+				dGet('wtw_bloadall').onclick = function() { WTW.setQuickEditorLoadAll(0); };
+				dGet('wtw_bloadall').className = "wtw-quickbar";
+				dGet('wtw_bloadall').title = "Load All Action Zones";
+				dGet('wtw_bloadall').alt = "Load All Action Zones";
+				if (dGet('wtw_adminloadall') != null) {
+					dGet('wtw_adminloadall').innerHTML = "Load All Zones ON";
+				}
+			}
+			WTW.setCookie("wtw_bloadall","1",30);
+		} else {
+			WTW.loadAllActionZones = 0;
+			if (dGet('wtw_bloadall') != null) {
+				dGet('wtw_bloadall').innerHTML = "Load<br />All<br />OFF";
+				dGet('wtw_bloadall').onclick = function() { WTW.setQuickEditorLoadAll(1); };
+				dGet('wtw_bloadall').className = "wtw-quickbaroff";
+				dGet('wtw_bloadall').title = "Load Active Action Zones";
+				dGet('wtw_bloadall').alt = "Load Active Action Zones";
+				if (dGet('wtw_adminloadall') != null) {
+					dGet('wtw_adminloadall').innerHTML = "Load All Zones OFF";
+				}
+			}
+			WTW.setCookie("wtw_bloadall","0",30);
+		}
+		WTW.checkZones = true;
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminmenus.js-setQuickEditorLoadAll=" + ex.message);
 	}
 }
 

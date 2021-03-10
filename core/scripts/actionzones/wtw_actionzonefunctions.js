@@ -20,6 +20,10 @@ WTWJS.prototype.checkActionZones = function() {
 						if (WTW.myAvatar != null) {
 							zmeinzone = WTW.myAvatar.intersectsMesh(zactionzone, false);
 						}
+						/* Available in Admin Mode Only, sets all load zones as if the avatar is in them so that it loads all sections of the map - great for getting snapshots and images */
+						if (WTW.loadAllActionZones == 1 && WTW.adminView == 1 && zmoldname.indexOf("loadzone") > -1) {
+							zmeinzone = true;
+						}
 						var zothersinzone = false;
 						/* check if others are in the zone */
 						

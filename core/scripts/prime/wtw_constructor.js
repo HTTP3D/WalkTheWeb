@@ -24,6 +24,9 @@ function WTWJS() {
 
 	/* WTW.guiAdminColors - dynamic texture layer in babylon used for color selector in admin mode - BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI  */
 	this.guiAdminColors = null;
+	
+	/* WTW.loadAllActionZones - sets all load zones as if the avatar is in them so that it loads all sections of the map - great for getting snapshots and images */
+	this.loadAllActionZones = 0;
 
 
 /* GLOBAL VARIABLES FOR BROWSE MODE (ALSO USED IN ADMIN MODE) */
