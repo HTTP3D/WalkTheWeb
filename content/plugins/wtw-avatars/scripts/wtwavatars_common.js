@@ -92,7 +92,7 @@ WTWJS.prototype.getAsyncJSON = function(zurl, zcallback, zaction, zrequest) {
 			Httpreq.send(zrequest);
 		});
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_utilities.js-getAsyncJSON=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getAsyncJSON=" + ex.message);
 	}
 }
 
@@ -137,8 +137,22 @@ WTWJS.prototype.postAsyncJSON = function(zurl, zrequest, zcallback) {
 			Httpreq.send(zformdata);
 		});
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_utilities.js-postAsyncJSON=" + ex.message);
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-postAsyncJSON=" + ex.message);
 	}
+}
+
+WTWJS.prototype.getMeshOrNodeByID = function(zmoldname) {
+	/* return the object if it is a Mesh or TransformNode */
+	var zobject = null;
+	try {
+		zobject = scene.getMeshByID(zmoldname);
+		if (zobject == null) {
+			zobject = scene.getTransformNodeByID(zmoldname);
+		}
+	} catch (ex) {
+		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getMeshOrNodeByID=" + ex.message);
+	}
+	return zobject;
 }
 
 WTWJS.prototype.setCookie = function(zname, zvalue, zdays) {
