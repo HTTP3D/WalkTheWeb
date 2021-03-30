@@ -21,9 +21,9 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = "3.4.4";
+	public $version = "3.4.5";
 	public $dbversion = "1.1.17";
-	public $versiondate = "2021-2-26";
+	public $versiondate = "2021-3-30";
 	public $serverinstanceid = "";
 	public $usertoken = "";
 	public $rootpath = "";
@@ -1980,10 +1980,6 @@ class wtw {
 			$zmainelements .= "<div id=\"wtw_itooltip\"></div>\r\n";
 			$zmainelements .= "<div id=\"wtw_itouchleft\"></div>\r\n";
 			$zmainelements .= "<div id=\"wtw_itouchright\"></div>\r\n";
-			$zmainelements .= "<img id=\"wtw_iwalkcompassarrow\" src=\"".$this->contenturl."/system/images/walkarrow.png\" border=\"0\" style=\"position: absolute; z-index: 0; visibility: hidden; position: absolute; top: 0px; left: 0px; height: 97px; width: 75px;\" />\r\n";
-			$zmainelements .= "<img id=\"wtw_iwalkcompass\" src=\"".$this->contenturl."/system/images/compassrose.png\" border=\"0\" style=\"position: absolute; z-index: 0; visibility: hidden; position: absolute; top: 0px; left: 0px; height: 97px; width: 75px;\" />\r\n";
-			$zmainelements .= "<div id=\"wtw_outlineselfcameradiv\" style=\"display:none;visibility:hidden;\"></div>\r\n";
-			$zmainelements .= "<canvas id=\"wtw_uiCanvas\"></canvas>\r\n";
 			$zmainelements .= "<canvas id=\"wtw_renderCanvas\" touch-action=\"none\"></canvas>\r\n";
 			$zmainelements .= "<div id=\"wtw_greyout\"></div>\r\n";
 			$zmainelements .= "<div id=\"wtw_ibrowsediv\" class=\"wtw-browsediv\" style=\"display:none;\">\r\n";

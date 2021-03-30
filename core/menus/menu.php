@@ -12,13 +12,13 @@
 	<div id="wtw_menusettingsscroll" class="wtw-mainmenuscroll">
 		<ul class="wtw-menuli">
 			<li class="wtw-menuliholder"><img src="/content/system/images/menucamera.png" alt="Camera On" title="Camera On" class='wtw-menulefticon' />Main Camera</li>
-			<li class="wtw-submenuli" style="border-bottom:1px solid #454545;"><select id="wtw_firstcamera" class="wtw-menudropdown" onchange="WTW.switchCamera(1);">
+			<li class="wtw-submenuli" style="border-bottom:1px solid #454545;"><select id="wtw_firstcamera" class="wtw-menudropdown">
 					<option value="First-Person Camera">First-Person Camera</option>
 					<option value="Follow Camera">Follow Camera</option>
 					<option value="Scene Camera">Scene Camera</option>
 					<option value="Self Camera">Self Camera</option>
 				</select><br />
-				<select id="wtw_cameradimensions" class="wtw-menudropdown" onchange="WTW.switchCamera(1);">
+				<select id="wtw_cameradimensions" class="wtw-menudropdown">
 					<option value="">2D View</option>
 					<option value="Anaglyph">3D Glasses Anaglyph Red-Cyan</option>
 					<option value="VR">3D VR Headset</option>
@@ -35,7 +35,7 @@
 				<input id="wtw_tcameradistance" type="range" min="-100" max="100" value="-25" step="1" style="direction: ltr;width:240px;cursor:pointer;" oninput="WTW.changeCameraDistance();" onchange="WTW.changeCameraDistance();this.blur();"/>
 			</li>
 			<li class="wtw-menuli" onclick="WTW.toggleCameraTwo();"><img id="wtw_cameratwoicon" src="/content/system/images/menucameraoff.png" alt="Turn Camera On" title="Turn Camera On" class='wtw-menulefticon' /><div id="wtw_cameratwotext">Second Camera Off</div></li>
-			<li id="wtw_cameratwoselect" class="wtw-submenuli" style="display:none;visibility:hidden;"><select id="wtw_secondcamera" class="wtw-menudropdown" onchange="WTW.switchCamera(2);">
+			<li id="wtw_cameratwoselect" class="wtw-submenuli" style="display:none;visibility:hidden;"><select id="wtw_secondcamera" class="wtw-menudropdown">
 					<option value="Scene Camera">Scene Camera</option>
 					<option value="First-Person Camera">First-Person Camera</option>
 					<option value="Follow Camera">Follow Camera</option>
@@ -43,7 +43,6 @@
 				</select></li>
 			<li><img src="/content/system/images/menuview.png" alt="Show and Hide Items" title="Show and Hide Items" class='wtw-menulefticon' />View</li>
 			<li class="wtw-menuliholder"><ul class="wtw-submenuli">
-					<li class="wtw-menuli" onclick="WTW.toggleCompass();"><img id="wtw_compassicon" src="/content/system/images/menuon.png" alt="Hide Compass" title="Hide Compass" class='wtw-menulefticon' /><div id="wtw_compassvisibility">Compass is Visible</div></li>
 					<li class="wtw-menuli" onclick="WTW.toggleFPS();"><img id="wtw_fpsicon" src="/content/system/images/menuoff.png" alt="Show Mold Count" title="Show Mold Count" class='wtw-menulefticon' /><div id="wtw_fpsvisibility">Mold Count / FPS are Hidden</div></li>
 					<li class="wtw-menuli" onclick="WTW.toggleArrows();"><img id="wtw_arrowsicon" src="/content/system/images/menuoff.png" alt="Show Arrows" title="Show Arrows" class='wtw-menulefticon' /><div id="wtw_arrowsvisibility">Arrows are Hidden</div></li>
 				</ul></li>
