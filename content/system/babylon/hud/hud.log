@@ -1,0 +1,86 @@
+Exporter version: 2.80.1, Blender version: 2.90.0
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  D:\Data\HTTP3DInc\Blender\HUD\
+	Python World class constructor completed
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  hud
+		processing begun of material:  base
+		processing begun of material:  transparent
+		processing begun of material:  blacktransparent
+		processing begun of material:  blackmedium
+		processing begun of material:  solid
+		processing begun of multimaterial:  hud.Multimaterial#0
+		num positions      :  570
+		num normals        :  570
+		num tangents       :  0
+		num uvs            :  1140
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  372
+	processing begun of mesh:  hudclose
+		processing begun of material:  base
+		processing begun of material:  transparent
+		processing begun of material:  blacktransparent
+		processing begun of material:  highlight
+		processing begun of material:  solid
+		registered as also a user of material:  base
+		registered as also a user of material:  transparent
+		registered as also a user of material:  blacktransparent
+		registered as also a user of material:  solid
+		processing begun of multimaterial:  hud.Multimaterial#1
+		num positions      :  220
+		num normals        :  220
+		num tangents       :  0
+		num uvs            :  440
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  200
+	processing begun of mesh:  imageframe
+		processing begun of material:  highlight
+		registered as also a user of material:  highlight
+		num positions      :  239
+		num normals        :  239
+		num tangents       :  0
+		num uvs            :  478
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  294
+	processing begun of mesh:  menuitemframe
+		processing begun of material:  solid
+		registered as also a user of material:  solid
+		num positions      :  42
+		num normals        :  42
+		num tangents       :  0
+		num uvs            :  84
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  34
+	processing begun of mesh:  menuitem
+		processing begun of material:  solid
+		registered as also a user of material:  solid
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of light (POINT):  Light
+========= Writing of JSON file started =========
+	writing mesh:  hud
+	writing mesh:  hudclose
+	writing mesh:  imageframe
+	writing mesh:  menuitemframe
+	writing mesh:  menuitem
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 0.1264 secs
