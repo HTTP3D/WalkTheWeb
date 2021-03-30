@@ -1660,6 +1660,13 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 			var zmold = WTW.getMeshOrNodeByID(zmoldname);
 			/* confirm mold is in the scene */
 			if (zmold != null) {
+				if (zmold.WTW != undefined) {
+					if (zmold.WTW.particlesystem != undefined) {
+						zmold.WTW.particlesystem.stop();
+						zmold.WTW.particlesystem.reset();
+						WTW.disposeClean(zmoldname + '-sprite');
+					}
+				}
 				try {
 					if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf('actionzone') > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1 || zmoldname.indexOf('editavatar') > -1 || zmoldname == 'hud') {
 						/* dispose of child objects from imported meshes */

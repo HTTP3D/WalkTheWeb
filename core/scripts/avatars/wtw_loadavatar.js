@@ -448,11 +448,7 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 											/* after basic animations are loaded, start the idle and show the avatar - then wait one second and continue loading the animations */
 											zavatar.WTW.animations.running['onwait'].weight = 1;
 											WTW.disposeOldAvatar(zavatarname);
-											if (zenteranimate) {
-												WTW.avatarEnter(zavatarname);
-											} else {
-												WTW.avatarShowVisible(zavatarname);
-											}
+											WTW.avatarEnter(zavatarname);
 										}
 										WTW.loadAvatarAnimations(zavatarname, zanimationind + 1);
 									} else if (zavatarname.indexOf('myavatar-') > -1) {
@@ -465,11 +461,7 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 										/* run enter animation to show the avatar */
 										if (zanimationind < 12) {
 											WTW.disposeOldAvatar(zavatarname);
-											if (zenteranimate) {
-												WTW.avatarEnter(zavatarname);
-											} else {
-												WTW.avatarShowVisible(zavatarname);
-											}
+											WTW.avatarEnter(zavatarname);
 										}
 										/* clean up the old avatar meshes if there were any */
 									} else {
@@ -477,11 +469,7 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 										/* clean up the old avatar meshes if there were any */
 										WTW.disposeOldAvatar(zavatarname);
 										/* play enter animation to show avatar */
-										if (zenteranimate) {
-											WTW.avatarEnter(zavatarname);
-										} else {
-											WTW.avatarShowVisible(zavatarname);
-										}
+										WTW.avatarEnter(zavatarname);
 									}
 								}
 							}); 
@@ -919,7 +907,6 @@ WTWJS.prototype.closeAvatarSettings = function() {
 		} else if (dGet('wtw_tuserid').value == '') {
 			WTW.showSettingsMenu('wtw_menucontrols');
 		}
-		WTW.switchCamera(1);
 	} catch (ex) {
 		WTW.log("core-scripts-avatars-wtw_loadavatar.js-closeAvatarSettings=" + ex.message);
     }

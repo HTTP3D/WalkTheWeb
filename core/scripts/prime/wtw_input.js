@@ -286,6 +286,9 @@ WTWJS.prototype.keyPressed = function(keycode) {
 	/* keyboard pressed, process keys */
 	try {
 		switch (keycode) {
+			case 67: /* c */
+				WTW.hudToggleCompass();
+				break;
 			case 72: /* h */
 			case 77: /* m */
 				WTW.hudToggle();
@@ -683,11 +686,11 @@ WTWJS.prototype.mouseScroll = function(zrolled) {
 				WTW.startRender();
 			}
 			if (WTW.cameraFocus == 0) {
-				zrolled = zrolled / 120;
-				var zdirx = Math.sin(WTW.camera.rotation.y);
-				var zdiry = -Math.sin(WTW.camera.rotation.x);
-				var zdirz = Math.cos(WTW.camera.rotation.y);
-				WTW.camera.cameraDirection = WTW.camera.cameraDirection.add(new BABYLON.Vector3(zrolled*zdirx, zrolled*zdiry, zrolled*zdirz));
+				zrolled = zrolled / 12;
+				var zdirx = Math.sin(WTW.cameraOne.rotation.y);
+				var zdiry = -Math.sin(WTW.cameraOne.rotation.x);
+				var zdirz = Math.cos(WTW.cameraOne.rotation.y);
+				WTW.cameraOne.cameraDirection = WTW.cameraOne.cameraDirection.add(new BABYLON.Vector3(zrolled*zdirx, zrolled*zdiry, zrolled*zdirz));
 			} else {
 				if (zrolled > 0) {
 					zrolled = 1.5;

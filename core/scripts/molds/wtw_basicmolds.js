@@ -1161,8 +1161,14 @@ WTWJS.prototype.addMoldParticleSphere = function(zmoldname, zmolddef, zlenx, zle
 	
 		zparticlesystem.addVelocityGradient(0, 3, 5);
 		zparticlesystem.addVelocityGradient(1.0, -5, -10);
-	
+		zparticlesystem.disposeOnStop = true;
+		
 		zparticlesystem.start();
+		
+		zmold.WTW = {
+			'particlesystem':zparticlesystem
+		};
+		
 		
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldParticleSphere=" + ex.message);
@@ -1214,7 +1220,12 @@ WTWJS.prototype.addMoldParticleShower = function(zmoldname, zmolddef, zlenx, zle
 		zparticlesystem.addVelocityGradient(0, 3, 5);
 		zparticlesystem.addVelocityGradient(1.0, -5, -10);
 	
+		zparticlesystem.disposeOnStop = true;
 		zparticlesystem.start();
+
+		zmold.WTW = {
+			'particlesystem':zparticlesystem
+		};
 		
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldParticleShower=" + ex.message);
@@ -1347,6 +1358,9 @@ WTWJS.prototype.addMoldFountain = function(zmoldname, zmolddef, zlenx, zleny, zl
 		// Start the particle system
 		zwater.start();
 		zwater.disposeOnStop = true;
+		zmold.WTW = {
+			'particlesystem':zwater
+		};
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addMoldFountain=" + ex.message);
 	}

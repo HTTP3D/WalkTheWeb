@@ -12,6 +12,8 @@ WTWJS.prototype.openHUD = function() {
 		var zmoldname = 'hud';
 		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold == null) {
+			var zcamerafront = WTW.getMeshOrNodeByID('camerafront');
+			
 			/* reset HUD layout */
 			WTW.hudLayout = '';
 			var zobjectfolder = '/content/system/babylon/hud/';
@@ -19,11 +21,11 @@ WTWJS.prototype.openHUD = function() {
 			var zobjectanimations = null;
 			
 			zmold = new BABYLON.TransformNode(zmoldname);
-			zmold.position = new BABYLON.Vector3(8,0,0);
+			zmold.position = new BABYLON.Vector3(0,0,0);
 			zmold.rotation = new BABYLON.Vector3(0,0,0);
 			zmold.scaling = new BABYLON.Vector3(1,1,1);
 			zmold.billboardMode = BABYLON.Mesh.BILLBOARDMODE_ALL;
-			zmold.parent = scene.activeCameras[0];
+			zmold.parent = zcamerafront;
 			
 			BABYLON.SceneLoader.ImportMeshAsync("", zobjectfolder, zobjectfile, scene).then(
 				function (zresults) {
@@ -167,38 +169,6 @@ WTWJS.prototype.openHUD = function() {
 								if (zobjectanimations != null) {
 //									WTW.addMoldAnimation(zmoldname, zmeshname, zresults.meshes[i], zobjectanimations);
 								}
-
-/*
-								/ * set custom colors to avatar parts * /
-								let zdiffusecolor = '#ffffff';
-								let zemissivecolor = '#000000';
-								let zspecularcolor = '#000000';
-								let zambientcolor = '#ffffff';
-								if (zmolddef.color.diffusecolor != undefined) {
-									zdiffusecolor = zmolddef.color.diffusecolor;
-								}
-								if (zmolddef.color.emissivecolor != undefined) {
-									zemissivecolor = zmolddef.color.emissivecolor;
-								}
-								if (zmolddef.color.specularcolor != undefined) {
-									zspecularcolor = zmolddef.color.specularcolor;
-								}
-								if (zmolddef.color.ambientcolor != undefined) {
-									zambientcolor = zmolddef.color.ambientcolor;
-								}
-								
-								if (zresults.meshes[i].material != null) {
-									/ * set the color values * /
-									zresults.meshes[i].material.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
-									zresults.meshes[i].material.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
-									zresults.meshes[i].material.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
-									zresults.meshes[i].material.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
-									/ * refresh the materials to apply colors * /
-									var zcovering = zresults.meshes[i].material;
-									zresults.meshes[i].material.dispose();
-									zresults.meshes[i].material = zcovering;
-								}
-*/
 
 								/* make sure child meshes are pickable */
 								if (zmeshname == 'menuitem' || zmeshname == 'textbox' || zmeshname.indexOf('slider') > -1) {
@@ -449,6 +419,19 @@ WTWJS.prototype.hudClick = function(zmoldname) {
 //WTW.log("zmoldname=" + zmoldname);
 		var zhud = WTW.getMeshOrNodeByID('hud');
 		if (zhud != null) {
+			var zcamera1id = '';
+			var zparent = '';
+			if (WTW.cameraOne != null) {
+				zcamera1id = WTW.cameraOne.id;
+				if (WTW.cameraOne.parent != null) {
+					zparent = WTW.cameraOne.parent.name;
+				}
+			}
+			var zsettings = {
+				'parent': zparent,
+				'distance': WTW.cameraDistance,
+				'yoffset': 180
+			};
 			switch (zmoldname) {
 				case "hud-cornertopright":
 					/* close X on the top right of HUD */
@@ -463,34 +446,73 @@ WTWJS.prototype.hudClick = function(zmoldname) {
 					WTW.hudClearCameras();
 					break;
 				case "hud-imagebutton-camera1-follow":
-					WTW.hudChangeCamera(zmoldname, 1, 'Follow Camera', '');
+					zsettings = {
+						'parent':'',
+						'distance': -28,
+						'yoffset': 180
+					};
+					WTW.hudHighlightCamera(1, zmoldname);
+					WTW.initCamera(1, zcamera1id, zsettings);
+					break;
+				case "hud-imagebutton-camera1-firststable": /* 'myavatar-' + dGet('wtw_tinstanceid').value + '-camera' */
+					zsettings = {
+						'parent': '',
+						'distance': 2,
+						'yoffset': 180
+					};
+					WTW.hudHighlightCamera(1, zmoldname);
+					WTW.initCamera(1, zcamera1id, zsettings);
 					break;
 				case "hud-imagebutton-camera1-first":
-					WTW.hudChangeCamera(zmoldname, 1, 'First-Person Camera', '');
-					break;
-				case "hud-imagebutton-camera1-firststable":
-					WTW.hudChangeCamera(zmoldname, 1, 'First-Person Camera', '');
+					zsettings = {
+						'parent': 'myavatar-' + dGet('wtw_tinstanceid').value + '-headtop',
+						'distance': 2,
+						'yoffset': 180
+					};
+					WTW.hudHighlightCamera(1, zmoldname);
+					WTW.initCamera(1, zcamera1id, zsettings);
 					break;
 				case "hud-imagebutton-camerastyle-picture":
-					WTW.hudChangeCamera(zmoldname, 1, '', '');
+					WTW.hudHighlightCamera(0, zmoldname);
+					WTW.initCamera(1, 'followcamera', zsettings);
 					break;
 				case "hud-imagebutton-camerastyle-anaglyph":
-					WTW.hudChangeCamera(zmoldname, 1, '', 'Anaglyph');
+					WTW.hudHighlightCamera(0, zmoldname);
+					WTW.initCamera(1, 'anaglyphcamera', zsettings);
 					break;
 				case "hud-imagebutton-camerastyle-vr":
-					WTW.hudChangeCamera(zmoldname, 1, '', 'VR');
+					WTW.hudHighlightCamera(0, zmoldname);
+					WTW.initCamera(1, 'vrcamera', zsettings);
 					break;
 				case "hud-imagebutton-camerastyle-vrgamepad":
-					WTW.hudChangeCamera(zmoldname, 1, '', 'VR Gamepad');
+					WTW.hudHighlightCamera(0, zmoldname);
+					WTW.initCamera(1, 'vrgamepadcamera', zsettings);
 					break;
 				case "hud-imagebutton-camera2-follow":
-					WTW.hudChangeCamera(zmoldname, 2, 'Follow Camera', '');
+					zsettings = {
+						'parent': zparent,
+						'distance': -28,
+						'yoffset': 180
+					};
+					WTW.hudHighlightCamera(2, zmoldname);
+					WTW.initCamera(2, zcamera1id, zsettings);
 					break;
 				case "hud-imagebutton-camera2-scene":
-					WTW.hudChangeCamera(zmoldname, 2, 'Scene Camera', '');
+					zsettings = {
+						'parent': zparent,
+						'distance': -40,
+						'yoffset': 180
+					};
+					WTW.hudHighlightCamera(2, zmoldname);
+					WTW.initCamera(2, zcamera1id, zsettings);
 					break;
 				case "hud-imagebutton-camera2-self":
-					WTW.hudChangeCamera(zmoldname, 2, 'Self Camera', '');
+					zsettings = {
+						'parent': zparent,
+						'distance': 30
+					};
+					WTW.hudHighlightCamera(2, zmoldname);
+					WTW.initCamera(2, zcamera1id, zsettings);
 					break;
 				case "hud-slider-camera1-dist":
 					
@@ -543,7 +565,7 @@ WTWJS.prototype.hudCheckHovers = function(zmoldname, zactive) {
 					zmold.position.z += .2;
 				}
 			}
-			var zmoldtextname = zmoldname.replace('-menuitem-','-menuitemtext-').replace('-imagebutton-','-imagebutton-image-');
+			var zmoldtextname = zmoldname.replace('-menuitem-','-menuitemtext-');
 			if (zmoldtextname.indexOf('hud-save-') > -1 || zmoldtextname.indexOf('hud-cancel-') > -1) {
 				zmoldtextname += '-text';
 			}
@@ -582,6 +604,73 @@ WTWJS.prototype.hudCheckHovers = function(zmoldname, zactive) {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-hud-wtw_hud.js-hudCheckHovers=" + ex.message);
+	}
+}
+
+WTWJS.prototype.hudToggleCompass = function() {
+	/* hud toggle compass open or closed */
+	try {
+		var zmoldname = 'compass-0';
+		var zmold = WTW.getMeshOrNodeByID(zmoldname);
+		if (zmold == null) {
+			/* HUD Compass layout */
+			var zobjectfolder = '/content/system/babylon/compass/';
+			var zobjectfile = 'compass.babylon';
+			var zobjectanimations = null;
+
+			var zcamerafront = WTW.getMeshOrNodeByID('camerafront');
+			
+			zmold = new BABYLON.TransformNode(zmoldname);
+			zmold.position = new BABYLON.Vector3(8,-5,4);
+			zmold.rotation = new BABYLON.Vector3(WTW.getRadians(-30),0,WTW.getRadians(10));
+			zmold.scaling = new BABYLON.Vector3(.75,.75,.75);
+			zmold.parent = zcamerafront;
+			
+			BABYLON.SceneLoader.ImportMeshAsync("", zobjectfolder, zobjectfile, scene).then(
+				function (zresults) {
+					if (zresults.meshes != null) {
+						var zobjectanimations = [];
+						zmold.WTW = {
+							'objectanimations':zobjectanimations
+						};
+						
+						for (var i=0; i < zresults.meshes.length; i++) {
+							if (zresults.meshes[i] != null) {
+								/* add the base mold name to each of the child meshes */
+								var zmeshname = zresults.meshes[i].name;
+								var zchildmoldname = zmoldname + "-" + zmeshname;
+								zchildmoldname = zchildmoldname.replace(" ","_").toLowerCase();
+								zresults.meshes[i].id = zchildmoldname;
+								zresults.meshes[i].name = zchildmoldname;
+								zresults.meshes[i].isPickable = false;
+
+								/* make sure all object meshes have a parent */
+								if (zresults.meshes[i].parent == null) {
+									zresults.meshes[i].parent = zmold;
+								}
+								/* initiate and preload any event driven animations */
+								if (zobjectanimations != null) {
+									WTW.addMoldAnimation(zmoldname, zmeshname, zresults.meshes[i], zobjectanimations);
+								}
+								if (zmold == null || zmold.parent == null) {
+									/* if the parent has been deleted after this async process began (avoiding orphaned objects)*/
+									zresults.meshes[i].dispose();
+								}
+							}
+						}
+					}
+					zmold = WTW.getMeshOrNodeByID(zmoldname);
+					if (zmold == null || zmold.parent == null) {
+						/* if the parent has been deleted after this async process began (avoiding orphaned objects) */
+						WTW.disposeClean(zmoldname);
+					}
+				}
+			);
+		} else {
+			WTW.disposeClean('compass-0');
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-hud-wtw_hud.js-hudToggleCompass=" + ex.message);
 	}
 }
 
@@ -1277,32 +1366,8 @@ WTWJS.prototype.toggleCameraTwo = function() {
 			WTW.hide('wtw_cameratwoselect');
 			WTW.setCookie("showcameratwo","0",30);
 		}
-		WTW.switchCamera(2);
 	} catch (ex) {
 		WTW.log("core-scripts-hud-wtw_hud.js-toggleCameraTwo=" + ex.message);
-	}
-}
-
-WTWJS.prototype.toggleCompass = function() {
-	/* toggle show or hide compass */
-	try {
-		if (dGet('wtw_compassvisibility').innerHTML == "Compass is Visible") { 
-			/* hide compass */
-			dGet('wtw_compassvisibility').innerHTML = "Compass is Hidden";
-			dGet('wtw_compassicon').src = "/content/system/images/menuoff.png";
-			dGet('wtw_compassicon').alt = "Show Compass";
-			dGet('wtw_compassicon').title = "Show Compass";
-			WTW.setCookie("showcompass","0",30);
-		} else {
-			/* show compass */
-			dGet('wtw_compassvisibility').innerHTML = "Compass is Visible";
-			dGet('wtw_compassicon').src = "/content/system/images/menuon.png";
-			dGet('wtw_compassicon').alt = "Hide Compass";
-			dGet('wtw_compassicon').title = "Hide Compass";
-			WTW.setCookie("showcompass","1",30);
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud.js-toggleCompass=" + ex.message);
 	}
 }
 

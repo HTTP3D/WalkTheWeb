@@ -159,10 +159,12 @@ WTWJS.prototype.hudAddImageButton = function(zimageurl, zid, zpositionx, zpositi
 			}
 			zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zbgcolor);
 			zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zbgcolor);
+			zcovering.specularColor = new BABYLON.Color3.FromHexString('#000000');
 			zimage.material = zcovering;
-			zimage.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz-.1);
+			zimage.position = new BABYLON.Vector3(0, 0, -.1);
+			zimage.scaling = new BABYLON.Vector3(1/.3, 1, 1);
 			zimage.isPickable = false;
-			zimage.parent = zmold;
+			zimage.parent = zbutton;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-hud-wtw_hud_fields.js-hudAddImageButton=" + ex.message);

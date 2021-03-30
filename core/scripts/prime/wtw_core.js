@@ -37,8 +37,6 @@ WTWJS.prototype.loadSequence = function() {
 		WTW.loadInitSettings();
 		/* get user settings that were saved by cookies - implemented before the load scene function */
 		WTW.loadUserSettings();
-		/* load user canvas (canvas that shows compass) - obsolete soon */
-		WTW.loadUserCanvas();
 		/* load rest of scene starting with connecting grids, which trigger loading action zones, molds, and then automations */
 		WTW.loadScene();
 		/* additional settings that are loaded after the scene is loaded - like initializing multiplayer functions */
@@ -226,10 +224,6 @@ WTWJS.prototype.initEnvironment = function() {
 		/* set physics on ground */
 		WTW.extraGround.physicsImpostor = new BABYLON.PhysicsImpostor(WTW.extraGround, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.5 }, scene);
 		
-		/* load the basic camera settings (default mobile with gamepad vs free camera) */
-		WTW.loadCameraSettings();
-		/* set initial compass visibility */
-		WTW.toggleCompass();
 		/* start render cycle */
 		WTW.startRender();
 		
@@ -392,7 +386,7 @@ WTWJS.prototype.loadInitSettings = function() {
 		/* load place holder for where my avatar will be loaded (allows camera to set in place) */
 		WTW.loadAvatarPlaceholder();
 		/* load primary camera */
-		WTW.loadPrimaryCamera(zparent);
+		WTW.loadPrimaryCamera();
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_core.js-loadInitSettings=" + ex.message);
 	} 
@@ -453,15 +447,9 @@ WTWJS.prototype.loadUserSettings = function() {
 		} else {
 			dGet("wtw_tuseravatarid").value = "";
 		}
+
 		var zshowcompass = WTW.getCookie("showcompass");
-		if (zshowcompass != null) {
-			if (zshowcompass == "0") {
-				dGet('wtw_compassvisibility').innerHTML = "Compass Hidden";
-				dGet('wtw_compassicon').src = "/content/system/images/menuoff.png";
-				dGet('wtw_compassicon').alt = "Show Compass";
-				dGet('wtw_compassicon').title = "Show Compass";
-			}
-		}
+
 		var zshowarrows = WTW.getCookie("showarrows");
 		if (zshowarrows != null) {
 			if (zshowarrows == "0") {
@@ -552,56 +540,6 @@ WTWJS.prototype.loadUserSettings = function() {
 	} catch (ex) { 
 		WTW.log("core-scripts-prime-wtw_core.js-loadUserSettings=" + ex.message);
 	}
-}
-
-WTWJS.prototype.loadUserCanvas = function() {
-	/* this is a canvas in front of the babylon canvas that can show user interface items like compass */
-	/* this will be obsolete when the new hud display is complete */
-	try {
-		/* only draw this canvass if compass is currently showing in scene (menu option) */
-		if (dGet('wtw_compassvisibility').innerHTML == "Compass is Visible") {
-			WTW.uicanvas = dGet("wtw_uiCanvas");
-			WTW.uicanvas.width = WTW.sizeX;
-			WTW.uicanvas.height = WTW.sizeY;
-			let zctx = WTW.uicanvas.getContext("2d");
-			/* compass angle is rotated based on the angle of my avatar */
-			var zcompassangle = 90;
-			if (WTW.myAvatar != null) {
-				zcompassangle = -WTW.getDegrees(WTW.myAvatar.rotation.y) + 90;
-			}
-			if (WTW.adminView == 1) {
-				zctx.translate(WTW.sizeX - (WTW.sizeX * 1.1 / 24),WTW.sizeY - (WTW.sizeX * .3 / 12) - 120); 
-			} else {
-				zctx.translate(WTW.sizeX - (WTW.sizeX * 1.1 / 24),WTW.sizeY - (WTW.sizeX * .3 / 12) - 90); 
-			}
-			zctx.rotate(zcompassangle * Math.PI / 180); 
-			try {
-				zctx.drawImage(dGet("wtw_iwalkcompass"), -(WTW.sizeX / 24), -(WTW.sizeX / 24), (WTW.sizeX * 2 / 24), (WTW.sizeX * 2 / 24));
-			} catch(ex) {}
-			zctx.rotate(-zcompassangle * Math.PI / 180);
-			/* next add an arrow over the compass that points towards the current closest building (as the name is shown in the menu bar) */
-			if (WTW.closestAngle != null && WTW.closestDistance > 80) {
-				zctx.rotate(-(WTW.closestAngle) * Math.PI / 180); 
-				try {
-					zctx.drawImage(dGet("wtw_iwalkcompassarrow"), -10, -80, 19, 80);
-				} catch(ex) {}
-				zctx.rotate((WTW.closestAngle) * Math.PI / 180);
-			}
-			if (WTW.adminView == 1) {
-				zctx.translate(-(WTW.sizeX - (WTW.sizeX * 1.1 / 24)), -(WTW.sizeY - (WTW.sizeX * .3 / 12) - 120)); 
-			} else {
-				zctx.translate(-(WTW.sizeX - (WTW.sizeX * 1.1 / 24)), -(WTW.sizeY - (WTW.sizeX * .3 / 12) - 90)); 
-			}
-		} else {
-			WTW.uicanvas = dGet("wtw_uiCanvas");
-			WTW.uicanvas.width = WTW.sizeX;
-			WTW.uicanvas.height = WTW.sizeY;
-			let zctx = WTW.uicanvas.getContext("2d");
-			zctx.clearRect(0, 0, WTW.sizeX, WTW.sizeY);
-		}
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-loadUserCanvas=" + ex.message);
-	} 
 }
 
 WTWJS.prototype.loadScene = async function() {
@@ -1479,6 +1417,27 @@ WTWJS.prototype.startRender = function() {
 						WTW.pluginsRenderloopAfterInit();
 					}
 					if (WTW.myAvatar != null) {
+						/* move the compass rose if the compass is visible */
+						var zcompassrose = scene.getMeshByID('compass-0-rose');
+						var zcompassclosest = scene.getMeshByID('compass-0-closest');
+						if (zcompassrose != null) {
+							var zangle = -WTW.myAvatar.rotation.y;
+							if (zcompassrose.rotation.y < zangle) {
+								zcompassrose.rotation.y += (zangle - zcompassrose.rotation.y)/15;
+							} else {
+								zcompassrose.rotation.y -= (zcompassrose.rotation.y - zangle)/15;
+							}
+							if (zcompassclosest != null) {
+								/* set the closest building arrow pointer if not already in building */
+								if (WTW.closestAngle != null && WTW.closestDistance > 80) {
+									zcompassclosest.rotation.y = WTW.getRadians(-WTW.closestAngle);
+									zcompassclosest.isVisible = true;
+								} else {
+									zcompassclosest.isVisible = false;
+								}
+							}
+						}
+
 						/* if my avatar is in the scene, have the extended ground and sky sphere stay centered over my avatar */
 						/* compute world matrix guarantees world coordinates are calculated even if the parent is changed */
 						WTW.myAvatar.computeWorldMatrix(true);
@@ -1522,8 +1481,6 @@ WTWJS.prototype.startRender = function() {
 							WTW.sky.scaling.z = zskysize;
 						}
 					} 
-					/* user canvas is used for compass, arrows, and other menu options */
-					WTW.loadUserCanvas();
 					if (WTW.checkShownMolds == 0) {
 						/* set shown molds will show the molds where the load zones identified are status 2 (avatar is in zone) */
 						WTW.setShownMolds();

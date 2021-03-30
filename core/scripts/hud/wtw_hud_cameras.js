@@ -11,14 +11,14 @@ WTWJS.prototype.hudGetCameras = function() {
 	try {
 		WTW.hudAddLabel('Main Camera', 'hud-camera1', -8, 3.2, 0);
 		WTW.hudAddLabel('3D Mode', 'hud-camera1-style', -7.3, 1.5, 0);
-		WTW.hudAddLabel('Second Camera', 'hud-camera2', -8, -3.5, 0);
+//		WTW.hudAddLabel('Second Camera', 'hud-camera2', -8, -3.5, 0);
 		WTW.hudAddLabel('Distance', 'hud-camera1-disttext', -7.3, -.5, 0);
 		WTW.hudAddLabel('Follow', 'hud-camera1-distfollowtext', 0.2, -1.1, 0, .4, .1);
 		WTW.hudAddLabel('Selfie', 'hud-camera1-distselfietext', 4.7, -1.1, 0, .4, .1);
 		
 		WTW.hudAddImageButton('/content/system/images/camera-follow.png', 'camera1-follow', 1, 3.5, 0, 1);
-		WTW.hudAddImageButton('/content/system/images/camera-firstpersonstable.png', 'camera1-firststable', 3.5, 3.5, 0);
-		WTW.hudAddImageButton('/content/system/images/camera-firstperson.png', 'camera1-first', 6, 3.5, 0);
+//		WTW.hudAddImageButton('/content/system/images/camera-firstpersonstable.png', 'camera1-firststable', 3.5, 3.5, 0);
+//		WTW.hudAddImageButton('/content/system/images/camera-firstperson.png', 'camera1-first', 6, 3.5, 0);
 
 		WTW.hudAddImageButton('/content/system/images/camera-picture.png', 'camerastyle-picture', -1.5, 1.7, 0, 1);
 		WTW.hudAddImageButton('/content/system/images/camera-anaglyph.png', 'camerastyle-anaglyph', 1, 1.7, 0);
@@ -27,43 +27,13 @@ WTWJS.prototype.hudGetCameras = function() {
 		
 		WTW.hudAddSlider(WTW.cameraDistance, -100, 100, 'camera1-dist', 3, -.2, 0);
 		
-		WTW.hudAddImageButton('/content/system/images/camera-follow.png', 'camera2-follow', 1, -3.3, 0);
-		WTW.hudAddImageButton('/content/system/images/camera-scene.png', 'camera2-scene', 3.5, -3.3, 0);
-		WTW.hudAddImageButton('/content/system/images/camera-self.png', 'camera2-self', 6, -3.3, 0);
+//		WTW.hudAddImageButton('/content/system/images/camera-follow.png', 'camera2-follow', 1, -3.3, 0);
+//		WTW.hudAddImageButton('/content/system/images/camera-scene.png', 'camera2-scene', 3.5, -3.3, 0);
+//		WTW.hudAddImageButton('/content/system/images/camera-self.png', 'camera2-self', 6, -3.3, 0);
 		
 		WTW.hudAddSaveClose('cameras', 0, -5.3, 0);
 	} catch (ex) {
 		WTW.log("core-scripts-hud-wtw_hud_cameras.js-hudGetCameras=" + ex.message);
-	}
-}
-
-WTWJS.prototype.hudChangeCamera = function(zmoldname, zcameranumber, zcameraname, zdimension) {
-	/* this function changes camera when a HUD camera button is pressed */
-	try {
-		if (zcameraname != '') {
-			WTW.setDDLValue('wtw_firstcamera', zcameraname);
-			WTW.hudHighlightCamera(1, zmoldname);
-		}
-		if (zdimension != '' || (zcameraname == '' && zdimension == '')) {
-			WTW.setDDLValue('wtw_cameradimensions', zdimension);
-			WTW.hudHighlightCamera(0, zmoldname);
-		}
-		if (zcameranumber == 2) {
-			var zcamera2 = WTW.getDDLValue('wtw_secondcamera');
-			if (zcamera2 == zcameraname) {
-				WTW.toggleCameraTwo();
-				WTW.hudHighlightCamera(2, '');
-			} else {
-				if (dGet('wtw_cameratwotext').innerHTML != "Second Camera On") {
-					WTW.toggleCameraTwo();
-				}
-				WTW.setDDLValue('wtw_secondcamera', zcameraname);
-				WTW.hudHighlightCamera(2, zmoldname);
-			}
-		}
-		WTW.switchCamera(zcameranumber);
-	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_cameras.js-hudChangeCamera=" + ex.message);
 	}
 }
 
@@ -87,7 +57,7 @@ WTWJS.prototype.hudHighlightCamera = function(zcameraset, zactivebutton) {
 			var zbutton = scene.getMeshByID(zbuttons[i]);
 			if (zbutton != null) {
 				var zbgcolor = '#000000';
-				if (zbuttons[i] == zactivebutton) {
+				if (zactivebutton == zbuttons[i]) {
 					zbgcolor = '#09255F';
 				}
 				var zcovering = zbutton.material;

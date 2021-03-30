@@ -273,17 +273,17 @@ function WTWJS() {
 	this.cameraYOffset = 0;
 	
 	/* numerous camera instances depending on the current camera choice(s) from the menu */
-	/* only the camera in use are kept in active cameras */
+	/* only the cameras in use are kept in active cameras */
+	this.cameraOne = null;
+	this.cameraTwo = null;
+
+	/* sets the distance for WTW.cameraOne from the target - creates follow, scene, or selfie views */
+	this.cameraDistance = -25;
+	
+	
 	this.camera = null; /* First-Person Camera */
-	this.cameraClone = null;
 	this.cameraFollow = null; /* Follow Camera */
 	this.cameraFollowTwo = null; /* Follow Camera */
-	this.cameraArc = null; /* Arc Rotation Camera */
-	this.cameraAnaglyph = null; /* Red/Cyan 3D Glasses */
-	this.cameraVR = null; /* VR Camera */
-	this.cameraVRGamepad = null; /* VR Camera with gamepad controls */
-	this.cameraWebVR = null; /* Web VR Camera */
-	this.cameraDistance = -25;
 	
 /* avatar related */
 	

@@ -302,10 +302,10 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.loadSkyScene(0, 1, 0.25, 2, 10, 0.8, 0.005, .5);
 						break;
 					case "wtw_skysetsunrise":
-						WTW.loadSkyScene(-0.5, 1, 0.25, 2, 10, 0.8, 0.005, .5);
+						WTW.loadSkyScene(0.5, 1, 0.25, 2, 10, 0.8, 0.005, .5);
 						break;
 					case "wtw_skysetsunset":
-						WTW.loadSkyScene(0.5, 1, 0.25, 2, 10, 0.8, 0.005, .5);
+						WTW.loadSkyScene(-0.5, 1, 0.25, 2, 10, 0.8, 0.005, .5);
 						break;
 					case "wtw_skysetnight":
 						WTW.loadSkyScene(0.26, 1, 0.10, 0, 2, 0.8, 0.006, .5);
@@ -1052,20 +1052,13 @@ WTWJS.prototype.toggleAdminMenuMediaLibrary = function() {
 WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 	/* toggle camera - attach to avatar or release for free movement */
 	try {
+		var zavatarcamera = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
 		if (zvalue == 1) {
 			WTW.cameraFocus = 1;
-			var zavatarcamera = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
-			var zheadtop = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-headtop");
-			if (zavatarcamera != null && zheadtop != null) {
-				WTW.camera.parent = zavatarcamera;
-				zavatarcamera.parent = zheadtop;
-				WTW.camera.position.x = 0;
-				WTW.camera.position.y = 0;
-				WTW.camera.position.z = 0;
-				WTW.camera.rotation.y = WTW.getRadians(0);
+			if (zavatarcamera != null) {
+				WTW.cameraOne.lockedTarget = zavatarcamera;
 			}
-			WTW.camera.inputs.attached.mouse.detachControl();
-			WTW.switchCamera(1);
+
 			if (dGet('wtw_bavatarcamera') != null) {
 				dGet('wtw_bavatarcamera').innerHTML = "Avatar<br />Camera<br />ON";
 				dGet('wtw_bavatarcamera').onclick = function() { WTW.setQuickEditorAvatarCamera(0); };
@@ -1079,21 +1072,8 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 			WTW.setCookie("wtw_bavatarcamera","1",30);
 		} else {
 			WTW.cameraFocus = 0;
-			var zavatarcamera = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
-			if (zavatarcamera != null) {
-				var zabspos = WTW.getWorldPosition(zavatarcamera);
-				var zavatar = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value);
-				if (zavatar != null && WTW.mainParentMold != null) {
-					zavatarcamera.parent = WTW.mainParentMold;
-					WTW.camera.position.x = zabspos.x;
-					WTW.camera.position.y = zabspos.y;
-					WTW.camera.position.z = zabspos.z;
-					WTW.camera.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + 90);
-				}
-			}
-			WTW.camera.inputs.attachInput(WTW.camera.inputs.attached.mouse);
-			WTW.camera.viewport = new BABYLON.Viewport(0, 0, 1, 1);
-			scene.activeCameras[0] = WTW.camera;
+			WTW.cameraOne.lockedTarget = null;
+		
 			if (dGet('wtw_bavatarcamera') != null) {
 				dGet('wtw_bavatarcamera').innerHTML = "Avatar<br />Camera<br />OFF";
 				dGet('wtw_bavatarcamera').onclick = function() { WTW.setQuickEditorAvatarCamera(1); };

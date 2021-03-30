@@ -20,7 +20,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 		if (zavatar != null && WTW.cameraFocus == 1 && WTW.placeHolder == 0) {
 			zavatar.rotation.x = 0;
 			zavatar.rotation.z = 0;
-			var zincrement = .1;
+			var zincrement = .2;
 			var zactivecount = 0;
 			var zmoveevents = [];
 			if (zavatar.WTW != null) {

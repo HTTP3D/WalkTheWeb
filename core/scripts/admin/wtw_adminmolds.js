@@ -2474,11 +2474,11 @@ WTWJS.prototype.getNewCoordinates = function(zdist) {
 			zpositionz = Math.round((WTW.myAvatar.position.z - zdist * Math.sin(WTW.myAvatar.rotation.y)));
 		} else {
 			/* camera is Not focused on Avatar, use the camera position and rotation to calculate new point */
-			zrotationy = WTW.getDegrees(WTW.camera.rotation.y) - 90;
+			zrotationy = WTW.getDegrees(WTW.cameraOne.rotation.y) - 90;
 			var zadjrot = WTW.getRadians(zrotationy);
-			zpositiony = Math.round(WTW.camera.position.y);
-			zpositionx = Math.round((WTW.camera.position.x + zdist * Math.cos(zadjrot)));
-			zpositionz = Math.round((WTW.camera.position.z - zdist * Math.sin(zadjrot)));
+			zpositiony = Math.round(WTW.cameraOne.position.y);
+			zpositionx = Math.round((WTW.cameraOne.position.x + zdist * Math.cos(zadjrot)));
+			zpositionz = Math.round((WTW.cameraOne.position.z - zdist * Math.sin(zadjrot)));
 		}
 		zrotationy = WTW.cleanDegrees(zrotationy);
 		/* round off rotation to the nearest 90 degrees */
