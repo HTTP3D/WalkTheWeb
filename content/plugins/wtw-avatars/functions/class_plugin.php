@@ -332,13 +332,30 @@ class wtwavatars {
 			$zformdata .= "	<br /><br />\r\n";
 			$zformdata .= "	<h2>Search Category Tags</h2>\r\n";
 			$zformdata .= "	<input type=\"text\" id=\"wtw_tshareavatartags\" maxlength=\"255\" onclick=\"WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();\" onkeyup=\"WTW.checkKey(this, 'displayname', 0, 0);\" onblur=\"WTW.checkKey(this, 'displayname', 0, 1);\" /><br />\r\n";
-			$zformdata .= "	<div style=\"font-weight:normal;font-size:.8em;color:#c0c0c0;\">Example: table, chair, display, lamp, etc</div>\r\n";
+			$zformdata .= "	<div style=\"font-weight:normal;font-size:.8em;color:#c0c0c0;\">Example: Avatar, Leather Armor, Boots, etc.</div>\r\n";
 			$zformdata .= "	<br /><br />\r\n";
 			$zformdata .= "	<div id=\"wtw_bsnapshotavatar\" class='wtw-menulevel2' onclick=\"WTW.snapshot3D(dGet('wtw_trootpath').value + dGet('wtw_tavatarfolder').value + 'snapshots/', 'defaultavatar.png');\" style=\"cursor: pointer;\">Set Default Snapshot</div><br />\r\n";
 			$zformdata .= "	<img id=\"wtw_defaultavatarsnapshot\" class=\"wtw-snapshot\" />\r\n";
 			$zformdata .= "	<br /> \r\n";
-			$zformdata .= "	<div id=\"wtw_shareavatarresponse\" style=\"font-size:1.5em;color:green;\"></div><br />\r\n";
+
+			$zformdata .= "	<h2>Initial Share or Update</h2>\r\n";
+			$zformdata .= "	<div style=\"text-align:left;margin-left:40px;color:#ffffff;cursor:pointer;\" onclick=\"dGet('wtw_tshareoriginal').click();\">\r\n";
+			$zformdata .= "	<input type=\"radio\" id=\"wtw_tshareoriginal\" name=\"wtw_tsharetype\" value=\"initial\" onchange=\"WTW.changeAvatarVersion();\" /> Initial Share<br />\r\n";
+			$zformdata .= "	</div>\r\n";
+			$zformdata .= "	<div style=\"font-weight:normal;font-size:.8em;color:#c0c0c0;\">You created the 3D Avatar and want to Share it.</div>\r\n";
 			$zformdata .= "	<br /> \r\n";
+			$zformdata .= "	<div style=\"text-align:left;margin-left:40px;color:#ffffff;cursor:pointer;\" onclick=\"dGet('wtw_tshareupdate').click();\">\r\n";
+			$zformdata .= "	<input type=\"radio\" id=\"wtw_tshareupdate\" name=\"wtw_tsharetype\" value=\"update\" /> Update Share<br />\r\n";
+			$zformdata .= "	</div>\r\n";
+			$zformdata .= "	<div style=\"font-weight:normal;font-size:.8em;color:#c0c0c0;text-align:left;\">Optional: Only Available if this 3D Avatar was already Shared and you are the original creator.<br /><br />\r\n";
+			$zformdata .= "<div style=\"color:white;font-weight:bold;text-align:center;\">Version: <input type=\"text\" id=\"wtw_tshareversion\" maxlength=\"255\" value=\"1.0.0\" /></div><br />\r\n";
+			$zformdata .= "	Version Numbers are 3 numbers each separated by a period.<br /><br /><div style=\"margin-left:20px;\">
+			* First number is incremented for major changes or complete rebuilds.<br />
+			* Second number is incremented for minor changes or additions.<br />
+			* Third number is incremented for adjustments, texture changes, or bug fixes.</div><br />
+			When the first or second number changes, the numbers to the right reset to 0. </div><br /><br />\r\n";
+			$zformdata .= "<div style=\"color:white;font-weight:bold;text-align:center;\">Version Description: <input type=\"text\" id=\"wtw_tshareversiondesc\" maxlength=\"255\" value=\"\" /></div><br />\r\n";
+			$zformdata .= "	<div id=\"wtw_shareavatarresponse\" style=\"font-size:1.5em;color:green;\"></div><br />\r\n";
 			$zformdata .= "</div>\r\n";
 			$zformdata .= "<br />\r\n";
 			$zformdata .= "<div id=\"wtw_bshareavatartemplate\" class=\"wtw-greenbutton\" onclick=\"WTW.adminMenuItemSelected(this);\" style=\"font-size:1.4em;\">Share 3D Avatar as Template</div>\r\n";
@@ -358,6 +375,8 @@ class wtwavatars {
 			$zformdata .= "<h2>3D Avatar Name</h2>\r\n";
 			$zformdata .= "<div class=\"wtw-mainmenuvalue\">Users change the Name when selected.</div>\r\n";
 			$zformdata .= "<input type=\"text\" id=\"wtw_tinfoavatarname\" maxlength=\"255\" onclick=\"WTW.checkKey(this, 'displayname', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'displayname', 0, 0);\" onblur=\"WTW.checkKey(this, 'displayname', 0, 1);\" /><br /><br />\r\n";
+			$zformdata .= "<h2>Version</h2>\r\n";
+			$zformdata .= "<input type=\"text\" id=\"wtw_tinfoavatarversion\" maxlength=\"255\" /><br /><br />\r\n";
 			$zformdata .= "<h2>Avatar Group</h2>\r\n";
 			$zformdata .= "<div class=\"wtw-mainmenuvalue\">Groups can be assigned to a 3D Community<br />(Example: Zombie Group for Zombie Scenes).</div>\r\n";
 			$zformdata .= "<select id=\"wtw_tinfoavatargroup\"></select>\r\n";
