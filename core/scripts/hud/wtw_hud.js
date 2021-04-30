@@ -421,6 +421,24 @@ WTWJS.prototype.hudClick = function(zmoldname) {
 		if (zhud != null) {
 			var zcamera1id = '';
 			var zparent = '';
+			var zpositionx = 0;
+			var zpositiony = 0;
+			var zpositionz = 0;
+			var zrotationx = 0;
+			var zrotationy = 0;
+			var zrotationz = 0;
+			if (WTW.cameraOne != null) {
+				if (WTW.cameraOne.position != undefined) {
+					zpositionx = WTW.cameraOne.position.x;
+					zpositiony = WTW.cameraOne.position.y;
+					zpositionz = WTW.cameraOne.position.z;
+				}
+				if (WTW.cameraOne.rotation != undefined) {
+					zrotationx = WTW.cameraOne.rotation.x;
+					zrotationy = WTW.cameraOne.rotation.y;
+					zrotationz = WTW.cameraOne.rotation.z;
+				}
+			}
 			if (WTW.cameraOne != null) {
 				zcamera1id = WTW.cameraOne.id;
 				if (WTW.cameraOne.parent != null) {
@@ -430,7 +448,8 @@ WTWJS.prototype.hudClick = function(zmoldname) {
 			var zsettings = {
 				'parent': zparent,
 				'distance': WTW.cameraDistance,
-				'yoffset': 180
+				'position': new BABYLON.Vector3(zpositionx, zpositiony, zpositionz),
+				'rotation': new BABYLON.Vector3(zrotationx, zrotationy, zrotationz)
 			};
 			switch (zmoldname) {
 				case "hud-cornertopright":
@@ -449,16 +468,18 @@ WTWJS.prototype.hudClick = function(zmoldname) {
 					zsettings = {
 						'parent':'',
 						'distance': -28,
-						'yoffset': 180
+						'position': new BABYLON.Vector3(0, 0, 0),
+						'rotation': new BABYLON.Vector3(0, 0, 0)
 					};
 					WTW.hudHighlightCamera(1, zmoldname);
 					WTW.initCamera(1, zcamera1id, zsettings);
 					break;
-				case "hud-imagebutton-camera1-firststable": /* 'myavatar-' + dGet('wtw_tinstanceid').value + '-camera' */
+				case "hud-imagebutton-camera1-firststable":
 					zsettings = {
-						'parent': '',
+						'parent': 'myavatar-' + dGet('wtw_tinstanceid').value + '-camera',
 						'distance': 2,
-						'yoffset': 180
+						'position': new BABYLON.Vector3(-2, 0, 0),
+						'rotation': new BABYLON.Vector3(0, WTW.getRadians(180), 0)
 					};
 					WTW.hudHighlightCamera(1, zmoldname);
 					WTW.initCamera(1, zcamera1id, zsettings);
@@ -467,7 +488,8 @@ WTWJS.prototype.hudClick = function(zmoldname) {
 					zsettings = {
 						'parent': 'myavatar-' + dGet('wtw_tinstanceid').value + '-headtop',
 						'distance': 2,
-						'yoffset': 180
+						'position': new BABYLON.Vector3(-2, 0, 0),
+						'rotation': new BABYLON.Vector3(0, WTW.getRadians(180), WTW.getRadians(180))
 					};
 					WTW.hudHighlightCamera(1, zmoldname);
 					WTW.initCamera(1, zcamera1id, zsettings);
@@ -492,7 +514,8 @@ WTWJS.prototype.hudClick = function(zmoldname) {
 					zsettings = {
 						'parent': zparent,
 						'distance': -28,
-						'yoffset': 180
+						'position': new BABYLON.Vector3(0, 0, 0),
+						'rotation': new BABYLON.Vector3(0, 0, 0)
 					};
 					WTW.hudHighlightCamera(2, zmoldname);
 					WTW.initCamera(2, zcamera1id, zsettings);
@@ -501,7 +524,8 @@ WTWJS.prototype.hudClick = function(zmoldname) {
 					zsettings = {
 						'parent': zparent,
 						'distance': -40,
-						'yoffset': 180
+						'position': new BABYLON.Vector3(0, 0, 0),
+						'rotation': new BABYLON.Vector3(0, 0, 0)
 					};
 					WTW.hudHighlightCamera(2, zmoldname);
 					WTW.initCamera(2, zcamera1id, zsettings);
@@ -509,7 +533,9 @@ WTWJS.prototype.hudClick = function(zmoldname) {
 				case "hud-imagebutton-camera2-self":
 					zsettings = {
 						'parent': zparent,
-						'distance': 30
+						'distance': 30,
+						'position': new BABYLON.Vector3(0, 0, 0),
+						'rotation': new BABYLON.Vector3(0, 0, 0)
 					};
 					WTW.hudHighlightCamera(2, zmoldname);
 					WTW.initCamera(2, zcamera1id, zsettings);

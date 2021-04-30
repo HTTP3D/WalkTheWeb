@@ -17,8 +17,8 @@ WTWJS.prototype.hudGetCameras = function() {
 		WTW.hudAddLabel('Selfie', 'hud-camera1-distselfietext', 4.7, -1.1, 0, .4, .1);
 		
 		WTW.hudAddImageButton('/content/system/images/camera-follow.png', 'camera1-follow', 1, 3.5, 0, 1);
-//		WTW.hudAddImageButton('/content/system/images/camera-firstpersonstable.png', 'camera1-firststable', 3.5, 3.5, 0);
-//		WTW.hudAddImageButton('/content/system/images/camera-firstperson.png', 'camera1-first', 6, 3.5, 0);
+		WTW.hudAddImageButton('/content/system/images/camera-firstpersonstable.png', 'camera1-firststable', 3.5, 3.5, 0);
+		WTW.hudAddImageButton('/content/system/images/camera-firstperson.png', 'camera1-first', 6, 3.5, 0);
 
 		WTW.hudAddImageButton('/content/system/images/camera-picture.png', 'camerastyle-picture', -1.5, 1.7, 0, 1);
 		WTW.hudAddImageButton('/content/system/images/camera-anaglyph.png', 'camerastyle-anaglyph', 1, 1.7, 0);

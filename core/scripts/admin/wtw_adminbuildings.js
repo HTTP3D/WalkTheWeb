@@ -29,11 +29,14 @@ WTWJS.prototype.openBuildingForm = async function(w) {
 							if (WTW.buildings[i].buildinginfo.buildingid != undefined) {
 								if (WTW.buildings[i].buildinginfo.buildingid != null) {
 									if (dGet("wtw_tbuildingid").value == WTW.buildings[i].buildinginfo.buildingid) {
+										dGet('wtw_tinfobuildingversion').disabled = false;
 										dGet('wtw_tbuildingname').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
+										dGet('wtw_tinfobuildingversion').value = WTW.buildings[i].buildinginfo.version;
 										dGet('wtw_tbuildingdescription').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingdescription);
 										dGet('wtw_tbuildingsnapshotid').value = WTW.buildings[i].buildinginfo.snapshotid;
 										dGet('wtw_tbuildinganalyticsid').value = WTW.buildings[i].buildinginfo.analyticsid;
 										dGet('wtw_tbuildingalttag').value = WTW.decode(WTW.buildings[i].alttag.name);
+										dGet('wtw_tinfobuildingversion').disabled = true;
 									}
 								}
 							}
@@ -257,10 +260,16 @@ WTWJS.prototype.getSelectBuildingsList = async function() {
 				if (WTW.buildings != null) {
 					for (var i = 0; i < WTW.buildings.length; i++) {
 						if (WTW.buildings[i] != null) {
+							var zversion = '';
+							if (WTW.buildings[i].buildinginfo.version != undefined) {
+								if (WTW.buildings[i].buildinginfo.version != '') {
+									zversion = ' (v' + WTW.buildings[i].buildinginfo.version + ')';
+								}
+							}
 							if (WTW.buildings[i].buildinginfo.buildingid == buildingid) {
-								dGet("wtw_listbuildings").innerHTML += "<div id=\"wtw_beditbuilding" + WTW.buildings[i].buildinginfo.buildingid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'>" + WTW.decode(WTW.buildings[i].buildinginfo.buildingname) + "</div>\r\n";
+								dGet("wtw_listbuildings").innerHTML += "<div id=\"wtw_beditbuilding" + WTW.buildings[i].buildinginfo.buildingid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.buildings[i].buildinginfo.buildingname) + "</div>\r\n";
 							} else {
-								dGet("wtw_listbuildings").innerHTML += "<div id=\"wtw_beditbuilding" + WTW.buildings[i].buildinginfo.buildingid + "\" onclick=\"window.location.href='admin.php?buildingid=" + WTW.buildings[i].buildinginfo.buildingid + "';\" class='wtw-menulevel2'>" + WTW.decode(WTW.buildings[i].buildinginfo.buildingname) + "</div>\r\n";
+								dGet("wtw_listbuildings").innerHTML += "<div id=\"wtw_beditbuilding" + WTW.buildings[i].buildinginfo.buildingid + "\" onclick=\"window.location.href='admin.php?buildingid=" + WTW.buildings[i].buildinginfo.buildingid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.buildings[i].buildinginfo.buildingname) + "</div>\r\n";
 							}
 						}
 					}

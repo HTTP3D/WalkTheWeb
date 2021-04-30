@@ -12,7 +12,13 @@ WTWJS.prototype.loadPrimaryCamera = function() {
 		} else {
             WTW.isMobile = false;
 		}
-		WTW.initCamera(1, 'follow');
+		var zsettings = {
+			'parent': '',
+			'distance': -28,
+			'position': new BABYLON.Vector3(0, 0, 0),
+			'rotation': new BABYLON.Vector3(0, 0, 0)
+		};
+		WTW.initCamera(1, 'followcamera', zsettings);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_cameras.js-loadPrimaryCamera=" + ex.message);
 	}
@@ -138,7 +144,6 @@ WTWJS.prototype.initCamera = function(zviewport, zcameraid, zsettings) {
 			
 			if (zviewport == 1) {
 				WTW.cameraOne = zcamera;
-//				WTW.cameraOne.yOffset = zsettings.yoffset;
 				WTW.cameraOne.inertia = .10;
 				WTW.cameraOne.cameraAcceleration = 0.7;
 				WTW.cameraOne.maxZ = 5000;
@@ -147,7 +152,6 @@ WTWJS.prototype.initCamera = function(zviewport, zcameraid, zsettings) {
 				WTW.cameraDistance = zsettings.distance;
 			} else {
 				WTW.cameraTwo = zcamera;
-				WTW.cameraTwo.yOffset = 180;
 				WTW.cameraTwo.inertia = .10;
 				WTW.cameraTwo.cameraAcceleration = 0.7;
 				WTW.cameraTwo.maxZ = 5000;
@@ -170,6 +174,8 @@ WTWJS.prototype.initCamera = function(zviewport, zcameraid, zsettings) {
 				var zparentmold = WTW.getMeshOrNodeByID(zsettings.parent);
 				if (zparentmold != null) {
 					WTW.cameraOne.parent = zparentmold;
+					WTW.cameraOne.position = zsettings.position;
+					WTW.cameraOne.rotation = zsettings.rotation;
 				}
 			}
 		}
@@ -213,10 +219,15 @@ WTWJS.prototype.setMovingCameras = function(zavatar) {
 				/* camera one */
 				if (WTW.cameraOne != null) {
 					if (WTW.cameraOne.parent == null) {
+						/* camera is not parented (defaults to scene) and follows locked target */
 						WTW.cameraOne.heightOffset = WTW.cameraYOffset;
-//					WTW.cameraOne.rotation.y = WTW.getRadians(WTW.getDegrees(zavatar.rotation.y) + WTW.cameraOne.yOffset + zrotation);
 						WTW.cameraOne.position = new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.cos(zavatar.rotation.y)) * WTW.cameraDistance, zavatar.position.y + zavatarcenter.position.y + WTW.cameraYOffset, zavatar.position.z - parseFloat(Math.sin(zavatar.rotation.y)) * WTW.cameraDistance);
 						WTW.setCameraDistance();
+					} else {
+						/* camera is parented to avatar and has no locked target */
+//						WTW.cameraOne.heightOffset = WTW.cameraYOffset;
+//						WTW.cameraOne.position = new BABYLON.Vector3(0, WTW.cameraYOffset, 0);
+//						WTW.cameraOne.rotation.y = WTW.getRadians(180);
 					}
 				}
 				/* camera two is the scene camera window follow camera */

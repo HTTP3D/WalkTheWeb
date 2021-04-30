@@ -18,14 +18,20 @@ WTWJS.prototype.openSelectAvatar = function() {
 					var zavatargroup = '';
 					for (var i = 0; i < zresponse.avatars.length; i++) {
 						if (zresponse.avatars[i] != null) {
+							var zversion = '';
+							if (zresponse.avatars[i].version != undefined) {
+								if (zresponse.avatars[i].version != '') {
+									zversion = ' (v' + zresponse.avatars[i].version + ')';
+								}
+							}
 							if (zresponse.avatars[i].avatargroup != zavatargroup) {
 								dGet("wtw_listavatars").innerHTML += "<h2>" + zresponse.avatars[i].avatargroup + "</h2>";
 								zavatargroup = zresponse.avatars[i].avatargroup;
 							}
 							if (zresponse.avatars[i].avatarid == avatarid) {
-								dGet("wtw_listavatars").innerHTML += "<div id=\"wtw_beditavatar" + zresponse.avatars[i].avatarid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'>" + WTW.decode(zresponse.avatars[i].displayname) + "</div>\r\n";
+								dGet("wtw_listavatars").innerHTML += "<div id=\"wtw_beditavatar" + zresponse.avatars[i].avatarid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(zresponse.avatars[i].displayname) + "</div>\r\n";
 							} else {
-								dGet("wtw_listavatars").innerHTML += "<div id=\"wtw_beditavatar" + zresponse.avatars[i].avatarid + "\" onclick=\"window.location.href='admin.php?avatarid=" + zresponse.avatars[i].avatarid + "';\" class='wtw-menulevel2'>" + WTW.decode(zresponse.avatars[i].displayname) + "</div>\r\n";
+								dGet("wtw_listavatars").innerHTML += "<div id=\"wtw_beditavatar" + zresponse.avatars[i].avatarid + "\" onclick=\"window.location.href='admin.php?avatarid=" + zresponse.avatars[i].avatarid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(zresponse.avatars[i].displayname) + "</div>\r\n";
 							}
 						}
 					}
@@ -277,6 +283,10 @@ WTWJS.prototype.openShareAvatarForm = function() {
 					var zdescripton = '';
 					var ztags = '';
 					var zsnapshot = '';
+					var zversionid = avatarid;
+					var zversion = '1.0.0';
+					var zversiondesc = 'Initial Version';
+					var zcreateuserid = '';
 					if (zresponse.avatar.share.templatename != undefined) {
 						if (zresponse.avatar.share.templatename != '') {
 							ztempname = zresponse.avatar.share.templatename;
@@ -311,11 +321,44 @@ WTWJS.prototype.openShareAvatarForm = function() {
 							zsnapshot = zresponse.avatar.snapshots.thumbnail;
 						}
 					}
+					if (zresponse.avatar.versionid != undefined) {
+						if (zresponse.avatar.versionid != '') {
+							zversionid = zresponse.avatar.versionid;
+						}
+					}
+					if (zresponse.avatar.version != undefined) {
+						if (zresponse.avatar.version != '') {
+							zversion = zresponse.avatar.version;
+						}
+					}
+					if (zresponse.avatar.versiondesc != undefined) {
+						if (zresponse.avatar.versiondesc != '') {
+							zversiondesc = zresponse.avatar.versiondesc;
+						}
+					}
+					if (zresponse.avatar.createuserid != undefined) {
+						if (zresponse.avatar.createuserid != '') {
+							zcreateuserid = zresponse.avatar.createuserid;
+						}
+					}
+
 					dGet('wtw_teditavatarid').value = zresponse.avatar.avatarid;
 					dGet('wtw_tavatarfolder').value = '/content/uploads/avatars/' + dGet('wtw_teditavatarid').value + '/';
 					dGet('wtw_tshareavatartempname').value = ztempname;
 					dGet('wtw_tshareavatardescription').value = zdescripton;
 					dGet('wtw_tshareavatartags').value = ztags;
+					dGet('wtw_tshareversion').value = zversion;
+					dGet('wtw_tshareversiondesc').value = zversiondesc;
+					dGet('wtw_tshareoriginal').checked = true;
+					dGet('wtw_tshareversion').disabled = true;
+					dGet('wtw_tshareversiondesc').disabled = true;
+					dGet('wtw_tshareoriginal').onchange = function() { WTW.changeAvatarVersion(zversion, zversiondesc);};
+					dGet('wtw_tshareupdate').onchange = function() { WTW.changeAvatarVersion(zversion, zversiondesc);};
+					if (dGet('wtw_tuserid').value == zcreateuserid && zcreateuserid != '') {
+						dGet('wtw_tshareupdate').disabled = false;
+					} else {
+						dGet('wtw_tshareupdate').disabled = true;
+					}
 					dGet('wtw_defaultavatarsnapshot').src = zsnapshot;
 					if (zsnapshot != '') {
 						WTW.show('wtw_defaultavatarsnapshot');
@@ -332,15 +375,38 @@ WTWJS.prototype.openShareAvatarForm = function() {
 	} 
 }
 
+WTWJS.prototype.changeAvatarVersion = function(zversion, zversiondesc) {
+	/* change when initial share or update share is selected on Share 3D Avatar Form */
+	try {
+		if (dGet('wtw_tshareoriginal').checked == true) {
+			dGet('wtw_tshareversion').value = '1.0.0';
+			dGet('wtw_tshareversiondesc').value = 'Initial Version';
+			dGet('wtw_tshareversion').disabled = true;
+			dGet('wtw_tshareversiondesc').disabled = true;
+		} else {
+			dGet('wtw_tshareversion').disabled = false;
+			dGet('wtw_tshareversiondesc').disabled = false;
+			dGet('wtw_tshareversion').value = zversion;
+			dGet('wtw_tshareversiondesc').value = zversiondesc;
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminavatars.js-changeAvatarVersion=" + ex.message);
+	} 
+}
+
 WTWJS.prototype.saveShareAvatarForm = async function() {
 	/* process the share 3D Avatar and Save the settings locally for next Share */
 	try {
+		dGet('wtw_tshareversion').disabled = false;
+		dGet('wtw_tshareversiondesc').disabled = false;
 		var zrequest = {
 			'avatarid': avatarid,
 			'pastavatarid': '',
 			'templatename': btoa(dGet('wtw_tshareavatartempname').value),
 			'description': btoa(dGet('wtw_tshareavatardescription').value),
 			'tags': btoa(dGet('wtw_tshareavatartags').value),
+			'version' : dGet('wtw_tshareversion').value,
+			'versiondesc' : btoa(dGet('wtw_tshareversiondesc').value),
 			'function':'saveavatartemplate'
 		};
 		WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
@@ -387,11 +453,14 @@ WTWJS.prototype.openEditAvatar = function() {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.avatar != null) {
+					dGet('wtw_tinfoavatarversion').disabled = false;
 					dGet('wtw_teditavatarid').value = zresponse.avatar.avatarid;
 					dGet('wtw_tinfoavatarname').value = zresponse.avatar.displayname;
+					dGet('wtw_tinfoavatarversion').value = zresponse.avatar.version;
 					dGet('wtw_tinfoavatardescription').value = zresponse.avatar.avatardescription;
 					dGet('wtw_tinfoavatargender').value = zresponse.avatar.gender;
 					WTW.loadAvatarGroupDDL('wtw_tinfoavatargroup', zresponse.avatar.avatargroup);
+					dGet('wtw_tinfoavatarversion').disabled = true;
 					WTW.show('wtw_adminEditAvatarInformationDiv');
 				}
 			}
@@ -1132,7 +1201,8 @@ WTWJS.prototype.openEditAvatarAnimations = function(zselectedanimation) {
 						zavataranimationslist += "<br /><div id=\"wtw_adminavatarsaveanimations\" class=\"wtw-greenbutton\" onclick=\"WTW.saveAvatarAnimationDefinition();\" style=\"font-size:1.4em;\">Save New Animation</div><br />\r\n";
 						zavataranimationslist += "<div style=\"text-align:center;\"><div class=\"wtw-yellowbutton\" onclick=\"WTW.cancelAddNewAnimation();\" >Cancel</div></div>";
 						zavataranimationslist += "</div>\r\n";
-
+						
+						zavataranimationslist += "<br /><div style='color:yellow;font-weight:bold;'>Total Animations: " + zresponse.avatar.avataranimationdefs.length + "</div><br />\r\n";
 						zavataranimationslist += "<br /><div id=\"wtw_adminavataraddnewanimation\" class=\"wtw-greenbutton\" onclick=\"WTW.addNewAvatarAnimation();\" style=\"font-size:1.4em;\">Add New Animation</div>\r\n";
 					}
 					dGet('wtw_avataranimationslist').innerHTML = zavataranimationslist;
@@ -1376,6 +1446,16 @@ WTWJS.prototype.loadAvatarFilesDDL = function(zresponse) {
 								dGet(zddlid).add(zoption);
 							}
 						}
+					}
+				}
+			}
+		}
+		/* set dropdown default to newly uploaded babylon file if it exists */
+		if (dGet('wtw_avatarfilesupload2').value != null && zdefault == '') {
+			for (var i=0;i < dGet('wtw_avatarfilesupload2').files.length;i++) {
+				if (dGet('wtw_avatarfilesupload2').files[i] != null) {
+					if (dGet('wtw_avatarfilesupload2').files[i].name.indexOf('.babylon') > -1 && dGet('wtw_avatarfilesupload2').files[i].name.indexOf('.babylon.manifest') == -1) {
+						WTW.setDDLText(zddlid, dGet('wtw_avatarfilesupload2').files[i].name);
 					}
 				}
 			}

@@ -527,7 +527,9 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 				}
 			}
 			WTW.pluginsMoveAvatar(zavatar, zmoveevents);
-		} 
+		} else {
+			WTW.setMovingCameras(zavatar);
+		}
 	} catch(ex) {
 		WTW.log("core-scripts-avatars-wtw_avatarfunctions.js-moveAvatar=" + ex.message);
 	}

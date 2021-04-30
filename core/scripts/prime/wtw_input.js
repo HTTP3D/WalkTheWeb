@@ -686,7 +686,7 @@ WTWJS.prototype.mouseScroll = function(zrolled) {
 				WTW.startRender();
 			}
 			if (WTW.cameraFocus == 0) {
-				zrolled = zrolled / 12;
+				zrolled = zrolled / 24;
 				var zdirx = Math.sin(WTW.cameraOne.rotation.y);
 				var zdiry = -Math.sin(WTW.cameraOne.rotation.x);
 				var zdirz = Math.cos(WTW.cameraOne.rotation.y);

@@ -25,13 +25,16 @@ WTWJS.prototype.openCommunityForm = async function(zcommunityid) {
 						if (WTW.communities[i] != null) {
 							if (WTW.communities[i].communityinfo.communityid != undefined) {
 								if (zcommunityid == WTW.communities[i].communityinfo.communityid) {
+									dGet('wtw_tinfocommunityversion').disabled = false;
 									dGet('wtw_tcommunityname').value = WTW.decode(WTW.communities[i].communityinfo.communityname);
+									dGet('wtw_tinfocommunityversion').value = WTW.communities[i].communityinfo.version;
 									dGet('wtw_tcommunitydescription').value = WTW.decode(WTW.communities[i].communityinfo.communitydescription);
 									dGet('wtw_tcommunitysnapshotid').value = WTW.communities[i].communityinfo.snapshotid;
 									dGet('wtw_tcommunityanalyticsid').value = WTW.communities[i].communityinfo.analyticsid;
 									dGet('wtw_tgroundpositiony').value = Number(WTW.communities[i].groundpositiony).toFixed(2);
 									dGet('wtw_twaterpositiony').value = Number(WTW.communities[i].waterpositiony).toFixed(2);
 									dGet('wtw_tcommunityalttag').value = WTW.decode(WTW.communities[i].alttag.name);
+									dGet('wtw_tinfocommunityversion').disabled = true;
 								}
 							}
 						}
@@ -266,10 +269,16 @@ WTWJS.prototype.getSelectCommunitiesList = async function() {
 				if (WTW.communities != null) {
 					for (var i = 0; i < WTW.communities.length; i++) {
 						if (WTW.communities[i] != null) {
+							var zversion = '';
+							if (WTW.communities[i].communityinfo.version != undefined) {
+								if (WTW.communities[i].communityinfo.version != '') {
+									zversion = ' (v' + WTW.communities[i].communityinfo.version + ')';
+								}
+							}
 							if (WTW.communities[i].communityinfo.communityid == communityid) {
-								dGet("wtw_listcommunities").innerHTML += "<div id=\"wtw_beditcommunity" + WTW.communities[i].communityinfo.communityid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'>" + WTW.decode(WTW.communities[i].communityinfo.communityname) + "</div>\r\n";
+								dGet("wtw_listcommunities").innerHTML += "<div id=\"wtw_beditcommunity" + WTW.communities[i].communityinfo.communityid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.communities[i].communityinfo.communityname) + "</div>\r\n";
 							} else {
-								dGet("wtw_listcommunities").innerHTML += "<div id=\"wtw_beditcommunity" + WTW.communities[i].communityinfo.communityid + "\" onclick=\"window.location.href='admin.php?communityid=" + WTW.communities[i].communityinfo.communityid + "';\" class='wtw-menulevel2'>" + WTW.decode(WTW.communities[i].communityinfo.communityname) + "</div>\r\n";
+								dGet("wtw_listcommunities").innerHTML += "<div id=\"wtw_beditcommunity" + WTW.communities[i].communityinfo.communityid + "\" onclick=\"window.location.href='admin.php?communityid=" + WTW.communities[i].communityinfo.communityid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.communities[i].communityinfo.communityname) + "</div>\r\n";
 							}
 						}
 					}

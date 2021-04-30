@@ -27,11 +27,14 @@ WTWJS.prototype.openThingForm = async function(zthingid) {
 							if (WTW.things[i].thinginfo.thingid != undefined) {
 								if (WTW.things[i].thinginfo.thingid != null) {
 									if (zthingid == WTW.things[i].thinginfo.thingid) {
+										dGet('wtw_tinfothingversion').disabled = false;
 										dGet('wtw_tthingind').value = i;
 										dGet('wtw_tthingname').value = WTW.decode(WTW.things[i].thinginfo.thingname);
+										dGet('wtw_tinfothingversion').value = WTW.things[i].thinginfo.version;
 										dGet('wtw_tthingdescription').value = WTW.decode(WTW.things[i].thinginfo.thingdescription);
 										dGet('wtw_tthingsnapshotid').value = WTW.things[i].thinginfo.snapshot;
 										dGet('wtw_tthingalttag').value = WTW.decode(WTW.things[i].alttag.name);
+										dGet('wtw_tinfothingversion').disabled = true;
 									}
 								}
 							}
@@ -269,10 +272,16 @@ WTWJS.prototype.getSelectThingsList = async function() {
 				if (WTW.things != null) {
 					for (var i = 0; i < WTW.things.length; i++) {
 						if (WTW.things[i] != null) {
+							var zversion = '';
+							if (WTW.things[i].thinginfo.version != undefined) {
+								if (WTW.things[i].thinginfo.version != '') {
+									zversion = ' (v' + WTW.things[i].thinginfo.version + ')';
+								}
+							}
 							if (WTW.things[i].thinginfo.thingid == thingid) {
-								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditthing" + WTW.things[i].thinginfo.thingid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
+								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditthing" + WTW.things[i].thinginfo.thingid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
 							} else {
-								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditthing" + WTW.things[i].thinginfo.thingid + "\" onclick=\"window.location.href='admin.php?thingid=" + WTW.things[i].thinginfo.thingid + "';\" class='wtw-menulevel2'>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
+								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditthing" + WTW.things[i].thinginfo.thingid + "\" onclick=\"window.location.href='admin.php?thingid=" + WTW.things[i].thinginfo.thingid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
 							}
 						}
 					}
