@@ -95,6 +95,8 @@ try {
 		$zavatars[$i] = array(
 			'useravatarid'=> $zrow["useravatarid"],
 			'avatarid'=> $zrow["avatarid"],
+			'versionid'=> $zrow["versionid"],
+			'version'=> $zrow["version"],
 			'avatargroup'=> $zrow["avatargroup"],
 			'displayname'=> $zrow["displayname"],
 			'defaultdisplayname'=> $zrow["defaultdisplayname"],

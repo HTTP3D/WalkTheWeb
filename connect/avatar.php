@@ -154,6 +154,9 @@ try {
 		/* Load the avatar information for response */
 		$zavatar = array(
 			'avatarid'=> $zrow["avatarid"],
+			'versionid'=> $zrow["versionid"],
+			'version'=> $zrow["version"],
+			'versiondesc'=> htmlspecialchars($zrow["versiondesc"], ENT_QUOTES, 'UTF-8'),
 			'avatargroup'=> $zrow["avatargroup"],
 			'displayname'=> $zrow["displayname"],
 			'avatardescription'=> htmlspecialchars($zrow["avatardescription"], ENT_QUOTES, 'UTF-8'),
@@ -203,7 +206,11 @@ try {
 			'sortorder'=> $zrow["sortorder"],
 			'alttag'=> $zrow["alttag"],
 			'avatarparts'=> $zavatarparts,
-			'avataranimationdefs'=> $zavataranimationdefs
+			'avataranimationdefs'=> $zavataranimationdefs,
+			'createuserid'=> $zrow["createuserid"],
+			'createdate'=> $zrow["createdate"],
+			'updateuserid'=> $zrow["updateuserid"],
+			'updatedate'=> $zrow["updatedate"]
 		);
 	}
 	$zresponse['avatar'] = $zavatar;

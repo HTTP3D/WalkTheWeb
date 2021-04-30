@@ -27,6 +27,9 @@ try {
 		$zauthorizedusers = array('userid'=> $zrow["userid"]);
 		$zthinginfo = array(
 			'thingid' => $zrow["thingid"],
+			'versionid' => $zrow["versionid"],
+			'version' => $zrow["version"],
+			'versiondesc' => htmlspecialchars($zrow["versiondesc"], ENT_QUOTES, 'UTF-8'),
 			'thingname' => htmlspecialchars($zrow["thingname"], ENT_QUOTES, 'UTF-8'),
 			'thingdescription' => htmlspecialchars($zrow["thingdescription"], ENT_QUOTES, 'UTF-8'),
 			'createdate' => $zrow["createdate"],

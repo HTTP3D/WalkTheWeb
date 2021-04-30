@@ -60,6 +60,9 @@ try {
 		);
 		$zcommunityinfo = array(
 			'communityid' => $zrow["communityid"],
+			'versionid' => $zrow["versionid"],
+			'version' => $zrow["version"],
+			'versiondesc' => htmlspecialchars($zrow["versiondesc"], ENT_QUOTES, 'UTF-8'),
 			'communityname' => htmlspecialchars($zrow["communityname"], ENT_QUOTES, 'UTF-8'),
 			'communitydescription' => htmlspecialchars($zrow["communitydescription"], ENT_QUOTES, 'UTF-8'),
 			'snapshotid' => $zrow["snapshotid"],

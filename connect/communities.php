@@ -12,6 +12,9 @@ try {
 	$zresults = $wtwconnect->query("
 		select ua1.useraccess,
 			c1.communityid,
+			c1.versionid,
+			c1.version,
+			c1.versiondesc,
 			c1.communityname,
 			c1.communitydescription,
 			c1.snapshotid,
@@ -57,6 +60,9 @@ try {
 		group by 
 			ua1.useraccess,
 			c1.communityid,
+			c1.versionid,
+			c1.version,
+			c1.versiondesc,
 			c1.communityname,
 			c1.communitydescription,
 			c1.snapshotid,
@@ -104,6 +110,9 @@ try {
 		}
 		$zcommunityinfo = array(
 			'communityid' => $zrow["communityid"],
+			'versionid' => $zrow["versionid"],
+			'version' => $zrow["version"],
+			'versiondesc' => htmlspecialchars($zrow["versiondesc"], ENT_QUOTES, 'UTF-8'),
 			'communityname' => htmlspecialchars($zrow["communityname"], ENT_QUOTES, 'UTF-8'),
 			'communitydescription' => htmlspecialchars($zrow["communitydescription"], ENT_QUOTES, 'UTF-8'),
 			'createdate' => $zrow["createdate"],
