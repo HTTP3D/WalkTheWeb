@@ -26,6 +26,8 @@ try {
 	$ztemplatename = $wtwhandlers->getPost('templatename','');
 	$zdescription = $wtwhandlers->getPost('description','');
 	$ztags = $wtwhandlers->getPost('tags','');
+	$zversion = $wtwhandlers->getPost('version','');
+	$zversiondesc = $wtwhandlers->getPost('versiondesc','');
 	$zsharehash = $wtwhandlers->getPost('sharehash','');
 	$zpositionx = $wtwhandlers->getPost('positionx','0');
 	$zpositiony = $wtwhandlers->getPost('positiony','0');
@@ -161,7 +163,7 @@ try {
 			$zresponse = $wtwavatars->deleteAvatarFile($zfilename, $zobjectfolder);
 			break;
 		case "saveavatartemplate":
-			$zresponse = $wtwavatars->saveAvatarTemplate($zavatarid, $ztemplatename, $zdescription, $ztags);
+			$zresponse = $wtwavatars->saveAvatarTemplate($zavatarid, $ztemplatename, $zdescription, $ztags, $zversion, $zversiondesc);
 			break;
 		case "shareavatartemplate":
 			$zresponse = $wtwavatars->shareAvatarTemplate($zavatarid, $zsharehash);

@@ -210,7 +210,7 @@ class wtwtables {
 				CREATE TABLE `".wtw_tableprefix."avatars` (
 				  `avatarid` varchar(16) NOT NULL,
 				  `pastavatarid` varchar(16) DEFAULT '',
-				  `versionavatarid` varchar(16) DEFAULT '',
+				  `versionid` varchar(16) DEFAULT '',
 				  `version` varchar(10) DEFAULT '1.0.0',
 				  `versiondesc` varchar(255) DEFAULT '',
 				  `avatargroup` varchar(64) DEFAULT 'Default',
@@ -336,7 +336,7 @@ class wtwtables {
 				CREATE TABLE `".wtw_tableprefix."buildings` (
 				  `buildingid` varchar(16) NOT NULL,
 				  `pastbuildingid` varchar(16) DEFAULT '',
-				  `versionbuildingid` varchar(16) DEFAULT '',
+				  `versionid` varchar(16) DEFAULT '',
 				  `version` varchar(10) DEFAULT '1.0.0',
 				  `versiondesc` varchar(255) DEFAULT '',
 				  `downloadparentwebid` varchar(16) DEFAULT '',
@@ -378,7 +378,7 @@ class wtwtables {
 				CREATE TABLE `".wtw_tableprefix."communities` (
 				  `communityid` varchar(16) NOT NULL,
 				  `pastcommunityid` varchar(16) DEFAULT '',
-				  `versioncommunityid` varchar(16) DEFAULT '',
+				  `versionid` varchar(16) DEFAULT '',
 				  `version` varchar(10) DEFAULT '1.0.0',
 				  `versiondesc` varchar(255) DEFAULT '',
 				  `downloadparentwebid` varchar(16) DEFAULT '',
@@ -783,7 +783,7 @@ class wtwtables {
 				CREATE TABLE `".wtw_tableprefix."things` (
 				  `thingid` varchar(16) NOT NULL,
 				  `pastthingid` varchar(16) DEFAULT '',
-				  `versionthingid` varchar(16) DEFAULT '',
+				  `versionid` varchar(16) DEFAULT '',
 				  `version` varchar(10) DEFAULT '1.0.0',
 				  `versiondesc` varchar(255) DEFAULT '',
 				  `downloadparentwebid` varchar(16) DEFAULT '',
@@ -990,7 +990,7 @@ class wtwtables {
 				  `userip` varchar(64) DEFAULT '',
 				  `instanceid` varchar(24) DEFAULT '',
 				  `avatarid` varchar(16) DEFAULT '',
-				  `versionavatarid` varchar(16) DEFAULT '',
+				  `versionid` varchar(16) DEFAULT '',
 				  `version` varchar(10) DEFAULT '1.0.0',
 				  `avatargroup` varchar(64) DEFAULT 'Default',
 				  `objectfolder` varchar(255) DEFAULT '',
@@ -1152,7 +1152,7 @@ class wtwtables {
 			/* updated 3.4.3 - add new avatars */
 			$wtwdb->query("
 				INSERT INTO ".wtw_tableprefix."avatars 
-				(avatarid, pastavatarid, versionavatarid, version, avatargroup, displayname, avatardescription, objectfolder, objectfile, gender, positionx, positiony, positionz, scalingx, scalingy, scalingz, rotationx, rotationy, rotationz, startframe, endframe, sortorder, templatename, description, tags, snapshotid, shareuserid, sharehash, sharetemplatedate, alttag, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+				(avatarid, pastavatarid, versionid, version, avatargroup, displayname, avatardescription, objectfolder, objectfile, gender, positionx, positiony, positionz, scalingx, scalingy, scalingz, rotationx, rotationy, rotationz, startframe, endframe, sortorder, templatename, description, tags, snapshotid, shareuserid, sharehash, sharetemplatedate, alttag, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
 				VALUES 
 				('3b9bt5c70igtmqux','','3b9bt5c70igtmqux','1.0.0','Anonymous','Anonymous Male','Anonymous Male Android','/content/uploads/avatars/3b9bt5c70igtmqux/','maleidle.babylon','male',0.0,0.0,0.0,0.08,0.08,0.08,0.0,-90.0,0.0,1,213,2,'Anonymous Male','Anonymous Male avatar with a default blue color and robotic android look. ','Avatar, Anonymous, android, robot','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."','','',0),
 				('641svy8bwjx2kme7','','641svy8bwjx2kme7','1.0.0','Default','Remy','Blonde Haired Male with short sleeve shirt and shorts','/content/uploads/avatars/641svy8bwjx2kme7/','remyidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,196,4,'Remy','Blonde Haired Male with short sleeve shirt and shorts','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."','','',0),
@@ -2218,7 +2218,7 @@ class wtwtables {
 				/* updated 3.4.3 - add new avatars with the same avatarids */
 				$wtwdb->query("
 					INSERT INTO ".wtw_tableprefix."avatars 
-					(avatarid, pastavatarid, versionavatarid, version, avatargroup, displayname, avatardescription, objectfolder, objectfile, gender, positionx, positiony, positionz, scalingx, scalingy, scalingz, rotationx, rotationy, rotationz, startframe, endframe, sortorder, templatename, description, tags, snapshotid, shareuserid, sharehash, sharetemplatedate, alttag, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+					(avatarid, pastavatarid, versionid, version, avatargroup, displayname, avatardescription, objectfolder, objectfile, gender, positionx, positiony, positionz, scalingx, scalingy, scalingz, rotationx, rotationy, rotationz, startframe, endframe, sortorder, templatename, description, tags, snapshotid, shareuserid, sharehash, sharetemplatedate, alttag, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
 					VALUES 
 					('3b9bt5c70igtmqux','','3b9bt5c70igtmqux','1.0.0','Anonymous','Anonymous Male','Anonymous Male Android','/content/uploads/avatars/3b9bt5c70igtmqux/','maleidle.babylon','male',0.0,0.0,0.0,0.08,0.08,0.08,0.0,-90.0,0.0,1,213,2,'Anonymous Male','Anonymous Male avatar with a default blue color and robotic android look. ','Avatar, Anonymous, android, robot','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
 					('641svy8bwjx2kme7','','641svy8bwjx2kme7','1.0.0','Default','Remy','Blonde Haired Male with short sleeve shirt and shorts','/content/uploads/avatars/641svy8bwjx2kme7/','remyidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,196,4,'Remy','Blonde Haired Male with short sleeve shirt and shorts','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
@@ -3210,46 +3210,50 @@ class wtwtables {
 					where useravatarid='".$zrow["useravatarid"]."';");
 			}
 			
-			/* updated 3.4.5 - added version id, version, and version description fields - populate version id and version where blank */
+			/* updated 3.4.5 and 3.4.6 - added version id, version, and version description fields - populate version id and version where blank */
 			$wtwdb->query("
 				update ".wtw_tableprefix."avatars
-				set versionavatarid=avatarid,
+				set versionid=avatarid,
 					version='1.0.0',
+					versiondesc='Initial Version',
 					updatedate='".$ztimestamp."',
 					updateuserid='".$zuserid."'
-				where versionavatarid='';
+				where versionid='';
 			");
 			$wtwdb->query("
 				update ".wtw_tableprefix."communities
-				set versioncommunityid=communityid,
+				set versionid=communityid,
 					version='1.0.0',
+					versiondesc='Initial Version',
 					updatedate='".$ztimestamp."',
 					updateuserid='".$zuserid."'
-				where versioncommunityid='';
+				where versionid='';
 			");
 			$wtwdb->query("
 				update ".wtw_tableprefix."buildings
-				set versionbuildingid=buildingid,
+				set versionid=buildingid,
 					version='1.0.0',
+					versiondesc='Initial Version',
 					updatedate='".$ztimestamp."',
 					updateuserid='".$zuserid."'
-				where versionbuildingid='';
+				where versionid='';
 			");
 			$wtwdb->query("
 				update ".wtw_tableprefix."things
-				set versionthingid=thingid,
+				set versionid=thingid,
 					version='1.0.0',
+					versiondesc='Initial Version',
 					updatedate='".$ztimestamp."',
 					updateuserid='".$zuserid."'
-				where versionthingid='';
+				where versionid='';
 			");
 			$wtwdb->query("
 				update ".wtw_tableprefix."useravatars
-				set versionavatarid=versionavatarid,
+				set versionid=avatarid,
 					version='1.0.0',
 					updatedate='".$ztimestamp."',
 					updateuserid='".$zuserid."'
-				where versionavatarid='';
+				where versionid='';
 			");
 			
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);

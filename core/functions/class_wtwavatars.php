@@ -1085,6 +1085,9 @@ class wtwavatars {
 					insert into ".wtw_tableprefix."avatars
 					   (avatarid,
 					    pastavatarid,
+						versionid,
+						version,
+						versiondesc,
 						avatargroup,
 						displayname,
 						avatardescription,
@@ -1114,6 +1117,9 @@ class wtwavatars {
 						updateuserid)
 					 select '".$znewavatarid."' as avatarid,
 						'".$zavatarid."' as pastavatarid,
+						versionid,
+						version,
+						versiondesc,
 						avatargroup,
 						CONCAT(displayname, ' - copy') as displayname,
 						avatardescription,
@@ -1322,6 +1328,9 @@ class wtwavatars {
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."avatars
 						   (avatarid,
+						    versionid,
+							version,
+							versiondesc,
 						    avatargroup,
 							displayname,
 							objectfolder,
@@ -1339,6 +1348,9 @@ class wtwavatars {
 							updateuserid)
 						  values
 						   ('".$zavatarid."',
+						    '".$zavatarid."',
+							'1.0.0',
+							'Initial Version',
 						    '".$zavatargroup."',
 						    '".$zdisplayname."',
 						    '".$zobjectfolder."',
@@ -1471,6 +1483,9 @@ class wtwavatars {
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."avatars
 						   (avatarid,
+						    versionid,
+							version,
+							versiondesc,
 						    avatargroup,
 							displayname,
 							avatardescription,
@@ -1486,6 +1501,9 @@ class wtwavatars {
 							updateuserid)
 						  values
 						   ('".$zavatarid."',
+						    '".$zavatarid."',
+							'1.0.0',
+							'Initial Version',
 						    '".$zavatargroup."',
 						    '".$zdisplayname."',
 						    '".$zavatardescription."',
@@ -1537,7 +1555,7 @@ class wtwavatars {
 		return $zresponse;
 	}
 	
-	public function saveAvatarTemplate($zavatarid, $ztemplatename, $zdescription, $ztags) {
+	public function saveAvatarTemplate($zavatarid, $ztemplatename, $zdescription, $ztags, $zversion, $zversiondesc) {
 		/* saves the avatar information (Not User Avatar, just the starting avatar you can choose) - admin function */
 		global $wtwhandlers;
 		$zresponse = array(
@@ -1563,9 +1581,14 @@ class wtwavatars {
 					$ztags = base64_decode($ztags);
 					
 				}
+				if (!empty($zversiondesc) && isset($zversiondesc)) {
+					$zversiondesc = base64_decode($zversiondesc);
+					
+				}
 				$ztemplatename = htmlspecialchars($ztemplatename, ENT_QUOTES, 'UTF-8');
 				$zdescription = htmlspecialchars($zdescription, ENT_QUOTES, 'UTF-8');
 				$ztags = htmlspecialchars($ztags, ENT_QUOTES, 'UTF-8');
+				$zversiondesc = htmlspecialchars($zversiondesc, ENT_QUOTES, 'UTF-8');
 				$zsharehash = $wtwhandlers->getRandomString(16,1);
 				$zresponse["sharehash"] = $zsharehash;
 
@@ -1583,6 +1606,8 @@ class wtwavatars {
 						set templatename='".$ztemplatename."',
 							description='".$zdescription."',
 							tags='".$ztags."',
+							version='".$zversion."',
+							versiondesc='".$zversiondesc."',
 							sharehash='".$zsharehash."',
 							shareuserid='".$wtwhandlers->userid."',
 							updatedate=now(),
@@ -1665,6 +1690,9 @@ class wtwavatars {
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."avatars
 						   (avatarid,
+						    versionid,
+							version,
+							versiondesc,
 						    avatargroup,
 							displayname,
 							avatardescription,
@@ -1675,6 +1703,9 @@ class wtwavatars {
 							updateuserid)
 						  values
 						   ('".$zavatarid."',
+						    '".$zavatarid."',
+							'1.0.0',
+							'Initial Version',
 						    '".$zavatargroup."',
 						    '".$zdisplayname."',
 						    '".$zavatardescription."',
@@ -2311,6 +2342,9 @@ class wtwavatars {
 					insert into ".wtw_tableprefix."avatars 
 					   (avatarid,
 						pastavatarid,
+						versionid,
+						version,
+						versiondesc,
 						avatargroup,
 						displayname,
 						avatardescription,
@@ -2343,6 +2377,9 @@ class wtwavatars {
 					values
 					   ('".$znewwebid."',
 						'".$zrequest->avatarid."',
+						'".$zrequest->versionid."',
+						'".$zrequest->version."',
+						'".addslashes($zrequest->versiondesc)."',
 						'".addslashes($zrequest->avatargroup)."',
 						'".addslashes($zrequest->displayname)."',
 						'".addslashes($zrequest->avatardescription)."',

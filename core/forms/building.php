@@ -3,6 +3,9 @@
 		<h2>3D Building Name</h2>
 		<input type="text" id="wtw_tbuildingname" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><br />
 		<br />
+		<h2>Version</h2>
+		<input type="text" id="wtw_tinfobuildingversion" maxlength="255" /><br />
+		<br />
 		<h2>3D Building Description</h2>
 		<div class="wtw-menulevel0text" style="text-align:left;">shows on the meta tags of the 3D Building Website</div>
 		<input type="text" id="wtw_tbuildingdescription" maxlength="255" onclick="WTW.checkKey(this, 'safetext', 0, 0);" onkeyup="WTW.checkKey(this, 'safetext', 0, 0);" onblur="WTW.checkKey(this, 'safetext', 0, 1);" /><br />

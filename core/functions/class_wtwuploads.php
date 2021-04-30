@@ -1313,6 +1313,11 @@ class wtwuploads {
 					closedir($zdh);
 				}
 			}
+			/* sort the results by file name */
+			function arraysort($a, $b) {
+				return ($a["file"] > $b["file"]) ? 1 : -1;
+			}
+			usort($zresults, "arraysort");
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getUploadedFileFilesDetails=".$e->getMessage());
 		}

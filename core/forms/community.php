@@ -3,6 +3,9 @@
 		<h2>3D Community Name</h2>
 		<input type="text" id="wtw_tcommunityname" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><br />
 		<br />
+		<h2>Version</h2>
+		<input type="text" id="wtw_tinfocommunityversion" maxlength="255" /><br />
+		<br />
 		<h2>3D Community Description</h2>
 		<div class="wtw-menulevel0text" style="text-align:left;">shows on the meta tags of the 3D Website</div>
 		<input type="text" id="wtw_tcommunitydescription" maxlength="255" onclick="WTW.checkKey(this, 'safetext', 0, 0);" onkeyup="WTW.checkKey(this, 'safetext', 0, 0);" onblur="WTW.checkKey(this, 'safetext', 0, 1);" /><br />
