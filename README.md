@@ -2,7 +2,7 @@
 Open-Source 3D Internet (3D CMS)
 Invented and created by Aaron Dishno Ed.D.
 CEO and Founder of HTTP3D Inc. - WalkTheWeb
-Find me at http://WalkTheWeb.tv  (WalkTheWeb on Twitch)
+Find me at http://WalkTheWeb.tv  (WalkTheWeb on Twitch) or ask me questions on Discord: https://discord.com/invite/MW7MG2t
 
 INSTALLATION
 ---------------------------------------------------------------------------
