@@ -8,7 +8,7 @@ INSTALLATION
 ---------------------------------------------------------------------------
 1.  To Install, copy the files into the root of a website.
 2.  It is highly recommended to start your URL with http://3d.  or   https://3d. to 
-    signify it is a 3D Website and help others find you!
+    signify it is a WalkTheWeb 3D Website and help others find you!
 3.  The browser user (inetuser) will need write access in the entire folder for updates.
 4.  Optional: you can manually download updates and overwrite the program files, 
     but the /content folder must have write permissions for Admin user uploads.
