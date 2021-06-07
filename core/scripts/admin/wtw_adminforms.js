@@ -126,7 +126,14 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 			case "users":
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Users</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zsetcategory + "</div>";
 				WTW.show('wtw_showfilepage');
-				WTW.openAllUsers();
+				switch (zsetcategory) {
+					case 'User Roles':
+						WTW.openAllRoles();
+						break;
+					default: /* All Users */
+						WTW.openAllUsers();
+						break;
+				}
 				break;
 			case "plugins":
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>3D Plugins</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zsetcategory + "</div>";

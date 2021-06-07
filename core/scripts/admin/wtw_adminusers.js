@@ -135,6 +135,203 @@ WTWJS.prototype.getUser = async function(zuserid) {
 	}
 }
 
+WTWJS.prototype.openAllRoles = async function() {
+	/* open admin page form for roles for users access */
+	try {
+		dGet('wtw_rolestitle').innerHTML = "<div id='wtw_addrolebutton' class='wtw-greenbuttonright' onclick=\"WTW.addRole();\">Add New</div>User Roles";
+		WTW.show('wtw_userspage');
+		WTW.show('wtw_loadingusers');
+		WTW.hide('wtw_roleinfo');
+		WTW.hide('wtw_roles');
+		WTW.hide('wtw_roleslist');
+		WTW.hide('wtw_roleadd');
+		dGet('wtw_roleslist').innerHTML = "";
+		dGet('wtw_roleswidth').className = "wtw-dashboardboxleftfull";
+		WTW.getAsyncJSON("/connect/roles.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				var zuserroleslist = "";
+				if (zresponse != null) {
+					zuserroleslist += "<table class=\"wtw-table\"><tr><td class=\"wtw-tablecolumnheading\">Role ID</td><td class=\"wtw-tablecolumnheading\">Role Name</td><td class=\"wtw-tablecolumnheading\">Create Date</td><td class=\"wtw-tablecolumnheading\">&nbsp;</td></tr>";
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i].roleid != undefined) {
+							zuserroleslist += "<tr><td class=\"wtw-tablecolumns\">" + zresponse[i].roleid + "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].rolename + "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].createdate + "</td><td class=\"wtw-tablecolumns\">";
+							zuserroleslist += "<div id='getuserrole" + zresponse[i].roleid + "' class='wtw-bluebuttonright' onclick=\"WTW.getRole('" + zresponse[i].roleid + "', '" + btoa(zresponse[i].rolename) + "');\">Edit Role</div>";
+							zuserroleslist += "</td></tr>";
+						}
+					}
+					zuserroleslist += "</table>";
+				}
+				dGet('wtw_roleslist').innerHTML = zuserroleslist;
+				WTW.hide('wtw_loadingusers');
+				WTW.show('wtw_roleslist');
+				WTW.show('wtw_roles');
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminusers.js-openAllRoles=" + ex.message);
+	}
+}
+
+WTWJS.prototype.addRole = function() {
+	/* open form to add new role */
+	try {
+		WTW.show('wtw_loadingusers');
+		WTW.hide('wtw_roleslist');
+		WTW.hide('wtw_roleadd');
+		WTW.hide('wtw_roleinfo');
+		var zroleinfo = "";
+		dGet('wtw_roleadd').innerHTML = "";
+		dGet('wtw_roleswidth').className = "wtw-dashboardboxleft";
+		dGet('wtw_rolestitle').innerHTML = "New Role";
+		zroleinfo += "<div class=\"wtw-dashboardlabel\">Role Name</div>";
+		zroleinfo += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_trolename2\" type=\"text\" maxlength=\"45\"/></div>";
+		zroleinfo += "<div class=\"wtw-clear\"></div>";
+
+		zroleinfo += "<div id=\"wtw_errorrolesave2\" class=\"wtw-dashboardlabel wtw-red\"></div>";
+		zroleinfo += "<div class=\"wtw-clear\"></div>";
+		zroleinfo += "<div id='cancelsaverole' class='wtw-yellowbuttonleft' onclick=\"WTW.cancelSaveRole();\">Cancel</div>";
+		zroleinfo += "<div id='addrole' class='wtw-greenbuttonright' onclick=\"WTW.saveNewRole();\">Save Role</div>";
+		dGet('wtw_roleadd').innerHTML = zroleinfo;
+		WTW.hide('wtw_loadingusers');
+		WTW.show('wtw_roleadd');
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminusers.js-addRole=" + ex.message);
+	}
+}
+
+WTWJS.prototype.cancelSaveRole = function() {
+	/* cancel save role changes */
+	try {	
+		dGet('wtw_rolestitle').innerHTML = "<div id='wtw_addrolebutton' class='wtw-greenbuttonright' onclick=\"WTW.addRole();\">Add New</div>User Roles";
+		WTW.hide('wtw_roleinfo');
+		WTW.hide('wtw_roleadd');
+		dGet('wtw_roleswidth').className = "wtw-dashboardboxleftfull";
+		WTW.show('wtw_roleslist');
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminusers.js-cancelSaveRole=" + ex.message);
+	}
+}	
+
+WTWJS.prototype.saveNewRole = async function() {
+	/* save new role */
+	try {	
+		var zrolename = dGet("wtw_trolename2").value;
+		dGet('wtw_errorrolesave2').innerHTML = "";
+
+		if (zrolename.length > 2) {
+			dGet('wtw_rolestitle').innerHTML = "<div id='wtw_addrolebutton' class='wtw-greenbuttonright' onclick=\"WTW.addRole();\">Add New</div>User Roles";
+			WTW.hide('wtw_roleslist');
+			WTW.hide('wtw_roleinfo');
+			WTW.hide('wtw_roleadd');
+			dGet('wtw_roleswidth').className = "wtw-dashboardboxleftfull";
+			var zrequest = {
+				'rolename': btoa(zrolename),
+				'function':'savenewrole'
+			};
+			WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					WTW.openAllRoles();
+				}
+			);
+		} else {
+			dGet('wtw_errorrolesave2').innerHTML = "Role Name must be 3 or more characters";
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminusers.js-saveNewRole=" + ex.message);
+	}
+}	
+
+WTWJS.prototype.saveRole = async function() {
+	/* save (update) role */
+	try {	
+		var zrolename = dGet("wtw_trolename").value;
+		var zroleid = dGet("wtw_troleid").innerText;
+		dGet('wtw_errorrolesave').innerHTML = "";
+
+		if (zrolename.length > 2) {
+			dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_addrolebutton' class='wtw-greenbuttonright' onclick=\"WTW.addRole();\">Add New</div>User Roles";
+			WTW.hide('wtw_roleslist');
+			WTW.hide('wtw_roleinfo');
+			WTW.hide('wtw_roleadd');
+			dGet('wtw_roleswidth').className = "wtw-dashboardboxleftfull";
+			var zrequest = {
+				'roleid':zroleid,
+				'rolename':btoa(zrolename),
+				'function':'saverole'
+			};
+			WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					WTW.openAllRoles();
+				}
+			);
+		} else {
+			dGet('wtw_errorrolesave').innerHTML = "Role Name must be 3 or more characters";
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminusers.js-saveUser=" + ex.message);
+	}
+}	
+
+WTWJS.prototype.getRole = async function(zroleid, zrolename) {
+	/* select role form list and display role edit form */
+	try {
+		WTW.show('wtw_loadingusers');
+		WTW.hide('wtw_roleslist');
+		WTW.hide('wtw_roleadd');
+		WTW.hide('wtw_roleinfo');
+		dGet('wtw_roleinfo').innerHTML = "";
+		dGet('wtw_roleswidth').className = "wtw-dashboardboxleft";
+
+
+		var zroleinfo = "";
+		dGet('wtw_rolestitle').innerHTML = "Role: " + atob(zrolename);
+		zroleinfo += "<div class=\"wtw-dashboardlabel\">Role Name</div>";
+		zroleinfo += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_trolename\" type=\"text\" value=\"" + atob(zrolename) + "\" maxlength=\"64\"/></div>";
+		zroleinfo += "<div class=\"wtw-clear\"></div>";
+		zroleinfo += "<div class=\"wtw-dashboardlabel\">Role ID</div>";
+		zroleinfo += "<div id=\"wtw_troleid\" class=\"wtw-dashboardvalue\">" + zroleid + "</div>";
+		zroleinfo += "<div class=\"wtw-clear\"></div><hr />";
+
+		zroleinfo += "<div id=\"wtw_errorrolesave\" class=\"wtw-dashboardlabel wtw-red\"></div>";
+		zroleinfo += "<div class=\"wtw-clear\"></div>";
+		zroleinfo += "<div id='deleterole" + zroleid + "' class='wtw-redbuttonleft' onclick=\"WTW.deleteRole('" + zroleid + "');\">Delete Role</div>";
+		zroleinfo += "<div id='saverole" + zroleid + "' class='wtw-greenbuttonright' onclick=\"WTW.saveRole();\">Save Role</div>";
+		zroleinfo += "<div id='cancelsaverole" + zroleid + "' class='wtw-yellowbuttonright' onclick=\"WTW.cancelSaveRole();\">Cancel</div>";
+
+		dGet('wtw_roleinfo').innerHTML = zroleinfo;
+		WTW.hide('wtw_loadingusers');
+		WTW.show('wtw_roleinfo');
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminusers.js-getRole=" + ex.message);
+	}
+}
+
+WTWJS.prototype.deleteRole = async function(zroleid) {
+	/* delete role and refresh role list */
+	try {	
+		if (zroleid != "") {
+			var zrequest = {
+				'roleid': zroleid,
+				'function':'deleterole'
+			};
+			WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					WTW.openAllRoles();
+				}
+			);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminusers.js-deleteRole=" + ex.message);
+	}
+}	
+
 WTWJS.prototype.deleteUserRole = async function(zuserid, zuserinroleid) {
 	/* delete a role from a user */
 	try {	
@@ -189,26 +386,26 @@ WTWJS.prototype.addUser = function() {
 		WTW.hide('wtw_userlist');
 		WTW.hide('wtw_useradd');
 		WTW.hide('wtw_userinfo');
-		var zuserlist = "";
+		var zuserinfo = "";
 		var zsamplepassword = WTW.getRandomString(20);
 		dGet('wtw_useradd').innerHTML = "";
 		dGet('wtw_alluserswidth').className = "wtw-dashboardboxleft";
 		dGet('wtw_alluserstitle').innerHTML = "New User";
-		zuserlist += "<div class=\"wtw-dashboardlabel\">Display Name</div>";
-		zuserlist += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuserdisplayname2\" type=\"text\" maxlength=\"64\"/></div>";
-		zuserlist += "<div class=\"wtw-clear\"></div>";
-		zuserlist += "<div class=\"wtw-dashboardlabel\">Email</div>";
-		zuserlist += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuseruseremail2\" type=\"text\" maxlength=\"255\"/></div>";
-		zuserlist += "<div class=\"wtw-clear\"></div>";
-		zuserlist += "<div class=\"wtw-dashboardlabel\">Password</div>";
-		zuserlist += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuseruserpassword2\" type=\"text\" value=\"" + zsamplepassword + "\" maxlength=\"255\"/></div>";
-		zuserlist += "<div class=\"wtw-clear\"></div>";
+		zuserinfo += "<div class=\"wtw-dashboardlabel\">Display Name</div>";
+		zuserinfo += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuserdisplayname2\" type=\"text\" maxlength=\"64\"/></div>";
+		zuserinfo += "<div class=\"wtw-clear\"></div>";
+		zuserinfo += "<div class=\"wtw-dashboardlabel\">Email</div>";
+		zuserinfo += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuseruseremail2\" type=\"text\" maxlength=\"255\"/></div>";
+		zuserinfo += "<div class=\"wtw-clear\"></div>";
+		zuserinfo += "<div class=\"wtw-dashboardlabel\">Password</div>";
+		zuserinfo += "<div class=\"wtw-dashboardvalue\"><input id=\"wtw_tuseruserpassword2\" type=\"text\" value=\"" + zsamplepassword + "\" maxlength=\"255\"/></div>";
+		zuserinfo += "<div class=\"wtw-clear\"></div>";
 
-		zuserlist += "<div id=\"wtw_errorusersave2\" class=\"wtw-dashboardlabel wtw-red\"></div>";
-		zuserlist += "<div class=\"wtw-clear\"></div>";
-		zuserlist += "<div id='cancelsaveuser' class='wtw-yellowbuttonleft' onclick=\"WTW.cancelSaveUser();\">Cancel</div>";
-		zuserlist += "<div id='adduser' class='wtw-greenbuttonright' onclick=\"WTW.saveNewUser();\">Save User</div>";
-		dGet('wtw_useradd').innerHTML = zuserlist;
+		zuserinfo += "<div id=\"wtw_errorusersave2\" class=\"wtw-dashboardlabel wtw-red\"></div>";
+		zuserinfo += "<div class=\"wtw-clear\"></div>";
+		zuserinfo += "<div id='cancelsaveuser' class='wtw-yellowbuttonleft' onclick=\"WTW.cancelSaveUser();\">Cancel</div>";
+		zuserinfo += "<div id='adduser' class='wtw-greenbuttonright' onclick=\"WTW.saveNewUser();\">Save User</div>";
+		dGet('wtw_useradd').innerHTML = zuserinfo;
 		WTW.hide('wtw_loadingusers');
 		WTW.show('wtw_useradd');
 	} catch (ex) {

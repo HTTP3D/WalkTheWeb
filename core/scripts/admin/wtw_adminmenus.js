@@ -746,6 +746,9 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 					case 'wtw_adminuserlist':
 						WTW.openFullPageForm('users','All Users');
 						break;
+					case 'wtw_adminuserroles':
+						WTW.openFullPageForm('users','User Roles');
+						break;
 					case 'wtw_adminallplugins':
 						WTW.openFullPageForm('plugins','All Plugins');
 						break;
