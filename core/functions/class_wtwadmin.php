@@ -622,6 +622,16 @@ class wtwadmin {
 			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";
 			$zpagedata .= "		</div>\r\n";
+			$zpagedata .= "		<div id=\"wtw_roles\" class=\"wtw-fullpage\">\r\n";
+			$zpagedata .= "			<div id=\"wtw_roleswidth\" class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zpagedata .= "				<div id=\"wtw_rolestitle\" class=\"wtw-dashboardboxtitle\"><div id='wtw_adduserrolebutton' class='wtw-greenbuttonright' onclick=\"WTW.addRole();\">Add New</div>User Roles</div>\r\n";
+			$zpagedata .= "				<div class=\"wtw-dashboardbox\">\r\n";
+			$zpagedata .= "					<div id=\"wtw_roleslist\"></div>\r\n";
+			$zpagedata .= "					<div id=\"wtw_roleinfo\"></div>\r\n";
+			$zpagedata .= "					<div id=\"wtw_roleadd\"></div>\r\n";
+			$zpagedata .= "				</div>\r\n";
+			$zpagedata .= "			</div>\r\n";
+			$zpagedata .= "		</div>\r\n";
 			$zpagedata .= "	</div>\r\n";
 			
 			/* plugins list and functions */

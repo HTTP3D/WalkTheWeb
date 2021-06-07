@@ -16,6 +16,7 @@ try {
 	$zuseremail = $wtwhandlers->getPost('useremail','');
 	$zpassword = $wtwhandlers->getPost('password','');
 	$zusertoken = $wtwhandlers->getPost('usertoken','');
+	$zrolename = $wtwhandlers->getPost('rolename','');
 	$zuseravatarid = $wtwhandlers->getPost('useravatarid','');
 	$zinstanceid = $wtwhandlers->getPost('instanceid','');
 	$zdisplayname = $wtwhandlers->getPost('displayname','');
@@ -79,6 +80,15 @@ try {
 			break;
 		case "deleteuserrole":
 			$wtwusers->deleteUserRoleID($zuserid, $zuserinroleid);
+			break;
+		case "savenewrole":	
+			$wtwusers->saveNewRole($zrolename);
+			break;
+		case "saverole":
+			$wtwusers->saveRole($zroleid, $zrolename);
+			break;
+		case "deleterole":
+			$wtwusers->deleteRole($zroleid);
 			break;
 		case "savepermissions":
 			$zpermissions = $wtwusers->addUserPermissions($zusersearch, $zcommunityid, $zbuildingid, $zthingid, $zuseraccess);

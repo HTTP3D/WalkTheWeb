@@ -1185,6 +1185,112 @@ class wtwusers {
 		}
 		return $zsuccess;
 	}
+
+	public function saveRole($zroleid, $zrolename) {
+		/* save the role name */
+		global $wtwhandlers;
+		$zsuccess = false;
+		try {
+			if ($wtwhandlers->isUserInRole("admin")) {
+				if (!empty($zrolename) && isset($zrolename)) {
+					$zrolename = $wtwhandlers->decode64($zrolename);
+				}
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."roles
+					set rolename='".addslashes($zrolename)."'
+					where roleid='".$zroleid."'
+					limit 1;");
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-saveRole=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+
+	public function saveNewRole($zrolename) {
+		/* add new role to database - does not add permissions to role */
+		global $wtwhandlers;
+		$zsuccess = false;
+		try {
+			if ($wtwhandlers->isUserInRole("admin")) {
+				if (!empty($zrolename) && isset($zrolename)) {
+					$zrolename = $wtwhandlers->decode64($zrolename);
+				}
+				$zresults = $wtwhandlers->query("
+					select *
+					from ".wtw_tableprefix."roles
+					where rolename like '".addslashes($zrolename)."'
+					limit 1;");
+				if (count($zresults) == 0) {
+					$zroleid = $wtwhandlers->getRandomString(16,1);
+					
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."roles 
+							(roleid,
+							 rolename,
+							 createdate,
+							 createuserid,
+							 updatedate,
+							 updateuserid)
+						  values
+							('".$zroleid."',
+							 '".addslashes($zrolename)."',
+							 now(),
+							 '".$wtwhandlers->userid."',
+							 now(),
+							 '".$wtwhandlers->userid."');");
+					$zsuccess = true;
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-saveNewRole=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+
+	public function deleteRole($zroleid) {
+		/* flags a role as deleted - some roles are protected and cannot be delete using this function */
+		global $wtwhandlers;
+		$zsuccess = false;
+		try {
+			if ($wtwhandlers->isUserInRole("admin")) {
+				$zrolename = '';
+				$zresults = $wtwhandlers->query("
+					select *
+					from ".wtw_tableprefix."roles
+					where roleid='".$zroleid."'
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zrolename = strtolower($zrow["rolename"]);
+				}
+				if ($zrolename != 'admin' && $zrolename != 'architect' && $zrolename != 'developer' && $zrolename != 'graphics artist' && $zrolename != 'guest' && $zrolename != 'host' && $zrolename != 'subscriber') {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."roles
+						set deleted=1,
+							deleteddate=now(),
+							deleteduserid='".$wtwhandlers->userid."'
+						where roleid='".$zroleid."'
+						limit 1;");
+					$zresults = $wtwhandlers->query("
+						select deleted
+						from ".wtw_tableprefix."roles
+						where roleid='".$zroleid."'
+						limit 1;");
+					foreach ($zresults as $zrow) {
+						if ($zrow["deleted"] == 1) {
+							$zsuccess = true;
+						}
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-deleteRole=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+
+
 }
 
 	function wtwusers() {

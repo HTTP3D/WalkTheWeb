@@ -85,6 +85,7 @@ class wtwadminmenu {
 
 				$this->addAdminMenuItem('wtw_adminusers', 'Users', 90, 'wtw_users', 0, '', '/content/system/images/menuprofile.png', $adminroles, "WTW.toggleAdminMenuLevel('users');");
 				$this->addAdminMenuItem('wtw_adminuserlist', 'All Users', 90, 'wtw_users', 1, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminuserroles', 'User Roles', 90, 'wtw_users', 2, 'wtw_roleslist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 
 				$this->addAdminMenuItem('wtw_adminsettings', 'Settings', 100, 'wtw_settings', 0, '', '/content/system/images/menusettings.png', $developerroles, "WTW.toggleAdminMenuLevel('settings');");
 				$this->addAdminMenuItem('wtw_adminserversettings', 'Server Settings', 100, 'wtw_settings', 1, 'wtw_serversettings', '', $adminroles, "WTW.adminMenuItemSelected(this);");
