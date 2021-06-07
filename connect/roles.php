@@ -25,7 +25,8 @@ try {
 		foreach ($zresults as $zrow) {
 			$zroles[$i] = array(
 				'roleid' => $zrow["roleid"],
-				'rolename' => $zrow["rolename"]
+				'rolename' => $zrow["rolename"],
+				'createdate' => $zrow["createdate"]
 				);
 			$i += 1;
 		}
