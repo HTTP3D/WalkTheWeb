@@ -485,7 +485,7 @@ class wtw {
 							/* connection worked, now encode password */
 							$zupdatepassword = true;
 						}
-					}
+					} 
 				} else {
 					/* connection did not work, try connection without decoding */
 					$zconn = new mysqli(wtw_dbserver, wtw_dbusername, wtw_dbpassword, wtw_dbname);
