@@ -412,7 +412,6 @@ class wtwuploads {
 				chmod($zfilepath, octdec(wtw_chmod));
 				$zfilesize = filesize($zfilepath);
 				$zfiledata = addslashes(file_get_contents($zfilepath));
-				$zwebsizeid = "";
 				$znewfilename = "";
 				if ($zpublic == '1') {
 					$znewfilename = $this->getNewFileName($zfilename, $znewwidth, $znewheight);
