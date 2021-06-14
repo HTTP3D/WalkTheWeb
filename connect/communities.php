@@ -8,93 +8,188 @@ try {
 	/* google analytics tracking (if defined in wtw_config.php) */
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/communities.php");
 
-	/* select communities for user */
-	$zresults = $wtwconnect->query("
-		select ua1.useraccess,
-			c1.communityid,
-			c1.versionid,
-			c1.version,
-			c1.versiondesc,
-			c1.communityname,
-			c1.communitydescription,
-			c1.snapshotid,
-			c1.analyticsid,
-			c1.gravity,
-			c1.templatename,
-			c1.description,
-			c1.tags,
-			c1.textureid,
-			u2.filepath as texturepath,
-			c1.skydomeid,
-			c1.groundpositiony,
-			c1.waterpositiony,
-			c1.alttag,
-			c1.buildingpositionx,
-			c1.buildingpositiony,
-			c1.buildingpositionz,
-			c1.buildingscalingx,
-			c1.buildingscalingy,
-			c1.buildingscalingz,
-			c1.buildingrotationx,
-			c1.buildingrotationy,
-			c1.buildingrotationz,
-			c1.createdate,
-			c1.createuserid,
-			c1.updatedate,
-			c1.updateuserid,
-			u1.filepath,
-			u1.filetype,
-			max(u1.filedata) as filedata
-		from ".wtw_tableprefix."userauthorizations ua1
-			inner join ".wtw_tableprefix."communities c1
-				on ua1.communityid = c1.communityid
-			left join ".wtw_tableprefix."uploads u1
-				on c1.snapshotid=u1.uploadid
-			left join ".wtw_tableprefix."uploads u2
-				on c1.textureid=u2.uploadid
-		where ua1.userid='".$wtwconnect->userid."'
-		   and ua1.deleted=0
-		   and c1.deleted=0
-		   and (ua1.useraccess='admin'
-		   or ua1.useraccess='architect')
-		group by 
-			ua1.useraccess,
-			c1.communityid,
-			c1.versionid,
-			c1.version,
-			c1.versiondesc,
-			c1.communityname,
-			c1.communitydescription,
-			c1.snapshotid,
-			c1.analyticsid,
-			c1.gravity,
-			c1.templatename,
-			c1.description,
-			c1.tags,
-			c1.textureid,
-			u2.filepath,
-			c1.skydomeid,
-			c1.groundpositiony,
-			c1.waterpositiony,
-			c1.alttag,
-			c1.buildingpositionx,
-			c1.buildingpositiony,
-			c1.buildingpositionz,
-			c1.buildingscalingx,
-			c1.buildingscalingy,
-			c1.buildingscalingz,
-			c1.buildingrotationx,
-			c1.buildingrotationy,
-			c1.buildingrotationz,
-			c1.createdate,
-			c1.createuserid,
-			c1.updatedate,
-			c1.updateuserid,
-			u1.filepath,
-			u1.filetype
-		order by c1.communityname, 
-			c1.communityid;");
-	
+	/* check user for global roles with access */
+	$zuserid = $wtwconnect->userid;
+	$hasaccess = false;
+	$zroles = $wtwconnect->getUserRoles($zuserid);
+	foreach ($zroles as $zrole) {
+		if (strtolower($zrole['rolename']) == 'admin' || strtolower($zrole['rolename']) == 'architect' || strtolower($zrole['rolename']) == 'developer' || strtolower($zrole['rolename']) == 'graphics artist') {
+			$hasaccess = true;
+		}
+	}
+	/* select communities by userid */
+	$zresults = array();
+	if ($hasaccess) {
+		/* select communities based on global role */
+		$zresults = $wtwconnect->query("
+			select '".$wtwconnect->userid."' as useraccess,
+				c1.communityid,
+				c1.versionid,
+				c1.version,
+				c1.versiondesc,
+				c1.communityname,
+				c1.communitydescription,
+				c1.snapshotid,
+				c1.analyticsid,
+				c1.gravity,
+				c1.templatename,
+				c1.description,
+				c1.tags,
+				c1.textureid,
+				u2.filepath as texturepath,
+				c1.skydomeid,
+				c1.groundpositiony,
+				c1.waterpositiony,
+				c1.alttag,
+				c1.buildingpositionx,
+				c1.buildingpositiony,
+				c1.buildingpositionz,
+				c1.buildingscalingx,
+				c1.buildingscalingy,
+				c1.buildingscalingz,
+				c1.buildingrotationx,
+				c1.buildingrotationy,
+				c1.buildingrotationz,
+				c1.createdate,
+				c1.createuserid,
+				c1.updatedate,
+				c1.updateuserid,
+				u1.filepath,
+				u1.filetype,
+				max(u1.filedata) as filedata
+			from ".wtw_tableprefix."communities c1
+				left join ".wtw_tableprefix."uploads u1
+					on c1.snapshotid=u1.uploadid
+				left join ".wtw_tableprefix."uploads u2
+					on c1.textureid=u2.uploadid
+			where 
+			   c1.deleted=0
+			group by 
+				useraccess,
+				c1.communityid,
+				c1.versionid,
+				c1.version,
+				c1.versiondesc,
+				c1.communityname,
+				c1.communitydescription,
+				c1.snapshotid,
+				c1.analyticsid,
+				c1.gravity,
+				c1.templatename,
+				c1.description,
+				c1.tags,
+				c1.textureid,
+				u2.filepath,
+				c1.skydomeid,
+				c1.groundpositiony,
+				c1.waterpositiony,
+				c1.alttag,
+				c1.buildingpositionx,
+				c1.buildingpositiony,
+				c1.buildingpositionz,
+				c1.buildingscalingx,
+				c1.buildingscalingy,
+				c1.buildingscalingz,
+				c1.buildingrotationx,
+				c1.buildingrotationy,
+				c1.buildingrotationz,
+				c1.createdate,
+				c1.createuserid,
+				c1.updatedate,
+				c1.updateuserid,
+				u1.filepath,
+				u1.filetype
+			order by c1.communityname, 
+				c1.communityid;");
+	} else {
+		/* select communities for user with granular permissions */
+		$zresults = $wtwconnect->query("
+			select ua1.useraccess,
+				c1.communityid,
+				c1.versionid,
+				c1.version,
+				c1.versiondesc,
+				c1.communityname,
+				c1.communitydescription,
+				c1.snapshotid,
+				c1.analyticsid,
+				c1.gravity,
+				c1.templatename,
+				c1.description,
+				c1.tags,
+				c1.textureid,
+				u2.filepath as texturepath,
+				c1.skydomeid,
+				c1.groundpositiony,
+				c1.waterpositiony,
+				c1.alttag,
+				c1.buildingpositionx,
+				c1.buildingpositiony,
+				c1.buildingpositionz,
+				c1.buildingscalingx,
+				c1.buildingscalingy,
+				c1.buildingscalingz,
+				c1.buildingrotationx,
+				c1.buildingrotationy,
+				c1.buildingrotationz,
+				c1.createdate,
+				c1.createuserid,
+				c1.updatedate,
+				c1.updateuserid,
+				u1.filepath,
+				u1.filetype,
+				max(u1.filedata) as filedata
+			from ".wtw_tableprefix."userauthorizations ua1
+				inner join ".wtw_tableprefix."communities c1
+					on ua1.communityid = c1.communityid
+				left join ".wtw_tableprefix."uploads u1
+					on c1.snapshotid=u1.uploadid
+				left join ".wtw_tableprefix."uploads u2
+					on c1.textureid=u2.uploadid
+			where ua1.userid='".$wtwconnect->userid."'
+			   and ua1.deleted=0
+			   and c1.deleted=0
+			   and (ua1.useraccess='admin'
+			   or ua1.useraccess='architect')
+			group by 
+				ua1.useraccess,
+				c1.communityid,
+				c1.versionid,
+				c1.version,
+				c1.versiondesc,
+				c1.communityname,
+				c1.communitydescription,
+				c1.snapshotid,
+				c1.analyticsid,
+				c1.gravity,
+				c1.templatename,
+				c1.description,
+				c1.tags,
+				c1.textureid,
+				u2.filepath,
+				c1.skydomeid,
+				c1.groundpositiony,
+				c1.waterpositiony,
+				c1.alttag,
+				c1.buildingpositionx,
+				c1.buildingpositiony,
+				c1.buildingpositionz,
+				c1.buildingscalingx,
+				c1.buildingscalingy,
+				c1.buildingscalingz,
+				c1.buildingrotationx,
+				c1.buildingrotationy,
+				c1.buildingrotationz,
+				c1.createdate,
+				c1.createuserid,
+				c1.updatedate,
+				c1.updateuserid,
+				u1.filepath,
+				u1.filetype
+			order by c1.communityname, 
+				c1.communityid;");
+	}
+
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
 	$i = 0;

@@ -11,26 +11,51 @@ try {
 	/* get values from querystring or session */
 	$zuserid = $wtwconnect->userid;
 
+	/* check user for global roles with access */
+	$hasaccess = false;
+	$zroles = $wtwconnect->getUserRoles($zuserid);
+	foreach ($zroles as $zrole) {
+		if (strtolower($zrole['rolename']) == 'admin' || strtolower($zrole['rolename']) == 'architect' || strtolower($zrole['rolename']) == 'developer' || strtolower($zrole['rolename']) == 'graphics artist') {
+			$hasaccess = true;
+		}
+	}
 	/* select buildings by userid */
-	$zresults = $wtwconnect->query("
-		select b1.*,
-			u1.filepath,
-			u1.filetype,
-			u1.filedata
-		from (select * 
-				from ".wtw_tableprefix."userauthorizations 
-				where userid='".$zuserid."' 
-					and not buildingid='' 
-					and deleted=0 
-					and (useraccess='admin' 
-						or useraccess='architect')) ua1
-			inner join (select * 
-					from ".wtw_tableprefix."buildings
-					where deleted=0) b1
-				on b1.buildingid = ua1.buildingid
-			left join ".wtw_tableprefix."uploads u1
-				on b1.snapshotid=u1.uploadid
-		order by b1.buildingname, b1.buildingid;");
+	$zresults = array();
+	if ($hasaccess) {
+		/* user gas global access role that allows access */
+		$zresults = $wtwconnect->query("
+			select b1.*,
+				u1.filepath,
+				u1.filetype,
+				u1.filedata
+			from (select * 
+						from ".wtw_tableprefix."buildings
+						where deleted=0) b1
+				left join ".wtw_tableprefix."uploads u1
+					on b1.snapshotid=u1.uploadid
+			order by b1.buildingname, b1.buildingid;");
+	} else {
+		/* user will only receive data that they have granular permissions to view */
+		$zresults = $wtwconnect->query("
+			select b1.*,
+				u1.filepath,
+				u1.filetype,
+				u1.filedata
+			from (select * 
+					from ".wtw_tableprefix."userauthorizations 
+					where userid='".$zuserid."' 
+						and not buildingid='' 
+						and deleted=0 
+						and (useraccess='admin' 
+							or useraccess='architect')) ua1
+				inner join (select * 
+						from ".wtw_tableprefix."buildings
+						where deleted=0) b1
+					on b1.buildingid = ua1.buildingid
+				left join ".wtw_tableprefix."uploads u1
+					on b1.snapshotid=u1.uploadid
+			order by b1.buildingname, b1.buildingid;");
+	}
 	
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 

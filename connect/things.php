@@ -11,24 +11,48 @@ try {
 	/* get values from querystring or session */
 	$zuserid = $wtwconnect->userid;
 	
-	/* select building molds that have been deleted */
-	$zresults = $wtwconnect->query("
-		select t1.*,
-			u1.filetype,
-			u1.filepath,
-			u1.filedata
-		from ".wtw_tableprefix."things t1 
-			inner join ".wtw_tableprefix."userauthorizations ua1
-				on t1.thingid=ua1.thingid
-			left join ".wtw_tableprefix."uploads u1
-				on t1.snapshotid=u1.uploadid
-		 where ua1.userid='".$zuserid."'
-			and not ua1.thingid=''
-			and t1.deleted=0
-			and ua1.deleted=0
-			and (ua1.useraccess='admin'
-				or ua1.useraccess='architect')
-		order by t1.thingname,t1.thingid;");
+	/* check user for global roles with access */
+	$hasaccess = false;
+	$zroles = $wtwconnect->getUserRoles($zuserid);
+	foreach ($zroles as $zrole) {
+		if (strtolower($zrole['rolename']) == 'admin' || strtolower($zrole['rolename']) == 'architect' || strtolower($zrole['rolename']) == 'developer' || strtolower($zrole['rolename']) == 'graphics artist') {
+			$hasaccess = true;
+		}
+	}
+	/* select things by userid */
+	$zresults = array();
+	if ($hasaccess) {
+		/* select things based on global access */
+		$zresults = $wtwconnect->query("
+			select t1.*,
+				u1.filetype,
+				u1.filepath,
+				u1.filedata
+			from ".wtw_tableprefix."things t1 
+				left join ".wtw_tableprefix."uploads u1
+					on t1.snapshotid=u1.uploadid
+			 where t1.deleted=0
+			order by t1.thingname,t1.thingid;");
+	} else {
+		/* select things based on granular user permissions */
+		$zresults = $wtwconnect->query("
+			select t1.*,
+				u1.filetype,
+				u1.filepath,
+				u1.filedata
+			from ".wtw_tableprefix."things t1 
+				inner join ".wtw_tableprefix."userauthorizations ua1
+					on t1.thingid=ua1.thingid
+				left join ".wtw_tableprefix."uploads u1
+					on t1.snapshotid=u1.uploadid
+			 where ua1.userid='".$zuserid."'
+				and not ua1.thingid=''
+				and t1.deleted=0
+				and ua1.deleted=0
+				and (ua1.useraccess='admin'
+					or ua1.useraccess='architect')
+			order by t1.thingname,t1.thingid;");
+	}
 	
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
