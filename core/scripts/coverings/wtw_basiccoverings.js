@@ -810,8 +810,8 @@ WTWJS.prototype.addCovering2D = function(zmoldname, zmolddef, zlenx, zleny, zlen
 	try {
 		var zuoffset = 0;
 		var zvoffset = 0;
-		var zuscale = zlenx / 10;
-		var zvscale = zleny / 10;
+		var zuscale = 1;
+		var zvscale = 1;
 		var ztextureid = "t1qlqxd6pzubzzzy";
 		var ztexturepath = "/content/system/stock/lightgray-512x512.jpg";
 		var zimageextension = "";
@@ -830,12 +830,12 @@ WTWJS.prototype.addCovering2D = function(zmoldname, zmolddef, zlenx, zleny, zlen
 				}
 				if (WTW.isNumeric(zmolddef.graphics.uscale)) {
 					if (Number(zmolddef.graphics.uscale) > 0) {
-						zuscale = zuscale * Number(zmolddef.graphics.uscale);
+						zuscale = Number(zmolddef.graphics.uscale);
 					}
 				}
 				if (WTW.isNumeric(zmolddef.graphics.vscale)) {
 					if (Number(zmolddef.graphics.vscale) > 0) {
-						zvscale = zvscale * Number(zmolddef.graphics.vscale);
+						zvscale = Number(zmolddef.graphics.vscale);
 					}
 				}
 				if (WTW.isNumeric(zmolddef.graphics.uoffset)) {

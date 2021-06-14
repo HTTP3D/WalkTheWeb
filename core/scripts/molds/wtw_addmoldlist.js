@@ -761,13 +761,13 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldscalingy').value = "10.00";
 				dGet('wtw_tmoldscalingz').value = "0.00";
 				dGet('wtw_tmoldrotationx').value = "0.00";
-				dGet('wtw_tmoldrotationy').value = zrotationy + 90;
+				dGet('wtw_tmoldrotationy').value = zrotationy;
 				dGet('wtw_tmoldrotationz').value = "0.00";
 				dGet('wtw_tmoldspecial2').value = "0.00";
 				dGet('wtw_tmolduoffset').value = "0.00";
 				dGet('wtw_tmoldvoffset').value = "0.00";
-				dGet('wtw_tmolduscale').value = "0.00";
-				dGet('wtw_tmoldvscale').value = "0.00";
+				dGet('wtw_tmolduscale').value = "1.00";
+				dGet('wtw_tmoldvscale').value = "1.00";
 				dGet('wtw_tmoldsubdivisions').value = "2";
 				break;
 			case "lightbulb":
