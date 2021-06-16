@@ -72,6 +72,7 @@ WTWJS.prototype.globalLoginResponse = function(zresults) {
 					dGet('wtw_tglobaluserid').value = '';
 					dGet('wtw_tuserid').value = '';
 					dGet('wtw_tuseremail').value = '';
+					dGet('wtw_tdisplayname').value = '';
 					dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
 					dGet('wtw_menudisplayname').innerHTML = 'Login';
 					dGet('wtw_tuserimageurl').value = "";
@@ -705,6 +706,7 @@ WTWJS.prototype.loginAttemptResponse = function(zresults) {
 					serror = zresults.serror;
 					dGet('wtw_tuserid').value = '';
 					dGet('wtw_tuseremail').value = '';
+					dGet('wtw_tdisplayname').value = '';
 					dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
 					dGet('wtw_menudisplayname').innerHTML = 'Login';
 					dGet('wtw_tuserimageurl').value = "";
@@ -746,30 +748,31 @@ WTWJS.prototype.logout = async function() {
 		WTW.hide('wtw_mainadminmode');
 		WTW.hide('wtw_menuloggedin');
 		WTW.show('wtw_menulogin');
-		dGet('wtw_tuserid').value = "";
-		dGet('wtw_tusertoken').value = "";
-		dGet('wtw_tuploadpathid').value = "";
-		dGet('wtw_mainmenudisplayname').innerHTML = "Login";
+		dGet('wtw_tuserid').value = '';
+		dGet('wtw_tusertoken').value = '';
+		dGet('wtw_tuploadpathid').value = '';
+		dGet('wtw_tdisplayname').value = '';
+		dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
 		dGet('wtw_menudisplayname').innerHTML = '';
-		dGet('wtw_tuseremail').value = "";
-		dGet('wtw_profileimagelg').src = "/content/system/images/menuprofilebig.png";
-		dGet('wtw_profileimagesm').src = "/content/system/images/menuprofile32.png";
+		dGet('wtw_tuseremail').value = '';
+		dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
+		dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 		if (dGet('wtw_mainadminmode') != null) {
-			dGet('wtw_mainadminmode').innerHTML = "";
+			dGet('wtw_mainadminmode').innerHTML = '';
 		}
 		if (dGet('wtw_modecommunity') != null) {
-			dGet('wtw_modecommunity').onclick = "";
+			dGet('wtw_modecommunity').onclick = '';
 		}
 		if (dGet('wtw_showcommunityname') != null) {
-			dGet('wtw_showcommunityname').onclick = "";
+			dGet('wtw_showcommunityname').onclick = '';
 		}
 		if (dGet('wtw_modebuilding') != null) {
-			dGet('wtw_modebuilding').onclick = "";
+			dGet('wtw_modebuilding').onclick = '';
 		}
 		if (dGet('wtw_showbuildingname') != null) {
-			dGet('wtw_showbuildingname').onclick = "";
+			dGet('wtw_showbuildingname').onclick = '';
 		}
-		if (window.location.href.indexOf("admin.php") > -1) {
+		if (window.location.href.indexOf('admin.php') > -1) {
 			window.location.href = "//" + wtw_domainname + "/";
 		} else {
 			WTW.logoutMyAvatar();
@@ -865,6 +868,7 @@ WTWJS.prototype.setLoginValues = function(zuserid, zdisplayname, zemail, zuserim
 			dGet('wtw_mainmenudisplayname').innerHTML = zdisplayname;
 			dGet('wtw_menudisplayname').innerHTML = zdisplayname;
 		}
+		dGet('wtw_tdisplayname').value = zdisplayname;
 		dGet('wtw_teditdisplayname').value = zdisplayname;
 		dGet('wtw_teditemail').value = zemail;
 		dGet('wtw_menuemail').innerHTML = zemail;

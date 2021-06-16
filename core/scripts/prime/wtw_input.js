@@ -200,6 +200,7 @@ WTWJS.prototype.keyDown = function(zevent) {
 		zevent = zevent || window.event;
 		var zctrl = zevent.ctrlKey ? zevent.ctrlKey : ((zevent.keyCode === 17) ? true : false);
 		WTW.shiftKey = zevent.shiftKey ? zevent.shiftKey : ((zevent.keyCode === 16) ? true : false);
+		WTW.pluginsKeyDown(zevent);
 		let zbrowser = WTW.getBrowser();
 		let zcommandworksin = "chrome,edgechrome,safari,firefox,opera";
 		if (zevent.keyCode === 122 && zcommandworksin.indexOf(zbrowser) > -1) {
@@ -268,6 +269,7 @@ WTWJS.prototype.keyUp = function(zevent) {
 		if (zevent.keyCode === 16) {
 			WTW.shiftKey = false;
 		}
+		WTW.pluginsKeyUp(zevent);
 		if (WTW.adminView == 1 && (zctrl || zevent.keyCode == 27)) {
 			
 		} else if (WTW.canvasFocus == 1 && WTW.placeHolder == 0) {

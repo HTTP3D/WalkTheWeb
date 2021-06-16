@@ -843,6 +843,7 @@ WTWJS.prototype.showAvatarDisplayName = function(zopen) {
 			WTW.show('wtw_displaybannote');
 			dGet('wtw_mainmenudisplayname').innerHTML = dGet('wtw_tavatardisplayname').value;
 			dGet('wtw_menudisplayname').innerHTML = dGet('wtw_tavatardisplayname').value;
+			dGet('wtw_tdisplayname').value = dGet('wtw_tavatardisplayname').value;
 		}
 		if (zopen) {
 			WTW.toggle('wtw_menuavatardisplaynamediv');
