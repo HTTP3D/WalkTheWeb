@@ -551,6 +551,14 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsAddActionZone = function(zmoldname, zmolddef) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('addactionzone');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsAddActionZone=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsAvatarBeforeCreate = function(zavatarname, zavatardef) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->returnScriptFunction('avatarbeforecreate', 'zavatardef');
@@ -565,6 +573,22 @@ class wtwplugins {
 			$jsdata .= 	$this->getScriptFunction('onclick');
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsOnClick=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsKeyDown = function(zevent) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('keydown');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsKeyDown=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsKeyUp = function(zevent) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('keyup');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsKeyUp=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
