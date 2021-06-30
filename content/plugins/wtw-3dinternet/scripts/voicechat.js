@@ -74,6 +74,9 @@ WTW_3DINTERNET.prototype.initVoiceChatSocket = function() {
 						'serverinstanceid':dGet('wtw_serverinstanceid').value,
 						'serverip':dGet('wtw_serverip').value,
 						'roomid':communityid + buildingid + thingid,
+						'communityid':communityid,
+						'buildingid':buildingid,
+						'thingid':thingid,
 						'instanceid':dGet('wtw_tinstanceid').value,
 						'userid':dGet('wtw_tuserid').value,
 						'displayname':btoa(dGet('wtw_tdisplayname').value)
@@ -86,6 +89,9 @@ WTW_3DINTERNET.prototype.initVoiceChatSocket = function() {
 					'serverinstanceid':dGet('wtw_serverinstanceid').value,
 					'serverip':dGet('wtw_serverip').value,
 					'roomid':communityid + buildingid + thingid,
+					'communityid':communityid,
+					'buildingid':buildingid,
+					'thingid':thingid,
 					'instanceid':dGet('wtw_tinstanceid').value,
 					'userid':dGet('wtw_tuserid').value,
 					'displayname':btoa(dGet('wtw_tdisplayname').value)
@@ -166,40 +172,40 @@ WTW_3DINTERNET.prototype.beforeUnloadVoiceChat = function() {
 	} 
 }
 
-WTW_3DINTERNET.prototype.processVoiceChatCommand = function(data) {
+WTW_3DINTERNET.prototype.processVoiceChatCommand = function(zdata) {
 	try {
 		if (wtw3dinternet.masterVoiceChat == '1') {
-			if (dGet('wtw_voicechatbox-' + data.voicechatid) != null) {
-				var zdisplayname = wtw3dinternet.getAvatarDisplayName(data.frominstanceid);
+			if (dGet('wtw_voicechatbox-' + zdata.voicechatid) != null) {
+				var zdisplayname = wtw3dinternet.getAvatarDisplayName(zdata.frominstanceid);
 				ztext = "";
-				switch (data.text) {
+				switch (zdata.text) {
 					case "decline voicechat":
 						ztext = "<span class='wtw3dinternet-chatrednote'><b>" + zdisplayname + ":</b> Sorry, I can not voice chat right now.</span><br />";
-						ztext += "<div id='wtw_voicechatclosenow-" + data.voicechatid + "' class='wtw3dinternet-chatbuttondecline' onclick=\"wtw3dinternet.closeVoiceChat('" + data.voicechatid + "');\">Close</div>";
+						ztext += "<div id='wtw_voicechatclosenow-" + zdata.voicechatid + "' class='wtw3dinternet-chatbuttondecline' onclick=\"wtw3dinternet.closeVoiceChat('" + zdata.voicechatid + "');\">Close</div>";
 						break;
 					case "leave voicechat":
 						ztext = "<span class='wtw3dinternet-chatnote'><b>" + zdisplayname + "</b> has left the voice chat.</span>";
-						WTW.hide('wtw_voicechattyping-' + data.voicechatid);
-						WTW.hide('wtw_voicechatadd-' + data.voicechatid);
-						WTW.hide('wtw_voicechattextsend-' + data.voicechatid);
-						WTW.show('wtw_voicechatok-' + data.voicechatid);
+						WTW.hide('wtw_voicechattyping-' + zdata.voicechatid);
+						WTW.hide('wtw_voicechatadd-' + zdata.voicechatid);
+						WTW.hide('wtw_voicechattextsend-' + zdata.voicechatid);
+						WTW.show('wtw_voicechatok-' + zdata.voicechatid);
 						break;
 					case "accept voicechat":
-						wtw3dinternet.acceptVoiceChat(data.voicechatid, zdisplayname);
+						wtw3dinternet.acceptVoiceChat(zdata.voicechatid, zdisplayname);
 						break;
 					case "typing":
-						dGet('wtw_voicechattyping-' + data.voicechatid).innerHTML = zdisplayname + ' is typing...';
-						dGet('wtw_voicechattyping-' + data.voicechatid).style.visibility = 'visible';
+						dGet('wtw_voicechattyping-' + zdata.voicechatid).innerHTML = zdisplayname + ' is typing...';
+						dGet('wtw_voicechattyping-' + zdata.voicechatid).style.visibility = 'visible';
 						break;
 					case "stop typing":
-						dGet('wtw_voicechattyping-' + data.voicechatid).innerHTML = '';
-						dGet('wtw_voicechattyping-' + data.voicechatid).style.visibility = 'hidden';
+						dGet('wtw_voicechattyping-' + zdata.voicechatid).innerHTML = '';
+						dGet('wtw_voicechattyping-' + zdata.voicechatid).style.visibility = 'hidden';
 						break;
 				}
-				if (ztext != "" && dGet('wtw_voicechattext-' + data.voicechatid) != null) {
-					dGet('wtw_voicechattext-' + data.voicechatid).innerHTML += ztext + "<hr class='wtw3dinternet-chathr' />";
+				if (ztext != "" && dGet('wtw_voicechattext-' + zdata.voicechatid) != null) {
+					dGet('wtw_voicechattext-' + zdata.voicechatid).innerHTML += ztext + "<hr class='wtw3dinternet-chathr' />";
 				}
-				wtw3dinternet.chatVoiceSetScroll(data.voicechatid, true);
+				wtw3dinternet.chatVoiceSetScroll(zdata.voicechatid, true);
 			}
 		}
 	} catch (ex) {
@@ -453,6 +459,9 @@ WTW_3DINTERNET.prototype.startRecording = function() {
 						'serverinstanceid':dGet('wtw_serverinstanceid').value,
 						'serverip':dGet('wtw_serverip').value,
 						'roomid':communityid + buildingid + thingid,
+						'communityid':communityid,
+						'buildingid':buildingid,
+						'thingid':thingid,
 						'instanceid':dGet('wtw_tinstanceid').value,
 						'userid':dGet('wtw_tuserid').value,
 						'displayname':btoa(dGet('wtw_tdisplayname').value)

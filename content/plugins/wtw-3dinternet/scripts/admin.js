@@ -22,6 +22,9 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 				'serverinstanceid':dGet('wtw_serverinstanceid').value,
 				'serverip':dGet('wtw_serverip').value,
 				'roomid':communityid + buildingid + thingid,
+				'communityid':communityid,
+				'buildingid':buildingid,
+				'thingid':thingid,
 				'domainurl':wtw_domainurl,
 				'siteurl':wtw_websiteurl,
 				'instanceid':dGet('wtw_tinstanceid').value,
@@ -34,6 +37,9 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 					'serverinstanceid':dGet('wtw_serverinstanceid').value,
 					'serverip':dGet('wtw_serverip').value,
 					'roomid':communityid + buildingid + thingid,
+					'communityid':communityid,
+					'buildingid':buildingid,
+					'thingid':thingid,
 					'domainurl':wtw_domainurl,
 					'siteurl':wtw_websiteurl,
 					'instanceid':dGet('wtw_tinstanceid').value,
@@ -52,6 +58,9 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 					'serverinstanceid':dGet('wtw_serverinstanceid').value,
 					'serverip':dGet('wtw_serverip').value,
 					'roomid':communityid + buildingid + thingid,
+					'communityid':communityid,
+					'buildingid':buildingid,
+					'thingid':thingid,
 					'domainurl':wtw_domainurl,
 					'siteurl':wtw_websiteurl,
 					'instanceid':dGet('wtw_tinstanceid').value,
@@ -60,39 +69,34 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 				}); 
 			}, 5000);
 
-			
-			
-
-
-
-			wtw3dinternet.admin.on('login', function(data) {
+			wtw3dinternet.admin.on('login', function(zdata) {
 				if (wtw3dinternet.masterMove == '1') {
 					// Whenever the server emits 'login', add user to count
-					wtw3dinternet.addParticipantsMessage(data); 
+					wtw3dinternet.addParticipantsMessage(zdata); 
 				}
 			});
 
-			wtw3dinternet.admin.on('user joined', function(data) {
+			wtw3dinternet.admin.on('user joined', function(zdata) {
 				if (wtw3dinternet.masterMove == '1') {
-					wtw3dinternet.addParticipantsMessage(data);
-					zavatar = WTW.getMeshOrNodeByID('person' + data.instanceid);
+					wtw3dinternet.addParticipantsMessage(zdata);
+					zavatar = WTW.getMeshOrNodeByID('person' + zdata.instanceid);
 					if (zavatar == null) {
-						if (data.instanceid != dGet('wtw_tinstanceid').value) {
+						if (zdata.instanceid != dGet('wtw_tinstanceid').value) {
 
 						}
 					}
 				}
 			});
 
-			wtw3dinternet.admin.on('user left', function(data) {
+			wtw3dinternet.admin.on('user left', function(zdata) {
 				// Whenever the server emits 'user left', fade and remove the avatar
-				wtw3dinternet.addParticipantsMessage(data);
-				wtw3dinternet.removeAvatar(data.avatarname);
+				wtw3dinternet.addParticipantsMessage(zdata);
+				wtw3dinternet.removeAvatar(zdata.avatarname);
 			});
 
-			wtw3dinternet.admin.on('set disabled', function(data) {
+			wtw3dinternet.admin.on('set disabled', function(zdata) {
 				// Whenever the server emits 'user left', fade and remove the avatar
-				wtw3dinternet.addParticipantsMessage(data);
+				wtw3dinternet.addParticipantsMessage(zdata);
 				wtw3dinternet.removeAllAvatars();
 			});
 
@@ -101,6 +105,9 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 					'serverinstanceid':dGet('wtw_serverinstanceid').value,
 					'serverip':dGet('wtw_serverip').value,
 					'roomid':communityid + buildingid + thingid,
+					'communityid':communityid,
+					'buildingid':buildingid,
+					'thingid':thingid,
 					'instanceid':dGet('wtw_tinstanceid').value,
 					'placeholder':WTW.placeHolder,
 					'userid':dGet('wtw_tuserid').value,
@@ -119,6 +126,9 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 				'serverinstanceid':dGet('wtw_serverinstanceid').value,
 				'serverip':dGet('wtw_serverip').value,
 				'roomid':communityid + buildingid + thingid,
+				'communityid':communityid,
+				'buildingid':buildingid,
+				'thingid':thingid,
 				'instanceid':dGet('wtw_tinstanceid').value,
 				'userid':dGet('wtw_tuserid').value,
 				'placeholder':WTW.placeHolder,
@@ -132,9 +142,9 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 				WTW.log('response=' + zresponse);
 			});
 
-			wtw3dinternet.admin.on('receive scene command', function(data) {
+			wtw3dinternet.admin.on('receive scene command', function(zdata) {
 				if (wtw3dinternet.masterMove == '1') {
-					wtw3dinternet.processSceneCommand(data);
+					wtw3dinternet.processSceneCommand(zdata);
 				}
 			});
 		}

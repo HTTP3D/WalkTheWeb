@@ -130,6 +130,8 @@ class wtw3dinternet {
 
 			$wtwplugins->addScriptFunction("avatarbeforecreate", "wtw3dinternet.showAvatarIDs(zavatarname, zavatardef);");
 			$wtwplugins->addScriptFunction("checkactionzonetrigger", "wtw3dinternet.multiPersonInActionZone(zactionzone);");
+			$wtwplugins->addScriptFunction("addactionzone", "wtw3dinternet.addLoadZone(zmoldname, zmolddef);");
+			$wtwplugins->addScriptFunction("disposeclean", "wtw3dinternet.disposeClean(zmoldname);");
 
 			$wtwplugins->addScriptFunction("loadusersettingsafterengine", "wtw3dinternet.loadUserSettingsAfterEngine();"); 
 
@@ -146,6 +148,7 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("onclick", "wtw3dinternet.onClick(zpickedname);");
 			$wtwplugins->addScriptFunction("checkhovers", "wtw3dinternet.checkHovers(zmoldname, zshape);");
 			$wtwplugins->addScriptFunction("resethovers", "wtw3dinternet.resetHovers(zmoldname, zshape);");
+			$wtwplugins->addScriptFunction("keyup", "wtw3dinternet.keyUp(zevent);");
 
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-3dinternet:functions-class_plugin.php.php-initHooks=".$e->getMessage());
@@ -267,7 +270,7 @@ class wtw3dinternet {
 						  `userip` varchar(64) DEFAULT '',
 						  `instanceid` varchar(24) DEFAULT '',
 						  `avatarid` varchar(16) DEFAULT '',
-						  `versionavatarid` varchar(16) DEFAULT '',
+						  `versionid` varchar(16) DEFAULT '',
 						  `version` varchar(10) DEFAULT '1.0.0',
 						  `avatargroup` varchar(64) DEFAULT 'Default',
 						  `objectfolder` varchar(256) DEFAULT '',
@@ -372,11 +375,11 @@ class wtw3dinternet {
 					/* updated 3.4.5 - set initial values for new fields */
 					$wtwplugins->query("
 						update ".WTW_3DINTERNET_PREFIX."useravatars
-						set versionavatarid=avatarid,
+						set versionid=avatarid,
 							version='1.0.0',
 							updatedate=now(),
 							updateuserid='".$wtwplugins->userid."'
-						where versionavatarid='';
+						where versionid='';
 					");
 					
 					$wtwplugins->saveSetting(WTW_3DINTERNET_PREFIX."dbversion", $this->dbversion);

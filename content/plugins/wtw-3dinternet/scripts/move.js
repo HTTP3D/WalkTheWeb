@@ -11,25 +11,25 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 				WTW.log("error = " + message,'red');
 			}); 
 			
-			wtw3dinternet.move.on('login', function(data) {
+			wtw3dinternet.move.on('login', function(zdata) {
 				if (wtw3dinternet.masterMove == '1') {
 					// Whenever the server emits 'login', add user to count
-					wtw3dinternet.addParticipantsMessage(data); 
+					wtw3dinternet.addParticipantsMessage(zdata); 
 				}
 			});
 
-			wtw3dinternet.move.on('user joined', function(data) {
+			wtw3dinternet.move.on('user joined', function(zdata) {
 				if (wtw3dinternet.masterMove == '1') {
-					wtw3dinternet.addParticipantsMessage(data);
-					zavatar = WTW.getMeshOrNodeByID('person' + data.instanceid);
+					wtw3dinternet.addParticipantsMessage(zdata);
+					zavatar = WTW.getMeshOrNodeByID('person' + zdata.instanceid);
 					if (zavatar == null) {
-						if (data.instanceid != dGet('wtw_tinstanceid').value) {
-							let zavatarind = wtw3dinternet.getAvatarInd(data.instanceid);
+						if (zdata.instanceid != dGet('wtw_tinstanceid').value) {
+							let zavatarind = wtw3dinternet.getAvatarInd(zdata.instanceid);
 							if (wtw3dinternet.avatars[zavatarind] == null) {
 								wtw3dinternet.avatars[wtw3dinternet.avatars.length] = {
-									'instanceid':data.instanceid,
-									'placeholder':data.placeholder,
-									'userid':data.userid,
+									'instanceid':zdata.instanceid,
+									'placeholder':zdata.placeholder,
+									'userid':zdata.userid,
 									'position':{
 										'x':WTW.init.startPositionX,
 										'y':WTW.init.startPositionY,
@@ -44,9 +44,9 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 									'loaded':'0'
 								};
 							}
-							if (WTW.isNumeric(data.placeholder)) {
-								if (Number(data.placeholder) == 0) {
-									WTW.getSavedAvatar("person-" + data.instanceid, data.globaluseravatarid, data.useravatarid, data.avatarid, false);
+							if (WTW.isNumeric(zdata.placeholder)) {
+								if (Number(zdata.placeholder) == 0) {
+									WTW.getSavedAvatar("person-" + zdata.instanceid, zdata.globaluseravatarid, zdata.useravatarid, zdata.avatarid, false);
 								}
 							}
 						}
@@ -54,15 +54,15 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 				}
 			});
 
-			wtw3dinternet.move.on('user left', function(data) {
+			wtw3dinternet.move.on('user left', function(zdata) {
 				// Whenever the server emits 'user left', fade and remove the avatar
-				wtw3dinternet.addParticipantsMessage(data);
-				wtw3dinternet.removeAvatar(data.avatarname);
+				wtw3dinternet.addParticipantsMessage(zdata);
+				wtw3dinternet.removeAvatar(zdata.avatarname);
 			});
 
-			wtw3dinternet.move.on('set disabled', function(data) {
+			wtw3dinternet.move.on('set disabled', function(zdata) {
 				// Whenever the server emits 'user left', fade and remove the avatar
-				wtw3dinternet.addParticipantsMessage(data);
+				wtw3dinternet.addParticipantsMessage(zdata);
 				wtw3dinternet.removeAllAvatars();
 			});
 
@@ -71,6 +71,9 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 					'serverinstanceid':dGet('wtw_serverinstanceid').value,
 					'serverip':dGet('wtw_serverip').value,
 					'roomid':communityid + buildingid + thingid,
+					'communityid':communityid,
+					'buildingid':buildingid,
+					'thingid':thingid,
 					'domainurl':wtw_domainurl,
 					'instanceid':dGet('wtw_tinstanceid').value,
 					'placeholder':WTW.placeHolder,
@@ -180,6 +183,9 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 				'serverinstanceid':dGet('wtw_serverinstanceid').value,
 				'serverip':dGet('wtw_serverip').value,
 				'roomid':communityid + buildingid + thingid,
+				'communityid':communityid,
+				'buildingid':buildingid,
+				'thingid':thingid,
 				'domainurl':wtw_domainurl,
 				'instanceid':dGet('wtw_tinstanceid').value,
 				'userid':dGet('wtw_tuserid').value,
@@ -194,9 +200,9 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 				WTW.log('response=' + zresponse);
 			});
 
-			wtw3dinternet.move.on('receive scene command', function(data) {
+			wtw3dinternet.move.on('receive scene command', function(zdata) {
 				if (wtw3dinternet.masterMove == '1') {
-					wtw3dinternet.processSceneCommand(data);
+					wtw3dinternet.processSceneCommand(zdata);
 				}
 			});
 
@@ -204,6 +210,9 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 			wtw3dinternet.move.emit('wtwadmin', {
 				'serverinstanceid':dGet('wtw_serverinstanceid').value,
 				'roomid':communityid + buildingid + thingid,
+				'communityid':communityid,
+				'buildingid':buildingid,
+				'thingid':thingid,
 				'command':'YOURCOMMAND' 
 				/ * add any other values you need to pass here * /
 			});
@@ -214,18 +223,18 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 	} 
 }
 
-WTW_3DINTERNET.prototype.processSceneCommand = function(data) {
+WTW_3DINTERNET.prototype.processSceneCommand = function(zdata) {
 	try {
-		switch (data.text) {
+		switch (zdata.text) {
 			case "leave scene":
-				wtw3dinternet.removeAvatar("person-" + data.instanceid);
+				wtw3dinternet.removeAvatar("person-" + zdata.instanceid);
 				break;
 			case "refresh avatar":
-				let zavatarind = wtw3dinternet.getAvatarInd(data.instanceid);
-				if (zavatarind > -1 && data.instanceid != dGet('wtw_tinstanceid').value) {
-					if (WTW.isNumeric(data.placeholder)) {
-						if (Number(data.placeholder) == 0) {
-							WTW.getSavedAvatar("person-" + data.instanceid, data.globaluseravatarid, data.useravatarid, data.avatarid, false);
+				let zavatarind = wtw3dinternet.getAvatarInd(zdata.instanceid);
+				if (zavatarind > -1 && zdata.instanceid != dGet('wtw_tinstanceid').value) {
+					if (WTW.isNumeric(zdata.placeholder)) {
+						if (Number(zdata.placeholder) == 0) {
+							WTW.getSavedAvatar("person-" + zdata.instanceid, zdata.globaluseravatarid, zdata.useravatarid, zdata.avatarid, false);
 						}
 					}
 				}
@@ -247,6 +256,9 @@ WTW_3DINTERNET.prototype.moveAvatar = function(zavatar, zmoveevents) {
 					'serverinstanceid':dGet('wtw_serverinstanceid').value,
 					'serverip':dGet('wtw_serverip').value,
 					'roomid':communityid + buildingid + thingid,
+					'communityid':communityid,
+					'buildingid':buildingid,
+					'thingid':thingid,
 					'globaluseravatarid':dGet('wtw_tglobaluseravatarid').value,
 					'useravatarid':dGet('wtw_tuseravatarid').value,
 					'avatarid':dGet('wtw_tavatarid').value,
@@ -324,10 +336,10 @@ WTW_3DINTERNET.prototype.getAvatarInd = function(zinstanceid) {
 	return zavatarind;
 }
 
-WTW_3DINTERNET.prototype.addParticipantsMessage = function(data) {
+WTW_3DINTERNET.prototype.addParticipantsMessage = function(zdata) {
 	try {
-		if (data.usercount > 0 && wtw3dinternet.masterMove == '1') {
-			document.getElementById('participantsMessage').innerHTML = "&nbsp;" + data.usercount + " Walkers";
+		if (zdata.usercount > 0 && wtw3dinternet.masterMove == '1') {
+			document.getElementById('participantsMessage').innerHTML = "&nbsp;" + zdata.usercount + " Walkers";
 		} else {
 			document.getElementById('participantsMessage').innerHTML = '';
 		}
@@ -527,6 +539,9 @@ WTW_3DINTERNET.prototype.clearMultiuser = async function(zuseravatarid, zinstanc
 				'serverinstanceid':dGet('wtw_serverinstanceid').value,
 				'serverip':dGet('wtw_serverip').value,
 				'roomid':communityid + buildingid + thingid,
+				'communityid':communityid,
+				'buildingid':buildingid,
+				'thingid':thingid,
 				'domainurl':wtw_domainurl,
 				'siteurl':wtw_websiteurl,
 				'instanceid':dGet('wtw_tinstanceid').value,
@@ -701,6 +716,9 @@ WTW_3DINTERNET.prototype.sendCommand = function(ztoinstanceid, zaction, ztext) {
 				'serverinstanceid':dGet('wtw_serverinstanceid').value,
 				'serverip':dGet('wtw_serverip').value,
 				'roomid':zroomid,
+				'communityid':communityid,
+				'buildingid':buildingid,
+				'thingid':thingid,
 				'placeholder':WTW.placeHolder,
 				'globaluseravatarid':dGet('wtw_tglobaluseravatarid').value,
 				'useravatarid':dGet('wtw_tuseravatarid').value,
