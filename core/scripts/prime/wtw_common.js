@@ -1300,6 +1300,8 @@ WTWJS.prototype.processMoldQueue = function() {
 						case "addactionzone":
 							WTW.addActionZone(zmoldname, WTW.loadMoldQueue[i].molddef);
 							WTW.checkZones = true;
+							/* add support for plugins to execute code when action zones are added to scene */
+							WTW.pluginsAddActionZone(zmoldname, WTW.loadMoldQueue[i].molddef);
 							break;
 						case "dispose":
 							WTW.disposeClean(zmoldname, WTW.loadMoldQueue[i].check);

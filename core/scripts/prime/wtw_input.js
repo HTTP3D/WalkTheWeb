@@ -44,7 +44,6 @@ WTWJS.prototype.touchDown = function(zevent) {
 		WTW.isMouseDown = 0;
 		WTW.canvasFocus = 1;
 		WTW.clearSelectedMold();
-		WTW.clearSelectedMold();
 		//scene.activeCamera = scene.activeCameras[0];
 		if (zevent.originalEvent != undefined) {
 			if (zevent.originalEvent.touches != undefined) {
@@ -422,11 +421,11 @@ WTWJS.prototype.mouseClick = function(zevent) {
 					zpickedname = zresult.pickedMesh.name;
 				}
 
+				WTW.pluginsOnClick(zpickedname);
 				if (zpickedname != '') {
 					var zmold = WTW.getMeshOrNodeByID(zpickedname);
 					if (zpickedname.indexOf("-") > -1) {
 						WTW.checkMoldEvent('onclick', zpickedname);
-						WTW.pluginsOnClick(zpickedname);
 						if (zpickedname.substr(0,4) == 'hud-') {
 							WTW.hudClick(zpickedname);
 						} else if (zpickedname.indexOf("-image") > -1) {

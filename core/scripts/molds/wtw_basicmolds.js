@@ -2625,13 +2625,13 @@ WTWJS.prototype.addVideoStream = function(zmoldname, zlenx, zleny, zlenz) {
 		
 		
 		if (dGet('wtw_streaming-' + zwebid) != null) {
-			var zvideomat = new BABYLON.StandardMaterial(zmoldname + "-streammat", scene);
+/*			var zvideomat = new BABYLON.StandardMaterial(zmoldname + "-streammat", scene);
 			var zvideotexture = new BABYLON.VideoTexture(zmoldname + "-streamtexture", dGet('wtw_streaming-' + zwebid), scene, true, true);
 			zvideomat.backFaceCulling = false;
 			zvideomat.diffuseTexture = zvideotexture;
 			zvideomat.emissiveColor = BABYLON.Color3.White();
 			zmold.material = zvideomat;
-		}
+*/		}
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
 		WTW.log("core-scripts-molds-basicmolds\r\n addVideoStream=" + ex.message);
