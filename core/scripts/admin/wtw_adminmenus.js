@@ -1055,6 +1055,8 @@ WTWJS.prototype.toggleAdminMenuMediaLibrary = function() {
 WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 	/* toggle camera - attach to avatar or release for free movement */
 	try {
+		var zavatar = WTW.__("Avatar");
+		var zcamera = WTW.__("Camera");
 		var zavatarcamera = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-camera");
 		if (zvalue == 1) {
 			WTW.cameraFocus = 1;
@@ -1063,7 +1065,8 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 			}
 
 			if (dGet('wtw_bavatarcamera') != null) {
-				dGet('wtw_bavatarcamera').innerHTML = "Avatar<br />Camera<br />ON";
+				var zon = WTW.__("On");
+				dGet('wtw_bavatarcamera').innerHTML = zavatar + "<br />" + zcamera + "<br />" + zon;
 				dGet('wtw_bavatarcamera').onclick = function() { WTW.setQuickEditorAvatarCamera(0); };
 				dGet('wtw_bavatarcamera').className = "wtw-quickbar";
 				dGet('wtw_bavatarcamera').title = "Camera is Attached to Avatar";
@@ -1078,7 +1081,8 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 			WTW.cameraOne.lockedTarget = null;
 		
 			if (dGet('wtw_bavatarcamera') != null) {
-				dGet('wtw_bavatarcamera').innerHTML = "Avatar<br />Camera<br />OFF";
+				var zoff = WTW.__("Off");
+				dGet('wtw_bavatarcamera').innerHTML = zavatar + "<br />" + zcamera + "<br />" + zoff;
 				dGet('wtw_bavatarcamera').onclick = function() { WTW.setQuickEditorAvatarCamera(1); };
 				dGet('wtw_bavatarcamera').className = "wtw-quickbaroff";
 				dGet('wtw_bavatarcamera').title = "Camera is Detached from Avatar";
@@ -1097,9 +1101,11 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 WTWJS.prototype.setQuickEditorFocus = function(zvalue) {
 	/* toggle off or on highlight molds on mouse over */
 	try {
+		var zfocus = WTW.__("Focus");
 		if (zvalue == 1) {
 			if (dGet('wtw_bfocus') != null) {
-				dGet('wtw_bfocus').innerHTML = "Focus<br /><br />ON";
+				var zon = WTW.__("On");
+				dGet('wtw_bfocus').innerHTML = zfocus + "<br /><br />" + zon;
 				dGet('wtw_bfocus').onclick = function() { WTW.setQuickEditorFocus(0); };
 				dGet('wtw_bfocus').className = "wtw-quickbar";
 				dGet('wtw_bfocus').title = "Focus Highlight is On";
@@ -1112,7 +1118,8 @@ WTWJS.prototype.setQuickEditorFocus = function(zvalue) {
 		} else {
 			/* WTW.resetMoldsOpacity(); */
 			if (dGet('wtw_bfocus') != null) {
-				dGet('wtw_bfocus').innerHTML = "Focus<br /><br />OFF";
+				var zoff = WTW.__("Off");
+				dGet('wtw_bfocus').innerHTML = zfocus + "<br /><br />" + zoff;
 				dGet('wtw_bfocus').onclick = function() { WTW.setQuickEditorFocus(1); };
 				dGet('wtw_bfocus').className = "wtw-quickbaroff";
 				dGet('wtw_bfocus').title = "Focus Highlight is Off";
@@ -1131,10 +1138,12 @@ WTWJS.prototype.setQuickEditorFocus = function(zvalue) {
 WTWJS.prototype.setQuickEditorMerged = function(zvalue) {
 	/* show or hide the complete molds that were merged (using opacity) */
 	try {
+		var zmerged = WTW.__("Merged");
 		if (zvalue == 1) {
 			WTW.setShowCSG();
 			if (dGet('wtw_bmerged') != null) {
-				dGet('wtw_bmerged').innerHTML = "Merged<br /><br />ON";
+				var zon = WTW.__("On");
+				dGet('wtw_bmerged').innerHTML = zmerged + "<br /><br />" + zon;
 				dGet('wtw_bmerged').onclick = function() { WTW.setQuickEditorMerged(0); };
 				dGet('wtw_bmerged').className = "wtw-quickbar";
 				dGet('wtw_bmerged').title = "Merged Shapes are Shown";
@@ -1147,7 +1156,8 @@ WTWJS.prototype.setQuickEditorMerged = function(zvalue) {
 		} else {
 			WTW.setHideCSG();
 			if (dGet('wtw_bmerged') != null) {
-				dGet('wtw_bmerged').innerHTML = "Merged<br /><br />OFF";
+				var zoff = WTW.__("Off");
+				dGet('wtw_bmerged').innerHTML = zmerged + "<br /><br />" + zoff;
 				dGet('wtw_bmerged').onclick = function() { WTW.setQuickEditorMerged(1); };
 				dGet('wtw_bmerged').className = "wtw-quickbaroff";
 				dGet('wtw_bmerged').title = "Merged Shapes are Hidden";
@@ -1223,6 +1233,7 @@ WTWJS.prototype.setHideCSG = function() {
 WTWJS.prototype.setQuickEditorZones = function(value) {
 	/* show or hide action zones in the 3D Scene */
 	try {
+		var zzones = WTW.__("Zones");
 		if (value == 1) {
 			for (var i=0;i<WTW.actionZones.length;i++) {
 				if (WTW.actionZones[i] != null) {
@@ -1230,7 +1241,8 @@ WTWJS.prototype.setQuickEditorZones = function(value) {
 				}
 			}
 			if (dGet('wtw_bzones') != null) {
-				dGet('wtw_bzones').innerHTML = "Zones<br /><br />ON";
+				var zon = WTW.__("On");
+				dGet('wtw_bzones').innerHTML = zzones + "<br /><br />" + zon;
 				dGet('wtw_bzones').onclick = function() { WTW.setQuickEditorZones(0); };
 				dGet('wtw_bzones').className = "wtw-quickbar";
 				dGet('wtw_bzones').title = "Action Zones are Shown";
@@ -1247,7 +1259,8 @@ WTWJS.prototype.setQuickEditorZones = function(value) {
 				}
 			}
 			if (dGet('wtw_bzones') != null) {
-				dGet('wtw_bzones').innerHTML = "Zones<br /><br />OFF";
+				var zoff = WTW.__("Off");
+				dGet('wtw_bzones').innerHTML = zzones + "<br /><br />" + zoff;
 				dGet('wtw_bzones').onclick = function() { WTW.setQuickEditorZones(1); };
 				dGet('wtw_bzones').className = "wtw-quickbaroff";
 				dGet('wtw_bzones').title = "Action Zones are Hidden";
@@ -1266,10 +1279,13 @@ WTWJS.prototype.setQuickEditorZones = function(value) {
 WTWJS.prototype.setQuickEditorLoadAll = function(value) {
 	/* load all action zones in the 3D Scene - great for getting snapshots and full images */
 	try {
+		var zload = WTW.__("Load");
+		var zall = WTW.__("All");
 		if (value == 1) {
 			WTW.loadAllActionZones = 1;
 			if (dGet('wtw_bloadall') != null) {
-				dGet('wtw_bloadall').innerHTML = "Load<br />All<br />ON";
+				var zon = WTW.__("On");
+				dGet('wtw_bloadall').innerHTML = zload + "<br />" + zall + "<br />" + zon;
 				dGet('wtw_bloadall').onclick = function() { WTW.setQuickEditorLoadAll(0); };
 				dGet('wtw_bloadall').className = "wtw-quickbar";
 				dGet('wtw_bloadall').title = "Load All Action Zones";
@@ -1282,7 +1298,8 @@ WTWJS.prototype.setQuickEditorLoadAll = function(value) {
 		} else {
 			WTW.loadAllActionZones = 0;
 			if (dGet('wtw_bloadall') != null) {
-				dGet('wtw_bloadall').innerHTML = "Load<br />All<br />OFF";
+				var zoff = WTW.__("Off");
+				dGet('wtw_bloadall').innerHTML = zload + "<br />" + zall + "<br />" + zoff;
 				dGet('wtw_bloadall').onclick = function() { WTW.setQuickEditorLoadAll(1); };
 				dGet('wtw_bloadall').className = "wtw-quickbaroff";
 				dGet('wtw_bloadall').title = "Load Active Action Zones";
@@ -1302,6 +1319,7 @@ WTWJS.prototype.setQuickEditorLoadAll = function(value) {
 WTWJS.prototype.setQuickEditorLines = function(value) {
 	/* show or hide the editor guide lines when editing an object */
 	try {
+		var zlines = WTW.__("Lines");
 		if (value == 1) {
 			if (WTW.lineZ == undefined || WTW.lineZ == null ) {
 			} else {
@@ -1334,7 +1352,8 @@ WTWJS.prototype.setQuickEditorLines = function(value) {
 				WTW.lineZ8.isVisible = true;  				
 			}
 			if (dGet('wtw_blines') != null) {
-				dGet('wtw_blines').innerHTML = "Lines<br /><br />ON";
+				var zon = WTW.__("On");
+				dGet('wtw_blines').innerHTML = zlines + "<br /><br />" + zon;
 				dGet('wtw_blines').onclick = function() { WTW.setQuickEditorLines(0); };
 				dGet('wtw_blines').className = "wtw-quickbar";
 				dGet('wtw_blines').title = "Alignment Lines are Shown";
@@ -1376,7 +1395,8 @@ WTWJS.prototype.setQuickEditorLines = function(value) {
 				WTW.lineZ8.isVisible = false;            
 			}
 			if (dGet('wtw_blines') != null) {
-				dGet('wtw_blines').innerHTML = "Lines<br /><br />OFF";
+				var zoff = WTW.__("Off");
+				dGet('wtw_blines').innerHTML = zlines + "<br /><br />" + zoff;
 				dGet('wtw_blines').onclick = function() { WTW.setQuickEditorLines(1); };
 				dGet('wtw_blines').className = "wtw-quickbaroff";
 				dGet('wtw_blines').title = "Alignment Lines are Hidden";

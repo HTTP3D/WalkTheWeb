@@ -3326,6 +3326,11 @@ WTWJS.prototype.openServerSettings = async function() {
 						dGet('wtw_tableprefix').value = '';
 					}
 					dGet('wtw_tableprefix').disabled = true;
+					if (zresponse.defaultlanguage != undefined) {
+						WTW.loadLanguages(zresponse.defaultlanguage);
+					} else {
+						WTW.loadLanguages('English');
+					}
 					if (zresponse.adminemail != undefined) {
 						dGet('wtw_adminemail').value = zresponse.adminemail;
 					} else {
@@ -3400,6 +3405,45 @@ WTWJS.prototype.openServerSettings = async function() {
 	}
 }
 
+WTWJS.prototype.loadLanguages = async function(zlanguage) {
+	/* load languages for Server Settings */
+	try {
+		if (zlanguage == undefined) {
+			zlanguage = 'English';
+		}
+		WTW.clearDDL('wtw_defaultlanguage');
+		var zoption = document.createElement("option");
+		zoption.text = 'English';
+		zoption.value = 'eng';
+		if (zlanguage == "English") {
+			zoption.selected = true;
+		}
+		dGet('wtw_defaultlanguage').add(zoption);		
+		
+		var zrequest = {
+			'function':'getlanguages'
+		};
+		WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
+			function(zresponse) {
+WTW.log(zresponse);
+				zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
+					/* load values into dropdown */
+					var zoption1 = document.createElement("option");
+					zoption1.text = zresponse[0].language;
+					zoption1.value = zresponse[0].abbreviation;
+					if (zresponse[0].language == zlanguage) {
+						zoption1.selected = true;
+					}
+					dGet('wtw_defaultlanguage').add(zoption1);		
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-loadLanguages=" + ex.message);
+	}
+}
+		
 WTWJS.prototype.saveServerSettings = async function() {
 	/* save Server Settings to the Config file */
 	try {
@@ -3408,6 +3452,7 @@ WTWJS.prototype.saveServerSettings = async function() {
 			'dbname': dGet('wtw_dbname').value,
 			'dbusername': dGet('wtw_dbusername').value,
 			'dbpassword': btoa(dGet('wtw_dbpassword').value),
+			'defaultlanguage': WTW.getDDLText('wtw_defaultlanguage','English'),
 			'contentpath': dGet('wtw_contentpath').value,
 			'defaultdomain': dGet('wtw_defaultdomain').value,
 			'defaultsitename': dGet('wtw_defaultsitename').value,
