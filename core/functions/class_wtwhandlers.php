@@ -393,6 +393,12 @@ class wtwhandlers {
 		return $wtwdb->getRatingText($zrating);
 	}
 
+	public function __($zlabel) {
+		/* Language translation based on language file */
+		global $wtwdb;
+		return $wtwdb->__($zlabel);
+	}	
+
 	public function addHandlerHeader($zavailabledomains) {
 		/* sets the domain allowed for cross script - only when allowed */
 		$zheader = "";

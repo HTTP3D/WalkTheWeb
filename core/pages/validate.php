@@ -33,6 +33,7 @@ global $wtwhandlers;
 		}
 	}
 ?>
+<!DOCTYPE html>
 <html>
 <head>
 	<title><?php echo $wtwhandlers->domainname; ?> - Validate Email</title>

@@ -46,12 +46,14 @@ class wtw {
 	public $buildingid = "";
 	public $thingid = "";
 	public $avatarid = "";
+	public $defaultlanguage = "English";
 	public $pluginstylesheets = array();
 	public $pluginscripts = array();
 	public $pluginscriptfunctions = array();
 	public $pluginMoldDefs = array();
 	public $pluginActionZoneDefs = array();
 	public $pluginCoveringDefs = array();
+	public $translation = array();
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -762,6 +764,12 @@ class wtw {
 					}
 				}
 			} 
+
+			/* load translation files */
+			if (defined("wtw_defaultlanguage")) {
+				$this->defaultlanguage = wtw_defaultlanguage;
+			}
+			$this->loadTranslationArray();
 			/* setup process steps - display webpages */
 			switch ($zsetupstep) {
 				case 1: /* Need to set up Database Login */
@@ -1867,13 +1875,20 @@ class wtw {
 			$zjsdata .= "	var thingid = '".$this->thingid."';\r\n";
 			$zjsdata .= "	var avatarid = '".$this->avatarid."';\r\n";
 			$zjsdata .= "	var wtw_domain;\r\n";
+			$zjsdata .= "	var wtw_translate = [];;\r\n";
 			$zjsdata .= "	var wtw_uploads = [];\r\n";
 			$zjsdata .= "	var wtw_version = \"".$this->version."\";\r\n";
 			$zjsdata .= "	var wtw_versiondate = \"".$this->versiondate."\";\r\n";
 			$zjsdata .= "	var wtw_versiontext = \"HTTP3D Inc. (v".$this->version.") ".date('m-d-Y', strtotime($this->versiondate))."\";\r\n";
+			$zjsdata .= "	var wtw_defaultlanguage = \"".$this->defaultlanguage."\";\r\n";
 			$zjsdata .= "	try {\r\n";
 			$zjsdata .= "		wtw_domain = JSON.stringify(".json_encode($this->getSceneSetting()).");\r\n";
 			$zjsdata .= "	} catch(ex) {\r\n 			console.log('core-snippets-checkloadurl=' + ex.message);\r\n";
+			$zjsdata .= "	}\r\n";
+			$zjsdata .= "	try {\r\n";
+			$zjsdata .= "		wtw_translate = JSON.stringify(".json_encode($this->translation).");\r\n";
+			$zjsdata .= "		wtw_translate = JSON.parse(wtw_translate);\r\n";
+			$zjsdata .= "	} catch(ex) {\r\n 			console.log('core-snippets-checkloadurl-translation=' + ex.message);\r\n";
 			$zjsdata .= "	}\r\n";
             $zjsdata .= "	if (window != top) {\r\n";
             $zjsdata .= "	    top.location.href = location.href;\r\n";
@@ -2043,6 +2058,34 @@ class wtw {
 		}
 		return $zhiddenfields;
 	}
+	
+	public function loadTranslationArray() {
+		/* Load Language translation files */
+		try {
+			$i = 0;
+			$zdir = wtw_rootpath."/core/languages";
+			if (is_dir($zdir)) {
+				if ($zdh = opendir($zdir)) {
+					while (($zfile = readdir($zdh)) !== false) {
+						if ($zfile != '.' && $zfile != '..') {
+							$zlanguageurl = $this->domainurl."/core/languages/".$zfile;
+							$zlanguagedata = file_get_contents($zlanguageurl);
+							$zlanguagedata = json_decode($zlanguagedata);
+							if (isset($zlanguagedata[0]->translate) && isset($zlanguagedata[0]->language)) {
+								if (strtolower($zlanguagedata[0]->language) == strtolower($this->defaultlanguage)) {
+									$this->translation[$i] = $zlanguagedata[0];
+									$i += 1;
+								}
+							}
+						}
+					}
+					closedir($zdh);
+				}
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtw-initsession.php-loadTranslationArray=".$e->getMessage());
+		}
+	}	
 	
 }
 

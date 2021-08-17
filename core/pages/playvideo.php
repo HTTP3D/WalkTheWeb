@@ -6,7 +6,7 @@
 	$videoextension = pathinfo($videosrc,PATHINFO_EXTENSION);
 	
 ?>
-
+<!DOCTYPE html>
 <html>
 <head>
 	<title>WalkTheWeb Video Player - Full Screen</title>

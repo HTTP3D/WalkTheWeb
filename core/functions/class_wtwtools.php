@@ -111,6 +111,7 @@ class wtwtools {
 			'dbusername'=>'',
 			'dbpassword'=>'',
 			'tableprefix'=>'',
+			'defaultlanguage'=>'English',
 			'contentpath'=>'',
 			'contenturl'=>'',
 			'defaultdomain'=>'',
@@ -146,6 +147,9 @@ class wtwtools {
 				}
 				if (defined('wtw_tableprefix')) {
 					$zresponse["tableprefix"] = wtw_tableprefix;
+				}
+				if (defined('wtw_language')) {
+					$zresponse["defaultlanguage"] = wtw_language;
 				}
 				if (defined('wtw_contentpath')) {
 					$zresponse["contentpath"] = wtw_contentpath;
@@ -193,7 +197,7 @@ class wtwtools {
 		return $zresponse;
 	}
 
-	public function saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zftpuser, $zftppassword, $zftpbase) {
+	public function saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zdefaultlanguage, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zftpuser, $zftppassword, $zftpbase) {
 		global $wtwhandlers;
 		$zresponse = array('serror'=>'');
 		try {
@@ -203,6 +207,7 @@ class wtwtools {
 				$this->updateConfigSetting('wtw_dbname', $zdbname);
 				$this->updateConfigSetting('wtw_dbusername', $zdbusername);
 				$this->updateConfigSetting('wtw_dbpassword', $zdbpassword);
+				$this->updateConfigSetting('wtw_defaultlanguage', $zdefaultlanguage);
 				$this->updateConfigSetting('wtw_contentpath', $zcontentpath);
 				$this->updateConfigSetting('wtw_defaultdomain', $zdefaultdomain);
 				$this->updateConfigSetting('wtw_defaultsitename', $zdefaultsitename);
@@ -222,6 +227,52 @@ class wtwtools {
 		return $zresponse;
 	}
 
+	public function getLanguages() {
+		global $wtwhandlers;
+		$zresponse = array();
+		try {
+			/* check languages folder for language files */
+			$i = 0;
+			$zfilepath = wtw_rootpath."/core/languages";
+			if (file_exists($zfilepath)) {
+				$zfiles = new DirectoryIterator($zfilepath);
+				foreach ($zfiles as $zfileinfo) {
+					if (!$zfileinfo->isDir() && !$zfileinfo->isDot()) {
+						$zfilename = $zfileinfo->getFilename();
+						$zurl = $wtwhandlers->domainurl."/core/languages/".$zfilename;
+						$zrequest = file_get_contents($zurl);
+						if (!empty($zrequest) && isset($zrequest)) {
+							$zrequest = json_decode($zrequest);
+						}
+					if (isset($zrequest[0]->language) && !empty($zrequest[0]->language) && isset($zrequest[0]->abbreviation) && !empty($zrequest[0]->abbreviation)) {
+							$zresponse[$i] = array(
+								'language'=>$zrequest[0]->language,
+								'abbreviation'=>$zrequest[0]->abbreviation
+							);
+						}
+					}
+				}
+			} else {
+				mkdir($zfilepath, octdec(wtw_chmod), true);
+				chmod($zfilepath, octdec(wtw_chmod));
+			}
+			/* sort the results by language, then abbreviation */
+/*			function arraysort($a, $b) {
+				if ($a["language"] == $b["language"]) {
+					return ($a["abbreviation"] > $b["abbreviation"]) ? 1 : -1;
+				}
+				return ($a["language"] > $b["language"]) ? 1 : -1;
+			}
+			usort($zresponse, "arraysort");
+*/			
+			
+			
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwtools.php-getLanguages=".$e->getMessage());
+		}
+		return $zresponse;
+	}
+	
 	public function updateConfigSetting($zsetting, $zvalue) {
 		global $wtwhandlers;
 		$zresponse = array('serror'=>'');
@@ -390,7 +441,11 @@ class wtwtools {
 		return $zresponse;
 	}
 
-
+	public function __($zlabel) {
+		/* Language translation based on language file */
+		global $wtwhandlers;
+		return $wtwhandlers->__($zlabel);
+	}	
 }
 
 	function wtwtools() {

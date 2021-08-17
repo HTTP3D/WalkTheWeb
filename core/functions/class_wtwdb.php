@@ -2004,6 +2004,46 @@ class wtwdb {
 		}
 		return $zsuccess;
 	}
+
+	public function __($zlabel) {
+		/* Language translation based on language file */
+		global $wtw;
+		$znewlabel = $zlabel;
+		try {
+			$zsetlanguage = "English";
+			if (defined("wtw_defaultlanguage")) {
+				$zsetlanguage = wtw_defaultlanguage;
+			}
+			$zdir = wtw_rootpath."/core/languages";
+			if (is_dir($zdir)) {
+				if ($zdh = opendir($zdir)) {
+					while (($zfile = readdir($zdh)) !== false) {
+						if ($zfile != '.' && $zfile != '..') {
+							$zlanguageurl = $wtw->domainurl."/core/languages/".$zfile;
+							$zlanguagedata = file_get_contents($zlanguageurl);
+							$zlanguagedata = json_decode($zlanguagedata);
+							if (isset($zlanguagedata[0]->translate)) {
+								if (isset($zlanguagedata[0]->language)) {
+									if (strtolower($zlanguagedata[0]->language) == strtolower($zsetlanguage)) {
+										foreach($zlanguagedata[0]->translate as $zkey => $zvalue) {
+											if (strtolower($zlabel) == strtolower($zkey)) {
+												$znewlabel = $zvalue;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					closedir($zdh);
+				}
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-__language=".$e->getMessage());
+		}
+		return $znewlabel;
+	}	
+
 }
 
 	function wtwdb() {

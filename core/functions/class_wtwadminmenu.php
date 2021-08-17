@@ -53,60 +53,60 @@ class wtwadminmenu {
 					$zaccessrequired = array of roles that are granted access - null for all allowed
 					$zjsfunction = javascript function to call for onclick event examples: WTW.show('divname');   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
 				*/
-				$this->addAdminMenuItem('wtw_admindashboard', 'Dashboard', -100, 'wtw_dashboard', 0, '', '/content/system/images/menudashboard.png', null, "WTW.toggleAdminMenuDashboard();");
-				$this->addAdminMenuItem('wtw_adminmenudashboard', 'Admin Home', -100, 'wtw_dashboard', 1, 'wtw_adminhome', '', null, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminmenuupdates', 'Updates', -100, 'wtw_dashboard', 2, 'wtw_updates', '', $developerroles, "WTW.openFullPageForm('updates','Check for Updates','');");
+				$this->addAdminMenuItem('wtw_admindashboard', $this->__('Dashboard'), -100, 'wtw_dashboard', 0, '', '/content/system/images/menudashboard.png', null, "WTW.toggleAdminMenuDashboard();");
+				$this->addAdminMenuItem('wtw_adminmenudashboard', $this->__('Admin Home'), -100, 'wtw_dashboard', 1, 'wtw_adminhome', '', null, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminmenuupdates', $this->__('Updates'), -100, 'wtw_dashboard', 2, 'wtw_updates', '', $developerroles, "WTW.openFullPageForm('updates','Check for Updates','');");
 				
-				$this->addAdminMenuItem('wtw_adminmedia', 'Media Library', -95, 'wtw_medialibrary', 0, '', '/content/system/images/menumedia.png', $updateroles, "WTW.toggleAdminMenuMediaLibrary();");
-				$this->addAdminMenuItem('wtw_adminmediaobjects', '3D Models', -95, 'wtw_medialibrary', 1, 'wtw_viewobjects', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);");
-				$this->addAdminMenuItem('wtw_adminmediafiles', 'Files', -95, 'wtw_medialibrary', 2, 'wtw_viewfiles', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(2);");
-				$this->addAdminMenuItem('wtw_adminmediawtwdownloads', 'WalkTheWeb Downloads', -95, 'wtw_medialibrary', 3, 'wtw_viewwtwdownloads', '', $updateroles, "WTW.openFullPageForm('importpage','communities');");
+				$this->addAdminMenuItem('wtw_adminmedia', $this->__('Media Library'), -95, 'wtw_medialibrary', 0, '', '/content/system/images/menumedia.png', $updateroles, "WTW.toggleAdminMenuMediaLibrary();");
+				$this->addAdminMenuItem('wtw_adminmediaobjects', $this->__('3D Models'), -95, 'wtw_medialibrary', 1, 'wtw_viewobjects', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);");
+				$this->addAdminMenuItem('wtw_adminmediafiles', $this->__('Files'), -95, 'wtw_medialibrary', 2, 'wtw_viewfiles', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(2);");
+				$this->addAdminMenuItem('wtw_adminmediawtwdownloads', $this->__('WalkTheWeb Downloads'), -95, 'wtw_medialibrary', 3, 'wtw_viewwtwdownloads', '', $updateroles, "WTW.openFullPageForm('importpage','communities');");
 
-				$this->addAdminMenuItem('wtw_admincommunities', '3D Communities', -90, 'wtw_communities', 0, '', '/content/system/images/menucommunities.png', $updateroles, "WTW.toggleAdminMenuLevel('communities');");
-				$this->addAdminMenuItem('wtw_adminselectcommunity', 'Select 3D Community', -90, 'wtw_communities', 1, 'wtw_selectcommunity', '', $updateroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminaddcommunity', 'Add New 3D Community', -90, 'wtw_communities', 2, 'wtw_addcommunity', '', $updateroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminsettingscommunity', 'Options and Settings', -90, 'wtw_communities', 3, 'wtw_communitysettings', '', $updateroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_admineditcommunity', 'Edit 3D Community', -90, 'wtw_communities', 4, 'wtw_editcommunity', '', $updateroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_admincommunities', $this->__('3D Communities'), -90, 'wtw_communities', 0, '', '/content/system/images/menucommunities.png', $updateroles, "WTW.toggleAdminMenuLevel('communities');");
+				$this->addAdminMenuItem('wtw_adminselectcommunity', $this->__('Select 3D Community'), -90, 'wtw_communities', 1, 'wtw_selectcommunity', '', $updateroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminaddcommunity', $this->__('Add New 3D Community'), -90, 'wtw_communities', 2, 'wtw_addcommunity', '', $updateroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminsettingscommunity', $this->__('Options and Settings'), -90, 'wtw_communities', 3, 'wtw_communitysettings', '', $updateroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_admineditcommunity', $this->__('Edit 3D Community'), -90, 'wtw_communities', 4, 'wtw_editcommunity', '', $updateroles, "WTW.adminMenuItemSelected(this);");
 				
-				$this->addAdminMenuItem('wtw_adminbuildings', '3D Buildings', -85, 'wtw_buildings', 0, '', '/content/system/images/menubuildings.png', $updateroles, "WTW.toggleAdminMenuLevel('buildings');");
-				$this->addAdminMenuItem('wtw_adminselectbuilding', 'Select 3D Building', -85, 'wtw_buildings', 1, 'wtw_selectbuilding', '', $updateroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminaddbuilding', 'Add New 3D Building', -85, 'wtw_buildings', 2, 'wtw_addbuilding', '', $updateroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminsettingsbuilding', 'Options and Settings', -85, 'wtw_buildings', 3, 'wtw_buildingsettings', '', $updateroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_admineditbuilding', 'Edit 3D Building', -85, 'wtw_buildings', 4, 'wtw_editbuilding', '', $updateroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminbuildings', $this->__('3D Buildings'), -85, 'wtw_buildings', 0, '', '/content/system/images/menubuildings.png', $updateroles, "WTW.toggleAdminMenuLevel('buildings');");
+				$this->addAdminMenuItem('wtw_adminselectbuilding', $this->__('Select 3D Building'), -85, 'wtw_buildings', 1, 'wtw_selectbuilding', '', $updateroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminaddbuilding', $this->__('Add New 3D Building'), -85, 'wtw_buildings', 2, 'wtw_addbuilding', '', $updateroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminsettingsbuilding', $this->__('Options and Settings'), -85, 'wtw_buildings', 3, 'wtw_buildingsettings', '', $updateroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_admineditbuilding', $this->__('Edit 3D Building'), -85, 'wtw_buildings', 4, 'wtw_editbuilding', '', $updateroles, "WTW.adminMenuItemSelected(this);");
 
-				$this->addAdminMenuItem('wtw_adminthings', '3D Things', -80, 'wtw_things', 0, '', '/content/system/images/menuthings.png', $updateroles, "WTW.toggleAdminMenuLevel('things');");
-				$this->addAdminMenuItem('wtw_adminselectthing', 'Select 3D Thing', -80, 'wtw_things', 1, 'wtw_selectthing', '', $updateroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminaddthing', 'Add New 3D Thing', -80, 'wtw_things', 2, 'wtw_addthing', '', $updateroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminsettingsthing', 'Options and Settings', -80, 'wtw_things', 3, 'wtw_thingsettings', '', $updateroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_admineditthing', 'Edit 3D Thing', -80, 'wtw_things', 4, 'wtw_editthing', '', $updateroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminthings', $this->__('3D Things'), -80, 'wtw_things', 0, '', '/content/system/images/menuthings.png', $updateroles, "WTW.toggleAdminMenuLevel('things');");
+				$this->addAdminMenuItem('wtw_adminselectthing', $this->__('Select 3D Thing'), -80, 'wtw_things', 1, 'wtw_selectthing', '', $updateroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminaddthing', $this->__('Add New 3D Thing'), -80, 'wtw_things', 2, 'wtw_addthing', '', $updateroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminsettingsthing', $this->__('Options and Settings'), -80, 'wtw_things', 3, 'wtw_thingsettings', '', $updateroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_admineditthing', $this->__('Edit 3D Thing'), -80, 'wtw_things', 4, 'wtw_editthing', '', $updateroles, "WTW.adminMenuItemSelected(this);");
 
-				$this->addAdminMenuItem('wtw_adminplugins', '3D Plugins', 50, 'wtw_plugins', 0, '', '/content/system/images/menuplugin.png', $developerroles, "WTW.toggleAdminMenuLevel('plugins');");
-				$this->addAdminMenuItem('wtw_adminallplugins', 'All Plugins', 50, 'wtw_plugins', 1, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminplugins', $this->__('3D Plugins'), 50, 'wtw_plugins', 0, '', '/content/system/images/menuplugin.png', $developerroles, "WTW.toggleAdminMenuLevel('plugins');");
+				$this->addAdminMenuItem('wtw_adminallplugins', $this->__('All Plugins'), 50, 'wtw_plugins', 1, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 
-				$this->addAdminMenuItem('wtw_adminusers', 'Users', 90, 'wtw_users', 0, '', '/content/system/images/menuprofile.png', $adminroles, "WTW.toggleAdminMenuLevel('users');");
-				$this->addAdminMenuItem('wtw_adminuserlist', 'All Users', 90, 'wtw_users', 1, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminuserroles', 'User Roles', 90, 'wtw_users', 2, 'wtw_roleslist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminusers', $this->__('Users'), 90, 'wtw_users', 0, '', '/content/system/images/menuprofile.png', $adminroles, "WTW.toggleAdminMenuLevel('users');");
+				$this->addAdminMenuItem('wtw_adminuserlist', $this->__('All Users'), 90, 'wtw_users', 1, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminuserroles', $this->__('User Roles'), 90, 'wtw_users', 2, 'wtw_roleslist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 
-				$this->addAdminMenuItem('wtw_adminsettings', 'Settings', 100, 'wtw_settings', 0, '', '/content/system/images/menusettings.png', $developerroles, "WTW.toggleAdminMenuLevel('settings');");
-				$this->addAdminMenuItem('wtw_adminserversettings', 'Server Settings', 100, 'wtw_settings', 1, 'wtw_serversettings', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminwebalias', 'Web Aliases', 100, 'wtw_settings', 2, 'wtw_webalias', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminemailserver', 'Email Server', 100, 'wtw_settings', 3, 'wtw_emailserver', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminapikeys', 'API Keys Access', 100, 'wtw_settings', 4, 'wtw_apikeys', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminsettings', $this->__('Settings'), 100, 'wtw_settings', 0, '', '/content/system/images/menusettings.png', $developerroles, "WTW.toggleAdminMenuLevel('settings');");
+				$this->addAdminMenuItem('wtw_adminserversettings', $this->__('Server Settings'), 100, 'wtw_settings', 1, 'wtw_serversettings', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminwebalias', $this->__('Web Aliases'), 100, 'wtw_settings', 2, 'wtw_webalias', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminemailserver', $this->__('Email Server'), 100, 'wtw_settings', 3, 'wtw_emailserver', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminapikeys', $this->__('API Keys Access'), 100, 'wtw_settings', 4, 'wtw_apikeys', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 
-				$this->addAdminMenuItem('wtw_admindevtools', 'Developer Tools', 998, 'wtw_devtools', 0, '', '/content/system/images/menutools.png', $developerroles, "WTW.toggleAdminMenuLevel('tools');");
-				$this->addAdminMenuItem('wtw_adminavatarcamera', 'Avatar Camera ON', 998, 'wtw_devtools', 1, 'wtw_avatarcamera', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminfocus', 'Focus ON', 998, 'wtw_devtools', 2, 'wtw_focus', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminmerged', 'Merged Molds ON', 998, 'wtw_devtools', 3, 'wtw_merged', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminzones', 'Action Zones ON', 998, 'wtw_devtools', 4, 'wtw_zones', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminloadall', 'Load All Zones ON', 998, 'wtw_devtools', 5, 'wtw_loadall', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminlines', 'Alignment Lines ON', 998, 'wtw_devtools', 6, 'wtw_lines', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminaxislabels', 'Axis Labels OFF', 998, 'wtw_devtools', 7, 'wtw_axislabels', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminloadedobjects', 'List Loaded Objects', 998, 'wtw_devtools', 10, 'wtw_loadedobjects', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_admindevtools', $this->__('Developer Tools'), 998, 'wtw_devtools', 0, '', '/content/system/images/menutools.png', $developerroles, "WTW.toggleAdminMenuLevel('tools');");
+				$this->addAdminMenuItem('wtw_adminavatarcamera', $this->__('Avatar Camera ON'), 998, 'wtw_devtools', 1, 'wtw_avatarcamera', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminfocus', $this->__('Focus ON'), 998, 'wtw_devtools', 2, 'wtw_focus', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminmerged', $this->__('Merged Molds ON'), 998, 'wtw_devtools', 3, 'wtw_merged', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminzones', $this->__('Action Zones ON'), 998, 'wtw_devtools', 4, 'wtw_zones', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminloadall', $this->__('Load All Zones ON'), 998, 'wtw_devtools', 5, 'wtw_loadall', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlines', $this->__('Alignment Lines ON'), 998, 'wtw_devtools', 6, 'wtw_lines', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminaxislabels', $this->__('Axis Labels OFF'), 998, 'wtw_devtools', 7, 'wtw_axislabels', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminloadedobjects', $this->__('List Loaded Objects'), 998, 'wtw_devtools', 10, 'wtw_loadedobjects', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 
 				if (!empty($wtw->communityid) || !empty($wtw->buildingid) || !empty($wtw->thingid) || !empty($wtw->avatarid)) {
-					$this->addAdminMenuItem('wtw_admincloseproject', 'Close 3D Project', 999, 'wtw_admincloseproject', 0, '', '/content/system/images/menuclosedoor.png', $updateroles, "WTW.adminMenuItemSelected(this);");
+					$this->addAdminMenuItem('wtw_admincloseproject', $this->__('Close 3D Project'), 999, 'wtw_admincloseproject', 0, '', '/content/system/images/menuclosedoor.png', $updateroles, "WTW.adminMenuItemSelected(this);");
 				}
-				$this->addAdminMenuItem('wtw_adminexit', 'Exit Admin', 1000, 'wtw_adminexit', 0, '', '/content/system/images/menuexit.png', null, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminexit', $this->__('Exit Admin'), 1000, 'wtw_adminexit', 0, '', '/content/system/images/menuexit.png', null, "WTW.adminMenuItemSelected(this);");
 
 			}
 		} catch (Exception $e) {
@@ -545,6 +545,12 @@ class wtwadminmenu {
 			$wtwdb->serror("core-functions-class_wtwmenus.php-getAdminMenuDivs=".$e->getMessage());
 		}
 		return $zmenudivs;
+	}	
+
+	public function __($zlabel) {
+		/* Language translation based on language file */
+		global $wtwdb;
+		return $wtwdb->__($zlabel);
 	}	
 
 }

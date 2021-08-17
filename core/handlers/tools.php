@@ -9,6 +9,9 @@ try {
 	$zrequest = file_get_contents('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
 	
+	if (!defined('wtw_defaultlanguage')) {
+		define('wtw_defaultlanguage','English');
+	}
 	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zwebid = $wtwhandlers->getPost('webid','');
@@ -27,6 +30,7 @@ try {
 	$zdbname = $wtwhandlers->getPost('dbname',wtw_dbname);
 	$zdbusername = $wtwhandlers->getPost('dbusername',wtw_dbusername);
 	$zdbpassword = $wtwhandlers->getPost('dbpassword',wtw_dbpassword);
+	$zdefaultlanguage = $wtwhandlers->getPost('defaultlanguage',wtw_defaultlanguage);
 	$zcontentpath = $wtwhandlers->getPost('contentpath',wtw_contentpath);
 	$zdefaultdomain = $wtwhandlers->getPost('defaultdomain',wtw_defaultdomain);
 	$zdefaultsitename = $wtwhandlers->getPost('defaultsitename',wtw_defaultsitename);
@@ -38,6 +42,7 @@ try {
 	$zftpuser = $wtwhandlers->getPost('ftpuser',wtw_ftpuser);
 	$zftppassword = $wtwhandlers->getPost('ftppassword',wtw_ftppassword);
 	$zftpbase = $wtwhandlers->getPost('ftpbase',wtw_ftpbase);
+	$zlabel = $wtwhandlers->getPost('label','');
 
 	/* convert any comma seperated email lists into arrays */
 	if (!empty($zsendto) && isset($zsendto)) {
@@ -72,13 +77,19 @@ try {
 			$zresponse = $wtwtools->getServerSettings();
 			break;
 		case "saveserversettings":
-			$zresponse = $wtwtools->saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zftpuser, $zftppassword, $zftpbase);
+			$zresponse = $wtwtools->saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zdefaultlanguage, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zftpuser, $zftppassword, $zftpbase);
+			break;
+		case "getlanguages":
+			$zresponse = $wtwtools->getLanguages();
 			break;
 		case "sendadminemail":
 			$zresponse = $wtwtools->sendAdminEmail($zsendto, $zsubject, $zmessage);
 			break;
 		case "sendemail":
 			$zresponse = $wtwtools->sendEmail($zsendto, $zcopyto, $zbccto, $zsubject, $zhtmlmessage, $zmessage);
+			break;
+		case "translate":
+			$zresponse = $wtwtools->__($zlabel);
 			break;
 	}
 
