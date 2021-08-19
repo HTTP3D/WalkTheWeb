@@ -3425,7 +3425,6 @@ WTWJS.prototype.loadLanguages = async function(zlanguage) {
 		};
 		WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
 			function(zresponse) {
-WTW.log(zresponse);
 				zresponse = JSON.parse(zresponse);
 				if (zresponse != null) {
 					/* load values into dropdown */
