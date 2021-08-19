@@ -1,0 +1,25 @@
+[{
+	"language":"Español",
+	"abbreviation":"esp",
+	"translate": {
+		"3D Avatars": "Avatares 3D",
+		"Select 3D Avatar": "Seleccionar Avatar 3D",
+		"Add New 3D Avatar": "Añadir Nuevo Avatar 3D",
+		"Create 3D Avatar": "Crear Avatar 3D",
+		"Edit 3D Avatar": "Editar Avatar 3D",
+		"3D Avatar Snapshot": "La Foto de Avatar 3D",
+		"Copy 3D Avatar": "Copiar Avatar 3D",
+		"Share 3D Avatar": "Compartir Avatar 3D",
+		"Delete 3D Avatar": "Eliminar Avatar 3D",
+		"Avatar Groups": "Grupos de Avatar",
+		"Avatar Animation Events": "Eventos de Animación de Avatar",
+		"3D Avatars List": "Lista de Avatar 3D",
+		"3D Avatar Profiles": "Perfiles de Avatar 3D",
+		"Add or Edit Avatar": "Agregar o Editar Avatar 3D",
+		"3D Avatar Information": "Información de Avatar 3D",
+		"3D Avatar Files": "Archivos de Avatar 3D",
+		"3D Avatar Scaling": "Dimensionamiento de Avatar 3D",
+		"3D Avatar Colors": "Colores de Avatar 3D",
+		"3D Avatar Animations": "Animaciónes de Avatar 3D"
+	}
+}]
