@@ -148,8 +148,8 @@ class wtwtools {
 				if (defined('wtw_tableprefix')) {
 					$zresponse["tableprefix"] = wtw_tableprefix;
 				}
-				if (defined('wtw_language')) {
-					$zresponse["defaultlanguage"] = wtw_language;
+				if (defined('wtw_defaultlanguage')) {
+					$zresponse["defaultlanguage"] = wtw_defaultlanguage;
 				}
 				if (defined('wtw_contentpath')) {
 					$zresponse["contentpath"] = wtw_contentpath;

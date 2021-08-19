@@ -295,6 +295,12 @@ class wtwplugins {
 		return $wtwdb->checkAdminAccess($zcommunityid, $zbuildingid, $zthingid);
 	}
 
+	public function __($zlabel) {
+		/* Language translation based on language file */
+		global $wtwdb;
+		return $wtwdb->__($zlabel);
+	}	
+
 	public function addStylesheet($zstylesheetid, $zadminonly, $zstylesheeturl) {
 		/* function to add a stylsheet to the page load */
 		global $wtw;

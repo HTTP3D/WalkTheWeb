@@ -2014,10 +2014,11 @@ class wtwdb {
 			if (defined("wtw_defaultlanguage")) {
 				$zsetlanguage = wtw_defaultlanguage;
 			}
+			/* look for translation in core language files */
 			$zdir = wtw_rootpath."/core/languages";
 			if (is_dir($zdir)) {
-				if ($zdh = opendir($zdir)) {
-					while (($zfile = readdir($zdh)) !== false) {
+				if ($zdirectory = opendir($zdir)) {
+					while (($zfile = readdir($zdirectory)) !== false) {
 						if ($zfile != '.' && $zfile != '..') {
 							$zlanguageurl = $wtw->domainurl."/core/languages/".$zfile;
 							$zlanguagedata = file_get_contents($zlanguageurl);
@@ -2035,7 +2036,45 @@ class wtwdb {
 							}
 						}
 					}
-					closedir($zdh);
+					closedir($zdirectory);
+				}
+			}
+			if ($znewlabel == $zlabel) {
+				/* look for translation in plugin folders */
+				$zdir = wtw_rootpath."/content/plugins";
+				if (is_dir($zdir)) {
+					if ($zdirectory = opendir($zdir)) {
+						while (($zfile = readdir($zdirectory)) !== false) {
+							if ($zfile != '.' && $zfile != '..') {
+								if (is_dir($zdir.'/'.$zfile)) {
+									if (is_dir($zdir.'/'.$zfile.'/languages')) {
+										if ($zdirectory2 = opendir($zdir.'/'.$zfile.'/languages')) {
+											while (($zfile2 = readdir($zdirectory2)) !== false) {
+												if ($zfile2 != '.' && $zfile2 != '..') {
+													$zlanguageurl = $wtw->domainurl."/content/plugins/".$zfile."/languages/".$zfile2;
+													$zlanguagedata = file_get_contents($zlanguageurl);
+													$zlanguagedata = json_decode($zlanguagedata);
+													if (isset($zlanguagedata[0]->translate)) {
+														if (isset($zlanguagedata[0]->language)) {
+															if (strtolower($zlanguagedata[0]->language) == strtolower($zsetlanguage)) {
+																foreach($zlanguagedata[0]->translate as $zkey => $zvalue) {
+																	if (strtolower($zlabel) == strtolower($zkey)) {
+																		$znewlabel = $zvalue;
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+											closedir($zdirectory2);
+										}
+									}
+								}
+							}
+						}
+						closedir($zdirectory);
+					}
 				}
 			}
 		} catch (Exception $e) {

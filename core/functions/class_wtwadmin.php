@@ -653,7 +653,7 @@ class wtwadmin {
 			
 			/* settings page - server settings */
 			$zpagedata .= "		<div id=\"wtw_serversettings\" class=\"wtw-fullpage\">\r\n";
-			$zpagedata .= "			<div class=\"wtw-dashboardboxleft\">\r\n";
+			$zpagedata .= "			<div class=\"wtw-dashboardboxleftdouble\">\r\n";
 			$zpagedata .= "				<div class=\"wtw-dashboardboxtitle\">WalkTheWeb Server Settings</div>\r\n";
 			$zpagedata .= "				<div class=\"wtw-dashboardbox\">\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">Server Instance ID</div>\r\n";
@@ -691,7 +691,7 @@ class wtwadmin {
 			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">Default Site Name</div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_defaultsitename\" maxlength=\"255\" /></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">Google Analytics ID<br />(default)</div>\r\n";
+			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">Google Analytics ID (default)</div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_googleanalytics\" maxlength=\"255\" /></div>\r\n";
 
 			$zpagedata .= "					<div class=\"wtw-clear\"></div><hr />\r\n";
@@ -701,14 +701,14 @@ class wtwadmin {
 			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">Content URL</div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_contenturl\" maxlength=\"255\" /></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">Folder Permissions<br />(default umask is 0027)</div>\r\n";
+			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">Folder Permissions (default umask is 0027)</div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_umask\" maxlength=\"4\" /></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">File Permissions<br />(default is 755)</div>\r\n";
+			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">File Permissions (default is 755)</div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_chmod\" maxlength=\"15\" /></div>\r\n";
 
 			$zpagedata .= "					<div class=\"wtw-clear\"></div><hr />\r\n";
-			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">FTP Host<br />(Server:port)</div>\r\n";
+			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">FTP Host (Server:port)</div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_ftphost\" maxlength=\"255\" /></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">FTP User</div>\r\n";
@@ -717,12 +717,12 @@ class wtwadmin {
 			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">FTP Password</div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"password\" id=\"wtw_ftppassword\" maxlength=\"255\" /></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">FTP Base<br />(Subfolder for 3D Website)</div>\r\n";
+			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">FTP Base (Subfolder for 3D Website)</div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_ftpbase\" maxlength=\"255\" /></div>\r\n";
 
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "					<div id=\"wtw_serversettingscomplete\"></div><br />\r\n";
-			$zpagedata .= "					<div id=\"wtw_loadingserversettings\" class=\"wtw-loadingnotice\" style=\"margin-left:auto;margin-right:auto;color:#000000;\">Loading...</div>\r\n";
+			$zpagedata .= "					<div id=\"wtw_loadingserversettings\" class=\"wtw-loadingnotice\" style=\"margin-left:auto;margin-right:auto;color:#000000;\">Loading</div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-greenmenubutton\" onclick=\"WTW.saveServerSettings();\">Save Server Settings</div>\r\n";
 			$zpagedata .= "				</div>\r\n";
