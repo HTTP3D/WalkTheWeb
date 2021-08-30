@@ -36,25 +36,25 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 		/* select page to show */
 		switch (zpageid) {
 			case "error":
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Users</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zsetcategory + "</div>";
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__("Error") + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__(zsetcategory) + "</div>";
 				WTW.show('wtw_showfilepage');
 				WTW.show('wtw_errorpage');
 				WTW.show('wtw_showerror');
 				break;
 			case "dashboard":
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>WalkTheWeb Dashboard</div>";
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__("WalkTheWeb Dashboard") + "</div>";
 				WTW.show('wtw_dashboardpage');
 				WTW.openDashboardForm();
 				break;
 			case "updates":
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Updates</div>";
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__("Updates") + "</div>";
 				WTW.show('wtw_showfilepage');
 				WTW.show('wtw_updatespage');
 				WTW.checkForUpdates('1');
 				WTW.loadArchiveUpdates();
 				break;
 			case "medialibrary":
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Media Library</div>";
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__("Media Library") + "</div>";
 				WTW.show('wtw_selectimagepage');
 				dGet('wtw_fullpageform').style.width = (WTW.sizeX - 5 - Number(dGet('wtw_adminmenubutton').style.left.replace("px",""))).toString() + 'px';
 				dGet('wtw_selectimageformscroll').style.height = (WTW.sizeY - 160) + 'px';
@@ -64,13 +64,13 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				}
 				break;
 			case "mediapage":
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Media Library</div>";
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__("Media Library") + "</div>";
 				WTW.show('wtw_showfilepage');
 				WTW.openMediaPageForm(zitem);
 				break;
 			case "importpage":
 				if (WTW.adminView == 1) {
-					dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','','');\">Media Library</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>WalkTheWeb Downloads</div>";
+					dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','','');\">" + WTW.__("Media Library") + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__("WalkTheWeb Downloads") + "</div>";
 					WTW.hide('wtw_installprogress');
 					WTW.hide('searchcommunitiesdiv');
 					WTW.hide('searchbuildingsdiv');
@@ -124,7 +124,7 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				}
 				break;
 			case "users":
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Users</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zsetcategory + "</div>";
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__("Users") + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__(zsetcategory) + "</div>";
 				WTW.show('wtw_showfilepage');
 				switch (zsetcategory) {
 					case 'User Roles':
@@ -136,13 +136,13 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				}
 				break;
 			case "plugins":
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>3D Plugins</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zsetcategory + "</div>";
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__("3D Plugins") + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__(zsetcategory) + "</div>";
 				WTW.show('wtw_showfilepage');
 				/* WTW.openAllPlugins('',''); */
 				WTW.checkForUpdates('2');
 				break;
 			case "settings":
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>Settings</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zsetcategory + "</div>";
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__("Settings") + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__(zsetcategory) + "</div>";
 				WTW.show('wtw_showfilepage');
 				switch (zsetcategory) {
 					case "Server Settings":
@@ -160,7 +160,8 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				}
 				break;
 			case "fullpage":
-				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + zsetcategory + "</div>";
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__(zsetcategory) + "</div>";
+				WTW.show('wtw_settingspage');
 				WTW.show('wtw_fullpageplugins');
 				WTW.show(zitem);
 				break;
@@ -2476,6 +2477,7 @@ WTWJS.prototype.changeEmailSwitch = function() {
 WTWJS.prototype.openWebAliasSettings = async function() {
 	/* open web aliases page form */
 	try {
+		WTW.hide('wtw_serversettings');
 		WTW.show('wtw_loadingwebalias');
 		WTW.show('wtw_settingspage');
 		WTW.show('wtw_webaliassettings');
@@ -3442,10 +3444,13 @@ WTWJS.prototype.loadLanguages = async function(zlanguage) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-loadLanguages=" + ex.message);
 	}
 }
-		
-WTWJS.prototype.saveServerSettings = async function() {
+
+WTWJS.prototype.saveServerSettings = async function(zreload) {
 	/* save Server Settings to the Config file */
 	try {
+		if (zreload == undefined) {
+			zreload = false;
+		}
 		var zrequest = {
 			'dbserver': dGet('wtw_dbserver').value,
 			'dbname': dGet('wtw_dbname').value,
@@ -3476,9 +3481,14 @@ WTWJS.prototype.saveServerSettings = async function() {
 					dGet('wtw_serversettingscomplete').innerHTML = 'Server Settings Saved';
 					dGet('wtw_serversettingscomplete').style.color = 'green';
 				}
-				window.setTimeout(function() {
-					dGet('wtw_serversettingscomplete').innerHTML = '';
-				},5000);
+				if (zreload) {
+					window.location.reload();
+					return false;
+				} else {
+					window.setTimeout(function() {
+						dGet('wtw_serversettingscomplete').innerHTML = '';
+					},5000);
+				}
 			}
 		);
 	} catch (ex) {

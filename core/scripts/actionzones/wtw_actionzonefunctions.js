@@ -42,6 +42,8 @@ WTWJS.prototype.checkActionZones = function() {
 									/* trigger a pageview in analytics if set */
 									WTW.checkAnalytics(i);
 								} catch (ex) {}
+								/* trigger plugins when avatar enters zone */
+								WTW.pluginsEnterActionZone(zmoldname, WTW.actionZones[i]);
 								/* status 2 means loaded */
 								WTW.actionZones[i].status = 2;
 							} else if (zmeinzone == false && zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {
@@ -51,6 +53,8 @@ WTWJS.prototype.checkActionZones = function() {
 										WTW.addUnloadZoneToQueue(i);
 									}
 								}
+								/* trigger plugins when avatar exits zone */
+								WTW.pluginsExitActionZone(zmoldname, WTW.actionZones[i]);
 								/* status 0 means unloaded */
 								WTW.actionZones[i].status = 0;
 							} else if (zmoldname.indexOf("loadanimations") > -1) {
@@ -80,6 +84,8 @@ WTWJS.prototype.checkActionZones = function() {
 								}
 								/* if there were JavaScripts loaded with the zone, unload them */
 								WTW.checkUnloadScripts(i);
+								/* trigger plugins when avatar exits zone */
+								WTW.pluginsExitActionZone(zmoldname, WTW.actionZones[i]);
 								/* status 0 means not in zone */
 								WTW.actionZones[i].status = 0;
 							} else if (zmoldname.indexOf("clickactivated") > -1) {

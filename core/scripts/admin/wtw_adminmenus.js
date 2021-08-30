@@ -767,56 +767,56 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						break;
 				/* Dev Tools Admin Items */
 					case "wtw_adminfocus":
-						if (dGet('wtw_adminfocus').innerHTML.indexOf('Focus ON') > -1) {
+						if (dGet('wtw_adminfocus').innerHTML.indexOf(WTW.__('Focus ON')) > -1) {
 							WTW.setQuickEditorFocus(0);
 						} else {
 							WTW.setQuickEditorFocus(1);
 						}
 						break;
 					case "wtw_adminavatarcamera":
-						if (dGet('wtw_adminavatarcamera').innerHTML.indexOf('Avatar Camera ON') > -1) {
+						if (dGet('wtw_adminavatarcamera').innerHTML.indexOf(WTW.__('Avatar Camera ON')) > -1) {
 							WTW.setQuickEditorAvatarCamera(0);
 						} else {
 							WTW.setQuickEditorAvatarCamera(1);
 						}
 						break;
 					case "wtw_adminmerged":
-						if (dGet('wtw_adminmerged').innerHTML.indexOf('Merged Molds ON') > -1) {
+						if (dGet('wtw_adminmerged').innerHTML.indexOf(WTW.__('Merged Molds ON')) > -1) {
 							WTW.setQuickEditorMerged(0);
 						} else {
 							WTW.setQuickEditorMerged(1);
 						}
 						break;
 					case "wtw_adminzones":
-						if (dGet('wtw_adminzones').innerHTML.indexOf('Action Zones ON') > -1) {
+						if (dGet('wtw_adminzones').innerHTML.indexOf(WTW.__('Action Zones ON')) > -1) {
 							WTW.setQuickEditorZones(0);
 						} else {
 							WTW.setQuickEditorZones(1);
 						}
 						break;
 					case "wtw_adminloadall":
-						if (dGet('wtw_adminloadall').innerHTML.indexOf('Load All Zones ON') > -1) {
+						if (dGet('wtw_adminloadall').innerHTML.indexOf(WTW.__('Load All Zones ON')) > -1) {
 							WTW.setQuickEditorLoadAll(0);
 						} else {
 							WTW.setQuickEditorLoadAll(1);
 						}
 						break;
 					case "wtw_adminlines":
-						if (dGet('wtw_adminlines').innerHTML.indexOf('Alignment Lines ON') > -1) {
+						if (dGet('wtw_adminlines').innerHTML.indexOf(WTW.__('Alignment Lines ON')) > -1) {
 							WTW.setQuickEditorLines(0);
 						} else {
 							WTW.setQuickEditorLines(1);
 						}
 						break;
 					case "wtw_adminaxislabels":
-						if (dGet('wtw_adminaxislabels').innerHTML.indexOf('Axis Labels ON') > -1) {
+						if (dGet('wtw_adminaxislabels').innerHTML.indexOf(WTW.__('Axis Labels ON')) > -1) {
 							if (WTW.moveX == undefined || WTW.moveX == null ) {
 							} else {
 								WTW.moveX.isVisible = false;
 								WTW.moveY.isVisible = false;
 								WTW.moveZ.isVisible = false;          
 							}
-							dGet('wtw_adminaxislabels').innerHTML = 'Axis Labels OFF';
+							dGet('wtw_adminaxislabels').innerHTML = WTW.__('Axis Labels OFF');
 						} else {
 							if (WTW.moveX == undefined || WTW.moveX == null ) {
 							} else {
@@ -824,7 +824,7 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 								WTW.moveY.isVisible = true;
 								WTW.moveZ.isVisible = true;				
 							}
-							dGet('wtw_adminaxislabels').innerHTML = 'Axis Labels ON';
+							dGet('wtw_adminaxislabels').innerHTML = WTW.__('Axis Labels ON');
 						}
 						break;
 					case "wtw_adminloadedobjects":
@@ -1069,10 +1069,10 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 				dGet('wtw_bavatarcamera').innerHTML = zavatar + "<br />" + zcamera + "<br />" + zon;
 				dGet('wtw_bavatarcamera').onclick = function() { WTW.setQuickEditorAvatarCamera(0); };
 				dGet('wtw_bavatarcamera').className = "wtw-quickbar";
-				dGet('wtw_bavatarcamera').title = "Camera is Attached to Avatar";
-				dGet('wtw_bavatarcamera').alt = "Camera is Attached to Avatar";
+				dGet('wtw_bavatarcamera').title = WTW.__("Camera is Attached to Avatar");
+				dGet('wtw_bavatarcamera').alt = WTW.__("Camera is Attached to Avatar");
 				if (dGet('wtw_adminavatarcamera') != null) {
-					dGet('wtw_adminavatarcamera').innerHTML = "Avatar Camera ON";
+					dGet('wtw_adminavatarcamera').innerHTML = WTW.__("Avatar Camera ON");
 				}
 			}
 			WTW.setCookie("wtw_bavatarcamera","1",30);
@@ -1085,10 +1085,10 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 				dGet('wtw_bavatarcamera').innerHTML = zavatar + "<br />" + zcamera + "<br />" + zoff;
 				dGet('wtw_bavatarcamera').onclick = function() { WTW.setQuickEditorAvatarCamera(1); };
 				dGet('wtw_bavatarcamera').className = "wtw-quickbaroff";
-				dGet('wtw_bavatarcamera').title = "Camera is Detached from Avatar";
-				dGet('wtw_bavatarcamera').alt = "Camera is Detached from Avatar";
+				dGet('wtw_bavatarcamera').title = WTW.__("Camera is Detached from Avatar");
+				dGet('wtw_bavatarcamera').alt = WTW.__("Camera is Detached from Avatar");
 				if (dGet('wtw_adminavatarcamera') != null) {
-					dGet('wtw_adminavatarcamera').innerHTML = "Avatar Camera OFF";
+					dGet('wtw_adminavatarcamera').innerHTML = WTW.__("Avatar Camera OFF");
 				}
 			}
 			WTW.setCookie("wtw_bavatarcamera","0",30);
@@ -1108,10 +1108,10 @@ WTWJS.prototype.setQuickEditorFocus = function(zvalue) {
 				dGet('wtw_bfocus').innerHTML = zfocus + "<br /><br />" + zon;
 				dGet('wtw_bfocus').onclick = function() { WTW.setQuickEditorFocus(0); };
 				dGet('wtw_bfocus').className = "wtw-quickbar";
-				dGet('wtw_bfocus').title = "Focus Highlight is On";
-				dGet('wtw_bfocus').alt = "Focus Highlight is On";
+				dGet('wtw_bfocus').title = WTW.__("Focus Highlight is On");
+				dGet('wtw_bfocus').alt = WTW.__("Focus Highlight is On");
 				if (dGet('wtw_adminfocus') != null) {
-					dGet('wtw_adminfocus').innerHTML = "Focus ON";
+					dGet('wtw_adminfocus').innerHTML = WTW.__("Focus ON");
 				}
 			}
 			WTW.setCookie("wtw_bfocus","1",30);
@@ -1122,10 +1122,10 @@ WTWJS.prototype.setQuickEditorFocus = function(zvalue) {
 				dGet('wtw_bfocus').innerHTML = zfocus + "<br /><br />" + zoff;
 				dGet('wtw_bfocus').onclick = function() { WTW.setQuickEditorFocus(1); };
 				dGet('wtw_bfocus').className = "wtw-quickbaroff";
-				dGet('wtw_bfocus').title = "Focus Highlight is Off";
-				dGet('wtw_bfocus').alt = "Focus Highlight is Off";
+				dGet('wtw_bfocus').title = WTW.__("Focus Highlight is Off");
+				dGet('wtw_bfocus').alt = WTW.__("Focus Highlight is Off");
 				if (dGet('wtw_adminfocus') != null) {
-					dGet('wtw_adminfocus').innerHTML = "Focus OFF";
+					dGet('wtw_adminfocus').innerHTML = WTW.__("Focus OFF");
 				}
 			}
 			WTW.setCookie("wtw_bfocus","0",30);
@@ -1146,10 +1146,10 @@ WTWJS.prototype.setQuickEditorMerged = function(zvalue) {
 				dGet('wtw_bmerged').innerHTML = zmerged + "<br /><br />" + zon;
 				dGet('wtw_bmerged').onclick = function() { WTW.setQuickEditorMerged(0); };
 				dGet('wtw_bmerged').className = "wtw-quickbar";
-				dGet('wtw_bmerged').title = "Merged Shapes are Shown";
-				dGet('wtw_bmerged').alt = "Merged Shapes are Shown";
+				dGet('wtw_bmerged').title = WTW.__("Merged Shapes are Shown");
+				dGet('wtw_bmerged').alt = WTW.__("Merged Shapes are Shown");
 				if (dGet('wtw_adminmerged') != null) {
-					dGet('wtw_adminmerged').innerHTML = "Merged Molds ON";
+					dGet('wtw_adminmerged').innerHTML = WTW.__("Merged Molds ON");
 				}
 			}
 			WTW.setCookie("wtw_bmerged","1",30);
@@ -1160,10 +1160,10 @@ WTWJS.prototype.setQuickEditorMerged = function(zvalue) {
 				dGet('wtw_bmerged').innerHTML = zmerged + "<br /><br />" + zoff;
 				dGet('wtw_bmerged').onclick = function() { WTW.setQuickEditorMerged(1); };
 				dGet('wtw_bmerged').className = "wtw-quickbaroff";
-				dGet('wtw_bmerged').title = "Merged Shapes are Hidden";
-				dGet('wtw_bmerged').alt = "Merged Shapes are Hidden";
+				dGet('wtw_bmerged').title = WTW.__("Merged Shapes are Hidden");
+				dGet('wtw_bmerged').alt = WTW.__("Merged Shapes are Hidden");
 				if (dGet('wtw_adminmerged') != null) {
-					dGet('wtw_adminmerged').innerHTML = "Merged Molds OFF";
+					dGet('wtw_adminmerged').innerHTML = WTW.__("Merged Molds OFF");
 				}
 			}
 			WTW.setCookie("wtw_bmerged","0",30);
@@ -1245,10 +1245,10 @@ WTWJS.prototype.setQuickEditorZones = function(value) {
 				dGet('wtw_bzones').innerHTML = zzones + "<br /><br />" + zon;
 				dGet('wtw_bzones').onclick = function() { WTW.setQuickEditorZones(0); };
 				dGet('wtw_bzones').className = "wtw-quickbar";
-				dGet('wtw_bzones').title = "Action Zones are Shown";
-				dGet('wtw_bzones').alt = "Action Zones are Shown";
+				dGet('wtw_bzones').title = WTW.__("Action Zones are Shown");
+				dGet('wtw_bzones').alt = WTW.__("Action Zones are Shown");
 				if (dGet('wtw_adminzones') != null) {
-					dGet('wtw_adminzones').innerHTML = "Action Zones ON";
+					dGet('wtw_adminzones').innerHTML = WTW.__("Action Zones ON");
 				}
 			}
 			WTW.setCookie("wtw_bzones","1",30);
@@ -1263,10 +1263,10 @@ WTWJS.prototype.setQuickEditorZones = function(value) {
 				dGet('wtw_bzones').innerHTML = zzones + "<br /><br />" + zoff;
 				dGet('wtw_bzones').onclick = function() { WTW.setQuickEditorZones(1); };
 				dGet('wtw_bzones').className = "wtw-quickbaroff";
-				dGet('wtw_bzones').title = "Action Zones are Hidden";
-				dGet('wtw_bzones').alt = "Action Zones are Hidden";
+				dGet('wtw_bzones').title = WTW.__("Action Zones are Hidden");
+				dGet('wtw_bzones').alt = WTW.__("Action Zones are Hidden");
 				if (dGet('wtw_adminzones') != null) {
-					dGet('wtw_adminzones').innerHTML = "Action Zones OFF";
+					dGet('wtw_adminzones').innerHTML = WTW.__("Action Zones OFF");
 				}
 			}
 			WTW.setCookie("wtw_bzones","0",30);
@@ -1288,10 +1288,10 @@ WTWJS.prototype.setQuickEditorLoadAll = function(value) {
 				dGet('wtw_bloadall').innerHTML = zload + "<br />" + zall + "<br />" + zon;
 				dGet('wtw_bloadall').onclick = function() { WTW.setQuickEditorLoadAll(0); };
 				dGet('wtw_bloadall').className = "wtw-quickbar";
-				dGet('wtw_bloadall').title = "Load All Action Zones";
-				dGet('wtw_bloadall').alt = "Load All Action Zones";
+				dGet('wtw_bloadall').title = WTW.__("Load All Action Zones");
+				dGet('wtw_bloadall').alt = WTW.__("Load All Action Zones");
 				if (dGet('wtw_adminloadall') != null) {
-					dGet('wtw_adminloadall').innerHTML = "Load All Zones ON";
+					dGet('wtw_adminloadall').innerHTML = WTW.__("Load All Zones ON");
 				}
 			}
 			WTW.setCookie("wtw_bloadall","1",30);
@@ -1302,10 +1302,10 @@ WTWJS.prototype.setQuickEditorLoadAll = function(value) {
 				dGet('wtw_bloadall').innerHTML = zload + "<br />" + zall + "<br />" + zoff;
 				dGet('wtw_bloadall').onclick = function() { WTW.setQuickEditorLoadAll(1); };
 				dGet('wtw_bloadall').className = "wtw-quickbaroff";
-				dGet('wtw_bloadall').title = "Load Active Action Zones";
-				dGet('wtw_bloadall').alt = "Load Active Action Zones";
+				dGet('wtw_bloadall').title = WTW.__("Load Active Action Zones");
+				dGet('wtw_bloadall').alt = WTW.__("Load Active Action Zones");
 				if (dGet('wtw_adminloadall') != null) {
-					dGet('wtw_adminloadall').innerHTML = "Load All Zones OFF";
+					dGet('wtw_adminloadall').innerHTML = WTW.__("Load All Zones OFF");
 				}
 			}
 			WTW.setCookie("wtw_bloadall","0",30);
@@ -1356,10 +1356,10 @@ WTWJS.prototype.setQuickEditorLines = function(value) {
 				dGet('wtw_blines').innerHTML = zlines + "<br /><br />" + zon;
 				dGet('wtw_blines').onclick = function() { WTW.setQuickEditorLines(0); };
 				dGet('wtw_blines').className = "wtw-quickbar";
-				dGet('wtw_blines').title = "Alignment Lines are Shown";
-				dGet('wtw_blines').alt = "Alignment Lines are Shown";
+				dGet('wtw_blines').title = WTW.__("Alignment Lines are Shown");
+				dGet('wtw_blines').alt = WTW.__("Alignment Lines are Shown");
 				if (dGet('wtw_adminlines') != null) {
-					dGet('wtw_adminlines').innerHTML = "Alignment Lines ON";
+					dGet('wtw_adminlines').innerHTML = WTW.__("Alignment Lines ON");
 				}
 			}
 			WTW.setCookie("wtw_blines","1",30);
@@ -1399,10 +1399,10 @@ WTWJS.prototype.setQuickEditorLines = function(value) {
 				dGet('wtw_blines').innerHTML = zlines + "<br /><br />" + zoff;
 				dGet('wtw_blines').onclick = function() { WTW.setQuickEditorLines(1); };
 				dGet('wtw_blines').className = "wtw-quickbaroff";
-				dGet('wtw_blines').title = "Alignment Lines are Hidden";
-				dGet('wtw_blines').alt = "Alignment Lines are Hidden";
+				dGet('wtw_blines').title = WTW.__("Alignment Lines are Hidden");
+				dGet('wtw_blines').alt = WTW.__("Alignment Lines are Hidden");
 				if (dGet('wtw_adminlines') != null) {
-					dGet('wtw_adminlines').innerHTML = "Alignment Lines OFF";
+					dGet('wtw_adminlines').innerHTML = WTW.__("Alignment Lines OFF");
 				}
 			}
 			WTW.setCookie("wtw_blines","0",30);
@@ -1865,9 +1865,9 @@ WTWJS.prototype.setMenuBarSelectText = function() {
 	/* browse menubar while in admin mode - set default menu bar text wording and show/hide */
 	try {
 		if (thingid == "" && buildingid == "" && communityid == "") {
-			dGet('wtw_showcommunityname').innerHTML = "Select 3D Item to Edit";	
+			dGet('wtw_showcommunityname').innerHTML = WTW.__("Select 3D Item to Edit");
 			dGet('wtw_showcommunityname').style.cursor = 'default';
-			dGet('wtw_showbuildingname').innerHTML = "from Admin Menu Above";	
+			dGet('wtw_showbuildingname').innerHTML = WTW.__("from Admin Menu Above");
 			dGet('wtw_showbuildingname').style.cursor = 'default';
 			WTW.hide('wtw_modebuilding');
 			WTW.hide('wtw_mainadminmode');

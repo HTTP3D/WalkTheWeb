@@ -1071,15 +1071,15 @@ WTWJS.prototype.changeGraphic = function(zvalue) {
         }
 		switch (WTW.graphicSet) {
 			case 0:
-				dGet('wtw_graphichelptitle').innerHTML = "Graphics (Low Resolution)";
+				dGet('wtw_graphichelptitle').innerHTML = WTW.__("Graphics (Low Resolution)");
 				WTW.gpuSetting = 'low';
 				break;
 			case 1:
-				dGet('wtw_graphichelptitle').innerHTML = "Graphics (Optimum Balance)";
+				dGet('wtw_graphichelptitle').innerHTML = WTW.__("Graphics (Optimum Balance)");
 				WTW.gpuSetting = 'medium';
 				break;
 			case 2:
-				dGet('wtw_graphichelptitle').innerHTML = "Graphics (High Resolution)";
+				dGet('wtw_graphichelptitle').innerHTML = WTW.__("Graphics (High Resolution)");
 				WTW.gpuSetting = 'high';
 				break;
 		}
@@ -1129,32 +1129,32 @@ WTWJS.prototype.setShadowSettings = function() {
 			case 0:
 				zshadowresolution = 512;
 				if (WTW.gpuSetting == 'low') {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (None - Low Resolution)<br><b>This is your recommended setting.<b/>";
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (None - Low Resolution)") + "<br /><b>" + WTW.__("This is your recommended setting.") + "<b/>";
                 }
                 else {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (None - Low Resolution)<br /><br />";
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (None - Low Resolution)") + "<br /><br />";
                 }
 				break;
 			case 1:
 				zshadowresolution = 1024;
 				if (WTW.gpuSetting == 'medium') {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (Some - Medium Resolution)<br><b>This is your recommended setting.<b/>";
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (Some - Medium Resolution)") + "<br /><b>" + WTW.__("This is your recommended setting.") + "<b/>";
                 }
                 else {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (Some - Medium Resolution)<br /><br />";
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (Some - Medium Resolution)") + "<br /><br />";
                 }
 				break;
 			case 2:
 				zshadowresolution = 1024;
-				dGet('wtw_shadowhelptitle').innerHTML = "Shadows (All) - High Resolution<br /><br />";
+				dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (Most - High Resolution)") + "<br /><br />";
 				break;
 			case 3:
 				zshadowresolution = 4096;
 				if (WTW.gpuSetting == 'high') {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (All - Ultimate Resolution)<br><b>This is your recommended setting.<b/>";
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (All - Ultimate Resolution)") + "<br><b>" + WTW.__("This is your recommended setting.") + "<b/>";
                 }
                 else {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (All - Ultimate Resolution)<br /><br />";
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (All - Ultimate Resolution)") + "<br /><br />";
                 }
 				break;
 		}
@@ -1212,12 +1212,12 @@ WTWJS.prototype.toggleSoundMute = function() {
 			/* was off (muted) - now turn on */
 			/* set menu options for sound turned on */
 			dGet('wtw_menumute').src = "/content/system/images/menumuteoff32.png";
-			dGet('wtw_menumute').alt = "Turn Sound Off";
-			dGet('wtw_menumute').title = "Turn Sound Off";
+			dGet('wtw_menumute').alt = WTW.__("Turn Sound Off");
+			dGet('wtw_menumute').title = WTW.__("Turn Sound Off");
 			dGet('wtw_submenumute').src = "/content/system/images/menumuteoff.png";
-			dGet('wtw_submenumute').alt = "Turn Sound Off";
-			dGet('wtw_submenumute').title = "Turn Sound Off";
-			dGet('wtw_submenumutetext').innerHTML = "Sound is On";
+			dGet('wtw_submenumute').alt = WTW.__("Turn Sound Off");
+			dGet('wtw_submenumute').title = WTW.__("Turn Sound Off");
+			dGet('wtw_submenumutetext').innerHTML = WTW.__("Sound is On");
 			
 			/* check molds to turn on sound */
 			for (var i=0;i < WTW.communitiesMolds.length; i++) {
@@ -1290,12 +1290,12 @@ WTWJS.prototype.toggleSoundMute = function() {
 		} else {
 			/* set menu options for sound turned off */
 			dGet('wtw_menumute').src = "/content/system/images/menumuteon32.png";
-			dGet('wtw_menumute').alt = "Turn Sound On";
-			dGet('wtw_menumute').title = "Turn Sound On";
+			dGet('wtw_menumute').alt = WTW.__("Turn Sound On");
+			dGet('wtw_menumute').title = WTW.__("Turn Sound On");
 			dGet('wtw_submenumute').src = "/content/system/images/menumuteon.png";
-			dGet('wtw_submenumute').alt = "Turn Sound On";
-			dGet('wtw_submenumute').title = "Turn Sound On";
-			dGet('wtw_submenumutetext').innerHTML = "Sound is Off";
+			dGet('wtw_submenumute').alt = WTW.__("Turn Sound On");
+			dGet('wtw_submenumute').title = WTW.__("Turn Sound On");
+			dGet('wtw_submenumutetext').innerHTML = WTW.__("Sound is Off");
 
 			/* check molds to turn off sound */
 			for (var i=0;i < WTW.communitiesMolds.length; i++) {
@@ -1375,20 +1375,20 @@ WTWJS.prototype.toggleSoundMute = function() {
 WTWJS.prototype.toggleCameraTwo = function() {
 	/* toggle on or off camera two (scene camera) */
 	try {
-		if (dGet('wtw_cameratwotext').innerHTML == "Second Camera Off") { 
+		if (dGet('wtw_cameratwotext').innerHTML == WTW.__("Second Camera Off")) { 
 			/* turn on */
-			dGet('wtw_cameratwotext').innerHTML = "Second Camera On";
+			dGet('wtw_cameratwotext').innerHTML = WTW.__("Second Camera On");
 			dGet('wtw_cameratwoicon').src = "/content/system/images/menucamera.png";
-			dGet('wtw_cameratwoicon').alt = "Hide Second Camera";
-			dGet('wtw_cameratwoicon').title = "Hide Second Camera";
+			dGet('wtw_cameratwoicon').alt = WTW.__("Hide Second Camera");
+			dGet('wtw_cameratwoicon').title = WTW.__("Hide Second Camera");
 			WTW.show('wtw_cameratwoselect');
 			WTW.setCookie("showcameratwo","1",30);
 		} else {
 			/* turn off */
-			dGet('wtw_cameratwotext').innerHTML = "Second Camera Off";
+			dGet('wtw_cameratwotext').innerHTML = WTW.__("Second Camera Off");
 			dGet('wtw_cameratwoicon').src = "/content/system/images/menucameraoff.png";
-			dGet('wtw_cameratwoicon').alt = "Show Second Camera";
-			dGet('wtw_cameratwoicon').title = "Show Second Camera";
+			dGet('wtw_cameratwoicon').alt = WTW.__("Show Second Camera");
+			dGet('wtw_cameratwoicon').title = WTW.__("Show Second Camera");
 			WTW.hide('wtw_cameratwoselect');
 			WTW.setCookie("showcameratwo","0",30);
 		}
@@ -1400,21 +1400,21 @@ WTWJS.prototype.toggleCameraTwo = function() {
 WTWJS.prototype.toggleArrows = function() {
 	/* toggle show or hide movement arrows (mostly for first person camera) */
 	try {
-		if (dGet('wtw_arrowsvisibility').innerHTML == "Arrows are Visible") { 
+		if (dGet('wtw_arrowsvisibility').innerHTML == WTW.__("Arrows are Visible")) { 
 			/* hide arrows */
-			dGet('wtw_arrowsvisibility').innerHTML = "Arrows are Hidden";
+			dGet('wtw_arrowsvisibility').innerHTML = WTW.__("Arrows are Hidden");
 			dGet('wtw_arrowsicon').src = "/content/system/images/menuoff.png";
-			dGet('wtw_arrowsicon').alt = "Show Arrows";
-			dGet('wtw_arrowsicon').title = "Show Arrows";
+			dGet('wtw_arrowsicon').alt = WTW.__("Show Arrows");
+			dGet('wtw_arrowsicon').title = WTW.__("Show Arrows");
 			WTW.hide('wtw_iwalkarrow');
 			WTW.hide('wtw_iwalkarrow2');
 			WTW.setCookie("showarrows","0",30);
 		} else {
 			/* show arrows */
-			dGet('wtw_arrowsvisibility').innerHTML = "Arrows are Visible";
+			dGet('wtw_arrowsvisibility').innerHTML = WTW.__("Arrows are Visible");
 			dGet('wtw_arrowsicon').src = "/content/system/images/menuon.png";
-			dGet('wtw_arrowsicon').alt = "Hide Arrows";
-			dGet('wtw_arrowsicon').title = "Hide Arrows";
+			dGet('wtw_arrowsicon').alt = WTW.__("Hide Arrows");
+			dGet('wtw_arrowsicon').title = WTW.__("Hide Arrows");
 			WTW.show('wtw_iwalkarrow');
 			WTW.show('wtw_iwalkarrow2');
 			WTW.setCookie("showarrows","1",30);
@@ -1427,21 +1427,21 @@ WTWJS.prototype.toggleArrows = function() {
 WTWJS.prototype.toggleFPS = function() {
 	/* toggle show or hide frames per second counter */
 	try {
-		if (dGet('wtw_fpsvisibility').innerHTML == "Mold Count/FPS are Visible") { 
+		if (dGet('wtw_fpsvisibility').innerHTML == WTW.__("Mold Count and FPS are Visible")) { 
 			/* hide fps */
-			dGet('wtw_fpsvisibility').innerHTML = "Mold Count/FPS are Hidden";
+			dGet('wtw_fpsvisibility').innerHTML = WTW.__("Mold Count and FPS are Hidden");
 			dGet('wtw_fpsicon').src = "/content/system/images/menuoff.png";
-			dGet('wtw_fpsicon').alt = "Show Mold Count";
-			dGet('wtw_fpsicon').title = "Show Mold Count";
+			dGet('wtw_fpsicon').alt = WTW.__("Show Mold Count");
+			dGet('wtw_fpsicon').title = WTW.__("Show Mold Count");
 			WTW.hide('wtw_showmeshfps');
 			WTW.setCookie("showfps","0",30);
 			WTW.showFPS = 0;
 		} else {
 			/* show fps */
-			dGet('wtw_fpsvisibility').innerHTML = "Mold Count/FPS are Visible";
+			dGet('wtw_fpsvisibility').innerHTML = WTW.__("Mold Count and FPS are Visible");
 			dGet('wtw_fpsicon').src = "/content/system/images/menuon.png";
-			dGet('wtw_fpsicon').alt = "Hide Mold Count";
-			dGet('wtw_fpsicon').title = "Hide Mold Count";
+			dGet('wtw_fpsicon').alt = WTW.__("Hide Mold Count");
+			dGet('wtw_fpsicon').title = WTW.__("Hide Mold Count");
 			WTW.show('wtw_showmeshfps');
 			WTW.setCookie("showfps","1",30);
 			WTW.showFPS = 1;

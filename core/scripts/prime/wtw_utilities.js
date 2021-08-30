@@ -3062,14 +3062,16 @@ WTWJS.prototype.__ = function(zlabel) {
 	/* Language translation based on language file */
     var znewlabel = zlabel;
     try {
-		for (var i=0; i<wtw_translate.length;i++) {
-			if (wtw_translate[i] != null) {
-				if (wtw_translate[i].language != undefined) {
-					if (wtw_translate[i].language.toLowerCase() == wtw_defaultlanguage.toLowerCase()) {
-						for (var zkey in wtw_translate[i].translate) {
-							if (zkey != null) {
-								if (zkey.toLowerCase() == zlabel.toLowerCase()) {
-									znewlabel = wtw_translate[i].translate[zkey];
+		if (wtw_defaultlanguage.toLowerCase() != "english") {
+			for (var i=0; i<wtw_translate.length;i++) {
+				if (wtw_translate[i] != null) {
+					if (wtw_translate[i].language != undefined) {
+						if (wtw_translate[i].language.toLowerCase() == wtw_defaultlanguage.toLowerCase()) {
+							for (var zkey in wtw_translate[i].translate) {
+								if (zkey != null) {
+									if (zkey.toLowerCase() == zlabel.toLowerCase()) {
+										znewlabel = wtw_translate[i].translate[zkey];
+									}
 								}
 							}
 						}

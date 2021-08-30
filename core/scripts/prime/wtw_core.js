@@ -453,10 +453,10 @@ WTWJS.prototype.loadUserSettings = function() {
 		var zshowarrows = WTW.getCookie("showarrows");
 		if (zshowarrows != null) {
 			if (zshowarrows == "0") {
-				dGet('wtw_arrowsvisibility').innerHTML = "Arrows are Hidden";
+				dGet('wtw_arrowsvisibility').innerHTML = WTW.__("Arrows are Hidden");
 				dGet('wtw_arrowsicon').src = "/content/system/images/menuoff.png";
-				dGet('wtw_arrowsicon').alt = "Show Arrows";
-				dGet('wtw_arrowsicon').title = "Show Arrows";
+				dGet('wtw_arrowsicon').alt = WTW.__("Show Arrows");
+				dGet('wtw_arrowsicon').title = WTW.__("Show Arrows");
 				WTW.hide('wtw_iwalkarrow');
 				WTW.hide('wtw_iwalkarrow2');
 			}
@@ -465,10 +465,10 @@ WTWJS.prototype.loadUserSettings = function() {
 		WTW.showFPS = 0;
 		if (zshowfps != null) {
 			if (zshowfps == "1") {
-				dGet('wtw_fpsvisibility').innerHTML = "Mold Count/FPS are Visible";
+				dGet('wtw_fpsvisibility').innerHTML = WTW.__("Mold Count and FPS are Visible");
 				dGet('wtw_fpsicon').src = "/content/system/images/menuon.png";
-				dGet('wtw_fpsicon').alt = "Hide Mold Count";
-				dGet('wtw_fpsicon').title = "Hide Mold Count";
+				dGet('wtw_fpsicon').alt = WTW.__("Hide Mold Count");
+				dGet('wtw_fpsicon').title = WTW.__("Hide Mold Count");
 				WTW.show('wtw_showmeshfps');
 				WTW.showFPS = 1;
 			}
@@ -499,41 +499,41 @@ WTWJS.prototype.loadUserSettings = function() {
 		switch (WTW.shadowSet) {
 			case 0:
                 if (WTW.gpuSetting == 'low') {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (None - Low Resolution)<br /><b>This is your recommended setting.<b/>";
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (None - Low Resolution) This is your recommended setting.");
                 }
                 else {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (None - Low Resolution)";
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (None - Low Resolution)");
                 }
 				break;
 			case 1:
                 if (WTW.gpuSetting == 'medium') {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (Some - Medium Resolution)<br /><b>This is your recommended setting.<b/>";
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (Some - Medium Resolution) This is your recommended setting.");
                 }
                 else {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (Some - Medium Resolution)";
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (Some - Medium Resolution)");
                 }
 				break;
 			case 2:
-                dGet('wtw_shadowhelptitle').innerHTML = "Shadows (Most - High Resolution)";
+                dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (Most - High Resolution)");
 				break;
 			case 3:
                 if (WTW.gpuSetting == 'high') {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (All - Ultimate Resolution)<br /><b>This is your recommended setting.<b/>";
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (All - Ultimate Resolution) This is your recommended setting.");
                 }
                 else {
-                    dGet('wtw_shadowhelptitle').innerHTML = "Shadows (All - Ultimate Resolution)";
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (All - Ultimate Resolution)");
                 }
 				break;
 		}
 		switch (WTW.graphicSet) {
 			case 0:
-				dGet('wtw_graphichelptitle').innerHTML = "Graphics (Low Resolution)";
+				dGet('wtw_graphichelptitle').innerHTML = WTW.__("Graphics (Low Resolution)");
 				break;
 			case 1:
-				dGet('wtw_graphichelptitle').innerHTML = "Graphics (Optimum Balance)";
+				dGet('wtw_graphichelptitle').innerHTML = WTW.__("Graphics (Optimum Balance)");
 				break;
 			case 2:
-				dGet('wtw_graphichelptitle').innerHTML = "Graphics (High Resolution)";
+				dGet('wtw_graphichelptitle').innerHTML = WTW.__("Graphics (High Resolution)");
 				break;
 		}
 		WTW.pluginsLoadUserSettings();
