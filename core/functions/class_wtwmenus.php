@@ -23,7 +23,13 @@ class wtwmenus {
 			call_user_func_array($this->$method, array_merge(array(&$this), $arguments));
 		}
 	}
-	
+
+	public function __($zlabel) {
+		/* Language translation based on language file */
+		global $wtwdb;
+		return $wtwdb->__($zlabel);
+	}	
+
 	public function getMainMenu() {
 		/* gets the dynamically created browsing menu (bottom of the screen) */
 		global $wtw;
@@ -92,9 +98,9 @@ class wtwmenus {
 					}
 					$style = "style=\"".$style."\"";
 					if ($zrow["menuicon"] != '') {
-						$mainmenu .= "<img ".$menuitemname." src='".$zrow["menuicon"]."' alt='".$menutext."' title='".$menutext."' class='wtw-menu".$menualign."icon' ".$onclick.$onmouseover.$onmouseout." ".$style." />";
+						$mainmenu .= "<img ".$menuitemname." src='".$zrow["menuicon"]."' alt='".$wtwdb->__($menutext)."' title='".$wtwdb->__($menutext)."' class='wtw-menu".$menualign."icon' ".$onclick.$onmouseover.$onmouseout." ".$style." />";
 					} else {
-						$mainmenu .= "<div ".$menuitemname." class='wtw-menu".$menualign."text' ".$onclick.$onmouseover.$onmouseout." ".$style." >".$menutext."</div>";
+						$mainmenu .= "<div ".$menuitemname." class='wtw-menu".$menualign."text' ".$onclick.$onmouseover.$onmouseout." ".$style." >".$wtwdb->__($menutext)."</div>";
 					}
 				}
 			}			
@@ -181,7 +187,7 @@ class wtwmenus {
 						$zjsfunction = '';
 					}
 					if ($ztempmenu != $zmenu) {
-						$zsettingsmenu .= "<li id=\"".$zid."\" class=\"wtw-menuli\" onclick=\"WTW.hide('wtw_menusettings');".$zjsfunction."\"><img id=\"".$zid."image\" src=\"".$ziconurl."\" alt=\"".$ztitle."\" title=\"".$ztitle."\" class='wtw-menulefticon' />".$ztitle."</li>";
+						$zsettingsmenu .= "<li id=\"".$zid."\" class=\"wtw-menuli\" onclick=\"WTW.hide('wtw_menusettings');".$zjsfunction."\"><img id=\"".$zid."image\" src=\"".$ziconurl."\" alt=\"".$wtwdb->__($ztitle)."\" title=\"".$wtwdb->__($ztitle)."\" class='wtw-menulefticon' />".$wtwdb->__($ztitle)."</li>";
 					}
 				}
 			}
@@ -249,10 +255,10 @@ class wtwmenus {
 					}
 					if (!empty($zformdata) && isset($zformdata)) {
 						$zmenuforms .= "<div id=\"".$zformid."\" class=\"".$zcssclass."\" style=\"display:none;visibility:hidden;\">";
-						$zmenuforms .= "	<img class=\"wtw-closeright\" onclick=\"WTW.closeMenus('".$zformid."');\" src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />";
-						$zmenuforms .= "	<img id=\"".$zformid."min\" class=\"wtw-closeright\" onclick=\"WTW.resizeMenu('".$zformid."', 'min');\" src=\"/content/system/images/menuminimize.png\" alt=\"Minimize ".$ztitle."\" title=\"Minimize ".$ztitle."\" onmouseover=\"this.src='/content/system/images/menuminimizehover.png';\" onmouseout=\"this.src='/content/system/images/menuminimize.png';\" style=\"display:none;visibility:hidden;\" />\r\n";
-						$zmenuforms .= "	<img id=\"".$zformid."max\" class=\"wtw-closeright\" onclick=\"WTW.resizeMenu('".$zformid."', 'max');\" src=\"/content/system/images/menumaximize.png\" alt=\"Maximize ".$ztitle."\" title=\"Maximize ".$ztitle."\" onmouseover=\"this.src='/content/system/images/menumaximizehover.png';\" onmouseout=\"this.src='/content/system/images/menumaximize.png';\" style=\"display:none;visibility:hidden;\" />\r\n";
-						$zmenuforms .= "	<div class=\"wtw-menuheading\">".$ztitle."</div>";
+						$zmenuforms .= "	<img class=\"wtw-closeright\" onclick=\"WTW.closeMenus('".$zformid."');\" src=\"/content/system/images/menuclose.png\" alt=\"".$wtwdb->__("Close")."\" title=\"".$wtwdb->__("Close")."\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />";
+						$zmenuforms .= "	<img id=\"".$zformid."min\" class=\"wtw-closeright\" onclick=\"WTW.resizeMenu('".$zformid."', 'min');\" src=\"/content/system/images/menuminimize.png\" alt=\"".$wtwdb->__("Minimize")." ".$wtwdb->__($ztitle)."\" title=\"".$wtwdb->__("Minimize")." ".$wtwdb->__($ztitle)."\" onmouseover=\"this.src='/content/system/images/menuminimizehover.png';\" onmouseout=\"this.src='/content/system/images/menuminimize.png';\" style=\"display:none;visibility:hidden;\" />\r\n";
+						$zmenuforms .= "	<img id=\"".$zformid."max\" class=\"wtw-closeright\" onclick=\"WTW.resizeMenu('".$zformid."', 'max');\" src=\"/content/system/images/menumaximize.png\" alt=\"".$wtwdb->__("Maximize")." ".$wtwdb->__($ztitle)."\" title=\"".$wtwdb->__("Maximize")." ".$wtwdb->__($ztitle)."\" onmouseover=\"this.src='/content/system/images/menumaximizehover.png';\" onmouseout=\"this.src='/content/system/images/menumaximize.png';\" style=\"display:none;visibility:hidden;\" />\r\n";
+						$zmenuforms .= "	<div class=\"wtw-menuheading\">".$wtwdb->__($ztitle)."</div>";
 						$zmenuforms .= "	<div id=\"".$zformid."scroll\" class=\"wtw-mainmenuscroll\">";
 						$zmenuforms .= $zformdata;
 						$zmenuforms .= "	</div>";

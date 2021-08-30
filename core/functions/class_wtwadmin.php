@@ -675,7 +675,7 @@ class wtwadmin {
 			$zpagedata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tableprefix\" maxlength=\"255\" /></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">Default Language</div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-dashboardvalue\"><select id=\"wtw_defaultlanguage\"></select>\r\n";
+			$zpagedata .= "					<div class=\"wtw-dashboardvalue\"><select id=\"wtw_defaultlanguage\" onchange=\"WTW.saveServerSettings(true);\"></select></div>\r\n";
 
 			$zpagedata .= "					<div class=\"wtw-clear\"></div><hr />\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">Admin Email</div>\r\n";
