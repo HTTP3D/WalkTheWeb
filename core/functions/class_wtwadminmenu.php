@@ -146,6 +146,7 @@ class wtwadminmenu {
 
 			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingaddblock', '<div class="wtw-altkey">ctrl+b</div>Add 3D Building <u>B</u>lock', 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingaddweb', '<div class="wtw-altkey">ctrl+o</div>Add 3D Web <u>O</u>bject', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingaddmodel', '<div class="wtw-altkey">ctrl+m</div>Add 3D <u>M</u>odel', 25, $zupdateroles, "WTW.openAddNewMold('building','babylonfile');");
 			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingaddthing', '<div class="wtw-altkey">ctrl+h</div>Add 3D T<u>h</u>ing', 30, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editbuilding', 'wtw_adminbuildingactionzones', '<div class="wtw-altkey">ctrl+a</div>Add or Edit <u>A</u>ctions', 40, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editbuilding', '', '<hr class="wtw-menuhr" />', 999, $zupdateroles, "");
@@ -167,6 +168,7 @@ class wtwadminmenu {
 
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddblock', '<div class="wtw-altkey">ctrl+b</div>Add 3D Building <u>B</u>lock', 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddweb', '<div class="wtw-altkey">ctrl+o</div>Add 3D Web <u>O</u>bject', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddmodel', '<div class="wtw-altkey">ctrl+m</div>Add 3D <u>M</u>odel', 25, $zupdateroles, "WTW.openAddNewMold('community','babylonfile');");
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddbuilding', '<div class="wtw-altkey">ctrl+u</div>Add 3D B<b>u</b>ilding', 30, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityaddthing', '<div class="wtw-altkey">ctrl+h</div>Add 3D T<u>h</u>ing', 30, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editcommunity', 'wtw_admincommunityactionzones', '<div class="wtw-altkey">ctrl+a</div>Add or Edit <u>A</u>ctions', 40, $zupdateroles, "WTW.adminMenuItemSelected(this);");
@@ -193,6 +195,7 @@ class wtwadminmenu {
 
 			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingaddblock', '<div class="wtw-altkey">ctrl+b</div>Add 3D Building <u>B</u>lock', 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingaddweb', '<div class="wtw-altkey">ctrl+o</div>Add 3D Web <u>O</u>bject', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingaddmodel', '<div class="wtw-altkey">ctrl+m</div>Add 3D <u>M</u>odel', 30, $zupdateroles, "WTW.openAddNewMold('thing','babylonfile');");
 			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingactions', '<div class="wtw-altkey">ctrl+a</div>Add or Edit <u>A</u>ctions', 40, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editthing', '', '<hr class="wtw-menuhr" />', 100, $zupdateroles, "");
 			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 1000, $zupdateroles, "WTW.adminMenuItemSelected(this);");

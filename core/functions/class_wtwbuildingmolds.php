@@ -234,7 +234,7 @@ class wtwbuildingmolds {
 				$wtwmoldscommon->savePathPoints('', $zbuildingid, '', $zbuildingmoldid, 2, $zmoldpath2points);
 			}
 		} catch (Exception $e) {
-			serror("core-functions-class_wtwbuildingmolds.php-saveBuildingMold=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwbuildingmolds.php-saveBuildingMold=".$e->getMessage());
 		}
 		return $zbuildingmoldid;
 	}
@@ -275,7 +275,7 @@ class wtwbuildingmolds {
 				}
 			}
 		} catch (Exception $e) {
-			serror("core-functions-class_wtwbuildingmolds.php-deleteBuildingMold=".$e->getMessage());
+			$wtwhandlers->serror("core-functions-class_wtwbuildingmolds.php-deleteBuildingMold=".$e->getMessage());
 		}
 		return $zsuccess;
 	}

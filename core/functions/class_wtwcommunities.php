@@ -1960,7 +1960,7 @@ class wtwcommunities {
 						chmod($znewobjectfolder, octdec(wtw_chmod));
 					}
 					if (!empty($zavataranimation->objectfolder) && !empty($zavataranimation->objectfile)) {
-						$znewobjectfolder = $znewfolder.'/avataranimations/'.str_replace(".babylon","",$zavataranimation->objectfile);
+						$znewobjectfolder = $znewfolder.'/avataranimations/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zavataranimation->objectfile))));
 						if (!file_exists($znewobjectfolder)) {
 							mkdir($znewobjectfolder, octdec(wtw_chmod), true);
 							chmod($znewobjectfolder, octdec(wtw_chmod));
@@ -2375,12 +2375,12 @@ class wtwcommunities {
 							mkdir($znewobjectfolder, octdec(wtw_chmod), true);
 							chmod($znewobjectfolder, octdec(wtw_chmod));
 						}
-						$znewobjectfolder = $znewfolder.'/objects/'.str_replace(".babylon","",$zuploadobject->objectfile);
+						$znewobjectfolder = $znewfolder.'/objects/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zuploadobject->objectfile))));
 						if (!file_exists($znewobjectfolder)) {
 							mkdir($znewobjectfolder, octdec(wtw_chmod), true);
 							chmod($znewobjectfolder, octdec(wtw_chmod));
 						}
-						$znewobjecturl = $znewurl.'/objects/'.str_replace(".babylon","",$zuploadobject->objectfile)."/";
+						$znewobjecturl = $znewurl.'/objects/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zuploadobject->objectfile))))."/";
 						
 						/* get new foreign keys */
 						$znewuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->userid);
