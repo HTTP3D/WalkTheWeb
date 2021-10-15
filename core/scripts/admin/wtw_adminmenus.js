@@ -1515,6 +1515,9 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 						case 72: // h
 							dGet('wtw_adminbuildingaddthing').click();
 							break;
+						case 77: // m
+							dGet('wtw_adminbuildingaddmodel').click();
+							break;
 						case 79: // o
 							dGet('wtw_adminbuildingaddweb').click();
 							break;
@@ -1669,6 +1672,9 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 						case 76: // l
 							dGet('wtw_admincommunitylandscape').click();
 							break;
+						case 77: // m
+							dGet('wtw_admincommunityaddmodel').click();
+							break;
 						case 79: // o
 							dGet('wtw_admincommunityaddweb').click();
 							break;
@@ -1766,6 +1772,9 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 							break;
 						case 68: // d
 							dGet('wtw_adminmenuthingdoneediting').click();
+							break;
+						case 77: // m
+							dGet('wtw_adminthingaddmodel').click();
 							break;
 						case 79: // o
 							dGet('wtw_adminthingaddweb').click();

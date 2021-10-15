@@ -1491,7 +1491,7 @@ WTWJS.prototype.uploadFiles = function() {
 		if (dGet('wtw_filesupload').value != null) {
 			var zobjectfilepart = dGet('wtw_tobjectfile').value;
 			var zitem = dGet('wtw_tfileitem').value;
-			zobjectfilepart = zobjectfilepart.replace(".babylon","");
+			zobjectfilepart = zobjectfilepart.replace(".babylon","").replace(".glb","").replace(".gltf","").replace(".obj","");
 			var zform1 = document.createElement('form');
 			var Httpreq = new XMLHttpRequest();
 			var zformdata = new FormData(zform1);
@@ -1526,7 +1526,7 @@ WTWJS.prototype.uploadAsyncFiles = function() {
 			return new Promise(function () {
 				var zobjectfilepart = dGet('wtw_tobjectfile').value;
 				var zitem = dGet('wtw_tfileitem').value;
-				zobjectfilepart = zobjectfilepart.replace(".babylon","");
+				zobjectfilepart = zobjectfilepart.replace(".babylon","").replace(".glb","").replace(".gltf","").replace(".obj","");
 				var zform1 = document.createElement('form');
 				var Httpreq = new XMLHttpRequest();
 				var zformdata = new FormData(zform1);
@@ -1756,7 +1756,7 @@ WTWJS.prototype.uploadObjectFiles = function(ztype) {
 				zwebtype = "things";
 			}
 			var zobjectfilepart = dGet('wtw_tobjectfile').value;
-			zobjectfilepart = zobjectfilepart.replace(".babylon","");
+			zobjectfilepart = zobjectfilepart.replace(".babylon","").replace(".glb","").replace(".gltf","").replace(".obj","");
 			var zform1 = document.createElement('form');
 			var Httpreq = new XMLHttpRequest();
 			var zformdata = new FormData(zform1);
@@ -1806,7 +1806,7 @@ WTWJS.prototype.uploadAsyncObjectFiles = function(ztype) {
 					zwebtype = "things";
 				}
 				var zobjectfilepart = dGet('wtw_tobjectfile').value;
-				zobjectfilepart = zobjectfilepart.replace(".babylon","");
+				zobjectfilepart = zobjectfilepart.replace(".babylon","").replace(".glb","").replace(".gltf","").replace(".obj","");
 				var zform1 = document.createElement('form');
 				var Httpreq = new XMLHttpRequest();
 				var zformdata = new FormData(zform1);
@@ -1846,7 +1846,7 @@ WTWJS.prototype.deleteObjectFile = async function() {
 	/* delete 3D Mold Object file */
 	try {
 		var zobjectfilepart = dGet('wtw_tobjectfile').value;
-		zobjectfilepart = zobjectfilepart.replace(".babylon","");
+		zobjectfilepart = zobjectfilepart.replace(".babylon","").replace(".glb","").replace(".gltf","").replace(".obj","");
 		var zrequest = {
 			'filename': dGet('wtw_tdeletefile').value,
 			'objectfilepart': zobjectfilepart,
@@ -1871,6 +1871,9 @@ WTWJS.prototype.loadObjectDetailsFiles = async function(zuploadobjectid, zobject
 	try {
 		dGet('wtw_uploadedmodelsfilesdiv').innerHTML = "";
 		var zfilesdiv = "";
+
+WTW.log("zobjectfolder=" + zobjectfolder);
+
 		var zrequest = {
 			'objectfolder': zobjectfolder,
 			'function':'getuploadedfilefilesdetails'

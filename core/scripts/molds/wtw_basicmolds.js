@@ -1484,7 +1484,7 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 			}
 		}
 		if (zobjectfile != '') {
-			if (zobjectfile.indexOf('.babylon') > -1) {
+			if (zobjectfile.indexOf('.babylon') > -1 || zobjectfile.indexOf('.glb') > -1 || zobjectfile.indexOf('.gltf') > -1 || zobjectfile.indexOf('.obj') > -1) {
 				BABYLON.SceneLoader.ImportMeshAsync("", zobjectfolder, zobjectfile, scene).then(
 					function (zresults) {
 						var zhasanimation = false;
@@ -1614,29 +1614,6 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 						WTW.setMoldLoaded(zmoldname, '1');
 					}
 				);
-			} else if (zobjectfile.indexOf('.gltf') > -1 || zobjectfile.indexOf('.obj') > -1) {
-				/* babylon can natively load gltf or obj files, but this is not fully tested or complete (animations not loaded) */
-				BABYLON.SceneLoader.ImportMeshAsync("", zobjectfolder, zobjectfile, scene).then(
-					function (zresults) {
-						if (zresults.meshes != null) {
-							for (var i=0; i < zresults.meshes.length; i++) {
-								if (zresults.meshes[i] != null) {
-									zresults.meshes[i].name = zmoldname + "-file" + i;
-									WTW.registerMouseOver(zresults.meshes[i]);
-									if (zresults.meshes[i].parent == null) {
-										if (zbillboard == '1') {
-											zresults.meshes[i].parent = zmoldrot;
-										} else {
-											zresults.meshes[i].parent = zmold;
-										}
-									}
-								}
-							}
-							
-						}
-						WTW.setMoldLoaded(zmoldname, '1');
-					}
-				);				
 			}
 		}
 	} catch (ex) {
