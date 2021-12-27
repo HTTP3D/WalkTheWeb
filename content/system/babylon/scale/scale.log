@@ -1,0 +1,42 @@
+Exporter version: 6.4.4, Blender version: 2.90.0
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  D:\Data\HTTP3DInc\Blender\scale\
+	Python World class constructor completed
+	processing begun of mesh:  Cube
+		processing begun of material:  Material
+		processing begun of material:  bars
+		processing begun of material:  arrow
+		processing begun of multimaterial:  scale.Multimaterial#0
+		num positions      :  273
+		num normals        :  273
+		num tangents       :  0
+		num uvs            :  546
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  152
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  Text
+		processing begun of material:  text
+		num positions      :  1586
+		num normals        :  1586
+		num tangents       :  0
+		num uvs            :  3172
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  1573
+	processing begun of light (POINT):  Light
+========= Writing of JSON file started =========
+	writing mesh:  Cube
+	writing mesh:  Text
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 0.1837 secs
