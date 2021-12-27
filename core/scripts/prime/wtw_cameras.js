@@ -221,7 +221,11 @@ WTWJS.prototype.setMovingCameras = function(zavatar) {
 					if (WTW.cameraOne.parent == null) {
 						/* camera is not parented (defaults to scene) and follows locked target */
 						WTW.cameraOne.heightOffset = WTW.cameraYOffset;
-						WTW.cameraOne.position = new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.cos(zavatar.rotation.y)) * WTW.cameraDistance, zavatar.position.y + zavatarcenter.position.y + WTW.cameraYOffset, zavatar.position.z - parseFloat(Math.sin(zavatar.rotation.y)) * WTW.cameraDistance);
+						if (Math.abs(WTW.cameraOne.radius) < Math.abs(WTW.cameraDistance)) {
+							WTW.cameraOne.position = new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.cos(zavatar.rotation.y)) * WTW.cameraOne.radius, zavatar.position.y + zavatarcenter.position.y + WTW.cameraYOffset, zavatar.position.z - parseFloat(Math.sin(zavatar.rotation.y)) * WTW.cameraOne.radius);
+						} else {
+							WTW.cameraOne.position = new BABYLON.Vector3(zavatar.position.x + parseFloat(Math.cos(zavatar.rotation.y)) * WTW.cameraDistance, zavatar.position.y + zavatarcenter.position.y + WTW.cameraYOffset, zavatar.position.z - parseFloat(Math.sin(zavatar.rotation.y)) * WTW.cameraDistance);
+						}
 						WTW.setCameraDistance();
 					} else {
 						/* camera is parented to avatar and has no locked target */

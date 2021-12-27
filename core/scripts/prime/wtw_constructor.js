@@ -287,7 +287,8 @@ function WTWJS() {
 	
 /* avatar related */
 	
-	/* WTW.placeHolder - value is used to start the scene loading before the avatar is loaded to the scene - The Placeholder Avatar is deleted and replaced by the avatar after the avatar is visible in the 3D Scene */
+	/* WTW.placeHolder - value is used to start the scene loading before the avatar is loaded to the scene - The Placeholder Avatar is deleted and replaced by the avatar after the avatar is visible in the 3D Scene. 
+	1 = placeholder is loaded, 0 = avatar is loaded */
 	this.placeHolder = 1;
 	
 	/* WTW.myAvatar - this is your avatar object parent (cube at the base of the avatar) */
