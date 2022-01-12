@@ -777,7 +777,7 @@ class wtw {
 					echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_install.css\" /></head>";
 					echo "<body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
 					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:400px;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;'>";
-					echo "<img src='/content/system/images/wtwlogo.png' style='margin-left:40px;margin-right:40px;' />";
+					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Database Setup</h3>";
 					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Server:</b></div>";
 					echo "<input name='wtw_dbserver' type='text' value='127.0.0.1:3306' size='20' maxlength='255' />";
@@ -804,7 +804,7 @@ class wtw {
 					echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_install.css\" /></head>";
 					echo "<body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
 					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:400px;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;'>";
-					echo "<img src='/content/system/images/wtwlogo.png' style='margin-left:40px;margin-right:40px;' />";
+					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Database Connection Error</h3>";
 					echo "<div style='margin-left:10px;'><b>Edit your config file:</b><br /><br /><div style='margin-left:10px;'>";
 					echo "/config/wtw_config.php<br /><br /><br /></div>";
@@ -824,7 +824,7 @@ class wtw {
 					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
 					echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_install.css\" /></head>";
 					echo "<body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'><div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:400px;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;'>";
-					echo "<img src='/content/system/images/wtwlogo.png' style='margin-left:40px;margin-right:40px;' />";
+					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
 
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Admin Account</h3>";
 					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Email:</b></div>";
@@ -858,7 +858,7 @@ class wtw {
 					echo "<script src=\"/core/scripts/prime/wtw_install.js\"></script></head>";
 					echo "<body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
 					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:400px;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;'>";
-					echo "<img src='/content/system/images/wtwlogo.png' style='margin-left:40px;margin-right:40px;' />";
+					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Found Another Install</h3>";
 					echo "<div style='margin-left:10px;'><b>Edit your config file:</b><br /><br /><div style='margin-left:10px;'>";
 					echo "/config/wtw_config.php<br /><br /><br /></div>";
@@ -875,7 +875,7 @@ class wtw {
 					echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_install.css\" /></head>";
 					echo "<body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
 					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:400px;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;'>";
-					echo "<img src='/content/system/images/wtwlogo.png' style='margin-left:40px;margin-right:40px;' />";
+					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
 
 					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Admin Login</h3>";
 					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Email:</b></div>";
@@ -897,7 +897,7 @@ class wtw {
 					echo "<script src=\"/core/scripts/prime/wtw_downloads.js\"></script>";
 					echo "</head><body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
 					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:90%;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;text-align:center;'>";
-					echo "<img src='/content/system/images/wtwlogo.png' />";
+					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
 					echo "<input type=\"hidden\" id=\"wtw_serverinstanceid\" value=\"".$this->serverinstanceid."\" />";
 
 					echo "<div id=\"wtw_selectwebform\">";
@@ -925,7 +925,7 @@ class wtw {
 					echo "<script src=\"/core/scripts/prime/wtw_downloads.js\"></script>";
 					echo "</head><body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
 					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:90%;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;text-align:center;'>";
-					echo "<img src='/content/system/images/wtwlogo.png' />";
+					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
 					echo "<input type=\"hidden\" id=\"wtw_serverinstanceid\" value=\"".$this->serverinstanceid."\" />";
 					echo "<input type=\"hidden\" id=\"wtw_tcommunityid\" value=\"".$zcommunityid."\" />";
 					echo "<input type=\"hidden\" id=\"wtw_tbuildingpositionx\" value=\"".$zbuildingpositionx."\" />";
