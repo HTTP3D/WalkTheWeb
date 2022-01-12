@@ -73,30 +73,30 @@ class wtwshopping {
 			if ($wtwplugins->pagename == "admin.php") {
 				/* admin menu items */
 				/* wtwplugins class -> addAdminMenuItem function (menu item id, menu text, level 1 sort, level 1 id, level 2 sort, level 2 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
-				$wtwplugins->addAdminMenuItem('wtw_adminshopping', '3D Stores', 25, 'wtw_shopping', 0, '', WTWSHOPPING_URL.'/assets/images/menustore.png', array('admin','developer','architect'), null);
-				$wtwplugins->addAdminMenuItem('wtw_adminliststores', 'List Stores', 25, 'wtw_shopping', 1, 'wtw_liststores', '', array('admin','developer','architect'), "WTW.openFullPageForm('fullpage','List Stores','wtw_liststorespage');WTWShopping.getStores();");
-				$wtwplugins->addAdminMenuItem('wtw_adminaddstore', 'Add Store', 25, 'wtw_shopping', 2, 'wtw_addstore', '', array('admin','developer','architect'), "WTW.openFullPageForm('fullpage','Add Store','wtw_addstoresettingspage');");
+				$wtwplugins->addAdminMenuItem('wtw_adminshopping', $wtwplugins->__('3D Stores'), 25, 'wtw_shopping', 0, '', WTWSHOPPING_URL.'/assets/images/menustore.png', array('admin','developer','architect'), null);
+				$wtwplugins->addAdminMenuItem('wtw_adminliststores', $wtwplugins->__('List Stores'), 25, 'wtw_shopping', 1, 'wtw_liststores', '', array('admin','developer','architect'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('List Stores')."','wtw_liststorespage');WTWShopping.getStores();");
+				$wtwplugins->addAdminMenuItem('wtw_adminaddstore', $wtwplugins->__('Add Store'), 25, 'wtw_shopping', 2, 'wtw_addstore', '', array('admin','developer','architect'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('Add Store')."','wtw_addstoresettingspage');");
 				
 				/* admin full page settings forms */
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
 				$wtwplugins->addFullPageForm('wtw_liststorespage', array('admin','developer','architect'), $this->listStoresPage());
 				$wtwplugins->addFullPageForm('wtw_addstoresettingspage', array('admin','developer','architect'), $this->addStoreSettingsPage());
 
-				$wtwplugins->addAdminSubMenuItem('editcommunity', 'wtw_shopping_adminCommunityShoppingObjects', 'Add 3D Store Object', 110, array('admin','developer','architect'), "WTWShopping.openAdminStoreObjects();");
+				$wtwplugins->addAdminSubMenuItem('editcommunity', 'wtw_shopping_adminCommunityShoppingObjects', $wtwplugins->__('Add 3D Store Object'), 110, array('admin','developer','architect'), "WTWShopping.openAdminStoreObjects();");
 				
-				$wtwplugins->addAdminSubMenuItem('editbuilding', 'wtw_shopping_adminBuildingShoppingObjects', 'Add 3D Store Object', 110, array('admin','developer','architect'), "WTWShopping.openAdminStoreObjects();");
+				$wtwplugins->addAdminSubMenuItem('editbuilding', 'wtw_shopping_adminBuildingShoppingObjects', $wtwplugins->__('Add 3D Store Object'), 110, array('admin','developer','architect'), "WTWShopping.openAdminStoreObjects();");
 				
-				$wtwplugins->addAdminSubMenuItem('editthing', 'wtw_shopping_adminThingShoppingObjects', 'Add 3D Store Object', 110, array('admin','developer','architect'), "WTWShopping.openAdminStoreObjects();");
+				$wtwplugins->addAdminSubMenuItem('editthing', 'wtw_shopping_adminThingShoppingObjects', $wtwplugins->__('Add 3D Store Object'), 110, array('admin','developer','architect'), "WTWShopping.openAdminStoreObjects();");
 				
-				$wtwplugins->addAdminSubMenuItem('communityoptions', 'wtwshopping_admincommunitystores', '3D Store Settings', 27, array('admin','developer','architect'), "WTWShopping.getStoresDropdown('community');");
-				$wtwplugins->addAdminSubMenuItem('buildingoptions', 'wtwshopping_adminbuildingstores', '3D Store Settings', 27, array('admin','developer','architect'), "WTWShopping.getStoresDropdown('building');");
-				$wtwplugins->addAdminSubMenuItem('thingoptions', 'wtwshopping_adminthingstores', '3D Store Settings', 27, array('admin','developer','architect'), "WTWShopping.getStoresDropdown('thing');");
+				$wtwplugins->addAdminSubMenuItem('communityoptions', 'wtwshopping_admincommunitystores', $wtwplugins->__('3D Store Settings'), 27, array('admin','developer','architect'), "WTWShopping.getStoresDropdown('community');");
+				$wtwplugins->addAdminSubMenuItem('buildingoptions', 'wtwshopping_adminbuildingstores', $wtwplugins->__('3D Store Settings'), 27, array('admin','developer','architect'), "WTWShopping.getStoresDropdown('building');");
+				$wtwplugins->addAdminSubMenuItem('thingoptions', 'wtwshopping_adminthingstores', $wtwplugins->__('3D Store Settings'), 27, array('admin','developer','architect'), "WTWShopping.getStoresDropdown('thing');");
 				
-				$wtwplugins->addAdminMenuForm('wtwshopping_adminMoldObjectsDiv', 'Add 3D Store Object', $this->storeObjectsForm(), array('admin','developer','architect'));
+				$wtwplugins->addAdminMenuForm('wtwshopping_adminMoldObjectsDiv', $wtwplugins->__('Add 3D Store Object'), $this->storeObjectsForm(), array('admin','developer','architect'));
 
-				$wtwplugins->addAdminMenuForm('wtwshopping_admincommunitystoresdiv', '3D Store Settings', $this->storeSettingsForm('community'), array('admin','developer','architect'));
-				$wtwplugins->addAdminMenuForm('wtwshopping_adminbuildingstoresdiv', '3D Store Settings', $this->storeSettingsForm('building'), array('admin','developer','architect'));
-				$wtwplugins->addAdminMenuForm('wtwshopping_adminthingstoresdiv', '3D Store Settings', $this->storeSettingsForm('thing'), array('admin','developer','architect'));
+				$wtwplugins->addAdminMenuForm('wtwshopping_admincommunitystoresdiv', $wtwplugins->__('3D Store Settings'), $this->storeSettingsForm('community'), array('admin','developer','architect'));
+				$wtwplugins->addAdminMenuForm('wtwshopping_adminbuildingstoresdiv', $wtwplugins->__('3D Store Settings'), $this->storeSettingsForm('building'), array('admin','developer','architect'));
+				$wtwplugins->addAdminMenuForm('wtwshopping_adminthingstoresdiv', $wtwplugins->__('3D Store Settings'), $this->storeSettingsForm('thing'), array('admin','developer','architect'));
 				
 				/* add div section to edit mold form */
 				$wtwplugins->addAdminMenuDiv('editmold', 'wtw_productdiv', $this->editMoldPage(), array('admin','developer','architect'));

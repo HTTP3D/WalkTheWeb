@@ -1,0 +1,11 @@
+[{
+	"language":"Español",
+	"abbreviation":"esp",
+	"translate": {
+		"3D Stores": "Tiendas 3D",
+		"List Stores": "Lista de Tiendas",
+		"Add Store": "Añadir Tiendas",
+		"Add 3D Store Object": "Añadir Objeto de Tiendas 3D",
+		"3D Store Settings": "Configuración del Tiendas 3D"
+	}
+}]
