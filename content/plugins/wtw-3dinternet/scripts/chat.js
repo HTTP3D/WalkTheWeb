@@ -94,7 +94,7 @@ WTW_3DINTERNET.prototype.initChatSocket = function() {
 
 WTW_3DINTERNET.prototype.reconnectChatRooms = function() {
 	try {
-		if (wtw3dinternet.masterChat == '1') {
+/*		if (wtw3dinternet.masterChat == '1') {
 			for (var i = 0; i < WTW.actionZones.length; i++) {
 				if (WTW.actionZones[i] != null) {
 					var zmoldname = WTW.actionZones[i].moldname;
@@ -108,9 +108,9 @@ WTW_3DINTERNET.prototype.reconnectChatRooms = function() {
 									zmeinzone = WTW.myAvatar.intersectsMesh(zactionzone, false);
 								}
 								if (zmeinzone) {
-									wtw3dinternet.enterChatRoom(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind]);
+									wtw3dinternet.enterChatZone(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind]);
 								} else {
-									wtw3dinternet.exitChatRoom(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind]);
+									wtw3dinternet.exitChatZone(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind]);
 								}
 							}
 						}
@@ -118,64 +118,79 @@ WTW_3DINTERNET.prototype.reconnectChatRooms = function() {
 				}
 			}
 		}
+*/
 	} catch (ex) {
 		WTW.log("plugins:wtw-3dinternet:scripts-chat.js-reconnectChatRooms=" + ex.message);
 	} 
 }
 
-WTW_3DINTERNET.prototype.enterChatRoom = function(zmoldname, zmolddef) {
+WTW_3DINTERNET.prototype.enterChatZone = function(zmoldname, zmolddef) {
 	try {
-		if (wtw3dinternet.masterChat == '1') {
-			var zstartchat = window.setInterval(function(){
-				if (wtw3dinternet.chat != null) {
-					var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
-					if (zactionzone != null) {
-						var zmeinzone = WTW.myAvatar.intersectsMesh(zactionzone, false);
-						if (zmeinzone) {
-							wtw3dinternet.chat.emit('add user', {
-								'serverinstanceid':dGet('wtw_serverinstanceid').value,
-								'serverip':dGet('wtw_serverip').value,
-								'roomid':'',
-								'communityid':zmolddef.communityinfo.communityid,
-								'buildingid':zmolddef.buildinginfo.buildingid,
-								'thingid':zmolddef.thinginfo.thingid,
-								'instanceid':dGet('wtw_tinstanceid').value,
-								'userid':dGet('wtw_tuserid').value,
-								'displayname':btoa(dGet('wtw_tdisplayname').value)
-							});
+/*		if (wtw3dinternet.masterChat == '1') {
+			if (zmolddef.actionzonename.toLowerCase().indexOf('high') > -1 && zmolddef.actionzonename.toLowerCase().indexOf('custom') == -1) {
+				var zstartchat = window.setInterval(function(){
+					if (wtw3dinternet.chat != null) {
+						var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
+						if (zactionzone != null) {
+							var zmeinzone = WTW.myAvatar.intersectsMesh(zactionzone, false);
+							if (zmeinzone) {
+WTW.log("enter=" + zmolddef.actionzonename,'yellow');
+WTW.log("communityid=" + zmolddef.communityinfo.communityid,'yellow');
+WTW.log("buildingid=" + zmolddef.buildinginfo.buildingid,'yellow');
+WTW.log("thingid=" + zmolddef.thinginfo.thingid,'yellow');
+								wtw3dinternet.chat.emit('add user', {
+									'serverinstanceid':dGet('wtw_serverinstanceid').value,
+									'serverip':dGet('wtw_serverip').value,
+									'roomid':'',
+									'communityid':zmolddef.communityinfo.communityid,
+									'buildingid':zmolddef.buildinginfo.buildingid,
+									'thingid':zmolddef.thinginfo.thingid,
+									'instanceid':dGet('wtw_tinstanceid').value,
+									'userid':dGet('wtw_tuserid').value,
+									'displayname':btoa(dGet('wtw_tdisplayname').value)
+								});
+							}
 						}
+						window.clearInterval(zstartchat);
+						zstartchat = null;
 					}
-					window.clearInterval(zstartchat);
-					zstartchat = null;
-				}
-			},500);
+				},500);
+			}
 		}
+*/
 	} catch (ex) {
-		WTW.log("plugins:wtw-3dinternet:scripts-chat.js-enterChatRoom=" + ex.message);
+		WTW.log("plugins:wtw-3dinternet:scripts-chat.js-enterChatZone=" + ex.message);
 	} 
 }
 
-WTW_3DINTERNET.prototype.exitChatRoom = function(zmoldname, zmolddef) {
+WTW_3DINTERNET.prototype.exitChatZone = function(zmoldname, zmolddef) {
 	try {
-		if (wtw3dinternet.masterChat == '1') {
-			var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
-			/* check mold to avoid multiple execution of code */
-			if (wtw3dinternet.chat != null && zactionzone != null) {
-				wtw3dinternet.chat.emit('disconnect', {
-					'serverinstanceid':dGet('wtw_serverinstanceid').value,
-					'serverip':dGet('wtw_serverip').value,
-					'roomid':'',
-					'communityid':zmolddef.communityinfo.communityid,
-					'buildingid':zmolddef.buildinginfo.buildingid,
-					'thingid':zmolddef.thinginfo.thingid,
-					'instanceid':dGet('wtw_tinstanceid').value,
-					'userid':dGet('wtw_tuserid').value,
-					'displayname':btoa(dGet('wtw_tdisplayname').value)
-				});
+/*		if (wtw3dinternet.masterChat == '1') {
+			if (zmolddef.actionzonename.toLowerCase().indexOf('high') > -1 && zmolddef.actionzonename.toLowerCase().indexOf('custom') == -1) {
+				var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
+				/ * check mold to avoid multiple execution of code * /
+				if (wtw3dinternet.chat != null && zactionzone != null) {
+WTW.log("exit=" + zmolddef.actionzonename);
+WTW.log("communityid=" + zmolddef.communityinfo.communityid);
+WTW.log("buildingid=" + zmolddef.buildinginfo.buildingid);
+WTW.log("thingid=" + zmolddef.thinginfo.thingid);
+					wtw3dinternet.chat.emit('disconnect', {
+						'serverinstanceid':dGet('wtw_serverinstanceid').value,
+						'serverip':dGet('wtw_serverip').value,
+						'roomid':'',
+						'communityid':zmolddef.communityinfo.communityid,
+						'buildingid':zmolddef.buildinginfo.buildingid,
+						'thingid':zmolddef.thinginfo.thingid,
+						'instanceid':dGet('wtw_tinstanceid').value,
+						'userid':dGet('wtw_tuserid').value,
+						'displayname':btoa(dGet('wtw_tdisplayname').value)
+					});
+				}
 			}
 		}
+*/
 	} catch (ex) {
-		WTW.log("plugins:wtw-3dinternet:scripts-chat.js-enterChatRoom=" + ex.message);
+		WTW.log("plugins:wtw-3dinternet:scripts-chat.js-exitChatZone=" + ex.message);
 	} 
 }
 

@@ -17,12 +17,13 @@ function WTW_3DINTERNET() {
 	this.move = null;
 	this.chat = null;
 	this.chatText = [];
-	this.voicechat = null;
-	this.lastAnimations = '';
+	this.loadZones = [];
 	this.avatars = [];
 	this.AvatarIDs = 1;
 	this.multiPlayer = 20;
 	this.multiPlayerOn = 1;
+	this.voicechat = null;
+	this.lastAnimations = '';
 	this.typingTimer = null;
 	this.mediaStream = null;
 	this.recordAudio = null;
@@ -584,6 +585,22 @@ WTW_3DINTERNET.prototype.beforeUnloadMove = function() {
 	try {
 		wtw3dinternet.avatars = [];
 		if (wtw3dinternet.move != null) {
+			for (var i = 0; i < WTW.actionZones.length; i++) {
+				if (WTW.actionZones[i] != null) {
+					var zmoldname = WTW.actionZones[i].moldname;
+					var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
+					var zmeinzone = false;
+					if (WTW.myAvatar != null) {
+						zmeinzone = WTW.myAvatar.intersectsMesh(zactionzone, false);
+					}
+					if (zmeinzone && zmoldname != undefined) {
+						if (zmoldname.indexOf("loadzone") > -1) {
+							/* trigger plugins when avatar exits zone */
+							WTW.pluginsExitActionZone(zmoldname, WTW.actionZones[i]);
+						}
+					}
+				}
+			}			
 			wtw3dinternet.move.emit('disconnect', {
 				'serverinstanceid':dGet('wtw_serverinstanceid').value,
 				'roomid':communityid + buildingid + thingid,
@@ -858,29 +875,3 @@ WTW_3DINTERNET.prototype.getAvatarDisplayName = function(zinstanceid) {
 	return zdisplayname;
 }
 
-WTW_3DINTERNET.prototype.addLoadZone = function(zmoldname, zmolddef) {
-	try {
-		if (zmolddef.actionzonename.toLowerCase().indexOf('high') > -1 && zmolddef.actionzonename.toLowerCase().indexOf('custom') == -1) {
-			/* avatar is in High Load Zone */
-			wtw3dinternet.enterChatRoom(zmoldname, zmolddef);
-		}
-	} catch(ex) {
-		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-addLoadZone=" + ex.message);
-	}
-}
-
-WTW_3DINTERNET.prototype.disposeClean = function(zmoldname) {
-	try {
-		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
-		if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
-			if (zmoldnameparts.molds[zmoldnameparts.moldind].actionzonename != undefined) {
-				if (zmoldnameparts.molds[zmoldnameparts.moldind].actionzonename.toLowerCase().indexOf('high') > -1 && zmoldnameparts.molds[zmoldnameparts.moldind].actionzonename.toLowerCase().indexOf('custom') == -1) {
-					/* avatar left High Load Zone */
-					wtw3dinternet.exitChatRoom(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind]);
-				}
-			}
-		}
-	} catch(ex) {
-		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-disposeClean=" + ex.message);
-	}
-}

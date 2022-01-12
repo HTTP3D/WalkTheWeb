@@ -78,8 +78,8 @@ class wtw3dinternet {
 				/* add admin menu items */
 				/* wtwplugins class -> addAdminMenuItem function (menu item id, menu text, level 1 sort, level 1 id, level 2 sort, level 2 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
 				
-				$wtwplugins->addAdminMenuItem('wtw_3dinternetmenu', '3D Internet', -1, 'wtw_3dinternetmenu', 0, '', '/content/plugins/wtw-3dinternet/assets/images/menuworld.png', array('admin','developer'), null);
-				$wtwplugins->addAdminMenuItem('wtw_3dinternetsettings', 'Control Panel', -1, 'wtw_3dinternetmenu', 1, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','3D Internet','wtw_3dinternetsettingspage');wtw3dinternet.serviceCheck('multiplayer');");
+				$wtwplugins->addAdminMenuItem('wtw_3dinternetmenu', $wtwplugins->__('3D Internet'), -1, 'wtw_3dinternetmenu', 0, '', '/content/plugins/wtw-3dinternet/assets/images/menuworld.png', array('admin','developer'), null);
+				$wtwplugins->addAdminMenuItem('wtw_3dinternetsettings', $wtwplugins->__('Control Panel'), -1, 'wtw_3dinternetmenu', 1, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternetsettingspage');wtw3dinternet.serviceCheck('multiplayer');");
 
 				/* admin full page settings forms */
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
@@ -130,8 +130,12 @@ class wtw3dinternet {
 
 			$wtwplugins->addScriptFunction("avatarbeforecreate", "wtw3dinternet.showAvatarIDs(zavatarname, zavatardef);");
 			$wtwplugins->addScriptFunction("checkactionzonetrigger", "wtw3dinternet.multiPersonInActionZone(zactionzone);");
-			$wtwplugins->addScriptFunction("addactionzone", "wtw3dinternet.addLoadZone(zmoldname, zmolddef);");
-			$wtwplugins->addScriptFunction("disposeclean", "wtw3dinternet.disposeClean(zmoldname);");
+
+			$wtwplugins->addScriptFunction("enteractionzone", "wtw3dinternet.enterLoadZone(zmoldname, zmolddef);");
+			$wtwplugins->addScriptFunction("enteractionzone", "wtw3dinternet.enterChatZone(zmoldname, zmolddef);");
+
+			$wtwplugins->addScriptFunction("exitactionzone", "wtw3dinternet.exitLoadZone(zmoldname, zmolddef);");
+			$wtwplugins->addScriptFunction("exitactionzone", "wtw3dinternet.exitChatZone(zmoldname, zmolddef);");
 
 			$wtwplugins->addScriptFunction("loadusersettingsafterengine", "wtw3dinternet.loadUserSettingsAfterEngine();"); 
 
@@ -212,7 +216,7 @@ class wtw3dinternet {
 			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablefranchisebuildings\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablefranchisebuildingstext\" class=\"wtw-disabledlabel\">3D Buildings Franchising Disabled</div><br />\r\n";
 			$zformdata .= "			</div>\r\n";
 
-			$zformdata .= "			<br /><br /><div onclick=\"WTW.toggle('wtw_videopreview');\" class=\"wtw-logincancel\">TEST VIDEO</div>\r\n";
+			$zformdata .= "			<br /><br /><div onclick=\"WTW.toggle('wtw_videopreview');\" class=\"wtw-logincancel\" style=\"display:none;visibility:hidden;\">TEST VIDEO</div>\r\n";
 
 			$zformdata .= "		</div>\r\n";
 			$zformdata .= "	</div>\r\n";
