@@ -96,10 +96,10 @@ class wtwavatars {
 
 				$wtwplugins->addAdminSubMenuItem('settingsavatar', '', '<hr class="wtw-menuhr" />', 50, $zupdateroles, "");
 
-				$wtwplugins->addAdminSubMenuItem('settingsavatar', 'wtw_adminavatargroups', $wtwplugins->__('Avatar Groups'), 55, $zupdateroles, "WTW.openFullPageForm('fullpage',".$wtwplugins->__('Avatar Groups').",'wtw_avatargroupspage');");
-				$wtwplugins->addAdminSubMenuItem('settingsavatar', 'wtw_adminavataranimationevents', $wtwplugins->__('Avatar Animation Events'), 60, $zupdateroles, "WTW.openFullPageForm('fullpage',".$wtwplugins->__('Avatar Animation Events').",'wtw_avataranimationeventspage');");
-				$wtwplugins->addAdminSubMenuItem('settingsavatar', 'wtw_adminavatarlist', $wtwplugins->__('3D Avatars List'), 65, $zupdateroles, "WTW.openFullPageForm('fullpage',".$wtwplugins->__('3D Avatars List').",'wtw_avatarlistpage');");
-				$wtwplugins->addAdminSubMenuItem('settingsavatar', 'wtw_adminavatarprofiles', $wtwplugins->__('3D Avatar Profiles'), 70, $zupdateroles, "WTW.openFullPageForm('fullpage',".$wtwplugins->__('Add or Edit Avatar').",'wtw_avatarprofilepage');wtwavatars.loadAvatarEditDDL('wtw_selecteditavatar');");
+				$wtwplugins->addAdminSubMenuItem('settingsavatar', 'wtw_adminavatargroups', $wtwplugins->__('Avatar Groups'), 55, $zupdateroles, "WTW.openFullPageForm('fullpage','".$wtwplugins->__('Avatar Groups')."','wtw_avatargroupspage');");
+				$wtwplugins->addAdminSubMenuItem('settingsavatar', 'wtw_adminavataranimationevents', $wtwplugins->__('Avatar Animation Events'), 60, $zupdateroles, "WTW.openFullPageForm('fullpage','".$wtwplugins->__('Avatar Animation Events')."','wtw_avataranimationeventspage');");
+				$wtwplugins->addAdminSubMenuItem('settingsavatar', 'wtw_adminavatarlist', $wtwplugins->__('3D Avatars List'), 65, $zupdateroles, "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Avatars List')."','wtw_avatarlistpage');");
+				$wtwplugins->addAdminSubMenuItem('settingsavatar', 'wtw_adminavatarprofiles', $wtwplugins->__('3D Avatar Profiles'), 70, $zupdateroles, "WTW.openFullPageForm('fullpage','".$wtwplugins->__('Add or Edit Avatar')."','wtw_avatarprofilepage');wtwavatars.loadAvatarEditDDL('wtw_selecteditavatar');");
 
 
 				$wtwplugins->addAdminSubMenuItem('editavatar', 'wtw_adminavatarinformation', $wtwplugins->__('3D Avatar Information'), 1, $zupdateroles, "WTW.adminMenuItemSelected(this);");
