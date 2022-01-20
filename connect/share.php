@@ -669,6 +669,7 @@ try {
 					'past'.$zwebtype.'moldid'=>$zrowmolds["past".$zwebtype."moldid"],
 					$zwebtype.'id'=>$zrowmolds[$zwebtype."id"],
 					'loadactionzoneid'=>$zrowmolds["loadactionzoneid"],
+					'unloadactionzoneid'=>$zrowmolds["unloadactionzoneid"],
 					'shape'=>$zrowmolds["shape"],
 					'covering'=>$zrowmolds["covering"],
 					'positionx'=>$zrowmolds["positionx"],

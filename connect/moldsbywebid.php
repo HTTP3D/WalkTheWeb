@@ -32,6 +32,7 @@ try {
 			'' as thingid,
 			'' as altconnectinggridid,
 			a1.loadactionzoneid,
+			a1.unloadactionzoneid,
 			a1.shape,
 			a1.covering,
 			a1.positionx,
@@ -421,6 +422,7 @@ try {
 					where communityid='".$zcommunityid."' 
 						and (not communityid='') and deleted=0) a2
 				on a1.loadactionzoneid = a2.actionzoneid
+				or a1.unloadactionzoneid = a2.actionzoneid
 				or a1.actionzoneid = a2.actionzoneid
 			left join (select analyticsid,communityid 
 					from ".wtw_tableprefix."communities 
@@ -440,6 +442,7 @@ try {
 			'' as thingid,
 			'' as altconnectinggridid,
 			a1.loadactionzoneid,
+			a1.unloadactionzoneid,
 			a1.shape,
 			a1.covering,
 			a1.positionx,
@@ -827,6 +830,7 @@ try {
 			inner join (select * from ".wtw_tableprefix."actionzones 
 					where buildingid='".$zbuildingid."' and (not buildingid='') and deleted=0) a2
 				on a1.loadactionzoneid = a2.actionzoneid
+				or a1.unloadactionzoneid = a2.actionzoneid
 				or a1.actionzoneid = a2.actionzoneid
 			left join (select analyticsid,buildingid 
 					from ".wtw_tableprefix."buildings 
@@ -846,6 +850,7 @@ try {
 			a1.thingid,
 			'' as altconnectinggridid,
 			a1.loadactionzoneid,
+			a1.unloadactionzoneid,
 			a1.shape,
 			a1.covering,
 			a1.positionx,
@@ -1235,6 +1240,7 @@ try {
 					where thingid='".$zthingid."' 
 						and (not thingid='') and deleted=0) a2
 				on a1.loadactionzoneid = a2.actionzoneid
+				or a1.unloadactionzoneid = a2.actionzoneid
 				or a1.actionzoneid = a2.actionzoneid
 			left join (select analyticsid,thingid 
 					from ".wtw_tableprefix."things 
@@ -1254,6 +1260,7 @@ try {
 			a1.thingid,
 			connectinggrids.connectinggridid as altconnectinggridid,
 			connectinggrids.altloadactionzoneid as loadactionzoneid,
+			a1.unloadactionzoneid,
 			a1.shape,
 			a1.covering,
 			a1.positionx,
@@ -1664,6 +1671,7 @@ try {
 			a1.thingid,
 			connectinggrids.connectinggridid as altconnectinggridid,
 			connectinggrids.altloadactionzoneid as loadactionzoneid,
+			a1.unloadactionzoneid,
 			a1.shape,
 			a1.covering,
 			a1.positionx,
@@ -2074,6 +2082,7 @@ try {
 			a1.thingid,
 			connectinggrids.connectinggridid as altconnectinggridid,
 			connectinggrids.altloadactionzoneid as loadactionzoneid,
+			a1.unloadactionzoneid,
 			a1.shape,
 			a1.covering,
 			a1.positionx,
@@ -2667,6 +2676,8 @@ try {
 			'parentactionzoneind'=> $zparentactionzoneind,
 			'loadactionzoneid'=> $zrow["loadactionzoneid"],
 			'loadactionzoneind'=> '-1',
+			'unloadactionzoneid'=> $zrow["unloadactionzoneid"],
+			'unloadactionzoneind'=> '-1',
 			'inloadactionzone'=> $inloadactionzone,
 			'altconnectinggridid'=> $zrow["altconnectinggridid"],
 			'altconnectinggridind'=> '-1',

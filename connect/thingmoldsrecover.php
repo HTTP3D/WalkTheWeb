@@ -391,6 +391,7 @@ try {
 			'jsparameters'=> '',
 			'actionzoneid'=> $zrow["actionzoneid"],
 			'loadactionzoneid'=> $zrow["loadactionzoneid"],
+			'unloadactionzoneid'=> $zrow["unloadactionzoneid"],
 			'connectinggridid'=> $zconnectinggridid,
 			'connectinggridind'=> $zconnectinggridind,
 			'attachmoldind'=> '-1',
