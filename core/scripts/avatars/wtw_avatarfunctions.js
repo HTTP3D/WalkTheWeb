@@ -92,14 +92,30 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 												break;
 											case 38: //arrow w forward
 											case 87: //w forward
+												/* check if backwards is also pressed */
+												var zonwalkbackwards = false;
+												var zonrunbackwards = false;
 												var zonjump = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalkbackwards', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalkbackwards', WTW.animationSet)].active == 1) {
+														zonwalkbackwards = true;
+													}
+												}
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunbackwards', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunbackwards', WTW.animationSet)].active == 1) {
+														zonrunbackwards = true;
+													}
+												}
 												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onjump', WTW.animationSet)] != undefined) {
 													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onjump', WTW.animationSet)].active == 1) {
 														zonjump = true;
 													}
 												}
+
 												if (zonjump) {
-													if (WTW.shiftKey) {
+													if (zonwalkbackwards || zonrunbackwards) {
+														zanim = WTW.checkAnimationSet(zavatar, 'onjump', WTW.animationSet);
+													} else if (WTW.shiftKey) {
 														zanim = WTW.checkAnimationSet(zavatar, 'onjumprun', WTW.animationSet);
 													} else {
 														zanim = WTW.checkAnimationSet(zavatar, 'onjumpwalk', WTW.animationSet);
@@ -110,29 +126,69 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 													zanim = '';
 													zactivecount += 1;
 												} else {
-													if (WTW.shiftKey) {
-														zanim = WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet);
+													if (zonwalkbackwards || zonrunbackwards) {
+														zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalkbackwards', WTW.animationSet)].active = 0;
+														zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunbackwards', WTW.animationSet)].active = 0;
 													} else {
-														zanim = WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet);
+														if (WTW.shiftKey) {
+															zanim = WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet);
+														} else {
+															zanim = WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet);
+														}
 													}
 												}
 												break;
 											case 1038: //arrow w forward
-												zanim = WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet);
+												var zonwalkbackwards = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalkbackwards', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalkbackwards', WTW.animationSet)].active == 1) {
+														zonwalkbackwards = true;
+													}
+												}
+												if (zonwalkbackwards) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalkbackwards', WTW.animationSet)].active = 0;
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet);
+												}
 												break;
 											case 2038: //arrow w forward
-												zanim = WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet);
+												var zonrunbackwards = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunbackwards', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunbackwards', WTW.animationSet)].active == 1) {
+														zonrunbackwards = true;
+													}
+												}
+												if (zonrunbackwards) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunbackwards', WTW.animationSet)].active = 0;
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet);
+												}
 												break;
 											case 40: //arrow s backwards
 											case 83: //s backwards
+												/* check if backwards is also pressed */
+												var zonwalk = false;
+												var zonrun = false;
 												var zonjump = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet)].active == 1) {
+														zonwalk = true;
+													}
+												}
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet)].active == 1) {
+														zonrun = true;
+													}
+												}
 												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onjump', WTW.animationSet)] != undefined) {
 													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onjump', WTW.animationSet)].active == 1) {
 														zonjump = true;
 													}
 												}
 												if (zonjump) {
-													if (WTW.shiftKey) {
+													if (zonwalk || zonrun) {
+														zanim = WTW.checkAnimationSet(zavatar, 'onjump', WTW.animationSet);
+													} else if (WTW.shiftKey) {
 														zanim = WTW.checkAnimationSet(zavatar, 'onjumprunbackwards', WTW.animationSet);
 													} else {
 														zanim = WTW.checkAnimationSet(zavatar, 'onjumpwalkbackwards', WTW.animationSet);
@@ -143,68 +199,238 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 													zanim = '';
 													zactivecount += 1;
 												} else {
-													if (WTW.shiftKey) {
-														zanim = WTW.checkAnimationSet(zavatar, 'onrunbackwards', WTW.animationSet);
+													if (zonwalk || zonrun) {
+														zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet)].active = 0;
+														zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet)].active = 0;
 													} else {
-														zanim = WTW.checkAnimationSet(zavatar, 'onwalkbackwards', WTW.animationSet);
+														if (WTW.shiftKey) {
+															zanim = WTW.checkAnimationSet(zavatar, 'onrunbackwards', WTW.animationSet);
+														} else {
+															zanim = WTW.checkAnimationSet(zavatar, 'onwalkbackwards', WTW.animationSet);
+														}
 													}
 												}
 												break;
 											case 1040: //arrow s backwards
-												zanim = WTW.checkAnimationSet(zavatar, 'onwalkbackwards', WTW.animationSet);
+												var zonwalk = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet)].active == 1) {
+														zonwalk = true;
+													}
+												}
+												if (zonwalk) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onwalk', WTW.animationSet)].active = 0;
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onwalkbackwards', WTW.animationSet);
+												}
 												break;
 											case 2040: //arrow s backwards
-												zanim = WTW.checkAnimationSet(zavatar, 'onrunbackwards', WTW.animationSet);
+												var zonrun = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet)].active == 1) {
+														zonrun = true;
+													}
+												}
+												if (zonrun) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrun', WTW.animationSet)].active = 0;
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onrunbackwards', WTW.animationSet);
+												}
 												break;
 											case 37: //arrow q rotate left
 											case 81: //q rotate left
-												if (WTW.shiftKey) {
-													zanim = WTW.checkAnimationSet(zavatar, 'onrunturnleft', WTW.animationSet);
+												/* check if right is also pressed */
+												var zonturnright = false;
+												var zonrunturnright = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnright', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnright', WTW.animationSet)].active == 1) {
+														zonturnright = true;
+													}
+												}
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunturnright', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunturnright', WTW.animationSet)].active == 1) {
+														zonrunturnright = true;
+													}
+												}
+												if (zonturnright || zonrunturnright) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnright', WTW.animationSet)].active = 0;
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunturnright', WTW.animationSet)].active = 0;
+												} else {
+													if (WTW.shiftKey) {
+														zanim = WTW.checkAnimationSet(zavatar, 'onrunturnleft', WTW.animationSet);
+													} else {
+														zanim = WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet);
+													}
+												}
+												break;
+											case 1037: //mouse rotate left
+												/* check if right is also pressed */
+												var zonturnright = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnright', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnright', WTW.animationSet)].active == 1) {
+														zonturnright = true;
+													}
+												}
+												if (zonturnright) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnright', WTW.animationSet)].active = 0;
 												} else {
 													zanim = WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet);
 												}
 												break;
-											case 1037: //mouse rotate left
-												zanim = WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet);
-												break;
 											case 2037: //mouse rotate left
-												zanim = WTW.checkAnimationSet(zavatar, 'onrunturnleft', WTW.animationSet);
+												/* check if right is also pressed */
+												var zonrunturnright = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunturnright', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunturnright', WTW.animationSet)].active == 1) {
+														zonrunturnright = true;
+													}
+												}
+												if (zonrunturnright) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunturnright', WTW.animationSet)].active = 0;
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onrunturnleft', WTW.animationSet);
+												}
 												break;
 											case 39: //arrow e rotate right
 											case 69: //e rotate right
-												if (WTW.shiftKey) {
-													zanim = WTW.checkAnimationSet(zavatar, 'onrunturnright', WTW.animationSet);
+												/* check if left is also pressed */
+												var zonturnleft = false;
+												var zonrunturnleft = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet)].active == 1) {
+														zonturnleft = true;
+													}
+												}
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunturnleft', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunturnleft', WTW.animationSet)].active == 1) {
+														zonrunturnleft = true;
+													}
+												}
+												if (zonturnleft || zonrunturnleft) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet)].active = 0;
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunturnleft', WTW.animationSet)].active = 0;
+												} else {
+													if (WTW.shiftKey) {
+														zanim = WTW.checkAnimationSet(zavatar, 'onrunturnright', WTW.animationSet);
+													} else {
+														zanim = WTW.checkAnimationSet(zavatar, 'onturnright', WTW.animationSet);
+													}
+												}
+												break;
+											case 1039: //mouse rotate right
+												/* check if left is also pressed */
+												var zonturnleft = false;
+												var zonrunturnleft = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet)].active == 1) {
+														zonturnleft = true;
+													}
+												}
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunturnleft', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunturnleft', WTW.animationSet)].active == 1) {
+														zonrunturnleft = true;
+													}
+												}
+												if (zonturnleft || zonrunturnleft) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet)].active = 0;
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunturnleft', WTW.animationSet)].active = 0;
 												} else {
 													zanim = WTW.checkAnimationSet(zavatar, 'onturnright', WTW.animationSet);
 												}
 												break;
-											case 1039: //mouse rotate right
-												zanim = WTW.checkAnimationSet(zavatar, 'onturnright', WTW.animationSet);
-												break;
 											case 2039: //mouse rotate right
-												zanim = WTW.checkAnimationSet(zavatar, 'onrunturnright', WTW.animationSet);
+												/* check if left is also pressed */
+												var zonturnleft = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet)].active == 1) {
+														zonturnleft = true;
+													}
+												}
+												if (zonturnleft) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onturnleft', WTW.animationSet)].active = 0;
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onrunturnright', WTW.animationSet);
+												}
 												break;
 											case 65: //a strafe left
 											case 1065: //mouse strafe left
-												if (WTW.shiftKey) {
-													zanim = WTW.checkAnimationSet(zavatar, 'onrunstrafeleft', WTW.animationSet);
+												/* check if right is also pressed */
+												var zonstraferight = false;
+												var zonrunstraferight = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onstraferight', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onstraferight', WTW.animationSet)].active == 1) {
+														zonstraferight = true;
+													}
+												}
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunstraferight', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunstraferight', WTW.animationSet)].active == 1) {
+														zonrunstraferight = true;
+													}
+												}
+												if (zonstraferight || zonrunstraferight) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onstraferight', WTW.animationSet)].active = 0;
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunstraferight', WTW.animationSet)].active = 0;
 												} else {
-													zanim = WTW.checkAnimationSet(zavatar, 'onstrafeleft', WTW.animationSet);
+													if (WTW.shiftKey) {
+														zanim = WTW.checkAnimationSet(zavatar, 'onrunstrafeleft', WTW.animationSet);
+													} else {
+														zanim = WTW.checkAnimationSet(zavatar, 'onstrafeleft', WTW.animationSet);
+													}
 												}
 												break;
 											case 2065: //mouse strafe left
-												zanim = WTW.checkAnimationSet(zavatar, 'onrunstrafeleft', WTW.animationSet);
+												/* check if right is also pressed */
+												var zonrunstraferight = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunstraferight', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunstraferight', WTW.animationSet)].active == 1) {
+														zonrunstraferight = true;
+													}
+												}
+												if (zonrunstraferight) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunstraferight', WTW.animationSet)].active = 0;
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onrunstrafeleft', WTW.animationSet);
+												}
 												break;
 											case 68: //d strafe right
 											case 1068: //mouse strafe right
-												if (WTW.shiftKey) {
-													zanim = WTW.checkAnimationSet(zavatar, 'onrunstraferight', WTW.animationSet);
+												/* check if left is also pressed */
+												var zonstrafeleft = false;
+												var zonrunstrafeleft = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onstrafeleft', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onstrafeleft', WTW.animationSet)].active == 1) {
+														zonstrafeleft = true;
+													}
+												}
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunstrafeleft', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunstrafeleft', WTW.animationSet)].active == 1) {
+														zonrunstrafeleft = true;
+													}
+												}
+												if (zonstrafeleft || zonrunstrafeleft) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onstrafeleft', WTW.animationSet)].active = 0;
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunstrafeleft', WTW.animationSet)].active = 0;
 												} else {
-													zanim = WTW.checkAnimationSet(zavatar, 'onstraferight', WTW.animationSet);
+													if (WTW.shiftKey) {
+														zanim = WTW.checkAnimationSet(zavatar, 'onrunstraferight', WTW.animationSet);
+													} else {
+														zanim = WTW.checkAnimationSet(zavatar, 'onstraferight', WTW.animationSet);
+													}
 												}
 												break;
 											case 2068: //mouse strafe right
-												zanim = WTW.checkAnimationSet(zavatar, 'onrunstraferight', WTW.animationSet);
+												/* check if left is also pressed */
+												var zonrunstrafeleft = false;
+												if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunstrafeleft', WTW.animationSet)] != undefined) {
+													if (zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunstrafeleft', WTW.animationSet)].active == 1) {
+														zonrunstrafeleft = true;
+													}
+												}
+												if (zonrunstrafeleft) {
+													zavatar.WTW.animations.running[WTW.checkAnimationSet(zavatar, 'onrunstrafeleft', WTW.animationSet)].active = 0;
+												} else {
+													zanim = WTW.checkAnimationSet(zavatar, 'onrunstraferight', WTW.animationSet);
+												}
 												break;
 											case 82: //r rotate up
 											case 1082: //mouse rotate up
