@@ -594,7 +594,7 @@ WTW_3DINTERNET.prototype.beforeUnloadMove = function() {
 						zmeinzone = WTW.myAvatar.intersectsMesh(zactionzone, false);
 					}
 					if (zmeinzone && zmoldname != undefined) {
-						if (zmoldname.indexOf("loadzone") > -1) {
+						if (zmoldname.indexOf("loadzone") > -1 && zmoldname.indexOf("unloadzone") == -1) {
 							/* trigger plugins when avatar exits zone */
 							WTW.pluginsExitActionZone(zmoldname, WTW.actionZones[i]);
 						}

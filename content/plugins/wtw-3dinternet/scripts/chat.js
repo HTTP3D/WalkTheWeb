@@ -102,7 +102,7 @@ WTW_3DINTERNET.prototype.reconnectChatRooms = function() {
 						var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
 						var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 						if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
-							if (zmoldname.indexOf("loadzone") > -1 && zactionzone != null && zmoldnameparts.molds[zmoldnameparts.moldind].actionzonename.toLowerCase().indexOf('high') > -1 && zmoldnameparts.molds[zmoldnameparts.moldind].actionzonename.toLowerCase().indexOf('custom') == -1) {
+							if (zmoldname.indexOf("loadzone") > -1 && zmoldname.indexOf("unloadzone") == -1 && zactionzone != null && zmoldnameparts.molds[zmoldnameparts.moldind].actionzonename.toLowerCase().indexOf('high') > -1 && zmoldnameparts.molds[zmoldnameparts.moldind].actionzonename.toLowerCase().indexOf('custom') == -1) {
 								var zmeinzone = false;
 								if (WTW.myAvatar != null) {
 									zmeinzone = WTW.myAvatar.intersectsMesh(zactionzone, false);
