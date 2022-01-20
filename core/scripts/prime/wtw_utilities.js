@@ -146,6 +146,7 @@ WTWJS.prototype.getMoldnameParts = function(zmoldname) {
 	var zshape = '';
 	var zinstanceid = '';
 	var zloadactionzoneid = '';
+	var zunloadactionzoneid = '';
 	var zactionzoneid = '';
 	var zcoveringname = '';
 	var zmoldnamebase = '';
@@ -229,6 +230,7 @@ WTWJS.prototype.getMoldnameParts = function(zmoldname) {
 				}
 
 				zloadactionzoneid = zmolds[zmoldind].loadactionzoneid;
+				zunloadactionzoneid = zmolds[zmoldind].unloadactionzoneid;
 				zactionzoneid = zmolds[zmoldind].actionzoneid;
 				zcoveringname = zmolds[zmoldind].covering;
 			}
@@ -259,6 +261,7 @@ WTWJS.prototype.getMoldnameParts = function(zmoldname) {
 		'shape':zshape,
 		'avatarpart':zavatarpart,
 		'loadactionzoneid':zloadactionzoneid,
+		'unloadactionzoneid':zunloadactionzoneid,
 		'actionzoneid':zactionzoneid,
 		'coveringname':zcoveringname,
 		'namepart':znamepart,

@@ -1680,10 +1680,11 @@ WTWJS.prototype.loadUploadedObjectsDiv = async function(showloading) {
 					}
 					if (zitem == "3dobject") {
 						zlinktext = "Select";
-						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.setSelectModel('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.setSelectModel('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">Edit</div><div class='wtw-clear'></div></div></div>";
+						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.setSelectModel('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'><canvas id='wtw_modelCanvas" + i + "' style='border:1px solid black;display:none;visibility:hidden;'></canvas>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.setSelectModel('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">Edit</div><div class='wtw-clear'></div></div></div>";
 					} else {
-						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-clear'></div></div></div>";
+						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'><canvas id='wtw_modelCanvas" + i + "' style='border:1px solid black;display:none;visibility:hidden;'></canvas>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-clear'></div></div></div>";
 					}
+					WTW.loadPreviewScene(i);
 				}
 				dGet('wtw_uploadedmodelsdiv').innerHTML = zuploadedobjectsdiv;
 				dGet('wtw_uploadedmodelsdiv').style.height = (WTW.sizeY - 160) + 'px';
@@ -1697,6 +1698,25 @@ WTWJS.prototype.loadUploadedObjectsDiv = async function(showloading) {
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-loadUploadedObjectsDiv=" + ex.message);
+	}
+}
+
+WTWJS.prototype.loadPreviewScene = async function(zind) {
+	/* creates scene used to preview a 3D Model */
+	try {
+		var zcanvasid = 'wtw_modelCanvas' + zind;
+		if (dGet(zcanvasid) != null) {
+//WTW.log(zcanvasid);
+//			var zview = engine.registerView(dGet(zcanvasid));
+/*			var scene1 = new BABYLON.Scene(engine);        
+			scene1.name = "wtw_modelcanvas" + zind;
+			scene1.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
+			scene1.autoClear = false;
+			scene1.autoClearDepthAndStencil = false;
+*/			
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-loadPreviewScene=" + ex.message);
 	}
 }
 

@@ -1127,8 +1127,8 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 						var zthingid = "";
 						var zaltconnectinggridid = "";
 						var zaltconnectinggridind = -1;
-						var ztestactionzoneid = "";
 						var zloadactionzoneind = -1;
+						var zunloadactionzoneind = -1;
 						var zinloadactionzone = "0";
 						/* check and read values if they exist */
 						if (zaddmolds.molds[i].altconnectinggridid != "" && zaddmolds.molds[i].altconnectinggridid != undefined) {
@@ -1143,9 +1143,16 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 						if (zaddmolds.molds[i].loadactionzoneind != undefined) {
 							zloadactionzoneind = zaddmolds.molds[i].loadactionzoneind;
 						}
+						if (zaddmolds.molds[i].unloadactionzoneind != undefined) {
+							zunloadactionzoneind = zaddmolds.molds[i].unloadactionzoneind;
+						}
 						if (zloadactionzoneind == -1) {
 							zloadactionzoneind = WTW.getActionZoneInd(zaddmolds.molds[i].loadactionzoneid, zconnectinggridind);
 							zaddmolds.molds[i].loadactionzoneind = zloadactionzoneind;
+						}
+						if (zunloadactionzoneind == -1) {
+							zunloadactionzoneind = WTW.getActionZoneInd(zaddmolds.molds[i].unloadactionzoneid, zconnectinggridind);
+							zaddmolds.molds[i].unloadactionzoneind = zunloadactionzoneind;
 						}
 						if (zparentactionzoneind == -1) {
 							zparentactionzoneind = zaddmolds.molds[i].parentactionzoneind;
@@ -1197,9 +1204,6 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 										WTW.communitiesMolds[zmoldind].moldname = "communitymolds-" + zmoldind + "-" + WTW.communitiesMolds[zmoldind].moldid + "-" + zconnectinggridind + "-" + zconnectinggridid + "-" + WTW.communitiesMolds[zmoldind].shape;
 									}
 									WTW.communitiesMolds[zmoldind].inloadactionzone = zinloadactionzone;
-									if (ztestactionzoneid != WTW.communitiesMolds[zmoldind].loadactionzoneid) {
-										ztestactionzoneid = WTW.communitiesMolds[zmoldind].loadactionzoneid;
-									}
 								}			
 							}								
 						}
@@ -1234,9 +1238,6 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 										WTW.buildingMolds[zmoldind].moldname = "buildingmolds-" + zmoldind + "-" + WTW.buildingMolds[zmoldind].moldid + "-" + zconnectinggridind + "-" + zconnectinggridid + "-" + WTW.buildingMolds[zmoldind].shape;
 									}
 									WTW.buildingMolds[zmoldind].inloadactionzone = zinloadactionzone;
-									if (ztestactionzoneid != WTW.buildingMolds[zmoldind].loadactionzoneid) {
-										ztestactionzoneid = WTW.buildingMolds[zmoldind].loadactionzoneid;
-									}
 								}						
 							}
 						} 
@@ -1271,9 +1272,6 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 										WTW.thingMolds[zmoldind].moldname = "thingmolds-" + zmoldind + "-" + WTW.thingMolds[zmoldind].moldid + "-" + zconnectinggridind + "-" + zconnectinggridid + "-" + WTW.thingMolds[zmoldind].shape;
 									}
 									WTW.thingMolds[zmoldind].inloadactionzone = zinloadactionzone;
-									if (ztestactionzoneid != WTW.thingMolds[zmoldind].loadactionzoneid) {
-										ztestactionzoneid = WTW.thingMolds[zmoldind].loadactionzoneid;
-									}
 								}					
 							}								
 						} 

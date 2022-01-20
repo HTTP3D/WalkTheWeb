@@ -14,7 +14,7 @@ WTWJS.prototype.checkAnalytics = function(zactionzoneind) {
 			var zcommunityid = WTW.actionZones[zactionzoneind].communityinfo.communityid;
 			var zbuildingid = WTW.actionZones[zactionzoneind].buildinginfo.buildingid;
 			var zthingid = WTW.actionZones[zactionzoneind].thinginfo.thingid;
-			if (zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[zactionzoneind].status == 0 && WTW.actionZones[zactionzoneind].actionzonename.toLowerCase().indexOf("custom") == -1 && (zcommunityid != '' || zbuildingid != '' || zthingid != '')) {
+			if (zmoldname.indexOf("loadzone") > -1 && zmoldname.indexOf("unloadzone") == -1 && WTW.actionZones[zactionzoneind].status == 0 && WTW.actionZones[zactionzoneind].actionzonename.toLowerCase().indexOf("custom") == -1 && (zcommunityid != '' || zbuildingid != '' || zthingid != '')) {
 				if (zactionzonename == 'Extreme Load Zone') {
 					WTW.trackPageView(zactionzoneind, 'extreme');
 				} else if (zactionzonename == 'High - Load when far') {

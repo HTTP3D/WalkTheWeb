@@ -431,6 +431,7 @@ WTWJS.prototype.loadMoldForm = function(zmolddef) {
 		WTW.setDDLValue("wtw_tmoldcovering", zmolddef.covering);
 		WTW.setDDLValue("wtw_tmoldcsgaction", zmolddef.csg.action);
 		WTW.setDDLValue("wtw_tmoldloadactionzoneid", zmolddef.loadactionzoneid);
+		WTW.setDDLValue("wtw_tmoldunloadactionzoneid", zmolddef.unloadactionzoneid);
 		if (zmolddef.graphics.waterreflection == '1') {
 			dGet('wtw_tmoldwaterreflection').checked = true;
 		} else {
@@ -761,6 +762,7 @@ WTWJS.prototype.openAddNewMold = function(zwebtype, zshape) {
 				break;
 		}
 		var zloadactionzoneid = WTW.getLoadActionZoneID("normal");
+		var zunloadactionzoneid = '';
 		WTW.getLoadZoneList(zloadactionzoneid);
 		var zmoldid = WTW.getRandomString(16);
 		zmolds[zmoldind].moldid = zmoldid;
@@ -876,6 +878,8 @@ WTWJS.prototype.openAddNewMold = function(zwebtype, zshape) {
 		zmolds[zmoldind].parentname = dGet('wtw_tconnectinggridname').value;
 		zmolds[zmoldind].loadactionzoneid = zloadactionzoneid;
 		zmolds[zmoldind].loadactionzoneind = WTW.getActionZoneInd(zloadactionzoneid, Number(dGet('wtw_tconnectinggridind').value));
+		zmolds[zmoldind].unloadactionzoneid = zunloadactionzoneid;
+		zmolds[zmoldind].unloadactionzoneind = WTW.getActionZoneInd(zunloadactionzoneid, Number(dGet('wtw_tconnectinggridind').value));
 		WTW.setDDLValue('wtw_tmoldcovering', zcoveringname);
 		zmold = WTW.addMold(zmolds[zmoldind].moldname, zmolds[zmoldind], zmolds[zmoldind].parentname, zcoveringname);
 		zmold.isPickable = true;
@@ -1323,7 +1327,9 @@ WTWJS.prototype.submitMoldForm = async function(zselect) {
 			zmolds[zmoldind].actionzoneid = dGet('wtw_tmoldactionzoneid').value;
 			zmolds[zmoldind].actionzoneind = WTW.getActionZoneInd(zmolds[zmoldind].actionzoneid,0);
 			zmolds[zmoldind].loadactionzoneid = dGet('wtw_tmoldloadactionzoneid').options[dGet('wtw_tmoldloadactionzoneid').selectedIndex].value;
+			zmolds[zmoldind].unloadactionzoneid = dGet('wtw_tmoldunloadactionzoneid').options[dGet('wtw_tmoldunloadactionzoneid').selectedIndex].value;
 			zmolds[zmoldind].loadactionzoneind = WTW.getActionZoneInd(zmolds[zmoldind].loadactionzoneid,0);
+			zmolds[zmoldind].unloadactionzoneind = WTW.getActionZoneInd(zmolds[zmoldind].unloadactionzoneid,-1);
 			zmolds[zmoldind].csg.moldid = dGet('wtw_tmoldcsgmoldid').value;
 			if (dGet('wtw_tmoldcsgaction').selectedIndex > -1) {
 				zmolds[zmoldind].csg.action = dGet('wtw_tmoldcsgaction').options[dGet('wtw_tmoldcsgaction').selectedIndex].value;
@@ -1351,6 +1357,7 @@ WTWJS.prototype.submitMoldForm = async function(zselect) {
 				'moldid': zmolds[zmoldind].moldid,
 				'moldind': zmoldind,
 				'loadactionzoneid': zmolds[zmoldind].loadactionzoneid,
+				'unloadactionzoneid': zmolds[zmoldind].unloadactionzoneid,
 				'webtype': zwebtype,
 				'shape': zmolds[zmoldind].shape,
 				'covering': zmolds[zmoldind].covering,
@@ -1451,6 +1458,7 @@ WTWJS.prototype.clearEditMold = function() {
 		dGet('wtw_tmoldid').value = "";
 		WTW.getLoadZoneList(WTW.getLoadActionZoneID("normal"));
 		dGet('wtw_tmoldloadactionzoneid').selectedIndex = -1;
+		dGet('wtw_tmoldunloadactionzoneid').selectedIndex = -1;
 		dGet('wtw_tmoldcovering').selectedIndex = -1;
 		dGet('wtw_tmoldcoveringold').value = "";
 		dGet('wtw_tmoldshape').value = "";

@@ -105,7 +105,7 @@ WTWJS.prototype.checkActionZones = function() {
 						/* allow hooks for plugins to add code on check zone (mostly for custom zones or to add functions to an existing zone) */
 						WTW.pluginsCheckActionZone(zmoldname, i, zmeinzone, zothersinzone);
 					} else if (zmoldname.indexOf("loadzone") > -1) {
-						/* if loadzone not otherwise defined, set status to avaatr not in zone */
+						/* if loadzone not otherwise defined, set status to avatar not in zone */
 						WTW.actionZones[i].status = 0;
 					}
 				}

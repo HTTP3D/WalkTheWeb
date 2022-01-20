@@ -45,6 +45,47 @@ WTWJS.prototype.addActionzoneLoadzone = function(zactionzonename, zactionzoneind
 	return zactionzone;
 }
 
+WTWJS.prototype.addActionzoneUnloadzone = function(zactionzonename, zactionzoneind, zactionzonedef) {
+	/* load zone = shape often box by default - triggers molds to load when your avatar enters the load zone */
+	var zactionzone;
+	try {
+		/* create the shape for the load zone */
+		/* default actionzoneshape is cube and hidden (opacity 0) */
+		var zmolddef = WTW.newMold();
+		zmolddef.shape = zactionzonedef.actionzoneshape;
+		zmolddef.covering = "hidden";
+		/* position, scaling, and rotation of zone */
+		zmolddef.position.x = zactionzonedef.position.x;
+		zmolddef.position.y = zactionzonedef.position.y;
+		zmolddef.position.z = zactionzonedef.position.z;
+		zmolddef.scaling.x = zactionzonedef.scaling.x;
+		zmolddef.scaling.y = zactionzonedef.scaling.y;
+		zmolddef.scaling.z = zactionzonedef.scaling.z;
+		zmolddef.rotation.x = zactionzonedef.rotation.x;
+		zmolddef.rotation.y = zactionzonedef.rotation.y;
+		zmolddef.rotation.z = zactionzonedef.rotation.z;
+		/* subdivisions are only used for some shapes like spheres */
+		zmolddef.subdivisions = 12;
+		/* set transparent in 3D Scene */
+		zmolddef.opacity = 0;
+		/* every mold has a parent except for the main scene mold cube - most times it is the 3D Community, Building or Thing */
+		zmolddef.parentname = zactionzonedef.parentname;
+		/* actionzoneid refers to the database saved unique identifier (definition of what is being built. */
+		/* but since each 3D Object can be added to 3D Scenes multiple times, repeating the same actionzoneid, */
+		/* zactionzoneind (notice ind is for index) refers to the instance of the 3d object when added to the 3D Scene */
+		zmolddef.actionzoneind = zactionzoneind;
+		/* by default zones do not have collisions - avatars can walk into them */
+		zmolddef.checkcollisions = "0";
+		/* even in admin mode, zones are not pickable in the 3D Scene, use the menu to select and edit a zone */
+		zmolddef.ispickable = "0";
+		WTW.addMoldToQueue(zactionzonename, zmolddef, zmolddef.parentname, zmolddef.covering, null);
+		WTW.actionZones[zactionzoneind].shown = "2";
+	} catch (ex) {
+		WTW.log("core-scripts-actionzones-basicactionzones\r\n addActionzoneUnloadzone=" + ex.message);
+	}
+	return zactionzone;
+}
+
 WTWJS.prototype.addActionzoneLoadAnimations = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	/* load animations = shape often box by default - triggers to load avatar animations to your avatar when it enters the zone */
 	var zactionzone;

@@ -338,34 +338,48 @@ WTWJS.prototype.setShownMoldsByWeb = function(zwebtype) {
 						var znode = WTW.getMeshOrNodeByID(zmolds[i].moldname);
 						if (zparentmold != null) {
 							var zloadazind = -1;
+							var zunloadazind = -1;
 							var zloadazstatus = 0;
+							var zunloadazstatus = 0;
 							var zconnectinggridind = Number(zmolds[i].connectinggridind);
 							var zcsgmoldid = zmolds[i].csg.moldid;
 							if (zmolds[i].loadactionzoneind != undefined) {
 								zloadazind = zmolds[i].loadactionzoneind;
 							}
+							if (zmolds[i].unloadactionzoneind != undefined) {
+								zunloadazind = zmolds[i].unloadactionzoneind;
+							}
 							if (zloadazind == -1) {
 								zloadazind = WTW.getActionZoneInd(zmolds[i].loadactionzoneid, zconnectinggridind);
 								zmolds[i].loadactionzoneind = zloadazind;
+							}
+							if (zunloadazind == -1) {
+								zunloadazind = WTW.getActionZoneInd(zmolds[i].unloadactionzoneid, zconnectinggridind);
+								zmolds[i].unloadactionzoneind = zunloadazind;
 							}
 							if (WTW.actionZones[zloadazind] != null) {
 								if (WTW.actionZones[zloadazind] != null) {
 									zloadazstatus = WTW.actionZones[zloadazind].status;
 								}
 							}
-							if (zloadazstatus == 0) {
+							if (WTW.actionZones[zunloadazind] != null) {
+								if (WTW.actionZones[zunloadazind] != null) {
+									zunloadazstatus = WTW.actionZones[zunloadazind].status;
+								}
+							}
+							if (zloadazstatus == 0 || zunloadazstatus == 2) {
 								if (zshown != "0") {
 									zmolds[i].shown = "0";
 									WTW.addDisposeMoldToQueue(zmolds[i].moldname);
 								}
-							} else if (zloadazstatus == 2 && zshown == "0" && zmold == null) {
+							} else if (zloadazstatus == 2 && zunloadazstatus != 2 && zshown == "0" && zmold == null) {
 								WTW.setMoldActionZoneParent(zmolds, i);
 								if (zcsgmoldid == "") {
 									zmolds[i].shown = "1";
 									WTW.addMoldToQueue(zmolds[i].moldname, zmolds[i], zmolds[i].parentname, zmolds[i].covering,null);
 									zfound = true;
 								}
-							} else if (zloadazstatus == 2 && zshown == "1" && zloaded == '0') {
+							} else if (zloadazstatus == 2 && zunloadazstatus != 2 && zshown == "1" && zloaded == '0') {
 								/* mold has not finished loading */
 								zfound = true;
 							}

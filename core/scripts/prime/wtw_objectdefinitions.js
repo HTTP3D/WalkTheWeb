@@ -359,6 +359,8 @@ WTWJS.prototype.newMold = function() {
 			'parentactionzoneind':'-1',
 			'loadactionzoneid':'',
 			'loadactionzoneind':'-1',
+			'unloadactionzoneid':'',
+			'unloadactionzoneind':'-1',
 			'inloadactionzone':'0',
 			'altconnectinggridid':'',
 			'altconnectinggridind':'-1',

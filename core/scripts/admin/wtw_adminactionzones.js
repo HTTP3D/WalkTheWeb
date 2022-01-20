@@ -1068,6 +1068,9 @@ WTWJS.prototype.getLoadZoneList = function(zdefaultvalue) {
 	/* this process provides a drop down list for the molds form to select a load zone (in the advanced options section) */
 	try {
 		WTW.clearDDL("wtw_tmoldloadactionzoneid");
+		WTW.clearDDL("wtw_tmoldunloadactionzoneid");
+		
+		
 		for (var i=0;i < WTW.actionZones.length;i++) {
 			if (WTW.actionZones[i] != null) {
 				if (WTW.actionZones[i].actionzonetype == 'loadzone') {
@@ -1080,6 +1083,24 @@ WTWJS.prototype.getLoadZoneList = function(zdefaultvalue) {
 						}
 						dGet("wtw_tmoldloadactionzoneid").add(zoption);
 					}
+				} else if (WTW.actionZones[i].actionzonetype == 'unloadzone') {
+					if ((WTW.actionZones[i].thinginfo.thingid==thingid && thingid!='') || (WTW.actionZones[i].buildinginfo.buildingid==buildingid && buildingid!='') || (WTW.actionZones[i].communityinfo.communityid==communityid && communityid!='')) {
+						if (dGet("wtw_tmoldunloadactionzoneid").options.length == 0) {
+							var zoption0 = document.createElement("option");
+							zoption0.text = "";
+							zoption0.value = "";
+							zoption0.selected = true;
+							dGet("wtw_tmoldunloadactionzoneid").add(zoption0);
+						}
+						
+						var zoption = document.createElement("option");
+						zoption.text = WTW.actionZones[i].actionzonename;
+						zoption.value = WTW.actionZones[i].actionzoneid;
+						if (zoption.value == zdefaultvalue) {
+							zoption.selected = true;
+						}
+						dGet("wtw_tmoldunloadactionzoneid").add(zoption);
+					}
 				}
 			}
 		}
@@ -1089,6 +1110,11 @@ WTWJS.prototype.getLoadZoneList = function(zdefaultvalue) {
 			zoption2.value = "";
 			zoption2.selected = true;
 			dGet("wtw_tmoldloadactionzoneid").add(zoption2);
+		}
+		if (dGet("wtw_tmoldunloadactionzoneid").options.length == 0) {
+			WTW.hide('wtw_unloadzonediv');
+		} else {
+			WTW.show('wtw_unloadzonediv');
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminactionzones.js-getLoadZoneList=" + ex.message);

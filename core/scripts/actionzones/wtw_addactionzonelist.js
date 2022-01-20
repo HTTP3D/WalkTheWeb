@@ -10,6 +10,7 @@ WTWJS.prototype.getActionZoneList = function() {
 	zactionzonelist = [];
 	try {
 		zactionzonelist[zactionzonelist.length] = {"name":"Load Zone","helpurl":"https://www.walktheweb.com/wiki/load-zone-action-zones/", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Unload Zone","helpurl":"https://www.walktheweb.com/wiki/load-zone-action-zones/", "defaulteditform":"0"};
 		zactionzonelist[zactionzonelist.length] = {"name":"Sliding Door","helpurl":"https://www.walktheweb.com/wiki/sliding-doors-action-zones/", "defaulteditform":"0"};
 		zactionzonelist[zactionzonelist.length] = {"name":"Swinging Door","helpurl":"https://www.walktheweb.com/wiki/swinging-doors-action-zone/", "defaulteditform":"0"};
 		zactionzonelist[zactionzonelist.length] = {"name":"Click Activated Sliding Door","helpurl":"", "defaulteditform":"0"};
@@ -113,6 +114,10 @@ WTWJS.prototype.addActionZone = function(zactionzonename, zactionzonedef) {
 					case "loadzone":
 						/* load zone = shape often box by default - triggers molds to load when your avatar enters the load zone */
 						zactionzone = WTW.addActionzoneLoadzone(zactionzonename, zactionzoneind, zactionzonedef);
+						break;
+					case "unloadzone":
+						/* load zone = shape often box by default - triggers molds to load when your avatar enters the load zone */
+						zactionzone = WTW.addActionzoneUnloadzone(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "loadanimations":
 						/* load animations = shape often box by default - triggers to load avatar animations to your avatar when it enters the zone */
@@ -241,6 +246,9 @@ WTWJS.prototype.setNewActionZoneDefaults = function(zactionzonetype) {
 			case "loadzone":
 				dGet('wtw_tactionzonename').value = "Custom - Load Zone";
 				break;
+			case "unloadzone":
+				dGet('wtw_tactionzonename').value = "Unload Zone";
+				break;
 			case "loadanimations":
 				dGet('wtw_tactionzonename').value = "Load Animations";
 				break;
@@ -348,6 +356,16 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				WTW.hide('wtw_actionzoneadvancedoptslink');
 				WTW.hide('wtw_actionzonepartsdiv');
 				dGet('wtw_editactionzoneformtitle').innerHTML = "Add Load Zone";
+				dGet('wtw_tcopyaxletoactionzone').disabled = true;
+				WTW.show('wtw_actionzoneadvancedopts');
+				WTW.show('wtw_azjavascriptdiv');
+				break;
+			case "unloadzone":
+				WTW.hide('wtw_actionzoneaxisdiv');
+				WTW.hide('wtw_copyaxletoactionzonediv');
+				WTW.hide('wtw_actionzoneadvancedoptslink');
+				WTW.hide('wtw_actionzonepartsdiv');
+				dGet('wtw_editactionzoneformtitle').innerHTML = "Add Unload Zone";
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
 				WTW.show('wtw_actionzoneadvancedopts');
 				WTW.show('wtw_azjavascriptdiv');
