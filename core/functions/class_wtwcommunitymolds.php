@@ -20,7 +20,7 @@ class wtwcommunitymolds {
 		}
 	}
 	
-	function saveCommunityMold($zcommunitymoldid, $zcommunityid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zsubdivisions, $zminheight, $zmaxheight, $zcheckcollisions, $zispickable, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain) {
+	function saveCommunityMold($zcommunitymoldid, $zcommunityid, $zloadactionzoneid, $zunloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zsubdivisions, $zminheight, $zmaxheight, $zcheckcollisions, $zispickable, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain) {
 		/* save a community mold settings */
 		global $wtwhandlers;
 		try {
@@ -39,6 +39,7 @@ class wtwcommunitymolds {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."communitymolds
 						set loadactionzoneid='".$zloadactionzoneid."',
+							unloadactionzoneid='".$zunloadactionzoneid."',
 							shape='".$zshape."',
 							covering='".$zcovering."',
 							positionx=".$wtwhandlers->checkNumber($zpositionx,0).",
@@ -99,6 +100,7 @@ class wtwcommunitymolds {
 						   (communitymoldid,
 							communityid,
 							loadactionzoneid,
+							unloadactionzoneid,
 							shape,
 							covering,
 							positionx,
@@ -162,6 +164,7 @@ class wtwcommunitymolds {
 						   ('".$zcommunitymoldid."',
 							'".$zcommunityid."',
 							'".$zloadactionzoneid."',
+							'".$zunloadactionzoneid."',
 							'".$zshape."',
 							'".$zcovering."',
 							".$wtwhandlers->checkNumber($zpositionx,0).",

@@ -925,6 +925,7 @@ class wtwcommunities {
 					select t3.communitymoldid as pastcommunitymoldid,
 						 '".$zcommunityid."' as communityid,
 						 t3.loadactionzoneid,
+						 t3.unloadactionzoneid,
 						 t3.shape,
 						 t3.covering,
 						 t3.positionx,
@@ -1000,6 +1001,7 @@ class wtwcommunities {
 							pastcommunitymoldid,
 							communityid,
 							loadactionzoneid,
+							unloadactionzoneid,
 							shape,
 							covering,
 							positionx,
@@ -1073,6 +1075,7 @@ class wtwcommunities {
 							'".$zrow["pastcommunitymoldid"]."',
 							'".$zrow["communityid"]."',
 							'".$zrow["loadactionzoneid"]."',
+							'".$zrow["unloadactionzoneid"]."',
 							'".$zrow["shape"]."',
 							'".$zrow["covering"]."',
 							".$wtwhandlers->checkNumber($zrow["positionx"],0).",
@@ -1300,6 +1303,16 @@ class wtwcommunities {
 					set t1.loadactionzoneid = t2.actionzoneid
 					where t1.communityid='".$zcommunityid."'
 						and (not t1.loadactionzoneid='')
+						and (not t2.actionzoneid is null);");
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds t1 
+					left join (select * from ".wtw_tableprefix."actionzones 
+							where communityid='".$zcommunityid."' 
+								and (not communityid='')) t2
+						on t1.unloadactionzoneid = t2.pastactionzoneid
+					set t1.unloadactionzoneid = t2.actionzoneid
+					where t1.communityid='".$zcommunityid."'
+						and (not t1.unloadactionzoneid='')
 						and (not t2.actionzoneid is null);");
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."actionzones t1
@@ -2567,6 +2580,7 @@ class wtwcommunities {
 						$znewsoundid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->soundid);
 
 						$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zmold->loadactionzoneid);
+						$znewunloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zmold->unloadactionzoneid);
 						$znewactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zmold->actionzoneid);
 						
 						$znewuploadobjectid = $wtwhandlers->getIDByPastID('uploadobjects', 'uploadobjectid', 'pastuploadobjectid', $zmold->uploadobjectid);
@@ -2577,6 +2591,7 @@ class wtwcommunities {
 						/* remainder fo the common fields for communitymolds, buildingmolds, and thingmolds */
 						$zsql .= "
 							loadactionzoneid,
+							unloadactionzoneid,
 							shape,
 							covering,
 							positionx,
@@ -2649,6 +2664,7 @@ class wtwcommunities {
 						
 						$zsqlvalues .= "
 							'".$znewloadactionzoneid."',
+							'".$znewunloadactionzoneid."',
 							'".$zmold->shape."',
 							'".$zmold->covering."',
 							".$zmold->positionx.",

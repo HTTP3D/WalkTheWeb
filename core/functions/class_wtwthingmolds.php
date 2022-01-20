@@ -20,7 +20,7 @@ class wtwthingmolds {
 		}
 	}
 	
-	function saveThingMold($zthingmoldid, $zthingid, $zloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zsubdivisions, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain) {
+	function saveThingMold($zthingmoldid, $zthingid, $zloadactionzoneid, $zunloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zsubdivisions, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain) {
 		/* saves thing mold settings when a thing mold is added or edited */
 		global $wtwhandlers;
 		try {
@@ -39,6 +39,7 @@ class wtwthingmolds {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."thingmolds
 						set loadactionzoneid='".$zloadactionzoneid."',
+							unloadactionzoneid='".$zunloadactionzoneid."',
 							shape='".$zshape."',
 							covering='".$zcovering."',
 							positionx=".$wtwhandlers->checkNumber($zpositionx,0).",
@@ -99,6 +100,7 @@ class wtwthingmolds {
 						   (thingmoldid,
 							thingid,
 							loadactionzoneid,
+							unloadactionzoneid,
 							shape,
 							covering,
 							positionx,
@@ -162,6 +164,7 @@ class wtwthingmolds {
 						   ('".$zthingmoldid."',
 							'".$zthingid."',
 							'".$zloadactionzoneid."',
+							'".$zunloadactionzoneid."',
 							'".$zshape."',
 							'".$zcovering."',
 							".$wtwhandlers->checkNumber($zpositionx,0).",

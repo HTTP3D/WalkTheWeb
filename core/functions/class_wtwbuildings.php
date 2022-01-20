@@ -850,6 +850,7 @@ class wtwbuildings {
 						t3.buildingmoldid as pastbuildingmoldid,
 						'".$zbuildingid."' as buildingid,
 						t3.loadactionzoneid,
+						t3.unloadactionzoneid,
 						t3.shape,
 						t3.covering,
 						t3.positionx,
@@ -925,6 +926,7 @@ class wtwbuildings {
 					$zbuildingmoldid = $wtwhandlers->getRandomString(16,1);
 					$zpastbuildingmoldid = $zrow["pastbuildingmoldid"];
 					$zloadactionzoneid = $zrow["loadactionzoneid"];
+					$zunloadactionzoneid = $zrow["unloadactionzoneid"];
 					$zshape = $zrow["shape"];
 					$zcovering = $zrow["covering"];
 					$zpositionx = $zrow["positionx"];
@@ -996,6 +998,7 @@ class wtwbuildings {
 							pastbuildingmoldid,
 							buildingid,
 							loadactionzoneid,
+							unloadactionzoneid,
 							shape,
 							covering,
 							positionx,
@@ -1069,6 +1072,7 @@ class wtwbuildings {
 							'".$zpastbuildingmoldid."',
 							'".$zbuildingid."',
 							'".$zloadactionzoneid."',
+							'".$zunloadactionzoneid."',
 							'".$zshape."',
 							'".$zcovering."',
 							".$wtwhandlers->checkNumber($zpositionx,0).",
@@ -1352,6 +1356,13 @@ class wtwbuildings {
 					set t1.loadactionzoneid=t2.actionzoneid
 					where t1.buildingid='".$zbuildingid."'
 						and (not t1.loadactionzoneid='');");
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds t1
+						left join (select * from ".wtw_tableprefix."actionzones where buildingid='".$zbuildingid."' and (not buildingid='') and deleted=0) t2
+						on t1.unloadactionzoneid=t2.pastactionzoneid
+					set t1.unloadactionzoneid=t2.actionzoneid
+					where t1.buildingid='".$zbuildingid."'
+						and (not t1.unloadactionzoneid='');");
 				$zsuccess = true;
 			}
 		} catch (Exception $e) {

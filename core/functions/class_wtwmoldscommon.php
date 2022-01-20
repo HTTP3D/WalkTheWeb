@@ -405,6 +405,17 @@ class wtwmoldscommon {
 							and t1.".$zwebtype."id='".$zwebid."'
 							and not t2.actionzoneid is null;"); 
 					$wtwhandlers->query("
+						update ".wtw_tableprefix.$zwebtype."molds t1 
+							inner join (select * 
+								from ".wtw_tableprefix."actionzones 
+								where ".$zwebtype."id='".$zwebid."'
+									and (not ".$zwebtype."id='')) t2
+							on t1.unloadactionzoneid = t2.pastactionzoneid
+						set t1.unloadactionzoneid = t2.actionzoneid
+						where not t1.unloadactionzoneid=''
+							and t1.".$zwebtype."id='".$zwebid."'
+							and not t2.actionzoneid is null;"); 
+					$wtwhandlers->query("
 						update ".wtw_tableprefix."actionzones t1
 							inner join (select * 
 								from ".wtw_tableprefix.$zwebtype."molds 

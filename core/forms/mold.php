@@ -342,6 +342,10 @@
 					<h2 style="margin-bottom:3px;">Shape Visibility Distance</h2>
 					<select id="wtw_tmoldloadactionzoneid"></select>
 				</div>
+				<div id="wtw_unloadzonediv">
+					<h2 style="margin-bottom:3px;">Exclusion Zone</h2>
+					<select id="wtw_tmoldunloadactionzoneid"></select>
+				</div>
 				<div id="wtw_moldshadowreflectiondiv"><br /><br />
 					<input type="checkbox" id="wtw_tmoldreceiveshadows" class="wtw-smallprint" value="1" onchange="WTW.setNewMold(1);" /><span style="color:#c0c0c0;"> Allow Shadows on Surface</span><br /><br />
 					<input type="checkbox" id="wtw_tmoldwaterreflection" class="wtw-smallprint" value="1" onchange="WTW.setNewMold(1);" /><span style="color:#c0c0c0;"> Select to Reflect on Water</span><br /><br />

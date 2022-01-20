@@ -22,8 +22,8 @@ class wtw {
 	
 	/* declare public $wtw variables */
 	public $version = "3.4.10";
-	public $dbversion = "1.1.18";
-	public $versiondate = "2021-8-30";
+	public $dbversion = "1.1.19";
+	public $versiondate = "2022-1-13";
 	public $serverinstanceid = "";
 	public $usertoken = "";
 	public $rootpath = "";
@@ -1879,7 +1879,7 @@ class wtw {
 			$zjsdata .= "	var wtw_uploads = [];\r\n";
 			$zjsdata .= "	var wtw_version = \"".$this->version."\";\r\n";
 			$zjsdata .= "	var wtw_versiondate = \"".$this->versiondate."\";\r\n";
-			$zjsdata .= "	var wtw_versiontext = \"HTTP3D Inc. (v".$this->version.") ".date('m-d-Y', strtotime($this->versiondate))."\";\r\n";
+			$zjsdata .= "	var wtw_versiontext = \"WalkTheWeb (v".$this->version.") ".date('m-d-Y', strtotime($this->versiondate))."\\r\\nDatabase (v".$this->dbversion.")\\r\\n© Copyright HTTP3D Inc.\";\r\n";
 			$zjsdata .= "	var wtw_defaultlanguage = \"".$this->defaultlanguage."\";\r\n";
 			$zjsdata .= "	try {\r\n";
 			$zjsdata .= "		wtw_domain = JSON.stringify(".json_encode($this->getSceneSetting()).");\r\n";
