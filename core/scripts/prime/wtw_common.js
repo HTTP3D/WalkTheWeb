@@ -1991,3 +1991,118 @@ WTWJS.prototype.disposeReflectionFromMold = function(zmoldname) {
 	} 
 }
 
+WTWJS.prototype.feedbackSnapshot = async function() {
+	/* take Feedback Snapshot and update Feedback form */
+	try {
+		dGet('wtw_feedbacksnapshotbutton').onclick = "";
+		dGet('wtw_feedbacksnapshotbutton').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
+		
+		var zcontext = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
+		scene.render();
+		var zfiledata = canvas.toDataURL("image/png");
+		zcontext = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: false});
+		var zrequest = {
+			'filename': 'feedback-' + WTW.getRandomString(8) + '.png',
+			'filepath': dGet('wtw_tcontentpath').value + '/uploads/feedback/snapshots/',
+			'filedata': zfiledata,
+			'function':'saveimage'
+		};
+		WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.feedbackSnapshotResponse(zresponse);
+			}
+		);		
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-feedbackSnapshot=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.feedbackSnapshotResponse = function(zresponse) {
+	/* Feedback Snapshot complete, update Feedback form */
+	try {
+		//zresponse.snapshotid, zresponse.snapshotpath, zresponse.snapshotdata
+
+		dGet('wtw_feedbacksnapshot').src = zresponse.snapshotpath + "?" + WTW.getRandomString(5);
+		WTW.show('wtw_feedbacksnapshot');
+		
+		dGet('wtw_feedbacksnapshotbutton').onclick = function(){
+			WTW.feedbackSnapshot();
+		};
+		dGet('wtw_feedbacksnapshotbutton').innerHTML = "Take Snapshot";
+
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-feedbackSnapshotResponse=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.feedbackSubmit = async function() {
+	/* submit Feedback form */
+	try {
+		if (dGet('wtw_feedbacksubject').value != '' && dGet('wtw_feedbackmessage').value != '') {
+			var zrequest = {
+				'serverinstanceid': dGet('wtw_serverinstanceid').value,
+				'serverip': dGet('wtw_serverip').value,
+				'url': btoa(window.location.href),
+				'domainurl': btoa(wtw_domainurl),
+				'wtwversion': btoa(wtw_version),
+				'communityid': communityid,
+				'buildingid': buildingid,
+				'thingid': thingid,
+				'feedbacktype': btoa(WTW.getDDLValue('wtw_feedbacktype')),
+				'category': btoa(WTW.getDDLText('wtw_feedbackcategory')),
+				'subject': btoa(dGet('wtw_feedbacksubject').value),
+				'message': btoa(dGet('wtw_feedbackmessage').value),
+				'snapshoturl': btoa(dGet('wtw_feedbacksnapshot').src),
+				'feedbackname': btoa(dGet('wtw_feedbackname').value),
+				'displayname': btoa(dGet('wtw_tdisplayname').value),
+				'feedbackemail': btoa(dGet('wtw_feedbackemail').value),
+				'useremail': btoa(dGet('wtw_tuseremail').value),
+				'userid': dGet('wtw_tuserid').value,
+				'userip': dGet('wtw_tuserip').value,
+				'instanceid': dGet('wtw_tinstanceid').value,
+				'globaluserid': dGet('wtw_tglobaluserid').value,
+				'usertoken': dGet('wtw_tusertoken').value,
+				'uploadpathid': dGet('wtw_tuploadpathid').value,
+				'globaluseravatarid': dGet('wtw_tglobaluseravatarid').value,
+				'useravatarid': dGet('wtw_tuseravatarid').value,
+				'feedbackid': '',
+				'function':'savefeedback'
+			};
+			WTW.hide('wtw_feedbackform');
+			WTW.show('wtw_feedbackthankyou');
+			WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					zrequest.feedbackid = zresponse.feedbackid;
+					dGet('wtw_feedbacktype').selectedIndex = 0;
+					dGet('wtw_feedbackcategory').selectedIndex = 0;
+					dGet('wtw_feedbacksubject').value = '';
+					dGet('wtw_feedbackmessage').value = '';
+					dGet('wtw_feedbacksnapshot').src = '';
+					WTW.hide('wtw_feedbacksnapshot');
+					/* forward feedback to WalkTheWeb hub to be logged */
+					WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/feedback.php", zrequest, 
+						function(zresponse2) {
+							zresponse2 = JSON.parse(zresponse2);
+						}
+					);
+					window.setTimeout(function(){
+						WTW.hide('wtw_feedbackthankyou');
+						WTW.show('wtw_feedbackform');
+					},5000);
+				}
+			);
+		} else {
+			if (dGet('wtw_feedbacksubject').value == '') {
+				dGet('wtw_feedbacksubject').focus();
+			} else {
+				dGet('wtw_feedbackmessage').focus();
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-feedbackSubmit=" + ex.message);
+	} 
+}

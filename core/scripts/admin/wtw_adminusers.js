@@ -8,10 +8,14 @@
 /* 		roles - give server wide access to levels of functionality */
 /* 		dev access - provides direct access to a given 3D Community, 3D Building, or 3D Thing */
 
-WTWJS.prototype.openAllUsers = async function() {
+WTWJS.prototype.openAllUsers = async function(zfilter) {
 	/* open admin page form for users and role access */
 	try {
-		dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_adduserbutton' class='wtw-greenbuttonright' onclick=\"WTW.addUser();\">Add New</div>All Users";
+		if (zfilter == undefined) {
+			zfilter = 'All Users';
+		}
+		dGet('wtw_filter').value = zfilter;
+		dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_adduserbutton' class='wtw-greenbuttonright' onclick=\"WTW.addUser();\">Add New</div>" + zfilter;
 		WTW.show('wtw_userspage');
 		WTW.show('wtw_loadingusers');
 		WTW.hide('wtw_allusers');
@@ -28,19 +32,21 @@ WTWJS.prototype.openAllUsers = async function() {
 					zuserlist += "<table class=\"wtw-table\"><tr><td class=\"wtw-tablecolumnheading\">Display Name</td><td class=\"wtw-tablecolumnheading\">Email</td><td class=\"wtw-tablecolumnheading\">User ID</td><td class=\"wtw-tablecolumnheading\">User Roles</td><td class=\"wtw-tablecolumnheading\">Create Date</td><td class=\"wtw-tablecolumnheading\">&nbsp;</td></tr>";
 					for (var i=0;i<zresponse.length;i++) {
 						if (zresponse[i].userid != undefined) {
-							zuserlist += "<tr><td class=\"wtw-tablecolumns\">" + zresponse[i].displayname + "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].email + "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].userid + "</td><td class=\"wtw-tablecolumns\">";
-							for (var j=0;j<zresponse[i].roles.length;j++) {
-								if (zresponse[i].roles[j] != undefined) {
-									if (j == 0) {
-										zuserlist += zresponse[i].roles[j].rolename;
-									} else {
-										zuserlist += ", " + zresponse[i].roles[j].rolename;
+							if (zfilter == 'All Users' || (zfilter == 'Privileged Users' && zresponse[i].roles.length > 0) || (zfilter == 'Local Users' && zresponse[i].usertoken.length == 0 && zresponse[i].roles.length > 0) || (zfilter == 'Global Users' && zresponse[i].usertoken.length > 0 && zresponse[i].roles.length > 0) || (zfilter == 'Visiting Users' && zresponse[i].roles.length == 0)) {
+								zuserlist += "<tr><td class=\"wtw-tablecolumns\">" + zresponse[i].displayname + "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].email + "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].userid + "</td><td class=\"wtw-tablecolumns\">";
+								for (var j=0;j<zresponse[i].roles.length;j++) {
+									if (zresponse[i].roles[j] != undefined) {
+										if (j == 0) {
+											zuserlist += zresponse[i].roles[j].rolename;
+										} else {
+											zuserlist += ", " + zresponse[i].roles[j].rolename;
+										}
 									}
 								}
+								zuserlist += "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].createdate + "</td><td class=\"wtw-tablecolumns\">";
+								zuserlist += "<div id='getuser" + zresponse[i].userid + "' class='wtw-bluebuttonright' onclick=\"WTW.getUser('" + zresponse[i].userid + "');\">Edit User</div>";
+								zuserlist += "</td></tr>";
 							}
-							zuserlist += "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].createdate + "</td><td class=\"wtw-tablecolumns\">";
-							zuserlist += "<div id='getuser" + zresponse[i].userid + "' class='wtw-bluebuttonright' onclick=\"WTW.getUser('" + zresponse[i].userid + "');\">Edit User</div>";
-							zuserlist += "</td></tr>";
 						}
 					}
 					zuserlist += "</table>";
@@ -415,8 +421,12 @@ WTWJS.prototype.addUser = function() {
 
 WTWJS.prototype.cancelSaveUser = function() {
 	/* cancel save user changes */
-	try {	
-		dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_adduserbutton' class='wtw-greenbuttonright' onclick=\"WTW.addUser();\">Add New</div>All Users";
+	try {
+		var zfilter = dGet('wtw_filter').value;
+		if (zfilter == '') {
+			zfilter = 'All Users';
+		}
+		dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_adduserbutton' class='wtw-greenbuttonright' onclick=\"WTW.addUser();\">Add New</div>" + zfilter;
 		WTW.hide('wtw_userinfo');
 		WTW.hide('wtw_useradd');
 		dGet('wtw_alluserswidth').className = "wtw-dashboardboxleftfull";
@@ -432,9 +442,13 @@ WTWJS.prototype.saveNewUser = async function() {
 		var zemail = dGet("wtw_tuseruseremail2").value;
 		var zdisplayname = dGet("wtw_tuserdisplayname2").value;
 		dGet('wtw_errorusersave2').innerHTML = "";
+		var zfilter = dGet('wtw_filter').value;
+		if (zfilter == '') {
+			zfilter = 'All Users';
+		}
 
 		if (zemail.length > 2) {
-			dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_adduserbutton' class='wtw-greenbuttonright' onclick=\"WTW.addUser();\">Add New</div>All Users";
+			dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_adduserbutton' class='wtw-greenbuttonright' onclick=\"WTW.addUser();\">Add New</div>" + zfilter;
 			WTW.hide('wtw_userlist');
 			WTW.hide('wtw_userinfo');
 			WTW.hide('wtw_useradd');
@@ -450,7 +464,7 @@ WTWJS.prototype.saveNewUser = async function() {
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
-					WTW.openAllUsers();
+					WTW.openAllUsers(zfilter);
 				}
 			);
 		} else {
@@ -467,9 +481,12 @@ WTWJS.prototype.saveUser = async function() {
 		var zdisplayname = dGet("wtw_tuserdisplayname").value;
 		var zuserid = dGet("wtw_tuseruserid").innerText;
 		dGet('wtw_errorusersave').innerHTML = "";
-
+		var zfilter = dGet('wtw_filter').value;
+		if (zfilter == '') {
+			zfilter = 'All Users';
+		}
 		if (zuserid.length > 2) {
-			dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_adduserbutton' class='wtw-greenbuttonright' onclick=\"WTW.addUser();\">Add New</div>All Users";
+			dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_adduserbutton' class='wtw-greenbuttonright' onclick=\"WTW.addUser();\">Add New</div>" + zfilter;
 			WTW.hide('wtw_userlist');
 			WTW.hide('wtw_userinfo');
 			WTW.hide('wtw_useradd');
@@ -485,7 +502,7 @@ WTWJS.prototype.saveUser = async function() {
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
-					WTW.openAllUsers();
+					WTW.openAllUsers(zfilter);
 				}
 			);
 		} else {
@@ -508,7 +525,7 @@ WTWJS.prototype.deleteUser = async function(zuserid) {
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
-					WTW.openAllUsers();
+					WTW.openAllUsers(dGet('wtw_filter').value);
 				}
 			);
 		}

@@ -746,11 +746,29 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 					case 'wtw_adminuserlist':
 						WTW.openFullPageForm('users','All Users');
 						break;
+					case 'wtw_adminprivilegeduserlist':
+						WTW.openFullPageForm('users','Privileged Users');
+						break;
+					case 'wtw_adminlocaluserlist':
+						WTW.openFullPageForm('users','Local Users');
+						break;
+					case 'wtw_adminglobaluserlist':
+						WTW.openFullPageForm('users','Global Users');
+						break;
+					case 'wtw_adminvisitinguserlist':
+						WTW.openFullPageForm('users','Visiting Users');
+						break;
 					case 'wtw_adminuserroles':
 						WTW.openFullPageForm('users','User Roles');
 						break;
 					case 'wtw_adminallplugins':
 						WTW.openFullPageForm('plugins','All Plugins');
+						break;
+					case 'wtw_adminactiveplugins':
+						WTW.openFullPageForm('plugins','Active Plugins');
+						break;
+					case 'wtw_admininactiveplugins':
+						WTW.openFullPageForm('plugins','Inactive Plugins');
 						break;
 				/* Settings Admin Items */
 					case 'wtw_adminserversettings':
@@ -997,7 +1015,7 @@ WTWJS.prototype.adminOpenSubmenu = function(zobj) {
 WTWJS.prototype.toggleAdminMenuDashboard = function() {
 	/* open and close dashboard */
 	try {
-		if (dGet('wtw_fullpageform').style.display == "none" || (dGet('wtw_dashboardpage').style.display == "none" && dGet('wtw_updatespage').style.display == "none")) {
+		if (dGet('wtw_fullpageform').style.display == "none" || (dGet('wtw_dashboardpage').style.display == "none" && dGet('wtw_updatespage').style.display == "none") || (dGet('wtw_dashboardpage').style.display == "none" && dGet('wtw_feedbackpage').style.display == "none")) {
 			WTW.openFullPageForm('dashboard','','');
 		} else {
 			WTW.closeFullPageForm();
