@@ -15,7 +15,26 @@ try {
 	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zwebid = $wtwhandlers->getPost('webid','');
+	$zcommunityid = $wtwhandlers->getPost('communityid','');
+	$zbuildingid = $wtwhandlers->getPost('buildingid','');
+	$zthingid = $wtwhandlers->getPost('thingid','');
+	$zglobaluserid = $wtwhandlers->getPost('globaluserid','');
+	$zuserid = $wtwhandlers->getPost('userid','');
+	$zuserip = $wtwhandlers->getPost('userip','');
+	$zusertoken = $wtwhandlers->getPost('usertoken','');
+	$zinstanceid = $wtwhandlers->getPost('instanceid','');
+	$zglobaluseravatarid = $wtwhandlers->getPost('globaluseravatarid','');
+	$zuseravatarid = $wtwhandlers->getPost('useravatarid','');
+	$zuploadpathid = $wtwhandlers->getPost('uploadpathid','');
 	$zwebtype = $wtwhandlers->getPost('webtype','');
+	$zfeedbackid = $wtwhandlers->getPost('feedbackid','');
+	$zstatus = $wtwhandlers->getPost('status','');
+	$zfilter = $wtwhandlers->getPost('filter','');
+	$zfeedbacktype = $wtwhandlers->getPost('feedbacktype','');
+	$zfeedbackname = $wtwhandlers->getPost('feedbackname','');
+	$zdisplayname = $wtwhandlers->getPost('displayname','');
+	$zfeedbackemail = $wtwhandlers->getPost('feedbackemail','');
+	$zuseremail = $wtwhandlers->getPost('useremail','');
 	$zparentalcontrols = $wtwhandlers->getPost('parentalcontrols','0');
 	$zrating = $wtwhandlers->getPost('rating','');
 	$zratingvalue = $wtwhandlers->getPost('ratingvalue','');
@@ -24,6 +43,7 @@ try {
 	$zcopyto = $wtwhandlers->getPost('copyto','');
 	$zbccto = $wtwhandlers->getPost('bccto','');
 	$zsubject = $wtwhandlers->getPost('subject','');
+	$zcategory = $wtwhandlers->getPost('category','');
 	$zhtmlmessage = $wtwhandlers->getPost('htmlmessage','');
 	$zmessage = $wtwhandlers->getPost('message','');
 	$zdbserver = $wtwhandlers->getPost('dbserver',wtw_dbserver);
@@ -31,6 +51,10 @@ try {
 	$zdbusername = $wtwhandlers->getPost('dbusername',wtw_dbusername);
 	$zdbpassword = $wtwhandlers->getPost('dbpassword',wtw_dbpassword);
 	$zdefaultlanguage = $wtwhandlers->getPost('defaultlanguage',wtw_defaultlanguage);
+	$zurl = $wtwhandlers->getPost('url','');
+	$zdomainurl = $wtwhandlers->getPost('domainurl','');
+	$zsnapshoturl = $wtwhandlers->getPost('snapshoturl','');
+	$zwtwversion = $wtwhandlers->getPost('wtwversion','');
 	$zcontentpath = $wtwhandlers->getPost('contentpath',wtw_contentpath);
 	$zdefaultdomain = $wtwhandlers->getPost('defaultdomain',wtw_defaultdomain);
 	$zdefaultsitename = $wtwhandlers->getPost('defaultsitename',wtw_defaultsitename);
@@ -90,6 +114,15 @@ try {
 			break;
 		case "translate":
 			$zresponse = $wtwtools->__($zlabel);
+			break;
+		case "savefeedback":
+			$zresponse = $wtwtools->saveFeedback($zurl, $zdomainurl, $zwtwversion, $zcommunityid, $zbuildingid, $zthingid, $zfeedbacktype, $zcategory, $zsubject, $zmessage, $zsnapshoturl, $zfeedbackname, $zdisplayname, $zfeedbackemail, $zuseremail, $zuserid, $zuserip, $zinstanceid, $zglobaluserid, $zusertoken, $zuploadpathid, $zglobaluseravatarid, $zuseravatarid);
+			break;
+		case "getfeedback":
+			$zresponse = $wtwtools->getFeedback($zfilter);
+			break;
+		case "updatefeedbackstatus":
+			$zresponse = $wtwtools->updateFeedbackStatus($zfeedbackid, $zstatus);
 			break;
 	}
 

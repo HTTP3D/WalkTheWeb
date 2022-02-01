@@ -138,8 +138,12 @@ class wtwuploads {
 			$zpreviewfilename = "";
 			$zpreviewbrowsepath = "";
 			$zuserid = "";
+			$zuploadpathid = "";
 			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
 				$zuserid = $_SESSION["wtw_userid"];
+			}
+			if(isset($_SESSION["wtw_uploadpathid"]) && !empty($_SESSION["wtw_uploadpathid"])) {
+				$zuploadpathid = $_SESSION["wtw_uploadpathid"];
 			}
 			$wtwhandlers->checkContentFolders($zcommunityid, $zbuildingid, $zthingid, $zavatarid);
 			
@@ -167,6 +171,11 @@ class wtwuploads {
 				$zpreviewpath = $wtwhandlers->contentpath."/uploads/avatars/".$zavatarid."/snapshots/".$zavatarid."-snapshot.png";
 				$zpreviewbrowsepath = $wtwhandlers->contenturl."/uploads/avatars/".$zavatarid."/snapshots/".$zavatarid."-snapshot.png";
 				$zpreviewfilename = $zavatarid."-snapshot.png";
+			} else {
+				$zsnapshotpath = $wtwhandlers->contenturl."/uploads/feedback/snapshots/".$zfilename1;
+				$zpreviewpath = $wtwhandlers->contentpath."/uploads/feedback/snapshots/".$zfilename1;
+				$zpreviewbrowsepath = $wtwhandlers->contenturl."/uploads/feedback/snapshots/".$zfilename1;
+				$zpreviewfilename = $zfilename1;
 			}
 			$zfiledata = str_replace('data:image/png;base64,', '', $zfiledata);
 			$zfiledata = str_replace(' ', '+', $zfiledata);
@@ -184,6 +193,8 @@ class wtwuploads {
 				$zfiletitle = "defaultthingsm.png";
 			} else if ($zfilename1 == "defaultavatar.png") {				
 				$zfiletitle = "defaultavatarsm.png";
+			} else {
+				$zfiletitle = str_replace('.png', 'sm.png', $zfilename1);;
 			}
 			$zfilepath = $zfilepath1.$zfiletitle;
 			$zoriginalid = $wtwhandlers->getRandomString(16,1);

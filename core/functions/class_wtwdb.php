@@ -531,6 +531,18 @@ class wtwdb {
 					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media", octdec(wtw_chmod), true);
 					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media", octdec(wtw_chmod));
 				}
+				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/snapshots")) {
+					mkdir($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/snapshots", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/snapshots", octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/feedback")) {
+					mkdir($this->contentpath."/uploads/feedback", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/feedback", octdec(wtw_chmod));
+				}
+				if (!file_exists($this->contentpath."/uploads/feedback/snapshots")) {
+					mkdir($this->contentpath."/uploads/feedback/snapshots", octdec(wtw_chmod), true);
+					chmod($this->contentpath."/uploads/feedback/snapshots", octdec(wtw_chmod));
+				}
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-checkContentFolders=".$e->getMessage());

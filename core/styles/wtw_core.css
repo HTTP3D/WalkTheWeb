@@ -521,6 +521,23 @@ input.wtw-smallprintinput {
 	background-color:red;
 	border:1px solid blue;
 }
+.wtw-feedbackbutton {
+	padding:10px;
+	color:#ffffff;
+	margin:2px;
+	border:1px solid #000000;
+	border-radius:10px;
+	background-color:#111111;
+	font-size:1em;
+	font-weight:normal;
+	text-align:center;
+}
+.wtw-feedbackbutton:hover {
+	cursor:pointer;
+	color:#ffffff;
+	background-color:blue;
+	border:1px solid blue;
+}
 .wtw-menufileselect {
 	float:right;
 	margin:2px 10px 2px 2px;

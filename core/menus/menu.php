@@ -104,6 +104,7 @@
 			<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/knowledgebase_category/tutorials/','_blank');"><img src="/content/system/images/menututorials.png" alt="<?php echo $wtwmenus->__("Tutorials"); ?>" title="<?php echo $wtwmenus->__("Tutorials"); ?>" class='wtw-menulefticon' /><?php echo $wtwmenus->__("Tutorials"); ?></li>
 			<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/knowledgebase_category/tutorials/','_blank');"><img src="/content/system/images/menutools.png" alt="<?php echo $wtwmenus->__("Admin Help"); ?>" title="<?php echo $wtwmenus->__("Admin Help"); ?>" class='wtw-menulefticon' /><?php echo $wtwmenus->__("Admin Help"); ?></li>
 			<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/useragreement/','_blank');"><img src="/content/system/images/menueula.png" alt="<?php echo $wtwmenus->__("End User License Agreement"); ?>" title="<?php echo $wtwmenus->__("End User License Agreement"); ?>" class='wtw-menulefticon' /><?php echo $wtwmenus->__("End User License Agreement"); ?></li>
+			<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.hide('wtw_menusettings');WTW.showSettingsMenu('wtw_menufeedback');"><img src="/content/system/images/menugraphics.png" alt="Feedback or Issue" title="Feedback or Issue" class='wtw-menulefticon' /><?php echo $wtwmenus->__("Feedback or Issue"); ?></li>
 			<li class="wtw-menuli" onclick="WTW.closeMenus();WTW.openWebpage('https://www.walktheweb.com/contact-us/','_blank');"><img src="/content/system/images/menuinfo.png" alt="<?php echo $wtwmenus->__("Contact WalkTheWeb"); ?>" title="<?php echo $wtwmenus->__("Contact WalkTheWeb"); ?>" class='wtw-menulefticon' /><?php echo $wtwmenus->__("Contact WalkTheWeb"); ?></li>
 		</ul>
 	</div>
@@ -250,6 +251,82 @@
 			</ul>
 			<div class="wtw-greenmenubutton" onclick="WTW.closeAvatarSettings();"><?php echo $wtwmenus->__("Close Avatar Settings"); ?></div>
 		</div>
+	</div>
+</div>
+<div id="wtw_menufeedback" class="wtw-slideupmenuright" style="display:none;visibility:hidden;">
+	<img class="wtw-closeright" onclick="WTW.closeMenus();" src="/content/system/images/menuclose.png" alt="Close" title="Close" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
+	<div class="wtw-menuheading"><?php echo $wtwmenus->__("Feedback or Issue"); ?></div>
+	<div id="wtw_menufeedbackscroll" class="wtw-mainmenuscroll">
+		<div id="wtw_feedbacknote" class="wtw-menunote"><?php echo $wtwmenus->__("Feedback or Reporting issues lead to a more refined enjoyable 3D Internet Experience."); ?><br /><br />
+			<?php echo $wtwmenus->__("Please be as detailed as possible to help lead us to a complete solution."); ?><br /><br />
+			<?php echo $wtwmenus->__("Thank you for your help!"); ?></div>
+		
+		<ul id="wtw_feedbackthankyou" style="display:none;visibility:hidden;" class="wtw-menuli">
+			<li class="wtw-submenublockli">
+				<div class="wtw-menusubtext">
+					<?php echo $wtwmenus->__("Thank You"); ?><br />
+					<div class="wtw-menunote">Thank you for providing feedback!</div>
+				</div>
+			</li>
+		</ul>
+		<ul id="wtw_feedbackform" class="wtw-menuli">
+			<li class="wtw-submenublockli">
+				<div class="wtw-menusubtext">
+					<?php echo $wtwmenus->__("Type of Feedback:"); ?><br />
+					<select id="wtw_feedbacktype">
+						<option value="Feedback">Feedback (constructive please)</option>
+						<option value="Suggestion">Helpful Suggestion</option>
+						<option value="Request">Feature Request or Enhancement</option>
+						<option value="Help">Coding Help or Question</option>
+						<option value="Issue">Report an Issue or Bug</option>
+					</select><br />
+					<?php echo $wtwmenus->__("Category:"); ?><br />
+					<select id="wtw_feedbackcategory">
+						<option value="general">General</option>
+						<option value="avatars">3D Avatars</option>
+						<option value="community">3D Community Scenes</option>
+						<option value="building">3D Buildings</option>
+						<option value="store">3D Building Stores</option>
+						<option value="thing">3D Things</option>
+						<option value="model">3D Models</option>
+						<option value="graphics">Graphics or Textures</option>
+						<option value="animation">Animation</option>
+						<option value="sound">Sound</option>
+						<option value="multiplayer">Multiplayer</option>
+						<option value="chat">Chat</option>
+						<option value="plugins">3D Plugins</option>
+						<option value="other">Other</option>
+					</select><br />
+					<?php echo $wtwmenus->__("Subject:"); ?><br />
+						<input type="text" id="wtw_feedbacksubject" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><br />
+					<?php echo $wtwmenus->__("Message:"); ?><br />
+					<textarea id="wtw_feedbackmessage" rows="8" cols="30"></textarea><br />
+				</div>
+			</li>
+			<li class="wtw-submenublockli">
+				<div class="wtw-menusubtext">
+					<?php echo $wtwmenus->__("Snapshot:"); ?>
+					<div class="wtw-menunote">Position the view to show the subject of your feedback, then click <b>Take Snapshot</b>. If needed, you can retake the snapshot until you get the desired results.</div>
+					<img id="wtw_feedbacksnapshot" class="wtw-snapshot" style="width:90%;height:auto;display:none;visibility:hidden;" /><br />
+					<div id="wtw_feedbacksnapshotbutton" class="wtw-feedbackbutton" onclick="WTW.feedbackSnapshot();">Take Snapshot</div>
+				</div>
+			</li>
+			<li class="wtw-submenublockli">
+				<div class="wtw-menusubtext">
+					<?php echo $wtwmenus->__("Contact Information:"); ?>
+					<div class="wtw-menunote">Optional, if you would like a response.</div>
+					<?php echo $wtwmenus->__("Name:"); ?><br />
+						<input type="text" id="wtw_feedbackname" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><br />
+					<?php echo $wtwmenus->__("Email:"); ?><br />
+						<input type="text" id="wtw_feedbackemail" maxlength="255" onclick="WTW.checkKey(this, 'email', 0, 0);" onkeyup="WTW.checkKey(this, 'email', 0, 0);" onblur="WTW.checkKey(this, 'email', 0, 1);" /><br />
+				</div>
+			</li>
+			<li class="wtw-submenublockli" onclick="WTW.feedbackSubmit();">
+				<div class="wtw-menusubtext">
+					<div id="wtw_feedbacksubmitbutton" class="wtw-feedbackbutton">Submit Feedback</div>
+				</div>
+			</li>
+		</ul>
 	</div>
 </div>
 <div id="wtw_menucontentrating" class="wtw-slideupmenuright" style="display:none;visibility:hidden;">

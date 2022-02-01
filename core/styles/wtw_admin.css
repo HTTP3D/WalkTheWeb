@@ -221,6 +221,49 @@ td.wtw-tddeactive {
 	background-color:#001359;
 	color:#FDFFB9
 }
+.wtw-versionheadergreen {
+	border:1px solid black;
+	background-color:#1A7311;
+	color:white;
+	font-size:1.2em;
+	text-align:left;
+	margin:5px;
+	padding:8px;
+}
+.wtw-versionheadergreen:hover {
+	cursor:pointer;
+	background-color:#001359;
+	color:#FDFFB9
+}
+.wtw-versionheaderblack {
+	border:1px solid black;
+	background-color:#111111;
+	color:white;
+	font-size:1.2em;
+	text-align:left;
+	margin:5px;
+	padding:8px;
+}
+.wtw-versionheaderblack:hover {
+	cursor:pointer;
+	background-color:#001359;
+	color:#FDFFB9
+}
+.wtw-archivebutton {
+	float:right;
+	border:1px solid #000000;
+	background-color:#111111;
+	color:white;
+	font-size:1.2em;
+	text-align:center;
+	margin:5px;
+	padding:8px;
+}
+.wtw-archivebutton:hover {
+	cursor:pointer;
+	background-color:#001359;
+	color:#FDFFB9
+}
 .wtw-versionsummary {
 	border:1px solid gray;
 	border-radius:15px;

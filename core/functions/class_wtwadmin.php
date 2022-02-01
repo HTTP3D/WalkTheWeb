@@ -174,6 +174,7 @@ class wtwadmin {
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatargroupid\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationeventid\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarfolderdisplay\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_filter\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tnewmold\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldid\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldind\" />\r\n";
@@ -353,6 +354,22 @@ class wtwadmin {
 			$zpagedata .= "						<div id=\"wtw_updatepluginlist\"></div>\r\n";
 			$zpagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "						<div id=\"wtw_archiveupdateslist\"></div>\r\n";
+			$zpagedata .= "					</div>\r\n";
+			$zpagedata .= "				</div>\r\n";
+			$zpagedata .= "			</div>\r\n";
+			$zpagedata .= "		</div>\r\n";
+			$zpagedata .= "	</div>\r\n";
+
+			/* feedback page */
+			$zpagedata .= "	<div id=\"wtw_feedbackpage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
+			$zpagedata .= "		<div id=\"wtw_loadingfeedback\" class=\"wtw-loadingnotice\">Checking for Feedback...</div>\r\n";
+			$zpagedata .= "		<div id=\"wtw_feedbackpagescroll\" class=\"wtw-formscroll\">\r\n";
+			$zpagedata .= "			<div id=\"wtw_allfeedback\">\r\n";
+			$zpagedata .= "				<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zpagedata .= "					<div class=\"wtw-dashboardboxtitle\">Feedback</div>\r\n";
+			$zpagedata .= "					<div class=\"wtw-dashboardbox\">\r\n";
+			$zpagedata .= "						<div id=\"wtw_feedbacklist\"></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "					</div>\r\n";
 			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";
@@ -639,7 +656,7 @@ class wtwadmin {
 			$zpagedata .= "		<div id=\"wtw_loadingplugins\" class=\"wtw-loadingnotice\">Loading...</div>\r\n";
 			$zpagedata .= "		<div id=\"wtw_allplugins\" class=\"wtw-fullpage\">\r\n";
 			$zpagedata .= "			<div class=\"wtw-dashboardboxleftfull\">\r\n";
-			$zpagedata .= "				<div class=\"wtw-dashboardboxtitle\">All Plugins</div>\r\n";
+			$zpagedata .= "				<div id=\"wtw_pluginslisttitle\" class=\"wtw-dashboardboxtitle\">All Plugins</div>\r\n";
 			$zpagedata .= "				<div class=\"wtw-dashboardbox\">\r\n";
 			$zpagedata .= "					<div id=\"wtw_pluginslist\"></div>\r\n";
 			$zpagedata .= "				</div>\r\n";

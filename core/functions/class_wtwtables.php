@@ -585,6 +585,46 @@ class wtwtables {
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;				
 			");
 			$wtwdb->deltaCreateTable("
+				CREATE TABLE `".wtw_tableprefix."feedback` (
+				  `feedbackid` VARCHAR(32) NOT NULL,
+				  `url` VARCHAR(255) NULL DEFAULT '',
+				  `domainurl` VARCHAR(255) NULL DEFAULT '',
+				  `wtwversion` VARCHAR(45) NULL DEFAULT '',
+				  `communityid` VARCHAR(16) NULL DEFAULT '',
+				  `buildingid` VARCHAR(16) NULL DEFAULT '',
+				  `thingid` VARCHAR(16) NULL DEFAULT '',
+				  `feedbacktype` VARCHAR(45) NULL DEFAULT '',
+				  `category` VARCHAR(45) NULL DEFAULT '',
+				  `subject` VARCHAR(255) NULL DEFAULT '',
+				  `message` VARCHAR(2048) NULL DEFAULT '',
+				  `snapshoturl` VARCHAR(255) NULL DEFAULT '',
+				  `feedbackname` VARCHAR(255) NULL DEFAULT '',
+				  `displayname` VARCHAR(255) NULL DEFAULT '',
+				  `feedbackemail` VARCHAR(255) NULL DEFAULT '',
+				  `useremail` VARCHAR(255) NULL DEFAULT '',
+				  `userid` VARCHAR(16) NULL DEFAULT '',
+				  `userip` VARCHAR(45) NULL DEFAULT '',
+				  `instanceid` VARCHAR(25) NULL DEFAULT '',
+				  `globaluserid` VARCHAR(16) NULL DEFAULT '',
+				  `usertoken` VARCHAR(1024) NULL DEFAULT '',
+				  `uploadpathid` VARCHAR(16) NULL DEFAULT '',
+				  `globaluseravatarid` VARCHAR(16) NULL DEFAULT '',
+				  `useravatarid` VARCHAR(16) NULL DEFAULT '',
+				  `viewdate` DATETIME NULL DEFAULT NULL,
+				  `feedbackdate` DATETIME NULL DEFAULT NULL,
+				  `archivedate` DATETIME NULL DEFAULT NULL,
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int DEFAULT '0',
+				  PRIMARY KEY (`feedbackid`),
+				  UNIQUE INDEX `".wtw_tableprefix."feedbackid_UNIQUE` (`feedbackid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			");
+			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."menuitems` (
 				  `menuitemid` int NOT NULL AUTO_INCREMENT,
 				  `menuitemname` varchar(255) DEFAULT '',

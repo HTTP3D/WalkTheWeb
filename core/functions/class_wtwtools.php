@@ -441,6 +441,176 @@ class wtwtools {
 		return $zresponse;
 	}
 
+	public function saveFeedback($zurl, $zdomainurl, $zwtwversion, $zcommunityid, $zbuildingid, $zthingid, $zfeedbacktype, $zcategory, $zsubject, $zmessage, $zsnapshoturl, $zfeedbackname, $zdisplayname, $zfeedbackemail, $zuseremail, $zuserid, $zuserip, $zinstanceid, $zglobaluserid, $zusertoken, $zuploadpathid, $zglobaluseravatarid, $zuseravatarid) {
+		global $wtwhandlers;
+		$zresponse = array(
+			'feedbackid'=>'', 
+			'serror'=>''
+		);
+		try {
+			if (!empty($zurl) && isset($zurl)) {
+				$zurl = addslashes(base64_decode($zurl));
+			}
+			if (!empty($zdomainurl) && isset($zdomainurl)) {
+				$zdomainurl = addslashes(base64_decode($zdomainurl));
+			}
+			if (!empty($zwtwversion) && isset($zwtwversion)) {
+				$zwtwversion = addslashes(base64_decode($zwtwversion));
+			}
+			if (!empty($zfeedbacktype) && isset($zfeedbacktype)) {
+				$zfeedbacktype = addslashes(base64_decode($zfeedbacktype));
+			}
+			if (!empty($zcategory) && isset($zcategory)) {
+				$zcategory = addslashes(base64_decode($zcategory));
+			}
+			if (!empty($zsubject) && isset($zsubject)) {
+				$zsubject = addslashes(base64_decode($zsubject));
+			}
+			if (!empty($zmessage) && isset($zmessage)) {
+				$zmessage = addslashes(base64_decode($zmessage));
+			}
+			if (!empty($zsnapshoturl) && isset($zsnapshoturl)) {
+				$zsnapshoturl = addslashes(base64_decode($zsnapshoturl));
+			}
+			if (!empty($zfeedbackname) && isset($zfeedbackname)) {
+				$zfeedbackname = addslashes(base64_decode($zfeedbackname));
+			}
+			if (!empty($zdisplayname) && isset($zdisplayname)) {
+				$zdisplayname = addslashes(base64_decode($zdisplayname));
+			}
+			if (!empty($zfeedbackemail) && isset($zfeedbackemail)) {
+				$zfeedbackemail = addslashes(base64_decode($zfeedbackemail));
+			}
+			if (!empty($zuseremail) && isset($zuseremail)) {
+				$zuseremail = addslashes(base64_decode($zuseremail));
+			}
+
+			/* create a new rating record in the table */
+			$zfeedbackid = $wtwhandlers->getRandomString(16,1);
+
+			$wtwhandlers->query("
+				insert into ".wtw_tableprefix."feedback
+				   (feedbackid,
+					url,
+					domainurl,
+					wtwversion,
+					communityid,
+					buildingid,
+					thingid,
+					feedbacktype,
+					category,
+					subject,
+					message,
+					snapshoturl,
+					feedbackname,
+					displayname,
+					feedbackemail,
+					useremail,
+					userid,
+					userip,
+					instanceid,
+					globaluserid,
+					usertoken,
+					uploadpathid,
+					globaluseravatarid,
+					useravatarid,
+					feedbackdate,
+					createdate,
+					createuserid,
+					updatedate,
+					updateuserid)
+				  values
+				   ('".$zfeedbackid."',
+					'".$zurl."',
+					'".$zdomainurl."',
+					'".$zwtwversion."',
+					'".$zcommunityid."',
+					'".$zbuildingid."',
+					'".$zthingid."',
+					'".$zfeedbacktype."',
+					'".$zcategory."',
+					'".$zsubject."',
+					'".$zmessage."',
+					'".$zsnapshoturl."',
+					'".$zfeedbackname."',
+					'".$zdisplayname."',
+					'".$zfeedbackemail."',
+					'".$zuseremail."',
+					'".$zuserid."',
+					'".$zuserip."',
+					'".$zinstanceid."',
+					'".$zglobaluserid."',
+					'".$zusertoken."',
+					'".$zuploadpathid."',
+					'".$zglobaluseravatarid."',
+					'".$zuseravatarid."',
+					now(),
+					now(),
+					'".$wtwhandlers->userid."',
+					now(),
+					'".$wtwhandlers->userid."');");
+
+			$zresponse = array(
+				'feedbackid'=>$zfeedbackid, 
+				'serror'=>''
+			);
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwtools.php-saveFeedback=".$e->getMessage());
+			$zresponse = array('feedbackid'=>'', 'serror' => $e->getMessage());
+		}
+		return $zresponse;
+	}
+
+	public function getFeedback($zfilter) {
+		global $wtwhandlers;
+		$zresults = array();
+		try {
+			/* get feedback using filter */
+			$zresults = $wtwhandlers->query("
+				select * from ".wtw_tableprefix."feedback
+					order by feedbackdate desc,feedbackid desc;");
+
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwtools.php-getFeedback=".$e->getMessage());
+			$zresults = array('serror' => $e->getMessage());
+		}
+		return $zresults;
+	}
+
+	public function updateFeedbackStatus($zfeedbackid, $zstatus) {
+		global $wtwhandlers;
+		$zresults = array();
+		try {
+			/* set feedback status */
+			switch ($zstatus) {
+				case "Open":
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."feedback
+						set viewdate=now()
+						where feedbackid='".$zfeedbackid."';");
+					break;
+				case "Close":
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."feedback
+						set archivedate=now()
+						where feedbackid='".$zfeedbackid."'
+							and archivedate is null;");
+					break;
+				case "Reopen":
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."feedback
+						set archivedate=null
+						where feedbackid='".$zfeedbackid."';");
+					break;
+			}
+
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwtools.php-getFeedback=".$e->getMessage());
+			$zresults = array('serror' => $e->getMessage());
+		}
+		return $zresults;
+	}
+	
 	public function __($zlabel) {
 		/* Language translation based on language file */
 		global $wtwhandlers;
