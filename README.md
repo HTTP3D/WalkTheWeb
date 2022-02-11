@@ -1,14 +1,17 @@
 # WalkTheWeb
-Open-Source 3D Internet (3D CMS)
+Open-Source 3D Internet Metaverse (3D CMS)
 Invented and created by Aaron Dishno Ed.D.
 CEO and Founder of HTTP3D Inc. - WalkTheWeb
 Find me at http://WalkTheWeb.tv  (WalkTheWeb on Twitch) or ask me questions on Discord: https://discord.com/invite/MW7MG2t
+
+Create your own Metaverse with our easy to use WalkTheWeb Metaverse software. While you do not have to be a programer to use it, programmers can easily take advantage of the Babylonjs.com Game Engine and build 3D Games and 3D Content using our 3D CMS software. Multiplayer functionality and services are readily available from WalkTheWeb. 
+Using PHP, JavaScript, and MySQL it can be hosted on any server capable of running WordPress.
 
 INSTALLATION
 ---------------------------------------------------------------------------
 1.  To Install, copy the files into the root of a website.
 2.  It is highly recommended to start your URL with http://3d.  or   https://3d. to 
-    signify it is a WalkTheWeb 3D Website and help others find you!
+    signify it is a WalkTheWeb 3D Website and help others find your Metaverse!
 3.  The browser user (inetuser) will need write access in the entire folder for updates.
 4.  Optional: you can manually download updates and overwrite the program files, 
     but the /content folder must have write permissions for Admin user uploads.
@@ -42,5 +45,5 @@ RewriteRule ^.*$ /index.php?wtwpath=%{REQUEST_URI}&%{QUERY_STRING} [P]
 
 LEARNING
 ---------------------------------------------------------------------------
-There are videos at: https://www.youtube.com/channel/UCEcaZ947Mv1ylLd_MYS1ivg
+There are videos at: https://www.youtube.com/c/WalkTheWeb3d
 or watch me on http://walktheweb.tv     (WalkTheWeb on Twitch)
