@@ -7,6 +7,9 @@ Find me at http://WalkTheWeb.tv  (WalkTheWeb on Twitch) or ask me questions on D
 Create your own Metaverse with our easy to use WalkTheWeb Metaverse software. While you do not have to be a programer to use it, programmers can easily take advantage of the Babylonjs.com Game Engine and build 3D Games and 3D Content using our 3D CMS software. Multiplayer functionality and services are readily available from WalkTheWeb. 
 Using PHP, JavaScript, and MySQL it can be hosted on any server capable of running WordPress.
 
+Connect your 3D Store (WordPress and WooCommerce) using the WalkTheWeb WordPress Plugin: https://wordpress.org/plugins/walktheweb/
+New Version coming soon that supports WalkTheWeb Open-Source Self Hosting! (https://github.com/HTTP3D/WalkTheWeb-WordPress-Plugin)
+
 INSTALLATION
 ---------------------------------------------------------------------------
 1.  To Install, copy the files into the root of a website.
