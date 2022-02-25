@@ -8,28 +8,13 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 			wtw3dinternet.move = io.connect('https://3dnet.walktheweb.network/move');
 			
 			wtw3dinternet.move.on('serror', function(zmessage) {
-var zcolor = 'red';
-if (zmessage.indexOf('instanceid=4pe1tvloxnd8yoihe491c1by') > -1) {
-	zcolor = 'pink';
-} else {
-	
-}
-				WTW.log("error = " + zmessage,zcolor);
+				WTW.log("error = " + zmessage,'red');
 			}); 
 
 			wtw3dinternet.move.on('entered zone', function(zdata) {
-WTW.log("ENTERED ZONE",'green');
 				if (wtw3dinternet.masterMove == '1') {
 					if (dGet('wtw_serverinstanceid').value == zdata.serverinstanceid && communityid == zdata.communityid && buildingid == zdata.buildingid && thingid == zdata.thingid) {
 						wtw3dinternet.addParticipantsMessage(zdata);
-
-var zcolor = 'green';
-if (zdata.instanceid == '4pe1tvloxnd8yoihe491c1by') {
-	zcolor = 'orange';
-} else {
-	
-}
-WTW.log("ENTERED ZONE - " + zdata.communityid + " | " + zdata.buildingid + " - instanceid=" + zdata.instanceid,zcolor);
 
 						zavatar = WTW.getMeshOrNodeByID('person-' + zdata.instanceid);
 						if (zavatar == null) {
@@ -67,14 +52,6 @@ WTW.log("ENTERED ZONE - " + zdata.communityid + " | " + zdata.buildingid + " - i
 
 			wtw3dinternet.move.on('exited zone', function(zdata) {
 				if (wtw3dinternet.masterMove == '1') {
-var zcolor = 'green';
-if (zdata.instanceid == '4pe1tvloxnd8yoihe491c1by') {
-	zcolor = 'orange';
-} else {
-	
-}
-
-WTW.log("EXITED ZONE - " + zdata.communityid + " | " + zdata.buildingid + " - instanceid=" + zdata.instanceid,zcolor);
 				
 					if (zdata.instanceid != dGet('wtw_tinstanceid').value) {
 						
@@ -143,36 +120,16 @@ WTW.log("EXITED ZONE - " + zdata.communityid + " | " + zdata.buildingid + " - in
 			});
 
 			wtw3dinternet.move.on('reconnect', function() {
-/*				wtw3dinternet.move.emit('add user', {
-					'serverinstanceid':dGet('wtw_serverinstanceid').value,
-					'serverip':dGet('wtw_serverip').value,
-					'roomid':communityid + buildingid + thingid,
-					'communityid':communityid,
-					'buildingid':buildingid,
-					'thingid':thingid,
-					'domainurl':wtw_domainurl,
-					'instanceid':dGet('wtw_tinstanceid').value,
-					'placeholder':WTW.placeHolder,
-					'userid':dGet('wtw_tuserid').value,
-					'globaluseravatarid':dGet('wtw_tglobaluseravatarid').value,
-					'useravatarid':dGet('wtw_tuseravatarid').value,
-					'avatarid':dGet('wtw_tavatarid').value,
-					'displayname':btoa(dGet('wtw_tdisplayname').value)
-				}); */
+
 			});
 
 			wtw3dinternet.move.on('reconnect_error', function() {
-//				WTW.log('reconnect failed');
+
 			});
 
 			wtw3dinternet.move.on('avatar movement', function(zmovedata) {
 				/* process runs when another avatar in the scene moves */
 				if (wtw3dinternet.masterMove == '1' && zmovedata.instanceid != dGet('wtw_tinstanceid').value && ((zmovedata.primary == 'community' && communityid != '') || (zmovedata.primary == 'building' && buildingid != '') || (zmovedata.primary == 'community' && buildingid != '') || (zmovedata.primary == 'building' && zmovedata.buildingid != '' && zmovedata.communityid != ''))) {
-
-//WTW.log("instanceid=" + zmovedata.instanceid, 'yellow');
-//WTW.log("primary=" + zmovedata.primary);
-//WTW.log("communityid=" + zmovedata.communityid);
-//WTW.log("buildingid=" + zmovedata.buildingid);
 					
 					/* 	avatars in same community -> (zmovedata.primary == 'community' && communityid != '') || 
 						avatars in same building -> (zmovedata.primary == 'building' && buildingid != '') || 
@@ -180,16 +137,6 @@ WTW.log("EXITED ZONE - " + zdata.communityid + " | " + zdata.buildingid + " - in
 						avatars from community in building -> (zmovedata.primary == 'building' && zmovedata.buildingid != '' && zmovedata.communityid != '')
 					*/
 					
-					
-					
-if (zmovedata.instanceid == '4pe1tvloxnd8yoihe491c1by') {
-//WTW.log("x=" + zmovedata.position.x);
-//WTW.log("buildingid=" + zmovedata.buildingid, 'yellow');
-//WTW.log("communityid=" + zmovedata.communityid, 'yellow');
-//WTW.log("primary=" + zmovedata.primary, 'yellow');
-//zerror += "ZZZinstanceid=" + zmovedata.instanceid;
-}
-
 					var zavatarname = "person-" + zmovedata.instanceid;
 					let zavatarind = wtw3dinternet.getAvatarInd(zmovedata.instanceid);
 					if (wtw3dinternet.avatars[zavatarind] == null) {
@@ -213,7 +160,6 @@ if (zmovedata.instanceid == '4pe1tvloxnd8yoihe491c1by') {
 						};
 						if (WTW.isNumeric(zmovedata.placeholder)) {
 							if (Number(zmovedata.placeholder) == 0) {
-WTW.log("2-get saved avatar", 'yellow');
 								WTW.getSavedAvatar("person-" + zmovedata.instanceid, zmovedata.globaluseravatarid, zmovedata.useravatarid, zmovedata.avatarid, false);
 							}
 						}
@@ -289,7 +235,6 @@ WTW.log("2-get saved avatar", 'yellow');
 						wtw3dinternet.avatars[zavatarind].loadcounter = 0;
 						if (WTW.isNumeric(zmovedata.placeholder)) {
 							if (Number(zmovedata.placeholder) == 0) {
-WTW.log("1-get saved avatar", 'yellow');
 								WTW.getSavedAvatar("person-" + zmovedata.instanceid, zmovedata.globaluseravatarid, zmovedata.useravatarid, zmovedata.avatarid, false);
 							}
 						}
@@ -306,24 +251,7 @@ WTW.log("1-get saved avatar", 'yellow');
 					}
 				}
 			});
-/*
-			wtw3dinternet.move.emit('add user', {
-				'serverinstanceid':dGet('wtw_serverinstanceid').value,
-				'serverip':dGet('wtw_serverip').value,
-				'roomid':communityid + buildingid + thingid,
-				'communityid':communityid,
-				'buildingid':buildingid,
-				'thingid':thingid,
-				'domainurl':wtw_domainurl,
-				'instanceid':dGet('wtw_tinstanceid').value,
-				'userid':dGet('wtw_tuserid').value,
-				'placeholder':WTW.placeHolder,
-				'globaluseravatarid':dGet('wtw_tglobaluseravatarid').value,
-				'useravatarid':dGet('wtw_tuseravatarid').value,
-				'avatarid':dGet('wtw_tavatarid').value,
-				'displayname':btoa(dGet('wtw_tdisplayname').value)
-			});
-*/
+
 			wtw3dinternet.move.on('wtwadminresponse', function(zresponse) {
 				WTW.log('response=' + zresponse);
 			});
@@ -984,6 +912,9 @@ WTW_3DINTERNET.prototype.enterLoadZone = function(zmoldname, zmolddef) {
 									'placeholder':WTW.placeHolder,
 									'displayname':btoa(dGet('wtw_tdisplayname').value)
 								});
+								/* enter Chat Zone */
+								wtw3dinternet.enterChatLoadZone(zmoldname, zmolddef);
+								/* add load zone to array of connecting grid offsets */
 								wtw3dinternet.addLoadZone(zmolddef.actionzoneid, communityid, zmolddef.buildinginfo.buildingid, zmolddef.thinginfo.thingid, zpositionx, zpositiony, zpositionz, zscalingx, zscalingy, zscalingz, zrotationx, zrotationy, zrotationz);
 							}
 						}
@@ -1012,10 +943,6 @@ WTW_3DINTERNET.prototype.exitLoadZone = function(zmoldname, zmolddef) {
 				var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
 				/* check mold to avoid multiple execution of code */
 				if (wtw3dinternet.move != null && zactionzone != null) {
-//WTW.log("MOVE exit=" + zmolddef.actionzonename, 'white');
-//WTW.log("communityid=" + zmolddef.communityinfo.communityid, 'white');
-//WTW.log("buildingid=" + zmolddef.buildinginfo.buildingid, 'white');
-//WTW.log("thingid=" + zmolddef.thinginfo.thingid, 'white');
 					wtw3dinternet.move.emit('exit zone', {
 						'serverinstanceid':dGet('wtw_serverinstanceid').value,
 						'serverip':dGet('wtw_serverip').value,
@@ -1027,6 +954,9 @@ WTW_3DINTERNET.prototype.exitLoadZone = function(zmoldname, zmolddef) {
 						'userid':dGet('wtw_tuserid').value,
 						'displayname':btoa(dGet('wtw_tdisplayname').value)
 					});
+					/* exit Chat Zone */
+					wtw3dinternet.exitChatLoadZone(zmoldname, zmolddef);
+					/* remove the load zone from the array of conencting grid offsets */
 					wtw3dinternet.removeLoadZone(zmolddef.actionzoneid, zmolddef.communityinfo.communityid, zmolddef.buildinginfo.buildingid, zmolddef.thinginfo.thingid);
 				}
 				var zstartadmin = window.setInterval(function(){
@@ -1045,6 +975,7 @@ WTW_3DINTERNET.prototype.exitLoadZone = function(zmoldname, zmolddef) {
 
 WTW_3DINTERNET.prototype.addLoadZone = function(zactionzoneid, zcommunityid, zbuildingid, zthingid, zpositionx, zpositiony, zpositionz, zscalingx, zscalingy, zscalingz, zrotationx, zrotationy, zrotationz) {
 	try {
+		/* add load zone to array of connecting grid offsets */
 		/* position, scaling, and rotation values are the Connecting Grid not the Action Zone */
 		var zfound = false;
 		for (var i=0; i < wtw3dinternet.loadZones.length; i++) {
@@ -1078,6 +1009,7 @@ WTW_3DINTERNET.prototype.addLoadZone = function(zactionzoneid, zcommunityid, zbu
 
 WTW_3DINTERNET.prototype.removeLoadZone = function(zactionzoneid, zcommunityid, zbuildingid, zthingid) {
 	try {
+		/* remove the load zone from the array of conencting grid offsets */
 		for (var i = wtw3dinternet.loadZones.length; i > 0; i--) {
 			if (wtw3dinternet.loadZones[i] != null) {
 				if (wtw3dinternet.loadZones[i].actionzoneid == zactionzoneid && wtw3dinternet.loadZones[i].communityid == zcommunityid && wtw3dinternet.loadZones[i].buildingid == zbuildingid && wtw3dinternet.loadZones[i].thingid == zthingid) {

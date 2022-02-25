@@ -3,7 +3,7 @@
 #	title = WalkTheWeb 3D Internet
 #	description = 3D Internet connects your WalkTheWeb instance to the 3D Internet with Global WalkTheWeb Logins, Avatars, and options for Multiplayer and Chat!
 #	author = Aaron Dishno Ed.D.
-# 	version = 1.0.0
+# 	version = 1.0.1
 
 /* WalkTheWeb uses BabylonJS.com game engine */
 /* https://doc.babylonjs.com/babylon101/ */

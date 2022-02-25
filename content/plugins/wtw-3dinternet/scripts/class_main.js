@@ -65,7 +65,9 @@ WTW_3DINTERNET.prototype.keyUp = function(zevent) {
 	try {
 		/* check for enter key when canvas is focused and avatar is present */
 		if (WTW.canvasFocus == 1 && WTW.placeHolder == 0 && zevent.keyCode == 13) {
-			wtw3dinternet.toggleChatPrompt();
+			if (document.activeElement.id.indexOf('wtw_chatadd-') == -1) {
+				wtw3dinternet.toggleChatPrompt();
+			}
 		}
 	} catch (ex) {
 		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-keyUp=" + ex.message);
@@ -79,9 +81,9 @@ WTW_3DINTERNET.prototype.avatarConnectMenu = function(ztoinstanceid) {
 			var zform = "<div id=\"wtw3dinternet_connect" + ztoinstanceid + "\" class='wtw3dinternet-chatboxshadow'>" + 
 					"<img class='wtw-closeright' onclick=\"wtw3dinternet.closeAvatarConnectMenu('" + ztoinstanceid + "');\" src='/content/system/images/menuclosegrey.png' alt='Close' title='Close' onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclosegrey.png';\" />" + 
 					"<div class='wtw3dinternet-chatdisplayname'>" + zdisplayname + "</div><div style=\"clear:both;\"></div>" + 
-					"<div class='wtw3dinternet-chatuserinstance'>ID: " + ztoinstanceid + "</div><div style=\"clear:both;\"></div>" + 
 					"<div id=\"wtw_startchat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" onclick=\"wtw3dinternet.closeAvatarConnectMenu('" + ztoinstanceid + "');wtw3dinternet.startChat('" + ztoinstanceid + "');\">Private Chat</div>" +
-					"<div id=\"wtw_startvoicechat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" onclick=\"wtw3dinternet.closeAvatarConnectMenu('" + ztoinstanceid + "');wtw3dinternet.startVoiceChat('" + ztoinstanceid + "');\">Private Voice Chat</div>" +
+/*					"<div id=\"wtw_startvoicechat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" 		
+					onclick=\"wtw3dinternet.closeAvatarConnectMenu('" + ztoinstanceid + "');wtw3dinternet.startVoiceChat('" + ztoinstanceid + "');\">Private Voice Chat</div>" + */
 				"</div>";
 			dGet('wtw_startconnect').innerHTML += zform;
 		}
@@ -135,17 +137,15 @@ WTW_3DINTERNET.prototype.loadUserSettingsAfterEngine = function() {
 			wtw3dinternet.initAdminSocket();
 			/* only start the multiplayer services for browse mode */
 			/* this will give more resources to admin mode */
-//			if (WTW.adminView == 0) {
-				if (wtw3dinternet.masterMove == '1') {
-					wtw3dinternet.initMoveSocket();
-				}
-				if (wtw3dinternet.masterChat == '1') {
-					wtw3dinternet.initChatSocket();
-				}
-				if (wtw3dinternet.masterVoiceChat == '1') {
-					wtw3dinternet.initVoiceChatSocket();
-				}
-//			}
+			if (wtw3dinternet.masterMove == '1') {
+				wtw3dinternet.initMoveSocket();
+			}
+			if (wtw3dinternet.masterChat == '1') {
+				wtw3dinternet.initChatSocket();
+			}
+			if (wtw3dinternet.masterVoiceChat == '1') {
+				wtw3dinternet.initVoiceChatSocket();
+			}
 		},100);
 	} catch (ex) {
 		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-loadUserSettingsAfterEngine=" + ex.message);

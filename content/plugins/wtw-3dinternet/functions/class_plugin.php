@@ -132,10 +132,8 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("checkactionzonetrigger", "wtw3dinternet.multiPersonInActionZone(zactionzone);");
 
 			$wtwplugins->addScriptFunction("enteractionzone", "wtw3dinternet.enterLoadZone(zmoldname, zmolddef);");
-			$wtwplugins->addScriptFunction("enteractionzone", "wtw3dinternet.enterChatZone(zmoldname, zmolddef);");
 
 			$wtwplugins->addScriptFunction("exitactionzone", "wtw3dinternet.exitLoadZone(zmoldname, zmolddef);");
-			$wtwplugins->addScriptFunction("exitactionzone", "wtw3dinternet.exitChatZone(zmoldname, zmolddef);");
 
 			$wtwplugins->addScriptFunction("loadusersettingsafterengine", "wtw3dinternet.loadUserSettingsAfterEngine();"); 
 
