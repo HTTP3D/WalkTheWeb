@@ -1327,7 +1327,9 @@ WTWJS.prototype.submitMoldForm = async function(zselect) {
 			zmolds[zmoldind].actionzoneid = dGet('wtw_tmoldactionzoneid').value;
 			zmolds[zmoldind].actionzoneind = WTW.getActionZoneInd(zmolds[zmoldind].actionzoneid,0);
 			zmolds[zmoldind].loadactionzoneid = dGet('wtw_tmoldloadactionzoneid').options[dGet('wtw_tmoldloadactionzoneid').selectedIndex].value;
-			zmolds[zmoldind].unloadactionzoneid = dGet('wtw_tmoldunloadactionzoneid').options[dGet('wtw_tmoldunloadactionzoneid').selectedIndex].value;
+			if (dGet('wtw_tmoldunloadactionzoneid').options.length > 0) {
+				zmolds[zmoldind].unloadactionzoneid = dGet('wtw_tmoldunloadactionzoneid').options[dGet('wtw_tmoldunloadactionzoneid').selectedIndex].value;
+			}
 			zmolds[zmoldind].loadactionzoneind = WTW.getActionZoneInd(zmolds[zmoldind].loadactionzoneid,0);
 			zmolds[zmoldind].unloadactionzoneind = WTW.getActionZoneInd(zmolds[zmoldind].unloadactionzoneid,-1);
 			zmolds[zmoldind].csg.moldid = dGet('wtw_tmoldcsgmoldid').value;

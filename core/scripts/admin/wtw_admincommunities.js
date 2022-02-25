@@ -25,16 +25,16 @@ WTWJS.prototype.openCommunityForm = async function(zcommunityid) {
 						if (WTW.communities[i] != null) {
 							if (WTW.communities[i].communityinfo.communityid != undefined) {
 								if (zcommunityid == WTW.communities[i].communityinfo.communityid) {
-									dGet('wtw_tinfocommunityversion').disabled = false;
 									dGet('wtw_tcommunityname').value = WTW.decode(WTW.communities[i].communityinfo.communityname);
+									dGet('wtw_tversionid').value = WTW.communities[i].communityinfo.versionid;
 									dGet('wtw_tinfocommunityversion').value = WTW.communities[i].communityinfo.version;
+									dGet('wtw_tinfocommunityversiondesc').value = WTW.decode(WTW.communities[i].communityinfo.versiondesc);
 									dGet('wtw_tcommunitydescription').value = WTW.decode(WTW.communities[i].communityinfo.communitydescription);
 									dGet('wtw_tcommunitysnapshotid').value = WTW.communities[i].communityinfo.snapshotid;
 									dGet('wtw_tcommunityanalyticsid').value = WTW.communities[i].communityinfo.analyticsid;
 									dGet('wtw_tgroundpositiony').value = Number(WTW.communities[i].groundpositiony).toFixed(2);
 									dGet('wtw_twaterpositiony').value = Number(WTW.communities[i].waterpositiony).toFixed(2);
 									dGet('wtw_tcommunityalttag').value = WTW.decode(WTW.communities[i].alttag.name);
-									dGet('wtw_tinfocommunityversion').disabled = true;
 								}
 							}
 						}
@@ -116,6 +116,8 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 				for (var i = 0; i < WTW.communities.length; i++) {
 					if (WTW.communities[i] != null) {
 						if (WTW.communities[i].communityinfo.communityid == communityid) {
+							WTW.communities[i].communityinfo.version = dGet('wtw_tinfocommunityversion').value;
+							WTW.communities[i].communityinfo.versiondesc = WTW.encode(dGet('wtw_tinfocommunityversiondesc').value);
 							WTW.communities[i].communityinfo.communityname = WTW.encode(dGet('wtw_tcommunityname').value);
 							WTW.communities[i].communityinfo.communitydescription = WTW.encode(dGet('wtw_tcommunitydescription').value);
 							WTW.communities[i].communityinfo.analyticsid = dGet('wtw_tcommunityanalyticsid').value;
@@ -137,6 +139,9 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 					'communityid': communityid,
 					'communityname': btoa(dGet('wtw_tcommunityname').value),
 					'communitydescription': btoa(dGet('wtw_tcommunitydescription').value),
+					'versionid': dGet('wtw_tversionid').value,
+					'version': dGet('wtw_tinfocommunityversion').value,
+					'versiondesc': btoa(dGet('wtw_tinfocommunityversiondesc').value),
 					'analyticsid': dGet('wtw_tcommunityanalyticsid').value,
 					'groundpositiony': dGet('wtw_tgroundpositiony').value,
 					'waterpositiony': dGet('wtw_twaterpositiony').value,
@@ -158,6 +163,8 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 				for (var i = 0; i < WTW.communities.length; i++) {
 					if (WTW.communities[i] != null) {
 						if (WTW.communities[i].communityinfo.communityid == communityid) {
+							dGet('wtw_tinfocommunityversion').value = WTW.communities[i].communityinfo.version;
+							dGet('wtw_tinfocommunityversiondesc').value = WTW.decode(WTW.communities[i].communityinfo.versiondesc);
 							dGet('wtw_tcommunityname').value = WTW.decode(WTW.communities[i].communityinfo.communityname);
 							dGet('wtw_tcommunitydescription').value = WTW.decode(WTW.communities[i].communityinfo.communitydescription);
 							dGet('wtw_tcommunityanalyticsid').value = WTW.communities[i].communityinfo.analyticsid;

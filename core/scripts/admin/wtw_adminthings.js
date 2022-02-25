@@ -27,14 +27,14 @@ WTWJS.prototype.openThingForm = async function(zthingid) {
 							if (WTW.things[i].thinginfo.thingid != undefined) {
 								if (WTW.things[i].thinginfo.thingid != null) {
 									if (zthingid == WTW.things[i].thinginfo.thingid) {
-										dGet('wtw_tinfothingversion').disabled = false;
 										dGet('wtw_tthingind').value = i;
 										dGet('wtw_tthingname').value = WTW.decode(WTW.things[i].thinginfo.thingname);
+										dGet('wtw_tversionid').value = WTW.things[i].thinginfo.versionid;
 										dGet('wtw_tinfothingversion').value = WTW.things[i].thinginfo.version;
+										dGet('wtw_tinfothingversiondesc').value = WTW.decode(WTW.things[i].thinginfo.versiondesc);
 										dGet('wtw_tthingdescription').value = WTW.decode(WTW.things[i].thinginfo.thingdescription);
 										dGet('wtw_tthingsnapshotid').value = WTW.things[i].thinginfo.snapshot;
 										dGet('wtw_tthingalttag').value = WTW.decode(WTW.things[i].alttag.name);
-										dGet('wtw_tinfothingversion').disabled = true;
 									}
 								}
 							}
@@ -79,6 +79,9 @@ WTWJS.prototype.loadThingForm = async function(zthingid) {
 										dGet('wtw_tthingind').value = i;
 										dGet('wtw_tthingname').value = WTW.decode(WTW.things[i].thinginfo.thingname);
 										dGet('wtw_tthingdescription').value = WTW.decode(WTW.things[i].thinginfo.thingdescription);
+										dGet('wtw_tversionid').value = WTW.things[i].thinginfo.versionid;
+										dGet('wtw_tinfothingversion').value = WTW.things[i].thinginfo.version;
+										dGet('wtw_tinfothingversiondesc').value = WTW.decode(WTW.things[i].thinginfo.versiondesc);
 										dGet('wtw_tthingsnapshotid').value = WTW.things[i].thinginfo.snapshot;
 										dGet('wtw_tthingalttag').value = WTW.decode(WTW.things[i].alttag.name);
 									}
@@ -134,8 +137,11 @@ WTWJS.prototype.submitthingForm = async function(w) {
 					for (var i = 0; i < WTW.things.length; i++) {
 						if (WTW.things[i] != null) {
 						    if (WTW.things[i].thinginfo.thingid == dGet('wtw_tthingid').value) {
-								WTW.things[i].thinginfo.thingname = dGet('wtw_tthingname').value;
-								WTW.things[i].thinginfo.thingdescription = dGet('wtw_tthingdescription').value;
+								WTW.things[i].thinginfo.thingname = WTW.encode(dGet('wtw_tthingname').value);
+								WTW.things[i].thinginfo.thingdescription = WTW.encode(dGet('wtw_tthingdescription').value);
+								WTW.things[i].thinginfo.versionid = dGet('wtw_tversionid').value;
+								WTW.things[i].thinginfo.version = dGet('wtw_tinfothingversion').value;
+								WTW.things[i].thinginfo.versiondesc = WTW.encode(dGet('wtw_tinfothingversiondesc').value);
 								dGet('wtw_showbuildingname').innerHTML = dGet('wtw_tthingname').value;
 							}
 						}
@@ -146,6 +152,9 @@ WTWJS.prototype.submitthingForm = async function(w) {
 						'thingname': btoa(dGet('wtw_tthingname').value),
 						'thingdescription': btoa(dGet('wtw_tthingdescription').value),
 						'analyticsid': dGet('wtw_tthinganalyticsid').value,
+						'versionid': dGet('wtw_tversionid').value,
+						'version': dGet('wtw_tinfothingversion').value,
+						'versiondesc': btoa(dGet('wtw_tinfothingversiondesc').value),
 						'alttag': btoa(dGet('wtw_tthingalttag').value),
 						'function':'savething'
 					};
@@ -166,8 +175,11 @@ WTWJS.prototype.submitthingForm = async function(w) {
 				for (var i = 0; i < WTW.things.length; i++) {
 					if (WTW.things[i] != null) {
 					    if (WTW.things[i].thinginfo.thingid == dGet('wtw_tthingid').value) {
-							dGet('wtw_tthingname').value = WTW.things[i].thinginfo.thingname;
-							dGet('wtw_tthingdescription').value = WTW.things[i].thinginfo.thingdescription;
+							dGet('wtw_tthingname').value = WTW.decode(WTW.things[i].thinginfo.thingname);
+							dGet('wtw_tthingdescription').value = WTW.decode(WTW.things[i].thinginfo.thingdescription);
+							dGet('wtw_tversionid').value = WTW.things[i].thinginfo.versionid;
+							dGet('wtw_tinfothingversion').value = WTW.things[i].thinginfo.version;
+							dGet('wtw_tinfothingversiondesc').value = WTW.decode(WTW.things[i].thinginfo.versiondesc);
 							dGet('wtw_tthinganalyticsid').value = WTW.things[i].thinginfo.analytics;
 							dGet('wtw_tthingalttag').value = WTW.decode(WTW.things[i].alttag.name);
 						}

@@ -286,17 +286,19 @@ WTWJS.prototype.keyUp = function(zevent) {
 WTWJS.prototype.keyPressed = function(keycode) {
 	/* keyboard pressed, process keys */
 	try {
-		switch (keycode) {
-			case 67: /* c */
-				WTW.hudToggleCompass();
-				break;
-			case 72: /* h */
-			case 77: /* m */
-				WTW.hudToggle();
-				break;
-			default:
-				WTW.keyPressedAdd(keycode);
-				break;
+		if (document.activeElement.id.indexOf('wtw_chatadd-') == -1) {
+			switch (keycode) {
+				case 67: /* c */
+					WTW.hudToggleCompass();
+					break;
+				case 72: /* h */
+				case 77: /* m */
+					WTW.hudToggle();
+					break;
+				default:
+					WTW.keyPressedAdd(keycode);
+					break;
+			}
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_input.js-keyPressed=" + ex.message);

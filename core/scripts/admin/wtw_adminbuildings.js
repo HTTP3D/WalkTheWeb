@@ -29,14 +29,15 @@ WTWJS.prototype.openBuildingForm = async function(w) {
 							if (WTW.buildings[i].buildinginfo.buildingid != undefined) {
 								if (WTW.buildings[i].buildinginfo.buildingid != null) {
 									if (dGet("wtw_tbuildingid").value == WTW.buildings[i].buildinginfo.buildingid) {
-										dGet('wtw_tinfobuildingversion').disabled = false;
+										dGet('wtw_tversionid').value = WTW.buildings[i].buildinginfo.versionid;
+										dGet('wtw_tinfobuildingversion').value = WTW.buildings[i].buildinginfo.version;
+										dGet('wtw_tinfobuildingversiondesc').value = WTW.decode(WTW.buildings[i].buildinginfo.versiondesc);
 										dGet('wtw_tbuildingname').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
 										dGet('wtw_tinfobuildingversion').value = WTW.buildings[i].buildinginfo.version;
 										dGet('wtw_tbuildingdescription').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingdescription);
 										dGet('wtw_tbuildingsnapshotid').value = WTW.buildings[i].buildinginfo.snapshotid;
 										dGet('wtw_tbuildinganalyticsid').value = WTW.buildings[i].buildinginfo.analyticsid;
 										dGet('wtw_tbuildingalttag').value = WTW.decode(WTW.buildings[i].alttag.name);
-										dGet('wtw_tinfobuildingversion').disabled = true;
 									}
 								}
 							}
@@ -137,6 +138,11 @@ WTWJS.prototype.submitBuildingForm = async function(w) {
 						if (WTW.buildings[i].buildinginfo.buildingid == dGet('wtw_tbuildingid').value) {
 							WTW.buildings[i].buildinginfo.buildingname = WTW.encode(dGet('wtw_tbuildingname').value);
 							WTW.buildings[i].buildinginfo.buildingdescription = WTW.encode(dGet('wtw_tbuildingdescription').value);
+
+							WTW.buildings[i].buildinginfo.versionid = dGet('wtw_tversionid').value;
+							WTW.buildings[i].buildinginfo.version = dGet('wtw_tinfobuildingversion').value;
+							WTW.buildings[i].buildinginfo.versiondesc = WTW.encode(dGet('wtw_tinfobuildingversiondesc').value);
+
 							WTW.buildings[i].buildinginfo.analyticsid = dGet('wtw_tbuildinganalyticsid').value;
 							WTW.buildings[i].alttag.name = WTW.encode(dGet('wtw_tbuildingalttag').value);
 							dGet('wtw_showbuildingname').innerHTML = dGet('wtw_tbuildingname').value;
@@ -148,6 +154,9 @@ WTWJS.prototype.submitBuildingForm = async function(w) {
 					'buildingname':btoa(dGet('wtw_tbuildingname').value),
 					'buildingdescription':btoa(dGet('wtw_tbuildingdescription').value),
 					'alttag':btoa(dGet('wtw_tbuildingalttag').value),
+					'versionid':dGet('wtw_tversionid').value,
+					'version':dGet('wtw_tinfobuildingversion').value,
+					'versiondesc':btoa(dGet('wtw_tinfobuildingversiondesc').value),
 					'analyticsid':dGet('wtw_tbuildinganalyticsid').value,
 					'function':'savebuilding'
 				};
@@ -162,6 +171,8 @@ WTWJS.prototype.submitBuildingForm = async function(w) {
 				for (var i = 0; i < WTW.buildings.length; i++) {
 					if (WTW.buildings[i] != null) {
 					    if (WTW.buildings[i].buildinginfo.buildingid == dGet('wtw_tbuildingid').value) {
+							dGet('wtw_tinfobuildingversion').value = WTW.buildings[i].buildinginfo.version;
+							dGet('wtw_tinfobuildingversiondesc').value = WTW.decode(WTW.buildings[i].buildinginfo.versiondesc);
 							dGet('wtw_tbuildingname').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingname);
 							dGet('wtw_tbuildingdescription').value = WTW.decode(WTW.buildings[i].buildinginfo.buildingdescription);
 							dGet('wtw_tbuildinganalyticsid').value = WTW.buildings[i].buildinginfo.analyticsid;
