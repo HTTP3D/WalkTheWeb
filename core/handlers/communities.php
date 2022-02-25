@@ -13,6 +13,9 @@ try {
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zcommunityid = $wtwhandlers->getPost('communityid','');
 	$zpastcommunityid = $wtwhandlers->getPost('pastcommunityid','');
+	$zversionid = $wtwhandlers->getPost('versionid','');
+	$zversion = $wtwhandlers->getPost('version','');
+	$zversiondesc = $wtwhandlers->decode64($wtwhandlers->getPost('versiondesc',''));
 	$zwebid = $wtwhandlers->getPost('webid','');
 	$zwebtype = $wtwhandlers->getPost('webtype','');
 	$zcommunityname = $wtwhandlers->decode64($wtwhandlers->getPost('communityname',''));
@@ -58,7 +61,7 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savecommunity":
-			$zcommunityid = $wtwcommunities->saveCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zcommunitydescription, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag);
+			$zcommunityid = $wtwcommunities->saveCommunity($zcommunityid, $zpastcommunityid, $zversionid, $zversion, $zversiondesc, $zcommunityname, $zcommunitydescription, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag);
 			$zresponse = array(
 				'communityid'=> $zcommunityid
 			);
@@ -95,7 +98,7 @@ try {
 			);
 			break;
 		case "importcommunity":
-			$zcommunityid = $wtwcommunities->importCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag);
+			$zcommunityid = $wtwcommunities->importCommunity($zcommunityid, $zpastcommunityid, $zversionid, $zversion, $zversiondesc, $zcommunityname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag);
 			$zresponse = array(
 				'communityid'=> $zcommunityid
 			);

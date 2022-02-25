@@ -39,7 +39,7 @@ class wtwcommunities {
 		return $found;
 	}
 
-	public function saveCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zcommunitydescription, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag) {
+	public function saveCommunity($zcommunityid, $zpastcommunityid, $zversionid, $zversion, $zversiondesc, $zcommunityname, $zcommunitydescription, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag) {
 		/* save community settings to the database */
 		global $wtwhandlers;
 		$copycommunityid = "";
@@ -58,6 +58,9 @@ class wtwcommunities {
 						insert into ".wtw_tableprefix."communities
 							(communityid,
 							 pastcommunityid,
+							 versionid,
+							 version,
+							 versiondesc,
 							 communityname,
 							 communitydescription,
 							 analyticsid,
@@ -72,6 +75,9 @@ class wtwcommunities {
 						values
 							('".$zcommunityid."',
 							 '".$zpastcommunityid."',
+							 '".$zcommunityid."',
+							 '1.0.0',
+							 'Initial Version',
 							 '".$wtwhandlers->escapeHTML($zcommunityname)."',
 							 '".$wtwhandlers->escapeHTML($zcommunitydescription)."',
 							 '".$zanalyticsid."',
@@ -89,6 +95,9 @@ class wtwcommunities {
 						insert into ".wtw_tableprefix."communities
 							(communityid,
 							 pastcommunityid,
+							 versionid,
+							 version,
+							 versiondesc,
 							 communityname,
 							 communitydescription,
 							 analyticsid,
@@ -136,6 +145,9 @@ class wtwcommunities {
 							 updateuserid)
 						select '".$zcommunityid."' as communityid,
 							 '".$zpastcommunityid."' as pastcommunityid,
+							 versionid,
+							 version,
+							 versiondesc,
 							 '".$wtwhandlers->escapeHTML($zcommunityname)."' as communityname,
 							 '".$wtwhandlers->escapeHTML($zcommunitydescription)."' as communitydescription,
 							 analyticsid,
@@ -210,6 +222,8 @@ class wtwcommunities {
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."communities
 					set 
+						version='".$wtwhandlers->escapeHTML($zversion)."',
+						versiondesc='".$wtwhandlers->escapeHTML($zversiondesc)."',
 						communityname='".$wtwhandlers->escapeHTML($zcommunityname)."',
 						communitydescription='".$wtwhandlers->escapeHTML($zcommunitydescription)."',
 						analyticsid='".$zanalyticsid."',
@@ -1422,6 +1436,7 @@ class wtwcommunities {
 					select userid
 					from ".wtw_tableprefix."users 
 					where CONVERT(from_base64(usertoken) USING utf8)='".$zusertoken."'
+						or CONVERT(from_base64(wordpresstoken) USING utf8)='".$zusertoken."'
 					limit 1;");
 				foreach ($zresults as $zrow) {
 					$zuserid = $zrow["userid"];
@@ -1681,6 +1696,9 @@ class wtwcommunities {
 							insert into ".wtw_tableprefix."communities 
 							   (communityid,
 								pastcommunityid,
+								versionid,
+								version,
+								versiondesc,
 								downloadparentwebid,
 								downloadparentwebtype,
 								communityname,
@@ -1729,6 +1747,9 @@ class wtwcommunities {
 							values
 							   ('".$znewcommunityid."',
 								'".$zrequest->communityid."',
+								'".$zrequest->versionid."',
+								'".$zrequest->version."',
+								'".addslashes($zrequest->versiondesc)."',
 								'".$zdownloadparentwebid."',
 								'".$zdownloadparentwebtype."',
 								'".$zrequest->communityname."',
@@ -1802,6 +1823,9 @@ class wtwcommunities {
 							insert into ".wtw_tableprefix."buildings 
 							   (buildingid,
 								pastbuildingid,
+								versionid,
+								version,
+								versiondesc,
 								downloadparentwebid,
 								downloadparentwebtype,
 								buildingname,
@@ -1830,6 +1854,9 @@ class wtwcommunities {
 							values
 							   ('".$znewbuildingid."',
 								'".$zrequest->buildingid."',
+								'".$zrequest->versionid."',
+								'".$zrequest->version."',
+								'".addslashes($zrequest->versiondesc)."',
 								'".$zdownloadparentwebid."',
 								'".$zdownloadparentwebtype."',
 								'".$zrequest->buildingname."',
@@ -1882,6 +1909,9 @@ class wtwcommunities {
 							insert into ".wtw_tableprefix."things 
 							   (thingid,
 								pastthingid,
+								versionid,
+								version,
+								versiondesc,
 								downloadparentwebid,
 								downloadparentwebtype,
 								thingname,
@@ -1910,6 +1940,9 @@ class wtwcommunities {
 							values
 							   ('".$znewthingid."',
 								'".$zrequest->thingid."',
+								'".$zrequest->versionid."',
+								'".$zrequest->version."',
+								'".addslashes($zrequest->versiondesc)."',
 								'".$zdownloadparentwebid."',
 								'".$zdownloadparentwebtype."',
 								'".$zrequest->thingname."',
@@ -3100,7 +3133,7 @@ class wtwcommunities {
 		return $znewwebid;
 	}
 		
-	public function importCommunity($zcommunityid, $zpastcommunityid, $zcommunityname, $zcommunityanalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag) {
+	public function importCommunity($zcommunityid, $zpastcommunityid, $zversionid, $zversion, $zversiondesc, $zcommunityname, $zcommunityanalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag) {
 		/* imports community settings from the media library wen you download a community */
 		global $wtwhandlers;
 		try {
@@ -3111,6 +3144,9 @@ class wtwcommunities {
 						insert into ".wtw_tableprefix."communities
 							(communityid, 
 							 pastcommunityid, 
+							 versionid,
+							 version,
+							 versiondesc,
 							 communityname, 
 							 analyticsid, 
 							 positionx, 
@@ -3143,6 +3179,9 @@ class wtwcommunities {
 						values
 							('".$zcommunityid."', 
 							 '".$zpastcommunityid."', 
+							 '".$zversionid."', 
+							 '".$zversion."', 
+							 '".addslashes($zversiondesc)."',
 							 '".$zcommunityname."', 
 							 '".$zcommunityanalyticsid."', 
 							 ".$zstartpositionx.", 

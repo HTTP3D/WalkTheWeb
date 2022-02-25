@@ -4,7 +4,10 @@
 		<input type="text" id="wtw_tthingname" maxlength="255" onclick="WTW.checkKey(this, 'displayname', 0, 0);" onkeyup="WTW.checkKey(this, 'displayname', 0, 0);" onblur="WTW.checkKey(this, 'displayname', 0, 1);" /><div id="wtw_reqeditthingname" class="wtw-required">&nbsp;* Required</div><br />
 		<br />
 		<h2>Version</h2>
-		<input type="text" id="wtw_tinfothingversion" maxlength="255" /><br />
+		<input type="text" id="wtw_tinfothingversion" maxlength="12" /><br />
+		<br />
+		<h2>Version Description</h2>
+		<input type="text" id="wtw_tinfothingversiondesc" maxlength="255" /><br />
 		<br />
 		<h2>3D Thing Description</h2>
 		<div class="wtw-menulevel0text" style="text-align:left;">shows on the meta tags of the 3D Thing Website</div>

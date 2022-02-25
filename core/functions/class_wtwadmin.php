@@ -174,6 +174,7 @@ class wtwadmin {
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatargroupid\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationeventid\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarfolderdisplay\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tversionid\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_filter\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tnewmold\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldid\" />\r\n";

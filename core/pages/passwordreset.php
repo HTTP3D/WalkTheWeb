@@ -71,7 +71,7 @@ global $wtwhandlers;
 				<div class="wtw-loginlabelwidth">&nbsp;</div>
 				<div id="wtw_passwordstrengthdiv"><input type="text" id="wtw_tpasswordstrength" class="wtw-textbox" style="visibility:hidden;padding:5px;border-radius:10px;" autocomplete="" /></div><div style="clear:both;"></div>
 
-				<div class="wtw-loginlabel">Password</div><div><input type="password" id="wtw_tnewpassword" name="wtw_tnewpassword"autocomplete="new-password" class="wtw-textbox" maxlength="256" onkeyup="WTW.checkPassword(this,'wtw_tpasswordstrength');WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');" onfocus="WTW.registerPasswordFocus();" onblur="WTW.registerPasswordBlur();" /></div><div style="clear:both;"></div>
+				<div class="wtw-loginlabel">Password</div><div><input type="password" id="wtw_tnewpassword" name="wtw_tnewpassword" autocomplete="new-password" class="wtw-textbox" maxlength="256" onkeyup="WTW.checkPassword(this,'wtw_tpasswordstrength');WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');" onfocus="WTW.registerPasswordFocus();" onblur="WTW.registerPasswordBlur();" /></div><div style="clear:both;"></div>
 				<div class="wtw-loginlabel">Confirm Password</div><div><input type="password" id="wtw_tnewpassword2" name="wtw_tnewpassword2" autocomplete="new-password" class="wtw-textbox" maxlength="256" onkeyup="WTW.checkPasswordConfirm('wtw_tnewpassword', 'wtw_tnewpassword2', 'wtw_registererrortext');" /></div><div style="clear:both;"></div>
 
 				<div id="wtw_registererrortext" class="wtw-errortext">

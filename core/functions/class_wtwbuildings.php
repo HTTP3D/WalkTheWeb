@@ -39,7 +39,7 @@ class wtwbuildings {
 		return $found;
 	}
 
-	public function saveBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zbuildingdescription, $zanalyticsid, $zalttag) {
+	public function saveBuilding($zbuildingid, $zpastbuildingid, $zversionid, $zversion, $zversiondesc, $zbuildingname, $zbuildingdescription, $zanalyticsid, $zalttag) {
 		/* save building settings */
 		global $wtwhandlers;
 		$zcopybuildingid = "";
@@ -59,6 +59,9 @@ class wtwbuildings {
 						insert into ".wtw_tableprefix."buildings
 							(buildingid,
 							 pastbuildingid,
+							 versionid,
+							 version,
+							 versiondesc,
 							 buildingname,
 							 buildingdescription,
 							 analyticsid,
@@ -71,6 +74,9 @@ class wtwbuildings {
 						values
 							('".$zbuildingid."',
 							 '',
+							 '".$zbuildingid."',
+							 '1.0.0',
+							 'Initial Version',
 							 '".$wtwhandlers->escapeHTML($zbuildingname)."',
 							 '".$wtwhandlers->escapeHTML($zbuildingdescription)."',
 							 '".$zanalyticsid."',
@@ -86,6 +92,9 @@ class wtwbuildings {
 						insert into ".wtw_tableprefix."buildings
 							(buildingid,
 							 pastbuildingid,
+							 versionid,
+							 version,
+							 versiondesc,
 							 buildingname,
 							 buildingdescription,
 							 analyticsid,
@@ -113,6 +122,9 @@ class wtwbuildings {
 							 updateuserid)
 						select '".$zbuildingid."' as buildingid,
 							 '".$zpastbuildingid."' as pastbuildingid,
+							 versionid,
+							 version,
+							 versiondesc,
 							 '".$wtwhandlers->escapeHTML($zbuildingname)."' as buildingname,
 							 '".$wtwhandlers->escapeHTML($zbuildingdescription)."' as buildingdescription,
 							 analyticsid,
@@ -166,7 +178,9 @@ class wtwbuildings {
 				/* only updates if you have access */
 				 $wtwhandlers->query("
 					update ".wtw_tableprefix."buildings
-					set buildingname='".$wtwhandlers->escapeHTML($zbuildingname)."',
+					set version='".$wtwhandlers->escapeHTML($zversion)."',
+						versiondesc='".$wtwhandlers->escapeHTML($zversiondesc)."',
+						buildingname='".$wtwhandlers->escapeHTML($zbuildingname)."',
 						buildingdescription='".$wtwhandlers->escapeHTML($zbuildingdescription)."',
 						analyticsid='".$zanalyticsid."',
 						alttag='".$wtwhandlers->escapeHTML($zalttag)."',
@@ -1534,7 +1548,7 @@ class wtwbuildings {
 		return $zsuccess;
 	}
 	
-	public function importBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zbuildinganalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $zalttag) {
+	public function importBuilding($zbuildingid, $zpastbuildingid, $zversionid, $zversion, $zversiondesc, $zbuildingname, $zbuildinganalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $zalttag) {
 		/* import building from 3dnet.walktheweb.com in the media library */
 		global $wtwhandlers;
 		try {
@@ -1545,6 +1559,9 @@ class wtwbuildings {
 						insert into ".wtw_tableprefix."buildings
 							(buildingid, 
 							 pastbuildingid, 
+							 versionid,
+							 version,
+							 versiondesc,
 							 buildingname, 
 							 analyticsid, 
 							 positionx, 
@@ -1566,6 +1583,9 @@ class wtwbuildings {
 						values
 							('".$zbuildingid."', 
 							 '".$zpastbuildingid."', 
+							 '".$zversionid."',
+							 '".$zversion."',
+							 '".addslashes($zversiondesc)."',
 							 '".$zbuildingname."', 
 							 '".$zbuildinganalyticsid."', 
 							 ".$zstartpositionx.", 

@@ -13,6 +13,9 @@ try {
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zthingid = $wtwhandlers->getPost('thingid','');
 	$zpastthingid = $wtwhandlers->getPost('pastthingid','');
+	$zversionid = $wtwhandlers->getPost('versionid','');
+	$zversion = $wtwhandlers->getPost('version','');
+	$zversiondesc = $wtwhandlers->decode64($wtwhandlers->getPost('versiondesc',''));
 	$zthingname = $wtwhandlers->decode64($wtwhandlers->getPost('thingname',''));
 	$zthingdescription = $wtwhandlers->decode64($wtwhandlers->getPost('thingdescription',''));
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
@@ -35,7 +38,7 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savething":
-			$zthingid = $wtwthings->saveThing($zthingid, $zpastthingid, $zthingname, $zthingdescription, $zanalyticsid, $zalttag);
+			$zthingid = $wtwthings->saveThing($zthingid, $zpastthingid, $zversionid, $zversion, $zversiondesc, $zthingname, $zthingdescription, $zanalyticsid, $zalttag);
 			$zresponse = array(
 				'thingid'=> $zthingid
 			);
@@ -50,7 +53,7 @@ try {
 			//$wtwthings->saveThingGravity($zthingid, $zgravity);
 			break;
 		case "importthing":
-			$zthingid = $wtwthings->importThing($zthingid, $zpastthingid, $zthingname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $zalttag);
+			$zthingid = $wtwthings->importThing($zthingid, $zpastthingid, $zversionid, $zversion, $zversiondesc, $zthingname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $zalttag);
 			$zresponse = array(
 				'thingid'=> $zthingid
 			);

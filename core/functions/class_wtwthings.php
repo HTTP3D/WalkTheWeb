@@ -39,7 +39,7 @@ class wtwthings {
 		return $found;
 	}
 
-	public function saveThing($zthingid, $zpastthingid, $zthingname, $zthingdescription, $zanalyticsid, $zalttag) {
+	public function saveThing($zthingid, $zpastthingid, $zversionid, $zversion, $zversiondesc, $zthingname, $zthingdescription, $zanalyticsid, $zalttag) {
 		/* save thing settings */
 		global $wtwhandlers;
 		$copythingid = "";
@@ -59,6 +59,9 @@ class wtwthings {
 						insert into ".wtw_tableprefix."things
 							(thingid,
 							 pastthingid,
+							 versionid,
+							 version,
+							 versiondesc,
 							 thingname,
 							 thingdescription,
 							 analyticsid,
@@ -71,6 +74,9 @@ class wtwthings {
 						values
 							('".$zthingid."',
 							 '',
+							 '".$zthingid."',
+							 '1.0.0',
+							 'Initial Version',
 							 '".$wtwhandlers->escapeHTML($zthingname)."',
 							 '".$wtwhandlers->escapeHTML($zthingdescription)."',
 							 '".$zanalyticsid."',
@@ -86,6 +92,9 @@ class wtwthings {
 						insert into ".wtw_tableprefix."things
 							(thingid,
 							 pastthingid,
+							 versionid,
+							 version,
+							 versiondesc,
 							 thingname,
 							 thingdescription,
 							 analyticsid,
@@ -113,6 +122,9 @@ class wtwthings {
 							 updateuserid)
 						select '".$zthingid."' as thingid,
 							 '".$zpastthingid."' as pastthingid,
+							 versionid,
+							 version,
+							 versiondesc,
 							 '".$wtwhandlers->escapeHTML($zthingname)."' as thingname,
 							 '".$wtwhandlers->escapeHTML($zthingdescription)."' as thingdescription,
 							 analyticsid,
@@ -166,12 +178,14 @@ class wtwthings {
 				/* only updates if you have access */
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."things
-					set  thingname='".$wtwhandlers->escapeHTML($zthingname)."',
-						 thingdescription='".$wtwhandlers->escapeHTML($zthingdescription)."',
-						 analyticsid='".$zanalyticsid."',
-						 alttag='".$wtwhandlers->escapeHTML($zalttag)."',
-						 updatedate=now(),
-						 updateuserid='".$wtwhandlers->userid."'
+					set version='".$wtwhandlers->escapeHTML($zversion)."',
+						versiondesc='".$wtwhandlers->escapeHTML($zversiondesc)."',
+						thingname='".$wtwhandlers->escapeHTML($zthingname)."',
+						thingdescription='".$wtwhandlers->escapeHTML($zthingdescription)."',
+						analyticsid='".$zanalyticsid."',
+						alttag='".$wtwhandlers->escapeHTML($zalttag)."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
 					where thingid='".$zthingid."';");
 			}
 		} catch (Exception $e) {
@@ -1284,7 +1298,7 @@ class wtwthings {
 		return $zsuccess;
 	}
 	
-	public function importThing($zthingid, $zpastthingid, $zthingname, $zthinganalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $zalttag) {
+	public function importThing($zthingid, $zpastthingid, $zversionid, $zversion, $zversiondesc, $zthingname, $zthinganalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $zalttag) {
 		/* import thing from 3dnet.walktheweb.com in the media library */
 		global $wtwhandlers;
 		try {
@@ -1295,6 +1309,9 @@ class wtwthings {
 						insert into ".wtw_tableprefix."things
 							(thingid, 
 							 pastthingid, 
+							 versionid,
+							 version,
+							 versiondesc,
 							 thingname, 
 							 analyticsid, 
 							 positionx, 
@@ -1316,6 +1333,9 @@ class wtwthings {
 						values
 							('".$zthingid."', 
 							 '".$zpastthingid."', 
+							 '".$zversionid."', 
+							 '".$zversion."', 
+							 '".addslashes($zversiondesc)."', 
 							 '".$zthingname."', 
 							 '".$zthinganalyticsid."', 
 							 ".$zstartpositionx.", 

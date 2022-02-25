@@ -12,6 +12,9 @@ try {
 	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zbuildingid = $wtwhandlers->getPost('buildingid','');
+	$zversionid = $wtwhandlers->getPost('versionid','');
+	$zversion = $wtwhandlers->getPost('version','');
+	$zversiondesc = $wtwhandlers->decode64($wtwhandlers->getPost('versiondesc',''));
 	$zpastbuildingid = $wtwhandlers->getPost('pastbuildingid','');
 	$zbuildingname = $wtwhandlers->decode64($wtwhandlers->getPost('buildingname',''));
 	$zbuildingdescription = $wtwhandlers->decode64($wtwhandlers->getPost('buildingdescription',''));
@@ -35,7 +38,7 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savebuilding":
-			$zbuildingid = $wtwbuildings->saveBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zbuildingdescription, $zanalyticsid, $zalttag);
+			$zbuildingid = $wtwbuildings->saveBuilding($zbuildingid, $zpastbuildingid, $zversionid, $zversion, $zversiondesc, $zbuildingname, $zbuildingdescription, $zanalyticsid, $zalttag);
 			$zresponse = array(
 				'buildingid'=> $zbuildingid
 			);
@@ -57,7 +60,7 @@ try {
 			$zresponse = $wtwbuildings->shareBuildingTemplate($zbuildingid, $zsharehash);
 			break;
 		case "importbuilding":
-			$zbuildingid = $wtwbuildings->importBuilding($zbuildingid, $zpastbuildingid, $zbuildingname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $zalttag);
+			$zbuildingid = $wtwbuildings->importBuilding($zbuildingid, $zpastbuildingid, $zversionid, $zversion, $zversiondesc, $zbuildingname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $zalttag);
 			$zresponse = array(
 				'buildingid'=> $zbuildingid
 			);
