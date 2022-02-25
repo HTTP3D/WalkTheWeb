@@ -31,7 +31,7 @@ try {
 	$zstoreproducturl = $wtwconnect->getPost('storeproducturl','');
 	$zstoreapiurl = $wtwconnect->getPost('storeapiurl','');
 	$ziframes = $wtwconnect->getPost('iframes','');
-	
+
 	$zauthenticationok = false;
 	$zwebnameok = false;
 	$zuserid = '';
@@ -60,7 +60,7 @@ try {
 	$zstoreproducturl = $wtwconnect->decode64($zstoreproducturl);
 	$zstoreapiurl = $wtwconnect->decode64($zstoreapiurl);
 	$ziframes = $wtwconnect->decode64($ziframes);
-	
+
 	$zparse = parse_url($zhosturl);
 	$zdomainname = $zparse['host'];
 	if (strpos(strtolower($zhosturl), 'http://') !== false) {
@@ -113,6 +113,34 @@ try {
 				if ($zauthenticationok == false) {
 					$serror = 'User does not have permission on WalkTheWeb Server';
 				}
+			} else if (!empty($zusertoken) && isset($zusertoken)) {
+				/* check is the user with the access token has admin or host access */
+				$zresults = $wtwconnect->query("
+					select u1.*,
+						r1.rolename
+					from ".wtw_tableprefix."users u1
+						inner join ".wtw_tableprefix."usersinroles ur1
+							on u1.userid=ur1.userid
+						inner join ".wtw_tableprefix."roles r1
+							on ur1.roleid=r1.roleid
+					where CONVERT(from_base64(u1.wordpresstoken) USING utf8)='".$zusertoken."'
+						and u1.deleted=0
+						and (r1.rolename like 'admin'
+							or r1.rolename like 'host')
+						and ur1.deleted=0
+						and r1.deleted=0
+					order by r1.rolename
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zauthenticationok = true;
+					$zuserid = $zrow["userid"];
+					$zpastuserid = $zrow["pastuserid"];
+					$zuploadpathid = $zrow["uploadpathid"];
+					$zwtwusertoken = $zusertoken;
+				}
+				if ($zauthenticationok == false) {
+					$serror = 'User does not have permission on WalkTheWeb Server';
+				}
 			}
 			
 			if ($zauthenticationok && !empty($zwebname) && isset($zwebname)) {
@@ -152,6 +180,13 @@ try {
 				
 				if (empty($znewcommunityid) || !isset($znewcommunityid)) {
 					$serror = '3D Community Scene could not be created.';
+				} else {
+					$wtwconnect->query("
+						update ".wtw_tableprefix."communities
+							set communityname='".addslashes($zwtwstorename)." 3D Community'
+							where communityid='".$znewcommunityid."'
+							limit 1;
+					");
 				}
 				
 				/* get building start position and rotation */
@@ -186,6 +221,13 @@ try {
 				
 				if (empty($znewbuildingid) || !isset($znewbuildingid)) {
 					$serror = '3D Shopping Building could not be created.';
+				} else {
+					$wtwconnect->query("
+						update ".wtw_tableprefix."buildings
+							set buildingname='".addslashes($zwtwstorename)."'
+							where buildingid='".$znewbuildingid."'
+							limit 1;
+					");
 				}
 				
 				/* add webalias for new community to map the web url to the new 3D Website */

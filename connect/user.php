@@ -25,6 +25,10 @@ try {
 		
 		/* format json return dataset */
 		foreach ($zresults as $zrow) {
+			$usertokenexists = 'false';
+			if (!empty($zrow["usertoken"]) && isset($zrow["usertoken"])) {
+				$usertokenexists = 'true';
+			}
 			$zuser = array(
 				'userid' => $zrow["userid"],
 				'uploadpathid' => $zrow["uploadpathid"],
@@ -35,6 +39,7 @@ try {
 				'lastname' => $zrow["lastname"],
 				'gender' => $zrow["gender"],
 				'dob' => $zrow["dob"],
+				'usertoken' => $usertokenexists,
 				'createdate' => $zrow["createdate"],
 				'createuserid' => $zrow["createuserid"],
 				'updatedate' => $zrow["updatedate"],
