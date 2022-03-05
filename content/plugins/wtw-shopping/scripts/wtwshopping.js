@@ -673,7 +673,7 @@ wtwshopping.prototype.productClearFetchProducts = function(zmoldname) {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		/* products array holds products fetched from the WooCommerce site so they can be assigned to the molds and displayed */
 		if (WTWShopping.products != null) {
-			for (var i=WTWShopping.products.length;i > -1 ;i--) {
+			for (var i=WTWShopping.products.length-1;i > -1 ;i--) {
 				if (WTWShopping.products[i] != null) {
 					if (WTWShopping.products[i].connectinggridind.toString() == zmoldnameparts.cgind.toString() && WTWShopping.products[i].connectinggridid == zmoldnameparts.cgid) {
 						WTWShopping.products.splice(i,1);
@@ -1390,7 +1390,7 @@ wtwshopping.prototype.productClearForSearchResults = function(zmoldname, zconnec
 			}
 		}
 		if (WTWShopping.products != null) {
-			for (var i=WTWShopping.products.length;i > -1;i--) {
+			for (var i=WTWShopping.products.length-1;i > -1;i--) {
 				if (WTWShopping.products[i] != null) {
 					if (WTWShopping.products[i].connectinggridid == zconnectinggridid && Number(WTWShopping.products[i].connectinggridind) == Number(zconnectinggridind)) {
 						WTWShopping.products.splice(i,1);
@@ -1400,7 +1400,7 @@ wtwshopping.prototype.productClearForSearchResults = function(zmoldname, zconnec
 			}
 		}
 		if (WTWShopping.fetchQueue != null) {
-			for (var i=WTWShopping.fetchQueue.length;i > -1 ;i--) {
+			for (var i=WTWShopping.fetchQueue.length-1;i > -1 ;i--) {
 				if (WTWShopping.fetchQueue[i] != null) {
 					if (WTWShopping.fetchQueue[i].connectinggridind.toString() == zmoldnameparts.cgind.toString() && WTWShopping.fetchQueue[i].connectinggridid == zmoldnameparts.cgid) {
 						WTWShopping.fetchQueue.splice(i,1);
@@ -1968,7 +1968,7 @@ wtwshopping.prototype.productGetProduct = function(zmoldname) {
 			var zfetch = false;
 			if (zmoldnameparts.molds[zmoldnameparts.moldind] != null && zmoldnameparts.cgid != '' && zmoldnameparts.cgind > -1) {
 				if (WTWShopping.products != null) {
-					for (var i=WTWShopping.products.length;i > -1 ;i--) {
+					for (var i=WTWShopping.products.length-1;i > -1 ;i--) {
 						if (WTWShopping.products[i] != null) {
 							if (WTWShopping.products[i].setcount == "0" && WTWShopping.products[i].connectinggridind.toString() == zmoldnameparts.cgind.toString() && WTWShopping.products[i].connectinggridid == zmoldnameparts.cgid) {
 								zmoldnameparts.molds[zmoldnameparts.moldind].store.storeurl = WTWShopping.products[i].storeurl;
