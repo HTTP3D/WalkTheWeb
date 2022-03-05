@@ -24,6 +24,8 @@ try {
 	$zwtwurl = $wtwconnect->getPost('wtwurl','');
 	$zwebname = $wtwconnect->getPost('webname','');
 	$zwtwstorename = $wtwconnect->getPost('wtwstorename','');
+	$zwtwkey = $wtwconnect->getPost('wtwkey','');
+	$zwtwsecret = $wtwconnect->getPost('wtwsecret','');
 	$zwookey = $wtwconnect->getPost('wookey','');
 	$zwoosecret = $wtwconnect->getPost('woosecret','');
 	$zstoreurl = $wtwconnect->getPost('storeurl','');
@@ -53,6 +55,7 @@ try {
 	$zwtwurl = $wtwconnect->decode64($zwtwurl);
 	$zwebname = strtolower($wtwconnect->decode64($zwebname));
 	$zwtwstorename = $wtwconnect->decode64($zwtwstorename);
+	$zwtwsecret = $wtwconnect->decode64($zwtwsecret);
 	$zwookey = $wtwconnect->decode64($zwookey);
 	$zwoosecret = $wtwconnect->decode64($zwoosecret);
 	$zstoreurl = $wtwconnect->decode64($zstoreurl);
@@ -70,6 +73,34 @@ try {
 	$zresponse = array();
 	
 	switch ($zfunction) {
+		case "syncwebsites":
+			$zapikeyid = '';
+			$zresults = $wtwconnect->query("
+				select * 
+				from ".wtw_tableprefix."apikeys
+				where appurl='".$zstoreurl."'
+					and wtwkey='".$zwtwkey."'
+					and wtwsecret='".$zwtwsecret."'
+					and deleted=0
+					and approved=1;");
+			foreach ($zresults as $zrow) {
+				$zapikeyid = $zrow->apikeyid;
+			}
+			if (isset($zapikeyid) && !empty($zapikeyid)) {
+				$i = 0;
+				/* key-secret combo has access */
+/*				$zresults = $wtwconnect->query("
+					select * 
+					from ".wtw_tableprefix."
+				");
+				foreach ($zresults as $zrow) {
+					$zresponse[$i] = array(
+						
+					);
+					$i += 1;
+				}
+*/			}
+			break;
 		case "createcommunityandbuilding":
 			$zresponse = array(
 				'serror'=>'',

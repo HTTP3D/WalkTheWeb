@@ -84,6 +84,8 @@ try {
 	$zresponse = null;
 	$zavataranimationdefs = array();
 	$zcontentratings = array();
+	$zblockedby = array();
+	$zbannedby = array();
 	$zpositionx = '0.00';
 	$zpositiony = '0.00';
 	$zpositionz = '0.00';
@@ -442,11 +444,48 @@ try {
 		}
 	}
 	
+	if (!empty($zinstanceid) && isset($zinstanceid)) {
+		/* get any blocked or banned records if they exist */
+		$zfoundbantable = false;
+		$zresults = $wtwconnect->query("show tables like '".wtw_tableprefix."3dinternet_blockedinstances';");
+		if (is_object($zresults)) {
+			if ($zresults->num_rows > 0) {
+				$zfoundbantable = true;
+			}
+		} 
+		if ($zfoundbantable) {
+			$i = 0;
+			$j = 0;
+
+			$zresults = $wtwconnect->query("
+				select *
+				from ".wtw_tableprefix."3dinternet_blockedinstances
+				where (baninstanceid='".$zinstanceid."'
+						or instanceid='".$zinstanceid."')
+					and deleted=0;
+			");
+			foreach ($zresults as $zrow) {
+				if ($zrow->blockchat == 1) {
+					$zblockedby[$i] = array(
+						'instanceid' => $zrow->instanceid,
+						'baninstanceid' => $zrow->baninstanceid
+					);
+				}
+				if ($zrow->banuser == 1) {
+					$zbannedby[$i] = array(
+						'instanceid' => $zrow->instanceid,
+						'baninstanceid' => $zrow->baninstanceid
+					);
+				}
+			}
+		}
+	}
 	
 	/* combine avatar settings and animations for json return dataset */
 	$zavatar = array(
 		'name'=> '',
 		'userid'=> $zuserid,
+		'userip'=> '',
 		'anonymous'=>$zanonymous,
 		'globaluseravatarid'=> '',
 		'useravatarid'=> $zfounduseravatarid,
@@ -516,7 +555,9 @@ try {
 		'moveevents'=> '',
 		'parentname'=> '',
 		'updated'=> '0',
-		'loaded'=> '0'
+		'loaded'=> '0',
+		'blockedby'=> $zblockedby,
+		'bannedby'=> $zbannedby
 	);
 	$zresponse['avatar'] = $zavatar;
 	echo json_encode($zresponse);	
