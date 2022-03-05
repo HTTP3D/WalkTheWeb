@@ -1249,7 +1249,7 @@ WTWJS.prototype.clearDDL = function(zddlname) {
 		if (dGet(zddlname) != null) {
 			var zddl = dGet(zddlname);
 			if (zddl.options != undefined) {
-				for (var i = zddl.options.length - 1 ; i >= 0 ; i--) {
+				for (var i = zddl.options.length-1; i > -1 ; i--) {
 					zddl.remove(i);
 				}
 			}
@@ -2856,7 +2856,7 @@ WTWJS.prototype.deleteIdFromArray = function(zarray, ztext) {
 	try {
 		if (zarray != null) {
 			if (zarray.length > 0) {
-				for (var i=zarray.length;0>zarray.length;i--) {
+				for (var i=zarray.length-1;i>-1;i--) {
 					if (zarray[i] != null) {
 						if (zarray[i].id == ztext) {
 							zarray.splice(i,1);

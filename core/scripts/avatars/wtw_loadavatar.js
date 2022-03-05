@@ -76,11 +76,16 @@ WTWJS.prototype.getSavedAvatar = async function(zavatarname, zglobaluseravatarid
 			zavatarid = '';
 		}
 		if (zglobaluseravatarid != '' || zuseravatarid != '' || zavatarid != '') {
+			var zinstanceid = '';
+			if (zavatarname.indexOf("-") > -1) {
+				zinstanceid = zavatarname.split('-')[1];
+			}
 			if (zglobaluseravatarid != '') {
 				/* global avatar - uses a secure post method to 3dnet.walktheweb.com */
 				var zrequest = {
 					'globaluseravatarid':btoa(zglobaluseravatarid),
 					'serverinstanceid':btoa(dGet('wtw_serverinstanceid').value),
+					'instanceid':btoa(zinstanceid),
 					'function':'getglobalavatar'
 				};
 				WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalavatar.php", zrequest, 
@@ -93,10 +98,6 @@ WTWJS.prototype.getSavedAvatar = async function(zavatarname, zglobaluseravatarid
 				);
 			} else {
 				/* Local or Anonymous avatar - uses a get method to current server */
-				var zinstanceid = '';
-				if (zavatarname.indexOf("-") > -1) {
-					zinstanceid = zavatarname.split('-')[1];
-				}
 				WTW.getAsyncJSON("/connect/useravatar.php?avatarid=" + btoa(zavatarid) + "&useravatarid=" + btoa(zuseravatarid) + "&instanceid=" + btoa(zinstanceid), 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
@@ -466,10 +467,17 @@ WTWJS.prototype.loadAvatarAnimations = function(zavatarname, zanimationind, zent
 										/* clean up the old avatar meshes if there were any */
 									} else {
 										/* other users' avatar is done loading */
-										/* clean up the old avatar meshes if there were any */
-										WTW.disposeOldAvatar(zavatarname);
-										/* play enter animation to show avatar */
-										WTW.avatarEnter(zavatarname);
+										var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
+										var zavatarparts = [];
+										if (zavatarscale != null) {
+											zavatarparts = zavatarscale.getChildren();
+										}
+										if (zavatarparts.length == 0) {
+											/* clean up the old avatar meshes if there were any */
+											WTW.disposeOldAvatar(zavatarname);
+											/* play enter animation to show avatar */
+											WTW.avatarEnter(zavatarname);
+										}
 									}
 								}
 							}); 
@@ -502,7 +510,7 @@ WTWJS.prototype.loadAvatarAnimation = function(zavatarname, zuseravataranimation
 		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (zavatar != null) {
 			if (zavatar.WTW.animations != undefined) {
-				for (var i=zavatar.WTW.animations.length; i>-1; i--) {
+				for (var i=zavatar.WTW.animations.length-1; i>-1; i--) {
 					if (zavatar.WTW.animations[i] != null) {
 						/* if animation is already found, stop the animation and remove the frame range */
 						if (zavatar.WTW.animations[i].useravataranimationid == zuseravataranimationid && zanimationevent == "onoption" && zuseravataranimationid != '') {
@@ -881,14 +889,15 @@ WTWJS.prototype.saveAvatarDisplayName = async function() {
 	}
 }
 
-WTWJS.prototype.myAvatarLoadComplete = function(zavatarname) {
+WTWJS.prototype.avatarLoadComplete = function(zavatarname) {
 	/* triggers at the end of the enter animation - no matter which one is used */
 	try {
 		if (zavatarname.indexOf('myavatar-') > -1) {
 			WTW.myAvatar.WTW.loaded = true;
 		}
+		WTW.pluginsAvatarLoadComplete(zavatarname);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_loadavatar.js-myAvatarLoadComplete=" + ex.message);
+		WTW.log("core-scripts-avatars-wtw_loadavatar.js-avatarLoadComplete=" + ex.message);
     }
 }
 

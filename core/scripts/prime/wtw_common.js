@@ -963,7 +963,7 @@ WTWJS.prototype.removeReflectionRefraction = function(zmoldname) {
 		if (WTW.waterMat != null) {
 			var zrenderlist = WTW.waterMat.getRenderList();
 			if (zrenderlist != null) {
-				for (var i=zrenderlist.length;i > 0;i--) {
+				for (var i=zrenderlist.length-1;i > -1;i--) {
 					if (zrenderlist[i] != null) {
 						if (zrenderlist[i].name != undefined) {
 							if (zrenderlist[i].name == zmoldname) {
@@ -1842,7 +1842,7 @@ WTWJS.prototype.disposeDirectionalTexture = function(zmold) {
 WTWJS.prototype.disposeMoldEvent = function(zmoldname) {
 	/* dispose mold animation event */
 	try {
-		for (var i=WTW.moldEvents.length;i>-1;i--) {
+		for (var i=WTW.moldEvents.length-1;i>-1;i--) {
 			if (WTW.moldEvents[i] != null) {
 				if (WTW.moldEvents[i].moldname.indexOf(zmoldname) > -1) {
 					if (typeof window[WTW.moldEvents[i].animationname] == 'function') {
@@ -1879,7 +1879,7 @@ WTWJS.prototype.disposeReflectionFromMold = function(zmoldname) {
 	try {
 		if (WTW.waterMat != null) {
 			if (WTW.waterMat.reflectionTexture != null) {
-				for (var i=WTW.waterMat.reflectionTexture.renderList.length; i > -1 ; i--) {
+				for (var i=WTW.waterMat.reflectionTexture.renderList.length-1; i > -1 ; i--) {
 					if (WTW.waterMat.reflectionTexture.renderList[i] != null) {
 						if (WTW.waterMat.reflectionTexture.renderList[i].name == zmoldname) {
 							WTW.waterMat.reflectionTexture.renderList[i] = null;
@@ -1889,7 +1889,7 @@ WTWJS.prototype.disposeReflectionFromMold = function(zmoldname) {
 				}
 			}
 			if (WTW.waterMat.refractionTexture != null) {
-				for (var i=WTW.waterMat.refractionTexture.renderList.length; i > -1 ; i--) {
+				for (var i=WTW.waterMat.refractionTexture.renderList.length-1; i > -1 ; i--) {
 					if (WTW.waterMat.refractionTexture.renderList[i] != null) {
 						if (WTW.waterMat.refractionTexture.renderList[i].name == zmoldname) {
 							WTW.waterMat.refractionTexture.renderList[i] = null;
@@ -1905,7 +1905,7 @@ WTWJS.prototype.disposeReflectionFromMold = function(zmoldname) {
 					var zwatermat = scene.getMaterialByID(WTW.communitiesMolds[j].moldname + "-watermat");
 					if (zwatermat != null) {
 						if (zwatermat.reflectionTexture != null) {
-							for (var i=zwatermat.reflectionTexture.renderList.length; i > -1 ; i--) {
+							for (var i=zwatermat.reflectionTexture.renderList.length-1; i > -1 ; i--) {
 								if (zwatermat.reflectionTexture.renderList[i] != null) {
 									if (zwatermat.reflectionTexture.renderList[i].name == zmoldname) {
 										zwatermat.reflectionTexture.renderList[i] = null;
@@ -1915,7 +1915,7 @@ WTWJS.prototype.disposeReflectionFromMold = function(zmoldname) {
 							}
 						}
 						if (zwatermat.refractionTexture != null) {
-							for (var i=zwatermat.refractionTexture.renderList.length; i > -1 ; i--) {
+							for (var i=zwatermat.refractionTexture.renderList.length-1; i > -1 ; i--) {
 								if (zwatermat.refractionTexture.renderList[i] != null) {
 									if (zwatermat.refractionTexture.renderList[i].name == zmoldname) {
 										zwatermat.refractionTexture.renderList[i] = null;
@@ -1934,7 +1934,7 @@ WTWJS.prototype.disposeReflectionFromMold = function(zmoldname) {
 					var zwatermat = scene.getMaterialByID(WTW.buildingMolds[j].moldname + "-watermat");
 					if (zwatermat != null) {
 						if (zwatermat.reflectionTexture != null) {
-							for (var i=zwatermat.reflectionTexture.renderList.length; i > -1 ; i--) {
+							for (var i=zwatermat.reflectionTexture.renderList.length-1; i > -1 ; i--) {
 								if (zwatermat.reflectionTexture.renderList[i] != null) {
 									if (zwatermat.reflectionTexture.renderList[i].name == zmoldname) {
 										zwatermat.reflectionTexture.renderList[i] = null;
@@ -1944,7 +1944,7 @@ WTWJS.prototype.disposeReflectionFromMold = function(zmoldname) {
 							}
 						}
 						if (zwatermat.refractionTexture != null) {
-							for (var i=zwatermat.refractionTexture.renderList.length; i > -1 ; i--) {
+							for (var i=zwatermat.refractionTexture.renderList.length-1; i > -1 ; i--) {
 								if (zwatermat.refractionTexture.renderList[i] != null) {
 									if (zwatermat.refractionTexture.renderList[i].name == zmoldname) {
 										zwatermat.refractionTexture.renderList[i] = null;
@@ -1963,7 +1963,7 @@ WTWJS.prototype.disposeReflectionFromMold = function(zmoldname) {
 					var zwatermat = scene.getMaterialByID(WTW.thingMolds[j].moldname + "-watermat");
 					if (zwatermat != null) {
 						if (zwatermat.reflectionTexture != null) {
-							for (var i=zwatermat.reflectionTexture.renderList.length; i > -1 ; i--) {
+							for (var i=zwatermat.reflectionTexture.renderList.length-1; i > -1 ; i--) {
 								if (zwatermat.reflectionTexture.renderList[i] != null) {
 									if (zwatermat.reflectionTexture.renderList[i].name == zmoldname) {
 										zwatermat.reflectionTexture.renderList[i] = null;
@@ -1973,7 +1973,7 @@ WTWJS.prototype.disposeReflectionFromMold = function(zmoldname) {
 							}
 						}
 						if (zwatermat.refractionTexture != null) {
-							for (var i=zwatermat.refractionTexture.renderList.length; i > -1 ; i--) {
+							for (var i=zwatermat.refractionTexture.renderList.length-1; i > -1 ; i--) {
 								if (zwatermat.refractionTexture.renderList[i] != null) {
 									if (zwatermat.refractionTexture.renderList[i].name == zmoldname) {
 										zwatermat.refractionTexture.renderList[i] = null;

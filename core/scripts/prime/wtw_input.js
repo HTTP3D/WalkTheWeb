@@ -344,7 +344,7 @@ WTWJS.prototype.keyPressedReplace = function(replacekeycode, keycode) {
 			if (WTW.canvasFocus == 1 || keycode.indexOf('onoption') > -1) {
 				var zfound = false;
 				if (WTW.keysPressed != null) {
-					for (var i=WTW.keysPressed.length;i > -1;i--) {
+					for (var i=WTW.keysPressed.length-1;i > -1;i--) {
 						if (WTW.keysPressed[i] != null) {
 							if (WTW.keysPressed[i] == replacekeycode) {
 								WTW.keysPressed.splice(i, 1);
@@ -378,7 +378,7 @@ WTWJS.prototype.keyPressedRemove = function(keycode) {
 			}
 			if (WTW.canvasFocus == 1 || zonoption > -1) {
 				if (WTW.keysPressed != null) {
-					for (var i=WTW.keysPressed.length;i > -1;i--) {
+					for (var i=WTW.keysPressed.length-1;i > -1;i--) {
 						if (WTW.keysPressed[i] != null) {
 							if (WTW.keysPressed[i] == keycode) {
 								WTW.keysPressed.splice(i, 1);
@@ -1727,9 +1727,13 @@ WTWJS.prototype.setOpacity = function(zmoldname, zopacity) {
 		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			if (zmold.material != undefined) {
-				zmold.material.alpha = zopacity;
-				if (zmoldname.indexOf('actionzone') == -1) {
+				if (zmoldname.indexOf('person') > -1) {
+					zmold.visibility = zopacity;
+				} else if (zmoldname.indexOf('actionzone') == -1) {
+					zmold.material.alpha = zopacity;
 					zmold.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+				} else {
+					zmold.material.alpha = zopacity;
 				}
 				if (zopacity == 0) {
 					zmold.isVisible = false;				

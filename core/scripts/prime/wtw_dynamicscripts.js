@@ -63,7 +63,7 @@ WTWJS.prototype.unloadJSFile = function(zfilename, zfiletype) {
 		var ztargetelement = (zfiletype == "js") ? "script" : (zfiletype == "css") ? "link" : "none";
 		var ztargetattr = (zfiletype == "js") ? "src" : (zfiletype == "css") ? "href" : "none";
 		var zallsuspects = document.getElementsByTagName(ztargetelement);
-		for (var i = zallsuspects.length; i >= 0; i--) {
+		for (var i = zallsuspects.length-1; i > -1; i--) {
 			if (zallsuspects[i] && zallsuspects[i].getAttribute(ztargetattr) != null && zallsuspects[i].getAttribute(ztargetattr).indexOf(zfilename) != -1) {
 				zallsuspects[i].parentNode.removeChild(zallsuspects[i]);
 			}

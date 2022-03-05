@@ -637,6 +637,8 @@ WTWJS.prototype.newAvatarDef = function() {
 	var zavatarparts = [];
 	var zanimations = [];
 	var zavataranimationdefs = [];
+	var zblockedby = [];
+	var zbannedby = [];
 	try {
 		zavatardef = {
 			'position': {
@@ -711,6 +713,7 @@ WTWJS.prototype.newAvatarDef = function() {
 			'trackid':'',
 			'instanceid':'',
 			'userid':'',
+			'userip':'',
 			'versionid':'',
 			'version':'1.0.0',
 			'versiondesc': 'Initial Version',
@@ -739,7 +742,9 @@ WTWJS.prototype.newAvatarDef = function() {
 			'updated':'',
 			'ridealong':null,
 			'lastupdate':false,
-			'loaded':false
+			'loaded':false,
+			'blockedby':zblockedby,
+			'bannedby':zbannedby
 		};
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAvatarDef=" + ex.message);

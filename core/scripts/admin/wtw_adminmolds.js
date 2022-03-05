@@ -622,7 +622,7 @@ WTWJS.prototype.addPoint = function(zobj) {
 					var znewy = null;
 					var znewz = null;
 					var zmaxind = zmolds[zmoldind].paths.path1.length - 1;
-					for (var i = zmolds[zmoldind].paths.path1.length - 1 ; i >= 0 ; i--) {
+					for (var i = zmolds[zmoldind].paths.path1.length - 1 ; i > -1 ; i--) {
 						if (zmolds[zmoldind].paths.path1[i] != null) {
 							if (i == 0 && zminx == null) {
 								zminx = Number(zmolds[zmoldind].paths.path1[i].x);
