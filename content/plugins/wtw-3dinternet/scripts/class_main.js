@@ -74,17 +74,76 @@ WTW_3DINTERNET.prototype.keyUp = function(zevent) {
 	} 
 }
 
-WTW_3DINTERNET.prototype.avatarConnectMenu = function(ztoinstanceid) {
+WTW_3DINTERNET.prototype.avatarConnectMenu = function(ztoinstanceid, zrefresh) {
 	try {
+		if (zrefresh == undefined) {
+			zrefresh = false;
+		}
+		if (dGet("wtw3dinternet_connect" + ztoinstanceid) != null && zrefresh) {
+			dGet("wtw3dinternet_connect" + ztoinstanceid).parentElement.removeChild(dGet("wtw3dinternet_connect" + ztoinstanceid));
+		}
 		if (dGet("wtw3dinternet_connect" + ztoinstanceid) == null) {
 			var zdisplayname = wtw3dinternet.getAvatarDisplayName(ztoinstanceid);
+			var zbanavatar = WTW.getMeshOrNodeByID("person-" + ztoinstanceid);
+			var zblockedchat = '0';
+			var zbanblockedchat = '0';
+			var zbanneduser = '0';
+			var zbanbanneduser = '0';
+			if (zbanavatar != null) {
+				if (zbanavatar.WTW != undefined) {
+					if (zbanavatar.WTW.blockedby != undefined) {
+						for (var i=0;i<zbanavatar.WTW.blockedby.length;i++) {
+							if (zbanavatar.WTW.blockedby[i] != null) {
+								if (zbanavatar.WTW.blockedby[i].instanceid == dGet('wtw_tinstanceid').value) {
+									zblockedchat = '1';
+								} else if (zbanavatar.WTW.blockedby[i].baninstanceid == dGet('wtw_tinstanceid').value) {
+									zbanblockedchat = '1';
+								}
+							}
+						}
+					}
+					if (zbanavatar.WTW.bannedby != undefined) {
+						for (var i=0;i<zbanavatar.WTW.bannedby.length;i++) {
+							if (zbanavatar.WTW.bannedby[i] != null) {
+								if (zbanavatar.WTW.bannedby[i].instanceid == dGet('wtw_tinstanceid').value) {
+									zbanneduser = '1';
+								} else if (zbanavatar.WTW.bannedby[i].baninstanceid == dGet('wtw_tinstanceid').value) {
+									zbanbanneduser = '1';
+								}
+							}
+						}
+					}
+				}
+			}
 			var zform = "<div id=\"wtw3dinternet_connect" + ztoinstanceid + "\" class='wtw3dinternet-chatboxshadow'>" + 
 					"<img class='wtw-closeright' onclick=\"wtw3dinternet.closeAvatarConnectMenu('" + ztoinstanceid + "');\" src='/content/system/images/menuclosegrey.png' alt='Close' title='Close' onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclosegrey.png';\" />" + 
-					"<div class='wtw3dinternet-chatdisplayname'>" + zdisplayname + "</div><div style=\"clear:both;\"></div>" + 
-					"<div id=\"wtw_startchat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" onclick=\"wtw3dinternet.closeAvatarConnectMenu('" + ztoinstanceid + "');wtw3dinternet.startChat('" + ztoinstanceid + "');\">Private Chat</div>" +
-/*					"<div id=\"wtw_startvoicechat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" 		
-					onclick=\"wtw3dinternet.closeAvatarConnectMenu('" + ztoinstanceid + "');wtw3dinternet.startVoiceChat('" + ztoinstanceid + "');\">Private Voice Chat</div>" + */
-				"</div>";
+					"<div class='wtw3dinternet-chatdisplayname'>" + zdisplayname + "</div><div style=\"clear:both;\"></div>"; 
+			if (zblockedchat == '0' && zbanneduser == '0' && zbanblockedchat == '0' && zbanbanneduser == '0') {
+				zform += "<div id=\"wtw_startchat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" onclick=\"wtw3dinternet.closeAvatarConnectMenu('" + ztoinstanceid + "');wtw3dinternet.startChat('" + ztoinstanceid + "');\">Private Chat</div>";
+			} else if (zbanneduser == '1' || zbanbanneduser == '1') {
+				zform += "<div id=\"wtw_startchat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\">Private Chat Banned</div>";
+			} else if (zblockedchat == '1' || zbanblockedchat == '1') {
+				zform += "<div id=\"wtw_startchat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\">Private Chat Blocked</div>";
+			}
+/*			zform += "<div id=\"wtw_startvoicechat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" 		
+			onclick=\"wtw3dinternet.closeAvatarConnectMenu('" + ztoinstanceid + "');wtw3dinternet.startVoiceChat('" + ztoinstanceid + "');\">Private Voice Chat</div>"; */
+			if (zbanneduser == '0' && zbanbanneduser == '0') {
+				if (zbanblockedchat == '1' && zblockedchat == '0') {
+					zform += "<div id=\"wtw_blockchat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" onclick=\"wtw3dinternet.blockChat('" + ztoinstanceid + "');\">" + zdisplayname + " Blocked Chat</div>";
+				} else if (zblockedchat == '1') {
+					zform += "<div id=\"wtw_blockchat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" onclick=\"wtw3dinternet.blockChat('" + ztoinstanceid + "');\">Unblock Chat</div>";
+				} else {
+					zform += "<div id=\"wtw_blockchat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" onclick=\"wtw3dinternet.blockChat('" + ztoinstanceid + "');\">Block Chat</div>";
+				}
+			}
+			if (zbanbanneduser == '1' && zbanneduser == '0') {
+				zform += "<div id=\"wtw_blockchat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" onclick=\"wtw3dinternet.banUserInstance('" + ztoinstanceid + "');\">" + zdisplayname + " Banned You</div>";
+			} else if (zbanneduser == '1') {
+				zform += "<div id=\"wtw_blockchat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" onclick=\"wtw3dinternet.banUserInstance('" + ztoinstanceid + "');\">Unban User</div>";
+			} else {
+				zform += "<div id=\"wtw_blockchat" + ztoinstanceid + "\" class=\"wtw3dinternet-button\" onclick=\"wtw3dinternet.banUserInstance('" + ztoinstanceid + "');\">Ban User</div>";
+			}
+			zform += "</div>";
 			dGet('wtw_startconnect').innerHTML += zform;
 		}
 		WTW.show('wtw_startconnect');
@@ -875,3 +934,50 @@ WTW_3DINTERNET.prototype.getAvatarDisplayName = function(zinstanceid) {
 	return zdisplayname;
 }
 
+WTW_3DINTERNET.prototype.blockedAvatar = function(zbaninstanceid, zblockchat, zbanuser) {
+	/* block or unblock Avatar with a user instance */
+	try {
+		var zbanavatarscale = WTW.getMeshOrNodeByID('person-' + zbaninstanceid + '-scale');
+		if (zbanavatarscale != null) {
+			zopacity = 1;
+			if (zbanuser == '1') {
+				zopacity = 0;
+			} else if (zblockchat == '1') {
+				zopacity = .5;
+			}
+			var zbanavatarparts = [];
+			zbanavatarparts = zbanavatarscale.getChildren();
+			for (var i=0; i < zbanavatarparts.length; i++) {
+				if (zbanavatarparts[i] != null) {
+					WTW.setOpacity(zbanavatarparts[i].id, zopacity);
+				}
+			}
+		}
+		wtw3dinternet.showAvatarIDs('person-' + zbaninstanceid);
+	} catch (ex) {
+		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-blockedAvatar=" + ex.message);
+	}
+}
+
+WTW_3DINTERNET.prototype.avatarLoadComplete = function(zavatarname) {
+	/* check avatar for block or ban after avatar enters */
+	try {
+		var zinstanceid = '';
+		var zblockchat = '0';
+		var zbanuser = '0';
+		if (zavatarname.indexOf('person-') > -1) {
+			zinstanceid = zavatarname.split('-')[1];
+
+			if (wtw3dinternet.isBlocked(zinstanceid)) {
+				zblockchat = '1';
+			}
+			if (wtw3dinternet.isBanned(zinstanceid)) {
+				zbanuser = '1';
+			}
+			
+			wtw3dinternet.blockedAvatar(zinstanceid, zblockchat, zbanuser);
+		}
+	} catch (ex) {
+		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-avatarLoadComplete=" + ex.message);
+	}
+}

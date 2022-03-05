@@ -33,7 +33,7 @@ try {
 	$zwalkanimationspeed = $wtwconnect->decode64($wtwconnect->getVal('v','1'));
 	$zturnspeed = $wtwconnect->decode64($wtwconnect->getVal('t','1'));
 	$zturnanimationspeed = $wtwconnect->decode64($wtwconnect->getVal('r','1'));
-	$zip = $wtwconnect->decode64($wtwconnect->getVal('a',''));
+	$zuserip = $wtwconnect->decode64($wtwconnect->getVal('a',''));
 	$zserverinstanceid = $wtwconnect->decode64($wtwconnect->getVal('si',''));
 	$zusertoken = $wtwconnect->getVal('at','');
 	$zrefresh = $wtwconnect->getVal('refresh','');
@@ -123,7 +123,7 @@ try {
 		$wtwconnect->query("
 			update ".WTW_3DINTERNET_PREFIX."useravatars
 			set  userid='".$zuserid."',
-				 userip='".$zip."',
+				 userip='".$zuserip."',
 				 globaluseravatarid='".$zglobaluseravatarid."',
 				 avatarid='".$zavatarid."',
 				 objectfolder='".$zobjectfolder."',
@@ -149,7 +149,7 @@ try {
 				 walkanimationspeed=".$zwalkanimationspeed.",
 				 turnspeed=".$zturnspeed.",
 				 turnanimationspeed=".$zturnanimationspeed.",
-				 lastip='".$zip."',
+				 lastip='".$zuserip."',
 				 lastdate=now(),
 				 updatedate=now(),
 				 updateuserid='".$wtwconnect->userid."',
@@ -203,7 +203,7 @@ try {
 				 '".$zuseravatarid."',
 				 '".$zglobaluseravatarid."',
 				 '".$zuserid."',
-				 '".$zip."',
+				 '".$zuserip."',
 				 '".$zavatarid."',
 				 '".$zobjectfolder."',
 				 '".$zobjectfile."',
@@ -228,7 +228,7 @@ try {
 				 ".$zwalkanimationspeed.",
 				 ".$zturnspeed.",
 				 ".$zturnanimationspeed.",
-				 '".$zip."',
+				 '".$zuserip."',
 				 now(),
 				 now(),
 				 '".$wtwconnect->userid."',
@@ -243,7 +243,7 @@ try {
 	if(ini_get('allow_url_fopen') ) {
 		if (!isset($zglobaluseravatarid) || empty($zglobaluseravatarid)) {
 			/* get local avatar */
-			$avatarurl = $wtwconnect->domainurl."/connect/useravatar.php?useravatarid=".base64_encode($zuseravatarid)."&instanceid=".base64_encode($zinstanceid)."&userid=".base64_encode($zuserid)."&userip=".base64_encode($zip);
+			$avatarurl = $wtwconnect->domainurl."/connect/useravatar.php?useravatarid=".base64_encode($zuseravatarid)."&instanceid=".base64_encode($zinstanceid)."&userid=".base64_encode($zuserid)."&userip=".base64_encode($zuserip);
 			$zavatardata = file_get_contents($avatarurl);
 		} else {
 			/* get global avatar */

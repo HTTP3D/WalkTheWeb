@@ -23,11 +23,11 @@ class wtw3dinternet {
 		}
 	}	
 	
-	public $version = "1.0.0";
+	public $version = "1.0.1";
 
-	public $dbversion = "1.0.5";
+	public $dbversion = "1.0.6";
 
-	public $versiondate = "2020-10-30";
+	public $versiondate = "2022-2-28";
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -128,7 +128,7 @@ class wtw3dinternet {
 			
 			$wtwplugins->addScriptFunction("savedavatarretrieved", "wtw3dinternet.savedAvatarRetrieved(zavatarname, zsendrefresh);");
 
-			$wtwplugins->addScriptFunction("avatarbeforecreate", "wtw3dinternet.showAvatarIDs(zavatarname, zavatardef);");
+			$wtwplugins->addScriptFunction("avatarbeforecreate", "wtw3dinternet.showAvatarIDs(zavatarname);");
 			$wtwplugins->addScriptFunction("checkactionzonetrigger", "wtw3dinternet.multiPersonInActionZone(zactionzone);");
 
 			$wtwplugins->addScriptFunction("enteractionzone", "wtw3dinternet.enterLoadZone(zmoldname, zmolddef);");
@@ -151,6 +151,8 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("checkhovers", "wtw3dinternet.checkHovers(zmoldname, zshape);");
 			$wtwplugins->addScriptFunction("resethovers", "wtw3dinternet.resetHovers(zmoldname, zshape);");
 			$wtwplugins->addScriptFunction("keyup", "wtw3dinternet.keyUp(zevent);");
+
+			$wtwplugins->addScriptFunction("avatarloadcomplete", "wtw3dinternet.avatarLoadComplete(zavatarname);");
 
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-3dinternet:functions-class_plugin.php.php-initHooks=".$e->getMessage());
@@ -266,10 +268,10 @@ class wtw3dinternet {
 				if ($dbversion != $this->dbversion) {
 					$wtwplugins->deltaCreateTable("
 						CREATE TABLE `".WTW_3DINTERNET_PREFIX."useravatars` (
+						  `useravatarid` varchar(16) NOT NULL,
 						  `globaluseravatarid` varchar(32) DEFAULT '',
-						  `useravatarid` varchar(45) NOT NULL,
 						  `userid` varchar(16) DEFAULT '',
-						  `userip` varchar(64) DEFAULT '',
+						  `userip` varchar(15) DEFAULT '',
 						  `instanceid` varchar(24) DEFAULT '',
 						  `avatarid` varchar(16) DEFAULT '',
 						  `versionid` varchar(16) DEFAULT '',
@@ -371,6 +373,31 @@ class wtw3dinternet {
 						  PRIMARY KEY (`useravataranimationid`),
 						  UNIQUE KEY `".WTW_3DINTERNET_PREFIX."useravataranimationid_UNIQUE` (`useravataranimationid`),
 						  KEY `".WTW_3DINTERNET_PREFIX."idx_useravataranimations` (`avataranimationid`,`useravatarid`,`animationevent`)
+						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+					");
+					$wtwplugins->deltaCreateTable("
+						CREATE TABLE `".WTW_3DINTERNET_PREFIX."blockedinstances` (
+						  `blockedinstanceid` varchar(16) NOT NULL,
+						  `instanceid` varchar(24) DEFAULT '',
+						  `userid` varchar(16) DEFAULT '',
+						  `baninstanceid` varchar(24) DEFAULT '',
+						  `banuserid` varchar(16) DEFAULT '',
+						  `banuserip` varchar(15) DEFAULT '',
+						  `banuseravatarid` varchar(16) DEFAULT '',
+						  `banglobalavatarid` varchar(32) DEFAULT '',
+						  `blockchat` int DEFAULT '0',
+						  `banuser` int DEFAULT '0',
+						  `createdate` datetime DEFAULT NULL,
+						  `createuserid` varchar(16) DEFAULT '',
+						  `updatedate` datetime DEFAULT NULL,
+						  `updateuserid` varchar(16) DEFAULT '',
+						  `deleteddate` datetime DEFAULT NULL,
+						  `deleteduserid` varchar(16) DEFAULT '',
+						  `deleted` int DEFAULT '0',
+						  PRIMARY KEY (`blockedinstanceid`),
+						  UNIQUE KEY `".WTW_3DINTERNET_PREFIX."blockedinstanceid_UNIQUE` (`blockedinstanceid`),
+						  KEY `".WTW_3DINTERNET_PREFIX."idx_blockedinstances` 
+						  (`blockedinstanceid`,`instanceid`,`userid`)
 						) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 					");
 					

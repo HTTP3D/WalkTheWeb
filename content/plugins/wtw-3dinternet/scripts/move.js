@@ -462,7 +462,7 @@ WTW_3DINTERNET.prototype.addParticipantsMessage = function(zdata) {
 
 WTW_3DINTERNET.prototype.removeAvatar = function(zavatarname) {
 	try {
-		for (var i=wtw3dinternet.avatars.length;i>0;i--) {
+		for (var i=wtw3dinternet.avatars.length-1; i>-1; i--) {
 			if (wtw3dinternet.avatars[i] != null) {
 				if (wtw3dinternet.avatars[i].instanceid != undefined) {
 					if (wtw3dinternet.avatars[i].instanceid == zavatarname.replace("person-","")) {
@@ -746,38 +746,53 @@ WTW_3DINTERNET.prototype.toggleAvatarIDs = function() {
     }
 }
 
-WTW_3DINTERNET.prototype.showAvatarIDs = function(zavatarname, zavatardef) {
+WTW_3DINTERNET.prototype.showAvatarIDs = function(zavatarname) {
 	try {
-		var zdisplayname = 'Anonymous';
-		if (zavatardef.displayname != undefined) {
-			zdisplayname = zavatardef.displayname;
-		}
-		try {
-			zdisplayname = atob(zdisplayname);
-		} catch (ex) {}
-		if (zdisplayname != '' && zavatarname.indexOf('person-') > -1) {
-			var zavatar = WTW.getMeshOrNodeByID(zavatarname);
-			var zmolddef = WTW.newMold();
-			zmolddef.webtext.webtext = zdisplayname;
-			zmolddef.webtext.webstyle = JSON.stringify({
-				"anchor":"center",
-				"letter-height":1.00,
-				"letter-thickness":.10,
-				"color":"#0000ff",
-				"alpha":1.00,
-				"colors":{
-					"diffuse":"#f0f0f0",
-					"specular":"#000000",
-					"ambient":"#808080",
-					"emissive":"#0000ff"
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
+		if (zavatar != null) {
+			var zdisplayname = 'Anonymous';
+			var zinstanceid = '';
+			if (zavatar.WTW != undefined) {
+				if (zavatar.WTW.displayname != undefined) {
+					zdisplayname = zavatar.WTW.displayname;
 				}
-			});
-			var znamemold = WTW.addMold3DText(zavatarname + '-nameplate', zmolddef, 1, 1, 1);
-			znamemold.parent = zavatar;
-			znamemold.position.y = 16;
-			znamemold.billboardMode = 2;
-			if (wtw3dinternet.AvatarIDs == 0) {
-				znamemold.isVisible = false;
+				if (zavatar.WTW.instanceid != undefined) {
+					zinstanceid = zavatar.WTW.instanceid;
+				}
+			}
+			try {
+				zdisplayname = atob(zdisplayname);
+			} catch (ex) {}
+			if (zdisplayname != '' && zavatarname.indexOf('person-') > -1) {
+				WTW.disposeClean(zavatarname + '-nameplate');
+				var zmolddef = WTW.newMold();
+				var zalpha = 1;
+				if (wtw3dinternet.isBanned(zinstanceid)) {
+					zalpha = .01;
+				} else if (wtw3dinternet.isBlocked(zinstanceid)) {
+					zalpha = .5;
+				}
+				zmolddef.webtext.webtext = zdisplayname;
+				zmolddef.webtext.webstyle = JSON.stringify({
+					"anchor":"center",
+					"letter-height":1.00,
+					"letter-thickness":.10,
+					"color":"#0000ff",
+					"alpha":zalpha,
+					"colors":{
+						"diffuse":"#f0f0f0",
+						"specular":"#000000",
+						"ambient":"#808080",
+						"emissive":"#0000ff"
+					}
+				});
+				var znamemold = WTW.addMold3DText(zavatarname + '-nameplate', zmolddef, 1, 1, 1);
+				znamemold.parent = zavatar;
+				znamemold.position.y = 16;
+				znamemold.billboardMode = 2;
+				if (wtw3dinternet.AvatarIDs == 0) {
+					znamemold.isVisible = false;
+				}
 			}
 		}
     } catch (ex) {
@@ -1010,7 +1025,7 @@ WTW_3DINTERNET.prototype.addLoadZone = function(zactionzoneid, zcommunityid, zbu
 WTW_3DINTERNET.prototype.removeLoadZone = function(zactionzoneid, zcommunityid, zbuildingid, zthingid) {
 	try {
 		/* remove the load zone from the array of conencting grid offsets */
-		for (var i = wtw3dinternet.loadZones.length; i > 0; i--) {
+		for (var i = wtw3dinternet.loadZones.length-1; i > -1; i--) {
 			if (wtw3dinternet.loadZones[i] != null) {
 				if (wtw3dinternet.loadZones[i].actionzoneid == zactionzoneid && wtw3dinternet.loadZones[i].communityid == zcommunityid && wtw3dinternet.loadZones[i].buildingid == zbuildingid && wtw3dinternet.loadZones[i].thingid == zthingid) {
 					wtw3dinternet.loadZones.splice(i,1);
@@ -1020,4 +1035,127 @@ WTW_3DINTERNET.prototype.removeLoadZone = function(zactionzoneid, zcommunityid, 
 	} catch (ex) {
 		WTW.log("plugins:wtw-3dinternet:scripts-move.js-removeLoadZone=" + ex.message);
 	} 
+}
+
+WTW_3DINTERNET.prototype.banUserInstance = function(zbaninstanceid) {
+	/* ban an instance of a user */
+	try {
+		var zbanavatar = WTW.getMeshOrNodeByID("person-" + zbaninstanceid);
+		if (zbanavatar != null) {
+			var zbanuserid = '';
+			var zbanuserip = '';
+			var zbanuseravatarid = '';
+			var zbanglobalavatarid = '';
+			var zblockchat = '1';
+			var zbanuser = '1';
+			var zfoundblockedchat = false;
+			if (zbanavatar.WTW != undefined) {
+				if (zbanavatar.WTW.userid != undefined) {
+					zbanuserid = zbanavatar.WTW.userid;
+				}
+				if (zbanavatar.WTW.userip != undefined) {
+					zbanuserip = zbanavatar.WTW.userip;
+				}
+				if (zbanavatar.WTW.useravatarid != undefined) {
+					zbanuseravatarid = zbanavatar.WTW.useravatarid;
+				}
+				if (zbanavatar.WTW.globaluseravatarid != undefined) {
+					zbanglobalavatarid = zbanavatar.WTW.globaluseravatarid;
+				}
+				if (zbanavatar.WTW.bannedby != undefined) {
+					for (var i=zbanavatar.WTW.bannedby.length-1;i>-1;i--) {
+						if (zbanavatar.WTW.bannedby[i] != null) {
+							if (zbanavatar.WTW.bannedby[i].instanceid == dGet('wtw_tinstanceid').value) {
+								/* was already banned - so unban */
+								zbanuser = '0';
+								zblockchat = '0';
+								zbanavatar.WTW.bannedby.splice(i,1);
+							}
+						}
+					}
+				}
+				if (zbanavatar.WTW.blockedby != undefined) {
+					for (var i=zbanavatar.WTW.blockedby.length-1;i>-1;i--) {
+						if (zbanavatar.WTW.blockedby[i] != null) {
+							if (zbanavatar.WTW.blockedby[i].instanceid == dGet('wtw_tinstanceid').value) {
+								/* was already blocked */
+								if (zbanuser == '0') {
+									/* unban so unblock chat */
+									zbanavatar.WTW.blockedby.splice(i,1);
+								} else {
+									zfoundblockedchat = true;
+								}
+							}
+						}
+					}
+				}
+				if (zbanuser == '1') {
+					if (zbanavatar.WTW.bannedby != undefined) {
+						zbanavatar.WTW.bannedby[zbanavatar.WTW.bannedby.length] = {
+							'instanceid': dGet('wtw_tinstanceid').value,
+							'baninstanceid': zbaninstanceid
+						};
+					} else {
+						zbanavatar.WTW.bannedby[0] = {
+							'instanceid': dGet('wtw_tinstanceid').value,
+							'baninstanceid': zbaninstanceid
+						};
+					}
+				}
+				if (zblockchat == '1' && zfoundblockedchat == false) {
+					if (zbanavatar.WTW.blockedby != undefined) {
+						zbanavatar.WTW.blockedby[zbanavatar.WTW.blockedby.length] = {
+							'instanceid': dGet('wtw_tinstanceid').value,
+							'baninstanceid': zbaninstanceid
+						};
+					} else {
+						zbanavatar.WTW.blockedby[0] = {
+							'instanceid': dGet('wtw_tinstanceid').value,
+							'baninstanceid': zbaninstanceid
+						};
+					}
+				}
+			}
+			wtw3dinternet.showAvatarIDs('person-' + zbaninstanceid);
+			/* pass block and ban change to other user through multiplayer */
+			var zchatid = WTW.getRandomString(20);
+			wtw3dinternet.sendMessage('ban', zchatid, zbaninstanceid, 'block or ban user', '', zblockchat, zbanuser);
+			/* save block or ban to database */
+			var zrequest = {
+				'serverinstanceid':dGet('wtw_serverinstanceid').value,
+				'instanceid':dGet('wtw_tinstanceid').value,
+				'userid':dGet('wtw_tuserid').value,
+				'baninstanceid':zbaninstanceid,
+				'banuserid':zbanuserid,
+				'banuserip':zbanuserip,
+				'banuseravatarid':zbanuseravatarid,
+				'banglobalavatarid':zbanglobalavatarid,
+				'blockchat':zblockchat,
+				'banuser':zbanuser,
+				'function':'saveban'
+			};
+			WTW.postAsyncJSON("/core/handlers/wtw-3dinternet-saveban.php", zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					if (zresponse.serror != '') {
+						WTW.log("plugins:wtw-3dinternet:scripts-chat.js-blockChat=" + zresponse.serror);
+					}
+					wtw3dinternet.avatarConnectMenu(zbaninstanceid, true);
+					wtw3dinternet.blockedAvatar(zbaninstanceid, zblockchat, zbanuser);
+				}
+			);
+			/* report to WalkTheWeb to assist in predicting bans globally */
+			WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/wtwsaveban.php", zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					wtw3dinternet.avatarConnectMenu(zbaninstanceid, true);
+					wtw3dinternet.blockedAvatar(zbaninstanceid, zblockchat, zbanuser);
+				}
+			);
+		}		
+	} catch (ex) {
+		WTW.log("core-scripts-hud-wtw_hud_fields.js-banUserInstance=" + ex.message);
+	}
 }
