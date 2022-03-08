@@ -25,6 +25,10 @@ class wtw {
 	public $dbversion = "1.1.22";
 	public $versiondate = "2022-2-28";
 	public $serverinstanceid = "";
+	public $globaluserid = "";
+	public $userid = "";
+	public $userip = "";
+	public $adminemail = "";
 	public $usertoken = "";
 	public $rootpath = "";
 	public $contentpath = "";
@@ -35,9 +39,6 @@ class wtw {
 	public $websiteurl = "";
 	public $serverip = '';
 	public $pagename = "";
-	public $userid = "";
-	public $globaluserid = "";
-	public $userip = "";
 	public $uri = "";
 	public $community = "";
 	public $building = "";
@@ -762,6 +763,12 @@ class wtw {
 					if ($zsetupstep == 0) {
 						$zsetupstep = 7;
 					}
+				} else {
+					/* check for settings optional services offered - once */
+					$zoptservices = $wtwdb->getSetting("OptionalServicesOffered");
+					if (empty($zoptservices)) {
+						$zsetupstep = 8;
+					}
 				}
 			} 
 
@@ -769,46 +776,52 @@ class wtw {
 			if (defined("wtw_defaultlanguage")) {
 				$this->defaultlanguage = wtw_defaultlanguage;
 			}
+			if (defined("wtw_adminemail")) {
+				$this->adminemail = wtw_adminemail;
+			}
 			$this->loadTranslationArray();
+
 			/* setup process steps - display webpages */
 			switch ($zsetupstep) {
 				case 1: /* Need to set up Database Login */
 					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
-					echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_install.css\" /></head>";
-					echo "<body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
-					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:400px;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;'>";
-					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
-					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Database Setup</h3>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Server:</b></div>";
-					echo "<input name='wtw_dbserver' type='text' value='127.0.0.1:3306' size='20' maxlength='255' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Database Name:</b></div>";
-					echo "<input name='wtw_dbname' type='text' value='' size='20' maxlength='255' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Database User:</b></div>";
-					echo "<input name='wtw_dbusername' type='text' value='' size='20' maxlength='255' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Database Password:</b></div>";
-					echo "<input name='wtw_dbpassword' type='password' value='' size='20' maxlength='64' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Table Prefix:</b></div>";
-					echo "<input name='wtw_tableprefix' type='text' value='wtw_' size='20' maxlength='24' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
-					echo "<div class=\"wtw-icenter\"><input name='wtw_bsave' type='submit' value='Save' style='font-size:1.4em;width:120px;border-radius:10px;' /></div>";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
+					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' /></head>";
+					echo "<body class='wtw-body'><form id='wtw_form1' action='' method='post'>";
+					echo "<div class='wtw-fullwidth'><br /><div class='wtw-narrowpage'>";
+					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
+					
+					echo "<h2 class='wtw-login'>Database Setup</h2>";
+					echo "<div class='wtw-label'><b>Server:</b></div>";
+					echo "<input name='wtw_dbserver' type='text' value='127.0.0.1:3306' size='20' maxlength='255' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
+					echo "<div class='wtw-label'><b>Database Name:</b></div>";
+					echo "<input name='wtw_dbname' type='text' value='' size='20' maxlength='255' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
+					echo "<div class='wtw-label'><b>Database User:</b></div>";
+					echo "<input name='wtw_dbusername' type='text' value='' size='20' maxlength='255' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
+					echo "<div class='wtw-label'><b>Database Password:</b></div>";
+					echo "<input name='wtw_dbpassword' type='password' value='' size='20' maxlength='64' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
+					echo "<div class='wtw-label'><b>Table Prefix:</b></div>";
+					echo "<input name='wtw_tableprefix' type='text' value='wtw_' size='20' maxlength='24' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
+					echo "<div class='wtw-icenter'><input name='wtw_bsave' class='wtw-button' type='submit' value='Save and Continue' /></div>";
+					echo "<div class='wtw-clearspace'></div>";
 					echo "</div><br /></div><br /></form></body></html>";
 					die;
 					break;
 				case 2: /* error in connection to database */
 					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
-					echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_install.css\" /></head>";
-					echo "<body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
-					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:400px;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;'>";
-					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
-					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Database Connection Error</h3>";
-					echo "<div style='margin-left:10px;'><b>Edit your config file:</b><br /><br /><div style='margin-left:10px;'>";
+					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' /></head>";
+					echo "<body class='wtw-body'><form id='wtw_form1' action='' method='post'>";
+					echo "<div class='wtw-fullwidth'><br /><div class='wtw-narrowpage'>";
+					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
+					
+					echo "<h2 class='wtw-login'>Database Connection Error</h2>";
+					echo "<div class='wtw-lightblock'><b>Edit your config file:</b><br /><br /><div class='wtw-indent'>";
 					echo "/config/wtw_config.php<br /><br /><br /></div>";
-					echo "<b>Confirm the following lines exist:</b><br /><br /><div style='margin-left:10px;'>";
+					echo "<b>Confirm the following lines exist:</b><br /><br /><div class='wtw-indent'>";
 					echo "define(\"wtw_dbserver\", \"YourServer\");<br />";
 					echo "define(\"wtw_dbname\", \"YourDatabase\");<br />";
 					echo "define(\"wtw_dbusername\", \"YourDbUser\");<br />";
@@ -816,101 +829,104 @@ class wtw {
 					echo "define(\"wtw_tableprefix\", \"YourTablePrefix\");<br /><br />";
 					echo "define(\"wtw_contentpath\", \"YourContentPath\");<br />";
 					echo "define(\"wtw_contenturl\", \"YourContentUrl\");<br /><br /><br />";
-					echo "</div></div><div class=\"wtw-icenter\"><input name='wtw_bsave' type='submit' value='Retry' style='font-size:1.4em;width:120px;border-radius:10px;' /></div>";
+					echo "</div></div><div class='wtw-icenter'><input name='wtw_bsave' type='submit' value='Retry'  class='wtw-button' /></div>";
 					echo "<br /></div><br /></div><br /></form></body></html>";
 					die;
 					break;
 				case 3: /* new install - empty database */
 					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
-					echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_install.css\" /></head>";
-					echo "<body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'><div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:400px;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;'>";
-					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
+					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' /></head>";
+					echo "<body class='wtw-body'><form id='wtw_form1' action='' method='post'><div class='wtw-fullwidth'><br /><div class='wtw-narrowpage'>";
+					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
 
-					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Admin Account</h3>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Email:</b></div>";
-					echo "<input name='wtw_tadminemail' type='text' value='' size='20' maxlength='255' autocomplete='email' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Password:</b></div>";
-					echo "<input name='wtw_tadminpassword' type='password' value='' size='20' maxlength='24' autocomplete='new-password' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Confirm Password:</b></div>";
-					echo "<input name='wtw_tadminpassword2' type='password' value='' size='20' maxlength='24' autocomplete='new-password' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Display Name:</b></div>";
-					echo "<input name='wtw_tadmindisplayname' type='text' value='' size='20' maxlength='255' autocomplete='nickname' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
+					echo "<h2 class='wtw-login'>Admin Account</h2>";
+					echo "<div class='wtw-label'><b>Admin Email:</b></div>";
+					echo "<input name='wtw_tadminemail' type='text' value='' size='20' maxlength='255' autocomplete='email' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
+					echo "<div class='wtw-label'><b>Admin Password:</b></div>";
+					echo "<input name='wtw_tadminpassword' type='password' value='' size='20' maxlength='24' autocomplete='new-password' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
+					echo "<div class='wtw-label'><b>Confirm Password:</b></div>";
+					echo "<input name='wtw_tadminpassword2' type='password' value='' size='20' maxlength='24' autocomplete='new-password' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
+					echo "<div class='wtw-label'><b>Admin Display Name:</b></div>";
+					echo "<input name='wtw_tadmindisplayname' type='text' value='' size='20' maxlength='255' autocomplete='nickname' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
 
-					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Site Settings</h3>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Site Name:</b></div>";
-					echo "<input name='wtw_tsitename' type='text' value='My 3D Website' size='20' maxlength='255' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Google Analytics (Optional):</b></div>";
-					echo "<input name='wtw_googleanalytics' type='text' value='' size='20' maxlength='24' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
+					echo "<h2 class='wtw-login'>Site Settings</h2>";
+					echo "<div class='wtw-label'><b>Site Name:</b></div>";
+					echo "<input name='wtw_tsitename' type='text' value='My 3D Website' size='20' maxlength='255' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
+					echo "<div class='wtw-label'><b>Google Analytics (Optional):</b></div>";
+					echo "<input name='wtw_googleanalytics' type='text' value='' size='20' maxlength='24' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
 					
-					echo "<div class=\"wtw-icenter\"><input name='wtw_bsave' type='submit' value='Save' style='font-size:1.4em;width:120px;border-radius:10px;' /></div>";
+					echo "<div class='wtw-icenter'><input name='wtw_bsave' type='submit' value='Save and Continue' class='wtw-button' /></div>";
 					echo "<br /></div><br /></div><br /></form></body></html>";
 					die;
 					break;
 				case 4: /* found another install - confirm add new tables */
 					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
-					echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_install.css\" />";
-					echo "<script src=\"/core/scripts/prime/wtw_install.js\"></script></head>";
-					echo "<body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
-					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:400px;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;'>";
-					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
-					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Found Another Install</h3>";
-					echo "<div style='margin-left:10px;'><b>Edit your config file:</b><br /><br /><div style='margin-left:10px;'>";
+					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' />";
+					echo "<script src='/core/scripts/prime/wtw_install.js'></script></head>";
+					echo "<body class='wtw-body'><form id='wtw_form1' action='' method='post'>";
+					echo "<div class='wtw-fullwidth'><br /><div class='wtw-narrowpage'>";
+					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
+
+					echo "<h2 class='wtw-login'>Found Another Install</h2>";
+					echo "<div class='wtw-lightblock'><b>Edit your config file:</b><br /><br /><div class='wtw-indent'>";
 					echo "/config/wtw_config.php<br /><br /><br /></div>";
-					echo "<b>Confirm the following line:</b><br /><br /><div style='margin-left:10px;'>";
+					echo "<b>Confirm the following line:</b><br /><br /><div class='wtw-indent'>";
 					echo "define(\"wtw_tableprefix\", \"YourTablePrefix\");<br /><br /><br />";
-					echo "<b>OR</b><br /><span style='color:red;font-weight:bold;'>CONFIRM you wish to add new tables to this database.</span><br /><br /><br />";
+					echo "<b>OR</b><br /><br /><span class='wtw-error'>CONFIRM you wish to add new tables to this database.</span><br /><br /><br />";
 					echo "<input id='wtw_tconfirm' name='wtw_tconfirm' type='hidden' value='' />";
-					echo "</div></div><div class=\"wtw-icenter\"><input name='wtw_bconfirmsubmit' type='submit' value='Confirm' style='font-size:1.4em;width:120px;border-radius:10px;' onclick=\"dGet('wtw_tconfirm').value='YES';\" /></div>";
+					echo "</div></div><div class='wtw-icenter'><input name='wtw_bconfirmsubmit' type='submit' value='Confirm and Continue'  class='wtw-button' onclick=\"dGet('wtw_tconfirm').value='YES';\" /></div>";
 					echo "<br /></div><br /></div><br /></form></body></html>";
 					die;
 					break;
 				case 5: /* user not logged in - Admin login screen */
 					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
-					echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_install.css\" /></head>";
-					echo "<body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
-					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:400px;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;'>";
-					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
+					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' /></head>";
+					echo "<body class='wtw-body'><form id='wtw_form1' action='' method='post'>";
+					echo "<div class='wtw-fullwidth'><br /><div class='wtw-narrowpage'>";
+					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
 
-					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Admin Login</h3>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Email:</b></div>";
-					echo "<input name='wtw_tadminemail' type='text' value='' size='20' maxlength='255' autocomplete='email' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
-					echo "<div style='float:left;width:170px;margin-left:10px;margin-right:10px;'><b>Admin Password:</b></div>";
-					echo "<input name='wtw_tadminpassword' type='password' value='' size='20' maxlength='24' autocomplete='current-password' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
+					echo "<h2 class='wtw-login'>Admin Login</h2>";
+					echo "<div class='wtw-label'><b>Admin Email:</b></div>";
+					echo "<input name='wtw_tadminemail' type='text' value='' size='20' maxlength='255' autocomplete='email' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
+					echo "<div class='wtw-label'><b>Admin Password:</b></div>";
+					echo "<input name='wtw_tadminpassword' type='password' value='' size='20' maxlength='24' autocomplete='current-password' class='wtw-textbox' />";
+					echo "<div class='wtw-clearspace'></div>";
 
-					echo "<div class=\"wtw-icenter\"><input name='wtw_blogin' type='submit' value='Login' style='font-size:1.4em;width:120px;border-radius:10px;' /></div>";
+					echo "<div class='wtw-icenter'><input name='wtw_blogin' type='submit' value='Login'  class='wtw-button' /></div>";
 					echo "<br /></div><br /></div><br /></form></body></html>";
 					die;					
 					break;
 				case 6: /* select Your 3D Community */
 					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
-					echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_install.css\" />";
+					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' />";
 					echo "<script>var wtw_domainname = '".$this->domainname."';</script>";
-					echo "<script src=\"/core/scripts/prime/wtw_install.js\"></script>";
-					echo "<script src=\"/core/scripts/prime/wtw_downloads.js\"></script>";
-					echo "</head><body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
-					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:90%;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;text-align:center;'>";
-					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
-					echo "<input type=\"hidden\" id=\"wtw_serverinstanceid\" value=\"".$this->serverinstanceid."\" />";
+					echo "<script src='/core/scripts/prime/wtw_install.js'></script>";
+					echo "<script src='/core/scripts/prime/wtw_downloads.js'></script>";
+					echo "</head><body class='wtw-body'><form id='wtw_form1' action='' method='post'>";
+					echo "<div class='wtw-fullwidth'><br /><div class='wtw-widepage'>";
+					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
+					echo "<input type='hidden' id='wtw_serverinstanceid' value='".$this->serverinstanceid."' />";
 
-					echo "<div id=\"wtw_selectwebform\">";
-					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Select Your First 3D Community Scene</h3>";
-					echo "<b>Search:</b> <input id='wtw_tcommunitysearch' name='wtw_tcommunitysearch' type='text' value='' size='20' maxlength='255' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
+					echo "<div id='wtw_selectwebform' class='wtw-searchform'>";
+					echo "<h2 class='wtw-login'>Select Your First 3D Community Scene</h2>";
+					echo "<div class='wtw-searcharea'><div class='wtw-searchlabel'>Search:</div>";
+					echo "<input name='wtw_bcommunitysearch' type='button' value='Search' onclick=\"WTW.communitySearch(dGet('wtw_tcommunitysearch').value);\" class='wtw-searchbutton' />";
+					echo "<input id='wtw_tcommunitysearch' name='wtw_tcommunitysearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
+					echo "<div class='wtw-clearspace'></div>";
+					
+					echo "<br /><hr /><div id='wtw_commtempsearchresults' class='wtw-indentmore'></div>";
+					echo "</div><div id='wtw_installprogress' class='wtw-ihide wtw-iprogresssection'>";
 
-					echo "<div class='wtw-icenter'><input name='wtw_bcommunitysearch' type='button' value='Search' onclick=\"WTW.communitySearch(dGet('wtw_tcommunitysearch').value);\" style='font-size:1.4em;width:120px;border-radius:10px;' /></div>";
-					echo "<br /><hr /><div id='wtw_commtempsearchresults' style='margin-left:20px;text-align:left;'></div>";
-					echo "</div><div id=\"wtw_installprogress\" class=\"wtw-ihide wtw-iprogresssection\">";
-					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Installing Your First 3D Community Scene</h3>";
-					echo "<div id=\"wtw_progresstext\" class=\"wtw-iprogresstext\">&nbsp;</div>";
-					echo "<div class=\"wtw-iprogressdiv\"><div id=\"wtw_progressbar\" class=\"wtw-iprogressbar\"></div></div>";
+					echo "<h2 class='wtw-login'>Installing Your First 3D Community Scene</h2>";
+					echo "<div id='wtw_progresstext' class='wtw-iprogresstext'>&nbsp;</div>";
+					echo "<div class='wtw-iprogressdiv'><div id='wtw_progressbar' class='wtw-iprogressbar'></div></div>";
 					echo "</div></div><br /></div><br /></form>";
 					echo "<script>";
 					echo "WTW.communitySearch('');";
@@ -919,43 +935,121 @@ class wtw {
 					break;
 				case 7: /* select Your 3D Building */
 					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
-					echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_install.css\" />";
+					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' />";
 					echo "<script>var wtw_domainname = '".$this->domainname."';</script>";
-					echo "<script src=\"/core/scripts/prime/wtw_install.js\"></script>";
-					echo "<script src=\"/core/scripts/prime/wtw_downloads.js\"></script>";
-					echo "</head><body style='background-color:grey;font-family:arial;'><form id='wtw_form1' action='' method='post'>";
-					echo "<div style='width:100%;'><br /><div style='border:1px solid black;background-color:white;width:90%;margin-top:20px;margin-bottom:20px;margin-left:auto;margin-right:auto;text-align:center;'>";
-					echo "<img src='/content/system/images/HTTP3DLogo-sticker.jpg' style='margin-left:75px;margin-right:75px;width:250px;height:auto;' />";
-					echo "<input type=\"hidden\" id=\"wtw_serverinstanceid\" value=\"".$this->serverinstanceid."\" />";
-					echo "<input type=\"hidden\" id=\"wtw_tcommunityid\" value=\"".$zcommunityid."\" />";
-					echo "<input type=\"hidden\" id=\"wtw_tbuildingpositionx\" value=\"".$zbuildingpositionx."\" />";
-					echo "<input type=\"hidden\" id=\"wtw_tbuildingpositiony\" value=\"".$zbuildingpositiony."\" />";
-					echo "<input type=\"hidden\" id=\"wtw_tbuildingpositionz\" value=\"".$zbuildingpositionz."\" />";
-					echo "<input type=\"hidden\" id=\"wtw_tbuildingscalingx\" value=\"".$zbuildingscalingx."\" />";
-					echo "<input type=\"hidden\" id=\"wtw_tbuildingscalingy\" value=\"".$zbuildingscalingy."\" />";
-					echo "<input type=\"hidden\" id=\"wtw_tbuildingscalingz\" value=\"".$zbuildingscalingz."\" />";
-					echo "<input type=\"hidden\" id=\"wtw_tbuildingrotationx\" value=\"".$zbuildingrotationx."\" />";
-					echo "<input type=\"hidden\" id=\"wtw_tbuildingrotationy\" value=\"".$zbuildingrotationy."\" />";
-					echo "<input type=\"hidden\" id=\"wtw_tbuildingrotationz\" value=\"".$zbuildingrotationz."\" />";
+					echo "<script src='/core/scripts/prime/wtw_install.js'></script>";
+					echo "<script src='/core/scripts/prime/wtw_downloads.js'></script>";
+					echo "</head><body class='wtw-body'><form id='wtw_form1' action='' method='post'>";
+					echo "<div class='wtw-fullwidth'><br /><div class='wtw-widepage'>";
+					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
+					echo "<input type='hidden' id='wtw_serverinstanceid' value='".$this->serverinstanceid."' />";
+					echo "<input type='hidden' id='wtw_tcommunityid' value='".$zcommunityid."' />";
+					echo "<input type='hidden' id='wtw_tbuildingpositionx' value='".$zbuildingpositionx."' />";
+					echo "<input type='hidden' id='wtw_tbuildingpositiony' value='".$zbuildingpositiony."' />";
+					echo "<input type='hidden' id='wtw_tbuildingpositionz' value='".$zbuildingpositionz."' />";
+					echo "<input type='hidden' id='wtw_tbuildingscalingx' value='".$zbuildingscalingx."' />";
+					echo "<input type='hidden' id='wtw_tbuildingscalingy' value='".$zbuildingscalingy."' />";
+					echo "<input type='hidden' id='wtw_tbuildingscalingz' value='".$zbuildingscalingz."' />";
+					echo "<input type='hidden' id='wtw_tbuildingrotationx' value='".$zbuildingrotationx."' />";
+					echo "<input type='hidden' id='wtw_tbuildingrotationy' value='".$zbuildingrotationy."' />";
+					echo "<input type='hidden' id='wtw_tbuildingrotationz' value='".$zbuildingrotationz."' />";
 
-					echo "<div id=\"wtw_selectwebform\">";
-					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Select Your First 3D Building Scene</h3>";
-					echo "<b>Search:</b> <input id='wtw_tbuildingsearch' name='wtw_tbuildingsearch' type='text' value='' size='20' maxlength='255' />";
-					echo "<div class='wtw-iclear' style='min-height:20px;'></div>";
+					echo "<div id='wtw_selectwebform' class='wtw-searchform'>";
+					echo "<h2 class='wtw-login'>Select Your First 3D Building Scene</h2>";
 
-					echo "<div class='wtw-icenter'><input name='wtw_bbuildingsearch' type='button' value='Search' onclick=\"WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);\" style='font-size:1.4em;width:120px;border-radius:10px;' /></div>";
-					echo "<br /><hr /><div id='wtw_buildtempsearchresults' style='margin-left:20px;text-align:left;'></div>";
-					echo "</div><div id=\"wtw_installprogress\" class=\"wtw-ihide wtw-iprogresssection\">";
-					echo "<hr /><h3 class=\"wtw-icenter\" style='margin-top:0px;'>Installing Your First 3D Building Scene</h3>";
-					echo "<div id=\"wtw_progresstext\" class=\"wtw-iprogresstext\">&nbsp;</div>";
-					echo "<div class=\"wtw-iprogressdiv\"><div id=\"wtw_progressbar\" class=\"wtw-iprogressbar\"></div></div>";
+					echo "<div class='wtw-searcharea'><div class='wtw-searchlabel'>Search:</div>";
+					echo "<input name='wtw_bbuildingsearch' type='button' value='Search' onclick=\"WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);\" class='wtw-searchbutton' />";
+					echo "<input id='wtw_tbuildingsearch' name='wtw_tbuildingsearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
+					echo "<div class='wtw-clearspace'></div>";
+
+					echo "<br /><hr /><div id='wtw_buildtempsearchresults' class='wtw-indentmore'></div>";
+					echo "</div><div id='wtw_installprogress' class='wtw-ihide wtw-iprogresssection'>";
+
+					echo "<h2 class='wtw-login'>Installing Your First 3D Building Scene</h2>";
+					echo "<div id='wtw_progresstext' class='wtw-iprogresstext'>&nbsp;</div>";
+					echo "<div class='wtw-iprogressdiv'><div id='wtw_progressbar' class='wtw-iprogressbar'></div></div>";
 					echo "</div></div><br /></div><br /></form>";
 					echo "<script>";
 					echo "WTW.buildingSearch('');";
 					echo "</script></body></html>";
 					die;
 					break;
-			}
+				case 8: /* select Optional Paid Services */
+					global $wtwdb;
+					/* set setting to only show this page once */
+					$wtwdb->saveSetting('OptionalServicesOffered','1');
+					
+					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
+					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' />";
+					echo "<script>var wtw_domainname = '".$this->domainname."';</script>";
+					echo "<script src='/core/scripts/prime/wtw_install.js'></script>";
+					echo "<script src='/core/scripts/prime/wtw_downloads.js'></script>";
+					echo "</head><body class='wtw-body'><form id='wtw_form1' action='' method='post'>";
+					echo "<div class='wtw-fullwidth'><br /><div class='wtw-widepage'>";
+					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
+					echo "<input type='hidden' id='wtw_serverinstanceid' value='".$this->serverinstanceid."' />";
+					echo "<input type='hidden' id='wtw_serverip' value='".$this->serverip."' />";
+					echo "<input type='hidden' id='wtw_domainurl' value='".$this->domainurl."' />";
+					echo "<input type='hidden' id='wtw_websiteurl' value='".$this->websiteurl."' />";
+					echo "<input type='hidden' id='wtw_domainname' value='".$this->domainname."' />";
+					echo "<input type='hidden' id='wtw_userid' value='".$this->userid."' />";
+					echo "<input type='hidden' id='wtw_useremail' value='".$this->adminemail."' />";
+					echo "<input type='hidden' id='wtw_usertoken' value='".$this->usertoken."' />";
+					echo "<input type='hidden' id='wtw_tcommunityid' value='".$zcommunityid."' />";
+					
+					echo "<h2 class='wtw-login'>WalkTheWeb Services Activation</h2>";
+					echo "<div id='wtw_selectservicediv' style='display:block;visibility:visible;'>";
+					echo "	<h2 class='wtw-categoryheading'>Optional Paid Services</h2>";
+					echo "	<div id='wtw_business' onclick='WTW.selectMultiplayerPackage(this);' class='wtw-servicelisting-selected'>";
+					echo "		<div class='wtw-servicetitle'>Multiplayer for Small Businesses<div class='wtw-currency'>$20 USD per Month<br /><span class='wtw-smalltext'>*Paid Yearly</span></div></div>";
+					echo "		<div class='wtw-clearspace'></div>";
+					echo "		<div><hr />";
+					echo "		Ideal for 3D Shopping Websites. Show up to <b>50 Simultaneous Multiplayer Users</b> on your WalkTheWeb Server instance (All 3D Websites combined).";
+					echo "		</div>";
+					echo "	</div>";
+					echo "	<div id='wtw_gamer' onclick='WTW.selectMultiplayerPackage(this);' class='wtw-servicelisting'>";
+					echo "		<div class='wtw-servicetitle'>Multiplayer for 3D Game Websites<div class='wtw-currency'>$27 USD per Month<br /><span class='wtw-smalltext'>*Paid Yearly</span></div></div>";
+					echo "		<div class='wtw-clearspace'></div>";
+					echo "		<div><hr />";
+					echo "		Ideal for 3D Gaming Websites. Show up to <b>75 Simultaneous Multiplayer Users</b> on your WalkTheWeb Server instance (All 3D Websites combined).";
+					echo "		</div>";
+					echo "	</div>";
+					echo "	<div id='wtw_developer' onclick='WTW.selectMultiplayerPackage(this);' class='wtw-servicelisting'>";
+					echo "		<div class='wtw-servicetitle'>Multiplayer for Developers<div class='wtw-currency'>$10 USD per Month<br /><span class='wtw-smalltext'>*Paid Yearly</span></div></div>";
+					echo "		<div class='wtw-clearspace'></div>";
+					echo "		<div><hr />";
+					echo "		Ideal balance of capabilities and savings for Developers. Create, test and even operate development or production 3D Websites with up to <b>20 Simultaneous Multiplayer Users</b> on your WalkTheWeb Server instance (All 3D Websites combined).";
+					echo "		</div>";
+					echo "	</div>";
+					echo "	<h3 class='wtw-categoryheading'>Selected Service</h3>";
+					echo "	<div class='wtw-prepcart'>";
+					echo "		<div class='wtw-serviceselect' onclick='WTW.openCart();'>View Cart</div>";
+					echo "		<div id='wtw_selectedservice' class='wtw-servicetitle'>Multiplayer for Small Businesses</div>";
+					echo "		<div id='wtw_selectedprice' class='wtw-currencyinline'>$20</div> <div class='wtw-currencyinline'>USD per Month <span class='wtw-smalltext'>*Paid Yearly</span></div>";
+					echo "		<div id='wtw_expandedservice' style='display:none;visibility:hidden;'>";
+					echo "			<hr /><div class='wtw-servicetitle'>Expanded Multiplayer</div>";
+					echo "			<div class='wtw-currencyinline'>$18</div> <div class='wtw-currencyinline'>USD per Month <span class='wtw-smalltext'>*Paid Yearly</span></div>";
+					echo "		</div>";
+					echo "	</div>";
+					echo "	<div class='wtw-clearspace'></div>";
+					echo "	<div class='wtw-logincancel' onclick='window.location.href=window.location.href;'>No Thanks</div>";
+					echo "</div>";
+					
+					echo "</div></div>";
+
+					echo "<div id='wtw_ibrowsediv' class='wtw-browsediv' style='display:none;'>";
+					echo "	<div id='wtw_browseheader' class='wtw-browseheader'>";
+					echo "		<div id='wtw_browseheaderclose' class='wtw-browseclose' onclick='WTW.closeIFrame();'>";
+					echo "			<img src='/content/system/images/menuclose.png' alt='Close' title='Close' onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />";
+					echo "		</div>";
+					echo "		<div id='wtw_browsetitle'></div>";
+					echo "	</div>";
+					echo "  <div id='wtw_ipagediv' class='wtw-ipagediv'></div>";
+					echo "	<iframe id='wtw_ibrowseframe' class='wtw-ibrowseframe' src='/core/pages/loading.php'></iframe>";
+					echo "</div>";
+
+					die;
+					break;			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-checkDatabase=".$e->getMessage());
 		}
