@@ -794,7 +794,7 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault) {
 		}
 		if (wtw3dinternet.globalLogins == '1') {
 			if (dGet('wtw_myavatars') != null) {
-				// call for global list
+				/* call for global list */
 				var zrequest = {
 					'usertoken':dGet('wtw_tusertoken').value,
 					'globaluserid':btoa(dGet('wtw_tglobaluserid').value),

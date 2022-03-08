@@ -205,9 +205,9 @@ class wtw3dinternet {
 
 			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablechat\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablechattext\" class=\"wtw-disabledlabel\">Multiplayer Chat Disabled</div><div style=\"clear:both;\"></div><br />\r\n";
 
-			$zformdata .= "				<div id=\"wtw3dinternet_voicechattext\" class=\"wtw-disabledlabel\" style=\"float:right;\"></div>";
+			$zformdata .= "				<div id=\"wtw3dinternet_voicechattext\" class=\"wtw-disabledlabel\" style=\"float:right;display:none;\"></div>";
 
-			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablevoicechat\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablevoicechattext\" class=\"wtw-disabledlabel\">Multiplayer Voice Chat Disabled</div><div style=\"clear:both;\"></div>\r\n";
+			$zformdata .= "				<label class=\"wtw-switch\" style=\"display:none;\"><input id=\"wtw3dinternet_enablevoicechat\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablevoicechattext\" class=\"wtw-disabledlabel\" style=\"display:none;\">Multiplayer Voice Chat Disabled</div><div style=\"clear:both;\"></div>\r\n";
 			$zformdata .= "			</div>\r\n";
 			
 			/* for future use */
