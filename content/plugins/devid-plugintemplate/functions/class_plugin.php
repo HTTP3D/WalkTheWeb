@@ -102,7 +102,7 @@ class devidplugintemplate {
 			/* $wtwplugins->addScriptFunction("onclick", "devidplugintemplate.onClick(zpickedname);"); */
 			/* $wtwplugins->addScriptFunction("setnewactionzonedefaults", "devidplugintemplate.setNewActionZoneDefaults(zactionzonetype);"); */
 			/* $wtwplugins->addScriptFunction("setactionzoneformfields", "devidplugintemplate.setNewActionZoneFormFields(zactionzonetype);"); */
-			/* $wtwplugins->addScriptFunction("checkactionzone", "devidplugintemplate.checkActionZone(zactionzonename, zactionzoneind, zmeinzone, zothersinzone);"); */
+			/* $wtwplugins->addScriptFunction("checkactionperzone", "devidplugintemplate.checkActionZone(zactionzonename, zactionzoneind, zmeinzone, zothersinzone);"); */
 			/* $wtwplugins->addScriptFunction("setavatarmovement", "devidplugintemplate.setAvatarMovement(zavatar, zkey, zweight);"); */
 			/* $wtwplugins->addScriptFunction("checkhovers", "devidplugintemplate.checkHovers(zmoldname, zshape);"); */
 			/* $wtwplugins->addScriptFunction("resethovers", "devidplugintemplate.resetHovers(zmoldname, zshape);"); */
