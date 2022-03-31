@@ -489,6 +489,14 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 			
+			$jsdata .= "	WTWJS.prototype.pluginsResetActivityTimer = function() {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('resetactivitytimer');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsResetActivityTimer=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+			
 			$jsdata .= "	WTWJS.prototype.pluginsLoadLoginSettings = function(zloaddefault) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= $this->returnScriptFunction('loadloginsettings', 'zloaddefault');
@@ -539,17 +547,25 @@ class wtwplugins {
 			$jsdata .= "		return zloaddefault;\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsCheckActionZoneTrigger = function(zactionzone) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsCheckActionPerZoneTrigger = function(zactionzone) {\r\n";
 			$jsdata .= "		var zothersinzone = false;\r\n";
 			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->returnScriptFunction('checkactionzonetrigger','zothersinzone');
+			$jsdata .= 	$this->returnScriptFunction('checkactionperzonetrigger','zothersinzone');
 			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('class_wtw-pluginsCheckActionZoneTrigger=' + ex.message);\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsCheckActionPerZoneTrigger=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "		return zothersinzone;\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsCheckActionZone = function(zactionzonename, zactionzoneind, zmeinzone, zothersinzone) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsCheckActionPerZone = function(zactionzonename, zactionzoneind, zmeinzone, zothersinzone) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('checkactionperzone');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsCheckActionPerZone=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsCheckActionZone = function() {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= $this->getScriptFunction('checkactionzone');
 			$jsdata .= "		} catch (ex) {\r\n";
