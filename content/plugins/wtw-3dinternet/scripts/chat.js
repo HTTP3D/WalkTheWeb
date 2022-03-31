@@ -3,30 +3,53 @@
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
 WTW_3DINTERNET.prototype.initChatSocket = function() {
+	/* initiate the listeners for WalkTheWeb Chat channel for multiplayer */
 	try {
 		if (wtw3dinternet.chat == null) {
-			wtw3dinternet.chat = io.connect('https://3dnet.walktheweb.network/chat');
+			wtw3dinternet.chat = io.connect('https://3dnet.walktheweb.network/chat', { transports : ['websocket', 'polling'] });
 
-			wtw3dinternet.chat.on('serror', function(zmessage) {
-				WTW.log("error = " + zmessage,'pink');
-			}); 
-			
-			wtw3dinternet.chat.on('login', function(zdata) {
-				if (wtw3dinternet.masterChat == '1') {
+			wtw3dinternet.chat.on('serror', function(zresponse) {
+				var zcolor = 'white';
+				var zchannel = '';
+				var zerror = JSON.stringify(zresponse);
+				if (zresponse != null) {
+					if (zresponse.channel != undefined) {
+						zchannel = zresponse.channel;
+						switch (zchannel) {
+							case 'admin':
+								zcolor = 'yellow';
+								break;
+							case 'move':
+								zcolor = 'pink';
+								break;
+							case 'chat':
+								zcolor = 'white';
+								break;
+						}
+					}
+					if (zresponse.page != undefined) {
+						zchannel += "-" + zresponse.page;
+					}
+					if (zresponse.error != undefined) {
+						zerror = atob(zresponse.error);
+					}
 				}
-			}); 
-
-			wtw3dinternet.chat.on('user joined', function(zdata) {
-				if (wtw3dinternet.masterChat == '1') {
-				}
+				WTW.log(zchannel + ' = ' + zerror, zcolor);
 			});
-
+			
 			wtw3dinternet.chat.on('user left', function(zdata) {
+
 			});
 
-			wtw3dinternet.chat.on('reconnect', function() {
+			wtw3dinternet.chat.on('reconnect', function(zdata) {
+//				WTW.log('Chat-RECONNECT=' + JSON.stringify(zdata), 'red');
+
 			});
 			
+			wtw3dinternet.chat.on('reconnect_error', function(zdata) {
+//				WTW.log('Chat-RECONNECT_ERROR=' + JSON.stringify(zdata), 'red');
+			});
+
 			wtw3dinternet.chat.on('chat invite', function(zdata) {
 				if (wtw3dinternet.masterChat == '1') {
 					if (wtw3dinternet.isBlockedOrBanned(zdata.frominstanceid) == false) {
@@ -119,6 +142,7 @@ WTW_3DINTERNET.prototype.initChatSocket = function() {
 }
 
 WTW_3DINTERNET.prototype.enterChatLoadZone = function(zmoldname, zmolddef) {
+	/* enter chat zone for group chat */
 	try {
 		if (wtw3dinternet.masterChat == '1') {
 			var zstartchat = window.setInterval(function(){
@@ -149,6 +173,7 @@ WTW_3DINTERNET.prototype.enterChatLoadZone = function(zmoldname, zmolddef) {
 }
 
 WTW_3DINTERNET.prototype.exitChatLoadZone = function(zmoldname, zmolddef) {
+	/* exit chat zone for group chat */
 	try {
 		if (wtw3dinternet.masterChat == '1') {
 			var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
@@ -173,6 +198,7 @@ WTW_3DINTERNET.prototype.exitChatLoadZone = function(zmoldname, zmolddef) {
 }
 
 WTW_3DINTERNET.prototype.beforeUnloadChat = function() {
+	/* announce leaving before closing chat */
 	try {
 		var zchats = dGet('wtw_chatsendrequests').childNodes;
 		for (var i=0; i<zchats.length; i++) {
@@ -193,6 +219,7 @@ WTW_3DINTERNET.prototype.beforeUnloadChat = function() {
 }
 
 WTW_3DINTERNET.prototype.processChatCommand = function(zdata) {
+	/* process personal chat command */ 
 	try {
 		if (wtw3dinternet.masterChat == '1') {
 			if (wtw3dinternet.isBlockedOrBanned(zdata.frominstanceid) == false) {
@@ -236,6 +263,7 @@ WTW_3DINTERNET.prototype.processChatCommand = function(zdata) {
 }
 			
 WTW_3DINTERNET.prototype.startChat = function(zinstanceid) {
+	/* start personal chat */
 	try {
 		if (wtw3dinternet.masterChat == '1') {
 			if (wtw3dinternet.isBlockedOrBanned(zinstanceid) == false) {
@@ -256,6 +284,7 @@ WTW_3DINTERNET.prototype.startChat = function(zinstanceid) {
 }
 
 WTW_3DINTERNET.prototype.sendMessage = function(zchattype, zchatid, ztoinstanceid, zaction, ztext, zblockchat, zbanuser) {
+	/* send chat message or ban to multiplayer user */
 	try {
 		switch (zchattype) {
 			case "chat":
@@ -302,11 +331,9 @@ WTW_3DINTERNET.prototype.sendMessage = function(zchattype, zchatid, ztoinstancei
 				break;
 			case "ban":
 				if (wtw3dinternet.masterChat == '1') {
-					let zroomid = communityid + buildingid + thingid;
 					wtw3dinternet.chat.emit(zaction, {
 						'serverinstanceid':dGet('wtw_serverinstanceid').value,
 						'serverip':dGet('wtw_serverip').value,
-						'roomid':zroomid,
 						'communityid':communityid,
 						'buildingid':buildingid,
 						'thingid':thingid,
@@ -328,6 +355,7 @@ WTW_3DINTERNET.prototype.sendMessage = function(zchattype, zchatid, ztoinstancei
 }
 
 WTW_3DINTERNET.prototype.addChatBox = function(zchatid, zdisplayname, ztext) {
+	/* open a chat box */
 	var zchatbox = "";
 	try {
 		if (wtw3dinternet.masterChat == '1') {
@@ -359,6 +387,7 @@ WTW_3DINTERNET.prototype.addChatBox = function(zchatid, zdisplayname, ztext) {
 }
 
 WTW_3DINTERNET.prototype.acceptChat = function(zchatid, zdisplayname, zresponse) {
+	/* accept personal chat */
 	try {
 		if (zresponse == undefined) {
 			zresponse == false;
@@ -382,6 +411,7 @@ WTW_3DINTERNET.prototype.acceptChat = function(zchatid, zdisplayname, zresponse)
 }
 
 WTW_3DINTERNET.prototype.sendChat = function(zchatid) {
+	/* post and send chat message to other user */
 	try {
 		var ztext = "";
 		if (dGet('wtw_chatadd-' + zchatid) != null) {
@@ -399,6 +429,7 @@ WTW_3DINTERNET.prototype.sendChat = function(zchatid) {
 }
 
 WTW_3DINTERNET.prototype.closeChat = function(zchatid, zresponse, zdecline) {
+	/* close chat window or decline chat */
 	try {
 		var ztext = 'leave chat';
 		if (zresponse == undefined) {
@@ -429,6 +460,7 @@ WTW_3DINTERNET.prototype.closeChat = function(zchatid, zresponse, zdecline) {
 }
 
 WTW_3DINTERNET.prototype.closeMenus = function(zmenuid) {
+	/* close chat boxes */
 	try {
 		switch (zmenuid) {
 			case 'wtw_menuvoicechat':
@@ -470,6 +502,7 @@ WTW_3DINTERNET.prototype.closeMenus = function(zmenuid) {
 }
 	
 WTW_3DINTERNET.prototype.chatCheckKey = function(obj, zchatid) {
+	/* show typing message on private chat */
 	try {
 		var e = window.event;
 		if (e != undefined) {
@@ -527,6 +560,7 @@ WTW_3DINTERNET.prototype.chatCheckKey = function(obj, zchatid) {
 }
 
 WTW_3DINTERNET.prototype.chatSetScroll = function(chatid, setfocus) {
+	/* set scroll on chat window */
 	try {
 		WTW.showSettingsMenu('wtw_menuchat');
 		if (dGet('wtw_chattext-' + chatid) != null) {
@@ -545,6 +579,7 @@ WTW_3DINTERNET.prototype.chatSetScroll = function(chatid, setfocus) {
 }
 
 WTW_3DINTERNET.prototype.setChatNewInfo = function(chatid, setNew) {
+	/* change text style class on new text */
 	try {
 		if (setNew) {
 			if (dGet('wtw_chatdisplayname' + chatid) != null) {
@@ -561,6 +596,7 @@ WTW_3DINTERNET.prototype.setChatNewInfo = function(chatid, setNew) {
 }
 
 WTW_3DINTERNET.prototype.toggleChatPrompt = function() {
+	/* toggle on and off chat prompt cursor */
 	try {
 		var zmoldname = 'hud-textprompt';
 		var zmold = WTW.getMeshOrNodeByID(zmoldname);
@@ -659,6 +695,7 @@ WTW_3DINTERNET.prototype.toggleChatPrompt = function() {
 }
 
 WTW_3DINTERNET.prototype.promptText = function() {
+	/* append text in prompt box for group chat */ 
 	try {
 		var zmold = WTW.getMeshOrNodeByID('hud-textprompt');
 		if (zmold != null) {
@@ -712,7 +749,7 @@ WTW_3DINTERNET.prototype.promptEditText = function(zmoldname) {
 }
 
 WTW_3DINTERNET.prototype.promptEditRefreshText = function(zmoldname, zparentname, zeditdone) {
-	/* refresh the text with the latest changes */
+	/* refresh the text with the latest changes in group chat prompt */
 	try {
 		if (zeditdone == undefined) {
 			zeditdone = false;
@@ -792,6 +829,7 @@ WTW_3DINTERNET.prototype.promptEditRefreshText = function(zmoldname, zparentname
 }
 
 WTW_3DINTERNET.prototype.postPromptText = function() {
+	/* post the text from the text box prompt for group chat */
 	try {
 		if (dGet('hud-textprompt-background') != null) {
 			var ztext = dGet('hud-textprompt-background').value;
@@ -814,7 +852,6 @@ WTW_3DINTERNET.prototype.postPromptText = function() {
 					wtw3dinternet.chat.emit('send group chat', {
 						'serverinstanceid':dGet('wtw_serverinstanceid').value,
 						'serverip':dGet('wtw_serverip').value,
-						'roomid':communityid + buildingid + thingid,
 						'communityid':communityid,
 						'buildingid':buildingid,
 						'thingid':thingid,
@@ -842,6 +879,7 @@ WTW_3DINTERNET.prototype.postPromptText = function() {
 }
 
 WTW_3DINTERNET.prototype.refreshChatText = function() {
+	/* refresh the text in group chat prompt box */
 	try {
 		var zmoldname = 'hud-chattext';
 		var zmoldparent = WTW.getMeshOrNodeByID(zmoldname);
@@ -909,6 +947,7 @@ WTW_3DINTERNET.prototype.refreshChatText = function() {
 }
 
 WTW_3DINTERNET.prototype.clearTextTimer = function() {
+	/* clears old messages in the group chat display text */
 	try {
 		if (WTW.textTimer != null) {
 			window.clearInterval(WTW.textTimer);

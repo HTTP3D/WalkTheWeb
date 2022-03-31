@@ -4,27 +4,32 @@
 
 function WTW_3DINTERNET() {
 	/* Add your global variables as needed here */
-	this.ver = "1.0.0";
-	this.checkConnection = null;
-	this.masterMove = '0';
-	this.masterChat = '0';
-	this.masterVoiceChat = '0';
-	this.masterFranchising = '0';
-	this.globalLogins = '0';
-	this.localLogins = '1';
-	this.anonymousLogins = '1';
-	this.admin = null;
-	this.move = null;
-	this.chat = null;
-	this.chatText = [];
-	this.loadZones = [];
-	this.avatars = [];
-	this.AvatarIDs = 1;
-	this.multiPlayer = 20;
-	this.multiPlayerOn = 1;
+	this.ver = "1.1.0";
+	this.checkConnection = null; /* connection heartbeat for Admin Channel */
+	this.masterMove = '0'; /* toggle off or on Multiplayer Movement tracking (server level) */
+	this.masterChat = '0'; /* toggle off or on Chat (server level) */
+	this.masterVoiceChat = '0'; /* toggle off or on Voice Chat (server level) */
+	this.masterFranchising = '0'; /* toggle off or on ability to franchise out your buildings to other server 3D Scenes*/
+	this.globalLogins = '0'; /* toggle off or on global WalkTheWeb user logins - 1 to allow */
+	this.localLogins = '1'; /* toggle off or on local server logins - 1 to allow */
+	this.anonymousLogins = '1'; /* toggle off or on the use of anonymous avatars - 0 to require login */
+	this.admin = null; /* admin channel object - used for connection and checking multiplayer server settings */
+	this.move = null; /* movement channel object - tracks and sends multiplayer movements */
+	this.chat = null; /* chat channel object - processes all chat to and from your user */
+	this.chatText = []; /* group chat text queue */
+	this.loadZones = []; /* used to track offset of 3D Community vs 3D Buildings loaded directly */ 
+	this.avatars = []; /* minimal tracking required for multiplayer avatars currently in the 3D Scene */
+	this.AvatarIDs = 1; /* show or hide the avatar display name above the avatars */
+	this.multiPlayer = 20; /* maximum multiplayers shown in 3D Scene - also limited by Multiplayer Server account max */
+	this.multiPlayerOn = 1; /* toggle off or on Multiplayer */
+	this.avatarParameterSize = 800; /* sets the scale of the avatar parameter box for showing multiplayer avatars */
+	this.lastAnimations = ''; /* my previously running avatar animations used to track changes in animation */
+	this.typingTimer = null; /* used to track if you are currently typing a message in personal chat */
+	this.inactiveTimeout = 1800000; /* set the inactive timeout for my avatar 1800000 = 30 minutes */
+	this.inactive = false; /* flag used after inactive timeout to keep multiplayer inactive until movement is detected again */
+	
+	/* the following variables are experimental settings used to test and program voice chat */
 	this.voicechat = null;
-	this.lastAnimations = '';
-	this.typingTimer = null;
 	this.mediaStream = null;
 	this.recordAudio = null;
 	this.recordVideo = null;
@@ -35,6 +40,7 @@ function WTW_3DINTERNET() {
 var wtw3dinternet = new WTW_3DINTERNET();
 
 WTW_3DINTERNET.prototype.onClick = function(zpickedname) {
+	/* process onclick events for plugin */
 	try {
 		zpickedname = zpickedname.toLowerCase();
 		let zmoldnameparts = WTW.getMoldnameParts(zpickedname);
@@ -62,8 +68,8 @@ WTW_3DINTERNET.prototype.onClick = function(zpickedname) {
 }
 
 WTW_3DINTERNET.prototype.keyUp = function(zevent) {
+	/* check for enter key when canvas is focused and avatar is present */
 	try {
-		/* check for enter key when canvas is focused and avatar is present */
 		if (WTW.canvasFocus == 1 && WTW.placeHolder == 0 && zevent.keyCode == 13) {
 			if (document.activeElement.id.indexOf('wtw_chatadd-') == -1) {
 				wtw3dinternet.toggleChatPrompt();
@@ -75,6 +81,7 @@ WTW_3DINTERNET.prototype.keyUp = function(zevent) {
 }
 
 WTW_3DINTERNET.prototype.avatarConnectMenu = function(ztoinstanceid, zrefresh) {
+	/* connect options menu that pops up when you click on a multiplayer avatar in the 3D Scene */
 	try {
 		if (zrefresh == undefined) {
 			zrefresh = false;
@@ -157,6 +164,7 @@ WTW_3DINTERNET.prototype.avatarConnectMenu = function(ztoinstanceid, zrefresh) {
 }
 
 WTW_3DINTERNET.prototype.closeAvatarConnectMenu = function(ztoinstanceid) {
+	/* close menu for multiplayer avatar connect options */
 	try {
 		if (dGet('wtw_startconnect') != null && dGet("wtw3dinternet_connect" + ztoinstanceid ) != null) {
 			dGet('wtw_startconnect').removeChild(dGet("wtw3dinternet_connect" + ztoinstanceid ));
@@ -170,6 +178,7 @@ WTW_3DINTERNET.prototype.closeAvatarConnectMenu = function(ztoinstanceid) {
 }
 
 WTW_3DINTERNET.prototype.checkHovers = function(zmoldname, zshape) {
+	/* added tooltip when you hover over an avatar */
 	try {
 		if (zmoldname.indexOf('person-') > -1) {
 			if (wtw3dinternet.masterChat == '1' || wtw3dinternet.masterVoiceChat == '1') {
@@ -182,6 +191,7 @@ WTW_3DINTERNET.prototype.checkHovers = function(zmoldname, zshape) {
 }
 
 WTW_3DINTERNET.prototype.resetHovers = function(zmoldname, zshape) {
+	/* close tooltip after you mouse out from an avatar */
 	try {
 		WTW.hideToolTip();
 	} catch(ex) {
@@ -190,8 +200,8 @@ WTW_3DINTERNET.prototype.resetHovers = function(zmoldname, zshape) {
 }
 
 WTW_3DINTERNET.prototype.loadUserSettingsAfterEngine = function() {
+	/* 10 second delay on starting multiplayer so that initial scene is completely loaded. */
 	try {
-		/* 10 second delay on starting multiplayer so that initial scene is completely loaded. */
 		window.setTimeout(function() {
 			wtw3dinternet.initAdminSocket();
 			/* only start the multiplayer services for browse mode */
@@ -212,6 +222,7 @@ WTW_3DINTERNET.prototype.loadUserSettingsAfterEngine = function() {
 }
 
 WTW_3DINTERNET.prototype.loadLoginSettings = function(zloaddefault) {
+	/* load additional login settings */
 	try {
 		WTW.getSettings("wtw3dinternet_enableGlobal, wtw3dinternet_enableLocal, wtw3dinternet_enableAnonymous, wtw3dinternet_masterMove, wtw3dinternet_masterChat, wtw3dinternet_masterVoiceChat, wtw3dinternet_masterFranchising", "wtw3dinternet.responseLoadLoginSettings");
 		
@@ -256,6 +267,7 @@ WTW_3DINTERNET.prototype.loadLoginSettings = function(zloaddefault) {
 }
 
 WTW_3DINTERNET.prototype.responseLoadLoginSettings = async function(zsettings, zparameters) {
+	/* performed after it loads the login settings - sets the plugin global variables */
 	try {
 		zsetting = JSON.parse(zsettings);
 		if (zsetting.wtw3dinternet_enableGlobal != undefined) {
@@ -312,6 +324,7 @@ WTW_3DINTERNET.prototype.responseLoadLoginSettings = async function(zsettings, z
 }
 
 WTW_3DINTERNET.prototype.setActiveText = function(zresponse) {
+	/* set admin menu text show if your multiplayer account is active */
 	try {
 		if (zresponse != null) {
 			for (var i=0;i<zresponse.length;i++) {
@@ -349,6 +362,7 @@ WTW_3DINTERNET.prototype.setActiveText = function(zresponse) {
 }
 
 WTW_3DINTERNET.prototype.setControlPanelSwitches = function() {
+	/* set admin menu switches for multiplayer and login account settings */
 	try {
 		if (WTW.adminView == 1) {
 			if (dGet('wtw3dinternet_enableglobaltext') != null) {
@@ -424,6 +438,7 @@ WTW_3DINTERNET.prototype.setControlPanelSwitches = function() {
 }
 
 WTW_3DINTERNET.prototype.changeSwitch = function(zobj) {
+	/* toggle admin multiplayer options menu switches */
 	try {
 		let zchecked = '0';
 		if (zobj.checked) {
@@ -475,6 +490,7 @@ WTW_3DINTERNET.prototype.changeSwitch = function(zobj) {
 }
 
 WTW_3DINTERNET.prototype.serviceCheck = async function(zservice) {
+	/* check for multiplayer services on main WalkTheWeb hub */
 	try {
 		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/servicecheck.php?serverinstanceid=" + dGet('wtw_serverinstanceid').value + "&serverip=" + dGet('wtw_serverip').value + "&service=" + zservice + "&userid=" + dGet('wtw_tuserid').value, 
 			function(zresponse) {
@@ -509,8 +525,8 @@ WTW_3DINTERNET.prototype.serviceCheck = async function(zservice) {
 }
 
 WTW_3DINTERNET.prototype.enableMultiplayer = function(zchecked) {
+	/* toggle multiplayer on or off */
 	try {
-		/* toggle multiplayer on or off */
 		wtw3dinternet.masterMove = zchecked;
 		if (wtw3dinternet.masterMove == '1') {
 			/* check if the multiplayer service is activated */
@@ -520,7 +536,6 @@ WTW_3DINTERNET.prototype.enableMultiplayer = function(zchecked) {
 				wtw3dinternet.admin.emit('hold', {
 					'serverinstanceid':dGet('wtw_serverinstanceid').value,
 					'serverip':dGet('wtw_serverip').value,
-					'roomid':communityid + buildingid + thingid,
 					'communityid':communityid,
 					'buildingid':buildingid,
 					'thingid':thingid,
@@ -542,7 +557,6 @@ WTW_3DINTERNET.prototype.enableMultiplayer = function(zchecked) {
 				wtw3dinternet.admin.emit('hold', {
 					'serverinstanceid':dGet('wtw_serverinstanceid').value,
 					'serverip':dGet('wtw_serverip').value,
-					'roomid':communityid + buildingid + thingid,
 					'communityid':communityid,
 					'buildingid':buildingid,
 					'thingid':thingid,
@@ -564,6 +578,7 @@ WTW_3DINTERNET.prototype.enableMultiplayer = function(zchecked) {
 }
 
 WTW_3DINTERNET.prototype.purchaseComplete = async function() {
+	/* purchase complete - close window and reset admin multiplayer options */
 	try {
 		/* close purchase window */
 		WTW.closeIFrame();
@@ -581,6 +596,7 @@ WTW_3DINTERNET.prototype.purchaseComplete = async function() {
 }
 
 WTW_3DINTERNET.prototype.openActivateWindow = function() {
+	/* opens the window to offer service */
 	try {
 		WTW.openIFrame("https://3dnet.walktheweb.com/core/pages/serviceactivation.php?serverinstanceid=" + btoa(dGet('wtw_serverinstanceid').value) + "&domainname=" + btoa(wtw_domainname) + "&domainurl=" + btoa(wtw_domainurl) + "&websiteurl=" + btoa(wtw_websiteurl) + "&serverip=" + btoa(dGet('wtw_serverip').value) + "&userid=" + btoa(dGet('wtw_tuserid').value) + "&useremail=" + btoa(dGet('wtw_tuseremail').value), .5, .7, "WalkTheWeb Service Activation");
 	} catch (ex) {
@@ -589,6 +605,7 @@ WTW_3DINTERNET.prototype.openActivateWindow = function() {
 }
 
 WTW_3DINTERNET.prototype.enableChat = async function(zchecked) {
+	/* enable chat options */
 	try {
 		wtw3dinternet.masterChat = zchecked;
 		if (wtw3dinternet.masterChat == '1') {
@@ -615,6 +632,7 @@ WTW_3DINTERNET.prototype.enableChat = async function(zchecked) {
 }
 
 WTW_3DINTERNET.prototype.enableVoiceChat = async function(zchecked) {
+	/* enable voice chat options (experimental) */
 	try {
 		wtw3dinternet.masterVoiceChat = zchecked;
 		if (wtw3dinternet.masterVoiceChat == '1') {
@@ -641,6 +659,7 @@ WTW_3DINTERNET.prototype.enableVoiceChat = async function(zchecked) {
 }
 
 WTW_3DINTERNET.prototype.beforeUnloadMove = function() {
+	/* when web page is unloaded perform this first */
 	try {
 		wtw3dinternet.avatars = [];
 		if (wtw3dinternet.move != null) {
@@ -660,9 +679,8 @@ WTW_3DINTERNET.prototype.beforeUnloadMove = function() {
 					}
 				}
 			}			
-			wtw3dinternet.move.emit('disconnect', {
+			wtw3dinternet.move.emit('disconnect server', {
 				'serverinstanceid':dGet('wtw_serverinstanceid').value,
-				'roomid':communityid + buildingid + thingid,
 				'communityid':communityid,
 				'buildingid':buildingid,
 				'thingid':thingid,
@@ -677,15 +695,7 @@ WTW_3DINTERNET.prototype.beforeUnloadMove = function() {
 		if (wtw3dinternet.admin != null) {
 			wtw3dinternet.admin.emit('disconnect server', {
 				'serverinstanceid':dGet('wtw_serverinstanceid').value,
-				'roomid':communityid + buildingid + thingid,
-				'communityid':communityid,
-				'buildingid':buildingid,
-				'thingid':thingid,
-				'domainurl':wtw_domainurl,
-				'siteurl':wtw_websiteurl,
-				'instanceid':dGet('wtw_tinstanceid').value,
-				'userid':dGet('wtw_tuserid').value,
-				'displayname':btoa(dGet('wtw_tdisplayname').value)
+				'instanceid':dGet('wtw_tinstanceid').value
 			});
 		}
 	} catch (ex) {
@@ -694,6 +704,7 @@ WTW_3DINTERNET.prototype.beforeUnloadMove = function() {
 }
 
 WTW_3DINTERNET.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
+	/* local login options enabled and called */
 	try {
 		let zpagediv = "";
 		switch (zitem) {
@@ -741,6 +752,7 @@ WTW_3DINTERNET.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 }
 
 WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault) {
+	/* retrieve my available avatars to select one for this 3D Scene */
 	try {
 		let zmyavatars = [];
 		let zlocalcomplete = false;
@@ -853,6 +865,7 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault) {
 }
 
 WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, zavatarid) {
+	/* avatar selected - load avatar */
 	var zloading = false;
 	try {
 		if (wtw3dinternet.globalLogins == '1') {
@@ -918,6 +931,7 @@ WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zusera
 }
 
 WTW_3DINTERNET.prototype.getAvatarDisplayName = function(zinstanceid) {
+	/* pull avatar display name */
 	var zdisplayname = "";
 	try {
 		var zavatar = WTW.getMeshOrNodeByID('person-' + zinstanceid);
@@ -979,5 +993,265 @@ WTW_3DINTERNET.prototype.avatarLoadComplete = function(zavatarname) {
 		}
 	} catch (ex) {
 		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-avatarLoadComplete=" + ex.message);
+	}
+}
+
+WTW_3DINTERNET.prototype.checkActionZone = async function() {
+	/* executes after every time my avatar moves position */
+	try {
+		wtw3dinternet.checkAvatarParameter();
+		
+	} catch (ex) {
+		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-checkActionZone=" + ex.message);
+	}
+}
+
+WTW_3DINTERNET.prototype.resetActivityTimer = async function() {
+	/* allow the multiplayer avatar to fade after inactive for a period of time */
+	try {
+		if (wtw3dinternet.inactive) {
+			/* turn back on multiplayer */
+			wtw3dinternet.inactive = false;
+			wtw3dinternet.reconnectLoadZones();
+		}
+		if (wtw3dinternet.masterMove == '1') {
+			if (wtw3dinternet.move != null) {
+				wtw3dinternet.move.emit('fade avatar',{
+					'serverinstanceid':dGet('wtw_serverinstanceid').value,
+					'communityid':communityid,
+					'buildingid':buildingid,
+					'thingid':thingid,
+					'instanceid':dGet('wtw_tinstanceid').value,
+					'userid':dGet('wtw_tuserid').value,
+					'fade':1
+				});
+			}
+			/* reset my avatar fade if it already started to go inactive */
+			var zmyavatar = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value);
+			if (zmyavatar != null) {
+				if (zmyavatar.WTW != undefined) {
+					/* fade my avatar in my 3D Scene */
+					if (zmyavatar.WTW.fadetimer != null) {
+						window.clearTimeout(zmyavatar.WTW.fadetimer);
+						zmyavatar.WTW.fadetimer = null;
+					}
+					zmyavatar.WTW.fadetimer  = window.setInterval(function(){
+						var zavatarscale = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
+						if (zavatarscale != null) {
+							var zavatarparts = zavatarscale.getChildren();
+							var zdone = false;
+							for (var i=0; i<zavatarparts.length;i++) {
+								if (zavatarparts[i] != null) {
+									if (zavatarparts[i].visibility < 1) {
+										zavatarparts[i].visibility += .05;
+									} else {
+										zavatarparts[i].visibility = 1;
+										zdone = true;
+									}
+								}
+							} 
+							if (zdone) {
+								for (var i=0; i<zavatarparts.length;i++) {
+									if (zavatarparts[i] != null) {
+										zavatarparts[i].visibility = 1;
+									}
+								} 
+								window.clearInterval(zmyavatar.WTW.fadetimer);
+							}
+						}
+					},50);
+				}
+			}
+
+			/* set timer to go inactive */
+			if (WTW.activityTimer != null) {
+				window.clearTimeout(WTW.activityTimer);
+				WTW.activityTimer = null;
+			}
+			WTW.activityTimer = window.setTimeout(function () {
+				wtw3dinternet.fadeMyInactiveAvatar();
+			}, wtw3dinternet.inactiveTimeout);
+		}
+	} catch (ex) {
+		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-resetActivityTimer=" + ex.message);
+	}
+}
+
+WTW_3DINTERNET.prototype.fadeMyInactiveAvatar = async function() {
+	/* allow the multiplayer avatar to fade after inactive for a period of time */
+	try {
+		if (wtw3dinternet.masterMove == '1') {
+			/* send inactive signal to multiplayer users */
+			if (wtw3dinternet.move != null) {
+				wtw3dinternet.move.emit('fade avatar',{
+					'serverinstanceid':dGet('wtw_serverinstanceid').value,
+					'communityid':communityid,
+					'buildingid':buildingid,
+					'thingid':thingid,
+					'instanceid':dGet('wtw_tinstanceid').value,
+					'userid':dGet('wtw_tuserid').value,
+					'fade':.25
+				});
+			}
+			/* check for my avatar */
+			var zmyavatar = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value);
+			if (zmyavatar != null) {
+				if (zmyavatar.WTW != undefined) {
+					/* fade my avatar in my 3D Scene */
+					if (zmyavatar.WTW.fadetimer != null) {
+						window.clearTimeout(zmyavatar.WTW.fadetimer);
+						zmyavatar.WTW.fadetimer = null;
+					}
+					zmyavatar.WTW.fadetimer  = window.setInterval(function(){
+						var zavatarscale = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
+						if (zavatarscale != null) {
+							var zavatarparts = zavatarscale.getChildren();
+							var zdone = false;
+							for (var i=0; i<zavatarparts.length;i++) {
+								if (zavatarparts[i] != null) {
+									if (zavatarparts[i].visibility > .5) {
+										zavatarparts[i].visibility -= .05;
+									} else {
+										zavatarparts[i].visibility = .5;
+										zdone = true;
+									}
+								}
+							} 
+							if (zdone) {
+								for (var i=0; i<zavatarparts.length;i++) {
+									if (zavatarparts[i] != null) {
+										zavatarparts[i].visibility = .5;
+									}
+								} 
+								window.clearInterval(zmyavatar.WTW.fadetimer);
+								zmyavatar.WTW.fadetimer = null;
+								/* start new timer to go inactive and leave multiplayer if it remains inactive */
+								zmyavatar.WTW.fadetimer  = window.setInterval(function(){
+									var zavatarscale = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
+									if (zavatarscale != null) {
+										var zavatarparts = zavatarscale.getChildren();
+										var zdone = false;
+										for (var i=0; i<zavatarparts.length;i++) {
+											if (zavatarparts[i] != null) {
+												if (zavatarparts[i].visibility > .25) {
+													zavatarparts[i].visibility -= .05;
+												} else {
+													zavatarparts[i].visibility = .25;
+													zdone = true;
+												}
+											}
+										} 
+										if (zdone) {
+											for (var i=0; i<zavatarparts.length;i++) {
+												if (zavatarparts[i] != null) {
+													zavatarparts[i].visibility = .25;
+												}
+											} 
+											window.clearInterval(zmyavatar.WTW.fadetimer);
+											zmyavatar.WTW.fadetimer = null;
+											/* log off */
+											wtw3dinternet.inactive = true;
+											/* disconnect from server (leave all rooms) */
+											if (wtw3dinternet.move != null) {
+												wtw3dinternet.move.emit('disconnect server',{
+													'serverinstanceid':dGet('wtw_serverinstanceid').value,
+													'communityid':communityid,
+													'buildingid':buildingid,
+													'thingid':thingid,
+													'domainurl':wtw_domainurl,
+													'siteurl':wtw_websiteurl,
+													'instanceid':dGet('wtw_tinstanceid').value,
+													'userid':dGet('wtw_tuserid').value,
+													'displayname':btoa(dGet('wtw_tdisplayname').value)
+												});
+											}
+											/* remove all multiplayer avatars */
+											wtw3dinternet.removeAllAvatars();
+										}
+									}
+								},5000);
+							}
+						}
+					},500);
+				}
+			}
+			/* restart the activity timer timeout */
+			if (WTW.activityTimer != null) {
+				window.clearTimeout(WTW.activityTimer);
+				WTW.activityTimer = null;
+			}
+			if (WTW.isMobile) {
+				WTW.activityTimer = window.setTimeout(function () {
+					WTW.noActivityPause();
+				}, 300000);
+			} else {
+				WTW.activityTimer = window.setTimeout(function () {
+					WTW.noActivityPause();
+				}, 10800000);
+			}
+		}
+	} catch (ex) {
+		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-fadeMyInactiveAvatar=" + ex.message);
+	}
+}
+
+WTW_3DINTERNET.prototype.fadeAvatar = function(zdata) {
+	/* fade avatar that is inactive - unfade avatar that returns to active */
+	try {
+		if (zdata.instanceid != undefined) {
+			var zavatar = WTW.getMeshOrNodeByID('person-' + zdata.instanceid);
+			if (zavatar != null) {
+				if (zavatar.WTW != undefined) {
+					var zfade = 1;
+					var ztimeincrement = 500;
+					if (zdata.fade != undefined) {
+						zfade = Number(zdata.fade);
+					}
+					if (zavatar.WTW.fadetimer != null) {
+						window.clearInterval(zavatar.WTW.fadetimer);
+						zavatar.WTW.fadetimer = null;
+					}
+					if (zfade == 1) {
+						ztimeincrement = 50;
+					}
+					zavatar.WTW.fadetimer  = window.setInterval(function(){
+						var zavatarscale = WTW.getMeshOrNodeByID('person-' + zdata.instanceid + '-scale');
+						if (zavatarscale != null) {
+							var zfaded = zfade;
+							var zavatarparts = zavatarscale.getChildren();
+							var zdone = false;
+							if (wtw3dinternet.isBlocked(zdata.instanceid)) {
+								zfaded = 0;
+							} else if (wtw3dinternet.isBanned(zdata.instanceid) && zfaded == 1) {
+								zfaded = .5;
+							}
+							for (var i=0; i<zavatarparts.length;i++) {
+								if (zavatarparts[i] != null) {
+									if (zavatarparts[i].visibility > zfaded + .05) {
+										zavatarparts[i].visibility -= .05;
+									} else if (zavatarparts[i].visibility < zfaded - .05) {
+										zavatarparts[i].visibility += .05;
+									} else {
+										zavatarparts[i].visibility = zfaded;
+										zdone = true;
+									}
+								}
+							} 
+							if (zdone) {
+								for (var i=0; i<zavatarparts.length;i++) {
+									if (zavatarparts[i] != null) {
+										zavatarparts[i].visibility = zfaded;
+									}
+								} 
+								window.clearInterval(zavatar.WTW.fadetimer);
+								zavatar.WTW.fadetimer = null;
+							}
+						}
+					},ztimeincrement);
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("plugins:wtw-3dinternet:scripts-class_main..js-fadeAvatar=" + ex.message);
 	}
 }

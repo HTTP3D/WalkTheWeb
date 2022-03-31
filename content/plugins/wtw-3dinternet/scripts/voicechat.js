@@ -55,22 +55,12 @@ WTW_3DINTERNET.prototype.initVoiceChatSocket = function() {
 				WTW.log("plugins:wtw-3dinternet:scripts-voicechat.js-initVoiceChatSocket(ffmpeg-error)=" + zerror);
 			});
 
-			wtw3dinternet.voicechat.on('login', function(zdata) {
-				if (wtw3dinternet.masterVoiceChat == '1') {
-				}
-			}); 
-
-			wtw3dinternet.voicechat.on('user joined', function(zdata) {
-				if (wtw3dinternet.masterVoiceChat == '1') {
-				}
-			});
-
 			wtw3dinternet.voicechat.on('user left', function(zdata) {
 			});
 
 			wtw3dinternet.voicechat.on('reconnect', function() {
 				if (wtw3dinternet.masterVoiceChat == '1') {
-					wtw3dinternet.voicechat.emit('add user', {
+/*					wtw3dinternet.voicechat.emit('add user', {
 						'serverinstanceid':dGet('wtw_serverinstanceid').value,
 						'serverip':dGet('wtw_serverip').value,
 						'roomid':communityid + buildingid + thingid,
@@ -81,11 +71,11 @@ WTW_3DINTERNET.prototype.initVoiceChatSocket = function() {
 						'userid':dGet('wtw_tuserid').value,
 						'displayname':btoa(dGet('wtw_tdisplayname').value)
 					});
-				}
+*/				}
 			});
 			
 			if (wtw3dinternet.masterVoiceChat == '1') {
-				wtw3dinternet.voicechat.emit('add user', {
+/*				wtw3dinternet.voicechat.emit('add user', {
 					'serverinstanceid':dGet('wtw_serverinstanceid').value,
 					'serverip':dGet('wtw_serverip').value,
 					'roomid':communityid + buildingid + thingid,
@@ -96,7 +86,7 @@ WTW_3DINTERNET.prototype.initVoiceChatSocket = function() {
 					'userid':dGet('wtw_tuserid').value,
 					'displayname':btoa(dGet('wtw_tdisplayname').value)
 				});
-			}
+*/			}
 
 			wtw3dinternet.voicechat.on('voicechat invite', function(zdata) {
 				if (wtw3dinternet.masterVoiceChat == '1') {
