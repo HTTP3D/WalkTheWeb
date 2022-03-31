@@ -149,7 +149,7 @@ class wtwavatars {
 			/* $wtwplugins->addScriptFunction("onclick", "wtwavatars.onClick(zpickedname);"); */
 			/* $wtwplugins->addScriptFunction("setnewactionzonedefaults", "wtwavatars.setNewActionZoneDefaults(zactionzonetype);"); */
 			/* $wtwplugins->addScriptFunction("setactionzoneformfields", "wtwavatars.setNewActionZoneFormFields(zactionzonetype);"); */
-			/* $wtwplugins->addScriptFunction("checkactionzone", "wtwavatars.checkActionZone(zactionzonename, zactionzoneind, zmeinzone, zothersinzone);"); */
+			/* $wtwplugins->addScriptFunction("checkactionperzone", "wtwavatars.checkActionZone(zactionzonename, zactionzoneind, zmeinzone, zothersinzone);"); */
 			/* $wtwplugins->addScriptFunction("setavatarmovement", "wtwavatars.setAvatarMovement(zavatar, zevent, zweight);"); */
 			/* $wtwplugins->addScriptFunction("checkhovers", "wtwavatars.checkHovers(zmoldname, zshape);"); */
 			/* $wtwplugins->addScriptFunction("resethovers", "wtwavatars.resetHovers(zmoldname, zshape);"); */
