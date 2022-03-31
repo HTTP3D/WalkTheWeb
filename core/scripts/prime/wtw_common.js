@@ -18,6 +18,7 @@ WTWJS.prototype.resetActivityTimer = function() {
 		} else {
 			WTW.activityTimer = window.setTimeout(function () {WTW.noActivityPause();}, 10800000);
 		}
+		WTW.pluginsResetActivityTimer();
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_common.js-resetActivityTimer=" + ex.message);
 	}

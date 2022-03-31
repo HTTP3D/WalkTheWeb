@@ -744,7 +744,8 @@ WTWJS.prototype.newAvatarDef = function() {
 			'lastupdate':false,
 			'loaded':false,
 			'blockedby':zblockedby,
-			'bannedby':zbannedby
+			'bannedby':zbannedby,
+			'fadetimer':null
 		};
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAvatarDef=" + ex.message);

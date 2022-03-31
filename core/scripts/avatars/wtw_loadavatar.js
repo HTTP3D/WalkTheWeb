@@ -223,7 +223,6 @@ WTWJS.prototype.disposeAvatar = function(zavatarname) {
 					}
 				}
 			}
-			zavatarscale.dispose();
 		}
     } catch (ex) {
 		WTW.log("core-scripts-avatars-wtw_loadavatar.js-disposeAvatar=" + ex.message);

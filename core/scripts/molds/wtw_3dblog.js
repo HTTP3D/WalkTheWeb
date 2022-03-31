@@ -576,12 +576,13 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 		} else {
 			zwebstyle = JSON.parse(zwebstyle);
 		}
-		WTW.disposeClean(zmoldname + "-text");
+		WTW.disposeClean(zmoldname + '-text');
 		Writer = BABYLON.MeshWriter(scene, {scale:1});
         var zdisplaytext  = new Writer(zwebtext, zwebstyle);
 		var zmytext = zdisplaytext.getMesh();
 		zmytext.rotation.x = WTW.getRadians(-90);
-		zmytext.name = zmoldname + "-text";
+		zmytext.name = zmoldname + '-text';
+		zmytext.id = zmoldname + '-text';
 		zmytext.parent = zmold;
 		zmytext.isPickable = true;
 		WTW.registerMouseOver(zmytext);

@@ -578,6 +578,7 @@ WTWJS.prototype.loadUserSettingsAfterEngine = function() {
 		window.setTimeout(function() {
 			WTW.isInitCycle = 0;
 			WTW.pluginsLoadUserSettingsAfterEngine();
+			WTW.resetActivityTimer();
 		}, 5000);
 	} catch (ex) { 
 		WTW.log("core-scripts-prime-wtw_core.js-loadUserSettingsAfterEngine=" + ex.message);

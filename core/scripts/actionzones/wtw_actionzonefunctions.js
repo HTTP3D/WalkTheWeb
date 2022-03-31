@@ -27,7 +27,7 @@ WTWJS.prototype.checkActionZones = function() {
 						var zothersinzone = false;
 						/* check if others are in the zone */
 						
-						zothersinzone = WTW.pluginsCheckActionZoneTrigger(zactionzone);
+						zothersinzone = WTW.pluginsCheckActionPerZoneTrigger(zactionzone);
 						if (zmeinzone || zothersinzone) {
 							if (zmeinzone && zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 2) {
 								/* my avatar in load zone - triggers loading of molds */
@@ -103,7 +103,7 @@ WTWJS.prototype.checkActionZones = function() {
 							}
 						}
 						/* allow hooks for plugins to add code on check zone (mostly for custom zones or to add functions to an existing zone) */
-						WTW.pluginsCheckActionZone(zmoldname, i, zmeinzone, zothersinzone);
+						WTW.pluginsCheckActionPerZone(zmoldname, i, zmeinzone, zothersinzone);
 					} else if (zmoldname.indexOf("loadzone") > -1) {
 						/* if loadzone not otherwise defined, set status to avatar not in zone */
 						WTW.actionZones[i].status = 0;
@@ -118,6 +118,7 @@ WTWJS.prototype.checkActionZones = function() {
 				WTW.resetActivityTimer();
 			}
 		}
+		WTW.pluginsCheckActionZone();
 		/* this variable tells the render cycle that it is already executed, it must be true to execute function again. different places in code will trigger a true to force it to run the function on demand only */
 		WTW.checkZones = false;
 	} catch(ex) {
