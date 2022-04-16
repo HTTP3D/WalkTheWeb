@@ -297,7 +297,7 @@ class wtwadmin {
 			/* dashboard page */
 			$zpagedata .= "	<div id=\"wtw_dashboardpage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$zpagedata .= "		<div id=\"wtw_loadingdashboard\" class=\"wtw-loadingnotice\">Loading...</div>\r\n";
-			$zpagedata .= "		<div id=\"wtw_dashboard\">\r\n";
+			$zpagedata .= "		<div id=\"wtw_dashboard\" style='overflow-y:auto;overflow-x:none;'>\r\n";
 
 			$zpagedata .= "			<div id=\"wtw_videolinks\" class=\"wtw-dashboardboxleftdouble\" style=\"display:none;visibility:hidden;\">\r\n";
 			$zpagedata .= "				<div class=\"wtw-dashboardboxtitle\" onclick=\"WTW.toggleDashboardBox('wtw_videolinksdiv');\"><div id=\"wtw_videolinksdivarrow\" class=\"wtw-divarrow\">⯅</div>WalkTheWeb Videos</div>\r\n";
@@ -334,6 +334,14 @@ class wtwadmin {
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">3D Things</div>\r\n";
 			$zpagedata .= "					<div id=\"wtw_otherthingcount\" class=\"wtw-dashboardvalue\"></div>\r\n";
+			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "				</div>\r\n";
+			$zpagedata .= "			</div>\r\n";
+
+			$zpagedata .= "			<div id=\"wtw_downloadqueue\" class=\"wtw-dashboardboxleftdouble\" style=\"display:none;visibility:hidden;\">\r\n";
+			$zpagedata .= "				<div class=\"wtw-dashboardboxtitle\" onclick=\"WTW.toggleDashboardBox('wtw_downloadqueuediv');\"><div id=\"wtw_downloadqueuedivarrow\" class=\"wtw-divarrow\">⯅</div>WalkTheWeb Downloads Queue</div>\r\n";
+			$zpagedata .= "				<div id=\"wtw_downloadqueuediv\" class=\"wtw-dashboardboxmax\" style=\"min-height:550px;\">\r\n";
+			$zpagedata .= "					<div id=\"wtw_downloadqueuelist\"></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";

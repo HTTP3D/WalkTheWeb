@@ -1178,6 +1178,8 @@ a.wtw-helplink2:hover {
 	padding:0px;
 	margin:0px;
 	width:100%;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 .wtw-dashboardboxleft {
 	float:left;
@@ -1831,6 +1833,12 @@ li.wtw-avatarlihilight:hover {
 #wtw_profileimagesm {
 	height:32px;
 	width:auto;
+}
+.wtw-smallimageleft {
+	float:left;
+	width:250px;
+	height:auto;
+	margin:0px 10px 10px 10px;
 }
 .wtw-closeright {
 	position:relative;

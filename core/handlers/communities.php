@@ -16,8 +16,10 @@ try {
 	$zversionid = $wtwhandlers->getPost('versionid','');
 	$zversion = $wtwhandlers->getPost('version','');
 	$zversiondesc = $wtwhandlers->decode64($wtwhandlers->getPost('versiondesc',''));
+	$zdownloadid = $wtwhandlers->getPost('downloadid','');
 	$zwebid = $wtwhandlers->getPost('webid','');
 	$zwebtype = $wtwhandlers->getPost('webtype','');
+	$zprocess = $wtwhandlers->getPost('process','');
 	$zcommunityname = $wtwhandlers->decode64($wtwhandlers->getPost('communityname',''));
 	$zcommunitydescription = $wtwhandlers->decode64($wtwhandlers->getPost('communitydescription',''));
 	$zdescription = $wtwhandlers->decode64($wtwhandlers->getPost('description',''));
@@ -102,6 +104,9 @@ try {
 			$zresponse = array(
 				'communityid'=> $zcommunityid
 			);
+			break;
+		case "updatedownloadqueue":
+			$zresponse = $wtwcommunities->updateDownloadsQueue($zdownloadid, $zwebid, $zwebtype, $zprocess);
 			break;
 	}
 

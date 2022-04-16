@@ -573,6 +573,26 @@ class wtwtables {
 				  PRIMARY KEY (`contentratingid`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 			");
+			$wtwdb->deltaCreateTable("			
+				CREATE TABLE `".wtw_tableprefix."downloads` (
+				  `downloadid` varchar(16) NOT NULL,
+				  `webid` varchar(16) DEFAULT NULL,
+				  `webtype` varchar(16) DEFAULT NULL,
+				  `userip` varchar(45) DEFAULT NULL,
+				  `fromurl` varchar(255) DEFAULT NULL,
+				  `downloaddate` datetime DEFAULT NULL,
+				  `downloaduserid` varchar(16) DEFAULT '',
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int DEFAULT '0',
+				  PRIMARY KEY (`downloadid`),
+				  UNIQUE KEY `".wtw_tableprefix."downloadid_UNIQUE` (`downloadid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;			
+			");
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."errorlog` (
 				  `errorid` int NOT NULL AUTO_INCREMENT,

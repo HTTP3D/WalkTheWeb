@@ -3407,6 +3407,130 @@ class wtwcommunities {
 		}
 		return $zresponse;
 	}		
+		
+	public function addDownloadQueue($zwebid, $zwebtype) {
+		/* Add Web to download queue */
+		global $wtwconnect;
+		$zresponse = array(
+			'success'=>'0',
+			'serror'=>''
+		);
+		try {
+			$zfound = false;
+			$zdownloadid = $wtwconnect->getRandomString(16,1);
+			$zuserip = $wtwconnect->getClientIP();
+			$zfromurl = $_SERVER['HTTP_REFERER'];
+			/* check to see if it is already there */
+			$zresults = $wtwconnect->query("
+				select * 
+				from ".wtw_tableprefix."downloads
+				where webid='".$zwebid."'
+					and webtype='".$zwebtype."'
+				limit 1;");
+			foreach ($zresults as $zrow) {
+				$zfound = true;
+			}
+			if ($zfound == false) {
+				$wtwconnect->query("
+					insert into ".wtw_tableprefix."downloads
+					   (downloadid,
+					    webid,
+						webtype,
+						userip,
+						fromurl,
+						createdate,
+						updatedate)
+					 values
+					   ('".$zdownloadid."',
+					    '".$zwebid."',
+						'".$zwebtype."',
+						'".$zuserip."',
+						'".$zfromurl."',
+						now(),
+						now());
+				");
+				$zresponse = array(
+					'success'=>'1',
+					'serror'=>''
+				);
+			} else {
+				$zresponse = array(
+					'success'=>'0',
+					'serror'=>'Download already found in Queue'
+				);
+			}
+		} catch (Exception $e) {
+			$wtwconnect->serror("core-functions-class_wtwcommunities.php-addDownloadQueue=".$e->getMessage());
+			$zresponse = array(
+				'success'=>'0',
+				'serror'=>$e->getMessage()
+			);
+		}
+		return $zresponse;
+	}
+	
+	public function updateDownloadsQueue($zdownloadid, $zwebid, $zwebtype, $zprocess) {
+		/* update download queue - process 1 = done, 0 = cancel (delete) */
+		global $wtwhandlers;
+		$zresponse = array(
+			'success'=>'0',
+			'serror'=>''
+		);
+		try {
+			$zfound = false;
+			/* check to see if it is already there */
+			$zresults = $wtwhandlers->query("
+				select * 
+				from ".wtw_tableprefix."downloads
+				where webid='".$zwebid."'
+					and webtype='".$zwebtype."'
+					and downloadid='".$zdownloadid."'
+					and deleted=0
+				limit 1;");
+			foreach ($zresults as $zrow) {
+				$zfound = true;
+			}
+			if ($zfound) {
+				if ($zprocess == '1') {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."downloads
+						set downloaddate=now(),
+							downloaduserid='".$wtwhandlers->userid."',
+							deleteddate=now(),
+							deleteduserid='".$wtwhandlers->userid."',
+							deleted=1
+						where downloadid='".$zdownloadid."'
+						limit 1;
+					");
+				} else {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."downloads
+						set deleteddate=now(),
+							deleteduserid='".$wtwhandlers->userid."',
+							deleted=1
+						where downloadid='".$zdownloadid."'
+						limit 1;
+					");
+				}
+				$zresponse = array(
+					'success'=>'1',
+					'serror'=>''
+				);
+			} else {
+				$zresponse = array(
+					'success'=>'0',
+					'serror'=>'Download not found in Queue'
+				);
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-updateDownloadsQueue=".$e->getMessage());
+			$zresponse = array(
+				'success'=>'0',
+				'serror'=>$e->getMessage()
+			);
+		}
+		return $zresponse;
+	}
 }
 
 	function wtwcommunities() {
