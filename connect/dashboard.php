@@ -16,6 +16,7 @@ try {
 	$othercommunitycount = 0;
 	$otherbuildingcount = 0;
 	$otherthingcount = 0;
+    $zdownloads = array();
     $zresponse = array();
 	
 	if ($wtwconnect->isUserInRole('admin')) {
@@ -89,6 +90,25 @@ try {
 			$otherthingcount = $zrow["thingcount"];
 		}
 		
+		/* check download queue for any pending */
+		$i = 0;
+		$zresults = $wtwconnect->query("
+			select * 
+				from ".wtw_tableprefix."downloads 
+				where deleted=0 
+				order by createdate desc, downloadid desc;");
+		foreach ($zresults as $zrow) {
+			$zdownloads[$i] = array(
+				"downloadid" => $zrow["downloadid"],
+				"webid" => $zrow["webid"],
+				"webtype" => $zrow["webtype"],
+				"userip" => $zrow["userip"],
+				"fromurl" => $zrow["fromurl"],
+				"createdate" => $zrow["createdate"]
+			);
+			$i += 1;
+		}
+		
 		echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
 		$zresponse[0] = array(
@@ -97,7 +117,8 @@ try {
 			'mythingcount'=> $mythingcount,
 			'othercommunitycount'=> $othercommunitycount,
 			'otherbuildingcount'=> $otherbuildingcount,
-			'otherthingcount'=> $otherthingcount
+			'otherthingcount'=> $otherthingcount,
+			'downloads'=> $zdownloads
 		);
 	}
 	echo json_encode($zresponse);	

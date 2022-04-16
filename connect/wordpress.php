@@ -7,7 +7,11 @@ require_once('../core/functions/class_wtwcommunities.php');
 global $wtwconnect;
 global $wtwcommunities;
 
-try {
+try {//host
+//	echo $wtwconnect->addConnectHeader('*');
+	header('Access-Control-Allow-Origin: *');
+	header('Content-type: application/json');
+
 	/* google analytics tracking (if defined in wtw_config.php) */
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/wordpress.php");
 	
@@ -16,6 +20,8 @@ try {
 	$zwebsiteurl = $wtwconnect->getPost('websiteurl','');
 	$zbuildingid = $wtwconnect->getPost('buildingid','');
 	$zcommunityid = $wtwconnect->getPost('communityid','');
+	$zwebid = $wtwconnect->getPost('webid','');
+	$zwebtype = $wtwconnect->getPost('webtype','');
 	$zusertoken = $wtwconnect->getPost('usertoken','');
 	$zwtwusertoken = $wtwconnect->getPost('wtwusertoken','');
 	$zwtwemail = $wtwconnect->getPost('wtwemail','');
@@ -64,15 +70,22 @@ try {
 	$zstoreapiurl = $wtwconnect->decode64($zstoreapiurl);
 	$ziframes = $wtwconnect->decode64($ziframes);
 
-	$zparse = parse_url($zhosturl);
-	$zdomainname = $zparse['host'];
-	if (strpos(strtolower($zhosturl), 'http://') !== false) {
-		$zforcehttps = '0';
+	try {
+		$zparse = parse_url($zhosturl);
+		$zdomainname = $zparse['host'];
+		if (strpos(strtolower($zhosturl), 'http://') !== false) {
+			$zforcehttps = '0';
+		}
+	} catch (Exception $e) {
+		
 	}
 	
 	$zresponse = array();
 	
 	switch ($zfunction) {
+		case "downloadqueue":
+			$zresponse = $wtwcommunities->addDownloadQueue($zwebid, $zwebtype);
+			break;
 		case "syncwebsites":
 			$zapikeyid = '';
 			$zresults = $wtwconnect->query("
@@ -420,7 +433,6 @@ try {
 			break;
 	}
 	
-	echo $wtwconnect->addConnectHeader('*');
 	
 	echo json_encode($zresponse);	
 } catch (Exception $e) {
