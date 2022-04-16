@@ -1039,14 +1039,14 @@ WTWJS.prototype.toggleDashboardBox = function(zelementname) {
 				if (zdivarrow != null) {
 					zdivarrow.innerHTML = '⯅';
 				}
+				WTW.show(zelementname);
 			} else {
-				zdiv.style.maxHeight = '300px';
 				zdiv.style.maxHeight = '0px';
 				zdiv.style.overflowY = 'hidden';
 				if (zdivarrow != null) {
 					zdivarrow.innerHTML = '⯆';
 				}
-				
+				WTW.hide(zelementname);
 			}
 		}
 	} catch (ex) {

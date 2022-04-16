@@ -914,12 +914,13 @@ WTWJS.prototype.updateWalkTheWebComplete = function(zpluginname, zversion, zupda
 
 /* dashboard and WalkTheWeb & 3D Plugin updates forms */
 
-WTWJS.prototype.openDashboardForm = async function(item) {
+WTWJS.prototype.openDashboardForm = async function() {
 	/* load dashboard form */
 	try {
 		WTW.hide('wtw_dashboard');
 		WTW.show('wtw_loadingdashboard');
 		WTW.hide('wtw_videolinks');
+		WTW.hide('wtw_downloadqueue');
 		dGet("wtw_mycommcount").innerHTML = '0';
 		dGet("wtw_mybuildcount").innerHTML = '0';
 		dGet("wtw_mythingcount").innerHTML = '0';
@@ -949,6 +950,11 @@ WTWJS.prototype.openDashboardForm = async function(item) {
 							}
 							if (zresponse[i].otherthingcount != undefined) {
 								dGet('wtw_otherthingcount').innerHTML = WTW.formatNumber(Number(zresponse[i].otherthingcount),0);
+							}
+							if (zresponse[i].downloads != undefined) {
+								if (zresponse[i].downloads.length > 0) {
+									WTW.getDownloadsInfo(zresponse[i].downloads);
+								}
 							}
 						}
 					}
@@ -984,7 +990,77 @@ WTWJS.prototype.openDashboardForm = async function(item) {
 	}
 }
 
+WTWJS.prototype.getDownloadsInfo = async function(zdownloads) {
+	/* uses the local downloads to get the download info from 3dnet.walktheweb.com hub */
+	try {
+		var zrequest = {
+			'downloads': JSON.stringify(zdownloads),
+			'function':'getdownloadinfo'
+		};
+		WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/downloadsinfo.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				WTW.displayDownloadsQueue(zresponse);
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-getDownloadsInfo=" + ex.message);
+	}
+}
 
+WTWJS.prototype.displayDownloadsQueue = async function(zdownloadinfo) {
+	/* display any downloads with info and preview */
+	try {
+		var zdownloadslist = "<div>";
+		for (var i=0;i < zdownloadinfo.length;i++) {
+			if (zdownloadinfo[i] != null) {
+				if (zdownloadinfo[i].imageurl != '') {
+					zdownloadslist += "<img src='" + zdownloadinfo[i].imageurl + "' class='wtw-smallimageleft' />";
+				}
+				zdownloadslist += "<div style='padding:2px;margin:0px 10px 10px 20px;'><b>" + zdownloadinfo[i].templatename + "</b> (" + zdownloadinfo[i].version + ")<br /><div style='float:right;'><div onclick=\"WTW.downloadWebFromQueue('" + zdownloadinfo[i].downloadid + "','" + zdownloadinfo[i].webid + "','" + zdownloadinfo[i].webtype + "','1');\" class='wtw-searchresultbutton'>Download</div><br /><div onclick=\"WTW.downloadWebFromQueue('" + zdownloadinfo[i].downloadid + "','" + zdownloadinfo[i].webid + "','" + zdownloadinfo[i].webtype + "','0');\" class='wtw-searchresultbutton'>Cancel</div></div><br /><b>Created By:</b> " + zdownloadinfo[i].displayname + "<br /><b>on</b> " + WTW.formatDate(zdownloadinfo[i].createdate) + "<br />" + zdownloadinfo[i].description + "<br /></div><div style='clear:both;'></div><hr />";
+			}
+		}
+		zdownloadslist += "</div>";
+		dGet('wtw_downloadqueuelist').innerHTML = zdownloadslist;
+		dGet('wtw_dashboard').style.height = (WTW.sizeY-100)+'px';
+		WTW.show('wtw_downloadqueue');
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-displayDownloadsQueue=" + ex.message);
+	}
+}
+
+//
+WTWJS.prototype.downloadWebFromQueue = async function(zdownloadid, zwebid, zwebtype, zprocess) {
+	/* download 3D Web from queue */
+	try {
+		/* process the queue - mark it downloaded */
+		var zrequest = {
+			'downloadid': zdownloadid,
+			'webid': zwebid,
+			'webtype': zwebtype,
+			'process': zprocess,
+			'function':'updatedownloadqueue'
+		};
+		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+			function(zresponse) {
+WTW.log(zresponse);
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				/* refresh the dashboard - update downloads queue */
+				WTW.openDashboardForm();
+			}
+		);
+		if (zprocess == '1') {
+			/* download the 3D Web */
+			WTW.downloadWeb(zwebid, zwebtype);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-downloadWebFromQueue=" + ex.message);
+	}
+}
+
+		
 /* media library forms */
 
 /* media library - main media page form */
