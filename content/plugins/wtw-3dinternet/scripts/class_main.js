@@ -751,9 +751,12 @@ WTW_3DINTERNET.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 	}
 }
 
-WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault) {
+WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault, zeditmode) {
 	/* retrieve my available avatars to select one for this 3D Scene */
 	try {
+		if (zeditmode == undefined) {
+			zeditmode = false;
+		}
 		let zmyavatars = [];
 		let zlocalcomplete = false;
 		let zglobalcomplete = false;
@@ -798,7 +801,7 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault) {
 						}
 						zlocalcomplete = true;
 						if (zglobalcomplete || wtw3dinternet.globalLogins != '1') {
-							WTW.showMyAvatarList(zmyavatars, .4, .8);
+							WTW.showMyAvatarList(zmyavatars, .4, .8, zeditmode);
 						}
 					}
 				);
@@ -851,7 +854,7 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault) {
 						}
 						zglobalcomplete = true;
 						if (zlocalcomplete || wtw3dinternet.localLogins != '1') {
-							WTW.showMyAvatarList(zmyavatars, .4, .8);
+							WTW.showMyAvatarList(zmyavatars, .4, .8, zeditmode);
 						}
 					}
 				);

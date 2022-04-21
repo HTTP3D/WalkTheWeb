@@ -124,7 +124,7 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("openlocallogin", "wtw3dinternet.openLocalLogin(zitem, zwidth, zheight);");
 			
 			$wtwplugins->addScriptFunction("myavataranimationsloaded", "wtw3dinternet.activateMultiplayer();");
-			$wtwplugins->addScriptFunction("getmyavatarlist", "wtw3dinternet.getMyAvatarList(zloaddefault);");
+			$wtwplugins->addScriptFunction("getmyavatarlist", "wtw3dinternet.getMyAvatarList(zloaddefault, zeditmode);");
 			
 			$wtwplugins->addScriptFunction("savedavatarretrieved", "wtw3dinternet.savedAvatarRetrieved(zavatarname, zsendrefresh);");
 
