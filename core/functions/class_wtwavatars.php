@@ -83,6 +83,33 @@ class wtwavatars {
 		return $zfounduseravatarid;
 	}
 
+	public function deleteUserAvatar($zuseravatarid) {
+		/* flags the user avatar as deleted so it no longer shows up on the my avatars list */
+		global $wtwhandlers;
+		$zresponse = array(
+			'serror'=>''
+		);
+		try {
+			if (isset($zuseravatarid) && !empty($zuseravatarid) && isset($wtwhandlers->userid) && !empty($wtwhandlers->userid)) {
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."useravatars 
+					set deleteddate=now(),
+						deleteduserid='".$wtwhandlers->userid."',
+						deleted=1
+					where userid='".$wtwhandlers->userid."'
+						and not userid=''
+						and useravatarid='".$zuseravatarid."'
+					limit 1;");
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwavatars.php-deleteUserAvatar=".$e->getMessage());
+			$zresponse = array(
+				'serror'=>$e->getMessage()
+			);
+		}
+		return $zresponse;
+	}
+
 	public function getUserSession($zinstanceid) {
 		/* get local user informaiton based on logged in session */
 		global $wtwhandlers;

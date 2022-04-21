@@ -2309,3 +2309,34 @@ input:checked + .wtw-slider:before {
 	float:right;
 	margin-right:20px;
 }
+.wtw-editmode {
+	display:inline-block;
+	color:#000000;
+	background-color:#FEFFCE;
+	border:1px solid black;
+	border-radius:15px;
+	padding:10px;
+	margin:10px auto 10px auto;
+	font-weight:bold;
+}
+.wtw-editmode:hover {
+	cursor:pointer;
+	color:#000000;
+	background-color:yellow;
+}
+.wtw-editmoderight {
+	float:right;
+	display:inline-block;
+	color:#000000;
+	background-color:#FEFFCE;
+	border:1px solid black;
+	border-radius:15px;
+	padding:10px;
+	margin:10px auto 10px auto;
+	font-weight:bold;
+}
+.wtw-editmoderight:hover {
+	cursor:pointer;
+	color:#000000;
+	background-color:yellow;
+}

@@ -538,7 +538,7 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsGetMyAvatarList = function(zloaddefault) {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsGetMyAvatarList = function(zloaddefault, zeditmode) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->returnScriptFunction('getmyavatarlist','zloaddefault');
 			$jsdata .= "		} catch (ex) {\r\n";

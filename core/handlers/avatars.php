@@ -171,6 +171,9 @@ try {
 		case "setuseravatarglobalhash":
 			$zresponse = $wtwavatars->setUserAvatarGlobalHash($zuseravatarid);
 			break;
+		case "deleteuseravatar":
+			$zresponse = $wtwavatars->deleteUserAvatar($zuseravatarid);
+			break;
 		case "downloadweb":
 			$zresponse = $wtwavatars->downloadWeb($zwebid, $zwebid, $zwebtype, '');
 			break;
