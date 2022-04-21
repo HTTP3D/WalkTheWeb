@@ -1044,7 +1044,6 @@ WTWJS.prototype.downloadWebFromQueue = async function(zdownloadid, zwebid, zwebt
 		};
 		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
 			function(zresponse) {
-WTW.log(zresponse);
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				/* refresh the dashboard - update downloads queue */
