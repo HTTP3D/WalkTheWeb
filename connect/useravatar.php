@@ -99,12 +99,16 @@ try {
 	$zobjectfile = "";
 	$zstartframe = '1';
 	$zendframe = '1';
-	$zgender = "female";
-	$zdisplayname = "Anonymous";
+	$zgender = 'female';
+	$zdisplayname = 'Anonymous';
 	$zavatardescription = '';
 	$zavatargroup = 'Custom';
 	$zanonymous = '0';
 	$zprivacy = 0;
+	$zversionid = '';
+	$zversion = '1.0.0';
+	$zversionorder = 1000000;
+	$zversiondesc = 'Initial Version';
 	
 	$zwalkspeed = '1';
 	$zwalkanimationspeed = '1';
@@ -135,6 +139,10 @@ try {
 			$zavatarid = $zrow["avatarid"];
 			$zfoundavatarid = $zrow["avatarid"];
 			$zuserid = $zrow["userid"];
+			$zversionid = $zrow["versionid"];
+			$zversion = $zrow["version"];
+			$zversionorder = $zrow["versionorder"];
+			$zversiondesc = $zrow["versiondesc"];
 			$zobjectfolder = $zrow["objectfolder"];
 			$zobjectfile = $zrow["objectfile"];
 			$zstartframe = $zrow["startframe"];
@@ -279,6 +287,10 @@ try {
 		foreach ($zresults as $zrow) {
 			$zuseravatarid = '';
 			$zanonymous = '1';
+			$zversionid = $zrow["versionid"];
+			$zversion = $zrow["version"];
+			$zversionorder = $zrow["versionorder"];
+			$zversiondesc = $zrow["versiondesc"];
 			$zpositionx = $zrow["positionx"];
 			$zpositiony = $zrow["positiony"];
 			$zpositionz = $zrow["positionz"];
@@ -491,6 +503,10 @@ try {
 		'useravatarid'=> $zfounduseravatarid,
 		'instanceid'=> $zinstanceid,
 		'avatarid'=> $zfoundavatarid,
+		'versionid'=> $zversionid,
+		'version'=> $zversion,
+		'versionorder'=> $zversionorder,
+		'versiondesc'=> addslashes($zversiondesc),
 		'displayname'=> addslashes($zdisplayname),
 		'avatardescription'=> addslashes($zavatardescription),
 		'gender'=> addslashes($zgender),

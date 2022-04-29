@@ -156,9 +156,10 @@ try {
 			'avatarid'=> $zrow["avatarid"],
 			'versionid'=> $zrow["versionid"],
 			'version'=> $zrow["version"],
+			'versionorder'=> $zrow["versionorder"],
 			'versiondesc'=> htmlspecialchars($zrow["versiondesc"], ENT_QUOTES, 'UTF-8'),
 			'avatargroup'=> $zrow["avatargroup"],
-			'displayname'=> $zrow["displayname"],
+			'displayname'=> htmlspecialchars($zrow["displayname"], ENT_QUOTES, 'UTF-8'),
 			'avatardescription'=> htmlspecialchars($zrow["avatardescription"], ENT_QUOTES, 'UTF-8'),
 			'gender'=> $zrow["gender"],
 			'objects'=> array(

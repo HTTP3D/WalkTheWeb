@@ -318,6 +318,7 @@ try {
 			'pastavatarid' => $zrow["pastavatarid"],
 			'versionid'=> $zrow["versionid"],
 			'version'=> $zrow["version"],
+			'versionorder'=> $zrow["versionorder"],
 			'versiondesc'=> htmlspecialchars($zrow["versiondesc"], ENT_QUOTES, 'UTF-8'),
 			'avatargroup' => $zrow["avatargroup"],
 			'displayname' => htmlspecialchars($zrow["displayname"], ENT_QUOTES, 'UTF-8'),

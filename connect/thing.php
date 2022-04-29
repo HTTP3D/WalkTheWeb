@@ -29,10 +29,14 @@ try {
 			'thingid' => $zrow["thingid"],
 			'versionid' => $zrow["versionid"],
 			'version' => $zrow["version"],
+			'versionorder' => $zrow["versionorder"],
 			'versiondesc' => htmlspecialchars($zrow["versiondesc"], ENT_QUOTES, 'UTF-8'),
 			'thingname' => htmlspecialchars($zrow["thingname"], ENT_QUOTES, 'UTF-8'),
 			'thingdescription' => htmlspecialchars($zrow["thingdescription"], ENT_QUOTES, 'UTF-8'),
+			'updatedate' => $zrow["updatedate"],
+			'updateuserid' => $zrow["updateuserid"],
 			'createdate' => $zrow["createdate"],
+			'createuserid' => $zrow["createuserid"],
 			'analyticsid'=> $zrow["analyticsid"],
 			'snapshotid' => $zrow["snapshotid"]
 		);
