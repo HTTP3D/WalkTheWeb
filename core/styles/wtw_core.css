@@ -1934,6 +1934,32 @@ li.wtw-menunoteset {
 	padding:1px 4px 1px 4px;
 	text-align:center;
 }
+.wtw-badgebutton {
+	text-align:center;
+	display:block;
+	background-color:yellow;
+	font-size:1em;
+	color:black;
+	border:1px solid blue;
+	border-radius:10px;
+	margin:0px auto 0px auto;
+	padding:4px 4px 4px 4px;
+}
+.wtw-badgebutton:hover {
+	cursor:pointer;
+	color:blue;
+}
+.wtw-badgebuttoncompleted {
+	text-align:center;
+	display:block;
+	background-color:#D3FFCE;
+	font-size:1em;
+	color:black;
+	border:1px solid green;
+	border-radius:10px;
+	margin:0px auto 0px auto;
+	padding:4px 4px 4px 4px;
+}
 .wtw-loginbutton {
 	border:#073770 4px solid;
 	border-radius:20px;

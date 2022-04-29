@@ -61,6 +61,7 @@ class wtwbuildings {
 							 pastbuildingid,
 							 versionid,
 							 version,
+							 versionorder,
 							 versiondesc,
 							 buildingname,
 							 buildingdescription,
@@ -76,6 +77,7 @@ class wtwbuildings {
 							 '',
 							 '".$zbuildingid."',
 							 '1.0.0',
+							 1000000,
 							 'Initial Version',
 							 '".$wtwhandlers->escapeHTML($zbuildingname)."',
 							 '".$wtwhandlers->escapeHTML($zbuildingdescription)."',
@@ -94,6 +96,7 @@ class wtwbuildings {
 							 pastbuildingid,
 							 versionid,
 							 version,
+							 versionorder,
 							 versiondesc,
 							 buildingname,
 							 buildingdescription,
@@ -124,6 +127,7 @@ class wtwbuildings {
 							 '".$zpastbuildingid."' as pastbuildingid,
 							 versionid,
 							 version,
+							 versionorder,
 							 versiondesc,
 							 '".$wtwhandlers->escapeHTML($zbuildingname)."' as buildingname,
 							 '".$wtwhandlers->escapeHTML($zbuildingdescription)."' as buildingdescription,
@@ -1552,15 +1556,30 @@ class wtwbuildings {
 		/* import building from 3dnet.walktheweb.com in the media library */
 		global $wtwhandlers;
 		try {
+			$zversion1 = 1;
+			$zversion2 = 0;
+			$zversion3 = 0;
+
+			if (strpos($zversion, '.') !== false) {
+				try {
+					list($zversion1, $zversion2, $zversion3) = explode('.', $zversion);
+				} catch (Exception $e) {
+					$zversion1 = 1;
+					$zversion2 = 0;
+					$zversion3 = 0;
+				}
+			}
+			$zversionorder = (1000000*$zversion1) + (1000*$zversion2) + $zversion3;
 			/* ini_set('max_execution_time', 300); */
 			if (!empty($wtwhandlers->getSessionUserID())) {
-				if ($wtwhandlers->keyExists(wtw_tableprefix.'buildings', 'buildingid', $zbuildingid) == false) {
+				if ($wtwhandlers->keyExists('buildings', 'buildingid', $zbuildingid) == false) {
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."buildings
 							(buildingid, 
 							 pastbuildingid, 
 							 versionid,
 							 version,
+							 versionorder,
 							 versiondesc,
 							 buildingname, 
 							 analyticsid, 
@@ -1585,6 +1604,7 @@ class wtwbuildings {
 							 '".$zpastbuildingid."', 
 							 '".$zversionid."',
 							 '".$zversion."',
+							 ".$zversionorder."
 							 '".addslashes($zversiondesc)."',
 							 '".$zbuildingname."', 
 							 '".$zbuildinganalyticsid."', 
@@ -1684,7 +1704,7 @@ class wtwbuildings {
 		return $zsuccess;
 	}
 			
-	public function saveBuildingTemplate($zbuildingid, $ztemplatename, $zdescription, $ztags) {
+	public function saveBuildingTemplate($zbuildingid, $ztemplatename, $zdescription, $ztags, $zversion, $zversiondesc) {
 		/* save building as a template to the media library */
 		global $wtwhandlers;
 		$zresponse = array(
@@ -1703,8 +1723,23 @@ class wtwbuildings {
 				$ztemplatename = htmlspecialchars($ztemplatename, ENT_QUOTES, 'UTF-8');
 				$zdescription = htmlspecialchars($zdescription, ENT_QUOTES, 'UTF-8');
 				$ztags = htmlspecialchars($ztags, ENT_QUOTES, 'UTF-8');
+				$zversiondesc = htmlspecialchars($zversiondesc, ENT_QUOTES, 'UTF-8');
 				$zsharehash = $wtwhandlers->getRandomString(16,1);
 				$zresponse["sharehash"] = $zsharehash;
+				$zversion1 = 1;
+				$zversion2 = 0;
+				$zversion3 = 0;
+
+				if (strpos($zversion, '.') !== false) {
+					try {
+						list($zversion1, $zversion2, $zversion3) = explode('.', $zversion);
+					} catch (Exception $e) {
+						$zversion1 = 1;
+						$zversion2 = 0;
+						$zversion3 = 0;
+					}
+				}
+				$zversionorder = (1000000*$zversion1) + (1000*$zversion2) + $zversion3;
 				
 				$zresults = $wtwhandlers->query("
 					select buildingid 
@@ -1720,6 +1755,9 @@ class wtwbuildings {
 						    tags='".$ztags."',
 							description='".$zdescription."',
 							sharehash='".$zsharehash."',
+							version='".$zversion."',
+							versionorder=".$zversionorder.",
+							versiondesc='".$zversiondesc."',
 							shareuserid='".$zuserid."',
 							sharetemplatedate=now(),
 							updatedate=now(),

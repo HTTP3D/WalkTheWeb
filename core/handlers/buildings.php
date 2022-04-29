@@ -54,7 +54,7 @@ try {
 			break;
 
 		case "savebuildingtemplate":
-			$zresponse = $wtwbuildings->saveBuildingTemplate($zbuildingid, $zbuildingname, $zdescription, $ztags);
+			$zresponse = $wtwbuildings->saveBuildingTemplate($zbuildingid, $zbuildingname, $zdescription, $ztags, $zversion, $zversiondesc);
 			break;
 		case "sharebuildingtemplate":
 			$zresponse = $wtwbuildings->shareBuildingTemplate($zbuildingid, $zsharehash);

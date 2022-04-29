@@ -60,6 +60,7 @@ class wtwcommunities {
 							 pastcommunityid,
 							 versionid,
 							 version,
+							 versionorder,
 							 versiondesc,
 							 communityname,
 							 communitydescription,
@@ -77,6 +78,7 @@ class wtwcommunities {
 							 '".$zpastcommunityid."',
 							 '".$zcommunityid."',
 							 '1.0.0',
+							 1000000,
 							 'Initial Version',
 							 '".$wtwhandlers->escapeHTML($zcommunityname)."',
 							 '".$wtwhandlers->escapeHTML($zcommunitydescription)."',
@@ -97,6 +99,7 @@ class wtwcommunities {
 							 pastcommunityid,
 							 versionid,
 							 version,
+							 versionorder,
 							 versiondesc,
 							 communityname,
 							 communitydescription,
@@ -147,6 +150,7 @@ class wtwcommunities {
 							 '".$zpastcommunityid."' as pastcommunityid,
 							 versionid,
 							 version,
+							 versionorder,
 							 versiondesc,
 							 '".$wtwhandlers->escapeHTML($zcommunityname)."' as communityname,
 							 '".$wtwhandlers->escapeHTML($zcommunitydescription)."' as communitydescription,
@@ -1698,6 +1702,7 @@ class wtwcommunities {
 								pastcommunityid,
 								versionid,
 								version,
+								versionorder,
 								versiondesc,
 								downloadparentwebid,
 								downloadparentwebtype,
@@ -1749,24 +1754,25 @@ class wtwcommunities {
 								'".$zrequest->communityid."',
 								'".$zrequest->versionid."',
 								'".$zrequest->version."',
+								".$wtwhandlers->checkNumber($zrequest->versionorder,1000000).",
 								'".addslashes($zrequest->versiondesc)."',
 								'".$zdownloadparentwebid."',
 								'".$zdownloadparentwebtype."',
 								'".$zrequest->communityname."',
 								'".$zrequest->communitydescription."',
 								'".$zuserid."',
-								".$zrequest->positionx.",
-								".$zrequest->positiony.",
-								".$zrequest->positionz.",
-								".$zrequest->scalingx.",
-								".$zrequest->scalingy.",
-								".$zrequest->scalingz.",
-								".$zrequest->rotationx.",
-								".$zrequest->rotationy.",
-								".$zrequest->rotationz.",
-								".$zrequest->gravity.",
-								".$zrequest->groundpositiony.",
-								".$zrequest->waterpositiony.",
+								".$wtwhandlers->checkNumber($zrequest->positionx,0).",
+								".$wtwhandlers->checkNumber($zrequest->positiony,0).",
+								".$wtwhandlers->checkNumber($zrequest->positionz,0).",
+								".$wtwhandlers->checkNumber($zrequest->scalingx,1).",
+								".$wtwhandlers->checkNumber($zrequest->scalingy,1).",
+								".$wtwhandlers->checkNumber($zrequest->scalingz,1).",
+								".$wtwhandlers->checkNumber($zrequest->rotationx,0).",
+								".$wtwhandlers->checkNumber($zrequest->rotationy,0).",
+								".$wtwhandlers->checkNumber($zrequest->rotationz,0).",
+								".$wtwhandlers->checkNumber($zrequest->gravity,9.8).",
+								".$wtwhandlers->checkNumber($zrequest->groundpositiony,0).",
+								".$wtwhandlers->checkNumber($zrequest->waterpositiony,-1).",
 								'".$znewtextureid."',
 								'".$znewskydomeid."',
 								".$zrequest->skyinclination.",
@@ -1782,15 +1788,15 @@ class wtwcommunities {
 								'".$znewsnapshotid."',
 								'".$znewshareuserid."',
 								'".$zrequest->alttag."',
-								".$zrequest->buildingpositionx.",
-								".$zrequest->buildingpositiony.",
-								".$zrequest->buildingpositionz.",
-								".$zrequest->buildingscalingx.",
-								".$zrequest->buildingscalingy.",
-								".$zrequest->buildingscalingz.",
-								".$zrequest->buildingrotationx.",
-								".$zrequest->buildingrotationy.",
-								".$zrequest->buildingrotationz.",
+								".$wtwhandlers->checkNumber($zrequest->buildingpositionx,0).",
+								".$wtwhandlers->checkNumber($zrequest->buildingpositiony,0).",
+								".$wtwhandlers->checkNumber($zrequest->buildingpositionz,0).",
+								".$wtwhandlers->checkNumber($zrequest->buildingscalingx,1).",
+								".$wtwhandlers->checkNumber($zrequest->buildingscalingy,1).",
+								".$wtwhandlers->checkNumber($zrequest->buildingscalingz,1).",
+								".$wtwhandlers->checkNumber($zrequest->buildingrotationx,0).",
+								".$wtwhandlers->checkNumber($zrequest->buildingrotationy,0).",
+								".$wtwhandlers->checkNumber($zrequest->buildingrotationz,0).",
 								now(),
 								'".$zuserid."',
 								now(),
@@ -1825,6 +1831,7 @@ class wtwcommunities {
 								pastbuildingid,
 								versionid,
 								version,
+								versionorder,
 								versiondesc,
 								downloadparentwebid,
 								downloadparentwebtype,
@@ -1856,22 +1863,23 @@ class wtwcommunities {
 								'".$zrequest->buildingid."',
 								'".$zrequest->versionid."',
 								'".$zrequest->version."',
+								".$wtwhandlers->checkNumber($zrequest->versionorder,1000000).",
 								'".addslashes($zrequest->versiondesc)."',
 								'".$zdownloadparentwebid."',
 								'".$zdownloadparentwebtype."',
 								'".$zrequest->buildingname."',
 								'".$zrequest->buildingdescription."',
 								'".$zuserid."',
-								".$zrequest->positionx.",
-								".$zrequest->positiony.",
-								".$zrequest->positionz.",
-								".$zrequest->scalingx.",
-								".$zrequest->scalingy.",
-								".$zrequest->scalingz.",
-								".$zrequest->rotationx.",
-								".$zrequest->rotationy.",
-								".$zrequest->rotationz.",
-								".$zrequest->gravity.",
+								".$wtwhandlers->checkNumber($zrequest->positionx,0).",
+								".$wtwhandlers->checkNumber($zrequest->positiony,0).",
+								".$wtwhandlers->checkNumber($zrequest->positionz,0).",
+								".$wtwhandlers->checkNumber($zrequest->scalingx,1).",
+								".$wtwhandlers->checkNumber($zrequest->scalingy,1).",
+								".$wtwhandlers->checkNumber($zrequest->scalingz,1).",
+								".$wtwhandlers->checkNumber($zrequest->rotationx,0).",
+								".$wtwhandlers->checkNumber($zrequest->rotationy,0).",
+								".$wtwhandlers->checkNumber($zrequest->rotationz,0).",
+								".$wtwhandlers->checkNumber($zrequest->gravity,9.8).",
 								'".$zrequest->templatename."',
 								'".$zrequest->tags."',
 								'".$zrequest->description."',
@@ -1911,6 +1919,7 @@ class wtwcommunities {
 								pastthingid,
 								versionid,
 								version,
+								versionorder,
 								versiondesc,
 								downloadparentwebid,
 								downloadparentwebtype,
@@ -1942,22 +1951,23 @@ class wtwcommunities {
 								'".$zrequest->thingid."',
 								'".$zrequest->versionid."',
 								'".$zrequest->version."',
+								".$wtwhandlers->checkNumber($zrequest->versionorder,1000000).",
 								'".addslashes($zrequest->versiondesc)."',
 								'".$zdownloadparentwebid."',
 								'".$zdownloadparentwebtype."',
 								'".$zrequest->thingname."',
 								'".$zrequest->thingdescription."',
 								'".$zuserid."',
-								".$zrequest->positionx.",
-								".$zrequest->positiony.",
-								".$zrequest->positionz.",
-								".$zrequest->scalingx.",
-								".$zrequest->scalingy.",
-								".$zrequest->scalingz.",
-								".$zrequest->rotationx.",
-								".$zrequest->rotationy.",
-								".$zrequest->rotationz.",
-								".$zrequest->gravity.",
+								".$wtwhandlers->checkNumber($zrequest->positionx,0).",
+								".$wtwhandlers->checkNumber($zrequest->positiony,0).",
+								".$wtwhandlers->checkNumber($zrequest->positionz,0).",
+								".$wtwhandlers->checkNumber($zrequest->scalingx,1).",
+								".$wtwhandlers->checkNumber($zrequest->scalingy,1).",
+								".$wtwhandlers->checkNumber($zrequest->scalingz,1).",
+								".$wtwhandlers->checkNumber($zrequest->rotationx,0).",
+								".$wtwhandlers->checkNumber($zrequest->rotationy,0).",
+								".$wtwhandlers->checkNumber($zrequest->rotationz,0).",
+								".$wtwhandlers->checkNumber($zrequest->gravity,9.8).",
 								'".$zrequest->templatename."',
 								'".$zrequest->tags."',
 								'".$zrequest->description."',
@@ -2072,18 +2082,18 @@ class wtwcommunities {
 						   ('".$znewavataranimationid."',
 							'".$zavataranimation->avataranimationid."',
 							'".$znewuserid."',
-							".$zavataranimation->loadpriority.",
+							".$wtwhandlers->checkNumber($zavataranimation->loadpriority,25).",
 							'".$zavataranimation->animationevent."',
 							'".$zavataranimation->animationfriendlyname."',
 							'".$znewanimationicon."',
 							'".$znewobjectfolder."',
 							'".$zavataranimation->objectfile."',
-							".$zavataranimation->startframe.",
-							".$zavataranimation->endframe.",
-							".$zavataranimation->animationloop.",
-							".$zavataranimation->speedratio.",
+							".$wtwhandlers->checkNumber($zavataranimation->startframe,1).",
+							".$wtwhandlers->checkNumber($zavataranimation->endframe,1).",
+							".$wtwhandlers->checkNumber($zavataranimation->animationloop,1).",
+							".$wtwhandlers->checkNumber($zavataranimation->speedratio,1).",
 							'".$znewsoundid."',
-							'".$zavataranimation->soundmaxdistance."',
+							".$wtwhandlers->checkNumber($zavataranimation->soundmaxdistance,100).",
 							'".$zavataranimation->createdate."',
 							'".$znewcreateuserid."',
 							now(),
@@ -3132,20 +3142,2117 @@ class wtwcommunities {
 		}
 		return $znewwebid;
 	}
+
+	public function downloadUpdateWeb($zwebid, $zupdatewebid, $zwebtype, $zusertoken) {
+		/* this process downloads updated version of 3D Web from https://3dnet.walktheweb.com (WalkTheWeb repository)*/
+		/* this is the response after you select a 3D Item to update the version */
+		/* $zupdatewebid is the item selected (3D Community, 3D Bulding, or 3D Thing) updated version */
+		/* $zwebid is the current 3D Web being updated */
+		/* $zwebtype is 'community', 'building', or 'thing' */ // uploads
+		global $wtwhandlers;
+		global $wtwconnect;
+		try {
+			if (isset($wtwhandlers) == false && isset($wtwconnect)) {
+				$wtwhandlers = $wtwconnect;
+			}
+
+			$zwebtypes = "";
+			$znewcommunityid = "";
+			$znewbuildingid = "";
+			$znewthingid = "";
+			$zuserid = $wtwhandlers->userid;
+			$zdomainurl = "";
+			$znewfolder = '';
+			$zurl = '';
+			
+			/* allow usertoken authentication */
+			if ((empty($zuserid) || !isset($zuserid)) && !empty($zusertoken) && isset($zusertoken)) {
+				$zresults = $wtwhandlers->query("
+					select userid
+					from ".wtw_tableprefix."users 
+					where CONVERT(from_base64(usertoken) USING utf8)='".$zusertoken."'
+						or CONVERT(from_base64(wordpresstoken) USING utf8)='".$zusertoken."'
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zuserid = $zrow["userid"];
+				}
+			}
+			
+			/* only add download if the userid exists */
+			if (!empty($zuserid) && isset($zuserid)) {
+				
+				/* $zwebtypes is the plural version of webtype (used in table names) */
+				switch($zwebtype) {
+					case "community":
+						$zwebtypes = "communities";
+						break;
+					case "building":
+						$zwebtypes = "buildings";
+						break;
+					case "thing":
+						$zwebtypes = "things";
+						break;
+				}
+//				$zwebid = $wtwhandlers->getNewKey($zwebtypes, $zwebtype."id", $zwebid);
+				switch($zwebtype) {
+					case "community":
+						$znewcommunityid = $zwebid;
+						break;
+					case "building":
+						$znewbuildingid = $zwebid;
+						break;
+					case "thing":
+						$znewthingid = $zwebid;
+						break;
+				}
+				
+				/* fetch the 3D Web data structure for the repository (all of the associated records) */
+				$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zupdatewebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
+
+				if (!empty($zurl)) {
+					$zrequest = file_get_contents($zurl);
+				}
+				if (!empty($zrequest) && isset($zrequest)) {
+					$zrequest = json_decode($zrequest);
+				}
+				
+				/* determine the new local path for uploaded files associated with this download */
+				$znewfolder = $wtwhandlers->contentpath.'/uploads/'.$zwebtypes.'/'.$zwebid;
+				$znewurl = $wtwhandlers->contenturl.'/uploads/'.$zwebtypes.'/'.$zwebid;
+				if (!file_exists($znewfolder)) {
+					mkdir($znewfolder, octdec(wtw_chmod), true);
+					chmod($znewfolder, octdec(wtw_chmod));
+				}
+				
+				/* process all users associated to this download (for your reference) */
+				foreach ($zrequest->users as $zuser) {
+					/* check if the userid is already in use */
+					$znewuserid = $wtwhandlers->getNewKey('users', 'userid', $zuser->userid);
+					$znewuploadpathid = $wtwhandlers->getNewKey('users', "uploadpathid", $zuser->uploadpathid);
+					$zuserpassword = $wtwhandlers->getRandomString(16,1);
+					$zresults = $wtwhandlers->query("
+						select userid
+						from ".wtw_tableprefix."users 
+						where userid='".$znewuserid."'
+						limit 1;
+						");
+					if (count($zresults) == 0) {
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."users 
+							   (userid,
+								pastuserid,
+								displayname,
+								email,
+								uploadpathid,
+								userpassword,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$znewuserid."',
+								'".$zuser->userid."',
+								'".addslashes($zuser->displayname)."',
+								'".$zuser->email."',
+								'".$znewuploadpathid."',
+								'".$zuserpassword."',
+								now(),
+								'".$znewuserid."',
+								now(),
+								'".$znewuserid."');");
+					}
+				}
+
+
+				/* process all uploads related to this download */
+				foreach ($zrequest->uploads as $zupload) {
+					/* assign a new uploadid if it is already in use */
+					$znewuploadid = $wtwhandlers->getNewKey('uploads', "uploadid", $zupload->uploadid);
+
+					$zneworiginalid = '';
+					$znewwebsizeid = '';
+					$znewthumbnailid = '';
+					$znewfileurl = '';
+					
+					/* each image has 3 associated records for original, websize, and thumbnail */
+					if ($zupload->uploadid == $zupload->originalid) {
+						$zneworiginalid = $znewuploadid;
+					} else if ($zupload->uploadid == $zupload->websizeid) {
+						$znewwebsizeid = $znewuploadid;
+					} else if ($zupload->uploadid == $zupload->thumbnailid) {
+						$znewthumbnailid = $znewuploadid;
+					}
+					
+					/* each image gets its own new ID if the initial one is already in use */
+					if (empty($zneworiginalid)) {
+						$zneworiginalid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zupload->originalid);
+					}
+					if (empty($znewwebsizeid)) {
+						$znewwebsizeid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zupload->websizeid);
+					}
+					if (empty($znewthumbnailid)) {
+						$znewthumbnailid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zupload->thumbnailid);
+					}
+					
+					$znewuploadsfolder = $znewfolder.'/uploads';
+					$znewuploadsurl = $znewurl.'/uploads';
+					if (!file_exists($znewuploadsfolder)) {
+						mkdir($znewuploadsfolder, octdec(wtw_chmod), true);
+						chmod($znewuploadsfolder, octdec(wtw_chmod));
+					}
+					if (!empty($zupload->filepath)) {
+						try {
+							/* check file types for valid downloads */
+							$zfileext = strtolower(pathinfo($zupload->filepath, PATHINFO_EXTENSION));
+							if ($zfileext == 'babylon' || $zfileext == 'manifest' || $zfileext == 'blend' || $zfileext == 'obj' || $zfileext == 'glb' || $zfileext == 'glbt' || $zfileext == 'fbx' || $zfileext == 'dae' || $zfileext == 'stl' || $zfileext == 'jpg' || $zfileext == 'jpeg' || $zfileext == 'bmp' || $zfileext == 'tif' || $zfileext == 'tiff' || $zfileext == 'png' || $zfileext == 'gif' || $zfileext == 'webp' || $zfileext == 'wav' || $zfileext == 'mp3' || $zfileext == 'mp4' || $zfileext == 'wma' || $zfileext == 'aac' || $zfileext == 'flac' || $zfileext == 'webm' || $zfileext == 'ogg' || $zfileext == 'mpg' || $zfileext == 'avi' || $zfileext == 'mov' || $zfileext == 'wmv' || $zfileext == 'flv' || $zfileext == 'swf' || $zfileext == 'mtl' || $zfileext == '3ds' || $zfileext == 'c4d' || $zfileext == 'txt' || $zfileext == 'log' || $zfileext == 'pdf') {
+								/* download each file */
+								file_put_contents($znewuploadsfolder.'/'.$zupload->filename, fopen($zupload->filepath, 'r'));
+								chmod($znewuploadsfolder.'/'.$zupload->filename, octdec(wtw_chmod));
+								$znewfileurl = $znewuploadsurl.'/'.$zupload->filename;
+							}
+						} catch (Exception $e) {
+							$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadUpdateWeb-getfile=".$e->getMessage());
+						}	
+					}
+					
+					/* get new foreign keys */
+					/* lookup foreign key values to new assigned values using "past" field prefix */
+					$znewuserid = $wtwhandlers->getUserIDfromPastID($zupload->userid);
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zupload->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zupload->updateuserid);
+					
+					$zhidedate = "null";
+					$zhide = "0";
+					$zcheckeddate = "null";
+					if (isset($zupload->hidedate)) {
+						$zhidedate = "'".$zupload->hidedate."'";
+					}
+					if ($zupload->hide == 1) {
+						$zhide = "1";
+					}
+					/* insert new record into uploads table */
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."uploads 
+						   (uploadid,
+							pastuploadid,
+							originalid,
+							websizeid,
+							thumbnailid,
+							userid,
+							filetitle,
+							filename,
+							fileextension,
+							filesize,
+							filetype,
+							filepath,
+							filedata,
+							imagewidth,
+							imageheight,
+							stock,
+							hidedate,
+							hideuserid,
+							hide,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						values
+						   ('".$znewuploadid."',
+							'".$zupload->uploadid."',
+							'".$zneworiginalid."',
+							'".$znewwebsizeid."',
+							'".$znewthumbnailid."',
+							'".$znewuserid."',
+							'".$zupload->filetitle."',
+							'".$zupload->filename."',
+							'".$zupload->fileextension."',
+							".$zupload->filesize.",
+							'".$zupload->filetype."',
+							'".$znewfileurl."',
+							'".$zupload->filedata."',
+							".$zupload->imagewidth.",
+							".$zupload->imageheight.",
+							0,
+							".$zhidedate.",
+							'".$zupload->hideuserid."',
+							".$zhide.",
+							'".$zupload->createdate."',
+							'".$znewcreateuserid."',
+							now(),
+							'".$znewupdateuserid."');");
+					
+					/* update foreign keys as needed */
+					if (!empty($zneworiginalid)) {
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."uploads 
+							set originalid='".$zneworiginalid."'
+							where (pastuploadid='".$zupload->originalid."'
+									or (websizeid='".$znewwebsizeid."' and not '".$znewwebsizeid."'='')
+									or (thumbnailid='".$znewthumbnailid."' and not '".$znewthumbnailid."'=''))
+								and originalid = '';");
+					}
+					if (!empty($znewwebsizeid)) {
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."uploads 
+							set websizeid='".$znewwebsizeid."'
+							where (pastuploadid = '".$zupload->websizeid."'
+									or (originalid='".$zneworiginalid."' and not '".$zneworiginalid."'='')
+									or (thumbnailid='".$znewthumbnailid."' and not '".$znewthumbnailid."'=''))
+								and websizeid = '';");
+					}
+					if (!empty($znewthumbnailid)) {
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."uploads 
+							set thumbnailid='".$znewthumbnailid."'
+							where (pastuploadid='".$zupload->thumbnailid."'
+									or (originalid='".$zneworiginalid."' and not '".$zneworiginalid."'='')
+									or (websizeid='".$zneworiginalid."' and not '".$zneworiginalid."'=''))
+								and thumbnailid = '';");
+					}
+				}
+
 		
+				/* write main web record */
+				/* get new foreign keys */
+				$znewsnapshotid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zrequest->snapshotid);
+				$znewuserid = $wtwhandlers->getUserIDfromPastID($zrequest->userid);
+				$znewshareuserid = $wtwhandlers->getUserIDfromPastID($zrequest->shareuserid);
+				$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zrequest->createuserid);
+				$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zrequest->updateuserid);
+				
+				switch($zwebtype) {
+					case "community":
+						/* get new foreign keys */
+						$znewtextureid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zrequest->textureid);
+						$znewskydomeid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zrequest->skydomeid);
+						
+						$zfoundcommunityid = '';
+						$zresults = $wtwhandlers->query("
+							select communityid 
+							from ".wtw_tableprefix."communities
+							where communityid='".$znewcommunityid."'
+							limit 1;
+						");
+						foreach($zresults as $zrow) {
+							$zfoundcommunityid = $zrow["communityid"];
+						}
+						
+						if (isset($zfoundcommunityid) && !empty($zfoundcommunityid)) {
+							/* update communities table */
+							$wtwhandlers->query("
+								update ".wtw_tableprefix."communities 
+								set versionid='".$zrequest->versionid."',
+									version='".$zrequest->version."',
+									versionorder=".$wtwhandlers->checkNumber($zrequest->versionorder).",
+									versiondesc'".addslashes($zrequest->versiondesc)."',
+									communitydescription='".$zrequest->communitydescription."',
+									userid='".$zuserid."',
+									positionx=".$wtwhandlers->checkNumber($zrequest->positionx,0).",
+									positiony=".$wtwhandlers->checkNumber($zrequest->positiony,0).",
+									positionz=".$wtwhandlers->checkNumber($zrequest->positionz,0).",
+									scalingx=".$wtwhandlers->checkNumber($zrequest->scalingx,1).",
+									scalingy=".$wtwhandlers->checkNumber($zrequest->scalingy,1).",
+									scalingz=".$wtwhandlers->checkNumber($zrequest->scalingz,1).",
+									rotationx=".$wtwhandlers->checkNumber($zrequest->rotationx,0).",
+									rotationy=".$wtwhandlers->checkNumber($zrequest->rotationy,0).",
+									rotationz=".$wtwhandlers->checkNumber($zrequest->rotationz,0).",
+									gravity=".$wtwhandlers->checkNumber($zrequest->gravity,9.8).",
+									groundpositiony=".$wtwhandlers->checkNumber($zrequest->groundpositiony,0).",
+									waterpositiony=".$wtwhandlers->checkNumber($zrequest->waterpositiony,-1).",
+									textureid='".$znewtextureid."',
+									skydomeid='".$znewskydomeid."',
+									skyinclination=".$zrequest->skyinclination.",
+									skyluminance=".$zrequest->skyluminance.",
+									skyazimuth=".$zrequest->skyazimuth.",
+									skyrayleigh=".$zrequest->skyrayleigh.",
+									skyturbidity=".$zrequest->skyturbidity.",
+									skymiedirectionalg=".$zrequest->skymiedirectionalg.",
+									skymiecoefficient=".$zrequest->skymiecoefficient.",
+									templatename='".$zrequest->templatename."',
+									tags='".$zrequest->tags."',
+									description='".$zrequest->description."',
+									snapshotid='".$znewsnapshotid."',
+									shareuserid='".$znewshareuserid."',
+									alttag='".$zrequest->alttag."',
+									buildingpositionx=".$wtwhandlers->checkNumber($zrequest->buildingpositionx,0).",
+									buildingpositiony=".$wtwhandlers->checkNumber($zrequest->buildingpositiony,0).",
+									buildingpositionz=".$wtwhandlers->checkNumber($zrequest->buildingpositionz,0).",
+									buildingscalingx=".$wtwhandlers->checkNumber($zrequest->buildingscalingx,1).",
+									buildingscalingy=".$wtwhandlers->checkNumber($zrequest->buildingscalingy,1).",
+									buildingscalingz=".$wtwhandlers->checkNumber($zrequest->buildingscalingz,1).",
+									buildingrotationx=".$wtwhandlers->checkNumber($zrequest->buildingrotationx,0).",
+									buildingrotationy=".$wtwhandlers->checkNumber($zrequest->buildingrotationy,0).",
+									buildingrotationz=".$wtwhandlers->checkNumber($zrequest->buildingrotationz,0).",
+									updatedate=now(),
+									updateuserid='".$zuserid."'
+								where communityid='".$zfoundcommunityid."'
+								limit 1;");
+						} else {
+							/* insert new record into communities table */
+							$wtwhandlers->query("
+								insert into ".wtw_tableprefix."communities 
+								   (communityid,
+									pastcommunityid,
+									versionid,
+									version,
+									versionorder,
+									versiondesc,
+									communityname,
+									communitydescription,
+									userid,
+									positionx,
+									positiony,
+									positionz,
+									scalingx,
+									scalingy,
+									scalingz,
+									rotationx,
+									rotationy,
+									rotationz,
+									gravity,
+									groundpositiony,
+									waterpositiony,
+									textureid,
+									skydomeid,
+									skyinclination,
+									skyluminance,
+									skyazimuth,
+									skyrayleigh,
+									skyturbidity,
+									skymiedirectionalg,
+									skymiecoefficient,
+									templatename,
+									tags,
+									description,
+									snapshotid,
+									shareuserid,
+									alttag,
+									buildingpositionx,
+									buildingpositiony,
+									buildingpositionz,
+									buildingscalingx,
+									buildingscalingy,
+									buildingscalingz,
+									buildingrotationx,
+									buildingrotationy,
+									buildingrotationz,
+									createdate,
+									createuserid,
+									updatedate,
+									updateuserid)
+								values
+								   ('".$znewcommunityid."',
+									'".$zrequest->communityid."',
+									'".$zrequest->versionid."',
+									'".$zrequest->version."',
+									".$wtwhandlers->checkNumber($zrequest->versionorder,1000000).",
+									'".addslashes($zrequest->versiondesc)."',
+									'".$zrequest->communityname."',
+									'".$zrequest->communitydescription."',
+									'".$zuserid."',
+									".$wtwhandlers->checkNumber($zrequest->positionx,0).",
+									".$wtwhandlers->checkNumber($zrequest->positiony,0).",
+									".$wtwhandlers->checkNumber($zrequest->positionz,0).",
+									".$wtwhandlers->checkNumber($zrequest->scalingx,1).",
+									".$wtwhandlers->checkNumber($zrequest->scalingy,1).",
+									".$wtwhandlers->checkNumber($zrequest->scalingz,1).",
+									".$wtwhandlers->checkNumber($zrequest->rotationx,0).",
+									".$wtwhandlers->checkNumber($zrequest->rotationy,0).",
+									".$wtwhandlers->checkNumber($zrequest->rotationz,0).",
+									".$wtwhandlers->checkNumber($zrequest->gravity,9.8).",
+									".$wtwhandlers->checkNumber($zrequest->groundpositiony,0).",
+									".$wtwhandlers->checkNumber($zrequest->waterpositiony,-1).",
+									'".$znewtextureid."',
+									'".$znewskydomeid."',
+									".$zrequest->skyinclination.",
+									".$zrequest->skyluminance.",
+									".$zrequest->skyazimuth.",
+									".$zrequest->skyrayleigh.",
+									".$zrequest->skyturbidity.",
+									".$zrequest->skymiedirectionalg.",
+									".$zrequest->skymiecoefficient.",
+									'".$zrequest->templatename."',
+									'".$zrequest->tags."',
+									'".$zrequest->description."',
+									'".$znewsnapshotid."',
+									'".$znewshareuserid."',
+									'".$zrequest->alttag."',
+									".$wtwhandlers->checkNumber($zrequest->buildingpositionx,0).",
+									".$wtwhandlers->checkNumber($zrequest->buildingpositiony,0).",
+									".$wtwhandlers->checkNumber($zrequest->buildingpositionz,0).",
+									".$wtwhandlers->checkNumber($zrequest->buildingscalingx,1).",
+									".$wtwhandlers->checkNumber($zrequest->buildingscalingy,1).",
+									".$wtwhandlers->checkNumber($zrequest->buildingscalingz,1).",
+									".$wtwhandlers->checkNumber($zrequest->buildingrotationx,0).",
+									".$wtwhandlers->checkNumber($zrequest->buildingrotationy,0).",
+									".$wtwhandlers->checkNumber($zrequest->buildingrotationz,0).",
+									now(),
+									'".$zuserid."',
+									now(),
+									'".$zuserid."');");
+						}
+						break;
+					case "building":
+						$zfoundbuildingid = '';
+						$zresults = $wtwhandlers->query("
+							select buildingid 
+							from ".wtw_tableprefix."buildings
+							where buildingid='".$znewbuildingid."'
+							limit 1;
+						");
+						foreach($zresults as $zrow) {
+							$zfoundbuildingid = $zrow["buildingid"];
+						}
+						
+						if (isset($zfoundbuildingid) && !empty($zfoundbuildingid)) {
+							/* update buildings table */
+							$wtwhandlers->query("
+								update ".wtw_tableprefix."buildings 
+								set versionid='".$zrequest->versionid."',
+									version='".$zrequest->version."',
+									versionorder='".$wtwhandlers->checkNumber($zrequest->versionorder,1000000)."',
+									versiondesc='".addslashes($zrequest->versiondesc)."',
+									buildingdescription='".$zrequest->buildingdescription."',
+									userid='".$zuserid."',
+									positionx=".$wtwhandlers->checkNumber($zrequest->positionx,0).",
+									positiony=".$wtwhandlers->checkNumber($zrequest->positiony,0).",
+									positionz=".$wtwhandlers->checkNumber($zrequest->positionz,0).",
+									scalingx=".$wtwhandlers->checkNumber($zrequest->scalingx,1).",
+									scalingy=".$wtwhandlers->checkNumber($zrequest->scalingy,1).",
+									scalingz=".$wtwhandlers->checkNumber($zrequest->scalingz,1).",
+									rotationx=".$wtwhandlers->checkNumber($zrequest->rotationx,0).",
+									rotationy=".$wtwhandlers->checkNumber($zrequest->rotationy,0).",
+									rotationz=".$wtwhandlers->checkNumber($zrequest->rotationz,0).",
+									gravity=".$wtwhandlers->checkNumber($zrequest->gravity,9.8).",
+									templatename='".$zrequest->templatename."',
+									tags='".$zrequest->tags."',
+									description='".$zrequest->description."',
+									snapshotid='".$znewsnapshotid."',
+									shareuserid='".$znewshareuserid."',
+									alttag='".$zrequest->alttag."',
+									updatedate=now(),
+									updateuserid='".$zuserid."'
+								where buildingid='".$znewbuildingid."'
+								limit 1;");
+						} else {
+							/* insert new record into buildings table */
+							$wtwhandlers->query("
+								insert into ".wtw_tableprefix."buildings 
+								   (buildingid,
+									pastbuildingid,
+									versionid,
+									version,
+									versionorder,
+									versiondesc,
+									buildingname,
+									buildingdescription,
+									userid,
+									positionx,
+									positiony,
+									positionz,
+									scalingx,
+									scalingy,
+									scalingz,
+									rotationx,
+									rotationy,
+									rotationz,
+									gravity,
+									templatename,
+									tags,
+									description,
+									snapshotid,
+									shareuserid,
+									alttag,
+									createdate,
+									createuserid,
+									updatedate,
+									updateuserid)
+								values
+								   ('".$znewbuildingid."',
+									'".$zrequest->buildingid."',
+									'".$zrequest->versionid."',
+									'".$zrequest->version."',
+									".$wtwhandlers->checkNumber($zrequest->versionorder,1000000).",
+									'".addslashes($zrequest->versiondesc)."',
+									'".$zrequest->buildingname."',
+									'".$zrequest->buildingdescription."',
+									'".$zuserid."',
+									".$wtwhandlers->checkNumber($zrequest->positionx,0).",
+									".$wtwhandlers->checkNumber($zrequest->positiony,0).",
+									".$wtwhandlers->checkNumber($zrequest->positionz,0).",
+									".$wtwhandlers->checkNumber($zrequest->scalingx,1).",
+									".$wtwhandlers->checkNumber($zrequest->scalingy,1).",
+									".$wtwhandlers->checkNumber($zrequest->scalingz,1).",
+									".$wtwhandlers->checkNumber($zrequest->rotationx,0).",
+									".$wtwhandlers->checkNumber($zrequest->rotationy,0).",
+									".$wtwhandlers->checkNumber($zrequest->rotationz,0).",
+									".$wtwhandlers->checkNumber($zrequest->gravity,9.8).",
+									'".$zrequest->templatename."',
+									'".$zrequest->tags."',
+									'".$zrequest->description."',
+									'".$znewsnapshotid."',
+									'".$znewshareuserid."',
+									'".$zrequest->alttag."',
+									now(),
+									'".$zuserid."',
+									now(),
+									'".$zuserid."');");
+						}
+						break;
+					case "thing":
+						$zfoundthingid = '';
+						$zresults = $wtwhandlers->query("
+							select thingid 
+							from ".wtw_tableprefix."things
+							where thingid='".$znewthingid."'
+							limit 1;
+						");
+						foreach($zresults as $zrow) {
+							$zfoundthingid = $zrow["thingid"];
+						}
+						
+						if (isset($zfoundthingid) && !empty($zfoundthingid)) {
+							/* update things table */
+							$wtwhandlers->query("
+								update ".wtw_tableprefix."things 
+								set versionid='".$zrequest->versionid."',
+									version='".$zrequest->version."',
+									versionorder=".$wtwhandlers->checkNumber($zrequest->versionorder,1000000).",
+									versiondesc='".addslashes($zrequest->versiondesc)."',
+									thingdescription='".$zrequest->thingdescription."',
+									userid='".$zuserid."',
+									positionx=".$wtwhandlers->checkNumber($zrequest->positionx,0).",
+									positiony=".$wtwhandlers->checkNumber($zrequest->positiony,0).",
+									positionz=".$wtwhandlers->checkNumber($zrequest->positionz,0).",
+									scalingx=".$wtwhandlers->checkNumber($zrequest->scalingx,1).",
+									scalingy=".$wtwhandlers->checkNumber($zrequest->scalingy,1).",
+									scalingz=".$wtwhandlers->checkNumber($zrequest->scalingz,1).",
+									rotationx=".$wtwhandlers->checkNumber($zrequest->rotationx,0).",
+									rotationy=".$wtwhandlers->checkNumber($zrequest->rotationy,0).",
+									rotationz=".$wtwhandlers->checkNumber($zrequest->rotationz,0).",
+									gravity=".$wtwhandlers->checkNumber($zrequest->gravity,9.8).",
+									templatename='".$zrequest->templatename."',
+									tags='".$zrequest->tags."',
+									description='".$zrequest->description."',
+									snapshotid='".$znewsnapshotid."',
+									shareuserid='".$znewshareuserid."',
+									alttag='".$zrequest->alttag."',
+									updatedate=now(),
+									updateuserid='".$zuserid."'
+								where thingid='".$znewthingid."'
+								limit 1;");
+						} else {
+							/* insert new record into things table */
+							$wtwhandlers->query("
+								insert into ".wtw_tableprefix."things 
+								   (thingid,
+									pastthingid,
+									versionid,
+									version,
+									versionorder,
+									versiondesc,
+									thingname,
+									thingdescription,
+									userid,
+									positionx,
+									positiony,
+									positionz,
+									scalingx,
+									scalingy,
+									scalingz,
+									rotationx,
+									rotationy,
+									rotationz,
+									gravity,
+									templatename,
+									tags,
+									description,
+									snapshotid,
+									shareuserid,
+									alttag,
+									createdate,
+									createuserid,
+									updatedate,
+									updateuserid)
+								values
+								   ('".$znewthingid."',
+									'".$zrequest->thingid."',
+									'".$zrequest->versionid."',
+									'".$zrequest->version."',
+									".$wtwhandlers->checkNumber($zrequest->versionorder,1000000).",
+									'".addslashes($zrequest->versiondesc)."',
+									'".$zrequest->thingname."',
+									'".$zrequest->thingdescription."',
+									'".$zuserid."',
+									".$wtwhandlers->checkNumber($zrequest->positionx,0).",
+									".$wtwhandlers->checkNumber($zrequest->positiony,0).",
+									".$wtwhandlers->checkNumber($zrequest->positionz,0).",
+									".$wtwhandlers->checkNumber($zrequest->scalingx,1).",
+									".$wtwhandlers->checkNumber($zrequest->scalingy,1).",
+									".$wtwhandlers->checkNumber($zrequest->scalingz,1).",
+									".$wtwhandlers->checkNumber($zrequest->rotationx,0).",
+									".$wtwhandlers->checkNumber($zrequest->rotationy,0).",
+									".$wtwhandlers->checkNumber($zrequest->rotationz,0).",
+									".$wtwhandlers->checkNumber($zrequest->gravity,9.8).",
+									'".$zrequest->templatename."',
+									'".$zrequest->tags."',
+									'".$zrequest->description."',
+									'".$znewsnapshotid."',
+									'".$znewshareuserid."',
+									'".$zrequest->alttag."',
+									now(),
+									'".$zuserid."',
+									now(),
+									'".$zuserid."');");
+						}
+						break;
+				}	
+				
+				/* process all avatar animations */
+				foreach ($zrequest->avataranimations as $zavataranimation) {
+				
+					/* check if the avataranimationid is already in use */
+					$znewavataranimationid = $wtwhandlers->getNewKey('avataranimations', "avataranimationid", $zavataranimation->avataranimationid);
+					
+					$znewanimationicon = '';
+					
+					$znewobjectfolder = $znewfolder.'/avataranimations';
+					if (!file_exists($znewobjectfolder)) {
+						mkdir($znewobjectfolder, octdec(wtw_chmod), true);
+						chmod($znewobjectfolder, octdec(wtw_chmod));
+					}
+					if (!empty($zavataranimation->objectfolder) && !empty($zavataranimation->objectfile)) {
+						$znewobjectfolder = $znewfolder.'/avataranimations/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zavataranimation->objectfile))));
+						if (!file_exists($znewobjectfolder)) {
+							mkdir($znewobjectfolder, octdec(wtw_chmod), true);
+							chmod($znewobjectfolder, octdec(wtw_chmod));
+						}
+						$zfileext = strtolower(pathinfo($znewobjectfolder."/".$zavataranimation->objectfile, PATHINFO_EXTENSION));
+						if ($zfileext == 'babylon') {
+							try {
+								file_put_contents($znewobjectfolder."/".$zavataranimation->objectfile, fopen($zavataranimation->objectfolder.$zavataranimation->objectfile, 'r'));
+								chmod($znewobjectfolder."/".$zavataranimation->objectfile, octdec(wtw_chmod));
+							} catch (Exception $e) {
+								$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-babylon=".$e->getMessage());
+							}	
+							try {
+								file_put_contents($znewobjectfolder."/".$zavataranimation->objectfile.".manifest", fopen($zavataranimation->objectfolder.$zavataranimation->objectfile.".manifest", 'r'));
+								chmod($znewobjectfolder."/".$zavataranimation->objectfile.".manifest", octdec(wtw_chmod));
+							} catch (Exception $e) {
+								$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-manifest=".$e->getMessage());
+							}	
+							
+							if (!empty($zavataranimation->animationicon)) {
+								try {
+									$ziconfilename = basename($zavataranimation->animationicon);  
+									$znewanimationicon = $znewobjectfolder."/".$ziconfilename;
+									file_put_contents($znewanimationicon, fopen($zavataranimation->animationicon, 'r'));
+									chmod($znewanimationicon, octdec(wtw_chmod));
+								} catch (Exception $e) {
+									$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-icon=".$e->getMessage());
+								}	
+							}
+						}
+					}
+					
+					/* get new foreign keys */
+					$znewsoundid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zavataranimation->soundid);
+					
+					$znewuserid = $wtwhandlers->getUserIDfromPastID($zavataranimation->userid);
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zavataranimation->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zavataranimation->updateuserid);
+					
+					/* insert new record into avataranimations table */
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."avataranimations 
+						   (avataranimationid,
+							pastavataranimationid,
+							userid,
+							loadpriority,
+							animationevent,
+							animationfriendlyname,
+							animationicon,
+							objectfolder,
+							objectfile,
+							startframe,
+							endframe,
+							animationloop,
+							speedratio,
+							soundid,
+							soundmaxdistance,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						values
+						   ('".$znewavataranimationid."',
+							'".$zavataranimation->avataranimationid."',
+							'".$znewuserid."',
+							".$wtwhandlers->checkNumber($zavataranimation->loadpriority,25).",
+							'".$zavataranimation->animationevent."',
+							'".$zavataranimation->animationfriendlyname."',
+							'".$znewanimationicon."',
+							'".$znewobjectfolder."',
+							'".$zavataranimation->objectfile."',
+							".$wtwhandlers->checkNumber($zavataranimation->startframe,1).",
+							".$wtwhandlers->checkNumber($zavataranimation->endframe,1).",
+							".$wtwhandlers->checkNumber($zavataranimation->animationloop,1).",
+							".$wtwhandlers->checkNumber($zavataranimation->speedratio,1).",
+							'".$znewsoundid."',
+							".$wtwhandlers->checkNumber($zavataranimation->soundmaxdistance,100).",
+							'".$zavataranimation->createdate."',
+							'".$znewcreateuserid."',
+							now(),
+							'".$znewupdateuserid."');");
+				}			
+				
+
+				/* process all action zones */
+				foreach ($zrequest->actionzones as $zactionzone) {
+					/* check if the actionzoneid is already in use */
+					$znewactionzoneid = '';
+					
+					/* get new foreign keys */
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zactionzone->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zactionzone->updateuserid);
+					
+					$zfoundactionzoneid = '';
+					$zresults = $wtwhandlers->query("
+						select actionzoneid
+						from ".wtw_tableprefix."actionzones
+						where actionzoneid='".$zactionzone->actionzoneid."'
+						limit 1;
+					");
+					foreach ($zresults as $zrow) {
+						$zfoundactionzoneid = $zrow["actionzoneid"];
+					}
+					
+					if (isset($zfoundactionzoneid) && !empty($zfoundactionzoneid)) {
+						$znewactionzoneid = $zfoundactionzoneid;
+
+						/* update actionzones table */
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."actionzones 
+							set communityid='".$znewcommunityid."',
+								buildingid='".$znewbuildingid."',
+								thingid='".$znewthingid."',
+								attachmoldid='".$zactionzone->attachmoldid."',
+								loadactionzoneid='".$zactionzone->loadactionzoneid."',
+								parentactionzoneid='".$zactionzone->parentactionzoneid."',
+								actionzonename='".$zactionzone->actionzonename."',
+								actionzonetype='".$zactionzone->actionzonetype."',
+								actionzoneshape='".$zactionzone->actionzoneshape."',
+								movementtype='".$zactionzone->movementtype."',
+								movementdistance=".$zactionzone->movementdistance.",
+								positionx=".$zactionzone->positionx.",
+								positiony=".$zactionzone->positiony.",
+								positionz=".$zactionzone->positionz.",
+								scalingx=".$zactionzone->scalingx.",
+								scalingy=".$zactionzone->scalingy.",
+								scalingz=".$zactionzone->scalingz.",
+								rotationx=".$zactionzone->rotationx.",
+								rotationy=".$zactionzone->rotationy.",
+								rotationz=".$zactionzone->rotationz.",
+								axispositionx=".$zactionzone->axispositionx.",
+								axispositiony=".$zactionzone->axispositiony.",
+								axispositionz=".$zactionzone->axispositionz.",
+								axisrotationx=".$zactionzone->axisrotationx.",
+								axisrotationy=".$zactionzone->axisrotationy.",
+								axisrotationz=".$zactionzone->axisrotationz.",
+								rotateaxis='".$zactionzone->rotateaxis."',
+								rotatedegrees=".$zactionzone->rotatedegrees.",
+								rotatedirection=".$zactionzone->rotatedirection.",
+								rotatespeed=".$zactionzone->rotatespeed.",
+								value1=".$zactionzone->value1.",
+								value2=".$zactionzone->value2.",
+								defaulteditform=".$zactionzone->defaulteditform.",
+								jsfunction='".$zactionzone->jsfunction."',
+								jsparameters='".$zactionzone->jsparameters."',
+								updatedate=now(),
+								updateuserid='".$znewupdateuserid."'
+							where actionzoneid='".$znewactionzoneid."'
+							limit 1;");
+					} else {
+						/* get new key */
+						$znewactionzoneid = $wtwhandlers->getNewKey('actionzones', "actionzoneid", $zactionzone->actionzoneid);
+						
+						/* insert new record into actionzones table */
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."actionzones 
+							   (actionzoneid,
+								pastactionzoneid,
+								communityid,
+								buildingid,
+								thingid,
+								attachmoldid,
+								loadactionzoneid,
+								parentactionzoneid,
+								actionzonename,
+								actionzonetype,
+								actionzoneshape,
+								movementtype,
+								movementdistance,
+								positionx,
+								positiony,
+								positionz,
+								scalingx,
+								scalingy,
+								scalingz,
+								rotationx,
+								rotationy,
+								rotationz,
+								axispositionx,
+								axispositiony,
+								axispositionz,
+								axisrotationx,
+								axisrotationy,
+								axisrotationz,
+								rotateaxis,
+								rotatedegrees,
+								rotatedirection,
+								rotatespeed,
+								value1,
+								value2,
+								defaulteditform,
+								jsfunction,
+								jsparameters,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$znewactionzoneid."',
+								'".$zactionzone->actionzoneid."',
+								'".$znewcommunityid."',
+								'".$znewbuildingid."',
+								'".$znewthingid."',
+								'".$zactionzone->attachmoldid."',
+								'".$zactionzone->loadactionzoneid."',
+								'".$zactionzone->parentactionzoneid."',
+								'".$zactionzone->actionzonename."',
+								'".$zactionzone->actionzonetype."',
+								'".$zactionzone->actionzoneshape."',
+								'".$zactionzone->movementtype."',
+								".$zactionzone->movementdistance.",				
+								".$zactionzone->positionx.",
+								".$zactionzone->positiony.",
+								".$zactionzone->positionz.",
+								".$zactionzone->scalingx.",
+								".$zactionzone->scalingy.",
+								".$zactionzone->scalingz.",
+								".$zactionzone->rotationx.",
+								".$zactionzone->rotationy.",
+								".$zactionzone->rotationz.",
+								".$zactionzone->axispositionx.",
+								".$zactionzone->axispositiony.",
+								".$zactionzone->axispositionz.",
+								".$zactionzone->axisrotationx.",
+								".$zactionzone->axisrotationy.",
+								".$zactionzone->axisrotationz.",
+								'".$zactionzone->rotateaxis."',
+								".$zactionzone->rotatedegrees.",
+								".$zactionzone->rotatedirection.",
+								".$zactionzone->rotatespeed.",
+								".$zactionzone->value1.",
+								".$zactionzone->value2.",
+								".$zactionzone->defaulteditform.",
+								'".$zactionzone->jsfunction."',
+								'".$zactionzone->jsparameters."',
+								'".$zactionzone->createdate."',
+								'".$znewcreateuserid."',
+								now(),
+								'".$znewupdateuserid."');");
+					}
+						
+					foreach ($zactionzone->animations as $zazanimation) {
+						/* check if the actionzoneanimationid is already in use */
+						$znewactionzoneanimationid = $wtwhandlers->getNewKey('actionzoneanimations', "actionzoneanimationid", $zazanimation->actionzoneanimationid);
+						
+						/* get new foreign keys */
+						$znewavataranimationid = $wtwhandlers->getIDByPastID('avataranimations', 'avataranimationid', 'pastavataranimationid', $zazanimation->avataranimationid);
+						
+						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zazanimation->createuserid);
+						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zazanimation->updateuserid);
+
+						$zfoundactionzoneanimationid = '';
+						$zresults = $wtwhandlers->query("
+							select actionzoneanimationid
+							from ".wtw_tableprefix."actionzoneanimations
+							where actionzoneanimationid='".$zazanimation->actionzoneanimationid."'
+							limit 1;
+						");
+						foreach ($zresults as $zrow) {
+							$zfoundactionzoneanimationid = $zrow["actionzoneanimationid"];
+						}
+						
+						if (isset($zfoundactionzoneanimationid) && !empty($zfoundactionzoneanimationid)) {
+							/* update actionzoneanimations table */
+							$wtwhandlers->query("
+								update ".wtw_tableprefix."actionzoneanimations 
+								set actionzoneid='".$znewactionzoneid."',
+									communityid='".$znewcommunityid."',
+									buildingid='".$znewbuildingid."',
+									thingid='".$znewthingid."',
+									avataranimationid='".$znewavataranimationid."',
+									updatedate=now(),
+									updateuserid='".$znewupdateuserid."'
+								where actionzoneanimationid='".$zfoundactionzoneanimationid."'
+								limit 1;");	
+						} else {
+							/* insert new record into actionzoneanimations table */
+							$wtwhandlers->query("
+								insert into ".wtw_tableprefix."actionzoneanimations 
+								   (actionzoneanimationid,
+									pastactionzoneanimationid,
+									actionzoneid,
+									communityid,
+									buildingid,
+									thingid,
+									avataranimationid,
+									createdate,
+									createuserid,
+									updatedate,
+									updateuserid)
+								values
+								   ('".$znewactionzoneanimationid."',
+									'".$zazanimation->actionzoneanimationid."',
+									'".$znewactionzoneid."',
+									'".$znewcommunityid."',
+									'".$znewbuildingid."',
+									'".$znewthingid."',
+									'".$znewavataranimationid."',
+									'".$zazanimation->createdate."',
+									'".$znewcreateuserid."',
+									now(),
+									'".$znewupdateuserid."');");	
+						}
+					}
+				}
+
+				/* process action zone foreign action zones */
+				$zresults = $wtwhandlers->query("
+					select *  from ".wtw_tableprefix."actionzones 
+					where communityid='".$znewcommunityid."'
+						and buildingid='".$znewbuildingid."'
+						and thingid='".$znewthingid."';");
+				foreach ($zresults as $zrow) {
+					/* get new foreign keys */
+					$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zrow["loadactionzoneid"]);
+					$znewparentactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zrow["parentactionzoneid"]);
+
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."actionzones
+						set loadactionzoneid='".$znewloadactionzoneid."',
+							parentactionzoneid='".$znewparentactionzoneid."'
+						where actionzoneid='".$zrow["actionzoneid"]."'
+						limit 1;");
+				}
+
+
+				/* process all scripts */
+				foreach ($zrequest->scripts as $zscript) {
+				
+					/* check if the scriptid is already in use */
+					$znewscriptid = $wtwhandlers->getNewKey('scripts', "scriptid", $zscript->scriptid);
+					
+					$znewscriptfolder = $znewfolder.'/scripts';
+					if (!file_exists($znewscriptfolder)) {
+						mkdir($znewscriptfolder, octdec(wtw_chmod), true);
+						chmod($znewscriptfolder, octdec(wtw_chmod));
+					}
+					if (!empty($zscript->scriptpath)) {
+						$zfileext = strtolower(pathinfo($znewscriptfolder."/".$zscript->scriptfilename, PATHINFO_EXTENSION));
+						if ($zfileext == 'js') {
+							try {
+								file_put_contents($znewscriptfolder."/".$zscript->scriptfilename, fopen($zscript->scriptpath, 'r'));
+								chmod($znewscriptfolder."/".$zscript->scriptfilename, octdec(wtw_chmod));
+							} catch (Exception $e) {
+								$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadUpdateWeb-getfile-js=".$e->getMessage());
+							}	
+						}
+					}
+					
+					/* get new foreign keys */
+					$znewactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zscript->actionzoneid);
+					
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zscript->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zscript->updateuserid);
+					
+					/* insert new record into scripts table */
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."scripts 
+						   (scriptid,
+							pastscriptid,
+							actionzoneid,
+							webtype,
+							scriptname,
+							scriptpath,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						values
+						   ('".$znewscriptid."',
+							'".$zscript->scriptid."',
+							'".$znewactionzoneid."',
+							'".$zscript->webtype."',
+							'".$zscript->scriptname."',
+							'".$znewscriptfolder."/".$zscript->scriptfilename."',
+							'".$zscript->createdate."',
+							'".$znewcreateuserid."',
+							now(),
+							'".$znewupdateuserid."');");		
+				}
+
+
+				/* process parent connecting grids */
+				foreach ($zrequest->connectinggrids as $zconnectinggrid) {
+					/* check if the connectinggridid is already in use */
+					$znewconnectinggridid = $wtwhandlers->getNewKey('connectinggrids', "connectinggridid", $zconnectinggrid->connectinggridid);
+					
+					/* get new foreign keys */
+					$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->loadactionzoneid);
+					$znewaltloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->altloadactionzoneid);
+					$znewunloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->unloadactionzoneid);
+					$znewattachactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->attachactionzoneid);
+					
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->updateuserid);
+					
+					$zfoundconnectinggridid = '';
+					$zresults = $wtwhandlers->query("
+						select connectinggridid
+						from ".wtw_tableprefix."connectinggrids
+						where connectinggridid='".$zconnectinggrid->connectinggridid."'
+						limit 1;
+					");
+					foreach ($zresults as $zrow) {
+						$zfoundconnectinggridid = $zrow["connectinggridid"];
+					}
+					
+					if (isset($zfoundconnectinggridid) && !empty($zfoundconnectinggridid)) {
+						/* update connectinggrids table */
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."connectinggrids 
+							set parentwebid='',
+								parentwebtype='".$zconnectinggrid->parentwebtype."',
+								childwebid='".$zwebid."',
+								childwebtype='".$zconnectinggrid->childwebtype."',
+								loadactionzoneid='".$znewloadactionzoneid."',
+								altloadactionzoneid='".$znewaltloadactionzoneid."',
+								unloadactionzoneid='".$znewunloadactionzoneid."',
+								attachactionzoneid='".$znewattachactionzoneid."',
+								alttag='".$zconnectinggrid->alttag."',
+								updatedate=now(),
+								updateuserid='".$znewupdateuserid."'
+							where connectinggridid='".$zfoundconnectinggridid."'
+							limit 1;");
+					} else {
+						
+						/* insert new record into connectinggrids table */
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."connectinggrids 
+							   (connectinggridid,
+								pastconnectinggridid,
+								parentwebid,
+								parentwebtype,
+								childwebid,
+								childwebtype,
+								positionx,
+								positiony,
+								positionz,
+								scalingx,
+								scalingy,
+								scalingz,
+								rotationx,
+								rotationy,
+								rotationz,
+								loadactionzoneid,
+								altloadactionzoneid,
+								unloadactionzoneid,
+								attachactionzoneid,
+								alttag,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$znewconnectinggridid."',
+								'".$zconnectinggrid->connectinggridid."',
+								'',
+								'".$zconnectinggrid->parentwebtype."',
+								'".$zwebid."',
+								'".$zconnectinggrid->childwebtype."',
+								".$zconnectinggrid->positionx.",
+								".$zconnectinggrid->positiony.",
+								".$zconnectinggrid->positionz.",
+								".$zconnectinggrid->scalingx.",
+								".$zconnectinggrid->scalingy.",
+								".$zconnectinggrid->scalingz.",
+								".$zconnectinggrid->rotationx.",
+								".$zconnectinggrid->rotationy.",
+								".$zconnectinggrid->rotationz.",
+								'".$znewloadactionzoneid."',
+								'".$znewaltloadactionzoneid."',
+								'".$znewunloadactionzoneid."',
+								'".$znewattachactionzoneid."',
+								'".$zconnectinggrid->alttag."',
+								'".$zconnectinggrid->createdate."',
+								'".$znewcreateuserid."',
+								now(),
+								'".$znewupdateuserid."');");
+					}
+				}
+				
+
+				/* process content ratings */
+				foreach ($zrequest->contentratings as $zcontentrating) {
+					/* check if the contentratingid is already in use */
+					$znewcontentratingid = $wtwhandlers->getNewKey('contentratings', "contentratingid", $zcontentrating->contentratingid);
+					
+					/* get new foreign keys */
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zcontentrating->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zcontentrating->updateuserid);
+
+					$zfoundcontentratingid = '';
+					$zresults = $wtwhandlers->query("
+						select contentratingid
+						from ".wtw_tableprefix."contentratings
+						where contentratingid='".$zcontentrating->contentratingid."'
+						limit 1;
+					");
+					foreach ($zresults as $zrow) {
+						$zfoundcontentratingid = $zrow["contentratingid"];
+					}
+					
+					if (isset($zfoundcontentratingid) && !empty($zfoundcontentratingid)) {
+					
+						/* insert new record into connectinggrids table */
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."contentratings 
+							set webid='".$zwebid."',
+								webtype='".$zcontentrating->webtype."',
+								rating='".$zcontentrating->rating."',
+								ratingvalue=".$zcontentrating->ratingvalue.",
+								contentwarning='".$zcontentrating->contentwarning."',
+								updatedate=now(),
+								updateuserid='".$znewupdateuserid."'
+							where contentratingid='".$zfoundcontentratingid."'
+							limit 1;");
+					} else {
+						/* insert new record into connectinggrids table */
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."contentratings 
+							   (contentratingid,
+								pastcontentratingid,
+								webid,
+								webtype,
+								rating,
+								ratingvalue,
+								contentwarning,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$znewcontentratingid."',
+								'".$zcontentrating->contentratingid."',
+								'".$zwebid."',
+								'".$zcontentrating->webtype."',
+								'".$zcontentrating->rating."',
+								".$zcontentrating->ratingvalue.",
+								'".$zcontentrating->contentwarning."',
+								'".$zcontentrating->createdate."',
+								'".$znewcreateuserid."',
+								now(),
+								'".$znewupdateuserid."');");
+					}
+				}
+				
+
+				/* process uploaded objects */
+				foreach ($zrequest->uploadobjects as $zuploadobject) {
+					$znewuploadobjectid = $wtwhandlers->getNewKey('uploadobjects', "uploadobjectid", $zuploadobject->uploadobjectid);
+
+					if (!empty($zuploadobject->uploadobjectid) && isset($zuploadobject->uploadobjectid)) {
+						
+						$znewobjectfolder = $znewfolder.'/objects';
+						if (!file_exists($znewobjectfolder)) {
+							mkdir($znewobjectfolder, octdec(wtw_chmod), true);
+							chmod($znewobjectfolder, octdec(wtw_chmod));
+						}
+						$znewobjectfolder = $znewfolder.'/objects/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zuploadobject->objectfile))));
+						if (!file_exists($znewobjectfolder)) {
+							mkdir($znewobjectfolder, octdec(wtw_chmod), true);
+							chmod($znewobjectfolder, octdec(wtw_chmod));
+						}
+						$znewobjecturl = $znewurl.'/objects/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zuploadobject->objectfile))))."/";
+						
+						/* get new foreign keys */
+						$znewuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->userid);
+						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->createuserid);
+						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobject->updateuserid);
+						
+						/* insert new record into uploadobjects table */
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."uploadobjects 
+							   (uploadobjectid,
+								pastuploadobjectid,
+								userid,
+								objectfolder,
+								objectfile,
+								stock,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$znewuploadobjectid."',
+								'".$zuploadobject->uploadobjectid."',
+								'".$zuserid."',
+								'".$znewobjecturl."',
+								'".$zuploadobject->objectfile."',
+								".$zuploadobject->stock.",
+								'".$zuploadobject->createdate."',
+								'".$znewcreateuserid."',
+								now(),
+								'".$znewupdateuserid."');");
+						
+						foreach($zuploadobject->objectfiles as $zfile) {
+							try {
+								$zfileext = strtolower(pathinfo($zfile->filepath, PATHINFO_EXTENSION));
+								if ($zfileext == 'babylon' || $zfileext == 'manifest' || $zfileext == 'blend' || $zfileext == 'obj' || $zfileext == 'glb' || $zfileext == 'glbt' || $zfileext == 'fbx' || $zfileext == 'dae' || $zfileext == 'stl' || $zfileext == 'jpg' || $zfileext == 'jpeg' || $zfileext == 'bmp' || $zfileext == 'tif' || $zfileext == 'tiff' || $zfileext == 'png' || $zfileext == 'gif' || $zfileext == 'webp' || $zfileext == 'wav' || $zfileext == 'mp3' || $zfileext == 'mp4' || $zfileext == 'wma' || $zfileext == 'aac' || $zfileext == 'flac' || $zfileext == 'webm' || $zfileext == 'ogg' || $zfileext == 'mpg' || $zfileext == 'avi' || $zfileext == 'mov' || $zfileext == 'wmv' || $zfileext == 'flv' || $zfileext == 'swf' || $zfileext == 'mtl' || $zfileext == '3ds' || $zfileext == 'c4d' || $zfileext == 'txt' || $zfileext == 'log' || $zfileext == 'pdf') {
+									file_put_contents($znewobjectfolder.'/'.$zfile->filename, fopen($zfile->filepath, 'r'));
+									chmod($znewobjectfolder.'/'.$zfile->filename, octdec(wtw_chmod));
+								}
+							} catch (Exception $e) {
+								$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadUpdateWeb-getfiles=".$e->getMessage());
+							}	
+						}
+						
+						
+						/* process upload object animations */
+						foreach ($zuploadobject->uploadobjectanimations as $zuploadobjectanimation) {
+						
+							/* check if the upload object animation id (objectanimationid) is already in use */
+							$znewobjectanimationid = $wtwhandlers->getNewKey('uploadobjectanimations', "objectanimationid", $zuploadobjectanimation->objectanimationid);
+							
+							/* get new foreign keys */
+							$znewsoundid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zuploadobjectanimation->soundid);
+							
+							$znewuserid = $wtwhandlers->getUserIDfromPastID($zuploadobjectanimation->userid);
+							$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobjectanimation->createuserid);
+							$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zuploadobjectanimation->updateuserid);
+							
+							/* insert new record into uploadobjectanimations table */
+							$wtwhandlers->query("
+								insert into ".wtw_tableprefix."uploadobjectanimations 
+								   (objectanimationid,
+									pastobjectanimationid,
+									uploadobjectid,
+									userid,
+									animationname,
+									moldnamepart,
+									moldevent,
+									startframe,
+									endframe,
+									animationloop,
+									speedratio,
+									animationendscript,
+									animationendparameters,
+									stopcurrentanimations,
+									additionalscript,
+									additionalparameters,
+									soundid,
+									soundmaxdistance,
+									createdate,
+									createuserid,
+									updatedate,
+									updateuserid)
+								values
+								   ('".$znewobjectanimationid."',
+									'".$zuploadobjectanimation->objectanimationid."',
+									'".$znewuploadobjectid."',
+									'".$znewuserid."',
+									'".$zuploadobjectanimation->animationname."',
+									'".$zuploadobjectanimation->moldnamepart."',
+									'".$zuploadobjectanimation->moldevent."',
+									".$zuploadobjectanimation->startframe.",
+									".$zuploadobjectanimation->endframe.",
+									".$zuploadobjectanimation->animationloop.",
+									".$zuploadobjectanimation->speedratio.",
+									'".$zuploadobjectanimation->animationendscript."',
+									'".$zuploadobjectanimation->animationendparameters."',
+									".$zuploadobjectanimation->stopcurrentanimations.",
+									'".$zuploadobjectanimation->additionalscript."',
+									'".$zuploadobjectanimation->additionalparameters."',
+									'".$znewsoundid."',
+									".$zuploadobjectanimation->soundmaxdistance.",
+									'".$zuploadobjectanimation->createdate."',
+									'".$znewcreateuserid."',
+									now(),
+									'".$znewupdateuserid."');");
+						}
+					}
+				}			
+
+
+				/* process all molds */
+				foreach ($zrequest->molds as $zmold) {
+					/* check if the moldid is already in use */
+					$znewmoldid = '';
+					$zsql = '';
+					$zsqlvalues = '';
+					$zfoundmoldid = '';
+
+					switch($zwebtype) {
+						case "community":
+							$zresults = $wtwhandlers->query("
+								select communitymoldid
+								from ".wtw_tableprefix."communitymolds
+								where communitymoldid='".$zmold->communitymoldid."'
+								limit 1;
+							");
+							foreach ($zresults as $zrow) {
+								$zfoundmoldid = $zrow["communitymoldid"];
+							}
+							
+							if (isset($zfoundmoldid) && !empty($zfoundmoldid)) {
+								/* update communitymolds table */
+								$znewmoldid = $zfoundmoldid;
+								$zsql = "update ".wtw_tableprefix."communitymolds
+								   set communityid='".$znewcommunityid."',";
+								$zsqlvalues = "where communitymoldid='".$zfoundmoldid."'
+									limit 1;";
+							} else {
+								$znewmoldid = $wtwhandlers->getNewKey($zwebtype.'molds', $zwebtype.'moldid', $zmold->communitymoldid);
+								/* insert new record into communitymolds table */
+								$zsql = "insert into ".wtw_tableprefix."communitymolds
+								   (communitymoldid,
+									pastcommunitymoldid,
+									communityid,";
+								$zsqlvalues = "('".$znewmoldid."',
+									'".$zmold->communitymoldid."',
+									'".$znewcommunityid."',";
+							}
+							break;
+						case "building":
+							$zresults = $wtwhandlers->query("
+								select buildingmoldid
+								from ".wtw_tableprefix."buildingmolds
+								where buildingmoldid='".$zmold->buildingmoldid."'
+								limit 1;
+							");
+							foreach ($zresults as $zrow) {
+								$zfoundmoldid = $zrow["buildingmoldid"];
+							}
+							
+							if (isset($zfoundmoldid) && !empty($zfoundmoldid)) {
+								/* update buildingmolds table */
+								$znewmoldid = $zfoundmoldid;
+								$zsql = "update ".wtw_tableprefix."buildingmolds
+								   set buildingid='".$znewbuildingid."',";
+								$zsqlvalues = "where buildingmoldid='".$zfoundmoldid."'
+									limit 1;";
+							} else {
+								$znewmoldid = $wtwhandlers->getNewKey($zwebtype.'molds', $zwebtype.'moldid', $zmold->buildingmoldid);
+								/* insert new record into buildingmolds table */
+								$zsql = "insert into ".wtw_tableprefix."buildingmolds
+								   (buildingmoldid,
+									pastbuildingmoldid,
+									buildingid,";
+								$zsqlvalues = "('".$znewmoldid."',
+									'".$zmold->buildingmoldid."',
+									'".$znewbuildingid."',";
+							}
+							break;
+						case "thing":
+							$zresults = $wtwhandlers->query("
+								select thingmoldid
+								from ".wtw_tableprefix."thingmolds
+								where thingmoldid='".$zmold->thingmoldid."'
+								limit 1;
+							");
+							foreach ($zresults as $zrow) {
+								$zfoundmoldid = $zrow["thingmoldid"];
+							}
+							
+							if (isset($zfoundmoldid) && !empty($zfoundmoldid)) {
+								/* update thingmolds table */
+								$znewmoldid = $zfoundmoldid;
+								$zsql = "update ".wtw_tableprefix."thingmolds
+								   set thingid='".$znewthingid."',";
+								$zsqlvalues = "where thingmoldid='".$zfoundmoldid."'
+									limit 1;";
+							} else {
+								$znewmoldid = $wtwhandlers->getNewKey($zwebtype.'molds', $zwebtype.'moldid', $zmold->thingmoldid);
+								/* insert new record into thingmolds table */
+								$zsql = "insert into ".wtw_tableprefix."thingmolds
+								   (thingmoldid,
+									pastthingmoldid,
+									thingid,";
+								$zsqlvalues = "('".$znewmoldid."',
+									'".$zmold->pastthingmoldid."',
+									'".$znewthingid."',";
+							}
+							break;
+					}
+
+					if (!empty($zsql)) {
+						$znewtextureid = '';
+						$znewtexturebumpid = '';
+						$znewtexturehoverid = '';
+						$znewvideoid = '';
+						$znewvideoposterid = '';
+						$znewheightmapid = '';
+						$znewmixmapid = '';
+						$znewtexturerid = '';
+						$znewtexturegid = '';
+						$znewtexturebid = '';
+						$znewtexturebumprid = '';
+						$znewtexturebumpgid = '';
+						$znewtexturebumpbid = '';
+						$znewsoundid = '';
+						$znewtextureid = '';
+						
+						/* get new foreign keys */
+						$znewtextureid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->textureid);
+						$znewtexturebumpid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebumpid);
+						$znewtexturehoverid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturehoverid);
+						$znewvideoid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->videoid);
+						$znewvideoposterid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->videoposterid);
+						$znewheightmapid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->heightmapid);
+						$znewmixmapid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->mixmapid);
+						$znewtexturerid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturerid);
+						$znewtexturegid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturegid);
+						$znewtexturebid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebid);
+						$znewtexturebumprid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebumprid);
+						$znewtexturebumpgid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebumpgid);
+						$znewtexturebumpbid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->texturebumpbid);
+						$znewsoundid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zmold->soundid);
+
+						$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zmold->loadactionzoneid);
+						$znewunloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zmold->unloadactionzoneid);
+						$znewactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zmold->actionzoneid);
+						
+						$znewuploadobjectid = $wtwhandlers->getIDByPastID('uploadobjects', 'uploadobjectid', 'pastuploadobjectid', $zmold->uploadobjectid);
+						
+						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zmold->createuserid);
+						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zmold->updateuserid);
+						
+						if (isset($zfoundmoldid) && !empty($zfoundmoldid)) {
+							/* remainder fo the common fields for communitymolds, buildingmolds, and thingmolds */
+							$zsql .= "
+								loadactionzoneid='".$znewloadactionzoneid."',
+								unloadactionzoneid='".$znewunloadactionzoneid."',
+								shape='".$zmold->shape."',
+								covering='".$zmold->covering."',
+								positionx=".$zmold->positionx.",
+								positiony=".$zmold->positiony.",
+								positionz=".$zmold->positionz.",
+								scalingx=".$zmold->scalingx.",
+								scalingy=".$zmold->scalingy.",
+								scalingz=".$zmold->scalingz.",
+								rotationx=".$zmold->rotationx.",
+								rotationy=".$zmold->rotationy.",
+								rotationz=".$zmold->rotationz.",
+								special1=".$zmold->special1.",
+								special2=".$zmold->special2.",
+								uoffset=".$zmold->uoffset.",
+								voffset=".$zmold->voffset.",
+								uscale=".$zmold->uscale.",
+								vscale=".$zmold->vscale.",
+								uploadobjectid='".$znewuploadobjectid."',
+								graphiclevel=".$zmold->graphiclevel.",
+								textureid='".$znewtextureid."',
+								texturebumpid='".$znewtexturebumpid."',
+								texturehoverid='".$znewtexturehoverid."',
+								videoid='".$znewvideoid."',
+								videoposterid='".$znewvideoposterid."',
+								diffusecolor='".$zmold->diffusecolor."',
+								specularcolor='".$zmold->specularcolor."',
+								emissivecolor='".$zmold->emissivecolor."',
+								ambientcolor='".$zmold->ambientcolor."',
+								heightmapid='".$znewheightmapid."',
+								mixmapid='".$znewmixmapid."',
+								texturerid='".$znewtexturerid."',
+								texturegid='".$znewtexturegid."',
+								texturebid='".$znewtexturebid."',
+								texturebumprid='".$znewtexturebumprid."',
+								texturebumpgid='".$znewtexturebumpgid."',
+								texturebumpbid='".$znewtexturebumpbid."',
+								soundid='".$znewsoundid."',
+								soundname='".$zmold->soundname."',
+								soundattenuation='".$zmold->soundattenuation."',
+								soundloop=".$zmold->soundloop.",
+								soundmaxdistance=".$zmold->soundmaxdistance.",
+								soundrollofffactor=".$zmold->soundrollofffactor.",
+								soundrefdistance=".$zmold->soundrefdistance.",
+								soundconeinnerangle=".$zmold->soundconeinnerangle.",
+								soundconeouterangle=".$zmold->soundconeouterangle.",
+								soundconeoutergain=".$zmold->soundconeoutergain.",
+								webtext='".$zmold->webtext."',
+								webstyle='".$zmold->webstyle."',
+								opacity=".$zmold->opacity.",
+								sideorientation='".$zmold->sideorientation."',
+								billboard=".$zmold->billboard.",
+								waterreflection=".$zmold->waterreflection.",
+								receiveshadows=".$zmold->receiveshadows.",
+								subdivisions=".$zmold->subdivisions.",
+								minheight=".$zmold->minheight.",
+								maxheight=".$zmold->maxheight.",
+								checkcollisions=".$zmold->checkcollisions.",
+								ispickable=".$zmold->ispickable.",
+								actionzoneid='".$znewactionzoneid."',
+								csgmoldid='".$zmold->csgmoldid."',
+								csgaction='".$zmold->csgaction."',
+								alttag='".$zmold->alttag."',
+								jsfunction='".$zmold->jsfunction."',
+								jsparameters='".$zmold->jsparameters."',
+								updatedate=now(),
+								updateuserid='".$znewupdateuserid."' ";
+
+						} else {
+							/* remainder fo the common fields for communitymolds, buildingmolds, and thingmolds */
+							$zsql .= "
+								loadactionzoneid,
+								unloadactionzoneid,
+								shape,
+								covering,
+								positionx,
+								positiony,
+								positionz,
+								scalingx,
+								scalingy,
+								scalingz,
+								rotationx,
+								rotationy,
+								rotationz,
+								special1,
+								special2,
+								uoffset,
+								voffset,
+								uscale,
+								vscale,
+								uploadobjectid,
+								graphiclevel,
+								textureid,
+								texturebumpid,
+								texturehoverid,
+								videoid,
+								videoposterid,
+								diffusecolor,
+								specularcolor,
+								emissivecolor,
+								ambientcolor,
+								heightmapid,
+								mixmapid,
+								texturerid,
+								texturegid,
+								texturebid,
+								texturebumprid,
+								texturebumpgid,
+								texturebumpbid,
+								soundid,
+								soundname,
+								soundattenuation,
+								soundloop,
+								soundmaxdistance,
+								soundrollofffactor,
+								soundrefdistance,
+								soundconeinnerangle,
+								soundconeouterangle,
+								soundconeoutergain,
+								webtext,
+								webstyle,
+								opacity,
+								sideorientation,
+								billboard,
+								waterreflection,
+								receiveshadows,
+								subdivisions,
+								minheight,
+								maxheight,
+								checkcollisions,
+								ispickable,
+								actionzoneid,
+								csgmoldid,
+								csgaction,
+								alttag,
+								jsfunction,
+								jsparameters,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+								values ";
+							
+							$zsqlvalues .= "
+								'".$znewloadactionzoneid."',
+								'".$znewunloadactionzoneid."',
+								'".$zmold->shape."',
+								'".$zmold->covering."',
+								".$zmold->positionx.",
+								".$zmold->positiony.",
+								".$zmold->positionz.",
+								".$zmold->scalingx.",
+								".$zmold->scalingy.",
+								".$zmold->scalingz.",
+								".$zmold->rotationx.",
+								".$zmold->rotationy.",
+								".$zmold->rotationz.",
+								".$zmold->special1.",
+								".$zmold->special2.",
+								".$zmold->uoffset.",
+								".$zmold->voffset.",
+								".$zmold->uscale.",
+								".$zmold->vscale.",
+								'".$znewuploadobjectid."',
+								".$zmold->graphiclevel.",
+								'".$znewtextureid."',
+								'".$znewtexturebumpid."',
+								'".$znewtexturehoverid."',
+								'".$znewvideoid."',
+								'".$znewvideoposterid."',
+								'".$zmold->diffusecolor."',
+								'".$zmold->specularcolor."',
+								'".$zmold->emissivecolor."',
+								'".$zmold->ambientcolor."',
+								'".$znewheightmapid."',
+								'".$znewmixmapid."',
+								'".$znewtexturerid."',
+								'".$znewtexturegid."',
+								'".$znewtexturebid."',
+								'".$znewtexturebumprid."',
+								'".$znewtexturebumpgid."',
+								'".$znewtexturebumpbid."',
+								'".$znewsoundid."',
+								'".$zmold->soundname."',
+								'".$zmold->soundattenuation."',
+								".$zmold->soundloop.",
+								".$zmold->soundmaxdistance.",
+								".$zmold->soundrollofffactor.",
+								".$zmold->soundrefdistance.",
+								".$zmold->soundconeinnerangle.",
+								".$zmold->soundconeouterangle.",
+								".$zmold->soundconeoutergain.",
+								'".$zmold->webtext."',
+								'".$zmold->webstyle."',
+								".$zmold->opacity.",
+								'".$zmold->sideorientation."',
+								".$zmold->billboard.",
+								".$zmold->waterreflection.",
+								".$zmold->receiveshadows.",
+								".$zmold->subdivisions.",
+								".$zmold->minheight.",
+								".$zmold->maxheight.",
+								".$zmold->checkcollisions.",
+								".$zmold->ispickable.",
+								'".$znewactionzoneid."',
+								'".$zmold->csgmoldid."',
+								'".$zmold->csgaction."',
+								'".$zmold->alttag."',
+								'".$zmold->jsfunction."',
+								'".$zmold->jsparameters."',
+								'".$zmold->createdate."',
+								'".$znewcreateuserid."',
+								now(),
+								'".$znewupdateuserid."');";
+												
+						}
+						if (!empty($zsql)) {
+							$wtwhandlers->query($zsql.$zsqlvalues);
+						}
+						
+						/*  get mold points */
+						foreach ($zmold->moldpoints as $zmoldpoint) {
+							
+							/* get new foreign keys */
+							$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zmoldpoint->createuserid);
+							$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zmoldpoint->updateuserid);
+							
+							$zfoundmoldpointid = '';
+							$zresults = $wtwhandlers->query("
+								select moldpointid
+								from ".wtw_tableprefix."moldpoints
+								where moldpointid='".$zmoldpoint->moldpointid."'
+								limit 1;
+							");
+							foreach ($zresults as $zrow) {
+								$zfoundmoldpointid = $zrow["moldpointid"];
+							}
+							
+							if (isset($zfoundmoldpointid) && !empty($zfoundmoldpointid)) {
+								/* update moldpoints table */
+								$wtwhandlers->query("
+									update ".wtw_tableprefix."moldpoints 
+									set	moldid='".$znewmoldid."',
+										pathnumber=".$zmoldpoint->pathnumber.",
+										sorder=".$zmoldpoint->sorder.",
+										positionx=".$zmoldpoint->positionx.",
+										positiony=".$zmoldpoint->positiony.",
+										positionz=".$zmoldpoint->positionz.",
+										updatedate=now(),
+										updateuserid='".$znewupdateuserid."'
+									where moldpointid='".$zfoundmoldpointid."'
+									limit 1;");
+							} else {
+								$znewmoldpointid = $wtwhandlers->getNewKey('moldpoints', 'moldpointid', $zmoldpoint->moldpointid);
+								/* insert new record into moldpoints table */
+								$wtwhandlers->query("
+									insert into ".wtw_tableprefix."moldpoints 
+									   (moldpointid,
+										pastmoldpointid,
+										moldid,
+										pathnumber,
+										sorder,
+										positionx,
+										positiony,
+										positionz,
+										createdate,
+										createuserid,
+										updatedate,
+										updateuserid)
+									values
+									   ('".$znewmoldpointid."',
+										'".$zmoldpoint->moldpointid."',
+										'".$znewmoldid."',
+										".$zmoldpoint->pathnumber.",
+										".$zmoldpoint->sorder.",
+										".$zmoldpoint->positionx.",
+										".$zmoldpoint->positiony.",
+										".$zmoldpoint->positionz.",
+										'".$zmoldpoint->createdate."',
+										'".$znewcreateuserid."',
+										now(),
+										'".$znewupdateuserid."');");
+							}
+
+						}
+						
+						/* process csg molds */
+						$zresults = $wtwhandlers->query("
+							select *  from ".wtw_tableprefix.$zwebtype."molds 
+							where ".$zwebtype."moldid='".$znewmoldid."'
+								and not csgmoldid='';");
+						foreach ($zresults as $zrow) {
+							/* get new foreign keys */
+							$znewcsgmoldid = $wtwhandlers->getIDByPastID($zwebtype.'molds', $zwebtype.'moldid', 'past'.$zwebtype.'moldid', $zrow["csgmoldid"]);
+							
+							$wtwhandlers->query("
+								update ".wtw_tableprefix.$zwebtype."molds
+								set csgmoldid='".$znewcsgmoldid."'
+								where ".$zwebtype."moldid='".$zrow[$zwebtype."moldid"]."'
+									and not csgmoldid=''
+								limit 1;");
+						}
+
+
+						/* process action zone attach molds */
+						$zresults = $wtwhandlers->query("
+							select *  from ".wtw_tableprefix."actionzones 
+							where ".$zwebtype."id='".$zwebid."'
+								and not attachmoldid='';");
+						foreach ($zresults as $zrow) {
+							/* get new foreign keys */
+							$znewattachmoldid = $wtwhandlers->getIDByPastID($zwebtype.'molds', $zwebtype.'moldid', 'past'.$zwebtype.'moldid', $zrow["attachmoldid"]);
+							
+							$wtwhandlers->query("
+								update ".wtw_tableprefix."actionzones
+								set attachmoldid='".$znewattachmoldid."'
+								where actionzoneid='".$zrow["actionzoneid"]."'
+									and not attachmoldid=''
+								limit 1;");
+						}
+
+
+						/* get webimages */
+						foreach ($zmold->webimages as $zwebimage) {
+
+							$znewcommunitymoldid = '';
+							$znewbuildingmoldid = '';
+							$znewthingmoldid = '';
+							switch ($zwebtype) {
+								case 'community':
+									$znewcommunitymoldid = $znewmoldid;
+									break;
+								case 'building':
+									$znewbuildingmoldid = $znewmoldid;
+									break;
+								case 'thing':
+									$znewthingmoldid = $znewmoldid;
+									break;
+							}
+							/* get new foreign keys */
+							$znewimageid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zwebimage->imageid);
+							$znewimagehoverid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zwebimage->imagehoverid);
+							$znewimageclickid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zwebimage->imageclickid);
+							
+							$znewuserid = $wtwhandlers->getUserIDfromPastID($zwebimage->userid);
+							$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zwebimage->createuserid);
+							$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zwebimage->updateuserid);
+							
+							$zfoundwebimageid = '';
+							$zresults = $wtwhandlers->query("
+								select webimageid
+								from ".wtw_tableprefix."webimages
+								where webimageid='".$zwebimage->webimageid."'
+								limit 1;
+							");
+							foreach ($zresults as $zrow) {
+								$zfoundwebimageid = $zrow["webimageid"];
+							}
+							
+							if (isset($zfoundwebimageid) && !empty($zfoundwebimageid)) {
+								/* update webimages table */
+								$wtwhandlers->query("
+									update ".wtw_tableprefix."webimages 
+									set communitymoldid='".$znewcommunitymoldid."',
+										buildingmoldid='".$znewbuildingmoldid."',
+										thingmoldid='".$znewthingmoldid."',
+										imageindex=".$zwebimage->imageindex.",
+										imageid='".$znewimageid."',
+										imagehoverid='".$znewimagehoverid."',
+										imageclickid='".$znewimageclickid."',
+										graphiclevel=".$zwebimage->graphiclevel.",
+										jsfunction='".$zwebimage->jsfunction."',
+										jsparameters='".$zwebimage->jsparameters."',
+										userid='".$znewuserid."',
+										alttag='".$zwebimage->alttag."',
+										updatedate=now(),
+										updateuserid='".$znewupdateuserid."'
+									where webimageid='".$zfoundwebimageid."'
+									limit 1;");	
+							} else {
+								$znewwebimageid = $wtwhandlers->getNewKey('webimages', 'webimageid', $zwebimage->webimageid);
+								/* insert new record into webimages table */
+								$wtwhandlers->query("
+									insert into ".wtw_tableprefix."webimages 
+									   (webimageid,
+										pastwebimageid,
+										communitymoldid,
+										buildingmoldid,
+										thingmoldid,
+										imageindex,
+										imageid,
+										imagehoverid,
+										imageclickid,
+										graphiclevel,
+										jsfunction,
+										jsparameters,
+										userid,
+										alttag,
+										createdate,
+										createuserid,
+										updatedate,
+										updateuserid)
+									values
+									   ('".$znewwebimageid."',
+										'".$zwebimage->webimageid."',
+										'".$znewcommunitymoldid."',
+										'".$znewbuildingmoldid."',
+										'".$znewthingmoldid."',
+										".$zwebimage->imageindex.",
+										'".$znewimageid."',
+										'".$znewimagehoverid."',
+										'".$znewimageclickid."',
+										".$zwebimage->graphiclevel.",
+										'".$zwebimage->jsfunction."',
+										'".$zwebimage->jsparameters."',
+										'".$znewuserid."',
+										'".$zwebimage->alttag."',
+										'".$zwebimage->createdate."',
+										'".$znewcreateuserid."',
+										now(),
+										'".$znewupdateuserid."');");	
+							}
+
+						}			
+					}
+				}
+
+				/* process child connecting grids */
+				if ($zwebtype != 'thing') {
+					$zdiffwebid = '';
+					foreach ($zrequest->childconnectinggrids as $zconnectinggrid) {
+					
+						/* check if the connectinggridid is already in use */
+						$znewconnectinggridid = $wtwhandlers->getNewKey('connectinggrids', 'connectinggridid', $zconnectinggrid->connectinggridid);
+
+						if (($zwebtype == 'community' && ($zconnectinggrid->childwebtype == 'building' || $zconnectinggrid->childwebtype == 'thing')) || ($zwebtype == 'building' && $zconnectinggrid->childwebtype == 'thing')) {
+							$zfetchweb = false;
+							
+							/* look out for duplicates, while making sure we get each 3D webs */
+							$znewchildwebid = '';
+							$znewchildwebtypes = '';
+							switch ($zconnectinggrid->childwebtype) {
+								case "community":
+									$znewchildwebtypes = 'communities';
+									break;
+								case "building":
+									$znewchildwebtypes = 'buildings';
+									break;
+								case "thing":
+									$znewchildwebtypes = 'things';
+									break;
+							}
+							$znewchildwebid = $wtwhandlers->getNewKey($znewchildwebtypes, $zconnectinggrid->childwebtype.'id', $zconnectinggrid->childwebid);
+							$zfoundconnectinggridid = '';
+							if ($zdiffwebid != $zconnectinggrid->childwebid) {
+								$zfetchweb = true;
+								$zdiffwebid = $zconnectinggrid->childwebid;
+								
+								$zresults = $wtwhandlers->query("
+									select *  from ".wtw_tableprefix."connectinggrids 
+									where connectinggridid='".$zconnectinggrid->connectinggridid."'
+									limit 1;");
+								foreach ($zresults as $zrow) {
+									$zfoundconnectinggridid = $zrow["connectinggridid"];
+								}
+							} else {
+								$zresults = $wtwhandlers->query("
+									select *  from ".wtw_tableprefix.$znewchildwebtypes." 
+									where past".$zconnectinggrid->childwebtype."id='".$zconnectinggrid->childwebid."'
+									order by createdate desc
+									limit 1;");
+								foreach ($zresults as $zrow) {
+									$znewchildwebid = $zrow[$zconnectinggrid->childwebtype."id"];
+								}
+							}
+							
+							/* get new foreign keys */
+							$znewloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->loadactionzoneid);
+							$znewaltloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->altloadactionzoneid);
+							$znewunloadactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->unloadactionzoneid);
+							$znewattachactionzoneid = $wtwhandlers->getIDByPastID('actionzones', 'actionzoneid', 'pastactionzoneid', $zconnectinggrid->attachactionzoneid);
+							
+							$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->createuserid);
+							$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->updateuserid);
+							
+							if (isset($zfoundconnectinggridid) & !empty($zfoundconnectinggridid)) {
+								/* already found */
+								$zfetchweb = false;
+								$wtwhandlers->query("
+									update ".wtw_tableprefix."connectinggrids 
+									set parentwebid='".$zwebid."',
+										parentwebtype='".$zconnectinggrid->parentwebtype."',
+										childwebid='".$znewchildwebid."',
+										childwebtype='".$zconnectinggrid->childwebtype."',
+										positionx=".$zconnectinggrid->positionx.",
+										positiony=".$zconnectinggrid->positiony.",
+										positionz=".$zconnectinggrid->positionz.",
+										scalingx=".$zconnectinggrid->scalingx.",
+										scalingy=".$zconnectinggrid->scalingy.",
+										scalingz=".$zconnectinggrid->scalingz.",
+										rotationx=".$zconnectinggrid->rotationx.",
+										rotationy=".$zconnectinggrid->rotationy.",
+										rotationz=".$zconnectinggrid->rotationz.",
+										loadactionzoneid='".$znewloadactionzoneid."',
+										altloadactionzoneid='".$znewaltloadactionzoneid."',
+										unloadactionzoneid='".$znewunloadactionzoneid."',
+										attachactionzoneid='".$znewattachactionzoneid."',
+										alttag='".$zconnectinggrid->alttag."',
+										updatedatenow(),
+										updateuserid='".$znewupdateuserid."'
+									where connectinggridid='".$zfoundconnectinggridid."'
+									limit 1;");
+							} else {
+							/* insert new record into connectinggrids table (additional 3D Webs in the current 3D Web) */
+								$wtwhandlers->query("
+									insert into ".wtw_tableprefix."connectinggrids 
+									   (connectinggridid,
+										pastconnectinggridid,
+										parentwebid,
+										parentwebtype,
+										childwebid,
+										childwebtype,
+										positionx,
+										positiony,
+										positionz,
+										scalingx,
+										scalingy,
+										scalingz,
+										rotationx,
+										rotationy,
+										rotationz,
+										loadactionzoneid,
+										altloadactionzoneid,
+										unloadactionzoneid,
+										attachactionzoneid,
+										alttag,
+										createdate,
+										createuserid,
+										updatedate,
+										updateuserid)
+									values
+									   ('".$znewconnectinggridid."',
+										'".$zconnectinggrid->connectinggridid."',
+										'".$zwebid."',
+										'".$zconnectinggrid->parentwebtype."',
+										'".$znewchildwebid."',
+										'".$zconnectinggrid->childwebtype."',
+										".$zconnectinggrid->positionx.",
+										".$zconnectinggrid->positiony.",
+										".$zconnectinggrid->positionz.",
+										".$zconnectinggrid->scalingx.",
+										".$zconnectinggrid->scalingy.",
+										".$zconnectinggrid->scalingz.",
+										".$zconnectinggrid->rotationx.",
+										".$zconnectinggrid->rotationy.",
+										".$zconnectinggrid->rotationz.",
+										'".$znewloadactionzoneid."',
+										'".$znewaltloadactionzoneid."',
+										'".$znewunloadactionzoneid."',
+										'".$znewattachactionzoneid."',
+										'".$zconnectinggrid->alttag."',
+										'".$zconnectinggrid->createdate."',
+										'".$znewcreateuserid."',
+										now(),
+										'".$znewupdateuserid."');");
+							}
+							if ($zfetchweb) {
+								/* assign newchildwebid, but also need to pass the webid... */
+								$this->downloadWeb($zconnectinggrid->childwebid, $znewchildwebid, $zconnectinggrid->childwebtype, $zusertoken, $zwebid, $zconnectinggrid->parentwebtype, '', 0, 0, 0, 0);
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadUpdateWeb=".$e->getMessage());
+		}
+		return $zwebid;
+	}
+	
 	public function importCommunity($zcommunityid, $zpastcommunityid, $zversionid, $zversion, $zversiondesc, $zcommunityname, $zcommunityanalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag) {
 		/* imports community settings from the media library wen you download a community */
 		global $wtwhandlers;
 		try {
 			/* ini_set('max_execution_time', 300); */
 			if (!empty($wtwhandlers->getSessionUserID())) {
-				if ($wtwhandlers->keyExists(wtw_tableprefix.'communities', 'communityid', $zcommunityid) == false) {
+				if ($wtwhandlers->keyExists('communities', 'communityid', $zcommunityid) == false) {
+					$zversion1 = 1;
+					$zversion2 = 0;
+					$zversion3 = 0;
+
+					if (strpos($zversion, '.') !== false) {
+						try {
+							list($zversion1, $zversion2, $zversion3) = explode('.', $zversion);
+						} catch (Exception $e) {
+							$zversion1 = 1;
+							$zversion2 = 0;
+							$zversion3 = 0;
+						}
+					}
+					$zversionorder = (1000000*$zversion1) + (1000*$zversion2) + $zversion3;
+
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."communities
 							(communityid, 
 							 pastcommunityid, 
 							 versionid,
 							 version,
+							 versionorder,
 							 versiondesc,
 							 communityname, 
 							 analyticsid, 
@@ -3181,6 +5288,7 @@ class wtwcommunities {
 							 '".$zpastcommunityid."', 
 							 '".$zversionid."', 
 							 '".$zversion."', 
+							 ".$zversionorder.",
 							 '".addslashes($zversiondesc)."',
 							 '".$zcommunityname."', 
 							 '".$zcommunityanalyticsid."', 
@@ -3269,7 +5377,7 @@ class wtwcommunities {
 		return $zcommunityid;
 	}
 
-	public function saveCommunityTemplate($zcommunityid, $ztemplatename, $zdescription, $ztags) {
+	public function saveCommunityTemplate($zcommunityid, $ztemplatename, $zdescription, $ztags, $zversion, $zversiondesc) {
 		/* save community as a template to the media library */
 		global $wtwhandlers;
 		$zresponse = array(
@@ -3288,8 +5396,23 @@ class wtwcommunities {
 				$ztemplatename = htmlspecialchars($ztemplatename, ENT_QUOTES, 'UTF-8');
 				$zdescription = htmlspecialchars($zdescription, ENT_QUOTES, 'UTF-8');
 				$ztags = htmlspecialchars($ztags, ENT_QUOTES, 'UTF-8');
+				$zversiondesc = htmlspecialchars($zversiondesc, ENT_QUOTES, 'UTF-8');
 				$zsharehash = $wtwhandlers->getRandomString(16,1);
 				$zresponse["sharehash"] = $zsharehash;
+				$zversion1 = 1;
+				$zversion2 = 0;
+				$zversion3 = 0;
+
+				if (strpos($zversion, '.') !== false) {
+					try {
+						list($zversion1, $zversion2, $zversion3) = explode('.', $zversion);
+					} catch (Exception $e) {
+						$zversion1 = 1;
+						$zversion2 = 0;
+						$zversion3 = 0;
+					}
+				}
+				$zversionorder = (1000000*$zversion1) + (1000*$zversion2) + $zversion3;
 				
 				$zresults = $wtwhandlers->query("
 					select communityid 
@@ -3306,6 +5429,9 @@ class wtwcommunities {
 							description='".$zdescription."',
 							sharehash='".$zsharehash."',
 							shareuserid='".$zuserid."',
+							version='".$zversion."',
+							versionorder=".$zversionorder.",
+							versiondesc='".$zversiondesc."',
 							updatedate=now(),
 							updateuserid='".$zuserid."'
 						where communityid='".$zcommunityid."'

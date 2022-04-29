@@ -680,7 +680,7 @@ class wtwdb {
 		try {
 			$zresults = $this->query("
 				select ".$zfieldid." 
-				from ".$ztablename." 
+				from ".wtw_tableprefix.$ztablename." 
 				where ".$zfieldid."=".$zkeyid.";");
 			if (count($zresults) > 0) {
 				$zexists = true;

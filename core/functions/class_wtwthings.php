@@ -61,6 +61,7 @@ class wtwthings {
 							 pastthingid,
 							 versionid,
 							 version,
+							 versionorder,
 							 versiondesc,
 							 thingname,
 							 thingdescription,
@@ -76,6 +77,7 @@ class wtwthings {
 							 '',
 							 '".$zthingid."',
 							 '1.0.0',
+							 1000000,
 							 'Initial Version',
 							 '".$wtwhandlers->escapeHTML($zthingname)."',
 							 '".$wtwhandlers->escapeHTML($zthingdescription)."',
@@ -94,6 +96,7 @@ class wtwthings {
 							 pastthingid,
 							 versionid,
 							 version,
+							 versionorder,
 							 versiondesc,
 							 thingname,
 							 thingdescription,
@@ -124,6 +127,7 @@ class wtwthings {
 							 '".$zpastthingid."' as pastthingid,
 							 versionid,
 							 version,
+							 versionorder,
 							 versiondesc,
 							 '".$wtwhandlers->escapeHTML($zthingname)."' as thingname,
 							 '".$wtwhandlers->escapeHTML($zthingdescription)."' as thingdescription,
@@ -1304,13 +1308,28 @@ class wtwthings {
 		try {
 			/* ini_set('max_execution_time', 300); */
 			if (!empty($wtwhandlers->getSessionUserID())) {
-				if ($wtwhandlers->keyExists(wtw_tableprefix.'things', 'thingid', $zthingid) == false) {
+				if ($wtwhandlers->keyExists('things', 'thingid', $zthingid) == false) {
+					$zversion1 = 1;
+					$zversion2 = 0;
+					$zversion3 = 0;
+
+					if (strpos($zversion, '.') !== false) {
+						try {
+							list($zversion1, $zversion2, $zversion3) = explode('.', $zversion);
+						} catch (Exception $e) {
+							$zversion1 = 1;
+							$zversion2 = 0;
+							$zversion3 = 0;
+						}
+					}
+					$zversionorder = (1000000*$zversion1) + (1000*$zversion2) + $zversion3;
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."things
 							(thingid, 
 							 pastthingid, 
 							 versionid,
 							 version,
+							 versionorder,
 							 versiondesc,
 							 thingname, 
 							 analyticsid, 
@@ -1335,6 +1354,7 @@ class wtwthings {
 							 '".$zpastthingid."', 
 							 '".$zversionid."', 
 							 '".$zversion."', 
+							 ".$zversionorder.",
 							 '".addslashes($zversiondesc)."', 
 							 '".$zthingname."', 
 							 '".$zthinganalyticsid."', 
@@ -1386,7 +1406,7 @@ class wtwthings {
 		return $zthingid;
 	}		
 	
-	public function saveThingTemplate($zthingid, $ztemplatename, $zdescription, $ztags) {
+	public function saveThingTemplate($zthingid, $ztemplatename, $zdescription, $ztags, $zversion, $zversiondesc) {
 		/* save thing as a template to the media library */
 		global $wtwhandlers;
 		$zresponse = array(
@@ -1405,8 +1425,23 @@ class wtwthings {
 				$ztemplatename = htmlspecialchars($ztemplatename, ENT_QUOTES, 'UTF-8');
 				$zdescription = htmlspecialchars($zdescription, ENT_QUOTES, 'UTF-8');
 				$ztags = htmlspecialchars($ztags, ENT_QUOTES, 'UTF-8');
+				$zversiondesc = htmlspecialchars($zversiondesc, ENT_QUOTES, 'UTF-8');
 				$zsharehash = $wtwhandlers->getRandomString(16,1);
 				$zresponse["sharehash"] = $zsharehash;
+				$zversion1 = 1;
+				$zversion2 = 0;
+				$zversion3 = 0;
+
+				if (strpos($zversion, '.') !== false) {
+					try {
+						list($zversion1, $zversion2, $zversion3) = explode('.', $zversion);
+					} catch (Exception $e) {
+						$zversion1 = 1;
+						$zversion2 = 0;
+						$zversion3 = 0;
+					}
+				}
+				$zversionorder = (1000000*$zversion1) + (1000*$zversion2) + $zversion3;
 				
 				$zresults = $wtwhandlers->query("
 					select thingid 
@@ -1423,6 +1458,9 @@ class wtwthings {
 							description='".$zdescription."',
 							sharehash='".$zsharehash."',
 							shareuserid='".$zuserid."',
+							version='".$zversion."',
+							versionorder=".$zversionorder.",
+							versiondesc='".$zversiondesc."',
 							updatedate=now(),
 							updateuserid='".$zuserid."'
 						where thingid='".$zthingid."'

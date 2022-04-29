@@ -59,7 +59,7 @@ try {
 			);
 			break;
 		case "savethingtemplate":
-			$zresponse = $wtwthings->saveThingTemplate($zthingid, $zthingname, $zdescription, $ztags);
+			$zresponse = $wtwthings->saveThingTemplate($zthingid, $zthingname, $zdescription, $ztags, $zversion, $zversiondesc);
 			break;
 		case "sharethingtemplate":
 			$zresponse = $wtwthings->shareThingTemplate($zthingid, $zsharehash);

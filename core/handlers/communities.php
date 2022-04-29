@@ -18,6 +18,7 @@ try {
 	$zversiondesc = $wtwhandlers->decode64($wtwhandlers->getPost('versiondesc',''));
 	$zdownloadid = $wtwhandlers->getPost('downloadid','');
 	$zwebid = $wtwhandlers->getPost('webid','');
+	$zupdatewebid = $wtwhandlers->getPost('updatewebid','');
 	$zwebtype = $wtwhandlers->getPost('webtype','');
 	$zprocess = $wtwhandlers->getPost('process','');
 	$zcommunityname = $wtwhandlers->decode64($wtwhandlers->getPost('communityname',''));
@@ -87,7 +88,7 @@ try {
 			$wtwcommunities->saveCommunityGround($zcommunityid, $zgroundtextureid);
 			break;
 		case "savecommunitytemplate":
-			$zresponse = $wtwcommunities->saveCommunityTemplate($zcommunityid, $zcommunityname, $zdescription, $ztags);
+			$zresponse = $wtwcommunities->saveCommunityTemplate($zcommunityid, $zcommunityname, $zdescription, $ztags, $zversion, $zversiondesc);
 			break;
 		case "sharecommunitytemplate":
 			$zresponse = $wtwcommunities->shareCommunityTemplate($zcommunityid, $zsharehash);
@@ -98,6 +99,9 @@ try {
 				'webid'=> $znewwebid,
 				'webtype'=> $zwebtype
 			);
+			break;
+		case "downloadupdateweb":
+			$zresponse = $wtwcommunities->downloadUpdateWeb($zwebid, $zupdatewebid, $zwebtype, '');
 			break;
 		case "importcommunity":
 			$zcommunityid = $wtwcommunities->importCommunity($zcommunityid, $zpastcommunityid, $zversionid, $zversion, $zversiondesc, $zcommunityname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag);

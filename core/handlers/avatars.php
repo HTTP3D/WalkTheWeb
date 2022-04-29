@@ -14,6 +14,7 @@ try {
 	$zuseravatarid = $wtwhandlers->getPost('useravatarid','');
 	$zavatarid = $wtwhandlers->getPost('avatarid','');
 	$zwebid = $wtwhandlers->getPost('webid','');
+	$zupdatewebid = $wtwhandlers->getPost('updatewebid','');
 	$zwebtype = $wtwhandlers->getPost('webtype','');
 	$zinstanceid = $wtwhandlers->getPost('instanceid','');
 	$zuserip = $wtwhandlers->getPost('userip','');
@@ -26,6 +27,7 @@ try {
 	$ztemplatename = $wtwhandlers->getPost('templatename','');
 	$zdescription = $wtwhandlers->getPost('description','');
 	$ztags = $wtwhandlers->getPost('tags','');
+	$zversionid = $wtwhandlers->getPost('versionid','');
 	$zversion = $wtwhandlers->getPost('version','');
 	$zversiondesc = $wtwhandlers->getPost('versiondesc','');
 	$zsharehash = $wtwhandlers->getPost('sharehash','');
@@ -176,6 +178,12 @@ try {
 			break;
 		case "downloadweb":
 			$zresponse = $wtwavatars->downloadWeb($zwebid, $zwebid, $zwebtype, '');
+			break;
+		case "downloadupdateweb":
+			$zresponse = $wtwavatars->downloadUpdateWeb($zwebid, $zupdatewebid, $zwebtype, '');
+			break;
+		case "downloadupdateuseravatar":
+			$zresponse = $wtwavatars->downloadUpdateUserAvatar($zuseravatarid, $zinstanceid, $zwebid, $zupdatewebid, $zwebtype, '');
 			break;
 	}
 
