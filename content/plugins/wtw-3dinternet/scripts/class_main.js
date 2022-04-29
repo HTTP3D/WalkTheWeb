@@ -699,7 +699,7 @@ WTW_3DINTERNET.prototype.beforeUnloadMove = function() {
 			});
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-beforeUnloadMove=" + ex.message);
+		//WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-beforeUnloadMove=" + ex.message);
 	} 
 }
 
@@ -758,6 +758,7 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault, zeditmode) {
 			zeditmode = false;
 		}
 		let zmyavatars = [];
+		let zversioncheck = [];
 		let zlocalcomplete = false;
 		let zglobalcomplete = false;
 		if (wtw3dinternet.localLogins == '1') {
@@ -770,10 +771,22 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault, zeditmode) {
 								if (zresponse.avatars.length > 0) {
 									for (var i=0;i<zresponse.avatars.length;i++) {
 										if (zresponse.avatars[i] != null) {
+											zversioncheck[zversioncheck.length] = {
+												'webtype': 'avatar',
+												'globaluseravatarid': '',
+												'useravatarid': zresponse.avatars[i].useravatarid,
+												'webid': zresponse.avatars[i].avatarid,
+												'versionid': zresponse.avatars[i].versionid,
+												'version': zresponse.avatars[i].version
+											};
 											zmyavatars[zmyavatars.length] = {
 												'globaluseravatarid': '',
 												'useravatarid': zresponse.avatars[i].useravatarid,
 												'avatarid': zresponse.avatars[i].avatarid,
+												'versionid': zresponse.avatars[i].versionid,
+												'version': zresponse.avatars[i].version,
+												'versionorder': zresponse.avatars[i].versionorder,
+												'versiondesc': zresponse.avatars[i].versiondesc,
 												'avatargroup': zresponse.avatars[i].avatargroup,
 												'displayname': zresponse.avatars[i].displayname,
 												'avatardescription': zresponse.avatars[i].avatardescription,
@@ -801,7 +814,7 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault, zeditmode) {
 						}
 						zlocalcomplete = true;
 						if (zglobalcomplete || wtw3dinternet.globalLogins != '1') {
-							WTW.showMyAvatarList(zmyavatars, .4, .8, zeditmode);
+							WTW.showMyAvatarList(zmyavatars, .4, .8, zeditmode, zversioncheck);
 						}
 					}
 				);
@@ -824,10 +837,22 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault, zeditmode) {
 							if (zresponse.avatars.length > 0) {
 								for (var i=0;i<zresponse.avatars.length;i++) {
 									if (zresponse.avatars[i] != null) {
+										zversioncheck[zversioncheck.length] = {
+											'webtype': 'avatar',
+											'globaluseravatarid': zresponse.avatars[i].globaluseravatarid,
+											'useravatarid': zresponse.avatars[i].useravatarid,
+											'webid': zresponse.avatars[i].avatarid,
+											'versionid': zresponse.avatars[i].versionid,
+											'version': zresponse.avatars[i].version
+										};
 										zmyavatars[zmyavatars.length] = {
 											'globaluseravatarid': zresponse.avatars[i].globaluseravatarid,
 											'useravatarid': zresponse.avatars[i].useravatarid,
 											'avatarid': zresponse.avatars[i].avatarid,
+											'versionid': zresponse.avatars[i].versionid,
+											'version': zresponse.avatars[i].version,
+											'versionorder': zresponse.avatars[i].versionorder,
+											'versiondesc': zresponse.avatars[i].versiondesc,
 											'avatargroup': zresponse.avatars[i].avatargroup,
 											'displayname': zresponse.avatars[i].displayname,
 											'avatardescription': zresponse.avatars[i].avatardescription,
@@ -854,7 +879,7 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault, zeditmode) {
 						}
 						zglobalcomplete = true;
 						if (zlocalcomplete || wtw3dinternet.localLogins != '1') {
-							WTW.showMyAvatarList(zmyavatars, .4, .8, zeditmode);
+							WTW.showMyAvatarList(zmyavatars, .4, .8, zeditmode, zversioncheck);
 						}
 					}
 				);

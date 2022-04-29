@@ -23,11 +23,11 @@ class wtw3dinternet {
 		}
 	}	
 	
-	public $version = "1.1.0";
+	public $version = "1.1.1";
 
-	public $dbversion = "1.0.6";
+	public $dbversion = "1.0.8";
 
-	public $versiondate = "2022-3-30";
+	public $versiondate = "2022-4-29";
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -278,6 +278,8 @@ class wtw3dinternet {
 						  `avatarid` varchar(16) DEFAULT '',
 						  `versionid` varchar(16) DEFAULT '',
 						  `version` varchar(10) DEFAULT '1.0.0',
+						  `versionorder` int DEFAULT '1000000',
+						  `versiondesc` varchar(255) DEFAULT '',
 						  `avatargroup` varchar(64) DEFAULT 'Default',
 						  `objectfolder` varchar(256) DEFAULT '',
 						  `objectfile` varchar(256) DEFAULT '',
@@ -408,6 +410,8 @@ class wtw3dinternet {
 						update ".WTW_3DINTERNET_PREFIX."useravatars
 						set versionid=avatarid,
 							version='1.0.0',
+							versionorder=1000000,
+							versiondesc='Initial Version'
 							updatedate=now(),
 							updateuserid='".$wtwplugins->userid."'
 						where versionid='';
