@@ -347,3 +347,39 @@ WTWJS.prototype.completedWebDownload = function(zresponse) {
 		WTW.log("core-scripts-prime-wtw_downloads.js-completedWebDownload=" + ex.message);
 	}
 }
+
+WTWJS.prototype.downloadWebVersion = function(zobj, zwebid, zupdatewebid, zversionid, zversion, zoldversion, zwebtype) {
+	/* download and update web by version */
+	try {
+		if (zobj != null) {
+			zobj.innerHTML = 'Updating to (v' + zversion + ')';
+			zobj.onclick = function () {};
+		}
+		var zrequest = {
+			'webid': zwebid,
+			'updatewebid': zupdatewebid,
+			'versionid': zversionid,
+			'version': zversion,
+			'webtype': zwebtype,
+			'function':'downloadupdateweb'
+		};
+		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				zobj.innerHTML = 'Completed (v' + zversion + ')';
+				zobj.className = 'wtw-badgebuttoncompleted';
+				if (dGet('wtw_beditweb-' + zwebid) != null) {
+					dGet('wtw_beditweb-' + zwebid).innerHTML = dGet('wtw_beditweb-' + zwebid).innerHTML.replace(zoldversion,zversion);
+				}
+				window.setTimeout(function(){
+					if (dGet('wtw_beditweb_update-' + zwebid) != null) {
+						dGet('wtw_beditweb_update-' + zwebid).remove();
+					}
+				},5000);
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_downloads.js-downloadWebVersion=" + ex.message);
+	} 
+}

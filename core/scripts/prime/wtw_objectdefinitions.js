@@ -716,6 +716,7 @@ WTWJS.prototype.newAvatarDef = function() {
 			'userip':'',
 			'versionid':'',
 			'version':'1.0.0',
+			'versionorder': 1000000,
 			'versiondesc': 'Initial Version',
 			'anonymous':'1',
 			'avatar':'default',

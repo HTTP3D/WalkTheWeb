@@ -16,9 +16,16 @@ WTWJS.prototype.openSelectAvatar = function() {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.avatars != null) {
 					var zavatargroup = '';
+					var zversioncheck = [];
 					for (var i = 0; i < zresponse.avatars.length; i++) {
 						if (zresponse.avatars[i] != null) {
 							var zversion = '';
+							zversioncheck[i] = {
+								'webtype': 'avatar',
+								'webid': zresponse.avatars[i].avatarid,
+								'versionid': zresponse.avatars[i].versionid,
+								'version': zresponse.avatars[i].version
+							};
 							if (zresponse.avatars[i].version != undefined) {
 								if (zresponse.avatars[i].version != '') {
 									zversion = ' (v' + zresponse.avatars[i].version + ')';
@@ -29,12 +36,42 @@ WTWJS.prototype.openSelectAvatar = function() {
 								zavatargroup = zresponse.avatars[i].avatargroup;
 							}
 							if (zresponse.avatars[i].avatarid == avatarid) {
-								dGet("wtw_listavatars").innerHTML += "<div id=\"wtw_beditavatar" + zresponse.avatars[i].avatarid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(zresponse.avatars[i].displayname) + "</div>\r\n";
+								dGet("wtw_listavatars").innerHTML += "<div id=\"wtw_beditavatar-" + zresponse.avatars[i].avatarid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(zresponse.avatars[i].displayname) + "</div>\r\n";
 							} else {
-								dGet("wtw_listavatars").innerHTML += "<div id=\"wtw_beditavatar" + zresponse.avatars[i].avatarid + "\" onclick=\"window.location.href='admin.php?avatarid=" + zresponse.avatars[i].avatarid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(zresponse.avatars[i].displayname) + "</div>\r\n";
+								dGet("wtw_listavatars").innerHTML += "<div id=\"wtw_beditavatar-" + zresponse.avatars[i].avatarid + "\" onclick=\"window.location.href='admin.php?avatarid=" + zresponse.avatars[i].avatarid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(zresponse.avatars[i].displayname) + "</div>\r\n";
 							}
 						}
 					}
+					/* check for updated versions */
+					var zrequest2 = {
+						'versioncheck': JSON.stringify(zversioncheck),
+						'function':'versioncheck'
+					};
+					WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/versioncheck.php", zrequest2, 
+						function(zresponse2) {
+							zresponse2 = JSON.parse(zresponse2);
+							for (var i = 0; i < zresponse2.length; i++) {
+								if (zresponse2[i] != null) {
+									var zversionid = zresponse2[i].versionid;
+									if (document.getElementById('wtw_beditavatar-' + zversionid) != null) {
+										var zwebid = zresponse2[i].webid;
+										var zupdatewebid = zresponse2[i].updatewebid;
+										var zversion = zresponse2[i].version;
+										var zoldversion = zresponse2[i].oldversion;
+										
+										var zdiv = document.createElement('div');
+										zdiv.id = 'wtw_beditavatar_update-' + zversionid;
+										zdiv.className = 'wtw-badgebutton';
+										zdiv.innerHTML = 'Update Available (v' + zversion + ')';
+										zdiv.onclick = function() {
+											WTW.downloadAvatarVersion(this, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'avatar');
+										};
+										document.getElementById('wtw_beditavatar-' + zversionid).appendChild(zdiv);
+									}
+								}
+							}
+						}
+					);
 				}
 				window.setTimeout(function() {
 					WTW.hide('wtw_loadingavatarid');
@@ -44,6 +81,42 @@ WTWJS.prototype.openSelectAvatar = function() {
 		);		
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminavatars.js-openSelectAvatar=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.downloadAvatarVersion = function(zobj, zwebid, zupdatewebid, zversionid, zversion, zoldversion, zwebtype) {
+	/* download and update avatar by version */
+	try {
+		if (zobj != null) {
+			zobj.innerHTML = 'Updating to (v' + zversion + ')';
+			zobj.onclick = function () {};
+		}
+		var zrequest = {
+			'webid': zwebid,
+			'updatewebid': zupdatewebid,
+			'versionid': zversionid,
+			'version': zversion,
+			'webtype': zwebtype,
+			'function':'downloadupdateweb'
+		};
+		WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				zobj.innerHTML = 'Completed (v' + zversion + ')';
+				zobj.className = 'wtw-badgebuttoncompleted';
+				if (dGet('wtw_beditavatar-' + zwebid) != null) {
+					dGet('wtw_beditavatar-' + zwebid).innerHTML = dGet('wtw_beditavatar-' + zwebid).innerHTML.replace(zoldversion,zversion);
+				}
+				window.setTimeout(function(){
+					if (dGet('wtw_beditavatar_update-' + zwebid) != null) {
+						dGet('wtw_beditavatar_update-' + zwebid).remove();
+					}
+				},5000);
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminavatars.js-downloadAvatarVersion=" + ex.message);
 	} 
 }
 

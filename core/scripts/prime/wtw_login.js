@@ -501,16 +501,29 @@ WTWJS.prototype.getMyAvatarList = async function(zwidth, zheight, zeditmode) {
 			if (dGet('wtw_myavatars') != null) {
 				WTW.getAsyncJSON("/connect/avatars.php?groups=my", 
 					function(zresponse) {
+						var zversioncheck = [];
 						if (zresponse != null) {
 							zresponse = JSON.parse(zresponse);
 							if (zresponse.avatars != null) {
 								if (zresponse.avatars.length > 0) {
 									for (var i=0;i<zresponse.avatars.length;i++) {
 										if (zresponse.avatars[i] != null) {
+											zversioncheck[zversioncheck.length] = {
+												'webtype': 'avatar',
+												'globaluseravatarid': '',
+												'useravatarid': zresponse.avatars[i].useravatarid,
+												'webid': zresponse.avatars[i].avatarid,
+												'versionid': zresponse.avatars[i].versionid,
+												'version': zresponse.avatars[i].version
+											};
 											zmyavatars[zmyavatars.length] = {
 												'globaluseravatarid': '',
 												'useravatarid': zresponse.avatars[i].useravatarid,
 												'avatarid': zresponse.avatars[i].avatarid,
+												'versionid': zresponse.avatars[i].versionid,
+												'version': zresponse.avatars[i].version,
+												'versionorder': zresponse.avatars[i].versionorder,
+												'versiondesc': zresponse.avatars[i].versiondesc,
 												'avatargroup': zresponse.avatars[i].avatargroup,
 												'displayname': zresponse.avatars[i].displayname,
 												'avatardescription': zresponse.avatars[i].avatardescription,
@@ -536,7 +549,7 @@ WTWJS.prototype.getMyAvatarList = async function(zwidth, zheight, zeditmode) {
 								}
 							}
 						}
-						WTW.showMyAvatarList(zmyavatars, zwidth, zheight, zeditmode);
+						WTW.showMyAvatarList(zmyavatars, zwidth, zheight, zeditmode, zversioncheck);
 						WTW.setBrowseDiv(zwidth, zheight);
 					}
 				);
@@ -547,47 +560,58 @@ WTWJS.prototype.getMyAvatarList = async function(zwidth, zheight, zeditmode) {
 	}
 }
 
-WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight, zeditmode) {
+WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight, zeditmode, zversioncheck) {
 	/* formats the list of avatars to select and use in the scene */
 	try {
 		if (zeditmode == undefined) {
 			zeditmode = false;
 		}
-		let zmyavatarcount = 0;
+		var zmyavatarcount = 0;
 		if (zmyavatars != null) {
 			zmyavatarcount = zmyavatars.length;
 		}
 		if (zmyavatarcount > 0) {
 			if (dGet('wtw_myavatars') != null) {
-				let zmylist = ''; 
+				var zmylist = ''; 
 				dGet('wtw_myavatars').innerHTML = '';
-				let zdefault = -1;
+				var zdefault = -1;
 				for (var i=0;i<zmyavatars.length;i++) {
 					if (zmyavatars[i] != null) {
-						let zuseravatarid = '';
-						let zglobaluseravatarid = '';
-						let zavatarid = '';
-						let zglobal = false;
-						let zicon2 = "/content/system/images/avatarselect.png";;
-						let zicon = "/content/system/images/localserver.png";
-						let ztext = "3D Website Local Avatar";
-						let ztext2 = "My Avatar";
+						var zuseravatarid = '';
+						var zglobaluseravatarid = '';
+						var zupdateuseravatarid = '';
+						var zavatarid = '';
+						var zglobal = false;
+						var zicon2 = '/content/system/images/avatarselect.png';;
+						var zicon = '/content/system/images/localserver.png';
+						var ztext = '3D Website Local Avatar';
+						var ztext2 = 'My Avatar';
+						var zversion = '1.0.0';
 						if (zmyavatars[i].globaluseravatarid != undefined) {
 							if (zmyavatars[i].globaluseravatarid != '') {
 								zglobaluseravatarid = zmyavatars[i].globaluseravatarid;
 								zicon = "/content/system/images/global.png";
 								ztext = "WalkTheWeb Global Avatar";
+								zupdateuseravatarid = zglobaluseravatarid;
 								zglobal = true;
 							}
 						}
 						if (zmyavatars[i].useravatarid != undefined) {
 							if (zmyavatars[i].useravatarid != '') {
 								zuseravatarid = zmyavatars[i].useravatarid;
+								if (zglobal == false) {
+									zupdateuseravatarid = zuseravatarid;
+								}
 							}
 						}
 						if (zmyavatars[i].avatarid != undefined) {
 							if (zmyavatars[i].avatarid != '') {
 								zavatarid = zmyavatars[i].avatarid;
+							}
+						}
+						if (zmyavatars[i].version != undefined) {
+							if (zmyavatars[i].version != '') {
+								zversion = zmyavatars[i].version;
 							}
 						}
 						if (zdefault == -1) {
@@ -607,10 +631,11 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight, zeditmo
 						if (zeditmode) {
 							zmylist += "<div id='wtw_editmyavatar" + i + "' class='wtw-editmoderight' onclick=\"WTW.deleteUserAvatar('" + zglobaluseravatarid + "','" + zuseravatarid + "'," + zwidth + "," + zheight + ");\">Delete</div>";
 						}
-						zmylist += "<div class=\"wtw-loginbutton\" style=\"text-align:left;\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.onMyAvatarSelect('" + zmyavatars[i].globaluseravatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\">";
+						zmylist += "<div id='wtw_beditavatar-" + zupdateuseravatarid + "' class=\"wtw-loginbutton\" style=\"text-align:left;\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.log('clicked load');WTW.onMyAvatarSelect('" + zmyavatars[i].globaluseravatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\">";
+						zmylist += "<div style='float:right;'>[" + zversion + "]</div>";
 						zmylist += "<img src=\"" + zicon + "\" class=\"wtw-icon\" title=\"" + ztext + "\" alt=\"" + ztext + "\" />";
 						zmylist += "<img src=\"" + zicon2 + "\" class=\"wtw-icon\" title=\"" + ztext2 + "\" alt=\"" + ztext2 + "\" />";
-						zmylist += ztext2 + "</div>\r\n";
+						zmylist += ztext2 + "<div style='clear:both;'></div></div>\r\n";
 					}
 				}
 				if (zmyavatars.length > 0) {
@@ -624,16 +649,58 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight, zeditmo
 				if (dGet('wtw_editmyavatarslist') != null) {
 					if (zeditmode) {
 						dGet('wtw_editmyavatarslist').onclick = function() {
-							WTW.showMyAvatarList(zmyavatars, zwidth, zheight, false);
+							WTW.showMyAvatarList(zmyavatars, zwidth, zheight, false, zversioncheck);
 						}
 					} else {
 						dGet('wtw_editmyavatarslist').onclick = function() {
-							WTW.showMyAvatarList(zmyavatars, zwidth, zheight, true);
+							WTW.showMyAvatarList(zmyavatars, zwidth, zheight, true, zversioncheck);
 						}
 					}
 				}
 				if (zdefault == -1) {
 					dGet('wtw_browseheaderclose').onclick = function() {WTW.openAvatarDesigner();};
+				}
+				if (zversioncheck != undefined) {
+					/* check for updated versions */
+					var zrequest2 = {
+						'versioncheck': JSON.stringify(zversioncheck),
+						'function':'versioncheck'
+					};
+					WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/versioncheck.php", zrequest2, 
+						function(zresponse2) {
+							zresponse2 = JSON.parse(zresponse2);
+							for (var i = 0; i < zresponse2.length; i++) {
+								if (zresponse2[i] != null) {
+									var zglobaluseravatarid = zresponse2[i].globaluseravatarid;
+									var zuseravatarid = zresponse2[i].useravatarid;
+									var zupdateuseravatarid = zuseravatarid;
+									if (zglobaluseravatarid != '') {
+										zupdateuseravatarid = zglobaluseravatarid;
+									}
+									if (document.getElementById('wtw_beditavatar-' + zupdateuseravatarid) != null) {
+										var zwebid = zresponse2[i].webid;
+										var zupdatewebid = zresponse2[i].updatewebid;
+										var zversionid = zresponse2[i].versionid;
+										var zversion = zresponse2[i].version;
+										var zoldversion = zresponse2[i].oldversion;
+										var zdiv = document.createElement('div');
+										zdiv.id = 'wtw_beditavatar_update-' + zupdateuseravatarid;
+										zdiv.className = 'wtw-badgebutton';
+										zdiv.innerHTML = 'Update Available (v' + zversion + ')';
+										zdiv.onclick = function(zevent) {
+											if (zevent == undefined) {
+												zevent = window.event;
+											}
+											WTW.downloadUserAvatarVersion(this, zglobaluseravatarid, zuseravatarid, zupdateuseravatarid, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'avatar');
+											zevent.stopPropagation();
+											zevent.preventDefault();
+										};
+										document.getElementById('wtw_beditavatar-' + zupdateuseravatarid).appendChild(zdiv);
+									}
+								}
+							}
+						}
+					);
 				}
 			}
 			WTW.show('wtw_createnewavatar');
@@ -644,6 +711,92 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight, zeditmo
 	}
 }
 
+WTWJS.prototype.downloadUserAvatarVersion = function(zobj, zglobaluseravatarid, zuseravatarid, zupdateuseravatarid, zwebid, zupdatewebid, zversionid, zversion, zoldversion, zwebtype) {
+	/* download and update user avatar by version */
+	try {
+		if (zobj != null) {
+			zobj.innerHTML = 'Updating to (v' + zversion + ')';
+			zobj.onclick = function () {};
+		}
+
+		var zrequest = {
+			'webid': zwebid,
+			'serverinstanceid': dGet('wtw_serverinstanceid').value,
+			'domainurl': wtw_domainurl,
+			'globaluserid': btoa(dGet('wtw_tglobaluserid').value),
+			'globaluseravatarid': zglobaluseravatarid,
+			'useravatarid': zuseravatarid,
+			'userid': dGet('wtw_tuserid').value,
+			'instanceid': dGet('wtw_tinstanceid').value,
+			'updatewebid': zupdatewebid,
+			'versionid': zversionid,
+			'version': zversion,
+			'webtype': zwebtype,
+			'function':'downloadupdateuseravatar'
+		};
+		if (zuseravatarid != '') {
+			WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note serror would contain errors */
+					if (zglobaluseravatarid != '') {
+						WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalsaveavatar.php", zrequest, 
+							function(zresponse2) {
+								zresponse = JSON.parse(zresponse2);
+								WTW.updateVersionDisplay(zobj, zversion, zoldversion, 'wtw_beditavatar-' + zupdateuseravatarid, 'wtw_beditavatar_update-' + zupdateuseravatarid);
+								window.setTimeout(function(){
+									if (dGet('wtw_tglobaluseravatarid').value == zglobaluseravatarid) {
+										WTW.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zwebid);
+									}
+								},10000);
+							}
+						);
+					} else {
+						WTW.updateVersionDisplay(zobj, zversion, zoldversion, 'wtw_beditavatar-' + zupdateuseravatarid, 'wtw_beditavatar_update-' + zupdateuseravatarid);
+						window.setTimeout(function(){
+							if (dGet('wtw_tuseravatarid').value == zuseravatarid) {
+								WTW.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zwebid);
+							}
+						},10000);
+					}
+				}
+			);
+		} else if (zglobaluseravatarid != '') {
+			WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalsaveavatar.php", zrequest, 
+				function(zresponse2) {
+					zresponse = JSON.parse(zresponse2);
+					WTW.updateVersionDisplay(zobj, zversion, zoldversion, 'wtw_beditavatar-' + zupdateuseravatarid, 'wtw_beditavatar_update-' + zupdateuseravatarid);
+					window.setTimeout(function(){
+						if (dGet('wtw_tglobaluseravatarid').value == zglobaluseravatarid) {
+							WTW.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zwebid);
+						}
+					},10000);
+				}
+			);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_login.js-downloadUserAvatarVersion=" + ex.message);
+	} 
+}
+
+WTWJS.prototype.updateVersionDisplay = async function(zobj, zversion, zoldversion, zupdateid, zupdatebadgeid) {
+	/* swap old version for new version after update occurred */
+	try {
+		zobj.innerHTML = 'Completed (v' + zversion + ')';
+		zobj.className = 'wtw-badgebuttoncompleted';
+		if (dGet(zupdateid) != null) {
+			dGet(zupdateid).innerHTML = dGet(zupdateid).innerHTML.replace(zoldversion,zversion);
+		}
+		window.setTimeout(function(){
+			if (dGet(zupdatebadgeid) != null) {
+				dGet(zupdatebadgeid).remove();
+			}
+		},5000);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_login.js-updateVersionDisplay=" + ex.message);
+	} 
+}
+		
 WTWJS.prototype.onMyAvatarSaveSelect = async function(zglobaluseravatarid, zuseravatarid, zavatarid) {
 	/* process to enter the 3D Scene when the avatar is selected (save my selection) */
 	try {

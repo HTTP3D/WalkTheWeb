@@ -27,6 +27,8 @@ WTWJS.prototype.openThingForm = async function(zthingid) {
 							if (WTW.things[i].thinginfo.thingid != undefined) {
 								if (WTW.things[i].thinginfo.thingid != null) {
 									if (zthingid == WTW.things[i].thinginfo.thingid) {
+										dGet('wtw_tinfothingversion').disabled = false;
+										dGet('wtw_tinfothingversiondesc').disabled = false;
 										dGet('wtw_tthingind').value = i;
 										dGet('wtw_tthingname').value = WTW.decode(WTW.things[i].thinginfo.thingname);
 										dGet('wtw_tversionid').value = WTW.things[i].thinginfo.versionid;
@@ -35,6 +37,8 @@ WTWJS.prototype.openThingForm = async function(zthingid) {
 										dGet('wtw_tthingdescription').value = WTW.decode(WTW.things[i].thinginfo.thingdescription);
 										dGet('wtw_tthingsnapshotid').value = WTW.things[i].thinginfo.snapshot;
 										dGet('wtw_tthingalttag').value = WTW.decode(WTW.things[i].alttag.name);
+										dGet('wtw_tinfothingversion').disabled = true;
+										dGet('wtw_tinfothingversiondesc').disabled = true;
 									}
 								}
 							}
@@ -282,21 +286,58 @@ WTWJS.prototype.getSelectThingsList = async function() {
 			function(zresponse) {
 				WTW.things = JSON.parse(zresponse);
 				if (WTW.things != null) {
+					var zversioncheck = [];
 					for (var i = 0; i < WTW.things.length; i++) {
 						if (WTW.things[i] != null) {
 							var zversion = '';
+							zversioncheck[i] = {
+								'webtype': 'thing',
+								'webid': WTW.things[i].thinginfo.thingid,
+								'versionid': WTW.things[i].thinginfo.versionid,
+								'version': WTW.things[i].thinginfo.version
+							};
 							if (WTW.things[i].thinginfo.version != undefined) {
 								if (WTW.things[i].thinginfo.version != '') {
 									zversion = ' (v' + WTW.things[i].thinginfo.version + ')';
 								}
 							}
 							if (WTW.things[i].thinginfo.thingid == thingid) {
-								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditthing" + WTW.things[i].thinginfo.thingid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
+								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditweb-" + WTW.things[i].thinginfo.thingid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
 							} else {
-								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditthing" + WTW.things[i].thinginfo.thingid + "\" onclick=\"window.location.href='admin.php?thingid=" + WTW.things[i].thinginfo.thingid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
+								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditweb-" + WTW.things[i].thinginfo.thingid + "\" onclick=\"window.location.href='admin.php?thingid=" + WTW.things[i].thinginfo.thingid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
 							}
 						}
 					}
+					/* check for updated versions */
+					var zrequest2 = {
+						'versioncheck': JSON.stringify(zversioncheck),
+						'function':'versioncheck'
+					};
+					WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/versioncheck.php", zrequest2, 
+						function(zresponse2) {
+							zresponse2 = JSON.parse(zresponse2);
+							for (var i = 0; i < zresponse2.length; i++) {
+								if (zresponse2[i] != null) {
+									var zversionid = zresponse2[i].versionid;
+									if (document.getElementById('wtw_beditweb-' + zversionid) != null) {
+										var zwebid = zresponse2[i].webid;
+										var zupdatewebid = zresponse2[i].updatewebid;
+										var zversion = zresponse2[i].version;
+										var zoldversion = zresponse2[i].oldversion;
+										
+										var zdiv = document.createElement('div');
+										zdiv.id = 'wtw_beditweb_update-' + zversionid;
+										zdiv.className = 'wtw-badgebutton';
+										zdiv.innerHTML = 'Update Available (v' + zversion + ')';
+										zdiv.onclick = function() {
+											WTW.downloadWebVersion(this, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'thing');
+										};
+										document.getElementById('wtw_beditweb-' + zversionid).appendChild(zdiv);
+									}
+								}
+							}
+						}
+					);
 				}
 				window.setTimeout(function() {
 					WTW.hide('wtw_loadingthingid');
@@ -371,6 +412,30 @@ WTWJS.prototype.openShareThingForm = async function() {
 							if (WTW.things[i].thinginfo.thingid != undefined) {
 								if (WTW.things[i].thinginfo.thingid != null) {
 									if (thingid == WTW.things[i].thinginfo.thingid) {
+										var zversionid = thingid;
+										var zversion = '1.0.0';
+										var zversiondesc = 'Initial Version';
+										var zcreateuserid = '';
+										if (WTW.things[i].thinginfo.versionid != undefined) {
+											if (WTW.things[i].thinginfo.versionid != '') {
+												zversionid = WTW.things[i].thinginfo.versionid;
+											}
+										}
+										if (WTW.things[i].thinginfo.version != undefined) {
+											if (WTW.things[i].thinginfo.version != '') {
+												zversion = WTW.things[i].thinginfo.version;
+											}
+										}
+										if (WTW.things[i].thinginfo.versiondesc != undefined) {
+											if (WTW.things[i].thinginfo.versiondesc != '') {
+												zversiondesc = WTW.things[i].thinginfo.versiondesc;
+											}
+										}
+										if (WTW.things[i].thinginfo.createuserid != undefined) {
+											if (WTW.things[i].thinginfo.createuserid != '') {
+												zcreateuserid = WTW.things[i].thinginfo.createuserid;
+											}
+										}
 										if (WTW.things[i].share.templatename != "") {
 											dGet('wtw_tsharethingtempname').value = WTW.things[i].share.templatename;
 										} else {
@@ -382,6 +447,18 @@ WTWJS.prototype.openShareThingForm = async function() {
 											dGet('wtw_defaultthingsnapshot').src = WTW.things[i].thinginfo.snapshotpath;
 										} else {
 											dGet('wtw_defaultthingsnapshot').src = WTW.things[i].thinginfo.snapshotdata;
+										}
+										dGet('wtw_tsharethingversion').value = zversion;
+										dGet('wtw_tsharethingversiondesc').value = zversiondesc;
+										dGet('wtw_tsharethingoriginal').checked = true;
+										dGet('wtw_tsharethingversion').disabled = true;
+										dGet('wtw_tsharethingversiondesc').disabled = true;
+										dGet('wtw_tsharethingoriginal').onchange = function() { WTW.changeWebVersion('thing', zversion, zversiondesc);};
+										dGet('wtw_tsharethingupdate').onchange = function() { WTW.changeWebVersion('thing', zversion, zversiondesc);};
+										if (dGet('wtw_tuserid').value == zcreateuserid && zcreateuserid != '') {
+											dGet('wtw_tsharethingupdate').disabled = false;
+										} else {
+											dGet('wtw_tsharethingupdate').disabled = true;
 										}
 									}
 								}
@@ -412,12 +489,16 @@ WTWJS.prototype.openShareThingForm = async function() {
 WTWJS.prototype.saveShareThingForm = async function() {
 	/* process the share 3D Thing and Save the settings locally for next Share */
 	try {
+		dGet('wtw_tsharethingversion').disabled = false;
+		dGet('wtw_tsharethingversiondesc').disabled = false;
 		var zrequest = {
 			'thingid': thingid,
 			'pastthingid': '',
 			'thingname': btoa(dGet('wtw_tsharethingtempname').value),
 			'description': btoa(dGet('wtw_tsharethingdescription').value),
 			'tags': btoa(dGet('wtw_tsharethingtags').value),
+			'version' : dGet('wtw_tsharethingversion').value,
+			'versiondesc' : btoa(dGet('wtw_tsharethingversiondesc').value),
 			'function':'savethingtemplate'
 		};
 		WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
