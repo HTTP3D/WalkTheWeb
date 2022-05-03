@@ -329,8 +329,13 @@ WTWJS.prototype.getSelectThingsList = async function() {
 										zdiv.id = 'wtw_beditweb_update-' + zversionid;
 										zdiv.className = 'wtw-badgebutton';
 										zdiv.innerHTML = 'Update Available (v' + zversion + ')';
-										zdiv.onclick = function() {
+										zdiv.onclick = function(zevent) {
+											if (zevent == undefined) {
+												zevent = window.event;
+											}
 											WTW.downloadWebVersion(this, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'thing');
+											zevent.stopPropagation();
+											zevent.preventDefault();
 										};
 										document.getElementById('wtw_beditweb-' + zversionid).appendChild(zdiv);
 									}

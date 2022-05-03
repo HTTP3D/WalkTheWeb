@@ -63,8 +63,13 @@ WTWJS.prototype.openSelectAvatar = function() {
 										zdiv.id = 'wtw_beditavatar_update-' + zversionid;
 										zdiv.className = 'wtw-badgebutton';
 										zdiv.innerHTML = 'Update Available (v' + zversion + ')';
-										zdiv.onclick = function() {
+										zdiv.onclick = function(zevent) {
+											if (zevent == undefined) {
+												zevent = window.event;
+											}
 											WTW.downloadAvatarVersion(this, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'avatar');
+											zevent.stopPropagation();
+											zevent.preventDefault();
 										};
 										document.getElementById('wtw_beditavatar-' + zversionid).appendChild(zdiv);
 									}

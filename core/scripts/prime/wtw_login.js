@@ -631,7 +631,7 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight, zeditmo
 						if (zeditmode) {
 							zmylist += "<div id='wtw_editmyavatar" + i + "' class='wtw-editmoderight' onclick=\"WTW.deleteUserAvatar('" + zglobaluseravatarid + "','" + zuseravatarid + "'," + zwidth + "," + zheight + ");\">Delete</div>";
 						}
-						zmylist += "<div id='wtw_beditavatar-" + zupdateuseravatarid + "' class=\"wtw-loginbutton\" style=\"text-align:left;\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.log('clicked load');WTW.onMyAvatarSelect('" + zmyavatars[i].globaluseravatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\">";
+						zmylist += "<div id='wtw_beditavatar-" + zupdateuseravatarid + "' class=\"wtw-loginbutton\" style=\"text-align:left;\" title=\"Select Avatar\" alt=\"Select Avatar\" onclick=\"WTW.onMyAvatarSelect('" + zmyavatars[i].globaluseravatarid + "', '" + zmyavatars[i].useravatarid + "', '" + zmyavatars[i].avatarid + "');\">";
 						zmylist += "<div style='float:right;'>[" + zversion + "]</div>";
 						zmylist += "<img src=\"" + zicon + "\" class=\"wtw-icon\" title=\"" + ztext + "\" alt=\"" + ztext + "\" />";
 						zmylist += "<img src=\"" + zicon2 + "\" class=\"wtw-icon\" title=\"" + ztext2 + "\" alt=\"" + ztext2 + "\" />";
