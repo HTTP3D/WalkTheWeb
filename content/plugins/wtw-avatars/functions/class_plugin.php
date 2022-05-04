@@ -78,12 +78,12 @@ class wtwavatars {
 				/* add admin menu items */
 				/* wtwplugins class -> addAdminMenuItem function (menu item id, menu text, level 1 sort, level 1 id, level 2 sort, level 2 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
 				
-				$wtwplugins->addAdminMenuItem('wtw_avatarsmenu', $wtwplugins->__('3D Avatars'), -75, 'wtw_avatarsmenu', 0, '', '/content/system/images/menuavatars.png', $zdeveloperroles, null);
-				$wtwplugins->addAdminMenuItem('wtw_selectavatar', $wtwplugins->__('Select 3D Avatar'), -75, 'wtw_avatarsmenu', 1, 'wtw_selectavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
-				$wtwplugins->addAdminMenuItem('wtw_addnewavatar', $wtwplugins->__('Add New 3D Avatar'), -75, 'wtw_avatarsmenu', 2, 'wtw_addnewavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
-				$wtwplugins->addAdminMenuItem('wtw_createavatar', $wtwplugins->__('Create 3D Avatar'), -75, 'wtw_avatarsmenu', 3, 'wtw_createavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
-				$wtwplugins->addAdminMenuItem('wtw_adminsettingsavatar', $wtwplugins->__('Options and Settings'), -75, 'wtw_avatarsmenu', 5, 'wtw_adminsettingsavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
-				$wtwplugins->addAdminMenuItem('wtw_admineditavatar', $wtwplugins->__('Edit 3D Avatar'), -75, 'wtw_avatarsmenu', 6, 'wtw_admineditavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
+				$wtwplugins->addAdminMenuItem('wtw_adminavatars', $wtwplugins->__('3D Avatars'), -75, 'wtw_adminavatars', 0, '', '/content/system/images/menuavatars.png', $zdeveloperroles, null);
+				$wtwplugins->addAdminMenuItem('wtw_selectavatar', $wtwplugins->__('Select 3D Avatar'), -75, 'wtw_adminavatars', 1, 'wtw_selectavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
+				$wtwplugins->addAdminMenuItem('wtw_addnewavatar', $wtwplugins->__('Add New 3D Avatar'), -75, 'wtw_adminavatars', 2, 'wtw_addnewavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
+				$wtwplugins->addAdminMenuItem('wtw_createavatar', $wtwplugins->__('Create 3D Avatar'), -75, 'wtw_adminavatars', 3, 'wtw_createavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
+				$wtwplugins->addAdminMenuItem('wtw_adminsettingsavatar', $wtwplugins->__('Options and Settings'), -75, 'wtw_adminavatars', 5, 'wtw_adminsettingsavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
+				$wtwplugins->addAdminMenuItem('wtw_admineditavatar', $wtwplugins->__('Edit 3D Avatar'), -75, 'wtw_adminavatars', 6, 'wtw_admineditavatar', '', $zdeveloperroles, "WTW.adminMenuItemSelected(this);");
 
 				$wtwplugins->addAdminSubMenuItem('settingsavatar', 'wtw_adminavatarratings', '<div class="wtw-altkey">ctrl+r</div>'.$wtwplugins->__('Ratings and Requirements'), 5, $zupdateroles, "WTW.openFullPageForm('fullpage','Ratings and Requirements', 'wtw_requirementspage');WTW.openRequirements();");
 				$wtwplugins->addAdminSubMenuItem('settingsavatar', 'wtw_adminavatarsnapshot', '<div class="wtw-altkey">ctrl+a</div>'.$wtwplugins->__('3D Avatar Snapshot'), 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");

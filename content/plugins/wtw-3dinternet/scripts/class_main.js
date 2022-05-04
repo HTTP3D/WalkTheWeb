@@ -776,6 +776,9 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault, zeditmode) {
 												'globaluseravatarid': '',
 												'useravatarid': zresponse.avatars[i].useravatarid,
 												'webid': zresponse.avatars[i].avatarid,
+												'webname': btoa(zresponse.avatars[i].displayname),
+												'webdesc': btoa(zresponse.avatars[i].avatardescription),
+												'webimage': zresponse.avatars[i].snapshots.thumbnail,
 												'versionid': zresponse.avatars[i].versionid,
 												'version': zresponse.avatars[i].version
 											};
@@ -839,6 +842,9 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault, zeditmode) {
 									if (zresponse.avatars[i] != null) {
 										zversioncheck[zversioncheck.length] = {
 											'webtype': 'avatar',
+											'webname': btoa(zresponse.avatars[i].displayname),
+											'webdesc': btoa(zresponse.avatars[i].avatardescription),
+											'webimage': zresponse.avatars[i].snapshots.thumbnail,
 											'globaluseravatarid': zresponse.avatars[i].globaluseravatarid,
 											'useravatarid': zresponse.avatars[i].useravatarid,
 											'webid': zresponse.avatars[i].avatarid,
