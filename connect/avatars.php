@@ -17,7 +17,7 @@ try {
 		if ($zgroups == 'my') {
 			/* pull a group of MY available avatars */
 			$zresults = $wtwconnect->query("
-				select *,
+				select distinct *,
 					'' as templatename, 
 					'' as description, 
 					'' as tags, 
@@ -48,7 +48,7 @@ try {
 				$zwhere .= "a1.avatargroup='".$zgroups."') ";
 			}
 			$zresults = $wtwconnect->query("
-				select a1.*,
+				select distinct a1.*,
 					'' as useravatarid,
 					u1.displayname as defaultdisplayname
 				from ".wtw_tableprefix."avatars a1
@@ -59,7 +59,7 @@ try {
 		}
 	} else {
 		$zresults = $wtwconnect->query("
-			select a1.*,
+			select distinct a1.*,
 				'' as useravatarid,
 				u1.displayname as defaultdisplayname
 			from ".wtw_tableprefix."avatars a1

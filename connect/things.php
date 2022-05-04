@@ -24,7 +24,7 @@ try {
 	if ($hasaccess) {
 		/* select things based on global access */
 		$zresults = $wtwconnect->query("
-			select t1.*,
+			select distinct t1.*,
 				u1.filetype,
 				u1.filepath,
 				u1.filedata
@@ -36,7 +36,7 @@ try {
 	} else {
 		/* select things based on granular user permissions */
 		$zresults = $wtwconnect->query("
-			select t1.*,
+			select distinct t1.*,
 				u1.filetype,
 				u1.filepath,
 				u1.filedata

@@ -24,7 +24,7 @@ try {
 	if ($hasaccess) {
 		/* user gas global access role that allows access */
 		$zresults = $wtwconnect->query("
-			select b1.*,
+			select distinct b1.*,
 				u1.filepath,
 				u1.filetype,
 				u1.filedata
@@ -37,7 +37,7 @@ try {
 	} else {
 		/* user will only receive data that they have granular permissions to view */
 		$zresults = $wtwconnect->query("
-			select b1.*,
+			select distinct b1.*,
 				u1.filepath,
 				u1.filetype,
 				u1.filedata
