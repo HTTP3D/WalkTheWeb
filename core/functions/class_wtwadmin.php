@@ -175,6 +175,9 @@ class wtwadmin {
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationeventid\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarfolderdisplay\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tversionid\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tbadges\" value=\"0\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tbadgesupdates\" value=\"0\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tbadgeswtw\" value=\"0\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_filter\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tnewmold\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldid\" />\r\n";
@@ -313,33 +316,15 @@ class wtwadmin {
 			$zpagedata .= "			</div>\r\n";
 
 			$zpagedata .= "			<div id=\"wtw_userwebcount\" class=\"wtw-dashboardboxleft\">\r\n";
-			$zpagedata .= "				<div class=\"wtw-dashboardboxtitle\" onclick=\"WTW.toggleDashboardBox('wtw_webcountdiv');\"><div id=\"wtw_webcountdivarrow\" class=\"wtw-divarrow\">⯅</div>3D Website Count</div>\r\n";
-			$zpagedata .= "				<div id=\"wtw_webcountdiv\" class=\"wtw-dashboardboxmax\">\r\n";
-			$zpagedata .= "					<h3 class=\"wtw-black\">My 3D Websites</h3>\r\n";
-			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">3D Community Scenes</div>\r\n";
-			$zpagedata .= "					<div id=\"wtw_mycommcount\" class=\"wtw-dashboardvalue\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">3D Buildings</div>\r\n";
-			$zpagedata .= "					<div id=\"wtw_mybuildcount\" class=\"wtw-dashboardvalue\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">3D Things</div>\r\n";
-			$zpagedata .= "					<div id=\"wtw_mythingcount\" class=\"wtw-dashboardvalue\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$zpagedata .= "					<h3 class=\"wtw-black\">Access to Other 3D Websites</h3>\r\n";
-			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">3D Community Scenes</div>\r\n";
-			$zpagedata .= "					<div id=\"wtw_othercommcount\" class=\"wtw-dashboardvalue\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">3D Buildings</div>\r\n";
-			$zpagedata .= "					<div id=\"wtw_otherbuildcount\" class=\"wtw-dashboardvalue\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
-			$zpagedata .= "					<div class=\"wtw-dashboardlabel\">3D Things</div>\r\n";
-			$zpagedata .= "					<div id=\"wtw_otherthingcount\" class=\"wtw-dashboardvalue\"></div>\r\n";
+			$zpagedata .= "				<div class=\"wtw-dashboardboxtitle\" onclick=\"WTW.toggleDashboardBox('wtw_webcountdiv');\"><div id=\"wtw_webcountdivarrow\" class=\"wtw-divarrow\">⯅</div>Server Stats and Information</div>\r\n";
+			$zpagedata .= "				<div id=\"wtw_webcountdiv\" class=\"wtw-dashboardboxmax\" style=\"max-height:550px;\">\r\n";
+			$zpagedata .= "					<div id=\"wtw_serverstatslist\"></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";
 
 			$zpagedata .= "			<div id=\"wtw_downloadqueue\" class=\"wtw-dashboardboxleftdouble\" style=\"display:none;visibility:hidden;\">\r\n";
-			$zpagedata .= "				<div class=\"wtw-dashboardboxtitle\" onclick=\"WTW.toggleDashboardBox('wtw_downloadqueuediv');\"><div id=\"wtw_downloadqueuedivarrow\" class=\"wtw-divarrow\">⯅</div>WalkTheWeb Downloads Queue</div>\r\n";
+			$zpagedata .= "				<div class=\"wtw-dashboardboxtitle\" onclick=\"WTW.toggleDashboardBox('wtw_downloadqueuediv');\"><div id=\"wtw_downloadqueuedivarrow\" class=\"wtw-divarrow\">⯅</div>WalkTheWeb Pending Downloads (Queue)</div>\r\n";
 			$zpagedata .= "				<div id=\"wtw_downloadqueuediv\" class=\"wtw-dashboardboxmax\" style=\"min-height:550px;\">\r\n";
 			$zpagedata .= "					<div id=\"wtw_downloadqueuelist\"></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
@@ -359,6 +344,8 @@ class wtwadmin {
 			$zpagedata .= "					<div class=\"wtw-dashboardbox\">\r\n";
 			$zpagedata .= "						<div id=\"wtw_updatelist\"></div>\r\n";
 			$zpagedata .= "						<div id=\"wtw_updatedetailslist\"></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "						<div id=\"wtw_updatewebslist\"></div>\r\n";
 			$zpagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "						<div id=\"wtw_updatepluginlist\"></div>\r\n";
 			$zpagedata .= "						<div class=\"wtw-clear\"></div>\r\n";

@@ -77,6 +77,27 @@ html, body {
 	background-color:#FCFFBD;
 	cursor:pointer;
 }
+.wtw-searchresultbuttonyellow {
+	float:right;
+	border:2px solid gray;
+	border-radius:10px;
+	color:#000000;
+	font-weight:bold;
+	width:120px;
+	padding:20px;
+	text-align:center;
+	vertical-align:top;
+	font-size:1em;
+	margin:15px 5px 5px 5px;
+	background-color:yellow;
+	cursor:default;
+}
+.wtw-searchresultbuttonyellow:hover {
+	border:2px solid green;
+	color:green;
+	background-color:#FCFFBD;
+	cursor:pointer;
+}
 .wtw-adminiconimage {
 	height:45px;
 	width:auto;

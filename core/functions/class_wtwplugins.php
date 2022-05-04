@@ -295,6 +295,11 @@ class wtwplugins {
 		return $wtwdb->checkAdminAccess($zcommunityid, $zbuildingid, $zthingid);
 	}
 
+	public function dirSize($zdirectory) {
+		global $wtwdb;
+		return $wtwdb->dirSize($zdirectory);
+	} 
+
 	public function __($zlabel) {
 		/* Language translation based on language file */
 		global $wtwdb;

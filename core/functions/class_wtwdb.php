@@ -1525,6 +1525,21 @@ class wtwdb {
 		return $zsuccess;
 	}
 
+	public function dirSize($zdirectory) {
+		global $wtwdb;
+		$zsize = 0;
+		try {
+			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($zdirectory)) as $zfile){
+				if($zfile -> getFileName() != '..') {
+					$zsize += $zfile->getSize();
+				}
+			}
+		} catch (Exception $e) {
+			$wtwdb->serror("core-functions-class_wtwdb.php-dirSize=".$e->getMessage());
+		}
+		return $zsize;
+	} 
+
 	public function getobjectanimations($zuploadobjectid) {
 		$zobjectanimations = array();
 		try {

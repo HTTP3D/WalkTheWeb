@@ -1252,6 +1252,12 @@ a.wtw-helplink2:hover {
 	text-align:right;
 	color:#000000;
 }
+.wtw-dashboardvaluefloat {
+	float:right;
+	margin:5px 10px 5px 10px;
+	text-align:right;
+	color:#000000;
+}
 .wtw-dashboardvalueurl {
 	text-align:right;
 	color:#000000;
@@ -1960,6 +1966,34 @@ li.wtw-menunoteset {
 	margin:0px auto 0px auto;
 	padding:4px 4px 4px 4px;
 }
+.wtw-updatebadgebutton {
+	float:right;
+	text-align:center;
+	display:block;
+	background-color:yellow;
+	font-size:1em;
+	color:black;
+	border:1px solid blue;
+	border-radius:10px;
+	margin:10px;
+	padding:10px;
+}
+.wtw-updatebadgebutton:hover {
+	cursor:pointer;
+	color:blue;
+}
+.wtw-updatebadgebuttoncompleted {
+	float:right;
+	text-align:center;
+	display:block;
+	background-color:#D3FFCE;
+	font-size:1em;
+	color:black;
+	border:1px solid green;
+	border-radius:10px;
+	margin:10px;
+	padding:10px;
+}
 .wtw-loginbutton {
 	border:#073770 4px solid;
 	border-radius:20px;
@@ -2365,4 +2399,10 @@ input:checked + .wtw-slider:before {
 	cursor:pointer;
 	color:#000000;
 	background-color:yellow;
+}
+.wtw-thumbnailleft {
+	width:120px;
+	height:auto;
+	float:left;
+	margin: 5px 10px 5px 5px;
 }
