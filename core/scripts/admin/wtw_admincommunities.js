@@ -282,8 +282,11 @@ WTWJS.prototype.getSelectCommunitiesList = async function() {
 					for (var i = 0; i < WTW.communities.length; i++) {
 						if (WTW.communities[i] != null) {
 							var zversion = '';
-							zversioncheck[i] = {
+							zversioncheck[zversioncheck.length] = {
 								'webtype': 'community',
+								'webname': btoa(WTW.communities[i].communityinfo.communityname),
+								'webdesc': btoa(WTW.communities[i].communityinfo.communitydescription),
+								'webimage': WTW.communities[i].communityinfo.snapshotpath,
 								'webid': WTW.communities[i].communityinfo.communityid,
 								'versionid': WTW.communities[i].communityinfo.versionid,
 								'version': WTW.communities[i].communityinfo.version

@@ -20,8 +20,11 @@ WTWJS.prototype.openSelectAvatar = function() {
 					for (var i = 0; i < zresponse.avatars.length; i++) {
 						if (zresponse.avatars[i] != null) {
 							var zversion = '';
-							zversioncheck[i] = {
+							zversioncheck[zversioncheck.length] = {
 								'webtype': 'avatar',
+								'webname': btoa(zresponse.avatars[i].displayname),
+								'webdesc': btoa(zresponse.avatars[i].avatardescription),
+								'webimage': zresponse.avatars[i].snapshots.thumbnail,
 								'webid': zresponse.avatars[i].avatarid,
 								'versionid': zresponse.avatars[i].versionid,
 								'version': zresponse.avatars[i].version
@@ -113,6 +116,8 @@ WTWJS.prototype.downloadAvatarVersion = function(zobj, zwebid, zupdatewebid, zve
 				if (dGet('wtw_beditavatar-' + zwebid) != null) {
 					dGet('wtw_beditavatar-' + zwebid).innerHTML = dGet('wtw_beditavatar-' + zwebid).innerHTML.replace(zoldversion,zversion);
 				}
+				/* update badges */
+				WTW.checkForUpdates();
 				window.setTimeout(function(){
 					if (dGet('wtw_beditavatar_update-' + zwebid) != null) {
 						dGet('wtw_beditavatar_update-' + zwebid).remove();

@@ -73,7 +73,7 @@ WTWJS.prototype.toggleAdminMenu = function(zbuttonid) {
 					WTW.hideAdminMenu();
 					WTW.backToEdit();
 				} else {
-					WTW.show('wtw_avatarsmenudiv');
+					WTW.show('wtw_adminavatarsdiv');
 					WTW.show('wtw_adminsettingsavatar');
 					WTW.show('wtw_admineditavatar');
 				}

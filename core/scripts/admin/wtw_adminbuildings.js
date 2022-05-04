@@ -277,8 +277,11 @@ WTWJS.prototype.getSelectBuildingsList = async function() {
 					for (var i = 0; i < WTW.buildings.length; i++) {
 						if (WTW.buildings[i] != null) {
 							var zversion = '';
-							zversioncheck[i] = {
+							zversioncheck[zversioncheck.length] = {
 								'webtype': 'building',
+								'webname': btoa(WTW.buildings[i].buildinginfo.buildingname),
+								'webdesc': btoa(WTW.buildings[i].buildinginfo.buildingdescription),
+								'webimage': WTW.buildings[i].buildinginfo.snapshotpath,
 								'webid': WTW.buildings[i].buildinginfo.buildingid,
 								'versionid': WTW.buildings[i].buildinginfo.versionid,
 								'version': WTW.buildings[i].buildinginfo.version

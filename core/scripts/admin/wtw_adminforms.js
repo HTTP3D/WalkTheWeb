@@ -277,7 +277,10 @@ WTWJS.prototype.checkForFeedbackComplete = function(zresponse, zfilter) {
 							zarchivetext = "Reopen";
 						} else if (zviewed) {
 							zstatus = 'Open';
+						} else {
+							znewfeedback += 1;
 						}
+						
 						zfeedbacklist += "<tr id=\"wtw_feedback-header-" + zresponse[i].feedbackid + "\" onclick=\"WTW.toggleFeedback('" + zresponse[i].feedbackid + "');\" class=\"wtw-versionheader" + zstatuscolor + "\">";
 						zfeedbacklist += "<td class=\"wtw-tablecolumns\" style=\"white-space:normal;\">" + zdatestring + "</td>";
 						zfeedbacklist += "<td class=\"wtw-tablecolumns\" style=\"white-space:normal;\"><b>" + zresponse[i].subject + "</b></td>";
@@ -305,18 +308,10 @@ WTWJS.prototype.checkForFeedbackComplete = function(zresponse, zfilter) {
 		dGet('wtw_feedbacklist').innerHTML = zfeedbacklist;
 		WTW.hide('wtw_loadingfeedback');
 		WTW.show('wtw_feedbacklist');
-/*		if (zupdates > 0 || zupdatewtw > 0) {
-			dGet('wtw_admindashboardbadge').innerHTML = (zupdates + zupdatewtw);
-			dGet('wtw_adminmenuupdatesbadge').innerHTML = (zupdates + zupdatewtw);
-			WTW.showInline('wtw_admindashboardbadge');
-			WTW.showInline('wtw_adminmenuupdatesbadge');
-		}
-		if (zupdates > 0) {
-			dGet('wtw_adminpluginsbadge').innerHTML = zupdates;
-			dGet('wtw_adminallpluginsbadge').innerHTML = zupdates;
-			WTW.showInline('wtw_adminpluginsbadge');
-			WTW.showInline('wtw_adminallpluginsbadge');
-		} */
+
+		dGet('wtw_adminmenufeedbackbadge').innerHTML = znewfeedback;
+		WTW.updateBadges();
+		
 		dGet('wtw_feedbackpagescroll').style.height = (WTW.sizeY - 160) + 'px';
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-checkForFeedbackComplete=" + ex.message);
@@ -340,6 +335,16 @@ WTWJS.prototype.toggleFeedback = async function(zfeedbackid) {
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							/* note zresponse.serror would contain any errors */
+							
+							/* update badges */
+							if (dGet('wtw_adminmenufeedbackbadge').innerHTML != '') {
+								if (WTW.isNumeric(dGet('wtw_adminmenufeedbackbadge').innerHTML)) {
+									if (Number(dGet('wtw_adminmenufeedbackbadge').innerHTML) > 0) {
+										dGet('wtw_adminmenufeedbackbadge').innerHTML = (Number(dGet('wtw_adminmenufeedbackbadge').innerHTML) - 1);
+									}
+								}
+							}
+							WTW.updateBadges();
 						}
 					);
 					dGet('wtw_feedback-status-' + zfeedbackid).innerHTML = 'Open';
@@ -386,12 +391,113 @@ WTWJS.prototype.archiveFeedback = async function(zfeedbackid) {
 	}
 }
 
+WTWJS.prototype.updateBadges = async function() {
+	/* update the display badges in the admin menu */
+	/* to fully check updates, use WTW.checkForUpdates('1'); */
+	try {
+		var ztotaldashboardupdates = 0;
+		var ztotalupdates = 0;
+		WTW.hide('wtw_admindashboardbadge');
+		WTW.hide('wtw_adminmenudashboardbadge');
+		WTW.hide('wtw_adminmenuupdatesbadge');
+		WTW.hide('wtw_adminmenufeedbackbadge');
+		WTW.hide('wtw_admincommunitiesbadge');
+		WTW.hide('wtw_adminbuildingsbadge');
+		WTW.hide('wtw_adminthingsbadge');
+		WTW.hide('wtw_adminavatarsbadge');
+		WTW.hide('wtw_adminpluginsbadge');
+		
+		if (dGet('wtw_tbadgeswtw').value != '') {
+			if (WTW.isNumeric(dGet('wtw_tbadgeswtw').value)) {
+				ztotalupdates += Number(dGet('wtw_tbadgeswtw').value);
+				ztotaldashboardupdates += Number(dGet('wtw_tbadgeswtw').value);
+			}
+		}
+		if (dGet('wtw_adminpluginsbadge').innerHTML != '') {
+			if (WTW.isNumeric(dGet('wtw_adminpluginsbadge').innerHTML)) {
+				ztotalupdates += Number(dGet('wtw_adminpluginsbadge').innerHTML);
+				ztotaldashboardupdates += Number(dGet('wtw_adminpluginsbadge').innerHTML);
+				if (Number(dGet('wtw_adminpluginsbadge').innerHTML) > 0) {
+					WTW.showInline('wtw_adminpluginsbadge');
+				}
+			}
+		}
+		if (dGet('wtw_admincommunitiesbadge').innerHTML != '') {
+			if (WTW.isNumeric(dGet('wtw_admincommunitiesbadge').innerHTML)) {
+				ztotalupdates += Number(dGet('wtw_admincommunitiesbadge').innerHTML);
+				ztotaldashboardupdates += Number(dGet('wtw_admincommunitiesbadge').innerHTML);
+				if (Number(dGet('wtw_admincommunitiesbadge').innerHTML) > 0) {
+					WTW.showInline('wtw_admincommunitiesbadge');
+				}
+			}
+		}
+		if (dGet('wtw_adminbuildingsbadge').innerHTML != '') {
+			if (WTW.isNumeric(dGet('wtw_adminbuildingsbadge').innerHTML)) {
+				ztotalupdates += Number(dGet('wtw_adminbuildingsbadge').innerHTML);
+				ztotaldashboardupdates += Number(dGet('wtw_adminbuildingsbadge').innerHTML);
+				if (Number(dGet('wtw_adminbuildingsbadge').innerHTML) > 0) {
+					WTW.showInline('wtw_adminbuildingsbadge');
+				}
+			}
+		}
+		if (dGet('wtw_adminthingsbadge').innerHTML != '') {
+			if (WTW.isNumeric(dGet('wtw_adminthingsbadge').innerHTML)) {
+				ztotalupdates += Number(dGet('wtw_adminthingsbadge').innerHTML);
+				ztotaldashboardupdates += Number(dGet('wtw_adminthingsbadge').innerHTML);
+				if (Number(dGet('wtw_adminthingsbadge').innerHTML) > 0) {
+					WTW.showInline('wtw_adminthingsbadge');
+				}
+			}
+		}
+		if (dGet('wtw_adminavatarsbadge').innerHTML != '') {
+			if (WTW.isNumeric(dGet('wtw_adminavatarsbadge').innerHTML)) {
+				ztotalupdates += Number(dGet('wtw_adminavatarsbadge').innerHTML);
+				ztotaldashboardupdates += Number(dGet('wtw_adminavatarsbadge').innerHTML);
+				if (Number(dGet('wtw_adminavatarsbadge').innerHTML) > 0) {
+					WTW.showInline('wtw_adminavatarsbadge');
+				}
+			}
+		}
+		if (dGet('wtw_adminmenudashboardbadge').innerHTML != '') {
+			if (WTW.isNumeric(dGet('wtw_adminmenudashboardbadge').innerHTML)) {
+				if (Number(dGet('wtw_adminmenudashboardbadge').innerHTML) > 0) {
+					ztotaldashboardupdates += Number(dGet('wtw_adminmenudashboardbadge').innerHTML);
+					WTW.showInline('wtw_adminmenudashboardbadge');
+				}
+			}
+		}
+		if (dGet('wtw_adminmenufeedbackbadge').innerHTML != '') {
+			if (WTW.isNumeric(dGet('wtw_adminmenufeedbackbadge').innerHTML)) {
+				if (Number(dGet('wtw_adminmenufeedbackbadge').innerHTML) > 0) {
+					ztotaldashboardupdates += Number(dGet('wtw_adminmenufeedbackbadge').innerHTML);
+					WTW.showInline('wtw_adminmenufeedbackbadge');
+				}
+			}
+		}
+		dGet('wtw_tbadgesupdates').value = ztotalupdates;
+		dGet('wtw_tbadges').value = ztotaldashboardupdates;
+		if (ztotalupdates > 0) {
+			dGet('wtw_adminmenuupdatesbadge').innerHTML = ztotalupdates;
+			WTW.showInline('wtw_adminmenuupdatesbadge');
+		}
+		if (ztotaldashboardupdates > 0) {
+			dGet('wtw_admindashboardbadge').innerHTML = ztotaldashboardupdates;
+			WTW.showInline('wtw_admindashboardbadge');
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-updateBadges=" + ex.message);
+	}
+}
+
 /* WalkTheWeb and 3D Plugin Updates */
 
 /* check for updates */
 WTWJS.prototype.checkForUpdates = async function(zshow, zfilter) {
 	/* check for updates call */
 	try {
+		if (zshow == undefined) {
+			zshow = '1';
+		}
 		if (zfilter == undefined) {
 			zfilter = 'All Plugins';
 		}
@@ -424,6 +530,9 @@ WTWJS.prototype.checkForUpdates = async function(zshow, zfilter) {
 				WTW.getPluginInfoComplete(zresponse.plugins, zshow, zfilter);
 			}
 		);
+		WTW.checkUpdatesForAllWebs();
+		WTW.openDashboardForm(false);
+		WTW.checkForFeedback('Open Feedback');
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-checkForUpdates=" + ex.message);
 	}
@@ -594,21 +703,178 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 				WTW.show('wtw_allplugins');
 				break;
 		}
-		if (zupdates > 0 || zupdatewtw > 0) {
-			dGet('wtw_admindashboardbadge').innerHTML = (zupdates + zupdatewtw);
-			dGet('wtw_adminmenuupdatesbadge').innerHTML = (zupdates + zupdatewtw);
-			WTW.showInline('wtw_admindashboardbadge');
-			WTW.showInline('wtw_adminmenuupdatesbadge');
-		}
-		if (zupdates > 0) {
-			dGet('wtw_adminpluginsbadge').innerHTML = zupdates;
-			dGet('wtw_adminallpluginsbadge').innerHTML = zupdates;
-			WTW.showInline('wtw_adminpluginsbadge');
-			WTW.showInline('wtw_adminallpluginsbadge');
-		}
+		
+		/* update badges */
+		dGet('wtw_adminpluginsbadge').innerHTML = zupdates;
+		dGet('wtw_tbadgeswtw').value = zupdatewtw;
+		WTW.updateBadges();
+
 		dGet('wtw_updatespagescroll').style.height = (WTW.sizeY - 160) + 'px';
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-checkForUpdatesComplete=" + ex.message);
+	}
+}
+
+WTWJS.prototype.checkUpdatesForAllWebs = async function() {
+	/* gather list of 3D Webs and send to 3dnet hub to check for updates */
+	try {
+		dGet('wtw_updatewebslist').innerHTML = '';
+		WTW.hide('wtw_updatewebslist');
+		var zversioncheck = [];
+		WTW.getAsyncJSON("/connect/communities.php", 
+			function(zresponse) {
+				WTW.communities = JSON.parse(zresponse);
+				if (WTW.communities != null) {
+					for (var i = 0; i < WTW.communities.length; i++) {
+						if (WTW.communities[i] != null) {
+							zversioncheck[zversioncheck.length] = {
+								'webtype': 'community',
+								'webname': btoa(WTW.communities[i].communityinfo.communityname),
+								'webdesc': btoa(WTW.communities[i].communityinfo.communitydescription),
+								'webimage': WTW.communities[i].communityinfo.snapshotpath,
+								'webid': WTW.communities[i].communityinfo.communityid,
+								'versionid': WTW.communities[i].communityinfo.versionid,
+								'version': WTW.communities[i].communityinfo.version
+							};
+						}
+					}
+				}
+				WTW.getAsyncJSON("/connect/buildings.php", 
+					function(zresponse2) {
+						WTW.buildings = JSON.parse(zresponse2);
+						if (WTW.buildings != null) {
+							for (var i = 0; i < WTW.buildings.length; i++) {
+								if (WTW.buildings[i] != null) {
+									zversioncheck[zversioncheck.length] = {
+										'webtype': 'building',
+										'webname': btoa(WTW.buildings[i].buildinginfo.buildingname),
+										'webdesc': btoa(WTW.buildings[i].buildinginfo.buildingdescription),
+										'webimage': WTW.buildings[i].buildinginfo.snapshotpath,
+										'webid': WTW.buildings[i].buildinginfo.buildingid,
+										'versionid': WTW.buildings[i].buildinginfo.versionid,
+										'version': WTW.buildings[i].buildinginfo.version
+									};
+								}
+							}
+						}
+						WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+							function(zresponse3) {
+								WTW.things = JSON.parse(zresponse3);
+								if (WTW.things != null) {
+									for (var i = 0; i < WTW.things.length; i++) {
+										if (WTW.things[i] != null) {
+											var zversion = '';
+											zversioncheck[zversioncheck.length] = {
+												'webtype': 'thing',
+												'webname': btoa(WTW.things[i].thinginfo.thingname),
+												'webdesc': btoa(WTW.things[i].thinginfo.thingdescription),
+												'webimage': WTW.things[i].thinginfo.snapshotpath,
+												'webid': WTW.things[i].thinginfo.thingid,
+												'versionid': WTW.things[i].thinginfo.versionid,
+												'version': WTW.things[i].thinginfo.version
+											};						
+										}
+									}
+								}
+								WTW.getAsyncJSON("/connect/avatars.php", 
+									function(zresponse4) {
+										zresponse4 = JSON.parse(zresponse4);
+										if (zresponse4.avatars != null) {
+											for (var i = 0; i < zresponse4.avatars.length; i++) {
+												if (zresponse4.avatars[i] != null) {
+													zversioncheck[zversioncheck.length] = {
+														'webtype': 'avatar',
+														'webname': btoa(zresponse4.avatars[i].displayname),
+														'webdesc': btoa(zresponse4.avatars[i].avatardescription),
+														'webimage': zresponse4.avatars[i].snapshots.thumbnail,
+														'webid': zresponse4.avatars[i].avatarid,
+														'versionid': zresponse4.avatars[i].versionid,
+														'version': zresponse4.avatars[i].version
+													};								
+												}
+											}
+										}
+										/* check for updated versions */
+										var zrequest = {
+											'versioncheck': JSON.stringify(zversioncheck),
+											'function':'versioncheck'
+										};
+										WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/versioncheck.php", zrequest, 
+											function(zresponse5) {
+												zresponse5 = JSON.parse(zresponse5);
+												var zcommunitycount = 0;
+												var zbuildingcount = 0;
+												var zthingcount = 0;
+												var zavatarcount = 0;
+												var zupdatewebslist = '';
+												if (zresponse5 != null) {
+													zupdatewebslist += "<div class='wtw-dashboardboxleftfull'>";
+													zupdatewebslist += "<div class='wtw-dashboardboxtitle'>3D Web Updates Available</div>";
+													zupdatewebslist += "<div class='wtw-dashboardbox'>";
+													for (var i = 0; i < zresponse5.length; i++) {
+														if (zresponse5[i] != null) {
+															var zversionid = zresponse5[i].versionid;
+															var zwebid = zresponse5[i].webid;
+															var zwebtype = zresponse5[i].webtype;
+															var zwebname = atob(zresponse5[i].webname);
+															var zwebdesc = atob(zresponse5[i].webdesc);
+															var zwebimage = zresponse5[i].webimage;
+															var zupdatewebid = zresponse5[i].updatewebid;
+															var zversion = zresponse5[i].version;
+															var zoldversion = zresponse5[i].oldversion;
+															var zonclick = " onclick=\"WTW.downloadWebVersion(this,'" + zwebid + "','" + zupdatewebid + "','" + zversionid + "','" + zversion + "','" + zoldversion + "','" + zwebtype + "');\" ";
+															
+															switch (zwebtype) {
+																case 'community':
+																	zcommunitycount += 1;
+																	break;
+																case 'building':
+																	zbuildingcount += 1;
+																	break;
+																case 'thing':
+																	zthingcount += 1;
+																	break;
+																case 'avatar':
+																	zavatarcount += 1;
+																	zonclick = " onclick=\"WTW.downloadAvatarVersion(this,'" + zwebid + "','" + zupdatewebid + "','" + zversionid + "','" + zversion + "','" + zoldversion + "','" + zwebtype + "');\" ";
+																	break;
+															}
+															zupdatewebslist += "<div id='wtw_beditweb_div-" + zwebid + "' class='wtw-filelistdiv'>";
+															if (zwebimage != '') {
+																zupdatewebslist += "<img src='" + zwebimage + "' class='wtw-thumbnailleft' />";
+															}
+															zupdatewebslist += "<div id='wtw_beditweb_update-" + zwebid + "' class='wtw-updatebadgebutton' " + zonclick + ">Update Available (v" + zversion + ")</div>";
+															zupdatewebslist += "<div><b>" + zwebname + " [v" + zoldversion + "]</b> - " + zwebdesc + "</div>";
+															zupdatewebslist += "</div><div style='clear:both;'></div>";
+														}
+													}
+													zupdatewebslist += "</div></div>";
+													
+													/* update badges */
+													dGet('wtw_admincommunitiesbadge').innerHTML = zcommunitycount;
+													dGet('wtw_adminbuildingsbadge').innerHTML = zbuildingcount;
+													dGet('wtw_adminthingsbadge').innerHTML = zthingcount;
+													dGet('wtw_adminavatarsbadge').innerHTML = zavatarcount;
+													
+													WTW.updateBadges();
+												}
+												dGet('wtw_updatewebslist').innerHTML = zupdatewebslist;
+												if (zresponse5.length > 0) {
+													WTW.show('wtw_updatewebslist');
+												}
+											}
+										);										
+									}
+								);	
+							}
+						);
+					}
+				);
+			}
+		);
+		
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-checkUpdatesForAllWebs=" + ex.message);
 	}
 }
 
@@ -914,83 +1180,104 @@ WTWJS.prototype.updateWalkTheWebComplete = function(zpluginname, zversion, zupda
 
 /* dashboard and WalkTheWeb & 3D Plugin updates forms */
 
-WTWJS.prototype.openDashboardForm = async function() {
+WTWJS.prototype.openDashboardForm = async function(zshow) {
 	/* load dashboard form */
 	try {
-		WTW.hide('wtw_dashboard');
-		WTW.show('wtw_loadingdashboard');
-		WTW.hide('wtw_videolinks');
-		WTW.hide('wtw_downloadqueue');
-		dGet("wtw_mycommcount").innerHTML = '0';
-		dGet("wtw_mybuildcount").innerHTML = '0';
-		dGet("wtw_mythingcount").innerHTML = '0';
-		dGet("wtw_othercommcount").innerHTML = '0';
-		dGet("wtw_otherbuildcount").innerHTML = '0';
-		dGet("wtw_otherthingcount").innerHTML = '0';
+		if (zshow == undefined) {
+			zshow = true;
+		}
+		if (zshow) {
+			WTW.hide('wtw_dashboard');
+			WTW.show('wtw_loadingdashboard');
+			WTW.hide('wtw_videolinks');
+			WTW.hide('wtw_downloadqueue');
+		}
+		dGet("wtw_serverstatslist").innerHTML = '';
 		WTW.getAsyncJSON("/connect/dashboard.php", 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse != null) {
+					var zserverstatslist = '';
+					zserverstatslist += "<div style='width:98%;margin:5px;'>";
+					zserverstatslist += "<div class=\"wtw-dashboardlabel\">&nbsp;</div>";
+					zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:90px;'><b><u>Serverwide</u></b></div>";
+					zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:60px;'><b><u>My Account</u></b></div>";
+					zserverstatslist += "</div>";
+					zserverstatslist += "<div class=\"wtw-clear\"></div>";
 					for (var i = 0; i < zresponse.length; i++) {
 						if (zresponse[i] != null) {
-							if (zresponse[i].mycommunitycount != undefined) {
-								dGet('wtw_mycommcount').innerHTML = WTW.formatNumber(Number(zresponse[i].mycommunitycount),0);
+							var zmycount = zresponse[i].mycount;
+							var zscount = zresponse[i].scount;
+							if (zresponse[i].item == 'Website Size') {
+								zscount = WTW.formatNumber(Math.round(Number(zscount)/1000000));
+								zserverstatslist += "<div style='width:98%;margin:5px;'>";
+								zserverstatslist += "<div class=\"wtw-dashboardlabel\"><b>" + zresponse[i].item + "</b></div>";
+								zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:100px;'>" + zscount + " MB</div>";
+								zserverstatslist += "</div>";
+								zserverstatslist += "<div class=\"wtw-clear\"></div>";
+							} else {
+								if (WTW.isNumeric(zresponse[i].mycount)) {
+									zmycount = WTW.formatNumber(Number(zresponse[i].mycount));
+								}
+								if (WTW.isNumeric(zresponse[i].scount)) {
+									zscount = WTW.formatNumber(Number(zresponse[i].scount));
+								}
+								zserverstatslist += "<div style='width:98%;margin:5px;'>";
+								zserverstatslist += "<div class=\"wtw-dashboardlabel\"><b>" + zresponse[i].item + "</b></div>";
+								zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:90px;'>" + zscount + "</div>";
+								zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:60px;'>" + zmycount + "</div>";
+								zserverstatslist += "</div>";
+								zserverstatslist += "<div class=\"wtw-clear\"></div>";
 							}
-							if (zresponse[i].mybuildingcount != undefined) {
-								dGet('wtw_mybuildcount').innerHTML = WTW.formatNumber(Number(zresponse[i].mybuildingcount),0);
-							}
-							if (zresponse[i].mythingcount != undefined) {
-								dGet('wtw_mythingcount').innerHTML = WTW.formatNumber(Number(zresponse[i].mythingcount),0);
-							}
-							if (zresponse[i].othercommunitycount != undefined) {
-								dGet('wtw_othercommcount').innerHTML = WTW.formatNumber(Number(zresponse[i].othercommunitycount),0);
-							}
-							if (zresponse[i].otherbuildingcount != undefined) {
-								dGet('wtw_otherbuildcount').innerHTML = WTW.formatNumber(Number(zresponse[i].otherbuildingcount),0);
-							}
-							if (zresponse[i].otherthingcount != undefined) {
-								dGet('wtw_otherthingcount').innerHTML = WTW.formatNumber(Number(zresponse[i].otherthingcount),0);
-							}
-							if (zresponse[i].downloads != undefined) {
-								if (zresponse[i].downloads.length > 0) {
-									WTW.getDownloadsInfo(zresponse[i].downloads);
+							if (i == 0) {
+								if (zresponse[i].downloads != undefined) {
+									if (zresponse[i].downloads.length > 0) {
+										WTW.getDownloadsInfo(zresponse[i].downloads, zshow);
+									}
 								}
 							}
 						}
 					}
-				}
-				window.setTimeout(function() {
-					WTW.hide('wtw_loadingdashboard');
-					WTW.show('wtw_dashboard');
-				},500);
-			}
-		);
-		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/videolinks.php", 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				for (var i=0;i<zresponse.length;i++) {
-					if (zresponse[i] != null) {
-						if (i == 0) {
-							dGet('wtw_latestvideotitle').innerHTML = atob(zresponse[i].videotitle);
-							dGet('wtw_latestvideodetails').innerHTML = "Presented by: " + zresponse[i].presenter + " on " + WTW.formatDate(zresponse[i].updatedate) + "<br /><br />" + atob(zresponse[i].description);
-							if (zresponse[i].videourl.indexOf('?v=') > -1) {
-								var zyoutubeid = zresponse[i].videourl.split('?v=')[1];
-								dGet('wtw_latestvideo').innerHTML = "<iframe width=\"100%\" height=\"auto\" src=\"https://www.youtube.com/embed/" + zyoutubeid + "?list=PLnMgA5ebbr8KXw9z5vp4E202e-RTKa9X-\" frameborder=\"0\" allowfullscreen style=\"min-height:350px;\"></iframe>";
-							}
-						} else {
-							
-						}
+					if (zshow) {
+						dGet("wtw_serverstatslist").innerHTML = zserverstatslist;
 					}
 				}
-				WTW.show('wtw_videolinks');
+				if (zshow) {
+					window.setTimeout(function() {
+						WTW.hide('wtw_loadingdashboard');
+						WTW.show('wtw_dashboard');
+					},500);
+				}
 			}
 		);
+		if (zshow) {
+			WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/videolinks.php", 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							if (i == 0) {
+								dGet('wtw_latestvideotitle').innerHTML = atob(zresponse[i].videotitle);
+								dGet('wtw_latestvideodetails').innerHTML = "Presented by: " + zresponse[i].presenter + " on " + WTW.formatDate(zresponse[i].updatedate) + "<br /><br />" + atob(zresponse[i].description);
+								if (zresponse[i].videourl.indexOf('?v=') > -1) {
+									var zyoutubeid = zresponse[i].videourl.split('?v=')[1];
+									dGet('wtw_latestvideo').innerHTML = "<iframe width=\"100%\" height=\"auto\" src=\"https://www.youtube.com/embed/" + zyoutubeid + "?list=PLnMgA5ebbr8KXw9z5vp4E202e-RTKa9X-\" frameborder=\"0\" allowfullscreen style=\"min-height:350px;\"></iframe>";
+								}
+							} else {
+								
+							}
+						}
+					}
+					WTW.show('wtw_videolinks');
+				}
+			);
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-openDashboardForm=" + ex.message);
 	}
 }
 
-WTWJS.prototype.getDownloadsInfo = async function(zdownloads) {
+WTWJS.prototype.getDownloadsInfo = async function(zdownloads, zshow) {
 	/* uses the local downloads to get the download info from 3dnet.walktheweb.com hub */
 	try {
 		var zrequest = {
@@ -1001,7 +1288,7 @@ WTWJS.prototype.getDownloadsInfo = async function(zdownloads) {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-				WTW.displayDownloadsQueue(zresponse);
+				WTW.displayDownloadsQueue(zresponse, zshow);
 			}
 		);
 	} catch (ex) {
@@ -1009,22 +1296,32 @@ WTWJS.prototype.getDownloadsInfo = async function(zdownloads) {
 	}
 }
 
-WTWJS.prototype.displayDownloadsQueue = async function(zdownloadinfo) {
+WTWJS.prototype.displayDownloadsQueue = async function(zdownloadinfo, zshow) {
 	/* display any downloads with info and preview */
 	try {
+		if (zshow == undefined) {
+			zshow = true;
+		}
 		var zdownloadslist = "<div>";
-		for (var i=0;i < zdownloadinfo.length;i++) {
-			if (zdownloadinfo[i] != null) {
-				if (zdownloadinfo[i].imageurl != '') {
-					zdownloadslist += "<img src='" + zdownloadinfo[i].imageurl + "' class='wtw-smallimageleft' />";
+		if (zshow) {
+			for (var i=0;i < zdownloadinfo.length;i++) {
+				if (zdownloadinfo[i] != null) {
+					if (zdownloadinfo[i].imageurl != '') {
+						zdownloadslist += "<img src='" + zdownloadinfo[i].imageurl + "' class='wtw-smallimageleft' />";
+					}
+					zdownloadslist += "<div style='padding:2px;margin:0px 10px 10px 20px;'><b>" + zdownloadinfo[i].templatename + "</b> (" + zdownloadinfo[i].version + ")<br /><div style='float:right;'><div onclick=\"WTW.downloadWebFromQueue('" + zdownloadinfo[i].downloadid + "','" + zdownloadinfo[i].webid + "','" + zdownloadinfo[i].webtype + "','1');\" class='wtw-searchresultbuttonyellow'>Download</div><br /><div onclick=\"WTW.downloadWebFromQueue('" + zdownloadinfo[i].downloadid + "','" + zdownloadinfo[i].webid + "','" + zdownloadinfo[i].webtype + "','0');\" class='wtw-searchresultbutton'>Cancel</div></div><br /><b>Created By:</b> " + zdownloadinfo[i].displayname + "<br /><b>on</b> " + WTW.formatDate(zdownloadinfo[i].createdate) + "<br />" + zdownloadinfo[i].description + "<br /></div><div style='clear:both;'></div><hr />";
 				}
-				zdownloadslist += "<div style='padding:2px;margin:0px 10px 10px 20px;'><b>" + zdownloadinfo[i].templatename + "</b> (" + zdownloadinfo[i].version + ")<br /><div style='float:right;'><div onclick=\"WTW.downloadWebFromQueue('" + zdownloadinfo[i].downloadid + "','" + zdownloadinfo[i].webid + "','" + zdownloadinfo[i].webtype + "','1');\" class='wtw-searchresultbutton'>Download</div><br /><div onclick=\"WTW.downloadWebFromQueue('" + zdownloadinfo[i].downloadid + "','" + zdownloadinfo[i].webid + "','" + zdownloadinfo[i].webtype + "','0');\" class='wtw-searchresultbutton'>Cancel</div></div><br /><b>Created By:</b> " + zdownloadinfo[i].displayname + "<br /><b>on</b> " + WTW.formatDate(zdownloadinfo[i].createdate) + "<br />" + zdownloadinfo[i].description + "<br /></div><div style='clear:both;'></div><hr />";
 			}
 		}
 		zdownloadslist += "</div>";
-		dGet('wtw_downloadqueuelist').innerHTML = zdownloadslist;
-		dGet('wtw_dashboard').style.height = (WTW.sizeY-100)+'px';
-		WTW.show('wtw_downloadqueue');
+		if (zshow) {
+			dGet('wtw_downloadqueuelist').innerHTML = zdownloadslist;
+			dGet('wtw_dashboard').style.height = (WTW.sizeY-100)+'px';
+			WTW.show('wtw_downloadqueue');
+		}
+		/* update badges */
+		dGet('wtw_adminmenudashboardbadge').innerHTML = zdownloadinfo.length;
+		WTW.updateBadges();
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-displayDownloadsQueue=" + ex.message);
 	}

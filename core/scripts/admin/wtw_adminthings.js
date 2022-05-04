@@ -290,8 +290,11 @@ WTWJS.prototype.getSelectThingsList = async function() {
 					for (var i = 0; i < WTW.things.length; i++) {
 						if (WTW.things[i] != null) {
 							var zversion = '';
-							zversioncheck[i] = {
+							zversioncheck[zversioncheck.length] = {
 								'webtype': 'thing',
+								'webname': btoa(WTW.things[i].thinginfo.thingname),
+								'webdesc': btoa(WTW.things[i].thinginfo.thingdescription),
+								'webimage': WTW.things[i].thinginfo.snapshotpath,
 								'webid': WTW.things[i].thinginfo.thingid,
 								'versionid': WTW.things[i].thinginfo.versionid,
 								'version': WTW.things[i].thinginfo.version
@@ -318,15 +321,15 @@ WTWJS.prototype.getSelectThingsList = async function() {
 							zresponse2 = JSON.parse(zresponse2);
 							for (var i = 0; i < zresponse2.length; i++) {
 								if (zresponse2[i] != null) {
+									var zwebid = zresponse2[i].webid;
 									var zversionid = zresponse2[i].versionid;
-									if (document.getElementById('wtw_beditweb-' + zversionid) != null) {
-										var zwebid = zresponse2[i].webid;
+									if (document.getElementById('wtw_beditweb-' + zwebid) != null) {
 										var zupdatewebid = zresponse2[i].updatewebid;
 										var zversion = zresponse2[i].version;
 										var zoldversion = zresponse2[i].oldversion;
 										
 										var zdiv = document.createElement('div');
-										zdiv.id = 'wtw_beditweb_update-' + zversionid;
+										zdiv.id = 'wtw_beditweb_update-' + zwebid;
 										zdiv.className = 'wtw-badgebutton';
 										zdiv.innerHTML = 'Update Available (v' + zversion + ')';
 										zdiv.onclick = function(zevent) {
@@ -337,7 +340,7 @@ WTWJS.prototype.getSelectThingsList = async function() {
 											zevent.stopPropagation();
 											zevent.preventDefault();
 										};
-										document.getElementById('wtw_beditweb-' + zversionid).appendChild(zdiv);
+										document.getElementById('wtw_beditweb-' + zwebid).appendChild(zdiv);
 									}
 								}
 							}

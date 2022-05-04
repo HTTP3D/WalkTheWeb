@@ -510,6 +510,9 @@ WTWJS.prototype.getMyAvatarList = async function(zwidth, zheight, zeditmode) {
 										if (zresponse.avatars[i] != null) {
 											zversioncheck[zversioncheck.length] = {
 												'webtype': 'avatar',
+												'webname': btoa(zresponse.avatars[i].displayname),
+												'webdesc': btoa(zresponse.avatars[i].avatardescription),
+												'webimage': zresponse.avatars[i].snapshots.thumbnail,
 												'globaluseravatarid': '',
 												'useravatarid': zresponse.avatars[i].useravatarid,
 												'webid': zresponse.avatars[i].avatarid,

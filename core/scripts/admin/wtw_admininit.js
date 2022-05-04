@@ -67,7 +67,6 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 					WTW.openFullPageForm('plugins','All Plugins');
 					break;
 				default:
-					WTW.checkForUpdates();
 					break;
 			}
 			if (WTW.isNumeric(zhmenu)) {
@@ -98,7 +97,7 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 				}
 			}
 			/* check for updates to WalkTheWeb and 3D Plugins */
-			WTW.checkForUpdates();
+			WTW.checkForUpdates('1');
 		} else {
 			/* page is returning from a babylon screen shot */
 			/* open the appropriate menu option */

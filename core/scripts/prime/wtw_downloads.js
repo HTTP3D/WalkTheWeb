@@ -368,11 +368,15 @@ WTWJS.prototype.downloadWebVersion = function(zobj, zwebid, zupdatewebid, zversi
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				zobj.innerHTML = 'Completed (v' + zversion + ')';
-				zobj.className = 'wtw-badgebuttoncompleted';
+				zobj.className += 'completed';
 				if (dGet('wtw_beditweb-' + zwebid) != null) {
 					dGet('wtw_beditweb-' + zwebid).innerHTML = dGet('wtw_beditweb-' + zwebid).innerHTML.replace(zoldversion,zversion);
 				}
+
+				/* update badges */
+				WTW.checkForUpdates();
 				window.setTimeout(function(){
+					/* remove update buttons */
 					if (dGet('wtw_beditweb_update-' + zwebid) != null) {
 						dGet('wtw_beditweb_update-' + zwebid).remove();
 					}
