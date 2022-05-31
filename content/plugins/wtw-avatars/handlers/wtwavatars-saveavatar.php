@@ -73,7 +73,6 @@ try {
 			$zanimationfriendlyname = '';
 			$zloadpriority = 0;
 			$zanimationicon = '';
-			$zdefaultspeedratio = 1;
 			$zspeedratio = 1;
 			$zobjectfolder = '';
 			$zobjectfile = '';
@@ -93,7 +92,6 @@ try {
 				$zanimationfriendlyname = $zrow["animationfriendlyname"];
 				$zloadpriority = $zrow["loadpriority"];
 				$zanimationicon = $zrow["animationicon"];
-				$zdefaultspeedratio = $zrow["defaultspeedratio"];
 				$zspeedratio = $zrow["speedratio"];
 				$zobjectfolder = $zrow["objectfolder"];
 				$zobjectfile = $zrow["objectfile"];

@@ -1633,14 +1633,14 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 										} else if (zbonename.indexOf("leftfoot") > -1 && zleftfootbone == -1) {
 											zleftfootbone = j;
 										}
-										if (j == 0) {
+/*										if (j == 0) {
 											zresponse.skeletons[i].bones[j].parent = zavatarscale;
 										} else {
 											if (zresponse.skeletons[i].bones[j].parent == null) {
 												zresponse.skeletons[i].bones[j].parent = zresponse.skeletons[i].bones[0];
 											}
 										}
-									}
+*/									}
 								}
 								if (zheadtopbone > -1) {
 									var zheadtop = BABYLON.MeshBuilder.CreateBox(zavatarname + "-headtop", {}, scene);

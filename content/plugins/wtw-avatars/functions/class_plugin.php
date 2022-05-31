@@ -19,11 +19,11 @@ class wtwavatars {
 		}
 	}	
 	
-	public $version = "1.0.1";
+	public $version = "1.0.2";
 
 	public $dbversion = "1.0.1";
 
-	public $versiondate = "2020-8-29";
+	public $versiondate = "2020-5-31";
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
