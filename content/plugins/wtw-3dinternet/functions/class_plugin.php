@@ -23,11 +23,11 @@ class wtw3dinternet {
 		}
 	}	
 	
-	public $version = "1.1.1";
+	public $version = "1.1.2";
 
 	public $dbversion = "1.0.8";
 
-	public $versiondate = "2022-4-29";
+	public $versiondate = "2022-5-31";
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -150,6 +150,8 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadMove();");
 			
 			$wtwplugins->addScriptFunction("onclick", "wtw3dinternet.onClick(zpickedname);");
+			$wtwplugins->addScriptFunction("onmicvolumechange", "wtw3dinternet.onMicVolumeChange(zvolume);");
+			$wtwplugins->addScriptFunction("togglemicmute", "wtw3dinternet.toggleMicMute();");
 			$wtwplugins->addScriptFunction("checkhovers", "wtw3dinternet.checkHovers(zmoldname, zshape);");
 			$wtwplugins->addScriptFunction("resethovers", "wtw3dinternet.resetHovers(zmoldname, zshape);");
 			$wtwplugins->addScriptFunction("keyup", "wtw3dinternet.keyUp(zevent);");
@@ -209,7 +211,7 @@ class wtw3dinternet {
 
 			$zformdata .= "				<div id=\"wtw3dinternet_voicechattext\" class=\"wtw-disabledlabel\" style=\"float:right;display:none;\"></div>";
 
-			$zformdata .= "				<label class=\"wtw-switch\" style=\"display:none;\"><input id=\"wtw3dinternet_enablevoicechat\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablevoicechattext\" class=\"wtw-disabledlabel\" style=\"display:none;\">Multiplayer Voice Chat Disabled</div><div style=\"clear:both;\"></div>\r\n";
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablevoicechat\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablevoicechattext\" class=\"wtw-disabledlabel\">Multiplayer Voice Chat Disabled</div><div style=\"clear:both;\"></div>\r\n";
 			$zformdata .= "			</div>\r\n";
 			
 			/* for future use */

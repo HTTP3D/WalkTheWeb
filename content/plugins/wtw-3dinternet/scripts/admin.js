@@ -6,7 +6,7 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 	/* initiate the listeners for WalkTheWeb Admin channel communication */
 	try {
 		if (wtw3dinternet.admin == null) {
-			wtw3dinternet.admin = io.connect('https://3dnet.walktheweb.network/admin', { transports : ['websocket', 'polling'] });
+			wtw3dinternet.admin = io.connect('https://3dnet.walktheweb.network/admin', {});
 			
 			wtw3dinternet.admin.emit('connect server', {
 				'serverinstanceid':dGet('wtw_serverinstanceid').value,
@@ -21,11 +21,20 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 			});
 
 			wtw3dinternet.admin.on('user left', function(zdata) {
-				WTW.log('USER LEFT=' + JSON.stringify(zdata), 'red');
+				WTW.log('USER LEFT=' + JSON.stringify(zdata), 'pink');
+			});
+
+
+			wtw3dinternet.admin.on('connect', function() {
+				/* WTW.log('Admin-CONNECT', 'pink'); */
+			});
+
+			wtw3dinternet.admin.on('connect_error', function(zdata) {
+				/* WTW.log('Admin-CONNECT-ERROR=' + JSON.stringify(zdata), 'pink'); */
 			});
 
 			wtw3dinternet.admin.on('reconnect', function(zdata) {
-//				WTW.log('Admin-RECONNECT=' + JSON.stringify(zdata), 'red');
+				/* WTW.log('Admin-RECONNECT=' + JSON.stringify(zdata), 'pink'); */
 				wtw3dinternet.admin.emit('connect server', {
 					'serverinstanceid':dGet('wtw_serverinstanceid').value,
 					'serverip':dGet('wtw_serverip').value,
@@ -34,11 +43,11 @@ WTW_3DINTERNET.prototype.initAdminSocket = function() {
 			});
 
 			wtw3dinternet.admin.on('reconnect_error', function(zdata) {
-//				WTW.log('Admin-RECONNECT_ERROR=' + JSON.stringify(zdata), 'red');
+				/* WTW.log('Admin-RECONNECT_ERROR=' + JSON.stringify(zdata), 'pink'); */
 			});
 
 			wtw3dinternet.admin.on('disconnect user', function(zdata) {
-				WTW.log('DISCONNECT USER=' + JSON.stringify(zdata), 'red');
+				/* WTW.log('DISCONNECT USER=' + JSON.stringify(zdata), 'pink'); */
 			});
 
 			wtw3dinternet.admin.on('wtwadminresponse', function(zresponse) {

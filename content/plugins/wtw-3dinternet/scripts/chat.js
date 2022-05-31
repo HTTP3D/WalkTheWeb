@@ -6,7 +6,7 @@ WTW_3DINTERNET.prototype.initChatSocket = function() {
 	/* initiate the listeners for WalkTheWeb Chat channel for multiplayer */
 	try {
 		if (wtw3dinternet.chat == null) {
-			wtw3dinternet.chat = io.connect('https://3dnet.walktheweb.network/chat', { transports : ['websocket', 'polling'] });
+			wtw3dinternet.chat = io.connect('https://3dnet.walktheweb.network/chat', {});
 
 			wtw3dinternet.chat.on('serror', function(zresponse) {
 				var zcolor = 'white';
@@ -40,7 +40,7 @@ WTW_3DINTERNET.prototype.initChatSocket = function() {
 			wtw3dinternet.chat.on('user left', function(zdata) {
 
 			});
-
+/*
 			wtw3dinternet.chat.on('reconnect', function(zdata) {
 //				WTW.log('Chat-RECONNECT=' + JSON.stringify(zdata), 'red');
 
@@ -49,7 +49,7 @@ WTW_3DINTERNET.prototype.initChatSocket = function() {
 			wtw3dinternet.chat.on('reconnect_error', function(zdata) {
 //				WTW.log('Chat-RECONNECT_ERROR=' + JSON.stringify(zdata), 'red');
 			});
-
+*/
 			wtw3dinternet.chat.on('chat invite', function(zdata) {
 				if (wtw3dinternet.masterChat == '1') {
 					if (wtw3dinternet.isBlockedOrBanned(zdata.frominstanceid) == false) {
@@ -265,6 +265,7 @@ WTW_3DINTERNET.prototype.processChatCommand = function(zdata) {
 WTW_3DINTERNET.prototype.startChat = function(zinstanceid) {
 	/* start personal chat */
 	try {
+WTW.log("zinstanceid=" + zinstanceid);
 		if (wtw3dinternet.masterChat == '1') {
 			if (wtw3dinternet.isBlockedOrBanned(zinstanceid) == false) {
 				let zchatid = WTW.getRandomString(20);

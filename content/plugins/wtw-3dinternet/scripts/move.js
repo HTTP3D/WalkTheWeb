@@ -6,10 +6,10 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 	/* initiate the listeners for WalkTheWeb Move channel multiplayer tracking */
 	try {
 		if (wtw3dinternet.move == null) {
-			wtw3dinternet.move = io.connect('https://3dnet.walktheweb.network/move', { transports : ['websocket', 'polling'] });
+			wtw3dinternet.move = io.connect('https://3dnet.walktheweb.network/move', {});
 			
 			wtw3dinternet.move.on('reconnect', function(zdata) {
-				WTW.log('Move-RECONNECT=' + JSON.stringify(zdata), 'red');
+				/* WTW.log('Move-RECONNECT=' + JSON.stringify(zdata), 'red'); */
 				if (wtw3dinternet.inactive == false) {
 					wtw3dinternet.reconnectLoadZones();
 				}
@@ -17,7 +17,7 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 
 			wtw3dinternet.move.on('reconnect_error', function(zdata) {
 				if (wtw3dinternet.inactive == false) {
-					WTW.log('Move-RECONNECT_ERROR=' + JSON.stringify(zdata), 'red');
+					/* WTW.log('Move-RECONNECT_ERROR=' + JSON.stringify(zdata), 'red'); */
 				}
 			});
 
@@ -1133,6 +1133,8 @@ WTW_3DINTERNET.prototype.enterLoadZone = function(zmoldname, zmolddef) {
 								});
 								/* enter Chat Zone */
 								wtw3dinternet.enterChatLoadZone(zmoldname, zmolddef);
+								/* enter Voice Chat Zone */
+								wtw3dinternet.enterVoiceChatLoadZone(zmoldname, zmolddef);
 								/* add load zone to array of connecting grid offsets */
 								wtw3dinternet.addLoadZone(zmolddef.actionzoneid, communityid, zmolddef.buildinginfo.buildingid, zmolddef.thinginfo.thingid, zpositionx, zpositiony, zpositionz, zscalingx, zscalingy, zscalingz, zrotationx, zrotationy, zrotationz);
 							}
@@ -1176,6 +1178,8 @@ WTW_3DINTERNET.prototype.exitLoadZone = function(zmoldname, zmolddef) {
 					});
 					/* exit Chat Zone */
 					wtw3dinternet.exitChatLoadZone(zmoldname, zmolddef);
+					/* exit Voice Chat Zone */
+					wtw3dinternet.exitVoiceChatLoadZone(zmoldname, zmolddef);
 					/* remove the load zone from the array of connecting grid offsets */
 					wtw3dinternet.removeLoadZone(zmolddef.actionzoneid, zmolddef.communityinfo.communityid, zmolddef.buildinginfo.buildingid, zmolddef.thinginfo.thingid);
 				}

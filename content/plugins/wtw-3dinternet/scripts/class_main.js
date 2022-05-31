@@ -16,6 +16,11 @@ function WTW_3DINTERNET() {
 	this.admin = null; /* admin channel object - used for connection and checking multiplayer server settings */
 	this.move = null; /* movement channel object - tracks and sends multiplayer movements */
 	this.chat = null; /* chat channel object - processes all chat to and from your user */
+	this.voicechat = null; /* voice chat channel object - processes all voice chat to and from your user */
+	this.voicestream = null; /* stream picked up from microphone audio */
+	this.voiceprocessor = null; /* stream picked up from microphone audio */
+	this.voiceaudiocontext = null; /* stream picked up from microphone audio */
+	this.voiceinput = null; /* stream picked up from microphone audio */
 	this.chatText = []; /* group chat text queue */
 	this.loadZones = []; /* used to track offset of 3D Community vs 3D Buildings loaded directly */ 
 	this.avatars = []; /* minimal tracking required for multiplayer avatars currently in the 3D Scene */
@@ -28,12 +33,11 @@ function WTW_3DINTERNET() {
 	this.inactiveTimeout = 1800000; /* set the inactive timeout for my avatar 1800000 = 30 minutes */
 	this.inactive = false; /* flag used after inactive timeout to keep multiplayer inactive until movement is detected again */
 	
-	/* the following variables are experimental settings used to test and program voice chat */
-	this.voicechat = null;
-	this.mediaStream = null;
-	this.recordAudio = null;
+	/* the following variables are experimental settings used to test and program video */
+	this.mediaStream = null; /* video stream */
+	this.recordAudio = null; 
 	this.recordVideo = null;
-	this.mediaSocket = null;
+//	this.mediaSocket = null;
 }
 
 /* Create the class instance */
@@ -1286,6 +1290,19 @@ WTW_3DINTERNET.prototype.fadeAvatar = function(zdata) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-3dinternet:scripts-class_main..js-fadeAvatar=" + ex.message);
+		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-fadeAvatar=" + ex.message);
+	}
+}
+
+WTW_3DINTERNET.prototype.toggleMicMute = function() {
+	/* toggle mic on and off */
+	try {
+		if (WTW.micMute == true) { 
+			
+		} else {
+			
+		}
+	} catch (ex) {
+		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-toggleMicMute=" + ex.message);
 	}
 }
