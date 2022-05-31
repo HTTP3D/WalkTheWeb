@@ -552,6 +552,9 @@ try {
 				'z'=> 0
 			)
 		),
+		'sounds'=> array(
+			'voice' => null
+		),
 		'avatarparts'=> $zavatarparts,
 		'avataranimationdefs'=> $zavataranimationdefs,
 		'animations'=> array(),

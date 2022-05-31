@@ -134,6 +134,9 @@ try {
 				'description' => htmlspecialchars($zrow["description"], ENT_QUOTES, 'UTF-8'),
 				'tags' => htmlspecialchars($zrow["tags"], ENT_QUOTES, 'UTF-8')
 			),
+			'sounds'=> array(
+				'voice' => null
+			),
 			'sortorder'=> $zrow["sortorder"]
 		);
 		$i += 1;
