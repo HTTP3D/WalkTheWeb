@@ -49,6 +49,7 @@
 			<li class="wtw-menuli" onclick="WTW.hide('wtw_menusettings');WTW.showSettingsMenu('wtw_menumovementspeed');"><img src="/content/system/images/menumovement.png" alt="Movement Speed" title="Movement Speed" class='wtw-menulefticon' /><?php echo $wtwmenus->__("Movement Speed"); ?></li>
 			<li class="wtw-menuli" onclick="WTW.hide('wtw_menusettings');WTW.showSettingsMenu('wtw_menugraphicsquality');"><img src="/content/system/images/menugraphics.png" alt="Graphics Quality" title="Graphics Quality" class='wtw-menulefticon' /><?php echo $wtwmenus->__("Graphics Quality"); ?></li>
 			<li class="wtw-menuli" onclick="WTW.hide('wtw_menusettings');WTW.showSettingsMenu('wtw_menushadowquality');"><img src="/content/system/images/menushadows.png" alt="Shadow Quality" title="Shadow Quality" class='wtw-menulefticon' /><?php echo $wtwmenus->__("Shadow Quality"); ?></li>
+			<li class="wtw-menuli" onclick="WTW.hide('wtw_menusettings');WTW.showSettingsMenu('wtw_menutestmic');"><img src="/content/system/images/menushadows.png" alt="Test Microphone" title="Test Microphone" class='wtw-menulefticon' /><?php echo $wtwmenus->__("Test Microphone"); ?></li>
 			<li class="wtw-menuli" onclick="WTW.toggleSoundMute();"><img id="wtw_submenumute" src="/content/system/images/menumuteon.png" alt="<?php echo $wtwmenus->__("Turn Sound On"); ?>" title="<?php echo $wtwmenus->__("Turn Sound On"); ?>" class='wtw-menulefticon' /><span id="wtw_submenumutetext"><?php echo $wtwmenus->__("Sound is Off"); ?></span></li>
 <?php		echo $wtwmenus->getSettingsMenu(); ?>
 		</ul>
@@ -205,6 +206,39 @@
 				<input type="button" value="Higher" style="display:inline-block;cursor:pointer;" onclick="WTW.changeShadow(1);" />
 			</li>
 			<li id="wtw_shadowhelptitle" class="wtw-submenuli wtw-menunoteset"><?php echo $wtwmenus->__("Shadows (Some - Low Resolution)"); ?></li>
+		</ul>
+	</div>
+</div>
+<div id="wtw_menutestmic" class="wtw-slideupmenuright" style="display:none;visibility:hidden;">
+	<img class="wtw-closeright" onclick="WTW.closeMenus();" src="/content/system/images/menuclose.png" alt="<?php echo $wtwmenus->__("Close"); ?>" title="<?php echo $wtwmenus->__("Close"); ?>" onmouseover="this.src='/content/system/images/menuclosehover.png';" onmouseout="this.src='/content/system/images/menuclose.png';" />
+	<div class="wtw-menuheading"><?php echo $wtwmenus->__("Test Microphone"); ?></div>
+	<div id="wtw_menutestmicscroll" class="wtw-mainmenuscroll">
+		<div id="wtw_testmicnote" class="wtw-menunote" style="display:none;visibility:hidden;"><?php echo $wtwmenus->__("this is a volume check fo the Microphone."); ?></div>
+		<ul class="wtw-menuli">
+			<li class="wtw-menuliholder">
+				<img src="/content/system/images/menuq.png" alt="<?php echo $wtwmenus->__("Show Help"); ?>" title="<?php echo $wtwmenus->__("Show Help"); ?>" class='wtw-menuq' onclick="WTW.toggle('wtw_testmicnote');" />
+				<img src="/content/system/images/menumicon.png" alt="<?php echo $wtwmenus->__("Test Microphone"); ?>" title="<?php echo $wtwmenus->__("Test Microphone"); ?>" class='wtw-menulefticon' /><?php echo $wtwmenus->__("Test Microphone"); ?></li>
+			<li class="wtw-submenuli">
+				<div class="wtw-container">
+					<span><!--Microphone--><br /><br /><br /></span>
+					<div class="wtw-volumen-wrapper">
+						<div class="wtw-led"></div>
+						<div class="wtw-led"></div>
+						<div class="wtw-led"></div>
+						<div class="wtw-led"></div>
+						<div class="wtw-led"></div>
+						<div class="wtw-led"></div>
+						<div class="wtw-led"></div>
+						<div class="wtw-led"></div>
+						<div class="wtw-led"></div>
+						<div class="wtw-led"></div>
+					</div>
+					<br />
+					<div class="wtw-control-audio-wrapper">
+						<div id="wtw_audio" class="wtw-audio-control">&#127908;</div>
+					</div>
+				</div>
+			</li>
 		</ul>
 	</div>
 </div>

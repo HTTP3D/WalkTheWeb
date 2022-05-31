@@ -1907,27 +1907,28 @@ class wtwtables {
 				(3,'','WalkTheWeb','main','left',-1000,1,'','/content/system/images/menuwtwlogo32.png','open-tab','https://www.walktheweb.com',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				(4,'wtw_showcommunityname','[Community]','main','left',-980,1,'','','','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				(5,'wtw_showbuildingname','[Building]','main','left',-970,1,'','','','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				(6,'wtw_menumute','Mute On','main','right',-990,1,'','/content/system/images/menumuteon32.png','WTW.toggleSoundMute','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				(7,'wtw_mainmenudisplayname','[Login]','main','right',-969,1,'','','show-hide','wtw_menuprofile',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				(8,'','Help','main','right',-1000,1,'','/content/system/images/menuhelp32.png','show-hide','wtw_menuhelp',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				(9,'wtw_mainadminmode','Admin Home','main','left',-990,1,'','/content/system/images/menutools32.png','navigate','/admin.php',2,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				(10,'wtw_modebuilding','[EditBuilding]','main','left',-975,1,'','/content/system/images/menuedit32.png','navigate','/admin.php',2,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				(11,'wtw_modecommunity','[EditCommunity]','main','left',-985,1,'','/content/system/images/menuedit32.png','navigate','/admin.php',2,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				(12,'wtw_menuarrowicon','','main','left',-978,1,'','/content/system/images/menuarrow32.png','image','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				(13,'wtw_menuoptionanimations','Animations','main','center',-800,1,'','/content/system/images/menugestures32.png','WTW.toggleMenuAnimations','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				(14,'wtw_menuhomeicon','Home','main','left',-995,1,'','/content/system/images/menuhome32.png','navigate','/',3,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				(6,'wtw_menumic','Mic On','main','right',-980,1,'','/content/system/images/menumicoff32.png','WTW.toggleMicMute','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				(7,'wtw_menumute','Mute On','main','right',-990,1,'','/content/system/images/menumuteon32.png','WTW.toggleSoundMute','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				(8,'wtw_mainmenudisplayname','[Login]','main','right',-969,1,'','','show-hide','wtw_menuprofile',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				(9,'','Help','main','right',-1000,1,'','/content/system/images/menuhelp32.png','show-hide','wtw_menuhelp',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				(10,'wtw_mainadminmode','Admin Home','main','left',-990,1,'','/content/system/images/menutools32.png','navigate','/admin.php',2,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				(11,'wtw_modebuilding','[EditBuilding]','main','left',-975,1,'','/content/system/images/menuedit32.png','navigate','/admin.php',2,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				(12,'wtw_modecommunity','[EditCommunity]','main','left',-985,1,'','/content/system/images/menuedit32.png','navigate','/admin.php',2,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				(13,'wtw_menuarrowicon','','main','left',-978,1,'','/content/system/images/menuarrow32.png','image','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				(14,'wtw_menuoptionanimations','Animations','main','center',-800,1,'','/content/system/images/menugestures32.png','WTW.toggleMenuAnimations','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				(15,'wtw_menuhomeicon','Home','main','left',-995,1,'','/content/system/images/menuhome32.png','navigate','/',3,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				
-				(15,'wtw_rating','[Not Rated]','main','right',-1001,1,'','','show-hide','wtw_menucontentrating',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				(16,'wtw_rating','[Not Rated]','main','right',-1001,1,'','','show-hide','wtw_menucontentrating',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
 				
-				(16,'','Player Stats','mainmenu','left',1,1,'','','WTW.hudOpenMenuItem','1',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				(17,'','Player Stats','mainmenu','left',1,1,'','','WTW.hudOpenMenuItem','1',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
 				
-				(17,'','Settings','mainmenu','',50,1,'','','WTW.hudOpenMenuItem','50',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				(18,'','Settings','mainmenu','',50,1,'','','WTW.hudOpenMenuItem','50',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
 				
-				(18,'','<- Main Menu','settings','',1,1,'','','WTW.hudOpenMenuItem','51',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				(19,'','<- Main Menu','settings','',1,1,'','','WTW.hudOpenMenuItem','51',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
 
-				(19,'','Cameras','settings','left',10,1,'','','WTW.hudOpenMenuItem','60',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				(20,'','Cameras','settings','left',10,1,'','','WTW.hudOpenMenuItem','60',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
 
-				(20,'','Profile','settings','left',100,1,'','','WTW.hudOpenMenuItem','100',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
+				(21,'','Profile','settings','left',100,1,'','','WTW.hudOpenMenuItem','100',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
 			");
 			
 			/* add roles */
@@ -3339,6 +3340,22 @@ class wtwtables {
 				where versiondesc=''
 					and not uploadobjectid='';
 			");
+			
+			/* updated 3.4.14 - added mic support - mic icon added to main menu */
+			$zresults = $wtwdb->query("
+				select menuitemid 
+				from ".wtw_tableprefix."menuitems 
+				where menuitemname='wtw_menumic'
+					and deleted=0;
+			");
+			if (empty(count($zresults))) {
+				$wtwdb->query("
+					INSERT INTO ".wtw_tableprefix."menuitems 
+					(menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+					VALUES 
+					('wtw_menumic','Mic On','main','right',-980,1,'','/content/system/images/menumicoff32.png','WTW.toggleMicMute','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
+				");			
+			}
 			
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 		} catch (Exception $e) {

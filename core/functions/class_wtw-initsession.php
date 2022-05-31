@@ -22,7 +22,7 @@ class wtw {
 	
 	/* declare public $wtw variables */
 	public $version = "3.4.13";
-	public $dbversion = "1.1.25";
+	public $dbversion = "1.1.28";
 	public $versiondate = "2022-4-29";
 	public $serverinstanceid = "";
 	public $globaluserid = "";
@@ -1995,8 +1995,8 @@ class wtw {
 			$zjsdata .= "		}\r\n";
             $zjsdata .= "	}\r\n";
 			$zjsdata .= "</script>"; 
-			$zjsdata .= "<script src=\"/core/scripts/engine/socket.io.js\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/engine/socket.io-stream.js\"></script>\r\n";
+			$zjsdata .= "<script src=\"https://3dnet.walktheweb.network/socket.io/socket.io.js\"></script>\r\n";
+//			$zjsdata .= "<script src=\"/core/scripts/engine/socket.io-stream.js\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$this->version."\"></script>\r\n";
 			$zjsdata .= $wtwplugins->getScriptFunctions();
 		} catch (Exception $e) {
@@ -2040,7 +2040,7 @@ class wtw {
 			$zjsdata .= "<script src=\"/core/scripts/engine/babylonjs.postProcess.min.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/engine/babylon.gui.min.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/engine/babylonjs.proceduralTextures.min.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/engine/babylon.materials.min.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src=\"/core/scripts/engine/babylonjs.materials.min.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/engine/pep.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/engine/loader.js?x=".$zver."\"></script>\r\n";
 			$zjsdata .= "<script src=\"/core/scripts/engine/meshwriter.min.js?x=".$zver."\"></script>\r\n";

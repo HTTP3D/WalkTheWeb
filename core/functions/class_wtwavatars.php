@@ -2989,17 +2989,29 @@ class wtwavatars {
 					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zanimation->updateuserid);
 
 					$zfoundavataranimationid = '';
-					$zresults = $wtwhandlers->query("
-						select avataranimationid
-						from ".wtw_tableprefix."avataranimations 
-						where avatarid='".$zwebid."'
-							and animationevent='".$zanimation->animationevent."'
-							and animationfriendlyname='".addslashes($zanimation->animationfriendlyname)."'
-							and objectfile='".$zanimation->objectfile."'
-						limit 1;
-						");
-					foreach ($zresults as $zrow) {
-						$zfoundavataranimationid = $zrow["avataranimationid"];
+					if ($zanimation->animationevent != 'onoption') {
+						$zresults = $wtwhandlers->query("
+							select avataranimationid
+							from ".wtw_tableprefix."avataranimations 
+							where avatarid='".$zwebid."'
+								and animationevent='".$zanimation->animationevent."'
+							limit 1;
+							");
+						foreach ($zresults as $zrow) {
+							$zfoundavataranimationid = $zrow["avataranimationid"];
+						}
+					} else {
+						$zresults = $wtwhandlers->query("
+							select avataranimationid
+							from ".wtw_tableprefix."avataranimations 
+							where avatarid='".$zwebid."'
+								and animationevent='".$zanimation->animationevent."'
+								and objectfile='".$zanimation->objectfile."'
+							limit 1;
+							");
+						foreach ($zresults as $zrow) {
+							$zfoundavataranimationid = $zrow["avataranimationid"];
+						}
 					}
 
 					if (isset($zfoundavataranimationid) && !empty($zfoundavataranimationid)) {
