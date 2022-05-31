@@ -31,13 +31,17 @@ WTWJS.prototype.initEvents = function() {
 		window.addEventListener('touchcancel', WTW.touchCancel, false);
 		window.addEventListener('touchleave', WTW.touchCancel, false); 
 		window.addEventListener("beforeunload", WTW.beforeUnload,false);
+		document.getElementById('wtw_audio').addEventListener('click', function() {
+			WTW.toggleMicMute();
+		});
+
 		if (window.addEventListener) {
 			window.addEventListener("message", WTW.onMessage, false);        
 		} else if (window.attachEvent) {
 			window.attachEvent("onmessage", WTW.onMessage, false);
 		}
 
-		document.addEventListener("focus", WTW.checkFocus , true)
+		document.addEventListener("focus", WTW.checkFocus , true);
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_init.js-initEvents=" + ex.message);
 	}

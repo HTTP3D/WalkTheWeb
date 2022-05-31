@@ -126,6 +126,72 @@ WTWJS.prototype.checkActionZones = function() {
 	}
 }
 
+WTWJS.prototype.getActiveLoadZones = function() {
+	/* get array of action load zones that my avatar is in */
+	var zactionzones = [];
+	try {
+		for (var i = 0; i < WTW.actionZones.length; i++) {
+			if (WTW.actionZones[i] != null) {
+				var zmoldname = WTW.actionZones[i].moldname;
+				var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
+				if (zmoldname != undefined) {
+					if (zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status == 2) {
+						zactionzones[zactionzones.length] = WTW.actionZones[i];
+					}
+				}
+			}
+		}		
+	} catch (ex) {
+		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-getActiveLoadZones=" + ex.message);
+	}
+	return zactionzones;
+}
+
+WTWJS.prototype.getActiveWebs = function() {
+	/* get array of webs that my avatar is in the extreme zone */
+	var zwebs = [];
+	try {
+		for (var i = 0; i < WTW.actionZones.length; i++) {
+			if (WTW.actionZones[i] != null) {
+				var zmoldname = WTW.actionZones[i].moldname;
+				var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
+				if (zmoldname != undefined) {
+					if (zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status == 2 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
+						var zfound = false;
+						var zwebtype = 'community';
+						var zwebid = WTW.actionZones[i].communityinfo.communityid;
+						if (WTW.actionZones[i].buildinginfo.buildingid != '') {
+							zwebtype = 'building';
+							zwebid = WTW.actionZones[i].buildinginfo.buildingid;
+						} else if (WTW.actionZones[i].thinginfo.thingid != '') {
+							zwebtype = 'thing';
+							zwebid = WTW.actionZones[i].thinginfo.thingid;
+						}
+						/* check if the web is already in the array */
+						for (var j = 0;j < zwebs.length;j++) {
+							if (zwebs[j] != null) {
+								if (zwebs[j].webtype == zwebtype && zwebs[j].webid == zwebid) {
+									zfound = true;
+								}
+							}
+						}
+						if (zfound == false) {
+							/* only add if not already in the array */
+							zwebs[zwebs.length] = {
+								'webtype': zwebtype,
+								'webid': zwebid
+							};
+						}
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-getActiveWebs=" + ex.message);
+	}
+	return zwebs;
+}
+
 WTWJS.prototype.checkAvatarsInZone = function(zactionzone) {
 	/* for future use - to check if a multiplayer avatar is in the action zone */
 	var zinzone = false;

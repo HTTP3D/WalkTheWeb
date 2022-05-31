@@ -1205,6 +1205,32 @@ WTWJS.prototype.setShadowSettings = function() {
     }
 }
 
+WTWJS.prototype.toggleMicMute = function() {
+	/* toggle mic on and off */
+	try {
+		if (WTW.micMute == true) { 
+			/* set menu options for mic turned off */
+			dGet('wtw_menumic').src = "/content/system/images/menumicon32.png";
+			dGet('wtw_menumic').alt = WTW.__("Turn Mic Off");
+			dGet('wtw_menumic').title = WTW.__("Turn Mic Off");
+			dGet('wtw_audio').style.boxShadow = "5px 2px 5px 0px #0a0a0e5e inset, -2px -2px 1px 0px #a7a7a73d inset";
+			dGet('wtw_audio').style.fontSize = "24px";
+			WTW.micMute = false;
+		} else {
+			dGet('wtw_menumic').src = "/content/system/images/menumicoff32.png";
+			dGet('wtw_menumic').alt = WTW.__("Turn Mic On");
+			dGet('wtw_menumic').title = WTW.__("Turn Mic On");
+			dGet('wtw_audio').style.boxShadow = "-2px -2px 4px 0px #a7a7a73d, 2px 2px 4px 0px #0a0a0e5e";
+			dGet('wtw_audio').style.fontSize = "25px";
+			WTW.micMute = true;
+		}
+		WTW.pluginsToggleMicMute();
+		WTW.activeMic();
+	} catch (ex) {
+		WTW.log("core-scripts-hud-wtw_hud.js-toggleMicMute=" + ex.message);
+	}
+}
+
 WTWJS.prototype.toggleSoundMute = function() {
 	/* toggle sound on and off from molds playing the sounds */
 	try {
@@ -1365,6 +1391,7 @@ WTWJS.prototype.toggleSoundMute = function() {
 			WTW.soundMute = true;
 		}
 		WTW.setCookie("soundmute",WTW.soundMute,30);
+		WTW.pluginsToggleSoundMute();
 	} catch (ex) {
 		WTW.log("core-scripts-hud-wtw_hud.js-toggleSoundMute=" + ex.message);
 	}

@@ -2401,3 +2401,107 @@ WTWJS.prototype.setToolTipLocation = function() {
 		WTW.log("core-scripts-prime-wtw_input.js-setToolTipLocation=" + ex.message);
     }
 }
+
+WTWJS.prototype.activeMic = function() {
+	/* Turn On Microphone */
+	try {
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+		
+		navigator.getUserMedia(
+			{ audio: true, video: false },
+			WTW.onMicrophoneGranted,
+			WTW.onMicrophoneDenied
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_input.js-activeMic=" + ex.message);
+	}
+}
+
+WTWJS.prototype.onMicrophoneGranted = async function(zstream) {
+	/* Microphone is on */
+	try {
+		if (WTW.audioContext == null) {
+			/* Initialize AudioContext object */
+			WTW.audioContext = new AudioContext()
+
+			/* Adding an AudioWorkletProcessor from worker script with addModule method */
+			await WTW.audioContext.audioWorklet.addModule('/content/plugins/wtw-3dinternet/scripts/voicechatworker.js')
+
+			/* Creating a MediaStreamSource object and sending a MediaStream object granted by the user */
+			WTW.audioContext.microphone = WTW.audioContext.createMediaStreamSource(zstream)
+
+			/* Creating AudioWorkletNode sending context and name of processor registered in worker script */
+			WTW.audioContext.audioNode = new AudioWorkletNode(WTW.audioContext, 'vumeter')
+
+			/* Listing any message from AudioWorkletProcessor in its process method here where you can know the volume level */
+			WTW.audioContext.audioNode.port.onmessage = zevent => {
+				let zvolume = 0;
+				let zsensibility = 5; /* Add any sensibility */
+				if (zevent.data.volume) {
+					zvolume = zevent.data.volume;
+				}
+				WTW.onMicVolumeChange((zvolume * 100) / zsensibility);
+				
+				wtw3dinternet.streamAudio(zstream);
+			}
+
+			/* connect microphone to the AudioWorkletNode and output from WTW.audioContext */
+			WTW.audioContext.microphone.connect(WTW.audioContext.audioNode).connect(WTW.audioContext.destination);
+		}
+		/* stop or resume the microphone from listening */
+		if (WTW.micMute) {
+			if (WTW.audioContext != null) {
+				WTW.audioContext.suspend();
+			}
+			WTW.onMicVolumeChange(0);
+		} else {
+			if (WTW.audioContext != null) {
+				WTW.audioContext.resume();
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_input.js-onMicrophoneGranted=" + ex.message);
+	}
+}
+
+WTWJS.prototype.onMicrophoneDenied = function() {
+	/* Microphone is off */
+	try {
+		dGet('wtw_audio').style.boxShadow = "-2px -2px 4px 0px #a7a7a73d, 2px 2px 4px 0px #0a0a0e5e";
+		dGet('wtw_audio').style.fontSize = "25px";
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_input.js-onMicrophoneDenied=" + ex.message);
+	}
+}
+
+WTWJS.prototype.onMicVolumeChange = function(zvolume) {
+	/* test mic display colors */
+	try {
+		let zleds = [...document.getElementsByClassName('wtw-led')]
+		let zrange = zleds.slice(0, Math.round(zvolume))
+		var zledColor = [
+			"#064dac",
+			"#064dac",
+			"#064dac",
+			"#06ac5b",
+			"#15ac06",
+			"#4bac06",
+			"#80ac06",
+			"#acaa06",
+			"#ac8b06",
+			"#ac5506"
+		];
+		for (var i = 0; i < zleds.length; i++) {
+			zleds[i].style.boxShadow = "-2px -2px 4px 0px #a7a7a73d, 2px 2px 4px 0px #0a0a0e5e";
+			zleds[i].style.height = "22px";
+		}
+
+		for (var i = 0; i < zrange.length; i++) {
+			zrange[i].style.boxShadow = `5px 2px 5px 0px #0a0a0e5e inset, -2px -2px 1px 0px #a7a7a73d inset, -2px -2px 30px 0px ${zledColor[i]} inset`;
+			zrange[i].style.height = "25px";
+		}
+		WTW.pluginsOnMicVolumeChange(zvolume);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_input.js-onMicVolumeChange=" + ex.message);
+	}
+}

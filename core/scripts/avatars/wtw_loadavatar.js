@@ -894,7 +894,9 @@ WTWJS.prototype.avatarLoadComplete = function(zavatarname) {
 		if (zavatarname.indexOf('myavatar-') > -1) {
 			WTW.myAvatar.WTW.loaded = true;
 		}
-		WTW.pluginsAvatarLoadComplete(zavatarname);
+		if (typeof WTW.pluginsAvatarLoadComplete == 'function') {
+			WTW.pluginsAvatarLoadComplete(zavatarname);
+		}
     } catch (ex) {
 		WTW.log("core-scripts-avatars-wtw_loadavatar.js-avatarLoadComplete=" + ex.message);
     }

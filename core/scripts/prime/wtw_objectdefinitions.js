@@ -676,6 +676,10 @@ WTWJS.prototype.newAvatarDef = function() {
 				'lastframecount':0
 				
 			},
+			'sounds':
+			{
+				'voice':null
+			},
 			'start':
 			{
 				'position':

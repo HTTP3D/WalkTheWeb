@@ -109,6 +109,7 @@ function WTWJS() {
 	/* Texture caching buffers - set to true to clear buffer of texture paths to free up memory */
 	this.cleanCachedTextureBuffer = true;
 
+
 /* processing queues, helpers, and listeners */
 	
 	/* WTW.loadMoldQueue - the load queue Array is used to pace the mold creation throughout the frames keeping it running with smooth animation. */
@@ -285,6 +286,7 @@ function WTWJS() {
 	this.cameraFollow = null; /* Follow Camera */
 	this.cameraFollowTwo = null; /* Follow Camera */
 	
+	
 /* avatar related */
 	
 	/* WTW.placeHolder - value is used to start the scene loading before the avatar is loaded to the scene - The Placeholder Avatar is deleted and replaced by the avatar after the avatar is visible in the 3D Scene. 
@@ -318,7 +320,6 @@ function WTWJS() {
 	this.drive = null;
 
 
-
 /* user settings */	
 
 	/* WTW.walkSpeed - Avatar Related - value set by the menu to adjust the avatar walk speed movement */
@@ -341,6 +342,12 @@ function WTWJS() {
 
 	/* WTW.soundMute - global setting to turn off or on the sounds. (all sounds should use this global check before playing or setting volume) */
 	this.soundMute = true;
+
+	/* WTW.micMute - global setting to turn off or on the microphone. (all apps should use this global check before using mic) */
+	this.micMute = true;
+	
+	/* WTW.audioContext - global microphone audio input stream. */
+	this.audioContext = null;
 
 	
 /* user input related events */

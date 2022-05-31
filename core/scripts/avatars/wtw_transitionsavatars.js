@@ -179,6 +179,9 @@ WTWJS.prototype.toggleMenuAnimations = function() {
 			var zavatar = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value);
 			if (zavatar != null) {
 				if (zavatar.WTW.avataranimationdefs != undefined) {
+					zavatar.WTW.avataranimationdefs.sort(function (a, b) {
+						return (+(a.loadpriority > b.loadpriority) || +(a.loadpriority === b.loadpriority) - 1) || (+(a.animationfriendlyname > b.animationfriendlyname) || +(a.animationfriendlyname === b.animationfriendlyname) - 1);
+					});
 					for (var i=0; i < zavatar.WTW.avataranimationdefs.length; i++) {
 						if (zavatar.WTW.avataranimationdefs[i] != null) {
 							var zanimdef = zavatar.WTW.avataranimationdefs[i];

@@ -604,14 +604,14 @@ WTWJS.prototype.addAvatar3DObject = function(zavatarname, zavatardef) {
 											} else if (zbonename.indexOf("leftfoot") > -1 && zleftfootbone == -1) {
 												zleftfootbone = j;
 											}
-											if (j == 0) {
+/*											if (j == 0) {
 												zresults.skeletons[i].bones[j].parent = zavatarparent;
 											} else {
 												if (zresults.skeletons[i].bones[j].parent == null) {
 													zresults.skeletons[i].bones[j].parent = zresults.skeletons[i].bones[0];
 												}
 											}
-										}
+*/										}
 									}
 									if (zheadtopbone > -1) {
 										/* headtop box parents to top of head */
@@ -1093,14 +1093,14 @@ WTWJS.prototype.addAvatarForEdit = function(zavatarname, zavatardef) {
 											} else if (zbonename.indexOf("leftfoot") > -1 && zleftfootbone == -1) {
 												zleftfootbone = j;
 											}
-											if (j == 0) {
+/*											if (j == 0) {
 												zresults.skeletons[i].bones[j].parent = zavatarparent;
 											} else {
 												if (zresults.skeletons[i].bones[j].parent == null) {
 													zresults.skeletons[i].bones[j].parent = zresults.skeletons[i].bones[0];
 												}
 											}
-										}
+*/										}
 									}
 									if (zheadtopbone > -1) {
 										/* headtop box parents to top of head */
