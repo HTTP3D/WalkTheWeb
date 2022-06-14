@@ -173,6 +173,8 @@ try {
 			'actionzoneshape'=> $zrow["actionzoneshape"],
 			'attachmoldid'=> $zrow["attachmoldid"],
 			'parentactionzoneid'=> $zrow["parentactionzoneid"],
+			'teleportwebid'=> $zrow["teleportwebid"],
+			'teleportwebtype'=> $zrow["teleportwebtype"],
 			'movementtype'=> $zrow["movementtype"],
 			'rotatespeed'=> $zrow["rotatespeed"],
 			'value1'=> $zrow["value1"],

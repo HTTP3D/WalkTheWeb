@@ -16,7 +16,7 @@ try {
 	$zcommunity = $wtwconnect->getVal('community','');
 	$zuserid = $wtwconnect->userid;
 	$zconnectinggridid = "";
-	
+
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 	
 	if ((empty($zcommunityid) || !isset($zcommunityid)) && (!empty($zcommunity) && isset($zcommunity))) {
@@ -143,12 +143,7 @@ try {
 				communities.skyturbidity,
 				communities.skymiedirectionalg,
 				communities.skymiecoefficient,
-				'' as thingauthorizationid,
-				bc.userauthorizationid,
-				cc.userauthorizationid as communityauthorizationid,
-				cc.useraccess,
-				cc.invitationcode,
-				ct.notificationcount
+				'' as thingauthorizationid
 			from (select * from ".wtw_tableprefix."communities 
 						where deleted=0 and communityid = '".$zcommunityid."') communities
 				left join (select * from ".wtw_tableprefix."connectinggrids 
@@ -159,22 +154,7 @@ try {
 						where buildings.deleted=0 
 							and buildings.buildingid = '".$zbuildingid."') buildings 
 					on buildings.buildingid = connectinggrids.childwebid
-				left join (select userauthorizationid, buildingid 
-						from ".wtw_tableprefix."userauthorizations 
-						where userid='".$zuserid."' and deleted=0) bc
-					on buildings.buildingid=bc.buildingid
-				left join (select userauthorizationid, useraccess, invitationcode, communityid 
-						from ".wtw_tableprefix."userauthorizations 
-						where userid='".$zuserid."' 
-							and not userid='' and deleted=0) cc
-					on communities.communityid=cc.communityid
-				left join (select count(userauthorizationid) as notificationcount 
-						from ".wtw_tableprefix."userauthorizations 
-						where invitationuserid='".$zuserid."' 
-							and not userid='' and communityid='".$zcommunityid."' 
-							and not communityid='' and reversenotified=1 
-							and deleted=0) ct
-				on 0=0;");
+				;");
 	} else if (!empty($zcommunityid) && isset($zcommunityid)) {
 		/* get domain info and connecting grids by communityid */
 		$zresults = $wtwconnect->query("
@@ -242,24 +222,10 @@ try {
 				communities.skymiedirectionalg,
 				communities.skymiecoefficient,
 				'' as thingauthorizationid,
-				'' as userauthorizationid,
-				cc.userauthorizationid as communityauthorizationid,
-				cc.useraccess,
-				cc.invitationcode,
-				ct.notificationcount
+				'' as userauthorizationid
 			from (select * from ".wtw_tableprefix."communities 
-						where deleted=0 and communityid='".$zcommunityid."') communities
-				left join (select userauthorizationid, useraccess, invitationcode, communityid 
-						from ".wtw_tableprefix."userauthorizations 
-						where userid='".$zuserid."' 
-							and not userid='' and deleted=0) cc
-					on communities.communityid=cc.communityid
-				left join (select count(userauthorizationid) as notificationcount 
-						from ".wtw_tableprefix."userauthorizations 
-						where invitationuserid='".$zuserid."' 
-							and not userid='' and communityid='".$zcommunityid."' 
-							and not communityid='' and reversenotified=1 and deleted=0) ct
-				on 0=0;	");	
+						where deleted=0 and communityid='".$zcommunityid."') communities;	
+		");	
 	} else if (!empty($zbuildingid) && isset($zbuildingid)) {
 		/* select domain info and connecting grids by buildingid */
 		$zresults = $wtwconnect->query("
@@ -312,26 +278,11 @@ try {
 				10 as skyturbidity,
 				.8 as skymiedirectionalg,
 				.005 as skymiecoefficient,
-				'' as thingauthorizationid,
-				bc.userauthorizationid,        
-				'' as communityauthorizationid,
-				bc.useraccess,
-				bc.invitationcode,
-				ct.notificationcount
+				'' as thingauthorizationid
 			from (select * from ".wtw_tableprefix."buildings 
 						where buildings.deleted=0 
 							and buildings.buildingid='".$zbuildingid."') buildings 
-				left join (select userauthorizationid, useraccess, invitationcode, buildingid 
-						from ".wtw_tableprefix."userauthorizations 
-						where userid='".$zuserid."' 
-							and not userid='' and deleted=0) bc
-					on buildings.buildingid=bc.buildingid
-				left join (select count(userauthorizationid) as notificationcount 
-						from ".wtw_tableprefix."userauthorizations 
-						where invitationuserid='".$zuserid."' 
-							and not userid='' and buildingid='".$zbuildingid."' 
-							and not buildingid='' and reversenotified=1 and deleted=0) ct
-					on 0=0;");
+		;");
 	}
 
 	$zresponse = array();
@@ -383,14 +334,14 @@ try {
 			'y' => $zrow["rotationy"],
 			'z' => $zrow["rotationz"]
 		);	
-		$startlocation = array(
+		$zstartlocation = array(
 			'position' => $zposition,
 			'scaling' => $zscaling,
 			'rotation' => $zrotation);
 		$zresponse['domaininfo'] = $zdomaininfo;
 		$zresponse['buildinginfo'] = $zbuildinginfo;
 		$zresponse['communityinfo'] = $zcommunityinfo;
-		$zresponse['startlocation'] = $startlocation;
+		$zresponse['startlocation'] = $zstartlocation;
 		$zresponse['useraccesslist'] = null; /* getaccesslist("", $zbuildingid, $zcommunityid); */
 	}
 	echo json_encode($zresponse);	
