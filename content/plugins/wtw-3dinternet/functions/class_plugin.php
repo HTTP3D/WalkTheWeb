@@ -136,6 +136,8 @@ class wtw3dinternet {
 
 			$wtwplugins->addScriptFunction("exitactionzone", "wtw3dinternet.exitLoadZone(zmoldname, zmolddef);");
 
+			$wtwplugins->addScriptFunction("unloadallzones", "wtw3dinternet.unloadAllZones();");
+
 			$wtwplugins->addScriptFunction("loadusersettingsafterengine", "wtw3dinternet.loadUserSettingsAfterEngine();"); 
 
 			$wtwplugins->addScriptFunction("resetactivitytimer", "wtw3dinternet.resetActivityTimer();");

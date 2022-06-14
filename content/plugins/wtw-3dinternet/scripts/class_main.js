@@ -1306,3 +1306,21 @@ WTW_3DINTERNET.prototype.toggleMicMute = function() {
 		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-toggleMicMute=" + ex.message);
 	}
 }
+
+WTW_3DINTERNET.prototype.unloadAllZones = function() {
+	/* Unload All Zones for teleport */
+	try {
+		if (scene.meshes != null) {
+			for (var i=0;i < scene.meshes.length;i++) {
+				var zmoldname = scene.meshes[i].name;
+				if (zmoldname.indexOf("person-") > -1) {
+					/* clear any multiplayers from old scene */
+					WTW.disposeAvatar(zmoldname);
+					scene.meshes[i].dispose();
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("plugins:wtw-3dinternet:scripts-class_main.js-unloadAllZones=" + ex.message);
+	}
+}
