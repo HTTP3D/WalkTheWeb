@@ -347,8 +347,13 @@ function WTWJS() {
 	this.micMute = true;
 	
 	/* WTW.audioContext - global microphone audio input stream. */
-	this.audioContext = null;
-
+	this.audioSend = null;
+	this.audioReceive = null;
+	
+	/* WTW.audioBuffers - receiving audio from multiplayer voice chat */
+	this.audioBuffers = [];
+	this.audioWorkletNodes = [];
+	this.testAudio = null;
 	
 /* user input related events */
 	

@@ -151,6 +151,8 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 	try {
 		var zparentname = dGet('wtw_tconnectinggridname').value;
 		var zwebtype = "building";
+		var zactionzonetype = "";
+		var zteleportwebid = '';
 		WTW.hideAdminMenu();
 		WTW.show('wtw_adminmenu20');
 		WTW.show('wtw_adminmenu20b');
@@ -162,7 +164,6 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 		dGet('wtw_tmoldshape').value = "box";
 		dGet('wtw_tmoldwebtype').value = zwebtype;
 		WTW.setDDLValue("wtw_tmoldcovering", "texture");
-		var zactionzonetype = "";
 		for (var i=0;i < dGet('wtw_tactionzonetypelist').options.length;i++) {
 			if (zactionzoneid == dGet('wtw_tactionzonetypelist').options[i].value) {
 				zactionzonetype = zactionzoneid;
@@ -279,6 +280,7 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 				dGet('wtw_tactionzonedefaulteditform').value = WTW.actionZones[zactionzoneind].defaulteditform;
 				dGet('wtw_tactionzonejsfunction').value = WTW.actionZones[zactionzoneind].jsfunction;
 				dGet('wtw_tactionzonejsparameters').value = WTW.actionZones[zactionzoneind].jsparameters;
+				zteleportwebid = WTW.actionZones[zactionzoneind].teleportwebid;
 				if (WTW.actionZones[zactionzoneind].scripts != null) {
 					WTW.loadAZFormScripts(WTW.actionZones[zactionzoneind].scripts);
 				}
@@ -364,6 +366,9 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 		if (zactionzonetype == "loadanimations") {
 			WTW.loadAZAnimationsList();
 			WTW.loadAZAvatarAnimations();
+		}
+		if (zactionzonetype == "teleportzone") {
+			WTW.loadAZCommunitiesList(zteleportwebid);
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminactionzones.js-openActionZoneForm=" + ex.message);
@@ -505,6 +510,40 @@ WTWJS.prototype.loadAZAvatarAnimations = async function() {
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminactionzones.js-loadAZAvatarAnimations=" + ex.message);
+	}
+}		
+
+WTWJS.prototype.loadAZCommunitiesList = async function(zteleportwebid) {
+	/* load communities list to select from when adding to a zone for teleport */
+	try {
+		WTW.clearDDL('wtw_tazteleportzoneid');
+		var zoption0 = document.createElement("option");
+		zoption0.text = '';
+		zoption0.value = '';
+		dGet('wtw_tazteleportzoneid').add(zoption0);
+		WTW.getAsyncJSON("/connect/communitynames.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				var zdefault = true;
+				for (var i=0;i<zresponse.length;i++) {
+					if (zresponse[i] != null) {
+						var zoption = document.createElement("option");
+						zoption.text = zresponse[i].communityname;
+						zoption.value = zresponse[i].communityid;
+						if (zteleportwebid == zresponse[i].communityid) {
+							zoption.selected = true;
+							zdefault = false;
+						}
+						dGet('wtw_tazteleportzoneid').add(zoption);
+					}
+				}
+				if (zdefault) {
+					dGet('wtw_tazteleportzoneid').options[0].selected = true;
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminactionzones.js-loadAZCommunitiesList=" + ex.message);
 	}
 }		
 
@@ -650,6 +689,11 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 			/* save the action zone */
 			var zactionzoneind = Number(dGet('wtw_tactionzoneind').value);
 			var zloadactionzoneid = WTW.getDDLValue('wtw_tazloadactionzoneid');
+			var zteleportwebtype = '';
+			var zteleportwebid = WTW.getDDLValue('wtw_tazteleportzoneid');
+			if (zteleportwebid != '') {
+				zteleportwebtype = 'community';
+			}
 			if (zactionzonename == 'Extreme Load Zone') {
 				zloadactionzoneid = '';
 			}
@@ -663,6 +707,8 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 				WTW.actionZones[zactionzoneind].actionzonetype = dGet('wtw_tactionzonetype').value;
 				WTW.actionZones[zactionzoneind].actionzoneshape = dGet('wtw_tactionzoneshape').value;
 				WTW.actionZones[zactionzoneind].attachmoldid = dGet('wtw_tattachmoldid').value;
+				WTW.actionZones[zactionzoneind].teleportwebid = zteleportwebid;
+				WTW.actionZones[zactionzoneind].teleportwebtype = zteleportwebtype;
 				WTW.actionZones[zactionzoneind].movementtype = dGet('wtw_tactionzonemovementtype').value;
 				WTW.actionZones[zactionzoneind].rotatespeed = dGet('wtw_tactionzonerotatespeed').value;
 				WTW.actionZones[zactionzoneind].value1 = dGet('wtw_tactionzonevalue1').value;
@@ -702,6 +748,8 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 				'actionzonetype':dGet('wtw_tactionzonetype').value,
 				'actionzoneshape':dGet('wtw_tactionzoneshape').value,
 				'attachmoldid':dGet('wtw_tattachmoldid').value,
+				'teleportwebid':zteleportwebid,
+				'teleportwebtype':zteleportwebtype,
 				'movementtype':dGet('wtw_tactionzonemovementtype').value,
 				'rotatespeed':dGet('wtw_tactionzonerotatespeed').value,
 				'value1':dGet('wtw_tactionzonevalue1').value,

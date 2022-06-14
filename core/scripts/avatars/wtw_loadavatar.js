@@ -15,6 +15,7 @@ WTWJS.prototype.loadAvatarPlaceholder = function() {
 		zavatardef.name = "myavatar-" + dGet("wtw_tinstanceid").value;
 		zavatardef.instanceid = dGet("wtw_tinstanceid").value;
 		zavatardef.start.position.x += zrand1;
+		zavatardef.start.position.y += .57;
 		zavatardef.start.position.z += zrand2;
 		zavatardef.start.rotation.x = 0;
 		zavatardef.start.rotation.y = WTW.init.startRotationY;
@@ -23,7 +24,7 @@ WTWJS.prototype.loadAvatarPlaceholder = function() {
 		/* is it set to delete after 10 seconds */
 		var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
 		zstartstand.scaling = new BABYLON.Vector3(25, 1, 25);
-		zstartstand.position = new BABYLON.Vector3(zavatardef.start.position.x, zavatardef.start.position.y - .57, zavatardef.start.position.z);
+		zstartstand.position = new BABYLON.Vector3(zavatardef.start.position.x, zavatardef.start.position.y, zavatardef.start.position.z);
 		zstartstand.checkCollisions = true;
 		zcovering = new BABYLON.StandardMaterial("matstartstand", scene);
 		zstartstand.material = new BABYLON.StandardMaterial("matstartstand", scene);

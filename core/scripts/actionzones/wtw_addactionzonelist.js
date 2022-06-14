@@ -17,6 +17,8 @@ WTWJS.prototype.getActionZoneList = function() {
 		zactionzonelist[zactionzonelist.length] = {"name":"Rotate","helpurl":"", "defaulteditform":"0"};
 		zactionzonelist[zactionzonelist.length] = {"name":"Load Animations","helpurl":"", "defaulteditform":"0"};
 		zactionzonelist[zactionzonelist.length] = {"name":"Ride Along","helpurl":"", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Teleport Zone","helpurl":"", "defaulteditform":"0"};
+		zactionzonelist[zactionzonelist.length] = {"name":"Spawn Zone","helpurl":"", "defaulteditform":"0"};
 /* the following are works in progress and conceptual ideas */
 /*		zactionzonelist[zactionzonelist.length] = {"name":"Seat","helpurl":"", "defaulteditform":"0"}; */
 		/* currently in testing or under development */
@@ -122,6 +124,14 @@ WTWJS.prototype.addActionZone = function(zactionzonename, zactionzonedef) {
 					case "loadanimations":
 						/* load animations = shape often box by default - triggers to load avatar animations to your avatar when it enters the zone */
 						zactionzone = WTW.addActionzoneLoadAnimations(zactionzonename, zactionzoneind, zactionzonedef);
+						break;
+					case "teleportzone":
+						/* load animations = shape often box by default - triggers to load avatar animations to your avatar when it enters the zone */
+						zactionzone = WTW.addActionzoneTeleportZone(zactionzonename, zactionzoneind, zactionzonedef);
+						break;
+					case "spawnzone":
+						/* load animations = shape often box by default - triggers to load avatar animations to your avatar when it enters the zone */
+						zactionzone = WTW.addActionzoneSpawnZone(zactionzonename, zactionzoneind, zactionzonedef);
 						break;
 					case "slidingdoor":
 						/* sliding door zone = shape often box by default - triggers molds to move in a defined axis direction when any avatar enters the zone */
@@ -249,6 +259,12 @@ WTWJS.prototype.setNewActionZoneDefaults = function(zactionzonetype) {
 			case "unloadzone":
 				dGet('wtw_tactionzonename').value = "Unload Zone";
 				break;
+			case "teleportzone":
+				dGet('wtw_tactionzonename').value = "Teleport Zone";
+				break;
+			case "spawnzone":
+				dGet('wtw_tactionzonename').value = "Spawn Zone";
+				break;
 			case "loadanimations":
 				dGet('wtw_tactionzonename').value = "Load Animations";
 				break;
@@ -337,6 +353,7 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 		WTW.hide('wtw_attachactionzonediv');
 		WTW.hide('wtw_actionzoneavataranimationsdiv');
 		WTW.hide('wtw_azjavascriptdiv');
+		WTW.hide('wtw_actionzoneteleportdiv');
 		dGet('wtw_tcopyaxletoactionzone').disabled = false;
 		dGet('wtw_axispositiontitle').innerHTML = "Axis Position";
 		dGet('wtw_axisrotationtitle').innerHTML = "Axis Rotation";
@@ -369,6 +386,24 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
 				WTW.show('wtw_actionzoneadvancedopts');
 				WTW.show('wtw_azjavascriptdiv');
+				break;
+			case "teleportzone":
+				WTW.hide('wtw_actionzoneaxisdiv');
+				WTW.hide('wtw_copyaxletoactionzonediv');
+				WTW.hide('wtw_actionzoneadvancedoptslink');
+				WTW.hide('wtw_actionzonepartsdiv');
+				dGet('wtw_editactionzoneformtitle').innerHTML = "Add Teleport Zone";
+				dGet('wtw_tcopyaxletoactionzone').disabled = true;
+				WTW.show('wtw_actionzoneadvancedopts');
+				WTW.show('wtw_actionzoneteleportdiv');
+				break;
+			case "spawnzone":
+				WTW.hide('wtw_actionzoneaxisdiv');
+				WTW.hide('wtw_copyaxletoactionzonediv');
+				WTW.hide('wtw_actionzoneadvancedoptslink');
+				WTW.hide('wtw_actionzonepartsdiv');
+				dGet('wtw_editactionzoneformtitle').innerHTML = "Add Spawn Zone";
+				dGet('wtw_tcopyaxletoactionzone').disabled = true;
 				break;
 			case "loadanimations":
 				WTW.hide('wtw_actionzoneaxisdiv');

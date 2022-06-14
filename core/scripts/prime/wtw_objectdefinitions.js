@@ -161,6 +161,8 @@ WTWJS.prototype.newActionZone = function() {
 			'actionzoneshape':'box',
 			'attachmoldid':'',
 			'parentactionzoneid':'',
+			'teleportwebid':'',
+			'teleportwebtype':'',
 			'movementtype':'',
 			'rotatespeed':'1.00',
 			'value1':'0.00',

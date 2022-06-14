@@ -13,7 +13,7 @@ WTWJS.prototype.checkActionZones = function() {
 				var zmoldname = WTW.actionZones[i].moldname;
 				var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
 				if (zmoldname != undefined) {
-					if (zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].shown != "2") {
+					if ((zmoldname.indexOf("loadzone") > -1 || zmoldname.indexOf("teleportzone") > -1) && WTW.actionZones[i].shown != "2") {
 						WTW.actionZones[i].status = 0;
 					} else if (zactionzone != null) {
 						var zmeinzone = false;
@@ -57,6 +57,10 @@ WTWJS.prototype.checkActionZones = function() {
 								WTW.pluginsExitActionZone(zmoldname, WTW.actionZones[i]);
 								/* status 0 means unloaded */
 								WTW.actionZones[i].status = 0;
+							} else if (zmeinzone && zmoldname.indexOf("teleportzone") > -1 && WTW.actionZones[i].status != 2) {
+								/* entered teleport */
+								WTW.actionZones[i].status = 2;
+								WTW.teleport(i);
 							} else if (zmoldname.indexOf("loadanimations") > -1) {
 								/* when in zone, see if there are animations defined to load */
 								WTW.checkLoadAnimations(i);
@@ -386,3 +390,174 @@ WTWJS.prototype.initMirrorLoadZone = function(zmoldname, zmolddef) {
 	}
 }
 
+WTWJS.prototype.teleport = function(zactionzoneindex) {
+	/* teleport to new community */
+	try {
+		var zwebid = '';
+		var zwebtype = 'community';
+		var zoldwebid = communityid;
+		var zoldwebtype = 'community';
+		if (buildingid != '') {
+			zoldwebid = buildingid;
+			zoldwebtype = 'building';
+		} else if (thingid != '') {
+			zoldwebid = thingid;
+			zoldwebtype = 'thing';
+		}
+		if (WTW.actionZones[zactionzoneindex] != null) {
+			if (WTW.actionZones[zactionzoneindex].teleportwebid != undefined) {
+				zwebid = WTW.actionZones[zactionzoneindex].teleportwebid;
+				if (zwebid != '') {
+					/* update the url to the new community id and enter url in history */
+					if (window.history.pushState) {       
+						var znewurl = new URL(window.location.href);       
+						znewurl.search = '?communityid=' + zwebid;
+						window.history.pushState({ path: znewurl.href }, '', znewurl.href); 
+					}
+					/* get domaininfo, scene, and sky settings */
+					WTW.getAsyncJSON("/connect/domaininfo.php?communityid=" + zwebid, 
+						function(zresponse) {
+							zresponse = JSON.parse(zresponse);
+							communityid = zwebid;
+							var zconnectinggrids = WTW.unloadAllZones();
+							
+							/* hide avatar for reentry */
+							var zavatarparts = [];
+							var zavatarscale = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-scale');
+							if (zavatarscale != null) {
+								zavatarparts = zavatarscale.getChildren();
+							}
+							for (var i=0; i<zavatarparts.length; i++) {
+								if (zavatarparts[i] != null) {
+									zavatarparts[i].isVisible = false;
+									zavatarparts[i].visibility = 0;
+								}
+							}
+
+							/* start stand for avatar while scene loads */
+							/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
+							
+							var zrand1 = ((Math.floor(Math.random() * 200) + 1)/10) - 10;
+							var zrand2 = ((Math.floor(Math.random() * 200) + 1)/10) - 10;
+							var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
+							zstartstand.scaling = new BABYLON.Vector3(50, 1, 50);
+							zstartstand.position = new BABYLON.Vector3(WTW.init.startPositionX + zrand1, WTW.init.startPositionY, WTW.init.startPositionZ + zrand2);
+							zstartstand.checkCollisions = true;
+							zcovering = new BABYLON.StandardMaterial("matstartstand", scene);
+							zstartstand.material = new BABYLON.StandardMaterial("matstartstand", scene);
+							zstartstand.material.alpha = 0;
+							
+							WTW.myAvatar.position = new BABYLON.Vector3(WTW.init.startPositionX + zrand1, WTW.init.startPositionY + 100, WTW.init.startPositionZ + zrand2);
+							WTW.myAvatar.rotation.y = WTW.getRadians(WTW.init.startRotationY);
+							
+							WTW.avatarShowFadeSwirlLong('myavatar-' + dGet('wtw_tinstanceid').value, zavatarparts);
+							
+							/* set new content rating */
+							WTW.setContentRating();
+							WTW.init = {
+								'groundTextureID':zresponse.communityinfo.textureid,
+								'groundTexturePath':zresponse.communityinfo.texturepath,
+								'skyTextureID':zresponse.communityinfo.skydomeid,
+								'skyTexturePath':zresponse.communityinfo.skydomepath,
+								'skyInclination':Number(zresponse.communityinfo.skyinclination),
+								'skyLuminance':Number(zresponse.communityinfo.skyluminance),
+								'skyAzimuth':Number(zresponse.communityinfo.skyazimuth),
+								'skyRayleigh':Number(zresponse.communityinfo.skyrayleigh),
+								'skyTurbidity':Number(zresponse.communityinfo.skyturbidity),
+								'skyMieDirectionalG':Number(zresponse.communityinfo.skymiedirectionalg),
+								'skyMieCoefficient':Number(zresponse.communityinfo.skymiecoefficient),
+								'groundPositionY':Number(zresponse.startlocation.position.groundpositiony),
+								'waterPositionY':Number(zresponse.startlocation.position.waterpositiony),
+								'startPositionX':Number(zresponse.startlocation.position.x),
+								'startPositionY':Number(zresponse.startlocation.position.y),
+								'startPositionZ':Number(zresponse.startlocation.position.z),
+								'startScalingX':Number(zresponse.startlocation.scaling.x),
+								'startScalingY':Number(zresponse.startlocation.scaling.y),
+								'startScalingZ':Number(zresponse.startlocation.scaling.z),
+								'startRotationX':Number(zresponse.startlocation.rotation.x),
+								'startRotationY':Number(zresponse.startlocation.rotation.y),
+								'startRotationZ':Number(zresponse.startlocation.rotation.z),
+								'gravity':Number(zresponse.domaininfo.gravity),
+								'loaded':1
+							};
+							scene.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
+							WTW.sun.intensity = WTW.getSunIntensity(WTW.init.skyInclination, WTW.init.skyAzimuth);
+							WTW.loadSkyScene(WTW.init.skyInclination, WTW.init.skyLuminance, WTW.init.skyAzimuth, WTW.init.skyRayleigh, WTW.init.skyTurbidity, WTW.init.skyMieDirectionalG, WTW.init.skyMieCoefficient, .25);
+							/* set new ground texture */
+							WTW.extraGround.material = new BABYLON.StandardMaterial("mat-communityeground", scene);
+							WTW.extraGround.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
+							WTW.extraGround.material.diffuseTexture = new BABYLON.Texture(WTW.init.groundTexturePath, scene);
+							WTW.extraGround.material.diffuseTexture.uScale = 500;
+							WTW.extraGround.material.diffuseTexture.vScale = 500;
+							/* set community and initial building name */
+							document.title = zresponse.communityinfo.communityname;
+							dGet('wtw_showcommunityname').innerHTML = zresponse.communityinfo.communityname;
+							dGet('wtw_showbuildingname').innerHTML = "<span style='color:yellow;'>Welcome to WalkTheWeb</span>";
+
+							/* remove connecting grids from old scene */
+							for (var i=0; i<zconnectinggrids.length;i++) {
+								if (zconnectinggrids[i] != null) {
+									if (zconnectinggrids[i] != WTW.mainParent) {
+										WTW.disposeClean(zconnectinggrids[i]);
+									}
+								}
+							}
+							
+							/* load new scene */
+							WTW.loadScene();
+							
+							window.setTimeout(function() {
+								/* move avatar just in case the avatar sunk into the ground before it loaded the scene */
+								WTW.myAvatar.position = new BABYLON.Vector3(WTW.init.startPositionX + zrand1, WTW.init.startPositionY + .57, WTW.init.startPositionZ + zrand2);
+								WTW.myAvatar.rotation.y = WTW.getRadians(WTW.init.startRotationY);
+								/* delete start stand after 10 seconds */
+								window.setTimeout(function() {
+									zstartstand.dispose();
+								},10000);
+							},3000);
+						}
+					);
+				}
+			}
+		}
+/* 	remember log off from multiplayer avatars scenes
+	load domain settings
+*/
+	} catch (ex) {
+		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-teleport=" + ex.message);
+	}
+}
+
+WTWJS.prototype.unloadAllZones = function() {
+	/* Unload All Zones for teleport */
+	var zconnectinggrids = [];
+	try {
+		var j = 0;
+		if (scene.meshes != null) {
+			for (var i=0;i < scene.meshes.length;i++) {
+				var zmoldname = scene.meshes[i].name;
+				if (zmoldname.indexOf("loadzone") > -1) {
+					/* dispose of load zone meshes so that the avatar will not be found in it and reload */
+					scene.meshes[i].dispose();
+				}
+				/* collect connecting grid names */
+				if (zmoldname.indexOf("connectinggrid") > -1) {
+					zconnectinggrids[j] = zmoldname;
+					j += 1;
+				}
+			}
+		}
+		
+		WTW.pluginsUnloadAllZones();
+
+		for (var i = 0; i < WTW.actionZones.length; i++) {
+			if (WTW.actionZones[i] != null) {
+				/* queue to unload load zones so that they are properly unloaded with everything they trigger */
+				WTW.addUnloadZoneToQueue(i);
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-unloadAllZones=" + ex.message);
+	}
+	return zconnectinggrids;
+}

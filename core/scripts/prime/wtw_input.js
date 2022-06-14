@@ -2420,21 +2420,25 @@ WTWJS.prototype.activeMic = function() {
 WTWJS.prototype.onMicrophoneGranted = async function(zstream) {
 	/* Microphone is on */
 	try {
-		if (WTW.audioContext == null) {
-			/* Initialize AudioContext object */
-			WTW.audioContext = new AudioContext()
+		if (WTW.audioSend == null) {
+			/* Initialize audioSend object */
+			if (WTW.audioSend == null) {
+				WTW.audioSend = new AudioContext();
+			}
 
 			/* Adding an AudioWorkletProcessor from worker script with addModule method */
-			await WTW.audioContext.audioWorklet.addModule('/content/plugins/wtw-3dinternet/scripts/voicechatworker.js')
+			await WTW.audioSend.audioWorklet.addModule('/content/plugins/wtw-3dinternet/scripts/voicechatsend.js')
 
 			/* Creating a MediaStreamSource object and sending a MediaStream object granted by the user */
-			WTW.audioContext.microphone = WTW.audioContext.createMediaStreamSource(zstream)
+			WTW.audioSend.microphone = WTW.audioSend.createMediaStreamSource(zstream)
 
 			/* Creating AudioWorkletNode sending context and name of processor registered in worker script */
-			WTW.audioContext.audioNode = new AudioWorkletNode(WTW.audioContext, 'vumeter')
-
+			WTW.audioSend.audioNode = new AudioWorkletNode(WTW.audioSend, 'voicechatsend')
+			
+			let recordBuffer;
+			
 			/* Listing any message from AudioWorkletProcessor in its process method here where you can know the volume level */
-			WTW.audioContext.audioNode.port.onmessage = zevent => {
+			WTW.audioSend.audioNode.port.onmessage = zevent => {
 				let zvolume = 0;
 				let zsensibility = 5; /* Add any sensibility */
 				if (zevent.data.volume) {
@@ -2442,21 +2446,33 @@ WTWJS.prototype.onMicrophoneGranted = async function(zstream) {
 				}
 				WTW.onMicVolumeChange((zvolume * 100) / zsensibility);
 				
-				wtw3dinternet.streamAudio(zstream);
+				if (WTW.micMute == false) {
+					if (zevent.data.eventType === 'buffer') {
+						recordBuffer = new Float32Array(zevent.data.buffer);
+					}
+					if (zevent.data.eventType === 'data' && WTW.micMute == false) {
+//          	        socket.volatile.emit('voice', { id: socket.id, buffer: recordBuffer.slice(zevent.data.start, zevent.data.end).buffer });
+						wtw3dinternet.streamAudio(recordBuffer.slice(zevent.data.start, zevent.data.end).buffer);
+//						wtw3dinternet.streamAudio(zstream);
+					}
+				}
+				
 			}
-
-			/* connect microphone to the AudioWorkletNode and output from WTW.audioContext */
-			WTW.audioContext.microphone.connect(WTW.audioContext.audioNode).connect(WTW.audioContext.destination);
+			
+			WTW.audioSend.microphone.connect(WTW.audioSend.audioNode);
+			
+			/* connect microphone to the AudioWorkletNode and output from WTW.audioSend */
+			WTW.audioSend.microphone.connect(WTW.audioSend.audioNode).connect(WTW.audioSend.destination);
 		}
 		/* stop or resume the microphone from listening */
 		if (WTW.micMute) {
-			if (WTW.audioContext != null) {
-				WTW.audioContext.suspend();
+			if (WTW.audioSend != null) {
+				WTW.audioSend.suspend();
 			}
 			WTW.onMicVolumeChange(0);
 		} else {
-			if (WTW.audioContext != null) {
-				WTW.audioContext.resume();
+			if (WTW.audioSend != null) {
+				WTW.audioSend.resume();
 			}
 		}
 	} catch (ex) {

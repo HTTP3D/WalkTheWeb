@@ -752,6 +752,108 @@ WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
     }
 }
 
+WTWJS.prototype.avatarShowFadeSwirlLong = function(zavatarname, zavatarparts) {
+	/* enter animation for an avatar - fade to visible with 2 torus swirling arroud */
+	try {
+		var zavatar = WTW.getMeshOrNodeByID(zavatarname);
+		if (zavatar != null) {
+			var ztorus1 = WTW.addMoldTorus(zavatarname + '-torus1', .5, .5, .5, 24, 20)
+			ztorus1.isVisible = true;
+			ztorus1.parent = zavatar;
+			ztorus1.position.y += 10;
+			ztorus1.rotation.z = WTW.getRadians(25);
+			ztorus1.isVisible = true;
+			ztorus1.visibility = 0;
+			var ztorus2 = WTW.addMoldTorus(zavatarname + '-torus2', .5, .5, .5, 24, 20)
+			ztorus2.isVisible = true;
+			ztorus2.parent = zavatar;
+			ztorus2.position.y += 5;
+			ztorus2.rotation.z = WTW.getRadians(-25);
+			ztorus2.isVisible = true;
+			ztorus2.visibility = 0;
+		}
+		for (var i=0; i<zavatarparts.length;i++) {
+			if (zavatarparts[i] != null) {
+				zavatarparts[i].isVisible = true;
+				zavatarparts[i].visibility = 0;
+			}
+		}
+		var ztimername  = window.setInterval(function(){
+			var zavatar = WTW.getMeshOrNodeByID(zavatarname);
+			if (zavatar != null) {
+				var zavatarscale = WTW.getMeshOrNodeByID(zavatarname + '-scale');
+				if (zavatarscale != null) {
+					var ztorus1 = WTW.getMeshOrNodeByID(zavatarname + '-torus1');
+					var ztorus2 = WTW.getMeshOrNodeByID(zavatarname + '-torus2');
+					var zavatarparts = zavatarscale.getChildren();
+					var zdone = false;
+					if (ztorus1 != null) {
+						if (WTW.getDegrees(ztorus1.rotation.y) > 340 || zavatarparts[0].visibility > 0) {
+							for (var i=0; i<zavatarparts.length;i++) {
+								if (zavatarparts[i] != null) {
+									if (zavatarparts[i].visibility < 1) {
+										zavatarparts[i].visibility += .005;
+									} else {
+										zavatarparts[i].visibility = 1;
+										zdone = true;
+									}
+								}
+							} 
+							
+						}
+						ztorus1.rotation.y += WTW.getRadians(10);
+						if (ztorus1.visibility < 1) {
+							ztorus1.visibility += .01;
+						} else {
+							ztorus1.visibility = 1;
+						}
+					}
+					if (ztorus2 != null) {
+						ztorus2.rotation.y += WTW.getRadians(10);
+						if (ztorus2.visibility < 1) {
+							ztorus2.visibility += .01;
+						} else {
+							ztorus2.visibility = 1;
+						}
+					}
+					if (zdone) {
+						window.clearInterval(ztimername);
+						ztimername  = window.setInterval(function(){
+							var ztorus1 = WTW.getMeshOrNodeByID(zavatarname + '-torus1');
+							var ztorus2 = WTW.getMeshOrNodeByID(zavatarname + '-torus2');
+							var zdone = false;
+							if (ztorus1 != null) {
+								ztorus1.rotation.y += WTW.getRadians(10);
+								if (ztorus1.visibility > 0) {
+									ztorus1.visibility -= .01;
+								} else {
+									zdone = true;
+								}
+							}
+							if (ztorus2 != null) {
+								ztorus2.rotation.y += WTW.getRadians(10);
+								if (ztorus2.visibility > 0) {
+									ztorus2.visibility -= .01;
+								} else {
+									zdone = true;
+								}
+							}
+							if (zdone) {
+								WTW.disposeClean(zavatarname + '-torus1');
+								WTW.disposeClean(zavatarname + '-torus2');
+								window.clearInterval(ztimername);
+								WTW.avatarLoadComplete(zavatarname);
+							}
+						},70);
+					}
+				}
+			}
+		},70);
+    } catch (ex) {
+		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFadeSwirlLong=" + ex.message);
+    }
+}
+
 WTWJS.prototype.avatarShowFadeSprite = function(zavatarname, zavatarparts) {
 	/* enter animation for an avatar - fade to visible with particle sprite shower */
 	try {
