@@ -200,4 +200,13 @@
 			<div id="wtw_azjavascriptlinks" ></div>
 			<div id="wtw_azjavascript" class="wtw-menulevel0" onclick="WTW.startUploadImage(this.innerHTML);return (false);">Upload JavaScript File</div>
 		</div><br /><br />
+		<div id="wtw_actionzoneteleportdiv">
+			<h4>Teleport Settings</h4>
+			<div class="wtw-onecol">Teleport to 3D Community:</div><br />
+			<select id="wtw_tazteleportzoneid"></select><br /><br />
+			<div class="wtw-onecol">Spawn Zone:</div><br />
+			<select id="wtw_tazspawnzoneid">
+				<option value=''>Default</option>
+			</select><br />
+		</div><br /><br />
 	</div>

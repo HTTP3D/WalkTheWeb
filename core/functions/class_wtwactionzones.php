@@ -40,7 +40,7 @@ class wtwactionzones {
 		return $zactionzoneid;
 	}
 	
-	public function saveActionZone($zactionzoneid, $zcommunityid, $zbuildingid, $zthingid, $zactionzonename, $zactionzonetype, $zactionzoneshape, $zattachmoldid, $zmovementtype, $zrotatespeed, $zvalue1, $zvalue2, $zdefaulteditform, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zaxispositionx, $zaxispositiony, $zaxispositionz, $zaxisrotationx, $zaxisrotationy, $zaxisrotationz, $zrotateaxis, $zrotatedegrees, $zrotatedirection, $zmovementdistance, $zloadactionzoneid, $zjsfunction, $zjsparameters) {
+	public function saveActionZone($zactionzoneid, $zcommunityid, $zbuildingid, $zthingid, $zactionzonename, $zactionzonetype, $zactionzoneshape, $zattachmoldid, $zteleportwebid, $zteleportwebtype, $zmovementtype, $zrotatespeed, $zvalue1, $zvalue2, $zdefaulteditform, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zaxispositionx, $zaxispositiony, $zaxispositionz, $zaxisrotationx, $zaxisrotationy, $zaxisrotationz, $zrotateaxis, $zrotatedegrees, $zrotatedirection, $zmovementdistance, $zloadactionzoneid, $zjsfunction, $zjsparameters) {
 		/* save an action zone to the actionzones table */
 		$zsuccess = false;
 		global $wtwhandlers;
@@ -58,6 +58,8 @@ class wtwactionzones {
 							actionzonetype='".$zactionzonetype."',
 							actionzoneshape='".$zactionzoneshape."',
 							attachmoldid='".$zattachmoldid."',
+							teleportwebid='".$zteleportwebid."',
+							teleportwebtype='".$zteleportwebtype."',
 							movementtype='".$zmovementtype."',
 							positionx=".$wtwhandlers->checkNumber($zpositionx,0).",
 							positiony=".$wtwhandlers->checkNumber($zpositiony,0).",
@@ -105,6 +107,8 @@ class wtwactionzones {
 							actionzonetype,
 							actionzoneshape,
 							attachmoldid,
+							teleportwebid,
+							teleportwebtype,
 							movementtype,
 							positionx,
 							positiony,
@@ -145,6 +149,8 @@ class wtwactionzones {
 							'".$zactionzonetype."',
 							'".$zactionzoneshape."',
 							'".$zattachmoldid."',
+							'".$zteleportwebid."',
+							'".$zteleportwebtype."',
 							'".$zmovementtype."',
 							".$wtwhandlers->checkNumber($zpositionx,0).",
 							".$wtwhandlers->checkNumber($zpositiony,0).",

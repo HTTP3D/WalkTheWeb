@@ -19,6 +19,8 @@ try {
 	$zactionzonetype = $wtwhandlers->getPost('actionzonetype','');
 	$zactionzoneshape = $wtwhandlers->getPost('actionzoneshape','');
 	$zattachmoldid = $wtwhandlers->getPost('attachmoldid','');
+	$zteleportwebid = $wtwhandlers->getPost('teleportwebid','');
+	$zteleportwebtype = $wtwhandlers->getPost('teleportwebtype','');
 	$zmovementtype = $wtwhandlers->getPost('movementtype','');
 	$zrotatespeed = $wtwhandlers->getPost('rotatespeed','1');
 	$zvalue1 = $wtwhandlers->getPost('value1','0');
@@ -56,7 +58,7 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "saveactionzone":
-			if ($wtwactionzones->saveActionZone($zactionzoneid, $zcommunityid, $zbuildingid, $zthingid, $zactionzonename, $zactionzonetype, $zactionzoneshape, $zattachmoldid, $zmovementtype, $zrotatespeed, $zvalue1, $zvalue2, $zdefaulteditform, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zaxispositionx, $zaxispositiony, $zaxispositionz, $zaxisrotationx, $zaxisrotationy, $zaxisrotationz, $zrotateaxis, $zrotatedegrees, $zrotatedirection, $zaxisscalingz, $zloadactionzoneid, $zjsfunction, $zjsparameters) == false) {
+			if ($wtwactionzones->saveActionZone($zactionzoneid, $zcommunityid, $zbuildingid, $zthingid, $zactionzonename, $zactionzonetype, $zactionzoneshape, $zattachmoldid, $zteleportwebid, $zteleportwebtype, $zmovementtype, $zrotatespeed, $zvalue1, $zvalue2, $zdefaulteditform, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zaxispositionx, $zaxispositiony, $zaxispositionz, $zaxisrotationx, $zaxisrotationy, $zaxisrotationz, $zrotateaxis, $zrotatedegrees, $zrotatedirection, $zaxisscalingz, $zloadactionzoneid, $zjsfunction, $zjsparameters) == false) {
 				$zresponse = array(
 					'serror'=> 'Could not save Action Zone'
 				);

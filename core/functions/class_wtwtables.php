@@ -60,6 +60,8 @@ class wtwtables {
 				  `attachmoldid` varchar(16) DEFAULT '',
 				  `loadactionzoneid` varchar(16) DEFAULT '',
 				  `parentactionzoneid` varchar(16) DEFAULT '',
+				  `teleportwebid` varchar(16) DEFAULT '',
+				  `teleportwebtype` varchar(16) DEFAULT '',
 				  `actionzonename` varchar(255) DEFAULT '',
 				  `actionzonetype` varchar(45) DEFAULT '',
 				  `actionzoneshape` varchar(45) DEFAULT 'cylinder',
