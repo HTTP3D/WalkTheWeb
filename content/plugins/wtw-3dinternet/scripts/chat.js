@@ -265,7 +265,7 @@ WTW_3DINTERNET.prototype.processChatCommand = function(zdata) {
 WTW_3DINTERNET.prototype.startChat = function(zinstanceid) {
 	/* start personal chat */
 	try {
-WTW.log("zinstanceid=" + zinstanceid);
+//WTW.log("zinstanceid=" + zinstanceid);
 		if (wtw3dinternet.masterChat == '1') {
 			if (wtw3dinternet.isBlockedOrBanned(zinstanceid) == false) {
 				let zchatid = WTW.getRandomString(20);

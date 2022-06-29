@@ -470,7 +470,7 @@ var zsourcebuffer = zmediasource.addSourceBuffer(zvoice.inputBuffer.type);
 /*
 
 //if (WTW.audioBuffers[zfoundaudiobuffer] != undefined && test == 0) {
-WTW.log("FOUND AUDIO");
+//WTW.log("FOUND AUDIO");
 //	const blob = new Blob([WTW.audioBuffers[zfoundaudiobuffer].buffer], { type: "audio/wav" });
 //	const blob = new Blob([WTW.audioWorkletNodes[zfoundaudiobuffer]], { type: "audio/wav" });
 	const blob = new Blob([zdata.voice], { type: "audio/wav" });

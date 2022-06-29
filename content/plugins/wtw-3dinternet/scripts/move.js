@@ -46,6 +46,7 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 						if (zavatar == null) {
 							if (zdata.instanceid != dGet('wtw_tinstanceid').value) {
 								let zavatarind = wtw3dinternet.getAvatarInd(zdata.instanceid);
+								var zspawnpoint = WTW.getSpawnPoint();
 								if (wtw3dinternet.avatars[zavatarind] == null) {
 									wtw3dinternet.avatars[wtw3dinternet.avatars.length] = {
 										'instanceid':zdata.instanceid,
@@ -55,14 +56,14 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 										'useravatarid':zdata.useravatarid, 
 										'avatarid':zdata.avatarid,
 										'position':{
-											'x':WTW.init.startPositionX,
-											'y':WTW.init.startPositionY,
-											'z':WTW.init.startPositionZ
+											'x':zspawnpoint.position.x,
+											'y':zspawnpoint.position.y,
+											'z':zspawnpoint.position.z
 										},
 										'rotation':{
-											'x':WTW.init.startRotationX,
-											'y':WTW.init.startRotationY,
-											'z':WTW.init.startRotationZ
+											'x':zspawnpoint.rotation.x,
+											'y':zspawnpoint.rotation.y,
+											'z':zspawnpoint.rotation.z
 										},
 										'loadcounter':0,
 										'loaded':'0',
@@ -112,6 +113,7 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 					
 					var zavatarname = "person-" + zmovedata.instanceid;
 					let zavatarind = wtw3dinternet.getAvatarInd(zmovedata.instanceid);
+					var zspawnpoint = WTW.getSpawnPoint();
 					if (wtw3dinternet.avatars[zavatarind] == null) {
 						zavatarind = wtw3dinternet.avatars.length;
 						wtw3dinternet.avatars[zavatarind] = {
@@ -119,14 +121,14 @@ WTW_3DINTERNET.prototype.initMoveSocket = function() {
 							'placeholder':zmovedata.placeholder,
 							'userid':zmovedata.userid,
 							'position':{
-								'x':WTW.init.startPositionX,
-								'y':WTW.init.startPositionY,
-								'z':WTW.init.startPositionZ
+								'x':zspawnpoint.position.x,
+								'y':zspawnpoint.position.y,
+								'z':zspawnpoint.position.z
 							},
 							'rotation':{
-								'x':WTW.init.startRotationX,
-								'y':WTW.init.startRotationY,
-								'z':WTW.init.startRotationZ
+								'x':zspawnpoint.rotation.x,
+								'y':zspawnpoint.rotation.y,
+								'z':zspawnpoint.rotation.z
 							},
 							'loadcounter':0,
 							'loaded':'0',
