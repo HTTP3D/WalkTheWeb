@@ -285,6 +285,95 @@ try {
 		;");
 	}
 
+	$zazresults = array();
+	$zspawnzones = array();
+	if (!empty($zcommunityid)) {
+		$zazresults = $wtwdb->query("
+			select distinct az1.* 
+			from ".wtw_tableprefix."actionzones az1 
+			where (az1.communityid='".$zcommunityid."' 
+				and az1.actionzonetype='spawnzone' 
+				and az1.deleted=0)
+
+			union
+			select distinct az2.* 
+			from ".wtw_tableprefix."actionzones az2
+				inner join ".wtw_tableprefix."connectinggrids cg2
+					on az2.buildingid=cg2.childwebid
+					and cg2.childwebtype='building'
+					and cg2.parentwebid='".$zcommunityid."'
+					and cg2.parentwebtype='community'
+			where (az2.actionzonetype='spawnzone' 
+				and az2.deleted=0
+				and cg2.deleted=0)
+
+			union
+			select distinct az3.* 
+			from ".wtw_tableprefix."actionzones az3
+				inner join ".wtw_tableprefix."connectinggrids cg3
+					on az3.buildingid=cg3.childwebid
+					and cg3.childwebtype='thing'
+					and cg3.parentwebid='".$zcommunityid."'
+					and cg3.parentwebtype='community'
+			where (az3.actionzonetype='spawnzone' 
+				and az3.deleted=0
+				and cg3.deleted=0);			
+		");		
+	} else if (!empty($zbuildingid)) {
+		$zazresults = $wtwdb->query("
+			select distinct az1.* 
+			from ".wtw_tableprefix."actionzones az1 
+			where (az1.buildingid='".$zbuildingid."' 
+				and az1.actionzonetype='spawnzone' 
+				and az1.deleted=0)
+
+			union
+			select distinct az2.* 
+			from ".wtw_tableprefix."actionzones az2
+				inner join ".wtw_tableprefix."connectinggrids cg2
+					on az2.thingid=cg2.childwebid
+					and cg2.childwebtype='thing'
+					and cg2.parentwebid='".$zbuildingid."'
+					and cg2.parentwebtype='building'
+			where (az2.actionzonetype='spawnzone' 
+				and az2.deleted=0
+				and cg2.deleted=0);			
+		");
+	} else if (!empty($zthingid)) {
+		$zazresults = $wtwdb->query("
+			select distinct az1.* 
+			from ".wtw_tableprefix."actionzones az1 
+			where (az1.thingid='".$zthingid."' 
+				and az1.actionzonetype='spawnzone' 
+				and az1.deleted=0);			
+		");
+	}
+	if (count($zazresults) > 0) {
+		$zspawnindex = 0;
+		foreach ($zazresults as $zazrow) {
+			$zspawnzones[$zspawnindex] = array(
+				'actionzoneid'=>$zazrow["actionzoneid"],
+				'communityid'=>$zazrow["communityid"],
+				'buildingid'=>$zazrow["buildingid"],
+				'thingid'=>$zazrow["thingid"],
+				'loadactionzoneid'=>$zazrow["loadactionzoneid"],
+				'actionzonename'=>$zazrow["actionzonename"],
+				'actionzoneshape'=>$zazrow["actionzoneshape"],
+				'actionzonetype'=>$zazrow["actionzonetype"],
+				'positionx'=>$zazrow["positionx"],
+				'positiony'=>$zazrow["positiony"],
+				'positionz'=>$zazrow["positionz"],
+				'scalingx'=>$zazrow["scalingx"],
+				'scalingy'=>$zazrow["scalingy"],
+				'scalingz'=>$zazrow["scalingz"],
+				'rotationx'=>$zazrow["rotationx"],
+				'rotationy'=>$zazrow["rotationy"],
+				'rotationz'=>$zazrow["rotationz"]
+			);
+			$zspawnindex += 1;
+		}
+	}
+
 	$zresponse = array();
 	/* format json return dataset */
 	foreach ($zresults as $zrow) {
@@ -338,12 +427,13 @@ try {
 			'position' => $zposition,
 			'scaling' => $zscaling,
 			'rotation' => $zrotation);
-		$zresponse['domaininfo'] = $zdomaininfo;
-		$zresponse['buildinginfo'] = $zbuildinginfo;
-		$zresponse['communityinfo'] = $zcommunityinfo;
-		$zresponse['startlocation'] = $zstartlocation;
-		$zresponse['useraccesslist'] = null; /* getaccesslist("", $zbuildingid, $zcommunityid); */
 	}
+	$zresponse['domaininfo'] = $zdomaininfo;
+	$zresponse['buildinginfo'] = $zbuildinginfo;
+	$zresponse['communityinfo'] = $zcommunityinfo;
+	$zresponse['startlocation'] = $zstartlocation;
+	$zresponse['spawnzones'] = $zspawnzones;
+	$zresponse['useraccesslist'] = null; /* getaccesslist("", $zbuildingid, $zcommunityid); */
 	echo json_encode($zresponse);	
 } catch (Exception $e) {
 	$wtwconnect->serror("connect-domaininfo.php=".$e->getMessage());

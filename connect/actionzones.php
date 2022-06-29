@@ -175,6 +175,7 @@ try {
 			'parentactionzoneid'=> $zrow["parentactionzoneid"],
 			'teleportwebid'=> $zrow["teleportwebid"],
 			'teleportwebtype'=> $zrow["teleportwebtype"],
+			'spawnactionzoneid'=> $zrow["spawnactionzoneid"],
 			'movementtype'=> $zrow["movementtype"],
 			'rotatespeed'=> $zrow["rotatespeed"],
 			'value1'=> $zrow["value1"],
