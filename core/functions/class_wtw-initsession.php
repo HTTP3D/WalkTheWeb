@@ -21,9 +21,9 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = "3.4.14";
-	public $dbversion = "1.1.29";
-	public $versiondate = "2022-5-31";
+	public $version = "3.5.0";
+	public $dbversion = "1.1.30";
+	public $versiondate = "2022-6-29";
 	public $serverinstanceid = "";
 	public $globaluserid = "";
 	public $userid = "";
@@ -1236,6 +1236,9 @@ class wtw {
 			$zcommunityaccess = array();
 			$zbuildingaccess = array();
 			$zthingaccess = array();
+			$zazresults = array();
+			$zspawnzones = array();
+			$zspawnindex = 0;
 			if (!empty($this->userid) && isset($this->userid)) {
 				/* get user access to this 3D web item */
 				if (!empty($this->communityid)) {
@@ -1402,6 +1405,38 @@ class wtw {
 						$zscalingz = $adjpos["scalingz"];
 					}
 				}
+				/* retrieve alternate spawn zones */
+				$zazresults = $wtwdb->query("
+					select distinct az1.* 
+					from ".wtw_tableprefix."actionzones az1 
+					where (az1.communityid='".$this->communityid."' 
+						and az1.actionzonetype='spawnzone' 
+						and az1.deleted=0)
+
+					union
+					select distinct az2.* 
+					from ".wtw_tableprefix."actionzones az2
+						inner join ".wtw_tableprefix."connectinggrids cg2
+							on az2.buildingid=cg2.childwebid
+							and cg2.childwebtype='building'
+							and cg2.parentwebid='".$this->communityid."'
+							and cg2.parentwebtype='community'
+					where (az2.actionzonetype='spawnzone' 
+						and az2.deleted=0
+						and cg2.deleted=0)
+
+					union
+					select distinct az3.* 
+					from ".wtw_tableprefix."actionzones az3
+						inner join ".wtw_tableprefix."connectinggrids cg3
+							on az3.buildingid=cg3.childwebid
+							and cg3.childwebtype='thing'
+							and cg3.parentwebid='".$this->communityid."'
+							and cg3.parentwebtype='community'
+					where (az3.actionzonetype='spawnzone' 
+						and az3.deleted=0
+						and cg3.deleted=0);			
+				");
 			} else if (!empty($this->communityid) && !empty($this->buildingid)) {
 				/* if a building in a community is called as start point reference */
 				/* buildings table - get building's self position, rotation, and scaling */
@@ -1455,6 +1490,38 @@ class wtw {
 						$zscalingz = $adjpos["scalingz"];
 					}
 				}
+				/* retrieve alternate spawn zones */
+				$zazresults = $wtwdb->query("
+					select distinct az1.* 
+					from ".wtw_tableprefix."actionzones az1 
+					where (az1.communityid='".$this->communityid."' 
+						and az1.actionzonetype='spawnzone' 
+						and az1.deleted=0)
+
+					union
+					select distinct az2.* 
+					from ".wtw_tableprefix."actionzones az2
+						inner join ".wtw_tableprefix."connectinggrids cg2
+							on az2.buildingid=cg2.childwebid
+							and cg2.childwebtype='building'
+							and cg2.parentwebid='".$this->communityid."'
+							and cg2.parentwebtype='community'
+					where (az2.actionzonetype='spawnzone' 
+						and az2.deleted=0
+						and cg2.deleted=0)
+
+					union
+					select distinct az3.* 
+					from ".wtw_tableprefix."actionzones az3
+						inner join ".wtw_tableprefix."connectinggrids cg3
+							on az3.buildingid=cg3.childwebid
+							and cg3.childwebtype='thing'
+							and cg3.parentwebid='".$this->communityid."'
+							and cg3.parentwebtype='community'
+					where (az3.actionzonetype='spawnzone' 
+						and az3.deleted=0
+						and cg3.deleted=0);			
+				");
 			} else if (!empty($this->communityid) && !empty($this->thingid)) {
 				/* if a thing in a community is called as start point reference */
 				/* things table - get thing's self position, rotation, and scaling */
@@ -1508,6 +1575,38 @@ class wtw {
 						$zscalingz = $adjpos["scalingz"];
 					}
 				}
+				/* retrieve alternate spawn zones */
+				$zazresults = $wtwdb->query("
+					select distinct az1.* 
+					from ".wtw_tableprefix."actionzones az1 
+					where (az1.communityid='".$this->communityid."' 
+						and az1.actionzonetype='spawnzone' 
+						and az1.deleted=0)
+
+					union
+					select distinct az2.* 
+					from ".wtw_tableprefix."actionzones az2
+						inner join ".wtw_tableprefix."connectinggrids cg2
+							on az2.buildingid=cg2.childwebid
+							and cg2.childwebtype='building'
+							and cg2.parentwebid='".$this->communityid."'
+							and cg2.parentwebtype='community'
+					where (az2.actionzonetype='spawnzone' 
+						and az2.deleted=0
+						and cg2.deleted=0)
+
+					union
+					select distinct az3.* 
+					from ".wtw_tableprefix."actionzones az3
+						inner join ".wtw_tableprefix."connectinggrids cg3
+							on az3.buildingid=cg3.childwebid
+							and cg3.childwebtype='thing'
+							and cg3.parentwebid='".$this->communityid."'
+							and cg3.parentwebtype='community'
+					where (az3.actionzonetype='spawnzone' 
+						and az3.deleted=0
+						and cg3.deleted=0);			
+				");
 			} else if (!empty($this->buildingid) && !empty($this->thingid)) {
 				/* if a thing in a building is called as start point reference (no community ) */
 				/* things table - get thing's self position, rotation, and scaling */
@@ -1561,6 +1660,26 @@ class wtw {
 						$zscalingz = $adjpos["scalingz"];
 					}
 				}
+				/* retrieve alternate spawn zones */
+				$zazresults = $wtwdb->query("
+					select distinct az1.* 
+					from ".wtw_tableprefix."actionzones az1 
+					where (az1.buildingid='".$this->buildingid."' 
+						and az1.actionzonetype='spawnzone' 
+						and az1.deleted=0)
+
+					union
+					select distinct az2.* 
+					from ".wtw_tableprefix."actionzones az2
+						inner join ".wtw_tableprefix."connectinggrids cg2
+							on az2.thingid=cg2.childwebid
+							and cg2.childwebtype='thing'
+							and cg2.parentwebid='".$this->buildingid."'
+							and cg2.parentwebtype='building'
+					where (az2.actionzonetype='spawnzone' 
+						and az2.deleted=0
+						and cg2.deleted=0);			
+				");
 			} else if (!empty($this->communityid)) {
 				/* if only a community is called as start point reference */
 				/* communities table - get community's self position, rotation, and scaling */
@@ -1581,6 +1700,38 @@ class wtw {
 					$zscalingy = $this->checkNumber($zrow["scalingy"],1);
 					$zscalingz = $this->checkNumber($zrow["scalingz"],1);
 				}
+				/* retrieve alternate spawn zones */
+				$zazresults = $wtwdb->query("
+					select distinct az1.* 
+					from ".wtw_tableprefix."actionzones az1 
+					where (az1.communityid='".$this->communityid."' 
+						and az1.actionzonetype='spawnzone' 
+						and az1.deleted=0)
+
+					union
+					select distinct az2.* 
+					from ".wtw_tableprefix."actionzones az2
+						inner join ".wtw_tableprefix."connectinggrids cg2
+							on az2.buildingid=cg2.childwebid
+							and cg2.childwebtype='building'
+							and cg2.parentwebid='".$this->communityid."'
+							and cg2.parentwebtype='community'
+					where (az2.actionzonetype='spawnzone' 
+						and az2.deleted=0
+						and cg2.deleted=0)
+
+					union
+					select distinct az3.* 
+					from ".wtw_tableprefix."actionzones az3
+						inner join ".wtw_tableprefix."connectinggrids cg3
+							on az3.buildingid=cg3.childwebid
+							and cg3.childwebtype='thing'
+							and cg3.parentwebid='".$this->communityid."'
+							and cg3.parentwebtype='community'
+					where (az3.actionzonetype='spawnzone' 
+						and az3.deleted=0
+						and cg3.deleted=0);			
+				");
 			} else if (!empty($this->buildingid)) {
 				/* if only a building is called as start point reference */
 				/* buildings table - get building's self position, rotation, and scaling */
@@ -1601,6 +1752,26 @@ class wtw {
 					$zscalingy = $this->checkNumber($zrow["scalingy"],1);
 					$zscalingz = $this->checkNumber($zrow["scalingz"],1);
 				}
+				/* retrieve alternate spawn zones */
+				$zazresults = $wtwdb->query("
+					select distinct az1.* 
+					from ".wtw_tableprefix."actionzones az1 
+					where (az1.buildingid='".$this->buildingid."' 
+						and az1.actionzonetype='spawnzone' 
+						and az1.deleted=0)
+
+					union
+					select distinct az2.* 
+					from ".wtw_tableprefix."actionzones az2
+						inner join ".wtw_tableprefix."connectinggrids cg2
+							on az2.thingid=cg2.childwebid
+							and cg2.childwebtype='thing'
+							and cg2.parentwebid='".$this->buildingid."'
+							and cg2.parentwebtype='building'
+					where (az2.actionzonetype='spawnzone' 
+						and az2.deleted=0
+						and cg2.deleted=0);			
+				");
 			} else if (!empty($this->thingid)) {
 				/* if only a thing is called as start point reference */
 				/* things table - get thing's self position, rotation, and scaling */
@@ -1621,6 +1792,14 @@ class wtw {
 					$zscalingy = $this->checkNumber($zrow["scalingy"],1);
 					$zscalingz = $this->checkNumber($zrow["scalingz"],1);
 				}
+				/* retrieve alternate spawn zones */
+				$zazresults = $wtwdb->query("
+					select distinct az1.* 
+					from ".wtw_tableprefix."actionzones az1 
+					where (az1.thingid='".$this->thingid."' 
+						and az1.actionzonetype='spawnzone' 
+						and az1.deleted=0);			
+				");
 			}
 			$zdomaininfo = array(
 				'communityid' => $this->communityid,
@@ -1727,6 +1906,31 @@ class wtw {
 				}
 			}			
 			
+			if (count($zazresults) > 0) {
+				foreach ($zazresults as $zazrow) {
+					$zspawnzones[$zspawnindex] = array(
+						'actionzoneid'=>$zazrow["actionzoneid"],
+						'communityid'=>$zazrow["communityid"],
+						'buildingid'=>$zazrow["buildingid"],
+						'thingid'=>$zazrow["thingid"],
+						'loadactionzoneid'=>$zazrow["loadactionzoneid"],
+						'actionzonename'=>$zazrow["actionzonename"],
+						'actionzoneshape'=>$zazrow["actionzoneshape"],
+						'actionzonetype'=>$zazrow["actionzonetype"],
+						'positionx'=>$zazrow["positionx"],
+						'positiony'=>$zazrow["positiony"],
+						'positionz'=>$zazrow["positionz"],
+						'scalingx'=>$zazrow["scalingx"],
+						'scalingy'=>$zazrow["scalingy"],
+						'scalingz'=>$zazrow["scalingz"],
+						'rotationx'=>$zazrow["rotationx"],
+						'rotationy'=>$zazrow["rotationy"],
+						'rotationz'=>$zazrow["rotationz"]
+					);
+					$zspawnindex += 1;
+				}
+			}
+
 			$zposition = array(
 				'x' => $zpositionx,
 				'y' => $zpositiony,
@@ -1753,6 +1957,7 @@ class wtw {
 			$zinitialscene['buildinginfo'] = $zbuildinginfo;
 			$zinitialscene['thinginfo'] = $zthinginfo;
 			$zinitialscene['startlocation'] = $startlocation;
+			$zinitialscene['spawnzones'] = $zspawnzones;
 			$zinitialscene['useraccesslist'] = null;
 			/* get main 3D Thing settings */
 			$zresults = $wtwdb->query("

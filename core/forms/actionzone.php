@@ -203,10 +203,8 @@
 		<div id="wtw_actionzoneteleportdiv">
 			<h4>Teleport Settings</h4>
 			<div class="wtw-onecol">Teleport to 3D Community:</div><br />
-			<select id="wtw_tazteleportzoneid"></select><br /><br />
+			<select id="wtw_tazteleportzoneid" onchange="WTW.reloadAZSpawnList();"></select><br /><br />
 			<div class="wtw-onecol">Spawn Zone:</div><br />
-			<select id="wtw_tazspawnzoneid">
-				<option value=''>Default</option>
-			</select><br />
+			<select id="wtw_tazspawnzoneid"></select><br />
 		</div><br /><br />
 	</div>

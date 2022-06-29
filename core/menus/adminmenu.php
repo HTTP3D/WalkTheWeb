@@ -302,7 +302,7 @@
 				<div id="wtw_adminmenu44" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback44" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
 					<div class="wtw-menuheader"><?php echo $wtwadminmenu->__("Set Start Position"); ?></div><br />
-					<div class="wtw-menulevel0text" style="text-align:left;">Move to the location and view angle you would like for everyone to start your 3D Community then click <strong>Use Current Position</strong> to Save the <strong>Start Location</strong></div>
+					<div class="wtw-menulevel0text" style="text-align:left;">Move to the location and view angle you would like for the default start position in your 3D Website then click <strong>Use Current Position</strong> to Save the <strong>Start Location</strong><br /><br />Note: Avatars will appear in a random distance (within 10 units) from the start position. Additional Spawn Zones of any size can be added under the <strong>Add / Edit Action Zones</strong></div>
 					<div id="wtw_startsaved" style="color:green;visibility:hidden;text-align:center;"><?php echo $wtwadminmenu->__("Starting Position Saved"); ?></div><br />
 					<br />
 					<div id="wtw_setstartposition" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;"><?php echo $wtwadminmenu->__("Use Current Position"); ?></div>

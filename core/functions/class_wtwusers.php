@@ -809,50 +809,58 @@ class wtwusers {
 		try {
 			if (!empty($zdisplayname) && isset($zdisplayname)) {
 				$zdisplayname = $wtwhandlers->decode64($zdisplayname);
+			} else {
+				$zserror = "Accounts require a Display Name, Email, and Password.";
 			}
 			if (!empty($zuseremail) && isset($zuseremail)) {
 				$zuseremail = $wtwhandlers->decode64($zuseremail);
+			} else {
+				$zserror = "Accounts require a Display Name, Email, and Password.";
 			}
 			if (!empty($zpassword) && isset($zpassword)) {
 				$zpassword = $wtwhandlers->decode64($zpassword);
-			}
-			if ($this->isEmailAvailable($zuseremail)) {
-				$zuserid = $wtwhandlers->getRandomString(16,1);
-				$zuploadpathid = $wtwhandlers->getRandomString(16,1);
-				$zoptions = ['cost' => 11];
-				$zpasswordhash = password_hash($zpassword, PASSWORD_DEFAULT, $zoptions);
-				$ztimestamp = date('Y/m/d H:i:s');
-				$wtwhandlers->query("
-					insert into ".wtw_tableprefix."users 
-						(userid,
-						 uploadpathid, 
-						 userpassword,
-						 email,
-						 displayname,
-						 createdate,
-						 createuserid,
-						 updatedate,
-						 updateuserid)
-					  values
-						('".$zuserid."',
-						 '".$zuploadpathid."', 
-						 '".$zpasswordhash."',
-						 '".$zuseremail."',
-						 '".addslashes($zdisplayname)."',
-						 '".$ztimestamp."',
-						 '".$zuserid."',
-						 '".$ztimestamp."',
-						 '".$zuserid."');
-				");
-				$_SESSION["wtw_userid"] = $zuserid;
-				$_SESSION["wtw_uploadpathid"] = $zuploadpathid;			
-				global $wtw;
-				global $wtwuser;
-				$wtw->userid = $zuserid;
-				$wtwuser->userid = $zuserid;
-				$zsuccess = true;
 			} else {
-				$zserror = "Email is already in use.";
+				$zserror = "Accounts require a Display Name, Email, and Password.";
+			}
+			if (empty($zserror)) {
+				if ($this->isEmailAvailable($zuseremail)) {
+					$zuserid = $wtwhandlers->getRandomString(16,1);
+					$zuploadpathid = $wtwhandlers->getRandomString(16,1);
+					$zoptions = ['cost' => 11];
+					$zpasswordhash = password_hash($zpassword, PASSWORD_DEFAULT, $zoptions);
+					$ztimestamp = date('Y/m/d H:i:s');
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."users 
+							(userid,
+							 uploadpathid, 
+							 userpassword,
+							 email,
+							 displayname,
+							 createdate,
+							 createuserid,
+							 updatedate,
+							 updateuserid)
+						  values
+							('".$zuserid."',
+							 '".$zuploadpathid."', 
+							 '".$zpasswordhash."',
+							 '".$zuseremail."',
+							 '".addslashes($zdisplayname)."',
+							 '".$ztimestamp."',
+							 '".$zuserid."',
+							 '".$ztimestamp."',
+							 '".$zuserid."');
+					");
+					$_SESSION["wtw_userid"] = $zuserid;
+					$_SESSION["wtw_uploadpathid"] = $zuploadpathid;			
+					global $wtw;
+					global $wtwuser;
+					$wtw->userid = $zuserid;
+					$wtwuser->userid = $zuserid;
+					$zsuccess = true;
+				} else {
+					$zserror = "Email is already in use.";
+				}
 			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwusers.php-createAccount=".$e->getMessage());
