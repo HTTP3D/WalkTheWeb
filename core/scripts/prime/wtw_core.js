@@ -355,6 +355,9 @@ WTWJS.prototype.loadInitSettings = function() {
 				}
 				WTW.init.loaded = 1;
 			}
+			if (wtw_domain.spawnzones != null) {
+				WTW.spawnZones = wtw_domain.spawnzones;
+			}
 		}
 		if (communityid == null) {
 			communityid = "";
@@ -686,6 +689,11 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 		/* if ground is set below 0 (zero) y value, add water to the scene at 0 (zero) y value - otherwise no main water plane is loaded */
 		if ((zgroundpositiony < zwaterpositiony) || (WTW.adminView == 1 && communityid != "")) {
 			WTW.initLoadUpload(zgroundtextureid, zgroundtextureid, 7);
+			if (WTW.water != null) {
+				WTW.water.material.dispose();
+				WTW.water.dispose();
+				WTW.water = null;
+			}
 			/* create water */
 			WTW.water = BABYLON.MeshBuilder.CreatePlane("communitywater", {width:5000, height:5000, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 			WTW.water.rotation.x = WTW.getRadians(90);
@@ -820,9 +828,9 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 							break;
 					}
 					/* load level defines primary web object (highest level) to load or if it is placed under another web object (like 3D Building in a 3D Community) */
+					var zparentname = "";
 					if (WTW.connectingGrids[zconnectinggridind].loadlevel == "1") {
 						/* primary level item loaded in 3D Scene */
-						var zparentname = "";
 						if (WTW.connectingGrids[zconnectinggridind].parentwebid == "") {
 							/* web object has no parent (is the parent of all the rest) */
 							zparentconnectinggridind = zconnectinggridind;

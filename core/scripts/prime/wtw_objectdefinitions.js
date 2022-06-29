@@ -641,6 +641,7 @@ WTWJS.prototype.newAvatarDef = function() {
 	var zavataranimationdefs = [];
 	var zblockedby = [];
 	var zbannedby = [];
+	var zspawnpoint = WTW.getSpawnPoint();
 	try {
 		zavatardef = {
 			'position': {
@@ -686,15 +687,15 @@ WTWJS.prototype.newAvatarDef = function() {
 			{
 				'position':
 				{
-					'x':WTW.init.startPositionX,
-					'y':WTW.init.startPositionY,
-					'z':WTW.init.startPositionZ
+					'x':zspawnpoint.position.x,
+					'y':zspawnpoint.position.y,
+					'z':zspawnpoint.position.z
 				},
 				'rotation':
 				{
-					'x':'0.00',
-					'y':WTW.init.startRotationY,
-					'z':'0.00'
+					'x':zspawnpoint.rotation.x,
+					'y':zspawnpoint.rotation.y,
+					'z':zspawnpoint.rotation.z
 				}
 			},
 			'snapshots':

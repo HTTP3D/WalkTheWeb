@@ -153,6 +153,8 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 		var zwebtype = "building";
 		var zactionzonetype = "";
 		var zteleportwebid = '';
+		var zspawnactionzoneid = '';
+		var zactionzoneind = -1;
 		WTW.hideAdminMenu();
 		WTW.show('wtw_adminmenu20');
 		WTW.show('wtw_adminmenu20b');
@@ -164,12 +166,14 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 		dGet('wtw_tmoldshape').value = "box";
 		dGet('wtw_tmoldwebtype').value = zwebtype;
 		WTW.setDDLValue("wtw_tmoldcovering", "texture");
+		/* check if zactionzoneid is a type for a new actionzone, otherwise it is the id to be edited */
 		for (var i=0;i < dGet('wtw_tactionzonetypelist').options.length;i++) {
 			if (zactionzoneid == dGet('wtw_tactionzonetypelist').options[i].value) {
 				zactionzonetype = zactionzoneid;
 			}
 		}
 		if (zactionzonetype != "") {
+			/* add new action zone */
 			var zdefaultloadactionzoneid = WTW.getLoadActionZoneID("High");
 			WTW.getLoadActionZoneList(zdefaultloadactionzoneid);
 			zactionzoneid = WTW.getRandomString(16);
@@ -177,7 +181,7 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 			dGet('wtw_tactionzonetype').value = zactionzonetype;
 			WTW.setNewActionZoneDefaults(zactionzonetype);
 			WTW.setActionZoneFormFields(zactionzonetype);
-			var zactionzoneind = WTW.getNextCount(WTW.actionZones);
+			zactionzoneind = WTW.getNextCount(WTW.actionZones);
 			dGet('wtw_tactionzoneind').value = zactionzoneind;
 			WTW.actionZones[zactionzoneind] = WTW.newActionZone();
 			WTW.actionZones[zactionzoneind].actionzoneid = zactionzoneid;
@@ -238,8 +242,9 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 				}
 			},100);
 		} else {
+			/* edit existing action zone */
 			dGet('wtw_tactionzoneid').value = zactionzoneid;
-			var zactionzoneind = WTW.getActionZoneInd(zactionzoneid,dGet("wtw_tconnectinggridind").value);
+			zactionzoneind = WTW.getActionZoneInd(zactionzoneid,dGet("wtw_tconnectinggridind").value);
 			dGet('wtw_tactionzoneind').value = zactionzoneind;
 			if (WTW.actionZones[zactionzoneind] != null) {
 				dGet('wtw_editactionzoneformtitle').innerHTML = "Edit " + WTW.actionZones[zactionzoneind].actionzonename;
@@ -281,6 +286,7 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 				dGet('wtw_tactionzonejsfunction').value = WTW.actionZones[zactionzoneind].jsfunction;
 				dGet('wtw_tactionzonejsparameters').value = WTW.actionZones[zactionzoneind].jsparameters;
 				zteleportwebid = WTW.actionZones[zactionzoneind].teleportwebid;
+				zspawnactionzoneid = WTW.actionZones[zactionzoneind].spawnactionzoneid;
 				if (WTW.actionZones[zactionzoneind].scripts != null) {
 					WTW.loadAZFormScripts(WTW.actionZones[zactionzoneind].scripts);
 				}
@@ -363,12 +369,14 @@ WTWJS.prototype.openActionZoneForm = function(zactionzoneid) {
 			dGet('wtw_tactionzonename').disabled = false;
 			WTW.showInline('wtw_bdelactionzone');
 		}
-		if (zactionzonetype == "loadanimations") {
-			WTW.loadAZAnimationsList();
-			WTW.loadAZAvatarAnimations();
-		}
-		if (zactionzonetype == "teleportzone") {
-			WTW.loadAZCommunitiesList(zteleportwebid);
+		switch (zactionzonetype) {
+			case 'loadanimations':
+				WTW.loadAZAnimationsList();
+				WTW.loadAZAvatarAnimations();
+				break;
+			case 'teleportzone':
+				WTW.loadAZCommunitiesList(zteleportwebid, zspawnactionzoneid);
+				break;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminactionzones.js-openActionZoneForm=" + ex.message);
@@ -513,7 +521,7 @@ WTWJS.prototype.loadAZAvatarAnimations = async function() {
 	}
 }		
 
-WTWJS.prototype.loadAZCommunitiesList = async function(zteleportwebid) {
+WTWJS.prototype.loadAZCommunitiesList = async function(zteleportwebid, zspawnactionzoneid) {
 	/* load communities list to select from when adding to a zone for teleport */
 	try {
 		WTW.clearDDL('wtw_tazteleportzoneid');
@@ -533,6 +541,7 @@ WTWJS.prototype.loadAZCommunitiesList = async function(zteleportwebid) {
 						if (zteleportwebid == zresponse[i].communityid) {
 							zoption.selected = true;
 							zdefault = false;
+							WTW.loadAZSpawnList(zteleportwebid, zspawnactionzoneid);
 						}
 						dGet('wtw_tazteleportzoneid').add(zoption);
 					}
@@ -544,6 +553,52 @@ WTWJS.prototype.loadAZCommunitiesList = async function(zteleportwebid) {
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminactionzones.js-loadAZCommunitiesList=" + ex.message);
+	}
+}		
+
+WTWJS.prototype.reloadAZSpawnList = async function() {
+	/* reload spawn action zone list following a change in community */
+	try {
+		var zteleportzoneid = WTW.getDDLValue('wtw_tazteleportzoneid');
+		WTW.loadAZSpawnList(zteleportzoneid);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminactionzones.js-reloadAZSpawnList=" + ex.message);
+	}
+}		
+
+WTWJS.prototype.loadAZSpawnList = async function(zteleportwebid, zspawnactionzoneid) {
+	/* load communities list to select from when adding to a zone for teleport */
+	try {
+		WTW.clearDDL('wtw_tazspawnzoneid');
+		var zoption0 = document.createElement("option");
+		zoption0.text = 'Default';
+		zoption0.value = '';
+		dGet('wtw_tazspawnzoneid').add(zoption0);
+		WTW.getAsyncJSON("/connect/domaininfo.php?communityid=" + zteleportwebid, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				var zdefault = true;
+				if (zresponse.spawnzones != null) {
+					for (var i=0;i<zresponse.spawnzones.length;i++) {
+						if (zresponse.spawnzones[i] != null) {
+							var zoption = document.createElement("option");
+							zoption.text = zresponse.spawnzones[i].actionzonename;
+							zoption.value = zresponse.spawnzones[i].actionzoneid;
+							if (zspawnactionzoneid == zresponse.spawnzones[i].actionzoneid) {
+								zoption.selected = true;
+								zdefault = false;
+							}
+							dGet('wtw_tazspawnzoneid').add(zoption);
+						}
+					}
+				}
+				if (zdefault) {
+					dGet('wtw_tazspawnzoneid').options[0].selected = true;
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminactionzones.js-loadAZSpawnList=" + ex.message);
 	}
 }		
 
@@ -662,6 +717,10 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 			if (WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].actionzonetype == 'loadzone') {
 				WTW.setShownMolds();
 			}
+			if (w != 2) {
+				WTW.disposeClean(WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].moldname + '-arrow');	
+				WTW.hideActionZone(Number(dGet('wtw_tactionzoneind').value));
+			}
 			WTW.disposeClean("actionzone-" + dGet('wtw_tactionzoneind').value + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].actionzoneid + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridind + "-" + WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)].connectinggridid + "-" + dGet('wtw_tactionzonetype').value);
 			WTW.actionZones[Number(dGet('wtw_tactionzoneind').value)] = null;
 
@@ -680,7 +739,6 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 						if (w != 2) {
 							WTW.hideAdminMenu();
 							WTW.backToEdit();
-							WTW.hideActionZone(Number(dGet('wtw_tactionzoneind').value));
 						}
 					}
 				);
@@ -691,6 +749,7 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 			var zloadactionzoneid = WTW.getDDLValue('wtw_tazloadactionzoneid');
 			var zteleportwebtype = '';
 			var zteleportwebid = WTW.getDDLValue('wtw_tazteleportzoneid');
+			var zspawnactionzoneid = WTW.getDDLValue('wtw_tazspawnzoneid');
 			if (zteleportwebid != '') {
 				zteleportwebtype = 'community';
 			}
@@ -709,6 +768,7 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 				WTW.actionZones[zactionzoneind].attachmoldid = dGet('wtw_tattachmoldid').value;
 				WTW.actionZones[zactionzoneind].teleportwebid = zteleportwebid;
 				WTW.actionZones[zactionzoneind].teleportwebtype = zteleportwebtype;
+				WTW.actionZones[zactionzoneind].spawnactionzoneid = zspawnactionzoneid;
 				WTW.actionZones[zactionzoneind].movementtype = dGet('wtw_tactionzonemovementtype').value;
 				WTW.actionZones[zactionzoneind].rotatespeed = dGet('wtw_tactionzonerotatespeed').value;
 				WTW.actionZones[zactionzoneind].value1 = dGet('wtw_tactionzonevalue1').value;
@@ -733,7 +793,7 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 				WTW.actionZones[zactionzoneind].axis.rotatedegrees = dGet('wtw_tactionzonerotatedegrees').value;
 				WTW.actionZones[zactionzoneind].axis.rotatedirection = "1";
 				WTW.actionZones[zactionzoneind].movementdistance = dGet('wtw_taxisscalingz').value;
-				WTW.actionZones[zactionzoneind].loadactionzone = zloadactionzoneid;
+				WTW.actionZones[zactionzoneind].loadactionzoneid = zloadactionzoneid;
 				WTW.actionZones[zactionzoneind].jsfunction = dGet('wtw_tactionzonejsfunction').value;
 				WTW.actionZones[zactionzoneind].jsparameters = dGet('wtw_tactionzonejsparameters').value;
 			}
@@ -750,6 +810,7 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 				'attachmoldid':dGet('wtw_tattachmoldid').value,
 				'teleportwebid':zteleportwebid,
 				'teleportwebtype':zteleportwebtype,
+				'spawnactionzoneid':zspawnactionzoneid,
 				'movementtype':dGet('wtw_tactionzonemovementtype').value,
 				'rotatespeed':dGet('wtw_tactionzonerotatespeed').value,
 				'value1':dGet('wtw_tactionzonevalue1').value,
@@ -789,6 +850,7 @@ WTWJS.prototype.submitActionZoneForm = async function(w) {
 						WTW.hideAdminMenu();
 						WTW.backToEdit();
 						WTW.hideActionZone(Number(dGet('wtw_tactionzoneind').value));
+						WTW.disposeClean(WTW.actionZones[zactionzoneind].moldname + '-arrow');
 					}
 				}
 			);
@@ -814,6 +876,7 @@ WTWJS.prototype.closeActionZoneForm = function() {
 				WTW.setOpacity("actionzoneaxlebase2-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype, 0);
 			}
 			WTW.hideActionZone(zactionzoneind);
+			WTW.disposeClean(WTW.actionZones[zactionzoneind].moldname + '-arrow');
 		}
 		dGet('wtw_tactionzoneid').value = "";
 		dGet('wtw_tactionzoneind').value = "-1";
@@ -1465,6 +1528,45 @@ WTWJS.prototype.setNewActionZone = function() {
 							zactionzone.rotation.z = zrotationz;
 							zactionzone.isVisible = true;
 							WTW.openEditPoles(zactionzone);
+						}
+						break;
+					case 'spawnzone':
+						if (zactionzone != null) {
+							zactionzone.position.x = zpositionx;
+							zactionzone.position.y = zpositiony;
+							zactionzone.position.z = zpositionz;
+							zactionzone.scaling.x = zscalingx;
+							zactionzone.scaling.y = zscalingy;
+							zactionzone.scaling.z = zscalingz;
+							zactionzone.rotation.x = zrotationx;
+							zactionzone.rotation.y = zrotationy;
+							zactionzone.rotation.z = zrotationz;
+							zactionzone.isVisible = true;
+							WTW.openEditPoles(zactionzone);
+						}
+						var zspawnzonearrow = WTW.getMeshOrNodeByID(WTW.actionZones[zactionzoneind].moldname + '-arrow');
+						if (zspawnzonearrow == null) {
+							var zmolddef = WTW.newMold();
+							zmolddef.shape = 'babylonfile';
+							zmolddef.covering = "none";
+							zmolddef.scaling.x = 1/zscalingx;
+							zmolddef.scaling.y = 1/zscalingy;
+							zmolddef.scaling.z = 1/zscalingz;
+							zmolddef.subdivisions = 12;
+							zmolddef.opacity = 1;
+							zmolddef.parentname = WTW.actionZones[zactionzoneind].moldname;
+							zmolddef.checkcollisions = "0";
+							zmolddef.ispickable = "0";
+							zmolddef.objects.folder = '/content/system/babylon/spawnzone/';
+							zmolddef.objects.file = 'spawnzone.babylon';
+							/* create the Direction Arrow using the mold definition above */
+							var zmold = WTW.addMold(WTW.actionZones[zactionzoneind].moldname + '-arrow', zmolddef, zmolddef.parentname, zmolddef.covering);
+							zmold.isPickable = false;
+							zmold.checkCollisions = false;
+						} else {
+							zspawnzonearrow.scaling.x = 1/zscalingx;
+							zspawnzonearrow.scaling.y = 1/zscalingy;
+							zspawnzonearrow.scaling.z = 1/zscalingz;
 						}
 						break;
 					default:

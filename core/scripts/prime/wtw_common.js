@@ -1230,6 +1230,18 @@ WTWJS.prototype.addUnloadZoneToQueue = function(zactionzoneind) {
 	}
 }
 
+WTWJS.prototype.addUnloadConnectingGridToQueue = function(zconnectinggridind) {
+	/* add request to remove connectinggrid to queue to be removed from scene */
+	try {
+		var zloadmoldqueind = WTW.loadMoldQueue.length;
+		WTW.loadMoldQueue[zloadmoldqueind] = WTW.newMoldQueue();
+		WTW.loadMoldQueue[zloadmoldqueind].connectinggridind = zconnectinggridind;
+		WTW.loadMoldQueue[zloadmoldqueind].queprocess = "unloadconnectinggrid";
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-addUnloadConnectingGridToQueue=" + ex.message);
+	}
+}
+
 WTWJS.prototype.addMoldToQueue = function(zmoldname, zmolddef, zparentname, zcoveringname, zcsgmolddef) {
 	/* add mold to queue to be added to the scene */
 	try {
@@ -1320,6 +1332,9 @@ WTWJS.prototype.processMoldQueue = function() {
 							break;
 						case "dispose":
 							WTW.disposeClean(zmoldname, WTW.loadMoldQueue[i].check);
+							break;
+						case "unloadconnectinggrid":
+							WTW.unloadConnectingGrid(WTW.loadMoldQueue[i].connectinggridind);
 							break;
 						case "add":
 							if (WTW.loadMoldQueue[i].molddef != null && WTW.loadMoldQueue[i].molddef != undefined) {
@@ -1466,6 +1481,18 @@ WTWJS.prototype.processMoldQueue = function() {
 	WTW.checkLoadQueue = 0;
 }
 
+WTWJS.prototype.unloadConnectingGrid = function(zconnectinggridind) {
+	/* clear all child objects under a connecting grid and remove the connecting grid */
+	try {
+		if (WTW.connectingGrids[zconnectinggridind] != null) {
+			/* currently handled in teleport - for future use when multiple Communities are loaded in scene */
+			
+			
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_common.js-unloadConnectingGrid=" + ex.message);
+	}
+}
 
 /* settings are database saved variables */
 /* developers can create and use these functions to save and retrieve the settings as needed */

@@ -404,6 +404,7 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				WTW.hide('wtw_actionzonepartsdiv');
 				dGet('wtw_editactionzoneformtitle').innerHTML = "Add Spawn Zone";
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
+				WTW.show('wtw_actionzoneadvancedopts');
 				break;
 			case "loadanimations":
 				WTW.hide('wtw_actionzoneaxisdiv');

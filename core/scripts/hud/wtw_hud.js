@@ -1745,44 +1745,57 @@ WTWJS.prototype.listMeshes = function() {
 		var zcolor = "gray";
 		WTW.log("---loaded meshes--------count=" + scene.meshes.length + "------------------------------");
 		for (var i=0; i < scene.meshes.length; i++) {
-			var zparentname = "";
-			var zmoldname = scene.meshes[i].name;
-			var zvisible = scene.meshes[i].isVisible;
-			if (zmoldname.toLowerCase().indexOf("connectinggrid") > -1) {
-				zcolor = "green";
-				var zmold = WTW.getMeshOrNodeByID(zmoldname);
-				if (zmold != null && zmold.parent != null) {
-					zparentname = zmold.parent.name;
-				}
-			} else if (zmoldname.toLowerCase().indexOf("actionzone") > -1) {
-				zcolor = "lightblue";
-				var zmold = WTW.getMeshOrNodeByID(zmoldname);
-				if (zmold != null && zmold.parent != null) {
-					zparentname = zmold.parent.name;
-				}
-			} else if (zmoldname.toLowerCase().indexOf("person") > -1) {
-				zcolor = "red";
-				var zmold = WTW.getMeshOrNodeByID(zmoldname);
-				if (zmold != null && zmold.parent != null) {
-					zparentname = zmold.parent.name;
-				}
-			} else {
-				zcolor = "gray";
-			}
-			var zinmesh = "NO";
-			if (zmoldname.toLowerCase().indexOf("molds") > -1) {
-				var zmold = WTW.getMeshOrNodeByID(zmoldname);
-				if (zmold != null && WTW.myAvatar != null) {
-					if (WTW.myAvatar.intersectsMesh(zmold, false)) {
-						zinmesh = "YES";
+			if (scene.meshes[i] != null) {
+				var zparentname = "";
+				var zstatus = "";
+				var zshown = "";
+				var zmoldname = scene.meshes[i].name;
+				var zvisible = scene.meshes[i].isVisible;
+				var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
+				if (zmoldname.toLowerCase().indexOf("connectinggrid") > -1) {
+					zcolor = "green";
+					var zmold = WTW.getMeshOrNodeByID(zmoldname);
+					if (zmold != null && zmold.parent != null) {
+						zparentname = zmold.parent.name;
 					}
-					zparentname = zmold.parent.name;
+					if (WTW.connectingGrids[zmoldnameparts.moldind] != null) {
+						zstatus = WTW.connectingGrids[zmoldnameparts.moldind].status;
+						zshown = WTW.connectingGrids[zmoldnameparts.moldind].shown;
+					}
+				} else if (zmoldname.toLowerCase().indexOf("actionzone") > -1) {
+					zcolor = "lightblue";
+					var zmold = WTW.getMeshOrNodeByID(zmoldname);
+					if (zmold != null && zmold.parent != null) {
+						zparentname = zmold.parent.name;
+					}
+					if (WTW.actionZones[zmoldnameparts.moldind] != null) {
+						zstatus = WTW.actionZones[zmoldnameparts.moldind].status;
+						zshown = WTW.actionZones[zmoldnameparts.moldind].shown;
+					}
+				} else if (zmoldname.toLowerCase().indexOf("person") > -1) {
+					zcolor = "red";
+					var zmold = WTW.getMeshOrNodeByID(zmoldname);
+					if (zmold != null && zmold.parent != null) {
+						zparentname = zmold.parent.name;
+					}
+				} else {
+					zcolor = "gray";
 				}
-			}
-			if (zcolor == 'red') {
-				WTW.log(i + "==" + zmoldname + " in=" + zinmesh + " parent=" + zparentname + " visible=" + zvisible, zcolor);
-			} else {
-				WTW.log(i + "==" + zmoldname + " in=" + zinmesh + " parent=" + zparentname + " visible=" + zvisible, zcolor);
+				var zinmesh = "NO";
+				if (zmoldname.toLowerCase().indexOf("molds") > -1) {
+					var zmold = WTW.getMeshOrNodeByID(zmoldname);
+					if (zmold != null && WTW.myAvatar != null) {
+						if (WTW.myAvatar.intersectsMesh(zmold, false)) {
+							zinmesh = "YES";
+						}
+						zparentname = zmold.parent.name;
+					}
+				}
+				if (zcolor == 'red') {
+					WTW.log(i + "==" + zmoldname + " in=" + zinmesh + " parent=" + zparentname + " visible=" + zvisible, zcolor);
+				} else {
+					WTW.log(i + "==" + zmoldname + " in=" + zinmesh + " parent=" + zparentname + " visible=" + zvisible + " status=" + zstatus + " shown=" + zshown, zcolor);
+				}
 			}
 		}
 	} catch (ex) {

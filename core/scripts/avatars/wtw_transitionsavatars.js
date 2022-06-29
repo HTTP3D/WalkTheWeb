@@ -792,7 +792,7 @@ WTWJS.prototype.avatarShowFadeSwirlLong = function(zavatarname, zavatarparts) {
 							for (var i=0; i<zavatarparts.length;i++) {
 								if (zavatarparts[i] != null) {
 									if (zavatarparts[i].visibility < 1) {
-										zavatarparts[i].visibility += .005;
+										zavatarparts[i].visibility += .01;
 									} else {
 										zavatarparts[i].visibility = 1;
 										zdone = true;
@@ -825,7 +825,7 @@ WTWJS.prototype.avatarShowFadeSwirlLong = function(zavatarname, zavatarparts) {
 							if (ztorus1 != null) {
 								ztorus1.rotation.y += WTW.getRadians(10);
 								if (ztorus1.visibility > 0) {
-									ztorus1.visibility -= .01;
+									ztorus1.visibility -= .05;
 								} else {
 									zdone = true;
 								}
@@ -833,7 +833,7 @@ WTWJS.prototype.avatarShowFadeSwirlLong = function(zavatarname, zavatarparts) {
 							if (ztorus2 != null) {
 								ztorus2.rotation.y += WTW.getRadians(10);
 								if (ztorus2.visibility > 0) {
-									ztorus2.visibility -= .01;
+									ztorus2.visibility -= .05;
 								} else {
 									zdone = true;
 								}

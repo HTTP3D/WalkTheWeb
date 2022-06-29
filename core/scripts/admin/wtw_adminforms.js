@@ -2449,7 +2449,7 @@ WTWJS.prototype.loadObjectDetailsFiles = async function(zuploadobjectid, zobject
 		dGet('wtw_uploadedmodelsfilesdiv').innerHTML = "";
 		var zfilesdiv = "";
 
-WTW.log("zobjectfolder=" + zobjectfolder);
+//WTW.log("zobjectfolder=" + zobjectfolder);
 
 		var zrequest = {
 			'objectfolder': zobjectfolder,

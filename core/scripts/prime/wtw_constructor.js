@@ -185,6 +185,9 @@ function WTWJS() {
 	/* WTW.actionZones - Array of Action Zone definitions loaded in a given 3D Scene - areas that trigger actions or JavaScript functions as you 3D Browse */
 	this.actionZones = [];
 	
+	/* WTW.spawnZones - Array of Spawn Zone definitions in a given 3D Scene - these are avatar entry points */
+	this.spawnZones = [];
+
 	/* WTW.automations - Array of Automation definitions loaded in a given 3D Scene - create stepped sequences of animations or actions */
 	this.automations = [];
 	

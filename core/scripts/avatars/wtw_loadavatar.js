@@ -7,19 +7,11 @@
 WTWJS.prototype.loadAvatarPlaceholder = function() {
 	/* call to create the placeholder before the user selects their avatar - provides a parent and focus for the cameras */
 	try {
-		/* uses a random offset so that multiplayer avatars do not enter at the exact position */
-		var zrand1 = ((Math.floor(Math.random() * 200) + 1)/10) - 10;
-		var zrand2 = ((Math.floor(Math.random() * 200) + 1)/10) - 10;
 		/* get default avatar definition and set name, instance, and position */
 		var zavatardef = WTW.newAvatarDef();
 		zavatardef.name = "myavatar-" + dGet("wtw_tinstanceid").value;
 		zavatardef.instanceid = dGet("wtw_tinstanceid").value;
-		zavatardef.start.position.x += zrand1;
 		zavatardef.start.position.y += .57;
-		zavatardef.start.position.z += zrand2;
-		zavatardef.start.rotation.x = 0;
-		zavatardef.start.rotation.y = WTW.init.startRotationY;
-		zavatardef.start.rotation.z = 0;
 		/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
 		/* is it set to delete after 10 seconds */
 		var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
@@ -30,7 +22,7 @@ WTWJS.prototype.loadAvatarPlaceholder = function() {
 		zstartstand.material = new BABYLON.StandardMaterial("matstartstand", scene);
 		zstartstand.material.alpha = 0;
 		WTW.myAvatar = WTW.addAvatarPlaceholder(zavatardef.name, zavatardef);
-		WTW.myAvatar.rotation.y = WTW.getRadians(WTW.init.startRotationY);
+		WTW.myAvatar.rotation.y = WTW.getRadians(zavatardef.start.rotation.y);
 		window.setTimeout(function() {zstartstand.dispose();},10000);
     } catch (ex) {
 		WTW.log("core-scripts-avatars-wtw_loadavatar.js-loadAvatarPlaceholder=" + ex.message);
