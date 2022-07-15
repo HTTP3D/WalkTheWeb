@@ -39,8 +39,23 @@ try {
 				c1.textureid,
 				u2.filepath as texturepath,
 				c1.skydomeid,
+				c1.waterbumpid,
+				u3.filepath as waterbumppath,
 				c1.groundpositiony,
 				c1.waterpositiony,
+				c1.waterbumpheight,
+				c1.watersubdivisions,
+				c1.windforce,
+				c1.winddirectionx,
+				c1.winddirectiony,
+				c1.winddirectionz,
+				c1.waterwaveheight,
+				c1.waterwavelength,
+				c1.watercolorrefraction,
+				c1.watercolorreflection,
+				c1.watercolorblendfactor,
+				c1.watercolorblendfactor2,
+				c1.wateralpha,
 				c1.alttag,
 				c1.buildingpositionx,
 				c1.buildingpositiony,
@@ -63,6 +78,8 @@ try {
 					on c1.snapshotid=u1.uploadid
 				left join ".wtw_tableprefix."uploads u2
 					on c1.textureid=u2.uploadid
+				left join ".wtw_tableprefix."uploads u3
+					on c1.waterbumpid=u3.uploadid
 			where 
 			   c1.deleted=0
 			group by 
@@ -83,8 +100,23 @@ try {
 				c1.textureid,
 				u2.filepath,
 				c1.skydomeid,
+				c1.waterbumpid,
+				u3.filepath,
 				c1.groundpositiony,
 				c1.waterpositiony,
+				c1.waterbumpheight,
+				c1.watersubdivisions,
+				c1.windforce,
+				c1.winddirectionx,
+				c1.winddirectiony,
+				c1.winddirectionz,
+				c1.waterwaveheight,
+				c1.waterwavelength,
+				c1.watercolorrefraction,
+				c1.watercolorreflection,
+				c1.watercolorblendfactor,
+				c1.watercolorblendfactor2,
+				c1.wateralpha,
 				c1.alttag,
 				c1.buildingpositionx,
 				c1.buildingpositiony,
@@ -123,8 +155,23 @@ try {
 				c1.textureid,
 				u2.filepath as texturepath,
 				c1.skydomeid,
+				c1.waterbumpid,
+				u3.filepath as waterbumppath,
 				c1.groundpositiony,
 				c1.waterpositiony,
+				c1.waterbumpheight,
+				c1.watersubdivisions,
+				c1.windforce,
+				c1.winddirectionx,
+				c1.winddirectiony,
+				c1.winddirectionz,
+				c1.waterwaveheight,
+				c1.waterwavelength,
+				c1.watercolorrefraction,
+				c1.watercolorreflection,
+				c1.watercolorblendfactor,
+				c1.watercolorblendfactor2,
+				c1.wateralpha,
 				c1.alttag,
 				c1.buildingpositionx,
 				c1.buildingpositiony,
@@ -149,6 +196,8 @@ try {
 					on c1.snapshotid=u1.uploadid
 				left join ".wtw_tableprefix."uploads u2
 					on c1.textureid=u2.uploadid
+				left join ".wtw_tableprefix."uploads u3
+					on c1.waterbumpid=u3.uploadid
 			where ua1.userid='".$wtwconnect->userid."'
 			   and ua1.deleted=0
 			   and c1.deleted=0
@@ -172,8 +221,23 @@ try {
 				c1.textureid,
 				u2.filepath,
 				c1.skydomeid,
+				c1.waterbumpid,
+				u3.filepath,
 				c1.groundpositiony,
 				c1.waterpositiony,
+				c1.waterbumpheight,
+				c1.watersubdivisions,
+				c1.windforce,
+				c1.winddirectionx,
+				c1.winddirectiony,
+				c1.winddirectionz,
+				c1.waterwaveheight,
+				c1.waterwavelength,
+				c1.watercolorrefraction,
+				c1.watercolorreflection,
+				c1.watercolorblendfactor,
+				c1.watercolorblendfactor2,
+				c1.wateralpha,
 				c1.alttag,
 				c1.buildingpositionx,
 				c1.buildingpositiony,
@@ -241,6 +305,39 @@ try {
 				'backupid'=>''						
 			)
 		);
+		$zground = array(
+			'position'=> array (
+				'y'=> $zrow["groundpositiony"]
+			)
+		);
+		$zwater = array(
+			'bump'=> array (
+				'id'=> $zrow["waterbumpid"],
+				'path'=> $zrow["waterbumppath"],
+				'height'=> $zrow["waterbumpheight"],
+				'backupid'=>'',
+				'backuppath'=>''
+			),
+			'position'=> array (
+				'y'=> $zrow["waterpositiony"]
+			),
+			'subdivisions'=> $zrow["watersubdivisions"],
+			'waveheight'=> $zrow["waterwaveheight"],
+			'wavelength'=> $zrow["waterwavelength"],
+			'colorrefraction'=> $zrow["watercolorrefraction"],
+			'colorreflection'=> $zrow["watercolorreflection"],
+			'colorblendfactor'=> $zrow["watercolorblendfactor"],
+			'colorblendfactor2'=> $zrow["watercolorblendfactor2"],
+			'alpha'=> $zrow["wateralpha"]
+		);
+		$zwind = array(
+			'direction'=> array (
+				'x'=> $zrow["winddirectionx"],
+				'y'=> $zrow["winddirectiony"],
+				'z'=> $zrow["winddirectionz"]
+			),
+			'force'=> $zrow["windforce"]
+		);
 		$zalttag = array(
 			'name' => $zrow["alttag"]
 		);
@@ -265,12 +362,13 @@ try {
 			'communityinfo' => $zcommunityinfo,
 			'share'=> $zshare,
 			'graphics' => $zgraphics,
+			'ground' => $zground,
+			'water' => $zwater,
+			'wind' => $zwind,
 			'authorizedusers'=> $zauthorizedusers,
 			'alttag'=> $zalttag,
 			'firstbuilding'=> $zfirstbuilding,
-			'gravity'=> $zrow["gravity"],
-			'groundpositiony'=> $zrow["groundpositiony"],
-			'waterpositiony'=> $zrow["waterpositiony"]
+			'gravity'=> $zrow["gravity"]
 		);
 		$i += 1;
 	}

@@ -30,6 +30,14 @@ try {
 								on u2.websizeid=u1.uploadid 
 						where u2.uploadid=c1.skydomeid limit 1)
 				end as skydomepath,
+			case when c1.waterbumpid = '' then ''
+				else
+					(select u1.filepath 
+						from ".wtw_tableprefix."uploads u2 
+							left join ".wtw_tableprefix."uploads u1 
+								on u2.websizeid=u1.uploadid 
+						where u2.uploadid=c1.waterbumpid limit 1)
+				end as waterbumppath,
 			case when (select GROUP_CONCAT(userid) as useraccess 
 						from ".wtw_tableprefix."userauthorizations 
 						where communityid='".$zcommunityid."' 
@@ -98,9 +106,32 @@ try {
 			)
 		);
 		$zwater = array(
+			'bump'=> array (
+				'id'=> $zrow["waterbumpid"],
+				'path'=> $zrow["waterbumppath"],
+				'height'=> $zrow["waterbumpheight"],
+				'backupid'=>'',
+				'backuppath'=>''
+			),
 			'position'=> array (
 				'y'=> $zrow["waterpositiony"]
-			)
+			),
+			'subdivisions'=> $zrow["watersubdivisions"],
+			'waveheight'=> $zrow["waterwaveheight"],
+			'wavelength'=> $zrow["waterwavelength"],
+			'colorrefraction'=> $zrow["watercolorrefraction"],
+			'colorreflection'=> $zrow["watercolorreflection"],
+			'colorblendfactor'=> $zrow["watercolorblendfactor"],
+			'colorblendfactor2'=> $zrow["watercolorblendfactor2"],
+			'alpha'=> $zrow["wateralpha"]
+		);
+		$zwind = array(
+			'direction'=> array (
+				'x'=> $zrow["winddirectionx"],
+				'y'=> $zrow["winddirectiony"],
+				'z'=> $zrow["winddirectionz"]
+			),
+			'force'=> $zrow["windforce"]
 		);
 		$zfirstbuilding = array(
 			'position' => array(
@@ -126,6 +157,7 @@ try {
 			'graphics' => $zgraphics,
 			'ground' => $zground,
 			'water' => $zwater,
+			'wind' => $zwind,
 			'authorizedusers'=> $zauthorizedusers,
 			'gravity'=> $zrow["gravity"]
 		);
