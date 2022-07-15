@@ -29,14 +29,19 @@ INSTALLATION
 That is it! 
 
 Check out this video of the Install and Getting Started Walk-Through:
+
 https://www.youtube.com/watch?v=EMrBnzfAMZM
 
 TROUBLESHOOTING THE INSTALLATION
+---------------------------------------------------------------------------
 Troubleshooting 404 Errors on Plugin base Connect Files:
+
 (Example: /connect/wtw-shopping-getconnectstore.php?communityid=y8mjn49j47225bld&buildingid=&thingid= 404)
+
 Use the Rewrite rule below to correct this and similar errors.
 
 LINUX SETUP
+---------------------------------------------------------------------------
 Note: on Linux systems, add a .htaccess file in the root (or use site config) with the following:
 
 RewriteEngine On
@@ -55,4 +60,5 @@ RewriteRule ^.*$ /index.php?wtwpath=%{REQUEST_URI}&%{QUERY_STRING} [P]
 LEARNING
 ---------------------------------------------------------------------------
 There are videos at: https://www.youtube.com/c/WalkTheWeb3d
+
 or watch me on http://walktheweb.tv     (WalkTheWeb on Twitch)
