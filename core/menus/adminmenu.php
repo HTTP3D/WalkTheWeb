@@ -290,12 +290,12 @@
 				</div>
 				<div id="wtw_adminmenu42" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
 					<div id="wtw_bback42" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
-					<div class="wtw-menuheader"><?php echo $wtwadminmenu->__("Water Depth"); ?></div><br />
+					<div class="wtw-menuheader"><?php echo $wtwadminmenu->__("Water, Waves, and Wind"); ?></div><br />
 					<a href="https://www.walktheweb.com/wiki/3d-community-water-depth/" title="Help" alt="Help" class="wtw-helplink" target="_blank">?</a>
 					<div id="wtw_loadingwaterdepthform" class="wtw-loadingnotice" style="margin-left:auto;margin-right:auto;color:#000000;"><?php echo $wtwadminmenu->__("Loading"); ?></div>
 <?php				include './core/forms/waterdepth.php'; ?>
 					<br />
-					<div id="wtw_bsavewaterdepth" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;"><?php echo $wtwadminmenu->__("Save Depth"); ?></div>
+					<div id="wtw_bsavewaterdepth" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;"><?php echo $wtwadminmenu->__("Save Water Settings"); ?></div>
 					<div id="wtw_cancel42" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);"><?php echo $wtwadminmenu->__("Cancel"); ?></div>
 					<br /><br />
 				</div>

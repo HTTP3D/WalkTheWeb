@@ -22,7 +22,7 @@ class wtw {
 	
 	/* declare public $wtw variables */
 	public $version = "3.5.0";
-	public $dbversion = "1.1.30";
+	public $dbversion = "1.2.2";
 	public $versiondate = "2022-6-29";
 	public $serverinstanceid = "";
 	public $globaluserid = "";
@@ -1839,7 +1839,15 @@ class wtw {
 										left join ".wtw_tableprefix."uploads u1 
 											on u2.websizeid=u1.uploadid 
 									where u2.uploadid=skydomeid limit 1)
-							end as skydomepath
+							end as skydomepath,
+						case when waterbumpid = '' then ''
+							else
+								(select u1.filepath 
+									from ".wtw_tableprefix."uploads u2
+										left join ".wtw_tableprefix."uploads u1 
+											on u2.websizeid=u1.uploadid 
+									where u2.uploadid=waterbumpid limit 1)
+							end as waterbumppath
 					from ".wtw_tableprefix."communities
 					where communityid='".$this->communityid."'
 						and deleted=0
@@ -1864,6 +1872,21 @@ class wtw {
 					$zcommunityinfo = array(
 						'communityid' => $this->communityid,
 						'communityname' => $zrow["communityname"],
+						'waterbumpid' => $zrow["waterbumpid"],
+						'waterbumppath' => $zrow["waterbumppath"],
+						'waterbumpheight' => $zrow["waterbumpheight"],
+						'watersubdivisions' => $zrow["watersubdivisions"],
+						'windforce' => $zrow["windforce"],
+						'winddirectionx' => $zrow["winddirectionx"],
+						'winddirectiony' => $zrow["winddirectiony"],
+						'winddirectionz' => $zrow["winddirectionz"],
+						'waterwaveheight' => $zrow["waterwaveheight"],
+						'waterwavelength' => $zrow["waterwavelength"],
+						'watercolorrefraction' => $zrow["watercolorrefraction"],
+						'watercolorreflection' => $zrow["watercolorreflection"],
+						'watercolorblendfactor' => $zrow["watercolorblendfactor"],
+						'watercolorblendfactor2' => $zrow["watercolorblendfactor2"],
+						'wateralpha' => $zrow["wateralpha"],
 						'access' => $zcommunityaccess);	
 				}
 			}

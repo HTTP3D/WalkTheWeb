@@ -28,6 +28,20 @@ try {
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
 	$zgroundpositiony = $wtwhandlers->getPost('groundpositiony','');
 	$zwaterpositiony = $wtwhandlers->getPost('waterpositiony','');
+	$zwaterbumpid = $wtwhandlers->getPost('waterbumpid','');
+	$zwaterbumpheight = $wtwhandlers->getPost('waterbumpheight','.6');
+	$zwatersubdivisions = $wtwhandlers->getPost('watersubdivisions','2');
+	$zwindforce = $wtwhandlers->getPost('waterwindforce','-10');
+	$zwinddirectionx = $wtwhandlers->getPost('waterwinddirectionx','1');
+	$zwinddirectiony = $wtwhandlers->getPost('waterwinddirectiony','1');
+	$zwinddirectionz = $wtwhandlers->getPost('waterwinddirectionz','0');
+	$zwaterwaveheight = $wtwhandlers->getPost('waterwaveheight','.2');
+	$zwaterwavelength = $wtwhandlers->getPost('waterwavelength','.02');
+	$zwatercolorrefraction = $wtwhandlers->getPost('watercolorrefraction','#23749C');
+	$zwatercolorreflection = $wtwhandlers->getPost('watercolorreflection','#52BCF1');
+	$zwatercolorblendfactor = $wtwhandlers->getPost('watercolorblendfactor','.2');
+	$zwatercolorblendfactor2 = $wtwhandlers->getPost('watercolorblendfactor2','.2');
+	$zwateralpha = $wtwhandlers->getPost('wateralpha','.9');
 	$zalttag = $wtwhandlers->decode64($wtwhandlers->getPost('alttag',''));
 	$zpositionx = $wtwhandlers->getPost('positionx','0');
 	$zpositiony = $wtwhandlers->getPost('positiony','0');
@@ -64,7 +78,7 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "savecommunity":
-			$zcommunityid = $wtwcommunities->saveCommunity($zcommunityid, $zpastcommunityid, $zversionid, $zversion, $zversiondesc, $zcommunityname, $zcommunitydescription, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag);
+			$zcommunityid = $wtwcommunities->saveCommunity($zcommunityid, $zpastcommunityid, $zversionid, $zversion, $zversiondesc, $zcommunityname, $zcommunitydescription, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zwaterbumpid, $zwaterbumpheight, $zwatersubdivisions, $zwindforce, $zwinddirectionx, $zwinddirectiony, $zwinddirectionz, $zwaterwaveheight, $zwaterwavelength, $zwatercolorrefraction, $zwatercolorreflection, $zwatercolorblendfactor, $zwatercolorblendfactor2, $zwateralpha, $zalttag);
 			$zresponse = array(
 				'communityid'=> $zcommunityid
 			);

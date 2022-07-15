@@ -265,6 +265,8 @@ class wtwadmin {
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tskymiecoefficientbackup\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_textendedgroundtextureid\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_textendedgroundtexturepath\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_twaterbumpid\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_twaterbumppath\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_teditpointindex\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tobjectanimationid\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuploadobjectid\" />\r\n";

@@ -186,7 +186,7 @@ class wtwadminmenu {
 
 			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapesky', 'Sky', 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapeground', 'Extended Ground', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapewater', 'Water Depth', 30, $zupdateroles, "WTW.adminMenuItemSelected(this);");
+			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapewater', 'Water, Waves, and Wind', 30, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapegravity', 'Gravity', 40, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editlandscape', 'wtw_adminlandscapeterrain', 'Add Ground Terrain', 50, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 

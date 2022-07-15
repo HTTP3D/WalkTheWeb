@@ -30,10 +30,10 @@ var WORLDMONGER = WORLDMONGER || {};
         this.reflectionLevel = 0.6;
         this.refractionLevel = 0.8;
         
-        this.waveLength = 0.1;
-        this.waveHeight = 0.15;
+        this.waveLength = .1;
+        this.waveHeight = .15;
 
-        this.waterDirection = new BABYLON.Vector2(0, 1.0);
+        this.waterDirection = new BABYLON.Vector2(0, 1);
 
         this._time = 0;
     };

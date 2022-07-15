@@ -39,7 +39,7 @@ class wtwcommunities {
 		return $found;
 	}
 
-	public function saveCommunity($zcommunityid, $zpastcommunityid, $zversionid, $zversion, $zversiondesc, $zcommunityname, $zcommunitydescription, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zalttag) {
+	public function saveCommunity($zcommunityid, $zpastcommunityid, $zversionid, $zversion, $zversiondesc, $zcommunityname, $zcommunitydescription, $zanalyticsid, $zgroundpositiony, $zwaterpositiony, $zwaterbumpid, $zwaterbumpheight, $zwatersubdivisions, $zwindforce, $zwinddirectionx, $zwinddirectiony, $zwinddirectionz, $zwaterwaveheight, $zwaterwavelength, $zwatercolorrefraction, $zwatercolorreflection, $zwatercolorblendfactor, $zwatercolorblendfactor2, $zwateralpha, $zalttag) {
 		/* save community settings to the database */
 		global $wtwhandlers;
 		$copycommunityid = "";
@@ -117,7 +117,21 @@ class wtwcommunities {
 							 gravity,
 							 groundpositiony,
 							 waterpositiony,
+							 waterbumpheight,
+							 watersubdivisions,
+							 windforce,
+							 winddirectionx,
+							 winddirectiony,
+							 winddirectionz,
+							 waterwaveheight,
+							 waterwavelength,
+							 watercolorrefraction,
+							 watercolorreflection,
+							 watercolorblendfactor,
+							 watercolorblendfactor2,
+							 wateralpha,
 							 textureid,
+							 waterbumpid,
 							 skydomeid,
 							 skyinclination,
 							 skyluminance,
@@ -168,7 +182,21 @@ class wtwcommunities {
 							 gravity,
 							 groundpositiony,
 							 waterpositiony,
+							 waterbumpheight,
+							 watersubdivisions,
+							 windforce,
+							 winddirectionx,
+							 winddirectiony,
+							 winddirectionz,
+							 waterwaveheight,
+							 waterwavelength,
+							 watercolorrefraction,
+							 watercolorreflection,
+							 watercolorblendfactor,
+							 watercolorblendfactor2,
+							 wateralpha,
 							 textureid,
+							 waterbumpid,
 							 skydomeid,
 							 skyinclination,
 							 skyluminance,
@@ -223,6 +251,12 @@ class wtwcommunities {
 						 '".$wtwhandlers->userid."');");
 			} else if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
 				/* only updates if you have access */
+				if (empty($zwatercolorrefraction) || !isset($zwatercolorrefraction)) {
+					$zwatercolorrefraction = '#23749C';
+				}
+				if (empty($zwatercolorreflection) || !isset($zwatercolorreflection)) {
+					$zwatercolorreflection = '#52BCF1';
+				}
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."communities
 					set 
@@ -233,6 +267,20 @@ class wtwcommunities {
 						analyticsid='".$zanalyticsid."',
 						groundpositiony=".$wtwhandlers->checkNumber($zgroundpositiony,0).",
 						waterpositiony=".$wtwhandlers->checkNumber($zwaterpositiony,-1).",
+						waterbumpid='".$zwaterbumpid."', 
+						waterbumpheight=".$wtwhandlers->checkNumber($zwaterbumpheight,0.6).", 
+						watersubdivisions=".$wtwhandlers->checkNumber($zwatersubdivisions,2).", 
+						windforce=".$wtwhandlers->checkNumber($zwindforce,-10).", 
+						winddirectionx=".$wtwhandlers->checkNumber($zwinddirectionx,1).", 
+						winddirectiony=".$wtwhandlers->checkNumber($zwinddirectiony,0).", 
+						winddirectionz=".$wtwhandlers->checkNumber($zwinddirectionz,1).", 
+						waterwaveheight=".$wtwhandlers->checkNumber($zwaterwaveheight,0.2).", 
+						waterwavelength=".$wtwhandlers->checkNumber($zwaterwavelength,0.02).", 
+						watercolorrefraction='".$zwatercolorrefraction."', 
+						watercolorreflection='".$zwatercolorreflection."', 
+						watercolorblendfactor=".$wtwhandlers->checkNumber($zwatercolorblendfactor,0.2).", 
+						watercolorblendfactor2=".$wtwhandlers->checkNumber($zwatercolorblendfactor2,0.2).", 
+						wateralpha=".$wtwhandlers->checkNumber($zwateralpha,0.9).",
 						alttag='".$wtwhandlers->escapeHTML($zalttag)."',
 						updatedate=now(),
 						updateuserid='".$wtwhandlers->userid."'
@@ -1721,6 +1769,20 @@ class wtwcommunities {
 								gravity,
 								groundpositiony,
 								waterpositiony,
+								waterbumpheight,
+								watersubdivisions,
+								windforce,
+								winddirectionx,
+								winddirectiony,
+								winddirectionz,
+								waterwaveheight,
+								waterwavelength,
+								watercolorrefraction,
+								watercolorreflection,
+								watercolorblendfactor,
+								watercolorblendfactor2,
+								wateralpha,
+								waterbumpid,
 								textureid,
 								skydomeid,
 								skyinclination,
@@ -1773,6 +1835,20 @@ class wtwcommunities {
 								".$wtwhandlers->checkNumber($zrequest->gravity,9.8).",
 								".$wtwhandlers->checkNumber($zrequest->groundpositiony,0).",
 								".$wtwhandlers->checkNumber($zrequest->waterpositiony,-1).",
+								".$wtwhandlers->checkNumber($zrequest->waterbumpheight,.6).",
+								".$wtwhandlers->checkNumber($zrequest->watersubdivisions,2).",
+								".$wtwhandlers->checkNumber($zrequest->windforce,-10).",
+								".$wtwhandlers->checkNumber($zrequest->winddirectionx,1).",
+								".$wtwhandlers->checkNumber($zrequest->winddirectiony,0).",
+								".$wtwhandlers->checkNumber($zrequest->winddirectionz,1).",
+								".$wtwhandlers->checkNumber($zrequest->waterwaveheight,.2).",
+								".$wtwhandlers->checkNumber($zrequest->waterwavelength,.02).",
+								'".$zrequest->watercolorrefraction."',
+								'".$zrequest->watercolorreflection."',
+								".$wtwhandlers->checkNumber($zrequest->watercolorblendfactor,.2).",
+								".$wtwhandlers->checkNumber($zrequest->watercolorblendfactor2,.2).",
+								".$wtwhandlers->checkNumber($zrequest->wateralpha,.9).",
+								'".$zrequest->waterbumpid."',
 								'".$znewtextureid."',
 								'".$znewskydomeid."',
 								".$zrequest->skyinclination.",
@@ -3459,6 +3535,20 @@ class wtwcommunities {
 									gravity=".$wtwhandlers->checkNumber($zrequest->gravity,9.8).",
 									groundpositiony=".$wtwhandlers->checkNumber($zrequest->groundpositiony,0).",
 									waterpositiony=".$wtwhandlers->checkNumber($zrequest->waterpositiony,-1).",
+									waterbumpheight=".$wtwhandlers->checkNumber($zrequest->waterbumpheight,.6).",
+									watersubdivisions=".$wtwhandlers->checkNumber($zrequest->watersubdivisions,2).",
+									windforce=".$wtwhandlers->checkNumber($zrequest->windforce,-10).",
+									winddirectionx=".$wtwhandlers->checkNumber($zrequest->winddirectionx,1).",
+									winddirectiony=".$wtwhandlers->checkNumber($zrequest->winddirectiony,0).",
+									winddirectionz=".$wtwhandlers->checkNumber($zrequest->winddirectionz,1).",
+									waterwaveheight=".$wtwhandlers->checkNumber($zrequest->waterwaveheight,.2).",
+									waterwavelength=".$wtwhandlers->checkNumber($zrequest->waterwavelength,.02).",
+									watercolorrefraction='".$zrequest->watercolorrefraction."',
+									watercolorreflection='".$zrequest->watercolorreflection."',
+									watercolorblendfactor=".$wtwhandlers->checkNumber($zrequest->watercolorblendfactor,.2).",
+									watercolorblendfactor2=".$wtwhandlers->checkNumber($zrequest->watercolorblendfactor2,.2).",
+									wateralpha=".$wtwhandlers->checkNumber($zrequest->wateralpha,.9).",
+									waterbumpid='".$zrequest->waterbumpid."',
 									textureid='".$znewtextureid."',
 									skydomeid='".$znewskydomeid."',
 									skyinclination=".$zrequest->skyinclination.",
@@ -3512,6 +3602,20 @@ class wtwcommunities {
 									gravity,
 									groundpositiony,
 									waterpositiony,
+									waterbumpheight,
+									watersubdivisions,
+									windforce,
+									winddirectionx,
+									winddirectiony,
+									winddirectionz,
+									waterwaveheight,
+									waterwavelength,
+									watercolorrefraction,
+									watercolorreflection,
+									watercolorblendfactor,
+									watercolorblendfactor2,
+									wateralpha,
+									waterbumpid,
 									textureid,
 									skydomeid,
 									skyinclination,
@@ -3562,6 +3666,20 @@ class wtwcommunities {
 									".$wtwhandlers->checkNumber($zrequest->gravity,9.8).",
 									".$wtwhandlers->checkNumber($zrequest->groundpositiony,0).",
 									".$wtwhandlers->checkNumber($zrequest->waterpositiony,-1).",
+									".$wtwhandlers->checkNumber($zrequest->waterbumpheight,.6).",
+									".$wtwhandlers->checkNumber($zrequest->watersubdivisions,2).",
+									".$wtwhandlers->checkNumber($zrequest->windforce,-10).",
+									".$wtwhandlers->checkNumber($zrequest->winddirectionx,1).",
+									".$wtwhandlers->checkNumber($zrequest->winddirectiony,0).",
+									".$wtwhandlers->checkNumber($zrequest->winddirectionz,1).",
+									".$wtwhandlers->checkNumber($zrequest->waterwaveheight,.2).",
+									".$wtwhandlers->checkNumber($zrequest->waterwavelength,.02).",
+									'".$zrequest->watercolorrefraction."',
+									'".$zrequest->watercolorreflection."',
+									".$wtwhandlers->checkNumber($zrequest->watercolorblendfactor,.2).",
+									".$wtwhandlers->checkNumber($zrequest->watercolorblendfactor2,.2).",
+									".$wtwhandlers->checkNumber($zrequest->wateralpha,.9).",
+									'".$zrequest->waterbumpid."',
 									'".$znewtextureid."',
 									'".$znewskydomeid."',
 									".$zrequest->skyinclination.",
@@ -5225,7 +5343,7 @@ class wtwcommunities {
 	}
 	
 	public function importCommunity($zcommunityid, $zpastcommunityid, $zversionid, $zversion, $zversiondesc, $zcommunityname, $zcommunityanalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag) {
-		/* imports community settings from the media library wen you download a community */
+		/* imports community settings from the media library when you download a community */
 		global $wtwhandlers;
 		try {
 			/* ini_set('max_execution_time', 300); */
