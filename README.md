@@ -31,6 +31,9 @@ That is it!
 Check out this video of the Install and Getting Started Walk-Through:
 https://www.youtube.com/watch?v=EMrBnzfAMZM
 
+Troubleshooting 404 Errors on Plugin base Connect Files:
+(Example: /connect/wtw-shopping-getconnectstore.php?communityid=y8mjn49j47225bld&buildingid=&thingid= 404)
+Use the Rewrite rule below to correct this and similar errors.
 
 Note: on Linux systems, add a .htaccess file in the root (or use site config) with the following:
 
