@@ -1,43 +1,43 @@
 WTWJS.prototype.openHUDFollow = function() {
 	/* new feature just beginning to be coded */
 	try {
-//WTW.log("OPEN HUD");
-		var zanchor = new BABYLON.TransformNode("");
-		var zmanager = new BABYLON.GUI.GUI3DManager(scene);
+WTW.log("OPEN HUD");
+		var anchor = new BABYLON.TransformNode("");
+		var manager = new BABYLON.GUI.GUI3DManager(scene);
 
-		var zpanel = new BABYLON.GUI.PlanePanel();
-		zpanel.margin = .25;
-		zpanel.columns = 1;
+		var panel = new BABYLON.GUI.PlanePanel();
+		panel.margin = .25;
+		panel.columns = 1;
 		
-		zmanager.addControl(zpanel);
-		zpanel.linkToTransformNode(zanchor);
-		zpanel.position.z = -1.5;
-		zpanel.scaling = new BABYLON.Vector3(3,3,3);
-		//zpanel.position.y = 10;
-		zpanel.blockLayout = true;
-//		var zbutton = new BABYLON.GUI.HolographicButton("orientation");
+		manager.addControl(panel);
+		panel.linkToTransformNode(anchor);
+		panel.position.z = -1.5;
+		panel.scaling = new BABYLON.Vector3(3,3,3);
+		//panel.position.y = 10;
+		panel.blockLayout = true;
+//		var button = new BABYLON.GUI.HolographicButton("orientation");
 		
 		
-		zmanager.parent = WTW.myAvatar;
+		manager.parent = WTW.myAvatar;
 		
-		var zbutton = new BABYLON.GUI.Button3D("reset");
+		var button = new BABYLON.GUI.Button3D("reset");
 
-		var ztext = new BABYLON.GUI.TextBlock();
-		ztext.text = "HERE I AM";
-		ztext.color = "white";
-		ztext.fontSize = 50;
-		zbutton.content = ztext;
+		var text = new BABYLON.GUI.TextBlock();
+		text.text = "HERE I AM";
+		text.color = "white";
+		text.fontSize = 50;
+		button.content = text;
 		
 		
-		zpanel.addControl(zbutton);
+		panel.addControl(button);
 
-		zbutton.text = "Button #" + zpanel.children.length;
+		button.text = "Button #" + panel.children.length;
 		
-		var zbutton2 = new BABYLON.GUI.HolographicButton("orientation");
-		zpanel.addControl(zbutton2);
+		var button2 = new BABYLON.GUI.HolographicButton("orientation");
+		panel.addControl(button2);
 
-		zbutton.text = "Button #" + zpanel.children.length;
-		zpanel.blockLayout = false;
+		button.text = "Button #" + panel.children.length;
+		panel.blockLayout = false;
 
 		scene.render();
 	} catch (ex) {

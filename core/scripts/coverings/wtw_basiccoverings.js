@@ -687,15 +687,16 @@ WTWJS.prototype.addCoveringWater = function(zmoldname, zmolddef) {
 	try {
 		zcovering = new BABYLON.WaterMaterial("mat" + zmoldname, scene, new BABYLON.Vector2(512, 512));
 		zcovering.backFaceCulling = true;
-		zcovering.bumpTexture = new BABYLON.Texture("/content/system/images/waterbump.png", scene);
-		zcovering.windForce = -15;
-		zcovering.waveHeight = .1;
+		zcovering.bumpTexture = new BABYLON.Texture("/content/system/stock/waterbump.png", scene);
+		zcovering.windForce = -10;
+		zcovering.waveHeight = .2;
 		//zcovering.windDirection = new BABYLON.Vector2(1, 1);
 		zcovering.waterColor = new BABYLON.Color3(0.2, 0.3, 0.7); // water color blended with the refraction (near)
 		zcovering.waterColor2 = new BABYLON.Color3(0.3, 0.4, 0.8); // water color blended with the reflection (far)
-		zcovering.colorBlendFactor = 0;
-		zcovering.bumpHeight = 0.5;
-		zcovering.waveLength = 0.5;			
+		zcovering.colorBlendFactor = .2;
+		zcovering.colorBlendFactor2 = .2;
+		zcovering.bumpHeight = 0.6;
+		zcovering.waveLength = 0.02;			
 		zcovering.addToRenderList(WTW.sky);
 		zcovering.addToRenderList(WTW.extraGround);
 		WTW.addReflection(zcovering);

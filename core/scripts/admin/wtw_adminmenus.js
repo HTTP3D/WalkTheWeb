@@ -284,6 +284,9 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.openCommunityForm(communityid);
 						WTW.show('wtw_adminmenu42');
 						break;
+					case "wtw_changewaterbumptexture":
+						WTW.openFullPageForm('medialibrary','image','waterbumptexture','wtw_twaterbumpid','wtw_twaterbumppath','wtw_waterbumppreview');
+						break;
 					case "wtw_adminlandscapegravity":
 						WTW.hideAdminMenu();
 						dGet('wtw_tcommgravity').value = WTW.init.gravity;

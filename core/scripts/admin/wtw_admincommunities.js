@@ -34,11 +34,31 @@ WTWJS.prototype.openCommunityForm = async function(zcommunityid) {
 									dGet('wtw_tcommunitydescription').value = WTW.decode(WTW.communities[i].communityinfo.communitydescription);
 									dGet('wtw_tcommunitysnapshotid').value = WTW.communities[i].communityinfo.snapshotid;
 									dGet('wtw_tcommunityanalyticsid').value = WTW.communities[i].communityinfo.analyticsid;
-									dGet('wtw_tgroundpositiony').value = Number(WTW.communities[i].groundpositiony).toFixed(2);
-									dGet('wtw_twaterpositiony').value = Number(WTW.communities[i].waterpositiony).toFixed(2);
+									dGet('wtw_tgroundpositiony').value = Number(WTW.communities[i].ground.position.y).toFixed(2);
+									dGet('wtw_twaterpositiony').value = Number(WTW.communities[i].water.position.y).toFixed(2);
+									dGet('wtw_twaterbumpid').value = WTW.communities[i].water.bump.id;
+									dGet('wtw_twaterbumpheight').value = Number(WTW.communities[i].water.bump.height).toFixed(2);
+									dGet('wtw_twatersubdivisions').value = Number(WTW.communities[i].water.subdivisions).toFixed(0);
+									dGet('wtw_twaterwaveheight').value = Number(WTW.communities[i].water.waveheight).toFixed(2);
+									dGet('wtw_twaterwavelength').value = Number(WTW.communities[i].water.wavelength).toFixed(2);
+									dGet('wtw_twatercolorrefraction').value = WTW.communities[i].water.colorrefraction;
+									dGet('wtw_twatercolorreflection').value = WTW.communities[i].water.colorreflection;
+									dGet('wtw_twatercolorblendfactor').value = Number(WTW.communities[i].water.colorblendfactor).toFixed(2);
+									dGet('wtw_twatercolorblendfactor2').value = Number(WTW.communities[i].water.colorblendfactor2).toFixed(2);
+									dGet('wtw_twaterwindforce').value = Number(WTW.communities[i].wind.force).toFixed(2);
+									dGet('wtw_twaterwinddirectionx').value = Number(WTW.communities[i].wind.direction.x).toFixed(2);
+									dGet('wtw_twaterwinddirectiony').value = Number(WTW.communities[i].wind.direction.y).toFixed(2);
+									dGet('wtw_twaterwinddirectionz').value = Number(WTW.communities[i].wind.direction.z).toFixed(2);
+									dGet('wtw_twateralpha').value = Number(WTW.communities[i].water.alpha).toFixed(2) * 100;
+									dGet('wtw_tcommunityalttag').value = WTW.decode(WTW.communities[i].alttag.name);
 									dGet('wtw_tcommunityalttag').value = WTW.decode(WTW.communities[i].alttag.name);
 									dGet('wtw_tinfocommunityversion').disabled = true;
 									dGet('wtw_tinfocommunityversiondesc').disabled = true;
+									dGet('wtw_twaterbumppath').value = WTW.communities[i].water.bump.path;
+									if (dGet('wtw_twaterbumppath').value == '') {
+										dGet('wtw_twaterbumppath').value = '/content/system/images/waterbump.png';
+									}
+									dGet('wtw_waterbumppreview').src = dGet('wtw_twaterbumppath').value;
 								}
 							}
 						}
@@ -53,7 +73,9 @@ WTWJS.prototype.openCommunityForm = async function(zcommunityid) {
 				},500);
 			}
 		);
-		dGet('wtw_tcommunityname').focus();
+		if (dGet('wtw_tcommunityname') != null) {
+			dGet('wtw_tcommunityname').focus();
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-openCommunityForm=" + ex.message);
 	}
@@ -75,9 +97,28 @@ WTWJS.prototype.loadCommunityForm = async function(zcommunityid) {
 									dGet('wtw_tcommunitydescription').value = WTW.decode(WTW.communities[i].communityinfo.communitydescription);
 									dGet('wtw_tcommunitysnapshotid').value = WTW.communities[i].communityinfo.snapshotid;
 									dGet('wtw_tcommunityanalyticsid').value = WTW.communities[i].communityinfo.analyticsid;
-									dGet('wtw_tgroundpositiony').value = Number(WTW.communities[i].groundpositiony).toFixed(2);
-									dGet('wtw_twaterpositiony').value = Number(WTW.communities[i].waterpositiony).toFixed(2);
+									dGet('wtw_tgroundpositiony').value = Number(WTW.communities[i].ground.position.y).toFixed(2);
+									dGet('wtw_twaterpositiony').value = Number(WTW.communities[i].water.position.y).toFixed(2);
+									dGet('wtw_twaterbumpid').value = WTW.communities[i].water.bump.id;
+									dGet('wtw_twaterbumpheight').value = Number(WTW.communities[i].water.bump.height).toFixed(2);
+									dGet('wtw_twatersubdivisions').value = Number(WTW.communities[i].water.subdivisions).toFixed(0);
+									dGet('wtw_twaterwaveheight').value = Number(WTW.communities[i].water.waveheight).toFixed(2);
+									dGet('wtw_twaterwavelength').value = Number(WTW.communities[i].water.wavelength).toFixed(2);
+									dGet('wtw_twatercolorrefraction').value = WTW.communities[i].water.colorrefraction;
+									dGet('wtw_twatercolorreflection').value = WTW.communities[i].water.colorreflection;
+									dGet('wtw_twatercolorblendfactor').value = Number(WTW.communities[i].water.colorblendfactor).toFixed(2);
+									dGet('wtw_twatercolorblendfactor2').value = Number(WTW.communities[i].water.colorblendfactor2).toFixed(2);
+									dGet('wtw_twaterwindforce').value = Number(WTW.communities[i].wind.force).toFixed(2);
+									dGet('wtw_twaterwinddirectionx').value = Number(WTW.communities[i].wind.direction.x).toFixed(2);
+									dGet('wtw_twaterwinddirectiony').value = Number(WTW.communities[i].wind.direction.y).toFixed(2);
+									dGet('wtw_twaterwinddirectionz').value = Number(WTW.communities[i].wind.direction.z).toFixed(2);
+									dGet('wtw_twateralpha').value = Number(WTW.communities[i].water.alpha).toFixed(2) * 100;
 									dGet('wtw_tcommunityalttag').value = WTW.decode(WTW.communities[i].alttag.name);
+									dGet('wtw_twaterbumppath').value = WTW.communities[i].water.bump.path;
+									if (dGet('wtw_twaterbumppath').value == '') {
+										dGet('wtw_twaterbumppath').value = '/content/system/images/waterbump.png';
+									}
+									dGet('wtw_waterbumppreview').src = dGet('wtw_twaterbumppath').value;
 								}
 							}
 						}
@@ -111,6 +152,10 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 				break;
 			case 1:
 				/* save 3D Community settings */
+				var zalpha = 1;
+				if (WTW.isNumeric(dGet('wtw_twateralpha').value)) {
+					zalpha = Number(dGet('wtw_twateralpha').value) / 100;
+				}
 				if (WTW.isNumeric(dGet('wtw_tgroundpositiony').value) == false) {
 					dGet('wtw_tgroundpositiony').value = "0.00";
 				}
@@ -125,8 +170,23 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 							WTW.communities[i].communityinfo.communityname = WTW.encode(dGet('wtw_tcommunityname').value);
 							WTW.communities[i].communityinfo.communitydescription = WTW.encode(dGet('wtw_tcommunitydescription').value);
 							WTW.communities[i].communityinfo.analyticsid = dGet('wtw_tcommunityanalyticsid').value;
-							WTW.communities[i].groundpositiony = dGet('wtw_tgroundpositiony').value;
-							WTW.communities[i].waterpositiony = dGet('wtw_twaterpositiony').value;
+							WTW.communities[i].ground.position.y = dGet('wtw_tgroundpositiony').value;
+							WTW.communities[i].water.position.y = dGet('wtw_twaterpositiony').value;
+							WTW.communities[i].water.bump.id = dGet('wtw_twaterbumpid').value;
+							WTW.communities[i].water.bump.height = dGet('wtw_twaterbumpheight').value;
+							WTW.communities[i].water.subdivisions = dGet('wtw_twatersubdivisions').value;
+							WTW.communities[i].water.waveheight = dGet('wtw_twaterwaveheight').value;
+							WTW.communities[i].water.wavelength = dGet('wtw_twaterwavelength').value;
+							WTW.communities[i].water.colorrefraction = dGet('wtw_twatercolorrefraction').value;
+							WTW.communities[i].water.colorreflection = dGet('wtw_twatercolorreflection').value;
+							WTW.communities[i].water.colorblendfactor = dGet('wtw_twatercolorblendfactor').value;
+							WTW.communities[i].water.colorblendfactor2 = dGet('wtw_twatercolorblendfactor2').value;
+							WTW.communities[i].water.alpha = zalpha;
+							WTW.communities[i].water.bump.path = dGet('wtw_twaterbumppath').value;
+							WTW.communities[i].wind.force = dGet('wtw_twaterwindforce').value;
+							WTW.communities[i].wind.direction.x = dGet('wtw_twaterwinddirectionx').value;
+							WTW.communities[i].wind.direction.y = dGet('wtw_twaterwinddirectiony').value;
+							WTW.communities[i].wind.direction.z = dGet('wtw_twaterwinddirectionz').value;
 							WTW.communities[i].alttag.name = WTW.encode(dGet('wtw_tcommunityalttag').value);
 							dGet('wtw_showcommunityname').innerHTML = dGet('wtw_tcommunityname').value;
 						}
@@ -149,6 +209,21 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 					'analyticsid': dGet('wtw_tcommunityanalyticsid').value,
 					'groundpositiony': dGet('wtw_tgroundpositiony').value,
 					'waterpositiony': dGet('wtw_twaterpositiony').value,
+					'waterbumpid': dGet('wtw_twaterbumpid').value,
+					'waterbumppath': dGet('wtw_twaterbumppath').value,
+					'waterbumpheight': dGet('wtw_twaterbumpheight').value,
+					'watersubdivisions': dGet('wtw_twatersubdivisions').value,
+					'waterwaveheight': dGet('wtw_twaterwaveheight').value,
+					'waterwavelength': dGet('wtw_twaterwavelength').value,
+					'watercolorrefraction': dGet('wtw_twatercolorrefraction').value,
+					'watercolorreflection': dGet('wtw_twatercolorreflection').value,
+					'watercolorblendfactor': dGet('wtw_twatercolorblendfactor').value,
+					'watercolorblendfactor2': dGet('wtw_twatercolorblendfactor2').value,
+					'wateralpha': zalpha,
+					'waterwindforce': dGet('wtw_twaterwindforce').value,
+					'waterwinddirectionx': dGet('wtw_twaterwinddirectionx').value,
+					'waterwinddirectiony': dGet('wtw_twaterwinddirectiony').value,
+					'waterwinddirectionz': dGet('wtw_twaterwinddirectionz').value,
 					'alttag': btoa(dGet('wtw_tcommunityalttag').value),
 					'function':'savecommunity'
 				};
@@ -157,7 +232,7 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
 						WTW.hideAdminMenu();
-						WTW.show('wtw_adminmenu24');
+						WTW.show('wtw_adminmenu30');
 						WTW.setMenuBarSelectText();
 					}
 				);
@@ -178,12 +253,73 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 				}
 				//need rollback on scene
 				WTW.hideAdminMenu();
-				WTW.show('wtw_adminmenu24');
+				WTW.show('wtw_adminmenu30');
 				WTW.setMenuBarSelectText();
 				break;
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_admincommunities.js-submitCommunityForm=" + ex.message);
+	}
+}
+
+WTWJS.prototype.openWaveColorSelector = function() {
+	/* opens 2 color selectors for water waves refractive and reflective colors */
+	try {
+		if (WTW.guiAdminColors != null) {
+			WTW.guiAdminColors.dispose();
+			WTW.guiAdminColors = null;
+		}
+		WTW.guiAdminColors = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+		var zpanel = new BABYLON.GUI.StackPanel();
+		zpanel.width = "300px";
+		zpanel.isVertical = true;
+		zpanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+		zpanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+		WTW.guiAdminColors.addControl(zpanel);
+
+		var zcolortitle = new BABYLON.GUI.TextBlock();
+		zcolortitle.text = 'Refraction Color';
+		zcolortitle.color = '#FFFFFF';
+		zcolortitle.fontSize = 20;
+		zcolortitle.height = '50px';
+		zpanel.addControl(zcolortitle);     
+	
+		var zcolorpicker = new BABYLON.GUI.ColorPicker();
+		zcolorpicker.value = new BABYLON.Color3.FromHexString(dGet('wtw_twatercolorrefraction').value);
+		zcolorpicker.height = "250px";
+		zcolorpicker.width = "250px";
+		zcolorpicker.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+		zcolorpicker.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+		zcolorpicker.onValueChangedObservable.add(function(value) {
+			if (value != null) {
+				dGet('wtw_twatercolorrefraction').value = WTW.rgbToHex(value.r, value.g, value.b);
+				WTW.setGroundWater();
+			}
+		});
+		zpanel.addControl(zcolorpicker); 
+
+		var zcolortitle2 = new BABYLON.GUI.TextBlock();
+		zcolortitle2.text = 'Reflection Color';
+		zcolortitle2.color = '#FFFFFF';
+		zcolortitle2.fontSize = 20;
+		zcolortitle2.height = '50px';
+		zpanel.addControl(zcolortitle2);     
+	
+		var zcolorpicker2 = new BABYLON.GUI.ColorPicker();
+		zcolorpicker2.value = new BABYLON.Color3.FromHexString(dGet('wtw_twatercolorreflection').value);
+		zcolorpicker2.height = "250px";
+		zcolorpicker2.width = "250px";
+		zcolorpicker2.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+		zcolorpicker2.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+		zcolorpicker2.onValueChangedObservable.add(function(value) {
+			if (value != null) {
+				dGet('wtw_twatercolorreflection').value = WTW.rgbToHex(value.r, value.g, value.b);
+				WTW.setGroundWater();
+			}
+		});
+		zpanel.addControl(zcolorpicker2); 
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_admincommunities.js-openWaveColorSelector=" + ex.message);
 	}
 }
 
@@ -980,11 +1116,14 @@ WTWJS.prototype.setGravity = function() {
 
 /* ground level - creates water if below 0 (zero) */
 WTWJS.prototype.setGroundWater = function() {
-	/* set ground level and water from form */
+	/* set ground level and water settings from form */
 	try {
 		if (communityid != "") {
 			var zgroundpositiony = 0;
 			var zwaterpositiony = -1;
+			var zwatercolorrefraction = '#23749C';
+			var zwatercolorreflection = '#52BCF1';
+
 			if (WTW.isNumeric(dGet('wtw_tgroundpositiony').value)) {
 				zgroundpositiony = Number(dGet('wtw_tgroundpositiony').value);
 			}
@@ -999,7 +1138,121 @@ WTWJS.prototype.setGroundWater = function() {
 				WTW.extraGround.position.y = zgroundpositiony;
 			}
 			if (WTW.water != null) {
+
+				if (dGet('wtw_twaterbumppath').value == '') {
+					dGet('wtw_twaterbumppath').value = '/content/system/images/waterbump.png';
+				}
+				if (WTW.water != null) {
+					WTW.water.material.dispose();
+					WTW.water.dispose();
+					WTW.water = null;
+				}
+				/* create water */
+				if (WTW.isNumeric(dGet('wtw_twatersubdivisions').value)) {
+					if (Number(dGet('wtw_twatersubdivisions').value) < 2) {
+						dGet('wtw_twatersubdivisions').value = 2;
+					}
+				} else {
+					dGet('wtw_twatersubdivisions').value = 2;
+				}
+			
+				WTW.water = BABYLON.Mesh.CreateGround("communitywater", 5000, 5000, Math.round(Number(dGet('wtw_twatersubdivisions').value)), scene, false);
+			
+				WTW.waterMat = new BABYLON.WaterMaterial("communitywatermat", scene, new BABYLON.Vector2(512, 512));
+				WTW.waterMat.bumpTexture = new BABYLON.Texture(dGet('wtw_twaterbumppath').value, scene);
 				WTW.water.position.y = zwaterpositiony;
+				WTW.init.waterBumpPath = dGet('wtw_twaterbumppath').value;
+				WTW.init.waterSubdivisions = dGet('wtw_twatersubdivisions').value;
+				if (WTW.isNumeric(dGet('wtw_twaterbumpheight').value)) {
+					if (Number(dGet('wtw_twaterbumpheight').value) < 0) {
+						dGet('wtw_twaterbumpheight').value = 0;
+					}
+					WTW.waterMat.bumpHeight = Number(dGet('wtw_twaterbumpheight').value);
+				} else {
+					WTW.waterMat.bumpHeight = 0;
+				}
+				if (WTW.isHexColor(dGet('wtw_twatercolorrefraction').value)) {
+					zwatercolorrefraction = dGet('wtw_twatercolorrefraction').value;
+				}
+				if (WTW.isHexColor(dGet('wtw_twatercolorreflection').value)) {
+					zwatercolorreflection = dGet('wtw_twatercolorreflection').value;
+				}
+				WTW.waterMat.waterColor = new BABYLON.Color3.FromHexString(zwatercolorrefraction); 
+				/* water color blended with the refraction (near) */
+				WTW.waterMat.waterColor2 = new BABYLON.Color3.FromHexString(zwatercolorreflection); 
+				/* water color blended with the reflection (far) */
+				if (WTW.isNumeric(dGet('wtw_twatercolorblendfactor').value)) {
+					if (Number(dGet('wtw_twatercolorblendfactor').value) < 0) {
+						dGet('wtw_twatercolorblendfactor').value = 0;
+					} else if (Number(dGet('wtw_twatercolorblendfactor').value) > 10) {
+						dGet('wtw_twatercolorblendfactor').value = 10;
+					}
+					WTW.waterMat.colorBlendFactor = Number(dGet('wtw_twatercolorblendfactor').value);
+				} else {
+					WTW.waterMat.colorBlendFactor = .2;
+				}
+				if (WTW.isNumeric(dGet('wtw_twatercolorblendfactor2').value)) {
+					if (Number(dGet('wtw_twatercolorblendfactor2').value) < 0) {
+						dGet('wtw_twatercolorblendfactor2').value = 0;
+					} else if (Number(dGet('wtw_twatercolorblendfactor2').value) > 10) {
+						dGet('wtw_twatercolorblendfactor2').value = 10;
+					}
+					WTW.waterMat.colorBlendFactor2 = Number(dGet('wtw_twatercolorblendfactor2').value);
+				} else {
+					WTW.waterMat.colorBlendFactor2 = .2;
+				}
+				if (WTW.isNumeric(dGet('wtw_twaterwindforce').value)) {
+					WTW.waterMat.windForce = dGet('wtw_twaterwindforce').value;
+				} else {
+					WTW.waterMat.windForce = -10;
+				}
+				if (WTW.isNumeric(dGet('wtw_twaterwinddirectionx').value) && WTW.isNumeric(dGet('wtw_twaterwinddirectionz').value)) {
+					if (Number(dGet('wtw_twaterwinddirectionx').value) < -1) {
+						dGet('wtw_twaterwinddirectionx').value = -1;
+					} else if (Number(dGet('wtw_twaterwinddirectionx').value) > 1) {
+						dGet('wtw_twaterwinddirectionx').value = 1;
+					}
+					if (Number(dGet('wtw_twaterwinddirectionz').value) < -1) {
+						dGet('wtw_twaterwinddirectionz').value = -1;
+					} else if (Number(dGet('wtw_twaterwinddirectionz').value) > 1) {
+						dGet('wtw_twaterwinddirectionz').value = 1;
+					}
+					WTW.waterMat.windDirection = new BABYLON.Vector2(Number(dGet('wtw_twaterwinddirectionx').value), Number(dGet('wtw_twaterwinddirectionz').value));
+				} else {
+					WTW.waterMat.windDirection = new BABYLON.Vector2(1, 1);
+				}
+				if (WTW.isNumeric(dGet('wtw_twaterwaveheight').value)) {
+					if (Number(dGet('wtw_twaterwaveheight').value) < 0) {
+						dGet('wtw_twaterwaveheight').value = 0;
+					}
+					WTW.waterMat.waveHeight = Number(dGet('wtw_twaterwaveheight').value);
+				} else {
+					WTW.waterMat.waveHeight = .2;
+				}
+				if (WTW.isNumeric(dGet('wtw_twaterwavelength').value)) {
+					if (Number(dGet('wtw_twaterwavelength').value) < 0) {
+						dGet('wtw_twaterwavelength').value = 0;
+					}
+					WTW.waterMat.waveLength = Number(dGet('wtw_twaterwavelength').value);	
+				} else {
+					WTW.waterMat.waveLength = .02;	
+				}
+				if (WTW.isNumeric(dGet('wtw_twateralpha').value)) {
+					if (Number(dGet('wtw_twateralpha').value) < 0) {
+						dGet('wtw_twateralpha').value = 0;
+					} else if (Number(dGet('wtw_twateralpha').value) > 100) {
+						dGet('wtw_twateralpha').value = 100;
+					}
+					WTW.waterMat.alpha = Number(dGet('wtw_twateralpha').value) / 100;
+				} else {
+					WTW.waterMat.alpha = .9;
+				}
+				WTW.waterMat.backFaceCulling = true;
+				WTW.water.isPickable = false;
+				WTW.water.checkCollisions = false;
+				WTW.water.material = WTW.waterMat;
+				WTW.waterMat.addToRenderList(WTW.sky);
+				WTW.waterMat.addToRenderList(WTW.extraGround);
 			}
 			dGet('wtw_twaterpositiony').value = zwaterpositiony;
 		}

@@ -272,25 +272,11 @@ WTWJS.prototype.getMoldnameParts = function(zmoldname) {
 
 WTWJS.prototype.rgbToHex = function(zred, zgreen, zblue) {
 	/* converts red, green, blue to hex */
-	/* note uses babylon colors decimal between 0 and 1 */
 	var zhex = '';
 	try {
 		if (WTW.isNumeric(zred) && WTW.isNumeric(zgreen) && WTW.isNumeric(zblue)) {
-			if (zred <= 1 && zred >=0 && zgreen <= 1 && zgreen >=0 && zblue <= 1 && zblue >=0) {
-				let zredhex = (zred * 255).toString(16);
-				let zgreenhex = (zgreen * 255).toString(16);
-				let zbluehex = (zblue * 255).toString(16);
-				if (zredhex.length == 1) {
-					zredhex = "0" + zredhex;
-				}
-				if (zgreenhex.length == 1) {
-					zgreenhex = "0" + zgreenhex;
-				}
-				if (zbluehex.length == 1) {
-					zbluehex = "0" + zbluehex;
-				}
-				zhex = '#' + zredhex + zgreenhex + zbluehex;
-			}
+			var zcolor = new BABYLON.Color3(zred,zgreen,zblue);
+			zhex = zcolor.toHexString();
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-rgbToHex=" + ex.message);
@@ -320,6 +306,19 @@ WTWJS.prototype.hexToRGB = function(zhex) {
 		'b':zblue,
 		'color3':zcolor3
 	};
+}
+
+WTWJS.prototype.isHexColor = function(zhex) {
+	/* validates Hex Color Code */
+	var zisvalid = false;
+	try {
+		if (/^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i.test(zhex)) {
+			zisvalid = true;
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-isHexColor=" + ex.message);
+	}
+	return zisvalid;
 }
 
 WTWJS.prototype.setTextColor = function(zbgcolor, zlightcolor, zdarkcolor) {
@@ -1274,7 +1273,7 @@ WTWJS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 		}
 		if (WTW.isNumeric(zvali)) {
 			if (WTW.adminView == 1) {
-				if (zitem == "wtw_tgroundpositiony") {
+				if (zitem == "wtw_tgroundpositiony" || zitem.indexOf("water") > -1) {
 					znvali = parseFloat(Math.round(Number(zvali) * 100) / 100) + ndni;
 					dGet(zitem).value = (znvali.toFixed(2));
 					WTW.setGroundWater();
@@ -1317,7 +1316,7 @@ WTWJS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 			}
 			if (WTW.isNumeric(zval)) {
 				if (WTW.adminView == 1) {
-					if (zitem == "wtw_tgroundpositiony") {
+					if (zitem == "wtw_tgroundpositiony" || zitem.indexOf("water") > -1) {
 						znval = parseFloat(Math.round(Number(zval) * 100) / 100) + zndn;
 						dGet(zitem).value = (znval.toFixed(2));
 						WTW.setGroundWater();
