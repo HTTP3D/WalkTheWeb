@@ -360,6 +360,7 @@ class wtwtables {
 				  `rotationx` decimal(18,2) DEFAULT '-5.00',
 				  `rotationy` decimal(18,2) DEFAULT '100.00',
 				  `rotationz` decimal(18,2) DEFAULT '0.00',
+				  `spawnactionzoneid` varchar(16) DEFAULT '',
 				  `gravity` decimal(18,2) DEFAULT '9.80',
 				  `templatename` varchar(255) DEFAULT '',
 				  `description` mediumtext,
@@ -403,6 +404,7 @@ class wtwtables {
 				  `rotationx` decimal(18,2) DEFAULT '0.00',
 				  `rotationy` decimal(18,2) DEFAULT '0.00',
 				  `rotationz` decimal(18,2) DEFAULT '0.00',
+				  `spawnactionzoneid` varchar(16) DEFAULT '',
 				  `gravity` decimal(18,2) DEFAULT '9.80',
 				  `groundpositiony` decimal(18,2) DEFAULT '0.00',
 				  `waterpositiony` decimal(18,2) DEFAULT '-1.00',
@@ -620,6 +622,7 @@ class wtwtables {
 				  `message` varchar(2048) DEFAULT '',
 				  `intvalue` int DEFAULT NULL,
 				  `decimalvalue` decimal(18,2) DEFAULT NULL,
+				  `archivedate` datetime DEFAULT NULL,
 				  PRIMARY KEY (`errorid`),
 				  UNIQUE KEY `".wtw_tableprefix."errorid_UNIQUE` (`errorid`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;				
@@ -650,9 +653,9 @@ class wtwtables {
 				  `uploadpathid` VARCHAR(16) NULL DEFAULT '',
 				  `globaluseravatarid` VARCHAR(16) NULL DEFAULT '',
 				  `useravatarid` VARCHAR(16) NULL DEFAULT '',
-				  `viewdate` DATETIME NULL DEFAULT NULL,
-				  `feedbackdate` DATETIME NULL DEFAULT NULL,
-				  `archivedate` DATETIME NULL DEFAULT NULL,
+				  `viewdate` DATETIME DEFAULT NULL,
+				  `feedbackdate` DATETIME DEFAULT NULL,
+				  `archivedate` DATETIME DEFAULT NULL,
 				  `createdate` datetime DEFAULT NULL,
 				  `createuserid` varchar(16) DEFAULT '',
 				  `updatedate` datetime DEFAULT NULL,
@@ -661,7 +664,7 @@ class wtwtables {
 				  `deleteduserid` varchar(16) DEFAULT '',
 				  `deleted` int DEFAULT '0',
 				  PRIMARY KEY (`feedbackid`),
-				  UNIQUE INDEX `".wtw_tableprefix."feedbackid_UNIQUE` (`feedbackid`)
+				  UNIQUE KEY `".wtw_tableprefix."feedbackid_UNIQUE` (`feedbackid`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 			");
 			$wtwdb->deltaCreateTable("
@@ -885,6 +888,7 @@ class wtwtables {
 				  `rotationx` decimal(18,2) DEFAULT '-5.00',
 				  `rotationy` decimal(18,2) DEFAULT '100.00',
 				  `rotationz` decimal(18,2) DEFAULT '0.00',
+				  `spawnactionzoneid` varchar(16) DEFAULT '',
 				  `gravity` decimal(18,2) DEFAULT '9.80',
 				  `templatename` varchar(255) DEFAULT '',
 				  `description` mediumtext,

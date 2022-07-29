@@ -374,6 +374,24 @@ class wtwadmin {
 			$zpagedata .= "		</div>\r\n";
 			$zpagedata .= "	</div>\r\n";
 
+			/* error log page */
+			$zpagedata .= "	<div id=\"wtw_errorlogpage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
+			$zpagedata .= "		<div id=\"wtw_loadingerrorlog\" class=\"wtw-loadingnotice\">Checking for Error Log...</div>\r\n";
+			$zpagedata .= "		<div id=\"wtw_errorlogpagescroll\" class=\"wtw-formscroll\">\r\n";
+			$zpagedata .= "			<div id=\"wtw_allerrorlog\">\r\n";
+			$zpagedata .= "				<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zpagedata .= "					<div class=\"wtw-dashboardboxtitle\">Error Log</div>\r\n";
+			$zpagedata .= "					<div class=\"wtw-dashboardbox\">\r\n";
+			$zpagedata .= "						<div id=\"wtw_errorlogdelete\" class=\"wtw-bluebuttonright\" onclick=\"WTW.deleteArchivedErrorLog();\">Delete Archived Errors</div>\r\n";
+			$zpagedata .= "						<div id=\"wtw_errorlogactive\" class=\"wtw-bluebuttonselected\" onclick=\"WTW.openErrorLog('Active Errors');\">Active Errors</div><div id=\"wtw_errorlogrecent\" class=\"wtw-bluebutton\" onclick=\"WTW.openErrorLog('Most Recent Errors');\">Most Recent Errors</div><div id=\"wtw_errorlogall\" class=\"wtw-bluebutton\" onclick=\"WTW.openErrorLog('All Errors');\">All Errors</div>\r\n";
+			$zpagedata .= "						<div id=\"wtw_errorloglist\"></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "					</div>\r\n";
+			$zpagedata .= "				</div>\r\n";
+			$zpagedata .= "			</div>\r\n";
+			$zpagedata .= "		</div>\r\n";
+			$zpagedata .= "	</div>\r\n";
+
 			/* media library - 3d downloads */
 			$zpagedata .= "	<div id=\"wtw_showimportpage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";
 			$zpagedata .= "		<div id=\"wtw_importhorizontalmenu\" class=\"wtw-horizontalmenu\">\r\n";

@@ -57,6 +57,7 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminmenudashboard', $this->__('Admin Home'), -100, 'wtw_dashboard', 1, 'wtw_adminhome', '', null, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminmenuupdates', $this->__('Updates'), -100, 'wtw_dashboard', 2, 'wtw_updates', '', $developerroles, "WTW.openFullPageForm('updates','Check for Updates','');");
 				$this->addAdminMenuItem('wtw_adminmenufeedback', $this->__('Feedback'), -100, 'wtw_dashboard', 3, 'wtw_feedback', '', $developerroles, "WTW.openFullPageForm('feedback','Open Feedback','');");
+				$this->addAdminMenuItem('wtw_adminmenuerrorlog', $this->__('Error Log'), -100, 'wtw_dashboard', 4, 'wtw_errorlog', '', $developerroles, "WTW.openFullPageForm('errorlog','Active Errors','');");
 				
 				$this->addAdminMenuItem('wtw_adminmedia', $this->__('Media Library'), -95, 'wtw_medialibrary', 0, '', '/content/system/images/menumedia.png', $updateroles, "WTW.toggleAdminMenuMediaLibrary();");
 				$this->addAdminMenuItem('wtw_adminmediaobjects', $this->__('3D Models'), -95, 'wtw_medialibrary', 1, 'wtw_viewobjects', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);");

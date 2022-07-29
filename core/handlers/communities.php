@@ -13,6 +13,8 @@ try {
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zcommunityid = $wtwhandlers->getPost('communityid','');
 	$zpastcommunityid = $wtwhandlers->getPost('pastcommunityid','');
+	$zbuildingid = $wtwhandlers->getPost('buildingid','');
+	$zthingid = $wtwhandlers->getPost('thingid','');
 	$zversionid = $wtwhandlers->getPost('versionid','');
 	$zversion = $wtwhandlers->getPost('version','');
 	$zversiondesc = $wtwhandlers->decode64($wtwhandlers->getPost('versiondesc',''));
@@ -26,6 +28,7 @@ try {
 	$zdescription = $wtwhandlers->decode64($wtwhandlers->getPost('description',''));
 	$ztags = $wtwhandlers->decode64($wtwhandlers->getPost('tags',''));
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
+	$zspawnactionzoneid = $wtwhandlers->getPost('spawnactionzoneid','');
 	$zgroundpositiony = $wtwhandlers->getPost('groundpositiony','');
 	$zwaterpositiony = $wtwhandlers->getPost('waterpositiony','');
 	$zwaterbumpid = $wtwhandlers->getPost('waterbumpid','');
@@ -88,6 +91,9 @@ try {
 			break;
 		case "savestartposition":
 			$wtwcommunities->saveCommunityStartPosition($zcommunityid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz);
+			break;
+		case "savedefaultspawnzone":
+			$zresponse = $wtwcommunities->saveDefaultSpawnZone($zcommunityid, $zbuildingid, $zthingid, $zspawnactionzoneid); 
 			break;
 		case "updatefirstbuilding":
 			$wtwcommunities->saveFirstBuilding($zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);

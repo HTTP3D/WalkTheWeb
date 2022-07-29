@@ -21,9 +21,9 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = "3.5.0";
-	public $dbversion = "1.2.2";
-	public $versiondate = "2022-6-29";
+	public $version = "3.5.1";
+	public $dbversion = "1.2.5";
+	public $versiondate = "2022-7-29";
 	public $serverinstanceid = "";
 	public $globaluserid = "";
 	public $userid = "";
@@ -473,6 +473,11 @@ class wtw {
 					fclose($zfile);
 					chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
 				}
+			}
+			/* create .htaccess file from htaccess file template if it does not exist - IIS and NginX will ignore it */
+			if (!file_exists(wtw_rootpath.'/.htaccess')) {
+				copy(wtw_rootpath.'/htaccess', wtw_rootpath.'/.htaccess');
+				chmod(wtw_rootpath.'/.htaccess', octdec(wtw_chmod));
 			}
 			/* if using plain text password - convert plain text password to encoded password */
 			if (defined('wtw_dbserver') && defined('wtw_dbname') && defined('wtw_dbusername') && defined('wtw_dbpassword')) {
@@ -1213,7 +1218,7 @@ class wtw {
 		
 
 	public function getSceneSetting() {
-		/* get initial 3D COmmunity Scene settings (sky, water level, ground textures, and avatar start position) */
+		/* get initial 3D Community Scene settings (sky, water level, ground textures, and avatar start position) */
 		global $wtwdb;
 		$zinitialscene = array();
 		try {
@@ -1806,6 +1811,7 @@ class wtw {
 				'buildingid' => $this->buildingid,
 				'thingid' => $this->thingid,
 				'sitename' => '',
+				'spawnactionzoneid' => '',
 				'gravity' => '9.8',
 				'userid' => $this->userid,
 				'textureid' => '2391f1v9om09am77',
@@ -1857,6 +1863,7 @@ class wtw {
 					$zgroundpositiony = $zrow["groundpositiony"];
 					$zwaterpositiony = $zrow["waterpositiony"];
 					$zdomaininfo['sitename'] = $zrow["communityname"];
+					$zdomaininfo['spawnactionzoneid'] = $zrow["spawnactionzoneid"];
 					$zdomaininfo['gravity'] = $zrow["gravity"];
 					$zdomaininfo['textureid'] = $zrow["textureid"];
 					$zdomaininfo['texturepath'] = $zrow["texturepath"];
@@ -1901,6 +1908,7 @@ class wtw {
 				foreach ($zresults as $zrow) {
 					if (count($zdomaininfo) == 0) {
 						$zdomaininfo['sitename'] = $zrow["buildingname"];
+						$zdomaininfo['spawnactionzoneid'] = $zrow["spawnactionzoneid"];
 						$zdomaininfo['gravity'] = $zrow["gravity"];
 					}
 					$zbuildinginfo = array(
@@ -1920,6 +1928,7 @@ class wtw {
 				foreach ($zresults as $zrow) {
 					if (count($zdomaininfo) == 0) {
 						$zdomaininfo['sitename'] = $zrow["thingname"];
+						$zdomaininfo['spawnactionzoneid'] = $zrow["spawnactionzoneid"];
 						$zdomaininfo['gravity'] = $zrow["gravity"];
 					}
 					$zthinginfo = array(
@@ -2311,7 +2320,7 @@ class wtw {
 		/* these are the main page elements such as canvases and graphic helpers */
 		$zmainelements = "";
 		try {
-			$zmainelements = "<div id=\"wtw_showmeshfps\"></div>\r\n";
+			$zmainelements = "<div id=\"wtw_showmeshfps\" style=\"display:none;visibility:hidden;\"></div>\r\n";
 			$zmainelements .= "<div id=\"wtw_iwalkarrow\" style=\"display:none;visibility:hidden;\"></div>\r\n";
 			$zmainelements .= "<div id=\"wtw_iwalkarrow2\" style=\"display:none;visibility:hidden;\"></div>\r\n";
 			$zmainelements .= "<div id=\"wtw_itooltip\"></div>\r\n";

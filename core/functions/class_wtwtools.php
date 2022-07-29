@@ -611,6 +611,86 @@ class wtwtools {
 		return $zresults;
 	}
 	
+	public function getErrorLog($zfilter) {
+		global $wtwhandlers;
+		$zresults = array();
+		try {
+			/* get Error Log using filter */
+			switch ($zfilter) {
+				case "All Errors":
+					$zresults = $wtwhandlers->query("
+						select * from ".wtw_tableprefix."errorlog
+							order by logdate desc, errorid desc;");
+					break;
+				case "Most Recent Errors":
+					$zresults = $wtwhandlers->query("
+						select * from ".wtw_tableprefix."errorlog
+							where archivedate is null
+							order by logdate desc, errorid desc
+							limit 25;");
+					break;
+				default: /* "Active Errors" */
+					$zresults = $wtwhandlers->query("
+						select * from ".wtw_tableprefix."errorlog
+							where archivedate is null
+							order by logdate desc, errorid desc;");
+					break;
+			}
+
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwtools.php-getErrorLog=".$e->getMessage());
+			$zresults = array('serror' => $e->getMessage());
+		}
+		return $zresults;
+	}
+
+	public function updateErrorLogStatus($zerrorid, $zstatus) {
+		global $wtwhandlers;
+		$zresults = array(
+			'serror'=> ''
+		);
+		try {
+			/* set errorlog status */
+			switch ($zstatus) {
+				case "Archive":
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."errorlog
+						set archivedate=now()
+						where errorid='".$zerrorid."'
+							and archivedate is null;");
+					break;
+				case "Restore":
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."errorlog
+						set archivedate=null
+						where errorid='".$zerrorid."';");
+					break;
+			}
+
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwtools.php-updateErrorLogStatus=".$e->getMessage());
+			$zresults = array('serror' => $e->getMessage());
+		}
+		return $zresults;
+	}
+
+	public function deleteArchivedErrorLog() {
+		global $wtwhandlers;
+		$zresults = array(
+			'serror'=> ''
+		);
+		try {
+			/* delete archived errorlog records */
+			$wtwhandlers->query("
+				delete from ".wtw_tableprefix."errorlog
+				where not archivedate is null;");
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwtools.php-deleteArchivedErrorLog=".$e->getMessage());
+			$zresults = array('serror' => $e->getMessage());
+		}
+		return $zresults;
+	}
+	
 	public function __($zlabel) {
 		/* Language translation based on language file */
 		global $wtwhandlers;

@@ -401,6 +401,40 @@ input.wtw-smallprintinput {
 	background-color:#41593D;
 	border:1px solid blue;
 }
+.wtw-bluebutton {
+	display:inline-block;
+	padding:10px;
+	color:#ffffff;
+	margin:2px;
+	border:1px solid #000000;
+	background-color:#375377;
+	font-size:1em;
+	font-weight:normal;
+	text-align:center;
+}
+.wtw-bluebutton:hover {
+	cursor:pointer;
+	color:#ffffff;
+	background-color:#41593D;
+	border:1px solid blue;
+}
+.wtw-bluebuttonselected {
+	display:inline-block;
+	padding:10px;
+	color:#000000;
+	margin:2px;
+	border:1px solid #000000;
+	background-color:#C4DFEC;
+	font-size:1em;
+	font-weight:normal;
+	text-align:center;
+}
+.wtw-bluebuttonselected:hover {
+	cursor:pointer;
+	color:#ffffff;
+	background-color:#41593D;
+	border:1px solid blue;
+}
 .wtw-yellowbuttonleft {
 	padding:10px;
 	color:#000000;

@@ -329,6 +329,46 @@ class wtwcommunities {
 		return $zsuccess;
 	}
 
+	public function saveDefaultSpawnZone($zcommunityid, $zbuildingid, $zthingid, $zspawnactionzoneid) {
+		/* this saves the default spawn zone for a 3D Community, 3D Building, or 3D Thing */
+		global $wtwhandlers;
+		$zresponse = array(
+			'serror' => ''
+		);
+		try {
+			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."communities
+					set spawnactionzoneid='".$zspawnactionzoneid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where communityid='".$zcommunityid."';");
+			}
+			if ($wtwhandlers->checkUpdateAccess("", $zbuildingid, "")) {
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."buildings
+					set spawnactionzoneid='".$zspawnactionzoneid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where buildingid='".$zbuildingid."';");
+			}
+			if ($wtwhandlers->checkUpdateAccess("", "", $zthingid)) {
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."things
+					set spawnactionzoneid='".$zspawnactionzoneid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where thingid='".$zthingid."';");
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveDefaultSpawnZone=".$e->getMessage());
+			$zresponse = array(
+				'serror' => $e->getMessage()
+			);
+		}
+		return $zresponse;
+	}
+
 	public function saveFirstBuilding($zcommunityid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz) {
 		/* this sets the avatar start position in a 3D Community scene */
 		global $wtwhandlers;

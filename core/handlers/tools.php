@@ -35,6 +35,7 @@ try {
 	$zdisplayname = $wtwhandlers->getPost('displayname','');
 	$zfeedbackemail = $wtwhandlers->getPost('feedbackemail','');
 	$zuseremail = $wtwhandlers->getPost('useremail','');
+	$zerrorid = $wtwhandlers->getPost('errorid','');
 	$zparentalcontrols = $wtwhandlers->getPost('parentalcontrols','0');
 	$zrating = $wtwhandlers->getPost('rating','');
 	$zratingvalue = $wtwhandlers->getPost('ratingvalue','');
@@ -123,6 +124,15 @@ try {
 			break;
 		case "updatefeedbackstatus":
 			$zresponse = $wtwtools->updateFeedbackStatus($zfeedbackid, $zstatus);
+			break;
+		case "geterrorlog":
+			$zresponse = $wtwtools->getErrorLog($zfilter);
+			break;
+		case "updateerrorlogstatus":
+			$zresponse = $wtwtools->updateErrorLogStatus($zerrorid, $zstatus);
+			break;
+		case "deletearchivederrorlog":
+			$zresponse = $wtwtools->deleteArchivedErrorLog();
 			break;
 	}
 
