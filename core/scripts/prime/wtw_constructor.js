@@ -188,6 +188,9 @@ function WTWJS() {
 	/* WTW.spawnZones - Array of Spawn Zone definitions in a given 3D Scene - these are avatar entry points */
 	this.spawnZones = [];
 
+	/* WTW.spawnZoneID - sets the Default Spawn Zone for first time entry. Blank is Random, 'default' will use the set start position, otherwise the actionzoneid of the spawnactionzoneid will force the entry spawn zone */
+	this.spawnZoneID = '';
+
 	/* WTW.automations - Array of Automation definitions loaded in a given 3D Scene - create stepped sequences of animations or actions */
 	this.automations = [];
 	

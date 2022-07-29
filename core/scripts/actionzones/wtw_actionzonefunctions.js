@@ -486,7 +486,7 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 
 							WTW.extraGround.position.y = Number(WTW.init.groundPositionY);
 							if (WTW.init.groundPositionY == 0) {
-								WTW.water.position.y = -1;
+								WTW.water.position.y = -50;
 							} else {
 								WTW.water.position.y = Number(WTW.init.waterPositionY);
 							}
@@ -656,13 +656,13 @@ WTWJS.prototype.getSpawnPoint = function(zspawnzones, zspawnactionzoneid) {
 			zspawnzones = WTW.spawnZones;
 		}
 		if (zspawnactionzoneid == undefined) {
-			zspawnactionzoneid = '';
+			zspawnactionzoneid = WTW.spawnZoneID;
 		}
 		/* randomly select a spawn zone (notice one more than the count of spawn zones will be for default location) */
 		/* using Math.random() * (max - min) + min */
 		var zrand = Math.round(Math.random() * zspawnzones.length);
 		/* check for select spawn zone to exist, if it is set */
-		if (zspawnactionzoneid != '') {
+		if (zspawnactionzoneid != '' && zspawnactionzoneid != 'default') {
 			for (var i=0;i<zspawnzones.length;i++) {
 				if (zspawnzones[i] != null) {
 					if (zspawnzones[i].actionzoneid == zspawnactionzoneid) {
@@ -672,7 +672,7 @@ WTWJS.prototype.getSpawnPoint = function(zspawnzones, zspawnactionzoneid) {
 				}
 			}
 		}
-		if (zspawnzones[zrand] != null) {
+		if (zspawnzones[zrand] != null && zspawnactionzoneid != 'default') {
 			var zpositivex = Math.round(Math.random());
 			var zpositivez = Math.round(Math.random());
 			/* divided by 2 so that it is distance from center point */

@@ -173,6 +173,7 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						break;
 					case 'wtw_admincommunitystart':
 						WTW.hideAdminMenu();
+						WTW.openStartPositionForm();
 						WTW.show('wtw_adminmenu44');
 						break;
 					case 'wtw_admincommunityfirstbuilding':
@@ -639,6 +640,9 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 					case "wtw_setstartposition":
 						WTW.setStartPosition(communityid, buildingid, thingid);
 						break;
+					case "wtw_savespawnzone":
+						WTW.saveDefaultSpawnZone(communityid, buildingid, thingid);
+						break;
 					case "wtw_bback11":
 					case "wtw_bcancelmold":
 						WTW.submitMoldForm(-1);
@@ -1018,7 +1022,7 @@ WTWJS.prototype.adminOpenSubmenu = function(zobj) {
 WTWJS.prototype.toggleAdminMenuDashboard = function() {
 	/* open and close dashboard */
 	try {
-		if (dGet('wtw_fullpageform').style.display == "none" || (dGet('wtw_dashboardpage').style.display == "none" && dGet('wtw_updatespage').style.display == "none") || (dGet('wtw_dashboardpage').style.display == "none" && dGet('wtw_feedbackpage').style.display == "none")) {
+		if (dGet('wtw_fullpageform').style.display == "none" || (dGet('wtw_dashboardpage').style.display == "none" && dGet('wtw_updatespage').style.display == "none") || (dGet('wtw_dashboardpage').style.display == "none" && dGet('wtw_feedbackpage').style.display == "none") || (dGet('wtw_dashboardpage').style.display == "none" && dGet('wtw_errorlogpage').style.display == "none")) {
 			WTW.openFullPageForm('dashboard','','');
 		} else {
 			WTW.closeFullPageForm();

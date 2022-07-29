@@ -370,6 +370,9 @@ WTWJS.prototype.loadInitSettings = function() {
 				if (WTW.init.startRotationX > 180) {
 					WTW.init.startRotationX -= 360;
 				}
+				if (wtw_domain.domaininfo.spawnactionzoneid != null) {
+					WTW.spawnZoneID = wtw_domain.domaininfo.spawnactionzoneid;
+				}
 				WTW.init.loaded = 1;
 			}
 			if (wtw_domain.spawnzones != null) {
@@ -732,12 +735,15 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 		WTW.extraGround.material.dispose();
 		WTW.extraGround.material = zgroundcovering;
 		/* if ground is set below 0 (zero) y value, add water to the scene at 0 (zero) y value - otherwise no main water plane is loaded */
-		if ((WTW.init.groundPositionY < WTW.init.waterPositionY) || (WTW.adminView == 1 && communityid != "")) {
+		if ((WTW.init.groundPositionY < 0) || (WTW.adminView == 1 && communityid != "")) {
 			WTW.initLoadUpload(WTW.init.groundTextureID, WTW.init.groundTextureID, 7);
 			if (WTW.water != null) {
 				WTW.water.material.dispose();
 				WTW.water.dispose();
 				WTW.water = null;
+			}
+			if (WTW.adminView == 1 && communityid != "" && WTW.init.groundPositionY == 0) {
+				WTW.init.waterPositionY = -50;
 			}
 			/* create water */
 			WTW.water = BABYLON.Mesh.CreateGround("communitywater", 5000, 5000, Math.round(WTW.init.waterSubdivisions), scene, false);

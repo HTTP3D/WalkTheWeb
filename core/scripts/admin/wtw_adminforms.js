@@ -59,6 +59,12 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				WTW.show('wtw_feedbackpage');
 				WTW.checkForFeedback('Open Feedback');
 				break;
+			case "errorlog":
+				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__("Error Log") + "</div>";
+				WTW.show('wtw_showfilepage');
+				WTW.show('wtw_errorlogpage');
+				WTW.openErrorLog();
+				break;
 			case "medialibrary":
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__("Media Library") + "</div>";
 				WTW.show('wtw_selectimagepage');
@@ -232,7 +238,7 @@ WTWJS.prototype.checkForFeedback = async function(zfilter) {
 			'filter':zfilter,
 			'function':'getfeedback'
 		};
-		/* get update information for 3D Plugins */
+		/* get feedback data */
 		WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
@@ -388,6 +394,142 @@ WTWJS.prototype.archiveFeedback = async function(zfeedbackid) {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-archiveFeedback=" + ex.message);
+	}
+}
+
+/* Error Log */
+WTWJS.prototype.openErrorLog = async function(zfilter) {
+	/* retrieve Error Log data */
+	try {
+		if (zfilter == undefined) {
+			zfilter = 'All Errors';
+		}
+		dGet('wtw_errorlogactive').className = 'wtw-bluebutton';
+		dGet('wtw_errorlogrecent').className = 'wtw-bluebutton';
+		dGet('wtw_errorlogall').className = 'wtw-bluebutton';
+		switch (zfilter) {
+			case 'Active Errors':
+				dGet('wtw_errorlogactive').className = 'wtw-bluebuttonselected';
+				break;
+			case 'Most Recent Errors':
+				dGet('wtw_errorlogrecent').className = 'wtw-bluebuttonselected';
+				break;
+			default: /* All Errors */
+				dGet('wtw_errorlogall').className = 'wtw-bluebuttonselected';
+				break;
+		}
+		WTW.show('wtw_loadingerrorlog');
+		WTW.hide('wtw_errorloglist');
+		dGet('wtw_errorloglist').innerHTML = "";
+
+		var zrequest = {
+			'filter':zfilter,
+			'function':'geterrorlog'
+		};
+		/* get error log */
+		WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				WTW.openErrorLogComplete(zresponse, zfilter);
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-openErrorLog=" + ex.message);
+	}
+}
+
+WTWJS.prototype.openErrorLogComplete = function(zresponse, zfilter) {
+	/* show list of feedback */
+	try {
+		var zerrorloglist = "<div class=\"wtw-dashboardbox\">";
+		if (dGet('wtw_errorloglisttitle') != null) {
+			dGet('wtw_errorloglisttitle').innerHTML = zfilter;
+		}
+		if (zresponse != null) {
+			zerrorloglist += "<table class=\"wtw-table\">";
+			if (zresponse.length > 0) {
+				for (var i=0;i < zresponse.length;i++) {
+					if (zresponse[i] != null) {
+						var zstatuscolor = 'green';
+						var zarchivetext = 'Archive';
+						var zarchived = false;
+						var zlogdate = new Date(zresponse[i].logdate);
+						var zdatestring = (zlogdate.getMonth()+1) + "/" + zlogdate.getDate() + "/" + zlogdate.getFullYear();
+						if (zresponse[i].archivedate != null) {
+							zarchived = true;
+							zstatuscolor = "black";
+							zarchivetext = "Restore";
+						}
+						
+						zerrorloglist += "<tr id=\"wtw_errorlog-header-" + zresponse[i].errorid + "\" class=\"wtw-versionheader" + zstatuscolor + "\">";
+						zerrorloglist += "<td class=\"wtw-tablecolumns\" style=\"white-space:normal;\">" + zdatestring + "</td>";
+						zerrorloglist += "<td class=\"wtw-tablecolumns\" style=\"white-space:normal;\">" + WTW.encode(zresponse[i].message) + "</td>";
+						zerrorloglist += "<td class=\"wtw-tablecolumns\" style=\"white-space:normal;text-align:right;\"><div id=\"wtw_errorlog-archive-" + zresponse[i].errorid + "\" class=\"wtw-archivebutton\" onclick=\"WTW.archiveErrorLog('" + zresponse[i].errorid + "');\">" + zarchivetext + "</div></td>";
+						zerrorloglist += "</tr>";
+					}
+				}
+			} else {
+				zerrorloglist += "<tr><td class=\"wtw-tablecolumns\" style=\"white-space:normal;font-size:1.4em;\">No Errors Found</td></tr>";
+			}
+			zerrorloglist += "</table>";
+		}
+		zerrorloglist += "</div>";
+		dGet('wtw_errorloglist').innerHTML = zerrorloglist;
+		WTW.hide('wtw_loadingerrorlog');
+		WTW.show('wtw_errorloglist');
+
+		dGet('wtw_errorlogpagescroll').style.height = (WTW.sizeY - 160) + 'px';
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-openErrorLogComplete=" + ex.message);
+	}
+}
+
+WTWJS.prototype.archiveErrorLog = async function(zerrorid) {
+	/* update the error log archive status */
+	try {
+		if (dGet('wtw_errorlog-archive-' + zerrorid) != null) {
+			var zstatus = 'Archive';
+			if (dGet('wtw_errorlog-archive-' + zerrorid).innerHTML == 'Archive') {
+				dGet('wtw_errorlog-archive-' + zerrorid).innerHTML = 'Restore';
+				dGet('wtw_errorlog-header-' + zerrorid).className = 'wtw-versionheaderblack';
+			} else {
+				zstatus = 'Restore';
+				dGet('wtw_errorlog-archive-' + zerrorid).innerHTML = 'Archive';
+				dGet('wtw_errorlog-header-' + zerrorid).className = 'wtw-versionheadergreen';
+			}
+			var zrequest = {
+				'errorid':zerrorid,
+				'status':zstatus,
+				'function':'updateerrorlogstatus'
+			};
+			WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					/* note zresponse.serror would contain any errors */
+				}
+			);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-archiveErrorLog=" + ex.message);
+	}
+}
+
+
+WTWJS.prototype.deleteArchivedErrorLog = async function() {
+	/* delete the archived error log records */
+	try {
+		var zrequest = {
+			'function':'deletearchivederrorlog'
+		};
+		WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note zresponse.serror would contain any errors */
+				WTW.openErrorLog();
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-deleteArchivedErrorLog=" + ex.message);
 	}
 }
 
