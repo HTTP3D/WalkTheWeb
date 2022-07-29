@@ -32,33 +32,12 @@ Check out this video of the Install and Getting Started Walk-Through:
 
 https://www.youtube.com/watch?v=EMrBnzfAMZM
 
-TROUBLESHOOTING THE INSTALLATION
----------------------------------------------------------------------------
-Troubleshooting 404 Errors on Plugin base Connect Files:
-
-(Example: /connect/wtw-shopping-getconnectstore.php?communityid=y8mjn49j47225bld&buildingid=&thingid= 404)
-
-Use the Rewrite rule below to correct this and similar errors.
-
-LINUX SETUP
----------------------------------------------------------------------------
-Note: on Linux systems, add a .htaccess file in the root (or use site config) with the following:
-
-RewriteEngine On
-
-RewriteBase /
-
-RewriteCond %{REQUEST_FILENAME} !-f
-
-RewriteCond %{REQUEST_FILENAME} !-d
-
-RewriteRule ^.*$ /index.php?wtwpath=%{REQUEST_URI}&%{QUERY_STRING} [P]
-
-
-
-
 LEARNING
 ---------------------------------------------------------------------------
 There are videos at: https://www.youtube.com/c/WalkTheWeb3d
 
 or watch me on http://walktheweb.tv     (WalkTheWeb on Twitch)
+
+or ask me a question or provide feedback on Discord: https://discord.com/invite/MW7MG2t
+
+We also welcome participation - Want to help code WTW?? Build a Plugin for WTW?? Create 3D Models?? Make Money???
