@@ -1,4 +1,4 @@
-# WalkTheWeb
+# WalkTheWeb (WTW)
 Demo 3D Website: https://3d.walktheweb.com
 
 Find me on Discord: https://discord.com/invite/MW7MG2t
@@ -8,7 +8,7 @@ Invented and created by Aaron Dishno Ed.D. CEO and Founder of HTTP3D Inc. - Walk
 
 I believe the Internet should always be Free and Available to all. Do you really want the big gaming companies to own the Metaverse and kill the full potential with censorship and advertising? Help me build a Free 3D Internet Metaverse by using and supporting Open-Source WalkTheWeb. I am calling for PROGRAMMERS, DESIGNERS, and ARTISTS to unite! So that Everyone owns the Metaverse.
 
-To start, create your own Metaverse - multiverse with our easy to use WalkTheWeb 3D Internet Hosting software. While you do not have to be a programer to use it, programmers can easily take advantage of the Babylonjs.com Game Engine and build 3D Games and 3D Content using our 3D CMS software and your own code together. 3D Artists (3D Model Designers) can show off their work quickly in a working environment with Avatars and 3D Scenes.  Multiplayer functionality and services are readily available from WalkTheWeb (keeps the work load off your server). Babylonjs.com supports browser based devices that can use WebGL and 3D Scenes can be viewed by numerous camera views for Computers, Cell Phones, Tablets, and Virtual Reality equipment (VR). WalkTheWeb uses PHP, JavaScript, and MySQL it can be hosted on any server capable of running WordPress.
+To start, create your own Metaverse - Multiverse with our easy to use WalkTheWeb 3D Internet Hosting software. While you do not have to be a programer to use it, programmers can easily take advantage of the Babylonjs.com Game Engine and build 3D Games and 3D Content using our 3D CMS software and your own code together. 3D Artists (3D Model Designers) can show off their work quickly in a working environment with Avatars and 3D Scenes.  Multiplayer functionality and services are readily available from WalkTheWeb (keeps the work load off your server). Babylonjs.com supports browser based devices that can use WebGL and 3D Scenes can be viewed by numerous camera views for Computers, Cell Phones, Tablets, and Virtual Reality equipment (VR). WalkTheWeb uses PHP, JavaScript, and MySQL it can be hosted on any server capable of running WordPress.
 
 3D CMS is a 3D Content Management System for easily creating and hosting you own 3D Games, 3D Shopping and 3D Metaverse and Multiverse Scenes. Using the Babylonjs.com game engine and works completely in the browser (does not download an app). You can put each of your 3D Buildings or 3D Games into many 3D Community Scenes. Makes it easy to update in one place, yet a powerful distribution by allowing your 3D Building (or 3D Game) to be visited in many 3D Scenes! Think of it as combining WordPress with a 3D Game Engine at an exponential level!
 
@@ -44,6 +44,6 @@ or watch me on http://walktheweb.tv     (WalkTheWeb on Twitch)
 
 or ask me a question or provide feedback on Discord: https://discord.com/invite/MW7MG2t
 
-We also welcome participation - Want to help code WTW?? Build a Plugin for WTW?? Create 3D Models?? Make Money??? Connect with me on Discord.
+We welcome your participation - Want to help code WalkTheWeb (WTW)?? Build a Plugin for WTW?? Create 3D Models?? Quickly create custom 3D Stores for your customers?? Make Money??? Connect with me on Discord.
 
 BabylonJS: https://www.babylonjs.com
