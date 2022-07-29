@@ -10,10 +10,12 @@ try {
 	
 	/* get values from querystring or session */
 	$zdomainname = $wtwconnect->getVal('domainname','');
-	$zbuildingid = $wtwconnect->getVal('buildingid','');
-	$zbuilding = $wtwconnect->getVal('building','');
 	$zcommunityid = $wtwconnect->getVal('communityid','');
 	$zcommunity = $wtwconnect->getVal('community','');
+	$zbuildingid = $wtwconnect->getVal('buildingid','');
+	$zbuilding = $wtwconnect->getVal('building','');
+	$zthingid = $wtwconnect->getVal('thingid','');
+	$zthing = $wtwconnect->getVal('thing','');
 	$zuserid = $wtwconnect->userid;
 	$zconnectinggridid = "";
 
@@ -83,6 +85,7 @@ try {
 								and deleted=0 and not communityid='')
 					end as communityaccess,
 				buildings.buildingid,
+				'' as thingid,
 				case when (select GROUP_CONCAT(userid) as useraccess 
 							from ".wtw_tableprefix."userauthorizations 
 							where buildingid=buildings.buildingid 
@@ -112,6 +115,7 @@ try {
 				connectinggrids.rotationy as bcrotationy,
 				connectinggrids.rotationz as bcrotationz,
 				communities.userid,
+				communities.spawnactionzoneid,
 				communities.gravity,
 				communities.communityname as sitename,
 				buildings.buildingname,
@@ -170,6 +174,7 @@ try {
 								and deleted=0 and not communityid='')
 					end as communityaccess,
 				'' as buildingid,
+				'' as thingid,
 				'' as buildingaccess,
 				communities.positionx as positionx,
 				communities.positiony as positiony,
@@ -190,6 +195,7 @@ try {
 				0 as bcrotationy,
 				0 as bcrotationz,
 				communities.userid,
+				communities.spawnactionzoneid,
 				communities.gravity,
 				communities.communityname as sitename,
 				'' as buildingname,
@@ -232,6 +238,7 @@ try {
 			select '' as communityid,
 				'' as communityaccess,
 				buildings.buildingid,
+				'' as thingid,
 				case when (select GROUP_CONCAT(userid) as useraccess 
 							from ".wtw_tableprefix."userauthorizations 
 							where buildingid=buildings.buildingid 
@@ -261,12 +268,13 @@ try {
 				0 as bcrotationy,
 				0 as bcrotationz,
 				buildings.userid,
+				buildings.spawnactionzoneid,
 				buildings.gravity,
 				buildings.buildingname as sitename,
 				buildings.buildingname,
 				'default' as communityname,
 				0 as groundpositiony,
-				-1 as waterpositiony,
+				-50 as waterpositiony,
 				'2391f1v9om09am77' as textureid,
 				'/content/system/stock/dirt-512x512.jpg' as texturepath,
 				'' as skydomeid,
@@ -282,6 +290,65 @@ try {
 			from (select * from ".wtw_tableprefix."buildings 
 						where buildings.deleted=0 
 							and buildings.buildingid='".$zbuildingid."') buildings 
+		;");
+	} else if (!empty($zthingid) && isset($zthingid)) {
+		/* select domain info and connecting grids by thingid */
+		$zresults = $wtwconnect->query("
+			select '' as communityid,
+				'' as communityaccess,
+				'' as buildingid,
+				things.thingid,
+				case when (select GROUP_CONCAT(userid) as useraccess 
+							from ".wtw_tableprefix."userauthorizations 
+							where thingid=things.thingid 
+								and deleted=0 and not thingid='') is null then ''
+					else
+						(select GROUP_CONCAT(userid) as useraccess 
+							from ".wtw_tableprefix."userauthorizations 
+							where thingid=things.thingid 
+								and deleted=0 and not thingid='')
+					end as thingaccess,
+				things.positionx as positionx,
+				things.positiony as positiony,
+				things.positionz as positionz,
+				things.scalingx as scalingx,
+				things.scalingy as scalingy,
+				things.scalingz as scalingz,
+				things.rotationx as rotationx,
+				things.rotationy as rotationy,
+				things.rotationz as rotationz,
+				0 as bcpositionx,
+				0 as bcpositiony,
+				0 as bcpositionz,
+				1 as bcscalingx,
+				1 as bcscalingy,
+				1 as bcscalingz,
+				0 as bcrotationx,
+				0 as bcrotationy,
+				0 as bcrotationz,
+				things.userid,
+				things.spawnactionzoneid,
+				things.gravity,
+				things.thingname as sitename,
+				'' as buildingname,
+				'default' as communityname,
+				0 as groundpositiony,
+				-50 as waterpositiony,
+				'2391f1v9om09am77' as textureid,
+				'/content/system/stock/dirt-512x512.jpg' as texturepath,
+				'' as skydomeid,
+				'' as skydomepath,
+				0 as skyinclination,
+				1 as skyluminance,
+				.25 as skyazimuth,
+				2 as skyrayleigh,
+				10 as skyturbidity,
+				.8 as skymiedirectionalg,
+				.005 as skymiecoefficient,
+				'' as thingauthorizationid
+			from (select * from ".wtw_tableprefix."things 
+						where things.deleted=0 
+							and things.thingid='".$zthingid."') things 
 		;");
 	}
 
@@ -379,10 +446,13 @@ try {
 	foreach ($zresults as $zrow) {
 		$zcommunityid = $zrow["communityid"];
 		$zbuildingid = $zrow["buildingid"];
+		$zthingid = $zrow["thingid"];
 		$zdomaininfo = array(
-			'buildingid' => $zrow["buildingid"],
 			'communityid' => $zrow["communityid"],
+			'buildingid' => $zrow["buildingid"],
+			'thingid' => $zrow["thingid"],
 			'sitename' => $zrow["sitename"],
+			'spawnactionzoneid' => $zrow["spawnactionzoneid"],
 			'gravity' => $zrow["gravity"],
 			'userid' => $zrow["userid"]);
 		$zbuildinginfo = array(

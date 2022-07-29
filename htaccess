@@ -1,9 +1,10 @@
 # BEGIN WalkTheWeb
-
+<IfModule mod_rewrite.c>
 	RewriteEngine On
+	RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 	RewriteBase /
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^.*$ /index.php?wtwpath=%{REQUEST_URI}&%{QUERY_STRING} [P]
-
+</IfModule>
 # END WalkTheWeb
