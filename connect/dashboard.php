@@ -14,7 +14,6 @@ try {
 	$zwebsitesize = 0;
     $zdownloads = array();
     $zresponse = array();
-	
 	if ($wtwconnect->isUserInRole('admin')) {
 		
 		$zwebsitesize = $wtwconnect->dirSize($wtwconnect->rootpath);
@@ -69,7 +68,7 @@ try {
 				from (select count(uploadobjectid) as scount from ".wtw_tableprefix."uploadobjects where deleted=0) m1
 					left join (select count(uploadobjectid) as mycount 
 						from ".wtw_tableprefix."uploadobjects 
-						where createuserid='".$wtwconnect->userid."' and deleted=0) m2 on 1=1
+						where (createuserid='".$wtwconnect->userid."' or userid='".$wtwconnect->userid."') and deleted=0) m2 on 1=1
 				union
 			select '3D Plugins' as item, p1.scount, p2.mycount 
 				from (select count(pluginname) as scount from ".wtw_tableprefix."plugins where deleted=0) p1
@@ -81,7 +80,7 @@ try {
 				from (select count(uploadid) as scount from ".wtw_tableprefix."uploads where deleted=0) u1
 					left join (select count(uploadid) as mycount 
 						from ".wtw_tableprefix."uploads 
-						where createuserid='".$wtwconnect->userid."' and deleted=0) u2 on 1=1
+						where (createuserid='".$wtwconnect->userid."' or userid='".$wtwconnect->userid."') and deleted=0) u2 on 1=1
 				union
 			select 'Users 3D Avatars' as item, ua1.scount, ua2.mycount 
 				from (select count(useravatarid) as scount from ".wtw_tableprefix."useravatars where deleted=0) ua1
@@ -118,12 +117,220 @@ try {
 			$i += 1;
 		}		
 		$zresponse[$i] = array(
-			'item'=> 'Website Size',
-			'mycount'=> '',
+			'item'=> 'Total Folder Size',
+			'mycount'=> $zwebsitesize,
 			'scount'=> $zwebsitesize,
 			'downloads'=> null
 		);
 		$i += 1;
+	} else {
+		/* all other users based on user/host account */
+		
+		/* check download queue for any pending */
+		$i = 0;
+		$zresults = $wtwconnect->query("
+			select * 
+				from ".wtw_tableprefix."downloads 
+				where deleted=0 
+					and (userip='".$wtwconnect->userip."'
+						or downloaduserid='".$wtwconnect->userid."'
+						or createuserid='".$wtwconnect->userid."')
+				order by createdate desc, downloadid desc;");
+		foreach ($zresults as $zrow) {
+			$zdownloads[$i] = array(
+				"downloadid" => $zrow["downloadid"],
+				"webid" => $zrow["webid"],
+				"webtype" => $zrow["webtype"],
+				"userip" => $zrow["userip"],
+				"fromurl" => $zrow["fromurl"],
+				"createdate" => $zrow["createdate"]
+			);
+			$i += 1;
+		}
+		
+		/* get server totals */
+		$i = 0;
+		$zresults = $wtwconnect->query("
+			select '3D Communities' as item, c1.scount, c2.mycount 
+				from (select count(communityid) as scount from ".wtw_tableprefix."communities where deleted=0) c1 
+					left join (select count(communityid) as mycount 
+						from ".wtw_tableprefix."communities 
+						where createuserid='".$wtwconnect->userid."' and deleted=0) c2 on 1=1
+				union
+			select '3D Buildings' as item, b1.scount, b2.mycount 
+				from (select count(buildingid) as scount from ".wtw_tableprefix."buildings where deleted=0) b1
+					left join (select count(buildingid) as mycount 
+						from ".wtw_tableprefix."buildings 
+						where createuserid='".$wtwconnect->userid."' and deleted=0) b2 on 1=1
+				union
+			select '3D Things' as item, t1.scount, t2.mycount 
+				from (select count(thingid) as scount from ".wtw_tableprefix."things where deleted=0) t1
+					left join (select count(thingid) as mycount 
+						from ".wtw_tableprefix."things 
+						where createuserid='".$wtwconnect->userid."' and deleted=0) t2 on 1=1
+				union
+			select '3D Avatars' as item, a1.scount, a2.mycount 
+				from (select count(avatarid) as scount from ".wtw_tableprefix."avatars where deleted=0) a1
+					left join (select count(avatarid) as mycount 
+						from ".wtw_tableprefix."avatars 
+						where (hostuserid='".$wtwconnect->userid."'
+							or createuserid='".$wtwconnect->userid."') and deleted=0) a2 on 1=1
+				union
+			select '3D Models' as item, m1.scount, m2.mycount 
+				from (select count(uploadobjectid) as scount from ".wtw_tableprefix."uploadobjects where deleted=0) m1
+					left join (select count(uploadobjectid) as mycount 
+						from ".wtw_tableprefix."uploadobjects 
+						where (createuserid='".$wtwconnect->userid."' or userid='".$wtwconnect->userid."') and deleted=0) m2 on 1=1
+				union
+			select 'Uploads' as item, u1.scount, u2.mycount 
+				from (select count(uploadid) as scount from ".wtw_tableprefix."uploads where deleted=0) u1
+					left join (select count(uploadid) as mycount 
+						from ".wtw_tableprefix."uploads 
+						where (createuserid='".$wtwconnect->userid."' or userid='".$wtwconnect->userid."') and deleted=0) u2 on 1=1
+				union
+			select 'Users 3D Avatars' as item, ua1.scount, ua2.mycount 
+				from (select count(useravatarid) as scount from ".wtw_tableprefix."useravatars where deleted=0) ua1
+					left join (select count(useravatarid) as mycount 
+						from ".wtw_tableprefix."useravatars 
+						where createuserid='".$wtwconnect->userid."' and deleted=0) ua2 on 1=1
+		");		
+
+		foreach ($zresults as $zrow) {
+			/* calculate user drive space */
+			$zfoldersize = 0;
+			switch ($zrow["item"]) {
+				case '3D Communities':
+					$zresults2 = $wtwconnect->query("
+						select * 
+							from ".wtw_tableprefix."communities 
+							where deleted=0 
+								and createuserid='".$wtwconnect->userid."';");
+					foreach ($zresults2 as $zrow2) {
+						if (file_exists($wtwconnect->rootpath."/content/uploads/communities/".$zrow2["communityid"])) {
+							$zsize = $wtwconnect->dirSize($wtwconnect->rootpath."/content/uploads/communities/".$zrow2["communityid"]);
+							$zwebsitesize += $zsize;
+							$zfoldersize += $zsize;
+						}
+					}
+					break;
+				case '3D Buildings':
+					$zresults2 = $wtwconnect->query("
+						select * 
+							from ".wtw_tableprefix."buildings 
+							where deleted=0 
+								and createuserid='".$wtwconnect->userid."';");
+					foreach ($zresults2 as $zrow2) {
+						if (file_exists($wtwconnect->rootpath."/content/uploads/buildings/".$zrow2["buildingid"])) {
+							$zsize = $wtwconnect->dirSize($wtwconnect->rootpath."/content/uploads/buildings/".$zrow2["buildingid"]);
+							$zwebsitesize += $zsize;
+							$zfoldersize += $zsize;
+						}
+					}
+					break;
+				case '3D Things':
+					$zresults2 = $wtwconnect->query("
+						select * 
+							from ".wtw_tableprefix."things 
+							where deleted=0 
+								and createuserid='".$wtwconnect->userid."';");
+					foreach ($zresults2 as $zrow2) {
+						if (file_exists($wtwconnect->rootpath."/content/uploads/things/".$zrow2["thingid"])) {
+							$zsize = $wtwconnect->dirSize($wtwconnect->rootpath."/content/uploads/things/".$zrow2["thingid"]);
+							$zwebsitesize += $zsize;
+							$zfoldersize += $zsize;
+						}
+					}
+					break;
+				case '3D Avatars':
+					$zresults2 = $wtwconnect->query("
+						select * 
+							from ".wtw_tableprefix."avatars 
+							where deleted=0 
+								and (hostuserid='".$wtwconnect->userid."'
+									or createuserid='".$wtwconnect->userid."');");
+					foreach ($zresults2 as $zrow2) {
+						if (file_exists($wtwconnect->rootpath."/content/uploads/avatars/".$zrow2["avatarid"])) {
+							$zsize = $wtwconnect->dirSize($wtwconnect->rootpath."/content/uploads/avatars/".$zrow2["avatarid"]);
+							$zwebsitesize += $zsize;
+							$zfoldersize += $zsize;
+						}
+					}
+					break;
+				case '3D Models':
+					$zresults2 = $wtwconnect->query("
+						select * 
+							from ".wtw_tableprefix."uploadobjects 
+							where deleted=0 
+								and (createuserid='".$wtwconnect->userid."'
+									or userid='".$wtwconnect->userid."');");
+					foreach ($zresults2 as $zrow2) {
+						if (file_exists($wtwconnect->rootpath.$zrow2["objectfolder"])) {
+							$zsize = $wtwconnect->dirSize($wtwconnect->rootpath.$zrow2["objectfolder"]);
+							$zwebsitesize += $zsize;
+							$zfoldersize += $zsize;
+						}
+					}
+					break;
+				case 'Uploads':
+					$zresults2 = $wtwconnect->query("
+						select * 
+							from ".wtw_tableprefix."uploads 
+							where deleted=0 
+								and (createuserid='".$wtwconnect->userid."'
+									or userid='".$wtwconnect->userid."');");
+					foreach ($zresults2 as $zrow2) {
+						if (file_exists($wtwconnect->rootpath.$zrow2["filepath"])) {
+							$zsize = filesize($wtwconnect->rootpath.$zrow2["filepath"]);
+							$zwebsitesize += $zsize;
+							$zfoldersize += $zsize;
+						}
+					}
+					break;
+				case 'Users 3D Avatars':
+					$zresults2 = $wtwconnect->query("
+						select * 
+							from ".wtw_tableprefix."useravatars 
+							where deleted=0 
+								and createuserid='".$wtwconnect->userid."';");
+					foreach ($zresults2 as $zrow2) {
+						if (file_exists($wtwconnect->rootpath."/content/uploads/useravatars/".$zrow2["useravatarid"])) {
+							$zsize = $wtwconnect->dirSize($wtwconnect->rootpath."/content/uploads/useravatars/".$zrow2["useravatarid"]);
+							$zwebsitesize += $zsize;
+							$zfoldersize += $zsize;
+						}
+					}
+					break;
+			}
+			/* add values to response array */
+			if (empty($i)) {
+				$zresponse[$i] = array(
+					'item'=> $zrow["item"],
+					'mycount'=> $zrow["mycount"],
+					'scount'=> $zrow["scount"],
+					'foldersize'=> $zfoldersize,
+					'downloads'=> $zdownloads
+				);
+			} else {
+				$zresponse[$i] = array(
+					'item'=> $zrow["item"],
+					'mycount'=> $zrow["mycount"],
+					'scount'=> $zrow["scount"],
+					'foldersize'=> $zfoldersize,
+					'downloads'=> null
+				);
+			}
+			$i += 1;
+		}		
+		
+		$zresponse[$i] = array(
+			'item'=> 'Total Folder Size',
+			'mycount'=> '',
+			'scount'=> $zwebsitesize,
+			'foldersize'=> $zwebsitesize,
+			'downloads'=> null
+		);
+		$i += 1;		
+		
 	}
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 

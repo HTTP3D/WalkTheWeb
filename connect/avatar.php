@@ -10,6 +10,10 @@ try {
 
 	/* get values from querystring or session */
 	$zavatarid = $wtwconnect->getVal('avatarid','');
+	$zhostuserid = '';
+	if ($wtwconnect->isUserInRole("Host") && $wtwconnect->isUserInRole("Admin") == false) {
+		$zhostuserid = $wtwconnect->userid;
+	}
 
 	$zavatarparts = array();
 	$zavataranimationdefs = array();
@@ -93,6 +97,7 @@ try {
 				on a1.snapshotid=u1.uploadid
 		where a1.deleted=0 
 			and a1.avatarid='".$zavatarid."'
+			and (hostuserid='".$zhostuserid."' or hostuserid='')
 		order by a1.avatargroup, a1.sortorder, a1.displayname;");
 	$zavatar = array();
 
@@ -154,6 +159,7 @@ try {
 		/* Load the avatar information for response */
 		$zavatar = array(
 			'avatarid'=> $zrow["avatarid"],
+			'hostuserid'=> $zrow["hostuserid"],
 			'versionid'=> $zrow["versionid"],
 			'version'=> $zrow["version"],
 			'versionorder'=> $zrow["versionorder"],

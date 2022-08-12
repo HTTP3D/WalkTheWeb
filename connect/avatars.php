@@ -11,6 +11,11 @@ try {
 	/* get values from querystring or session */
 	$zgroups = $wtwconnect->getVal('groups','');
 	
+	$zhostuserid = '';
+	if ($wtwconnect->isUserInRole("Host") && $wtwconnect->isUserInRole("Admin") == false) {
+		$zhostuserid = $wtwconnect->userid;
+	}
+
 	$zresults = array();
 	$zwebtype = 'avatars';
 	if (!empty($zgroups) && isset($zgroups)) {
@@ -18,6 +23,7 @@ try {
 			/* pull a group of MY available avatars */
 			$zresults = $wtwconnect->query("
 				select distinct *,
+					'' as hostuserid,
 					'' as templatename, 
 					'' as description, 
 					'' as tags, 
@@ -31,7 +37,7 @@ try {
 			$zwebtype = 'useravatars';
 		} else {
 			/* pull a group of available avatars */
-			$zwhere = "a1.deleted=0  and (";
+			$zwhere = "a1.deleted=0 and (a1.hostuserid='".$zhostuserid."' or a1.hostuserid='') and (";
 			if (strpos($zgroups, ',') !== false) {
 				$zgrouplist = explode(",", $zgroups);
 				$i = 0;
@@ -55,7 +61,7 @@ try {
 				left join (select displayname from ".wtw_tableprefix."users where userid='".$wtwconnect->userid."') u1
 				on 1=1
 				where ".$zwhere." 
-				order by a1.avatargroup, a1.displayname;");
+				order by a1.hostuserid desc, a1.avatargroup, a1.displayname;");
 		}
 	} else {
 		$zresults = $wtwconnect->query("
@@ -65,8 +71,8 @@ try {
 			from ".wtw_tableprefix."avatars a1
 				left join (select displayname from ".wtw_tableprefix."users where userid='".$wtwconnect->userid."') u1
 				on 1=1
-			where a1.deleted=0 
-			order by a1.avatargroup, a1.displayname;");
+			where a1.deleted=0 and (a1.hostuserid='".$zhostuserid."' or a1.hostuserid='')
+			order by a1.hostuserid desc, a1.avatargroup, a1.displayname;");
 	}
 	$i = 0;
 	$zavatars = array();
@@ -95,6 +101,7 @@ try {
 		$zavatars[$i] = array(
 			'useravatarid'=> $zrow["useravatarid"],
 			'avatarid'=> $zrow["avatarid"],
+			'hostuserid'=> $zrow["hostuserid"],
 			'versionid'=> $zrow["versionid"],
 			'version'=> $zrow["version"],
 			'versionorder'=> $zrow["versionorder"],

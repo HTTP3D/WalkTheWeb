@@ -9,25 +9,49 @@ try {
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/webalias.php");
 	
 	$zwebaliasid = $wtwconnect->getVal('webaliasid','');
+	$zhostuserid = '';
+	if ($wtwconnect->isUserInRole("Host") && $wtwconnect->isUserInRole("Admin") == false) {
+		$zhostuserid = $wtwconnect->userid;
+	}
 	
 	$zresponse = array();
-	if (!empty($zwebaliasid) && isset($zwebaliasid) && $wtwconnect->isUserInRole("Admin")) {
+	if (!empty($zwebaliasid) && isset($zwebaliasid) && ($wtwconnect->isUserInRole("Admin") || $wtwconnect->isUserInRole("Host"))) {
 		/* get web aliases for a user */
-		$zresults = $wtwconnect->query("
-			select w1.*
-			from ".wtw_tableprefix."webaliases w1
-			where w1.deleted=0
-				and w1.webaliasid='".$zwebaliasid."'
-			order by 
-				w1.domainname,
-				w1.communitypublishname,
-				w1.buildingpublishname,
-				w1.thingpublishname,
-				w1.communityid,
-				w1.buildingid,
-				w1.thingid,
-				w1.webaliasid;");
-		
+		$zresults = array();
+		if ($wtwconnect->isUserInRole("Admin")) {
+			$zresults = $wtwconnect->query("
+				select w1.*
+				from ".wtw_tableprefix."webaliases w1
+				where w1.deleted=0
+					and w1.webaliasid='".$zwebaliasid."'
+				order by 
+					w1.hostuserid,
+					w1.domainname,
+					w1.communitypublishname,
+					w1.buildingpublishname,
+					w1.thingpublishname,
+					w1.communityid,
+					w1.buildingid,
+					w1.thingid,
+					w1.webaliasid;");
+		} else {
+			$zresults = $wtwconnect->query("
+				select w1.*
+				from ".wtw_tableprefix."webaliases w1
+				where w1.deleted=0
+					and w1.webaliasid='".$zwebaliasid."'
+					and hostuserid='".$zhostuserid."'
+					and not hostuserid=''
+				order by 
+					w1.domainname,
+					w1.communitypublishname,
+					w1.buildingpublishname,
+					w1.thingpublishname,
+					w1.communityid,
+					w1.buildingid,
+					w1.thingid,
+					w1.webaliasid;");
+		}
 		echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 		
 		$i = 0;

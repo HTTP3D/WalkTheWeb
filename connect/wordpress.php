@@ -69,6 +69,10 @@ try {//host
 	$zstoreproducturl = $wtwconnect->decode64($zstoreproducturl);
 	$zstoreapiurl = $wtwconnect->decode64($zstoreapiurl);
 	$ziframes = $wtwconnect->decode64($ziframes);
+	$zhostuserid = '';
+	if ($wtwconnect->isUserInRole("Host") && $wtwconnect->isUserInRole("Admin") == false) {
+		$zhostuserid = $zwtwuserid;
+	}
 
 	try {
 		$zparse = parse_url($zhosturl);
@@ -279,6 +283,7 @@ try {//host
 				$wtwconnect->query("
 					insert into ".wtw_tableprefix."webaliases
 					   (webaliasid,
+					    hostuserid,
 						forcehttps,
 						domainname,
 						webalias,
@@ -294,6 +299,7 @@ try {//host
 						updateuserid)
 					values
 					   ('".$zwebaliasid."',
+					    '".$zhostuserid."',
 						".$zforcehttps.",
 						'".$zdomainname."',
 						'".$zdomainname."',
@@ -313,6 +319,7 @@ try {//host
 				$wtwconnect->query("
 					insert into ".wtw_tableprefix."webaliases
 					   (webaliasid,
+					    hostuserid,
 						forcehttps,
 						domainname,
 						webalias,
@@ -328,6 +335,7 @@ try {//host
 						updateuserid)
 					values
 					   ('".$zwebaliasid."',
+					    '".$zhostuserid."',
 						".$zforcehttps.",
 						'".$zdomainname."',
 						'".$zdomainname."',
