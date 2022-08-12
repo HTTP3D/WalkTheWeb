@@ -273,66 +273,71 @@ WTWJS.prototype.getSelectBuildingsList = async function() {
 			function(zresponse) {
 				WTW.buildings = JSON.parse(zresponse);
 				if (WTW.buildings != null) {
-					var zversioncheck = [];
-					for (var i = 0; i < WTW.buildings.length; i++) {
-						if (WTW.buildings[i] != null) {
-							var zversion = '';
-							zversioncheck[zversioncheck.length] = {
-								'webtype': 'building',
-								'webname': btoa(WTW.buildings[i].buildinginfo.buildingname),
-								'webdesc': btoa(WTW.buildings[i].buildinginfo.buildingdescription),
-								'webimage': WTW.buildings[i].buildinginfo.snapshotpath,
-								'webid': WTW.buildings[i].buildinginfo.buildingid,
-								'versionid': WTW.buildings[i].buildinginfo.versionid,
-								'version': WTW.buildings[i].buildinginfo.version
-							};
-							if (WTW.buildings[i].buildinginfo.version != undefined) {
-								if (WTW.buildings[i].buildinginfo.version != '') {
-									zversion = ' (v' + WTW.buildings[i].buildinginfo.version + ')';
+					if (WTW.buildings.length > 0) {
+						var zversioncheck = [];
+						for (var i = 0; i < WTW.buildings.length; i++) {
+							if (WTW.buildings[i] != null) {
+								var zversion = '';
+								zversioncheck[zversioncheck.length] = {
+									'webtype': 'building',
+									'webname': btoa(WTW.buildings[i].buildinginfo.buildingname),
+									'webdesc': btoa(WTW.buildings[i].buildinginfo.buildingdescription),
+									'webimage': WTW.buildings[i].buildinginfo.snapshotpath,
+									'webid': WTW.buildings[i].buildinginfo.buildingid,
+									'versionid': WTW.buildings[i].buildinginfo.versionid,
+									'version': WTW.buildings[i].buildinginfo.version
+								};
+								if (WTW.buildings[i].buildinginfo.version != undefined) {
+									if (WTW.buildings[i].buildinginfo.version != '') {
+										zversion = ' (v' + WTW.buildings[i].buildinginfo.version + ')';
+									}
+								}
+								if (WTW.buildings[i].buildinginfo.buildingid == buildingid) {
+									dGet("wtw_listbuildings").innerHTML += "<div id=\"wtw_beditweb-" + WTW.buildings[i].buildinginfo.buildingid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.buildings[i].buildinginfo.buildingname) + "</div>\r\n";
+								} else {
+									dGet("wtw_listbuildings").innerHTML += "<div id=\"wtw_beditweb-" + WTW.buildings[i].buildinginfo.buildingid + "\" onclick=\"window.location.href='admin.php?buildingid=" + WTW.buildings[i].buildinginfo.buildingid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.buildings[i].buildinginfo.buildingname) + "</div>\r\n";
 								}
 							}
-							if (WTW.buildings[i].buildinginfo.buildingid == buildingid) {
-								dGet("wtw_listbuildings").innerHTML += "<div id=\"wtw_beditweb-" + WTW.buildings[i].buildinginfo.buildingid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.buildings[i].buildinginfo.buildingname) + "</div>\r\n";
-							} else {
-								dGet("wtw_listbuildings").innerHTML += "<div id=\"wtw_beditweb-" + WTW.buildings[i].buildinginfo.buildingid + "\" onclick=\"window.location.href='admin.php?buildingid=" + WTW.buildings[i].buildinginfo.buildingid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.buildings[i].buildinginfo.buildingname) + "</div>\r\n";
-							}
 						}
-					}
-					/* check for updated versions */
-					var zrequest2 = {
-						'versioncheck': JSON.stringify(zversioncheck),
-						'function':'versioncheck'
-					};
-					WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/versioncheck.php", zrequest2, 
-						function(zresponse2) {
-							zresponse2 = JSON.parse(zresponse2);
-							for (var i = 0; i < zresponse2.length; i++) {
-								if (zresponse2[i] != null) {
-									var zversionid = zresponse2[i].versionid;
-									if (document.getElementById('wtw_beditweb-' + zversionid) != null) {
-										var zwebid = zresponse2[i].webid;
-										var zupdatewebid = zresponse2[i].updatewebid;
-										var zversion = zresponse2[i].version;
-										var zoldversion = zresponse2[i].oldversion;
-										
-										var zdiv = document.createElement('div');
-										zdiv.id = 'wtw_beditweb_update-' + zversionid;
-										zdiv.className = 'wtw-badgebutton';
-										zdiv.innerHTML = 'Update Available (v' + zversion + ')';
-										zdiv.onclick = function(zevent) {
-											if (zevent == undefined) {
-												zevent = window.event;
-											}
-											WTW.downloadWebVersion(this, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'building');
-											zevent.stopPropagation();
-											zevent.preventDefault();
-										};
-										document.getElementById('wtw_beditweb-' + zversionid).appendChild(zdiv);
+						/* check for updated versions */
+						var zrequest2 = {
+							'versioncheck': JSON.stringify(zversioncheck),
+							'function':'versioncheck'
+						};
+						WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/versioncheck.php", zrequest2, 
+							function(zresponse2) {
+								zresponse2 = JSON.parse(zresponse2);
+								for (var i = 0; i < zresponse2.length; i++) {
+									if (zresponse2[i] != null) {
+										var zversionid = zresponse2[i].versionid;
+										if (document.getElementById('wtw_beditweb-' + zversionid) != null) {
+											var zwebid = zresponse2[i].webid;
+											var zupdatewebid = zresponse2[i].updatewebid;
+											var zversion = zresponse2[i].version;
+											var zoldversion = zresponse2[i].oldversion;
+											
+											var zdiv = document.createElement('div');
+											zdiv.id = 'wtw_beditweb_update-' + zversionid;
+											zdiv.className = 'wtw-badgebutton';
+											zdiv.innerHTML = 'Update Available (v' + zversion + ')';
+											zdiv.onclick = function(zevent) {
+												if (zevent == undefined) {
+													zevent = window.event;
+												}
+												WTW.downloadWebVersion(this, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'building');
+												zevent.stopPropagation();
+												zevent.preventDefault();
+											};
+											document.getElementById('wtw_beditweb-' + zversionid).appendChild(zdiv);
+										}
 									}
 								}
 							}
-						}
-					);
+						);
+					} else {
+						dGet("wtw_listbuildings").innerHTML = "<div style=\"color:yellow;\">No 3D Buildings Found</div><br />";
+						dGet("wtw_listbuildings").innerHTML += "<div id=\"wtw_adminaddbuilding2\" class=\"wtw-adminsubmenu\" onclick=\"WTW.adminMenuItemSelected(dGet('wtw_adminaddbuilding'));\">Add New 3D Building</div>";
+					}
 				}
 				window.setTimeout(function() {
 					WTW.hide('wtw_loadingbuildingid');

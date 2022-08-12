@@ -212,12 +212,12 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 					case "wtw_cancel25":
 						WTW.submitCommunityForm(-1);
 						WTW.hideAdminMenu();
-						WTW.show('wtw_adminmenu24');
+						WTW.backToTools();
 						break;
 					case "wtw_save25":
 						WTW.submitCommunityForm(1);
 						WTW.hideAdminMenu();
-						WTW.show('wtw_adminmenu24');
+						WTW.backToTools();
 						break;
 					case 'wtw_admincommunitylandscape':
 						WTW.hideAdminMenu();
@@ -356,7 +356,7 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 							scene.gravity = new BABYLON.Vector3(0, 0, 0);
 						}
 						WTW.saveGravity();
-						WTW.show('wtw_adminmenu30');
+						WTW.backToTools();
 						break;
 					case "wtw_bback45":
 					case "wtw_cancel45":
@@ -374,13 +374,13 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 							WTW.init.gravity = 0;
 							scene.gravity = new BABYLON.Vector3(0, 0, 0);
 						}
-						WTW.show('wtw_adminmenu30');
+						WTW.backToTools();
 						break;
 					case "wtw_bback42":
 					case "wtw_cancel42":
 						WTW.submitCommunityForm(-1);
 						WTW.hideAdminMenu();
-						WTW.show('wtw_adminmenu30');
+						WTW.backToTools();
 						break;
 					case 'wtw_admincommunitysnapshot':	
 						WTW.hideAdminMenu();
@@ -434,13 +434,13 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 					case "wtw_adminmenubuildsave":
 						WTW.hideAdminMenu();
 						WTW.submitBuildingForm(1);
-						WTW.show('wtw_adminmenu1');
+						WTW.backToTools();
 						break;
 					case "wtw_bback5":
 					case "wtw_cancel5":
 						WTW.hideAdminMenu();
 						WTW.submitBuildingForm(-1);
-						WTW.show('wtw_adminmenu4');
+						WTW.backToTools();
 						break;
 					case "wtw_bback9":
 						WTW.hideAdminMenu();
@@ -512,10 +512,10 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.hideAdminMenu();
 						WTW.show('wtw_adminmenu34');
 						break;
-					case "wtw_save35":
+					case "wtw_adminmenuthingsave":
 						WTW.submitthingForm(1);
 						WTW.hideAdminMenu();
-						WTW.show('wtw_adminmenu34');
+						WTW.backToTools();
 						break;
 					case "wtw_cancel35":
 						WTW.submitthingForm(-1);
@@ -728,6 +728,9 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						WTW.disposeClean('avatarscale-0--0--babylonfile');
 						WTW.show('wtw_adminEditAvatarDiv');
 						break;
+					case "wtw_admincustomcopyavatar":
+						WTW.copyMyAvatar();
+						break;
 					case "wtw_adminavatarinformation":
 						WTW.hideAdminMenu();
 						WTW.openEditAvatar();
@@ -781,11 +784,17 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 					case 'wtw_adminserversettings':
 						WTW.openFullPageForm('settings','Server Settings');
 						break;
-					case 'wtw_adminwebalias':
-						WTW.openFullPageForm('settings','Web Aliases');
-						break;
 					case 'wtw_adminemailserver':
 						WTW.openFullPageForm('settings','Email Server');
+						break;
+					case 'wtw_adminhostingserver':
+						WTW.openFullPageForm('settings','Server Hosting Settings');
+						break;
+					case 'wtw_adminwebdomains':
+						WTW.openFullPageForm('settings','Web Domains');
+						break;
+					case 'wtw_adminwebalias':
+						WTW.openFullPageForm('settings','Web Aliases');
 						break;
 					case "wtw_adminapikeys":
 						WTW.openFullPageForm('settings','API Keys Access');

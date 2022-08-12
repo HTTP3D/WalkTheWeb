@@ -933,23 +933,61 @@ WTWJS.prototype.formatNumber = function(zval, zdecimalpoints) {
 	/* format a number with #,###.## (zval is the number and zdecimalpoints is number of decimal points) */
 	var znumbertext = "";
 	try {
-		if (WTW.isNumeric(zval)) {
-			zval = Number(zval);
-			var zdecimal = '';
-			var zround = '';
-			var zval1 = 0;
-			var zval4 = 0;
-			var zval3 = 0;
-			var zval2 = zval.toFixed(zdecimalpoints), zval3 = zval2|0, b = zval < 0 ? 1 : 0,
-			zval4 = Math.abs(zval2-zval3), zdecimal = ('' + zval4.toFixed(zdecimalpoints)).substr(2, zdecimalpoints),
-			zval1 = '' + zval3, i = zval1.length, zround = '';
-			while ( (i-=3) > b ) { 
-				zround = ',' + zval1.substr(i, 3) + zround; 
+		if (zdecimalpoints == undefined) {
+			zdecimalpoints= 2;
+		}
+		if (zval != null) {
+			if (WTW.isNumeric(zval)) {
+				zval = Number(zval);
+				var zdecimal = '';
+				var zround = '';
+				var zval1 = 0;
+				var zval4 = 0;
+				var zval3 = 0;
+				var zval2 = zval.toFixed(zdecimalpoints), zval3 = zval2|0, b = zval < 0 ? 1 : 0,
+				zval4 = Math.abs(zval2-zval3), zdecimal = ('' + zval4.toFixed(zdecimalpoints)).substr(2, zdecimalpoints),
+				zval1 = '' + zval3, i = zval1.length, zround = '';
+				while ( (i-=3) > b ) { 
+					zround = ',' + zval1.substr(i, 3) + zround; 
+				}
+				znumbertext = zval1.substr(0, i + 3) + zround + (zdecimal ? '.' + zdecimal: '');
 			}
-			znumbertext = zval1.substr(0, i + 3) + zround + (zdecimal ? '.' + zdecimal: '');
 		}
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-formatNumber=" + ex.message);
+    }  
+	return znumbertext;
+}
+
+WTWJS.prototype.formatMoney = function(zval, zdecimalpoints) {
+	/* format a number with #,###.## (zval is the number and zdecimalpoints is number of decimal points) */
+	var znumbertext = "";
+	try {
+		if (zdecimalpoints == undefined) {
+			zdecimalpoints= 2;
+		}
+		if (zval != null) {
+			if (zval.length > 0) {
+				zval = zval.replace(' ','').replace('$','');
+			}
+			if (WTW.isNumeric(zval)) {
+				zval = Number(zval);
+				var zdecimal = '';
+				var zround = '';
+				var zval1 = 0;
+				var zval4 = 0;
+				var zval3 = 0;
+				var zval2 = zval.toFixed(zdecimalpoints), zval3 = zval2|0, b = zval < 0 ? 1 : 0,
+				zval4 = Math.abs(zval2-zval3), zdecimal = ('' + zval4.toFixed(zdecimalpoints)).substr(2, zdecimalpoints),
+				zval1 = '' + zval3, i = zval1.length, zround = '';
+				while ( (i-=3) > b ) { 
+					zround = ',' + zval1.substr(i, 3) + zround; 
+				}
+				znumbertext = '$' + zval1.substr(0, i + 3) + zround + (zdecimal ? '.' + zdecimal: '');
+			}
+		}
+    } catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-formatMoney=" + ex.message);
     }  
 	return znumbertext;
 }
@@ -990,18 +1028,28 @@ WTWJS.prototype.isDate = function(zval) {
 
 WTWJS.prototype.formatDate = function(zdatetext) {
 	/* format zdatetext as month/day/year */
-	if (zdatetext != "") {
-		var zdate = new Date(zdatetext);
-		var	zmonth = '' + (zdate.getMonth() + 1);
-		var	zday = '' + zdate.getDate();
-		var	zyear = zdate.getFullYear();
+	var zdate = '';
+	try {
+		if (zdatetext != null) {
+			if (zdatetext != "") {
+				var zddate = new Date(zdatetext);
+				var	zmonth = '' + (zddate.getMonth() + 1);
+				var	zday = '' + zddate.getDate();
+				var	zyear = zddate.getFullYear();
 
-		if (zmonth.length < 2) zmonth = '0' + zmonth;
-		if (zday.length < 2) zday = '0' + zday;
-		return [zmonth, zday, zyear].join('/');
-	} else {
-		return "";
+				if (zmonth.length < 2) {
+					zmonth = '0' + zmonth;
+				}
+				if (zday.length < 2) {
+					zday = '0' + zday;
+				}
+				zdate = [zmonth, zday, zyear].join('/');
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-formatDate=" + ex.message);
 	}
+	return zdate;
 }
 
 WTWJS.prototype.formatDateLong = function(zdatetext) {
@@ -1060,11 +1108,31 @@ WTWJS.prototype.formatDateLong = function(zdatetext) {
 	}
 }
 
-WTWJS.prototype.addDays = function(zdate, zdays) {
+WTWJS.prototype.addDays = function(zdatetext, zdays) {
 	/* add days to date */
-    var zresults = new Date(zdate);
-    zresults.setDate(zresults.getDate() + zdays);
-    return zresults;
+	var zdate = '';
+	try {
+		if (zdatetext != null) {
+			if (zdatetext != "") {
+				var zddate = new Date(zdatetext);
+				zddate.setDate(zddate.getDate() + Number(zdays));
+				var	zmonth = '' + (zddate.getMonth() + 1);
+				var	zday = '' + zddate.getDate();
+				var	zyear = zddate.getFullYear();
+
+				if (zmonth.length < 2) {
+					zmonth = '0' + zmonth;
+				}
+				if (zday.length < 2) {
+					zday = '0' + zday;
+				}
+				zdate = [zmonth, zday, zyear].join('/');
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_utilities.js-addDays=" + ex.message);
+	}
+	return zdate;
 }
 
 /* url and links */
@@ -1426,6 +1494,21 @@ WTWJS.prototype.toggle = function(zelementname) {
 	}
 }
 
+WTWJS.prototype.toggleTR = function(zelementname) {
+	/* show or hide an table row element (toggle show/hide) */
+	try {
+		if (dGet(zelementname) != null) {
+			if (dGet(zelementname).style.visibility == 'visible') {
+				WTW.hide(zelementname);
+			} else {
+				dGet(zelementname).style.display = 'table-row';
+				dGet(zelementname).style.visibility = 'visible';
+			}
+		}
+	} catch (ex) { 
+		WTW.log("core-scripts-prime-wtw_utilities.js-toggle=" + ex.message);
+	}
+}
 
 /* get position, rotation, or distance to and from various reference points */
 

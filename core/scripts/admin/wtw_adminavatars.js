@@ -16,6 +16,7 @@ WTWJS.prototype.openSelectAvatar = function() {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.avatars != null) {
 					var zavatargroup = '';
+					var zhostid = '';
 					var zversioncheck = [];
 					for (var i = 0; i < zresponse.avatars.length; i++) {
 						if (zresponse.avatars[i] != null) {
@@ -33,6 +34,15 @@ WTWJS.prototype.openSelectAvatar = function() {
 								if (zresponse.avatars[i].version != '') {
 									zversion = ' (v' + zresponse.avatars[i].version + ')';
 								}
+							}
+							if (zhostid != zresponse.avatars[i].hostuserid) {
+								if (zhostid == '') {
+									dGet("wtw_listavatars").innerHTML += "<h2 style='color:yellow;text-align:center;width:100%;'>Custom Avatars</h2>";
+								} else {
+									dGet("wtw_listavatars").innerHTML += "<h2 style='color:yellow;text-align:center;width:100%;'>Global Avatars</h2>";
+									zavatargroup = '';
+								}
+								zhostid = zresponse.avatars[i].hostuserid;
 							}
 							if (zresponse.avatars[i].avatargroup != zavatargroup) {
 								dGet("wtw_listavatars").innerHTML += "<h2>" + zresponse.avatars[i].avatargroup + "</h2>";

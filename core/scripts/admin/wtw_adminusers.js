@@ -385,6 +385,25 @@ WTWJS.prototype.addUserRole = async function(zuserid) {
 	}
 }	
 
+WTWJS.prototype.isUserInRole = function(zrolename) {
+	/* is user in a role by name */
+	var zisinrole = false;
+	try {	
+		if (WTW.roles != null && zrolename != '') {
+			for (i=0;i< WTW.roles.length;i++) {
+				if (WTW.roles[i] != null) {
+					if (WTW.roles[i].rolename.toLowerCase() == zrolename.toLowerCase()) {
+						zisinrole = true;
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminusers.js-isUserInRole=" + ex.message);
+	}
+	return zisinrole;
+}	
+
 WTWJS.prototype.addUser = function() {
 	/* open form to add new user */
 	try {

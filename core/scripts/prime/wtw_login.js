@@ -183,7 +183,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				break;
 			case "Email Verification":
 				zpagediv += "<h2 class=\"wtw-login\">Email Verification</h2>" +
-					"<h2 style=\"color:#FDFFCE;\">WalkTheWeb would like to confirm your email before continuing. Please check your email for the latest validation link.<br /><br />If you cannot find the email, click <i>Continue</i> to resend it.<br /><br />After you confirm your email, click <i>Continue</i> to complete the login.</h2>" + 
+					"<h2 style=\"color:#FDFFCE;white-space:normal;\">WalkTheWeb would like to confirm your email before continuing. Please check your email for the latest validation link.<br /><br />If you cannot find the email, click <i>Continue</i> to resend it.<br /><br />After you confirm your email, click <i>Continue</i> to complete the login.</h2>" + 
 					"<div class=\"wtw-loginbutton\" onclick=\"WTW.checkEmailValidation('');\"><img src=\"/content/system/images/wtwlogo.png\" alt=\"HTTP3D Inc.\" title=\"HTTP3D Inc.\" class=\"wtw-loginlogo\"/><div style=\"margin-top:10px;\">Continue</div></div>" +
 					"<div class=\"wtw-logincancel\" onclick=\"WTW.openLocalLogin('3D Website Login', .3, .6);\">Return to Login</div>&nbsp;&nbsp;";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;

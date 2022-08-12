@@ -378,6 +378,9 @@ WTWJS.prototype.loadInitSettings = function() {
 			if (wtw_domain.spawnzones != null) {
 				WTW.spawnZones = wtw_domain.spawnzones;
 			}
+			if (wtw_domain.roles != null) {
+				WTW.roles = wtw_domain.roles;
+			}
 		}
 		if (communityid == null) {
 			communityid = "";

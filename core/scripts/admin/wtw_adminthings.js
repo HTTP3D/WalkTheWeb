@@ -87,6 +87,7 @@ WTWJS.prototype.loadThingForm = async function(zthingid) {
 										dGet('wtw_tinfothingversion').value = WTW.things[i].thinginfo.version;
 										dGet('wtw_tinfothingversiondesc').value = WTW.decode(WTW.things[i].thinginfo.versiondesc);
 										dGet('wtw_tthingsnapshotid').value = WTW.things[i].thinginfo.snapshot;
+										dGet('wtw_tthinganalyticsid').value = WTW.things[i].thinginfo.analytics;
 										dGet('wtw_tthingalttag').value = WTW.decode(WTW.things[i].alttag.name);
 									}
 								}
@@ -146,6 +147,7 @@ WTWJS.prototype.submitthingForm = async function(w) {
 								WTW.things[i].thinginfo.versionid = dGet('wtw_tversionid').value;
 								WTW.things[i].thinginfo.version = dGet('wtw_tinfothingversion').value;
 								WTW.things[i].thinginfo.versiondesc = WTW.encode(dGet('wtw_tinfothingversiondesc').value);
+								WTW.things[i].thinginfo.analytics = dGet('wtw_tthinganalyticsid').value;
 								dGet('wtw_showbuildingname').innerHTML = dGet('wtw_tthingname').value;
 							}
 						}
@@ -168,7 +170,7 @@ WTWJS.prototype.submitthingForm = async function(w) {
 							/* note serror would contain errors */
 							/* return to previous menu */
 							WTW.hideAdminMenu();
-							WTW.backToEdit();
+							WTW.backToTools();
 							WTW.setMenuBarSelectText();
 						}
 					);
@@ -191,7 +193,7 @@ WTWJS.prototype.submitthingForm = async function(w) {
 				}
 				/* return to previous menu */
 				WTW.hideAdminMenu();
-				WTW.backToEdit();
+				WTW.backToTools();
 				WTW.setMenuBarSelectText();
 				break;
 		}
@@ -286,66 +288,71 @@ WTWJS.prototype.getSelectThingsList = async function() {
 			function(zresponse) {
 				WTW.things = JSON.parse(zresponse);
 				if (WTW.things != null) {
-					var zversioncheck = [];
-					for (var i = 0; i < WTW.things.length; i++) {
-						if (WTW.things[i] != null) {
-							var zversion = '';
-							zversioncheck[zversioncheck.length] = {
-								'webtype': 'thing',
-								'webname': btoa(WTW.things[i].thinginfo.thingname),
-								'webdesc': btoa(WTW.things[i].thinginfo.thingdescription),
-								'webimage': WTW.things[i].thinginfo.snapshotpath,
-								'webid': WTW.things[i].thinginfo.thingid,
-								'versionid': WTW.things[i].thinginfo.versionid,
-								'version': WTW.things[i].thinginfo.version
-							};
-							if (WTW.things[i].thinginfo.version != undefined) {
-								if (WTW.things[i].thinginfo.version != '') {
-									zversion = ' (v' + WTW.things[i].thinginfo.version + ')';
+					if (WTW.things.length > 0) {
+						var zversioncheck = [];
+						for (var i = 0; i < WTW.things.length; i++) {
+							if (WTW.things[i] != null) {
+								var zversion = '';
+								zversioncheck[zversioncheck.length] = {
+									'webtype': 'thing',
+									'webname': btoa(WTW.things[i].thinginfo.thingname),
+									'webdesc': btoa(WTW.things[i].thinginfo.thingdescription),
+									'webimage': WTW.things[i].thinginfo.snapshotpath,
+									'webid': WTW.things[i].thinginfo.thingid,
+									'versionid': WTW.things[i].thinginfo.versionid,
+									'version': WTW.things[i].thinginfo.version
+								};
+								if (WTW.things[i].thinginfo.version != undefined) {
+									if (WTW.things[i].thinginfo.version != '') {
+										zversion = ' (v' + WTW.things[i].thinginfo.version + ')';
+									}
+								}
+								if (WTW.things[i].thinginfo.thingid == thingid) {
+									dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditweb-" + WTW.things[i].thinginfo.thingid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
+								} else {
+									dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditweb-" + WTW.things[i].thinginfo.thingid + "\" onclick=\"window.location.href='admin.php?thingid=" + WTW.things[i].thinginfo.thingid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
 								}
 							}
-							if (WTW.things[i].thinginfo.thingid == thingid) {
-								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditweb-" + WTW.things[i].thinginfo.thingid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
-							} else {
-								dGet("wtw_listthings").innerHTML += "<div id=\"wtw_beditweb-" + WTW.things[i].thinginfo.thingid + "\" onclick=\"window.location.href='admin.php?thingid=" + WTW.things[i].thinginfo.thingid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.things[i].thinginfo.thingname) + "</div>\r\n";
-							}
 						}
-					}
-					/* check for updated versions */
-					var zrequest2 = {
-						'versioncheck': JSON.stringify(zversioncheck),
-						'function':'versioncheck'
-					};
-					WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/versioncheck.php", zrequest2, 
-						function(zresponse2) {
-							zresponse2 = JSON.parse(zresponse2);
-							for (var i = 0; i < zresponse2.length; i++) {
-								if (zresponse2[i] != null) {
-									var zwebid = zresponse2[i].webid;
-									var zversionid = zresponse2[i].versionid;
-									if (document.getElementById('wtw_beditweb-' + zwebid) != null) {
-										var zupdatewebid = zresponse2[i].updatewebid;
-										var zversion = zresponse2[i].version;
-										var zoldversion = zresponse2[i].oldversion;
-										
-										var zdiv = document.createElement('div');
-										zdiv.id = 'wtw_beditweb_update-' + zwebid;
-										zdiv.className = 'wtw-badgebutton';
-										zdiv.innerHTML = 'Update Available (v' + zversion + ')';
-										zdiv.onclick = function(zevent) {
-											if (zevent == undefined) {
-												zevent = window.event;
-											}
-											WTW.downloadWebVersion(this, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'thing');
-											zevent.stopPropagation();
-											zevent.preventDefault();
-										};
-										document.getElementById('wtw_beditweb-' + zwebid).appendChild(zdiv);
+						/* check for updated versions */
+						var zrequest2 = {
+							'versioncheck': JSON.stringify(zversioncheck),
+							'function':'versioncheck'
+						};
+						WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/versioncheck.php", zrequest2, 
+							function(zresponse2) {
+								zresponse2 = JSON.parse(zresponse2);
+								for (var i = 0; i < zresponse2.length; i++) {
+									if (zresponse2[i] != null) {
+										var zwebid = zresponse2[i].webid;
+										var zversionid = zresponse2[i].versionid;
+										if (document.getElementById('wtw_beditweb-' + zwebid) != null) {
+											var zupdatewebid = zresponse2[i].updatewebid;
+											var zversion = zresponse2[i].version;
+											var zoldversion = zresponse2[i].oldversion;
+											
+											var zdiv = document.createElement('div');
+											zdiv.id = 'wtw_beditweb_update-' + zwebid;
+											zdiv.className = 'wtw-badgebutton';
+											zdiv.innerHTML = 'Update Available (v' + zversion + ')';
+											zdiv.onclick = function(zevent) {
+												if (zevent == undefined) {
+													zevent = window.event;
+												}
+												WTW.downloadWebVersion(this, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'thing');
+												zevent.stopPropagation();
+												zevent.preventDefault();
+											};
+											document.getElementById('wtw_beditweb-' + zwebid).appendChild(zdiv);
+										}
 									}
 								}
 							}
-						}
-					);
+						);
+					} else {
+						dGet("wtw_listthings").innerHTML = "<div style=\"color:yellow;\">No 3D Things Found</div><br />";
+						dGet("wtw_listthings").innerHTML += "<div id=\"wtw_adminaddthing2\" class=\"wtw-adminsubmenu\" onclick=\"WTW.adminMenuItemSelected(dGet('wtw_adminaddthing'));\">Add New 3D Thing</div>";
+					}
 				}
 				window.setTimeout(function() {
 					WTW.hide('wtw_loadingthingid');

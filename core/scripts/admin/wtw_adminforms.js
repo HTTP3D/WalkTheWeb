@@ -163,6 +163,14 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 					case "Email Server":
 						WTW.openEmailServerSettings();
 						break;
+					case "Server Hosting Settings":
+						WTW.openHostingServerSettings();
+						break;
+					case "Web Domains":
+						WTW.openWebDomainsSettings();
+						/* cancel add or edit if it is open */
+						WTW.saveDomainForm(-1);
+						break;
 					case "Web Aliases":
 						WTW.openWebAliasSettings();
 						break;
@@ -176,6 +184,14 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				WTW.show('wtw_settingspage');
 				WTW.show('wtw_fullpageplugins');
 				WTW.show(zitem);
+				switch (zsetcategory) {
+					case "Invoices":
+						WTW.openInvoices('admin');
+						break;
+					case "My Invoices":
+						WTW.openInvoices('my');
+						break;
+				}
 				break;
 			default:
 				WTW.hide('wtw_fullpageform');
@@ -311,14 +327,20 @@ WTWJS.prototype.checkForFeedbackComplete = function(zresponse, zfilter) {
 			}
 		}
 		zfeedbacklist += "</div>";
-		dGet('wtw_feedbacklist').innerHTML = zfeedbacklist;
+		if (dGet('wtw_feedbacklist') != null) {
+			dGet('wtw_feedbacklist').innerHTML = zfeedbacklist;
+		}
 		WTW.hide('wtw_loadingfeedback');
 		WTW.show('wtw_feedbacklist');
-
-		dGet('wtw_adminmenufeedbackbadge').innerHTML = znewfeedback;
+		
+		if (dGet('wtw_adminmenufeedbackbadge') != null) {
+			dGet('wtw_adminmenufeedbackbadge').innerHTML = znewfeedback;
+		}
 		WTW.updateBadges();
 		
-		dGet('wtw_feedbackpagescroll').style.height = (WTW.sizeY - 160) + 'px';
+		if (dGet('wtw_feedbackpagescroll') != null) {
+			dGet('wtw_feedbackpagescroll').style.height = (WTW.sizeY - 160) + 'px';
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-checkForFeedbackComplete=" + ex.message);
 	}
@@ -404,6 +426,11 @@ WTWJS.prototype.openErrorLog = async function(zfilter) {
 		if (zfilter == undefined) {
 			zfilter = 'All Errors';
 		}
+		if (WTW.isUserInRole('admin')) {
+			WTW.show('wtw_errorlogdelete');
+		} else {
+			WTW.hide('wtw_errorlogdelete');
+		}
 		dGet('wtw_errorlogactive').className = 'wtw-bluebutton';
 		dGet('wtw_errorlogrecent').className = 'wtw-bluebutton';
 		dGet('wtw_errorlogall').className = 'wtw-bluebutton';
@@ -452,6 +479,7 @@ WTWJS.prototype.openErrorLogComplete = function(zresponse, zfilter) {
 					if (zresponse[i] != null) {
 						var zstatuscolor = 'green';
 						var zarchivetext = 'Archive';
+						var zreadonlytext = 'Active';
 						var zarchived = false;
 						var zlogdate = new Date(zresponse[i].logdate);
 						var zdatestring = (zlogdate.getMonth()+1) + "/" + zlogdate.getDate() + "/" + zlogdate.getFullYear();
@@ -459,12 +487,17 @@ WTWJS.prototype.openErrorLogComplete = function(zresponse, zfilter) {
 							zarchived = true;
 							zstatuscolor = "black";
 							zarchivetext = "Restore";
+							zreadonlytext = 'Archived';
 						}
 						
 						zerrorloglist += "<tr id=\"wtw_errorlog-header-" + zresponse[i].errorid + "\" class=\"wtw-versionheader" + zstatuscolor + "\">";
 						zerrorloglist += "<td class=\"wtw-tablecolumns\" style=\"white-space:normal;\">" + zdatestring + "</td>";
 						zerrorloglist += "<td class=\"wtw-tablecolumns\" style=\"white-space:normal;\">" + WTW.encode(zresponse[i].message) + "</td>";
-						zerrorloglist += "<td class=\"wtw-tablecolumns\" style=\"white-space:normal;text-align:right;\"><div id=\"wtw_errorlog-archive-" + zresponse[i].errorid + "\" class=\"wtw-archivebutton\" onclick=\"WTW.archiveErrorLog('" + zresponse[i].errorid + "');\">" + zarchivetext + "</div></td>";
+						if (WTW.isUserInRole('Admin')) {
+							zerrorloglist += "<td class=\"wtw-tablecolumns\" style=\"white-space:normal;text-align:right;\"><div id=\"wtw_errorlog-archive-" + zresponse[i].errorid + "\" class=\"wtw-archivebutton\" onclick=\"WTW.archiveErrorLog('" + zresponse[i].errorid + "');\">" + zarchivetext + "</div></td>";
+						} else {
+							zerrorloglist += "<td class=\"wtw-tablecolumns\" style=\"white-space:normal;text-align:right;\"><div id=\"wtw_errorlog-archive-" + zresponse[i].errorid + "\" class=\"wtw-archivebutton\">" + zreadonlytext + "</div></td>";
+						}
 						zerrorloglist += "</tr>";
 					}
 				}
@@ -548,81 +581,96 @@ WTWJS.prototype.updateBadges = async function() {
 		WTW.hide('wtw_adminthingsbadge');
 		WTW.hide('wtw_adminavatarsbadge');
 		WTW.hide('wtw_adminpluginsbadge');
-		
-		if (dGet('wtw_tbadgeswtw').value != '') {
-			if (WTW.isNumeric(dGet('wtw_tbadgeswtw').value)) {
-				ztotalupdates += Number(dGet('wtw_tbadgeswtw').value);
-				ztotaldashboardupdates += Number(dGet('wtw_tbadgeswtw').value);
-			}
-		}
-		if (dGet('wtw_adminpluginsbadge').innerHTML != '') {
-			if (WTW.isNumeric(dGet('wtw_adminpluginsbadge').innerHTML)) {
-				ztotalupdates += Number(dGet('wtw_adminpluginsbadge').innerHTML);
-				ztotaldashboardupdates += Number(dGet('wtw_adminpluginsbadge').innerHTML);
-				if (Number(dGet('wtw_adminpluginsbadge').innerHTML) > 0) {
-					WTW.showInline('wtw_adminpluginsbadge');
+		if (dGet('wtw_tbadgeswtw') != null) {
+			if (dGet('wtw_tbadgeswtw').value != '') {
+				if (WTW.isNumeric(dGet('wtw_tbadgeswtw').value)) {
+					ztotalupdates += Number(dGet('wtw_tbadgeswtw').value);
+					ztotaldashboardupdates += Number(dGet('wtw_tbadgeswtw').value);
 				}
 			}
 		}
-		if (dGet('wtw_admincommunitiesbadge').innerHTML != '') {
-			if (WTW.isNumeric(dGet('wtw_admincommunitiesbadge').innerHTML)) {
-				ztotalupdates += Number(dGet('wtw_admincommunitiesbadge').innerHTML);
-				ztotaldashboardupdates += Number(dGet('wtw_admincommunitiesbadge').innerHTML);
-				if (Number(dGet('wtw_admincommunitiesbadge').innerHTML) > 0) {
-					WTW.showInline('wtw_admincommunitiesbadge');
+		if (dGet('wtw_adminpluginsbadge') != null) {
+			if (dGet('wtw_adminpluginsbadge').innerHTML != '') {
+				if (WTW.isNumeric(dGet('wtw_adminpluginsbadge').innerHTML)) {
+					ztotalupdates += Number(dGet('wtw_adminpluginsbadge').innerHTML);
+					ztotaldashboardupdates += Number(dGet('wtw_adminpluginsbadge').innerHTML);
+					if (Number(dGet('wtw_adminpluginsbadge').innerHTML) > 0) {
+						WTW.showInline('wtw_adminpluginsbadge');
+					}
 				}
 			}
 		}
-		if (dGet('wtw_adminbuildingsbadge').innerHTML != '') {
-			if (WTW.isNumeric(dGet('wtw_adminbuildingsbadge').innerHTML)) {
-				ztotalupdates += Number(dGet('wtw_adminbuildingsbadge').innerHTML);
-				ztotaldashboardupdates += Number(dGet('wtw_adminbuildingsbadge').innerHTML);
-				if (Number(dGet('wtw_adminbuildingsbadge').innerHTML) > 0) {
-					WTW.showInline('wtw_adminbuildingsbadge');
+		if (dGet('wtw_admincommunitiesbadge') != null) {
+			if (dGet('wtw_admincommunitiesbadge').innerHTML != '') {
+				if (WTW.isNumeric(dGet('wtw_admincommunitiesbadge').innerHTML)) {
+					ztotalupdates += Number(dGet('wtw_admincommunitiesbadge').innerHTML);
+					ztotaldashboardupdates += Number(dGet('wtw_admincommunitiesbadge').innerHTML);
+					if (Number(dGet('wtw_admincommunitiesbadge').innerHTML) > 0) {
+						WTW.showInline('wtw_admincommunitiesbadge');
+					}
 				}
 			}
 		}
-		if (dGet('wtw_adminthingsbadge').innerHTML != '') {
-			if (WTW.isNumeric(dGet('wtw_adminthingsbadge').innerHTML)) {
-				ztotalupdates += Number(dGet('wtw_adminthingsbadge').innerHTML);
-				ztotaldashboardupdates += Number(dGet('wtw_adminthingsbadge').innerHTML);
-				if (Number(dGet('wtw_adminthingsbadge').innerHTML) > 0) {
-					WTW.showInline('wtw_adminthingsbadge');
+		if (dGet('wtw_adminbuildingsbadge') != null) {
+			if (dGet('wtw_adminbuildingsbadge').innerHTML != '') {
+				if (WTW.isNumeric(dGet('wtw_adminbuildingsbadge').innerHTML)) {
+					ztotalupdates += Number(dGet('wtw_adminbuildingsbadge').innerHTML);
+					ztotaldashboardupdates += Number(dGet('wtw_adminbuildingsbadge').innerHTML);
+					if (Number(dGet('wtw_adminbuildingsbadge').innerHTML) > 0) {
+						WTW.showInline('wtw_adminbuildingsbadge');
+					}
 				}
 			}
 		}
-		if (dGet('wtw_adminavatarsbadge').innerHTML != '') {
-			if (WTW.isNumeric(dGet('wtw_adminavatarsbadge').innerHTML)) {
-				ztotalupdates += Number(dGet('wtw_adminavatarsbadge').innerHTML);
-				ztotaldashboardupdates += Number(dGet('wtw_adminavatarsbadge').innerHTML);
-				if (Number(dGet('wtw_adminavatarsbadge').innerHTML) > 0) {
-					WTW.showInline('wtw_adminavatarsbadge');
+		if (dGet('wtw_adminthingsbadge') != null) {
+			if (dGet('wtw_adminthingsbadge').innerHTML != '') {
+				if (WTW.isNumeric(dGet('wtw_adminthingsbadge').innerHTML)) {
+					ztotalupdates += Number(dGet('wtw_adminthingsbadge').innerHTML);
+					ztotaldashboardupdates += Number(dGet('wtw_adminthingsbadge').innerHTML);
+					if (Number(dGet('wtw_adminthingsbadge').innerHTML) > 0) {
+						WTW.showInline('wtw_adminthingsbadge');
+					}
 				}
 			}
 		}
-		if (dGet('wtw_adminmenudashboardbadge').innerHTML != '') {
-			if (WTW.isNumeric(dGet('wtw_adminmenudashboardbadge').innerHTML)) {
-				if (Number(dGet('wtw_adminmenudashboardbadge').innerHTML) > 0) {
-					ztotaldashboardupdates += Number(dGet('wtw_adminmenudashboardbadge').innerHTML);
-					WTW.showInline('wtw_adminmenudashboardbadge');
+		if (dGet('wtw_adminavatarsbadge') != null) {
+			if (dGet('wtw_adminavatarsbadge').innerHTML != '') {
+				if (WTW.isNumeric(dGet('wtw_adminavatarsbadge').innerHTML)) {
+					ztotalupdates += Number(dGet('wtw_adminavatarsbadge').innerHTML);
+					ztotaldashboardupdates += Number(dGet('wtw_adminavatarsbadge').innerHTML);
+					if (Number(dGet('wtw_adminavatarsbadge').innerHTML) > 0) {
+						WTW.showInline('wtw_adminavatarsbadge');
+					}
 				}
 			}
 		}
-		if (dGet('wtw_adminmenufeedbackbadge').innerHTML != '') {
-			if (WTW.isNumeric(dGet('wtw_adminmenufeedbackbadge').innerHTML)) {
-				if (Number(dGet('wtw_adminmenufeedbackbadge').innerHTML) > 0) {
-					ztotaldashboardupdates += Number(dGet('wtw_adminmenufeedbackbadge').innerHTML);
-					WTW.showInline('wtw_adminmenufeedbackbadge');
+		if (dGet('wtw_adminmenudashboardbadge') != null) {
+			if (dGet('wtw_adminmenudashboardbadge').innerHTML != '') {
+				if (WTW.isNumeric(dGet('wtw_adminmenudashboardbadge').innerHTML)) {
+					if (Number(dGet('wtw_adminmenudashboardbadge').innerHTML) > 0) {
+						ztotaldashboardupdates += Number(dGet('wtw_adminmenudashboardbadge').innerHTML);
+						WTW.showInline('wtw_adminmenudashboardbadge');
+					}
+				}
+			}
+		}
+		if (dGet('wtw_adminmenufeedbackbadge') != null) {
+			if (dGet('wtw_adminmenufeedbackbadge').innerHTML != '') {
+				if (WTW.isNumeric(dGet('wtw_adminmenufeedbackbadge').innerHTML)) {
+					if (Number(dGet('wtw_adminmenufeedbackbadge').innerHTML) > 0) {
+						ztotaldashboardupdates += Number(dGet('wtw_adminmenufeedbackbadge').innerHTML);
+						WTW.showInline('wtw_adminmenufeedbackbadge');
+					}
 				}
 			}
 		}
 		dGet('wtw_tbadgesupdates').value = ztotalupdates;
 		dGet('wtw_tbadges').value = ztotaldashboardupdates;
-		if (ztotalupdates > 0) {
+		if (ztotalupdates > 0 && dGet('wtw_adminmenuupdatesbadge') != null) {
 			dGet('wtw_adminmenuupdatesbadge').innerHTML = ztotalupdates;
 			WTW.showInline('wtw_adminmenuupdatesbadge');
 		}
-		if (ztotaldashboardupdates > 0) {
+		if (ztotaldashboardupdates > 0 && dGet('wtw_admindashboardbadge') != null) {
 			dGet('wtw_admindashboardbadge').innerHTML = ztotaldashboardupdates;
 			WTW.showInline('wtw_admindashboardbadge');
 		}
@@ -786,7 +834,7 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 									zupdatewtw += 1;
 								}
 								zupdateslist += "<div id=\"wtw_loadingupdating\" class=\"wtw-loadingnotice\">Updating...</div>";
-								if (zmyplugins[i].latestversion != wtw_version) {
+								if (zmyplugins[i].latestversion != wtw_version && WTW.isUserInRole('Admin')) {
 									zupdateslist += "<div class=\"wtw-greenmenubutton\" onclick=\"WTW.updateWalkTheWeb('" + zmyplugins[i].pluginname + "','" + zmyplugins[i].latestversion + "','" + zdatestring + "','" + zmyplugins[i].updateurl + "');\">Update Now!</div>";
 									WTW.getVersionDetails(zmyplugins[i].updateid);
 								}
@@ -801,7 +849,7 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 									}
 									if (zfilter == 'All Plugins' || (zpluginclass == 'wtw-active' && zfilter == 'Active Plugins') || (zpluginclass == 'wtw-deactive' && zfilter == 'Inactive Plugins')) {
 										zpluginslist += "<tr><td class=\"wtw-tablecolumns " + ztdclass + "\">";
-										if (zmyplugins[i].version != zmyplugins[i].latestversion) {
+										if (zmyplugins[i].version != zmyplugins[i].latestversion && WTW.isUserInRole('Admin')) {
 											zpluginslist += "<div id='updateplugin" + zmyplugins[i].pluginname + "' class='wtw-greenbuttonleft' onclick=\"WTW.updatePlugin('" + zmyplugins[i].pluginname + "','" + zmyplugins[i].version + "','" + zmyplugins[i].updatedate + "','" + zmyplugins[i].updateurl + "','" + zshow + "');\">Update Now!</div>";
 											zupdates += 1;
 										}
@@ -809,9 +857,17 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 										zpluginslist += "<td class=\"wtw-tablecolumns " + ztdclass + "\"><span class='" + zpluginclass + "'>" + zmyplugins[i].title + "</span> : " + zmyplugins[i].author + "<br />" + zmyplugins[i].description + "<br /></td>";
 										zpluginslist += "<td class=\"wtw-tablecolumns " + ztdclass + "\">";
 										if (zmyplugins[i].active == "1") {
-											zpluginslist += "<div id='activate" + zmyplugins[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"WTW.activatePlugin('" + zmyplugins[i].pluginname + "',0);\" alt=\"Click to Deactivate\" title=\"Click to Deactivate\">Activated</div>";
+											if (WTW.isUserInRole('Admin')) {
+												zpluginslist += "<div id='activate" + zmyplugins[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"WTW.activatePlugin('" + zmyplugins[i].pluginname + "',0);\" alt=\"Click to Deactivate\" title=\"Click to Deactivate\">Activated</div>";
+											} else {
+												zpluginslist += "<div id='activate" + zmyplugins[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"console.log('Will Not Deactivate');\" alt=\"\" title=\"\">Activated</div>";
+											}
 										} else {
-											zpluginslist += "<div id='activate" + zmyplugins[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.activatePlugin('" + zmyplugins[i].pluginname + "',1);\" alt=\"Click to Activate\" title=\"Click to Activate\">Deactivated</div>";
+											if (WTW.isUserInRole('Admin')) {
+												zpluginslist += "<div id='activate" + zmyplugins[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.activatePlugin('" + zmyplugins[i].pluginname + "',1);\" alt=\"Click to Activate\" title=\"Click to Activate\">Deactivated</div>";
+											} else {
+												zpluginslist += "<div id='activate" + zmyplugins[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"console.log('Request Activation');\" alt=\"Click to Request Activate\" title=\"Click to Request Activate\">Deactivated</div>";
+											}
 										}
 										zpluginslist += "</td></tr>";
 									}
@@ -829,8 +885,12 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 		zupdateslist += "</div>";
 		switch (zshow) {
 			case "1":
-				dGet('wtw_updatelist').innerHTML = zupdateslist;
-				dGet('wtw_updatepluginlist').innerHTML = zpluginslist;
+				if (dGet('wtw_updatelist') != null) {
+					dGet('wtw_updatelist').innerHTML = zupdateslist;
+				}
+				if (dGet('wtw_updatepluginlist') != null) {
+					dGet('wtw_updatepluginlist').innerHTML = zpluginslist;
+				}
 				WTW.hide('wtw_loadingupdating');
 				WTW.hide('wtw_loadingupdates');
 				WTW.show('wtw_updatelist');
@@ -839,7 +899,9 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 				}
 				break;
 			case "2":
-				dGet("wtw_pluginslist").innerHTML = zpluginslist;
+				if (dGet("wtw_pluginslist") != null) {
+					dGet("wtw_pluginslist").innerHTML = zpluginslist;
+				}
 				WTW.hide('wtw_loadingplugins');
 				WTW.show('wtw_pluginslist');
 				WTW.show('wtw_allplugins');
@@ -847,11 +909,15 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 		}
 		
 		/* update badges */
-		dGet('wtw_adminpluginsbadge').innerHTML = zupdates;
+		if (dGet('wtw_adminpluginsbadge') != null) {
+			dGet('wtw_adminpluginsbadge').innerHTML = zupdates;
+		}
 		dGet('wtw_tbadgeswtw').value = zupdatewtw;
 		WTW.updateBadges();
-
-		dGet('wtw_updatespagescroll').style.height = (WTW.sizeY - 160) + 'px';
+		
+		if (dGet('wtw_updatespagescroll') != null) {
+			dGet('wtw_updatespagescroll').style.height = (WTW.sizeY - 160) + 'px';
+		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-checkForUpdatesComplete=" + ex.message);
 	}
@@ -993,10 +1059,18 @@ WTWJS.prototype.checkUpdatesForAllWebs = async function() {
 													zupdatewebslist += "</div></div>";
 													
 													/* update badges */
-													dGet('wtw_admincommunitiesbadge').innerHTML = zcommunitycount;
-													dGet('wtw_adminbuildingsbadge').innerHTML = zbuildingcount;
-													dGet('wtw_adminthingsbadge').innerHTML = zthingcount;
-													dGet('wtw_adminavatarsbadge').innerHTML = zavatarcount;
+													if (dGet('wtw_admincommunitiesbadge') != null) {
+														dGet('wtw_admincommunitiesbadge').innerHTML = zcommunitycount;
+													}
+													if (dGet('wtw_adminbuildingsbadge') != null) {
+														dGet('wtw_adminbuildingsbadge').innerHTML = zbuildingcount;
+													}
+													if (dGet('wtw_adminthingsbadge') != null) {
+														dGet('wtw_adminthingsbadge').innerHTML = zthingcount;
+													}
+													if (dGet('wtw_adminavatarsbadge') != null) {
+														dGet('wtw_adminavatarsbadge').innerHTML = zavatarcount;
+													}
 													
 													WTW.updateBadges();
 												}
@@ -1166,9 +1240,17 @@ WTWJS.prototype.openAllPluginsComplete = function(zresponse, zpluginname, zactiv
 						zpluginslist += "<td class=\"wtw-tablecolumns " + ztdclass + "\"><span class='" + zpluginclass + "'>" + zresponse[i].title + "</span> : " + zresponse[i].author + "<br />" + zresponse[i].description + "<br /></td>";
 						zpluginslist += "<td class=\"wtw-tablecolumns " + ztdclass + "\">";
 						if (zresponse[i].active == "1") {
-							zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"WTW.activatePlugin('" + zresponse[i].pluginname + "',0);\" alt=\"Click to Deactivate\" title=\"Click to Deactivate\">Activated</div>";
+							if (WTW.isUserInRole('Admin')) {
+								zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"WTW.activatePlugin('" + zresponse[i].pluginname + "',0);\" alt=\"Click to Deactivate\" title=\"Click to Deactivate\">Activated</div>";
+							} else {
+								zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"console.log('Will Not Deactivate');\" alt=\"\" title=\"\">Activated</div>";
+							}
 						} else {
-							zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.activatePlugin('" + zresponse[i].pluginname + "',1);\" alt=\"Click to Activate\" title=\"Click to Activate\">Deactivated</div>";
+							if (WTW.isUserInRole('Admin')) {
+								zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.activatePlugin('" + zresponse[i].pluginname + "',1);\" alt=\"Click to Activate\" title=\"Click to Activate\">Deactivated</div>";
+							} else {
+								zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.console.log('Request Activation');\" alt=\"Click to Request Activate\" title=\"Click to Request Activate\">Deactivated</div>";
+							}
 						}
 						zpluginslist += "</td></tr>";
 					}
@@ -1342,7 +1424,11 @@ WTWJS.prototype.openDashboardForm = async function(zshow) {
 					var zserverstatslist = '';
 					zserverstatslist += "<div style='width:98%;margin:5px;'>";
 					zserverstatslist += "<div class=\"wtw-dashboardlabel\">&nbsp;</div>";
-					zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:90px;'><b><u>Serverwide</u></b></div>";
+					if (WTW.isUserInRole('admin')) {
+						zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:90px;'><b><u>Serverwide</u></b></div>";
+					} else {
+						zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:90px;'><b><u>Folder Size</u></b></div>";
+					}
 					zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:60px;'><b><u>My Account</u></b></div>";
 					zserverstatslist += "</div>";
 					zserverstatslist += "<div class=\"wtw-clear\"></div>";
@@ -1350,23 +1436,38 @@ WTWJS.prototype.openDashboardForm = async function(zshow) {
 						if (zresponse[i] != null) {
 							var zmycount = zresponse[i].mycount;
 							var zscount = zresponse[i].scount;
-							if (zresponse[i].item == 'Website Size') {
-								zscount = WTW.formatNumber(Math.round(Number(zscount)/1000000));
-								zserverstatslist += "<div style='width:98%;margin:5px;'>";
+							var zfoldersize = zresponse[i].foldersize;
+							if (zresponse[i].item == 'Total Folder Size') {
+								zscount = WTW.formatNumber(Math.round(Number(zscount)/1000000),0);
+								zserverstatslist += "<hr /><div style='width:98%;margin:5px;'>";
 								zserverstatslist += "<div class=\"wtw-dashboardlabel\"><b>" + zresponse[i].item + "</b></div>";
 								zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:100px;'>" + zscount + " MB</div>";
 								zserverstatslist += "</div>";
 								zserverstatslist += "<div class=\"wtw-clear\"></div>";
-							} else {
+							} else if (WTW.isUserInRole('admin')) {
 								if (WTW.isNumeric(zresponse[i].mycount)) {
-									zmycount = WTW.formatNumber(Number(zresponse[i].mycount));
+									zmycount = WTW.formatNumber(Number(zresponse[i].mycount),0);
 								}
 								if (WTW.isNumeric(zresponse[i].scount)) {
-									zscount = WTW.formatNumber(Number(zresponse[i].scount));
+									zscount = WTW.formatNumber(Number(zresponse[i].scount),0);
 								}
 								zserverstatslist += "<div style='width:98%;margin:5px;'>";
 								zserverstatslist += "<div class=\"wtw-dashboardlabel\"><b>" + zresponse[i].item + "</b></div>";
 								zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:90px;'>" + zscount + "</div>";
+								zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:60px;'>" + zmycount + "</div>";
+								zserverstatslist += "</div>";
+								zserverstatslist += "<div class=\"wtw-clear\"></div>";
+							} else {
+								zfoldersize = WTW.formatNumber(Math.round(Number(zfoldersize)/1000000),0);
+								if (WTW.isNumeric(zresponse[i].mycount)) {
+									zmycount = WTW.formatNumber(Number(zresponse[i].mycount),0);
+								}
+								if (WTW.isNumeric(zresponse[i].scount)) {
+									zscount = WTW.formatNumber(Number(zresponse[i].scount),0);
+								}
+								zserverstatslist += "<div style='width:98%;margin:5px;'>";
+								zserverstatslist += "<div class=\"wtw-dashboardlabel\"><b>" + zresponse[i].item + "</b></div>";
+								zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:90px;'>" + zfoldersize + " MB</div>";
 								zserverstatslist += "<div class=\"wtw-dashboardvaluefloat\" style='min-width:60px;'>" + zmycount + "</div>";
 								zserverstatslist += "</div>";
 								zserverstatslist += "<div class=\"wtw-clear\"></div>";
@@ -1422,8 +1523,14 @@ WTWJS.prototype.openDashboardForm = async function(zshow) {
 WTWJS.prototype.getDownloadsInfo = async function(zdownloads, zshow) {
 	/* uses the local downloads to get the download info from 3dnet.walktheweb.com hub */
 	try {
+		var zuserid = ''; /* blank will show all downloads pending on server - admin role */
+		if (WTW.isUserInRole('Host') && WTW.isUserInRole('Admin') == false) {
+			/* sending userid will limit the list to only downloads for this user */
+			zuserid = dGet('wtw_tuserid').value;
+		}
 		var zrequest = {
 			'downloads': JSON.stringify(zdownloads),
+			'userid': zuserid,
 			'function':'getdownloadinfo'
 		};
 		WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/downloadsinfo.php", zrequest, 
@@ -3194,6 +3301,545 @@ WTWJS.prototype.changeEmailSwitch = function() {
 	}
 }
 
+/* web domains - for web hosting and default domains */
+
+WTWJS.prototype.openWebDomainsSettings = async function() {
+	/* open web domains page form */
+	try {
+		WTW.hide('wtw_serversettings');
+		WTW.show('wtw_loadingwebdomain');
+		WTW.show('wtw_settingspage');
+		WTW.show('wtw_webdomainsettings');
+		dGet('wtw_webdomainlist').innerHTML = "";
+		WTW.getAsyncJSON("/connect/webdomains.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
+					var zwebdomainlist = "<table class=\"wtw-table\"><tr><td class=\"wtw-tablecolumnheading\"><b>Domain Name</b></td>\r\n";
+					zwebdomainlist += "<td class=\"wtw-tablecolumnheading\"><b>Start<br />Date</b></td>\r\n";
+					zwebdomainlist += "<td class=\"wtw-tablecolumnheading\"><b>Expire<br />Date</b></td>\r\n";
+					if (WTW.isUserInRole('admin')) {
+						zwebdomainlist += "<td class=\"wtw-tablecolumnheading\"><b>Allow<br />Hosting</b></td>\r\n";
+					}
+					zwebdomainlist += "<td class=\"wtw-tablecolumnheading\"><b>Hosting<br />Price</b></td>\r\n";
+					zwebdomainlist += "<td class=\"wtw-tablecolumnheading\"><b>SSL Cert<br />Price</b></td>\r\n";
+					zwebdomainlist += "<td class=\"wtw-tablecolumnheading\"><b>Hosting Term<br />(Days)</b></td>\r\n";
+					zwebdomainlist += "<td class=\"wtw-tablecolumnheading\"><b>&nbsp;</b></td></tr>";
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							if (zresponse[i].webdomainid != undefined) {
+								var zallowhosting = "No";
+								var zhostuserid = zresponse[i].hostuserid;
+								var zforcehttps = zresponse[i].forcehttps;
+								var zdomainname = zresponse[i].domainname;
+								var zstartdate = WTW.formatDate(zresponse[i].startdate);
+								var zexpiredate = WTW.formatDate(zresponse[i].expiredate);
+								var zhostprice = WTW.formatMoney(zresponse[i].hostprice);
+								var zsslprice = WTW.formatMoney(zresponse[i].sslprice);
+								var zhostdays = WTW.formatNumber(zresponse[i].hostdays,0);
+								var zurl = "http://" + zdomainname;
+								if (zforcehttps == "1" || zforcehttps == 1) {
+									zurl = "https://" + zdomainname;
+								}
+								if (zresponse[i].allowhosting == '1') {
+									zallowhosting = 'Yes';
+								}
+								if (zhostuserid == dGet('wtw_tuserid').value || WTW.isUserInRole('admin')) {
+									zwebdomainlist += "<tr><td class=\"wtw-tablecolumns\"><a href='" + zurl + "' target='_blank'>" + zurl + "</a></td>\r\n";
+									zwebdomainlist += "<td class=\"wtw-tablecolumns\">" + zstartdate + "</td>\r\n";
+									zwebdomainlist += "<td class=\"wtw-tablecolumns\">" + zexpiredate + "</td>\r\n";
+									if (WTW.isUserInRole('admin')) {
+										zwebdomainlist += "<td class=\"wtw-tablecolumns\">" + zallowhosting + "</td>\r\n";
+									}
+									zwebdomainlist += "<td class=\"wtw-tablecolumns\">" + zhostprice + "</td>\r\n";
+									zwebdomainlist += "<td class=\"wtw-tablecolumns\">" + zsslprice + "</td>\r\n";
+									zwebdomainlist += "<td class=\"wtw-tablecolumns\">" + zhostdays + "</td>\r\n";
+									zwebdomainlist += "<td class=\"wtw-tablecolumns\"><div class='wtw-bluebuttonright' onclick=\"WTW.editWebDomain('" + zresponse[i].webdomainid + "');\">Edit</div></td></tr>";
+								} else {
+									zwebdomainlist += "<tr><td class=\"wtw-tablecolumns\"><a href='" + zurl + "' target='_blank'>" + zurl + "</a></td>\r\n";
+									zwebdomainlist += "<td class=\"wtw-tablecolumns\">" + zstartdate + "</td>\r\n";
+									zwebdomainlist += "<td class=\"wtw-tablecolumns\">" + zexpiredate + "</td>\r\n";
+									zwebdomainlist += "<td class=\"wtw-tablecolumns\"></td>\r\n";
+									zwebdomainlist += "<td class=\"wtw-tablecolumns\"></td>\r\n";
+									zwebdomainlist += "<td class=\"wtw-tablecolumns\"></td>\r\n";
+									zwebdomainlist += "<td class=\"wtw-tablecolumns\"></td></tr>";
+								}
+							}
+						}
+					}
+					zwebdomainlist += "</table>"
+					dGet('wtw_webdomainlist').innerHTML = zwebdomainlist;
+					WTW.hide('wtw_loadingwebdomain');
+					if (WTW.isUserInRole('host')) {
+						WTW.show('wtw_addwebdomainnote');
+					} else {
+						WTW.hide('wtw_addwebdomainnote');
+					}
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-openWebDomainsSettings=" + ex.message);
+	}
+}
+
+WTWJS.prototype.openDomainForm = function() {
+	/* open edit web domain form */
+	try {
+		var zdate = new Date();
+		var	zmonth = '' + (zdate.getMonth() + 1);
+		var	zday = '' + zdate.getDate();
+		var	zyear = zdate.getFullYear();
+
+		if (zmonth.length < 2) {
+			zmonth = '0' + zmonth;
+		}
+		if (zday.length < 2) {
+			zday = '0' + zday;
+		}
+		zdate = [zmonth, zday, zyear].join('/');
+		dGet("wtw_domainstartdate").disabled = false;
+		dGet("wtw_domainexpiredate").disabled = false;
+		dGet("wtw_domainhostprice").disabled = false;
+		dGet("wtw_domainsslprice").disabled = false;
+		dGet("wtw_domainhostdays").disabled = false;
+		dGet('wtw_domainforcehttps').selectedIndex = 0;
+		dGet("wtw_twebdomainid").value = '';
+		dGet("wtw_twebdomain").value = '3d.';
+		dGet('wtw_twebdomain').style.color = 'black';
+		dGet('wtw_twebdomain').style.borderColor = "-internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133))";
+		dGet("wtw_domainstartdate").value = zdate;
+		dGet("wtw_domainexpiredate").value = '';
+		dGet("wtw_domainhostprice").value = '';
+		dGet("wtw_domainsslprice").value = '';
+		dGet("wtw_domainhostdays").value = '';
+		dGet('wtw_tallowhostingyes').checked = false;
+		dGet('wtw_tallowhostingno').checked = false;
+		WTW.hide('wtw_addwebdomainnote');
+		WTW.hide('wtw_domainpurchaseview');
+		WTW.show('wtw_domaindetailsdiv');
+		if (WTW.isUserInRole("host")) {
+			var zrequest = {
+				'function':'gethostingserversettings'
+			};
+			WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					if (zresponse != null) {
+						/* load values into form */
+						var zserverhosting = '0';
+						var zserverhostprice = 0;
+						var zserversslprice = 0;
+						var zserverhostdays = '';
+						var zserverdnsarecord = '';
+						var zserverdnscname = '';
+						if (zresponse.serverhosting != undefined) {
+							zserverhosting = zresponse.serverhosting;
+						}
+						if (zresponse.serverhostprice != undefined) {
+							zserverhostprice = zresponse.serverhostprice;
+						}
+						if (zresponse.serversslprice != undefined) {
+							zserversslprice = zresponse.serversslprice;
+						}
+						if (zresponse.serverhostdays != undefined) {
+							zserverhostdays = WTW.formatNumber(zresponse.serverhostdays,0);
+						}
+						if (zresponse.serverdnsarecord != undefined) {
+							zserverdnsarecord = zresponse.serverdnsarecord;
+						}
+						if (zresponse.serverdnscname != undefined) {
+							zserverdnscname = zresponse.serverdnscname;
+						}
+						dGet("wtw_domainhostprice").value = WTW.formatMoney(zserverhostprice);
+						dGet("wtw_domainsslprice").value = WTW.formatMoney(zserversslprice);
+						dGet("wtw_domainhostdays").value = WTW.formatNumber(zserverhostdays,0);
+						if (WTW.isUserInRole('host')) {
+							dGet('wtw_domainforcehttps').onclick = function() {
+								WTW.changeDomainPurchaseSSL(zserverhostdays, Number(zserverhostprice), Number(zserversslprice));
+							};
+							dGet("wtw_domainstartdate").disabled = true;
+							dGet("wtw_domainexpiredate").disabled = true;
+							dGet("wtw_domainhostprice").disabled = true;
+							dGet("wtw_domainsslprice").disabled = true;
+							dGet("wtw_domainhostdays").disabled = true;
+
+							dGet('wtw_domainpurchaseqty').innerHTML = '1';
+							dGet('wtw_domainpurchasedesc').innerHTML = WTW.formatNumber(zserverhostdays,0) + ' days 3D Web Hosting of Your Domain Name';
+							dGet('wtw_domainpurchaseprice').innerHTML = WTW.formatMoney(zserverhostprice);
+
+							dGet('wtw_domainpurchasesslqty').innerHTML = '1';
+							dGet('wtw_domainpurchasessldesc').innerHTML = WTW.formatNumber(zserverhostdays,0) + ' days - SSL Certficate (https)';
+							dGet('wtw_domainpurchasesslprice').innerHTML = WTW.formatMoney(zserversslprice);
+							
+							dGet('wtw_domainpurchasetotal').innerHTML = WTW.formatMoney((Number(zserverhostprice) + Number(zserversslprice)));
+							WTW.show('wtw_domainpurchaseview');
+							WTW.hide('wtw_domaindetailsdiv');
+						} else {
+							WTW.hide('wtw_domainpurchaseview');
+							WTW.show('wtw_domaindetailsdiv');
+							dGet('wtw_domainforcehttps').onclick = function() {};
+						}
+						WTW.show('wtw_addwebdomaindiv');
+						WTW.hide('wtw_addwebdomain');
+						WTW.hide('wtw_bdomaindelete');
+						if (WTW.isUserInRole('host') && dGet("wtw_twebdomainid").value == '') {
+							dGet('wtw_bdomainsave').innerHTML = 'Purchase Web Domain Hosting';
+						} else {
+							dGet('wtw_bdomainsave').innerHTML = 'Save Web Domain';
+						}
+						dGet('wtw_twebdomain').focus();
+					}
+				}
+			);
+		} else {
+			WTW.show('wtw_addwebdomaindiv');
+			WTW.hide('wtw_addwebdomain');
+			WTW.hide('wtw_bdomaindelete');
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-openDomainForm=" + ex.message);
+	}
+}
+
+WTWJS.prototype.changeDomainPurchaseSSL = async function(zserverhostdays, zserverhostprice, zserversslprice) {
+	/* web domain change SSL option */
+	try {
+		var zssl = WTW.getDDLText('wtw_domainforcehttps');
+		if (zssl == 'https://') {
+			dGet('wtw_domainpurchasesslqty').innerHTML = '1';
+			dGet('wtw_domainpurchasessldesc').innerHTML = WTW.formatNumber(zserverhostdays,0) + ' days - SSL Certficate (https)';
+			dGet('wtw_domainpurchasesslprice').innerHTML = WTW.formatMoney(zserversslprice);
+			dGet('wtw_domainpurchasetotal').innerHTML = WTW.formatMoney((zserverhostprice + zserversslprice));
+		} else {
+			dGet('wtw_domainpurchasesslqty').innerHTML = '&nbsp;';
+			dGet('wtw_domainpurchasessldesc').innerHTML = '&nbsp;';
+			dGet('wtw_domainpurchasesslprice').innerHTML = '&nbsp;';
+			dGet('wtw_domainpurchasetotal').innerHTML = WTW.formatMoney(zserverhostprice);
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-changeDomainPurchaseSSL=" + ex.message);
+	}
+}
+
+WTWJS.prototype.editWebDomain = async function(zwebdomainid) {
+	/* load to edit a web domain */
+	try {
+		WTW.show('wtw_addwebdomaindiv');
+		WTW.hide('wtw_addwebdomain');
+		WTW.hide('wtw_bdomaindelete');
+		dGet('wtw_twebdomain').style.color = 'black';
+		dGet('wtw_twebdomain').style.borderColor = "-internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133))";
+		dGet("wtw_domainstartdate").disabled = false;
+		dGet("wtw_domainexpiredate").disabled = false;
+		dGet("wtw_domainhostprice").disabled = false;
+		dGet("wtw_domainsslprice").disabled = false;
+		dGet("wtw_domainhostdays").disabled = false;
+		WTW.hide('wtw_addwebdomainnote');
+		WTW.hide('wtw_domainpurchaseview');
+		WTW.show('wtw_domaindetailsdiv');
+		WTW.getAsyncJSON("/connect/webdomain.php?webdomainid=" + zwebdomainid, 
+			function(zresponse) {
+				var zforcehttps = '';
+				var zdomainname = '';
+				var zstartdate = '';
+				var zexpiredate = '';
+				var zhostprice = '';
+				var zsslprice = '';
+				var zhostdays = '';
+				var zallowhosting = '0';
+				
+				zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							if (zresponse[i].webdomainid != undefined) {
+								zforcehttps = zresponse[i].forcehttps;
+								zdomainname = zresponse[i].domainname;
+								zstartdate = WTW.formatDate(zresponse[i].startdate);
+								zexpiredate = WTW.formatDate(zresponse[i].expiredate);
+								zhostprice = WTW.formatMoney(zresponse[i].hostprice);
+								zsslprice = WTW.formatMoney(zresponse[i].sslprice);
+								zhostdays = WTW.formatNumber(zresponse[i].hostdays,0);
+								if (zresponse[i].allowhosting == '1') {
+									zallowhosting = '1';
+								}
+							}
+						}
+					}
+				}
+				if (zforcehttps == "1") {
+					dGet('wtw_domainforcehttps').selectedIndex = 0;
+				} else {
+					dGet('wtw_domainforcehttps').selectedIndex = 1;
+				}
+				dGet("wtw_twebdomainid").value = zwebdomainid;
+				
+				dGet("wtw_twebdomain").value = zdomainname;
+				dGet("wtw_domainstartdate").value = zstartdate;
+				dGet("wtw_domainexpiredate").value = zexpiredate;
+				dGet("wtw_domainhostprice").value = zhostprice;
+				dGet("wtw_domainsslprice").value = zsslprice;
+				dGet("wtw_domainhostdays").value = zhostdays;
+				if (zallowhosting == '1') {
+					dGet('wtw_tallowhostingyes').checked = true;
+				} else {
+					dGet('wtw_tallowhostingno').checked = true;
+				}
+				if (WTW.isUserInRole('host')) {
+					dGet("wtw_domainstartdate").disabled = true;
+					dGet("wtw_domainexpiredate").disabled = true;
+					dGet("wtw_domainhostprice").disabled = true;
+					dGet("wtw_domainsslprice").disabled = true;
+					dGet("wtw_domainhostdays").disabled = true;
+				}
+				WTW.show('wtw_bdomaindelete');
+				dGet('wtw_twebdomain').focus();
+				if (WTW.isUserInRole('host') && dGet("wtw_twebdomainid").value == '') {
+					dGet('wtw_bdomainsave').innerHTML = 'Purchase Web Domain Hosting';
+				} else {
+					dGet('wtw_bdomainsave').innerHTML = 'Save Web Domain';
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-editWebDomain=" + ex.message);
+	}
+}
+
+WTWJS.prototype.saveDomainForm = async function(w) {
+	/* save web domain */
+	try {
+		var zwebdomainid = dGet('wtw_twebdomainid').value;
+		dGet("wtw_domainstartdate").disabled = false;
+		dGet("wtw_domainexpiredate").disabled = false;
+		dGet("wtw_domainhostprice").disabled = false;
+		dGet("wtw_domainsslprice").disabled = false;
+		dGet("wtw_domainhostdays").disabled = false;
+		switch (w) {
+			case 1: /* save */
+				var zdomainname = dGet('wtw_twebdomain').value;
+				var zstartdate = WTW.formatDate(dGet('wtw_domainstartdate').value);
+				var zexpiredate = WTW.formatDate(dGet('wtw_domainexpiredate').value);
+				var zhostprice = WTW.formatMoney(dGet('wtw_domainhostprice').value);
+				var zsslprice = WTW.formatMoney(dGet('wtw_domainsslprice').value);
+				var zhostdays = WTW.formatNumber(dGet('wtw_domainhostdays').value);
+				var zforcehttps = WTW.getDDLText('wtw_domainforcehttps');
+				var zinvoicetotal = Number(dGet('wtw_domainhostprice').value.replace("$","").replace(" ",""));
+				var zallowhosting = '0';
+				if (zforcehttps == "https://") {
+					zforcehttps = "1";
+					zinvoicetotal += Number(dGet('wtw_domainsslprice').value.replace("$","").replace(" ",""));
+				} else {
+					zforcehttps = "0";
+				}
+				if (dGet('wtw_tallowhostingyes').checked) {
+					zallowhosting = '1';
+				}
+				if (zdomainname.length < 6) {
+					dGet('wtw_twebdomain').style.color = 'red';
+					dGet('wtw_twebdomain').style.borderColor = 'red';
+				} else {
+					if (WTW.isUserInRole('host')) {
+						var zinvoiceid = WTW.getRandomString(16);
+						var zinvoicedescription = 'Purchase 3D Web Hosting for ' + zdomainname;
+						var zrequest = {
+							'invoiceid': zinvoiceid,
+							'domainname': zdomainname,
+							'email': dGet('wtw_tuseremail').value,
+							'invoicedescription': zinvoicedescription,
+							'invoicetotal': zinvoicetotal,
+							'function':'saveinvoice'
+						};
+						WTW.postAsyncJSON("/core/handlers/invoices.php", zrequest, 
+							function(zresponse) {
+								zresponse = JSON.parse(zresponse);
+								/* note serror would contain errors */
+								WTW.pluginsSaveDomainForm(w, zinvoiceid, zdomainname, zinvoicedescription, zinvoicetotal);
+								var zinvoicedetailid = WTW.getRandomString(16);
+								var zsortorder = 0;
+								var zrequest1 = {
+									'invoicedetailid': zinvoicedetailid,
+									'invoiceid': zinvoiceid,
+									'sortorder': zsortorder,
+									'quantity': 1,
+									'description': WTW.formatNumber(zhostdays,0) + ' days 3D Web Hosting of Your Domain Name',
+									'price': zhostprice,
+									'function':'saveinvoicedetail'
+								};
+								WTW.postAsyncJSON("/core/handlers/invoices.php", zrequest1, 
+									function(zresponse1) {
+										zresponse1 = JSON.parse(zresponse1);
+										/* note serror would contain errors */
+										
+									}
+								);
+								if (dGet('wtw_domainpurchasesslqty').innerHTML == '1') {
+									var zinvoicedetailid2 = WTW.getRandomString(16);
+									var zsortorder2 = 1;
+									var zrequest2 = {
+										'invoicedetailid': zinvoicedetailid2,
+										'invoiceid': zinvoiceid,
+										'sortorder': zsortorder2,
+										'quantity': 1,
+										'description': WTW.formatNumber(zhostdays,0) + ' days - SSL Certficate (https)',
+										'price': zsslprice,
+										'function':'saveinvoicedetail'
+									};
+									WTW.postAsyncJSON("/core/handlers/invoices.php", zrequest2, 
+										function(zresponse2) {
+											zresponse2 = JSON.parse(zresponse2);
+											/* note serror would contain errors */
+										}
+									);
+								}
+							}
+						);
+						/* after approved payment */
+						if (zexpiredate == '' && zstartdate != '') {
+							zexpiredate = WTW.addDays(zstartdate,zhostdays);
+						}
+						var zrequest4 = {
+							'webdomainid': zwebdomainid,
+							'domainname': zdomainname,
+							'startdate': zstartdate,
+							'expiredate': zexpiredate,
+							'allowhosting': zallowhosting,
+							'hostprice': zhostprice,
+							'sslprice': zsslprice,
+							'hostdays': zhostdays,
+							'forcehttps': zforcehttps,
+							'function':'savewebdomain'
+						};
+						WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest4, 
+							function(zresponse4) {
+								zresponse4 = JSON.parse(zresponse4);
+								/* note serror would contain errors */
+								dGet('wtw_domainforcehttps').selectedIndex = 0;
+								dGet("wtw_twebdomainid").value = '';
+								dGet("wtw_twebdomain").value = '';
+								dGet("wtw_domainstartdate").value = '';
+								dGet("wtw_domainexpiredate").value = '';
+								dGet("wtw_domainhostprice").value = '';
+								dGet("wtw_domainsslprice").value = '';
+								dGet("wtw_domainhostdays").value = '';
+								dGet('wtw_tallowhostingyes').checked = false;
+								dGet('wtw_tallowhostingno').checked = false;
+								WTW.hide('wtw_addwebdomaindiv');
+								WTW.show('wtw_addwebdomain');
+								if (WTW.isUserInRole('host')) {
+									WTW.show('wtw_addwebdomainnote');
+								} else {
+									WTW.hide('wtw_addwebdomainnote');
+								}
+								WTW.hide('wtw_domainpurchaseview');
+								WTW.show('wtw_domaindetailsdiv');
+								WTW.openWebDomainsSettings();
+							}
+						);
+					} else {
+						var zrequest = {
+							'webdomainid': zwebdomainid,
+							'domainname': zdomainname,
+							'startdate': zstartdate,
+							'expiredate': zexpiredate,
+							'allowhosting': zallowhosting,
+							'hostprice': zhostprice,
+							'sslprice': zsslprice,
+							'hostdays': zhostdays,
+							'forcehttps': zforcehttps,
+							'function':'savewebdomain'
+						};
+						WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
+							function(zresponse) {
+								zresponse = JSON.parse(zresponse);
+								/* note serror would contain errors */
+								dGet('wtw_domainforcehttps').selectedIndex = 0;
+								dGet("wtw_twebdomainid").value = '';
+								dGet("wtw_twebdomain").value = '';
+								dGet("wtw_domainstartdate").value = '';
+								dGet("wtw_domainexpiredate").value = '';
+								dGet("wtw_domainhostprice").value = '';
+								dGet("wtw_domainsslprice").value = '';
+								dGet("wtw_domainhostdays").value = '';
+								dGet('wtw_tallowhostingyes').checked = false;
+								dGet('wtw_tallowhostingno').checked = false;
+								WTW.hide('wtw_addwebdomaindiv');
+								WTW.show('wtw_addwebdomain');
+								if (WTW.isUserInRole('host')) {
+									WTW.show('wtw_addwebdomainnote');
+								} else {
+									WTW.hide('wtw_addwebdomainnote');
+								}
+								WTW.hide('wtw_domainpurchaseview');
+								WTW.show('wtw_domaindetailsdiv');
+								WTW.openWebDomainsSettings();
+							}
+						);
+					}
+				}
+				break;
+			case -1: /* cancel */
+				dGet('wtw_domainforcehttps').selectedIndex = 0;
+				dGet("wtw_twebdomainid").value = '';
+				dGet("wtw_twebdomain").value = '';
+				dGet("wtw_domainstartdate").value = '';
+				dGet("wtw_domainexpiredate").value = '';
+				dGet("wtw_domainhostprice").value = '';
+				dGet("wtw_domainsslprice").value = '';
+				dGet("wtw_domainhostdays").value = '';
+				dGet('wtw_tallowhostingyes').checked = false;
+				dGet('wtw_tallowhostingno').checked = false;
+				WTW.hide('wtw_addwebdomaindiv');
+				WTW.show('wtw_addwebdomain');
+				if (WTW.isUserInRole('host')) {
+					WTW.show('wtw_addwebdomainnote');
+				} else {
+					WTW.hide('wtw_addwebdomainnote');
+				}
+				WTW.hide('wtw_domainpurchaseview');
+				WTW.show('wtw_domaindetailsdiv');
+				WTW.pluginsSaveDomainForm(w, '');
+				break;
+			case 0: /* delete */
+				var zrequest = {
+					'webdomainid': zwebdomainid,
+					'function':'deletewebdomain'
+				};
+				WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						/* note serror would contain errors */
+						dGet('wtw_domainforcehttps').selectedIndex = 0;
+						dGet("wtw_twebdomainid").value = '';
+						dGet("wtw_twebdomain").value = '';
+						dGet("wtw_domainstartdate").value = '';
+						dGet("wtw_domainexpiredate").value = '';
+						dGet("wtw_domainhostprice").value = '';
+						dGet("wtw_domainsslprice").value = '';
+						dGet("wtw_domainhostdays").value = '';
+						dGet('wtw_tallowhostingyes').checked = false;
+						dGet('wtw_tallowhostingno').checked = false;
+						WTW.hide('wtw_addwebdomaindiv');
+						WTW.show('wtw_addwebdomain');
+						if (WTW.isUserInRole('host')) {
+							WTW.show('wtw_addwebdomainnote');
+						} else {
+							WTW.hide('wtw_addwebdomainnote');
+						}
+						WTW.hide('wtw_domainpurchaseview');
+						WTW.show('wtw_domaindetailsdiv');
+						WTW.pluginsSaveDomainForm(w, '');
+						WTW.openWebDomainsSettings();
+					}
+				);
+				break;
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-saveDomainForm=" + ex.message);
+	}
+}
+
 /* web aliases - mapping urls to 3D Communities, 3D Buildings, and 3D Things */
 
 WTWJS.prototype.openWebAliasSettings = async function() {
@@ -3337,7 +3983,7 @@ WTWJS.prototype.editWebAlias = async function(zwebaliasid) {
 					dGet('wtw_aliasforcehttps').selectedIndex = 1;
 				}
 				dGet("wtw_twebaliasid").value = zwebaliasid;
-				dGet("wtw_taliasdomainname").value = zdomainname;
+				WTW.loadWebDomainsForAliases(zdomainname);
 				dGet("wtw_taliascommunitypublishname").value = zcommunitypub;
 				dGet("wtw_taliasbuildingpublishname").value = zbuildingpub;
 				dGet("wtw_taliasthingpublishname").value = zthingpub;
@@ -3347,6 +3993,36 @@ WTWJS.prototype.editWebAlias = async function(zwebaliasid) {
 		);
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminforms.js-editWebAlias=" + ex.message);
+	}
+}
+
+WTWJS.prototype.loadWebDomainsForAliases = async function(zselecteddomainname) {
+	/* drop down list for selecting domain name on Web Alias form */
+	try {
+		WTW.clearDDL('wtw_taliasdomainname');
+		WTW.getAsyncJSON("/connect/webdomains.php", 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							if (zresponse[i].webdomainid != undefined) {
+								var zdomainname = zresponse[i].domainname;
+								var zoption = document.createElement("option");
+								zoption.text = zdomainname;
+								zoption.value = zdomainname;
+								if (zselecteddomainname.toLowerCase() == zdomainname.toLowerCase()) {
+									zoption.selected = true;
+								}
+								dGet('wtw_taliasdomainname').add(zoption);
+							}
+						}
+					}
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-loadWebDomainsForAliases=" + ex.message);
 	}
 }
 
@@ -3475,7 +4151,7 @@ WTWJS.prototype.clearAliasForm = function() {
 	/* clear web alias edit form */
 	try {
 		dGet("wtw_twebaliasid").value = "";
-		dGet('wtw_taliasdomainname').value = wtw_domainname;
+		WTW.loadWebDomainsForAliases(wtw_domainname);
 		dGet('wtw_aliaslevel1').innerHTML = "&nbsp;";
 		dGet('wtw_aliaslevel2').innerHTML = "&nbsp;";
 		dGet('wtw_aliaslevel3').innerHTML = "&nbsp;";
@@ -3646,14 +4322,14 @@ WTWJS.prototype.saveAliasForm = async function(w) {
 		var zwebaliasid = dGet('wtw_twebaliasid').value;
 		switch (w) {
 			case 1: /* save */
-				var zdomainname = dGet('wtw_taliasdomainname').value;
+				var zdomainname = WTW.getDDLValue('wtw_taliasdomainname');
 				var zcommunitypublishname = dGet('wtw_taliascommunitypublishname').value;
 				var zbuildingpublishname = dGet('wtw_taliasbuildingpublishname').value;
 				var zthingpublishname = dGet('wtw_taliasthingpublishname').value;
 				var zaliascommunityid = "";
 				var zaliasbuildingid = "";
 				var zaliasthingid = "";
-				var zforcehttps = dGet('wtw_aliasforcehttps').options[dGet('wtw_aliasforcehttps').selectedIndex].text;
+				var zforcehttps = WTW.getDDLText('wtw_aliasforcehttps');
 				var i = dGet('wtw_taliaspathtype').options[dGet('wtw_taliaspathtype').selectedIndex].value;
 				if (zforcehttps == "https://") {
 					zforcehttps = "1";
@@ -3998,6 +4674,113 @@ WTWJS.prototype.saveAPIKeyForm = async function(w) {
 	}
 }
 
+/* Invoices Admin */
+
+WTWJS.prototype.openInvoices = async function(zlist) {
+	/* open Invoices page form */
+	try {
+		if (zlist == undefined) {
+			zlist = 'my';
+		}
+		WTW.show('wtw_invoicespage');
+		WTW.show('wtw_loadinginvoices');
+		dGet('wtw_invoicestitle').innerHTML = 'Invoices';
+		if (zlist == 'my') {
+			dGet('wtw_invoicestitle').innerHTML = 'My Invoices';
+		}
+		dGet('wtw_invoiceslist').innerHTML = '';
+		var zrequest = {
+			'list':zlist,
+			'function':'getinvoices'
+		};
+		WTW.postAsyncJSON("/core/handlers/invoices.php", zrequest,
+			function(zresponse) {
+				if (zresponse != null) {
+					zresponse = JSON.parse(zresponse);
+					/* send JSON results to be formated on the form */
+					var zinvoiceslist = "<table class=\"wtw-table\"><tr><td class=\"wtw-tablecolumnheading\"><b>Invoice ID</b></td>\r\n";
+					zinvoiceslist += "<td class=\"wtw-tablecolumnheading\"><b>Invoice Date</b></td>\r\n";
+					zinvoiceslist += "<td class=\"wtw-tablecolumnheading\"><b>Domain Name</b></td>\r\n";
+					zinvoiceslist += "<td class=\"wtw-tablecolumnheading\"><b>Description</b></td>\r\n";
+					zinvoiceslist += "<td class=\"wtw-tablecolumnheading\"><b>Total</b></td>\r\n";
+					zinvoiceslist += "<td class=\"wtw-tablecolumnheading\"><b>&nbsp;</b></td></tr>";
+					if (zresponse.invoices != undefined) {
+						for (var i=0;i<zresponse.invoices.length;i++) {
+							if (zresponse.invoices[i] != null) {
+								var zinvoicedetails = [];
+								var ztransactions = [];
+								var zbdetails = '&nbsp;';
+								if (zresponse.invoices[i].invoicedetails != null) {
+									if (zresponse.invoices[i].invoicedetails.length > 0) {
+										zinvoicedetails = zresponse.invoices[i].invoicedetails
+									}
+								}
+								if (zresponse.invoices[i].transactions != null) {
+									if (zresponse.invoices[i].transactions.length > 0) {
+										ztransactions = zresponse.invoices[i].transactions
+									}
+								}
+								if (zinvoicedetails.length > 0 || ztransactions.length > 0) {
+									zbdetails = "<div class='wtw-bluebuttonright' onclick=\"WTW.openWebpage('/core/pages/invoice.php?invoiceid=" + zresponse.invoices[i].invoiceid + "','_blank');\">Print View</div><div class='wtw-bluebuttonright' onclick=\"WTW.toggleTR('wtw_invoice-" + zresponse.invoices[i].invoiceid + "');\">Details</div>";
+								}
+								zinvoiceslist += "<tr><td class=\"wtw-tablecolumns\">" + zresponse.invoices[i].invoiceid + "</td>\r\n";
+								zinvoiceslist += "<td class=\"wtw-tablecolumns\">" + WTW.formatDate(zresponse.invoices[i].invoicedate) + "</td>\r\n";
+								zinvoiceslist += "<td class=\"wtw-tablecolumns\">" + zresponse.invoices[i].domainname + "</td>\r\n";
+								zinvoiceslist += "<td class=\"wtw-tablecolumns\">" + zresponse.invoices[i].invoicedescription + "</td>\r\n";
+								zinvoiceslist += "<td class=\"wtw-tablecolumns\">" + WTW.formatMoney(zresponse.invoices[i].invoicetotal) + "</td>\r\n";
+								zinvoiceslist += "<td class=\"wtw-tablecolumns\">" + zbdetails + "</td></tr>\r\n";
+								if (zinvoicedetails.length > 0 || ztransactions.length > 0) {
+									zinvoiceslist += "<tr id=\"wtw_invoice-" + zresponse.invoices[i].invoiceid + "\" class=\"wtw-hide\"><td class=\"wtw-tablecolumns\"></td>\r\n";
+									zinvoiceslist += "<td class=\"wtw-tablecolumns\" colspan=\"4\">\r\n";
+									if (zinvoicedetails.length > 0) {
+										zinvoiceslist += "<table class=\"wtw-table\"><tr><td class=\"wtw-tablecolumnheading\" ><b>Quantity</b></td>\r\n";
+										zinvoiceslist += "<td class=\"wtw-tablecolumnheading\"><b>Description</b></td>\r\n";
+										zinvoiceslist += "<td class=\"wtw-tablecolumnheading\"><b>Price</b></td></tr>\r\n";
+										for (var j=0;j< zinvoicedetails.length;j++) {
+											if (zinvoicedetails[j] != null) {
+												zinvoiceslist += "<tr><td class=\"wtw-tablecolumns\">" + zinvoicedetails[j].quantity + "</td>\r\n";
+												zinvoiceslist += "<td class=\"wtw-tablecolumns\">" + zinvoicedetails[j].description + "</td>\r\n";
+												zinvoiceslist += "<td class=\"wtw-tablecolumns\">" + WTW.formatMoney(zinvoicedetails[j].price) + "</td>\r\n";
+												zinvoiceslist += "<td>&nbsp;</td></tr>\r\n";
+											}
+										}
+										zinvoiceslist += "<tr><td class=\"wtw-tablecolumns\" style=\"border-top:2px solid #000000;\">&nbsp;</td>\r\n";
+										zinvoiceslist += "<td class=\"wtw-tablecolumns\" style=\"border-top:2px solid #000000;\"><b>Total Invoice</b></td>\r\n";
+										zinvoiceslist += "<td class=\"wtw-tablecolumns\" style=\"border-top:2px solid #000000;\"><b>" + WTW.formatMoney(zresponse.invoices[i].invoicetotal) + "</b></td>\r\n";
+										zinvoiceslist += "<td>&nbsp;</td></tr></table>\r\n";
+									}
+									if (ztransactions.length > 0) {
+										zinvoiceslist += "<table class=\"wtw-table\"><tr><td class=\"wtw-tablecolumnheading\" ><b>Transaction ID</b></td>\r\n";
+										zinvoiceslist += "<td class=\"wtw-tablecolumnheading\"><b>Transaction Status</b></td>\r\n";
+										zinvoiceslist += "<td class=\"wtw-tablecolumnheading\"><b>Pay Status</b></td>\r\n";
+										zinvoiceslist += "<td class=\"wtw-tablecolumnheading\"><b>Pay Amount</b></td></tr>\r\n";
+										for (var j=0;j< ztransactions.length;j++) {
+											if (ztransactions[j] != null) {
+												zinvoiceslist += "<tr><td class=\"wtw-tablecolumns\">" + ztransactions[j].transactionid + "</td>\r\n";
+												zinvoiceslist += "<td class=\"wtw-tablecolumns\">" + ztransactions[j].transactionstatus + "</td>\r\n";
+												zinvoiceslist += "<td class=\"wtw-tablecolumns\">" + ztransactions[j].paystatus + "</td>\r\n";
+												zinvoiceslist += "<td class=\"wtw-tablecolumns\">" + WTW.formatMoney(ztransactions[j].payamount) + "</td>\r\n";
+												zinvoiceslist += "<td>&nbsp;</td></tr>\r\n";
+											}
+										}
+										zinvoiceslist += "</table>\r\n";
+									}
+									zinvoiceslist += "</td><td class=\"wtw-tablecolumns\"></td></tr>\r\n";
+								}
+							}
+						}
+					}
+					zinvoiceslist += "</table>\r\n";
+					dGet('wtw_invoiceslist').innerHTML = zinvoiceslist;
+					WTW.hide('wtw_loadinginvoices');
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-openInvoices=" + ex.message);
+	}
+}
+
 /* server settings */
 
 WTWJS.prototype.openServerSettings = async function() {
@@ -4218,4 +5001,119 @@ WTWJS.prototype.saveServerSettings = async function(zreload) {
 	}
 }
 
+/* Server Hosting Settings */
 
+WTWJS.prototype.openHostingServerSettings = async function() {
+	/* open Server Hosting Settings page form */
+	try {
+		WTW.show('wtw_loadingserverhostsettings');
+		WTW.show('wtw_settingspage');
+		WTW.show('wtw_hostingsettings');
+		var zrequest = {
+			'function':'gethostingserversettings'
+		};
+		WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				if (zresponse != null) {
+					/* load values into form */
+					var zserverhosting = '0';
+					if (zresponse.serverhosting != undefined) {
+						zserverhosting = zresponse.serverhosting;
+					}
+					if (zserverhosting == '1') {
+						dGet('wtw_tserverhosting').checked = true;
+					} else {
+						dGet('wtw_tserverhosting').checked = false;
+					}
+					if (zresponse.serverhostprice != undefined) {
+						dGet('wtw_tserverhostprice').value = WTW.formatMoney(zresponse.serverhostprice);
+					} else {
+						dGet('wtw_tserverhostprice').value = '';
+					}
+					if (zresponse.serversslprice != undefined) {
+						dGet('wtw_tserversslprice').value = WTW.formatMoney(zresponse.serversslprice);
+					} else {
+						dGet('wtw_tserversslprice').value = '';
+					}
+					if (zresponse.serverhostdays != undefined) {
+						dGet('wtw_tserverhostdays').value = WTW.formatNumber(zresponse.serverhostdays,0);
+					} else {
+						dGet('wtw_tserverhostdays').value = '';
+					}
+					if (zresponse.serverdnsarecord != undefined) {
+						dGet('wtw_tserverdnsarecord').value = zresponse.serverdnsarecord;
+					} else {
+						dGet('wtw_tserverdnsarecord').value = '';
+					}
+					if (zresponse.serverdnscname != undefined) {
+						dGet('wtw_tserverdnscname').value = zresponse.serverdnscname;
+					} else {
+						dGet('wtw_tserverdnscname').value = '';
+					}
+					WTW.changeHostingSwitch(dGet('wtw_tserverhosting'),false);
+					WTW.hide('wtw_loadingserverhostsettings');
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-openHostingServerSettings=" + ex.message);
+	}
+}
+
+WTWJS.prototype.changeHostingSwitch = async function(zobj, zsave) {
+	try {
+		if (zsave == undefined) {
+			zsave = false;
+		}
+		if (zobj.checked) {
+			WTW.show('wtw_serverhostingdiv');
+			dGet('wtw_tserverhostingtext').innerHTML = 'Server Hosting Enabled';
+		} else {
+			WTW.hide('wtw_serverhostingdiv');
+			dGet('wtw_tserverhostingtext').innerHTML = 'Server Hosting Disabled';
+		}
+		if (zsave) {
+			WTW.saveHostingServerSettings();
+		}
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-changeHostingSwitch=" + ex.message);
+	}
+}
+
+WTWJS.prototype.saveHostingServerSettings = async function() {
+	/* save Server Settings to the Config file */
+	try {
+		var zserverhosting = '0';
+		if (dGet('wtw_tserverhosting').checked) {
+			zserverhosting = '1';
+		}
+		var zrequest = {
+			'serverhosting': zserverhosting,
+			'serverhostprice': dGet('wtw_tserverhostprice').value,
+			'serversslprice': dGet('wtw_tserversslprice').value,
+			'serverhostdays': dGet('wtw_tserverhostdays').value,
+			'serverdnsarecord': dGet('wtw_tserverdnsarecord').value,
+			'serverdnscname': dGet('wtw_tserverdnscname').value,
+			'function':'savehostingserversettings'
+		};
+		WTW.postAsyncJSON("/core/handlers/tools.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				/* note serror would contain errors */
+				if (zresponse.serror != '') {
+					dGet('wtw_serverhostsettingscomplete').innerHTML = zresponse.serror;
+					dGet('wtw_serverhostsettingscomplete').style.color = 'red';
+				} else {
+					dGet('wtw_serverhostsettingscomplete').innerHTML = 'Server Hosting Settings Saved';
+					dGet('wtw_serverhostsettingscomplete').style.color = 'green';
+				}
+				window.setTimeout(function() {
+					dGet('wtw_serverhostsettingscomplete').innerHTML = '';
+				},5000);
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminforms.js-saveHostingServerSettings=" + ex.message);
+	}
+}
