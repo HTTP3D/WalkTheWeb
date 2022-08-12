@@ -242,11 +242,28 @@ WTW_AVATARS.prototype.loadAvatarGroups = function() {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
+				var zhostid = '';
+				var zhostuserid = '';
+				if (WTW.isUserInRole('host') && WTW.isUserInRole('admin') == false) {
+					zhostuserid = dGet('wtw_tuserid').value;
+				}
 				if (zresponse.avatargroups != null) {
 					dGet('wtw_avatargroupslist').innerHTML = '';
 					for (var i=0;i < zresponse.avatargroups.length;i++) {
 						if (zresponse.avatargroups[i] != null) {
-							dGet('wtw_avatargroupslist').innerHTML += "<div class=\"wtw-biglistleft\">" + zresponse.avatargroups[i].avatargroup + "</div><div class=\"wtw-bluebuttonright\" onclick=\"wtwavatars.openAvatarGroupForm('" + zresponse.avatargroups[i].avatargroupid + "','" + zresponse.avatargroups[i].avatargroup + "');\">Edit</div><div class=\"wtw-clear\"></div><hr />";
+							if (zhostid != zresponse.avatargroups[i].hostuserid) {
+								if (zhostid == '') {
+									dGet('wtw_avatargroupslist').innerHTML += "<div class=\"wtw-biglistcenter\" style=\"color:blue;\">Custom Avatar Groups</div><div class=\"wtw-clear\"></div><hr />";
+								} else {
+									dGet('wtw_avatargroupslist').innerHTML += "<div class=\"wtw-biglistcenter\" style=\"color:blue;\">Global Avatar Groups</div><div class=\"wtw-clear\"></div><hr />";
+								}
+								zhostid = zresponse.avatargroups[i].hostuserid;
+							}
+							if (zhostuserid == '' || zhostuserid == zresponse.avatargroups[i].hostuserid) {
+								dGet('wtw_avatargroupslist').innerHTML += "<div class=\"wtw-biglistleft\">" + zresponse.avatargroups[i].avatargroup + "</div><div class=\"wtw-bluebuttonright\" onclick=\"wtwavatars.openAvatarGroupForm('" + zresponse.avatargroups[i].avatargroupid + "','" + zresponse.avatargroups[i].avatargroup + "');\">Edit</div><div class=\"wtw-clear\"></div><hr />";
+							} else {
+								dGet('wtw_avatargroupslist').innerHTML += "<div class=\"wtw-biglistleft\">" + zresponse.avatargroups[i].avatargroup + "</div><div class=\"wtw-clear\"></div><hr />";
+							}
 						}
 					}
 				}

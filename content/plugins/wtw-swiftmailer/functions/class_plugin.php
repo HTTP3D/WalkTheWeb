@@ -72,12 +72,9 @@ class wtwswiftmailer {
 			if ($wtwplugins->pagename == "admin.php") {
 				/* add admin menu items */
 				/* wtwplugins class -> addAdminMenuItem function (menu item id, menu text, level 1 sort, level 1 id, level 2 sort, level 2 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
-				/* $wtwplugins->addAdminMenuItem('wtw_adminpaintball', '3D Stores', 95, 'wtw_paintball', 0, '', wtwswiftmailer_URL.'/assets/images/menustore.png', array('admin','developer','architect'), null); */
-				/* $wtwplugins->addAdminMenuItem('wtw_adminliststores', 'List Stores', 95, 'wtw_paintball', 1, 'wtw_liststores', '', array('admin','developer','architect'), "WTW.openFullPageForm('fullpage','List Stores','wtw_liststorespage');wtwswiftmailer.getStores();"); */
 				
 				/* admin full page settings forms */
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
-				/* $wtwplugins->addFullPageForm('wtw_liststorespage', array('admin','developer','architect'), $this->listStoresPage()); */
 				
 			}
 		} catch (Exception $e) {
@@ -111,7 +108,7 @@ class wtwswiftmailer {
 			/* deltaCreateTable will add, alter, or remove fields or add the table if it doesnt exist */
 			/* check core/functions/class_wtwdb.php deltaCreateTable function for full support */
 			if ($wtwplugins->pagename == "admin.php") {
-				$dbversion = $wtwplugins->getSetting(WTW_SwiftMailer_PREFIX."dbversion");
+				$dbversion = $wtwplugins->getSetting(WTW_SwiftMailer_PREFIX."dbversion","1.0.0");
 				if ($dbversion != $this->dbversion) {
 /*					$wtwplugins->deltaCreateTable("
 						CREATE TABLE `".WTW_SwiftMailer_PREFIX."tablename` (
