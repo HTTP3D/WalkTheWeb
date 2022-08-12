@@ -270,7 +270,7 @@ class wtw3dinternet {
 			/* deltaCreateTable will add, alter, or remove fields or add the table if it doesnt exist */
 			/* check core/functions/class_wtwdb.php deltaCreateTable function for full support */
 			if ($wtwplugins->pagename == "admin.php") {
-				$dbversion = $wtwplugins->getSetting(WTW_3DINTERNET_PREFIX."dbversion");
+				$dbversion = $wtwplugins->getSetting(WTW_3DINTERNET_PREFIX."dbversion","1.0.0");
 				if ($dbversion != $this->dbversion) {
 					$wtwplugins->deltaCreateTable("
 						CREATE TABLE `".WTW_3DINTERNET_PREFIX."useravatars` (

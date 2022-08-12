@@ -71,12 +71,12 @@ class devidplugintemplate {
 			if ($wtwplugins->pagename == "admin.php") {
 				/* add admin menu items */
 				/* wtwplugins class -> addAdminMenuItem function (menu item id, menu text, level 1 sort, level 1 id, level 2 sort, level 2 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
-				/* $wtwplugins->addAdminMenuItem('wtw_adminpaintball', '3D Stores', 95, 'wtw_paintball', 0, '', devidplugintemplate_URL.'/assets/images/menustore.png', array('admin','developer','architect'), null); */
-				/* $wtwplugins->addAdminMenuItem('wtw_adminliststores', 'List Stores', 95, 'wtw_paintball', 1, 'wtw_liststores', '', array('admin','developer','architect'), "WTW.openFullPageForm('fullpage','List Stores','wtw_liststorespage');devidplugintemplate.getStores();"); */
+				/* $wtwplugins->addAdminMenuItem('wtw_adminmenuitem', 'Main Menu Item', 95, 'wtw_adminmenuitem', 0, '', devidplugintemplate_URL.'/assets/images/menustore.png', array('admin','developer','architect','host'), null); */
+				/* $wtwplugins->addAdminMenuItem('wtw_adminmymenuoption', 'My Menu Option', 95, 'wtw_adminmenuitem', 1, 'wtw_adminmymenuoption', '', array('admin','developer','architect','host'), "console.log('execute menu option');"); */
 				
 				/* admin full page settings forms */
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
-				/* $wtwplugins->addFullPageForm('wtw_liststorespage', array('admin','developer','architect'), $this->listStoresPage()); */
+				/* $wtwplugins->addFullPageForm('wtw_mypage', array('admin','developer','architect','host'), $this->myPage()); */
 				
 			}
 		} catch (Exception $e) {
@@ -144,7 +144,7 @@ class devidplugintemplate {
 			/* deltaCreateTable will add, alter, or remove fields or add the table if it doesnt exist */
 			/* check core/functions/class_wtwdb.php deltaCreateTable function for full support */
 			if ($wtwplugins->pagename == "admin.php") {
-				$dbversion = $wtwplugins->getSetting(DEVID_PLUGINTEMPLATE_PREFIX."dbversion");
+				$dbversion = $wtwplugins->getSetting(DEVID_PLUGINTEMPLATE_PREFIX."dbversion","1.0.0");
 				if ($dbversion != $this->dbversion) {
 /*					$wtwplugins->deltaCreateTable("
 						CREATE TABLE `".DEVID_PLUGINTEMPLATE_PREFIX."tablename` (
