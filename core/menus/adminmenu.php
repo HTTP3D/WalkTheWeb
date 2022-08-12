@@ -372,7 +372,7 @@
 				</div>
 <?php			echo $wtwadminmenu->getAdminMenuForms(); ?>
 			</div>
-<?php		if ($wtwdb->hasPermission(array("admin","developer","architect","graphics artist"))) { ?>
+<?php		if ($wtwdb->hasPermission(array("admin","developer","architect","graphics artist","host"))) { ?>
 			<div id="wtw_quickeditorsettings" class="wtw-menulevel0" style="text-align:center;position:absolute;z-index:8000;bottom:0px;width:320px;margin:0px;padding-left:0px;padding-right:0px;border-top:#333333;">
 				<div style="width:100%;text-align:center;margin-top:0px;">
 					<div style="font-size:.8em;color:white;margin-bottom:4px;width:100%;margin-left:0px;margin-right:0px;margin-top:0px;"><?php echo $wtwadminmenu->__("Quick Editor Settings"); ?></div>

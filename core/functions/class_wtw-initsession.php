@@ -21,33 +21,34 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = "3.5.1";
-	public $dbversion = "1.2.5";
-	public $versiondate = "2022-7-29";
-	public $serverinstanceid = "";
-	public $globaluserid = "";
-	public $userid = "";
-	public $userip = "";
-	public $adminemail = "";
-	public $usertoken = "";
-	public $rootpath = "";
-	public $contentpath = "";
-	public $contenturl = "";
+	public $version = '3.5.1';
+	public $dbversion = '1.2.12';
+	public $versiondate = '2022-7-29';
+	public $olddbversion = '';
+	public $serverinstanceid = '';
+	public $globaluserid = '';
+	public $userid = '';
+	public $userip = '';
+	public $adminemail = '';
+	public $usertoken = '';
+	public $rootpath = '';
+	public $contentpath = '';
+	public $contenturl = '';
 	public $protocol = "http://";
-	public $domainname = "";
-	public $domainurl = "";
-	public $websiteurl = "";
+	public $domainname = '';
+	public $domainurl = '';
+	public $websiteurl = '';
 	public $serverip = '';
-	public $pagename = "";
-	public $uri = "";
-	public $community = "";
-	public $building = "";
-	public $thing = "";
-	public $communityid = "";
-	public $buildingid = "";
-	public $thingid = "";
-	public $avatarid = "";
-	public $defaultlanguage = "English";
+	public $pagename = '';
+	public $uri = '';
+	public $community = '';
+	public $building = '';
+	public $thing = '';
+	public $communityid = '';
+	public $buildingid = '';
+	public $thingid = '';
+	public $avatarid = '';
+	public $defaultlanguage = 'English';
 	public $pluginstylesheets = array();
 	public $pluginscripts = array();
 	public $pluginscriptfunctions = array();
@@ -259,11 +260,7 @@ class wtw {
 						if (isset($zpathdef[2]) && !empty($zpathdef[2])) {
 							require_once(wtw_rootpath.'/core/functions/class_wtwpluginloader.php');
 							global $wtwpluginloader;
-							switch (trim($zpathdef[2])) {
-								case "handlers":
-									$wtwpluginloader->loadHandlersURL();
-									break;
-							}
+							$wtwpluginloader->loadPathURL(trim($zpathdef[2]));
 						}
 					}
 				} else if (trim($zpathdef[1]) == "community" || trim($zpathdef[1]) == "communities") {
@@ -344,7 +341,8 @@ class wtw {
 		/* number validation function with fallback value */
 		$zcheckval = $zdefaultval;
 		try {
-			if (!empty($zval) && isset($zval)) {
+			if (isset($zval)) {
+				$zval = str_replace(",","",str_replace(" ","",str_replace("$","", $zval)));
 				if (is_numeric($zval)) {
 					$zcheckval = $zval;
 				}
@@ -581,14 +579,23 @@ class wtw {
 				global $wtwdb;
 				if ($this->pagename == "admin.php") {
 					/* check for table updates if the db version is not current */
-					$zdbversion = $wtwdb->getSetting("wtw_dbversion");
+					$zversion = $wtwdb->getSetting("wtw_version","3.4.5");
+					$this->oldversion = $zversion;
+					$zdbversion = $wtwdb->getSetting("wtw_dbversion","1.2.5");
+					$this->olddbversion = $zdbversion;
 					if ($zdbversion != $this->dbversion) {
 						require_once(wtw_rootpath.'/core/functions/class_wtwtables.php');
 						global $wtwtables;
-						/* run table updates */
+						/* run dbversion table updates */
 						$wtwtables->databaseTableDefinitions();
 						/* run data updates and additions */
 						$wtwtables->checkDBVersionData($this->userid);
+						$this->olddbversion = $this->dbversion;
+					}
+					if ($zversion != $this->version) {
+						/* add any code required in version update */
+						$wtwdb->saveSetting("wtw_version", $this->version);
+						$this->oldversion = $this->version;
 					}
 				}
 				$zsetupstep = 3;
@@ -721,6 +728,40 @@ class wtw {
 								now(),
 								'".$this->userid."');");
 					}
+					$zresultsweb = $wtwdb->query("
+						select * from ".wtw_tableprefix."webdomains
+						where domainname='".$this->domainname."'
+							and deleted=0;");
+					if (count($zresultsweb) == 0) {
+						$zwebdomainid = $wtwdb->getRandomString(16,1);
+						$zforcehttps = 0;
+						if ($this->protocol == "https://") {
+							$zforcehttps = 1;
+						}
+						$wtwdb->query("
+							insert into ".wtw_tableprefix."webdomains
+							   (webdomainid,
+							    hostuserid,
+								domainname,
+								forcehttps,
+								startdate,
+								allowhosting,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							   values
+							   ('".$zwebdomainid."',
+							    '',
+								'".$this->domainname."',
+								".$zforcehttps.",
+								now(),
+								'1',
+								now(),
+								'".$this->userid."',
+								now(),
+								'".$this->userid."');");
+					}
 				}
 				if ($scount == 0) {
 					if (empty($_SESSION["wtw_userid"]) || !isset($_SESSION["wtw_userid"])) {
@@ -770,7 +811,7 @@ class wtw {
 					}
 				} else {
 					/* check for settings optional services offered - once */
-					$zoptservices = $wtwdb->getSetting("OptionalServicesOffered");
+					$zoptservices = $wtwdb->getSetting("OptionalServicesOffered", null);
 					if (empty($zoptservices)) {
 						$zsetupstep = 8;
 					}
@@ -1079,7 +1120,7 @@ class wtw {
 					$this->thing = "";
 				}
 			}
-			if ($this->pagename == "admin.php" && ($wtwdb->isUserInRole('admin') || $wtwdb->isUserInRole('architect') || $wtwdb->isUserInRole('developer') || $wtwdb->isUserInRole('graphics artist'))) {
+			if ($this->pagename == "admin.php" && ($wtwdb->isUserInRole('admin') || $wtwdb->isUserInRole('host') || $wtwdb->isUserInRole('architect') || $wtwdb->isUserInRole('developer') || $wtwdb->isUserInRole('graphics artist'))) {
 				/* user has admin access, get item to edit from querystring */
 				if(isset($_GET["avatarid"]) && !empty($_GET["avatarid"])) {
 					$this->avatarid = $wtwdb->checkIDFormat($_GET["avatarid"]);
@@ -1207,7 +1248,7 @@ class wtw {
 		/* check if user has the role of architect access */
 		$zhasaccess = false;
 		try {
-			if ($zrolename == 'Admin' || $zrolename == 'Architect' || $zrolename == 'Developer' || $zrolename == 'Graphics Artist') {
+			if ($zrolename == 'Admin' || $zrolename == 'Architect' || $zrolename == 'Developer' || $zrolename == 'Graphics Artist'  || $zrolename == 'Host') {
 				$zhasaccess = true;
 			}
 		} catch (Exception $e) {
@@ -1962,7 +2003,27 @@ class wtw {
 					$zspawnindex += 1;
 				}
 			}
-
+			$zroles = array();
+			if (!empty($this->userid)) {
+				/* get user roles */
+				$zresults = $wtwdb->query("
+					select r1.*
+					from ".wtw_tableprefix."roles r1
+						inner join ".wtw_tableprefix."usersinroles ur1
+						on r1.roleid = ur1.roleid
+					where ur1.userid='".$this->userid."'
+						and ur1.deleted=0
+						and r1.deleted=0
+					order by r1.rolename;");
+				$i = 0;
+				foreach ($zresults as $zrow) {
+					$zroles[$i] = array(
+						'roleid' => $zrow["roleid"],
+						'rolename' => $zrow["rolename"]
+					);	
+					$i += 1;
+				}
+			}
 			$zposition = array(
 				'x' => $zpositionx,
 				'y' => $zpositiony,
@@ -1991,6 +2052,7 @@ class wtw {
 			$zinitialscene['startlocation'] = $startlocation;
 			$zinitialscene['spawnzones'] = $zspawnzones;
 			$zinitialscene['useraccesslist'] = null;
+			$zinitialscene['roles'] = $zroles;
 			/* get main 3D Thing settings */
 			$zresults = $wtwdb->query("
 				select settingvalue

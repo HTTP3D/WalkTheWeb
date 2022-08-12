@@ -17,6 +17,13 @@ try {
 	$zavatarid = $wtwhandlers->getPost('avatarid','');
 	$zsettings = $wtwhandlers->getPost('settings','');
 	$zvalue = $wtwhandlers->getPost('value','');
+	$zwebdomainid = $wtwhandlers->getPost('webdomainid','');
+	$zstartdate = $wtwhandlers->getPost('startdate','');
+	$zexpiredate = $wtwhandlers->getPost('expiredate','');
+	$zallowhosting = $wtwhandlers->getPost('allowhosting','0');
+	$zhostprice = $wtwhandlers->getPost('hostprice','');
+	$zsslprice = $wtwhandlers->getPost('sslprice','');
+	$zhostdays = $wtwhandlers->getPost('hostdays','');
 	$zwebaliasid = $wtwhandlers->getPost('webaliasid','');
 	$zforcehttps = $wtwhandlers->getPost('forcehttps','');
 	$zdomainname = $wtwhandlers->getPost('domainname','');
@@ -36,7 +43,7 @@ try {
 	$zcategory = $wtwhandlers->getPost('category','');
 	$zhide = $wtwhandlers->getPost('hide','');
 	$zuploadid = $wtwhandlers->getPost('uploadid','');
-	
+
 	/* select the function called */
 	$zresponse = array();
 	switch ($zfunction) {
@@ -57,6 +64,15 @@ try {
 			$zresponse = array(
 				'success'=> $zsuccess
 			);
+			break;
+		case "savewebdomain":
+			$zsuccess = $wtwuploads->saveWebDomain($zwebdomainid, $zforcehttps, $zdomainname, $zstartdate, $zexpiredate, $zallowhosting, $zhostprice, $zsslprice, $zhostdays);
+			$zresponse = array(
+				'success'=> $zsuccess
+			);
+			break;
+		case "deletewebdomain":
+			$wtwuploads->deleteWebDomain($zwebdomainid);
 			break;
 		case "savewebalias":
 			$zsuccess = $wtwuploads->saveWebAlias($zwebaliasid, $zforcehttps, $zdomainname, $zcommunitypublishname, $zbuildingpublishname, $zthingpublishname, $zcommunityid, $zbuildingid, $zthingid);

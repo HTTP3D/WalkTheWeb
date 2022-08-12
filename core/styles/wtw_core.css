@@ -2403,6 +2403,23 @@ input:checked + .wtw-slider:before {
 	float:right;
 	margin-right:20px;
 }
+.wtw-roundedmessage {
+	font-size:1em;
+	border-radius:10px;
+	font-weight:normal;
+	background-color:#ffffff;
+	color:blue;
+	border:1px solid #000000;
+	text-align:center;
+	margin:10px 20px 10px 20px;
+}
+h2.wtw-roundedmessage {
+	font-size:1.2em;
+	font-weight:bold;
+	color:#000000;
+	text-align:center;
+	border:none;
+}
 .wtw-editmode {
 	display:inline-block;
 	color:#000000;
@@ -2483,4 +2500,32 @@ input:checked + .wtw-slider:before {
 
 	font-size: 25px;
 	border-radius: 50%;
+}
+table.wtw-table {
+	width:100%;
+	border-collapse: collapse;
+}
+td.wtw-tablecolumnheading {
+	min-height:38px;
+	font-weight:bold;
+	border-bottom:2px solid #000000;
+	padding:5px;
+}
+td.wtw-tablecolumnheadingright {
+	min-height:38px;
+	font-weight:bold;
+	border-bottom:2px solid #000000;
+	padding:5px;
+	text-align:right;
+}
+td.wtw-tablecolumns {
+	min-height:38px;
+	border-bottom:1px solid #375377;
+	padding:5px;
+}
+td.wtw-tablecolumnsright {
+	min-height:38px;
+	border-bottom:1px solid #375377;
+	padding:5px;
+	text-align:right;
 }

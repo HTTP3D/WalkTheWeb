@@ -198,6 +198,7 @@ class wtwtables {
 				CREATE TABLE `".wtw_tableprefix."avatargroups` (
 				  `avatargroupid` varchar(16) NOT NULL,
 				  `avatargroup` varchar(255) NOT NULL,
+				  `hostuserid` varchar(16) DEFAULT '',
 				  `createdate` datetime DEFAULT NULL,
 				  `createuserid` varchar(16) DEFAULT '',
 				  `updatedate` datetime DEFAULT NULL,
@@ -213,6 +214,7 @@ class wtwtables {
 				CREATE TABLE `".wtw_tableprefix."avatars` (
 				  `avatarid` varchar(16) NOT NULL,
 				  `pastavatarid` varchar(16) DEFAULT '',
+				  `hostuserid` varchar(16) DEFAULT '',
 				  `versionid` varchar(16) DEFAULT '',
 				  `version` varchar(12) DEFAULT '1.0.0',
 				  `versionorder` int DEFAULT '1000000',
@@ -651,7 +653,7 @@ class wtwtables {
 				  `globaluserid` VARCHAR(16) NULL DEFAULT '',
 				  `usertoken` VARCHAR(1024) NULL DEFAULT '',
 				  `uploadpathid` VARCHAR(16) NULL DEFAULT '',
-				  `globaluseravatarid` VARCHAR(16) NULL DEFAULT '',
+				  `globaluseravatarid` VARCHAR(32) NULL DEFAULT '',
 				  `useravatarid` VARCHAR(16) NULL DEFAULT '',
 				  `viewdate` DATETIME DEFAULT NULL,
 				  `feedbackdate` DATETIME DEFAULT NULL,
@@ -667,6 +669,47 @@ class wtwtables {
 				  UNIQUE KEY `".wtw_tableprefix."feedbackid_UNIQUE` (`feedbackid`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 			");
+			$wtwdb->deltaCreateTable("
+				CREATE TABLE `".wtw_tableprefix."invoices` (
+				  `invoiceid` varchar(16) NOT NULL,
+				  `hostuserid` varchar(16) DEFAULT '',
+				  `domainname` varchar(255) DEFAULT '',
+				  `userid` varchar(16) DEFAULT '',
+				  `userip` varchar(45) DEFAULT '',
+				  `email` varchar(255) DEFAULT '',
+				  `invoicedate` datetime DEFAULT NULL,
+				  `invoicedescription` varchar(255) DEFAULT '',
+				  `invoicetotal` decimal(18,2) DEFAULT '0',
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int(11) DEFAULT '0',
+				  PRIMARY KEY (`invoiceid`),
+				  UNIQUE KEY `".wtw_tableprefix."invoiceid_UNIQUE` (`invoiceid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			"); 
+			$wtwdb->deltaCreateTable("
+				CREATE TABLE `".wtw_tableprefix."invoicedetails` (
+				  `invoicedetailid` varchar(16) NOT NULL,
+				  `invoiceid` varchar(16) NOT NULL,
+				  `sortorder` int DEFAULT '0',
+				  `quantity` int DEFAULT '1',
+				  `description` varchar(255) DEFAULT '',
+				  `price` decimal(18,2) DEFAULT '0',
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int(11) DEFAULT '0',
+				  PRIMARY KEY (`invoicedetailid`),
+				  UNIQUE KEY `".wtw_tableprefix."invoicedetailid_UNIQUE` (`invoicedetailid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			"); 
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."menuitems` (
 				  `menuitemid` int NOT NULL AUTO_INCREMENT,
@@ -1173,6 +1216,7 @@ class wtwtables {
 			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."webaliases` (
 				  `webaliasid` varchar(16) NOT NULL,
+				  `hostuserid` varchar(16) DEFAULT '',
 				  `domainname` varchar(255) DEFAULT '',
 				  `communityid` varchar(16) DEFAULT '',
 				  `communitypublishname` varchar(255) DEFAULT '',
@@ -1191,6 +1235,29 @@ class wtwtables {
 				  `deleted` int DEFAULT '0',
 				  PRIMARY KEY (`webaliasid`),
 				  UNIQUE KEY `".wtw_tableprefix."webaliasid_UNIQUE` (`webaliasid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			");
+			$wtwdb->deltaCreateTable("
+				CREATE TABLE `".wtw_tableprefix."webdomains` (
+				  `webdomainid` varchar(16) NOT NULL,
+				  `hostuserid` varchar(16) DEFAULT '',
+				  `domainname` varchar(255) DEFAULT '',
+				  `forcehttps` int DEFAULT '0',
+				  `startdate` datetime DEFAULT NULL,
+				  `expiredate` datetime DEFAULT NULL,
+				  `allowhosting` int DEFAULT '0',
+				  `hostprice` decimal(18,2) DEFAULT '0',
+				  `sslprice` decimal(18,2) DEFAULT '0',
+				  `hostdays` int DEFAULT '365',
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` INT DEFAULT '0',
+				  PRIMARY KEY (`webdomainid`),
+				  UNIQUE INDEX `".wtw_tableprefix."webdomainid_UNIQUE` (`webdomainid`)
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 			");
 			$wtwdb->deltaCreateTable("
@@ -2269,7 +2336,6 @@ class wtwtables {
 				('h336lea89olz2do8','','q10xngdeyl4vwy07','h336lea89olz2do8','yxs6lcxokr6lhll3','".$zuserid."','yellow.jpg','yellow.jpg','jpg',7802.00,'image/jpeg','/content/system/stock/yellow-512x512.jpg',NULL,512.00,512.00,1,NULL,'',0,'".$ztimestamp."','".$zuserid."',0,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				('yxs6lcxokr6lhll3','','q10xngdeyl4vwy07','h336lea89olz2do8','yxs6lcxokr6lhll3','".$zuserid."','yellow.jpg','yellow.jpg','jpg',804.00,'image/jpeg','/content/system/stock/yellow.jpg',null,80.00,80.00,1,NULL,'',0,'".$ztimestamp."','".$zuserid."',0,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
 			");
-			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 			$this->checkDBVersionData($zuserid);
 		} catch (Exception $e) {
 			global $wtw;
@@ -2283,1101 +2349,1107 @@ class wtwtables {
 		try {
 			global $wtwdb;
 			$ztimestamp = date('Y/m/d H:i:s');
-
-			/* updated v3.3.0 - allow more scaling decimal places for avatars */
-			$zresults = $wtwdb->query("select COLUMN_TYPE as columntype from INFORMATION_SCHEMA.COLUMNS where table_name='".wtw_tableprefix."useravatars' AND COLUMN_NAME = 'scalingx';");
-			foreach ($zresults as $zrow) {
-				if ($zrow["columntype"] != "decimal(18,4)") {
-					$wtwdb->query("ALTER TABLE `".wtw_tableprefix."useravatars` 
-						CHANGE COLUMN `scalingx` `scalingx` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
-					$wtwdb->query("ALTER TABLE `".wtw_tableprefix."useravatars` 
-						CHANGE COLUMN `scalingy` `scalingy` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
-					$wtwdb->query("ALTER TABLE `".wtw_tableprefix."useravatars` 
-						CHANGE COLUMN `scalingz` `scalingz` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
-				}
-			}
+			$zversion = $wtw->version;
+			$zdbversion = $wtw->dbversion;
+			$zoldversion = $wtw->oldversion;
+			$zolddbversion = $wtw->olddbversion;
+			list($zoldversion1, $zoldversion2, $zoldversion3) = explode('.', $zoldversion);
 			
-			/* updated 3.4.3 - look for system based avatars */
-			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avatars where objectfolder like '%/content/system/avatars/%' and deleted=0;");
-			/* updated 3.4.3 - also check for empty table (means new install or needs to be repopulated) */
-			/* to force this not to execute, keep at least 2 original avatars - but you can flag them as deleted=1 in the table */
-			$zresults2 = $wtwdb->query("select avatarid from ".wtw_tableprefix."avatars where avatarid='3b9bt5c70igtmqux' or avatarid='641svy8bwjx2kme7' or avatarid='9e94useo7x2ief0s' or avatarid='aajvq38y06vulgh0' or avatarid='dihtmpm1ae3b9d3a' or avatarid='h1ro3h59xs5eknl0' or avatarid='odtx7arzof5eigp4' or avatarid='p7y3p6ti6d85yf7q' or avatarid='r8tgsns20ruwx0bg' or avatarid='v1ij2rkmdypo97c2';");
-			
-			if (count($zresults) > 0 || count($zresults2) < 3) {
-				/* updated 3.4.3 - remove old system based avatars */
-				$wtwdb->query("delete from ".wtw_tableprefix."avatars where avatarid='3b9bt5c70igtmqux' or avatarid='641svy8bwjx2kme7' or avatarid='9e94useo7x2ief0s' or avatarid='aajvq38y06vulgh0' or avatarid='dihtmpm1ae3b9d3a' or avatarid='h1ro3h59xs5eknl0' or avatarid='odtx7arzof5eigp4' or avatarid='p7y3p6ti6d85yf7q' or avatarid='r8tgsns20ruwx0bg' or avatarid='v1ij2rkmdypo97c2';");
-				$wtwdb->query("delete from ".wtw_tableprefix."avatarcolors where avatarid='3b9bt5c70igtmqux' or avatarid='641svy8bwjx2kme7' or avatarid='9e94useo7x2ief0s' or avatarid='aajvq38y06vulgh0' or avatarid='dihtmpm1ae3b9d3a' or avatarid='h1ro3h59xs5eknl0' or avatarid='odtx7arzof5eigp4' or avatarid='p7y3p6ti6d85yf7q' or avatarid='r8tgsns20ruwx0bg' or avatarid='v1ij2rkmdypo97c2';");
-
-				/* updated 3.4.3 - add new avatars with the same avatarids */
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avatars 
-					(avatarid, pastavatarid, versionid, version, versionorder, avatargroup, displayname, avatardescription, objectfolder, objectfile, gender, positionx, positiony, positionz, scalingx, scalingy, scalingz, rotationx, rotationy, rotationz, startframe, endframe, sortorder, templatename, description, tags, snapshotid, shareuserid, sharehash, sharetemplatedate, alttag, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES 
-					('3b9bt5c70igtmqux','','3b9bt5c70igtmqux','1.0.0',1000000,'Anonymous','Anonymous Male','Anonymous Male Android','/content/uploads/avatars/3b9bt5c70igtmqux/','maleidle.babylon','male',0.0,0.0,0.0,0.08,0.08,0.08,0.0,-90.0,0.0,1,213,2,'Anonymous Male','Anonymous Male avatar with a default blue color and robotic android look. ','Avatar, Anonymous, android, robot','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
-					('641svy8bwjx2kme7','','641svy8bwjx2kme7','1.0.0',1000000,'Default','Remy','Blonde Haired Male with short sleeve shirt and shorts','/content/uploads/avatars/641svy8bwjx2kme7/','remyidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,196,4,'Remy','Blonde Haired Male with short sleeve shirt and shorts','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
-					('9e94useo7x2ief0s','','9e94useo7x2ief0s','1.0.0',1000000,'Default','Liam','Black Haired Male with long sleeve shirt and pants','/content/uploads/avatars/9e94useo7x2ief0s/','liamidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,200,4,'Liam','Black Haired Male with long sleeve shirt and pants','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
-					('aajvq38y06vulgh0','','aajvq38y06vulgh0','1.0.0',1000000,'Default','Pearl','Blonde Haired Female Child with long sleeved shirt and shorts','/content/uploads/avatars/aajvq38y06vulgh0/','pearlidle.babylon','female',0.0,0.0,0.0,0.09,0.09,0.09,0.0,-90.0,0.0,1,325,3,'Pearl','Blonde Haired Female Child with long sleeved shirt and shorts.','Avatar, Default, Female, Child','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
-					('dihtmpm1ae3b9d3a','','dihtmpm1ae3b9d3a','1.0.0',1000000,'Default','Malcolm','Black Haired Male with half sleeve shirt, long pants, and hat','/content/uploads/avatars/dihtmpm1ae3b9d3a/','malcolmidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,195,4,'Malcolm','Black Haired Male with half sleeve shirt, long pants, and hat','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
-					('h1ro3h59xs5eknl0','','h1ro3h59xs5eknl0','1.0.0',1000000,'Default','Shae','Black Haired Female with black jacket, long pants, and boots','/content/uploads/avatars/h1ro3h59xs5eknl0/','shaeidle.babylon','female',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,303,3,'Shae','Black Haired Female with black jacket, long pants, and boots','Avatar, Default, Female','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
-					('odtx7arzof5eigp4','','odtx7arzof5eigp4','1.0.0',1000000,'Default','Regina','Black Haired Female with tank top, long pants, and hat','/content/uploads/avatars/odtx7arzof5eigp4/','reginaidle.babylon','female',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,241,3,'Regina','Black Haired Female with tank top, long pants, and hat','Avatar, Default, Female','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
-					('p7y3p6ti6d85yf7q','','p7y3p6ti6d85yf7q','1.0.0',1000000,'Anonymous','Anonymous Female','Anonymous Female Android','/content/uploads/avatars/p7y3p6ti6d85yf7q/','femaleidle.babylon','female',0.0,0.0,0.0,0.08,0.08,0.08,0.0,-90.0,0.0,1,100,1,'Anonymous Female','Anonymous Female avatar with a default red color and robotic android look. ','Avatar, Anonymous, android, robot','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
-					('r8tgsns20ruwx0bg','','r8tgsns20ruwx0bg','1.0.0',1000000,'Default','Jasper','Orange Haired Male Child','/content/uploads/avatars/r8tgsns20ruwx0bg/','jasperidle.babylon','male',0.0,0.0,0.0,0.09,0.09,0.09,0.0,-90.0,0.0,1,71,4,'Jasper','Orange Haired Male Child with short sleeved shirt and shorts.','Avatar, Default, Male, Child','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
-					('v1ij2rkmdypo97c2','','v1ij2rkmdypo97c2','1.0.0',1000000,'Default','Stefani','Brown Haired Female with tank top and shorts','/content/uploads/avatars/v1ij2rkmdypo97c2/','stefaniidle.babylon','female',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,363,3,'Stefani','Brown Haired Female with tank top and shorts','Avatar, Default, Female','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
-				");
-
-				/* updated 3.4.3 - add new avatar colors (parts) with the same avatarids */
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avatarcolors 
-					(avatarpartid, pastavatarpartid, avatarid, avatarpart, diffusecolor, specularcolor, emissivecolor, ambientcolor, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES 
-					('n7ggpnsdmvafn27q', '', '3b9bt5c70igtmqux', 'Alpha_Joints', '#47547F', '#000000', '#000000', '#47547F', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('whq222ptqbcwhbpe', '', '3b9bt5c70igtmqux', 'Alpha_Surface', '#31A6FD', '#000000', '#000000', '#31A6FD', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('pt96upqdo1ru1yny', '', '641svy8bwjx2kme7', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2x1u3pmt6xwp12gk', '', '641svy8bwjx2kme7', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('wjd8qs4v98d5y4cx', '', '641svy8bwjx2kme7', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('g4h2vp1mtk6ofy2t', '', '641svy8bwjx2kme7', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('bfd5zs7qydryrh3t', '', '641svy8bwjx2kme7', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9xm4fbcy6y9jb13m', '', '641svy8bwjx2kme7', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2ze2ozdpolqedzz4', '', '641svy8bwjx2kme7', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('gmr5gbvgibrwm60r', '', '9e94useo7x2ief0s', 'Body', '#FFFFFF', '#000000', '#000000', '#ffffff', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jv39gf5r987oihmu', '', '9e94useo7x2ief0s', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2ciipvngwn3wzreg', '', '9e94useo7x2ief0s', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('w62hm4xe4r3d7d2b', '', '9e94useo7x2ief0s', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('5a26y5b3f6z72yuu', '', '9e94useo7x2ief0s', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vbpzojwthsuzmx2i', '', '9e94useo7x2ief0s', 'Tops', '#ffffff', '#000000', '#000000', '#ffffff', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('f411l0wtsjd938b3', '', 'aajvq38y06vulgh0', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('skhk514cfn6z6528', '', 'aajvq38y06vulgh0', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('twvty9thzku85bzy', '', 'aajvq38y06vulgh0', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('t1fn2kip0t3ek6k3', '', 'aajvq38y06vulgh0', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('789zg2mbpirdaefz', '', 'aajvq38y06vulgh0', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('fkdfdshjsgnhiv91', '', 'aajvq38y06vulgh0', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('39ue6qhus79oyuq2', '', 'aajvq38y06vulgh0', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('riko7jfagi42kvoq', '', 'dihtmpm1ae3b9d3a', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('lxmqh7ux9z5ha1q1', '', 'dihtmpm1ae3b9d3a', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('8zrvrc0yv3njmyhh', '', 'dihtmpm1ae3b9d3a', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('o477h8qsjou40mv3', '', 'dihtmpm1ae3b9d3a', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('p80ygek28v4htplx', '', 'dihtmpm1ae3b9d3a', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('dujy29stjr1d3fxx', '', 'dihtmpm1ae3b9d3a', 'Hats', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('0z6w4naqcxya572c', '', 'dihtmpm1ae3b9d3a', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('r8jk0vdiqt477w3q', '', 'dihtmpm1ae3b9d3a', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ybdjum9lceqriu3l', '', 'h1ro3h59xs5eknl0', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('99dfpy7ffwywgykb', '', 'h1ro3h59xs5eknl0', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('s0kgfni1ksp7wypv', '', 'h1ro3h59xs5eknl0', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('tud2y63eh8f07lgr', '', 'h1ro3h59xs5eknl0', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('sxykax0jn240aymt', '', 'h1ro3h59xs5eknl0', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('mwmy1ls9ro0b2k85', '', 'h1ro3h59xs5eknl0', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('5k2b3nv5ih945e6d', '', 'h1ro3h59xs5eknl0', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('mfycst1inbeobx05', '', 'odtx7arzof5eigp4', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('320ez8wnt7pi538i', '', 'odtx7arzof5eigp4', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('j3gkj9t025ax9rhs', '', 'odtx7arzof5eigp4', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2nr5nlf62qtfkkxq', '', 'odtx7arzof5eigp4', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('rl029y75fj1coxyp', '', 'odtx7arzof5eigp4', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('mkgy5jhejme7firt', '', 'odtx7arzof5eigp4', 'Hats', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('o2br140ugumjh29q', '', 'odtx7arzof5eigp4', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ofxbs3a4i0w76pjb', '', 'odtx7arzof5eigp4', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vxmtb8vpvjvf3zma', '', 'p7y3p6ti6d85yf7q', 'Beta_Joints', '#4C2121', '#000000', '#000000', '#4C2121', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('n89yro60qtgyy93v', '', 'p7y3p6ti6d85yf7q', 'Beta_Surface', '#EB5F5F', '#000000', '#000000', '#EB5F5F', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('i26nosqecbdflfbt', '', 'r8tgsns20ruwx0bg', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('rvz45hxmna26uhtg', '', 'r8tgsns20ruwx0bg', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vga26dqzrdmu05q6', '', 'r8tgsns20ruwx0bg', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('lq9c84ora5mqzei5', '', 'r8tgsns20ruwx0bg', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2mbft9rzjxflby1w', '', 'r8tgsns20ruwx0bg', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('xnjwcxxfcsva4kcc', '', 'r8tgsns20ruwx0bg', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('d1rtqn7rmyhcenky', '', 'r8tgsns20ruwx0bg', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('dfnl46bdj5o8r0gq', '', 'v1ij2rkmdypo97c2', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('o28c083kl7r39w8c', '', 'v1ij2rkmdypo97c2', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('41e6r3eftk9bmzq9', '', 'v1ij2rkmdypo97c2', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('16t9ay39xyu7x6u4', '', 'v1ij2rkmdypo97c2', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('go4qcewxqkzep92r', '', 'v1ij2rkmdypo97c2', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('alrjnt7sat4cvx1c', '', 'v1ij2rkmdypo97c2', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('cxsfyd6lqjfatjsb', '', 'v1ij2rkmdypo97c2', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
-				");
-				
-				/* updated 3.4.3 - add new avatar animations with the same avatarids */
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avataranimations 
-					(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES
-					('r9087b004i9ptv0e', '', '3b9bt5c70igtmqux', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/3b9bt5c70igtmqux/', 'maleidle.babylon', '1', '213', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
-					('ivtj8k2n2erlptw4', '', '3b9bt5c70igtmqux', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malewalk.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('w4x8gkffxcyrxe8x', '', '3b9bt5c70igtmqux', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malewalkback.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('xtdev68nipxl5x64', '', '3b9bt5c70igtmqux', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('5b72o99k0bm6zga2', '', '3b9bt5c70igtmqux', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('x3o2chccn74zjpyo', '', '3b9bt5c70igtmqux', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('g4a06vseo3i9ta07', '', '3b9bt5c70igtmqux', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ii2qjfjecm06wy3m', '', '3b9bt5c70igtmqux', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('s35fo3h6fjfh8oqk', '', '3b9bt5c70igtmqux', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malewalkback.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('mf8wtehb2dqkmdzr', '', '3b9bt5c70igtmqux', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('yf92jhsjd5nvd82o', '', '3b9bt5c70igtmqux', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('s9yxs6k7fg2wd4i8', '', '3b9bt5c70igtmqux', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('7y4rh3zog9wpt0lw', '', '3b9bt5c70igtmqux', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ua8jbcmsbxi5w0di', '', '3b9bt5c70igtmqux', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('uatc8bv9tqoi6n3t', '', '3b9bt5c70igtmqux', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vw5d9f2os7sx2xh1', '', '3b9bt5c70igtmqux', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vi76lr5kg7qr96ld', '', '3b9bt5c70igtmqux', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('fsjumsb816paf2hi', '', '3b9bt5c70igtmqux', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('408rwa70fagu49rk', '', '3b9bt5c70igtmqux', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('sve58ukwpvdzyjiq', '', '3b9bt5c70igtmqux', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('txm33odfqel7ziv1', '', '3b9bt5c70igtmqux', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('uz8cualgsaq93ip9', '', '3b9bt5c70igtmqux', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('xds0u4345q5za745', '', '3b9bt5c70igtmqux', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('v245qnblckppa1xr', '', '3b9bt5c70igtmqux', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ksv82wdi9x6ph2id', '', '3b9bt5c70igtmqux', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('b1t97pcy0u1j4cln', '', '3b9bt5c70igtmqux', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('467omoxzv30i3g0l', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('7nbv5yo389ltrgt8', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('8q96piaohfn1f895', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('amv8njmmwefnlsod', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('qbjvak08ph2eik8r', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('qsd32hogy3jvzit0', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('uullzdlqiiw4f44r', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vtok6hf5c3yl83aw', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('yy0o3qcfafzi1pkw', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Dance - Hip Hop', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-dance.babylon', '1', '369', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('qk7c73bigh4ex8bv', '', '3b9bt5c70igtmqux', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6vwypoplqunx1u87', '', '3b9bt5c70igtmqux', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('py46sau5a5isd9iv', '', '3b9bt5c70igtmqux', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('y9kvul52rightfpi', '', '3b9bt5c70igtmqux', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('j47ucrkkde3056oh', '', '3b9bt5c70igtmqux', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vbyt0d25s9xbco6m', '', '3b9bt5c70igtmqux', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('t2woxk2jj8emfipz', '', '3b9bt5c70igtmqux', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('l7a081wl5nod2h7q', '', '3b9bt5c70igtmqux', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('7j6a7juf1y8ry2pp', '', '3b9bt5c70igtmqux', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('78vsxedgga0rgcjf', '', '3b9bt5c70igtmqux', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ljialzxbm9r4h6wi', '', '3b9bt5c70igtmqux', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('uidmjmzahn43de9o', '', '3b9bt5c70igtmqux', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vt1v6tiex4j7kt2n', '', '3b9bt5c70igtmqux', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('4wwkbvnfwx02rlov', '', '3b9bt5c70igtmqux', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
-				");
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avataranimations 
-					(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES
-					('wc004i6dcn4rdn2g', '', '641svy8bwjx2kme7', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/641svy8bwjx2kme7/', 'remyidle.babylon', '1', '196', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
-					('j2pbhi434a1bjr5j', '', '641svy8bwjx2kme7', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malewalk.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6ayvgo17uou7hqbb', '', '641svy8bwjx2kme7', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malewalkback.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('nahml62rp6r92kni', '', '641svy8bwjx2kme7', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('5p4eo7y6zf4fp7zb', '', '641svy8bwjx2kme7', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2ux4w2pae125lhnu', '', '641svy8bwjx2kme7', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('nahlhmne10vfh46i', '', '641svy8bwjx2kme7', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('8nm2g5b5urb89k2n', '', '641svy8bwjx2kme7', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('06sgxambog9xwona', '', '641svy8bwjx2kme7', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malewalkback.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('fa87echhw1hb6wy3', '', '641svy8bwjx2kme7', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('lom1binog7ml3p6r', '', '641svy8bwjx2kme7', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('qrmt7k8hozu9r339', '', '641svy8bwjx2kme7', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('cg8teiefyjvnnain', '', '641svy8bwjx2kme7', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ln0wsp7i6wskle45', '', '641svy8bwjx2kme7', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('wcqhmez4oemqlpa0', '', '641svy8bwjx2kme7', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('mf3qfn7k1rhivpoj', '', '641svy8bwjx2kme7', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ztmw5gadj8e0a9le', '', '641svy8bwjx2kme7', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('i1omq3fh9y663dal', '', '641svy8bwjx2kme7', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('dco0oo5vhag3u6ru', '', '641svy8bwjx2kme7', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('0dodwwtzh2a90qjv', '', '641svy8bwjx2kme7', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('w2oo9s7tmos50cpe', '', '641svy8bwjx2kme7', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('rrwyr0k8vuhga4yh', '', '641svy8bwjx2kme7', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('36629z8l4kv0z33h', '', '641svy8bwjx2kme7', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('d00tl4hm346jx1gx', '', '641svy8bwjx2kme7', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('cartyyh7nhg6gvkd', '', '641svy8bwjx2kme7', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('imygjervp7arfmxd', '', '641svy8bwjx2kme7', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('1wa0njcm4b6m6g2d', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('1yzdxuoqb7ocw3jp', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('7uboixxjjqa4vr1n', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Dance - House', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-dance.babylon', '1', '629', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('by3wmbypvdsgtusi', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('e824pycoz761iklm', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ed1zfxlflb171rsk', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('gj889xqe4a04ik92', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('j18ab8inwc2ehjgt', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('t85abm4aq4w4u0vd', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('fkzuwjag9qsx41ex', '', '641svy8bwjx2kme7', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9rq8z2y5flyvt3qw', '', '641svy8bwjx2kme7', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('72o6qwefzra0xfp1', '', '641svy8bwjx2kme7', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('yt3resfjcqe5y3hd', '', '641svy8bwjx2kme7', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6epvhqknuoqj5nc8', '', '641svy8bwjx2kme7', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('szziotxuaz3m4200', '', '641svy8bwjx2kme7', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jifaif9v5mq7itwo', '', '641svy8bwjx2kme7', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('a7yh1oy7ifejskrx', '', '641svy8bwjx2kme7', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('rvydbqdeohekiq5f', '', '641svy8bwjx2kme7', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('n7aaq6k61bnldcbo', '', '641svy8bwjx2kme7', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('q3or9g2i08vglvaq', '', '641svy8bwjx2kme7', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('5wgq1mrvbbl1n1zj', '', '641svy8bwjx2kme7', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('drnzrp308feoj5uf', '', '641svy8bwjx2kme7', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('dyk3ssmmvzgyo9tp', '', '641svy8bwjx2kme7', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
-				");
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avataranimations 
-					(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES
-					('78k4zhhzhemwlcvc', '', '9e94useo7x2ief0s', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/9e94useo7x2ief0s/', 'liamidle.babylon', '1', '200', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
-					('1f0sw67go14gzinp', '', '9e94useo7x2ief0s', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malewalk.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('mxs7mhke962sslm9', '', '9e94useo7x2ief0s', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malewalkback.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('hoxk2ls6hx8d4jc4', '', '9e94useo7x2ief0s', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jc2977eg0najr6ml', '', '9e94useo7x2ief0s', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jk52v40qmvgrgyd3', '', '9e94useo7x2ief0s', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('4tp4fuvuot1piddq', '', '9e94useo7x2ief0s', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('93o2chdf0qpae4dg', '', '9e94useo7x2ief0s', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9wqyjxyyzzzzywk4', '', '9e94useo7x2ief0s', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malewalkback.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('xcvd979mdzuawona', '', '9e94useo7x2ief0s', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('f92ifmrwbs320wfe', '', '9e94useo7x2ief0s', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('4a4qchc99ir93p7z', '', '9e94useo7x2ief0s', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('xbvc5q6pzs0ocqls', '', '9e94useo7x2ief0s', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('8kyirkjoryz0fzhh', '', '9e94useo7x2ief0s', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('7hnpe4qqylw8xcm6', '', '9e94useo7x2ief0s', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('m86bevu06r1adwxm', '', '9e94useo7x2ief0s', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('u8d72seao9oedmet', '', '9e94useo7x2ief0s', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('c56d734x5rc57q54', '', '9e94useo7x2ief0s', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('l5ewogh7v7iezezi', '', '9e94useo7x2ief0s', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('zc711n622cac3htj', '', '9e94useo7x2ief0s', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ay7pxyy9k7878wd8', '', '9e94useo7x2ief0s', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('rh0m1ad2kpellfqi', '', '9e94useo7x2ief0s', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('93rj9cnjy8qr9c7m', '', '9e94useo7x2ief0s', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('xf5ifwwsmcwzv2li', '', '9e94useo7x2ief0s', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('5xhkmce28k5oq7m5', '', '9e94useo7x2ief0s', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ckl55gt049w9fpyf', '', '9e94useo7x2ief0s', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('1vm9v1k34pbfwbll', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('adqu1cei4d0d0k78', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('cy4209o28eqtazqa', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('d5r87qfdyw38ndpk', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('iyos220ycbwb1y2x', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jwz76o3zrpp3rwnb', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('pzgd35v26kebba95', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Dance - Tut Hip Hop', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-dance.babylon', '1', '407', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('tpze2dcthqk0mh7c', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('x3111863jusg1432', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('yrivwpyrrllee00p', '', '9e94useo7x2ief0s', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('sfoq9i7hl06anz3j', '', '9e94useo7x2ief0s', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('hca3waqenp9x3q0l', '', '9e94useo7x2ief0s', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('snarjgh66smd5pn2', '', '9e94useo7x2ief0s', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('c0p7gz5yp3wynbu9', '', '9e94useo7x2ief0s', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('f0mlz9ira9fwmmkg', '', '9e94useo7x2ief0s', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('q62uwg4uuv1u6up9', '', '9e94useo7x2ief0s', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('bb4y1spmmf0gec6e', '', '9e94useo7x2ief0s', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('rzlw4cl2lnawc7qj', '', '9e94useo7x2ief0s', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('7lvw65a24wyyktop', '', '9e94useo7x2ief0s', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('lvo7cu0jlxd0uhg1', '', '9e94useo7x2ief0s', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('fsga2olxqzqpq4k0', '', '9e94useo7x2ief0s', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('p9r17okbyhwsz1tc', '', '9e94useo7x2ief0s', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('zxgpqxxkmczbds2b', '', '9e94useo7x2ief0s', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
-				");
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avataranimations 
-					(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES
-					('o4kgmoik9nf8ws7p', '', 'aajvq38y06vulgh0', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/aajvq38y06vulgh0/', 'pearlidle.babylon', '1', '325', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
-					('zszl1drqbf6npkqy', '', 'aajvq38y06vulgh0', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'femalewalk.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('julhnrux63xd15lh', '', 'aajvq38y06vulgh0', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'femalewalkback.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('nu8mfa5x4ttkd6rb', '', 'aajvq38y06vulgh0', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('cphcae5j8iwz6x3q', '', 'aajvq38y06vulgh0', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('mjr6mjwtgsmqtw2k', '', 'aajvq38y06vulgh0', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('dmz1aal5x78l8ecj', '', 'aajvq38y06vulgh0', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('mgfri8pro5rcg9yz', '', 'aajvq38y06vulgh0', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('03h6cacvd7x0866c', '', 'aajvq38y06vulgh0', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'femalewalkback.babylon', '1', '24', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('97aub3g0pigsi8k5', '', 'aajvq38y06vulgh0', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('4210xk1lr0u43239', '', 'aajvq38y06vulgh0', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('1ssnvd9642xggyhg', '', 'aajvq38y06vulgh0', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('0866dcn71lta1act', '', 'aajvq38y06vulgh0', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('k5des0ykwohk88nq', '', 'aajvq38y06vulgh0', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('kmjiykvchhgnw6il', '', 'aajvq38y06vulgh0', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('mddkwevwo6fogquj', '', 'aajvq38y06vulgh0', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('8q2mrtu13qdlifaz', '', 'aajvq38y06vulgh0', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('3mt1lhi7733x9put', '', 'aajvq38y06vulgh0', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('638hk03hql2669ar', '', 'aajvq38y06vulgh0', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('of755emihbw5va6z', '', 'aajvq38y06vulgh0', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('grwn54r169nju8s1', '', 'aajvq38y06vulgh0', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('oovp44dbq5s9tg4u', '', 'aajvq38y06vulgh0', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('gb4pfnxnwxmgxwoc', '', 'aajvq38y06vulgh0', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('wqtfzwvhrteojvv7', '', 'aajvq38y06vulgh0', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('762zl27k7oaxmsp3', '', 'aajvq38y06vulgh0', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('x8nuxvc379v1rhys', '', 'aajvq38y06vulgh0', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6ndu5ptknh5urnuc', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('cegzfzlg2r35vjru', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('dup8ie7d1rfhqk32', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Dance - Twist', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-dance.babylon', '1', '227', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ke2j6di3g32g2lxw', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('lsjwznr6e4r7s2mw', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ode6t12zoe1h5oam', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('r78te36a3b495zva', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('t1c0fa44nhxdi8o4', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('zbn3zi351k08bf75', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('q54x4jkywoy07412', '', 'aajvq38y06vulgh0', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('xbulvavjspcts189', '', 'aajvq38y06vulgh0', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vqb0re96tq60xb2q', '', 'aajvq38y06vulgh0', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('69tbievkzjoe0hic', '', 'aajvq38y06vulgh0', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('iajou0alohn2fd2a', '', 'aajvq38y06vulgh0', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('3mda2s6zpcs48qv7', '', 'aajvq38y06vulgh0', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('o31jjw1uhp32cdof', '', 'aajvq38y06vulgh0', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('o5vogr5gj2j2ipb8', '', 'aajvq38y06vulgh0', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('zd88qcrv6wpg86op', '', 'aajvq38y06vulgh0', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('h04o182ehcncco2b', '', 'aajvq38y06vulgh0', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('5s7235czpwv9t0ih', '', 'aajvq38y06vulgh0', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('q30o6y9voni72lkx', '', 'aajvq38y06vulgh0', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('uc8mlkf0mt5j6bt0', '', 'aajvq38y06vulgh0', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('7aj39fzrosccrzl8', '', 'aajvq38y06vulgh0', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
-				");
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avataranimations 
-					(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES
-					('45dg48tccn60jnna', '', 'dihtmpm1ae3b9d3a', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/', 'malcolmidle.babylon', '1', '195', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
-					('9bu8mgen3h6gq95z', '', 'dihtmpm1ae3b9d3a', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malewalk.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('hguup0xngdf35fri', '', 'dihtmpm1ae3b9d3a', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malewalkback.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('avhsi8k52waqtvz9', '', 'dihtmpm1ae3b9d3a', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('bs1u56hvvq24en1a', '', 'dihtmpm1ae3b9d3a', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('03g1ssnvc7y61mz3', '', 'dihtmpm1ae3b9d3a', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('amaiouat8orpacvb', '', 'dihtmpm1ae3b9d3a', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ibzzzyvfmqv56eid', '', 'dihtmpm1ae3b9d3a', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('absye5i30phdg2zo', '', 'dihtmpm1ae3b9d3a', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malewalkback.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jlfa768mhkc280cq', '', 'dihtmpm1ae3b9d3a', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('kptx63zm62qieev4', '', 'dihtmpm1ae3b9d3a', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('bg9y2fxfa75334em', '', 'dihtmpm1ae3b9d3a', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('0phc97bxom4rdmz2', '', 'dihtmpm1ae3b9d3a', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('c8cimhpean88elwe', '', 'dihtmpm1ae3b9d3a', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('69lowvplqjwi2npi', '', 'dihtmpm1ae3b9d3a', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('4xxo3lsdvwgfgbdo', '', 'dihtmpm1ae3b9d3a', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('osabe0oggfm87llh', '', 'dihtmpm1ae3b9d3a', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9cjzw8oox1ckqqcx', '', 'dihtmpm1ae3b9d3a', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('dfyr8iqb9auqth71', '', 'dihtmpm1ae3b9d3a', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('tkhwhxo3nr7awp3t', '', 'dihtmpm1ae3b9d3a', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('xv4mcxi0g8y5u60x', '', 'dihtmpm1ae3b9d3a', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('4patz2fbqef0oc3d', '', 'dihtmpm1ae3b9d3a', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('dmrilk9asno5diw6', '', 'dihtmpm1ae3b9d3a', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('fgkxp3hlk8d850dd', '', 'dihtmpm1ae3b9d3a', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('o0812jhi5sq9rfqv', '', 'dihtmpm1ae3b9d3a', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('t6ulex0lajy06fjk', '', 'dihtmpm1ae3b9d3a', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('0wedh0rtt49sjjvd', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('1nb595r8o28cnmo1', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2j81rsg12f6g14us', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6thtbygsmolqusa6', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6vokevrg2450jyou', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('84wghue4zq3w3xlc', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('d7rvo8ccumi4tndn', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('m5c23iielnyeh03t', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('wf2uz0xqc97n89bd', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Dance - Hip Hop', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-dance.babylon', '1', '331', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jlvqlrkhek0ii9ig', '', 'dihtmpm1ae3b9d3a', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('d64rfgk8qg0ejpta', '', 'dihtmpm1ae3b9d3a', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('7djizpuqgum9x56v', '', 'dihtmpm1ae3b9d3a', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('1kxxr7u6nw0oqq5h', '', 'dihtmpm1ae3b9d3a', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9ydrm5d9xoabmdm6', '', 'dihtmpm1ae3b9d3a', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jw2j7a2ow13z10w1', '', 'dihtmpm1ae3b9d3a', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('zhz1x2fsn93loxpb', '', 'dihtmpm1ae3b9d3a', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('43hvs958xcsjmlth', '', 'dihtmpm1ae3b9d3a', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('tugl8y7xrcpigc0h', '', 'dihtmpm1ae3b9d3a', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('i4a7f2njqaab0r6u', '', 'dihtmpm1ae3b9d3a', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('rtysb697putw8gdo', '', 'dihtmpm1ae3b9d3a', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('3v9v8nmcm0eql3wd', '', 'dihtmpm1ae3b9d3a', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('nzs8eo5ojqtm0mai', '', 'dihtmpm1ae3b9d3a', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('w65ci4c79x6lsw9h', '', 'dihtmpm1ae3b9d3a', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
-				");
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avataranimations 
-					(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES
-					('5nt31zrtvvq4cdu3', '', 'h1ro3h59xs5eknl0', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/', 'shaeidle.babylon', '1', '303', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
-					('uuoxl8at7k8fh46j', '', 'h1ro3h59xs5eknl0', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'femalewalk.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('56fkk79qtw1kon74', '', 'h1ro3h59xs5eknl0', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'femalewalkback.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('1svy73w7d7y5w2o4', '', 'h1ro3h59xs5eknl0', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('mrv4ygdhddqieh6i', '', 'h1ro3h59xs5eknl0', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('q8z71lwpt1o9aohf', '', 'h1ro3h59xs5eknl0', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('y8d6tgtqa5zg9y05', '', 'h1ro3h59xs5eknl0', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('pa9iq5lip3a4tozu', '', 'h1ro3h59xs5eknl0', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('azywmf92ib4mrw9l', '', 'h1ro3h59xs5eknl0', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'femalewalkback.babylon', '1', '24', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('8d3fuy62sq950jr3', '', 'h1ro3h59xs5eknl0', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6npn198d6q4fsnvf', '', 'h1ro3h59xs5eknl0', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('82kom4si7gq8z867', '', 'h1ro3h59xs5eknl0', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jgnvglmanbqn2esp', '', 'h1ro3h59xs5eknl0', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('tnjyg7uxi9hpjkql', '', 'h1ro3h59xs5eknl0', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('lko6yaxtavuok0iy', '', 'h1ro3h59xs5eknl0', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vfw2bglw3tq3y9my', '', 'h1ro3h59xs5eknl0', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('b70p9844wibss7ta', '', 'h1ro3h59xs5eknl0', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9v5ht1sa0wnx15oj', '', 'h1ro3h59xs5eknl0', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('7fedoauhvt74nnys', '', 'h1ro3h59xs5eknl0', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6qhippd0ue944l0l', '', 'h1ro3h59xs5eknl0', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('reimbnyx6rimbcja', '', 'h1ro3h59xs5eknl0', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('gdyuyl9xymk8n7rq', '', 'h1ro3h59xs5eknl0', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('8i9e7ivl3ck0u7lv', '', 'h1ro3h59xs5eknl0', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('0jfkla29rby90uyd', '', 'h1ro3h59xs5eknl0', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('t1v1hxmve7fg9v4e', '', 'h1ro3h59xs5eknl0', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('mxrx6xgsgqh01smr', '', 'h1ro3h59xs5eknl0', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('7so4eesf6b2wobm2', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9284klrcme8hi58l', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('cc8hd2bt27obn2ce', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('i4zorwvhpsw2pyq2', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Dance - Salsa', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-dance.babylon', '1', '288', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('l9sx0mx7au6j1fr1', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('m8qndis4egvi75f0', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('q9c36gx30cx4nu5v', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vtfc8mu9ut1c4rsm', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('zo6i4is601zomglm', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jmtjtuzni0gikwo0', '', 'h1ro3h59xs5eknl0', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('7dqyih6z2yce4ja3', '', 'h1ro3h59xs5eknl0', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('l68d0ij618pgcppl', '', 'h1ro3h59xs5eknl0', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('e8oil40b02z7goe6', '', 'h1ro3h59xs5eknl0', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('tbwc0e2l7oi2aplg', '', 'h1ro3h59xs5eknl0', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('c1lq56xntjamxone', '', 'h1ro3h59xs5eknl0', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ainjewhyb4ggbhdq', '', 'h1ro3h59xs5eknl0', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('yfwnsp459n31e089', '', 'h1ro3h59xs5eknl0', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('4qa50a5ftxthrhca', '', 'h1ro3h59xs5eknl0', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('5m7sdkudphgmuia1', '', 'h1ro3h59xs5eknl0', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('kjg5rgzeuq1xqtit', '', 'h1ro3h59xs5eknl0', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('chl85isrn5t1hvgd', '', 'h1ro3h59xs5eknl0', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jazt5f7z1eps0a1e', '', 'h1ro3h59xs5eknl0', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('j2g035cumv2xjmjg', '', 'h1ro3h59xs5eknl0', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
-				");
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avataranimations 
-					(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES
-					('o3h47opkqwat7mge', '', 'odtx7arzof5eigp4', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/odtx7arzof5eigp4/', 'reginaidle.babylon', '1', '241', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
-					('j0hccn866c6vsen2', '', 'odtx7arzof5eigp4', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'femalewalk.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('dm19ak0dstrdjnjt', '', 'odtx7arzof5eigp4', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'femalewalkback.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('myz1976axt8r5els', '', 'odtx7arzof5eigp4', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('5fo2bdxisdkqwd4h', '', 'odtx7arzof5eigp4', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('hyam9fdjld15jc3d', '', 'odtx7arzof5eigp4', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ngekmgen3i9r339y', '', 'odtx7arzof5eigp4', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('3yioweepev69qwbx', '', 'odtx7arzof5eigp4', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2h8qym61oacxmbof', '', 'odtx7arzof5eigp4', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('36pwechejj1kpu3x', '', 'odtx7arzof5eigp4', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'femalewalkback.babylon', '1', '24', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('fa88j0g8sa07y753', '', 'odtx7arzof5eigp4', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('1webe10wjx0bilfc', '', 'odtx7arzof5eigp4', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6y8bxnij7d978l8e', '', 'odtx7arzof5eigp4', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jk9l8byuazzyudcn', '', 'odtx7arzof5eigp4', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('l8sqjtjkr0zanc5l', '', 'odtx7arzof5eigp4', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('15m4hdra4mbtuqhx', '', 'odtx7arzof5eigp4', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('p9cbpxnj9msun68v', '', 'odtx7arzof5eigp4', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('tomwv04oqal2g7xw', '', 'odtx7arzof5eigp4', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('uwqpivcg98sjawbp', '', 'odtx7arzof5eigp4', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('s9sxp5gmtckpveln', '', 'odtx7arzof5eigp4', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9p6hoee13cubno45', '', 'odtx7arzof5eigp4', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('fl76gp9moby40ou8', '', 'odtx7arzof5eigp4', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('maysjiskb4p494fj', '', 'odtx7arzof5eigp4', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('kcv7ny7zd81rrqkk', '', 'odtx7arzof5eigp4', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ylarf0nypf2n7enw', '', 'odtx7arzof5eigp4', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('gnqd80kcijsnufn6', '', 'odtx7arzof5eigp4', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('56j843jw0qwjuceq', '', 'odtx7arzof5eigp4', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('3s7qgw2go007ask5', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jivvhnl72rb0nuzh', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('lmbo7arygrsarcbe', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('nchqvge3hatd7c8c', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('o0et7jy2ph3uwo8j', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('qdacv9ve0vx9ng5o', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ynd3of2gruujmemi', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('zd6710kd1l7emjgw', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Dance - Wave Hip Hop', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-dance.babylon', '1', '405', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('zepcfdzfvtukxjcf', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('tpu31zpezp62zs6x', '', 'odtx7arzof5eigp4', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walk-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2z7v8tgblyqba9dg', '', 'odtx7arzof5eigp4', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('bv032couamwdlj5q', '', 'odtx7arzof5eigp4', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('7lsnip18qe4uclug', '', 'odtx7arzof5eigp4', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('d7mto61bd3bha686', '', 'odtx7arzof5eigp4', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('3ppfhxv1wpkgp4w7', '', 'odtx7arzof5eigp4', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6b5zh19eweam0jji', '', 'odtx7arzof5eigp4', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('n4hi012nom1bvu5u', '', 'odtx7arzof5eigp4', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('gsunr2gofzjlk3ff', '', 'odtx7arzof5eigp4', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('bbt7etf0byhepqjv', '', 'odtx7arzof5eigp4', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('k7kf4q2585d8ay4z', '', 'odtx7arzof5eigp4', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('yjrrgud0rmo6owt1', '', 'odtx7arzof5eigp4', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('3pbl1gcla4h3cszw', '', 'odtx7arzof5eigp4', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('f71735yliy4b0ucq', '', 'odtx7arzof5eigp4', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
-				");
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avataranimations 
-					(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES
-					('ohb6x5ze1112a9e6', '', 'p7y3p6ti6d85yf7q', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/', 'femaleidle.babylon', '1', '100', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
-					('bdxircdsw641we93', '', 'p7y3p6ti6d85yf7q', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'femalewalk.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('qdo9cu9r0svzbnai', '', 'p7y3p6ti6d85yf7q', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'femalewalkback.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('pxk1g6i1m3jdabpm', '', 'p7y3p6ti6d85yf7q', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('z1abrv0hfo3h2v54', '', 'p7y3p6ti6d85yf7q', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9pu3xcwiwz5utj7e', '', 'p7y3p6ti6d85yf7q', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6i1n6vvsccpf21zu', '', 'p7y3p6ti6d85yf7q', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('fyhj8jzbncsw2pbe', '', 'p7y3p6ti6d85yf7q', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('5j6dabpn2erp5nua', '', 'p7y3p6ti6d85yf7q', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'femalewalkback.babylon', '1', '24', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ytb1bga3nwmcxjy3', '', 'p7y3p6ti6d85yf7q', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('o2bct3zn9czveclx', '', 'p7y3p6ti6d85yf7q', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vaudbhi1qhaxs6i0', '', 'p7y3p6ti6d85yf7q', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ta1do9brv3uy7430', '', 'p7y3p6ti6d85yf7q', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'malestraferight.babylon', '1', '26', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('cfz2rb7aqxzmbbcl', '', 'p7y3p6ti6d85yf7q', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('3ybdeoz0e31smyb0', '', 'p7y3p6ti6d85yf7q', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2us07qcgphx3ot91', '', 'p7y3p6ti6d85yf7q', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('k10a88qrfvr2tt3t', '', 'p7y3p6ti6d85yf7q', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('d4gigjax9co44ia9', '', 'p7y3p6ti6d85yf7q', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('d1xjyz5wssky5osd', '', 'p7y3p6ti6d85yf7q', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('xgg8yq0svsbluv70', '', 'p7y3p6ti6d85yf7q', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('xqqc6atchhmhwgot', '', 'p7y3p6ti6d85yf7q', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('hnp40zuucqjf1f9s', '', 'p7y3p6ti6d85yf7q', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('w874p74qvqsum1be', '', 'p7y3p6ti6d85yf7q', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('a6oiyyu8e9rv41jr', '', 'p7y3p6ti6d85yf7q', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('5hotdyklzoloil9v', '', 'p7y3p6ti6d85yf7q', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('1sn6myzx5d2t2tqc', '', 'p7y3p6ti6d85yf7q', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('02p16d4ax3tm94w6', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('3oz4dv3yvnu8qtqs', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Dance - Hip Hop', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-dance.babylon', '1', '153', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6gnq88flx6r5uycj', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('8blx9vbi2pyd0k7h', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('8x6trj323756yjz8', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('8zl9djjpxanyjj23', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('eds4owitgiidj16x', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jyuulxxz73kfx41d', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('wfmt9jig20tgq8z6', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('flbfgprxaaz69igj', '', 'p7y3p6ti6d85yf7q', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('hs8wmyu8zcsd645k', '', 'p7y3p6ti6d85yf7q', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('cupvarkt8tckk9wp', '', 'p7y3p6ti6d85yf7q', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('y6yq94wzb6qsuak6', '', 'p7y3p6ti6d85yf7q', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('c2sbs1qbsy0305x7', '', 'p7y3p6ti6d85yf7q', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('k9f0y774vgx76mmg', '', 'p7y3p6ti6d85yf7q', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ghlqnk9hfrzjd7hw', '', 'p7y3p6ti6d85yf7q', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ijbva30w99hte18l', '', 'p7y3p6ti6d85yf7q', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('le44ea7hgtiwlk3w', '', 'p7y3p6ti6d85yf7q', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ldghqfg61ywkvrc7', '', 'p7y3p6ti6d85yf7q', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('xjthi5n63iusoeu6', '', 'p7y3p6ti6d85yf7q', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('phq2wuj7vomkrwoj', '', 'p7y3p6ti6d85yf7q', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ml4reymctienjk2d', '', 'p7y3p6ti6d85yf7q', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('oh204m5xzxe4gqya', '', 'p7y3p6ti6d85yf7q', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
-				");
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avataranimations 
-					(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES
-					('gfso15ljwulgi6c9', '', 'r8tgsns20ruwx0bg', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/', 'jasperidle.babylon', '1', '71', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
-					('vj0hc99jwvpwd8z7', '', 'r8tgsns20ruwx0bg', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malewalk.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('558r36misbbl2klb', '', 'r8tgsns20ruwx0bg', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malewalkback.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('qpbjpxk1f36kas32', '', 'r8tgsns20ruwx0bg', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('0whnwjy4tq8wvmgf', '', 'r8tgsns20ruwx0bg', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('gh2u3xd12a74zl2h', '', 'r8tgsns20ruwx0bg', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('rkj1ihx50jou446l', '', 'r8tgsns20ruwx0bg', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('aywnkwtb5si57mjt', '', 'r8tgsns20ruwx0bg', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('en019757k7d82o3i', '', 'r8tgsns20ruwx0bg', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malewalkback.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9t9tcbilhnqsp6q6', '', 'r8tgsns20ruwx0bg', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('q13a4utlgkebg9z6', '', 'r8tgsns20ruwx0bg', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('s47q36nne0u7hvvp', '', 'r8tgsns20ruwx0bg', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vvpwglj0cof38tel', '', 'r8tgsns20ruwx0bg', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('amyscydvj0ydzyjx', '', 'r8tgsns20ruwx0bg', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('mat1koyf0negd3lz', '', 'r8tgsns20ruwx0bg', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('q9qtohcswldr3oi2', '', 'r8tgsns20ruwx0bg', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('gim1r7dukguvn0m9', '', 'r8tgsns20ruwx0bg', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('3yzc45wytwyin046', '', 'r8tgsns20ruwx0bg', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('4fm8sdbpw8p9dv7o', '', 'r8tgsns20ruwx0bg', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('iruyxr8b0p4ho7u2', '', 'r8tgsns20ruwx0bg', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jtugpo8us59xia4z', '', 'r8tgsns20ruwx0bg', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('8g68ig75c4dna4w2', '', 'r8tgsns20ruwx0bg', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9txbwsyjncgf1sqs', '', 'r8tgsns20ruwx0bg', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('zxia7912xm04wp62', '', 'r8tgsns20ruwx0bg', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('lpyn9jbh4e78gvsb', '', 'r8tgsns20ruwx0bg', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('0tu1yqk2irhu1zkh', '', 'r8tgsns20ruwx0bg', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('3q7i3a0sstslcvav', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('dtiyszzeq6ijfhrr', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('elv38tu0lnryylgw', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ffnph8yej8kgs1u5', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('h0cljhty5yfa9ns2', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('h61nn6jeoshjk8em', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('iqwp1l9wtdl8hh5z', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('l8gz6z0pr7yedfdo', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('s21wirqtwvkm3mlp', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Dance - Breakdance', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-dance.babylon', '1', '111', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('b0foao03pb19x7e1', '', 'r8tgsns20ruwx0bg', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('maju79dhvfa99r8l', '', 'r8tgsns20ruwx0bg', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('l8ygjgj9jjclw67q', '', 'r8tgsns20ruwx0bg', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('exw5uayi09nciswn', '', 'r8tgsns20ruwx0bg', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('f5w7pr718c31i8m3', '', 'r8tgsns20ruwx0bg', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('jmqw97x4cn3jifo2', '', 'r8tgsns20ruwx0bg', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('29jgv98x8zchhdz3', '', 'r8tgsns20ruwx0bg', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('az3u6yzq253ckadk', '', 'r8tgsns20ruwx0bg', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('5fm9slbuc8trv7dx', '', 'r8tgsns20ruwx0bg', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('fx0v1jewghks28mt', '', 'r8tgsns20ruwx0bg', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('d4c4ksd6db4pm6ei', '', 'r8tgsns20ruwx0bg', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('55yed4zpq3y3t4cu', '', 'r8tgsns20ruwx0bg', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('1e02zs5piisme1yx', '', 'r8tgsns20ruwx0bg', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('o3qv2ebsrpnc6asj', '', 'r8tgsns20ruwx0bg', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
-				");
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avataranimations 
-					(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES
-					('n3i9s7ophcae5h1r', '', 'v1ij2rkmdypo97c2', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/', 'stefaniidle.babylon', '1', '363', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
-					('kugqdo853zl0bili', '', 'v1ij2rkmdypo97c2', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'femalewalk.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('sen2dpcn5w0blz4o', '', 'v1ij2rkmdypo97c2', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'femalewalkback.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('17vpyohemuc9anbo', '', 'v1ij2rkmdypo97c2', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('g8sa2h7ld3emyvht', '', 'v1ij2rkmdypo97c2', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('qpbf6mkz74zlyz3k', '', 'v1ij2rkmdypo97c2', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ns1tzf8ulfdigqab', '', 'v1ij2rkmdypo97c2', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('iupyohfn02a8d6r8', '', 'v1ij2rkmdypo97c2', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('vpyk0dt1n6x5x8c1', '', 'v1ij2rkmdypo97c2', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'femalewalkback.babylon', '1', '24', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6sdhb3lnilfdkr38', '', 'v1ij2rkmdypo97c2', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('tfmvj0g8tddtw5ye', '', 'v1ij2rkmdypo97c2', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('41warxbvfh6grfw6', '', 'v1ij2rkmdypo97c2', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('25i6ayvk4zly1bii', '', 'v1ij2rkmdypo97c2', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('kjg59nnkjjagphzg', '', 'v1ij2rkmdypo97c2', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('y0ww1a1bzotaeij6', '', 'v1ij2rkmdypo97c2', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('iyw28zh9ddfybq7b', '', 'v1ij2rkmdypo97c2', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('0esp3539dmnwgueb', '', 'v1ij2rkmdypo97c2', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('8urc5k5wfrb2rq82', '', 'v1ij2rkmdypo97c2', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('wvbgyl82o2asluu1', '', 'v1ij2rkmdypo97c2', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2xhv7zgs9zq1j3ec', '', 'v1ij2rkmdypo97c2', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('n3qvyyhzkxeiehpl', '', 'v1ij2rkmdypo97c2', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('iftvhhsgbfklwlw0', '', 'v1ij2rkmdypo97c2', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('db5mdheetohk154s', '', 'v1ij2rkmdypo97c2', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('j7210d1diub8edki', '', 'v1ij2rkmdypo97c2', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9dhdlbcoijc21ks7', '', 'v1ij2rkmdypo97c2', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ugc9jrkzn34xfb2n', '', 'v1ij2rkmdypo97c2', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('06bkntz10htbjnof', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2w6u3f9ae990kb25', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('31nrl2gmtgkq9pu5', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('76xphisu8xi7tezx', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ar2w03f499kif3zi', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('e76nl8wy3evbldky', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('gs7tv5nnisrz3rjv', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('o5gyo65yutc5rrdt', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Dance - Swing', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-dance.babylon', '1', '503', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('ys5e1ffpbz7dp9m3', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('o0wxc9c0r609ppup', '', 'v1ij2rkmdypo97c2', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2rn9h2vmh10gzp48', '', 'v1ij2rkmdypo97c2', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('rkcakcnazgxhse9t', '', 'v1ij2rkmdypo97c2', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('2vuym4yaa9kpjmuz', '', 'v1ij2rkmdypo97c2', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('07s116f0131pm3qc', '', 'v1ij2rkmdypo97c2', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('aa60m1y5v1857nha', '', 'v1ij2rkmdypo97c2', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('fnbe3tqem605lgxc', '', 'v1ij2rkmdypo97c2', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('w03u62a3c0eg4rpy', '', 'v1ij2rkmdypo97c2', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('kvu639mnotatyvz9', '', 'v1ij2rkmdypo97c2', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('6crtqzl35vrbkqwo', '', 'v1ij2rkmdypo97c2', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9dnmlhw90se34zec', '', 'v1ij2rkmdypo97c2', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('9ddyo8rhp132tyxx', '', 'v1ij2rkmdypo97c2', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('pcv32nrwp7kbtrad', '', 'v1ij2rkmdypo97c2', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
-					('cw18ezyud0jz51mu', '', 'v1ij2rkmdypo97c2', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
-				");
-			}
-
-			/* updated v3.3.0 - avatar designer was moved to a plugin - these plugins need to be enabled on first run */
-			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."plugins where pluginname='wtw-avatars';");
-			if (count($zresults) == 0) { 
-				$wtwdb->query("INSERT INTO ".wtw_tableprefix."plugins 
-				(pluginname, active, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-				VALUES 
-				('wtw-avatars',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);"); 
-			}
-			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."plugins where pluginname='wtw-shopping';");
-			if (count($zresults) == 0) { 
-				$wtwdb->query("INSERT INTO ".wtw_tableprefix."plugins 
-				(pluginname, active, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-				VALUES 
-				('wtw-shopping',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);"); 
-			}
-			
-			/* updated 3.3.4 - added avatar groups as categories for avatars */
-			$zresults = $wtwdb->query("
-				select * 
-				from ".wtw_tableprefix."avatargroups;");
-			if (count($zresults) == 0) {
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."avatargroups 
-					(avatargroupid, avatargroup, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES 
-					('cphaz1acsziosye6','Anonymous','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-					('ot45ejgp5oxl6420','Default','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
-				");
-			}
-
-			/* updated 3.3.4 - add hex versions of colors (phasing out rgb values in the database) */
-			$this->updateColorsHex($zuserid);
-			
-			/* updated 3.3.5 - added Host role for sites that are hosted on the server */
-			$zresults = $wtwdb->query("
-				select * 
-				from ".wtw_tableprefix."roles
-				where rolename like 'host';");
-			if (count($zresults) == 0) {
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."roles 
-					(roleid, rolename, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES 
-						('".$wtwdb->getRandomString(16,1)."','Host','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'','0');
-				");
-			}
-
-			/* updated 3.4.1 - removed username from users - replaced by userid and displayname */
-			$zresults = $wtwdb->query("
-				show columns from ".wtw_tableprefix."users like 'username';");
-			if (count($zresults) > 0) {
-				$wtwdb->query("
-					alter table ".wtw_tableprefix."users 
-					drop column username;");
-			}
-
-			/* updated 3.4.3 - added Content Rating to the Browse Menu */
-			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menuitemname='wtw_rating';");
-			if (count($zresults) == 0) {
-				$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
-					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
-						(null, 'wtw_rating', '[Not Rated]', 'main', 'right', -1001, 1, '', '', 'show-hide', 'wtw_menucontentrating', 1, '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', null, '', 0);
-				");
-			}
-
-			/* updated 3.4.4 - added items to the HUD Menu */
-			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='Player Stats' and menuset='mainmenu';");
-			if (count($zresults) == 0) {
-				$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
-					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
-						(null,'','Player Stats','mainmenu','left',1,1,'','','WTW.hudOpenMenuItem','1',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
-				");
-			}
-			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='Settings' and menuset='mainmenu';");
-			if (count($zresults) == 0) {
-				$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
-					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
-						(null,'','Settings','mainmenu','',50,1,'','','WTW.hudOpenMenuItem','50',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
-				");
-			}
-			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='<- Main Menu' and menuset='settings';");
-			if (count($zresults) == 0) {
-				$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
-					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
-						(null,'','<- Main Menu','settings','',1,1,'','','WTW.hudOpenMenuItem','51',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
-				");
-			}
-			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='Cameras' and menuset='settings';");
-			if (count($zresults) == 0) {
-				$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
-					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
-						(null,'','Cameras','settings','left',10,1,'','','WTW.hudOpenMenuItem','60',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
-				");
-			}
-			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='Profile' and menuset='settings';");
-			if (count($zresults) == 0) {
-				$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
-					(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
-						(null,'','Profile','settings','left',100,1,'','','WTW.hudOpenMenuItem','100',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
-				");
-			}
-			
-			/* updated v3.4.3 populate initial avatar animation events to new table */
-			$zcount = 0;
-			$zresults = $wtwdb->query("select count(*) as scount from ".wtw_tableprefix."avataranimationevents;");
-			foreach ($zresults as $zrow) {
-				$zcount = $zrow["scount"];
-			}
-			if ($zcount < 10) {
-				/* count of 10 gives some flexibility to remove some of the initial values, yet catches new or incomplete installs */
-				$wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimationevents 
-				(animationeventid, animationevent, loadpriority, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-				VALUES 
-				('0ktb74w8ecij4zjt','onjump',34,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('2fyimof7q0vc3ess','onrun-riffle',-105,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('2sqbe11394tq8y09','onrunturnright-riffle',-107,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('8d3en4mrzm75335h','onsleep',2,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('8eaajtfrh47mgh2t','onrunstraferight-riffle',-108,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('9nf9z4qa755c878m','onrunturnright',38,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('bajq38y2g1v8ivth','onwalk',50,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('cxmamaiq27unm8aq','onrunstraferight',37,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('gen17y72ssi59wpu','onrunturnleft-riffle',-107,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('gslmcvc16tj8k2qd','onjumpwalk',33,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('ha04nt6dexd4ftre','onrun',40,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('hll8arxe90blz5rf','onturnright-riffle',-103,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('hzii4zm4si8l8how','ondie-riffle',-109,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('i59xr1zqo99isdjm','onrunbackwards-riffle',-106,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('iwz5vunog9xvj3v2','onwait-swim',10,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('jqzt1tw4x79qtw4v','onstraferight',47,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('junpkpu43224fqfy','onjumprunbackwards',30,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('nub02cks7pxjupxh','onoption',0,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('o99ira75448vosuw','onrunbackwards',39,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('oezpkr4a2h5eklbq','onwait-riffle',-100,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('oly081kpu2rn02bc','onturnright',48,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('p9al5x62v52zpjlf','onrunbackwards-swim',6,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('q5lip3bagi30qmwo','onwait-sit',35,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('qjflqsslk4w3uwy4','onjumprun',32,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('qxfcifo3fv4yd28y','onstrafeleft-riffle',-104,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('rlqtycsx9jx09cva','onwalk-swim',9,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('rtrfttowiunsyhh0','onturnleft',48,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('si6ef0qn03i9t8qx','onjumpwalkbackwards',31,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('sresp7vr9xwoqn05','onrunstrafeleft',37,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('srfsp6q3cf36mm63','onwalk-riffle',-101,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('twz9cyrwaohhw4w2','onrun-swim',8,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('tzinndwd5ns1u1rl','onstraferight-riffle',-104,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('vze0vd5p14gxaojp','onturnleft-riffle',-103,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('w0cnbjuj6axt7mjt','ondie',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('w1jj1n6wx099hmqt','onrunstrafeleft-riffle',-108,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('xe6ovc180f1wd6ul','onwalkbackwards-riffle',-102,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('xprqbdxhq5mk1jiy','onwalkbackwards-swim',7,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('y756fjgq7vq4cbl2','onstrafeleft',47,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('ym6zgcbjq127umis','onwait',100,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('z869qu3w7ecjnodv','onrunturnleft',38,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
-				('zhgtra63v3v1m04m','onwalkbackwards',49,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);");
-			}
-			
-			/* Update 3.4.3 - populate the additional fields in the useravataranimations table where needed */
-			$zresults = $wtwdb->query("
-				select ua1.*,
-					a1.loadpriority as defloadpriority,
-					a1.animationevent as defanimationevent,
-					a1.animationfriendlyname as defanimationfriendlyname,
-					a1.animationicon as defanimationicon,
-					a1.objectfolder as defobjectfolder,
-					a1.objectfile as defobjectfile,
-					a1.startframe as defstartframe,
-					a1.endframe as defendframe,
-					a1.animationloop as defanimationloop,
-					a1.speedratio as defspeedratio,
-					a1.soundid as defsoundid,
-					a1.soundmaxdistance as defsoundmaxdistance
-				from ".wtw_tableprefix."useravataranimations ua1
-					left join ".wtw_tableprefix."avataranimations a1
-					on ua1.avataranimationid = a1.avataranimationid
-				where ua1.deleted=0
-					and ua1.endframe=0
-					and ua1.objectfile=''
-				order by ua1.useravatarid, ua1.useravataranimationid;");
-			foreach ($zresults as $zrow) {
-				$zloadpriority = 0;
-				$zzstartframe = 0;
-				$zendframe = 0;
-				$zanimationloop = 1;
-				$zspeedratio = 1;
-				$zsoundmaxdistance = 100;
-				if (isset($zrow["defloadpriority"]) && !empty($zrow["defloadpriority"])) {
-					$zloadpriority = $zrow["defloadpriority"];
-				}
-				if (isset($zrow["defstartframe"]) && !empty($zrow["defstartframe"])) {
-					$zstartframe = $zrow["defstartframe"];
-				}
-				if (isset($zrow["defendframe"]) && !empty($zrow["defendframe"])) {
-					$zendframe = $zrow["defendframe"];
-				}
-				if (isset($zrow["defanimationloop"]) && !empty($zrow["defanimationloop"])) {
-					$zanimationloop = $zrow["defanimationloop"];
-				}
-				if (isset($zrow["defspeedratio"]) && !empty($zrow["defspeedratio"])) {
-					$zspeedratio = $zrow["defspeedratio"];
-				}
-				if (isset($zrow["defsoundmaxdistance"]) && !empty($zrow["defsoundmaxdistance"])) {
-					$zsoundmaxdistance = $zrow["defsoundmaxdistance"];
-				}
-				$wtwdb->query("
-					update ".wtw_tableprefix."useravataranimations
-					set loadpriority=".$zloadpriority.",
-						animationevent='".$zrow["defanimationevent"]."',
-						animationfriendlyname='".$zrow["defanimationfriendlyname"]."',
-						animationicon='".$zrow["defanimationicon"]."',
-						objectfolder='".$zrow["defobjectfolder"]."',
-						objectfile='".$zrow["defobjectfile"]."',
-						startframe=".$zstartframe.",
-						endframe=".$zendframe.",
-						animationloop=".$zanimationloop.",
-						speedratio=".$zspeedratio.",
-						soundid='".$zrow["defsoundid"]."',
-						soundmaxdistance=".$zsoundmaxdistance."
-					where useravataranimationid='".$zrow["useravataranimationid"]."'
-					limit 1;");
-			}
-
-			/* update 3.4.3 - add the missing animations for each avatarid in useravatars */
-			$zresults = $wtwdb->query("
-				select aa1.*,
-					ua1.useravatarid,
-					uaa1.useravataranimationid
-				from ".wtw_tableprefix."avataranimations aa1
-					inner join ".wtw_tableprefix."avatars a1
-					on aa1.avatarid = a1.avatarid
-					left join ".wtw_tableprefix."useravatars ua1
-					on ua1.avatarid = a1.avatarid
-					left join ".wtw_tableprefix."useravataranimations uaa1
-					on ua1.useravatarid = uaa1.useravatarid
-					and uaa1.avataranimationid = aa1.avataranimationid
-				where aa1.deleted=0
-					and ua1.useravatarid is not null
-					and uaa1.useravataranimationid is null
-				order by avatarid, useravatarid, loadpriority desc, avataranimationid;
-			");
-			foreach ($zresults as $zrow) {
-				$zuseravataranimationid = $wtwdb->getRandomString(16,1);
-				$zloadpriority = 0;
-				$zzstartframe = 0;
-				$zendframe = 0;
-				$zanimationloop = 1;
-				$zspeedratio = 1;
-				$zsoundmaxdistance = 100;
-				if (isset($zrow["loadpriority"]) && !empty($zrow["loadpriority"])) {
-					$zloadpriority = $zrow["loadpriority"];
-				}
-				if (isset($zrow["startframe"]) && !empty($zrow["startframe"])) {
-					$zstartframe = $zrow["startframe"];
-				}
-				if (isset($zrow["endframe"]) && !empty($zrow["endframe"])) {
-					$zendframe = $zrow["endframe"];
-				}
-				if (isset($zrow["animationloop"]) && !empty($zrow["animationloop"])) {
-					$zanimationloop = $zrow["animationloop"];
-				}
-				if (isset($zrow["defspeedratio"]) && !empty($zrow["speedratio"])) {
-					$zspeedratio = $zrow["speedratio"];
-				}
-				if (isset($zrow["soundmaxdistance"]) && !empty($zrow["soundmaxdistance"])) {
-					$zsoundmaxdistance = $zrow["soundmaxdistance"];
-				}
-				$wtwdb->query("
-					insert into ".wtw_tableprefix."useravataranimations
-					   (useravataranimationid,
-					    avataranimationid,
-						useravatarid,
-						loadpriority,
-						animationevent,
-						animationfriendlyname,
-						animationicon,
-						objectfolder,
-						objectfile,
-						startframe,
-						endframe,
-						animationloop,
-						speedratio,
-						walkspeed,
-						soundid,
-						soundmaxdistance,
-						createdate,
-						createuserid,
-						updatedate,
-						updateuserid)
-					  values
-					   ('".$zuseravataranimationid."',
-					    '".$zrow["avataranimationid"]."',
-						'".$zrow["useravatarid"]."',
-						".$zloadpriority.",
-						'".$zrow["animationevent"]."',
-						'".$zrow["animationfriendlyname"]."',
-						'".$zrow["animationicon"]."',
-						'".$zrow["objectfolder"]."',
-						'".$zrow["objectfile"]."',
-						".$zstartframe.",
-						".$zendframe.",
-						".$zanimationloop.",
-						".$zspeedratio.",
-						1,
-						'".$zrow["soundid"]."',
-						".$zsoundmaxdistance.",
-						'".$ztimestamp."',
-						'".$zuserid."',
-						'".$ztimestamp."',
-						'".$zuserid."');
-				");
-			}
-			
-			/* Updated 3.4.3 - user avatars now have their own folders on the server for all of the related files */
-			$wtwdb->checkContentFolders('', '', '', '');
-			$zresults = $wtwdb->query("
-				select ua1.*,
-					a1.rotationx as defrotationx,
-					a1.rotationy as defrotationy,
-					a1.rotationz as defrotationz,
-					a1.startframe as defstartframe,
-					a1.endframe as defendframe
-				from ".wtw_tableprefix."useravatars ua1
-					left join ".wtw_tableprefix."avatars a1
-                    on ua1.avatarid=a1.avatarid
-				where ua1.objectfolder like '%/avatars/%'
-				order by ua1.useravatarid;");
-			foreach ($zresults as $zrow) {
-				$zsourcefolder = wtw_rootpath.$zrow["objectfolder"];
-				$zdestinationfolder = $wtwdb->contentpath."/uploads/useravatars/".$zrow["useravatarid"];
-
-				if (strpos($zsourcefolder,$zrow["avatarid"]) === false) {
-					if (file_exists($wtwdb->contentpath."/uploads/avatars/".$zrow["avatarid"])) {
-						$zsourcefolder = $wtwdb->contentpath."/uploads/avatars/".$zrow["avatarid"];
+			if (($zoldversion1 == 3 && $zoldversion2 < 5) || $zoldversion1 < 3) {
+				/* updated v3.3.0 - allow more scaling decimal places for avatars */
+				$zresults = $wtwdb->query("select COLUMN_TYPE as columntype from INFORMATION_SCHEMA.COLUMNS where table_name='".wtw_tableprefix."useravatars' AND COLUMN_NAME = 'scalingx';");
+				foreach ($zresults as $zrow) {
+					if ($zrow["columntype"] != "decimal(18,4)") {
+						$wtwdb->query("ALTER TABLE `".wtw_tableprefix."useravatars` 
+							CHANGE COLUMN `scalingx` `scalingx` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
+						$wtwdb->query("ALTER TABLE `".wtw_tableprefix."useravatars` 
+							CHANGE COLUMN `scalingy` `scalingy` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
+						$wtwdb->query("ALTER TABLE `".wtw_tableprefix."useravatars` 
+							CHANGE COLUMN `scalingz` `scalingz` DECIMAL(18,4) NULL DEFAULT '1.0000' ;");
 					}
 				}
-				$zsourcefolder = rtrim($zsourcefolder, "/");
+				
+				/* updated 3.4.3 - look for system based avatars */
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."avatars where objectfolder like '%/content/system/avatars/%' and deleted=0;");
+				/* updated 3.4.3 - also check for empty table (means new install or needs to be repopulated) */
+				/* to force this not to execute, keep at least 2 original avatars - but you can flag them as deleted=1 in the table */
+				$zresults2 = $wtwdb->query("select avatarid from ".wtw_tableprefix."avatars where avatarid='3b9bt5c70igtmqux' or avatarid='641svy8bwjx2kme7' or avatarid='9e94useo7x2ief0s' or avatarid='aajvq38y06vulgh0' or avatarid='dihtmpm1ae3b9d3a' or avatarid='h1ro3h59xs5eknl0' or avatarid='odtx7arzof5eigp4' or avatarid='p7y3p6ti6d85yf7q' or avatarid='r8tgsns20ruwx0bg' or avatarid='v1ij2rkmdypo97c2';");
+				
+				if (count($zresults) > 0 || count($zresults2) < 3) {
+					/* updated 3.4.3 - remove old system based avatars */
+					$wtwdb->query("delete from ".wtw_tableprefix."avatars where avatarid='3b9bt5c70igtmqux' or avatarid='641svy8bwjx2kme7' or avatarid='9e94useo7x2ief0s' or avatarid='aajvq38y06vulgh0' or avatarid='dihtmpm1ae3b9d3a' or avatarid='h1ro3h59xs5eknl0' or avatarid='odtx7arzof5eigp4' or avatarid='p7y3p6ti6d85yf7q' or avatarid='r8tgsns20ruwx0bg' or avatarid='v1ij2rkmdypo97c2';");
+					$wtwdb->query("delete from ".wtw_tableprefix."avatarcolors where avatarid='3b9bt5c70igtmqux' or avatarid='641svy8bwjx2kme7' or avatarid='9e94useo7x2ief0s' or avatarid='aajvq38y06vulgh0' or avatarid='dihtmpm1ae3b9d3a' or avatarid='h1ro3h59xs5eknl0' or avatarid='odtx7arzof5eigp4' or avatarid='p7y3p6ti6d85yf7q' or avatarid='r8tgsns20ruwx0bg' or avatarid='v1ij2rkmdypo97c2';");
 
-				if (!file_exists($zdestinationfolder)) {
-					/* if folder does not exit, create it and copy the files into it */
-					/* this is a safe guard, so existing folders will not be overwritten (usually means is it already complete) */
-					mkdir($zdestinationfolder, octdec(wtw_chmod), true);
-					chmod($zdestinationfolder, octdec(wtw_chmod));
-					$wtwdb->copyContentSubFolderRecursive($zsourcefolder, $zdestinationfolder);
+					/* updated 3.4.3 - add new avatars with the same avatarids */
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avatars 
+						(avatarid, pastavatarid, versionid, version, versionorder, avatargroup, displayname, avatardescription, objectfolder, objectfile, gender, positionx, positiony, positionz, scalingx, scalingy, scalingz, rotationx, rotationy, rotationz, startframe, endframe, sortorder, templatename, description, tags, snapshotid, shareuserid, sharehash, sharetemplatedate, alttag, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES 
+						('3b9bt5c70igtmqux','','3b9bt5c70igtmqux','1.0.0',1000000,'Anonymous','Anonymous Male','Anonymous Male Android','/content/uploads/avatars/3b9bt5c70igtmqux/','maleidle.babylon','male',0.0,0.0,0.0,0.08,0.08,0.08,0.0,-90.0,0.0,1,213,2,'Anonymous Male','Anonymous Male avatar with a default blue color and robotic android look. ','Avatar, Anonymous, android, robot','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+						('641svy8bwjx2kme7','','641svy8bwjx2kme7','1.0.0',1000000,'Default','Remy','Blonde Haired Male with short sleeve shirt and shorts','/content/uploads/avatars/641svy8bwjx2kme7/','remyidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,196,4,'Remy','Blonde Haired Male with short sleeve shirt and shorts','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+						('9e94useo7x2ief0s','','9e94useo7x2ief0s','1.0.0',1000000,'Default','Liam','Black Haired Male with long sleeve shirt and pants','/content/uploads/avatars/9e94useo7x2ief0s/','liamidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,200,4,'Liam','Black Haired Male with long sleeve shirt and pants','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+						('aajvq38y06vulgh0','','aajvq38y06vulgh0','1.0.0',1000000,'Default','Pearl','Blonde Haired Female Child with long sleeved shirt and shorts','/content/uploads/avatars/aajvq38y06vulgh0/','pearlidle.babylon','female',0.0,0.0,0.0,0.09,0.09,0.09,0.0,-90.0,0.0,1,325,3,'Pearl','Blonde Haired Female Child with long sleeved shirt and shorts.','Avatar, Default, Female, Child','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+						('dihtmpm1ae3b9d3a','','dihtmpm1ae3b9d3a','1.0.0',1000000,'Default','Malcolm','Black Haired Male with half sleeve shirt, long pants, and hat','/content/uploads/avatars/dihtmpm1ae3b9d3a/','malcolmidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,195,4,'Malcolm','Black Haired Male with half sleeve shirt, long pants, and hat','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+						('h1ro3h59xs5eknl0','','h1ro3h59xs5eknl0','1.0.0',1000000,'Default','Shae','Black Haired Female with black jacket, long pants, and boots','/content/uploads/avatars/h1ro3h59xs5eknl0/','shaeidle.babylon','female',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,303,3,'Shae','Black Haired Female with black jacket, long pants, and boots','Avatar, Default, Female','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+						('odtx7arzof5eigp4','','odtx7arzof5eigp4','1.0.0',1000000,'Default','Regina','Black Haired Female with tank top, long pants, and hat','/content/uploads/avatars/odtx7arzof5eigp4/','reginaidle.babylon','female',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,241,3,'Regina','Black Haired Female with tank top, long pants, and hat','Avatar, Default, Female','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+						('p7y3p6ti6d85yf7q','','p7y3p6ti6d85yf7q','1.0.0',1000000,'Anonymous','Anonymous Female','Anonymous Female Android','/content/uploads/avatars/p7y3p6ti6d85yf7q/','femaleidle.babylon','female',0.0,0.0,0.0,0.08,0.08,0.08,0.0,-90.0,0.0,1,100,1,'Anonymous Female','Anonymous Female avatar with a default red color and robotic android look. ','Avatar, Anonymous, android, robot','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+						('r8tgsns20ruwx0bg','','r8tgsns20ruwx0bg','1.0.0',1000000,'Default','Jasper','Orange Haired Male Child','/content/uploads/avatars/r8tgsns20ruwx0bg/','jasperidle.babylon','male',0.0,0.0,0.0,0.09,0.09,0.09,0.0,-90.0,0.0,1,71,4,'Jasper','Orange Haired Male Child with short sleeved shirt and shorts.','Avatar, Default, Male, Child','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+						('v1ij2rkmdypo97c2','','v1ij2rkmdypo97c2','1.0.0',1000000,'Default','Stefani','Brown Haired Female with tank top and shorts','/content/uploads/avatars/v1ij2rkmdypo97c2/','stefaniidle.babylon','female',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,363,3,'Stefani','Brown Haired Female with tank top and shorts','Avatar, Default, Female','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
+					");
+
+					/* updated 3.4.3 - add new avatar colors (parts) with the same avatarids */
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avatarcolors 
+						(avatarpartid, pastavatarpartid, avatarid, avatarpart, diffusecolor, specularcolor, emissivecolor, ambientcolor, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES 
+						('n7ggpnsdmvafn27q', '', '3b9bt5c70igtmqux', 'Alpha_Joints', '#47547F', '#000000', '#000000', '#47547F', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('whq222ptqbcwhbpe', '', '3b9bt5c70igtmqux', 'Alpha_Surface', '#31A6FD', '#000000', '#000000', '#31A6FD', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('pt96upqdo1ru1yny', '', '641svy8bwjx2kme7', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2x1u3pmt6xwp12gk', '', '641svy8bwjx2kme7', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('wjd8qs4v98d5y4cx', '', '641svy8bwjx2kme7', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('g4h2vp1mtk6ofy2t', '', '641svy8bwjx2kme7', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('bfd5zs7qydryrh3t', '', '641svy8bwjx2kme7', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9xm4fbcy6y9jb13m', '', '641svy8bwjx2kme7', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2ze2ozdpolqedzz4', '', '641svy8bwjx2kme7', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('gmr5gbvgibrwm60r', '', '9e94useo7x2ief0s', 'Body', '#FFFFFF', '#000000', '#000000', '#ffffff', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jv39gf5r987oihmu', '', '9e94useo7x2ief0s', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2ciipvngwn3wzreg', '', '9e94useo7x2ief0s', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('w62hm4xe4r3d7d2b', '', '9e94useo7x2ief0s', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('5a26y5b3f6z72yuu', '', '9e94useo7x2ief0s', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vbpzojwthsuzmx2i', '', '9e94useo7x2ief0s', 'Tops', '#ffffff', '#000000', '#000000', '#ffffff', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('f411l0wtsjd938b3', '', 'aajvq38y06vulgh0', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('skhk514cfn6z6528', '', 'aajvq38y06vulgh0', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('twvty9thzku85bzy', '', 'aajvq38y06vulgh0', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('t1fn2kip0t3ek6k3', '', 'aajvq38y06vulgh0', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('789zg2mbpirdaefz', '', 'aajvq38y06vulgh0', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('fkdfdshjsgnhiv91', '', 'aajvq38y06vulgh0', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('39ue6qhus79oyuq2', '', 'aajvq38y06vulgh0', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('riko7jfagi42kvoq', '', 'dihtmpm1ae3b9d3a', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('lxmqh7ux9z5ha1q1', '', 'dihtmpm1ae3b9d3a', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('8zrvrc0yv3njmyhh', '', 'dihtmpm1ae3b9d3a', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('o477h8qsjou40mv3', '', 'dihtmpm1ae3b9d3a', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('p80ygek28v4htplx', '', 'dihtmpm1ae3b9d3a', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('dujy29stjr1d3fxx', '', 'dihtmpm1ae3b9d3a', 'Hats', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('0z6w4naqcxya572c', '', 'dihtmpm1ae3b9d3a', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('r8jk0vdiqt477w3q', '', 'dihtmpm1ae3b9d3a', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ybdjum9lceqriu3l', '', 'h1ro3h59xs5eknl0', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('99dfpy7ffwywgykb', '', 'h1ro3h59xs5eknl0', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('s0kgfni1ksp7wypv', '', 'h1ro3h59xs5eknl0', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('tud2y63eh8f07lgr', '', 'h1ro3h59xs5eknl0', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('sxykax0jn240aymt', '', 'h1ro3h59xs5eknl0', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('mwmy1ls9ro0b2k85', '', 'h1ro3h59xs5eknl0', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('5k2b3nv5ih945e6d', '', 'h1ro3h59xs5eknl0', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('mfycst1inbeobx05', '', 'odtx7arzof5eigp4', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('320ez8wnt7pi538i', '', 'odtx7arzof5eigp4', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('j3gkj9t025ax9rhs', '', 'odtx7arzof5eigp4', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2nr5nlf62qtfkkxq', '', 'odtx7arzof5eigp4', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('rl029y75fj1coxyp', '', 'odtx7arzof5eigp4', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('mkgy5jhejme7firt', '', 'odtx7arzof5eigp4', 'Hats', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('o2br140ugumjh29q', '', 'odtx7arzof5eigp4', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ofxbs3a4i0w76pjb', '', 'odtx7arzof5eigp4', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vxmtb8vpvjvf3zma', '', 'p7y3p6ti6d85yf7q', 'Beta_Joints', '#4C2121', '#000000', '#000000', '#4C2121', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('n89yro60qtgyy93v', '', 'p7y3p6ti6d85yf7q', 'Beta_Surface', '#EB5F5F', '#000000', '#000000', '#EB5F5F', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('i26nosqecbdflfbt', '', 'r8tgsns20ruwx0bg', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('rvz45hxmna26uhtg', '', 'r8tgsns20ruwx0bg', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vga26dqzrdmu05q6', '', 'r8tgsns20ruwx0bg', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('lq9c84ora5mqzei5', '', 'r8tgsns20ruwx0bg', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2mbft9rzjxflby1w', '', 'r8tgsns20ruwx0bg', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('xnjwcxxfcsva4kcc', '', 'r8tgsns20ruwx0bg', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('d1rtqn7rmyhcenky', '', 'r8tgsns20ruwx0bg', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('dfnl46bdj5o8r0gq', '', 'v1ij2rkmdypo97c2', 'Body', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('o28c083kl7r39w8c', '', 'v1ij2rkmdypo97c2', 'Bottoms', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('41e6r3eftk9bmzq9', '', 'v1ij2rkmdypo97c2', 'Eyelashes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('16t9ay39xyu7x6u4', '', 'v1ij2rkmdypo97c2', 'Eyes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('go4qcewxqkzep92r', '', 'v1ij2rkmdypo97c2', 'Hair', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('alrjnt7sat4cvx1c', '', 'v1ij2rkmdypo97c2', 'Shoes', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('cxsfyd6lqjfatjsb', '', 'v1ij2rkmdypo97c2', 'Tops', '#FFFFFF', '#000000', '#000000', '#FFFFFF', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
+					");
+					
+					/* updated 3.4.3 - add new avatar animations with the same avatarids */
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avataranimations 
+						(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES
+						('r9087b004i9ptv0e', '', '3b9bt5c70igtmqux', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/3b9bt5c70igtmqux/', 'maleidle.babylon', '1', '213', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
+						('ivtj8k2n2erlptw4', '', '3b9bt5c70igtmqux', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malewalk.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('w4x8gkffxcyrxe8x', '', '3b9bt5c70igtmqux', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malewalkback.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('xtdev68nipxl5x64', '', '3b9bt5c70igtmqux', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('5b72o99k0bm6zga2', '', '3b9bt5c70igtmqux', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('x3o2chccn74zjpyo', '', '3b9bt5c70igtmqux', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('g4a06vseo3i9ta07', '', '3b9bt5c70igtmqux', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ii2qjfjecm06wy3m', '', '3b9bt5c70igtmqux', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('s35fo3h6fjfh8oqk', '', '3b9bt5c70igtmqux', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malewalkback.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('mf8wtehb2dqkmdzr', '', '3b9bt5c70igtmqux', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('yf92jhsjd5nvd82o', '', '3b9bt5c70igtmqux', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('s9yxs6k7fg2wd4i8', '', '3b9bt5c70igtmqux', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('7y4rh3zog9wpt0lw', '', '3b9bt5c70igtmqux', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ua8jbcmsbxi5w0di', '', '3b9bt5c70igtmqux', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('uatc8bv9tqoi6n3t', '', '3b9bt5c70igtmqux', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vw5d9f2os7sx2xh1', '', '3b9bt5c70igtmqux', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vi76lr5kg7qr96ld', '', '3b9bt5c70igtmqux', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('fsjumsb816paf2hi', '', '3b9bt5c70igtmqux', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('408rwa70fagu49rk', '', '3b9bt5c70igtmqux', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('sve58ukwpvdzyjiq', '', '3b9bt5c70igtmqux', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('txm33odfqel7ziv1', '', '3b9bt5c70igtmqux', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('uz8cualgsaq93ip9', '', '3b9bt5c70igtmqux', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('xds0u4345q5za745', '', '3b9bt5c70igtmqux', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('v245qnblckppa1xr', '', '3b9bt5c70igtmqux', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ksv82wdi9x6ph2id', '', '3b9bt5c70igtmqux', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('b1t97pcy0u1j4cln', '', '3b9bt5c70igtmqux', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('467omoxzv30i3g0l', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('7nbv5yo389ltrgt8', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('8q96piaohfn1f895', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('amv8njmmwefnlsod', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('qbjvak08ph2eik8r', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('qsd32hogy3jvzit0', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('uullzdlqiiw4f44r', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vtok6hf5c3yl83aw', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('yy0o3qcfafzi1pkw', '', '3b9bt5c70igtmqux', '', '0', 'onoption', 'Option - Dance - Hip Hop', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'option-dance.babylon', '1', '369', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('qk7c73bigh4ex8bv', '', '3b9bt5c70igtmqux', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6vwypoplqunx1u87', '', '3b9bt5c70igtmqux', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('py46sau5a5isd9iv', '', '3b9bt5c70igtmqux', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('y9kvul52rightfpi', '', '3b9bt5c70igtmqux', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('j47ucrkkde3056oh', '', '3b9bt5c70igtmqux', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vbyt0d25s9xbco6m', '', '3b9bt5c70igtmqux', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('t2woxk2jj8emfipz', '', '3b9bt5c70igtmqux', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('l7a081wl5nod2h7q', '', '3b9bt5c70igtmqux', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('7j6a7juf1y8ry2pp', '', '3b9bt5c70igtmqux', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('78vsxedgga0rgcjf', '', '3b9bt5c70igtmqux', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ljialzxbm9r4h6wi', '', '3b9bt5c70igtmqux', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('uidmjmzahn43de9o', '', '3b9bt5c70igtmqux', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vt1v6tiex4j7kt2n', '', '3b9bt5c70igtmqux', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('4wwkbvnfwx02rlov', '', '3b9bt5c70igtmqux', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/3b9bt5c70igtmqux/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
+					");
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avataranimations 
+						(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES
+						('wc004i6dcn4rdn2g', '', '641svy8bwjx2kme7', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/641svy8bwjx2kme7/', 'remyidle.babylon', '1', '196', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
+						('j2pbhi434a1bjr5j', '', '641svy8bwjx2kme7', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malewalk.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6ayvgo17uou7hqbb', '', '641svy8bwjx2kme7', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malewalkback.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('nahml62rp6r92kni', '', '641svy8bwjx2kme7', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('5p4eo7y6zf4fp7zb', '', '641svy8bwjx2kme7', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2ux4w2pae125lhnu', '', '641svy8bwjx2kme7', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('nahlhmne10vfh46i', '', '641svy8bwjx2kme7', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('8nm2g5b5urb89k2n', '', '641svy8bwjx2kme7', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('06sgxambog9xwona', '', '641svy8bwjx2kme7', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malewalkback.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('fa87echhw1hb6wy3', '', '641svy8bwjx2kme7', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('lom1binog7ml3p6r', '', '641svy8bwjx2kme7', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('qrmt7k8hozu9r339', '', '641svy8bwjx2kme7', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('cg8teiefyjvnnain', '', '641svy8bwjx2kme7', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ln0wsp7i6wskle45', '', '641svy8bwjx2kme7', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('wcqhmez4oemqlpa0', '', '641svy8bwjx2kme7', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('mf3qfn7k1rhivpoj', '', '641svy8bwjx2kme7', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ztmw5gadj8e0a9le', '', '641svy8bwjx2kme7', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('i1omq3fh9y663dal', '', '641svy8bwjx2kme7', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('dco0oo5vhag3u6ru', '', '641svy8bwjx2kme7', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('0dodwwtzh2a90qjv', '', '641svy8bwjx2kme7', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('w2oo9s7tmos50cpe', '', '641svy8bwjx2kme7', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('rrwyr0k8vuhga4yh', '', '641svy8bwjx2kme7', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('36629z8l4kv0z33h', '', '641svy8bwjx2kme7', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('d00tl4hm346jx1gx', '', '641svy8bwjx2kme7', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('cartyyh7nhg6gvkd', '', '641svy8bwjx2kme7', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('imygjervp7arfmxd', '', '641svy8bwjx2kme7', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('1wa0njcm4b6m6g2d', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('1yzdxuoqb7ocw3jp', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('7uboixxjjqa4vr1n', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Dance - House', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-dance.babylon', '1', '629', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('by3wmbypvdsgtusi', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('e824pycoz761iklm', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ed1zfxlflb171rsk', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('gj889xqe4a04ik92', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('j18ab8inwc2ehjgt', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('t85abm4aq4w4u0vd', '', '641svy8bwjx2kme7', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('fkzuwjag9qsx41ex', '', '641svy8bwjx2kme7', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9rq8z2y5flyvt3qw', '', '641svy8bwjx2kme7', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('72o6qwefzra0xfp1', '', '641svy8bwjx2kme7', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('yt3resfjcqe5y3hd', '', '641svy8bwjx2kme7', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6epvhqknuoqj5nc8', '', '641svy8bwjx2kme7', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('szziotxuaz3m4200', '', '641svy8bwjx2kme7', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jifaif9v5mq7itwo', '', '641svy8bwjx2kme7', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('a7yh1oy7ifejskrx', '', '641svy8bwjx2kme7', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('rvydbqdeohekiq5f', '', '641svy8bwjx2kme7', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('n7aaq6k61bnldcbo', '', '641svy8bwjx2kme7', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('q3or9g2i08vglvaq', '', '641svy8bwjx2kme7', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('5wgq1mrvbbl1n1zj', '', '641svy8bwjx2kme7', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('drnzrp308feoj5uf', '', '641svy8bwjx2kme7', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('dyk3ssmmvzgyo9tp', '', '641svy8bwjx2kme7', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/641svy8bwjx2kme7/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
+					");
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avataranimations 
+						(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES
+						('78k4zhhzhemwlcvc', '', '9e94useo7x2ief0s', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/9e94useo7x2ief0s/', 'liamidle.babylon', '1', '200', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
+						('1f0sw67go14gzinp', '', '9e94useo7x2ief0s', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malewalk.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('mxs7mhke962sslm9', '', '9e94useo7x2ief0s', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malewalkback.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('hoxk2ls6hx8d4jc4', '', '9e94useo7x2ief0s', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jc2977eg0najr6ml', '', '9e94useo7x2ief0s', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jk52v40qmvgrgyd3', '', '9e94useo7x2ief0s', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('4tp4fuvuot1piddq', '', '9e94useo7x2ief0s', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('93o2chdf0qpae4dg', '', '9e94useo7x2ief0s', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9wqyjxyyzzzzywk4', '', '9e94useo7x2ief0s', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malewalkback.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('xcvd979mdzuawona', '', '9e94useo7x2ief0s', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('f92ifmrwbs320wfe', '', '9e94useo7x2ief0s', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('4a4qchc99ir93p7z', '', '9e94useo7x2ief0s', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('xbvc5q6pzs0ocqls', '', '9e94useo7x2ief0s', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('8kyirkjoryz0fzhh', '', '9e94useo7x2ief0s', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('7hnpe4qqylw8xcm6', '', '9e94useo7x2ief0s', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('m86bevu06r1adwxm', '', '9e94useo7x2ief0s', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('u8d72seao9oedmet', '', '9e94useo7x2ief0s', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('c56d734x5rc57q54', '', '9e94useo7x2ief0s', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('l5ewogh7v7iezezi', '', '9e94useo7x2ief0s', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('zc711n622cac3htj', '', '9e94useo7x2ief0s', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ay7pxyy9k7878wd8', '', '9e94useo7x2ief0s', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('rh0m1ad2kpellfqi', '', '9e94useo7x2ief0s', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('93rj9cnjy8qr9c7m', '', '9e94useo7x2ief0s', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('xf5ifwwsmcwzv2li', '', '9e94useo7x2ief0s', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('5xhkmce28k5oq7m5', '', '9e94useo7x2ief0s', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ckl55gt049w9fpyf', '', '9e94useo7x2ief0s', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('1vm9v1k34pbfwbll', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('adqu1cei4d0d0k78', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('cy4209o28eqtazqa', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('d5r87qfdyw38ndpk', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('iyos220ycbwb1y2x', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jwz76o3zrpp3rwnb', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('pzgd35v26kebba95', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Dance - Tut Hip Hop', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-dance.babylon', '1', '407', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('tpze2dcthqk0mh7c', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('x3111863jusg1432', '', '9e94useo7x2ief0s', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('yrivwpyrrllee00p', '', '9e94useo7x2ief0s', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('sfoq9i7hl06anz3j', '', '9e94useo7x2ief0s', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('hca3waqenp9x3q0l', '', '9e94useo7x2ief0s', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('snarjgh66smd5pn2', '', '9e94useo7x2ief0s', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('c0p7gz5yp3wynbu9', '', '9e94useo7x2ief0s', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('f0mlz9ira9fwmmkg', '', '9e94useo7x2ief0s', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('q62uwg4uuv1u6up9', '', '9e94useo7x2ief0s', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('bb4y1spmmf0gec6e', '', '9e94useo7x2ief0s', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('rzlw4cl2lnawc7qj', '', '9e94useo7x2ief0s', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('7lvw65a24wyyktop', '', '9e94useo7x2ief0s', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('lvo7cu0jlxd0uhg1', '', '9e94useo7x2ief0s', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('fsga2olxqzqpq4k0', '', '9e94useo7x2ief0s', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('p9r17okbyhwsz1tc', '', '9e94useo7x2ief0s', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('zxgpqxxkmczbds2b', '', '9e94useo7x2ief0s', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/9e94useo7x2ief0s/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
+					");
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avataranimations 
+						(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES
+						('o4kgmoik9nf8ws7p', '', 'aajvq38y06vulgh0', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/aajvq38y06vulgh0/', 'pearlidle.babylon', '1', '325', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
+						('zszl1drqbf6npkqy', '', 'aajvq38y06vulgh0', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'femalewalk.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('julhnrux63xd15lh', '', 'aajvq38y06vulgh0', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'femalewalkback.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('nu8mfa5x4ttkd6rb', '', 'aajvq38y06vulgh0', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('cphcae5j8iwz6x3q', '', 'aajvq38y06vulgh0', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('mjr6mjwtgsmqtw2k', '', 'aajvq38y06vulgh0', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('dmz1aal5x78l8ecj', '', 'aajvq38y06vulgh0', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('mgfri8pro5rcg9yz', '', 'aajvq38y06vulgh0', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('03h6cacvd7x0866c', '', 'aajvq38y06vulgh0', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'femalewalkback.babylon', '1', '24', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('97aub3g0pigsi8k5', '', 'aajvq38y06vulgh0', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('4210xk1lr0u43239', '', 'aajvq38y06vulgh0', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('1ssnvd9642xggyhg', '', 'aajvq38y06vulgh0', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('0866dcn71lta1act', '', 'aajvq38y06vulgh0', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('k5des0ykwohk88nq', '', 'aajvq38y06vulgh0', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('kmjiykvchhgnw6il', '', 'aajvq38y06vulgh0', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('mddkwevwo6fogquj', '', 'aajvq38y06vulgh0', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('8q2mrtu13qdlifaz', '', 'aajvq38y06vulgh0', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('3mt1lhi7733x9put', '', 'aajvq38y06vulgh0', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('638hk03hql2669ar', '', 'aajvq38y06vulgh0', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('of755emihbw5va6z', '', 'aajvq38y06vulgh0', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('grwn54r169nju8s1', '', 'aajvq38y06vulgh0', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('oovp44dbq5s9tg4u', '', 'aajvq38y06vulgh0', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('gb4pfnxnwxmgxwoc', '', 'aajvq38y06vulgh0', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('wqtfzwvhrteojvv7', '', 'aajvq38y06vulgh0', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('762zl27k7oaxmsp3', '', 'aajvq38y06vulgh0', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('x8nuxvc379v1rhys', '', 'aajvq38y06vulgh0', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6ndu5ptknh5urnuc', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('cegzfzlg2r35vjru', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('dup8ie7d1rfhqk32', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Dance - Twist', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-dance.babylon', '1', '227', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ke2j6di3g32g2lxw', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('lsjwznr6e4r7s2mw', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ode6t12zoe1h5oam', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('r78te36a3b495zva', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('t1c0fa44nhxdi8o4', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('zbn3zi351k08bf75', '', 'aajvq38y06vulgh0', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('q54x4jkywoy07412', '', 'aajvq38y06vulgh0', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('xbulvavjspcts189', '', 'aajvq38y06vulgh0', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vqb0re96tq60xb2q', '', 'aajvq38y06vulgh0', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('69tbievkzjoe0hic', '', 'aajvq38y06vulgh0', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('iajou0alohn2fd2a', '', 'aajvq38y06vulgh0', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('3mda2s6zpcs48qv7', '', 'aajvq38y06vulgh0', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('o31jjw1uhp32cdof', '', 'aajvq38y06vulgh0', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('o5vogr5gj2j2ipb8', '', 'aajvq38y06vulgh0', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('zd88qcrv6wpg86op', '', 'aajvq38y06vulgh0', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('h04o182ehcncco2b', '', 'aajvq38y06vulgh0', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('5s7235czpwv9t0ih', '', 'aajvq38y06vulgh0', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('q30o6y9voni72lkx', '', 'aajvq38y06vulgh0', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('uc8mlkf0mt5j6bt0', '', 'aajvq38y06vulgh0', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('7aj39fzrosccrzl8', '', 'aajvq38y06vulgh0', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/aajvq38y06vulgh0/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
+					");
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avataranimations 
+						(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES
+						('45dg48tccn60jnna', '', 'dihtmpm1ae3b9d3a', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/', 'malcolmidle.babylon', '1', '195', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
+						('9bu8mgen3h6gq95z', '', 'dihtmpm1ae3b9d3a', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malewalk.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('hguup0xngdf35fri', '', 'dihtmpm1ae3b9d3a', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malewalkback.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('avhsi8k52waqtvz9', '', 'dihtmpm1ae3b9d3a', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('bs1u56hvvq24en1a', '', 'dihtmpm1ae3b9d3a', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('03g1ssnvc7y61mz3', '', 'dihtmpm1ae3b9d3a', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('amaiouat8orpacvb', '', 'dihtmpm1ae3b9d3a', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ibzzzyvfmqv56eid', '', 'dihtmpm1ae3b9d3a', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('absye5i30phdg2zo', '', 'dihtmpm1ae3b9d3a', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malewalkback.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jlfa768mhkc280cq', '', 'dihtmpm1ae3b9d3a', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('kptx63zm62qieev4', '', 'dihtmpm1ae3b9d3a', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('bg9y2fxfa75334em', '', 'dihtmpm1ae3b9d3a', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('0phc97bxom4rdmz2', '', 'dihtmpm1ae3b9d3a', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('c8cimhpean88elwe', '', 'dihtmpm1ae3b9d3a', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('69lowvplqjwi2npi', '', 'dihtmpm1ae3b9d3a', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('4xxo3lsdvwgfgbdo', '', 'dihtmpm1ae3b9d3a', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('osabe0oggfm87llh', '', 'dihtmpm1ae3b9d3a', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9cjzw8oox1ckqqcx', '', 'dihtmpm1ae3b9d3a', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('dfyr8iqb9auqth71', '', 'dihtmpm1ae3b9d3a', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('tkhwhxo3nr7awp3t', '', 'dihtmpm1ae3b9d3a', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('xv4mcxi0g8y5u60x', '', 'dihtmpm1ae3b9d3a', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('4patz2fbqef0oc3d', '', 'dihtmpm1ae3b9d3a', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('dmrilk9asno5diw6', '', 'dihtmpm1ae3b9d3a', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('fgkxp3hlk8d850dd', '', 'dihtmpm1ae3b9d3a', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('o0812jhi5sq9rfqv', '', 'dihtmpm1ae3b9d3a', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('t6ulex0lajy06fjk', '', 'dihtmpm1ae3b9d3a', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('0wedh0rtt49sjjvd', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('1nb595r8o28cnmo1', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2j81rsg12f6g14us', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6thtbygsmolqusa6', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6vokevrg2450jyou', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('84wghue4zq3w3xlc', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('d7rvo8ccumi4tndn', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('m5c23iielnyeh03t', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('wf2uz0xqc97n89bd', '', 'dihtmpm1ae3b9d3a', '', '0', 'onoption', 'Option - Dance - Hip Hop', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'option-dance.babylon', '1', '331', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jlvqlrkhek0ii9ig', '', 'dihtmpm1ae3b9d3a', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('d64rfgk8qg0ejpta', '', 'dihtmpm1ae3b9d3a', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('7djizpuqgum9x56v', '', 'dihtmpm1ae3b9d3a', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('1kxxr7u6nw0oqq5h', '', 'dihtmpm1ae3b9d3a', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9ydrm5d9xoabmdm6', '', 'dihtmpm1ae3b9d3a', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jw2j7a2ow13z10w1', '', 'dihtmpm1ae3b9d3a', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('zhz1x2fsn93loxpb', '', 'dihtmpm1ae3b9d3a', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('43hvs958xcsjmlth', '', 'dihtmpm1ae3b9d3a', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('tugl8y7xrcpigc0h', '', 'dihtmpm1ae3b9d3a', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('i4a7f2njqaab0r6u', '', 'dihtmpm1ae3b9d3a', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('rtysb697putw8gdo', '', 'dihtmpm1ae3b9d3a', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('3v9v8nmcm0eql3wd', '', 'dihtmpm1ae3b9d3a', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('nzs8eo5ojqtm0mai', '', 'dihtmpm1ae3b9d3a', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('w65ci4c79x6lsw9h', '', 'dihtmpm1ae3b9d3a', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/dihtmpm1ae3b9d3a/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
+					");
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avataranimations 
+						(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES
+						('5nt31zrtvvq4cdu3', '', 'h1ro3h59xs5eknl0', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/', 'shaeidle.babylon', '1', '303', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
+						('uuoxl8at7k8fh46j', '', 'h1ro3h59xs5eknl0', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'femalewalk.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('56fkk79qtw1kon74', '', 'h1ro3h59xs5eknl0', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'femalewalkback.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('1svy73w7d7y5w2o4', '', 'h1ro3h59xs5eknl0', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('mrv4ygdhddqieh6i', '', 'h1ro3h59xs5eknl0', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('q8z71lwpt1o9aohf', '', 'h1ro3h59xs5eknl0', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('y8d6tgtqa5zg9y05', '', 'h1ro3h59xs5eknl0', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('pa9iq5lip3a4tozu', '', 'h1ro3h59xs5eknl0', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('azywmf92ib4mrw9l', '', 'h1ro3h59xs5eknl0', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'femalewalkback.babylon', '1', '24', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('8d3fuy62sq950jr3', '', 'h1ro3h59xs5eknl0', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6npn198d6q4fsnvf', '', 'h1ro3h59xs5eknl0', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('82kom4si7gq8z867', '', 'h1ro3h59xs5eknl0', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jgnvglmanbqn2esp', '', 'h1ro3h59xs5eknl0', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('tnjyg7uxi9hpjkql', '', 'h1ro3h59xs5eknl0', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('lko6yaxtavuok0iy', '', 'h1ro3h59xs5eknl0', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vfw2bglw3tq3y9my', '', 'h1ro3h59xs5eknl0', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('b70p9844wibss7ta', '', 'h1ro3h59xs5eknl0', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9v5ht1sa0wnx15oj', '', 'h1ro3h59xs5eknl0', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('7fedoauhvt74nnys', '', 'h1ro3h59xs5eknl0', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6qhippd0ue944l0l', '', 'h1ro3h59xs5eknl0', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('reimbnyx6rimbcja', '', 'h1ro3h59xs5eknl0', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('gdyuyl9xymk8n7rq', '', 'h1ro3h59xs5eknl0', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('8i9e7ivl3ck0u7lv', '', 'h1ro3h59xs5eknl0', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('0jfkla29rby90uyd', '', 'h1ro3h59xs5eknl0', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('t1v1hxmve7fg9v4e', '', 'h1ro3h59xs5eknl0', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('mxrx6xgsgqh01smr', '', 'h1ro3h59xs5eknl0', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('7so4eesf6b2wobm2', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9284klrcme8hi58l', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('cc8hd2bt27obn2ce', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('i4zorwvhpsw2pyq2', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Dance - Salsa', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-dance.babylon', '1', '288', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('l9sx0mx7au6j1fr1', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('m8qndis4egvi75f0', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('q9c36gx30cx4nu5v', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vtfc8mu9ut1c4rsm', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('zo6i4is601zomglm', '', 'h1ro3h59xs5eknl0', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jmtjtuzni0gikwo0', '', 'h1ro3h59xs5eknl0', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('7dqyih6z2yce4ja3', '', 'h1ro3h59xs5eknl0', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('l68d0ij618pgcppl', '', 'h1ro3h59xs5eknl0', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('e8oil40b02z7goe6', '', 'h1ro3h59xs5eknl0', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('tbwc0e2l7oi2aplg', '', 'h1ro3h59xs5eknl0', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('c1lq56xntjamxone', '', 'h1ro3h59xs5eknl0', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ainjewhyb4ggbhdq', '', 'h1ro3h59xs5eknl0', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('yfwnsp459n31e089', '', 'h1ro3h59xs5eknl0', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('4qa50a5ftxthrhca', '', 'h1ro3h59xs5eknl0', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('5m7sdkudphgmuia1', '', 'h1ro3h59xs5eknl0', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('kjg5rgzeuq1xqtit', '', 'h1ro3h59xs5eknl0', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('chl85isrn5t1hvgd', '', 'h1ro3h59xs5eknl0', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jazt5f7z1eps0a1e', '', 'h1ro3h59xs5eknl0', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('j2g035cumv2xjmjg', '', 'h1ro3h59xs5eknl0', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/h1ro3h59xs5eknl0/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
+					");
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avataranimations 
+						(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES
+						('o3h47opkqwat7mge', '', 'odtx7arzof5eigp4', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/odtx7arzof5eigp4/', 'reginaidle.babylon', '1', '241', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
+						('j0hccn866c6vsen2', '', 'odtx7arzof5eigp4', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'femalewalk.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('dm19ak0dstrdjnjt', '', 'odtx7arzof5eigp4', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'femalewalkback.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('myz1976axt8r5els', '', 'odtx7arzof5eigp4', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('5fo2bdxisdkqwd4h', '', 'odtx7arzof5eigp4', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('hyam9fdjld15jc3d', '', 'odtx7arzof5eigp4', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ngekmgen3i9r339y', '', 'odtx7arzof5eigp4', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('3yioweepev69qwbx', '', 'odtx7arzof5eigp4', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2h8qym61oacxmbof', '', 'odtx7arzof5eigp4', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('36pwechejj1kpu3x', '', 'odtx7arzof5eigp4', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'femalewalkback.babylon', '1', '24', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('fa88j0g8sa07y753', '', 'odtx7arzof5eigp4', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('1webe10wjx0bilfc', '', 'odtx7arzof5eigp4', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6y8bxnij7d978l8e', '', 'odtx7arzof5eigp4', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jk9l8byuazzyudcn', '', 'odtx7arzof5eigp4', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('l8sqjtjkr0zanc5l', '', 'odtx7arzof5eigp4', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('15m4hdra4mbtuqhx', '', 'odtx7arzof5eigp4', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('p9cbpxnj9msun68v', '', 'odtx7arzof5eigp4', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('tomwv04oqal2g7xw', '', 'odtx7arzof5eigp4', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('uwqpivcg98sjawbp', '', 'odtx7arzof5eigp4', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('s9sxp5gmtckpveln', '', 'odtx7arzof5eigp4', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9p6hoee13cubno45', '', 'odtx7arzof5eigp4', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('fl76gp9moby40ou8', '', 'odtx7arzof5eigp4', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('maysjiskb4p494fj', '', 'odtx7arzof5eigp4', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('kcv7ny7zd81rrqkk', '', 'odtx7arzof5eigp4', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ylarf0nypf2n7enw', '', 'odtx7arzof5eigp4', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('gnqd80kcijsnufn6', '', 'odtx7arzof5eigp4', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('56j843jw0qwjuceq', '', 'odtx7arzof5eigp4', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('3s7qgw2go007ask5', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jivvhnl72rb0nuzh', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('lmbo7arygrsarcbe', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('nchqvge3hatd7c8c', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('o0et7jy2ph3uwo8j', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('qdacv9ve0vx9ng5o', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ynd3of2gruujmemi', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('zd6710kd1l7emjgw', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Dance - Wave Hip Hop', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-dance.babylon', '1', '405', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('zepcfdzfvtukxjcf', '', 'odtx7arzof5eigp4', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('tpu31zpezp62zs6x', '', 'odtx7arzof5eigp4', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walk-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2z7v8tgblyqba9dg', '', 'odtx7arzof5eigp4', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('bv032couamwdlj5q', '', 'odtx7arzof5eigp4', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('7lsnip18qe4uclug', '', 'odtx7arzof5eigp4', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('d7mto61bd3bha686', '', 'odtx7arzof5eigp4', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('3ppfhxv1wpkgp4w7', '', 'odtx7arzof5eigp4', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6b5zh19eweam0jji', '', 'odtx7arzof5eigp4', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('n4hi012nom1bvu5u', '', 'odtx7arzof5eigp4', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('gsunr2gofzjlk3ff', '', 'odtx7arzof5eigp4', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('bbt7etf0byhepqjv', '', 'odtx7arzof5eigp4', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('k7kf4q2585d8ay4z', '', 'odtx7arzof5eigp4', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('yjrrgud0rmo6owt1', '', 'odtx7arzof5eigp4', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('3pbl1gcla4h3cszw', '', 'odtx7arzof5eigp4', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('f71735yliy4b0ucq', '', 'odtx7arzof5eigp4', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/odtx7arzof5eigp4/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
+					");
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avataranimations 
+						(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES
+						('ohb6x5ze1112a9e6', '', 'p7y3p6ti6d85yf7q', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/', 'femaleidle.babylon', '1', '100', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
+						('bdxircdsw641we93', '', 'p7y3p6ti6d85yf7q', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'femalewalk.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('qdo9cu9r0svzbnai', '', 'p7y3p6ti6d85yf7q', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'femalewalkback.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('pxk1g6i1m3jdabpm', '', 'p7y3p6ti6d85yf7q', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('z1abrv0hfo3h2v54', '', 'p7y3p6ti6d85yf7q', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9pu3xcwiwz5utj7e', '', 'p7y3p6ti6d85yf7q', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6i1n6vvsccpf21zu', '', 'p7y3p6ti6d85yf7q', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('fyhj8jzbncsw2pbe', '', 'p7y3p6ti6d85yf7q', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('5j6dabpn2erp5nua', '', 'p7y3p6ti6d85yf7q', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'femalewalkback.babylon', '1', '24', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ytb1bga3nwmcxjy3', '', 'p7y3p6ti6d85yf7q', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('o2bct3zn9czveclx', '', 'p7y3p6ti6d85yf7q', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vaudbhi1qhaxs6i0', '', 'p7y3p6ti6d85yf7q', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ta1do9brv3uy7430', '', 'p7y3p6ti6d85yf7q', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'malestraferight.babylon', '1', '26', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('cfz2rb7aqxzmbbcl', '', 'p7y3p6ti6d85yf7q', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('3ybdeoz0e31smyb0', '', 'p7y3p6ti6d85yf7q', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2us07qcgphx3ot91', '', 'p7y3p6ti6d85yf7q', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('k10a88qrfvr2tt3t', '', 'p7y3p6ti6d85yf7q', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('d4gigjax9co44ia9', '', 'p7y3p6ti6d85yf7q', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('d1xjyz5wssky5osd', '', 'p7y3p6ti6d85yf7q', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('xgg8yq0svsbluv70', '', 'p7y3p6ti6d85yf7q', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('xqqc6atchhmhwgot', '', 'p7y3p6ti6d85yf7q', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('hnp40zuucqjf1f9s', '', 'p7y3p6ti6d85yf7q', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('w874p74qvqsum1be', '', 'p7y3p6ti6d85yf7q', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('a6oiyyu8e9rv41jr', '', 'p7y3p6ti6d85yf7q', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('5hotdyklzoloil9v', '', 'p7y3p6ti6d85yf7q', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('1sn6myzx5d2t2tqc', '', 'p7y3p6ti6d85yf7q', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('02p16d4ax3tm94w6', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('3oz4dv3yvnu8qtqs', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Dance - Hip Hop', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-dance.babylon', '1', '153', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6gnq88flx6r5uycj', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('8blx9vbi2pyd0k7h', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('8x6trj323756yjz8', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('8zl9djjpxanyjj23', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('eds4owitgiidj16x', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jyuulxxz73kfx41d', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('wfmt9jig20tgq8z6', '', 'p7y3p6ti6d85yf7q', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('flbfgprxaaz69igj', '', 'p7y3p6ti6d85yf7q', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('hs8wmyu8zcsd645k', '', 'p7y3p6ti6d85yf7q', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('cupvarkt8tckk9wp', '', 'p7y3p6ti6d85yf7q', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('y6yq94wzb6qsuak6', '', 'p7y3p6ti6d85yf7q', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('c2sbs1qbsy0305x7', '', 'p7y3p6ti6d85yf7q', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('k9f0y774vgx76mmg', '', 'p7y3p6ti6d85yf7q', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ghlqnk9hfrzjd7hw', '', 'p7y3p6ti6d85yf7q', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ijbva30w99hte18l', '', 'p7y3p6ti6d85yf7q', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('le44ea7hgtiwlk3w', '', 'p7y3p6ti6d85yf7q', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ldghqfg61ywkvrc7', '', 'p7y3p6ti6d85yf7q', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('xjthi5n63iusoeu6', '', 'p7y3p6ti6d85yf7q', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('phq2wuj7vomkrwoj', '', 'p7y3p6ti6d85yf7q', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ml4reymctienjk2d', '', 'p7y3p6ti6d85yf7q', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('oh204m5xzxe4gqya', '', 'p7y3p6ti6d85yf7q', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/p7y3p6ti6d85yf7q/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
+					");
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avataranimations 
+						(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES
+						('gfso15ljwulgi6c9', '', 'r8tgsns20ruwx0bg', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/', 'jasperidle.babylon', '1', '71', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
+						('vj0hc99jwvpwd8z7', '', 'r8tgsns20ruwx0bg', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malewalk.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('558r36misbbl2klb', '', 'r8tgsns20ruwx0bg', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malewalkback.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('qpbjpxk1f36kas32', '', 'r8tgsns20ruwx0bg', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('0whnwjy4tq8wvmgf', '', 'r8tgsns20ruwx0bg', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('gh2u3xd12a74zl2h', '', 'r8tgsns20ruwx0bg', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('rkj1ihx50jou446l', '', 'r8tgsns20ruwx0bg', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('aywnkwtb5si57mjt', '', 'r8tgsns20ruwx0bg', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('en019757k7d82o3i', '', 'r8tgsns20ruwx0bg', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malewalkback.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9t9tcbilhnqsp6q6', '', 'r8tgsns20ruwx0bg', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('q13a4utlgkebg9z6', '', 'r8tgsns20ruwx0bg', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('s47q36nne0u7hvvp', '', 'r8tgsns20ruwx0bg', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vvpwglj0cof38tel', '', 'r8tgsns20ruwx0bg', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('amyscydvj0ydzyjx', '', 'r8tgsns20ruwx0bg', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('mat1koyf0negd3lz', '', 'r8tgsns20ruwx0bg', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('q9qtohcswldr3oi2', '', 'r8tgsns20ruwx0bg', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('gim1r7dukguvn0m9', '', 'r8tgsns20ruwx0bg', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('3yzc45wytwyin046', '', 'r8tgsns20ruwx0bg', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('4fm8sdbpw8p9dv7o', '', 'r8tgsns20ruwx0bg', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('iruyxr8b0p4ho7u2', '', 'r8tgsns20ruwx0bg', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jtugpo8us59xia4z', '', 'r8tgsns20ruwx0bg', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('8g68ig75c4dna4w2', '', 'r8tgsns20ruwx0bg', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9txbwsyjncgf1sqs', '', 'r8tgsns20ruwx0bg', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('zxia7912xm04wp62', '', 'r8tgsns20ruwx0bg', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('lpyn9jbh4e78gvsb', '', 'r8tgsns20ruwx0bg', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('0tu1yqk2irhu1zkh', '', 'r8tgsns20ruwx0bg', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('3q7i3a0sstslcvav', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('dtiyszzeq6ijfhrr', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('elv38tu0lnryylgw', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ffnph8yej8kgs1u5', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('h0cljhty5yfa9ns2', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('h61nn6jeoshjk8em', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('iqwp1l9wtdl8hh5z', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('l8gz6z0pr7yedfdo', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('s21wirqtwvkm3mlp', '', 'r8tgsns20ruwx0bg', '', '0', 'onoption', 'Option - Dance - Breakdance', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'option-dance.babylon', '1', '111', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('b0foao03pb19x7e1', '', 'r8tgsns20ruwx0bg', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('maju79dhvfa99r8l', '', 'r8tgsns20ruwx0bg', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('l8ygjgj9jjclw67q', '', 'r8tgsns20ruwx0bg', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('exw5uayi09nciswn', '', 'r8tgsns20ruwx0bg', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('f5w7pr718c31i8m3', '', 'r8tgsns20ruwx0bg', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('jmqw97x4cn3jifo2', '', 'r8tgsns20ruwx0bg', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('29jgv98x8zchhdz3', '', 'r8tgsns20ruwx0bg', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('az3u6yzq253ckadk', '', 'r8tgsns20ruwx0bg', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('5fm9slbuc8trv7dx', '', 'r8tgsns20ruwx0bg', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('fx0v1jewghks28mt', '', 'r8tgsns20ruwx0bg', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('d4c4ksd6db4pm6ei', '', 'r8tgsns20ruwx0bg', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('55yed4zpq3y3t4cu', '', 'r8tgsns20ruwx0bg', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('1e02zs5piisme1yx', '', 'r8tgsns20ruwx0bg', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('o3qv2ebsrpnc6asj', '', 'r8tgsns20ruwx0bg', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/r8tgsns20ruwx0bg/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
+					");
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avataranimations 
+						(avataranimationid, pastavataranimationid, avatarid, userid, loadpriority, animationevent, animationfriendlyname, animationicon, objectfolder, objectfile, startframe, endframe, animationloop, speedratio, soundid, soundpath, soundmaxdistance, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES
+						('n3i9s7ophcae5h1r', '', 'v1ij2rkmdypo97c2', '', '100', 'onwait', 'Wait', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/', 'stefaniidle.babylon', '1', '363', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '2'),
+						('kugqdo853zl0bili', '', 'v1ij2rkmdypo97c2', '', '50', 'onwalk', 'Walk', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'femalewalk.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('sen2dpcn5w0blz4o', '', 'v1ij2rkmdypo97c2', '', '49', 'onwalkbackwards', 'Walk Backwards', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'femalewalkback.babylon', '1', '24', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('17vpyohemuc9anbo', '', 'v1ij2rkmdypo97c2', '', '48', 'onturnleft', 'Turn Left', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'maleturnleft.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('g8sa2h7ld3emyvht', '', 'v1ij2rkmdypo97c2', '', '48', 'onturnright', 'Turn Right', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'maleturnright.babylon', '1', '29', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('qpbf6mkz74zlyz3k', '', 'v1ij2rkmdypo97c2', '', '47', 'onstrafeleft', 'Strafe Left', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'malestrafeleft.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ns1tzf8ulfdigqab', '', 'v1ij2rkmdypo97c2', '', '47', 'onstraferight', 'Strafe Right', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'malestraferight.babylon', '1', '26', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('iupyohfn02a8d6r8', '', 'v1ij2rkmdypo97c2', '', '40', 'onrun', 'Run', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'malerun.babylon', '1', '16', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('vpyk0dt1n6x5x8c1', '', 'v1ij2rkmdypo97c2', '', '39', 'onrunbackwards', 'Run Backwards', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'femalewalkback.babylon', '1', '24', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6sdhb3lnilfdkr38', '', 'v1ij2rkmdypo97c2', '', '38', 'onrunturnleft', 'Run Turn Left', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'maleturnleft.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('tfmvj0g8tddtw5ye', '', 'v1ij2rkmdypo97c2', '', '38', 'onrunturnright', 'Run Turn Right', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'maleturnright.babylon', '1', '29', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('41warxbvfh6grfw6', '', 'v1ij2rkmdypo97c2', '', '37', 'onrunstrafeleft', 'Run Strafe Left', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'malestrafeleft.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('25i6ayvk4zly1bii', '', 'v1ij2rkmdypo97c2', '', '37', 'onrunstraferight', 'Run Strafe Right', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'malestraferight.babylon', '1', '26', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('kjg59nnkjjagphzg', '', 'v1ij2rkmdypo97c2', '', '35', 'onwait-sit', 'Wait - Sit', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'wait-sit.babylon', '1', '155', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('y0ww1a1bzotaeij6', '', 'v1ij2rkmdypo97c2', '', '34', 'onjump', 'Jump', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'jump.babylon', '1', '46', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('iyw28zh9ddfybq7b', '', 'v1ij2rkmdypo97c2', '', '33', 'onjumpwalk', 'Walk - Jump', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walk-jump.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('0esp3539dmnwgueb', '', 'v1ij2rkmdypo97c2', '', '32', 'onjumprun', 'Run - Jump', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walk-jump.babylon', '1', '25', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('8urc5k5wfrb2rq82', '', 'v1ij2rkmdypo97c2', '', '31', 'onjumpwalkbackwards', 'Walk Backwards - Jump', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('wvbgyl82o2asluu1', '', 'v1ij2rkmdypo97c2', '', '30', 'onjumprunbackwards', 'Run Backwards - Jump', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walkbackwards-jump.babylon', '1', '23', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2xhv7zgs9zq1j3ec', '', 'v1ij2rkmdypo97c2', '', '10', 'onwait-swim', 'Wait - Swim', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('n3qvyyhzkxeiehpl', '', 'v1ij2rkmdypo97c2', '', '9', 'onwalk-swim', 'Walk - Swim', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walk-swim.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('iftvhhsgbfklwlw0', '', 'v1ij2rkmdypo97c2', '', '8', 'onrun-swim', 'Run - Swim', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walk-swim.babylon', '1', '109', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('db5mdheetohk154s', '', 'v1ij2rkmdypo97c2', '', '7', 'onwalkbackwards-swim', 'Walk Backwards Swim', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'wait-swim.babylon', '1', '73', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('j7210d1diub8edki', '', 'v1ij2rkmdypo97c2', '', '6', 'onrunbackwards-swim', 'Run Backwards Swim', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'wait-swim.babylon', '1', '73', '1', '1.50', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9dhdlbcoijc21ks7', '', 'v1ij2rkmdypo97c2', '', '2', 'onsleep', 'Wait - Sleep', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'wait-sleep.babylon', '1', '166', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ugc9jrkzn34xfb2n', '', 'v1ij2rkmdypo97c2', '', '1', 'ondie', 'Die', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'die.babylon', '1', '56', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('06bkntz10htbjnof', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Agree', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-agree.babylon', '1', '47', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2w6u3f9ae990kb25', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Angry', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-angry.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('31nrl2gmtgkq9pu5', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Wave', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-wave.babylon', '1', '14', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('76xphisu8xi7tezx', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Disagree', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-disagree.babylon', '1', '79', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ar2w03f499kif3zi', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Point', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-point.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('e76nl8wy3evbldky', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Charge', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-charge.babylon', '1', '138', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('gs7tv5nnisrz3rjv', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Victory', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-victory.babylon', '1', '109', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('o5gyo65yutc5rrdt', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Dance - Swing', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-dance.babylon', '1', '503', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('ys5e1ffpbz7dp9m3', '', 'v1ij2rkmdypo97c2', '', '0', 'onoption', 'Option - Bow', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'option-bow.babylon', '1', '67', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('o0wxc9c0r609ppup', '', 'v1ij2rkmdypo97c2', '', '-100', 'onwait-riffle', 'Wait - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'wait-riffle.babylon', '1', '207', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2rn9h2vmh10gzp48', '', 'v1ij2rkmdypo97c2', '', '-101', 'onwalk-riffle', 'Walk - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walk-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('rkcakcnazgxhse9t', '', 'v1ij2rkmdypo97c2', '', '-102', 'onwalkbackwards-riffle', 'Walk Backwards - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walkbackwards-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('2vuym4yaa9kpjmuz', '', 'v1ij2rkmdypo97c2', '', '-103', 'onturnleft-riffle', 'Turn Left - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('07s116f0131pm3qc', '', 'v1ij2rkmdypo97c2', '', '-103', 'onturnright-riffle', 'Turn Right - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'turnright-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('aa60m1y5v1857nha', '', 'v1ij2rkmdypo97c2', '', '-104', 'onstrafeleft-riffle', 'Walk Strafe Left - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walkstrafeleft-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('fnbe3tqem605lgxc', '', 'v1ij2rkmdypo97c2', '', '-104', 'onstraferight-riffle', 'Walk Strafe Right - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'walkstraferight-riffle.babylon', '1', '25', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('w03u62a3c0eg4rpy', '', 'v1ij2rkmdypo97c2', '', '-105', 'onrun-riffle', 'Run - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'run-riffle.babylon', '1', '17', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('kvu639mnotatyvz9', '', 'v1ij2rkmdypo97c2', '', '-106', 'onrunbackwards-riffle', 'Run Backwards - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'runbackwards-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('6crtqzl35vrbkqwo', '', 'v1ij2rkmdypo97c2', '', '-107', 'onrunturnleft-riffle', 'Run Turn Left - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'turnleft-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9dnmlhw90se34zec', '', 'v1ij2rkmdypo97c2', '', '-107', 'onrunturnright-riffle', 'Run Turn Right - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'turnright-riffle.babylon', '1', '25', '1', '2.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('9ddyo8rhp132tyxx', '', 'v1ij2rkmdypo97c2', '', '-108', 'onrunstrafeleft-riffle', 'Run Strafe Left - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'runstrafeleft-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('pcv32nrwp7kbtrad', '', 'v1ij2rkmdypo97c2', '', '-108', 'onrunstraferight-riffle', 'Run Strafe Right - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'runstraferight-riffle.babylon', '1', '13', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0'),
+						('cw18ezyud0jz51mu', '', 'v1ij2rkmdypo97c2', '', '-109', 'ondie-riffle', 'Die - Riffle', '', '/content/uploads/avatars/v1ij2rkmdypo97c2/animations/', 'die-riffle.babylon', '1', '72', '1', '1.00', '', '', '100.00', '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', NULL, '', '0');
+					");
+				}
+
+				/* updated v3.3.0 - avatar designer was moved to a plugin - these plugins need to be enabled on first run */
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."plugins where pluginname='wtw-avatars';");
+				if (count($zresults) == 0) { 
+					$wtwdb->query("INSERT INTO ".wtw_tableprefix."plugins 
+					(pluginname, active, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+					VALUES 
+					('wtw-avatars',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);"); 
+				}
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."plugins where pluginname='wtw-shopping';");
+				if (count($zresults) == 0) { 
+					$wtwdb->query("INSERT INTO ".wtw_tableprefix."plugins 
+					(pluginname, active, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+					VALUES 
+					('wtw-shopping',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);"); 
 				}
 				
+				/* updated 3.3.4 - added avatar groups as categories for avatars */
+				$zresults = $wtwdb->query("
+					select * 
+					from ".wtw_tableprefix."avatargroups;");
+				if (count($zresults) == 0) {
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."avatargroups 
+						(avatargroupid, avatargroup, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES 
+						('cphaz1acsziosye6','Anonymous','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+						('ot45ejgp5oxl6420','Default','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
+					");
+				}
+
+				/* updated 3.3.4 - add hex versions of colors (phasing out rgb values in the database) */
+				$this->updateColorsHex($zuserid);
+				
+				/* updated 3.3.5 - added Host role for sites that are hosted on the server */
+				$zresults = $wtwdb->query("
+					select * 
+					from ".wtw_tableprefix."roles
+					where rolename like 'host';");
+				if (count($zresults) == 0) {
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."roles 
+						(roleid, rolename, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES 
+							('".$wtwdb->getRandomString(16,1)."','Host','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'','0');
+					");
+				}
+
+				/* updated 3.4.1 - removed username from users - replaced by userid and displayname */
+				$zresults = $wtwdb->query("
+					show columns from ".wtw_tableprefix."users like 'username';");
+				if (count($zresults) > 0) {
+					$wtwdb->query("
+						alter table ".wtw_tableprefix."users 
+						drop column username;");
+				}
+
+				/* updated 3.4.3 - added Content Rating to the Browse Menu */
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menuitemname='wtw_rating';");
+				if (count($zresults) == 0) {
+					$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+						(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+							(null, 'wtw_rating', '[Not Rated]', 'main', 'right', -1001, 1, '', '', 'show-hide', 'wtw_menucontentrating', 1, '".$ztimestamp."', '".$zuserid."', '".$ztimestamp."', '".$zuserid."', null, '', 0);
+					");
+				}
+
+				/* updated 3.4.4 - added items to the HUD Menu */
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='Player Stats' and menuset='mainmenu';");
+				if (count($zresults) == 0) {
+					$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+						(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+							(null,'','Player Stats','mainmenu','left',1,1,'','','WTW.hudOpenMenuItem','1',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
+					");
+				}
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='Settings' and menuset='mainmenu';");
+				if (count($zresults) == 0) {
+					$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+						(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+							(null,'','Settings','mainmenu','',50,1,'','','WTW.hudOpenMenuItem','50',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
+					");
+				}
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='<- Main Menu' and menuset='settings';");
+				if (count($zresults) == 0) {
+					$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+						(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+							(null,'','<- Main Menu','settings','',1,1,'','','WTW.hudOpenMenuItem','51',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
+					");
+				}
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='Cameras' and menuset='settings';");
+				if (count($zresults) == 0) {
+					$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+						(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+							(null,'','Cameras','settings','left',10,1,'','','WTW.hudOpenMenuItem','60',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
+					");
+				}
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='Profile' and menuset='settings';");
+				if (count($zresults) == 0) {
+					$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+						(menuitemid, menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+							(null,'','Profile','settings','left',100,1,'','','WTW.hudOpenMenuItem','100',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
+					");
+				}
+				
+				/* updated v3.4.3 populate initial avatar animation events to new table */
+				$zcount = 0;
+				$zresults = $wtwdb->query("select count(*) as scount from ".wtw_tableprefix."avataranimationevents;");
+				foreach ($zresults as $zrow) {
+					$zcount = $zrow["scount"];
+				}
+				if ($zcount < 10) {
+					/* count of 10 gives some flexibility to remove some of the initial values, yet catches new or incomplete installs */
+					$wtwdb->query("INSERT INTO ".wtw_tableprefix."avataranimationevents 
+					(animationeventid, animationevent, loadpriority, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+					VALUES 
+					('0ktb74w8ecij4zjt','onjump',34,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('2fyimof7q0vc3ess','onrun-riffle',-105,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('2sqbe11394tq8y09','onrunturnright-riffle',-107,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('8d3en4mrzm75335h','onsleep',2,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('8eaajtfrh47mgh2t','onrunstraferight-riffle',-108,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('9nf9z4qa755c878m','onrunturnright',38,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('bajq38y2g1v8ivth','onwalk',50,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('cxmamaiq27unm8aq','onrunstraferight',37,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('gen17y72ssi59wpu','onrunturnleft-riffle',-107,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('gslmcvc16tj8k2qd','onjumpwalk',33,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('ha04nt6dexd4ftre','onrun',40,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('hll8arxe90blz5rf','onturnright-riffle',-103,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('hzii4zm4si8l8how','ondie-riffle',-109,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('i59xr1zqo99isdjm','onrunbackwards-riffle',-106,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('iwz5vunog9xvj3v2','onwait-swim',10,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('jqzt1tw4x79qtw4v','onstraferight',47,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('junpkpu43224fqfy','onjumprunbackwards',30,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('nub02cks7pxjupxh','onoption',0,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('o99ira75448vosuw','onrunbackwards',39,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('oezpkr4a2h5eklbq','onwait-riffle',-100,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('oly081kpu2rn02bc','onturnright',48,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('p9al5x62v52zpjlf','onrunbackwards-swim',6,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('q5lip3bagi30qmwo','onwait-sit',35,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('qjflqsslk4w3uwy4','onjumprun',32,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('qxfcifo3fv4yd28y','onstrafeleft-riffle',-104,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('rlqtycsx9jx09cva','onwalk-swim',9,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('rtrfttowiunsyhh0','onturnleft',48,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('si6ef0qn03i9t8qx','onjumpwalkbackwards',31,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('sresp7vr9xwoqn05','onrunstrafeleft',37,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('srfsp6q3cf36mm63','onwalk-riffle',-101,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('twz9cyrwaohhw4w2','onrun-swim',8,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('tzinndwd5ns1u1rl','onstraferight-riffle',-104,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('vze0vd5p14gxaojp','onturnleft-riffle',-103,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('w0cnbjuj6axt7mjt','ondie',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('w1jj1n6wx099hmqt','onrunstrafeleft-riffle',-108,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('xe6ovc180f1wd6ul','onwalkbackwards-riffle',-102,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('xprqbdxhq5mk1jiy','onwalkbackwards-swim',7,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('y756fjgq7vq4cbl2','onstrafeleft',47,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('ym6zgcbjq127umis','onwait',100,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('z869qu3w7ecjnodv','onrunturnleft',38,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+					('zhgtra63v3v1m04m','onwalkbackwards',49,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);");
+				}
+				
+				/* Update 3.4.3 - populate the additional fields in the useravataranimations table where needed */
+				$zresults = $wtwdb->query("
+					select ua1.*,
+						a1.loadpriority as defloadpriority,
+						a1.animationevent as defanimationevent,
+						a1.animationfriendlyname as defanimationfriendlyname,
+						a1.animationicon as defanimationicon,
+						a1.objectfolder as defobjectfolder,
+						a1.objectfile as defobjectfile,
+						a1.startframe as defstartframe,
+						a1.endframe as defendframe,
+						a1.animationloop as defanimationloop,
+						a1.speedratio as defspeedratio,
+						a1.soundid as defsoundid,
+						a1.soundmaxdistance as defsoundmaxdistance
+					from ".wtw_tableprefix."useravataranimations ua1
+						left join ".wtw_tableprefix."avataranimations a1
+						on ua1.avataranimationid = a1.avataranimationid
+					where ua1.deleted=0
+						and ua1.endframe=0
+						and ua1.objectfile=''
+					order by ua1.useravatarid, ua1.useravataranimationid;");
+				foreach ($zresults as $zrow) {
+					$zloadpriority = 0;
+					$zzstartframe = 0;
+					$zendframe = 0;
+					$zanimationloop = 1;
+					$zspeedratio = 1;
+					$zsoundmaxdistance = 100;
+					if (isset($zrow["defloadpriority"]) && !empty($zrow["defloadpriority"])) {
+						$zloadpriority = $zrow["defloadpriority"];
+					}
+					if (isset($zrow["defstartframe"]) && !empty($zrow["defstartframe"])) {
+						$zstartframe = $zrow["defstartframe"];
+					}
+					if (isset($zrow["defendframe"]) && !empty($zrow["defendframe"])) {
+						$zendframe = $zrow["defendframe"];
+					}
+					if (isset($zrow["defanimationloop"]) && !empty($zrow["defanimationloop"])) {
+						$zanimationloop = $zrow["defanimationloop"];
+					}
+					if (isset($zrow["defspeedratio"]) && !empty($zrow["defspeedratio"])) {
+						$zspeedratio = $zrow["defspeedratio"];
+					}
+					if (isset($zrow["defsoundmaxdistance"]) && !empty($zrow["defsoundmaxdistance"])) {
+						$zsoundmaxdistance = $zrow["defsoundmaxdistance"];
+					}
+					$wtwdb->query("
+						update ".wtw_tableprefix."useravataranimations
+						set loadpriority=".$zloadpriority.",
+							animationevent='".$zrow["defanimationevent"]."',
+							animationfriendlyname='".$zrow["defanimationfriendlyname"]."',
+							animationicon='".$zrow["defanimationicon"]."',
+							objectfolder='".$zrow["defobjectfolder"]."',
+							objectfile='".$zrow["defobjectfile"]."',
+							startframe=".$zstartframe.",
+							endframe=".$zendframe.",
+							animationloop=".$zanimationloop.",
+							speedratio=".$zspeedratio.",
+							soundid='".$zrow["defsoundid"]."',
+							soundmaxdistance=".$zsoundmaxdistance."
+						where useravataranimationid='".$zrow["useravataranimationid"]."'
+						limit 1;");
+				}
+
+				/* update 3.4.3 - add the missing animations for each avatarid in useravatars */
+				$zresults = $wtwdb->query("
+					select aa1.*,
+						ua1.useravatarid,
+						uaa1.useravataranimationid
+					from ".wtw_tableprefix."avataranimations aa1
+						inner join ".wtw_tableprefix."avatars a1
+						on aa1.avatarid = a1.avatarid
+						left join ".wtw_tableprefix."useravatars ua1
+						on ua1.avatarid = a1.avatarid
+						left join ".wtw_tableprefix."useravataranimations uaa1
+						on ua1.useravatarid = uaa1.useravatarid
+						and uaa1.avataranimationid = aa1.avataranimationid
+					where aa1.deleted=0
+						and ua1.useravatarid is not null
+						and uaa1.useravataranimationid is null
+					order by avatarid, useravatarid, loadpriority desc, avataranimationid;
+				");
+				foreach ($zresults as $zrow) {
+					$zuseravataranimationid = $wtwdb->getRandomString(16,1);
+					$zloadpriority = 0;
+					$zzstartframe = 0;
+					$zendframe = 0;
+					$zanimationloop = 1;
+					$zspeedratio = 1;
+					$zsoundmaxdistance = 100;
+					if (isset($zrow["loadpriority"]) && !empty($zrow["loadpriority"])) {
+						$zloadpriority = $zrow["loadpriority"];
+					}
+					if (isset($zrow["startframe"]) && !empty($zrow["startframe"])) {
+						$zstartframe = $zrow["startframe"];
+					}
+					if (isset($zrow["endframe"]) && !empty($zrow["endframe"])) {
+						$zendframe = $zrow["endframe"];
+					}
+					if (isset($zrow["animationloop"]) && !empty($zrow["animationloop"])) {
+						$zanimationloop = $zrow["animationloop"];
+					}
+					if (isset($zrow["defspeedratio"]) && !empty($zrow["speedratio"])) {
+						$zspeedratio = $zrow["speedratio"];
+					}
+					if (isset($zrow["soundmaxdistance"]) && !empty($zrow["soundmaxdistance"])) {
+						$zsoundmaxdistance = $zrow["soundmaxdistance"];
+					}
+					$wtwdb->query("
+						insert into ".wtw_tableprefix."useravataranimations
+						   (useravataranimationid,
+							avataranimationid,
+							useravatarid,
+							loadpriority,
+							animationevent,
+							animationfriendlyname,
+							animationicon,
+							objectfolder,
+							objectfile,
+							startframe,
+							endframe,
+							animationloop,
+							speedratio,
+							walkspeed,
+							soundid,
+							soundmaxdistance,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						  values
+						   ('".$zuseravataranimationid."',
+							'".$zrow["avataranimationid"]."',
+							'".$zrow["useravatarid"]."',
+							".$zloadpriority.",
+							'".$zrow["animationevent"]."',
+							'".$zrow["animationfriendlyname"]."',
+							'".$zrow["animationicon"]."',
+							'".$zrow["objectfolder"]."',
+							'".$zrow["objectfile"]."',
+							".$zstartframe.",
+							".$zendframe.",
+							".$zanimationloop.",
+							".$zspeedratio.",
+							1,
+							'".$zrow["soundid"]."',
+							".$zsoundmaxdistance.",
+							'".$ztimestamp."',
+							'".$zuserid."',
+							'".$ztimestamp."',
+							'".$zuserid."');
+					");
+				}
+				
+				/* Updated 3.4.3 - user avatars now have their own folders on the server for all of the related files */
+				$wtwdb->checkContentFolders('', '', '', '');
+				$zresults = $wtwdb->query("
+					select ua1.*,
+						a1.rotationx as defrotationx,
+						a1.rotationy as defrotationy,
+						a1.rotationz as defrotationz,
+						a1.startframe as defstartframe,
+						a1.endframe as defendframe
+					from ".wtw_tableprefix."useravatars ua1
+						left join ".wtw_tableprefix."avatars a1
+						on ua1.avatarid=a1.avatarid
+					where ua1.objectfolder like '%/avatars/%'
+					order by ua1.useravatarid;");
+				foreach ($zresults as $zrow) {
+					$zsourcefolder = wtw_rootpath.$zrow["objectfolder"];
+					$zdestinationfolder = $wtwdb->contentpath."/uploads/useravatars/".$zrow["useravatarid"];
+
+					if (strpos($zsourcefolder,$zrow["avatarid"]) === false) {
+						if (file_exists($wtwdb->contentpath."/uploads/avatars/".$zrow["avatarid"])) {
+							$zsourcefolder = $wtwdb->contentpath."/uploads/avatars/".$zrow["avatarid"];
+						}
+					}
+					$zsourcefolder = rtrim($zsourcefolder, "/");
+
+					if (!file_exists($zdestinationfolder)) {
+						/* if folder does not exit, create it and copy the files into it */
+						/* this is a safe guard, so existing folders will not be overwritten (usually means is it already complete) */
+						mkdir($zdestinationfolder, octdec(wtw_chmod), true);
+						chmod($zdestinationfolder, octdec(wtw_chmod));
+						$wtwdb->copyContentSubFolderRecursive($zsourcefolder, $zdestinationfolder);
+					}
+					
+					$wtwdb->query("
+						update ".wtw_tableprefix."useravatars
+						set objectfolder='/content/uploads/useravatars/".$zrow["useravatarid"]."/',
+							rotationx=".$zrow["defrotationx"].",
+							rotationy=".$zrow["defrotationy"].",
+							rotationz=".$zrow["defrotationz"].",
+							startframe=".$zrow["defstartframe"].",
+							endframe=".$zrow["defendframe"].",
+							updatedate='".$ztimestamp."',
+							updateuserid='".$zuserid."'
+						where useravatarid='".$zrow["useravatarid"]."'
+						limit 1;");
+					
+					/* update the related avatar animations */
+					$wtwdb->query("
+						update ".wtw_tableprefix."useravataranimations
+						set objectfolder='/content/uploads/useravatars/".$zrow["useravatarid"]."/animations/',
+							updatedate='".$ztimestamp."',
+							updateuserid='".$zuserid."'
+						where useravatarid='".$zrow["useravatarid"]."';");
+				}
+				
+				/* updated 3.4.5 and 3.4.6 and 3.4.13 - added version id, version, versionorder, and version description fields - populate version id and version where blank */
+				$wtwdb->query("
+					update ".wtw_tableprefix."avatars
+					set versionid=avatarid,
+						version='1.0.0',
+						versionorder=1000000,
+						versiondesc='Initial Version',
+						updatedate='".$ztimestamp."',
+						updateuserid='".$zuserid."'
+					where versionid='';
+				");
+				$wtwdb->query("
+					update ".wtw_tableprefix."communities
+					set versionid=communityid,
+						version='1.0.0',
+						versionorder=1000000,
+						versiondesc='Initial Version',
+						updatedate='".$ztimestamp."',
+						updateuserid='".$zuserid."'
+					where versionid='';
+				");
+				$wtwdb->query("
+					update ".wtw_tableprefix."buildings
+					set versionid=buildingid,
+						version='1.0.0',
+						versionorder=1000000,
+						versiondesc='Initial Version',
+						updatedate='".$ztimestamp."',
+						updateuserid='".$zuserid."'
+					where versionid='';
+				");
+				$wtwdb->query("
+					update ".wtw_tableprefix."things
+					set versionid=thingid,
+						version='1.0.0',
+						versionorder=1000000,
+						versiondesc='Initial Version',
+						updatedate='".$ztimestamp."',
+						updateuserid='".$zuserid."'
+					where versionid='';
+				");
 				$wtwdb->query("
 					update ".wtw_tableprefix."useravatars
-					set objectfolder='/content/uploads/useravatars/".$zrow["useravatarid"]."/',
-						rotationx=".$zrow["defrotationx"].",
-						rotationy=".$zrow["defrotationy"].",
-						rotationz=".$zrow["defrotationz"].",
-						startframe=".$zrow["defstartframe"].",
-						endframe=".$zrow["defendframe"].",
+					set versionid=avatarid,
+						version='1.0.0',
+						versionorder=1000000,
+						versiondesc='Initial Version'
 						updatedate='".$ztimestamp."',
 						updateuserid='".$zuserid."'
-					where useravatarid='".$zrow["useravatarid"]."'
-					limit 1;");
+					where versionid='';
+				");
+				$wtwdb->query("
+					update ".wtw_tableprefix."uploadobjects
+					set versionid=uploadobjectid,
+						versiondesc='Initial Version'
+					where versiondesc=''
+						and not uploadobjectid='';
+				");
 				
-				/* update the related avatar animations */
-				$wtwdb->query("
-					update ".wtw_tableprefix."useravataranimations
-					set objectfolder='/content/uploads/useravatars/".$zrow["useravatarid"]."/animations/',
-						updatedate='".$ztimestamp."',
-						updateuserid='".$zuserid."'
-					where useravatarid='".$zrow["useravatarid"]."';");
+				/* updated 3.4.14 - added mic support - mic icon added to main menu */
+				$zresults = $wtwdb->query("
+					select menuitemid 
+					from ".wtw_tableprefix."menuitems 
+					where menuitemname='wtw_menumic'
+						and deleted=0;
+				");
+				if (empty(count($zresults))) {
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."menuitems 
+						(menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES 
+						('wtw_menumic','Mic On','main','right',-980,1,'','/content/system/images/menumicoff32.png','WTW.toggleMicMute','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
+					");			
+				}
 			}
-			
-			/* updated 3.4.5 and 3.4.6 and 3.4.13 - added version id, version, versionorder, and version description fields - populate version id and version where blank */
-			$wtwdb->query("
-				update ".wtw_tableprefix."avatars
-				set versionid=avatarid,
-					version='1.0.0',
-					versionorder=1000000,
-					versiondesc='Initial Version',
-					updatedate='".$ztimestamp."',
-					updateuserid='".$zuserid."'
-				where versionid='';
-			");
-			$wtwdb->query("
-				update ".wtw_tableprefix."communities
-				set versionid=communityid,
-					version='1.0.0',
-					versionorder=1000000,
-					versiondesc='Initial Version',
-					updatedate='".$ztimestamp."',
-					updateuserid='".$zuserid."'
-				where versionid='';
-			");
-			$wtwdb->query("
-				update ".wtw_tableprefix."buildings
-				set versionid=buildingid,
-					version='1.0.0',
-					versionorder=1000000,
-					versiondesc='Initial Version',
-					updatedate='".$ztimestamp."',
-					updateuserid='".$zuserid."'
-				where versionid='';
-			");
-			$wtwdb->query("
-				update ".wtw_tableprefix."things
-				set versionid=thingid,
-					version='1.0.0',
-					versionorder=1000000,
-					versiondesc='Initial Version',
-					updatedate='".$ztimestamp."',
-					updateuserid='".$zuserid."'
-				where versionid='';
-			");
-			$wtwdb->query("
-				update ".wtw_tableprefix."useravatars
-				set versionid=avatarid,
-					version='1.0.0',
-					versionorder=1000000,
-					versiondesc='Initial Version'
-					updatedate='".$ztimestamp."',
-					updateuserid='".$zuserid."'
-				where versionid='';
-			");
-			$wtwdb->query("
-				update ".wtw_tableprefix."uploadobjects
-				set versionid=uploadobjectid,
-					versiondesc='Initial Version'
-				where versiondesc=''
-					and not uploadobjectid='';
-			");
-			
-			/* updated 3.4.14 - added mic support - mic icon added to main menu */
-			$zresults = $wtwdb->query("
-				select menuitemid 
-				from ".wtw_tableprefix."menuitems 
-				where menuitemname='wtw_menumic'
-					and deleted=0;
-			");
-			if (empty(count($zresults))) {
-				$wtwdb->query("
-					INSERT INTO ".wtw_tableprefix."menuitems 
-					(menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
-					VALUES 
-					('wtw_menumic','Mic On','main','right',-980,1,'','/content/system/images/menumicoff32.png','WTW.toggleMicMute','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
-				");			
-			}
-			
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 		} catch (Exception $e) {
 			$wtw->serror("core-functions-tabledefs.php-checkDBVersionData=".$e->getMessage());

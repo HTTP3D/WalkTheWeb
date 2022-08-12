@@ -52,9 +52,9 @@ class wtwuploads {
 	}
 	
 	/* expose functions to this class from other functions so that the original function is only updated in one place */
-	public function getSetting($zsettingname) {
+	public function getSetting($zsettingname, $zdefaultvalue) {
 		global $wtwhandlers;
-		return $wtwhandlers->getSetting($zsettingname);
+		return $wtwhandlers->getSetting($zsettingname, $zdefaultvalue);
 	}
 
 	public function getSettings($zsettingnames) {
@@ -1111,35 +1111,211 @@ class wtwuploads {
 		}
 		return $zkey;
 	}
-
-	public function saveWebAlias($zwebaliasid,$zforcehttps,$zdomainname,$zcommunitypublishname,$zbuildingpublishname,$zthingpublishname,$zcommunityid,$zbuildingid,$zthingid) {
-		/* updates the web alias from the admin menu settings page */
+	
+	public function saveWebDomain($zoldwebdomainid, $zforcehttps, $zdomainname, $zstartdate, $zexpiredate, $zallowhosting, $zhostprice, $zsslprice, $zhostdays) {
+		/* updates the web domain from the admin menu settings page */
+		global $wtwhandlers;
+		$zsuccess = false;
+		try {
+			$zwebdomainid = "";
+			$zhostuserid = '';
+			if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+				$zhostuserid = $wtwhandlers->userid;
+			}
+			if (isset($zdomainname) && !empty($zdomainname)) {
+				/* check to see if web domain is already in use */
+				$zresponse = $wtwhandlers->query("
+					select * from ".wtw_tableprefix."webdomains
+					where lower(domainname)=lower('".$zdomainname."')
+					limit 1;");
+				if (count($zresponse) > 0) {
+					foreach ($zresponse as $zrow) {
+						$zwebdomainid = $zrow["webdomainid"];
+					}
+				} else {
+					/* check if passed webdomainid exists */
+					$zresponse = $wtwhandlers->query("
+						select * from ".wtw_tableprefix."webdomains
+						where webdomainid='".$zwebdomainid."'
+							and not webdomainid=''
+						limit 1;");
+					if (count($zresponse) == 0) {
+						$zwebdomainid = "";
+					}
+				}
+				
+				if ($wtwhandlers->isUserInRole("Admin") || $wtwhandlers->isUserInRole("Host")) {
+					/* validate data */
+					$zforcehttps = $wtwhandlers->checkNumber($zforcehttps, 0);
+					$zstartdate = $wtwhandlers->prepCheckDate($zstartdate);
+					$zexpiredate = $wtwhandlers->prepCheckDate($zexpiredate);
+					$zallowhosting = $wtwhandlers->checkNumber($zallowhosting, 0);
+					$zhostprice = $wtwhandlers->checkNumber($zhostprice, 0);
+					$zsslprice = $wtwhandlers->checkNumber($zsslprice, 0);
+					$zhostdays = $wtwhandlers->checkNumber($zhostdays, 365);
+					if ($zforcehttps != 1) {
+						$zforcehttps = 0;
+					}
+					/* update or insert new webdomain */
+					if (empty($zwebdomainid) || !isset($zwebdomainid)) {
+						$zwebdomainid = $wtwhandlers->getRandomString(16,1);
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."webdomains
+							   (webdomainid,
+								hostuserid,
+								forcehttps,
+								domainname,
+								startdate,
+								expiredate,
+								allowhosting,
+								hostprice,
+								sslprice,
+								hostdays,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$zwebdomainid."',
+								'".$zhostuserid."',
+								".$zforcehttps.",
+								'".$zdomainname."',
+								".$zstartdate.",
+								".$zexpiredate.",
+								".$zallowhosting.",
+								".$zhostprice.",
+								".$zsslprice.",
+								".$zhostdays.",
+								now(),
+								'".$wtwhandlers->userid."',
+								now(),
+								'".$wtwhandlers->userid."');");
+					} else {
+						if ($wtwhandlers->isUserInRole("Admin")) {
+							$wtwhandlers->query("
+								update ".wtw_tableprefix."webdomains
+								set forcehttps=".$zforcehttps.",
+									domainname='".$zdomainname."',
+									startdate=".$zstartdate.",
+									expiredate=".$zexpiredate.",
+									allowhosting=".$zallowhosting.",
+									hostprice=".$zhostprice.",
+									sslprice=".$zsslprice.",
+									hostdays=".$zhostdays.",
+									updatedate=now(),
+									updateuserid='".$wtwhandlers->userid."',
+									deleteddate=null,
+									deleteduserid='',
+									deleted=0
+								where webdomainid='".$zwebdomainid."'
+								limit 1;");
+						} else {
+							$wtwhandlers->query("
+								update ".wtw_tableprefix."webdomains
+								set forcehttps=".$zforcehttps.",
+									domainname='".$zdomainname."',
+									startdate=".$zstartdate.",
+									expiredate=".$zexpiredate.",
+									hostprice=".$zhostprice.",
+									sslprice=".$zsslprice.",
+									hostdays=".$zhostdays.",
+									updatedate=now(),
+									updateuserid='".$wtwhandlers->userid."',
+									deleteddate=null,
+									deleteduserid='',
+									deleted=0
+								where webdomainid='".$zwebdomainid."'
+									and hostuserid='".$zhostuserid."'
+									and not hostuserid=''
+								limit 1;");
+						}
+					}
+					$zsuccess = true;
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-saveWebDomain=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+	
+	public function deleteWebDomain($zwebdomainid) {
+		/* sets the deleted flag for a web domain */
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
 			if ($wtwhandlers->isUserInRole("Admin")) {
-				/* check to see if web alias is already in use - if so - update it */
+				/* mark webdomain as deleted */
+				if (!empty($zwebdomainid) && isset($zwebdomainid)) {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."webdomains
+						set deleteddate=now(),
+							deleteduserid='".$wtwhandlers->userid."',
+							deleted=1
+						where webdomainid='".$zwebdomainid."'
+						limit 1;");
+				}
+				$zsuccess = true;
+			} else if ($wtwhandlers->isUserInRole("Host")) {
+				$zhostuserid = $wtwhandlers->userid;
+				/* mark webdomain as deleted */
+				if (!empty($zwebdomainid) && isset($zwebdomainid)) {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."webdomains
+						set deleteddate=now(),
+							deleteduserid='".$wtwhandlers->userid."',
+							deleted=1
+						where webdomainid='".$zwebdomainid."'
+							and hostuserid='".$zhostuserid."'
+							and not hostuserid=''
+						limit 1;");
+				}
+				$zsuccess = true;
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-deleteWebDomain=".$e->getMessage());
+		}
+		return $zsuccess;
+	}
+	
+	public function saveWebAlias($zoldwebaliasid,$zforcehttps,$zdomainname,$zcommunitypublishname,$zbuildingpublishname,$zthingpublishname,$zcommunityid,$zbuildingid,$zthingid) {
+		/* updates the web alias from the admin menu settings page */
+		global $wtwhandlers;
+		$zsuccess = false;
+		try {
+			$zwebaliasid = "";
+			$zhostuserid = '';
+			if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+				$zhostuserid = $wtwhandlers->userid;
+			}
+			/* check to see if web alias is already in use */
+			$zresponse = $wtwhandlers->query("
+				select * from ".wtw_tableprefix."webaliases
+				where lower(domainname)=lower('".$zdomainname."')
+					and lower(communitypublishname)=lower('".$zcommunitypublishname."')
+					and lower(buildingpublishname)=lower('".$zbuildingpublishname."')
+					and lower(thingpublishname)=lower('".$zthingpublishname."')
+				limit 1;");
+			if (count($zresponse) > 0) {
+				foreach ($zresponse as $zrow) {
+					$zwebaliasid = $zrow["webaliasid"];
+				}
+			} else {
+				/* check if passed webaliasid exists */
 				$zresponse = $wtwhandlers->query("
 					select * from ".wtw_tableprefix."webaliases
-					where lower(domainname)=lower('".$zdomainname."')
-						and lower(communitypublishname)=lower('".$zcommunitypublishname."')
-						and lower(buildingpublishname)=lower('".$zbuildingpublishname."')
-						and lower(thingpublishname)=lower('".$zthingpublishname."')
+					where webaliasid='".$zwebaliasid."'
+						and not webaliasid=''
 					limit 1;");
-				if (count($zresponse) > 0) {
-					foreach ($zresponse as $zrow) {
-						$zwebaliasid = $zrow["webaliasid"];
-					}
-				} else {
-					/* check if passed webaliasid exists */
-					$zresponse = $wtwhandlers->query("
-						select * from ".wtw_tableprefix."webaliases
-						where webaliasid='".$zwebaliasid."'
-							and not webaliasid=''
-						limit 1;");
-					if (count($zresponse) == 0) {
-						$zwebaliasid = "";
-					}
+				if (count($zresponse) == 0) {
+					$zwebaliasid = "";
+				}
+			}
+			
+			if ($wtwhandlers->isUserInRole("Admin") || $wtwhandlers->isUserInRole("Host")) {
+				$zforcehttps = $wtwhandlers->checkNumber($zforcehttps, 0);
+				if ($zforcehttps != 1) {
+					$zforcehttps = 0;
 				}
 				/* update or insert new webalias */
 				if (empty($zwebaliasid) || !isset($zwebaliasid)) {
@@ -1147,6 +1323,7 @@ class wtwuploads {
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."webaliases
 						   (webaliasid,
+						    hostuserid,
 							forcehttps,
 							domainname,
 							webalias,
@@ -1162,6 +1339,7 @@ class wtwuploads {
 							updateuserid)
 						values
 						   ('".$zwebaliasid."',
+						    '".$zhostuserid."',
 							".$zforcehttps.",
 							'".$zdomainname."',
 							'".$zdomainname."',
@@ -1176,24 +1354,47 @@ class wtwuploads {
 							now(),
 							'".$wtwhandlers->userid."');");
 				} else {
-					$wtwhandlers->query("
-						update ".wtw_tableprefix."webaliases
-						set forcehttps=".$zforcehttps.",
-							domainname='".$zdomainname."',
-							webalias='".$zdomainname."',
-							communityid='".$zcommunityid."',
-							communitypublishname='".$zcommunitypublishname."',
-							buildingid='".$zbuildingid."',
-							buildingpublishname='".$zbuildingpublishname."',
-							thingid='".$zthingid."',
-							thingpublishname='".$zthingpublishname."',
-							updatedate=now(),
-							updateuserid='".$wtwhandlers->userid."',
-							deleteddate=null,
-							deleteduserid='',
-							deleted=0
-						where webaliasid='".$zwebaliasid."'
-						limit 1;");
+					if ($wtwhandlers->isUserInRole("Admin")) {
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."webaliases
+							set forcehttps=".$zforcehttps.",
+								domainname='".$zdomainname."',
+								webalias='".$zdomainname."',
+								communityid='".$zcommunityid."',
+								communitypublishname='".$zcommunitypublishname."',
+								buildingid='".$zbuildingid."',
+								buildingpublishname='".$zbuildingpublishname."',
+								thingid='".$zthingid."',
+								thingpublishname='".$zthingpublishname."',
+								updatedate=now(),
+								updateuserid='".$wtwhandlers->userid."',
+								deleteddate=null,
+								deleteduserid='',
+								deleted=0
+							where webaliasid='".$zwebaliasid."'
+							limit 1;");
+					} else {
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."webaliases
+							set forcehttps=".$zforcehttps.",
+								domainname='".$zdomainname."',
+								webalias='".$zdomainname."',
+								communityid='".$zcommunityid."',
+								communitypublishname='".$zcommunitypublishname."',
+								buildingid='".$zbuildingid."',
+								buildingpublishname='".$zbuildingpublishname."',
+								thingid='".$zthingid."',
+								thingpublishname='".$zthingpublishname."',
+								updatedate=now(),
+								updateuserid='".$wtwhandlers->userid."',
+								deleteddate=null,
+								deleteduserid='',
+								deleted=0
+							where webaliasid='".$zwebaliasid."'
+								and hostuserid='".$zhostuserid."'
+								and not hostuserid=''
+							limit 1;");
+					}
 				}
 				$zsuccess = true;
 			}
@@ -1209,7 +1410,7 @@ class wtwuploads {
 		$zsuccess = false;
 		try {
 			if ($wtwhandlers->isUserInRole("Admin")) {
-				/* update or insert new webalias */
+				/* mark webalias as deleted */
 				if (!empty($zwebaliasid) && isset($zwebaliasid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."webaliases
@@ -1217,6 +1418,21 @@ class wtwuploads {
 							deleteduserid='".$wtwhandlers->userid."',
 							deleted=1
 						where webaliasid='".$zwebaliasid."'
+						limit 1;");
+				}
+				$zsuccess = true;
+			} else if ($wtwhandlers->isUserInRole("Host")) {
+				$zhostuserid = $wtwhandlers->userid;
+				/* mark webalias as deleted */
+				if (!empty($zwebaliasid) && isset($zwebaliasid)) {
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."webaliases
+						set deleteddate=now(),
+							deleteduserid='".$wtwhandlers->userid."',
+							deleted=1
+						where webaliasid='".$zwebaliasid."'
+							and hostuserid='".$zhostuserid."'
+							and not hostuserid=''
 						limit 1;");
 				}
 				$zsuccess = true;

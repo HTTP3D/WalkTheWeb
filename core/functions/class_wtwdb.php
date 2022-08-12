@@ -841,7 +841,7 @@ class wtwdb {
 	public function isUserInRole($zrole) {
 		$zsuccess = false;
 		try {
-			$this->getSessionUserID();
+			$zuserid = $this->getSessionUserID();
 			$zresults = $this->query("
 				select ur1.userinroleid 
 				from ".wtw_tableprefix."usersinroles ur1
@@ -850,6 +850,7 @@ class wtwdb {
 					inner join ".wtw_tableprefix."users u1
 					on ur1.userid=u1.userid
 				where lower(r1.rolename)=lower('".$zrole."')
+					and u1.userid='".$zuserid."'
 					and r1.deleted=0
 					and ur1.deleted=0
 					and u1.deleted=0;");
@@ -1104,8 +1105,8 @@ class wtwdb {
 		return $zratingtext;
 	}
 	
-	public function getSetting($zsettingname) {
-		$zsettingvalue = "";
+	public function getSetting($zsettingname, $zdefaultvalue = null) {
+		$zsettingvalue = $zdefaultvalue;
 		try {
 			$zresults = $this->query("
 				select * 
@@ -1307,6 +1308,7 @@ class wtwdb {
 		$zcheckval = $zdefaultval;
 		try {
 			if (isset($zval)) {
+				$zval = str_replace(",","",str_replace(" ","",str_replace("$","", $zval)));
 				if (is_numeric($zval)) {
 					$zcheckval = $zval;
 				}
@@ -1418,13 +1420,13 @@ class wtwdb {
 			$zdatepart  = explode('/', $zdate);
 			if (count($zdatepart) == 3) {
 				if (checkdate($zdatepart[0], $zdatepart[1], $zdatepart[2])) {
-					$zdatestring = "'".$zdate."'";
+					$zdatestring = "'".$zdatepart[2]."-".$zdatepart[1]."-".$zdatepart[0]."'";
 				}
 			} else {
 				$zformat = 'Y-m-d H:i:s';
 				$zvaliddate = DateTime::createFromFormat($zformat, $zdate);
 				if ($zvaliddate && $zvaliddate->format($zformat) == $zdate) {
-					$zdatestring = "'".$zdate."'";
+					$zdatestring = "'".$zvaliddate."'";
 				}
 			}
 			if (empty($zdatestring)) {
@@ -1434,6 +1436,37 @@ class wtwdb {
 			$this->serror("core-functions-class_wtwdb.php-prepCheckDate=".$e->getMessage());
 		}			
 		return $zdatestring;
+	}
+
+	public function formatDate($zdate) {
+		/* returns mm/dd/yyyy */
+		$zdatestring = "";
+		try {
+			if (isset($zdate) && !empty($zdate)) {
+				$zformat = 'm/d/Y';
+				$zdate = date_create($zdate);
+				$zdatestring = date_format($zdate,$zformat);
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-formatDate=".$e->getMessage());
+		}			
+		return $zdatestring;
+	}
+	
+	public function formatMoney($znumber) {
+		/* returns $##,###.## format */
+		$zmoneystring = "";
+		try {
+			if (isset($znumber) && !empty($znumber)) {
+				$znumber = str_replace(",","",str_replace("$","",str_replace(" ","",$znumber)));
+				if (is_numeric($znumber)) {
+					$zmoneystring = "$".number_format($znumber, 2, '.', ',');
+				}
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-formatMoney=".$e->getMessage());
+		}			
+		return $zmoneystring;
 	}
 	
 	public function escapeHTML($ztext) {

@@ -163,21 +163,6 @@ html, body {
 	font-size:.7em;
 	color:#afafaf;
 }
-table.wtw-table {
-	width:100%;
-	border-collapse: collapse;
-}
-td.wtw-tablecolumnheading {
-	min-height:38px;
-	font-weight:bold;
-	border-bottom:2px solid #000000;
-	padding:5px;
-}
-td.wtw-tablecolumns {
-	min-height:38px;
-	border-bottom:1px solid #375377;
-	padding:5px;
-}
 .wtw-active {
 	font-weight:bold;
 	font-size:1.2em;
@@ -347,6 +332,17 @@ td.wtw-tddeactive {
 }
 .wtw-biglistleft {
 	float:left;
+	margin-left:10px;
+	font-weight: bold;
+	color: #000000;
+	font-size: 1.2em;
+	margin-bottom: 2px;
+	background-color:transparent;
+	min-height:32px;
+}
+.wtw-biglistcenter {
+	width:100%;
+	text-align:center;
 	margin-left:10px;
 	font-weight: bold;
 	color: #000000;

@@ -267,9 +267,9 @@ class wtwhandlers {
 		return $wtwdb->checkAdminAccess($zcommunityid, $zbuildingid, $zthingid);
 	}
 
-	public function getSetting($zsettingname) {
+	public function getSetting($zsettingname, $zdefaultvalue) {
 		global $wtwdb;
-		return $wtwdb->getSetting($zsettingname);
+		return $wtwdb->getSetting($zsettingname, $zdefaultvalue);
 	}
 
 	public function saveSetting($zsettingname, $zsettingvalue) {
@@ -346,6 +346,18 @@ class wtwhandlers {
 		/* returns either 'dateformatted' or NULL - ready to be used in SQL */
 		global $wtwdb;
 		return $wtwdb->prepCheckDate($zdate);
+	}
+
+	public function formatDate($zdate) {
+		/* returns mm/dd/yyyy */
+		global $wtwdb;
+		return $wtwdb->formatDate($zdate);
+	}
+	
+	public function formatMoney($znumber) {
+		/* returns $##,###.## */
+		global $wtwdb;
+		return $wtwdb->formatMoney($znumber);
 	}
 
 	public function escapeHTML($ztext) {

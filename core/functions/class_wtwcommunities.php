@@ -5386,6 +5386,10 @@ class wtwcommunities {
 		/* imports community settings from the media library when you download a community */
 		global $wtwhandlers;
 		try {
+			$zhostuserid = '';
+			if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+				$zhostuserid = $wtwhandlers->userid;
+			}
 			/* ini_set('max_execution_time', 300); */
 			if (!empty($wtwhandlers->getSessionUserID())) {
 				if ($wtwhandlers->keyExists('communities', 'communityid', $zcommunityid) == false) {
@@ -5509,6 +5513,7 @@ class wtwcommunities {
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."webaliases
 							(webaliasid,
+							 hostuserid,
 							 domainname,
 							 communityid,
 							 webalias,
@@ -5519,6 +5524,7 @@ class wtwcommunities {
 							 updateuserid)
 						values
 							('".$zwebaliasid."',
+							 '".$zhostuserid."',
 							 '".$wtwhandlers->domainname."',
 							 '".$zcommunityid."',
 							 '".$wtwhandlers->domainname."',

@@ -39,6 +39,7 @@ class wtwplugins {
 	public $communityid = '';
 	public $buildingid = '';
 	public $thingid = '';
+	public $avatarid = "";
 
 	public function initClass() {
 		/* set the global variables */
@@ -62,6 +63,7 @@ class wtwplugins {
 			$this->communityid = $wtw->communityid;
 			$this->buildingid = $wtw->buildingid;
 			$this->thingid = $wtw->thingid;
+			$this->avatarid = $wtw->avatarid;
 		}
 	}
 	
@@ -157,9 +159,9 @@ class wtwplugins {
 		return $wtwdb->getRandomString($zlength,$zstringtype);
 	}
 
-	public function getSetting($zsettingname) {
+	public function getSetting($zsettingname, $zdefaultvalue) {
 		global $wtwdb;
-		return $wtwdb->getSetting($zsettingname);
+		return $wtwdb->getSetting($zsettingname, $zdefaultvalue);
 	}
 
 	public function saveSetting($zsettingname, $zsettingvalue) {
@@ -228,6 +230,18 @@ class wtwplugins {
 		return $wtwdb->prepCheckDate($zdate);
 	}
 
+	public function formatDate($zdate) {
+		/* returns mm/dd/yyyy */
+		global $wtwdb;
+		return $wtwdb->formatDate($zdate);
+	}
+	
+	public function formatMoney($znumber) {
+		/* returns $##,###.## */
+		global $wtwdb;
+		return $wtwdb->formatMoney($znumber);
+	}
+	
 	public function escapeHTML($text) {
 		global $wtwdb;
 		return $wtwdb->escapeHTML($text);
@@ -961,6 +975,16 @@ class wtwplugins {
 			$jsdata .= "			WTW.log('class_wtw-pluginsBeforeUnload=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
+			
+			$jsdata .= "	WTWJS.prototype.pluginsSaveDomainForm = function(w, zinvoiceid, zdomainname, zinvoicedescription, zinvoicetotal) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('savedomainform');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSaveDomainForm=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+			
+			//
 
 			$jsdata .= "</script>"; 
 		} catch (Exception $e) {

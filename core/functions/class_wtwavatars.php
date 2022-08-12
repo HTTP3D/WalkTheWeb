@@ -791,7 +791,11 @@ class wtwavatars {
 			'serror'=>''
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				$zfoundavatargroupid = '';
 				$zresults = $wtwhandlers->query("
 					select avatargroupid
@@ -809,6 +813,7 @@ class wtwavatars {
 						insert into ".wtw_tableprefix."avatargroups
 						   (avatargroupid,
 						    avatargroup,
+							hostuserid,
 							createdate,
 							createuserid,
 							updatedate,
@@ -816,6 +821,7 @@ class wtwavatars {
 						  values
 						   ('".$zavatargroupid."',
 						    '".$zavatargroup."',
+							'".$zhostuserid."',
 							now(),
 							'".$wtwhandlers->userid."',
 							now(),
@@ -828,6 +834,8 @@ class wtwavatars {
 							updatedate=now(),
 							updateuserid='".$wtwhandlers->userid."'
 						where avatargroupid='".$zavatargroupid."'
+							and (hostuserid='".$zhostuserid."'
+								or hostuserid='')
 						limit 1;
 					");
 				}
@@ -852,13 +860,19 @@ class wtwavatars {
 			'serror'=>''
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."avatargroups
 					set deleteddate=now(),
 						deleteduserid='".$wtwhandlers->userid."',
 						deleted=1
 					where avatargroupid='".$zavatargroupid."'
+						and (hostuserid='".$zhostuserid."'
+							or createuserid='".$wtwhandlers->userid."')
 					limit 1;
 				");
 			} else {
@@ -883,13 +897,20 @@ class wtwavatars {
 			'avatargroups'=>array()
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				$zresults = $wtwhandlers->query("
 					select avatargroupid,
-						avatargroup
+						avatargroup,
+						hostuserid
 					from ".wtw_tableprefix."avatargroups
 					where deleted=0
-					order by avatargroup, avatargroupid;
+						and (hostuserid='".$zhostuserid."'
+							or hostuserid='')
+					order by hostuserid desc, avatargroup, avatargroupid;
 				");
 				$zresponse = array(
 					'serror'=>'',
@@ -918,7 +939,7 @@ class wtwavatars {
 			'serror'=>''
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zfoundanimationeventid = '';
 				if (!isset($zloadpriority)) {
 					$zloadpriority = 0;
@@ -987,7 +1008,7 @@ class wtwavatars {
 			'serror'=>''
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."avataranimationevents
 					set deleteddate=now(),
@@ -1018,7 +1039,7 @@ class wtwavatars {
 			'animationevents'=>array()
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zresults = $wtwhandlers->query("
 					select animationeventid,
 						animationevent, loadpriority
@@ -1054,7 +1075,11 @@ class wtwavatars {
 			'avatarid'=>$zavatarid
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				$zfoundavatarid = '';
 				$zresults = $wtwhandlers->query("
 					select avatarid
@@ -1071,6 +1096,8 @@ class wtwavatars {
 						updatedate=now(),
 						updateuserid='".$wtwhandlers->userid."'
 					where avatarid='".$zavatarid."'
+						and (hostuserid='".$zhostuserid."'
+							or createuserid='".$wtwhandlers->userid."')
 					limit 1;
 				");
 			} else {
@@ -1097,7 +1124,11 @@ class wtwavatars {
 			'avatarid'=>''
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				$znewavatarid = $wtwhandlers->getRandomString(16,1);
 				$zobjectfolder = "/content/uploads/avatars/".$zavatarid."/";
 				$znewobjectfolder = "/content/uploads/avatars/".$znewavatarid."/";
@@ -1111,6 +1142,7 @@ class wtwavatars {
 				$wtwhandlers->query("
 					insert into ".wtw_tableprefix."avatars
 					   (avatarid,
+					    hostuserid,
 					    pastavatarid,
 						versionid,
 						version,
@@ -1144,6 +1176,7 @@ class wtwavatars {
 						updatedate,
 						updateuserid)
 					 select '".$znewavatarid."' as avatarid,
+						'".$zhostuserid."' as hostuserid,
 						'".$zavatarid."' as pastavatarid,
 						versionid,
 						version,
@@ -1340,7 +1373,11 @@ class wtwavatars {
 			'avatarid'=>$zavatarid
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				$zfoundavatarid = '';
 				$zresults = $wtwhandlers->query("
 					select avatarid
@@ -1357,6 +1394,7 @@ class wtwavatars {
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."avatars
 						   (avatarid,
+						    hostuserid,
 						    versionid,
 							version,
 							versionorder,
@@ -1378,6 +1416,7 @@ class wtwavatars {
 							updateuserid)
 						  values
 						   ('".$zavatarid."',
+						    '".$zhostuserid."',
 						    '".$zavatarid."',
 							'1.0.0',
 							1000000,
@@ -1418,6 +1457,8 @@ class wtwavatars {
 							updatedate=now(),
 							updateuserid='".$wtwhandlers->userid."'
 						where avatarid='".$zavatarid."'
+							and (hostuserid='".$zhostuserid."'
+								or createuserid='".$wtwhandlers->userid."')
 						limit 1;
 					");
 				}
@@ -1444,13 +1485,19 @@ class wtwavatars {
 			'serror'=>''
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."avatars
 					set deleteddate=now(),
 						deleteduserid='".$wtwhandlers->userid."',
 						deleted=1
 					where avatarid='".$zavatarid."'
+						and (hostuserid='".$zhostuserid."'
+							or createuserid='".$wtwhandlers->userid."')
 					limit 1;
 				");
 			} else {
@@ -1474,7 +1521,7 @@ class wtwavatars {
 			'serror'=> ''
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zfilepath = wtw_rootpath.$zobjectfolder.$zfilename;
 				if (file_exists($zfilepath)) {
 					unlink($zfilepath);
@@ -1497,7 +1544,11 @@ class wtwavatars {
 			'avatarid'=>$zavatarid
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				$zfoundavatarid = '';
 				$zresults = $wtwhandlers->query("
 					select avatarid
@@ -1514,6 +1565,7 @@ class wtwavatars {
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."avatars
 						   (avatarid,
+						    hostuserid,
 						    versionid,
 							version,
 							versionorder,
@@ -1533,6 +1585,7 @@ class wtwavatars {
 							updateuserid)
 						  values
 						   ('".$zavatarid."',
+						    '".$zhostuserid."',
 						    '".$zavatarid."',
 							'1.0.0',
 							1000000,
@@ -1569,6 +1622,8 @@ class wtwavatars {
 							updatedate=now(),
 							updateuserid='".$wtwhandlers->userid."'
 						where avatarid='".$zavatarid."'
+							and (hostuserid='".$zhostuserid."'
+								or createuserid='".$wtwhandlers->userid."')
 						limit 1;
 					");
 				}
@@ -1597,8 +1652,12 @@ class wtwavatars {
 			'sharehash'=>''
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zfoundavatarid = '';
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
@@ -1661,6 +1720,8 @@ class wtwavatars {
 							updatedate=now(),
 							updateuserid='".$wtwhandlers->userid."'
 						where avatarid='".$zavatarid."'
+							and (hostuserid='".$zhostuserid."'
+								or createuserid='".$wtwhandlers->userid."')
 						limit 1;
 					");
 				}
@@ -1692,7 +1753,7 @@ class wtwavatars {
 			'sharehash'=>''
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zuserid = "";
 				$zfoundavatarid = "";
 				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
@@ -1721,8 +1782,12 @@ class wtwavatars {
 			'avatarid'=>$zavatarid
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zfoundavatarid = '';
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				$zresults = $wtwhandlers->query("
 					select avatarid
 					from ".wtw_tableprefix."avatars
@@ -1738,6 +1803,7 @@ class wtwavatars {
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."avatars
 						   (avatarid,
+						    hostuserid,
 						    versionid,
 							version,
 							versionorder,
@@ -1752,6 +1818,7 @@ class wtwavatars {
 							updateuserid)
 						  values
 						   ('".$zavatarid."',
+						    '".$zhostuserid."',
 						    '".$zavatarid."',
 							'1.0.0',
 							1000000,
@@ -1778,6 +1845,8 @@ class wtwavatars {
 							updatedate=now(),
 							updateuserid='".$wtwhandlers->userid."'
 						where avatarid='".$zavatarid."'
+							and (hostuserid='".$zhostuserid."'
+								or createuserid='".$wtwhandlers->userid."')
 						limit 1;
 					");
 				}
@@ -1805,8 +1874,12 @@ class wtwavatars {
 			'avatarid'=>$zavatarid
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zfoundavatarid = '';
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				$zresults = $wtwhandlers->query("
 					select avatarid
 					from ".wtw_tableprefix."avatars
@@ -1857,6 +1930,8 @@ class wtwavatars {
 							updatedate=now(),
 							updateuserid='".$wtwhandlers->userid."'
 						where avatarid='".$zavatarid."'
+							and (hostuserid='".$zhostuserid."'
+								or createuserid='".$wtwhandlers->userid."')
 						limit 1;
 					");
 				} else {
@@ -1889,7 +1964,7 @@ class wtwavatars {
 			'avatarpartid'=>$zavatarpartid
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				if (empty($zdiffusecolor) || !isset($zdiffusecolor)) {
 					$zdiffusecolor = '#FFFFFF';
 				}
@@ -1985,7 +2060,7 @@ class wtwavatars {
 			'avataranimationid'=>$zavataranimationid
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				if (empty($zloadpriority) || !isset($zloadpriority)) {
 					$zloadpriority = '0';
 				}
@@ -2105,7 +2180,7 @@ class wtwavatars {
 			'serror'=>''
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zfoundavataranimationid = '';
 				$zresults = $wtwhandlers->query("
 					select avataranimationid
@@ -2151,7 +2226,7 @@ class wtwavatars {
 		);
 		try {
 			$wtwhandlers->checkContentFolders('', '', '', '');
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zfilepath = wtw_rootpath.$zobjectfolder;
 				if (!file_exists($zfilepath)) {
 					mkdir($zfilepath, octdec(wtw_chmod), true);
@@ -2227,7 +2302,7 @@ class wtwavatars {
 		);
 		try {
 			$wtwhandlers->checkContentFolders('', '', '', $zavatarid);
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zfilepath = wtw_rootpath.$zobjectfolder;
 				if (!file_exists($zfilepath)) {
 					mkdir($zfilepath, octdec(wtw_chmod), true);
@@ -2309,6 +2384,10 @@ class wtwavatars {
 			$zdomainurl = "";
 			$znewfolder = '';
 			$zurl = '';
+			$zhostuserid = '';
+			if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+				$zhostuserid = $wtwhandlers->userid;
+			}
 			
 			/* allow usertoken authentication */
 			if ((empty($zuserid) || !isset($zuserid)) && !empty($zusertoken) && isset($zusertoken)) {
@@ -2392,6 +2471,7 @@ class wtwavatars {
 					insert into ".wtw_tableprefix."avatars 
 					   (avatarid,
 						pastavatarid,
+						hostuserid,
 						versionid,
 						version,
 						versionorder,
@@ -2428,6 +2508,7 @@ class wtwavatars {
 					values
 					   ('".$znewwebid."',
 						'".$zrequest->avatarid."',
+						'".$zhostuserid."',
 						'".$zrequest->versionid."',
 						'".$zrequest->version."',
 						".$wtwhandlers->checkNumber($zrequest->versionorder,1000000).",
@@ -2480,7 +2561,9 @@ class wtwavatars {
 				$zresults = $wtwhandlers->query("
 					select *  
 					from ".wtw_tableprefix."avatargroups 
-					where avatargroup='".$zrequest->avatargroup."';");
+					where avatargroup='".$zrequest->avatargroup."'
+						and (hostuserid='".$zhostuserid."'
+							or hostuserid='');");
 				if (count($zresults) == 0) {
 					$zavatargroupid = $wtwhandlers->getNewKey('avatargroups', 'avatargroupid', $wtwhandlers->getRandomString(16,1));
 
@@ -2488,6 +2571,7 @@ class wtwavatars {
 						insert into ".wtw_tableprefix."avatargroups
 						   (avatargroupid,
 							avatargroup,
+							hostuserid,
 							createdate,
 							createuserid,
 							updatedate,
@@ -2495,6 +2579,7 @@ class wtwavatars {
 						  values
 						   ('".$zavatargroupid."',
 							'".addslashes($zrequest->avatargroup)."',
+							'".$zhostuserid."',
 							now(),
 							'".$znewcreateuserid."',
 							now(),
@@ -2673,6 +2758,10 @@ class wtwavatars {
 			$zdomainurl = "";
 			$znewfolder = '';
 			$zurl = '';
+			$zhostuserid = '';
+			if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+				$zhostuserid = $wtwhandlers->userid;
+			}
 			
 			/* allow usertoken authentication */
 			if ((empty($zuserid) || !isset($zuserid)) && !empty($zusertoken) && isset($zusertoken)) {
@@ -2754,7 +2843,7 @@ class wtwavatars {
 				
 				$zfoundavatarid = '';
 				$zresults = $wtwhandlers->query("
-					select avatarid
+					select avatarid, hostuserid
 					from ".wtw_tableprefix."avatars 
 					where avatarid='".$zwebid."'
 					limit 1;
@@ -2794,13 +2883,14 @@ class wtwavatars {
 							alttag='".addslashes($zrequest->alttag)."',
 							updatedate='".$zrequest->updatedate."',
 							updateuserid='".$znewupdateuserid."'
-						where avatarid='".$zwebid."'
+						where avatarid='".$zwebid."' 
 						limit 1;");
 				} else {
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."avatars 
 						   (avatarid,
 							pastavatarid,
+							hostuserid,
 							versionid,
 							version,
 							versionorder,
@@ -2837,6 +2927,7 @@ class wtwavatars {
 						values
 						   ('".$zwebid."',
 							'".$zrequest->avatarid."',
+							'".$zhostuserid."',
 							'".$zrequest->versionid."',
 							'".$zrequest->version."',
 							".$wtwhandlers->checkNumber($zrequest->versionorder,1000000).",
@@ -2891,7 +2982,9 @@ class wtwavatars {
 				$zresults = $wtwhandlers->query("
 					select *  
 					from ".wtw_tableprefix."avatargroups 
-					where avatargroup='".$zrequest->avatargroup."';");
+					where avatargroup='".$zrequest->avatargroup."'
+						and (hostuserid='".$zhostuserid."'
+							or hostuserid='');");
 				if (count($zresults) == 0) {
 					$zavatargroupid = $wtwhandlers->getNewKey('avatargroups', 'avatargroupid', $wtwhandlers->getRandomString(16,1));
 
@@ -2899,6 +2992,7 @@ class wtwavatars {
 						insert into ".wtw_tableprefix."avatargroups
 						   (avatargroupid,
 							avatargroup,
+							hostuserid,
 							createdate,
 							createuserid,
 							updatedate,
@@ -2906,6 +3000,7 @@ class wtwavatars {
 						  values
 						   ('".$zavatargroupid."',
 							'".addslashes($zrequest->avatargroup)."',
+							'".$zhostuserid."',
 							now(),
 							'".$znewcreateuserid."',
 							now(),
@@ -3182,6 +3277,10 @@ class wtwavatars {
 			$zdomainurl = "";
 			$znewfolder = '';
 			$zurl = '';
+			$zhostuserid = '';
+			if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+				$zhostuserid = $wtwhandlers->userid;
+			}
 			
 			/* allow usertoken authentication */
 			if ((empty($zuserid) || !isset($zuserid)) && !empty($zusertoken) && isset($zusertoken)) {
@@ -3318,7 +3417,9 @@ class wtwavatars {
 				$zresults = $wtwhandlers->query("
 					select *  
 					from ".wtw_tableprefix."avatargroups 
-					where avatargroup='".$zrequest->avatargroup."';");
+					where avatargroup='".$zrequest->avatargroup."'
+						and (hostuserid='".$zhostuserid."'
+							or hostuserid='');");
 				if (count($zresults) == 0) {
 					$zavatargroupid = $wtwhandlers->getNewKey('avatargroups', 'avatargroupid', $wtwhandlers->getRandomString(16,1));
 
@@ -3326,6 +3427,7 @@ class wtwavatars {
 						insert into ".wtw_tableprefix."avatargroups
 						   (avatargroupid,
 							avatargroup,
+							hostuserid,
 							createdate,
 							createuserid,
 							updatedate,
@@ -3333,6 +3435,7 @@ class wtwavatars {
 						  values
 						   ('".$zavatargroupid."',
 							'".addslashes($zrequest->avatargroup)."',
+							'".$zhostuserid."',
 							now(),
 							'".$znewcreateuserid."',
 							now(),

@@ -38,8 +38,8 @@ class wtwadminmenu {
 				exit();
 			} else {
 				/* accessrequired - array of role names or null for all allowed */
-				$updateroles = array("admin","developer","architect","graphics artist");
-				$developerroles = array("admin","developer");
+				$updateroles = array("admin","developer","architect","graphics artist","host");
+				$developerroles = array("admin","developer","host");
 				$adminroles = array("admin");
 				
 				/* add admin menu item function: */
@@ -56,7 +56,7 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_admindashboard', $this->__('Dashboard'), -100, 'wtw_dashboard', 0, '', '/content/system/images/menudashboard.png', null, "WTW.toggleAdminMenuDashboard();");
 				$this->addAdminMenuItem('wtw_adminmenudashboard', $this->__('Admin Home'), -100, 'wtw_dashboard', 1, 'wtw_adminhome', '', null, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminmenuupdates', $this->__('Updates'), -100, 'wtw_dashboard', 2, 'wtw_updates', '', $developerroles, "WTW.openFullPageForm('updates','Check for Updates','');");
-				$this->addAdminMenuItem('wtw_adminmenufeedback', $this->__('Feedback'), -100, 'wtw_dashboard', 3, 'wtw_feedback', '', $developerroles, "WTW.openFullPageForm('feedback','Open Feedback','');");
+				$this->addAdminMenuItem('wtw_adminmenufeedback', $this->__('Feedback'), -100, 'wtw_dashboard', 3, 'wtw_feedback', '', $adminroles, "WTW.openFullPageForm('feedback','Open Feedback','');");
 				$this->addAdminMenuItem('wtw_adminmenuerrorlog', $this->__('Error Log'), -100, 'wtw_dashboard', 4, 'wtw_errorlog', '', $developerroles, "WTW.openFullPageForm('errorlog','Active Errors','');");
 				
 				$this->addAdminMenuItem('wtw_adminmedia', $this->__('Media Library'), -95, 'wtw_medialibrary', 0, '', '/content/system/images/menumedia.png', $updateroles, "WTW.toggleAdminMenuMediaLibrary();");
@@ -94,12 +94,22 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminglobaluserlist', $this->__('Global Users'), 90, 'wtw_users', 4, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminvisitinguserlist', $this->__('Visiting Users'), 90, 'wtw_users', 5, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminuserroles', $this->__('User Roles'), 90, 'wtw_users', 10, 'wtw_roleslist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-
-				$this->addAdminMenuItem('wtw_adminsettings', $this->__('Settings'), 100, 'wtw_settings', 0, '', '/content/system/images/menusettings.png', $developerroles, "WTW.toggleAdminMenuLevel('settings');");
+				
+				$this->addAdminMenuItem('wtw_adminsettings', $this->__('Settings'), 100, 'wtw_settings', 0, '', '/content/system/images/menusettings.png', $adminroles, "WTW.toggleAdminMenuLevel('settings');");
 				$this->addAdminMenuItem('wtw_adminserversettings', $this->__('Server Settings'), 100, 'wtw_settings', 1, 'wtw_serversettings', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminwebalias', $this->__('Web Aliases'), 100, 'wtw_settings', 2, 'wtw_webalias', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminemailserver', $this->__('Email Server'), 100, 'wtw_settings', 3, 'wtw_emailserver', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminapikeys', $this->__('API Keys Access'), 100, 'wtw_settings', 4, 'wtw_apikeys', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminemailserver', $this->__('Email Server'), 100, 'wtw_settings', 2, 'wtw_emailserver', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminhostingserver', $this->__('Server Hosting Settings'), 100, 'wtw_settings', 3, 'wtw_hostingserver', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminapikeys', $this->__('API Keys Access'), 100, 'wtw_settings', 6, 'wtw_apikeys', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				
+				$this->addAdminMenuItem('wtw_adminwebdomains', $this->__('Web Domains'), 110, 'wtw_webdomains', 0, 'wtw_adminwebdomains', '/content/system/images/menuglobe.png', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminwebalias', $this->__('Web Aliases'), 110, 'wtw_webdomains', 1, 'wtw_adminwebalias', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				
+				if ($wtwdb->isUserInRole("Admin") || $wtwdb->isUserInRole("Developer")) {
+					$this->addAdminMenuItem('wtw_admininvoices', 'Invoices', 120, 'wtw_adminmenuinvoices', 0, 'wtw_admininvoices', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$this->__('Invoices')."','wtw_invoicepage');");
+					$this->addAdminMenuItem('wtw_adminmyinvoices', 'My Invoices', 120, 'wtw_adminmenuinvoices', 1, 'wtw_adminmyinvoices', '', array('admin','developer','architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
+				} else {
+					$this->addAdminMenuItem('wtw_adminmyinvoices', 'My Invoices', 120, 'wtw_adminmenuinvoices', 0, 'wtw_adminmyinvoices', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
+				}
 
 				$this->addAdminMenuItem('wtw_admindevtools', $this->__('Developer Tools'), 998, 'wtw_devtools', 0, '', '/content/system/images/menutools.png', $developerroles, "WTW.toggleAdminMenuLevel('tools');");
 				$this->addAdminMenuItem('wtw_adminavatarcamera', $this->__('Avatar Camera ON'), 998, 'wtw_devtools', 1, 'wtw_avatarcamera', '', $developerroles, "WTW.adminMenuItemSelected(this);");
@@ -130,7 +140,7 @@ class wtwadminmenu {
 		$zsuccess = false;
 		try {
 			/* accessrequired - array of role names or null for all allowed */
-			$zupdateroles = array("admin","developer","architect","graphics artist");
+			$zupdateroles = array("admin","developer","architect","graphics artist","host");
 			$zdeveloperroles = array("admin","developer");
 			
 			/* add admin sub menu item function: */

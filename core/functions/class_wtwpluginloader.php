@@ -309,9 +309,9 @@ class wtwpluginloader {
 		}
 	}
 
-	public function loadHandlersURL() {
-		/* plugins can have a /handlers folder that is accessed as a root /core/handlers/ folder through the provided rewrite rules */
-		/* basically /content/plugins/YOURPLUGINNAME/handlers/ is treated as /core/handlers/ */
+	public function loadPathURL($zpath) {
+		/* plugins can have a /path folder that is accessed as a root /core/path/ folder through the provided rewrite rules */
+		/* basically /content/plugins/YOURPLUGINNAME/path/ is treated as /core/path/ */
 		require_once(wtw_rootpath.'/core/functions/class_wtwdb.php');
 		global $wtw;
 		try {
@@ -323,7 +323,7 @@ class wtwpluginloader {
 				$zfile = trim($zpathdef[3]);
 			}
 			if (!empty($zfile) && isset($zfile)) {
-				$zhandlersfile = "";
+				$zpathfile = "";
 				$zfilepath = $wtw->contentpath."/plugins";
 				if (file_exists($zfilepath)) {
 					$zfolders = new DirectoryIterator($zfilepath);
@@ -331,13 +331,13 @@ class wtwpluginloader {
 						if ($zdirinfo->isDir() && !$zdirinfo->isDot()) {
 							$zfolder = $zdirinfo->getFilename();
 							if ($this->getPluginActive($zfolder) == "1") {
-								if (file_exists($zfilepath."/".$zfolder."/handlers")) {
-									$zhandlersfiles = new DirectoryIterator($zfilepath."/".$zfolder."/handlers");
+								if (file_exists($zfilepath."/".$zfolder."/".$zpath)) {
+									$zhandlersfiles = new DirectoryIterator($zfilepath."/".$zfolder."/".$zpath);
 									foreach ($zhandlersfiles as $zfileinfo) {
 										if (!$zfileinfo->isDir() && !$zfileinfo->isDot()) {
 											$zcfile = $zfileinfo->getFilename();
 											if ($zcfile == $zfile) {
-												$zhandlersfile = $zfilepath."/".$zfolder."/handlers/".$zcfile;
+												$zpathfile = $zfilepath."/".$zfolder."/".$zpath."/".$zcfile;
 												$zpluginphp = $zfilepath."/".$zfolder."/".$zfolder.".php";
 											}
 										}
@@ -347,15 +347,19 @@ class wtwpluginloader {
 						}
 					}
 				}
-				if (!empty($zhandlersfile) && isset($zhandlersfile)) {
-					require_once(wtw_rootpath.'/core/functions/class_wtwhandlers.php');
+				if (!empty($zpathfile) && isset($zpathfile)) {
+					if (file_exists(wtw_rootpath.'/core/functions/class_wtw'.$zpath.'.php')) {
+						require_once(wtw_rootpath.'/core/functions/class_wtw'.$zpath.'.php');
+					} else {
+						require_once(wtw_rootpath.'/core/functions/class_wtwhandlers.php');
+					}
 					if (!empty($zpluginphp) && isset($zpluginphp)) {
 						if (file_exists($zpluginphp)) {
 							require_once(wtw_rootpath.'/core/functions/class_wtwplugins.php');
 							require_once($zpluginphp);
 						}
 					}
-					require_once($zhandlersfile);
+					require_once($zpathfile);
 				} else {
 					http_response_code(404);
 				}
@@ -365,9 +369,10 @@ class wtwpluginloader {
 				exit();
 			}
 		} catch (Exception $e) {
-			$wtw->serror("core-functions-class_wtwpluginloader.php-loadHandlersURL=" . $e->getMessage());
+			$wtw->serror("core-functions-class_wtwpluginloader.php-loadPathURL=" . $e->getMessage());
 		}
 	}
+
 
 }
 

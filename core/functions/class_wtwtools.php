@@ -26,7 +26,7 @@ class wtwtools {
 			'serror'=>''
 		);
 		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist"))) {
+			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				if (!empty($zwebid) && isset($zwebid) && is_numeric($zratingvalue) && !empty($zrating) && isset($zrating)) {
 					if (!empty($zcontentwarning) && isset($zcontentwarning)) {
 						$zcontentwarning = addslashes(base64_decode($zcontentwarning));
@@ -226,6 +226,69 @@ class wtwtools {
 		}
 		return $zresponse;
 	}
+	
+	public function getHostingServerSettings() {
+		global $wtwhandlers;
+		$zresponse = array(
+			'serverhosting'=>'0',
+			'serverhostprice'=>'0',
+			'serversslprice'=>'0',
+			'serverhostdays'=>'365',
+			'serverdnsarecord'=>'',
+			'serverdnscname'=>''
+		);
+		try {
+			/* confirm still logged in */
+			/* set default value */
+			$zresponse["serverdnsarecord"] = $wtwhandlers->serverip;
+			if (defined('wtw_defaultdomain')) {
+				$zresponse["serverdnscname"] = wtw_defaultdomain;
+			}
+			/* try to load saved values if they exist */
+			if (defined('wtw_server_hosting')) {
+				$zresponse["serverhosting"] = $wtwhandlers->checkNumber(wtw_server_hosting,0);
+			}
+			if (defined('wtw_server_hostprice')) {
+				$zresponse["serverhostprice"] = $wtwhandlers->checkNumber(wtw_server_hostprice,0);
+			}
+			if (defined('wtw_server_sslprice')) {
+				$zresponse["serversslprice"] = $wtwhandlers->checkNumber(wtw_server_sslprice,0);
+			}
+			if (defined('wtw_server_hostdays')) {
+				$zresponse["serverhostdays"] = $wtwhandlers->checkNumber(wtw_server_hostdays,0);
+			}
+			if (defined('wtw_server_dns_arecord')) {
+				$zresponse["serverdnsarecord"] = wtw_server_dns_arecord;
+			}
+			if (defined('wtw_server_dns_cname')) {
+				$zresponse["serverdnscname"] = wtw_server_dns_cname;
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwtools.php-getHostingServerSettings=".$e->getMessage());
+		}
+		return $zresponse;
+	}
+	
+	public function saveHostingServerSettings($zserverhosting, $zserverhostprice, $zserversslprice, $zserverhostdays, $zserverdnsarecord, $zserverdnscname) {
+		global $wtwhandlers;
+		$zresponse = array('serror'=>'');
+		try {
+			/* confirm still logged in */
+			$wtwhandlers->getSessionUserID();
+			if ($wtwhandlers->hasPermission(array("admin"))) {
+				$this->updateConfigSetting('wtw_server_hosting', $wtwhandlers->checkNumber($zserverhosting,0));
+				$this->updateConfigSetting('wtw_server_hostprice', $wtwhandlers->checkNumber($zserverhostprice,0));
+				$this->updateConfigSetting('wtw_server_sslprice', $wtwhandlers->checkNumber($zserversslprice,0));
+				$this->updateConfigSetting('wtw_server_hostdays', $wtwhandlers->checkNumber($zserverhostdays,365));
+				$this->updateConfigSetting('wtw_server_dns_arecord', $zserverdnsarecord);
+				$this->updateConfigSetting('wtw_server_dns_cname', $zserverdnscname);
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwtools.php-saveHostingServerSettings=".$e->getMessage());
+			$zresponse = array('serror'=>'Error saving hosting settings: '.$e->getMessage());
+		}
+		return $zresponse;
+	}
 
 	public function getLanguages() {
 		global $wtwhandlers;
@@ -283,7 +346,7 @@ class wtwtools {
 				$lines = file(wtw_rootpath.'/config/wtw_config.php');
 				$cfile = fopen(wtw_rootpath."/config/wtw_config.php","wb");
 				foreach ($lines as $line) {
-					if (strpos($line, $zsetting) !== false) {
+					if (strpos($line, "define(\"".$zsetting."\",") !== false) {
 						fwrite($cfile, "    define(\"".$zsetting."\", \"".$zvalue."\");\r\n");
 						$zfound = true;
 					} else {
@@ -487,7 +550,6 @@ class wtwtools {
 
 			/* create a new rating record in the table */
 			$zfeedbackid = $wtwhandlers->getRandomString(16,1);
-
 			$wtwhandlers->query("
 				insert into ".wtw_tableprefix."feedback
 				   (feedbackid,
@@ -562,10 +624,10 @@ class wtwtools {
 	}
 
 	public function getFeedback($zfilter) {
+		/* get feedback using filter */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
-			/* get feedback using filter */
 			$zresults = $wtwhandlers->query("
 				select * from ".wtw_tableprefix."feedback
 					order by feedbackdate desc,feedbackid desc;");
@@ -578,10 +640,10 @@ class wtwtools {
 	}
 
 	public function updateFeedbackStatus($zfeedbackid, $zstatus) {
+		/* set feedback status */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
-			/* set feedback status */
 			switch ($zstatus) {
 				case "Open":
 					$wtwhandlers->query("
@@ -612,10 +674,10 @@ class wtwtools {
 	}
 	
 	public function getErrorLog($zfilter) {
+		/* get Error Log using filter */
 		global $wtwhandlers;
 		$zresults = array();
 		try {
-			/* get Error Log using filter */
 			switch ($zfilter) {
 				case "All Errors":
 					$zresults = $wtwhandlers->query("
@@ -645,28 +707,29 @@ class wtwtools {
 	}
 
 	public function updateErrorLogStatus($zerrorid, $zstatus) {
+		/* set errorlog status */
 		global $wtwhandlers;
 		$zresults = array(
 			'serror'=> ''
 		);
 		try {
-			/* set errorlog status */
-			switch ($zstatus) {
-				case "Archive":
-					$wtwhandlers->query("
-						update ".wtw_tableprefix."errorlog
-						set archivedate=now()
-						where errorid='".$zerrorid."'
-							and archivedate is null;");
-					break;
-				case "Restore":
-					$wtwhandlers->query("
-						update ".wtw_tableprefix."errorlog
-						set archivedate=null
-						where errorid='".$zerrorid."';");
-					break;
+			if ($wtwhandlers->isUserInRole("admin")) {
+				switch ($zstatus) {
+					case "Archive":
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."errorlog
+							set archivedate=now()
+							where errorid='".$zerrorid."'
+								and archivedate is null;");
+						break;
+					case "Restore":
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."errorlog
+							set archivedate=null
+							where errorid='".$zerrorid."';");
+						break;
+				}
 			}
-
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwtools.php-updateErrorLogStatus=".$e->getMessage());
 			$zresults = array('serror' => $e->getMessage());
@@ -675,15 +738,17 @@ class wtwtools {
 	}
 
 	public function deleteArchivedErrorLog() {
+		/* delete archived errorlog records */
 		global $wtwhandlers;
 		$zresults = array(
 			'serror'=> ''
 		);
 		try {
-			/* delete archived errorlog records */
-			$wtwhandlers->query("
-				delete from ".wtw_tableprefix."errorlog
-				where not archivedate is null;");
+			if ($wtwhandlers->isUserInRole("admin")) {
+				$wtwhandlers->query("
+					delete from ".wtw_tableprefix."errorlog
+					where not archivedate is null;");
+			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwtools.php-deleteArchivedErrorLog=".$e->getMessage());
 			$zresults = array('serror' => $e->getMessage());

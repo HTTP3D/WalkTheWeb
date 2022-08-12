@@ -276,6 +276,7 @@ class wtwadmin {
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tdeleteanimation\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tobjectsoundid\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tobjectsoundpath\" />\r\n";
+			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_twebdomainid\" maxlength=\"16\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_twebaliasid\" maxlength=\"16\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tapikeyid\" maxlength=\"16\" />\r\n";
 			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tbackupfullpageformtitle\" />\r\n";
@@ -761,6 +762,40 @@ class wtwadmin {
 			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";
 			$zpagedata .= "		</div>\r\n";
+
+			/* settings page - hosting settings */
+			$zpagedata .= "		<div id=\"wtw_hostingsettings\" class=\"wtw-fullpage\">\r\n";
+			$zpagedata .= "			<div class=\"wtw-dashboardboxleftdouble\">\r\n";
+			$zpagedata .= "				<div class=\"wtw-dashboardboxtitle\">Server Hosting Settings</div>\r\n";
+			$zpagedata .= "				<div class=\"wtw-dashboardbox\">\r\n";
+
+			$zpagedata .= "					<label class=\"wtw-switch\"><input id=\"wtw_tserverhosting\" type=\"checkbox\" onclick=\"WTW.changeHostingSwitch(this, true);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw_tserverhostingtext\" class=\"wtw-disabledlabel\">Server Hosting Disabled</div><div style=\"clear:both;\"></div><br /><br />\r\n";
+			
+			$zpagedata .= "					<div id=\"wtw_serverhostingdiv\" class=\"wtw-hide\">\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardlabel\">Hosting Price</div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tserverhostprice\" maxlength=\"10\" /></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardlabel\">SSL Cert Price</div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tserversslprice\" maxlength=\"10\" /></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardlabel\">Hosting Term (Days)</div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tserverhostdays\" maxlength=\"7\" /></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-clear\"></div><hr />\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardboxtitle\">Suggested Hosting DNS Settings</div><div class=\"wtw-menusmalltext\">What the Host accounts will view for suggested DNS settings</div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardlabel\">Server IP for A-Record</div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tserverdnsarecord\" maxlength=\"25\" /></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardlabel\">OR - Server C-Name</div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tserverdnscname\" maxlength=\"255\" /></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-clear\"></div><hr />\r\n";
+			$zpagedata .= "						<div id=\"wtw_serverhostsettingscomplete\"></div><br />\r\n";
+			$zpagedata .= "						<div id=\"wtw_loadingserverhostsettings\" class=\"wtw-loadingnotice\" style=\"margin-left:auto;margin-right:auto;color:#000000;\">Loading</div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-greenmenubutton\" onclick=\"WTW.saveHostingServerSettings();\">Save Server Settings</div>\r\n";
+			$zpagedata .= "					</div>\r\n";
+			$zpagedata .= "				</div>\r\n";
+			$zpagedata .= "			</div>\r\n";
+			$zpagedata .= "		</div>\r\n";
 			
 			/* settings page - email server */
 			$zpagedata .= "		<div id=\"wtw_emailserversettings\" class=\"wtw-fullpage\">\r\n";
@@ -806,7 +841,111 @@ class wtwadmin {
 			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";
 			$zpagedata .= "		</div>\r\n";
-			
+						
+			/* settings page - web domains */
+			$zpagedata .= "		<div id=\"wtw_webdomainsettings\" class=\"wtw-fullpage\">\r\n";
+			$zpagedata .= "			<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zpagedata .= "				<div class=\"wtw-dashboardboxtitle\"><div id='wtw_addwebdomain' class='wtw-greenbuttonright' onclick=\"WTW.openDomainForm();\">Add New</div>Web Domains</div>\r\n";
+			$zpagedata .= "				<div class=\"wtw-dashboardbox\">\r\n";
+			$zpagedata .= "					<div id='wtw_addwebdomaindiv' class=\"wtw-dashboardboxleftdouble wtw-hide\">\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardboxtitle\">Add Web Domain</div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardbox\">\r\n";
+			$zpagedata .= "							<div class=\"wtw-dashboardlabel\" style=\"font-size:1.2em;\">Domain Name:&nbsp;\r\n";
+			$zpagedata .= "								<select id=\"wtw_domainforcehttps\" style=\"font-size:1.2em;\"> <option>https://</option><option>http://</option> </select>&nbsp; <input type=\"text\" id=\"wtw_twebdomain\" value='' maxlength=\"255\" style=\"font-size:1.2em;\" /></div>\r\n";
+			$zpagedata .= "							<div class=\"wtw-clear\"></div>\r\n";
+
+			$zpagedata .= "							<div id=\"wtw_domainpurchaseview\" class=\"wtw-hide\">\r\n";
+			$zpagedata .= "							<table class=\"wtw-table\"><tr>\r\n";
+			$zpagedata .= "							<td class=\"wtw-tablecolumnheading\"><b>Quantity</b></td>\r\n";
+			$zpagedata .= "							<td class=\"wtw-tablecolumnheading\"><b>Description</b></td>\r\n";
+			$zpagedata .= "							<td class=\"wtw-tablecolumnheading\"><b>Price</b></td>\r\n";
+			$zpagedata .= "							</tr><tr>\r\n";
+			$zpagedata .= "							<td id=\"wtw_domainpurchaseqty\" class=\"wtw-tablecolumns\"></td>\r\n";
+			$zpagedata .= "							<td id=\"wtw_domainpurchasedesc\" class=\"wtw-tablecolumns\"></td>\r\n";
+			$zpagedata .= "							<td id=\"wtw_domainpurchaseprice\" class=\"wtw-tablecolumns\"></td>\r\n";
+			$zpagedata .= "							</tr><tr>\r\n";
+			$zpagedata .= "							<td id=\"wtw_domainpurchasesslqty\" class=\"wtw-tablecolumns\"></td>\r\n";
+			$zpagedata .= "							<td id=\"wtw_domainpurchasessldesc\" class=\"wtw-tablecolumns\"></td>\r\n";
+			$zpagedata .= "							<td id=\"wtw_domainpurchasesslprice\" class=\"wtw-tablecolumns\"></td>\r\n";
+			$zpagedata .= "							</tr><tr>\r\n";
+			$zpagedata .= "							<td class=\"wtw-tablecolumnheading\">&nbsp;</td>\r\n";
+			$zpagedata .= "							<td class=\"wtw-tablecolumnheading\"><b>Total US Dollars</b></td>\r\n";
+			$zpagedata .= "							<td id=\"wtw_domainpurchasetotal\" class=\"wtw-tablecolumnheading\"></td>\r\n";
+			$zpagedata .= "							</tr></table></div>\r\n";
+
+			$zpagedata .= "							<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "							<div id=\"wtw_domaindetailsdiv\">\r\n";
+			$zpagedata .= "								<div class=\"wtw-dashboardlabel\">Start Date:&nbsp;</div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-dashboardvalue\">";
+			$zpagedata .= "									<input type=\"text\" id=\"wtw_domainstartdate\" value='' maxlength=\"255\" /></div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-dashboardlabel\">Expire Date:&nbsp;</div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-dashboardvalue\">";
+			$zpagedata .= "									<input type=\"text\" id=\"wtw_domainexpiredate\" value='' maxlength=\"255\" /></div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-clear\"></div>\r\n";
+			if ($wtwdb->isUserInRole("Admin")) {
+				$zpagedata .= "								<div class=\"wtw-dashboardlabel\">Allow Hosting:&nbsp;</div>\r\n";
+				$zpagedata .= "								<div class=\"wtw-dashboardvalue\">";
+				$zpagedata .= "									<input type=\"radio\" id=\"wtw_tallowhostingyes\" name=\"wtw_tallowhosting\" value=\"1\" />Yes &nbsp;&nbsp;&nbsp;";
+				$zpagedata .= "									<input type=\"radio\" id=\"wtw_tallowhostingno\" name=\"wtw_tallowhosting\" value=\"0\" />No</div>\r\n";
+				$zpagedata .= "								<div class=\"wtw-clear\"></div>\r\n";
+			} else {
+				$zpagedata .= "								<input type=\"hidden\" id=\"wtw_tallowhostingyes\" value='' />\r\n";
+				$zpagedata .= "								<input type=\"hidden\" id=\"wtw_tallowhostingno\" value='' />\r\n";
+				$zpagedata .= "								<input type=\"hidden\" id=\"wtw_tallowhosting\" name=\"wtw_tallowhosting\" value='' />\r\n";
+			}
+			$zpagedata .= "								<div class=\"wtw-dashboardlabel\">Host Price:&nbsp;</div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-dashboardvalue\">";
+			$zpagedata .= "									<input type=\"text\" id=\"wtw_domainhostprice\" value='' maxlength=\"255\" /></div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-dashboardlabel\">SSL Cert Price:&nbsp;</div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-dashboardvalue\">";
+			$zpagedata .= "									<input type=\"text\" id=\"wtw_domainsslprice\" value='' maxlength=\"255\" /></div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-dashboardlabel\">Hosting Term (Days):&nbsp;</div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-dashboardvalue\">";
+			$zpagedata .= "									<input type=\"text\" id=\"wtw_domainhostdays\" value='' maxlength=\"255\" /></div>\r\n";
+			$zpagedata .= "								<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= " 						</div>\r\n";
+			$zpagedata .= " 					</div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "						<div id=\"wtw_bdomaindelete\" class='wtw-redbuttonleft wtw-hide' onclick=\"WTW.saveDomainForm(0);\">Delete Web Domain</div>\r\n";
+			$zpagedata .= "						<div id=\"wtw_bdomainsave\" class='wtw-greenbuttonright' onclick=\"WTW.saveDomainForm(1);\">Save Web Domain</div>\r\n";
+			$zpagedata .= "						<div class='wtw-yellowbuttonright' onclick=\"WTW.saveDomainForm(-1);\">Cancel</div>\r\n";
+			$zpagedata .= "						<div id=\"wtw_domainfunctionsdiv\" class=\"wtw-hide\"></div>\r\n";
+			$zpagedata .= "						<div class=\"wtw-clear\"></div><br />\r\n";
+			if ($wtwdb->isUserInRole("Host")) {
+				$zdnsarecord = $wtw->serverip;
+				$zdnscname = ''; 
+				if (defined('wtw_defaultdomain')) {
+					$zdnscname = wtw_defaultdomain;
+				}
+				if (defined('wtw_server_dns_arecord')) {
+					$zdnsarecord = wtw_server_dns_arecord;
+				}
+				if (defined('wtw_server_dns_cname')) {
+					$zdnscname = wtw_server_dns_cname;
+				}				
+				$zpagedata .= "							<div class=\"wtw-roundedmessage\"><h2 class=\"wtw-roundedmessage\">Recommended DNS Settings for your new Domain Name</h2><b>A-Record</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>3d</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>".$zdnsarecord."</b><br /><br />OR USE<br /><br /><b>C-Name</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>3d</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>".$zdnscname."</b><br /><br /></div>\r\n";
+				$zpagedata .= "							<div class=\"wtw-clear\"></div><br />\r\n";
+			}
+			$zpagedata .= " 				</div>\r\n";
+			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			if ($wtwdb->isUserInRole("Host")) {
+				$zpagedata .= "					<div id=\"wtw_addwebdomainnote\">Click <b>Add New</b> to personalize your 3D Website with your own Domain Name (<b>http://3d.<span style='color:blue;'>YourDomainName.com</span></b>)</div>\r\n";
+				$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			}
+			$zpagedata .= "					<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zpagedata .= "						<div class=\"wtw-dashboardboxtitle\">Web Domains</div>\r\n";
+			$zpagedata .= "						<div id=\"wtw_webdomainlist\"></div><br />\r\n";
+			$zpagedata .= " 				</div>\r\n";
+			$zpagedata .= "					<div id=\"wtw_webdomaincomplete\"></div><br />\r\n";
+			$zpagedata .= "					<div id=\"wtw_loadingwebdomain\" class=\"wtw-loadingnotice\" style=\"margin-left:auto;margin-right:auto;color:#000000;\">Loading...</div>\r\n";
+			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "				</div>\r\n";
+			$zpagedata .= "			</div>\r\n";
+			$zpagedata .= "		</div>\r\n";
+
 			/* settings page - web aliases */
 			$zpagedata .= "		<div id=\"wtw_webaliassettings\" class=\"wtw-fullpage\">\r\n";
 			$zpagedata .= "			<div class=\"wtw-dashboardboxleftfull\">\r\n";
@@ -843,7 +982,7 @@ class wtwadmin {
 			$zpagedata .= "								</tr>\r\n";
 			$zpagedata .= "								<tr>\r\n";
 			$zpagedata .= "									<td><select id=\"wtw_aliasforcehttps\"><option>https://</option><option>http://</option></select></td>\r\n";
-			$zpagedata .= "									<td id='wtw_aliastext1'><input type=\"text\" id=\"wtw_taliasdomainname\" value='3d.' maxlength=\"255\" /></td>\r\n";
+			$zpagedata .= "									<td id='wtw_aliastext1'><select id=\"wtw_taliasdomainname\"></select></td>\r\n";
 			$zpagedata .= "									<td id='wtw_aliastext2'>/<input type=\"text\" id=\"wtw_taliascommunitypublishname\" value='' maxlength=\"255\" /></td>\r\n";
 			$zpagedata .= "									<td id='wtw_aliastext3'>/<input type=\"text\" id=\"wtw_taliasbuildingpublishname\" value='' maxlength=\"255\" /></td>\r\n";
 			$zpagedata .= "									<td id='wtw_aliastext4'>/<input type=\"text\" id=\"wtw_taliasthingpublishname\" value='' maxlength=\"255\" /></td>\r\n";
@@ -862,17 +1001,17 @@ class wtwadmin {
 			$zpagedata .= "							</div>\r\n";
 			$zpagedata .= "							<div id='wtw_aliasthing'>\r\n";
 			$zpagedata .= "							</div>\r\n";
-			$zpagedata .= " 						</div>\r\n";
+			$zpagedata .= " 					</div>\r\n";
 			$zpagedata .= "						<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "						<div id=\"wtw_baliasdelete\" class='wtw-redbuttonleft wtw-hide' onclick=\"WTW.saveAliasForm(0);\">Delete Web Alias</div>\r\n";
 			$zpagedata .= "						<div class='wtw-greenbuttonright' onclick=\"WTW.saveAliasForm(1);\">Save Web Alias</div>\r\n";
 			$zpagedata .= "						<div class='wtw-yellowbuttonright' onclick=\"WTW.saveAliasForm(-1);\">Cancel</div>\r\n";
-			$zpagedata .= " 					</div>\r\n";
+			$zpagedata .= " 				</div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-dashboardboxleftfull\">\r\n";
 			$zpagedata .= "						<div class=\"wtw-dashboardboxtitle\">Web Aliases</div>\r\n";
 			$zpagedata .= "						<div id=\"wtw_webaliaslist\"></div><br />\r\n";
-			$zpagedata .= " 					</div>\r\n";
+			$zpagedata .= " 				</div>\r\n";
 			$zpagedata .= "					<div id=\"wtw_webaliascomplete\"></div><br />\r\n";
 			$zpagedata .= "					<div id=\"wtw_loadingwebalias\" class=\"wtw-loadingnotice\" style=\"margin-left:auto;margin-right:auto;color:#000000;\">Loading...</div>\r\n";
 			$zpagedata .= "					<div class=\"wtw-clear\"></div>\r\n";
@@ -928,6 +1067,18 @@ class wtwadmin {
 			$zpagedata .= "		</div>\r\n";
 			$zpagedata .= "	</div>\r\n";
 			
+			/* Invoices Page */
+			$zpagedata .= "	<div id=\"wtw_invoicespage\" class=\"wtw-fullpage\">\r\n";
+			$zpagedata .= "		<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zpagedata .= "			<div id=\"wtw_invoicestitle\" class=\"wtw-dashboardboxtitle\">My Invoices</div>\r\n";
+			$zpagedata .= "			<div class=\"wtw-dashboardbox\">\r\n";
+			$zpagedata .= "				<div id=\"wtw_invoiceslist\"></div><br />\r\n";
+			$zpagedata .= "				<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "				<div id=\"wtw_loadinginvoices\" class=\"wtw-loadingnotice\" style=\"margin-left:auto;margin-right:auto;color:#000000;\">Loading...</div>\r\n";
+			$zpagedata .= "				<div class=\"wtw-clear\"></div>\r\n";
+			$zpagedata .= "			</div>\r\n";
+			$zpagedata .= "		</div>\r\n";
+			$zpagedata .= "	</div>\r\n";
 			
 			/* 3D Community Requirements Page */
 			$zpagedata .= "	<div id=\"wtw_requirementspage\" class=\"wtw-dashboardpage wtw-hide\" style=\"display:none;\">\r\n";

@@ -24,5 +24,5 @@
 		</div> -->
 		<br />
 		<hr class="wtw-menuhr" />
-		<div id="wtw_save35" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;">Save Settings</div>
+		<div id="wtw_adminmenuthingsave" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);" style="font-size:1.4em;">Save Settings</div>
 	</div>
