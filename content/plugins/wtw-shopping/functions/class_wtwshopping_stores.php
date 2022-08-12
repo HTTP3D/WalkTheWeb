@@ -36,35 +36,60 @@ class wtwshopping_stores {
 	public function saveStore($zstoreid, $zstorename, $zstoreiframes, $zstoreurl, $zstorecarturl, $zstoreproducturl, $zwoocommerceapiurl, $zwoocommercekey, $zwoocommercesecret) {
 		global $wtwplugins;
 		try {
-			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
+			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Host") || $wtwplugins->isUserInRole("Architect")) {
+				$zhostuserid = '';
+				if ($wtwplugins->isUserInRole("Host") && $wtwplugins->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwplugins->userid;
+				}
 				if (empty($zstoreid) || !isset($zstoreid)) {
 					$zstoreid = $wtwplugins->getRandomString(16,1);
+					$zwtwkey = base64_encode("ck_".$wtwplugins->getRandomString(40,1));
+					$zwtwsecret = base64_encode("cs_".$wtwplugins->getRandomString(40,1));
+
 					$wtwplugins->query("
 						insert into ".WTWSHOPPING_PREFIX."stores
 							(storeid,
+							 hostuserid,
 							 storename,
 							 storeiframes,
 							 storeurl,
 							 storecarturl,
 							 storeproducturl,
 							 woocommerceapiurl,
+							 wtwkey,
+							 wtwsecret,
 							 woocommercekey, 
 							 woocommercesecret,
+							 approveddate,
+							 approveduserid,
 							 createdate,
-							 createuserid)
+							 createuserid,
+							 updatedate,
+							 updateuserid)
 						values
 							('".$zstoreid."',
+							 '".$zhostuserid."',
 							 '".$zstorename."',
 							 ".$zstoreiframes.",
 							 '".$zstoreurl."',
 							 '".$zstorecarturl."',
 							 '".$zstoreproducturl."',
 							 '".$zwoocommerceapiurl."',
+							 '".$zwtwkey."',
+							 '".$zwtwsecret."',
 							 '".$zwoocommercekey."', 
 							 '".$zwoocommercesecret."',
 							 now(),
+							 '".$wtwplugins->userid."',
+							 now(),
+							 '".$wtwplugins->userid."',
+							 now(),
 							 '".$wtwplugins->userid."');");
 				} else {
+					$zwhere = "where storeid='".$zstoreid."' ";
+					if (!empty($zhostuserid)) {
+						$zwhere = "where storeid='".$zstoreid."' and hostuserid='".$zhostuserid."' ";
+					}
 					$wtwplugins->query("
 						update ".WTWSHOPPING_PREFIX."stores
 						set storename='".$zstorename."',
@@ -79,8 +104,7 @@ class wtwshopping_stores {
 							updateuserid='".$wtwplugins->userid."',
 							deleteddate=null,
 							deleteduserid='',
-							deleted=0
-						where storeid='".$zstoreid."'
+							deleted=0 ".$zwhere."
 						limit 1;
 					");
 				}
@@ -95,20 +119,36 @@ class wtwshopping_stores {
 		global $wtwplugins;
 		$zsuccess = false;
 		try {
-			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
+			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Host") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
+				$zhostuserid = '';
+				if ($wtwplugins->isUserInRole("Host") && $wtwplugins->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwplugins->userid;
+				}
 				if (!empty($zcommunityid) || !empty($zbuildingid) || !empty($zthingid)) {
 					$zconnectid = '';
+					$zwhere = "where communityid='".$zcommunityid."'
+							and buildingid='".$zbuildingid."'
+							and thingid='".$zthingid."' ";
+					if (!empty($zhostuserid)) {
+						$zwhere = "where communityid='".$zcommunityid."'
+							and buildingid='".$zbuildingid."'
+							and thingid='".$zthingid."' 
+							and hostuserid='".$zhostuserid."' ";
+					}
 					$zresults = $wtwplugins->query("
 						select connectid 
 						from ".WTWSHOPPING_PREFIX."connectstores
-						where communityid='".$zcommunityid."'
-							and buildingid='".$zbuildingid."'
-							and thingid='".$zthingid."'
+						".$zwhere." 
 						limit 1;");
 					foreach ($zresults as $zrow) {
 						$zconnectid = $zrow["connectid"];
 					}
 					if (!empty($zconnectid) && isset($zconnectid)) {
+						$zwhere = "where connectid='".$zconnectid."' ";
+						if (!empty($zhostuserid)) {
+							$zwhere = "where connectid='".$zconnectid."' 
+								and hostuserid='".$zhostuserid."' ";
+						}
 						$wtwplugins->query("
 							update ".WTWSHOPPING_PREFIX."connectstores
 							set storeid='".$zstoreid."',
@@ -117,7 +157,7 @@ class wtwshopping_stores {
 								deleteddate=null,
 								deleteduserid='',
 								deleted=0
-							where connectid='".$zconnectid."'
+							".$zwhere." 
 							limit 1;");
 					} else {
 						$zconnectid = $wtwplugins->getRandomString(16,1);
@@ -128,6 +168,7 @@ class wtwshopping_stores {
 								 communityid,
 								 buildingid,
 								 thingid,
+								 hostuserid,
 								 createdate,
 								 createuserid,
 								 updatedate,
@@ -138,6 +179,7 @@ class wtwshopping_stores {
 								 '".$zcommunityid."',
 								 '".$zbuildingid."',
 								 '".$zthingid."',
+								 '".$zhostuserid."',
 								 now(),
 								 '".$wtwplugins->userid."',
 								 now(),
@@ -156,8 +198,17 @@ class wtwshopping_stores {
 		global $wtwplugins;
 		$zsuccess = false;
 		try {
-			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
+			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Host") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
 				if (!empty($zstoreid) && isset($zstoreid)) {
+					$zhostuserid = '';
+					if ($wtwplugins->isUserInRole("Host") && $wtwplugins->isUserInRole("Admin") == false) {
+						$zhostuserid = $wtwplugins->userid;
+					}
+					$zwhere = "where storeid='".$zstoreid."' ";
+					if (!empty($zhostuserid)) {
+						$zwhere = "where storeid='".$zstoreid."' 
+							and hostuserid='".$zhostuserid."' ";
+					}
 					$wtwplugins->query("
 						update ".WTWSHOPPING_PREFIX."stores
 						set woocommercekey=woocommercekeynew,
@@ -165,7 +216,7 @@ class wtwshopping_stores {
 							deleteddate=null,
 							deleteduserid='',
 							deleted=0
-						where storeid='".$zstoreid."'
+						".$zwhere."
 						limit 1;
 					");
 					$wtwplugins->query("
@@ -190,8 +241,17 @@ class wtwshopping_stores {
 		global $wtwplugins;
 		$zsuccess = false;
 		try {
-			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
+			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Host") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
 				if (!empty($zstoreid) && isset($zstoreid)) {
+					$zhostuserid = '';
+					if ($wtwplugins->isUserInRole("Host") && $wtwplugins->isUserInRole("Admin") == false) {
+						$zhostuserid = $wtwplugins->userid;
+					}
+					$zwhere = "where storeid='".$zstoreid."' ";
+					if (!empty($zhostuserid)) {
+						$zwhere = "where storeid='".$zstoreid."' 
+							and hostuserid='".$zhostuserid."' ";
+					}
 					$zwtwkey = base64_encode("ck_".$wtwplugins->getRandomString(40,1));
 					$zwtwsecret = base64_encode("cs_".$wtwplugins->getRandomString(40,1));
 					$wtwplugins->query("
@@ -204,7 +264,7 @@ class wtwshopping_stores {
 							deleteddate=null,
 							deleteduserid='',
 							deleted=0
-						where storeid='".$zstoreid."'
+						".$zwhere."
 						limit 1;
 					");
 					$zstoreurl = "";
@@ -213,7 +273,7 @@ class wtwshopping_stores {
 					$zresults = $wtwplugins->query("
 						select connectid 
 						from ".WTWSHOPPING_PREFIX."stores
-						where storeid='".$zstoreid."'
+						".$zwhere."
 						limit 1;");
 					foreach ($zresults as $zrow) {
 						$zstoreurl = $zrow["storeurl"];
@@ -242,8 +302,12 @@ class wtwshopping_stores {
 		global $wtwplugins;
 		$zsuccess = false;
 		try {
-			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
+			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Host") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
 				if (!empty($zstoreid) && isset($zstoreid)) {
+					$zhostuserid = '';
+					if ($wtwplugins->isUserInRole("Host") && $wtwplugins->isUserInRole("Admin") == false) {
+						$zhostuserid = $wtwplugins->userid;
+					}
 					$wtwplugins->query("
 						update ".WTWSHOPPING_PREFIX."stores
 						set deleteddate=now(),

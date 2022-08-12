@@ -3,18 +3,30 @@ global $wtwconnect;
 try {
 	/* google analytics tracking (if defined in wtw_config.php) */
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/wtw-shopping-getstores.php");
+	$zuserid = $wtwconnect->userid;
 	
 	/* select useravatarid data */
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 	$zstores = array();
-	$zresults = $wtwconnect->query("
-		select *
-		from ".WTWSHOPPING_PREFIX."stores  
-		where deleted=0;");
+	$zresults = array();
+	if ($wtwconnect->hasPermission(array("admin"))) {
+		$zresults = $wtwconnect->query("
+			select *
+			from ".WTWSHOPPING_PREFIX."stores  
+			where deleted=0;");
+	} else if ($wtwconnect->hasPermission(array("host"))) {
+		$zresults = $wtwconnect->query("
+			select *
+			from ".WTWSHOPPING_PREFIX."stores  
+			where deleted=0
+				and ((hostuserid='".$zuserid."' and not hostuserid='')
+				or (createuserid='".$zuserid."' and not createuserid=''));");
+	}
 	$i = 0;
 	foreach ($zresults as $zrow) {
 		$zstores[$i] = array(
 			'storeid'=> $zrow["storeid"], 
+			'hostuserid'=> $zrow["hostuserid"], 
 			'storename'=> $zrow["storename"], 
 			'storeiframes'=> $zrow["storeiframes"],
 			'storeurl'=> $zrow["storeurl"],

@@ -7,6 +7,7 @@ function wtwshopping() {
 	this.molds = [];
 	this.products = [];
 	this.fetchQueue = [];
+	this.temptext = '';
 }
 
 var WTWShopping = new wtwshopping();
@@ -419,9 +420,15 @@ wtwshopping.prototype.setProduct = async function(zcategoryid, zproductid, zprod
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		var zstoreinfo = WTWShopping.getStoreID(zmoldnameparts.communityid, zmoldnameparts.buildingid, zmoldnameparts.thingid);
 		if (WTW.adminView == 1) {
-			dGet('wtw_tmoldproductid').value = zproductid;
-			//dGet('wtw_tmoldproductname').value = zproductname;
-			dGet('wtw_tmoldslug').value = zslug;
+			if (dGet('wtw_tmoldproductid') != null) {
+				dGet('wtw_tmoldproductid').value = zproductid;
+			}
+			if (dGet('wtw_tmoldproductname') != null) {
+				//dGet('wtw_tmoldproductname').value = zproductname;
+			}
+			if (dGet('wtw_tmoldslug') != null) {
+				dGet('wtw_tmoldslug').value = zslug;
+			}
 		}
 		
 		if (zmoldnameparts.molds[zmoldnameparts.moldind] != undefined) {

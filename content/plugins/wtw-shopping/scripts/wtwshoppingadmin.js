@@ -1,3 +1,47 @@
+wtwshopping.prototype.openAddStoreForm = async function() {
+	try {
+		WTWShopping.temptext = '';
+		WTW.openFullPageForm('fullpage','Add Store','wtw_addstoresettingspage');
+		dGet('wtw_tstoreid').value = '';
+		dGet('wtw_tstorename').value = 'My 3D Store';
+		dGet('wtw_tstoreiframes').checked = true;
+		dGet('wtw_tstoreurl').value = '';
+		dGet('wtw_tstorecarturl').value = '';
+		dGet('wtw_tstoreproducturl').value = '';
+		dGet('wtw_tstorewooapiurl').value = '';
+		dGet('wtw_tstorewookey').value = '';
+		dGet('wtw_tstorewoosecret').value = '';
+		dGet('wtw_shopping_addstoretitle').innerHTML = "Add Store";
+		dGet('wtw_baddstore').innerHTML = "Add Store";
+		WTW.hide('wtw_bdeletestore');
+	} catch (ex) {
+		WTW.log("plugins:wtw-shopping:scripts-wtwshoppingadmin.js-openAddStoreForm=" + ex.message);
+	} 
+}
+
+wtwshopping.prototype.prefillStoreForm = async function() {
+	try {
+		var zstoreurl = dGet('wtw_tstoreurl').value;
+		if (zstoreurl.length > 9) {
+			if (zstoreurl[zstoreurl.length-1] == '/') {
+				zstoreurl = zstoreurl.substring(0,zstoreurl.length-1);
+			}
+		}
+		if (dGet('wtw_tstorecarturl').value == '' || dGet('wtw_tstorecarturl').value == WTWShopping.temptext + '/cart/') {
+			dGet('wtw_tstorecarturl').value = zstoreurl + '/cart/';
+		}
+		if (dGet('wtw_tstoreproducturl').value == '' || dGet('wtw_tstoreproducturl').value == WTWShopping.temptext + '/product/') {
+			dGet('wtw_tstoreproducturl').value = zstoreurl + '/product/';
+		}
+		if (dGet('wtw_tstorewooapiurl').value == '' || dGet('wtw_tstorewooapiurl').value == WTWShopping.temptext + '/wp-json/wc/v2/') {
+			dGet('wtw_tstorewooapiurl').value = zstoreurl + '/wp-json/wc/v2/';
+		}
+		WTWShopping.temptext = zstoreurl;
+	} catch (ex) {
+		WTW.log("plugins:wtw-shopping:scripts-wtwshoppingadmin.js-prefillStoreForm=" + ex.message);
+	} 
+}
+
 wtwshopping.prototype.addStore = async function() {
 	try {
 		var zstoreiframes = '0';
@@ -21,7 +65,7 @@ wtwshopping.prototype.addStore = async function() {
 				zresponse = JSON.parse(zresponse);
 				/* note: zresponse.serror would contain any error text */
 				WTWShopping.cancelSaveStore(false);
-				WTW.openFullPageForm('fullpage','List Stores','wtw_liststorespage');
+				WTW.openFullPageForm('fullpage','All 3D Stores','wtw_liststorespage');
 				WTWShopping.getStores();
 			}
 		);
@@ -41,7 +85,7 @@ wtwshopping.prototype.deleteStore = async function() {
 				zresponse = JSON.parse(zresponse);
 				/* note: zresponse.serror would contain any error text */
 				WTWShopping.cancelSaveStore(false);
-				WTW.openFullPageForm('fullpage','List Stores','wtw_liststorespage');
+				WTW.openFullPageForm('fullpage','All 3D Stores','wtw_liststorespage');
 				WTWShopping.getStores();
 			}
 		);
@@ -65,7 +109,7 @@ wtwshopping.prototype.cancelSaveStore = function(zredirect) {
 		dGet('wtw_baddstore').innerHTML = "Add Store";
 		WTW.hide('wtw_bdeletestore');
 		if (zredirect) {
-			WTW.openFullPageForm('fullpage','List Stores','wtw_liststorespage');parent.WTWShopping.getStores();
+			WTW.openFullPageForm('fullpage','All 3D Stores','wtw_liststorespage');parent.WTWShopping.getStores();
 		}
 	} catch (ex) {
 		WTW.log("plugins:wtw-shopping:scripts-wtwshoppingadmin.js-cancelSaveStore=" + ex.message);
