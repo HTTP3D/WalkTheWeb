@@ -5,7 +5,7 @@ try {
 	require_once(WTW_SwiftMailer_PATH . '/functions/class_functions.php');
 	global $wtwswiftmailer_functions;
 	/* get sent data */
-	$zrequest = file_get_contents('php://input');
+	$zrequest = $wtwhandlers->openFilefromURL('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
 	/* get the requested function name for the awitch case below */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
