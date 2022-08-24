@@ -282,12 +282,8 @@ class wtwshopping_stores {
 					}
 					if (!empty($zwookey) && isset($zwookey) && !empty($zwoosecret) && isset($zwoosecret)) {
 						$zupdateurl = $zstoreurl."/walktheweb/wtwconnection.php?walktheweb_wtwconnection=1&hosturl=".$wtwplugins->domainurl."&wtwkey=".$zwtwkey."&wtwsecret=".$zwtwsecret."&wookey=".$zwookey."&woosecret=".$zwoosecret;
-						if(ini_get('allow_url_fopen') ) {
-							$zdata1 = file_get_contents($zupdateurl);
-						} else if (extension_loaded('curl')) {
-							$getfile = curl_init($zupdateurl);
-							curl_close($getfile);
-						}
+						/* test open the path */
+						$wtwplugins->openFilefromURL($zupdateurl);
 					}
 					$zsuccess = true;
 				}

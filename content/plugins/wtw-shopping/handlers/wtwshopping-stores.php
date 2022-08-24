@@ -5,7 +5,7 @@ try {
 	require_once(WTWSHOPPING_PATH . '/functions/class_wtwshopping_stores.php');
 	global $wtwshopping_stores;
 	/* get sent data */
-	$zrequest = file_get_contents('php://input');
+	$zrequest = $wtwhandlers->openFilefromURL('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
 	/* get the requested function name for the switch case below */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
