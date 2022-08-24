@@ -244,11 +244,11 @@ try {
 		if (!isset($zglobaluseravatarid) || empty($zglobaluseravatarid)) {
 			/* get local avatar */
 			$avatarurl = $wtwconnect->domainurl."/connect/useravatar.php?useravatarid=".base64_encode($zuseravatarid)."&instanceid=".base64_encode($zinstanceid)."&userid=".base64_encode($zuserid)."&userip=".base64_encode($zuserip);
-			$zavatardata = file_get_contents($avatarurl);
+			$zavatardata = $wtwconnect->openFilefromURL($avatarurl);
 		} else {
 			/* get global avatar */
 			$avatarurl = "https://3dnet.walktheweb.com/connect/globalavatar.php?usertoken=".$zusertoken."&globaluseravatarid=".base64_encode($zglobaluseravatarid)."&serverinstanceid=".base64_encode($zserverinstanceid);
-			$zavatardata = file_get_contents($avatarurl);
+			$zavatardata = $wtwconnect->openFilefromURL($avatarurl);
 		}
 	}
 	$zavatardata = json_decode($zavatardata);
