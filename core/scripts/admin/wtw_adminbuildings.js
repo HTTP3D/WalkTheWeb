@@ -350,30 +350,94 @@ WTWJS.prototype.getSelectBuildingsList = async function() {
 	}		
 }
 
-WTWJS.prototype.getBuildingMoldList = async function() {
+WTWJS.prototype.getAddBuildingList = async function() {
 	/* 3D Buildings can be added to 3D Communities */
 	/* this function creates a list of 3D Buildings to add */
 	try {
-		WTW.hide('wtw_buildingmoldsbuttonlist');
-		WTW.show('wtw_loadingbuildingmoldsbuttonlist');
-		dGet("wtw_buildingmoldsbuttonlist").innerHTML = "";
+		WTW.hide('wtw_buildingsbuttonlist');
+		WTW.show('wtw_loadingbuildingsbuttonlist');
+		dGet("wtw_buildingsbuttonlist").innerHTML = "";
 		WTW.getAsyncJSON("/connect/buildings.php?userid=" + dGet('wtw_tuserid').value, 
 			function(zresponse) {
 				WTW.buildings = JSON.parse(zresponse);
 				if (WTW.buildings != null) {
 					for (var i = 0; i < WTW.buildings.length; i++) {
 						if (WTW.buildings[i] != null) {
-							dGet("wtw_buildingmoldsbuttonlist").innerHTML += "<div id=\"wtw_baddbbuildingmold" + WTW.buildings[i].buildinginfo.buildingid + "\" onclick=\"WTW.addConnectingGrid('building', '" + WTW.buildings[i].buildinginfo.buildingid + "', '" + WTW.buildings[i].buildinginfo.buildingname + "');\" class='wtw-menulevel2'>" + WTW.buildings[i].buildinginfo.buildingname + "</div>\r\n";
+							dGet("wtw_buildingsbuttonlist").innerHTML += "<div id=\"wtw_baddbbuildingmold" + WTW.buildings[i].buildinginfo.buildingid + "\" onclick=\"WTW.addConnectingGrid('building', '" + WTW.buildings[i].buildinginfo.buildingid + "', '" + WTW.buildings[i].buildinginfo.buildingname + "');\" class='wtw-menulevel2'>" + WTW.buildings[i].buildinginfo.buildingname + "</div>\r\n";
 						}
 					}
 				}
-				WTW.hide('wtw_loadingbuildingmoldsbuttonlist');
-				WTW.show('wtw_buildingmoldsbuttonlist');
+				WTW.hide('wtw_loadingbuildingsbuttonlist');
+				WTW.show('wtw_buildingsbuttonlist');
 				WTW.setWindowSize();
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_adminbuildings.js-getBuildingMoldList=" + ex.message);
+		WTW.log("core-scripts-admin-wtw_adminbuildings.js-getAddBuildingList=" + ex.message);
+	}		
+}
+
+WTWJS.prototype.showFranchise = function(zobj, zdiv) {
+	/* toggle Local vs Internet */
+	try {
+		switch (zobj.id) {
+			case 'wtw_buildingsbuttonlocal':
+				dGet('wtw_buildingsbuttonlocal').className = 'wtw-localbuttonselected';
+				dGet('wtw_buildingsbuttoninternet').className = 'wtw-localbutton';
+				WTW.hide(zdiv);
+				WTW.getAddBuildingList();
+				break;
+			case 'wtw_buildingsbuttoninternet':
+				dGet('wtw_buildingsbuttoninternet').className = 'wtw-localbuttonselected';
+				dGet('wtw_buildingsbuttonlocal').className = 'wtw-localbutton';
+				WTW.show(zdiv);
+				dGet('wtw_buildingsbuttonlist').innerHTML = '';
+				dGet('wtw_franchisesearch').value = '3d.';
+				dGet('wtw_franchisesearch').focus();
+				break;
+		}
+		
+		
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminbuildings.js-showFranchise=" + ex.message);
+	}		
+}
+
+WTWJS.prototype.getFranchiseBuildingList = async function() {
+	/* 3D Buildings can be added to 3D Communities */
+	/* this function creates a list of 3D Buildings to add */
+	try {
+		WTW.hide('wtw_buildingsbuttonlist');
+		WTW.show('wtw_loadingbuildingsbuttonlist');
+		dGet("wtw_buildingsbuttonlist").innerHTML = '';
+		var zrequest = {
+			'domainname': dGet('wtw_franchisesearch').value,
+			'webtype': 'building',
+			'function':'getfranchises'
+		};
+		WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/franchises.php", zrequest,
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				var zbuildingsbuttonlist = '';
+				if (zresponse != null) {
+					for (var i = 0; i < zresponse.length; i++) {
+						if (zresponse[i] != null) {
+							zbuildingsbuttonlist += "<div id=\"wtw_baddbbuildingmold" + zresponse[i].franchiseid + "\" onclick=\"WTW.addConnectingGrid('building', '', '" + zresponse[i].sitename + "', '" + zresponse[i].franchiseid + "', '" + zresponse[i].serverfranchiseid + "', '" + zresponse[i].webalias + "');\" class='wtw-menulevel2'>";
+							if (zresponse[i].sitepreview != '') {
+								zbuildingsbuttonlist += "<img src='" + zresponse[i].sitepreview + "' style='width:100%;height:auto;' /><br />";
+							}
+							zbuildingsbuttonlist += "<b>" + zresponse[i].sitename + "</b><br /><div class='wtw-menusmalltext'>" + zresponse[i].sitedescription + "</div></div>\r\n";
+						}
+					}
+				}
+				dGet("wtw_buildingsbuttonlist").innerHTML = zbuildingsbuttonlist;
+				WTW.hide('wtw_loadingbuildingsbuttonlist');
+				WTW.show('wtw_buildingsbuttonlist');
+				WTW.setWindowSize();
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-admin-wtw_adminbuildings.js-getFranchiseBuildingList=" + ex.message);
 	}		
 }
 

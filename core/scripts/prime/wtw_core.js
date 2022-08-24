@@ -491,7 +491,7 @@ WTWJS.prototype.loadUserSettings = function() {
 		WTW.showFPS = 0;
 		if (zshowfps != null) {
 			if (zshowfps == "1") {
-				dGet('wtw_fpsvisibility').innerHTML = WTW.__("Mold Count and FPS are Visible");
+				dGet('wtw_fpsvisibility').innerHTML = WTW.__("Counts and FPS are Visible");
 				dGet('wtw_fpsicon').src = "/content/system/images/menuon.png";
 				dGet('wtw_fpsicon').alt = WTW.__("Hide Mold Count");
 				dGet('wtw_fpsicon').title = WTW.__("Hide Mold Count");

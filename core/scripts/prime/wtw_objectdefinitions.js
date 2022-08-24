@@ -13,6 +13,12 @@ WTWJS.prototype.newConnectingGrid = function() {
 	var zconnectinggrid = '';
 	try {
 		zconnectinggrid = {
+			'franchise':
+			{
+				'franchiseid':'',
+				'serverfranchiseid':'',
+				'webalias':''
+			},
 			'communityinfo':
 			{
 				'communityid':'',

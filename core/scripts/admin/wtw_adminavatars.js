@@ -177,6 +177,16 @@ WTWJS.prototype.loadAvatarForEdit = function() {
 					zavatardef.objects = zresponse.avatar.objects;
 					zavatardef.avatarparts = zresponse.avatar.avatarparts;
 					zavatardef.avataranimationdefs = zresponse.avatar.avataranimationdefs;
+					var zdisplayname = zresponse.avatar.displayname;
+					dGet('wtw_showcommunityname').innerHTML = 'Edit 3D Avatar';
+					dGet('wtw_showcommunityname').style.cursor = 'default';
+					if (zdisplayname == "") {
+						dGet('wtw_showbuildingname').innerHTML = "3D Avatar";
+						dGet('wtw_showbuildingname').style.cursor = 'default';
+					} else {
+						dGet('wtw_showbuildingname').innerHTML = zdisplayname;
+						dGet('wtw_showbuildingname').style.cursor = 'pointer';
+					}
 					WTW.addAvatarForEdit(zavatardef.name, zavatardef);
 				}
 			}

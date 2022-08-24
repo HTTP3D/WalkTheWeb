@@ -82,6 +82,16 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 					case 35:
 						WTW.openThingForm(thingid);
 						break;
+					case 69: /* change site preview image */
+						if (communityid != '') {
+							WTW.adminMenuItemSelected(dGet('wtw_admincommunitysnapshot'));
+						} else if (buildingid != '') {
+							WTW.adminMenuItemSelected(dGet('wtw_adminbuildingsnapshot'));
+						} else if (thingid != '') {
+							WTW.adminMenuItemSelected(dGet('wtw_adminthingsnapshot'));
+						}
+						break;
+						
 				}
 				WTW.show('wtw_adminmenu' + zhmenu);
 				if (dGet('wtw_adminmenubutton').style.left == "0px") {

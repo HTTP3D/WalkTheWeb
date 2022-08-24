@@ -123,14 +123,14 @@ WTWJS.prototype.hideAdminMenu = function() {
 	}
 }
 
-WTWJS.prototype.adminOpenSubmenuForm = function(obj) {
+WTWJS.prototype.adminOpenSubmenuForm = function(zobj) {
 	/* open a section (submenu form) of the admin menu */
 	try {
-		if (obj != null) {
-			if (obj.id != undefined) {
-				if (dGet(obj.id + 'div') != null) {
+		if (zobj != null) {
+			if (zobj.id != undefined) {
+				if (dGet(zobj.id + 'div') != null) {
 					WTW.hideAdminMenu();
-					WTW.show(obj.id + 'div');
+					WTW.show(zobj.id + 'div');
 				}
 			}
 		}
@@ -139,12 +139,12 @@ WTWJS.prototype.adminOpenSubmenuForm = function(obj) {
 	}		
 }
 
-WTWJS.prototype.adminMenuItemSelected = function(obj) {
+WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 	/* select the menu item and execute the appropriate functions per menu item */
 	try {
-		if (obj != null) {
-			if (obj.id != undefined) {
-				switch (obj.id) {
+		if (zobj != null) {
+			if (zobj.id != undefined) {
+				switch (zobj.id) {
 				/* Dashboard */
 					case "wtw_adminmenudashboard":
 						WTW.openFullPageForm('dashboard','','');
@@ -235,12 +235,12 @@ WTWJS.prototype.adminMenuItemSelected = function(obj) {
 						break;
 					case 'wtw_admincommunityaddbuilding':
 						WTW.hideAdminMenu();
-						WTW.getBuildingMoldList()
+						WTW.showFranchise(dGet('wtw_buildingsbuttonlocal'),'wtw_buildingsinternetdiv');
 						WTW.show('wtw_adminmenu27');
 						break;
 					case 'wtw_admincommunityaddthing':
 						WTW.hideAdminMenu();
-						WTW.getThingMoldList()
+						WTW.getThingMoldList();
 						WTW.show('wtw_adminmenu13');
 						break;
 					case 'wtw_admincommunityactionzones':
@@ -1907,16 +1907,18 @@ WTWJS.prototype.adminMenuQuickKeys = function(keycode) {
 WTWJS.prototype.setMenuBarSelectText = function() {
 	/* browse menubar while in admin mode - set default menu bar text wording and show/hide */
 	try {
-		if (thingid == "" && buildingid == "" && communityid == "") {
+		if (thingid == "" && buildingid == "" && communityid == "" && avatarid == "") {
 			dGet('wtw_showcommunityname').innerHTML = WTW.__("Select 3D Item to Edit");
 			dGet('wtw_showcommunityname').style.cursor = 'default';
 			dGet('wtw_showbuildingname').innerHTML = WTW.__("from Admin Menu Above");
 			dGet('wtw_showbuildingname').style.cursor = 'default';
 			WTW.hide('wtw_modebuilding');
 			WTW.hide('wtw_mainadminmode');
+			WTW.hide('wtw_rating');
 		} else {
 			WTW.showInline('wtw_modebuilding');
 			WTW.showInline('wtw_mainadminmode');
+			WTW.showInline('wtw_rating');
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-admin-wtw_adminmenus.js-setMenuBarSelectText=" + ex.message);

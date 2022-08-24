@@ -267,13 +267,22 @@ WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 	}
 }
 
-WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, zchildwebname) {
+WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, zchildwebname, zfranchiseid, zserverfranchiseid, zwebalias) {
 	/* add a connecting grid (add 3D Building to a 3D Community, or 3D Thing in a 3D Community or 3D Building) */
 	try {
+		if (zfranchiseid == undefined) {
+			zfranchiseid = '';
+		}
+		if (zserverfranchiseid == undefined) {
+			zserverfranchiseid = '';
+		}
+		if (zwebalias == undefined) {
+			zwebalias = '';
+		}
 		WTW.hideAdminMenu();
 		var zparentwebid = "";
 		var zparentwebtype = "";
-		var zdist = 100;
+		var zdist = 200;
 		dGet('wtw_tconngridalttag').value = '';
 		if (communityid != "") {
 			zparentwebid = communityid;
@@ -285,7 +294,7 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 			zparentwebid = thingid;
 			zparentwebtype = "thing";
 		}
-		if (zparentwebtype != "" && zchildwebid != "") {
+		if (zparentwebtype != "" && (zchildwebid != "" || zfranchiseid != '')) {
 			if (zparentwebtype == "community") {
 				if (WTW.communities != null) {
 					for (var i = 0; i < WTW.communities.length; i++) {
@@ -338,7 +347,11 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 			zpositiony = znewcoords.positionY;
 			zpositionz = znewcoords.positionZ;
 			zrotationy = znewcoords.rotationY;
-			WTW.getAsyncJSON("/connect/actionzones.php?thingid=" + zchildwebid + "&buildingid=" + zchildwebid + "&communityid=&parentname=" + zparentname + "&connectinggridid=" + zconnectinggridid + "&connectinggridind=" + zconnectinggridind, 
+			var zactionzonesurl = '/connect/actionzones.php?thingid=' + zchildwebid + '&buildingid=' + zchildwebid + '&communityid=&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
+			if (zfranchiseid != '') {
+				zactionzonesurl = 'https://3dnet.walktheweb.com/connect/franchiseactionzones.php?franchiseid=' + zfranchiseid + '&serverfranchiseid=' + zserverfranchiseid + '&webalias=' + zwebalias + '&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
+			}
+			WTW.getAsyncJSON(zactionzonesurl, 
 				function(zresponse) {
 					var zaddactionzones = JSON.parse(zresponse);
 					for (var j = 0; j < zaddactionzones.actionzones.length; j++) {
@@ -438,7 +451,11 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 					WTW.openConnectingGridsForm(zconnectinggridind);
 					WTW.setWindowSize();
 					if (zchildwebtype == "building") {
-						WTW.getAsyncJSON("/connect/connectinggrids.php?parentwebid=" + zchildwebid + "&startpositionx=0&startpositiony=0&startpositionz=0&parentname=" + WTW.connectingGrids[zconnectinggridind].moldname, 
+						var zconnectinggridsurl = '/connect/connectinggrids.php?parentwebid=' + zchildwebid + '&startpositionx=0&startpositiony=0&startpositionz=0&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname;
+						if (zfranchiseid != '') {
+							zconnectinggridsurl = 'https://3dnet.walktheweb.com/connect/franchiseconnectinggrids.php?franchiseid=' + zfranchiseid + '&serverfranchiseid=' + zserverfranchiseid + '&webalias=' + zwebalias + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&startpositionx=0&startpositiony=0&startpositionz=0';
+						}
+						WTW.getAsyncJSON(zconnectinggridsurl, 
 							function(zresponse) {
 								WTW.loadChildConnectingGrids(JSON.parse(zresponse));
 							}

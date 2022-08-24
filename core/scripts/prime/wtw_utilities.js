@@ -1055,7 +1055,7 @@ WTWJS.prototype.formatDate = function(zdatetext) {
 WTWJS.prototype.formatDateLong = function(zdatetext) {
 	/* format long date spelled out month */
 	try {
-		if (zdatetext != "") {
+		if (zdatetext != '') {
 			var zdate = new Date(zdatetext);
 			var zmonth = (zdate.getMonth() + 1);
 			var zday = zdate.getDate() + ', ';
@@ -1063,48 +1063,48 @@ WTWJS.prototype.formatDateLong = function(zdatetext) {
 			var zmonthtext = '';
 			switch (zmonth) {
 				case 1:
-					zmonthtext = "January ";
+					zmonthtext = 'January ';
 					break;
 				case 2:
-					zmonthtext = "February ";
+					zmonthtext = 'February ';
 					break;
 				case 3:
-					zmonthtext = "March ";
+					zmonthtext = 'March ';
 					break;
 				case 4:
-					zmonthtext = "April ";
+					zmonthtext = 'April ';
 					break;
 				case 5:
-					zmonthtext = "May ";
+					zmonthtext = 'May ';
 					break;
 				case 6:
-					zmonthtext = "June ";
+					zmonthtext = 'June ';
 					break;
 				case 7:
-					zmonthtext = "July ";
+					zmonthtext = 'July ';
 					break;
 				case 8:
-					zmonthtext = "August ";
+					zmonthtext = 'August ';
 					break;
 				case 9:
-					zmonthtext = "September ";
+					zmonthtext = 'September ';
 					break;
 				case 10:
-					zmonthtext = "October ";
+					zmonthtext = 'October ';
 					break;
 				case 11:
-					zmonthtext = "November ";
+					zmonthtext = 'November ';
 					break;
 				case 12:
-					zmonthtext = "December ";
+					zmonthtext = 'December ';
 					break;
 			}
 			return zmonthtext + zday + zyear;
 		} else {
-			return "";
+			return '';
 		}
 	} catch (ex) {
-		return "";
+		return '';
 	}
 }
 
@@ -1113,7 +1113,7 @@ WTWJS.prototype.addDays = function(zdatetext, zdays) {
 	var zdate = '';
 	try {
 		if (zdatetext != null) {
-			if (zdatetext != "") {
+			if (zdatetext != '') {
 				var zddate = new Date(zdatetext);
 				zddate.setDate(zddate.getDate() + Number(zdays));
 				var	zmonth = '' + (zddate.getMonth() + 1);
@@ -1286,10 +1286,12 @@ WTWJS.prototype.setDDLText = function(zddlname, ztext) {
 
 WTWJS.prototype.getDDLValue = function(zddlname) {
 	/* get the drop-down list selected value */
-	var zddlvalue = "";
+	var zddlvalue = '';
 	try {
-		if (dGet(zddlname).options[dGet(zddlname).selectedIndex] != undefined) {
-			zddlvalue = dGet(zddlname).options[dGet(zddlname).selectedIndex].value;
+		if (dGet(zddlname) != null) {
+			if (dGet(zddlname).options[dGet(zddlname).selectedIndex] != undefined) {
+				zddlvalue = dGet(zddlname).options[dGet(zddlname).selectedIndex].value;
+			}
 		}
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-setDDLValue=" + ex.message);
@@ -1299,10 +1301,12 @@ WTWJS.prototype.getDDLValue = function(zddlname) {
 
 WTWJS.prototype.getDDLText = function(zddlname) {
 	/* get the drop-down list selected text */
-	var zddltext = "";
+	var zddltext = '';
 	try {
-		if (dGet(zddlname).options[dGet(zddlname).selectedIndex] != undefined) {
-			zddltext = dGet(zddlname).options[dGet(zddlname).selectedIndex].text;
+		if (dGet(zddlname) != null) {
+			if (dGet(zddlname).options[dGet(zddlname).selectedIndex] != undefined) {
+				zddltext = dGet(zddlname).options[dGet(zddlname).selectedIndex].text;
+			}
 		}
     } catch (ex) {
 		WTW.log("core-scripts-prime-wtw_utilities.js-getDDLText=" + ex.message);

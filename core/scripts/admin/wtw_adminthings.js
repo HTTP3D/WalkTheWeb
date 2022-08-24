@@ -44,6 +44,8 @@ WTWJS.prototype.openThingForm = async function(zthingid) {
 							}
 						}
 					}
+					dGet('wtw_showcommunityname').innerHTML = 'Edit 3D Thing';
+					dGet('wtw_showcommunityname').style.cursor = 'default';
 					if (dGet('wtw_tthingname').value == "") {
 						dGet('wtw_showbuildingname').innerHTML = "3D Thing";
 						dGet('wtw_showbuildingname').style.cursor = 'default';
@@ -94,6 +96,8 @@ WTWJS.prototype.loadThingForm = async function(zthingid) {
 							}
 						}
 					}
+					dGet('wtw_showcommunityname').innerHTML = 'Edit 3D Thing';
+					dGet('wtw_showcommunityname').style.cursor = 'default';
 					if (dGet('wtw_tthingname').value == "") {
 						dGet('wtw_showbuildingname').innerHTML = "3D Thing";
 						dGet('wtw_showbuildingname').style.cursor = 'default';

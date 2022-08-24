@@ -32,7 +32,11 @@ WTWJS.prototype.openAllUsers = async function(zfilter) {
 					zuserlist += "<table class=\"wtw-table\"><tr><td class=\"wtw-tablecolumnheading\">Display Name</td><td class=\"wtw-tablecolumnheading\">Email</td><td class=\"wtw-tablecolumnheading\">User ID</td><td class=\"wtw-tablecolumnheading\">User Roles</td><td class=\"wtw-tablecolumnheading\">Create Date</td><td class=\"wtw-tablecolumnheading\">&nbsp;</td></tr>";
 					for (var i=0;i<zresponse.length;i++) {
 						if (zresponse[i].userid != undefined) {
-							if (zfilter == 'All Users' || (zfilter == 'Privileged Users' && zresponse[i].roles.length > 0) || (zfilter == 'Local Users' && zresponse[i].usertoken.length == 0 && zresponse[i].roles.length > 0) || (zfilter == 'Global Users' && zresponse[i].usertoken.length > 0 && zresponse[i].roles.length > 0) || (zfilter == 'Visiting Users' && zresponse[i].roles.length == 0)) {
+							if (zfilter == 'All Users' || 
+								(zfilter == 'Privileged Users' && zresponse[i].roles.length > 0) || 
+								(zfilter == 'Local Users' && zresponse[i].usertoken == 'false' && zresponse[i].roles.length > 0) || 
+								(zfilter == 'Global Users' && zresponse[i].usertoken == 'true' && zresponse[i].roles.length > 0) || 
+								(zfilter == 'Visiting Users' && zresponse[i].roles.length == 0)) {
 								zuserlist += "<tr><td class=\"wtw-tablecolumns\">" + zresponse[i].displayname + "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].email + "</td><td class=\"wtw-tablecolumns\">" + zresponse[i].userid + "</td><td class=\"wtw-tablecolumns\">";
 								for (var j=0;j<zresponse[i].roles.length;j++) {
 									if (zresponse[i].roles[j] != undefined) {

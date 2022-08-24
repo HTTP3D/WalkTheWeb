@@ -416,7 +416,6 @@ WTWJS.prototype.hudToggle = function() {
 WTWJS.prototype.hudClick = function(zmoldname) {
 	/* handles click on HUD buttons */
 	try {
-//WTW.log("zmoldname=" + zmoldname);
 		var zhud = WTW.getMeshOrNodeByID('hud');
 		if (zhud != null) {
 			var zcamera1id = '';
@@ -1397,25 +1396,17 @@ WTWJS.prototype.toggleSoundMute = function() {
 	}
 }
 
-
 /* menu options - set on or off */
 WTWJS.prototype.toggleCameraTwo = function() {
 	/* toggle on or off camera two (scene camera) */
 	try {
-		if (dGet('wtw_cameratwotext').innerHTML == WTW.__("Second Camera Off")) { 
+		var zcamera2 = WTW.getCookie('showcameratwo');
+		if (zcamera2 == 0) { 
 			/* turn on */
-			dGet('wtw_cameratwotext').innerHTML = WTW.__("Second Camera On");
-			dGet('wtw_cameratwoicon').src = "/content/system/images/menucamera.png";
-			dGet('wtw_cameratwoicon').alt = WTW.__("Hide Second Camera");
-			dGet('wtw_cameratwoicon').title = WTW.__("Hide Second Camera");
 			WTW.show('wtw_cameratwoselect');
 			WTW.setCookie("showcameratwo","1",30);
 		} else {
 			/* turn off */
-			dGet('wtw_cameratwotext').innerHTML = WTW.__("Second Camera Off");
-			dGet('wtw_cameratwoicon').src = "/content/system/images/menucameraoff.png";
-			dGet('wtw_cameratwoicon').alt = WTW.__("Show Second Camera");
-			dGet('wtw_cameratwoicon').title = WTW.__("Show Second Camera");
 			WTW.hide('wtw_cameratwoselect');
 			WTW.setCookie("showcameratwo","0",30);
 		}
@@ -1454,9 +1445,9 @@ WTWJS.prototype.toggleArrows = function() {
 WTWJS.prototype.toggleFPS = function() {
 	/* toggle show or hide frames per second counter */
 	try {
-		if (dGet('wtw_fpsvisibility').innerHTML == WTW.__("Mold Count and FPS are Visible")) { 
+		if (dGet('wtw_fpsvisibility').innerHTML == WTW.__("Counts and FPS are Visible")) { 
 			/* hide fps */
-			dGet('wtw_fpsvisibility').innerHTML = WTW.__("Mold Count and FPS are Hidden");
+			dGet('wtw_fpsvisibility').innerHTML = WTW.__("Counts and FPS are Hidden");
 			dGet('wtw_fpsicon').src = "/content/system/images/menuoff.png";
 			dGet('wtw_fpsicon').alt = WTW.__("Show Mold Count");
 			dGet('wtw_fpsicon').title = WTW.__("Show Mold Count");
@@ -1465,7 +1456,7 @@ WTWJS.prototype.toggleFPS = function() {
 			WTW.showFPS = 0;
 		} else {
 			/* show fps */
-			dGet('wtw_fpsvisibility').innerHTML = WTW.__("Mold Count and FPS are Visible");
+			dGet('wtw_fpsvisibility').innerHTML = WTW.__("Counts and FPS are Visible");
 			dGet('wtw_fpsicon').src = "/content/system/images/menuon.png";
 			dGet('wtw_fpsicon').alt = WTW.__("Hide Mold Count");
 			dGet('wtw_fpsicon').title = WTW.__("Hide Mold Count");
@@ -1821,5 +1812,38 @@ WTWJS.prototype.listTransformNodes = function() {
 		}
 	} catch (ex) {
 		WTW.log("core-scripts-hud-wtw_hud.js-listTransformNodes=" + ex.message);
+	}
+}
+
+WTWJS.prototype.openCameraMenu = function() {
+	/* open camera menu */
+	try {
+		WTW.hide('wtw_menusettings');
+		WTW.openHUD();
+		window.setTimeout(function(){
+			WTW.hudMenuText('settings');
+			/* look up menu item id for camera */
+			var zrequest = {
+				'menuset':'settings',
+				'function':'gethudmenu'
+			};
+			WTW.postAsyncJSON("/core/handlers/hud.php", zrequest, 
+				function(zresponse) {
+					if (zresponse != null) {
+						zresponse = JSON.parse(zresponse);
+						for (var i=0;i<zresponse.length;i++) {
+							if (zresponse[i] != null) {
+								if (zresponse[i].menutext == 'Cameras') {
+									WTW.hudClick('hud-menuitem-' + zresponse[i].menuitemid);
+									i = zresponse.length;
+								}
+							}
+						}
+					}
+				}
+			);			
+		},1000)
+	} catch (ex) {
+		WTW.log("core-scripts-hud-wtw_hud.js-openCameraMenu=" + ex.message);
 	}
 }
