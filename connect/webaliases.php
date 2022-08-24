@@ -15,10 +15,37 @@ try {
 	$zresults = array();
 	
 	/* get web aliases for a user */
-	if ($wtwconnect->isUserInRole("Admin")) {
+	if ($wtwconnect->isUserInRole("Admin") || $wtwconnect->isUserInRole("Developer")) {
 		$zresults = $wtwconnect->query("
-			select w1.*
+			select w1.*,
+				c1.communityname,
+				b1.buildingname,
+				t1.thingname,
+				c1.snapshotid as communitysnapshotid,
+				b1.snapshotid as buildingsnapshotid,
+				t1.snapshotid as thingsnapshotid,
+				case when c1.snapshotid is null then ''
+					else (select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=c1.snapshotid limit 1)
+					end as communitysnapshoturl,
+				case when b1.snapshotid is null then ''
+					else (select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=b1.snapshotid limit 1)
+					end as buildingsnapshoturl,
+				case when t1.snapshotid is null then ''
+					else (select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=t1.snapshotid limit 1)
+					end as thingsnapshoturl
 			from ".wtw_tableprefix."webaliases w1
+				left join ".wtw_tableprefix."communities c1
+					on w1.communityid=c1.communityid
+				left join ".wtw_tableprefix."buildings b1
+					on w1.buildingid=b1.buildingid
+				left join ".wtw_tableprefix."things t1
+					on w1.thingid=t1.thingid
 			where w1.deleted=0
 			order by 
 				w1.hostuserid desc,
@@ -32,11 +59,38 @@ try {
 				w1.webaliasid;");
 	} else if ($wtwconnect->isUserInRole("Host")) {
 		$zresults = $wtwconnect->query("
-			select w1.*
+			select w1.*,
+				c1.communityname,
+				b1.buildingname,
+				t1.thingname,
+				c1.snapshotid as communitysnapshotid,
+				b1.snapshotid as buildingsnapshotid,
+				t1.snapshotid as thingsnapshotid,
+				case when c1.snapshotid is null then ''
+					else (select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=c1.snapshotid limit 1)
+					end as communitysnapshoturl,
+				case when b1.snapshotid is null then ''
+					else (select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=b1.snapshotid limit 1)
+					end as buildingsnapshoturl,
+				case when t1.snapshotid is null then ''
+					else (select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=t1.snapshotid limit 1)
+					end as thingsnapshoturl
 			from ".wtw_tableprefix."webaliases w1
+				left join ".wtw_tableprefix."communities c1
+					on w1.communityid=c1.communityid
+				left join ".wtw_tableprefix."buildings b1
+					on w1.buildingid=b1.buildingid
+				left join ".wtw_tableprefix."things t1
+					on w1.thingid=t1.thingid
 			where w1.deleted=0
-				and hostuserid='".$zhostuserid."'
-				and not hostuserid=''
+				and w1.hostuserid='".$zhostuserid."'
+				and not w1.hostuserid=''
 			order by 
 				w1.hostuserid,
 				w1.domainname,
@@ -59,13 +113,27 @@ try {
 			'webaliasid' => $zrow["webaliasid"],
 			'domainname' => $zrow["domainname"],
 			'webalias' => $zrow["webalias"],
+			'sitename' => $zrow["sitename"],
+			'sitedescription' => $zrow["sitedescription"],
+			'siteicon' => $zrow["siteicon"],
 			'communityid' => $zrow["communityid"],
 			'communitypublishname' => $zrow["communitypublishname"],
+			'communityname' => $zrow["communityname"],
 			'buildingid' => $zrow["buildingid"],
 			'buildingpublishname' => $zrow["buildingpublishname"],
+			'buildingname' => $zrow["buildingname"],
 			'thingid' => $zrow["thingid"],
 			'thingpublishname' => $zrow["thingpublishname"],
+			'thingname' => $zrow["thingname"],
 			'forcehttps' => $zrow["forcehttps"],
+			'franchise' => $zrow["franchise"],
+			'franchiseid' => $zrow["franchiseid"],
+			'communitysnapshotid' => $zrow["communitysnapshotid"],
+			'buildingsnapshotid' => $zrow["buildingsnapshotid"],
+			'thingsnapshotid' => $zrow["thingsnapshotid"],
+			'communitysnapshoturl' => $zrow["communitysnapshoturl"],
+			'buildingsnapshoturl' => $zrow["buildingsnapshoturl"],
+			'thingsnapshoturl' => $zrow["thingsnapshoturl"],
 			'createdate' => $zrow["createdate"],
 			'createuserid' => $zrow["createuserid"],
 			'updatedate' => $zrow["updatedate"],

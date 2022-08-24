@@ -78,7 +78,7 @@ try {
 				)
 			));
 				
-			$zresults = file_get_contents('https://3dnet.walktheweb.com/connect/authenticate.php', false, $zpostdata);			
+			$zresults = $wtwconnect->openFilefromURL('https://3dnet.walktheweb.com/connect/authenticate.php', false, $zpostdata);			
 			if (!empty($zresults) && isset($zresults)) {
 				$zresults = json_decode($zresults);
 			}

@@ -38,6 +38,12 @@ try {
 								on u2.websizeid=u1.uploadid 
 						where u2.uploadid=c1.waterbumpid limit 1)
 				end as waterbumppath,
+			case when c1.snapshotid = '' then ''
+				else
+					(select u1.filepath 
+						from ".wtw_tableprefix."uploads u1 
+						where u1.uploadid=c1.snapshotid limit 1)
+				end as snapshotpath,
 			case when (select GROUP_CONCAT(userid) as useraccess 
 						from ".wtw_tableprefix."userauthorizations 
 						where communityid='".$zcommunityid."' 
@@ -79,6 +85,7 @@ try {
 			'createdate' => $zrow["createdate"],
 			'createuserid' => $zrow["createuserid"],
 			'snapshotid' => $zrow["snapshotid"],
+			'snapshotpath' => $zrow["snapshotpath"],
 			'analyticsid'=> $zrow["analyticsid"],
 			'access'=> $zrow["communityaccess"]
 		);

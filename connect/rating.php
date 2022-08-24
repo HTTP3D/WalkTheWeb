@@ -112,7 +112,7 @@ try {
 		}
 	}
 	
-	if ($zextended == '1') {
+	if ($zextended == '1' && isset($zwebid) && !empty($zwebid)) {
 		/* look for content ratings on child items */
 		$zresults = $wtwconnect->query("
 			select cg1.*,

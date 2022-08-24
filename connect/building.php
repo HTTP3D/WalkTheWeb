@@ -13,7 +13,13 @@ try {
 
 	/* select building data */
 	$zresults = $wtwconnect->query("
-		select *
+		select *,
+			case when snapshotid = '' then ''
+				else
+					(select u1.filepath 
+						from ".wtw_tableprefix."uploads u1 
+						where u1.uploadid=snapshotid limit 1)
+				end as snapshotpath
 		from ".wtw_tableprefix."buildings
 		where buildingid='".$zbuildingid."'
 		   and deleted=0;");
@@ -38,6 +44,7 @@ try {
 			'createdate' => $zrow["createdate"],
 			'createuserid' => $zrow["createuserid"],
 			'snapshotid' => $zrow["snapshotid"],
+			'snapshotpath' => $zrow["snapshotpath"],
 			'analyticsid'=> $zrow["analyticsid"]
 		);
 		$zshare = array(
