@@ -150,7 +150,7 @@ class wtwcoins_functions {
 						'content' => $zpostdata
 				));
 				$zrequest  = stream_context_create($zopts);
-				$zresponse = file_get_contents('https://3dnet.walktheweb.com/connect/wtwcoins.php', false, $zrequest);
+				$zresponse = $wtwplugins->openFilefromURL('https://3dnet.walktheweb.com/connect/wtwcoins.php', false, $zrequest);
 			}
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-coins:functions-class_functions.php-collectCoinGlobal=".$e->getMessage());
