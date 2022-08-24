@@ -263,6 +263,7 @@ class wtwbuildings {
 		try {
 			/* new building has to already exist */
 			/* does user have access to copy building and new building */
+			set_time_limit(0);
 			if ($wtwhandlers->checkUpdateAccess("", $zbuildingid, "") && $wtwhandlers->checkUpdateAccess("", $zfrombuildingid, "")) {
 				/* update actionzones */
 				$zresults = $wtwhandlers->query("
@@ -1556,6 +1557,7 @@ class wtwbuildings {
 		/* import building from 3dnet.walktheweb.com in the media library */
 		global $wtwhandlers;
 		try {
+			set_time_limit(0);
 			$zversion1 = 1;
 			$zversion2 = 0;
 			$zversion3 = 0;
@@ -1820,11 +1822,7 @@ class wtwbuildings {
 				}
 				$zfromurl = "https://3dnet.walktheweb.com/connect/share.php?buildingid=".$zbuildingid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;
 
-				if(ini_get('allow_url_fopen') ) {
-					$zresponse = file_get_contents($zfromurl);
-				} else if (extension_loaded('curl')) {
-					$zresponse = curl_init($zfromurl);
-				}
+				$zresponse = $wtwhandlers->openFilefromURL($zfromurl);
 				$zresponse = json_decode($zresponse, true);
 			}
 		} catch (Exception $e) {

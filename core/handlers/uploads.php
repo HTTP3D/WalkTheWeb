@@ -6,15 +6,17 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwuploads.php');
 	global $wtwuploads;
-	$zrequest = file_get_contents('php://input');
+	$zrequest = $wtwhandlers->openFilefromURL('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
 
 	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
+	$zinstanceid = $wtwhandlers->getPost('instanceid','');
 	$zcommunityid = $wtwhandlers->getPost('communityid','');
 	$zbuildingid = $wtwhandlers->getPost('buildingid','');
 	$zthingid = $wtwhandlers->getPost('thingid','');
 	$zavatarid = $wtwhandlers->getPost('avatarid','');
+	$zfranchise = $wtwhandlers->getPost('franchise','0');
 	$zsettings = $wtwhandlers->getPost('settings','');
 	$zvalue = $wtwhandlers->getPost('value','');
 	$zwebdomainid = $wtwhandlers->getPost('webdomainid','');
@@ -30,6 +32,9 @@ try {
 	$zcommunitypublishname = $wtwhandlers->getPost('communitypublishname','');
 	$zbuildingpublishname = $wtwhandlers->getPost('buildingpublishname','');
 	$zthingpublishname = $wtwhandlers->getPost('thingpublishname','');
+	$zsitename = $wtwhandlers->getPost('sitename','');
+	$zsitedescription = $wtwhandlers->getPost('sitedescription','');
+	$zsiteicon = $wtwhandlers->getPost('siteicon','/favicon.ico');
 	$zfilepath = $wtwhandlers->getPost('filepath','');
 	$zfilename = $wtwhandlers->getPost('filename','');
 	$zfiledata = $wtwhandlers->getPost('filedata','');
@@ -75,9 +80,9 @@ try {
 			$wtwuploads->deleteWebDomain($zwebdomainid);
 			break;
 		case "savewebalias":
-			$zsuccess = $wtwuploads->saveWebAlias($zwebaliasid, $zforcehttps, $zdomainname, $zcommunitypublishname, $zbuildingpublishname, $zthingpublishname, $zcommunityid, $zbuildingid, $zthingid);
+			$zfranchiseid = $wtwuploads->saveWebAlias($zwebaliasid, $zforcehttps, $zdomainname, $zcommunitypublishname, $zbuildingpublishname, $zthingpublishname, $zcommunityid, $zbuildingid, $zthingid, $zsitename, $zsitedescription, $zsiteicon, $zfranchise, $zinstanceid);
 			$zresponse = array(
-				'success'=> $zsuccess
+				'franchiseid'=> $zfranchiseid
 			);
 			break;
 		case "deletewebalias":

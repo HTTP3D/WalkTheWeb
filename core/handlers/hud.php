@@ -6,7 +6,7 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwhud.php');
 	global $wtwhud;
-	$zrequest = file_get_contents('php://input');
+	$zrequest = $wtwhandlers->openFilefromURL('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
 	
 	/* read in values */

@@ -25,6 +25,7 @@ class wtwtables {
 		global $wtw;
 		global $wtwdb;
 		try {
+			set_time_limit(0);
 			/* Table Updates - Renamed Fields - Apply before rechecking tables - Ignores on new installs or if not found */
 			/* updated 3.4.3 - renamed avatar related fields */
 			$wtwdb->renameFieldIfExists(wtw_tableprefix.'avatars', 'avatarfolder', 'objectfolder');
@@ -343,6 +344,7 @@ class wtwtables {
 				CREATE TABLE `".wtw_tableprefix."buildings` (
 				  `buildingid` varchar(16) NOT NULL,
 				  `pastbuildingid` varchar(16) DEFAULT '',
+				  `hostuserid` varchar(16) DEFAULT '',
 				  `versionid` varchar(16) DEFAULT '',
 				  `version` varchar(12) DEFAULT '1.0.0',
 				  `versionorder` int DEFAULT '1000000',
@@ -387,6 +389,7 @@ class wtwtables {
 				CREATE TABLE `".wtw_tableprefix."communities` (
 				  `communityid` varchar(16) NOT NULL,
 				  `pastcommunityid` varchar(16) DEFAULT '',
+				  `hostuserid` varchar(16) DEFAULT '',
 				  `versionid` varchar(16) DEFAULT '',
 				  `version` varchar(12) DEFAULT '1.0.0',
 				  `versionorder` int DEFAULT '1000000',
@@ -721,7 +724,7 @@ class wtwtables {
 				  `menulevel` int DEFAULT '1',
 				  `menuiconid` varchar(16) DEFAULT '',
 				  `menuicon` varchar(255) DEFAULT '',
-				  `menuaction` varchar(45) DEFAULT '',
+				  `menuaction` varchar(255) DEFAULT '',
 				  `menuproperty` varchar(255) DEFAULT '',
 				  `menusecurity` int DEFAULT '1',
 				  `createdate` datetime DEFAULT NULL,
@@ -795,8 +798,8 @@ class wtwtables {
 				  `actionzoneid` varchar(16) DEFAULT '',
 				  `webtype` varchar(15) DEFAULT '',
 				  `webid` varchar(16) DEFAULT '',
-				  `scriptname` varchar(256) DEFAULT '',
-				  `scriptpath` varchar(256) DEFAULT '',
+				  `scriptname` varchar(255) DEFAULT '',
+				  `scriptpath` varchar(255) DEFAULT '',
 				  `createdate` datetime DEFAULT NULL,
 				  `createuserid` varchar(16) DEFAULT '',
 				  `updatedate` datetime DEFAULT NULL,
@@ -912,6 +915,7 @@ class wtwtables {
 				CREATE TABLE `".wtw_tableprefix."things` (
 				  `thingid` varchar(16) NOT NULL,
 				  `pastthingid` varchar(16) DEFAULT '',
+				  `hostuserid` varchar(16) DEFAULT '',
 				  `versionid` varchar(16) DEFAULT '',
 				  `version` varchar(12) DEFAULT '1.0.0',
 				  `versionorder` int DEFAULT '1000000',
@@ -987,10 +991,12 @@ class wtwtables {
 				CREATE TABLE `".wtw_tableprefix."uploadobjects` (
 				  `uploadobjectid` varchar(16) NOT NULL,
 				  `pastuploadobjectid` varchar(16) DEFAULT '',
+				  `hostuserid` varchar(16) DEFAULT '',
 				  `versionid` varchar(16) DEFAULT '',
 				  `version` varchar(10) DEFAULT '1.0.0',
 				  `versionorder` int DEFAULT '1000000',
 				  `versiondesc` varchar(255) DEFAULT 'Initial Version',
+				  `groupid` varchar(16) NOT NULL,
 				  `userid` varchar(16) DEFAULT '',
 				  `objectfolder` varchar(255) DEFAULT '',
 				  `objectfile` varchar(255) DEFAULT '',
@@ -1226,6 +1232,11 @@ class wtwtables {
 				  `thingpublishname` varchar(255) DEFAULT '',
 				  `webalias` varchar(255) DEFAULT NULL,
 				  `forcehttps` int DEFAULT '0',
+				  `franchise` int DEFAULT '0',
+				  `franchiseid` varchar(32) DEFAULT '',
+				  `sitename` varchar(255) DEFAULT '',
+				  `sitedescription` varchar(255) DEFAULT '',
+				  `siteicon` varchar(255) DEFAULT '',
 				  `createdate` datetime DEFAULT NULL,
 				  `createuserid` varchar(16) DEFAULT '',
 				  `updatedate` datetime DEFAULT NULL,
@@ -1298,6 +1309,7 @@ class wtwtables {
 		global $wtw;
 		global $wtwdb;
 		try {
+			set_time_limit(0);
 			/* use the same time stamp for all changes within a set */
 			$ztimestamp = date('Y/m/d H:i:s');
 			$wtwdb->query("
@@ -2348,6 +2360,7 @@ class wtwtables {
 		global $wtw;
 		try {
 			global $wtwdb;
+			set_time_limit(0);
 			$ztimestamp = date('Y/m/d H:i:s');
 			$zversion = $wtw->version;
 			$zdbversion = $wtw->dbversion;
@@ -3449,7 +3462,54 @@ class wtwtables {
 						('wtw_menumic','Mic On','main','right',-980,1,'','/content/system/images/menumicoff32.png','WTW.toggleMicMute','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
 					");			
 				}
+			} else if ($zoldversion1 == 3 && $zoldversion2 < 6) {
+				/* updated 3.5.2 - added Menu Items */
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='WalkTheWeb Help' and menuset='Help Menu';");
+				if (count($zresults) == 0) {
+					$wtwdb->query("INSERT INTO ".wtw_tableprefix."menuitems 
+						(menuitemname, menutext, menuset, menualignment, menuorder, menulevel, menuiconid, menuicon, menuaction, menuproperty, menusecurity, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted) VALUES 
+						('','WalkTheWeb Help','Help Menu','left',10,1,'','/content/system/images/menuwtwhelp.png','WTW.closeMenus();WTW.openWebpage(\'https://www.walktheweb.com/wiki/\',\'_blank\');','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+						('','Movement Controls','Help Menu','left',20,1,'','/content/system/images/menumovement.png','WTW.closeMenus();WTW.showSettingsMenu(\'wtw_menucontrols\');','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+						('','Common Questions','Help Menu','left',30,1,'','/content/system/images/menuquestions.png','WTW.closeMenus();WTW.openWebpage(\'https://www.walktheweb.com/knowledgebase_category/3d-browsing/\',\'_blank\');','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+						('','Tutorials','Help Menu','left',40,1,'','/content/system/images/menututorials.png','WTW.closeMenus();WTW.openWebpage(\'https://www.walktheweb.com/knowledgebase_category/tutorials/\',\'_blank\');','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+						('','Admin Help','Help Menu','left',50,1,'','/content/system/images/menutools.png','WTW.closeMenus();WTW.openWebpage(\'https://www.walktheweb.com/knowledgebase_category/tutorials/\',\'_blank\');','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+						('','End User License Agreement','Help Menu','left',60,1,'','/content/system/images/menueula.png','WTW.closeMenus();WTW.openWebpage(\'https://www.walktheweb.com/useragreement/\',\'_blank\');','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+						('','WalkTheWeb Refund Policy','Help Menu','left',70,1,'','/content/system/images/menurefund.png','WTW.closeMenus();WTW.openWebpage(\'https://www.walktheweb.com/refund-policy/\',\'_blank\');','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+						('','Feedback or Issue','Help Menu','left',80,1,'','/content/system/images/menugraphics.png','WTW.closeMenus();WTW.hide(\'wtw_menusettings\');WTW.showSettingsMenu(\'wtw_menufeedback\');','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+						('','Contact WalkTheWeb','Help Menu','left',500,1,'','/content/system/images/menuinfo.png','WTW.closeMenus();WTW.openWebpage(\'https://www.walktheweb.com/contact-us/\',\'_blank\');','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
+					");
+				}
+				/* updated 3.5.2 - corrected web alias */
+				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."webaliases where domainname=webalias;");
+				foreach ($zresults as $zrow) {
+					$zwebalias = 'http://';
+					if ($zrow["forcehttps"] == '1') {
+						$zwebalias = 'https://';
+					}
+					$zwebalias .= $zrow["domainname"];
+					if ((!isset($zrow["communityid"]) || empty($zrow["communityid"])) && isset($zrow["buildingid"]) && !empty($zrow["buildingid"])) {
+						$zwebalias .= '/buildings/'.$zrow["buildingpublishname"];
+						if (isset($zrow["thingid"]) && !empty($zrow["thingid"])) {
+							$zwebalias .= '/'.$zrow["thingpublishname"];
+						}
+					} else if ((!isset($zrow["communityid"]) || empty($zrow["communityid"])) && (!isset($zrow["buildingid"]) || empty($zrow["buildingid"])) && isset($zrow["thingid"]) && !empty($zrow["thingid"])) {
+						$zwebalias .= '/things/'.$zrow["thingpublishname"];
+					} else if (isset($zrow["communityid"]) && !empty($zrow["communityid"]) && isset($zrow["communitypublishname"]) && !empty($zrow["communitypublishname"])) {
+						$zwebalias .= '/'.$zrow["communitypublishname"];
+						if (isset($zrow["buildingid"]) && !empty($zrow["buildingid"]) && isset($zrow["buildingpublishname"]) && !empty($zrow["buildingpublishname"])) {
+							$zwebalias .= '/'.$zrow["buildingpublishname"];
+						}
+						if (isset($zrow["thingid"]) && !empty($zrow["thingid"]) && isset($zrow["thingpublishname"]) && !empty($zrow["thingpublishname"])) {
+							$zwebalias .= '/'.$zrow["thingpublishname"];
+						}
+					}
+					$wtwdb->query("update ".wtw_tableprefix."webaliases 
+						set webalias='".$zwebalias."'
+						where webaliasid='".$zrow["webaliasid"]."'
+						limit 1;");
+				}
 			}
+
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 		} catch (Exception $e) {
 			$wtw->serror("core-functions-tabledefs.php-checkDBVersionData=".$e->getMessage());

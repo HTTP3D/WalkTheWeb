@@ -630,10 +630,15 @@ class wtwdb {
 
 	public function getFilefromURL($zfromurl, $zfilepath, $zfilename) {
 		/* save file using any available method fopen, curl, or ftp (added soon) */
+		$zsuccess = true;
 		try {
 			if(ini_get('allow_url_fopen') ) {
 				$zdata1 = file_get_contents($zfromurl);
-				$zsuccess = file_put_contents($zfilepath.$zfilename, $zdata1);	
+				$zsuccess2 = file_put_contents($zfilepath.$zfilename, $zdata1);	
+				/* zsuccess will be the number of bytes or false on fail */
+				if ($zsuccess2 == false) {
+					$zsuccess = false;
+				}
 			} else if (extension_loaded('curl')) {
 				$zgetfile = curl_init($zfromurl);
 				$zopenfile = fopen($zfilepath.$zfilename, 'wb');
@@ -646,7 +651,24 @@ class wtwdb {
 			chmod($zfilepath.$zfilename, octdec(wtw_chmod));
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-getFilefromURL=".$e->getMessage());
+			$zsuccess = false;
 		}
+		return $zsuccess;
+	}
+	
+	public function openFilefromURL($zfromurl, $zuseincludepath=false, $zcontext=null) {
+		/* open file using any available method fopen, curl, or ftp (added soon) */
+		$zresponse = null;
+		try {
+			if(ini_get('allow_url_fopen') ) {
+				$zresponse = file_get_contents($zfromurl, $zuseincludepath, $zcontext);
+			} else if (extension_loaded('curl')) {
+				$zresponse = curl_init($zfromurl);
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-openFilefromURL=".$e->getMessage());
+		}
+		return $zresponse;
 	}
 	
 	public function getRandomString($zlength, $zstringtype) {
@@ -2093,7 +2115,7 @@ class wtwdb {
 						while (($zfile = readdir($zdirectory)) !== false) {
 							if ($zfile != '.' && $zfile != '..') {
 								$zlanguageurl = $wtw->domainurl."/core/languages/".$zfile;
-								$zlanguagedata = file_get_contents($zlanguageurl);
+								$zlanguagedata = $this->openFilefromURL($zlanguageurl);
 								$zlanguagedata = json_decode($zlanguagedata);
 								if (isset($zlanguagedata[0]->translate)) {
 									if (isset($zlanguagedata[0]->language)) {
@@ -2124,7 +2146,7 @@ class wtwdb {
 												while (($zfile2 = readdir($zdirectory2)) !== false) {
 													if ($zfile2 != '.' && $zfile2 != '..') {
 														$zlanguageurl = $wtw->domainurl."/content/plugins/".$zfile."/languages/".$zfile2;
-														$zlanguagedata = file_get_contents($zlanguageurl);
+														$zlanguagedata = $this->openFilefromURL($zlanguageurl);
 														$zlanguagedata = json_decode($zlanguagedata);
 														if (isset($zlanguagedata[0]->translate)) {
 															if (isset($zlanguagedata[0]->language)) {

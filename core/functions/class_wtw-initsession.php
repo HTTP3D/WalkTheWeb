@@ -22,7 +22,7 @@ class wtw {
 	
 	/* declare public $wtw variables */
 	public $version = '3.5.1';
-	public $dbversion = '1.2.12';
+	public $dbversion = '1.2.14';
 	public $versiondate = '2022-7-29';
 	public $olddbversion = '';
 	public $serverinstanceid = '';
@@ -48,6 +48,7 @@ class wtw {
 	public $buildingid = '';
 	public $thingid = '';
 	public $avatarid = '';
+	public $webaliasid = '';
 	public $defaultlanguage = 'English';
 	public $pluginstylesheets = array();
 	public $pluginscripts = array();
@@ -1195,6 +1196,9 @@ class wtw {
 				
 				$zresults = $wtwdb->query($zsql);
 				foreach ($zresults as $zrow) {
+					if (!empty($zrow["webaliasid"]) && isset($zrow["webaliasid"])) {
+						$this->webaliasid = $zrow["webaliasid"];
+					}
 					if (!empty($zrow["communityid"]) && isset($zrow["communityid"])) {
 						$this->communityid = $zrow["communityid"];
 					}
@@ -2081,141 +2085,190 @@ class wtw {
 			/* domainverify = used by social media */
 			/* fbappid =  used by social media */
 			/* also check category and business contact email and setup image alt */
-			$zpreviewpath = "";
-			$ztestpreviewpath = "";
-			$zpreviewwidth = "512";
-			$zpreviewheight = "300";
-			$zwebdescription = "";
-			$zwebtitle = "WalkTheWeb: 3D Internet";
-			$zresults = array();
+			$zpreviewpath = '';
+			$zpreviewwidth = '512';
+			$zpreviewheight = '300';
+			$zsitename = 'WalkTheWeb: 3D Internet Metaverse';
+			$zsitedescription = 'WalkTheWeb: Internationally Patented 3D Internet Browsing and 3D Website hosting. WalkTheWeb (R), http://3d (TM), https://3d (TM), and HTTP3D (TM).';
+			$zsiteicon = '/favicon.ico';
 			/* get meta data values based on 3D Community, Building, or Thing */
-			if (!empty($this->communityid)) {
-				/* get meta data values based on 3D Community as root level */
-				$zresults = $wtwdb->query("
-					select 
-						case when u2.filepath = '' or u2.filepath is null 
-							then '".$this->domainurl."/content/uploads/communities/".$this->communityid."/snapshots/defaultcommunitysm.png'
-							else u2.filepath
-							end as previewpath, 
-						case when u2.filepath = '' or u2.filepath is null 
-							then '/uploads/communities/".$this->communityid."/snapshots/defaultcommunitysm.png'
-							else ''
-							end as testpreviewpath, 
-						case when u2.filepath = '' or u2.filepath is null 
-							then u1.imagewidth
-							else u2.imagewidth
-							end as previewwidth, 
-						case when u2.filepath = '' or u2.filepath is null 
-							then u1.imageheight
-							else u2.imageheight
-							end as previewheight,
-						c1.communityname as webname,
-						c1.communitydescription as webdescription
-					from ".wtw_tableprefix."communities c1 
-					inner join ".wtw_tableprefix."uploads u1 
-						on c1.snapshotid=u1.uploadid 
-					left join ".wtw_tableprefix."uploads u2 
-						on u1.originalid=u2.uploadid 
-					where c1.communityid='".$this->communityid."' limit 1;");
-			} else if (!empty($this->buildingid)) {
-				/* get meta data values based on 3D Building as root level */
-				$zresults = $wtwdb->query("
-					select 
-						case when u2.filepath = '' or u2.filepath is null 
-							then '".$this->domainurl."/content/uploads/buildings/".$this->buildingid."/snapshots/defaultbuildingsm.png'
-							else u2.filepath
-							end as previewpath, 
-						case when u2.filepath = '' or u2.filepath is null 
-							then '/uploads/buildings/".$this->buildingid."/snapshots/defaultbuildingsm.png'
-							else ''
-							end as testpreviewpath, 
-						case when u2.filepath = '' or u2.filepath is null 
-							then u1.imagewidth
-							else u2.imagewidth
-							end as previewwidth, 
-						case when u2.filepath = '' or u2.filepath is null 
-							then u1.imageheight
-							else u2.imageheight
-							end as previewheight,
-						b1.buildingname as webname,
-						b1.buildingdescription as webdescription
-					from ".wtw_tableprefix."buildings b1 
-					inner join ".wtw_tableprefix."uploads u1 
-						on b1.snapshotid=u1.uploadid 
-					left join ".wtw_tableprefix."uploads u2 
-						on u1.originalid=u2.uploadid 
-					where b1.buildingid='".$this->buildingid."' limit 1;");
-			} else if (!empty($this->thingid)) {
-				/* get meta data values based on 3D Thing as root level */
-				$zresults = $wtwdb->query("
-					select 
-						case when u2.filepath = '' or u2.filepath is null 
-							then '".$this->domainurl."/content/uploads/things/".$this->thingid."/snapshots/defaultthingsm.png'
-							else u2.filepath
-							end as previewpath, 
-						case when u2.filepath = '' or u2.filepath is null 
-							then '/uploads/things/".$this->thingid."/snapshots/defaultthingsm.png'
-							else ''
-							end as testpreviewpath, 
-						case when u2.filepath = '' or u2.filepath is null 
-							then u1.imagewidth
-							else u2.imagewidth
-							end as previewwidth, 
-						case when u2.filepath = '' or u2.filepath is null 
-							then u1.imageheight
-							else u2.imageheight
-							end as previewheight,
-							t1.thingname as webname,
-							t1.thingdescription as webdescription
-					from ".wtw_tableprefix."things t1 
-					inner join ".wtw_tableprefix."uploads u1 
-						on t1.snapshotid=u1.uploadid 
-					left join ".wtw_tableprefix."uploads u2 
-						on u1.originalid=u2.uploadid 
-					where t1.thingid='".$this->thingid."' limit 1;");
-			}
-			foreach ($zresults as $zrow) {
-				$zpreviewpath = $zrow["previewpath"]."?time=".date_timestamp_get(date_create());
-				$ztestpreviewpath = $zrow["testpreviewpath"];
-				$zpreviewwidth = $zrow["previewwidth"];
-				$zpreviewheight = $zrow["previewheight"];
-				$zwebtitle = $zrow["webname"];
-				$zwebdescription = $zrow["webdescription"];
-			}
+			$zresults = $wtwdb->query("
+				select w1.*,
+					c1.communityname,
+					b1.buildingname,
+					t1.thingname,
+					c1.snapshotid as communitysnapshotid,
+					b1.snapshotid as buildingsnapshotid,
+                    t1.snapshotid as thingsnapshotid,
+					case when c1.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=c1.snapshotid limit 1)
+						end as communitysnapshoturl,
+					case when c1.snapshotid is null then '512'
+						else (select imagewidth 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=c1.snapshotid limit 1)
+						end as communitysnapshotwidth,
+					case when c1.snapshotid is null then '300'
+						else (select imageheight 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=c1.snapshotid limit 1)
+						end as communitysnapshotheight,
+					case when b1.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=b1.snapshotid limit 1)
+						end as buildingsnapshoturl,
+					case when b1.snapshotid is null then '512'
+						else (select imagewidth 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=b1.snapshotid limit 1)
+						end as buildingsnapshotwidth,
+					case when b1.snapshotid is null then '300'
+						else (select imageheight 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=b1.snapshotid limit 1)
+						end as buildingsnapshotheight,
+					case when t1.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=t1.snapshotid limit 1)
+						end as thingsnapshoturl,
+					case when t1.snapshotid is null then '512'
+						else (select imagewidth 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=t1.snapshotid limit 1)
+						end as thingsnapshotwidth,
+					case when t1.snapshotid is null then '300'
+						else (select imageheight 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=t1.snapshotid limit 1)
+						end as thingsnapshotheight,
+					case when (w1.webaliasid='".$this->webaliasid."' and not webaliasid='') then 1
+						else case when (w1.webalias like '".$this->websiteurl."' and not webalias='') then 2
+							else 3
+							end 
+						end as prioritylevel
+				from ".wtw_tableprefix."webaliases w1
+					left join ".wtw_tableprefix."communities c1
+						on w1.communityid=c1.communityid
+					left join ".wtw_tableprefix."buildings b1
+						on w1.buildingid=b1.buildingid
+					left join ".wtw_tableprefix."things t1
+						on w1.thingid=t1.thingid
+				where w1.deleted=0
+					and (w1.webaliasid='".$this->webaliasid."' and not webaliasid='')
+                    or (w1.webalias like '".$this->websiteurl."' and not webalias='')
+                    or (w1.communityid='".$this->communityid."' and w1.buildingid='".$this->buildingid."' and w1.thingid='".$this->thingid."')
+				order by 
+					prioritylevel,
+					w1.createdate,
+					w1.domainname,
+					w1.communitypublishname,
+					w1.buildingpublishname,
+					w1.thingpublishname,
+					w1.communityid,
+					w1.buildingid,
+					w1.thingid,
+					w1.webaliasid
+				limit 1;
+			");
 
-			if (!file_exists($this->contentpath.$ztestpreviewpath) && !empty($ztestpreviewpath)) {
+			foreach ($zresults as $zrow) {
+				$zsitename = $zrow["sitename"];
+				$zsitedescription = $zrow["sitedescription"];
+				$zsiteicon = $zrow["siteicon"];
+				$zcommunityid = $zrow["communityid"];
+				$zbuildingid = $zrow["buildingid"];
+				$zthingid = $zrow["thingid"];
+				$zcommunityname = $zrow["communityname"];
+				$zbuildingname = $zrow["buildingname"];
+				$zthingname = $zrow["thingname"];
+				$zcommunitysnapshoturl = $zrow["communitysnapshoturl"]."?time=".date_timestamp_get(date_create());
+				$zcommunitysnapshotwidth = $zrow["communitysnapshotwidth"];
+				$zcommunitysnapshotheight = $zrow["communitysnapshotheight"];
+				$zbuildingsnapshoturl = $zrow["buildingsnapshoturl"]."?time=".date_timestamp_get(date_create());
+				$zbuildingsnapshotwidth = $zrow["buildingsnapshotwidth"];
+				$zbuildingsnapshotheight = $zrow["buildingsnapshotheight"];
+				$zthingsnapshoturl = $zrow["thingsnapshoturl"]."?time=".date_timestamp_get(date_create());
+				$zthingsnapshotwidth = $zrow["thingsnapshotwidth"];
+				$zthingsnapshotheight = $zrow["thingsnapshotheight"];
+				
+				if (isset($zcommunityid) && !empty($zcommunityid)) {
+					$zpreviewpath = $zcommunitysnapshoturl;
+					$zpreviewwidth = $zcommunitysnapshotwidth;
+					$zpreviewheight = $zcommunitysnapshotheight;
+					if (!isset($zsitename) || empty($zsitename)) {
+						$zsitename = $zcommunityname;
+					}
+				} else if (isset($zbuildingid) && !empty($zbuildingid)) {
+					$zpreviewpath = $zbuildingsnapshoturl;
+					$zpreviewwidth = $zbuildingsnapshotwidth;
+					$zpreviewheight = $zbuildingsnapshotheight;
+					if (!isset($zsitename) || empty($zsitename)) {
+						$zsitename = $zbuildingname;
+					}
+				} else if (isset($zthingid) && !empty($zthingid)) {
+					$zpreviewpath = $zthingsnapshoturl;
+					$zpreviewwidth = $zthingsnapshotwidth;
+					$zpreviewheight = $zthingsnapshotheight;
+					if (!isset($zsitename) || empty($zsitename)) {
+						$zsitename = $zthingname;
+					}
+				}
+			}
+			if (!isset($zsitename) || empty($zsitename)) {
+				$zsitename = "WalkTheWeb 3D Internet Metaverse";
+			}
+			if (empty($zsitedescription) || !isset($zsitedescription)) {
+				$zsitedescription = "WalkTheWeb: Internationally Patented 3D Internet Browsing and 3D Website hosting. WalkTheWeb (R), http://3d (TM), https://3d (TM), and HTTP3D (TM).";
+			} 
+			if (!isset($zpreviewpath) || empty($zpreviewpath)) {
 				$zpreviewpath = $this->domainurl."/content/system/stock/wtw-3dinternet.jpg";
 			}
 			if ($this->pagename == 'admin.php') {
-				$zwebtitle = "WalkTheWeb: 3D Internet Admin";
-				$zwebdescription = "WalkTheWeb: Admin Site: Patented 3D Internet Browsing and 3D Website hosting. WalkTheWeb (R), http://3d (TM), https://3d (TM), and HTTP3D (TM).";
+				$zsitename = "WalkTheWeb Admin: ".$zsitename;
+				$zsitedescription = "WalkTheWeb Admin: Patented 3D Internet Browsing and 3D Website hosting. WalkTheWeb (R), http://3d (TM), https://3d (TM), and HTTP3D (TM).";
 			}
-			if (empty($zwebtitle) || !isset($zwebtitle)) {
-				$zwebtitle = "WalkTheWeb 3D Internet";
-			}
-			if (empty($zwebdescription) || !isset($zwebdescription)) {
-				$zwebdescription = "WalkTheWeb: Internationally Patented 3D Internet Browsing and 3D Website hosting. WalkTheWeb (R), http://3d (TM), https://3d (TM), and HTTP3D (TM).";
-			} 
+
 			/* meta data entries */
-			$zmetadata = "<title>".$zwebtitle."</title>\r\n";
+			$zmetadata = "<title>".$zsitename."</title>\r\n";
 			$zmetadata .= "<meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\" />\r\n";
 			$zmetadata .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\r\n";
 			$zmetadata .= "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\">\r\n";
 			$zmetadata .= "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\r\n";
 			$zmetadata .= "<meta http-equiv=\"Expires\" content=\"-1\" />\r\n";
-			if (!empty($zwebdescription) && isset($zwebdescription)) {
-				$zmetadata .= "<meta name=\"description\" content=\"".$zwebdescription."\" />\r\n";
-				$zmetadata .= "<meta property=\"og:description\" content=\"".$zwebdescription."\" />\r\n";
+			$zmetadata .= "<link id=\"wtw_favicon\" rel=\"icon\" href=\"".$zsiteicon."\" />\r\n";
+			if (!empty($zsitedescription) && isset($zsitedescription)) {
+				$zmetadata .= "<meta name=\"description\" content=\"".$zsitedescription."\" />\r\n";
+				$zmetadata .= "<meta property=\"og:description\" content=\"".$zsitedescription."\" />\r\n";
 			}
 			$zmetadata .= "<meta property=\"og:image\" content=\"".$zpreviewpath."\" />\r\n";
 			$zmetadata .= "<meta property=\"og:image:width\" content=\"".$zpreviewwidth."\"/>\r\n";
 			$zmetadata .= "<meta property=\"og:image:height\" content=\"".$zpreviewheight."\"/>\r\n";
-			$zmetadata .= "<meta property=\"og:image:alt\" content=\"".$zpreviewpath."\" />\r\n";
+			$zmetadata .= "<meta property=\"og:image:alt\" content=\"".$zsitename."\" />\r\n";
 			$zmetadata .= "<meta property=\"og:url\" content=\"".$this->protocol.$this->domainname.$this->uri."\" />\r\n";
 			$zmetadata .= "<meta property=\"og:type\" content=\"business.business\" />\r\n";
-			$zmetadata .= "<meta property=\"og:title\" content=\"".$zwebtitle."\" />\r\n";
+			$zmetadata .= "<meta property=\"og:site_name\" content=\"".$zsitename."\" />\r\n";
+			$zmetadata .= "<meta property=\"og:see_also\" content=\"https://www.walktheweb.com\" />\r\n";
+			$zmetadata .= "<meta property=\"og:title\" content=\"".$zsitename."\" />\r\n";
+
+			$zmetadata .= "<meta name=\"keywords\" content=\"WalkTheWeb,3D Internet,Metaverse,Multiverse,open-source,http3d,".$zsitedescription."\" />\r\n";
+			$zmetadata .= "<meta property=\"image\" content=\"".$zpreviewpath."\" />\r\n";
+			$zmetadata .= "<meta property=\"image:width\" content=\"".$zpreviewwidth."\"/>\r\n";
+			$zmetadata .= "<meta property=\"image:height\" content=\"".$zpreviewheight."\"/>\r\n";
+			$zmetadata .= "<meta property=\"image:alt\" content=\"".$zsitename."\" />\r\n";
+			$zmetadata .= "<meta property=\"url\" content=\"".$this->protocol.$this->domainname.$this->uri."\" />\r\n";
+
+			$zmetadata .= "<meta name=\"twitter:card\" content=\"summary\">\r\n";
+			$zmetadata .= "<meta name=\"twitter:url\" content=\"".$this->protocol.$this->domainname.$this->uri."\">\r\n";
+			$zmetadata .= "<meta name=\"twitter:title\" content=\"".$zsitename."\">\r\n";
+			$zmetadata .= "<meta name=\"twitter:description\" content=\"".$zsitedescription."\">\r\n";
+			$zmetadata .= "<meta name=\"twitter:image\" content=\"".$zpreviewpath."\">\r\n";
+
 			/* additional optional meta data - should be defined on the /config/wtw_config.php file */
-/*			if (defined('domainverify')) {
+			if (defined('domainverify')) {
 				$zmetadata .= "<meta name=\"p:domain_verify\" content=\"".domainverify."\"/>\r\n";
 			}
 			if (defined('fbappid')) {
@@ -2224,7 +2277,7 @@ class wtw {
 			if (defined('contactemail')) {
 				$zmetadata .= "<meta property=\"business:contact_data\" content=\"".contactemail."\" />\r\n";
 			}
-*/		} catch (Exception $e) {
+		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadMetaData=".$e->getMessage());
 		}
 		return $zmetadata;
@@ -2462,7 +2515,7 @@ class wtw {
 					while (($zfile = readdir($zdh)) !== false) {
 						if ($zfile != '.' && $zfile != '..') {
 							$zlanguageurl = $this->domainurl."/core/languages/".$zfile;
-							$zlanguagedata = file_get_contents($zlanguageurl);
+							$zlanguagedata = $this->openFilefromURL($zlanguageurl);
 							$zlanguagedata = json_decode($zlanguagedata);
 							if (isset($zlanguagedata[0]->translate) && isset($zlanguagedata[0]->language)) {
 								if (strtolower($zlanguagedata[0]->language) == strtolower($this->defaultlanguage)) {
@@ -2479,6 +2532,21 @@ class wtw {
 			$this->serror("core-functions-class_wtw-initsession.php-loadTranslationArray=".$e->getMessage());
 		}
 	}	
+
+	public function openFilefromURL($zfromurl, $zuseincludepath=false, $zcontext=null) {
+		/* open file using any available method fopen, curl, or ftp (added soon) */
+		$zresponse = null;
+		try {
+			if (ini_get('allow_url_fopen')) {
+				$zresponse = file_get_contents($zfromurl, $zuseincludepath, $zcontext);
+			} else if (extension_loaded('curl')) {
+				$zresponse = curl_init($zfromurl);
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtw-initsession.php-openFilefromURL=".$e->getMessage());
+		}
+		return $zresponse;
+	}
 	
 }
 

@@ -44,6 +44,7 @@ class wtwcommunities {
 		global $wtwhandlers;
 		$copycommunityid = "";
 		try {
+			set_time_limit(0);
 			if (empty($zpastcommunityid) || !isset($zpastcommunityid) || $wtwhandlers->checkUpdateAccess($zpastcommunityid, "", "") == false) {
 				/* denies copy function if you do not have access to community to copy */
 				$zpastcommunityid = "";
@@ -561,6 +562,7 @@ class wtwcommunities {
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
+			set_time_limit(0);
 			if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "") && $wtwhandlers->checkUpdateAccess($zfromcommunityid, "", "")) {
 				$zresults = $wtwhandlers->query("
 					select t2.actionzoneid as pastactionzoneid,
@@ -1472,6 +1474,7 @@ class wtwcommunities {
 		global $wtwhandlers;
 		global $wtwconnect;
 		try {
+			set_time_limit(0);
 			if (isset($wtwhandlers) == false && isset($wtwconnect)) {
 				$wtwhandlers = $wtwconnect;
 			}
@@ -1566,9 +1569,7 @@ class wtwcommunities {
 				/* fetch the 3D Web data structure for the repository (all of the associated records) */
 				$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zwebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
 
-				if (!empty($zurl)) {
-					$zrequest = file_get_contents($zurl);
-				}
+				$zrequest = $wtwhandlers->openFilefromURL($zurl);
 				if (!empty($zrequest) && isset($zrequest)) {
 					$zrequest = json_decode($zrequest);
 				}
@@ -3268,6 +3269,7 @@ class wtwcommunities {
 		global $wtwhandlers;
 		global $wtwconnect;
 		try {
+			set_time_limit(0);
 			if (isset($wtwhandlers) == false && isset($wtwconnect)) {
 				$wtwhandlers = $wtwconnect;
 			}
@@ -3325,9 +3327,7 @@ class wtwcommunities {
 				/* fetch the 3D Web data structure for the repository (all of the associated records) */
 				$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zupdatewebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
 
-				if (!empty($zurl)) {
-					$zrequest = file_get_contents($zurl);
-				}
+				$zrequest = $wtwhandlers->openFilefromURL($zurl);
 				if (!empty($zrequest) && isset($zrequest)) {
 					$zrequest = json_decode($zrequest);
 				}
@@ -5386,6 +5386,7 @@ class wtwcommunities {
 		/* imports community settings from the media library when you download a community */
 		global $wtwhandlers;
 		try {
+			set_time_limit(0);
 			$zhostuserid = '';
 			if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
 				$zhostuserid = $wtwhandlers->userid;
@@ -5685,11 +5686,7 @@ class wtwcommunities {
 				}
 				$zfromurl = "https://3dnet.walktheweb.com/connect/share.php?communityid=".$zcommunityid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;
 
-				if(ini_get('allow_url_fopen') ) {
-					$zresponse = file_get_contents($zfromurl);
-				} else if (extension_loaded('curl')) {
-					$zresponse = curl_init($zfromurl);
-				}
+				$zresponse = $wtwhandlers->openFilefromURL($zfromurl);
 				$zresponse = json_decode($zresponse, true);
 			}
 		} catch (Exception $e) {

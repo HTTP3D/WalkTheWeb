@@ -1761,11 +1761,7 @@ class wtwavatars {
 				}
 				$zfromurl = "https://3dnet.walktheweb.com/connect/shareavatar.php?avatarid=".$zavatarid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;
 
-				if(ini_get('allow_url_fopen') ) {
-					$zresponse = file_get_contents($zfromurl);
-				} else if (extension_loaded('curl')) {
-					$zresponse = curl_init($zfromurl);
-				}
+				$zresponse = $wtwhandlers->openFilefromURL($zfromurl);
 				$zresponse = json_decode($zresponse, true);
 			}
 		} catch (Exception $e) {
@@ -2407,9 +2403,7 @@ class wtwavatars {
 				/* fetch the 3D Web data structure for the repository (all of the associated records) */
 				$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zwebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
 
-				if (!empty($zurl)) {
-					$zrequest = file_get_contents($zurl);
-				}
+				$zrequest = $wtwhandlers->openFilefromURL($zurl);
 				if (!empty($zrequest) && isset($zrequest)) {
 					$zrequest = json_decode($zrequest);
 				}
@@ -2781,9 +2775,7 @@ class wtwavatars {
 				/* fetch the 3D Web data structure for the repository (all of the associated records) */
 				$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zupdatewebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
 
-				if (!empty($zurl)) {
-					$zrequest = file_get_contents($zurl);
-				}
+				$zrequest = $wtwhandlers->openFilefromURL($zurl);
 				if (!empty($zrequest) && isset($zrequest)) {
 					$zrequest = json_decode($zrequest);
 				}
@@ -3300,9 +3292,7 @@ class wtwavatars {
 				/* fetch the 3D Web data structure for the repository (all of the associated records) */
 				$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zupdatewebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
 
-				if (!empty($zurl)) {
-					$zrequest = file_get_contents($zurl);
-				}
+				$zrequest = $wtwhandlers->openFilefromURL($zurl);
 				if (!empty($zrequest) && isset($zrequest)) {
 					$zrequest = json_decode($zrequest);
 				}

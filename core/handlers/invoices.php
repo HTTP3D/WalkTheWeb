@@ -6,7 +6,7 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwinvoices.php');
 	global $wtwinvoices;
-	$zrequest = file_get_contents('php://input');
+	$zrequest = $wtwhandlers->openFilefromURL('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
 	
 	if (!defined('wtw_defaultlanguage')) {

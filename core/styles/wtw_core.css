@@ -851,6 +851,16 @@ select.wtw-fileselectcategory {
 	color: #000000;
 	cursor:pointer;
 }
+.wtw-tinyimage {
+	height: 25px;
+	width: 25px;
+	border: 1px solid #c0c0c0;
+}
+.wtw-smallimage {
+	height: 65px;
+	width: auto;
+	border: 1px solid #c0c0c0;
+}
 .wtw-sampleimage {
 	height: 65px;
 	width: 65px;
@@ -1388,6 +1398,85 @@ a.wtw-helplink2:hover {
 }
 .wtw-rightbutton:hover {
 	background-color:#FBFFDE;
+	color:#375377;
+	border:1px solid black;
+	cursor:pointer;
+}
+a.wtw-rightbutton {
+	padding:5px;
+	float:right;
+	margin-right:15px;
+	font-size:1em;
+	color:gray;
+	border:1px solid #c0c0c0;
+	background-color:transparent;
+	text-decoration:none;
+}
+a.wtw-rightbutton:hover {
+	background-color:#FBFFDE;
+	color:#375377;
+	border:1px solid black;
+	cursor:pointer;
+}
+.wtw-leftbutton {
+	padding:5px;
+	float:left;
+	margin-left:5px;
+	font-size:1em;
+	color:gray;
+	border:1px solid #c0c0c0;
+	background-color:transparent;
+}
+.wtw-leftbutton:hover {
+	background-color:#FBFFDE;
+	color:#375377;
+	border:1px solid black;
+	cursor:pointer;
+}
+a.wtw-leftbutton {
+	padding:5px;
+	float:left;
+	margin-left:5px;
+	font-size:1em;
+	color:gray;
+	border:1px solid #c0c0c0;
+	background-color:transparent;
+	text-decoration:none;
+}
+a.wtw-leftbutton:hover {
+	background-color:#FBFFDE;
+	color:#375377;
+	border:1px solid black;
+	cursor:pointer;
+}
+.wtw-localbuttonselected {
+	padding:5px;
+	margin-left:8px;
+	margin-right:8px;
+	display:inline-block;
+	font-size:1em;
+	color:gray;
+	border:1px solid #c0c0c0;
+	background-color:#FBFFDE;
+}
+.wtw-localbuttonselected:hover {
+	background-color:yellow;
+	color:#375377;
+	border:1px solid black;
+	cursor:pointer;
+}
+.wtw-localbutton {
+	padding:5px;
+	margin-left:8px;
+	margin-right:8px;
+	display:inline-block;
+	font-size:1em;
+	color:gray;
+	border:1px solid #c0c0c0;
+	background-color:transparent;
+}
+.wtw-localbutton:hover {
+	background-color:yellow;
 	color:#375377;
 	border:1px solid black;
 	cursor:pointer;

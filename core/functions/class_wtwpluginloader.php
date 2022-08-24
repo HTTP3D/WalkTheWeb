@@ -217,18 +217,9 @@ class wtwpluginloader {
 				mkdir($wtwhandlers->contentpath."/system/updates/".$zpluginname, octdec(wtw_chmod), true);
 				chmod($wtwhandlers->contentpath."/system/updates/".$zpluginname, octdec(wtw_chmod));
 			}
-			if(ini_get('allow_url_fopen') ) {
-				$zdata1 = file_get_contents($zupdateurl);
-				$zsuccessdownload = file_put_contents($ztempfilepath.$ztempfilename, $zdata1);			
-			} else if (extension_loaded('curl')) {
-				$getfile = curl_init($zupdateurl);
-				$openfile = fopen($ztempfilepath.$ztempfilename, 'wb');
-				curl_setopt($getfile, CURLOPT_FILE, $openfile);
-				curl_setopt($getfile, CURLOPT_HEADER, 0);
-				curl_exec($getfile);
-				curl_close($getfile);
-				fclose($openfile);
-			}
+			
+			$wtwhandlers->getFilefromURL($zupdateurl, $ztempfilepath, $ztempfilename);
+			
 			if (file_exists($ztempfilepath.$ztempfilename)) {
 				chmod($ztempfilepath.$ztempfilename, octdec(wtw_chmod));
 				$zip = new ZipArchive;

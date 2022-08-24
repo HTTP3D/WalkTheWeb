@@ -6,7 +6,7 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwusers.php');
 	global $wtwusers;
-	$zrequest = file_get_contents('php://input');
+	$zrequest = $wtwhandlers->openFilefromURL('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
 
 	/* read in values */
@@ -33,7 +33,9 @@ try {
 	$zuseraccess = $wtwhandlers->getPost('useraccess','');
 	
 	/* select the function called */
-	$zresponse = array();
+	$zresponse = array(
+		'serror'=> ''
+	);
 	switch ($zfunction) {
 		case "saveuser":
 			$wtwusers->saveUser($zuserid, $zdisplayname, $zuseremail);
@@ -80,6 +82,9 @@ try {
 			break;
 		case "deleteuserrole":
 			$wtwusers->deleteUserRoleID($zuserid, $zuserinroleid);
+			break;
+		case "addhostroletoall":
+			$zresponse = $wtwusers->addHostRoleToAll();
 			break;
 		case "savenewrole":	
 			$wtwusers->saveNewRole($zrolename);

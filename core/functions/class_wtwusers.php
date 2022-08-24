@@ -155,6 +155,7 @@ class wtwusers {
 		);
 		try {
 			$zresults = array();
+			$zuserid = '';
 			if (!empty($zglobaluserid) && isset($zglobaluserid)) {
 				$zglobaluserid = $wtwdb->decode64($zglobaluserid);
 			}
@@ -310,6 +311,20 @@ class wtwusers {
 						$wtwuser->userid = $zuserid;
 					} catch (Exception $e) {}
 				}
+
+				/* add user to Host Role by default if server host user role setting is enabled */
+				$zaddhostrole = false;
+				if (defined('wtw_server_host_user_role')) {
+					if ($wtwdb->checkNumber(wtw_server_host_user_role,0) == 1) {
+						$zaddhostrole = true;
+					}
+				}
+				if ($zaddhostrole) {
+					/* only add Host Role if not in Admin */
+					if ($wtwdb->isUserInRole("admin") == false) {
+						$this->addUserRole($zuserid, 'Host');
+					}
+				}
 			}
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwusers.php-globalLogin=".$e->getMessage());
@@ -353,8 +368,9 @@ class wtwusers {
 		try {			
 			$zresults = $wtwdb->query("
 				select roleid from ".wtw_tableprefix."roles 
-				where rolename = '".$zrolename."'
-					and deleted=0 order by createdate limit 1;
+				where rolename like '".$zrolename."'
+					and deleted=0 
+				order by createdate limit 1;
 			");
 			foreach ($zresults as $zrow) {
 				$roleid = $zrow['roleid'];
@@ -400,7 +416,7 @@ class wtwusers {
 				$zvalid = true;
 			}
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwusers.php-userIdIsValid=".$e->getMessage());
+			$wtwdb->serror("core-functions-class_wtwusers.php-roleIdIsValid=".$e->getMessage());
 		}
 		return $zvalid;
 	}
@@ -409,18 +425,23 @@ class wtwusers {
 		/* add a role */
 		global $wtw;
 		global $wtwdb;
+		global $wtwhandlers;
 		$zsuccess = false;
 		try {
+			if (!isset($wtw) && isset($wtwhandlers)) {
+				$wtw = $wtwhandlers;
+			}
 			if ($this->userIdIsValid($zuserid)) {
 				$zroleid = $this->getRoleId($zrolename);
 				if (!empty($zroleid) && isset($zroleid)) {
 					$zresults = $wtwdb->query("
-						select userinroleid, deleted from ".wtw_tableprefix."usersinroles 
+						select userinroleid, deleted 
+						from ".wtw_tableprefix."usersinroles 
 						where roleid = '".$zroleid."'
-							and userid = '".$zuserid."' order by createdate limit 1;
+							and userid = '".$zuserid."' 
+						order by createdate limit 1;
 					");
 					$ztimestamp = date('Y/m/d H:i:s');
-					$wtw->userid = $_SESSION["wtw_userid"];
 					if (count($zresults) > 0) {
 						$zuserinroleid = "";
 						$zdeleted = 0;
@@ -553,6 +574,42 @@ class wtwusers {
 			$wtwhandlers->serror("core-functions-class_wtwusers.php-deleteUserRoleID=".$e->getMessage());
 		}
 		return $zsuccess;
+	}
+	
+	public function addHostRoleToAll() {
+		/* adds all existing users to Host Role (except Admins) */
+		global $wtwhandlers;
+		$zresponse = array(
+			'serror'=> ''
+		);
+		try {
+			if ($wtwhandlers->isUserInRole("admin")) {
+				$zresults = $wtwhandlers->query("
+					select u1.*,
+						r1.roleid,
+						r1.rolename
+					from ".wtw_tableprefix."users u1
+						left join ".wtw_tableprefix."usersinroles ur1
+							on u1.userid=ur1.userid
+						left join (select roleid, rolename 
+							from ".wtw_tableprefix."roles 
+							where deleted=0 and (rolename like 'host' or rolename like 'admin')) r1
+							on ur1.roleid=r1.roleid
+					where u1.deleted=0
+						and r1.roleid is null
+					order by userid;
+				");
+				foreach ($zresults as $zrow) {
+					$this->addUserRole($zrow["userid"], 'Host');
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwusers.php-addHostRoleToAll=".$e->getMessage());
+			$zresponse = array(
+				'serror'=> $e->getMessage()
+			);
+		}
+		return $zresponse;
 	}
 	
 	public function addUserPermissions($zusersearch, $zcommunityid, $zbuildingid, $zthingid, $zuseraccess) {
@@ -857,6 +914,19 @@ class wtwusers {
 					global $wtwuser;
 					$wtw->userid = $zuserid;
 					$wtwuser->userid = $zuserid;
+					/* add user to Host Role by default if server host user role setting is enabled */
+					$zaddhostrole = false;
+					if (defined('wtw_server_host_user_role')) {
+						if ($wtwhandlers->checkNumber(wtw_server_host_user_role,0) == 1) {
+							$zaddhostrole = true;
+						}
+					}
+					if ($zaddhostrole) {
+						/* only add Host Role if not in Admin */
+						if ($wtwhandlers->isUserInRole("admin") == false) {
+							$this->addUserRole($zuserid, 'Host');
+						}
+					}
 					$zsuccess = true;
 				} else {
 					$zserror = "Email is already in use.";

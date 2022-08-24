@@ -44,6 +44,7 @@ class wtwthings {
 		global $wtwhandlers;
 		$copythingid = "";
 		try {
+			set_time_limit(0);
 			if (!empty($zpastthingid) && isset($zpastthingid) && $wtwhandlers->checkUpdateAccess("", "", $zpastthingid) == false) {
 				/* denies copy function if you do not have access to thing to copy */
 				$zpastthingid = "";
@@ -340,6 +341,7 @@ class wtwthings {
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
+			set_time_limit(0);
 			/* new thing has to already exist */
 			/* does user have access to copy thing and new thing */
 			if ($wtwhandlers->checkUpdateAccess("", "", $zthingid) && $wtwhandlers->checkUpdateAccess("", "", $zfromthingid)) {
@@ -1491,11 +1493,7 @@ class wtwthings {
 				}
 				$zfromurl = "https://3dnet.walktheweb.com/connect/share.php?thingid=".$zthingid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;
 
-				if(ini_get('allow_url_fopen') ) {
-					$zresponse = file_get_contents($zfromurl);
-				} else if (extension_loaded('curl')) {
-					$zresponse = curl_init($zfromurl);
-				}
+				$zresponse = $wtwhandlers->openFilefromURL($zfromurl);
 				$zresponse = json_decode($zresponse, true);
 			}
 		} catch (Exception $e) {

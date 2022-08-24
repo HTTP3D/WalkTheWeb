@@ -197,7 +197,7 @@ class wtwtools {
 		return $zresponse;
 	}
 
-	public function saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zdefaultlanguage, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zftpuser, $zftppassword, $zftpbase) {
+	public function saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zdefaultlanguage, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zftphost, $zftpuser, $zftppassword, $zftpbase) {
 		global $wtwhandlers;
 		$zresponse = array('serror'=>'');
 		try {
@@ -216,6 +216,7 @@ class wtwtools {
 				$this->updateConfigSetting('wtw_adminname', $zadminname);
 				$this->updateConfigSetting('wtw_umask', $zumask);
 				$this->updateConfigSetting('wtw_chmod', $zchmod);
+				$this->updateConfigSetting('wtw_ftphost', $zftphost);
 				$this->updateConfigSetting('wtw_ftpuser', $zftpuser);
 				$this->updateConfigSetting('wtw_ftppassword', $zftppassword);
 				$this->updateConfigSetting('wtw_ftpbase', $zftpbase);
@@ -235,7 +236,8 @@ class wtwtools {
 			'serversslprice'=>'0',
 			'serverhostdays'=>'365',
 			'serverdnsarecord'=>'',
-			'serverdnscname'=>''
+			'serverdnscname'=>'',
+			'serverhostuserrole'=>'0'
 		);
 		try {
 			/* confirm still logged in */
@@ -263,13 +265,16 @@ class wtwtools {
 			if (defined('wtw_server_dns_cname')) {
 				$zresponse["serverdnscname"] = wtw_server_dns_cname;
 			}
+			if (defined('wtw_server_host_user_role')) {
+				$zresponse["serverhostuserrole"] = $wtwhandlers->checkNumber(wtw_server_host_user_role,0);
+			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwtools.php-getHostingServerSettings=".$e->getMessage());
 		}
 		return $zresponse;
 	}
 	
-	public function saveHostingServerSettings($zserverhosting, $zserverhostprice, $zserversslprice, $zserverhostdays, $zserverdnsarecord, $zserverdnscname) {
+	public function saveHostingServerSettings($zserverhosting, $zserverhostprice, $zserversslprice, $zserverhostdays, $zserverdnsarecord, $zserverdnscname, $zserverhostuserrole) {
 		global $wtwhandlers;
 		$zresponse = array('serror'=>'');
 		try {
@@ -282,6 +287,7 @@ class wtwtools {
 				$this->updateConfigSetting('wtw_server_hostdays', $wtwhandlers->checkNumber($zserverhostdays,365));
 				$this->updateConfigSetting('wtw_server_dns_arecord', $zserverdnsarecord);
 				$this->updateConfigSetting('wtw_server_dns_cname', $zserverdnscname);
+				$this->updateConfigSetting('wtw_server_host_user_role', $wtwhandlers->checkNumber($zserverhostuserrole,0));
 			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwtools.php-saveHostingServerSettings=".$e->getMessage());
@@ -303,7 +309,7 @@ class wtwtools {
 					if (!$zfileinfo->isDir() && !$zfileinfo->isDot()) {
 						$zfilename = $zfileinfo->getFilename();
 						$zurl = $wtwhandlers->domainurl."/core/languages/".$zfilename;
-						$zrequest = file_get_contents($zurl);
+						$zrequest = $wtwhandlers->openFilefromURL($zurl);
 						if (!empty($zrequest) && isset($zrequest)) {
 							$zrequest = json_decode($zrequest);
 						}

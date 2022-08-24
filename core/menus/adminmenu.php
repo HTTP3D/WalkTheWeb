@@ -180,12 +180,22 @@
 					<div id="wtw_adminmenucommdoneediting" class="wtw-greenbutton" onclick="WTW.adminMenuItemSelected(this);"><div class="wtw-altkey2">ctrl+d</div><?php echo $wtwadminmenu->__("Done Editing"); ?></div>
 					<br /><br />
 				</div>
-				<div id="wtw_adminmenu27" class="wtw-adminmenuform" style="display:none;visibility:hidden;">
+				<div id="wtw_adminmenu27" class="wtw-adminmenuform" style="display:none;visibility:hidden;color:#FFF7DA;">
 					<div id="wtw_bback27" alt="Back" title="Back" class="wtw-backbutton" onclick="WTW.adminMenuItemSelected(this);">&lt;&lt;</div>
 					<div class="wtw-menuheader"><?php echo $wtwadminmenu->__("Add 3D Building"); ?></div><br />
-					<a href="https://www.walktheweb.com/wiki/" title="Help" alt="Help" class="wtw-helplink" target="_blank">?</a>
-					<div id="wtw_loadingbuildingmoldsbuttonlist" class="wtw-loadingnotice" style="margin-left:auto;margin-right:auto;color:#000000;"><?php echo $wtwadminmenu->__("Loading"); ?></div>
-					<div id="wtw_buildingmoldsbuttonlist"></div>
+					<div id="wtw_loadingbuildingsbuttonlist" class="wtw-loadingnotice" style="margin-left:auto;margin-right:auto;color:#000000;"><?php echo $wtwadminmenu->__("Loading"); ?></div><br />
+<div class='wtw-hide'>
+					<div id="wtw_buildingsbuttonlocal" class="wtw-localbuttonselected" style="border-top-left-radius:10px;border-bottom-left-radius:10px;" onclick="WTW.showFranchise(this, 'wtw_buildingsinternetdiv');"><?php echo $wtwadminmenu->__("Local"); ?></div> or <div id="wtw_buildingsbuttoninternet" class="wtw-localbutton" style="border-top-right-radius:10px;border-bottom-right-radius:10px;" onclick="WTW.showFranchise(this, 'wtw_buildingsinternetdiv');"><?php echo $wtwadminmenu->__("3D Internet"); ?></div>
+					<div class="wtw-clear"></div>
+					<div id="wtw_buildingsinternetdiv" class="wtw-hide">
+						<h4 style="margin-bottom:3px;"><?php echo $wtwadminmenu->__("Domain Name"); ?></h4>
+						<div style="font-weight:normal;font-size:.8em;color:#c0c0c0;white-space:normal;">(<?php echo $wtwadminmenu->__("Example"); ?>: 3d.walktheweb.com)</div><br />
+						<input type="text" id="wtw_franchisesearch" maxlength="255" style="width:260px;" onclick="WTW.checkKey(this, 'webname', 1, 0);" onkeyup="WTW.checkKey(this, 'webname', 1, 0);" onblur="WTW.checkKey(this, 'webname', 1, 1);" /><br /><br />
+						<div id="wtw_bsearchbuildingfranchises" class="wtw-greenbutton" onclick="WTW.getFranchiseBuildingList();" style="font-size:1.4em;"><?php echo $wtwadminmenu->__("Search Franchises"); ?></div><br /><br />
+					</div>
+</div>
+					<div class="wtw-clear"></div>
+					<div id="wtw_buildingsbuttonlist"></div>
 					<br />
 					<div id="wtw_cancel27" class="wtw-yellowbutton" onclick="WTW.adminMenuItemSelected(this);"><?php echo $wtwadminmenu->__("Cancel"); ?></div>
 					<br /><br />

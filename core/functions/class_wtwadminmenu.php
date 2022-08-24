@@ -61,7 +61,7 @@ class wtwadminmenu {
 				
 				$this->addAdminMenuItem('wtw_adminmedia', $this->__('Media Library'), -95, 'wtw_medialibrary', 0, '', '/content/system/images/menumedia.png', $updateroles, "WTW.toggleAdminMenuMediaLibrary();");
 				$this->addAdminMenuItem('wtw_adminmediaobjects', $this->__('3D Models'), -95, 'wtw_medialibrary', 1, 'wtw_viewobjects', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);");
-				$this->addAdminMenuItem('wtw_adminmediafiles', $this->__('Files'), -95, 'wtw_medialibrary', 2, 'wtw_viewfiles', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(2);");
+				$this->addAdminMenuItem('wtw_adminmediafiles', $this->__('Files and Textures'), -95, 'wtw_medialibrary', 2, 'wtw_viewfiles', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(2);");
 				$this->addAdminMenuItem('wtw_adminmediawtwdownloads', $this->__('WalkTheWeb Downloads'), -95, 'wtw_medialibrary', 3, 'wtw_viewwtwdownloads', '', $updateroles, "WTW.openFullPageForm('importpage','communities');");
 
 				$this->addAdminMenuItem('wtw_admincommunities', $this->__('3D Communities'), -90, 'wtw_communities', 0, '', '/content/system/images/menucommunities.png', $updateroles, "WTW.toggleAdminMenuLevel('communities');");
@@ -87,30 +87,48 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminactiveplugins', $this->__('Active Plugins'), 50, 'wtw_plugins', 2, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_admininactiveplugins', $this->__('Inactive Plugins'), 50, 'wtw_plugins', 3, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 
-				$this->addAdminMenuItem('wtw_adminusers', $this->__('Users'), 90, 'wtw_users', 0, '', '/content/system/images/menuprofile.png', $adminroles, "WTW.toggleAdminMenuLevel('users');");
-				$this->addAdminMenuItem('wtw_adminuserlist', $this->__('All Users'), 90, 'wtw_users', 1, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminprivilegeduserlist', $this->__('Privileged Users'), 90, 'wtw_users', 2, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminlocaluserlist', $this->__('Local Users'), 90, 'wtw_users', 3, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminglobaluserlist', $this->__('Global Users'), 90, 'wtw_users', 4, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminvisitinguserlist', $this->__('Visiting Users'), 90, 'wtw_users', 5, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminuserroles', $this->__('User Roles'), 90, 'wtw_users', 10, 'wtw_roleslist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				
-				$this->addAdminMenuItem('wtw_adminsettings', $this->__('Settings'), 100, 'wtw_settings', 0, '', '/content/system/images/menusettings.png', $adminroles, "WTW.toggleAdminMenuLevel('settings');");
-				$this->addAdminMenuItem('wtw_adminserversettings', $this->__('Server Settings'), 100, 'wtw_settings', 1, 'wtw_serversettings', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminemailserver', $this->__('Email Server'), 100, 'wtw_settings', 2, 'wtw_emailserver', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminhostingserver', $this->__('Server Hosting Settings'), 100, 'wtw_settings', 3, 'wtw_hostingserver', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminapikeys', $this->__('API Keys Access'), 100, 'wtw_settings', 6, 'wtw_apikeys', '', $adminroles, "WTW.adminMenuItemSelected(this);");
-				
 				$this->addAdminMenuItem('wtw_adminwebdomains', $this->__('Web Domains'), 110, 'wtw_webdomains', 0, 'wtw_adminwebdomains', '/content/system/images/menuglobe.png', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminwebalias', $this->__('Web Aliases'), 110, 'wtw_webdomains', 1, 'wtw_adminwebalias', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				
 				if ($wtwdb->isUserInRole("Admin") || $wtwdb->isUserInRole("Developer")) {
-					$this->addAdminMenuItem('wtw_admininvoices', 'Invoices', 120, 'wtw_adminmenuinvoices', 0, 'wtw_admininvoices', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$this->__('Invoices')."','wtw_invoicepage');");
-					$this->addAdminMenuItem('wtw_adminmyinvoices', 'My Invoices', 120, 'wtw_adminmenuinvoices', 1, 'wtw_adminmyinvoices', '', array('admin','developer','architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
+					$zresults = $wtwdb->query("
+						select invoiceid
+						from ".wtw_tableprefix."invoices
+						where deleted=0
+						limit 1;
+					");
+					if (count($zresults) > 0) {
+						$this->addAdminMenuItem('wtw_admininvoices', 'Invoices', 400, 'wtw_adminmenuinvoices', 0, 'wtw_admininvoices', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$this->__('Invoices')."','wtw_invoicepage');");
+						$this->addAdminMenuItem('wtw_adminmyinvoices', 'My Invoices', 400, 'wtw_adminmenuinvoices', 1, 'wtw_adminmyinvoices', '', array('admin','developer','architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
+					}
 				} else {
-					$this->addAdminMenuItem('wtw_adminmyinvoices', 'My Invoices', 120, 'wtw_adminmenuinvoices', 0, 'wtw_adminmyinvoices', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
+					$zresults = $wtwdb->query("
+						select invoiceid
+						from ".wtw_tableprefix."invoices
+						where deleted=0
+							and (hostuserid='".$wtwdb->userid."'
+								or createuserid='".$wtwdb->userid."')
+						limit 1;
+					");
+					if (count($zresults) > 0) {
+						$this->addAdminMenuItem('wtw_adminmyinvoices', 'My Invoices', 400, 'wtw_adminmenuinvoices', 0, 'wtw_adminmyinvoices', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
+					}
 				}
 
+				$this->addAdminMenuItem('wtw_adminusers', $this->__('Users'), 500, 'wtw_users', 0, '', '/content/system/images/menuprofile.png', $adminroles, "WTW.toggleAdminMenuLevel('users');");
+				$this->addAdminMenuItem('wtw_adminuserlist', $this->__('All Users'), 500, 'wtw_users', 1, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminprivilegeduserlist', $this->__('Privileged Users'), 500, 'wtw_users', 2, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlocaluserlist', $this->__('Local Users'), 500, 'wtw_users', 3, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminglobaluserlist', $this->__('Global Users'), 500, 'wtw_users', 4, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminvisitinguserlist', $this->__('Visiting Users'), 500, 'wtw_users', 5, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminuserroles', $this->__('User Roles'), 500, 'wtw_users', 10, 'wtw_roleslist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				
+				$this->addAdminMenuItem('wtw_adminsettings', $this->__('Settings'), 900, 'wtw_settings', 0, '', '/content/system/images/menusettings.png', $adminroles, "WTW.toggleAdminMenuLevel('settings');");
+				$this->addAdminMenuItem('wtw_adminserversettings', $this->__('Server Settings'), 900, 'wtw_settings', 1, 'wtw_serversettings', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminemailserver', $this->__('Email Server'), 900, 'wtw_settings', 2, 'wtw_emailserver', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminhostingserver', $this->__('Server Hosting Settings'), 900, 'wtw_settings', 3, 'wtw_hostingserver', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminapikeys', $this->__('API Keys Access'), 900, 'wtw_settings', 6, 'wtw_apikeys', '', $adminroles, "WTW.adminMenuItemSelected(this);");
+				
 				$this->addAdminMenuItem('wtw_admindevtools', $this->__('Developer Tools'), 998, 'wtw_devtools', 0, '', '/content/system/images/menutools.png', $developerroles, "WTW.toggleAdminMenuLevel('tools');");
 				$this->addAdminMenuItem('wtw_adminavatarcamera', $this->__('Avatar Camera ON'), 998, 'wtw_devtools', 1, 'wtw_avatarcamera', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminfocus', $this->__('Focus ON'), 998, 'wtw_devtools', 2, 'wtw_focus', '', $developerroles, "WTW.adminMenuItemSelected(this);");

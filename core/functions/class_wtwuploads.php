@@ -212,7 +212,7 @@ class wtwuploads {
 			$zwidth = $zimagedetails[0];
 			$zheight = $zimagedetails[1];
 			$zfilesize = filesize($zfilepath);
-			$zfiledata = addslashes(file_get_contents($zfilepath));
+			$zfiledata = addslashes($wtwhandlers->openFilefromURL($zfilepath));
 			
 			$this->updateFileInDb($zsnapshotid,'websize',$zoriginalid,$zsnapshotid,'',$zfiletitle,$zfiletitle,'png',$zfilesize,'image/png',$zfiledata,$zwidth,$zheight,$zsnapshotpath);
 			
@@ -332,7 +332,7 @@ class wtwuploads {
 			}
 			$zfiledata = null;
 			if (strpos($zfiletype, 'image') > -1) {
-				$zfiledata = addslashes(file_get_contents($zfilepath));
+				$zfiledata = addslashes($wtwhandlers->openFilefromURL($zfilepath));
 			}
 			$zissnapshot = strpos($zfilepath, 'snapshot');
 			if (empty($zfiletitle)) {
@@ -422,7 +422,7 @@ class wtwuploads {
 				$zimagesavefunc($znewimage, $zfilepath);
 				chmod($zfilepath, octdec(wtw_chmod));
 				$zfilesize = filesize($zfilepath);
-				$zfiledata = addslashes(file_get_contents($zfilepath));
+				$zfiledata = addslashes($wtwhandlers->openFilefromURL($zfilepath));
 				$znewfilename = "";
 				if ($zpublic == '1') {
 					$znewfilename = $this->getNewFileName($zfilename, $znewwidth, $znewheight);
@@ -447,7 +447,7 @@ class wtwuploads {
 				$zimagesavefunc($znewimage, $zfilepath);
 				chmod($zfilepath, octdec(wtw_chmod));
 				$zfilesize = filesize($zfilepath);
-				$zfiledata = addslashes(file_get_contents($zfilepath));
+				$zfiledata = addslashes($wtwhandlers->openFilefromURL($zfilepath));
 				$znewfilename = "";
 				if ($zpublic == '1') {
 					$znewfilename = $this->getNewFileName($zfilename, $znewwidth, $znewheight);
@@ -1035,20 +1035,7 @@ class wtwuploads {
 				$znewfilename = $this->avoidDuplicateFileNames($zfilepath, $zfilename);
 				$znewfilepath = $zbrowsepath.$znewfilename;
 				
-				if(ini_get('allow_url_fopen') ) {
-					$zdata1 = file_get_contents($zfromurl);
-					$zsuccess = file_put_contents($zfilepath.$znewfilename, $zdata1);	
-					chmod($zfilepath.$znewfilename, octdec(wtw_chmod));
-				} else if (extension_loaded('curl')) {
-					$zgetfile = curl_init($zfromurl);
-					$zopenfile = fopen($zfilepath.$znewfilename, 'wb');
-					curl_setopt($zgetfile, CURLOPT_FILE, $zopenfile);
-					curl_setopt($zgetfile, CURLOPT_HEADER, 0);
-					curl_exec($zgetfile);
-					curl_close($zgetfile);
-					fclose($zopenfile);
-					chmod($zfilepath.$znewfilename, octdec(wtw_chmod));
-				} else {
+				if ($wtwhandlers->getFilefromURL($zfromurl, $zfilepath, $znewfilename) == false) {
 					$znewfilename = $zfilename;
 					$znewfilepath = $zfromurl;
 				}
@@ -1061,28 +1048,6 @@ class wtwuploads {
 			'filepath' => $znewfilepath);
 	}
 	
-	public function getFilefromURL($zfromurl, $zfilepath, $zfilename) {
-		/* save file using any available method fopen, curl, or ftp (added soon) */
-		global $wtwhandlers;
-		try {
-			if(ini_get('allow_url_fopen') ) {
-				$zdata1 = file_get_contents($zfromurl);
-				$zsuccess = file_put_contents($zfilepath.$zfilename, $zdata1);	
-			} else if (extension_loaded('curl')) {
-				$zgetfile = curl_init($zfromurl);
-				$zopenfile = fopen($zfilepath.$zfilename, 'wb');
-				curl_setopt($zgetfile, CURLOPT_FILE, $zopenfile);
-				curl_setopt($zgetfile, CURLOPT_HEADER, 0);
-				curl_exec($zgetfile);
-				curl_close($zgetfile);
-				fclose($zopenfile);
-			}
-			chmod($zfilepath.$zfilename, octdec(wtw_chmod));
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getFilefromURL=".$e->getMessage());
-		}
-	}
-
 	public function setKeyHash($zkey, $zwebtype, $zwebid) {
 		/* security hash for downloading/uploading */
 		global $wtwhandlers;
@@ -1278,45 +1243,78 @@ class wtwuploads {
 		return $zsuccess;
 	}
 	
-	public function saveWebAlias($zoldwebaliasid,$zforcehttps,$zdomainname,$zcommunitypublishname,$zbuildingpublishname,$zthingpublishname,$zcommunityid,$zbuildingid,$zthingid) {
+	public function saveWebAlias($zoldwebaliasid, $zforcehttps, $zdomainname, $zcommunitypublishname, $zbuildingpublishname, $zthingpublishname, $zcommunityid, $zbuildingid, $zthingid, $zsitename, $zsitedescription, $zsiteicon, $zfranchise, $zinstanceid) {
 		/* updates the web alias from the admin menu settings page */
 		global $wtwhandlers;
-		$zsuccess = false;
+		$zfranchiseid = '';
 		try {
-			$zwebaliasid = "";
+			$zwebalias = '';
+			$zwebaliasid = '';
 			$zhostuserid = '';
+			if (isset($zfranchise) && !empty($zfranchise)) {
+				$zfranchise = $wtwhandlers->checkNumber($zfranchise,0);
+			} else {
+				$zfranchise = 0;
+			}
+			if (isset($zforcehttps) && !empty($zforcehttps)) {
+				$zforcehttps = $wtwhandlers->checkNumber($zforcehttps,0);
+				if ($zforcehttps != 1) {
+					$zforcehttps = 0;
+				}
+			} else {
+				$zforcehttps = 0;
+			}
 			if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
 				$zhostuserid = $wtwhandlers->userid;
 			}
-			/* check to see if web alias is already in use */
-			$zresponse = $wtwhandlers->query("
+			/* check to see if web alias pub name is already in use - if found, update it */
+			$zresults = $wtwhandlers->query("
 				select * from ".wtw_tableprefix."webaliases
 				where lower(domainname)=lower('".$zdomainname."')
 					and lower(communitypublishname)=lower('".$zcommunitypublishname."')
 					and lower(buildingpublishname)=lower('".$zbuildingpublishname."')
 					and lower(thingpublishname)=lower('".$zthingpublishname."')
 				limit 1;");
-			if (count($zresponse) > 0) {
-				foreach ($zresponse as $zrow) {
+			if (count($zresults) > 0) {
+				foreach ($zresults as $zrow) {
 					$zwebaliasid = $zrow["webaliasid"];
 				}
-			} else {
-				/* check if passed webaliasid exists */
-				$zresponse = $wtwhandlers->query("
+			}
+			if (isset($zoldwebaliasid) && !empty($zoldwebaliasid) && empty($zwebaliasid)) {
+				/* check if passed webaliasid is found - only used if pub name is not found */
+				$zresults = $wtwhandlers->query("
 					select * from ".wtw_tableprefix."webaliases
-					where webaliasid='".$zwebaliasid."'
+					where webaliasid='".$zoldwebaliasid."'
 						and not webaliasid=''
 					limit 1;");
-				if (count($zresponse) == 0) {
-					$zwebaliasid = "";
+				foreach ($zresults as $zrow) {
+					$zwebaliasid = $zrow["webaliasid"];
 				}
 			}
-			
-			if ($wtwhandlers->isUserInRole("Admin") || $wtwhandlers->isUserInRole("Host")) {
-				$zforcehttps = $wtwhandlers->checkNumber($zforcehttps, 0);
-				if ($zforcehttps != 1) {
-					$zforcehttps = 0;
+			/* set the webalias url */
+			$zwebalias = 'http://';
+			if ($zforcehttps == '1') {
+				$zwebalias = 'https://';
+			}
+			$zwebalias .= $zdomainname;
+			if ((!isset($zcommunityid) || empty($zcommunityid)) && isset($zbuildingid) && !empty($zbuildingid)) {
+				$zwebalias .= '/buildings/'.$zbuildingpublishname;
+				if (isset($zthingid) && !empty($zthingid)) {
+					$zwebalias .= '/'.$zthingpublishname;
 				}
+			} else if ((!isset($zcommunityid) || empty($zcommunityid)) && (!isset($zbuildingid) || empty($zbuildingid)) && isset($zthingid) && !empty($zthingid)) {
+				$zwebalias .= '/things/'.$zthingpublishname;
+			} else if (isset($zcommunityid) && !empty($zcommunityid) && isset($zcommunitypublishname) && !empty($zcommunitypublishname)) {
+				$zwebalias .= '/'.$zcommunitypublishname;
+				if (isset($zbuildingid) && !empty($zbuildingid) && isset($zbuildingpublishname) && !empty($zbuildingpublishname)) {
+					$zwebalias .= '/'.$zbuildingpublishname;
+				}
+				if (isset($zthingid) && !empty($zthingid) && isset($zthingpublishname) && !empty($zthingpublishname)) {
+					$zwebalias .= '/'.$zthingpublishname;
+				}
+			}
+			/* save the webalias */
+			if ($wtwhandlers->isUserInRole("Admin") || $wtwhandlers->isUserInRole("Developer") || $wtwhandlers->isUserInRole("Host")) {
 				/* update or insert new webalias */
 				if (empty($zwebaliasid) || !isset($zwebaliasid)) {
 					$zwebaliasid = $wtwhandlers->getRandomString(16,1);
@@ -1333,6 +1331,10 @@ class wtwuploads {
 							buildingpublishname,
 							thingid,
 							thingpublishname,
+							sitename, 
+							sitedescription,
+							siteicon,
+							franchise,
 							createdate,
 							createuserid,
 							updatedate,
@@ -1342,30 +1344,39 @@ class wtwuploads {
 						    '".$zhostuserid."',
 							".$zforcehttps.",
 							'".$zdomainname."',
-							'".$zdomainname."',
+							'".$zwebalias."',
 							'".$zcommunityid."',
 							'".$zcommunitypublishname."',
 							'".$zbuildingid."',
 							'".$zbuildingpublishname."',
 							'".$zthingid."',
 							'".$zthingpublishname."',
+							'".$zsitename."',
+							'".$zsitedescription."',
+							'".$zsiteicon."',
+							".$zfranchise.",
 							now(),
 							'".$wtwhandlers->userid."',
 							now(),
 							'".$wtwhandlers->userid."');");
 				} else {
-					if ($wtwhandlers->isUserInRole("Admin")) {
+					if ($wtwhandlers->isUserInRole("Admin") || $wtwhandlers->isUserInRole("Developer")) {
+						/* admin and developers can update any web aliases on the server */
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."webaliases
 							set forcehttps=".$zforcehttps.",
 								domainname='".$zdomainname."',
-								webalias='".$zdomainname."',
+								webalias='".$zwebalias."',
 								communityid='".$zcommunityid."',
 								communitypublishname='".$zcommunitypublishname."',
 								buildingid='".$zbuildingid."',
 								buildingpublishname='".$zbuildingpublishname."',
 								thingid='".$zthingid."',
 								thingpublishname='".$zthingpublishname."',
+								sitename='".$zsitename."',
+								sitedescription='".$zsitedescription."',
+								siteicon='".$zsiteicon."',
+								franchise=".$zfranchise.",
 								updatedate=now(),
 								updateuserid='".$wtwhandlers->userid."',
 								deleteddate=null,
@@ -1374,17 +1385,22 @@ class wtwuploads {
 							where webaliasid='".$zwebaliasid."'
 							limit 1;");
 					} else {
+						/* host role can only update their own web aliases */
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."webaliases
 							set forcehttps=".$zforcehttps.",
 								domainname='".$zdomainname."',
-								webalias='".$zdomainname."',
+								webalias='".$zwebalias."',
 								communityid='".$zcommunityid."',
 								communitypublishname='".$zcommunitypublishname."',
 								buildingid='".$zbuildingid."',
 								buildingpublishname='".$zbuildingpublishname."',
 								thingid='".$zthingid."',
 								thingpublishname='".$zthingpublishname."',
+								sitename='".$zsitename."',
+								sitedescription='".$zsitedescription."',
+								siteicon='".$zsiteicon."',
+								franchise=".$zfranchise.",
 								updatedate=now(),
 								updateuserid='".$wtwhandlers->userid."',
 								deleteddate=null,
@@ -1396,12 +1412,136 @@ class wtwuploads {
 							limit 1;");
 					}
 				}
-				$zsuccess = true;
+				/* report Franchises change to WalkTheWeb */
+				$zdisplayname = '';
+				$zemail = '';
+				$zuploadpathid = '';
+				$zfoundfranchiseid = '';
+				$zsitepreview = '';
+				$zresults = $wtwhandlers->query("
+					select * from ".wtw_tableprefix."users 
+					where userid='".$wtwhandlers->userid."'
+					order by createdate
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zdisplayname = $zrow["displayname"];
+					$zemail = $zrow["email"];
+					$zuploadpathid = $zrow["uploadpathid"];
+				}
+				if (isset($zwebaliasid) && !empty($zwebaliasid)) {
+					/* check if passed webaliasid is found - only used if pub name is not found */
+					$zresults = $wtwhandlers->query("
+						select w1.*,
+							c1.communityname,
+							b1.buildingname,
+							t1.thingname,
+							c1.snapshotid as communitysnapshotid,
+							b1.snapshotid as buildingsnapshotid,
+							t1.snapshotid as thingsnapshotid,
+							case when c1.snapshotid is null then ''
+								else (select filepath 
+									from ".wtw_tableprefix."uploads 
+									where uploadid=c1.snapshotid limit 1)
+								end as communitysnapshoturl,
+							case when b1.snapshotid is null then ''
+								else (select filepath 
+									from ".wtw_tableprefix."uploads 
+									where uploadid=b1.snapshotid limit 1)
+								end as buildingsnapshoturl,
+							case when t1.snapshotid is null then ''
+								else (select filepath 
+									from ".wtw_tableprefix."uploads 
+									where uploadid=t1.snapshotid limit 1)
+								end as thingsnapshoturl
+						from ".wtw_tableprefix."webaliases w1
+							left join ".wtw_tableprefix."communities c1
+								on w1.communityid=c1.communityid
+							left join ".wtw_tableprefix."buildings b1
+								on w1.buildingid=b1.buildingid
+							left join ".wtw_tableprefix."things t1
+								on w1.thingid=t1.thingid
+						where w1.deleted=0
+							and w1.webaliasid='".$zwebaliasid."'
+						limit 1;");
+					foreach ($zresults as $zrow) {
+						$zfoundfranchiseid = $zrow["franchiseid"];
+						if (isset($zrow["communityid"]) && !empty($zrow["communityid"]) && isset($zrow["communitysnapshoturl"]) && !empty($zrow["communitysnapshoturl"])) {
+							$zsitepreview = $zrow["communitysnapshoturl"];
+						} else  if (isset($zrow["buildingid"]) && !empty($zrow["buildingid"]) && isset($zrow["buildingsnapshoturl"]) && !empty($zrow["buildingsnapshoturl"])) {
+							$zsitepreview = $zrow["buildingsnapshoturl"];
+						} else  if (isset($zrow["thingid"]) && !empty($zrow["thingid"]) && isset($zrow["thingsnapshoturl"]) && !empty($zrow["thingsnapshoturl"])) {
+							$zsitepreview = $zrow["thingsnapshoturl"];
+						}
+					}
+				}
+				if (isset($zsiteicon) && !empty($zsiteicon)) {
+					if (strpos($zsiteicon,'https://') === false && strpos($zsiteicon,'http://') === false) {
+						$zsiteicon = $wtwhandlers->domainurl.$zsiteicon;
+					}
+				}
+				if (isset($zsitepreview) && !empty($zsitepreview)) {
+					if (strpos($zsitepreview,'https://') === false && strpos($zsitepreview,'http://') === false) {
+						$zsitepreview = $wtwhandlers->domainurl.$zsitepreview;
+					}
+				}
+				$zrequest = stream_context_create(array('http' =>
+					array(
+						'method'  => 'POST',
+						'header'  => 'Content-Type: application/x-www-form-urlencoded',
+						'content' => http_build_query(
+							array(
+								'serverinstanceid' => $wtwhandlers->serverinstanceid,
+								'serverip' => $wtwhandlers->serverip,
+								'domainname' => $zdomainname,
+								'domainurl' => base64_encode($wtwhandlers->domainurl),
+								'instanceid' => $zinstanceid,
+								'userid' => $wtwhandlers->userid,
+								'hostuserid' => $zhostuserid,
+								'userip' => $wtwhandlers->userip,
+								'globaluserid' => base64_encode($wtwhandlers->globaluserid),
+								'usertoken' => $wtwhandlers->usertoken,
+								'displayname' => $zdisplayname,
+								'email' => $zemail,
+								'uploadpathid' => $zuploadpathid,
+								'webaliasid' => $zwebaliasid,
+								'forcehttps' => $zforcehttps,
+								'webalias' => $zwebalias,
+								'communityid' => $zcommunityid,
+								'communitypublishname' => $zcommunitypublishname,
+								'buildingid' => $zbuildingid,
+								'buildingpublishname' => $zbuildingpublishname,
+								'thingid' => $zthingid,
+								'thingpublishname' => $zthingpublishname,
+								'franchise' => $zfranchise,
+								'franchiseid' => $zfoundfranchiseid,
+								'sitename' => $zsitename,
+								'sitedescription' => $zsitedescription,
+								'siteicon' => $zsiteicon,
+								'sitepreview' => $zsitepreview,
+								'function' => 'franchisechange'
+							)
+						)
+					)
+				));
+					
+				$zresponse = $wtwhandlers->openFilefromURL('https://3dnet.walktheweb.com/connect/franchises.php', false, $zrequest);			
+				if (!empty($zresponse) && isset($zresponse)) {
+					$zresponse = json_decode($zresponse);
+					$zfranchiseid = '';
+					if (isset($zresponse->franchiseid) && !empty($zresponse->franchiseid)) {
+						$zfranchiseid = $zresponse->franchiseid;
+						$wtwhandlers->query("
+						update ".wtw_tableprefix."webaliases
+						set franchiseid='".$zfranchiseid."'
+						where webaliasid='".$zwebaliasid."'
+						limit 1;");
+					}
+				}
 			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-saveWebAlias=".$e->getMessage());
 		}
-		return $zsuccess;
+		return $zfranchiseid;
 	}
 	
 	public function deleteWebAlias($zwebaliasid) {

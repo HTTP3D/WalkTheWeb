@@ -6,12 +6,82 @@ global $wtwhandlers;
 try {
 	require_once(wtw_rootpath.'/core/functions/class_wtwtools.php');
 	global $wtwtools;
-	$zrequest = file_get_contents('php://input');
+	$zrequest = $wtwhandlers->openFilefromURL('php://input');
 	$zrequest = json_decode($zrequest, TRUE);
 	
 	if (!defined('wtw_defaultlanguage')) {
 		define('wtw_defaultlanguage','English');
 	}
+	/* set default values */
+	$zdefaultdbserver = '';
+	$zdefaultdbname = '';
+	$zdefaultdbusername = '';
+	$zdefaultdbpassword = '';
+	$zdefaultdefaultlanguage = '';
+	$zdefaultcontentpath = '';
+	$zdefaultdefaultdomain = '';
+	$zdefaultdefaultsitename = '';
+	$zdefaultgoogleanalytics = '';
+	$zdefaultadminemail = '';
+	$zdefaultadminname = '';
+	$zdefaultumask = '';
+	$zdefaultchmod = '';
+	$zdefaultftphost = '';
+	$zdefaultftpuser = '';
+	$zdefaultftppassword = '';
+	$zdefaultftpbase = '';
+	if (defined('wtw_dbserver')) {
+		$zdefaultdbserver = wtw_dbserver;
+	}
+	if (defined('wtw_dbname')) {
+		$zdefaultdbname = wtw_dbname;
+	}
+	if (defined('wtw_dbusername')) {
+		$zdefaultdbusername = wtw_dbusername;
+	}
+	if (defined('wtw_dbpassword')) {
+		$zdefaultdbpassword = wtw_dbpassword;
+	}
+	if (defined('wtw_defaultlanguage')) {
+		$zdefaultdefaultlanguage = wtw_defaultlanguage;
+	}
+	if (defined('wtw_contentpath')) {
+		$zdefaultcontentpath = wtw_contentpath;
+	}
+	if (defined('wtw_defaultdomain')) {
+		$zdefaultdefaultdomain = wtw_defaultdomain;
+	}
+	if (defined('wtw_defaultsitename')) {
+		$zdefaultdefaultsitename = wtw_defaultsitename;
+	}
+	if (defined('wtw_googleanalytics')) {
+		$zdefaultgoogleanalytics = wtw_googleanalytics;
+	}
+	if (defined('wtw_adminemail')) {
+		$zdefaultadminemail = wtw_adminemail;
+	}
+	if (defined('wtw_adminname')) {
+		$zdefaultadminname = wtw_adminname;
+	}
+	if (defined('wtw_umask')) {
+		$zdefaultumask = wtw_umask;
+	}
+	if (defined('wtw_chmod')) {
+		$zdefaultchmod = wtw_chmod;
+	}
+	if (defined('wtw_ftphost')) {
+		$zdefaultftphost = wtw_ftphost;
+	}
+	if (defined('wtw_ftpuser')) {
+		$zdefaultftpuser = wtw_ftpuser;
+	}
+	if (defined('wtw_ftppassword')) {
+		$zdefaultftppassword = wtw_ftppassword;
+	}
+	if (defined('wtw_ftpbase')) {
+		$zdefaultftpbase = wtw_ftpbase;
+	}
+
 	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zwebid = $wtwhandlers->getPost('webid','');
@@ -47,23 +117,23 @@ try {
 	$zcategory = $wtwhandlers->getPost('category','');
 	$zhtmlmessage = $wtwhandlers->getPost('htmlmessage','');
 	$zmessage = $wtwhandlers->getPost('message','');
-	$zdbserver = $wtwhandlers->getPost('dbserver',wtw_dbserver);
-	$zdbname = $wtwhandlers->getPost('dbname',wtw_dbname);
-	$zdbusername = $wtwhandlers->getPost('dbusername',wtw_dbusername);
-	$zdbpassword = $wtwhandlers->getPost('dbpassword',wtw_dbpassword);
-	$zdefaultlanguage = $wtwhandlers->getPost('defaultlanguage',wtw_defaultlanguage);
+	$zdbserver = $wtwhandlers->getPost('dbserver',$zdefaultdbserver);
+	$zdbname = $wtwhandlers->getPost('dbname',$zdefaultdbname);
+	$zdbusername = $wtwhandlers->getPost('dbusername',$zdefaultdbusername);
+	$zdbpassword = $wtwhandlers->getPost('dbpassword',$zdefaultdbpassword);
+	$zdefaultlanguage = $wtwhandlers->getPost('defaultlanguage',$zdefaultdefaultlanguage);
 	$zurl = $wtwhandlers->getPost('url','');
 	$zdomainurl = $wtwhandlers->getPost('domainurl','');
 	$zsnapshoturl = $wtwhandlers->getPost('snapshoturl','');
 	$zwtwversion = $wtwhandlers->getPost('wtwversion','');
-	$zcontentpath = $wtwhandlers->getPost('contentpath',wtw_contentpath);
-	$zdefaultdomain = $wtwhandlers->getPost('defaultdomain',wtw_defaultdomain);
-	$zdefaultsitename = $wtwhandlers->getPost('defaultsitename',wtw_defaultsitename);
-	$zgoogleanalytics = $wtwhandlers->getPost('googleanalytics',wtw_googleanalytics);
-	$zadminemail = $wtwhandlers->getPost('adminemail',wtw_adminemail);
-	$zadminname = $wtwhandlers->getPost('adminname',wtw_adminname);
-	$zumask = $wtwhandlers->getPost('umask',wtw_umask);
-	$zchmod = $wtwhandlers->getPost('chmod',wtw_chmod);
+	$zcontentpath = $wtwhandlers->getPost('contentpath',$zdefaultcontentpath);
+	$zdefaultdomain = $wtwhandlers->getPost('defaultdomain',$zdefaultdefaultdomain);
+	$zdefaultsitename = $wtwhandlers->getPost('defaultsitename',$zdefaultdefaultsitename);
+	$zgoogleanalytics = $wtwhandlers->getPost('googleanalytics',$zdefaultgoogleanalytics);
+	$zadminemail = $wtwhandlers->getPost('adminemail',$zdefaultadminemail);
+	$zadminname = $wtwhandlers->getPost('adminname',$zdefaultadminname);
+	$zumask = $wtwhandlers->getPost('umask',$zdefaultumask);
+	$zchmod = $wtwhandlers->getPost('chmod',$zdefaultchmod);
 
 	$zserverhosting = $wtwhandlers->getPost('serverhosting','0');
 	$zserverhostprice = $wtwhandlers->getPost('serverhostprice','0');
@@ -71,10 +141,12 @@ try {
 	$zserverhostdays = $wtwhandlers->getPost('serverhostdays','365');
 	$zserverdnsarecord = $wtwhandlers->getPost('serverdnsarecord','');
 	$zserverdnscname = $wtwhandlers->getPost('serverdnscname','');
-
-	$zftpuser = $wtwhandlers->getPost('ftpuser',wtw_ftpuser);
-	$zftppassword = $wtwhandlers->getPost('ftppassword',wtw_ftppassword);
-	$zftpbase = $wtwhandlers->getPost('ftpbase',wtw_ftpbase);
+	$zserverhostuserrole = $wtwhandlers->getPost('serverhostuserrole','0');
+	
+	$zftphost = $wtwhandlers->getPost('ftphost',$zdefaultftphost);
+	$zftpuser = $wtwhandlers->getPost('ftpuser',$zdefaultftpuser);
+	$zftppassword = $wtwhandlers->getPost('ftppassword',$zdefaultftppassword);
+	$zftpbase = $wtwhandlers->getPost('ftpbase',$zdefaultftpbase);
 	$zlabel = $wtwhandlers->getPost('label','');
 
 	/* convert any comma seperated email lists into arrays */
@@ -110,13 +182,13 @@ try {
 			$zresponse = $wtwtools->getServerSettings();
 			break;
 		case "saveserversettings":
-			$zresponse = $wtwtools->saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zdefaultlanguage, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zftpuser, $zftppassword, $zftpbase);
+			$zresponse = $wtwtools->saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zdefaultlanguage, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zftphost, $zftpuser, $zftppassword, $zftpbase);
 			break;
 		case "gethostingserversettings":
 			$zresponse = $wtwtools->getHostingServerSettings();
 			break;
 		case "savehostingserversettings":
-			$zresponse = $wtwtools->saveHostingServerSettings($zserverhosting, $zserverhostprice, $zserversslprice, $zserverhostdays, $zserverdnsarecord, $zserverdnscname);
+			$zresponse = $wtwtools->saveHostingServerSettings($zserverhosting, $zserverhostprice, $zserversslprice, $zserverhostdays, $zserverdnsarecord, $zserverdnscname, $zserverhostuserrole);
 			break;
 		case "getlanguages":
 			$zresponse = $wtwtools->getLanguages();

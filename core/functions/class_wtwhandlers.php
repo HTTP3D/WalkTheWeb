@@ -444,8 +444,15 @@ class wtwhandlers {
 	}
 
 	public function getFilefromURL($zfromurl, $zfilepath, $zfilename) {
+		/* save file using any available method fopen, curl, or ftp (added soon) */
 		global $wtwdb;
 		return $wtwdb->getFilefromURL($zfromurl, $zfilepath, $zfilename);
+	}
+
+	public function openFilefromURL($zfromurl, $zuseincludepath=false, $zcontext=null) {
+		/* open file using any available method fopen, curl, or ftp (added soon) */
+		global $wtwdb;
+		return $wtwdb->openFilefromURL($zfromurl, $zuseincludepath, $zcontext);
 	}
 
 	public function trackPageView($zcurrentpage) {
