@@ -3,7 +3,8 @@
 #	title = WalkTheWeb 3D Shopping Expansion
 #	description = Enable WalkTheWeb to host 3D Shopping Websites
 #	author = Aaron Dishno Ed.D.
-# 	version = 1.0.1
+# 	version = 1.0.2
+#	releasedate = 8/31/2022
 
 global $wtwplugins;
 
