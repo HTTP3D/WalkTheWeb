@@ -1,4 +1,4 @@
-# WalkTheWeb
+# WalkTheWeb (WTW)
 Demo 3D Website: https://3d.walktheweb.com
 
 Find me on Discord: https://discord.com/invite/MW7MG2t
@@ -44,6 +44,6 @@ or watch me on http://walktheweb.tv     (WalkTheWeb on Twitch)
 
 or ask me a question or provide feedback on Discord: https://discord.com/invite/MW7MG2t
 
-We welcome participation - Want to help code WTW?? Build a Plugin for WTW?? Create 3D Models?? Make Money??? Connect with me on Discord.
+We welcome your participation - Want to help code WalkTheWeb (WTW)?? Build a Plugin for WTW?? Create 3D Models?? Quickly create custom 3D Stores for your customers?? Make Money??? Connect with me on Discord.
 
 BabylonJS: https://www.babylonjs.com

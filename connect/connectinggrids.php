@@ -326,7 +326,7 @@ try {
 									and deleted=0 and not thingid='')
 						end as parentthingaccess,
 					'' as communityid,
-					'Walk the Web' as communityname,
+					'WalkTheWeb' as communityname,
 					'' as communitysnapshotid,
 					'' as communityanalyticsid,
 					'' as communityaccess,
@@ -470,7 +470,7 @@ try {
 				} else {
 					$zcommunityinfo = array(
 						'communityid'=> '',
-						'communityname'=> 'Walk the Web',
+						'communityname'=> 'WalkTheWeb',
 						'snapshotid' => '',
 						'analyticsid'=> '',
 						'access'=> ''
@@ -598,7 +598,7 @@ try {
 				} else {
 					$zcommunityinfo = array(
 						'communityid'=> '',
-						'communityname'=> 'Walk the Web',
+						'communityname'=> 'WalkTheWeb',
 						'snapshotid' => '',
 						'analyticsid'=> '',
 						'access'=> ''

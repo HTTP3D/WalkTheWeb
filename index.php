@@ -3,19 +3,33 @@
 	require_once('./core/functions/class_wtwplugins.php');
 	require_once('./core/functions/class_wtwmenus.php');
 	global $wtw;
+	global $wtwmenus;
 	global $wtwpluginloader;
-	$wtwpluginloader->getAllPlugins($wtw->contentpath,1); ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#">
-    <head><?php 	
+	$wtwpluginloader->getAllPlugins($wtw->contentpath,1);
+echo "<!DOCTYPE html>";
+echo "<html xmlns='http://www.w3.org/1999/xhtml' xmlns:fb='http://ogp.me/ns/fb#'>";
+echo "<head>";
 	echo $wtw->loadMetaData();
 	echo $wtw->loadCSSBrowseData();
 	echo $wtw->loadInitJSData(); 
-	echo $wtw->loadJSBrowseData(); ?>
-    </head>
-    <body><?php	
+	echo $wtw->loadJSBrowseData(); 
+echo "</head>";
+echo "<body>";
 	echo $wtw->loadMainElements();
 	echo $wtw->loadHiddenFields();
-	require_once('./core/menus/menu.php'); ?>
-    </body>
-</html>
+	echo $wtwmenus->getMainMenu();
+	echo $wtwmenus->getSettingsMenu();
+	echo $wtwmenus->getProfileMenu();
+	echo $wtwmenus->getBrowseMenu('wtw_menuhelp','Help Menu');
+	echo $wtwmenus->getAvatarMenu();
+	echo $wtwmenus->getOptionalAnimations();
+	echo $wtwmenus->getControlsMenu();
+	echo $wtwmenus->getMovementMenu();
+	echo $wtwmenus->getGraphicsMenu();
+	echo $wtwmenus->getShadowsMenu();
+	echo $wtwmenus->getMicMenu();
+	echo $wtwmenus->getContentRatingMenu();
+	echo $wtwmenus->getFeedbackMenu();
+	echo $wtwmenus->getMenuForms();
+echo "</body>";
+echo "</html>";
