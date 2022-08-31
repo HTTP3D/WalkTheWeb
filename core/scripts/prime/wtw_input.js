@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -33,7 +33,7 @@ WTWJS.prototype.setTouchMove = function(zevent) {
 			WTW.touch = null;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-setTouchMove=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-setTouchMove=' + ex.message);
 	}
 	return zisclick;
 }
@@ -79,7 +79,7 @@ WTWJS.prototype.touchDown = function(zevent) {
 			WTW.startRender();
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-touchDown=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-touchDown=' + ex.message);
 	}
 }
 
@@ -125,7 +125,7 @@ WTWJS.prototype.touchUp = function(zevent) {
 			WTW.hide('wtw_itouchright');
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-touchUp=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-touchUp=' + ex.message);
 	}
 }
 
@@ -178,7 +178,7 @@ WTWJS.prototype.touchMoving = function(zevent) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-touchMoving=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-touchMoving=' + ex.message);
 	}
 }
 
@@ -189,7 +189,7 @@ WTWJS.prototype.touchCancel = function(zevent) {
 		WTW.hide('wtw_itouchleft');
 		WTW.hide('wtw_itouchright');
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-touchCancel=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-touchCancel=' + ex.message);
 	}
 }
 
@@ -201,10 +201,10 @@ WTWJS.prototype.keyDown = function(zevent) {
 		WTW.shiftKey = zevent.shiftKey ? zevent.shiftKey : ((zevent.keyCode === 16) ? true : false);
 		WTW.pluginsKeyDown(zevent);
 		let zbrowser = WTW.getBrowser();
-		let zcommandworksin = "chrome,edgechrome,safari,firefox,opera";
+		let zcommandworksin = 'chrome,edgechrome,safari,firefox,opera';
 		if (zevent.keyCode === 122 && zcommandworksin.indexOf(zbrowser) > -1) {
 			zevent.preventDefault();
-			document.querySelector("#wtw_renderCanvas").requestFullscreen();
+			document.querySelector('#wtw_renderCanvas').requestFullscreen();
 		}
 		if (zevent.keyCode == 27) {
 			WTW.clearSelectedMold();
@@ -215,16 +215,16 @@ WTWJS.prototype.keyDown = function(zevent) {
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}
-			if (WTW.selectedMoldName != "") {
+			if (WTW.selectedMoldName != '') {
 				/* user is interacting with a mesh and should not move on key pressed - click on something else to resume movement */
-				if (WTW.selectedMoldName.indexOf("-") > -1) {
-					if (WTW.selectedMoldName.indexOf("-scrollboxbodytext") > -1) {
+				if (WTW.selectedMoldName.indexOf('-') > -1) {
+					if (WTW.selectedMoldName.indexOf('-scrollboxbodytext') > -1) {
 						var zscrollboxbodytext = WTW.getMeshOrNodeByID(WTW.selectedMoldName);
 						if (zscrollboxbodytext != null && zscrollboxbodytext.WTW != undefined) {
 							var zwebtext = zscrollboxbodytext.WTW.webtext.webtext;
 							zscrollboxbodytext.WTW.webtext.webtext = WTW.processKey(zscrollboxbodytext.WTW.webtext.webtext, zevent);
 							var zscrollpos = Number(zscrollboxbodytext.WTW.webtext.scrollpos);
-							WTW.scrollBoxRepaint(WTW.selectedMoldName.replace("-scrollboxbodytext",""), zscrollpos);
+							WTW.scrollBoxRepaint(WTW.selectedMoldName.replace('-scrollboxbodytext',''), zscrollpos);
 							zevent.preventDefault();
 						}
 					}
@@ -233,8 +233,8 @@ WTWJS.prototype.keyDown = function(zevent) {
 						/* mold name of 3D input box has matching HTML input element */
 						dGet(zmoldname).value = dGet(zmoldname).value.replace('|','');
 						switch (zevent.key) {
-							case "Backspace":
-							case "Delete":
+							case 'Backspace':
+							case 'Delete':
 								/* remove the last character */
 								var ztext = dGet(zmoldname).value.substring(0, dGet(zmoldname).value.length - 1);
 								dGet(zmoldname).value = ztext;
@@ -256,7 +256,7 @@ WTWJS.prototype.keyDown = function(zevent) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-keyDown=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-keyDown=' + ex.message);
 	}
 }
 
@@ -279,7 +279,7 @@ WTWJS.prototype.keyUp = function(zevent) {
 			WTW.vehicleStopTurn();
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-keyUp=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-keyUp=' + ex.message);
     }
 }
 
@@ -301,7 +301,7 @@ WTWJS.prototype.keyPressed = function(keycode) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-keyPressed=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-keyPressed=' + ex.message);
     }
 }
 
@@ -310,7 +310,7 @@ WTWJS.prototype.keyPressedAdd = function(keycode) {
 	/* entered through code function and not necessarily tied to a keyboard */
 	try {
 		if (keycode != undefined) {
-			keycode += "";
+			keycode += '';
 			if (WTW.canvasFocus == 1 || keycode.indexOf('onoption') > -1) {
 				var zfound = false;
 				if (WTW.keysPressed != null) {
@@ -332,7 +332,7 @@ WTWJS.prototype.keyPressedAdd = function(keycode) {
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-keyPressedAdd=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-keyPressedAdd=' + ex.message);
     }
 }
 
@@ -363,7 +363,7 @@ WTWJS.prototype.keyPressedReplace = function(replacekeycode, keycode) {
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-keyPressedReplace=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-keyPressedReplace=' + ex.message);
     }
 }
 
@@ -391,7 +391,7 @@ WTWJS.prototype.keyPressedRemove = function(keycode) {
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-keyPressedRemove=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-keyPressedRemove=' + ex.message);
     }
 }
 
@@ -413,9 +413,9 @@ WTWJS.prototype.mouseClick = function(zevent) {
 			} 
 			if (WTW.mouseStartX == WTW.mouseX && WTW.mouseStartY == WTW.mouseY) {
 				var zresult = scene.pick(WTW.mouseX, WTW.mouseY);
-				var zpickedname = "";
+				var zpickedname = '';
 				if (zresult.pickedMesh == null) {
-					if (WTW.currentID != "") {
+					if (WTW.currentID != '') {
 						zresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
 					}
 					zpickedname = WTW.currentID;
@@ -426,15 +426,15 @@ WTWJS.prototype.mouseClick = function(zevent) {
 				WTW.pluginsOnClick(zpickedname);
 				if (zpickedname != '') {
 					var zmold = WTW.getMeshOrNodeByID(zpickedname);
-					if (zpickedname.indexOf("-") > -1) {
+					if (zpickedname.indexOf('-') > -1) {
 						WTW.checkMoldEvent('onclick', zpickedname);
 						if (zpickedname.substr(0,4) == 'hud-') {
 							WTW.hudClick(zpickedname);
-						} else if (zpickedname.indexOf("-image") > -1) {
+						} else if (zpickedname.indexOf('-image') > -1) {
 							WTW.checkImageClick(zpickedname);
-						} else if (zpickedname.indexOf("-videoposter") > -1 || zpickedname.indexOf("-video-screen") > -1) {
+						} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
 							WTW.checkVideoClick(zpickedname);
-						} else if (zpickedname.indexOf("-vehicle") > -1) {
+						} else if (zpickedname.indexOf('-vehicle') > -1) {
 							WTW.toggleStartVehicle(zpickedname);
 						} else {
 							WTW.checkMoldFunctionAndExecute(zpickedname);
@@ -445,7 +445,7 @@ WTWJS.prototype.mouseClick = function(zevent) {
 		}
 		return true;
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseClick=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-mouseClick=' + ex.message);
     }
 }
 
@@ -465,17 +465,17 @@ WTWJS.prototype.mouseRight = function(zevent) {
 				return true;
 			}
 		} else {
-			let zclasses = "";
+			let zclasses = '';
 			if (zevent.target.attributes.class != undefined) {
 				zclasses = zevent.target.attributes.class.value;
 			}
 			let allowright = false;
 			if (WTW.isTextBox(zevent.target) && zevent.target.disabled == false) {
 				allowright = true;
-			} else if (zclasses != "") {
+			} else if (zclasses != '') {
 				if (zclasses.indexOf(' ') > -1) {
-					allowright = zclasses.toLowerCase().split(" ").includes("allow-contextmenu");
-				} else if (zclasses.toLowerCase() == "allow-contextmenu") {
+					allowright = zclasses.toLowerCase().split(' ').includes('allow-contextmenu');
+				} else if (zclasses.toLowerCase() == 'allow-contextmenu') {
 					allowright = true;
 				}
 			}
@@ -484,7 +484,7 @@ WTWJS.prototype.mouseRight = function(zevent) {
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseRight=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-mouseRight=' + ex.message);
     }
 }
 
@@ -510,13 +510,13 @@ WTWJS.prototype.mouseDown = function(zevent) {
 					zresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
 				}
 				if (zresult.pickedMesh != null) {
-					if (zresult.pickedMesh.name.indexOf("scrollboxup") > -1) {
+					if (zresult.pickedMesh.name.indexOf('scrollboxup') > -1) {
 						WTW.scrollBoxMove(zresult.pickedMesh.name, 25);
-					} else if (zresult.pickedMesh.name.indexOf("scrollboxdown") > -1) {
+					} else if (zresult.pickedMesh.name.indexOf('scrollboxdown') > -1) {
 						WTW.scrollBoxMove(zresult.pickedMesh.name, -25);
-					} else if (zresult.pickedMesh.name.indexOf("-scrollboxtab") > -1) {
+					} else if (zresult.pickedMesh.name.indexOf('-scrollboxtab') > -1) {
 						WTW.dragID = zresult.pickedMesh.name;
-					} else if (zresult.pickedMesh.name.indexOf("hud-") > -1) {
+					} else if (zresult.pickedMesh.name.indexOf('hud-') > -1) {
 						WTW.hudChangeCameraDistance(zresult.pickedMesh.name);
 					}
 				}
@@ -524,7 +524,7 @@ WTWJS.prototype.mouseDown = function(zevent) {
 		}
 		return true;
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseDown=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-mouseDown=' + ex.message);
     }
 }
 
@@ -544,14 +544,14 @@ WTWJS.prototype.mouseUp = function(zevent) {
 			if (WTW.adminView == 1) {
 				WTW.mouseUpAdmin(zevent);
 			}
-			if (WTW.dragID.indexOf("-scrollboxtab") > -1) {
+			if (WTW.dragID.indexOf('-scrollboxtab') > -1) {
 				WTW.lastID = WTW.dragID;
-				WTW.dragID = WTW.dragID.replace("-scrollboxtab","");
+				WTW.dragID = WTW.dragID.replace('-scrollboxtab','');
 				WTW.resetScrollBox(WTW.dragID);
-			} else if (WTW.dragID.indexOf("hud-") > -1) {
+			} else if (WTW.dragID.indexOf('hud-') > -1) {
 				WTW.hudChangeCameraDistance(WTW.dragID);
 			}
-			WTW.dragID = "";
+			WTW.dragID = '';
 		}
 		WTW.keyPressedRemove(1038);
 		WTW.keyPressedRemove(2038);
@@ -568,7 +568,7 @@ WTWJS.prototype.mouseUp = function(zevent) {
 		WTW.hide('wtw_itouchright');
 		return true;
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseUp=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-mouseUp=' + ex.message);
     }
 }
 
@@ -612,21 +612,21 @@ WTWJS.prototype.mouseMove = function(zevent) {
 			}
 			WTW.setToolTipLocation();
 			if (WTW.isMouseDown == 1) {
-				if (WTW.dragID.indexOf("-") > -1) {
-					if (WTW.dragID.indexOf("-scrollboxtab") > -1) {
+				if (WTW.dragID.indexOf('-') > -1) {
+					if (WTW.dragID.indexOf('-scrollboxtab') > -1) {
 						var zmolds = WTW.buildingMolds;
 						var zmoldind = -1;
 						var znamepart = WTW.dragID.split('-');
 						var zpheight = 0;
 						var zscrollmove = 0;
-						if (znamepart[0] != null) {
-							if (znamepart[0].indexOf("communitymolds") > -1) {
+						if (znamepart[1] != null) {
+							if (znamepart[1].indexOf('communitymolds') > -1) {
 								zmolds = WTW.communitiesMolds;
 							}
 						}
-						if (znamepart[1] != null) {
-							if (WTW.isNumeric(znamepart[1])) {
-								zmoldind = Number(znamepart[1]);
+						if (znamepart[2] != null) {
+							if (WTW.isNumeric(znamepart[2])) {
+								zmoldind = Number(znamepart[2]);
 							}
 						}
 						if (zmolds[zmoldind] != null) {
@@ -642,14 +642,14 @@ WTWJS.prototype.mouseMove = function(zevent) {
 						WTW.scrollBoxMove(WTW.dragID, zscrollmove);
 						WTW.mouseStartY = WTW.mouseY;
 						zevent.preventDefault();
-					} else if (WTW.dragID.indexOf("hud-") > -1) {
+					} else if (WTW.dragID.indexOf('hud-') > -1) {
 						WTW.hudChangeCameraDistance(WTW.dragID);
 					}
 				}
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseMove=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-mouseMove=' + ex.message);
     }
 }
 
@@ -663,7 +663,7 @@ WTWJS.prototype.mouseScroll1 = function(zevent) {
 			return (false);
 		}
 	} catch(ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseScroll1=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-mouseScroll1=' + ex.message);
 	}
 }
 
@@ -677,7 +677,7 @@ WTWJS.prototype.mouseScroll2 = function(zevent) {
 			return (false);
 		}
 	} catch(ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseScroll2=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-mouseScroll2=' + ex.message);
 	}
 }
 
@@ -722,7 +722,7 @@ WTWJS.prototype.mouseScroll = function(zrolled) {
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseScroll=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-mouseScroll=' + ex.message);
     }
 }
 
@@ -742,7 +742,7 @@ WTWJS.prototype.mouseOverMold = function(zmold) {
 			}
 		}
 	} catch(ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseOverMold=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-mouseOverMold=' + ex.message);
 	}
 }
 
@@ -754,19 +754,19 @@ WTWJS.prototype.mouseOutMold = function(zmold) {
 			WTW.hide('wtw_itooltip');
 			if (WTW.adminView == 1) {
 				if (dGet('wtw_bfocus') != null) {
-					if (dGet('wtw_bfocus').title == "Focus Highlight is On" || WTW.highlightLayer != null) {
+					if (dGet('wtw_bfocus').title == 'Focus Highlight is On' || WTW.highlightLayer != null) {
 						WTW.unhilightMold(WTW.currentID);
 					}
 				}
 			}
-			document.body.style.cursor = "default";
+			document.body.style.cursor = 'default';
 			WTW.lastID = WTW.currentID;
-			WTW.currentID = "";
+			WTW.currentID = '';
 			WTW.checkMoldEvent('onmouseout', WTW.lastID);
 			WTW.resetHovers();
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseOutMold=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-mouseOutMold=' + ex.message);
 	}
 }
 
@@ -781,7 +781,7 @@ WTWJS.prototype.clearSelectedMold = function () {
 		}
 		WTW.selectedMoldName = '';
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-clearSelectedMold=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-clearSelectedMold=' + ex.message);
 	}
 }
 
@@ -791,11 +791,11 @@ WTWJS.prototype.onMessage = function (zevent) {
 		zevent = zevent || window.event;
 		let zsafe = false;
 		// Check sender origin to be trusted
-		if (zevent.origin == "https://3d.walktheweb.com") {
+		if (zevent.origin == 'https://3d.walktheweb.com') {
 			zsafe = true;
-		} else if (zevent.origin == "https://3dnet.walktheweb.com") {
+		} else if (zevent.origin == 'https://3dnet.walktheweb.com') {
 			zsafe = true;
-		} else if (zevent.origin == "https://3dnet.walktheweb.network") {
+		} else if (zevent.origin == 'https://3dnet.walktheweb.network') {
 			zsafe = true;
 		} else if (zevent.origin == wtw_domainurl) {
 			zsafe = true;
@@ -818,7 +818,7 @@ WTWJS.prototype.onMessage = function (zevent) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-onMessage=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-onMessage=' + ex.message);
 	}
 }
 
@@ -829,50 +829,50 @@ WTWJS.prototype.processKey = function(ztext, zevent) {
 	/* keyboard filtering for input */
     try {
 		zevent = zevent || window.event;
-        ztext = ztext.replace(String.fromCharCode(16), "");
+        ztext = ztext.replace(String.fromCharCode(16), '');
         var zfound = 0;
         var zicursor = 0;
         if (ztext.indexOf('|') == -1) {
-            ztext += "|";
+            ztext += '|';
         }
         zicursor = ztext.indexOf('|');
         switch (zevent.keyCode) {
             case 8:
                 if (ztext.length > 1) {
                     if (ztext.length > 1 && zicursor > 0) {
-                        ztext = ztext.replace("|", "");
-                        ztext = ztext.substr(0, zicursor - 1) + "|" + ztext.substr(zicursor, ztext.length - (zicursor));
+                        ztext = ztext.replace('|', '');
+                        ztext = ztext.substr(0, zicursor - 1) + '|' + ztext.substr(zicursor, ztext.length - (zicursor));
                     }
                 }
                 zfound = 1;
                 break;
             case 9: // tab
-                ztext = ztext.replace("|", "     |");
+                ztext = ztext.replace('|', '     |');
                 zfound = 1;
                 break;
             case 13:
-                ztext = ztext.replace("|", String.fromCharCode(182).toLowerCase() + " |");
+                ztext = ztext.replace('|', String.fromCharCode(182).toLowerCase() + ' |');
                 zfound = 1;
                 break;
             case 27: // esc
                 zfound = 1;
                 break;
             case 32:
-                ztext = ztext.replace("|", " |");
+                ztext = ztext.replace('|', ' |');
                 zfound = 1;
                 break;
             case 35: // end
-                ztext = ztext.replace("|", "");
+                ztext = ztext.replace('|', '');
                 zfound = 1;
                 break;
             case 36: // home
-                ztext = "|" + ztext.replace("|", "");
+                ztext = '|' + ztext.replace('|', '');
                 zfound = 1;
                 break;
             case 37: // left
                 if (ztext.length > 1 && zicursor > 0) {
-                    ztext = ztext.replace("|", "");
-                    ztext = ztext.substr(0, zicursor - 1) + "|" + ztext.substr(zicursor - 1, ztext.length - (zicursor - 1));
+                    ztext = ztext.replace('|', '');
+                    ztext = ztext.substr(0, zicursor - 1) + '|' + ztext.substr(zicursor - 1, ztext.length - (zicursor - 1));
                 }
                 zfound = 1;
                 break;
@@ -880,8 +880,8 @@ WTWJS.prototype.processKey = function(ztext, zevent) {
                 zfound = 1;
                 break;
             case 39: // right
-                ztext = ztext.replace("|", "");
-                ztext = ztext.substr(0, zicursor + 1) + "|" + ztext.substr(zicursor + 1, ztext.length - (zicursor + 1));
+                ztext = ztext.replace('|', '');
+                ztext = ztext.substr(0, zicursor + 1) + '|' + ztext.substr(zicursor + 1, ztext.length - (zicursor + 1));
                 zfound = 1;
                 break;
             case 40: // down
@@ -892,8 +892,8 @@ WTWJS.prototype.processKey = function(ztext, zevent) {
                 break;
             case 46: // delete
                 if (ztext.length > zicursor + 1) {
-                    ztext = ztext.replace("|", "");
-                    ztext = ztext.substr(0, zicursor) + "|" + ztext.substr(zicursor + 1, ztext.length - (zicursor + 1));
+                    ztext = ztext.replace('|', '');
+                    ztext = ztext.substr(0, zicursor) + '|' + ztext.substr(zicursor + 1, ztext.length - (zicursor + 1));
                 }
                 zfound = 1;
                 break;
@@ -902,162 +902,162 @@ WTWJS.prototype.processKey = function(ztext, zevent) {
             if (zevent.shiftKey) {
                 switch (zevent.keyCode) {
                     case 48:
-                        ztext = ztext.replace("|", ")|");
+                        ztext = ztext.replace('|', ')|');
                         break;
                     case 49:
-                        ztext = ztext.replace("|", "!|");
+                        ztext = ztext.replace('|', '!|');
                         break;
                     case 50:
-                        ztext = ztext.replace("|", "@|");
+                        ztext = ztext.replace('|', '@|');
                         break;
                     case 51:
-                        ztext = ztext.replace("|", "#|");
+                        ztext = ztext.replace('|', '#|');
                         break;
                     case 52:
-                        ztext = ztext.replace("|", "$|");
+                        ztext = ztext.replace('|', '$|');
                         break;
                     case 53:
-                        ztext = ztext.replace("|", "%|");
+                        ztext = ztext.replace('|', '%|');
                         break;
                     case 54:
-                        ztext = ztext.replace("|", "^|");
+                        ztext = ztext.replace('|', '^|');
                         break;
                     case 55:
-                        ztext = ztext.replace("|", "&|");
+                        ztext = ztext.replace('|', '&|');
                         break;
                     case 56:
-                        ztext = ztext.replace("|", "*|");
+                        ztext = ztext.replace('|', '*|');
                         break;
                     case 57:
-                        ztext = ztext.replace("|", "(|");
+                        ztext = ztext.replace('|', '(|');
                         break;
                     case 186:
-                        ztext = ztext.replace("|", ":|");
+                        ztext = ztext.replace('|', ':|');
                         break;
                     case 187:
-                        ztext = ztext.replace("|", "+|");
+                        ztext = ztext.replace('|', '+|');
                         break;
                     case 188:
-                        ztext = ztext.replace("|", "<|");
+                        ztext = ztext.replace('|', '<|');
                         break;
                     case 189:
-                        ztext = ztext.replace("|", "_|");
+                        ztext = ztext.replace('|', '_|');
                         break;
                     case 190:
-                        ztext = ztext.replace("|", ">|");
+                        ztext = ztext.replace('|', '>|');
                         break;
                     case 191:
-                        ztext = ztext.replace("|", "?|");
+                        ztext = ztext.replace('|', '?|');
                         break;
                     case 192:
-                        ztext = ztext.replace("|", "~|");
+                        ztext = ztext.replace('|', '~|');
                         break;
                     case 219:
-                        ztext = ztext.replace("|", "{|");
+                        ztext = ztext.replace('|', '{|');
                         break;
                     case 220: //  |
                         break;
                     case 221:
-                        ztext = ztext.replace("|", "}|");
+                        ztext = ztext.replace('|', '}|');
                         break;
                     case 222:
-                        ztext = ztext.replace("|", "\"|");
+                        ztext = ztext.replace('|', "\"|");
                         break;
                     default:
-                        ztext = ztext.replace("|", String.fromCharCode(zevent.keyCode).toUpperCase() + "|");
+                        ztext = ztext.replace('|', String.fromCharCode(zevent.keyCode).toUpperCase() + '|');
                         break;
                 }
             } else {
                 switch (zevent.keyCode) {
                     case 96:
-                        ztext = ztext.replace("|", "0|");
+                        ztext = ztext.replace('|', '0|');
                         break;
                     case 97:
-                        ztext = ztext.replace("|", "1|");
+                        ztext = ztext.replace('|', '1|');
                         break;
                     case 98:
-                        ztext = ztext.replace("|", "2|");
+                        ztext = ztext.replace('|', '2|');
                         break;
                     case 99:
-                        ztext = ztext.replace("|", "3|");
+                        ztext = ztext.replace('|', '3|');
                         break;
                     case 100:
-                        ztext = ztext.replace("|", "4|");
+                        ztext = ztext.replace('|', '4|');
                         break;
                     case 101:
-                        ztext = ztext.replace("|", "5|");
+                        ztext = ztext.replace('|', '5|');
                         break;
                     case 102:
-                        ztext = ztext.replace("|", "6|");
+                        ztext = ztext.replace('|', '6|');
                         break;
                     case 103:
-                        ztext = ztext.replace("|", "7|");
+                        ztext = ztext.replace('|', '7|');
                         break;
                     case 104:
-                        ztext = ztext.replace("|", "8|");
+                        ztext = ztext.replace('|', '8|');
                         break;
                     case 105:
-                        ztext = ztext.replace("|", "9|");
+                        ztext = ztext.replace('|', '9|');
                         break;
                     case 106:
-                        ztext = ztext.replace("|", "*|");
+                        ztext = ztext.replace('|', '*|');
                         break;
                     case 107:
-                        ztext = ztext.replace("|", "+|");
+                        ztext = ztext.replace('|', '+|');
                         break;
                     case 109:
-                        ztext = ztext.replace("|", "-|");
+                        ztext = ztext.replace('|', '-|');
                         break;
                     case 110:
-                        ztext = ztext.replace("|", ".|");
+                        ztext = ztext.replace('|', '.|');
                         break;
                     case 111:
-                        ztext = ztext.replace("|", "/|");
+                        ztext = ztext.replace('|', '/|');
                         break;
                     case 186:
-                        ztext = ztext.replace("|", ";|");
+                        ztext = ztext.replace('|', ';|');
                         break;
                     case 187:
-                        ztext = ztext.replace("|", "=|");
+                        ztext = ztext.replace('|', '=|');
                         break;
                     case 188:
-                        ztext = ztext.replace("|", ",|");
+                        ztext = ztext.replace('|', ',|');
                         break;
                     case 189:
-                        ztext = ztext.replace("|", "-|");
+                        ztext = ztext.replace('|', '-|');
                         break;
                     case 190:
-                        ztext = ztext.replace("|", ".|");
+                        ztext = ztext.replace('|', '.|');
                         break;
                     case 191:
-                        ztext = ztext.replace("|", "/|");
+                        ztext = ztext.replace('|', '/|');
                         break;
                     case 192:
-                        ztext = ztext.replace("|", "`|");
+                        ztext = ztext.replace('|', '`|');
                         break;
                     case 219:
-                        ztext = ztext.replace("|", "[|");
+                        ztext = ztext.replace('|', '[|');
                         break;
                     case 220:
-                        ztext = ztext.replace("|", "\\|");
+                        ztext = ztext.replace('|', '\\|');
                         break;
                     case 221:
-                        ztext = ztext.replace("|", "]|");
+                        ztext = ztext.replace('|', ']|');
                         break;
                     case 222:
-                        ztext = ztext.replace("|", "'|");
+                        ztext = ztext.replace('|', "'|");
                         break;
                     default:
-                        ztext = ztext.replace("|", String.fromCharCode(zevent.keyCode).toLowerCase() + "|");
+                        ztext = ztext.replace('|', String.fromCharCode(zevent.keyCode).toLowerCase() + '|');
                         break;
                 }
             }
         }
         if (ztext.indexOf('|') == -1) {
-            ztext += "|";
+            ztext += '|';
         }
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-processKey=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-processKey=' + ex.message);
 	} 
     return ztext;
 }
@@ -1069,45 +1069,45 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 		var ztext = ztextinput.value;
 		var zcaretstart = ztextinput.length - 1;
 		var zcaretend = ztextinput.length - 1;
-		if (WTW.getBrowser() != "safari") {
+		if (WTW.getBrowser() != 'safari') {
 			zcaretstart = ztextinput.selectionStart;
 			zcaretend = ztextinput.selectionEnd;
 		}
-		var znewtext = "";
-		var zpossible = "";
+		var znewtext = '';
+		var zpossible = '';
 		switch (zvalidtype) {
-			case "number":
-				zpossible = "1234567890.-";
+			case 'number':
+				zpossible = '1234567890.-';
 				break;
-			case "phonenumber":
-				zpossible = "1234567890";
+			case 'phonenumber':
+				zpossible = '1234567890';
 				break;
-			case "text":
+			case 'text':
 				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_-+={[}]\\:;\"'<,>.?/ ";
 				break;
-			case "safetext":
+			case 'safetext':
 				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz~!@#$%^&*()_-+={[}]:;\"',.? ";
 				break;
-			case "password":
-				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz~!@#$%^&*()_-+={[}]:;<,>.? ";
+			case 'password':
+				zpossible = '1234567890abcdefghijklmnopqrstuvwxyz~!@#$%^&*()_-+={[}]:;<,>.? ';
 				break;
-			case "email":
+			case 'email':
 				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz@.!#$%&'*+-/=?^_`{|}~";
 				break;
-			case "webname":
-				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz-_.";
+			case 'webname':
+				zpossible = '1234567890abcdefghijklmnopqrstuvwxyz-_.';
 				break;
-			case "displayname":
+			case 'displayname':
 				zpossible = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_. ',";
 				break;
-			case "web":
+			case 'web':
 				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_-+={[}]\\:;\"'<,>.?/ ";
 				break;
-			case "idoremail":
-				zpossible = "1234567890abcdefghijklmnopqrstuvwxyz@.-_";
+			case 'idoremail':
+				zpossible = '1234567890abcdefghijklmnopqrstuvwxyz@.-_';
 				break;
 		}
-		if (ztext.length > 0 && zpossible != "") {
+		if (ztext.length > 0 && zpossible != '') {
 			for (var i = 0, len = ztext.length; i < len; i++) {
 				if (zpossible.indexOf(ztext[i].toLowerCase()) > -1) {
 					znewtext += ztext[i];
@@ -1149,24 +1149,24 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 					break;
 			}
 		}
-		ztextinput.style.backgroundColor = "#ffffff";
-		ztextinput.style.color = "#000000";
+		ztextinput.style.backgroundColor = '#ffffff';
+		ztextinput.style.color = '#000000';
 		switch (zvalidtype) {
-			case "number":
-				if (znewtext.indexOf(".") > -1) {
+			case 'number':
+				if (znewtext.indexOf('.') > -1) {
 					var zparts = znewtext.split('.');
 					if (zparts.length > 1) {
-						znewtext = zparts[0] + "." + zparts[1];
+						znewtext = zparts[0] + '.' + zparts[1];
 						for (i = 2;i < zparts.length;i++) {
 							znewtext += zparts[i];
 						}
 					}
 				}
-				if (znewtext.indexOf("-") > -1) {
+				if (znewtext.indexOf('-') > -1) {
 					var zparts = znewtext.split('-');
 					if (zparts.length > 1) {
 						if (zparts[0].length == 0) {
-							znewtext = "-" + zparts[1];
+							znewtext = '-' + zparts[1];
 							for (i = 2;i < zparts.length;i++) {
 								znewtext += zparts[i];
 							}
@@ -1179,78 +1179,78 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 					}
 				}
 				break;
-			case "phonenumber":
-				var zleading = "";
+			case 'phonenumber':
+				var zleading = '';
 				if (znewtext.length > 0) {
-					if (znewtext.substr(0,1) == "1") {
-						zleading = "1 ";
+					if (znewtext.substr(0,1) == '1') {
+						zleading = '1 ';
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart += 2;
 						zcaretend += 2;
 					}
 				}
 				if (znewtext.length > 10) {
-					znewtext = "(" + znewtext.substr(0,3) + ") " + znewtext.substr(3,3) + "-" + znewtext.substr(6,4) + " " + znewtext.substr(10,znewtext.length - 10);
+					znewtext = '(' + znewtext.substr(0,3) + ') ' + znewtext.substr(3,3) + '-' + znewtext.substr(6,4) + ' ' + znewtext.substr(10,znewtext.length - 10);
 					zcaretstart += 5;
 					zcaretend += 5;
 				} else if (znewtext.length > 6) {
-					znewtext = "(" + znewtext.substr(0,3) + ") " + znewtext.substr(3,3) + "-" + znewtext.substr(6,znewtext.length - 6);
+					znewtext = '(' + znewtext.substr(0,3) + ') ' + znewtext.substr(3,3) + '-' + znewtext.substr(6,znewtext.length - 6);
 					zcaretstart += 4;
 					zcaretend += 4;
 				} else if (znewtext.length > 3) {
-					znewtext = "(" + znewtext.substr(0,3) + ") " + znewtext.substr(3,znewtext.length - 3);
+					znewtext = '(' + znewtext.substr(0,3) + ') ' + znewtext.substr(3,znewtext.length - 3);
 					zcaretstart += 3;
 					zcaretend += 3;
 				} else if (znewtext.length > 0) {
-					znewtext = "(" + znewtext;
+					znewtext = '(' + znewtext;
 					zcaretstart += 1;
 					zcaretend += 1;
 				}
 				if (znewtext.length > 0) {
 					znewtext = zleading + znewtext;
 				} else {
-					znewtext = zleading.replace(" ","");
+					znewtext = zleading.replace(' ','');
 				}
 				break;
-			case "text":
+			case 'text':
 				break;
-			case "safetext":
+			case 'safetext':
 				if (zcomplete == 1) {
 					if (znewtext.length > 0) {
-						while (znewtext.indexOf("  ") > -1) {
-							znewtext = znewtext.replace("  "," ");
+						while (znewtext.indexOf('  ') > -1) {
+							znewtext = znewtext.replace('  ',' ');
 							zcaretstart -= 1;
 							zcaretend -= 1;
 						}
-						while (znewtext.indexOf(",,") > -1) {
-							znewtext = znewtext.replace(",,",",");
+						while (znewtext.indexOf(',,') > -1) {
+							znewtext = znewtext.replace(',,',',');
 							zcaretstart -= 1;
 							zcaretend -= 1;
 						}
-						while (znewtext.indexOf("--") > -1) {
-							znewtext = znewtext.replace("--","-");
+						while (znewtext.indexOf('--') > -1) {
+							znewtext = znewtext.replace('--','-');
 							zcaretstart -= 1;
 							zcaretend -= 1;
 						}
 					}
 				}
 				break;
-			case "password":
+			case 'password':
 				break;
-			case "email":
-				var zserverpossible = "abcdefghijklmnopqrstuvwxyz0123456789-.";
-				if (znewtext.indexOf("@") > -1) {
+			case 'email':
+				var zserverpossible = 'abcdefghijklmnopqrstuvwxyz0123456789-.';
+				if (znewtext.indexOf('@') > -1) {
 					var zparts = znewtext.split('@');
 					if (zparts.length > 1) {
-						znewtext = zparts[0] + "@" + zparts[1];
+						znewtext = zparts[0] + '@' + zparts[1];
 						for (i = 2;i < zparts.length;i++) {
 							znewtext += zparts[i];
 						}
 					}
 					zparts = znewtext.split('@');
-					znewtext = zparts[0] + "@";
+					znewtext = zparts[0] + '@';
 					ztext = zparts[1];
-					if (ztext.length > 0 && zpossible != "") {
+					if (ztext.length > 0 && zpossible != '') {
 						for (var i = 0, len = ztext.length; i < len; i++) {
 							if (zpossible.indexOf(ztext[i].toLowerCase()) > -1) {
 								znewtext += ztext[i];
@@ -1259,12 +1259,12 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 					}
 				}
 				if (znewtext.length > 0) {
-					while (znewtext.indexOf("..") > -1) {
-						znewtext = znewtext.replace("..",".");
+					while (znewtext.indexOf('..') > -1) {
+						znewtext = znewtext.replace('..','.');
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					if (znewtext.substr(0,1) == ".") {
+					if (znewtext.substr(0,1) == '.') {
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart -= 1;
 						zcaretend -= 1;
@@ -1272,44 +1272,44 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 				}
 				if (zcomplete == 1) {
 					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == ".") {
+						if (znewtext.substr(znewtext.length - 1,1) == '.') {
 							znewtext = znewtext.substr(0,znewtext.length - 1)
 						}
 					}
 					if (WTW.isEmail(znewtext) == false && znewtext.length > 0) {
-						ztextinput.style.backgroundColor = "#ff0000";
-						ztextinput.style.color = "#ffffff";
+						ztextinput.style.backgroundColor = '#ff0000';
+						ztextinput.style.color = '#ffffff';
 					}
 				}
 				break;
-			case "webname":
+			case 'webname':
 				if (znewtext.length > 0) {
-					while (znewtext.indexOf("..") > -1) {
-						znewtext = znewtext.replace("..",".");
+					while (znewtext.indexOf('..') > -1) {
+						znewtext = znewtext.replace('..','.');
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					if (znewtext.substr(0,1) == ".") {
+					if (znewtext.substr(0,1) == '.') {
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					while (znewtext.indexOf("--") > -1) {
-						znewtext = znewtext.replace("--","-");
+					while (znewtext.indexOf('--') > -1) {
+						znewtext = znewtext.replace('--','-');
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					if (znewtext.substr(0,1) == "-") {
+					if (znewtext.substr(0,1) == '-') {
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					while (znewtext.indexOf("__") > -1) {
-						znewtext = znewtext.replace("__","_");
+					while (znewtext.indexOf('__') > -1) {
+						znewtext = znewtext.replace('__','_');
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					if (znewtext.substr(0,1) == "_") {
+					if (znewtext.substr(0,1) == '_') {
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart -= 1;
 						zcaretend -= 1;
@@ -1317,23 +1317,23 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 				}
 				if (zcomplete == 1) {
 					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == ".") {
+						if (znewtext.substr(znewtext.length - 1,1) == '.') {
 							znewtext = znewtext.substr(0,znewtext.length - 1)
 						}
 					}
 					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == "-") {
+						if (znewtext.substr(znewtext.length - 1,1) == '-') {
 							znewtext = znewtext.substr(0,znewtext.length - 1)
 						}
 					}
 					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == "_") {
+						if (znewtext.substr(znewtext.length - 1,1) == '_') {
 							znewtext = znewtext.substr(0,znewtext.length - 1)
 						}
 					}
 				}
 				break;
-			case "displayname":
+			case 'displayname':
 				if (znewtext.length > 0) {
 					while (znewtext.indexOf("''") > -1) {
 						znewtext = znewtext.replace("''","'");
@@ -1345,52 +1345,52 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					while (znewtext.indexOf("  ") > -1) {
-						znewtext = znewtext.replace("  "," ");
+					while (znewtext.indexOf('  ') > -1) {
+						znewtext = znewtext.replace('  ',' ');
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					if (znewtext.substr(0,1) == " ") {
+					if (znewtext.substr(0,1) == ' ') {
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					while (znewtext.indexOf("..") > -1) {
-						znewtext = znewtext.replace("..",".");
+					while (znewtext.indexOf('..') > -1) {
+						znewtext = znewtext.replace('..','.');
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					if (znewtext.substr(0,1) == ".") {
+					if (znewtext.substr(0,1) == '.') {
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					while (znewtext.indexOf(",,") > -1) {
-						znewtext = znewtext.replace(",,",",");
+					while (znewtext.indexOf(',,') > -1) {
+						znewtext = znewtext.replace(',,',',');
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					if (znewtext.substr(0,1) == ",") {
+					if (znewtext.substr(0,1) == ',') {
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					while (znewtext.indexOf("--") > -1) {
-						znewtext = znewtext.replace("--","-");
+					while (znewtext.indexOf('--') > -1) {
+						znewtext = znewtext.replace('--','-');
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					if (znewtext.substr(0,1) == "-") {
+					if (znewtext.substr(0,1) == '-') {
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					while (znewtext.indexOf("__") > -1) {
-						znewtext = znewtext.replace("__","_");
+					while (znewtext.indexOf('__') > -1) {
+						znewtext = znewtext.replace('__','_');
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					if (znewtext.substr(0,1) == "_") {
+					if (znewtext.substr(0,1) == '_') {
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart -= 1;
 						zcaretend -= 1;
@@ -1398,27 +1398,27 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 				}
 				if (zcomplete == 1) {
 					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == ".") {
+						if (znewtext.substr(znewtext.length - 1,1) == '.') {
 							znewtext = znewtext.substr(0,znewtext.length - 1)
 						}
 					}
 					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == "-") {
+						if (znewtext.substr(znewtext.length - 1,1) == '-') {
 							znewtext = znewtext.substr(0,znewtext.length - 1)
 						}
 					}
 					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == "_") {
+						if (znewtext.substr(znewtext.length - 1,1) == '_') {
 							znewtext = znewtext.substr(0,znewtext.length - 1)
 						}
 					}
 					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == " ") {
+						if (znewtext.substr(znewtext.length - 1,1) == ' ') {
 							znewtext = znewtext.substr(0,znewtext.length - 1)
 						}
 					}
 					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == ",") {
+						if (znewtext.substr(znewtext.length - 1,1) == ',') {
 							znewtext = znewtext.substr(0,znewtext.length - 1)
 						}
 					}
@@ -1429,14 +1429,14 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 					}
 				}
 				break;
-			case "web":
+			case 'web':
 				if (znewtext.length > 0) {
-					while (znewtext.indexOf("..") > -1) {
-						znewtext = znewtext.replace("..",".");
+					while (znewtext.indexOf('..') > -1) {
+						znewtext = znewtext.replace('..','.');
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					if (znewtext.substr(0,1) == ".") {
+					if (znewtext.substr(0,1) == '.') {
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart -= 1;
 						zcaretend -= 1;
@@ -1444,52 +1444,52 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 				}
 				if (zcomplete == 1) {
 					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == ".") {
+						if (znewtext.substr(znewtext.length - 1,1) == '.') {
 							znewtext = znewtext.substr(0,znewtext.length - 1)
 						}
 					}
 					if (WTW.isURL(znewtext) == false && znewtext.length > 0) {
-						ztextinput.style.backgroundColor = "#ff0000";
-						ztextinput.style.color = "#ffffff";
+						ztextinput.style.backgroundColor = '#ff0000';
+						ztextinput.style.color = '#ffffff';
 					}
 				}
 				break;
-			case "idoremail":
+			case 'idoremail':
 				if (znewtext.length > 0) {
-					while (znewtext.indexOf("..") > -1) {
-						znewtext = znewtext.replace("..",".");
+					while (znewtext.indexOf('..') > -1) {
+						znewtext = znewtext.replace('..','.');
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					if (znewtext.substr(0,1) == ".") {
+					if (znewtext.substr(0,1) == '.') {
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					while (znewtext.indexOf("@@") > -1) {
-						znewtext = znewtext.replace("@@","@");
+					while (znewtext.indexOf('@@') > -1) {
+						znewtext = znewtext.replace('@@','@');
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
-					if (znewtext.substr(0,1) == "@") {
+					if (znewtext.substr(0,1) == '@') {
 						znewtext = znewtext.substr(1,znewtext.length - 1);
 						zcaretstart -= 1;
 						zcaretend -= 1;
 					}
 				}
-				var zserverpossible = "abcdefghijklmnopqrstuvwxyz0123456789-.";
-				if (znewtext.indexOf("@") > -1) {
+				var zserverpossible = 'abcdefghijklmnopqrstuvwxyz0123456789-.';
+				if (znewtext.indexOf('@') > -1) {
 					var zparts = znewtext.split('@');
 					if (zparts.length > 1) {
-						znewtext = zparts[0] + "@" + zparts[1];
+						znewtext = zparts[0] + '@' + zparts[1];
 						for (i = 2;i < zparts.length;i++) {
 							znewtext += zparts[i];
 						}
 					}
 					zparts = znewtext.split('@');
-					znewtext = zparts[0] + "@";
+					znewtext = zparts[0] + '@';
 					ztext = zparts[1];
-					if (ztext.length > 0 && zpossible != "") {
+					if (ztext.length > 0 && zpossible != '') {
 						for (var i = 0, len = ztext.length; i < len; i++) {
 							if (zpossible.indexOf(ztext[i].toLowerCase()) > -1) {
 								znewtext += ztext[i];
@@ -1499,106 +1499,106 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 				}
 				if (zcomplete == 1) {
 					if (znewtext.length > 0) {
-						if (znewtext.substr(znewtext.length - 1,1) == ".") {
+						if (znewtext.substr(znewtext.length - 1,1) == '.') {
 							znewtext = znewtext.substr(0,znewtext.length - 1)
 						}
 					}
 					if (WTW.isEmail(znewtext) == false) {
 						if (znewtext.length > 0) {
-							while (znewtext.indexOf("..") > -1) {
-								znewtext = znewtext.replace("..",".");
+							while (znewtext.indexOf('..') > -1) {
+								znewtext = znewtext.replace('..','.');
 								zcaretstart -= 1;
 								zcaretend -= 1;
 							}
-							if (znewtext.substr(0,1) == ".") {
+							if (znewtext.substr(0,1) == '.') {
 								znewtext = znewtext.substr(1,znewtext.length - 1);
 								zcaretstart -= 1;
 								zcaretend -= 1;
 							}
-							while (znewtext.indexOf("--") > -1) {
-								znewtext = znewtext.replace("--","-");
+							while (znewtext.indexOf('--') > -1) {
+								znewtext = znewtext.replace('--','-');
 								zcaretstart -= 1;
 								zcaretend -= 1;
 							}
-							if (znewtext.substr(0,1) == "-") {
+							if (znewtext.substr(0,1) == '-') {
 								znewtext = znewtext.substr(1,znewtext.length - 1);
 								zcaretstart -= 1;
 								zcaretend -= 1;
 							}
-							while (znewtext.indexOf("__") > -1) {
-								znewtext = znewtext.replace("__","_");
+							while (znewtext.indexOf('__') > -1) {
+								znewtext = znewtext.replace('__','_');
 								zcaretstart -= 1;
 								zcaretend -= 1;
 							}
-							if (znewtext.substr(0,1) == "_") {
+							if (znewtext.substr(0,1) == '_') {
 								znewtext = znewtext.substr(1,znewtext.length - 1);
 								zcaretstart -= 1;
 								zcaretend -= 1;
 							}
 						}
-						while (znewtext.indexOf("!") > -1) {
-							znewtext = znewtext.replace("!","");
+						while (znewtext.indexOf('!') > -1) {
+							znewtext = znewtext.replace('!','');
 						}
-						while (znewtext.indexOf("#") > -1) {
-							znewtext = znewtext.replace("#","");
+						while (znewtext.indexOf('#') > -1) {
+							znewtext = znewtext.replace('#','');
 						}
-						while (znewtext.indexOf("$") > -1) {
-							znewtext = znewtext.replace("$","");
+						while (znewtext.indexOf('$') > -1) {
+							znewtext = znewtext.replace('$','');
 						}
-						while (znewtext.indexOf("%") > -1) {
-							znewtext = znewtext.replace("%","");
+						while (znewtext.indexOf('%') > -1) {
+							znewtext = znewtext.replace('%','');
 						}
-						while (znewtext.indexOf("&") > -1) {
-							znewtext = znewtext.replace("&","");
+						while (znewtext.indexOf('&') > -1) {
+							znewtext = znewtext.replace('&','');
 						}
 						while (znewtext.indexOf("'") > -1) {
-							znewtext = znewtext.replace("'","");
+							znewtext = znewtext.replace("'",'');
 						}
-						while (znewtext.indexOf("*") > -1) {
-							znewtext = znewtext.replace("*","");
+						while (znewtext.indexOf('*') > -1) {
+							znewtext = znewtext.replace('*','');
 						}
-						while (znewtext.indexOf("+") > -1) {
-							znewtext = znewtext.replace("+","");
+						while (znewtext.indexOf('+') > -1) {
+							znewtext = znewtext.replace('+','');
 						}
-						while (znewtext.indexOf("/") > -1) {
-							znewtext = znewtext.replace("/","");
+						while (znewtext.indexOf('/') > -1) {
+							znewtext = znewtext.replace('/','');
 						}
-						while (znewtext.indexOf("=") > -1) {
-							znewtext = znewtext.replace("=","");
+						while (znewtext.indexOf('=') > -1) {
+							znewtext = znewtext.replace('=','');
 						}
-						while (znewtext.indexOf("?") > -1) {
-							znewtext = znewtext.replace("?","");
+						while (znewtext.indexOf('?') > -1) {
+							znewtext = znewtext.replace('?','');
 						}
-						while (znewtext.indexOf("^") > -1) {
-							znewtext = znewtext.replace("^","");
+						while (znewtext.indexOf('^') > -1) {
+							znewtext = znewtext.replace('^','');
 						}
-						while (znewtext.indexOf("`") > -1) {
-							znewtext = znewtext.replace("`","");
+						while (znewtext.indexOf('`') > -1) {
+							znewtext = znewtext.replace('`','');
 						}
-						while (znewtext.indexOf("{") > -1) {
-							znewtext = znewtext.replace("{","");
+						while (znewtext.indexOf('{') > -1) {
+							znewtext = znewtext.replace('{','');
 						}
-						while (znewtext.indexOf("}") > -1) {
-							znewtext = znewtext.replace("}","");
+						while (znewtext.indexOf('}') > -1) {
+							znewtext = znewtext.replace('}','');
 						}
-						while (znewtext.indexOf("|") > -1) {
-							znewtext = znewtext.replace("|","");
+						while (znewtext.indexOf('|') > -1) {
+							znewtext = znewtext.replace('|','');
 						}
-						while (znewtext.indexOf("~") > -1) {
-							znewtext = znewtext.replace("~","");
+						while (znewtext.indexOf('~') > -1) {
+							znewtext = znewtext.replace('~','');
 						}
 						if (znewtext.length > 0) {
-							if (znewtext.substr(znewtext.length - 1,1) == ".") {
+							if (znewtext.substr(znewtext.length - 1,1) == '.') {
 								znewtext = znewtext.substr(0,znewtext.length - 1)
 							}
 						}
 						if (znewtext.length > 0) {
-							if (znewtext.substr(znewtext.length - 1,1) == "-") {
+							if (znewtext.substr(znewtext.length - 1,1) == '-') {
 								znewtext = znewtext.substr(0,znewtext.length - 1)
 							}
 						}
 						if (znewtext.length > 0) {
-							if (znewtext.substr(znewtext.length - 1,1) == "_") {
+							if (znewtext.substr(znewtext.length - 1,1) == '_') {
 								znewtext = znewtext.substr(0,znewtext.length - 1)
 							}
 						}
@@ -1607,16 +1607,16 @@ WTWJS.prototype.checkKey = function(ztextinput, zvalidtype, zallowblank, zcomple
 				break;
 		}
 		if (zcomplete == 1 && znewtext.length == 0 && zallowblank == 0) {
-			ztextinput.style.backgroundColor = "#ff0000";
-			ztextinput.style.color = "#ffffff";
+			ztextinput.style.backgroundColor = '#ff0000';
+			ztextinput.style.color = '#ffffff';
 		}
 		ztextinput.value = znewtext;
-		if (WTW.getBrowser() != "safari") {
+		if (WTW.getBrowser() != 'safari') {
 			ztextinput.selectionStart = zcaretstart;
 			ztextinput.selectionEnd = zcaretend;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-WTW.checkKey=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-WTW.checkKey=' + ex.message);
 	} 
 }
 
@@ -1632,7 +1632,7 @@ WTWJS.prototype.registerMouseOver = function(zmold) {
 			zmold.actionManager.registerAction(WTW.mouseOut);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-registerMouseOver=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-registerMouseOver=' + ex.message);
 	}
 }
 
@@ -1643,22 +1643,22 @@ WTWJS.prototype.hilightMoldFast = function(zmoldname, zcolor) {
 		if (zmold != null) {
 			var zcolorset = BABYLON.Color3.Yellow();
 			switch (zcolor.toLowerCase()) {
-				case "green":
+				case 'green':
 					zcolorset = BABYLON.Color3.Green();
 					break;
-				case "red":
+				case 'red':
 					zcolorset = BABYLON.Color3.Red();
 					break;
-				case "blue":
+				case 'blue':
 					zcolorset = BABYLON.Color3.Blue();
 					break;
-				case "yellow":
+				case 'yellow':
 					zcolorset = BABYLON.Color3.Yellow();
 					break;
 			}
 			WTW.unhilightMold(zmoldname);
 			if (WTW.highlightLayer == null) {
-				WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
+				WTW.highlightLayer = new BABYLON.HighlightLayer('highlightlayer', scene);
 			}
 			WTW.highlightLayer.outerGlow = true;
 			WTW.highlightLayer.innerGlow = true;
@@ -1670,7 +1670,7 @@ WTWJS.prototype.hilightMoldFast = function(zmoldname, zcolor) {
 			},500);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-hilightMoldFast=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-hilightMoldFast=' + ex.message);
 	}
 }
 
@@ -1681,29 +1681,29 @@ WTWJS.prototype.hilightMold = function(zmoldname, zcolor) {
 		if (zmold != null) {
 			var zcolorset = BABYLON.Color3.Yellow();
 			switch (zcolor.toLowerCase()) {
-				case "green":
+				case 'green':
 					zcolorset = BABYLON.Color3.Green();
 					break;
-				case "red":
+				case 'red':
 					zcolorset = BABYLON.Color3.Red();
 					break;
-				case "blue":
+				case 'blue':
 					zcolorset = BABYLON.Color3.Blue();
 					break;
-				case "yellow":
+				case 'yellow':
 					zcolorset = BABYLON.Color3.Yellow();
 					break;
 			}
 			WTW.unhilightMold(zmoldname);
 			if (WTW.highlightLayer == null) {
-				WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
+				WTW.highlightLayer = new BABYLON.HighlightLayer('highlightlayer', scene);
 			}
 			WTW.highlightLayer.outerGlow = true;
 			//WTW.highlightLayer.innerGlow = true;
 			WTW.highlightLayer.addMesh(zmold, zcolorset);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-hilightMold=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-hilightMold=' + ex.message);
 	}
 }
 
@@ -1717,7 +1717,7 @@ WTWJS.prototype.unhilightMold = function(zmoldname) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-unhilightMold=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-unhilightMold=' + ex.message);
 	}
 }
 
@@ -1741,13 +1741,13 @@ WTWJS.prototype.setOpacity = function(zmoldname, zopacity) {
 					zmold.isVisible = true;				
 				}
 			} else {
-				var zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+				var zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
 				zcovering.alpha = zopacity;
 				zmold.material = zcovering;
 			}
 		} 
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-setOpacity=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-setOpacity=' + ex.message);
     }
 }
 
@@ -1774,7 +1774,7 @@ WTWJS.prototype.setDirectionalOpacity = function(zmoldname, zopacity) {
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-setDirectionalOpacity=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-setDirectionalOpacity=' + ex.message);
     }
 }
 
@@ -1808,7 +1808,7 @@ WTWJS.prototype.resetMoldsOpacity = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-resetMoldsOpacity=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-resetMoldsOpacity=' + ex.message);
 	}
 }
 
@@ -1816,16 +1816,16 @@ WTWJS.prototype.resetMoldOpacity = function(zwebtype, zmoldind) {
 	/* reset the opacity of a mold after a highlighting */
 	try {
 		var zmolds = WTW.buildingMolds;
-		var zshape = "box";
+		var zshape = 'box';
 		switch (zwebtype) {
-			case "community":
+			case 'community':
 				zmolds = WTW.communitiesMolds;
 				break;
-			case "thing":
+			case 'thing':
 				zmolds = WTW.thingMolds;
 				break;
 		}
-		if (zmolds[zmoldind].shape != "") {
+		if (zmolds[zmoldind].shape != '') {
 			zshape = zmolds[zmoldind].shape;
 		}
 		var zmoldname = zmolds[zmoldind].moldname;
@@ -1842,13 +1842,13 @@ WTWJS.prototype.resetMoldOpacity = function(zwebtype, zmoldind) {
 					}
 				}
 			}
-			if ((zshape == "box" || zshape == "wall" || zshape == "floor") && zmolds[zmoldind].covering == "directional texture") {
-				zmolds[zmoldind].covering = "directional texture";
-			} else if (zshape != "box" && zshape != "wall" && zshape != "floor" && zmolds[zmoldind].covering == "directional texture") {
-				zmolds[zmoldind].covering = "texture";
+			if ((zshape == 'box' || zshape == 'wall' || zshape == 'floor') && zmolds[zmoldind].covering == 'directional texture') {
+				zmolds[zmoldind].covering = 'directional texture';
+			} else if (zshape != 'box' && zshape != 'wall' && zshape != 'floor' && zmolds[zmoldind].covering == 'directional texture') {
+				zmolds[zmoldind].covering = 'texture';
 			}
 			if (zmold.material != undefined) {
-				if (zmolds[zmoldind].covering != "none" && zmolds[zmoldind].covering != "hidden" && zmolds[zmoldind].moldname.indexOf('video') == -1) {
+				if (zmolds[zmoldind].covering != 'none' && zmolds[zmoldind].covering != 'hidden' && zmolds[zmoldind].moldname.indexOf('video') == -1) {
 					zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
 					zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
 					zmold.material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
@@ -1860,10 +1860,10 @@ WTWJS.prototype.resetMoldOpacity = function(zwebtype, zmoldind) {
 					zmold.material.emissiveColor = new BABYLON.Color3(zopacity, zopacity, zopacity);
 					zmold.material.ambientColor = new BABYLON.Color3(zopacity, zopacity, zopacity);
 				}
-				if (zmolds[zmoldind].covering == "glass") {
+				if (zmolds[zmoldind].covering == 'glass') {
 					zopacity = .2;
 				}
-				if (zshape != "image") {
+				if (zshape != 'image') {
 					zmold.material.alpha = zopacity;
 				}
 				if (zmold.material.subMaterials != undefined) {
@@ -1876,7 +1876,7 @@ WTWJS.prototype.resetMoldOpacity = function(zwebtype, zmoldind) {
 					}
 				}
 			}
-			var zmoldimageframename = zmoldname + "-imageframe";
+			var zmoldimageframename = zmoldname + '-imageframe';
 			var zmoldimageframe = WTW.getMeshOrNodeByID(zmoldimageframename);
 			if (zmoldimageframe != null) {	
 				if (zmoldimageframe.material != undefined) {
@@ -1888,7 +1888,7 @@ WTWJS.prototype.resetMoldOpacity = function(zwebtype, zmoldind) {
 			}
 		}		
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-resetMoldOpacity=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-resetMoldOpacity=' + ex.message);
 	} 
 }
 
@@ -1898,9 +1898,9 @@ WTWJS.prototype.resetMoldCoverings = function() {
 		if (WTW.buildingMolds != null) {
 			for (var i = 0; i < WTW.buildingMolds.length; i++) {
 				if (WTW.buildingMolds[i] != null) {
-					var zshape = "wall";
-					var zcoveringname = "texture";
-					var ztexturebackupid = "";
+					var zshape = 'wall';
+					var zcoveringname = 'texture';
+					var ztexturebackupid = '';
 					if (WTW.buildingMolds[i].shape != undefined) {
 						zshape = WTW.buildingMolds[i].shape;
 					}
@@ -1910,18 +1910,18 @@ WTWJS.prototype.resetMoldCoverings = function() {
 					if (WTW.buildingMolds[i].graphics.texture.backupid != undefined) {
 						ztexturebackupid = WTW.buildingMolds[i].graphics.texture.backupid;
 					}
-					if (WTW.adminMenu == 6 || (WTW.adminMenu >= 10 && WTW.adminMenu <= 20) || WTW.adminMenu == 26 || WTW.adminMenu == 27 || WTW.adminMenu == 30 || WTW.adminMenu == 36 || (WTW.adminMenu >= 40 && WTW.adminMenu <= 52) || ztexturebackupid != "") {
+					if (WTW.adminMenu == 6 || (WTW.adminMenu >= 10 && WTW.adminMenu <= 20) || WTW.adminMenu == 26 || WTW.adminMenu == 27 || WTW.adminMenu == 30 || WTW.adminMenu == 36 || (WTW.adminMenu >= 40 && WTW.adminMenu <= 52) || ztexturebackupid != '') {
 						var zmold = WTW.getMeshOrNodeByID(WTW.buildingMolds[i].moldname);
 						if (zmold != null) {
 							var zmolddef = WTW.buildingMolds[i];
-							if ((zshape == "box" || zshape == "wall" || zshape == "floor") && zcoveringname == "directional texture") {
+							if ((zshape == 'box' || zshape == 'wall' || zshape == 'floor') && zcoveringname == 'directional texture') {
 								if (zmolddef.graphics.texture.id != zmolddef.graphics.texture.backupid && zmolddef.graphics.texture.backupid != '') {
 									WTW.disposeDirectionalTexture(zmold);
 								}
 							}
-							if (zshape != "image") {
+							if (zshape != 'image') {
 								WTW.resetMoldOpacity('building', i);
-								if (zshape != "viewblog" && zshape != "blogposting" && zshape != "image") {
+								if (zshape != 'viewblog' && zshape != 'blogposting' && zshape != 'image') {
 									if (zmolddef.graphics.texture.id != zmolddef.graphics.texture.backupid && zmolddef.graphics.texture.backupid != '') {
 										if (WTW.isNumeric(dGet('wtw_tmoldind').value)) {
 											if (i != Number(dGet('wtw_tmoldind').value)) {
@@ -1943,9 +1943,9 @@ WTWJS.prototype.resetMoldCoverings = function() {
 		if (WTW.communitiesMolds != null) {
 			for (var i = 0; i < WTW.communitiesMolds.length; i++) {
 				if (WTW.communitiesMolds[i] != null) {
-					var zshape = "wall";
-					var zcoveringname = "texture";
-					var ztexturebackupid = "";
+					var zshape = 'wall';
+					var zcoveringname = 'texture';
+					var ztexturebackupid = '';
 					if (WTW.communitiesMolds[i].shape != undefined) {
 						zshape = WTW.communitiesMolds[i].shape;
 					}
@@ -1955,18 +1955,18 @@ WTWJS.prototype.resetMoldCoverings = function() {
 					if (WTW.communitiesMolds[i].graphics.texture.backupid != undefined) {
 						ztexturebackupid = WTW.communitiesMolds[i].graphics.texture.backupid;
 					}
-					if (WTW.adminMenu == 6 || (WTW.adminMenu >= 10 && WTW.adminMenu <= 20) || WTW.adminMenu == 26 || WTW.adminMenu == 27 || WTW.adminMenu == 30 || WTW.adminMenu == 36 || (WTW.adminMenu >= 40 && WTW.adminMenu <= 52) || ztexturebackupid != "") {
+					if (WTW.adminMenu == 6 || (WTW.adminMenu >= 10 && WTW.adminMenu <= 20) || WTW.adminMenu == 26 || WTW.adminMenu == 27 || WTW.adminMenu == 30 || WTW.adminMenu == 36 || (WTW.adminMenu >= 40 && WTW.adminMenu <= 52) || ztexturebackupid != '') {
 						var zmold = WTW.getMeshOrNodeByID(WTW.communitiesMolds[i].moldname);
 						if (zmold != null) {
 							var zmolddef = WTW.communitiesMolds[i];
-							if ((zshape == "box" || zshape == "wall" || zshape == "floor") && zcoveringname == "directional texture") {
+							if ((zshape == 'box' || zshape == 'wall' || zshape == 'floor') && zcoveringname == 'directional texture') {
 								if (zmolddef.graphics.texture.id != zmolddef.graphics.texture.backupid && zmolddef.graphics.texture.backupid != '') {
 									WTW.disposeDirectionalTexture(zmold);
 								}
 							}
-							if (zshape != "image") {
+							if (zshape != 'image') {
 								WTW.resetMoldOpacity('community', i);
-								if (zshape != "viewblog" && zshape != "blogposting") {
+								if (zshape != 'viewblog' && zshape != 'blogposting') {
 									if (zmolddef.graphics.texture.id != zmolddef.graphics.texture.backupid && zmolddef.graphics.texture.backupid != '') {
 										if (WTW.isNumeric(dGet('wtw_tmoldind').value)) {
 											if (i != Number(dGet('wtw_tmoldind').value)) {
@@ -1988,9 +1988,9 @@ WTWJS.prototype.resetMoldCoverings = function() {
 		if (WTW.thingMolds != null) {
 			for (var i = 0; i < WTW.thingMolds.length; i++) {
 				if (WTW.thingMolds[i] != null) {
-					var zshape = "wall";
-					var zcoveringname = "texture";
-					var ztexturebackupid = "";
+					var zshape = 'wall';
+					var zcoveringname = 'texture';
+					var ztexturebackupid = '';
 					if (WTW.thingMolds[i].shape != undefined) {
 						zshape = WTW.thingMolds[i].shape;
 					}
@@ -2000,18 +2000,18 @@ WTWJS.prototype.resetMoldCoverings = function() {
 					if (WTW.thingMolds[i].graphics.texture.backupid != undefined) {
 						ztexturebackupid = WTW.thingMolds[i].graphics.texture.backupid;
 					}
-					if (WTW.adminMenu == 6 || (WTW.adminMenu >= 10 && WTW.adminMenu <= 20) || WTW.adminMenu == 26 || WTW.adminMenu == 27 || WTW.adminMenu == 30 || WTW.adminMenu == 36 || (WTW.adminMenu >= 40 && WTW.adminMenu <= 52) || ztexturebackupid != "") {
+					if (WTW.adminMenu == 6 || (WTW.adminMenu >= 10 && WTW.adminMenu <= 20) || WTW.adminMenu == 26 || WTW.adminMenu == 27 || WTW.adminMenu == 30 || WTW.adminMenu == 36 || (WTW.adminMenu >= 40 && WTW.adminMenu <= 52) || ztexturebackupid != '') {
 						var zmold = WTW.getMeshOrNodeByID(WTW.thingMolds[i].moldname);
 						if (zmold != null) {
 							var zmolddef = WTW.thingMolds[i];
-							if ((zshape == "box" || zshape == "wall" || zshape == "floor") && zcoveringname == "directional texture") {
+							if ((zshape == 'box' || zshape == 'wall' || zshape == 'floor') && zcoveringname == 'directional texture') {
 								if (zmolddef.graphics.texture.id != zmolddef.graphics.texture.backupid && zmolddef.graphics.texture.backupid != '') {
 									WTW.disposeDirectionalTexture(zmold);
 								}
 							}
-							if (zshape != "image") {
+							if (zshape != 'image') {
 								WTW.resetMoldOpacity('thing', i);
-								if (zshape != "viewblog" && zshape != "blogposting" && zshape != "image") {
+								if (zshape != 'viewblog' && zshape != 'blogposting' && zshape != 'image') {
 									if (zmolddef.graphics.texture.id != zmolddef.graphics.texture.backupid && zmolddef.graphics.texture.backupid != '') {
 										if (WTW.isNumeric(dGet('wtw_tmoldind').value)) {
 											if (i != Number(dGet('wtw_tmoldind').value)) {
@@ -2036,7 +2036,7 @@ WTWJS.prototype.resetMoldCoverings = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-resetMoldCoverings=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-resetMoldCoverings=' + ex.message);
 	}
 }
 
@@ -2044,18 +2044,18 @@ WTWJS.prototype.resetMoldCovering = function(zwebtype, zmoldind) {
 	/* reload and reset the material on a mesh based on the mold def */
 	try {
 		var zmolds = WTW.buildingMolds;
-		var zshape = "box";
+		var zshape = 'box';
 		switch (zwebtype) {
-			case "building":
+			case 'building':
 				break;
-			case "community":
+			case 'community':
 				zmolds = WTW.communitiesMolds;
 				break;
-			case "thing":
+			case 'thing':
 				zmolds = WTW.thingMolds;
 				break;
 		}
-		if (zmolds[zmoldind].shape != "") {
+		if (zmolds[zmoldind].shape != '') {
 			zshape = zmolds[zmoldind].shape;
 		}
 		var zmoldname = zmolds[zmoldind].moldname;
@@ -2076,13 +2076,13 @@ WTWJS.prototype.resetMoldCovering = function(zwebtype, zmoldind) {
 					zspecial2 = Number(zmolds[zmoldind].scaling.special2)
 				}
 			} catch(ex) {}
-			if ((zshape == "box" || zshape == "wall" || zshape == "floor") && zmolds[zmoldind].covering == "directional texture") {
-				zmolds[zmoldind].covering = "directional texture";
-			} else if (zshape != "box" && zshape != "wall" && zshape != "floor" && zmolds[zmoldind].covering == "directional texture") {
-				zmolds[zmoldind].covering = "texture";
+			if ((zshape == 'box' || zshape == 'wall' || zshape == 'floor') && zmolds[zmoldind].covering == 'directional texture') {
+				zmolds[zmoldind].covering = 'directional texture';
+			} else if (zshape != 'box' && zshape != 'wall' && zshape != 'floor' && zmolds[zmoldind].covering == 'directional texture') {
+				zmolds[zmoldind].covering = 'texture';
 			}
-			if (zmolds[zmoldind].covering != "none") {
-				if (zmolds[zmoldind].covering != "directional texture") {					
+			if (zmolds[zmoldind].covering != 'none') {
+				if (zmolds[zmoldind].covering != 'directional texture') {					
 					if (zmold.material != undefined) {
 						if (zmold.material.diffuseTexture != undefined) {
 							if (zmold.material.diffuseTexture != null) {
@@ -2121,11 +2121,11 @@ WTWJS.prototype.resetMoldCovering = function(zwebtype, zmoldind) {
 					zmold.material.dispose();
 					zmold.material = null;
 				}
-				zmold.material = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+				zmold.material = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
 			}
 		}		
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-resetMoldCovering=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-resetMoldCovering=' + ex.message);
 	} 
 }
 
@@ -2138,20 +2138,20 @@ WTWJS.prototype.checkImageClick = function(zmoldname) {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
 			if (zmoldnameparts.molds[zmoldnameparts.moldind].graphics.webimages[0] != null) {
-				var zparameters = "";
+				var zparameters = '';
 				if (zmoldnameparts.molds[zmoldnameparts.moldind].graphics.webimages[0].jsparameters != undefined) {
 					zparameters = zmoldnameparts.molds[zmoldnameparts.moldind].graphics.webimages[0].jsparameters;
 				}
 				if (zmoldnameparts.molds[zmoldnameparts.moldind].graphics.webimages[0].jsfunction != undefined) {
 					var zfunctionname = zmoldnameparts.molds[zmoldnameparts.moldind].graphics.webimages[0].jsfunction;
-					if (zfunctionname != "") {
+					if (zfunctionname != '') {
 						WTW.setFunctionAndExecute(zfunctionname, zparameters, zmoldname);
 					}
 				}
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-checkImageClick=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-checkImageClick=' + ex.message);
 	}
 }
 
@@ -2164,9 +2164,9 @@ WTWJS.prototype.checkVideoClick = function(zmoldname, zforce) {
 		/* get parent moldname */
 		zmoldname = zmoldname.replace('-videoposter','').replace('-mainvideo','').replace('-screen','');
 		/* get mold with video player texture */
-        var zvideomold = WTW.getMeshOrNodeByID(zmoldname + "-mainvideo");
+        var zvideomold = WTW.getMeshOrNodeByID(zmoldname + '-mainvideo');
 		/* get mold for video poster image (for when not playing) */
-        var zvideoposter = WTW.getMeshOrNodeByID(zmoldname + "-videoposter");
+        var zvideoposter = WTW.getMeshOrNodeByID(zmoldname + '-videoposter');
 
         if (zvideomold != null) {
 			/* if it is fully loaded */
@@ -2183,7 +2183,7 @@ WTWJS.prototype.checkVideoClick = function(zmoldname, zforce) {
 				/* stop the 3D Video Player */
 				zvideomold.material.diffuseTexture.video.pause();
 				/* open the video player page in new tab */
-				WTW.openWebpage("/core/pages/playvideo.php?videosrc=" + zvideomold.material.diffuseTexture.video.src, "_blank");
+				WTW.openWebpage('/core/pages/playvideo.php?videosrc=' + zvideomold.material.diffuseTexture.video.src, '_blank');
 			} else {
 				if ((zvideomold.material.diffuseTexture.video.paused && zforce == 3) || zforce == 1 || zforce == 2) {
 					/* move the video poster mold with the video texture (hide it) */
@@ -2209,7 +2209,7 @@ WTWJS.prototype.checkVideoClick = function(zmoldname, zforce) {
 			}
         }
     } catch (ex) {
-        WTW.log("core-scripts-prime-wtw_input.js-checkVideoClick=" + ex.message);
+        WTW.log('core-scripts-prime-wtw_input.js-checkVideoClick=' + ex.message);
     }
 }
 
@@ -2224,20 +2224,20 @@ WTWJS.prototype.checkHovers = function(zmold) {
 			if (WTW.adminView == 1) {
 				WTW.mouseOverMoldAdmin(zmold, WTW.currentID);
 			}
-			if (zmoldnameparts.namepart.length > 5) {
+			if (zmoldnameparts.namepart.length > 6) {
 				WTW.checkToolTip(zmoldnameparts.namepart, zmoldnameparts.moldind);
-				if (zmoldnameparts.parentname.indexOf("seat") > -1) {
+				if (zmoldnameparts.parentname.indexOf('seat') > -1) {
 					WTW.showToolTip('Select to Sit');
 				}
 				/* molds have 2 methods of hover, move hover mold infront of image OR use opacity to show/hide */
 				if (zmoldnameparts.shape == 'image') {
-					var zhovermold = WTW.getMeshOrNodeByID(zmoldnameparts.namepart[0] + "-" + zmoldnameparts.namepart[1] + "-" + zmoldnameparts.namepart[2] + "-" + zmoldnameparts.namepart[3] + "-" + zmoldnameparts.namepart[4] + "-" + zmoldnameparts.namepart[5] + "-hoverimage");
-					var zimagemold = WTW.getMeshOrNodeByID(zmoldnameparts.namepart[0] + "-" + zmoldnameparts.namepart[1] + "-" + zmoldnameparts.namepart[2] + "-" + zmoldnameparts.namepart[3] + "-" + zmoldnameparts.namepart[4] + "-" + zmoldnameparts.namepart[5] + "-mainimage");
+					var zhovermold = WTW.getMeshOrNodeByID(zmoldnameparts.namepart[0] + '-' + zmoldnameparts.namepart[1] + '-' + zmoldnameparts.namepart[2] + '-' + zmoldnameparts.namepart[3] + '-' + zmoldnameparts.namepart[4] + '-' + zmoldnameparts.namepart[5] + '-' + zmoldnameparts.namepart[6] + '-hoverimage');
+					var zimagemold = WTW.getMeshOrNodeByID(zmoldnameparts.namepart[0] + '-' + zmoldnameparts.namepart[1] + '-' + zmoldnameparts.namepart[2] + '-' + zmoldnameparts.namepart[3] + '-' + zmoldnameparts.namepart[4] + '-' + zmoldnameparts.namepart[5] + '-' + zmoldnameparts.namepart[6] + '-mainimage');
 					if (zhovermold != null && zimagemold != null) {
 						zhovermold.position.x = -.25;
 					}
 				} else {
-					var zhovermold = WTW.getMeshOrNodeByID(WTW.currentID + "hover");
+					var zhovermold = WTW.getMeshOrNodeByID(WTW.currentID + 'hover');
 					var zimagemold = WTW.getMeshOrNodeByID(WTW.currentID);
 					if (zhovermold != null && zimagemold != null) {
 						WTW.setDirectionalOpacity(WTW.currentID,0);
@@ -2258,7 +2258,7 @@ WTWJS.prototype.checkHovers = function(zmold) {
 			WTW.pluginsCheckHovers(zmoldname, zshape);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-checkHovers=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-checkHovers=' + ex.message);
 	}
 }
 
@@ -2269,20 +2269,20 @@ WTWJS.prototype.resetHovers = function() {
 		var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 		if (zmoldnameparts.molds.length > 0) {
 			if (zmoldnameparts.shape == 'image') {
-				if (zmoldname.indexOf("-") > -1) {
+				if (zmoldname.indexOf('-') > -1) {
 					var znamepart = zmoldname.split('-');
-					if (znamepart.length > 5) {
-						var zhovermold = WTW.getMeshOrNodeByID(znamepart[0] + "-" + znamepart[1] + "-" + znamepart[2] + "-" + znamepart[3] + "-" + znamepart[4] + "-" + znamepart[5] + "-hoverimage");
-						var zimagemold = WTW.getMeshOrNodeByID(znamepart[0] + "-" + znamepart[1] + "-" + znamepart[2] + "-" + znamepart[3] + "-" + znamepart[4] + "-" + znamepart[5] + "-mainimage");
+					if (znamepart.length > 6) {
+						var zhovermold = WTW.getMeshOrNodeByID(znamepart[0] + '-' + znamepart[1] + '-' + znamepart[2] + '-' + znamepart[3] + '-' + znamepart[4] + '-' + znamepart[5] + '-' + znamepart[6] + '-hoverimage');
+						var zimagemold = WTW.getMeshOrNodeByID(znamepart[0] + '-' + znamepart[1] + '-' + znamepart[2] + '-' + znamepart[3] + '-' + znamepart[4] + '-' + znamepart[5] + '-' + znamepart[6] + '-mainimage');
 						if (zhovermold != null && zimagemold != null) {
 							zhovermold.position.x = 0;
 						}
 					}
 				}
-			} else if (zmoldname.indexOf("scrollboxbodytext") > -1) {
+			} else if (zmoldname.indexOf('scrollboxbodytext') > -1) {
 				WTW.resetScrollBox(zmoldnameparts.moldname);
 			} else { 
-				var zhovermold = WTW.getMeshOrNodeByID(zmoldname + "hover");
+				var zhovermold = WTW.getMeshOrNodeByID(zmoldname + 'hover');
 				var zimagemold = WTW.getMeshOrNodeByID(zmoldname);
 				if (zhovermold != null && zimagemold != null) {
 					WTW.setDirectionalOpacity(zmoldname,1);
@@ -2296,7 +2296,7 @@ WTWJS.prototype.resetHovers = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-resetHovers=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-resetHovers=' + ex.message);
 	}
 }
 
@@ -2305,28 +2305,28 @@ WTWJS.prototype.checkToolTip = function(znamepart, zmoldind) {
 	/* this is the same as an alt tag on the mesh hover over */
 	try {
 		var zalttag = '';
-		var zwebtype = znamepart[0];
+		var zwebtype = znamepart[1];
 		var zmolds = null;
 		switch (zwebtype) {
-			case "thingmolds":
+			case 'thingmolds':
 				zmolds = WTW.thingMolds;
 				break;
-			case "buildingmolds":
+			case 'buildingmolds':
 				zmolds = WTW.buildingMolds;
 				break;
-			case "communitymolds":
+			case 'communitymolds':
 				zmolds = WTW.communitiesMolds;
 				break;
-			case "things":
+			case 'things':
 				zmolds = WTW.things;
 				break;
-			case "buildings":
+			case 'buildings':
 				zmolds = WTW.buildings;
 				break;
-			case "communities":
+			case 'communities':
 				zmolds = WTW.communities;
 				break;
-			case "connectinggrids":
+			case 'connectinggrids':
 				zmolds = WTW.connectingGrids;
 				break;
 		}
@@ -2336,30 +2336,32 @@ WTWJS.prototype.checkToolTip = function(znamepart, zmoldind) {
 					zalttag = zmolds[zmoldind].alttag.name;
 				}
 			}
-			if (zalttag == "" && thingid == "" && zwebtype == "thingmolds") {
+			if (zalttag == '' && thingid == '' && zwebtype == 'thingmolds') {
+				
+				
 				znamepart = WTW.thingMolds[zmoldind].parentname.split('-');
-				zmoldind = Number(znamepart[1]);
-				while (znamepart[0].indexOf("actionzone") > -1) {
-					zmoldind = Number(znamepart[1]);
+				zmoldind = Number(znamepart[2]);
+				while (znamepart[1].indexOf('actionzone') > -1) {
+					zmoldind = Number(znamepart[2]);
 					znamepart = WTW.actionZones[zmoldind].parentname.split('-');
-					zmoldind = Number(znamepart[1]);
+					zmoldind = Number(znamepart[2]);
 				}
 				WTW.checkToolTip(znamepart, zmoldind);
 			} else {
-				if (zalttag != "") {
+				if (zalttag != '') {
 					WTW.showToolTip(zalttag);
 				}
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-checkToolTip=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-checkToolTip=' + ex.message);
 	}
 }
 
 WTWJS.prototype.showToolTip = function(ztip) {
 	/* display the tooltip */
 	try {
-		if (ztip != "") {
+		if (ztip != '') {
 			dGet('wtw_itooltip').innerHTML = ztip;
 			WTW.show('wtw_itooltip');
 			WTW.setToolTipLocation();
@@ -2367,7 +2369,7 @@ WTWJS.prototype.showToolTip = function(ztip) {
 			WTW.hideToolTip();
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-showToolTip=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-showToolTip=' + ex.message);
 	}
 }
 
@@ -2376,7 +2378,7 @@ WTWJS.prototype.hideToolTip = function() {
 	try {
 		WTW.hide('wtw_itooltip');
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-hideToolTip=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-hideToolTip=' + ex.message);
 	}
 }
 
@@ -2398,7 +2400,7 @@ WTWJS.prototype.setToolTipLocation = function() {
 			dGet('wtw_itooltip').style.top = ziheight + 'px';
 		}
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-setToolTipLocation=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-setToolTipLocation=' + ex.message);
     }
 }
 
@@ -2413,7 +2415,7 @@ WTWJS.prototype.activeMic = function() {
 			WTW.onMicrophoneDenied
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-activeMic=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-activeMic=' + ex.message);
 	}
 }
 
@@ -2476,17 +2478,17 @@ WTWJS.prototype.onMicrophoneGranted = async function(zstream) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-onMicrophoneGranted=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-onMicrophoneGranted=' + ex.message);
 	}
 }
 
 WTWJS.prototype.onMicrophoneDenied = function() {
 	/* Microphone is off */
 	try {
-		dGet('wtw_audio').style.boxShadow = "-2px -2px 4px 0px #a7a7a73d, 2px 2px 4px 0px #0a0a0e5e";
-		dGet('wtw_audio').style.fontSize = "25px";
+		dGet('wtw_audio').style.boxShadow = '-2px -2px 4px 0px #a7a7a73d, 2px 2px 4px 0px #0a0a0e5e';
+		dGet('wtw_audio').style.fontSize = '25px';
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-onMicrophoneDenied=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-onMicrophoneDenied=' + ex.message);
 	}
 }
 
@@ -2496,28 +2498,28 @@ WTWJS.prototype.onMicVolumeChange = function(zvolume) {
 		let zleds = [...document.getElementsByClassName('wtw-led')]
 		let zrange = zleds.slice(0, Math.round(zvolume))
 		var zledColor = [
-			"#064dac",
-			"#064dac",
-			"#064dac",
-			"#06ac5b",
-			"#15ac06",
-			"#4bac06",
-			"#80ac06",
-			"#acaa06",
-			"#ac8b06",
-			"#ac5506"
+			'#064dac',
+			'#064dac',
+			'#064dac',
+			'#06ac5b',
+			'#15ac06',
+			'#4bac06',
+			'#80ac06',
+			'#acaa06',
+			'#ac8b06',
+			'#ac5506'
 		];
 		for (var i = 0; i < zleds.length; i++) {
-			zleds[i].style.boxShadow = "-2px -2px 4px 0px #a7a7a73d, 2px 2px 4px 0px #0a0a0e5e";
-			zleds[i].style.height = "22px";
+			zleds[i].style.boxShadow = '-2px -2px 4px 0px #a7a7a73d, 2px 2px 4px 0px #0a0a0e5e';
+			zleds[i].style.height = '22px';
 		}
 
 		for (var i = 0; i < zrange.length; i++) {
 			zrange[i].style.boxShadow = `5px 2px 5px 0px #0a0a0e5e inset, -2px -2px 1px 0px #a7a7a73d inset, -2px -2px 30px 0px ${zledColor[i]} inset`;
-			zrange[i].style.height = "25px";
+			zrange[i].style.height = '25px';
 		}
 		WTW.pluginsOnMicVolumeChange(zvolume);
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-onMicVolumeChange=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-onMicVolumeChange=' + ex.message);
 	}
 }

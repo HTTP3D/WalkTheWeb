@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -20,7 +20,7 @@ WTWJS.prototype.loadPrimaryCamera = function() {
 		};
 		WTW.initCamera(1, 'followcamera', zsettings);
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_cameras.js-loadPrimaryCamera=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_cameras.js-loadPrimaryCamera=' + ex.message);
 	}
 }
 
@@ -85,24 +85,24 @@ WTWJS.prototype.initCamera = function(zviewport, zcameraid, zsettings) {
 			/* https://doc.babylonjs.com/divingDeeper/cameras/camera_introduction */
 			switch (zcameraid.toLowerCase()) {
 				case 'anaglyphcamera':
-					zcamera = new BABYLON.AnaglyphUniversalCamera("anaglyphcamera", zposition, .033, scene); /* eye space = .033 might try .05 */
-					zcamera.id = "anaglyphcamera";
+					zcamera = new BABYLON.AnaglyphUniversalCamera('anaglyphcamera', zposition, .033, scene); /* eye space = .033 might try .05 */
+					zcamera.id = 'anaglyphcamera';
 					break;
 				case 'vrcamera':
-					zcamera = new BABYLON.VRDeviceOrientationFreeCamera ("vrcamera", zposition, scene);
-					zcamera.id = "vrcamera";
+					zcamera = new BABYLON.VRDeviceOrientationFreeCamera ('vrcamera', zposition, scene);
+					zcamera.id = 'vrcamera';
 					break;
 				case 'vrgamepadcamera':
-					zcamera = new BABYLON.VRDeviceOrientationGamepadCamera("vrgamepadcamera", zposition, scene);
-					zcamera.id = "vrgamepadcamera";
+					zcamera = new BABYLON.VRDeviceOrientationGamepadCamera('vrgamepadcamera', zposition, scene);
+					zcamera.id = 'vrgamepadcamera';
 					break;
 				case 'webvrcamera':
-					zcamera = new BABYLON.WebVRFreeCamera ("webvrcamera", zposition, scene);
-					zcamera.id = "webvrcamera";
+					zcamera = new BABYLON.WebVRFreeCamera ('webvrcamera', zposition, scene);
+					zcamera.id = 'webvrcamera';
 					break;
 				case 'flycamera':
-					zcamera = new BABYLON.FlyCamera ("flycamera", zposition, scene);
-					zcamera.id = "flycamera";
+					zcamera = new BABYLON.FlyCamera ('flycamera', zposition, scene);
+					zcamera.id = 'flycamera';
 					/* Airplane like rotation, with faster roll correction and banked-turns. */
 					/* Default is 100. A higher number means slower correction. */
 					zcamera.rollCorrect = 10;
@@ -115,30 +115,30 @@ WTWJS.prototype.initCamera = function(zviewport, zcameraid, zsettings) {
 					zcamera.bankedTurnMultiplier = 1;
 					break;
 				case 'orientationcamera':
-					zcamera = new BABYLON.DeviceOrientationCamera ("orientationcamera", zposition, scene);
-					zcamera.id = "orientationcamera";
+					zcamera = new BABYLON.DeviceOrientationCamera ('orientationcamera', zposition, scene);
+					zcamera.id = 'orientationcamera';
 					zcamera.angularSensibility = 10;
 					zcamera.moveSensibility = 10;
 					break;
 				case 'joystickcamera':
-					zcamera = new BABYLON.VirtualJoysticksCamera ("joystickcamera", zposition, scene);
-					zcamera.id = "joystickcamera";
+					zcamera = new BABYLON.VirtualJoysticksCamera ('joystickcamera', zposition, scene);
+					zcamera.id = 'joystickcamera';
 					break;
 				case 'arccamera':
 					/* Parameters: name, alpha, beta, radius, target position, scene */
-					zcamera = new BABYLON.ArcRotateCamera ("arccamera", 0, 0, 20, zposition, scene);
-					zcamera.id = "arccamera";
+					zcamera = new BABYLON.ArcRotateCamera ('arccamera', 0, 0, 20, zposition, scene);
+					zcamera.id = 'arccamera';
 					break;
 				case 'webxrcamera':
 					/* https://doc.babylonjs.com/divingDeeper/webXR/webXRSessionManagers */
 					var zxrsession = new WebXRSessionManager(scene);
 					/* https://doc.babylonjs.com/divingDeeper/webXR/webXRCamera */
-					zcamera = new BABYLON.WebXRCamera("webxrcamera", scene, zxrsession);
-					zcamera.id = "webxrcamera";
+					zcamera = new BABYLON.WebXRCamera('webxrcamera', scene, zxrsession);
+					zcamera.id = 'webxrcamera';
 					break;
 				default:
-					zcamera = new BABYLON.UniversalCamera("followcamera", zposition, scene);
-					zcamera.id = "followcamera";
+					zcamera = new BABYLON.UniversalCamera('followcamera', zposition, scene);
+					zcamera.id = 'followcamera';
 					break;
 			}
 			
@@ -184,13 +184,13 @@ WTWJS.prototype.initCamera = function(zviewport, zcameraid, zsettings) {
 		} else {
 			WTW.cameraOne.lockedTarget = null;
 		}
-		WTW.setCookie("cameradistance",WTW.cameraDistance,365);
+		WTW.setCookie('cameradistance',WTW.cameraDistance,365);
 		WTW.cameraOne.viewport = new BABYLON.Viewport(0, 0, 1, 1);
 		scene.activeCameras[0] = WTW.cameraOne;
 		scene.activeCameras[0].attachControl(canvas, true);
 		scene.cameraToUseForPointers = scene.activeCameras[0];
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_cameras.js-initCamera=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_cameras.js-initCamera=' + ex.message);
 	}
 }
 
@@ -204,7 +204,7 @@ WTWJS.prototype.setMovingCameras = function(zavatar) {
 				var zavatarradiansy = zavatar.rotation.y;
 				
 				/* these objects are used to focus the camera on parts of the avatar */
-				var zavatarcenter = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+				var zavatarcenter = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-center');
 
 				/* rotation of a parent object to the avatar (riding on a vehicle) is added to the camera rotation for world space */
 				var zrotation = 0;
@@ -282,7 +282,7 @@ WTWJS.prototype.setMovingCameras = function(zavatar) {
 			}
 		}
 	} catch(ex) {
-		WTW.log("core-scripts-prime-wtw_cameras.js-setMovingCameras=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_cameras.js-setMovingCameras=' + ex.message);
 	}
 }
 
@@ -294,7 +294,7 @@ WTWJS.prototype.setCameraDistance = function() {
 			var zdist = 100;
 			var zavatardistance = 100;
 			/* get camera focus point of avatar (center mass) */
-			var zavatarcenter = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value + "-center");
+			var zavatarcenter = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value + '-center');
 			if (zavatarcenter != null) {
 				var zavatarcenterposition = WTW.getWorldPosition(zavatarcenter);
 				var zavatarpos = new BABYLON.Vector3(zavatarcenterposition.x, zavatarcenterposition.y, zavatarcenterposition.z);
@@ -305,7 +305,7 @@ WTWJS.prototype.setCameraDistance = function() {
 				var zcameradistance = Math.sqrt(Math.pow(zavatarpos.x - WTW.cameraOne.position.x, 2) + Math.pow(zavatarpos.y - WTW.cameraOne.position.y, 2) + Math.pow(zavatarpos.z - WTW.cameraOne.position.z, 2));
 				var zhits = scene.multiPickWithRay(zray);
 				for (var i=0; i<zhits.length; i++){
-					if (zhits[i].pickedMesh.name.indexOf("molds-") > -1) {
+					if (zhits[i].pickedMesh.name.indexOf('molds-') > -1) {
 						if (zhits[i].distance < zdist) {
 							/* distance of closest mold */
 							zdist = zhits[i].distance;
@@ -330,6 +330,6 @@ WTWJS.prototype.setCameraDistance = function() {
 	} catch(ex) {
 		/* on error, set camera to default */
 		WTW.cameraOne.radius = WTW.cameraDistance;
-		WTW.log("core-scripts-prime-wtw_cameras.js-setCameraDistance=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_cameras.js-setCameraDistance=' + ex.message);
 	}
 }

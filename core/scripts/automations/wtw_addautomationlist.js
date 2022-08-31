@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -25,7 +25,7 @@ WTWJS.prototype.initAutomations = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-initAutomations=" + ex.message);
+		WTW.log('core-initAutomations=' + ex.message);
 	}
 }
 
@@ -47,7 +47,7 @@ WTWJS.prototype.nextStepAutomation = function(zautomationid, zconnectinggridind,
 			WTW.startAutomation(zautomationid, zconnectinggridind, znextstep, true);
 		}
 	} catch (ex) {
-		WTW.log("core-nextStepAutomation=" + ex.message);
+		WTW.log('core-nextStepAutomation=' + ex.message);
 	}
 }
 
@@ -62,16 +62,16 @@ WTWJS.prototype.startAutomation = function(zautomationid, zconnectinggridind, zs
 				if (WTW.automations[i].automationid == zautomationid && WTW.automations[i].connectinggridind == zconnectinggridind && WTW.automations[i].step.step == zstep) {
 					if (WTW.automations[i].running == '0' || zignorerunning) {
 						switch(WTW.automations[i].step.automationtype){
-							case "pause":
+							case 'pause':
 								automationpause(WTW.automations[i]);
 								break;
-							case "status":
+							case 'status':
 								automationstatus(WTW.automations[i]);
 								break;
-							case "condition":
+							case 'condition':
 								automationcondition(WTW.automations[i]);
 								break;
-							case "repeat":
+							case 'repeat':
 								automationrepeat(WTW.automations[i]);
 								break;
 							default:
@@ -84,7 +84,7 @@ WTWJS.prototype.startAutomation = function(zautomationid, zconnectinggridind, zs
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-startAutomation=" + ex.message);
+		WTW.log('core-startAutomation=' + ex.message);
 	}
 }
 
@@ -102,23 +102,23 @@ WTWJS.prototype.addAutomation = function(zautomationname, zautomationdef) {
 				var zparentautomationind = -1;
 				var zparentautomation = null;
 				var zautomationparent = WTW.automations[zautomationind].parentname;
-				if (WTW.automations[zautomationind].parentautomationid != "") {
+				if (WTW.automations[zautomationind].parentautomationid != '') {
 					zparentautomationind = getautomationind(WTW.automations[zautomationind].parentautomationid);
 					if (zparentautomationind > -1) {
 						if (WTW.automations[zparentautomationind] != null) {
-							var parentautomationname = "automation-" + zparentautomationind.toString() + "-" + WTW.automations[zparentautomationind].automationid + "-" + WTW.automations[zparentautomationind].connectinggridind + "-" + WTW.automations[zparentautomationind].connectinggridid + "-" + WTW.automations[zparentautomationind].automationtype;
+							var parentautomationname = 'local-automation-' + zparentautomationind.toString() + '-' + WTW.automations[zparentautomationind].automationid + '-' + WTW.automations[zparentautomationind].connectinggridind + '-' + WTW.automations[zparentautomationind].connectinggridid + '-' + WTW.automations[zparentautomationind].automationtype;
 							zparentautomation = WTW.getMeshOrNodeByID(parentautomationname);
 							if (zparentautomation == null) {
 								zparentautomation = WTW.addAutomation(parentautomationname, WTW.automations[zparentautomationind]);
 							}
-							WTW.automations[zautomationind].parentname = "automationaxlebase2-" + zparentautomationind.toString() + "-" + WTW.automations[zparentautomationind].automationid + "-" + WTW.automations[zparentautomationind].connectinggridind + "-" + WTW.automations[zparentautomationind].connectinggridid + "-" + WTW.automations[zparentautomationind].automationtype;
+							WTW.automations[zautomationind].parentname = 'local-automationaxlebase2-' + zparentautomationind.toString() + '-' + WTW.automations[zparentautomationind].automationid + '-' + WTW.automations[zparentautomationind].connectinggridind + '-' + WTW.automations[zparentautomationind].connectinggridid + '-' + WTW.automations[zparentautomationind].automationtype;
 							
 						}
 					}
 				}
 				if (zparentautomation != null) {
-					var zparentautomationaxlebasename = "automationaxlebase-" + zparentautomationind.toString() + "-" + WTW.automations[zparentautomationind].automationid + "-" + WTW.automations[zparentautomationind].connectinggridind + "-" + WTW.automations[zparentautomationind].connectinggridid + "-" + WTW.automations[zparentautomationind].automationtype;
-					var zparentautomationaxlebase2name = "automationaxlebase2-" + zparentautomationind.toString() + "-" + WTW.automations[zparentautomationind].automationid + "-" + WTW.automations[zparentautomationind].connectinggridind + "-" + WTW.automations[zparentautomationind].connectinggridid + "-" + WTW.automations[zparentautomationind].automationtype;
+					var zparentautomationaxlebasename = 'local-automationaxlebase-' + zparentautomationind.toString() + '-' + WTW.automations[zparentautomationind].automationid + '-' + WTW.automations[zparentautomationind].connectinggridind + '-' + WTW.automations[zparentautomationind].connectinggridid + '-' + WTW.automations[zparentautomationind].automationtype;
+					var zparentautomationaxlebase2name = 'local-automationaxlebase2-' + zparentautomationind.toString() + '-' + WTW.automations[zparentautomationind].automationid + '-' + WTW.automations[zparentautomationind].connectinggridind + '-' + WTW.automations[zparentautomationind].connectinggridid + '-' + WTW.automations[zparentautomationind].automationtype;
 					var zparentautomationaxlebase = WTW.getMeshOrNodeByID(zparentautomationaxlebasename);
 					zautomationdef.axis.position.x -= (zparentautomationaxlebase.position.x);
 					zautomationdef.axis.position.y -= (zparentautomationaxlebase.position.y);
@@ -129,11 +129,11 @@ WTWJS.prototype.addAutomation = function(zautomationname, zautomationdef) {
 					zautomationdef.parentname = zparentautomationaxlebase2name;
 				}
 				var zautomationtype = zautomationdef.automationtype.toLowerCase();
-				while (zautomationtype.indexOf(" ") > -1) {
-					zautomationtype = zautomationtype.replace(" ","");
+				while (zautomationtype.indexOf(' ') > -1) {
+					zautomationtype = zautomationtype.replace(' ','');
 				}
 				switch (zautomationtype) {
-					case "loadzone":
+					case 'loadzone':
 						zautomation = addautomationloadzone(zautomationname, zautomationind, zautomationdef);
 						break;
 					default:
@@ -143,7 +143,7 @@ WTWJS.prototype.addAutomation = function(zautomationname, zautomationdef) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-automations-addautomationlist\r\n addAutomation=" + ex.message);
+		WTW.log('core-scripts-automations-addautomationlist\r\n addAutomation=' + ex.message);
 	} 
 	return zautomation;*/
 }

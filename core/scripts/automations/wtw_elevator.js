@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -12,11 +12,11 @@ WTWJS.prototype.elevatorCall = function(zparameters, zmoldname) {
 	try {
 		var zfloor = 1;
 		var zvaluey = 0;
-		var zdirection = "up";
+		var zdirection = 'up';
 		if (zmoldname == undefined) {
-			zmoldname = "";
+			zmoldname = '';
 		}
-		if (zparameters.indexOf(",") > -1) {
+		if (zparameters.indexOf(',') > -1) {
 			var zparameter = zparameters.split(',');
 			if (WTW.isNumeric(zparameter[0])) {
 				zfloor = Number(zparameter[0]);
@@ -28,42 +28,42 @@ WTWJS.prototype.elevatorCall = function(zparameters, zmoldname) {
 				zdirection = zparameter[2];
 			}
 		}
-		if (zmoldname != "") {
-			if (zmoldname.indexOf("-") > -1) {
+		if (zmoldname != '') {
+			if (zmoldname.indexOf('-') > -1) {
 				var znamepart = zmoldname.split('-');
 				var zmolds = null;
 				var zmoldind = -1;
-				if (znamepart[0] != null) {
-					switch (znamepart[0]) {
-						case "communitymolds":
+				if (znamepart[1] != null) {
+					switch (znamepart[1]) {
+						case 'communitymolds':
 							zmolds = WTW.communitiesMolds;
 							break;
-						case "buildingmolds":
+						case 'buildingmolds':
 							zmolds = WTW.buildingMolds;
 							break;
-						case "thingmolds":
+						case 'thingmolds':
 							zmolds = WTW.thingMolds;
 							break;
 					}
 				}
-				if (znamepart[1] != null) {
-					if (WTW.isNumeric(znamepart[1])) {
-						zmoldind = Number(znamepart[1]);
-					}
-				}
-				if (znamepart[3] != null) {
-					if (WTW.isNumeric(znamepart[3])) {
-						connectinggridind = Number(znamepart[3]);
+				if (znamepart[2] != null) {
+					if (WTW.isNumeric(znamepart[2])) {
+						zmoldind = Number(znamepart[2]);
 					}
 				}
 				if (znamepart[4] != null) {
-					connectinggridid = znamepart[3];
+					if (WTW.isNumeric(znamepart[4])) {
+						connectinggridind = Number(znamepart[4]);
+					}
+				}
+				if (znamepart[5] != null) {
+					connectinggridid = znamepart[5];
 				}
 				if (zmolds[zmoldind] != null) {
 					if (zmolds[zmoldind].graphics.webimages[0] != null) {
 						if (zmolds[zmoldind].graphics.webimages[0].jsfunction != undefined) {
-							if (zmolds[zmoldind].graphics.webimages[0].jsfunction == "WTW.elevatorCall") {
-								WTW.setDirectionalOpacity(zmoldname.replace("-base","-clickimage"),1);
+							if (zmolds[zmoldind].graphics.webimages[0].jsfunction == 'WTW.elevatorCall') {
+								WTW.setDirectionalOpacity(zmoldname.replace('-base','-clickimage'),1);
 							}
 						}
 					}
@@ -72,7 +72,7 @@ WTWJS.prototype.elevatorCall = function(zparameters, zmoldname) {
 		}		
 		WTW.elevatorSelectFloor(zfloor, zmoldname);
 	} catch (ex) {
-		WTW.log("custom-elevatorCall=" + ex.message);
+		WTW.log('custom-elevatorCall=' + ex.message);
 	}
 }
 
@@ -88,7 +88,7 @@ WTWJS.prototype.elevatorClearTimer = function(zetimer) {
 			zetimer = null;
 		}
 	} catch (ex) {
-		WTW.log("custom-elevatorClearTimer=" + ex.message);
+		WTW.log('custom-elevatorClearTimer=' + ex.message);
 	}
 }
 
@@ -96,17 +96,17 @@ WTWJS.prototype.elevatorDoors = function(zdoordirection, zfloor, zvaluey, zdirec
 	try {
 		for (var i=0; i < WTW.actionZones.length; i++) {
 			if (WTW.actionZones[i] != null) {
-				if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == "clickactivatedslidingdoor" && Number(WTW.actionZones[i].axis.position.y) == zvaluey) {
-					if (zdoordirection == "open") {
+				if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == 'clickactivatedslidingdoor' && Number(WTW.actionZones[i].axis.position.y) == zvaluey) {
+					if (zdoordirection == 'open') {
 						if (WTW.actionZones[i].status != 4) {
 							WTW.actionZones[i].status = 3;
 							WTW.elevatorClearTimer(WTW.elevatorDoorTimer);
 							WTW.elevatorDoorTimer = window.setTimeout(function() {
 								WTW.elevatorClearTimer(WTW.elevatorDoorTimer);
-								WTW.elevatorDoors("close", zfloor, zvaluey, zdirection, zconnectinggridind, zconnectinggridid, zmoldname);
+								WTW.elevatorDoors('close', zfloor, zvaluey, zdirection, zconnectinggridind, zconnectinggridid, zmoldname);
 							},15000);
 						}
-					} else if (zdoordirection == "close") {
+					} else if (zdoordirection == 'close') {
 						if (WTW.actionZones[i].status != 1) {
 							WTW.actionZones[i].status = 2;
 							WTW.elevatorClearTimer(WTW.elevatorDoorTimer);
@@ -117,7 +117,7 @@ WTWJS.prototype.elevatorDoors = function(zdoordirection, zfloor, zvaluey, zdirec
 			}
 		}
 	} catch (ex) {
-		WTW.log("custom-elevatorDoors=" + ex.message);
+		WTW.log('custom-elevatorDoors=' + ex.message);
 	}
 }
 
@@ -126,43 +126,43 @@ WTWJS.prototype.elevatorRequestDoor = function(zdoordirection, zmoldname) {
 		var zvaluey = 0;
 		var zfloor = 1;
 		var zconnectinggridind = -1;
-		var zconnectinggridid = "";
-		if (zmoldname != "") {
-			if (zmoldname.indexOf("-") > -1) {
+		var zconnectinggridid = '';
+		if (zmoldname != '') {
+			if (zmoldname.indexOf('-') > -1) {
 				var znamepart = zmoldname.split('-');
 				var zmolds = null;
 				var zmoldind = -1;
-				if (znamepart[0] != null) {
-					switch (znamepart[0]) {
-						case "communitymolds":
+				if (znamepart[1] != null) {
+					switch (znamepart[1]) {
+						case 'communitymolds':
 							zmolds = WTW.communitiesMolds;
 							break;
-						case "buildingmolds":
+						case 'buildingmolds':
 							zmolds = WTW.buildingMolds;
 							break;
-						case "thingmolds":
+						case 'thingmolds':
 							zmolds = WTW.thingMolds;
 							break;
 					}
 				}
-				if (znamepart[1] != null) {
-					if (WTW.isNumeric(znamepart[1])) {
-						zmoldind = Number(znamepart[1]);
-					}
-				}
-				if (znamepart[3] != null) {
-					if (WTW.isNumeric(znamepart[3])) {
-						zconnectinggridind = Number(znamepart[3]);
+				if (znamepart[2] != null) {
+					if (WTW.isNumeric(znamepart[2])) {
+						zmoldind = Number(znamepart[2]);
 					}
 				}
 				if (znamepart[4] != null) {
-					zconnectinggridid = znamepart[3];
+					if (WTW.isNumeric(znamepart[4])) {
+						zconnectinggridind = Number(znamepart[4]);
+					}
+				}
+				if (znamepart[5] != null) {
+					zconnectinggridid = znamepart[5];
 				}
 				if (zmolds[zmoldind] != null) {
 					if (zmolds[zmoldind].graphics.webimages[0] != null) {
 						if (zmolds[zmoldind].graphics.webimages[0].jsfunction != undefined) {
-							if (zmolds[zmoldind].graphics.webimages[0].jsfunction == "WTW.elevatorRequestDoor") {
-								WTW.setDirectionalOpacity(zmoldname.replace("-base","-clickimage"),1);
+							if (zmolds[zmoldind].graphics.webimages[0].jsfunction == 'WTW.elevatorRequestDoor') {
+								WTW.setDirectionalOpacity(zmoldname.replace('-base','-clickimage'),1);
 							}
 						}
 					}
@@ -177,17 +177,17 @@ WTWJS.prototype.elevatorRequestDoor = function(zdoordirection, zmoldname) {
 		if (zestatus < 2 || zestatus == 4) {
 			for (var i=0; i < WTW.actionZones.length; i++) {
 				if (WTW.actionZones[i] != null) {
-					if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == "clickactivatedslidingdoor" && (Number(WTW.actionZones[i].axis.position.y) == zvaluey)) {
-						if (zdoordirection == "open") {
+					if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == 'clickactivatedslidingdoor' && (Number(WTW.actionZones[i].axis.position.y) == zvaluey)) {
+						if (zdoordirection == 'open') {
 							if (WTW.actionZones[i].status != 4) {
 								WTW.actionZones[i].status = 3;
 								WTW.elevatorClearTimer(WTW.elevatorDoorTimer);
 								WTW.elevatorDoorTimer = window.setTimeout(function() {
 									WTW.elevatorClearTimer(WTW.elevatorDoorTimer);
-									WTW.elevatorDoors("close", zfloor, zvaluey, "arrived", zconnectinggridind, zconnectinggridid, zmoldname);
+									WTW.elevatorDoors('close', zfloor, zvaluey, 'arrived', zconnectinggridind, zconnectinggridid, zmoldname);
 								},15000);
 							}
-						} else if (zdoordirection == "close") {
+						} else if (zdoordirection == 'close') {
 							if (WTW.actionZones[i].status != 1) {
 								WTW.actionZones[i].status = 2;
 								WTW.elevatorClearTimer(WTW.elevatorDoorTimer);
@@ -198,52 +198,52 @@ WTWJS.prototype.elevatorRequestDoor = function(zdoordirection, zmoldname) {
 				}
 			}
 		}
-		WTW.setDirectionalOpacity(zmoldname.replace("-base","-clickimage"),0);
+		WTW.setDirectionalOpacity(zmoldname.replace('-base','-clickimage'),0);
 	} catch (ex) {
-		WTW.log("custom-elevatorRequestDoor=" + ex.message);
+		WTW.log('custom-elevatorRequestDoor=' + ex.message);
 	}
 }
 
 WTWJS.prototype.elevatorSelectFloor = function(zsetfloor, zmoldname) {
 	try {
 		var zconnectinggridind = -1;
-		var zconnectinggridid = "";
+		var zconnectinggridid = '';
 		var znamepart = zmoldname.split('-');
 		var zmolds = null;
 		var zmoldind = -1;
-		if (zmoldname != "") {
-			if (zmoldname.indexOf("-") > -1) {
-				if (znamepart[0] != null) {
-					switch (znamepart[0]) {
-						case "communitymolds":
+		if (zmoldname != '') {
+			if (zmoldname.indexOf('-') > -1) {
+				if (znamepart[1] != null) {
+					switch (znamepart[1]) {
+						case 'communitymolds':
 							zmolds = WTW.communitiesMolds;
 							break;
-						case "buildingmolds":
+						case 'buildingmolds':
 							zmolds = WTW.buildingMolds;
 							break;
-						case "thingmolds":
+						case 'thingmolds':
 							zmolds = WTW.thingMolds;
 							break;
 					}
 				}
-				if (znamepart[1] != null) {
-					if (WTW.isNumeric(znamepart[1])) {
-						zmoldind = Number(znamepart[1]);
-					}
-				}
-				if (znamepart[3] != null) {
-					if (WTW.isNumeric(znamepart[3])) {
-						zconnectinggridind = Number(znamepart[3]);
+				if (znamepart[2] != null) {
+					if (WTW.isNumeric(znamepart[2])) {
+						zmoldind = Number(znamepart[2]);
 					}
 				}
 				if (znamepart[4] != null) {
-					zconnectinggridid = znamepart[3];
+					if (WTW.isNumeric(znamepart[4])) {
+						zconnectinggridind = Number(znamepart[4]);
+					}
+				}
+				if (znamepart[5] != null) {
+					zconnectinggridid = znamepart[5];
 				}
 				if (zmolds[zmoldind] != null) {
 					if (zmolds[zmoldind].graphics.webimages[0] != null) {
 						if (zmolds[zmoldind].graphics.webimages[0].jsfunction != undefined) {
-							if (zmolds[zmoldind].graphics.webimages[0].jsfunction == "WTW.elevatorSelectFloor") {
-								WTW.setDirectionalOpacity(zmoldname.replace("-base","-clickimage"),1);
+							if (zmolds[zmoldind].graphics.webimages[0].jsfunction == 'WTW.elevatorSelectFloor') {
+								WTW.setDirectionalOpacity(zmoldname.replace('-base','-clickimage'),1);
 							}
 						}
 					}
@@ -259,14 +259,14 @@ WTWJS.prototype.elevatorSelectFloor = function(zsetfloor, zmoldname) {
 			if (zmolds != null) {
 				for (var i=0;i < zmolds.length;i++) {
 					if (zmolds[i] != null) {
-						if (zmolds[i].shape == "image" && zmolds[i].graphics.webimages[0].jsfunction == "WTW.elevatorSelectFloor") {
-							if (zestatus < 2 && zmolds[i].graphics.webimages[0].jsparameters == "1") {
-								WTW.setDirectionalOpacity(zmolds[i].moldname + "-clickimage",0);
-							} else if (zestatus == 4 && zmolds[i].graphics.webimages[0].jsparameters == "2") {
-								WTW.setDirectionalOpacity(zmolds[i].moldname + "-clickimage",0);
+						if (zmolds[i].shape == 'image' && zmolds[i].graphics.webimages[0].jsfunction == 'WTW.elevatorSelectFloor') {
+							if (zestatus < 2 && zmolds[i].graphics.webimages[0].jsparameters == '1') {
+								WTW.setDirectionalOpacity(zmolds[i].moldname + '-clickimage',0);
+							} else if (zestatus == 4 && zmolds[i].graphics.webimages[0].jsparameters == '2') {
+								WTW.setDirectionalOpacity(zmolds[i].moldname + '-clickimage',0);
 							} else {
-								var zemold = WTW.getMeshOrNodeByID(zmolds[i].moldname + "-clickimage");
-								zmoldname = zmolds[i].moldname + "-base";
+								var zemold = WTW.getMeshOrNodeByID(zmolds[i].moldname + '-clickimage');
+								zmoldname = zmolds[i].moldname + '-base';
 								if (zemold != null) {
 									if (zemold.material.subMaterials[0] != null) {
 										if (zemold.material.subMaterials[0].alpha != undefined) {
@@ -285,10 +285,10 @@ WTWJS.prototype.elevatorSelectFloor = function(zsetfloor, zmoldname) {
 				}
 				for (var i=0;i < zmolds.length;i++) {
 					if (zmolds[i] != null) {
-						if (zmolds[i].shape == "image" && zmolds[i].graphics.webimages[0].jsfunction == "WTW.elevatorCall") {
+						if (zmolds[i].shape == 'image' && zmolds[i].graphics.webimages[0].jsfunction == 'WTW.elevatorCall') {
 							var zjsparameters = zmolds[i].graphics.webimages[0].jsparameters.split(',');
 							var zjsparameter = zjsparameters[0];
-							var zemold = WTW.getMeshOrNodeByID(zmolds[i].moldname + "-clickimage");
+							var zemold = WTW.getMeshOrNodeByID(zmolds[i].moldname + '-clickimage');
 							var zeopacity = 0; 
 							if (zemold != null) {
 								if (zemold.material.subMaterials[0] != null) {
@@ -297,19 +297,19 @@ WTWJS.prototype.elevatorSelectFloor = function(zsetfloor, zmoldname) {
 									}
 								}
 							}
-							if (zestatus < 2 && zjsparameter == "1") {
+							if (zestatus < 2 && zjsparameter == '1') {
 								if (zeopacity == 1 && zemoving == 0) {
-									WTW.elevatorRequestDoor("open", zmolds[i].moldname + "-base");
+									WTW.elevatorRequestDoor('open', zmolds[i].moldname + '-base');
 								}
-								WTW.setDirectionalOpacity(zmolds[i].moldname + "-clickimage",0);
-							} else if (zestatus == 4 && zjsparameter == "2") {
+								WTW.setDirectionalOpacity(zmolds[i].moldname + '-clickimage',0);
+							} else if (zestatus == 4 && zjsparameter == '2') {
 								if (zeopacity == 1 && zemoving == 0) {
-									WTW.elevatorRequestDoor("open", zmolds[i].moldname + "-base");
+									WTW.elevatorRequestDoor('open', zmolds[i].moldname + '-base');
 								}
-								WTW.setDirectionalOpacity(zmolds[i].moldname + "-clickimage",0);
+								WTW.setDirectionalOpacity(zmolds[i].moldname + '-clickimage',0);
 							} else {
 								if (zfloor == 0) {
-									zmoldname = zmolds[i].moldname + "-base";
+									zmoldname = zmolds[i].moldname + '-base';
 									if (zeopacity == 1) {
 										if (WTW.isNumeric(zjsparameter)) {
 											zfloor = Number(zjsparameter);
@@ -323,17 +323,17 @@ WTWJS.prototype.elevatorSelectFloor = function(zsetfloor, zmoldname) {
 			}
 			for (var i=0; i < WTW.actionZones.length; i++) {
 				if (WTW.actionZones[i] != null) {
-					if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == "elevator") {
+					if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == 'elevator') {
 						if (WTW.actionZones[i].status < 2 && zfloor == 1) {
-							WTW.setDirectionalOpacity(zmoldname.replace("-base","-clickimage"),0);
+							WTW.setDirectionalOpacity(zmoldname.replace('-base','-clickimage'),0);
 						} else if (WTW.actionZones[i].status == 4 && zfloor == 2) {
-							WTW.setDirectionalOpacity(zmoldname.replace("-base","-clickimage"),0);
+							WTW.setDirectionalOpacity(zmoldname.replace('-base','-clickimage'),0);
 						} else if (WTW.actionZones[i].status < 2 && zfloor == 2) {
 							if (zedoorstatus == 0) {
 								WTW.elevatorClearTimer(WTW.elevatorTimer);
 								WTW.elevatorTimer = window.setTimeout(function() {
 									WTW.elevatorClearTimer(WTW.elevatorTimer);
-									WTW.elevatorMove(2, 40, "up", zconnectinggridind, zconnectinggridid, zmoldname);
+									WTW.elevatorMove(2, 40, 'up', zconnectinggridind, zconnectinggridid, zmoldname);
 								},3000);
 							}
 						} else if (WTW.actionZones[i].status == 4 && zfloor == 1) {
@@ -341,7 +341,7 @@ WTWJS.prototype.elevatorSelectFloor = function(zsetfloor, zmoldname) {
 								WTW.elevatorClearTimer(WTW.elevatorTimer);
 								WTW.elevatorTimer = window.setTimeout(function() {
 									WTW.elevatorClearTimer(WTW.elevatorTimer);
-									WTW.elevatorMove(1, 0, "down", zconnectinggridind, zconnectinggridid, zmoldname);
+									WTW.elevatorMove(1, 0, 'down', zconnectinggridind, zconnectinggridid, zmoldname);
 								},3000);
 							}
 						}
@@ -350,7 +350,7 @@ WTWJS.prototype.elevatorSelectFloor = function(zsetfloor, zmoldname) {
 			}
 		},1000);
 	} catch (ex) {
-		WTW.log("custom-elevatorSelectFloor=" + ex.message);
+		WTW.log('custom-elevatorSelectFloor=' + ex.message);
 	}
 }
 
@@ -358,10 +358,10 @@ WTWJS.prototype.elevatorMove = function(zfloor, zvaluey, zdirection, zconnecting
 	try {
 		for (var i=0; i < WTW.actionZones.length; i++) {
 			if (WTW.actionZones[i] != null) {
-				if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == "elevator") {
-					if (zdirection == "up") {
+				if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == 'elevator') {
+					if (zdirection == 'up') {
 						WTW.actionZones[i].status = 3;
-					} else if (zdirection == "down") {
+					} else if (zdirection == 'down') {
 						WTW.actionZones[i].status = 2;
 					}
 				}
@@ -372,24 +372,24 @@ WTWJS.prototype.elevatorMove = function(zfloor, zvaluey, zdirection, zconnecting
 			var zestatus = WTW.elevatorStatus(zconnectinggridind, zconnectinggridid);
 			if (zestatus < 2) {
 				WTW.elevatorClearTimer(WTW.elevatorTimer);
-				WTW.setDirectionalOpacity(zmoldname.replace("-base","-clickimage"),0);
-				WTW.elevatorDoors("open", 1, 0, "arrival", zconnectinggridind, zconnectinggridid, zmoldname);
+				WTW.setDirectionalOpacity(zmoldname.replace('-base','-clickimage'),0);
+				WTW.elevatorDoors('open', 1, 0, 'arrival', zconnectinggridind, zconnectinggridid, zmoldname);
 				WTW.elevatorDoorTimer = window.setTimeout(function() {
 					WTW.elevatorClearTimer(WTW.elevatorDoorTimer);
-					WTW.elevatorDoors("close", 1, 0, "arrival", zconnectinggridind, zconnectinggridid, zmoldname);
+					WTW.elevatorDoors('close', 1, 0, 'arrival', zconnectinggridind, zconnectinggridid, zmoldname);
 				},15000);	
 			} else if (zestatus == 4) {
 				WTW.elevatorClearTimer(WTW.elevatorTimer);
-				WTW.setDirectionalOpacity(zmoldname.replace("-base","-clickimage"),0);
-				WTW.elevatorDoors("open", 2, 40, "arrival", zconnectinggridind, zconnectinggridid, zmoldname);
+				WTW.setDirectionalOpacity(zmoldname.replace('-base','-clickimage'),0);
+				WTW.elevatorDoors('open', 2, 40, 'arrival', zconnectinggridind, zconnectinggridid, zmoldname);
 				WTW.elevatorDoorTimer = window.setTimeout(function() {
 					WTW.elevatorClearTimer(WTW.elevatorDoorTimer);
-					WTW.elevatorDoors("close", 1, 0, "arrival", zconnectinggridind, zconnectinggridid, zmoldname);
+					WTW.elevatorDoors('close', 1, 0, 'arrival', zconnectinggridind, zconnectinggridid, zmoldname);
 				},15000);	
 			}
 		},2000);
 	} catch (ex) {
-		WTW.log("custom-elevatorMove=" + ex.message);
+		WTW.log('custom-elevatorMove=' + ex.message);
 	}
 }
 
@@ -398,13 +398,13 @@ WTWJS.prototype.elevatorStatus = function(zconnectinggridind, zconnectinggridid)
 	try {
 		for (var i=0; i < WTW.actionZones.length; i++) {
 			if (WTW.actionZones[i] != null) {
-				if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == "elevator") {
+				if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == 'elevator') {
 					zestatus = WTW.actionZones[i].status;
 				}
 			}
 		}
 	} catch (ex) {
-		WTW.log("custom-elevatorStatus=" + ex.message);
+		WTW.log('custom-elevatorStatus=' + ex.message);
 	}
 	return zestatus;
 }
@@ -414,7 +414,7 @@ WTWJS.prototype.elevatorDoorStatus = function(zconnectinggridind, zconnectinggri
 	try {
 		for (var i=0; i < WTW.actionZones.length; i++) {
 			if (WTW.actionZones[i] != null) {
-				if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == "clickactivatedslidingdoor") {
+				if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == 'clickactivatedslidingdoor') {
 					if (WTW.actionZones[i].status > 1) {
 						zedoorstatus = 1;
 					}
@@ -422,7 +422,7 @@ WTWJS.prototype.elevatorDoorStatus = function(zconnectinggridind, zconnectinggri
 			}
 		}
 	} catch (ex) {
-		WTW.log("custom-elevatorDoorStatus=" + ex.message);
+		WTW.log('custom-elevatorDoorStatus=' + ex.message);
 	}
 	return zedoorstatus;
 }
@@ -433,8 +433,8 @@ WTWJS.prototype.elevatorHeight = function(zconnectinggridind, zconnectinggridid)
 	try {
 		for (var i=0; i < WTW.actionZones.length; i++) {
 			if (WTW.actionZones[i] != null) {
-				if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == "elevator") {
-					var zactionzoneaxle = WTW.getMeshOrNodeByID(WTW.actionZones[i].moldname.replace("actionzone-","actionzoneaxle-"));
+				if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == 'elevator') {
+					var zactionzoneaxle = WTW.getMeshOrNodeByID(WTW.actionZones[i].moldname.replace('actionzone-','actionzoneaxle-'));
 					if (zactionzoneaxle != null) {
 						zeheight = zactionzoneaxle.position.y;
 					}
@@ -442,7 +442,7 @@ WTWJS.prototype.elevatorHeight = function(zconnectinggridind, zconnectinggridid)
 			}
 		}
 	} catch (ex) {
-		WTW.log("custom-elevatorHeight=" + ex.message);
+		WTW.log('custom-elevatorHeight=' + ex.message);
 	}
 	return zeheight;
 }

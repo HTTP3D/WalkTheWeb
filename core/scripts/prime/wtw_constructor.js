@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -42,7 +42,7 @@ function WTWJS() {
 	this.closestAngle = null;
 
 	/* WTW.closestWebID - WebId is either a communityid, buildingid, or thingid and this value identifies the closest item */
-	this.closestWebID = "";
+	this.closestWebID = '';
 
 	/* WTW.highlightLayer - used to highlight any mesh in the active 3D Scene (implementation of BABYLON.HighlightLayer) */
 	this.highlightLayer = null;
@@ -63,7 +63,7 @@ function WTWJS() {
 	this.pause = 1;
 
 	/* WTW,holdPosition - set as WTW.myAvatar.position (x,y,z) to determine if the avatar has moved - ties to the WTW.activityTimer above */
-	this.holdPosition = "";
+	this.holdPosition = '';
 
 	/* WTW.sizeX - current width of the canvas window running Babylon */
 	this.sizeX = 1024;
@@ -141,13 +141,13 @@ function WTWJS() {
 	/* WTW.loadedJSFiles - JavaScript files can be loaded dynamically with Action Zones so that they can be used only in sections of the 3D Scene map */
 	/* this value contains a string of file names that are loaded to the scene at any point of time - this does not include the standard loaded JS files */
 	/* Example: you walk into an area with a paint ball game, so the JavaScript file for game logic is loaded while you are there and unloads when you leave the arena */
-	this.loadedJSFiles = "";
+	this.loadedJSFiles = '';
 
 	
 /* 3D Scene related */
 	
 	/* WTW.mainParent - the name of the highest parent in the current 3D Scene, usually the connecting Grid for the 3D Community, 3D Building, 3D Thing in that order of availability */
-	this.mainParent = "connectinggrids-0---";
+	this.mainParent = 'local-connectinggrids-0---';
 	
 	/* WTW.mainParentMold - the name of the highest parent (Connecting Grid) in the current 3D Scene */
 	this.mainParentMold = null;
@@ -158,11 +158,11 @@ function WTWJS() {
 	/* WTW.communitiesMolds - Array of 3D Community Mold definitions loaded in a given 3D Scene */
 	this.communitiesMolds = [];
 	
-	/* WTW.communityName - identifies the current 3D Community or "WalkTheWeb" if no 3D Community is loaded */
-	this.communityName = "Walk the Web";
+	/* WTW.communityName - identifies the current 3D Community or 'WalkTheWeb' if no 3D Community is loaded */
+	this.communityName = 'WalkTheWeb';
 
 	/* WTW.editCommunityAccess - used to determine if user has admin mode access to the currently loaded 3D Community (enables link to Admin Mode on the bottom menu) */
-	this.editCommunityAccess = "";
+	this.editCommunityAccess = '';
 
 	/* WTW.buildings - Array of 3D Building definitions loaded in a given 3D Scene */
 	this.buildings = [];
@@ -171,10 +171,10 @@ function WTWJS() {
 	this.buildingMolds = [];
 	
 	/* WTW.buildingName - identifies the closest 3D Building within a 3D Community */
-	this.buildingName = "";
+	this.buildingName = '';
 
 	/* WTW.editBuildingAccess - used to determine if user has admin mode access to the currently loaded closest 3D Building (enables link to Admin Mode on the bottom menu) */
-	this.editBuildingAccess = "";
+	this.editBuildingAccess = '';
 
 	/* WTW.things - Array of 3D Thing definitions loaded in a given 3D Scene */
 	this.things = [];
@@ -201,7 +201,7 @@ function WTWJS() {
 	this.moldEvents = [];
 	
 	/* WTW.baseMoldCount - rough count of molds currently loaded into the 3D Scene (assist with creating efficient 3D Scenes and placing Load Zones) */
-	this.baseMoldCount = "";
+	this.baseMoldCount = '';
 
 	/* WTW.sun - the light object added to the scene */
 	this.sun;
@@ -427,19 +427,19 @@ function WTWJS() {
 	this.mouseOut = null;
 
 	/* WTW.dragID - id of the mold that is currently being dragged. Example includes scroll bar being dragged on 3D Blog box. */
-	this.dragID = "";
+	this.dragID = '';
 	
 	/* WTW.pick - changes the mode to pick a mold in the scene. Example: select a mold as part of a door to be added in a swinging door.. */
 	this.pick = 0;
 	
 	/* WTW.currentID - currently hovered mold name */
-	this.currentID = "";
+	this.currentID = '';
 
 	/* WTW.lastID - last hovered mold name */
-	this.lastID = "";
+	this.lastID = '';
 	
 	/* WTW.selectedMoldName - currently selected mold used for interacting with it (example: select fill in the blank - adds text to mold). */
-	this.selectedMoldName = "";
+	this.selectedMoldName = '';
 	
 	/* WTW.textTimer - used to create a blinking cursor in the fill in the blank for editing the Selected Mold (above) */
 	this.textTimer = null;

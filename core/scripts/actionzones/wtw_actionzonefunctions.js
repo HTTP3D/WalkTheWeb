@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -13,7 +13,7 @@ WTWJS.prototype.checkActionZones = function() {
 				var zmoldname = WTW.actionZones[i].moldname;
 				var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
 				if (zmoldname != undefined) {
-					if ((zmoldname.indexOf("loadzone") > -1 || zmoldname.indexOf("teleportzone") > -1) && WTW.actionZones[i].shown != "2") {
+					if ((zmoldname.indexOf('loadzone') > -1 || zmoldname.indexOf('teleportzone') > -1) && WTW.actionZones[i].shown != '2') {
 						WTW.actionZones[i].status = 0;
 					} else if (zactionzone != null) {
 						var zmeinzone = false;
@@ -21,7 +21,7 @@ WTWJS.prototype.checkActionZones = function() {
 							zmeinzone = WTW.myAvatar.intersectsMesh(zactionzone, false);
 						}
 						/* Available in Admin Mode Only, sets all load zones as if the avatar is in them so that it loads all sections of the map - great for getting snapshots and images */
-						if (WTW.loadAllActionZones == 1 && WTW.adminView == 1 && zmoldname.indexOf("loadzone") > -1) {
+						if (WTW.loadAllActionZones == 1 && WTW.adminView == 1 && zmoldname.indexOf('loadzone') > -1) {
 							zmeinzone = true;
 						}
 						var zothersinzone = false;
@@ -29,9 +29,9 @@ WTWJS.prototype.checkActionZones = function() {
 						
 						zothersinzone = WTW.pluginsCheckActionPerZoneTrigger(zactionzone);
 						if (zmeinzone || zothersinzone) {
-							if (zmeinzone && zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 2) {
+							if (zmeinzone && zmoldname.indexOf('loadzone') > -1 && WTW.actionZones[i].status != 2) {
 								/* my avatar in load zone - triggers loading of molds */
-								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
+								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf('extreme') > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf('custom') == -1) {
 									if (WTW.actionZones[i].status == 0) {
 										WTW.addLoadZoneToQueue(i);
 									}
@@ -46,8 +46,8 @@ WTWJS.prototype.checkActionZones = function() {
 								WTW.pluginsEnterActionZone(zmoldname, WTW.actionZones[i]);
 								/* status 2 means loaded */
 								WTW.actionZones[i].status = 2;
-							} else if (zmeinzone == false && zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {
-								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
+							} else if (zmeinzone == false && zmoldname.indexOf('loadzone') > -1 && WTW.actionZones[i].status != 0) {
+								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf('extreme') > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf('custom') == -1) {
 									/* if avatar left zone, unload zone */
 									if (WTW.actionZones[i].status == 2) {
 										WTW.addUnloadZoneToQueue(i);
@@ -57,30 +57,30 @@ WTWJS.prototype.checkActionZones = function() {
 								WTW.pluginsExitActionZone(zmoldname, WTW.actionZones[i]);
 								/* status 0 means unloaded */
 								WTW.actionZones[i].status = 0;
-							} else if (zmeinzone && zmoldname.indexOf("teleportzone") > -1 && WTW.actionZones[i].status != 2 && WTW.isInitCycle == 0) {
+							} else if (zmeinzone && zmoldname.indexOf('teleportzone') > -1 && WTW.actionZones[i].status != 2 && WTW.isInitCycle == 0) {
 								/* entered teleport */
 								WTW.actionZones[i].status = 2;
 								WTW.teleport(i);
-							} else if (zmoldname.indexOf("loadanimations") > -1) {
+							} else if (zmoldname.indexOf('loadanimations') > -1) {
 								/* when in zone, see if there are animations defined to load */
 								WTW.checkLoadAnimations(i);
-							} else if (zmoldname.indexOf("clickactivated") > -1) {
+							} else if (zmoldname.indexOf('clickactivated') > -1) {
 								/* action zone for click activated items (not in use yet) */
-							} else if (zmoldname.indexOf("door") > -1 && WTW.actionZones[i].status != 4 && WTW.actionZones[i].status != 3) {
+							} else if (zmoldname.indexOf('door') > -1 && WTW.actionZones[i].status != 4 && WTW.actionZones[i].status != 3) {
 								/* status 3 means opening door - status 4 means door is fully open */
 								WTW.actionZones[i].status = 3;
-							} else if (zmoldname.indexOf("mirror") > -1 && WTW.actionZones[i].status != 2) {
+							} else if (zmoldname.indexOf('mirror') > -1 && WTW.actionZones[i].status != 2) {
 								/* mirror zone loads objects into the mirror reflection */
 								WTW.actionZones[i].status = 2;
 								WTW.checkMirrorReflectionList(i);
-							} else if (zmeinzone && zmoldname.indexOf("ridealong") > -1) {
+							} else if (zmeinzone && zmoldname.indexOf('ridealong') > -1) {
 								/* when in ride along zone, set the avatar parent to zone parent to move with the parent and recalculate relative position */
 								WTW.checkRideAlongZone(zactionzone, i, zmeinzone, zothersinzone);
 							}
 						} else {
-							if (zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status != 0) {
+							if (zmoldname.indexOf('loadzone') > -1 && WTW.actionZones[i].status != 0) {
 								/* if avatar is not in the load zone, unload molds identified by that zone */
-								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
+								if (WTW.actionZones[i].actionzonename.toLowerCase().indexOf('extreme') > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf('custom') == -1) {
 									/* if avatar is not in parent zone, unload the zone itself */
 									if (WTW.actionZones[i].status == 2) {
 										WTW.addUnloadZoneToQueue(i);
@@ -92,23 +92,23 @@ WTWJS.prototype.checkActionZones = function() {
 								WTW.pluginsExitActionZone(zmoldname, WTW.actionZones[i]);
 								/* status 0 means not in zone */
 								WTW.actionZones[i].status = 0;
-							} else if (zmoldname.indexOf("clickactivated") > -1) {
+							} else if (zmoldname.indexOf('clickactivated') > -1) {
 								/* action zone for click activated items (not in use yet) */
-							} else if (zmoldname.indexOf("door") > -1 && WTW.actionZones[i].status != 2 && WTW.actionZones[i].status != 1 && WTW.actionZones[i].status != 0) {
+							} else if (zmoldname.indexOf('door') > -1 && WTW.actionZones[i].status != 2 && WTW.actionZones[i].status != 1 && WTW.actionZones[i].status != 0) {
 								/* door status 2 means closing door, status 0 means door closed */
 								WTW.actionZones[i].status = 2;
-							} else if (zmoldname.indexOf("mirror") > -1 && WTW.actionZones[i].status != 2) {
+							} else if (zmoldname.indexOf('mirror') > -1 && WTW.actionZones[i].status != 2) {
 								/* mirror status 0 means not in zone, unload reflection list */
 								WTW.actionZones[i].status = 0;
 								WTW.checkMirrorReflectionList(i);
-							} else if (zmeinzone == false && zmoldname.indexOf("ridealong") > -1) {
+							} else if (zmeinzone == false && zmoldname.indexOf('ridealong') > -1) {
 								/* when avatar returns from ride along zone, set the avatar parent to scene parent and recalculate position */
 								WTW.checkRideAlongZone(zactionzone, i, zmeinzone, zothersinzone);
 							}
 						}
 						/* allow hooks for plugins to add code on check zone (mostly for custom zones or to add functions to an existing zone) */
 						WTW.pluginsCheckActionPerZone(zmoldname, i, zmeinzone, zothersinzone);
-					} else if (zmoldname.indexOf("loadzone") > -1) {
+					} else if (zmoldname.indexOf('loadzone') > -1) {
 						/* if loadzone not otherwise defined, set status to avatar not in zone */
 						WTW.actionZones[i].status = 0;
 					}
@@ -117,8 +117,8 @@ WTWJS.prototype.checkActionZones = function() {
 		}
 		if (WTW.activityTimer != null && WTW.myAvatar != null) {
 			/* reset hold position to check for movement and reset the activity timer */
-			if (WTW.holdPosition != WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + "|" + WTW.myAvatar.position.z) {
-				WTW.holdPosition = WTW.myAvatar.position.x + "|" + WTW.myAvatar.position.y + "|" + WTW.myAvatar.position.z;
+			if (WTW.holdPosition != WTW.myAvatar.position.x + '|' + WTW.myAvatar.position.y + '|' + WTW.myAvatar.position.z) {
+				WTW.holdPosition = WTW.myAvatar.position.x + '|' + WTW.myAvatar.position.y + '|' + WTW.myAvatar.position.z;
 				WTW.resetActivityTimer();
 			}
 		}
@@ -126,7 +126,7 @@ WTWJS.prototype.checkActionZones = function() {
 		/* this variable tells the render cycle that it is already executed, it must be true to execute function again. different places in code will trigger a true to force it to run the function on demand only */
 		WTW.checkZones = false;
 	} catch(ex) {
-		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-checkActionZones=" + ex.message);
+		WTW.log('core-scripts-actionzones-wtw_actionzonefunctions.js-checkActionZones=' + ex.message);
 	}
 }
 
@@ -139,14 +139,14 @@ WTWJS.prototype.getActiveLoadZones = function() {
 				var zmoldname = WTW.actionZones[i].moldname;
 				var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
 				if (zmoldname != undefined) {
-					if (zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status == 2) {
+					if (zmoldname.indexOf('loadzone') > -1 && WTW.actionZones[i].status == 2) {
 						zactionzones[zactionzones.length] = WTW.actionZones[i];
 					}
 				}
 			}
 		}		
 	} catch (ex) {
-		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-getActiveLoadZones=" + ex.message);
+		WTW.log('core-scripts-actionzones-wtw_actionzonefunctions.js-getActiveLoadZones=' + ex.message);
 	}
 	return zactionzones;
 }
@@ -160,7 +160,7 @@ WTWJS.prototype.getActiveWebs = function() {
 				var zmoldname = WTW.actionZones[i].moldname;
 				var zactionzone = WTW.getMeshOrNodeByID(zmoldname);
 				if (zmoldname != undefined) {
-					if (zmoldname.indexOf("loadzone") > -1 && WTW.actionZones[i].status == 2 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("extreme") > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf("custom") == -1) {
+					if (zmoldname.indexOf('loadzone') > -1 && WTW.actionZones[i].status == 2 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf('extreme') > -1 && WTW.actionZones[i].actionzonename.toLowerCase().indexOf('custom') == -1) {
 						var zfound = false;
 						var zwebtype = 'community';
 						var zwebid = WTW.actionZones[i].communityinfo.communityid;
@@ -191,7 +191,7 @@ WTWJS.prototype.getActiveWebs = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-getActiveWebs=" + ex.message);
+		WTW.log('core-scripts-actionzones-wtw_actionzonefunctions.js-getActiveWebs=' + ex.message);
 	}
 	return zwebs;
 }
@@ -205,7 +205,7 @@ WTWJS.prototype.checkAvatarsInZone = function(zactionzone) {
 		
 		
 	} catch (ex) {
-		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-checkAvatarsInZone=" + ex.message);
+		WTW.log('core-scripts-actionzones-wtw_actionzonefunctions.js-checkAvatarsInZone=' + ex.message);
 	}
 	return zinzone;
 }
@@ -221,7 +221,7 @@ WTWJS.prototype.checkLoadAnimations = function(zactionzoneind) {
 						if (zazanimations[i] != null) {
 							var zactionzone = WTW.getMeshOrNodeByID(WTW.actionZones[zactionzoneind].moldname);
 							if (zactionzone != null) {
-								var zavatar = WTW.getMeshOrNodeByID("myavatar-" + dGet("wtw_tinstanceid").value);
+								var zavatar = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value);
 								if (zavatar != null) {
 									var zmeinzone = zavatar.intersectsMesh(zactionzone, false);
 									if (zmeinzone) {
@@ -247,7 +247,7 @@ WTWJS.prototype.checkLoadAnimations = function(zactionzoneind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-checkLoadAnimations=" + ex.message);
+		WTW.log('core-scripts-actionzones-wtw_actionzonefunctions.js-checkLoadAnimations=' + ex.message);
 	}
 }
 
@@ -270,9 +270,9 @@ WTWJS.prototype.checkRideAlongZone = function(zactionzone, zactionzoneind, zmein
 /*				var zcoords = WTW.getWorldData(zactionzoneparent);
 				if (WTW.myAvatar.ridealong != undefined && WTW.myAvatar.ridealong != null) {
 					if (WTW.isNumeric(zcoords.position.y) && WTW.isNumeric(WTW.myAvatar.ridealong.position.y)) {
-//WTW.log("new=" + zactionzonepos.y);
-//WTW.log("last=" + WTW.myAvatar.ridealong.position.y);
-//WTW.log("dy=" + (zactionzonepos.y - WTW.myAvatar.ridealong.position.y));
+//WTW.log('new=' + zactionzonepos.y);
+//WTW.log('last=' + WTW.myAvatar.ridealong.position.y);
+//WTW.log('dy=' + (zactionzonepos.y - WTW.myAvatar.ridealong.position.y));
 						WTW.myAvatar.position.y += (Number(zactionzonepos.y) - Number(WTW.myAvatar.ridealong.position.y));
 					}
 				}
@@ -282,10 +282,10 @@ WTWJS.prototype.checkRideAlongZone = function(zactionzone, zactionzoneind, zmein
 				if (WTW.myAvatar.parent.name != zactionzoneparent.name) {
 					WTW.myAvatar.setParent(zactionzoneparent);
 					//WTW.myAvatar.parent = zactionzoneparent;
-//WTW.log("zactionzoneparent=" + zactionzoneparent.name);
+//WTW.log('zactionzoneparent=' + zactionzoneparent.name);
 				}
 
-//WTW.log("avatar=" + WTW.myAvatar.parent.name);
+//WTW.log('avatar=' + WTW.myAvatar.parent.name);
 
 //				WTW.myAvatar.position.x -= (zcoords.position.x - zpositionx);
 //				WTW.myAvatar.position.y -= (zcoords.position.y - zpositiony);
@@ -294,27 +294,27 @@ WTWJS.prototype.checkRideAlongZone = function(zactionzone, zactionzoneind, zmein
 
 //				WTW.myAvatar.rotation.y -= zcoords.rotation.y; //WTW.getRadians(Number(WTW.getDegrees(Number(zrotationy))) - Number(WTW.getDegrees(Number(zcoords.rotation.y))));
 				//WTW.myAvatar.rotation.z = (zrotationz - zcoords.rotation.z);
-//WTW.log("az-x=" + WTW.getDegrees(zrotationx) + " = " + WTW.getDegrees(zcoords.rotation.x));
-//WTW.log("az-y=" + WTW.getDegrees(zrotationy) + " = " + WTW.getDegrees(zcoords.rotation.y));
-//WTW.log("az-z=" + WTW.getDegrees(zrotationz) + " = " + WTW.getDegrees(zcoords.rotation.z));
+//WTW.log('az-x=' + WTW.getDegrees(zrotationx) + ' = ' + WTW.getDegrees(zcoords.rotation.x));
+//WTW.log('az-y=' + WTW.getDegrees(zrotationy) + ' = ' + WTW.getDegrees(zcoords.rotation.y));
+//WTW.log('az-z=' + WTW.getDegrees(zrotationz) + ' = ' + WTW.getDegrees(zcoords.rotation.z));
 
 				
 			} else {
 //				WTW.myAvatar.ridealong = null;
 //				if (WTW.myAvatar.parent.name != WTW.mainParentMold.name) {
 //					WTW.myAvatar.setParent(WTW.mainParentMold);
-//WTW.log("parent=" + WTW.mainParentMold.name);		
+//WTW.log('parent=' + WTW.mainParentMold.name);		
 //				}
 //				WTW.myAvatar.position.x += (zpositionx - zcoords.position.x);
 //				WTW.myAvatar.position.y -= (zpositiony - zcoords.position.y);
-//WTW.log("zpositionz=" + zpositionz);
-//WTW.log("zazz=" + zcoords.position.z);
+//WTW.log('zpositionz=' + zpositionz);
+//WTW.log('zazz=' + zcoords.position.z);
 
 //				WTW.myAvatar.position.z += (zpositionz - zcoords.position.z);
 			} 
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-checkRideAlongZone=" + ex.message);
+		WTW.log('core-scripts-actionzones-wtw_actionzonefunctions.js-checkRideAlongZone=' + ex.message);
 	}
 }
 
@@ -322,46 +322,31 @@ WTWJS.prototype.initMirrorLoadZone = function(zmoldname, zmolddef) {
 	try {
 /*		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
-			var znamepart;
-			if (zmoldname.indexOf("-") > -1) {
-				znamepart = zmoldname.split('-');
-				var zwebtype = znamepart[0];
-				var zmoldind = Number(znamepart[1]);
-				var zmolds = null;
-				switch (zwebtype) {
-					case "thingmolds":
-						zmolds = WTW.thingMolds;
-						break;
-					case "buildingmolds":
-						zmolds = WTW.buildingMolds;
-						break;
-					case "communitymolds":
-						zmolds = WTW.communitiesMolds;
-						break;
-				}
-				if (zmolds != null) {
-					if (zmolds[zmoldind] != null) {
-						if (zmolds[zmoldind].mirroractionzoneid == "") {
+			if (zmoldname.indexOf('-') > -1) {
+				var znamepart = WTW.getMoldnameParts(zmoldname);
+				if (znamepart.molds != null) {
+					if (znamepart.molds[znamepart.moldind] != null) {
+						if (znamepart.molds[znamepart.moldind].mirroractionzoneid == '') {
 							var zactionzoneid = WTW.getRandomString(16);
-							zmolds[zmoldind].mirroractionzoneid = zactionzoneid;
+							znamepart.molds[znamepart.moldind].mirroractionzoneid = zactionzoneid;
 							var zactionzoneind = WTW.getNextCount(WTW.actionZones);
 							WTW.actionZones[zactionzoneind] = WTW.newActionZone();
 							WTW.actionZones[zactionzoneind].actionzoneid = zactionzoneid;
-							WTW.actionZones[zactionzoneind].actionzonetype = "mirror";
-							WTW.actionZones[zactionzoneind].actionzoneshape = "box";
+							WTW.actionZones[zactionzoneind].actionzonetype = 'mirror';
+							WTW.actionZones[zactionzoneind].actionzoneshape = 'box';
 							WTW.actionZones[zactionzoneind].status = 0;
-							WTW.actionZones[zactionzoneind].shown = "0";
+							WTW.actionZones[zactionzoneind].shown = '0';
 							WTW.actionZones[zactionzoneind].parentname = zmoldname;
-							if (communityid != "") {
-								var zbuildingid = "";
-								if (communityid != "" && zwebtype == "buildingmolds" && zmolds[zmoldind].buildinginfo.buildingid != undefined) {
-									zbuildingid = zmolds[zmoldind].buildinginfo.buildingid;
+							if (communityid != '') {
+								var zbuildingid = '';
+								if (communityid != '' && znamepart.webtype == 'buildingmolds' && znamepart.molds[znamepart.moldind].buildinginfo.buildingid != undefined) {
+									zbuildingid = znamepart.molds[znamepart.moldind].buildinginfo.buildingid;
 								}
 								WTW.actionZones[zactionzoneind].communityinfo.communityid = communityid;
 								WTW.actionZones[zactionzoneind].buildinginfo.buildingid = zbuildingid;
-							} else if (buildingid != "") {
+							} else if (buildingid != '') {
 								WTW.actionZones[zactionzoneind].buildinginfo.buildingid = buildingid;
-							} else if (thingid != "") {
+							} else if (thingid != '') {
 								WTW.actionZones[zactionzoneind].thinginfo.thingid = thingid;
 							}
 							var zscalingx = zmold.scaling.x * 2;
@@ -386,7 +371,7 @@ WTWJS.prototype.initMirrorLoadZone = function(zmoldname, zmolddef) {
 			}
 		}*/
 	} catch (ex) { 
-		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-initMirrorLoadZone=" + ex.message);
+		WTW.log('core-scripts-actionzones-wtw_actionzonefunctions.js-initMirrorLoadZone=' + ex.message);
 	}
 }
 
@@ -422,7 +407,7 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 						window.history.pushState({ path: znewurl.href }, '', znewurl.href); 
 					}
 					/* get domaininfo, scene, and sky settings */
-					WTW.getAsyncJSON("/connect/domaininfo.php?communityid=" + zteleportwebid, 
+					WTW.getAsyncJSON('/connect/domaininfo.php?communityid=' + zteleportwebid, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							communityid = zteleportwebid;
@@ -476,7 +461,7 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 							zstartstand.scaling = new BABYLON.Vector3(50, 1, 50);
 							zstartstand.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y, zspawnpoint.position.z);
 							zstartstand.checkCollisions = true;
-							zstartstand.material = new BABYLON.StandardMaterial("matstartstand", scene);
+							zstartstand.material = new BABYLON.StandardMaterial('matstartstand', scene);
 							zstartstand.material.alpha = 0;
 							
 							WTW.myAvatar.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y + 100, zspawnpoint.position.z);
@@ -498,9 +483,9 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 							/* set community and initial building name */
 							document.title = zresponse.communityinfo.communityname;
 							dGet('wtw_showcommunityname').innerHTML = zresponse.communityinfo.communityname;
-							dGet('wtw_showbuildingname').innerHTML = "<span style='color:yellow;'>Welcome to WalkTheWeb</span>";
+							dGet('wtw_showbuildingname').innerHTML = "<span class='wtw-yellow'>Welcome to WalkTheWeb</span>";
 							/* checking for main parent - adding if needed */
-							WTW.mainParent = "connectinggrids-0---";
+							WTW.mainParent = 'local-connectinggrids-0---';
 							var zmainparent = WTW.getMeshOrNodeByID(WTW.mainParent);
 							if (zmainparent == null) {
 								if (WTW.mainParentMold != null) {
@@ -556,7 +541,7 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 	load domain settings
 */
 	} catch (ex) {
-		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-teleport=" + ex.message);
+		WTW.log('core-scripts-actionzones-wtw_actionzonefunctions.js-teleport=' + ex.message);
 	}
 }
 
@@ -569,13 +554,13 @@ WTWJS.prototype.unloadAllZones = function() {
 			for (var i=0;i < scene.meshes.length;i++) {
 				var zmoldname = scene.meshes[i].name;
 				var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
-				if (zmoldname.indexOf("loadzone") > -1) {
+				if (zmoldname.indexOf('loadzone') > -1) {
 					/* dispose of load zone meshes so that the avatar will not be found in it and reload */
 					//scene.meshes[i].dispose();
 					
 				}
 				/* collect connecting grid names */
-				if (zmoldname.indexOf("connectinggrid") > -1) {
+				if (zmoldname.indexOf('connectinggrid') > -1) {
 					zconnectinggrids[j] = {
 						'connectinggridind': zmoldnameparts.moldind,
 						'connectinggridid': zmoldnameparts.moldid,
@@ -615,7 +600,7 @@ WTWJS.prototype.unloadAllZones = function() {
 		for (var i = 0; i < WTW.actionZones.length; i++) {
 			if (WTW.actionZones[i] != null) {
 				/* queue to unload load zones so that they are properly unloaded with everything they trigger */
-				WTW.actionZones[i].shown = "0";
+				WTW.actionZones[i].shown = '0';
 				WTW.actionZones[i].status = 0;
 				WTW.addUnloadZoneToQueue(i);
 			}
@@ -626,7 +611,7 @@ WTWJS.prototype.unloadAllZones = function() {
 		WTW.things = [];
 		WTW.automations = [];
 	} catch (ex) {
-		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-unloadAllZones=" + ex.message);
+		WTW.log('core-scripts-actionzones-wtw_actionzonefunctions.js-unloadAllZones=' + ex.message);
 	}
 	return zconnectinggrids;
 }
@@ -705,7 +690,7 @@ WTWJS.prototype.getSpawnPoint = function(zspawnzones, zspawnactionzoneid) {
 			zspawnpoint.position.z += zrand2;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-actionzones-wtw_actionzonefunctions.js-getSpawnPoint=" + ex.message);
+		WTW.log('core-scripts-actionzones-wtw_actionzonefunctions.js-getSpawnPoint=' + ex.message);
 	}
 	return zspawnpoint;
 }

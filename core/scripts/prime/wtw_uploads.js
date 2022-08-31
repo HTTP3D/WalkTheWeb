@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -47,7 +47,7 @@ WTWJS.prototype.getUploadFileData = function(zimageid) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_uploads.js-getUploadFileData=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_uploads.js-getUploadFileData=' + ex.message);
 	}
 	return {
 		'filedata':zfiledata,
@@ -109,7 +109,7 @@ WTWJS.prototype.saveToLocalDB = function(zstorename, zobject) {
 			};
 			zdbrequest.onupgradeneeded = function(event) {
 				var zdatabase    = event.target.result;
-				var zobjectstore = zdatabase.createObjectStore(zstorename, {keyPath: "id"});
+				var zobjectstore = zdatabase.createObjectStore(zstorename, {keyPath: 'id'});
 			};
 			zdbrequest.onsuccess = function(event) {
 				var zdatabase      = event.target.result;
@@ -138,7 +138,7 @@ WTWJS.prototype.getCountDB = function(zstorename) {
 			};
 			zdbrequest.onupgradeneeded = function(event) {
 				var zdatabase    = event.target.result;
-				var zobjectstore = zdatabase.createObjectStore(zstorename, {keyPath: "id"});
+				var zobjectstore = zdatabase.createObjectStore(zstorename, {keyPath: 'id'});
 			};
 			zdbrequest.onsuccess = function(event) {
 				var zdatabase      = event.target.result;
@@ -146,7 +146,7 @@ WTWJS.prototype.getCountDB = function(zstorename) {
 				var zobjectstore   = ztransaction.objectStore(zstorename);
 				var zcount = zobjectstore.count();
 				zcount.onsuccess = function() {
-					console.log("db count=" + zcount.result);
+					console.log('db count=' + zcount.result);
 				};
 			};
 		}
@@ -158,10 +158,10 @@ WTWJS.prototype.isUploadReadyOrAdd = async function(zuploadid) {
 	var zready = false;
 	try {
 		if (zuploadid != '') {
-			/* var localdbname = wtw_domainname.replace(".",""); */
+			/* var localdbname = wtw_domainname.replace('.',''); */
 			var zqueue = null;
 			var zfound = false;
-			if (wtw_uploads != null && zuploadid != "") {
+			if (wtw_uploads != null && zuploadid != '') {
 				for (var i = 0; i < wtw_uploads.length; i++) {
 					if (wtw_uploads[i] != null) {
 						if (wtw_uploads[i].uploadid == zuploadid) {
@@ -182,9 +182,9 @@ WTWJS.prototype.isUploadReadyOrAdd = async function(zuploadid) {
 				var zuploadind = WTW.getNextCount(wtw_uploads);
 				wtw_uploads[zuploadind] = WTW.newUpload();
 				wtw_uploads[zuploadind].uploadid = zuploadid;
-				wtw_uploads[zuploadind].queue = "1";
+				wtw_uploads[zuploadind].queue = '1';
 				/* if (WTW.getBrowser()=='ie') { */
-					WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zuploadid, 
+					WTW.getAsyncJSON('/connect/upload.php?uploadid=' + zuploadid, 
 						function(zresponse) {
 							WTW.loadFileUpload(JSON.parse(zresponse), zuploadid);
 						}
@@ -195,7 +195,7 @@ WTWJS.prototype.isUploadReadyOrAdd = async function(zuploadid) {
 						zadduploads[0] = zresponse1; 
 						WTW.loadFileUpload(zadduploads, zadduploads[0].uploadid);
 					}).catch(function (error) {
-						WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zuploadid, 
+						WTW.getAsyncJSON('/connect/upload.php?uploadid=' + zuploadid, 
 							function(zresponse) {
 								WTW.loadFileUpload(JSON.parse(zresponse), zuploadid);
 							}
@@ -207,7 +207,7 @@ WTWJS.prototype.isUploadReadyOrAdd = async function(zuploadid) {
 			zready = true;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_uploads.js-isUploadReadyOrAdd=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_uploads.js-isUploadReadyOrAdd=' + ex.message);
 	}
 	return zready;
 }
@@ -218,17 +218,17 @@ WTWJS.prototype.loadFileUpload = function(zadduploads, zuploadid, zsavelocal) {
 		/* if (zsavelocal == undefined) {
 			zsavelocal = true;
 		}
-		var localdbname = wtw_domainname.replace(".",""); */
+		var localdbname = wtw_domainname.replace('.',''); */
 		var zh3duploadind = WTW.getUploadInd(zuploadid);
 		if (zadduploads != null) {
 			for (var i=0;i < zadduploads.length;i++) {
-				if (zadduploads[i].uploadid != "") {
+				if (zadduploads[i].uploadid != '') {
 					if (WTW.isUploadAdded(zadduploads[i].uploadid) == false) {
 						var zuploadind = WTW.getNextCount(wtw_uploads);
 						wtw_uploads[zuploadind] = zadduploads[i];
 						var zimageinfo = WTW.getUploadFileData(zuploadid);
 						zimageinfo.image.onload = function() {
-							wtw_uploads[zuploadind].queue = "0";
+							wtw_uploads[zuploadind].queue = '0';
 						}
 						/* if (WTW.getBrowser()!='ie') {
 							if (zsavelocal) {
@@ -239,7 +239,7 @@ WTWJS.prototype.loadFileUpload = function(zadduploads, zuploadid, zsavelocal) {
 						wtw_uploads[zh3duploadind] = zadduploads[i];
 						var zimageinfo = WTW.getUploadFileData(zuploadid);
 						zimageinfo.image.onload = function() {
-							wtw_uploads[zh3duploadind].queue = "0";
+							wtw_uploads[zh3duploadind].queue = '0';
 						}
 						/* if (WTW.getBrowser()!='ie') {
 							if (zsavelocal) {
@@ -251,7 +251,7 @@ WTWJS.prototype.loadFileUpload = function(zadduploads, zuploadid, zsavelocal) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_uploads.js-loadFileUpload=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_uploads.js-loadFileUpload=' + ex.message);
 	}
 }
 
@@ -267,17 +267,17 @@ WTWJS.prototype.initLoadUpload = async function(zuploadid, ztempid, zrefreshopti
 		if (zparentname == undefined) {
 			zparentname = null;
 		}
-		/* var localdbname = wtw_domainname.replace(".",""); */
-		if (zuploadid != "") {
+		/* var localdbname = wtw_domainname.replace('.',''); */
+		if (zuploadid != '') {
 			if (WTW.isUploadReady(zuploadid)) {
 				WTW.setUploadCovering(zuploadid, zrefreshoption, zmoldname, zmolddef, zparentname);
 			} else if (WTW.isUploadInQueue(zuploadid)) {
 			} else {
 				var zuploadind = WTW.getNextCount(wtw_uploads);
 				wtw_uploads[zuploadind] = zuploadid;
-				wtw_uploads[zuploadind].queue = "1";
+				wtw_uploads[zuploadind].queue = '1';
 				/* if (WTW.getBrowser()=='ie') { */
-					WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zuploadid, 
+					WTW.getAsyncJSON('/connect/upload.php?uploadid=' + zuploadid, 
 						function(zresponse) {
 							WTW.loadUpload(JSON.parse(zresponse), zuploadid, zrefreshoption, false, zmoldname, zmolddef, zparentname);
 						}
@@ -288,7 +288,7 @@ WTWJS.prototype.initLoadUpload = async function(zuploadid, ztempid, zrefreshopti
 						zadduploads[0] = zresponse1; 
 						WTW.loadUpload(zadduploads, zadduploads[0].uploadid, zrefreshoption, false, zmoldname, zmolddef, zparentname);
 					}).catch(function (error) {
-						WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zuploadid, 
+						WTW.getAsyncJSON('/connect/upload.php?uploadid=' + zuploadid, 
 							function(zresponse) {
 								WTW.loadUpload(JSON.parse(zresponse), zuploadid, zrefreshoption, false, zmoldname, zmolddef, zparentname);
 							}
@@ -298,7 +298,7 @@ WTWJS.prototype.initLoadUpload = async function(zuploadid, ztempid, zrefreshopti
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_uploads.js-initLoadUpload=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_uploads.js-initLoadUpload=' + ex.message);
 	}
 }
 
@@ -318,17 +318,17 @@ WTWJS.prototype.loadUpload = function(zadduploads, zuploadid, zrefreshoption, zs
 		if (zparentname == undefined) {
 			zparentname = null;
 		}
-		/* var localdbname = wtw_domainname.replace(".",""); */
+		/* var localdbname = wtw_domainname.replace('.',''); */
 		var zh3duploadind = WTW.getUploadInd(zuploadid);
 		if (zadduploads != null) {
 			for (var i=0;i < zadduploads.length;i++) {
-				if (zadduploads[i].uploadid != "") {
+				if (zadduploads[i].uploadid != '') {
 					if (WTW.isUploadReady(zadduploads[i].uploadid) == false) {
 						zuploadind = WTW.getNextCount(wtw_uploads);
 						wtw_uploads[zuploadind] = zadduploads[i];
 						var zimageinfo = WTW.getUploadFileData(zuploadid);
 						zimageinfo.image.onload = function() {
-							wtw_uploads[zuploadind].queue = "0";
+							wtw_uploads[zuploadind].queue = '0';
 						}
 						/* if (WTW.getBrowser()!='ie') {
 							if (zsavelocal) {
@@ -339,7 +339,7 @@ WTWJS.prototype.loadUpload = function(zadduploads, zuploadid, zrefreshoption, zs
 						wtw_uploads[zh3duploadind] = zadduploads[i];
 						var zimageinfo = WTW.getUploadFileData(zuploadid);
 						zimageinfo.image.onload = function() {
-							wtw_uploads[zh3duploadind].queue = "0";
+							wtw_uploads[zh3duploadind].queue = '0';
 						}
 						/* if (WTW.getBrowser()!='ie') {
 							if (zsavelocal) {
@@ -353,7 +353,7 @@ WTWJS.prototype.loadUpload = function(zadduploads, zuploadid, zrefreshoption, zs
 		WTW.setUploadCovering(zuploadid, zrefreshoption, zmoldname, zmolddef, zparentname);
 		WTW.setShownMolds();
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_uploads.js-loadUpload=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_uploads.js-loadUpload=' + ex.message);
 	}
 }
 
@@ -390,12 +390,12 @@ WTWJS.prototype.setUploadCovering = function(zuploadid, zrefreshoption, zmoldnam
 					WTW.extraGround.material.dispose();
 					WTW.extraGround.material = null;
 				}
-				var zextragroundmaterial = new BABYLON.StandardMaterial("egmat", scene);
+				var zextragroundmaterial = new BABYLON.StandardMaterial('egmat', scene);
 				WTW.extraGround.material = zextragroundmaterial;
 				zextragroundmaterial.specularColor = new BABYLON.Color3(.1, .1, .1);
 				zextragroundmaterial.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
 				var zimageinfo = WTW.getUploadFileData(zuploadid);
-				zextragroundmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.filedata, "egmattexture", scene);
+				zextragroundmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.filedata, 'egmattexture', scene);
 				var zeguscale = 500;
 				var zegvscale = 500;
 				zextragroundmaterial.diffuseTexture.uScale = zeguscale;
@@ -440,14 +440,14 @@ WTWJS.prototype.setUploadCovering = function(zuploadid, zrefreshoption, zmoldnam
 				zposx = ztransformposition.posx;
 				zposy = ztransformposition.posy;
 				zposz = ztransformposition.posz;
-				WTW.loadTerrainAdvancedImages(zmoldname, zscalingx, zscalingy, zscalingz, zsubdivisions, '', zmolddef.graphics.heightmap.id, zminheight, zmaxheight, zparentname, zmolddef, "terrainadvanced", zposx, zposy, zposz, zmolddef.graphics.heightmap.mixmapid, zmolddef.graphics.heightmap.texturerid, zmolddef.graphics.heightmap.texturegid, zmolddef.graphics.heightmap.texturebid, zmolddef.graphics.heightmap.texturebumprid, zmolddef.graphics.heightmap.texturebumpgid, zmolddef.graphics.heightmap.texturebumpbid);
+				WTW.loadTerrainAdvancedImages(zmoldname, zscalingx, zscalingy, zscalingz, zsubdivisions, '', zmolddef.graphics.heightmap.id, zminheight, zmaxheight, zparentname, zmolddef, 'terrainadvanced', zposx, zposy, zposz, zmolddef.graphics.heightmap.mixmapid, zmolddef.graphics.heightmap.texturerid, zmolddef.graphics.heightmap.texturegid, zmolddef.graphics.heightmap.texturebid, zmolddef.graphics.heightmap.texturebumprid, zmolddef.graphics.heightmap.texturebumpgid, zmolddef.graphics.heightmap.texturebumpbid);
 				break;
 			default:
 
 				break;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_uploads.js-setUploadCovering=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_uploads.js-setUploadCovering=' + ex.message);
 	}
 }
 

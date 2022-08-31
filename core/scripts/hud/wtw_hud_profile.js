@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -22,7 +22,7 @@ WTWJS.prototype.hudGetProfile = function() {
 		WTW.hudAddSaveClose('profile', 0, ztop-8.8, 0);
 		
 		/* fetch the user profile */
-		WTW.getAsyncJSON("/connect/userprofile.php?useravatarid=" + dGet('wtw_tuseravatarid').value, 
+		WTW.getAsyncJSON('/connect/userprofile.php?useravatarid=' + dGet('wtw_tuseravatarid').value, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				var zdob = '';
@@ -38,7 +38,7 @@ WTWJS.prototype.hudGetProfile = function() {
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_profile.js-hudGetProfile=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_profile.js-hudGetProfile=' + ex.message);
 	}
 }
 
@@ -80,7 +80,7 @@ WTWJS.prototype.hudClearProfile = async function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_profile.js-hudClearProfile=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_profile.js-hudClearProfile=' + ex.message);
 	}
 }
 
@@ -98,7 +98,7 @@ WTWJS.prototype.hudSaveProfile = async function() {
 			'dob': dGet('hud-textbox-dob').value.replace('|',''),
 			'function':'savemyprofile'
 		};
-		WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+		WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -108,7 +108,7 @@ WTWJS.prototype.hudSaveProfile = async function() {
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_profile.js-hudSaveProfile=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_profile.js-hudSaveProfile=' + ex.message);
 	}
 }
 

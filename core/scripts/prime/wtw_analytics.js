@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -14,7 +14,7 @@ WTWJS.prototype.checkAnalytics = function(zactionzoneind) {
 			var zcommunityid = WTW.actionZones[zactionzoneind].communityinfo.communityid;
 			var zbuildingid = WTW.actionZones[zactionzoneind].buildinginfo.buildingid;
 			var zthingid = WTW.actionZones[zactionzoneind].thinginfo.thingid;
-			if (zmoldname.indexOf("loadzone") > -1 && zmoldname.indexOf("unloadzone") == -1 && WTW.actionZones[zactionzoneind].status == 0 && WTW.actionZones[zactionzoneind].actionzonename.toLowerCase().indexOf("custom") == -1 && (zcommunityid != '' || zbuildingid != '' || zthingid != '')) {
+			if (zmoldname.indexOf('loadzone') > -1 && zmoldname.indexOf('unloadzone') == -1 && WTW.actionZones[zactionzoneind].status == 0 && WTW.actionZones[zactionzoneind].actionzonename.toLowerCase().indexOf('custom') == -1 && (zcommunityid != '' || zbuildingid != '' || zthingid != '')) {
 				if (zactionzonename == 'Extreme Load Zone') {
 					WTW.trackPageView(zactionzoneind, 'extreme');
 				} else if (zactionzonename == 'High - Load when far') {
@@ -27,7 +27,7 @@ WTWJS.prototype.checkAnalytics = function(zactionzoneind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_analytics.js-checkAnalytics=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_analytics.js-checkAnalytics=' + ex.message);
 	}
 }
 
@@ -39,7 +39,7 @@ WTWJS.prototype.queueAnalytics = function(zactionzoneind, zdistancename) {
 		WTW.analyticsQueue[zanalyticsqueueind].actionzoneind = zactionzoneind;
 		WTW.analyticsQueue[zanalyticsqueueind].distancename = zdistancename;
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_analytics.js-queueAnalytics=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_analytics.js-queueAnalytics=' + ex.message);
 	}
 }
 
@@ -55,7 +55,7 @@ WTWJS.prototype.checkAnalyticsQueue = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_analytics.js-checkAnalyticsQueue=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_analytics.js-checkAnalyticsQueue=' + ex.message);
 	}
 }
 
@@ -65,58 +65,58 @@ WTWJS.prototype.trackPageView = async function(zactionzoneind, zdistancename) {
 		var zcommunityid = WTW.actionZones[Number(zactionzoneind)].communityinfo.communityid;
 		var zbuildingid = WTW.actionZones[Number(zactionzoneind)].buildinginfo.buildingid;
 		var zthingid = WTW.actionZones[Number(zactionzoneind)].thinginfo.thingid;
-		var zanalyticsid = "";
-		var zitem = "";
-		if (zcommunityid != "") {
+		var zanalyticsid = '';
+		var zitem = '';
+		if (zcommunityid != '') {
 			zanalyticsid = WTW.actionZones[Number(zactionzoneind)].communityinfo.analyticsid;
-			zitem = "community";
+			zitem = 'community';
 		}
-		if (zbuildingid != "") {
+		if (zbuildingid != '') {
 			zanalyticsid = WTW.actionZones[Number(zactionzoneind)].buildinginfo.analyticsid;
-			zitem = "building";
+			zitem = 'building';
 		}
-		if (zthingid != "") {
+		if (zthingid != '') {
 			zanalyticsid = WTW.actionZones[Number(zactionzoneind)].thinginfo.analyticsid;
-			zitem = "thing";
+			zitem = 'thing';
 		}
-		if (zanalyticsid != "" && zanalyticsid != undefined) {
-			var zsrc = "";
+		if (zanalyticsid != '' && zanalyticsid != undefined) {
+			var zsrc = '';
 			switch (zitem) {
-				case "community":
+				case 'community':
 					if (zdistancename == 'extreme') {
-						zsrc = "/core/handlers/community-loaded-extreme.php?analyticsid=" + zanalyticsid + "&communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid;
+						zsrc = '/core/handlers/community-loaded-extreme.php?analyticsid=' + zanalyticsid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid;
 					} else if (zdistancename == 'high') {
-						zsrc = "/core/handlers/community-loaded-high.php?analyticsid=" + zanalyticsid + "&communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid;
+						zsrc = '/core/handlers/community-loaded-high.php?analyticsid=' + zanalyticsid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid;
 					} else {
-						zsrc = "/core/handlers/community-loaded-near.php?analyticsid=" + zanalyticsid + "&communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid;
+						zsrc = '/core/handlers/community-loaded-near.php?analyticsid=' + zanalyticsid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid;
 					}
 					break;
-				case "building":
+				case 'building':
 					if (zdistancename == 'extreme') {
-						zsrc = "/core/handlers/building-loaded-extreme.php?analyticsid=" + zanalyticsid + "&communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid;
+						zsrc = '/core/handlers/building-loaded-extreme.php?analyticsid=' + zanalyticsid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid;
 					} else if (zdistancename == 'high') {
-						zsrc = "/core/handlers/building-loaded-high.php?analyticsid=" + zanalyticsid + "&communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid;
+						zsrc = '/core/handlers/building-loaded-high.php?analyticsid=' + zanalyticsid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid;
 					} else {
-						zsrc = "/core/handlers/building-loaded-near.php?analyticsid=" + zanalyticsid + "&communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid;
+						zsrc = '/core/handlers/building-loaded-near.php?analyticsid=' + zanalyticsid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid;
 					}
 					break;
-				case "thing":
+				case 'thing':
 					if (zdistancename == 'extreme') {
-						zsrc = "/core/handlers/thing-loaded-extreme.php?analyticsid=" + zanalyticsid + "&communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid;
+						zsrc = '/core/handlers/thing-loaded-extreme.php?analyticsid=' + zanalyticsid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid;
 					} else if (zdistancename == 'high') {
-						zsrc = "/core/handlers/thing-loaded-high.php?analyticsid=" + zanalyticsid + "&communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid;
+						zsrc = '/core/handlers/thing-loaded-high.php?analyticsid=' + zanalyticsid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid;
 					} else {
-						zsrc = "/core/handlers/thing-loaded-near.php?analyticsid=" + zanalyticsid + "&communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid;
+						zsrc = '/core/handlers/thing-loaded-near.php?analyticsid=' + zanalyticsid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid;
 					}
 					break;
 			} 
-			if (zsrc != "") {
+			if (zsrc != '') {
 				WTW.getAsycnWebpage(zsrc, null);
 			}
 		} 
 		
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_analytics.js-trackPageView=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_analytics.js-trackPageView=' + ex.message);
 	}
 }
 

@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -7,43 +7,43 @@
 WTWJS.prototype.initEvents = function() {
 	/* initialize all event listeners for input controls */
 	try {
-		dGet('wtw_renderCanvas').addEventListener("click", WTW.mouseClick);
-		window.addEventListener("onkeydown", WTW.keyDown,true);
-		window.addEventListener("keydown", WTW.keyDown);		
-		window.addEventListener("onkeyup", WTW.keyUp,true);
-		window.addEventListener("keyup", WTW.keyUp);	
-		if ("onmousewheel" in document) {
-			window.addEventListener("mousewheel", WTW.mouseScroll1,true);
-			//window.addEventListener("wheel", mouseScroll);		
+		dGet('wtw_renderCanvas').addEventListener('click', WTW.mouseClick);
+		window.addEventListener('onkeydown', WTW.keyDown,true);
+		window.addEventListener('keydown', WTW.keyDown);		
+		window.addEventListener('onkeyup', WTW.keyUp,true);
+		window.addEventListener('keyup', WTW.keyUp);	
+		if ('onmousewheel' in document) {
+			window.addEventListener('mousewheel', WTW.mouseScroll1,true);
+			//window.addEventListener('wheel', mouseScroll);		
 		} else {
-			window.addEventListener("DOMMouseScroll", function(e) {	WTW.mouseScroll2(e); });
+			window.addEventListener('DOMMouseScroll', function(e) {	WTW.mouseScroll2(e); });
 		}
-		dGet('wtw_renderCanvas').addEventListener("pointerdown", WTW.mouseDown);
-		dGet('wtw_renderCanvas').addEventListener("pointerup", WTW.mouseUp);
-		dGet('wtw_renderCanvas').addEventListener("pointermove", WTW.mouseMove);
-		dGet('wtw_renderCanvas').addEventListener("mousedown", WTW.mouseDown);
-		dGet('wtw_renderCanvas').addEventListener("mouseup", WTW.mouseUp);
-		dGet('wtw_renderCanvas').addEventListener("mousemove", WTW.mouseMove);
-		window.addEventListener("contextmenu", WTW.mouseRight);
+		dGet('wtw_renderCanvas').addEventListener('pointerdown', WTW.mouseDown);
+		dGet('wtw_renderCanvas').addEventListener('pointerup', WTW.mouseUp);
+		dGet('wtw_renderCanvas').addEventListener('pointermove', WTW.mouseMove);
+		dGet('wtw_renderCanvas').addEventListener('mousedown', WTW.mouseDown);
+		dGet('wtw_renderCanvas').addEventListener('mouseup', WTW.mouseUp);
+		dGet('wtw_renderCanvas').addEventListener('mousemove', WTW.mouseMove);
+		window.addEventListener('contextmenu', WTW.mouseRight);
 		window.addEventListener('touchstart', WTW.touchDown, false);
 		window.addEventListener('touchend', WTW.touchUp, false);
 		window.addEventListener('touchmove', WTW.touchMoving, false);
 		window.addEventListener('touchcancel', WTW.touchCancel, false);
 		window.addEventListener('touchleave', WTW.touchCancel, false); 
-		window.addEventListener("beforeunload", WTW.beforeUnload,false);
+		window.addEventListener('beforeunload', WTW.beforeUnload,false);
 		document.getElementById('wtw_audio').addEventListener('click', function() {
 			WTW.toggleMicMute();
 		});
 
 		if (window.addEventListener) {
-			window.addEventListener("message", WTW.onMessage, false);        
+			window.addEventListener('message', WTW.onMessage, false);        
 		} else if (window.attachEvent) {
-			window.attachEvent("onmessage", WTW.onMessage, false);
+			window.attachEvent('onmessage', WTW.onMessage, false);
 		}
 
-		document.addEventListener("focus", WTW.checkFocus , true);
+		document.addEventListener('focus', WTW.checkFocus , true);
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_init.js-initEvents=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_init.js-initEvents=' + ex.message);
 	}
 }
 
@@ -74,7 +74,7 @@ window.onload = function() {
 			WTW.adminInit();
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_init.js-onload=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_init.js-onload=' + ex.message);
 	}
 }
 window.onresize = function () {
@@ -84,7 +84,7 @@ window.onresize = function () {
 			WTW.setWindowSize();
 		}
 	} catch (ex) {
-		WTW.log("init-onresize=" + ex.message);
+		WTW.log('init-onresize=' + ex.message);
 	}
 }
 
@@ -96,7 +96,7 @@ WTWJS.prototype.beforeUnload = function (e) {
 //		e.returnValue = null;
 //		return null;
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_init.js-beforeUnload=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_init.js-beforeUnload=' + ex.message);
 	}
 }
 

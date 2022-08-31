@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -12,10 +12,10 @@ WTWJS.prototype.initLoadSequence = function() {
 			WTW.loadSequence();
 		} else {
 			/* if no, redirects to help and information webpage */
-			window.location.href = "https://www.walktheweb.com/wiki/trouble-viewing-3d-websites/";
+			window.location.href = 'https://www.walktheweb.com/wiki/trouble-viewing-3d-websites/';
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-initLoadSequence=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-initLoadSequence=' + ex.message);
 	} 
 }
 
@@ -46,7 +46,7 @@ WTWJS.prototype.loadSequence = function() {
 			WTW.loadAvatarForEdit();
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-continueLoadSequence=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-continueLoadSequence=' + ex.message);
 	} 
 }
 
@@ -63,12 +63,12 @@ WTWJS.prototype.setContentRating = function() {
 		} else if (avatarid != '') {
 			zwebtype = 'avatar';
 		}
-		WTW.getAsyncJSON("/connect/rating.php?webid=" + communityid + buildingid + thingid + avatarid + "&webtype=" + zwebtype, 
+		WTW.getAsyncJSON('/connect/rating.php?webid=' + communityid + buildingid + thingid + avatarid + '&webtype=' + zwebtype, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (dGet('wtw_rating') != null) {
 					if (zresponse.unratedcontent == '1') {
-						dGet('wtw_rating').innerHTML = zresponse.rating + "*";
+						dGet('wtw_rating').innerHTML = zresponse.rating + '*';
 					} else {
 						dGet('wtw_rating').innerHTML = zresponse.rating;
 					}
@@ -80,7 +80,7 @@ WTWJS.prototype.setContentRating = function() {
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-setContentRating=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-setContentRating=' + ex.message);
 	} 
 }
 
@@ -90,7 +90,7 @@ WTWJS.prototype.initEnvironment = function() {
 		/* every user has an instance assigned */
 		/* this allows different browsers or computers to have their own instance */
 		/* instance is used in the avatar name, helpful in multiplayer mode */
-		var zinstanceid = WTW.getCookie("instanceid");
+		var zinstanceid = WTW.getCookie('instanceid');
 		if (dGet('wtw_tinstanceid').value == '' && zinstanceid != null) {
 			if (zinstanceid.length == 24) {
 				dGet('wtw_tinstanceid').value = zinstanceid;
@@ -100,23 +100,23 @@ WTWJS.prototype.initEnvironment = function() {
 			zinstanceid = WTW.getRandomString(24);
 			dGet('wtw_tinstanceid').value = zinstanceid;
 		}
-		WTW.setCookie("instanceid", zinstanceid, 365);
+		WTW.setCookie('instanceid', zinstanceid, 365);
 		window.name = zinstanceid;
 		/* add mouse over for canvas */
 		/* sets WTW.canvasFocus variable to allow avatar movement only when canvas has focus */
 		/* also prevents animations an movement to keep going when mouse leaves the window */
-		dGet("wtw_renderCanvas").onmouseover = function() {WTW.canvasFocus = 1;};
-		dGet("wtw_renderCanvas").onmouseout = function() {WTW.canvasFocus = 0;WTW.keysPressed=[];};
+		dGet('wtw_renderCanvas').onmouseover = function() {WTW.canvasFocus = 1;};
+		dGet('wtw_renderCanvas').onmouseout = function() {WTW.canvasFocus = 0;WTW.keysPressed=[];};
 		
 		/* set up canvas for babylon */
-		canvas = dGet("wtw_renderCanvas");
+		canvas = dGet('wtw_renderCanvas');
 		/* event listener allows screen shots of the canvas */
-		canvas.addEventListener("webglcontextrestored", function (event) {/*initializeResources();*/}, false);
+		canvas.addEventListener('webglcontextrestored', function (event) {/*initializeResources();*/}, false);
 		
 		/* initialize babylon game engine */
 		engine = new BABYLON.Engine(canvas, true, {deterministicLockstep: false, lockstepMaxSteps: 4, doNotHandleContextLost: WTW.doNotHandleContextLost});
 		/* add WalkTheWeb version to the console.log */
-		console.log("%c\r\n\r\nWalkTheWeb Open-Source 3D Internet\r\n" + wtw_versiontext + "\r\n", "color:green;font-weight:bold;");
+		console.log('%c\r\n\r\nWalkTheWeb Open-Source 3D Internet\r\n' + wtw_versiontext + '\r\n', 'color:green;font-weight:bold;');
 		
 		/* optional optimization settings */
 		if (WTW.adminView == 1) {
@@ -127,7 +127,7 @@ WTWJS.prototype.initEnvironment = function() {
 		
 		/* initialize scene */
 		scene = new BABYLON.Scene(engine);        
-		scene.name = "WalkTheWeb";
+		scene.name = 'WalkTheWeb';
 		scene.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
 		
 		/* initialize cannon physics engine */
@@ -173,12 +173,12 @@ WTWJS.prototype.initEnvironment = function() {
 		
 		if (WTW.highlightLayer == null) {
 			/* initialize highlight layer for scene - used when selecting objects as needed */
-			WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
+			WTW.highlightLayer = new BABYLON.HighlightLayer('highlightlayer', scene);
 		}
 		
 		/* set 2 light sources so that the front and backs of 3D Objects have at least a minimum light */
 		/* direct light immitating the sun */
-		WTW.sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -200, -300), scene);
+		WTW.sun = new BABYLON.DirectionalLight('sun', new BABYLON.Vector3(-1, -200, -300), scene);
 		WTW.sun.position = new BABYLON.Vector3(0, WTW.sunPositionY, 0);
 		WTW.sun.intensity = WTW.getSunIntensity(WTW.init.skyInclination, WTW.init.skyAzimuth);
 		WTW.sun.shadowMinZ = 1;
@@ -189,11 +189,11 @@ WTWJS.prototype.initEnvironment = function() {
 		WTW.sun.groundColor = new BABYLON.Color3(.1, .1, .1);
 
 		/* lesser light for back sides of 3D Objects */
-		WTW.backLight = new BABYLON.DirectionalLight("backlight", new BABYLON.Vector3(1, -200, 300), scene);
+		WTW.backLight = new BABYLON.DirectionalLight('backlight', new BABYLON.Vector3(1, -200, 300), scene);
 		WTW.backLight.intensity = WTW.sun.intensity / 1.2;
 		
 		/* initialize sky sphere - scaling and material settings */
-		WTW.sky = BABYLON.MeshBuilder.CreateSphere("sky", {segments: 40, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.BACKSIDE}, scene);
+		WTW.sky = BABYLON.MeshBuilder.CreateSphere('sky', {segments: 40, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.BACKSIDE}, scene);
 		WTW.sky.scaling.x = 5000;
 		WTW.sky.scaling.y = 4800;
 		WTW.sky.scaling.z = 5000;
@@ -202,7 +202,7 @@ WTWJS.prototype.initEnvironment = function() {
 		WTW.sky.position.z = 0;
 		WTW.sky.isPickable = false;
 		WTW.sky.disableLighting = true;
-		var zskyboxmat = new BABYLON.SkyMaterial("skyMaterial", scene);
+		var zskyboxmat = new BABYLON.SkyMaterial('skyMaterial', scene);
 		zskyboxmat.backFaceCulling = false;
 		WTW.sky.material = zskyboxmat;
 		window.setTimeout(function() {
@@ -210,13 +210,13 @@ WTWJS.prototype.initEnvironment = function() {
 		}, 1000);
 		
 		/* initialize extra ground (extended ground that never ends while the avatar walks) */
-		WTW.extraGround = BABYLON.MeshBuilder.CreateGround("communityeground", {width: 5000, height: 5000, subdivisions: 2, updatable: false}, scene);
+		WTW.extraGround = BABYLON.MeshBuilder.CreateGround('communityeground', {width: 5000, height: 5000, subdivisions: 2, updatable: false}, scene);
 		WTW.extraGround.position.x = 0;
 		WTW.extraGround.position.y = 0;
 		WTW.extraGround.position.z = 0;
 		WTW.extraGround.isPickable = false;
 		WTW.extraGround.checkCollisions = true;
-		WTW.extraGround.material = new BABYLON.StandardMaterial("mat-communityeground", scene);
+		WTW.extraGround.material = new BABYLON.StandardMaterial('mat-communityeground', scene);
 		WTW.extraGround.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
 		WTW.extraGround.material.diffuseTexture = new BABYLON.Texture(WTW.init.groundTexturePath, scene);
 		WTW.extraGround.material.diffuseTexture.uScale = 500;
@@ -236,20 +236,20 @@ WTWJS.prototype.initEnvironment = function() {
 
 		/* set initial menubar names for community and building */
 		if (dGet('wtw_showcommunityname') != null) {
-			dGet('wtw_showcommunityname').innerHTML = "HTTP3D Inc.";
+			dGet('wtw_showcommunityname').innerHTML = 'HTTP3D Inc.';
 		}
 		if (dGet('wtw_showbuildingname') != null) {
-			dGet('wtw_showbuildingname').innerHTML = "<span style='color:yellow;'>Welcome to WalkTheWeb</span>";
+			dGet('wtw_showbuildingname').innerHTML = "<span class='wtw-yellow'>Welcome to WalkTheWeb</span>";
 		}
 		WTW.showInline('wtw_showcommunityname');
 		WTW.showInline('wtw_showbuildingname');
-		if (dGet("wtw_tuserid").value == "") {
+		if (dGet('wtw_tuserid').value == '') {
 			if (dGet('wtw_mainmenudisplayname') != null) {
-				dGet('wtw_mainmenudisplayname').innerHTML = "<span style='color:yellow;'>Login</span>";
+				dGet('wtw_mainmenudisplayname').innerHTML = "<span class='wtw-yellow'>Login</span>";
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-initEnvironment=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-initEnvironment=' + ex.message);
 	} 
 }
 
@@ -257,7 +257,7 @@ WTWJS.prototype.loadLoginSettings = function() {
 	/* load login settings */
 	try {
 		if (WTW.adminView == 1) {
-			if (dGet('wtw_tuserid').value == "") {
+			if (dGet('wtw_tuserid').value == '') {
 				/* if not logged in, redirect user to server home page */
 				window.location.href = '/';
 			}
@@ -270,7 +270,7 @@ WTWJS.prototype.loadLoginSettings = function() {
 			WTW.loadLoginAvatarSelect();
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-loadLoginSettings=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-loadLoginSettings=' + ex.message);
 	} 
 }
 
@@ -288,11 +288,11 @@ WTWJS.prototype.loadLoginAvatarSelect = function() {
 			/* check cookie and load Avatar OR open select Avatar list */
 			WTW.hide('wtw_menulogin');
 			WTW.hide('wtw_menuloggedin');
-			var zuseravatarid = WTW.getCookie("useravatarid");
+			var zuseravatarid = WTW.getCookie('useravatarid');
 			if (zuseravatarid != null) {
 				var zglobaluseravatarid = '';
-				if (WTW.getCookie("globaluseravatarid") != null) {
-					zglobaluseravatarid = WTW.getCookie("globaluseravatarid");
+				if (WTW.getCookie('globaluseravatarid') != null) {
+					zglobaluseravatarid = WTW.getCookie('globaluseravatarid');
 				}
 				/* if avatar saved, load avatar */
 				WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobaluseravatarid, zuseravatarid, '', false);
@@ -302,7 +302,7 @@ WTWJS.prototype.loadLoginAvatarSelect = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-loadLoginAvatarSelect=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-loadLoginAvatarSelect=' + ex.message);
 	} 
 }
 
@@ -318,7 +318,7 @@ WTWJS.prototype.loadInitSettings = function() {
 				WTW.buildingName = wtw_domain.buildinginfo.buildingname;
 				WTW.communityName = WTW.decode(wtw_domain.communityinfo.communityname);
 				if (dGet('wtw_communitysummary') != null) {
-					dGet('wtw_communitysummary').innerHTML = WTW.decode(wtw_domain.communityinfo.communityname) + " Community Summary";
+					dGet('wtw_communitysummary').innerHTML = WTW.decode(wtw_domain.communityinfo.communityname) + ' Community Summary';
 				}
 				WTW.init.groundTextureID = wtw_domain.domaininfo.textureid;
 				WTW.init.groundTexturePath = wtw_domain.domaininfo.texturepath;
@@ -383,20 +383,20 @@ WTWJS.prototype.loadInitSettings = function() {
 			}
 		}
 		if (communityid == null) {
-			communityid = "";
+			communityid = '';
 		}
 		if (buildingid == null) {
-			buildingid = "";
+			buildingid = '';
 		}
 		if (thingid == null) {
-			thingid = "";
+			thingid = '';
 		}
-		if (buildingid != "") {
-			communityid = "";
+		if (buildingid != '') {
+			communityid = '';
 		}
-		if (thingid != "") {
-			communityid = "";
-			buildingid = "";
+		if (thingid != '') {
+			communityid = '';
+			buildingid = '';
 		}
 		/* create the parent most connecting grid box */
 		/* everything else parents to this reference point */
@@ -414,87 +414,87 @@ WTWJS.prototype.loadInitSettings = function() {
 		/* load primary camera */
 		WTW.loadPrimaryCamera();
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-loadInitSettings=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-loadInitSettings=' + ex.message);
 	} 
 }
 
 WTWJS.prototype.loadUserSettings = function() {
 	/* get the user settings to be used in the 3d scene */
 	try {
-		var zcameradistance = WTW.getCookie("cameradistance");
+		var zcameradistance = WTW.getCookie('cameradistance');
 		if (zcameradistance != null) {
 			if (WTW.isNumeric(zcameradistance)) {
 				WTW.cameraDistance = Number(zcameradistance);
 			}
 		}
-		var zwalkspeed = WTW.getCookie("walkspeed");
+		var zwalkspeed = WTW.getCookie('walkspeed');
 		if (zwalkspeed != null) {
 			if (WTW.isNumeric(zwalkspeed)) {
 				WTW.walkSpeed = Number(zwalkspeed);
 			}
 		}
-		var zwalkanimationspeed = WTW.getCookie("walkanimationspeed");
+		var zwalkanimationspeed = WTW.getCookie('walkanimationspeed');
 		if (zwalkanimationspeed != null) {
 			if (WTW.isNumeric(zwalkanimationspeed)) {
 				WTW.walkAnimationSpeed = Number(zwalkanimationspeed);
 			}
 		}
-		var zturnspeed = WTW.getCookie("turnspeed");
+		var zturnspeed = WTW.getCookie('turnspeed');
 		if (zturnspeed != null) {
 			if (WTW.isNumeric(zturnspeed)) {
 				WTW.turnSpeed = Number(zturnspeed);
 			}
 		}
-		var zturnanimationspeed = WTW.getCookie("turnanimationspeed");
+		var zturnanimationspeed = WTW.getCookie('turnanimationspeed');
 		if (zturnanimationspeed != null) {
 			if (WTW.isNumeric(zturnanimationspeed)) {
 				WTW.turnAnimationSpeed = Number(zturnanimationspeed);
 			}
 		}
-		var zshadowsetting = WTW.getCookie("wtw_shadowsetting");
+		var zshadowsetting = WTW.getCookie('wtw_shadowsetting');
 		if (zshadowsetting != null) {
 			if (WTW.isNumeric(zshadowsetting)) {
 				WTW.shadowSet = Number(zshadowsetting);
 			}
 		}	
-		var zgraphicsetting = WTW.getCookie("graphicsetting");
+		var zgraphicsetting = WTW.getCookie('graphicsetting');
 		if (zgraphicsetting != null) {
 			if (WTW.isNumeric(zgraphicsetting)) {
 				WTW.graphicSet = Number(zgraphicsetting);
 			}
 		}		
-		var zsoundmute = WTW.getCookie("soundmute");
+		var zsoundmute = WTW.getCookie('soundmute');
 		if (zsoundmute != null) {
 			WTW.toggleSoundMute();
 		}
-		var zuseravatarid = WTW.getCookie("useravatarid");
+		var zuseravatarid = WTW.getCookie('useravatarid');
 		if (zuseravatarid != null) {
-			dGet("wtw_tuseravatarid").value = zuseravatarid;
+			dGet('wtw_tuseravatarid').value = zuseravatarid;
 		} else {
-			dGet("wtw_tuseravatarid").value = "";
+			dGet('wtw_tuseravatarid').value = '';
 		}
 
-		var zshowcompass = WTW.getCookie("showcompass");
+		var zshowcompass = WTW.getCookie('showcompass');
 
-		var zshowarrows = WTW.getCookie("showarrows");
+		var zshowarrows = WTW.getCookie('showarrows');
 		if (zshowarrows != null) {
-			if (zshowarrows == "0") {
-				dGet('wtw_arrowsvisibility').innerHTML = WTW.__("Arrows are Hidden");
-				dGet('wtw_arrowsicon').src = "/content/system/images/menuoff.png";
-				dGet('wtw_arrowsicon').alt = WTW.__("Show Arrows");
-				dGet('wtw_arrowsicon').title = WTW.__("Show Arrows");
+			if (zshowarrows == '0') {
+				dGet('wtw_arrowsvisibility').innerHTML = WTW.__('Arrows are Hidden');
+				dGet('wtw_arrowsicon').src = '/content/system/images/menuoff.png';
+				dGet('wtw_arrowsicon').alt = WTW.__('Show Arrows');
+				dGet('wtw_arrowsicon').title = WTW.__('Show Arrows');
 				WTW.hide('wtw_iwalkarrow');
 				WTW.hide('wtw_iwalkarrow2');
 			}
 		}
-		var zshowfps = WTW.getCookie("showfps");
+		var zshowfps = WTW.getCookie('showfps');
 		WTW.showFPS = 0;
 		if (zshowfps != null) {
-			if (zshowfps == "1") {
-				dGet('wtw_fpsvisibility').innerHTML = WTW.__("Counts and FPS are Visible");
-				dGet('wtw_fpsicon').src = "/content/system/images/menuon.png";
-				dGet('wtw_fpsicon').alt = WTW.__("Hide Mold Count");
-				dGet('wtw_fpsicon').title = WTW.__("Hide Mold Count");
+			if (zshowfps == '1') {
+				dGet('wtw_fpsvisibility').innerHTML = WTW.__('Counts and FPS are Visible');
+				dGet('wtw_fpsicon').src = '/content/system/images/menuon.png';
+				dGet('wtw_fpsicon').alt = WTW.__('Hide Mold Count');
+				dGet('wtw_fpsicon').title = WTW.__('Hide Mold Count');
 				WTW.show('wtw_showmeshfps');
 				WTW.showFPS = 1;
 			}
@@ -516,55 +516,55 @@ WTWJS.prototype.loadUserSettings = function() {
 		}
 		if (dGet('wtw_tshadowsetting') != null) {
 			dGet('wtw_tshadowsetting').value = WTW.shadowSet;
-			WTW.setCookie("wtw_shadowsetting",WTW.shadowSet,365);
+			WTW.setCookie('wtw_shadowsetting',WTW.shadowSet,365);
 		}
 		if (dGet('wtw_tgraphicsetting') != null) {
 			dGet('wtw_tgraphicsetting').value = WTW.graphicSet;
-			WTW.setCookie("graphicsetting",WTW.graphicSet,365);
+			WTW.setCookie('graphicsetting',WTW.graphicSet,365);
 		}
 		switch (WTW.shadowSet) {
 			case 0:
                 if (WTW.gpuSetting == 'low') {
-                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (None - Low Resolution) This is your recommended setting.");
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__('Shadows (None - Low Resolution) This is your recommended setting.');
                 }
                 else {
-                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (None - Low Resolution)");
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__('Shadows (None - Low Resolution)');
                 }
 				break;
 			case 1:
                 if (WTW.gpuSetting == 'medium') {
-                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (Some - Medium Resolution) This is your recommended setting.");
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__('Shadows (Some - Medium Resolution) This is your recommended setting.');
                 }
                 else {
-                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (Some - Medium Resolution)");
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__('Shadows (Some - Medium Resolution)');
                 }
 				break;
 			case 2:
-                dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (Most - High Resolution)");
+                dGet('wtw_shadowhelptitle').innerHTML = WTW.__('Shadows (Most - High Resolution)');
 				break;
 			case 3:
                 if (WTW.gpuSetting == 'high') {
-                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (All - Ultimate Resolution) This is your recommended setting.");
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__('Shadows (All - Ultimate Resolution) This is your recommended setting.');
                 }
                 else {
-                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__("Shadows (All - Ultimate Resolution)");
+                    dGet('wtw_shadowhelptitle').innerHTML = WTW.__('Shadows (All - Ultimate Resolution)');
                 }
 				break;
 		}
 		switch (WTW.graphicSet) {
 			case 0:
-				dGet('wtw_graphichelptitle').innerHTML = WTW.__("Graphics (Low Resolution)");
+				dGet('wtw_graphichelptitle').innerHTML = WTW.__('Graphics (Low Resolution)');
 				break;
 			case 1:
-				dGet('wtw_graphichelptitle').innerHTML = WTW.__("Graphics (Optimum Balance)");
+				dGet('wtw_graphichelptitle').innerHTML = WTW.__('Graphics (Optimum Balance)');
 				break;
 			case 2:
-				dGet('wtw_graphichelptitle').innerHTML = WTW.__("Graphics (High Resolution)");
+				dGet('wtw_graphichelptitle').innerHTML = WTW.__('Graphics (High Resolution)');
 				break;
 		}
 		WTW.pluginsLoadUserSettings();
 	} catch (ex) { 
-		WTW.log("core-scripts-prime-wtw_core.js-loadUserSettings=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-loadUserSettings=' + ex.message);
 	}
 }
 
@@ -572,7 +572,7 @@ WTWJS.prototype.loadScene = async function() {
 	/* if a community, fetch the community scene settings */
 	try {
 		if (communityid != 0) {
-			WTW.getAsyncJSON("/connect/community.php?communityid=" + communityid, 
+			WTW.getAsyncJSON('/connect/community.php?communityid=' + communityid, 
 				function(zresponse) {
 					WTW.loadCommunity(JSON.parse(zresponse));
 				}
@@ -582,23 +582,23 @@ WTWJS.prototype.loadScene = async function() {
 			WTW.loadCommunity(null);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-loadScene=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-loadScene=' + ex.message);
 	} 
 }
 
 WTWJS.prototype.loadUserSettingsAfterEngine = function() {
 	/* load any settings that are set after the scene is created */
 	try {
-		var zgpusetting = WTW.getCookie("gpusetting");
+		var zgpusetting = WTW.getCookie('gpusetting');
 		if (zgpusetting != null) {
 			WTW.gpuSetting = zgpusetting;
-			if (WTW.gpuSetting != "high" && WTW.gpuSetting != "medium" && WTW.gpuSetting != "low") {
-				WTW.gpuSetting = "low";
+			if (WTW.gpuSetting != 'high' && WTW.gpuSetting != 'medium' && WTW.gpuSetting != 'low') {
+				WTW.gpuSetting = 'low';
 			}
 		} else {
 			WTW.gpuSetting = WTW.getGPU();
 		}
-		WTW.setCookie("gpusetting", WTW.gpuSetting, 30);
+		WTW.setCookie('gpusetting', WTW.gpuSetting, 30);
 		/* allow animations to start before full scene loads */
 		scene.resetLastAnimationTimeFrame();
 		window.setTimeout(function() {
@@ -607,7 +607,7 @@ WTWJS.prototype.loadUserSettingsAfterEngine = function() {
 			WTW.resetActivityTimer();
 		}, 5000);
 	} catch (ex) { 
-		WTW.log("core-scripts-prime-wtw_core.js-loadUserSettingsAfterEngine=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-loadUserSettingsAfterEngine=' + ex.message);
 	}
 }
 
@@ -627,8 +627,8 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 					WTW.editCommunityAccess = WTW.communities[0].communityinfo.access;
 				}
 			}
-			if (WTW.communityName == "Walk the Web" || WTW.communityName == "WalkTheWeb") {
-				dGet('wtw_showcommunityname').innerHTML = "WalkTheWeb";
+			if (WTW.communityName == 'WalkTheWeb' || WTW.communityName == 'WalkTheWeb') {
+				dGet('wtw_showcommunityname').innerHTML = 'WalkTheWeb';
 				dGet('wtw_showcommunityname').style.cursor = 'default';
 			} else {
 				dGet('wtw_showcommunityname').innerHTML = WTW.decode(WTW.communityName);
@@ -727,7 +727,7 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 		/* extended ground */
 		/* set ground emissive color based on scene lighting - day or night degrees of hue */
 		WTW.extraGround.material.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-		if (WTW.init.groundTexturePath != "" && WTW.init.groundTexturePath != '/content/system/stock/dirt-512x512.jpg') {
+		if (WTW.init.groundTexturePath != '' && WTW.init.groundTexturePath != '/content/system/stock/dirt-512x512.jpg') {
 			WTW.extraGround.material.diffuseTexture = new BABYLON.Texture(WTW.init.groundTexturePath, scene);
 		}
 		WTW.extraGround.material.diffuseTexture.uScale = 500;
@@ -738,22 +738,22 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 		WTW.extraGround.material.dispose();
 		WTW.extraGround.material = zgroundcovering;
 		/* if ground is set below 0 (zero) y value, add water to the scene at 0 (zero) y value - otherwise no main water plane is loaded */
-		if ((WTW.init.groundPositionY < 0) || (WTW.adminView == 1 && communityid != "")) {
+		if ((WTW.init.groundPositionY < 0) || (WTW.adminView == 1 && communityid != '')) {
 			WTW.initLoadUpload(WTW.init.groundTextureID, WTW.init.groundTextureID, 7);
 			if (WTW.water != null) {
 				WTW.water.material.dispose();
 				WTW.water.dispose();
 				WTW.water = null;
 			}
-			if (WTW.adminView == 1 && communityid != "" && WTW.init.groundPositionY == 0) {
+			if (WTW.adminView == 1 && communityid != '' && WTW.init.groundPositionY == 0) {
 				WTW.init.waterPositionY = -50;
 			}
 			/* create water */
-			WTW.water = BABYLON.Mesh.CreateGround("communitywater", 5000, 5000, Math.round(WTW.init.waterSubdivisions), scene, false);
+			WTW.water = BABYLON.Mesh.CreateGround('communitywater', 5000, 5000, Math.round(WTW.init.waterSubdivisions), scene, false);
 			
-			WTW.waterMat = new BABYLON.WaterMaterial("communitywatermat", scene, new BABYLON.Vector2(512, 512));
+			WTW.waterMat = new BABYLON.WaterMaterial('communitywatermat', scene, new BABYLON.Vector2(512, 512));
 			
-			WTW.waterMat.bumpTexture = new BABYLON.Texture("/content/system/images/waterbump.png", scene);
+			WTW.waterMat.bumpTexture = new BABYLON.Texture('/content/system/images/waterbump.png', scene);
 			WTW.waterMat.bumpHeight = WTW.init.waterBumpHeight;
 
 			WTW.waterMat.windForce = WTW.init.windForce;
@@ -792,7 +792,7 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 		}
 		/* add shadows based on Graphics capability or settings if set */
 		if (WTW.shadows == null) {
-			var zshadowsetting = WTW.getCookie("wtw_shadowsetting");
+			var zshadowsetting = WTW.getCookie('wtw_shadowsetting');
             if (zshadowsetting == null || isNaN(zshadowsetting))  {
                 if (WTW.gpuSetting == 'medium') {
 					WTW.shadowSet = 1;
@@ -819,7 +819,7 @@ WTWJS.prototype.loadCommunity = function(zaddcommunities) {
 		/* preload the default texture for new objects */
 		WTW.isUploadReadyOrAdd('t1qlqxd6pzubzzzy');
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-loadCommunity=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-loadCommunity=' + ex.message);
 	} 
 }
 
@@ -829,11 +829,11 @@ WTWJS.prototype.getConnectingGrids = async function() {
 	try {
 		var zparentwebid = '';
 		/* default the parent web id to a 3D Community - but check if the parent most web object is a community, building, or thing (only one value is set per loaded 3D Scene) */
-		if (communityid != "") {
+		if (communityid != '') {
 			zparentwebid = communityid;
-		} else if (buildingid != "") {
+		} else if (buildingid != '') {
 			zparentwebid = buildingid;
-		} else if (thingid != "") {
+		} else if (thingid != '') {
 			zparentwebid = thingid;
 		}
 		/* parent web id will be set if there is a scene to load */
@@ -849,14 +849,14 @@ WTWJS.prototype.getConnectingGrids = async function() {
 			}
 			/* fetch all connecting grids that are in the primary web object loaded */
 			/* example, in a 3D Community, get any 3D Buildings, 3D Things, and 3D Things in the 3D Buildings in the 3D Community */
-			WTW.getAsyncJSON("/connect/connectinggrids.php?parentwebid=" + zparentwebid + "&startpositionx=" + zpositionx + "&startpositiony=" + zpositiony + "&startpositionz=" + zpositionz + "&userid=" + dGet('wtw_tuserid').value, 
+			WTW.getAsyncJSON('/connect/connectinggrids.php?parentwebid=' + zparentwebid + '&startpositionx=' + zpositionx + '&startpositiony=' + zpositiony + '&startpositionz=' + zpositionz + '&userid=' + dGet('wtw_tuserid').value, 
 				function(zresponse) {
 					WTW.loadConnectingGrids(JSON.parse(zresponse));
 				}
 			);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-getConnectingGrids=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-getConnectingGrids=' + ex.message);
 	} 
 }
 
@@ -867,59 +867,59 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 	/* allows multiple ids in the same scene - picture 4 chairs around a table - each an instance in their own position, rotation, and scaling */
 	try {
 		var zparentconnectinggridind = -1;
-		var zparentconnectinggridid = "";
+		var zparentconnectinggridid = '';
 		if (zaddconnectinggrids.webitems != undefined) {
 			for (var i = 0; i < zaddconnectinggrids.webitems.length; i++) {
 				if (zaddconnectinggrids.webitems[i] != null) {
-					var zcommunityid = "";
-					var zbuildingid = "";
-					var zthingid = "";
+					var zcommunityid = '';
+					var zbuildingid = '';
+					var zthingid = '';
 					/* load connecting grid settings */
 					var zconnectinggridind = WTW.getNextCount(WTW.connectingGrids);
 					WTW.connectingGrids[zconnectinggridind] = zaddconnectinggrids.webitems[i];
 					WTW.connectingGrids[zconnectinggridind].connectinggridind = zconnectinggridind;
 					switch (WTW.connectingGrids[zconnectinggridind].childwebtype) {
-						case "community":
+						case 'community':
 							zcommunityid = WTW.connectingGrids[zconnectinggridind].childwebid;
 							break;
-						case "building":
+						case 'building':
 							zbuildingid = WTW.connectingGrids[zconnectinggridind].childwebid;
 							break;
-						case "thing":
+						case 'thing':
 							zthingid = WTW.connectingGrids[zconnectinggridind].childwebid;
 							break;
 					}
 					/* load level defines primary web object (highest level) to load or if it is placed under another web object (like 3D Building in a 3D Community) */
-					var zparentname = "";
-					if (WTW.connectingGrids[zconnectinggridind].loadlevel == "1") {
+					var zparentname = '';
+					if (WTW.connectingGrids[zconnectinggridind].loadlevel == '1') {
 						/* primary level item loaded in 3D Scene */
-						if (WTW.connectingGrids[zconnectinggridind].parentwebid == "") {
+						if (WTW.connectingGrids[zconnectinggridind].parentwebid == '') {
 							/* web object has no parent (is the parent of all the rest) */
 							zparentconnectinggridind = zconnectinggridind;
 							zparentconnectinggridid = WTW.connectingGrids[zconnectinggridind].connectinggridid;
-							WTW.connectingGrids[zconnectinggridind].moldname = "connectinggrids-" + zconnectinggridind + "-" + zparentconnectinggridid + "--";
-							WTW.connectingGrids[zconnectinggridind].shown = "1";
+							WTW.connectingGrids[zconnectinggridind].moldname = 'local-connectinggrids-' + zconnectinggridind + '-' + zparentconnectinggridid + '--';
+							WTW.connectingGrids[zconnectinggridind].shown = '1';
 							WTW.connectingGrids[zconnectinggridind].parentname = zparentname;
 							WTW.connectingGrids[zconnectinggridind].parentconnectinggridind = -1;
-							WTW.connectingGrids[zconnectinggridind].parentconnectinggridid = "";
+							WTW.connectingGrids[zconnectinggridind].parentconnectinggridid = '';
 							WTW.connectingGrids[zconnectinggridind].status = 2;
-							WTW.addMoldToQueue(WTW.connectingGrids[zconnectinggridind].moldname, WTW.connectingGrids[zconnectinggridind], zparentname, "hidden",null);
+							WTW.addMoldToQueue(WTW.connectingGrids[zconnectinggridind].moldname, WTW.connectingGrids[zconnectinggridind], zparentname, 'hidden',null);
 							dGet('wtw_tconnectinggridname').value = WTW.connectingGrids[zconnectinggridind].moldname;
 							dGet('wtw_tconnectinggridind').value = zconnectinggridind;
 							dGet('wtw_tconnectinggridid').value = zparentconnectinggridid;
 						} else if (zparentconnectinggridind != -1) {
 							/* web object has a parent - set the parent */
-							WTW.connectingGrids[zconnectinggridind].moldname = "connectinggrids-" + zconnectinggridind + "-" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "-" + zparentconnectinggridind + "-" + zparentconnectinggridid;
-							zparentname = "connectinggrids-" + zparentconnectinggridind + "-" + zparentconnectinggridid + "--";
+							WTW.connectingGrids[zconnectinggridind].moldname = 'local-connectinggrids-' + zconnectinggridind + '-' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '-' + zparentconnectinggridind + '-' + zparentconnectinggridid;
+							zparentname = 'local-connectinggrids-' + zparentconnectinggridind + '-' + zparentconnectinggridid + '--';
 							WTW.mainParent = zparentname;
-							WTW.connectingGrids[zconnectinggridind].shown = "0";
+							WTW.connectingGrids[zconnectinggridind].shown = '0';
 							WTW.connectingGrids[zconnectinggridind].parentname = zparentname;
 							WTW.connectingGrids[zconnectinggridind].parentconnectinggridind = zparentconnectinggridind;
 							WTW.connectingGrids[zconnectinggridind].parentconnectinggridid = zparentconnectinggridid;
 						}
 						/* fetch action zones for the connecting grid item - triggers further loading of web object */
-						if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid == "") {
-							WTW.getJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + WTW.connectingGrids[zconnectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "&connectinggridind=" + zconnectinggridind, 
+						if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid == '') {
+							WTW.getJSON('/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind, 
 								function(zresponse) {
 									WTW.loadActionZones(JSON.parse(zresponse));
 								}
@@ -929,15 +929,15 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 						/* secondary level item loaded in 3D Scene */
 						var zsubparentconnectinggridid = WTW.connectingGrids[zconnectinggridind].parentconnectinggridid;
 						var zsubparentconnectinggridind = WTW.getConnectingGridInd(zsubparentconnectinggridid);
-						WTW.connectingGrids[zconnectinggridind].moldname = "connectinggrids-" + zconnectinggridind + "-" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "-" + zsubparentconnectinggridind + "-" + zsubparentconnectinggridid;
-						zparentname = "connectinggrids-" + zsubparentconnectinggridind + "-" + zsubparentconnectinggridid + "-" + zparentconnectinggridind + "-" + zparentconnectinggridid;
-						WTW.connectingGrids[zconnectinggridind].shown = "0";
+						WTW.connectingGrids[zconnectinggridind].moldname = 'local-connectinggrids-' + zconnectinggridind + '-' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '-' + zsubparentconnectinggridind + '-' + zsubparentconnectinggridid;
+						zparentname = 'local-connectinggrids-' + zsubparentconnectinggridind + '-' + zsubparentconnectinggridid + '-' + zparentconnectinggridind + '-' + zparentconnectinggridid;
+						WTW.connectingGrids[zconnectinggridind].shown = '0';
 						WTW.connectingGrids[zconnectinggridind].parentname = zparentname;
 						WTW.connectingGrids[zconnectinggridind].parentconnectinggridind = zsubparentconnectinggridind;
 						WTW.connectingGrids[zconnectinggridind].parentconnectinggridid = zsubparentconnectinggridid;
 						/* fetch action zones for the connecting grid item - triggers further loading of web object */
-						if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid == "") {
-							WTW.getJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + WTW.connectingGrids[zconnectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "&connectinggridind=" + zconnectinggridind, 
+						if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid == '') {
+							WTW.getJSON('/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind, 
 								function(zresponse) {
 									WTW.loadActionZones(JSON.parse(zresponse));
 								}
@@ -958,7 +958,7 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 		});
 		scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnEveryFrameTrigger, WTW.processMoldQueue, zcondition2));
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-loadConnectingGrids=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-loadConnectingGrids=' + ex.message);
 	} 
 }
 
@@ -968,22 +968,22 @@ WTWJS.prototype.getActionZones = async function(zconnectinggridind) {
 	/* Load Zone is the main action zone that fetches molds (mesh definitions) from web servers when your avatar enters the Load Zone (often a rectangle cube) */
 	try {
 		if (WTW.connectingGrids[zconnectinggridind] != null) {
-			var zcommunityid = "";
-			var zbuildingid = "";
-			var zthingid = "";
-			var zaltloadactionzoneid = "";
+			var zcommunityid = '';
+			var zbuildingid = '';
+			var zthingid = '';
+			var zaltloadactionzoneid = '';
 			/* load the settings from the connecting grid */
 			/* webtype identifies 3D Community, Building, or Thing */
 			/* webid is the communityid, buildingid, or thingid for the web object */
 			/* parent vs child items determine the relationship and placement in the 3D Scene */
 			switch (WTW.connectingGrids[zconnectinggridind].childwebtype) {
-				case "community":
+				case 'community':
 					zcommunityid = WTW.connectingGrids[zconnectinggridind].childwebid;
 					break;
-				case "building":
+				case 'building':
 					zbuildingid = WTW.connectingGrids[zconnectinggridind].childwebid;
 					break;
-				case "thing":
+				case 'thing':
 					zthingid = WTW.connectingGrids[zconnectinggridind].childwebid;
 					break;
 			}
@@ -993,8 +993,8 @@ WTWJS.prototype.getActionZones = async function(zconnectinggridind) {
 				}
 			}
 			/* fetch the action zones from the internet for a given web object */
-			if (zaltloadactionzoneid == "") {
-				WTW.getAsyncJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + WTW.connectingGrids[zconnectinggridind].moldname + "&connectinggridid=" + WTW.connectingGrids[zconnectinggridind].connectinggridid + "&connectinggridind=" + zconnectinggridind, 
+			if (zaltloadactionzoneid == '') {
+				WTW.getAsyncJSON('/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind, 
 					function(zresponse) {
 						WTW.loadActionZones(JSON.parse(zresponse));
 					}
@@ -1002,7 +1002,7 @@ WTWJS.prototype.getActionZones = async function(zconnectinggridind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-getActionZones=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-getActionZones=' + ex.message);
 	} 
 }
 
@@ -1012,15 +1012,15 @@ WTWJS.prototype.loadActionZones = function(zaddactionzones) {
 		if (zaddactionzones.actionzones != undefined) {
 			for (var i = 0; i < zaddactionzones.actionzones.length; i++) {
 				/* only add the action zone definition if it is not already in the array (avoid deplicates) */
-				if (WTW.isItemInArray(WTW.actionZones, zaddactionzones.actionzones[i].actionzoneid, zaddactionzones.actionzones[i].connectinggridind, -1, "actionzones") == false) {
+				if (WTW.isItemInArray(WTW.actionZones, zaddactionzones.actionzones[i].actionzoneid, zaddactionzones.actionzones[i].connectinggridind, -1, 'actionzones') == false) {
 					var zactionzoneind = WTW.getNextCount(WTW.actionZones);
-					var zaltconnectinggridid = "";
+					var zaltconnectinggridid = '';
 					var zaltconnectinggridind = -1;
 					WTW.actionZones[zactionzoneind] = zaddactionzones.actionzones[i];
 					WTW.actionZones[zactionzoneind].actionzoneind = zactionzoneind;
 					/* set initial status - user not in load zone, door closed, mirror reflections not loaded, etc... */
 					WTW.actionZones[zactionzoneind].status = 0;
-					if (WTW.actionZones[zactionzoneind].altconnectinggridid != "" && WTW.actionZones[zactionzoneind].altconnectinggridid != undefined) {
+					if (WTW.actionZones[zactionzoneind].altconnectinggridid != '' && WTW.actionZones[zactionzoneind].altconnectinggridid != undefined) {
 						zaltconnectinggridid = WTW.actionZones[zactionzoneind].altconnectinggridid;
 						zaltconnectinggridind = WTW.getConnectingGridInd(zaltconnectinggridid);
 					}
@@ -1029,10 +1029,10 @@ WTWJS.prototype.loadActionZones = function(zaddactionzones) {
 					/* if there is an alternate connecting grid set the new name */
 					if (zaltconnectinggridind > -1 && WTW.connectingGrids[zaltconnectinggridind] != undefined) {
 						var zparentname = WTW.connectingGrids[zaltconnectinggridind].moldname;
-						if (zconnectinggridname.indexOf("-") > -1) {
+						if (zconnectinggridname.indexOf('-') > -1) {
 							var znamepart = zconnectinggridname.split('-');
-							if (znamepart[2] != null) {
-								zparentname = "connectinggrids-" + zaltconnectinggridind + "-" + zaltconnectinggridid + "-" + znamepart[1] + "-" + znamepart[2];
+							if (znamepart[3] != null) {
+								zparentname = 'local-connectinggrids-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + znamepart[2] + '-' + znamepart[3];
 							}
 						}
 						WTW.actionZones[zactionzoneind].parentname = zparentname;
@@ -1040,7 +1040,7 @@ WTWJS.prototype.loadActionZones = function(zaddactionzones) {
 						WTW.actionZones[zactionzoneind].parentname = zconnectinggridname;
 					}
 					/* set the name of the action zone including instance (identify mutiple instances of the same web object in the scene) */
-					var zactionzonename = "actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype;
+					var zactionzonename = 'local-actionzone-' + zactionzoneind + '-' + WTW.actionZones[zactionzoneind].actionzoneid + '-' + WTW.actionZones[zactionzoneind].connectinggridind + '-' + WTW.actionZones[zactionzoneind].connectinggridid + '-' + WTW.actionZones[zactionzoneind].actionzonetype;
 					WTW.actionZones[zactionzoneind].moldname = zactionzonename;
 					/* test for alternate connecting grid (example - attach to action zone) */
 					WTW.attachConnectingGridToActionZone(zactionzoneind);
@@ -1048,7 +1048,7 @@ WTWJS.prototype.loadActionZones = function(zaddactionzones) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-loadActionZones=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-loadActionZones=' + ex.message);
 	} 
 }
 
@@ -1059,18 +1059,18 @@ WTWJS.prototype.attachConnectingGridToActionZone = function(zactionzoneind) {
 		/* the conecting grid would be the ferris wheel cart */
 		for (var i=0;i < WTW.connectingGrids.length; i++) {
 			if (WTW.connectingGrids[i] != null) {
-				var zattachactionzoneid = "";
+				var zattachactionzoneid = '';
 				var zattachactionzoneind = -1;
 				/* the connecting grid settings define if there is an attached action zone */
 				if (WTW.connectingGrids[i].attachactionzoneid != undefined) {
 					zattachactionzoneid = WTW.connectingGrids[i].attachactionzoneid;
 				}
-				if (zattachactionzoneid != "") {
+				if (zattachactionzoneid != '') {
 					zattachactionzoneind = WTW.getActionZoneInd(zattachactionzoneid, WTW.connectingGrids[i].parentconnectinggridind);
 					WTW.connectingGrids[i].attachactionzoneind = zattachactionzoneind;
 					if (zactionzoneind == zattachactionzoneind) {
 						var zparentname = WTW.getParentActionZoneName(zactionzoneind, WTW.connectingGrids[i].parentconnectinggridind);
-						if (zparentname != "") {
+						if (zparentname != '') {
 							/* parent the web object to the action zone */
 							WTW.connectingGrids[i].parentname = zparentname;
 							if (WTW.actionZones[zactionzoneind] != null) {
@@ -1088,7 +1088,7 @@ WTWJS.prototype.attachConnectingGridToActionZone = function(zactionzoneind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-attachConnectingGridToActionZone=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-attachConnectingGridToActionZone=' + ex.message);
 	} 
 }
 
@@ -1096,13 +1096,13 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 	/* when your avatar enters a Load action zone, the Mold definitions are fetched fro the internet then added to the local arrays to be added to the scene on demand */
 	/* webid is the communityid, buildingid, or thingid for the web object */
 	try {
-		var zcommunityid = "";
-		var zbuildingid = "";
-		var zthingid = "";
-		var zactionzoneid = "";
+		var zcommunityid = '';
+		var zbuildingid = '';
+		var zthingid = '';
+		var zactionzoneid = '';
 		var zconnectinggridind = -1;
-		var zconnectinggridid = "";
-		var zaltloadactionzoneid = "";
+		var zconnectinggridid = '';
+		var zaltloadactionzoneid = '';
 		/* get values from load zone in action zone array */
 		if (WTW.actionZones[zactionzoneind] != null) {
 			WTW.actionZones[zactionzoneind].status = 3;
@@ -1118,21 +1118,21 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 			}
 			zconnectinggridind = WTW.actionZones[zactionzoneind].connectinggridind;
 			zconnectinggridid = WTW.actionZones[zactionzoneind].connectinggridid;
-			var zparentname = "";
+			var zparentname = '';
 			if (WTW.connectingGrids[zconnectinggridind] != null) {
 				zparentname = WTW.connectingGrids[zconnectinggridind].moldname
 				if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid != undefined) {
 					zaltloadactionzoneid = WTW.connectingGrids[zconnectinggridind].altloadactionzoneid;
 				}
 			}
-			if (zparentname == "") {
+			if (zparentname == '') {
 				/* updated 3.3.2 was missing assignment */
 				zparentname = WTW.actionZones[zactionzoneind].parentname;
 			}
 		}
 		/* fetch action zones to be loaded by the load zone */
-		if (zaltloadactionzoneid == "") {
-			WTW.getAsyncJSON("/connect/actionzonesbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + zparentname + "&connectinggridid=" + zconnectinggridid + "&connectinggridind=" + zconnectinggridind, 
+		if (zaltloadactionzoneid == '') {
+			WTW.getAsyncJSON('/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind, 
 				function(zresponse) {
 					WTW.loadActionZones(JSON.parse(zresponse));
 				}
@@ -1140,9 +1140,9 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 		}
 		/* graphics settings can be used to limit the texture file sizes loaded (try to help computers with less resources available) */
 		var zgpusetting = WTW.gpuSetting;
-		if (zgpusetting == "medium") {
+		if (zgpusetting == 'medium') {
 			/* currently there is no individual medium support */
-			zgpusetting = "high";
+			zgpusetting = 'high';
 		}
 		/* graphics level can force higher or lower graphic resolution */
 		/* auto - uses lesser graphics unless directly set in settings to high level per mold texture */
@@ -1162,19 +1162,19 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 			WTW.show('wtw_graphichelpadmin');
 		}
 		/* fetch molds (mesh definitions) to be loaded by the load zone */
-		WTW.getAsyncJSON("/connect/moldsbywebid.php?webcommunityid=" + communityid + "&webbuildingid=" + buildingid + "&communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentactionzoneind=" + zactionzoneind + "&actionzoneid=" + zactionzoneid + "&parentname=" + WTW.actionZones[zactionzoneind].parentname + "&connectinggridid=" + zconnectinggridid + "&connectinggridind=" + zconnectinggridind + "&userid=" + dGet("wtw_tuserid").value + "&graphiclevel=" + zgraphiclevel, 
+		WTW.getAsyncJSON('/connect/moldsbywebid.php?webcommunityid=' + communityid + '&webbuildingid=' + buildingid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentactionzoneind=' + zactionzoneind + '&actionzoneid=' + zactionzoneid + '&parentname=' + WTW.actionZones[zactionzoneind].parentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind + '&userid=' + dGet('wtw_tuserid').value + '&graphiclevel=' + zgraphiclevel, 
 			function(zresponse) {
 				WTW.loadMolds(JSON.parse(zresponse));
 			}
 		);
 		/* fetch automations (automated sequences) to be loaded by the load zone (temporarily disabled - until they are added to the admin interface) */
-/*		WTW.getAsyncJSON("/connect/automationsbywebid.php?communityid=" + zcommunityid + "&buildingid=" + zbuildingid + "&thingid=" + zthingid + "&parentname=" + parentname + "&connectinggridid=" + zconnectinggridid + "&connectinggridind=" + zconnectinggridind, 
+/*		WTW.getAsyncJSON('/connect/automationsbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + parentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind, 
 			function(zresponse) {
 				WTW.loadAutomations(JSON.parse(zresponse));
 			}
 		); */
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-getMoldsByWebID=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-getMoldsByWebID=' + ex.message);
 	}
 }
 
@@ -1185,7 +1185,7 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 	/* community, buildings, and things use identical structures but have different tables in the database to keep them from getting too big */
 	/* 3D Community is the 3D Scene, 3D Building is a structure that can be in many 3D Scenes, and 3D Things can be in 3D Communities or Buildings */
 	try {
-		var zconnectinggridid = "";
+		var zconnectinggridid = '';
 		var zconnectinggridind = -1;
 		var zparentactionzoneind = -1;
 		if (zaddmolds != null) {
@@ -1193,16 +1193,16 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 				/* process the array of molds to be added to the mold arrays (ready to be loaded to the scene) */
 				for (var i = 0; i < zaddmolds.molds.length; i++) {
 					if (zaddmolds.molds[i] != null) {
-						var zcommunityid = "";
-						var zbuildingid = "";
-						var zthingid = "";
-						var zaltconnectinggridid = "";
+						var zcommunityid = '';
+						var zbuildingid = '';
+						var zthingid = '';
+						var zaltconnectinggridid = '';
 						var zaltconnectinggridind = -1;
 						var zloadactionzoneind = -1;
 						var zunloadactionzoneind = -1;
-						var zinloadactionzone = "0";
+						var zinloadactionzone = '0';
 						/* check and read values if they exist */
-						if (zaddmolds.molds[i].altconnectinggridid != "" && zaddmolds.molds[i].altconnectinggridid != undefined) {
+						if (zaddmolds.molds[i].altconnectinggridid != '' && zaddmolds.molds[i].altconnectinggridid != undefined) {
 							zaltconnectinggridid = zaddmolds.molds[i].altconnectinggridid;
 							zaltconnectinggridind = WTW.getConnectingGridInd(zaltconnectinggridid);
 							zaddmolds.molds[i].altconnectinggridind = zaltconnectinggridind;
@@ -1229,7 +1229,7 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 							zparentactionzoneind = zaddmolds.molds[i].parentactionzoneind;
 						}
 						if (zloadactionzoneind == zparentactionzoneind) {
-							zinloadactionzone = "1";
+							zinloadactionzone = '1';
 							WTW.actionZones[zloadactionzoneind].inloadactionzone = zinloadactionzone;
 						} else if (WTW.actionZones[zloadactionzoneind] != null) {
 							if (WTW.actionZones[zloadactionzoneind].inloadactionzone != undefined) {
@@ -1238,7 +1238,7 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 								var zloadactionzone = WTW.getMeshOrNodeByID(WTW.actionZones[zloadactionzoneind].moldname);
 								if (zloadactionzone != null) {
 									if (WTW.myAvatar.intersectsMesh(zloadactionzone, false)) { // (precise false)
-										zinloadactionzone = "1";
+										zinloadactionzone = '1';
 									}
 								}
 							}
@@ -1247,8 +1247,8 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 						/* check if community and add if yes */
 						if (zaddmolds.molds[i].communityinfo.communityid != undefined) {
 							zcommunityid = zaddmolds.molds[i].communityinfo.communityid;
-							if (zcommunityid != "" && zbuildingid == "" && zthingid == "") {
-								if (WTW.isItemInArray(WTW.communitiesMolds, zaddmolds.molds[i].moldid, zconnectinggridind, zaltconnectinggridind, "communitymolds") == false) {
+							if (zcommunityid != '' && zbuildingid == '' && zthingid == '') {
+								if (WTW.isItemInArray(WTW.communitiesMolds, zaddmolds.molds[i].moldid, zconnectinggridind, zaltconnectinggridind, 'communitymolds') == false) {
 									var zmoldind = WTW.getNextCount(WTW.communitiesMolds);
 									WTW.communitiesMolds[zmoldind] = zaddmolds.molds[i];
 									WTW.communitiesMolds[zmoldind].moldind = zmoldind;
@@ -1257,10 +1257,10 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 									var zconnectinggridname = WTW.connectingGrids[Number(zconnectinggridind)].moldname;
 									if (zaltconnectinggridind > -1 && WTW.connectingGrids[zaltconnectinggridind] != undefined) {
 										var zparentname = WTW.connectingGrids[zaltconnectinggridind].moldname;
-										if (zconnectinggridname.indexOf("-") > -1) {
+										if (zconnectinggridname.indexOf('-') > -1) {
 											var znamepart = zconnectinggridname.split('-');
-											if (znamepart[2] != null) {
-												zparentname = "connectinggrids-" + zaltconnectinggridind + "-" + zaltconnectinggridid + "-" + znamepart[1] + "-" + znamepart[2];
+											if (znamepart[3] != null) {
+												zparentname = 'local-connectinggrids-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + znamepart[2] + '-' + znamepart[3];
 											}
 										}
 										WTW.communitiesMolds[zmoldind].parentname = zparentname;
@@ -1270,9 +1270,9 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 									if (zaltconnectinggridind > -1) {
 										WTW.communitiesMolds[zmoldind].connectinggridind = zaltconnectinggridind;
 										WTW.communitiesMolds[zmoldind].connectinggridid = zaltconnectinggridid;
-										WTW.communitiesMolds[zmoldind].moldname = "communitymolds-" + zmoldind + "-" + WTW.communitiesMolds[zmoldind].moldid + "-" + zaltconnectinggridind + "-" + zaltconnectinggridid + "-" + WTW.communitiesMolds[zmoldind].shape;
+										WTW.communitiesMolds[zmoldind].moldname = 'local-communitymolds-' + zmoldind + '-' + WTW.communitiesMolds[zmoldind].moldid + '-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + WTW.communitiesMolds[zmoldind].shape;
 									} else {
-										WTW.communitiesMolds[zmoldind].moldname = "communitymolds-" + zmoldind + "-" + WTW.communitiesMolds[zmoldind].moldid + "-" + zconnectinggridind + "-" + zconnectinggridid + "-" + WTW.communitiesMolds[zmoldind].shape;
+										WTW.communitiesMolds[zmoldind].moldname = 'local-communitymolds-' + zmoldind + '-' + WTW.communitiesMolds[zmoldind].moldid + '-' + zconnectinggridind + '-' + zconnectinggridid + '-' + WTW.communitiesMolds[zmoldind].shape;
 									}
 									WTW.communitiesMolds[zmoldind].inloadactionzone = zinloadactionzone;
 								}			
@@ -1281,8 +1281,8 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 						/* check if building and add if yes */
 						if (zaddmolds.molds[i].buildinginfo.buildingid != undefined) {
 							zbuildingid = zaddmolds.molds[i].buildinginfo.buildingid;
-							if (zbuildingid != "" && zthingid == "") {
-								if (WTW.isItemInArray(WTW.buildingMolds, zaddmolds.molds[i].moldid, zconnectinggridind, zaltconnectinggridind, "buildingmolds") == false) {
+							if (zbuildingid != '' && zthingid == '') {
+								if (WTW.isItemInArray(WTW.buildingMolds, zaddmolds.molds[i].moldid, zconnectinggridind, zaltconnectinggridind, 'buildingmolds') == false) {
 									var zmoldind = WTW.getNextCount(WTW.buildingMolds);
 									WTW.buildingMolds[zmoldind] = zaddmolds.molds[i];
 									WTW.buildingMolds[zmoldind].moldind = zmoldind;
@@ -1291,10 +1291,10 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 									var zconnectinggridname = WTW.connectingGrids[Number(zconnectinggridind)].moldname;
 									if (zaltconnectinggridind > -1 && WTW.connectingGrids[zaltconnectinggridind] != undefined) {
 										var zparentname = WTW.connectingGrids[zaltconnectinggridind].moldname;
-										if (zconnectinggridname.indexOf("-") > -1) {
+										if (zconnectinggridname.indexOf('-') > -1) {
 											var znamepart = zconnectinggridname.split('-');
-											if (znamepart[2] != null) {
-												zparentname = "connectinggrids-" + zaltconnectinggridind + "-" + zaltconnectinggridid + "-" + znamepart[1] + "-" + znamepart[2];
+											if (znamepart[3] != null) {
+												zparentname = 'local-connectinggrids-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + znamepart[2] + '-' + znamepart[3];
 											}
 										}
 										WTW.buildingMolds[zmoldind].parentname = zparentname;
@@ -1304,9 +1304,9 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 									if (zaltconnectinggridind > -1) {
 										WTW.buildingMolds[zmoldind].connectinggridind = zaltconnectinggridind;
 										WTW.buildingMolds[zmoldind].connectinggridid = zaltconnectinggridid;
-										WTW.buildingMolds[zmoldind].moldname = "buildingmolds-" + zmoldind + "-" + WTW.buildingMolds[zmoldind].moldid + "-" + zaltconnectinggridind + "-" + zaltconnectinggridid + "-" + WTW.buildingMolds[zmoldind].shape;
+										WTW.buildingMolds[zmoldind].moldname = 'local-buildingmolds-' + zmoldind + '-' + WTW.buildingMolds[zmoldind].moldid + '-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + WTW.buildingMolds[zmoldind].shape;
 									} else {
-										WTW.buildingMolds[zmoldind].moldname = "buildingmolds-" + zmoldind + "-" + WTW.buildingMolds[zmoldind].moldid + "-" + zconnectinggridind + "-" + zconnectinggridid + "-" + WTW.buildingMolds[zmoldind].shape;
+										WTW.buildingMolds[zmoldind].moldname = 'local-buildingmolds-' + zmoldind + '-' + WTW.buildingMolds[zmoldind].moldid + '-' + zconnectinggridind + '-' + zconnectinggridid + '-' + WTW.buildingMolds[zmoldind].shape;
 									}
 									WTW.buildingMolds[zmoldind].inloadactionzone = zinloadactionzone;
 								}						
@@ -1315,8 +1315,8 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 						/* check if thing and add if yes */
 						if (zaddmolds.molds[i].thinginfo.thingid != undefined) {
 							zthingid = zaddmolds.molds[i].thinginfo.thingid;
-							if (zthingid != "") {
-								if (WTW.isItemInArray(WTW.thingMolds, zaddmolds.molds[i].moldid, zconnectinggridind, zaltconnectinggridind, "thingmolds") == false) {
+							if (zthingid != '') {
+								if (WTW.isItemInArray(WTW.thingMolds, zaddmolds.molds[i].moldid, zconnectinggridind, zaltconnectinggridind, 'thingmolds') == false) {
 									var zmoldind = WTW.getNextCount(WTW.thingMolds);
 									WTW.thingMolds[zmoldind] = zaddmolds.molds[i];
 									WTW.thingMolds[zmoldind].moldind = zmoldind;
@@ -1325,10 +1325,10 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 									var zconnectinggridname = WTW.connectingGrids[Number(zconnectinggridind)].moldname;
 									if (zaltconnectinggridind > -1 && WTW.connectingGrids[zaltconnectinggridind] != undefined) {
 										var zparentname = WTW.connectingGrids[zaltconnectinggridind].moldname;
-										if (zconnectinggridname.indexOf("-") > -1) {
+										if (zconnectinggridname.indexOf('-') > -1) {
 											var znamepart = zconnectinggridname.split('-');
-											if (znamepart[2] != null) {
-												zparentname = "connectinggrids-" + zaltconnectinggridind + "-" + zaltconnectinggridid + "-" + znamepart[1] + "-" + znamepart[2];
+											if (znamepart[3] != null) {
+												zparentname = 'local-connectinggrids-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + znamepart[2] + '-' + znamepart[3];
 											}
 										}
 										WTW.thingMolds[zmoldind].parentname = zparentname;
@@ -1338,9 +1338,9 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 									if (zaltconnectinggridind > -1) {
 										WTW.thingMolds[zmoldind].connectinggridind = zaltconnectinggridind;
 										WTW.thingMolds[zmoldind].connectinggridid = zaltconnectinggridid;
-										WTW.thingMolds[zmoldind].moldname = "thingmolds-" + zmoldind + "-" + WTW.thingMolds[zmoldind].moldid + "-" + zaltconnectinggridind + "-" + zaltconnectinggridid + "-" + WTW.thingMolds[zmoldind].shape;
+										WTW.thingMolds[zmoldind].moldname = 'local-thingmolds-' + zmoldind + '-' + WTW.thingMolds[zmoldind].moldid + '-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + WTW.thingMolds[zmoldind].shape;
 									} else {
-										WTW.thingMolds[zmoldind].moldname = "thingmolds-" + zmoldind + "-" + WTW.thingMolds[zmoldind].moldid + "-" + zconnectinggridind + "-" + zconnectinggridid + "-" + WTW.thingMolds[zmoldind].shape;
+										WTW.thingMolds[zmoldind].moldname = 'local-thingmolds-' + zmoldind + '-' + WTW.thingMolds[zmoldind].moldid + '-' + zconnectinggridind + '-' + zconnectinggridid + '-' + WTW.thingMolds[zmoldind].shape;
 									}
 									WTW.thingMolds[zmoldind].inloadactionzone = zinloadactionzone;
 								}					
@@ -1351,7 +1351,7 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 			}		
 		} 
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-loadMolds=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-loadMolds=' + ex.message);
 	}
 }
 
@@ -1370,7 +1370,7 @@ WTWJS.prototype.loadAutomations = function(zaddautomations) {
 							WTW.automations[zautomationind].automationind = zautomationind;
 							WTW.automations[zautomationind].moldid = WTW.automations[zautomationind].automationid;
 							WTW.automations[zautomationind].step.automationstepind = zautomationind;
-							WTW.automations[zautomationind].moldname = "automation-" + zautomationind + "-" + WTW.automations[zautomationind].step.automationstepid + "-" + WTW.automations[zautomationind].connectinggridind + "-" + WTW.automations[zautomationind].connectinggridid;
+							WTW.automations[zautomationind].moldname = 'local-automation-' + zautomationind + '-' + WTW.automations[zautomationind].step.automationstepid + '-' + WTW.automations[zautomationind].connectinggridind + '-' + WTW.automations[zautomationind].connectinggridid;
 							zautomationcount += 1;
 						}
 					}
@@ -1383,7 +1383,7 @@ WTWJS.prototype.loadAutomations = function(zaddautomations) {
 			}
 		}	
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-loadAutomations=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-loadAutomations=' + ex.message);
 	}
 }
 
@@ -1454,7 +1454,7 @@ WTWJS.prototype.unloadMoldsByWebID = function(zactionzoneind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-unloadMoldsByWebID=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-unloadMoldsByWebID=' + ex.message);
 	}
 }
 
@@ -1572,13 +1572,13 @@ WTWJS.prototype.startRender = function() {
 							zmeshcount = scene.meshes.length - WTW.baseMoldCount - zgridlines;
 						}
 						/* display count if flag is on */
-						dGet('wtw_showmeshfps').innerHTML = "Mold Count = " + (zmeshcount) + "<br />Frames Per Second=" + WTW.fps;
+						dGet('wtw_showmeshfps').innerHTML = 'Mold Count = ' + (zmeshcount) + '<br />Frames Per Second=' + WTW.fps;
 					}
 				} catch (ex) {} 
 			});
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-startRender=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-startRender=' + ex.message);
 	}
 }
 
@@ -1590,7 +1590,7 @@ WTWJS.prototype.stopRender = function() {
 			engine.stopRenderLoop();
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_core.js-stopRender=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_core.js-stopRender=' + ex.message);
 	}
 }
 

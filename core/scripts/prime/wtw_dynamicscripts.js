@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -12,12 +12,12 @@ WTWJS.prototype.checkLoadJSFile = function(zfilename, zfiletype) {
 	/* works with dynamically loading JavaScript files */
 	/* require once functionality - check if it is already loaded and load if it is not. */
 	try {
-		if (WTW.loadedJSFiles.indexOf("[" + zfilename + "]") == -1) {
+		if (WTW.loadedJSFiles.indexOf('[' + zfilename + ']') == -1) {
 			WTW.loadJSFile(zfilename, zfiletype);
-			WTW.loadedJSFiles += "[" + zfilename + "]";
+			WTW.loadedJSFiles += '[' + zfilename + ']';
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-checkLoadJSFile=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-checkLoadJSFile=' + ex.message);
 	}
 }
 
@@ -25,12 +25,12 @@ WTWJS.prototype.checkUnloadJSFile = function(zfilename, zfiletype) {
 	/* works with dynamically loading JavaScript files */
 	/* require once functionality - but only unload the JS file if all needs for it are no longer in use. */
 	try {
-		if (WTW.loadedJSFiles.indexOf("[" + zfilename + "]") != -1) {
+		if (WTW.loadedJSFiles.indexOf('[' + zfilename + ']') != -1) {
 			WTW.unloadJSFile(zfilename, zfiletype);
-			WTW.loadedJSFiles = WTW.loadedJSFiles.replace(zfilename, "");
+			WTW.loadedJSFiles = WTW.loadedJSFiles.replace(zfilename, '');
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-checkUnloadJSFile=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-checkUnloadJSFile=' + ex.message);
 	}
 }
 
@@ -38,30 +38,30 @@ WTWJS.prototype.loadJSFile = function(zfilename, zfiletype) {
 	/* dynamically loading JavaScript files */
 	try {
 		var zfileref;
-		if (zfiletype == "js") {
+		if (zfiletype == 'js') {
 			zfileref = document.createElement('script');
-			zfileref.setAttribute("type", "text/javascript");
-			zfileref.setAttribute("src", zfilename);
+			zfileref.setAttribute('type', 'text/javascript');
+			zfileref.setAttribute('src', zfilename);
 		}
-		else if (zfiletype == "css") {
-			zfileref = document.createElement("link");
-			zfileref.setAttribute("rel", "stylesheet");
-			zfileref.setAttribute("type", "text/css");
-			zfileref.setAttribute("href", zfilename);
+		else if (zfiletype == 'css') {
+			zfileref = document.createElement('link');
+			zfileref.setAttribute('rel', 'stylesheet');
+			zfileref.setAttribute('type', 'text/css');
+			zfileref.setAttribute('href', zfilename);
 		}
-		if (typeof zfileref != "undefined") {
-			document.getElementsByTagName("head")[0].appendChild(zfileref);
+		if (typeof zfileref != 'undefined') {
+			document.getElementsByTagName('head')[0].appendChild(zfileref);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-loadJSFile=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-loadJSFile=' + ex.message);
 	}
 }
 
 WTWJS.prototype.unloadJSFile = function(zfilename, zfiletype) {
 	/* dynamically unloading JavaScript files */
 	try {
-		var ztargetelement = (zfiletype == "js") ? "script" : (zfiletype == "css") ? "link" : "none";
-		var ztargetattr = (zfiletype == "js") ? "src" : (zfiletype == "css") ? "href" : "none";
+		var ztargetelement = (zfiletype == 'js') ? 'script' : (zfiletype == 'css') ? 'link' : 'none';
+		var ztargetattr = (zfiletype == 'js') ? 'src' : (zfiletype == 'css') ? 'href' : 'none';
 		var zallsuspects = document.getElementsByTagName(ztargetelement);
 		for (var i = zallsuspects.length-1; i > -1; i--) {
 			if (zallsuspects[i] && zallsuspects[i].getAttribute(ztargetattr) != null && zallsuspects[i].getAttribute(ztargetattr).indexOf(zfilename) != -1) {
@@ -69,7 +69,7 @@ WTWJS.prototype.unloadJSFile = function(zfilename, zfiletype) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-unloadJSFile=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-unloadJSFile=' + ex.message);
 	}
 }
 
@@ -83,16 +83,16 @@ WTWJS.prototype.checkLoadScripts = function(zactionzoneind) {
 				for (var i=0;i<zscripts.length;i++) {
 					if (zscripts[i] != null) {
 						if (zscripts[i].loaded == '0') {
-							var zwebtype = "communities";
+							var zwebtype = 'communities';
 							var zwebid = WTW.actionZones[zactionzoneind].communityinfo.communityid;
 							if (WTW.actionZones[zactionzoneind].buildinginfo.buildingid != '') {
-								zwebtype = "buildings";
+								zwebtype = 'buildings';
 								zwebid = WTW.actionZones[zactionzoneind].buildinginfo.buildingid;
 							} else if (WTW.actionZones[zactionzoneind].thinginfo.thingid != '') {
-								zwebtype = "things";
+								zwebtype = 'things';
 								zwebid = WTW.actionZones[zactionzoneind].thinginfo.thingid;
 							}
-							WTW.checkLoadJSFile("/content/uploads/" + zwebtype + "/" + zwebid + "/" + zscripts[i].scriptpath, 'js');
+							WTW.checkLoadJSFile('/content/uploads/' + zwebtype + '/' + zwebid + '/' + zscripts[i].scriptpath, 'js');
 							WTW.actionZones[zactionzoneind].scripts[i].loaded = '1';
 						}
 					}
@@ -100,7 +100,7 @@ WTWJS.prototype.checkLoadScripts = function(zactionzoneind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-checkLoadScripts=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-checkLoadScripts=' + ex.message);
 	}
 }
 
@@ -114,16 +114,16 @@ WTWJS.prototype.checkUnloadScripts = function(zactionzoneind) {
 				for (var i=0;i<zscripts.length;i++) {
 					if (zscripts[i] != null) {
 						if (zscripts[i].loaded == '1') {
-							var zwebtype = "communities";
+							var zwebtype = 'communities';
 							var zwebid = WTW.actionZones[zactionzoneind].communityinfo.communityid;
 							if (WTW.actionZones[zactionzoneind].buildinginfo.buildingid != '') {
-								zwebtype = "buildings";
+								zwebtype = 'buildings';
 								zwebid = WTW.actionZones[zactionzoneind].buildinginfo.buildingid;
 							} else if (WTW.actionZones[zactionzoneind].thinginfo.thingid != '') {
-								zwebtype = "things";
+								zwebtype = 'things';
 								zwebid = WTW.actionZones[zactionzoneind].thinginfo.thingid;
 							}
-							WTW.checkUnloadJSFile("/content/uploads/" + zwebtype + "/" + zwebid + "/" + zscripts[i].scriptpath, 'js');
+							WTW.checkUnloadJSFile('/content/uploads/' + zwebtype + '/' + zwebid + '/' + zscripts[i].scriptpath, 'js');
 							WTW.actionZones[zactionzoneind].scripts[i].loaded = '0';
 						}
 					}
@@ -131,7 +131,7 @@ WTWJS.prototype.checkUnloadScripts = function(zactionzoneind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-checkUnloadScripts=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-checkUnloadScripts=' + ex.message);
 	}
 }
 
@@ -140,25 +140,25 @@ WTWJS.prototype.checkUnloadScripts = function(zactionzoneind) {
 
 WTWJS.prototype.setFunctionName = function(zmoldname) {
 	/* create new function name (or new name for repeated instances of the same object) */
-	var zfunctionname = "";
+	var zfunctionname = '';
 	try {
-		zfunctionname = "f" + zmoldname;
+		zfunctionname = 'f' + zmoldname;
 		while (zfunctionname.indexOf(' ') > -1) {
 			zfunctionname = zfunctionname.replace(' ','');
 		}
 		while (zfunctionname.indexOf('-') > -1) {
 			zfunctionname = zfunctionname.replace('-','');
 		}
-		if (typeof window[zfunctionname] != "undefined") {
+		if (typeof window[zfunctionname] != 'undefined') {
 			var zbasename = zfunctionname;
 			var i = 0;
-			while (typeof window[zfunctionname] != "undefined") {
+			while (typeof window[zfunctionname] != 'undefined') {
 				i += 1;
 				zfunctionname = zbasename + i;
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-setFunctionName=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-setFunctionName=' + ex.message);
 	}
 	return zfunctionname;
 }
@@ -167,7 +167,7 @@ WTWJS.prototype.setFunctionAndExecute = function(zfunctionname, zparameters, zmo
 	/* convert function name and parameters to executable function and execute it */
 	try {
 		if (zmoldname != undefined) {
-			zparameters += "," + zmoldname;
+			zparameters += ',' + zmoldname;
 		}
 		if (zparameters.indexOf(',') > -1) {
 			var zvalues = zparameters.split(',');
@@ -178,7 +178,7 @@ WTWJS.prototype.setFunctionAndExecute = function(zfunctionname, zparameters, zmo
 			WTW.executeFunctionByName(zfunctionname, window, null);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-setFunctionAndExecute=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-setFunctionAndExecute=' + ex.message);
 	}
 }
 
@@ -194,7 +194,7 @@ WTWJS.prototype.checkMoldFunctionAndExecute = function(zmoldname) {
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-checkMoldFunctionAndExecute=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-checkMoldFunctionAndExecute=' + ex.message);
     }
 }
 
@@ -208,7 +208,7 @@ WTWJS.prototype.executeFunctionByName = function(zjsfunction, zcontext /*, args 
 		if (zjsfunction != null) {
 			if (zjsfunction != '') {
 				zargs = Array.prototype.slice.call(arguments, 2);
-				var znamespaces = zjsfunction.split(".");
+				var znamespaces = zjsfunction.split('.');
 				zfunc = znamespaces.pop();
 				for(var i = 0; i < znamespaces.length; i++) {
 					zcontext = zcontext[znamespaces[i]];
@@ -219,7 +219,7 @@ WTWJS.prototype.executeFunctionByName = function(zjsfunction, zcontext /*, args 
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-executeFunctionByName=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-executeFunctionByName=' + ex.message);
 	}
 	return zfunction;
 }
@@ -245,18 +245,18 @@ WTWJS.prototype.executeAnimationByName = function(zanimationname) {
 								}
 							}
 							/* temp for demo - sync 2 animations */
-							if (WTW.moldEvents[i].mold.name == "buildingmolds-0-h3ecuos3uff4t8gl-0-2202l5q2xiaogwn5-babylonfile-OccupyGuy_MouthAnimGeo") {
-								WTW.temp1 = scene.beginAnimation(WTW.moldEvents[i].mold, zstartframe, zendframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[zendscript] == "function") {window[zendscript](zendscript);}}, WTW.moldEvents[i].stopcurrentanimations);
+							if (WTW.moldEvents[i].mold.name == 'local-buildingmolds-0-h3ecuos3uff4t8gl-0-2202l5q2xiaogwn5-babylonfile-OccupyGuy_MouthAnimGeo') {
+								WTW.temp1 = scene.beginAnimation(WTW.moldEvents[i].mold, zstartframe, zendframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[zendscript] == 'function') {window[zendscript](zendscript);}}, WTW.moldEvents[i].stopcurrentanimations);
 								if (WTW.temp2 != null) {
 									WTW.temp1.syncWith(WTW.temp2);
 								}
-							} else if (WTW.moldEvents[i].mold.name == "buildingmolds-0-h3ecuos3uff4t8gl-0-2202l5q2xiaogwn5-babylonfile-Guitar") {
-								WTW.temp2 = scene.beginAnimation(WTW.moldEvents[i].mold, zstartframe, zendframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[zendscript] == "function") {window[zendscript](zendscript);}}, WTW.moldEvents[i].stopcurrentanimations);
+							} else if (WTW.moldEvents[i].mold.name == 'local-buildingmolds-0-h3ecuos3uff4t8gl-0-2202l5q2xiaogwn5-babylonfile-Guitar') {
+								WTW.temp2 = scene.beginAnimation(WTW.moldEvents[i].mold, zstartframe, zendframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[zendscript] == 'function') {window[zendscript](zendscript);}}, WTW.moldEvents[i].stopcurrentanimations);
 								if (WTW.temp1 != null) {
 									WTW.temp2.syncWith(WTW.temp1);
 								}
 							} else {
-								scene.beginAnimation(WTW.moldEvents[i].mold, zstartframe, zendframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[zendscript] == "function") {window[zendscript](zendscript);}}, WTW.moldEvents[i].stopcurrentanimations);
+								scene.beginAnimation(WTW.moldEvents[i].mold, zstartframe, zendframe, WTW.moldEvents[i].animationloop, Number(WTW.moldEvents[i].speedratio), function() {if (typeof window[zendscript] == 'function') {window[zendscript](zendscript);}}, WTW.moldEvents[i].stopcurrentanimations);
 							}
 							if (WTW.moldEvents[i].soundid != '' && WTW.soundMute == false) {
 								if (typeof WTW.moldEvents[i].sound.play == 'function') {
@@ -271,17 +271,17 @@ WTWJS.prototype.executeAnimationByName = function(zanimationname) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-executeAnimationByName=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-executeAnimationByName=' + ex.message);
 	}
 }
 
 WTWJS.prototype.checkFunctionname = function(zfunctionname, zmoldname) {
 	/* this process names dynamic created functions and avoids duplicates */
-	var znewfunctionname = "";
+	var znewfunctionname = '';
 	try {
-		var zletters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		var znumbers = "01234567890_";
-		var zreservedwords = ["break","do","instanceof","typeof","case","else","new","var","catch","finally","return","void","continue","for","switch","while","debugger","function","this","with","default","if","throw","delete","in","try","abstract","export","interface","static","boolean","extends","long","super","byte","final","native","synchronized","char","float","package","throws","class","goto","private","transient","const","implements","protected","volatile","double","import","public","enum","int","short","null","let","true","false","alert","blur","closed","document","focus","frames","history","innerHeight","innerWidth","length","location","navigator","open","outerHeight","outerWidth","parent","screen","screenX","screenY","statusbar","window"];
+		var zletters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		var znumbers = '01234567890_';
+		var zreservedwords = ['break','do','instanceof','typeof','case','else','new','var','catch','finally','return','void','continue','for','switch','while','debugger','function','this','with','default','if','throw','delete','in','try','abstract','export','interface','static','boolean','extends','long','super','byte','final','native','synchronized','char','float','package','throws','class','goto','private','transient','const','implements','protected','volatile','double','import','public','enum','int','short','null','let','true','false','alert','blur','closed','document','focus','frames','history','innerHeight','innerWidth','length','location','navigator','open','outerHeight','outerWidth','parent','screen','screenX','screenY','statusbar','window'];
 		if (zletters.indexOf(zfunctionname.substr(0,1)) > -1) {
 			znewfunctionname = zfunctionname.substr(0,1);
 		}
@@ -293,7 +293,7 @@ WTWJS.prototype.checkFunctionname = function(zfunctionname, zmoldname) {
 			}
 			for (var i=0;i<zreservedwords.length;i++) {
 				if (zreservedwords[i] == znewfunctionname) {
-					znewfunctionname = "";
+					znewfunctionname = '';
 				}
 			}
 		}
@@ -301,14 +301,14 @@ WTWJS.prototype.checkFunctionname = function(zfunctionname, zmoldname) {
 			if (window[znewfunctionname] != null) {
 				znewfunctionname = '';
 			}
-		} else if (typeof window[znewfunctionname] != "undefined" || typeof window[znewfunctionname] == "function") {
+		} else if (typeof window[znewfunctionname] != 'undefined' || typeof window[znewfunctionname] == 'function') {
 			znewfunctionname = '';
 		}
 		if (znewfunctionname == '') {
 			znewfunctionname = WTW.setFunctionName(zmoldname);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-checkFunctionname=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-checkFunctionname=' + ex.message);
 	}
 	return znewfunctionname;
 }
@@ -327,7 +327,7 @@ WTWJS.prototype.addMoldAnimation = function(zmoldname, zchildname, zmold, zobjec
 						var zmoldevent = zobjectanimations[i].moldevent;
 						var zstartframe = Number(zobjectanimations[i].startframe);
 						var zendframe = Number(zobjectanimations[i].endframe);
-						var zparameters = zstartframe + "-" + zendframe;
+						var zparameters = zstartframe + '-' + zendframe;
 						var zanimationloop = false;
 						var zspeedratio = Number(zobjectanimations[i].speedratio);
 						var zanimationendscript = zobjectanimations[i].animationendscript;
@@ -340,13 +340,13 @@ WTWJS.prototype.addMoldAnimation = function(zmoldname, zchildname, zmold, zobjec
 						var zsoundmaxdistance = zobjectanimations[i].soundmaxdistance;
 						var znamepart = zmoldname.split('-');
 						var zsubmoldname = '';
-						if (znamepart[6] != null) {
-							zsubmoldname = znamepart[6];
-						} else if (znamepart[2] != null) {
-							zsubmoldname = znamepart[2];
+						if (znamepart[7] != null) {
+							zsubmoldname = znamepart[7];
+						} else if (znamepart[3] != null) {
+							zsubmoldname = znamepart[3];
 						}
 						if (zmoldnamepart == zchildname && zsubmoldname != zchildname && zchildname != '') {
-							zmoldname = zmoldname + "-" + zchildname;
+							zmoldname = zmoldname + '-' + zchildname;
 						}
 						var zanimationname = WTW.checkFunctionname(zobjectanimations[i].animationname, zmoldname);
 
@@ -409,7 +409,7 @@ WTWJS.prototype.addMoldAnimation = function(zmoldname, zchildname, zmold, zobjec
 			}
 		}		
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-addMoldAnimation=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-addMoldAnimation=' + ex.message);
 	}
 }
 
@@ -430,7 +430,7 @@ WTWJS.prototype.resetActiveAnimations = function(zavatar) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-resetActiveAnimations=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-resetActiveAnimations=' + ex.message);
 	}
 }
 
@@ -444,12 +444,12 @@ WTWJS.prototype.checkAnimationSet = function(zavatar, zevent, zanimationset) {
 			if (zavatar.WTW != null) {
 				if (zavatar.WTW.animations != null) {
 					if (zavatar.WTW.animations.running != null) {
-						if (zanimationset.indexOf("vehicle") > -1) {
+						if (zanimationset.indexOf('vehicle') > -1) {
 							zevent = WTW.setVehicleAnimation(zevent);
 						} else {
 							var zweightkey = zevent;
 							if (zanimationset != '') {
-								zweightkey = zevent + "-" + zanimationset;
+								zweightkey = zevent + '-' + zanimationset;
 							}
 							if (zavatar.WTW.animations.running[zweightkey] != undefined) {
 								zevent = zweightkey;
@@ -460,7 +460,7 @@ WTWJS.prototype.checkAnimationSet = function(zavatar, zevent, zanimationset) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-checkAnimationSet=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-checkAnimationSet=' + ex.message);
 	}
 	return zevent;
 }
@@ -481,8 +481,8 @@ WTWJS.prototype.checkMoldEvent = function(zmoldevent, zmoldname) {
 						}
 						var zadditionalscript = WTW.moldEvents[i].additionalscript;
 						if (zadditionalscript != '') {
-							if (zadditionalscript.indexOf("WTW.") > -1) {
-								zadditionalscript = zadditionalscript.replace("WTW.","")
+							if (zadditionalscript.indexOf('WTW.') > -1) {
+								zadditionalscript = zadditionalscript.replace('WTW.','')
 								if (typeof WTW[zadditionalscript] == 'function') {
 									var zparameters = WTW.moldEvents[i].additionalparameters;
 									if (zparameters.indexOf(',') > -1) {
@@ -510,14 +510,14 @@ WTWJS.prototype.checkMoldEvent = function(zmoldevent, zmoldname) {
 				}
 			}
 		}
-		if (zmoldevent == "onclick") {
+		if (zmoldevent == 'onclick') {
 			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
 			if (zmoldnameparts.parentname.indexOf('seat') > -1) {
 				WTW.startSit(zmoldname);
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-checkMoldEvent=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-checkMoldEvent=' + ex.message);
 	}
 }
 
@@ -532,7 +532,7 @@ WTWJS.prototype.setMovementEventsKey = function(zmoveevents, zevent, zweight) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_dynamicscripts.js-setMovementEventsKey=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_dynamicscripts.js-setMovementEventsKey=' + ex.message);
 	}
 	return zmoveevents;
 }

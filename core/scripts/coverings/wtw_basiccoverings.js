@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -10,13 +10,13 @@ WTWJS.prototype.addCoveringWire = function(zmoldname, zmolddef) {
 	/* wireframe the mold instead of adding a material */
 	var zcovering;
 	try {
-		zcovering = "none";
+		zcovering = 'none';
 		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
 			zmold.wireframe = true;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringWire=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringWire=' + ex.message);
 	}
 	return zcovering;
 }
@@ -36,14 +36,14 @@ WTWJS.prototype.addCoveringColor = function(zmoldname, zmolddef) {
 				}
 			}
 		}
-		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
 		zcovering.alpha = zopacity;
 		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
 		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
 		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
 		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringColor=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringColor=' + ex.message);
 	}
 	return zcovering;
 }
@@ -53,8 +53,8 @@ WTWJS.prototype.addCoveringGlass = function(zmoldname, zmolddef) {
 	/* you can also achieve this with a color or texture with an opacity set in advanced options on the form */
 	var zcovering;
 	try {
-		WTW.disposeMaterial("mat" + zmoldname);		
-		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		WTW.disposeMaterial('mat' + zmoldname);		
+		zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
 		var zopacity = .2;
 		zcovering.alpha = zopacity;
 		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
@@ -62,7 +62,7 @@ WTWJS.prototype.addCoveringGlass = function(zmoldname, zmolddef) {
 		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
 		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringGlass=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringGlass=' + ex.message);
 	}
 	return zcovering;
 }
@@ -83,8 +83,8 @@ WTWJS.prototype.addCoveringMirror = function(zmoldname, zmolddef) {
 				}
 			}
 		}*/
-		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		zcovering.reflectionTexture = new BABYLON.MirrorTexture("matmirror" + zmoldname, 1024, scene, true);
+		zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
+		zcovering.reflectionTexture = new BABYLON.MirrorTexture('matmirror' + zmoldname, 1024, scene, true);
 		zcovering.reflectionTexture.mirrorPlane = new BABYLON.Plane(0, 0, 1, -10.0);
 		//zcovering.reflectionTexture.renderList = [WTW.sky, WTW.extraGround];
 		zcovering.reflectionTexture.level = zmirrorLevel;
@@ -95,7 +95,7 @@ WTWJS.prototype.addCoveringMirror = function(zmoldname, zmolddef) {
 		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 		WTW.initMirrorLoadZone(zmoldname, zmolddef);
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringMirror=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringMirror=' + ex.message);
 	}
 	return zcovering;
 }
@@ -104,7 +104,7 @@ WTWJS.prototype.addCoveringTexture = function(zmoldname, zmolddef, zlenx, zleny,
 	/* basic add texture material to mold - attempts to scale the texture on the surface (which can be overwritten in the advanced options of the form) */
 	var zcovering;
 	try {
-		var zshape = "box"; 
+		var zshape = 'box'; 
 		var zuoffset = 0;
 		var zvoffset = 0;
 		var zuscale = zlenx/10;
@@ -117,25 +117,25 @@ WTWJS.prototype.addCoveringTexture = function(zmoldname, zmolddef, zlenx, zleny,
 			zuscale = zlenz/10;
 			zvscale = zlenx/10;
 		}
-		var zimageid = "t1qlqxd6pzubzzzy";
-		var ztexturepath = "";
-		var zbumpid = "";
-		var zbumppath = "";
+		var zimageid = 't1qlqxd6pzubzzzy';
+		var ztexturepath = '';
+		var zbumpid = '';
+		var zbumppath = '';
 		var zdiffusecolor = '#ffffff';
 		var zemissivecolor = '#000000';
 		var zspecularcolor = '#000000';
 		var zambientcolor = '#ffffff';
 		if (zmolddef != undefined) {
-			if (zmolddef.shape != "") {
+			if (zmolddef.shape != '') {
 				zshape = zmolddef.shape;
 			}
-			if (zshape == "sphere" || zshape == "dome" || zshape == "cone") {
+			if (zshape == 'sphere' || zshape == 'dome' || zshape == 'cone') {
 				zuscale = ((zlenx/10 + zlenz/10) / 2) * Math.PI;
 				zvscale = zvscale * Math.PI;
-			} else if (zshape == "cylinder") {
+			} else if (zshape == 'cylinder') {
 				zuscale = ((zlenx + zlenz) / 2) / Math.PI;
 				zvscale = 1;
-			} else if (zshape == "half pipe") {
+			} else if (zshape == 'half pipe') {
 				zuscale = zlenx / 10;
 				zvscale = zlenz / 10;
 			}
@@ -145,14 +145,14 @@ WTWJS.prototype.addCoveringTexture = function(zmoldname, zmolddef, zlenx, zleny,
 				}
 				if (zmolddef.graphics.texture.path != undefined) {
 					ztexturepath = zmolddef.graphics.texture.path;
-					ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+					ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 				}
 				if (zmolddef.graphics.texture.bumpid != undefined) {
 					zbumpid = zmolddef.graphics.texture.bumpid;
 				}
 				if (zmolddef.graphics.texture.bumppath != undefined) {
 					zbumppath = zmolddef.graphics.texture.bumppath;
-					zbumppath = zbumppath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+					zbumppath = zbumppath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 				}
 				if (WTW.isNumeric(zmolddef.graphics.uscale)) {
 					if (Number(zmolddef.graphics.uscale) > 0) {
@@ -198,18 +198,18 @@ WTWJS.prototype.addCoveringTexture = function(zmoldname, zmolddef, zlenx, zleny,
 				}
 			}
 		}
-		WTW.disposeMaterial("mat" + zmoldname);		
-		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		WTW.disposeMaterial('mat' + zmoldname);		
+		zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
 		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
 		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
 		zcovering.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
 		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
 
-		var zimageextension = "";
+		var zimageextension = '';
 		if (ztexturepath == '') {
 			var zimageinfo = WTW.getUploadFileData(zimageid);
 			zimageextension = zimageinfo.extension;
-			zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, 'mattexture' + zimageid, scene);
 		} else {
 			zcovering.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 			zimageextension = ztexturepath.substr(ztexturepath.length - 3).toLowerCase();
@@ -218,7 +218,7 @@ WTWJS.prototype.addCoveringTexture = function(zmoldname, zmolddef, zlenx, zleny,
 		zcovering.diffuseTexture.vScale = zvscale;
 		zcovering.diffuseTexture.uOffset = zuoffset;
 		zcovering.diffuseTexture.vOffset = zvoffset;
-		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
+		if (zimageextension.indexOf('gif') > -1 || zimageextension.indexOf('png') > -1) {
 			zcovering.diffuseTexture.hasAlpha = true;
 		}	
 		if (zbumpid != '' || zbumppath != '') {
@@ -226,7 +226,7 @@ WTWJS.prototype.addCoveringTexture = function(zmoldname, zmolddef, zlenx, zleny,
 				zcovering.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				zcovering.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "mattexture" + zbumpid, scene);
+				zcovering.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, 'mattexture' + zbumpid, scene);
 			}
 			zcovering.bumpTexture.uScale = zuscale;
 			zcovering.bumpTexture.vScale = zvscale;
@@ -240,10 +240,10 @@ WTWJS.prototype.addCoveringTexture = function(zmoldname, zmolddef, zlenx, zleny,
 		//zcovering.isBlocking = false;
 		//zcovering.forceCompilation(mold, function() {
 //					mold.simplify([{ quality: 0.9, distance: 50 }, { quality: 0.5, distance: 80 }, { quality: 0.3, distance: 100 }, { quality: 0.1, distance: 180 }], true, BABYLON.SimplificationType.QUADRATIC, function() {
-//					zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+//					zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, 'mattexture' + zimageid, scene);
 //				});
 		//});
-		if (zmoldname.indexOf("myavatar-") > -1 || zmoldname.indexOf("person-") > -1) {
+		if (zmoldname.indexOf('myavatar-') > -1 || zmoldname.indexOf('person-') > -1) {
 			zcovering.backFaceCulling = false;
 		} else {
 			zcovering.backFaceCulling = true;
@@ -261,7 +261,7 @@ WTWJS.prototype.addCoveringTexture = function(zmoldname, zmolddef, zlenx, zleny,
 		}
 		zcovering.alpha = zopacity;
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringTexture=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringTexture=' + ex.message);
 	}
 	return zcovering;
 }
@@ -299,12 +299,12 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 		var zvosu = 0; 
 		var zuosd = 0; 
 		var zvosd = 0; 
-		var zimageid = "t1qlqxd6pzubzzzy";
-		var ztexturepath = "";
-		var zbumpid = "";
-		var zbumppath = "";
+		var zimageid = 't1qlqxd6pzubzzzy';
+		var ztexturepath = '';
+		var zbumpid = '';
+		var zbumppath = '';
 		var zopacity = 1;
-		var zimageextension = "";
+		var zimageextension = '';
 		if (zmolddef != undefined) {
 			if (zmolddef.opacity != undefined) {
 				if (WTW.isNumeric(zmolddef.opacity)) {
@@ -318,14 +318,14 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 			}
 			if (zmolddef.graphics != undefined) {
 				if (zmolddef.graphics.texture.id != undefined) {
-					if (zmolddef.graphics.texture.id != "") {
+					if (zmolddef.graphics.texture.id != '') {
 						zimageid = zmolddef.graphics.texture.id;
 					}
 				}
 				if (zmolddef.graphics.texture.path != undefined) {
-					if (zmolddef.graphics.texture.path != "") {
+					if (zmolddef.graphics.texture.path != '') {
 						ztexturepath = zmolddef.graphics.texture.path;
-						ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+						ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 					}
 				}
 				if (zmolddef.graphics.texture.bumpid != undefined) {
@@ -333,7 +333,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 				}
 				if (zmolddef.graphics.texture.bumppath != undefined) {
 					zbumppath = zmolddef.graphics.texture.bumppath;
-					zbumppath = zbumppath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+					zbumppath = zbumppath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 				}
 				if (WTW.isNumeric(zmolddef.graphics.uscale)) {
 					if (Number(zmolddef.graphics.uscale) > 0) {
@@ -426,14 +426,14 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 				zmold.subMeshes.push(new BABYLON.SubMesh(5, 20, 4, 30, 6, zmold));
 			}		
 		}
-		zcovering = new BABYLON.MultiMaterial("cubemat" + zmoldname, scene);
-		var zrmaterial = new BABYLON.StandardMaterial("rmat" + zmoldname, scene);
+		zcovering = new BABYLON.MultiMaterial('cubemat' + zmoldname, scene);
+		var zrmaterial = new BABYLON.StandardMaterial('rmat' + zmoldname, scene);
 		var zimageinfo;
 		var zimageextension = '';
 		if (ztexturepath == '') {
 			zimageinfo = WTW.getUploadFileData(zimageid);
 			zimageextension = zimageinfo.extension;
-			zrmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zrmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, 'mattexture' + zimageid, scene);
 		} else {
 			zrmaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 			zimageextension = ztexturepath.substr(ztexturepath.length - 3).toLowerCase();
@@ -450,7 +450,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 		zrmaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
 		zrmaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 
-		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
+		if (zimageextension.indexOf('gif') > -1 || zimageextension.indexOf('png') > -1) {
 			zrmaterial.diffuseTexture.hasAlpha = true;
 			zrmaterial.useAlphaFromDiffuseTexture = true;
 		}
@@ -459,7 +459,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 				zrmaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				zrmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "rMaterial" + zmoldname, scene);
+				zrmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, 'rMaterial' + zmoldname, scene);
 			}
 			zrmaterial.bumpTexture.wAng = 0 * Math.PI / 180;
 			zrmaterial.bumpTexture.uScale = zuscr;
@@ -469,9 +469,9 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 			zrmaterial.useParallax = true;
 			zrmaterial.useParallaxOcclusion = true;
 		}
-		var zlmaterial = new BABYLON.StandardMaterial("lmat" + zmoldname, scene);
+		var zlmaterial = new BABYLON.StandardMaterial('lmat' + zmoldname, scene);
 		if (ztexturepath == '') {
-			zlmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zlmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, 'mattexture' + zimageid, scene);
 		} else {
 			zlmaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
@@ -486,7 +486,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 		zlmaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
 		zlmaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 
-		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
+		if (zimageextension.indexOf('gif') > -1 || zimageextension.indexOf('png') > -1) {
 			zlmaterial.diffuseTexture.hasAlpha = true;
 			zlmaterial.useAlphaFromDiffuseTexture = true;
 		}
@@ -495,7 +495,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 				zlmaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				zlmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "lMaterial" + zmoldname, scene);
+				zlmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, 'lMaterial' + zmoldname, scene);
 			}
 			zlmaterial.bumpTexture.wAng = 180 * Math.PI / 180;
 			zlmaterial.bumpTexture.uScale = zuscl;
@@ -505,13 +505,13 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 			zlmaterial.useParallax = true;
 			zlmaterial.useParallaxOcclusion = true;
 		}
-		var imagename = "fmattexture" + zmoldname;
+		var imagename = 'fmattexture' + zmoldname;
 		if (WTW.adminView == 1) {
 			imagename +=  WTW.getRandomString(16);
 		}
-		var zfmaterial = new BABYLON.StandardMaterial("fmat" + zmoldname, scene);
+		var zfmaterial = new BABYLON.StandardMaterial('fmat' + zmoldname, scene);
 		if (ztexturepath == '') {
-			zfmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zfmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, 'mattexture' + zimageid, scene);
 		} else {
 			zfmaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
@@ -526,7 +526,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 		zfmaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
 		zfmaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 
-		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
+		if (zimageextension.indexOf('gif') > -1 || zimageextension.indexOf('png') > -1) {
 			zfmaterial.diffuseTexture.hasAlpha = true;
 			zfmaterial.useAlphaFromDiffuseTexture = true;
 		}
@@ -535,7 +535,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 				zfmaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				zfmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "fMaterial" + zmoldname, scene);
+				zfmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, 'fMaterial' + zmoldname, scene);
 			}
 			zfmaterial.bumpTexture.wAng = 90 * Math.PI / 180;
 			zfmaterial.bumpTexture.uScale = zuscf;
@@ -545,9 +545,9 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 			zfmaterial.useParallax = true;
 			zfmaterial.useParallaxOcclusion = true;
 		}
-		var zbmaterial = new BABYLON.StandardMaterial("bmat" + zmoldname, scene);
+		var zbmaterial = new BABYLON.StandardMaterial('bmat' + zmoldname, scene);
 		if (ztexturepath == '') {
-			zbmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zbmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, 'mattexture' + zimageid, scene);
 		} else {
 			zbmaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
@@ -563,7 +563,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 		zbmaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
 		zbmaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 
-		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
+		if (zimageextension.indexOf('gif') > -1 || zimageextension.indexOf('png') > -1) {
 			zbmaterial.diffuseTexture.hasAlpha = true;
 			zbmaterial.useAlphaFromDiffuseTexture = true;
 		}
@@ -572,7 +572,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 				zbmaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				zbmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "bMaterial" + zmoldname, scene);
+				zbmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, 'bMaterial' + zmoldname, scene);
 			}
 			zbmaterial.bumpTexture.wAng = 90 * Math.PI / 180;
 			zbmaterial.bumpTexture.uScale = zuscb;
@@ -582,9 +582,9 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 			zbmaterial.useParallax = true;
 			zbmaterial.useParallaxOcclusion = true;
 		}
-		var zumaterial = new BABYLON.StandardMaterial("umat" + zmoldname, scene);
+		var zumaterial = new BABYLON.StandardMaterial('umat' + zmoldname, scene);
 		if (ztexturepath == '') {
-			zumaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zumaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, 'mattexture' + zimageid, scene);
 		} else {
 			zumaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
@@ -600,7 +600,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 		zumaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
 		zumaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 
-		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
+		if (zimageextension.indexOf('gif') > -1 || zimageextension.indexOf('png') > -1) {
 			zumaterial.diffuseTexture.hasAlpha = true;
 			zumaterial.useAlphaFromDiffuseTexture = true;
 		}
@@ -609,7 +609,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 				zumaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				zumaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "uMaterial" + zmoldname, scene);
+				zumaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, 'uMaterial' + zmoldname, scene);
 			}
 			zumaterial.bumpTexture.wAng = 180 * Math.PI / 180;
 			zumaterial.bumpTexture.uScale = zuscu;
@@ -619,9 +619,9 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 			zumaterial.useParallax = true;
 			zumaterial.useParallaxOcclusion = true;
 		}
-		var zdmaterial = new BABYLON.StandardMaterial("dmat" + zmoldname, scene);
+		var zdmaterial = new BABYLON.StandardMaterial('dmat' + zmoldname, scene);
 		if (ztexturepath == '') {
-			zdmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + zimageid, scene);
+			zdmaterial.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, 'mattexture' + zimageid, scene);
 		} else {
 			zdmaterial.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 		}
@@ -637,7 +637,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 		zdmaterial.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
 		zdmaterial.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 
-		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
+		if (zimageextension.indexOf('gif') > -1 || zimageextension.indexOf('png') > -1) {
 			zdmaterial.diffuseTexture.hasAlpha = true;
 			zdmaterial.useAlphaFromDiffuseTexture = true;
 		}
@@ -646,7 +646,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 				zdmaterial.bumpTexture = new BABYLON.Texture(zbumppath, scene);
 			} else {
 				var zimageinfobump = WTW.getUploadFileData(zbumpid);
-				zdmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, "dMaterial" + zmoldname, scene);
+				zdmaterial.bumpTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfobump.image.src, 'dMaterial' + zmoldname, scene);
 			}
 			zdmaterial.bumpTexture.wAng = 180 * Math.PI / 180;
 			zdmaterial.bumpTexture.uScale = zuscd;
@@ -662,7 +662,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 		zcovering.subMaterials[3] = zfmaterial;
 		zcovering.subMaterials[4] = zumaterial;
 		zcovering.subMaterials[5] = zdmaterial;
-		if (zmoldname.indexOf("myavatar-") > -1 || zmoldname.indexOf("person-") > -1) {
+		if (zmoldname.indexOf('myavatar-') > -1 || zmoldname.indexOf('person-') > -1) {
 			zcovering.backFaceCulling = false;
 		} else {
 			zcovering.backFaceCulling = true;
@@ -676,7 +676,7 @@ WTWJS.prototype.addCoveringDirectionalTexture = function(zmoldname, zmolddef, zl
 		//zcovering.freeze();  // zcovering.unfreeze();
 		//zcovering.isBlocking = false;
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringDirectionalTexture=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringDirectionalTexture=' + ex.message);
 	}
 	return zcovering;
 }
@@ -685,9 +685,9 @@ WTWJS.prototype.addCoveringWater = function(zmoldname, zmolddef) {
 	/* water like surface material with reflection and refraction */
 	var zcovering;
 	try {
-		zcovering = new BABYLON.WaterMaterial("mat" + zmoldname, scene, new BABYLON.Vector2(512, 512));
+		zcovering = new BABYLON.WaterMaterial('mat' + zmoldname, scene, new BABYLON.Vector2(512, 512));
 		zcovering.backFaceCulling = true;
-		zcovering.bumpTexture = new BABYLON.Texture("/content/system/stock/waterbump.png", scene);
+		zcovering.bumpTexture = new BABYLON.Texture('/content/system/stock/waterbump.png', scene);
 		zcovering.windForce = -10;
 		zcovering.waveHeight = .2;
 		//zcovering.windDirection = new BABYLON.Vector2(1, 1);
@@ -701,7 +701,7 @@ WTWJS.prototype.addCoveringWater = function(zmoldname, zmolddef) {
 		zcovering.addToRenderList(WTW.extraGround);
 		WTW.addReflection(zcovering);
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringWater=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringWater=' + ex.message);
 	}
 	return zcovering;
 }
@@ -710,12 +710,12 @@ WTWJS.prototype.addCoveringFire = function(zmoldname, zmolddef) {
 	/* fire procedural texture */
 	var zcovering;
 	try {
-		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		var zcoveringfire = new BABYLON.FireProceduralTexture("matfiretex" + zmoldname, 256, scene);
+		zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
+		var zcoveringfire = new BABYLON.FireProceduralTexture('matfiretex' + zmoldname, 256, scene);
 		zcovering.diffuseTexture = zcoveringfire;
 		zcovering.opacityTexture = zcoveringfire;
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringFire=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringFire=' + ex.message);
 	}
 	return zcovering;
 }
@@ -754,10 +754,10 @@ WTWJS.prototype.addCoveringMarble = function(zmoldname, zmolddef, zlenx, zleny, 
 		if (zvscale < 1) {
 			zvscale = 1;
 		}
-		var zmarbletexture = new BABYLON.MarbleProceduralTexture("matmarbletex" + zmoldname, 512, scene);
+		var zmarbletexture = new BABYLON.MarbleProceduralTexture('matmarbletex' + zmoldname, 512, scene);
 		zmarbletexture.numberOfTilesHeight = Number(zuscale).toFixed(0);
 		zmarbletexture.numberOfTilesWidth = Number(zvscale).toFixed(0);
-		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
 		zcovering.alpha = zopacity;
 		zcovering.ambientTexture = zmarbletexture;
 		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
@@ -765,7 +765,7 @@ WTWJS.prototype.addCoveringMarble = function(zmoldname, zmolddef, zlenx, zleny, 
 		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
 		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringMarble=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringMarble=' + ex.message);
 	}
 	return zcovering;
 }
@@ -774,15 +774,15 @@ WTWJS.prototype.addCoveringRoad = function(zmoldname, zmolddef) {
 	/* road procedural texture */
 	var zcovering;
 	try {
-		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
-		var zroadtexture = new BABYLON.RoadProceduralTexture("matroadtex" + zmoldname, 512, scene);
+		zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
+		var zroadtexture = new BABYLON.RoadProceduralTexture('matroadtex' + zmoldname, 512, scene);
 		zcovering.diffuseTexture = zroadtexture;
 		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
 		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
 		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
 		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringRoad=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringRoad=' + ex.message);
 	}
 	return zcovering;
 }
@@ -791,16 +791,16 @@ WTWJS.prototype.addCoveringHidden = function(zmoldname, zalpha) {
 	/* hidden will make a transparent object */
 	var zcovering;
 	try {
-		if (typeof zalpha === "undefined") {
+		if (typeof zalpha === 'undefined') {
 			zalpha = 0;
 		}
-		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
 		zcovering.alpha = zalpha;
 		zcovering.specularColor = new BABYLON.Color3(zalpha, zalpha, zalpha);
 		zcovering.emissiveColor = new BABYLON.Color3(zalpha, zalpha, zalpha);
 		zcovering.diffuseColor = new BABYLON.Color3(zalpha, zalpha, zalpha);	
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringHidden=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringHidden=' + ex.message);
 	}
 	return zcovering;
 }
@@ -813,9 +813,9 @@ WTWJS.prototype.addCovering2D = function(zmoldname, zmolddef, zlenx, zleny, zlen
 		var zvoffset = 0;
 		var zuscale = 1;
 		var zvscale = 1;
-		var ztextureid = "t1qlqxd6pzubzzzy";
-		var ztexturepath = "/content/system/stock/lightgray-512x512.jpg";
-		var zimageextension = "";
+		var ztextureid = 't1qlqxd6pzubzzzy';
+		var ztexturepath = '/content/system/stock/lightgray-512x512.jpg';
+		var zimageextension = '';
 		if (zmolddef != undefined) {
 			if (zmolddef.graphics != undefined) {
 				if (zmolddef.graphics.texture.id != undefined) {
@@ -826,7 +826,7 @@ WTWJS.prototype.addCovering2D = function(zmoldname, zmolddef, zlenx, zleny, zlen
 				if (zmolddef.graphics.texture.path != undefined) {
 					if (zmolddef.graphics.texture.path.length > 0) {
 						ztexturepath = zmolddef.graphics.texture.path;
-						ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+						ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 					}
 				}
 				if (WTW.isNumeric(zmolddef.graphics.uscale)) {
@@ -851,7 +851,7 @@ WTWJS.prototype.addCovering2D = function(zmoldname, zmolddef, zlenx, zleny, zlen
 				}		
 			}
 		}
-		zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
 		if (ztexturepath == '') {
 			var zimageinfo = WTW.getUploadFileData(ztextureid);
 			zimageextension = zimageinfo.extension;
@@ -859,8 +859,8 @@ WTWJS.prototype.addCovering2D = function(zmoldname, zmolddef, zlenx, zleny, zlen
 		} else {
 			zimageextension = ztexturepath.substr(ztexturepath.length - 3).toLowerCase();
 		}
-		zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(ztexturepath, "mattexture" + ztextureid, scene);
-		if (zimageextension.indexOf("gif") > -1 || zimageextension.indexOf("png") > -1) {
+		zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(ztexturepath, 'mattexture' + ztextureid, scene);
+		if (zimageextension.indexOf('gif') > -1 || zimageextension.indexOf('png') > -1) {
 			zcovering.diffuseTexture.hasAlpha = true;
 		}
 		zcovering.diffuseTexture.uScale = zuscale;
@@ -884,7 +884,7 @@ WTWJS.prototype.addCovering2D = function(zmoldname, zmolddef, zlenx, zleny, zlen
 		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
 		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCovering2D=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCovering2D=' + ex.message);
 	}
 	return zcovering;
 }
@@ -905,8 +905,8 @@ WTWJS.prototype.addCoveringTerrain = function(zmoldname, zmolddef, zlenx, zleny,
 			var zvoffset = 0;
 			var zuscale = zlenx / 10;
 			var zvscale = zlenz / 10;
-			var ztextureid = "t1qlqxd6pzubzzzy";
-			var ztexturepath = "/content/system/stock/lightgray-512x512.jpg";
+			var ztextureid = 't1qlqxd6pzubzzzy';
+			var ztexturepath = '/content/system/stock/lightgray-512x512.jpg';
 			if (zmolddef != undefined) {
 				if (zmolddef.graphics != undefined) {
 					if (zmolddef.graphics.texture.id != undefined) {
@@ -917,7 +917,7 @@ WTWJS.prototype.addCoveringTerrain = function(zmoldname, zmolddef, zlenx, zleny,
 					if (zmolddef.graphics.texture.path != undefined) {
 						if (zmolddef.graphics.texture.path.length > 0) {
 							ztexturepath = zmolddef.graphics.texture.path;
-							ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+							ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 						}
 					}
 					if (WTW.isNumeric(zmolddef.graphics.uscale)) {
@@ -942,8 +942,8 @@ WTWJS.prototype.addCoveringTerrain = function(zmoldname, zmolddef, zlenx, zleny,
 					}		
 				}
 			}
-			zcovering = new BABYLON.StandardMaterial("mat-" + zmoldname, scene);
-			if (ztextureid != "" || ztexturepath != "") {
+			zcovering = new BABYLON.StandardMaterial('mat-' + zmoldname, scene);
+			if (ztextureid != '' || ztexturepath != '') {
 				zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
 				zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
 				zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
@@ -952,7 +952,7 @@ WTWJS.prototype.addCoveringTerrain = function(zmoldname, zmolddef, zlenx, zleny,
 					zcovering.diffuseTexture = new BABYLON.Texture(ztexturepath, scene);
 				} else {
 					var zimageinfo = WTW.getUploadFileData(ztextureid);
-					zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, "mattexture" + ztextureid, scene);
+					zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.image.src, 'mattexture' + ztextureid, scene);
 				}
 				zcovering.diffuseTexture.uScale = zuscale;
 				zcovering.diffuseTexture.vScale = zvscale;
@@ -961,7 +961,7 @@ WTWJS.prototype.addCoveringTerrain = function(zmoldname, zmolddef, zlenx, zleny,
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringTerrain=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringTerrain=' + ex.message);
 	}
 	return zcovering;
 }
@@ -981,7 +981,7 @@ WTWJS.prototype.loadTerrainAdvancedImages = function(zmoldname, zlenx, zleny, zl
 		var ztexturebumprpath = zmolddef.graphics.heightmap.texturebumprpath;
 		var ztexturebumpgpath = zmolddef.graphics.heightmap.texturebumpgpath;
 		var ztexturebumpbpath = zmolddef.graphics.heightmap.texturebumpbpath;
-		zheightmappath = zheightmappath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+		zheightmappath = zheightmappath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 
 		if ((zheightmappath != '' || WTW.isUploadReady(heightmapid)) && (zmixmappath != '' || WTW.isUploadReady(mixmapid)) && (ztexturerpath != '' || WTW.isUploadReady(texturerid)) && (ztexturegpath != '' || WTW.isUploadReady(texturegid)) && (ztexturebpath != '' || WTW.isUploadReady(texturebid)) && (ztexturebumprpath != '' || WTW.isUploadReady(texturebumprid) || texturebumprid == '') && (ztexturebumpgpath != '' || WTW.isUploadReady(texturebumpgid) || texturebumpgid == '') && (ztexturebumpbpath != '' || WTW.isUploadReady(texturebumpbid) || texturebumpbid == '')) {
 			var zimageheightmapid = WTW.getUploadFileData(heightmapid);
@@ -1046,7 +1046,7 @@ WTWJS.prototype.loadTerrainAdvancedImages = function(zmoldname, zlenx, zleny, zl
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n loadTerrainAdvancedImages=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n loadTerrainAdvancedImages=' + ex.message);
 	}
 	return zcovering;
 }
@@ -1086,16 +1086,16 @@ WTWJS.prototype.addCoveringTerrainAdvanced = function(zmoldname, zlenx, zleny, z
 				}		
 			}
 		}	
-		zmixmappath = zmixmappath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
-		ztexturerpath = ztexturerpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
-		ztexturegpath = ztexturegpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
-		ztexturebpath = ztexturebpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
-		ztexturebumprpath = ztexturebumprpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
-		ztexturebumpgpath = ztexturebumpgpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
-		ztexturebumpbpath = ztexturebumpbpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+		zmixmappath = zmixmappath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
+		ztexturerpath = ztexturerpath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
+		ztexturegpath = ztexturegpath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
+		ztexturebpath = ztexturebpath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
+		ztexturebumprpath = ztexturebumprpath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
+		ztexturebumpgpath = ztexturebumpgpath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
+		ztexturebumpbpath = ztexturebumpbpath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 		
 		// Create terrain material
-		var zcovering = new BABYLON.TerrainMaterial("mat" + zmoldname, scene);
+		var zcovering = new BABYLON.TerrainMaterial('mat' + zmoldname, scene);
 		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
 		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
 		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
@@ -1137,7 +1137,7 @@ WTWJS.prototype.addCoveringTerrainAdvanced = function(zmoldname, zlenx, zleny, z
 		zcovering.diffuseTexture3.uOffset = zuoffset;
 		zcovering.diffuseTexture3.vOffset = zuoffset;								
 	} catch (ex) {
-		WTW.log("core-scripts-coverings-basiccoverings\r\n addCoveringTerrainAdvanced=" + ex.message);
+		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringTerrainAdvanced=' + ex.message);
 	}
 	return zcovering;
 }

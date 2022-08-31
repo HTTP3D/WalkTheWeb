@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -43,7 +43,7 @@ WTWJS.prototype.adminInit = function() {
 	try {
 		/* add code if necessary, executes after WalkTheWeb scene completes loading sequence */
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admininit.js-adminInit=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admininit.js-adminInit=' + ex.message);
 	}
 }
 
@@ -55,15 +55,18 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 
 		var zsnapshot = WTW.getQuerystring('snapshot','0');
 		var zhmenu = WTW.getQuerystring('hmenu',1);
+		if (dGet('wtw_adminmenubutton').style.left == '') {
+			dGet('wtw_adminmenubutton').style.left = '0px';
+		}
 		if (zsnapshot != '1') {
 			/* default startup (not returning from a Babylon screen shot) */
 			/* show updates page if returning from an update reload */
 			var zshowupdates = WTW.getQuerystring('showupdates','0');
 			switch (zshowupdates) {
-				case "1":
+				case '1':
 					WTW.openFullPageForm('updates','','');
 					break;
-				case "2":
+				case '2':
 					WTW.openFullPageForm('plugins','All Plugins');
 					break;
 				default:
@@ -94,15 +97,15 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 						
 				}
 				WTW.show('wtw_adminmenu' + zhmenu);
-				if (dGet('wtw_adminmenubutton').style.left == "0px") {
+				if (dGet('wtw_adminmenubutton').style.left == '0px') {
 					WTW.toggleAdminMenu('wtw_adminmenubutton');
 				}
-			} else if (zhmenu != "") {
+			} else if (zhmenu != '') {
 				/* open default page (dashboard) */
-				if (zhmenu == "updates") {
+				if (zhmenu == 'updates') {
 					WTW.openFullPageForm('updates','','');
 				}
-				if (dGet('wtw_adminmenubutton').style.left == "0px") {
+				if (dGet('wtw_adminmenubutton').style.left == '0px') {
 					WTW.toggleAdminMenu('wtw_adminmenubutton');
 				}
 			}
@@ -114,21 +117,21 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 			zhmenu = 69;
 			if (communityid != '') {
 				WTW.hideAdminMenu();
-				dGet('wtw_snapshottitle').innerHTML = "3D Community Snapshot";
+				dGet('wtw_snapshottitle').innerHTML = '3D Community Snapshot';
 				WTW.openUpdateSnapshotForm();
 				WTW.show('wtw_adminmenu69');
 			} else if (buildingid != '') {
 				WTW.hideAdminMenu();
-				dGet('wtw_snapshottitle').innerHTML = "3D Building Snapshot";
+				dGet('wtw_snapshottitle').innerHTML = '3D Building Snapshot';
 				WTW.openUpdateSnapshotForm();
 				WTW.show('wtw_adminmenu69');
 			} else if (thingid != '') {
 				WTW.hideAdminMenu();
-				dGet('wtw_snapshottitle').innerHTML = "3D Thing Snapshot";
+				dGet('wtw_snapshottitle').innerHTML = '3D Thing Snapshot';
 				WTW.openUpdateSnapshotForm();
 				WTW.show('wtw_adminmenu69');
 			}
-			if (dGet('wtw_adminmenubutton').style.left == "0px") {
+			if (dGet('wtw_adminmenubutton').style.left == '0px') {
 				WTW.toggleAdminMenu('wtw_adminmenubutton');
 			}
 		}
@@ -139,28 +142,28 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 		} else if (thingid != '') {
 			WTW.loadThingForm(thingid);
 		}
-		if (WTW.getCookie("wtw_bfocus") != null) {
-			if (WTW.getCookie("wtw_bfocus") == '0') {
+		if (WTW.getCookie('wtw_bfocus') != null) {
+			if (WTW.getCookie('wtw_bfocus') == '0') {
 				WTW.setQuickEditorFocus(0);
 			}
 		}
-		if (WTW.getCookie("wtw_bmerged") != null) {
-			if (WTW.getCookie("wtw_bmerged") == '1') {
+		if (WTW.getCookie('wtw_bmerged') != null) {
+			if (WTW.getCookie('wtw_bmerged') == '1') {
 				WTW.setQuickEditorMerged(1);
 			}
 		}
-		if (WTW.getCookie("wtw_bzones") != null) {
-			if (WTW.getCookie("wtw_bzones") == '1') {
+		if (WTW.getCookie('wtw_bzones') != null) {
+			if (WTW.getCookie('wtw_bzones') == '1') {
 				WTW.setQuickEditorZones(1);
 			}
 		}
-		if (WTW.getCookie("wtw_bloadall") != null) {
-			if (WTW.getCookie("wtw_bloadall") == '1') {
+		if (WTW.getCookie('wtw_bloadall') != null) {
+			if (WTW.getCookie('wtw_bloadall') == '1') {
 				WTW.setQuickEditorLoadAll(1);
 			}
 		}
-		if (WTW.getCookie("wtw_blines") != null) {
-			if (WTW.getCookie("wtw_blines") == '0') {
+		if (WTW.getCookie('wtw_blines') != null) {
+			if (WTW.getCookie('wtw_blines') == '0') {
 				WTW.setQuickEditorLines(0);
 			}
 		}
@@ -170,7 +173,7 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 		dGet('wtw_twaterbumppath').value = WTW.init.waterBumpPath;
 		WTW.setMenuBarSelectText();
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admininit.js-adminLoadAfterScreen=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admininit.js-adminLoadAfterScreen=' + ex.message);
 	}
 }
 

@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -90,7 +90,7 @@ WTWJS.prototype.newConnectingGrid = function() {
 			'shown':'0'
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newConnectingGrid=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newConnectingGrid=' + ex.message);
 	}
 	return zconnectinggrid;
 }
@@ -190,7 +190,7 @@ WTWJS.prototype.newActionZone = function() {
 			'parentname':''
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newActionZone=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newActionZone=' + ex.message);
 	}
 	return zactionzone;
 }
@@ -380,7 +380,7 @@ WTWJS.prototype.newMold = function() {
 			'moldname':''
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newmold=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newmold=' + ex.message);
 	}
 	return zmolddef;
 }
@@ -397,7 +397,7 @@ WTWJS.prototype.newPathPoint = function() {
 			'sorder':'0'
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newPathPoint=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newPathPoint=' + ex.message);
 	}
 	return zpathpoint;
 }
@@ -430,7 +430,7 @@ WTWJS.prototype.newMoldEvent = function() {
 			'loaded':false
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newMoldEvent=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newMoldEvent=' + ex.message);
 	}
 	return zmoldevent;
 }
@@ -452,7 +452,7 @@ WTWJS.prototype.newWebImage = function() {
 			'clickloaded':'0'
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newWebImage=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newWebImage=' + ex.message);
 	}
 	return zwebimage;
 }
@@ -498,7 +498,7 @@ WTWJS.prototype.newHTMLSegment = function() {
 			}
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newHTMLSegment=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newHTMLSegment=' + ex.message);
 	}
 	return zhtmlsegment;
 }
@@ -529,7 +529,7 @@ WTWJS.prototype.newUpload = function() {
 			'queue':'0'
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newUpload=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newUpload=' + ex.message);
 	}
 	return zupload;
 }
@@ -559,7 +559,7 @@ WTWJS.prototype.newObjectAnimation = function() {
 			'soundmaxdistance':'100.00'
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newObjectAnimation=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newObjectAnimation=' + ex.message);
 	}
 	return zobjectanimation;
 }
@@ -587,7 +587,7 @@ WTWJS.prototype.newOffset = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newOffset=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newOffset=' + ex.message);
 	}
 	return zoffset;
 }
@@ -614,7 +614,7 @@ WTWJS.prototype.newMoldQueue = function() {
 			'csgmolddef':null,
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newMoldQueue=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newMoldQueue=' + ex.message);
 	}
 	return zmoldqueue;
 }
@@ -631,7 +631,7 @@ WTWJS.prototype.newAnalyticsQueue = function() {
 			'formind':'-1'
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAnalyticsQueue=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newAnalyticsQueue=' + ex.message);
 	}
 	return zanalyticsqueue;
 }
@@ -762,7 +762,7 @@ WTWJS.prototype.newAvatarDef = function() {
 			'fadetimer':null
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAvatarDef=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newAvatarDef=' + ex.message);
 	}
 	return zavatardef;
 }
@@ -794,7 +794,7 @@ WTWJS.prototype.newAvatarAnimationDef = function() {
 			'totalendframe':'0'
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAvatarAnimationDef=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newAvatarAnimationDef=' + ex.message);
 	}
 	return zanimationdef;
 }
@@ -847,7 +847,7 @@ WTWJS.prototype.newAutomation = function() {
 			'jsparameter':''
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newAutomation=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newAutomation=' + ex.message);
 	}
 	return automation;
 }
@@ -885,7 +885,7 @@ WTWJS.prototype.newDriveVehicle = function() {
 			'autospeed': null
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newDriveVehicle=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newDriveVehicle=' + ex.message);
 	}
 	return zdrive;
 }
@@ -913,7 +913,7 @@ WTWJS.prototype.newRideAlong = function() {
 			}
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_objectdefinitions.js-newRideAlong=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_objectdefinitions.js-newRideAlong=' + ex.message);
 	}
 	return zridealong;
 }

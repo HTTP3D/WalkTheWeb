@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -461,7 +461,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 								}
 							}
 						}
-						if (WTW.animationSet == "vehicle-boat") {
+						if (WTW.animationSet == 'vehicle-boat') {
 							WTW.moveAvatarVehicle(zavatar, zkeyspressed);
 						} else {
 							let zanimset = WTW.checkAnimationSet(zavatar, 'onwait', WTW.animationSet);
@@ -541,9 +541,9 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 
 									if (zavatar.WTW.animations.running[zevent].weight > 0) {
 										/* check for jump animation */
-										var zavatarscale = WTW.getMeshOrNodeByID(zavatar.name + "-scale");
-										var zavatarcenter = WTW.getMeshOrNodeByID(zavatar.name + "-center");
-										var zavatarcamera = WTW.getMeshOrNodeByID(zavatar.name + "-camera");
+										var zavatarscale = WTW.getMeshOrNodeByID(zavatar.name + '-scale');
+										var zavatarcenter = WTW.getMeshOrNodeByID(zavatar.name + '-center');
+										var zavatarcamera = WTW.getMeshOrNodeByID(zavatar.name + '-camera');
 										if (zavatarscale != null && zavatarcenter != null && zavatarcamera != null) {
 											if (zevent.indexOf('jump') > -1) {
 												/* this next code raises the avatar placeholder and adjusts the avatar scaling, camera, and center mass during a jump animation */
@@ -757,7 +757,7 @@ WTWJS.prototype.moveAvatar = function(zavatar, zkeyspressed) {
 			WTW.setMovingCameras(zavatar);
 		}
 	} catch(ex) {
-		WTW.log("core-scripts-avatars-wtw_avatarfunctions.js-moveAvatar=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_avatarfunctions.js-moveAvatar=' + ex.message);
 	}
 }
 
@@ -770,7 +770,7 @@ WTWJS.prototype.deleteUserAvatar = function(zglobaluseravatarid, zuseravatarid, 
 				'function':'deleteuseravatar'
 			};
 			/* send request to local server avatars handler */
-			WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+			WTW.postAsyncJSON('/core/handlers/avatars.php', zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					if (zglobaluseravatarid != '') {
@@ -785,7 +785,7 @@ WTWJS.prototype.deleteUserAvatar = function(zglobaluseravatarid, zuseravatarid, 
 							'function':'deleteglobaluseravatar'
 						};
 						/* send request to global server avatars handler */
-						WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalsaveavatar.php", zrequest2, 
+						WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalsaveavatar.php', zrequest2, 
 							function(zresponse2) {
 								zresponse2 = JSON.parse(zresponse2);
 								/* global user avatar - refresh list */
@@ -811,7 +811,7 @@ WTWJS.prototype.deleteUserAvatar = function(zglobaluseravatarid, zuseravatarid, 
 					'function':'deleteglobaluseravatar'
 				};
 				/* send request to global server avatars handler */
-				WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalsaveavatar.php", zrequest2, 
+				WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalsaveavatar.php', zrequest2, 
 					function(zresponse2) {
 						zresponse2 = JSON.parse(zresponse2);
 						/* global user avatar - refresh list */
@@ -821,20 +821,20 @@ WTWJS.prototype.deleteUserAvatar = function(zglobaluseravatarid, zuseravatarid, 
 			}
 		}
 	} catch(ex) {
-		WTW.log("core-scripts-avatars-wtw_avatarfunctions.js-deleteUserAvatar=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_avatarfunctions.js-deleteUserAvatar=' + ex.message);
 	}
 }
 
 WTWJS.prototype.pickUpObject = function(zavatarname, zmoldname, zavatarjointname, zoffset) {
 	/* pick up object to avatar */
-	/* zavatarname = name of avatar to pick up object (my avatar is: "myavatar" + dGet('wtw_tinstanceid').value ) */
+	/* zavatarname = name of avatar to pick up object (my avatar is: 'myavatar' + dGet('wtw_tinstanceid').value ) */
 	/* zmoldname = name of mold to pick up (can get from mouse click on item as picked name) */
 	/* zavatarjointname = each avatar has embedded boxes for joints that can serve as a parent to an object */
 	/* 		(zavatarjointname values are: 'headtop', 'chest', 'righthand', 'lefthand', 'righthip', 'lefthip', 'rightfoot', or 'leftfoot') */
 	/* zoffset = offset values of position, rotation, and scaling used for parenting mold to zavatarjointname */
 	try {
-		if (zavatarjointname == undefined || zavatarjointname == "") {
-			zavatarjointname = "righthand";
+		if (zavatarjointname == undefined || zavatarjointname == '') {
+			zavatarjointname = 'righthand';
 		}
 		if (zoffset == undefined) {
 			/* rotation is degrees */
@@ -895,7 +895,7 @@ WTWJS.prototype.pickUpObject = function(zavatarname, zmoldname, zavatarjointname
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_avatarfunctions.js-pickUpObject=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_avatarfunctions.js-pickUpObject=' + ex.message);
 	}
 }
 

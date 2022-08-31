@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -8,8 +8,8 @@
 WTWJS.prototype.refreshTextBox = function() {
 	/* refresh 3d text box, includes 3d scroll bar */
 	try {
-		if (WTW.selectedMoldName.indexOf("-") > -1) {
-			if (WTW.selectedMoldName.indexOf("-scrollboxbodytext") > -1) {
+		if (WTW.selectedMoldName.indexOf('-') > -1) {
+			if (WTW.selectedMoldName.indexOf('-scrollboxbodytext') > -1) {
 				var zscrollboxbodytext = WTW.getMeshOrNodeByID(WTW.selectedMoldName);
 				if (zscrollboxbodytext != null) {
 					if (zscrollboxbodytext.WTW != undefined) {
@@ -17,7 +17,7 @@ WTWJS.prototype.refreshTextBox = function() {
 							/* note: zwebtext = zscrollboxbodytext.WTW.webtext.webtext; */
 							if (WTW.isNumeric(zscrollboxbodytext.WTW.webtext.scrollpos)) {
 								var zscrollpos = Number(zscrollboxbodytext.WTW.webtext.scrollpos);
-								WTW.scrollBoxRepaint(WTW.selectedMoldName.replace("-scrollboxbodytext",""), zscrollpos);
+								WTW.scrollBoxRepaint(WTW.selectedMoldName.replace('-scrollboxbodytext',''), zscrollpos);
 							}
 						}
 					}
@@ -25,14 +25,14 @@ WTWJS.prototype.refreshTextBox = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-molds-wtw_3dblog.js-refreshTextBox=" + ex.message);
+		WTW.log('core-scripts-molds-wtw_3dblog.js-refreshTextBox=' + ex.message);
 	}
 }
 
 WTWJS.prototype.resetScrollBox = function(zmoldname) {
 	/* reset the scroll box textures */
 	try {
-		var zscrollboxtab = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxtab");
+		var zscrollboxtab = WTW.getMeshOrNodeByID(zmoldname + '-scrollboxtab');
 		if (zscrollboxtab != null && zscrollboxtab.WTW != undefined) {
 			try {
 				if (zscrollboxtab.material != null) {
@@ -40,9 +40,9 @@ WTWJS.prototype.resetScrollBox = function(zmoldname) {
 					zscrollboxtab.material = null;
 				}	
 			} catch(ex) {}
-			zscrollboxtab.material = WTW.addCoveringTexture(zmoldname + "-scrollboxtab", zscrollboxtab.WTW, zscrollboxtab.scaling.x, zscrollboxtab.scaling.y, zscrollboxtab.scaling.z, zscrollboxtab.WTW.scaling.special1, zscrollboxtab.WTW.scaling.special1);
+			zscrollboxtab.material = WTW.addCoveringTexture(zmoldname + '-scrollboxtab', zscrollboxtab.WTW, zscrollboxtab.scaling.x, zscrollboxtab.scaling.y, zscrollboxtab.scaling.z, zscrollboxtab.WTW.scaling.special1, zscrollboxtab.WTW.scaling.special1);
 		}
-		var zscrollboxup = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxup");
+		var zscrollboxup = WTW.getMeshOrNodeByID(zmoldname + '-scrollboxup');
 		if (zscrollboxup != null && zscrollboxup.WTW != undefined) {
 			try {
 				if (zscrollboxup.material != null) {
@@ -50,9 +50,9 @@ WTWJS.prototype.resetScrollBox = function(zmoldname) {
 					zscrollboxup.material = null;
 				}	
 			} catch(ex) {}
-			zscrollboxup.material = WTW.addCoveringTexture(zmoldname + "-scrollboxup", zscrollboxup.WTW, zscrollboxup.scaling.x, zscrollboxup.scaling.y, zscrollboxup.scaling.z, zscrollboxup.WTW.scaling.special1, zscrollboxup.WTW.scaling.special1);
+			zscrollboxup.material = WTW.addCoveringTexture(zmoldname + '-scrollboxup', zscrollboxup.WTW, zscrollboxup.scaling.x, zscrollboxup.scaling.y, zscrollboxup.scaling.z, zscrollboxup.WTW.scaling.special1, zscrollboxup.WTW.scaling.special1);
 		}
-		var zscrollboxuparrow = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxuparrow");
+		var zscrollboxuparrow = WTW.getMeshOrNodeByID(zmoldname + '-scrollboxuparrow');
 		if (zscrollboxuparrow != null && zscrollboxuparrow.WTW != undefined) {
 			try {
 				if (zscrollboxuparrow.material != null) {
@@ -60,9 +60,9 @@ WTWJS.prototype.resetScrollBox = function(zmoldname) {
 					zscrollboxuparrow.material = null;
 				}	
 			} catch(ex) {}
-			zscrollboxuparrow.material = WTW.addCoveringTexture(zmoldname + "-scrollboxuparrow", zscrollboxuparrow.WTW, zscrollboxuparrow.scaling.x, zscrollboxuparrow.scaling.y, zscrollboxuparrow.scaling.z, zscrollboxuparrow.WTW.scaling.special1, zscrollboxuparrow.WTW.scaling.special1);
+			zscrollboxuparrow.material = WTW.addCoveringTexture(zmoldname + '-scrollboxuparrow', zscrollboxuparrow.WTW, zscrollboxuparrow.scaling.x, zscrollboxuparrow.scaling.y, zscrollboxuparrow.scaling.z, zscrollboxuparrow.WTW.scaling.special1, zscrollboxuparrow.WTW.scaling.special1);
 		}
-		var zscrollboxdown = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxdown");
+		var zscrollboxdown = WTW.getMeshOrNodeByID(zmoldname + '-scrollboxdown');
 		if (zscrollboxdown != null && zscrollboxdown.WTW != undefined) {
 			try {
 				if (zscrollboxdown.material != null) {
@@ -70,9 +70,9 @@ WTWJS.prototype.resetScrollBox = function(zmoldname) {
 					zscrollboxdown.material = null;
 				}	
 			} catch(ex) {}
-			zscrollboxdown.material = WTW.addCoveringTexture(zmoldname + "-scrollboxdown", zscrollboxdown.WTW, zscrollboxdown.scaling.x, zscrollboxdown.scaling.y, zscrollboxdown.scaling.z, zscrollboxdown.WTW.scaling.special1, zscrollboxdown.WTW.scaling.special1);
+			zscrollboxdown.material = WTW.addCoveringTexture(zmoldname + '-scrollboxdown', zscrollboxdown.WTW, zscrollboxdown.scaling.x, zscrollboxdown.scaling.y, zscrollboxdown.scaling.z, zscrollboxdown.WTW.scaling.special1, zscrollboxdown.WTW.scaling.special1);
 		}
-		var zscrollboxdownarrow = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxdownarrow");
+		var zscrollboxdownarrow = WTW.getMeshOrNodeByID(zmoldname + '-scrollboxdownarrow');
 		if (zscrollboxdownarrow != null && zscrollboxdownarrow.WTW != undefined) {
 			try {
 				if (zscrollboxdownarrow.material != null) {
@@ -80,10 +80,10 @@ WTWJS.prototype.resetScrollBox = function(zmoldname) {
 					zscrollboxdownarrow.material = null;
 				}	
 			} catch(ex) {}
-			zscrollboxdownarrow.material = WTW.addCoveringTexture(zmoldname + "-scrollboxdownarrow", zscrollboxdownarrow.WTW, zscrollboxdownarrow.scaling.x, zscrollboxdownarrow.scaling.y, zscrollboxdownarrow.scaling.z, zscrollboxdownarrow.WTW.scaling.special1, zscrollboxdownarrow.WTW.scaling.special1);
+			zscrollboxdownarrow.material = WTW.addCoveringTexture(zmoldname + '-scrollboxdownarrow', zscrollboxdownarrow.WTW, zscrollboxdownarrow.scaling.x, zscrollboxdownarrow.scaling.y, zscrollboxdownarrow.scaling.z, zscrollboxdownarrow.WTW.scaling.special1, zscrollboxdownarrow.WTW.scaling.special1);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-molds-wtw_3dblog.js-resetScrollBox=" + ex.message);
+		WTW.log('core-scripts-molds-wtw_3dblog.js-resetScrollBox=' + ex.message);
 	}
 }
 
@@ -113,18 +113,18 @@ WTWJS.prototype.addHtmlHR = function(zcontent, zcolor, zhalign, ztlinesize, ztwi
 		zmaxheight = zsize.height;
 		zminx = zmaxwidth;
 		if (ztlinesize != undefined) {
-			var tsiz = ztlinesize.replace("px","").replace("em","").replace("pt","").replace(" ","");
+			var tsiz = ztlinesize.replace('px','').replace('em','').replace('pt','').replace(' ','');
 			if (WTW.isNumeric(tsiz)) {
 				linesize = tsiz;
 			} else {
-				linesize = "1";
+				linesize = '1';
 			}
 		} else {
-			linesize = "1";
+			linesize = '1';
 		}
 		if (ztwidth != undefined) {
-			var twid = ztwidth.replace("%","").replace(" ","");
-			if (ztwidth.indexOf("%") > -1) {
+			var twid = ztwidth.replace('%','').replace(' ','');
+			if (ztwidth.indexOf('%') > -1) {
 				if (WTW.isNumeric(twid)) {
 					zwidth = zmaxwidth * (Number(twid) / 100);
 				} else {
@@ -139,14 +139,14 @@ WTWJS.prototype.addHtmlHR = function(zcontent, zcolor, zhalign, ztlinesize, ztwi
 		var zx = 1;
 		var zy = 25;
 		switch (zhalign) {
-			case "center":
+			case 'center':
 				zx = zindent + (zmaxwidth - zwidth) / 2;
 				if (zminx > zx) {
 					zminx = zx;
 				}
 				zindent = 0;
 				break;
-			case "right":
+			case 'right':
 				zx = zindent + zmaxwidth - zwidth;
 				if (zminx > zx) {
 					zminx = zx;
@@ -175,7 +175,7 @@ WTWJS.prototype.addHtmlHR = function(zcontent, zcolor, zhalign, ztlinesize, ztwi
 		zcontent.material.diffuseTexture.update();
 		zpwidth = zmaxwidth;
 	} catch (ex) {
-		WTW.log("core-scripts-molds-wtw_3dblog.js-addHtmlHR=" + ex.message);
+		WTW.log('core-scripts-molds-wtw_3dblog.js-addHtmlHR=' + ex.message);
 	} 
 	return {
 		minx:zminx,
@@ -198,7 +198,7 @@ WTWJS.prototype.addHtmlBorder = function(zcontent, ztx, zty, ztwidth, ztheight, 
 		var zx = 1;
 		var zy = 1;
 		if (ztborderwidth == undefined) {
-			ztborderwidth = "0px";
+			ztborderwidth = '0px';
 		}
 		if (zscrollpos == undefined) {
 			zscrollpos = 0;
@@ -207,11 +207,11 @@ WTWJS.prototype.addHtmlBorder = function(zcontent, ztx, zty, ztwidth, ztheight, 
 		var zsize = zcontent.material.diffuseTexture.getSize();
 		zmaxwidth = zsize.width;
 		zmaxheight = zsize.height;
-		ztborderwidth = ztborderwidth.replace("px","").replace("em","").replace("pt","").replace(" ","");
+		ztborderwidth = ztborderwidth.replace('px','').replace('em','').replace('pt','').replace(' ','');
 		if (WTW.isNumeric(ztborderwidth)) {
 			linesize = ztborderwidth;
 		} else {
-			linesize = "1";
+			linesize = '1';
 		}
 		if (WTW.isNumeric(ztwidth)) {
 			zwidth = Number(ztwidth);
@@ -242,7 +242,7 @@ WTWJS.prototype.addHtmlBorder = function(zcontent, ztx, zty, ztwidth, ztheight, 
 		ztextureContext.restore();
 		zcontent.material.diffuseTexture.update();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-wtw_3dblog.js-addHtmlBorder=" + ex.message);
+		WTW.log('core-scripts-molds-wtw_3dblog.js-addHtmlBorder=' + ex.message);
 	} 
 } 
 
@@ -262,16 +262,16 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 		var ztextureContext = zcontent.material.diffuseTexture.getContext();
 		var zsize = zcontent.material.diffuseTexture.getSize();
 		if (ztfloat == undefined) {
-			ztfloat = "";
+			ztfloat = '';
 		}
 		if (ztfloatwidth == undefined) {
-			ztfloatwidth = "0px";
+			ztfloatwidth = '0px';
 		}
 		if (ztfloatheight == undefined) {
-			ztfloatheight = "0px";
+			ztfloatheight = '0px';
 		}
 		if (ztmaxwidth == undefined) {
-			ztmaxwidth = "100%";
+			ztmaxwidth = '100%';
 		}
 		if (zscrollpos == undefined) {
 			zscrollpos = 0;
@@ -284,10 +284,10 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 			zindent = 5;
 		}
 		if (ztmarginleft == undefined) {
-			ztmarginleft = "0px";
+			ztmarginleft = '0px';
 		}
 		if (ztmarginright == undefined) {
-			ztmarginright = "0px";
+			ztmarginright = '0px';
 		}
 		if (WTW.isNumeric(ztfloatwidth)) {
 			zfloatwidth = Number(ztfloatwidth);
@@ -295,30 +295,30 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 		if (WTW.isNumeric(ztfloatheight)) {
 			zfloatheight = Number(ztfloatheight);
 		}
-		if (ztmarginleft.indexOf("%") > -1) {
-			ztmarginleft = ztmarginleft.replace("%","").replace(" ","");
+		if (ztmarginleft.indexOf('%') > -1) {
+			ztmarginleft = ztmarginleft.replace('%','').replace(' ','');
 			if (WTW.isNumeric(ztmarginleft)) {
 				zmarginleft = zsize.width * Number(ztmarginleft)/100;
 			}
 		} else {
-			ztmarginleft = ztmarginleft.replace("px","").replace("em","").replace("pt","").replace(" ","");
+			ztmarginleft = ztmarginleft.replace('px','').replace('em','').replace('pt','').replace(' ','');
 			if (WTW.isNumeric(ztmarginleft)) {
 				zmarginleft = Number(ztmarginleft);
 			}
 		}
-		if (ztmarginright.indexOf("%") > -1) {
-			ztmarginright = ztmarginright.replace("%","").replace(" ","");
+		if (ztmarginright.indexOf('%') > -1) {
+			ztmarginright = ztmarginright.replace('%','').replace(' ','');
 			if (WTW.isNumeric(ztmarginright)) {
 				zmarginright = zsize.width * Number(ztmarginright)/100;
 			}
-		} else if (ztmarginright.indexOf("em") > -1) {
-			ztmarginright = ztmarginright.replace("em","").replace(" ","");
+		} else if (ztmarginright.indexOf('em') > -1) {
+			ztmarginright = ztmarginright.replace('em','').replace(' ','');
 			if (WTW.isNumeric(ztmarginright)) {
 				zmarginright = Number(ztmarginright) * 12;
 				
 			}
 		} else {
-			ztmarginright = ztmarginright.replace("px","").replace("pt","").replace(" ","");
+			ztmarginright = ztmarginright.replace('px','').replace('pt','').replace(' ','');
 			if (WTW.isNumeric(ztmarginright)) {
 				zmarginright = Number(ztmarginright);
 				
@@ -328,16 +328,16 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 			zmarginright = 10;
 		}
 		var zfontsize = 20;
-		if (ztfontsize.indexOf("em") > -1 && WTW.isNumeric(ztfontsize.replace("em","").replace(" ",""))) {
-			zfontsize = Number(ztfontsize.replace("px","").replace("em","").replace("pt","").replace(" ","")) * 12;
-		} else if (WTW.isNumeric(ztfontsize.replace("px","").replace("pt","").replace(" ",""))) {
-			zfontsize = Number(ztfontsize.replace("px","").replace("pt","").replace(" ",""));
+		if (ztfontsize.indexOf('em') > -1 && WTW.isNumeric(ztfontsize.replace('em','').replace(' ',''))) {
+			zfontsize = Number(ztfontsize.replace('px','').replace('em','').replace('pt','').replace(' ','')) * 12;
+		} else if (WTW.isNumeric(ztfontsize.replace('px','').replace('pt','').replace(' ',''))) {
+			zfontsize = Number(ztfontsize.replace('px','').replace('pt','').replace(' ',''));
 		}
 		var zlineheight = 30;
-		if (ztlineheight.indexOf("em") > -1 && WTW.isNumeric(ztlineheight.replace("em","").replace(" ",""))) {
-			zlineheight = Number(ztlineheight.replace("px","").replace("em","").replace("pt","").replace(" ","")) * 12;
-		} else if (WTW.isNumeric(ztlineheight.replace("px","").replace("pt","").replace(" ",""))) {
-			zlineheight = Number(ztlineheight.replace("px","").replace("pt","").replace(" ",""));
+		if (ztlineheight.indexOf('em') > -1 && WTW.isNumeric(ztlineheight.replace('em','').replace(' ',''))) {
+			zlineheight = Number(ztlineheight.replace('px','').replace('em','').replace('pt','').replace(' ','')) * 12;
+		} else if (WTW.isNumeric(ztlineheight.replace('px','').replace('pt','').replace(' ',''))) {
+			zlineheight = Number(ztlineheight.replace('px','').replace('pt','').replace(' ',''));
 		}
 		ztext = ztext.replace(/(?:\r\n|\r|\n)/g," ¶ ");
 		var zwords = ztext.split(' ');
@@ -346,17 +346,17 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 		zmaxheight = zsize.height;
 		zmaxwidth -= zindent;
 		zminx = zmaxwidth;
-		if (ztmaxwidth.indexOf("%") > -1) {
-			ztmaxwidth = ztmaxwidth.replace("%","").replace(" ","");
+		if (ztmaxwidth.indexOf('%') > -1) {
+			ztmaxwidth = ztmaxwidth.replace('%','').replace(' ','');
 			if (WTW.isNumeric(ztmaxwidth)) {
 				zmaxwidth = zmaxwidth * Number(ztmaxwidth)/100;
 			}
-		} else if (ztmaxwidth.indexOf("em") > -1 && WTW.isNumeric(ztfontsize.replace("em","").replace(" ",""))) {
-			zmaxwidth = Number(ztmaxwidth.replace("px","").replace("em","").replace("pt","").replace(" ","")) * 12;
-		} else if (WTW.isNumeric(ztmaxwidth.replace("px","").replace("pt","").replace(" ",""))) {
-			zmaxwidth = Number(ztmaxwidth.replace("px","").replace("pt","").replace(" ",""));
+		} else if (ztmaxwidth.indexOf('em') > -1 && WTW.isNumeric(ztfontsize.replace('em','').replace(' ',''))) {
+			zmaxwidth = Number(ztmaxwidth.replace('px','').replace('em','').replace('pt','').replace(' ','')) * 12;
+		} else if (WTW.isNumeric(ztmaxwidth.replace('px','').replace('pt','').replace(' ',''))) {
+			zmaxwidth = Number(ztmaxwidth.replace('px','').replace('pt','').replace(' ',''));
 		}
-		if (zhalign == "right") {
+		if (zhalign == 'right') {
 			zmarginleft = zsize.width - zmaxwidth - zmarginright;
 			if (zmarginleft < 0) {
 				zmarginleft = 0;
@@ -379,7 +379,7 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 		zy += zscrollpos;
 		zfloatheight += zylineheight;
 		ztextureContext.save();
-		ztextureContext.font = zfontsize + "px Arial";
+		ztextureContext.font = zfontsize + 'px Arial';
 		ztextureContext.fillStyle = zcolor;
 		var ztestmaxwidth = zmaxwidth;
 		for(var n = 0; n < zwords.length; n++) {
@@ -389,16 +389,16 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 				ztestmaxwidth = zmaxwidth;
 			}
 			var ztestLine = zline + zwords[n] + ' ';
-			var ztextsize =  ztextureContext.measureText(ztestLine.replace("¶ ","").trim());
-			ztextsizelast =  ztextureContext.measureText(zline.replace("¶ ","").trim());
+			var ztextsize =  ztextureContext.measureText(ztestLine.replace('¶ ','').trim());
+			ztextsizelast =  ztextureContext.measureText(zline.replace('¶ ','').trim());
 			ztestWidth = ztextsize.width;
 			ztestWidthlast = ztextsizelast.width;
 			if (zpwidth < ztestWidthlast) {
 				zpwidth = ztestWidthlast;
 			}
-			if ((ztestWidth > ztestmaxwidth && n > 0) || zwords[n].indexOf("¶") > -1) {
+			if ((ztestWidth > ztestmaxwidth && n > 0) || zwords[n].indexOf('¶') > -1) {
 				switch (zhalign) {
-					case "center":
+					case 'center':
 						if (zy > zscrollpos && zy < (zscrollpos + zfloatheight)) {
 							zx = zfloatwidth + zindent + (ztestmaxwidth - ztestWidthlast) / 2;
 						} else {
@@ -409,7 +409,7 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 						}
 						zindent = 5;
 						break;
-					case "right":
+					case 'right':
 						if (zy > zscrollpos && zy < (zscrollpos + zfloatheight)) {
 							zx = zfloatwidth + zmarginleft + zindent + ztestmaxwidth - ztestWidthlast;
 						} else {
@@ -432,9 +432,9 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 						zindent = 5;
 						break;
 				}
-				ztextureContext.fillText(zline.replace("¶","").trim(), zx, zy);
-				if (zwords[n].indexOf("¶") > -1) {
-					zline = "";
+				ztextureContext.fillText(zline.replace('¶','').trim(), zx, zy);
+				if (zwords[n].indexOf('¶') > -1) {
+					zline = '';
 				} else {
 					zline = zwords[n] + ' ';
 				}
@@ -442,10 +442,10 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 				zy += zylineheight;
 			}
 			else {
-				zline = ztestLine.replace("¶ ","");
+				zline = ztestLine.replace('¶ ','');
 			}
 		}
-		ztextsizelast =  ztextureContext.measureText(zline.replace("¶ ","").trim());
+		ztextsizelast =  ztextureContext.measureText(zline.replace('¶ ','').trim());
 		ztestWidthlast = ztextsizelast.width;
 		if (zpwidth < ztestWidthlast) {
 			zpwidth = ztestWidthlast;
@@ -456,7 +456,7 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 			ztestmaxwidth = zmaxwidth;
 		}
 		switch (zhalign) {
-			case "center":
+			case 'center':
 				if (zy > zscrollpos && zy < (zscrollpos + zfloatheight)) {
 					zx = zfloatwidth + zindent + (ztestmaxwidth - ztestWidthlast) / 2;
 				} else {
@@ -467,7 +467,7 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 				}
 				zindent = 5;
 				break;
-			case "right":
+			case 'right':
 				if (zy > zscrollpos && zy < (zscrollpos + zfloatheight)) {
 					zx = zfloatwidth + zmarginleft + zindent + ztestmaxwidth - ztestWidthlast;
 				} else {
@@ -491,23 +491,23 @@ WTWJS.prototype.wrapText = function(zcontent, ztext, ztlineheight, ztfontsize, z
 				break;
 		}
 		zlinewidth = ztestWidthlast;
-		ztextureContext.fillText(zline.replace("¶","").trim(), zx, zy);
+		ztextureContext.fillText(zline.replace('¶','').trim(), zx, zy);
 		ztextureContext.restore();
 		switch (zvalign) {
-			case "middle":
+			case 'middle':
 				zcontent.material.diffuseTexture.vOffset -= (1 - (1 / zmaxheight * zy)) / 2;
 				break;
-			case "center":
+			case 'center':
 				zcontent.material.diffuseTexture.vOffset -= (1 - (1 / zmaxheight * zy)) / 2;
 				break;
-			case "bottom":
+			case 'bottom':
 				zcontent.material.diffuseTexture.vOffset -= (1 - (1 / (zmaxheight - 1) * zy));
 				break;
 		}
 		zcontent.material.diffuseTexture.update();
 		zpheight = zy - zscrollpos;
 	} catch (ex) {
-		WTW.log("core-scripts-molds-wtw_3dblog.js-wrapText=" + ex.message);
+		WTW.log('core-scripts-molds-wtw_3dblog.js-wrapText=' + ex.message);
 	} 
 	return {
 		minx:zminx,
@@ -561,16 +561,16 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 				}
 			}
 			zwebstyle = {
-				"anchor":"center",
-				"letter-height":6.00,
-				"letter-thickness":1.00,
-				"color":"#ff0000",
-				"alpha":1.00,
-				"colors":{
-					"diffuse":zdiffusecolor,
-					"specular":zspecularcolor,
-					"ambient":zambientcolor,
-					"emissive":zemissivecolor
+				'anchor':'center',
+				'letter-height':6.00,
+				'letter-thickness':1.00,
+				'color':'#ff0000',
+				'alpha':1.00,
+				'colors':{
+					'diffuse':zdiffusecolor,
+					'specular':zspecularcolor,
+					'ambient':zambientcolor,
+					'emissive':zemissivecolor
 				}
 			};
 		} else {
@@ -587,7 +587,7 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 		zmytext.isPickable = true;
 		WTW.registerMouseOver(zmytext);
 	} catch (ex) {
-		WTW.log("core-scripts-molds-wtw_3dblog.js-addMold3DText=" + ex.message);
+		WTW.log('core-scripts-molds-wtw_3dblog.js-addMold3DText=' + ex.message);
 	}
 	return zmold;
 }
@@ -606,14 +606,14 @@ WTWJS.prototype.addHtmlImg = function(zcontent, zsrc, zhalign, ztwidth, ztheight
 	try {
 		var zwidth = 0;
 		var zheight = 0;
-		var zborderwidth = "0";
+		var zborderwidth = '0';
 		var ztextureContext = zcontent.material.diffuseTexture.getContext();
 		var zsize = zcontent.material.diffuseTexture.getSize();
 		if (ztborderwidth == undefined) {
-			ztborderwidth = "0px";
+			ztborderwidth = '0px';
 		}
 		if (ztbordercolor == undefined) {
-			ztbordercolor = "transparent";
+			ztbordercolor = 'transparent';
 		}
 		if (zscrollpos == undefined) {
 			zscrollpos = 0;
@@ -625,42 +625,42 @@ WTWJS.prototype.addHtmlImg = function(zcontent, zsrc, zhalign, ztwidth, ztheight
 		} else {
 			zindent = 0;
 		}
-		ztborderwidth = ztborderwidth.replace("px","").replace("em","").replace("pt","").replace(" ","");
+		ztborderwidth = ztborderwidth.replace('px','').replace('em','').replace('pt','').replace(' ','');
 		if (WTW.isNumeric(ztborderwidth)) {
 			zborderwidth = ztborderwidth;
 		} else {
-			zborderwidth = "0";
+			zborderwidth = '0';
 		}
 		if (ztmarginleft == undefined) {
-			ztmarginleft = "0px";
+			ztmarginleft = '0px';
 		}
 		if (ztmarginright == undefined) {
-			ztmarginright = "0px";
+			ztmarginright = '0px';
 		}
 		if (ztmargintop == undefined) {
-			ztmargintop = "0px";
+			ztmargintop = '0px';
 		}
 		if (ztmarginbottom == undefined) {
-			ztmarginbottom = "0px";
+			ztmarginbottom = '0px';
 		}
-		if (ztmarginleft.indexOf("%") > -1) {
-			ztmarginleft = ztmarginleft.replace("%","").replace(" ","");
+		if (ztmarginleft.indexOf('%') > -1) {
+			ztmarginleft = ztmarginleft.replace('%','').replace(' ','');
 			if (WTW.isNumeric(ztmarginleft)) {
 				zmarginleft = zsize.width * Number(ztmarginleft)/100;
 			}
 		} else {
-			ztmarginleft = ztmarginleft.replace("px","").replace("em","").replace("pt","").replace(" ","");
+			ztmarginleft = ztmarginleft.replace('px','').replace('em','').replace('pt','').replace(' ','');
 			if (WTW.isNumeric(ztmarginleft)) {
 				zmarginleft = Number(ztmarginleft);
 			}
 		}
-		if (ztmarginright.indexOf("%") > -1) {
-			ztmarginright = ztmarginright.replace("%","").replace(" ","");
+		if (ztmarginright.indexOf('%') > -1) {
+			ztmarginright = ztmarginright.replace('%','').replace(' ','');
 			if (WTW.isNumeric(ztmarginright)) {
 				zmarginright = zsize.width * Number(ztmarginright)/100;
 			}
 		} else {
-			ztmarginright = ztmarginright.replace("px","").replace("em","").replace("pt","").replace(" ","");
+			ztmarginright = ztmarginright.replace('px','').replace('em','').replace('pt','').replace(' ','');
 			if (WTW.isNumeric(ztmarginright)) {
 				zmarginright = Number(ztmarginright);
 			}
@@ -668,24 +668,24 @@ WTWJS.prototype.addHtmlImg = function(zcontent, zsrc, zhalign, ztwidth, ztheight
 		if (zmarginright < 10) {
 			zmarginright = 10;
 		}
-		if (ztmargintop.indexOf("%") > -1) {
-			ztmargintop = ztmargintop.replace("%","").replace(" ","");
+		if (ztmargintop.indexOf('%') > -1) {
+			ztmargintop = ztmargintop.replace('%','').replace(' ','');
 			if (WTW.isNumeric(ztmargintop)) {
 				zmargintop = zsize.height * Number(ztmargintop)/100;
 			}
 		} else {
-			ztmargintop = ztmargintop.replace("px","").replace("em","").replace("pt","").replace(" ","");
+			ztmargintop = ztmargintop.replace('px','').replace('em','').replace('pt','').replace(' ','');
 			if (WTW.isNumeric(ztmargintop)) {
 				zmargintop = Number(ztmargintop);
 			}
 		}
-		if (ztmarginbottom.indexOf("%") > -1) {
-			ztmarginbottom = ztmarginbottom.replace("%","").replace(" ","");
+		if (ztmarginbottom.indexOf('%') > -1) {
+			ztmarginbottom = ztmarginbottom.replace('%','').replace(' ','');
 			if (WTW.isNumeric(ztmarginbottom)) {
 				zmarginbottom = zsize.height * Number(ztmarginbottom)/100;
 			}
 		} else {
-			ztmarginbottom = ztmarginbottom.replace("px","").replace("em","").replace("pt","").replace(" ","");
+			ztmarginbottom = ztmarginbottom.replace('px','').replace('em','').replace('pt','').replace(' ','');
 			if (WTW.isNumeric(ztmarginbottom)) {
 				zmarginbottom = Number(ztmarginbottom);
 			}
@@ -693,22 +693,22 @@ WTWJS.prototype.addHtmlImg = function(zcontent, zsrc, zhalign, ztwidth, ztheight
 		zmaxwidth = zsize.width - zindent;
 		zmaxheight = zsize.height;
 		zminx = zmaxwidth;
-		if (zhalign == "right") {
+		if (zhalign == 'right') {
 			zmarginleft = zsize.width - zmaxwidth - zmarginright;
 			if (zmarginleft < 0) {
 				zmarginleft = 0;
 			}
 		}
 		if (ztwidth != undefined) {
-			if (ztwidth.indexOf("%") > -1) {
-				ztwidth = ztwidth.replace("%","").replace(" ","");
+			if (ztwidth.indexOf('%') > -1) {
+				ztwidth = ztwidth.replace('%','').replace(' ','');
 				if (WTW.isNumeric(ztwidth)) {
 					zwidth = zmaxwidth * (Number(ztwidth) / 100);
 				} else {
 					zwidth = zmaxwidth;
 				}
 			} else {
-				ztwidth = ztwidth.replace("px","").replace("pt","").replace(" ","");
+				ztwidth = ztwidth.replace('px','').replace('pt','').replace(' ','');
 				if (WTW.isNumeric(ztwidth)) {
 					zwidth = Number(ztwidth);
 				} else {
@@ -719,15 +719,15 @@ WTWJS.prototype.addHtmlImg = function(zcontent, zsrc, zhalign, ztwidth, ztheight
 			zwidth = zmaxwidth;
 		}
 		if (ztheight != undefined) {
-			if (ztheight.indexOf("%") > -1) {
-				ztheight = ztheight.replace("%","").replace(" ","");
+			if (ztheight.indexOf('%') > -1) {
+				ztheight = ztheight.replace('%','').replace(' ','');
 				if (WTW.isNumeric(ztheight)) {
 					zheight = zmaxheight * (Number(ztheight) / 100);
 				} else {
 					zheight = zmaxheight;
 				}
 			} else {
-				ztheight = ztheight.replace("px","").replace("pt","").replace(" ","");
+				ztheight = ztheight.replace('px','').replace('pt','').replace(' ','');
 				if (WTW.isNumeric(ztheight)) {
 					zheight = Number(ztheight);
 				} else {
@@ -740,14 +740,14 @@ WTWJS.prototype.addHtmlImg = function(zcontent, zsrc, zhalign, ztwidth, ztheight
 		var zx = 1;
 		var zy = zmargintop;
 		switch (zhalign) {
-			case "center":
+			case 'center':
 				zx = zindent + (zmaxwidth - zwidth) / 2;
 				if (zminx > zx) {
 					zminx = zx;
 				}
 				zindent = 0;
 				break;
-			case "right":
+			case 'right':
 				zx = zmarginleft + zindent + zmaxwidth - zwidth;
 				if (zminx > zx) {
 					zminx = zx;
@@ -764,7 +764,7 @@ WTWJS.prototype.addHtmlImg = function(zcontent, zsrc, zhalign, ztwidth, ztheight
 		}
 		zy += zscrollpos;
 		var ztempimage = new Image();
-		if (zsrc != "") {
+		if (zsrc != '') {
 			ztempimage.src = zsrc;
 			ztempimage.onload = function(){
 				ztextureContext.save();
@@ -775,11 +775,11 @@ WTWJS.prototype.addHtmlImg = function(zcontent, zsrc, zhalign, ztwidth, ztheight
 					ztextureContext.strokeRect(zx, zy, zwidth, zheight);
 				}
 				ztextureContext.restore();
-				if (typeof zcontent.material.diffuseTexture.update == "function") {
+				if (typeof zcontent.material.diffuseTexture.update == 'function') {
 					zcontent.material.diffuseTexture.update();
 				} else {
 					window.setTimeout(function() {
-						if (typeof zcontent.material.diffuseTexture.update == "function") {
+						if (typeof zcontent.material.diffuseTexture.update == 'function') {
 							zcontent.material.diffuseTexture.update();
 						}
 					},1000);
@@ -789,7 +789,7 @@ WTWJS.prototype.addHtmlImg = function(zcontent, zsrc, zhalign, ztwidth, ztheight
 		zpheight = zmargintop + zheight + zmarginbottom;
 		zpwidth = zmarginleft + zwidth + zmarginright;
 	} catch (ex) {
-		WTW.log("core-scripts-molds-wtw_3dblog.js-addHtmlImg=" + ex.message);
+		WTW.log('core-scripts-molds-wtw_3dblog.js-addHtmlImg=' + ex.message);
 	} 
 	return {
 		minx:zminx,
@@ -808,11 +808,11 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 	var zmaxwidth = 0;
 	var zmaxheight = 0;
 	try {
-		var zmoldname = "";
+		var zmoldname = '';
 		var znamepart = [];
-		if (zcontent.name.indexOf("-") > -1) {
+		if (zcontent.name.indexOf('-') > -1) {
 			znamepart = zcontent.name.split('-');
-			zmoldname = znamepart[0] + "-" + znamepart[1] + "-" + znamepart[2] + "-"  + znamepart[3] + "-"  + znamepart[4] + "-"  + znamepart[5];
+			zmoldname = znamepart[0] + '-' + znamepart[1] + '-' + znamepart[2] + '-'  + znamepart[3] + '-'  + znamepart[4] + '-'  + znamepart[5] + '-'  + znamepart[6];
 		}
 		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
@@ -825,15 +825,15 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 				zscrollpos = 0;
 			}
 			var zliney = zscrollpos;
-			zhtml = zhtml.replace(/(?:\r\n|\r|\n)/g," ¶ ");
+			zhtml = zhtml.replace(/(?:\r\n|\r|\n)/g,' ¶ ');
 			zhtml = WTW.decode(zhtml);
-			zhtml = "<div>" + zhtml + "</div>";
+			zhtml = '<div>' + zhtml + '</div>';
 			htmlpart = zhtml.split('<');
 			for (var i=0;i < htmlpart.length;i++) {
 				if (htmlpart[i].length > 0) {
-					if (htmlpart[i].substr(0,1) == "/") {
+					if (htmlpart[i].substr(0,1) == '/') {
 						var ztag = htmlpart[i].substr(1,htmlpart[i].length - 2);
-						if (zhtmlsegments[zhtmlind].style.borderwidth != "0px") {
+						if (zhtmlsegments[zhtmlind].style.borderwidth != '0px') {
 							WTW.addHtmlBorder(zcontent, zhtmlsegments[zhtmlind].system.x, zhtmlsegments[zhtmlind].system.y, zhtmlsegments[zhtmlind].system.width, zhtmlsegments[zhtmlind].system.height, zhtmlsegments[zhtmlind].style.bordercolor, 'solid', zhtmlsegments[zhtmlind].style.borderwidth, zscrollpos);
 						}
 						zhtmlind -= 1;
@@ -849,24 +849,24 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 						};
 						var ztag = htmlpart[i];
 						var ztagpart = [];
-						var zwords = "";
-						if (ztag.indexOf(">") > -1) {
+						var zwords = '';
+						if (ztag.indexOf('>') > -1) {
 							ztagpart = ztag.split('>');
 							ztag = ztagpart[0];
 							zwords = ztagpart[1];
 						} else {
 							zwords = ztag;
 						}
-						var ztagname = "";
-						var zattributes = "";
-						if (ztag.indexOf(" ") > -1) {
-							ztagname = ztag.substr(0,ztag.indexOf(" "));
-							zattributes = ztag.substr(ztag.indexOf(" "),ztag.length - ztag.indexOf(" "));
+						var ztagname = '';
+						var zattributes = '';
+						if (ztag.indexOf(' ') > -1) {
+							ztagname = ztag.substr(0,ztag.indexOf(' '));
+							zattributes = ztag.substr(ztag.indexOf(' '),ztag.length - ztag.indexOf(' '));
 						} else {
 							ztagname = ztag.substr(0,ztag.length);
 						}
-						while (zattributes.indexOf(" = ") > -1 || zattributes.indexOf("= ") > -1 || zattributes.indexOf(" =") > -1 || zattributes.indexOf(" : ") > -1 || zattributes.indexOf(": ") > -1 || zattributes.indexOf(" :") > -1 || zattributes.indexOf(" ; ") > -1 || zattributes.indexOf("; ") > -1 || zattributes.indexOf(" ;") > -1) {
-							zattributes = zattributes.replace(" = ","=").replace("= ","=").replace(" =","=").replace(" : ",":").replace(": ",":").replace(" :",":").replace(" ; ",";").replace("; ",";").replace(" ;",";").toLowerCase();
+						while (zattributes.indexOf(' = ') > -1 || zattributes.indexOf('= ') > -1 || zattributes.indexOf(' =') > -1 || zattributes.indexOf(' : ') > -1 || zattributes.indexOf(': ') > -1 || zattributes.indexOf(' :') > -1 || zattributes.indexOf(' ; ') > -1 || zattributes.indexOf('; ') > -1 || zattributes.indexOf(' ;') > -1) {
+							zattributes = zattributes.replace(' = ','=').replace('= ','=').replace(' =','=').replace(' : ',':').replace(': ',':').replace(' :',':').replace(' ; ',';').replace('; ',';').replace(' ;',';').toLowerCase();
 						}
 						zhtmlind += 1;
 						if (zhtmlsegments[zhtmlind] == null) {
@@ -890,19 +890,19 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 						zhtmlsegments[zhtmlind].style.margintop = zhtmlsegments[zhtmlind-1].style.margintop;
 						zhtmlsegments[zhtmlind].style.marginbottom = zhtmlsegments[zhtmlind-1].style.marginbottom;
 						var zattrib = [];
-						if (zattributes.indexOf(" ") > -1) {
+						if (zattributes.indexOf(' ') > -1) {
 							zattrib = zattributes.split(' ');
 						} else {
 							zattrib[0] = zattributes;
 						}
 						for (var a=0;a < zattrib.length;a++) {
-							var zattribute = "";
-							var zproperties = "";
-							if (zattrib[a].indexOf("=") > -1) {
+							var zattribute = '';
+							var zproperties = '';
+							if (zattrib[a].indexOf('=') > -1) {
 								var zattributeparts = zattrib[a].split('=');
 								zattribute = zattributeparts[0];
-								while (zattribute.indexOf('"') > -1 || zattribute.indexOf(/'/g) > -1) {
-									zattribute = zattribute.replace(/'/g, '').replace('"','');
+								while (zattribute.indexOf("'") > -1 || zattribute.indexOf(/'/g) > -1) {
+									zattribute = zattribute.replace(/'/g, '').replace("'",'');
 								}
 								zproperties = zattributeparts[1];
 								while (zproperties.indexOf('"') > -1 || zproperties.indexOf(/'/g) > -1) {
@@ -915,76 +915,76 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 								}
 							}
 							if (zattribute.length > 0) {
-								if (zattribute == "style") {
+								if (zattribute == 'style') {
 									var zprops = [];
-									if (zproperties.indexOf(";") > -1) {
+									if (zproperties.indexOf(';') > -1) {
 										zprops = zproperties.split(';');
 									} else {
 										zprops[0] = zproperties;
 									}
 									for (var p=0;p < zprops.length;p++) {
 										if (zprops[p].length > 0) {
-											if (zprops[p].indexOf(":") > -1) {
+											if (zprops[p].indexOf(':') > -1) {
 												var zproppart = zprops[p].split(':');
 												var zprop = zproppart[0];
-												while(zprop.indexOf("-") > -1) {
-													zprop = zprop.replace("-","");
+												while(zprop.indexOf('-') > -1) {
+													zprop = zprop.replace('-','');
 												}
 												var zvalue = zproppart[1];
 												switch (zprop) {
-													case "color":
+													case 'color':
 														zhtmlsegments[zhtmlind].style.color = zvalue;
 														break;
-													case "float":
+													case 'float':
 														zhtmlsegments[zhtmlind].style.float = zvalue;
 														break;
-													case "textalign":
+													case 'textalign':
 														zhtmlsegments[zhtmlind].style.textalign = zvalue;
 														break;
-													case "display":
+													case 'display':
 														zhtmlsegments[zhtmlind].style.display = zvalue;
 														break;
-													case "width":
+													case 'width':
 														zhtmlsegments[zhtmlind].style.width = zvalue;
 														break;
-													case "height":
+													case 'height':
 														zhtmlsegments[zhtmlind].style.height = zvalue;
 														break;
-													case "size":
+													case 'size':
 														zhtmlsegments[zhtmlind].style.size = zvalue;
 														break;
-													case "lineheight":
+													case 'lineheight':
 														zhtmlsegments[zhtmlind].style.lineheight = zvalue;
 														break;
-													case "fontsize":
+													case 'fontsize':
 														zhtmlsegments[zhtmlind].style.fontsize = zvalue;
 														break;
-													case "borderwidth":
+													case 'borderwidth':
 														zhtmlsegments[zhtmlind].style.borderwidth = zvalue;
 														break;
-													case "bordercolor":
+													case 'bordercolor':
 														zhtmlsegments[zhtmlind].style.bordercolor = zvalue;
 														break;
-													case "maxwidth":
+													case 'maxwidth':
 														zhtmlsegments[zhtmlind].style.maxwidth = zvalue;
 														break;
-													case "marginleft":
+													case 'marginleft':
 														zhtmlsegments[zhtmlind].style.marginleft = zvalue;
 														break;
-													case "marginright":
+													case 'marginright':
 														zhtmlsegments[zhtmlind].style.marginright = zvalue;
 														break;
-													case "margintop":
+													case 'margintop':
 														zhtmlsegments[zhtmlind].style.margintop = zvalue;
 														break;
-													case "marginbottom":
+													case 'marginbottom':
 														zhtmlsegments[zhtmlind].style.marginbottom = zvalue;
 														break;
 												}
 											}
 										}
 									}
-								} else if (zattribute == "src") {
+								} else if (zattribute == 'src') {
 									zhtmlsegments[zhtmlind].src = zproperties;
 								}
 							}
@@ -992,29 +992,29 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 						var zminx = 0;
 						var zparagraph;
 						var zlineheight = 30;
-						if (zhtmlsegments[zhtmlind].style.lineheight.indexOf("em") > -1 && WTW.isNumeric(zhtmlsegments[zhtmlind].style.lineheight.replace("px","").replace("em","").replace("pt","").replace(" ",""))) {
-							zlineheight = Number(zhtmlsegments[zhtmlind].style.lineheight.replace("em","").replace(" ","")) * 12;
-						} else if (WTW.isNumeric(zhtmlsegments[zhtmlind].style.lineheight.replace("px","").replace("em","").replace("pt","").replace(" ",""))) {
-							zlineheight = Number(zhtmlsegments[zhtmlind].style.lineheight.replace("px","").replace("pt","").replace(" ",""));
+						if (zhtmlsegments[zhtmlind].style.lineheight.indexOf('em') > -1 && WTW.isNumeric(zhtmlsegments[zhtmlind].style.lineheight.replace('px','').replace('em','').replace('pt','').replace(' ',''))) {
+							zlineheight = Number(zhtmlsegments[zhtmlind].style.lineheight.replace('em','').replace(' ','')) * 12;
+						} else if (WTW.isNumeric(zhtmlsegments[zhtmlind].style.lineheight.replace('px','').replace('em','').replace('pt','').replace(' ',''))) {
+							zlineheight = Number(zhtmlsegments[zhtmlind].style.lineheight.replace('px','').replace('pt','').replace(' ',''));
 						}
 						var zfontsize = 20;
-						if (zhtmlsegments[zhtmlind].style.fontsize.indexOf("em") > -1 && WTW.isNumeric(zhtmlsegments[zhtmlind].style.fontsize.replace("px","").replace("em","").replace("pt","").replace(" ",""))) {
-							zfontsize = Number(zhtmlsegments[zhtmlind].style.fontsize.replace("em","").replace(" ","")) * 12;
-						} else if (WTW.isNumeric(zhtmlsegments[zhtmlind].style.fontsize.replace("px","").replace("em","").replace("pt","").replace(" ",""))) {
-							zfontsize = Number(zhtmlsegments[zhtmlind].style.fontsize.replace("px","").replace("pt","").replace(" ",""));
+						if (zhtmlsegments[zhtmlind].style.fontsize.indexOf('em') > -1 && WTW.isNumeric(zhtmlsegments[zhtmlind].style.fontsize.replace('px','').replace('em','').replace('pt','').replace(' ',''))) {
+							zfontsize = Number(zhtmlsegments[zhtmlind].style.fontsize.replace('em','').replace(' ','')) * 12;
+						} else if (WTW.isNumeric(zhtmlsegments[zhtmlind].style.fontsize.replace('px','').replace('em','').replace('pt','').replace(' ',''))) {
+							zfontsize = Number(zhtmlsegments[zhtmlind].style.fontsize.replace('px','').replace('pt','').replace(' ',''));
 						}
-						if (zattributes.indexOf("/") > -1) {
+						if (zattributes.indexOf('/') > -1) {
 							switch (ztagname) {
-								case "br":
-									zparagraph = WTW.wrapText(zcontent, " ", zhtmlsegments[zhtmlind].style.lineheight, zhtmlsegments[zhtmlind].style.fontsize, zhtmlsegments[zhtmlind].style.textalign, "top", zhtmlsegments[zhtmlind].style.color, zliney, zhtmlsegments[zhtmlind].style.maxwidth, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].system.float, zhtmlsegments[zhtmlind].system.floatwidth, zhtmlsegments[zhtmlind].system.floatheight);
+								case 'br':
+									zparagraph = WTW.wrapText(zcontent, ' ', zhtmlsegments[zhtmlind].style.lineheight, zhtmlsegments[zhtmlind].style.fontsize, zhtmlsegments[zhtmlind].style.textalign, 'top', zhtmlsegments[zhtmlind].style.color, zliney, zhtmlsegments[zhtmlind].style.maxwidth, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].system.float, zhtmlsegments[zhtmlind].system.floatwidth, zhtmlsegments[zhtmlind].system.floatheight);
 									zliney += zparagraph.height;
 									zhtmlsegments[0].system.indent = 0;
 									zmaxwidth = zparagraph.maxwidth;
 									zmaxheight = zparagraph.maxheight;
 									zminx = zparagraph.minx;
 									break;
-								case "hr":
-									var zhrname = zmoldname + "-posttexthr" + zhrind;
+								case 'hr':
+									var zhrname = zmoldname + '-posttexthr' + zhrind;
 									var zhrbox = WTW.getMeshOrNodeByID(zhrname);
 									if (zliney < -10 || zliney > 490) {
 										if (zhrbox != null) {
@@ -1023,28 +1023,28 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 									} else {
 										var zhry = .95 * ((-zliney/512 * zmold.scaling.y) + 6.8);
 										if (zhrbox == null) {
-											var zhrtexture = "/content/stock/walls/blue.jpg";
-											var zhrtextureid = "vvpzrv2pae3bbkwv";
+											var zhrtexture = '/content/stock/walls/blue.jpg';
+											var zhrtextureid = 'vvpzrv2pae3bbkwv';
 											switch (zhtmlsegments[zhtmlind].style.color) {
-												case "red":
-													zhrtexture = "/content/stock/walls/red.jpg";
-													zhrtextureid = "sjbxon868lcuaub5";
+												case 'red':
+													zhrtexture = '/content/stock/walls/red.jpg';
+													zhrtextureid = 'sjbxon868lcuaub5';
 													break;
-												case "green":
-													zhrtexture = "/content/stock/walls/green.jpg";
-													zhrtextureid = "ngb72qh6hvy3ms5c";
+												case 'green':
+													zhrtexture = '/content/stock/walls/green.jpg';
+													zhrtextureid = 'ngb72qh6hvy3ms5c';
 													break;
-												case "gray":
-													zhrtexture = "/content/stock/walls/gray.jpg";
-													zhrtextureid = "ksa2h7mf909cvech";
+												case 'gray':
+													zhrtexture = '/content/stock/walls/gray.jpg';
+													zhrtextureid = 'ksa2h7mf909cvech';
 													break;
-												case "lightgray":
-													zhrtexture = "/content/stock/walls/lightgray.jpg";
-													zhrtextureid = "t1qlqxd6pzubzzzy";
+												case 'lightgray':
+													zhrtexture = '/content/stock/walls/lightgray.jpg';
+													zhrtextureid = 't1qlqxd6pzubzzzy';
 													break;
 											}
 											var zbasicmold = WTW.newMold();
-											zbasicmold.shape = "box";
+											zbasicmold.shape = 'box';
 											zbasicmold.position.x = .5;
 											zbasicmold.position.y = zhry;
 											zbasicmold.position.z = -.5;
@@ -1053,15 +1053,15 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 											zbasicmold.scaling.z = zmold.scaling.z - 2;
 											zbasicmold.subdivisions = 12;
 											zbasicmold.graphics.texture.id = zhrtextureid;
-											zbasicmold.parentname = zmoldname + "-scale";
-											zbasicmold.checkcollisions = "1";
+											zbasicmold.parentname = zmoldname + '-scale';
+											zbasicmold.checkcollisions = '1';
 											var zposttexthr = WTW.addMold(zhrname, zbasicmold, zbasicmold.parentname, zbasicmold.covering);
 										} else {
 											zhrbox.position.y = zhry;
 										}
 									}
 									zhrind += 1;
-									zparagraph = WTW.wrapText(zcontent, " ", zhtmlsegments[zhtmlind].style.lineheight, zhtmlsegments[zhtmlind].style.fontsize, zhtmlsegments[zhtmlind].style.textalign, "top", zhtmlsegments[zhtmlind].style.color, zliney, zhtmlsegments[zhtmlind].style.maxwidth, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].system.float, zhtmlsegments[zhtmlind].system.floatwidth, zhtmlsegments[zhtmlind].system.floatheight);
+									zparagraph = WTW.wrapText(zcontent, ' ', zhtmlsegments[zhtmlind].style.lineheight, zhtmlsegments[zhtmlind].style.fontsize, zhtmlsegments[zhtmlind].style.textalign, 'top', zhtmlsegments[zhtmlind].style.color, zliney, zhtmlsegments[zhtmlind].style.maxwidth, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].system.float, zhtmlsegments[zhtmlind].system.floatwidth, zhtmlsegments[zhtmlind].system.floatheight);
 									/* zparagraph = WTW.addHtmlHR(zcontent, zhtmlsegments[zhtmlind].style.color, zhtmlsegments[zhtmlind].style.textalign, zhtmlsegments[zhtmlind].style.size, zhtmlsegments[zhtmlind].style.width, zliney); */
 									zliney += zparagraph.height;
 									zhtmlsegments[0].system.indent = 0;
@@ -1069,13 +1069,13 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 									zmaxheight = zparagraph.maxheight;
 									zminx = zparagraph.minx;
 									break;
-								case "img":
+								case 'img':
 									zparagraph = WTW.addHtmlImg(zcontent, zhtmlsegments[zhtmlind].src, zhtmlsegments[zhtmlind].style.textalign, zhtmlsegments[zhtmlind].style.width, zhtmlsegments[zhtmlind].style.height, zhtmlsegments[zhtmlind].style.borderwidth, zhtmlsegments[zhtmlind].style.bordercolor, zliney, 0, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].style.margintop, zhtmlsegments[zhtmlind].style.marginbottom);
 									zhtmlsegments[0].system.indent = 0;
 									zmaxwidth = zparagraph.maxwidth;
 									zmaxheight = zparagraph.maxheight;
 									zminx = zparagraph.minx;
-									if (zhtmlsegments[zhtmlind].style.float != "") {
+									if (zhtmlsegments[zhtmlind].style.float != '') {
 										zhtmlsegments[zhtmlind].system.float = zhtmlsegments[zhtmlind].style.float;
 										zhtmlsegments[zhtmlind].system.floatwidth = zparagraph.width;
 										zhtmlsegments[zhtmlind].system.floatheight = zparagraph.height;
@@ -1091,15 +1091,15 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 								zhtmlwidth = zparagraph.width;
 							}
 							if (zwords.length > 0) {
-								if (zhtmlsegments[zhtmlind].style.display == "inline") {
+								if (zhtmlsegments[zhtmlind].style.display == 'inline') {
 									zliney -= zlineheight;
-									zparagraph = WTW.wrapText(zcontent, zwords, zhtmlsegments[zhtmlind].style.lineheight, zhtmlsegments[zhtmlind].style.fontsize, zhtmlsegments[zhtmlind].style.textalign, "top", zhtmlsegments[zhtmlind].style.color, zliney, zhtmlsegments[0].system.indent, zhtmlsegments[zhtmlind].style.maxwidth, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].system.float, zhtmlsegments[zhtmlind].system.floatwidth, zhtmlsegments[zhtmlind].system.floatheight);
+									zparagraph = WTW.wrapText(zcontent, zwords, zhtmlsegments[zhtmlind].style.lineheight, zhtmlsegments[zhtmlind].style.fontsize, zhtmlsegments[zhtmlind].style.textalign, 'top', zhtmlsegments[zhtmlind].style.color, zliney, zhtmlsegments[0].system.indent, zhtmlsegments[zhtmlind].style.maxwidth, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].system.float, zhtmlsegments[zhtmlind].system.floatwidth, zhtmlsegments[zhtmlind].system.floatheight);
 									zliney += zparagraph.height;
 								} else {
 									if (zhtmlsegments[zhtmlind].system.floatheight > 0) {
 										/* zliney -= zhtmlsegments[zhtmlind].system.floatheight; */
 									}
-									zparagraph = WTW.wrapText(zcontent, zwords, zhtmlsegments[zhtmlind].style.lineheight, zhtmlsegments[zhtmlind].style.fontsize, zhtmlsegments[zhtmlind].style.textalign, "top", zhtmlsegments[zhtmlind].style.color, zliney, 5, zhtmlsegments[zhtmlind].style.maxwidth, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].system.float, zhtmlsegments[zhtmlind].system.floatwidth, zhtmlsegments[zhtmlind].system.floatheight);
+									zparagraph = WTW.wrapText(zcontent, zwords, zhtmlsegments[zhtmlind].style.lineheight, zhtmlsegments[zhtmlind].style.fontsize, zhtmlsegments[zhtmlind].style.textalign, 'top', zhtmlsegments[zhtmlind].style.color, zliney, 5, zhtmlsegments[zhtmlind].style.maxwidth, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].system.float, zhtmlsegments[zhtmlind].system.floatwidth, zhtmlsegments[zhtmlind].system.floatheight);
 									zliney += zparagraph.height;
 									zhtmlsegments[0].system.indent = 0;
 								}
@@ -1114,21 +1114,21 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 
 									zliney += (zhtmlsegments[zhtmlind].system.floatheight - zparagraph.height);
 								}
-								zhtmlsegments[zhtmlind].system.float = "";
+								zhtmlsegments[zhtmlind].system.float = '';
 								zhtmlsegments[zhtmlind].system.floatwidth = 0;
 								zhtmlsegments[zhtmlind].system.floatheight = 0;
 							}
 							zhtmlind -= 1;
 						} else if (zwords.length > 0) {
-							if (zhtmlsegments[zhtmlind].style.display == "inline") {
+							if (zhtmlsegments[zhtmlind].style.display == 'inline') {
 								zliney -= zlineheight;
-								zparagraph = WTW.wrapText(zcontent, zwords, zhtmlsegments[zhtmlind].style.lineheight, zhtmlsegments[zhtmlind].style.fontsize, zhtmlsegments[zhtmlind].style.textalign, "top", zhtmlsegments[zhtmlind].style.color, zliney, zhtmlsegments[0].system.indent, zhtmlsegments[zhtmlind].style.maxwidth, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].system.float, zhtmlsegments[zhtmlind].system.floatwidth, zhtmlsegments[zhtmlind].system.floatheight);
+								zparagraph = WTW.wrapText(zcontent, zwords, zhtmlsegments[zhtmlind].style.lineheight, zhtmlsegments[zhtmlind].style.fontsize, zhtmlsegments[zhtmlind].style.textalign, 'top', zhtmlsegments[zhtmlind].style.color, zliney, zhtmlsegments[0].system.indent, zhtmlsegments[zhtmlind].style.maxwidth, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].system.float, zhtmlsegments[zhtmlind].system.floatwidth, zhtmlsegments[zhtmlind].system.floatheight);
 								zliney += zparagraph.height;
 							} else {
 								if (zhtmlsegments[zhtmlind].system.floatheight > 0) {
 									/* zliney -= zhtmlsegments[zhtmlind].system.floatheight; */
 								}
-								zparagraph = WTW.wrapText(zcontent, zwords, zhtmlsegments[zhtmlind].style.lineheight, zhtmlsegments[zhtmlind].style.fontsize, zhtmlsegments[zhtmlind].style.textalign, "top", zhtmlsegments[zhtmlind].style.color, zliney, 5, zhtmlsegments[zhtmlind].style.maxwidth, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].system.float, zhtmlsegments[zhtmlind].system.floatwidth, zhtmlsegments[zhtmlind].system.floatheight);
+								zparagraph = WTW.wrapText(zcontent, zwords, zhtmlsegments[zhtmlind].style.lineheight, zhtmlsegments[zhtmlind].style.fontsize, zhtmlsegments[zhtmlind].style.textalign, 'top', zhtmlsegments[zhtmlind].style.color, zliney, 5, zhtmlsegments[zhtmlind].style.maxwidth, zhtmlsegments[zhtmlind].style.marginleft, zhtmlsegments[zhtmlind].style.marginright, zhtmlsegments[zhtmlind].system.float, zhtmlsegments[zhtmlind].system.floatwidth, zhtmlsegments[zhtmlind].system.floatheight);
 								zliney += zparagraph.height;
 								zhtmlsegments[0].system.indent = 0;
 							}
@@ -1143,7 +1143,7 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 
 								zliney += (zhtmlsegments[zhtmlind].system.floatheight - zparagraph.height);
 							}
-							zhtmlsegments[zhtmlind].system.float = "";
+							zhtmlsegments[zhtmlind].system.float = '';
 							zhtmlsegments[zhtmlind].system.floatwidth = 0;
 							zhtmlsegments[zhtmlind].system.floatheight = 0;
 						}
@@ -1160,7 +1160,7 @@ WTWJS.prototype.wrapHtml = function(zcontent, zhtml, zscrollpos) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-molds-wtw_3dblog.js-wrapHtml=" + ex.message);
+		WTW.log('core-scripts-molds-wtw_3dblog.js-wrapHtml=' + ex.message);
 	} 
 	return {
 		width:zhtmlwidth,
@@ -1182,19 +1182,19 @@ WTWJS.prototype.scrollBoxMove = function(zmoldname, zscrollmove) {
 			WTW.scrollBoxRepaint(zmoldname, zscrollmove);
 		}, 100);
 	} catch (ex) {
-		WTW.log("core-scripts-molds-wtw_3dblog.js-scrollBoxMove=" + ex.message);
+		WTW.log('core-scripts-molds-wtw_3dblog.js-scrollBoxMove=' + ex.message);
 	} 
 }
 
 WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 	/* repaint the scroll box (after scroll the 3d blog wall) */
 	try {
-		if (zmoldname.indexOf("-") > -1) {
+		if (zmoldname.indexOf('-') > -1) {
 			var znamepart = zmoldname.split('-');
-			if (znamepart.length > 3) {
+			if (znamepart.length > 7) {
 				var zmolds = WTW.buildingMolds;
-				var zmoldind = Number(znamepart[1]);
-				if (znamepart[0] == "communitymolds") {
+				var zmoldind = Number(znamepart[2]);
+				if (znamepart[1] == 'communitymolds') {
 					zmolds = WTW.communitiesMolds;
 				}
 				if (zmolds[zmoldind] != null) {
@@ -1208,9 +1208,9 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 					if (zscrollpos > 0) {
 						zscrollpos = 0;
 					}
-					var zwebtext = "";
-					zmoldname = znamepart[0] + "-" + znamepart[1] + "-" + znamepart[2] + "-" + znamepart[3] + "-" + znamepart[4] + "-" + znamepart[5];
-					var zscrollboxbodytext = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxbodytext");
+					var zwebtext = '';
+					zmoldname = znamepart[0] + '-' + znamepart[1] + '-' + znamepart[2] + '-' + znamepart[3] + '-' + znamepart[4] + '-' + znamepart[5] + '-' + znamepart[6];
+					var zscrollboxbodytext = WTW.getMeshOrNodeByID(zmoldname + '-scrollboxbodytext');
 					if (zscrollboxbodytext != null) {
 						zscrollboxbodytext.WTW.webtext.scrollpos = zscrollpos;
 						if (zmolds[zmoldind].webtext.webtext != undefined) {
@@ -1220,11 +1220,11 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 						if (zscrollboxbodytext.WTW.webtext.webtext != zwebtext) {
 							zwebtext = zscrollboxbodytext.WTW.webtext.webtext;
 						}
-						if (zmoldname.indexOf("-blogposting") > -1 && zwebtext == "") {
-							zwebtext = "<div style=\"color:green;\">Click Here to Post</div>";
+						if (zmoldname.indexOf('-blogposting') > -1 && zwebtext == '') {
+							zwebtext = "<div style='color:green;'>Click Here to Post</div>";
 						}
-						var zcontentTexture = new BABYLON.DynamicTexture(zmoldname + "-scrollboxbodytexture", 512, scene, true);
-						zcontentTexture.name = zmoldname + "-scrollboxbodytexture";
+						var zcontentTexture = new BABYLON.DynamicTexture(zmoldname + '-scrollboxbodytexture', 512, scene, true);
+						zcontentTexture.name = zmoldname + '-scrollboxbodytexture';
 						zcontentTexture.hasAlpha = true;
 						zscrollboxbodytext.material.diffuseTexture = zcontentTexture;
 						var zparagraph = WTW.wrapHtml(zscrollboxbodytext, zwebtext, zscrollpos);
@@ -1232,15 +1232,15 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 							zscrollpos -= zscrollmove;
 						}
 						zmolds[zmoldind].webtext.fullheight = zparagraph.height;
-						var zscrollboxtab = WTW.getMeshOrNodeByID(zmoldname + "-scrollboxtab");
+						var zscrollboxtab = WTW.getMeshOrNodeByID(zmoldname + '-scrollboxtab');
 						if (zparagraph.height > zparagraph.maxheight) {
 							if (zscrollboxtab == null) {
-								var zbuttontextureid = "vvpzrv2pae3bbkwv";
-								var zbuttontexturehoverid = "yxs6lcxokr6lhll3";
-								var zarrowdownid = "hj9oly198c17x086";
-								var zarrowdownhoverid = "q3bajsb9brye6q3c";
-								var zarrowupid = "xghzjpxk2lqv9l9k";
-								var zarrowuphoverid = "jgmqro16rbainojm";
+								var zbuttontextureid = 'vvpzrv2pae3bbkwv';
+								var zbuttontexturehoverid = 'yxs6lcxokr6lhll3';
+								var zarrowdownid = 'hj9oly198c17x086';
+								var zarrowdownhoverid = 'q3bajsb9brye6q3c';
+								var zarrowupid = 'xghzjpxk2lqv9l9k';
+								var zarrowuphoverid = 'jgmqro16rbainojm';
 								var zleny = Number(zmolds[zmoldind].scaling.y);
 								var ztabheight = 1;
 								if (zparagraph.maxheight < zparagraph.height) {
@@ -1252,7 +1252,7 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 								var ztabpos = ztabpos = (zleny - 2) / 2 - ztabheight / 2;
 								
 								var zbasicmold9 = WTW.newMold();
-								zbasicmold9.shape = "box";
+								zbasicmold9.shape = 'box';
 								zbasicmold9.position.x = 1/4 + .2;
 								zbasicmold9.position.y = ztabpos;
 								zbasicmold9.position.z = 15/2 - .75;
@@ -1261,15 +1261,15 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 								zbasicmold9.scaling.z = .65;
 								zbasicmold9.subdivisions = 12;
 								zbasicmold9.graphics.texture.id = zbuttontextureid;
-								zbasicmold9.parentname = zmoldname + "-scale";
-								zbasicmold9.checkcollisions = "1";
-								zbasicmold9.ispickable = "1";
-								zscrollboxtab = WTW.addMold(zmoldname + "-scrollboxtab", zbasicmold9, zbasicmold9.parentname, zbasicmold9.covering);
+								zbasicmold9.parentname = zmoldname + '-scale';
+								zbasicmold9.checkcollisions = '1';
+								zbasicmold9.ispickable = '1';
+								zscrollboxtab = WTW.addMold(zmoldname + '-scrollboxtab', zbasicmold9, zbasicmold9.parentname, zbasicmold9.covering);
 								WTW.registerMouseOver(zscrollboxtab);
 								zscrollboxtab.WTW = zbasicmold9;
 
 								var zbasicmold9b = WTW.newMold();
-								zbasicmold9b.shape = "box";
+								zbasicmold9b.shape = 'box';
 								zbasicmold9b.position.x = 0;
 								zbasicmold9b.position.y = 0;
 								zbasicmold9b.position.z = 0;
@@ -1278,13 +1278,13 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 								zbasicmold9b.scaling.z = .8;
 								zbasicmold9b.subdivisions = 12;
 								zbasicmold9b.graphics.texture.id = zbuttontexturehoverid;
-								zbasicmold9b.parentname = zmoldname + "-scrollboxtab";
-								zbasicmold9b.checkcollisions = "1";
-								var zscrollboxtabhover = WTW.addMold(zmoldname + "-scrollboxtabhover", zbasicmold9b, zbasicmold9b.parentname, zbasicmold9b.covering);
+								zbasicmold9b.parentname = zmoldname + '-scrollboxtab';
+								zbasicmold9b.checkcollisions = '1';
+								var zscrollboxtabhover = WTW.addMold(zmoldname + '-scrollboxtabhover', zbasicmold9b, zbasicmold9b.parentname, zbasicmold9b.covering);
 								
 								var zbasicmold5 = WTW.newMold();
-								zbasicmold5.shape = "box";
-								zbasicmold5.covering = "directional texture";
+								zbasicmold5.shape = 'box';
+								zbasicmold5.covering = 'directional texture';
 								zbasicmold5.position.x = 1/4 + .2;
 								zbasicmold5.position.y = 15/2 - .6;
 								zbasicmold5.position.z = 15/2 - .75;
@@ -1295,16 +1295,16 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 								zbasicmold5.graphics.vscale = 17;
 								zbasicmold5.subdivisions = 12;
 								zbasicmold5.graphics.texture.id = zarrowupid;
-								zbasicmold5.parentname = zmoldname + "-scale";
-								zbasicmold5.checkcollisions = "1";
-								zbasicmold5.ispickable = "1";
-								var zscrollboxup = WTW.addMold(zmoldname + "-scrollboxup", zbasicmold5, zbasicmold5.parentname, zbasicmold5.covering);
+								zbasicmold5.parentname = zmoldname + '-scale';
+								zbasicmold5.checkcollisions = '1';
+								zbasicmold5.ispickable = '1';
+								var zscrollboxup = WTW.addMold(zmoldname + '-scrollboxup', zbasicmold5, zbasicmold5.parentname, zbasicmold5.covering);
 								WTW.registerMouseOver(zscrollboxup);
 								zscrollboxup.WTW = zbasicmold5;
 
 								var zbasicmold5b = WTW.newMold();
-								zbasicmold5b.shape = "box";
-								zbasicmold5b.covering = "directional texture";
+								zbasicmold5b.shape = 'box';
+								zbasicmold5b.covering = 'directional texture';
 								zbasicmold5b.position.x = 0;
 								zbasicmold5b.position.y = 0;
 								zbasicmold5b.position.z = 0;
@@ -1315,13 +1315,13 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 								zbasicmold5b.graphics.vscale = 13;
 								zbasicmold5b.subdivisions = 12;
 								zbasicmold5b.graphics.texture.id = zarrowuphoverid;
-								zbasicmold5b.parentname = zmoldname + "-scrollboxup";
-								zbasicmold5b.checkcollisions = "1";
-								var zscrollboxuphover = WTW.addMold(zmoldname + "-scrollboxuphover", zbasicmold5b, zbasicmold5b.parentname, zbasicmold5b.covering);
+								zbasicmold5b.parentname = zmoldname + '-scrollboxup';
+								zbasicmold5b.checkcollisions = '1';
+								var zscrollboxuphover = WTW.addMold(zmoldname + '-scrollboxuphover', zbasicmold5b, zbasicmold5b.parentname, zbasicmold5b.covering);
 
 								var zbasicmold7 = WTW.newMold();
-								zbasicmold7.shape = "box";
-								zbasicmold7.covering = "directional texture";
+								zbasicmold7.shape = 'box';
+								zbasicmold7.covering = 'directional texture';
 								zbasicmold7.position.x = 1/4 + .2;
 								zbasicmold7.position.y = -15/2 + .6;
 								zbasicmold7.position.z = 15/2 - .75;
@@ -1334,16 +1334,16 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 								zbasicmold7.graphics.vscale = 17;
 								zbasicmold7.subdivisions = 12;
 								zbasicmold7.graphics.texture.id = zarrowdownid;
-								zbasicmold7.parentname = zmoldname + "-scale";
-								zbasicmold7.checkcollisions = "1";
-								zbasicmold7.ispickable = "1";
-								var zscrollboxdown = WTW.addMold(zmoldname + "-scrollboxdown", zbasicmold7, zbasicmold7.parentname, zbasicmold7.covering);
+								zbasicmold7.parentname = zmoldname + '-scale';
+								zbasicmold7.checkcollisions = '1';
+								zbasicmold7.ispickable = '1';
+								var zscrollboxdown = WTW.addMold(zmoldname + '-scrollboxdown', zbasicmold7, zbasicmold7.parentname, zbasicmold7.covering);
 								WTW.registerMouseOver(zscrollboxdown);
 								zscrollboxdown.WTW = zbasicmold7;
 
 								var zbasicmold7b = WTW.newMold();
-								zbasicmold7b.shape = "box";
-								zbasicmold7b.covering = "directional texture";
+								zbasicmold7b.shape = 'box';
+								zbasicmold7b.covering = 'directional texture';
 								zbasicmold7b.position.x = 0;
 								zbasicmold7b.position.y = 0;
 								zbasicmold7b.position.z = 0;
@@ -1354,9 +1354,9 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 								zbasicmold7b.graphics.vscale = 13;
 								zbasicmold7b.subdivisions = 12;
 								zbasicmold7b.graphics.texture.id = zarrowdownhoverid;
-								zbasicmold7b.parentname = zmoldname + "-scrollboxdown";
-								zbasicmold7b.checkcollisions = "1";
-								var zscrollboxdownhover = WTW.addMold(zmoldname + "-scrollboxdownhover", zbasicmold7b, zbasicmold7b.parentname, zbasicmold7b.covering);
+								zbasicmold7b.parentname = zmoldname + '-scrollboxdown';
+								zbasicmold7b.checkcollisions = '1';
+								var zscrollboxdownhover = WTW.addMold(zmoldname + '-scrollboxdownhover', zbasicmold7b, zbasicmold7b.parentname, zbasicmold7b.covering);
 
 								scrollboxtab.position.y = (zscrollboxbodytext.parent.scaling.y - 1) / 2 - zscrollboxtab.scaling.y / 2 + (zscrollpos / (zparagraph.height - zparagraph.maxheight) * ((zscrollboxbodytext.parent.scaling.y - 1) - zscrollboxtab.scaling.y));
 							} else {
@@ -1377,7 +1377,7 @@ WTWJS.prototype.scrollBoxRepaint = function(zmoldname, zscrollmove) {
 			scene.activeCameras[0].attachControl(canvas, true); /* true allows canvas default event actions */
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-molds-wtw_3dblog.js-scrollBoxRepaint=" + ex.message);
+		WTW.log('core-scripts-molds-wtw_3dblog.js-scrollBoxRepaint=' + ex.message);
 	} 
 }
 

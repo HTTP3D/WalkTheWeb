@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -9,11 +9,11 @@ WTWJS.prototype.getAvatarList = function() {
 	/* list of autobot avatars */
 	var zavatarlist = [];
 	try {
-		zavatarlist[zavatarlist.length] = "Anonymous";
-		zavatarlist[zavatarlist.length] = "Female";
-		zavatarlist[zavatarlist.length] = "Male";
+		zavatarlist[zavatarlist.length] = 'Anonymous';
+		zavatarlist[zavatarlist.length] = 'Female';
+		zavatarlist[zavatarlist.length] = 'Male';
 	} catch (ex) {
-		WTW.log("core-scripts-avatars-addavatarlist\r\n getAvatarList=" + ex.message);
+		WTW.log('core-scripts-avatars-addavatarlist\r\n getAvatarList=' + ex.message);
 	} 
 	return zavatarlist;
 }
@@ -23,10 +23,10 @@ WTWJS.prototype.addAvatar = function(zavatarname, zavatardef, zparentname) {
 	var zavatar;
 	try {
 		if (zavatardef.avatar == undefined) {
-			zavatardef.avatar = "";
+			zavatardef.avatar = '';
 		}
 		switch (zavatardef.avatar.toLowerCase()) {
-			case "shark":
+			case 'shark':
 				zavatar = WTW.addAvatarShark(zavatarname, zavatardef);
 				break;
 			default:
@@ -39,7 +39,7 @@ WTWJS.prototype.addAvatar = function(zavatarname, zavatardef, zparentname) {
 			zavatar.parent = zavatarparent;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-avatars-addavatarlist\r\n addAvatar=" + ex.message);
+		WTW.log('core-scripts-avatars-addavatarlist\r\n addAvatar=' + ex.message);
 	} 
 	return zavatar;
 }

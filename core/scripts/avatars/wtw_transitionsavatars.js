@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -13,7 +13,7 @@ WTWJS.prototype.saveAvatarEnterAnimation = async function() {
 		}
 		var zrequest = {
 			'useravatarid': dGet('wtw_tuseravatarid').value,
-			'instanceid': dGet("wtw_tinstanceid").value,
+			'instanceid': dGet('wtw_tinstanceid').value,
 			'avataranimationid': zavataranimationid,
 			'transport': '1',
 			'function':'savetransportanimation'
@@ -25,7 +25,7 @@ WTWJS.prototype.saveAvatarEnterAnimation = async function() {
 			}
 		);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-saveAvatarEnterAnimation=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-saveAvatarEnterAnimation=' + ex.message);
     }
 }
 
@@ -76,7 +76,7 @@ WTWJS.prototype.addAvatarAnimationRow = function(zoptionind, zselectedvalue) {
 		zdeleteanimation.appendChild(znewoptional);
 		dGet('wtw_addoptionalanimations').appendChild(zdeleteanimation);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-addAvatarAnimationRow=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-addAvatarAnimationRow=' + ex.message);
     }
 }
 
@@ -114,7 +114,7 @@ WTWJS.prototype.updateAnimSelectValue = function(zuseravataranimationidfield, zu
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-updateAnimSelectValue=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-updateAnimSelectValue=' + ex.message);
     }
 }
 
@@ -151,7 +151,7 @@ WTWJS.prototype.deleteUserAnimation = async function(zselectname) {
 			WTW.hide(zselectname);
 			WTW.hide(zselectname + '-delete');
 		}
-		if (zuseravataranimationid != "") {
+		if (zuseravataranimationid != '') {
 			var zrequest = {
 				'useravatarid': dGet('wtw_tuseravatarid').value,
 				'instanceid': dGet('wtw_tinstanceid').value,
@@ -167,14 +167,14 @@ WTWJS.prototype.deleteUserAnimation = async function(zselectname) {
 			);
 		}
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-deleteUserAnimation=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-deleteUserAnimation=' + ex.message);
     }
 }
 
 WTWJS.prototype.toggleMenuAnimations = function() {
 	/* opens and closes the execute animations box from the menu - will be depreciated soon (moved to HUD) */
 	try {
-		if (dGet('wtw_menuoptionalanimations').style.display == 'none') {
+		if (dGet('wtw_menuoptionalanimations').style.display == 'none' || dGet('wtw_menuoptionalanimations').style.display == '') {
 			var zlistoptionalanimations = '';
 			var zavatar = WTW.getMeshOrNodeByID('myavatar-' + dGet('wtw_tinstanceid').value);
 			if (zavatar != null) {
@@ -226,7 +226,7 @@ WTWJS.prototype.toggleMenuAnimations = function() {
 			WTW.hide('wtw_menuoptionalanimations');
 		}
 	} catch (ex) { 
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-toggleMenuAnimations=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-toggleMenuAnimations=' + ex.message);
 	}
 }
 
@@ -254,7 +254,7 @@ WTWJS.prototype.avatarAnimationMode = function(zmode) {
 			}
 		}
 	} catch (ex) { 
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarAnimationMode=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarAnimationMode=' + ex.message);
 	}
 }
 
@@ -274,7 +274,7 @@ WTWJS.prototype.getAvatarAnimationsAll = async function() {
 			}
 		);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-getAvatarAnimationsAll=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-getAvatarAnimationsAll=' + ex.message);
     }
 }
 
@@ -364,17 +364,17 @@ WTWJS.prototype.loadAvatarAnimationsAll = function(zresponse) {
 							zeditavataranimations += "<div class='wtw-inlineindent'>" + zanimationname + "</div></li>";
 							zeditavataranimations += "<li id='wtw_animationdiv-" + i + "' class='wtw-avatarli' style='display:none;visibility:hidden;'>";
 							if (zresponse[i].animationevent == 'onoption') {
-								zeditavataranimations += "<div>";
+								zeditavataranimations += '<div>';
 							} else {
 								zeditavataranimations += "<div class='wtw-inlineindent2'>";
 							}
 							zeditavataranimations += "<input id='" + zcurrentinput + "' type='hidden' value='' />";
 							
 							if (zresponse[i].animationevent == 'onoption') {
-								zeditavataranimations += "<select id='wtw_tselectavataranimation-" + i + "' onchange=\"WTW.changeAvatarAnimation(this);\" style='display:none;visibility:hidden;' >";
+								zeditavataranimations += "<select id='wtw_tselectavataranimation-" + i + "' onchange=\"WTW.changeAvatarAnimation(this);\" class='wtw-pointer' style='display:none;visibility:hidden;' >";
 								zeditavataranimations += "<option value=''> -- Select Animation -- </option>";
 							} else {
-								zeditavataranimations += "<select id='wtw_tselectavataranimation-" + i + "' onchange=\"WTW.changeAvatarAnimation(this);\" >";
+								zeditavataranimations += "<select id='wtw_tselectavataranimation-" + i + "' onchange=\"WTW.changeAvatarAnimation(this);\" class='wtw-pointer' >";
 							}
 							if (zoptionind > 68) {
 								WTW.hide('wtw_animation-add');
@@ -413,7 +413,7 @@ WTWJS.prototype.loadAvatarAnimationsAll = function(zresponse) {
 		}
 		WTW.showSettingsMenu('wtw_menuavatar');
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-loadAvatarAnimationsAll=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-loadAvatarAnimationsAll=' + ex.message);
     }
 }
 
@@ -423,7 +423,7 @@ WTWJS.prototype.editEnterAnimation = function() {
 		WTW.editAvatarAnimation('', -1, 181);
 		WTW.toggle('wtw_animationdiv-enter');
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-editEnterAnimation=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-editEnterAnimation=' + ex.message);
     }
 }
 
@@ -439,7 +439,7 @@ WTWJS.prototype.editAvatarAnimation = function(animationevent, currentind, total
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-editAvatarAnimation=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-editAvatarAnimation=' + ex.message);
     }
 }
 
@@ -505,7 +505,7 @@ WTWJS.prototype.avatarEnter = function(zavatarname) {
 		}
 		WTW.pluginsEnterAvatar(zavatarname);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarEnter=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarEnter=' + ex.message);
     }
 }
 
@@ -522,7 +522,7 @@ WTWJS.prototype.avatarMinLoadEnter = function(zavatarname) {
 		}
 		WTW.avatarShowVisible(zavatarname, zavatarparts);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarMinLoadEnter=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarMinLoadEnter=' + ex.message);
     }
 }
 
@@ -554,7 +554,7 @@ WTWJS.prototype.avatarShowVisible = function(zavatarname, zavatarparts) {
 		}
 		WTW.avatarLoadComplete(zavatarname);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowVisible=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarShowVisible=' + ex.message);
     }
 }
 
@@ -592,7 +592,7 @@ WTWJS.prototype.avatarShowFade = function(zavatarname, zavatarparts) {
 			}
 		},50);
 	} catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFade=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFade=' + ex.message);
     }
 }
 
@@ -646,7 +646,7 @@ WTWJS.prototype.avatarShowFadeSmoke = function(zavatarname, zavatarparts) {
 			},100);
 		},500);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFadeSmoke=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFadeSmoke=' + ex.message);
     }
 }
 
@@ -748,7 +748,7 @@ WTWJS.prototype.avatarShowFadeSwirl = function(zavatarname, zavatarparts) {
 			}
 		},70);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFadeSwirl=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFadeSwirl=' + ex.message);
     }
 }
 
@@ -850,7 +850,7 @@ WTWJS.prototype.avatarShowFadeSwirlLong = function(zavatarname, zavatarparts) {
 			}
 		},70);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFadeSwirlLong=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFadeSwirlLong=' + ex.message);
     }
 }
 
@@ -920,7 +920,7 @@ WTWJS.prototype.avatarShowFadeSprite = function(zavatarname, zavatarparts) {
 			},30);
 		},500);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFadeSprite=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFadeSprite=' + ex.message);
     }
 }
 
@@ -994,7 +994,7 @@ WTWJS.prototype.avatarShowFadeParticles = function(zavatarname, zavatarparts) {
 			},25);
 		},1000);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFadeParticles=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarShowFadeParticles=' + ex.message);
     }
 }
 
@@ -1069,7 +1069,7 @@ WTWJS.prototype.avatarShowGrow = function(zavatarname, zavatarparts) {
 			}
 		},10);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowGrow=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarShowGrow=' + ex.message);
     }
 }
 
@@ -1159,7 +1159,7 @@ WTWJS.prototype.avatarShowGrowGlow = function(zavatarname, zavatarparts) {
 			}
 		},25);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowGrowGlow=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarShowGrowGlow=' + ex.message);
     }
 }
 
@@ -1250,7 +1250,7 @@ WTWJS.prototype.avatarShowGrowSmoke = function(zavatarname, zavatarparts) {
 			},40);
 		},300);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowGrowSmoke=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarShowGrowSmoke=' + ex.message);
     }
 }
 
@@ -1356,7 +1356,7 @@ WTWJS.prototype.avatarShowGrowGlowSmoke = function(zavatarname, zavatarparts) {
 			},40);
 		},300);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowGrowGlowSmoke=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarShowGrowGlowSmoke=' + ex.message);
     }
 }
 
@@ -1412,18 +1412,18 @@ WTWJS.prototype.avatarShowBeam = function(zavatarname, zavatarparts) {
 			},50);
 		},1500);
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-avatarShowBeam=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-avatarShowBeam=' + ex.message);
     }
 }
 
 WTWJS.prototype.loadSit = function(zavatarname) {
 	/* work in progress - sit command will move avatar to location, turn, and sit on designated mold */
 	try {
-		var zuseravataranimationid = "cccccccccccccccc";
-		var zavataranimationid = "dddddddddddddddd";
+		var zuseravataranimationid = 'cccccccccccccccc';
+		var zavataranimationid = 'dddddddddddddddd';
 		WTW.loadAvatarAnimation(zavatarname, zuseravataranimationid, 'Sit Wait', '', zavataranimationid, 'onsitwait', '/content/system/animations/movement/', 'sitwait.babylon', 1, 155, 1, 0, 0);
     } catch (ex) {
-		WTW.log("avatars-loadavatar-loadSit=" + ex.message);
+		WTW.log('avatars-loadavatar-loadSit=' + ex.message);
     }
 }
 
@@ -1441,7 +1441,7 @@ WTWJS.prototype.startSit = function(zmoldname) {
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-startSit=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-startSit=' + ex.message);
     }
 }
 
@@ -1462,7 +1462,7 @@ WTWJS.prototype.setSit = function(zmoldtomatch) {
 		},10); 
 */					
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-setSit=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-setSit=' + ex.message);
     }
 }
 
@@ -1529,7 +1529,7 @@ WTWJS.prototype.walkToPosition = function(zavatarname, zmoldtomatch, zfunctionna
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-walkToPosition=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-walkToPosition=' + ex.message);
     }
 }
 
@@ -1573,7 +1573,7 @@ WTWJS.prototype.turnToRotation = function(zavatarname, zmoldtoface, zfunctionnam
 			},10);			
 		}
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-turnToRotation=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-turnToRotation=' + ex.message);
     }
 }
 
@@ -1599,6 +1599,6 @@ WTWJS.prototype.cancelSit = function(zavatar, zmoveevents) {
 			},10);
 		}
     } catch (ex) {
-		WTW.log("core-scripts-avatars-wtw_transitionsavatars.js-cancelSit=" + ex.message);
+		WTW.log('core-scripts-avatars-wtw_transitionsavatars.js-cancelSit=' + ex.message);
     }
 }

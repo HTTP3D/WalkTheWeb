@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -7,9 +7,9 @@
 WTWJS.prototype.toggleStartVehicle = function(zpickedname) {
 	try {
 		
-		if (WTW.animationSet == "") {
-			WTW.animationSet = "vehicle-boat";
-//WTW.log("BOAT ON");
+		if (WTW.animationSet == '') {
+			WTW.animationSet = 'vehicle-boat';
+//WTW.log('BOAT ON');
 			var zconnectinggrid = WTW.getMoldConnectingGrid(zpickedname);
 			WTW.drive = WTW.newDriveVehicle();
 			WTW.drive.vehicletype = 'boat';
@@ -22,32 +22,32 @@ WTWJS.prototype.toggleStartVehicle = function(zpickedname) {
 //			WTW.drive.vehicle.checkCollisions = true;
 
 		} else {
-			WTW.animationSet = "";
+			WTW.animationSet = '';
 			WTW.drive.vehicle = null;
 			WTW.vehicleStopSpeed();
 			WTW.vehicleStopTurn();
-//WTW.log("BOAT OFF");
+//WTW.log('BOAT OFF');
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-vehicles-wtw_vehicles.js-toggleStartVehicle=" + ex.message);
+		WTW.log('core-scripts-vehicles-wtw_vehicles.js-toggleStartVehicle=' + ex.message);
 	}
 }
 
 WTWJS.prototype.setVehicleAnimation = function(zevent) {
-	var zanimation = "onwait";
+	var zanimation = 'onwait';
 	try {
 		switch (zevent) {
-			case "onturnright":
-			case "onrunturnright":
+			case 'onturnright':
+			case 'onrunturnright':
 				// set turn animation
 				break;
-			case "onturnleft":
-			case "onrunturnleft":
+			case 'onturnleft':
+			case 'onrunturnleft':
 				// set turn animation
 				break;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-vehicles-wtw_vehicles.js-setAnimation=" + ex.message);
+		WTW.log('core-scripts-vehicles-wtw_vehicles.js-setAnimation=' + ex.message);
 	}
 	return zanimation;
 }
@@ -149,16 +149,16 @@ WTWJS.prototype.moveAvatarVehicle = function(zavatar, zkeyspressed) {
 						zanim = WTW.keysPressed[k];
 					}
 					switch (zanim) {
-						case "onwalk":
+						case 'onwalk':
 							WTW.changeVehicleSpeed(1,10);
 							break;
-						case "onwalkbackwards":
+						case 'onwalkbackwards':
 							WTW.changeVehicleSpeed(1,-10);
 							break;
-						case "onturnleft":
+						case 'onturnleft':
 							WTW.changeVehicleTurn(-1);
 							break;
-						case "onturnright":
+						case 'onturnright':
 							WTW.changeVehicleTurn(1);
 							break;
 					}
@@ -167,7 +167,7 @@ WTWJS.prototype.moveAvatarVehicle = function(zavatar, zkeyspressed) {
 		}
 
 	} catch (ex) {
-		WTW.log("core-scripts-vehicles-wtw_vehicles.js-moveAvatarVehicle=" + ex.message);
+		WTW.log('core-scripts-vehicles-wtw_vehicles.js-moveAvatarVehicle=' + ex.message);
 	}
 }
 
@@ -219,7 +219,7 @@ WTWJS.prototype.changeVehicleSpeed = function(zdir, zspeedchange) {
 */
 		
 	} catch (ex) {
-		WTW.log("core-scripts-vehicles-wtw_vehicles.js-changeVehicleSpeed=" + ex.message);
+		WTW.log('core-scripts-vehicles-wtw_vehicles.js-changeVehicleSpeed=' + ex.message);
 	}
 }
 
@@ -239,7 +239,7 @@ WTWJS.prototype.changeVehicleTurn = function(zturnchange) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-vehicles-wtw_vehicles.js-changeVehicleTurn=" + ex.message);
+		WTW.log('core-scripts-vehicles-wtw_vehicles.js-changeVehicleTurn=' + ex.message);
 	}
 }
 
@@ -272,7 +272,7 @@ WTWJS.prototype.vehicleStopTurn = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-vehicles-wtw_vehicles.js-vehicleStopTurn=" + ex.message);
+		WTW.log('core-scripts-vehicles-wtw_vehicles.js-vehicleStopTurn=' + ex.message);
 	}
 }
 
@@ -305,7 +305,7 @@ WTWJS.prototype.vehicleStopSpeed = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-vehicles-wtw_vehicles.js-vehicleStopSpeed=" + ex.message);
+		WTW.log('core-scripts-vehicles-wtw_vehicles.js-vehicleStopSpeed=' + ex.message);
 	}
 }
 
@@ -341,7 +341,7 @@ WTWJS.prototype.vehicleRenderLoop = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-vehicles-wtw_vehicles.js-vehicleRenderLoop=" + ex.message);
+		WTW.log('core-scripts-vehicles-wtw_vehicles.js-vehicleRenderLoop=' + ex.message);
 	}
 }
 

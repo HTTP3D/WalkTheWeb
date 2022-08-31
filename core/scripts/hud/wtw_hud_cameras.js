@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -33,7 +33,7 @@ WTWJS.prototype.hudGetCameras = function() {
 		
 		WTW.hudAddSaveClose('cameras', 0, -5.3, 0);
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_cameras.js-hudGetCameras=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_cameras.js-hudGetCameras=' + ex.message);
 	}
 }
 
@@ -69,7 +69,7 @@ WTWJS.prototype.hudHighlightCamera = function(zcameraset, zactivebutton) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_cameras.js-hudHighlightCamera=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_cameras.js-hudHighlightCamera=' + ex.message);
 	}
 }
 
@@ -97,7 +97,7 @@ WTWJS.prototype.hudChangeCameraDistance = function(zmoldname) {
 						if (WTW.isMouseDown == 1 && WTW.dragID == '') {
 							WTW.dragID = zmoldname;
 						} else if (WTW.isMouseDown == 0) {
-							WTW.setCookie("cameradistance",WTW.cameraDistance,365);
+							WTW.setCookie('cameradistance',WTW.cameraDistance,365);
 						} else {
 							if (WTW.mouseStartX != WTW.mouseX) {
 								WTW.cameraDistance += (WTW.mouseX - WTW.mouseStartX);
@@ -105,10 +105,10 @@ WTWJS.prototype.hudChangeCameraDistance = function(zmoldname) {
 							}
 						}
 						break;
-					case "hud-slider-camera1-dist-left":
+					case 'hud-slider-camera1-dist-left':
 						WTW.cameraDistance -= 5;
 						break;
-					case "hud-slider-camera1-dist-right":
+					case 'hud-slider-camera1-dist-right':
 						WTW.cameraDistance += 5;
 						break;
 				}
@@ -121,7 +121,7 @@ WTWJS.prototype.hudChangeCameraDistance = function(zmoldname) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_cameras.js-hudChangeCameraDistance=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_cameras.js-hudChangeCameraDistance=' + ex.message);
 	}
 }
 
@@ -155,7 +155,7 @@ WTWJS.prototype.hudClearCameras = async function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_cameras.js-hudClearCameras=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_cameras.js-hudClearCameras=' + ex.message);
 	}
 }
 
@@ -173,7 +173,7 @@ WTWJS.prototype.hudSaveCameras = async function() {
 			'dob': dGet('hud-textbox-dob').value.replace('|',''),
 			'function':'savemyprofile'
 		};
-		WTW.postAsyncJSON("/core/handlers/users.php", zrequest, 
+		WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/ * note serror would contain errors * /
@@ -183,7 +183,7 @@ WTWJS.prototype.hudSaveCameras = async function() {
 			}
 		);
 */	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_cameras.js-hudSaveCameras=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_cameras.js-hudSaveCameras=' + ex.message);
 	}
 }
 

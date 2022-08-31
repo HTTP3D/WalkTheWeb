@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -10,13 +10,13 @@ WTWJS.prototype.addMoldBox = function(zmoldname, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
 		var zsideorientation = BABYLON.Mesh.DEFAULT;
-		if (zmoldname.indexOf("actionzone") > -1 && WTW.adminView == 1) {
+		if (zmoldname.indexOf('actionzone') > -1 && WTW.adminView == 1) {
 			zsideorientation = BABYLON.Mesh.DOUBLESIDE;
 		}
 		zmold = BABYLON.MeshBuilder.CreateBox(zmoldname, {sideOrientation: zsideorientation}, scene);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldBox=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldBox=' + ex.message);
 	}
 	return zmold;
 }
@@ -28,7 +28,7 @@ WTWJS.prototype.addMoldCylinder = function(zmoldname, zlenx, zleny, zlenz, zsubd
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldCylinder=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldCylinder=' + ex.message);
 	}
 	return zmold;
 }	
@@ -40,7 +40,7 @@ WTWJS.prototype.addMoldCone = function(zmoldname, zlenx, zleny, zlenz, zsubdivis
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldCone=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldCone=' + ex.message);
 	}
 	return zmold;
 }	
@@ -49,11 +49,11 @@ WTWJS.prototype.addMoldSpotLight = function(zmoldname, zlenx, zleny, zlenz, zsub
 	var zmold;
 	try {
 		zmold = BABYLON.MeshBuilder.CreateCylinder(zmoldname, {height: 1, diameterTop: zspecial1, diameterBottom: zspecial2, tessellation: zsubdivisions, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
-		var zlight = new BABYLON.SpotLight(zmoldname + "-spotlight", new BABYLON.Vector3(0, -3, 0), new BABYLON.Vector3(0, -3, 0), Math.PI / 3, 20, scene);
+		var zlight = new BABYLON.SpotLight(zmoldname + '-spotlight', new BABYLON.Vector3(0, -3, 0), new BABYLON.Vector3(0, -3, 0), Math.PI / 3, 20, scene);
 		zlight.parent = zmold;
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldSpotLight=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldSpotLight=' + ex.message);
 	}
 	return zmold;
 }	
@@ -72,7 +72,7 @@ WTWJS.prototype.addMoldPolygon = function(zmoldname, zlenx, zleny, zlenz, zspeci
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldPolygon=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldPolygon=' + ex.message);
 	}
 	return zmold;
 }	
@@ -84,7 +84,7 @@ WTWJS.prototype.addMoldSphere = function(zmoldname, zlenx, zleny, zlenz, zsubdiv
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldSphere=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldSphere=' + ex.message);
 	}
 	return zmold;
 }
@@ -107,7 +107,7 @@ WTWJS.prototype.addMoldTriangle = function(zmoldname, zlenx, zleny, zlenz, zspec
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldTriangle=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldTriangle=' + ex.message);
 	}
 	return zmold;
 }
@@ -119,7 +119,7 @@ WTWJS.prototype.addMoldTorus = function(zmoldname, zlenx, zleny, zlenz, zsubdivi
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldTorus=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldTorus=' + ex.message);
 	}
 	return zmold;
 }
@@ -131,7 +131,7 @@ WTWJS.prototype.addMoldPlane = function(zmoldname, zlenx, zleny, zlenz) {
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldPlane=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldPlane=' + ex.message);
 	}
 	return zmold;
 }
@@ -143,7 +143,7 @@ WTWJS.prototype.addMoldDisc = function(zmoldname, zlenx, zleny, zlenz, zsubdivis
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldDisc=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldDisc=' + ex.message);
 	}
 	return zmold;
 }
@@ -180,7 +180,7 @@ WTWJS.prototype.addMoldTube = function(zmoldname, zlenx, zleny, zlenz, zsubdivis
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldTube=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldTube=' + ex.message);
 	}
 	return zmold;
 }
@@ -215,7 +215,7 @@ WTWJS.prototype.addMoldLine = function(zmoldname, zlenx, zleny, zlenz, zpath1) {
 		zmold.edgesColor = new BABYLON.Color4(0, 1, 0, 1);
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldLine=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldLine=' + ex.message);
 	}
 	return zmold;
 }
@@ -230,10 +230,10 @@ WTWJS.prototype.addMoldTerrain = function(zmoldname, zlenx, zleny, zlenz, zsubdi
 			zheightmappath = '/content/system/stock/heightmap-1500x1500.jpg';
 		}
 		if (zheightmapid == '') {
-			zheightmapid = "dxmbplwoocpg5df3";
+			zheightmapid = 'dxmbplwoocpg5df3';
 		}
 		if (zheightmappath != null) {
-			zheightmappath = zheightmappath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+			zheightmappath = zheightmappath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 		}
 		if (WTW.adminView == 1) {
 			zmold = BABYLON.MeshBuilder.CreateGroundFromHeightMap(zmoldname, zheightmappath, {width: 1, height: 1, subdivisions: zsubdivisions, minHeight: zminheight, maxHeight: zmaxheight, updatable: false}, scene);
@@ -243,7 +243,7 @@ WTWJS.prototype.addMoldTerrain = function(zmoldname, zlenx, zleny, zlenz, zsubdi
 			zmold = BABYLON.MeshBuilder.CreateGroundFromHeightMap(zmoldname, zheightmappath, {width: zlenx, height: zlenz, subdivisions: zsubdivisions, minHeight: zminheight, maxHeight: zmaxheight, updatable: false}, scene);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldTerrain=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldTerrain=' + ex.message);
 	}
 	return zmold;
 }
@@ -255,29 +255,29 @@ WTWJS.prototype.addMoldDome = function(zmoldname, zlenx, zleny, zlenz, zsubdivis
 		if (zspecial1 < 1) {
 			zspecial1 = 1;
 		}
-		var zsphere1 = BABYLON.MeshBuilder.CreateSphere(zmoldname + "-sphere1", {segments: zsubdivisions, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
+		var zsphere1 = BABYLON.MeshBuilder.CreateSphere(zmoldname + '-sphere1', {segments: zsubdivisions, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zsphere1.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zsphere1.position.y = 10;
 		var zsphere1CSG = BABYLON.CSG.FromMesh(zsphere1);
-		var zsphere2 = BABYLON.MeshBuilder.CreateSphere(zmoldname + "-sphere2", {segments: zsubdivisions, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
+		var zsphere2 = BABYLON.MeshBuilder.CreateSphere(zmoldname + '-sphere2', {segments: zsubdivisions, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zsphere2.scaling = new BABYLON.Vector3(zlenx - zspecial1, zleny - zspecial1, zlenz - zspecial1);
 		zsphere2.position.y = 10;
 		var zsphere2CSG = BABYLON.CSG.FromMesh(zsphere2);
-		var zbox1 = BABYLON.MeshBuilder.CreateBox(zmoldname + "-box1", {}, scene);
+		var zbox1 = BABYLON.MeshBuilder.CreateBox(zmoldname + '-box1', {}, scene);
 		zbox1.scaling = new BABYLON.Vector3(zlenx + 1, zleny + 1, zlenz + 1);
 		zbox1.position = new BABYLON.Vector3(0, (10+zleny/2), 0);
 		var zbox1CSG = BABYLON.CSG.FromMesh(zbox1);
 		var zdomeCSG = zsphere1CSG.intersect(zbox1CSG);
 		zdomeCSG = zdomeCSG.subtract(zsphere2CSG);
-		var zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		var zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
 		zcovering.backFaceCulling = false;
 		zmold = zdomeCSG.toMesh(zmoldname, zcovering, scene);
-		WTW.disposeClean(zmoldname + "-sphere1");
-		WTW.disposeClean(zmoldname + "-sphere2");
-		WTW.disposeClean(zmoldname + "-box1");
+		WTW.disposeClean(zmoldname + '-sphere1');
+		WTW.disposeClean(zmoldname + '-sphere2');
+		WTW.disposeClean(zmoldname + '-box1');
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldDome=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldDome=' + ex.message);
 	}
 	return zmold;
 }
@@ -285,17 +285,17 @@ WTWJS.prototype.addMoldDome = function(zmoldname, zlenx, zleny, zlenz, zsubdivis
 WTWJS.prototype.addMoldHalfPipe = function(zmoldname, zlenx, zleny, zlenz, zsubdivisions, zspecial1) {
 	var zmold;
 	try {
-		var zcylinder1 = BABYLON.MeshBuilder.CreateCylinder(zmoldname + "-cylinder1", {height: 1, diameterTop: 1, diameterBottom: 1, tessellation: zsubdivisions, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
+		var zcylinder1 = BABYLON.MeshBuilder.CreateCylinder(zmoldname + '-cylinder1', {height: 1, diameterTop: 1, diameterBottom: 1, tessellation: zsubdivisions, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zcylinder1.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zcylinder1.rotation.x = WTW.getRadians(90);
 		zcylinder1.rotation.y = WTW.getRadians(90);
 		zcylinder1.position.y = 10;
-		var zcylinder2 = BABYLON.MeshBuilder.CreateCylinder(zmoldname + "-cylinder2", {height: 1, diameterTop: 1, diameterBottom: 1, tessellation: zsubdivisions, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
+		var zcylinder2 = BABYLON.MeshBuilder.CreateCylinder(zmoldname + '-cylinder2', {height: 1, diameterTop: 1, diameterBottom: 1, tessellation: zsubdivisions, subdivisions: 1, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zcylinder2.scaling = new BABYLON.Vector3(zlenx-zspecial1, zleny + 1, zlenz-zspecial1);
 		zcylinder2.rotation.x = WTW.getRadians(90);
 		zcylinder2.rotation.y = WTW.getRadians(90);
 		zcylinder2.position.y = 10;
-		var zbox1 = BABYLON.MeshBuilder.CreateBox(zmoldname + "-box1", {}, scene);
+		var zbox1 = BABYLON.MeshBuilder.CreateBox(zmoldname + '-box1', {}, scene);
 		zbox1.scaling = new BABYLON.Vector3(zlenx + 1, zleny + 1, zlenz + 1);
 		zbox1.position = new BABYLON.Vector3(0, 0, 0);
 		zbox1.rotation.x = WTW.getRadians(90);
@@ -305,15 +305,15 @@ WTWJS.prototype.addMoldHalfPipe = function(zmoldname, zlenx, zleny, zlenz, zsubd
 		var zcylinder2CSG = BABYLON.CSG.FromMesh(zcylinder2);
 		var zbox1CSG = BABYLON.CSG.FromMesh(zbox1);
 		var zhalfpipeCSG = zcylinder1CSG.subtract(zbox1CSG).subtract(zcylinder2CSG)
-		var zcovering = new BABYLON.StandardMaterial("mat" + zmoldname, scene);
+		var zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
 		zcovering.backFaceCulling = false;
 		zmold = zhalfpipeCSG.toMesh(zmoldname, zcovering, scene);
-		WTW.disposeClean(zmoldname + "-cylinder1");
-		WTW.disposeClean(zmoldname + "-cylinder2");
-		WTW.disposeClean(zmoldname + "-box1");
+		WTW.disposeClean(zmoldname + '-cylinder1');
+		WTW.disposeClean(zmoldname + '-cylinder2');
+		WTW.disposeClean(zmoldname + '-box1');
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldHalfPipe=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldHalfPipe=' + ex.message);
 	}
 	return zmold;
 }
@@ -326,10 +326,10 @@ WTWJS.prototype.addMoldSimpleTextBox = function(zmoldname, zmolddef, zlenx, zlen
 		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
 
-		var zwebimageid = "t1qlqxd6pzubzzzy";
-		var zwebtext = "<div style=\"font-size:24px;color:blue;\">Community Blog</div>";
+		var zwebimageid = 't1qlqxd6pzubzzzy';
+		var zwebtext = "<div style='font-size:24px;color:blue;'>Community Blog</div>";
 		var zbasicmold = WTW.newMold();
-		zbasicmold.shape = "box";
+		zbasicmold.shape = 'box';
 		zbasicmold.covering = zmolddef.covering;
 		zbasicmold.position.x = 0;
 		zbasicmold.position.y = 0;
@@ -340,12 +340,12 @@ WTWJS.prototype.addMoldSimpleTextBox = function(zmoldname, zmolddef, zlenx, zlen
 		zbasicmold.subdivisions = 12;
 		zbasicmold.graphics.texture.id = zmolddef.graphics.texture.id;
 		zbasicmold.parentname = zmoldname;
-		zbasicmold.checkcollisions = "1";
-		var zimageframe = WTW.addMold(zmoldname + "-simpletextboxframe", zbasicmold, zbasicmold.parentname, zbasicmold.covering);
+		zbasicmold.checkcollisions = '1';
+		var zimageframe = WTW.addMold(zmoldname + '-simpletextboxframe', zbasicmold, zbasicmold.parentname, zbasicmold.covering);
 
 		var zbasicmold1 = WTW.newMold();
-		zbasicmold1.shape = "box";
-		zbasicmold1.covering = "texture";
+		zbasicmold1.shape = 'box';
+		zbasicmold1.covering = 'texture';
 		zbasicmold1.position.x = -.2;
 		zbasicmold1.position.y = 0;
 		zbasicmold1.position.z = 0;
@@ -357,13 +357,13 @@ WTWJS.prototype.addMoldSimpleTextBox = function(zmoldname, zmolddef, zlenx, zlen
 		zbasicmold1.webtext.webtext = WTW.encode(zwebtext);
 		zbasicmold1.graphics.texture.id = zwebimageid;
 		zbasicmold1.parentname = zmoldname;
-		zbasicmold1.checkcollisions = "1";
-		var ztextwall = WTW.addMold(zmoldname + "-simpletextboxwall", zbasicmold1, zbasicmold1.parentname, zbasicmold1.covering);
+		zbasicmold1.checkcollisions = '1';
+		var ztextwall = WTW.addMold(zmoldname + '-simpletextboxwall', zbasicmold1, zbasicmold1.parentname, zbasicmold1.covering);
 		WTW.registerMouseOver(ztextwall);
 		ztextwall.WTW = zbasicmold1;
 		
-		var ztexture = new BABYLON.DynamicTexture(zmoldname + "-simpletextboxtexture", {width: 512,height: 512}, scene, true);
-		ztexture.name = zmoldname + "-simpletextboxtexture";
+		var ztexture = new BABYLON.DynamicTexture(zmoldname + '-simpletextboxtexture', {width: 512,height: 512}, scene, true);
+		ztexture.name = zmoldname + '-simpletextboxtexture';
 		ztexture.hasAlpha = true;
 		ztexture.uScale = (zlenz/10);
 		ztexture.vScale = (zleny/10);
@@ -373,7 +373,7 @@ WTWJS.prototype.addMoldSimpleTextBox = function(zmoldname, zmolddef, zlenx, zlen
 		var zscrollpos = 0;
 		var zparagraph = WTW.wrapHtml(ztextwall, zwebtext, zscrollpos);
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldSimpleTextBox=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldSimpleTextBox=' + ex.message);
 	}
 	return zmold;
 }
@@ -392,56 +392,56 @@ WTWJS.prototype.addMoldImage = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
 		zbasemold.parent = zmold;
 		
-		var zimageid = "t1qlqxd6pzubzzzy";
-		var zimagepath = "/content/system/stock/lightgray-512x512.jpg";
-		var ztextureid = "t1qlqxd6pzubzzzy";
-		var ztexturepath = "/content/system/stock/lightgray-512x512.jpg";
-		var zimagehoverid = "";
-		var zimagehoverpath = "";
-		var zimageclickid = "";
-		var zimageclickpath = "";
-		var zimagewallname = zmoldname + "-imagewall";
+		var zimageid = 't1qlqxd6pzubzzzy';
+		var zimagepath = '/content/system/stock/lightgray-512x512.jpg';
+		var ztextureid = 't1qlqxd6pzubzzzy';
+		var ztexturepath = '/content/system/stock/lightgray-512x512.jpg';
+		var zimagehoverid = '';
+		var zimagehoverpath = '';
+		var zimageclickid = '';
+		var zimageclickpath = '';
+		var zimagewallname = zmoldname + '-imagewall';
 		var zuoffset = 0;
 		var zvoffset = 0;
 		var zuscale = 10/zleny;
 		var zvscale = 10/zlenz;
 		if (zmolddef != undefined) {
-			if (zmolddef.shape != "") {
+			if (zmolddef.shape != '') {
 				zshape = zmolddef.shape;
 			}
 			if (zmolddef.graphics != undefined) {
 				if (zmolddef.graphics.webimages[0] != null) {
 					if (zmolddef.graphics.webimages[0].imageid != undefined) {
-						if (zmolddef.graphics.webimages[0].imageid != "") {
+						if (zmolddef.graphics.webimages[0].imageid != '') {
 							zimageid = zmolddef.graphics.webimages[0].imageid;
 						}
 					}
 					if (zmolddef.graphics.webimages[0].imagepath != undefined) {
-						if (zmolddef.graphics.webimages[0].imagepath != "") {
+						if (zmolddef.graphics.webimages[0].imagepath != '') {
 							zimagepath = zmolddef.graphics.webimages[0].imagepath;
-							zimagepath = zimagepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+							zimagepath = zimagepath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 						}
 					}
 					if (zmolddef.graphics.webimages[0].imagehoverid != undefined) {
-						if (zmolddef.graphics.webimages[0].imagehoverid != "") {
+						if (zmolddef.graphics.webimages[0].imagehoverid != '') {
 							zimagehoverid = zmolddef.graphics.webimages[0].imagehoverid;
 						}
 					}
 					if (zmolddef.graphics.webimages[0].imagehoverpath != undefined) {
-						if (zmolddef.graphics.webimages[0].imagehoverpath != "") {
+						if (zmolddef.graphics.webimages[0].imagehoverpath != '') {
 							zimagehoverpath = zmolddef.graphics.webimages[0].imagehoverpath;
-							zimagehoverpath = zimagehoverpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+							zimagehoverpath = zimagehoverpath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 						}
 					}
 					if (zmolddef.graphics.webimages[0].imageclickid != undefined) {
-						if (zmolddef.graphics.webimages[0].imageclickid != "") {
+						if (zmolddef.graphics.webimages[0].imageclickid != '') {
 							zimageclickid = zmolddef.graphics.webimages[0].imageclickid;
 						}
 					}
 					if (zmolddef.graphics.webimages[0].imageclickpath != undefined) {
-						if (zmolddef.graphics.webimages[0].imageclickpath != "") {
+						if (zmolddef.graphics.webimages[0].imageclickpath != '') {
 							zimageclickpath = zmolddef.graphics.webimages[0].imageclickpath;
-							zimageclickpath = zimageclickpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+							zimageclickpath = zimageclickpath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 						}
 					}
 				}
@@ -450,13 +450,13 @@ WTWJS.prototype.addMoldImage = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 				}
 				if (zmolddef.graphics.texture.path != undefined) {
 					ztexturepath = zmolddef.graphics.texture.path;
-					ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+					ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 				}
 			}
 		}		
 		var zmolddefimage = WTW.newMold();
-		zmolddefimage.shape = "box";
-		zmolddefimage.covering = "texture";
+		zmolddefimage.shape = 'box';
+		zmolddefimage.covering = 'texture';
 		zmolddefimage.position.x = 0;
 		zmolddefimage.position.y = 0;
 		zmolddefimage.position.z = 0;
@@ -470,19 +470,19 @@ WTWJS.prototype.addMoldImage = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 		zmolddefimage.graphics.vscale = zuscale; /* intentionally swapped */
 		zmolddefimage.graphics.uoffset = zvoffset;
 		zmolddefimage.graphics.voffset = zuoffset;
-		zmolddefimage.parentname = zmoldname + "-base";
-		zmolddefimage.checkcollisions = "1";
-		var zimagemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-mainimage", {}, scene);
+		zmolddefimage.parentname = zmoldname + '-base';
+		zmolddefimage.checkcollisions = '1';
+		var zimagemold = BABYLON.MeshBuilder.CreateBox(zmoldname + '-mainimage', {}, scene);
 		zimagemold.scaling = new BABYLON.Vector3(.2, zlenz, zleny);
 		zimagemold.rotation.x = WTW.getRadians(-90);
-		zimagemold.material = WTW.addCovering("texture", zmoldname + "-mainimage", zmolddefimage, .2, zlenz, zleny, '0', '0');
+		zimagemold.material = WTW.addCovering('texture', zmoldname + '-mainimage', zmolddefimage, .2, zlenz, zleny, '0', '0');
 		zimagemold.material.alpha = 1;
 		zimagemold.parent = zbasemold;
 		WTW.registerMouseOver(zimagemold);
 		if (zimagehoverid != '' && zimagehoverid != 't1qlqxd6pzubzzzy') {
 			var zmolddefhoverimage = WTW.newMold();
-			zmolddefhoverimage.shape = "box";
-			zmolddefhoverimage.covering = "texture";
+			zmolddefhoverimage.shape = 'box';
+			zmolddefhoverimage.covering = 'texture';
 			zmolddefhoverimage.position.x = 0;
 			zmolddefhoverimage.position.y = 0;
 			zmolddefhoverimage.position.z = 0;
@@ -496,18 +496,18 @@ WTWJS.prototype.addMoldImage = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 			zmolddefhoverimage.graphics.vscale = zuscale; /* intentionally swapped */
 			zmolddefhoverimage.graphics.uoffset = zvoffset;
 			zmolddefhoverimage.graphics.voffset = zuoffset;
-			zmolddefhoverimage.parentname = zmoldname + "-base";
-			zmolddefhoverimage.checkcollisions = "1";
-			var zhoverimagemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-hoverimage", {}, scene);
+			zmolddefhoverimage.parentname = zmoldname + '-base';
+			zmolddefhoverimage.checkcollisions = '1';
+			var zhoverimagemold = BABYLON.MeshBuilder.CreateBox(zmoldname + '-hoverimage', {}, scene);
 			zhoverimagemold.scaling = new BABYLON.Vector3(.15, zlenz, zleny);
 			zhoverimagemold.rotation.x = WTW.getRadians(-90);
-			zhoverimagemold.material = WTW.addCovering("texture", zmoldname + "-hoverimage", zmolddefhoverimage, .15, zlenz, zleny, '0', '0');
+			zhoverimagemold.material = WTW.addCovering('texture', zmoldname + '-hoverimage', zmolddefhoverimage, .15, zlenz, zleny, '0', '0');
 			zhoverimagemold.parent = zbasemold;		
 		}
 		if (zimageclickid != '' && zimageclickid != 't1qlqxd6pzubzzzy') {
 			var zmolddefclickimage = WTW.newMold();
-			zmolddefclickimage.shape = "box";
-			zmolddefclickimage.covering = "texture";
+			zmolddefclickimage.shape = 'box';
+			zmolddefclickimage.covering = 'texture';
 			zmolddefclickimage.position.x = 0;
 			zmolddefclickimage.position.y = 0;
 			zmolddefclickimage.position.z = 0;
@@ -522,17 +522,17 @@ WTWJS.prototype.addMoldImage = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 			zmolddefclickimage.graphics.vscale = zuscale; /* intentionally swapped */
 			zmolddefclickimage.graphics.uoffset = zvoffset;
 			zmolddefclickimage.graphics.voffset = zuoffset;
-			zmolddefclickimage.parentname = zmoldname + "-base";
-			zmolddefclickimage.checkcollisions = "1";
-			var zclickimagemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-clickimage", {}, scene);
+			zmolddefclickimage.parentname = zmoldname + '-base';
+			zmolddefclickimage.checkcollisions = '1';
+			var zclickimagemold = BABYLON.MeshBuilder.CreateBox(zmoldname + '-clickimage', {}, scene);
 			zclickimagemold.scaling = new BABYLON.Vector3(.25, zlenz, zleny);
 			zclickimagemold.rotation.x = WTW.getRadians(-90);
-			zclickimagemold.material = WTW.addCovering("texture", zmoldname + "-clickimage", zmolddefclickimage, .25, zlenz, zleny, '0', '0');
+			zclickimagemold.material = WTW.addCovering('texture', zmoldname + '-clickimage', zmolddefclickimage, .25, zlenz, zleny, '0', '0');
 			zclickimagemold.parent = zbasemold;
 		}
-		if (zmolddef.covering != "glass") {
+		if (zmolddef.covering != 'glass') {
 			var zmolddefframe = WTW.newMold();
-			zmolddefframe.shape = "box";
+			zmolddefframe.shape = 'box';
 			zmolddefframe.covering = zmolddef.covering;
 			zmolddefframe.color = zmolddef.color;
 			zmolddefframe.position.x = .05;
@@ -548,18 +548,18 @@ WTWJS.prototype.addMoldImage = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 			zmolddefframe.graphics.vscale = zuscale; /* intentionally swapped */
 			zmolddefframe.graphics.uoffset = zvoffset;
 			zmolddefframe.graphics.voffset = zuoffset;
-			zmolddefframe.parentname = zmoldname + "-base";
-			zmolddefframe.checkcollisions = "1";
-			var zimageframemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-imageframe", {}, scene);
+			zmolddefframe.parentname = zmoldname + '-base';
+			zmolddefframe.checkcollisions = '1';
+			var zimageframemold = BABYLON.MeshBuilder.CreateBox(zmoldname + '-imageframe', {}, scene);
 			zimageframemold.scaling = new BABYLON.Vector3(.2, zlenz * 1.02, zleny * 1.02);
 			zimageframemold.position = new BABYLON.Vector3(.05, 0, 0);
 			zimageframemold.rotation.x = WTW.getRadians(-90);
-			zimageframemold.material = WTW.addCovering(zmolddef.covering, zmoldname + "-imageframe", zmolddefframe, .2, zlenz * 1.02, zleny * 1.02, '0', '0');
+			zimageframemold.material = WTW.addCovering(zmolddef.covering, zmoldname + '-imageframe', zmolddefframe, .2, zlenz * 1.02, zleny * 1.02, '0', '0');
 			zimageframemold.parent = zbasemold;	
 			zimageframemold.material.alpha = 1;	
 		}		
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldImage=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldImage=' + ex.message);
 	}
 	return zmold;
 }
@@ -572,62 +572,62 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
 
-		var zbasemold = new BABYLON.TransformNode(zmoldname + "-base");
+		var zbasemold = new BABYLON.TransformNode(zmoldname + '-base');
 		zbasemold.position = new BABYLON.Vector3(0,0,0);
 		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
 		zbasemold.scaling = new BABYLON.Vector3(1/zlenx,1/zleny,1/zlenz);
 		zbasemold.parent = zmold;
 
-		var ztextureid = "t1qlqxd6pzubzzzy";
-		var ztexturepath = "/content/system/stock/lightgray-512x512.jpg";
-		var zimageid = "t1qlqxd6pzubzzzy";
-		var zimagepath = "/content/system/stock/lightgray-512x512.jpg";
-		var zimagehoverid = "";
-		var zimagehoverpath = "";
-		var zimagewallname = zmoldname + "-imagewall";
+		var ztextureid = 't1qlqxd6pzubzzzy';
+		var ztexturepath = '/content/system/stock/lightgray-512x512.jpg';
+		var zimageid = 't1qlqxd6pzubzzzy';
+		var zimagepath = '/content/system/stock/lightgray-512x512.jpg';
+		var zimagehoverid = '';
+		var zimagehoverpath = '';
+		var zimagewallname = zmoldname + '-imagewall';
 		if (zmolddef.graphics.webimages[0] != null) {
 			if (zmolddef.graphics.webimages[0].imageid != undefined) {
-				if (zmolddef.graphics.webimages[0].imageid != "") {
+				if (zmolddef.graphics.webimages[0].imageid != '') {
 					zimageid = zmolddef.graphics.webimages[0].imageid;
 				}
 			}
 			if (zmolddef.graphics.webimages[0].imagepath != undefined) {
-				if (zmolddef.graphics.webimages[0].imagepath != "") {
+				if (zmolddef.graphics.webimages[0].imagepath != '') {
 					zimagepath = zmolddef.graphics.webimages[0].imagepath;
-					zimagepath = zimagepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+					zimagepath = zimagepath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 				}
 			}
 			if (zmolddef.graphics.webimages[0].imagehoverid != undefined) {
-				if (zmolddef.graphics.webimages[0].imagehoverid != "") {
+				if (zmolddef.graphics.webimages[0].imagehoverid != '') {
 					zimagehoverid = zmolddef.graphics.webimages[0].imagehoverid;
 				}
 			}
 			if (zmolddef.graphics.webimages[0].imagehoverpath != undefined) {
-				if (zmolddef.graphics.webimages[0].imagehoverpath != "") {
+				if (zmolddef.graphics.webimages[0].imagehoverpath != '') {
 					zimagehoverpath = zmolddef.graphics.webimages[0].imagehoverpath;
-					zimagehoverpath = zimagehoverpath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+					zimagehoverpath = zimagehoverpath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 				}
 			}
 		}
 		if (zmolddef.graphics.texture.id != undefined) {
-			if (zmolddef.graphics.texture.id != "") {
+			if (zmolddef.graphics.texture.id != '') {
 				ztextureid = zmolddef.graphics.texture.id;
 			}
 		}
 		if (zmolddef.graphics.texture.path != undefined) {
-			if (zmolddef.graphics.texture.path != "") {
+			if (zmolddef.graphics.texture.path != '') {
 				ztexturepath = zmolddef.graphics.texture.path;
-				ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace("http:","").replace("https:","");
+				ztexturepath = ztexturepath.replace(wtw_domainname, window.location.hostname).replace('http:','').replace('https:','');
 			}
 		}
-		if (WTW.isUploadReady(zimageid) == false && zimageid != "") {
+		if (WTW.isUploadReady(zimageid) == false && zimageid != '') {
 			WTW.initLoadUpload(zimageid, zimageid, 5);
 		}
-		if (WTW.isUploadReady(zimagehoverid) == false && zimagehoverid != "") {
+		if (WTW.isUploadReady(zimagehoverid) == false && zimagehoverid != '') {
 			WTW.initLoadUpload(zimagehoverid, zimagehoverid, 5);
-			zimagewallname = zmoldname + "-imagewall";
+			zimagewallname = zmoldname + '-imagewall';
 		}
-		var zraisedmold = BABYLON.MeshBuilder.CreateGroundFromHeightMap(zmoldname + "-raised", zheightmappath, {width: 1, height: 1, subdivisions: zsubdivisions, minHeight: zminheight, maxHeight: zmaxheight, updatable: false}, scene);
+		var zraisedmold = BABYLON.MeshBuilder.CreateGroundFromHeightMap(zmoldname + '-raised', zheightmappath, {width: 1, height: 1, subdivisions: zsubdivisions, minHeight: zminheight, maxHeight: zmaxheight, updatable: false}, scene);
 		zraisedmold.position.x = .05;
 		zraisedmold.scaling.x = zlenz;
 		zraisedmold.scaling.z = zleny;
@@ -639,25 +639,25 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 		var zvoffset = 0;
 		var zuscale = 1;
 		var zvscale = 1;
-		var zcovering = new BABYLON.StandardMaterial("mat-" + zmoldname + "-raised", scene);
+		var zcovering = new BABYLON.StandardMaterial('mat-' + zmoldname + '-raised', scene);
 		async function loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset) {
 			var zimageinfo = WTW.getUploadFileData(zimageid);
 			var zimageextension = zimageinfo.extension;
-			zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.filedata, "mattexture" + zmoldname + "-raised", scene);
+			zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.filedata, 'mattexture' + zmoldname + '-raised', scene);
 			zcovering.diffuseTexture.uScale = zuscale;
 			zcovering.diffuseTexture.vScale = zvscale;
 			zcovering.diffuseTexture.uOffset = zuoffset;
 			zcovering.diffuseTexture.vOffset = zvoffset;
 			zcovering.specularColor = new BABYLON.Color3(.4, .4, .4);
 			zcovering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);	
-			var zthisraisedmold = WTW.getMeshOrNodeByID(zmoldname + "-raised");
+			var zthisraisedmold = WTW.getMeshOrNodeByID(zmoldname + '-raised');
 			if (zthisraisedmold != null) {
 				zthisraisedmold.material = zcovering;
 			}
 		}
 		var zmolddefimage = WTW.newMold();
-		zmolddefimage.shape = "box";
-		zmolddefimage.covering = "directional texture";
+		zmolddefimage.shape = 'box';
+		zmolddefimage.covering = 'directional texture';
 		zmolddefimage.position.x = 0;
 		zmolddefimage.position.y = 0;
 		zmolddefimage.position.z = 0;
@@ -669,18 +669,18 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 		zmolddefimage.graphics.texture.path = zimagepath;
 		zmolddefimage.graphics.uscale = 10/zleny;
 		zmolddefimage.graphics.vscale = 10/zlenz;
-		zmolddefimage.parentname = zmoldname + "-base";
-		zmolddefimage.checkcollisions = "1";
-		var zimagemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-mainimage", {}, scene);
+		zmolddefimage.parentname = zmoldname + '-base';
+		zmolddefimage.checkcollisions = '1';
+		var zimagemold = BABYLON.MeshBuilder.CreateBox(zmoldname + '-mainimage', {}, scene);
 		zimagemold.scaling = new BABYLON.Vector3(.2, zleny, zlenz);
-		zimagemold.material = WTW.addCovering("directional texture", zmoldname + "-mainimage", zmolddefimage, .2, zleny, zlenz, '0', '0');
+		zimagemold.material = WTW.addCovering('directional texture', zmoldname + '-mainimage', zmolddefimage, .2, zleny, zlenz, '0', '0');
 		zimagemold.material.alpha = 1;
 		zimagemold.parent = zbasemold;
 		WTW.registerMouseOver(zimagemold);
 		if (zimagehoverid != '' && zimagehoverid != 't1qlqxd6pzubzzzy') {
 			var zmolddefhoverimage = WTW.newMold();
-			zmolddefhoverimage.shape = "box";
-			zmolddefhoverimage.covering = "directional texture";
+			zmolddefhoverimage.shape = 'box';
+			zmolddefhoverimage.covering = 'directional texture';
 			zmolddefhoverimage.position.x = 0;
 			zmolddefhoverimage.position.y = 0;
 			zmolddefhoverimage.position.z = 0;
@@ -692,16 +692,16 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 			zmolddefhoverimage.graphics.texture.path = zimagehoverpath;
 			zmolddefhoverimage.graphics.uscale = 10/zleny;
 			zmolddefhoverimage.graphics.vscale = 10/zlenz;
-			zmolddefhoverimage.parentname = zmoldname + "-base";
-			zmolddefhoverimage.checkcollisions = "1";
-			var zhoverimagemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-hoverimage", {}, scene);
+			zmolddefhoverimage.parentname = zmoldname + '-base';
+			zmolddefhoverimage.checkcollisions = '1';
+			var zhoverimagemold = BABYLON.MeshBuilder.CreateBox(zmoldname + '-hoverimage', {}, scene);
 			zhoverimagemold.scaling = new BABYLON.Vector3(.15, zleny, zlenz);
-			zhoverimagemold.material = WTW.addCovering("directional texture", zmoldname + "-hoverimage", zmolddefhoverimage, .15, zleny, zlenz, '0', '0');
+			zhoverimagemold.material = WTW.addCovering('directional texture', zmoldname + '-hoverimage', zmolddefhoverimage, .15, zleny, zlenz, '0', '0');
 			zhoverimagemold.parent = zbasemold;		
 		}
-		if (zmolddef.covering != "glass") {
+		if (zmolddef.covering != 'glass') {
 			var zmolddefframe = WTW.newMold();
-			zmolddefframe.shape = "box";
+			zmolddefframe.shape = 'box';
 			zmolddefframe.covering = zmolddef.covering;
 			zmolddefframe.position.x = .1;
 			zmolddefframe.position.y = 0;
@@ -715,19 +715,19 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 			zmolddefframe.graphics.texture.path = zmolddef.graphics.texture.path;
 			zmolddefframe.graphics.uscale = 10/zleny;
 			zmolddefframe.graphics.vscale = 10/zlenz;
-			zmolddefframe.parentname = zmoldname + "-base";
-			zmolddefframe.checkcollisions = "1";
-			var zimageframemold = BABYLON.MeshBuilder.CreateBox(zmoldname + "-imageframe", {}, scene);
+			zmolddefframe.parentname = zmoldname + '-base';
+			zmolddefframe.checkcollisions = '1';
+			var zimageframemold = BABYLON.MeshBuilder.CreateBox(zmoldname + '-imageframe', {}, scene);
 			zimageframemold.scaling = new BABYLON.Vector3(.2, zleny * 1.02, zlenz * 1.02);
 			zimageframemold.position = new BABYLON.Vector3(.1, 0, 0);
-			zimageframemold.material = WTW.addCovering("directional texture", zmoldname + "-imageframe", zmolddefframe, .2, zleny * 1.02, zlenz * 1.02, '0', '0');
+			zimageframemold.material = WTW.addCovering('directional texture', zmoldname + '-imageframe', zmolddefframe, .2, zleny * 1.02, zlenz * 1.02, '0', '0');
 			zimageframemold.parent = zbasemold;	
 			zimageframemold.material.alpha = 1;	
 		}
 		if (WTW.isUploadReady(zimageid)) {
 			loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset);
 		} else {
-			WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zimageid, 
+			WTW.getAsyncJSON('/connect/upload.php?uploadid=' + zimageid, 
 				function(zresponse) {
 					WTW.loadUpload(JSON.parse(zresponse), zimageid, 0);
 					loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset);
@@ -735,7 +735,7 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 			);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldRaisedImage=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldRaisedImage=' + ex.message);
 	}
 	return zmold;
 }
@@ -793,8 +793,8 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 		}
 
 		var zloop = false;
-        var zvideo = "/content/system/images/EnterWelcomeCenter.mp4";
-		var zvideoposter = "/content/system/images/videoposter.jpg";
+        var zvideo = '/content/system/images/EnterWelcomeCenter.mp4';
+		var zvideoposter = '/content/system/images/videoposter.jpg';
 		if (zmolddef.sound.loop != undefined) {
 			if (zmolddef.sound.loop == '1') {
 				zloop = true;
@@ -810,9 +810,9 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 				zvideoposter = zmolddef.graphics.texture.videoposter;
 			}
 		}
-		zmolddef.objects.folder = "/content/system/babylon/tv/";
-		zmolddef.objects.file = "tv.babylon";
-		BABYLON.SceneLoader.ImportMeshAsync("", zmolddef.objects.folder, zmolddef.objects.file, scene).then(
+		zmolddef.objects.folder = '/content/system/babylon/tv/';
+		zmolddef.objects.file = 'tv.babylon';
+		BABYLON.SceneLoader.ImportMeshAsync('', zmolddef.objects.folder, zmolddef.objects.file, scene).then(
 			function (zresults) {
 				if (zresults.meshes != null) {
 					var zobjectanimations = [];
@@ -988,7 +988,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 					for (var i=0; i < zresults.meshes.length; i++) {
 						if (zresults.meshes[i] != null) {
 							var zmeshname = zresults.meshes[i].name.toLowerCase();
-							var zchildmoldname = zmoldname + "-" + zmeshname;
+							var zchildmoldname = zmoldname + '-' + zmeshname;
 							zresults.meshes[i].name = zchildmoldname;
 							zresults.meshes[i].id = zchildmoldname;
 							WTW.registerMouseOver(zresults.meshes[i]);
@@ -1008,12 +1008,12 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 				}
 			}
 		);
-        var zvideomat = new BABYLON.StandardMaterial(zmoldname + "-mat", scene);
-        var zvideotexture = new BABYLON.VideoTexture(zmoldname + "-video", zvideo, scene, false, false); /* generateMipMaps?: boolean, invertY?: boolean */
+        var zvideomat = new BABYLON.StandardMaterial(zmoldname + '-mat', scene);
+        var zvideotexture = new BABYLON.VideoTexture(zmoldname + '-video', zvideo, scene, false, false); /* generateMipMaps?: boolean, invertY?: boolean */
         zvideomat.diffuseTexture = zvideotexture;
         zvideomat.alpha = 1;
         zvideomat.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);
-        var zvideomold = BABYLON.MeshBuilder.CreatePlane(zmoldname + "-mainvideo", {height: 9, width: 16, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
+        var zvideomold = BABYLON.MeshBuilder.CreatePlane(zmoldname + '-mainvideo', {height: 9, width: 16, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
         zvideomold.position.x = (zlenx * .1);
 		zvideomold.rotation.y = WTW.getRadians(-90);
         zvideomold.material = zvideomat;
@@ -1021,11 +1021,11 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
         zvideomold.WTW = {'videosrc':zvideo,'firstvideoclick':false};
         zvideomold.parent = zmold;
 
-        var zvideopostermold = BABYLON.MeshBuilder.CreatePlane(zmoldname + "-videoposter", {height: 9, width: 16.2, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
+        var zvideopostermold = BABYLON.MeshBuilder.CreatePlane(zmoldname + '-videoposter', {height: 9, width: 16.2, sideOrientation: BABYLON.Mesh.DEFAULTSIDE}, scene);
         zvideopostermold.position.x = zvideomold.position.x + .1;
 		zvideopostermold.rotation.y = WTW.getRadians(-90);
 		zvideopostermold.parent = zmold;
-        var zpostermat = new BABYLON.StandardMaterial(zmoldname + "-postermat", scene);
+        var zpostermat = new BABYLON.StandardMaterial(zmoldname + '-postermat', scene);
         zpostermat.diffuseTexture = new BABYLON.Texture(zvideoposter, scene);
         zpostermat.diffuseTexture.hasAlpha = false;
 		zpostermat.alpha = 1;
@@ -1034,7 +1034,7 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 		zpostermat.diffuseColor = new BABYLON.Color3(1,1,1);
 		zvideopostermold.material = zpostermat;
     } catch (ex) {
-        WTW.log("core-scripts-molds-basicmolds\r\n addMoldVideo=" + ex.message);
+        WTW.log('core-scripts-molds-basicmolds\r\n addMoldVideo=' + ex.message);
     }
     return zmold;
 }
@@ -1045,15 +1045,15 @@ WTWJS.prototype.addMoldCandleFlame = function(zmoldname, zmolddef, zlenx, zleny,
 		zmold = BABYLON.MeshBuilder.CreatePlane(zmoldname, {updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmold.billboardMode = BABYLON.Mesh.BILLBOARDMODE_Y;
-		var zcovering = new BABYLON.FireMaterial("mat" + zmoldname, scene);
-		zcovering.diffuseTexture = new BABYLON.Texture("/content/system/images/fire.png", scene);
-		zcovering.distortionTexture = new BABYLON.Texture("/content/system/images/distortion.png", scene);
-		zcovering.opacityTexture = new BABYLON.Texture("/content/system/images/candleopacity.png", scene);
+		var zcovering = new BABYLON.FireMaterial('mat' + zmoldname, scene);
+		zcovering.diffuseTexture = new BABYLON.Texture('/content/system/images/fire.png', scene);
+		zcovering.distortionTexture = new BABYLON.Texture('/content/system/images/distortion.png', scene);
+		zcovering.opacityTexture = new BABYLON.Texture('/content/system/images/candleopacity.png', scene);
 		zcovering.speed = 5.0;
 		zmold.material = zcovering;
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldCandleFlame=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldCandleFlame=' + ex.message);
 	}
 	return zmold;
 }
@@ -1066,13 +1066,13 @@ WTWJS.prototype.addMoldWaterPlane = function(zmoldname, zmolddef, zlenx, zleny, 
 		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx,1,zlenz);
 
-		var zbasemold = new BABYLON.TransformNode(zmoldname + "-base");
+		var zbasemold = new BABYLON.TransformNode(zmoldname + '-base');
 		zbasemold.position = new BABYLON.Vector3(0,0,0);
 		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
 		zbasemold.scaling = new BABYLON.Vector3(1/zlenx, 1, 1/zlenz);
 		zbasemold.parent = zmold;
 
-		var zwatermold = BABYLON.MeshBuilder.CreatePlane(zmoldname + "-water", {updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
+		var zwatermold = BABYLON.MeshBuilder.CreatePlane(zmoldname + '-water', {updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zwatermold.scaling.x = zlenx;
 		zwatermold.scaling.y = zlenz;
 		zwatermold.rotation.x = WTW.getRadians(90);
@@ -1082,7 +1082,7 @@ WTWJS.prototype.addMoldWaterPlane = function(zmoldname, zmolddef, zlenx, zleny, 
 		zwatermold.position.y = 0;
 		zwatermold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldWaterPlane=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldWaterPlane=' + ex.message);
 	}
 	return zmold;
 }
@@ -1095,13 +1095,13 @@ WTWJS.prototype.addMoldWaterDisc = function(zmoldname, zmolddef, zlenx, zleny, z
 		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx,1,zlenz);
 
-		var zbasemold = new BABYLON.TransformNode(zmoldname + "-base");
+		var zbasemold = new BABYLON.TransformNode(zmoldname + '-base');
 		zbasemold.position = new BABYLON.Vector3(0,0,0);
 		zbasemold.rotation = new BABYLON.Vector3(0,0,0);
 		zbasemold.scaling = new BABYLON.Vector3(1/zlenx, 1, 1/zlenz);
 		zbasemold.parent = zmold;
 
-		var zwatermold = BABYLON.MeshBuilder.CreateDisc(zmoldname + "-water", {tessellation: zsubdivisions, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
+		var zwatermold = BABYLON.MeshBuilder.CreateDisc(zmoldname + '-water', {tessellation: zsubdivisions, updatable: false, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 		zwatermold.scaling.x = zlenx;
 		zwatermold.scaling.y = zlenz;
 		zwatermold.rotation.x = WTW.getRadians(90);
@@ -1111,7 +1111,7 @@ WTWJS.prototype.addMoldWaterDisc = function(zmoldname, zmolddef, zlenx, zleny, z
 		zwatermold.position.y = 0;
 		zwatermold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldWaterDisc=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldWaterDisc=' + ex.message);
 	}
 	return zmold;
 }
@@ -1124,9 +1124,9 @@ WTWJS.prototype.addMoldParticleSphere = function(zmoldname, zmolddef, zlenx, zle
 		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 
-		var zparticlesystem = new BABYLON.ParticleSystem(zmoldname + "-particles", 2000, scene);
+		var zparticlesystem = new BABYLON.ParticleSystem(zmoldname + '-particles', 2000, scene);
 		zparticlesystem.parent = zmold;
-		zparticlesystem.particleTexture = new BABYLON.Texture("/content/system/images/flare.png", scene);
+		zparticlesystem.particleTexture = new BABYLON.Texture('/content/system/images/flare.png', scene);
 		
 		zparticlesystem.emitter = zmold; // the starting object, the emitter
 		var zemittertype = new BABYLON.SphereParticleEmitter();
@@ -1171,7 +1171,7 @@ WTWJS.prototype.addMoldParticleSphere = function(zmoldname, zmolddef, zlenx, zle
 		
 		
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldParticleSphere=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldParticleSphere=' + ex.message);
 	}
 	return zmold;
 }
@@ -1184,9 +1184,9 @@ WTWJS.prototype.addMoldParticleShower = function(zmoldname, zmolddef, zlenx, zle
 		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		
-		var zparticlesystem = new BABYLON.ParticleSystem(zmoldname + "-particles", 2000, scene);
+		var zparticlesystem = new BABYLON.ParticleSystem(zmoldname + '-particles', 2000, scene);
 		zparticlesystem.parent = zmold;
-		zparticlesystem.particleTexture = new BABYLON.Texture("/content/system/images/flare.png", scene);
+		zparticlesystem.particleTexture = new BABYLON.Texture('/content/system/images/flare.png', scene);
 		
 		zparticlesystem.emitter = zmold; // the starting object, the emitter
 
@@ -1228,7 +1228,7 @@ WTWJS.prototype.addMoldParticleShower = function(zmoldname, zmolddef, zlenx, zle
 		};
 		
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldParticleShower=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldParticleShower=' + ex.message);
 	}
 	return zmold;
 }
@@ -1245,8 +1245,8 @@ WTWJS.prototype.addMoldSmoke = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 		var zemittertype = zsmokepillar.createConeEmitter(0.6, 1);
 		zsmokepillar.emitRate = 20;
 		zsmokepillar.emitter = zmold;
-		zsmokepillar.id = zmoldname + "-smokepillar";
-		zsmokepillar.name = zmoldname + "-smokepillar";
+		zsmokepillar.id = zmoldname + '-smokepillar';
+		zsmokepillar.name = zmoldname + '-smokepillar';
 		
 		/* Size */
 		zsmokepillar.addSizeGradient(0.0, 1.0, 2.0);
@@ -1272,7 +1272,7 @@ WTWJS.prototype.addMoldSmoke = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 
 		/* Texture */
 		zsmokepillar.isAnimationSheetEnabled = true;
-		zsmokepillar.particleTexture = new BABYLON.Texture("/content/system/images/cloudsprite.png", scene);
+		zsmokepillar.particleTexture = new BABYLON.Texture('/content/system/images/cloudsprite.png', scene);
 		zsmokepillar.blendMode = BABYLON.ParticleSystem.BLENDMODE_MULTIPLY;
 		zsmokepillar.spriteCellWidth = 256;
 		zsmokepillar.spriteCellHeight = 256;
@@ -1289,7 +1289,7 @@ WTWJS.prototype.addMoldSmoke = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 		zsmokepillar.parent = zmold;
 
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldSmoke=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldSmoke=' + ex.message);
 	}
 	return zmold;
 }
@@ -1303,15 +1303,15 @@ WTWJS.prototype.addMoldFountain = function(zmoldname, zmolddef, zlenx, zleny, zl
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny ,zlenz);
 
 		// Create a particle system
-		var zwater = new BABYLON.ParticleSystem("particles", 20000, scene);
+		var zwater = new BABYLON.ParticleSystem('particles', 20000, scene);
 	  
 		//Texture of each particle
-		zwater.particleTexture = new BABYLON.Texture("/content/system/images/flare.png", scene);
+		zwater.particleTexture = new BABYLON.Texture('/content/system/images/flare.png', scene);
 	  
 		// Where the particles come from
 		zwater.emitter = zmold; // the starting object, the emitter
-		zwater.id = zmoldname + "-water";
-		zwater.name = zmoldname + "-water";
+		zwater.id = zmoldname + '-water';
+		zwater.name = zmoldname + '-water';
 		zwater.minEmitBox = new BABYLON.Vector3(.1, 0, 0); // Starting all from
 		zwater.maxEmitBox = new BABYLON.Vector3(-.1, 0, 0); // To...
 	  
@@ -1362,7 +1362,7 @@ WTWJS.prototype.addMoldFountain = function(zmoldname, zmolddef, zlenx, zleny, zl
 			'particlesystem':zwater
 		};
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldFountain=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldFountain=' + ex.message);
 	}
 	return zmold;
 }
@@ -1485,7 +1485,7 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 		}
 		if (zobjectfile != '') {
 			if (zobjectfile.indexOf('.babylon') > -1 || zobjectfile.indexOf('.glb') > -1 || zobjectfile.indexOf('.gltf') > -1 || zobjectfile.indexOf('.obj') > -1) {
-				BABYLON.SceneLoader.ImportMeshAsync("", zobjectfolder, zobjectfile, scene).then(
+				BABYLON.SceneLoader.ImportMeshAsync('', zobjectfolder, zobjectfile, scene).then(
 					function (zresults) {
 						var zhasanimation = false;
 						if (zresults.meshes != null) {
@@ -1495,8 +1495,8 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 								if (zresults.meshes[i] != null) {
 									/* add the base mold name to each of the child meshes */
 									var zmeshname = zresults.meshes[i].name;
-									var zchildmoldname = zmoldname + "-" + zmeshname;
-									zchildmoldname = zchildmoldname.replace(" ","_").toLowerCase();
+									var zchildmoldname = zmoldname + '-' + zmeshname;
+									zchildmoldname = zchildmoldname.replace(' ','_').toLowerCase();
 									zresults.meshes[i].id = zchildmoldname;
 									zresults.meshes[i].name = zchildmoldname;
 //									zresults.meshes[i].convertToUnIndexedMesh();
@@ -1553,7 +1553,7 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 //										zmold.physicsImpostor = new BABYLON.PhysicsImpostor(zresults.meshes[i], BABYLON.PhysicsImpostor.MeshImpostor, {ignoreParent: false,  mass: 1, friction: 1, restitution: .5 }, scene);
 									}
 									/* overwrite material to wireframe if selected */
-									if (zmeshname.indexOf("WireFrame") > -1) {
+									if (zmeshname.indexOf('WireFrame') > -1) {
 										zresults.meshes[i].material.wireframe = true;
 									}
 
@@ -1579,7 +1579,7 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 									var zmeshname = zresults.skeletons[i].name;
 									zbone.isVisible = false;
 									/* append zmoldname to all child skeleton names */
-									var zchildmoldname = zmoldname + "-" + zmeshname;
+									var zchildmoldname = zmoldname + '-' + zmeshname;
 									zresults.skeletons[i].name = zchildmoldname;
 									/* WTW.registerMouseOver(zresults.skeletons[i]); */
 									/* make sure all bones have a parent set */
@@ -1617,7 +1617,7 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldBabylonFile=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldBabylonFile=' + ex.message);
 	}
 	return zmold;
 } 
@@ -1637,7 +1637,7 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 		zscalemold.WTW = zmolddef;
 		zscalemold.parent = zmold;
 
-		var zwebtext = "";
+		var zwebtext = '';
 		if (zmolddef.webtext.webtext != undefined) {
 			zwebtext = WTW.decode(zmolddef.webtext.webtext);
 		}
@@ -1645,14 +1645,14 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 		if (WTW.isNumeric(zmolddef.position.scroll)) {
 			zscrollpos = Number(zmolddef.position.scroll);
 		}
-		var zgroovetextureid = "t1qlqxd6pzubzzzy";
-		var zbuttontextureid = "vvpzrv2pae3bbkwv";
-		var zbuttontexturehoverid = "yxs6lcxokr6lhll3";
-		var zbodyimageid = "8uhx630pg7pu57lc";
-		var zarrowdownid = "hj9oly198c17x086";
-		var zarrowdownhoverid = "q3bajsb9brye6q3c";
-		var zarrowupid = "xghzjpxk2lqv9l9k";
-		var zarrowuphoverid = "jgmqro16rbainojm";
+		var zgroovetextureid = 't1qlqxd6pzubzzzy';
+		var zbuttontextureid = 'vvpzrv2pae3bbkwv';
+		var zbuttontexturehoverid = 'yxs6lcxokr6lhll3';
+		var zbodyimageid = '8uhx630pg7pu57lc';
+		var zarrowdownid = 'hj9oly198c17x086';
+		var zarrowdownhoverid = 'q3bajsb9brye6q3c';
+		var zarrowupid = 'xghzjpxk2lqv9l9k';
+		var zarrowuphoverid = 'jgmqro16rbainojm';
 		if (WTW.isUploadReady(zgroovetextureid) == false) {
 			WTW.initLoadUpload(zgroovetextureid, zgroovetextureid, 5);
 		}
@@ -1663,7 +1663,7 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 			WTW.initLoadUpload(zbodyimageid, zbodyimageid, 5);
 		}
 		var zbasicmold = WTW.newMold();
-		zbasicmold.shape = "box";
+		zbasicmold.shape = 'box';
 		zbasicmold.position.x = 0;
 		zbasicmold.position.y = 0;
 		zbasicmold.position.z = 0;
@@ -1673,12 +1673,12 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 		zbasicmold.subdivisions = 12;
 		zbasicmold.graphics.texture.id = zmolddef.graphics.texture.id;
 		zbasicmold.graphics.texture.path = zmolddef.graphics.texture.path;
-		zbasicmold.parentname = zmoldname + "-scale";
-		zbasicmold.checkcollisions = "1";
-		var zscrollboxwall = WTW.addMold(zmoldname + "-scrollboxwall", zbasicmold, zbasicmold.parentname, zbasicmold.covering);
+		zbasicmold.parentname = zmoldname + '-scale';
+		zbasicmold.checkcollisions = '1';
+		var zscrollboxwall = WTW.addMold(zmoldname + '-scrollboxwall', zbasicmold, zbasicmold.parentname, zbasicmold.covering);
 		
 		var zbasicmold2 = WTW.newMold();
-		zbasicmold2.shape = "box";
+		zbasicmold2.shape = 'box';
 		zbasicmold2.position.x = 1/2;
 		zbasicmold2.position.y = 0;
 		zbasicmold2.position.z = 15/2 - .75;
@@ -1686,13 +1686,13 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 		zbasicmold2.scaling.y = (15 - .5);
 		zbasicmold2.scaling.z = .65;
 		zbasicmold2.subdivisions = 12;
-		zbasicmold2.parentname = zmoldname + "-scale";
-		zbasicmold2.checkcollisions = "1";
-		var zscrollboxgroove = WTW.addMold(zmoldname + "-scrollboxgroove", zbasicmold2, zbasicmold2.parentname, zbasicmold2.covering);
-		WTW.processCSGAction(zmoldname + "-scrollboxwall", zscrollboxwall, zscrollboxgroove, "subtract", zbasicmold);
+		zbasicmold2.parentname = zmoldname + '-scale';
+		zbasicmold2.checkcollisions = '1';
+		var zscrollboxgroove = WTW.addMold(zmoldname + '-scrollboxgroove', zbasicmold2, zbasicmold2.parentname, zbasicmold2.covering);
+		WTW.processCSGAction(zmoldname + '-scrollboxwall', zscrollboxwall, zscrollboxgroove, 'subtract', zbasicmold);
 		
 		var zbasicmold3 = WTW.newMold();
-		zbasicmold3.shape = "box";
+		zbasicmold3.shape = 'box';
 		zbasicmold3.position.x = 1/4;
 		zbasicmold3.position.y = 0;
 		zbasicmold3.position.z = 15/2 - .75;
@@ -1701,12 +1701,12 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 		zbasicmold3.scaling.z = .65;
 		zbasicmold3.subdivisions = 12;
 		zbasicmold3.graphics.texture.id = zgroovetextureid;
-		zbasicmold3.parentname = zmoldname + "-scale";
-		zbasicmold3.checkcollisions = "1";
-		var zscrollboxgroovetexture = WTW.addMold(zmoldname + "-scrollboxgroovetexture", zbasicmold3, zbasicmold3.parentname, zbasicmold3.covering);
+		zbasicmold3.parentname = zmoldname + '-scale';
+		zbasicmold3.checkcollisions = '1';
+		var zscrollboxgroovetexture = WTW.addMold(zmoldname + '-scrollboxgroovetexture', zbasicmold3, zbasicmold3.parentname, zbasicmold3.covering);
 
 		var zbasicmold4 = WTW.newMold();
-		zbasicmold4.shape = "box";
+		zbasicmold4.shape = 'box';
 		zbasicmold4.position.x = 1/4 + .05;
 		zbasicmold4.position.y = 0;
 		zbasicmold4.position.z = 15/2 - .75;
@@ -1714,13 +1714,13 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 		zbasicmold4.scaling.y = (15 - .5);
 		zbasicmold4.scaling.z = .6;
 		zbasicmold4.subdivisions = 12;
-		zbasicmold4.parentname = zmoldname + "-scale";
-		zbasicmold4.checkcollisions = "1";
-		var zscrollboxgroovecut = WTW.addMold(zmoldname + "-scrollboxgroovecut", zbasicmold4, zbasicmold4.parentname, zbasicmold4.covering);
-		WTW.processCSGAction(zmoldname + "-scrollboxgroovetexture", zscrollboxgroovetexture, zscrollboxgroovecut, "subtract", zbasicmold3);
+		zbasicmold4.parentname = zmoldname + '-scale';
+		zbasicmold4.checkcollisions = '1';
+		var zscrollboxgroovecut = WTW.addMold(zmoldname + '-scrollboxgroovecut', zbasicmold4, zbasicmold4.parentname, zbasicmold4.covering);
+		WTW.processCSGAction(zmoldname + '-scrollboxgroovetexture', zscrollboxgroovetexture, zscrollboxgroovecut, 'subtract', zbasicmold3);
 			
 		var zbasicmold10 = WTW.newMold();
-		zbasicmold10.shape = "box";
+		zbasicmold10.shape = 'box';
 		zbasicmold10.position.x = 1/2 + .02;
 		zbasicmold10.position.y = 0;
 		zbasicmold10.position.z = -.5;
@@ -1729,13 +1729,13 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 		zbasicmold10.scaling.z = 15 - 2;
 		zbasicmold10.subdivisions = 12;
 		zbasicmold10.graphics.texture.id = zbodyimageid;
-		zbasicmold10.parentname = zmoldname + "-scale";
-		zbasicmold10.checkcollisions = "1";
-		var zscrollboxbody = WTW.addMold(zmoldname + "-scrollboxbody", zbasicmold10, zbasicmold10.parentname, zbasicmold10.covering);
+		zbasicmold10.parentname = zmoldname + '-scale';
+		zbasicmold10.checkcollisions = '1';
+		var zscrollboxbody = WTW.addMold(zmoldname + '-scrollboxbody', zbasicmold10, zbasicmold10.parentname, zbasicmold10.covering);
 
 		var zbasicmold11 = WTW.newMold();
-		zbasicmold11.shape = "box";
-		zbasicmold11.covering = "texture";
+		zbasicmold11.shape = 'box';
+		zbasicmold11.covering = 'texture';
 		zbasicmold11.position.x = 1/2 + .04;
 		zbasicmold11.position.y = 0;
 		zbasicmold11.position.z = 0;
@@ -1747,13 +1747,13 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 		zbasicmold11.webtext.scrollpos = 0;
 		zbasicmold11.webtext.webtext = zwebtext;
 		zbasicmold11.graphics.texture.id = zbodyimageid;
-		zbasicmold11.parentname = zmoldname + "-scrollboxbody";
-		zbasicmold11.checkcollisions = "1";
-		var zscrollboxbodytext = WTW.addMold(zmoldname + "-scrollboxbodytext", zbasicmold11, zbasicmold11.parentname, zbasicmold11.covering);
+		zbasicmold11.parentname = zmoldname + '-scrollboxbody';
+		zbasicmold11.checkcollisions = '1';
+		var zscrollboxbodytext = WTW.addMold(zmoldname + '-scrollboxbodytext', zbasicmold11, zbasicmold11.parentname, zbasicmold11.covering);
 		zscrollboxbodytext.WTW = zbasicmold11;
 
-		var ztexture = new BABYLON.DynamicTexture(zmoldname + "-scrollboxbodytexture", {width: 512,height: 512}, scene, true);
-		ztexture.name = zmoldname + "-scrollboxbodytexture";
+		var ztexture = new BABYLON.DynamicTexture(zmoldname + '-scrollboxbodytexture', {width: 512,height: 512}, scene, true);
+		ztexture.name = zmoldname + '-scrollboxbodytexture';
 		ztexture.hasAlpha = true;
 		zscrollboxbodytext.material.diffuseTexture = ztexture;
 		var zparagraph = WTW.wrapHtml(zscrollboxbodytext, zwebtext, zscrollpos);
@@ -1767,7 +1767,7 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 		var ztabpos = ztabpos = (15 - 2) / 2 - ztabheight / 2;
 		if (zparagraph.height > zparagraph.maxheight) {
 			var zbasicmold9 = WTW.newMold();
-			zbasicmold9.shape = "box";
+			zbasicmold9.shape = 'box';
 			zbasicmold9.position.x = 1/4 + .2;
 			zbasicmold9.position.y = ztabpos;
 			zbasicmold9.position.z = 15/2 - .75;
@@ -1776,15 +1776,15 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 			zbasicmold9.scaling.z = .65;
 			zbasicmold9.subdivisions = 12;
 			zbasicmold9.graphics.texture.id = zbuttontextureid;
-			zbasicmold9.parentname = zmoldname + "-scale";
-			zbasicmold9.checkcollisions = "1";
-			zbasicmold9.ispickable = "1";
-			var zscrollboxtab = WTW.addMold(zmoldname + "-scrollboxtab", zbasicmold9, zbasicmold9.parentname, zbasicmold9.covering);
+			zbasicmold9.parentname = zmoldname + '-scale';
+			zbasicmold9.checkcollisions = '1';
+			zbasicmold9.ispickable = '1';
+			var zscrollboxtab = WTW.addMold(zmoldname + '-scrollboxtab', zbasicmold9, zbasicmold9.parentname, zbasicmold9.covering);
 			WTW.registerMouseOver(zscrollboxtab);
 			zscrollboxtab.WTW = zbasicmold9;
 
 			var zbasicmold9b = WTW.newMold();
-			zbasicmold9b.shape = "box";
+			zbasicmold9b.shape = 'box';
 			zbasicmold9b.position.x = 0;
 			zbasicmold9b.position.y = 0;
 			zbasicmold9b.position.z = 0;
@@ -1793,13 +1793,13 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 			zbasicmold9b.scaling.z = .8;
 			zbasicmold9b.subdivisions = 12;
 			zbasicmold9b.graphics.texture.id = zbuttontexturehoverid;
-			zbasicmold9b.parentname = zmoldname + "-scale";
-			zbasicmold9b.checkcollisions = "1";
-			var zscrollboxtabhover = WTW.addMold(zmoldname + "-scrollboxtabhover", zbasicmold9b, zbasicmold9b.parentname, zbasicmold9b.covering);
+			zbasicmold9b.parentname = zmoldname + '-scale';
+			zbasicmold9b.checkcollisions = '1';
+			var zscrollboxtabhover = WTW.addMold(zmoldname + '-scrollboxtabhover', zbasicmold9b, zbasicmold9b.parentname, zbasicmold9b.covering);
 			
 			var zbasicmold5 = WTW.newMold();
-			zbasicmold5.shape = "box";
-			zbasicmold5.covering = "directional texture";
+			zbasicmold5.shape = 'box';
+			zbasicmold5.covering = 'directional texture';
 			zbasicmold5.position.x = 1/4 + .2;
 			zbasicmold5.position.y = 15/2 - .6;
 			zbasicmold5.position.z = 15/2 - .75;
@@ -1810,16 +1810,16 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 			zbasicmold5.graphics.vscale = 17;
 			zbasicmold5.subdivisions = 12;
 			zbasicmold5.graphics.texture.id = zarrowupid;
-			zbasicmold5.parentname = zmoldname + "-scale";
-			zbasicmold5.checkcollisions = "1";
-			zbasicmold5.ispickable = "1";
-			var zscrollboxup = WTW.addMold(zmoldname + "-scrollboxup", zbasicmold5, zbasicmold5.parentname, zbasicmold5.covering);
+			zbasicmold5.parentname = zmoldname + '-scale';
+			zbasicmold5.checkcollisions = '1';
+			zbasicmold5.ispickable = '1';
+			var zscrollboxup = WTW.addMold(zmoldname + '-scrollboxup', zbasicmold5, zbasicmold5.parentname, zbasicmold5.covering);
 			WTW.registerMouseOver(zscrollboxup);
 			zscrollboxup.WTW = zbasicmold5;
 
 			var zbasicmold5b = WTW.newMold();
-			zbasicmold5b.shape = "box";
-			zbasicmold5b.covering = "directional texture";
+			zbasicmold5b.shape = 'box';
+			zbasicmold5b.covering = 'directional texture';
 			zbasicmold5b.position.x = 0;
 			zbasicmold5b.position.y = 0;
 			zbasicmold5b.position.z = 0;
@@ -1830,13 +1830,13 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 			zbasicmold5b.graphics.vscale = 13;
 			zbasicmold5b.subdivisions = 12;
 			zbasicmold5b.graphics.texture.id = zarrowuphoverid;
-			zbasicmold5b.parentname = zmoldname + "-scrollboxup";
-			zbasicmold5b.checkcollisions = "1";
-			var zscrollboxuphover = WTW.addMold(zmoldname + "-scrollboxuphover", zbasicmold5b, zbasicmold5b.parentname, zbasicmold5b.covering);
+			zbasicmold5b.parentname = zmoldname + '-scrollboxup';
+			zbasicmold5b.checkcollisions = '1';
+			var zscrollboxuphover = WTW.addMold(zmoldname + '-scrollboxuphover', zbasicmold5b, zbasicmold5b.parentname, zbasicmold5b.covering);
 
 			var zbasicmold7 = WTW.newMold();
-			zbasicmold7.shape = "box";
-			zbasicmold7.covering = "directional texture";
+			zbasicmold7.shape = 'box';
+			zbasicmold7.covering = 'directional texture';
 			zbasicmold7.position.x = 1/4 + .2;
 			zbasicmold7.position.y = -15/2 + .6;
 			zbasicmold7.position.z = 15/2 - .75;
@@ -1849,16 +1849,16 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 			zbasicmold7.graphics.vscale = 17;
 			zbasicmold7.subdivisions = 12;
 			zbasicmold7.graphics.texture.id = zarrowdownid;
-			zbasicmold7.parentname = zmoldname + "-scale";
-			zbasicmold7.checkcollisions = "1";
-			zbasicmold7.ispickable = "1";
-			var zscrollboxdown = WTW.addMold(zmoldname + "-scrollboxdown", zbasicmold7, zbasicmold7.parentname, zbasicmold7.covering);
+			zbasicmold7.parentname = zmoldname + '-scale';
+			zbasicmold7.checkcollisions = '1';
+			zbasicmold7.ispickable = '1';
+			var zscrollboxdown = WTW.addMold(zmoldname + '-scrollboxdown', zbasicmold7, zbasicmold7.parentname, zbasicmold7.covering);
 			WTW.registerMouseOver(zscrollboxdown);
 			zscrollboxdown.WTW = zbasicmold7;
 
 			var zbasicmold7b = WTW.newMold();
-			zbasicmold7b.shape = "box";
-			zbasicmold7b.covering = "directional texture";
+			zbasicmold7b.shape = 'box';
+			zbasicmold7b.covering = 'directional texture';
 			zbasicmold7b.position.x = 0;
 			zbasicmold7b.position.y = 0;
 			zbasicmold7b.position.z = 0;
@@ -1869,16 +1869,16 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 			zbasicmold7b.graphics.vscale = 13;
 			zbasicmold7b.subdivisions = 12;
 			zbasicmold7b.graphics.texture.id = zarrowdownhoverid;
-			zbasicmold7b.parentname = zmoldname + "-scrollboxdown";
-			zbasicmold7b.checkcollisions = "1";
-			var zscrollboxdownhover = WTW.addMold(zmoldname + "-scrollboxdownhover", zbasicmold7b, zbasicmold7b.parentname, zbasicmold7b.covering);
+			zbasicmold7b.parentname = zmoldname + '-scrollboxdown';
+			zbasicmold7b.checkcollisions = '1';
+			var zscrollboxdownhover = WTW.addMold(zmoldname + '-scrollboxdownhover', zbasicmold7b, zbasicmold7b.parentname, zbasicmold7b.covering);
 		}
-		if (zmoldname.indexOf("-") > -1) {
+		if (zmoldname.indexOf('-') > -1) {
 			var znamepart = zmoldname.split('-');
-			if (znamepart.length > 2) {
+			if (znamepart.length > 3) {
 				var zmolds = WTW.buildingMolds;
-				var zmoldind = Number(znamepart[1]);
-				if (znamepart[0] == "communitymolds") {
+				var zmoldind = Number(znamepart[2]);
+				if (znamepart[1] == 'communitymolds') {
 					zmolds = WTW.communitiesMolds;
 				}
 				if (zmolds[zmoldind] != null) {
@@ -1893,7 +1893,7 @@ WTWJS.prototype.addMoldViewBlog = function(zmoldname, zmolddef, zlenx, zleny, zl
 			WTW.scrollBoxRepaint(zmoldname, 0);
 		},1000);
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldViewBlog=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldViewBlog=' + ex.message);
 	}
 	return zmold;
 }
@@ -1914,23 +1914,23 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zscalemold.WTW = zmolddef;
 		zscalemold.parent = zmold;
 
-		var zwebtext = "";
+		var zwebtext = '';
 		if (zmolddef.webtext.webtext != undefined) {
 			zwebtext = WTW.decode(zmolddef.webtext.webtext);
 		}
-		if (zwebtext == "") {
-			zwebtext = "<div style=\"color:green;\">Click Here to Post</div>";
+		if (zwebtext == '') {
+			zwebtext = "<div style='color:green;'>Click Here to Post</div>";
 		}
 		var zscrollpos = 0;
 		if (WTW.isNumeric(zmolddef.position.scroll)) {
 			zscrollpos = Number(zmolddef.position.scroll);
 		}
-		var zgroovetextureid = "t1qlqxd6pzubzzzy";
-		var zbuttontextureid = "vvpzrv2pae3bbkwv";
-		var zbodyimageid = "8uhx630pg7pu57lc";
-		var zcancelbuttontextureid = "ksa2h7mf909cvech";
-		var zgreenbuttontextureid = "ngb72qh6hvy3ms5c";
-		var zbodyimagebgid = "1acvat7nlz840lz2";
+		var zgroovetextureid = 't1qlqxd6pzubzzzy';
+		var zbuttontextureid = 'vvpzrv2pae3bbkwv';
+		var zbodyimageid = '8uhx630pg7pu57lc';
+		var zcancelbuttontextureid = 'ksa2h7mf909cvech';
+		var zgreenbuttontextureid = 'ngb72qh6hvy3ms5c';
+		var zbodyimagebgid = '1acvat7nlz840lz2';
 		if (WTW.isUploadReady(zgroovetextureid) == false) {
 			WTW.initLoadUpload(zgroovetextureid, zgroovetextureid, 5);
 		}
@@ -1949,15 +1949,15 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		if (WTW.isUploadReady(zbodyimagebgid) == false) {
 			WTW.initLoadUpload(zbodyimagebgid, zbodyimagebgid, 5);
 		}
-		var zbcanceltextureid = "3lnjnpihw0dvaqsu";
-		var zbcanceltexturehoverid = "u8nlyz4nveessjec";
-		var zbposttextureid = "77htnrtwy4rdo84v";
-		var zbposttexturehoverid = "4o13fso28z6zcu58";
-		var zbpictextureid = "v1jophdeu3w8iumn";
-		var zbpictexturehoverid = "gdhb5sgye391ev69";
+		var zbcanceltextureid = '3lnjnpihw0dvaqsu';
+		var zbcanceltexturehoverid = 'u8nlyz4nveessjec';
+		var zbposttextureid = '77htnrtwy4rdo84v';
+		var zbposttexturehoverid = '4o13fso28z6zcu58';
+		var zbpictextureid = 'v1jophdeu3w8iumn';
+		var zbpictexturehoverid = 'gdhb5sgye391ev69';
 		
 		var zbasicmold = WTW.newMold();
-		zbasicmold.shape = "box";
+		zbasicmold.shape = 'box';
 		zbasicmold.position.x = 0;
 		zbasicmold.position.y = 0;
 		zbasicmold.position.z = 0;
@@ -1967,12 +1967,12 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold.subdivisions = 12;
 		zbasicmold.graphics.texture.id = zmolddef.graphics.texture.id;
 		zbasicmold.graphics.texture.path = zmolddef.graphics.texture.path;
-		zbasicmold.parentname = zmoldname + "-scale";
-		zbasicmold.checkcollisions = "1";
-		var zposttextwall = WTW.addMold(zmoldname + "-posttextwall", zbasicmold, zbasicmold.parentname, zbasicmold.covering);
+		zbasicmold.parentname = zmoldname + '-scale';
+		zbasicmold.checkcollisions = '1';
+		var zposttextwall = WTW.addMold(zmoldname + '-posttextwall', zbasicmold, zbasicmold.parentname, zbasicmold.covering);
 		
 		var zbasicmold1 = WTW.newMold();
-		zbasicmold1.shape = "box";
+		zbasicmold1.shape = 'box';
 		zbasicmold1.position.x = 1/2;
 		zbasicmold1.position.y = (15 * .25)/2;
 		zbasicmold1.position.z = -.5;
@@ -1980,13 +1980,13 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold1.scaling.y = (15 * .75) - 1;
 		zbasicmold1.scaling.z = 15 - 2;
 		zbasicmold1.subdivisions = 12;
-		zbasicmold1.parentname = zmoldname + "-scale";
-		zbasicmold1.checkcollisions = "1";
-		var zposttextviewgroove = WTW.addMold(zmoldname + "-posttextviewgroove", zbasicmold1, zbasicmold1.parentname, zbasicmold1.covering);
-		zposttextwall = WTW.processCSGAction(zmoldname + "-posttextwall", zposttextwall, zposttextviewgroove, "subtract", zbasicmold);
+		zbasicmold1.parentname = zmoldname + '-scale';
+		zbasicmold1.checkcollisions = '1';
+		var zposttextviewgroove = WTW.addMold(zmoldname + '-posttextviewgroove', zbasicmold1, zbasicmold1.parentname, zbasicmold1.covering);
+		zposttextwall = WTW.processCSGAction(zmoldname + '-posttextwall', zposttextwall, zposttextviewgroove, 'subtract', zbasicmold);
 
 		var zbasicmold2 = WTW.newMold();
-		zbasicmold2.shape = "box";
+		zbasicmold2.shape = 'box';
 		zbasicmold2.position.x = 1/2;
 		zbasicmold2.position.y = 0;
 		zbasicmold2.position.z = 15/2 - .75;
@@ -1994,14 +1994,14 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold2.scaling.y = (15 - .5);
 		zbasicmold2.scaling.z = .65;
 		zbasicmold2.subdivisions = 12;
-		zbasicmold2.parentname = zmoldname + "-scale";
-		zbasicmold2.checkcollisions = "1";
-		var zposttextgroove = WTW.addMold(zmoldname + "-posttextgroove", zbasicmold2, zbasicmold2.parentname, zbasicmold2.covering);
-		zposttextwall = WTW.processCSGAction(zmoldname + "-posttextwall", zposttextwall, zposttextgroove, "subtract", zbasicmold);
+		zbasicmold2.parentname = zmoldname + '-scale';
+		zbasicmold2.checkcollisions = '1';
+		var zposttextgroove = WTW.addMold(zmoldname + '-posttextgroove', zbasicmold2, zbasicmold2.parentname, zbasicmold2.covering);
+		zposttextwall = WTW.processCSGAction(zmoldname + '-posttextwall', zposttextwall, zposttextgroove, 'subtract', zbasicmold);
 		WTW.registerMouseOver(zposttextwall);
 		
 		var zbasicmold3 = WTW.newMold();
-		zbasicmold3.shape = "box";
+		zbasicmold3.shape = 'box';
 		zbasicmold3.position.x = 1/4;
 		zbasicmold3.position.y = 0;
 		zbasicmold3.position.z = 15/2 - .75;
@@ -2010,12 +2010,12 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold3.scaling.z = .65;
 		zbasicmold3.subdivisions = 12;
 		zbasicmold3.graphics.texture.id = zgroovetextureid;
-		zbasicmold3.parentname = zmoldname + "-scale";
-		zbasicmold3.checkcollisions = "1";
-		var zposttextgroovetexture = WTW.addMold(zmoldname + "-posttextgroovetexture", zbasicmold3, zbasicmold3.parentname, zbasicmold3.covering);
+		zbasicmold3.parentname = zmoldname + '-scale';
+		zbasicmold3.checkcollisions = '1';
+		var zposttextgroovetexture = WTW.addMold(zmoldname + '-posttextgroovetexture', zbasicmold3, zbasicmold3.parentname, zbasicmold3.covering);
 
 		var zbasicmold4 = WTW.newMold();
-		zbasicmold4.shape = "box";
+		zbasicmold4.shape = 'box';
 		zbasicmold4.position.x = 1/4 + .05;
 		zbasicmold4.position.y = 0;
 		zbasicmold4.position.z = 15/2 - .75;
@@ -2023,13 +2023,13 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold4.scaling.y = (15 - .5);
 		zbasicmold4.scaling.z = .6;
 		zbasicmold4.subdivisions = 12;
-		zbasicmold4.parentname = zmoldname + "-scale";
-		zbasicmold4.checkcollisions = "1";
-		var zposttextgroovecut = WTW.addMold(zmoldname + "-posttextgroovecut", zbasicmold4, zbasicmold4.parentname, zbasicmold4.covering);
-		zposttextgroovetexture = WTW.processCSGAction(zmoldname + "-posttextgroovetexture", zposttextgroovetexture, zposttextgroovecut, "subtract", zbasicmold3);
+		zbasicmold4.parentname = zmoldname + '-scale';
+		zbasicmold4.checkcollisions = '1';
+		var zposttextgroovecut = WTW.addMold(zmoldname + '-posttextgroovecut', zbasicmold4, zbasicmold4.parentname, zbasicmold4.covering);
+		zposttextgroovetexture = WTW.processCSGAction(zmoldname + '-posttextgroovetexture', zposttextgroovetexture, zposttextgroovecut, 'subtract', zbasicmold3);
 		
 		var zbasicmold18 = WTW.newMold();
-		zbasicmold18.shape = "box";
+		zbasicmold18.shape = 'box';
 		zbasicmold18.position.x = .2;
 		zbasicmold18.position.y = 0;
 		zbasicmold18.position.z = -.5;
@@ -2038,12 +2038,12 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold18.scaling.z = 15 - 2;
 		zbasicmold18.subdivisions = 12;
 		zbasicmold18.graphics.texture.id = zbodyimagebgid;
-		zbasicmold18.parentname = zmoldname + "-scale";
-		zbasicmold18.checkcollisions = "1";
-		var zscrollboxtbodybg = WTW.addMold(zmoldname + "-scrollboxtbodybg", zbasicmold18, zbasicmold18.parentname, zbasicmold18.covering);
+		zbasicmold18.parentname = zmoldname + '-scale';
+		zbasicmold18.checkcollisions = '1';
+		var zscrollboxtbodybg = WTW.addMold(zmoldname + '-scrollboxtbodybg', zbasicmold18, zbasicmold18.parentname, zbasicmold18.covering);
 				
 		var zbasicmold10 = WTW.newMold();
-		zbasicmold10.shape = "box";
+		zbasicmold10.shape = 'box';
 		zbasicmold10.position.x = 1/4;
 		zbasicmold10.position.y = 0;
 		zbasicmold10.position.z = -.5;
@@ -2052,14 +2052,14 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold10.scaling.z = 15 - 2;
 		zbasicmold10.subdivisions = 12;
 		zbasicmold10.graphics.texture.id = zbodyimageid;
-		zbasicmold10.parentname = zmoldname + "-scale";
-		zbasicmold10.checkcollisions = "1";
-		var zscrollboxtbody = WTW.addMold(zmoldname + "-scrollboxtbody", zbasicmold10, zbasicmold10.parentname, zbasicmold10.covering);
+		zbasicmold10.parentname = zmoldname + '-scale';
+		zbasicmold10.checkcollisions = '1';
+		var zscrollboxtbody = WTW.addMold(zmoldname + '-scrollboxtbody', zbasicmold10, zbasicmold10.parentname, zbasicmold10.covering);
 		WTW.registerMouseOver(zscrollboxtbody);
 		zscrollboxtbody.WTW = zbasicmold10;
 		
 		var zbasicmold11 = WTW.newMold();
-		zbasicmold11.shape = "box";
+		zbasicmold11.shape = 'box';
 		zbasicmold11.position.x = 1/2 + .04;
 		zbasicmold11.position.y = 0;
 		zbasicmold11.position.z = 0;
@@ -2071,13 +2071,13 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold11.webtext.webtext = zwebtext;
 		zbasicmold11.webtext.scrollpos = zscrollpos;
 		zbasicmold11.graphics.texture.id = zbodyimageid;
-		zbasicmold11.parentname = zmoldname + "-scrollboxtbody";
-		zbasicmold11.checkcollisions = "1";
-		var zscrollboxbodytext = WTW.addMold(zmoldname + "-scrollboxbodytext", zbasicmold11, zbasicmold11.parentname, zbasicmold11.covering);
+		zbasicmold11.parentname = zmoldname + '-scrollboxtbody';
+		zbasicmold11.checkcollisions = '1';
+		var zscrollboxbodytext = WTW.addMold(zmoldname + '-scrollboxbodytext', zbasicmold11, zbasicmold11.parentname, zbasicmold11.covering);
 		zscrollboxbodytext.WTW = zbasicmold11;
 		
-		var ztexture = new BABYLON.DynamicTexture(zmoldname + "-scrollboxbodytexture", {width: 512,height: 512}, scene, true);
-		ztexture.name = zmoldname + "-scrollboxbodytexture";
+		var ztexture = new BABYLON.DynamicTexture(zmoldname + '-scrollboxbodytexture', {width: 512,height: 512}, scene, true);
+		ztexture.name = zmoldname + '-scrollboxbodytexture';
 		ztexture.hasAlpha = true;
 		zscrollboxbodytext.material.diffuseTexture = ztexture;
 		var zparagraph = WTW.wrapHtml(zscrollboxbodytext, zwebtext, zscrollpos);
@@ -2092,10 +2092,10 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		ztabpos = (15 - 2) / 2 - ztabheight / 2;
 
 		var zbasicmold12 = WTW.newMold();
-		zbasicmold12.shape = "box";
-		zbasicmold12.covering = "directional texture";
-		zbasicmold12.graphics.uscale = "7.2";
-		zbasicmold12.graphics.vscale = "2.2";
+		zbasicmold12.shape = 'box';
+		zbasicmold12.covering = 'directional texture';
+		zbasicmold12.graphics.uscale = '7.2';
+		zbasicmold12.graphics.vscale = '2.2';
 		zbasicmold12.position.x = 1/4 + .2;
 		zbasicmold12.position.y = (-15 * .3);
 		zbasicmold12.position.z = 15/4;
@@ -2104,16 +2104,16 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold12.scaling.z = (15 * .3);
 		zbasicmold12.subdivisions = 12;
 		zbasicmold12.graphics.texture.id = zbposttextureid;
-		zbasicmold12.parentname = zmoldname + "-scale";
-		zbasicmold12.checkcollisions = "1";
-		var zposttextbpost = WTW.addMold(zmoldname + "-posttextbpost", zbasicmold12, zbasicmold12.parentname, zbasicmold12.covering);
+		zbasicmold12.parentname = zmoldname + '-scale';
+		zbasicmold12.checkcollisions = '1';
+		var zposttextbpost = WTW.addMold(zmoldname + '-posttextbpost', zbasicmold12, zbasicmold12.parentname, zbasicmold12.covering);
 		WTW.registerMouseOver(zposttextbpost);
 		
 		var zbasicmold13 = WTW.newMold();
-		zbasicmold13.shape = "box";
-		zbasicmold13.covering = "directional texture";
-		zbasicmold13.graphics.uscale = "7.2";
-		zbasicmold13.graphics.vscale = "2.2";
+		zbasicmold13.shape = 'box';
+		zbasicmold13.covering = 'directional texture';
+		zbasicmold13.graphics.uscale = '7.2';
+		zbasicmold13.graphics.vscale = '2.2';
 		zbasicmold13.position.x = 1/4 + .1;
 		zbasicmold13.position.y = (-15 * .3);
 		zbasicmold13.position.z = 15/4;
@@ -2122,15 +2122,15 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold13.scaling.z = (15 * .3)-.05;
 		zbasicmold13.subdivisions = 12;
 		zbasicmold13.graphics.texture.id = zbposttexturehoverid;
-		zbasicmold13.parentname = zmoldname + "-scale";
-		zbasicmold13.checkcollisions = "1";
-		var zposttextbposthover = WTW.addMold(zmoldname + "-posttextbposthover", zbasicmold13, zbasicmold13.parentname, zbasicmold13.covering);
+		zbasicmold13.parentname = zmoldname + '-scale';
+		zbasicmold13.checkcollisions = '1';
+		var zposttextbposthover = WTW.addMold(zmoldname + '-posttextbposthover', zbasicmold13, zbasicmold13.parentname, zbasicmold13.covering);
 		
 		var zbasicmold14 = WTW.newMold();
-		zbasicmold14.shape = "box";
-		zbasicmold14.covering = "directional texture";
-		zbasicmold14.graphics.uscale = "7.2";
-		zbasicmold14.graphics.vscale = "2.2";
+		zbasicmold14.shape = 'box';
+		zbasicmold14.covering = 'directional texture';
+		zbasicmold14.graphics.uscale = '7.2';
+		zbasicmold14.graphics.vscale = '2.2';
 		zbasicmold14.position.x = 1/4 + .2;
 		zbasicmold14.position.y = (-15 * .3);
 		zbasicmold14.position.z = -15 /3.2;
@@ -2139,16 +2139,16 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold14.scaling.z = (15 * .3);
 		zbasicmold14.subdivisions = 12;
 		zbasicmold14.graphics.texture.id = zbcanceltextureid;
-		zbasicmold14.parentname = zmoldname + "-scale";
-		zbasicmold14.checkcollisions = "1";
-		var zposttextbcancel = WTW.addMold(zmoldname + "-posttextbcancel", zbasicmold14, zbasicmold14.parentname, zbasicmold14.covering);
+		zbasicmold14.parentname = zmoldname + '-scale';
+		zbasicmold14.checkcollisions = '1';
+		var zposttextbcancel = WTW.addMold(zmoldname + '-posttextbcancel', zbasicmold14, zbasicmold14.parentname, zbasicmold14.covering);
 		WTW.registerMouseOver(zposttextbcancel);
 		
 		var zbasicmold15 = WTW.newMold();
-		zbasicmold15.shape = "box";
-		zbasicmold15.covering = "directional texture";
-		zbasicmold15.graphics.uscale = "7.2";
-		zbasicmold15.graphics.vscale = "2.2";
+		zbasicmold15.shape = 'box';
+		zbasicmold15.covering = 'directional texture';
+		zbasicmold15.graphics.uscale = '7.2';
+		zbasicmold15.graphics.vscale = '2.2';
 		zbasicmold15.position.x = 1/4 + .1;
 		zbasicmold15.position.y = (-15 * .3);
 		zbasicmold15.position.z = -15 /3.2;
@@ -2157,15 +2157,15 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold15.scaling.z = (15 * .3)-.05;
 		zbasicmold15.subdivisions = 12;
 		zbasicmold15.graphics.texture.id = zbcanceltexturehoverid;
-		zbasicmold15.parentname = zmoldname + "-scale";
-		zbasicmold15.checkcollisions = "1";
-		var zposttextbcancelhover = WTW.addMold(zmoldname + "-posttextbcancelhover", zbasicmold15, zbasicmold15.parentname, zbasicmold15.covering);
+		zbasicmold15.parentname = zmoldname + '-scale';
+		zbasicmold15.checkcollisions = '1';
+		var zposttextbcancelhover = WTW.addMold(zmoldname + '-posttextbcancelhover', zbasicmold15, zbasicmold15.parentname, zbasicmold15.covering);
 		
 		var zbasicmold16 = WTW.newMold();
-		zbasicmold16.shape = "box";
-		zbasicmold16.covering = "directional texture";
-		zbasicmold16.graphics.uscale = "6.7";
-		zbasicmold16.graphics.vscale = "6.7";
+		zbasicmold16.shape = 'box';
+		zbasicmold16.covering = 'directional texture';
+		zbasicmold16.graphics.uscale = '6.7';
+		zbasicmold16.graphics.vscale = '6.7';
 		zbasicmold16.position.x = 1/4 + .2;
 		zbasicmold16.position.y = (-15 * .42);
 		zbasicmold16.position.z = -15 /2.45;
@@ -2174,16 +2174,16 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold16.scaling.z = (15 * .1);
 		zbasicmold16.subdivisions = 12;
 		zbasicmold16.graphics.texture.id = zbpictextureid;
-		zbasicmold16.parentname = zmoldname + "-scale";
-		zbasicmold16.checkcollisions = "1";
-		var zposttextbpic = WTW.addMold(zmoldname + "-posttextbpic", zbasicmold16, zbasicmold16.parentname, zbasicmold16.covering);
+		zbasicmold16.parentname = zmoldname + '-scale';
+		zbasicmold16.checkcollisions = '1';
+		var zposttextbpic = WTW.addMold(zmoldname + '-posttextbpic', zbasicmold16, zbasicmold16.parentname, zbasicmold16.covering);
 		WTW.registerMouseOver(zposttextbpic);
 		
 		var zbasicmold17 = WTW.newMold();
-		zbasicmold17.shape = "box";
-		zbasicmold17.covering = "directional texture";
-		zbasicmold17.graphics.uscale = "6.7";
-		zbasicmold17.graphics.vscale = "6.7";
+		zbasicmold17.shape = 'box';
+		zbasicmold17.covering = 'directional texture';
+		zbasicmold17.graphics.uscale = '6.7';
+		zbasicmold17.graphics.vscale = '6.7';
 		zbasicmold17.position.x = 1/4 + .1;
 		zbasicmold17.position.y = (-15 * .42);
 		zbasicmold17.position.z = -15 /2.45;
@@ -2192,13 +2192,13 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 		zbasicmold17.scaling.z = (15 * .1)-.05;
 		zbasicmold17.subdivisions = 12;
 		zbasicmold17.graphics.texture.id = zbpictexturehoverid;
-		zbasicmold17.parentname = zmoldname + "-scale";
-		zbasicmold17.checkcollisions = "1";
-		var zposttextbpichover = WTW.addMold(zmoldname + "-posttextbpichover", zbasicmold17, zbasicmold17.parentname, zbasicmold17.covering);
+		zbasicmold17.parentname = zmoldname + '-scale';
+		zbasicmold17.checkcollisions = '1';
+		var zposttextbpichover = WTW.addMold(zmoldname + '-posttextbpichover', zbasicmold17, zbasicmold17.parentname, zbasicmold17.covering);
 		
 		if (zparagraph.height > zparagraph.maxheight) {
 			var zbasicmold9 = WTW.newMold();
-			zbasicmold9.shape = "box";
+			zbasicmold9.shape = 'box';
 			zbasicmold9.position.x = 1/4 + .2;
 			zbasicmold9.position.y = ztabpos;
 			zbasicmold9.position.z = 15/2 - .75;
@@ -2207,13 +2207,13 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 			zbasicmold9.scaling.z = .65;
 			zbasicmold9.subdivisions = 12;
 			zbasicmold9.graphics.texture.id = zbuttontextureid;
-			zbasicmold9.parentname = zmoldname + "-scale";
-			zbasicmold9.checkcollisions = "1";
-			var zscrollboxtab = WTW.addMold(zmoldname + "-scrollboxtab", zbasicmold9, zbasicmold9.parentname, zbasicmold9.covering);
+			zbasicmold9.parentname = zmoldname + '-scale';
+			zbasicmold9.checkcollisions = '1';
+			var zscrollboxtab = WTW.addMold(zmoldname + '-scrollboxtab', zbasicmold9, zbasicmold9.parentname, zbasicmold9.covering);
 			WTW.registerMouseOver(zscrollboxtab);
 
 			var zbasicmold5 = WTW.newMold();
-			zbasicmold5.shape = "box";
+			zbasicmold5.shape = 'box';
 			zbasicmold5.position.x = 1/4 + .2;
 			zbasicmold5.position.y = 15/2 - .6;
 			zbasicmold5.position.z = 15/2 - .75;
@@ -2222,13 +2222,13 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 			zbasicmold5.scaling.z = .65;
 			zbasicmold5.subdivisions = 12;
 			zbasicmold5.graphics.texture.id = zbuttontextureid;
-			zbasicmold5.parentname = zmoldname + "-scale";
-			zbasicmold5.checkcollisions = "1";
-			var zscrollboxup = WTW.addMold(zmoldname + "-scrollboxup", zbasicmold5, zbasicmold5.parentname, zbasicmold5.covering);
+			zbasicmold5.parentname = zmoldname + '-scale';
+			zbasicmold5.checkcollisions = '1';
+			var zscrollboxup = WTW.addMold(zmoldname + '-scrollboxup', zbasicmold5, zbasicmold5.parentname, zbasicmold5.covering);
 			WTW.registerMouseOver(zscrollboxup);
 			
 			var zbasicmold6 = WTW.newMold();
-			zbasicmold6.shape = "triangle";
+			zbasicmold6.shape = 'triangle';
 			zbasicmold6.position.x = 1/4 + .4;
 			zbasicmold6.position.y = 15/2 - .6;
 			zbasicmold6.position.z = 15/2 - .75;
@@ -2240,13 +2240,13 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 			zbasicmold6.rotation.z = 90;
 			zbasicmold6.subdivisions = 12;
 			zbasicmold6.graphics.texture.id = zgroovetextureid;
-			zbasicmold6.parentname = zmoldname + "-scale";
-			zbasicmold6.checkcollisions = "1";
-			var zscrollboxuparrow = WTW.addMold(zmoldname + "-scrollboxuparrow", zbasicmold6, zbasicmold6.parentname, zbasicmold6.covering);
+			zbasicmold6.parentname = zmoldname + '-scale';
+			zbasicmold6.checkcollisions = '1';
+			var zscrollboxuparrow = WTW.addMold(zmoldname + '-scrollboxuparrow', zbasicmold6, zbasicmold6.parentname, zbasicmold6.covering);
 			WTW.registerMouseOver(zscrollboxuparrow);
 			
 			var zbasicmold7 = WTW.newMold();
-			zbasicmold7.shape = "box";
+			zbasicmold7.shape = 'box';
 			zbasicmold7.position.x = 1/4 + .2;
 			zbasicmold7.position.y = -15/2 + .6;
 			zbasicmold7.position.z = 15/2 - .75;
@@ -2255,13 +2255,13 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 			zbasicmold7.scaling.z = .65;
 			zbasicmold7.subdivisions = 12;
 			zbasicmold7.graphics.texture.id = zbuttontextureid;
-			zbasicmold7.parentname = zmoldname + "-scale";
-			zbasicmold7.checkcollisions = "1";
-			var zscrollboxdown = WTW.addMold(zmoldname + "-scrollboxdown", zbasicmold7, zbasicmold7.parentname, zbasicmold7.covering);
+			zbasicmold7.parentname = zmoldname + '-scale';
+			zbasicmold7.checkcollisions = '1';
+			var zscrollboxdown = WTW.addMold(zmoldname + '-scrollboxdown', zbasicmold7, zbasicmold7.parentname, zbasicmold7.covering);
 			WTW.registerMouseOver(zscrollboxdown);
 			
 			var zbasicmold8 = WTW.newMold();
-			zbasicmold8.shape = "triangle";
+			zbasicmold8.shape = 'triangle';
 			zbasicmold8.position.x = 1/4 + .4;
 			zbasicmold8.position.y = -15/2 + .6;
 			zbasicmold8.position.z = 15/2 - .75;
@@ -2273,17 +2273,17 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 			zbasicmold8.rotation.z = 90;
 			zbasicmold8.subdivisions = 12;
 			zbasicmold8.graphics.texture.id = zgroovetextureid;
-			zbasicmold8.parentname = zmoldname + "-scale";
-			zbasicmold8.checkcollisions = "1";
-			var zscrollboxdownarrow = WTW.addMold(zmoldname + "-scrollboxdownarrow", zbasicmold8, zbasicmold8.parentname, zbasicmold8.covering);
+			zbasicmold8.parentname = zmoldname + '-scale';
+			zbasicmold8.checkcollisions = '1';
+			var zscrollboxdownarrow = WTW.addMold(zmoldname + '-scrollboxdownarrow', zbasicmold8, zbasicmold8.parentname, zbasicmold8.covering);
 			WTW.registerMouseOver(zscrollboxdownarrow);
 		}
-		if (zmoldname.indexOf("-") > -1) {
+		if (zmoldname.indexOf('-') > -1) {
 			var znamepart = zmoldname.split('-');
-			if (znamepart.length > 2) {
+			if (znamepart.length > 3) {
 				var zmolds = WTW.buildingMolds;
-				var i = Number(znamepart[1]);
-				if (znamepart[0] == "communitymolds") {
+				var i = Number(znamepart[2]);
+				if (znamepart[1] == 'communitymolds') {
 					zmolds = WTW.communitiesMolds;
 				}
 				if (zmolds[i] != null) {
@@ -2298,7 +2298,7 @@ WTWJS.prototype.addMoldBlogPosting = function(zmoldname, zmolddef, zlenx, zleny,
 			WTW.scrollBoxRepaint(zmoldname, 0);
 		},1000);
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldBlogPosting=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldBlogPosting=' + ex.message);
 	}
 	return zmold;
 } 
@@ -2312,16 +2312,16 @@ WTWJS.prototype.addMoldLightbulb = function(zmoldname, zmolddef, zlenx, zleny, z
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		
 		var zmoldbulb = WTW.newMold();
-		zmoldbulb.shape = "sphere";
-		zmoldbulb.covering = "color";
+		zmoldbulb.shape = 'sphere';
+		zmoldbulb.covering = 'color';
 		zmoldbulb.color = zmolddef.color;
 		zmoldbulb.scaling = zmolddef.scaling;
 		zmoldbulb.subdivisions = zmolddef.subdivisions;
 		zmoldbulb.parentname = zmoldname;
-		zmoldbulb.checkcollisions = "1";
-		var zbulbcenter = BABYLON.MeshBuilder.CreateSphere(zmoldname + "-bulbcenter", {segments: zsubdivisions, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.FRONTSIDE}, scene);
+		zmoldbulb.checkcollisions = '1';
+		var zbulbcenter = BABYLON.MeshBuilder.CreateSphere(zmoldname + '-bulbcenter', {segments: zsubdivisions, diameter:1, updatable: false, sideOrientation: BABYLON.Mesh.FRONTSIDE}, scene);
 		zbulbcenter.scaling = new BABYLON.Vector3(zlenx * .3, zleny * .8, zlenz * .3);
-		zbulbcenter.material = WTW.addCovering("color", zmoldname + "-bulbmat", zmoldbulb, zlenx * .3, zleny * .8, zlenz * .3, '0', '0');
+		zbulbcenter.material = WTW.addCovering('color', zmoldname + '-bulbmat', zmoldbulb, zlenx * .3, zleny * .8, zlenz * .3, '0', '0');
 		zbulbcenter.isPickable = true;
 		zbulbcenter.parent = zmold;
 		zbulbcenter.convertToUnIndexedMesh();
@@ -2330,7 +2330,7 @@ WTWJS.prototype.addMoldLightbulb = function(zmoldname, zmolddef, zlenx, zleny, z
 		zmoldglass.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmoldglass.parent = zmold;
 		zmoldglass.convertToUnIndexedMesh();
-		var zglassmat = new BABYLON.StandardMaterial(zmoldname + "-glassmat", scene);
+		var zglassmat = new BABYLON.StandardMaterial(zmoldname + '-glassmat', scene);
 		zglassmat.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
 		zglassmat.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
 		zglassmat.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
@@ -2347,7 +2347,7 @@ WTWJS.prototype.addMoldLightbulb = function(zmoldname, zmolddef, zlenx, zleny, z
 				zmoldnameparts.molds[zmoldnameparts.moldind].objects.shadows.dispose();
 				zmoldnameparts.molds[zmoldnameparts.moldind].objects.shadows = '';
 			}
-			zmoldnameparts.molds[zmoldnameparts.moldind].objects.light = new BABYLON.DirectionalLight(zmoldname + "-light", new BABYLON.Vector3(0, -1, 1), scene);
+			zmoldnameparts.molds[zmoldnameparts.moldind].objects.light = new BABYLON.DirectionalLight(zmoldname + '-light', new BABYLON.Vector3(0, -1, 1), scene);
 			zmoldnameparts.molds[zmoldnameparts.moldind].objects.light.intensity = 0.8;
 			zmoldnameparts.molds[zmoldnameparts.moldind].objects.light.shadowMinZ = 0;
 			zmoldnameparts.molds[zmoldnameparts.moldind].objects.light.shadowMaxZ = 100;
@@ -2363,14 +2363,14 @@ WTWJS.prototype.addMoldLightbulb = function(zmoldname, zmolddef, zlenx, zleny, z
 			zmoldnameparts.molds[zmoldnameparts.moldind].objects.shadows.usePoissonSampling = true;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldLightbulb=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldLightbulb=' + ex.message);
 	}
 	return zmold;
 }
 
 //Tree generator code
 
-var coordSystem=function(b){var g=b.normalize();b=0==Math.abs(b.x)&&0==Math.abs(b.y)?(new BABYLON.Vector3(b.z,0,0)).normalize():(new BABYLON.Vector3(b.y,-b.x,0)).normalize();var r=BABYLON.Vector3.Cross(b,g);return{x:b,y:g,z:r}},randPct=function(b,g){return 0==g?b:(1+(1-2*Math.random())*g)*b},createBranch=function(b,g,r,w,h,l,v,n,x){for(var t=[],d,c=[],f,q=[],a=0;12>a;a++)t[a]=[];for(var m=0;m<h;m++)for(a=m/h,d=g.y.scale(a*r),d.addInPlace(g.x.scale(v*Math.exp(-a)*Math.sin(l*a*Math.PI))),d.addInPlace(b),c[m]=d,d=n*(1+(.4*Math.random()-.2))*(1-(1-w)*a),q.push(d),a=0;12>a;a++)f=a*Math.PI/6,f=g.x.scale(d*Math.cos(f)).add(g.z.scale(d*Math.sin(f))),f.addInPlace(c[m]),t[a].push(f);for(a=0;12>a;a++)t[a].push(c[c.length-1]);return{branch:BABYLON.MeshBuilder.CreateRibbon("branch",{pathArray:t,closeArray:!0},x),core:c,_radii:q}},createTreeBase=function(b,g,r,w,h,l,v,n,x,t){var d=2/(1+Math.sqrt(5)),c=new BABYLON.Vector3(0,1,0),f,c=coordSystem(c),q=new BABYLON.Vector3(0,0,0),a=[],m=[],e=[],A=[],q=createBranch(q,c,b,g,r,1,x,1,t);a.push(q.branch);var y=q.core;m.push(y);e.push(q._radii);A.push(c);for(var q=y[y.length-1],y=2*Math.PI/h,z,u,p,C,B=0;B<h;B++)if(f=randPct(B*y,.25),f=c.y.scale(Math.cos(randPct(l,.15))).add(c.x.scale(Math.sin(randPct(l,.15))*Math.sin(f))).add(c.z.scale(Math.sin(randPct(l,.15))*Math.cos(f))),z=coordSystem(f),f=createBranch(q,z,b*v,g,r,n,x*d,g,t),p=f.core,p=p[p.length-1],a.push(f.branch),m.push(f.core),e.push(f._radii),A.push(z),1<w)for(var D=0;D<h;D++)u=randPct(D*y,.25),u=z.y.scale(Math.cos(randPct(l,.15))).add(z.x.scale(Math.sin(randPct(l,.15))*Math.sin(u))).add(z.z.scale(Math.sin(randPct(l,.15))*Math.cos(u))),u=coordSystem(u),C=createBranch(p,u,b*v*v,g,r,n,x*d*d,g*g,t),a.push(C.branch),m.push(C.core),e.push(f._radii),A.push(u);return{tree:BABYLON.Mesh.MergeMeshes(a),paths:m,radii:e,directions:A}},createTree=function(b,g,r,w,h,l,v,n,x,t,d,c,f,q,a,m){1!=h&&2!=h&&(h=1);var e=createTreeBase(b,g,r,h,l,v,n,d,c,m);e.tree.material=w;var A=b*Math.pow(n,h),y=A/(2*f),z=1.5*Math.pow(g,h-1);n=BABYLON.MeshBuilder.CreateDisc("leaf",{radius:z/2,tessellation:12,sideOrientation:BABYLON.Mesh.DOUBLESIDE},m);b=new BABYLON.SolidParticleSystem("leaveSPS",m,{updatable:!1});b.addShape(n,2*f*Math.pow(l,h),{positionFunction:function(b,a,g){a=Math.floor(g/(2*f));1==h?a++:a=2+a%l+Math.floor(a/l)*(l+1);var E=(g%(2*f)*y+3*y/2)/A,d=Math.ceil(r*E);d>e.paths[a].length-1&&(d=e.paths[a].length-1);var k=d-1,c=k/(r-1),m=d/(r-1);b.position=new BABYLON.Vector3(e.paths[a][k].x+(e.paths[a][d].x-e.paths[a][k].x)*(E-c)/(m-c),e.paths[a][k].y+(e.paths[a][d].y-e.paths[a][k].y)*(E-c)/(m-c)+(.6*z/q+e.radii[a][d])*(g%2*2-1),e.paths[a][k].z+(e.paths[a][d].z-e.paths[a][k].z)*(E-c)/(m-c));b.rotation.z=Math.random()*Math.PI/4;b.rotation.y=Math.random()*Math.PI/2;b.rotation.z=Math.random()*Math.PI/4;b.scale.y=1/q}});b=b.buildMesh();b.billboard=!0;n.dispose();d=new BABYLON.SolidParticleSystem("miniSPS",m,{updatable:!1});n=new BABYLON.SolidParticleSystem("minileavesSPS",m,{updatable:!1});var u=[];c=2*Math.PI/l;for(var p=0;p<Math.pow(l,h+1);p++)u.push(randPct(Math.floor(p/Math.pow(l,h))*c,.2));c=function(a,b,d){var c=d%Math.pow(l,h);1==h?c++:c=2+c%l+Math.floor(c/l)*(l+1);var f=e.directions[c],c=new BABYLON.Vector3(e.paths[c][e.paths[c].length-1].x,e.paths[c][e.paths[c].length-1].y,e.paths[c][e.paths[c].length-1].z),k=u[d],k=f.y.scale(Math.cos(randPct(v,0))).add(f.x.scale(Math.sin(randPct(v,0))*Math.sin(k))).add(f.z.scale(Math.sin(randPct(v,0))*Math.cos(k))),f=BABYLON.Vector3.Cross(BABYLON.Axis.Y,k),k=Math.acos(BABYLON.Vector3.Dot(k,BABYLON.Axis.Y)/k.length());a.scale=new BABYLON.Vector3(Math.pow(g,h+1),Math.pow(g,h+1),Math.pow(g,h+1));a.quaternion=BABYLON.Quaternion.RotationAxis(f,k);a.position=c;};for(var C=[],B=[],p=e.paths.length,D=e.paths[0].length,F=0;F<x;F++)C.push(2*Math.PI*Math.random()-Math.PI),B.push([Math.floor(Math.random()*p),Math.floor(Math.random()*(D-1)+1)]);p=function(a,c,b){var d=B[b][0],f=B[b][1],k=e.directions[d];c=new BABYLON.Vector3(e.paths[d][f].x,e.paths[d][f].y,e.paths[d][f].z);c.addInPlace(k.z.scale(e.radii[d][f]/2));b=C[b];k=k.y.scale(Math.cos(randPct(t,0))).add(k.x.scale(Math.sin(randPct(t,0))*Math.sin(b))).add(k.z.scale(Math.sin(randPct(t,0))*Math.cos(b)));b=BABYLON.Vector3.Cross(BABYLON.Axis.Y,k);k=Math.acos(BABYLON.Vector3.Dot(k,BABYLON.Axis.Y)/k.length());a.scale=new BABYLON.Vector3(Math.pow(g,h+1),Math.pow(g,h+1),Math.pow(g,h+1));a.quaternion=BABYLON.Quaternion.RotationAxis(b,k);a.position=c};d.addShape(e.tree,Math.pow(l,h+1),{positionFunction:c});d.addShape(e.tree,x,{positionFunction:p});d=d.buildMesh();d.material=w;n.addShape(b,Math.pow(l,h+1),{positionFunction:c});n.addShape(b,x,{positionFunction:p});w=n.buildMesh();b.dispose();w.material=a;a=BABYLON.MeshBuilder.CreateBox("",{},m);a.isVisible=!1;e.tree.parent=a;d.parent=a;return w.parent=a};
+var coordSystem=function(b){var g=b.normalize();b=0==Math.abs(b.x)&&0==Math.abs(b.y)?(new BABYLON.Vector3(b.z,0,0)).normalize():(new BABYLON.Vector3(b.y,-b.x,0)).normalize();var r=BABYLON.Vector3.Cross(b,g);return{x:b,y:g,z:r}},randPct=function(b,g){return 0==g?b:(1+(1-2*Math.random())*g)*b},createBranch=function(b,g,r,w,h,l,v,n,x){for(var t=[],d,c=[],f,q=[],a=0;12>a;a++)t[a]=[];for(var m=0;m<h;m++)for(a=m/h,d=g.y.scale(a*r),d.addInPlace(g.x.scale(v*Math.exp(-a)*Math.sin(l*a*Math.PI))),d.addInPlace(b),c[m]=d,d=n*(1+(.4*Math.random()-.2))*(1-(1-w)*a),q.push(d),a=0;12>a;a++)f=a*Math.PI/6,f=g.x.scale(d*Math.cos(f)).add(g.z.scale(d*Math.sin(f))),f.addInPlace(c[m]),t[a].push(f);for(a=0;12>a;a++)t[a].push(c[c.length-1]);return{branch:BABYLON.MeshBuilder.CreateRibbon('branch',{pathArray:t,closeArray:!0},x),core:c,_radii:q}},createTreeBase=function(b,g,r,w,h,l,v,n,x,t){var d=2/(1+Math.sqrt(5)),c=new BABYLON.Vector3(0,1,0),f,c=coordSystem(c),q=new BABYLON.Vector3(0,0,0),a=[],m=[],e=[],A=[],q=createBranch(q,c,b,g,r,1,x,1,t);a.push(q.branch);var y=q.core;m.push(y);e.push(q._radii);A.push(c);for(var q=y[y.length-1],y=2*Math.PI/h,z,u,p,C,B=0;B<h;B++)if(f=randPct(B*y,.25),f=c.y.scale(Math.cos(randPct(l,.15))).add(c.x.scale(Math.sin(randPct(l,.15))*Math.sin(f))).add(c.z.scale(Math.sin(randPct(l,.15))*Math.cos(f))),z=coordSystem(f),f=createBranch(q,z,b*v,g,r,n,x*d,g,t),p=f.core,p=p[p.length-1],a.push(f.branch),m.push(f.core),e.push(f._radii),A.push(z),1<w)for(var D=0;D<h;D++)u=randPct(D*y,.25),u=z.y.scale(Math.cos(randPct(l,.15))).add(z.x.scale(Math.sin(randPct(l,.15))*Math.sin(u))).add(z.z.scale(Math.sin(randPct(l,.15))*Math.cos(u))),u=coordSystem(u),C=createBranch(p,u,b*v*v,g,r,n,x*d*d,g*g,t),a.push(C.branch),m.push(C.core),e.push(f._radii),A.push(u);return{tree:BABYLON.Mesh.MergeMeshes(a),paths:m,radii:e,directions:A}},createTree=function(b,g,r,w,h,l,v,n,x,t,d,c,f,q,a,m){1!=h&&2!=h&&(h=1);var e=createTreeBase(b,g,r,h,l,v,n,d,c,m);e.tree.material=w;var A=b*Math.pow(n,h),y=A/(2*f),z=1.5*Math.pow(g,h-1);n=BABYLON.MeshBuilder.CreateDisc('leaf',{radius:z/2,tessellation:12,sideOrientation:BABYLON.Mesh.DOUBLESIDE},m);b=new BABYLON.SolidParticleSystem('leaveSPS',m,{updatable:!1});b.addShape(n,2*f*Math.pow(l,h),{positionFunction:function(b,a,g){a=Math.floor(g/(2*f));1==h?a++:a=2+a%l+Math.floor(a/l)*(l+1);var E=(g%(2*f)*y+3*y/2)/A,d=Math.ceil(r*E);d>e.paths[a].length-1&&(d=e.paths[a].length-1);var k=d-1,c=k/(r-1),m=d/(r-1);b.position=new BABYLON.Vector3(e.paths[a][k].x+(e.paths[a][d].x-e.paths[a][k].x)*(E-c)/(m-c),e.paths[a][k].y+(e.paths[a][d].y-e.paths[a][k].y)*(E-c)/(m-c)+(.6*z/q+e.radii[a][d])*(g%2*2-1),e.paths[a][k].z+(e.paths[a][d].z-e.paths[a][k].z)*(E-c)/(m-c));b.rotation.z=Math.random()*Math.PI/4;b.rotation.y=Math.random()*Math.PI/2;b.rotation.z=Math.random()*Math.PI/4;b.scale.y=1/q}});b=b.buildMesh();b.billboard=!0;n.dispose();d=new BABYLON.SolidParticleSystem('miniSPS',m,{updatable:!1});n=new BABYLON.SolidParticleSystem('minileavesSPS',m,{updatable:!1});var u=[];c=2*Math.PI/l;for(var p=0;p<Math.pow(l,h+1);p++)u.push(randPct(Math.floor(p/Math.pow(l,h))*c,.2));c=function(a,b,d){var c=d%Math.pow(l,h);1==h?c++:c=2+c%l+Math.floor(c/l)*(l+1);var f=e.directions[c],c=new BABYLON.Vector3(e.paths[c][e.paths[c].length-1].x,e.paths[c][e.paths[c].length-1].y,e.paths[c][e.paths[c].length-1].z),k=u[d],k=f.y.scale(Math.cos(randPct(v,0))).add(f.x.scale(Math.sin(randPct(v,0))*Math.sin(k))).add(f.z.scale(Math.sin(randPct(v,0))*Math.cos(k))),f=BABYLON.Vector3.Cross(BABYLON.Axis.Y,k),k=Math.acos(BABYLON.Vector3.Dot(k,BABYLON.Axis.Y)/k.length());a.scale=new BABYLON.Vector3(Math.pow(g,h+1),Math.pow(g,h+1),Math.pow(g,h+1));a.quaternion=BABYLON.Quaternion.RotationAxis(f,k);a.position=c;};for(var C=[],B=[],p=e.paths.length,D=e.paths[0].length,F=0;F<x;F++)C.push(2*Math.PI*Math.random()-Math.PI),B.push([Math.floor(Math.random()*p),Math.floor(Math.random()*(D-1)+1)]);p=function(a,c,b){var d=B[b][0],f=B[b][1],k=e.directions[d];c=new BABYLON.Vector3(e.paths[d][f].x,e.paths[d][f].y,e.paths[d][f].z);c.addInPlace(k.z.scale(e.radii[d][f]/2));b=C[b];k=k.y.scale(Math.cos(randPct(t,0))).add(k.x.scale(Math.sin(randPct(t,0))*Math.sin(b))).add(k.z.scale(Math.sin(randPct(t,0))*Math.cos(b)));b=BABYLON.Vector3.Cross(BABYLON.Axis.Y,k);k=Math.acos(BABYLON.Vector3.Dot(k,BABYLON.Axis.Y)/k.length());a.scale=new BABYLON.Vector3(Math.pow(g,h+1),Math.pow(g,h+1),Math.pow(g,h+1));a.quaternion=BABYLON.Quaternion.RotationAxis(b,k);a.position=c};d.addShape(e.tree,Math.pow(l,h+1),{positionFunction:c});d.addShape(e.tree,x,{positionFunction:p});d=d.buildMesh();d.material=w;n.addShape(b,Math.pow(l,h+1),{positionFunction:c});n.addShape(b,x,{positionFunction:p});w=n.buildMesh();b.dispose();w.material=a;a=BABYLON.MeshBuilder.CreateBox('',{},m);a.isVisible=!1;e.tree.parent=a;d.parent=a;return w.parent=a};
 
 WTWJS.prototype.addMoldTree = function(zmoldname, zmolddef, zlenx, zleny, zlenz, zposx, zposy, zposz, zsubdivisions) {
 	var zmold;
@@ -2387,13 +2387,13 @@ WTWJS.prototype.addMoldTree = function(zmoldname, zmolddef, zlenx, zleny, zlenz,
 		ztreebase.parent = zmold;
 		
 		/* leaf material */
-		var zgreen = new BABYLON.StandardMaterial("green", scene);
+		var zgreen = new BABYLON.StandardMaterial('green', scene);
 		zgreen.diffuseColor = new BABYLON.Color3(.1,.6,0);	
 		
 		/* trunk and branch material */
-		var zbark = new BABYLON.StandardMaterial("bark", scene);
-		zbark.emissiveTexture = new BABYLON.Texture("/content/system/images/barktexture.jpg", scene);
-		zbark.diffuseTexture = new BABYLON.Texture("/content/system/images/barktexture.jpg", scene);
+		var zbark = new BABYLON.StandardMaterial('bark', scene);
+		zbark.emissiveTexture = new BABYLON.Texture('/content/system/images/barktexture.jpg', scene);
+		zbark.diffuseTexture = new BABYLON.Texture('/content/system/images/barktexture.jpg', scene);
 		zbark.diffuseTexture.uScale = 2.0;//Repeat 5 times on the Vertical Axes
 		zbark.diffuseTexture.vScale = 2.0;//Repeat 5 times on the Horizontal Axes		
 					
@@ -2413,10 +2413,10 @@ WTWJS.prototype.addMoldTree = function(zmoldname, zmolddef, zlenx, zleny, zlenz,
 		var zleaf_wh_ratio = 0.5;
 					
 		var ztree = createTree(ztrunk_height, ztrunk_taper, ztrunk_slices, zbark, zboughs, zforks, zfork_angle, zfork_ratio, zbranches, zbranch_angle, zbow_freq, zbow_height, zleaves_on_branch, zleaf_wh_ratio, zgreen, scene);		
-		ztree.name = zmoldname + "-tree";
+		ztree.name = zmoldname + '-tree';
 		ztree.parent = zmold;
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldTree=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldTree=' + ex.message);
 	}
 	return zmold;
 }
@@ -2433,11 +2433,11 @@ WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, 
 		
 		var zdistancebetweenpoints = zlenx / zsubdivisions;	
 		
-		var zcovering = new BABYLON.StandardMaterial(zmoldname + "-mat", scene);
+		var zcovering = new BABYLON.StandardMaterial(zmoldname + '-mat', scene);
 		zcovering.diffuseTexture = WTW.addCoveringTexture(zmoldname, zmolddef, zlenx, zleny, zlenz, '0', '0');
 		/* zcovering.zOffset = -20; */
 		zcovering.backFaceCulling = false;
-		var zshape = "box"; 
+		var zshape = 'box'; 
 		var zuoffset = 0;
 		var zvoffset = 0;
 		var zuscale = zlenx/10;
@@ -2450,18 +2450,18 @@ WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, 
 			zuscale = zlenz/10;
 			zvscale = zlenx/10;
 		}
-		var zimageid = "t1qlqxd6pzubzzzy";
+		var zimageid = 't1qlqxd6pzubzzzy';
 		if (zmolddef != undefined) {
-			if (zmolddef.shape != "") {
+			if (zmolddef.shape != '') {
 				zshape = zmolddef.shape;
 			}
-			if (zshape == "sphere" || zshape == "dome" || zshape == "cone") {
+			if (zshape == 'sphere' || zshape == 'dome' || zshape == 'cone') {
 				zuscale = ((zlenx/10 + zlenz/10) / 2) * Math.PI;
 				zvscale = zvscale * Math.PI;
-			} else if (zshape == "cylinder") {
+			} else if (zshape == 'cylinder') {
 				zuscale = ((zlenx + zlenz) / 2) / Math.PI;
 				zvscale = 1;
-			} else if (zshape == "half pipe") {
+			} else if (zshape == 'half pipe') {
 				zuscale = zlenx / 10;
 				zvscale = zlenz / 10;
 			}
@@ -2494,7 +2494,7 @@ WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, 
 		async function loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset, zmold) {
 			var zimageinfo = WTW.getUploadFileData(zimageid);
 			var zimageextension = zimageinfo.extension;
-			zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.filedata, "mattexture" + zmoldname + "-raised", scene);
+			zcovering.diffuseTexture = new BABYLON.Texture.CreateFromBase64String(zimageinfo.filedata, 'mattexture' + zmoldname + '-raised', scene);
 			zcovering.diffuseTexture.uScale = zuscale;
 			zcovering.diffuseTexture.vScale = zvscale;
 			zcovering.diffuseTexture.uOffset = zuoffset;
@@ -2502,7 +2502,7 @@ WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, 
 			zcovering.specularColor = new BABYLON.Color3(.4, .4, .4);
 			zcovering.emissiveColor = new BABYLON.Color3(WTW.sun.intensity, WTW.sun.intensity, WTW.sun.intensity);	
 			/* Our built-in 'ground' shape. Params: name, width, depth, subdivs, scene */
-			var zflagcloth = BABYLON.Mesh.CreateGround(zmoldname + "-flagcloth", zlenx, zleny, zsubdivisions - 1, scene, true);
+			var zflagcloth = BABYLON.Mesh.CreateGround(zmoldname + '-flagcloth', zlenx, zleny, zsubdivisions - 1, scene, true);
 				
 			zflagcloth.material = zcovering;
 			zflagcloth.parent = zmold;
@@ -2513,7 +2513,7 @@ WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, 
 			for (var i = 0; i < zpositions.length; i = i + 3) {
 				var zvector = BABYLON.Vector3.FromArray(zpositions, i);
 				
-				var zsphere = BABYLON.MeshBuilder.CreateSphere(zmoldname + "-sphere" + i, { diameter: 0.1 }, scene);
+				var zsphere = BABYLON.MeshBuilder.CreateSphere(zmoldname + '-sphere' + i, { diameter: 0.1 }, scene);
 				zsphere.position.copyFrom(zvector);
 				zspheres.push(zsphere);
 			}
@@ -2543,7 +2543,7 @@ WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, 
 		if (WTW.isUploadReady(zimageid)) {
 			loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset, zmold);
 		} else {
-			WTW.getAsyncJSON("/connect/upload.php?uploadid=" + zimageid, 
+			WTW.getAsyncJSON('/connect/upload.php?uploadid=' + zimageid, 
 				function(zresponse) {
 					WTW.loadUpload(JSON.parse(zresponse), zimageid, 0);
 					loadcoveringtexture(zmoldname, zcovering, zimageid, zuscale, zvscale, zuoffset, zvoffset, zmold);
@@ -2551,7 +2551,7 @@ WTWJS.prototype.addMoldFlag = async function(zmoldname, zmolddef, zlenx, zleny, 
 			);
 		}		
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldFlag=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldFlag=' + ex.message);
 	}
 	return zmold;
 }
@@ -2575,7 +2575,7 @@ WTWJS.prototype.addMoldRoundedBox = function(zmoldname, zlenx, zleny, zlenz) {
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addMoldRoundedBox=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addMoldRoundedBox=' + ex.message);
 	}
 	return zmold;
 }
@@ -2590,20 +2590,20 @@ WTWJS.prototype.addVideoStream = function(zmoldname, zlenx, zleny, zlenz) {
 		
 		/* add video player if needed */
 		if (dGet('wtw_streaming-' + zwebid) == null) {
-//<div><video id=\"wtw_camerapreview\" class=\"wtw-camerapreview\"></video></div>
-			var zdiv = document.createElement("div");
+//<div><video id='wtw_camerapreview' class='wtw-camerapreview'></video></div>
+			var zdiv = document.createElement('div');
 			zdiv.id = 'wtw_streamingdiv-' + zwebid;
-			var zvideo = document.createElement("video");
+			var zvideo = document.createElement('video');
 			zvideo.id = 'wtw_streaming-' + zwebid;
 			zvideo.className = 'wtw-videohidden';
 			zdiv.appendChild(zvideo);
-			dGet("wtw_streaming").appendChild(zdiv);
+			dGet('wtw_streaming').appendChild(zdiv);
 		}
 		
 		
 		if (dGet('wtw_streaming-' + zwebid) != null) {
-/*			var zvideomat = new BABYLON.StandardMaterial(zmoldname + "-streammat", scene);
-			var zvideotexture = new BABYLON.VideoTexture(zmoldname + "-streamtexture", dGet('wtw_streaming-' + zwebid), scene, true, true);
+/*			var zvideomat = new BABYLON.StandardMaterial(zmoldname + '-streammat', scene);
+			var zvideotexture = new BABYLON.VideoTexture(zmoldname + '-streamtexture', dGet('wtw_streaming-' + zwebid), scene, true, true);
 			zvideomat.backFaceCulling = false;
 			zvideomat.diffuseTexture = zvideotexture;
 			zvideomat.emissiveColor = BABYLON.Color3.White();
@@ -2611,7 +2611,7 @@ WTWJS.prototype.addVideoStream = function(zmoldname, zlenx, zleny, zlenz) {
 */		}
 		zmold.convertToUnIndexedMesh();
 	} catch (ex) {
-		WTW.log("core-scripts-molds-basicmolds\r\n addVideoStream=" + ex.message);
+		WTW.log('core-scripts-molds-basicmolds\r\n addVideoStream=' + ex.message);
 	}
 	return zmold;
 }

@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -18,17 +18,17 @@ WTWJS.prototype.hudAddLabel = function(zlabel, zid, zpositionx, zpositiony, zpos
 		var zmold = WTW.getMeshOrNodeByID('hud-pageform');
 		if (zmold != null) {
 			var zstyle = {
-				"font-family": "Arial",
-				"anchor":"left",
-				"letter-height":zfontsize,
-				"letter-thickness":zfontthickness,
-				"color":"#ffffff",
-				"alpha":1.00,
-				"colors":{
-					"diffuse":'#ffffff',
-					"specular":'#989e2c',
-					"ambient":'#888722',
-					"emissive":'#37370d'
+				'font-family': 'Arial',
+				'anchor':'left',
+				'letter-height':zfontsize,
+				'letter-thickness':zfontthickness,
+				'color':'#ffffff',
+				'alpha':1.00,
+				'colors':{
+					'diffuse':'#ffffff',
+					'specular':'#989e2c',
+					'ambient':'#888722',
+					'emissive':'#37370d'
 				}
 			};
 			var zmenuitemtextwriter = new Writer(zlabel, zstyle);
@@ -41,7 +41,7 @@ WTWJS.prototype.hudAddLabel = function(zlabel, zid, zpositionx, zpositiony, zpos
 			zmenuitemtext.isPickable = false;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_fields.js-hudGetProfile=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_fields.js-hudGetProfile=' + ex.message);
 	}
 }
 
@@ -75,17 +75,17 @@ WTWJS.prototype.hudAddTextbox = function(zvalue, zid, zpositionx, zpositiony, zp
 			WTW.registerMouseOver(ztextbox);
 
 			var zstyle = {
-				"font-family": "Arial",
-				"anchor":"left",
-				"letter-height":.9,
-				"letter-thickness":.4,
-				"color":"#ffffff",
-				"alpha":1.00,
-				"colors":{
-					"diffuse":'#ffffff',
-					"specular":'#989e2c',
-					"ambient":'#888722',
-					"emissive":'#37370d'
+				'font-family': 'Arial',
+				'anchor':'left',
+				'letter-height':.9,
+				'letter-thickness':.4,
+				'color':'#ffffff',
+				'alpha':1.00,
+				'colors':{
+					'diffuse':'#ffffff',
+					'specular':'#989e2c',
+					'ambient':'#888722',
+					'emissive':'#37370d'
 				}
 			};
 			dGet(ztextboxid).value = zvalue;
@@ -115,7 +115,7 @@ WTWJS.prototype.hudAddTextbox = function(zvalue, zid, zpositionx, zpositiony, zp
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_fields.js-hudAddTextbox=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_fields.js-hudAddTextbox=' + ex.message);
 	}
 }
 
@@ -167,7 +167,7 @@ WTWJS.prototype.hudAddImageButton = function(zimageurl, zid, zpositionx, zpositi
 			zimage.parent = zbutton;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_fields.js-hudAddImageButton=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_fields.js-hudAddImageButton=' + ex.message);
 	}
 }
 
@@ -210,7 +210,7 @@ WTWJS.prototype.hudAddSlider = function(zvalue, zmin, zmax, zid, zpositionx, zpo
 			/* 5.4 is the total distance of the slider */
 			var ztabposition = ((zvalue / (zmax - zmin)) * 5.4);
 
-			var zcovering = new BABYLON.StandardMaterial("hud-slider-" + zid + "mat", scene);
+			var zcovering = new BABYLON.StandardMaterial('hud-slider-' + zid + 'mat', scene);
 			zcovering.emissiveColor =  new BABYLON.Color3.FromHexString('#30320B');
 			zcovering.diffuseColor =  new BABYLON.Color3.FromHexString('#464910');
 			zcovering.specularColor =  new BABYLON.Color3.FromHexString('#464910');
@@ -253,7 +253,7 @@ WTWJS.prototype.hudAddSlider = function(zvalue, zmin, zmax, zid, zpositionx, zpo
 
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_fields.js-hudAddSlider=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_fields.js-hudAddSlider=' + ex.message);
 	}
 }
 
@@ -271,7 +271,7 @@ WTWJS.prototype.hudAddSaveClose = function(zid, zpositionx, zpositiony, zpositio
 			zsavebutton.isVisible = true;
 			zsavebutton.parent = zmold;
 			WTW.registerMouseOver(zsavebutton);
-			var zcovering = new BABYLON.StandardMaterial("hud-save-" + zid + "mat", scene);
+			var zcovering = new BABYLON.StandardMaterial('hud-save-' + zid + 'mat', scene);
 			zcovering.emissiveColor =  new BABYLON.Color3.FromHexString('#082F0C');
 			zcovering.diffuseColor =  new BABYLON.Color3.FromHexString('#094A0F');
 			zcovering.specularColor =  new BABYLON.Color3.FromHexString('#094A0F');
@@ -286,7 +286,7 @@ WTWJS.prototype.hudAddSaveClose = function(zid, zpositionx, zpositiony, zpositio
 			zcancelbutton.isVisible = true;
 			zcancelbutton.parent = zmold;
 			WTW.registerMouseOver(zcancelbutton);
-			var zcovering = new BABYLON.StandardMaterial("hud-save-" + zid + "mat", scene);
+			var zcovering = new BABYLON.StandardMaterial('hud-save-' + zid + 'mat', scene);
 			zcovering.emissiveColor =  new BABYLON.Color3.FromHexString('#30320B');
 			zcovering.diffuseColor =  new BABYLON.Color3.FromHexString('#464910');
 			zcovering.specularColor =  new BABYLON.Color3.FromHexString('#464910');
@@ -294,17 +294,17 @@ WTWJS.prototype.hudAddSaveClose = function(zid, zpositionx, zpositiony, zpositio
 			zcancelbutton.material = zcovering;
 
 			var zstyle = {
-				"font-family": "Arial",
-				"anchor":"left",
-				"letter-height":.9,
-				"letter-thickness":.4,
-				"color":"#ffffff",
-				"alpha":1.00,
-				"colors":{
-					"diffuse":'#ffffff',
-					"specular":'#989e2c',
-					"ambient":'#888722',
-					"emissive":'#37370d'
+				'font-family': 'Arial',
+				'anchor':'left',
+				'letter-height':.9,
+				'letter-thickness':.4,
+				'color':'#ffffff',
+				'alpha':1.00,
+				'colors':{
+					'diffuse':'#ffffff',
+					'specular':'#989e2c',
+					'ambient':'#888722',
+					'emissive':'#37370d'
 				}
 			};
 			var zsavewriter = new Writer('Save', zstyle);
@@ -326,7 +326,7 @@ WTWJS.prototype.hudAddSaveClose = function(zid, zpositionx, zpositiony, zpositio
 			zcanceltext.isPickable = false;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_fields.js-hudAddSaveClose=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_fields.js-hudAddSaveClose=' + ex.message);
 	}
 }
 
@@ -354,7 +354,7 @@ WTWJS.prototype.hudEditText = function(zmoldname) {
 			},500);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_fields.js-hudEditText=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_fields.js-hudEditText=' + ex.message);
 	}
 }
 
@@ -407,17 +407,17 @@ WTWJS.prototype.hudEditRefreshText = function(zmoldname, zparentname, zeditdone)
 		var zdisplaytext = null;
 		if (zshowtext != '') {
 			var zwebstyle = {
-				"font-family": "Arial",
-				"anchor":"left",
-				"letter-height":.9,
-				"letter-thickness":.4,
-				"color":"#ffffff",
-				"alpha":1.00,
-				"colors":{
-					"diffuse":'#ffffff',
-					"specular":'#989e2c',
-					"ambient":'#888722',
-					"emissive":'#37370d'
+				'font-family': 'Arial',
+				'anchor':'left',
+				'letter-height':.9,
+				'letter-thickness':.4,
+				'color':'#ffffff',
+				'alpha':1.00,
+				'colors':{
+					'diffuse':'#ffffff',
+					'specular':'#989e2c',
+					'ambient':'#888722',
+					'emissive':'#37370d'
 				}
 			};
 			var zmoldparent = WTW.getMeshOrNodeByID('hud-pageform');
@@ -432,7 +432,7 @@ WTWJS.prototype.hudEditRefreshText = function(zmoldname, zparentname, zeditdone)
 			zmytext.isPickable = false;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-hud-wtw_hud_fields.js-hudEditRefreshText=" + ex.message);
+		WTW.log('core-scripts-hud-wtw_hud_fields.js-hudEditRefreshText=' + ex.message);
 	}
 }
 

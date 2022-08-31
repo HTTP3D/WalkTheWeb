@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -11,39 +11,39 @@ WTWJS.prototype.getCoveringList = function(zshape) {
 	var zcoveringlist = null;
 	zcoveringlist = [];
 	try {
-		if (zshape == "terrain") {
-			zcoveringlist[zcoveringlist.length] = "Terrain";
+		if (zshape == 'terrain') {
+			zcoveringlist[zcoveringlist.length] = 'Terrain';
 		} else {
-			if (zshape == "plane" || zshape == "disc") {
-				zcoveringlist[zcoveringlist.length] = "2D Texture";
-			} else if (zshape != "sharktank") {
-				zcoveringlist[zcoveringlist.length] = "Texture";
-				if (zshape == "wall" || zshape == "floor" || zshape == "box") {
-					zcoveringlist[zcoveringlist.length] = "Directional Texture";
+			if (zshape == 'plane' || zshape == 'disc') {
+				zcoveringlist[zcoveringlist.length] = '2D Texture';
+			} else if (zshape != 'sharktank') {
+				zcoveringlist[zcoveringlist.length] = 'Texture';
+				if (zshape == 'wall' || zshape == 'floor' || zshape == 'box') {
+					zcoveringlist[zcoveringlist.length] = 'Directional Texture';
 				}
 			}
-			zcoveringlist[zcoveringlist.length] = "Color";
-			zcoveringlist[zcoveringlist.length] = "Glass";
-			//zcoveringlist[zcoveringlist.length] = "Mirror";
-			zcoveringlist[zcoveringlist.length] = "Water";
-			zcoveringlist[zcoveringlist.length] = "Fire";
-			zcoveringlist[zcoveringlist.length] = "Marble";
-			zcoveringlist[zcoveringlist.length] = "Road";
-			zcoveringlist[zcoveringlist.length] = "Hidden";
+			zcoveringlist[zcoveringlist.length] = 'Color';
+			zcoveringlist[zcoveringlist.length] = 'Glass';
+			//zcoveringlist[zcoveringlist.length] = 'Mirror';
+			zcoveringlist[zcoveringlist.length] = 'Water';
+			zcoveringlist[zcoveringlist.length] = 'Fire';
+			zcoveringlist[zcoveringlist.length] = 'Marble';
+			zcoveringlist[zcoveringlist.length] = 'Road';
+			zcoveringlist[zcoveringlist.length] = 'Hidden';
 		}
 		WTW.coveringlist = WTW.pluginsCoverings(WTW.coveringlist);
-		WTW.clearDDL("wtw_tmoldcovering");
+		WTW.clearDDL('wtw_tmoldcovering');
 		for (var i=0;i < zcoveringlist.length;i++) {
-			var zoption = document.createElement("option");
+			var zoption = document.createElement('option');
 			zoption.text = zcoveringlist[i];
 			zoption.value = zcoveringlist[i].toLowerCase();
-			if (zcoveringlist[i] == "Texture") {
+			if (zcoveringlist[i] == 'Texture') {
 				zoption.selected = true;
 			}
-			dGet("wtw_tmoldcovering").add(zoption);
+			dGet('wtw_tmoldcovering').add(zoption);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-molds-addcoveringlist\r\n getCoveringList=" + ex.message);
+		WTW.log('core-scripts-molds-addcoveringlist\r\n getCoveringList=' + ex.message);
 	} 
 	return zcoveringlist;
 }
@@ -54,50 +54,50 @@ WTWJS.prototype.addCovering = function(zcoveringname, zmoldname, zmolddef, zlenx
 	try {
 		/* each covering is defined by a separate function */
 		switch (zcoveringname) {
-			case "color":
+			case 'color':
 				zcovering = WTW.addCoveringColor(zmoldname, zmolddef);
 				break;
-			case "glass":
+			case 'glass':
 				zmolddef.opacity = .2;
 				zcovering = WTW.addCoveringGlass(zmoldname, zmolddef);
 				break;
-			case "mirror":
+			case 'mirror':
 				zcovering = WTW.addCoveringMirror(zmoldname, zmolddef);
 				break;
-			case "water":
+			case 'water':
 				zcovering = WTW.addCoveringWater(zmoldname, zmolddef);
 				break;
-			case "fire":
+			case 'fire':
 				zcovering = WTW.addCoveringFire(zmoldname, zmolddef);
 				break;
-			case "marble":
+			case 'marble':
 				zcovering = WTW.addCoveringMarble(zmoldname, zmolddef, zlenx, zleny, zlenz);
 				break;
-			case "road":
+			case 'road':
 				zcovering = WTW.addCoveringRoad(zmoldname, zmolddef);
 				break;
-			case "texture":
+			case 'texture':
 				zcovering = WTW.addCoveringTexture(zmoldname, zmolddef, zlenx, zleny, zlenz, zspecial1, zspecial2);
 				break;
-			case "directional texture":
+			case 'directional texture':
 				zcovering = WTW.addCoveringDirectionalTexture(zmoldname, zmolddef, zlenx, zleny, zlenz);
 				break; 
-			case "2d texture":
+			case '2d texture':
 				zcovering = WTW.addCovering2D(zmoldname, zmolddef, zlenx, zleny, zlenz);
 				break;
-			case "terrain":
+			case 'terrain':
 				zcovering = WTW.addCoveringTerrain(zmoldname, zmolddef, zlenx, zleny, zlenz);
 				break;
-			case "hidden":
+			case 'hidden':
 				zcovering = WTW.addCoveringHidden(zmoldname, 0);
 				break;
-			case "hiddenshow":
+			case 'hiddenshow':
 				zcovering = WTW.addCoveringHidden(zmoldname, .3);
 				break;
-			case "wire":
+			case 'wire':
 				zcovering = WTW.addCoveringWire(zmoldname);
 				break;
-			case "none":
+			case 'none':
 				zcovering = null;
 				break;
 			default:
@@ -105,7 +105,7 @@ WTWJS.prototype.addCovering = function(zcoveringname, zmoldname, zmolddef, zlenx
 				break;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-molds-addcoveringlist\r\n addCovering=" + ex.message);
+		WTW.log('core-scripts-molds-addcoveringlist\r\n addCovering=' + ex.message);
 	} 
 	return zcovering;
 }
@@ -115,7 +115,7 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 	/* for example a texture covering shows the texture selection part of the form */
 	try {
 		switch (zcoveringname) {
-			case "glass":
+			case 'glass':
 				WTW.show('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldtexturetitle');
 				WTW.hide('wtw_moldbumptexturetitle');
@@ -123,7 +123,7 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 				WTW.hide('wtw_moldtexturepreview');
 				WTW.hide('wtw_moldbasictextureset2div');
 				break;
-			case "mirror":
+			case 'mirror':
 				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldtexturetitle');
 				WTW.hide('wtw_moldbumptexturetitle');
@@ -131,13 +131,13 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 				WTW.hide('wtw_moldtexturepreview');
 				WTW.hide('wtw_moldbasictextureset2div');
 				break;
-			case "water":
+			case 'water':
 				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldtexturetitle');
 				WTW.hide('wtw_moldtexturepreview');
 				WTW.hide('wtw_moldbasictextureset2div');
 				break;
-			case "fire":
+			case 'fire':
 				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldtexturetitle');
 				WTW.hide('wtw_moldbumptexturetitle');
@@ -145,7 +145,7 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 				WTW.hide('wtw_moldtexturepreview');
 				WTW.hide('wtw_moldbasictextureset2div');
 				break;
-			case "marble":
+			case 'marble':
 				WTW.show('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldtexturetitle');
 				WTW.hide('wtw_moldbumptexturetitle');
@@ -153,7 +153,7 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 				WTW.hide('wtw_moldtexturepreview');
 				WTW.hide('wtw_moldbasictextureset2div');
 				break;
-			case "road":
+			case 'road':
 				WTW.show('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldtexturetitle');
 				WTW.hide('wtw_moldbumptexturetitle');
@@ -161,7 +161,7 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 				WTW.hide('wtw_moldtexturepreview');
 				WTW.hide('wtw_moldbasictextureset2div');
 				break;
-			case "directional texture":
+			case 'directional texture':
 				WTW.show('wtw_moldcolorsdiv');
 				WTW.show('wtw_moldtexturetitle');
 				WTW.show('wtw_moldbumptexturetitle');
@@ -169,7 +169,7 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 				WTW.show('wtw_moldtexturepreview');
 				WTW.show('wtw_moldbasictextureset2div');
 				break; 
-			case "texture":
+			case 'texture':
 				WTW.show('wtw_moldcolorsdiv');
 				WTW.show('wtw_moldtexturetitle');
 				WTW.show('wtw_moldbumptexturetitle');
@@ -177,7 +177,7 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 				WTW.show('wtw_moldtexturepreview');
 				WTW.show('wtw_moldbasictextureset2div');
 				break;
-			case "2d texture":
+			case '2d texture':
 				WTW.show('wtw_moldcolorsdiv');
 				WTW.show('wtw_moldtexturetitle');
 				WTW.show('wtw_moldbumptexturetitle');
@@ -185,7 +185,7 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 				WTW.show('wtw_moldtexturepreview');
 				WTW.show('wtw_moldbasictextureset2div');
 				break;
-			case "terrain":
+			case 'terrain':
 				WTW.show('wtw_moldcolorsdiv');
 				WTW.show('wtw_moldtexturetitle');
 				WTW.hide('wtw_moldbumptexturetitle');
@@ -193,7 +193,7 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 				WTW.show('wtw_moldtexturepreview');
 				WTW.show('wtw_moldbasictextureset2div');
 				break;
-			case "hidden":
+			case 'hidden':
 				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldtexturetitle');
 				WTW.hide('wtw_moldbumptexturetitle');
@@ -201,7 +201,7 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 				WTW.hide('wtw_moldtexturepreview');
 				WTW.hide('wtw_moldbasictextureset2div');
 				break;
-			case "color":
+			case 'color':
 				WTW.show('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldtexturetitle');
 				WTW.hide('wtw_moldbumptexturetitle');
@@ -209,7 +209,7 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 				WTW.hide('wtw_moldtexturepreview');
 				WTW.hide('wtw_moldbasictextureset2div');
 				break;
-			case "none":
+			case 'none':
 				WTW.hide('wtw_moldcolorsdiv');
 				WTW.hide('wtw_moldtexturetitle');
 				WTW.hide('wtw_moldbumptexturetitle');
@@ -228,6 +228,6 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 		}	
 		WTW.pluginsSetCoveringFormFields(zcoveringname);
 	} catch (ex) {
-		WTW.log("core-scripts-molds-addcoveringlist\r\n setCoveringFormFields=" + ex.message);
+		WTW.log('core-scripts-molds-addcoveringlist\r\n setCoveringFormFields=' + ex.message);
 	}
 }

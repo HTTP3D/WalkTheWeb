@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -16,8 +16,8 @@ WTWJS.prototype.openCommunityForm = async function(zcommunityid) {
 		WTW.show('wtw_loadingwaterdepthform');
 		WTW.hide('wtw_adminmenu25b');
 		WTW.hide('wtw_adminmenu42b');
-		dGet('wtw_tcommunityalttag').value = "";
-		WTW.getAsyncJSON("/connect/communities.php", 
+		dGet('wtw_tcommunityalttag').value = '';
+		WTW.getAsyncJSON('/connect/communities.php', 
 			function(zresponse) {
 				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
@@ -77,15 +77,15 @@ WTWJS.prototype.openCommunityForm = async function(zcommunityid) {
 			dGet('wtw_tcommunityname').focus();
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-openCommunityForm=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-openCommunityForm=' + ex.message);
 	}
 }		
 
 WTWJS.prototype.loadCommunityForm = async function(zcommunityid) {
 	/* load settings to the 3D Community Information Form */
 	try {
-		dGet('wtw_tcommunityalttag').value = "";
-		WTW.getAsyncJSON("/connect/communities.php", 
+		dGet('wtw_tcommunityalttag').value = '';
+		WTW.getAsyncJSON('/connect/communities.php', 
 			function(zresponse) {
 				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
@@ -127,7 +127,7 @@ WTWJS.prototype.loadCommunityForm = async function(zcommunityid) {
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-loadCommunityForm=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-loadCommunityForm=' + ex.message);
 	}
 }		
 
@@ -142,7 +142,7 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 					'communityid': communityid,
 					'function':'deletecommunity'
 				};
-				WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+				WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -157,10 +157,10 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 					zalpha = Number(dGet('wtw_twateralpha').value) / 100;
 				}
 				if (WTW.isNumeric(dGet('wtw_tgroundpositiony').value) == false) {
-					dGet('wtw_tgroundpositiony').value = "0.00";
+					dGet('wtw_tgroundpositiony').value = '0.00';
 				}
 				if (WTW.isNumeric(dGet('wtw_twaterpositiony').value) == false) {
-					dGet('wtw_twaterpositiony').value = "-1.00";
+					dGet('wtw_twaterpositiony').value = '-1.00';
 				}
 				for (var i = 0; i < WTW.communities.length; i++) {
 					if (WTW.communities[i] != null) {
@@ -195,7 +195,7 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 				for (var i = 0; i < WTW.communitiesMolds.length; i++) {
 					if (WTW.communitiesMolds[i] != null) {
 						if (WTW.communitiesMolds[i].communityinfo.communityid == communityid) {
-							WTW.communitiesMolds[i].graphics.texture.backupid = "";
+							WTW.communitiesMolds[i].graphics.texture.backupid = '';
 						}
 					}
 				}
@@ -227,7 +227,7 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 					'alttag': btoa(dGet('wtw_tcommunityalttag').value),
 					'function':'savecommunity'
 				};
-				WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+				WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -258,7 +258,7 @@ WTWJS.prototype.submitCommunityForm = async function(w) {
 				break;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-submitCommunityForm=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-submitCommunityForm=' + ex.message);
 	}
 }
 
@@ -269,9 +269,9 @@ WTWJS.prototype.openWaveColorSelector = function() {
 			WTW.guiAdminColors.dispose();
 			WTW.guiAdminColors = null;
 		}
-		WTW.guiAdminColors = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+		WTW.guiAdminColors = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('UI');
 		var zpanel = new BABYLON.GUI.StackPanel();
-		zpanel.width = "300px";
+		zpanel.width = '300px';
 		zpanel.isVertical = true;
 		zpanel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
 		zpanel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
@@ -286,8 +286,8 @@ WTWJS.prototype.openWaveColorSelector = function() {
 	
 		var zcolorpicker = new BABYLON.GUI.ColorPicker();
 		zcolorpicker.value = new BABYLON.Color3.FromHexString(dGet('wtw_twatercolorrefraction').value);
-		zcolorpicker.height = "250px";
-		zcolorpicker.width = "250px";
+		zcolorpicker.height = '250px';
+		zcolorpicker.width = '250px';
 		zcolorpicker.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
 		zcolorpicker.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 		zcolorpicker.onValueChangedObservable.add(function(value) {
@@ -307,8 +307,8 @@ WTWJS.prototype.openWaveColorSelector = function() {
 	
 		var zcolorpicker2 = new BABYLON.GUI.ColorPicker();
 		zcolorpicker2.value = new BABYLON.Color3.FromHexString(dGet('wtw_twatercolorreflection').value);
-		zcolorpicker2.height = "250px";
-		zcolorpicker2.width = "250px";
+		zcolorpicker2.height = '250px';
+		zcolorpicker2.width = '250px';
 		zcolorpicker2.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
 		zcolorpicker2.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 		zcolorpicker2.onValueChangedObservable.add(function(value) {
@@ -319,7 +319,7 @@ WTWJS.prototype.openWaveColorSelector = function() {
 		});
 		zpanel.addControl(zcolorpicker2); 
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-openWaveColorSelector=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-openWaveColorSelector=' + ex.message);
 	}
 }
 
@@ -327,7 +327,7 @@ WTWJS.prototype.copyMyCommunity = async function() {
 	/* make a copy of an existing 3D Community (use as backup or as a new 3D Community to edit and use) */
 	try {
 		dGet('wtw_tcommunityname').value = '';
-		WTW.getAsyncJSON("/connect/communities.php?userid=" + dGet('wtw_tuserid').value, 
+		WTW.getAsyncJSON('/connect/communities.php?userid=' + dGet('wtw_tuserid').value, 
 			function(zresponse) {
 				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
@@ -336,12 +336,12 @@ WTWJS.prototype.copyMyCommunity = async function() {
 							if (WTW.communities[i].communityinfo.communityid != undefined) {
 								if (WTW.communities[i].communityinfo.communityid != null) {
 									if (communityid == WTW.communities[i].communityinfo.communityid) {
-										dGet('wtw_tcommunityname').value = WTW.decode(WTW.communities[i].communityinfo.communityname) + " - Copy";
+										dGet('wtw_tcommunityname').value = WTW.decode(WTW.communities[i].communityinfo.communityname) + ' - Copy';
 										var zcommunityname = WTW.encode(dGet('wtw_tcommunityname').value);
-										if (zcommunityname != "") {
-											WTW.copyCommunity(communityid, zcommunityname + " - Copy");
+										if (zcommunityname != '') {
+											WTW.copyCommunity(communityid, zcommunityname + ' - Copy');
 										} else {
-											WTW.copyCommunity(communityid, "New 3D Community - Copy");
+											WTW.copyCommunity(communityid, 'New 3D Community - Copy');
 										}
 									}
 								}
@@ -352,23 +352,23 @@ WTWJS.prototype.copyMyCommunity = async function() {
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-copyMyCommunity=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-copyMyCommunity=' + ex.message);
 	}
 }
 
 WTWJS.prototype.copyCommunity = async function(zcopycommunityid, zcommunityname) {
 	/* submit the copy process to the database to duplicate */
 	try {
-		if (zcommunityname != "" && dGet('wtw_tcommunityname').value == "") {
+		if (zcommunityname != '' && dGet('wtw_tcommunityname').value == '') {
 			dGet('wtw_tcommunityname').value = zcommunityname;
-		} else if (dGet('wtw_tcommunityname').value == "") {
-			dGet('wtw_tcommunityname').value = "New 3D Community";
+		} else if (dGet('wtw_tcommunityname').value == '') {
+			dGet('wtw_tcommunityname').value = 'New 3D Community';
 		}
-		if (dGet('wtw_tgroundpositiony').value == "" || WTW.isNumeric(dGet('wtw_tgroundpositiony').value) == false) {
-			dGet('wtw_tgroundpositiony').value = "0.00";
+		if (dGet('wtw_tgroundpositiony').value == '' || WTW.isNumeric(dGet('wtw_tgroundpositiony').value) == false) {
+			dGet('wtw_tgroundpositiony').value = '0.00';
 		}
-		if (dGet('wtw_twaterpositiony').value == "" || WTW.isNumeric(dGet('wtw_twaterpositiony').value) == false) {
-			dGet('wtw_twaterpositiony').value = "-1.00";
+		if (dGet('wtw_twaterpositiony').value == '' || WTW.isNumeric(dGet('wtw_twaterpositiony').value) == false) {
+			dGet('wtw_twaterpositiony').value = '-1.00';
 		}
 		var zrequest = {
 			'pastcommunityid': zcopycommunityid,
@@ -379,7 +379,7 @@ WTWJS.prototype.copyCommunity = async function(zcopycommunityid, zcommunityname)
 			'alttag': '',
 			'function':'savecommunity'
 		};
-		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -387,7 +387,7 @@ WTWJS.prototype.copyCommunity = async function(zcopycommunityid, zcommunityname)
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-copyCommunity=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-copyCommunity=' + ex.message);
 	}
 }
 
@@ -395,12 +395,12 @@ WTWJS.prototype.copyCommunityComplete = function(zcommunityid) {
 	/* copy process is complete, load new 3D Community */
 	try {
 		window.setTimeout(function() {
-			if (zcommunityid != "" && zcommunityid != communityid) {
-				window.location.href="/admin.php?communityid=" + zcommunityid + "&hmenu=25&newcommunity=1";
+			if (zcommunityid != '' && zcommunityid != communityid) {
+				window.location.href='/admin.php?communityid=' + zcommunityid + '&hmenu=25&newcommunity=1';
 			}
 		}, 2000);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-copyCommunityComplete=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-copyCommunityComplete=' + ex.message);
 	} 
 }
 
@@ -409,8 +409,8 @@ WTWJS.prototype.getSelectCommunitiesList = async function() {
 	try {
 		WTW.hide('wtw_listcommunities');
 		WTW.show('wtw_loadingcommunityid');
-		dGet("wtw_listcommunities").innerHTML = "";
-		WTW.getAsyncJSON("/connect/communities.php", 
+		dGet('wtw_listcommunities').innerHTML = '';
+		WTW.getAsyncJSON('/connect/communities.php', 
 			function(zresponse) {
 				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
@@ -434,9 +434,9 @@ WTWJS.prototype.getSelectCommunitiesList = async function() {
 									}
 								}
 								if (WTW.communities[i].communityinfo.communityid == communityid) {
-									dGet("wtw_listcommunities").innerHTML += "<div id=\"wtw_beditweb-" + WTW.communities[i].communityinfo.communityid + "\" class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.communities[i].communityinfo.communityname) + "</div>\r\n";
+									dGet('wtw_listcommunities').innerHTML += "<div id='wtw_beditweb-" + WTW.communities[i].communityinfo.communityid + "' class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style='float:right;color:#afafaf;'>" + zversion + "</div>" + WTW.decode(WTW.communities[i].communityinfo.communityname) + "</div>\r\n";
 								} else {
-									dGet("wtw_listcommunities").innerHTML += "<div id=\"wtw_beditweb-" + WTW.communities[i].communityinfo.communityid + "\" onclick=\"window.location.href='admin.php?communityid=" + WTW.communities[i].communityinfo.communityid + "';\" class='wtw-menulevel2'><div style=\"float:right;color:#afafaf;\">" + zversion + "</div>" + WTW.decode(WTW.communities[i].communityinfo.communityname) + "</div>\r\n";
+									dGet('wtw_listcommunities').innerHTML += "<div id='wtw_beditweb-" + WTW.communities[i].communityinfo.communityid + "' onclick=\"window.location.href='admin.php?communityid=" + WTW.communities[i].communityinfo.communityid + "';\" class='wtw-menulevel2'><div style='float:right;color:#afafaf;'>" + zversion + "</div>" + WTW.decode(WTW.communities[i].communityinfo.communityname) + "</div>\r\n";
 								}
 							}
 						}
@@ -445,7 +445,7 @@ WTWJS.prototype.getSelectCommunitiesList = async function() {
 							'versioncheck': JSON.stringify(zversioncheck),
 							'function':'versioncheck'
 						};
-						WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/versioncheck.php", zrequest2, 
+						WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/versioncheck.php', zrequest2, 
 							function(zresponse2) {
 								zresponse2 = JSON.parse(zresponse2);
 								for (var i = 0; i < zresponse2.length; i++) {
@@ -476,8 +476,8 @@ WTWJS.prototype.getSelectCommunitiesList = async function() {
 							}
 						);
 					} else {
-						dGet("wtw_listcommunities").innerHTML = "<div style=\"color:yellow;\">No 3D Communities Found</div><br />";
-						dGet("wtw_listcommunities").innerHTML += "<div id=\"wtw_adminaddcommunity2\" class=\"wtw-adminsubmenu\" onclick=\"WTW.adminMenuItemSelected(dGet('wtw_adminaddcommunity'));\">Add New 3D Community</div>";
+						dGet('wtw_listcommunities').innerHTML = "<div class='wtw-yellow'>No 3D Communities Found</div><br />";
+						dGet("wtw_listcommunities").innerHTML += "<div id='wtw_adminaddcommunity2' class='wtw-adminsubmenu' onclick=\"WTW.adminMenuItemSelected(dGet('wtw_adminaddcommunity'));\">Add New 3D Community</div>";
 					}
 				}
 				window.setTimeout(function() {
@@ -487,37 +487,37 @@ WTWJS.prototype.getSelectCommunitiesList = async function() {
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-getSelectCommunitiesList=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-getSelectCommunitiesList=' + ex.message);
 	}		
 }
 
 WTWJS.prototype.editCommunity = function(zcommunityid) {
 	/* load a select 3D Community into the editor */
 	try {
-		WTW.openWebpage(wtw_domainurl + "/admin.php?communityidid=" + zcommunityid);
+		WTW.openWebpage(wtw_domainurl + '/admin.php?communityidid=' + zcommunityid);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-editCommunity=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-editCommunity=' + ex.message);
 	}
 }
 
 WTWJS.prototype.communitySearchShowCommunity = function(newcommunityid) {
 	/* after you search and select a 3D Community, this loads the 3D Community in the editor */
 	try {
-		window.location.href="/admin.php?communityid=" + newcommunityid + "&hmenu=25&newcommunity=1";
+		window.location.href='/admin.php?communityid=' + newcommunityid + '&hmenu=25&newcommunity=1';
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-communitySearchShowCommunity=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-communitySearchShowCommunity=' + ex.message);
 	}
 }
 
 WTWJS.prototype.openShareCommunityForm = async function() {
 	/* share 3D Community is used to send a copy to WalkTheWeb for others to search and download copies of their own */
 	try {
-		dGet("wtw_tsharecommtempname").value = "";
-		dGet("wtw_tsharecommdescription").value = "";
-		dGet('wtw_tsharecommtags').value = "";
+		dGet('wtw_tsharecommunitytempname').value = '';
+		dGet('wtw_tsharecommunitydescription').value = '';
+		dGet('wtw_tsharecommunitytags').value = '';
 		WTW.hide('wtw_adminmenu29b');
 		WTW.show('wtw_loadingsharecommunityform');
-		WTW.getAsyncJSON("/connect/communities.php", 
+		WTW.getAsyncJSON('/connect/communities.php', 
 			function(zresponse) {
 				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
@@ -550,14 +550,14 @@ WTWJS.prototype.openShareCommunityForm = async function() {
 												zcreateuserid = WTW.communities[i].communityinfo.createuserid;
 											}
 										}
-										if (WTW.communities[i].share.templatename != "") {
-											dGet('wtw_tsharecommtempname').value = WTW.communities[i].share.templatename;
+										if (WTW.communities[i].share.templatename != '') {
+											dGet('wtw_tsharecommunitytempname').value = WTW.communities[i].share.templatename;
 										} else {
-											dGet('wtw_tsharecommtempname').value = WTW.communities[i].communityinfo.communityname;
+											dGet('wtw_tsharecommunitytempname').value = WTW.communities[i].communityinfo.communityname;
 										}
-										dGet('wtw_tsharecommdescription').value = WTW.communities[i].share.description;
-										dGet('wtw_tsharecommtags').value = WTW.communities[i].share.tags;
-										if (WTW.communities[i].communityinfo.snapshotpath != "") {
+										dGet('wtw_tsharecommunitydescription').value = WTW.communities[i].share.description;
+										dGet('wtw_tsharecommunitytags').value = WTW.communities[i].share.tags;
+										if (WTW.communities[i].communityinfo.snapshotpath != '') {
 											dGet('wtw_defaultcommunitysnapshot').src = WTW.communities[i].communityinfo.snapshotpath;
 										} else {
 											dGet('wtw_defaultcommunitysnapshot').src = WTW.communities[i].communityinfo.snapshotdata;
@@ -591,7 +591,7 @@ WTWJS.prototype.openShareCommunityForm = async function() {
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-openShareCommunityForm=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-openShareCommunityForm=' + ex.message);
 	}
 }		
 
@@ -614,7 +614,7 @@ WTWJS.prototype.changeWebVersion = function(zwebtype, zversion, zversiondesc) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-changeWebVersion=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-changeWebVersion=' + ex.message);
 	} 
 }
 
@@ -625,21 +625,21 @@ WTWJS.prototype.saveShareCommunityForm = async function() {
 		dGet('wtw_tsharecommunityversiondesc').disabled = false;
 		var zrequest = {
 			'communityid': communityid,
-			'communityname': btoa(dGet('wtw_tsharecommtempname').value),
-			'description': btoa(dGet('wtw_tsharecommdescription').value),
-			'tags': btoa(dGet('wtw_tsharecommtags').value),
+			'communityname': btoa(dGet('wtw_tsharecommunitytempname').value),
+			'description': btoa(dGet('wtw_tsharecommunitydescription').value),
+			'tags': btoa(dGet('wtw_tsharecommunitytags').value),
 			'version' : dGet('wtw_tsharecommunityversion').value,
 			'versiondesc' : btoa(dGet('wtw_tsharecommunityversiondesc').value),
 			'function':'savecommunitytemplate'
 		};
-		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				dGet('wtw_sharehash').value = zresponse.sharehash;
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-saveShareCommunityForm=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-saveShareCommunityForm=' + ex.message);
 	}
 }
 
@@ -654,19 +654,19 @@ WTWJS.prototype.shareCommunityTemplate = async function() {
 			'sharehash': dGet('wtw_sharehash').value,
 			'function':'sharecommunitytemplate'
 		};
-		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 
 				/* note serror would contain errors */
-				dGet('wtw_sharecommunityresponse').innerHTML = zresponse.success + " " + zresponse.serror;
+				dGet('wtw_sharecommunityresponse').innerHTML = zresponse.success + ' ' + zresponse.serror;
 				window.setTimeout(function() {
-					dGet('wtw_sharecommunityresponse').innerHTML = "";
+					dGet('wtw_sharecommunityresponse').innerHTML = '';
 				}, 5000);
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-shareCommunityTemplate=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-shareCommunityTemplate=' + ex.message);
 	}
 }
 
@@ -679,7 +679,7 @@ WTWJS.prototype.openAddGroundTerrain = function() {
 	try {
 		var zmoldind = WTW.getNextCount(WTW.communitiesMolds);
 		WTW.communitiesMolds[zmoldind] = WTW.newMold();
-		var zshape = "terrain";
+		var zshape = 'terrain';
 		var zmoldid = WTW.getRandomString(16);
 		var zsettingx = 700;
 		var zsettingz = 800;
@@ -696,7 +696,7 @@ WTWJS.prototype.openAddGroundTerrain = function() {
 		WTW.communitiesMolds[zmoldind].moldid = zmoldid;
 		WTW.communitiesMolds[zmoldind].moldind = zmoldind;
 		WTW.communitiesMolds[zmoldind].communityinfo.communityid = communityid;
-		WTW.communitiesMolds[zmoldind].communityinfo.communityind = "-1";
+		WTW.communitiesMolds[zmoldind].communityinfo.communityind = '-1';
 		WTW.communitiesMolds[zmoldind].position.x = zpositionx;
 		WTW.communitiesMolds[zmoldind].position.y = zpositiony;
 		WTW.communitiesMolds[zmoldind].position.z = zpositionz;
@@ -714,23 +714,23 @@ WTWJS.prototype.openAddGroundTerrain = function() {
 		WTW.communitiesMolds[zmoldind].graphics.vscale = zsettingz / 10
 		WTW.communitiesMolds[zmoldind].subdivisions = 70;
 		WTW.communitiesMolds[zmoldind].shape = zshape;
-		WTW.communitiesMolds[zmoldind].covering = "terrain";
-		WTW.communitiesMolds[zmoldind].checkcollisions = "0";
-		WTW.communitiesMolds[zmoldind].ispickable = "1";	
-		WTW.communitiesMolds[zmoldind].loadactionzoneid = WTW.getLoadActionZoneID("Extreme");		
+		WTW.communitiesMolds[zmoldind].covering = 'terrain';
+		WTW.communitiesMolds[zmoldind].checkcollisions = '0';
+		WTW.communitiesMolds[zmoldind].ispickable = '1';	
+		WTW.communitiesMolds[zmoldind].loadactionzoneid = WTW.getLoadActionZoneID('Extreme');		
 		WTW.communitiesMolds[zmoldind].loadactionzoneind = WTW.getActionZoneInd(WTW.communitiesMolds[zmoldind].loadactionzoneid, Number(dGet('wtw_tconnectinggridind').value));
 		WTW.communitiesMolds[zmoldind].unloadactionzoneid = '';		
 		WTW.communitiesMolds[zmoldind].unloadactionzoneind = -1;
-		WTW.communitiesMolds[zmoldind].connectinggridind = Number(dGet("wtw_tconnectinggridind").value);		
-		WTW.communitiesMolds[zmoldind].connectinggridid = dGet("wtw_tconnectinggridid").value;		
-		WTW.communitiesMolds[zmoldind].parentname = dGet("wtw_tconnectinggridname").value;		
-		WTW.communitiesMolds[zmoldind].moldname = "communitymolds-" + zmoldind + "-" + zmoldid + "-" + dGet("wtw_tconnectinggridind").value + "-" + dGet("wtw_tconnectinggridid").value + "-" + zshape;		
+		WTW.communitiesMolds[zmoldind].connectinggridind = Number(dGet('wtw_tconnectinggridind').value);		
+		WTW.communitiesMolds[zmoldind].connectinggridid = dGet('wtw_tconnectinggridid').value;		
+		WTW.communitiesMolds[zmoldind].parentname = dGet('wtw_tconnectinggridname').value;		
+		WTW.communitiesMolds[zmoldind].moldname = 'local-communitymolds-' + zmoldind + '-' + zmoldid + '-' + dGet('wtw_tconnectinggridind').value + '-' + dGet('wtw_tconnectinggridid').value + '-' + zshape;		
 		var zimageinfo = WTW.getUploadFileData('fcg9ws5gsjd7x2ko');
 		var zimageinfo2 = WTW.getUploadFileData('rb89jzbm4qepbimm');
 		dGet('wtw_moldheightmappreview').src = zimageinfo2.filedata;
 		WTW.openMoldForm(zmoldind, 'terrain', 'community', false);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-openAddGroundTerrain=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-openAddGroundTerrain=' + ex.message);
 	}		
 }
 
@@ -745,13 +745,13 @@ WTWJS.prototype.openEditGroundSettings = function() {
 			if (WTW.communities[i] != null) {
 				if (WTW.communities[i].communityinfo.communityid == communityid) {
 					if (WTW.communities[i].graphics.texture.id != null) {
-						if (WTW.communities[i].graphics.texture.backupid == "") {
+						if (WTW.communities[i].graphics.texture.backupid == '') {
 							WTW.communities[i].graphics.texture.backupid = WTW.communities[i].graphics.texture.id;
 						}
 						zgroundtextureid = WTW.communities[i].graphics.texture.id;
 					}
 					if (WTW.communities[i].graphics.texture.path != null) {
-						if (WTW.communities[i].graphics.texture.backuppath == "") {
+						if (WTW.communities[i].graphics.texture.backuppath == '') {
 							WTW.communities[i].graphics.texture.backuppath = WTW.communities[i].graphics.texture.path;
 						}
 						zgroundtexturepath = WTW.communities[i].graphics.texture.path;
@@ -765,7 +765,7 @@ WTWJS.prototype.openEditGroundSettings = function() {
 		dGet('wtw_textendedgroundtexturepath').value = zgroundtexturepath;
 		WTW.setPreviewImage('wtw_showextendedgroundpreview', 'wtw_textendedgroundtexturepath', 'wtw_textendedgroundtextureid');
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-openEditGroundSettings=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-openEditGroundSettings=' + ex.message);
 	}		
 }
 
@@ -774,21 +774,21 @@ WTWJS.prototype.saveGround = async function() {
 	try {
 		var zgroundtextureid = WTW.init.groundTextureID;
 		var zgroundtexturepath = WTW.init.groundTexturePath;
-		if (dGet('wtw_textendedgroundtextureid').value != "") {
+		if (dGet('wtw_textendedgroundtextureid').value != '') {
 			zgroundtextureid = dGet('wtw_textendedgroundtextureid').value;
 		}
-		if (dGet('wtw_textendedgroundtexturepath').value != "") {
+		if (dGet('wtw_textendedgroundtexturepath').value != '') {
 			zgroundtexturepath = dGet('wtw_textendedgroundtexturepath').value;
 		}
 		for (var i = 0; i < WTW.communities.length; i++) {
 			if (WTW.communities[i] != null) {
 				if (WTW.communities[i].communityinfo.communityid == communityid) {
 					if (WTW.communities[i].graphics.texture.id != null) {
-						WTW.communities[i].graphics.texture.backupid = "";
+						WTW.communities[i].graphics.texture.backupid = '';
 						WTW.communities[i].graphics.texture.id = zgroundtextureid;
 					}
 					if (WTW.communities[i].graphics.texture.path != null) {
-						WTW.communities[i].graphics.texture.backuppath = "";
+						WTW.communities[i].graphics.texture.backuppath = '';
 						WTW.communities[i].graphics.texture.path = zgroundtexturepath;
 					}
 				}
@@ -799,14 +799,14 @@ WTWJS.prototype.saveGround = async function() {
 			'groundtextureid': zgroundtextureid,
 			'function':'saveextendedground'
 		};
-		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-saveGround=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-saveGround=' + ex.message);
 	}		
 }
 
@@ -819,14 +819,14 @@ WTWJS.prototype.cancelGround = function() {
 			if (WTW.communities[i] != null) {
 				if (WTW.communities[i].communityinfo.communityid == communityid) {
 					if (WTW.communities[i].graphics.texture.id != null) {
-						if (WTW.communities[i].graphics.texture.backupid != "") {
+						if (WTW.communities[i].graphics.texture.backupid != '') {
 							WTW.communities[i].graphics.texture.id = WTW.communities[i].graphics.texture.backupid;
-							WTW.communities[i].graphics.texture.backupid = "";
+							WTW.communities[i].graphics.texture.backupid = '';
 						}
 						zgroundtextureid = WTW.communities[i].graphics.texture.id;
-						if (WTW.communities[i].graphics.texture.backuppath != "") {
+						if (WTW.communities[i].graphics.texture.backuppath != '') {
 							WTW.communities[i].graphics.texture.path = WTW.communities[i].graphics.texture.backuppath;
-							WTW.communities[i].graphics.texture.backuppath = "";
+							WTW.communities[i].graphics.texture.backuppath = '';
 						}
 						zgroundtexturepath = WTW.communities[i].graphics.texture.path;
 					}
@@ -837,7 +837,7 @@ WTWJS.prototype.cancelGround = function() {
 		dGet('wtw_textendedgroundtexturepath').value = zgroundtexturepath;
 		WTW.setPreviewImage('wtw_showextendedgroundpreview', 'wtw_textendedgroundtexturepath', 'wtw_textendedgroundtextureid');
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-cancelGround=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-cancelGround=' + ex.message);
 	}		
 }
 
@@ -861,7 +861,7 @@ WTWJS.prototype.openSkyDomeForm = function() {
 			if (WTW.communities[i] != null) {
 				if (WTW.communities[i].communityinfo.communityid == communityid) {
 					if (WTW.communities[i].graphics.sky.id != null) {
-						if (WTW.communities[i].graphics.sky.backupid == "") {
+						if (WTW.communities[i].graphics.sky.backupid == '') {
 							WTW.communities[i].graphics.sky.backupid = WTW.communities[i].graphics.sky.id;
 						}
 						zskydomeid = WTW.communities[i].graphics.sky.id;
@@ -872,7 +872,7 @@ WTWJS.prototype.openSkyDomeForm = function() {
 		WTW.hide('wtw_loadingskysettingsform');
 		WTW.show('wtw_adminmenu40b');
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-openSkyDomeForm=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-openSkyDomeForm=' + ex.message);
 	}
 }
 
@@ -986,7 +986,7 @@ WTWJS.prototype.setSkyScene = function (zkey, znewvalue, zincrement) {
 		}
 		WTW.loadSkyScene(WTW.init.skyInclination, WTW.init.skyLuminance, WTW.init.skyAzimuth, WTW.init.skyRayleigh, WTW.init.skyTurbidity, WTW.init.skyMieDirectionalG, WTW.init.skyMieCoefficient, 1);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-setSkyScene=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-setSkyScene=' + ex.message);
 	}  
 }
 
@@ -1006,9 +1006,9 @@ WTWJS.prototype.cancelSkyDome = function() {
 			if (WTW.communities[i] != null) {
 				if (WTW.communities[i].communityinfo.communityid == communityid) {
 					if (WTW.communities[i].graphics.sky.id != null) {
-						if (WTW.communities[i].graphics.sky.backupid != "") {
+						if (WTW.communities[i].graphics.sky.backupid != '') {
 							WTW.communities[i].graphics.sky.id = WTW.communities[i].graphics.sky.backupid;
-							WTW.communities[i].graphics.sky.backupid = "";
+							WTW.communities[i].graphics.sky.backupid = '';
 						}
 					}
 					zskydomeid = WTW.communities[i].graphics.sky.id;
@@ -1016,7 +1016,7 @@ WTWJS.prototype.cancelSkyDome = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-cancelSkyDome=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-cancelSkyDome=' + ex.message);
 	}
 }
 
@@ -1024,14 +1024,14 @@ WTWJS.prototype.saveSkyDome = async function() {
 	/* save skydome sky changes */
 	try {
 		var zskydomeid = WTW.init.skyTextureID;
-		if (dGet('wtw_tskydomeid').value != "") {
+		if (dGet('wtw_tskydomeid').value != '') {
 			zskydomeid = dGet('wtw_tskydomeid').value;
 		}
 		for (var i = 0; i < WTW.communities.length; i++) {
 			if (WTW.communities[i] != null) {
 				if (WTW.communities[i].communityinfo.communityid == communityid) {
 					if (WTW.communities[i].graphics.sky.id != null) {
-						WTW.communities[i].graphics.sky.backupid = "";
+						WTW.communities[i].graphics.sky.backupid = '';
 						WTW.communities[i].graphics.sky.id = zskydomeid;
 					}
 				}
@@ -1049,14 +1049,14 @@ WTWJS.prototype.saveSkyDome = async function() {
 			'skymiecoefficient': WTW.init.skyMieCoefficient,
 			'function':'saveskydome'
 		};
-		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-saveSkyDome=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-saveSkyDome=' + ex.message);
 	}
 }
 
@@ -1064,35 +1064,35 @@ WTWJS.prototype.saveSkyDome = async function() {
 WTWJS.prototype.saveGravity = async function() {
 	/* save community gravity (applies to scene when loaded) */
 	try {
-		if (communityid != "") {
+		if (communityid != '') {
 			var zrequest = {
 				'communityid': communityid,
 				'gravity':WTW.init.gravity,
 				'function':'savegravity'
 			};
-			WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+			WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
 				}
 			);
-		} else if (buildingid != "") {
+		} else if (buildingid != '') {
 			var zrequest = {
 				'buildingid': buildingid,
 				'gravity':WTW.init.gravity,
 				'function':'savegravity'
 			};
-			WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
+			WTW.postAsyncJSON('/core/handlers/buildings.php', zrequest, 
 				function(zresponse) {
 				}
 			);
-		} else if (thingid != "") {
+		} else if (thingid != '') {
 			var zrequest = {
 				'thingid': thingid,
 				'gravity':WTW.init.gravity,
 				'function':'savegravity'
 			};
-			WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
+			WTW.postAsyncJSON('/core/handlers/things.php', zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -1100,7 +1100,7 @@ WTWJS.prototype.saveGravity = async function() {
 			);
 		}		
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-saveGravity=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-saveGravity=' + ex.message);
 	}
 }
 
@@ -1117,7 +1117,7 @@ WTWJS.prototype.setGravity = function() {
 			scene.gravity = new BABYLON.Vector3(0, 0, 0);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-setGravity=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-setGravity=' + ex.message);
 	}
 }
 
@@ -1125,7 +1125,7 @@ WTWJS.prototype.setGravity = function() {
 WTWJS.prototype.setGroundWater = function() {
 	/* set ground level and water settings from form */
 	try {
-		if (communityid != "") {
+		if (communityid != '') {
 			var zgroundpositiony = 0;
 			var zwaterpositiony = -50;
 			var zwatercolorrefraction = '#23749C';
@@ -1136,7 +1136,7 @@ WTWJS.prototype.setGroundWater = function() {
 			}
 			if (zgroundpositiony > 0) {
 				zgroundpositiony = 0;
-				dGet('wtw_tgroundpositiony').value = "0.00";
+				dGet('wtw_tgroundpositiony').value = '0.00';
 			}
 			if (zgroundpositiony != 0) {
 				zwaterpositiony = 0;
@@ -1163,9 +1163,9 @@ WTWJS.prototype.setGroundWater = function() {
 					dGet('wtw_twatersubdivisions').value = 2;
 				}
 			
-				WTW.water = BABYLON.Mesh.CreateGround("communitywater", 5000, 5000, Math.round(Number(dGet('wtw_twatersubdivisions').value)), scene, false);
+				WTW.water = BABYLON.Mesh.CreateGround('communitywater', 5000, 5000, Math.round(Number(dGet('wtw_twatersubdivisions').value)), scene, false);
 			
-				WTW.waterMat = new BABYLON.WaterMaterial("communitywatermat", scene, new BABYLON.Vector2(512, 512));
+				WTW.waterMat = new BABYLON.WaterMaterial('communitywatermat', scene, new BABYLON.Vector2(512, 512));
 				WTW.waterMat.bumpTexture = new BABYLON.Texture(dGet('wtw_twaterbumppath').value, scene);
 				WTW.water.position.y = zwaterpositiony;
 				WTW.init.waterBumpPath = dGet('wtw_twaterbumppath').value;
@@ -1264,7 +1264,7 @@ WTWJS.prototype.setGroundWater = function() {
 			dGet('wtw_twaterpositiony').value = zwaterpositiony;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-setGroundWater=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-setGroundWater=' + ex.message);
 	}
 }
 
@@ -1280,63 +1280,63 @@ WTWJS.prototype.openConfirmation = function(w) {
 		WTW.showInline('wtw_greyout');
 		dGet('wtw_tconfirmid').value = w;
 		switch (w) {
-			case "1":
-				dGet('wtw_confirmformtitle').innerHTML = "Confirm Delete Building";
-				dGet('wtw_confirmheading').innerHTML = "Are you sure you want to Delete the Building?";
-				dGet('wtw_confirmtext').innerHTML = "<br />Deleting the Building will Delete all Walls, Floors, and Web Components. It will also remove it from all <b>3D Communities</b>!";
-				dGet('wtw_bconfirm').value = "Delete Building";
+			case '1':
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete Building';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the Building?';
+				dGet('wtw_confirmtext').innerHTML = '<br />Deleting the Building will Delete all Walls, Floors, and Web Components. It will also remove it from all <b>3D Communities</b>!';
+				dGet('wtw_bconfirm').value = 'Delete Building';
 				break;
-			case "2":
-				dGet('wtw_confirmformtitle').innerHTML = "Confirm Delete Community";
-				dGet('wtw_confirmheading').innerHTML = "Are you sure you want to Delete the Community?";
-				dGet('wtw_confirmtext').innerHTML = "<br />Deleting the Community will also Delete all Terrain, Building Placements, Walls, Floors, and Web Components.";
-				dGet('wtw_bconfirm').value = "Delete Community";
+			case '2':
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete Community';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the Community?';
+				dGet('wtw_confirmtext').innerHTML = '<br />Deleting the Community will also Delete all Terrain, Building Placements, Walls, Floors, and Web Components.';
+				dGet('wtw_bconfirm').value = 'Delete Community';
 				break;
-			case "3":
-				dGet('wtw_confirmformtitle').innerHTML = "Confirm Delete Building from this Community";
-				dGet('wtw_confirmheading').innerHTML = "Are you sure you want to Delete the Building from this Community?";
-				dGet('wtw_confirmtext').innerHTML = "<br />The building can always be added again if you change your mind.";
-				dGet('wtw_bconfirm').value = "Delete Building from Community";
+			case '3':
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete Building from this Community';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the Building from this Community?';
+				dGet('wtw_confirmtext').innerHTML = '<br />The building can always be added again if you change your mind.';
+				dGet('wtw_bconfirm').value = 'Delete Building from Community';
 				break;
-			case "4":
-				dGet('wtw_confirmformtitle').innerHTML = "Confirm Share 3D Building";
-				dGet('wtw_confirmheading').innerHTML = "Are you sure you want to Share this 3D Building?";
-				dGet('wtw_confirmtext').innerHTML = "<br />Other Users will be able to use a Shared Copy of this design for their own 3D Building. It will not affect your current 3D Building. The Shared Copy cannot be undone once Shared.";
-				dGet('wtw_bconfirm').value = "Share My 3D Building";
+			case '4':
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Share 3D Building';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Share this 3D Building?';
+				dGet('wtw_confirmtext').innerHTML = '<br />Other Users will be able to use a Shared Copy of this design for their own 3D Building. It will not affect your current 3D Building. The Shared Copy cannot be undone once Shared.';
+				dGet('wtw_bconfirm').value = 'Share My 3D Building';
 				break;
-			case "5":
-				dGet('wtw_confirmformtitle').innerHTML = "Confirm Share 3D Community";
-				dGet('wtw_confirmheading').innerHTML = "Are you sure you want to Share this 3D Community?";
-				dGet('wtw_confirmtext').innerHTML = "<br />Other Users will be able to use a Shared Copy of this design for their own 3D Communities. It will not affect your current 3D Community. The Shared Copy cannot be undone once Shared.";
-				dGet('wtw_bconfirm').value = "Share My 3D Community";
+			case '5':
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Share 3D Community';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Share this 3D Community?';
+				dGet('wtw_confirmtext').innerHTML = '<br />Other Users will be able to use a Shared Copy of this design for their own 3D Communities. It will not affect your current 3D Community. The Shared Copy cannot be undone once Shared.';
+				dGet('wtw_bconfirm').value = 'Share My 3D Community';
 				break;
-			case "6":
-				dGet('wtw_confirmformtitle').innerHTML = "Confirm Delete 3D Thing";
-				dGet('wtw_confirmheading').innerHTML = "Are you sure you want to Delete the 3D Thing?";
-				dGet('wtw_confirmtext').innerHTML = "<br />Deleting the 3D Thing will also Delete all parts including Shapes and Web Components.";
-				dGet('wtw_bconfirm').value = "Delete 3D Thing";
+			case '6':
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete 3D Thing';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the 3D Thing?';
+				dGet('wtw_confirmtext').innerHTML = '<br />Deleting the 3D Thing will also Delete all parts including Shapes and Web Components.';
+				dGet('wtw_bconfirm').value = 'Delete 3D Thing';
 				break;
-			case "7":
-				dGet('wtw_confirmformtitle').innerHTML = "Confirm Share 3D Thing";
-				dGet('wtw_confirmheading').innerHTML = "Are you sure you want to Share this 3D Thing?";
-				dGet('wtw_confirmtext').innerHTML = "<br />Other Users will be able to use a Shared Copy of this design for their own 3D Thing. It will not affect your current 3D Thing. The Shared Copy cannot be undone once Shared.";
-				dGet('wtw_bconfirm').value = "Share My 3D Thing";
+			case '7':
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Share 3D Thing';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Share this 3D Thing?';
+				dGet('wtw_confirmtext').innerHTML = '<br />Other Users will be able to use a Shared Copy of this design for their own 3D Thing. It will not affect your current 3D Thing. The Shared Copy cannot be undone once Shared.';
+				dGet('wtw_bconfirm').value = 'Share My 3D Thing';
 				break;
-			case "8":
-				dGet('wtw_confirmformtitle').innerHTML = "Confirm Delete 3D Avatar";
-				dGet('wtw_confirmheading').innerHTML = "Are you sure you want to Delete the 3D Avatar?";
-				dGet('wtw_confirmtext').innerHTML = "<br />Deleting the 3D Avatar will also Delete all parts including Animations.";
-				dGet('wtw_bconfirm').value = "Delete 3D Avatar";
+			case '8':
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete 3D Avatar';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the 3D Avatar?';
+				dGet('wtw_confirmtext').innerHTML = '<br />Deleting the 3D Avatar will also Delete all parts including Animations.';
+				dGet('wtw_bconfirm').value = 'Delete 3D Avatar';
 				break;
-			case "9":
-				dGet('wtw_confirmformtitle').innerHTML = "Confirm Share 3D Avatar";
-				dGet('wtw_confirmheading').innerHTML = "Are you sure you want to Share this 3D Avatar?";
-				dGet('wtw_confirmtext').innerHTML = "<br />Other Users will be able to use a Shared Copy of this design for their own 3D Avatar. It will not affect your current 3D Avatar. The Shared Copy cannot be undone once Shared.";
-				dGet('wtw_bconfirm').value = "Share My 3D Avatar";
+			case '9':
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Share 3D Avatar';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Share this 3D Avatar?';
+				dGet('wtw_confirmtext').innerHTML = '<br />Other Users will be able to use a Shared Copy of this design for their own 3D Avatar. It will not affect your current 3D Avatar. The Shared Copy cannot be undone once Shared.';
+				dGet('wtw_bconfirm').value = 'Share My 3D Avatar';
 				break;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-openConfirmation=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-openConfirmation=' + ex.message);
 	}
 }
 
@@ -1344,36 +1344,36 @@ WTWJS.prototype.completedConfirmation = function(w) {
 	/* if confirmed, continue to process */
 	try {
 		switch (w) {
-			case "1":
+			case '1':
 				WTW.submitBuildingForm(0);
 				break;
-			case "2":
+			case '2':
 				WTW.submitCommunityForm(0);
 				break;
-			case "3":
+			case '3':
 				WTW.submitConnectingGridsForm(0);
 				break;
-			case "4":
+			case '4':
 				WTW.shareBuildingTemplate();
 				break;
-			case "5":
+			case '5':
 				WTW.shareCommunityTemplate();
 				break;
-			case "6":
+			case '6':
 				WTW.submitthingForm(0);
 				break;
-			case "7":
+			case '7':
 				WTW.shareThingTemplate();
 				break;
-			case "8":
+			case '8':
 				WTW.deleteAvatar(0);
 				break;
-			case "9":
+			case '9':
 				WTW.shareAvatarTemplate();
 				break;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-completedConfirmation=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-completedConfirmation=' + ex.message);
 	}
 }
 
@@ -1383,7 +1383,7 @@ WTWJS.prototype.closeConfirmation = function(w) {
 		WTW.hide('wtw_confirmform');
 		WTW.hide('wtw_greyout');
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-closeConfirmation=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-closeConfirmation=' + ex.message);
 	}
 }
 
@@ -1392,7 +1392,7 @@ WTWJS.prototype.setStartPosition = async function(zcommunityid, zbuildingid, zth
 	/* sets start position for 3D Commuity, 3D Building, or 3D Thing */
 	try {
 		if (WTW.myAvatar!= null) {
-			if (zcommunityid != "") {
+			if (zcommunityid != '') {
 				var zrequest = {
 					'communityid': zcommunityid,
 					'positionx': WTW.myAvatar.position.x,
@@ -1406,17 +1406,17 @@ WTWJS.prototype.setStartPosition = async function(zcommunityid, zbuildingid, zth
 					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
 					'function':'savestartposition'
 				};
-				WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+				WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
-						dGet('wtw_startsaved').style.visibility = "visible";
+						dGet('wtw_startsaved').style.visibility = 'visible';
 						window.setTimeout(function(){
-							dGet('wtw_startsaved').style.visibility = "hidden";
+							dGet('wtw_startsaved').style.visibility = 'hidden';
 						}, 3000);
 					}
 				);
-			} else if (zbuildingid != "") {
+			} else if (zbuildingid != '') {
 				var zrequest = {
 					'buildingid': zbuildingid,
 					'positionx': WTW.myAvatar.position.x,
@@ -1430,15 +1430,15 @@ WTWJS.prototype.setStartPosition = async function(zcommunityid, zbuildingid, zth
 					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
 					'function':'savestartposition'
 				};
-				WTW.postAsyncJSON("/core/handlers/buildings.php", zrequest, 
+				WTW.postAsyncJSON('/core/handlers/buildings.php', zrequest, 
 					function(zresponse) {
-						dGet('wtw_startsaved').style.visibility = "visible";
+						dGet('wtw_startsaved').style.visibility = 'visible';
 						window.setTimeout(function(){
-							dGet('wtw_startsaved').style.visibility = "hidden";
+							dGet('wtw_startsaved').style.visibility = 'hidden';
 						}, 3000);
 					}
 				);
-			} else if (zthingid != "") {
+			} else if (zthingid != '') {
 				var zrequest = {
 					'thingid': zthingid,
 					'positionx': WTW.myAvatar.position.x,
@@ -1452,20 +1452,20 @@ WTWJS.prototype.setStartPosition = async function(zcommunityid, zbuildingid, zth
 					'rotationz': WTW.getDegrees(WTW.myAvatar.rotation.z),
 					'function':'savestartposition'
 				};
-				WTW.postAsyncJSON("/core/handlers/things.php", zrequest, 
+				WTW.postAsyncJSON('/core/handlers/things.php', zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
-						dGet('wtw_startsaved').style.visibility = "visible";
+						dGet('wtw_startsaved').style.visibility = 'visible';
 						window.setTimeout(function(){
-							dGet('wtw_startsaved').style.visibility = "hidden";
+							dGet('wtw_startsaved').style.visibility = 'hidden';
 						}, 3000);
 					}
 				);
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-setStartPosition=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-setStartPosition=' + ex.message);
 	}
 }
 
@@ -1473,15 +1473,15 @@ WTWJS.prototype.openStartPositionForm = async function() {
 	/* load settings to the Start Position Form */
 	try {
 		WTW.clearDDL('wtw_tdefaultspawnzone');
-		var zoption = document.createElement("option");
+		var zoption = document.createElement('option');
 		zoption.text = 'Random';
 		zoption.value = '';
 		dGet('wtw_tdefaultspawnzone').add(zoption);
-		var zoption2 = document.createElement("option");
+		var zoption2 = document.createElement('option');
 		zoption2.text = 'Default';
 		zoption2.value = 'default';
 		dGet('wtw_tdefaultspawnzone').add(zoption2);
-		WTW.getAsyncJSON("/connect/domaininfo.php?communityid=" + communityid + "&buildingid=" + buildingid + "&thingid=" + thingid, 
+		WTW.getAsyncJSON('/connect/domaininfo.php?communityid=' + communityid + '&buildingid=' + buildingid + '&thingid=' + thingid, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				var zspawnactionzoneid = '';
@@ -1491,7 +1491,7 @@ WTWJS.prototype.openStartPositionForm = async function() {
 				if (zresponse.spawnzones != null) {
 					for (var i =0;i<zresponse.spawnzones.length;i++) {
 						if (zresponse.spawnzones[i] != null) {
-							var zoption3 = document.createElement("option");
+							var zoption3 = document.createElement('option');
 							zoption3.text = zresponse.spawnzones[i].actionzonename;
 							zoption3.value = zresponse.spawnzones[i].actionzoneid;
 							if (zresponse.spawnzones[i].actionzoneid == zspawnactionzoneid) {
@@ -1509,7 +1509,7 @@ WTWJS.prototype.openStartPositionForm = async function() {
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-openStartPositionForm=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-openStartPositionForm=' + ex.message);
 	}
 }		
 
@@ -1524,7 +1524,7 @@ WTWJS.prototype.saveDefaultSpawnZone = async function(zcommunityid, zbuildingid,
 			'spawnactionzoneid': zspawnactionzoneid,
 			'function':'savedefaultspawnzone'
 		};
-		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -1533,7 +1533,7 @@ WTWJS.prototype.saveDefaultSpawnZone = async function(zcommunityid, zbuildingid,
 		WTW.hideAdminMenu();
 		WTW.backToTools();
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-saveDefaultSpawnZone=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-saveDefaultSpawnZone=' + ex.message);
 	}
 }
 
@@ -1546,7 +1546,7 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 		WTW.hide('wtw_adminmenu69b');
 		WTW.show('wtw_loadingupdatesnapshot');
 		if (communityid != '') {
-			WTW.getAsyncJSON("/connect/communities.php", 
+			WTW.getAsyncJSON('/connect/communities.php', 
 				function(zresponse) {
 					WTW.communities = JSON.parse(zresponse);
 					if (WTW.communities != null) {
@@ -1555,7 +1555,7 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 								if (WTW.communities[i].communityinfo.communityid != undefined) {
 									if (WTW.communities[i].communityinfo.communityid != null) {
 										if (communityid == WTW.communities[i].communityinfo.communityid) {
-											if (WTW.communities[i].communityinfo.snapshotpath != "") {
+											if (WTW.communities[i].communityinfo.snapshotpath != '') {
 												dGet('wtw_defaultsnapshot').src = WTW.communities[i].communityinfo.snapshotpath;
 											} else {
 												dGet('wtw_defaultsnapshot').src = WTW.communities[i].communityinfo.snapshotdata;
@@ -1577,7 +1577,7 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 				}
 			);
 		} else if (buildingid != '') {
-			WTW.getAsyncJSON("/connect/buildings.php", 
+			WTW.getAsyncJSON('/connect/buildings.php', 
 				function(zresponse) {
 					WTW.buildings = JSON.parse(zresponse);
 					if (WTW.buildings != null) {
@@ -1586,7 +1586,7 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 								if (WTW.buildings[i].buildinginfo.buildingid != undefined) {
 									if (WTW.buildings[i].buildinginfo.buildingid != null) {
 										if (buildingid == WTW.buildings[i].buildinginfo.buildingid) {
-											if (WTW.buildings[i].buildinginfo.snapshotpath != "") {
+											if (WTW.buildings[i].buildinginfo.snapshotpath != '') {
 												dGet('wtw_defaultsnapshot').src = WTW.buildings[i].buildinginfo.snapshotpath;
 											} else {
 												dGet('wtw_defaultsnapshot').src = WTW.buildings[i].buildinginfo.snapshotdata;
@@ -1608,7 +1608,7 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 				}
 			);
 		} else if (thingid != '') {
-			WTW.getAsyncJSON("/connect/things.php?userid=" + dGet('wtw_tuserid').value, 
+			WTW.getAsyncJSON('/connect/things.php?userid=' + dGet('wtw_tuserid').value, 
 				function(zresponse) {
 					WTW.things = JSON.parse(zresponse);
 					if (WTW.things != null) {
@@ -1617,7 +1617,7 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 								if (WTW.things[i].thinginfo.thingid != undefined) {
 									if (WTW.things[i].thinginfo.thingid != null) {
 										if (thingid == WTW.things[i].thinginfo.thingid) {
-											if (WTW.things[i].thinginfo.snapshotpath != "") {
+											if (WTW.things[i].thinginfo.snapshotpath != '') {
 												dGet('wtw_defaultsnapshot').src = WTW.things[i].thinginfo.snapshotpath;
 											} else {
 												dGet('wtw_defaultsnapshot').src = WTW.things[i].thinginfo.snapshotdata;
@@ -1639,7 +1639,7 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 				}
 			);
 		} else if (avatarid != '') {
-			WTW.getAsyncJSON("/connect/avatar.php?avatarid=" + avatarid, 
+			WTW.getAsyncJSON('/connect/avatar.php?avatarid=' + avatarid, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					dGet('wtw_tavatarfolder').value = zresponse.avatar.objects.folder;
@@ -1660,7 +1660,7 @@ WTWJS.prototype.openUpdateSnapshotForm = async function() {
 			);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-wtw_admincommunities.js-openUpdateSnapshotForm=" + ex.message);
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-openUpdateSnapshotForm=' + ex.message);
 	}
 }
 
@@ -1669,33 +1669,33 @@ WTWJS.prototype.snapshot3D = async function(zfilepath, zfilename) {
 	try {
 		/* 3d web form */
 		if (dGet('wtw_bsnapshotthing') != null) {
-			dGet('wtw_bsnapshotthing').onclick = "";
+			dGet('wtw_bsnapshotthing').onclick = '';
 			dGet('wtw_bsnapshotthing').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
 		}
 		if (dGet('wtw_bsnapshotbuilding') != null) {
-			dGet('wtw_bsnapshotbuilding').onclick = "";
+			dGet('wtw_bsnapshotbuilding').onclick = '';
 			dGet('wtw_bsnapshotbuilding').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
 		}
 		if (dGet('wtw_bsnapshotcommunity') != null) {
-			dGet('wtw_bsnapshotcommunity').onclick = "";
+			dGet('wtw_bsnapshotcommunity').onclick = '';
 			dGet('wtw_bsnapshotcommunity').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
 		}
 		/* avatar forms */
 		if (dGet('wtw_bupdatesnapshot') != null) {
-			dGet('wtw_bupdatesnapshot').onclick = "";
+			dGet('wtw_bupdatesnapshot').onclick = '';
 			dGet('wtw_bupdatesnapshot').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
 		}
 		if (dGet('wtw_bsnapshotavatar') != null) {
-			dGet('wtw_bsnapshotavatar').onclick = "";
+			dGet('wtw_bsnapshotavatar').onclick = '';
 			dGet('wtw_bsnapshotavatar').innerHTML = "<span style='color:gray;'>Loading Image...</span>";
 		}
 		dGet('wtw_tfilename').value = zfilename;
 		dGet('wtw_tfilepath').value = zfilepath;
 
-		var zcontext = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
+		var zcontext = canvas.getContext('experimental-webgl', {preserveDrawingBuffer: true});
 		scene.render();
-		var zfiledata = canvas.toDataURL("image/png");
-		zcontext = canvas.getContext("experimental-webgl", {preserveDrawingBuffer: false});
+		var zfiledata = canvas.toDataURL('image/png');
+		zcontext = canvas.getContext('experimental-webgl', {preserveDrawingBuffer: false});
 		var zrequest = {
 			'communityid': communityid,
 			'buildingid': buildingid,
@@ -1706,7 +1706,7 @@ WTWJS.prototype.snapshot3D = async function(zfilepath, zfilename) {
 			'filedata': zfiledata,
 			'function':'saveimage'
 		};
-		WTW.postAsyncJSON("/core/handlers/uploads.php", zrequest, 
+		WTW.postAsyncJSON('/core/handlers/uploads.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -1714,7 +1714,7 @@ WTWJS.prototype.snapshot3D = async function(zfilepath, zfilename) {
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_admincommunities.js-snapshot3D=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_admincommunities.js-snapshot3D=' + ex.message);
 	} 
 }
 
@@ -1722,10 +1722,10 @@ WTWJS.prototype.updateSnapshot3D = function(zcommunityid, zbuildingid, zthingid,
 	/* update snapshot of 3D Community, 3D Building, or 3D Thing */
 	try {
 		if (WTW.adminView == 1) {
-			if (zthingid != "") {
+			if (zthingid != '') {
 				if (dGet('wtw_defaultthingsnapshot') != null) {
-					if (zsnapshotpath != "") {
-						dGet('wtw_defaultthingsnapshot').src = zsnapshotpath + "?" + WTW.getRandomString(5);
+					if (zsnapshotpath != '') {
+						dGet('wtw_defaultthingsnapshot').src = zsnapshotpath + '?' + WTW.getRandomString(5);
 					} else {
 						dGet('wtw_defaultthingsnapshot').src = zfiledata;
 					}
@@ -1747,10 +1747,10 @@ WTWJS.prototype.updateSnapshot3D = function(zcommunityid, zbuildingid, zthingid,
 					}
 				}
 			}
-			if (zbuildingid != "") {
+			if (zbuildingid != '') {
 				if (dGet('wtw_defaultbuildingsnapshot') != null) {
-					if (zsnapshotpath != "") {
-						dGet('wtw_defaultbuildingsnapshot').src = zsnapshotpath + "?" + WTW.getRandomString(5);
+					if (zsnapshotpath != '') {
+						dGet('wtw_defaultbuildingsnapshot').src = zsnapshotpath + '?' + WTW.getRandomString(5);
 					} else {
 						dGet('wtw_defaultbuildingsnapshot').src = zfiledata;
 					}
@@ -1772,10 +1772,10 @@ WTWJS.prototype.updateSnapshot3D = function(zcommunityid, zbuildingid, zthingid,
 					}
 				}
 			}
-			if (zcommunityid != "") {
+			if (zcommunityid != '') {
 				if (dGet('wtw_defaultcommunitysnapshot') != null) {
-					if (zsnapshotpath != "") {
-						dGet('wtw_defaultcommunitysnapshot').src = zsnapshotpath + "?" + WTW.getRandomString(5);
+					if (zsnapshotpath != '') {
+						dGet('wtw_defaultcommunitysnapshot').src = zsnapshotpath + '?' + WTW.getRandomString(5);
 					} else {
 						dGet('wtw_defaultcommunitysnapshot').src = zfiledata;
 					}
@@ -1800,8 +1800,8 @@ WTWJS.prototype.updateSnapshot3D = function(zcommunityid, zbuildingid, zthingid,
 		}
 		/* update snapshot on snapshot form */
 		if (dGet('wtw_defaultsnapshot') != null) {
-			if (zsnapshotpath != "") {
-				dGet('wtw_defaultsnapshot').src = zsnapshotpath + "?" + WTW.getRandomString(5);
+			if (zsnapshotpath != '') {
+				dGet('wtw_defaultsnapshot').src = zsnapshotpath + '?' + WTW.getRandomString(5);
 			} else {
 				dGet('wtw_defaultsnapshot').src = zfiledata;
 			}
@@ -1813,13 +1813,13 @@ WTWJS.prototype.updateSnapshot3D = function(zcommunityid, zbuildingid, zthingid,
 					WTW.adminMenuItemSelected(this);
 				}
 			};
-			dGet('wtw_bupdatesnapshot').innerHTML = "Set Default Snapshot";
+			dGet('wtw_bupdatesnapshot').innerHTML = 'Set Default Snapshot';
 		}
 		if (avatarid != '') {
 			/* update snapshot on avatar share form */
 				if (dGet('wtw_defaultavatarsnapshot') != null) {
-				if (zsnapshotpath != "") {
-					dGet('wtw_defaultavatarsnapshot').src = zsnapshotpath + "?" + WTW.getRandomString(5);
+				if (zsnapshotpath != '') {
+					dGet('wtw_defaultavatarsnapshot').src = zsnapshotpath + '?' + WTW.getRandomString(5);
 				} else {
 					dGet('wtw_defaultavatarsnapshot').src = zfiledata;
 				}
@@ -1829,7 +1829,7 @@ WTWJS.prototype.updateSnapshot3D = function(zcommunityid, zbuildingid, zthingid,
 				dGet('wtw_bsnapshotavatar').onclick = function(){
 					WTW.snapshot3D(dGet('wtw_trootpath').value + dGet('wtw_tavatarfolder').value + 'snapshots/', 'defaultavatar.png');
 				};
-				dGet('wtw_bsnapshotavatar').innerHTML = "Set Default Snapshot";
+				dGet('wtw_bsnapshotavatar').innerHTML = 'Set Default Snapshot';
 			}
 		} else {
 			/* update snapshot on community, building, and thing forms */
@@ -1837,24 +1837,24 @@ WTWJS.prototype.updateSnapshot3D = function(zcommunityid, zbuildingid, zthingid,
 				dGet('wtw_bsnapshotthing').onclick = function(){
 					WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/things/' + dGet('wtw_tthingid').value + '/snapshots/', 'defaultthing.png');
 				};
-				dGet('wtw_bsnapshotthing').innerHTML = "Set Default Snapshot";
+				dGet('wtw_bsnapshotthing').innerHTML = 'Set Default Snapshot';
 			}
 			if (dGet('wtw_bsnapshotbuilding') != null) {
 				dGet('wtw_bsnapshotbuilding').onclick = function(){
 					WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/buildings/' + dGet('wtw_tbuildingid').value + '/snapshots/', 'defaultbuilding.png');
 				};
-				dGet('wtw_bsnapshotbuilding').innerHTML = "Set Default Snapshot";
+				dGet('wtw_bsnapshotbuilding').innerHTML = 'Set Default Snapshot';
 			}
 			if (dGet('wtw_bsnapshotcommunity') != null) {
 				dGet('wtw_bsnapshotcommunity').onclick = function(){
 					WTW.snapshot3D(dGet('wtw_tcontentpath').value + '/uploads/communities/' + dGet('wtw_tcommunityid').value + '/snapshots/', 'defaultcommunity.png');
 				};
-				dGet('wtw_bsnapshotcommunity').innerHTML = "Set Default Snapshot";
+				dGet('wtw_bsnapshotcommunity').innerHTML = 'Set Default Snapshot';
 			}
 		}
 
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_admincommunities.js-updateSnapshot3D=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_admincommunities.js-updateSnapshot3D=' + ex.message);
 	} 
 }
 

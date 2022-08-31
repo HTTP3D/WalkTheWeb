@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -12,7 +12,7 @@ WTWJS.prototype.updateProgressText = function(ztext) {
 			dGet('wtw_progresstext').innerHTML = ztext;
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-updateProgressText=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-updateProgressText=' + ex.message);
 	}
 }
 
@@ -21,10 +21,10 @@ WTWJS.prototype.updateProgressBar = function(zprogress, ztotal) {
 	try {
 		if (dGet('wtw_progressbar') != null) {
 			zpercent = Math.round(100/ztotal * zprogress);
-			dGet('wtw_progressbar').style.width = zpercent + "%";
+			dGet('wtw_progressbar').style.width = zpercent + '%';
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-updateProgressBar=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-updateProgressBar=' + ex.message);
 	}
 	return zprogress;
 }
@@ -33,13 +33,13 @@ WTWJS.prototype.communitySearch = async function(zsearch) {
 	/* keyword search to find a community to download to your instance */
 	try {
 		zsearch = WTW.encode(zsearch);
-		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + zsearch + "&webtype=community", 
+		WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/sharesearch.php?search=' + zsearch + '&webtype=community', 
 			function(zresponse) {
 				WTW.communitySearchReply(JSON.parse(zresponse));
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-communitySearch=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-communitySearch=' + ex.message);
 	}
 }
 
@@ -47,7 +47,7 @@ WTWJS.prototype.communitySearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
 		var ztempsearchresults = '';
-		dGet('wtw_commtempsearchresults').innerHTML = "";
+		dGet('wtw_commtempsearchresults').innerHTML = '';
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
 			var zcommunityid = zresponse[i].servercommunityid;
@@ -68,7 +68,7 @@ WTWJS.prototype.communitySearchReply = function(zresponse) {
 		}
 		dGet('wtw_commtempsearchresults').innerHTML = ztempsearchresults;
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-communitySearchReply=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-communitySearchReply=' + ex.message);
 	}
 }
 
@@ -76,13 +76,13 @@ WTWJS.prototype.buildingSearch = async function(zsearch) {
 	/* keyword search to find a building to download to your instance */
 	try {
 		zsearch = WTW.encode(zsearch);
-		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + zsearch + "&webtype=building", 
+		WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/sharesearch.php?search=' + zsearch + '&webtype=building', 
 			function(zresponse) {
 				WTW.buildingSearchReply(JSON.parse(zresponse));
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-buildingSearch=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-buildingSearch=' + ex.message);
 	}
 }
 
@@ -90,7 +90,7 @@ WTWJS.prototype.buildingSearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
 		var ztempsearchresults = '';
-		dGet('wtw_buildtempsearchresults').innerHTML = "";
+		dGet('wtw_buildtempsearchresults').innerHTML = '';
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
 			var zbuildingid = zresponse[i].serverbuildingid;
@@ -111,7 +111,7 @@ WTWJS.prototype.buildingSearchReply = function(zresponse) {
 		}
 		dGet('wtw_buildtempsearchresults').innerHTML = ztempsearchresults;
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-buildingSearchReply=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-buildingSearchReply=' + ex.message);
 	}
 }
 
@@ -119,13 +119,13 @@ WTWJS.prototype.thingSearch = async function(zsearch) {
 	/* keyword search to find a thing to download to your instance */
 	try {
 		zsearch = WTW.encode(zsearch);
-		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + zsearch + "&webtype=thing", 
+		WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/sharesearch.php?search=' + zsearch + '&webtype=thing', 
 			function(zresponse) {
 				WTW.thingSearchReply(JSON.parse(zresponse));
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-thingSearch=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-thingSearch=' + ex.message);
 	}
 }
 
@@ -133,7 +133,7 @@ WTWJS.prototype.thingSearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
 		var ztempsearchresults = '';
-		dGet('wtw_thingtempsearchresults').innerHTML = "";
+		dGet('wtw_thingtempsearchresults').innerHTML = '';
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
 			var zthingid = zresponse[i].serverthingid;
@@ -155,7 +155,7 @@ WTWJS.prototype.thingSearchReply = function(zresponse) {
 		dGet('wtw_thingtempsearchresults').innerHTML = ztempsearchresults;
 		WTW.setWindowSize();
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-thingSearchReply=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-thingSearchReply=' + ex.message);
 	}
 }
 
@@ -163,13 +163,13 @@ WTWJS.prototype.avatarSearch = async function(zsearch) {
 	/* keyword search to find a avatar to download to your instance */
 	try {
 		zsearch = WTW.encode(zsearch);
-		WTW.getAsyncJSON("https://3dnet.walktheweb.com/connect/sharesearch.php?search=" + zsearch + "&webtype=avatar", 
+		WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/sharesearch.php?search=' + zsearch + '&webtype=avatar', 
 			function(zresponse) {
 				WTW.avatarSearchReply(JSON.parse(zresponse));
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-avatarSearch=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-avatarSearch=' + ex.message);
 	}
 }
 
@@ -177,7 +177,7 @@ WTWJS.prototype.avatarSearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
 		var ztempsearchresults = '';
-		dGet('wtw_avatartempsearchresults').innerHTML = "";
+		dGet('wtw_avatartempsearchresults').innerHTML = '';
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
 			var zavatarid = zresponse[i].serveravatarid;
@@ -205,7 +205,7 @@ WTWJS.prototype.avatarSearchReply = function(zresponse) {
 		dGet('wtw_avatartempsearchresults').innerHTML = ztempsearchresults;
 		WTW.setWindowSize();
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-avatarSearchReply=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-avatarSearchReply=' + ex.message);
 	}
 }
 
@@ -218,7 +218,7 @@ WTWJS.prototype.downloadWeb = async function(zcopywebid, zwebtype) {
 				'webtype': zwebtype,
 				'function':'downloadweb'
 			};
-			WTW.postAsyncJSON("/core/handlers/avatars.php", zrequest, 
+			WTW.postAsyncJSON('/core/handlers/avatars.php', zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -272,7 +272,7 @@ WTWJS.prototype.downloadWeb = async function(zcopywebid, zwebtype) {
 				'buildingrotationz': zbuildingrotationz,
 				'function':'downloadweb'
 			};
-			WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+			WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -281,14 +281,14 @@ WTWJS.prototype.downloadWeb = async function(zcopywebid, zwebtype) {
 			);
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-downloadWeb=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-downloadWeb=' + ex.message);
 	}
 }
 
 WTWJS.prototype.completedWebDownload = function(zresponse) {
 	/* download is complete, notidfy user */
 	try {
-		WTW.updateProgressText("WalkTheWeb Download Completed");
+		WTW.updateProgressText('WalkTheWeb Download Completed');
 		WTW.updateProgressBar(100,100);
 		var zisinstall = true;
 		if (WTW.adminView != undefined) {
@@ -297,7 +297,7 @@ WTWJS.prototype.completedWebDownload = function(zresponse) {
 			}
 		}
 		if (zisinstall) {
-			window.location.href = "/";
+			window.location.href = '/';
 		} else {
 			WTW.hide('wtw_installprogress');
 			WTW.hide('wtw_commtempsearchresults');
@@ -306,33 +306,33 @@ WTWJS.prototype.completedWebDownload = function(zresponse) {
 			WTW.hide('wtw_avatartempsearchresults');
 			WTW.show('wtw_downloadcomplete');
 			switch (zresponse.webtype) {
-				case "community":
-					dGet('wtw_downloadcompletemessage').innerHTML = "You can find your <b>New 3D Community</b> in the <b>Admin Menu</b><br />or select from the following:";
-					dGet('wtw_bopenwebdownload').value = "Open Your New 3D Community in the Editor";
+				case 'community':
+					dGet('wtw_downloadcompletemessage').innerHTML = 'You can find your <b>New 3D Community</b> in the <b>Admin Menu</b><br />or select from the following:';
+					dGet('wtw_bopenwebdownload').value = 'Open Your New 3D Community in the Editor';
 					dGet('wtw_bcontinuewebdownload').onclick = function() { WTW.openFullPageForm('importpage','communities'); };
 					WTW.hideAdminMenu();
 					WTW.getSelectCommunitiesList();
 					WTW.show('wtw_adminmenu22');
 					break;
-				case "building":
-					dGet('wtw_downloadcompletemessage').innerHTML = "You can find your <b>New 3D Building</b> in the <b>Admin Menu</b><br />or select from the following:";
-					dGet('wtw_bopenwebdownload').value = "Open Your New 3D Building in the Editor";
+				case 'building':
+					dGet('wtw_downloadcompletemessage').innerHTML = 'You can find your <b>New 3D Building</b> in the <b>Admin Menu</b><br />or select from the following:';
+					dGet('wtw_bopenwebdownload').value = 'Open Your New 3D Building in the Editor';
 					dGet('wtw_bcontinuewebdownload').onclick = function() { WTW.openFullPageForm('importpage','buildings'); };
 					WTW.hideAdminMenu();
 					WTW.getSelectBuildingsList();
 					WTW.show('wtw_adminmenu2');
 					break;
-				case "thing":
-					dGet('wtw_downloadcompletemessage').innerHTML = "You can find your <b>New 3D Thing</b> in the <b>Admin Menu</b><br />or select from the following:";
-					dGet('wtw_bopenwebdownload').value = "Open Your New 3D Thing in the Editor";
+				case 'thing':
+					dGet('wtw_downloadcompletemessage').innerHTML = 'You can find your <b>New 3D Thing</b> in the <b>Admin Menu</b><br />or select from the following:';
+					dGet('wtw_bopenwebdownload').value = 'Open Your New 3D Thing in the Editor';
 					dGet('wtw_bcontinuewebdownload').onclick = function() { WTW.openFullPageForm('importpage','things'); };
 					WTW.hideAdminMenu();
 					WTW.getSelectThingsList();
 					WTW.show('wtw_adminmenu32');
 					break;
-				case "avatar":
-					dGet('wtw_downloadcompletemessage').innerHTML = "You can find your <b>New 3D Avatar</b> in the <b>Admin Menu</b><br />or select from the following:";
-					dGet('wtw_bopenwebdownload').value = "Open Your New 3D Avatar in the Editor";
+				case 'avatar':
+					dGet('wtw_downloadcompletemessage').innerHTML = 'You can find your <b>New 3D Avatar</b> in the <b>Admin Menu</b><br />or select from the following:';
+					dGet('wtw_bopenwebdownload').value = 'Open Your New 3D Avatar in the Editor';
 					dGet('wtw_bcontinuewebdownload').onclick = function() { WTW.openFullPageForm('importpage','avatars'); };
 					WTW.hideAdminMenu();
 					WTW.openSelectAvatar();
@@ -344,7 +344,7 @@ WTWJS.prototype.completedWebDownload = function(zresponse) {
 		}		
 		
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-completedWebDownload=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-completedWebDownload=' + ex.message);
 	}
 }
 
@@ -363,7 +363,7 @@ WTWJS.prototype.downloadWebVersion = function(zobj, zwebid, zupdatewebid, zversi
 			'webtype': zwebtype,
 			'function':'downloadupdateweb'
 		};
-		WTW.postAsyncJSON("/core/handlers/communities.php", zrequest, 
+		WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
@@ -384,6 +384,6 @@ WTWJS.prototype.downloadWebVersion = function(zobj, zwebid, zupdatewebid, zversi
 			}
 		);
 	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_downloads.js-downloadWebVersion=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_downloads.js-downloadWebVersion=' + ex.message);
 	} 
 }
