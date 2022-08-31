@@ -1,10 +1,10 @@
-// All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors
-// "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. 
-// Read the included GNU Ver 3.0 license file for details and additional release information.
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
 function DEVID_PLUGINTEMPLATE() {
 	/* Add your global variables as needed here */
-	this.ver = "1.0.0";
+	this.ver = '1.0.0';
 }
 
 /* Create the class instance */
@@ -41,14 +41,14 @@ DEVID_PLUGINTEMPLATE.prototype.onClick = function(zpickedname) {
 
 		*/		
 		/* use indexOf function or the zmoldnameparts to set conditional code for the selected 3D Object */
-		/* in this example, the zpickedname has a name part "wtwpaintballgun1a" */
+		/* in this example, the zpickedname has a name part 'wtwpaintballgun1a' */
 		/* when the 3D Object is clicked, the Avatar picks up the 3D Object in the righthand */
 		/* using the offset Position, Scaling, and Rotation set below */
 		/* note the offset is from an avatar in the T-Pose with palm of the hand facing down */
 		/* 		x = arm to finger tips axis direction */
 		/* 		y = palm to back of hand axis direction */
 		/* 		z = first finger to forth finger axis direction */
-		if (zpickedname.indexOf("wtwpaintballgun1a") > -1) {
+		if (zpickedname.indexOf('wtwpaintballgun1a') > -1) {
 			let zoffset = {
 				'position': {
 					'x':-.77,
@@ -66,13 +66,13 @@ DEVID_PLUGINTEMPLATE.prototype.onClick = function(zpickedname) {
 					'z':78
 				}
 			};
-			/* the current user avatar is named "myavatar-" + dGet("wtw_tinstanceid").value */
+			/* the current user avatar is named 'myavatar-' + dGet('wtw_tinstanceid').value */
 			/* pick up object function (avatarname, objectname, attachpoint, offset) */
 			/* attachpoints can be found /core/scripts/avatars/basicavatars.js */
-			WTW.pickUpObject("myavatar-" + dGet("wtw_tinstanceid").value, zpickedname, 'righthand', zoffset);
+			WTW.pickUpObject('myavatar-' + dGet('wtw_tinstanceid').value, zpickedname, 'righthand', zoffset);
 		}
 	} catch (ex) {
-		WTW.log("plugins:devid-plugintemplate:scripts-class_main.js-onClick=" + ex.message);
+		WTW.log('plugins:devid-plugintemplate:scripts-class_main.js-onClick=' + ex.message);
 	} 
 }
 
@@ -83,12 +83,12 @@ DEVID_PLUGINTEMPLATE.prototype.checkActionZone = function(zactionzonename, zacti
 		/* this example checks if my avatar is in a load animations zone */
 		/* if so, it calls the funtion to add the zone required animations to my avatar */
 		if (zmeinzone) {
-			if (zactionzonename.indexOf("loadanimations") > -1) {
+			if (zactionzonename.indexOf('loadanimations') > -1) {
 				WTW.checkLoadAnimations(zactionzoneind);
 			}
 		}
 	} catch (ex) {
-		WTW.log("plugins:devid-plugintemplate:scripts-class_main.js-checkActionZone=" + ex.message);
+		WTW.log('plugins:devid-plugintemplate:scripts-class_main.js-checkActionZone=' + ex.message);
 	} 
 }
 
@@ -100,12 +100,12 @@ DEVID_PLUGINTEMPLATE.prototype.setAvatarMovement = function(zavatar, zkey, zweig
 		/* WTW.animationSet = 'riffle'; */
 		/* so that onwait becomes onwait-riffle animation if it exists */
 		switch (zkey) {
-			case "onwait-riffle":
+			case 'onwait-riffle':
 				let zstride = WTW.init.gravity * 15 * zavatar.WTW.animations.running[zkey].weight * WTW.walkSpeed / WTW.fps;
 				let zmove = WTW.getMoveDownVector(zavatar.name, -zstride);
 				zavatar.moveWithCollisions(zmove);
 				break;
-			case "onwalk-riffle":
+			case 'onwalk-riffle':
 				if (WTW.moveOverride == 0) {
 					let zstride = 15 * zavatar.WTW.animations.running[zkey].weight * WTW.walkSpeed / WTW.fps;
 					zavatar.WTW.animations.running[zkey].speedRatio = WTW.walkAnimationSpeed;
@@ -115,7 +115,7 @@ DEVID_PLUGINTEMPLATE.prototype.setAvatarMovement = function(zavatar, zkey, zweig
 				break;
 		}
 	} catch (ex) {
-		WTW.log("plugins:devid-plugintemplate:scripts-class_main.js-setAvatarMovement=" + ex.message);
+		WTW.log('plugins:devid-plugintemplate:scripts-class_main.js-setAvatarMovement=' + ex.message);
 	} 
 	return zweight;
 }
@@ -126,7 +126,7 @@ DEVID_PLUGINTEMPLATE.prototype.checkHovers = function(zmoldname, zshape) {
 		/* useful if you want to change material, highlighting, or prompt a response */
 		zmoldname = zmoldname.toLowerCase();
 		/* example:
-			if (zmoldname.indexOf("golfball") > -1) {
+			if (zmoldname.indexOf('golfball') > -1) {
 				//... code to make it do something when mouse hovers the mesh
 			}
 		  or where the zshape is defined as golfball (zshape is the type, like cube, sphere, etc...):
@@ -135,7 +135,7 @@ DEVID_PLUGINTEMPLATE.prototype.checkHovers = function(zmoldname, zshape) {
 			}
 		*/
 	} catch (ex) {
-		WTW.log("plugins:devid-plugintemplate:scripts-class_main.js-checkHovers=" + ex.message);
+		WTW.log('plugins:devid-plugintemplate:scripts-class_main.js-checkHovers=' + ex.message);
 	} 
 }
 
@@ -145,7 +145,7 @@ DEVID_PLUGINTEMPLATE.prototype.resetHovers = function(zmoldname, zshape) {
 		/* useful if you want to change material back, unhighlighting, or close a prompt */
 		zmoldname = zmoldname.toLowerCase();
 		/* example:
-			if (zmoldname.indexOf("golfball") > -1) {
+			if (zmoldname.indexOf('golfball') > -1) {
 				//... code to make it do something - reset hovers
 			}
 		  or where the zshape is defined as golfball (zshape is the type, like cube, sphere, etc...):
@@ -154,6 +154,6 @@ DEVID_PLUGINTEMPLATE.prototype.resetHovers = function(zmoldname, zshape) {
 			}
 		*/
 	} catch (ex) {
-		WTW.log("plugins:devid-plugintemplate:scripts-class_main.js-resetHovers=" + ex.message);
+		WTW.log('plugins:devid-plugintemplate:scripts-class_main.js-resetHovers=' + ex.message);
 	} 
 }

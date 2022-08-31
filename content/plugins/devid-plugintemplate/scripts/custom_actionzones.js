@@ -1,3 +1,7 @@
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
+
 DEVID_PLUGINTEMPLATE.prototype.addActionZoneMyCustomZone = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	let zactionzone;
 	try {
@@ -9,7 +13,7 @@ DEVID_PLUGINTEMPLATE.prototype.addActionZoneMyCustomZone = function(zactionzonen
 			let zmolddef = WTW.newMold();
 			/* Shape, Position, Scaling, Rotation, and Parent Name are passed to the object on creation */
 			zmolddef.shape = zactionzonedef.actionzoneshape;
-			zmolddef.covering = "hidden";
+			zmolddef.covering = 'hidden';
 			zmolddef.scaling.x = zactionzonedef.scaling.x;
 			zmolddef.scaling.y = zactionzonedef.scaling.y;
 			zmolddef.scaling.z = zactionzonedef.scaling.z;
@@ -17,8 +21,8 @@ DEVID_PLUGINTEMPLATE.prototype.addActionZoneMyCustomZone = function(zactionzonen
 			zmolddef.opacity = 0;
 			zmolddef.parentname = zactionzonedef.parentname;
 			zmolddef.actionzoneind = zactionzoneind;
-			zmolddef.checkcollisions = "0";
-			zmolddef.ispickable = "0";
+			zmolddef.checkcollisions = '0';
+			zmolddef.ispickable = '0';
 			/* create the action zone using the mold definition above */
 			zactionzone = WTW.addMold(zactionzonename, zmolddef, zmolddef.parentname, zmolddef.covering);
 			zactionzone.rotation.x = WTW.getRadians(zactionzonedef.rotation.x);
@@ -30,8 +34,8 @@ DEVID_PLUGINTEMPLATE.prototype.addActionZoneMyCustomZone = function(zactionzonen
 			zactionzone.position.y = zactionzonedef.position.y;
 			zactionzone.position.z = zactionzonedef.position.z;
 		}
-		/* shown = "2" will keep it from adding a duplicate object while it is in the queue */
-		WTW.actionZones[zactionzoneind].shown = "2";
+		/* shown = '2' will keep it from adding a duplicate object while it is in the queue */
+		WTW.actionZones[zactionzoneind].shown = '2';
 		
 		
 		/* everything you create in this function should be parented to the above or using the basic Action Zones */
@@ -41,12 +45,12 @@ DEVID_PLUGINTEMPLATE.prototype.addActionZoneMyCustomZone = function(zactionzonen
 		/* examples of existing 3D Objects can be found at /core/scripts/actionzones/wtw_basicactionzones.js */
 		/* you can use one of the Action Zones as a base and build off it as needed */
 		/* names of your child objects and materials should be: */
-		/* zactionzonename + "-DEVIDpartname" */
+		/* zactionzonename + '-DEVIDpartname' */
 		/* where partname is whatever you want it to be. */
 
 
 	} catch (ex) {
-		WTW.log("plugins:devid-plugintemplate:scripts-custom_actionzones.js-addActionZoneMyCustomZone=" + ex.message);
+		WTW.log('plugins:devid-plugintemplate:scripts-custom_actionzones.js-addActionZoneMyCustomZone=' + ex.message);
 	}
 	return zactionzone;
 }
@@ -56,12 +60,12 @@ DEVID_PLUGINTEMPLATE.prototype.setNewActionZoneDefaults = function(zactionzonety
 		/* add each custom action zone to this one function as a case - no need to add additional hooks */
 		/* zactionzonetype is name of 'My Custom Zone' - all lowercase and no spaces */
 		switch (zactionzonetype) {
-			case "mycustomzone":
-				dGet('wtw_tactionzonename').value = "New My Custom Zone";
+			case 'mycustomzone':
+				dGet('wtw_tactionzonename').value = 'New My Custom Zone';
 				break;
 		}
 	} catch (ex) {
-		WTW.log("plugins:devid-plugintemplate:scripts-custom_actionzones.js-setNewActionZoneDefaults=" + ex.message);
+		WTW.log('plugins:devid-plugintemplate:scripts-custom_actionzones.js-setNewActionZoneDefaults=' + ex.message);
 	}
 }
 		
@@ -70,9 +74,9 @@ DEVID_PLUGINTEMPLATE.prototype.setActionZoneFormFields = function(zactionzonetyp
 		/* add each custom action zone to this one function as a case - no need to add additional hooks */
 		/* zactionzonetype is name of my custom action zone - all lowercase and no spaces */
 		switch (zactionzonetype) {
-			case "mycustomzone":
+			case 'mycustomzone':
 				/* define the labels and button names used on the form */
-				dGet('wtw_editactionzoneformtitle').innerHTML = "Add My Custom Zone";
+				dGet('wtw_editactionzoneformtitle').innerHTML = 'Add My Custom Zone';
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
 				/* show or hide the section divs on the form (/core/forms/actionzone.php) */
 				WTW.hide('wtw_actionzoneaxisdiv');
@@ -83,7 +87,7 @@ DEVID_PLUGINTEMPLATE.prototype.setActionZoneFormFields = function(zactionzonetyp
 				break;
 		}
 	} catch (ex) {
-		WTW.log("plugins:devid-plugintemplate:scripts-custom_actionzones.js-setActionZoneFormFields=" + ex.message);
+		WTW.log('plugins:devid-plugintemplate:scripts-custom_actionzones.js-setActionZoneFormFields=' + ex.message);
 	}
 }
 		
