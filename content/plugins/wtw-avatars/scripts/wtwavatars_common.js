@@ -1,5 +1,9 @@
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
+
 function WTWJS() {
-	this.ver = "1.0.0";
+	this.ver = '1.0.0';
 	this.avatars = [];
 	this.avatarParts = [];
 	this.avatarAnimations = [];
@@ -58,16 +62,16 @@ WTWJS.prototype.getJSON = function(zurl, zcallback, zaction, zrequest) {
 			zrequest = null;
 		}
 		var Httpreq = new XMLHttpRequest();
-		Httpreq.overrideMimeType("application/json");
+		Httpreq.overrideMimeType('application/json');
 		Httpreq.open(zaction, zurl, true);
 		Httpreq.onreadystatechange = function () {
-			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+			if (Httpreq.readyState == 4 && Httpreq.status == '200') {
 				zcallback(Httpreq.responseText);
 			}
 		};
 		Httpreq.send(zrequest);  
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getJSON=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-getJSON=' + ex.message);
 	}
 }
 
@@ -82,17 +86,17 @@ WTWJS.prototype.getAsyncJSON = function(zurl, zcallback, zaction, zrequest) {
 				zrequest = null;
 			}
 			var Httpreq = new XMLHttpRequest();
-			Httpreq.overrideMimeType("application/json");
+			Httpreq.overrideMimeType('application/json');
 			Httpreq.open(zaction, zurl, true);
 			Httpreq.onreadystatechange = function () {
-				if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+				if (Httpreq.readyState == 4 && Httpreq.status == '200') {
 					zcallback(Httpreq.responseText);
 				}
 			};
 			Httpreq.send(zrequest);
 		});
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getAsyncJSON=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-getAsyncJSON=' + ex.message);
 	}
 }
 
@@ -107,13 +111,13 @@ WTWJS.prototype.postJSON = function(zurl, zrequest, zcallback) {
 		zformdata.append('action', 'POST');
 		Httpreq.open('POST', zurl);
 		Httpreq.onreadystatechange = function () {
-			if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+			if (Httpreq.readyState == 4 && Httpreq.status == '200') {
 				zcallback(Httpreq.responseText);
 			}
 		};
 		Httpreq.send(zformdata);  
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-postJSON=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-postJSON=' + ex.message);
 	}
 }
 
@@ -130,14 +134,14 @@ WTWJS.prototype.postAsyncJSON = function(zurl, zrequest, zcallback) {
 			zformdata.append('action', 'POST');
 			Httpreq.open('POST', zurl);
 			Httpreq.onreadystatechange = function () {
-				if (Httpreq.readyState == 4 && Httpreq.status == "200") {
+				if (Httpreq.readyState == 4 && Httpreq.status == '200') {
 					zcallback(Httpreq.responseText);
 				}
 			};
 			Httpreq.send(zformdata);
 		});
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-postAsyncJSON=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-postAsyncJSON=' + ex.message);
 	}
 }
 
@@ -150,34 +154,34 @@ WTWJS.prototype.getMeshOrNodeByID = function(zmoldname) {
 			zobject = scene.getTransformNodeByID(zmoldname);
 		}
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getMeshOrNodeByID=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-getMeshOrNodeByID=' + ex.message);
 	}
 	return zobject;
 }
 
 WTWJS.prototype.setCookie = function(zname, zvalue, zdays) {
 	try {
-		var zexpires = "";
+		var zexpires = '';
 		if (zdays) {
 			var zdate = new Date();
 			zdate.setTime(zdate.getTime() + (zdays*24*60*60*1000));
-			zexpires = "; expires=" + zdate.toGMTString();
+			zexpires = '; expires=' + zdate.toGMTString();
 		}
-		if (wtw_protocol == "https://") {
-			document.cookie = zname + "=" + zvalue + zexpires + "; domain=" + wtw_domainname + ";path=/;secure";
+		if (wtw_protocol == 'https://') {
+			document.cookie = zname + '=' + zvalue + zexpires + '; domain=' + wtw_domainname + ';path=/;secure';
 		} else {
-			document.cookie = zname + "non=" + zvalue + zexpires + "; path=/";
+			document.cookie = zname + 'non=' + zvalue + zexpires + '; path=/';
 		}
     } catch (ex) {
-        WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-setCookie=" +ex.message);
+        WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-setCookie=' +ex.message);
     }
 }
 
 WTWJS.prototype.getCookie = function(zname) {
-	var zvalue = "";
+	var zvalue = '';
 	try {
-		if (wtw_protocol != "https://") {
-			zname += "non=";
+		if (wtw_protocol != 'https://') {
+			zname += 'non=';
 		}
 		var zcookies = document.cookie.split(';');
 		for(var i=0;i < zcookies.length;i++) {
@@ -189,27 +193,27 @@ WTWJS.prototype.getCookie = function(zname) {
 				zvalue = zcook.substring(zname.length,zcook.length);
 			}
 		}
-		if (zvalue == "") {
+		if (zvalue == '') {
 			zvalue = null;
-		} else if (zvalue.indexOf("non=") > -1) {
-			zvalue = zvalue.replace("non=","");
-		} else if (zvalue.indexOf("=") > -1) {
-			zvalue = zvalue.replace("=","");
+		} else if (zvalue.indexOf('non=') > -1) {
+			zvalue = zvalue.replace('non=','');
+		} else if (zvalue.indexOf('=') > -1) {
+			zvalue = zvalue.replace('=','');
 		}
     } catch (ex) {
-        WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getCookie=" +ex.message);
+        WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-getCookie=' +ex.message);
     }
 	return zvalue;
 }
 
 WTWJS.prototype.deleteCookie = function(zname) {
-    WTW.setCookie(zname,"",-1);
+    WTW.setCookie(zname,'',-1);
 }
 
 WTWJS.prototype.getQuerystring = function(zkey, zdefault) {
-    var zquery = "";
+    var zquery = '';
     try {
-        if (zdefault == null) zdefault = "";
+        if (zdefault == null) zdefault = '';
         zkey = zkey.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
         var zregex = new RegExp("[\\?&]" + zkey + "=([^&#]*)");
         var zqs = zregex.exec(window.location.href);
@@ -219,7 +223,7 @@ WTWJS.prototype.getQuerystring = function(zkey, zdefault) {
             zquery = zqs[1];
         }
     } catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getQuerystring=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-getQuerystring=' + ex.message);
     }
     return zquery;
 }
@@ -232,7 +236,7 @@ WTWJS.prototype.getRandomString = function(zlength) {
 			zresult += zchars[Math.floor(Math.random() * zchars.length)];
 		}
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-randomString=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-randomString=' + ex.message);
 	}
     return zresult;
 }
@@ -248,7 +252,7 @@ WTWJS.prototype.getRadians = function(zdegrees) {
 			zradians = zdegrees * Math.PI / 180;
 		}
     } catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getRadians=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-getRadians=' + ex.message);
     }
 	return zradians;
 }
@@ -260,7 +264,7 @@ WTWJS.prototype.getDegrees = function(zradians) {
 			zdegrees = WTW.cleanDegrees(zradians * 180 / Math.PI);
 		}
     } catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-getDegrees=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-getDegrees=' + ex.message);
     }
 	return zdegrees;
 }
@@ -273,65 +277,65 @@ WTWJS.prototype.registerMouseOver = function(mold) {
 			mold.actionManager.registerAction(WTW.mouseOut);
 		}
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-registerMouseOver=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-registerMouseOver=' + ex.message);
 	}
 }
 
 WTWJS.prototype.mouseOverMold = function(mold) {
 	try {
-		document.body.style.cursor = "default";
+		document.body.style.cursor = 'default';
 		if (mold.meshUnderPointer != null) {
 			WTW.lastID = WTW.currentID;
 			WTW.currentID = mold.meshUnderPointer.name;
 			if (mold.meshUnderPointer.isPickable) {
-				document.body.style.cursor = "pointer";
+				document.body.style.cursor = 'pointer';
 			}
 		}
 	} catch(ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-mouseOverMold=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-mouseOverMold=' + ex.message);
 	}
 }
 
 WTWJS.prototype.mouseOutMold = function(mold) {
 	try {
-		document.body.style.cursor = "default";
+		document.body.style.cursor = 'default';
 		WTW.lastID = WTW.currentID;
-		WTW.currentID = "";
+		WTW.currentID = '';
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-mouseOutMold=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-mouseOutMold=' + ex.message);
 	}
 }
 
 WTWJS.prototype.showIDs = function(zdisplayname) {
 	try {
-		if (zdisplayname == "") {
+		if (zdisplayname == '') {
 			zdisplayname = 'Anonymous';
 		}
-		var znamemold = WTW.getMeshOrNodeByID("myavatar" + dGet('wtw_tinstanceid').value + '-nameplate');
+		var znamemold = WTW.getMeshOrNodeByID('myavatar' + dGet('wtw_tinstanceid').value + '-nameplate');
 		if (znamemold != null) {
 			znamemold.dispose();
 		}
 		var zmolddef = WTW.newMold();
 		zmolddef.webtext.webtext = zdisplayname;
 		zmolddef.webtext.webstyle = JSON.stringify({
-			"anchor":"center",
-			"letter-height":1.00,
-			"letter-thickness":.10,
-			"color":"#0000ff",
-			"alpha":1.00,
-			"colors":{
-				"diffuse":"#f0f0f0",
-				"specular":"#000000",
-				"ambient":"#808080",
-				"emissive":"#0000ff"
+			'anchor':'center',
+			'letter-height':1.00,
+			'letter-thickness':.10,
+			'color':'#0000ff',
+			'alpha':1.00,
+			'colors':{
+				'diffuse':'#f0f0f0',
+				'specular':'#000000',
+				'ambient':'#808080',
+				'emissive':'#0000ff'
 			}
 		});
-		znamemold = WTW.addMold3DText("myavatar" + dGet('wtw_tinstanceid').value + '-nameplate', zmolddef, 1, 1, 1);
+		znamemold = WTW.addMold3DText('myavatar' + dGet('wtw_tinstanceid').value + '-nameplate', zmolddef, 1, 1, 1);
 		znamemold.parent = WTW.myAvatar;
 		znamemold.position.y = 16;
 		znamemold.billboardMode = 2;
     } catch (ex) {
-        WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-showIDs=" +ex.message);
+        WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-showIDs=' +ex.message);
     }
 }
 
@@ -526,7 +530,7 @@ WTWJS.prototype.newMold = function() {
 			'moldname':''
 		};
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-newmold=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-newmold=' + ex.message);
 	}
 	return zmolddef;
 }
@@ -548,7 +552,7 @@ WTWJS.prototype.newWebImage = function() {
 			'clickloaded':'0'
 		};
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-newWebImage=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-newWebImage=' + ex.message);
 	}
 	return zwebimage;
 }
@@ -568,16 +572,16 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 		}
 		if (zwebstyle == null || zwebstyle == '') {
 			zwebstyle = {
-				"anchor":"center",
-				"letter-height":6.00,
-				"letter-thickness":1.00,
-				"color":"#ff0000",
-				"alpha":1.00,
-				"colors":{
-					"diffuse":"#f0f0f0",
-					"specular":"#000000",
-					"ambient":"#808080",
-					"emissive":"#ff0000"
+				'anchor':'center',
+				'letter-height':6.00,
+				'letter-thickness':1.00,
+				'color':'#ff0000',
+				'alpha':1.00,
+				'colors':{
+					'diffuse':'#f0f0f0',
+					'specular':'#000000',
+					'ambient':'#808080',
+					'emissive':'#ff0000'
 				}
 			};
 		} else {
@@ -587,12 +591,12 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
         var zdisplaytext  = new Writer(zwebtext, zwebstyle);
 		var zmytext = zdisplaytext.getMesh();
 		zmytext.rotation.x = WTW.getRadians(-90);
-		zmytext.name = zmoldname + "-text";
+		zmytext.name = zmoldname + '-text';
 		zmytext.parent = zmold;
 		zmytext.isPickable = true;
 		WTW.registerMouseOver(zmytext);
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-addMold3DText=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-addMold3DText=' + ex.message);
 	}
 	return zmold;
 }
@@ -603,22 +607,22 @@ WTWJS.prototype.hilightMoldFast = function(zmoldname, zcolor) {
 		if (zmold != null) {
 			var zcolorcode = BABYLON.Color3.Yellow();
 			switch (zcolor.toLowerCase()) {
-				case "green":
+				case 'green':
 					zcolorcode = BABYLON.Color3.Green();
 					break;
-				case "red":
+				case 'red':
 					zcolorcode = BABYLON.Color3.Red();
 					break;
-				case "blue":
+				case 'blue':
 					zcolorcode = BABYLON.Color3.Blue();
 					break;
-				case "yellow":
+				case 'yellow':
 					zcolorcode = BABYLON.Color3.Yellow();
 					break;
 			}
 			WTW.unhilightMold(zmoldname);
 			if (WTW.highlightLayer == null) {
-				WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
+				WTW.highlightLayer = new BABYLON.HighlightLayer('highlightlayer', scene);
 			}
 			WTW.highlightLayer.outerGlow = true;
 			WTW.highlightLayer.innerGlow = true;
@@ -630,7 +634,7 @@ WTWJS.prototype.hilightMoldFast = function(zmoldname, zcolor) {
 			},500);
 		}
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-hilightMoldFast=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-hilightMoldFast=' + ex.message);
 	}
 }
 
@@ -640,29 +644,29 @@ WTWJS.prototype.hilightMold = function(zmoldname, zcolor) {
 		if (zmold != null) {
 			var zcolorcode = BABYLON.Color3.Yellow();
 			switch (zcolor.toLowerCase()) {
-				case "green":
+				case 'green':
 					zcolorcode = BABYLON.Color3.Green();
 					break;
-				case "red":
+				case 'red':
 					zcolorcode = BABYLON.Color3.Red();
 					break;
-				case "blue":
+				case 'blue':
 					zcolorcode = BABYLON.Color3.Blue();
 					break;
-				case "yellow":
+				case 'yellow':
 					zcolorcode = BABYLON.Color3.Yellow();
 					break;
 			}
 			WTW.unhilightMold(zmoldname);
 			if (WTW.highlightLayer == null) {
-				WTW.highlightLayer = new BABYLON.HighlightLayer("highlightlayer", scene);
+				WTW.highlightLayer = new BABYLON.HighlightLayer('highlightlayer', scene);
 			}
 			WTW.highlightLayer.outerGlow = true;
 			//WTW.highlightLayer.innerGlow = true;
 			WTW.highlightLayer.addMesh(zmold, zcolorcode);
 		}
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-hilightMold=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-hilightMold=' + ex.message);
 	}
 }
 
@@ -675,19 +679,19 @@ WTWJS.prototype.unhilightMold = function(zmoldname) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-unhilightMold=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-unhilightMold=' + ex.message);
 	}
 }
 
 WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 	try {
 		/* extension of the babylon dispose function to catch various child and sub elements */
-		if (zmoldname != "") {
+		if (zmoldname != '') {
 			scene.blockfreeActiveMeshesAndRenderingGroups = true;
 			if (zcheck == undefined) {
 				zcheck = true;
 			}
-            var znamepart = zmoldname.split('-');
+            var znamepart = WTW.getMoldnameParts(zmoldname);
 			/* dispose mold (mesh) from shadow and reflection arrays */
 			WTW.disposeShadowFromMold(zmoldname);
 			WTW.disposeReflectionFromMold(zmoldname);
@@ -698,30 +702,30 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 			try {
 				WTW.disposeMoldEvent(zmoldname);
 				WTW.disposeSoundAndLights(zmoldname);
-				if (zmoldname.indexOf("myavatar") > -1 || zmoldname.indexOf("person") > -1) {
+				if (zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1) {
 					/* dispose of avatar parts / animations */
 					WTW.disposeAnimations(zmoldname);
-				} else if (znamepart[5] == 'video') {
+				} else if (znamepart.shape == 'video') {
 					/* stop and clear the video before it is deleted */
 					var zstrtemp = zmoldname;
-					zstrtemp = zstrtemp.replace("-base","-mainvideo");
+					zstrtemp = zstrtemp.replace('-base','-mainvideo');
 					var zvideomold = WTW.getMeshOrNodeByID(zstrtemp);
 					if (zvideomold != null){
 						if (zvideomold.material.diffuseTexture.video != undefined) {
 							zvideomold.material.diffuseTexture.video.pause();
-							zvideomold.material.diffuseTexture.video.src = "";
+							zvideomold.material.diffuseTexture.video.src = '';
 						}
 						if (zvideomold.material.diffuseTexture.video != null) {
 							zvideomold.material.diffuseTexture.video = null;
 						}
 				   }
-				} else if (znamepart[5].indexOf('water') > -1) {
+				} else if (znamepart.shape.indexOf('water') > -1) {
 					/* remove mold from reflection and refraction arrays */
 					var zstrtemp = zmoldname;
 					if (zstrtemp.indexOf('-base') > -1) {
-						zstrtemp = zstrtemp.replace("-base","");
+						zstrtemp = zstrtemp.replace('-base','');
 					}
-					var zwatermat = scene.getMaterialByID(zstrtemp + "-watermat");
+					var zwatermat = scene.getMaterialByID(zstrtemp + '-watermat');
 					if (zwatermat != null) {
 						if (zwatermat.reflectionTexture.renderList != null) {
 							if (zwatermat.reflectionTexture.renderList.length > 0) {
@@ -748,20 +752,20 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 						zwatermat.dispose();
 					} catch(ex) {}
 					if (zcheck) {
-						WTW.disposeClean(zstrtemp + "-water", false);
+						WTW.disposeClean(zstrtemp + '-water', false);
 					}
-				} else if (znamepart[5].indexOf('image') > -1) {
+				} else if (znamepart.shape.indexOf('image') > -1) {
 					/* dispose of hover over and click image mold layers */
 					var zstrtemp = zmoldname;
 					if (zstrtemp.indexOf('-base') > -1) {
-						zstrtemp = zstrtemp.replace("-base","-mainimage");
+						zstrtemp = zstrtemp.replace('-base','-mainimage');
 					} else {
-						zstrtemp += "-mainimage";
+						zstrtemp += '-mainimage';
 					}
 					if (zcheck) {
 						WTW.disposeClean(zstrtemp, false);
-						WTW.disposeClean(zstrtemp.replace("-mainimage","-hoverimage"), false);
-						WTW.disposeClean(zstrtemp.replace("-mainimage","-clickimage"), false);
+						WTW.disposeClean(zstrtemp.replace('-mainimage','-hoverimage'), false);
+						WTW.disposeClean(zstrtemp.replace('-mainimage','-clickimage'), false);
 					}
 				}
 			} catch (ex) {}
@@ -807,17 +811,17 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 				zmold = null;
 				if (zcheck) {
 					/* dispose of action zone components (axle, pole, hinge, bases) */
-					if (zmoldname.indexOf("actionzone") > -1) {
-						WTW.disposeClean(zmoldname.replace("actionzone","actionzoneaxle"),false);
-						WTW.disposeClean(zmoldname.replace("actionzone","actionzoneaxlepole"),false);
-						WTW.disposeClean(zmoldname.replace("actionzone","actionzoneaxlebase"),false);
-						WTW.disposeClean(zmoldname.replace("actionzone","actionzoneaxlebase2"),false);
+					if (zmoldname.indexOf('actionzone') > -1) {
+						WTW.disposeClean(zmoldname.replace('actionzone','actionzoneaxle'),false);
+						WTW.disposeClean(zmoldname.replace('actionzone','actionzoneaxlepole'),false);
+						WTW.disposeClean(zmoldname.replace('actionzone','actionzoneaxlebase'),false);
+						WTW.disposeClean(zmoldname.replace('actionzone','actionzoneaxlebase2'),false);
 					}
 				}
 				/* dispose of any dynamic meshes (changes subdivisions as get closer) */
-				var zmoldfar = WTW.getMeshOrNodeByID(zmoldname + "-far");
+				var zmoldfar = WTW.getMeshOrNodeByID(zmoldname + '-far');
 				if (zmoldfar != null) {
-					WTW.disposeClean(zmoldname + "-far");
+					WTW.disposeClean(zmoldname + '-far');
 				}
 			}
 			/* added support to dispose of Transform Nodes */
@@ -836,7 +840,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 			scene.blockfreeActiveMeshesAndRenderingGroups = false;
 		}
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-disposeClean=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-disposeClean=' + ex.message);
 		scene.blockfreeActiveMeshesAndRenderingGroups = false;
 	}
 }
@@ -847,14 +851,14 @@ WTWJS.prototype.openLocalLogin = function(zmenuname, zwidth, zheigth) {
 			'func': 'WTW.openLocalLogin',
 			'message': zmenuname,
 			'parameters':Array(zmenuname)
-		}, "*");
+		}, '*');
 		window.parent.postMessage({
 			'func': 'WTW.resizeIFrame',
 			'message': 'Size Frame',
 			'parameters':Array(zwidth,zheigth)
-		}, "*");
+		}, '*');
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-openLocalLogin=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-openLocalLogin=' + ex.message);
 	}
 }
 
@@ -863,9 +867,9 @@ WTWJS.prototype.onMessage = function (e) {
 		e = e || window.event;
 		zmessage = e.data.message;
 		if (zmessage != '') {
-//WTW.log(zmessage.replace("<","&lt;").replace(">","&gt;"));
+//WTW.log(zmessage.replace('<','&lt;').replace('>','&gt;'));
 		}
 	} catch (ex) {
-		WTW.log("plugins-wtw-avatars-scripts-wtwavatars_common.js-onMessage=" + ex.message);
+		WTW.log('plugins-wtw-avatars-scripts-wtwavatars_common.js-onMessage=' + ex.message);
 	}
 }

@@ -19,11 +19,9 @@ class wtwavatars {
 		}
 	}	
 	
-	public $version = "1.0.2";
-
+	public $version = "1.0.3";
 	public $dbversion = "1.0.1";
-
-	public $versiondate = "2020-5-31";
+	public $versiondate = "2020-8-31";
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
@@ -241,7 +239,7 @@ class wtwavatars {
 		global $wtwplugins;
 		$zformdata = "";
 		try {
-			$zformdata .= "<div id=\"wtw_loadingavatarid\" class=\"wtw-loadingnotice\" style=\"margin-left:auto;margin-right:auto;color:#000000;\">".$wtwplugins->__('Loading')."</div>\r\n";
+			$zformdata .= "<div id=\"wtw_loadingavatarid\" class=\"wtw-loadingnoticecentered\">".$wtwplugins->__('Loading')."</div>\r\n";
 			$zformdata .= "<div id=\"wtw_listavatars\"></div><br />\r\n";
 			$zformdata .= "<div class=\"wtw-yellowbutton\" onclick=\"WTW.closeSelectAvatar();\">".$wtwplugins->__('Cancel')."</div><br /><br />\r\n";
 		} catch (Exception $e) {
@@ -276,7 +274,7 @@ class wtwavatars {
 			$zformdata .= "<input type=\"text\" id=\"wtw_tnewavatarname\" maxlength=\"255\" onclick=\"WTW.checkKey(this, 'displayname', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'displayname', 0, 0);\" onblur=\"WTW.checkKey(this, 'displayname', 0, 1);\" /><br /><br />\r\n";
 			$zformdata .= "<h2>Avatar Group</h2>\r\n";
 			$zformdata .= "<div class=\"wtw-mainmenuvalue\">Groups can be assigned to a 3D Community<br />(Example: Zombie Group for Zombie Scenes).</div>\r\n";
-			$zformdata .= "<select id=\"wtw_tnewavatargroup\"></select>\r\n";
+			$zformdata .= "<select id=\"wtw_tnewavatargroup\" class='wtw-pointer'></select>\r\n";
 			$zformdata .= "<h2>Avatar Description</h2>\r\n";
 			$zformdata .= "<input type=\"text\" id=\"wtw_tnewavatardescription\" maxlength=\"255\" onclick=\"WTW.checkKey(this, 'displayname', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'displayname', 0, 0);\" onblur=\"WTW.checkKey(this, 'displayname', 0, 1);\" /><br /><br />\r\n";
 			$zformdata .= "<h2>Gender</h2>\r\n";
@@ -287,7 +285,7 @@ class wtwavatars {
 			$zformdata .= "<h2>Main 3D Avatar File</h2>\r\n";
 			$zformdata .= "<div class=\"wtw-mainmenuvalue\">Upload the Main 3D Avatar File<br />(.babylon, .obj, .gtlf, or .glb supported).</div>\r\n";
 			$zformdata .= "<div id=\"wtw_taddnewavatarerror\" class=\"wtw-error\"></div>\r\n";
-			$zformdata .= "<br /><div id=\"wtw_adminnewavatarupload\" class=\"wtw-greenbutton\" onclick=\"dGet('wtw_avatarfileupload').click();\" style=\"font-size:1.4em;\">Upload Main Avatar File</div>\r\n";
+			$zformdata .= "<br /><div id=\"wtw_adminnewavatarupload\" class=\"wtw-greenbuttonbig\" onclick=\"dGet('wtw_avatarfileupload').click();\">Upload Main Avatar File</div>\r\n";
 			$zformdata .= "</div>\r\n";
 
 			$zformdata .= "<div id=\"wtw_newavataruploadfolder\" style=\"display:none;visibility:hidden;\">\r\n";
@@ -301,7 +299,7 @@ class wtwavatars {
 			$zformdata .= "<div class=\"wtw-clear\"></div>\r\n";
 			$zformdata .= "<div><input type=\"text\" id=\"wtw_tnewavatarendframe\" maxlength=\"255\" onclick=\"WTW.checkKey(this, 'number', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'number', 0, 0);\" onblur=\"WTW.checkKey(this, 'number', 0, 1);\" style=\"float:right;margin-right:20px;\" />End Frame</div>\r\n";
 			$zformdata .= "<div class=\"wtw-clear\"></div>\r\n";
-			$zformdata .= "<br /><div id=\"wtw_adminnewavatarsave\" class=\"wtw-greenbutton\" onclick=\"WTW.loadNewAvatarFilesForm();\" style=\"font-size:1.4em;\">Save and Continue</div>\r\n";
+			$zformdata .= "<br /><div id=\"wtw_adminnewavatarsave\" class=\"wtw-greenbuttonbig\" onclick=\"WTW.loadNewAvatarFilesForm();\">Save and Continue</div>\r\n";
 			$zformdata .= "</div>\r\n";
 			$zformdata .= "</div>\r\n";
 
@@ -309,7 +307,7 @@ class wtwavatars {
 			$zformdata .= "<h2>File List</h2>\r\n";
 			$zformdata .= "<div id=\"wtw_newavatarfileslist\"></div><br /><br />\r\n";
 			$zformdata .= "<div class=\"wtw-mainmenuvalue\">After Files are uploaded, click Load Avatar to continue.</div>\r\n";
-			$zformdata .= "<br /><div id=\"wtw_adminnewavatarreload\" class=\"wtw-greenbutton\" onclick=\"WTW.loadNewAvatar();\" style=\"font-size:1.4em;\">Load Avatar</div>\r\n";
+			$zformdata .= "<br /><div id=\"wtw_adminnewavatarreload\" class=\"wtw-greenbuttonbig\" onclick=\"WTW.loadNewAvatar();\">Load Avatar</div>\r\n";
 			$zformdata .= "</div>\r\n";
 
 			$zformdata .= "<div class=\"wtw-yellowbutton\" onclick=\"WTW.adminMenuItemSelected(dGet('wtw_bbackwtw_adminAddNewAvatarDiv'));\">Cancel</div><br /><br />\r\n";
@@ -339,16 +337,16 @@ class wtwavatars {
 		try {
 			$zformdata .= "<div class=\"wtw-menuheader\">Share My<br />3D Avatar<br />as Template</div><br />\r\n";
 			$zformdata .= "<a href=\"https://www.walktheweb.com/wiki/share-3d-objects/\" title=\"Help\" alt=\"Help\" class=\"wtw-helplink\" target=\"_blank\">?</a>\r\n";
-			$zformdata .= "<div id=\"wtw_loadingshareavatarform\" class=\"wtw-loadingnotice\" style=\"margin-left:auto;margin-right:auto;color:#000000;\">Loading...</div>\r\n";
+			$zformdata .= "<div id=\"wtw_loadingshareavatarform\" class=\"wtw-loadingnoticecentered\">Loading...</div>\r\n";
 			$zformdata .= "<div id=\"wtw_shareavatardiv\" class=\"wtw-hide\">\r\n";
 			$zformdata .= "	<h2>Template Name</h2>\r\n";
-			$zformdata .= "	<input type=\"text\" id=\"wtw_tshareavatartempname\" maxlength=\"255\" onclick=\"WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();\" onkeyup=\"WTW.checkKey(this, 'displayname', 0, 0);\" onblur=\"WTW.checkKey(this, 'displayname', 0, 1);\" />\r\n";
+			$zformdata .= "	<input type=\"text\" id=\"wtw_tshareavatartempname\" maxlength=\"255\" onclick=\"WTW.checkKey(this, 'displayname', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'displayname', 0, 0);\" onblur=\"WTW.checkKey(this, 'displayname', 0, 1);\" />\r\n";
 			$zformdata .= "	<br /><br />\r\n";
 			$zformdata .= "	<h2>Description</h2>\r\n";
-			$zformdata .= "	<textarea id=\"wtw_tshareavatardescription\" rows=\"4\" onclick=\"WTW.checkKey(this, 'safetext', 0, 0);WTW.blockPassThrough();\" onkeyup=\"WTW.checkKey(this, 'safetext', 0, 0);\" onblur=\"WTW.checkKey(this, 'safetext', 0, 1);\"></textarea>\r\n";
+			$zformdata .= "	<textarea id=\"wtw_tshareavatardescription\" rows=\"4\" onclick=\"WTW.checkKey(this, 'safetext', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'safetext', 0, 0);\" onblur=\"WTW.checkKey(this, 'safetext', 0, 1);\"></textarea>\r\n";
 			$zformdata .= "	<br /><br />\r\n";
 			$zformdata .= "	<h2>Search Category Tags</h2>\r\n";
-			$zformdata .= "	<input type=\"text\" id=\"wtw_tshareavatartags\" maxlength=\"255\" onclick=\"WTW.checkKey(this, 'displayname', 0, 0);WTW.blockPassThrough();\" onkeyup=\"WTW.checkKey(this, 'displayname', 0, 0);\" onblur=\"WTW.checkKey(this, 'displayname', 0, 1);\" /><br />\r\n";
+			$zformdata .= "	<input type=\"text\" id=\"wtw_tshareavatartags\" maxlength=\"255\" onclick=\"WTW.checkKey(this, 'displayname', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'displayname', 0, 0);\" onblur=\"WTW.checkKey(this, 'displayname', 0, 1);\" /><br />\r\n";
 			$zformdata .= "	<div style=\"font-weight:normal;font-size:.8em;color:#c0c0c0;\">Example: Avatar, Leather Armor, Boots, etc.</div>\r\n";
 			$zformdata .= "	<br /><br />\r\n";
 			$zformdata .= "	<div id=\"wtw_bsnapshotavatar\" class='wtw-menulevel2' onclick=\"WTW.snapshot3D(dGet('wtw_trootpath').value + dGet('wtw_tavatarfolder').value + 'snapshots/', 'defaultavatar.png');\" style=\"cursor: pointer;\">Set Default Snapshot</div><br />\r\n";
@@ -375,7 +373,7 @@ class wtwavatars {
 			$zformdata .= "	<div id=\"wtw_shareavatarresponse\" style=\"font-size:1.5em;color:green;\"></div><br />\r\n";
 			$zformdata .= "</div>\r\n";
 			$zformdata .= "<br />\r\n";
-			$zformdata .= "<div id=\"wtw_bshareavatartemplate\" class=\"wtw-greenbutton\" onclick=\"WTW.adminMenuItemSelected(this);\" style=\"font-size:1.4em;\">Share 3D Avatar as Template</div>\r\n";
+			$zformdata .= "<div id=\"wtw_bshareavatartemplate\" class=\"wtw-greenbuttonbig\" onclick=\"WTW.adminMenuItemSelected(this);\">Share 3D Avatar as Template</div>\r\n";
 			$zformdata .= "<div id=\"wtw_cancelshareavatar\" class=\"wtw-yellowbutton\" onclick=\"WTW.adminMenuItemSelected(this);\">Cancel</div>\r\n";
 			$zformdata .= "<br /><br />\r\n";
 		} catch (Exception $e) {
@@ -396,14 +394,14 @@ class wtwavatars {
 			$zformdata .= "<input type=\"text\" id=\"wtw_tinfoavatarversion\" maxlength=\"255\" /><br /><br />\r\n";
 			$zformdata .= "<h2>Avatar Group</h2>\r\n";
 			$zformdata .= "<div class=\"wtw-mainmenuvalue\">Groups can be assigned to a 3D Community<br />(Example: Zombie Group for Zombie Scenes).</div>\r\n";
-			$zformdata .= "<select id=\"wtw_tinfoavatargroup\"></select>\r\n";
+			$zformdata .= "<select id=\"wtw_tinfoavatargroup\" class='wtw-pointer'></select>\r\n";
 			$zformdata .= "<h2>Gender</h2>\r\n";
 			$zformdata .= "<div class=\"wtw-mainmenuvalue\">Optional, may help users search for Avatars.</div>\r\n";
 			$zformdata .= "<input type=\"text\" id=\"wtw_tinfoavatargender\" maxlength=\"255\" onclick=\"WTW.checkKey(this, 'displayname', 1, 0);\" onkeyup=\"WTW.checkKey(this, 'displayname', 1, 0);\" onblur=\"WTW.checkKey(this, 'displayname', 1, 1);\" /><br /><br />\r\n";
 			$zformdata .= "<h2>Avatar Description</h2>\r\n";
 			$zformdata .= "<input type=\"text\" id=\"wtw_tinfoavatardescription\" maxlength=\"255\" onclick=\"WTW.checkKey(this, 'displayname', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'displayname', 0, 0);\" onblur=\"WTW.checkKey(this, 'displayname', 0, 1);\" /><br /><br />\r\n";
 			$zformdata .= "<div id=\"wtw_tinfoavatarerror\" class=\"wtw-error\"></div>\r\n";
-			$zformdata .= "<br /><div id=\"wtw_adminavatarsave\" class=\"wtw-greenbutton\" onclick=\"WTW.saveEditAvatar();\" style=\"font-size:1.4em;\">Save Avatar Information</div>\r\n";
+			$zformdata .= "<br /><div id=\"wtw_adminavatarsave\" class=\"wtw-greenbuttonbig\" onclick=\"WTW.saveEditAvatar();\">Save Avatar Information</div>\r\n";
 			$zformdata .= "<div class=\"wtw-yellowbutton\" onclick=\"WTW.adminMenuItemSelected(dGet('wtw_bbackwtw_adminEditAvatarInformationDiv'));\">Cancel</div><br /><br />\r\n";
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-avatars:functions-class_plugin.php-editAvatarInformationForm=".$e->getMessage());
@@ -527,7 +525,7 @@ class wtwavatars {
 			$zformdata .= "</div><hr class=\"wtw-menuhr\" />";
 			
 			$zformdata .= "<div id=\"wtw_tscalingavatarerror\" class=\"wtw-error\"></div>\r\n";
-			$zformdata .= "<br /><div id=\"wtw_adminavatarsavescaling\" class=\"wtw-greenbutton\" onclick=\"WTW.saveAvatarScaling();\" style=\"font-size:1.4em;\">Save Avatar Scaling</div>\r\n";
+			$zformdata .= "<br /><div id=\"wtw_adminavatarsavescaling\" class=\"wtw-greenbuttonbig\" onclick=\"WTW.saveAvatarScaling();\">Save Avatar Scaling</div>\r\n";
 			
 			
 			$zformdata .= "<div class=\"wtw-yellowbutton\" onclick=\"WTW.adminMenuItemSelected(dGet('wtw_bbackwtw_adminEditAvatarScalingDiv'));\">Cancel</div><br /><br />\r\n";
@@ -579,7 +577,7 @@ class wtwavatars {
 			$zformdata .= "				<div id=\"wtw_addavatarprofiletitle\" class=\"wtw-dashboardboxtitle\">Edit Avatar</div>\r\n";
 			$zformdata .= "					<div class=\"wtw-dashboardbox\">\r\n";
 			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Select Avatar to Edit</div>\r\n";
-			$zformdata .= "					<select id=\"wtw_selecteditavatar\" onchange=\"wtwavatars.loadEditAvatar();\"></select>\r\n";
+			$zformdata .= "					<select id=\"wtw_selecteditavatar\" onchange=\"wtwavatars.loadEditAvatar();\" class='wtw-pointer'></select>\r\n";
 			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			/ * avatar details div * /
 			$zformdata .= "			<div id=\"wtw_avatardetails\" class=\"wtw-hide\">\r\n";
@@ -589,7 +587,7 @@ class wtwavatars {
 			$zformdata .= "					<input type=\"hidden\" id=\"wtw_tavatarprofileavatarid\" />\r\n";
 			$zformdata .= "					<input type=\"hidden\" id=\"wtw_tavatarprofilesortorder\" />\r\n";
 			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Avatar Group</div>\r\n";
-			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><select id=\"wtw_tavatarprofileavatargroup\" onchange=\"\"></select></div><br />\r\n";
+			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><select id=\"wtw_tavatarprofileavatargroup\" onchange=\"\" class='wtw-pointer'></select></div><br />\r\n";
 			$zformdata .= "					<div class=\"wtw-clear\"></div>\r\n";
 			$zformdata .= "					<div class=\"wtw-dashboardlabel\">Avatar Display Name</div>\r\n";
 			$zformdata .= "					<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tavatarprofiledisplayname\" maxlength=\"255\" /></div><br />\r\n";

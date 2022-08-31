@@ -1,5 +1,10 @@
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
+
 /* avatar designer scripts - works menus and avatar settings */
 /* global values used for the avatar designer only (page loads as iframe) */
+
 var scene, canvas, engine, camera, gui;
 var wtw_avatarselector, wtw_leftmenu, wtw_rightmenu, wtw_rightmenulower, wtw_colormenu, wtw_colorpicker, wtw_activeinput, wtw_loadingtext, wtw_loadingtimer, wtw_activemenu;
 var wtw_runningevent = '';
@@ -12,10 +17,10 @@ var wtw_avatardef = null;
 WTWJS.prototype.createScene = function() {
 	/* create the avatar designer scene - lighting designed to match the default WalkTheWeb scene */
 	try {
-		console.log("%c\r\n\r\nWalkTheWeb 3D Avatar Designer\r\nHTTP3D Inc. (v1.0.0) 04-17-2020", "color:green;font-weight:bold;");
+		console.log('%c\r\n\r\nWalkTheWeb 3D Avatar Designer\r\nHTTP3D Inc. (v1.0.1) 08-29-2022', 'color:green;font-weight:bold;');
 		if (BABYLON.Engine.isSupported()) {
 			WTW.loadAnimations();
-			var zinstanceid = WTW.getCookie("instanceid");
+			var zinstanceid = WTW.getCookie('instanceid');
 			if (dGet('wtw_tinstanceid').value == '' && zinstanceid != null) {
 				if (zinstanceid.length == 24) {
 					dGet('wtw_tinstanceid').value = zinstanceid;
@@ -25,17 +30,17 @@ WTWJS.prototype.createScene = function() {
 				zinstanceid = WTW.getRandomString(24);
 				dGet('wtw_tinstanceid').value = zinstanceid;
 			}
-			WTW.setCookie("instanceid", zinstanceid, 365);
+			WTW.setCookie('instanceid', zinstanceid, 365);
 			scene = new BABYLON.Scene(engine);
 			scene.autoClear = false;
 			scene.autoClearDepthAndStencil = false;
 			scene.ambientColor = new BABYLON.Color3(.3, .3, .3);
 
-			camera = new BABYLON.ArcRotateCamera("ArcRotateCamera", BABYLON.Tools.ToRadians(0), Math.PI/2, 30, new BABYLON.Vector3(0,0,0), scene);
+			camera = new BABYLON.ArcRotateCamera('ArcRotateCamera', BABYLON.Tools.ToRadians(0), Math.PI/2, 30, new BABYLON.Vector3(0,0,0), scene);
 			camera.attachControl(canvas, true);
 
 			/* direct light immitating the sun */
-			WTW.sun = new BABYLON.DirectionalLight("sun", new BABYLON.Vector3(-1, -1, -1), scene);
+			WTW.sun = new BABYLON.DirectionalLight('sun', new BABYLON.Vector3(-1, -1, -1), scene);
 			WTW.sun.position = new BABYLON.Vector3(-50, 500, 0);
 			WTW.sun.intensity = 1;
 			WTW.sun.shadowMinZ = 1;
@@ -46,7 +51,7 @@ WTWJS.prototype.createScene = function() {
 			WTW.sun.groundColor = new BABYLON.Color3(.1, .1, .1);
 
 			/* lesser light for back sides */
-			WTW.backLight = new BABYLON.DirectionalLight("backlight", new BABYLON.Vector3(1, -1, 1), scene);
+			WTW.backLight = new BABYLON.DirectionalLight('backlight', new BABYLON.Vector3(1, -1, 1), scene);
 			WTW.backLight.intensity = WTW.sun.intensity / 1.5; //3;
 			
 			var zsetupparent = new BABYLON.TransformNode('setupparent-0');
@@ -54,7 +59,7 @@ WTWJS.prototype.createScene = function() {
 			zsetupparent.rotation = new BABYLON.Vector3(0,0,0);
 			zsetupparent.scaling = new BABYLON.Vector3(1,1,1);
 
-			var zbgsphere = BABYLON.MeshBuilder.CreateSphere("bgsphere", {segments: 16, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
+			var zbgsphere = BABYLON.MeshBuilder.CreateSphere('bgsphere', {segments: 16, diameter:1, updatable: true, sideOrientation: BABYLON.Mesh.DOUBLESIDE}, scene);
 			zbgsphere.scaling = new BABYLON.Vector3(600, 600, 600); 
 			zbgsphere.isPickable = false;
 
@@ -62,7 +67,7 @@ WTWJS.prototype.createScene = function() {
 			WTW.mouseOut = new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, WTW.mouseOutMold);
 			scene.actionManager = new BABYLON.ActionManager(scene);
 			
-			gui = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+			gui = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('UI');
 			
 			var zuseravatarid = WTW.getQuerystring('useravatarid','');
 			var zglobaluseravatarid = WTW.getQuerystring('globaluseravatarid','');
@@ -88,10 +93,10 @@ WTWJS.prototype.createScene = function() {
 				}, 1000);
 			}
 		} else {
-			WTW.log("WebGL not supported");
+			WTW.log('WebGL not supported');
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-createScene=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-createScene=' + ex.message);
 	}
 }
 
@@ -112,8 +117,8 @@ WTWJS.prototype.loadLeftMenu = function(zactive) {
 		}
 		dGet('wtw_activemenu').value = zactive;
 		wtw_leftmenu = new BABYLON.GUI.Grid();
-		wtw_leftmenu.width = "330px";
-		wtw_leftmenu.height = "450px";
+		wtw_leftmenu.width = '330px';
+		wtw_leftmenu.height = '450px';
 		wtw_leftmenu.leftInPixels = 20;
 		wtw_leftmenu.addColumnDefinition(1);
 		wtw_leftmenu.addRowDefinition(1/5);
@@ -126,90 +131,90 @@ WTWJS.prototype.loadLeftMenu = function(zactive) {
 		gui.addControl(wtw_leftmenu);
 		
 		/* select my avatar button */
-		var zbutton0 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("selectavatar-button", 'Select My Avatar', 'image');
-		zbutton0.width = "330px";
-		zbutton0.height = "60px";
+		var zbutton0 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('selectavatar-button', 'Select My Avatar', 'image');
+		zbutton0.width = '330px';
+		zbutton0.height = '60px';
 		if (zactive  == 0) {
 			/* set active button blue with yellow text */
-			zbutton0.color = "yellow";
-			zbutton0.background = "blue";
-			if (dGet('wtw_tavatarid').value == "") {
+			zbutton0.color = 'yellow';
+			zbutton0.background = 'blue';
+			if (dGet('wtw_tavatarid').value == '') {
 				zbutton0.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(0);});
 			} else {
 				zbutton0.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
 			}
 		} else {
-			zbutton0.color = "white";
-			zbutton0.background = "green";
+			zbutton0.color = 'white';
+			zbutton0.background = 'green';
 			zbutton0.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(0);});
 		}
 		wtw_leftmenu.addControl(zbutton0, 1, 0);
 		
-		if (dGet('wtw_tavatarid').value != "") {
+		if (dGet('wtw_tavatarid').value != '') {
 			/* avatar profile button */
-			var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarprofile-button", 'Avatar Profile', 'image');
-			zbutton1.width = "330px";
-			zbutton1.height = "60px";
+			var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('avatarprofile-button', 'Avatar Profile', 'image');
+			zbutton1.width = '330px';
+			zbutton1.height = '60px';
 			if (zactive  == 1) {
 				/* set active button blue with yellow text */
-				zbutton1.color = "yellow";
-				zbutton1.background = "blue";
+				zbutton1.color = 'yellow';
+				zbutton1.background = 'blue';
 			} else {
-				zbutton1.color = "white";
-				zbutton1.background = "green";
+				zbutton1.color = 'white';
+				zbutton1.background = 'green';
 			}
 			zbutton1.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
 			wtw_leftmenu.addControl(zbutton1, 0, 0);
 
 			/* avatar colors button */
-			var zbutton2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarcolors-button", 'Avatar Colors', 'image');
-			zbutton2.width = "330px";
-			zbutton2.height = "60px";
+			var zbutton2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('avatarcolors-button', 'Avatar Colors', 'image');
+			zbutton2.width = '330px';
+			zbutton2.height = '60px';
 			if (zactive  == 2) {
 				/* set active button blue with yellow text */
-				zbutton2.color = "yellow";
-				zbutton2.background = "blue";
+				zbutton2.color = 'yellow';
+				zbutton2.background = 'blue';
 				zbutton2.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
 			} else {
-				zbutton2.color = "white";
-				zbutton2.background = "green";
+				zbutton2.color = 'white';
+				zbutton2.background = 'green';
 				zbutton2.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(2);});
 			}
 			wtw_leftmenu.addControl(zbutton2, 2, 0);
 
 			/* avatar animations button */
-			var zbutton3 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avataranimations-button", 'Avatar Animations', 'image');
-			zbutton3.width = "330px";
-			zbutton3.height = "60px";
+			var zbutton3 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('avataranimations-button', 'Avatar Animations', 'image');
+			zbutton3.width = '330px';
+			zbutton3.height = '60px';
 			if (zactive  == 3) {
 				/* set active button blue with yellow text */
-				zbutton3.color = "yellow";
-				zbutton3.background = "blue";
+				zbutton3.color = 'yellow';
+				zbutton3.background = 'blue';
 				zbutton3.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
 			} else {
-				zbutton3.color = "white";
-				zbutton3.background = "green";
+				zbutton3.color = 'white';
+				zbutton3.background = 'green';
 				zbutton3.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(3);});
 			}
 			wtw_leftmenu.addControl(zbutton3, 3, 0);
 
 			/* save and continue button */
-			var zbutton4 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("save-button", 'Save and Continue', 'image');
-			zbutton4.width = "330px";
-			zbutton4.height = "60px";
+			var zbutton4 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('save-button', 'Save and Continue', 'image');
+			zbutton4.width = '330px';
+			zbutton4.height = '60px';
 			if (zactive  == 4) {
-				zbutton4.color = "yellow";
-				zbutton4.background = "blue";
+				zbutton4.color = 'yellow';
+				zbutton4.background = 'blue';
 			} else {
-				zbutton4.color = "white";
-				zbutton4.background = "green";
+				zbutton4.color = 'white';
+				zbutton4.background = 'green';
 			}
 			zbutton4.onPointerClickObservable.add(function(ev, state) {WTW.saveMyAvatar();WTW.loadLeftMenu(4);});
 			wtw_leftmenu.addControl(zbutton4, 4, 0);
 		}
 		WTW.loadRightMenu(zactive);
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-loadLeftMenu=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-loadLeftMenu=' + ex.message);
 	}
 }
 
@@ -235,14 +240,14 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 	
 		switch (zactive) {
 			case 0:   /* select avatar options */
-				wtw_rightmenu.width = "330px";
-				wtw_rightmenu.height = "200px";
+				wtw_rightmenu.width = '330px';
+				wtw_rightmenu.height = '200px';
 				WTW.chooseAvatar();
 				break;
 			case 1:   /* select avatar profile settings */
-				if (dGet('wtw_tavatarid').value != "") {
-					wtw_rightmenu.width = "330px";
-					wtw_rightmenu.height = "400px";
+				if (dGet('wtw_tavatarid').value != '') {
+					wtw_rightmenu.width = '330px';
+					wtw_rightmenu.height = '400px';
 					wtw_rightmenu.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
 					wtw_rightmenu.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 					wtw_rightmenu.addColumnDefinition(1);
@@ -256,84 +261,84 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 					wtw_rightmenu.addRowDefinition(1/8);
 					
 					var ztext1 = new BABYLON.GUI.TextBlock();
-					ztext1.text = "Display Name:";
-					ztext1.color = "white";
+					ztext1.text = 'Display Name:';
+					ztext1.color = 'white';
 					ztext1.fontSize = 24;
-					ztext1.height = "30px";
+					ztext1.height = '30px';
 					wtw_rightmenu.addControl(ztext1, 0, 0);
 					
 					var zdisplayname = dGet('wtw_tnewavatardisplayname').value;
 					if (zdisplayname == '') {
-						zdisplayname = "Anonymous";
+						zdisplayname = 'Anonymous';
 					}
 					var zinput = new BABYLON.GUI.InputText();
-					zinput.promptMessage = "Display Name";
-					zinput.width = "300px";
-					zinput.height = "40px";
+					zinput.promptMessage = 'Display Name';
+					zinput.width = '300px';
+					zinput.height = '40px';
 					zinput.text = zdisplayname;
-					zinput.color = "white";
-					zinput.background = "#2F4720";
+					zinput.color = 'white';
+					zinput.background = '#2F4720';
 					zinput.onFocusSelectAll = true;
 					zinput.onTextChangedObservable.add(function(value) {WTW.updateDisplayName(value.text);});
 					wtw_rightmenu.addControl(zinput, 1, 0);
 					
 					if (wtw_showglobal) {
 						var zbutton1 = new BABYLON.GUI.RadioButton();
-						zbutton1.name = "globalavatar";
-						zbutton1.width = "30px";
-						zbutton1.height = "30px";
-						zbutton1.color = "white";
-						zbutton1.group = "global";
+						zbutton1.name = 'globalavatar';
+						zbutton1.width = '30px';
+						zbutton1.height = '30px';
+						zbutton1.color = 'white';
+						zbutton1.group = 'global';
 						var ztext2 = new BABYLON.GUI.TextBlock();
 						if (dGet('wtw_tglobaluserid').value != '') {
 							zbutton1.isChecked = true;
-							WTW.updateGlobalAvatar("1");
-							zbutton1.background = "green";
-							zbutton1.onIsCheckedChangedObservable.add(function(state) {if (state) {WTW.updateGlobalAvatar("1");}}); 
-							ztext2.text = "Works on most WalkTheWeb 3D Websites Globally";
-							ztext2.color = "#afafaf";
+							WTW.updateGlobalAvatar('1');
+							zbutton1.background = 'green';
+							zbutton1.onIsCheckedChangedObservable.add(function(state) {if (state) {WTW.updateGlobalAvatar('1');}}); 
+							ztext2.text = 'Works on most WalkTheWeb 3D Websites Globally';
+							ztext2.color = '#afafaf';
 						} else {
 							zbutton1.isChecked = false;
-							WTW.updateGlobalAvatar("0");
-							zbutton1.background = "red";
-							zbutton1.onIsCheckedChangedObservable.add(function(state) {if (state) {WTW.updateGlobalAvatar("0");state.checked=false;}}); 
-							ztext2.text = "Requires Global Login";
-							ztext2.color = "red";
+							WTW.updateGlobalAvatar('0');
+							zbutton1.background = 'red';
+							zbutton1.onIsCheckedChangedObservable.add(function(state) {if (state) {WTW.updateGlobalAvatar('0');state.checked=false;}}); 
+							ztext2.text = 'Requires Global Login';
+							ztext2.color = 'red';
 						}
-						var zlabel1 = BABYLON.GUI.Control.AddHeader(zbutton1, 'WalkTheWeb Global Avatar', "270px", { isHorizontal: true, controlFirst: true });
-						zlabel1.height = "40px";
-						zlabel1.width = "270px";
-						zlabel1.color = "white";
+						var zlabel1 = BABYLON.GUI.Control.AddHeader(zbutton1, 'WalkTheWeb Global Avatar', '270px', { isHorizontal: true, controlFirst: true });
+						zlabel1.height = '40px';
+						zlabel1.width = '270px';
+						zlabel1.color = 'white';
 						wtw_rightmenu.addControl(zlabel1, 3, 0);
 
 						ztext2.fontSize = 20;
-						ztext2.height = "100px";
+						ztext2.height = '100px';
 						ztext2.textWrapping = true;
 						ztext2.textHorizontalAlignment = 3;
 						wtw_rightmenu.addControl(ztext2, 4, 0);
 
 						var zbutton2 = new BABYLON.GUI.RadioButton();
-						zbutton2.name = "localavatar";
-						zbutton2.width = "30px";
-						zbutton2.height = "30px";
-						zbutton2.color = "white";
-						zbutton2.background = "green";     
-						zbutton2.group = "global";
+						zbutton2.name = 'localavatar';
+						zbutton2.width = '30px';
+						zbutton2.height = '30px';
+						zbutton2.color = 'white';
+						zbutton2.background = 'green';     
+						zbutton2.group = 'global';
 						if (dGet('wtw_tglobaluserid').value == '') {
 							zbutton2.isChecked = true;
 						}
-						zbutton2.onIsCheckedChangedObservable.add(function(state) {if (state) {WTW.updateGlobalAvatar("0");}}); 
-						var zlabel2 = BABYLON.GUI.Control.AddHeader(zbutton2, 'Local 3D Website Avatar', "270px", { isHorizontal: true, controlFirst: true });
-						zlabel2.height = "40px";
-						zlabel2.width = "270px";
-						zlabel2.color = "white";
+						zbutton2.onIsCheckedChangedObservable.add(function(state) {if (state) {WTW.updateGlobalAvatar('0');}}); 
+						var zlabel2 = BABYLON.GUI.Control.AddHeader(zbutton2, 'Local 3D Website Avatar', '270px', { isHorizontal: true, controlFirst: true });
+						zlabel2.height = '40px';
+						zlabel2.width = '270px';
+						zlabel2.color = 'white';
 						wtw_rightmenu.addControl(zlabel2, 6, 0);
 
 						var ztext3 = new BABYLON.GUI.TextBlock();
-						ztext3.text = "Works on Local 3D Websites on the same Web Server";
-						ztext3.color = "#afafaf";
+						ztext3.text = 'Works on Local 3D Websites on the same Web Server';
+						ztext3.color = '#afafaf';
 						ztext3.fontSize = 20;
-						ztext3.height = "100px";
+						ztext3.height = '100px';
 						ztext3.textWrapping = true;
 						ztext3.textHorizontalAlignment = 3;
 						wtw_rightmenu.addControl(ztext3, 7, 0);
@@ -341,15 +346,15 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 				}
 				break;
 			case 2:   /* avatar colors settings */
-				if (dGet('wtw_tavatarid').value != "") {
+				if (dGet('wtw_tavatarid').value != '') {
 					if (wtw_colormenu != null) {
 						wtw_colormenu.dispose();
 					}
 					wtw_colormenu = new BABYLON.GUI.Grid();
 					wtw_colormenu.topInPixels = 75;
 					wtw_colormenu.rightInPixels = 340;
-					wtw_colormenu.width = "510px";
-					wtw_colormenu.height = "150px";
+					wtw_colormenu.width = '510px';
+					wtw_colormenu.height = '150px';
 					wtw_colormenu.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
 					wtw_colormenu.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 					wtw_colormenu.addColumnDefinition(1/3);
@@ -358,10 +363,10 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 					wtw_colormenu.addRowDefinition(1);
 				
 					wtw_rightmenu.topInPixels = 20;
-					wtw_rightmenu.width = "330px";
+					wtw_rightmenu.width = '330px';
 					if (WTW.avatarParts != null) {
 						if (WTW.avatarParts.length > 0) {
-							wtw_rightmenu.height = ((WTW.avatarParts.length + 2.5) * 100) + "px";
+							wtw_rightmenu.height = ((WTW.avatarParts.length + 2.5) * 100) + 'px';
 							wtw_rightmenu.addColumnDefinition(2/3);
 							wtw_rightmenu.addColumnDefinition(1/3);
 							wtw_rightmenu.addRowDefinition(1/(WTW.avatarParts.length + 1));
@@ -378,8 +383,8 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 					var zmold = WTW.getMeshOrNodeByID(zmoldname);
 					if (wtw_colorpicker == null) {
 						wtw_colorpicker = new BABYLON.GUI.ColorPicker();
-						wtw_colorpicker.name = "avatarcolorpicker";
-						wtw_colorpicker.id = "avatarcolorpicker";
+						wtw_colorpicker.name = 'avatarcolorpicker';
+						wtw_colorpicker.id = 'avatarcolorpicker';
 						if (zmold != null) {
 							if (dGet('wtw_tcolortype').value  == 'Diffuse') {
 								wtw_colorpicker.value = zmold.material.diffuseColor;
@@ -389,8 +394,8 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 						} else {
 							wtw_colorpicker.value = new BABYLON.Vector3(1, 1, 1);
 						}
-						wtw_colorpicker.height = "150px";
-						wtw_colorpicker.width = "150px";
+						wtw_colorpicker.height = '150px';
+						wtw_colorpicker.width = '150px';
 						wtw_colorpicker.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
 						wtw_colorpicker.onValueChangedObservable.add(function(value) {
 							if (value != null) {
@@ -401,27 +406,27 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 					wtw_colormenu.addControl(wtw_colorpicker,0,0);
 
 					var zdiffusebutton = BABYLON.GUI.Button.CreateImageWithCenterTextButton('diffuse-button', 'Diffuse', 'image');
-					zdiffusebutton.width = "210px";
-					zdiffusebutton.height = "50px";
+					zdiffusebutton.width = '210px';
+					zdiffusebutton.height = '50px';
 					if (dGet('wtw_tcolortype').value  == 'Diffuse') {
-						zdiffusebutton.color = "yellow";
-						zdiffusebutton.background = "blue";
+						zdiffusebutton.color = 'yellow';
+						zdiffusebutton.background = 'blue';
 					} else {
-						zdiffusebutton.color = "white";
-						zdiffusebutton.background = "green";
+						zdiffusebutton.color = 'white';
+						zdiffusebutton.background = 'green';
 					}
 					zdiffusebutton.onPointerClickObservable.add(function(ev, state) { dGet('wtw_tcolortype').value='Diffuse';WTW.loadLeftMenu(2);});
 					wtw_rightmenu.addControl(zdiffusebutton, 0, 0);
 
 					var zemissivebutton = BABYLON.GUI.Button.CreateImageWithCenterTextButton('emissive-button', 'Emissive', 'image');
-					zemissivebutton.width = "210px";
-					zemissivebutton.height = "50px";
+					zemissivebutton.width = '210px';
+					zemissivebutton.height = '50px';
 					if (dGet('wtw_tcolortype').value  == 'Emissive') {
-						zemissivebutton.color = "yellow";
-						zemissivebutton.background = "blue";
+						zemissivebutton.color = 'yellow';
+						zemissivebutton.background = 'blue';
 					} else {
-						zemissivebutton.color = "white";
-						zemissivebutton.background = "green";
+						zemissivebutton.color = 'white';
+						zemissivebutton.background = 'green';
 					}
 					zemissivebutton.onPointerClickObservable.add(function(ev, state) { dGet('wtw_tcolortype').value='Emissive';WTW.loadLeftMenu(2);});
 					wtw_rightmenu.addControl(zemissivebutton, 0, 1);
@@ -430,15 +435,15 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 						for (var i=0;i<WTW.avatarParts.length;i++) {
 							if (WTW.avatarParts[i] != null) {
 								wtw_rightmenu.addRowDefinition(1/(WTW.avatarParts.length + 1));
-								var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarParts[i].part + "-color-button", WTW.avatarParts[i].part, 'image');
-								zbutton1.width = "210px";
-								zbutton1.height = "50px";
+								var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarParts[i].part + '-color-button', WTW.avatarParts[i].part, 'image');
+								zbutton1.width = '210px';
+								zbutton1.height = '50px';
 								if (dGet('wtw_tavatarpart').value  == WTW.avatarParts[i].part) {
-									zbutton1.color = "black";
-									zbutton1.background = "yellow";
+									zbutton1.color = 'black';
+									zbutton1.background = 'yellow';
 								} else {
-									zbutton1.color = "black";
-									zbutton1.background = "white";
+									zbutton1.color = 'black';
+									zbutton1.background = 'white';
 								}
 								zbutton1.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarPart(state.currentTarget.name.split('-')[0]);WTW.loadLeftMenu(2);});
 								wtw_rightmenu.addControl(zbutton1, i+1, 0);
@@ -449,32 +454,32 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 								}
 
 								if (dGet('wtw_tavatarpart').value  == WTW.avatarParts[i].part) {
-									wtw_activeinput = new BABYLON.GUI.InputText(WTW.avatarParts[i].part + "-color-input");
-									wtw_activeinput.promptMessage = "Color (hex)";
-									wtw_activeinput.width = "110px";
-									wtw_activeinput.height = "50px";
+									wtw_activeinput = new BABYLON.GUI.InputText(WTW.avatarParts[i].part + '-color-input');
+									wtw_activeinput.promptMessage = 'Color (hex)';
+									wtw_activeinput.width = '110px';
+									wtw_activeinput.height = '50px';
 									wtw_activeinput.text = zhex;
-									wtw_activeinput.color = WTW.setTextColor(zhex, "#ffffff", "#000000");
+									wtw_activeinput.color = WTW.setTextColor(zhex, '#ffffff', '#000000');
 									wtw_activeinput.background = zhex;
-									wtw_activeinput.focusedBackground = "#000000";
-									if (wtw_activeinput.color == "#000000") {
-										wtw_activeinput.focusedBackground = "#ffffff";
+									wtw_activeinput.focusedBackground = '#000000';
+									if (wtw_activeinput.color == '#000000') {
+										wtw_activeinput.focusedBackground = '#ffffff';
 									}
 									wtw_activeinput.onFocusSelectAll = true;
 									wtw_activeinput.onBlurObservable.add(function(value) {WTW.updateColorByHex(value.text);});
 									wtw_activeinput.onTextPasteObservable.add(function(value) {WTW.updateColorByHex(value.text);});
 									wtw_rightmenu.addControl(wtw_activeinput, i+1, 1);
 								} else {
-									var zinputtext = new BABYLON.GUI.InputText(WTW.avatarParts[i].part + "-color-input");
-									zinputtext.promptMessage = "Color (hex)";
-									zinputtext.width = "110px";
-									zinputtext.height = "50px";
+									var zinputtext = new BABYLON.GUI.InputText(WTW.avatarParts[i].part + '-color-input');
+									zinputtext.promptMessage = 'Color (hex)';
+									zinputtext.width = '110px';
+									zinputtext.height = '50px';
 									zinputtext.text = zhex;
-									zinputtext.color = WTW.setTextColor(zhex, "#ffffff", "#000000");
+									zinputtext.color = WTW.setTextColor(zhex, '#ffffff', '#000000');
 									zinputtext.background = zhex;
-									zinputtext.focusedBackground = "#000000";
-									if (zinputtext.color == "#000000") {
-										zinputtext.focusedBackground = "#ffffff";
+									zinputtext.focusedBackground = '#000000';
+									if (zinputtext.color == '#000000') {
+										zinputtext.focusedBackground = '#ffffff';
 									}
 									zinputtext.onPointerClickObservable.add(function(ev, state) {WTW.getMyAvatarPart(state.currentTarget.name.split('-')[0]);WTW.loadLeftMenu(2);});
 									wtw_rightmenu.addControl(zinputtext, i+1, 1);
@@ -486,11 +491,11 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 				}
 				break;
 			case 3:   /* avatar animation settings */
-				if (dGet('wtw_tavatarid').value != "") {
+				if (dGet('wtw_tavatarid').value != '') {
 					wtw_rightmenu.topInPixels = 10;
 					wtw_rightmenu.rightInPixels = 20;
-					wtw_rightmenu.width = "350px";
-					wtw_rightmenu.height = "60px";
+					wtw_rightmenu.width = '350px';
+					wtw_rightmenu.height = '60px';
 					wtw_rightmenu.addColumnDefinition(2/3);
 					wtw_rightmenu.addColumnDefinition(1/3);
 					wtw_rightmenu.addRowDefinition(1);
@@ -506,11 +511,11 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 						zanimationname = WTW.getAnimationEventName(dGet('wtw_teditanimationevent').value);
 					}
 					if (dGet('wtw_teditanimationevent').value != '' && wtw_editmode) {
-						var zbutton2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("animationevent-button", zanimationname, 'image');
-						zbutton2.width = "220px";
-						zbutton2.height = "50px";
-						zbutton2.color = "yellow";
-						zbutton2.background = "blue";
+						var zbutton2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('animationevent-button', zanimationname, 'image');
+						zbutton2.width = '220px';
+						zbutton2.height = '50px';
+						zbutton2.color = 'yellow';
+						zbutton2.background = 'blue';
 						zbutton2.onPointerClickObservable.add(function(ev, state) {WTW.selectAnimationEvent(dGet('wtw_teditanimationevent').value);});
 						wtw_rightmenu.addControl(zbutton2, 0, 0);
 						WTW.selectAnimationEvent(dGet('wtw_teditanimationevent').value);
@@ -519,33 +524,33 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 						if (wtw_editmode) {
 							zlabel = zanimationname;
 						}
-						var zbutton3 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("animationevent-button", zlabel, 'image');
-						zbutton3.width = "220px";
-						zbutton3.height = "50px";
+						var zbutton3 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('animationevent-button', zlabel, 'image');
+						zbutton3.width = '220px';
+						zbutton3.height = '50px';
 						if (wtw_editmode) {
-							zbutton3.color = "#ffffff";
-							zbutton3.background = "green";
+							zbutton3.color = '#ffffff';
+							zbutton3.background = 'green';
 						} else {
-							zbutton3.color = "yellow";
-							zbutton3.background = "blue";
+							zbutton3.color = 'yellow';
+							zbutton3.background = 'blue';
 						}
 						zbutton3.onPointerClickObservable.add(function(ev, state) {WTW.selectAnimationEvent(dGet('wtw_tavataranimationevent').value);});
 						wtw_rightmenu.addControl(zbutton3, 0, 0);
 						WTW.selectAnimationEvent(dGet('wtw_tavataranimationevent').value);
 					}
-					let zbuttonedit = "Edit";
+					let zbuttonedit = 'Edit';
 					if (wtw_editmode) {
-						zbuttonedit = "Save";
+						zbuttonedit = 'Save';
 					}
-					var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("editanimation-button", zbuttonedit, 'image');
-					zbutton1.width = "110px";
-					zbutton1.height = "50px";
+					var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('editanimation-button', zbuttonedit, 'image');
+					zbutton1.width = '110px';
+					zbutton1.height = '50px';
 					if (wtw_editmode) {
-						zbutton1.color = "yellow";
-						zbutton1.background = "blue";
+						zbutton1.color = 'yellow';
+						zbutton1.background = 'blue';
 					} else {
-						zbutton1.color = "#ffffff";
-						zbutton1.background = "green";
+						zbutton1.color = '#ffffff';
+						zbutton1.background = 'green';
 					}
 					zbutton1.onPointerClickObservable.add(function(ev, state) {WTW.toggleEditAnimations();WTW.selectAnimationEvent(dGet('wtw_tavataranimationevent').value);});
 					wtw_rightmenu.addControl(zbutton1, 0, 1);
@@ -553,33 +558,33 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 				}
 				break;
 			case 4:   /* save avatar settings */
-				if (dGet('wtw_tavatarid').value != "") {
+				if (dGet('wtw_tavatarid').value != '') {
 					wtw_rightmenu.topInPixels = 10;
 					wtw_rightmenu.rightInPixels = 20;
-					wtw_rightmenu.width = "350px";
-					wtw_rightmenu.height = "300px";
+					wtw_rightmenu.width = '350px';
+					wtw_rightmenu.height = '300px';
 					wtw_rightmenu.addColumnDefinition(1);
 					wtw_rightmenu.addRowDefinition(1/2);
 					wtw_rightmenu.addRowDefinition(1/2);
 				
 					var ztext1 = new BABYLON.GUI.TextBlock();
-					ztext1.text = "Avatar Saved";
-					ztext1.color = "green";
+					ztext1.text = 'Avatar Saved';
+					ztext1.color = 'green';
 					ztext1.fontSize = 50;
-					ztext1.height = "400px";
+					ztext1.height = '400px';
 					ztext1.textWrapping = true;
 					ztext1.textHorizontalAlignment = 3;
 					wtw_rightmenu.addControl(ztext1, 0, 0);
 					
-					let zsaved = "WalkTheWeb Global and the Local 3D Websites";
+					let zsaved = 'WalkTheWeb Global and the Local 3D Websites';
 					if (dGet('wtw_tglobalavatar').value == '0') {
-						zsaved = "Local 3D Websites on the same Web Server";
+						zsaved = 'Local 3D Websites on the same Web Server';
 					}
 					var ztext2 = new BABYLON.GUI.TextBlock();
 					ztext2.text = zsaved;
-					ztext2.color = "green";
+					ztext2.color = 'green';
 					ztext2.fontSize = 30;
-					ztext2.height = "400px";
+					ztext2.height = '400px';
 					ztext2.textWrapping = true;
 					ztext2.textHorizontalAlignment = 3;
 					wtw_rightmenu.addControl(ztext2, 1, 0);
@@ -598,7 +603,7 @@ WTWJS.prototype.loadRightMenu = function(zactive) {
 		}
 		gui.addControl(wtw_rightmenu);
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-loadRightMenu=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-loadRightMenu=' + ex.message);
 	}
 }
 
@@ -613,15 +618,15 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 				'serverinstanceid':btoa(dGet('wtw_serverinstanceid').value),
 				'function':'getglobalavatar'
 			};
-			WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalavatar.php", zrequest, 
+			WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalavatar.php', zrequest, 
 				async function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					if (zresponse.avatar != null) {
 						wtw_avatardef = zresponse.avatar;
 						dGet('wtw_tnewavatardisplayname').value = zresponse.avatar.displayname;
 						dGet('wtw_tavatarid').value = zresponse.avatar.avatarid;
-						dGet("wtw_tglobaluseravatarid").value = zresponse.avatar.globaluseravatarid;
-						dGet("wtw_tuseravatarid").value = zresponse.avatar.useravatarid;
+						dGet('wtw_tglobaluseravatarid').value = zresponse.avatar.globaluseravatarid;
+						dGet('wtw_tuseravatarid').value = zresponse.avatar.useravatarid;
 						if (WTW.avatarAnimations != null && wtw_avatardef.avataranimationdefs != null) {
 							if (WTW.avatarAnimations.length > 0) {
 								for (var i=0;i<WTW.avatarAnimations.length;i++) {
@@ -647,7 +652,7 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 							'groups':'',
 							'function':'getglobalavatars'
 						};
-						WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalavatars.php", zrequest2, 
+						WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalavatars.php', zrequest2, 
 							function(zresponse2) {
 								if (zresponse2 != null) {
 									zresponse2 = JSON.parse(zresponse2);
@@ -689,7 +694,7 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 			);			
 		} else {
 			/* load local server user avatar */
-			WTW.getAsyncJSON("/connect/useravatar.php?useravatarid=" + btoa(zuseravatarid) + "&instanceid=" + btoa(dGet('wtw_tinstanceid').value) + "&userid=" + btoa(dGet('wtw_tuserid').value) + "&userip=" + btoa(dGet('wtw_tuserip').value), 
+			WTW.getAsyncJSON('/connect/useravatar.php?useravatarid=' + btoa(zuseravatarid) + '&instanceid=' + btoa(dGet('wtw_tinstanceid').value) + '&userid=' + btoa(dGet('wtw_tuserid').value) + '&userip=' + btoa(dGet('wtw_tuserip').value), 
 				async function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					if (zresponse != null) {
@@ -697,7 +702,7 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 							wtw_avatardef = zresponse.avatar;
 							dGet('wtw_tnewavatardisplayname').value = zresponse.avatar.displayname;
 							dGet('wtw_tavatarid').value = zresponse.avatar.avatarid;
-							dGet("wtw_tglobaluseravatarid").value = '';
+							dGet('wtw_tglobaluseravatarid').value = '';
 							dGet('wtw_tuseravatarid').value = zresponse.avatar.useravatarid;
 							if (WTW.avatarAnimations != null && wtw_avatardef.avataranimationdefs != null) {
 								if (WTW.avatarAnimations.length > 0) {
@@ -717,7 +722,7 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 								}
 							}
 							WTW.avatars = [];
-							WTW.getAsyncJSON("/connect/avatars.php", 
+							WTW.getAsyncJSON('/connect/avatars.php', 
 								function(zresponse2) {
 									if (zresponse2 != null) {
 										zresponse2 = JSON.parse(zresponse2);
@@ -760,7 +765,7 @@ WTWJS.prototype.loadDesignerAvatar = async function(zglobaluseravatarid, zuserav
 			);
 		}
     } catch (ex) {
-		WTW.log("avatars-loadavatar-loadDesignerAvatar=" + ex.message);
+		WTW.log('avatars-loadavatar-loadDesignerAvatar=' + ex.message);
     }
 }
 
@@ -807,7 +812,7 @@ WTWJS.prototype.saveMyAvatar = async function() {
 			'avatardescription':zavatardescription,
 			'function':'saveavatar'
 		};
-		WTW.postAsyncJSON("/core/handlers/wtwavatars-saveavatar.php", zrequest, 
+		WTW.postAsyncJSON('/core/handlers/wtwavatars-saveavatar.php', zrequest, 
 			async function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.useravatarid != '') {
@@ -815,11 +820,11 @@ WTWJS.prototype.saveMyAvatar = async function() {
 					if (dGet('wtw_tglobalavatar').value == '1') {
 						/* if checkbox for global is checked, save to global 3dnet.walktheweb.com */
 						var zsecureprotocol = '0';
-						if (wtw_protocol == "https://") {
+						if (wtw_protocol == 'https://') {
 							zsecureprotocol = '1';
 						}
-						if (zresponse.objectfolder.indexOf("http") == -1) {
-							zresponse.objectfolder = "https://3dnet.walktheweb.com" + zresponse.objectfolder;
+						if (zresponse.objectfolder.indexOf('http') == -1) {
+							zresponse.objectfolder = 'https://3dnet.walktheweb.com' + zresponse.objectfolder;
 						}
 						var zrequest2 = {
 							'usertoken':dGet('wtw_tusertoken').value,
@@ -852,7 +857,7 @@ WTWJS.prototype.saveMyAvatar = async function() {
 							'avatardescription':zresponse.avatardescription,
 							'function':'saveavatar'
 						};
-						WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalsaveavatar.php", zrequest2, 
+						WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalsaveavatar.php', zrequest2, 
 							function(zresponse2) {
 								zresponse2 = JSON.parse(zresponse2);
 								WTW.saveMyAvatarColors();
@@ -865,7 +870,7 @@ WTWJS.prototype.saveMyAvatar = async function() {
 			} 
 		);
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-saveMyAvatar=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-saveMyAvatar=' + ex.message);
 	}
 }
 
@@ -888,7 +893,7 @@ WTWJS.prototype.saveMyAvatarColors = async function() {
 					'index':i,
 					'function':'saveavatarcolor'
 				};
-				WTW.postAsyncJSON("/core/handlers/wtwavatars-saveavatar.php", zrequest, 
+				WTW.postAsyncJSON('/core/handlers/wtwavatars-saveavatar.php', zrequest, 
 					async function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						var zrequest2 = {
@@ -909,7 +914,7 @@ WTWJS.prototype.saveMyAvatarColors = async function() {
 						};
 						if (dGet('wtw_tglobalavatar').value == '1') {
 							/* if checkbox for global is checked, save to global 3dnet.walktheweb.com */
-							WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalsaveavatar.php", zrequest2, 
+							WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalsaveavatar.php', zrequest2, 
 								function(zresponse2) {
 									zresponse2 = JSON.parse(zresponse2);
 									if (zresponse2.index == WTW.avatarParts.length - 1) {
@@ -925,7 +930,7 @@ WTWJS.prototype.saveMyAvatarColors = async function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-saveMyAvatarColors=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-saveMyAvatarColors=' + ex.message);
 	}
 }
 
@@ -968,13 +973,13 @@ WTWJS.prototype.saveMyAvatarAnimations = async function() {
 								'index':i,
 								'function':'saveavataranimation'
 							};
-							WTW.postAsyncJSON("/core/handlers/wtwavatars-saveavatar.php", zrequest, 
+							WTW.postAsyncJSON('/core/handlers/wtwavatars-saveavatar.php', zrequest, 
 								async function(zresponse) {
 									zresponse = JSON.parse(zresponse);
 									if (dGet('wtw_tglobalavatar').value == '1') {
 										/* if checkbox for global is checked, save to global 3dnet.walktheweb.com */
-										if (zresponse.objectfolder.indexOf("http") == -1) {
-											zresponse.objectfolder = "https://3dnet.walktheweb.com" + zresponse.objectfolder;
+										if (zresponse.objectfolder.indexOf('http') == -1) {
+											zresponse.objectfolder = 'https://3dnet.walktheweb.com' + zresponse.objectfolder;
 										}
 										var zrequest2 = {
 											'serverinstanceid':dGet('wtw_serverinstanceid').value,
@@ -1001,7 +1006,7 @@ WTWJS.prototype.saveMyAvatarAnimations = async function() {
 											'function':'saveavataranimation'
 										};
 										if (dGet('wtw_tglobalavatar').value == '1') {
-											WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/globalsaveavatar.php", zrequest2, 
+											WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalsaveavatar.php', zrequest2, 
 												function(zresponse2) {
 													zresponse2 = JSON.parse(zresponse2);
 													if (zresponse2.index == WTW.avatarAnimations.length-1) {
@@ -1022,7 +1027,7 @@ WTWJS.prototype.saveMyAvatarAnimations = async function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-saveMyAvatarAnimations=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-saveMyAvatarAnimations=' + ex.message);
 	}
 }
 
@@ -1037,18 +1042,18 @@ WTWJS.prototype.returnCloseDesigner = function() {
 					'func': 'WTW.reloadAvatar',
 					'message': 'Reload Avatar',
 					'parameters':null
-				}, "*");
+				}, '*');
 				window.parent.postMessage({
 					'func': 'WTW.closeIFrame',
 					'message': 'Close iFrame',
 					'parameters':null
-				}, "*");
+				}, '*');
 			}, 2000);
 		} else {
 			WTW.openLocalLogin('Select Avatar',.4,.9);
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-returnCloseDesigner=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-returnCloseDesigner=' + ex.message);
 	}
 }
 
@@ -1057,7 +1062,7 @@ WTWJS.prototype.updateGlobalAvatar = function(zvalue) {
 	try {
 		dGet('wtw_tglobalavatar').value = zvalue;
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-updateGlobalAvatar=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-updateGlobalAvatar=' + ex.message);
 	}
 }
 
@@ -1067,7 +1072,7 @@ WTWJS.prototype.editMyAvatarAnimations = function(zevent) {
 		dGet('wtw_teditanimationevent').value = zevent;
 		WTW.loadRightMenu(3);
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-editMyAvatarAnimations=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-editMyAvatarAnimations=' + ex.message);
 	}
 }
 
@@ -1082,7 +1087,7 @@ WTWJS.prototype.toggleEditAnimations = function() {
 		}
 		WTW.loadRightMenu(3);
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-toggleEditAnimations=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-toggleEditAnimations=' + ex.message);
 	}
 }
 
@@ -1123,14 +1128,14 @@ WTWJS.prototype.selectAnimationEvent = function(zevent) {
 		wtw_rightmenulower.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
 		wtw_rightmenulower.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 		wtw_rightmenulower.addColumnDefinition(1);
-		wtw_rightmenulower.width = "350px";
+		wtw_rightmenulower.width = '350px';
 		if (zrows > 0) {
 			let j = 0;
-			wtw_rightmenulower.height = (zrows * 50) + "px";
+			wtw_rightmenulower.height = (zrows * 50) + 'px';
 			for(var i=0;i<WTW.avatarAnimations.length;i++) {
 				if (WTW.avatarAnimations[i] != null) {
 					let zbuttonname = WTW.avatarAnimations[i].animationeventname;
-					let zcolor = "#D8F8FF";
+					let zcolor = '#D8F8FF';
 					let zweight = 0;
 					if (WTW.myAvatar.WTW.animations.running[zevent] != undefined) {
 						if (WTW.myAvatar.WTW.animations.running[zevent].weight != undefined) {
@@ -1143,17 +1148,17 @@ WTWJS.prototype.selectAnimationEvent = function(zevent) {
 						wtw_rightmenulower.addRowDefinition(1/zrows);
 						if (dGet('wtw_tavataranimationevent').value == WTW.avatarAnimations[i].animationevent && wtw_editmode == false) {
 							if (zweight != 1) {
-								zbuttonname += ": " + dGet('wtw_tanimationfriendlyname').value;
-								zcolor = "yellow";
+								zbuttonname += ': ' + dGet('wtw_tanimationfriendlyname').value;
+								zcolor = 'yellow';
 							}
 						} else if (dGet('wtw_teditanimationevent').value == WTW.avatarAnimations[i].animationevent && wtw_editmode) {
-							zbuttonname += ": " + dGet('wtw_tanimationfriendlyname').value;
-							zcolor = "yellow";
+							zbuttonname += ': ' + dGet('wtw_tanimationfriendlyname').value;
+							zcolor = 'yellow';
 						}
-						var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarAnimations[i].animationevent + "-animation-button", zbuttonname, 'image');
-						zbutton1.width = "330px";
-						zbutton1.height = "50px";
-						zbutton1.color = "#000000";
+						var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarAnimations[i].animationevent + '-animation-button', zbuttonname, 'image');
+						zbutton1.width = '330px';
+						zbutton1.height = '50px';
+						zbutton1.color = '#000000';
 						zbutton1.background = zcolor;
 						if (wtw_editmode) {
 							zbutton1.onPointerClickObservable.add(function(ev, state) {WTW.editMyAvatarAnimations(state.currentTarget.name.split('-')[0]);});
@@ -1168,14 +1173,14 @@ WTWJS.prototype.selectAnimationEvent = function(zevent) {
 							wtw_rightmenulower.addRowDefinition(1/zrows);
 							zbuttonname = WTW.avatarAnimations[i].animationfriendlyname;
 							if (WTW.avatarAnimations[i].selected) {
-								zcolor = "yellow";
+								zcolor = 'yellow';
 							} else {
-								zcolor = "#ffffff";
+								zcolor = '#ffffff';
 							}
-							var zbutton2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarAnimations[i].avataranimationid + "-animation-button", zbuttonname, 'image');
-							zbutton2.width = "330px";
-							zbutton2.height = "50px";
-							zbutton2.color = "#000000";
+							var zbutton2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton(WTW.avatarAnimations[i].avataranimationid + '-animation-button', zbuttonname, 'image');
+							zbutton2.width = '330px';
+							zbutton2.height = '50px';
+							zbutton2.color = '#000000';
 							zbutton2.background = zcolor;
 							zbutton2.onPointerClickObservable.add(function(ev, state) {WTW.changeMyAvatarAnimation(state.currentTarget.name.split('-')[0]);});
 							wtw_rightmenulower.addControl(zbutton2, j, 0);
@@ -1219,12 +1224,12 @@ WTWJS.prototype.selectAnimationEvent = function(zevent) {
 				}
 			}
 		} else {
-			wtw_rightmenulower.height = "60px";
+			wtw_rightmenulower.height = '60px';
 			wtw_rightmenulower.addRowDefinition(1);
 		}
 		gui.addControl(wtw_rightmenulower);
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-selectAnimationEvent=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-selectAnimationEvent=' + ex.message);
 	}
 }
 
@@ -1257,7 +1262,7 @@ WTWJS.prototype.clearAnimations = function(zavatarname) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-clearAnimations=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-clearAnimations=' + ex.message);
 	}
 }
 
@@ -1283,7 +1288,7 @@ WTWJS.prototype.changeMyAvatarAnimation = function(zavataranimationid) {
 		}
 		WTW.getMyAvatarAnimations(dGet('wtw_teditanimationevent').value);
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-changeMyAvatarAnimation=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-changeMyAvatarAnimation=' + ex.message);
 	}
 }
 
@@ -1325,7 +1330,7 @@ WTWJS.prototype.getMyAvatarAnimations = function(zanimationevent) {
 			WTW.loadRightMenu(3);
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-getMyAvatarAnimations=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-getMyAvatarAnimations=' + ex.message);
 	}
 }
 
@@ -1334,50 +1339,50 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 	try {
 		WTW.startLoading();
 		if (dGet('wtw_tavatarid').value == '') {
-			var zbutton0 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("selectavatar-button", 'Select My Avatar', 'image');
-			zbutton0.width = "330px";
-			zbutton0.height = "60px";
-			zbutton0.color = "yellow";
-			zbutton0.background = "blue";
+			var zbutton0 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('selectavatar-button', 'Select My Avatar', 'image');
+			zbutton0.width = '330px';
+			zbutton0.height = '60px';
+			zbutton0.color = 'yellow';
+			zbutton0.background = 'blue';
 			zbutton0.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
 			wtw_leftmenu.addControl(zbutton0, 1, 0);
 
-			var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarprofile-button", 'Avatar Profile', 'image');
-			zbutton1.width = "330px";
-			zbutton1.height = "60px";
-			zbutton1.color = "white";
-			zbutton1.background = "green";
+			var zbutton1 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('avatarprofile-button', 'Avatar Profile', 'image');
+			zbutton1.width = '330px';
+			zbutton1.height = '60px';
+			zbutton1.color = 'white';
+			zbutton1.background = 'green';
 			zbutton1.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(1);});
 			wtw_leftmenu.addControl(zbutton1, 0, 0);
 
-			var zbutton2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avatarcolors-button", 'Avatar Colors', 'image');
-			zbutton2.width = "330px";
-			zbutton2.height = "60px";
-			zbutton2.color = "white";
-			zbutton2.background = "green";
+			var zbutton2 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('avatarcolors-button', 'Avatar Colors', 'image');
+			zbutton2.width = '330px';
+			zbutton2.height = '60px';
+			zbutton2.color = 'white';
+			zbutton2.background = 'green';
 			zbutton2.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(2);});
 			wtw_leftmenu.addControl(zbutton2, 2, 0);
 
-			var zbutton3 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("avataranimations-button", 'Avatar Animations', 'image');
-			zbutton3.width = "330px";
-			zbutton3.height = "60px";
-			zbutton3.color = "white";
-			zbutton3.background = "green";
+			var zbutton3 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('avataranimations-button', 'Avatar Animations', 'image');
+			zbutton3.width = '330px';
+			zbutton3.height = '60px';
+			zbutton3.color = 'white';
+			zbutton3.background = 'green';
 			zbutton3.onPointerClickObservable.add(function(ev, state) {WTW.loadLeftMenu(3);});
 			wtw_leftmenu.addControl(zbutton3, 3, 0);
 
-			var zbutton4 = BABYLON.GUI.Button.CreateImageWithCenterTextButton("save-button", 'Save Avatar', 'image');
-			zbutton4.width = "330px";
-			zbutton4.height = "60px";
-			zbutton4.color = "white";
-			zbutton4.background = "green";
+			var zbutton4 = BABYLON.GUI.Button.CreateImageWithCenterTextButton('save-button', 'Save Avatar', 'image');
+			zbutton4.width = '330px';
+			zbutton4.height = '60px';
+			zbutton4.color = 'white';
+			zbutton4.background = 'green';
 			zbutton4.onPointerClickObservable.add(function(ev, state) {WTW.saveMyAvatar();WTW.loadLeftMenu(4);});
 			wtw_leftmenu.addControl(zbutton4, 4, 0);
 		}
 		dGet('wtw_tavatarid').value = zavatardef.avatarid;
 		WTW.avatarParts = [];
-		zsetupparent = WTW.getMeshOrNodeByID("setupparent-0");
-		var zavatarname = "myavatar-" + dGet('wtw_tinstanceid').value;
+		zsetupparent = WTW.getMeshOrNodeByID('setupparent-0');
+		var zavatarname = 'myavatar-' + dGet('wtw_tinstanceid').value;
 		WTW.myAvatar = WTW.getMeshOrNodeByID(zavatarname);
 		if (WTW.myAvatar != null) {
 			WTW.myAvatar.dispose();
@@ -1392,8 +1397,8 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 		var zscalingy = 1;
 		var zscalingz = 1;
 		var zobjectanimations = null;
-		var zobjectfolder = "/content/system/avatars/male/";
-		var zobjectfile = "maleidle.babylon";
+		var zobjectfolder = '/content/system/avatars/male/';
+		var zobjectfile = 'maleidle.babylon';
 		var zavataranimationdefs = [];
 		if (zavatardef.position.x != undefined) {
 			if (WTW.isNumeric(zavatardef.position.x)) {
@@ -1452,7 +1457,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 			}
 		}
 		WTW.myAvatar = BABYLON.MeshBuilder.CreateBox(zavatarname, {}, scene);
-		WTW.myAvatar.material = new BABYLON.StandardMaterial("matmyavatar" + zavatarname, scene);
+		WTW.myAvatar.material = new BABYLON.StandardMaterial('matmyavatar' + zavatarname, scene);
 		WTW.myAvatar.material.alpha = 0;
 		WTW.myAvatar.parent = zsetupparent;
 		WTW.myAvatar.applyGravity = true;
@@ -1469,15 +1474,15 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 		zavatarscale.scaling = new BABYLON.Vector3(zscalingx, zscalingy, zscalingz);
 		zavatarscale.parent = WTW.myAvatar;
 
-		var zavatarcamera = BABYLON.MeshBuilder.CreateBox(zavatarname + "-camera", {}, scene);
-		zavatarcamera.material = new BABYLON.StandardMaterial("matcamera" + zavatarname, scene);
+		var zavatarcamera = BABYLON.MeshBuilder.CreateBox(zavatarname + '-camera', {}, scene);
+		zavatarcamera.material = new BABYLON.StandardMaterial('matcamera' + zavatarname, scene);
 		zavatarcamera.material.alpha = 0;
 		zavatarcamera.parent = WTW.myAvatar;
 		zavatarcamera.position.y = 12;
 		zavatarcamera.rotation.y = WTW.getRadians(-90);
 
-		var zavatarcenter = BABYLON.MeshBuilder.CreateBox(zavatarname + "-center", {}, scene);
-		zavatarcenter.material = new BABYLON.StandardMaterial("matcenter" + zavatarname, scene);
+		var zavatarcenter = BABYLON.MeshBuilder.CreateBox(zavatarname + '-center', {}, scene);
+		zavatarcenter.material = new BABYLON.StandardMaterial('matcenter' + zavatarname, scene);
 		zavatarcenter.material.alpha = 0;
 		zavatarcenter.parent = WTW.myAvatar;
 		zavatarcenter.position.y = 10;
@@ -1490,7 +1495,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 						if (zresponse.meshes[i] != null) {
 							var zmesh = zresponse.meshes[i];
 							var zmeshname = zresponse.meshes[i].name;
-							var zchildmoldname = zavatarname + "-" + zmeshname;
+							var zchildmoldname = zavatarname + '-' + zmeshname;
 							zresponse.meshes[i].isPickable = true;
 							zresponse.meshes[i].name = zchildmoldname;
 							zresponse.meshes[i].id = zchildmoldname;
@@ -1570,7 +1575,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 												}
 												if (zmoldevent == 'onload') {
 													zanimationloop = false;
-													if ((typeof zmesh.WTW.animations.onwait) != "undefined") {
+													if ((typeof zmesh.WTW.animations.onwait) != 'undefined') {
 														zresponse.meshes[i].WTW.animations[zmoldevent] = scene.beginWeightedAnimation(zmesh, zstartframe, zendframe, 1, zanimationloop, zspeedratio, function() {zmesh.WTW.animations.onload.weight=0; zmesh.WTW.animations.onwait.weight=1;});
 													} else {
 														zresponse.meshes[i].WTW.animations[zmoldevent] = scene.beginWeightedAnimation(zmesh, zstartframe, zendframe, 1, zanimationloop, zspeedratio);
@@ -1581,7 +1586,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 											}
 										}
 									}
-									if ((typeof zmesh.WTW.animations.onload) == "undefined" && (typeof zmesh.WTW.animations.onwait) != "undefined") {
+									if ((typeof zmesh.WTW.animations.onload) == 'undefined' && (typeof zmesh.WTW.animations.onwait) != 'undefined') {
 										zmesh.WTW.animations.onwait.weight=1;
 									}
 								}
@@ -1597,7 +1602,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 						if (zresponse.skeletons[i] != null) {
 							var zmesh = zresponse.skeletons[i];
 							var zmeshname = zresponse.skeletons[i].name;
-							var zchildmoldname = zavatarname + "-" + zmeshname;
+							var zchildmoldname = zavatarname + '-' + zmeshname;
 							zresponse.skeletons[i].name = zchildmoldname;
 							zresponse.skeletons[i].id = zchildmoldname;
 							WTW.registerMouseOver(zresponse.skeletons[i]);
@@ -1616,21 +1621,21 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 								for (var j=0; j < zresponse.skeletons[i].bones.length; j++) {
 									if (zresponse.skeletons[i].bones[j] != null) {
 										var zbonename = zresponse.skeletons[i].bones[j].name.toLowerCase();
-										if (zbonename.indexOf("headtop") > -1 && zheadtopbone == -1) {
+										if (zbonename.indexOf('headtop') > -1 && zheadtopbone == -1) {
 											zheadtopbone = j;
-										} else if (zbonename.indexOf("spine2") > -1 && zspine2bone == -1) {
+										} else if (zbonename.indexOf('spine2') > -1 && zspine2bone == -1) {
 											zspine2bone = j;
-										} else if (zbonename.indexOf("righthand") > -1 && zrighthandbone == -1) {
+										} else if (zbonename.indexOf('righthand') > -1 && zrighthandbone == -1) {
 											zrighthandbone = j;
-										} else if (zbonename.indexOf("lefthand") > -1 && zlefthandbone == -1) {
+										} else if (zbonename.indexOf('lefthand') > -1 && zlefthandbone == -1) {
 											zlefthandbone = j;
-										} else if (zbonename.indexOf("rightupleg") > -1 && zrightlegbone == -1) {
+										} else if (zbonename.indexOf('rightupleg') > -1 && zrightlegbone == -1) {
 											zrightlegbone = j;
-										} else if (zbonename.indexOf("leftupleg") > -1 && zleftlegbone == -1) {
+										} else if (zbonename.indexOf('leftupleg') > -1 && zleftlegbone == -1) {
 											zleftlegbone = j;
-										} else if (zbonename.indexOf("rightfoot") > -1 && zrightfootbone == -1) {
+										} else if (zbonename.indexOf('rightfoot') > -1 && zrightfootbone == -1) {
 											zrightfootbone = j;
-										} else if (zbonename.indexOf("leftfoot") > -1 && zleftfootbone == -1) {
+										} else if (zbonename.indexOf('leftfoot') > -1 && zleftfootbone == -1) {
 											zleftfootbone = j;
 										}
 /*										if (j == 0) {
@@ -1643,77 +1648,77 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 */									}
 								}
 								if (zheadtopbone > -1) {
-									var zheadtop = BABYLON.MeshBuilder.CreateBox(zavatarname + "-headtop", {}, scene);
+									var zheadtop = BABYLON.MeshBuilder.CreateBox(zavatarname + '-headtop', {}, scene);
 									zheadtop.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-									zheadtop.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-headtop', scene);
+									zheadtop.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-headtop', scene);
 									zheadtop.material.alpha = 0;
 									zheadtop.isPickable = true;
 									//WTW.registerMouseOver(zheadtop);
 									zheadtop.attachToBone(zresponse.skeletons[i].bones[zheadtopbone], zresponse.meshes[0]);
-									if (zavatarname == "myavatar-" + dGet("wtw_tinstanceid").value) {
+									if (zavatarname == 'myavatar-' + dGet('wtw_tinstanceid').value) {
 										zavatarcamera.parent = zheadtop;
 										zavatarcamera.position.y = 0;
 										zavatarcamera.rotation.y = WTW.getRadians(0);
 									}
 								}
 								if (zspine2bone > -1) {
-									var zchest = BABYLON.MeshBuilder.CreateBox(zavatarname + "-chest", {}, scene);
+									var zchest = BABYLON.MeshBuilder.CreateBox(zavatarname + '-chest', {}, scene);
 									zchest.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-									zchest.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-chest', scene);
+									zchest.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-chest', scene);
 									zchest.material.alpha = 0;
 									zchest.isPickable = true;
 									//WTW.registerMouseOver(zchest);
 									zchest.attachToBone(zresponse.skeletons[i].bones[zspine2bone], zresponse.meshes[0]);
 								}
 								if (zrighthandbone > -1) {
-									var zrighthand = BABYLON.MeshBuilder.CreateBox(zavatarname + "-righthand", {}, scene);
+									var zrighthand = BABYLON.MeshBuilder.CreateBox(zavatarname + '-righthand', {}, scene);
 									zrighthand.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingz, 1/zscalingz);
-									zrighthand.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-righthand', scene);
+									zrighthand.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-righthand', scene);
 									zrighthand.material.alpha = 0;
 									zrighthand.isPickable = true;
 									//WTW.registerMouseOver(zrighthand);
 									zrighthand.attachToBone(zresponse.skeletons[i].bones[zrighthandbone], zresponse.meshes[0]);
 								}
 								if (zlefthandbone > -1) {
-									var zlefthand = BABYLON.MeshBuilder.CreateBox(zavatarname + "-lefthand", {}, scene);
+									var zlefthand = BABYLON.MeshBuilder.CreateBox(zavatarname + '-lefthand', {}, scene);
 									zlefthand.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-									zlefthand.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-lefthand', scene);
+									zlefthand.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-lefthand', scene);
 									zlefthand.material.alpha = 0;
 									zlefthand.isPickable = true;
 									//WTW.registerMouseOver(zlefthand);
 									zlefthand.attachToBone(zresponse.skeletons[i].bones[zlefthandbone], zresponse.meshes[0]);
 								}
 								if (zrightlegbone > -1) {
-									var zrightleg = BABYLON.MeshBuilder.CreateBox(zavatarname + "-righthip", {}, scene);
+									var zrightleg = BABYLON.MeshBuilder.CreateBox(zavatarname + '-righthip', {}, scene);
 									zrightleg.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-									zrightleg.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-rightleg', scene);
+									zrightleg.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-rightleg', scene);
 									zrightleg.material.alpha = 0;
 									zrightleg.isPickable = true;
 									//WTW.registerMouseOver(zrightleg);
 									zrightleg.attachToBone(zresponse.skeletons[i].bones[zrightlegbone], zresponse.meshes[0]);
 								}
 								if (zleftlegbone > -1) {
-									var zleftleg = BABYLON.MeshBuilder.CreateBox(zavatarname + "-lefthip", {}, scene);
+									var zleftleg = BABYLON.MeshBuilder.CreateBox(zavatarname + '-lefthip', {}, scene);
 									zleftleg.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-									zleftleg.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-leftleg', scene);
+									zleftleg.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-leftleg', scene);
 									zleftleg.material.alpha = 0;
 									zleftleg.isPickable = true;
 									//WTW.registerMouseOver(zleftleg);
 									zleftleg.attachToBone(zresponse.skeletons[i].bones[zleftlegbone], zresponse.meshes[0]);
 								}
 								if (zrightfootbone > -1) {
-									var zrightfoot = BABYLON.MeshBuilder.CreateBox(zavatarname + "-rightfoot", {}, scene);
+									var zrightfoot = BABYLON.MeshBuilder.CreateBox(zavatarname + '-rightfoot', {}, scene);
 									zrightfoot.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-									zrightfoot.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-rightfoot', scene);
+									zrightfoot.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-rightfoot', scene);
 									zrightfoot.material.alpha = 0;
 									zrightfoot.isPickable = true;
 									//WTW.registerMouseOver(zrightfoot);
 									zrightfoot.attachToBone(zresponse.skeletons[i].bones[zrightfootbone], zresponse.meshes[0]);
 								}
 								if (zleftfootbone > -1) {
-									var zleftfoot = BABYLON.MeshBuilder.CreateBox(zavatarname + "-leftfoot", {}, scene);
+									var zleftfoot = BABYLON.MeshBuilder.CreateBox(zavatarname + '-leftfoot', {}, scene);
 									zleftfoot.scaling = new BABYLON.Vector3(1/zscalingx, 1/zscalingy, 1/zscalingz);
-									zleftfoot.material = zcovering = new BABYLON.StandardMaterial("mat" + zavatarname + '-leftfoot', scene);
+									zleftfoot.material = zcovering = new BABYLON.StandardMaterial('mat' + zavatarname + '-leftfoot', scene);
 									zleftfoot.material.alpha = 0;
 									zleftfoot.isPickable = true;
 									//WTW.registerMouseOver(zleftfoot);
@@ -1766,7 +1771,7 @@ WTWJS.prototype.loadAvatarMeshes = function(zavatardef) {
 			}
 		);
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-loadAvatarMeshes=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-loadAvatarMeshes=' + ex.message);
 	}
 }
 
@@ -1775,7 +1780,7 @@ WTWJS.prototype.loadAnimations = async function() {
 	try {
 		var j = 0;
 		WTW.avatarAnimations = [];
-		WTW.getAsyncJSON("/connect/avataranimations.php", 
+		WTW.getAsyncJSON('/connect/avataranimations.php', 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				for (var i=0;i<zresponse.avataranimations.length;i++) {
@@ -1820,7 +1825,7 @@ WTWJS.prototype.loadAnimations = async function() {
 			}
 		);
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-loadAnimations=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-loadAnimations=' + ex.message);
 	}
 }
 
@@ -1832,25 +1837,25 @@ WTWJS.prototype.chooseAvatar = async function() {
 			wtw_avatarselector.dispose();
 		}
 		WTW.avatars = [];
-		WTW.getAsyncJSON("/connect/avatars.php", 
+		WTW.getAsyncJSON('/connect/avatars.php', 
 			function(zresponse) {
 				if (zresponse != null) {
 					zresponse = JSON.parse(zresponse);
 					if (zresponse.avatars != null) {
 						if (zresponse.avatars.length > 0) {
-							wtw_avatarselector = new BABYLON.GUI.ScrollViewer("ChooseAvatar");
+							wtw_avatarselector = new BABYLON.GUI.ScrollViewer('ChooseAvatar');
 							wtw_avatarselector.width = .96;
-							wtw_avatarselector.height = "225px";
-							wtw_avatarselector.background = "gray";
-							wtw_avatarselector.barColor = "tan";
-							wtw_avatarselector.barBackground = "black";
+							wtw_avatarselector.height = '225px';
+							wtw_avatarselector.background = 'gray';
+							wtw_avatarselector.barColor = 'tan';
+							wtw_avatarselector.barBackground = 'black';
 							wtw_avatarselector.thumbLength = .5;
 							wtw_avatarselector.barSize = 20;
 							wtw_avatarselector.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
 							gui.addControl(wtw_avatarselector);
 							var zgrid = new BABYLON.GUI.Grid();
-							zgrid.width = (202 * zresponse.avatars.length) + "px";
-							zgrid.height = "200px";
+							zgrid.width = (202 * zresponse.avatars.length) + 'px';
+							zgrid.height = '200px';
 							for (var i=0; i<zresponse.avatars.length;i++) {
 								zgrid.addColumnDefinition(1/zresponse.avatars.length);
 							}
@@ -1858,11 +1863,11 @@ WTWJS.prototype.chooseAvatar = async function() {
 							wtw_avatarselector.addControl(zgrid);
 							for (var i=0; i<zresponse.avatars.length;i++) {
 								var zavatarid = zresponse.avatars[i].avatarid;
-								var zbutton = BABYLON.GUI.Button.CreateImageWithCenterTextButton(zavatarid + "-button", zresponse.avatars[i].displayname, zresponse.avatars[i].objects.folder + zresponse.avatars[i].snapshots.thumbnail);
-								zbutton.width = "240px";
-								zbutton.height = "200px";
-								zbutton.color = "white";
-								zbutton.background = "green";
+								var zbutton = BABYLON.GUI.Button.CreateImageWithCenterTextButton(zavatarid + '-button', zresponse.avatars[i].displayname, zresponse.avatars[i].objects.folder + zresponse.avatars[i].snapshots.thumbnail);
+								zbutton.width = '240px';
+								zbutton.height = '200px';
+								zbutton.color = 'white';
+								zbutton.background = 'green';
 								zbutton.onPointerClickObservable.add(function(ev, state) {WTW.selectAvatar(state.currentTarget.name.split('-')[0]);});
 								zgrid.addControl(zbutton, 0, i);
 								
@@ -1896,7 +1901,7 @@ WTWJS.prototype.chooseAvatar = async function() {
 			}
 		);
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-chooseAvatar=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-chooseAvatar=' + ex.message);
 	}
 }
 
@@ -1904,7 +1909,7 @@ WTWJS.prototype.updateColorByHex = function(zhex) {
 	/* when a hex color code is changed, this process updates the mesh and color picker wheel selection */
 	try {
 		if (/^#([0-9A-F]{3}){1,2}$/i.test(zhex) == false) {
-			zhex = "#FFFFFF";
+			zhex = '#FFFFFF';
 		}
 		var zmold = WTW.getMeshOrNodeByID(dGet('wtw_tmoldname').value);
 		if (zmold != null) {
@@ -1922,21 +1927,21 @@ WTWJS.prototype.updateColorByHex = function(zhex) {
 			if (wtw_activeinput != null) {
 				wtw_activeinput.text = zhex.toUpperCase();
 				wtw_activeinput.background = zhex;
-				wtw_activeinput.color = WTW.setTextColor(zhex, "#ffffff", "#000000");
-				wtw_activeinput.focusedBackground = "#000000";
-				if (wtw_activeinput.color == "#000000") {
-					wtw_activeinput.focusedBackground = "#ffffff";
+				wtw_activeinput.color = WTW.setTextColor(zhex, '#ffffff', '#000000');
+				wtw_activeinput.focusedBackground = '#000000';
+				if (wtw_activeinput.color == '#000000') {
+					wtw_activeinput.focusedBackground = '#ffffff';
 				}
 			}
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-updateColorByHex=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-updateColorByHex=' + ex.message);
 	}
 }
 
 WTWJS.prototype.getMyAvatarPart = function(zpart) {
 	/* when an avatar part is selected, this loads the part to be edited (for color selection) */
-	let zmoldname = "";
+	let zmoldname = '';
 	try {
 		if (zpart == undefined) {
 			zpart = '';
@@ -1954,13 +1959,13 @@ WTWJS.prototype.getMyAvatarPart = function(zpart) {
 						} else {
 							wtw_colorpicker.value = zmold.material.emissiveColor;
 						}
-						WTW.hilightMoldFast(zmoldname, "yellow");
+						WTW.hilightMoldFast(zmoldname, 'yellow');
 					}
 				}
 			}
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-getMyAvatarPart=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-getMyAvatarPart=' + ex.message);
 	}
 	return zmoldname;
 }
@@ -1982,7 +1987,7 @@ WTWJS.prototype.updateAvatarPartColor = function(zhex) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-updateAvatarPartColor=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-updateAvatarPartColor=' + ex.message);
 	}
 }
 
@@ -1990,24 +1995,24 @@ WTWJS.prototype.setMyAvatarColor = function(r, g, b) {
 	/* on change of color, this function updates the avatar part with the color selected */
 	try {
 		var zmold = WTW.getMeshOrNodeByID(dGet('wtw_tmoldname').value);
-		var zpartcolor = "#ffffff";
+		var zpartcolor = '#ffffff';
 		if (zmold != null) {
 			switch (dGet('wtw_tcolortype').value) {
-				case "Diffuse":
+				case 'Diffuse':
 					zmold.material.diffuseColor = new BABYLON.Color3(r,g,b);
 					zmold.material.ambientColor = new BABYLON.Color3(r,g,b);
 					zpartcolor = zmold.material.diffuseColor.toHexString();
 					break;
-				case "Specular":
+				case 'Specular':
 					zmold.material.specularColor = new BABYLON.Color3(r,g,b);
 					zpartcolor = zmold.material.specularColor.toHexString();
 					break;
-				case "Emissive":
+				case 'Emissive':
 					zmold.material.specularColor = new BABYLON.Color3(r,g,b);
 					zmold.material.emissiveColor = new BABYLON.Color3(r,g,b);
 					zpartcolor = zmold.material.emissiveColor.toHexString();
 					break;
-				case "Ambient":
+				case 'Ambient':
 					zmold.material.ambientColor = new BABYLON.Color3(r,g,b);
 					zpartcolor = zmold.material.ambientColor.toHexString();
 					break;
@@ -2018,30 +2023,30 @@ WTWJS.prototype.setMyAvatarColor = function(r, g, b) {
 			if (wtw_activeinput != null) {
 				wtw_activeinput.text = zpartcolor;
 				wtw_activeinput.background = zpartcolor;
-				wtw_activeinput.color = WTW.setTextColor(zpartcolor, "#ffffff", "#000000");
-				wtw_activeinput.focusedBackground = "#000000";
-				if (wtw_activeinput.color == "#000000") {
-					wtw_activeinput.focusedBackground = "#ffffff";
+				wtw_activeinput.color = WTW.setTextColor(zpartcolor, '#ffffff', '#000000');
+				wtw_activeinput.focusedBackground = '#000000';
+				if (wtw_activeinput.color == '#000000') {
+					wtw_activeinput.focusedBackground = '#ffffff';
 				}
 				WTW.updateAvatarPartColor(zpartcolor);
 			}
 		}
 		scene.render();
 	} catch (ex) {
-		WTW.log("avatars-loadavatar-setMyAvatarColor=" + ex.message);
+		WTW.log('avatars-loadavatar-setMyAvatarColor=' + ex.message);
 	}
 }
 
 WTWJS.prototype.setTextColor = function(zbgcolor, zlightcolor, zdarkcolor) {
 	/* when the color is selected, the form updates the color to the background */
 	/* this also sets the text color to an opposite color than the background (default is black or white) */
-	var zcolor = "black";
+	var zcolor = 'black';
 	try {
 		if (zlightcolor == undefined) {
-			zlightcolor = "#ffffff";
+			zlightcolor = '#ffffff';
 		}
 		if (zdarkcolor == undefined) {
-			zdarkcolor = "#000000";
+			zdarkcolor = '#000000';
 		}
 		var zcolorstring = (zbgcolor.charAt(0) === '#') ? zbgcolor.substring(1, 7) : zbgcolor;
 		var zred = parseInt(zcolorstring.substring(0, 2), 16); // hexToR
@@ -2057,7 +2062,7 @@ WTWJS.prototype.setTextColor = function(zbgcolor, zlightcolor, zdarkcolor) {
 		var zcompare = (0.2126 * zcols[0]) + (0.7152 * zcols[1]) + (0.0722 * zcols[2]);
 		zcolor = (zcompare > 0.179) ? zdarkcolor : zlightcolor;
 	} catch (ex) {
-		WTW.log("avatars-loadavatar-setTextColor=" + ex.message);
+		WTW.log('avatars-loadavatar-setTextColor=' + ex.message);
 	}
 	return zcolor;
 }
@@ -2068,7 +2073,7 @@ WTWJS.prototype.updateDisplayName = function(ztext) {
 		dGet('wtw_tnewavatardisplayname').value = ztext;
 		WTW.showIDs(ztext);
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-updateDisplayName=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-updateDisplayName=' + ex.message);
 	}
 }
 
@@ -2100,14 +2105,14 @@ WTWJS.prototype.closeMenu = function() {
 			wtw_colorpicker = null;
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-closeMenu=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-closeMenu=' + ex.message);
 	}
 }
 
 WTWJS.prototype.preloadAvatar = async function(zavatarid) {
 	/* load the basic avatar settings */
 	try {
-		WTW.getAsyncJSON("/connect/avatar.php?avatarid=" + zavatarid, 
+		WTW.getAsyncJSON('/connect/avatar.php?avatarid=' + zavatarid, 
 			function(zresponse) {
 				if (zresponse != null) {
 					zresponse = JSON.parse(zresponse);
@@ -2119,7 +2124,7 @@ WTWJS.prototype.preloadAvatar = async function(zavatarid) {
 			}
 		);
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-preloadAvatar=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-preloadAvatar=' + ex.message);
 	}
 }
 
@@ -2150,7 +2155,7 @@ WTWJS.prototype.selectAvatar = function(zavatarid) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-selectAvatar=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-selectAvatar=' + ex.message);
 	}
 }
 
@@ -2161,10 +2166,10 @@ WTWJS.prototype.startLoading = function() {
 			wtw_loadingtimer = window.setInterval(function() {
 				if (wtw_loadingtext == null) {
 					wtw_loadingtext = new BABYLON.GUI.TextBlock();
-					wtw_loadingtext.text = "Loading...";
-					wtw_loadingtext.color = "yellow";
+					wtw_loadingtext.text = 'Loading...';
+					wtw_loadingtext.color = 'yellow';
 					wtw_loadingtext.fontSize = 120;
-					wtw_loadingtext.height = "180px";
+					wtw_loadingtext.height = '180px';
 					gui.addControl(wtw_loadingtext);
 				} else {
 					wtw_loadingtext.dispose();
@@ -2173,7 +2178,7 @@ WTWJS.prototype.startLoading = function() {
 			}, 500);
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-startLoading=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-startLoading=' + ex.message);
 	}
 }
 
@@ -2189,7 +2194,7 @@ WTWJS.prototype.stopLoading = function() {
 			wtw_loadingtext = null;
 		}
 	} catch (ex) {
-		WTW.log("wtw-avatars-scripts-wtwavatars_designer.js-stopLoading=" + ex.message);
+		WTW.log('wtw-avatars-scripts-wtwavatars_designer.js-stopLoading=' + ex.message);
 	}
 }
 
@@ -2198,9 +2203,9 @@ WTWJS.prototype.mouseClick = function(e) {
 	try {
 		e = e || window.event;
 		var zpickedresult = scene.pick(e.clientX, e.clientY);
-		var zpickedname = "";
+		var zpickedname = '';
 		if (zpickedresult.pickedMesh == null) {
-			if (WTW.currentID != "") {
+			if (WTW.currentID != '') {
 				zpickedresult.pickedMesh = WTW.getMeshOrNodeByID(WTW.currentID);
 			}
 			zpickedname = WTW.currentID;
@@ -2209,7 +2214,7 @@ WTWJS.prototype.mouseClick = function(e) {
 		}
 		if (zpickedname != '') {
 			switch (dGet('wtw_activemenu').value) {
-				case "2":
+				case '2':
 					if (zpickedname.indexOf('-') > -1) {
 						let part = zpickedname.split('-')[2];
 						WTW.getMyAvatarPart(part);
@@ -2219,11 +2224,11 @@ WTWJS.prototype.mouseClick = function(e) {
 			}
 		}
     } catch (ex) {
-		WTW.log("core-scripts-prime-wtw_input.js-mouseClick=" + ex.message);
+		WTW.log('core-scripts-prime-wtw_input.js-mouseClick=' + ex.message);
     }
 }
 
-window.addEventListener("resize", function () {
+window.addEventListener('resize', function () {
 	/* resize the canvas when the window is resized */
 	engine.resize();
 });
@@ -2231,40 +2236,40 @@ window.addEventListener("resize", function () {
 window.onload = function () {
 	/* window on load event */
 	/* add onclick event listener */
-	dGet('renderCanvas').addEventListener("click", WTW.mouseClick);
+	dGet('renderCanvas').addEventListener('click', WTW.mouseClick);
 	/* add on message event listener to talk with parent frame */
 	if (window.addEventListener) {
-		window.addEventListener("message", WTW.onMessage, false);        
+		window.addEventListener('message', WTW.onMessage, false);        
 	} else if (window.attachEvent) {
-		window.attachEvent("onmessage", WTW.onMessage, false);
+		window.attachEvent('onmessage', WTW.onMessage, false);
 	}
 	/* get avatar speed settings */
-	var zwalkspeed = WTW.getCookie("walkspeed");
+	var zwalkspeed = WTW.getCookie('walkspeed');
 	if (zwalkspeed != null) {
 		if (WTW.isNumeric(zwalkspeed)) {
 			WTW.walkSpeed = Number(zwalkspeed);
 		}
 	}
-	var zwalkanimationspeed = WTW.getCookie("walkanimationspeed");
+	var zwalkanimationspeed = WTW.getCookie('walkanimationspeed');
 	if (zwalkanimationspeed != null) {
 		if (WTW.isNumeric(zwalkanimationspeed)) {
 			WTW.walkAnimationSpeed = Number(zwalkanimationspeed);
 		}
 	}
-	var zturnspeed = WTW.getCookie("turnspeed");
+	var zturnspeed = WTW.getCookie('turnspeed');
 	if (zturnspeed != null) {
 		if (WTW.isNumeric(zturnspeed)) {
 			WTW.turnSpeed = Number(zturnspeed);
 		}
 	}
-	var zturnanimationspeed = WTW.getCookie("turnanimationspeed");
+	var zturnanimationspeed = WTW.getCookie('turnanimationspeed');
 	if (zturnanimationspeed != null) {
 		if (WTW.isNumeric(zturnanimationspeed)) {
 			WTW.turnAnimationSpeed = Number(zturnanimationspeed);
 		}
 	}
 	/* get canvas and initiate the create scene function (and start render loop for animation) */
-	canvas = document.getElementById("renderCanvas");
+	canvas = document.getElementById('renderCanvas');
 	engine = new BABYLON.Engine(canvas, true);
 	WTW.createScene();
 	engine.runRenderLoop(function () {

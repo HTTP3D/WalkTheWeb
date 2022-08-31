@@ -81,7 +81,7 @@ $zver = date("Y-m-d-H-i-s");
 		<script src="/core/scripts/prime/wtw_objectdefinitions.js?x=<?php echo $zver; ?>"></script>
     </head>
 	<body>
-		<canvas id="renderCanvas" touch-action="none"></canvas>
+		<canvas id='renderCanvas' touch-action='none'></canvas>
 		<input type="hidden" id="wtw_activemenu" />
 		<input type="hidden" id="wtw_serverinstanceid" value="<?php echo $wtw->serverinstanceid; ?>" />
 		<input type="hidden" id="wtw_tcontentpath" value="<?php echo $wtw->contentpath; ?>" />
