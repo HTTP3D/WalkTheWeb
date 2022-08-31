@@ -71,6 +71,9 @@
 	padding:10px;
 	background-color:#ffffff;
 }
+.wtw-pointer {
+	cursor:pointer;
+}
 .wtw-indent {
 	margin-left:10px;
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Walk the Web (TM) - Help</title>
+	<title>WalkTheWeb (TM) - Help</title>
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Expires" content="0" />
@@ -44,7 +44,7 @@
 		function sethelp(zhelptab) {
 			var zdivs = document.getElementsByClassName('wtw-helpdiv');
 			for (var i=0;i < zdivs.length;i++) {
-				zdivs[i].style.display = "none";
+				zdivs[i].style.display = 'none';
 				zdivs[i].style.visibility = "hidden";
 			}
 			if (dGet(zhelptab) != null) {
@@ -58,7 +58,7 @@
 	</script>
 </head>
 <body>
-	<div class="wtw-center"><h1>Walk the Web - Help</h1></div>
+	<div class="wtw-center"><h1>WalkTheWeb - Help</h1></div>
 	
 	<div id="wtw_helpmenu">
 		<h2 onclick="sethelp('wtw_helpmenudiv');" class="wtw-right">Help Menu - Index</h2>

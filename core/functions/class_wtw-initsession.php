@@ -21,9 +21,9 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = '3.5.1';
+	public $version = '3.5.2';
 	public $dbversion = '1.2.14';
-	public $versiondate = '2022-7-29';
+	public $versiondate = '2022-8-31';
 	public $olddbversion = '';
 	public $serverinstanceid = '';
 	public $globaluserid = '';
@@ -83,7 +83,7 @@ class wtw {
 				} catch (Exception $e) { }
 				try {
 					if ($this->pagename == "admin.php") {
-						$zerror = "<script type=\"text/javascript\">";
+						$zerror = "<script type='text/javascript'>";
 						/* $zerror = "console.log('".addslashes($message)."');";
 						   $zerror .= "document.getElementById('wtw_error').innerHTML = '".addslashes($message)."';";
 						   $zerror .= "WTW.openFullPageForm('error','Error Found');"; */
@@ -2234,48 +2234,48 @@ class wtw {
 
 			/* meta data entries */
 			$zmetadata = "<title>".$zsitename."</title>\r\n";
-			$zmetadata .= "<meta http-equiv=\"Cache-Control\" content=\"no-cache, no-store, must-revalidate\" />\r\n";
-			$zmetadata .= "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\r\n";
-			$zmetadata .= "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\">\r\n";
-			$zmetadata .= "<meta http-equiv=\"Pragma\" content=\"no-cache\" />\r\n";
-			$zmetadata .= "<meta http-equiv=\"Expires\" content=\"-1\" />\r\n";
-			$zmetadata .= "<link id=\"wtw_favicon\" rel=\"icon\" href=\"".$zsiteicon."\" />\r\n";
+			$zmetadata .= "<meta http-equiv='Cache-Control' content='no-cache, no-store, must-revalidate' />\r\n";
+			$zmetadata .= "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>\r\n";
+			$zmetadata .= "<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>\r\n";
+			$zmetadata .= "<meta http-equiv='Pragma' content='no-cache' />\r\n";
+			$zmetadata .= "<meta http-equiv='Expires' content='-1' />\r\n";
+			$zmetadata .= "<link id='wtw_favicon' rel='icon' href='".$zsiteicon."' />\r\n";
 			if (!empty($zsitedescription) && isset($zsitedescription)) {
-				$zmetadata .= "<meta name=\"description\" content=\"".$zsitedescription."\" />\r\n";
-				$zmetadata .= "<meta property=\"og:description\" content=\"".$zsitedescription."\" />\r\n";
+				$zmetadata .= "<meta name='description' content=\"".$zsitedescription."\" />\r\n";
+				$zmetadata .= "<meta property='og:description' content=\"".$zsitedescription."\" />\r\n";
 			}
-			$zmetadata .= "<meta property=\"og:image\" content=\"".$zpreviewpath."\" />\r\n";
-			$zmetadata .= "<meta property=\"og:image:width\" content=\"".$zpreviewwidth."\"/>\r\n";
-			$zmetadata .= "<meta property=\"og:image:height\" content=\"".$zpreviewheight."\"/>\r\n";
-			$zmetadata .= "<meta property=\"og:image:alt\" content=\"".$zsitename."\" />\r\n";
-			$zmetadata .= "<meta property=\"og:url\" content=\"".$this->protocol.$this->domainname.$this->uri."\" />\r\n";
-			$zmetadata .= "<meta property=\"og:type\" content=\"business.business\" />\r\n";
-			$zmetadata .= "<meta property=\"og:site_name\" content=\"".$zsitename."\" />\r\n";
-			$zmetadata .= "<meta property=\"og:see_also\" content=\"https://www.walktheweb.com\" />\r\n";
-			$zmetadata .= "<meta property=\"og:title\" content=\"".$zsitename."\" />\r\n";
+			$zmetadata .= "<meta property='og:image' content='".$zpreviewpath."' />\r\n";
+			$zmetadata .= "<meta property='og:image:width' content='".$zpreviewwidth."'/>\r\n";
+			$zmetadata .= "<meta property='og:image:height' content='".$zpreviewheight."'/>\r\n";
+			$zmetadata .= "<meta property='og:image:alt' content=\"".$zsitename."\" />\r\n";
+			$zmetadata .= "<meta property='og:url' content='".$this->protocol.$this->domainname.$this->uri."' />\r\n";
+			$zmetadata .= "<meta property='og:type' content='business.business' />\r\n";
+			$zmetadata .= "<meta property='og:site_name' content=\"".$zsitename."\" />\r\n";
+			$zmetadata .= "<meta property='og:see_also' content='https://www.walktheweb.com' />\r\n";
+			$zmetadata .= "<meta property='og:title' content=\"".$zsitename."\" />\r\n";
 
-			$zmetadata .= "<meta name=\"keywords\" content=\"WalkTheWeb,3D Internet,Metaverse,Multiverse,open-source,http3d,".$zsitedescription."\" />\r\n";
-			$zmetadata .= "<meta property=\"image\" content=\"".$zpreviewpath."\" />\r\n";
-			$zmetadata .= "<meta property=\"image:width\" content=\"".$zpreviewwidth."\"/>\r\n";
-			$zmetadata .= "<meta property=\"image:height\" content=\"".$zpreviewheight."\"/>\r\n";
-			$zmetadata .= "<meta property=\"image:alt\" content=\"".$zsitename."\" />\r\n";
-			$zmetadata .= "<meta property=\"url\" content=\"".$this->protocol.$this->domainname.$this->uri."\" />\r\n";
+			$zmetadata .= "<meta name='keywords' content=\"WalkTheWeb,3D Internet,Metaverse,Multiverse,open-source,http3d,".$zsitedescription."\" />\r\n";
+			$zmetadata .= "<meta property='image' content='".$zpreviewpath."' />\r\n";
+			$zmetadata .= "<meta property='image:width' content='".$zpreviewwidth."'/>\r\n";
+			$zmetadata .= "<meta property='image:height' content='".$zpreviewheight."'/>\r\n";
+			$zmetadata .= "<meta property='image:alt' content=\"".$zsitename."\" />\r\n";
+			$zmetadata .= "<meta property='url' content='".$this->protocol.$this->domainname.$this->uri."' />\r\n";
 
-			$zmetadata .= "<meta name=\"twitter:card\" content=\"summary\">\r\n";
-			$zmetadata .= "<meta name=\"twitter:url\" content=\"".$this->protocol.$this->domainname.$this->uri."\">\r\n";
-			$zmetadata .= "<meta name=\"twitter:title\" content=\"".$zsitename."\">\r\n";
-			$zmetadata .= "<meta name=\"twitter:description\" content=\"".$zsitedescription."\">\r\n";
-			$zmetadata .= "<meta name=\"twitter:image\" content=\"".$zpreviewpath."\">\r\n";
+			$zmetadata .= "<meta name='twitter:card' content='summary'>\r\n";
+			$zmetadata .= "<meta name='twitter:url' content='".$this->protocol.$this->domainname.$this->uri."'>\r\n";
+			$zmetadata .= "<meta name='twitter:title' content=\"".$zsitename."\">\r\n";
+			$zmetadata .= "<meta name='twitter:description' content=\"".$zsitedescription."\">\r\n";
+			$zmetadata .= "<meta name='twitter:image' content='".$zpreviewpath."'>\r\n";
 
 			/* additional optional meta data - should be defined on the /config/wtw_config.php file */
 			if (defined('domainverify')) {
-				$zmetadata .= "<meta name=\"p:domain_verify\" content=\"".domainverify."\"/>\r\n";
+				$zmetadata .= "<meta name='p:domain_verify' content=\"".domainverify."\"/>\r\n";
 			}
 			if (defined('fbappid')) {
-				$zmetadata .= "<meta property=\"fb:app_id\" content=\"".fbappid."\" />\r\n";
+				$zmetadata .= "<meta property='fb:app_id' content=\"".fbappid."\" />\r\n";
 			}
 			if (defined('contactemail')) {
-				$zmetadata .= "<meta property=\"business:contact_data\" content=\"".contactemail."\" />\r\n";
+				$zmetadata .= "<meta property='business:contact_data' content=\"".contactemail."\" />\r\n";
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadMetaData=".$e->getMessage());
@@ -2288,7 +2288,7 @@ class wtw {
 		global $wtwplugins;
 		$zjsdata = "";
 		try {	
-			$zjsdata = "<script type=\"text/javascript\">\r\n";
+			$zjsdata = "<script type='text/javascript'>\r\n";
 			if (defined('wtw_devmode')) {
 				$zjsdata .= "	var wtw_devmode = '".wtw_devmode."';\r\n";
 			} else {
@@ -2347,9 +2347,9 @@ class wtw {
 			$zjsdata .= "		}\r\n";
             $zjsdata .= "	}\r\n";
 			$zjsdata .= "</script>"; 
-			$zjsdata .= "<script src=\"https://3dnet.walktheweb.network/socket.io/socket.io.js\"></script>\r\n";
-//			$zjsdata .= "<script src=\"/core/scripts/engine/socket.io-stream.js\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_constructor.js?x=".$this->version."\"></script>\r\n";
+			$zjsdata .= "<script src='https://3dnet.walktheweb.network/socket.io/socket.io.js'></script>\r\n";
+//			$zjsdata .= "<script src='/core/scripts/engine/socket.io-stream.js'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_constructor.js?x=".$this->version."'></script>\r\n";
 			$zjsdata .= $wtwplugins->getScriptFunctions();
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadInitJSData=".$e->getMessage());
@@ -2366,50 +2366,50 @@ class wtw {
 			/* alternative used during development to force reload every time */
 			$zver = date("Y-m-d-H-i-s");
 			/* additional materials library available: https://github.com/BabylonJS/Babylon.js/tree/master/dist/materialsLibrary/ */
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_common.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_utilities.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_dynamicscripts.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_login.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_uploads.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_analytics.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_downloads.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_cameras.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_basicavatars.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_addavatarlist.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_transitionsavatars.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_loadavatar.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/avatars/wtw_avatarfunctions.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/hud/wtw_hud.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/hud/wtw_hud_fields.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/hud/wtw_hud_cameras.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/hud/wtw_hud_profile.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/engine/earcut.js?x=".$zver."\"></script>\r\n";
-			/* $zjsdata .= "<script src=\"/core/scripts/engine/oimo.js?x=".$zver."\"></script>\r\n"; */
-			$zjsdata .= "<script src=\"/core/scripts/engine/cannon.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/engine/babylon.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/engine/babylonjs.loaders.min.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/engine/babylonjs.postProcess.min.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/engine/babylon.gui.min.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/engine/babylonjs.proceduralTextures.min.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/engine/babylonjs.materials.min.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/engine/pep.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/engine/loader.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/engine/meshwriter.min.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_input.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/actionzones/wtw_basicactionzones.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/actionzones/wtw_addactionzonelist.js?x=".$zver."\"></script>\r\n";			
-			$zjsdata .= "<script src=\"/core/scripts/actionzones/wtw_actionzonefunctions.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/coverings/wtw_basiccoverings.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/coverings/wtw_addcoveringlist.js?x=".$zver."\"></script>\r\n";		
-			$zjsdata .= "<script src=\"/core/scripts/molds/wtw_basicmolds.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/molds/wtw_addmoldlist.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/molds/wtw_3dblog.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/automations/wtw_basicautomations.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/automations/wtw_addautomationlist.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/vehicles/wtw_vehicles.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_core.js?x=".$zver."\"></script>\r\n";
-			$zjsdata .= "<script src=\"/core/scripts/prime/wtw_init.js?x=".$zver."\"></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_common.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_utilities.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_dynamicscripts.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_login.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_uploads.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_analytics.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_downloads.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_cameras.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/avatars/wtw_basicavatars.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/avatars/wtw_addavatarlist.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/avatars/wtw_transitionsavatars.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/avatars/wtw_loadavatar.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/avatars/wtw_avatarfunctions.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_fields.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_cameras.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_profile.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/earcut.js?x=".$zver."'></script>\r\n";
+			/* $zjsdata .= "<script src='/core/scripts/engine/oimo.js?x=".$zver."'></script>\r\n"; */
+			$zjsdata .= "<script src='/core/scripts/engine/cannon.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/babylon.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.loaders.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.postProcess.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/babylon.gui.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.proceduralTextures.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.materials.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/pep.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/loader.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/meshwriter.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_input.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/actionzones/wtw_basicactionzones.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/actionzones/wtw_addactionzonelist.js?x=".$zver."'></script>\r\n";			
+			$zjsdata .= "<script src='/core/scripts/actionzones/wtw_actionzonefunctions.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/coverings/wtw_basiccoverings.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/coverings/wtw_addcoveringlist.js?x=".$zver."'></script>\r\n";		
+			$zjsdata .= "<script src='/core/scripts/molds/wtw_basicmolds.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/molds/wtw_addmoldlist.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/molds/wtw_3dblog.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/automations/wtw_basicautomations.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/automations/wtw_addautomationlist.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/vehicles/wtw_vehicles.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_core.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/prime/wtw_init.js?x=".$zver."'></script>\r\n";
 			global $wtwplugins;
 			$zjsdata .= $wtwplugins->getPluginScripts('0', $zver);
 		} catch (Exception $e) {
@@ -2423,7 +2423,7 @@ class wtw {
 		global $wtwplugins;
 		$zcssdata = "";
 		try {	
-			$zcssdata .= "<link rel=\"stylesheet\" type=\"text/css\" href=\"/core/styles/wtw_core.css\" />\r\n";
+			$zcssdata .= "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_core.css' />\r\n";
 			$zcssdata .= $wtwplugins->getPluginStylesheets('0');
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadCSSBrowseData=".$e->getMessage());
@@ -2435,26 +2435,26 @@ class wtw {
 		/* these are the main page elements such as canvases and graphic helpers */
 		$zmainelements = "";
 		try {
-			$zmainelements = "<div id=\"wtw_showmeshfps\" style=\"display:none;visibility:hidden;\"></div>\r\n";
-			$zmainelements .= "<div id=\"wtw_iwalkarrow\" style=\"display:none;visibility:hidden;\"></div>\r\n";
-			$zmainelements .= "<div id=\"wtw_iwalkarrow2\" style=\"display:none;visibility:hidden;\"></div>\r\n";
-			$zmainelements .= "<div id=\"wtw_itooltip\"></div>\r\n";
-			$zmainelements .= "<div id=\"wtw_itouchleft\"></div>\r\n";
-			$zmainelements .= "<div id=\"wtw_itouchright\"></div>\r\n";
-			$zmainelements .= "<canvas id=\"wtw_renderCanvas\" touch-action=\"none\"></canvas>\r\n";
-			$zmainelements .= "<div id=\"wtw_greyout\"></div>\r\n";
-			$zmainelements .= "<div id=\"wtw_ibrowsediv\" class=\"wtw-browsediv\" style=\"display:none;\">\r\n";
-			$zmainelements .= "	<div id=\"wtw_browseheader\" class=\"wtw-browseheader\">\r\n";
-			$zmainelements .= "		<div id=\"wtw_browseheaderclose\" class=\"wtw-browseclose\" onclick=\"WTW.closeIFrame();\">\r\n";
-			$zmainelements .= "			<img src=\"/content/system/images/menuclose.png\" alt=\"Close\" title=\"Close\" onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />\r\n";
+			$zmainelements = "<div id='wtw_showmeshfps' class='wtw-hide'></div>\r\n";
+			$zmainelements .= "<div id='wtw_iwalkarrow' class='wtw-hide'></div>\r\n";
+			$zmainelements .= "<div id='wtw_iwalkarrow2' class='wtw-hide'></div>\r\n";
+			$zmainelements .= "<div id='wtw_itooltip'></div>\r\n";
+			$zmainelements .= "<div id='wtw_itouchleft'></div>\r\n";
+			$zmainelements .= "<div id='wtw_itouchright'></div>\r\n";
+			$zmainelements .= "<canvas id='wtw_renderCanvas' touch-action='none'></canvas>\r\n";
+			$zmainelements .= "<div id='wtw_greyout'></div>\r\n";
+			$zmainelements .= "<div id='wtw_ibrowsediv' class='wtw-browsediv' style='display:none;' onclick='WTW.blockPassThrough();'>\r\n";
+			$zmainelements .= "	<div id='wtw_browseheader' class='wtw-browseheader'>\r\n";
+			$zmainelements .= "		<div id='wtw_browseheaderclose' class='wtw-browseclose' onclick='WTW.closeIFrame();'>\r\n";
+			$zmainelements .= "			<img src='/content/system/images/menuclose.png' alt='Close' title='Close' onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />\r\n";
 			$zmainelements .= "		</div>\r\n";
-			$zmainelements .= "		<div id=\"wtw_browsetitle\"></div>\r\n";
+			$zmainelements .= "		<div id='wtw_browsetitle'></div>\r\n";
 			$zmainelements .= "	</div>\r\n";
-			$zmainelements .= "  <div id=\"wtw_ipagediv\" class=\"wtw-ipagediv\"></div>\r\n";
-			$zmainelements .= "	<iframe id=\"wtw_ibrowseframe\" class=\"wtw-ibrowseframe\" src=\"/core/pages/loading.php\"></iframe>\r\n";
+			$zmainelements .= "  <div id='wtw_ipagediv' class='wtw-ipagediv' onclick='WTW.blockPassThrough();'></div>\r\n";
+			$zmainelements .= "	<iframe id='wtw_ibrowseframe' class='wtw-ibrowseframe' src='/core/pages/loading.php' onclick='WTW.blockPassThrough();'></iframe>\r\n";
 			$zmainelements .= "</div>\r\n";
-			$zmainelements .= "<div id=\"wtw_streaming\" class=\"wtw-hide\"></div>\r\n";
-			$zmainelements .= "<div id=\"wtw_playerstats\" class=\"wtw-playerstats\"></div>\r\n";
+			$zmainelements .= "<div id='wtw_streaming' class='wtw-hide'></div>\r\n";
+			$zmainelements .= "<div id='wtw_playerstats' class='wtw-playerstats'></div>\r\n";
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadMainElements=".$e->getMessage());
 		}
@@ -2466,39 +2466,39 @@ class wtw {
 		$zhiddenfields = "";
 		global $wtwuser;
 		try {
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_serverinstanceid\" value=\"".$this->serverinstanceid."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_serverip\" value=\"".$this->serverip."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tusertoken\" value=\"".$this->usertoken."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tglobaluserid\" value=\"".$this->globaluserid."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserid\" value=\"".$wtwuser->userid."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserip\" value=\"".$wtwuser->userip."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tdisplayname\" value=\"".addslashes($wtwuser->displayname)."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseremail\" value=\"".$wtwuser->email."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuserimageurl\" value=\"".$wtwuser->userimageurl."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseraccess\" value=\"".$wtwuser->useraccess."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_trootpath\" value=\"".wtw_rootpath."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tcontentpath\" value=\"".$wtwuser->contentpath."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuploadpathid\" value=\"".$wtwuser->uploadpathid."\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tinstanceid\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tglobaluseravatarid\" value=\"\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tuseravatarid\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavatarid\" value=\"\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tavataranimationevent\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tattachavatarmoldname\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tmoldname\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tinvitationcode\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tfilepath\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tfilename\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tfileitem\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tfileitemname\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tfileitemnamepath\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tfileitempreviewname\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_helptab\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tconnectinggridind\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tconnectinggridid\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_tconnectinggridname\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_eulaversion\" value=\"0\" />\r\n";
-			$zhiddenfields .= "<input type=\"hidden\" id=\"wtw_eulaacceptdate\" />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_serverinstanceid' value='".$this->serverinstanceid."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_serverip' value='".$this->serverip."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tusertoken' value='".$this->usertoken."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tglobaluserid' value='".$this->globaluserid."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tuserid' value='".$wtwuser->userid."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tuserip' value='".$wtwuser->userip."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tdisplayname' value=\"".addslashes($wtwuser->displayname)."\" />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tuseremail' value='".$wtwuser->email."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tuserimageurl' value='".$wtwuser->userimageurl."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tuseraccess' value=\"".$wtwuser->useraccess."\" />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_trootpath' value='".wtw_rootpath."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tcontentpath' value='".$wtwuser->contentpath."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tuploadpathid' value='".$wtwuser->uploadpathid."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tinstanceid' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tglobaluseravatarid' value='' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tuseravatarid' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tavatarid' value='' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tavataranimationevent' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tattachavatarmoldname' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tmoldname' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tinvitationcode' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tfilepath' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tfilename' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tfileitem' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tfileitemname' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tfileitemnamepath' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tfileitempreviewname' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_helptab' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tconnectinggridind' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tconnectinggridid' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_tconnectinggridname' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_eulaversion' value='0' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_eulaacceptdate' />\r\n";
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-loadHiddenFields=".$e->getMessage());
 		}
@@ -2570,7 +2570,7 @@ class wtw {
 			);
 			if (isset($zerror['type']) && in_array($zerror['type'], $zerrors, true)) {
 				$zmessage = addslashes(str_replace("\n","",str_replace("\r","",$zerror['message'])));
-				$zerror = "<script type=\"text/javascript\">";
+				$zerror = "<script type='text/javascript'>";
 				try {
 					/* attempt to show error on page when available */
 					$zerror .= "if (document.getElementById('wtw_error') != null) {";

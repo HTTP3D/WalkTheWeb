@@ -3508,6 +3508,74 @@ class wtwtables {
 						where webaliasid='".$zrow["webaliasid"]."'
 						limit 1;");
 				}
+				/* updated 3.5.2 - remove forms and menus folders and files (moved to adminmenu and menu classes) */
+				if (file_exists($wtw->rootpath.'/core/forms/actionzone.php')) {
+					unlink($wtw->rootpath.'/core/forms/actionzone.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/building.php')) {
+					unlink($wtw->rootpath.'/core/forms/building.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/buildingshare.php')) {
+					unlink($wtw->rootpath.'/core/forms/buildingshare.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/community.php')) {
+					unlink($wtw->rootpath.'/core/forms/community.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/communityshare.php')) {
+					unlink($wtw->rootpath.'/core/forms/communityshare.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/connectinggrids.php')) {
+					unlink($wtw->rootpath.'/core/forms/connectinggrids.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/firstbuilding.php')) {
+					unlink($wtw->rootpath.'/core/forms/firstbuilding.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/groundsettings.php')) {
+					unlink($wtw->rootpath.'/core/forms/groundsettings.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/mold.php')) {
+					unlink($wtw->rootpath.'/core/forms/mold.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/skydome.php')) {
+					unlink($wtw->rootpath.'/core/forms/skydome.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/thing.php')) {
+					unlink($wtw->rootpath.'/core/forms/thing.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/thingshare.php')) {
+					unlink($wtw->rootpath.'/core/forms/thingshare.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/updatesnapshot.php')) {
+					unlink($wtw->rootpath.'/core/forms/updatesnapshot.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/useraccess.php')) {
+					unlink($wtw->rootpath.'/core/forms/useraccess.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/userdevaccess.php')) {
+					unlink($wtw->rootpath.'/core/forms/userdevaccess.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/forms/waterdepth.php')) {
+					unlink($wtw->rootpath.'/core/forms/waterdepth.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/menus/adminmenu.php')) {
+					unlink($wtw->rootpath.'/core/menus/adminmenu.php');
+				}
+				if (file_exists($wtw->rootpath.'/core/menus/menu.php')) {
+					unlink($wtw->rootpath.'/core/menus/menu.php');
+				}
+				/* file was moved to /core/scripts/hud/ folder */
+				if (file_exists($wtw->rootpath.'/core/scripts/prime/wtw_hud.js')) {
+					unlink($wtw->rootpath.'/core/scripts/prime/wtw_hud.js');
+				}
+				/* only remove forms and menus folders if they are empty */
+				$zfilecount = count(glob($wtw->rootpath.'/core/forms/*'));
+				if ($zfilecount == 0 && is_dir($wtw->rootpath.'/core/forms')) {
+					rmdir($wtw->rootpath.'/core/forms');
+				}
+				$zfilecount = count(glob($wtw->rootpath.'/core/menus/*'));
+				if ($zfilecount == 0 && is_dir($wtw->rootpath.'/core/menus')) {
+					rmdir($wtw->rootpath.'/core/menus');
+				}
 			}
 
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);

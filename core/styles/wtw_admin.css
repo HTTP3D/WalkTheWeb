@@ -69,7 +69,6 @@ html, body {
 	font-size:1em;
 	margin:15px 5px 5px 5px;
 	background-color:#ffffff;
-	cursor:default;
 }
 .wtw-searchresultbutton:hover {
 	border:2px solid green;
@@ -113,9 +112,11 @@ html, body {
 	text-align:center;
 	border:1px solid #226D22;
 	margin-top:0px;
+	cursor:default;
 }
 .wtw-quickbar:hover {
 	background-color:#226D22;
+	cursor:pointer;
 }
 .wtw-quickbaroff {
 	font-size:10px;
@@ -131,6 +132,7 @@ html, body {
 }
 .wtw-quickbaroff:hover {
 	background-color:#6D2222;
+	cursor:pointer;
 }
 .wtw-objectcontainer {
 	width:350px;
@@ -182,6 +184,13 @@ td.wtw-tddeactive {
 	visibility:hidden;
 	margin-left:15px;
 	width:280px;
+	height:auto;
+}
+.wtw-snapshot90p {
+	display:none;
+	visibility:hidden;
+	margin-left:15px;
+	width:90%;
 	height:auto;
 }
 .wtw-backbutton {
