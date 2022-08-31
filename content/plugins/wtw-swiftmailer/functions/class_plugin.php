@@ -19,9 +19,9 @@ class wtwswiftmailer {
 		}
 	}	
 	
-	public $version = "1.0.0";
-
+	public $version = "1.0.1";
 	public $dbversion = "1.0.0";
+	public $versiondate = "2022-8-31";
 	
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
