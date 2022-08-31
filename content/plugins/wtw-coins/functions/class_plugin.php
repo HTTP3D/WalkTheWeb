@@ -19,10 +19,10 @@ class wtwcoins {
 		}
 	}	
 	
-	public $version = "1.0.0";
-
+	public $version = "1.0.2";
 	public $dbversion = "1.0.0";
-	
+	public $versiondate = "2020-8-31";
+		
 	public function __call ($method, $arguments)  {
 		if (isset($this->$method)) {
 			call_user_func_array($this->$method, array_merge(array(&$this), $arguments));
@@ -291,10 +291,10 @@ class wtwcoins {
 			
 			$zformdata .= "<hr class=\"wtw-menuhr\" />\r\n";
 			$zformdata .= "<h2 style=\"margin-bottom:3px;\">Coin Value</h2>\r\n";
-			$zformdata .= "<select id=\"wtwcoins_tvalue1\" onchange=\"wtwcoins.setNewCoin();\"></select><br />\r\n";
+			$zformdata .= "<select id=\"wtwcoins_tvalue1\" onchange=\"wtwcoins.setNewCoin();\" class='wtw-pointer'></select><br />\r\n";
 			$zformdata .= "<hr class=\"wtw-menuhr\" />\r\n";
 			$zformdata .= "<h2 style=\"margin-bottom:3px;\">Coin Visibility Distance<br />(Load Zone)</h2>\r\n";
-			$zformdata .= "<select id=\"wtwcoins_tloadactionzoneid\"></select><br /><br />\r\n";
+			$zformdata .= "<select id=\"wtwcoins_tloadactionzoneid\" class='wtw-pointer'></select><br /><br />\r\n";
 
 			$zformdata .= "<div id=\"wtwcoins_savecoin\" class=\"wtw-greenbutton\" onclick=\"wtwcoins.submitCoinForm(1);\">Save Coin</div>\r\n";
 			

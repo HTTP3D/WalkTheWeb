@@ -1,3 +1,7 @@
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
+
 WTW_COINS.prototype.addActionZoneMyCustomZone = function(zactionzonename, zactionzoneind, zactionzonedef) {
 	let zactionzone;
 	try {
@@ -9,7 +13,7 @@ WTW_COINS.prototype.addActionZoneMyCustomZone = function(zactionzonename, zactio
 			let zmolddef = WTW.newMold();
 			/* Shape, Position, Scaling, Rotation, and Parent Name are passed to the object on creation */
 			zmolddef.shape = zactionzonedef.actionzoneshape;
-			zmolddef.covering = "hidden";
+			zmolddef.covering = 'hidden';
 			zmolddef.scaling.x = zactionzonedef.scaling.x;
 			zmolddef.scaling.y = zactionzonedef.scaling.y;
 			zmolddef.scaling.z = zactionzonedef.scaling.z;
@@ -17,8 +21,8 @@ WTW_COINS.prototype.addActionZoneMyCustomZone = function(zactionzonename, zactio
 			zmolddef.opacity = 0;
 			zmolddef.parentname = zactionzonedef.parentname;
 			zmolddef.actionzoneind = zactionzoneind;
-			zmolddef.checkcollisions = "0";
-			zmolddef.ispickable = "0";
+			zmolddef.checkcollisions = '0';
+			zmolddef.ispickable = '0';
 			/* create the action zone using the mold definition above */
 			zactionzone = WTW.addMold(zactionzonename, zmolddef, zmolddef.parentname, zmolddef.covering);
 			zactionzone.rotation.x = WTW.getRadians(zactionzonedef.rotation.x);
@@ -30,8 +34,8 @@ WTW_COINS.prototype.addActionZoneMyCustomZone = function(zactionzonename, zactio
 			zactionzone.position.y = zactionzonedef.position.y;
 			zactionzone.position.z = zactionzonedef.position.z;
 		}
-		/* shown = "2" will keep it from adding a duplicate object while it is in the queue */
-		WTW.actionZones[zactionzoneind].shown = "2";
+		/* shown = '2' will keep it from adding a duplicate object while it is in the queue */
+		WTW.actionZones[zactionzoneind].shown = '2';
 		
 		
 		/* everything you create in this function should be parented to the above or using the basic Action Zones */
@@ -41,12 +45,12 @@ WTW_COINS.prototype.addActionZoneMyCustomZone = function(zactionzonename, zactio
 		/* examples of existing 3D Objects can be found at /core/scripts/actionzones/wtw_basicactionzones.js */
 		/* you can use one of the Action Zones as a base and build off it as needed */
 		/* names of your child objects and materials should be: */
-		/* zactionzonename + "-DEVIDpartname" */
+		/* zactionzonename + '-DEVIDpartname' */
 		/* where partname is whatever you want it to be. */
 
 
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-addActionZoneMyCustomZone=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-addActionZoneMyCustomZone=' + ex.message);
 	}
 	return zactionzone;
 }
@@ -56,12 +60,12 @@ WTW_COINS.prototype.setNewActionZoneDefaults = function(zactionzonetype) {
 		/* add each custom action zone to this one function as a case - no need to add additional hooks */
 		/* zactionzonetype is name of 'My Custom Zone' - all lowercase and no spaces */
 		switch (zactionzonetype) {
-/*			case "mycustomzone":
-				dGet('wtw_tactionzonename').value = "New My Custom Zone";
+/*			case 'mycustomzone':
+				dGet('wtw_tactionzonename').value = 'New My Custom Zone';
 				break;
 */		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-setNewActionZoneDefaults=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-setNewActionZoneDefaults=' + ex.message);
 	}
 }
 		
@@ -70,9 +74,9 @@ WTW_COINS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 		/* add each custom action zone to this one function as a case - no need to add additional hooks */
 		/* zactionzonetype is name of my custom action zone - all lowercase and no spaces */
 		switch (zactionzonetype) {
-/*			case "mycustomzone":
+/*			case 'mycustomzone':
 				/ * define the labels and button names used on the form * /
-				dGet('wtw_editactionzoneformtitle').innerHTML = "Add My Custom Zone";
+				dGet('wtw_editactionzoneformtitle').innerHTML = 'Add My Custom Zone';
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
 				/ * show or hide the section divs on the form (/core/forms/actionzone.php) * /
 				WTW.hide('wtw_actionzoneaxisdiv');
@@ -83,7 +87,7 @@ WTW_COINS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				break;
 */		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-setActionZoneFormFields=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-setActionZoneFormFields=' + ex.message);
 	}
 }
 
@@ -94,13 +98,13 @@ WTW_COINS.prototype.addNewCoin = function() {
 		WTW.hide('wtwcoins_bdelcoin');
 		wtwcoins.loadActionZones();
 		wtwcoins.loadCoinValues();
-		var zwebtype = "building";
-		if (communityid != "") {
-			zwebtype = "community";
-		} else if (thingid != "") {
-			zwebtype = "thing";
+		var zwebtype = 'building';
+		if (communityid != '') {
+			zwebtype = 'community';
+		} else if (thingid != '') {
+			zwebtype = 'thing';
 		}
-		dGet('wtw_tmoldshape').value = "box";
+		dGet('wtw_tmoldshape').value = 'box';
 		dGet('wtw_tmoldwebtype').value = zwebtype;
 		
 		var zcoords = WTW.getNewCoordinates(25);
@@ -108,7 +112,7 @@ WTW_COINS.prototype.addNewCoin = function() {
 		dGet('wtwcoins_tactionzonecoiny').value = (Number(zcoords.positionY) + 6).toFixed(2);
 		dGet('wtwcoins_tactionzonecoinz').value = Number(zcoords.positionZ).toFixed(2);
 		
-		var zdefaultloadactionzoneid = WTW.getLoadActionZoneID("High");
+		var zdefaultloadactionzoneid = WTW.getLoadActionZoneID('High');
 		var zactionzoneid = WTW.getRandomString(16);
 		var zactionzoneind = WTW.getNextCount(WTW.actionZones);
 		dGet('wtw_tactionzoneid').value = zactionzoneid;
@@ -149,15 +153,15 @@ WTW_COINS.prototype.addNewCoin = function() {
 		WTW.actionZones[zactionzoneind].value2 = dGet('wtw_tactionzonevalue2').value;
 		WTW.actionZones[zactionzoneind].defaulteditform = dGet('wtw_tactionzonedefaulteditform').value;
 		WTW.actionZones[zactionzoneind].loadactionzoneid = zdefaultloadactionzoneid;
-		WTW.actionZones[zactionzoneind].connectinggridid = dGet("wtw_tconnectinggridid").value;
-		WTW.actionZones[zactionzoneind].connectinggridind = dGet("wtw_tconnectinggridind").value;
+		WTW.actionZones[zactionzoneind].connectinggridid = dGet('wtw_tconnectinggridid').value;
+		WTW.actionZones[zactionzoneind].connectinggridind = dGet('wtw_tconnectinggridind').value;
 		WTW.actionZones[zactionzoneind].parentname = WTW.getParentName(WTW.actionZones[zactionzoneind].connectinggridind);
-		WTW.actionZones[zactionzoneind].moldname = "actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-" + WTW.actionZones[zactionzoneind].actionzonetype;
+		WTW.actionZones[zactionzoneind].moldname = 'local-actionzone-' + zactionzoneind + '-' + WTW.actionZones[zactionzoneind].actionzoneid + '-' + WTW.actionZones[zactionzoneind].connectinggridind + '-' + WTW.actionZones[zactionzoneind].connectinggridid + '-' + WTW.actionZones[zactionzoneind].actionzonetype;
 		WTW.addActionZone(WTW.actionZones[zactionzoneind].moldname, WTW.actionZones[zactionzoneind]);
 		WTW.showActionZone(zactionzoneind);
 		WTW.show('wtwcoins_editcoindiv');
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-addNewCoin=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-addNewCoin=' + ex.message);
 	}
 }
 
@@ -175,7 +179,7 @@ WTW_COINS.prototype.changeRotateDirection = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-changeRotateDirection=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-changeRotateDirection=' + ex.message);
 	}
 }
 
@@ -188,13 +192,13 @@ WTW_COINS.prototype.editCoin = function(zactionzonename) {
 		WTW.showInline('wtwcoins_bdelcoin');
 		wtwcoins.loadActionZones();
 		wtwcoins.loadCoinValues();
-		var zwebtype = "building";
-		if (communityid != "") {
-			zwebtype = "community";
-		} else if (thingid != "") {
-			zwebtype = "thing";
+		var zwebtype = 'building';
+		if (communityid != '') {
+			zwebtype = 'community';
+		} else if (thingid != '') {
+			zwebtype = 'thing';
 		}
-		dGet('wtw_tmoldshape').value = "box";
+		dGet('wtw_tmoldshape').value = 'box';
 		dGet('wtw_tmoldwebtype').value = zwebtype;
 		
 		var zcoords = WTW.getNewCoordinates(25);
@@ -202,7 +206,7 @@ WTW_COINS.prototype.editCoin = function(zactionzonename) {
 		dGet('wtwcoins_tactionzonecoiny').value = (Number(zcoords.positionY) + 6).toFixed(2);
 		dGet('wtwcoins_tactionzonecoinz').value = Number(zcoords.positionZ).toFixed(2);
 		
-		var zdefaultloadactionzoneid = WTW.getLoadActionZoneID("High");
+		var zdefaultloadactionzoneid = WTW.getLoadActionZoneID('High');
 		var zactionzoneid = zmoldnameparts.moldid;
 		var zactionzoneind = zmoldnameparts.moldind;
 		dGet('wtw_tactionzoneid').value = zactionzoneid;
@@ -232,14 +236,14 @@ WTW_COINS.prototype.editCoin = function(zactionzonename) {
 			/* default edit form set to 1 (custom) keeps it off the lists for other action zones */
 			dGet('wtw_tactionzonedefaulteditform').value = WTW.actionZones[zactionzoneind].defaulteditform;
 			WTW.setDDLValue('wtwcoins_tloadactionzoneid', WTW.actionZones[zactionzoneind].loadactionzoneid);
-			dGet("wtw_tconnectinggridid").value = WTW.actionZones[zactionzoneind].connectinggridid;
-			dGet("wtw_tconnectinggridind").value = WTW.actionZones[zactionzoneind].connectinggridind;
+			dGet('wtw_tconnectinggridid').value = WTW.actionZones[zactionzoneind].connectinggridid;
+			dGet('wtw_tconnectinggridind').value = WTW.actionZones[zactionzoneind].connectinggridind;
 			WTW.setDDLValue('wtwcoins_tvalue1', dGet('wtw_tactionzonevalue1').value);
 		}
 		WTW.showActionZone(zactionzoneind);
 		WTW.show('wtwcoins_editcoindiv');
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-editCoin=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-editCoin=' + ex.message);
 	}
 }
 
@@ -258,7 +262,7 @@ WTW_COINS.prototype.addActionZoneCoin = function(zactionzonename, zactionzoneind
 			let zmolddef = WTW.newMold();
 			/* Shape, Position, Scaling, Rotation, and Parent Name are passed to the object on creation */
 			zmolddef.shape = zactionzonedef.actionzoneshape;
-			zmolddef.covering = "hidden";
+			zmolddef.covering = 'hidden';
 			zmolddef.scaling.x = zactionzonedef.scaling.x;
 			zmolddef.scaling.y = zactionzonedef.scaling.y;
 			zmolddef.scaling.z = zactionzonedef.scaling.z;
@@ -266,8 +270,8 @@ WTW_COINS.prototype.addActionZoneCoin = function(zactionzonename, zactionzoneind
 			zmolddef.opacity = 0;
 			zmolddef.parentname = zactionzonedef.parentname;
 			zmolddef.actionzoneind = zactionzoneind;
-			zmolddef.checkcollisions = "0";
-			zmolddef.ispickable = "0";
+			zmolddef.checkcollisions = '0';
+			zmolddef.ispickable = '0';
 			/* create the action zone using the mold definition above */
 			zactionzone = WTW.addMold(zactionzonename, zmolddef, zmolddef.parentname, zmolddef.covering);
 			zactionzone.rotation.x = WTW.getRadians(zactionzonedef.rotation.x);
@@ -321,10 +325,10 @@ WTW_COINS.prototype.addActionZoneCoin = function(zactionzonename, zactionzoneind
 			wtwcoins.loadCoin(zactionzonename, zvalue1, zactionzonedef.scaling.x, zactionzonedef.scaling.y, zactionzonedef.scaling.z, zactionzonedef);
 			WTW.actionZones[zactionzoneind].status = 2;
 		}
-		/* shown = "2" will keep it from adding a duplicate object while it is in the queue */
-		WTW.actionZones[zactionzoneind].shown = "2";
+		/* shown = '2' will keep it from adding a duplicate object while it is in the queue */
+		WTW.actionZones[zactionzoneind].shown = '2';
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-addActionZoneCoin=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-addActionZoneCoin=' + ex.message);
 	}
 	return zactionzone;
 }
@@ -349,7 +353,7 @@ WTW_COINS.prototype.loadCoin = async function(zactionzonename, zvalue1, zscaling
 			/* add coin using babylon file */
 			var zfolder = '/content/plugins/wtw-coins/assets/3dobjects/';
 			var zfile = 'wtwcoin-' + Math.round(zvalue1) + zghost + '.babylon';
-			BABYLON.SceneLoader.ImportMeshAsync("", zfolder, zfile, scene).then(
+			BABYLON.SceneLoader.ImportMeshAsync('', zfolder, zfile, scene).then(
 				function (zresults) {
 					if (zresults.meshes != null) {
 						zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
@@ -357,7 +361,7 @@ WTW_COINS.prototype.loadCoin = async function(zactionzonename, zvalue1, zscaling
 							for (var i=0; i < zresults.meshes.length; i++) {
 								if (zresults.meshes[i] != null) {
 									var zmeshname = zresults.meshes[i].name;
-									var zchildmoldname = zactionzonename + "-" + zmeshname;
+									var zchildmoldname = zactionzonename + '-' + zmeshname;
 									zresults.meshes[i].name = zchildmoldname;
 									WTW.registerMouseOver(zresults.meshes[i]);
 									zresults.meshes[i].parent = zactionzone;
@@ -380,7 +384,7 @@ WTW_COINS.prototype.loadCoin = async function(zactionzonename, zvalue1, zscaling
 			);
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-loadCoin=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-loadCoin=' + ex.message);
 	}
 }
 
@@ -404,7 +408,7 @@ WTW_COINS.prototype.checkCoin = async function(zactionzonename) {
 					'userid': dGet('wtw_tuserid').value,
 					'function':'checkcoin'
 				};
-				WTW.postAsyncJSON("/core/handlers/wtw-coins-collected.php", zrequest, 
+				WTW.postAsyncJSON('/core/handlers/wtw-coins-collected.php', zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -423,7 +427,7 @@ WTW_COINS.prototype.checkCoin = async function(zactionzonename) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-checkCoin=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-checkCoin=' + ex.message);
 	}
 }
 
@@ -433,20 +437,20 @@ WTW_COINS.prototype.loadPastCoinTotals = async function() {
 		/* see if the coins total display is created */
 		if (dGet('wtwcoins_display') == null) {
 			var zplayerstats = dGet('wtw_playerstats');
-			var zdiv = document.createElement("div");
+			var zdiv = document.createElement('div');
 			zdiv.id = 'wtwcoins_display';
 			zdiv.className = 'wtwcoins-display';
-			var zglobal = document.createElement("img");
+			var zglobal = document.createElement('img');
 			zglobal.id = 'wtwcoins_global';
 			zglobal.className = 'wtwcoins-global';
 			zglobal.src = '/content/system/images/global.png';
 			zdiv.appendChild(zglobal);
-			var zlabel = document.createElement("div");
+			var zlabel = document.createElement('div');
 			zlabel.id = 'wtwcoins_displaytext';
 			zlabel.className = 'wtwcoins-displaylabel';
 			zlabel.innerHTML = 'WTW Coins: ';
 			zdiv.appendChild(zlabel);
-			var zvalue = document.createElement("div");
+			var zvalue = document.createElement('div');
 			zvalue.id = 'wtwcoins_counter';
 			zvalue.className = 'wtwcoins-displayvalue';
 			zvalue.innerHTML = '0';
@@ -458,7 +462,7 @@ WTW_COINS.prototype.loadPastCoinTotals = async function() {
 				'userid': dGet('wtw_tuserid').value,
 				'function':'getcointotals'
 			};
-			WTW.postAsyncJSON("/core/handlers/wtw-coins-collected.php", zrequest, 
+			WTW.postAsyncJSON('/core/handlers/wtw-coins-collected.php', zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
@@ -482,7 +486,7 @@ WTW_COINS.prototype.loadPastCoinTotals = async function() {
 							'usertoken': dGet('wtw_tusertoken').value,
 							'function':'getcointotals'
 						};
-						WTW.postAsyncJSON("https://3dnet.walktheweb.com/connect/wtwcoins.php", zrequest, 
+						WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/wtwcoins.php', zrequest, 
 							function(zresponse) {
 								zresponse = JSON.parse(zresponse);
 								if (zresponse.totalcoins != undefined) {
@@ -503,7 +507,7 @@ WTW_COINS.prototype.loadPastCoinTotals = async function() {
 			);
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-loadPastCoinTotals=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-loadPastCoinTotals=' + ex.message);
 	}
 }
 
@@ -513,7 +517,7 @@ WTW_COINS.prototype.submitCoinForm = async function(w) {
 		/* add a coin action zone to the 3D Web and open the Edit Coin Form */
 		var zactionzoneid = dGet('wtw_tactionzoneid').value;
 		var zactionzoneind = Number(dGet('wtw_tactionzoneind').value);
-		var zactionzonename = "actionzone-" + zactionzoneind + "-" + WTW.actionZones[zactionzoneind].actionzoneid + "-" + WTW.actionZones[zactionzoneind].connectinggridind + "-" + WTW.actionZones[zactionzoneind].connectinggridid + "-wtwcoin";
+		var zactionzonename = 'local-actionzone-' + zactionzoneind + '-' + WTW.actionZones[zactionzoneind].actionzoneid + '-' + WTW.actionZones[zactionzoneind].connectinggridind + '-' + WTW.actionZones[zactionzoneind].connectinggridid + '-wtwcoin';
 		var zscalingx = dGet('wtw_tactionzonescalingx').value;
 		var zscalingy = dGet('wtw_tactionzonescalingy').value;
 		var zscalingz = dGet('wtw_tactionzonescalingz').value;
@@ -584,7 +588,7 @@ WTW_COINS.prototype.submitCoinForm = async function(w) {
 					'jsparameters':'',
 					'function':'saveactionzone'
 				};
-				WTW.postAsyncJSON("/core/handlers/actionzones.php", zrequest, 
+				WTW.postAsyncJSON('/core/handlers/actionzones.php', zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -601,7 +605,7 @@ WTW_COINS.prototype.submitCoinForm = async function(w) {
 					'thingid': thingid,
 					'function':'deleteactionzone'
 				};
-				WTW.postAsyncJSON("/core/handlers/actionzones.php", zrequest, 
+				WTW.postAsyncJSON('/core/handlers/actionzones.php', zrequest, 
 					function(zresponse) {
 						zresponse = JSON.parse(zresponse);
 						/* note serror would contain errors */
@@ -635,7 +639,7 @@ WTW_COINS.prototype.submitCoinForm = async function(w) {
 		WTW.hide('wtwcoins_editcoindiv');
 		WTW.backToEdit();
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-submitCoinForm=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-submitCoinForm=' + ex.message);
 	}
 }
 
@@ -648,9 +652,9 @@ WTW_COINS.prototype.loadActionZones = function() {
 			if (WTW.actionZones != null) {
 				for (var i = 0; i < WTW.actionZones.length; i++) {
 					if (WTW.actionZones[i] != null) {
-						var zthingid = "";
-						var zbuildingid = "";
-						var zcommunityid = "";
+						var zthingid = '';
+						var zbuildingid = '';
+						var zcommunityid = '';
 						if (WTW.actionZones[i].thinginfo.thingid != undefined) {
 							zthingid = WTW.actionZones[i].thinginfo.thingid;
 						}
@@ -660,8 +664,8 @@ WTW_COINS.prototype.loadActionZones = function() {
 						if (WTW.actionZones[i].communityinfo.communityid != undefined) {
 							zcommunityid = WTW.actionZones[i].communityinfo.communityid;
 						}
-						if ((WTW.actionZones[i].actionzonetype == "loadzone") && ((zcommunityid == communityid && communityid != "") || (zbuildingid == buildingid && buildingid != ""))) {
-							var zoption = document.createElement("option");
+						if ((WTW.actionZones[i].actionzonetype == 'loadzone') && ((zcommunityid == communityid && communityid != '') || (zbuildingid == buildingid && buildingid != ''))) {
+							var zoption = document.createElement('option');
 							zoption.text = WTW.actionZones[i].actionzonename;
 							zoption.value = WTW.actionZones[i].actionzoneid;
 							if (WTW.actionZones[i].actionzonename == 'Normal - Load when near') {
@@ -674,7 +678,7 @@ WTW_COINS.prototype.loadActionZones = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("core-scripts-admin-custom_actionzones.js-loadActionZones=" + ex.message);
+		WTW.log('core-scripts-admin-custom_actionzones.js-loadActionZones=' + ex.message);
 	}
 }
 
@@ -684,39 +688,39 @@ WTW_COINS.prototype.loadCoinValues = function() {
 		if (dGet('wtwcoins_tvalue1') != null) {
 			WTW.clearDDL('wtwcoins_tvalue1');
 
-			var zoption1 = document.createElement("option");
+			var zoption1 = document.createElement('option');
 			zoption1.text = '1 Token';
 			zoption1.value = '1';
 			zoption1.selected = true;
 			dGet('wtwcoins_tvalue1').add(zoption1);
 		
-			var zoption5 = document.createElement("option");
+			var zoption5 = document.createElement('option');
 			zoption5.text = '5 Tokens';
 			zoption5.value = '5';
 			dGet('wtwcoins_tvalue1').add(zoption5);
 		
-			var zoption10 = document.createElement("option");
+			var zoption10 = document.createElement('option');
 			zoption10.text = '10 Tokens';
 			zoption10.value = '10';
 			dGet('wtwcoins_tvalue1').add(zoption10);
 		
-			var zoption25 = document.createElement("option");
+			var zoption25 = document.createElement('option');
 			zoption25.text = '25 Tokens';
 			zoption25.value = '25';
 			dGet('wtwcoins_tvalue1').add(zoption25);
 		
-			var zoption50 = document.createElement("option");
+			var zoption50 = document.createElement('option');
 			zoption50.text = '50 Tokens';
 			zoption50.value = '50';
 			dGet('wtwcoins_tvalue1').add(zoption50);
 		
-			var zoption100 = document.createElement("option");
+			var zoption100 = document.createElement('option');
 			zoption100.text = '100 Tokens';
 			zoption100.value = '100';
 			dGet('wtwcoins_tvalue1').add(zoption100);
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-loadCoinValues=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-loadCoinValues=' + ex.message);
 	}
 }
 
@@ -760,7 +764,7 @@ WTW_COINS.prototype.changeNumberValue = function(zitem, zdn, zrefresh) {
 			}
 		}, 100);
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-changeNumberValue=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-changeNumberValue=' + ex.message);
 	}
 }
 
@@ -768,7 +772,7 @@ WTW_COINS.prototype.setNewCoin = function() {
 	/* show changes to the WTW Coin as it is edited */
 	try {
 		/* get the action zone mesh name (opposed to the friendly name) */
-		var zactionzonename = "actionzone-" + dGet('wtw_tactionzoneind').value + "-" + dGet('wtw_tactionzoneid').value + "-" + dGet("wtw_tconnectinggridind").value + "-" + dGet("wtw_tconnectinggridid").value + "-wtwcoin";
+		var zactionzonename = 'local-actionzone-' + dGet('wtw_tactionzoneind').value + '-' + dGet('wtw_tactionzoneid').value + '-' + dGet('wtw_tconnectinggridind').value + '-' + dGet('wtw_tconnectinggridid').value + '-wtwcoin';
 		
 		/* get the coin value */
 		var zvalue1 = WTW.getDDLValue('wtwcoins_tvalue1');
@@ -809,14 +813,14 @@ WTW_COINS.prototype.setNewCoin = function() {
 			dGet('wtw_tactionzonevalue1').value = zvalue1;
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-setNewCoin=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-setNewCoin=' + ex.message);
 	}
 }
 
 WTW_COINS.prototype.checkActionZone = function(zactionzonename, zactionzoneind, zmeinzone, zothersinzone) {
 	/* check if avatar is in the action zone and respond accordingly */
 	try {
-		if (zactionzonename.indexOf("wtwcoin") > -1) {
+		if (zactionzonename.indexOf('wtwcoin') > -1) {
 			if (zmeinzone) {
 				wtwcoins.collectCoin(zactionzonename, zactionzoneind);
 			} else if (zothersinzone) {
@@ -824,7 +828,7 @@ WTW_COINS.prototype.checkActionZone = function(zactionzonename, zactionzoneind, 
 			}
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-checkActionZone=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-checkActionZone=' + ex.message);
 	}
 }
 
@@ -834,20 +838,20 @@ WTW_COINS.prototype.collectCoin = function(zactionzonename, zactionzoneind) {
 		
 		if (dGet('wtwcoins_display') == null) {
 			var zplayerstats = dGet('wtw_playerstats');
-			var zdiv = document.createElement("div");
+			var zdiv = document.createElement('div');
 			zdiv.id = 'wtwcoins_display';
 			zdiv.className = 'wtwcoins-display';
-			var zglobal = document.createElement("img");
+			var zglobal = document.createElement('img');
 			zglobal.id = 'wtwcoins_global';
 			zglobal.className = 'wtwcoins-global';
 			zglobal.src = '/content/system/images/global.png';
 			zdiv.appendChild(zglobal);
-			var zlabel = document.createElement("div");
+			var zlabel = document.createElement('div');
 			zlabel.id = 'wtwcoins_displaytext';
 			zlabel.className = 'wtwcoins-displaylabel';
 			zlabel.innerHTML = 'WTW Coins: ';
 			zdiv.appendChild(zlabel);
-			var zvalue = document.createElement("div");
+			var zvalue = document.createElement('div');
 			zvalue.id = 'wtwcoins_counter';
 			zvalue.className = 'wtwcoins-displayvalue';
 			zvalue.innerHTML = '0';
@@ -886,7 +890,7 @@ WTW_COINS.prototype.collectCoin = function(zactionzonename, zactionzoneind) {
 						'value1': zvalue1,
 						'function':'collectcoin'
 					};
-					WTW.postAsyncJSON("/core/handlers/wtw-coins-collected.php", zrequest, 
+					WTW.postAsyncJSON('/core/handlers/wtw-coins-collected.php', zrequest, 
 						function(zresponse) {
 							zresponse = JSON.parse(zresponse);
 							/* note serror would contain errors */
@@ -913,7 +917,7 @@ WTW_COINS.prototype.collectCoin = function(zactionzonename, zactionzoneind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-collectCoin=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-collectCoin=' + ex.message);
 	}
 }
 
@@ -932,7 +936,7 @@ WTW_COINS.prototype.showGhostCoins = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-removeCoin=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-removeCoin=' + ex.message);
 	}
 }
 
@@ -952,7 +956,7 @@ WTW_COINS.prototype.removeCoin = function(zactionzonename, zactionzoneind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-removeCoin=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-removeCoin=' + ex.message);
 	}
 }
 
@@ -981,6 +985,6 @@ WTW_COINS.prototype.tempHideCoin = function(zactionzonename, zactionzoneind) {
 			}
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-custom_actionzones.js-tempHideCoin=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-custom_actionzones.js-tempHideCoin=' + ex.message);
 	}
 }

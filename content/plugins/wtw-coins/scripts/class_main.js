@@ -1,10 +1,10 @@
-// All code is Copyright 2013-2021 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors
-// "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. 
-// Read the included GNU Ver 3.0 license file for details and additional release information.
+/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
+/* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
 function WTW_COINS() {
 	/* Add your global variables as needed here */
-	this.ver = "1.0.0";
+	this.ver = '1.0.0';
 	this.coinRotation = null;
 }
 
@@ -44,7 +44,7 @@ WTW_COINS.prototype.onClick = function(zpickedname) {
 
 		
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-class_main.js-onClick=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-class_main.js-onClick=' + ex.message);
 	} 
 }
 
@@ -65,7 +65,7 @@ WTW_COINS.prototype.mouseClickRightAdmin = function(e, zpickedname) {
 			return false;
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-class_main.js-mouseClickRightAdmin=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-class_main.js-mouseClickRightAdmin=' + ex.message);
 	} 
 }
 
@@ -76,12 +76,12 @@ WTW_COINS.prototype.checkActionZone = function(zactionzonename, zactionzoneind, 
 		/* this example checks if my avatar is in a load animations zone */
 		/* if so, it calls the funtion to add the zone required animations to my avatar */
 		if (zmeinzone) {
-			if (zactionzonename.indexOf("coins") > -1) {
+			if (zactionzonename.indexOf('coins') > -1) {
 				WTW.checkLoadAnimations(zactionzoneind);
 			}
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-class_main.js-checkActionZone=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-class_main.js-checkActionZone=' + ex.message);
 	} 
 }
 
@@ -92,7 +92,7 @@ WTW_COINS.prototype.checkHovers = function(zmoldname, zshape) {
 		zmoldname = zmoldname.toLowerCase();
 
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-class_main.js-checkHovers=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-class_main.js-checkHovers=' + ex.message);
 	} 
 }
 
@@ -103,7 +103,7 @@ WTW_COINS.prototype.resetHovers = function(zmoldname, zshape) {
 		zmoldname = zmoldname.toLowerCase();
 
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-class_main.js-resetHovers=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-class_main.js-resetHovers=' + ex.message);
 	} 
 }
 
@@ -112,37 +112,37 @@ WTW_COINS.prototype.toggleWTWGhostCoins = function(zenable) {
 	try {
 		if (zenable != undefined) {
 			if (zenable == 1) {
-				WTW.setCookie("wtwghostcoins", '1', 365);
+				WTW.setCookie('wtwghostcoins', '1', 365);
 				dGet('wtwcoins_showghostcoins').checked = true;
 				dGet('wtwcoins_showghostcoinstext').className = 'wtw-enablelabel';
 				dGet('wtwcoins_showghostcoinstext').innerHTML = 'Visible';
 			} else {
-				WTW.setCookie("wtwghostcoins", '0', 365);
+				WTW.setCookie('wtwghostcoins', '0', 365);
 				dGet('wtwcoins_showghostcoins').checked = false;
 				dGet('wtwcoins_showghostcoinstext').className = 'wtw-disabledlabel';
 				dGet('wtwcoins_showghostcoinstext').innerHTML = 'Hidden';
 			}
 		} else {
 			if (dGet('wtwcoins_showghostcoins').checked) {
-				WTW.setCookie("wtwghostcoins", '1', 365);
+				WTW.setCookie('wtwghostcoins', '1', 365);
 				dGet('wtwcoins_showghostcoinstext').className = 'wtw-enablelabel';
 				dGet('wtwcoins_showghostcoinstext').innerHTML = 'Visible';
 			} else {
-				WTW.setCookie("wtwghostcoins", '0', 365);
+				WTW.setCookie('wtwghostcoins', '0', 365);
 				dGet('wtwcoins_showghostcoinstext').className = 'wtw-disabledlabel';
 				dGet('wtwcoins_showghostcoinstext').innerHTML = 'Hidden';
 			}
 		}
 		wtwcoins.showGhostCoins();
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-class_main.js-toggleWTWGhostCoins=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-class_main.js-toggleWTWGhostCoins=' + ex.message);
 	} 
 }
 
 WTW_COINS.prototype.loadUserSettings = function() {
 	/* load settings when user loads the website */
 	try {
-		var zghostcoins = WTW.getCookie("wtwghostcoins");
+		var zghostcoins = WTW.getCookie('wtwghostcoins');
 		if (zghostcoins != null) {
 			if (WTW.isNumeric(zghostcoins)) {
 				if (Number(zghostcoins) == 1) {
@@ -151,7 +151,7 @@ WTW_COINS.prototype.loadUserSettings = function() {
 			}
 		}
 	} catch (ex) {
-		WTW.log("plugins:wtw-coins:scripts-class_main.js-loadUserSettings=" + ex.message);
+		WTW.log('plugins:wtw-coins:scripts-class_main.js-loadUserSettings=' + ex.message);
 	} 
 }
 
