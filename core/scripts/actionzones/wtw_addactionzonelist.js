@@ -83,19 +83,18 @@ WTWJS.prototype.addActionZone = function(zactionzonename, zactionzonedef) {
 					zparentactionzoneind = WTW.getActionZoneInd(WTW.actionZones[zactionzoneind].parentactionzoneid, WTW.actionZones[zactionzoneind].connectinggridind);
 					if (zparentactionzoneind > -1) {
 						if (WTW.actionZones[zparentactionzoneind] != null) {
-							var zparentactionzonename = 'local-actionzone-' + zparentactionzoneind.toString() + '-' + WTW.actionZones[zparentactionzoneind].actionzoneid + '-' + WTW.actionZones[zparentactionzoneind].connectinggridind + '-' + WTW.actionZones[zparentactionzoneind].connectinggridid + '-' + WTW.actionZones[zparentactionzoneind].actionzonetype;
+							var zparentactionzonename = WTW.actionZones[zparentactionzoneind].moldname;
 							var zparentactionzone = WTW.getMeshOrNodeByID(zparentactionzonename);
 							if (zparentactionzone == null) {
 								zparentactionzone = WTW.addActionZone(zparentactionzonename, WTW.actionZones[zparentactionzoneind]);
 							}
-							WTW.actionZones[zactionzoneind].parentname = 'local-actionzoneaxlebase2-' + zparentactionzoneind.toString() + '-' + WTW.actionZones[zparentactionzoneind].actionzoneid + '-' + WTW.actionZones[zparentactionzoneind].connectinggridind + '-' + WTW.actionZones[zparentactionzoneind].connectinggridid + '-' + WTW.actionZones[zparentactionzoneind].actionzonetype;
-							
+							WTW.actionZones[zactionzoneind].parentname = WTW.actionZones[zparentactionzoneind].moldname.replace('-actionzone-','-actionzoneaxlebase2-');
 						}
 					}
 				}
 				if (zparentactionzone != null) {
-					var zparentactionzoneaxlebasename = 'local-actionzoneaxlebase-' + zparentactionzoneind.toString() + '-' + WTW.actionZones[zparentactionzoneind].actionzoneid + '-' + WTW.actionZones[zparentactionzoneind].connectinggridind + '-' + WTW.actionZones[zparentactionzoneind].connectinggridid + '-' + WTW.actionZones[zparentactionzoneind].actionzonetype;
-					var zparentactionzoneaxlebase2name = 'local-actionzoneaxlebase2-' + zparentactionzoneind.toString() + '-' + WTW.actionZones[zparentactionzoneind].actionzoneid + '-' + WTW.actionZones[zparentactionzoneind].connectinggridind + '-' + WTW.actionZones[zparentactionzoneind].connectinggridid + '-' + WTW.actionZones[zparentactionzoneind].actionzonetype;
+					var zparentactionzoneaxlebasename = WTW.actionZones[zparentactionzoneind].moldname.replace('-actionzone-','-actionzoneaxlebase-');
+					var zparentactionzoneaxlebase2name = WTW.actionZones[zparentactionzoneind].moldname.replace('-actionzone-','-actionzoneaxlebase2-'); 
 					var zparentactionzoneaxlebase = WTW.getMeshOrNodeByID(zparentactionzoneaxlebasename);
 					zactionzonedef.axis.position.x -= (zparentactionzoneaxlebase.position.x);
 					zactionzonedef.axis.position.y -= (zparentactionzoneaxlebase.position.y);

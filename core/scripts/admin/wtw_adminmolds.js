@@ -1868,15 +1868,9 @@ WTWJS.prototype.openEditPoles = function(zmold) {
 				WTW.moveY.scaling.y = 1;
 				WTW.moveY.scaling.z = 2;
 			}
-			if (dGet('wtw_adminaxislabels').innerHTML == 'Axis Labels ON') {
-				WTW.moveX.isVisible = true;
-				WTW.moveY.isVisible = true;
-				WTW.moveZ.isVisible = true;				
-			} else {
-				WTW.moveX.isVisible = false;
-				WTW.moveY.isVisible = false;
-				WTW.moveZ.isVisible = false;          
-			}	
+			WTW.moveX.isVisible = false;
+			WTW.moveY.isVisible = false;
+			WTW.moveZ.isVisible = false;          
 			if (dGet('wtw_blines').alt = 'Alignment Lines are Shown') {
 				WTW.lineZ.isVisible = true;
 				WTW.lineX.isVisible = true;

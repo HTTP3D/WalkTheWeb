@@ -50,7 +50,7 @@ function automationcondition(zautomationdef) {
 			if (zactionzoneind > -1) {
 				switch (WTW.actionZones[zactionzoneind].actionzonetype) {
 					case 'rotate':
-/*						var zactionzoneaxle = WTW.getMeshOrNodeByID('local-actionzoneaxle-' + zactionzoneind + '-' + WTW.actionZones[zactionzoneind].actionzoneid + '-' + WTW.actionZones[zactionzoneind].connectinggridind + '-' + WTW.actionZones[zactionzoneind].connectinggridid + '-' + WTW.actionZones[zactionzoneind].actionzonetype);
+/*						var zactionzoneaxle = WTW.getMeshOrNodeByID(WTW.actionZones[zactionzoneind].moldname.replace('-actionzone-','-actionzoneaxle-'));
 						if (zactionzoneaxle != null) {
 							if (zautomationdef.step.conditionoperator == '<=') {
 								if (WTW.automations[zautomationind].step.timer != null) {

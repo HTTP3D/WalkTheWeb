@@ -51,7 +51,7 @@ WTWJS.prototype.openSelectAvatar = function() {
 							if (zresponse.avatars[i].avatarid == avatarid) {
 								dGet('wtw_listavatars').innerHTML += "<div id='wtw_beditavatar-" + zresponse.avatars[i].avatarid + "' class='wtw-menulevel2' style='background-color:#2C2CAB;'><div style='float:right;color:#afafaf;'>" + zversion + "</div>" + WTW.decode(zresponse.avatars[i].displayname) + "</div>\r\n";
 							} else {
-								dGet("wtw_listavatars").innerHTML += "<div id='wtw_beditavatar-" + zresponse.avatars[i].avatarid + "' onclick='window.location.href='admin.php?avatarid=" + zresponse.avatars[i].avatarid + "';' class='wtw-menulevel2'><div style='float:right;color:#afafaf;'>" + zversion + "</div>" + WTW.decode(zresponse.avatars[i].displayname) + "</div>\r\n";
+								dGet("wtw_listavatars").innerHTML += "<div id='wtw_beditavatar-" + zresponse.avatars[i].avatarid + "' onclick=\"window.location.href='admin.php?avatarid=" + zresponse.avatars[i].avatarid + "';\" class='wtw-menulevel2'><div style='float:right;color:#afafaf;'>" + zversion + "</div>" + WTW.decode(zresponse.avatars[i].displayname) + "</div>\r\n";
 							}
 						}
 					}
@@ -685,17 +685,17 @@ WTWJS.prototype.displayAvatarFiles = function(zresponse) {
 		if (zresponse != null) {
 			var zfilesdiv = '';
 			if (zsubfolder == '') {
-				zfilesdiv += "<div id='wtw_avatarfoldermain' class='wtw-greenbuttonnarrow' style='text-align:center;cursor:pointer;margin:5px;' onclick=''>Main</div>";
+				zfilesdiv += "<div id='wtw_avatarfoldermain' class='wtw-greenbuttonnarrow' style='text-align:center;cursor:pointer;margin:5px;'>Main</div>";
 			} else {
 				zfilesdiv += "<div id='wtw_avatarfoldermain' class='wtw-yellowbutton' style='text-align:center;cursor:pointer;margin:5px;' onclick=\"WTW.openEditAvatarFiles('','" + dGet('wtw_tavatarfolderdisplay').value + "');\">Main</div>";
 			}
 			if (zsubfolder == 'textures/') {
-				zfilesdiv += "<div id='wtw_avatarfoldertextures' class='wtw-greenbuttonnarrow' style='text-align:center;cursor:pointer;margin:5px;' onclick=''>Textures</div>";
+				zfilesdiv += "<div id='wtw_avatarfoldertextures' class='wtw-greenbuttonnarrow' style='text-align:center;cursor:pointer;margin:5px;'>Textures</div>";
 			} else {
 				zfilesdiv += "<div id='wtw_avatarfoldertextures' class='wtw-yellowbutton' style='text-align:center;cursor:pointer;margin:5px;' onclick=\"WTW.openEditAvatarFiles('textures','" + dGet('wtw_tavatarfolderdisplay').value + "');\">Textures</div>";
 			}
 			if (zsubfolder == 'animations/') {
-				zfilesdiv += "<div id='wtw_avatarfolderanimations' class='wtw-greenbuttonnarrow' style='text-align:center;cursor:pointer;margin:5px;' onclick=''>Animations</div>";
+				zfilesdiv += "<div id='wtw_avatarfolderanimations' class='wtw-greenbuttonnarrow' style='text-align:center;cursor:pointer;margin:5px;'>Animations</div>";
 			} else {
 				zfilesdiv += "<div id='wtw_avatarfolderanimations' class='wtw-yellowbutton' style='text-align:center;cursor:pointer;margin:5px;' onclick=\"WTW.openEditAvatarFiles('animations','" + dGet('wtw_tavatarfolderdisplay').value + "');\">Animations</div>";
 			}
@@ -713,7 +713,7 @@ WTWJS.prototype.displayAvatarFiles = function(zresponse) {
 					if (zresponse[i].file != undefined) {
 						if (zresponse[i].file != 'snapshots' && zresponse[i].file != 'textures' && zresponse[i].file != 'animations') {
 							var zfolder = atob(zresponse[i].folder) + zresponse[i].file;
-							zfilesdiv += "<div class='wtw-filelist' style='background-color:" + zbgcolor + ";margin-bottom:8px;'><img src='/content/system/images/close2.png' alt='Delete' title='Delete' style='float:right;width:24px;height:auto;margin-right:5px;cursor:pointer;' onclick=\"WTW.confirmDeleteAvatarFile('" + zresponse[i].file + "');\"><div class='wtw-download' style='margin:5px;' onclick='WTW.downloadFile(\"" + zfolder + "\", \"" + zresponse[i].file + "\");'>" + zresponse[i].file + "</div></div>";
+							zfilesdiv += "<div class='wtw-filelist' style='background-color:" + zbgcolor + ";margin-bottom:8px;'><img src='/content/system/images/close2.png' alt='Delete' title='Delete' style='float:right;width:24px;height:auto;margin-right:5px;cursor:pointer;' onclick=\"WTW.confirmDeleteAvatarFile('" + zresponse[i].file + "');\"><div class='wtw-download' style='margin:5px;' onclick=\"WTW.downloadFile('" + zfolder + "', '" + zresponse[i].file + "');\">" + zresponse[i].file + "</div></div>";
 							if (zbgcolor == '#ffffff') {
 								zbgcolor = '#eeeeee';
 							} else {

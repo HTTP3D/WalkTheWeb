@@ -28,8 +28,10 @@ WTWJS.prototype.openConnectingGridsForm = function(zconnectinggridind) {
 				dGet('wtw_tcommunityid').value = WTW.connectingGrids[zconnectinggridind].communityinfo.communityid;
 				dGet('wtw_tbuildingid').value = WTW.connectingGrids[zconnectinggridind].buildinginfo.buildingid;
 				dGet('wtw_tthingid').value = WTW.connectingGrids[zconnectinggridind].thinginfo.thingid;
+				dGet('wtw_tparentserverfranchiseid').value = WTW.connectingGrids[zconnectinggridind].parentserverfranchiseid;
 				dGet('wtw_tparentwebid').value = WTW.connectingGrids[zconnectinggridind].parentwebid;
 				dGet('wtw_tparentwebtype').value = WTW.connectingGrids[zconnectinggridind].parentwebtype;
+				dGet('wtw_tchildserverfranchiseid').value = WTW.connectingGrids[zconnectinggridind].childserverfranchiseid;
 				dGet('wtw_tchildwebid').value = WTW.connectingGrids[zconnectinggridind].childwebid;
 				dGet('wtw_tchildwebtype').value = WTW.connectingGrids[zconnectinggridind].childwebtype;
 				dGet('wtw_teditloadactionzoneid').value = WTW.connectingGrids[zconnectinggridind].loadactionzoneid;
@@ -233,8 +235,10 @@ WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 						'thingid': thingid,
 						'loadactionzoneid': dGet('wtw_teditloadactionzoneid').value,
 						'altloadactionzoneid': zaltloadactionzoneid,
+						'parentserverfranchiseid': dGet('wtw_tparentserverfranchiseid').value,
 						'parentwebid': dGet('wtw_tparentwebid').value,
 						'parentwebtype': dGet('wtw_tparentwebtype').value,
+						'childserverfranchiseid': dGet('wtw_tchildserverfranchiseid').value,
 						'childwebid': dGet('wtw_tchildwebid').value,
 						'childwebtype': dGet('wtw_tchildwebtype').value,
 						'connectinggridind': zconnectinggridind,
@@ -280,6 +284,8 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 			zwebalias = '';
 		}
 		WTW.hideAdminMenu();
+		var zserver = 'local';
+		var zparentserverfranchiseid = '';
 		var zparentwebid = '';
 		var zparentwebtype = '';
 		var zdist = 200;
@@ -350,6 +356,8 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 			var zactionzonesurl = '/connect/actionzones.php?thingid=' + zchildwebid + '&buildingid=' + zchildwebid + '&communityid=&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
 			if (zfranchiseid != '') {
 				zactionzonesurl = 'https://3dnet.walktheweb.com/connect/franchiseactionzones.php?franchiseid=' + zfranchiseid + '&serverfranchiseid=' + zserverfranchiseid + '&webalias=' + zwebalias + '&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
+				zchildwebid = zfranchiseid;
+				zserver =  zserverfranchiseid;
 			}
 			WTW.getAsyncJSON(zactionzonesurl, 
 				function(zresponse) {
@@ -363,7 +371,7 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 						WTW.actionZones[zactionzoneind].connectinggridind = zconnectinggridind;
 						WTW.actionZones[zactionzoneind].connectinggridid = zconnectinggridid;
 						WTW.actionZones[zactionzoneind].parentname = WTW.connectingGrids[zconnectinggridind].moldname;
-						WTW.actionZones[zactionzoneind].moldname = 'local-actionzone-' + zactionzoneind + '-' + WTW.actionZones[zactionzoneind].actionzoneid + '-' + zconnectinggridind + '-' + zconnectinggridid + '-' + WTW.actionZones[zactionzoneind].actionzonetype;
+						WTW.actionZones[zactionzoneind].moldname = zserver + '-actionzone-' + zactionzoneind + '-' + WTW.actionZones[zactionzoneind].actionzoneid + '-' + zconnectinggridind + '-' + zconnectinggridid + '-' + WTW.actionZones[zactionzoneind].actionzonetype;
 						if (WTW.actionZones[zactionzoneind].actionzonename.indexOf('Extreme') > -1) {
 							zloadactionzoneid = WTW.actionZones[zactionzoneind].actionzoneid;
 						}
@@ -374,8 +382,10 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 					WTW.connectingGrids[zconnectinggridind].communityinfo.communityid = communityid;
 					WTW.connectingGrids[zconnectinggridind].parentconnectinggridid = dGet('wtw_tconnectinggridid').value;
 					WTW.connectingGrids[zconnectinggridind].parentconnectinggridind = dGet('wtw_tconnectinggridind').value;
+					WTW.connectingGrids[zconnectinggridind].parentserverfranchiseid = zparentserverfranchiseid;
 					WTW.connectingGrids[zconnectinggridind].parentwebid = zparentwebid;
 					WTW.connectingGrids[zconnectinggridind].parentwebtype = zparentwebtype;
+					WTW.connectingGrids[zconnectinggridind].childserverfranchiseid = zserverfranchiseid;
 					WTW.connectingGrids[zconnectinggridind].childwebid = zchildwebid;
 					WTW.connectingGrids[zconnectinggridind].childwebtype = zchildwebtype;			
 					WTW.connectingGrids[zconnectinggridind].position.x = zpositionx;
@@ -428,8 +438,10 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 					dGet('wtw_teditconnectinggridid').value = zconnectinggridid;
 					dGet('wtw_teditconnectinggridind').value = zconnectinggridind;
 					dGet('wtw_teditloadactionzoneid').value = zloadactionzoneid;
+					dGet('wtw_tparentserverfranchiseid').value = zparentserverfranchiseid;
 					dGet('wtw_tparentwebid').value = zparentwebid;
 					dGet('wtw_tparentwebtype').value = zparentwebtype;
+					dGet('wtw_tchildserverfranchiseid').value = zserverfranchiseid;
 					dGet('wtw_tchildwebid').value = zchildwebid;
 					dGet('wtw_tchildwebtype').value = zchildwebtype;
 					dGet('wtw_tconngridpositionx').value = zpositionx;
@@ -451,13 +463,14 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 					WTW.openConnectingGridsForm(zconnectinggridind);
 					WTW.setWindowSize();
 					if (zchildwebtype == 'building') {
+						/* get any 3D Things connecting grids in the 3D Building */
 						var zconnectinggridsurl = '/connect/connectinggrids.php?parentwebid=' + zchildwebid + '&startpositionx=0&startpositiony=0&startpositionz=0&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname;
 						if (zfranchiseid != '') {
 							zconnectinggridsurl = 'https://3dnet.walktheweb.com/connect/franchiseconnectinggrids.php?franchiseid=' + zfranchiseid + '&serverfranchiseid=' + zserverfranchiseid + '&webalias=' + zwebalias + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&startpositionx=0&startpositiony=0&startpositionz=0';
 						}
 						WTW.getAsyncJSON(zconnectinggridsurl, 
 							function(zresponse) {
-								WTW.loadChildConnectingGrids(JSON.parse(zresponse));
+								WTW.loadChildConnectingGrids(JSON.parse(zresponse), zserver);
 							}
 						);
 					}
@@ -469,7 +482,7 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 	}
 }
 
-WTWJS.prototype.loadChildConnectingGrids = async function(zaddconnectinggrids) {
+WTWJS.prototype.loadChildConnectingGrids = async function(zaddconnectinggrids, zserver) {
 	/* load any connecting grids for 3D Things that are in the 3D Building or 3D Community */
 	try {
 		var zparentconnectinggridind = -1;
@@ -485,13 +498,13 @@ WTWJS.prototype.loadChildConnectingGrids = async function(zaddconnectinggrids) {
 							var zconnectinggridind = WTW.getNextCount(WTW.connectingGrids);
 							WTW.connectingGrids[zconnectinggridind] = zaddconnectinggrids.webitems[i];
 							WTW.connectingGrids[zconnectinggridind].connectinggridind = zconnectinggridind;
-							WTW.connectingGrids[zconnectinggridind].moldname = 'local-connectinggrids-' + zconnectinggridind + '-' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '-' + Number(dGet('wtw_teditconnectinggridind').value) + '-' + dGet('wtw_teditconnectinggridid').value;
+							WTW.connectingGrids[zconnectinggridind].moldname = zserver + '-connectinggrids-' + zconnectinggridind + '-' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '-' + Number(dGet('wtw_teditconnectinggridind').value) + '-' + dGet('wtw_teditconnectinggridid').value;
 							WTW.connectingGrids[zconnectinggridind].shown = '0';
 							WTW.connectingGrids[zconnectinggridind].status = 2;
 							WTW.addMoldToQueue(WTW.connectingGrids[zconnectinggridind].moldname, WTW.connectingGrids[zconnectinggridind], WTW.connectingGrids[zconnectinggridind].parentname, 'hidden',null);
 							WTW.getAsyncJSON('/connect/actionzone.php?actionzoneid=' + WTW.connectingGrids[zconnectinggridind].loadactionzoneid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind, 
 								function(zresponse) {
-									WTW.loadChildLoadZones(JSON.parse(zresponse));
+									WTW.loadChildLoadZones(JSON.parse(zresponse), zserver);
 								}
 							);
 						}

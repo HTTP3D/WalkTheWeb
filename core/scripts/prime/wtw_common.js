@@ -985,7 +985,7 @@ WTWJS.prototype.checkMirrorReflectionList = function(zactionzoneind) {
 	try {
 		if (WTW.actionZones[zactionzoneind] != null) {
 			if (WTW.actionZones[zactionzoneind].actionzonetype == 'mirror') {
-				var zactionzone = WTW.getMeshOrNodeByID('local-actionzone-' + zactionzoneind + '-' + WTW.actionZones[zactionzoneind].actionzoneid + '-' + WTW.actionZones[zactionzoneind].connectinggridind + '-' + WTW.actionZones[zactionzoneind].connectinggridid + '-' + WTW.actionZones[zactionzoneind].actionzonetype);
+				var zactionzone = WTW.getMeshOrNodeByID(WTW.actionZones[zactionzoneind].moldname);
 				if (zactionzone != null) {
 					var zmold = zactionzone.parent;
 					if (zmold != null) {

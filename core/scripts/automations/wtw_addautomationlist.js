@@ -106,19 +106,19 @@ WTWJS.prototype.addAutomation = function(zautomationname, zautomationdef) {
 					zparentautomationind = getautomationind(WTW.automations[zautomationind].parentautomationid);
 					if (zparentautomationind > -1) {
 						if (WTW.automations[zparentautomationind] != null) {
-							var parentautomationname = 'local-automation-' + zparentautomationind.toString() + '-' + WTW.automations[zparentautomationind].automationid + '-' + WTW.automations[zparentautomationind].connectinggridind + '-' + WTW.automations[zparentautomationind].connectinggridid + '-' + WTW.automations[zparentautomationind].automationtype;
+							var parentautomationname = WTW.automations[zparentautomationind].moldname;
 							zparentautomation = WTW.getMeshOrNodeByID(parentautomationname);
 							if (zparentautomation == null) {
 								zparentautomation = WTW.addAutomation(parentautomationname, WTW.automations[zparentautomationind]);
 							}
-							WTW.automations[zautomationind].parentname = 'local-automationaxlebase2-' + zparentautomationind.toString() + '-' + WTW.automations[zparentautomationind].automationid + '-' + WTW.automations[zparentautomationind].connectinggridind + '-' + WTW.automations[zparentautomationind].connectinggridid + '-' + WTW.automations[zparentautomationind].automationtype;
+							WTW.automations[zautomationind].parentname = WTW.automations[zparentautomationind].moldname.replace('-automation-','-automationaxlebase2-');
 							
 						}
 					}
 				}
 				if (zparentautomation != null) {
-					var zparentautomationaxlebasename = 'local-automationaxlebase-' + zparentautomationind.toString() + '-' + WTW.automations[zparentautomationind].automationid + '-' + WTW.automations[zparentautomationind].connectinggridind + '-' + WTW.automations[zparentautomationind].connectinggridid + '-' + WTW.automations[zparentautomationind].automationtype;
-					var zparentautomationaxlebase2name = 'local-automationaxlebase2-' + zparentautomationind.toString() + '-' + WTW.automations[zparentautomationind].automationid + '-' + WTW.automations[zparentautomationind].connectinggridind + '-' + WTW.automations[zparentautomationind].connectinggridid + '-' + WTW.automations[zparentautomationind].automationtype;
+					var zparentautomationaxlebasename = WTW.automations[zparentautomationind].moldname.replace('-automation-','-automationaxlebase-');
+					var zparentautomationaxlebase2name = WTW.automations[zparentautomationind].moldname.replace('-automation-','-automationaxlebase2-');
 					var zparentautomationaxlebase = WTW.getMeshOrNodeByID(zparentautomationaxlebasename);
 					zautomationdef.axis.position.x -= (zparentautomationaxlebase.position.x);
 					zautomationdef.axis.position.y -= (zparentautomationaxlebase.position.y);

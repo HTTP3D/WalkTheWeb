@@ -163,7 +163,8 @@ WTWJS.prototype.addMold = function(zmoldname, zmolddef, zparentname, zcoveringna
 				zmaxheight = Number(zmolddef.graphics.heightmap.maxheight);
 			}
 		} catch(ex) {}
-		var ztransformposition = WTW.transformPosition(zmolddef, zposx, zposy, zposz); // accounts for alternate parenting
+		/* account for alternate parenting */
+		var ztransformposition = WTW.transformPosition(zmolddef, zposx, zposy, zposz); 
 		zposx = ztransformposition.posx;
 		zposy = ztransformposition.posy;
 		zposz = ztransformposition.posz;

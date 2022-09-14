@@ -689,7 +689,7 @@ WTWJS.prototype.checkForUpdates = async function(zshow, zfilter) {
 			zshow = '1';
 		}
 		if (zfilter == undefined) {
-			zfilter = 'All Plugins';
+			zfilter = 'All 3D Plugins';
 		}
 		switch (zshow) {
 			case '1':
@@ -847,7 +847,7 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 										zpluginclass = 'wtw-active';
 										ztdclass = 'wtw-tdactive';
 									}
-									if (zfilter == 'All Plugins' || (zpluginclass == 'wtw-active' && zfilter == 'Active Plugins') || (zpluginclass == 'wtw-deactive' && zfilter == 'Inactive Plugins')) {
+									if (zfilter == 'All 3D Plugins' || (zpluginclass == 'wtw-active' && zfilter == 'Active 3D Plugins') || (zpluginclass == 'wtw-deactive' && zfilter == 'Inactive 3D Plugins')) {
 										zpluginslist += "<tr><td class='wtw-tablecolumns " + ztdclass + "'>";
 										if (zmyplugins[i].version != zmyplugins[i].latestversion && WTW.isUserInRole('Admin')) {
 											zpluginslist += "<div id='updateplugin" + zmyplugins[i].pluginname + "' class='wtw-greenbuttonleft' onclick=\"WTW.updatePlugin('" + zmyplugins[i].pluginname + "','" + zmyplugins[i].version + "','" + zmyplugins[i].updatedate + "','" + zmyplugins[i].updateurl + "','" + zshow + "');\">Update Now!</div>";
@@ -1217,7 +1217,7 @@ WTWJS.prototype.openAllPlugins = async function(zpluginname, zactive) {
 }
 
 WTWJS.prototype.openAllPluginsComplete = function(zresponse, zpluginname, zactive) {
-	/* open all plugins process complete, display list of plugins */
+	/* open all 3D plugins process complete, display list of plugins */
 	try {
 		var zpluginslist = '';
 		zresponse = JSON.parse(zresponse);
@@ -1649,6 +1649,9 @@ WTWJS.prototype.openMediaPageForm = async function(zuploadid) {
 								if (zuploadinfo[i].uploadinfo.updatedate != undefined) {
 									dGet('wtw_uploadupdatedate').innerHTML = WTW.formatDateLong(zuploadinfo[i].uploadinfo.updatedate);
 								}
+								dGet('wtw_uploadfiledelete').onclick = function() {
+									WTW.deleteUploadFiles(zuploadid);
+								};
 							}
 							
 							dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','" + zcategory + "','');WTW.setImageMenu(2);\">Media Library</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zfiletitle + "</div>";
@@ -2078,6 +2081,23 @@ WTWJS.prototype.toggleHideMyImage = async function(zuploadid, zitem, zcategory, 
 	}
 }	
 
+WTWJS.prototype.deleteUploadFiles = async function(zuploadid) {
+	/* this pagge form shows stock images, sounds, and videos as necessary */
+	try {
+		var zrequest = {
+			'uploadid': zuploadid,
+			'function':'deleteuploadfiles'
+		};
+		WTW.postAsyncJSON('/core/handlers/uploads.php', zrequest, 
+			function(zresponse) {
+				WTW.openFullPageForm('medialibrary','','');WTW.setImageMenu(2);
+			}
+		);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminforms.js-deleteUploadFiles=' + ex.message);
+	}
+}	
+
 WTWJS.prototype.loadStockPage = async function(zitem) {
 	/* this pagge form shows stock images, sounds, and videos as necessary */
 	try {
@@ -2488,7 +2508,7 @@ WTWJS.prototype.loadUploadedObjectsDiv = async function(showloading) {
 						zlinktext = 'Select';
 						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.setSelectModel('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'><canvas id='wtw_modelCanvas" + i + "' style='border:1px solid black;display:none;visibility:hidden;'></canvas>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.setSelectModel('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">Edit</div><div class='wtw-leftbutton' onclick=\"WTW.openIFrame('/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "',.8,.8,'Preview " + zresponse[i].objectfile + "');\">Preview</div><div class='wtw-clear'></div></div></div>";
 					} else {
-						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'><canvas id='wtw_modelCanvas" + i + "' style='border:1px solid black;display:none;visibility:hidden;'></canvas>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-leftbutton' onclick=\"WTW.openIFrame('/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "',.8,.8,'Preview " + zresponse[i].objectfile + "');\">Preview</div><div class='wtw-clear'></div></div></div>";
+						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "-" + zresponse[i].groupid + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'><canvas id='wtw_modelCanvas" + i + "' style='border:1px solid black;display:none;visibility:hidden;'></canvas>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div id='wtw_bgroup_" + zresponse[i].uploadobjectid + "' class='wtw-rightbutton' onclick=\"WTW.selectObjectGroup('" + zresponse[i].uploadobjectid + "','" + zresponse[i].groupid + "', 'wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "-" + zresponse[i].groupid + "');\" onmouseover=\"WTW.showObjectGroup('" + zresponse[i].uploadobjectid + "','" + zresponse[i].groupid + "',true);\" onmouseout=\"WTW.showObjectGroup('" + zresponse[i].uploadobjectid + "','" + zresponse[i].groupid + "',false);\">Group</div><div class='wtw-leftbutton' onclick=\"WTW.openIFrame('/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "',.8,.8,'Preview " + zresponse[i].objectfile + "');\">Preview</div><div class='wtw-clear'></div></div></div>";
 					}
 					WTW.loadPreviewScene(i);
 				}
@@ -2504,6 +2524,90 @@ WTWJS.prototype.loadUploadedObjectsDiv = async function(showloading) {
 		);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminforms.js-loadUploadedObjectsDiv=' + ex.message);
+	}
+}
+
+WTWJS.prototype.showObjectGroup = async function(zuploadobjectid, zgroupid, zshow) {
+	/* show obj group to mark parts of 3D Models */
+	try {
+		var zbgcolor = '#ffffff';
+		if (zshow) {
+			zbgcolor = '#feffce';
+		}
+		var zobjectcontainers = document.getElementsByClassName('wtw-objectcontainer');
+		for (var i=0;i<zobjectcontainers.length;i++) {
+			if (zobjectcontainers[i] != null) {
+				if (zobjectcontainers[i].id.indexOf('wtw_obj_') > -1 && zobjectcontainers[i].id.indexOf('-' + zgroupid) > -1) {
+					if (dGet('wtw_tgroupuploadobjectid').value != zuploadobjectid) {
+						dGet(zobjectcontainers[i].id).style.backgroundColor = zbgcolor;
+					}
+				}
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminforms.js-showObjectGroup=' + ex.message);
+	}
+}
+
+WTWJS.prototype.selectObjectGroup = async function(zuploadobjectid, zgroupid, zgroupdiv) {
+	/* select obj groupid to mark parts of 3D Models */
+	try {
+		if (dGet('wtw_tgroupuploadobjectid').value == '' || dGet('wtw_tgroupuploadobjectid').value == zuploadobjectid) {
+			if (dGet(zgroupdiv) != null) {
+				if (dGet(zgroupdiv).style.borderColor != 'red') {
+					dGet(zgroupdiv).style.borderColor = 'red';
+					dGet(zgroupdiv).style.backgroundColor = '#feffce';
+					dGet('wtw_tgroupuploadobjectid').value = zuploadobjectid;
+					dGet('wtw_tgroupid').value = zgroupid;
+					dGet('wtw_tgroupdiv').value = zgroupdiv;
+				} else {
+					dGet(zgroupdiv).style.borderColor = '#afafaf';
+					dGet(zgroupdiv).style.backgroundColor = '#ffffff';
+					dGet('wtw_tgroupuploadobjectid').value = '';
+					dGet('wtw_tgroupid').value = '';
+					dGet('wtw_tgroupdiv').value = '';
+				}
+			}
+		} else {
+			dGet(zgroupdiv).style.borderColor = 'red';
+			dGet(zgroupdiv).style.backgroundColor = '#feffce';
+			var zrequest = {
+				'uploadobjectid': dGet('wtw_tgroupuploadobjectid').value,
+				'groupid': zgroupid,
+				'function':'saveobjectgroup'
+			};
+			WTW.postAsyncJSON('/core/handlers/uploadedfiles.php', zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					try {
+						/* set new div id, events, and styles */
+						var znewuploadobjectid = dGet('wtw_tgroupuploadobjectid').value;
+						var znewdivid = dGet('wtw_tgroupdiv').value.replace('-' + dGet('wtw_tgroupid').value, '-' + zgroupid);
+						var zbgroup = 'wtw_bgroup_' + znewuploadobjectid;
+						dGet(zbgroup).onclick = function() {
+							WTW.selectObjectGroup(znewuploadobjectid, zgroupid, znewdivid);
+						};
+						dGet(zbgroup).onmouseover = function() {
+							WTW.showObjectGroup(znewuploadobjectid, zgroupid, true);
+						};
+						dGet(zbgroup).onmouseout = function() {
+							WTW.showObjectGroup(znewuploadobjectid, zgroupid, false);
+						};
+						dGet(zgroupdiv).style.borderColor = '#afafaf';
+						dGet(zgroupdiv).style.backgroundColor = '#ffffff';
+						dGet(dGet('wtw_tgroupdiv').value).id = znewdivid;
+						dGet(znewdivid).style.borderColor = '#afafaf';
+						dGet(znewdivid).style.backgroundColor = '#ffffff';
+						WTW.showObjectGroup(zuploadobjectid, zgroupid, true);
+					} catch (ex) {}
+					dGet('wtw_tgroupuploadobjectid').value = '';
+					dGet('wtw_tgroupid').value = '';
+					dGet('wtw_tgroupdiv').value = '';
+				}
+			);
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminforms.js-selectObjectGroup=' + ex.message);
 	}
 }
 
@@ -2557,7 +2661,7 @@ WTWJS.prototype.loadObjectDetailsName = async function(zuploadobjectid) {
 							//zcreatedate = date('m/d/Y', strtotime($zcreatedate));
 							znamediv += "<div class='wtw-objectcontainer'><div class='wtw-objectfile'>" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "</div></div>";
 							
-							zpreviewdiv += "<div class='wtw-leftbutton' onclick=\"dGet('wtw_3dobectpreview-" + i + "').src='/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "';\" style='margin:10px;'>Preview or Refresh Preview</div> You may need to clear your browser cache files to fully refresh the 3D Object Preview.<br />\r\n";
+							zpreviewdiv += "<div class='wtw-leftbutton' onclick=\"dGet('wtw_3dobectpreview-" + i + "').src='/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "';\" style='margin:10px;'>Preview or Refresh Preview</div> After an update, you may need to clear your browser cache files to fully refresh the 3D Model Preview.<br />\r\n";
 							zpreviewdiv += "<iframe id='wtw_3dobectpreview-" + i + "' src='/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "' style='width:100%;min-height:400px;height:100%;'></iframe>\r\n";
 							zpreviewdiv += "<br /><br />Use Mouse Scroll-Wheel to Zoom<br /><br />Hold Mouse Left Button Down to Rotate View as you move Mouse or<br /><br />Use Arrow Keys on the Keyboard.<br />\r\n";
 
@@ -2722,9 +2826,9 @@ WTWJS.prototype.loadObjectDetailsFiles = async function(zuploadobjectid, zobject
 							zfilesdiv += "<img src='/content/system/images/close2.png' alt='Delete' title='Delete' style='width:24px;height:auto;float:right;cursor:pointer;' onclick=\"dGet('wtw_tdeletefile').value='" + zresponse[i].file + "';WTW.hide('wtw_uploadbutton');WTW.showInline('wtw_deletefile');WTW.showInline('wtw_canceldelete');\" />";
 							var zfolder = atob(zresponse[i].folder) + zresponse[i].file;
 							if (zresponse[i].file == zfilename) {
-								zfilesdiv += "<div class='wtw-download' onclick='WTW.downloadFile(\"" + zfolder + "\", \"" + zresponse[i].file + "\");'><div class='wtw-floatright'>Primary</div><strong>" + zresponse[i].file + "</strong></div><br /><div class='wtw-clear'></div>";
+								zfilesdiv += "<div class='wtw-download' onclick=\"WTW.downloadFile('" + zfolder + "', '" + zresponse[i].file + "');\"><div class='wtw-floatright'>Primary</div><strong>" + zresponse[i].file + "</strong></div><br /><div class='wtw-clear'></div>";
 							} else {
-								zfilesdiv += "<div class='wtw-download' onclick='WTW.downloadFile(\"" + zfolder + "\", \"" + zresponse[i].file + "\");'>" + zresponse[i].file + "</div><br /><div class='wtw-clear'></div>";
+								zfilesdiv += "<div class='wtw-download' onclick=\"WTW.downloadFile('" + zfolder + "', '" + zresponse[i].file + "');\">" + zresponse[i].file + "</div><br /><div class='wtw-clear'></div>";
 							}
 							zfilesdiv += "</div>";
 							if (zbgcolor == '#ffffff') {
@@ -3375,11 +3479,6 @@ WTWJS.prototype.openWebDomainsSettings = async function() {
 					zwebdomainlist += '</table>'
 					dGet('wtw_webdomainlist').innerHTML = zwebdomainlist;
 					WTW.hide('wtw_loadingwebdomain');
-					if (WTW.isUserInRole('host')) {
-						WTW.show('wtw_addwebdomainnote');
-					} else {
-						WTW.hide('wtw_addwebdomainnote');
-					}
 				}
 			}
 		);
@@ -3420,7 +3519,6 @@ WTWJS.prototype.openDomainForm = function() {
 		dGet('wtw_domainhostdays').value = '';
 		dGet('wtw_tallowhostingyes').checked = false;
 		dGet('wtw_tallowhostingno').checked = true;
-		WTW.hide('wtw_addwebdomainnote');
 		WTW.hide('wtw_domainpurchaseview');
 		WTW.show('wtw_domaindetailsdiv');
 		if (WTW.isUserInRole('admin') || WTW.isUserInRole('developer') || WTW.isUserInRole('host')) {
@@ -3544,7 +3642,6 @@ WTWJS.prototype.editWebDomain = async function(zwebdomainid) {
 		dGet('wtw_domainhostprice').disabled = false;
 		dGet('wtw_domainsslprice').disabled = false;
 		dGet('wtw_domainhostdays').disabled = false;
-		WTW.hide('wtw_addwebdomainnote');
 		WTW.hide('wtw_domainpurchaseview');
 		WTW.show('wtw_domaindetailsdiv');
 		WTW.getAsyncJSON('/connect/webdomain.php?webdomainid=' + zwebdomainid, 
@@ -3736,11 +3833,6 @@ WTWJS.prototype.saveDomainForm = async function(w) {
 								dGet('wtw_tallowhostingno').checked = false;
 								WTW.hide('wtw_addwebdomaindiv');
 								WTW.show('wtw_addwebdomain');
-								if (WTW.isUserInRole('host')) {
-									WTW.show('wtw_addwebdomainnote');
-								} else {
-									WTW.hide('wtw_addwebdomainnote');
-								}
 								WTW.hide('wtw_domainpurchaseview');
 								WTW.show('wtw_domaindetailsdiv');
 								WTW.openWebDomainsSettings();
@@ -3775,11 +3867,6 @@ WTWJS.prototype.saveDomainForm = async function(w) {
 								dGet('wtw_tallowhostingno').checked = false;
 								WTW.hide('wtw_addwebdomaindiv');
 								WTW.show('wtw_addwebdomain');
-								if (WTW.isUserInRole('host')) {
-									WTW.show('wtw_addwebdomainnote');
-								} else {
-									WTW.hide('wtw_addwebdomainnote');
-								}
 								WTW.hide('wtw_domainpurchaseview');
 								WTW.show('wtw_domaindetailsdiv');
 								WTW.openWebDomainsSettings();
@@ -3801,11 +3888,6 @@ WTWJS.prototype.saveDomainForm = async function(w) {
 				dGet('wtw_tallowhostingno').checked = false;
 				WTW.hide('wtw_addwebdomaindiv');
 				WTW.show('wtw_addwebdomain');
-				if (WTW.isUserInRole('host')) {
-					WTW.show('wtw_addwebdomainnote');
-				} else {
-					WTW.hide('wtw_addwebdomainnote');
-				}
 				WTW.hide('wtw_domainpurchaseview');
 				WTW.show('wtw_domaindetailsdiv');
 				WTW.pluginsSaveDomainForm(w, '');
@@ -3831,11 +3913,6 @@ WTWJS.prototype.saveDomainForm = async function(w) {
 						dGet('wtw_tallowhostingno').checked = false;
 						WTW.hide('wtw_addwebdomaindiv');
 						WTW.show('wtw_addwebdomain');
-						if (WTW.isUserInRole('host')) {
-							WTW.show('wtw_addwebdomainnote');
-						} else {
-							WTW.hide('wtw_addwebdomainnote');
-						}
 						WTW.hide('wtw_domainpurchaseview');
 						WTW.show('wtw_domaindetailsdiv');
 						WTW.pluginsSaveDomainForm(w, '');
@@ -4999,8 +5076,10 @@ WTWJS.prototype.openInvoices = async function(zlist) {
 		WTW.show('wtw_invoicespage');
 		WTW.show('wtw_loadinginvoices');
 		dGet('wtw_invoicestitle').innerHTML = 'Invoices';
+		dGet('wtw_invoicesnote').innerHTML = '<b>Invoices or Hosting Invoices</b> provide printable receipts for your WalkTheWeb Hosted Users Purchases and Upgrades. Your WalkTheWeb Instance can host 3D Websites for your customers!<br />';
 		if (zlist == 'my') {
 			dGet('wtw_invoicestitle').innerHTML = 'My Invoices';
+			dGet('wtw_invoicesnote').innerHTML = '<b>My Invoices</b> provide printable receipts for your WalkTheWeb Purchases and Upgrades.<br />';
 		}
 		dGet('wtw_invoiceslist').innerHTML = '';
 		var zrequest = {

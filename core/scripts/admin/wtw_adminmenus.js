@@ -238,12 +238,12 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						break;
 					case 'wtw_admincommunityaddbuilding':
 						WTW.hideAdminMenu();
-						WTW.showFranchise(dGet('wtw_buildingsbuttonlocal'),'wtw_buildingsinternetdiv');
+						WTW.showFranchise(dGet('wtw_buildingbuttonlocal'),'building');
 						WTW.show('wtw_adminmenu27');
 						break;
 					case 'wtw_admincommunityaddthing':
 						WTW.hideAdminMenu();
-						WTW.getThingMoldList();
+						WTW.getAddThingList();
 						WTW.show('wtw_adminmenu13');
 						break;
 					case 'wtw_admincommunityactionzones':
@@ -580,7 +580,7 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						break;
 					case 'wtw_adminbuildingaddthing':
 						WTW.hideAdminMenu();
-						WTW.getThingMoldList()
+						WTW.getAddThingList()
 						WTW.show('wtw_adminmenu13');
 						break;
 					case 'wtw_adminbuildingactionzones':
@@ -775,13 +775,13 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.openFullPageForm('users','User Roles');
 						break;
 					case 'wtw_adminallplugins':
-						WTW.openFullPageForm('plugins','All Plugins');
+						WTW.openFullPageForm('plugins','All 3D Plugins');
 						break;
 					case 'wtw_adminactiveplugins':
-						WTW.openFullPageForm('plugins','Active Plugins');
+						WTW.openFullPageForm('plugins','Active 3D Plugins');
 						break;
 					case 'wtw_admininactiveplugins':
-						WTW.openFullPageForm('plugins','Inactive Plugins');
+						WTW.openFullPageForm('plugins','Inactive 3D Plugins');
 						break;
 				/* Settings Admin Items */
 					case 'wtw_adminserversettings':
@@ -793,109 +793,44 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 					case 'wtw_adminhostingserver':
 						WTW.openFullPageForm('settings','Server Hosting Settings');
 						break;
-					case 'wtw_adminwebdomains':
+					case 'wtw_adminmenuwebdomains':
 						WTW.openFullPageForm('settings','Web Domains');
 						break;
-					case 'wtw_adminwebalias':
+					case 'wtw_adminmenuwebalias':
 						WTW.openFullPageForm('settings','Web Aliases');
 						break;
 					case 'wtw_adminapikeys':
 						WTW.openFullPageForm('settings','API Keys Access');
 						break;
 				/* Dev Tools Admin Items */
-					case 'wtw_adminfocus':
-						if (dGet('wtw_adminfocus').innerHTML.indexOf(WTW.__('Focus ON')) > -1) {
-							WTW.setQuickEditorFocus(0);
-						} else {
-							WTW.setQuickEditorFocus(1);
-						}
-						break;
-					case 'wtw_adminavatarcamera':
-						if (dGet('wtw_adminavatarcamera').innerHTML.indexOf(WTW.__('Avatar Camera ON')) > -1) {
-							WTW.setQuickEditorAvatarCamera(0);
-						} else {
-							WTW.setQuickEditorAvatarCamera(1);
-						}
-						break;
-					case 'wtw_adminmerged':
-						if (dGet('wtw_adminmerged').innerHTML.indexOf(WTW.__('Merged Molds ON')) > -1) {
-							WTW.setQuickEditorMerged(0);
-						} else {
-							WTW.setQuickEditorMerged(1);
-						}
-						break;
-					case 'wtw_adminzones':
-						if (dGet('wtw_adminzones').innerHTML.indexOf(WTW.__('Action Zones ON')) > -1) {
-							WTW.setQuickEditorZones(0);
-						} else {
-							WTW.setQuickEditorZones(1);
-						}
-						break;
-					case 'wtw_adminloadall':
-						if (dGet('wtw_adminloadall').innerHTML.indexOf(WTW.__('Load All Zones ON')) > -1) {
-							WTW.setQuickEditorLoadAll(0);
-						} else {
-							WTW.setQuickEditorLoadAll(1);
-						}
-						break;
-					case 'wtw_adminlines':
-						if (dGet('wtw_adminlines').innerHTML.indexOf(WTW.__('Alignment Lines ON')) > -1) {
-							WTW.setQuickEditorLines(0);
-						} else {
-							WTW.setQuickEditorLines(1);
-						}
-						break;
-					case 'wtw_adminaxislabels':
-						if (dGet('wtw_adminaxislabels').innerHTML.indexOf(WTW.__('Axis Labels ON')) > -1) {
-							if (WTW.moveX == undefined || WTW.moveX == null ) {
-							} else {
-								WTW.moveX.isVisible = false;
-								WTW.moveY.isVisible = false;
-								WTW.moveZ.isVisible = false;          
-							}
-							dGet('wtw_adminaxislabels').innerHTML = WTW.__('Axis Labels OFF');
-						} else {
-							if (WTW.moveX == undefined || WTW.moveX == null ) {
-							} else {
-								WTW.moveX.isVisible = true;
-								WTW.moveY.isVisible = true;
-								WTW.moveZ.isVisible = true;				
-							}
-							dGet('wtw_adminaxislabels').innerHTML = WTW.__('Axis Labels ON');
-						}
-						break;
-					case 'wtw_adminloadedobjects':
-						WTW.hideAdminMenu();
-						WTW.show('wtw_adminmenu70');
-						break;
-					case 'wtw_listmeshes':
+					case 'wtw_adminlistmeshes':
 						WTW.listMeshes();
 						break;
-					case 'wtw_listtransformnodes':
+					case 'wtw_adminlisttransformnodes':
 						WTW.listTransformNodes();
 						break;
-					case 'wtw_listcgs':
+					case 'wtw_adminlistcgs':
 						WTW.listConnectingGrids();
 						break;
-					case 'wtw_listazs':
+					case 'wtw_adminlistazs':
 						WTW.listActionZones();
 						break;
-					case 'wtw_listcommmolds':
+					case 'wtw_adminlistcommmolds':
 						WTW.listCommunityMolds();
 						break;
-					case 'wtw_listbuildmolds':
+					case 'wtw_adminlistbuildmolds':
 						WTW.listBuildingMolds();
 						break;
-					case 'wtw_listthingmolds':
+					case 'wtw_adminlistthingmolds':
 						WTW.listThingMolds();
 						break;
-					case 'wtw_listautomations':
+					case 'wtw_adminlistautomations':
 						WTW.listAutomations();
 						break;
-					case 'wtw_listloadeduploads':
+					case 'wtw_adminlistloadeduploads':
 						WTW.listUploads();
 						break;
-					case 'wtw_listmyavatarlocation':
+					case 'wtw_adminlistmyavatarlocation':
 						WTW.listMyAvatarLocation();
 						break;
 				/* close and exit Admin Items */
@@ -1031,20 +966,6 @@ WTWJS.prototype.adminOpenSubmenu = function(zobj) {
 
 /* toggle open and closed full page forms */
 
-WTWJS.prototype.toggleAdminMenuDashboard = function() {
-	/* open and close dashboard */
-	try {
-		if (dGet('wtw_fullpageform').style.display == 'none' || (dGet('wtw_dashboardpage').style.display == 'none' && dGet('wtw_updatespage').style.display == 'none') || (dGet('wtw_dashboardpage').style.display == 'none' && dGet('wtw_feedbackpage').style.display == 'none') || (dGet('wtw_dashboardpage').style.display == 'none' && dGet('wtw_errorlogpage').style.display == 'none')) {
-			WTW.openFullPageForm('dashboard','','');
-		} else {
-			WTW.closeFullPageForm();
-			//WTW.hideFullPages();
-		}
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminmenus.js-toggleAdminMenuDashboard=' + ex.message);
-	}
-}
-
 WTWJS.prototype.toggleDashboardBox = function(zelementname) {
 	/* open and close dashboard boxes with animation by changes in maxHeight */
 	try {
@@ -1073,17 +994,167 @@ WTWJS.prototype.toggleDashboardBox = function(zelementname) {
 	}
 }
 
-WTWJS.prototype.toggleAdminMenuMediaLibrary = function() {
-	/* open and close Media Library */
+WTWJS.prototype.toggleAdminSubMenu = function(zobj) {
+	/* open and close Menu - Submenu */
 	try {
-		if (dGet('wtw_fullpageform').style.display == 'none' || dGet('wtw_selectimagepage').style.display == 'none') {
-			WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);
-		} else {
-			WTW.closeFullPageForm();
+		switch (zobj.id) {
+			case 'wtw_admindashboard':
+				if ((dGet('wtw_dashboardpage').style.display == 'none' || dGet('wtw_dashboardpage').style.display == '') && (dGet('wtw_updatespage').style.display == 'none' || dGet('wtw_updatespage').style.display == '') && (dGet('wtw_feedbackpage').style.display == 'none' || dGet('wtw_feedbackpage').style.display == '') && (dGet('wtw_errorlogpage').style.display == 'none' || dGet('wtw_errorlogpage').style.display == '')) {
+					WTW.openFullPageForm('dashboard','','');
+				} else {
+					WTW.hide('wtw_dashboardpage');
+					WTW.hide('wtw_updatespage');
+					WTW.hide('wtw_feedbackpage');
+					WTW.hide('wtw_errorlogpage');
+					WTW.closeFullPageForm();
+				}
+				break;
+			case 'wtw_adminmedia':
+				if ((dGet('wtw_selectimagepage').style.display == 'none' || dGet('wtw_selectimagepage').style.display == '') && (dGet('wtw_adminmediawtwdownloads').style.display == 'none' || dGet('wtw_adminmediawtwdownloads').style.display == '') && (dGet('wtw_admincommunitiesdiv').style.display == 'none' || dGet('wtw_admincommunitiesdiv').style.display == '') && (dGet('wtw_adminbuildingsdiv').style.display == 'none' || dGet('wtw_adminbuildingsdiv').style.display == '') && (dGet('wtw_adminthingsdiv').style.display == 'none' || dGet('wtw_adminthingsdiv').style.display == '') && (dGet('wtw_showimportpage').style.display == 'none' || dGet('wtw_showimportpage').style.display == '')) {
+					WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);
+				} else {
+					WTW.hide('wtw_selectimagepage');
+					WTW.hide('wtw_showimportpage');
+					WTW.hide('wtw_admincommunitiesdiv');
+					WTW.hide('wtw_adminbuildingsdiv');
+					WTW.hide('wtw_adminthingsdiv');
+					WTW.closeFullPageForm();
+				}
+				break;
+			case 'wtw_adminwebsites':
+				if ((dGet('wtw_webdomainsettings').style.display == 'none' || dGet('wtw_webdomainsettings').style.display == '') && (dGet('wtw_webaliassettings').style.display == 'none' || dGet('wtw_webaliassettings').style.display == '')) {
+					WTW.openFullPageForm('settings','Web Domains');
+				} else {
+					WTW.hide('wtw_webdomainsettings');
+					WTW.hide('wtw_webaliassettings');
+					WTW.closeFullPageForm();
+				}
+				break;
+			case 'wtw_adminplugins':
+				if ((dGet('wtw_pluginspage').style.display == 'none' || dGet('wtw_pluginspage').style.display == '')) {
+					WTW.toggleAdminMenuLevel('plugins');
+					WTW.adminMenuItemSelected(dGet('wtw_adminallplugins'));
+				} else {
+					WTW.hide('wtw_pluginspage');
+					WTW.closeFullPageForm();
+				}
+				break;
+			case 'wtw_adminmenuinvoices':
+				if ((dGet('wtw_invoicepage').style.display == 'none' || dGet('wtw_invoicepage').style.display == '') && (dGet('wtw_myinvoicepage').style.display == 'none' || dGet('wtw_myinvoicepage').style.display == '')) {
+					WTW.openFullPageForm('fullpage','Invoices','wtw_invoicepage');
+				} else {
+					WTW.hide('wtw_invoicepage');
+					WTW.hide('wtw_myinvoicepage');
+					WTW.closeFullPageForm();
+				}
+				break;
+			case 'wtw_adminmenuinvoices2':
+				if ((dGet('wtw_myinvoicepage').style.display == 'none' || dGet('wtw_myinvoicepage').style.display == '')) {
+					WTW.openFullPageForm('fullpage','My Invoices','wtw_myinvoicepage');
+				} else {
+					WTW.hide('wtw_myinvoicepage');
+					WTW.closeFullPageForm();
+				}
+				break;
+			case 'wtw_adminusers':
+				if ((dGet('wtw_userspage').style.display == 'none' || dGet('wtw_userspage').style.display == '')) {
+					WTW.toggleAdminMenuLevel('users');
+					WTW.adminMenuItemSelected(dGet('wtw_adminuserlist'));
+				} else {
+					WTW.hide('wtw_userspage');
+					WTW.closeFullPageForm();
+				}
+				break;
+			case 'wtw_adminsettings':
+				if ((dGet('wtw_settingspage').style.display == 'none' || dGet('wtw_settingspage').style.display == '')) {
+					WTW.toggleAdminMenuLevel('settings');
+					WTW.adminMenuItemSelected(dGet('wtw_adminserversettings'));
+				} else {
+					WTW.hide('wtw_settingspage');
+					WTW.closeFullPageForm();
+				}
+				break;
+		}
+		WTW.pluginsToggleAdminSubMenu(zobj);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminmenus.js-toggleAdminSubMenu=' + ex.message);
+	}
+}
+
+
+/* franchise functions */
+
+WTWJS.prototype.showFranchise = function(zobj, zwebtype) {
+	/* toggle Local vs Internet */
+	try {
+		switch (zobj.id) {
+			case 'wtw_' + zwebtype + 'buttonlocal':
+				dGet('wtw_' + zwebtype + 'buttonlocal').className = 'wtw-localbuttonselected';
+				dGet('wtw_' + zwebtype + 'buttoninternet').className = 'wtw-localbutton';
+				WTW.hide('wtw_' + zwebtype + 'internetdiv');
+				switch (zwebtype) {
+					case 'community':
+						//WTW.getAddCommunityList();
+						break;
+					case 'building':
+						WTW.getAddBuildingList();
+						break;
+					case 'thing':
+						WTW.getAddThingList();
+						break;
+				}
+				break;
+			case 'wtw_' + zwebtype + 'buttoninternet':
+				dGet('wtw_' + zwebtype + 'buttoninternet').className = 'wtw-localbuttonselected';
+				dGet('wtw_' + zwebtype + 'buttonlocal').className = 'wtw-localbutton';
+				WTW.show('wtw_' + zwebtype + 'internetdiv');
+				dGet('wtw_' + zwebtype + 'buttonlist').innerHTML = '';
+				dGet('wtw_franchise' + zwebtype + 'search').value = '3d.';
+				dGet('wtw_franchise' + zwebtype + 'search').focus();
+				break;
 		}
 	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminmenus.js-toggleAdminMenuMediaLibrary=' + ex.message);
-	}
+		WTW.log('core-scripts-admin-wtw_adminmenus.js-showFranchise=' + ex.message);
+	}		
+}
+
+WTWJS.prototype.getFranchiseList = async function(zwebtype) {
+	/* 3D Buildings and 3D Things can be added to 3D Communities */
+	/* 3D Things can also be added to 3D Buildings */
+	/* this function creates a list of 3D Webs (by webtype) to add */
+	try {
+		WTW.hide('wtw_' + zwebtype + 'buttonlist');
+		WTW.show('wtw_loading' + zwebtype + 'buttonlist');
+		dGet('wtw_' + zwebtype + 'buttonlist').innerHTML = '';
+		var zrequest = {
+			'domainname': dGet('wtw_franchise' + zwebtype + 'search').value,
+			'webtype': zwebtype,
+			'function':'getfranchises'
+		};
+		WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/franchises.php', zrequest,
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				var zbuttonlist = '';
+				if (zresponse != null) {
+					for (var i = 0; i < zresponse.length; i++) {
+						if (zresponse[i] != null) {
+							zbuttonlist += "<div id='wtw_badd' + zwebtype + 'mold" + zresponse[i].franchiseid + "' onclick=\"WTW.addConnectingGrid('" + zwebtype + "', '', '" + zresponse[i].sitename + "', '" + zresponse[i].franchiseid + "', '" + zresponse[i].serverfranchiseid + "', '" + zresponse[i].webalias + "');\" class='wtw-menulevel2'>";
+							if (zresponse[i].sitepreview != '') {
+								zbuttonlist += "<img src='" + zresponse[i].sitepreview + "' style='width:100%;height:auto;' /><br />";
+							}
+							zbuttonlist += "<b>" + zresponse[i].sitename + "</b><br /><div class='wtw-menusmalltext'>" + zresponse[i].sitedescription + "</div></div>\r\n";
+						}
+					}
+				}
+				dGet('wtw_' + zwebtype + 'buttonlist').innerHTML = zbuttonlist;
+				WTW.hide('wtw_loading' + zwebtype + 'buttonlist');
+				WTW.show('wtw_' + zwebtype + 'buttonlist');
+				WTW.setWindowSize();
+			}
+		);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminmenus.js-getFranchiseList=' + ex.message);
+	}		
 }
 
 
@@ -1108,9 +1179,6 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 				dGet('wtw_bavatarcamera').className = 'wtw-quickbar';
 				dGet('wtw_bavatarcamera').title = WTW.__('Camera is Attached to Avatar');
 				dGet('wtw_bavatarcamera').alt = WTW.__('Camera is Attached to Avatar');
-				if (dGet('wtw_adminavatarcamera') != null) {
-					dGet('wtw_adminavatarcamera').innerHTML = WTW.__('Avatar Camera ON');
-				}
 			}
 			WTW.setCookie('wtw_bavatarcamera','1',30);
 		} else {
@@ -1124,9 +1192,6 @@ WTWJS.prototype.setQuickEditorAvatarCamera = function(zvalue) {
 				dGet('wtw_bavatarcamera').className = 'wtw-quickbaroff';
 				dGet('wtw_bavatarcamera').title = WTW.__('Camera is Detached from Avatar');
 				dGet('wtw_bavatarcamera').alt = WTW.__('Camera is Detached from Avatar');
-				if (dGet('wtw_adminavatarcamera') != null) {
-					dGet('wtw_adminavatarcamera').innerHTML = WTW.__('Avatar Camera OFF');
-				}
 			}
 			WTW.setCookie('wtw_bavatarcamera','0',30);
 		}
@@ -1147,9 +1212,6 @@ WTWJS.prototype.setQuickEditorFocus = function(zvalue) {
 				dGet('wtw_bfocus').className = 'wtw-quickbar';
 				dGet('wtw_bfocus').title = WTW.__('Focus Highlight is On');
 				dGet('wtw_bfocus').alt = WTW.__('Focus Highlight is On');
-				if (dGet('wtw_adminfocus') != null) {
-					dGet('wtw_adminfocus').innerHTML = WTW.__('Focus ON');
-				}
 			}
 			WTW.setCookie('wtw_bfocus','1',30);
 		} else {
@@ -1161,9 +1223,6 @@ WTWJS.prototype.setQuickEditorFocus = function(zvalue) {
 				dGet('wtw_bfocus').className = 'wtw-quickbaroff';
 				dGet('wtw_bfocus').title = WTW.__('Focus Highlight is Off');
 				dGet('wtw_bfocus').alt = WTW.__('Focus Highlight is Off');
-				if (dGet('wtw_adminfocus') != null) {
-					dGet('wtw_adminfocus').innerHTML = WTW.__('Focus OFF');
-				}
 			}
 			WTW.setCookie('wtw_bfocus','0',30);
 		}
@@ -1185,9 +1244,6 @@ WTWJS.prototype.setQuickEditorMerged = function(zvalue) {
 				dGet('wtw_bmerged').className = 'wtw-quickbar';
 				dGet('wtw_bmerged').title = WTW.__('Merged Shapes are Shown');
 				dGet('wtw_bmerged').alt = WTW.__('Merged Shapes are Shown');
-				if (dGet('wtw_adminmerged') != null) {
-					dGet('wtw_adminmerged').innerHTML = WTW.__('Merged Molds ON');
-				}
 			}
 			WTW.setCookie('wtw_bmerged','1',30);
 		} else {
@@ -1199,9 +1255,6 @@ WTWJS.prototype.setQuickEditorMerged = function(zvalue) {
 				dGet('wtw_bmerged').className = 'wtw-quickbaroff';
 				dGet('wtw_bmerged').title = WTW.__('Merged Shapes are Hidden');
 				dGet('wtw_bmerged').alt = WTW.__('Merged Shapes are Hidden');
-				if (dGet('wtw_adminmerged') != null) {
-					dGet('wtw_adminmerged').innerHTML = WTW.__('Merged Molds OFF');
-				}
 			}
 			WTW.setCookie('wtw_bmerged','0',30);
 		}
@@ -1284,9 +1337,6 @@ WTWJS.prototype.setQuickEditorZones = function(value) {
 				dGet('wtw_bzones').className = 'wtw-quickbar';
 				dGet('wtw_bzones').title = WTW.__('Action Zones are Shown');
 				dGet('wtw_bzones').alt = WTW.__('Action Zones are Shown');
-				if (dGet('wtw_adminzones') != null) {
-					dGet('wtw_adminzones').innerHTML = WTW.__('Action Zones ON');
-				}
 			}
 			WTW.setCookie('wtw_bzones','1',30);
 		} else {
@@ -1302,9 +1352,6 @@ WTWJS.prototype.setQuickEditorZones = function(value) {
 				dGet('wtw_bzones').className = 'wtw-quickbaroff';
 				dGet('wtw_bzones').title = WTW.__('Action Zones are Hidden');
 				dGet('wtw_bzones').alt = WTW.__('Action Zones are Hidden');
-				if (dGet('wtw_adminzones') != null) {
-					dGet('wtw_adminzones').innerHTML = WTW.__('Action Zones OFF');
-				}
 			}
 			WTW.setCookie('wtw_bzones','0',30);
 		}
@@ -1327,9 +1374,6 @@ WTWJS.prototype.setQuickEditorLoadAll = function(value) {
 				dGet('wtw_bloadall').className = 'wtw-quickbar';
 				dGet('wtw_bloadall').title = WTW.__('Load All Action Zones');
 				dGet('wtw_bloadall').alt = WTW.__('Load All Action Zones');
-				if (dGet('wtw_adminloadall') != null) {
-					dGet('wtw_adminloadall').innerHTML = WTW.__('Load All Zones ON');
-				}
 			}
 			WTW.setCookie('wtw_bloadall','1',30);
 		} else {
@@ -1341,9 +1385,6 @@ WTWJS.prototype.setQuickEditorLoadAll = function(value) {
 				dGet('wtw_bloadall').className = 'wtw-quickbaroff';
 				dGet('wtw_bloadall').title = WTW.__('Load Active Action Zones');
 				dGet('wtw_bloadall').alt = WTW.__('Load Active Action Zones');
-				if (dGet('wtw_adminloadall') != null) {
-					dGet('wtw_adminloadall').innerHTML = WTW.__('Load All Zones OFF');
-				}
 			}
 			WTW.setCookie('wtw_bloadall','0',30);
 		}
@@ -1395,9 +1436,6 @@ WTWJS.prototype.setQuickEditorLines = function(value) {
 				dGet('wtw_blines').className = 'wtw-quickbar';
 				dGet('wtw_blines').title = WTW.__('Alignment Lines are Shown');
 				dGet('wtw_blines').alt = WTW.__('Alignment Lines are Shown');
-				if (dGet('wtw_adminlines') != null) {
-					dGet('wtw_adminlines').innerHTML = WTW.__('Alignment Lines ON');
-				}
 			}
 			WTW.setCookie('wtw_blines','1',30);
 		} else {
@@ -1438,9 +1476,6 @@ WTWJS.prototype.setQuickEditorLines = function(value) {
 				dGet('wtw_blines').className = 'wtw-quickbaroff';
 				dGet('wtw_blines').title = WTW.__('Alignment Lines are Hidden');
 				dGet('wtw_blines').alt = WTW.__('Alignment Lines are Hidden');
-				if (dGet('wtw_adminlines') != null) {
-					dGet('wtw_adminlines').innerHTML = WTW.__('Alignment Lines OFF');
-				}
 			}
 			WTW.setCookie('wtw_blines','0',30);
 		}

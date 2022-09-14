@@ -221,12 +221,12 @@ WTWJS.prototype.addActionzoneSlidingDoor = function(zactionzonename, zactionzone
 		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
 		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
 		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
-		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
-		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle-'));
-		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole-'));
-		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
+		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
+		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'));
+		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 		if (zactionzoneaxlebase == null) {
-			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
+			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
 			zactionzoneaxlebase.parent = zparent;
 			zactionzoneaxlebase.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxlebase.rotation = new BABYLON.Vector3(WTW.getRadians(zaxisrotx), WTW.getRadians(zaxisroty), WTW.getRadians(zaxisrotz));
@@ -234,7 +234,7 @@ WTWJS.prototype.addActionzoneSlidingDoor = function(zactionzonename, zactionzone
 		}
 		if (zactionzoneaxle == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle-'));
+			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
 			zactionzoneaxle.parent = zactionzoneaxlebase;
 			zactionzoneaxle.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxle.rotation = new BABYLON.Vector3(0,0,0);
@@ -250,13 +250,13 @@ WTWJS.prototype.addActionzoneSlidingDoor = function(zactionzonename, zactionzone
 			zmolddef4.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef4.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef4.opacity = 0;
-			zmolddef4.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zmolddef4.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
 			zactionzoneaxlepole.isPickable = false;
 			zactionzoneaxlepole.checkCollisions = false;
 		}
 		if (zactionzoneaxlebase2 == null) {
-			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 			zactionzoneaxlebase2.parent = zactionzoneaxle;
 			zactionzoneaxlebase2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxlebase2.rotation = new BABYLON.Vector3(WTW.getRadians(-zaxisrotx),WTW.getRadians(-zaxisroty),WTW.getRadians(-zaxisrotz));
@@ -351,7 +351,7 @@ WTWJS.prototype.addActionzoneSlidingDoor = function(zactionzonename, zactionzone
 		if (WTW.adminView == 1) {
 			if (dGet('wtw_bzones').title == 'Action Zones are Shown' || zactionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
 				WTW.setOpacity(zactionzonename, .2);
-				WTW.setOpacity(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), 1);
+				WTW.setOpacity(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), 1);
 			}
 		}
 		WTW.actionZones[zactionzoneind].shown = '2';
@@ -377,12 +377,12 @@ WTWJS.prototype.addActionzoneSwingingDoor = function(zactionzonename, zactionzon
 		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
 		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
 		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
-		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
-		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle-'));
-		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole-'));
-		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
+		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
+		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'));
+		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 		if (zactionzoneaxlebase == null && zparent != null) {
-			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
+			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
 			zactionzoneaxlebase.parent = zparent;
 			zactionzoneaxlebase.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxlebase.rotation = new BABYLON.Vector3(WTW.getRadians(zaxisrotx), WTW.getRadians(zaxisroty), WTW.getRadians(zaxisrotz));
@@ -390,7 +390,7 @@ WTWJS.prototype.addActionzoneSwingingDoor = function(zactionzonename, zactionzon
 		}
 		if (zactionzoneaxle == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle-'));
+			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
 			zactionzoneaxle.parent = zactionzoneaxlebase;
 			zactionzoneaxle.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxle.rotation = new BABYLON.Vector3(0,0,0);
@@ -409,13 +409,13 @@ WTWJS.prototype.addActionzoneSwingingDoor = function(zactionzonename, zactionzon
 			zmolddef4.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef4.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef4.opacity = 0;
-			zmolddef4.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zmolddef4.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
 			zactionzoneaxlepole.isPickable = false;
 			zactionzoneaxlepole.checkCollisions = false;
 		}
 		if (zactionzoneaxlebase2 == null) {
-			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 			zactionzoneaxlebase2.parent = zactionzoneaxle;
 			zactionzoneaxlebase2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxlebase2.rotation = new BABYLON.Vector3(WTW.getRadians(-zaxisrotx),WTW.getRadians(-zaxisroty),WTW.getRadians(-zaxisrotz));
@@ -445,7 +445,7 @@ WTWJS.prototype.addActionzoneSwingingDoor = function(zactionzonename, zactionzon
 			if (WTW.isNumeric(zactionzonedef.movementdistance)) {
 				zmovementdistance = Number(zactionzonedef.movementdistance);
 			}
-			var zaxlename = zactionzonename.replace('actionzone-','actionzoneaxle-');
+			var zaxlename = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
 			var zaxledir = 'rotation.y';
 			var zswingdir = 1;
 			var zswingdist = 90;
@@ -578,7 +578,7 @@ WTWJS.prototype.addActionzoneSwingingDoor = function(zactionzonename, zactionzon
 		if (WTW.adminView == 1) {
 			if (dGet('wtw_bzones').title == 'Action Zones are Shown' || zactionzonedef.actionzoneid == dGet('wtw_tactionzoneid').value) {
 				WTW.setOpacity(zactionzonename, .2);
-				WTW.setOpacity(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), 1);
+				WTW.setOpacity(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), 1);
 			}
 		}
 		WTW.actionZones[zactionzoneind].shown = '2';
@@ -605,12 +605,12 @@ WTWJS.prototype.addActionzoneRotate = function(zactionzonename, zactionzoneind, 
 		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
 		var zrotatespeed = Number(zactionzonedef.rotatespeed);
 		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
-		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
-		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle-'));
-		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole-'));
-		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
+		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
+		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'));
+		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 		if (zactionzoneaxlebase == null) {
-			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
+			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
 			zactionzoneaxlebase.parent = zparent;
 			zactionzoneaxlebase.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxlebase.rotation = new BABYLON.Vector3(WTW.getRadians(zaxisrotx), WTW.getRadians(0), WTW.getRadians(zaxisrotz));
@@ -618,7 +618,7 @@ WTWJS.prototype.addActionzoneRotate = function(zactionzonename, zactionzoneind, 
 		}
 		if (zactionzoneaxle == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle-'));
+			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
 			zactionzoneaxle.parent = zactionzoneaxlebase;
 			zactionzoneaxle.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxle.rotation = new BABYLON.Vector3(0,0,0);
@@ -637,13 +637,13 @@ WTWJS.prototype.addActionzoneRotate = function(zactionzonename, zactionzoneind, 
 			zmolddef4.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef4.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef4.opacity = 1;
-			zmolddef4.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zmolddef4.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
 			zactionzoneaxlepole.isPickable = false;
 			zactionzoneaxlepole.checkCollisions = false;
 		}
 		if (zactionzoneaxlebase2 == null) {
-			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 			zactionzoneaxlebase2.parent = zactionzoneaxle;
 			zactionzoneaxlebase2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxlebase2.rotation = new BABYLON.Vector3(WTW.getRadians(-zaxisrotx),WTW.getRadians(0),WTW.getRadians(-zaxisrotz));
@@ -689,7 +689,7 @@ WTWJS.prototype.addActionzoneRotate = function(zactionzonename, zactionzoneind, 
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == 'Action Zones are Shown') {
 				WTW.setOpacity(zactionzonename, .2);
-				WTW.setOpacity(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), 1);
+				WTW.setOpacity(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), 1);
 			}
 		}
 		WTW.actionZones[zactionzoneind].status = 1;
@@ -716,12 +716,12 @@ WTWJS.prototype.addActionzoneClickSlidingDoor = function(zactionzonename, zactio
 		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
 		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
 		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
-		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
-		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle-'));
-		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole-'));
-		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
+		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
+		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'));
+		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 		if (zactionzoneaxlebase == null) {
-			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
+			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
 			zactionzoneaxlebase.parent = zparent;
 			zactionzoneaxlebase.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxlebase.rotation = new BABYLON.Vector3(WTW.getRadians(zaxisrotx), WTW.getRadians(zaxisroty), WTW.getRadians(zaxisrotz));
@@ -729,7 +729,7 @@ WTWJS.prototype.addActionzoneClickSlidingDoor = function(zactionzonename, zactio
 		}
 		if (zactionzoneaxle == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle-'));
+			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
 			zactionzoneaxle.parent = zactionzoneaxlebase;
 			zactionzoneaxle.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxle.rotation = new BABYLON.Vector3(0,0,0);
@@ -745,13 +745,13 @@ WTWJS.prototype.addActionzoneClickSlidingDoor = function(zactionzonename, zactio
 			zmolddef4.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef4.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef4.opacity = 0;
-			zmolddef4.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zmolddef4.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
 			zactionzoneaxlepole.isPickable = false;
 			zactionzoneaxlepole.checkCollisions = false;
 		}
 		if (zactionzoneaxlebase2 == null) {
-			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 			zactionzoneaxlebase2.parent = zactionzoneaxle;
 			zactionzoneaxlebase2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxlebase2.rotation = new BABYLON.Vector3(WTW.getRadians(-zaxisrotx),WTW.getRadians(-zaxisroty),WTW.getRadians(-zaxisrotz));
@@ -845,7 +845,7 @@ WTWJS.prototype.addActionzoneClickSlidingDoor = function(zactionzonename, zactio
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == 'Action Zones are Shown') {
 				WTW.setOpacity(zactionzonename, .2);
-				WTW.setOpacity(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), 1);
+				WTW.setOpacity(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), 1);
 			}
 		}
 		WTW.actionZones[zactionzoneind].shown = '2';
@@ -944,12 +944,12 @@ WTWJS.prototype.addActionzonePeoplemover = function(zactionzonename, zactionzone
 		var zroty = Number(zactionzonedef.rotation.y);
 		var zrotz = Number(zactionzonedef.rotation.z);
 		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
-		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
-		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle-'));
-		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole-'));
-		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
+		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
+		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'));
+		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 		if (zactionzoneaxlebase == null) {
-			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
+			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
 			zactionzoneaxlebase.parent = zparent;
 			zactionzoneaxlebase.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxlebase.rotation = new BABYLON.Vector3(WTW.getRadians(zaxisrotx), WTW.getRadians(zaxisroty), WTW.getRadians(zaxisrotz));
@@ -957,7 +957,7 @@ WTWJS.prototype.addActionzonePeoplemover = function(zactionzonename, zactionzone
 		}
 		if (zactionzoneaxle == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle-'));
+			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
 			zactionzoneaxle.parent = zactionzoneaxlebase;
 			zactionzoneaxle.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxle.rotation = new BABYLON.Vector3(0,0,0);
@@ -976,13 +976,13 @@ WTWJS.prototype.addActionzonePeoplemover = function(zactionzonename, zactionzone
 			zmolddef4.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef4.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef4.opacity = 0;
-			zmolddef4.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zmolddef4.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
 			zactionzoneaxlepole.isPickable = false;
 			zactionzoneaxlepole.checkCollisions = false;
 		}
 		if (zactionzoneaxlebase2 == null) {
-			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 			zactionzoneaxlebase2.parent = zactionzoneaxle;
 			zactionzoneaxlebase2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxlebase2.scaling = new BABYLON.Vector3(1,1,1);
@@ -1221,7 +1221,7 @@ WTWJS.prototype.addActionzonePeoplemover = function(zactionzonename, zactionzone
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == 'Action Zones are Shown') {
 				WTW.setOpacity(zactionzonename, .2);
-				WTW.setOpacity(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), 1);
+				WTW.setOpacity(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), 1);
 			}
 		}
 		WTW.actionZones[zactionzoneind].shown = '2';
@@ -1254,12 +1254,12 @@ WTWJS.prototype.addActionzoneElevator = function(zactionzonename, zactionzoneind
 			}
 		}
 		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
-		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
-		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle-'));
-		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole-'));
-		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
+		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
+		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'));
+		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 		if (zactionzoneaxlebase == null) {
-			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
+			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
 			zactionzoneaxlebase.parent = zparent;
 			zactionzoneaxlebase.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxlebase.rotation = new BABYLON.Vector3(WTW.getRadians(zaxisrotx), WTW.getRadians(zaxisroty), WTW.getRadians(zaxisrotz));
@@ -1267,7 +1267,7 @@ WTWJS.prototype.addActionzoneElevator = function(zactionzonename, zactionzoneind
 		}
 		if (zactionzoneaxle == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle-'));
+			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
 			zactionzoneaxle.parent = zactionzoneaxlebase;
 			zactionzoneaxle.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxle.rotation = new BABYLON.Vector3(0,0,0);
@@ -1284,13 +1284,13 @@ WTWJS.prototype.addActionzoneElevator = function(zactionzonename, zactionzoneind
 			zmolddef4.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef4.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef4.opacity = 0;
-			zmolddef4.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zmolddef4.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
 			zactionzoneaxlepole.isPickable = false;
 			zactionzoneaxlepole.checkCollisions = false;
 		}
 		if (zactionzoneaxlebase2 == null) {
-			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 			zactionzoneaxlebase2.parent = zactionzoneaxle;
 			zactionzoneaxlebase2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxlebase2.rotation = new BABYLON.Vector3(WTW.getRadians(-zaxisrotx),WTW.getRadians(-zaxisroty),WTW.getRadians(-zaxisrotz));
@@ -1336,7 +1336,7 @@ WTWJS.prototype.addActionzoneElevator = function(zactionzonename, zactionzoneind
 						for (var i=0; i < WTW.actionZones.length; i++) {
 							if (WTW.actionZones[i] != null) {
 								if (zcgind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == 'clickactivatedslidingdoor') {
-									var zdooractionzoneaxlebase = WTW.getMeshOrNodeByID(WTW.actionZones[i].moldname.replace('actionzone-','actionzoneaxlebase-'));
+									var zdooractionzoneaxlebase = WTW.getMeshOrNodeByID(WTW.actionZones[i].moldname.replace('-actionzone-','-actionzoneaxlebase-'));
 									if (zdooractionzoneaxlebase != null) {
 										if (zdooractionzoneaxlebase.position.x == zelevatorbase.position.x && zdooractionzoneaxlebase.position.z == zelevatorbase.position.z) {
 											zelevatorridealong.position.y = zelevatorpath.position.y + (zelevatorridealong.scaling.y/2);
@@ -1379,7 +1379,7 @@ WTWJS.prototype.addActionzoneElevator = function(zactionzonename, zactionzoneind
 						for (var i=0; i < WTW.actionZones.length; i++) {
 							if (WTW.actionZones[i] != null) {
 								if (zcgind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == 'clickactivatedslidingdoor') {
-									var zdooractionzoneaxlebase = WTW.getMeshOrNodeByID(WTW.actionZones[i].moldname.replace('actionzone-','actionzoneaxlebase-'));
+									var zdooractionzoneaxlebase = WTW.getMeshOrNodeByID(WTW.actionZones[i].moldname.replace('-actionzone-','-actionzoneaxlebase-'));
 									if (zdooractionzoneaxlebase != null) {
 										if (zdooractionzoneaxlebase.position.x == zelevatorbase.position.x && zdooractionzoneaxlebase.position.z == zelevatorbase.position.z) {
 											zelevatorridealong.position.y = zelevatorpath.position.y + (zelevatorridealong.scaling.y/2);
@@ -1419,7 +1419,7 @@ WTWJS.prototype.addActionzoneElevator = function(zactionzonename, zactionzoneind
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == 'Action Zones are Shown') {
 				WTW.setOpacity(zactionzonename, .2);
-				WTW.setOpacity(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), 1);
+				WTW.setOpacity(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), 1);
 			}
 		}
 		WTW.actionZones[zactionzoneind].shown = '2';
@@ -1445,12 +1445,12 @@ WTWJS.prototype.addActionzoneSeat = function(zactionzonename, zactionzoneind, za
 		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
 		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
 		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
-		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
-		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle-'));
-		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole-'));
-		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
+		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
+		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'));
+		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 		if (zactionzoneaxlebase == null) {
-			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
+			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
 			zactionzoneaxlebase.parent = zparent;
 			zactionzoneaxlebase.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
 			zactionzoneaxlebase.rotation = new BABYLON.Vector3(0,0,0);
@@ -1458,7 +1458,7 @@ WTWJS.prototype.addActionzoneSeat = function(zactionzonename, zactionzoneind, za
 		}
 		if (zactionzoneaxle == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle-'));
+			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
 			zactionzoneaxle.parent = zactionzoneaxlebase;
 			zactionzoneaxle.position = new BABYLON.Vector3(zaxispositionx+4, zaxispositiony-8, zaxispositionz);
 			zactionzoneaxle.rotation = new BABYLON.Vector3(0,WTW.getRadians(-90),0);
@@ -1474,15 +1474,15 @@ WTWJS.prototype.addActionzoneSeat = function(zactionzonename, zactionzoneind, za
 			zmolddef4.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef4.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef4.opacity = 1;
-			zmolddef4.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zmolddef4.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
 			zactionzoneaxlepole.isPickable = false;
 			zactionzoneaxlepole.checkCollisions = false;
 			zactionzoneaxlepole.rotation.x = WTW.getRadians(90);
 			zactionzoneaxlepole.position.y += 5;
 		}
 		if (zactionzoneaxlebase2 == null) {
-			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 			zactionzoneaxlebase2.parent = zactionzoneaxle;
 			zactionzoneaxlebase2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxlebase2.rotation = new BABYLON.Vector3(0, WTW.getRadians(-90), 0);
@@ -1508,7 +1508,7 @@ WTWJS.prototype.addActionzoneSeat = function(zactionzonename, zactionzoneind, za
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == 'Action Zones are Shown') {
 				WTW.setOpacity(zactionzonename, .2);
-				WTW.setOpacity(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), 1);
+				WTW.setOpacity(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), 1);
 			}
 		}
 		WTW.actionZones[zactionzoneind].shown = '2';	
@@ -1534,12 +1534,12 @@ WTWJS.prototype.addActionzonePassengerSeat = function(zactionzonename, zactionzo
 		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
 		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
 		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
-		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
-		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle-'));
-		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole-'));
-		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
+		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
+		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'));
+		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 		if (zactionzoneaxlebase == null) {
-			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
+			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
 			zactionzoneaxlebase.parent = zparent;
 			zactionzoneaxlebase.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxlebase.rotation = new BABYLON.Vector3(0,0,0);
@@ -1547,7 +1547,7 @@ WTWJS.prototype.addActionzonePassengerSeat = function(zactionzonename, zactionzo
 		}
 		if (zactionzoneaxle == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle-'));
+			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
 			zactionzoneaxle.parent = zactionzoneaxlebase;
 			zactionzoneaxle.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxle.rotation = new BABYLON.Vector3(WTW.getRadians(zaxisrotx), WTW.getRadians(zaxisroty), WTW.getRadians(zaxisrotz));
@@ -1563,14 +1563,14 @@ WTWJS.prototype.addActionzonePassengerSeat = function(zactionzonename, zactionzo
 			zmolddef4.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef4.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef4.opacity = 0;
-			zmolddef4.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zmolddef4.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
 			zactionzoneaxlepole.position.z = 5;
 			zactionzoneaxlepole.isPickable = false;
 			zactionzoneaxlepole.checkCollisions = false;
 		}
 		if (zactionzoneaxlebase2 == null) {
-			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 			zactionzoneaxlebase2.parent = zactionzoneaxle;
 			zactionzoneaxlebase2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxlebase2.rotation = new BABYLON.Vector3(0,0,0);
@@ -1597,7 +1597,7 @@ WTWJS.prototype.addActionzonePassengerSeat = function(zactionzonename, zactionzo
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == 'Action Zones are Shown') {
 				WTW.setOpacity(zactionzonename, .2);
-				WTW.setOpacity(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), 1);
+				WTW.setOpacity(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), 1);
 			}
 		}
 		WTW.actionZones[zactionzoneind].shown = '2';		
@@ -1623,12 +1623,12 @@ WTWJS.prototype.addActionzoneDriverSeat = function(zactionzonename, zactionzonei
 		var zaxisroty = Number(zactionzonedef.axis.rotation.y);
 		var zaxisrotz = Number(zactionzonedef.axis.rotation.z);
 		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
-		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
-		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle-'));
-		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole-'));
-		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
+		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
+		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'));
+		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 		if (zactionzoneaxlebase == null) {
-			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
+			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
 			zactionzoneaxlebase.parent = zparent;
 			zactionzoneaxlebase.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxlebase.rotation = new BABYLON.Vector3(0,0,0);
@@ -1636,7 +1636,7 @@ WTWJS.prototype.addActionzoneDriverSeat = function(zactionzonename, zactionzonei
 		}
 		if (zactionzoneaxle == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle-'));
+			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
 			zactionzoneaxle.parent = zactionzoneaxlebase;
 			zactionzoneaxle.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxle.rotation = new BABYLON.Vector3(WTW.getRadians(zaxisrotx), WTW.getRadians(zaxisroty), WTW.getRadians(zaxisrotz));
@@ -1652,14 +1652,14 @@ WTWJS.prototype.addActionzoneDriverSeat = function(zactionzonename, zactionzonei
 			zmolddef4.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef4.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef4.opacity = 0;
-			zmolddef4.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zmolddef4.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
 			zactionzoneaxlepole.position.z = 5;
 			zactionzoneaxlepole.isPickable = false;
 			zactionzoneaxlepole.checkCollisions = false;
 		}
 		if (zactionzoneaxlebase2 == null) {
-			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 			zactionzoneaxlebase2.parent = zactionzoneaxle;
 			zactionzoneaxlebase2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxlebase2.rotation = new BABYLON.Vector3(0,0,0);
@@ -1686,7 +1686,7 @@ WTWJS.prototype.addActionzoneDriverSeat = function(zactionzonename, zactionzonei
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == 'Action Zones are Shown') {
 				WTW.setOpacity(zactionzonename, .2);
-				WTW.setOpacity(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), 1);
+				WTW.setOpacity(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), 1);
 			}
 		}
 		WTW.actionZones[zactionzoneind].shown = '2';		
@@ -1717,14 +1717,14 @@ WTWJS.prototype.addActionzoneDriverTurnAngle = function(zactionzonename, zaction
 			zconnectinggridind = Number(znamepart[2]);
 		}
 		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
-		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
-		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle-'));
-		var zactionzoneaxle2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle2-'));
-		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole-'));
-		var zactionzoneaxlepole2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole2-'));
-		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
+		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
+		var zactionzoneaxle2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle2-'));
+		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'));
+		var zactionzoneaxlepole2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole2-'));
+		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 		if (zactionzoneaxlebase == null) {
-			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
+			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
 			zactionzoneaxlebase.parent = zparent;
 			zactionzoneaxlebase.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxlebase.rotation = new BABYLON.Vector3(WTW.getRadians(zaxisrotx), WTW.getRadians(zaxisroty), WTW.getRadians(zaxisrotz));
@@ -1732,7 +1732,7 @@ WTWJS.prototype.addActionzoneDriverTurnAngle = function(zactionzonename, zaction
 		}
 		if (zactionzoneaxle == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle-'));
+			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
 			zactionzoneaxle.parent = zactionzoneaxlebase;
 			zactionzoneaxle.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxle.rotation = new BABYLON.Vector3(0,0,0);
@@ -1751,13 +1751,13 @@ WTWJS.prototype.addActionzoneDriverTurnAngle = function(zactionzonename, zaction
 			zmolddef4.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef4.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef4.opacity = 0;
-			zmolddef4.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zmolddef4.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
 			zactionzoneaxlepole.isPickable = false;
 			zactionzoneaxlepole.checkCollisions = false;
 		}
 		if (zactionzoneaxlebase2 == null) {
-			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 			zactionzoneaxlebase2.parent = zactionzoneaxle;
 			zactionzoneaxlebase2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxlebase2.rotation = new BABYLON.Vector3(WTW.getRadians(-zaxisrotx), WTW.getRadians(-zaxisroty), WTW.getRadians(-zaxisrotz));
@@ -1777,7 +1777,7 @@ WTWJS.prototype.addActionzoneDriverTurnAngle = function(zactionzonename, zaction
 			zactionzone.isPickable = false;
 			zactionzone.checkCollisions = false;
 			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
-			var zaxlename = zactionzonename.replace('actionzone-','actionzoneaxle-'); 
+			var zaxlename = zactionzonename.replace('-actionzone-','-actionzoneaxle-'); 
 			try {
 				var zcondition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
 					var zcurrentfactor = Number(zactionzonedef.axis.rotatedegrees);
@@ -1850,7 +1850,7 @@ WTWJS.prototype.addActionzoneDriverTurnAngle = function(zactionzonename, zaction
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == 'Action Zones are Shown') {
 				WTW.setOpacity(zactionzonename, .2);
-				WTW.setOpacity(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), 1);
+				WTW.setOpacity(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), 1);
 			}
 		}
 		WTW.actionZones[zactionzoneind].shown = '2';
@@ -1881,14 +1881,14 @@ WTWJS.prototype.addActionzoneDriverTurningWheel = function(zactionzonename, zact
 			zconnectinggridind = Number(znamepart[2]);
 		}
 		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
-		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
-		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle-'));
-		var zactionzoneaxle2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle2-'));
-		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole-'));
-		var zactionzoneaxlepole2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole2-'));
-		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
+		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
+		var zactionzoneaxle2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle2-'));
+		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'));
+		var zactionzoneaxlepole2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole2-'));
+		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 		if (zactionzoneaxlebase == null) {
-			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
+			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
 			zactionzoneaxlebase.parent = zparent;
 			zactionzoneaxlebase.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxlebase.rotation = new BABYLON.Vector3(WTW.getRadians(zaxisrotx), WTW.getRadians(zaxisroty), WTW.getRadians(zaxisrotz));
@@ -1896,7 +1896,7 @@ WTWJS.prototype.addActionzoneDriverTurningWheel = function(zactionzonename, zact
 		}
 		if (zactionzoneaxle == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle-'));
+			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
 			zactionzoneaxle.parent = zactionzoneaxlebase;
 			zactionzoneaxle.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxle.rotation = new BABYLON.Vector3(0,0,0);
@@ -1915,13 +1915,13 @@ WTWJS.prototype.addActionzoneDriverTurningWheel = function(zactionzonename, zact
 			zmolddef4.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef4.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef4.opacity = 0;
-			zmolddef4.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zmolddef4.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
 			zactionzoneaxlepole.isPickable = false;
 			zactionzoneaxlepole.checkCollisions = false;
 		}
 		if (zactionzoneaxlebase2 == null) {
-			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 			zactionzoneaxlebase2.parent = zactionzoneaxle;
 			zactionzoneaxlebase2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxlebase2.rotation = new BABYLON.Vector3(WTW.getRadians(-zaxisrotx), WTW.getRadians(-zaxisroty), WTW.getRadians(-zaxisrotz));
@@ -1929,7 +1929,7 @@ WTWJS.prototype.addActionzoneDriverTurningWheel = function(zactionzonename, zact
 		}
 		if (zactionzoneaxle2 == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle2-'));
+			zactionzoneaxle2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle2-'));
 			zactionzoneaxle2.parent = zactionzoneaxlebase2;
 			zactionzoneaxle2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxle2.rotation = new BABYLON.Vector3(0,0,0);
@@ -2017,8 +2017,8 @@ WTWJS.prototype.addActionzoneDriverTurningWheel = function(zactionzonename, zact
 			zmolddef7.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef7.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef7.opacity = 0;
-			zmolddef7.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole2 = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole2-'), zmolddef7, zmolddef7.parentname, zmolddef7.covering);
+			zmolddef7.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole2 = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole2-'), zmolddef7, zmolddef7.parentname, zmolddef7.covering);
 			zactionzoneaxlepole2.isPickable = false;
 			zactionzoneaxlepole2.checkCollisions = false;
 		}
@@ -2036,7 +2036,7 @@ WTWJS.prototype.addActionzoneDriverTurningWheel = function(zactionzonename, zact
 			zactionzone.isPickable = false;
 			zactionzone.checkCollisions = false;
 			zactionzone.position = new BABYLON.Vector3(zpositionx, zpositiony, zpositionz);
-			var zaxlename = zactionzonename.replace('actionzone-','actionzoneaxle-'); 
+			var zaxlename = zactionzonename.replace('-actionzone-','-actionzoneaxle-'); 
 			try {
 				var zcondition1 = new BABYLON.PredicateCondition(scene.actionManager, function () {
 					var zcurrentfactor = Number(zactionzonedef.axis.rotatedegrees);
@@ -2109,7 +2109,7 @@ WTWJS.prototype.addActionzoneDriverTurningWheel = function(zactionzonename, zact
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == 'Action Zones are Shown') {
 				WTW.setOpacity(zactionzonename, .2);
-				WTW.setOpacity(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), 1);
+				WTW.setOpacity(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), 1);
 			}
 		}
 		WTW.actionZones[zactionzoneind].shown = '2';
@@ -2140,12 +2140,12 @@ WTWJS.prototype.addActionzoneDriverWheel = function(zactionzonename, zactionzone
 			zconnectinggridind = Number(znamepart[2]);
 		}
 		zactionzone = WTW.getMeshOrNodeByID(zactionzonename);
-		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
-		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxle-'));
-		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlepole-'));
-		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+		var zactionzoneaxlebase = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
+		var zactionzoneaxle = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
+		var zactionzoneaxlepole = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'));
+		var zactionzoneaxlebase2 = WTW.getMeshOrNodeByID(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 		if (zactionzoneaxlebase == null) {
-			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase-'));
+			zactionzoneaxlebase = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase-'));
 			zactionzoneaxlebase.parent = zparent;
 			zactionzoneaxlebase.position = new BABYLON.Vector3(zaxispositionx, zaxispositiony, zaxispositionz);
 			zactionzoneaxlebase.rotation = new BABYLON.Vector3(WTW.getRadians(zaxisrotx), WTW.getRadians(zaxisroty), WTW.getRadians(zaxisrotz));
@@ -2153,7 +2153,7 @@ WTWJS.prototype.addActionzoneDriverWheel = function(zactionzonename, zactionzone
 		}
 		if (zactionzoneaxle == null) {
 			WTW.actionZones[zactionzoneind].status = 0;
-			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxle-'));
+			zactionzoneaxle = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxle-'));
 			zactionzoneaxle.parent = zactionzoneaxlebase;
 			zactionzoneaxle.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxle.rotation = new BABYLON.Vector3(0,0,0);
@@ -2241,13 +2241,13 @@ WTWJS.prototype.addActionzoneDriverWheel = function(zactionzonename, zactionzone
 			zmolddef4.graphics.texture.id = '7orpcjosyct5b1bf';
 			zmolddef4.graphics.texture.path = '/content/system/stock/vaxis-512x512.png';
 			zmolddef4.opacity = 0;
-			zmolddef4.parentname = zactionzonename.replace('actionzone-','actionzoneaxle-');
-			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
+			zmolddef4.parentname = zactionzonename.replace('-actionzone-','-actionzoneaxle-');
+			zactionzoneaxlepole = WTW.addMold(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), zmolddef4, zmolddef4.parentname, zmolddef4.covering);
 			zactionzoneaxlepole.isPickable = false;
 			zactionzoneaxlepole.checkCollisions = false;
 		}
 		if (zactionzoneaxlebase2 == null) {
-			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('actionzone-','actionzoneaxlebase2-'));
+			zactionzoneaxlebase2 = new BABYLON.TransformNode(zactionzonename.replace('-actionzone-','-actionzoneaxlebase2-'));
 			zactionzoneaxlebase2.parent = zactionzoneaxle;
 			zactionzoneaxlebase2.position = new BABYLON.Vector3(0,0,0);
 			zactionzoneaxlebase2.rotation = new BABYLON.Vector3(WTW.getRadians(-zaxisrotx), WTW.getRadians(-zaxisroty), WTW.getRadians(-zaxisrotz));
@@ -2271,7 +2271,7 @@ WTWJS.prototype.addActionzoneDriverWheel = function(zactionzonename, zactionzone
 		if (dGet('wtw_bzones') != null) {
 			if (WTW.adminView == 1 && dGet('wtw_bzones').title == 'Action Zones are Shown') {
 				WTW.setOpacity(zactionzonename, .2);
-				WTW.setOpacity(zactionzonename.replace('actionzone-','actionzoneaxlepole-'), 1);
+				WTW.setOpacity(zactionzonename.replace('-actionzone-','-actionzoneaxlepole-'), 1);
 			}
 		}
 		WTW.actionZones[zactionzoneind].shown = '2';

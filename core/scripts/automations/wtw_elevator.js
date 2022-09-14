@@ -434,7 +434,7 @@ WTWJS.prototype.elevatorHeight = function(zconnectinggridind, zconnectinggridid)
 		for (var i=0; i < WTW.actionZones.length; i++) {
 			if (WTW.actionZones[i] != null) {
 				if (zconnectinggridind == WTW.actionZones[i].connectinggridind && WTW.actionZones[i].actionzonetype == 'elevator') {
-					var zactionzoneaxle = WTW.getMeshOrNodeByID(WTW.actionZones[i].moldname.replace('actionzone-','actionzoneaxle-'));
+					var zactionzoneaxle = WTW.getMeshOrNodeByID(WTW.actionZones[i].moldname.replace('-actionzone-','-actionzoneaxle-'));
 					if (zactionzoneaxle != null) {
 						zeheight = zactionzoneaxle.position.y;
 					}

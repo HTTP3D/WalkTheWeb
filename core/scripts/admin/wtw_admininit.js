@@ -67,7 +67,7 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 					WTW.openFullPageForm('updates','','');
 					break;
 				case '2':
-					WTW.openFullPageForm('plugins','All Plugins');
+					WTW.openFullPageForm('plugins','All 3D Plugins');
 					break;
 				default:
 					break;

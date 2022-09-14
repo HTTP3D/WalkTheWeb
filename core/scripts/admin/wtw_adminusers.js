@@ -14,6 +14,25 @@ WTWJS.prototype.openAllUsers = async function(zfilter) {
 		if (zfilter == undefined) {
 			zfilter = 'All Users';
 		}
+		var zusersnote = '';
+		switch (zfilter) {
+			case 'Privileged Users':
+				zusersnote = '<b>Privileged Users</b> provides a list of users that have been granted one or more security Roles.<br />';
+				break;
+			case 'Local Users':
+				zusersnote = '<b>Local Users</b> provides a list of local users on this server that have been granted one or more security Roles.<br />';
+				break;
+			case 'Global Users':
+				zusersnote = '<b>Global Users</b> provides a list of WalkTheWeb Global users that have been granted one or more security roles.<br />';
+				break;
+			case 'Visiting Users':
+				zusersnote = '<b>Visiting Users</b> provides a list of logged in users including those who have visited using a WalkTheWeb Global Login, that do not have any security roles on this server.<br />';
+				break;
+			default:
+				zusersnote = '<b>All Users</b> provides a list of users including those who have visited using a WalkTheWeb Global Login.<br />';
+				break;
+		}
+		dGet('wtw_usersnote').innerHTML = zusersnote;
 		dGet('wtw_filter').value = zfilter;
 		dGet('wtw_alluserstitle').innerHTML = "<div id='wtw_adduserbutton' class='wtw-greenbuttonright' onclick=\"WTW.addUser();\">Add New</div>" + zfilter;
 		WTW.show('wtw_userspage');

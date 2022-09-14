@@ -866,6 +866,7 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 	/* note, names that end in 'ind' identify the instance */
 	/* allows multiple ids in the same scene - picture 4 chairs around a table - each an instance in their own position, rotation, and scaling */
 	try {
+		var zserver = 'local';
 		var zparentconnectinggridind = -1;
 		var zparentconnectinggridid = '';
 		if (zaddconnectinggrids.webitems != undefined) {
@@ -891,13 +892,16 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 					}
 					/* load level defines primary web object (highest level) to load or if it is placed under another web object (like 3D Building in a 3D Community) */
 					var zparentname = '';
+					if (WTW.connectingGrids[zconnectinggridind].serverfranchiseid != '') {
+						zserver = WTW.connectingGrids[zconnectinggridind].serverfranchiseid;
+					}
 					if (WTW.connectingGrids[zconnectinggridind].loadlevel == '1') {
 						/* primary level item loaded in 3D Scene */
 						if (WTW.connectingGrids[zconnectinggridind].parentwebid == '') {
 							/* web object has no parent (is the parent of all the rest) */
 							zparentconnectinggridind = zconnectinggridind;
 							zparentconnectinggridid = WTW.connectingGrids[zconnectinggridind].connectinggridid;
-							WTW.connectingGrids[zconnectinggridind].moldname = 'local-connectinggrids-' + zconnectinggridind + '-' + zparentconnectinggridid + '--';
+							WTW.connectingGrids[zconnectinggridind].moldname = zserver + '-connectinggrids-' + zconnectinggridind + '-' + zparentconnectinggridid + '--';
 							WTW.connectingGrids[zconnectinggridind].shown = '1';
 							WTW.connectingGrids[zconnectinggridind].parentname = zparentname;
 							WTW.connectingGrids[zconnectinggridind].parentconnectinggridind = -1;
@@ -909,8 +913,8 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 							dGet('wtw_tconnectinggridid').value = zparentconnectinggridid;
 						} else if (zparentconnectinggridind != -1) {
 							/* web object has a parent - set the parent */
-							WTW.connectingGrids[zconnectinggridind].moldname = 'local-connectinggrids-' + zconnectinggridind + '-' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '-' + zparentconnectinggridind + '-' + zparentconnectinggridid;
-							zparentname = 'local-connectinggrids-' + zparentconnectinggridind + '-' + zparentconnectinggridid + '--';
+							WTW.connectingGrids[zconnectinggridind].moldname = zserver + '-connectinggrids-' + zconnectinggridind + '-' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '-' + zparentconnectinggridind + '-' + zparentconnectinggridid;
+							zparentname = zserver + '-connectinggrids-' + zparentconnectinggridind + '-' + zparentconnectinggridid + '--';
 							WTW.mainParent = zparentname;
 							WTW.connectingGrids[zconnectinggridind].shown = '0';
 							WTW.connectingGrids[zconnectinggridind].parentname = zparentname;
@@ -919,9 +923,15 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 						}
 						/* fetch action zones for the connecting grid item - triggers further loading of web object */
 						if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid == '') {
-							WTW.getJSON('/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind, 
+							zserver = 'local';
+							var zactionzoneurl = '/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind;
+							if (WTW.connectingGrids[zconnectinggridind].childserverfranchiseid != '') {
+								zserver = WTW.connectingGrids[zconnectinggridind].childserverfranchiseid;
+								zactionzoneurl = 'https://3dnet.walktheweb.com/connect/franchiseactionzonesbywebid.php?serverfranchiseid=' + zserver + '&franchiseid=' + WTW.connectingGrids[zconnectinggridind].childwebid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind;
+							}
+							WTW.getJSON(zactionzoneurl, 
 								function(zresponse) {
-									WTW.loadActionZones(JSON.parse(zresponse));
+									WTW.loadActionZones(JSON.parse(zresponse), zserver);
 								}
 							);
 						}
@@ -929,17 +939,23 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 						/* secondary level item loaded in 3D Scene */
 						var zsubparentconnectinggridid = WTW.connectingGrids[zconnectinggridind].parentconnectinggridid;
 						var zsubparentconnectinggridind = WTW.getConnectingGridInd(zsubparentconnectinggridid);
-						WTW.connectingGrids[zconnectinggridind].moldname = 'local-connectinggrids-' + zconnectinggridind + '-' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '-' + zsubparentconnectinggridind + '-' + zsubparentconnectinggridid;
-						zparentname = 'local-connectinggrids-' + zsubparentconnectinggridind + '-' + zsubparentconnectinggridid + '-' + zparentconnectinggridind + '-' + zparentconnectinggridid;
+						WTW.connectingGrids[zconnectinggridind].moldname = zserver + '-connectinggrids-' + zconnectinggridind + '-' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '-' + zsubparentconnectinggridind + '-' + zsubparentconnectinggridid;
+						zparentname = zserver + '-connectinggrids-' + zsubparentconnectinggridind + '-' + zsubparentconnectinggridid + '-' + zparentconnectinggridind + '-' + zparentconnectinggridid;
 						WTW.connectingGrids[zconnectinggridind].shown = '0';
 						WTW.connectingGrids[zconnectinggridind].parentname = zparentname;
 						WTW.connectingGrids[zconnectinggridind].parentconnectinggridind = zsubparentconnectinggridind;
 						WTW.connectingGrids[zconnectinggridind].parentconnectinggridid = zsubparentconnectinggridid;
 						/* fetch action zones for the connecting grid item - triggers further loading of web object */
 						if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid == '') {
-							WTW.getJSON('/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind, 
+							zserver = 'local';
+							var zactionzoneurl = '/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind;
+							if (WTW.connectingGrids[zconnectinggridind].childserverfranchiseid != '') {
+								zserver = WTW.connectingGrids[zconnectinggridind].childserverfranchiseid;
+								zactionzoneurl = 'https://3dnet.walktheweb.com/connect/franchiseactionzonesbywebid.php?serverfranchiseid=' + zserver + '&franchiseid=' + WTW.connectingGrids[zconnectinggridind].childwebid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind;
+							}
+							WTW.getJSON(zactionzoneurl, 
 								function(zresponse) {
-									WTW.loadActionZones(JSON.parse(zresponse));
+									WTW.loadActionZones(JSON.parse(zresponse), zserver);
 								}
 							);
 						}
@@ -994,9 +1010,15 @@ WTWJS.prototype.getActionZones = async function(zconnectinggridind) {
 			}
 			/* fetch the action zones from the internet for a given web object */
 			if (zaltloadactionzoneid == '') {
-				WTW.getAsyncJSON('/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind, 
+				var zserver = 'local';
+				var zactionzoneurl = '/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind;
+				if (WTW.connectingGrids[zconnectinggridind].childserverfranchiseid != '') {
+					zserver = WTW.connectingGrids[zconnectinggridind].childserverfranchiseid;
+					zactionzoneurl = 'https://3dnet.walktheweb.com/connect/franchiseactionzonesbywebid.php?serverfranchiseid=' + zserver + '&franchiseid=' + WTW.connectingGrids[zconnectinggridind].childwebid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind;
+				}
+				WTW.getAsyncJSON(zactionzoneurl, 
 					function(zresponse) {
-						WTW.loadActionZones(JSON.parse(zresponse));
+						WTW.loadActionZones(JSON.parse(zresponse), zserver);
 					}
 				);
 			}
@@ -1006,7 +1028,7 @@ WTWJS.prototype.getActionZones = async function(zconnectinggridind) {
 	} 
 }
 
-WTWJS.prototype.loadActionZones = function(zaddactionzones) {
+WTWJS.prototype.loadActionZones = function(zaddactionzones, zserver) {
 	/* load the fetched action zone definitions to the action zones array */
 	try {
 		if (zaddactionzones.actionzones != undefined) {
@@ -1032,7 +1054,7 @@ WTWJS.prototype.loadActionZones = function(zaddactionzones) {
 						if (zconnectinggridname.indexOf('-') > -1) {
 							var znamepart = zconnectinggridname.split('-');
 							if (znamepart[3] != null) {
-								zparentname = 'local-connectinggrids-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + znamepart[2] + '-' + znamepart[3];
+								zparentname = zserver + '-connectinggrids-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + znamepart[2] + '-' + znamepart[3];
 							}
 						}
 						WTW.actionZones[zactionzoneind].parentname = zparentname;
@@ -1040,7 +1062,7 @@ WTWJS.prototype.loadActionZones = function(zaddactionzones) {
 						WTW.actionZones[zactionzoneind].parentname = zconnectinggridname;
 					}
 					/* set the name of the action zone including instance (identify mutiple instances of the same web object in the scene) */
-					var zactionzonename = 'local-actionzone-' + zactionzoneind + '-' + WTW.actionZones[zactionzoneind].actionzoneid + '-' + WTW.actionZones[zactionzoneind].connectinggridind + '-' + WTW.actionZones[zactionzoneind].connectinggridid + '-' + WTW.actionZones[zactionzoneind].actionzonetype;
+					var zactionzonename = zserver + '-actionzone-' + zactionzoneind + '-' + WTW.actionZones[zactionzoneind].actionzoneid + '-' + WTW.actionZones[zactionzoneind].connectinggridind + '-' + WTW.actionZones[zactionzoneind].connectinggridid + '-' + WTW.actionZones[zactionzoneind].actionzonetype;
 					WTW.actionZones[zactionzoneind].moldname = zactionzonename;
 					/* test for alternate connecting grid (example - attach to action zone) */
 					WTW.attachConnectingGridToActionZone(zactionzoneind);
@@ -1096,6 +1118,7 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 	/* when your avatar enters a Load action zone, the Mold definitions are fetched fro the internet then added to the local arrays to be added to the scene on demand */
 	/* webid is the communityid, buildingid, or thingid for the web object */
 	try {
+		var zserver = 'local';
 		var zcommunityid = '';
 		var zbuildingid = '';
 		var zthingid = '';
@@ -1124,6 +1147,9 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 				if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid != undefined) {
 					zaltloadactionzoneid = WTW.connectingGrids[zconnectinggridind].altloadactionzoneid;
 				}
+				if (WTW.connectingGrids[zconnectinggridind].childserverfranchiseid != '') {
+					zserver = WTW.connectingGrids[zconnectinggridind].childserverfranchiseid;
+				}
 			}
 			if (zparentname == '') {
 				/* updated 3.3.2 was missing assignment */
@@ -1132,7 +1158,11 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 		}
 		/* fetch action zones to be loaded by the load zone */
 		if (zaltloadactionzoneid == '') {
-			WTW.getAsyncJSON('/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind, 
+			var zactionzoneurl = '/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
+			if (zserver != 'local') {
+				zactionzoneurl = 'https://3dnet.walktheweb.com/connect/franchiseactionzonesbywebid.php?serverfranchiseid=' + zserver + '&franchiseid=' + WTW.connectingGrids[zconnectinggridind].childwebid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
+			}
+			WTW.getAsyncJSON(zactionzoneurl, 
 				function(zresponse) {
 					WTW.loadActionZones(JSON.parse(zresponse));
 				}
@@ -1162,7 +1192,11 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 			WTW.show('wtw_graphichelpadmin');
 		}
 		/* fetch molds (mesh definitions) to be loaded by the load zone */
-		WTW.getAsyncJSON('/connect/moldsbywebid.php?webcommunityid=' + communityid + '&webbuildingid=' + buildingid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentactionzoneind=' + zactionzoneind + '&actionzoneid=' + zactionzoneid + '&parentname=' + WTW.actionZones[zactionzoneind].parentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind + '&userid=' + dGet('wtw_tuserid').value + '&graphiclevel=' + zgraphiclevel, 
+		var zmoldsurl = '/connect/moldsbywebid.php?webcommunityid=' + communityid + '&webbuildingid=' + buildingid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentactionzoneind=' + zactionzoneind + '&actionzoneid=' + zactionzoneid + '&parentname=' + WTW.actionZones[zactionzoneind].parentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind + '&userid=' + dGet('wtw_tuserid').value + '&graphiclevel=' + zgraphiclevel;
+		if (zserver != 'local') {
+			zmoldsurl = 'https://3dnet.walktheweb.com/connect/franchisemoldsbywebid.php?serverfranchiseid=' + zserver + '&franchiseid=' + WTW.connectingGrids[zconnectinggridind].childwebid + '&webcommunityid=' + communityid + '&webbuildingid=' + buildingid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentactionzoneind=' + zactionzoneind + '&actionzoneid=' + zactionzoneid + '&parentname=' + WTW.actionZones[zactionzoneind].parentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind + '&userid=' + dGet('wtw_tuserid').value + '&graphiclevel=' + zgraphiclevel;
+		}
+		WTW.getAsyncJSON(zmoldsurl, 
 			function(zresponse) {
 				WTW.loadMolds(JSON.parse(zresponse));
 			}
@@ -1170,7 +1204,7 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 		/* fetch automations (automated sequences) to be loaded by the load zone (temporarily disabled - until they are added to the admin interface) */
 /*		WTW.getAsyncJSON('/connect/automationsbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + parentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind, 
 			function(zresponse) {
-				WTW.loadAutomations(JSON.parse(zresponse));
+				WTW.loadAutomations(JSON.parse(zresponse), zserver);
 			}
 		); */
 	} catch (ex) {
@@ -1193,6 +1227,7 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 				/* process the array of molds to be added to the mold arrays (ready to be loaded to the scene) */
 				for (var i = 0; i < zaddmolds.molds.length; i++) {
 					if (zaddmolds.molds[i] != null) {
+						var zserver = 'local ';
 						var zcommunityid = '';
 						var zbuildingid = '';
 						var zthingid = '';
@@ -1202,6 +1237,9 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 						var zunloadactionzoneind = -1;
 						var zinloadactionzone = '0';
 						/* check and read values if they exist */
+						if (zaddmolds.molds[i].serverfranchiseid != undefined && zaddmolds.molds[i].serverfranchiseid != '') {
+							zserver = zaddmolds.molds[i].serverfranchiseid;
+						}
 						if (zaddmolds.molds[i].altconnectinggridid != '' && zaddmolds.molds[i].altconnectinggridid != undefined) {
 							zaltconnectinggridid = zaddmolds.molds[i].altconnectinggridid;
 							zaltconnectinggridind = WTW.getConnectingGridInd(zaltconnectinggridid);
@@ -1230,7 +1268,9 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 						}
 						if (zloadactionzoneind == zparentactionzoneind) {
 							zinloadactionzone = '1';
-							WTW.actionZones[zloadactionzoneind].inloadactionzone = zinloadactionzone;
+							if (WTW.actionZones[zloadactionzoneind] != null) {
+								WTW.actionZones[zloadactionzoneind].inloadactionzone = zinloadactionzone;
+							}
 						} else if (WTW.actionZones[zloadactionzoneind] != null) {
 							if (WTW.actionZones[zloadactionzoneind].inloadactionzone != undefined) {
 								zinloadactionzone = WTW.actionZones[zloadactionzoneind].inloadactionzone;
@@ -1260,7 +1300,7 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 										if (zconnectinggridname.indexOf('-') > -1) {
 											var znamepart = zconnectinggridname.split('-');
 											if (znamepart[3] != null) {
-												zparentname = 'local-connectinggrids-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + znamepart[2] + '-' + znamepart[3];
+												zparentname = zserver + '-connectinggrids-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + znamepart[2] + '-' + znamepart[3];
 											}
 										}
 										WTW.communitiesMolds[zmoldind].parentname = zparentname;
@@ -1270,9 +1310,9 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 									if (zaltconnectinggridind > -1) {
 										WTW.communitiesMolds[zmoldind].connectinggridind = zaltconnectinggridind;
 										WTW.communitiesMolds[zmoldind].connectinggridid = zaltconnectinggridid;
-										WTW.communitiesMolds[zmoldind].moldname = 'local-communitymolds-' + zmoldind + '-' + WTW.communitiesMolds[zmoldind].moldid + '-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + WTW.communitiesMolds[zmoldind].shape;
+										WTW.communitiesMolds[zmoldind].moldname = zserver + '-communitymolds-' + zmoldind + '-' + WTW.communitiesMolds[zmoldind].moldid + '-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + WTW.communitiesMolds[zmoldind].shape;
 									} else {
-										WTW.communitiesMolds[zmoldind].moldname = 'local-communitymolds-' + zmoldind + '-' + WTW.communitiesMolds[zmoldind].moldid + '-' + zconnectinggridind + '-' + zconnectinggridid + '-' + WTW.communitiesMolds[zmoldind].shape;
+										WTW.communitiesMolds[zmoldind].moldname = zserver + '-communitymolds-' + zmoldind + '-' + WTW.communitiesMolds[zmoldind].moldid + '-' + zconnectinggridind + '-' + zconnectinggridid + '-' + WTW.communitiesMolds[zmoldind].shape;
 									}
 									WTW.communitiesMolds[zmoldind].inloadactionzone = zinloadactionzone;
 								}			
@@ -1294,7 +1334,7 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 										if (zconnectinggridname.indexOf('-') > -1) {
 											var znamepart = zconnectinggridname.split('-');
 											if (znamepart[3] != null) {
-												zparentname = 'local-connectinggrids-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + znamepart[2] + '-' + znamepart[3];
+												zparentname = zserver + '-connectinggrids-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + znamepart[2] + '-' + znamepart[3];
 											}
 										}
 										WTW.buildingMolds[zmoldind].parentname = zparentname;
@@ -1304,9 +1344,9 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 									if (zaltconnectinggridind > -1) {
 										WTW.buildingMolds[zmoldind].connectinggridind = zaltconnectinggridind;
 										WTW.buildingMolds[zmoldind].connectinggridid = zaltconnectinggridid;
-										WTW.buildingMolds[zmoldind].moldname = 'local-buildingmolds-' + zmoldind + '-' + WTW.buildingMolds[zmoldind].moldid + '-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + WTW.buildingMolds[zmoldind].shape;
+										WTW.buildingMolds[zmoldind].moldname = zserver + '-buildingmolds-' + zmoldind + '-' + WTW.buildingMolds[zmoldind].moldid + '-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + WTW.buildingMolds[zmoldind].shape;
 									} else {
-										WTW.buildingMolds[zmoldind].moldname = 'local-buildingmolds-' + zmoldind + '-' + WTW.buildingMolds[zmoldind].moldid + '-' + zconnectinggridind + '-' + zconnectinggridid + '-' + WTW.buildingMolds[zmoldind].shape;
+										WTW.buildingMolds[zmoldind].moldname = zserver + '-buildingmolds-' + zmoldind + '-' + WTW.buildingMolds[zmoldind].moldid + '-' + zconnectinggridind + '-' + zconnectinggridid + '-' + WTW.buildingMolds[zmoldind].shape;
 									}
 									WTW.buildingMolds[zmoldind].inloadactionzone = zinloadactionzone;
 								}						
@@ -1328,7 +1368,7 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 										if (zconnectinggridname.indexOf('-') > -1) {
 											var znamepart = zconnectinggridname.split('-');
 											if (znamepart[3] != null) {
-												zparentname = 'local-connectinggrids-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + znamepart[2] + '-' + znamepart[3];
+												zparentname = zserver + '-connectinggrids-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + znamepart[2] + '-' + znamepart[3];
 											}
 										}
 										WTW.thingMolds[zmoldind].parentname = zparentname;
@@ -1338,9 +1378,9 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 									if (zaltconnectinggridind > -1) {
 										WTW.thingMolds[zmoldind].connectinggridind = zaltconnectinggridind;
 										WTW.thingMolds[zmoldind].connectinggridid = zaltconnectinggridid;
-										WTW.thingMolds[zmoldind].moldname = 'local-thingmolds-' + zmoldind + '-' + WTW.thingMolds[zmoldind].moldid + '-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + WTW.thingMolds[zmoldind].shape;
+										WTW.thingMolds[zmoldind].moldname = zserver + '-thingmolds-' + zmoldind + '-' + WTW.thingMolds[zmoldind].moldid + '-' + zaltconnectinggridind + '-' + zaltconnectinggridid + '-' + WTW.thingMolds[zmoldind].shape;
 									} else {
-										WTW.thingMolds[zmoldind].moldname = 'local-thingmolds-' + zmoldind + '-' + WTW.thingMolds[zmoldind].moldid + '-' + zconnectinggridind + '-' + zconnectinggridid + '-' + WTW.thingMolds[zmoldind].shape;
+										WTW.thingMolds[zmoldind].moldname = zserver + '-thingmolds-' + zmoldind + '-' + WTW.thingMolds[zmoldind].moldid + '-' + zconnectinggridind + '-' + zconnectinggridid + '-' + WTW.thingMolds[zmoldind].shape;
 									}
 									WTW.thingMolds[zmoldind].inloadactionzone = zinloadactionzone;
 								}					
@@ -1355,7 +1395,7 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 	}
 }
 
-WTWJS.prototype.loadAutomations = function(zaddautomations) {
+WTWJS.prototype.loadAutomations = function(zaddautomations, zserver) {
 	/* load automations (automated sequences of scripted events) */
 	try {
 		if (zaddautomations != null) {
@@ -1370,7 +1410,7 @@ WTWJS.prototype.loadAutomations = function(zaddautomations) {
 							WTW.automations[zautomationind].automationind = zautomationind;
 							WTW.automations[zautomationind].moldid = WTW.automations[zautomationind].automationid;
 							WTW.automations[zautomationind].step.automationstepind = zautomationind;
-							WTW.automations[zautomationind].moldname = 'local-automation-' + zautomationind + '-' + WTW.automations[zautomationind].step.automationstepid + '-' + WTW.automations[zautomationind].connectinggridind + '-' + WTW.automations[zautomationind].connectinggridid;
+							WTW.automations[zautomationind].moldname = zserver + '-automation-' + zautomationind + '-' + WTW.automations[zautomationind].step.automationstepid + '-' + WTW.automations[zautomationind].connectinggridind + '-' + WTW.automations[zautomationind].connectinggridid;
 							zautomationcount += 1;
 						}
 					}
