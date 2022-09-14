@@ -76,8 +76,8 @@ class wtw3dinternet {
 				/* add admin menu items */
 				/* wtwplugins class -> addAdminMenuItem function (menu item id, menu text, level 1 sort, level 1 id, level 2 sort, level 2 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
 				
-				$wtwplugins->addAdminMenuItem('wtw_3dinternetmenu', $wtwplugins->__('3D Internet'), -1, 'wtw_3dinternetmenu', 0, '', '/content/plugins/wtw-3dinternet/assets/images/menuworld.png', array('admin','developer'), null);
-				$wtwplugins->addAdminMenuItem('wtw_3dinternetsettings', $wtwplugins->__('Control Panel'), -1, 'wtw_3dinternetmenu', 1, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternetsettingspage');wtw3dinternet.serviceCheck('multiplayer');");
+				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetmenu', $wtwplugins->__('3D Internet'), -1, 'wtw_3dinternetmenu', 0, '', '/content/plugins/wtw-3dinternet/assets/images/menuworld.png', array('admin','developer'), "WTW.adminMenuItemSelected(this);WTW.toggleAdminSubMenu(this);");
+				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetsettings', $wtwplugins->__('Login and Multiplayer Settings'), -1, 'wtw_3dinternetmenu', 1, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternetsettingspage');wtw3dinternet.serviceCheck('multiplayer');");
 
 				/* admin full page settings forms */
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
@@ -144,6 +144,7 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("moveavatar", "wtw3dinternet.moveAvatar(zavatar, zmoveevents);");
 			$wtwplugins->addScriptFunction("onmyavatarselect", "wtw3dinternet.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);");
 			
+			$wtwplugins->addScriptFunction("toggleadminsubmenu", "wtw3dinternet.toggleAdminSubMenu(zobj);");
 			$wtwplugins->addScriptFunction("closemenus", "wtw3dinternet.closeMenus(zmenuid);");
 			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadVoiceChat();");
 			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadChat();");
@@ -186,7 +187,9 @@ class wtw3dinternet {
 		$zformdata = "";
 		try {
 			$zformdata .= "<div class=\"wtw-dashboardboxleftfull\">\r\n";
-			$zformdata .= "	<div class=\"wtw-dashboardboxtitle\">Control Panel - Server-wide Settings</div>\r\n";
+			$zformdata .= "	<div class=\"wtw-dashboardboxtitle\">3D Internet - Login and Multiplayer Settings</div>\r\n";
+			$zformdata .= "		<div class='wtw-roundedbox'><b>3D Internet Settings</b> provide global WalkTheWeb functionality and services. Use this panel to turn on or off features at a server level.<br /></div>\r\n";
+			$zformdata .= "		<div class='wtw-clear'></div>\r\n";
 			$zformdata .= "		<div class=\"wtw-dashboardbox\">\r\n";
 			
 			/* login settings - optional WalkTheWeb global login and Local server Login */

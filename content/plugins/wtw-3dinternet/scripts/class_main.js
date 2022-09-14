@@ -1325,3 +1325,21 @@ WTW_3DINTERNET.prototype.unloadAllZones = function() {
 		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-unloadAllZones=' + ex.message);
 	}
 }
+
+WTW_3DINTERNET.prototype.toggleAdminSubMenu = function(zobj) {
+	/* toggle admin menu and submenu */
+	try {
+		switch (zobj.id) {
+			case 'wtw_admin3dinternetmenu':
+				if ((dGet('wtw_3dinternetsettingspage').style.display == 'none' || dGet('wtw_3dinternetsettingspage').style.display == '')) {
+					WTW.openFullPageForm('fullpage','3D Internet','wtw_3dinternetsettingspage');wtw3dinternet.serviceCheck('multiplayer');
+				} else {
+					WTW.hide('wtw_3dinternetsettingspage');
+					WTW.closeFullPageForm();
+				}
+				break;
+		}
+	} catch (ex) {
+		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-toggleAdminSubMenu=' + ex.message);
+	}
+}
