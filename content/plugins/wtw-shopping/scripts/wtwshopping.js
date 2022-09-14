@@ -2327,3 +2327,23 @@ wtwshopping.prototype.clearSelectedMold = function () {
 		WTW.log('plugins:wtw-shopping:scripts-wtwshopping.js-clearSelectedMold=' + ex.message);
 	}
 }
+
+wtwshopping.prototype.toggleAdminSubMenu = function(zobj) {
+	/* toggle admin menu and submenu */
+	try {
+		switch (zobj.id) {
+			case 'wtw_adminshopping':
+				if ((dGet('wtw_liststorespage').style.display == 'none' || dGet('wtw_liststorespage').style.display == '') && (dGet('wtw_addstoresettingspage').style.display == 'none' || dGet('wtw_addstoresettingspage').style.display == '')) {
+					WTW.openFullPageForm('fullpage','All 3D Stores','wtw_liststorespage');
+					WTWShopping.getStores();
+				} else {
+					WTW.hide('wtw_liststorespage');
+					WTW.hide('wtw_addstoresettingspage');
+					WTW.closeFullPageForm();
+				}
+				break;
+		}
+	} catch (ex) {
+		WTW.log('plugins:wtw-shopping:scripts-wtwshopping.js-toggleAdminSubMenu=' + ex.message);
+	}
+}

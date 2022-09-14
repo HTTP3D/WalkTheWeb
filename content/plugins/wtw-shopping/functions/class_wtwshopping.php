@@ -71,10 +71,10 @@ class wtwshopping {
 			if ($wtwplugins->pagename == "admin.php") {
 				/* admin menu items */
 				/* wtwplugins class -> addAdminMenuItem function (menu item id, menu text, level 1 sort, level 1 id, level 2 sort, level 2 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
-				$wtwplugins->addAdminMenuItem('wtw_adminshopping', $wtwplugins->__('3D Stores'), 25, 'wtw_shopping', 0, '', WTWSHOPPING_URL.'/assets/images/menustore.png', array('admin','developer','architect','host'), null);
+				$wtwplugins->addAdminMenuItem('wtw_adminshopping', $wtwplugins->__('3D Stores'), 25, 'wtw_shopping', 0, '', WTWSHOPPING_URL.'/assets/images/menustore.png', array('admin','developer','architect','host'), "WTW.adminMenuItemSelected(this);WTW.toggleAdminSubMenu(this);");
 				$wtwplugins->addAdminMenuItem('wtw_adminliststores', $wtwplugins->__('All 3D Stores'), 25, 'wtw_shopping', 1, 'wtw_liststores', '', array('admin','developer','architect','host'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('All 3D Stores')."','wtw_liststorespage');WTWShopping.getStores();");
 				$wtwplugins->addAdminMenuItem('wtw_adminaddstore', $wtwplugins->__('Add Store'), 25, 'wtw_shopping', 2, 'wtw_addstore', '', array('admin','developer','architect','host'), "WTWShopping.openAddStoreForm();");
-				
+
 				/* admin full page settings forms */
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
 				$wtwplugins->addFullPageForm('wtw_liststorespage', array('admin','developer','architect','host'), $this->listStoresPage());
@@ -109,7 +109,7 @@ class wtwshopping {
 				$wtwplugins->addScriptFunction("loadmoldform", "WTWShopping.loadMoldForm(zwebtype, zshape, zmoldname);");
 				$wtwplugins->addScriptFunction("submitmoldform", "WTWShopping.submitMoldForm(zselect);");
 				$wtwplugins->addScriptFunction("cleareditmold", "WTWShopping.clearEditMold();");
-				
+				$wtwplugins->addScriptFunction("toggleadminsubmenu", "WTWShopping.toggleAdminSubMenu(zobj);");
 			}
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-shopping:functions-class_wtwshopping.php-initAdminOnlyHooks=".$e->getMessage());
@@ -198,6 +198,7 @@ class wtwshopping {
 			$zformdata .= "			<div class=\"wtw-clear\"></div>\r\n";
 			$zformdata .= "		</div>\r\n";
 			$zformdata .= "</div>\r\n";
+			$zformdata .= "<div class='wtw-roundedbox' style='float:right;max-width:60%;'><b>3D Stores</b> are a way to connect your <b>WordPress WooCommerce</b> shopping cart and products into 3D Communities, 3D Buildings, and 3D Things.<br /></div>\r\n";
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-shopping:functions-class_wtwshopping.php-addStoreSettingsPage=".$e->getMessage());
 		}
@@ -211,6 +212,8 @@ class wtwshopping {
 		try {
 			$zformdata .= "<div class=\"wtw-dashboardboxleftfull\">\r\n";
 			$zformdata .= "		<div class=\"wtw-dashboardboxtitle\"><div id=\"wtw_addstorebutton\" class=\"wtw-greenbuttonright\" onclick=\"WTWShopping.openAddStoreForm();\">Add New</div>All 3D Stores</div>\r\n";
+			$zformdata .= "			<div class='wtw-roundedbox'><b>3D Stores</b> are a way to connect your <b>WordPress WooCommerce</b> shopping cart and products into 3D Communities, 3D Buildings, and 3D Things. Allow or Deny permissions on this page allow your WordPress instance to view WalkTheWeb settings (using the WalkTheWeb Plugin).<br /><br />After a <b>3D Store</b> is added, open a 3D Community, 3D Building, or 3D Thing and select <b>Options and Settings -&gt; 3D Store Settings</b> to connect it to a particular 3D Store and Products.<br /></div>\r\n";
+			$zformdata .= "			<div class='wtw-clear'></div>\r\n";
 			$zformdata .= "		<div class=\"wtw-dashboardbox\">\r\n";
 			$zformdata .= "			<div id=\"wtw_shopping_liststores\"></div>\r\n";
 			$zformdata .= "		</div>\r\n";
