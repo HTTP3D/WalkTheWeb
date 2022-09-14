@@ -285,7 +285,7 @@ WTW_COINS.prototype.addMoldPlatformLift = function(zobjectfile, zmoldname, zmold
 											zliftbone = j;
 										}
 										if (j == 0) {
-											zresults.skeletons[i].bones[j].parent = zmold;
+//											zresults.skeletons[i].bones[j].parent = zmold;
 										} else {
 											if (zresults.skeletons[i].bones[j].parent == null) {
 												zresults.skeletons[i].bones[j].parent = zresults.skeletons[i].bones[0];
