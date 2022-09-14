@@ -503,6 +503,7 @@ try {
 	$zresponse['communityinfo'] = $zcommunityinfo;
 	$zresponse['startlocation'] = $zstartlocation;
 	$zresponse['spawnzones'] = $zspawnzones;
+	$zresponse['serverfranchiseid'] = '';
 	$zresponse['useraccesslist'] = null; /* getaccesslist("", $zbuildingid, $zcommunityid); */
 	echo json_encode($zresponse);	
 } catch (Exception $e) {

@@ -113,6 +113,7 @@ try {
 		/* format json return dataset */
 		foreach ($zresults as $zrow) {
 			$webalias = array(
+				'serverfranchiseid' => '',
 				'webaliasid' => $zrow["webaliasid"],
 				'domainname' => $zrow["domainname"],
 				'webalias' => $zrow["webalias"],

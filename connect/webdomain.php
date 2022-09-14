@@ -46,6 +46,7 @@ try {
 		/* format json return dataset */
 		foreach ($zresults as $zrow) {
 			$zwebdomain = array(
+				'serverfranchiseid' => '',
 				'webdomainid' => $zrow["webdomainid"],
 				'hostuserid' => $zrow["hostuserid"],
 				'domainname' => $zrow["domainname"],

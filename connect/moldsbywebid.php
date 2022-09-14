@@ -13,7 +13,7 @@ try {
 	$zbuildingid = $wtwconnect->getVal('buildingid','');
 	$zthingid = $wtwconnect->getVal('thingid','');
 	$zactionzoneid = $wtwconnect->getVal('actionzoneid','');
-	$zactionzoneind = $wtwconnect->getVal('actionzoneind','');
+	$zactionzoneind = $wtwconnect->getVal('actionzoneind','-1');
 	$zparentactionzoneind = $wtwconnect->getVal('parentactionzoneind','-1');
 	$zparentname = $wtwconnect->getVal('parentname','');
 	$zconnectinggridid = $wtwconnect->getVal('connectinggridid','');
@@ -402,8 +402,22 @@ try {
 			a1.updatedate,
 			a1.updateuserid,
 			communities.analyticsid as communityanalyticsid,
+			communities.communityname,
+			communities.snapshotid as communitysnapshotid,
+            case when communities.snapshotid is null or communities.snapshotid = '' then ''
+				else
+					(select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=communities.snapshotid limit 1)
+				end as communitysnapshoturl,
 			'' as buildinganalyticsid,
+			'' as buildingname,
+			'' as buildingsnapshotid,
+			'' as buildingsnapshoturl,
 			'' as thinganalyticsid,
+			'' as thingname,
+			'' as thingsnapshotid,
+			'' as thingsnapshoturl,
 			a1.alttag as communityalttag,
 			'' as buildingalttag,
 			'' as thingalttag,
@@ -424,7 +438,7 @@ try {
 				on a1.loadactionzoneid = a2.actionzoneid
 				or a1.unloadactionzoneid = a2.actionzoneid
 				or a1.actionzoneid = a2.actionzoneid
-			left join (select analyticsid,communityid 
+			left join (select * 
 					from ".wtw_tableprefix."communities 
 					where communityid='".$zcommunityid."' and deleted=0) communities
 				on a1.communityid =  communities.communityid
@@ -812,8 +826,22 @@ try {
 			a1.updatedate,
 			a1.updateuserid,
 			'' as communityanalyticsid,
+			'' as communityname,
+			'' as communitysnapshotid,
+			'' as communitysnapshoturl,
 			buildings.analyticsid as buildinganalyticsid,
+			buildings.buildingname,
+			buildings.snapshotid as buildingsnapshotid,
+            case when buildings.snapshotid is null or buildings.snapshotid = '' then ''
+				else
+					(select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=buildings.snapshotid limit 1)
+				end as buildingsnapshoturl,
 			'' as thinganalyticsid,
+			'' as thingname,
+			'' as thingsnapshotid,
+			'' as thingsnapshoturl,
 			'' as communityalttag,
 			a1.alttag as buildingalttag,
 			'' as thingalttag,
@@ -832,7 +860,7 @@ try {
 				on a1.loadactionzoneid = a2.actionzoneid
 				or a1.unloadactionzoneid = a2.actionzoneid
 				or a1.actionzoneid = a2.actionzoneid
-			left join (select analyticsid,buildingid 
+			left join (select * 
 					from ".wtw_tableprefix."buildings 
 					where buildingid='".$zbuildingid."' and deleted=0) buildings
 				on a1.buildingid =  buildings.buildingid
@@ -1220,8 +1248,22 @@ try {
 			a1.updatedate,
 			a1.updateuserid,
 			'' as communityanalyticsid,
+			'' as communityname,
+			'' as communitysnapshotid,
+			'' as communitysnapshoturl,
 			'' as buildinganalyticsid,
+			'' as buildingname,
+			'' as buildingsnapshotid,
+			'' as buildingsnapshoturl,
 			things.analyticsid as thinganalyticsid,
+			things.thingname,
+			things.snapshotid as thingsnapshotid,
+            case when things.snapshotid is null or things.snapshotid = '' then ''
+				else
+					(select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=things.snapshotid limit 1)
+				end as thingsnapshoturl,
 			'' as communityalttag,
 			'' as buildingalttag,
 			a1.alttag as thingalttag,
@@ -1242,7 +1284,7 @@ try {
 				on a1.loadactionzoneid = a2.actionzoneid
 				or a1.unloadactionzoneid = a2.actionzoneid
 				or a1.actionzoneid = a2.actionzoneid
-			left join (select analyticsid,thingid 
+			left join (select * 
 					from ".wtw_tableprefix."things 
 					where thingid='".$zthingid."' and deleted=0) things
 				on a1.thingid =  things.thingid
@@ -1630,8 +1672,22 @@ try {
 			a1.updatedate,
 			a1.updateuserid,
 			'' as communityanalyticsid,
+			'' as communityname,
+			'' as communitysnapshotid,
+			'' as communitysnapshoturl,
 			'' as buildinganalyticsid,
+			'' as buildingname,
+			'' as buildingsnapshotid,
+			'' as buildingsnapshoturl,
 			things.analyticsid as thinganalyticsid,
+			things.thingname,
+			things.snapshotid as thingsnapshotid,
+            case when things.snapshotid is null or things.snapshotid = '' then ''
+				else
+					(select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=things.snapshotid limit 1)
+				end as thingsnapshoturl,
 			'' as communityalttag,
 			'' as buildingalttag,
 			a1.alttag as thingalttag,
@@ -1654,7 +1710,7 @@ try {
 						and deleted=0) connectinggrids
 			inner join ".wtw_tableprefix."thingmolds a1
 				on connectinggrids.childwebid = a1.thingid
-			left join (select analyticsid,thingid 
+			left join (select * 
 					from ".wtw_tableprefix."things where deleted=0) things
 				on connectinggrids.childwebid =  things.thingid
 		where a1.deleted=0
@@ -2041,8 +2097,22 @@ try {
 			a1.updatedate,
 			a1.updateuserid,
 			'' as communityanalyticsid,
+			'' as communityname,
+			'' as communitysnapshotid,
+			'' as communitysnapshoturl,
 			'' as buildinganalyticsid,
+			'' as buildingname,
+			'' as buildingsnapshotid,
+			'' as buildingsnapshoturl,
 			things.analyticsid as thinganalyticsid,
+			things.thingname,
+			things.snapshotid as thingsnapshotid,
+            case when things.snapshotid is null or things.snapshotid = '' then ''
+				else
+					(select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=things.snapshotid limit 1)
+				end as thingsnapshoturl,
 			'' as communityalttag,
 			'' as buildingalttag,
 			a1.alttag as thingalttag,
@@ -2065,7 +2135,7 @@ try {
 						and deleted=0) connectinggrids
 			inner join ".wtw_tableprefix."thingmolds a1
 				on connectinggrids.childwebid = a1.thingid
-			left join (select analyticsid,thingid 
+			left join (select * 
 					from ".wtw_tableprefix."things where deleted=0) things
 				on connectinggrids.childwebid =  things.thingid
 		where a1.deleted=0
@@ -2452,8 +2522,22 @@ try {
 			a1.updatedate,
 			a1.updateuserid,
 			'' as communityanalyticsid,
+			'' as communityname,
+			'' as communitysnapshotid,
+			'' as communitysnapshoturl,
 			'' as buildinganalyticsid,
+			'' as buildingname,
+			'' as buildingsnapshotid,
+			'' as buildingsnapshoturl,
 			things.analyticsid as thinganalyticsid,
+			things.thingname,
+			things.snapshotid as thingsnapshotid,
+            case when things.snapshotid is null or things.snapshotid = '' then ''
+				else
+					(select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=things.snapshotid limit 1)
+				end as thingsnapshoturl,
 			'' as communityalttag,
 			'' as buildingalttag,
 			a1.alttag as thingalttag,
@@ -2476,7 +2560,7 @@ try {
 						and deleted=0) connectinggrids
 			inner join ".wtw_tableprefix."thingmolds a1
 				on connectinggrids.childwebid = a1.thingid
-			left join (select analyticsid,thingid 
+			left join (select * 
 					from ".wtw_tableprefix."things 
 					where deleted=0) things
 				on connectinggrids.childwebid =  things.thingid
@@ -2493,11 +2577,10 @@ try {
 	/* format json return dataset */
 	foreach ($zresults as $zrow) {
 		$zobjectanimations = null;
-		$ztempwebtext = "";
+		$ztempwebtext = '';
+		$zinloadactionzone = '0';
 		if ($zactionzoneid == $zrow["loadactionzoneid"] && $zactionzoneid != "") {
-			$inloadactionzone = "1";
-		} else {
-			$inloadactionzone = "0";
+			$zinloadactionzone = '1';
 		}
 		if(isset($zrow["webtext"]) && !empty($zrow["webtext"])) {
 			$ztempwebtext = implode('',(array)$zrow["webtext"]);
@@ -2508,16 +2591,25 @@ try {
 		$zcommunityinfo = array(
 			'communityid'=> $zrow["communityid"],
 			'communityind'=> '',
+			'communityname'=> $wtwconnect->escapeHTML($zrow["communityname"]),
+			'snapshotid' => $zrow["communitysnapshotid"],
+			'snapshoturl' => $zrow["communitysnapshoturl"],
 			'analyticsid'=> $zrow["communityanalyticsid"]
 		);
 		$zbuildinginfo = array(
 			'buildingid'=> $zrow["buildingid"],
 			'buildingind'=> '',
+			'buildingname'=> $wtwconnect->escapeHTML($zrow["buildingname"]),
+			'snapshotid' => $zrow["buildingsnapshotid"],
+			'snapshoturl' => $zrow["buildingsnapshoturl"],
 			'analyticsid'=> $zrow["buildinganalyticsid"]
 		);
 		$zthinginfo = array(
 			'thingid'=> $zrow["thingid"],
 			'thingind'=> '',
+			'thingname'=> $wtwconnect->escapeHTML($zrow["thingname"]),
+			'snapshotid' => $zrow["thingsnapshotid"],
+			'snapshoturl' => $zrow["thingsnapshoturl"],
 			'analyticsid'=> $zrow["thinganalyticsid"]
 		);
 		$zposition = array(
@@ -2648,6 +2740,7 @@ try {
 			'communityinfo'=> $zcommunityinfo, 
 			'buildinginfo'=> $zbuildinginfo, 
 			'thinginfo'=> $zthinginfo,
+			'serverfranchiseid' => '',
 			'moldid'=> $zrow["moldid"], 
 			'moldind'=> '-1',
 			'shape'=> $zrow["shape"], 
@@ -2678,7 +2771,7 @@ try {
 			'loadactionzoneind'=> '-1',
 			'unloadactionzoneid'=> $zrow["unloadactionzoneid"],
 			'unloadactionzoneind'=> '-1',
-			'inloadactionzone'=> $inloadactionzone,
+			'inloadactionzone'=> $zinloadactionzone,
 			'altconnectinggridid'=> $zrow["altconnectinggridid"],
 			'altconnectinggridind'=> '-1',
 			'connectinggridid'=> $zconnectinggridid,

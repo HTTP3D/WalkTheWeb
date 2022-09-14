@@ -63,8 +63,10 @@ try {
 			/* get connectinggrids for community */
 			$zresults = $wtwconnect->query("
 				select connectinggrids.connectinggridid,
+					connectinggrids.parentserverfranchiseid,
 					connectinggrids.parentwebid,
 					connectinggrids.parentwebtype,
+					connectinggrids.childserverfranchiseid,
 					connectinggrids.childwebid,
 					connectinggrids.childwebtype,
 					connectinggrids.loadactionzoneid,
@@ -86,6 +88,11 @@ try {
 					parentcommunities.communityid as parentcommunityid,
 					parentcommunities.communityname as parentcommunityname,
 					parentcommunities.snapshotid as parentcommunitysnapshotid,
+					case when parentcommunities.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=parentcommunities.snapshotid limit 1)
+						end as parentcommunitysnapshoturl,
 					parentcommunities.analyticsid as parentcommunityanalyticsid,
 					case when (select GROUP_CONCAT(userid) as useraccess 
 								from ".wtw_tableprefix."userauthorizations 
@@ -100,6 +107,11 @@ try {
 					parentbuildings.buildingid as parentbuildingid,
 					parentbuildings.buildingname as parentbuildingname,
 					parentbuildings.snapshotid as parentbuildingsnapshotid,
+					case when parentbuildings.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=parentbuildings.snapshotid limit 1)
+						end as parentbuildingsnapshoturl,
 					parentbuildings.analyticsid as parentbuildinganalyticsid,
 					case when (select GROUP_CONCAT(userid) as useraccess 
 								from ".wtw_tableprefix."userauthorizations 
@@ -114,6 +126,11 @@ try {
 					parentthings.thingid as parentthingid,
 					parentthings.thingname as parentthingname,
 					parentthings.snapshotid as parentthingsnapshotid,
+					case when parentthings.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=parentthings.snapshotid limit 1)
+						end as parentthingsnapshoturl,
 					parentthings.analyticsid as parentthinganalyticsid,
 					case when (select GROUP_CONCAT(userid) as useraccess 
 								from ".wtw_tableprefix."userauthorizations 
@@ -128,6 +145,11 @@ try {
 					communities.communityid,
 					communities.communityname,
 					communities.snapshotid as communitysnapshotid,
+					case when communities.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=communities.snapshotid limit 1)
+						end as communitysnapshoturl,
 					communities.analyticsid as communityanalyticsid,
 					case when (select GROUP_CONCAT(userid) as useraccess 
 								from ".wtw_tableprefix."userauthorizations 
@@ -142,6 +164,11 @@ try {
 					buildings.buildingid,
 					buildings.buildingname,
 					buildings.snapshotid as buildingsnapshotid,
+					case when buildings.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=buildings.snapshotid limit 1)
+						end as buildingsnapshoturl,
 					buildings.analyticsid as buildinganalyticsid,
 					case when (select GROUP_CONCAT(userid) as useraccess 
 								from ".wtw_tableprefix."userauthorizations 
@@ -156,6 +183,11 @@ try {
 					things.thingid,
 					things.thingname,
 					things.snapshotid as thingsnapshotid,
+					case when things.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=things.snapshotid limit 1)
+						end as thingsnapshoturl,
 					things.analyticsid as thinganalyticsid,
 					case when (select GROUP_CONCAT(userid) as useraccess 
 								from ".wtw_tableprefix."userauthorizations 
@@ -168,8 +200,10 @@ try {
 									and deleted=0 and not thingid='')
 						end as thingaccess,
 					childconnectinggrids.connectinggridid as subconnectinggridid,
+					childconnectinggrids.parentserverfranchiseid as subparentserverfranchiseid,
 					childconnectinggrids.parentwebid as subparentwebid,
 					childconnectinggrids.parentwebtype as subparentwebtype,
+					childconnectinggrids.childserverfranchiseid as subchildserverfranchiseid,
 					childconnectinggrids.childwebid as subchildwebid,
 					childconnectinggrids.childwebtype as subchildwebtype,
 					childconnectinggrids.loadactionzoneid as subloadactionzoneid,
@@ -191,6 +225,11 @@ try {
 					subchildthings.thingid as subchildthingid,
 					subchildthings.thingname as subchildthingname,
 					subchildthings.snapshotid as subchildthingsnapshotid,
+					case when subchildthings.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=subchildthings.snapshotid limit 1)
+						end as subchildthingsnapshoturl,
 					subchildthings.analyticsid as subchildthinganalyticsid,
 					case when (select GROUP_CONCAT(userid) as useraccess 
 								from ".wtw_tableprefix."userauthorizations 
@@ -272,8 +311,10 @@ try {
 			/* select connectinggrids for building or thing */
 			$zresults = $wtwconnect->query("
 				select connectinggrids.connectinggridid,
+					connectinggrids.parentserverfranchiseid,
 					connectinggrids.parentwebid,
 					connectinggrids.parentwebtype,
+					connectinggrids.childserverfranchiseid,
 					connectinggrids.childwebid,
 					connectinggrids.childwebtype,
 					connectinggrids.loadactionzoneid,
@@ -295,11 +336,17 @@ try {
 					'' as parentcommunityid,
 					'' as parentcommunityname,
 					'' as parentcommunitysnapshotid,
+					'' as parentcommunitysnapshoturl,
 					'' as parentcommunityanalyticsid,
 					'' as parentcommunityaccess,
 					parentbuildings.buildingid as parentbuildingid,
 					parentbuildings.buildingname as parentbuildingname,
 					parentbuildings.snapshotid as parentbuildingsnapshotid,
+					case when parentbuildings.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=parentbuildings.snapshotid limit 1)
+						end as parentbuildingsnapshoturl,
 					parentbuildings.analyticsid as parentbuildinganalyticsid,
 					case when (select GROUP_CONCAT(userid) as useraccess 
 								from ".wtw_tableprefix."userauthorizations 
@@ -314,6 +361,11 @@ try {
 					parentthings.thingid as parentthingid,
 					parentthings.thingname as parentthingname,
 					parentthings.snapshotid as parentthingsnapshotid,
+					case when parentthings.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=parentthings.snapshotid limit 1)
+						end as parentthingsnapshoturl,
 					parentthings.analyticsid as parentthinganalyticsid,
 					case when (select GROUP_CONCAT(userid) as useraccess 
 								from ".wtw_tableprefix."userauthorizations 
@@ -328,11 +380,17 @@ try {
 					'' as communityid,
 					'WalkTheWeb' as communityname,
 					'' as communitysnapshotid,
+					'' as communitysnapshoturl,
 					'' as communityanalyticsid,
 					'' as communityaccess,
 					buildings.buildingid,
 					buildings.buildingname,
 					buildings.snapshotid as buildingsnapshotid,
+					case when buildings.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=buildings.snapshotid limit 1)
+						end as buildingsnapshoturl,
 					buildings.analyticsid as buildinganalyticsid,
 					case when (select GROUP_CONCAT(userid) as useraccess 
 								from ".wtw_tableprefix."userauthorizations 
@@ -347,6 +405,11 @@ try {
 					things.thingid,
 					things.thingname,
 					things.snapshotid as thingsnapshotid,
+					case when things.snapshotid is null then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=things.snapshotid limit 1)
+						end as thingsnapshoturl,
 					things.analyticsid as thinganalyticsid,
 					case when (select GROUP_CONCAT(userid) as useraccess 
 								from ".wtw_tableprefix."userauthorizations 
@@ -359,8 +422,10 @@ try {
 									and deleted=0 and not thingid='')
 						end as thingaccess,
 					null as subconnectinggridid,
+					'' as subparentserverfranchiseid,
 					'' as subparentwebid,
 					'' as subparentwebtype,
+					'' as subchildserverfranchiseid,
 					'' as subchildwebid,
 					'' as subchildwebtype,
 					'' as subloadactionzoneid,
@@ -382,6 +447,7 @@ try {
 					'' as subchildthingid,
 					'' as subchildthingname,
 					'' as subchildthingsnapshotid,
+					'' as subchildthingsnapshoturl,
 					'' as subchildthinganalyticsid,
 					'' as subchildthingaccess
 				from 
@@ -454,16 +520,18 @@ try {
 				if(isset($zrow["parentcommunityid"]) && !empty($zrow["parentcommunityid"])) {
 					$zcommunityinfo = array(
 						'communityid'=> $zrow["parentcommunityid"],
-						'communityname'=> htmlspecialchars($zrow["parentcommunityname"], ENT_QUOTES, 'UTF-8'),
+						'communityname'=> $wtwconnect->escapeHTML($zrow["parentcommunityname"]),
 						'snapshotid' => $zrow["parentcommunitysnapshotid"],
+						'snapshoturl' => $zrow["parentcommunitysnapshoturl"],
 						'analyticsid'=> $zrow["parentcommunityanalyticsid"],
 						'access'=> $zrow["parentcommunityaccess"]
 					);
 				} elseif (isset($zrow["communityid"]) && !empty($zrow["communityid"])) {
 					$zcommunityinfo = array(
 						'communityid'=> $zrow["communityid"],
-						'communityname'=> htmlspecialchars($zrow["communityname"], ENT_QUOTES, 'UTF-8'),
+						'communityname'=> $wtwconnect->escapeHTML($zrow["communityname"]),
 						'snapshotid' => $zrow["communitysnapshotid"],
+						'snapshoturl' => $zrow["communitysnapshoturl"],
 						'analyticsid'=> $zrow["communityanalyticsid"],
 						'access'=> $zrow["communityaccess"]
 					);
@@ -472,6 +540,7 @@ try {
 						'communityid'=> '',
 						'communityname'=> 'WalkTheWeb',
 						'snapshotid' => '',
+						'snapshoturl' => '',
 						'analyticsid'=> '',
 						'access'=> ''
 					);
@@ -481,6 +550,7 @@ try {
 						'buildingid'=> $zrow["parentbuildingid"], 
 						'buildingname'=> $zrow["parentbuildingname"],
 						'snapshotid' => $zrow["parentbuildingsnapshotid"],
+						'snapshoturl' => $zrow["parentbuildingsnapshoturl"],
 						'analyticsid'=> $zrow["parentbuildinganalyticsid"],
 						'access'=> $zrow["parentbuildingaccess"]
 					);
@@ -489,6 +559,7 @@ try {
 						'buildingid'=> $zrow["buildingid"], 
 						'buildingname'=> $zrow["buildingname"],
 						'snapshotid' => $zrow["buildingsnapshotid"],
+						'snapshoturl' => $zrow["buildingsnapshoturl"],
 						'analyticsid'=> $zrow["buildinganalyticsid"],
 						'access'=> $zrow["buildingaccess"]
 					);
@@ -497,6 +568,7 @@ try {
 						'buildingid'=> '', 
 						'buildingname'=> '',
 						'snapshotid' => '',
+						'snapshoturl' => '',
 						'analyticsid'=> '',
 						'access'=> ''
 					);
@@ -506,6 +578,7 @@ try {
 						'thingid'=> $zrow["parentthingid"], 
 						'thingname'=> $zrow["parentthingname"],
 						'snapshotid' => $zrow["parentthingsnapshotid"],
+						'snapshoturl' => $zrow["parentthingsnapshoturl"],
 						'analyticsid'=> $zrow["parentthinganalyticsid"],
 						'access'=> $zrow["parentthingaccess"]
 					);
@@ -514,6 +587,7 @@ try {
 						'thingid'=> $zrow["thingid"], 
 						'thingname'=> $zrow["thingname"],
 						'snapshotid' => $zrow["thingsnapshotid"],
+						'snapshoturl' => $zrow["thingsnapshoturl"],
 						'analyticsid'=> $zrow["thinganalyticsid"],
 						'access'=> $zrow["thingaccess"]
 					);
@@ -522,6 +596,7 @@ try {
 						'thingid'=> '', 
 						'thingname'=> '',
 						'snapshotid' => '',
+						'snapshoturl' => '',
 						'analyticsid'=> '',
 						'access'=> ''
 					);
@@ -545,13 +620,16 @@ try {
 					'name'=> $zrow['alttag']
 				);
 				$zwebitems[$i] = array(
+					'serverfranchiseid' => '',
 					'connectinggridid'=> $zrow["connectinggridid"], 
 					'connectinggridind'=> '-1',
 					'parentconnectinggridid'=> '', 
 					'parentconnectinggridind'=> '-1',
 					'loadlevel'=> '1',
+					'parentserverfranchiseid'=> $zrow["parentserverfranchiseid"], 
 					'parentwebid'=> $zrow["parentwebid"], 
 					'parentwebtype'=> $zrow["parentwebtype"], 
+					'childserverfranchiseid'=> $zrow["childserverfranchiseid"], 
 					'childwebid'=> $zrow["childwebid"], 
 					'childwebtype'=> $zrow["childwebtype"], 
 					'loadactionzoneid'=> $zrow["loadactionzoneid"], 
@@ -582,16 +660,18 @@ try {
 				if(isset($zrow["parentcommunityid"]) && !empty($zrow["parentcommunityid"])) {
 					$zcommunityinfo = array(
 						'communityid'=> $zrow["parentcommunityid"],
-						'communityname'=> htmlspecialchars($zrow["parentcommunityname"], ENT_QUOTES, 'UTF-8'),
+						'communityname'=> $wtwconnect->escapeHTML($zrow["parentcommunityname"]),
 						'snapshotid' => $zrow["parentcommunitysnapshotid"],
+						'snapshoturl' => $zrow["parentcommunitysnapshoturl"],
 						'analyticsid'=> $zrow["parentcommunityanalyticsid"],
 						'access'=> $zrow["parentcommunityaccess"]
 					);
 				} elseif (isset($zrow["communityid"]) && !empty($zrow["communityid"])) {
 					$zcommunityinfo = array(
 						'communityid'=> $zrow["communityid"],
-						'communityname'=> htmlspecialchars($zrow["communityname"], ENT_QUOTES, 'UTF-8'),
+						'communityname'=> $wtwconnect->escapeHTML($zrow["communityname"]),
 						'snapshotid' => $zrow["communitysnapshotid"],
+						'snapshoturl' => $zrow["communitysnapshoturl"],
 						'analyticsid'=> $zrow["communityanalyticsid"],
 						'access'=> $zrow["communityaccess"]
 					);
@@ -600,6 +680,7 @@ try {
 						'communityid'=> '',
 						'communityname'=> 'WalkTheWeb',
 						'snapshotid' => '',
+						'snapshoturl' => '',
 						'analyticsid'=> '',
 						'access'=> ''
 					);
@@ -609,6 +690,7 @@ try {
 						'buildingid'=> $zrow["parentbuildingid"], 
 						'buildingname'=> $zrow["parentbuildingname"],
 						'snapshotid' => $zrow["parentbuildingsnapshotid"],
+						'snapshoturl' => $zrow["parentbuildingsnapshoturl"],
 						'analyticsid'=> $zrow["parentbuildinganalyticsid"],
 						'access'=> $zrow["parentbuildingaccess"]
 					);
@@ -617,6 +699,7 @@ try {
 						'buildingid'=> $zrow["buildingid"], 
 						'buildingname'=> $zrow["buildingname"],
 						'snapshotid' => $zrow["buildingsnapshotid"],
+						'snapshoturl' => $zrow["buildingsnapshoturl"],
 						'analyticsid'=> $zrow["buildinganalyticsid"],
 						'access'=> $zrow["buildingaccess"]
 					);
@@ -625,6 +708,7 @@ try {
 						'buildingid'=> '', 
 						'buildingname'=> '',
 						'snapshotid' => '',
+						'snapshoturl' => '',
 						'analyticsid'=> '',
 						'access'=> ''
 					);
@@ -634,6 +718,7 @@ try {
 						'thingid'=> $zrow["subchildthingid"], 
 						'thingname'=> $zrow["subchildthingname"],
 						'snapshotid' => $zrow["subchildthingsnapshotid"],
+						'snapshoturl' => $zrow["subchildthingsnapshoturl"],
 						'analyticsid'=> $zrow["subchildthinganalyticsid"],
 						'access'=> $zrow["subchildthingaccess"]
 					);
@@ -642,6 +727,7 @@ try {
 						'thingid'=> $zrow["parentthingid"], 
 						'thingname'=> $zrow["parentthingname"],
 						'snapshotid' => $zrow["parentthingsnapshotid"],
+						'snapshoturl' => $zrow["parentthingsnapshoturl"],
 						'analyticsid'=> $zrow["parentthinganalyticsid"],
 						'access'=> $zrow["parentthingaccess"]
 					);
@@ -650,6 +736,7 @@ try {
 						'thingid'=> $zrow["thingid"], 
 						'thingname'=> $zrow["thingname"],
 						'snapshotid' => $zrow["thingsnapshotid"],
+						'snapshoturl' => $zrow["thingsnapshoturl"],
 						'analyticsid'=> $zrow["thinganalyticsid"],
 						'access'=> $zrow["thingaccess"]
 					);
@@ -658,6 +745,7 @@ try {
 						'thingid'=> '', 
 						'thingname'=> '',
 						'snapshotid' => '',
+						'snapshoturl' => '',
 						'analyticsid'=> '',
 						'access'=> ''
 					);
@@ -681,13 +769,16 @@ try {
 					'z'=> $zrow["subrotationz"]
 				);
 				$zwebitems[$i] = array(
+					'serverfranchiseid' => '',
 					'connectinggridid'=> $zrow["subconnectinggridid"], 
 					'connectinggridind'=> '-1',
 					'parentconnectinggridid'=> $zrow["connectinggridid"], 
 					'parentconnectinggridind'=> '-1',
 					'loadlevel'=> '2',
+					'parentserverfranchiseid'=> $zrow["subparentserverfranchiseid"], 
 					'parentwebid'=> $zrow["subparentwebid"], 
 					'parentwebtype'=> $zrow["subparentwebtype"], 
+					'childserverfranchiseid'=> $zrow["subchildserverfranchiseid"], 
 					'childwebid'=> $zrow["subchildwebid"], 
 					'childwebtype'=> $zrow["subchildwebtype"], 
 					'loadactionzoneid'=> $zrow["subloadactionzoneid"], 

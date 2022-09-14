@@ -24,8 +24,8 @@ try {
 	foreach ($zresults as $zrow) {
 		$zcommunities[$i] = array(
 			'communityid' => $zrow["communityid"],
-			'communityname' => htmlspecialchars($zrow["communityname"], ENT_QUOTES, 'UTF-8'),
-			'communitydescription' => htmlspecialchars($zrow["communitydescription"], ENT_QUOTES, 'UTF-8')
+			'communityname' => $wtwconnect->escapeHTML($zrow["communityname"]),
+			'communitydescription' => $wtwconnect->escapeHTML($zrow["communitydescription"])
 		);
 		$i += 1;
 	}

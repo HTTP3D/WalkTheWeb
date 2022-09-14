@@ -19,29 +19,57 @@ try {
 	/* select action zones related to community, building, or thing */
 	$zresults = $wtwconnect->query("
 			select a1.*,
+				c1.analyticsid as communityanalyticsid,
+				c1.communityname,
+				c1.snapshotid as communitysnapshotid,
+				case when c1.snapshotid is null then ''
+					else (select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=c1.snapshotid limit 1)
+					end as communitysnapshoturl,
 				b1.analyticsid as buildinganalyticsid,
-				c1.analyticsid as communityanalyticsid
-			from ".wtw_tableprefix."actionzones a1 left join ".wtw_tableprefix."buildings b1
-				on a1.buildingid=b1.buildingid
+				b1.buildingname,
+				b1.snapshotid as buildingsnapshotid,
+				case when b1.snapshotid is null then ''
+					else (select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=b1.snapshotid limit 1)
+					end as buildingsnapshoturl,
+				t1.analyticsid as thinganalyticsid,
+				t1.thingname,
+				t1.snapshotid as thingsnapshotid,
+				case when t1.snapshotid is null then ''
+					else (select filepath 
+						from ".wtw_tableprefix."uploads 
+						where uploadid=t1.snapshotid limit 1)
+					end as thingsnapshoturl
+			from ".wtw_tableprefix."actionzones a1 
 				left join ".wtw_tableprefix."communities c1
-				on a1.communityid=c1.communityid
-			where ((a1.buildingid='".$zbuildingid."' 
-				and a1.thingid=''
-				and a1.communityid=''
-				and not a1.buildingid='')
-				or (a1.communityid='".$zcommunityid."'
-				and a1.thingid=''
-				and a1.buildingid=''
-				and not a1.communityid='')
-				or (a1.thingid='".$zthingid."'
-				and a1.buildingid=''
-				and a1.communityid=''
-				and not a1.thingid=''))
+					on a1.communityid=c1.communityid
+				left join ".wtw_tableprefix."buildings b1
+					on a1.buildingid=b1.buildingid
+				left join ".wtw_tableprefix."things t1
+					on a1.thingid=t1.thingid
+			where 
+				((a1.buildingid='".$zbuildingid."' 
+					and a1.thingid=''
+					and a1.communityid=''
+					and not a1.buildingid='')
+				  or (a1.communityid='".$zcommunityid."'
+					and a1.thingid=''
+					and a1.buildingid=''
+					and not a1.communityid='')
+				  or (a1.thingid='".$zthingid."'
+					and a1.buildingid=''
+					and a1.communityid=''
+					and not a1.thingid=''))
 				and a1.deleted=0
-				and (b1.deleted is null
-				or b1.deleted=0)
 				and (c1.deleted is null
-				or c1.deleted=0)
+					or c1.deleted=0)
+				and (b1.deleted is null
+					or b1.deleted=0)
+				and (t1.deleted is null
+					or t1.deleted=0)
 			order by a1.communityid,
 				a1.buildingid,
 				a1.thingid,
@@ -124,15 +152,24 @@ try {
 		
 		$zcommunityinfo = array(
 			'communityid'=> $zrow["communityid"],
+			'communityname'=> $wtwconnect->escapeHTML($zrow["communityname"]),
+			'snapshotid' => $zrow["communitysnapshotid"],
+			'snapshoturl' => $zrow["communitysnapshoturl"],
 			'analyticsid'=> $zrow["communityanalyticsid"]
 		);
 		$zbuildinginfo = array(
 			'buildingid'=> $zrow["buildingid"],
+			'buildingname'=> $wtwconnect->escapeHTML($zrow["buildingname"]),
+			'snapshotid' => $zrow["buildingsnapshotid"],
+			'snapshoturl' => $zrow["buildingsnapshoturl"],
 			'analyticsid'=> $zrow["buildinganalyticsid"]
 		);
 		$zthinginfo = array(
 			'thingid'=> $zrow["thingid"],
-			'analyticsid'=> ''
+			'thingname'=> $wtwconnect->escapeHTML($zrow["thingname"]),
+			'snapshotid' => $zrow["thingsnapshotid"],
+			'snapshoturl' => $zrow["thingsnapshoturl"],
+			'analyticsid'=> $zrow["thinganalyticsid"]
 		);
 		$zposition = array(
 			'x'=> $zrow["positionx"], 
@@ -166,6 +203,7 @@ try {
 			'communityinfo'=> $zcommunityinfo,
 			'buildinginfo'=> $zbuildinginfo,
 			'thinginfo'=> $zthinginfo,
+			'serverfranchiseid' => '',
 			'actionzoneid'=> $zrow["actionzoneid"], 
 			'actionzoneind'=> '-1',
 			'actionzonename'=> $zrow["actionzonename"], 

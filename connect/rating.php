@@ -246,6 +246,7 @@ try {
 	
 	/* format the JSON response */
 	$zresponse = array(
+		'serverfranchiseid' => '',
 		'rating' => $zrating,
 		'ratingvalue' => $zratingvalue,
 		'ratingtext' => $zratingtext,

@@ -26,8 +26,8 @@ try {
 	foreach ($zresults as $zrow) {
 		$zbuildings[$i] = array(
 			'buildingid' => $zrow["buildingid"],
-			'buildingname' => htmlspecialchars($zrow["buildingname"], ENT_QUOTES, 'UTF-8'),
-			'buildingdescription' => htmlspecialchars($zrow["buildingdescription"], ENT_QUOTES, 'UTF-8')
+			'buildingname' => $wtwconnect->escapeHTML($zrow["buildingname"]),
+			'buildingdescription' => $wtwconnect->escapeHTML($zrow["buildingdescription"])
 		);
 		$i += 1;
 	}

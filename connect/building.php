@@ -36,27 +36,28 @@ try {
 			'versionid' => $zrow["versionid"],
 			'version' => $zrow["version"],
 			'versionorder' => $zrow["versionorder"],
-			'versiondesc' => htmlspecialchars($zrow["versiondesc"], ENT_QUOTES, 'UTF-8'),
-			'buildingname' => htmlspecialchars($zrow["buildingname"], ENT_QUOTES, 'UTF-8'),
-			'buildingdescription' => htmlspecialchars($zrow["buildingdescription"], ENT_QUOTES, 'UTF-8'),
-			'updatedate' => $zrow["updatedate"],
-			'updateuserid' => $zrow["updateuserid"],
-			'createdate' => $zrow["createdate"],
-			'createuserid' => $zrow["createuserid"],
+			'versiondesc' => $wtwconnect->escapeHTML($zrow["versiondesc"]),
+			'buildingname' => $wtwconnect->escapeHTML($zrow["buildingname"]),
+			'buildingdescription' => $wtwconnect->escapeHTML($zrow["buildingdescription"]),
 			'snapshotid' => $zrow["snapshotid"],
 			'snapshotpath' => $zrow["snapshotpath"],
-			'analyticsid'=> $zrow["analyticsid"]
+			'analyticsid'=> $zrow["analyticsid"],
+			'createdate' => $zrow["createdate"],
+			'createuserid' => $zrow["createuserid"],
+			'updatedate' => $zrow["updatedate"],
+			'updateuserid' => $zrow["updateuserid"]
 		);
 		$zshare = array(
-			'templatename' => htmlspecialchars($zrow["templatename"], ENT_QUOTES, 'UTF-8'),
-			'description' => htmlspecialchars($zrow["description"], ENT_QUOTES, 'UTF-8'),
-			'tags' => htmlspecialchars($zrow["tags"], ENT_QUOTES, 'UTF-8')
+			'templatename' => $wtwconnect->escapeHTML($zrow["templatename"]),
+			'description' => $wtwconnect->escapeHTML($zrow["description"]),
+			'tags' => $wtwconnect->escapeHTML($zrow["tags"])
 		);
 		$zalttag = array(
 			'name' => $zrow["alttag"]
 		);
 		$zresponse[$i] = array(
 			'buildinginfo'=> $zbuildinginfo,
+			'serverfranchiseid' => '',
 			'share'=> $zshare,
 			'alttag'=> $zalttag,
 			'authorizedusers'=> $zauthorizedusers,

@@ -77,22 +77,22 @@ try {
 			'versionid' => $zrow["versionid"],
 			'version' => $zrow["version"],
 			'versionorder' => $zrow["versionorder"],
-			'versiondesc' => htmlspecialchars($zrow["versiondesc"], ENT_QUOTES, 'UTF-8'),
-			'communityname' => htmlspecialchars($zrow["communityname"], ENT_QUOTES, 'UTF-8'),
-			'communitydescription' => htmlspecialchars($zrow["communitydescription"], ENT_QUOTES, 'UTF-8'),
-			'updatedate' => $zrow["updatedate"],
-			'updateuserid' => $zrow["updateuserid"],
-			'createdate' => $zrow["createdate"],
-			'createuserid' => $zrow["createuserid"],
+			'versiondesc' => $wtwconnect->escapeHTML($zrow["versiondesc"]),
+			'communityname' => $wtwconnect->escapeHTML($zrow["communityname"]),
+			'communitydescription' => $wtwconnect->escapeHTML($zrow["communitydescription"]),
 			'snapshotid' => $zrow["snapshotid"],
 			'snapshotpath' => $zrow["snapshotpath"],
 			'analyticsid'=> $zrow["analyticsid"],
+			'createdate' => $zrow["createdate"],
+			'createuserid' => $zrow["createuserid"],
+			'updatedate' => $zrow["updatedate"],
+			'updateuserid' => $zrow["updateuserid"],
 			'access'=> $zrow["communityaccess"]
 		);
 		$zshare = array(
-			'templatename' => htmlspecialchars($zrow["templatename"], ENT_QUOTES, 'UTF-8'),
-			'description' => htmlspecialchars($zrow["description"], ENT_QUOTES, 'UTF-8'),
-			'tags' => htmlspecialchars($zrow["tags"], ENT_QUOTES, 'UTF-8')
+			'templatename' => $wtwconnect->escapeHTML($zrow["templatename"]),
+			'description' => $wtwconnect->escapeHTML($zrow["description"]),
+			'tags' => $wtwconnect->escapeHTML($zrow["tags"])
 		);
 		$zgraphics = array(
 			'texture'=> array (
@@ -159,6 +159,7 @@ try {
 		);
 		$communities[$i] = array(
 			'communityinfo' => $zcommunityinfo,
+			'serverfranchiseid' => '',
 			'share'=> $zshare,
 			'firstbuilding'=> $zfirstbuilding,
 			'graphics' => $zgraphics,
