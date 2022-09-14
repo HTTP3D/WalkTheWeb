@@ -12,6 +12,7 @@ try {
 	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zuploadobjectid = $wtwhandlers->getPost('uploadobjectid','');
+	$zgroupid = $wtwhandlers->getPost('groupid','');
 	$zobjectanimationid = $wtwhandlers->getPost('objectanimationid','');
 	$zobjectfolder = $wtwhandlers->getPost('objectfolder','');
 	$zobjectfilepart = $wtwhandlers->getPost('objectfilepart','');
@@ -66,6 +67,9 @@ try {
 			$zresponse = array(
 				'serror'=> $serror
 			);
+			break;
+		case "saveobjectgroup":
+			$zresponse = $wtwuploads->saveObjectGroup($zuploadobjectid, $zgroupid);
 			break;
 	}
 

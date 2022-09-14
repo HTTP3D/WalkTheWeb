@@ -1023,6 +1023,11 @@ class wtwdb {
 					}
 				}
 			}
+			if ($zhasaccess == false) {
+				if ($this->isUserInRole('Admin') || $this->isUserInRole('Developer')) {
+					$zhasaccess = true;
+				}
+			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwbuildings.php-checkUpdateAccess=".$e->getMessage());
 		}
@@ -1093,6 +1098,11 @@ class wtwdb {
 					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
 						$zhasaccess = true;
 					}
+				}
+			}
+			if ($zhasaccess == false) {
+				if ($this->isUserInRole('Admin') || $this->isUserInRole('Developer')) {
+					$zhasaccess = true;
 				}
 			}
 		} catch (Exception $e) {

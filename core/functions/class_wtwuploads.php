@@ -1823,6 +1823,25 @@ class wtwuploads {
 		return $serror;
 	}
 
+	function saveObjectGroup($zuploadobjectid, $zgroupid) {
+		/* group Object Uploads for 3D Models */
+		global $wtwhandlers;
+		$zresponse = array('serror'=> '');
+		try {
+			$wtwhandlers->query("
+				update ".wtw_tableprefix."uploadobjects
+				set groupid='".$zgroupid."',
+					updatedate=now(),
+					updateuserid='".$wtwhandlers->userid."'
+				where uploadobjectid='".$zuploadobjectid."'
+				limit 1;");
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-saveObjectGroup=".$e->getMessage());
+			$zresponse = array('serror'=> $e->getMessage());
+		}
+		return $zresponse;
+	}
+
 	public function uploadJavaScriptFiles($zuploadfiles, $zwebtype, $zwebid, $zactionzoneid) {
 		/* upload javascript files for use with plugins */
 		global $wtwhandlers;
@@ -1991,6 +2010,387 @@ class wtwuploads {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getMyImages=".$e->getMessage());
 		}
 		return $zresults;
+	}
+	
+	public function deleteUploadFiles($zuploadid) {
+		/* perminently deletes Media Library Images including original, websize, and thumbnail if they exist */
+		global $wtwhandlers;
+		$zresponseoriginalid = '';
+		$zresponsewebsizeid = '';
+		$zresponsethumbnailid = '';
+		$zresponse = array(
+			'responseoriginalid'=>'',
+			'responsewebsizeid'=>'',
+			'responsethumbnailid'=>'',
+			'serror'=>''
+		);
+		try {
+			$zoriginalid = '';
+			$zwebsizeid = '';
+			$zthumbnailid = '';
+			/* solid dark gray image for default replacement */
+			$zneworiginalid = 'tgvx2iflpqifkl9k';
+			$znewwebsizeid = 'ejj3tuq6nszhh0kr';
+			$znewthumbnailid = 'wlcu9qxe6sdg8r4c';
+			if (isset($zuploadid) && !empty($zuploadid)) {
+				$zresults = $wtwhandlers->query("
+					select * 
+					from ".wtw_tableprefix."uploads
+					where deleted=0
+						and uploadid='".$zuploadid."'
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zoriginalid = $zrow["originalid"];
+					$zwebsizeid = $zrow["websizeid"];
+					$zthumbnailid = $zrow["thumbnailid"];
+				}
+				if (isset($zoriginalid) && !empty($zoriginalid)) {
+					$zresponseoriginalid = $this->replaceUploadFile($zoriginalid, $zneworiginalid);
+					$zresponseoriginalid = $this->deleteUploadFile($zoriginalid);
+				}
+				if (isset($zwebsizeid) && !empty($zwebsizeid)) {
+					$zresponsewebsizeid = $this->replaceUploadFile($zwebsizeid, $znewwebsizeid);
+					$zresponsewebsizeid = $this->deleteUploadFile($zwebsizeid);
+				}
+				if (isset($zthumbnailid) && !empty($zthumbnailid)) {
+					$zresponsethumbnailid = $this->replaceUploadFile($zthumbnailid, $znewthumbnailid);
+					$zresponsethumbnailid = $this->deleteUploadFile($zthumbnailid);
+				}
+				$zresponse = array(
+					'responseoriginalid'=>$zresponseoriginalid,
+					'responsewebsizeid'=>$zresponsewebsizeid,
+					'responsethumbnailid'=>$zresponsethumbnailid,
+					'serror'=>''
+				);
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-deleteUploadFiles=".$e->getMessage());
+			$zresponse = array(
+				'responseoriginalid'=>$zresponseoriginalid,
+				'responsewebsizeid'=>$zresponsewebsizeid,
+				'responsethumbnailid'=>$zresponsethumbnailid,
+				'serror'=>$e->getMessage()
+			);
+		}
+		return $zresponse;
+	}
+	
+	public function replaceUploadFile($zuploadid, $znewuploadid) {
+		/* replace Media Library Images - search tables and replace where found */
+		/* attempt to not have an image or texture orphaned */
+		global $wtwhandlers;
+		$zresponse = array('serror'=>'');
+		try {
+			if (isset($zuploadid) && !empty($zuploadid) && isset($znewuploadid) && !empty($znewuploadid)) {
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set textureid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where textureid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set texturebumpid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebumpid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set texturehoverid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturehoverid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set videoid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where videoid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set videoposterid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where videoposterid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set heightmapid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where heightmapid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set mixmapid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where mixmapid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set texturerid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturerid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set texturegid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturegid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set texturebid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set texturebumprid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebumprid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set texturebumpgid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebumpgid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set texturebumpbid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebumpbid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."communitymolds
+					set soundid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where soundid='".$zuploadid."';");
+
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set textureid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where textureid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set texturebumpid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebumpid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set texturehoverid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturehoverid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set videoid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where videoid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set videoposterid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where videoposterid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set heightmapid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where heightmapid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set mixmapid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where mixmapid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set texturerid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturerid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set texturegid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturegid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set texturebid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set texturebumprid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebumprid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set texturebumpgid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebumpgid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set texturebumpbid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebumpbid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."buildingmolds
+					set soundid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where soundid='".$zuploadid."';");
+
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set textureid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where textureid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set texturebumpid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebumpid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set texturehoverid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturehoverid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set videoid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where videoid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set videoposterid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where videoposterid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set heightmapid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where heightmapid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set mixmapid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where mixmapid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set texturerid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturerid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set texturegid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturegid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set texturebid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set texturebumprid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebumprid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set texturebumpgid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebumpgid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set texturebumpbid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where texturebumpbid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."thingmolds
+					set soundid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where soundid='".$zuploadid."';");
+
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."webimages
+					set imageid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where imageid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."webimages
+					set imagehoverid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where imagehoverid='".$zuploadid."';");
+				$zresults = $wtwhandlers->query("
+					update ".wtw_tableprefix."webimages
+					set imageclickid='".$znewuploadid."',
+						updatedate=now(),
+						updateuserid='".$wtwhandlers->userid."'
+					where imageclickid='".$zuploadid."';");
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-replaceUploadFile=".$e->getMessage());
+			$zresponse = array('serror'=>$e->getMessage());
+		}
+		return $zresponse;
+	}
+
+	public function deleteUploadFile($zuploadid) {
+		/* perminently delete Media Library Image or file (Uploads) */
+		global $wtwhandlers;
+		$zresponse = array('serror'=>'');
+		try {
+			if (isset($zuploadid) && !empty($zuploadid)) {
+				$zresults = $wtwhandlers->query("
+					select * 
+					from ".wtw_tableprefix."uploads
+					where deleted=0
+						and uploadid='".$zuploadid."'
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfilepath = $zrow["filepath"];
+					if (file_exists($wtwhandlers->rootpath.$zfilepath)) {
+						unlink($wtwhandlers->rootpath.$zfilepath);
+					}
+					$wtwhandlers->query("
+					delete from ".wtw_tableprefix."uploads
+					where uploadid='".$zuploadid."'
+					limit 1;");
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-deleteUploadFile=".$e->getMessage());
+			$zresponse = array('serror'=>$e->getMessage());
+		}
+		return $zresponse;
 	}
 
 	public function getStockImages($zitem) {

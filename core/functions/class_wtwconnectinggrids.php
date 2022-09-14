@@ -19,7 +19,7 @@ class wtwconnectinggrids {
 		}
 	}
 
-	public function saveConnectingGrid($zconnectinggridid, $zparentwebid, $zparentwebtype, $zchildwebid, $zchildwebtype, $zloadactionzoneid, $zaltloadactionzoneid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zalttag) {
+	public function saveConnectingGrid($zconnectinggridid, $zparentserverfranchiseid, $zparentwebid, $zparentwebtype, $zchildserverfranchiseid, $zchildwebid, $zchildwebtype, $zloadactionzoneid, $zaltloadactionzoneid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zalttag) {
 		global $wtwhandlers;
 		try {
 			$access = false;
@@ -68,8 +68,10 @@ class wtwconnectinggrids {
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."connectinggrids
 							(connectinggridid,
+							 parentserverfranchiseid,
 							 parentwebid,
 							 parentwebtype,
+							 childserverfranchiseid,
 							 childwebid,
 							 childwebtype,
 							 positionx,
@@ -90,8 +92,10 @@ class wtwconnectinggrids {
 							 updateuserid)
 						values
 							('".$zconnectinggridid."',
+							 '".$zparentserverfranchiseid."',
 							 '".$zparentwebid."',
 							 '".$zparentwebtype."',
+							 '".$zchildserverfranchiseid."',
 							 '".$zchildwebid."',
 							 '".$zchildwebtype."',
 							 ".$wtwhandlers->checkNumber($zpositionx,0).",
@@ -111,7 +115,6 @@ class wtwconnectinggrids {
 							 now(),
 							 '".$wtwhandlers->userid."');");
 				}
-				/* NEED TO CHECK CONNECTING GRID ACTION ZONE (LOAD ZONE) checkconnectinggridactionzone */
 			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveConnectingGrid=".$e->getMessage());
@@ -178,8 +181,10 @@ class wtwconnectinggrids {
 								insert into ".wtw_tableprefix."connectinggrids
 									(connectinggridid, 
 									 pastconnectinggridid, 
+									 parentserverfranchiseid, 
 									 parentwebid, 
 									 parentwebtype, 
+									 childserverfranchiseid, 
 									 childwebid, 
 									 childwebtype, 
 									 positionx, 
@@ -203,8 +208,10 @@ class wtwconnectinggrids {
 								values
 									('".$zconnectinggridid."', 
 									 '".$zrow->connectinggridid."', 
+									 '".$zrow->parentserverfranchiseid."', 
 									 '".$zrow->parentwebid."', 
 									 '".$zrow->parentwebtype."', 
+									 '".$zrow->childserverfranchiseid."', 
 									 '".$zwebid."', 
 									 '".$zrow->childwebtype."', 
 									 ".$wtwhandlers->checkNumber($zrow->positionx,0).", 
@@ -230,8 +237,10 @@ class wtwconnectinggrids {
 								insert into ".wtw_tableprefix."connectinggrids
 									(connectinggridid, 
 									 pastconnectinggridid, 
+									 parentserverfranchiseid, 
 									 parentwebid, 
 									 parentwebtype, 
+									 childserverfranchiseid, 
 									 childwebid, 
 									 childwebtype, 
 									 positionx, 
@@ -255,8 +264,10 @@ class wtwconnectinggrids {
 								values
 									('".$zconnectinggridid."', 
 									 '".$zrow->connectinggridid."', 
+									 '".$zrow->parentserverfranchiseid."', 
 									 '".$zwebid."', 
 									 '".$zrow->parentwebtype."', 
+									 '',
 									 '',
 									 '".$zrow->childwebtype."', 
 									 ".$wtwhandlers->checkNumber($zrow->positionx,0).", 

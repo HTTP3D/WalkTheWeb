@@ -53,13 +53,13 @@ class wtwadminmenu {
 					$zaccessrequired = array of roles that are granted access - null for all allowed
 					$zjsfunction = javascript function to call for onclick event examples: WTW.show('divname');   or  myFunctionName('testthis');  or  MY.functionName();MY.secondFunction();
 				*/
-				$this->addAdminMenuItem('wtw_admindashboard', $this->__('Dashboard'), -100, 'wtw_dashboard', 0, '', '/content/system/images/menudashboard.png', null, "WTW.toggleAdminMenuDashboard();");
+				$this->addAdminMenuItem('wtw_admindashboard', $this->__('Dashboard'), -100, 'wtw_dashboard', 0, '', '/content/system/images/menudashboard.png', null, "WTW.toggleAdminSubMenu(this);");
 				$this->addAdminMenuItem('wtw_adminmenudashboard', $this->__('Admin Home'), -100, 'wtw_dashboard', 1, 'wtw_adminhome', '', null, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminmenuupdates', $this->__('Updates'), -100, 'wtw_dashboard', 2, 'wtw_updates', '', $developerroles, "WTW.openFullPageForm('updates','Check for Updates','');");
 				$this->addAdminMenuItem('wtw_adminmenufeedback', $this->__('Feedback'), -100, 'wtw_dashboard', 3, 'wtw_feedback', '', $adminroles, "WTW.openFullPageForm('feedback','Open Feedback','');");
 				$this->addAdminMenuItem('wtw_adminmenuerrorlog', $this->__('Error Log'), -100, 'wtw_dashboard', 4, 'wtw_errorlog', '', $developerroles, "WTW.openFullPageForm('errorlog','Active Errors','');");
 				
-				$this->addAdminMenuItem('wtw_adminmedia', $this->__('Media Library'), -95, 'wtw_medialibrary', 0, '', '/content/system/images/menumedia.png', $updateroles, "WTW.toggleAdminMenuMediaLibrary();");
+				$this->addAdminMenuItem('wtw_adminmedia', $this->__('Media Library'), -95, 'wtw_medialibrary', 0, '', '/content/system/images/menumedia.png', $updateroles, "WTW.toggleAdminSubMenu(this);");
 				$this->addAdminMenuItem('wtw_adminmediaobjects', $this->__('3D Models'), -95, 'wtw_medialibrary', 1, 'wtw_viewobjects', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);");
 				$this->addAdminMenuItem('wtw_adminmediafiles', $this->__('Files and Textures'), -95, 'wtw_medialibrary', 2, 'wtw_viewfiles', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(2);");
 				$this->addAdminMenuItem('wtw_adminmediawtwdownloads', $this->__('WalkTheWeb Downloads'), -95, 'wtw_medialibrary', 3, 'wtw_viewwtwdownloads', '', $updateroles, "WTW.openFullPageForm('importpage','communities');");
@@ -82,14 +82,15 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminsettingsthing', $this->__('Options and Settings'), -80, 'wtw_things', 3, 'wtw_thingsettings', '', $updateroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_admineditthing', $this->__('Edit 3D Thing'), -80, 'wtw_things', 4, 'wtw_editthing', '', $updateroles, "WTW.adminMenuItemSelected(this);");
 
-				$this->addAdminMenuItem('wtw_adminplugins', $this->__('3D Plugins'), 50, 'wtw_plugins', 0, '', '/content/system/images/menuplugin.png', $developerroles, "WTW.toggleAdminMenuLevel('plugins');");
-				$this->addAdminMenuItem('wtw_adminallplugins', $this->__('All Plugins'), 50, 'wtw_plugins', 1, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminactiveplugins', $this->__('Active Plugins'), 50, 'wtw_plugins', 2, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_admininactiveplugins', $this->__('Inactive Plugins'), 50, 'wtw_plugins', 3, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-
-				$this->addAdminMenuItem('wtw_adminwebdomains', $this->__('Web Domains'), 110, 'wtw_webdomains', 0, 'wtw_adminwebdomains', '/content/system/images/menuglobe.png', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminwebalias', $this->__('Web Aliases'), 110, 'wtw_webdomains', 1, 'wtw_adminwebalias', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminwebsites', $this->__('3D Websites'), -70, 'wtw_websites', 0, '', '/content/system/images/menuglobe.png', $developerroles, "WTW.toggleAdminSubMenu(this);");
+				$this->addAdminMenuItem('wtw_adminmenuwebdomains', $this->__('Web Domains'), -70, 'wtw_websites', 1, 'wtw_adminwebdomains', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminmenuwebalias', $this->__('Web Aliases'), -70, 'wtw_websites', 2, 'wtw_adminwebalias', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 				
+				$this->addAdminMenuItem('wtw_adminplugins', $this->__('3D Plugins'), 50, 'wtw_plugins', 0, '', '/content/system/images/menuplugin.png', $developerroles, "WTW.toggleAdminSubMenu(this);");
+				$this->addAdminMenuItem('wtw_adminallplugins', $this->__('All 3D Plugins'), 50, 'wtw_plugins', 1, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminactiveplugins', $this->__('Active 3D Plugins'), 50, 'wtw_plugins', 2, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_admininactiveplugins', $this->__('Inactive 3D Plugins'), 50, 'wtw_plugins', 3, 'wtw_allplugins', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+
 				if ($wtwdb->isUserInRole("Admin") || $wtwdb->isUserInRole("Developer")) {
 					$zresults = $wtwdb->query("
 						select invoiceid
@@ -98,8 +99,9 @@ class wtwadminmenu {
 						limit 1;
 					");
 					if (count($zresults) > 0) {
-						$this->addAdminMenuItem('wtw_admininvoices', 'Invoices', 400, 'wtw_adminmenuinvoices', 0, 'wtw_admininvoices', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$this->__('Invoices')."','wtw_invoicepage');");
-						$this->addAdminMenuItem('wtw_adminmyinvoices', 'My Invoices', 400, 'wtw_adminmenuinvoices', 1, 'wtw_adminmyinvoices', '', array('admin','developer','architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
+						$this->addAdminMenuItem('wtw_adminmenuinvoices', 'Invoices', 400, 'wtw_invoices', 0, '', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('admin','developer'), "WTW.toggleAdminSubMenu(this);");
+						$this->addAdminMenuItem('wtw_admininvoices', 'Invoices', 400, 'wtw_invoices', 1, 'wtw_admininvoices', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$this->__('Invoices')."','wtw_invoicepage');");
+						$this->addAdminMenuItem('wtw_adminmyinvoices', 'My Invoices', 400, 'wtw_invoices', 2, 'wtw_adminmyinvoices', '', array('admin','developer','architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
 					}
 				} else {
 					$zresults = $wtwdb->query("
@@ -111,11 +113,11 @@ class wtwadminmenu {
 						limit 1;
 					");
 					if (count($zresults) > 0) {
-						$this->addAdminMenuItem('wtw_adminmyinvoices', 'My Invoices', 400, 'wtw_adminmenuinvoices', 0, 'wtw_adminmyinvoices', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
+						$this->addAdminMenuItem('wtw_adminmyinvoices2', 'My Invoices', 400, 'wtw_invoices', 0, 'wtw_myinvoices', '/content/plugins/wtw-paypal/assets/menuinvoices.png', array('architect','host'), "WTW.openFullPageForm('fullpage','".$this->__('My Invoices')."','wtw_myinvoicepage');");
 					}
 				}
 
-				$this->addAdminMenuItem('wtw_adminusers', $this->__('Users'), 500, 'wtw_users', 0, '', '/content/system/images/menuprofile.png', $adminroles, "WTW.toggleAdminMenuLevel('users');");
+				$this->addAdminMenuItem('wtw_adminusers', $this->__('Users'), 500, 'wtw_users', 0, '', '/content/system/images/menuprofile.png', $adminroles, "WTW.toggleAdminSubMenu(this);");
 				$this->addAdminMenuItem('wtw_adminuserlist', $this->__('All Users'), 500, 'wtw_users', 1, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminprivilegeduserlist', $this->__('Privileged Users'), 500, 'wtw_users', 2, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminlocaluserlist', $this->__('Local Users'), 500, 'wtw_users', 3, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
@@ -123,21 +125,23 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminvisitinguserlist', $this->__('Visiting Users'), 500, 'wtw_users', 5, 'wtw_userlist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminuserroles', $this->__('User Roles'), 500, 'wtw_users', 10, 'wtw_roleslist', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				
-				$this->addAdminMenuItem('wtw_adminsettings', $this->__('Settings'), 900, 'wtw_settings', 0, '', '/content/system/images/menusettings.png', $adminroles, "WTW.toggleAdminMenuLevel('settings');");
+				$this->addAdminMenuItem('wtw_adminsettings', $this->__('Settings'), 900, 'wtw_settings', 0, '', '/content/system/images/menusettings.png', $adminroles, "WTW.toggleAdminSubMenu(this);");
 				$this->addAdminMenuItem('wtw_adminserversettings', $this->__('Server Settings'), 900, 'wtw_settings', 1, 'wtw_serversettings', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminemailserver', $this->__('Email Server'), 900, 'wtw_settings', 2, 'wtw_emailserver', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminhostingserver', $this->__('Server Hosting Settings'), 900, 'wtw_settings', 3, 'wtw_hostingserver', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				$this->addAdminMenuItem('wtw_adminapikeys', $this->__('API Keys Access'), 900, 'wtw_settings', 6, 'wtw_apikeys', '', $adminroles, "WTW.adminMenuItemSelected(this);");
 				
 				$this->addAdminMenuItem('wtw_admindevtools', $this->__('Developer Tools'), 998, 'wtw_devtools', 0, '', '/content/system/images/menutools.png', $developerroles, "WTW.toggleAdminMenuLevel('tools');");
-				$this->addAdminMenuItem('wtw_adminavatarcamera', $this->__('Avatar Camera ON'), 998, 'wtw_devtools', 1, 'wtw_avatarcamera', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminfocus', $this->__('Focus ON'), 998, 'wtw_devtools', 2, 'wtw_focus', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminmerged', $this->__('Merged Molds ON'), 998, 'wtw_devtools', 3, 'wtw_merged', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminzones', $this->__('Action Zones ON'), 998, 'wtw_devtools', 4, 'wtw_zones', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminloadall', $this->__('Load All Zones ON'), 998, 'wtw_devtools', 5, 'wtw_loadall', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminlines', $this->__('Alignment Lines ON'), 998, 'wtw_devtools', 6, 'wtw_lines', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminaxislabels', $this->__('Axis Labels OFF'), 998, 'wtw_devtools', 7, 'wtw_axislabels', '', $developerroles, "WTW.adminMenuItemSelected(this);");
-				$this->addAdminMenuItem('wtw_adminloadedobjects', $this->__('List Loaded Objects'), 998, 'wtw_devtools', 10, 'wtw_loadedobjects', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlistmeshes', $this->__('List Current Meshes'), 998, 'wtw_devtools', 10, 'wtw_listmeshes', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlisttransformnodes', $this->__('List Transform Nodes'), 998, 'wtw_devtools', 15, 'wtw_listtransformnodes', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlistcgs', $this->__('List Connecting Grids'), 998, 'wtw_devtools', 20, 'wtw_listcgs', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlistazs', $this->__('List Action Zones'), 998, 'wtw_devtools', 25, 'wtw_listazs', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlistcommmolds', $this->__('List Community Molds'), 998, 'wtw_devtools', 30, 'wtw_listcommmolds', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlistbuildmolds', $this->__('List Building Molds'), 998, 'wtw_devtools', 35, 'wtw_listbuildmolds', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlistthingmolds', $this->__('List Thing Molds'), 998, 'wtw_devtools', 40, 'wtw_listthingmolds', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlistautomations', $this->__('List Automations'), 998, 'wtw_devtools', 45, 'wtw_listautomations', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlistloadeduploads', $this->__('List Loaded Uploads'), 998, 'wtw_devtools', 50, 'wtw_listloadeduploads', '', $developerroles, "WTW.adminMenuItemSelected(this);");
+				$this->addAdminMenuItem('wtw_adminlistmyavatarlocation', $this->__('My Avatar Location'), 998, 'wtw_devtools', 55, 'wtw_listmyavatarlocation', '', $developerroles, "WTW.adminMenuItemSelected(this);");
 
 				if (!empty($wtw->communityid) || !empty($wtw->buildingid) || !empty($wtw->thingid) || !empty($wtw->avatarid)) {
 					$this->addAdminMenuItem('wtw_admincloseproject', $this->__('Close 3D Project'), 999, 'wtw_admincloseproject', 0, '', '/content/system/images/menuclosedoor.png', $updateroles, "WTW.adminMenuItemSelected(this);");
@@ -235,18 +239,6 @@ class wtwadminmenu {
 			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingactions', '<div class="wtw-altkey">ctrl+a</div>Add or Edit <u>A</u>ctions', 40, $zupdateroles, "WTW.adminMenuItemSelected(this);");
 			$this->addAdminSubMenuItem('editthing', '', '<hr class="wtw-menuhr" />', 100, $zupdateroles, "");
 			$this->addAdminSubMenuItem('editthing', 'wtw_adminthingrecover', '<div class="wtw-altkey">ctrl+r</div><u>R</u>ecover Deleted Items', 1000, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-
-			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listmeshes', 'List Current Meshes', 10, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listtransformnodes', 'List Transform Nodes', 15, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listcgs', 'List Connecting Grids', 20, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listazs', 'List Action Zones', 30, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listcommmolds', 'List Community Molds', 40, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listbuildmolds', 'List Building Molds', 50, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listthingmolds', 'List Thing Molds', 60, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listautomations', 'List Automations', 70, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listloadeduploads', 'List Loaded Uploads', 80, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-			$this->addAdminSubMenuItem('devlistobjects', 'wtw_listmyavatarlocation', 'My Avatar Location', 90, $zupdateroles, "WTW.adminMenuItemSelected(this);");
-
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwadminmenu.php-preloadAdminSubMenu=".$e->getMessage());
 		}
@@ -678,10 +670,19 @@ class wtwadminmenu {
 			$zmenu .= "				</div>\r\n";
 			$zmenu .= "				<div id='wtw_adminmenu13' class='wtw-adminmenuform wtw-hide'>\r\n";
 			$zmenu .= "					<div id='wtw_bback13' alt='Back' title='Back' class='wtw-backbutton' onclick='WTW.adminMenuItemSelected(this);'>&lt;&lt;</div>\r\n";
-			$zmenu .= "					<div class='wtw-menuheader'>".$this->__('Add 3D Thing')."</div><br />\r\n";
+			$zmenu .= "					<div class='wtw-menuheader'>".$this->__('Add 3D Thing')."</div>\r\n";
 			$zmenu .= "					<a href='https://www.walktheweb.com/wiki/add-3d-things-to-3d-buildings-or-3d-communities/' title='Help' alt='Help' class='wtw-helplink' target='_blank'>?</a>\r\n";
-			$zmenu .= "					<div id='wtw_loadingthingmoldsbuttonlist' class='wtw-loadingnoticecentered'>".$this->__('Loading')."</div>\r\n";
-			$zmenu .= "					<div id='wtw_thingmoldsbuttonlist'></div>\r\n";
+			$zmenu .= "					<div id='wtw_loadingthingbuttonlist' class='wtw-loadingnoticecentered'>".$this->__('Loading')."</div>\r\n";
+			$zmenu .= "					<div class='wtw-localbuttonleftpad'></div><div id='wtw_thingbuttonlocal' class='wtw-localbuttonselected wtw-leftradius' onclick=\"WTW.showFranchise(this, 'thing');\">".$this->__('Local')."</div><div class='wtw-localbuttonmiddlepad'> or </div><div id='wtw_thingbuttoninternet' class='wtw-localbutton wtw-rightradius' onclick=\"WTW.showFranchise(this, 'thing');\">".$this->__('3D Internet')."</div><div class='wtw-localbuttonrightpad'></div>\r\n";
+			$zmenu .= "					<div class='wtw-clear'></div>\r\n";
+			$zmenu .= "					<div id='wtw_thinginternetdiv' class='wtw-hide'>\r\n";
+			$zmenu .= "						<h4 class='wtw-marginbottom'>".$this->__('Domain Name')."</h4>\r\n";
+			$zmenu .= "						<div class='wtw-example'>(".$this->__('Example').": 3d.walktheweb.com)</div><br />\r\n";
+			$zmenu .= "						<input type='text' id='wtw_franchisethingsearch' maxlength='255' style='width:260px;' onclick=\"WTW.checkKey(this, 'webname', 1, 0);\" onkeyup=\"WTW.checkKey(this, 'webname', 1, 0);\" onblur=\"WTW.checkKey(this, 'webname', 1, 1);\" /><br /><br />\r\n";
+			$zmenu .= "						<div id='wtw_bsearchthingfranchises' class='wtw-greenbuttonbig' onclick=\"WTW.getFranchiseList('thing');\">".$this->__('Search Franchises')."</div><br /><br />\r\n";
+			$zmenu .= "					</div>\r\n";
+			$zmenu .= "					<div class='wtw-clear'></div>\r\n";			
+			$zmenu .= "					<div id='wtw_thingbuttonlist'></div>\r\n";
 			$zmenu .= "					<br />\r\n";
 			$zmenu .= "					<div id='wtw_cancel13' class='wtw-yellowbutton' onclick='WTW.adminMenuItemSelected(this);'>".$this->__('Cancel')."</div>\r\n";
 			$zmenu .= "					<br /><br />\r\n";
@@ -769,20 +770,18 @@ class wtwadminmenu {
 			$zmenu .= "				</div>\r\n";
 			$zmenu .= "				<div id='wtw_adminmenu27' class='wtw-adminmenuform wtw-hide' style='color:#FFF7DA;'>\r\n";
 			$zmenu .= "					<div id='wtw_bback27' alt='Back' title='Back' class='wtw-backbutton' onclick='WTW.adminMenuItemSelected(this);'>&lt;&lt;</div>\r\n";
-			$zmenu .= "					<div class='wtw-menuheader'>".$this->__('Add 3D Building')."</div><br />\r\n";
-			$zmenu .= "					<div id='wtw_loadingbuildingsbuttonlist' class='wtw-loadingnoticecentered'>".$this->__('Loading')."</div><br />\r\n";
-			$zmenu .= "<div class='wtw-hide'>\r\n";
-			$zmenu .= "					<div id='wtw_buildingsbuttonlocal' class='wtw-localbuttonselected wtw-leftradius' onclick='WTW.showFranchise(this, 'wtw_buildingsinternetdiv');'>".$this->__('Local')."</div> or <div id='wtw_buildingsbuttoninternet' class='wtw-localbutton wtw-rightradius' onclick=\"WTW.showFranchise(this, 'wtw_buildingsinternetdiv');\">".$this->__('3D Internet')."</div>\r\n";
+			$zmenu .= "					<div class='wtw-menuheader'>".$this->__('Add 3D Building')."</div>\r\n";
+			$zmenu .= "					<div id='wtw_loadingbuildingbuttonlist' class='wtw-loadingnoticecentered'>".$this->__('Loading')."</div>\r\n";
+			$zmenu .= "					<div class='wtw-localbuttonleftpad'></div><div id='wtw_buildingbuttonlocal' class='wtw-localbuttonselected wtw-leftradius' onclick=\"WTW.showFranchise(this, 'building');\">".$this->__('Local')."</div><div class='wtw-localbuttonmiddlepad'> or </div><div id='wtw_buildingbuttoninternet' class='wtw-localbutton wtw-rightradius' onclick=\"WTW.showFranchise(this, 'building');\">".$this->__('3D Internet')."</div><div class='wtw-localbuttonrightpad'></div>\r\n";
 			$zmenu .= "					<div class='wtw-clear'></div>\r\n";
-			$zmenu .= "					<div id='wtw_buildingsinternetdiv' class='wtw-hide'>\r\n";
+			$zmenu .= "					<div id='wtw_buildinginternetdiv' class='wtw-hide'>\r\n";
 			$zmenu .= "						<h4 class='wtw-marginbottom'>".$this->__('Domain Name')."</h4>\r\n";
 			$zmenu .= "						<div class='wtw-example'>(".$this->__('Example').": 3d.walktheweb.com)</div><br />\r\n";
-			$zmenu .= "						<input type='text' id='wtw_franchisesearch' maxlength='255' style='width:260px;' onclick=\"WTW.checkKey(this, 'webname', 1, 0);\" onkeyup=\"WTW.checkKey(this, 'webname', 1, 0);\" onblur=\"WTW.checkKey(this, 'webname', 1, 1);\" /><br /><br />\r\n";
-			$zmenu .= "						<div id='wtw_bsearchbuildingfranchises' class='wtw-greenbuttonbig' onclick='WTW.getFranchiseBuildingList();'>".$this->__('Search Franchises')."</div><br /><br />\r\n";
+			$zmenu .= "						<input type='text' id='wtw_franchisebuildingsearch' maxlength='255' style='width:260px;' onclick=\"WTW.checkKey(this, 'webname', 1, 0);\" onkeyup=\"WTW.checkKey(this, 'webname', 1, 0);\" onblur=\"WTW.checkKey(this, 'webname', 1, 1);\" /><br /><br />\r\n";
+			$zmenu .= "						<div id='wtw_bsearchbuildingfranchises' class='wtw-greenbuttonbig' onclick=\"WTW.getFranchiseList('building');\">".$this->__('Search Franchises')."</div><br /><br />\r\n";
 			$zmenu .= "					</div>\r\n";
-			$zmenu .= "</div>\r\n";
 			$zmenu .= "					<div class='wtw-clear'></div>\r\n";
-			$zmenu .= "					<div id='wtw_buildingsbuttonlist'></div>\r\n";
+			$zmenu .= "					<div id='wtw_buildingbuttonlist'></div>\r\n";
 			$zmenu .= "					<br />\r\n";
 			$zmenu .= "					<div id='wtw_cancel27' class='wtw-yellowbutton' onclick='WTW.adminMenuItemSelected(this);'>".$this->__('Cancel')."</div>\r\n";
 			$zmenu .= "					<br /><br />\r\n";
@@ -960,13 +959,7 @@ class wtwadminmenu {
 			$zmenu .= "					<div id='wtw_cancel69' class='wtw-greenbutton' onclick='WTW.adminMenuItemSelected(this);'>".$this->__('Done')."</div>\r\n";
 			$zmenu .= "					<br /><br />\r\n";
 			$zmenu .= "				</div>\r\n";
-			$zmenu .= "				<div id='wtw_adminmenu70' class='wtw-adminmenuform wtw-hide'>\r\n";
-			$zmenu .= "					<div id='wtw_bback70' alt='Back' title='Back' class='wtw-backbutton' onclick='WTW.adminMenuItemSelected(this);'>&lt;&lt;</div>\r\n";
-			$zmenu .= "					<div id='wtw_devtoolstitle' class='wtw-menuheader'>List Loaded Objects</div><br />\r\n";
-			$zmenu .= "					<div class='wtw-menulevel0text'>The following items List the current loaded objects and some of the parameters in the browser Console Log (in most browsers, press <strong>F12</strong> and choose <strong>Console</strong>).</div>\r\n";
-			$zmenu .= 						$this->getAdminSubMenu('devlistobjects')."\r\n";
-			$zmenu .= "					<br /><br />\r\n";
-			$zmenu .= "				</div>\r\n";
+
 			$zmenu .= 				$this->getAdminMenuForms()."\r\n";
 			$zmenu .= "			</div>\r\n";
 			if ($wtwdb->hasPermission(array('admin','developer','architect','graphics artist','host'))) { 

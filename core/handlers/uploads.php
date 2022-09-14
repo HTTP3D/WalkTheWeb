@@ -91,6 +91,9 @@ try {
 		case "getmyimages":
 			$zresponse = $wtwuploads->getMyImages($zcategory, $zhide);
 			break;
+		case "deleteuploadfiles":
+			$zresponse = $wtwuploads->deleteUploadFiles($zuploadid);
+			break;
 		case "getstockimages":
 			$zresponse = $wtwuploads->getStockImages($zitem);
 			break;

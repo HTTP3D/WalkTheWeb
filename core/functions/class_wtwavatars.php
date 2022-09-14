@@ -1677,10 +1677,10 @@ class wtwavatars {
 					$zversiondesc = base64_decode($zversiondesc);
 					
 				}
-				$ztemplatename = htmlspecialchars($ztemplatename, ENT_QUOTES, 'UTF-8');
-				$zdescription = htmlspecialchars($zdescription, ENT_QUOTES, 'UTF-8');
-				$ztags = htmlspecialchars($ztags, ENT_QUOTES, 'UTF-8');
-				$zversiondesc = htmlspecialchars($zversiondesc, ENT_QUOTES, 'UTF-8');
+				$ztemplatename = $wtwhandlers->escapeHTML($ztemplatename);
+				$zdescription = $wtwhandlers->escapeHTML($zdescription);
+				$ztags = $wtwhandlers->escapeHTML($ztags);
+				$zversiondesc = $wtwhandlers->escapeHTML($zversiondesc);
 				$zsharehash = $wtwhandlers->getRandomString(16,1);
 				$zresponse["sharehash"] = $zsharehash;
 				$zversion1 = 1;

@@ -677,6 +677,14 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsToggleAdminSubMenu = function(zobj) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('toggleadminsubmenu');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsToggleAdminSubMenu=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsKeyDown = function(zevent) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->getScriptFunction('keydown');

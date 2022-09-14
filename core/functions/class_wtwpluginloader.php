@@ -23,7 +23,7 @@ class wtwpluginloader {
 	}
 	
 	public function getAllPlugins($zcontentpath, $zload) {
-		/* check the plugin folder path to get all plugins by folders */
+		/* check the plugin folder path to get all 3D plugins by folders */
 		global $wtwdb;
 		$zresponse = array();
 		try {

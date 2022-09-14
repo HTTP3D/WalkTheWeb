@@ -139,6 +139,8 @@ html, body {
 	margin:15px;
 	border:1px solid #afafaf;
 	display:inline-block;
+	background-color:#ffffff;
+	color:#000000;
 }
 .wtw-objectfile {
 	text-align:center;
@@ -330,6 +332,7 @@ td.wtw-tddeactive {
 	padding:10px;
 	vertical-align:top;
 	color:#000000;
+	background-color:#ffffff;
 }
 .wtw-controlpaneltitlediv {
 	font-size:1.4em;
@@ -368,4 +371,12 @@ td.wtw-tddeactive {
 .wtw-download:hover {
 	color:#375377;
 	cursor:pointer;
+}
+.wtw-roundedbox {
+	border: 1px solid #000000;
+	border-radius:15px;
+	padding:5px;
+	margin:15px;
+	background-color:#ffffff;
+	color:#000000;
 }

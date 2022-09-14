@@ -551,8 +551,10 @@ class wtwtables {
 				CREATE TABLE `".wtw_tableprefix."connectinggrids` (
 				  `connectinggridid` varchar(16) NOT NULL,
 				  `pastconnectinggridid` varchar(16) DEFAULT '',
+				  `parentserverfranchiseid` varchar(32) DEFAULT '',
 				  `parentwebid` varchar(16) DEFAULT '',
 				  `parentwebtype` varchar(16) DEFAULT '',
+				  `childserverfranchiseid` varchar(32) DEFAULT '',
 				  `childwebid` varchar(16) DEFAULT '',
 				  `childwebtype` varchar(16) DEFAULT '',
 				  `positionx` decimal(18,2) DEFAULT '0.00',
@@ -3576,6 +3578,13 @@ class wtwtables {
 				if ($zfilecount == 0 && is_dir($wtw->rootpath.'/core/menus')) {
 					rmdir($wtw->rootpath.'/core/menus');
 				}
+				
+				/* updated 3.5.3 - setting up to group upload objects for future 3D Model Downloads */
+				$wtwdb->query("
+					update ".wtw_tableprefix."uploadobjects
+					set groupid=uploadobjectid
+					where groupid='';
+				");
 			}
 
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);

@@ -12,8 +12,10 @@ try {
 	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zconnectinggridid = $wtwhandlers->getPost('connectinggridid','');
+	$zparentserverfranchiseid = $wtwhandlers->getPost('parentserverfranchiseid','');
 	$zparentwebid = $wtwhandlers->getPost('parentwebid','');
 	$zparentwebtype = $wtwhandlers->getPost('parentwebtype','');
+	$zchildserverfranchiseid = $wtwhandlers->getPost('childserverfranchiseid','');
 	$zchildwebid = $wtwhandlers->getPost('childwebid','');
 	$zchildwebtype = $wtwhandlers->getPost('childwebtype','');
 	$zloadactionzoneid = $wtwhandlers->getPost('loadactionzoneid','');
@@ -36,7 +38,7 @@ try {
 	$zresponse = array();
 	switch ($zfunction) {
 		case "saveconnectinggrid":
-			$zconnectinggridid = $wtwconnectinggrids->saveConnectingGrid($zconnectinggridid, $zparentwebid, $zparentwebtype, $zchildwebid, $zchildwebtype, $zloadactionzoneid, $zaltloadactionzoneid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zalttag);
+			$zconnectinggridid = $wtwconnectinggrids->saveConnectingGrid($zconnectinggridid, $zparentserverfranchiseid, $zparentwebid, $zparentwebtype, $zchildserverfranchiseid, $zchildwebid, $zchildwebtype, $zloadactionzoneid, $zaltloadactionzoneid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zalttag);
 			break;
 		case "deleteconnectinggrid":
 			$wtwconnectinggrids->deleteConnectingGrid($zconnectinggridid);

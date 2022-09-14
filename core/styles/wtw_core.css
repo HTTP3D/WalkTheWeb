@@ -1260,6 +1260,10 @@ select.wtw-fileselectcategory {
 .wtw-yellowbackground {
 	background-color:yellow;
 }
+.wtw-whitebg {
+	color:#000000;
+	background-color:#ffffff;
+}
 .wtw-leftalign {
 	text-align:left;
 }
@@ -1430,7 +1434,8 @@ a.wtw-helplink2:hover {
 	border:1px solid #454545;
 	padding:0px;
 	margin:1%;
-	background-color:#ffffff;
+	background-color:#efefef;
+	color:#000000;
 }
 .wtw-dashboardboxleftdouble {
 	float:left;
@@ -1438,7 +1443,17 @@ a.wtw-helplink2:hover {
 	border:1px solid #454545;
 	padding:0px;
 	margin:1%;
-	background-color:#ffffff;
+	background-color:#efefef;
+	color:#000000;
+}
+.wtw-dashboardboxlefthalf {
+	float:left;
+	width:48%;
+	border:1px solid #454545;
+	padding:0px;
+	margin:1%;
+	background-color:#efefef;
+	color:#000000;
 }
 .wtw-dashboardboxleftfull {
 	float:left;
@@ -1446,7 +1461,8 @@ a.wtw-helplink2:hover {
 	border:1px solid #454545;
 	padding:0px;
 	margin:1%;
-	background-color:#ffffff;
+	background-color:#efefef;
+	color:#000000;
 }
 .wtw-dashboardboxtitle {
 	margin:0px;
@@ -1663,12 +1679,13 @@ a.wtw-leftbutton:hover {
 }
 .wtw-localbuttonselected {
 	padding:5px;
-	margin-left:8px;
-	margin-right:8px;
+	margin: 0px 0px 8px 0px;
 	display:inline-block;
 	font-size:1em;
 	color:gray;
 	border:1px solid #c0c0c0;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
 	background-color:#FBFFDE;
 }
 .wtw-localbuttonselected:hover {
@@ -1679,12 +1696,13 @@ a.wtw-leftbutton:hover {
 }
 .wtw-localbutton {
 	padding:5px;
-	margin-left:8px;
-	margin-right:8px;
+	margin: 0px 0px 8px 0px;
 	display:inline-block;
 	font-size:1em;
 	color:gray;
 	border:1px solid #c0c0c0;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
 	background-color:transparent;
 }
 .wtw-localbutton:hover {
@@ -1692,6 +1710,36 @@ a.wtw-leftbutton:hover {
 	color:#375377;
 	border:1px solid black;
 	cursor:pointer;
+}
+.wtw-localbuttonleftpad {
+	padding:5px;
+	margin: 0px 0px 8px 0px;
+	display:inline-block;
+	font-size:1em;
+	width: 10px;
+	border-top:1px solid #c0c0c0;
+	border-right:1px solid #c0c0c0;
+	border-top-right-radius: 20px;
+}
+.wtw-localbuttonrightpad {
+	padding:5px;
+	margin: 0px 0px 8px 0px;
+	display:inline-block;
+	font-size:1em;
+	width: 10px;
+	border-top:1px solid #c0c0c0;
+	border-left:1px solid #c0c0c0;
+	border-top-left-radius: 20px;
+}
+.wtw-localbuttonmiddlepad {
+	padding:5px;
+	margin: 0px 0px 8px 0px;
+	display:inline-block;
+	width:34px;
+	font-size:1em;
+	border-top:1px solid #c0c0c0;
+	border-top-left-radius: 20px;
+	border-top-right-radius: 20px;
 }
 .wtw-warningmessage {
 	text-align:center;

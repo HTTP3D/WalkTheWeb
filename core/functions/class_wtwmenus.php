@@ -479,7 +479,7 @@ class wtwmenus {
 		$zmenu = "";
 		try {
 			$zmenu .= "<div id='wtw_menucontrols' class='wtw-slideupmenuright wtw-hide'>\r\n";
-			$zmenu .= "	<img onclick='WTW.closeMenus();' class='wtw-closeright' src='/content/system/images/menuclose.png' alt='Close' title='Close' onmouseover='this.src='/content/system/images/menuclosehover.png';' onmouseout='this.src='/content/system/images/menuclose.png';' />\r\n";
+			$zmenu .= "	<img onclick='WTW.closeMenus();' class='wtw-closeright' src='/content/system/images/menuclose.png' alt='Close' title='Close' onmouseover='this.src='/content/system/images/menuclosehover.png';' onmouseout=\"this.src='/content/system/images/menuclose.png';\" />\r\n";
 			$zmenu .= "	<div class='wtw-menuheading'>".$this->__('Movement Controls')."</div>\r\n";
 			$zmenu .= "	<div id='wtw_menucontrolsscroll' class='wtw-mainmenuscroll'>\r\n";
 			$zmenu .= "		<ul class='wtw-menuli'>\r\n";

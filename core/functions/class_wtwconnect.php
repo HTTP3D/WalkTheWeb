@@ -431,8 +431,14 @@ class wtwconnect {
 
 	public function addConnectHeader($zavailabledomains) {
 		/* sets the domain allowed for cross script - only when allowed */
+		global $wtwdb;
 		$zheader = "";
 		try {
+			if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
+				if (substr($_SERVER['HTTP_REFERER'], 0, 29) === 'https://3dnet.walktheweb.com/') {
+					$zavailabledomains = '3dnet.walktheweb.com';
+				}
+			}
 			$zheader .= header('Access-Control-Allow-Origin: '.$zavailabledomains);
 			$zheader .= header('Content-type: application/json');
 			$zheader .= header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
