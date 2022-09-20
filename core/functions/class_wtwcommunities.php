@@ -2536,10 +2536,23 @@ class wtwcommunities {
 							'".$znewupdateuserid."');");
 				}
 				
-
+				/* create array of uploadobjects to update the groupid after they are all added to the table (next section) */
+				$i = 0;
+				$zgroups = array();
 				/* process uploaded objects */
 				foreach ($zrequest->uploadobjects as $zuploadobject) {
 					$znewuploadobjectid = $wtwhandlers->getNewKey('uploadobjects', "uploadobjectid", $zuploadobject->uploadobjectid);
+					$zgroupid = $zuploadobject->groupid;
+					if (!isset($zgroupid) || empty($zgroupid)) {
+						/* set to old id, will be updated in next section */
+						$zgroupid = $zuploadobject->uploadobjectid;
+					}
+					$zgroups[$i] = array(
+						'uploadobjectid'=>$zuploadobject->uploadobjectid,
+						'pastuploadobjectid'=>$znewuploadobjectid,
+						'groupid'=>$zgroupid
+					);
+					$i += 1;
 
 					if (!empty($zuploadobject->uploadobjectid) && isset($zuploadobject->uploadobjectid)) {
 						
@@ -2565,6 +2578,7 @@ class wtwcommunities {
 							insert into ".wtw_tableprefix."uploadobjects 
 							   (uploadobjectid,
 								pastuploadobjectid,
+								groupid,
 								userid,
 								objectfolder,
 								objectfile,
@@ -2576,6 +2590,7 @@ class wtwcommunities {
 							values
 							   ('".$znewuploadobjectid."',
 								'".$zuploadobject->uploadobjectid."',
+								'".$zgroupid."',
 								'".$zuserid."',
 								'".$znewobjecturl."',
 								'".$zuploadobject->objectfile."',
@@ -2661,8 +2676,30 @@ class wtwcommunities {
 									'".$znewupdateuserid."');");
 						}
 					}
-				}			
-
+				}
+				/* update groupid to new uploadobjectid based */
+				foreach ($zgroups as $zgroup) {
+					$znewgroupid = $zgroup['uploadobjectid'];
+					$zresults = $wtwhandlers->query("
+						select uploadobjectid
+						from ".wtw_tableprefix."uploadobjects
+						where pastuploadobjectid='".$zgroup['groupid']."'
+							and deleted=0
+						order by updatedate desc
+						limit 1;
+					");
+					foreach ($zresults as $zrow) {
+						$znewgroupid = $zrow['uploadobjectid'];
+					}
+					if (!isset($znewgroupid) || empty($znewgroupid)) {
+						$znewgroupid = $zgroup['uploadobjectid'];
+					}
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."uploadobjects
+						set groupid='".$znewgroupid."'
+						where uploadobjectid='".$zgroup['uploadobjectid']."';
+					");
+				}
 
 				/* process all molds */
 				foreach ($zrequest->molds as $zmold) {
@@ -4527,11 +4564,24 @@ class wtwcommunities {
 					}
 				}
 				
-
+				/* create array of uploadobjects to update the groupid after they are all added to the table (next section) */
+				$i = 0;
+				$zgroups = array();
 				/* process uploaded objects */
 				foreach ($zrequest->uploadobjects as $zuploadobject) {
 					$znewuploadobjectid = $wtwhandlers->getNewKey('uploadobjects', "uploadobjectid", $zuploadobject->uploadobjectid);
-
+					$zgroupid = $zuploadobject->groupid;
+					if (!isset($zgroupid) || empty($zgroupid)) {
+						/* set to old id, will be updated in next section */
+						$zgroupid = $zuploadobject->uploadobjectid;
+					}
+					$zgroups[$i] = array(
+						'uploadobjectid'=>$zuploadobject->uploadobjectid,
+						'pastuploadobjectid'=>$znewuploadobjectid,
+						'groupid'=>$zgroupid
+					);
+					$i += 1;
+					
 					if (!empty($zuploadobject->uploadobjectid) && isset($zuploadobject->uploadobjectid)) {
 						
 						$znewobjectfolder = $znewfolder.'/objects';
@@ -4556,6 +4606,7 @@ class wtwcommunities {
 							insert into ".wtw_tableprefix."uploadobjects 
 							   (uploadobjectid,
 								pastuploadobjectid,
+							    groupid,
 								userid,
 								objectfolder,
 								objectfile,
@@ -4567,6 +4618,7 @@ class wtwcommunities {
 							values
 							   ('".$znewuploadobjectid."',
 								'".$zuploadobject->uploadobjectid."',
+								'".$zgroupid."',
 								'".$zuserid."',
 								'".$znewobjecturl."',
 								'".$zuploadobject->objectfile."',
@@ -4652,8 +4704,30 @@ class wtwcommunities {
 									'".$znewupdateuserid."');");
 						}
 					}
-				}			
-
+				}
+				/* update groupid to new uploadobjectid based */
+				foreach ($zgroups as $zgroup) {
+					$znewgroupid = $zgroup['uploadobjectid'];
+					$zresults = $wtwhandlers->query("
+						select uploadobjectid
+						from ".wtw_tableprefix."uploadobjects
+						where pastuploadobjectid='".$zgroup['groupid']."'
+							and deleted=0
+						order by updatedate desc
+						limit 1;
+					");
+					foreach ($zresults as $zrow) {
+						$znewgroupid = $zrow['uploadobjectid'];
+					}
+					if (!isset($znewgroupid) || empty($znewgroupid)) {
+						$znewgroupid = $zgroup['uploadobjectid'];
+					}
+					$wtwhandlers->query("
+						update ".wtw_tableprefix."uploadobjects
+						set groupid='".$znewgroupid."'
+						where uploadobjectid='".$zgroup['uploadobjectid']."';
+					");
+				}
 
 				/* process all molds */
 				foreach ($zrequest->molds as $zmold) {

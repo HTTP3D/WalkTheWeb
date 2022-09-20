@@ -348,7 +348,7 @@ class wtwmenus {
 			$zmenu .= "			<img onclick='WTW.closeMenus();' class='wtw-closeright' src='/content/system/images/menuclose.png' alt='Close' title='Close' onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />\r\n";
 			$zmenu .= "			<div class='wtw-menuheading'>".$this->__('My Profile')."</div>\r\n";
 			$zmenu .= "			<ul class='wtw-menuli'>\r\n";
-			$zmenu .= "				<li class='wtw-menuliholder wtw-center'><img id='wtw_profileimagelg' src='/content/system/images/menuprofilebig.png' alt='Profile' title='Profile' class='wtw-profilelg' /></li>\r\n";
+			$zmenu .= "				<li class='wtw-menuliholder wtw-center'><img id='wtw_profileimagelg' src='/content/system/images/menuprofilebig.png' alt='Profile' title='Profile' class='wtw-image100' /></li>\r\n";
 			$zmenu .= "				<li class='wtw-submenuli'>".$this->__('Avatar Display Name')."</li>\r\n";
 			$zmenu .= "				<li class='wtw-submenuli'><div id='wtw_menudisplayname' class='wtw-indentbold wtw-pointer' onclick='WTW.editProfile();'></div>\r\n";
 			$zmenu .= "					<input type='text' id='wtw_teditdisplayname' class='wtw-hide' /></li>\r\n";
@@ -418,7 +418,7 @@ class wtwmenus {
 			$zmenu .= "				<li id='wtw_menuavatardisplaynamediv' class='wtw-submenublockli wtw-hide'><div class='wtw-menusubtext'>".$this->__('Avatar Display Name:')."<br />\r\n";
 			$zmenu .= "					<input id='wtw_tavatardisplayname' type='text' maxlength='255' onclick=\"WTW.checkKey(this, 'displayname', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'displayname', 0, 0);\" onblur=\"WTW.checkKey(this, 'displayname', 0, 1);WTW.saveAvatarDisplayName();\" /></div><br />\r\n";
 			$zmenu .= "					<div id='wtw_displaybannote' class='wtw-menusmalltext'>".$this->__('Be respectful of others when choosing a name.')." \r\n";
-			$zmenu .= 						$this->__('Reported offenders may be banned perminently.');
+			$zmenu .= 						$this->__('Reported offenders may be banned permanently.');
 			$zmenu .= 						$this->__('Note that all names used are recorded with your account.')."<br />\r\n";
 			$zmenu .= "					</div>\r\n";
 			$zmenu .= "				</li>\r\n";

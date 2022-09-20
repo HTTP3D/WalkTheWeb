@@ -423,6 +423,11 @@ class wtwconnect {
 		return $wtwdb->dirSize($zdirectory);
 	} 
 
+	public function getFileCount($zdirectory) {
+		global $wtwdb;
+		return $wtwdb->getFileCount($zdirectory);
+	} 
+
 	public function __($zlabel) {
 		/* Language translation based on language file */
 		global $wtwdb;

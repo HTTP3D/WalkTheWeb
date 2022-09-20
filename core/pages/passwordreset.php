@@ -80,7 +80,7 @@ global $wtwhandlers;
 				} ?>		
 				&nbsp;</div><br />
 			
-				<div class="wtw-loginbutton" onclick="WTW.resetPassword();"><img src="/content/system/images/wtwlogo.png" alt="HTTP3D Inc." title="HTTP3D Inc." class="wtw-loginlogo"/><div style="margin-top:10px;">Save New Password</div></div>
+				<div class="wtw-loginbutton" onclick="WTW.resetPassword();"><img src="/content/system/images/wtwlogo.png" alt="HTTP3D Inc." title="HTTP3D Inc." class="wtw-image40"/><div style="margin-top:10px;">Save New Password</div></div>
 <?php 		} else { ?>		
 				Your password has been reset.<br /><br />You can now return to the 3D Website to login.<br /><br />Welcome to WalkTheWeb 3D Internet!<br /><br />
 				<div style="clear:both;"></div>

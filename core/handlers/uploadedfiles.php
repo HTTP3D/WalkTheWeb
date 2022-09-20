@@ -12,6 +12,7 @@ try {
 	/* read in values */
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zuploadobjectid = $wtwhandlers->getPost('uploadobjectid','');
+	$zduplicateuploadobjectid = $wtwhandlers->getPost('duplicateuploadobjectid','');
 	$zgroupid = $wtwhandlers->getPost('groupid','');
 	$zobjectanimationid = $wtwhandlers->getPost('objectanimationid','');
 	$zobjectfolder = $wtwhandlers->getPost('objectfolder','');
@@ -25,7 +26,8 @@ try {
 	$zactionzoneid = $wtwhandlers->getPost('actionzoneid','');
 	$zuploadfile = $wtwhandlers->getFiles('wtw_uploadfile',null);
 	$zuploadfiles = $wtwhandlers->getFiles('wtw_uploadfiles',null);
-
+	$zpermanent = $wtwhandlers->getPost('permanent',0);
+	
 	/* select the function called */
 	$zresponse = array();
 	switch ($zfunction) {
@@ -56,6 +58,9 @@ try {
 		case "deleteobjectfile":
 			$wtwuploads->deleteObjectFile($zfilename, $zobjectfilepart);
 			break;
+		case "deleteuploadobject":
+			$wtwuploads->deleteUploadObject($zuploadobjectid, $zpermanent);
+			break;
 		case "uploadjavascriptfiles":
 			$serror = $wtwuploads->uploadJavaScriptFiles($zuploadfiles, $zwebtype, $zwebid, $zactionzoneid);
 			$zresponse = array(
@@ -70,6 +75,9 @@ try {
 			break;
 		case "saveobjectgroup":
 			$zresponse = $wtwuploads->saveObjectGroup($zuploadobjectid, $zgroupid);
+			break;
+		case "removeduplicateuploadobject":
+			$zresponse = $wtwuploads->removeDuplicateUploadObject($zuploadobjectid, $zduplicateuploadobjectid);
 			break;
 	}
 

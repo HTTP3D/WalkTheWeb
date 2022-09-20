@@ -1616,6 +1616,20 @@ class wtwdb {
 		return $zsize;
 	} 
 
+	public function getFileCount($zdirectory) {
+		$zfilecount = 0;
+		try {
+			$zdirectory = rtrim($zdirectory, "/");
+			if (file_exists($zdirectory)) {
+				$zfiles = new FilesystemIterator($zdirectory, FilesystemIterator::SKIP_DOTS);
+				$zfilecount = iterator_count($zfiles);
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-getFileCount=".$e->getMessage());
+		}
+		return $zfilecount;
+	} 
+
 	public function getobjectanimations($zuploadobjectid) {
 		$zobjectanimations = array();
 		try {

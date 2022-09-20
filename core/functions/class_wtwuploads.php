@@ -535,6 +535,7 @@ class wtwuploads {
 				$wtwhandlers->query("
 					insert into ".wtw_tableprefix."uploadobjects
 						(uploadobjectid,
+						 groupid,
 						 userid,
 						 objectfolder,
 						 objectfile,
@@ -544,6 +545,7 @@ class wtwuploads {
 						 updateuserid)
 					values
 						('".$zuploadobjectid."',
+						 '".$zuploadobjectid."',
 						 '".$wtwhandlers->userid."',
 						 '".$zobjectfolder."',
 						 '".$zfilename."',
@@ -1628,33 +1630,157 @@ class wtwuploads {
 		$zresults = array();
 		try {
 			$zresults = $wtwhandlers->query("
-				select *
-				from ".wtw_tableprefix."uploadobjects
-				where userid='".$wtwhandlers->userid."'
-					or stock=1
-				order by createdate desc, objectfile, objectfolder, uploadobjectid;");
+				select uo1.*,
+					case when sum1.webcount is null then 0
+						else sum1.webcount
+                        end as webcount
+				from ".wtw_tableprefix."uploadobjects uo1
+					left join (
+						select tb1.uploadobjectid, sum(tb1.webcount) as webcount
+						from
+							((select cm1.uploadobjectid, 
+								count(cm1.communityid) as webcount
+							from ".wtw_tableprefix."communitymolds cm1
+							where cm1.deleted=0
+								and not cm1.uploadobjectid =''
+							group by cm1.uploadobjectid)
+						union
+							(select bm1.uploadobjectid, 
+								count(bm1.buildingid) as webcount
+							from ".wtw_tableprefix."buildingmolds bm1
+							where bm1.deleted=0
+								and not bm1.uploadobjectid =''
+							group by bm1.uploadobjectid)
+						union
+							(select tm1.uploadobjectid, 
+								count(tm1.thingid) as webcount
+							from ".wtw_tableprefix."thingmolds tm1
+							where tm1.deleted=0
+								and not tm1.uploadobjectid =''
+							group by tm1.uploadobjectid)) tb1
+						group by tb1.uploadobjectid
+                    ) sum1
+                    on uo1.uploadobjectid=sum1.uploadobjectid
+				where (uo1.userid='".$wtwhandlers->userid."'
+					or uo1.stock=1)
+                    and uo1.deleted=0
+				order by uo1.createdate desc, uo1.objectfile, uo1.objectfolder, uo1.uploadobjectid;");
+			$i = 0;
+			foreach ($zresults as $zrow) {
+				$zfilecount = 0;
+				$zfoldersize = 0;
+				$zanimationcount = 0;
+				$zuploadobjectid = $zrow["uploadobjectid"];
+				$zobjectfolder = $zrow["objectfolder"];
+				$zfilecount = $wtwhandlers->getFileCount($wtwhandlers->rootpath.$zobjectfolder);
+				$zfoldersize = $wtwhandlers->dirSize($wtwhandlers->rootpath.$zobjectfolder);
+				$zanimationcount = $this->getUploadObjectAnimationsCount($zuploadobjectid);
+				$zresults[$i]["filecount"] = $zfilecount;
+				$zresults[$i]["foldersize"] = $zfoldersize;
+				$zresults[$i]["animationcount"] = $zanimationcount;
+				$i += 1;
+			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getUploadedFiles=".$e->getMessage());
 		}
 		return $zresults;
 	}
 
+	function getUploadObjectAnimationsCount($zuploadobjectid) {
+		/* Upload objects animation count for 3D Models */
+		global $wtwhandlers;
+		$zcount = 0;
+		try {
+			$zresults = $wtwhandlers->query("
+				select count(*) as scount
+				from ".wtw_tableprefix."uploadobjectanimations
+				where uploadobjectid='".$zuploadobjectid."'
+					and deleted=0;");
+			foreach ($zresults as $zrow) {
+				$zcount = $zrow["scount"];
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getUploadObjectAnimationsCount=".$e->getMessage());
+		}
+		return $zcount;
+	}
+
 	public function getUploadedFileNameDetails($zuploadobjectid) {
 		/* retrieve uploaded 3D Object file details settings from the database */
 		global $wtwhandlers;
-		$zresults = array();
+		$zresponse[0] = array(
+			'serror'=> ''
+		);
 		try {
-			$zresults = $wtwhandlers->query("
+			$zgroupid = '';
+			$zresponse = $wtwhandlers->query("
+				select *,
+					'' as webs,
+					'' as serror
+				from ".wtw_tableprefix."uploadobjects
+				where (userid='".$wtwhandlers->userid."'
+					or stock=1)
+					and uploadobjectid='".$zuploadobjectid."'
+				limit 1;");
+			foreach ($zresponse as $zrow) {
+				$zgroupid = $zrow["groupid"];
+			}
+			if (!isset($zgroupid) || empty($zgroupid)) {
+				$zgroupid = $zuploadobjectid;
+			}
+			$zwebs = $wtwhandlers->query("
+				select cm1.communityid as webid,
+						c1.communityname as webname,
+						'1' as sorder,
+						'Community' as webtype
+					from ".wtw_tableprefix."communitymolds cm1
+						inner join ".wtw_tableprefix."communities c1
+						on cm1.communityid=c1.communityid
+					where cm1.deleted=0
+						and c1.deleted=0
+						and cm1.uploadobjectid='".$zuploadobjectid."'
+						and not cm1.uploadobjectid =''
+				union
+				select bm1.buildingid as webid,
+						b1.buildingname as webname,
+						'2' as sorder,
+						'Building' as webtype
+					from ".wtw_tableprefix."buildingmolds bm1
+						inner join ".wtw_tableprefix."buildings b1
+						on bm1.buildingid=b1.buildingid
+					where bm1.deleted=0
+						and b1.deleted=0
+						and bm1.uploadobjectid='".$zuploadobjectid."'
+						and not bm1.uploadobjectid =''
+				union
+				select tm1.thingid as webid,
+						t1.thingname as webname,
+						'3' as sorder,
+						'Thing' as webtype
+					from ".wtw_tableprefix."thingmolds tm1
+						inner join ".wtw_tableprefix."things t1
+						on tm1.thingid=t1.thingid
+					where tm1.deleted=0
+						and t1.deleted=0
+						and tm1.uploadobjectid='".$zuploadobjectid."'
+						and not tm1.uploadobjectid =''
+				order by sorder, webtype, webname, webid;");
+			$zgroupmodels = $wtwhandlers->query("
 				select *
 				from ".wtw_tableprefix."uploadobjects
 				where (userid='".$wtwhandlers->userid."'
-						or stock=1)
-						and uploadobjectid='".$zuploadobjectid."'
-				limit 1;");
+					or stock=1)
+					and groupid='".$zgroupid."'
+				order by objectfile, uploadobjectid;");
+			$zresponse[0]["webs"] = $zwebs;
+			$zresponse[0]["groupmodels"] = $zgroupmodels;
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-getUploadedFileNameDetails=".$e->getMessage());
+			$zresponse[0] = array(
+				'serror'=> $e->getMessage()
+			);
 		}
-		return $zresults;
+		return $zresponse;
 	}
 
 	public function getUploadedFileFilesDetails($zobjectfolder) {
@@ -1663,7 +1789,7 @@ class wtwuploads {
 		$zresults = array();
 		try {
 			$i = 0;
-			$zdir = str_replace('/content',$wtwhandlers->contentpath,$zobjectfolder);
+			$zdir = str_replace('/content/',$wtwhandlers->contentpath.'/',$zobjectfolder);
 			$zdir = rtrim($zdir, "/");
 			if (is_dir($zdir)) {
 				if ($zdh = opendir($zdir)) {
@@ -1680,8 +1806,10 @@ class wtwuploads {
 				}
 			}
 			/* sort the results by file name */
-			function arraysort($a, $b) {
-				return ($a["file"] > $b["file"]) ? 1 : -1;
+			if(!function_exists('arraysort')){
+				function arraysort($a, $b) {
+					return ($a["file"] > $b["file"]) ? 1 : -1;
+				}
 			}
 			usort($zresults, "arraysort");
 		} catch (Exception $e) {
@@ -1842,6 +1970,36 @@ class wtwuploads {
 		return $zresponse;
 	}
 
+	function removeDuplicateUploadObject($zuploadobjectid, $zduplicateuploadobjectid) {
+		/* group Object Uploads for 3D Models */
+		global $wtwhandlers;
+		$zresponse = array('serror'=> '');
+		try {
+			$wtwhandlers->query("
+				update ".wtw_tableprefix."communitymolds
+				set uploadobjectid='".$zuploadobjectid."',
+					updatedate=now(),
+					updateuserid='".$wtwhandlers->userid."'
+				where uploadobjectid='".$zduplicateuploadobjectid."';");
+			$wtwhandlers->query("
+				update ".wtw_tableprefix."buildingmolds
+				set uploadobjectid='".$zuploadobjectid."',
+					updatedate=now(),
+					updateuserid='".$wtwhandlers->userid."'
+				where uploadobjectid='".$zduplicateuploadobjectid."';");
+			$wtwhandlers->query("
+				update ".wtw_tableprefix."thingmolds
+				set uploadobjectid='".$zuploadobjectid."',
+					updatedate=now(),
+					updateuserid='".$wtwhandlers->userid."'
+				where uploadobjectid='".$zduplicateuploadobjectid."';");
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-removeDuplicateUploadObject=".$e->getMessage());
+			$zresponse = array('serror'=> $e->getMessage());
+		}
+		return $zresponse;
+	}
+	
 	public function uploadJavaScriptFiles($zuploadfiles, $zwebtype, $zwebid, $zactionzoneid) {
 		/* upload javascript files for use with plugins */
 		global $wtwhandlers;
@@ -1963,7 +2121,87 @@ class wtwuploads {
 		}
 		return $serror;
 	}
-
+	
+	public function deleteUploadObject($zuploadobjectid, $zpermanent) {
+		/* deletes the 3D Model */
+		/* permanent = 0 will flag record as deleted, permanent = 1 permanently deletes record and files */
+		global $wtwhandlers;
+		$zresponse = array('serror'=>'');
+		try {
+			if (!isset($zpermanent) || empty($zpermanent)) {
+				$zpermanent = 0;
+			} else if ($zpermanent != 1 && $zpermanent != '1') {
+				$zpermanent = 0;
+			} else {
+				$zpermanent = 1;
+			}
+			if ($zpermanent == 1) {
+				$zresults = $wtwhandlers->query("
+					select * 
+					from ".wtw_tableprefix."uploadobjects
+					where uploadobjectid='".$zuploadobjectid."'
+					limit 1;
+				");
+				foreach ($zresults as $zrow) {
+					/* check folder and remove files (only deletes same extensions allowed in uploads) */
+					$zfoldercount = 0;
+					$zobjectfolder = $zrow["objectfolder"];
+					/* check if other objects are using the same folder */
+					$zresults2 = $wtwhandlers->query("
+						select count(*) as foldercount 
+						from ".wtw_tableprefix."uploadobjects
+						where objectfolder='".$zobjectfolder."';
+					");
+					foreach ($zresults2 as $zrow2) {
+						$zfoldercount = $zrow2["foldercount"];
+					}
+					/* permanently delete the record */
+					$wtwhandlers->query("
+						delete from ".wtw_tableprefix."uploadobjects
+						where uploadobjectid='".$zuploadobjectid."'
+						limit 1;
+					");
+					if ($zfoldercount == 1) {
+						/* only delete the files and folder if this is the only 1 record using this objectfolder */
+						$zdir = str_replace('/content/',$wtwhandlers->contentpath.'/',$zobjectfolder);
+						$zdir = rtrim($zdir, "/");
+						if (is_dir($zdir)) {
+							if ($zdh = opendir($zdir)) {
+								while (($zfile = readdir($zdh)) !== false) {
+									if ($zfile != '.' && $zfile != '..') {
+										if ($wtwhandlers->endsWith($zfile, '.babylon') || $wtwhandlers->endsWith($zfile, '.manifest') || $wtwhandlers->endsWith($zfile, '.blend') || $wtwhandlers->endsWith($zfile, '.blend1') || $wtwhandlers->endsWith($zfile, '.log') || $wtwhandlers->endsWith($zfile, '.jpg') || $wtwhandlers->endsWith($zfile, '.gif') || $wtwhandlers->endsWith($zfile, '.png') || $wtwhandlers->endsWith($zfile, '.jpeg') || $wtwhandlers->endsWith($zfile, '.obj') || $wtwhandlers->endsWith($zfile, '.gtlf') || $wtwhandlers->endsWith($zfile, '.glb') || $wtwhandlers->endsWith($zfile, '.fbx')) {
+											if (file_exists($wtwhandlers->rootpath.$zobjectfolder.$zfile)) {
+												unlink($wtwhandlers->rootpath.$zobjectfolder.$zfile);
+											}
+										}
+									}
+								}
+								closedir($zdh);
+							}
+							rmdir($zdir);
+						}
+					}
+				}
+			} else {
+				$wtwhandlers->query("
+					update ".wtw_tableprefix."uploadobjects
+					set deleteddate=now(),
+						deleteduserid='".$wtwhandlers->userid."',
+						deleted=1
+					where uploadobjectid='".$zuploadobjectid."'
+					limit 1;
+				");
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwuploads.php-deleteUploadObject=".$e->getMessage());
+			$zresponse = array(
+				'serror'=>$e->getMessage()
+			);
+		}
+		return $zresponse;
+	}
+	
+	
 	public function getMyImages($zcategory, $zhide) {
 		/* gets Media Library images by category */
 		global $wtwhandlers;
@@ -2013,7 +2251,7 @@ class wtwuploads {
 	}
 	
 	public function deleteUploadFiles($zuploadid) {
-		/* perminently deletes Media Library Images including original, websize, and thumbnail if they exist */
+		/* permanently deletes Media Library Images including original, websize, and thumbnail if they exist */
 		global $wtwhandlers;
 		$zresponseoriginalid = '';
 		$zresponsewebsizeid = '';
@@ -2364,7 +2602,7 @@ class wtwuploads {
 	}
 
 	public function deleteUploadFile($zuploadid) {
-		/* perminently delete Media Library Image or file (Uploads) */
+		/* permanently delete Media Library Image or file (Uploads) */
 		global $wtwhandlers;
 		$zresponse = array('serror'=>'');
 		try {

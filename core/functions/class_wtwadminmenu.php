@@ -60,7 +60,7 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminmenuerrorlog', $this->__('Error Log'), -100, 'wtw_dashboard', 4, 'wtw_errorlog', '', $developerroles, "WTW.openFullPageForm('errorlog','Active Errors','');");
 				
 				$this->addAdminMenuItem('wtw_adminmedia', $this->__('Media Library'), -95, 'wtw_medialibrary', 0, '', '/content/system/images/menumedia.png', $updateroles, "WTW.toggleAdminSubMenu(this);");
-				$this->addAdminMenuItem('wtw_adminmediaobjects', $this->__('3D Models'), -95, 'wtw_medialibrary', 1, 'wtw_viewobjects', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);");
+				$this->addAdminMenuItem('wtw_adminmediaobjects', $this->__('3D Models'), -95, 'wtw_medialibrary', 1, 'wtw_viewobjects', '', $updateroles, "dGet('wtw_modelfilter').value='';dGet('wtw_tgroupuploadobjectid').value='';dGet('wtw_tgroupdiv').value='';WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);");
 				$this->addAdminMenuItem('wtw_adminmediafiles', $this->__('Files and Textures'), -95, 'wtw_medialibrary', 2, 'wtw_viewfiles', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(2);");
 				$this->addAdminMenuItem('wtw_adminmediawtwdownloads', $this->__('WalkTheWeb Downloads'), -95, 'wtw_medialibrary', 3, 'wtw_viewwtwdownloads', '', $updateroles, "WTW.openFullPageForm('importpage','communities');");
 
@@ -1166,7 +1166,7 @@ class wtwadminmenu {
 			$zmenu .= "			<h2 class='wtw-marginbottom'>Shape Visibility Distance (Load Zone)</h2>\r\n";
 			$zmenu .= "			<select id='wtw_taltloadactionzoneid' class='wtw-pointer'></select><br />\r\n";
 			$zmenu .= "			<hr class='wtw-menuhr' />\r\n";
-			$zmenu .= "			<h2 class='wtw-marginbottom'>Alt Tag for 3D Object</h2>\r\n";
+			$zmenu .= "			<h2 class='wtw-marginbottom'>Alt Tag for 3D Web</h2>\r\n";
 			$zmenu .= "			<input type='text' id='wtw_tconngridalttag' maxlength='255' onclick=\"WTW.checkKey(this, 'displayname', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'displayname', 0, 0);\" onblur=\"WTW.checkKey(this, 'displayname', 0, 1);\" /><br />\r\n";
 			$zmenu .= "		</div><br />\r\n";
 			$zmenu .= "		<div id='wtw_beditthisbuilding' class='wtw-menulevel0' onclick='WTW.editBuilding();'>Open 3D Building in Editor</div><br />\r\n";
@@ -1403,10 +1403,10 @@ class wtwadminmenu {
 		try {
 			$zmenu .= "<div id='wtw_adminmenu11b' class='wtw-smallprintbackground wtw-hide' onclick='WTW.blockPassThrough();'>\r\n";
 			$zmenu .= "		<div id='wtw_objectdiv'>\r\n";
-			$zmenu .= "			<h2 class='wtw-marginbottom'>3D Object</h2>\r\n";
-			$zmenu .= "			<div class='wtw-onecol'>3D Object File</div>\r\n";
+			$zmenu .= "			<h2 class='wtw-marginbottom'>3D Model</h2>\r\n";
+			$zmenu .= "			<div class='wtw-onecol'>3D Model File</div>\r\n";
 			$zmenu .= "			<input type='text' id='wtw_tmoldobjectfile' maxlength='255' class='wtw-smallprintinput' /><br />\r\n";
-			$zmenu .= "			<div class='wtw-rightbutton' onclick=\"WTW.openFullPageForm('medialibrary','object','3dobject');\">Select 3D Object</div><br />\r\n";
+			$zmenu .= "			<div class='wtw-rightbutton' onclick=\"WTW.openFullPageForm('medialibrary','object','3dobject');\">Select 3D Model</div><br />\r\n";
 			$zmenu .= "		</div>\r\n";
 			$zmenu .= "		<h2 id='wtw_moldpositiontitle' class='wtw-marginbottom'>Mold Position</h2>\r\n";
 			$zmenu .= "		<div class='wtw-onecol wtw-nowrap'>Position Z (left,-right)<br />\r\n";

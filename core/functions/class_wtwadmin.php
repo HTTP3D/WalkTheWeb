@@ -333,7 +333,7 @@ class wtwadmin {
 
 			$zpagedata .= "			<div id='wtw_downloadqueue' class='wtw-dashboardboxleftdouble wtw-hide'>\r\n";
 			$zpagedata .= "				<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_downloadqueuediv');\"><div id='wtw_downloadqueuedivarrow' class='wtw-divarrow'>⯅</div>WalkTheWeb Pending Downloads (Queue)</div>\r\n";
-			$zpagedata .= "				<div id='wtw_downloadqueuediv' class='wtw-dashboardboxmax' style='min-height:550px;'>\r\n";
+			$zpagedata .= "				<div id='wtw_downloadqueuediv' class='wtw-dashboardboxmax'>\r\n";
 			$zpagedata .= "					<div id='wtw_downloadqueuelist'></div>\r\n";
 			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "				</div>\r\n";
@@ -401,7 +401,7 @@ class wtwadmin {
 			/* media library - 3d downloads */
 			$zpagedata .= "	<div id='wtw_showimportpage' class='wtw-dashboardpage wtw-hide' style='display:none;'>\r\n";
 			$zpagedata .= "		<div id='wtw_importhorizontalmenu' class='wtw-horizontalmenu'>\r\n";
-			$zpagedata .= "			<div id='wtw_menumedialibrary' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('medialibrary','');\">Back</div>\r\n";
+			$zpagedata .= "			<div id='wtw_menumedialibrary' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);\">Back</div>\r\n";
 			$zpagedata .= "			<div id='wtw_menuwtwcommunities' class='wtw-menutabtopselected' onclick=\"WTW.openFullPageForm('importpage','communities');\">3D Communities</div>\r\n";
 			$zpagedata .= "			<div id='wtw_menuwtwbuildings' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('importpage','buildings');\">3D Buildings</div>\r\n";
 			$zpagedata .= "			<div id='wtw_menuwtwthings' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('importpage','things');\">3D Things</div>\r\n";
@@ -466,7 +466,8 @@ class wtwadmin {
 			$zpagedata .= "			</div>\r\n";
 
 			$zpagedata .= "			<div id='wtw_menufilter' class='wtw-menufileselect' >\r\n";
-			$zpagedata .= "			<input type='text' id='wtw_modelfilter' onkeyup='WTW.filterModels(2);' onfocus='WTW.filterModels(1);' onblur='WTW.filterModels(0);' value='Name Filter' />\r\n";
+			$zpagedata .= "				<input type='text' id='wtw_modelfilter' onkeyup='WTW.filterModels(2);' onfocus='WTW.filterModels(1);' onblur='WTW.filterModels(0);' value='Name Filter' />\r\n";
+			$zpagedata .= "				<div class='wtw-xout' onclick=\"WTW.clearNameFilter();\">X</div>\r\n";
 			$zpagedata .= "			</div>\r\n";
 			
 			$zpagedata .= "			<div id='wtw_menuuploadedobjects' class='wtw-menutabtop' onclick='WTW.setImageMenu(4);'>3D Models</div>\r\n";
@@ -485,21 +486,17 @@ class wtwadmin {
 			$zpagedata .= "				<iframe id='wtw_communityimagesframe' class='wtw-imagesframe' src='' scrolling='yes' ></iframe>\r\n";
 			$zpagedata .= "			</div>\r\n";
 			$zpagedata .= "			<div id='wtw_menuimagemydiv' class='wtw-subdiv'>\r\n";
-			$zpagedata .= "				<div class='wtw-roundedbox'><b>My Uploads and Images</b> can be used in any 3D Community Scene, 3D Building, and 3D Thing. Images are added as 3D Web Objects or Textures on 3D Building Blocks.<br /></div>\r\n";
-			$zpagedata .= "				<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "				<div id='wtw_myimagesdiv' class='wtw-fullpage'></div>\r\n";
 			$zpagedata .= "			</div>\r\n";
 			$zpagedata .= "			<div id='wtw_menuimagestockdiv' class='wtw-subdiv'>\r\n";
-			$zpagedata .= "				<div class='wtw-roundedbox'><b>Stock Images</b> can be used in any 3D Community Scene, 3D Building, and 3D Thing. Images are added as 3D Web Objects or Textures on 3D Building Blocks.<br /></div>\r\n";
-			$zpagedata .= "				<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "				<div id='wtw_stockimagesdiv' class='wtw-fullpage'></div>\r\n";
 			$zpagedata .= "			</div>\r\n";
 			$zpagedata .= "			<div id='wtw_menuuploadedobjectsdiv' class='wtw-subdiv'>\r\n";
-			$zpagedata .= "				<div class='wtw-roundedbox'><b>3D Models</b> can be downloaded off the Internet or created from scratch using software like <a href='https://www.blender.org/' target='_blank'>Blender.org</a>. <b>3D Models</b> can be added to any 3D Community Scene, 3D Building, or 3D Thing. Recommended formats are .blender, .obj, .glb, or .gltf.<br /></div>\r\n";
-			$zpagedata .= "				<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "				<div id='wtw_uploadedmodelsdiv' class='wtw-fullpage' style='display:none;'></div>\r\n";
 			$zpagedata .= "				<div id='wtw_uploadedmodeldetailsdiv' class='wtw-fullpage' style='display:none;'>\r\n";
-			$zpagedata .= "				<div id='wtw_uploadedmodelpreviewdiv' class='wtw-dashboardboxleftdouble' style='display:block-inline;float:right;min-height:400px;padding:10px;'><br /><br /><br /><br /></div>\r\n";
+			$zpagedata .= "					<div class='wtw-roundedbox'><b>3D Models</b> can be downloaded off the Internet or created from scratch using software like <a href='https://www.blender.org/' target='_blank'>Blender.org</a>. <b>3D Models</b> can be added to any 3D Community Scene, 3D Building, or 3D Thing. Recommended formats are .blender, .obj, .glb, or .gltf.<br /></div>\r\n";
+			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "					<div id='wtw_uploadedmodelpreviewdiv' class='wtw-dashboardboxleftdouble' style='display:block-inline;float:right;min-height:400px;padding:10px;'><br /><br /><br /><br /></div>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardboxleft'>\r\n";
 			$zpagedata .= "						<div id='wtw_uploadedmodelsnamediv'></div>\r\n";
 			$zpagedata .= "						<div id='wtw_uploadedmodelsfilesdiv'></div>\r\n";
@@ -534,7 +531,7 @@ class wtwadmin {
 			$zpagedata .= "										<option value='onputdown'>Put Down</option>\r\n";
 			$zpagedata .= "									</select>\r\n";
 			$zpagedata .= "								</div>\r\n";
-			$zpagedata .= "								<div><h3 class='wtw-black'>Mesh Name</h3><div class='wtw-examplenote'>(name of sub-mesh of 3D Object or leave blank for full 3D Object)</div>\r\n";
+			$zpagedata .= "								<div><h3 class='wtw-black'>Mesh Name</h3><div class='wtw-examplenote'>(name of sub-mesh of 3D Model or leave blank for full 3D Model)</div>\r\n";
 			$zpagedata .= "									<input id='wtw_tmoldnamepart' type='text' maxlength='255' />\r\n";
 			$zpagedata .= "								</div>\r\n";
 			$zpagedata .= "								<div><h3 class='wtw-black'>Start Frame</h3>\r\n";
@@ -594,7 +591,7 @@ class wtwadmin {
 			$zpagedata .= "					<div class='wtw-dashboardlabel'>Upload Date</div>\r\n";
 			$zpagedata .= "					<div id='wtw_uploadupdatedate' class='wtw-dashboardvalue'></div>\r\n";
 			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
-			$zpagedata .= "					<div id='wtw_uploadfiledelete' class='wtw-redbuttonright'>Perminently Delete File</div><div class='wtw-yellowbuttonleft' onclick=\"WTW.openFullPageForm('medialibrary','','');WTW.setImageMenu(2);\">Back</div>\r\n";
+			$zpagedata .= "					<div id='wtw_uploadfiledelete' class='wtw-redbuttonright'>Permanently Delete File</div><div class='wtw-yellowbuttonleft' onclick=\"WTW.openFullPageForm('medialibrary','','');WTW.setImageMenu(2);\">Back</div>\r\n";
 			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";
@@ -710,11 +707,11 @@ class wtwadmin {
 			
 			/* settings page - server settings */
 			$zpagedata .= "		<div id='wtw_serversettings' class='wtw-fullpage'>\r\n";
-			$zpagedata .= "			<div class='wtw-roundedbox'><b>Server Settings</b> are used throughout WalkTheWeb and are stored in the /config/wtw_config.php file.<br /></div>\r\n";
-			$zpagedata .= "			<div class='wtw-clear'></div>\r\n";
-			$zpagedata .= "			<div class='wtw-dashboardboxleftdouble'>\r\n";
+			$zpagedata .= "			<div class='wtw-dashboardboxlefthalf'>\r\n";
 			$zpagedata .= "				<div class='wtw-dashboardboxtitle'>WalkTheWeb Server Settings</div>\r\n";
 			$zpagedata .= "				<div class='wtw-dashboardbox'>\r\n";
+			$zpagedata .= "					<div class='wtw-roundedbox'><b>Server Settings</b> are global variables stored in the /config/wtw_config.php file.<br /></div>\r\n";
+			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardlabel'>Server Instance ID</div>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardvalue'><input type='text' id='wtw_tserverinstanceid' maxlength='16' /></div>\r\n";
 			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
@@ -790,11 +787,11 @@ class wtwadmin {
 
 			/* settings page - email server */
 			$zpagedata .= "		<div id='wtw_emailserversettings' class='wtw-fullpage'>\r\n";
-			$zpagedata .= "			<div class='wtw-roundedbox'><b>Email Server Settings</b> provide basic connection for sending emails programmatically from WalkTheWeb.<br /></div>\r\n";
-			$zpagedata .= "			<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "			<div class='wtw-dashboardboxleft'>\r\n";
 			$zpagedata .= "				<div class='wtw-dashboardboxtitle'>Email Server Settings</div>\r\n";
 			$zpagedata .= "				<div class='wtw-dashboardbox'>\r\n";
+			$zpagedata .= "					<div class='wtw-roundedbox'><b>Email Server Settings</b> provide basic connection for sending emails programmatically from WalkTheWeb.<br /></div>\r\n";
+			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardlabel'>SMTP Email Server</div>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardvalue'><input type='text' id='wtw_tsmtphost' maxlength='255' /></div>\r\n";
 			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
@@ -837,11 +834,11 @@ class wtwadmin {
 						
 			/* settings page - hosting settings */
 			$zpagedata .= "		<div id='wtw_hostingsettings' class='wtw-fullpage'>\r\n";
-			$zpagedata .= "			<div class='wtw-roundedbox'><b>Server Hosting Settings</b> provide Host Role users the necessary settings to host their Domain Names.<br /></div>\r\n";
-			$zpagedata .= "			<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "			<div class='wtw-dashboardboxleftdouble'>\r\n";
 			$zpagedata .= "				<div class='wtw-dashboardboxtitle'>Server Hosting Settings</div>\r\n";
 			$zpagedata .= "				<div class='wtw-dashboardbox'>\r\n";
+			$zpagedata .= "					<div class='wtw-roundedbox'><b>Server Hosting Settings</b> provide users with <b>Host</b> role permissions the prices and necessary settings to host their Domain Names.<br /></div>\r\n";
+			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "					<label class='wtw-switch'><input id='wtw_tserverhosting' type='checkbox' onclick='WTW.changeHostingSwitch(this, true);'><span class='wtw-slider wtw-round'></span></label><div id='wtw_tserverhostingtext' class='wtw-disabledlabel'>Server Hosting Disabled</div><div style='clear:both;'></div>Server Hosting allows your users to Create 3D Websites (3D Communities, 3D Buildings, 3D Things, 3D Models, and 3D Avatars) on this WalkTheWeb Server.<br /><br />\r\n";			
 			$zpagedata .= "					<div id='wtw_serverhostingdiv' class='wtw-hide'>\r\n";
 			$zpagedata .= "						<div class='wtw-dashboardlabel'>Hosting Price</div>\r\n";

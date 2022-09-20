@@ -24,6 +24,7 @@ class wtw {
 	public $version = '3.5.2';
 	public $dbversion = '1.2.16';
 	public $versiondate = '2022-8-31';
+	public $oldversion = '';
 	public $olddbversion = '';
 	public $serverinstanceid = '';
 	public $globaluserid = '';
@@ -654,6 +655,8 @@ class wtw {
 						}
 						/* set up initial admin user - from installation process */
 						$zuserid = $wtwusers->firstAdminUser($zadmindisplayname,$zadminpassword,$zadminemail);
+						$zversion = $wtwdb->getSetting("wtw_version","3.4.5");
+						$this->oldversion = $zversion;
 						/* load initial tables form install */
 						$wtwtables->loadInitDbData($zuserid);
 						/* set user as admin role */

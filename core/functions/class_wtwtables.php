@@ -998,7 +998,7 @@ class wtwtables {
 				  `version` varchar(10) DEFAULT '1.0.0',
 				  `versionorder` int DEFAULT '1000000',
 				  `versiondesc` varchar(255) DEFAULT 'Initial Version',
-				  `groupid` varchar(16) NOT NULL,
+				  `groupid` varchar(16) DEFAULT '',
 				  `userid` varchar(16) DEFAULT '',
 				  `objectfolder` varchar(255) DEFAULT '',
 				  `objectfile` varchar(255) DEFAULT '',
@@ -1325,18 +1325,18 @@ class wtwtables {
 			/* updated 3.4.3 - add new avatars */
 			$wtwdb->query("
 				INSERT INTO ".wtw_tableprefix."avatars 
-				(avatarid, pastavatarid, versionid, version, versionorder, avatargroup, displayname, avatardescription, objectfolder, objectfile, gender, positionx, positiony, positionz, scalingx, scalingy, scalingz, rotationx, rotationy, rotationz, startframe, endframe, sortorder, templatename, description, tags, snapshotid, shareuserid, sharehash, sharetemplatedate, alttag, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+				(avatarid, pastavatarid, versionid, version, versionorder, versiondesc, avatargroup, displayname, avatardescription, objectfolder, objectfile, gender, positionx, positiony, positionz, scalingx, scalingy, scalingz, rotationx, rotationy, rotationz, startframe, endframe, sortorder, templatename, description, tags, snapshotid, shareuserid, sharehash, sharetemplatedate, alttag, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
 				VALUES 
-				('3b9bt5c70igtmqux','','3b9bt5c70igtmqux','1.0.0',1000000,'Anonymous','Anonymous Male','Anonymous Male Android','/content/uploads/avatars/3b9bt5c70igtmqux/','maleidle.babylon','male',0.0,0.0,0.0,0.08,0.08,0.08,0.0,-90.0,0.0,1,213,2,'Anonymous Male','Anonymous Male avatar with a default blue color and robotic android look. ','Avatar, Anonymous, android, robot','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."','','',0),
-				('641svy8bwjx2kme7','','641svy8bwjx2kme7','1.0.0',1000000,'Default','Remy','Blonde Haired Male with short sleeve shirt and shorts','/content/uploads/avatars/641svy8bwjx2kme7/','remyidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,196,4,'Remy','Blonde Haired Male with short sleeve shirt and shorts','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."','','',0),
-				('9e94useo7x2ief0s','','9e94useo7x2ief0s','1.0.0',1000000,'Default','Liam','Black Haired Male with long sleeve shirt and pants','/content/uploads/avatars/9e94useo7x2ief0s/','liamidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,200,4,'Liam','Black Haired Male with long sleeve shirt and pants','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."','','',0),
-				('aajvq38y06vulgh0','','aajvq38y06vulgh0','1.0.0',1000000,'Default','Pearl','Blonde Haired Female Child with long sleeved shirt and shorts','/content/uploads/avatars/aajvq38y06vulgh0/','pearlidle.babylon','female',0.0,0.0,0.0,0.09,0.09,0.09,0.0,-90.0,0.0,1,325,3,'Pearl','Blonde Haired Female Child with long sleeved shirt and shorts.','Avatar, Default, Female, Child','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."','','',0),
-				('dihtmpm1ae3b9d3a','','dihtmpm1ae3b9d3a','1.0.0',1000000,'Default','Malcolm','Black Haired Male with half sleeve shirt, long pants, and hat','/content/uploads/avatars/dihtmpm1ae3b9d3a/','malcolmidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,195,4,'Malcolm','Black Haired Male with half sleeve shirt, long pants, and hat','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."','','',0),
-				('h1ro3h59xs5eknl0','','h1ro3h59xs5eknl0','1.0.0',1000000,'Default','Shae','Black Haired Female with black jacket, long pants, and boots','/content/uploads/avatars/h1ro3h59xs5eknl0/','shaeidle.babylon','female',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,303,3,'Shae','Black Haired Female with black jacket, long pants, and boots','Avatar, Default, Female','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."','','',0),
-				('odtx7arzof5eigp4','','odtx7arzof5eigp4','1.0.0',1000000,'Default','Regina','Black Haired Female with tank top, long pants, and hat','/content/uploads/avatars/odtx7arzof5eigp4/','reginaidle.babylon','female',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,241,3,'Regina','Black Haired Female with tank top, long pants, and hat','Avatar, Default, Female','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."','','',0),
-				('p7y3p6ti6d85yf7q','','p7y3p6ti6d85yf7q','1.0.0',1000000,'Anonymous','Anonymous Female','Anonymous Female Android','/content/uploads/avatars/p7y3p6ti6d85yf7q/','femaleidle.babylon','female',0.0,0.0,0.0,0.08,0.08,0.08,0.0,-90.0,0.0,1,100,1,'Anonymous Female','Anonymous Female avatar with a default red color and robotic android look. ','Avatar, Anonymous, android, robot','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."','','',0),
-				('r8tgsns20ruwx0bg','','r8tgsns20ruwx0bg','1.0.0',1000000,'Default','Jasper','Orange Haired Male Child','/content/uploads/avatars/r8tgsns20ruwx0bg/','jasperidle.babylon','male',0.0,0.0,0.0,0.09,0.09,0.09,0.0,-90.0,0.0,1,71,4,'Jasper','Orange Haired Male Child with short sleeved shirt and shorts.','Avatar, Default, Male, Child','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."','','',0),
-				('v1ij2rkmdypo97c2','','v1ij2rkmdypo97c2','1.0.0',1000000,'Default','Stefani','Brown Haired Female with tank top and shorts','/content/uploads/avatars/v1ij2rkmdypo97c2/','stefaniidle.babylon','female',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,363,3,'Stefani','Brown Haired Female with tank top and shorts','Avatar, Default, Female','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."','','',0);
+				('3b9bt5c70igtmqux','','3b9bt5c70igtmqux','1.0.0',1000000,'Initial Version','Anonymous','Anonymous Male','Anonymous Male Android','/content/uploads/avatars/3b9bt5c70igtmqux/','maleidle.babylon','male',0.0,0.0,0.0,0.08,0.08,0.08,0.0,-90.0,0.0,1,213,2,'Anonymous Male','Anonymous Male avatar with a default blue color and robotic android look. ','Avatar, Anonymous, android, robot','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				('641svy8bwjx2kme7','','641svy8bwjx2kme7','1.0.0',1000000,'Initial Version','Default','Remy','Blonde Haired Male with short sleeve shirt and shorts','/content/uploads/avatars/641svy8bwjx2kme7/','remyidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,196,4,'Remy','Blonde Haired Male with short sleeve shirt and shorts','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				('9e94useo7x2ief0s','','9e94useo7x2ief0s','1.0.0',1000000,'Initial Version','Default','Liam','Black Haired Male with long sleeve shirt and pants','/content/uploads/avatars/9e94useo7x2ief0s/','liamidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,200,4,'Liam','Black Haired Male with long sleeve shirt and pants','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				('aajvq38y06vulgh0','','aajvq38y06vulgh0','1.0.0',1000000,'Initial Version','Default','Pearl','Blonde Haired Female Child with long sleeved shirt and shorts','/content/uploads/avatars/aajvq38y06vulgh0/','pearlidle.babylon','female',0.0,0.0,0.0,0.09,0.09,0.09,0.0,-90.0,0.0,1,325,3,'Pearl','Blonde Haired Female Child with long sleeved shirt and shorts.','Avatar, Default, Female, Child','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				('dihtmpm1ae3b9d3a','','dihtmpm1ae3b9d3a','1.0.0',1000000,'Initial Version','Default','Malcolm','Black Haired Male with half sleeve shirt, long pants, and hat','/content/uploads/avatars/dihtmpm1ae3b9d3a/','malcolmidle.babylon','male',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,195,4,'Malcolm','Black Haired Male with half sleeve shirt, long pants, and hat','Avatar, Default, Male','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				('h1ro3h59xs5eknl0','','h1ro3h59xs5eknl0','1.0.0',1000000,'Initial Version','Default','Shae','Black Haired Female with black jacket, long pants, and boots','/content/uploads/avatars/h1ro3h59xs5eknl0/','shaeidle.babylon','female',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,303,3,'Shae','Black Haired Female with black jacket, long pants, and boots','Avatar, Default, Female','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				('odtx7arzof5eigp4','','odtx7arzof5eigp4','1.0.0',1000000,'Initial Version','Default','Regina','Black Haired Female with tank top, long pants, and hat','/content/uploads/avatars/odtx7arzof5eigp4/','reginaidle.babylon','female',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,241,3,'Regina','Black Haired Female with tank top, long pants, and hat','Avatar, Default, Female','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				('p7y3p6ti6d85yf7q','','p7y3p6ti6d85yf7q','1.0.0',1000000,'Initial Version','Anonymous','Anonymous Female','Anonymous Female Android','/content/uploads/avatars/p7y3p6ti6d85yf7q/','femaleidle.babylon','female',0.0,0.0,0.0,0.08,0.08,0.08,0.0,-90.0,0.0,1,100,1,'Anonymous Female','Anonymous Female avatar with a default red color and robotic android look. ','Avatar, Anonymous, android, robot','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				('r8tgsns20ruwx0bg','','r8tgsns20ruwx0bg','1.0.0',1000000,'Initial Version','Default','Jasper','Orange Haired Male Child','/content/uploads/avatars/r8tgsns20ruwx0bg/','jasperidle.babylon','male',0.0,0.0,0.0,0.09,0.09,0.09,0.0,-90.0,0.0,1,71,4,'Jasper','Orange Haired Male Child with short sleeved shirt and shorts.','Avatar, Default, Male, Child','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0),
+				('v1ij2rkmdypo97c2','','v1ij2rkmdypo97c2','1.0.0',1000000,'Initial Version','Default','Stefani','Brown Haired Female with tank top and shorts','/content/uploads/avatars/v1ij2rkmdypo97c2/','stefaniidle.babylon','female',0.0,0.0,0.0,0.04,0.04,0.04,0.0,-90.0,0.0,1,363,3,'Stefani','Brown Haired Female with tank top and shorts','Avatar, Default, Female','','','',null,'','".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
 			");
 			
 			/* updated 3.4.3 - add new avatar colors (parts) with the same avatarids */
@@ -2032,6 +2032,14 @@ class wtwtables {
 
 				(21,'','Profile','settings','left',100,1,'','','WTW.hudOpenMenuItem','100',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',null,'',0);
 			");
+
+			/* add plugins */
+			$wtwdb->query("INSERT INTO ".wtw_tableprefix."plugins 
+				(pluginname, active, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+				VALUES 
+				('wtw-3dinternet',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0), 
+				('wtw-avatars',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0), 
+				('wtw-shopping',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);"); 
 			
 			/* add roles */
 			$wtwdb->query("
@@ -2050,21 +2058,21 @@ class wtwtables {
 			/* add initial sample upload objects - 3D Models */
 			$wtwdb->query("
 				INSERT INTO ".wtw_tableprefix."uploadobjects 
-				(uploadobjectid, pastuploadobjectid, versionid, version, versionorder, versiondesc, userid, objectfolder, objectfile, stock, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+				(uploadobjectid, pastuploadobjectid, versionid, version, versionorder, versiondesc, groupid, userid, objectfolder, objectfile, stock, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
 				VALUES 
-				('2lom1fyjsdf1wgkf','','2lom1fyjsdf1wgkf','1.0.0',1000000,'Initial Version','".$zuserid."','/content/system/babylon/doorblinds/','doorblinds.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				('2lom1fyjsdf1wgkf','','2lom1fyjsdf1wgkf','1.0.0',1000000,'Initial Version','2lom1fyjsdf1wgkf','".$zuserid."','/content/system/babylon/doorblinds/','doorblinds.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				
-				('3tur7r9z6y63w9k0','','3tur7r9z6y63w9k0','1.0.0',1000000,'Initial Version','".$zuserid."','/content/system/babylon/basket/','basket.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				('3tur7r9z6y63w9k0','','3tur7r9z6y63w9k0','1.0.0',1000000,'Initial Version','3tur7r9z6y63w9k0','".$zuserid."','/content/system/babylon/basket/','basket.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				
-				('c180du548ugrh59t','','c180du548ugrh59t','1.0.0',1000000,'Initial Version','".$zuserid."','/content/system/babylon/keyboard/','keyboard.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				('c180du548ugrh59t','','c180du548ugrh59t','1.0.0',1000000,'Initial Version','c180du548ugrh59t','".$zuserid."','/content/system/babylon/keyboard/','keyboard.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				
-				('hvvtgsnvfh5az2fy','','hvvtgsnvfh5az2fy','1.0.0',1000000,'Initial Version','".$zuserid."','/content/system/babylon/desk/','desk.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				('hvvtgsnvfh5az2fy','','hvvtgsnvfh5az2fy','1.0.0',1000000,'Initial Version','hvvtgsnvfh5az2fy','".$zuserid."','/content/system/babylon/desk/','desk.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				
-				('n2bhejhur8vpwc3d','','n2bhejhur8vpwc3d','1.0.0',1000000,'Initial Version','".$zuserid."','/content/system/babylon/computer/','computer.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				('n2bhejhur8vpwc3d','','n2bhejhur8vpwc3d','1.0.0',1000000,'Initial Version','n2bhejhur8vpwc3d','".$zuserid."','/content/system/babylon/computer/','computer.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				
-				('p6q4guuq6nqqfxd5','','p6q4guuq6nqqfxd5','1.0.0',1000000,'Initial Version','".$zuserid."','/content/system/babylon/windowblinds/','windowblinds.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
+				('p6q4guuq6nqqfxd5','','p6q4guuq6nqqfxd5','1.0.0',1000000,'Initial Version','p6q4guuq6nqqfxd5','".$zuserid."','/content/system/babylon/windowblinds/','windowblinds.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0),
 				
-				('v2n5p6owiwvnpkor','','v2n5p6owiwvnpkor','1.0.0',1000000,'Initial Version','".$zuserid."','/content/system/babylon/palmtree-highdef/','palmtree-highdef.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
+				('v2n5p6owiwvnpkor','','v2n5p6owiwvnpkor','1.0.0',1000000,'Initial Version','v2n5p6owiwvnpkor','".$zuserid."','/content/system/babylon/palmtree-highdef/','palmtree-highdef.babylon',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
 			");
 			
 			/* add upload objects - 3D Models - animations */
@@ -2368,8 +2376,11 @@ class wtwtables {
 			$zdbversion = $wtw->dbversion;
 			$zoldversion = $wtw->oldversion;
 			$zolddbversion = $wtw->olddbversion;
+			$zoldversion1 = 0;
+			$zoldversion2 = 0;
+			$zoldversion3 = 0;
 			list($zoldversion1, $zoldversion2, $zoldversion3) = explode('.', $zoldversion);
-			
+		
 			if (($zoldversion1 == 3 && $zoldversion2 < 5) || $zoldversion1 < 3) {
 				/* updated v3.3.0 - allow more scaling decimal places for avatars */
 				$zresults = $wtwdb->query("select COLUMN_TYPE as columntype from INFORMATION_SCHEMA.COLUMNS where table_name='".wtw_tableprefix."useravatars' AND COLUMN_NAME = 'scalingx';");

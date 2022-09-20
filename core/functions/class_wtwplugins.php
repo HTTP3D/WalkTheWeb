@@ -326,6 +326,16 @@ class wtwplugins {
 		return $wtwdb->dirSize($zdirectory);
 	} 
 
+	public function getFileCount($zdirectory) {
+		global $wtwdb;
+		return $wtwdb->getFileCount($zdirectory);
+	} 
+
+	public function endsWith($zhaystack, $zneedle) {
+		global $wtwdb;
+		return $wtwdb->endsWith($zhaystack, $zneedle);
+	}
+
 	public function __($zlabel) {
 		/* Language translation based on language file */
 		global $wtwdb;
