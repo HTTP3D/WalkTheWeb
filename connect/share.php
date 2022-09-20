@@ -117,7 +117,7 @@ function addUploadObjectID($zuploadobjectid) {
 					$zobjectfiles = array();
 					if (!empty($zrow["objectfolder"]) && isset($zrow["objectfolder"])) {
 						$zfiles = 0;
-						$zdir = str_replace('/content',$wtwconnect->contentpath,$zrow["objectfolder"]);
+						$zdir = str_replace('/content/',$wtwconnect->contentpath.'/',$zrow["objectfolder"]);
 						$zdir = rtrim($zdir, "/");
 						if (is_dir($zdir)) {
 							if ($zdh = opendir($zdir)) {
