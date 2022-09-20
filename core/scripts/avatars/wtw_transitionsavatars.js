@@ -71,7 +71,7 @@ WTWJS.prototype.addAvatarAnimationRow = function(zoptionind, zselectedvalue) {
 		var zdeleteanimation = document.createElement('div');
 		zdeleteanimation.id = 'wtw_tselectavataranimation-' + zoptionind + '-delete';
 		zdeleteanimation.className = 'wtw-deleteanimicon';
-		zdeleteanimation.innerHTML = "<img src='/content/system/images/deleteicon.png' alt='Delete Animation' title='Delete Animation' onclick=\"WTW.deleteUserAnimation('" + znewname + "');\" class='wtw-deleteicon' />";
+		zdeleteanimation.innerHTML = "<img src='/content/system/images/deleteicon.png' alt='Delete Animation' title='Delete Animation' onclick=\"WTW.deleteUserAnimation('" + znewname + "');\" class='wtw-image18' />";
 		dGet('wtw_addoptionalanimations').appendChild(zcurrent);
 		zdeleteanimation.appendChild(znewoptional);
 		dGet('wtw_addoptionalanimations').appendChild(zdeleteanimation);
@@ -207,7 +207,7 @@ WTWJS.prototype.toggleMenuAnimations = function() {
 								zlistoptionalanimations += " onpointerup=\"WTW.stopOptionalAnimation(this,'" + zanimdef.animationevent + "')\"";
 								zlistoptionalanimations += " ontouchstart=\"WTW.runOptionalAnimation(this,'" + zanimdef.animationevent + "')\"";
 								zlistoptionalanimations += " ontouchend=\"WTW.stopOptionalAnimation(this,'" + zanimdef.animationevent + "')\">";
-								zlistoptionalanimations += "<img src='" + zicon + "' class='wtw-animationicon' alt='" + zfriendlyname + "' title='" + zfriendlyname + "' /><br /><div style='margin:3px;'>" +zfriendlyname  + "</div></div>";
+								zlistoptionalanimations += "<img src='" + zicon + "' class='wtw-image80' alt='" + zfriendlyname + "' title='" + zfriendlyname + "' /><br /><div style='margin:3px;'>" +zfriendlyname  + "</div></div>";
 							} else if (zanimdef.animationevent.indexOf('onwait-fight') > -1) {
 								WTW.showInline('wtw_animationmodefight');
 							}

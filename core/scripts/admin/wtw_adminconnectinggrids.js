@@ -173,7 +173,6 @@ WTWJS.prototype.submitConnectingGridsForm = async function(w) {
 							}
 						}
 					}
-					WTW.closeConfirmation();
 					var zrequest = {
 						'connectinggridid': dGet('wtw_teditconnectinggridid').value,
 						'function':'deleteconnectinggrid'

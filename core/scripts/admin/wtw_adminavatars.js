@@ -527,7 +527,6 @@ WTWJS.prototype.shareAvatarTemplate = function() {
 	/* after user is sent to confirm form to make sure they want to Share the 3D Avatar */
 	/* this will process the share */
 	try {
-		WTW.closeConfirmation();
 		var zrequest = {
 			'avatarid': avatarid,
 			'sharehash': dGet('wtw_sharehash').value,

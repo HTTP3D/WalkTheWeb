@@ -1288,13 +1288,13 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				WTW.hide('wtw_moldshadowreflectiondiv');
 				break;
 			case 'babylonfile':
-				dGet('wtw_moldpositiontitle').innerHTML = '3D Object Position';
-				dGet('wtw_moldscalingtitle').innerHTML = '3D Object Length';
-				dGet('wtw_moldrotationtitle').innerHTML = '3D Object Rotation';
-				dGet('wtw_moldtexturetitle').innerHTML = '3D Object Texture Image';
-				dGet('wtw_bsavethismold').innerHTML = '<u>S</u>ave 3D Object';
-				dGet('wtw_bdelmold').innerHTML = '<u>D</u>elete 3D Object';
-				dGet('wtw_editmoldformtitle').innerHTML = 'Edit 3D Object';
+				dGet('wtw_moldpositiontitle').innerHTML = '3D Model Position';
+				dGet('wtw_moldscalingtitle').innerHTML = '3D Model Length';
+				dGet('wtw_moldrotationtitle').innerHTML = '3D Model Rotation';
+				dGet('wtw_moldtexturetitle').innerHTML = '3D Model Texture Image';
+				dGet('wtw_bsavethismold').innerHTML = '<u>S</u>ave 3D Model';
+				dGet('wtw_bdelmold').innerHTML = '<u>D</u>elete 3D Model';
+				dGet('wtw_editmoldformtitle').innerHTML = 'Edit 3D Model';
 				WTW.hide('wtw_moldbumptexturetitle');
 				WTW.hide('wtw_moldbasictexturesetdiv');
 				WTW.hide('wtw_moldbasictextureset2div');

@@ -69,7 +69,8 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__('Media Library') + "</div>";
 				WTW.show('wtw_selectimagepage');
 				dGet('wtw_fullpageform').style.width = (WTW.sizeX - 5 - Number(dGet('wtw_adminmenubutton').style.left.replace('px',''))).toString() + 'px';
-				dGet('wtw_selectimageformscroll').style.height = (WTW.sizeY - 160) + 'px';
+				dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
+				dGet('wtw_selectimageformscroll').style.height = (WTW.sizeY - 170) + 'px';
 				WTW.selectFileForm();
 				if (zsetcategory == '') {
 					WTW.showInline('wtw_menuwtwdownloads');
@@ -82,7 +83,7 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				break;
 			case 'importpage':
 				if (WTW.adminView == 1) {
-					dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','','');\">" + WTW.__('Media Library') + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__('WalkTheWeb Downloads') + "</div>";
+					dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"dGet('wtw_modelfilter').value='';dGet('wtw_tgroupuploadobjectid').value='';dGet('wtw_tgroupdiv').value='';WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);\">" + WTW.__('Media Library') + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__('WalkTheWeb Downloads') + "</div>";
 					WTW.hide('wtw_installprogress');
 					WTW.hide('searchcommunitiesdiv');
 					WTW.hide('searchbuildingsdiv');
@@ -339,7 +340,8 @@ WTWJS.prototype.checkForFeedbackComplete = function(zresponse, zfilter) {
 		WTW.updateBadges();
 		
 		if (dGet('wtw_feedbackpagescroll') != null) {
-			dGet('wtw_feedbackpagescroll').style.height = (WTW.sizeY - 160) + 'px';
+			dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
+			dGet('wtw_feedbackpagescroll').style.height = (WTW.sizeY - 170) + 'px';
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminforms.js-checkForFeedbackComplete=' + ex.message);
@@ -492,7 +494,7 @@ WTWJS.prototype.openErrorLogComplete = function(zresponse, zfilter) {
 						
 						zerrorloglist += "<tr id='wtw_errorlog-header-" + zresponse[i].errorid + "' class='wtw-versionheader" + zstatuscolor + "'>";
 						zerrorloglist += "<td class='wtw-tablecolumns' style='white-space:normal;'>" + zdatestring + "</td>";
-						zerrorloglist += "<td class='wtw-tablecolumns' style='white-space:normal;'>" + WTW.encode(zresponse[i].message) + "</td>";
+						zerrorloglist += "<td class='wtw-tablecolumns wtw-linkwrap' style='max-width:80%;word-break:break-all;'>" + WTW.encode(zresponse[i].message) + "</td>";
 						if (WTW.isUserInRole('Admin')) {
 							zerrorloglist += "<td class='wtw-tablecolumns' style='white-space:normal;text-align:right;'><div id='wtw_errorlog-archive-" + zresponse[i].errorid + "' class='wtw-archivebutton' onclick=\"WTW.archiveErrorLog('" + zresponse[i].errorid + "');\">" + zarchivetext + "</div></td>";
 						} else {
@@ -510,8 +512,8 @@ WTWJS.prototype.openErrorLogComplete = function(zresponse, zfilter) {
 		dGet('wtw_errorloglist').innerHTML = zerrorloglist;
 		WTW.hide('wtw_loadingerrorlog');
 		WTW.show('wtw_errorloglist');
-
-		dGet('wtw_errorlogpagescroll').style.height = (WTW.sizeY - 160) + 'px';
+		dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
+		dGet('wtw_errorlogpagescroll').style.height = (WTW.sizeY - 170) + 'px';
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminforms.js-openErrorLogComplete=' + ex.message);
 	}
@@ -916,7 +918,8 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 		WTW.updateBadges();
 		
 		if (dGet('wtw_updatespagescroll') != null) {
-			dGet('wtw_updatespagescroll').style.height = (WTW.sizeY - 160) + 'px';
+			dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
+			dGet('wtw_updatespagescroll').style.height = (WTW.sizeY - 170) + 'px';
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminforms.js-checkForUpdatesComplete=' + ex.message);
@@ -1654,7 +1657,7 @@ WTWJS.prototype.openMediaPageForm = async function(zuploadid) {
 								};
 							}
 							
-							dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','" + zcategory + "','');WTW.setImageMenu(2);\">Media Library</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zfiletitle + "</div>";
+							dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"dGet('wtw_modelfilter').value='';dGet('wtw_tgroupuploadobjectid').value='';dGet('wtw_tgroupdiv').value='';WTW.openFullPageForm('medialibrary','" + zcategory + "','');WTW.setImageMenu(4);\">Media Library</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zfiletitle + "</div>";
 							if (dGet('wtw_uploadfiletype').innerHTML.indexOf('image') > -1) {
 								if (zuploadinfo[i].thumbnail != null) {
 									if (zuploadinfo[i].thumbnail.data != undefined) {
@@ -1978,7 +1981,7 @@ WTWJS.prototype.loadMyFilesPage = async function(zitem, zcategory, zhide) {
 		};
 		WTW.postAsyncJSON('/core/handlers/uploads.php', zrequest, 
 			function(zresponse) {
-				var zmyimagesdiv = '';
+				var zmyimagesdiv = "<div class='wtw-roundedbox'><b>My Uploads and Images</b> can be used in any 3D Community Scene, 3D Building, and 3D Thing. Images are added as 3D Web Objects or Textures on 3D Building Blocks.<br /></div><div class='wtw-clear'></div>";
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.length > 0) {
 					for (var i=0;i<zresponse.length;i++) {
@@ -2046,7 +2049,8 @@ WTWJS.prototype.loadMyFilesPage = async function(zitem, zcategory, zhide) {
 				}
 				dGet('wtw_myimagesdiv').innerHTML = zmyimagesdiv;
 				WTW.show('wtw_myimagesdiv');
-				dGet('wtw_myimagesdiv').style.height = (WTW.sizeY - 160) + 'px';
+				dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
+				dGet('wtw_myimagesdiv').style.height = (WTW.sizeY - 170) + 'px';
 				WTW.hide('wtw_loadingselectimage');
 			}
 		);
@@ -2110,7 +2114,7 @@ WTWJS.prototype.loadStockPage = async function(zitem) {
 		};
 		WTW.postAsyncJSON('/core/handlers/uploads.php', zrequest, 
 			function(zresponse) {
-				var zstockimagesdiv = '';
+				var zstockimagesdiv = "<div class='wtw-roundedbox'><b>Stock Images</b> can be used in any 3D Community Scene, 3D Building, and 3D Thing. Images are added as 3D Web Objects or Textures on 3D Building Blocks.<br /></div><div class='wtw-clear'></div>";
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				for (var i=0;i<zresponse.length;i++) {
@@ -2136,7 +2140,8 @@ WTWJS.prototype.loadStockPage = async function(zitem) {
 				}
 				dGet('wtw_stockimagesdiv').innerHTML = zstockimagesdiv;
 				WTW.show('wtw_stockimagesdiv');
-				dGet('wtw_stockimagesdiv').style.height = (WTW.sizeY - 160) + 'px';
+				dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
+				dGet('wtw_stockimagesdiv').style.height = (WTW.sizeY - 170) + 'px';
 				WTW.hide('wtw_loadingselectimage');
 			}
 		);
@@ -2201,7 +2206,8 @@ WTWJS.prototype.loadCommunityPage = async function(zcommunityid, zbuildingid, zt
 				}
 				dGet('wtw_communityimagesdiv').innerHTML = zcommunityimagesdiv;
 				WTW.show('wtw_communityimagesdiv');
-				dGet('wtw_communityimagesdiv').style.height = (WTW.sizeY - 160) + 'px';
+				dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
+				dGet('wtw_communityimagesdiv').style.height = (WTW.sizeY - 170) + 'px';
 				WTW.hide('wtw_loadingselectimage');
 			}
 		);
@@ -2466,10 +2472,11 @@ WTWJS.prototype.openObjectPageForm = function(zuploadobjectid, zfilename) {
 	try {
 		var zcategory = WTW.getDDLValue('wtw_fileselectcategory');
 		dGet('wtw_tbackupfullpageformtitle').value = dGet('wtw_fullpageformtitle').innerHTML;
-		dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"WTW.openFullPageForm('medialibrary','" + zcategory + "','');WTW.setImageMenu(4);\">Media Library</div><img id='wtw_arrowicon2' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zfilename + "</div>";
+		dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"dGet('wtw_modelfilter').value='';dGet('wtw_tgroupuploadobjectid').value='';dGet('wtw_tgroupdiv').value='';WTW.openFullPageForm('medialibrary','" + zcategory + "','');WTW.setImageMenu(4);\">Media Library</div><img id='wtw_arrowicon2' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + zfilename + "</div>";
 		WTW.hide('wtw_uploadedmodelsdiv');
 		WTW.hide('wtw_loadingselectimage');
-		dGet('wtw_uploadedmodeldetailsdiv').style.height = (WTW.sizeY - 160) + 'px';
+		dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
+		dGet('wtw_uploadedmodeldetailsdiv').style.height = (WTW.sizeY - 170) + 'px';
 		WTW.show('wtw_uploadedmodeldetailsdiv');
 		WTW.loadObjectDetailsName(zuploadobjectid);
 		WTW.loadObjectDetailsAnimations(zuploadobjectid);
@@ -2496,24 +2503,48 @@ WTWJS.prototype.loadUploadedObjectsDiv = async function(showloading) {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				var zitem = dGet('wtw_tfileitem').value;
-				var zuploadedobjectsdiv = '';
+				var zuploadedobjectsdiv = "<div class='wtw-roundedbox'><b>3D Models</b> can be downloaded off the Internet or created from scratch using software like <a href='https://www.blender.org/' target='_blank'>Blender.org</a>. <b>3D Models</b> can be added to any 3D Community Scene, 3D Building, or 3D Thing. Recommended formats are .blender, .obj, .glb, or .gltf.<br /></div><div class='wtw-clear'></div>";
 				for (var i=0;i<zresponse.length;i++) {
+					var zfilecount = 0;
+					var zfoldersize = 0;
+					var zanimationcount = 0;
+					var zanimationdiv = '';
 					zcreatedate = zresponse[i].createdate;
+					if (zresponse[i].filecount != undefined) {
+						zfilecount = zresponse[i].filecount;
+					}
+					if (zresponse[i].foldersize != undefined) {
+						zfoldersize = zresponse[i].foldersize;
+					}
+					if (zresponse[i].animationcount != undefined) {
+						zanimationcount = zresponse[i].animationcount;
+						if (Number(zanimationcount) > 0) {
+							zanimationdiv = "<div class='wtw-animated'>Animated</div>";
+						}
+					}
+					zfoldersize = WTW.formatNumber(zfoldersize/1000000,3);
 					//zcreatedate = date('m/d/Y', strtotime($zcreatedate));
 					zlinktext = 'Edit';
 					if (zresponse[i].stock == '1') {
 						zlinktext = 'View';
 					}
+					var zwebcount = "<div class='wtw-webcount'><b>(" + zresponse[i].webcount + ")</b> 3D Webs are using this 3D Model</div><br /><br />";
+					if (Number(zresponse[i].webcount) == 0) {
+						zwebcount = "<div class='wtw-webcountzero'>No 3D Webs are using this 3D Model</div><br /><br />";
+					} else if (Number(zresponse[i].webcount) == 1) {
+						zwebcount = "<div class='wtw-webcount'><b>(" + zresponse[i].webcount + ")</b> 3D Web is using this 3D Model</div><br /><br />";
+					}
 					if (zitem == '3dobject') {
 						zlinktext = 'Select';
-						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.setSelectModel('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'><canvas id='wtw_modelCanvas" + i + "' style='border:1px solid black;display:none;visibility:hidden;'></canvas>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.setSelectModel('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">Edit</div><div class='wtw-leftbutton' onclick=\"WTW.openIFrame('/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "',.8,.8,'Preview " + zresponse[i].objectfile + "');\">Preview</div><div class='wtw-clear'></div></div></div>";
+						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.setSelectModel('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'><canvas id='wtw_modelCanvas" + i + "' style='border:1px solid black;display:none;visibility:hidden;'></canvas>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br />" + zanimationdiv + "<b>(" + zfilecount + ")</b> File(s) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + zfoldersize + " MB</b> Total<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br />" + zwebcount + "<div class='wtw-rightbutton' onclick=\"WTW.setSelectModel('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfolder + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">Edit</div><div class='wtw-leftbutton' onclick=\"WTW.openIFrame('/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "',.8,.8,'Preview " + zresponse[i].objectfile + "');\">Preview</div><div class='wtw-clear'></div></div></div>";
 					} else {
-						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "-" + zresponse[i].groupid + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'><canvas id='wtw_modelCanvas" + i + "' style='border:1px solid black;display:none;visibility:hidden;'></canvas>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br /><div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div id='wtw_bgroup_" + zresponse[i].uploadobjectid + "' class='wtw-rightbutton' onclick=\"WTW.selectObjectGroup('" + zresponse[i].uploadobjectid + "','" + zresponse[i].groupid + "', 'wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "-" + zresponse[i].groupid + "');\" onmouseover=\"WTW.showObjectGroup('" + zresponse[i].uploadobjectid + "','" + zresponse[i].groupid + "',true);\" onmouseout=\"WTW.showObjectGroup('" + zresponse[i].uploadobjectid + "','" + zresponse[i].groupid + "',false);\">Group</div><div class='wtw-leftbutton' onclick=\"WTW.openIFrame('/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "',.8,.8,'Preview " + zresponse[i].objectfile + "');\">Preview</div><div class='wtw-clear'></div></div></div>";
+						zuploadedobjectsdiv += "<div id='wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "-" + zresponse[i].groupid + "' class='wtw-objectcontainer'><div class='wtw-objectfile' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'><canvas id='wtw_modelCanvas" + i + "' style='border:1px solid black;display:none;visibility:hidden;'></canvas>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br />" + zanimationdiv + "<b>(" + zfilecount + ")</b> File(s) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>" + zfoldersize + " MB</b> Total<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "<br /><br />" + zwebcount + "<div class='wtw-rightbutton' onclick=\"WTW.openObjectPageForm('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile + "');\">" + zlinktext + "</div><div id='wtw_bgroup_" + zresponse[i].uploadobjectid + "' class='wtw-rightbutton' onclick=\"WTW.selectObjectGroup('" + zresponse[i].uploadobjectid + "','" + zresponse[i].groupid + "', 'wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "-" + zresponse[i].groupid + "');\" onmouseover=\"WTW.showObjectGroup('" + zresponse[i].uploadobjectid + "','" + zresponse[i].groupid + "',true);\" onmouseout=\"WTW.showObjectGroup('" + zresponse[i].uploadobjectid + "','" + zresponse[i].groupid + "',false);\">Group</div><div id='wtw_bduplicate_" + zresponse[i].uploadobjectid + "' class='wtw-rightbutton' onclick=\"WTW.selectObjectDuplicate('" + zresponse[i].uploadobjectid + "','" + zresponse[i].objectfile.toLowerCase() + "', 'wtw_obj_" + i + "_" + zresponse[i].objectfile.toLowerCase() + "-" + zresponse[i].groupid + "');\">Duplicate</div><div class='wtw-leftbutton' onclick=\"WTW.openIFrame('/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "',.8,.8,'Preview " + zresponse[i].objectfile + "');\">Preview</div><div class='wtw-clear'></div></div></div>";
 					}
 					WTW.loadPreviewScene(i);
 				}
 				dGet('wtw_uploadedmodelsdiv').innerHTML = zuploadedobjectsdiv;
-				dGet('wtw_uploadedmodelsdiv').style.height = (WTW.sizeY - 160) + 'px';
+				dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
+				dGet('wtw_uploadedmodelsdiv').style.height = (WTW.sizeY - 170) + 'px';
 				WTW.show('wtw_uploadedmodelsdiv');
 				if (showloading) {
 					WTW.hide('wtw_loadingselectimage');
@@ -2611,6 +2642,66 @@ WTWJS.prototype.selectObjectGroup = async function(zuploadobjectid, zgroupid, zg
 	}
 }
 
+WTWJS.prototype.selectObjectDuplicate = async function(zuploadobjectid, zobjectfile, zgroupdiv) {
+	/* select obj to eliminate duplicate 3D Models */
+	try {
+		if (dGet('wtw_tgroupuploadobjectid').value == '' || dGet('wtw_tgroupuploadobjectid').value == zuploadobjectid) {
+			if (dGet(zgroupdiv) != null) {
+				if (dGet(zgroupdiv).style.borderColor != 'red') {
+					dGet(zgroupdiv).style.borderColor = 'red';
+					dGet(zgroupdiv).style.backgroundColor = '#feffce';
+					dGet('wtw_tgroupuploadobjectid').value = zuploadobjectid;
+					dGet('wtw_tgroupdiv').value = zgroupdiv;
+					dGet('wtw_modelfilter').value = zobjectfile;
+					WTW.filterModels(2);
+				} else {
+					dGet(zgroupdiv).style.borderColor = '#afafaf';
+					dGet(zgroupdiv).style.backgroundColor = '#ffffff';
+					dGet('wtw_tgroupuploadobjectid').value = '';
+					dGet('wtw_tgroupdiv').value = '';
+				}
+			}
+		} else {
+			dGet(zgroupdiv).style.borderColor = 'red';
+			dGet(zgroupdiv).style.backgroundColor = '#feffce';
+			var zrequest = {
+				'uploadobjectid': zuploadobjectid,
+				'duplicateuploadobjectid': dGet('wtw_tgroupuploadobjectid').value,
+				'function':'removeduplicateuploadobject'
+			};
+			WTW.postAsyncJSON('/core/handlers/uploadedfiles.php', zrequest, 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					dGet('wtw_tgroupuploadobjectid').value = '';
+					dGet('wtw_tgroupdiv').value = '';
+					dGet('wtw_modelfilter').value = zobjectfile;
+					WTW.openFullPageForm('medialibrary','');
+					WTW.setImageMenu(4);
+				}
+			);
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminforms.js-selectObjectDuplicate=' + ex.message);
+	}
+}
+
+WTWJS.prototype.clearNameFilter = async function() {
+	/* clear name filter and reset duplicate function */
+	try {
+		if (dGet('wtw_tgroupdiv').value != '') {
+			dGet(dGet('wtw_tgroupdiv').value).style.borderColor = '#afafaf';
+			dGet(dGet('wtw_tgroupdiv').value).style.backgroundColor = '#ffffff';
+		}
+		dGet('wtw_tgroupuploadobjectid').value = '';
+		dGet('wtw_tgroupid').value = '';
+		dGet('wtw_modelfilter').value='';
+		WTW.filterModels(2);
+		dGet('wtw_modelfilter').focus();
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminforms.js-clearNameFilter=' + ex.message);
+	}
+}
+
 WTWJS.prototype.loadPreviewScene = async function(zind) {
 	/* creates scene used to preview a 3D Model */
 	try {
@@ -2650,22 +2741,61 @@ WTWJS.prototype.loadObjectDetailsName = async function(zuploadobjectid) {
 				if (zresponse.length > 0) {
 					for (var i=0;i < zresponse.length;i++) {
 						if (zresponse[i] != null) {
-							dGet('wtw_tuploadobjectid').value = zresponse[i].uploadobjectid;
-							dGet('wtw_tobjectfile').value = zresponse[i].objectfile;
-							if (zresponse[i].stock == 1) {
-								znamediv += "<h1 style='color:black;margin-left:20px;'>Edit Stock 3D Object</h1>";
-							} else {
-								znamediv += "<h1 style='color:black;margin-left:20px;'>Edit 3D Object</h1>";
-							}
-							var zcreatedate = zresponse[i].createdate;
-							//zcreatedate = date('m/d/Y', strtotime($zcreatedate));
-							znamediv += "<div class='wtw-objectcontainer'><div class='wtw-objectfile'>" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "</div></div>";
-							
-							zpreviewdiv += "<div class='wtw-leftbutton' onclick=\"dGet('wtw_3dobectpreview-" + i + "').src='/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "';\" style='margin:10px;'>Preview or Refresh Preview</div> After an update, you may need to clear your browser cache files to fully refresh the 3D Model Preview.<br />\r\n";
-							zpreviewdiv += "<iframe id='wtw_3dobectpreview-" + i + "' src='/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "' style='width:100%;min-height:400px;height:100%;'></iframe>\r\n";
-							zpreviewdiv += "<br /><br />Use Mouse Scroll-Wheel to Zoom<br /><br />Hold Mouse Left Button Down to Rotate View as you move Mouse or<br /><br />Use Arrow Keys on the Keyboard.<br />\r\n";
+							if (zresponse[i].uploadobjectid != undefined) {
+								var zcreatedate = zresponse[i].createdate;
+								//zcreatedate = date('m/d/Y', strtotime($zcreatedate));
+								dGet('wtw_tuploadobjectid').value = zresponse[i].uploadobjectid;
+								dGet('wtw_tobjectfile').value = zresponse[i].objectfile;
+								if (zresponse[i].stock == 1) {
+									znamediv += "<h1 style='color:black;margin-left:20px;'>Edit Stock 3D Model</h1>";
+								} else {
+									znamediv += "<h1 style='color:black;margin-left:20px;'>Edit 3D Model</h1>";
+								}
+								znamediv += "<div class='wtw-objectcontainer'><div class='wtw-objectfile'>" + zresponse[i].objectfile + "</div><div class='wtw-objectfolder'>" + zresponse[i].objectfolder.replace("/objects/","/objects<br />/") + "<br /><br /><span style='color:gray;'>Uploaded on </span>" + zcreatedate + "</div></div>";
+								
+								zpreviewdiv += "<div class='wtw-leftbutton' onclick=\"dGet('wtw_3dobectpreview-" + i + "').src='/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "';\" style='margin:10px;'>Preview or Refresh Preview</div> After an update, you may need to clear your browser cache files to fully refresh the 3D Model Preview.<br />\r\n";
+								zpreviewdiv += "<iframe id='wtw_3dobectpreview-" + i + "' src='/core/pages/models.php?objectfile=" + zresponse[i].objectfolder + zresponse[i].objectfile + "' style='width:100%;min-height:400px;height:100%;'></iframe>\r\n";
+								zpreviewdiv += "<br /><br />Use Mouse Scroll-Wheel to Zoom<br /><br />Hold Mouse Left Button Down to Rotate View as you move Mouse or<br /><br />Use Arrow Keys on the Keyboard.<br />\r\n";
 
-							WTW.loadObjectDetailsFiles(zuploadobjectid, zresponse[i].objectfolder, zresponse[i].objectfile);
+								WTW.loadObjectDetailsFiles(zuploadobjectid, zresponse[i].objectfolder, zresponse[i].objectfile);
+								if (zresponse[i].groupmodels != null) {
+									if (zresponse[i].groupmodels.length > 1) {
+										zpreviewdiv += "<br /><br /><div class='wtw-dashboardboxtitle'><div style='float:right;margin-right:10px;'>(" + zresponse[i].groupmodels.length + " found)</div>3D Models in this Group</div><br />";
+										for (var j=0;j<zresponse[i].groupmodels.length;j++) {
+											if (zresponse[i].groupmodels[j] != null) {
+												var zcolor = '#000000';
+												var zmodel = '';
+												if (zresponse[i].groupmodels[j].uploadobjectid == zresponse[i].uploadobjectid) {
+													zcolor = '#0000ff';
+													zmodel = ' (this 3D Model)';
+												}
+												zpreviewdiv += "<div style='display:inline-block;min-width:150px;'>3D Model:</div> <span style='color:" + zcolor + ";'><b>" + zresponse[i].groupmodels[j].objectfile.toLowerCase() + "</b></span>" + zmodel + "<br /><br />";
+											}
+										}
+									}
+								}
+								if (zresponse[i].webs != null) {
+									if (zresponse[i].webs.length > 0) {
+										zpreviewdiv += "<br /><br /><div class='wtw-dashboardboxtitle'><div style='float:right;margin-right:10px;'>(" + zresponse[i].webs.length + " found)</div>3D Webs that use this 3D Model</div><br />";
+										for (var j=0;j<zresponse[i].webs.length;j++) {
+											if (zresponse[i].webs[j] != null) {
+												zpreviewdiv += "<div style='display:inline-block;min-width:150px;'>3D " + zresponse[i].webs[j].webtype + ":</div> <a href='\admin.php?" + zresponse[i].webs[j].webtype.toLowerCase() + "id=" + zresponse[i].webs[j].webid + "'><b>" + zresponse[i].webs[j].webname + "</b></a><br /><br />";
+											}
+										}
+										zpreviewdiv += "<br /><br /><span style='color:red;'>Note: If you would like the option to delete this 3D Model, first remove it from the 3D Webs listed above.</span><br /><br />";
+									} else {
+										zpreviewdiv += "<br /><br /><div class='wtw-dashboardboxtitle'>Delete 3D Model</div><br />\r\n";
+										if (zresponse[i].stock != '1') {
+											zpreviewdiv += "<div id='wtw_uploadobjectdelete' class='wtw-redbuttonleft' onclick=\"WTW.deleteUploadObject('" + zresponse[i].uploadobjectid + "',0);\">Delete 3D Model</div> This button will mark the record Deleted and keep the files on the server.\r\n";
+											zpreviewdiv += "<div class='wtw-clear'></div><hr />";
+											zpreviewdiv += "<div id='wtw_uploadobjectpermdelete' class='wtw-redbuttonleft' onclick=\"dGet('wtw_tgroupuploadobjectid').value='" + zresponse[i].uploadobjectid + "';WTW.openConfirmation('10');\">Permanently Delete 3D Model</div> This button will delete the record and related 3D Model files on the server if they are no longer in use by other 3D Models.\r\n";
+										} else {
+											zpreviewdiv += "<br /><span style='color:red;'>Note: Stock items cannot be deleted.</span><br /><br />";
+										}
+										zpreviewdiv += "<div class='wtw-clear'></div>";
+									}									
+								}
+							}
 						}
 					}
 				} else {
@@ -2677,6 +2807,26 @@ WTWJS.prototype.loadObjectDetailsName = async function(zuploadobjectid) {
 		);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminforms.js-loadObjectDetailsName=' + ex.message);
+	}
+}
+
+WTWJS.prototype.deleteUploadObject = function(zuploadobjectid, zpermanent) {
+	/* delete 3D Model files */
+	try {
+		var zrequest = {
+			'uploadobjectid': zuploadobjectid,
+			'permanent': zpermanent,
+			'function':'deleteuploadobject'
+		};
+		WTW.postAsyncJSON('/core/handlers/uploadedfiles.php', zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				WTW.openFullPageForm('medialibrary','');
+				WTW.setImageMenu(4);
+			}
+		);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminforms.js-deleteUploadObject=' + ex.message);
 	}
 }
 

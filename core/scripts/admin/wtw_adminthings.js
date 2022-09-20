@@ -535,7 +535,6 @@ WTWJS.prototype.shareThingTemplate = async function() {
 	/* after user is sent to confirm form to make sure they want to Share the 3D Thing */
 	/* this will process the share */
 	try {
-		WTW.closeConfirmation();
 		dGet('wtw_bsharethingtemplate').value = 'Shared 3D Thing';
 		var zrequest = {
 			'thingid': thingid,

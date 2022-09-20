@@ -647,7 +647,6 @@ WTWJS.prototype.shareCommunityTemplate = async function() {
 	/* after user is sent to confirm form to make sure they want to Share the 3D Community */
 	/* this process the share */
 	try {
-		WTW.closeConfirmation();
 		dGet('wtw_bsharecommunitytemp').innerHTML = 'Shared 3D Community';
 		var zrequest = {
 			'communityid': communityid,
@@ -1334,6 +1333,12 @@ WTWJS.prototype.openConfirmation = function(w) {
 				dGet('wtw_confirmtext').innerHTML = '<br />Other Users will be able to use a Shared Copy of this design for their own 3D Avatar. It will not affect your current 3D Avatar. The Shared Copy cannot be undone once Shared.';
 				dGet('wtw_bconfirm').value = 'Share My 3D Avatar';
 				break;
+			case '10':
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Permanently Delete 3D Model';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete this 3D Model?';
+				dGet('wtw_confirmtext').innerHTML = '<br />This will delete the record and related 3D Model files on the server if they are no longer in use by other 3D Models. This cannot be undone once Permanently Deleted.';
+				dGet('wtw_bconfirm').value = 'Permanently Delete My 3D Model';
+				break;
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admincommunities.js-openConfirmation=' + ex.message);
@@ -1371,7 +1376,12 @@ WTWJS.prototype.completedConfirmation = function(w) {
 			case '9':
 				WTW.shareAvatarTemplate();
 				break;
+			case '10':
+				WTW.deleteUploadObject(dGet('wtw_tgroupuploadobjectid').value,1);
+				dGet('wtw_tgroupuploadobjectid').value = '';
+				break;
 		}
+		WTW.closeConfirmation();
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_admincommunities.js-completedConfirmation=' + ex.message);
 	}

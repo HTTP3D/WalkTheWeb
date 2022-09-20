@@ -511,7 +511,6 @@ WTWJS.prototype.shareBuildingTemplate = async function() {
 	/* after user is sent to confirm form to make sure they want to Share the 3D Building */
 	/* this process the share */
 	try {
-		WTW.closeConfirmation();
 		dGet('wtw_bsharebuildingtemp').innerHTML = 'Shared 3D Building';
 		var zrequest = {
 			'buildingid': buildingid,

@@ -357,25 +357,6 @@ WTWJS.prototype.openCart = function() {
 		}
 		document.body.scrollTop = document.documentElement.scrollTop = 0;
 		WTW.openIFrame('https://3dnet.walktheweb.com/core/pages/cartwalktheweb.php?serverinstanceid=' + btoa(dGet('wtw_serverinstanceid').value) + '&serverip=' + btoa(dGet('wtw_serverip').value) + '&domainname=' + btoa(dGet('wtw_domainname').value) + '&domainurl=' + btoa(dGet('wtw_domainurl').value) + '&websiteurl=' + btoa(dGet('wtw_websiteurl').value) + '&userid=' + btoa(dGet('wtw_userid').value) + '&useremail=' + btoa(dGet('wtw_useremail').value) + '&usertoken=' + btoa(dGet('wtw_usertoken').value) + '&selected=' + btoa(zselected), .8, .8, 'WalkTheWeb Shopping Cart');
-
-/*		var zrequest = {
-			'serverinstanceid':btoa(dGet('wtw_serverinstanceid').value),
-			'serverip':btoa(dGet('wtw_serverip').value),
-			'domainurl':btoa(dGet('wtw_domainurl').value),
-			'websiteurl':btoa(dGet('wtw_websiteurl').value),
-			'domainname':btoa(dGet('wtw_domainname').value),
-			'userid':btoa(dGet('wtw_userid').value),
-			'useremail':btoa(dGet('wtw_useremail').value),
-			'usertoken':btoa(dGet('wtw_usertoken').value),
-			'function':'opencart'
-		};
-		WTW.postJSON('https://3dnet.walktheweb.com/core/pages/cartwalktheweb.php', zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				
-			}
-		);
-*/		
 	} catch (ex) { 
 		WTW.log('core-scripts-prime-wtw_install.js-openCart=' + ex.message);
 	}
@@ -417,7 +398,6 @@ WTWJS.prototype.openIFrame = function(zurl, zwidth, zheight, ztitle) {
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_install.js-openIFrame=' + ex.message);
 		WTW.closeIFrame();
-//		WTW.openWebpage(zurl, '_blank');
 	}
 }
 
