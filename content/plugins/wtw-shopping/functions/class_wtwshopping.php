@@ -167,6 +167,8 @@ class wtwshopping {
 			$zformdata .= "<div class=\"wtw-dashboardboxleft\">\r\n";
 			$zformdata .= "		<div id=\"wtw_shopping_addstoretitle\" class=\"wtw-dashboardboxtitle\">Add Store</div>\r\n";
 			$zformdata .= "		<div class=\"wtw-dashboardbox\"><input type=\"hidden\" id=\"wtw_tstoreid\" maxlength=\"16\" />\r\n";
+			$zformdata .= "			<div class='wtw-roundedbox'><b>3D Stores</b> are a way to connect your <b>WordPress WooCommerce</b> shopping cart and products into 3D Communities, 3D Buildings, and 3D Things.<br /></div>\r\n";
+			$zformdata .= "			<div class=\"wtw-clear\"></div>\r\n";
 			$zformdata .= "			<div class=\"wtw-dashboardlabel\">Store Name</div>\r\n";
 			$zformdata .= "			<div class=\"wtw-dashboardvalue\"><input type=\"text\" id=\"wtw_tstorename\" maxlength=\"255\" /></div>\r\n";
 			$zformdata .= "			<div class=\"wtw-clear\"></div>\r\n";
@@ -198,7 +200,6 @@ class wtwshopping {
 			$zformdata .= "			<div class=\"wtw-clear\"></div>\r\n";
 			$zformdata .= "		</div>\r\n";
 			$zformdata .= "</div>\r\n";
-			$zformdata .= "<div class='wtw-roundedbox' style='float:right;max-width:60%;'><b>3D Stores</b> are a way to connect your <b>WordPress WooCommerce</b> shopping cart and products into 3D Communities, 3D Buildings, and 3D Things.<br /></div>\r\n";
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-shopping:functions-class_wtwshopping.php-addStoreSettingsPage=".$e->getMessage());
 		}
