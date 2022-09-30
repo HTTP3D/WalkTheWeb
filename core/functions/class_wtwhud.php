@@ -26,7 +26,7 @@ class wtwhud {
 		$zmenu = array();
 		try {
 			$zuserid = "";
-			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+			if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 				$zuserid = $_SESSION["wtw_userid"];
 			}
 			$zresults = $wtwhandlers->query("
@@ -66,7 +66,7 @@ class wtwhud {
 			if (isset($zmenuitemid)) {
 				if (is_numeric($zmenuitemid)) {
 					$zuserid = "";
-					if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+					if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 						$zuserid = $_SESSION["wtw_userid"];
 					}
 					$zresults = $wtwhandlers->query("

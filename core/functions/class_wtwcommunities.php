@@ -45,7 +45,7 @@ class wtwcommunities {
 		$copycommunityid = "";
 		try {
 			set_time_limit(0);
-			if (empty($zpastcommunityid) || !isset($zpastcommunityid) || $wtwhandlers->checkUpdateAccess($zpastcommunityid, "", "") == false) {
+			if (!isset($zpastcommunityid) || empty($zpastcommunityid) || $wtwhandlers->checkUpdateAccess($zpastcommunityid, "", "") == false) {
 				/* denies copy function if you do not have access to community to copy */
 				$zpastcommunityid = "";
 			}
@@ -53,7 +53,7 @@ class wtwcommunities {
 			if (empty($zcommunityid)) {
 				/* create new communityid */
 				$zcommunityid = $wtwhandlers->getRandomString(16,1);
-				if (empty($zpastcommunityid) || !isset($zpastcommunityid)) {
+				if (!isset($zpastcommunityid) || empty($zpastcommunityid)) {
 					/* create new community (without access to copy community or if not copying existing community, this creates new community) */
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."communities
@@ -252,10 +252,10 @@ class wtwcommunities {
 						 '".$wtwhandlers->userid."');");
 			} else if ($wtwhandlers->checkUpdateAccess($zcommunityid, "", "")) {
 				/* only updates if you have access */
-				if (empty($zwatercolorrefraction) || !isset($zwatercolorrefraction)) {
+				if (!isset($zwatercolorrefraction) || empty($zwatercolorrefraction)) {
 					$zwatercolorrefraction = '#23749C';
 				}
-				if (empty($zwatercolorreflection) || !isset($zwatercolorreflection)) {
+				if (!isset($zwatercolorreflection) || empty($zwatercolorreflection)) {
 					$zwatercolorreflection = '#52BCF1';
 				}
 				$wtwhandlers->query("
@@ -291,12 +291,12 @@ class wtwcommunities {
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwcommunities.php-saveCommunity=".$e->getMessage());
 		}
-		if (!empty($zpastcommunityid) && isset($zpastcommunityid) && !empty($zcommunityid) && isset($zcommunityid)) {
+		if ($wtwhandlers->hasValue($zpastcommunityid) && $wtwhandlers->hasValue($zcommunityid)) {
 			if ($this->copyCommunity($zcommunityid, $zpastcommunityid)) {
 				$copycommunityid = $zcommunityid;
 			}
 		}
-		if (empty($copycommunityid) || !isset($copycommunityid)) {
+		if (!isset($copycommunityid) || empty($copycommunityid)) {
 			$copycommunityid = $zcommunityid;
 		}
 		return $copycommunityid;
@@ -885,19 +885,19 @@ class wtwcommunities {
 				/* copy contentratings */
 				$zresults = $wtwhandlers->query("
 					select t2.contentratingid as pastcontentratingid,
-						 t2.webid,
-						 t2.webtype,
 						 '".$zcommunityid."' as webid,
+						 t2.webtype,
 						 t2.rating,
 						 t2.ratingvalue,
 						 t2.contentwarning
 					from ".wtw_tableprefix."contentratings t2
 					where t2.webid='".$zfromcommunityid."'
+						and webtype='community'
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
 					$zcontentratingid = $wtwhandlers->getRandomString(16,1);
 					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."automations
+						insert into ".wtw_tableprefix."contentratings
 							(contentratingid,
 							 pastcontentratingid,
 							 webid,
@@ -922,6 +922,45 @@ class wtwcommunities {
 							 now(),
 							 '".$wtwhandlers->userid."');");
 				}
+
+				/* copy plugins required */
+				$zresults = $wtwhandlers->query("
+					select t2.pluginsrequiredid as pastpluginsrequiredid,
+						 '".$zcommunityid."' as webid,
+						 'community' as webtype,
+						 t2.pluginname,
+						 t2.optional
+					from ".wtw_tableprefix."pluginsrequired t2
+					where t2.webid='".$zfromcommunityid."'
+						and t2.deleted=0;");
+
+				foreach ($zresults as $zrow) {
+					$zpluginsrequiredid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."pluginsrequired
+							(pluginsrequiredid,
+							 pastpluginsrequiredid,
+							 webid,
+							 webtype,
+							 pluginname,
+							 optional,
+							 createdate,
+							 createuserid,
+							 updatedate,
+							 updateuserid)
+						values
+							('".$zpluginsrequiredid."',
+							 '".$zrow["pastpluginsrequiredid"]."',
+							 '".$zrow["webid"]."',
+							 '".$zrow["webtype"]."',
+							 '".$zrow["pluginname"]."',
+							 '".$zrow["optional"]."',
+							 now(),
+							 '".$wtwhandlers->userid."',
+							 now(),
+							 '".$wtwhandlers->userid."');");
+				}
+				
 				/* update automations */
 				$zresults = $wtwhandlers->query("
 					select t2.automationid as pastautomationid,
@@ -1479,40 +1518,40 @@ class wtwcommunities {
 				$wtwhandlers = $wtwconnect;
 			}
 
-			if (empty($zdownloadparentwebid) || !isset($zdownloadparentwebid)) {
+			if (!isset($zdownloadparentwebid) || empty($zdownloadparentwebid)) {
 				$zdownloadparentwebid = '';
 			}
-			if (empty($zdownloadparentwebtype) || !isset($zdownloadparentwebtype)) {
+			if (!isset($zdownloadparentwebtype) || empty($zdownloadparentwebtype)) {
 				$zdownloadparentwebtype = '';
 			}
-			if (empty($zcommunityid) || !isset($zcommunityid)) {
+			if (!isset($zcommunityid) || empty($zcommunityid)) {
 				$zcommunityid = '';
 			}
-			if (empty($zbuildingpositionx) || !isset($zbuildingpositionx)) {
+			if (!isset($zbuildingpositionx) || empty($zbuildingpositionx)) {
 				$zbuildingpositionx = 0;
 			}
-			if (empty($zbuildingpositiony) || !isset($zbuildingpositiony)) {
+			if (!isset($zbuildingpositiony) || empty($zbuildingpositiony)) {
 				$zbuildingpositiony = 0;
 			}
-			if (empty($zbuildingpositionz) || !isset($zbuildingpositionz)) {
+			if (!isset($zbuildingpositionz) || empty($zbuildingpositionz)) {
 				$zbuildingpositionz = 0;
 			}
-			if (empty($zbuildingscalingx) || !isset($zbuildingscalingx)) {
+			if (!isset($zbuildingscalingx) || empty($zbuildingscalingx)) {
 				$zbuildingscalingx = 1;
 			}
-			if (empty($zbuildingscalingy) || !isset($zbuildingscalingy)) {
+			if (!isset($zbuildingscalingy) || empty($zbuildingscalingy)) {
 				$zbuildingscalingy = 1;
 			}
-			if (empty($zbuildingscalingz) || !isset($zbuildingscalingz)) {
+			if (!isset($zbuildingscalingz) || empty($zbuildingscalingz)) {
 				$zbuildingscalingz = 1;
 			}
-			if (empty($zbuildingrotationx) || !isset($zbuildingrotationx)) {
+			if (!isset($zbuildingrotationx) || empty($zbuildingrotationx)) {
 				$zbuildingrotationx = 0;
 			}
-			if (empty($zbuildingrotationy) || !isset($zbuildingrotationy)) {
+			if (!isset($zbuildingrotationy) || empty($zbuildingrotationy)) {
 				$zbuildingrotationy = 0;
 			}
-			if (empty($zbuildingrotationz) || !isset($zbuildingrotationz)) {
+			if (!isset($zbuildingrotationz) || empty($zbuildingrotationz)) {
 				$zbuildingrotationz = 0;
 			}
 			
@@ -1526,7 +1565,7 @@ class wtwcommunities {
 			$zurl = '';
 			
 			/* allow usertoken authentication */
-			if ((empty($zuserid) || !isset($zuserid)) && !empty($zusertoken) && isset($zusertoken)) {
+			if ((!isset($zuserid) || empty($zuserid)) && isset($zusertoken) && !empty($zusertoken)) {
 				$zresults = $wtwhandlers->query("
 					select userid
 					from ".wtw_tableprefix."users 
@@ -1539,7 +1578,7 @@ class wtwcommunities {
 			}
 			
 			/* only add download if the userid exists */
-			if (!empty($zuserid) && isset($zuserid)) {
+			if ($wtwhandlers->hasValue($zuserid)) {
 				
 				/* $zwebtypes is the plural version of webtype (used in table names) */
 				switch($zwebtype) {
@@ -1570,7 +1609,7 @@ class wtwcommunities {
 				$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zwebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
 
 				$zrequest = $wtwhandlers->openFilefromURL($zurl);
-				if (!empty($zrequest) && isset($zrequest)) {
+				if ($wtwhandlers->hasValue($zrequest)) {
 					$zrequest = json_decode($zrequest);
 				}
 				
@@ -2498,7 +2537,6 @@ class wtwcommunities {
 							'".$znewupdateuserid."');");
 				}
 				
-
 				/* process content ratings */
 				foreach ($zrequest->contentratings as $zcontentrating) {
 					/* check if the contentratingid is already in use */
@@ -2508,7 +2546,7 @@ class wtwcommunities {
 					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zcontentrating->createuserid);
 					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zcontentrating->updateuserid);
 					
-					/* insert new record into connectinggrids table */
+					/* insert new record into contentratings table */
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."contentratings 
 						   (contentratingid,
@@ -2536,6 +2574,47 @@ class wtwcommunities {
 							'".$znewupdateuserid."');");
 				}
 				
+				/* process plugins required */
+				foreach ($zrequest->pluginsrequired as $zpluginrequired) {
+					/* check if the pluginsrequiredid is already in use */
+					$znewpluginsrequiredid = $wtwhandlers->getNewKey('pluginsrequired', "pluginsrequiredid", $zpluginrequired->pluginsrequiredid);
+					
+					/* get new foreign keys */
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zpluginrequired->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zpluginrequired->updateuserid);
+					$zoptional = '0';
+					if ($wtwhandlers->hasValue($zpluginrequired->optional)) {
+						if ($zpluginrequired->optional == '1') {
+							$zoptional = '1';
+						}
+					}
+					
+					/* insert new record into pluginsrequired table */
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."pluginsrequired 
+						   (pluginsrequiredid,
+							pastpluginsrequiredid,
+							webid,
+							webtype,
+							pluginname,
+							optional,
+							createdate,
+							createuserid,
+							updatedate,
+							updateuserid)
+						values
+						   ('".$znewpluginsrequiredid."',
+							'".$zpluginrequired->pluginsrequiredid."',
+							'".$znewwebid."',
+							'".$zpluginrequired->webtype."',
+							'".$zpluginrequired->pluginname."',
+							".$zoptional.",
+							'".$zpluginrequired->createdate."',
+							'".$znewcreateuserid."',
+							now(),
+							'".$znewupdateuserid."');");
+				}
+
 				/* create array of uploadobjects to update the groupid after they are all added to the table (next section) */
 				$i = 0;
 				$zgroups = array();
@@ -2554,7 +2633,7 @@ class wtwcommunities {
 					);
 					$i += 1;
 
-					if (!empty($zuploadobject->uploadobjectid) && isset($zuploadobject->uploadobjectid)) {
+					if ($wtwhandlers->hasValue($zuploadobject->uploadobjectid)) {
 						
 						$znewobjectfolder = $znewfolder.'/objects';
 						if (!file_exists($znewobjectfolder)) {
@@ -3082,7 +3161,7 @@ class wtwcommunities {
 
 
 				/* if part of the new install process, add the first building to the first community */
-				if ($zwebtype == 'building' && !empty($zcommunityid) && isset($zcommunityid)) {
+				if ($zwebtype == 'building' && isset($zcommunityid) && !empty($zcommunityid)) {
 					$znewconnectinggridid = $wtwhandlers->getNewKey('connectinggrids', 'connectinggridid', '');
 					$zloadactionzoneid = '';
 					if (is_numeric($zbuildingpositionx) == false) {
@@ -3126,7 +3205,7 @@ class wtwcommunities {
 					}
 					
 					/* add connecting grid to place the building into the community during first time installs */
-					if (!empty($zloadactionzoneid) && isset($zloadactionzoneid)) {
+					if ($wtwhandlers->hasValue($zloadactionzoneid)) {
 						$wtwhandlers->query("
 							insert into ".wtw_tableprefix."connectinggrids 
 							   (connectinggridid,
@@ -3321,7 +3400,7 @@ class wtwcommunities {
 			$zurl = '';
 			
 			/* allow usertoken authentication */
-			if ((empty($zuserid) || !isset($zuserid)) && !empty($zusertoken) && isset($zusertoken)) {
+			if ((!isset($zuserid) || empty($zuserid)) && isset($zusertoken) && !empty($zusertoken)) {
 				$zresults = $wtwhandlers->query("
 					select userid
 					from ".wtw_tableprefix."users 
@@ -3334,7 +3413,7 @@ class wtwcommunities {
 			}
 			
 			/* only add download if the userid exists */
-			if (!empty($zuserid) && isset($zuserid)) {
+			if ($wtwhandlers->hasValue($zuserid)) {
 				
 				/* $zwebtypes is the plural version of webtype (used in table names) */
 				switch($zwebtype) {
@@ -3365,7 +3444,7 @@ class wtwcommunities {
 				$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zupdatewebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
 
 				$zrequest = $wtwhandlers->openFilefromURL($zurl);
-				if (!empty($zrequest) && isset($zrequest)) {
+				if ($wtwhandlers->hasValue($zrequest)) {
 					$zrequest = json_decode($zrequest);
 				}
 				
@@ -3590,7 +3669,7 @@ class wtwcommunities {
 							$zfoundcommunityid = $zrow["communityid"];
 						}
 						
-						if (isset($zfoundcommunityid) && !empty($zfoundcommunityid)) {
+						if ($wtwhandlers->hasValue($zfoundcommunityid)) {
 							/* update communities table */
 							$wtwhandlers->query("
 								update ".wtw_tableprefix."communities 
@@ -3799,7 +3878,7 @@ class wtwcommunities {
 							$zfoundbuildingid = $zrow["buildingid"];
 						}
 						
-						if (isset($zfoundbuildingid) && !empty($zfoundbuildingid)) {
+						if ($wtwhandlers->hasValue($zfoundbuildingid)) {
 							/* update buildings table */
 							$wtwhandlers->query("
 								update ".wtw_tableprefix."buildings 
@@ -3906,7 +3985,7 @@ class wtwcommunities {
 							$zfoundthingid = $zrow["thingid"];
 						}
 						
-						if (isset($zfoundthingid) && !empty($zfoundthingid)) {
+						if ($wtwhandlers->hasValue($zfoundthingid)) {
 							/* update things table */
 							$wtwhandlers->query("
 								update ".wtw_tableprefix."things 
@@ -4122,7 +4201,7 @@ class wtwcommunities {
 						$zfoundactionzoneid = $zrow["actionzoneid"];
 					}
 					
-					if (isset($zfoundactionzoneid) && !empty($zfoundactionzoneid)) {
+					if ($wtwhandlers->hasValue($zfoundactionzoneid)) {
 						$znewactionzoneid = $zfoundactionzoneid;
 
 						/* update actionzones table */
@@ -4280,7 +4359,7 @@ class wtwcommunities {
 							$zfoundactionzoneanimationid = $zrow["actionzoneanimationid"];
 						}
 						
-						if (isset($zfoundactionzoneanimationid) && !empty($zfoundactionzoneanimationid)) {
+						if ($wtwhandlers->hasValue($zfoundactionzoneanimationid)) {
 							/* update actionzoneanimations table */
 							$wtwhandlers->query("
 								update ".wtw_tableprefix."actionzoneanimations 
@@ -4425,7 +4504,7 @@ class wtwcommunities {
 						$zfoundconnectinggridid = $zrow["connectinggridid"];
 					}
 					
-					if (isset($zfoundconnectinggridid) && !empty($zfoundconnectinggridid)) {
+					if ($wtwhandlers->hasValue($zfoundconnectinggridid)) {
 						/* update connectinggrids table */
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."connectinggrids 
@@ -4499,7 +4578,6 @@ class wtwcommunities {
 					}
 				}
 				
-
 				/* process content ratings */
 				foreach ($zrequest->contentratings as $zcontentrating) {
 					/* check if the contentratingid is already in use */
@@ -4520,9 +4598,9 @@ class wtwcommunities {
 						$zfoundcontentratingid = $zrow["contentratingid"];
 					}
 					
-					if (isset($zfoundcontentratingid) && !empty($zfoundcontentratingid)) {
+					if ($wtwhandlers->hasValue($zfoundcontentratingid)) {
 					
-						/* insert new record into connectinggrids table */
+						/* insert new record into contentratings table */
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."contentratings 
 							set webid='".$zwebid."',
@@ -4535,7 +4613,7 @@ class wtwcommunities {
 							where contentratingid='".$zfoundcontentratingid."'
 							limit 1;");
 					} else {
-						/* insert new record into connectinggrids table */
+						/* insert new record into contentratings table */
 						$wtwhandlers->query("
 							insert into ".wtw_tableprefix."contentratings 
 							   (contentratingid,
@@ -4564,6 +4642,73 @@ class wtwcommunities {
 					}
 				}
 				
+				/* process plugins ratings */
+				foreach ($zrequest->pluginsrequired as $zpluginrequired) {
+					/* check if the pluginsrequiredid is already in use */
+					$znewpluginsrequiredid = $wtwhandlers->getNewKey('pluginsrequired', "pluginsrequiredid", $zpluginrequired->pluginsrequiredid);
+					
+					/* get new foreign keys */
+					$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zpluginrequired->createuserid);
+					$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zpluginrequired->updateuserid);
+
+					$zfoundpluginsrequiredid = '';
+					$zresults = $wtwhandlers->query("
+						select pluginsrequiredid
+						from ".wtw_tableprefix."pluginsrequired
+						where pluginsrequiredid='".$zpluginrequired->pluginsrequiredid."'
+						limit 1;
+					");
+					foreach ($zresults as $zrow) {
+						$zfoundpluginsrequiredid = $zrow["pluginsrequiredid"];
+					}
+					
+					$zoptional = '0';
+					if ($wtwhandlers->hasValue($zpluginrequired->optional)) {
+						if ($zpluginrequired->optional == '1') {
+							$zoptional = '1';
+						}
+					}
+
+					if ($wtwhandlers->hasValue($zfoundpluginsrequiredid)) {
+						/* insert new record into pluginsrequired table */
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."pluginsrequired 
+							set webid='".$zwebid."',
+								webtype='".$zpluginrequired->webtype."'
+								pluginname='".$zpluginrequired->pluginname."',
+								optional=".$zoptional.",
+								updatedate=now(),
+								updateuserid='".$znewupdateuserid."'
+							where pluginsrequiredid='".$zfoundpluginsrequiredid."'
+							limit 1;");
+					} else {
+						/* insert new record into pluginsrequired table */
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."pluginsrequired 
+							   (pluginsrequiredid,
+								pastpluginsrequiredid,
+								webid,
+								webtype,
+								pluginname,
+								optional,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$znewpluginsrequiredid."',
+								'".$zpluginrequired->pluginsrequiredid."',
+								'".$zwebid."',
+								'".$zpluginrequired->webtype."',
+								'".$zpluginrequired->pluginname."',
+								".$zoptional.",
+								'".$zpluginrequired->createdate."',
+								'".$znewcreateuserid."',
+								now(),
+								'".$znewupdateuserid."');");
+					}
+				}
+				
 				/* create array of uploadobjects to update the groupid after they are all added to the table (next section) */
 				$i = 0;
 				$zgroups = array();
@@ -4582,7 +4727,7 @@ class wtwcommunities {
 					);
 					$i += 1;
 					
-					if (!empty($zuploadobject->uploadobjectid) && isset($zuploadobject->uploadobjectid)) {
+					if ($wtwhandlers->hasValue($zuploadobject->uploadobjectid)) {
 						
 						$znewobjectfolder = $znewfolder.'/objects';
 						if (!file_exists($znewobjectfolder)) {
@@ -4749,7 +4894,7 @@ class wtwcommunities {
 								$zfoundmoldid = $zrow["communitymoldid"];
 							}
 							
-							if (isset($zfoundmoldid) && !empty($zfoundmoldid)) {
+							if ($wtwhandlers->hasValue($zfoundmoldid)) {
 								/* update communitymolds table */
 								$znewmoldid = $zfoundmoldid;
 								$zsql = "update ".wtw_tableprefix."communitymolds
@@ -4779,7 +4924,7 @@ class wtwcommunities {
 								$zfoundmoldid = $zrow["buildingmoldid"];
 							}
 							
-							if (isset($zfoundmoldid) && !empty($zfoundmoldid)) {
+							if ($wtwhandlers->hasValue($zfoundmoldid)) {
 								/* update buildingmolds table */
 								$znewmoldid = $zfoundmoldid;
 								$zsql = "update ".wtw_tableprefix."buildingmolds
@@ -4809,7 +4954,7 @@ class wtwcommunities {
 								$zfoundmoldid = $zrow["thingmoldid"];
 							}
 							
-							if (isset($zfoundmoldid) && !empty($zfoundmoldid)) {
+							if ($wtwhandlers->hasValue($zfoundmoldid)) {
 								/* update thingmolds table */
 								$znewmoldid = $zfoundmoldid;
 								$zsql = "update ".wtw_tableprefix."thingmolds
@@ -4872,7 +5017,7 @@ class wtwcommunities {
 						$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zmold->createuserid);
 						$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zmold->updateuserid);
 						
-						if (isset($zfoundmoldid) && !empty($zfoundmoldid)) {
+						if ($wtwhandlers->hasValue($zfoundmoldid)) {
 							/* remainder fo the common fields for communitymolds, buildingmolds, and thingmolds */
 							$zsql .= "
 								loadactionzoneid='".$znewloadactionzoneid."',
@@ -5114,7 +5259,7 @@ class wtwcommunities {
 								$zfoundmoldpointid = $zrow["moldpointid"];
 							}
 							
-							if (isset($zfoundmoldpointid) && !empty($zfoundmoldpointid)) {
+							if ($wtwhandlers->hasValue($zfoundmoldpointid)) {
 								/* update moldpoints table */
 								$wtwhandlers->query("
 									update ".wtw_tableprefix."moldpoints 
@@ -5235,7 +5380,7 @@ class wtwcommunities {
 								$zfoundwebimageid = $zrow["webimageid"];
 							}
 							
-							if (isset($zfoundwebimageid) && !empty($zfoundwebimageid)) {
+							if ($wtwhandlers->hasValue($zfoundwebimageid)) {
 								/* update webimages table */
 								$wtwhandlers->query("
 									update ".wtw_tableprefix."webimages 
@@ -5361,7 +5506,7 @@ class wtwcommunities {
 							$znewcreateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->createuserid);
 							$znewupdateuserid = $wtwhandlers->getUserIDfromPastID($zconnectinggrid->updateuserid);
 							
-							if (isset($zfoundconnectinggridid) & !empty($zfoundconnectinggridid)) {
+							if ($wtwhandlers->hasValue($zfoundconnectinggridid)) {
 								/* already found */
 								$zfetchweb = false;
 								$wtwhandlers->query("
@@ -5629,7 +5774,7 @@ class wtwcommunities {
 			if ($wtwhandlers->checkAdminAccess($zcommunityid, "", "")) {
 				$zuserid = "";
 				$zfoundcommunityid = "";
-				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
 				$ztemplatename = $wtwhandlers->escapeHTML($ztemplatename);
@@ -5660,7 +5805,7 @@ class wtwcommunities {
 				foreach ($zresults as $zrow) {
 					$zfoundcommunityid = $zrow["communityid"];
 				}
-				if (!empty($zfoundcommunityid) && isset($zfoundcommunityid)) {
+				if ($wtwhandlers->hasValue($zfoundcommunityid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."communities
 						set templatename='".$ztemplatename."',
@@ -5755,7 +5900,7 @@ class wtwcommunities {
 			if ($wtwhandlers->checkAdminAccess($zcommunityid, "", "")) {
 				$zuserid = "";
 				$zfoundcommunityid = "";
-				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
 				$zfromurl = "https://3dnet.walktheweb.com/connect/share.php?communityid=".$zcommunityid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;

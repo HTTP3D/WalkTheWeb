@@ -43,7 +43,7 @@ class wtwconnectinggrids {
 				foreach ($zresults as $zrow) {
 					$zfoundconnectinggridid = $zrow["connectinggridid"];
 				}
-				if (!empty($zfoundconnectinggridid) && isset($zfoundconnectinggridid)) {
+				if ($wtwhandlers->hasValue($zfoundconnectinggridid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."connectinggrids
 						set positionx=".$wtwhandlers->checkNumber($zpositionx,0).",
@@ -60,9 +60,9 @@ class wtwconnectinggrids {
 							updatedate=now(),
 							updateuserid='".$wtwhandlers->userid."'
 						where connectinggridid='".$zfoundconnectinggridid."';");
-				} else if (!empty($zchildwebtype) && isset($zchildwebtype)) {
+				} else if ($wtwhandlers->hasValue($zchildwebtype)) {
 					$zconnectinggridid = $wtwhandlers->checkIDFormat($zconnectinggridid);
-					if (empty($zconnectinggridid) || !isset($zconnectinggridid)) {
+					if (!isset($zconnectinggridid) || empty($zconnectinggridid)) {
 						$zconnectinggridid = $wtwhandlers->getRandomString(16,1);
 					}
 					$wtwhandlers->query("
@@ -169,8 +169,8 @@ class wtwconnectinggrids {
 		try {
 			/* ini_set('max_execution_time', 300); */
 			if (!empty($wtwhandlers->getSessionUserID())) {
+				$zconnectinggridsbulk = $wtwhandlers->decode64($zconnectinggridsbulk);
 				if (!empty($zconnectinggridsbulk)) {
-					$zconnectinggridsbulk = $wtwhandlers->decode64($zconnectinggridsbulk);
 					$zconnectinggrids = json_decode($zconnectinggridsbulk);
 					$zrecordeach = 50 / count($zconnectinggrids);
 					$i = 50;

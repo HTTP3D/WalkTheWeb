@@ -21,9 +21,9 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = '3.5.2';
-	public $dbversion = '1.2.16';
-	public $versiondate = '2022-8-31';
+	public $version = '3.5.3';
+	public $dbversion = '1.2.18';
+	public $versiondate = '2022-9-30';
 	public $oldversion = '';
 	public $olddbversion = '';
 	public $serverinstanceid = '';
@@ -126,7 +126,7 @@ class wtw {
 			if (defined('wtw_defaultdomain')) {
 				$this->domainname = strtolower(wtw_defaultdomain);
 			}
-			if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
+			if ($this->hasValue($_SERVER['HTTP_HOST'])) {
 				$this->domainname = strtolower($_SERVER['HTTP_HOST']);
 			}
 			/* load balancer checking the site - set load balancer to check site by ip address. This will avoid a full page load for health check */
@@ -139,7 +139,7 @@ class wtw {
 			$this->serverip = $zserverip;
 
 			$this->protocol = "http://";
-			if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+			if ($this->hasValue($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
 				if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == "https") {
 					$this->domainurl = "https://".$this->domainname;
 					$this->protocol = "https://";
@@ -147,7 +147,7 @@ class wtw {
 				} else {
 					$this->domainurl = "http://".$this->domainname;
 				}
-			} else if (empty($_SERVER['HTTPS']) || !isset($_SERVER['HTTPS'])){
+			} else if (!isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS'])){
 				$this->domainurl = "http://".$this->domainname;
 			} else if ($_SERVER['HTTPS'] == "off") {
 				$this->domainurl = "http://".$this->domainname;
@@ -169,29 +169,29 @@ class wtw {
 				$zuserip = $this->getClientIP();
 			} catch (Exception $e) {
 			}
-			if (!empty($zuserip) && isset($zuserip)) {
+			if ($this->hasValue($zuserip)) {
 				$this->userip = $zuserip;
 				$wtwuser->userip = $zuserip;
 			}
-			if (!empty($_SESSION["wtw_userid"]) && isset($_SESSION["wtw_userid"])) {
+			if ($this->hasValue($_SESSION["wtw_userid"])) {
 				$zuserid = $_SESSION["wtw_userid"];
-				if (!empty($zuserid) && isset($zuserid)) {
+				if ($this->hasValue($zuserid)) {
 					$this->userid = $zuserid;
 					$wtwuser->userid = $zuserid;
 				}
 			}
-			if (!empty($_SESSION["wtw_usertoken"]) && isset($_SESSION["wtw_usertoken"])) {
+			if ($this->hasValue($_SESSION["wtw_usertoken"])) {
 				$this->usertoken = $_SESSION["wtw_usertoken"];
 			}
-			if (!empty($_SESSION["wtw_globaluserid"]) && isset($_SESSION["wtw_globaluserid"])) {
+			if ($this->hasValue($_SESSION["wtw_globaluserid"])) {
 				$this->globaluserid = $_SESSION["wtw_globaluserid"];
 			}
-			if (isset($_SERVER['PHP_SELF']) && !empty($_SERVER['PHP_SELF'])) {
+			if ($this->hasValue($_SERVER['PHP_SELF'])) {
 				$this->pagename = strtolower(basename($_SERVER['PHP_SELF']));
 			} else {
 				$this->pagename = "index.php";
 			}
-			if (isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
+			if ($this->hasValue($_SERVER['REQUEST_URI'])) {
 				$this->uri = trim($_SERVER['REQUEST_URI']);
 				if (isset($_GET["wtwpath"])) {
 					$this->uri = $_GET["wtwpath"];
@@ -244,7 +244,7 @@ class wtw {
 	public function getDomainInfo() {
 		/* parse the URL and check for web aliases, connect files, or handler files */
 		try {
-			if (!empty($this->uri) && isset($this->uri)) {
+			if ($this->hasValue($this->uri)) {
 				$this->websiteurl = $this->uri;
 				$zroot =  explode('?', $this->uri);
 				$zpathdef = explode("/", $zroot[0]);
@@ -259,7 +259,7 @@ class wtw {
 						global $wtwpluginloader;
 						$wtwpluginloader->loadConnectURL();
 					} if (trim($zpathdef[1]) == "core") {
-						if (isset($zpathdef[2]) && !empty($zpathdef[2])) {
+						if ($this->hasValue($zpathdef[2])) {
 							require_once(wtw_rootpath.'/core/functions/class_wtwpluginloader.php');
 							global $wtwpluginloader;
 							$wtwpluginloader->loadPathURL(trim($zpathdef[2]));
@@ -280,12 +280,12 @@ class wtw {
 					$this->building = "";
 					$this->thing = trim($zpathdef[2]);
 					$this->websiteurl = $this->domainurl."/things/".$this->thing;
-				} else if (isset($zpathdef[3]) && !empty($zpathdef[3])) {
+				} else if ($this->hasValue($zpathdef[3])) {
 					$this->community = trim($zpathdef[1]);
 					$this->building = trim($zpathdef[2]);
 					$this->thing = trim($zpathdef[3]);
 					$this->websiteurl = $this->domainurl."/".$this->community."/".$this->building."/".$this->thing;
-				} else if (isset($zpathdef[2]) && !empty($zpathdef[2])) {
+				} else if ($this->hasValue($zpathdef[2])) {
 					$this->community = trim($zpathdef[1]);
 					$this->building = trim($zpathdef[2]);
 					$this->thing = "";
@@ -315,7 +315,7 @@ class wtw {
 		/* get querystring information with a default value if not found */
 		$zvalue = $zdefaultval;
 		try {
-			if(isset($_GET[$zkey]) && !empty($_GET[$zkey])) {
+			if ($this->hasValue($_GET[$zkey])) {
 				$zvalue = $_GET[$zkey];
 			}
 		} catch (Exception $e) {
@@ -328,7 +328,7 @@ class wtw {
 		/* get querystring number information with a default value if not found */
 		$zvalue = $zdefaultval;
 		try {
-			if(isset($_GET[$zkey]) && !empty($_GET[$zkey])) {
+			if ($this->hasValue($_GET[$zkey])) {
 				if (is_numeric($_GET[$zkey])) {
 					$zvalue = $_GET[$zkey];
 				}
@@ -339,6 +339,35 @@ class wtw {
 		return $zvalue;
 	}
 	
+	public function checkValue(&$zvalue, $zdefaultval = null) {
+		try {
+			if (!isset($zvalue) || empty($zvalue)) {
+				if (!isset($zdefaultval)) {
+					$zvalue = false;
+				} else {
+					$zvalue = $zdefaultval;
+				}
+			} else {
+				$zvalue = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtw-initsession.php-checkValue=".$e->getMessage());
+		}
+		return $zvalue;
+	}
+
+	public function hasValue(&$zvalue) {
+		$zresponse = false;
+		try {
+			if (isset($zvalue) && !empty($zvalue)) {
+				$zresponse = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtw-initsession.php-hasValue=".$e->getMessage());
+		}
+		return $zresponse;
+	}
+
 	public function checkNumber($zval, $zdefaultval) {
 		/* number validation function with fallback value */
 		$zcheckval = $zdefaultval;
@@ -359,7 +388,7 @@ class wtw {
 		/* text validation function that handles special characters */
 		$zchecktext = "";
 		try {
-			if (!empty($ztext) && isset($ztext)) {
+			if ($this->hasValue($ztext)) {
 				$zchecktext = htmlspecialchars($ztext, ENT_QUOTES, 'UTF-8');
 			}
 		} catch (Exception $e) {
@@ -415,7 +444,7 @@ class wtw {
 					$zcontentpath = wtw_rootpath."/content";
 					$zcontenturl = "/content";
 					$zdomainname = "";
-					if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
+					if ($this->hasValue($_SERVER['HTTP_HOST'])) {
 						$zdomainname = strtolower($_SERVER['HTTP_HOST']);
 					}
 					if (!file_exists(wtw_rootpath.'/config/wtw_config.php')) {
@@ -547,7 +576,7 @@ class wtw {
 						from information_schema.tables 
 						where table_schema = '".wtw_dbname."';");
 					foreach ($zresults as $zrow) {
-						if (!empty($zrow['scount']) && isset($zrow['scount'])) {
+						if ($this->hasValue($zrow['scount'])) {
 							if ($zrow['scount'] > 0) {
 								$zsetupstep = 4; /* found another install in database */
 							}
@@ -609,7 +638,7 @@ class wtw {
 					$zsetupstep = 0;
 				}
 				if ($zsetupstep == 0) {
-					if (!empty($this->userid) && isset($this->userid)) {
+					if ($this->hasValue($this->userid)) {
 						global $wtwuser;
 						$zresults = $wtwdb->query("select * 
 							from ".wtw_tableprefix."users 
@@ -768,7 +797,7 @@ class wtw {
 					}
 				}
 				if ($scount == 0) {
-					if (empty($_SESSION["wtw_userid"]) || !isset($_SESSION["wtw_userid"])) {
+					if (!isset($_SESSION["wtw_userid"]) || empty($_SESSION["wtw_userid"])) {
 						/* if not logged in - log in admin user */
 						$zsetupstep = 5;
 						if ($_SERVER['REQUEST_METHOD']=='POST') {
@@ -776,7 +805,7 @@ class wtw {
 							$zadminemail = base64_encode($_POST["wtw_tadminemail"]);
 							$zadminpassword = base64_encode($_POST["wtw_tadminpassword"]);
 							$zuser = $wtwusers->loginAttempt($zadminemail,$zadminpassword);
-							if (!empty($_SESSION["wtw_userid"]) && isset($_SESSION["wtw_userid"])) {
+							if ($this->hasValue($_SESSION["wtw_userid"])) {
 								$zsetupstep = 0;
 							}
 						}
@@ -797,7 +826,7 @@ class wtw {
 					$zcount = $zrow["scount"];
 				}
 				if ($zcount == 0) {
-					if (empty($_SESSION["wtw_userid"]) || !isset($_SESSION["wtw_userid"])) {
+					if (!isset($_SESSION["wtw_userid"]) || empty($_SESSION["wtw_userid"])) {
 						/* if not logged in - log in admin user */
 						$zsetupstep = 5;
 						if ($_SERVER['REQUEST_METHOD']=='POST') {
@@ -805,7 +834,7 @@ class wtw {
 							$zadminemail = base64_encode($_POST["wtw_tadminemail"]);
 							$zadminpassword = base64_encode($_POST["wtw_tadminpassword"]);
 							$zuser = $wtwusers->loginAttempt($zadminemail,$zadminpassword);
-							if (!empty($_SESSION["wtw_userid"]) && isset($_SESSION["wtw_userid"])) {
+							if ($this->hasValue($_SESSION["wtw_userid"])) {
 								$zsetupstep = 0;
 							}
 						}
@@ -970,6 +999,7 @@ class wtw {
 					echo "<input name='wtw_bcommunitysearch' type='button' value='Search' onclick=\"WTW.communitySearch(dGet('wtw_tcommunitysearch').value);\" class='wtw-searchbutton' />";
 					echo "<input id='wtw_tcommunitysearch' name='wtw_tcommunitysearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
 					echo "<div class='wtw-clearspace'></div>";
+					echo "<div id='wtw_downloadingnotice' class='wtw-loadingnoticecentered'>Downloading...</div>";
 					
 					echo "<br /><hr /><div id='wtw_commtempsearchresults' class='wtw-indentmore'></div>";
 					echo "</div><div id='wtw_installprogress' class='wtw-ihide wtw-iprogresssection'>";
@@ -1011,6 +1041,7 @@ class wtw {
 					echo "<input name='wtw_bbuildingsearch' type='button' value='Search' onclick=\"WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);\" class='wtw-searchbutton' />";
 					echo "<input id='wtw_tbuildingsearch' name='wtw_tbuildingsearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
 					echo "<div class='wtw-clearspace'></div>";
+					echo "<div id='wtw_downloadingnotice' class='wtw-loadingnoticecentered'>Downloading...</div>";
 
 					echo "<br /><hr /><div id='wtw_buildtempsearchresults' class='wtw-indentmore'></div>";
 					echo "</div><div id='wtw_installprogress' class='wtw-ihide wtw-iprogresssection'>";
@@ -1126,16 +1157,16 @@ class wtw {
 			}
 			if ($this->pagename == "admin.php" && ($wtwdb->isUserInRole('admin') || $wtwdb->isUserInRole('host') || $wtwdb->isUserInRole('architect') || $wtwdb->isUserInRole('developer') || $wtwdb->isUserInRole('graphics artist'))) {
 				/* user has admin access, get item to edit from querystring */
-				if(isset($_GET["avatarid"]) && !empty($_GET["avatarid"])) {
+				if (isset($_GET["avatarid"]) && !empty($_GET["avatarid"])) {
 					$this->avatarid = $wtwdb->checkIDFormat($_GET["avatarid"]);
 				}
-				if(isset($_GET["communityid"]) && !empty($_GET["communityid"])) {
+				if (isset($_GET["communityid"]) && !empty($_GET["communityid"])) {
 					$this->communityid = $wtwdb->checkIDFormat($_GET["communityid"]);
 				}
-				if(isset($_GET["buildingid"]) && !empty($_GET["buildingid"])) {
+				if (isset($_GET["buildingid"]) && !empty($_GET["buildingid"])) {
 					$this->buildingid = $wtwdb->checkIDFormat($_GET["buildingid"]);
 				}
-				if(isset($_GET["thingid"]) && !empty($_GET["thingid"])) {
+				if (isset($_GET["thingid"]) && !empty($_GET["thingid"])) {
 					$this->thingid = $wtwdb->checkIDFormat($_GET["thingid"]);
 				}
 				if (!empty($this->communityid)) {
@@ -1160,11 +1191,11 @@ class wtw {
 						$zwebsiteurl = "https://";
 					}
 					$zwebsiteurl .= $zrow["webalias"];
-					if (!empty($zrow["communitypublishname"]) && isset($zrow["communitypublishname"])) {
+					if ($this->hasValue($zrow["communitypublishname"])) {
 						$zwebsiteurl .= "/".$zrow["communitypublishname"];
-					} else if (!empty($zrow["buildingpublishname"]) && isset($zrow["buildingpublishname"])) {
+					} else if ($this->hasValue($zrow["buildingpublishname"])) {
 						$zwebsiteurl .= "/buildings/".$zrow["buildingpublishname"];
-					} else if (!empty($zrow["thingpublishname"]) && isset($zrow["thingpublishname"])) {
+					} else if ($this->hasValue($zrow["thingpublishname"])) {
 						$zwebsiteurl .= "/things/".$zrow["thingpublishname"];
 					}
 					$this->websiteurl = $zwebsiteurl;
@@ -1199,19 +1230,19 @@ class wtw {
 				
 				$zresults = $wtwdb->query($zsql);
 				foreach ($zresults as $zrow) {
-					if (!empty($zrow["webaliasid"]) && isset($zrow["webaliasid"])) {
+					if ($this->hasValue($zrow["webaliasid"])) {
 						$this->webaliasid = $zrow["webaliasid"];
 					}
-					if (!empty($zrow["communityid"]) && isset($zrow["communityid"])) {
+					if ($this->hasValue($zrow["communityid"])) {
 						$this->communityid = $zrow["communityid"];
 					}
-					if (!empty($zrow["buildingid"]) && isset($zrow["buildingid"])) {
+					if ($this->hasValue($zrow["buildingid"])) {
 						$this->buildingid = $zrow["buildingid"];
 					}
-					if (!empty($zrow["thingid"]) && isset($zrow["thingid"])) {
+					if ($this->hasValue($zrow["thingid"])) {
 						$this->thingid = $zrow["thingid"];
 					}
-					if (!empty($zrow["forcehttps"]) && isset($zrow["forcehttps"])) {
+					if ($this->hasValue($zrow["forcehttps"])) {
 						if ($zrow["forcehttps"] == "1" && $this->protocol == "http://") {
 							header("Location: https://".$this->domainname.$this->uri); 
 							exit();
@@ -1223,7 +1254,7 @@ class wtw {
 				}
 			}
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtw-initsession.php-checkHost=".$e->getMessage());
+			$this->serror("core-functions-class_wtw-initsession.php-checkWeb=".$e->getMessage());
 		}
 	}
 	
@@ -1246,7 +1277,7 @@ class wtw {
 				'scalingy' => $zscalingy,
 				'scalingz' => $zscalingz);
 		} catch (Exception $e) {
-			$this->serror("core-functions-class_wtw-initsession.php-checkHost=".$e->getMessage());
+			$this->serror("core-functions-class_wtw-initsession.php-getAdjustedPosition=".$e->getMessage());
 		}
 		return $adjpos;
 	}
@@ -1292,7 +1323,7 @@ class wtw {
 			$zazresults = array();
 			$zspawnzones = array();
 			$zspawnindex = 0;
-			if (!empty($this->userid) && isset($this->userid)) {
+			if ($this->hasValue($this->userid)) {
 				/* get user access to this 3D web item */
 				if (!empty($this->communityid)) {
 					/* check community level */
@@ -2152,7 +2183,12 @@ class wtw {
 						else case when (w1.webalias like '".$this->websiteurl."' and not webalias='') then 2
 							else 3
 							end 
-						end as prioritylevel
+						end as prioritylevel,
+					case when w1.siteiconid = '' then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=w1.siteiconid limit 1)
+						end as siteiconpath
 				from ".wtw_tableprefix."webaliases w1
 					left join ".wtw_tableprefix."communities c1
 						on w1.communityid=c1.communityid
@@ -2181,7 +2217,7 @@ class wtw {
 			foreach ($zresults as $zrow) {
 				$zsitename = $zrow["sitename"];
 				$zsitedescription = $zrow["sitedescription"];
-				$zsiteicon = $zrow["siteicon"];
+				$zsiteiconpath = $zrow["siteiconpath"];
 				$zcommunityid = $zrow["communityid"];
 				$zbuildingid = $zrow["buildingid"];
 				$zthingid = $zrow["thingid"];
@@ -2198,21 +2234,21 @@ class wtw {
 				$zthingsnapshotwidth = $zrow["thingsnapshotwidth"];
 				$zthingsnapshotheight = $zrow["thingsnapshotheight"];
 				
-				if (isset($zcommunityid) && !empty($zcommunityid)) {
+				if ($this->hasValue($zcommunityid)) {
 					$zpreviewpath = $zcommunitysnapshoturl;
 					$zpreviewwidth = $zcommunitysnapshotwidth;
 					$zpreviewheight = $zcommunitysnapshotheight;
 					if (!isset($zsitename) || empty($zsitename)) {
 						$zsitename = $zcommunityname;
 					}
-				} else if (isset($zbuildingid) && !empty($zbuildingid)) {
+				} else if ($this->hasValue($zbuildingid)) {
 					$zpreviewpath = $zbuildingsnapshoturl;
 					$zpreviewwidth = $zbuildingsnapshotwidth;
 					$zpreviewheight = $zbuildingsnapshotheight;
 					if (!isset($zsitename) || empty($zsitename)) {
 						$zsitename = $zbuildingname;
 					}
-				} else if (isset($zthingid) && !empty($zthingid)) {
+				} else if ($this->hasValue($zthingid)) {
 					$zpreviewpath = $zthingsnapshoturl;
 					$zpreviewwidth = $zthingsnapshotwidth;
 					$zpreviewheight = $zthingsnapshotheight;
@@ -2224,9 +2260,12 @@ class wtw {
 			if (!isset($zsitename) || empty($zsitename)) {
 				$zsitename = "WalkTheWeb 3D Internet Metaverse";
 			}
-			if (empty($zsitedescription) || !isset($zsitedescription)) {
+			if (!isset($zsitedescription) || empty($zsitedescription)) {
 				$zsitedescription = "WalkTheWeb: Internationally Patented 3D Internet Browsing and 3D Website hosting. WalkTheWeb (R), http://3d (TM), https://3d (TM), and HTTP3D (TM).";
 			} 
+			if (!isset($zsiteiconpath) || empty($zsiteiconpath)) {
+				$zsiteiconpath = "/favicon.ico";
+			}
 			if (!isset($zpreviewpath) || empty($zpreviewpath)) {
 				$zpreviewpath = $this->domainurl."/content/system/stock/wtw-3dinternet.jpg";
 			}
@@ -2242,8 +2281,8 @@ class wtw {
 			$zmetadata .= "<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>\r\n";
 			$zmetadata .= "<meta http-equiv='Pragma' content='no-cache' />\r\n";
 			$zmetadata .= "<meta http-equiv='Expires' content='-1' />\r\n";
-			$zmetadata .= "<link id='wtw_favicon' rel='icon' href='".$zsiteicon."' />\r\n";
-			if (!empty($zsitedescription) && isset($zsitedescription)) {
+			$zmetadata .= "<link id='wtw_favicon' rel='icon' href='".$zsiteiconpath."' />\r\n";
+			if ($this->hasValue($zsitedescription)) {
 				$zmetadata .= "<meta name='description' content=\"".$zsitedescription."\" />\r\n";
 				$zmetadata .= "<meta property='og:description' content=\"".$zsitedescription."\" />\r\n";
 			}

@@ -314,6 +314,12 @@ h2 {
 	font-size:1.3em;
 	color:#ffffff;
 }
+h2.wtw-black {
+	font-size:1.2em;
+	font-weight:bold;
+	color:#000000;
+	margin-bottom:2px;
+}
 h2.wtw-yellow {
 	color:yellow;
 	text-align:center;
@@ -349,6 +355,13 @@ h3.wtw-black {
 	font-size:1.2em;
 	font-weight:bold;
 	color:#000000;
+	background-color:transparent;
+	margin-bottom:2px;
+}
+h3.wtw-blue {
+	font-size:1.2em;
+	font-weight:bold;
+	color:#0e7098;
 	background-color:transparent;
 	margin-bottom:2px;
 }
@@ -1562,6 +1575,13 @@ hr.wtw-menuhr {
 .wtw-avataranimationmode {
 	display:inline-block;
 	margin-left:40px;
+}
+.wtw-mincol {
+	cursor:default;
+	display:inline-block;
+	text-align:left;
+	width:28%;
+	min-height:20px;
 }
 .wtw-onecol {
 	cursor:default;

@@ -76,6 +76,9 @@ try {
 		case "saveobjectgroup":
 			$zresponse = $wtwuploads->saveObjectGroup($zuploadobjectid, $zgroupid);
 			break;
+		case "ungroupobject":
+			$zresponse = $wtwuploads->ungroupObject($zuploadobjectid, $zgroupid);
+			break;
 		case "removeduplicateuploadobject":
 			$zresponse = $wtwuploads->removeDuplicateUploadObject($zuploadobjectid, $zduplicateuploadobjectid);
 			break;

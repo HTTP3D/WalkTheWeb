@@ -6,7 +6,7 @@ global $wtwhandlers;
 	$zconfirm = $wtwhandlers->getVal('confirm', '');
 	$zresponse = '0';
 	
-	if (!empty($zemail) && isset($zemail) && !empty($zconfirm) && isset($zconfirm)) {
+	if ($wtwhandlers->hasValue($zemail) && $wtwhandlers->hasValue($zconfirm)) {
 		/* get user by email */
 		$zresults = $wtwhandlers->query("
 			select * 
@@ -16,7 +16,7 @@ global $wtwhandlers;
 			order by createdate
 			limit 1;");
 		foreach ($zresults as $zrow) {
-			if ($zrow["emailconfirm"] == $zconfirm && (empty($zrow["emailconfirmdate"]) || !isset($zrow["emailconfirmdate"]))) {
+			if ($zrow["emailconfirm"] == $zconfirm && (!isset($zrow["emailconfirmdate"]) || empty($zrow["emailconfirmdate"]))) {
 				/* confirming email */
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."users
@@ -26,7 +26,7 @@ global $wtwhandlers;
 						and emailconfirmdate is null
 						and deleted=0;");
 				$zresponse = '1';
-			} else if (!empty($zrow["emailconfirmdate"]) && isset($zrow["emailconfirmdate"])) {
+			} else if ($wtwhandlers->hasValue($zrow["emailconfirmdate"])) {
 				/* already confirmed */
 				$zresponse = '2';
 			}

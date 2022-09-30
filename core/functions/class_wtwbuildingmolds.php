@@ -35,7 +35,7 @@ class wtwbuildingmolds {
 				foreach ($zresults as $zrow) {
 					$zfoundbuildingmoldid = $zrow["buildingmoldid"];
 				}
-				if (!empty($zfoundbuildingmoldid) && isset($zfoundbuildingmoldid)) {
+				if ($wtwhandlers->hasValue($zfoundbuildingmoldid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."buildingmolds
 						set loadactionzoneid='".$zloadactionzoneid."',
@@ -92,7 +92,7 @@ class wtwbuildingmolds {
 						where buildingmoldid='".$zbuildingmoldid."'
 							and buildingid='".$zbuildingid."';");
 				} else {
-					if (empty($zbuildingmoldid) || !isset($zbuildingmoldid)) {
+					if (!isset($zbuildingmoldid) || empty($zbuildingmoldid)) {
 						$zbuildingmoldid = $wtwhandlers->getRandomString(16,1);
 					}
 					$wtwhandlers->query("
@@ -258,7 +258,7 @@ class wtwbuildingmolds {
 							buildingmoldid='".$zbuildingmoldid."'
 							and buildingid='".$zbuildingid."';");
 					$zsuccess = true;
-				} else if (!empty($zdeleted) && isset($zdeleted) && is_numeric($zdeleted)) {
+				} else if ($wtwhandlers->hasValue($zdeleted) && is_numeric($zdeleted)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."buildingmolds
 						set deleted=".$zdeleted.",
@@ -300,7 +300,7 @@ class wtwbuildingmolds {
 				foreach ($zresults as $zrow) {
 					$zfoundbuildingmoldid = $zrow["buildingmoldid"];
 				}
-				if (!empty($zfoundbuildingmoldid) && isset($zfoundbuildingmoldid)) {
+				if ($wtwhandlers->hasValue($zfoundbuildingmoldid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."buildingmolds
 						set actionzoneid='".$zactionzoneid."',

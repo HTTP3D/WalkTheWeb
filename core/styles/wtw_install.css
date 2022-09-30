@@ -425,3 +425,16 @@ h3.wtw-categoryheading:hover {
 	color:green;
 	background-color: #ffffff;
 }
+.wtw-loadingnoticecentered {
+	width:250px;
+	text-align:center;
+	padding:1px;
+	border:1px solid #c0c0c0;
+	display:none;
+	visibility:hidden;
+	background-color:#FFFFE0;
+	animation:wtw-blinker 1s linear infinite;
+	margin-left:auto;
+	margin-right:auto;
+	color:#000000;
+}

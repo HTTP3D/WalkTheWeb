@@ -44,7 +44,7 @@ class wtwbuildings {
 		global $wtwhandlers;
 		$zcopybuildingid = "";
 		try {
-			if (empty($zpastbuildingid) || !isset($zpastbuildingid) || $wtwhandlers->checkUpdateAccess("", $zpastbuildingid, "") == false) {
+			if (!isset($zpastbuildingid) || empty($zpastbuildingid) || $wtwhandlers->checkUpdateAccess("", $zpastbuildingid, "") == false) {
 				/* denies copy function if you do not have access to building to copy */
 				$zpastbuildingid = "";
 			}
@@ -53,7 +53,7 @@ class wtwbuildings {
 				/* create new buildingid */
 				$zbuildingid = $wtwhandlers->getRandomString(16,1);
 				
-				if (empty($zpastbuildingid) || !isset($zpastbuildingid)) {
+				if (!isset($zpastbuildingid) || empty($zpastbuildingid)) {
 					/* create new building (without access to copy building or if not copying existing building, this creates new building) */
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."buildings
@@ -196,13 +196,13 @@ class wtwbuildings {
 			$wtwhandlers->serror("core-functions-class_wtwbuildings.php-saveBuilding=".$e->getMessage());
 		}
 		/* if you created a new building the return value is used to redirect and open the new building */
-		if (!empty($zpastbuildingid) && isset($zpastbuildingid) && !empty($zbuildingid) && isset($zbuildingid)) {
+		if ($wtwhandlers->hasValue($zpastbuildingid) && $wtwhandlers->hasValue($zbuildingid)) {
 			if ($this->copyBuilding($zbuildingid, $zpastbuildingid)) {
 				$zcopybuildingid = $zbuildingid;
 			}
 		}
 		/* if the new building errored or was not available (missing or permissions) this reloads your current building */
-		if (empty($zcopybuildingid) || !isset($zcopybuildingid)) {
+		if (!isset($zcopybuildingid) || empty($zcopybuildingid)) {
 			$zcopybuildingid = $zbuildingid;
 		}
 		return $zcopybuildingid;
@@ -699,12 +699,12 @@ class wtwbuildings {
 							 now(),
 							 '".$wtwhandlers->userid."');");
 				}
+
 				/* copy contentratings */
 				$zresults = $wtwhandlers->query("
 					select t2.contentratingid as pastcontentratingid,
-						 t2.webid,
-						 t2.webtype,
 						 '".$zbuildingid."' as webid,
+						 t2.webtype,
 						 t2.rating,
 						 t2.ratingvalue,
 						 t2.contentwarning
@@ -714,7 +714,7 @@ class wtwbuildings {
 				foreach ($zresults as $zrow) {
 					$zcontentratingid = $wtwhandlers->getRandomString(16,1);
 					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."automations
+						insert into ".wtw_tableprefix."contentratings
 							(contentratingid,
 							 pastcontentratingid,
 							 webid,
@@ -739,6 +739,44 @@ class wtwbuildings {
 							 now(),
 							 '".$wtwhandlers->userid."');");
 				}
+				
+				/* copy pluginsrequired */
+				$zresults = $wtwhandlers->query("
+					select t2.pluginsrequiredid as pastpluginsrequiredid,
+						 '".$zbuildingid."' as webid,
+						 'building' as webtype,
+						 t2.pluginname,
+						 t2.optional
+					from ".wtw_tableprefix."wtw_pluginsrequired t2
+					where t2.webid='".$zfrombuildingid."'
+						and t2.deleted=0;");
+				foreach ($zresults as $zrow) {
+					$zpluginsrequiredid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."wtw_pluginsrequired
+							(pluginsrequiredid,
+							 pastpluginsrequiredid,
+							 webid,
+							 webtype,
+							 pluginname,
+							 optional,
+							 createdate,
+							 createuserid,
+							 updatedate,
+							 updateuserid)
+						values
+							('".$zpluginsrequiredid."',
+							 '".$zrow["pastpluginsrequiredid"]."',
+							 '".$zrow["webid"]."',
+							 '".$zrow["webtype"]."',
+							 '".$zrow["pluginname"]."',
+							 ".$zrow["optional"].",
+							 now(),
+							 '".$wtwhandlers->userid."',
+							 now(),
+							 '".$wtwhandlers->userid."');");
+				}
+
 				/* update automations */
 				$zresults = $wtwhandlers->query("
 					select
@@ -1446,7 +1484,7 @@ class wtwbuildings {
 					where buildingid='".$zbuildingid,"'
 						and deleted=0;");
 				/* get 'high' distance load zone for initial slab of cement */
-				$loadactionzoneid = "";
+				$zloadactionzoneid = "";
 				$zresults = $wtwhandlers->query("
 					select actionzoneid 
 					from ".wtw_tableprefix."actionzones 
@@ -1455,9 +1493,9 @@ class wtwbuildings {
 						and actionzonetype='loadzone'
 						and (not actionzonename like '%custom%') limit 1;");
 				foreach ($zresults as $zrow) {
-					$loadactionzoneid = $zrow["actionzoneid"];
+					$zloadactionzoneid = $zrow["actionzoneid"];
 				}
-				if (!empty($loadactionzoneid) && isset($loadactionzoneid)) {
+				if ($wtwhandlers->hasValue($zloadactionzoneid)) {
 					/* add initial building slab of cement */
 					$zbuildingmoldid = $wtwhandlers->getRandomString(16,1);
 					$wtwhandlers->query("
@@ -1498,7 +1536,7 @@ class wtwbuildings {
 						values
 						   ('".$zbuildingmoldid."',
 							'".$zbuildingid,"',
-							'".$loadactionzoneid."',
+							'".$zloadactionzoneid."',
 							'floor',
 							'texture',
 							'0',
@@ -1719,7 +1757,7 @@ class wtwbuildings {
 			if ($wtwhandlers->checkAdminAccess("", $zbuildingid, "")) {
 				$zuserid = "";
 				$zfoundbuildingid = "";
-				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
 				$ztemplatename = $wtwhandlers->escapeHTML($ztemplatename);
@@ -1750,7 +1788,7 @@ class wtwbuildings {
 				foreach ($zresults as $zrow) {
 					$zfoundbuildingid = $zrow["buildingid"];
 				}
-				if (!empty($zfoundbuildingid) && isset($zfoundbuildingid)) {
+				if ($wtwhandlers->hasValue($zfoundbuildingid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."buildings
 						set templatename='".$ztemplatename."',
@@ -1817,7 +1855,7 @@ class wtwbuildings {
 			if ($wtwhandlers->checkAdminAccess("", $zbuildingid, "")) {
 				$zuserid = "";
 				$zfoundbuildingid = "";
-				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
 				$zfromurl = "https://3dnet.walktheweb.com/connect/share.php?buildingid=".$zbuildingid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;

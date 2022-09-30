@@ -35,7 +35,7 @@ class wtwcommunitymolds {
 				foreach ($zresults as $zrow) {
 					$zfoundcommunitymoldid = $zrow["communitymoldid"];
 				}
-				if (!empty($zfoundcommunitymoldid) && isset($zfoundcommunitymoldid)) {
+				if ($wtwhandlers->hasValue($zfoundcommunitymoldid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."communitymolds
 						set loadactionzoneid='".$zloadactionzoneid."',
@@ -92,7 +92,7 @@ class wtwcommunitymolds {
 						where communitymoldid='".$zcommunitymoldid."'
 							and communityid='".$zcommunityid."';");
 				} else {
-					if (empty($zcommunitymoldid) || !isset($zcommunitymoldid)) {
+					if (!isset($zcommunitymoldid) || empty($zcommunitymoldid)) {
 						$zcommunitymoldid = $wtwhandlers->getRandomString(16,1);
 					}
 					$wtwhandlers->query("
@@ -302,7 +302,7 @@ class wtwcommunitymolds {
 				foreach ($zresults as $zrow) {
 					$zfoundcommunitymoldid = $zrow["communitymoldid"];
 				}
-				if (!empty($zfoundcommunitymoldid) && isset($zfoundcommunitymoldid)) {
+				if ($wtwhandlers->hasValue($zfoundcommunitymoldid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."communitymolds
 						set actionzoneid='".$zactionzoneid."',

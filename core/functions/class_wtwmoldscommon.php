@@ -27,11 +27,11 @@ class wtwmoldscommon {
 		try {
 			if ($zmoldid != "") {
 				$access = false;
-				if (!empty($zcommunityid) && isset($zcommunityid)) {
+				if ($wtwhandlers->hasValue($zcommunityid)) {
 					$access = $wtwhandlers->checkAdminAccess($zcommunityid, "", "");
-				} else if (!empty($zbuildingid) && isset($zbuildingid)) {
+				} else if ($wtwhandlers->hasValue($zbuildingid)) {
 					$access = $wtwhandlers->checkAdminAccess("", $zbuildingid, "");
-				} else if (!empty($zthingid) && isset($zthingid)) {
+				} else if ($wtwhandlers->hasValue($zthingid)) {
 					$access = $wtwhandlers->checkAdminAccess("", "", $zthingid);
 				}
 				if ($access) {
@@ -58,7 +58,7 @@ class wtwmoldscommon {
 					foreach ($zresults as $zrow) {
 						$zmoldpointid = $zrow["moldpointid"];
 					}
-					if (!empty($zmoldpointid) && isset($zmoldpointid)) {
+					if ($wtwhandlers->hasValue($zmoldpointid)) {
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."moldpoints
 							set positionx=".$wtwhandlers->checkNumber($value["x"],0).",
@@ -126,7 +126,7 @@ class wtwmoldscommon {
 			foreach ($zresults as $zrow) {
 				$zwebimageid = $zrow["webimageid"];
 			}
-			if (!empty($zwebimageid) && isset($zwebimageid)) {
+			if ($wtwhandlers->hasValue($zwebimageid)) {
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."webimages
 					set imageindex=".$wtwhandlers->checkNumber($zimageindex,0).",
@@ -192,8 +192,8 @@ class wtwmoldscommon {
 		try {
 			/* ini_set('max_execution_time', 300); */
 			if (!empty($wtwhandlers->getSessionUserID())) {
+				$zmoldsbulk = $wtwhandlers->decode64($zmoldsbulk);
 				if (!empty($zmoldsbulk)) {
-					$zmoldsbulk = $wtwhandlers->decode64($zmoldsbulk);
 					$zmolds = json_decode($zmoldsbulk);
 					$zrecordeach = 90 / count($zmolds);
 					$i = 10;

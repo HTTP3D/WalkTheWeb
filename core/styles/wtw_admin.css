@@ -35,7 +35,8 @@ select.wtw-fileselectcategory {
 	font-size:1.2em;
 }
 .wtw-deactive {
-	font-weight:normal;
+	font-weight:bold;
+	font-style: italic;
 	font-size:1em;
 }
 .wtw-webcount {
@@ -173,6 +174,19 @@ select.wtw-fileselectcategory {
 	border-radius:15px;
 	padding:3px;
 }
+.wtw-pluginreqopt {
+	float:right;
+	font-weight:bold;
+	color:#000000;
+	background-color:#ffffff;
+	border:1px solid red;
+	border-radius:5px;
+	text-align:center;
+	width:120px;
+	min-height:12px;
+	margin:0px 5px 0px 5px;
+	padding:3px;
+}
 .wtw-versionsummary {
 	border:1px solid gray;
 	border-radius:15px;
@@ -299,6 +313,14 @@ td.wtw-tdactive {
 }
 td.wtw-tddeactive {
 	background-color:#cfcfcf;
+}
+td.wtw-tdactiverequired {
+	background-color:#feeaea;
+	border:2px solid red;
+}
+td.wtw-tdactiveoptional {
+	background-color:#feffd7;
+	border:2px solid red;
 }
 
 /* buttons and links */

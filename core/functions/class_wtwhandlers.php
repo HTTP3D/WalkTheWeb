@@ -71,11 +71,11 @@ class wtwhandlers {
 			if (defined('wtw_defaultdomain')) {
 				$this->domainname = wtw_defaultdomain;
 			}
-			if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
+			if ($this->hasValue($_SERVER['HTTP_HOST'])) {
 				$this->domainname = strtolower($_SERVER['HTTP_HOST']);
 			}
 			$this->protocol = "http://";
-			if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+			if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
 				if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == "https") {
 					$this->domainurl = "https://".$this->domainname;
 					$this->protocol = "https://";
@@ -83,7 +83,7 @@ class wtwhandlers {
 				} else {
 					$this->domainurl = "http://".$this->domainname;
 				}
-			} else if (empty($_SERVER['HTTPS']) || !isset($_SERVER['HTTPS'])){
+			} else if (!isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS'])){
 				$this->domainurl = "http://".$this->domainname;
 			} else if ($_SERVER['HTTPS'] == "off") {
 				$this->domainurl = "http://".$this->domainname;
@@ -96,18 +96,18 @@ class wtwhandlers {
 			$zserverip = gethostbyname($this->domainname);
 			$this->serverip = $zserverip;
 
-			if (!empty($_SESSION["wtw_usertoken"]) && isset($_SESSION["wtw_usertoken"])) {
+			if ($this->hasValue($_SESSION["wtw_usertoken"])) {
 				$this->usertoken = $_SESSION["wtw_usertoken"];
 			}
-			if (!empty($_SESSION["wtw_globaluserid"]) && isset($_SESSION["wtw_globaluserid"])) {
+			if ($this->hasValue($_SESSION["wtw_globaluserid"])) {
 				$this->globaluserid = $_SESSION["wtw_globaluserid"];
 			}
-			if (isset($_SERVER['PHP_SELF']) && !empty($_SERVER['PHP_SELF'])) {
+			if ($this->hasValue($_SERVER['PHP_SELF'])) {
 				$this->pagename = strtolower(basename($_SERVER['PHP_SELF']));
 			} else {
 				$this->pagename = "index.php";
 			}
-			if (isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI'])) {
+			if ($this->hasValue($_SERVER['REQUEST_URI'])) {
 				$this->uri = trim($_SERVER['REQUEST_URI']);
 				if (isset($_GET["wtwpath"])) {
 					$this->uri = $_GET["wtwpath"];
@@ -128,11 +128,11 @@ class wtwhandlers {
 				$zuserip = $this->getClientIP();
 			} catch (Exception $e) {
 			}
-			if (!empty($zuserip) && isset($zuserip)) {
+			if ($this->hasValue($zuserip)) {
 				$this->userip = $zuserip;
 				$wtwuser->userip = $zuserip;
 			}
-			if (!empty($_SESSION["wtw_userid"]) && isset($_SESSION["wtw_userid"])) {
+			if ($this->hasValue($_SESSION["wtw_userid"])) {
 				$zuserid = $_SESSION["wtw_userid"];
 				if ($this->userExists($zuserid)) {
 					$this->userid = $zuserid;
@@ -300,6 +300,16 @@ class wtwhandlers {
 	public function getNumber($zkey, $zdefaultval) {
 		global $wtwdb;
 		return $wtwdb->getNumber($zkey, $zdefaultval);
+	}
+
+	public function checkValue($zvalue, $zdefaultval = null) {
+		global $wtwdb;
+		return $wtwdb->checkValue($zvalue, $zdefaultval);
+	}
+
+	public function hasValue(&$zvalue) {
+		global $wtwdb;
+		return $wtwdb->hasValue($zvalue);
 	}
 
 	public function checkIDFormat($zid) {
@@ -476,11 +486,11 @@ class wtwhandlers {
 	if (session_status() == PHP_SESSION_NONE) {
 		$zdomainname = strtolower($_SERVER['HTTP_HOST']);
 		$zprotocol = "http://";
-		if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
 			if ($_SERVER['HTTP_X_FORWARDED_PROTO'] == "https") {
 				$zprotocol = "https://";
 			}
-		} else if (empty($_SERVER['HTTPS']) || !isset($_SERVER['HTTPS'])){
+		} else if (!isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS'])){
 		} else if ($_SERVER['HTTPS'] == "off") {
 		} else {
 			$zprotocol = "https://";

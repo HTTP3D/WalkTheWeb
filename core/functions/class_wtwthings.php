@@ -45,7 +45,7 @@ class wtwthings {
 		$copythingid = "";
 		try {
 			set_time_limit(0);
-			if (!empty($zpastthingid) && isset($zpastthingid) && $wtwhandlers->checkUpdateAccess("", "", $zpastthingid) == false) {
+			if ($wtwhandlers->hasValue($zpastthingid) && $wtwhandlers->checkUpdateAccess("", "", $zpastthingid) == false) {
 				/* denies copy function if you do not have access to thing to copy */
 				$zpastthingid = "";
 			}
@@ -54,7 +54,7 @@ class wtwthings {
 				/* create new thingid */
 				$zthingid = $wtwhandlers->getRandomString(16,1);
 				
-				if (empty($zpastthingid) || !isset($zpastthingid)) {
+				if (!isset($zpastthingid) || empty($zpastthingid)) {
 					/* create new thing (without access to copy thing or if not copying existing thing, this creates new thing) */
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."things
@@ -740,9 +740,8 @@ class wtwthings {
 				/* copy contentratings */
 				$zresults = $wtwhandlers->query("
 					select t2.contentratingid as pastcontentratingid,
-						 t2.webid,
-						 t2.webtype,
 						 '".$zthingid."' as webid,
+						 t2.webtype,
 						 t2.rating,
 						 t2.ratingvalue,
 						 t2.contentwarning
@@ -752,7 +751,7 @@ class wtwthings {
 				foreach ($zresults as $zrow) {
 					$zcontentratingid = $wtwhandlers->getRandomString(16,1);
 					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."automations
+						insert into ".wtw_tableprefix."contentratings
 							(contentratingid,
 							 pastcontentratingid,
 							 webid,
@@ -777,6 +776,44 @@ class wtwthings {
 							 now(),
 							 '".$wtwhandlers->userid."');");
 				}
+				
+				/* copy pluginsrequired */
+				$zresults = $wtwhandlers->query("
+					select t2.pluginsrequiredid as pastpluginsrequiredid,
+						 '".$zthingid."' as webid,
+						 'thing' as webtype,
+						 t2.pluginname,
+						 t2.optional
+					from ".wtw_tableprefix."wtw_pluginsrequired t2
+					where t2.webid='".$zfromthingid."'
+						and t2.deleted=0;");
+				foreach ($zresults as $zrow) {
+					$zpluginsrequiredid = $wtwhandlers->getRandomString(16,1);
+					$wtwhandlers->query("
+						insert into ".wtw_tableprefix."wtw_pluginsrequired
+							(pluginsrequiredid,
+							 pastpluginsrequiredid,
+							 webid,
+							 webtype,
+							 pluginname,
+							 optional,
+							 createdate,
+							 createuserid,
+							 updatedate,
+							 updateuserid)
+						values
+							('".$zpluginsrequiredid."',
+							 '".$zrow["pastpluginsrequiredid"]."',
+							 '".$zrow["webid"]."',
+							 '".$zrow["webtype"]."',
+							 '".$zrow["pluginname"]."',
+							 ".$zrow["optional"].",
+							 now(),
+							 '".$wtwhandlers->userid."',
+							 now(),
+							 '".$wtwhandlers->userid."');");
+				}
+				
 				/* copy automations */
 				$zresults = $wtwhandlers->query("
 					select t2.automationid as pastautomationid,
@@ -1421,7 +1458,7 @@ class wtwthings {
 			if ($wtwhandlers->checkAdminAccess("", "", $zthingid)) {
 				$zuserid = "";
 				$zfoundthingid = "";
-				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
 				$ztemplatename = $wtwhandlers->escapeHTML($ztemplatename);
@@ -1452,7 +1489,7 @@ class wtwthings {
 				foreach ($zresults as $zrow) {
 					$zfoundthingid = $zrow["thingid"];
 				}
-				if (!empty($zfoundthingid) && isset($zfoundthingid)) {
+				if ($wtwhandlers->hasValue($zfoundthingid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."things
 						set templatename='".$ztemplatename."',
@@ -1488,7 +1525,7 @@ class wtwthings {
 			if ($wtwhandlers->checkAdminAccess("", "", $zthingid)) {
 				$zuserid = "";
 				$zfoundthingid = "";
-				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
 				$zfromurl = "https://3dnet.walktheweb.com/connect/share.php?thingid=".$zthingid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;

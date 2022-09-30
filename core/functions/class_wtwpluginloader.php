@@ -25,8 +25,12 @@ class wtwpluginloader {
 	public function getAllPlugins($zcontentpath, $zload) {
 		/* check the plugin folder path to get all 3D plugins by folders */
 		global $wtwdb;
+		global $wtwhandlers;
 		$zresponse = array();
 		try {
+			if (!isset($wtwhandlers)) {
+				$wtwhandlers = $wtwdb;
+			}
 			$i = 0;
 			$zfilepath = $zcontentpath."/plugins";
 			if (file_exists($zfilepath)) {
@@ -37,6 +41,66 @@ class wtwpluginloader {
 						$zpluginphp = $zfilepath."/".$zfolder."/".$zfolder.".php";
 						if (file_exists($zpluginphp)) {
 							$zresponse[$i] = $this->getPluginPHP($zcontentpath, $zpluginphp, $zfolder, $zload);
+							$zallrequired = '0';
+							$zalloptional = '0';
+							$zwebsrequired = array();
+							$j = 0;
+							if (isset($wtwhandlers)) {
+								$zresults = $wtwhandlers->query("
+									select pr1.*,
+										c1.communityid,
+										c1.communityname,
+										b1.buildingid,
+										b1.buildingname,
+										t1.thingid,
+										t1.thingname
+									from ".wtw_tableprefix."pluginsrequired pr1
+										left join (select * from ".wtw_tableprefix."communities where deleted=0) c1
+											on pr1.webid=c1.communityid
+										left join (select * from ".wtw_tableprefix."buildings where deleted=0) b1
+											on pr1.webid=b1.buildingid
+										left join (select * from ".wtw_tableprefix."things where deleted=0) t1
+											on pr1.webid=t1.thingid
+									where pr1.deleted=0
+										and pr1.pluginname='".$zfolder."';");
+								foreach ($zresults as $zrow) {
+									$zallrequired = '1';
+									$zrequired = '1';
+									$zoptional = $zrow['optional'];
+									$zwebtype = '';
+									$zwebid = '';
+									$zwebname = '';
+									if ($zoptional == '1') {
+										$zalloptional = '1';
+										$zrequired = '0';
+									}
+									if ($wtwdb->hasValue($zrow['communityid'])) {
+										$zwebtype = 'Community';
+										$zwebid = $zrow['communityid'];
+										$zwebname = $zrow['communityname'];
+									} else if ($wtwdb->hasValue($zrow['buildingid'])) {
+										$zwebtype = 'Building';
+										$zwebid = $zrow['buildingid'];
+										$zwebname = $zrow['buildingname'];
+									} else if ($wtwdb->hasValue($zrow['thingid'])) {
+										$zwebtype = 'Thing';
+										$zwebid = $zrow['thingid'];
+										$zwebname = $zrow['thingname'];
+									}
+									$zwebsrequired[$j] = array(
+										'pluginsrequiredid'=> $zrow['pluginsrequiredid'],
+										'webid'=> $zwebid,
+										'webtype'=> $zwebtype,
+										'webname'=> $zwebname,
+										'required'=> $zrequired,
+										'optional'=> $zoptional,
+									);
+									$j += 1;
+								}
+							}
+							$zresponse[$i]["websrequired"] = $zwebsrequired;
+							$zresponse[$i]["required"] = $zallrequired;
+							$zresponse[$i]["optional"] = $zalloptional;
 							$i += 1;
 						}
 					}
@@ -73,7 +137,10 @@ class wtwpluginloader {
 			'filename' => $zpluginphp,
 			'updatedate' => '',
 			'updateurl' => '',
-			'active' => ''
+			'websrequired' => array(),
+			'active' => '0',
+			'required' => '0',
+			'optional' => '0'
 		);
 		try {
 			$i = 0;
@@ -104,7 +171,7 @@ class wtwpluginloader {
 						}
 					}
 				}
-				if (!empty($zpluginname) && isset($zpluginname)) {
+				if ($wtwdb->hasValue($zpluginname)) {
 					$zresponse['active'] = $this->getPluginActive($zpluginname);
 					if ($zresponse['active'] == "1" && $zload == 1) {
 						require_once($zcontentpath."/plugins/".$zpluginname."/".$zpluginname.".php");
@@ -139,6 +206,96 @@ class wtwpluginloader {
 		}
 		return $zactive;
 	}
+
+	public function savePluginsRequired($zwebid, $zwebtype, $zpluginname, $zrequired, $zoptional) {
+		/* see if a plugin is set to active */
+		global $wtwhandlers;
+		$zresponse = array(
+			'serror'=>''
+		);
+		try {
+			if ($wtwhandlers->hasValue($zrequired)) {
+				if ($zrequired != '1') {
+					$zrequired = '0';
+				}
+			} else {
+				$zrequired = '0';
+			}
+			if ($wtwhandlers->hasValue($zoptional)) {
+				if ($zoptional != '1') {
+					$zoptional = '0';
+				}
+			} else {
+				$zoptional = '0';
+			}
+			if ($wtwhandlers->hasValue($zwebid)) {
+				$zfoundid = '';
+				$zresults = $wtwhandlers->query("
+					select *
+					from ".wtw_tableprefix."pluginsrequired
+					where lower(pluginname)=lower('".$zpluginname."')
+						and webid='".$zwebid."';");
+				foreach ($zresults as $zrow) {
+					$zfoundid = $zrow['pluginsrequiredid'];
+				}
+				if ($wtwhandlers->hasValue($zfoundid)) {
+					if ($zrequired == '1' || $zoptional == '1') {
+						/* update existing required or optional */
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."pluginsrequired
+							set webtype='".$zwebtype."',
+								optional='".$zoptional."',
+								updatedate=now(),
+								updateuserid='".$wtwhandlers->userid."',
+								deleteddate=null,
+								deleteduserid='',
+								deleted=0
+							where pluginsrequiredid='".$zfoundid."';");
+					} else {
+						/* no longer required or optional */
+						$wtwhandlers->query("
+							update ".wtw_tableprefix."pluginsrequired
+							set deleteddate=now(),
+								deleteduserid='".$wtwhandlers->userid."',
+								deleted=1
+							where pluginsrequiredid='".$zfoundid."';");
+					}
+				} else {
+					if ($zrequired == '1' || $zoptional == '1') {
+						/* new required or optional plugin */
+						$zpluginsrequiredid = $wtwhandlers->getRandomString(16,1);
+						$wtwhandlers->query("
+							insert into ".wtw_tableprefix."pluginsrequired
+							   (pluginsrequiredid,
+							    webid,
+								webtype,
+								pluginname,
+								optional,
+								createdate,
+								createuserid,
+								updatedate,
+								updateuserid)
+							values
+							   ('".$zpluginsrequiredid."',
+								'".$zwebid."',
+								'".$zwebtype."',
+								'".$zpluginname."',
+								'".$zoptional."',
+								now(),
+								'".$wtwhandlers->userid."',
+								now(),
+								'".$wtwhandlers->userid."');");
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwpluginloader.php-savePluginsRequired=".$e->getMessage());
+			$zresponse = array(
+				'serror'=>$e->getMessage()
+			);
+		}
+		return $zresponse;
+	}
 	
 	public function setPluginActive($zpluginname, $zactive) {
 		/* set a plugin active status */
@@ -163,7 +320,7 @@ class wtwpluginloader {
 					$zdeletedold = $zrow["deleted"];
 					$zfound = $zrow["pluginname"];
 				}
-				if (!empty($zpluginname) && isset($zpluginname)) {
+				if ($wtwdb->hasValue($zpluginname)) {
 					if (!empty($zfound)) {
 						$wtwdb->query("
 							update ".wtw_tableprefix."plugins
@@ -253,7 +410,7 @@ class wtwpluginloader {
 			if (count($zpathdef) > 2) {
 				$zfile = trim($zpathdef[2]);
 			}
-			if (!empty($zfile) && isset($zfile)) {
+			if ($wtw->hasValue($zfile)) {
 				$zconnectfile = "";
 				$zfilepath = $wtw->contentpath."/plugins";
 				if (file_exists($zfilepath)) {
@@ -278,9 +435,9 @@ class wtwpluginloader {
 						}
 					}
 				}
-				if (!empty($zconnectfile) && isset($zconnectfile)) {
+				if ($wtw->hasValue($zconnectfile)) {
 					require_once(wtw_rootpath.'/core/functions/class_wtwconnect.php');
-					if (!empty($zpluginphp) && isset($zpluginphp)) {
+					if ($wtw->hasValue($zpluginphp)) {
 						if (file_exists($zpluginphp)) {
 							require_once(wtw_rootpath.'/core/functions/class_wtwplugins.php');
 							require_once($zpluginphp);
@@ -313,7 +470,7 @@ class wtwpluginloader {
 			if (count($zpathdef) > 3) {
 				$zfile = trim($zpathdef[3]);
 			}
-			if (!empty($zfile) && isset($zfile)) {
+			if ($wtw->hasValue($zfile)) {
 				$zpathfile = "";
 				$zfilepath = $wtw->contentpath."/plugins";
 				if (file_exists($zfilepath)) {
@@ -338,13 +495,13 @@ class wtwpluginloader {
 						}
 					}
 				}
-				if (!empty($zpathfile) && isset($zpathfile)) {
+				if ($wtw->hasValue($zpathfile)) {
 					if (file_exists(wtw_rootpath.'/core/functions/class_wtw'.$zpath.'.php')) {
 						require_once(wtw_rootpath.'/core/functions/class_wtw'.$zpath.'.php');
 					} else {
 						require_once(wtw_rootpath.'/core/functions/class_wtwhandlers.php');
 					}
-					if (!empty($zpluginphp) && isset($zpluginphp)) {
+					if ($wtw->hasValue($zpluginphp)) {
 						if (file_exists($zpluginphp)) {
 							require_once(wtw_rootpath.'/core/functions/class_wtwplugins.php');
 							require_once($zpluginphp);

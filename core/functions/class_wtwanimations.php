@@ -85,28 +85,28 @@ class wtwanimations {
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if(empty($zstartframe) || !isset($zstartframe)) {
+			if (!isset($zstartframe) || empty($zstartframe)) {
 				$zstartframe = '0';
 			}
-			if(empty($zendframe) || !isset($zendframe)) {
+			if (!isset($zendframe) || empty($zendframe)) {
 				$zendframe = '0';
 			}
-			if(!empty($zanimationloop) && isset($zanimationloop)) {
+			if ($wtwhandlers->hasValue($zanimationloop)) {
 				if ($zanimationloop != '1') {
 					$zanimationloop = '0';
 				}
 			} else {
 				$zanimationloop = '0';
 			}
-			if(empty($zspeedratio) || !isset($zspeedratio)) {
+			if (!isset($zspeedratio) || empty($zspeedratio)) {
 				$zspeedratio = '1.00';
 			}
-			if(empty($zsoundmaxdistance) || !isset($zsoundmaxdistance)) {
+			if (!isset($zsoundmaxdistance) || empty($zsoundmaxdistance)) {
 				$zsoundmaxdistance = '100.00';
 			} elseif (is_numeric($zsoundmaxdistance) == false) {
 				$zsoundmaxdistance = '100.00';
 			}
-			if(!empty($zstopcurrentanimations) && isset($zstopcurrentanimations)) {
+			if ($wtwhandlers->hasValue($zstopcurrentanimations)) {
 				if ($zstopcurrentanimations != '1') {
 					$zstopcurrentanimations = '0';
 				}
@@ -124,7 +124,7 @@ class wtwanimations {
 			foreach ($zresults as $zrow) {
 				$found = true;
 			}
-			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
+			if ($wtwhandlers->hasValue($wtwhandlers->userid)) {
 				if ($found) {
 					/* if found update record */
 					$wtwhandlers->query("
@@ -208,7 +208,7 @@ class wtwanimations {
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
+			if ($wtwhandlers->hasValue($wtwhandlers->userid)) {
 				$found = false;
 				$zresults = $wtwhandlers->query("
 					select objectanimationid 

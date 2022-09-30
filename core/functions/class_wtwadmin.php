@@ -283,6 +283,8 @@ class wtwadmin {
 			$zhiddenfields .= "<input type='hidden' id='wtw_tobjectsoundpath' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_twebdomainid' maxlength='16' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_twebaliasid' maxlength='16' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_taliassiteiconid' maxlength='16' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_taliassiteiconpath' maxlength='256' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tapikeyid' maxlength='16' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id=\"wtw_tbackupfullpageformtitle\" />\r\n";
 			$zhiddenfields .= "<img id='wtw_tobjectsoundicon' class='wtw-hide' />\r\n";
@@ -310,32 +312,44 @@ class wtwadmin {
 			$zpagedata .= "		<div id='wtw_loadingdashboard' class='wtw-loadingnotice'>Loading...</div>\r\n";
 			$zpagedata .= "		<div id='wtw_dashboard' style='overflow-y:auto;overflow-x:none;'>\r\n";
 
-			$zpagedata .= "			<div id='wtw_videolinks' class='wtw-dashboardboxleftdouble wtw-hide'>\r\n";
-			$zpagedata .= "				<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_videolinksdiv');\"><div id='wtw_videolinksdivarrow' class='wtw-divarrow'>⯅</div>WalkTheWeb Videos</div>\r\n";
-			$zpagedata .= "				<div id='wtw_videolinksdiv' class='wtw-dashboardboxmax' style='min-height:550px;'>\r\n";
-			$zpagedata .= "					<div id='wtw_latestvideo'></div>\r\n";
-			$zpagedata .= "					<h3 id='wtw_latestvideotitle' class='wtw-black'>WalkTheWeb Video</h3>\r\n";
-			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
-			$zpagedata .= "					<div id='wtw_latestvideodetails' class='wtw-dashboardlabel'>Latest Video</div>\r\n";
-			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
-			$zpagedata .= "					<h2><a href='https://www.youtube.com/channel/UCEcaZ947Mv1ylLd_MYS1ivg' target='_blank'>View More WalkTheWeb Videos</a></h2>\r\n";
-			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "			<div id='wtw_dashboardcol1' style='width:62%;margin:1%;padding:0px;display:inline-block;vertical-align:top;'>\r\n";
+			$zpagedata .= "				<div id='wtw_videolinks' class='wtw-dashboardboxleftfull wtw-hide'>\r\n";
+			$zpagedata .= "					<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_videolinksdiv');\"><div id='wtw_videolinksdivarrow' class='wtw-divarrow'>⯅</div>WalkTheWeb Videos</div>\r\n";
+			$zpagedata .= "					<div id='wtw_videolinksdiv' class='wtw-dashboardboxmax' style='min-height:550px;'>\r\n";
+			$zpagedata .= "						<div id='wtw_latestvideo'></div>\r\n";
+			$zpagedata .= "						<h3 id='wtw_latestvideotitle' class='wtw-black'>WalkTheWeb Video</h3>\r\n";
+			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "						<div id='wtw_latestvideodetails' class='wtw-dashboardlabel'>Latest Video</div>\r\n";
+			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "						<h2><a href='https://www.youtube.com/channel/UCEcaZ947Mv1ylLd_MYS1ivg' target='_blank'>View More WalkTheWeb Videos</a></h2>\r\n";
+			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "					</div>\r\n";
+			$zpagedata .= "				</div>\r\n";
+
+			$zpagedata .= "				<div id='wtw_downloadqueue' class='wtw-dashboardboxleftfull wtw-hide'>\r\n";
+			$zpagedata .= "					<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_downloadqueuediv');\"><div id='wtw_downloadqueuedivarrow' class='wtw-divarrow'>⯅</div>WalkTheWeb Pending Downloads (Queue)</div>\r\n";
+			$zpagedata .= "					<div id='wtw_downloadqueuediv' class='wtw-dashboardboxmax'>\r\n";
+			$zpagedata .= "						<div id='wtw_downloadqueuelist'></div>\r\n";
+			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "					</div>\r\n";
 			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";
 
-			$zpagedata .= "			<div id='wtw_userwebcount' class='wtw-dashboardboxleft'>\r\n";
-			$zpagedata .= "				<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_webcountdiv');\"><div id='wtw_webcountdivarrow' class='wtw-divarrow'>⯅</div>Server Stats and Information</div>\r\n";
-			$zpagedata .= "				<div id='wtw_webcountdiv' class='wtw-dashboardboxmax' style='max-height:550px;'>\r\n";
-			$zpagedata .= "					<div id='wtw_serverstatslist'></div>\r\n";
-			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "			<div id='wtw_dashboardcol2' style='width:29%;margin:1%;padding:0px;display:inline-block;vertical-align:top;'>\r\n";
+			$zpagedata .= "				<div id='wtw_serverstats' class='wtw-dashboardboxleftfull'>\r\n";
+			$zpagedata .= "					<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_webcountdiv');\"><div id='wtw_webcountdivarrow' class='wtw-divarrow'>⯅</div>Server Stats and Information</div>\r\n";
+			$zpagedata .= "					<div id='wtw_webcountdiv' class='wtw-dashboardboxmax' style='max-height:550px;'>\r\n";
+			$zpagedata .= "						<div id='wtw_serverstatslist'></div>\r\n";
+			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "					</div>\r\n";
 			$zpagedata .= "				</div>\r\n";
-			$zpagedata .= "			</div>\r\n";
 
-			$zpagedata .= "			<div id='wtw_downloadqueue' class='wtw-dashboardboxleftdouble wtw-hide'>\r\n";
-			$zpagedata .= "				<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_downloadqueuediv');\"><div id='wtw_downloadqueuedivarrow' class='wtw-divarrow'>⯅</div>WalkTheWeb Pending Downloads (Queue)</div>\r\n";
-			$zpagedata .= "				<div id='wtw_downloadqueuediv' class='wtw-dashboardboxmax'>\r\n";
-			$zpagedata .= "					<div id='wtw_downloadqueuelist'></div>\r\n";
-			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "				<div id='wtw_wtwactivity' class='wtw-dashboardboxleftfull'>\r\n";
+			$zpagedata .= "					<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_wtwactivitydiv');\"><div id='wtw_wtwactivitydivarrow' class='wtw-divarrow'>⯅</div>WalkTheWeb Global Latest Activity</div>\r\n";
+			$zpagedata .= "					<div id='wtw_wtwactivitydiv' class='wtw-dashboardboxmax' style='max-height:550px;'>\r\n";
+			$zpagedata .= "						<div id='wtw_wtwactivitylist'></div>\r\n";
+			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "					</div>\r\n";
 			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";
 
@@ -426,6 +440,7 @@ class wtwadmin {
 			$zpagedata .= "		<div style='width:100%;margin:0px;text-align:center;'>\r\n";
 			$zpagedata .= "			<!--img src='/content/system/images/wtwlogo.png' / -->\r\n";
 			$zpagedata .= "			<div id='wtw_selectwebform'>\r\n";
+			$zpagedata .= "				<div id='wtw_downloadingnotice' class='wtw-loadingnoticecentered'>Downloading...</div>\r\n";
 			$zpagedata .= "				<div id='wtw_commtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
 			$zpagedata .= "				<div id='wtw_buildtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
 			$zpagedata .= "				<div id='wtw_thingtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
@@ -961,6 +976,7 @@ class wtwadmin {
 				$zpagedata .= "							<div class='wtw-clear'></div><br />\r\n";
 			}
 			$zpagedata .= " 				</div>\r\n";
+			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "					<div class='wtw-roundedbox'><b>Domain Names</b> identify which Domain Names are hosted on this WalkTheWeb server.<br />Click <b>Add New</b> to personalize your 3D Website with your own Domain Name (<b>http://3d.<span style='color:blue;'>YourDomainName.com</span></b>).<br /><br /><b>Web Aliases</b> allow you to create URLs for any 3D Community Scene, 3D Building, or 3D Thing using your Domain Names.<br /></div>\r\n";
 			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardboxleftfull'>\r\n";
@@ -1038,7 +1054,7 @@ class wtwadmin {
 			$zpagedata .= "								<div class='wtw-dashboardvalue'><input type='text' id='wtw_aliassitedescription' maxlength='255' style='width:360px;' onclick=\"WTW.checkKey(this, 'safetext', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'safetext', 0, 0);\" onblur=\"WTW.checkKey(this, 'safetext', 0, 1);\" /></div>\r\n";
 			$zpagedata .= "								<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "								<div class='wtw-dashboardlabel'>Browser Tab Icon</div>\r\n";
-			$zpagedata .= "								<div class='wtw-dashboardvalue' style='text-align:center;'><img id='wtw_aliassiteicon' src='/favicon.ico' class='wtw-tinyimage' /> &nbsp;&nbsp;&nbsp; <div class='wtw-rightbutton'>Change Icon</div></div>\r\n";
+			$zpagedata .= "								<div class='wtw-dashboardvalue' style='text-align:center;'><img id='wtw_aliassiteicon' src='/favicon.ico' class='wtw-tinyimage' /> &nbsp;&nbsp;&nbsp; <div class='wtw-rightbutton' onclick=\"WTW.openFullPageForm('medialibrary','image','webaliasicon','wtw_taliassiteiconid','wtw_taliassiteiconpath','wtw_aliassiteicon');\">Change Icon</div></div>\r\n";
 			$zpagedata .= "								<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "							</div>\r\n";
 			$zpagedata .= "							<div class='wtw-clear'></div>\r\n";
@@ -1054,6 +1070,7 @@ class wtwadmin {
 			$zpagedata .= "						<div class='wtw-greenbuttonright' onclick='WTW.saveAliasForm(1);'>Save Web Alias</div>\r\n";
 			$zpagedata .= "						<div class='wtw-yellowbuttonright' onclick='WTW.saveAliasForm(-1);'>Cancel</div>\r\n";
 			$zpagedata .= " 				</div>\r\n";
+			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "					<div class='wtw-roundedbox'><b>Web Aliases</b> allow you to create URLs for any 3D Community Scene, 3D Building, or 3D Thing using your Domain Names.<br />Click <b>Add New</b> to set a Domain Name and Path to your 3D Websites.<br /><br /><b>Domain Names</b> identify which Domain Names are hosted on this WalkTheWeb server.<br /></div>\r\n";
 			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardboxleftfull'>\r\n";
@@ -1179,7 +1196,13 @@ class wtwadmin {
 					/* plugins required to load for this 3D Web */
 				$zpagedata .= "			<div class='wtw-controlpaneldiv'>\r\n";
 				$zpagedata .= "				<div class='wtw-controlpaneltitlediv'>Required 3D Plugins</div>\r\n";
-				$zpagedata .= "				<label class='wtw-switch'><input id='wtw_enablepluginsrequired' type='checkbox' onclick='WTW.changeSwitch(this);' checked><span class='wtw-slider wtw-round'></span></label><div id='wtw_enablepluginsrequiredtext' class='wtw-enablelabel'>All 3D Plugins are Enabled</div> <br />All 3D Plugins are enabled for this 3D Website.<br /><br />\r\n";
+				$zpagedata .= "				<label class='wtw-switch'><input id='wtw_enablepluginsrequired' type='checkbox' onclick='WTW.changeSwitch(this);'><span class='wtw-slider wtw-round'></span></label><div id='wtw_enablepluginsrequiredtext' class='wtw-disabledlabel'>No specific 3D Plugins are Required</div> <br />Enable to set specific 3D Plugins as Required or Optional.<br /><br />\r\n";
+				$zpagedata .= "				<div id='wtw_pluginsrequiredlist'></div>\r\n";
+				$zpagedata .= "				<div class='wtw-clear'></div>\r\n";
+				$zpagedata .= " 			<div id='wtw_pluginsrequirederror' class='wtw-error'></div>\r\n";
+				$zpagedata .= "				<div class='wtw-clear'></div>\r\n";
+				$zpagedata .= "				<div id='wtw_bpluginsrequiredsave' class='wtw-greenbuttonleft' onclick='WTW.savePluginsRequired();'>Save Plugins Required</div>\r\n";
+				$zpagedata .= "				<div class='wtw-clear'></div><br />\r\n";
 				$zpagedata .= "			</div>\r\n";
 			}
 
@@ -1209,13 +1232,13 @@ class wtwadmin {
 				$zfullpagedata = $zfullpageitem["fullpagedata"];
 				if ($wtwdb->hasPermission($zaccessrequired)) {
 					/* check for invalid entries */
-					if (empty($zid) | !isset($zid)) {
+					if (!isset($zid) || empty($zid)) {
 						$zid = $wtwdb->getRandomString(6,1);
 					}
-					if (empty($zfullpagedata) || !isset($zfullpagedata)) {
+					if (!isset($zfullpagedata)|| empty($zfullpagedata)) {
 						$zfullpagedata = '';
 					}
-					if (!empty($zfullpagedata) && isset($zfullpagedata)) {
+					if ($wtwdb->hasValue($zfullpagedata)) {
 						$zpagedata .= "		<div id='".$zid."' class='wtw-fullpage'>\r\n";
 						$zpagedata .= $zfullpagedata;
 						$zpagedata .= "		</div>\r\n";

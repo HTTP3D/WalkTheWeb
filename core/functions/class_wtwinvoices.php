@@ -29,7 +29,7 @@ class wtwinvoices {
 			'serror'=> ''
 		);
 		try {
-			if (isset($zinvoiceid) && !empty($zinvoiceid)) {
+			if ($wtwhandlers->hasValue($zinvoiceid)) {
 				$zinvoice = array();
 				$zinvoicedetails = array();
 				$ztransactions = array();
@@ -195,7 +195,7 @@ class wtwinvoices {
 				} else {
 					$zinvoicedate = $wtwhandlers->prepCheckDate($zinvoicedate);
 				}
-				if (isset($zinvoiceid) && !empty($zinvoiceid)) {
+				if ($wtwhandlers->hasValue($zinvoiceid)) {
 					$zresults = $wtwhandlers->query("
 						select invoiceid 
 						from ".wtw_tableprefix."invoices
@@ -278,7 +278,7 @@ class wtwinvoices {
 		try {
 			if ($wtwhandlers->isUserInRole("Admin") || $wtwhandlers->isUserInRole("Developer")) {
 				$zfoundinvoiceid = '';
-				if (isset($zinvoiceid) && !empty($zinvoiceid)) {
+				if ($wtwhandlers->hasValue($zinvoiceid)) {
 					$zresults = $wtwhandlers->query("
 						select invoiceid 
 						from ".wtw_tableprefix."invoices
@@ -287,7 +287,7 @@ class wtwinvoices {
 						$zfoundinvoiceid = $zrow["invoiceid"];
 					}
 				}
-				if (isset($zfoundinvoiceid) && !empty($zfoundinvoiceid)) {
+				if ($wtwhandlers->hasValue($zfoundinvoiceid)) {
 					/* mark delete invoice */
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."invoices
@@ -327,7 +327,7 @@ class wtwinvoices {
 		try {
 			if ($wtwhandlers->isUserInRole("Admin") || $wtwhandlers->isUserInRole("Developer") || $wtwhandlers->isUserInRole("Host")) {
 				$zfoundinvoicedetailid = '';
-				if (isset($zinvoicedetailid) && !empty($zinvoicedetailid)) {
+				if ($wtwhandlers->hasValue($zinvoicedetailid)) {
 					$zresults = $wtwhandlers->query("
 						select invoicedetailid 
 						from ".wtw_tableprefix."invoicedetails
@@ -408,7 +408,7 @@ class wtwinvoices {
 		try {
 			if ($wtwhandlers->isUserInRole("Admin") || $wtwhandlers->isUserInRole("Developer")) {
 				$zfoundinvoicedetailid = '';
-				if (isset($zinvoicedetailid) && !empty($zinvoicedetailid)) {
+				if ($wtwhandlers->hasValue($zinvoicedetailid)) {
 					$zresults = $wtwhandlers->query("
 						select invoicedetailid 
 						from ".wtw_tableprefix."invoicedetails
@@ -417,7 +417,7 @@ class wtwinvoices {
 						$zfoundinvoicedetailid = $zrow["invoicedetailid"];
 					}
 				}
-				if (isset($zfoundinvoicedetailid) && !empty($zfoundinvoicedetailid)) {
+				if ($wtwhandlers->hasValue($zfoundinvoicedetailid)) {
 					/* mark delete invoice detail */
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."invoicedetails

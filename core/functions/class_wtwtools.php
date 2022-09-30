@@ -27,8 +27,8 @@ class wtwtools {
 		);
 		try {
 			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
-				if (!empty($zwebid) && isset($zwebid) && is_numeric($zratingvalue) && !empty($zrating) && isset($zrating)) {
-					if (!empty($zcontentwarning) && isset($zcontentwarning)) {
+				if ($wtwhandlers->hasValue($zwebid) && is_numeric($zratingvalue) && $wtwhandlers->hasValue($zrating)) {
+					if ($wtwhandlers->hasValue($zcontentwarning)) {
 						$zcontentwarning = addslashes(base64_decode($zcontentwarning));
 					}
 					$zcontentratingid = '';
@@ -40,7 +40,7 @@ class wtwtools {
 					foreach ($zresults as $zrow) {
 						$zcontentratingid = $zrow["contentratingid"];
 					}
-					if ((empty($zcontentratingid) || !isset($zcontentratingid)) && $zparentalcontrols == '1') {
+					if ((!isset($zcontentratingid) || empty($zcontentratingid)) && $zparentalcontrols == '1') {
 						/* create a new rating record in the table */
 						$zcontentratingid = $wtwhandlers->getRandomString(16,1);
 						$wtwhandlers->query("
@@ -310,10 +310,10 @@ class wtwtools {
 						$zfilename = $zfileinfo->getFilename();
 						$zurl = $wtwhandlers->domainurl."/core/languages/".$zfilename;
 						$zrequest = $wtwhandlers->openFilefromURL($zurl);
-						if (!empty($zrequest) && isset($zrequest)) {
+						if ($wtwhandlers->hasValue($zrequest)) {
 							$zrequest = json_decode($zrequest);
 						}
-					if (isset($zrequest[0]->language) && !empty($zrequest[0]->language) && isset($zrequest[0]->abbreviation) && !empty($zrequest[0]->abbreviation)) {
+					if ($wtwhandlers->hasValue($zrequest[0]->language) && $wtwhandlers->hasValue($zrequest[0]->abbreviation)) {
 							$zresponse[$i] = array(
 								'language'=>$zrequest[0]->language,
 								'abbreviation'=>$zrequest[0]->abbreviation
@@ -395,10 +395,10 @@ class wtwtools {
 
 			$zfromemail = '';
 			$zfromemailname = '';
-			if (!empty($zresults["fromemail"]) && isset($zresults["fromemail"])) {
+			if ($wtwhandlers->hasValue($zresults["fromemail"])) {
 				$zfromemail = $zresults["fromemail"];
 			}
-			if (!empty($zresults["fromemailname"]) && isset($zresults["fromemailname"])) {
+			if ($wtwhandlers->hasValue($zresults["fromemailname"])) {
 				$zfromemailname = $zresults["fromemailname"];
 			}
 			if (empty($zfromemailname) && !empty($zfromemail)) {
@@ -406,7 +406,7 @@ class wtwtools {
 			}
 			if (!empty($zresults["smtphost"]) && !empty($zresults["smtpport"])) {
 				if (!empty($zfromemail)) {
-					if (empty($zresults["smtpencryption"]) || !isset($zresults["smtpencryption"])) {
+					if (!isset($zresults["smtpencryption"]) || empty($zresults["smtpencryption"])) {
 						$ztransport = (new Swift_SmtpTransport($zresults["smtphost"], $zresults["smtpport"]))
 						  ->setUsername($zresults["smtpusername"])
 						  ->setPassword($wtwhandlers->decode64($zresults["smtppassword"]));
@@ -459,10 +459,10 @@ class wtwtools {
 
 			$zfromemail = '';
 			$zfromemailname = '';
-			if (!empty($zresults["fromemail"]) && isset($zresults["fromemail"])) {
+			if ($wtwhandlers->hasValue($zresults["fromemail"])) {
 				$zfromemail = $zresults["fromemail"];
 			}
-			if (!empty($zresults["fromemailname"]) && isset($zresults["fromemailname"])) {
+			if ($wtwhandlers->hasValue($zresults["fromemailname"])) {
 				$zfromemailname = $zresults["fromemailname"];
 			}
 			if (empty($zfromemailname) && !empty($zfromemail)) {
@@ -470,7 +470,7 @@ class wtwtools {
 			}
 			if (!empty($zresults["smtphost"]) && !empty($zresults["smtpport"])) {
 				if (!empty($zfromemail)) {
-					if (empty($zresults["smtpencryption"]) || !isset($zresults["smtpencryption"])) {
+					if (!isset($zresults["smtpencryption"]) || empty($zresults["smtpencryption"])) {
 						$ztransport = (new Swift_SmtpTransport($zresults["smtphost"], $zresults["smtpport"]))
 						  ->setUsername($zresults["smtpusername"])
 						  ->setPassword($wtwhandlers->decode64($zresults["smtppassword"]));
@@ -486,13 +486,13 @@ class wtwtools {
 					$zemail->setFrom(array($zfromemail => $zfromemailname));
 					$zemail->setTo($zsendto);
 					$zemail->setBody($zhtmlmessage, 'text/html');
-					if (!empty($zcopyto) && isset($zcopyto)) {
+					if ($wtwhandlers->hasValue($zcopyto)) {
 						$zemail->setCc($zcopyto);
 					}
-					if (!empty($zbccto) && isset($zbccto)) {
+					if ($wtwhandlers->hasValue($zbccto)) {
 						$zemail->setBcc($zbccto);
 					}
-					if (!empty($zmessage) && isset($zmessage)) {
+					if ($wtwhandlers->hasValue($zmessage)) {
 						$zemail->addPart($zmessage, 'text/plain');
 					}
 					
@@ -517,42 +517,18 @@ class wtwtools {
 			'serror'=>''
 		);
 		try {
-			if (!empty($zurl) && isset($zurl)) {
-				$zurl = addslashes(base64_decode($zurl));
-			}
-			if (!empty($zdomainurl) && isset($zdomainurl)) {
-				$zdomainurl = addslashes(base64_decode($zdomainurl));
-			}
-			if (!empty($zwtwversion) && isset($zwtwversion)) {
-				$zwtwversion = addslashes(base64_decode($zwtwversion));
-			}
-			if (!empty($zfeedbacktype) && isset($zfeedbacktype)) {
-				$zfeedbacktype = addslashes(base64_decode($zfeedbacktype));
-			}
-			if (!empty($zcategory) && isset($zcategory)) {
-				$zcategory = addslashes(base64_decode($zcategory));
-			}
-			if (!empty($zsubject) && isset($zsubject)) {
-				$zsubject = addslashes(base64_decode($zsubject));
-			}
-			if (!empty($zmessage) && isset($zmessage)) {
-				$zmessage = addslashes(base64_decode($zmessage));
-			}
-			if (!empty($zsnapshoturl) && isset($zsnapshoturl)) {
-				$zsnapshoturl = addslashes(base64_decode($zsnapshoturl));
-			}
-			if (!empty($zfeedbackname) && isset($zfeedbackname)) {
-				$zfeedbackname = addslashes(base64_decode($zfeedbackname));
-			}
-			if (!empty($zdisplayname) && isset($zdisplayname)) {
-				$zdisplayname = addslashes(base64_decode($zdisplayname));
-			}
-			if (!empty($zfeedbackemail) && isset($zfeedbackemail)) {
-				$zfeedbackemail = addslashes(base64_decode($zfeedbackemail));
-			}
-			if (!empty($zuseremail) && isset($zuseremail)) {
-				$zuseremail = addslashes(base64_decode($zuseremail));
-			}
+			$zurl = addslashes($wtwhandlers->decode64($zurl));
+			$zdomainurl = addslashes($wtwhandlers->decode64($zdomainurl));
+			$zwtwversion = addslashes($wtwhandlers->decode64($zwtwversion));
+			$zfeedbacktype = addslashes($wtwhandlers->decode64($zfeedbacktype));
+			$zcategory = addslashes($wtwhandlers->decode64($zcategory));
+			$zsubject = addslashes($wtwhandlers->decode64($zsubject));
+			$zmessage = addslashes($wtwhandlers->decode64($zmessage));
+			$zsnapshoturl = addslashes($wtwhandlers->decode64($zsnapshoturl));
+			$zfeedbackname = addslashes($wtwhandlers->decode64($zfeedbackname));
+			$zdisplayname = addslashes($wtwhandlers->decode64($zdisplayname));
+			$zfeedbackemail = addslashes($wtwhandlers->decode64($zfeedbackemail));
+			$zuseremail = addslashes($wtwhandlers->decode64($zuseremail));
 
 			/* create a new rating record in the table */
 			$zfeedbackid = $wtwhandlers->getRandomString(16,1);

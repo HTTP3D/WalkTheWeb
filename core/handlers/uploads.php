@@ -34,7 +34,7 @@ try {
 	$zthingpublishname = $wtwhandlers->getPost('thingpublishname','');
 	$zsitename = $wtwhandlers->getPost('sitename','');
 	$zsitedescription = $wtwhandlers->getPost('sitedescription','');
-	$zsiteicon = $wtwhandlers->getPost('siteicon','/favicon.ico');
+	$zsiteiconid = $wtwhandlers->getPost('siteiconid','');
 	$zfilepath = $wtwhandlers->getPost('filepath','');
 	$zfilename = $wtwhandlers->getPost('filename','');
 	$zfiledata = $wtwhandlers->getPost('filedata','');
@@ -80,7 +80,7 @@ try {
 			$wtwuploads->deleteWebDomain($zwebdomainid);
 			break;
 		case "savewebalias":
-			$zfranchiseid = $wtwuploads->saveWebAlias($zwebaliasid, $zforcehttps, $zdomainname, $zcommunitypublishname, $zbuildingpublishname, $zthingpublishname, $zcommunityid, $zbuildingid, $zthingid, $zsitename, $zsitedescription, $zsiteicon, $zfranchise, $zinstanceid);
+			$zfranchiseid = $wtwuploads->saveWebAlias($zwebaliasid, $zforcehttps, $zdomainname, $zcommunitypublishname, $zbuildingpublishname, $zthingpublishname, $zcommunityid, $zbuildingid, $zthingid, $zsitename, $zsitedescription, $zsiteiconid, $zfranchise, $zinstanceid);
 			$zresponse = array(
 				'franchiseid'=> $zfranchiseid
 			);

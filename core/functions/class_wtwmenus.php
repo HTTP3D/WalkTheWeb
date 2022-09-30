@@ -37,7 +37,7 @@ class wtwmenus {
 		$mainmenu = "<div id='wtw_wtwmessage' class='wtw-wtwmessage'></div><div id='wtw_menubase' class='wtw-menubase'>";
 		try {
 			$zuserid = "";
-			if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+			if ($wtwdb->hasValue($_SESSION["wtw_userid"])) {
 				$zuserid = $_SESSION["wtw_userid"];
 			}
 			$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menuset='main' and menulevel=1 order by menuorder;");
@@ -126,7 +126,7 @@ class wtwmenus {
 			*/
 			$zfound = false;
 			foreach ($this->settingsmenu as $zsettingsmenu) {
-				if (isset($zsettingsmenu["id"]) && !empty($zsettingsmenu["id"])) {
+				if ($wtwdb->hasValue($zsettingsmenu["id"])) {
 					if ($zsettingsmenu["id"] == $zid) {
 						$zfound = true;
 					}
@@ -209,18 +209,18 @@ class wtwmenus {
 				$ziconurl = $zmenuitem["iconurl"];
 				$zaccessrequired = $zmenuitem["accessrequired"]; /* array of allowed roles */
 				$zjsfunction = $zmenuitem["jsfunction"];
-				if ($wtwdb->hasPermission($zaccessrequired) || empty($zaccessrequired) || !isset($zaccessrequired)) {
+				if ($wtwdb->hasPermission($zaccessrequired) || !isset($zaccessrequired) || empty($zaccessrequired)) {
 					/* check for invalid entries */
-					if (empty($zid) | !isset($zid)) {
+					if (!isset($zid) || empty($zid)) {
 						$zid = $wtwdb->getRandomString(5,1);
 					}
-					if (empty($ztitle) | !isset($ztitle)) {
+					if (!isset($ztitle) || empty($ztitle)) {
 						$ztitle = 'Menu Item';
 					}
-					if (empty($ziconurl) | !isset($ziconurl)) {
+					if (!isset($ziconurl) || empty($ziconurl)) {
 						$ziconurl = "/content/system/images/menuarrow.png";
 					}
-					if (empty($zjsfunction) || !isset($zjsfunction)) {
+					if (!isset($zjsfunction) || empty($zjsfunction)) {
 						$zjsfunction = '';
 					}
 					if ($ztempmenu != $zmenu) {
@@ -240,11 +240,11 @@ class wtwmenus {
 		$zsuccess = false;
 		try {
 			$zfound = false;
-			if (empty($zcssclass) || !isset($zcssclass)) {
+			if (!isset($zcssclass) || empty($zcssclass)) {
 				$zcssclass = 'wtw-slideupmenuright';
 			}
 			foreach ($this->settingsforms as $zsettingsform) {
-				if (isset($zsettingsform["formid"]) && !empty($zsettingsform["formid"])) {
+				if ($wtwdb->hasValue($zsettingsform["formid"])) {
 					if ($zsettingsform["formid"] == $zformid) {
 						$zfound = true;
 					}
@@ -278,19 +278,19 @@ class wtwmenus {
 				$ztitle = $zform["title"];
 				$zaccessrequired = $zform["accessrequired"]; /* array of allowed roles */
 				$zformdata = $zform["formdata"];
-				if ($wtwdb->hasPermission($zaccessrequired) || empty($zaccessrequired) || !isset($zaccessrequired)) {
+				if ($wtwdb->hasPermission($zaccessrequired) || !isset($zaccessrequired) || empty($zaccessrequired)) {
 					/* check for invalid entries */
 					$zcssclass = $zform["cssclass"];
-					if (empty($zformid) | !isset($zformid)) {
+					if (!isset($zformid) || empty($zformid)) {
 						$zformid = $wtwdb->getRandomString(6,1);
 					}
-					if (empty($zformdata) || !isset($zformdata)) {
+					if (!isset($zformdata) || empty($zformdata)) {
 						$zformdata = '';
 					}
-					if (empty($zcssclass) || !isset($zcssclass)) {
+					if (!isset($zcssclass) || empty($zcssclass)) {
 						$zcssclass = 'wtw-slideupmenuright';
 					}
-					if (!empty($zformdata) && isset($zformdata)) {
+					if ($wtwdb->hasValue($zformdata)) {
 						$zmenuforms .= "<div id='".$zformid."' class='".$zcssclass." wtw-hide'>";
 						$zmenuforms .= "	<img class='wtw-closeright' onclick=\"WTW.closeMenus('".$zformid."');\" src='/content/system/images/menuclose.png' alt='".$this->__("Close")."' title='".$this->__("Close")."' onmouseover=\"this.src='/content/system/images/menuclosehover.png';\" onmouseout=\"this.src='/content/system/images/menuclose.png';\" />";
 						$zmenuforms .= "	<img id='".$zformid."min' class='wtw-closeright wtw-hide' onclick=\"WTW.resizeMenu('".$zformid."', 'min');\" src='/content/system/images/menuminimize.png' alt='".$this->__("Minimize")." ".$this->__($ztitle)."' title='".$this->__("Minimize")." ".$this->__($ztitle)."' onmouseover=\"this.src='/content/system/images/menuminimizehover.png';\" onmouseout=\"this.src='/content/system/images/menuminimize.png';\" />\r\n";

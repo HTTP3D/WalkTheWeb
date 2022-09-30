@@ -13,8 +13,12 @@ try {
 	$zfunction = strtolower($wtwhandlers->getPost('function',''));
 	$zpluginname = $wtwhandlers->getPost('pluginname','');
 	$zactive = $wtwhandlers->getPost('active','');
+	$zrequired = $wtwhandlers->getPost('required','1');
+	$zoptional = $wtwhandlers->getPost('optional','0');
 	$zversion = $wtwhandlers->getPost('version','');
 	$zupdateurl = $wtwhandlers->getPost('updateurl','');
+	$zwebid = $wtwhandlers->getPost('webid','');
+	$zwebtype = $wtwhandlers->getPost('webtype','');
 
 	/* select the function called */
 	$zresponse = array();
@@ -26,7 +30,7 @@ try {
 			);
 			break;
 		case "getplugininfo":
-			$zplugins = $wtwpluginloader->getAllPlugins($wtwhandlers->contentpath,0);
+			$zplugins = $wtwpluginloader->getAllPlugins($wtwhandlers->contentpath, 0);
 			$zresponse = array(
 				'plugins'=> $zplugins
 			);
@@ -39,6 +43,9 @@ try {
 			$zresponse = array(
 				'success'=> $zsuccess
 			);
+			break;
+		case "savepluginsrequired":
+			$zresponse = $wtwpluginloader->savePluginsRequired($zwebid, $zwebtype, $zpluginname, $zrequired, $zoptional);
 			break;
 	}
 

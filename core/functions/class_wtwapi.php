@@ -78,8 +78,8 @@ class wtwapi {
 				foreach ($zresults as $zrow) {
 					/* only display the last 7 characters of the WTW Key */
 					$zkey = $zrow["wtwkey"];
-					if (!empty($zkey) && isset($zkey)) {
-						$zkey = $wtwhandlers->decode64($zkey);
+					$zkey = $wtwhandlers->decode64($zkey);
+					if ($wtwhandlers->hasValue($zkey)) {
 						$zkey = "...".substr($zkey, -7);
 					}
 					/* format the JSON data response */
@@ -122,7 +122,7 @@ class wtwapi {
 			/* confirm user has admin permission */
 			if ($wtwhandlers->hasPermission(array("admin"))) {
 				$zapikeyid = $wtwhandlers->decode64($zapikeyid);
-				if (!empty($zapikeyid) && isset($zapikeyid)) {
+				if ($wtwhandlers->hasValue($zapikeyid)) {
 					$zapikeys = array();
 					$i = 0;
 					/* get the API Key record from the database */
@@ -134,8 +134,8 @@ class wtwapi {
 					foreach ($zresults as $zrow) {
 						/* only display the last 7 characters of the WTW Key */
 						$zkey = $zrow["wtwkey"];
-						if (!empty($zkey) && isset($zkey)) {
-							$zkey = $wtwhandlers->decode64($zkey);
+						$zkey = $wtwhandlers->decode64($zkey);
+						if ($wtwhandlers->hasValue($zkey)) {
 							$zkey = "...".substr($zkey, -7);
 						}
 						/* format the JSON data response */
@@ -196,7 +196,7 @@ class wtwapi {
 				$options = ['cost' => 11];
 				$zwtwsecrethash = password_hash($zwtwsecret, PASSWORD_DEFAULT, $options);
 				
-				if (empty($zapikeyid) || !isset($zapikeyid)) {
+				if (!isset($zapikeyid) || empty($zapikeyid)) {
 					$zapikeyid = $wtwhandlers->getRandomString(16,1);
 					$zwtwkey = base64_encode($zwtwkey);
 
@@ -282,7 +282,7 @@ class wtwapi {
 			if ($wtwhandlers->hasPermission(array("admin"))) {
 				$zapikeyid = $wtwhandlers->decode64($zapikeyid);
 				
-				if (!empty($zapikeyid) && isset($zapikeyid)) {
+				if ($wtwhandlers->hasValue($zapikeyid)) {
 					if ($zapproved != '1') {
 						$zapproved = '0';
 					}
@@ -332,7 +332,7 @@ class wtwapi {
 			if ($wtwhandlers->hasPermission(array("admin"))) {
 				$zapikeyid = $wtwhandlers->decode64($zapikeyid);
 				
-				if (!empty($zapikeyid) && isset($zapikeyid)) {
+				if ($wtwhandlers->hasValue($zapikeyid)) {
 					/* update the API Key and set deleted and approved to 0 (NOT Approved) */
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."apikeys

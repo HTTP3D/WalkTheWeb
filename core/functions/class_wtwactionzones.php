@@ -20,16 +20,16 @@ class wtwactionzones {
 		}
 	}
 	
-	public function checkActionZone($checkactionzoneid) {
+	public function checkActionZone($zcheckactionzoneid) {
 		/* validates if a action zone id is in the actionzones table */
 		$zactionzoneid = "";
 		global $wtwhandlers;
 		try {
-			if (!empty($checkactionzoneid) && isset($checkactionzoneid)) {
+			if ($wtwhandlers->hasValue($zcheckactionzoneid)) {
 				$zresults = $wtwhandlers->query("
 					select actionzoneid 
 					from ".wtw_tableprefix."actionzones 
-					where actionzoneid='".$checkactionzoneid."' limit 1;");
+					where actionzoneid='".$zcheckactionzoneid."' limit 1;");
 				foreach ($zresults as $zrow) {
 					$zactionzoneid = $zrow["actionzoneid"];
 				}
@@ -46,9 +46,9 @@ class wtwactionzones {
 		global $wtwhandlers;
 		try {
 			if ($wtwhandlers->checkUpdateAccess($zcommunityid, $zbuildingid, $zthingid)) {
-				$foundactionzoneid = $this->checkActionZone($zactionzoneid);
+				$zfoundactionzoneid = $this->checkActionZone($zactionzoneid);
 				/* if actionzoneid is found, update the record */
-				if (!empty($foundactionzoneid) && isset($foundactionzoneid)) {
+				if ($wtwhandlers->hasValue($zfoundactionzoneid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."actionzones
 						set thingid='".$zthingid."',
@@ -95,7 +95,7 @@ class wtwactionzones {
 					$zsuccess = true;
 				} else {
 					/* if actionzoneid is not found, insert the record */
-					if (empty($zactionzoneid) || !isset($zactionzoneid)) {
+					if (!isset($zactionzoneid) || empty($zactionzoneid)) {
 						$zactionzoneid = $wtwhandlers->getRandomString(16,1);
 					}
 					$wtwhandlers->query("
@@ -203,7 +203,7 @@ class wtwactionzones {
 		try {
 			/* user must have update access to set something deleted */
 			if ($wtwhandlers->checkUpdateAccess($zcommunityid, $zbuildingid, $zthingid)) {
-				$newactionzoneid = "";
+				$znewactionzoneid = "";
 				$zactionzonetype = "";
 				/* retrieve a replacement action zone for any objects using the deleted action zone */
 				$zresults = $wtwhandlers->query("
@@ -227,13 +227,13 @@ class wtwactionzones {
 						$zactionzonetype = $zrow['actionzonetype'];
 					} else if ($zrow['actionzonetype'] == 'loadzone') {
 						if ($zrow['actionzonename'] == "Normal - Load when near") {
-							$newactionzoneid = $zrow['actionzoneid'];
-						} else if ($zrow['actionzonename'] == "High - Load when far" && $newactionzoneid == "") {
-							$newactionzoneid = $zrow['actionzoneid'];
-						} else if ($zrow['actionzonename'] == "Extreme Load Zone" && $newactionzoneid == "") {
-							$newactionzoneid = $zrow['actionzoneid'];
-						} else if ($newactionzoneid == "") {
-							$newactionzoneid = $zrow['actionzoneid'];
+							$znewactionzoneid = $zrow['actionzoneid'];
+						} else if ($zrow['actionzonename'] == "High - Load when far" && $znewactionzoneid == "") {
+							$znewactionzoneid = $zrow['actionzoneid'];
+						} else if ($zrow['actionzonename'] == "Extreme Load Zone" && $znewactionzoneid == "") {
+							$znewactionzoneid = $zrow['actionzoneid'];
+						} else if ($znewactionzoneid == "") {
+							$znewactionzoneid = $zrow['actionzoneid'];
 						}
 					}
 				}
@@ -259,32 +259,32 @@ class wtwactionzones {
 						and buildingid='".$zbuildingid."'
 						and communityid='".$zcommunityid."';");
 				
-				if (!empty($newactionzoneid) && isset($newactionzoneid)) {
+				if ($wtwhandlers->hasValue($znewactionzoneid)) {
 					/* clear community, building, and thing molds that used the deleted action zone */
-					if (!empty($zcommunityid) && isset($zcommunityid)) {
+					if ($wtwhandlers->hasValue($zcommunityid)) {
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."communitymolds
-							set loadactionzoneid='".$newactionzoneid."',
+							set loadactionzoneid='".$znewactionzoneid."',
 								updatedate=now(),
 								updateuserid='".$wtwhandlers->userid."'
 							where
 								loadactionzoneid='".$zactionzoneid."'
 								and communityid='".$zcommunityid."' 
 								and deleted=0;");
-					} else if (!empty($zbuildingid) && isset($zbuildingid)) {
+					} else if ($wtwhandlers->hasValue($zbuildingid)) {
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."buildingmolds
-							set loadactionzoneid='".$newactionzoneid."',
+							set loadactionzoneid='".$znewactionzoneid."',
 								updatedate=now(),
 								updateuserid='".$wtwhandlers->userid."'
 							where
 								loadactionzoneid='".$zactionzoneid."'
 								and buildingid='".$zbuildingid."' 
 								and deleted=0;");
-					} else if (!empty($zthingid) && isset($zthingid)) {
+					} else if ($wtwhandlers->hasValue($zthingid)) {
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."thingmolds
-							set loadactionzoneid='".$newactionzoneid."',
+							set loadactionzoneid='".$znewactionzoneid."',
 								updatedate=now(),
 								updateuserid='".$wtwhandlers->userid."'
 							where
@@ -309,8 +309,8 @@ class wtwactionzones {
 		try {
 			/* ini_set('max_execution_time', 300); */
 			if (!empty($wtwhandlers->getSessionUserID())) {
+				$zactionzonesbulk = $wtwhandlers->decode64($zactionzonesbulk);
 				if (!empty($zactionzonesbulk)) {
-					$zactionzonesbulk = $wtwhandlers->decode64($zactionzonesbulk);
 					$zactionzones = json_decode($zactionzonesbulk);
 					$zrecordeach = 50 / count($zactionzones);
 					$i = 50;
@@ -602,7 +602,7 @@ class wtwactionzones {
 					$zactionzoneanimationid = $zrow["actionzoneanimationid"];
 				}
 				
-				if (empty($zactionzoneanimationid) || !isset($zactionzoneanimationid)) {
+				if (!isset($zactionzoneanimationid) || empty($zactionzoneanimationid)) {
 					$zactionzoneanimationid = $wtwhandlers->getRandomString(16,1);
 					/* insert avatar animation for action zone */
 					$wtwhandlers->query("

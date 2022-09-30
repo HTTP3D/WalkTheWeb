@@ -189,6 +189,16 @@ class wtwplugins {
 		return $wtwdb->getNumber($key, $defaultval);
 	}
 
+	public function checkValue($zvalue, $zdefaultval = null) {
+		global $wtwdb;
+		return $wtwdb->checkValue($zvalue, $zdefaultval);
+	}
+
+	public function hasValue(&$zvalue) {
+		global $wtwdb;
+		return $wtwdb->hasValue($zvalue);
+	}
+
 	public function checkIDFormat($zid) {
 		global $wtwdb;
 		return $wtwdb->checkIDFormat($zid);
@@ -349,7 +359,7 @@ class wtwplugins {
 		try {
 			$zfound = false;
 			foreach ($wtw->pluginstylesheets as $zstylesheet) {
-				if (isset($zstylesheet["stylesheetid"]) && !empty($zstylesheet["stylesheetid"])) {
+				if ($this->hasValue($zstylesheet["stylesheetid"])) {
 					if ($zstylesheet["stylesheetid"] == $zstylesheetid) {
 						$zfound = true;
 					}
@@ -375,7 +385,7 @@ class wtwplugins {
 		global $wtw;
 		$zstylesheettext = "";
 		try {
-			if (!empty($zadmin) && isset($zadmin)) {
+			if ($this->hasValue($zadmin)) {
 				if ($zadmin != '1' && $zadmin != 1) {
 					$zadmin = '0';
 				} else {
@@ -388,7 +398,7 @@ class wtwplugins {
 				$zstylesheetid = $zstylesheet["stylesheetid"];
 				$zadminonly = $zstylesheet["adminonly"];
 				$zstylesheeturl = $zstylesheet["stylesheeturl"];
-				if (!empty($zadminonly) && isset($zadminonly)) {
+				if ($this->hasValue($zadminonly)) {
 					if ($zadminonly != '1' && $zadminonly != 1) {
 						$zadminonly = '0';
 					} else {
@@ -414,7 +424,7 @@ class wtwplugins {
 		try {
 			$zfound = false;
 			foreach ($wtw->pluginscripts as $zscript) {
-				if (isset($zscript["scriptid"]) && !empty($zscript["scriptid"])) {
+				if ($this->hasValue($zscript["scriptid"])) {
 					if ($zscript["scriptid"] == $zscriptid) {
 						$zfound = true;
 					}
@@ -440,7 +450,7 @@ class wtwplugins {
 		global $wtw;
 		$zscripttext = "";
 		try {
-			if (!empty($zadmin) && isset($zadmin)) {
+			if ($this->hasValue($zadmin)) {
 				if ($zadmin != '1' && $zadmin != 1) {
 					$zadmin = '0';
 				} else {
@@ -453,7 +463,7 @@ class wtwplugins {
 				$zscriptid = $zscript["scriptid"];
 				$zadminonly = $zscript["adminonly"];
 				$zscripturl = $zscript["scripturl"];
-				if (!empty($zadminonly) && isset($zadminonly)) {
+				if ($this->hasValue($zadminonly)) {
 					if ($zadminonly != '1' && $zadminonly != 1) {
 						$zadminonly = '0';
 					} else {
@@ -479,7 +489,7 @@ class wtwplugins {
 		try {
 			$zfound = false;
 			foreach ($wtw->pluginscriptfunctions as $zscriptfunctions) {
-				if (isset($zscriptfunctions["event"]) && !empty($zscriptfunctions["event"]) && isset($zscriptfunctions["functionname"]) && !empty($zscriptfunctions["functionname"])) {
+				if ($this->hasValue($zscriptfunctions["event"]) && $this->hasValue($zscriptfunctions["functionname"])) {
 					if ($zscriptfunctions["event"] == $zevent && $zscriptfunctions["functionname"] == $zfunctionname) {
 						$zfound = true;
 					}
@@ -1033,7 +1043,7 @@ class wtwplugins {
 			foreach ($wtw->pluginscriptfunctions as $zscriptfunctions) {
 				$zevent = trim($zscriptfunctions["event"]);
 				$zfunctionname = trim($zscriptfunctions["functionname"]);
-				if (!empty($zfunctionname) && isset($zfunctionname)) {
+				if ($this->hasValue($zfunctionname)) {
 					if (strpos($zfunctionname,";") === false) {
 						$zfunctionname .= ";";
 					}
@@ -1056,7 +1066,7 @@ class wtwplugins {
 			foreach ($wtw->pluginscriptfunctions as $zscriptfunctions) {
 				$zevent = trim($zscriptfunctions["event"]);
 				$zfunctionname = trim($zscriptfunctions["functionname"]);
-				if (!empty($zfunctionname) && isset($zfunctionname)) {
+				if ($this->hasValue($zfunctionname)) {
 					if (strpos($zfunctionname,";") === false) {
 						$zfunctionname .= ";";
 					}
@@ -1078,7 +1088,7 @@ class wtwplugins {
 		try {
 			$zfound = false;
 			foreach ($wtw->pluginMoldDefs as $zmold) {
-				if (isset($zmold["scriptid"]) && !empty($zmold["scriptid"])) {
+				if ($this->hasValue($zmold["scriptid"])) {
 					if ($zmold["scriptid"] == $zmoldtitle) {
 						$zfound = true;
 					}
@@ -1108,7 +1118,7 @@ class wtwplugins {
 				$zlist = trim($zmolddef["list"]);
 				$zmoldtitle = trim($zmolddef["moldtitle"]);
 				$zjsfunction = trim($zmolddef["jsfunction"]);
-				if (!empty($zjsfunction) && isset($zjsfunction)) {
+				if ($this->hasValue($zjsfunction)) {
 					if (strpos($zjsfunction,";") === false) {
 						$zjsfunction .= ";";
 					}
@@ -1132,7 +1142,7 @@ class wtwplugins {
 				$zlist = trim($zmolddef["list"]);
 				$zmoldtitle = str_replace(" ","",trim($zmolddef["moldtitle"]));
 				$zjsfunction = trim($zmolddef["jsfunction"]);
-				if (!empty($zjsfunction) && isset($zjsfunction)) {
+				if ($this->hasValue($zjsfunction)) {
 					if (strpos($zjsfunction,";") === false) {
 						$zjsfunction .= ";";
 					}
@@ -1160,7 +1170,7 @@ class wtwplugins {
 		try {
 			$zfound = false;
 			foreach ($wtw->pluginActionZoneDefs as $zactionzone) {
-				if (isset($zactionzone["scriptid"]) && !empty($zactionzone["scriptid"])) {
+				if ($this->hasValue($zactionzone["scriptid"])) {
 					if ($zactionzone["scriptid"] == $zactionzonetitle) {
 						$zfound = true;
 					}
@@ -1190,7 +1200,7 @@ class wtwplugins {
 				$zactionzonetitle = trim($zactionzonedef["actionzonetitle"]);
 				$zjsfunction = trim($zactionzonedef["jsfunction"]);
 				$zdefaulteditform = trim($zactionzonedef["defaulteditform"]);
-				if (!empty($zjsfunction) && isset($zjsfunction)) {
+				if ($this->hasValue($zjsfunction)) {
 					if (strpos($zjsfunction,";") === false) {
 						$zjsfunction .= ";";
 					}
@@ -1213,7 +1223,7 @@ class wtwplugins {
 			foreach ($wtw->pluginActionZoneDefs as $zactionzonedef) {
 				$zactionzonetitle = str_replace(" ","",trim($zactionzonedef["actionzonetitle"]));
 				$zjsfunction = trim($zactionzonedef["jsfunction"]);
-				if (!empty($zjsfunction) && isset($zjsfunction)) {
+				if ($this->hasValue($zjsfunction)) {
 					if (strpos($zjsfunction,";") === false) {
 						$zjsfunction .= ";";
 					}
@@ -1241,7 +1251,7 @@ class wtwplugins {
 		try {
 			$zfound = false;
 			foreach ($wtw->pluginCoveringDefs as $zcovering) {
-				if (isset($zcovering["scriptid"]) && !empty($zcovering["scriptid"])) {
+				if ($this->hasValue($zcovering["scriptid"])) {
 					if ($zcovering["scriptid"] == $zcoveringtitle) {
 						$zfound = true;
 					}
@@ -1269,7 +1279,7 @@ class wtwplugins {
 			foreach ($wtw->pluginCoveringDefs as $zcoveringdef) {
 				$zcoveringtitle = trim($zcoveringdef["coveringtitle"]);
 				$zjsfunction = trim($zcoveringdef["jsfunction"]);
-				if (!empty($zjsfunction) && isset($zjsfunction)) {
+				if ($this->hasValue($zjsfunction)) {
 					if (strpos($zjsfunction,";") === false) {
 						$zjsfunction .= ";";
 					}
@@ -1292,7 +1302,7 @@ class wtwplugins {
 			foreach ($wtw->pluginCoveringDefs as $zcoveringdef) {
 				$zcoveringtitle = str_replace(" ","",trim($zcoveringdef["coveringtitle"]));
 				$zjsfunction = trim($zcoveringdef["jsfunction"]);
-				if (!empty($zjsfunction) && isset($zjsfunction)) {
+				if ($this->hasValue($zjsfunction)) {
 					if (strpos($zjsfunction,";") === false) {
 						$zjsfunction .= ";";
 					}

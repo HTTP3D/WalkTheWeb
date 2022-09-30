@@ -35,7 +35,7 @@ class wtwthingmolds {
 				foreach ($zresults as $zrow) {
 					$zfoundthingmoldid = $zrow["thingmoldid"];
 				}
-				if (!empty($zfoundthingmoldid) && isset($zfoundthingmoldid)) {
+				if ($wtwhandlers->hasValue($zfoundthingmoldid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."thingmolds
 						set loadactionzoneid='".$zloadactionzoneid."',
@@ -92,7 +92,7 @@ class wtwthingmolds {
 						where thingmoldid='".$zthingmoldid."'
 							and thingid='".$zthingid."';");
 				} else {
-					if (empty($zthingmoldid) || !isset($zthingmoldid)) {
+					if (!isset($zthingmoldid) || empty($zthingmoldid)) {
 						$zthingmoldid = $wtwhandlers->getRandomString(16,1);
 					}
 					$wtwhandlers->query("
@@ -258,7 +258,7 @@ class wtwthingmolds {
 							thingmoldid='".$zthingmoldid."'
 							and thingid='".$zthingid."';");
 					$zsuccess = true;
-				} else if (!empty($zdeleted) && isset($zdeleted) && is_numeric($zdeleted)) {
+				} else if ($wtwhandlers->hasValue($zdeleted) && is_numeric($zdeleted)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."thingmolds
 						set deleted=".$zdeleted.",
@@ -300,7 +300,7 @@ class wtwthingmolds {
 				foreach ($zresults as $zrow) {
 					$zfoundthingmoldid = $zrow["thingmoldid"];
 				}
-				if (!empty($zfoundthingmoldid) && isset($zfoundthingmoldid)) {
+				if ($wtwhandlers->hasValue($zfoundthingmoldid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."thingmolds
 						set actionzoneid='".$zactionzoneid."',

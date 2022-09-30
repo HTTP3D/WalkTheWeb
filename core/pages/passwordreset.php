@@ -6,8 +6,7 @@ global $wtwhandlers;
 	$zconfirm = $wtwhandlers->getVal('confirm', '');
 	$zresponse = '0';
 	$serror = '';
-	
-	if (!empty($zemail) && isset($zemail) && !empty($zconfirm) && isset($zconfirm)) {
+	if ($wtwhandlers->hasValue($zemail) && $wtwhandlers->hasValue($zconfirm)) {
 		/* get user by email */
 		$zresults = $wtwhandlers->query("
 			select * from ".wtw_tableprefix."users

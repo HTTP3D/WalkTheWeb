@@ -39,7 +39,7 @@ class wtwdb {
 					('".addslashes($zmessage)."',
 					'".date('Y-m-d H:i:s')."');");
 				try {
-					if (isset($_SERVER['PHP_SELF']) && !empty($_SERVER['PHP_SELF'])) {
+					if ($this->hasValue($_SERVER['PHP_SELF'])) {
 						$this->pagename = strtolower(basename($_SERVER['PHP_SELF']));
 					} else {
 						$this->pagename = "index.php";
@@ -61,7 +61,7 @@ class wtwdb {
 		$zdata = array();
 		$znum_rows = 0;
 		try {
-			if (!empty($zsql) && isset($zsql)) {
+			if ($this->hasValue($zsql)) {
 				$conn = new mysqli(wtw_dbserver, wtw_dbusername, base64_decode(wtw_dbpassword), wtw_dbname);
 				if ($conn->connect_error) {
 					$this->serror("core-functons-class_wtwdb.php-query=".$conn->connect_error);
@@ -164,7 +164,7 @@ class wtwdb {
 				if (strpos(strtolower($zsqlpart),"create table") !== false) {
 					$zwords = explode(" ",strtolower(trim($zsqlpart)));
 					foreach ($zwords as $zword) {
-						if (isset($zword) && !empty($zword) && $zword != "create" && $zword != "table" && empty($ztable)) {
+						if ($this->hasValue($zword) && $zword != "create" && $zword != "table" && empty($ztable)) {
 							$ztable = str_replace("`","",$zword);
 						}
 					}
@@ -203,14 +203,13 @@ class wtwdb {
 						$znewdefault = "";
 						$znewextra = "";
 						$zwords = explode(" ",$zline);
-						if (isset($zwords[0]) && !empty($zwords[0])) {
+						if ($this->hasValue($zwords[0])) {
 							if ($zwords[0] != "key") {
 								$znewfield = $zwords[0];
 								$znewfield = str_replace(")","",$znewfield);
 							}
 						}
-						if (isset($zwords[1]) && !empty($zwords[1])) {
-							
+						if ($this->hasValue($zwords[1])) {
 							$znewtype = $zwords[1];
 						}
 						if (strpos($zline,"not null") !== false) {
@@ -218,7 +217,7 @@ class wtwdb {
 						}
 						if (strpos($zline," default ") !== false) {
 							$zlineparts = explode(" default ",$zline);
-							if (isset($zlineparts[1]) && !empty($zlineparts[1])) {
+							if ($this->hasValue($zlineparts[1])) {
 								if (strpos($zlineparts[1],"'") !== false) {
 									$zdefaults = explode("'",$zlineparts[1]);
 									if (isset($zdefaults[1])) {
@@ -459,7 +458,7 @@ class wtwdb {
 				mkdir($this->contentpath."/uploads/useravatars", octdec(wtw_chmod), true);
 				chmod($this->contentpath."/uploads/useravatars", octdec(wtw_chmod));
 			}
-			if (!empty($zcommunityid) && isset($zcommunityid)) {
+			if ($this->hasValue($zcommunityid)) {
 				if (!file_exists($this->contentpath."/uploads/communities/".$zcommunityid)) {
 					mkdir($this->contentpath."/uploads/communities/".$zcommunityid, octdec(wtw_chmod), true);
 					chmod($this->contentpath."/uploads/communities/".$zcommunityid, octdec(wtw_chmod));
@@ -473,7 +472,7 @@ class wtwdb {
 					chmod($this->contentpath."/uploads/communities/".$zcommunityid."/snapshots", octdec(wtw_chmod));
 				}
 			}
-			if (!empty($zbuildingid) && isset($zbuildingid)) {
+			if ($this->hasValue($zbuildingid)) {
 				if (!file_exists($this->contentpath."/uploads/buildings/".$zbuildingid)) {
 					mkdir($this->contentpath."/uploads/buildings/".$zbuildingid, octdec(wtw_chmod), true);
 					chmod($this->contentpath."/uploads/buildings/".$zbuildingid, octdec(wtw_chmod));
@@ -487,7 +486,7 @@ class wtwdb {
 					chmod($this->contentpath."/uploads/buildings/".$zbuildingid."/snapshots", octdec(wtw_chmod));
 				}
 			}
-			if (!empty($zthingid) && isset($zthingid)) {
+			if ($this->hasValue($zthingid)) {
 				if (!file_exists($this->contentpath."/uploads/things/".$zthingid)) {
 					mkdir($this->contentpath."/uploads/things/".$zthingid, octdec(wtw_chmod), true);
 					chmod($this->contentpath."/uploads/things/".$zthingid, octdec(wtw_chmod));
@@ -501,7 +500,7 @@ class wtwdb {
 					chmod($this->contentpath."/uploads/things/".$zthingid."/snapshots", octdec(wtw_chmod));
 				}
 			}
-			if (!empty($zavatarid) && isset($zavatarid)) {
+			if ($this->hasValue($zavatarid)) {
 				if (!file_exists($this->contentpath."/uploads/avatars/".$zavatarid)) {
 					mkdir($this->contentpath."/uploads/avatars/".$zavatarid, octdec(wtw_chmod), true);
 					chmod($this->contentpath."/uploads/avatars/".$zavatarid, octdec(wtw_chmod));
@@ -519,7 +518,7 @@ class wtwdb {
 					chmod($this->contentpath."/uploads/avatars/".$zavatarid."/snapshots", octdec(wtw_chmod));
 				}
 			}
-			if(isset($_SESSION['wtw_uploadpathid']) && !empty($_SESSION['wtw_uploadpathid'])) {
+			if ($this->hasValue($_SESSION['wtw_uploadpathid'])) {
 				$syear = date('Y');
 				$smonth = date('m');
 				if (!file_exists($this->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid'])) {
@@ -632,7 +631,7 @@ class wtwdb {
 		/* save file using any available method fopen, curl, or ftp (added soon) */
 		$zsuccess = true;
 		try {
-			if(ini_get('allow_url_fopen') ) {
+			if (ini_get('allow_url_fopen') ) {
 				$zdata1 = file_get_contents($zfromurl);
 				$zsuccess2 = file_put_contents($zfilepath.$zfilename, $zdata1);	
 				/* zsuccess will be the number of bytes or false on fail */
@@ -660,7 +659,7 @@ class wtwdb {
 		/* open file using any available method fopen, curl, or ftp (added soon) */
 		$zresponse = null;
 		try {
-			if(ini_get('allow_url_fopen') ) {
+			if (ini_get('allow_url_fopen') ) {
 				$zresponse = file_get_contents($zfromurl, $zuseincludepath, $zcontext);
 			} else if (extension_loaded('curl')) {
 				$zresponse = curl_init($zfromurl);
@@ -728,7 +727,7 @@ class wtwdb {
 		/* pass the tablename without prefix, id field name, and (optional) if you want a starting test value */
 		$zkeyid = '';
 		try {
-			if (empty($zdefaultkeyid) || !isset($zdefaultkeyid)) {
+			if (!isset($zdefaultkeyid) || empty($zdefaultkeyid)) {
 				$zdefaultkeyid = $this->getRandomString(16,1);
 			}
 			while (empty($zkeyid)) {
@@ -772,7 +771,7 @@ class wtwdb {
 	public function getIDByPastID($ztablename, $zfieldid, $zpastfieldid, $zpastid) {
 		$zkeyid = '';
 		try {
-			if (!empty($zpastid) && isset($zpastid)) {
+			if ($this->hasValue($zpastid)) {
 				$zresults = $this->query("
 					select ".$zfieldid." 
 					from ".wtw_tableprefix.$ztablename." 
@@ -792,7 +791,7 @@ class wtwdb {
 	public function getUserIDfromPastID($zpastid) {
 		$zkeyid = '';
 		try {
-			if (!empty($zpastid) && isset($zpastid)) {
+			if ($this->hasValue($zpastid)) {
 				$zresults = $this->query("
 					select userid 
 					from ".wtw_tableprefix."users 
@@ -848,7 +847,7 @@ class wtwdb {
 	public function getSessionUserID() {
 		$zuserid = "";
 		try {
-			if (!empty($_SESSION["wtw_userid"]) && isset($_SESSION["wtw_userid"])) {
+			if ($this->hasValue($_SESSION["wtw_userid"])) {
 				$this->userid = $_SESSION["wtw_userid"];
 				$zuserid = $_SESSION["wtw_userid"];
 			} else {
@@ -890,7 +889,7 @@ class wtwdb {
 		try {
 			/* defaults to current user unless called with admin role access */
 			if ($this->isUserInRole("admin")) {
-				if (empty($zuserid) || !isset($zuserid)) {
+				if (!isset($zuserid) || empty($zuserid)) {
 					$zuserid = $this->getSessionUserID();
 				}
 			} else {
@@ -929,10 +928,10 @@ class wtwdb {
 		$zhaspermission = false;
 		try {
 			$zuserroles = $this->getUserRoles();
-			if (empty($zaccessrequired) || !isset($zaccessrequired)) {
+			if (!isset($zaccessrequired) || empty($zaccessrequired)) {
 				/* null allows all */
 				$zhaspermission = true;
-			} else if (!empty($zuserroles) && isset($zuserroles)) {
+			} else if ($this->hasValue($zuserroles)) {
 				foreach ($zuserroles as $zrole) {
 					foreach ($zaccessrequired as $zaccessrolename) {
 						$zrolename = $zrole["rolename"];
@@ -953,7 +952,7 @@ class wtwdb {
 		try {
 			global $wtwuser;
 			$zresults = null;
-			if (!empty($_SESSION["wtw_userid"]) && isset($_SESSION["wtw_userid"])) {
+			if ($this->hasValue($_SESSION["wtw_userid"])) {
 				$zuserid = $_SESSION["wtw_userid"];
 				if ($this->userExists($zuserid)) {
 					global $wtwuser;
@@ -961,7 +960,7 @@ class wtwdb {
 					$wtwuser->userid = $zuserid;
 				}
 			}
-			if (!empty($zcommunityid) && isset($zcommunityid)) {
+			if ($this->hasValue($zcommunityid)) {
 				$zresults = $this->query("
 					select userauthorizationid 
 					from ".wtw_tableprefix."userauthorizations 
@@ -972,17 +971,14 @@ class wtwdb {
 						or lower(useraccess)='graphics artist'
 						or lower(useraccess)='developer')
 					limit 1");
-			}
-			if (!empty($zresults) && isset($zresults)) {
 				foreach ($zresults as $zrow) {
 					$zauthorizationid = $zrow["userauthorizationid"];
-					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
+					if ($this->hasValue($zauthorizationid)) {
 						$zhasaccess = true;
 					}
 				}
 			}
-			$zresults = null;
-			if (!empty($zbuildingid) && isset($zbuildingid)) {
+			if ($this->hasValue($zbuildingid)) {
 				$zresults = $this->query("
 					select userauthorizationid 
 					from ".wtw_tableprefix."userauthorizations 
@@ -993,17 +989,14 @@ class wtwdb {
 						or lower(useraccess)='graphics artist'
 						or lower(useraccess)='developer')
 					limit 1");
-			}
-			if (!empty($zresults) && isset($zresults)) {
 				foreach ($zresults as $zrow) {
 					$zauthorizationid = $zrow["userauthorizationid"];
-					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
+					if ($this->hasValue($zauthorizationid)) {
 						$zhasaccess = true;
 					}
 				}
 			}
-			$zresults = null;
-			if (!empty($zthingid) && isset($zthingid)) {
+			if ($this->hasValue($zthingid)) {
 				$zresults = $this->query("
 					select userauthorizationid 
 					from ".wtw_tableprefix."userauthorizations 
@@ -1014,11 +1007,9 @@ class wtwdb {
 						or lower(useraccess)='graphics artist'
 						or lower(useraccess)='developer')
 					limit 1");
-			}
-			if (!empty($zresults) && isset($zresults)) {
 				foreach ($zresults as $zrow) {
 					$zauthorizationid = $zrow["userauthorizationid"];
-					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
+					if ($this->hasValue($zauthorizationid)) {
 						$zhasaccess = true;
 					}
 				}
@@ -1038,8 +1029,7 @@ class wtwdb {
 		$zhasaccess = false;
 		try {
 			global $wtwuser;
-			$zresults = null;
-			if (!empty($_SESSION["wtw_userid"]) && isset($_SESSION["wtw_userid"])) {
+			if ($this->hasValue($_SESSION["wtw_userid"])) {
 				$zuserid = $_SESSION["wtw_userid"];
 				if ($this->userExists($zuserid)) {
 					global $wtwuser;
@@ -1047,7 +1037,7 @@ class wtwdb {
 					$wtwuser->userid = $zuserid;
 				}
 			}
-			if (!empty($zcommunityid) && isset($zcommunityid)) {
+			if ($this->hasValue($zcommunityid)) {
 				$zresults = $this->query("
 					select userauthorizationid 
 					from ".wtw_tableprefix."userauthorizations 
@@ -1055,17 +1045,14 @@ class wtwdb {
 						and userid='".$wtwuser->userid."'
 						and lower(useraccess)='admin'
 					limit 1");
-			}
-			if (!empty($zresults) && isset($zresults)) {
 				foreach ($zresults as $zrow) {
 					$zauthorizationid = $zrow["userauthorizationid"];
-					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
+					if ($this->hasValue($zauthorizationid)) {
 						$zhasaccess = true;
 					}
 				}
 			}
-			$zresults = null;
-			if (!empty($zbuildingid) && isset($zbuildingid)) {
+			if ($this->hasValue($zbuildingid)) {
 				$zresults = $this->query("
 					select userauthorizationid 
 					from ".wtw_tableprefix."userauthorizations 
@@ -1073,17 +1060,14 @@ class wtwdb {
 						and userid='".$wtwuser->userid."'
 						and lower(useraccess)='admin'
 					limit 1");
-			}
-			if (!empty($zresults) && isset($zresults)) {
 				foreach ($zresults as $zrow) {
 					$zauthorizationid = $zrow["userauthorizationid"];
-					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
+					if ($this->hasValue($zauthorizationid)) {
 						$zhasaccess = true;
 					}
 				}
 			}
-			$zresults = null;
-			if (!empty($zthingid) && isset($zthingid)) {
+			if ($this->hasValue($zthingid)) {
 				$zresults = $this->query("
 					select userauthorizationid 
 					from ".wtw_tableprefix."userauthorizations 
@@ -1091,11 +1075,9 @@ class wtwdb {
 						and userid='".$wtwuser->userid."'
 						and lower(useraccess)='admin'
 					limit 1");
-			}
-			if (!empty($zresults) && isset($zresults)) {
 				foreach ($zresults as $zrow) {
 					$zauthorizationid = $zrow["userauthorizationid"];
-					if (!empty($zauthorizationid) && isset($zauthorizationid)) {
+					if ($this->hasValue($zauthorizationid)) {
 						$zhasaccess = true;
 					}
 				}
@@ -1165,7 +1147,7 @@ class wtwdb {
 			foreach ($zresults as $zrow) {
 				$zsettingid = $zrow["settingid"];
 			}
-			if (isset($zsettingid) && !empty($zsettingid)) {
+			if ($this->hasValue($zsettingid)) {
 				$this->query("
 					update ".wtw_tableprefix."settings 
 					set settingvalue='".$zsettingvalue."',
@@ -1236,7 +1218,7 @@ class wtwdb {
 	public function saveSettings($zsettings) {
 		$zsuccess = true;
 		try {
-			if (!empty($zsettings) && isset($zsettings)) {
+			if ($this->hasValue($zsettings)) {
 				$zsettings = json_decode($zsettings);
 				foreach ($zsettings as $zsettingname=>$zsettingvalue) {
 					$zsuccess1 = $this->saveSetting($zsettingname, $zsettingvalue);
@@ -1257,7 +1239,7 @@ class wtwdb {
 	public function decode64($ztext) {
 		/* attempt to base64_decode the text, if not, return blank */
 		try {
-			if (!empty($ztext) && isset($ztext)) {
+			if ($this->hasValue($ztext)) {
 				$ztext = base64_decode($ztext);
 			} else {
 				$ztext = '';
@@ -1297,7 +1279,7 @@ class wtwdb {
 	public function getVal($zkey, $zdefaultval) {
 		$zvalue = $zdefaultval;
 		try {
-			if(isset($_GET[$zkey])) {
+			if (isset($_GET[$zkey])) {
 				$zvalue = $_GET[$zkey];
 			}
 		} catch (Exception $e) {
@@ -1309,7 +1291,7 @@ class wtwdb {
 	public function getNumber($zkey, $zdefaultval) {
 		$zvalue = $zdefaultval;
 		try {
-			if(isset($_GET[$zkey])) {
+			if (isset($_GET[$zkey])) {
 				if (is_numeric($_GET[$zkey])) {
 					$zvalue = $_GET[$zkey];
 				}
@@ -1319,7 +1301,36 @@ class wtwdb {
 		}
 		return $zvalue;
 	}
-	
+
+	public function checkValue($zvalue, $zdefaultval = null) {
+		try {
+			if (!isset($zvalue) || empty($zvalue)) {
+				if (!isset($zdefaultval)) {
+					$zvalue = false;
+				} else {
+					$zvalue = $zdefaultval;
+				}
+			} else if (!isset($zdefaultval)) {
+				$zvalue = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-checkValue=".$e->getMessage());
+		}
+		return $zvalue;
+	}
+
+	public function hasValue(&$zvalue) {
+		$zresponse = false;
+		try {
+			if (isset($zvalue) && !empty($zvalue)) {
+				$zresponse = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-hasValue=".$e->getMessage());
+		}
+		return $zresponse;
+	}
+
 	public function checkIDFormat($zid) {
 		$zvalidid = "";
 		try {
@@ -1474,7 +1485,7 @@ class wtwdb {
 		/* returns mm/dd/yyyy */
 		$zdatestring = "";
 		try {
-			if (isset($zdate) && !empty($zdate)) {
+			if ($this->hasValue($zdate)) {
 				$zformat = 'm/d/Y';
 				$zdate = date_create($zdate);
 				$zdatestring = date_format($zdate,$zformat);
@@ -1489,7 +1500,7 @@ class wtwdb {
 		/* returns $##,###.## format */
 		$zmoneystring = "";
 		try {
-			if (isset($znumber) && !empty($znumber)) {
+			if ($this->hasValue($znumber)) {
 				$znumber = str_replace(",","",str_replace("$","",str_replace(" ","",$znumber)));
 				if (is_numeric($znumber)) {
 					$zmoneystring = "$".number_format($znumber, 2, '.', ',');
@@ -1504,7 +1515,7 @@ class wtwdb {
 	public function escapeHTML($ztext) {
 		$zchecktext = "";
 		try {
-			if (!empty($ztext) && isset($ztext)) {
+			if ($this->hasValue($ztext)) {
 				$zchecktext = htmlspecialchars($ztext, ENT_QUOTES, 'UTF-8');
 			}
 		} catch (Exception $e) {
@@ -1542,8 +1553,8 @@ class wtwdb {
 		global $wtwdb;
 		$zsuccess = false;
 		try {
-			if (!empty($zkey) && isset($zkey)) {
-				$zkey = $this->decode64($zkey);
+			$zkey = $this->decode64($zkey);
+			if ($this->hasValue($zkey)) {
 				$zsharehash = "";
 				$zresults = array();
 				switch ($zwebtype) {
@@ -1569,7 +1580,7 @@ class wtwdb {
 				foreach ($zresults as $zrow) {
 					$zsharehash = $zrow["sharehash"];
 				}
-				if (!empty($zkey) && isset($zkey) && !empty($zsharehash) && isset($zsharehash)) {
+				if ($this->hasValue($zkey) && $this->hasValue($zsharehash)) {
 					if (password_verify($zkey, $zsharehash)) {
 						$zsuccess = true;
 					}
@@ -1606,7 +1617,7 @@ class wtwdb {
 		$zsize = 0;
 		try {
 			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($zdirectory)) as $zfile){
-				if($zfile -> getFileName() != '..') {
+				if ($zfile -> getFileName() != '..') {
 					$zsize += $zfile->getSize();
 				}
 			}
@@ -1680,7 +1691,7 @@ class wtwdb {
 	public function getwebimages($zthingmoldid, $zbuildingmoldid, $zcommunitymoldid, $zgraphiclevel) {
 		$zwebimages = array();
 		try {
-			if (empty($zgraphiclevel) || !isset($zgraphiclevel)) {
+			if (!isset($zgraphiclevel) || empty($zgraphiclevel)) {
 				$zgraphiclevel = -1;
 			} elseif (is_numeric($zgraphiclevel) == false) {
 				$zgraphiclevel = -1;
@@ -2024,11 +2035,11 @@ class wtwdb {
 		$zmoldid = "";
 		try {
 			if ($zshape == 'tube') {
-				if(!empty($zcommunitymoldid)) {
+				if (!empty($zcommunitymoldid)) {
 					$zmoldid = $zcommunitymoldid;
-				} else if(!empty($zbuildingmoldid)) {
+				} else if (!empty($zbuildingmoldid)) {
 					$zmoldid = $zbuildingmoldid;
-				} else if(!empty($zthingmoldid)) {
+				} else if (!empty($zthingmoldid)) {
 					$zmoldid = $zthingmoldid;
 				}
 				/* get point data for a given mold (lines, ribbons, lathe, etc...) */
@@ -2077,7 +2088,7 @@ class wtwdb {
 					$ztablename = "things";
 					break;
 			}
-			if (!empty($zwebid) && isset($zwebid) && !empty($ztablename) && isset($ztablename)) {
+			if ($this->hasValue($zwebid) && $this->hasValue($ztablename)) {
 				$i = 0;
 				/* get web alias (domain names) for a community */
 				$zresults = $this->query("

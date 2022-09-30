@@ -36,7 +36,7 @@ class wtwavatars {
 			foreach ($zresults as $zrow) {
 				$zfounduseravatarid = $zrow["useravatarid"];
 			}
-			if (empty($zfounduseravatarid) || !isset($zfounduseravatarid)) {
+			if (!isset($zfounduseravatarid) || empty($zfounduseravatarid)) {
 				/* check for existing avatar by user instance */ 
 				$zresults = $wtwhandlers->query("
 					select useravatarid 
@@ -50,7 +50,7 @@ class wtwavatars {
 					$zfounduseravatarid = $zrow["useravatarid"];
 				}
 			}
-			if ((empty($zfounduseravatarid) || !isset($zfounduseravatarid)) && !empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
+			if ((!isset($zfounduseravatarid) || empty($zfounduseravatarid)) && isset($wtwhandlers->userid) && !empty($wtwhandlers->userid)) {
 				/* check for existing avatar by loggedin user and instance */ 
 				$zresults = $wtwhandlers->query("
 					select useravatarid 
@@ -62,7 +62,7 @@ class wtwavatars {
 					$zfounduseravatarid = $zrow["useravatarid"];
 				}
 			}
-			if ((empty($zfounduseravatarid) || !isset($zfounduseravatarid)) && !empty($zinstanceid) && isset($zinstanceid)) {
+			if ((!isset($zfounduseravatarid) || empty($zfounduseravatarid)) && isset($zinstanceid) && !empty($zinstanceid)) {
 				/* check for existing avatar by loggedin user */ 
 				$zresults = $wtwhandlers->query("
 					select useravatarid 
@@ -74,7 +74,7 @@ class wtwavatars {
 					$zfounduseravatarid = $zrow["useravatarid"];
 				}
 			}
-			if (empty($zfounduseravatarid) || !isset($zfounduseravatarid)) {
+			if (!isset($zfounduseravatarid) || empty($zfounduseravatarid)) {
 				$zfounduseravatarid = "";
 			}
 		} catch (Exception $e) {
@@ -90,7 +90,7 @@ class wtwavatars {
 			'serror'=>''
 		);
 		try {
-			if (isset($zuseravatarid) && !empty($zuseravatarid) && isset($wtwhandlers->userid) && !empty($wtwhandlers->userid)) {
+			if ($wtwhandlers->hasValue($zuseravatarid) && $wtwhandlers->hasValue($wtwhandlers->userid)) {
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."useravatars 
 					set deleteddate=now(),
@@ -116,7 +116,7 @@ class wtwavatars {
 		$zresponse = "";
 		try {
 			$zavatar = array();
-			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
+			if ($wtwhandlers->hasValue($wtwhandlers->userid)) {
 				$zresults = $wtwhandlers->query("
 					select u.*,
 						a.useravatarid
@@ -174,7 +174,7 @@ class wtwavatars {
 		);
 		$zfounduseravatarid = '';
 		try {
-			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
+			if ($wtwhandlers->hasValue($wtwhandlers->userid)) {
 				/* check for existing avatar with same avatarid and userid */ 
 				$zresults = $wtwhandlers->query("
 					select * 
@@ -187,7 +187,7 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zfounduseravatarid = $zrow["useravatarid"];
 				}
-				if (empty($zfounduseravatarid) || !isset($zfounduseravatarid)) {
+				if (!isset($zfounduseravatarid) || empty($zfounduseravatarid)) {
 					/* if not found, add avatar to user account in useravatars table */
 					$zfoundavatarid = '';
 					$zavatargroup = 'default';
@@ -235,7 +235,7 @@ class wtwavatars {
 						$zendframe = $zrow["endframe"];
 					}
 					
-					if (isset($zfoundavatarid) && !empty($zfoundavatarid)) {
+					if ($wtwhandlers->hasValue($zfoundavatarid)) {
 						/* save new avatar to useravatars, using avatar table data */
 						$zfounduseravatarid = $wtwhandlers->getRandomString(16,1);
 						$wtwhandlers->query("
@@ -424,7 +424,7 @@ class wtwavatars {
 			'globalhash'=> ''
 		);
 		try {
-			if (!empty($wtwhandlers->userid) && isset($wtwhandlers->userid)) {
+			if ($wtwhandlers->hasValue($wtwhandlers->userid)) {
 				$zglobalhash = $wtwhandlers->getRandomString(16,1);
 				$wtwhandlers->query("
 				update ".wtw_tableprefix."useravatars 
@@ -466,7 +466,7 @@ class wtwavatars {
 			foreach ($zresults as $zrow) {
 				$zavatarpartid = $zrow["avatarpartid"];
 			}
-			if (!empty($zavatarpartid) && isset($zavatarpartid)) {
+			if ($wtwhandlers->hasValue($zavatarpartid)) {
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."useravatarcolors
 					set avatarpart='".$zavatarpart."',
@@ -521,7 +521,7 @@ class wtwavatars {
 		global $wtwhandlers;
 		$zsuccess = false;
 		try {
-			if (!empty($wtwhandlers->getSessionUserID()) && !empty($zuseravatarid) && isset($zuseravatarid) && !empty($zavatardisplayname) && isset($zavatardisplayname)) {
+			if (!empty($wtwhandlers->getSessionUserID()) && isset($zuseravatarid) && !empty($zuseravatarid) && isset($zavatardisplayname) && !empty($zavatardisplayname)) {
 				/* check if someone else is using that displayname */
 				$zfounduserid = "";
 				$zfounduseravatarid = "";
@@ -535,9 +535,9 @@ class wtwavatars {
 					$zfounduserid = $zrow["userid"];
 					$zfounduseravatarid = $zrow["useravatarid"];
 				}
-				if (empty($zfounduserid) || !isset($zfounduserid) || $wtwhandlers->userid == $zfounduserid) {
+				if (!isset($zfounduserid) || empty($zfounduserid) || $wtwhandlers->userid == $zfounduserid) {
 					/* either it is available or you have it */
-					if (!empty($zfounduseravatarid) && isset($zfounduseravatarid) && $zfounduseravatarid == $zuseravatarid) {
+					if ($wtwhandlers->hasValue($zfounduseravatarid) && $zfounduseravatarid == $zuseravatarid) {
 						/*no update needed */
 					} else {
 						/* swap names with your other avatar */
@@ -613,12 +613,12 @@ class wtwavatars {
 			foreach ($zresults as $zrow) {
 				$zfounduseravataranimationid = $zrow["useravataranimationid"];
 			}
-			if ($zanimationevent == 'onoption' && !empty($zuseravataranimationid) && isset($zuseravataranimationid)) {
+			if ($zanimationevent == 'onoption' && isset($zuseravataranimationid) && !empty($zuseravataranimationid)) {
 				$zfounduseravataranimationid = $zuseravataranimationid;
 			} else if ($zanimationevent == 'onoption') {
 				$zfounduseravataranimationid = "";
 			}
-			if (!empty($zfounduseravataranimationid) && isset($zfounduseravataranimationid)) {
+			if ($wtwhandlers->hasValue($zfounduseravataranimationid)) {
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."useravataranimations
 					set avataranimationid='".$zavataranimationid."',
@@ -741,7 +741,7 @@ class wtwavatars {
 			foreach ($zresults as $zrow) {
 				$zfounduseravataranimationid = $zrow["useravataranimationid"];
 			}
-			if (!empty($zfounduseravataranimationid) && isset($zfounduseravataranimationid)) {
+			if ($wtwhandlers->hasValue($zfounduseravataranimationid)) {
 				$wtwhandlers->query("
 					update ".wtw_tableprefix."useravataranimations
 					set avataranimationid='".$zavataranimationid."',
@@ -805,8 +805,8 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zfoundavatargroupid = $zrow["avatargroupid"];
 				}
-				if (empty($zfoundavatargroupid) || !isset($zfoundavatargroupid)) {
-					if (empty($zavatargroupid) || !isset($zavatargroupid)) {
+				if !isset($zfoundavatargroupid) || (empty($zfoundavatargroupid)) {
+					if (!isset($zavatargroupid) || empty($zavatargroupid)) {
 						$zavatargroupid = $wtwhandlers->getRandomString(16,1);
 					}
 					$wtwhandlers->query("
@@ -954,8 +954,8 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zfoundanimationeventid = $zrow["animationeventid"];
 				}
-				if (empty($zfoundanimationeventid) || !isset($zfoundanimationeventid)) {
-					if (empty($zanimationeventid) || !isset($zanimationeventid)) {
+				if (!isset($zfoundanimationeventid) || empty($zfoundanimationeventid)) {
+					if (!isset($zanimationeventid) || empty($zanimationeventid)) {
 						$zanimationeventid = $wtwhandlers->getRandomString(16,1);
 					}
 					$wtwhandlers->query("
@@ -1387,8 +1387,8 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zfoundavatarid = $zrow["avatarid"];
 				}
-				if (empty($zfoundavatarid) || !isset($zfoundavatarid)) {
-					if (empty($zavatarid) || !isset($zavatarid)) {
+				if (!isset($zfoundavatarid) || empty($zfoundavatarid)) {
+					if (!isset($zavatarid) || empty($zavatarid)) {
 						$zavatarid = $wtwhandlers->getRandomString(16,1);
 					}
 					$wtwhandlers->query("
@@ -1558,8 +1558,8 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zfoundavatarid = $zrow["avatarid"];
 				}
-				if (empty($zfoundavatarid) || !isset($zfoundavatarid)) {
-					if (empty($zavatarid) || !isset($zavatarid)) {
+				if (!isset($zfoundavatarid) || empty($zfoundavatarid)) {
+					if (!isset($zavatarid) || empty($zavatarid)) {
 						$zavatarid = $wtwhandlers->getRandomString(16,1);
 					}
 					$wtwhandlers->query("
@@ -1658,25 +1658,14 @@ class wtwavatars {
 				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
 					$zhostuserid = $wtwhandlers->userid;
 				}
-				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
-				if (!empty($ztemplatename) && isset($ztemplatename)) {
-					$ztemplatename = base64_decode($ztemplatename);
+				$ztemplatename = $wtwhandlers->decode($ztemplatename);
+				$zdescription = $wtwhandlers->decode($zdescription);
+				$ztags = $wtwhandlers->decode($ztags);
+				$zversiondesc = $wtwhandlers->decode($zversiondesc);
 					
-				}
-				if (!empty($zdescription) && isset($zdescription)) {
-					$zdescription = base64_decode($zdescription);
-					
-				}
-				if (!empty($ztags) && isset($ztags)) {
-					$ztags = base64_decode($ztags);
-					
-				}
-				if (!empty($zversiondesc) && isset($zversiondesc)) {
-					$zversiondesc = base64_decode($zversiondesc);
-					
-				}
 				$ztemplatename = $wtwhandlers->escapeHTML($ztemplatename);
 				$zdescription = $wtwhandlers->escapeHTML($zdescription);
 				$ztags = $wtwhandlers->escapeHTML($ztags);
@@ -1706,7 +1695,7 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zfoundavatarid = $zrow["avatarid"];
 				}
-				if (!empty($zfoundavatarid) && isset($zfoundavatarid)) {
+				if ($wtwhandlers->hasValue($zfoundavatarid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."avatars
 						set templatename='".$ztemplatename."',
@@ -1756,7 +1745,7 @@ class wtwavatars {
 			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zuserid = "";
 				$zfoundavatarid = "";
-				if(isset($_SESSION["wtw_userid"]) && !empty($_SESSION["wtw_userid"])) {
+				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 					$zuserid = $_SESSION["wtw_userid"];
 				}
 				$zfromurl = "https://3dnet.walktheweb.com/connect/shareavatar.php?avatarid=".$zavatarid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;
@@ -1792,8 +1781,8 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zfoundavatarid = $zrow["avatarid"];
 				}
-				if (empty($zfoundavatarid) || !isset($zfoundavatarid)) {
-					if (empty($zavatarid) || !isset($zavatarid)) {
+				if (!isset($zfoundavatarid) || empty($zfoundavatarid)) {
+					if (!isset($zavatarid) || empty($zavatarid)) {
 						$zavatarid = $wtwhandlers->getRandomString(16,1);
 					}
 					$wtwhandlers->query("
@@ -1884,7 +1873,7 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zfoundavatarid = $zrow["avatarid"];
 				}
-				if (!empty($zfoundavatarid) && isset($zfoundavatarid)) {
+				if ($wtwhandlers->hasValue($zfoundavatarid)) {
 					if (!is_numeric($zpositionx)) {
 						$zpositionx = 0;
 					}
@@ -1961,16 +1950,16 @@ class wtwavatars {
 		);
 		try {
 			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
-				if (empty($zdiffusecolor) || !isset($zdiffusecolor)) {
+				if (!isset($zdiffusecolor) || empty($zdiffusecolor)) {
 					$zdiffusecolor = '#FFFFFF';
 				}
-				if (empty($zspecularcolor) || !isset($zspecularcolor)) {
+				if (!isset($zspecularcolor) || empty($zspecularcolor)) {
 					$zspecularcolor = '#000000';
 				}
-				if (empty($zemissivecolor) || !isset($zemissivecolor)) {
+				if (!isset($zemissivecolor) || empty($zemissivecolor)) {
 					$zemissivecolor = '#000000';
 				}
-				if (empty($zambientcolor) || !isset($zambientcolor)) {
+				if (!isset($zambientcolor) || empty($zambientcolor)) {
 					$zambientcolor = '#FFFFFF';
 				}
 				$zfoundavatarpartid = '';
@@ -1984,7 +1973,7 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zfoundavatarpartid = $zrow["avatarpartid"];
 				}
-				if (!empty($zfoundavatarpartid) && isset($zfoundavatarpartid)) {
+				if ($wtwhandlers->hasValue($zfoundavatarpartid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."avatarcolors
 						set diffusecolor='".$zdiffusecolor."',
@@ -1999,7 +1988,7 @@ class wtwavatars {
 						limit 1;
 					");
 				} else {
-					if (empty($zavatarpartid) || !isset($zavatarpartid)) {
+					if (!isset($zavatarpartid) || empty($zavatarpartid)) {
 						$zavatarpartid = $wtwhandlers->getRandomString(16,1);
 					}
 					$wtwhandlers->query("
@@ -2057,25 +2046,25 @@ class wtwavatars {
 		);
 		try {
 			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
-				if (empty($zloadpriority) || !isset($zloadpriority)) {
+				if (!isset($zloadpriority) || empty($zloadpriority)) {
 					$zloadpriority = '0';
 				}
 				if (!is_numeric($zloadpriority)) {
 					$zloadpriority = '0';
 				}
-				if (empty($zstartframe) || !isset($zstartframe)) {
+				if (!isset($zstartframe) || empty($zstartframe)) {
 					$zstartframe = '1';
 				}
 				if (!is_numeric($zstartframe)) {
 					$zstartframe = '1';
 				}
-				if (empty($zendframe) || !isset($zendframe)) {
+				if (!isset($zendframe) || empty($zendframe)) {
 					$zendframe = '1';
 				}
 				if (!is_numeric($zendframe)) {
 					$zendframe = '1';
 				}
-				if (empty($zspeedratio) || !isset($zspeedratio)) {
+				if (!isset($zspeedratio) || empty($zspeedratio)) {
 					$zspeedratio = '1';
 				}
 				if (!is_numeric($zspeedratio)) {
@@ -2091,7 +2080,7 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zfoundavataranimationid = $zrow["avataranimationid"];
 				}
-				if (!empty($zfoundavataranimationid) && isset($zfoundavataranimationid)) {
+				if ($wtwhandlers->hasValue($zfoundavataranimationid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."avataranimations
 						set loadpriority=".$zloadpriority.",
@@ -2110,7 +2099,7 @@ class wtwavatars {
 						limit 1;
 					");
 				} else {
-					if (empty($zavataranimationid) || !isset($zavataranimationid)) {
+					if (!isset($zavataranimationid) || empty($zavataranimationid)) {
 						$zavataranimationid = $wtwhandlers->getRandomString(16,1);
 					}
 					$wtwhandlers->query("
@@ -2187,7 +2176,7 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zfoundavataranimationid = $zrow["avataranimationid"];
 				}
-				if (!empty($zfoundavataranimationid) && isset($zfoundavataranimationid)) {
+				if ($wtwhandlers->hasValue($zfoundavataranimationid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."avataranimations
 						set deleteddate=now(),
@@ -2246,7 +2235,7 @@ class wtwavatars {
 					);
 					$zisvalid = 0;
 				}
-				if(strtolower($zfileextension) != "babylon" && strtolower($zfileextension) != "gltf" && strtolower($zfileextension) != "glb" && strtolower($zfileextension) != "obj") {
+				if (strtolower($zfileextension) != "babylon" && strtolower($zfileextension) != "gltf" && strtolower($zfileextension) != "glb" && strtolower($zfileextension) != "obj") {
 					$zresponse = array(
 						'serror'=> "Only babylon, gltf, glb, and obj files are allowed at this time.",
 						'objectfolder'=> '',
@@ -2322,7 +2311,7 @@ class wtwavatars {
 						);
 						$zisvalid = 0;
 					}
-					if(strtolower($zfileextension) != "babylon" && strtolower($zfileextension) != "manifest" && strtolower($zfileextension) != "txt" && strtolower($zfileextension) != "jpg" && strtolower($zfileextension) != "png" && strtolower($zfileextension) != "jpeg" && strtolower($zfileextension) != "gif" && strtolower($zfileextension) != "wav" && strtolower($zfileextension) != "mp3" && strtolower($zfileextension) != "mp4" && strtolower($zfileextension) != "webm" && strtolower($zfileextension) != "ogv" && strtolower($zfileextension) != "bin" && strtolower($zfileextension) != "gltf" && strtolower($zfileextension) != "bgltf" && strtolower($zfileextension) != "glb" && strtolower($zfileextension) != "blend" && strtolower($zfileextension) != "blend1" && strtolower($zfileextension) != "obj" && strtolower($zfileextension) != "fbx" && strtolower($zfileextension) != "log") {
+					if (strtolower($zfileextension) != "babylon" && strtolower($zfileextension) != "manifest" && strtolower($zfileextension) != "txt" && strtolower($zfileextension) != "jpg" && strtolower($zfileextension) != "png" && strtolower($zfileextension) != "jpeg" && strtolower($zfileextension) != "gif" && strtolower($zfileextension) != "wav" && strtolower($zfileextension) != "mp3" && strtolower($zfileextension) != "mp4" && strtolower($zfileextension) != "webm" && strtolower($zfileextension) != "ogv" && strtolower($zfileextension) != "bin" && strtolower($zfileextension) != "gltf" && strtolower($zfileextension) != "bgltf" && strtolower($zfileextension) != "glb" && strtolower($zfileextension) != "blend" && strtolower($zfileextension) != "blend1" && strtolower($zfileextension) != "obj" && strtolower($zfileextension) != "fbx" && strtolower($zfileextension) != "log") {
 						$zresponse = array(
 							'serror'=> "Only babylon, gltf, glb, obj, blend, manifest, txt, and image files are allowed at this time.",
 							'objectfolder'=> '',
@@ -2386,7 +2375,7 @@ class wtwavatars {
 			}
 			
 			/* allow usertoken authentication */
-			if ((empty($zuserid) || !isset($zuserid)) && !empty($zusertoken) && isset($zusertoken)) {
+			if ((!isset($zuserid) || empty($zuserid)) && isset($zusertoken) && !empty($zusertoken)) {
 				$zresults = $wtwhandlers->query("
 					select userid
 					from ".wtw_tableprefix."users 
@@ -2397,14 +2386,14 @@ class wtwavatars {
 				}
 			}
 			/* only add download if the userid exists */
-			if (!empty($zuserid) && isset($zuserid)) {
+			if ($wtwhandlers->hasValue($zuserid)) {
 				$znewwebid = $wtwhandlers->getNewKey('avatars', $zwebtype.'id', $znewwebid);
 				
 				/* fetch the 3D Web data structure for the repository (all of the associated records) */
 				$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zwebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
 
 				$zrequest = $wtwhandlers->openFilefromURL($zurl);
-				if (!empty($zrequest) && isset($zrequest)) {
+				if ($wtwhandlers->hasValue($zrequest)) {
 					$zrequest = json_decode($zrequest);
 				}
 				
@@ -2758,7 +2747,7 @@ class wtwavatars {
 			}
 			
 			/* allow usertoken authentication */
-			if ((empty($zuserid) || !isset($zuserid)) && !empty($zusertoken) && isset($zusertoken)) {
+			if ((!isset($zuserid)|| empty($zuserid)) && isset($zusertoken) && !empty($zusertoken)) {
 				$zresults = $wtwhandlers->query("
 					select userid
 					from ".wtw_tableprefix."users 
@@ -2769,14 +2758,14 @@ class wtwavatars {
 				}
 			}
 			/* only add download if the userid exists */
-			if (!empty($zuserid) && isset($zuserid)) {
+			if ($wtwhandlers->hasValue($zuserid)) {
 				//$zupdatewebid = $wtwhandlers->getNewKey('avatars', $zwebtype.'id', $zupdatewebid);
 				
 				/* fetch the 3D Web data structure for the repository (all of the associated records) */
 				$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zupdatewebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
 
 				$zrequest = $wtwhandlers->openFilefromURL($zurl);
-				if (!empty($zrequest) && isset($zrequest)) {
+				if ($wtwhandlers->hasValue($zrequest)) {
 					$zrequest = json_decode($zrequest);
 				}
 				
@@ -2844,7 +2833,7 @@ class wtwavatars {
 					$zfoundavatarid = $zrow["avatarid"];
 				}
 				
-				if (isset($zfoundavatarid) && !empty($zfoundavatarid)) {
+				if ($wtwhandlers->hasValue($zfoundavatarid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."avatars 
 						set version='".$zrequest->version."',
@@ -3020,7 +3009,7 @@ class wtwavatars {
 						$zfoundavatarpartid = $zrow["avatarpartid"];
 					}
 
-					if (isset($zfoundavatarpartid) && !empty($zfoundavatarpartid)) {
+					if ($wtwhandlers->hasValue($zfoundavatarpartid)) {
 						/* update the colors if found */
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."avatarcolors 
@@ -3101,7 +3090,7 @@ class wtwavatars {
 						}
 					}
 
-					if (isset($zfoundavataranimationid) && !empty($zfoundavataranimationid)) {
+					if ($wtwhandlers->hasValue($zfoundavataranimationid)) {
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."avataranimations 
 							set userid='".$znewuserid."',
@@ -3188,7 +3177,7 @@ class wtwavatars {
 							$zfoundcontentratingid = $zrow["contentratingid"];
 						}
 						
-						if (isset($zfoundcontentratingid) && !empty($zfoundcontentratingid)) {
+						if ($wtwhandlers->hasValue($zfoundcontentratingid)) {
 							$wtwhandlers->query("
 								update ".wtw_tableprefix."contentratings 
 								set rating='".$zcontentrating->rating."',
@@ -3275,7 +3264,7 @@ class wtwavatars {
 			}
 			
 			/* allow usertoken authentication */
-			if ((empty($zuserid) || !isset($zuserid)) && !empty($zusertoken) && isset($zusertoken)) {
+			if ((!isset($zuserid) || empty($zuserid)) && isset($zusertoken) && !empty($zusertoken)) {
 				$zresults = $wtwhandlers->query("
 					select userid
 					from ".wtw_tableprefix."users 
@@ -3286,14 +3275,14 @@ class wtwavatars {
 				}
 			}
 			/* only add download if the userid exists */
-			if (!empty($zuserid) && isset($zuserid)) {
+			if ($wtwhandlers->hasValue($zuserid)) {
 				//$zupdatewebid = $wtwhandlers->getNewKey('avatars', $zwebtype.'id', $zupdatewebid);
 				
 				/* fetch the 3D Web data structure for the repository (all of the associated records) */
 				$zurl = "https://3dnet.walktheweb.com/connect/sharedownload.php?webid=".$zupdatewebid."&webtype=".$zwebtype."&userid=".$zuserid."&serverinstanceid=".$wtwhandlers->serverinstanceid."&domainurl=".$wtwhandlers->domainurl;
 
 				$zrequest = $wtwhandlers->openFilefromURL($zurl);
-				if (!empty($zrequest) && isset($zrequest)) {
+				if ($wtwhandlers->hasValue($zrequest)) {
 					$zrequest = json_decode($zrequest);
 				}
 				
@@ -3361,7 +3350,7 @@ class wtwavatars {
 					$zfounduseravatarid = $zrow["useravatarid"];
 				}
 				
-				if (isset($zfounduseravatarid) && !empty($zfounduseravatarid)) {
+				if ($wtwhandlers->hasValue($zfounduseravatarid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."useravatars 
 						set version='".$zrequest->version."',
@@ -3453,7 +3442,7 @@ class wtwavatars {
 						$zfoundavatarpartid = $zrow["avatarpartid"];
 					}
 
-					if (isset($zfoundavatarpartid) && !empty($zfoundavatarpartid)) {
+					if ($wtwhandlers->hasValue($zfoundavatarpartid)) {
 						/* update the colors if found */
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."useravatarcolors 
@@ -3526,7 +3515,7 @@ class wtwavatars {
 						$zfounduseravataranimationid = $zrow["useravataranimationid"];
 					}
 
-					if (isset($zfounduseravataranimationid) && !empty($zfounduseravataranimationid)) {
+					if ($wtwhandlers->hasValue($zfounduseravataranimationid)) {
 						$wtwhandlers->query("
 							update ".wtw_tableprefix."useravataranimations 
 							set avataranimationid='".$zanimation->avataranimationid."',

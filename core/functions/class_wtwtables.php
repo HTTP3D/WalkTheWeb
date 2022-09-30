@@ -779,6 +779,25 @@ class wtwtables {
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 			");
 			$wtwdb->deltaCreateTable("
+				CREATE TABLE `".wtw_tableprefix."pluginsrequired` (
+				  `pluginsrequiredid` varchar(16) NOT NULL DEFAULT '',
+				  `pastpluginsrequiredid` varchar(16) DEFAULT '',
+				  `webid` varchar(16) DEFAULT '',
+				  `webtype` varchar(16) DEFAULT '',
+				  `pluginname` varchar(255) DEFAULT '',
+				  `optional` int DEFAULT '0',
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int DEFAULT '0',
+				  PRIMARY KEY (`pluginsrequiredid`),
+				  UNIQUE KEY `".wtw_tableprefix."pluginsrequiredid_UNIQUE` (`pluginsrequiredid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			");
+			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."roles` (
 				  `roleid` varchar(16) NOT NULL,
 				  `rolename` varchar(45) NOT NULL,
@@ -1238,7 +1257,7 @@ class wtwtables {
 				  `franchiseid` varchar(32) DEFAULT '',
 				  `sitename` varchar(255) DEFAULT '',
 				  `sitedescription` varchar(255) DEFAULT '',
-				  `siteicon` varchar(255) DEFAULT '',
+				  `siteiconid` varchar(16) DEFAULT '',
 				  `createdate` datetime DEFAULT NULL,
 				  `createuserid` varchar(16) DEFAULT '',
 				  `updatedate` datetime DEFAULT NULL,
@@ -3220,22 +3239,22 @@ class wtwtables {
 					$zanimationloop = 1;
 					$zspeedratio = 1;
 					$zsoundmaxdistance = 100;
-					if (isset($zrow["defloadpriority"]) && !empty($zrow["defloadpriority"])) {
+					if ($wtwdb->hasValue($zrow["defloadpriority"])) {
 						$zloadpriority = $zrow["defloadpriority"];
 					}
-					if (isset($zrow["defstartframe"]) && !empty($zrow["defstartframe"])) {
+					if ($wtwdb->hasValue($zrow["defstartframe"])) {
 						$zstartframe = $zrow["defstartframe"];
 					}
-					if (isset($zrow["defendframe"]) && !empty($zrow["defendframe"])) {
+					if ($wtwdb->hasValue($zrow["defendframe"])) {
 						$zendframe = $zrow["defendframe"];
 					}
-					if (isset($zrow["defanimationloop"]) && !empty($zrow["defanimationloop"])) {
+					if ($wtwdb->hasValue($zrow["defanimationloop"])) {
 						$zanimationloop = $zrow["defanimationloop"];
 					}
-					if (isset($zrow["defspeedratio"]) && !empty($zrow["defspeedratio"])) {
+					if ($wtwdb->hasValue($zrow["defspeedratio"])) {
 						$zspeedratio = $zrow["defspeedratio"];
 					}
-					if (isset($zrow["defsoundmaxdistance"]) && !empty($zrow["defsoundmaxdistance"])) {
+					if ($wtwdb->hasValue($zrow["defsoundmaxdistance"])) {
 						$zsoundmaxdistance = $zrow["defsoundmaxdistance"];
 					}
 					$wtwdb->query("
@@ -3282,22 +3301,22 @@ class wtwtables {
 					$zanimationloop = 1;
 					$zspeedratio = 1;
 					$zsoundmaxdistance = 100;
-					if (isset($zrow["loadpriority"]) && !empty($zrow["loadpriority"])) {
+					if ($wtwdb->hasValue($zrow["loadpriority"])) {
 						$zloadpriority = $zrow["loadpriority"];
 					}
-					if (isset($zrow["startframe"]) && !empty($zrow["startframe"])) {
+					if ($wtwdb->hasValue($zrow["startframe"])) {
 						$zstartframe = $zrow["startframe"];
 					}
-					if (isset($zrow["endframe"]) && !empty($zrow["endframe"])) {
+					if ($wtwdb->hasValue($zrow["endframe"])) {
 						$zendframe = $zrow["endframe"];
 					}
-					if (isset($zrow["animationloop"]) && !empty($zrow["animationloop"])) {
+					if ($wtwdb->hasValue($zrow["animationloop"])) {
 						$zanimationloop = $zrow["animationloop"];
 					}
-					if (isset($zrow["defspeedratio"]) && !empty($zrow["speedratio"])) {
+					if ($wtwdb->hasValue($zrow["speedratio"])) {
 						$zspeedratio = $zrow["speedratio"];
 					}
-					if (isset($zrow["soundmaxdistance"]) && !empty($zrow["soundmaxdistance"])) {
+					if ($wtwdb->hasValue($zrow["soundmaxdistance"])) {
 						$zsoundmaxdistance = $zrow["soundmaxdistance"];
 					}
 					$wtwdb->query("
@@ -3500,19 +3519,19 @@ class wtwtables {
 						$zwebalias = 'https://';
 					}
 					$zwebalias .= $zrow["domainname"];
-					if ((!isset($zrow["communityid"]) || empty($zrow["communityid"])) && isset($zrow["buildingid"]) && !empty($zrow["buildingid"])) {
+					if ((!isset($zrow["communityid"]) || empty($zrow["communityid"])) && $wtwdb->hasValue($zrow["buildingid"])) {
 						$zwebalias .= '/buildings/'.$zrow["buildingpublishname"];
-						if (isset($zrow["thingid"]) && !empty($zrow["thingid"])) {
+						if ($wtwdb->hasValue($zrow["thingid"])) {
 							$zwebalias .= '/'.$zrow["thingpublishname"];
 						}
-					} else if ((!isset($zrow["communityid"]) || empty($zrow["communityid"])) && (!isset($zrow["buildingid"]) || empty($zrow["buildingid"])) && isset($zrow["thingid"]) && !empty($zrow["thingid"])) {
+					} else if ((!isset($zrow["communityid"]) || empty($zrow["communityid"])) && (!isset($zrow["buildingid"]) || empty($zrow["buildingid"])) && $wtwdb->hasValue($zrow["thingid"])) {
 						$zwebalias .= '/things/'.$zrow["thingpublishname"];
-					} else if (isset($zrow["communityid"]) && !empty($zrow["communityid"]) && isset($zrow["communitypublishname"]) && !empty($zrow["communitypublishname"])) {
+					} else if ($wtwdb->hasValue($zrow["communityid"]) && $wtwdb->hasValue($zrow["communitypublishname"])) {
 						$zwebalias .= '/'.$zrow["communitypublishname"];
-						if (isset($zrow["buildingid"]) && !empty($zrow["buildingid"]) && isset($zrow["buildingpublishname"]) && !empty($zrow["buildingpublishname"])) {
+						if ($wtwdb->hasValue($zrow["buildingid"]) && $wtwdb->hasValue($zrow["buildingpublishname"])) {
 							$zwebalias .= '/'.$zrow["buildingpublishname"];
 						}
-						if (isset($zrow["thingid"]) && !empty($zrow["thingid"]) && isset($zrow["thingpublishname"]) && !empty($zrow["thingpublishname"])) {
+						if ($wtwdb->hasValue($zrow["thingid"]) && $wtwdb->hasValue($zrow["thingpublishname"])) {
 							$zwebalias .= '/'.$zrow["thingpublishname"];
 						}
 					}

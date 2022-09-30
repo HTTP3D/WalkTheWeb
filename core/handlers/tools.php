@@ -150,21 +150,21 @@ try {
 	$zlabel = $wtwhandlers->getPost('label','');
 
 	/* convert any comma seperated email lists into arrays */
-	if (!empty($zsendto) && isset($zsendto)) {
+	if ($wtwhandlers->hasValue($zsendto)) {
 		if (strpos($zsendto,",") === false) {
 			$zsendto = array($zsendto);
 		} else {
 			$zsendto = explode(',',$zsendto);
 		}
 	}
-	if (!empty($zcopyto) && isset($zcopyto)) {
+	if ($wtwhandlers->hasValue($zcopyto)) {
 		if (strpos($zcopyto,",") === false) {
 			$zcopyto = array($zcopyto);
 		} else {
 			$zcopyto = explode(',',$zcopyto);
 		}
 	}
-	if (!empty($zbccto) && isset($zbccto)) {
+	if ($wtwhandlers->hasValue($zbccto)) {
 		if (strpos($zbccto,",") === false) {
 			$zbccto = array($zbccto);
 		} else {

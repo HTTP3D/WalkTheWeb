@@ -263,7 +263,7 @@ class wtwadminmenu {
 			/* check if loaded to avoid duplicate ids */
 			$zfound = false;
 			foreach ($this->adminmenu as $zadminmenuitems) {
-				if (isset($zadminmenuitems["id"]) && !empty($zadminmenuitems["id"])) {
+				if ($wtwdb->hasValue($zadminmenuitems["id"])) {
 					if ($zadminmenuitems["id"] == $zid) {
 						$zfound = true;
 					}
@@ -331,16 +331,16 @@ class wtwadminmenu {
 				$zjsfunction = $zmenuitem["jsfunction"];
 				if ($wtwdb->hasPermission($zaccessrequired)) {
 					/* check for invalid entries */
-					if (empty($zid) | !isset($zid)) {
+					if (!isset($zid) || empty($zid)) {
 						$zid = $wtwdb->getRandomString(5,1);
 					}
-					if (empty($ztitle) | !isset($ztitle)) {
+					if (!isset($ztitle) || empty($ztitle)) {
 						$ztitle = 'Menu Item';
 					}
-					if (empty($ziconurl) | !isset($ziconurl)) {
+					if (!isset($ziconurl) || empty($ziconurl)) {
 						$ziconurl = "/content/system/images/menuarrow.png";
 					}
-					if (empty($zjsfunction) || !isset($zjsfunction)) {
+					if (!isset($zjsfunction) || empty($zjsfunction)) {
 						$zjsfunction = '';
 					}
 					if ($ztempmenu != $zmenu) {
@@ -354,7 +354,7 @@ class wtwadminmenu {
 						/* prep for submenu items */
 						$zadminmenu .= "<div id=\"".$zid."div\" class=\"wtw-adminmenudiv\" style=\"display:none;\">";
 					}
-					if (!empty($zsubmenu) && isset($zsubmenu)) {
+					if ($wtwdb->hasValue($zsubmenu)) {
 						$zadminmenu .= "<div id=\"".$zid."\" class=\"wtw-adminsubmenu\" onclick=\"".$zjsfunction."\"><div id=\"".$zid."badge\" class=\"wtw-badge\"></div>".$ztitle."</div>";
 					}
 					$ztempmenu = $zmenu;
@@ -384,7 +384,7 @@ class wtwadminmenu {
 			/* check if loaded to avoid duplicate ids */
 			$zfound = false;
 			foreach ($this->adminsubmenu as $zadminsubmenuitems) {
-				if (isset($zadminsubmenuitems["id"]) && !empty($zadminsubmenuitems["id"])) {
+				if ($wtwdb->hasValue($zadminsubmenuitems["id"])) {
 					if ($zadminsubmenuitems["id"] == $zid) {
 						$zfound = true;
 					}
@@ -430,13 +430,13 @@ class wtwadminmenu {
 				$zjsfunction = $zmenuitem["jsfunction"];
 				if ($wtwdb->hasPermission($zaccessrequired) && $zmenu == $zselectmenu) {
 					/* check for invalid entries */
-					if (empty($zid) | !isset($zid)) {
+					if (!isset($zid) || empty($zid)) {
 						$zid = $wtwdb->getRandomString(5,1);
 					}
-					if (empty($ztitle) | !isset($ztitle)) {
+					if (!isset($ztitle) || empty($ztitle)) {
 						$ztitle = 'Menu Item';
 					}
-					if (empty($zjsfunction) || !isset($zjsfunction)) {
+					if (!isset($zjsfunction) || empty($zjsfunction)) {
 						$zjsfunction = '';
 					}
 					$zadminsubmenu .= "<div id=\"".$zid."\" class=\"wtw-menulevel0\" onclick=\"WTW.adminOpenSubmenuForm(this);".$zjsfunction."\">".$ztitle."</div>";
@@ -457,7 +457,7 @@ class wtwadminmenu {
 			/* check for duplicate ids */
 			$zfound = false;
 			foreach ($this->adminforms as $zadminform) {
-				if (isset($zadminform["formid"]) && !empty($zadminform["formid"])) {
+				if ($wtwdb->hasValue($zadminform["formid"])) {
 					if ($zadminform["formid"] == $zformid) {
 						$zfound = true;
 					}
@@ -491,16 +491,16 @@ class wtwadminmenu {
 				$ztitle = $zform["title"];
 				$zaccessrequired = $zform["accessrequired"]; /* array of allowed roles */
 				$zformdata = $zform["formdata"];
-				if ($wtwdb->hasPermission($zaccessrequired) || empty($zaccessrequired) || !isset($zaccessrequired)) {
+				if ($wtwdb->hasPermission($zaccessrequired) || !isset($zaccessrequired) || empty($zaccessrequired)) {
 					/* check for invalid entries */
-					if (empty($zformid) | !isset($zformid)) {
+					if (!isset($zformid) || empty($zformid)) {
 						$zformid = $wtwdb->getRandomString(6,1);
 					}
-					if (empty($zformdata) || !isset($zformdata)) {
+					if (!isset($zformdata) || empty($zformdata)) {
 						$zformdata = '';
 					}
 					/* this wraps your form data with a title and close form links */
-					if (!empty($zformdata) && isset($zformdata)) {
+					if ($wtwdb->hasValue($zformdata)) {
 						$zmenuforms .= "<div id=\"".$zformid."\" class=\"wtw-adminmenuform wtw-hide\">";
 						$zmenuforms .= "	<div id=\"wtw_bback".$zformid."\" alt=\"Back\" title=\"Back\" class=\"wtw-backbutton\" onclick=\"WTW.adminMenuItemSelected(this);\">&lt;&lt;</div>";
 						$zmenuforms .= "	<div class=\"wtw-menuheader\">".$ztitle."</div><br />";
@@ -523,7 +523,7 @@ class wtwadminmenu {
 			/* check for duplicate ids */
 			$zfound = false;
 			foreach ($this->admindivs as $zadminform) {
-				if (isset($zadminform["divid"]) && !empty($zadminform["divid"])) {
+				if ($wtwdb->hasValue($zadminform["divid"])) {
 					if ($zadminform["divid"] == $zdivid) {
 						$zfound = true;
 					}
@@ -558,15 +558,15 @@ class wtwadminmenu {
 					$zdivid = $zdiv["divid"];
 					$zaccessrequired = $zdiv["accessrequired"]; /* array of allowed roles */
 					$zdivdata = $zdiv["divdata"];
-					if ($wtwdb->hasPermission($zaccessrequired) || empty($zaccessrequired) || !isset($zaccessrequired)) {
+					if ($wtwdb->hasPermission($zaccessrequired) || !isset($zaccessrequired) || empty($zaccessrequired)) {
 						/* check for invalid entries */
-						if (empty($zdivid) | !isset($zdivid)) {
+						if (!isset($zdivid) || empty($zdivid)) {
 							$zdivid = $wtwdb->getRandomString(6,1);
 						}
-						if (empty($zdivdata) || !isset($zdivdata)) {
+						if (!isset($zdivdata) || empty($zdivdata)) {
 							$zdivdata = '';
 						}
-						if (!empty($zdivdata) && isset($zdivdata)) {
+						if ($wtwdb->hasValue($zdivdata)) {
 							$zmenudivs .= $zdivdata;
 						}
 					}

@@ -79,7 +79,7 @@ class wtwftp {
 		try {
 			$this->conn = ftp_connect($this->ftpHost);
 			$zloginresult = ftp_login($this->conn, $this->ftpUser, $this->ftpPass);
-			if($this->conn && $zloginresult) {
+			if ($this->conn && $zloginresult) {
 				ftp_pasv($this->conn, $this->ftpPasv);
 				$zsuccess = true;
 			}       
@@ -146,7 +146,7 @@ class wtwftp {
 				$this->createSubDirs($zdestinationfile, false, true);
 				if (!ftp_get($this->conn, $zdestinationfile, $zsourcefile, $this->ftpMode)) {
 					$zretry += 1;
-					if($zretry > $this->zretry) {
+					if ($zretry > $this->zretry) {
 						$this->logData('Error when downloading file: '.$zsourcefile.' => '.$zdestinationfile, 'error');
 						$zsuccess = false;
 					} else {
@@ -354,14 +354,14 @@ class wtwftp {
 				$this->makeDir($this->logPath, true);
 				$zlog = $this->logData;  
 				$zdate = '\n'.date('y-m-d H:i:s').' ';
-				if (isset($zlog['error']) && !empty($zlog['error'])) {
+				if ($wtwhandlers->hasValue($zlog['error'])) {
 					$zlogentry = date('y-m-d H:i:s').' '.join($zdate,$zlog['error']).'\r\n';
 					$zfile = $this->logPath.'/'.$this->ftpUser.'-error.log';
 					$zopenfile = fopen($zfile, 'a');
 					fwrite($zopenfile,$zlogentry);
 					fclose($zopenfile);
 				}
-				if (isset($zlog['ok']) && !empty($zlog['ok'])) {
+				if ($wtwhandlers->hasValue($zlog['ok'])) {
 					$zlogentry = date('y-m-d H:i:s').' '.join($zdate,$zlog['ok']).'\r\n';
 					$zfile = $this->logPath.'/'.$this->ftpUser.'-ok.log';
 					$zopenfile = fopen($zfile, 'a');

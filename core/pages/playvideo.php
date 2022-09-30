@@ -1,6 +1,6 @@
 <?php
 	$videosrc = "";
-	if(isset($_GET["videosrc"]) && !empty($_GET["videosrc"])) {
+	if (isset($_GET["videosrc"]) && !empty($_GET["videosrc"])) {
 		$videosrc = $_GET["videosrc"];
 	}
 	$videoextension = pathinfo($videosrc,PATHINFO_EXTENSION);
