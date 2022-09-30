@@ -11,7 +11,7 @@ try {
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
 	$zstoremold = array();
-	if (!empty($zmoldid) && isset($zmoldid)) {
+	if ($wtwconnect->hasValue($zmoldid)) {
 		$zresults = $wtwconnect->query("
 			select *
 			from ".WTWSHOPPING_PREFIX."molds  

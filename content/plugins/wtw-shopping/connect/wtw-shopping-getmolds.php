@@ -13,7 +13,7 @@ try {
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
 	$zstoremold = array();
-	if ((!empty($zcommunityid) && isset($zcommunityid)) || (!empty($zbuildingid) && isset($zbuildingid)) || (!empty($zthingid) && isset($zthingid))) {
+	if ((isset($zcommunityid) && !empty($zcommunityid)) || (isset($zbuildingid) && !empty($zbuildingid)) || (isset($zthingid) && !empty($zthingid))) {
 		/* make sure every shopping related mold has a cooresponding shopping mold record */
 		$zwebtype = '';
 		$zwebid = '';
@@ -36,7 +36,7 @@ try {
 				on m1.".$zwebtype."moldid=sm1.moldid
 			where m1.deleted=0;");
 		foreach ($zresults as $zrow) {
-			if (empty($zrow["shoppingmoldid"]) || !isset($zrow["shoppingmoldid"])) {
+			if (!isset($zrow["shoppingmoldid"]) || empty($zrow["shoppingmoldid"])) {
 				$znewshoppingmoldid = $wtwconnect->getRandomString(16,1);
 				$wtwconnect->query("
 					insert into ".WTWSHOPPING_PREFIX."molds 

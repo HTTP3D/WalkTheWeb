@@ -16,7 +16,7 @@ try {
 	$i = 0;
 	$z3dhost = array();
 	$zstoreid = '';
-	if (!empty($zwoostoreurl) && isset($zwoostoreurl)) {
+	if ($wtwconnect->hasValue($zwoostoreurl)) {
 		$zwoostoreurl = strtolower($zwoostoreurl);
 		$zresults = $wtwconnect->query("
 			select *

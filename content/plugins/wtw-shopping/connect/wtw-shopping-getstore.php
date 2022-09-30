@@ -11,7 +11,7 @@ try {
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
 	$zstore = array();
-	if (!empty($zstoreid) && isset($zstoreid)) {
+	if ($wtwconnect->hasValue($zstoreid)) {
 		$zresults = $wtwconnect->query("
 			select *
 			from ".WTWSHOPPING_PREFIX."stores  

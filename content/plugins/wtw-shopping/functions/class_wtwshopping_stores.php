@@ -41,7 +41,7 @@ class wtwshopping_stores {
 				if ($wtwplugins->isUserInRole("Host") && $wtwplugins->isUserInRole("Admin") == false) {
 					$zhostuserid = $wtwplugins->userid;
 				}
-				if (empty($zstoreid) || !isset($zstoreid)) {
+				if (!isset($zstoreid) || empty($zstoreid)) {
 					$zstoreid = $wtwplugins->getRandomString(16,1);
 					$zwtwkey = base64_encode("ck_".$wtwplugins->getRandomString(40,1));
 					$zwtwsecret = base64_encode("cs_".$wtwplugins->getRandomString(40,1));
@@ -143,7 +143,7 @@ class wtwshopping_stores {
 					foreach ($zresults as $zrow) {
 						$zconnectid = $zrow["connectid"];
 					}
-					if (!empty($zconnectid) && isset($zconnectid)) {
+					if ($wtwplugins->hasValue($zconnectid)) {
 						$zwhere = "where connectid='".$zconnectid."' ";
 						if (!empty($zhostuserid)) {
 							$zwhere = "where connectid='".$zconnectid."' 
@@ -199,7 +199,7 @@ class wtwshopping_stores {
 		$zsuccess = false;
 		try {
 			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Host") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
-				if (!empty($zstoreid) && isset($zstoreid)) {
+				if ($wtwplugins->hasValue($zstoreid)) {
 					$zhostuserid = '';
 					if ($wtwplugins->isUserInRole("Host") && $wtwplugins->isUserInRole("Admin") == false) {
 						$zhostuserid = $wtwplugins->userid;
@@ -242,7 +242,7 @@ class wtwshopping_stores {
 		$zsuccess = false;
 		try {
 			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Host") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
-				if (!empty($zstoreid) && isset($zstoreid)) {
+				if ($wtwplugins->hasValue($zstoreid)) {
 					$zhostuserid = '';
 					if ($wtwplugins->isUserInRole("Host") && $wtwplugins->isUserInRole("Admin") == false) {
 						$zhostuserid = $wtwplugins->userid;
@@ -280,7 +280,7 @@ class wtwshopping_stores {
 						$zwookey = $zrow["woocommercekey"];
 						$zwoosecret = $zrow["woocommercesecret"];
 					}
-					if (!empty($zwookey) && isset($zwookey) && !empty($zwoosecret) && isset($zwoosecret)) {
+					if ($wtwplugins->hasValue($zwookey) && $wtwplugins->hasValue($zwoosecret)) {
 						$zupdateurl = $zstoreurl."/walktheweb/wtwconnection.php?walktheweb_wtwconnection=1&hosturl=".$wtwplugins->domainurl."&wtwkey=".$zwtwkey."&wtwsecret=".$zwtwsecret."&wookey=".$zwookey."&woosecret=".$zwoosecret;
 						/* test open the path */
 						$wtwplugins->openFilefromURL($zupdateurl);
@@ -299,7 +299,7 @@ class wtwshopping_stores {
 		$zsuccess = false;
 		try {
 			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Host") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
-				if (!empty($zstoreid) && isset($zstoreid)) {
+				if ($wtwplugins->hasValue($zstoreid)) {
 					$zhostuserid = '';
 					if ($wtwplugins->isUserInRole("Host") && $wtwplugins->isUserInRole("Admin") == false) {
 						$zhostuserid = $wtwplugins->userid;
@@ -326,7 +326,7 @@ class wtwshopping_stores {
 		$zsuccess = false;
 		try {
 			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
-				if (!empty($zmoldid) && isset($zmoldid)) {
+				if ($wtwplugins->hasValue($zmoldid)) {
 					$wtwplugins->query("
 						update ".WTWSHOPPING_PREFIX."molds
 						set deleteddate=now(),
@@ -352,7 +352,7 @@ class wtwshopping_stores {
 		$zsuccess = false;
 		try {
 			if ($wtwplugins->isUserInRole("Admin") || $wtwplugins->isUserInRole("Developer") || $wtwplugins->isUserInRole("Architect")) {
-				if (!empty($zmoldid) && isset($zmoldid)) {
+				if ($wtwplugins->hasValue($zmoldid)) {
 					$zshoppingmoldid = "";
 					$zresults = $wtwplugins->query("
 						select shoppingmoldid 
@@ -366,7 +366,7 @@ class wtwshopping_stores {
 					foreach ($zresults as $zrow) {
 						$zshoppingmoldid = $zrow["shoppingmoldid"];
 					}
-					if (!empty($zshoppingmoldid) && isset($zshoppingmoldid)) {
+					if ($wtwplugins->hasValue($zshoppingmoldid)) {
 						$wtwplugins->query("
 							update ".WTWSHOPPING_PREFIX."molds
 							set slug='".$zmoldslug."',
