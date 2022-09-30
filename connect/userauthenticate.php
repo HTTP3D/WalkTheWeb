@@ -79,11 +79,11 @@ try {
 			));
 				
 			$zresults = $wtwconnect->openFilefromURL('https://3dnet.walktheweb.com/connect/authenticate.php', false, $zpostdata);			
-			if (!empty($zresults) && isset($zresults)) {
+			if ($wtwconnect->hasValue($zresults)) {
 				$zresults = json_decode($zresults);
 			}
 
-			if (isset($zresults->usertoken) && !empty($zresults->usertoken)) {
+			if ($wtwconnect->hasValue($zresults->usertoken)) {
 				/* authenticated */
 				$zfound = true;
 				$zwordpresstoken = $zrow["wordpresstoken"];

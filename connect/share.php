@@ -21,7 +21,7 @@ function addUploadID($zuploadid, $zrecursive) {
 	try {
 		global $zuploads;
 		global $zupload;
-		if (!empty($zuploadid) && isset($zuploadid)) {
+		if ($wtwconnect->hasValue($zuploadid)) {
 			$zfound = false;
 			foreach ($zuploads as $zrowup) {
 				if ($zrowup["uploadid"] == $zuploadid) {
@@ -37,7 +37,7 @@ function addUploadID($zuploadid, $zrecursive) {
 					and deleted=0;");
 				foreach ($zresults as $zrow) {
 					$zfilepath = $zrow["filepath"];
-					if (!empty($zfilepath) && isset($zfilepath)) {
+					if ($wtwconnect->hasValue($zfilepath)) {
 						if (substr($zfilepath, 0, 4) != "http") {
 							$zfilepath = $wtwconnect->domainurl.$zfilepath;
 						}
@@ -98,7 +98,7 @@ function addUploadObjectID($zuploadobjectid) {
 	try {
 		global $zuploadobjects;
 		global $zuploadobject;
-		if (!empty($zuploadobjectid) && isset($zuploadobjectid)) {
+		if ($wtwconnect->hasValue($zuploadobjectid)) {
 			$zfound = false;
 			foreach ($zuploadobjects as $zrowuo) {
 				if ($zrowuo["uploadobjectid"] == $zuploadobjectid) {
@@ -115,7 +115,7 @@ function addUploadObjectID($zuploadobjectid) {
 				foreach ($zresults as $zrow) {
 					/* get list of uploaded objects in folder */
 					$zobjectfiles = array();
-					if (!empty($zrow["objectfolder"]) && isset($zrow["objectfolder"])) {
+					if ($wtwconnect->hasValue($zrow["objectfolder"])) {
 						$zfiles = 0;
 						$zdir = str_replace('/content/',$wtwconnect->contentpath.'/',$zrow["objectfolder"]);
 						$zdir = rtrim($zdir, "/");
@@ -205,7 +205,7 @@ function addScriptID($zscriptid, $zscripturl) {
 	try {
 		global $zscripts;
 		global $zscript;
-		if (!empty($zscriptid) && isset($zscriptid)) {
+		if ($wtwconnect->hasValue($zscriptid)) {
 			$zfound = false;
 			foreach ($zscripts as $zrowscript) {
 				if ($zrowscript["scriptid"] == $zscriptid) {
@@ -250,7 +250,7 @@ function addAvatarAnimationID($zavataranimationid) {
 	try {
 		global $zavataranimations;
 		global $zavataranimation;
-		if (!empty($zavataranimationid) && isset($zavataranimationid)) {
+		if ($wtwconnect->hasValue($zavataranimationid)) {
 			$zfound = false;
 			foreach ($zavataranimations as $zrowanim) {
 				if ($zrowanim["avataranimationid"] == $zavataranimationid) {
@@ -310,7 +310,7 @@ function addUserID($zuserid) {
 	try {
 		global $zusers;
 		global $zuser;
-		if (!empty($zuserid) && isset($zuserid)) {
+		if ($wtwconnect->hasValue($zuserid)) {
 			$zfound = false;
 			foreach ($zusers as $zrowup) {
 				if ($zrowup["userid"] == $zuserid) {
@@ -367,9 +367,7 @@ try {
 
 	addUserID($zuserid);
 	
-//	echo $wtwconnect->addConnectHeader('*');
-	header('Access-Control-Allow-Origin: *');
-	header('Content-type: application/json');
+	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 	
 	if (!empty($zwebtypes)) {
 		/* get 3D Web */
@@ -389,6 +387,7 @@ try {
 				select *
 				from ".wtw_tableprefix."connectinggrids
 				where childwebid='".$zwebid."'
+					and childwebtype='".$zwebtype."'
 					and parentwebid=''
 					and deleted=0;");
 			$zcg = 0;
@@ -430,6 +429,7 @@ try {
 				select *
 				from ".wtw_tableprefix."connectinggrids
 				where parentwebid='".$zwebid."'
+					and parentwebtype='".$zwebtype."'
 					and deleted=0;");
 			$zcg = 0;
 			$zchildconnectinggrids = array();
@@ -470,6 +470,7 @@ try {
 				select *
 				from ".wtw_tableprefix."contentratings
 				where webid='".$zwebid."'
+					and webtype='".$zwebtype."'
 					and deleted=0;");
 			$zcr = 0;
 			$zcontentratings = array();
@@ -490,6 +491,33 @@ try {
 				$zcr += 1;
 				addUserID($zrowcr["createuserid"]);
 				addUserID($zrowcr["updateuserid"]);
+			}
+
+			/* get plugins required */
+			$zresultplugins = $wtwconnect->query("
+				select *
+				from ".wtw_tableprefix."pluginsrequired
+				where webid='".$zwebid."'
+					and webtype='".$zwebtype."'
+					and deleted=0;");
+			$zp = 0;
+			$zpluginsrequired = array();
+			foreach ($zresultplugins as $zrowp) {
+				$zpluginsrequired[$zp] = array(
+					'pluginsrequiredid'=>$zrowp["pluginsrequiredid"],
+					'pastpluginsrequiredid'=>$zrowp["pastpluginsrequiredid"],
+					'webid'=>$zrowp["webid"],
+					'webtype'=>$zrowp["webtype"],
+					'pluginname'=>$zrowp["pluginname"],
+					'optional'=>$zrowp["optional"],
+					'createdate'=>$zrowp["createdate"],
+					'createuserid'=>$zrowp["createuserid"],
+					'updatedate'=>$zrowp["updatedate"],
+					'updateuserid'=>$zrowp["updateuserid"]
+				);
+				$zp += 1;
+				addUserID($zrowp["createuserid"]);
+				addUserID($zrowp["updateuserid"]);
 			}
 
 			/* get action zones */
@@ -928,6 +956,7 @@ try {
 				'uploads'=>$zuploads,
 				'scripts'=>$zscripts,
 				'contentratings'=>$zcontentratings,
+				'pluginsrequired'=>$zpluginsrequired,
 				'avataranimations'=>$zavataranimations,
 				'users'=>$zusers
 			);

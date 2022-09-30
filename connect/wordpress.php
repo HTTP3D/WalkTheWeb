@@ -83,7 +83,6 @@ try {//host
 	} catch (Exception $e) {
 		
 	}
-	
 	$zresponse = array();
 	
 	switch ($zfunction) {
@@ -103,7 +102,7 @@ try {//host
 			foreach ($zresults as $zrow) {
 				$zapikeyid = $zrow->apikeyid;
 			}
-			if (isset($zapikeyid) && !empty($zapikeyid)) {
+			if ($wtwconnect->hasValue($zapikeyid)) {
 				$i = 0;
 				/* key-secret combo has access */
 /*				$zresults = $wtwconnect->query("
@@ -125,7 +124,7 @@ try {//host
 				'communityid'=>''
 			);
 
-			if (!empty($zwtwusertoken) && isset($zwtwusertoken)) {
+			if ($wtwconnect->hasValue($zwtwusertoken)) {
 				/* check is the user with the access token has admin or host access */
 				$zresults = $wtwconnect->query("
 					select u1.*,
@@ -149,7 +148,7 @@ try {//host
 					$zpastuserid = $zrow["pastuserid"];
 					$zuploadpathid = $zrow["uploadpathid"];
 					/* user found by access token, update the pastuserid (wtwuserid) to the user account as a reference */
-					if (!empty($zuserid) && isset($zuserid) && (empty($zpastuserid) || !isset($zpastuserid))) {
+					if ($wtwconnect->hasValue($zuserid) && (!isset($zpastuserid) || empty($zpastuserid))) {
 						$zresults = $wtwconnect->query("
 							update ".wtw_tableprefix."users
 							set pastuserid='".$zwtwuserid."',
@@ -161,7 +160,7 @@ try {//host
 				if ($zauthenticationok == false) {
 					$serror = 'User does not have permission on WalkTheWeb Server';
 				}
-			} else if (!empty($zusertoken) && isset($zusertoken)) {
+			} else if ($wtwconnect->hasValue($zusertoken)) {
 				/* check is the user with the access token has admin or host access */
 				$zresults = $wtwconnect->query("
 					select u1.*,
@@ -191,7 +190,7 @@ try {//host
 				}
 			}
 			
-			if ($zauthenticationok && !empty($zwebname) && isset($zwebname)) {
+			if ($zauthenticationok && isset($zwebname) && !empty($zwebname)) {
 				/* reserved words can not be any part of the webname - you can add your own reserved words */
 				$zreserved = array('wtw','walktheweb','http3d','https3d');
 
@@ -226,7 +225,7 @@ try {//host
 				/* download community */
 				$znewcommunityid = $wtwcommunities->downloadWeb($zcommunityid, $zcommunityid, 'community', $zwtwusertoken, '', '', '', 0, 0, 0, 1, 1, 1, 0, 0, 0);
 				
-				if (empty($znewcommunityid) || !isset($znewcommunityid)) {
+				if (!isset($znewcommunityid) || empty($znewcommunityid)) {
 					$serror = '3D Community Scene could not be created.';
 				} else {
 					$wtwconnect->query("
@@ -263,11 +262,14 @@ try {//host
 					$zbuildingrotationy = $zrow["buildingrotationy"];
 					$zbuildingrotationz = $zrow["buildingrotationz"];
 				}
-				
+$wtwconnect->serror("download buildingid=".$zbuildingid);
 				/* download building */
 				$znewbuildingid = $wtwcommunities->downloadWeb($zbuildingid, $zbuildingid, 'building', $zwtwusertoken, $znewcommunityid, 'community', $znewcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);
+
+$wtwconnect->serror("new buildingid=".$znewbuildingid);
+
 				
-				if (empty($znewbuildingid) || !isset($znewbuildingid)) {
+				if (!isset($znewbuildingid) || empty($znewbuildingid)) {
 					$serror = '3D Shopping Building could not be created.';
 				} else {
 					$wtwconnect->query("
@@ -440,8 +442,6 @@ try {//host
 			}
 			break;
 	}
-	
-	
 	echo json_encode($zresponse);	
 } catch (Exception $e) {
 	$wtwconnect->serror("connect-wordpress.php=".$e->getMessage());

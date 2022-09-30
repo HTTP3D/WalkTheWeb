@@ -30,7 +30,7 @@ try {
 		$hasaccess = $zrow["hasaccess"];
 	}
 	$zresults = array();
-	if (!empty($hasaccess) && isset($hasaccess)) {
+	if ($wtwconnect->hasValue($hasaccess)) {
 		$zresults = $wtwconnect->query("
 			select ua1.userauthorizationid,
 				u1.email,

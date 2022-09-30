@@ -40,13 +40,13 @@ try {
 		where cr1.webtype='';");
 	foreach ($zresults as $zrow) {
 		$znewwebtype = '';
-		if (isset($zrow["communityname"]) && !empty($zrow["communityname"])) {
+		if ($wtwconnect->hasValue($zrow["communityname"])) {
 			$znewwebtype = 'community';
-		} else if (isset($zrow["buildingname"]) && !empty($zrow["buildingname"])) {
+		} else if ($wtwconnect->hasValue($zrow["buildingname"])) {
 			$znewwebtype = 'building';
-		} else if (isset($zrow["thingname"]) && !empty($zrow["thingname"])) {
+		} else if ($wtwconnect->hasValue($zrow["thingname"])) {
 			$znewwebtype = 'thing';
-		} else if (isset($zrow["avatarname"]) && !empty($zrow["avatarname"])) {
+		} else if ($wtwconnect->hasValue($zrow["avatarname"])) {
 			$znewwebtype = 'avatar';
 		}
 		$wtwconnect->query("
@@ -83,13 +83,13 @@ try {
 	} else {
 		foreach ($zresults as $zrow) {
 			$zsitename = '';
-			if (isset($zrow["communityname"]) && !empty($zrow["communityname"])) {
+			if ($wtwconnect->hasValue($zrow["communityname"])) {
 				$zsitename = $zrow["communityname"];
-			} else if (isset($zrow["buildingname"]) && !empty($zrow["buildingname"])) {
+			} else if ($wtwconnect->hasValue($zrow["buildingname"])) {
 				$zsitename = $zrow["buildingname"];
-			} else if (isset($zrow["thingname"]) && !empty($zrow["thingname"])) {
+			} else if ($wtwconnect->hasValue($zrow["thingname"])) {
 				$zsitename = $zrow["thingname"];
-			} else if (isset($zrow["avatarname"]) && !empty($zrow["avatarname"])) {
+			} else if ($wtwconnect->hasValue($zrow["avatarname"])) {
 				$zsitename = $zrow["avatarname"];
 			}
 			$zrating = $zrow["rating"];
@@ -99,7 +99,7 @@ try {
 			}
 			$zcontentrating .= "<b><span style='color:#FEFFCE'>".$zsitename."</span> 3D Website is Rated <span style='color:#FEFFCE'>".$zrating."</span></b>. ".$zratingtext."<br />";
 
-			if (!empty($zrow["contentwarning"]) && isset($zrow["contentwarning"])) {
+			if ($wtwconnect->hasValue($zrow["contentwarning"])) {
 				if ($zextended == '0') {
 					$zcontentwarning = $zrow["contentwarning"];
 				} else {
@@ -142,13 +142,13 @@ try {
 		foreach ($zresults as $zrow) {
 			if (isset($zrow["ratingvalue"])) {
 				$zsitename = '';
-				if (isset($zrow["communityname"]) && !empty($zrow["communityname"])) {
+				if ($wtwconnect->hasValue($zrow["communityname"])) {
 					$zsitename = $zrow["communityname"];
-				} else if (isset($zrow["buildingname"]) && !empty($zrow["buildingname"])) {
+				} else if ($wtwconnect->hasValue($zrow["buildingname"])) {
 					$zsitename = $zrow["buildingname"];
-				} else if (isset($zrow["thingname"]) && !empty($zrow["thingname"])) {
+				} else if ($wtwconnect->hasValue($zrow["thingname"])) {
 					$zsitename = $zrow["thingname"];
-				} else if (isset($zrow["avatarname"]) && !empty($zrow["avatarname"])) {
+				} else if ($wtwconnect->hasValue($zrow["avatarname"])) {
 					$zsitename = $zrow["avatarname"];
 				}
 				/* if rating is higher than base rating, update the base rating */
@@ -163,7 +163,7 @@ try {
 					$zcontentrating .= "<b><span style='color:#FEFFCE'>".$zsitename."</span> 3D Website is Unrated</b><br />";
 				}
 				/* append any content warnings */
-				if (!empty($zrow["contentwarning"]) && isset($zrow["contentwarning"])) {
+				if ($wtwconnect->hasValue($zrow["contentwarning"])) {
 					$zcontentwarning .= $zrow["contentwarning"] . "<br /><br />";
 					$zcontentrating .= $zrow["contentwarning"] . "<br /><br />";
 				} else {
@@ -202,13 +202,13 @@ try {
 				foreach ($zresults2 as $zrow2) {
 					if (isset($zrow2["ratingvalue"])) {
 						$zsitename = '';
-						if (isset($zrow2["communityname"]) && !empty($zrow2["communityname"])) {
+						if ($wtwconnect->hasValue($zrow2["communityname"])) {
 							$zsitename = $zrow2["communityname"];
-						} else if (isset($zrow2["buildingname"]) && !empty($zrow2["buildingname"])) {
+						} else if ($wtwconnect->hasValue($zrow2["buildingname"])) {
 							$zsitename = $zrow2["buildingname"];
-						} else if (isset($zrow2["thingname"]) && !empty($zrow2["thingname"])) {
+						} else if ($wtwconnect->hasValue($zrow2["thingname"])) {
 							$zsitename = $zrow2["thingname"];
-						} else if (isset($zrow["avatarname"]) && !empty($zrow["avatarname"])) {
+						} else if ($wtwconnect->hasValue($zrow["avatarname"])) {
 							$zsitename = $zrow["avatarname"];
 						}
 						/* if rating is higher than base rating, update the base rating */
@@ -223,7 +223,7 @@ try {
 							$zcontentrating .= "<b><span style='color:#FEFFCE'>".$zsitename."</span> 3D Website is Unrated</b><br />";
 						}
 						/* append any content warnings */
-						if (!empty($zrow2["contentwarning"]) && isset($zrow2["contentwarning"])) {
+						if ($wtwconnect->hasValue($zrow2["contentwarning"])) {
 							$zcontentwarning .= $zrow2["contentwarning"] . "<br /><br />";
 							$zcontentrating .= $zrow2["contentwarning"] . "<br /><br />";
 						} else {

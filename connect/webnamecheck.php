@@ -9,10 +9,7 @@ try {
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/webnamecheck.php");
 	
 	$zwebname = $wtwconnect->getVal('webname','');
-
-	if (!empty($zwebname) && isset($zwebname)) {
-		$zwebname = strtolower($wtwconnect->decode64($zwebname));
-	}
+	$zwebname = strtolower($wtwconnect->decode64($zwebname));
 	
 	$zresponse = array(
 		'serror'=>'',
@@ -20,7 +17,7 @@ try {
 		'webname'=>$zwebname
 	);
 	
-	if (!empty($zwebname) && isset($zwebname)) {
+	if ($wtwconnect->hasValue($zwebname)) {
 		
 		/* reserved words can not be any part of the webname - you can add your own reserved words */
 		$zreserved = array('wtw','walktheweb','http3d','https3d');

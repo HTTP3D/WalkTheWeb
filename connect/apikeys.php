@@ -27,10 +27,10 @@ try {
 	
 	$zreferer = $_SERVER['HTTP_REFERER'];
 	
-	if(substr($zhosturl, -1) == '/') {
+	if (substr($zhosturl, -1) == '/') {
 		$zhosturl = substr($zhosturl, 0, -1);
 	}
-	if(substr($zreferer, -1) == '/') {
+	if (substr($zreferer, -1) == '/') {
 		$zreferer = substr($zreferer, 0, -1);
 	}
 
@@ -63,7 +63,7 @@ try {
 				$zdeleted = $zrow["deleted"];
 				$zapproved = $zrow["approved"];
 			}
-			if (empty($zwtwsecrethash) || !isset($zwtwsecrethash)) {
+			if (!isset($zwtwsecrethash) || empty($zwtwsecrethash)) {
 				/* key not found */
 				$zresponse = array(
 					'serror'=>'Invalid Key',
@@ -98,7 +98,7 @@ try {
 			break;
 		case "hostrequest":
 			echo $wtwconnect->addConnectHeader('*');
-			if (!empty($zreferer) && isset($zreferer) && !empty($zappid) && isset($zappid)) {
+			if ($wtwconnect->hasValue($zreferer) && $wtwconnect->hasValue($zappid)) {
 				$zdomainname = '';
 				$zforcehttps = '1';
 				$zparse = parse_url($zhosturl);

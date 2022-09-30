@@ -26,7 +26,7 @@ try {
 		/* format json return dataset */
 		foreach ($zresults as $zrow) {
 			$usertokenexists = 'false';
-			if (!empty($zrow["usertoken"]) && isset($zrow["usertoken"])) {
+			if ($wtwconnect->hasValue($zrow["usertoken"])) {
 				$usertokenexists = 'true';
 			}
 			$zuser = array(

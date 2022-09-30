@@ -19,7 +19,7 @@ try {
 	$zfounduseravatarid = '';
 	$zfoundavatarid = '';
 	
-	if (!empty($zuseravatarid) && isset($zuseravatarid)) {
+	if ($wtwconnect->hasValue($zuseravatarid)) {
 		/* check for user avatar */
 		$zresults = $wtwconnect->query("
 			select useravatarid, avatarid 
@@ -33,7 +33,7 @@ try {
 		}
 	}
 
-	if ((empty($zfounduseravatarid) || !isset($zfounduseravatarid)) && !empty($zuserid) && isset($zuserid)) {
+	if ((!isset($zfounduseravatarid) || empty($zfounduseravatarid)) && isset($zuserid) && !empty($zuserid)) {
 		/* check for user avatar for logged in user (latest used) */
 		$zresults = $wtwconnect->query("
 			select useravatarid, avatarid
@@ -48,7 +48,7 @@ try {
 		}
 	}
 
-	if ((empty($zfounduseravatarid) || !isset($zfounduseravatarid)) && !empty($zinstanceid) && isset($zinstanceid)) {
+	if ((!isset($zfounduseravatarid) || empty($zfounduseravatarid)) && isset($zinstanceid) && !empty($zinstanceid)) {
 		/* check for user avatar for by instance (latest used) */
 		$zresults = $wtwconnect->query("
 			select useravatarid, avatarid
@@ -63,7 +63,7 @@ try {
 		}
 	}
 
-	if ((empty($zfounduseravatarid) || !isset($zfounduseravatarid)) && !empty($zavatarid) && isset($zavatarid)) {
+	if ((!isset($zfounduseravatarid) || empty($zfounduseravatarid)) && isset($zavatarid) && !empty($zavatarid)) {
 		/* check for avatar selected */
 		$zresults = $wtwconnect->query("
 			select avatarid
@@ -122,7 +122,7 @@ try {
 
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
-	if (isset($zfounduseravatarid) && !empty($zfounduseravatarid)) {
+	if ($wtwconnect->hasValue($zfounduseravatarid)) {
 		/* get user avatar */
 		$zresults = $wtwconnect->query("
 			select * 
@@ -424,7 +424,7 @@ try {
 		$i += 1;
 	}
 	
-	if (isset($zglobalhash) && !empty($zglobalhash)) {
+	if ($wtwconnect->hasValue($zglobalhash)) {
 		/* check to see if the files and users should be included in the result set */
 		$zresults = $wtwconnect->query("
 			select * 
@@ -456,7 +456,7 @@ try {
 		}
 	}
 	
-	if (!empty($zinstanceid) && isset($zinstanceid)) {
+	if ($wtwconnect->hasValue($zinstanceid)) {
 		/* get any blocked or banned records if they exist */
 		$zfoundbantable = false;
 		$zresults = $wtwconnect->query("show tables like '".wtw_tableprefix."3dinternet_blockedinstances';");

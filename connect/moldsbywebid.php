@@ -2582,10 +2582,10 @@ try {
 		if ($zactionzoneid == $zrow["loadactionzoneid"] && $zactionzoneid != "") {
 			$zinloadactionzone = '1';
 		}
-		if(isset($zrow["webtext"]) && !empty($zrow["webtext"])) {
+		if ($wtwconnect->hasValue($zrow["webtext"])) {
 			$ztempwebtext = implode('',(array)$zrow["webtext"]);
 		}
-		if (isset($zrow["uploadobjectid"]) && !empty($zrow["uploadobjectid"])) {
+		if ($wtwconnect->hasValue($zrow["uploadobjectid"])) {
 			$zobjectanimations = $wtwconnect->getobjectanimations($zrow["uploadobjectid"]);
 		}
 		$zcommunityinfo = array(
@@ -2721,17 +2721,17 @@ try {
 			'coneoutergain' => $zrow["soundconeoutergain"],
 			'sound' => ''
 		);
-		if(isset($zrow['communitymoldid']) && !empty($zrow['communitymoldid']) && $zrow['communitymoldid'] != '') {
+		if ($wtwconnect->hasValue($zrow['communitymoldid'])) {
 			$zalttag = array(
 				'name'=> $zrow['communityalttag']
 			);
 		}
-		if(isset($zrow['buildingmoldid']) && !empty($zrow['buildingmoldid']) && $zrow['buildingmoldid'] != '') {
+		if ($wtwconnect->hasValue($zrow['buildingmoldid'])) {
 			$zalttag = array(
 				'name'=> $zrow['buildingalttag']
 			);
 		}
-		if(isset($zrow['thingmoldid']) && !empty($zrow['thingmoldid']) && $zrow['thingmoldid'] != '') {
+		if ($wtwconnect->hasValue($zrow['thingmoldid'])) {
 			$zalttag = array(
 				'name'=> $zrow['thingalttag']
 			);

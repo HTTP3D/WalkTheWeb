@@ -15,7 +15,7 @@ try {
 	}
 	
 	$zresponse = array();
-	if (!empty($zwebdomainid) && isset($zwebdomainid) && ($wtwconnect->isUserInRole("Admin") || $wtwconnect->isUserInRole("Host"))) {
+	if ($wtwconnect->hasValue($zwebdomainid) && ($wtwconnect->isUserInRole("Admin") || $wtwconnect->isUserInRole("Host"))) {
 		/* get web aliases for a user */
 		$zresults = array();
 		if ($wtwconnect->isUserInRole("Admin")) {

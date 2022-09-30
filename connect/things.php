@@ -62,7 +62,7 @@ try {
 	foreach ($zresults as $zrow) {
 		$zauthorizedusers = array('userid'=> $zrow["userid"]);
 		$snapshotdata = null;
-		if ((!isset($zrow["filepath"]) || empty($zrow["filepath"])) && !empty($zrow["filedata"]) && isset($zrow["filedata"])) {
+		if ((!isset($zrow["filepath"]) || empty($zrow["filepath"])) && isset($zrow["filedata"]) && !empty($zrow["filedata"])) {
 			$snapshotdata = "data:".$zrow["filetype"].";base64,".addslashes(base64_encode($zrow["filedata"]));
 		}
 		$zthinginfo = array(

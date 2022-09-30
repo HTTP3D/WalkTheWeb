@@ -234,10 +234,10 @@ try {
 	foreach ($zresults as $zrow) {
 		$zobjectanimations = null;
 		$ztempwebtext = "";
-		if(isset($zrow["webtext"]) && !empty($zrow["webtext"])) {
+		if ($wtwconnect->hasValue($zrow["webtext"])) {
 			$ztempwebtext = implode('',(array)$zrow["webtext"]);
 		}
-		if (isset($zrow["uploadobjectid"]) && !empty($zrow["uploadobjectid"])) {
+		if ($wtwconnect->hasValue($zrow["uploadobjectid"])) {
 			$zobjectanimations = $wtwconnect->getobjectanimations($zrow["uploadobjectid"]);
 		}
 		$zcommunityinfo = array(

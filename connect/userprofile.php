@@ -36,11 +36,11 @@ try {
 		$zdob = '';
 		$zdisplayname = $zrow["displayname"];
 		$zgender = $zrow["gender"];
-		if (isset($zrow["dob"]) && !empty($zrow["dob"])) {
+		if ($wtwconnect->hasValue($zrow["dob"])) {
 			$zdob = strtotime($zrow["dob"]);
 			$zdob = date("m/d/Y", $zdob);
 		}
-		if (isset($zrow["avatardisplayname"]) && !empty($zrow["avatardisplayname"])) {
+		if ($wtwconnect->hasValue($zrow["avatardisplayname"])) {
 			$zdisplayname = $zrow["avatardisplayname"];
 		}
 		if ((!isset($zgender) || empty($zgender)) && isset($zrow["avatargender"]) && !empty($zrow["avatargender"])) {

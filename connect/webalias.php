@@ -15,7 +15,7 @@ try {
 	}
 	
 	$zresponse = array();
-	if (!empty($zwebaliasid) && isset($zwebaliasid) && ($wtwconnect->isUserInRole("Admin") || $wtwconnect->isUserInRole("Host"))) {
+	if ($wtwconnect->hasValue($zwebaliasid) && ($wtwconnect->isUserInRole("Admin") || $wtwconnect->isUserInRole("Host"))) {
 		/* get web aliases for a user */
 		$zresults = array();
 		if ($wtwconnect->isUserInRole("Admin")) {
@@ -41,7 +41,12 @@ try {
 						else (select filepath 
 							from ".wtw_tableprefix."uploads 
 							where uploadid=t1.snapshotid limit 1)
-						end as thingsnapshoturl
+						end as thingsnapshoturl,
+					case when w1.siteiconid = '' then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=w1.siteiconid limit 1)
+						end as siteiconpath
 				from ".wtw_tableprefix."webaliases w1
 					left join ".wtw_tableprefix."communities c1
 						on w1.communityid=c1.communityid
@@ -84,7 +89,12 @@ try {
 						else (select filepath 
 							from ".wtw_tableprefix."uploads 
 							where uploadid=t1.snapshotid limit 1)
-						end as thingsnapshoturl
+						end as thingsnapshoturl,
+					case when w1.siteiconid = '' then ''
+						else (select filepath 
+							from ".wtw_tableprefix."uploads 
+							where uploadid=w1.siteiconid limit 1)
+						end as siteiconpath
 				from ".wtw_tableprefix."webaliases w1
 					left join ".wtw_tableprefix."communities c1
 						on w1.communityid=c1.communityid
@@ -119,7 +129,8 @@ try {
 				'webalias' => $zrow["webalias"],
 				'sitename' => $zrow["sitename"],
 				'sitedescription' => $zrow["sitedescription"],
-				'siteicon' => $zrow["siteicon"],
+				'siteiconid' => $zrow["siteiconid"],
+				'siteiconpath' => $zrow["siteiconpath"],
 				'communityid' => $zrow["communityid"],
 				'communitypublishname' => $zrow["communitypublishname"],
 				'communityname' => $zrow["communityname"],

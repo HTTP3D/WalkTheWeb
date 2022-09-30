@@ -21,7 +21,7 @@ try {
 
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 	
-	if ((empty($zcommunityid) || !isset($zcommunityid)) && (!empty($zcommunity) && isset($zcommunity))) {
+	if ((!isset($zcommunityid) || empty($zcommunityid)) && isset($zcommunity) && !empty($zcommunity)) {
 		/* select communityid for community by url segment (pubname) */
 		$zresults = $wtwconnect->query("
 			select communityid 
@@ -34,7 +34,7 @@ try {
 			$zcommunityid = $zrow["communityid"];
 		}
 	}
-	if ((empty($zbuildingid) || !isset($zbuildingid)) && (!empty($zbuilding) && isset($zbuilding))) {
+	if ((!isset($zbuildingid) || empty($zbuildingid)) && isset($zbuilding) && !empty($zbuilding)) {
 		/* select buildingid for community by url segment (pubname) */
 		$zresults = $wtwconnect->query("
 			select buildingid 
@@ -47,7 +47,7 @@ try {
 			$zbuildingid = $zrow["buildingid"];
 		}
 	}
-	if ((!empty($zcommunityid) && isset($zcommunityid)) && (!empty($zbuildingid) && isset($zbuildingid))) {
+	if ($wtwconnect->hasValue($zcommunityid) && $wtwconnect->hasValue($zbuildingid)) {
 		/* select connectinggridid */
 		$zresults = $wtwconnect->query("
 			select connectinggridid 
@@ -59,18 +59,18 @@ try {
 		foreach ($zresults as $zrow) {
 			$zconnectinggridid = $zrow["connectinggridid"];
 		}
-		if (empty($zconnectinggridid) || !isset($zconnectinggridid)) {
+		if (!isset($zconnectinggridid) || empty($zconnectinggridid)) {
 			$zbuildingid = "";
 		}
 	}
-	if (empty($zcommunityid) || !isset($zcommunityid)) {
+	if (!isset($zcommunityid) || empty($zcommunityid)) {
 		$zcommunityid = "";
 	}
-	if (empty($zbuildingid) || !isset($zbuildingid)) {
+	if (!isset($zbuildingid) || empty($zbuildingid)) {
 		$zbuildingid = "";
 	}
 	$zresults = array();
-	if (!empty($zcommunityid) && isset($zcommunityid) && !empty($zbuildingid) && isset($zbuildingid)) {
+	if ($wtwconnect->hasValue($zcommunityid) && $wtwconnect->hasValue($zbuildingid)) {
 		/* get domain info and connecting grids by communityid and buildingid */
 		$zresults = $wtwconnect->query("
 			select  communities.communityid,
@@ -159,7 +159,7 @@ try {
 							and buildings.buildingid = '".$zbuildingid."') buildings 
 					on buildings.buildingid = connectinggrids.childwebid
 				;");
-	} else if (!empty($zcommunityid) && isset($zcommunityid)) {
+	} else if ($wtwconnect->hasValue($zcommunityid)) {
 		/* get domain info and connecting grids by communityid */
 		$zresults = $wtwconnect->query("
 			select communities.communityid,
@@ -232,7 +232,7 @@ try {
 			from (select * from ".wtw_tableprefix."communities 
 						where deleted=0 and communityid='".$zcommunityid."') communities;	
 		");	
-	} else if (!empty($zbuildingid) && isset($zbuildingid)) {
+	} else if ($wtwconnect->hasValue($zbuildingid)) {
 		/* select domain info and connecting grids by buildingid */
 		$zresults = $wtwconnect->query("
 			select '' as communityid,
@@ -291,7 +291,7 @@ try {
 						where buildings.deleted=0 
 							and buildings.buildingid='".$zbuildingid."') buildings 
 		;");
-	} else if (!empty($zthingid) && isset($zthingid)) {
+	} else if ($wtwconnect->hasValue($zthingid)) {
 		/* select domain info and connecting grids by thingid */
 		$zresults = $wtwconnect->query("
 			select '' as communityid,

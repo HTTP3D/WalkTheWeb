@@ -18,7 +18,7 @@ try {
 
 	$zresults = array();
 	$zwebtype = 'avatars';
-	if (!empty($zgroups) && isset($zgroups)) {
+	if ($wtwconnect->hasValue($zgroups)) {
 		if ($zgroups == 'my') {
 			/* pull a group of MY available avatars */
 			$zresults = $wtwconnect->query("

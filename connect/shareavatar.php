@@ -25,7 +25,7 @@ function addUploadID($zuploadid, $zrecursive) {
 	try {
 		global $zuploads;
 		global $zupload;
-		if (!empty($zuploadid) && isset($zuploadid)) {
+		if ($wtwconnect->hasValue($zuploadid)) {
 			$zfound = false;
 			foreach ($zuploads as $zrowup) {
 				if ($zrowup["uploadid"] == $zuploadid) {
@@ -41,7 +41,7 @@ function addUploadID($zuploadid, $zrecursive) {
 					and deleted=0;");
 				foreach ($zresults as $zrow) {
 					$zfilepath = $zrow["filepath"];
-					if (!empty($zfilepath) && isset($zfilepath)) {
+					if ($wtwconnect->hasValue($zfilepath)) {
 						if (substr($zfilepath, 0, 4) != "http") {
 							$zfilepath = $wtwconnect->domainurl.$zfilepath;
 						}
@@ -91,7 +91,7 @@ function addAvatarAnimationID($zavataranimationid) {
 	try {
 		global $zavataranimations;
 		global $zavataranimation;
-		if (!empty($zavataranimationid) && isset($zavataranimationid)) {
+		if ($wtwconnect->hasValue($zavataranimationid)) {
 			$zfound = false;
 			foreach ($zavataranimations as $zrowanim) {
 				if ($zrowanim["avataranimationid"] == $zavataranimationid) {
@@ -151,7 +151,7 @@ function addUserID($zuserid) {
 	try {
 		global $zusers;
 		global $zuser;
-		if (!empty($zuserid) && isset($zuserid)) {
+		if ($wtwconnect->hasValue($zuserid)) {
 			$zfound = false;
 			foreach ($zusers as $zrowup) {
 				if ($zrowup["userid"] == $zuserid) {

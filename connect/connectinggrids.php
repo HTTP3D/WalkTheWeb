@@ -21,7 +21,7 @@ try {
 	
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
-	if (isset($zparentwebid) && !empty($zparentwebid)) {
+	if ($wtwconnect->hasValue($zparentwebid)) {
 		/* select connectinggridid for main childid for item */
 		$zresults = $wtwconnect->query("
 			select connectinggridid 
@@ -30,7 +30,7 @@ try {
 		foreach ($zresults as $zrow) {
 			$zconnectinggridid = $zrow["connectinggridid"];
 		}
-		if (empty($zconnectinggridid) || !isset($zconnectinggridid)) {
+		if (!isset($zconnectinggridid) || empty($zconnectinggridid)) {
 			/* select connectinggridid for item */
 			$zresults = $wtwconnect->query("
 				select connectinggridid 
@@ -516,8 +516,8 @@ try {
 		$zwebitems = array();
 		/* format json return dataset */
 		foreach ($zresults as $zrow) {
-			if ($zconnectinggridid != $zrow["connectinggridid"] && isset($zrow["connectinggridid"]) && !empty($zrow["connectinggridid"])) {
-				if(isset($zrow["parentcommunityid"]) && !empty($zrow["parentcommunityid"])) {
+			if ($zconnectinggridid != $zrow["connectinggridid"] && $wtwconnect->hasValue($zrow["connectinggridid"])) {
+				if ($wtwconnect->hasValue($zrow["parentcommunityid"])) {
 					$zcommunityinfo = array(
 						'communityid'=> $zrow["parentcommunityid"],
 						'communityname'=> $wtwconnect->escapeHTML($zrow["parentcommunityname"]),
@@ -526,7 +526,7 @@ try {
 						'analyticsid'=> $zrow["parentcommunityanalyticsid"],
 						'access'=> $zrow["parentcommunityaccess"]
 					);
-				} elseif (isset($zrow["communityid"]) && !empty($zrow["communityid"])) {
+				} elseif ($wtwconnect->hasValue($zrow["communityid"])) {
 					$zcommunityinfo = array(
 						'communityid'=> $zrow["communityid"],
 						'communityname'=> $wtwconnect->escapeHTML($zrow["communityname"]),
@@ -545,7 +545,7 @@ try {
 						'access'=> ''
 					);
 				}
-				if(isset($zrow["parentbuildingid"]) && !empty($zrow["parentbuildingid"])) {
+				if ($wtwconnect->hasValue($zrow["parentbuildingid"])) {
 					$zbuildinginfo = array(
 						'buildingid'=> $zrow["parentbuildingid"], 
 						'buildingname'=> $zrow["parentbuildingname"],
@@ -554,7 +554,7 @@ try {
 						'analyticsid'=> $zrow["parentbuildinganalyticsid"],
 						'access'=> $zrow["parentbuildingaccess"]
 					);
-				} elseif (isset($zrow["buildingid"]) && !empty($zrow["buildingid"])) {
+				} elseif ($wtwconnect->hasValue($zrow["buildingid"])) {
 					$zbuildinginfo = array(
 						'buildingid'=> $zrow["buildingid"], 
 						'buildingname'=> $zrow["buildingname"],
@@ -573,7 +573,7 @@ try {
 						'access'=> ''
 					);
 				}
-				if(isset($zrow["parentthingid"]) && !empty($zrow["parentthingid"])) {
+				if ($wtwconnect->hasValue($zrow["parentthingid"])) {
 					$zthinginfo = array(
 						'thingid'=> $zrow["parentthingid"], 
 						'thingname'=> $zrow["parentthingname"],
@@ -582,7 +582,7 @@ try {
 						'analyticsid'=> $zrow["parentthinganalyticsid"],
 						'access'=> $zrow["parentthingaccess"]
 					);
-				} elseif (isset($zrow["thingid"]) && !empty($zrow["thingid"])) {
+				} elseif ($wtwconnect->hasValue($zrow["thingid"])) {
 					$zthinginfo = array(
 						'thingid'=> $zrow["thingid"], 
 						'thingname'=> $zrow["thingname"],
@@ -657,7 +657,7 @@ try {
 				$i += 1;
 			}
 			if ($zrow["parentwebtype"] == 'community' && $zsubconnectinggridid != $zrow["subconnectinggridid"] && isset($zrow["subconnectinggridid"]) && !empty($zrow["subconnectinggridid"])) {
-				if(isset($zrow["parentcommunityid"]) && !empty($zrow["parentcommunityid"])) {
+				if ($wtwconnect->hasValue($zrow["parentcommunityid"])) {
 					$zcommunityinfo = array(
 						'communityid'=> $zrow["parentcommunityid"],
 						'communityname'=> $wtwconnect->escapeHTML($zrow["parentcommunityname"]),
@@ -666,7 +666,7 @@ try {
 						'analyticsid'=> $zrow["parentcommunityanalyticsid"],
 						'access'=> $zrow["parentcommunityaccess"]
 					);
-				} elseif (isset($zrow["communityid"]) && !empty($zrow["communityid"])) {
+				} elseif ($wtwconnect->hasValue($zrow["communityid"])) {
 					$zcommunityinfo = array(
 						'communityid'=> $zrow["communityid"],
 						'communityname'=> $wtwconnect->escapeHTML($zrow["communityname"]),
@@ -685,7 +685,7 @@ try {
 						'access'=> ''
 					);
 				}
-				if (isset($zrow["parentbuildingid"]) && !empty($zrow["parentbuildingid"])) {
+				if ($wtwconnect->hasValue($zrow["parentbuildingid"])) {
 					$zbuildinginfo = array(
 						'buildingid'=> $zrow["parentbuildingid"], 
 						'buildingname'=> $zrow["parentbuildingname"],
@@ -694,7 +694,7 @@ try {
 						'analyticsid'=> $zrow["parentbuildinganalyticsid"],
 						'access'=> $zrow["parentbuildingaccess"]
 					);
-				} elseif (isset($zrow["buildingid"]) && !empty($zrow["buildingid"])) {
+				} elseif ($wtwconnect->hasValue($zrow["buildingid"])) {
 					$zbuildinginfo = array(
 						'buildingid'=> $zrow["buildingid"], 
 						'buildingname'=> $zrow["buildingname"],
@@ -713,7 +713,7 @@ try {
 						'access'=> ''
 					);
 				}
-				if(isset($zrow["subchildthingid"]) && !empty($zrow["subchildthingid"])) {
+				if ($wtwconnect->hasValue($zrow["subchildthingid"])) {
 					$zthinginfo = array(
 						'thingid'=> $zrow["subchildthingid"], 
 						'thingname'=> $zrow["subchildthingname"],
@@ -722,7 +722,7 @@ try {
 						'analyticsid'=> $zrow["subchildthinganalyticsid"],
 						'access'=> $zrow["subchildthingaccess"]
 					);
-				} elseif (isset($zrow["parentthingid"]) && !empty($zrow["parentthingid"])) {
+				} elseif ($wtwconnect->hasValue($zrow["parentthingid"])) {
 					$zthinginfo = array(
 						'thingid'=> $zrow["parentthingid"], 
 						'thingname'=> $zrow["parentthingname"],
@@ -731,7 +731,7 @@ try {
 						'analyticsid'=> $zrow["parentthinganalyticsid"],
 						'access'=> $zrow["parentthingaccess"]
 					);
-				} elseif (isset($zrow["thingid"]) && !empty($zrow["thingid"])) {
+				} elseif ($wtwconnect->hasValue($zrow["thingid"])) {
 					$zthinginfo = array(
 						'thingid'=> $zrow["thingid"], 
 						'thingname'=> $zrow["thingname"],
