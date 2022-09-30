@@ -255,7 +255,7 @@ WTWJS.prototype.saveNewRole = async function() {
 			WTW.hide('wtw_roleadd');
 			dGet('wtw_roleswidth').className = 'wtw-dashboardboxleftfull';
 			var zrequest = {
-				'rolename': btoa(zrolename),
+				'rolename':btoa(zrolename),
 				'function':'savenewrole'
 			};
 			WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
@@ -345,7 +345,7 @@ WTWJS.prototype.deleteRole = async function(zroleid) {
 	try {	
 		if (zroleid != '') {
 			var zrequest = {
-				'roleid': zroleid,
+				'roleid':zroleid,
 				'function':'deleterole'
 			};
 			WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
@@ -391,8 +391,8 @@ WTWJS.prototype.addUserRole = async function(zuserid) {
 		if (zroleid != '' && zuserid != '') {
 			dGet('adduserrole' + zuserid).innerHTML = 'Adding...';
 			var zrequest = {
-				'userid': zuserid,
-				'roleid': zroleid,
+				'userid':zuserid,
+				'roleid':zroleid,
 				'function':'saveuserrole'
 			};
 			WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
@@ -497,9 +497,9 @@ WTWJS.prototype.saveNewUser = async function() {
 			dGet('wtw_alluserswidth').className = 'wtw-dashboardboxleftfull';
 			var zpassword = dGet('wtw_tuseruserpassword2').value;
 			var zrequest = {
-				'displayname': btoa(zdisplayname),
-				'password': btoa(zpassword),
-				'useremail': btoa(zemail),
+				'displayname':btoa(zdisplayname),
+				'password':btoa(zpassword),
+				'useremail':zemail,
 				'function':'savenewuser'
 			};
 			WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
@@ -537,7 +537,7 @@ WTWJS.prototype.saveUser = async function() {
 			var zrequest = {
 				'userid':zuserid,
 				'displayname':btoa(zdisplayname),
-				'useremail':btoa(zemail),
+				'useremail':zemail,
 				'function':'saveuser'
 			};
 			WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
@@ -560,7 +560,7 @@ WTWJS.prototype.deleteUser = async function(zuserid) {
 	try {	
 		if (zuserid != '') {
 			var zrequest = {
-				'userid': zuserid,
+				'userid':zuserid,
 				'function':'deleteuser'
 			};
 			WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
@@ -663,11 +663,11 @@ WTWJS.prototype.addAccess = async function() {
 	/* add user access to 3D Community, 3D Building, or 3D Thing */
 	try {
 		var zrequest = {
-			'communityid': communityid,
-			'buildingid': buildingid,
-			'thingid': thingid,
-			'useraccess': dGet('wtw_taddnewaccess').value,
-			'usersearch': dGet('wtw_tadduseridname').value,
+			'communityid':communityid,
+			'buildingid':buildingid,
+			'thingid':thingid,
+			'useraccess':dGet('wtw_taddnewaccess').value,
+			'usersearch':dGet('wtw_tadduseridname').value,
 			'function':'savepermissions'
 		};
 		WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
@@ -687,10 +687,10 @@ WTWJS.prototype.deleteAccess = async function() {
 	/* delete user access to 3D Community, 3D Building, or 3D Thing */
 	try {
 		var zrequest = {
-			'communityid': communityid,
-			'buildingid': buildingid,
-			'thingid': thingid,
-			'usersearch': dGet('wtw_tadduseridname').value,
+			'communityid':communityid,
+			'buildingid':buildingid,
+			'thingid':thingid,
+			'usersearch':dGet('wtw_tadduseridname').value,
 			'function':'deletepermissions'
 		};
 		WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
@@ -711,11 +711,11 @@ WTWJS.prototype.deleteAccess = async function() {
 WTWJS.prototype.addDevAccess = async function() {
 	try {
 		var zrequest = {
-			'communityid': communityid,
-			'buildingid': buildingid,
-			'thingid': thingid,
-			'useraccess': dGet('wtw_taddnewaccess').value,
-			'usersearch': dGet('wtw_tadduserdevaccess').value,
+			'communityid':communityid,
+			'buildingid':buildingid,
+			'thingid':thingid,
+			'useraccess':dGet('wtw_taddnewaccess').value,
+			'usersearch':dGet('wtw_tadduserdevaccess').value,
 			'function':'savepermissions'
 		};
 		WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
@@ -770,10 +770,10 @@ WTWJS.prototype.setAccessValid = function(w) {
 WTWJS.prototype.deleteDevAccess = async function() {
 	try {
 		var zrequest = {
-			'communityid': communityid,
-			'buildingid': buildingid,
-			'thingid': thingid,
-			'usersearch': dGet('wtw_tadduserdevaccess').value,
+			'communityid':communityid,
+			'buildingid':buildingid,
+			'thingid':thingid,
+			'usersearch':dGet('wtw_tadduserdevaccess').value,
 			'function':'deletepermissions'
 		};
 		WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 

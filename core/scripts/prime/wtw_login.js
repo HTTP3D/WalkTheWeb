@@ -37,10 +37,10 @@ WTWJS.prototype.globalLogin = async function(zparameters) {
 			zuseremail = atob(zparameter[2]);
 			zdisplayname = atob(zparameter[3]);
 			var zrequest = {
-				'globaluserid':btoa(zglobaluserid),
-				'usertoken':btoa(zusertoken),
+				'globaluserid':zglobaluserid,
+				'usertoken':zusertoken,
 				'displayname':btoa(zdisplayname),
-				'useremail':btoa(zuseremail),
+				'useremail':zuseremail,
 				'function':'globallogin'
 			};
 			WTW.postAsyncJSON('/core/handlers/users.php', zrequest,
@@ -59,16 +59,16 @@ WTWJS.prototype.globalLogin = async function(zparameters) {
 	}
 }
 
-WTWJS.prototype.globalLoginResponse = function(zresults) {
+WTWJS.prototype.globalLoginResponse = function(zresponse) {
 	/* references 3dnet.walktheweb.com - global WalkTheWeb login complete and returns the local values from login */
 	let znoerror = true;
 	try {
 		var zerror = '';
-		if (zresults != null) {
-			if (zresults.serror != undefined) {
-				if (zresults.serror != '') {
+		if (zresponse != null) {
+			if (zresponse.serror != undefined) {
+				if (zresponse.serror != '') {
 					znoerror = false;
-					zerror = zresults.serror;
+					zerror = zresponse.serror;
 					dGet('wtw_tglobaluserid').value = '';
 					dGet('wtw_tuserid').value = '';
 					dGet('wtw_tuseremail').value = '';
@@ -80,11 +80,11 @@ WTWJS.prototype.globalLoginResponse = function(zresults) {
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 					dGet('wtw_tusertoken').value = '';
 				}
-				if (zresults.userid != '') {
-					dGet('wtw_tusertoken').value = zresults.usertoken;
-					dGet('wtw_tglobaluserid').value = zresults.globaluserid;
+				if (zresponse.userid != '') {
+					dGet('wtw_tusertoken').value = zresponse.usertoken;
+					dGet('wtw_tglobaluserid').value = zresponse.globaluserid;
 					WTW.hide('wtw_menulogin');
-					WTW.setLoginValues(zresults.userid, zresults.displayname, zresults.email, zresults.userimageurl);
+					WTW.setLoginValues(zresponse.userid, zresponse.displayname, zresponse.email, zresponse.userimageurl);
 					WTW.show('wtw_menuloggedin');
 				} else {
 					WTW.hide('wtw_menuloggedin');
@@ -309,12 +309,12 @@ WTWJS.prototype.saveMyProfile = async function() {
 		/* validate entries... */
 		var zrequest = {
 			'userid': dGet('wtw_tuserid').value,
-			'displayname': dGet('wtw_tprofiledisplayname').value,
-			'useremail': dGet('wtw_tprofileemail').value,
-			'firstname': dGet('wtw_tprofilefirstname').value,
-			'lastname': dGet('wtw_tprofilelastname').value,
-			'gender': dGet('wtw_tprofilegender').value,
-			'dob': dGet('wtw_tprofiledob').value,
+			'displayname':btoa(dGet('wtw_tprofiledisplayname').value),
+			'useremail':dGet('wtw_tprofileemail').value,
+			'firstname':btoa(dGet('wtw_tprofilefirstname').value),
+			'lastname':btoa(dGet('wtw_tprofilelastname').value),
+			'gender':btoa(dGet('wtw_tprofilegender').value),
+			'dob':dGet('wtw_tprofiledob').value,
 			'function':'savemyprofile'
 		};
 		WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
@@ -876,7 +876,7 @@ WTWJS.prototype.loginAttempt = async function() {
 		}
 		dGet('wtw_loginerrortext').innerHTML = '';
 		var zrequest = {
-			'useremail':btoa(dGet('wtw_temail').value),
+			'useremail':dGet('wtw_temail').value,
 			'password':btoa(dGet('wtw_tpassword').value),
 			'function':'login'
 		};
@@ -892,14 +892,14 @@ WTWJS.prototype.loginAttempt = async function() {
 	}
 }
 
-WTWJS.prototype.loginAttemptResponse = function(zresults) {
+WTWJS.prototype.loginAttemptResponse = function(zresponse) {
 	/* response and results of a local server login request */
 	try {
 		var serror = '';
-		if (zresults != null) {
-			if (zresults.serror != undefined) {
-				if (zresults.serror != '') {
-					serror = zresults.serror;
+		if (zresponse != null) {
+			if (zresponse.serror != undefined) {
+				if (zresponse.serror != '') {
+					serror = zresponse.serror;
 					dGet('wtw_tuserid').value = '';
 					dGet('wtw_tuseremail').value = '';
 					dGet('wtw_tdisplayname').value = '';
@@ -909,12 +909,12 @@ WTWJS.prototype.loginAttemptResponse = function(zresults) {
 					dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
 					dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
 				}
-				if (zresults.userid != '') {
+				if (zresponse.userid != '') {
 					WTW.hide('wtw_menulogin');
 					WTW.show('wtw_menuloggedin');
-					WTW.setLoginValues(zresults.userid, zresults.displayname, zresults.email, zresults.userimageurl);
+					WTW.setLoginValues(zresponse.userid, zresponse.displayname, zresponse.email, zresponse.userimageurl);
 					if (WTW.enableEmailValidation == 1) {
-						WTW.checkEmailValidation(zresults.email);
+						WTW.checkEmailValidation(zresponse.email);
 					} else {
 						WTW.openLocalLogin('Select Avatar',.4,.9);
 					}
@@ -994,7 +994,7 @@ WTWJS.prototype.createAccount = async function() {
 		/* NEEDED add validation */
 		var zrequest = {
 			'displayname':btoa(dGet('wtw_tnewdisplayname').value),
-			'useremail':btoa(dGet('wtw_tnewemail').value),
+			'useremail':dGet('wtw_tnewemail').value,
 			'password':btoa(dGet('wtw_tnewpassword').value),
 			'function':'register'
 		};
@@ -1086,8 +1086,8 @@ WTWJS.prototype.checkEmailValidation = async function(zuseremail) {
 			zuseremail = dGet('wtw_tuseremail').value;
 		}
 		var zrequest = {
-			'useremail': zuseremail,
-			'userid':btoa(dGet('wtw_tuserid').value),
+			'useremail':zuseremail,
+			'userid':dGet('wtw_tuserid').value,
 			'function':'checkemailvalidation'
 		};
 		WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 
@@ -1114,8 +1114,8 @@ WTWJS.prototype.checkEmailValidation = async function(zuseremail) {
 						'function':'sendemail'
 					};
 					WTW.postAsyncJSON('/core/handlers/tools.php', zrequest, 
-						function(zresponse) {
-							zresponse = JSON.parse(zresponse);
+						function(zresponse2) {
+							zresponse2 = JSON.parse(zresponse2);
 							WTW.openLocalLogin('Email Verification', .4, .6);
 						}
 					);
@@ -1160,10 +1160,10 @@ WTWJS.prototype.saveProfile = async function() {
 	try {
 		/* validate entries... */
 		var zrequest = {
-			'useravatarid': btoa(dGet('wtw_tuseravatarid').value),
-			'instanceid': btoa(dGet('wtw_tinstanceid').value),
-			'useremail': btoa(dGet('wtw_teditemail').value),
-			'displayname': btoa(dGet('wtw_teditdisplayname').value),
+			'useravatarid':dGet('wtw_tuseravatarid').value,
+			'instanceid':dGet('wtw_tinstanceid').value,
+			'useremail':dGet('wtw_teditemail').value,
+			'displayname':btoa(dGet('wtw_teditdisplayname').value),
 			'function':'saveprofile'
 		};
 		WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 

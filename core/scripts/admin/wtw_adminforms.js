@@ -849,6 +849,20 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 										zpluginclass = 'wtw-active';
 										ztdclass = 'wtw-tdactive';
 									}
+									if (zmyplugins[i].required == '1') {
+										zrequired = ' checked ';
+										zhasrequirements = true;
+										if (zmyplugins[i].active != '1') {
+											ztdclass = 'wtw-tdactiverequired';
+										}
+									}
+									if (zmyplugins[i].optional == '1') {
+										zoptional = ' checked ';
+										zhasrequirements = true;
+										if (zmyplugins[i].active != '1') {
+											ztdclass = 'wtw-tdactiveoptional';
+										}
+									}
 									if (zfilter == 'All 3D Plugins' || (zpluginclass == 'wtw-active' && zfilter == 'Active 3D Plugins') || (zpluginclass == 'wtw-deactive' && zfilter == 'Inactive 3D Plugins')) {
 										zpluginslist += "<tr><td class='wtw-tablecolumns " + ztdclass + "'>";
 										if (zmyplugins[i].version != zmyplugins[i].latestversion && WTW.isUserInRole('Admin')) {
@@ -872,6 +886,21 @@ WTWJS.prototype.checkForUpdatesComplete = function(zmyplugins, zupdateinfo, zsho
 											}
 										}
 										zpluginslist += "</td></tr>";
+										if (zmyplugins[i].active != '1' && zmyplugins[i].websrequired != undefined) {
+											if (zmyplugins[i].websrequired.length > 0) {
+												zpluginslist += "<tr><td style='text-align:right;vertical-align:top;padding:5px;font-weight:bold;' >Dependents:</td><td class='wtw-tablecolumnheading wtw-tdactiveoptional'>";
+												for (var j=0;j<zmyplugins[i].websrequired.length;j++) {
+													if (zmyplugins[i].websrequired[j] != null) {
+														var zrequiredtext = 'Required';
+														if (zmyplugins[i].websrequired[j].optional == '1') {
+															zrequiredtext = 'Optional';
+														}
+														zpluginslist += "<div><div class='wtw-pluginreqopt'>" + zrequiredtext + "</div><div style='width:150px;display:inline-block;min-height:12px;'>3D " + zmyplugins[i].websrequired[j].webtype + "</div><a href='/admin.php?" + zmyplugins[i].websrequired[j].webtype.toLowerCase() + "id=" + zmyplugins[i].websrequired[j].webid + "'>" + zmyplugins[i].websrequired[j].webname + "</a><div class='wtw-clear'></div></div>";
+													}
+												}
+												zpluginslist += "</td>&nbsp;<td></td>";
+											}
+										}
 									}
 								}
 							}
@@ -1239,6 +1268,20 @@ WTWJS.prototype.openAllPluginsComplete = function(zresponse, zpluginname, zactiv
 							zpluginclass = 'wtw-active';
 							ztdclass = 'wtw-tdactive';
 						}
+						if (zresponse[i].required == '1') {
+							zrequired = ' checked ';
+							zhasrequirements = true;
+							if (zresponse[i].active != '1') {
+								ztdclass = 'wtw-tdactiverequired';
+							}
+						}
+						if (zresponse[i].optional == '1') {
+							zoptional = ' checked ';
+							zhasrequirements = true;
+							if (zresponse[i].active != '1') {
+								ztdclass = 'wtw-tdactiveoptional';
+							}
+						}
 						zpluginslist += "<tr><td class='wtw-tablecolumns " + ztdclass + "'><span class='" + zpluginclass + "'>" + zresponse[i].pluginname + "</span><br />Version: " + zresponse[i].version + "</td>";
 						zpluginslist += "<td class='wtw-tablecolumns " + ztdclass + "'><span class='" + zpluginclass + "'>" + zresponse[i].title + "</span> : " + zresponse[i].author + "<br />" + zresponse[i].description + "<br /></td>";
 						zpluginslist += "<td class='wtw-tablecolumns " + ztdclass + "'>";
@@ -1256,6 +1299,21 @@ WTWJS.prototype.openAllPluginsComplete = function(zresponse, zpluginname, zactiv
 							}
 						}
 						zpluginslist += "</td></tr>";
+						if (zresponse[i].active != '1' && zresponse[i].websrequired != undefined) {
+							if (zresponse[i].websrequired.length > 0) {
+								zpluginslist += "<tr><td style='text-align:right;vertical-align:top;padding:5px;font-weight:bold;' >Dependents:</td><td class='wtw-tablecolumnheading wtw-tdactiveoptional'>";
+								for (var j=0;j<zresponse[i].websrequired.length;j++) {
+									if (zresponse[i].websrequired[j] != null) {
+										var zrequiredtext = 'Required';
+										if (zresponse[i].websrequired[j].optional == '1') {
+											zrequiredtext = 'Optional';
+										}
+										zpluginslist += "<div><div class='wtw-pluginreqopt'>" + zrequiredtext + "</div><div style='width:150px;display:inline-block;min-height:12px;'>3D " + zresponse[i].websrequired[j].webtype + "</div><a href='/admin.php?" + zresponse[i].websrequired[j].webtype.toLowerCase() + "id=" + zresponse[i].websrequired[j].webid + "'>" + zresponse[i].websrequired[j].webname + "</a><div class='wtw-clear'></div></div>";
+									}
+								}
+								zpluginslist += "</td>&nbsp;<td></td>";
+							}
+						}
 					}
 				}
 			}
@@ -1417,9 +1475,12 @@ WTWJS.prototype.openDashboardForm = async function(zshow) {
 			WTW.hide('wtw_dashboard');
 			WTW.show('wtw_loadingdashboard');
 			WTW.hide('wtw_videolinks');
+			WTW.hide('wtw_wtwactivity');
 			WTW.hide('wtw_downloadqueue');
+			WTW.hide('wtw_serverstats');
 		}
 		dGet('wtw_serverstatslist').innerHTML = '';
+		dGet('wtw_wtwactivitylist').innerHTML = '';
 		WTW.getAsyncJSON('/connect/dashboard.php', 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
@@ -1487,6 +1548,7 @@ WTWJS.prototype.openDashboardForm = async function(zshow) {
 					if (zshow) {
 						dGet('wtw_serverstatslist').innerHTML = zserverstatslist;
 					}
+					WTW.show('wtw_serverstats');
 				}
 				if (zshow) {
 					window.setTimeout(function() {
@@ -1515,6 +1577,45 @@ WTWJS.prototype.openDashboardForm = async function(zshow) {
 						}
 					}
 					WTW.show('wtw_videolinks');
+				}
+			);
+			WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/wtwactivities.php', 
+				function(zresponse) {
+					zresponse = JSON.parse(zresponse);
+					var zwtwactivities = '';
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							zwtwactivities += "<h2 class='wtw-black'>" + atob(zresponse[i].activitytitle) + ' (' + WTW.formatDate(zresponse[i].createdate) + ')</h2>' + atob(zresponse[i].activitydescription) + '<br />';
+							switch (zresponse[i].category) {
+								case 'Shared 3D Avatar':
+								case 'Shared 3D Web':
+									zwtwactivities += "<h3 class='wtw-blue'>" + atob(zresponse[i].sharedtitle) + "</h3>";
+									zwtwactivities += atob(zresponse[i].shareddescription) + '<br /><br />';
+									zwtwactivities += '<b>Search Tags</b><br />' + atob(zresponse[i].tags) + '<br /><br />';
+									break;
+								case 'WalkTheWeb Users':
+									zresponse[i].sharedimage = '';
+								case 'WalkTheWeb Servers':
+									if (zresponse[i].sharedimage == '') {
+										zresponse[i].sharedimage = 'https://3dnet.walktheweb.com/wp-content/uploads/2021/02/NewWTWServer.png';
+									}
+									zwtwactivities += "<h3><a href='" + zresponse[i].website + "' target='_blank'>" + zresponse[i].website + "</a></h3>";
+									zwtwactivities += "<div class='wtw-mincol'>City: </div><b>" + zresponse[i].city + "</b><br /><div class='wtw-mincol'>Region: </div><b>" + zresponse[i].region + "</b><br /><div class='wtw-mincol'>Country: </div><b>" + zresponse[i].country + "</b><br /><div class='wtw-mincol'>Continent: </div><b>" + zresponse[i].continent + '</b><br /><br />';
+									break;
+								case 'WalkTheWeb Video':
+									zwtwactivities += "<h3><a href='" + zresponse[i].videourl + "' target='_blank'>" + zresponse[i].website + "</a></h3>";
+									zwtwactivities += 'Presented by: ' + zresponse[i].presenter + ' on ' + WTW.formatDate(zresponse[i].createdate) + '<br /><br />' + atob(zresponse[i].videodescription);
+									break;
+							}
+							if (zresponse[i].sharedimage != '') {
+								zwtwactivities += "<img src='" + zresponse[i].sharedimage + "' style='width:100%;height:auto;' /><hr />";
+							} else {
+								zwtwactivities += '<hr />';
+							}
+						}
+					}
+					dGet('wtw_wtwactivitylist').innerHTML = zwtwactivities;
+					WTW.show('wtw_wtwactivity');
 				}
 			);
 		}
@@ -1930,7 +2031,9 @@ WTWJS.prototype.setSelectFileID = function(zselectedobj, zuploadid, zoriginalid,
 				WTW.extraGround.material = zextragroundmaterial;
 				break;
 		}
-		if (zitemname != 'wtw_tobjectsoundid') {
+		if (zitemname == 'wtw_taliassiteiconid') {
+			WTW.openFullPageForm('settings','Web Aliases');
+		} else if (zitemname != 'wtw_tobjectsoundid') {
 			document.activeElement.blur();
 			WTW.closeFullPageForm();
 			if (WTW.adminView == 1) {
@@ -1987,7 +2090,7 @@ WTWJS.prototype.loadMyFilesPage = async function(zitem, zcategory, zhide) {
 					for (var i=0;i<zresponse.length;i++) {
 						if (zresponse[i] != null) {
 							zicononclick = '';
-							if(zitem != '') {
+							if (zitem != '') {
 								zicononclick = "onclick=\"WTW.setSelectFileID(this,'" + zresponse[i].uploadid + "','" + zresponse[i].originalid + "','" + zresponse[i].websizeid + "','" + zresponse[i].fileextension + "'," + zresponse[i].filesize + ",'" + zresponse[i].filetitle + "','" + zresponse[i].filename + "','" + zresponse[i].originalpath + "');\"";
 							} else {
 								zicononclick = "onclick=\"WTW.openFullPageForm('mediapage','" + zcategory + "','" + zresponse[i].uploadid + "');\"";
@@ -2642,6 +2745,31 @@ WTWJS.prototype.selectObjectGroup = async function(zuploadobjectid, zgroupid, zg
 	}
 }
 
+WTWJS.prototype.ungroupModel = async function(zobj, zuploadobjectid, zedituploadobjectid, zgroupid) {
+	/* remove a 3D Model from a group */
+	try {
+		if (zuploadobjectid == zedituploadobjectid) {
+			/* hide group section - this object is no longer in a group */
+			WTW.hide('wtw_divgroupedobjects');
+		} else {
+			/* hide the object from the group - editing another obect that still has a group */
+			WTW.hide(zobj.id.replace('wtw_bungroup-','wtw_divungroup-'));
+		}
+		var zrequest = {
+			'uploadobjectid': zuploadobjectid,
+			'groupid': zgroupid,
+			'function':'ungroupobject'
+		};
+		WTW.postAsyncJSON('/core/handlers/uploadedfiles.php', zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+			}
+		);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminforms.js-ungroupModel=' + ex.message);
+	}
+}
+
 WTWJS.prototype.selectObjectDuplicate = async function(zuploadobjectid, zobjectfile, zgroupdiv) {
 	/* select obj to eliminate duplicate 3D Models */
 	try {
@@ -2760,7 +2888,7 @@ WTWJS.prototype.loadObjectDetailsName = async function(zuploadobjectid) {
 								WTW.loadObjectDetailsFiles(zuploadobjectid, zresponse[i].objectfolder, zresponse[i].objectfile);
 								if (zresponse[i].groupmodels != null) {
 									if (zresponse[i].groupmodels.length > 1) {
-										zpreviewdiv += "<br /><br /><div class='wtw-dashboardboxtitle'><div style='float:right;margin-right:10px;'>(" + zresponse[i].groupmodels.length + " found)</div>3D Models in this Group</div><br />";
+										zpreviewdiv += "<div id='wtw_divgroupedobjects'><br /><br /><div class='wtw-dashboardboxtitle'><div style='float:right;margin-right:10px;'>(" + zresponse[i].groupmodels.length + " found)</div>3D Models in this Group</div><br />";
 										for (var j=0;j<zresponse[i].groupmodels.length;j++) {
 											if (zresponse[i].groupmodels[j] != null) {
 												var zcolor = '#000000';
@@ -2769,9 +2897,10 @@ WTWJS.prototype.loadObjectDetailsName = async function(zuploadobjectid) {
 													zcolor = '#0000ff';
 													zmodel = ' (this 3D Model)';
 												}
-												zpreviewdiv += "<div style='display:inline-block;min-width:150px;'>3D Model:</div> <span style='color:" + zcolor + ";'><b>" + zresponse[i].groupmodels[j].objectfile.toLowerCase() + "</b></span>" + zmodel + "<br /><br />";
+												zpreviewdiv += "<div id='wtw_divungroup-" + zresponse[i].groupmodels[j].uploadobjectid + "'><div id='wtw_bungroup-" + zresponse[i].groupmodels[j].uploadobjectid + "' class='wtw-rightbutton' onclick=\"WTW.ungroupModel(this, '" + zresponse[i].groupmodels[j].uploadobjectid + "','" + zresponse[i].uploadobjectid + "','" + zresponse[i].groupmodels[j].groupid + "');\">Ungroup</div><div style='display:inline-block;min-width:150px;'>3D Model:</div> <span style='color:" + zcolor + ";'><b>" + zresponse[i].groupmodels[j].objectfile.toLowerCase() + "</b></span>" + zmodel + "</div><div class='wtw-clear'><br /></div>";
 											}
 										}
+										zpreviewdiv += "</div>";
 									}
 								}
 								if (zresponse[i].webs != null) {
@@ -3244,13 +3373,97 @@ WTWJS.prototype.openRequirements = function() {
 				}
 				WTW.show('wtw_requirements');
 			}
-		);		
+		);
+		/* get plugins for required section */
+		dGet('wtw_pluginsrequiredlist').innerHTML = '';
+		WTW.getAsyncJSON('/connect/pluginsrequired.php?webid=' + communityid + buildingid + thingid + avatarid + '&webtype=' + zwebtype, 
+			function(zresponse) {
+				var zhasrequirements = false;
+				if (zresponse != null) {
+					zresponse = JSON.parse(zresponse);
+					var zpluginslist = "<table class='wtw-table'><tr>";
+					zpluginslist += "<td class='wtw-tablecolumnheading'>Required</td>";
+					zpluginslist += "<td class='wtw-tablecolumnheading'>Plugin Name</td>";
+					zpluginslist += "<td class='wtw-tablecolumnheading'>Details</td>";
+					zpluginslist += "<td class='wtw-tablecolumnheading'>&nbsp;</td>";
+					zpluginslist += "</tr>";
+					for (var i=0;i<zresponse.length;i++) {
+						if (zresponse[i] != null) {
+							if (zresponse[i].pluginname != undefined) {
+								var zpluginclass = 'wtw-deactive';
+								var ztdclass = 'wtw-tddeactive';
+								var zrequired = '';
+								var zoptional = '';
+								if (zresponse[i].active == '1') {
+									zpluginclass = 'wtw-active';
+									ztdclass = 'wtw-tdactive';
+								}
+								if (zresponse[i].required == '1') {
+									zrequired = ' checked ';
+									zhasrequirements = true;
+									if (zresponse[i].active != '1') {
+										ztdclass = 'wtw-tdactiverequired';
+									}
+								}
+								if (zresponse[i].optional == '1') {
+									zoptional = ' checked ';
+									zhasrequirements = true;
+									if (zresponse[i].active != '1') {
+										ztdclass = 'wtw-tdactiveoptional';
+									}
+								}
+								zpluginslist += "<tr><td class='wtw-tablecolumns " + ztdclass + "' style='white-space:nowrap;'><input id='wtw_pluginrequired-" + zresponse[i].pluginname + "' type='checkbox' class='wtw-pluginsrequired' onclick='WTW.requiredOrOptional(this);' " + zrequired + "/> Required<br /><input id='wtw_pluginoptional-" + zresponse[i].pluginname + "' type='checkbox' class='wtw-pluginsoptional' onclick='WTW.requiredOrOptional(this);' " + zoptional + "/> Optional</td>";
+								zpluginslist += "<td class='wtw-tablecolumns " + ztdclass + "' style='white-space:nowrap;'><span class='" + zpluginclass + "'>" + zresponse[i].pluginname + "</span><br />Version: " + zresponse[i].version + "</td>";
+								zpluginslist += "<td class='wtw-tablecolumns " + ztdclass + "'><span class='" + zpluginclass + "'>" + zresponse[i].title + "</span> : " + zresponse[i].author + "<br />" + zresponse[i].description + "<br /></td>";
+								zpluginslist += "<td class='wtw-tablecolumns " + ztdclass + "'>";
+								if (zresponse[i].active == '1') {
+									if (WTW.isUserInRole('Admin')) {
+										zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"WTW.activatePlugin('" + zresponse[i].pluginname + "',0);\" alt='Click to Deactivate' title='Click to Deactivate'>Activated</div>";
+									} else {
+										zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-bluebuttonright' onclick=\"console.log('Will Not Deactivate');\" alt='' title=''>Activated</div>";
+									}
+								} else {
+									if (WTW.isUserInRole('Admin')) {
+										zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.activatePlugin('" + zresponse[i].pluginname + "',1);\" alt='Click to Activate' title='Click to Activate'>Deactivated</div>";
+									} else {
+										zpluginslist += "<div id='activate" + zresponse[i].pluginname + "' class='wtw-yellowbuttonright' onclick=\"WTW.console.log('Request Activation');\" alt='Click to Request Activate' title='Click to Request Activate'>Deactivated</div>";
+									}
+								}
+								zpluginslist += "</td></tr>";
+							}
+						}
+					}
+					zpluginslist += "</table>";
+					dGet('wtw_pluginsrequiredlist').innerHTML = zpluginslist;
+				}
+				dGet('wtw_enablepluginsrequired').checked = zhasrequirements;
+				WTW.changeSwitch(dGet('wtw_enablepluginsrequired'));
+			}
+		);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminforms.js-openRequirements=' + ex.message);
 	}
 }
 
+WTWJS.prototype.requiredOrOptional = function(zobj) {
+	/* make sure required and optional are not both checked */
+	try {
+		if (zobj.id.indexOf('wtw_pluginrequired-') > -1) {
+			if (zobj.checked) {
+				dGet(zobj.id.replace('wtw_pluginrequired-','wtw_pluginoptional-')).checked = false;
+			}
+		} else {
+			if (zobj.checked) {
+				dGet(zobj.id.replace('wtw_pluginoptional-','wtw_pluginrequired-')).checked = false;
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminforms.js-requiredOrOptional=' + ex.message);
+	}
+}
+
 WTWJS.prototype.changeSwitch = function(zobj) {
+	/* toggle switch to set active vs inactive text */
 	try {
 		let zchecked = '0';
 		if (zobj.checked) {
@@ -3273,6 +3486,7 @@ WTWJS.prototype.changeSwitch = function(zobj) {
 }
 
 WTWJS.prototype.changeRating = function() {
+	/* change website rating drop-down */
 	try {
 		var zrating = WTW.getDDLText('wtw_webrating');
 		switch (zrating) {
@@ -3298,6 +3512,7 @@ WTWJS.prototype.changeRating = function() {
 }
 
 WTWJS.prototype.enableParentalSettings = function(zchecked) {
+	/* enable parental settings */
 	try {
 		var zwebtype = '';
 		if (communityid != '') {
@@ -3324,6 +3539,7 @@ WTWJS.prototype.enableParentalSettings = function(zchecked) {
 }
 
 WTWJS.prototype.enableAvatarGroups = function(zchecked) {
+	/* enable avatar groups */
 	try {
 
 	} catch (ex) {
@@ -3332,14 +3548,83 @@ WTWJS.prototype.enableAvatarGroups = function(zchecked) {
 }
 
 WTWJS.prototype.enablePluginsRequired = function(zchecked) {
+	/* enable plugins required switch */
 	try {
-
+		if (zchecked == '1') {
+			dGet('wtw_enablepluginsrequiredtext').innerHTML = 'Specific 3D Plugins are Required';
+			dGet('wtw_enablepluginsrequiredtext').className = 'wtw-enablelabel';
+			WTW.show('wtw_pluginsrequiredlist');
+		} else {
+			dGet('wtw_enablepluginsrequiredtext').innerHTML = 'No specific 3D Plugins are Required';
+			dGet('wtw_enablepluginsrequiredtext').className = 'wtw-disabledlabel';
+			WTW.hide('wtw_pluginsrequiredlist');
+		}
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminforms.js-enablePluginsRequired=' + ex.message);
 	} 
 }
 
+WTWJS.prototype.savePluginsRequired = function() {
+	/* save plugins required */
+	try {
+		dGet('wtw_pluginsrequirederror').innerHTML = '';
+		var zcheckboxes = document.getElementsByClassName('wtw-pluginsrequired');
+		for (var i=0;i<zcheckboxes.length;i++) {
+			if (zcheckboxes[i] != null) {
+				var zrequired = '0';
+				var zoptional = '0';
+				var zwebtype = '';
+				var zpluginname = zcheckboxes[i].id.replace('wtw_pluginrequired-','').replace('wtw_pluginoptional','');
+				if (zcheckboxes[i].checked) {
+					zrequired = '1';
+				}
+				if (dGet(zcheckboxes[i].id.replace('wtw_pluginrequired-','wtw_pluginoptional-')).checked) {
+					zoptional = '1';
+				}
+				if (communityid != '') {
+					zwebtype = 'community';
+				}
+				if (buildingid != '') {
+					zwebtype = 'building';
+				}
+				if (thingid != '') {
+					zwebtype = 'thing';
+				}
+				if (avatarid != '') {
+					zwebtype = 'avatar';
+				}
+				var zrequest = {
+					'webid': communityid + buildingid + thingid + avatarid,
+					'webtype': zwebtype,
+					'pluginname': zpluginname,
+					'required': zrequired,
+					'optional': zoptional,
+					'function':'savepluginsrequired'
+				};
+				WTW.postAsyncJSON('/core/handlers/pluginloader.php', zrequest, 
+					function(zresponse) {
+						zresponse = JSON.parse(zresponse);
+						if (zresponse.serror != '') {
+							dGet('wtw_pluginsrequirederror').innerHTML = zresponse.serror;
+							dGet('wtw_pluginsrequirederror').style.color = 'red';
+						} else {
+							dGet('wtw_pluginsrequirederror').innerHTML = 'Plugins Required are Saved';
+							dGet('wtw_pluginsrequirederror').style.color = 'green';
+						}
+						window.setTimeout(function() {
+							dGet('wtw_pluginsrequirederror').innerHTML = '';
+						},5000);
+					}
+				);
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminforms.js-savePluginsRequired=' + ex.message);
+	} 
+}
+
 WTWJS.prototype.saveCommunityRequirements = function(w) {
+	/* save community requirements */
 	try {
 		switch (w) {
 			case 1: /* save parental controls */
@@ -4117,7 +4402,8 @@ WTWJS.prototype.openWebAliasSettings = async function() {
 								var zfranchise = 'No';
 								var zsitename = '';
 								var zsitedescription = '';
-								var zsiteicon = '';
+								var zsiteiconid = '';
+								var zsiteiconpath = '';
 								var zsitesnapshot = '';
 								var zurl = 'http://' + zdomainname;
 								if (zforcehttps == '1' || zforcehttps == 1) {
@@ -4138,11 +4424,14 @@ WTWJS.prototype.openWebAliasSettings = async function() {
 								if (zresponse[i].sitedescription != null) {
 									zsitedescription = zresponse[i].sitedescription;
 								}
-								if (zresponse[i].siteicon != null) {
-									zsiteicon = zresponse[i].siteicon;
+								if (zresponse[i].siteiconid != null) {
+									zsiteiconid = zresponse[i].siteiconid;
 								}
-								if (zsiteicon == '') {
-									zsiteicon = '/favicon.ico';
+								if (zresponse[i].siteiconpath != null) {
+									zsiteiconpath = zresponse[i].siteiconpath;
+								}
+								if (zsiteiconpath == '') {
+									zsiteiconpath = '/favicon.ico';
 								}
 								if (zresponse[i].communitysnapshoturl != null) {
 									zcommunitysnapshoturl = zresponse[i].communitysnapshoturl;
@@ -4199,7 +4488,7 @@ WTWJS.prototype.openWebAliasSettings = async function() {
 									zsitename = 'WalkTheWeb 3D Website';
 								}
 								zwebaliaslist += "<tr><td class='wtw-tablecolumns'>" + zsitesnapshot + "</td>\r\n";
-								zwebaliaslist += "<td class='wtw-tablecolumns'><img src='" + zsiteicon + "' class='wtw-tinyimage' /> <a href='" + zurl + "' target='_blank'>" + zurl + "</a></td>\r\n";
+								zwebaliaslist += "<td class='wtw-tablecolumns'><img src='" + zsiteiconpath + "' class='wtw-tinyimage' /> <a href='" + zurl + "' target='_blank'>" + zurl + "</a></td>\r\n";
 								zwebaliaslist += "<td class='wtw-tablecolumns'>" + zsitename + "</td>\r\n";
 								zwebaliaslist += "<td class='wtw-tablecolumns'>" + zsitedescription + "</td>\r\n";
 								zwebaliaslist += "<td class='wtw-tablecolumns' style='text-align:center;'>" + zfranchise + "</td>\r\n";
@@ -4240,7 +4529,8 @@ WTWJS.prototype.editWebAlias = async function(zwebaliasid) {
 				var zthingname = '';
 				var zsitename = '';
 				var zsitedescription = '';
-				var zsiteicon = '';
+				var zsiteiconid = '';
+				var zsiteiconpath = '';
 				var zchangepreview = '/admin.php?hmenu=69';
 				
 				zresponse = JSON.parse(zresponse);
@@ -4263,7 +4553,8 @@ WTWJS.prototype.editWebAlias = async function(zwebaliasid) {
 								zthingname = zresponse[i].thingname;
 								zsitename = zresponse[i].sitename;
 								zsitedescription = zresponse[i].sitedescription;
-								zsiteicon = zresponse[i].siteicon;
+								zsiteiconid = zresponse[i].siteiconid;
+								zsiteiconpath = zresponse[i].siteiconpath;
 								if (zresponse[i].communitysnapshoturl != '') {
 									zaliaspreviewurl = zresponse[i].communitysnapshoturl;
 								} else if (zresponse[i].buildingsnapshoturl != '') {
@@ -4337,8 +4628,10 @@ WTWJS.prototype.editWebAlias = async function(zwebaliasid) {
 				}
 				dGet('wtw_aliassitename').value = zsitename;
 				dGet('wtw_aliassitedescription').value = zsitedescription;
-				if (zsiteicon != '') {
-					dGet('wtw_aliassiteicon').src = zsiteicon;
+				dGet('wtw_taliassiteiconid').value = zsiteiconid;
+				if (zsiteiconpath != '') {
+					dGet('wtw_taliassiteiconpath').value = zsiteiconpath;
+					dGet('wtw_aliassiteicon').src = zsiteiconpath;
 				}
 				if (zforcehttps == '1') {
 					dGet('wtw_aliasforcehttps').selectedIndex = 0;
@@ -4531,14 +4824,18 @@ WTWJS.prototype.setAliasCommunities = async function(zcommunityid) {
 						if (zresponse[i] != null) {
 							if (zresponse[i].communityid != undefined && zresponse[i].communityname != undefined) {
 								var zoption = document.createElement('option');
+								var zoption2 = document.createElement('option');
 								zoption.text = zresponse[i].communityname;
+								zoption2.text = zresponse[i].communityname;
 								zoption.value = zresponse[i].communityid;
+								zoption2.value = zresponse[i].communityid;
 								if (i == 0 && zcommunityid == '') {
 									zoption.selected = true;
+									zoption2.selected = true;
 								} else if (zcommunityid == zresponse[i].communityid) {
 									zoption.selected = true;
+									zoption2.selected = true;
 								}
-								var zoption2 = zoption.cloneNode(true);
 								dGet('wtw_aliasdomaincommunityid').add(zoption);
 								dGet('wtw_aliascommunityid').add(zoption2);
 							}
@@ -4922,7 +5219,7 @@ WTWJS.prototype.saveAliasForm = async function(w) {
 					'franchise': zfranchise,
 					'sitename': dGet('wtw_aliassitename').value,
 					'sitedescription': dGet('wtw_aliassitedescription').value,
-					'siteicon': dGet('wtw_aliassiteicon').src,
+					'siteiconid': dGet('wtw_taliassiteiconid').value,
 					'function':'savewebalias'
 				};
 				WTW.postAsyncJSON('/core/handlers/uploads.php', zrequest, 

@@ -211,6 +211,7 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						WTW.openShareCommunityForm();
 						WTW.show('wtw_adminmenu29');
 						break;
+					case 'wtw_bbackwtwshopping_admincommunitystoresdiv':
 					case 'wtw_bback25':
 					case 'wtw_cancel25':
 						WTW.submitCommunityForm(-1);

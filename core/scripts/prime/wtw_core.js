@@ -1227,7 +1227,7 @@ WTWJS.prototype.loadMolds = function(zaddmolds) {
 				/* process the array of molds to be added to the mold arrays (ready to be loaded to the scene) */
 				for (var i = 0; i < zaddmolds.molds.length; i++) {
 					if (zaddmolds.molds[i] != null) {
-						var zserver = 'local ';
+						var zserver = 'local';
 						var zcommunityid = '';
 						var zbuildingid = '';
 						var zthingid = '';

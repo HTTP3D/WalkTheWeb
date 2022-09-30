@@ -1162,7 +1162,7 @@ WTWJS.prototype.setShadowSettings = function() {
 		WTW.setCookie('wtw_shadowsetting',WTW.shadowSet,365);
 		
 		var zrenderlist = [];
-        if(WTW.shadows != null) {
+        if (WTW.shadows != null) {
 			zrenderlist = WTW.shadows.getShadowMap().renderList;
             WTW.shadows.dispose();
             WTW.shadows = null;

@@ -982,10 +982,12 @@ WTWJS.prototype.avatarShowFadeParticles = function(zavatarname, zavatarparts) {
 								zsmoke.position.y -= 1000;
 								window.setTimeout(function(){WTW.disposeClean(zavatarname + '-smoke');},7000);
 							} 
-							if (zpcs != null) {
-								zpcs.dispose();
-								zpcs = null;
-							}
+							try {
+								if (zpcs != null) {
+									zpcs.dispose();
+									zpcs = null;
+								}
+							} catch (ex) {}
 							window.clearInterval(ztimername);
 							WTW.avatarLoadComplete(zavatarname);
 						}

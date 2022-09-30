@@ -89,13 +89,13 @@ WTWJS.prototype.hudSaveProfile = async function() {
 	try {
 		/* validate entries... */
 		var zrequest = {
-			'userid': dGet('wtw_tuserid').value,
-			'displayname': dGet('hud-textbox-displayname').value.replace('|',''),
-			'useremail': dGet('hud-textbox-email').value.replace('|',''),
-			'firstname': dGet('hud-textbox-firstname').value.replace('|',''),
-			'lastname': dGet('hud-textbox-lastname').value.replace('|',''),
-			'gender': dGet('hud-textbox-gender').value.replace('|',''),
-			'dob': dGet('hud-textbox-dob').value.replace('|',''),
+			'userid':dGet('wtw_tuserid').value,
+			'displayname':btoa(dGet('hud-textbox-displayname').value.replace('|','')),
+			'useremail':dGet('hud-textbox-email').value.replace('|',''),
+			'firstname':btoa(dGet('hud-textbox-firstname').value.replace('|','')),
+			'lastname':btoa(dGet('hud-textbox-lastname').value.replace('|','')),
+			'gender':btoa(dGet('hud-textbox-gender').value.replace('|','')),
+			'dob':dGet('hud-textbox-dob').value.replace('|',''),
 			'function':'savemyprofile'
 		};
 		WTW.postAsyncJSON('/core/handlers/users.php', zrequest, 

@@ -32,6 +32,8 @@ WTWJS.prototype.updateProgressBar = function(zprogress, ztotal) {
 WTWJS.prototype.communitySearch = async function(zsearch) {
 	/* keyword search to find a community to download to your instance */
 	try {
+		WTW.hide('wtw_downloadingnotice');
+		WTW.hide('wtw_downloadcomplete');
 		zsearch = WTW.encode(zsearch);
 		WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/sharesearch.php?search=' + zsearch + '&webtype=community', 
 			function(zresponse) {
@@ -67,6 +69,7 @@ WTWJS.prototype.communitySearchReply = function(zresponse) {
 			ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 		}
 		dGet('wtw_commtempsearchresults').innerHTML = ztempsearchresults;
+		WTW.show('wtw_commtempsearchresults');
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_downloads.js-communitySearchReply=' + ex.message);
 	}
@@ -75,6 +78,8 @@ WTWJS.prototype.communitySearchReply = function(zresponse) {
 WTWJS.prototype.buildingSearch = async function(zsearch) {
 	/* keyword search to find a building to download to your instance */
 	try {
+		WTW.hide('wtw_downloadingnotice');
+		WTW.hide('wtw_downloadcomplete');
 		zsearch = WTW.encode(zsearch);
 		WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/sharesearch.php?search=' + zsearch + '&webtype=building', 
 			function(zresponse) {
@@ -110,6 +115,7 @@ WTWJS.prototype.buildingSearchReply = function(zresponse) {
 			ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 		}
 		dGet('wtw_buildtempsearchresults').innerHTML = ztempsearchresults;
+		WTW.show('wtw_buildtempsearchresults');
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_downloads.js-buildingSearchReply=' + ex.message);
 	}
@@ -118,6 +124,8 @@ WTWJS.prototype.buildingSearchReply = function(zresponse) {
 WTWJS.prototype.thingSearch = async function(zsearch) {
 	/* keyword search to find a thing to download to your instance */
 	try {
+		WTW.hide('wtw_downloadingnotice');
+		WTW.hide('wtw_downloadcomplete');
 		zsearch = WTW.encode(zsearch);
 		WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/sharesearch.php?search=' + zsearch + '&webtype=thing', 
 			function(zresponse) {
@@ -153,6 +161,7 @@ WTWJS.prototype.thingSearchReply = function(zresponse) {
 			ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 		}
 		dGet('wtw_thingtempsearchresults').innerHTML = ztempsearchresults;
+		WTW.show('wtw_thingtempsearchresults');
 		WTW.setWindowSize();
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_downloads.js-thingSearchReply=' + ex.message);
@@ -162,6 +171,8 @@ WTWJS.prototype.thingSearchReply = function(zresponse) {
 WTWJS.prototype.avatarSearch = async function(zsearch) {
 	/* keyword search to find a avatar to download to your instance */
 	try {
+		WTW.hide('wtw_downloadingnotice');
+		WTW.hide('wtw_downloadcomplete');
 		zsearch = WTW.encode(zsearch);
 		WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/sharesearch.php?search=' + zsearch + '&webtype=avatar', 
 			function(zresponse) {
@@ -203,6 +214,7 @@ WTWJS.prototype.avatarSearchReply = function(zresponse) {
 			ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 		}
 		dGet('wtw_avatartempsearchresults').innerHTML = ztempsearchresults;
+		WTW.show('wtw_avatartempsearchresults');
 		WTW.setWindowSize();
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_downloads.js-avatarSearchReply=' + ex.message);
@@ -212,6 +224,12 @@ WTWJS.prototype.avatarSearchReply = function(zresponse) {
 WTWJS.prototype.downloadWeb = async function(zcopywebid, zwebtype) {
 	/* This process takes the selected 3D Web and downloads a copy to the local instance */
 	try {
+		WTW.hide('wtw_commtempsearchresults');
+		WTW.hide('wtw_buildtempsearchresults');
+		WTW.hide('wtw_thingtempsearchresults');
+		WTW.hide('wtw_avatartempsearchresults');
+		WTW.hide('wtw_downloadcomplete');
+		WTW.show('wtw_downloadingnotice');
 		if (zwebtype == 'avatar') {
 			var zrequest = {
 				'webid': zcopywebid,
@@ -276,6 +294,7 @@ WTWJS.prototype.downloadWeb = async function(zcopywebid, zwebtype) {
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
+					WTW.hide('wtw_downloadingnotice');
 					WTW.completedWebDownload(zresponse);
 				}
 			);
