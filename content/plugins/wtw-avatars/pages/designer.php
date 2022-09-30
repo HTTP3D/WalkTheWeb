@@ -6,7 +6,7 @@ header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Request-Headers: Content-Type');
 
 $uploadpathid = "";
-if (!empty($_SESSION["wtw_uploadpathid"]) && isset($_SESSION["wtw_uploadpathid"])) {
+if ($wtw->hasValue($_SESSION["wtw_uploadpathid"])) {
 	$uploadpathid = $_SESSION["wtw_uploadpathid"];
 }
 	$jsdata = "<script type=\"text/javascript\">\r\n";

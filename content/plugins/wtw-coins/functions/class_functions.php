@@ -40,7 +40,7 @@ class wtwcoins_functions {
 		);
 		try {
 			/* make sure userid is not blank */
-			if (!empty($zuserid) && isset($zuserid)) {
+			if ($wtwplugins->hasValue($zuserid)) {
 				/* make sure the userid passed is the same as the logged in session userid */
 				if ($wtwplugins->userid == $zuserid) {
 					$zvalidpoints = false;
@@ -65,7 +65,7 @@ class wtwcoins_functions {
 						if ((int)$zrow["value1"] == (int)$zvalue1) {
 							$zvalidpoints = true;
 						}
-						if (isset($zrow["wtwcoinid"]) && !empty($zrow["wtwcoinid"])) {
+						if ($wtwplugins->hasValue($zrow["wtwcoinid"])) {
 							$zfoundcoin = true;
 						}
 						$zfoundactionzoneid = true;
@@ -130,7 +130,7 @@ class wtwcoins_functions {
 		try {
 			/* only send coin collected to global server if you are logged in and have a valid token */
 			/* it will validate the currently logged in account on the WalkTheWeb servers */
-			if (!empty($zglobaluserid) && isset($zglobaluserid) && !empty($zusertoken) && isset($zusertoken)) {
+			if ($wtwplugins->hasValue($zglobaluserid) && $wtwplugins->hasValue($zusertoken)) {
 				$zpostdata = http_build_query(array(
 					'serverinstanceid' => $wtwplugins->serverinstanceid,
 					'serverip' => $wtwplugins->serverip,
@@ -165,7 +165,7 @@ class wtwcoins_functions {
 		);
 		try {
 			/* make sure userid is not blank */
-			if (!empty($zuserid) && isset($zuserid)) {
+			if ($wtwplugins->hasValue($zuserid)) {
 				/* make sure the userid passed is the same as the logged in session userid */
 				if ($wtwplugins->userid == $zuserid) {
 					$zcointotalid = '';
@@ -186,7 +186,7 @@ class wtwcoins_functions {
 						$ztotalcoins = (int)$zrow["totalcoins"];
 					}
 					/* point value matches the database */
-					if (empty($zcointotalid) || !isset($zcointotalid)) {
+					if (!isset($zcointotalid) || empty($zcointotalid)) {
 						$zcointotalid = $wtwplugins->getRandomString(16,1);
 						$ztotalcoins = $zvalue1;
 						
@@ -241,7 +241,7 @@ class wtwcoins_functions {
 		);
 		try {
 			/* make sure userid is not blank */
-			if (!empty($zuserid) && isset($zuserid)) {
+			if ($wtwplugins->hasValue($zuserid)) {
 				/* make sure the userid passed is the same as the logged in session userid */
 				if ($wtwplugins->userid == $zuserid) {
 					$zresults = $wtwplugins->query("
@@ -270,7 +270,7 @@ class wtwcoins_functions {
 		);
 		try {
 			/* make sure userid is not blank */
-			if (!empty($zuserid) && isset($zuserid)) {
+			if ($wtwplugins->hasValue($zuserid)) {
 				/* make sure the userid passed is the same as the logged in session userid */
 				if ($wtwplugins->userid == $zuserid) {
 					$zresults = $wtwplugins->query("

@@ -37,7 +37,7 @@ class wtwavatars_functions {
 		global $wtwplugins;
 		try {
 			$zfounduseravatarid = '';
-			if (!empty($zuseravatarid) && isset($zuseravatarid)) {
+			if ($wtwplugins->hasValue($zuseravatarid)) {
 				$zresults = $wtwplugins->query("
 					select * 
 					from ".wtw_tableprefix."useravatars
@@ -47,7 +47,7 @@ class wtwavatars_functions {
 					$zfounduseravatarid = $zrow["useravatarid"];
 				}
 			}
-			if (empty($zfounduseravatarid) || !isset($zfounduseravatarid)) {
+			if (!isset($zfounduseravatarid) || empty($zfounduseravatarid)) {
 				$zuseravatarid = $wtwplugins->getRandomString(16,1);
 				$wtwplugins->query("
 					insert into ".wtw_tableprefix."useravatars
@@ -119,7 +119,7 @@ class wtwavatars_functions {
 		global $wtwplugins;
 		$zfoundavatarpartid = '';
 		try {
-			if (!empty($zuseravatarid) && isset($zuseravatarid) && !empty($zavatarpart) && isset($zavatarpart)) {
+			if ($wtwplugins->hasValue($zuseravatarid) && $wtwplugins->hasValue($zavatarpart)) {
 				$zresults = $wtwplugins->query("
 					select * 
 					from ".wtw_tableprefix."useravatarcolors
@@ -129,7 +129,7 @@ class wtwavatars_functions {
 				foreach ($zresults as $zrow) {
 					$zfoundavatarpartid = $zrow["avatarpartid"];
 				}
-				if (empty($zfoundavatarpartid) || !isset($zfoundavatarpartid)) {
+				if (!isset($zfoundavatarpartid) || empty($zfoundavatarpartid)) {
 					$zfoundavatarpartid = $wtwplugins->getRandomString(16,1);
 					$wtwplugins->query("
 						insert into ".wtw_tableprefix."useravatarcolors
@@ -184,7 +184,7 @@ class wtwavatars_functions {
 		global $wtwplugins;
 		$zfounduseravataranimationid = '';
 		try {
-			if (!empty($zanimationevent) && isset($zanimationevent)) {
+			if ($wtwplugins->hasValue($zanimationevent)) {
 				$zresults = $wtwplugins->query("
 					select * 
 					from ".wtw_tableprefix."useravataranimations
@@ -193,7 +193,7 @@ class wtwavatars_functions {
 				foreach ($zresults as $zrow) {
 					$zfounduseravataranimationid = $zrow["useravataranimationid"];
 				}
-				if (empty($zfounduseravataranimationid) || !isset($zfounduseravataranimationid)) {
+				if (!isset($zfounduseravataranimationid) || empty($zfounduseravataranimationid)) {
 					$zfounduseravataranimationid = $wtwplugins->getRandomString(16,1);
 					$wtwplugins->query("
 						insert into ".wtw_tableprefix."useravataranimations

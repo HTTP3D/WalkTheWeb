@@ -185,7 +185,7 @@ class wtwcoins {
 			/* check core/functions/class_wtwdb.php deltaCreateTable function for full support */
 			if ($wtwplugins->pagename == "admin.php") {
 				$zdbversion = $wtwplugins->getSetting(WTW_COINS_PREFIX."dbversion","1.0.0");
-				if ($zdbversion != $this->dbversion || empty($zdbversion) || !isset($zdbversion)) {
+				if ($zdbversion != $this->dbversion || !isset($zdbversion) || empty($zdbversion)) {
 					$wtwplugins->deltaCreateTable("
 						CREATE TABLE `".WTW_COINS_PREFIX."collected` (
 						  `wtwcoinid` varchar(16) NOT NULL,
