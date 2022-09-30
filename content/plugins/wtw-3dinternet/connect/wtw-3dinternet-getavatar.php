@@ -39,8 +39,8 @@ try {
 	foreach ($zresults as $zrow) {
 		$zuseruseravatarid = $zrow["useravatarid"];
 	}
-	if (!empty($zuserid) && isset($zuserid)) {
-		if (!empty($zuseruseravatarid) && isset($zuseruseravatarid)) {
+	if ($wtwconnect->hasValue($zuserid)) {
+		if ($wtwconnect->hasValue($zuseruseravatarid)) {
 			$zfounduseravatarid = $zuseruseravatarid;
 		} else {
 			$zfounduseravatarid = $zanonuseravatarid;
@@ -73,7 +73,7 @@ try {
 		'receiveshadows'=>'0'
 	);
 	$zavataranimationdefs = array();
-	if (!empty($zfounduseravatarid) && isset($zfounduseravatarid)) {
+	if ($wtwconnect->hasValue($zfounduseravatarid)) {
 		/* retrieve avatar by useravatarid */
 		$zresults = $wtwconnect->query("
 			select a.*,

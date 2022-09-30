@@ -50,7 +50,7 @@ class wtw_3dinternet_functions {
 			'serror'=>''
 		);
 		try {
-			if (isset($zinstanceid) && !empty($zinstanceid) && isset($zbaninstanceid) && !empty($zbaninstanceid)) {
+			if ($wtwplugins->hasValue($zinstanceid) && $wtwplugins->hasValue($zbaninstanceid)) {
 				$zpastblockchat = 0;
 				$zpastbanuser = 0;
 				if (!isset($zblockchat) || empty($zblockchat)) {

@@ -40,8 +40,8 @@ try {
 	foreach ($zresults as $zrow) {
 		$zuseruseravatarid = $zrow["useravatarid"];
 	}
-	if (!empty($zuserid) && isset($zuserid)) {
-		if (!empty($zuseruseravatarid) && isset($zuseruseravatarid)) {
+	if ($wtwconnect->hasValue($zuserid)) {
+		if ($wtwconnect->hasValue($zuseruseravatarid)) {
 			$zfounduseravatarid = $zuseruseravatarid;
 		} else {
 			$zfounduseravatarid = $zanonuseravatarid;
@@ -50,7 +50,7 @@ try {
 		$zfounduseravatarid = $zanonuseravatarid;
 	}
 
-	if (!empty($zfounduseravatarid) && isset($zfounduseravatarid)) {
+	if ($wtwconnect->hasValue($zfounduseravatarid)) {
 		/* clears temp tables when avatar leaves 3D Scene */
 		$wtwconnect->query("
 			delete from ".WTW_3DINTERNET_PREFIX."useravatars

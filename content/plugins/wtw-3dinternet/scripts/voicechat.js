@@ -32,7 +32,7 @@ WTW_3DINTERNET.prototype.initVoiceChatSocket = function() {
 			});
 
 			wtw3dinternet.voicechat.on('results', function (zdata) {
-				if(zdata && zdata.results[0] && zdata.results[0].alternatives[0]){
+				if (zdata && zdata.results[0] && zdata.results[0].alternatives[0]){
 					//resultpreview.innerHTML += " " + zdata.results[0].alternatives[0].transcript;
 				}
 			});

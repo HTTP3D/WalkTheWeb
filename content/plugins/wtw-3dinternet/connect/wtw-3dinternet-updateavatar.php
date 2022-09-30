@@ -79,11 +79,11 @@ try {
 	$zanonuseravatarid = "";
 	$zuseruseravatarid = "";
 
-	if (empty($zuseravatarid) || !isset($zuseravatarid)) {
+	if (!isset($zuseravatarid) || empty($zuseravatarid)) {
 		$zuseravatarid = $wtwconnect->getRandomString(16,1);
 	}
 
-	if (empty($zanonuseravatarid) || !isset($zanonuseravatarid)) {
+	if (!isset($zanonuseravatarid) || empty($zanonuseravatarid)) {
 		/* select anonymous useravatarid data by instance */
 		$zresults = $wtwconnect->query("
 			select useravatarid 
@@ -95,7 +95,7 @@ try {
 			$zanonuseravatarid = $zrow["useravatarid"];
 		}
 	}
-	if (empty($zuseruseravatarid) || !isset($zuseruseravatarid)) {
+	if (!isset($zuseruseravatarid) || empty($zuseruseravatarid)) {
 		/* select useravatarid data by userid */
 		$zresults = $wtwconnect->query("
 			select useravatarid 
@@ -108,8 +108,8 @@ try {
 			$zuseruseravatarid = $zrow["useravatarid"];
 		}
 	}
-	if (!empty($zuserid) && isset($zuserid)) {
-		if (!empty($zuseruseravatarid) && isset($zuseruseravatarid)) {
+	if ($wtwconnect->hasValue($zuserid)) {
+		if ($wtwconnect->hasValue($zuseruseravatarid)) {
 			$zfounduseravatarid = $zuseruseravatarid;
 		} else {
 			$zfounduseravatarid = $zanonuseravatarid;
@@ -118,7 +118,7 @@ try {
 		$zfounduseravatarid = $zanonuseravatarid;
 	}
 
-	if (!empty($zfounduseravatarid) && isset($zfounduseravatarid)) {
+	if ($wtwconnect->hasValue($zfounduseravatarid)) {
 		/* update temp tables for active avatar */
 		$wtwconnect->query("
 			update ".WTW_3DINTERNET_PREFIX."useravatars
@@ -240,7 +240,7 @@ try {
 	$zavatarparts = array();
 	$zanimationdefs = array();
 	/* get latest user avatar settings */
-	if(ini_get('allow_url_fopen') ) {
+	if (ini_get('allow_url_fopen') ) {
 		if (!isset($zglobaluseravatarid) || empty($zglobaluseravatarid)) {
 			/* get local avatar */
 			$avatarurl = $wtwconnect->domainurl."/connect/useravatar.php?useravatarid=".base64_encode($zuseravatarid)."&instanceid=".base64_encode($zinstanceid)."&userid=".base64_encode($zuserid)."&userip=".base64_encode($zuserip);
@@ -252,7 +252,7 @@ try {
 		}
 	}
 	$zavatardata = json_decode($zavatardata);
-	if (isset($zavatardata->avatar->avatarparts) && !empty($zavatardata->avatar->avatarparts)) {
+	if (isset($zavatardata->avatar->avatarparts)) {
 		/* get array of parts (meshes) for colors */
 		$zavatarparts = $zavatardata->avatar->avatarparts;
 		/* get array of animations */
@@ -261,7 +261,7 @@ try {
 		foreach($zanimationdefs as $zanimationdef) {
 			$zfounduseravataranimationid = "";
 			$zuseravataranimationid = $zanimationdef->useravataranimationid;
-			if (!empty($zuseravataranimationid) && isset($zuseravataranimationid)) {
+			if ($wtwconnect->hasValue($zuseravataranimationid)) {
 				$zloadpriority = "";
 				$zanimationfriendlyname = "";
 				$zanimationicon = "";
@@ -303,7 +303,7 @@ try {
 					$zsoundmaxdistance = $zrow["soundmaxdistance"];
 				}				
 				
-				if (!empty($zfounduseravataranimationid) && isset($zfounduseravataranimationid)) {
+				if ($wtwconnect->hasValue($zfounduseravataranimationid)) {
 					/* if user animation was found, update it */
 					$wtwconnect->query("
 						update ".WTW_3DINTERNET_PREFIX."useravataranimations 
@@ -391,7 +391,7 @@ try {
 		foreach($zavatarparts as $zavatarpart) {
 			$zfoundavatarpartid = "";
 			$zavatarpartid = $zavatarpart->avatarpartid;
-			if (!empty($zavatarpartid) && isset($zavatarpartid)) {
+			if ($wtwconnect->hasValue($zavatarpartid)) {
 				/* check of part exists in multiplayer table */
 				$zresults = $wtwconnect->query("
 					select avatarpartid 
@@ -403,7 +403,7 @@ try {
 				foreach ($zresults as $zrow) {
 					$zfoundavatarpartid = $zrow["avatarpartid"];
 				}
-				if (!empty($zfoundavatarpartid) && isset($zfoundavatarpartid)) {
+				if ($wtwconnect->hasValue($zfoundavatarpartid)) {
 					/* if part found, update the colors */
 					$wtwconnect->query("
 						update ".WTW_3DINTERNET_PREFIX."useravatarcolors 

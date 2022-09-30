@@ -1299,7 +1299,7 @@ WTW_3DINTERNET.prototype.addAvatarParameter = function() {
 		if (zavatar != null && zavatarparameter == null) {
 			zavatarparameter = BABYLON.MeshBuilder.CreateBox(zavatarparametername, {}, scene);
 			zavatarparameter.material = new BABYLON.StandardMaterial(zavatarparametername + '-mat', scene);
-			zavatarparameter.material.alpha = 1;
+			zavatarparameter.material.alpha = 0;
 			//zavatarparameter.showBoundingBox = false;
 			zavatarparameter.checkCollisions = false;
 			zavatarparameter.isPickable = false;
