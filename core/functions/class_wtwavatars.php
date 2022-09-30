@@ -805,7 +805,7 @@ class wtwavatars {
 				foreach ($zresults as $zrow) {
 					$zfoundavatargroupid = $zrow["avatargroupid"];
 				}
-				if !isset($zfoundavatargroupid) || (empty($zfoundavatargroupid)) {
+				if (!isset($zfoundavatargroupid) || empty($zfoundavatargroupid)) {
 					if (!isset($zavatargroupid) || empty($zavatargroupid)) {
 						$zavatargroupid = $wtwhandlers->getRandomString(16,1);
 					}
