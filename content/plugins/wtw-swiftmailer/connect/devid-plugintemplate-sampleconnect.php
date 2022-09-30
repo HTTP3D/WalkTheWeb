@@ -12,7 +12,7 @@ try {
 	echo $wtwconnect->addConnectHeader($wtwconnect->domainname);
 
 	$zresponse = array();
-	if (!empty($zprotectedname) && isset($zprotectedname)) {
+	if ($wtwconnect->hasValue($zprotectedname)) {
 		$zresults = $wtwconnect->query("
 			select *
 			from ".WTW_SwiftMailer_PREFIX."tablename  
