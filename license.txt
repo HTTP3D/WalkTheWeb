@@ -1,6 +1,6 @@
 WalkTheWeb - 3D Internet Hosting Software
 
-Copyright 2013-2020 by HTTP3D Inc. and the contributors
+Copyright 2013-2022 by HTTP3D Inc. and the contributors
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ and
 
   HTTP3D Inc. - WalkTheWeb - 3D Internet Hosting Software
 
-  Copyright 2013-2020 by HTTP3D Inc. and the contributors
+  Copyright 2013-2022 by HTTP3D Inc. and the contributors
 
   WalkTheWeb is released under the GPL Version 3
 	  Includes Permissions:
