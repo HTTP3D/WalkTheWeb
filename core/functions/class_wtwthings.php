@@ -53,6 +53,10 @@ class wtwthings {
 			if (empty($zthingid)) {
 				/* create new thingid */
 				$zthingid = $wtwhandlers->getRandomString(16,1);
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				
 				if (!isset($zpastthingid) || empty($zpastthingid)) {
 					/* create new thing (without access to copy thing or if not copying existing thing, this creates new thing) */
@@ -67,6 +71,7 @@ class wtwthings {
 							 thingname,
 							 thingdescription,
 							 analyticsid,
+							 hostuserid,
 							 userid,
 							 alttag,
 							 createdate,
@@ -83,6 +88,7 @@ class wtwthings {
 							 '".$wtwhandlers->escapeHTML($zthingname)."',
 							 '".$wtwhandlers->escapeHTML($zthingdescription)."',
 							 '".$zanalyticsid."',
+							 '".$zhostuserid."',
 							 '".$wtwhandlers->userid."',
 							 '".$wtwhandlers->escapeHTML($zalttag)."',
 							 now(),
@@ -784,13 +790,13 @@ class wtwthings {
 						 'thing' as webtype,
 						 t2.pluginname,
 						 t2.optional
-					from ".wtw_tableprefix."wtw_pluginsrequired t2
+					from ".wtw_tableprefix."pluginsrequired t2
 					where t2.webid='".$zfromthingid."'
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
 					$zpluginsrequiredid = $wtwhandlers->getRandomString(16,1);
 					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."wtw_pluginsrequired
+						insert into ".wtw_tableprefix."pluginsrequired
 							(pluginsrequiredid,
 							 pastpluginsrequiredid,
 							 webid,
@@ -1340,110 +1346,6 @@ class wtwthings {
 		}
 		return $zsuccess;
 	}
-	
-	public function importThing($zthingid, $zpastthingid, $zversionid, $zversion, $zversiondesc, $zthingname, $zthinganalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $zalttag) {
-		/* import thing from 3dnet.walktheweb.com in the media library */
-		global $wtwhandlers;
-		try {
-			/* ini_set('max_execution_time', 300); */
-			if (!empty($wtwhandlers->getSessionUserID())) {
-				if ($wtwhandlers->keyExists('things', 'thingid', $zthingid) == false) {
-					$zversion1 = 1;
-					$zversion2 = 0;
-					$zversion3 = 0;
-
-					if (strpos($zversion, '.') !== false) {
-						try {
-							list($zversion1, $zversion2, $zversion3) = explode('.', $zversion);
-						} catch (Exception $e) {
-							$zversion1 = 1;
-							$zversion2 = 0;
-							$zversion3 = 0;
-						}
-					}
-					$zversionorder = (1000000*$zversion1) + (1000*$zversion2) + $zversion3;
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."things
-							(thingid, 
-							 pastthingid, 
-							 versionid,
-							 version,
-							 versionorder,
-							 versiondesc,
-							 thingname, 
-							 analyticsid, 
-							 positionx, 
-							 positiony, 
-							 positionz, 
-							 scalingx, 
-							 scalingy, 
-							 scalingz, 
-							 rotationx, 
-							 rotationy, 
-							 rotationz, 
-							 gravity, 
-							 alttag,
-							 userid,
-							 createdate,
-							 createuserid,
-							 updatedate,
-							 updateuserid)
-						values
-							('".$zthingid."', 
-							 '".$zpastthingid."', 
-							 '".$zversionid."', 
-							 '".$zversion."', 
-							 ".$zversionorder.",
-							 '".addslashes($zversiondesc)."', 
-							 '".$zthingname."', 
-							 '".$zthinganalyticsid."', 
-							 ".$zstartpositionx.", 
-							 ".$zstartpositiony.", 
-							 ".$zstartpositionz.", 
-							 ".$zstartscalingx.", 
-							 ".$zstartscalingy.", 
-							 ".$zstartscalingz.", 
-							 ".$zstartrotationx.", 
-							 ".$zstartrotationy.", 
-							 ".$zstartrotationz.", 
-							 ".$zgravity.", 
-							 '".$zalttag."',
-							 '".$wtwhandlers->userid."',
-							 now(),
-							 '".$wtwhandlers->userid."',
-							 now(),
-							 '".$wtwhandlers->userid."');");
-					$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."userauthorizations
-							(userauthorizationid,
-							 userid,
-							 communityid,
-							 buildingid,
-							 thingid,
-							 useraccess,
-							 createdate,
-							 createuserid,
-							 updatedate,
-							 updateuserid)
-						values
-							('".$zuserauthorizationid."',
-							 '".$wtwhandlers->userid."',
-							 '',
-							 '',
-							 '".$zthingid."',
-							 'admin',
-							 now(),
-							 '".$wtwhandlers->userid."',
-							 now(),
-							 '".$wtwhandlers->userid."');");
-				}
-			}
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwthings.php-importThing=".$e->getMessage());
-		}
-		return $zthingid;
-	}		
 	
 	public function saveThingTemplate($zthingid, $ztemplatename, $zdescription, $ztags, $zversion, $zversiondesc) {
 		/* save thing as a template to the media library */

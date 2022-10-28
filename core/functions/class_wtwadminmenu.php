@@ -597,8 +597,8 @@ class wtwadminmenu {
 			$zmenu .= "				</div>\r\n";
 			$zmenu .= "				<div id='wtw_adminmenu2' class='wtw-adminmenuform wtw-hide'>\r\n";
 			$zmenu .= "					<div id='wtw_bback2' alt='Back' title='Back' class='wtw-backbutton' onclick='WTW.adminMenuItemSelected(this);'>&lt;&lt;</div>\r\n";
-			$zmenu .= "					<div class='wtw-menuheader'>".$this->__('Select 3D Building')."</div><br /><br />\r\n";
-			$zmenu .= "					<div id='wtw_loadingbuildingid' class='wtw-loadingnoticecentered'>".$this->__('Loading')."</div>\r\n";
+			$zmenu .= "					<div class='wtw-menuheader'>".$this->__('Select 3D Building')."</div>\r\n";
+			$zmenu .= "					<div id='wtw_loadingbuildingid' class='wtw-loadingnoticecentered'><br /><br />".$this->__('Loading')."</div>\r\n";
 			$zmenu .= "					<div id='wtw_listbuildings'></div><br />\r\n";
 			$zmenu .= "					<div class='wtw-yellowbutton' onclick='WTW.adminMenuItemSelected(this);'>".$this->__('Cancel')."</div><br /><br />\r\n";
 			$zmenu .= "				</div>\r\n";
@@ -735,9 +735,8 @@ class wtwadminmenu {
 			$zmenu .= "				</div>\r\n";
 			$zmenu .= "				<div id='wtw_adminmenu22' class='wtw-adminmenuform wtw-hide'>\r\n";
 			$zmenu .= "					<div id='wtw_bback22' alt='Back' title='Back' class='wtw-backbutton' onclick='WTW.adminMenuItemSelected(this);'>&lt;&lt;</div>\r\n";
-			$zmenu .= "					<div class='wtw-menuheader'>".$this->__('Select 3D Community')."</div><br />\r\n";
-			$zmenu .= "					<br />\r\n";
-			$zmenu .= "					<div id='wtw_loadingcommunityid' class='wtw-loadingnoticecentered'>".$this->__('Loading')."</div>\r\n";
+			$zmenu .= "					<div class='wtw-menuheader'>".$this->__('Select 3D Community')."</div>\r\n";
+			$zmenu .= "					<div id='wtw_loadingcommunityid' class='wtw-loadingnoticecentered'><br /><br />".$this->__('Loading')."</div>\r\n";
 			$zmenu .= "					<div id='wtw_listcommunities'></div>\r\n";
 			$zmenu .= "					<br />\r\n";
 			$zmenu .= "					<div id='wtw_cancel22' class='wtw-yellowbutton' onclick='WTW.adminMenuItemSelected(this);'>".$this->__('Cancel')."</div>\r\n";
@@ -817,9 +816,8 @@ class wtwadminmenu {
 			$zmenu .= "				</div>\r\n";
 			$zmenu .= "				<div id='wtw_adminmenu32' class='wtw-adminmenuform wtw-hide'>\r\n";
 			$zmenu .= "					<div id='wtw_bback32' alt='Back' title='Back' class='wtw-backbutton' onclick='WTW.adminMenuItemSelected(this);'>&lt;&lt;</div>\r\n";
-			$zmenu .= "					<div class='wtw-menuheader'>".$this->__('Select 3D Thing')."</div><br />\r\n";
-			$zmenu .= "					<br />\r\n";
-			$zmenu .= "					<div id='wtw_loadingthingid' class='wtw-loadingnoticecentered'>".$this->__('Loading')."</div>\r\n";
+			$zmenu .= "					<div class='wtw-menuheader'>".$this->__('Select 3D Thing')."</div>\r\n";
+			$zmenu .= "					<div id='wtw_loadingthingid' class='wtw-loadingnoticecentered'><br /><br />".$this->__('Loading')."</div>\r\n";
 			$zmenu .= "					<div id='wtw_listthings'></div>\r\n";
 			$zmenu .= "					<br />\r\n";
 			$zmenu .= "					<div class='wtw-yellowbutton' onclick='WTW.adminMenuItemSelected(this);'>".$this->__('Cancel')."</div>\r\n";
@@ -1532,7 +1530,7 @@ class wtwadminmenu {
 			$zmenu .= "			</div><br /><br />\r\n";
 			$zmenu .= "			<h4 class='wtw-marginbottom'>Letter Color (emissive)</h4>\r\n";
 			$zmenu .= "			<div class='wtw-mainmenuvalue'>(Example: #ff0000)</div><br />\r\n";
-			$zmenu .= "			<input type='text' id='wtw_tmoldwebtextcolor' maxlength='7' class='wtw-smallprintinput'  onfocus=\"WTW.openColorSelector(this, 'Emissive Color (Projected)', 'emissive');\" onblur='WTW.closeColorSelector(false);WTW.setNewMold(1);' onchange='WTW.setColorDirect(this);WTW.setNewMold(1);' onkeyup='WTW.setColorDirect(this);WTW.setNewMold(1);' /><br /><br />\r\n";
+			$zmenu .= "			<input type='text' id='wtw_tmoldwebtextemissive' maxlength='7' class='wtw-smallprintinput'  onfocus=\"WTW.openColorSelector(this, 'Emissive Color (Projected)', 'emissive');\" onblur='WTW.closeColorSelector(false);WTW.setNewMold(1);' onchange='WTW.setColorDirect(this);WTW.setNewMold(1);' onkeyup='WTW.setColorDirect(this);WTW.setNewMold(1);' /><br /><br />\r\n";
 			$zmenu .= "			<h4 class='wtw-marginbottom'>Base Color (diffuse)</h4>\r\n";
 			$zmenu .= "			<div class='wtw-mainmenuvalue'>(Example: #f0f0f0)</div><br />\r\n";
 			$zmenu .= "			<input type='text' id='wtw_tmoldwebtextdiffuse' maxlength='7' class='wtw-smallprintinput' onfocus=\"WTW.openColorSelector(this, 'Diffuse Color (Base)', 'diffuse');\" onblur='WTW.closeColorSelector(false);WTW.setNewMold(1);' onchange='WTW.setColorDirect(this);WTW.setNewMold(1);'  onkeyup='WTW.setColorDirect(this);WTW.setNewMold(1);' /><br /><br />\r\n";

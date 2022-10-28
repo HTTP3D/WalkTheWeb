@@ -1613,7 +1613,6 @@ class wtwdb {
 	}
 
 	public function dirSize($zdirectory) {
-		global $wtwdb;
 		$zsize = 0;
 		try {
 			foreach(new RecursiveIteratorIterator(new RecursiveDirectoryIterator($zdirectory)) as $zfile){
@@ -1622,7 +1621,7 @@ class wtwdb {
 				}
 			}
 		} catch (Exception $e) {
-			$wtwdb->serror("core-functions-class_wtwdb.php-dirSize=".$e->getMessage());
+			$this->serror("core-functions-class_wtwdb.php-dirSize=".$e->getMessage());
 		}
 		return $zsize;
 	} 

@@ -18,11 +18,6 @@ try {
 	$zversionid = $wtwhandlers->getPost('versionid','');
 	$zversion = $wtwhandlers->getPost('version','');
 	$zversiondesc = $wtwhandlers->decode64($wtwhandlers->getPost('versiondesc',''));
-	$zdownloadid = $wtwhandlers->getPost('downloadid','');
-	$zwebid = $wtwhandlers->getPost('webid','');
-	$zupdatewebid = $wtwhandlers->getPost('updatewebid','');
-	$zwebtype = $wtwhandlers->getPost('webtype','');
-	$zprocess = $wtwhandlers->getPost('process','');
 	$zcommunityname = $wtwhandlers->decode64($wtwhandlers->getPost('communityname',''));
 	$zcommunitydescription = $wtwhandlers->decode64($wtwhandlers->getPost('communitydescription',''));
 	$zdescription = $wtwhandlers->decode64($wtwhandlers->getPost('description',''));
@@ -112,25 +107,6 @@ try {
 			break;
 		case "sharecommunitytemplate":
 			$zresponse = $wtwcommunities->shareCommunityTemplate($zcommunityid, $zsharehash);
-			break;
-		case "downloadweb":
-			$znewwebid = $wtwcommunities->downloadWeb($zwebid, $zwebid, $zwebtype, '', '', '', $zcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);
-			$zresponse = array(
-				'webid'=> $znewwebid,
-				'webtype'=> $zwebtype
-			);
-			break;
-		case "downloadupdateweb":
-			$zresponse = $wtwcommunities->downloadUpdateWeb($zwebid, $zupdatewebid, $zwebtype, '');
-			break;
-		case "importcommunity":
-			$zcommunityid = $wtwcommunities->importCommunity($zcommunityid, $zpastcommunityid, $zversionid, $zversion, $zversiondesc, $zcommunityname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $ztextureid, $zskydomeid, $zskyinclination, $zskyluminance, $zskyazimuth, $zskyrayleigh, $zskyturbidity, $zskymiedirectionalg, $zskymiecoefficient, $zgroundpositiony, $zwaterpositiony, $zalttag);
-			$zresponse = array(
-				'communityid'=> $zcommunityid
-			);
-			break;
-		case "updatedownloadqueue":
-			$zresponse = $wtwcommunities->updateDownloadsQueue($zdownloadid, $zwebid, $zwebtype, $zprocess);
 			break;
 	}
 

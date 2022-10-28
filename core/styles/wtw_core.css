@@ -1480,6 +1480,10 @@ li.wtw-menulihilight:hover {
 .wtw-leftalign {
 	text-align:left;
 }
+.wtw-right {
+	float:right;
+	margin-right:15px;
+}
 .wtw-deleteanimicon {
 	display:inline-block;
 	white-space:nowrap;
@@ -2052,7 +2056,7 @@ iframe {
 	background-color:#acacac;
 }
 .wtw-iprogressbar {
-	width:10%;
+	width:5%;
 	height:27px;
 	margin-top:0px;
 	margin-bottom:0px;

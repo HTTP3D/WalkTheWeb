@@ -329,6 +329,7 @@ class wtwadmin {
 			$zpagedata .= "				<div id='wtw_downloadqueue' class='wtw-dashboardboxleftfull wtw-hide'>\r\n";
 			$zpagedata .= "					<div class='wtw-dashboardboxtitle' onclick=\"WTW.toggleDashboardBox('wtw_downloadqueuediv');\"><div id='wtw_downloadqueuedivarrow' class='wtw-divarrow'>⯅</div>WalkTheWeb Pending Downloads (Queue)</div>\r\n";
 			$zpagedata .= "					<div id='wtw_downloadqueuediv' class='wtw-dashboardboxmax'>\r\n";
+			$zpagedata .= "						<div id='wtw_downloadingnoticequeue' class='wtw-hide'></div>\r\n";
 			$zpagedata .= "						<div id='wtw_downloadqueuelist'></div>\r\n";
 			$zpagedata .= "						<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "					</div>\r\n";
@@ -440,7 +441,9 @@ class wtwadmin {
 			$zpagedata .= "		<div style='width:100%;margin:0px;text-align:center;'>\r\n";
 			$zpagedata .= "			<!--img src='/content/system/images/wtwlogo.png' / -->\r\n";
 			$zpagedata .= "			<div id='wtw_selectwebform'>\r\n";
-			$zpagedata .= "				<div id='wtw_downloadingnotice' class='wtw-loadingnoticecentered'>Downloading...</div>\r\n";
+
+			$zpagedata .= "				<div id='wtw_downloadingnotice' class='wtw-hide'></div>\r\n";
+
 			$zpagedata .= "				<div id='wtw_commtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
 			$zpagedata .= "				<div id='wtw_buildtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
 			$zpagedata .= "				<div id='wtw_thingtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
@@ -451,13 +454,6 @@ class wtwadmin {
 			$zpagedata .= "					<input id='wtw_bopenwebdownload' type='button' value='Open Your New 3D Community in the Editor' onclick='' style='font-size:1.4em;border-radius:10px;cursor:pointer;' /><br /><br />\r\n";
 			$zpagedata .= "					<input id='wtw_bcontinuewebdownload' type='button' value='Continue Searching for Downloads' onclick='' style='font-size:1.4em;border-radius:10px;cursor:pointer;' /><br /><br />\r\n";
 			$zpagedata .= "					<input id='wtw_bclosewebdownload' type='button' value='Close WalkTheWeb Downloads' onclick='WTW.closeFullPageForm();' style='font-size:1.4em;border-radius:10px;cursor:pointer;' /><br /><br />\r\n";
-			$zpagedata .= "				</div>\r\n";
-			$zpagedata .= "			</div>\r\n";
-			$zpagedata .= "				<div id='wtw_installprogress' class='wtw-hide wtw-iprogresssection'>\r\n";
-			$zpagedata .= "				<br /><h3 class='wtw-center wtw-black' style='margin-top:0px;'>Installing the 3D Community Scene</h3>\r\n";
-			$zpagedata .= "				<div id='wtw_progresstext' class='wtw-iprogresstext'>&nbsp;</div>\r\n";
-			$zpagedata .= "				<div class='wtw-iprogressdiv'>\r\n";
-			$zpagedata .= "					<div id='wtw_progressbar' class='wtw-iprogressbar'></div>\r\n";
 			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";
 			$zpagedata .= "		</div><br />\r\n";

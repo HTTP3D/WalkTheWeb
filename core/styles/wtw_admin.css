@@ -106,33 +106,34 @@ select.wtw-fileselectcategory {
 }
 .wtw-localbuttonleftpad {
 	padding:5px;
-	margin: 0px 0px 8px 0px;
+	margin:0px 0px 8px 0px;
 	display:inline-block;
 	font-size:1em;
-	width: 10px;
+	width:10px;
 	border-top:1px solid #c0c0c0;
 	border-right:1px solid #c0c0c0;
-	border-top-right-radius: 20px;
+	border-top-right-radius:20px;
 }
 .wtw-localbuttonrightpad {
 	padding:5px;
-	margin: 0px 0px 8px 0px;
+	margin:0px 0px 8px 0px;
 	display:inline-block;
 	font-size:1em;
-	width: 10px;
+	width:10px;
 	border-top:1px solid #c0c0c0;
 	border-left:1px solid #c0c0c0;
-	border-top-left-radius: 20px;
+	border-top-left-radius:20px;
 }
 .wtw-localbuttonmiddlepad {
 	padding:5px;
-	margin: 0px 0px 8px 0px;
+	margin:0px 0px 8px 0px;
 	display:inline-block;
 	width:34px;
+	color:gray;
 	font-size:1em;
 	border-top:1px solid #c0c0c0;
-	border-top-left-radius: 20px;
-	border-top-right-radius: 20px;
+	border-top-left-radius:20px;
+	border-top-right-radius:20px;
 }
 .wtw-hiddenimageoption {
 	float:right;
@@ -254,6 +255,11 @@ select.wtw-fileselectcategory {
 	text-align:left;
 	color:#000000;
 }
+.wtw-normalgray {
+	margin-top:20px;
+	font-weight:normal;
+	color:#c0c0c0;
+}
 .wtw-colorlist {
 	text-align:left;
 	color:#c0c0c0;
@@ -347,7 +353,7 @@ td.wtw-tdactiveoptional {
 	margin-top:5px;
 	margin-bottom:5px;
 	margin-left:35px;
-	margin-right:35px;
+	margin-right:5px;
 	padding:3px;
 	font-weight:normal;
 	font-size:1em;
@@ -1186,6 +1192,14 @@ a.wtw-linkwrap:hover {
 	overflow-x:auto;
 	overflow-y:none;
 	background-color:#ffffff;
+	white-space: pre;  
+	white-space: pre-wrap;
+	white-space: pre-line;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -hp-pre-wrap;
+	word-wrap: break-word;
 }
 
 /* loading, progress, and blinking */

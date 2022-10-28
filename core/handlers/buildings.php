@@ -59,12 +59,6 @@ try {
 		case "sharebuildingtemplate":
 			$zresponse = $wtwbuildings->shareBuildingTemplate($zbuildingid, $zsharehash);
 			break;
-		case "importbuilding":
-			$zbuildingid = $wtwbuildings->importBuilding($zbuildingid, $zpastbuildingid, $zversionid, $zversion, $zversiondesc, $zbuildingname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $zalttag);
-			$zresponse = array(
-				'buildingid'=> $zbuildingid
-			);
-			break;
 	}
 
 	/* set headers to keep data local to server */

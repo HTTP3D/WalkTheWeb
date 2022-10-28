@@ -52,12 +52,6 @@ try {
 		case "savegravity":
 			//$wtwthings->saveThingGravity($zthingid, $zgravity);
 			break;
-		case "importthing":
-			$zthingid = $wtwthings->importThing($zthingid, $zpastthingid, $zversionid, $zversion, $zversiondesc, $zthingname, $zanalyticsid, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zgravity, $zalttag);
-			$zresponse = array(
-				'thingid'=> $zthingid
-			);
-			break;
 		case "savethingtemplate":
 			$zresponse = $wtwthings->saveThingTemplate($zthingid, $zthingname, $zdescription, $ztags, $zversion, $zversiondesc);
 			break;

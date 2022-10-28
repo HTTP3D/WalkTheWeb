@@ -176,15 +176,6 @@ try {
 		case "deleteuseravatar":
 			$zresponse = $wtwavatars->deleteUserAvatar($zuseravatarid);
 			break;
-		case "downloadweb":
-			$zresponse = $wtwavatars->downloadWeb($zwebid, $zwebid, $zwebtype, '');
-			break;
-		case "downloadupdateweb":
-			$zresponse = $wtwavatars->downloadUpdateWeb($zwebid, $zupdatewebid, $zwebtype, '');
-			break;
-		case "downloadupdateuseravatar":
-			$zresponse = $wtwavatars->downloadUpdateUserAvatar($zuseravatarid, $zinstanceid, $zwebid, $zupdatewebid, $zwebtype, '');
-			break;
 	}
 
 	/* set headers to keep data local to server */

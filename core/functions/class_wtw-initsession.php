@@ -21,9 +21,9 @@ class wtw {
 	}	
 	
 	/* declare public $wtw variables */
-	public $version = '3.5.3';
+	public $version = '3.5.4';
 	public $dbversion = '1.2.18';
-	public $versiondate = '2022-9-30';
+	public $versiondate = '2022-10-28';
 	public $oldversion = '';
 	public $olddbversion = '';
 	public $serverinstanceid = '';
@@ -999,14 +999,9 @@ class wtw {
 					echo "<input name='wtw_bcommunitysearch' type='button' value='Search' onclick=\"WTW.communitySearch(dGet('wtw_tcommunitysearch').value);\" class='wtw-searchbutton' />";
 					echo "<input id='wtw_tcommunitysearch' name='wtw_tcommunitysearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
 					echo "<div class='wtw-clearspace'></div>";
-					echo "<div id='wtw_downloadingnotice' class='wtw-loadingnoticecentered'>Downloading...</div>";
+					echo "<div id='wtw_downloadingnotice' class='wtw-hide'></div>";
 					
 					echo "<br /><hr /><div id='wtw_commtempsearchresults' class='wtw-indentmore'></div>";
-					echo "</div><div id='wtw_installprogress' class='wtw-ihide wtw-iprogresssection'>";
-
-					echo "<h2 class='wtw-login'>Installing Your First 3D Community Scene</h2>";
-					echo "<div id='wtw_progresstext' class='wtw-iprogresstext'>&nbsp;</div>";
-					echo "<div class='wtw-iprogressdiv'><div id='wtw_progressbar' class='wtw-iprogressbar'></div></div>";
 					echo "</div></div><br /></div><br /></form>";
 					echo "<script>";
 					echo "WTW.communitySearch('');";
@@ -1041,14 +1036,9 @@ class wtw {
 					echo "<input name='wtw_bbuildingsearch' type='button' value='Search' onclick=\"WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);\" class='wtw-searchbutton' />";
 					echo "<input id='wtw_tbuildingsearch' name='wtw_tbuildingsearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
 					echo "<div class='wtw-clearspace'></div>";
-					echo "<div id='wtw_downloadingnotice' class='wtw-loadingnoticecentered'>Downloading...</div>";
+					echo "<div id='wtw_downloadingnotice' class='wtw-hide'></div>";
 
 					echo "<br /><hr /><div id='wtw_buildtempsearchresults' class='wtw-indentmore'></div>";
-					echo "</div><div id='wtw_installprogress' class='wtw-ihide wtw-iprogresssection'>";
-
-					echo "<h2 class='wtw-login'>Installing Your First 3D Building Scene</h2>";
-					echo "<div id='wtw_progresstext' class='wtw-iprogresstext'>&nbsp;</div>";
-					echo "<div class='wtw-iprogressdiv'><div id='wtw_progressbar' class='wtw-iprogressbar'></div></div>";
 					echo "</div></div><br /></div><br /></form>";
 					echo "<script>";
 					echo "WTW.buildingSearch('');";
@@ -2536,6 +2526,8 @@ class wtw {
 			$zhiddenfields .= "<input type='hidden' id='wtw_tfileitemnamepath' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tfileitempreviewname' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_helptab' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_ibrowsewidth' value='.9' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_ibrowseheight' value='.9' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tconnectinggridind' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tconnectinggridid' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tconnectinggridname' />\r\n";

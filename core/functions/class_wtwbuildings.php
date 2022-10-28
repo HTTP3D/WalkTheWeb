@@ -52,6 +52,10 @@ class wtwbuildings {
 			if (empty($zbuildingid)) {
 				/* create new buildingid */
 				$zbuildingid = $wtwhandlers->getRandomString(16,1);
+				$zhostuserid = '';
+				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+					$zhostuserid = $wtwhandlers->userid;
+				}
 				
 				if (!isset($zpastbuildingid) || empty($zpastbuildingid)) {
 					/* create new building (without access to copy building or if not copying existing building, this creates new building) */
@@ -66,6 +70,7 @@ class wtwbuildings {
 							 buildingname,
 							 buildingdescription,
 							 analyticsid,
+							 hostuserid,
 							 userid,
 							 alttag,
 							 createdate,
@@ -82,6 +87,7 @@ class wtwbuildings {
 							 '".$wtwhandlers->escapeHTML($zbuildingname)."',
 							 '".$wtwhandlers->escapeHTML($zbuildingdescription)."',
 							 '".$zanalyticsid."',
+							 '".$zhostuserid."',
 							 '".$wtwhandlers->userid."',
 							 '".$wtwhandlers->escapeHTML($zalttag)."',
 							 now(),
@@ -101,6 +107,7 @@ class wtwbuildings {
 							 buildingname,
 							 buildingdescription,
 							 analyticsid,
+							 hostuserid,
 							 userid,
 							 positionx,
 							 positiony,
@@ -132,6 +139,7 @@ class wtwbuildings {
 							 '".$wtwhandlers->escapeHTML($zbuildingname)."' as buildingname,
 							 '".$wtwhandlers->escapeHTML($zbuildingdescription)."' as buildingdescription,
 							 analyticsid,
+							 '".$zhostuserid."' as hostuserid,
 							 '".$wtwhandlers->userid."' as userid,
 							 positionx,
 							 positiony,
@@ -747,13 +755,13 @@ class wtwbuildings {
 						 'building' as webtype,
 						 t2.pluginname,
 						 t2.optional
-					from ".wtw_tableprefix."wtw_pluginsrequired t2
+					from ".wtw_tableprefix."pluginsrequired t2
 					where t2.webid='".$zfrombuildingid."'
 						and t2.deleted=0;");
 				foreach ($zresults as $zrow) {
 					$zpluginsrequiredid = $wtwhandlers->getRandomString(16,1);
 					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."wtw_pluginsrequired
+						insert into ".wtw_tableprefix."pluginsrequired
 							(pluginsrequiredid,
 							 pastpluginsrequiredid,
 							 webid,
@@ -1591,111 +1599,6 @@ class wtwbuildings {
 		return $zsuccess;
 	}
 	
-	public function importBuilding($zbuildingid, $zpastbuildingid, $zversionid, $zversion, $zversiondesc, $zbuildingname, $zbuildinganalyticsid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz, $zgravity, $zalttag) {
-		/* import building from 3dnet.walktheweb.com in the media library */
-		global $wtwhandlers;
-		try {
-			set_time_limit(0);
-			$zversion1 = 1;
-			$zversion2 = 0;
-			$zversion3 = 0;
-
-			if (strpos($zversion, '.') !== false) {
-				try {
-					list($zversion1, $zversion2, $zversion3) = explode('.', $zversion);
-				} catch (Exception $e) {
-					$zversion1 = 1;
-					$zversion2 = 0;
-					$zversion3 = 0;
-				}
-			}
-			$zversionorder = (1000000*$zversion1) + (1000*$zversion2) + $zversion3;
-			/* ini_set('max_execution_time', 300); */
-			if (!empty($wtwhandlers->getSessionUserID())) {
-				if ($wtwhandlers->keyExists('buildings', 'buildingid', $zbuildingid) == false) {
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."buildings
-							(buildingid, 
-							 pastbuildingid, 
-							 versionid,
-							 version,
-							 versionorder,
-							 versiondesc,
-							 buildingname, 
-							 analyticsid, 
-							 positionx, 
-							 positiony, 
-							 positionz, 
-							 scalingx, 
-							 scalingy, 
-							 scalingz, 
-							 rotationx, 
-							 rotationy, 
-							 rotationz, 
-							 gravity, 
-							 alttag,
-							 userid,
-							 createdate,
-							 createuserid,
-							 updatedate,
-							 updateuserid)
-						values
-							('".$zbuildingid."', 
-							 '".$zpastbuildingid."', 
-							 '".$zversionid."',
-							 '".$zversion."',
-							 ".$zversionorder."
-							 '".addslashes($zversiondesc)."',
-							 '".$zbuildingname."', 
-							 '".$zbuildinganalyticsid."', 
-							 ".$zstartpositionx.", 
-							 ".$zstartpositiony.", 
-							 ".$zstartpositionz.", 
-							 ".$zstartscalingx.", 
-							 ".$zstartscalingy.", 
-							 ".$zstartscalingz.", 
-							 ".$zstartrotationx.", 
-							 ".$zstartrotationy.", 
-							 ".$zstartrotationz.", 
-							 ".$zgravity.", 
-							 '".$zalttag."',
-							 '".$wtwhandlers->userid."',
-							 now(),
-							 '".$wtwhandlers->userid."',
-							 now(),
-							 '".$wtwhandlers->userid."');");
-					$zuserauthorizationid = $wtwhandlers->getRandomString(16,1);
-					$wtwhandlers->query("
-						insert into ".wtw_tableprefix."userauthorizations
-							(userauthorizationid,
-							 userid,
-							 communityid,
-							 buildingid,
-							 thingid,
-							 useraccess,
-							 createdate,
-							 createuserid,
-							 updatedate,
-							 updateuserid)
-						values
-							('".$zuserauthorizationid."',
-							 '".$wtwhandlers->userid."',
-							 '',
-							 '".$zbuildingid."',
-							 '',
-							 'admin',
-							 now(),
-							 '".$wtwhandlers->userid."',
-							 now(),
-							 '".$wtwhandlers->userid."');");
-				}
-			}
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwbuildings.php-importBuilding=".$e->getMessage());
-		}
-		return $zbuildingid;
-	}	
-
 	public function saveBuildingStartPosition($zbuildingid, $zstartpositionx, $zstartpositiony, $zstartpositionz, $zstartscalingx, $zstartscalingy, $zstartscalingz, $zstartrotationx, $zstartrotationy, $zstartrotationz) {
 		/* update avatar start position in relation to a building */
 		global $wtwhandlers;

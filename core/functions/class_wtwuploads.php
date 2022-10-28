@@ -511,6 +511,10 @@ class wtwuploads {
 			$zuploadpath = "";
 			$zbrowsepath = "";
 			$zobjectfolder = "";
+			$zhostuserid = '';
+			if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
+				$zhostuserid = $wtwhandlers->userid;
+			}
 			$wtwhandlers->checkContentFolders('', '', '', '');
 			$zuploadpath = $wtwhandlers->contentpath;
 			if ($wtwhandlers->hasValue($_SESSION['wtw_uploadpathid'])) {
@@ -536,6 +540,7 @@ class wtwuploads {
 					insert into ".wtw_tableprefix."uploadobjects
 						(uploadobjectid,
 						 groupid,
+						 hostuserid,
 						 userid,
 						 objectfolder,
 						 objectfile,
@@ -546,6 +551,7 @@ class wtwuploads {
 					values
 						('".$zuploadobjectid."',
 						 '".$zuploadobjectid."',
+						 '".$zhostuserid."',
 						 '".$wtwhandlers->userid."',
 						 '".$zobjectfolder."',
 						 '".$zfilename."',
