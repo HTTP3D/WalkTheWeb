@@ -18,7 +18,7 @@ try {
 			'communitymolds' as itemtype
 		from ".wtw_tableprefix."communitymolds
 		where communityid='".$zcommunityid."'
-		   and deleted=1
+		   and deleted>0
 		   and not deleteddate is null
 		order by deleteddate desc, 
 			communitymoldid desc;");

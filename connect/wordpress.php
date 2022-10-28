@@ -3,14 +3,12 @@
 /* permissions are required for access to some data */
 /* this connect file provides web aliases information */
 require_once('../core/functions/class_wtwconnect.php');
-require_once('../core/functions/class_wtwcommunities.php');
+require_once('../core/functions/class_wtwdownloads.php');
 global $wtwconnect;
-global $wtwcommunities;
+global $wtwdownloads;
 
-try {//host
-//	echo $wtwconnect->addConnectHeader('*');
-	header('Access-Control-Allow-Origin: *');
-	header('Content-type: application/json');
+try {
+	echo $wtwconnect->addConnectHeader('*');
 
 	/* google analytics tracking (if defined in wtw_config.php) */
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/wordpress.php");
@@ -42,7 +40,7 @@ try {//host
 
 	$zauthenticationok = false;
 	$zwebnameok = false;
-	$zuserid = '';
+	$zuserid = $wtwconnect->userid;
 	$znewcommunityid = '';
 	$znewbuildingid = '';
 	$zdomainname = '';
@@ -53,8 +51,6 @@ try {//host
 	$zwebsiteurl = $wtwconnect->decode64($zwebsiteurl);
 	$zbuildingid = $wtwconnect->decode64($zbuildingid);
 	$zcommunityid = $wtwconnect->decode64($zcommunityid);
-	$zusertoken = $wtwconnect->decode64($zusertoken);
-	$zwtwusertoken = $wtwconnect->decode64($zwtwusertoken);
 	$zwtwemail = strtolower($wtwconnect->decode64($zwtwemail));
 	$zwtwuserid = $wtwconnect->decode64($zwtwuserid);
 	$zhosturl = $wtwconnect->decode64($zhosturl);
@@ -70,9 +66,6 @@ try {//host
 	$zstoreapiurl = $wtwconnect->decode64($zstoreapiurl);
 	$ziframes = $wtwconnect->decode64($ziframes);
 	$zhostuserid = '';
-	if ($wtwconnect->isUserInRole("Host") && $wtwconnect->isUserInRole("Admin") == false) {
-		$zhostuserid = $zwtwuserid;
-	}
 
 	try {
 		$zparse = parse_url($zhosturl);
@@ -84,10 +77,10 @@ try {//host
 		
 	}
 	$zresponse = array();
-	
+
 	switch ($zfunction) {
 		case "downloadqueue":
-			$zresponse = $wtwcommunities->addDownloadQueue($zwebid, $zwebtype);
+			$zresponse = $wtwdownloads->addDownloadQueue($zwebid, $zwebtype);
 			break;
 		case "syncwebsites":
 			$zapikeyid = '';
@@ -105,17 +98,8 @@ try {//host
 			if ($wtwconnect->hasValue($zapikeyid)) {
 				$i = 0;
 				/* key-secret combo has access */
-/*				$zresults = $wtwconnect->query("
-					select * 
-					from ".wtw_tableprefix."
-				");
-				foreach ($zresults as $zrow) {
-					$zresponse[$i] = array(
-						
-					);
-					$i += 1;
-				}
-*/			}
+				
+			}
 			break;
 		case "createcommunityandbuilding":
 			$zresponse = array(
@@ -146,7 +130,6 @@ try {//host
 					$zauthenticationok = true;
 					$zuserid = $zrow["userid"];
 					$zpastuserid = $zrow["pastuserid"];
-					$zuploadpathid = $zrow["uploadpathid"];
 					/* user found by access token, update the pastuserid (wtwuserid) to the user account as a reference */
 					if ($wtwconnect->hasValue($zuserid) && (!isset($zpastuserid) || empty($zpastuserid))) {
 						$zresults = $wtwconnect->query("
@@ -181,15 +164,16 @@ try {//host
 				foreach ($zresults as $zrow) {
 					$zauthenticationok = true;
 					$zuserid = $zrow["userid"];
-					$zpastuserid = $zrow["pastuserid"];
-					$zuploadpathid = $zrow["uploadpathid"];
 					$zwtwusertoken = $zusertoken;
 				}
 				if ($zauthenticationok == false) {
 					$serror = 'User does not have permission on WalkTheWeb Server';
 				}
 			}
-			
+			if ($wtwconnect->hasValue($zuserid)) {
+				$zauthenticationok = true;
+			}
+
 			if ($zauthenticationok && isset($zwebname) && !empty($zwebname)) {
 				/* reserved words can not be any part of the webname - you can add your own reserved words */
 				$zreserved = array('wtw','walktheweb','http3d','https3d');
@@ -220,11 +204,16 @@ try {//host
 					$serror = 'Web Name is already in use.';
 				}
 			}
-			
+
 			if ($zauthenticationok && $zwebnameok) {
+				if ($wtwconnect->isUserInRole("Host")) {
+					$zhostuserid = $zuserid;
+				}
 				/* download community */
-				$znewcommunityid = $wtwcommunities->downloadWeb($zcommunityid, $zcommunityid, 'community', $zwtwusertoken, '', '', '', 0, 0, 0, 1, 1, 1, 0, 0, 0);
+				$zresults = $wtwdownloads->downloadWeb($zcommunityid, $zcommunityid, 'community', $zwtwusertoken, '', '', '', 0, 0, 0, 1, 1, 1, 0, 0, 0);
 				
+				$znewcommunityid = $zresults["newwebid"];
+
 				if (!isset($znewcommunityid) || empty($znewcommunityid)) {
 					$serror = '3D Community Scene could not be created.';
 				} else {
@@ -262,12 +251,11 @@ try {//host
 					$zbuildingrotationy = $zrow["buildingrotationy"];
 					$zbuildingrotationz = $zrow["buildingrotationz"];
 				}
-$wtwconnect->serror("download buildingid=".$zbuildingid);
+
 				/* download building */
-				$znewbuildingid = $wtwcommunities->downloadWeb($zbuildingid, $zbuildingid, 'building', $zwtwusertoken, $znewcommunityid, 'community', $znewcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);
-
-$wtwconnect->serror("new buildingid=".$znewbuildingid);
-
+				$zresults = $wtwdownloads->downloadWeb($zbuildingid, $zbuildingid, 'building', $zwtwusertoken, $znewcommunityid, 'community', $znewcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);
+				
+				$znewbuildingid = $zresults["newwebid"];
 				
 				if (!isset($znewbuildingid) || empty($znewbuildingid)) {
 					$serror = '3D Shopping Building could not be created.';
@@ -352,79 +340,82 @@ $wtwconnect->serror("new buildingid=".$znewbuildingid);
 						now(),
 						'".$zuserid."');");
 				
-				/* check if store tables exist (3D Shopping Plugin exists) */
-				$zstoretables = 0;
-				$zresults = $wtwconnect->query("
-					select count(*) as scount
-					from information_schema.tables 
-					where table_schema = '".wtw_dbname."'
-						and (table_name = '".wtw_tableprefix."shopping_stores'
-							or table_name = '".wtw_tableprefix."shopping_connectstores');");
-				foreach ($zresults as $zrow) {
-					$zstoretables = $zrow["scount"];
-				}
-				/* store tables exist - add permission entries */
-				if ($zstoretables > 1) {
-					$zstoreid = $wtwconnect->getRandomString(16,1);
-					$wtwconnect->query("
-						insert into ".wtw_tableprefix."shopping_stores
-							(storeid,
-							 storename,
-							 storeiframes,
-							 storeurl,
-							 storecarturl,
-							 storeproducturl,
-							 woocommerceapiurl,
-							 woocommercekey, 
-							 woocommercesecret,
-							 approveddate,
-							 approveduserid,
-							 createdate,
-							 createuserid,
-							 updatedate,
-							 updateuserid)
-						values
-							('".$zstoreid."',
-							 '".base64_encode($zwtwstorename)."',
-							 ".$ziframes.",
-							 '".$zstoreurl."',
-							 '".$zstorecarturl."',
-							 '".$zstoreproducturl."',
-							 '".$zstoreapiurl."',
-							 '".base64_encode($zwookey)."', 
-							 '".base64_encode($zwoosecret)."',
-							 now(),
-							 '".$zuserid."',
-							 now(),
-							 '".$zuserid."',
-							 now(),
-							 '".$zuserid."');");
-					
-					/* connect store settings to 3D Store Building */
-					$zconnectid = $wtwconnect->getRandomString(16,1);
-					$wtwconnect->query("
-						insert into ".wtw_tableprefix."shopping_connectstores
-							(connectid,
-							 storeid,
-							 communityid,
-							 buildingid,
-							 thingid,
-							 createdate,
-							 createuserid,
-							 updatedate,
-							 updateuserid)
+				/* if store key and secret exist - check if plugin is installed */
+				if ($wtwconnect->hasValue($zstoreurl) && $wtwconnect->hasValue($zwookey) && $wtwconnect->hasValue($zwoosecret)) {
+					/* check if store tables exist (3D Shopping Plugin exists) */
+					$zstoretables = 0;
+					$zresults = $wtwconnect->query("
+						select count(*) as scount
+						from information_schema.tables 
+						where table_schema = '".wtw_dbname."'
+							and (table_name = '".wtw_tableprefix."shopping_stores'
+								or table_name = '".wtw_tableprefix."shopping_connectstores');");
+					foreach ($zresults as $zrow) {
+						$zstoretables = $zrow["scount"];
+					}
+					/* if store tables exist - add permission entries */
+					if ($zstoretables > 1) {
+						$zstoreid = $wtwconnect->getRandomString(16,1);
+						$wtwconnect->query("
+							insert into ".wtw_tableprefix."shopping_stores
+								(storeid,
+								 storename,
+								 storeiframes,
+								 storeurl,
+								 storecarturl,
+								 storeproducturl,
+								 woocommerceapiurl,
+								 woocommercekey, 
+								 woocommercesecret,
+								 approveddate,
+								 approveduserid,
+								 createdate,
+								 createuserid,
+								 updatedate,
+								 updateuserid)
 							values
-							('".$zconnectid."',
-							 '".$zstoreid."',
-							 '',
-							 '".$znewbuildingid."',
-							 '',
-							 now(),
-							 '".$zuserid."',
-							 now(),
-							 '".$zuserid."');");
-				} else {
-					$serror = '3D Shopping Plugin is not installed.';
+								('".$zstoreid."',
+								 '".base64_encode($zwtwstorename)."',
+								 ".$ziframes.",
+								 '".$zstoreurl."',
+								 '".$zstorecarturl."',
+								 '".$zstoreproducturl."',
+								 '".$zstoreapiurl."',
+								 '".base64_encode($zwookey)."', 
+								 '".base64_encode($zwoosecret)."',
+								 now(),
+								 '".$zuserid."',
+								 now(),
+								 '".$zuserid."',
+								 now(),
+								 '".$zuserid."');");
+						
+						/* connect store settings to 3D Store Building */
+						$zconnectid = $wtwconnect->getRandomString(16,1);
+						$wtwconnect->query("
+							insert into ".wtw_tableprefix."shopping_connectstores
+								(connectid,
+								 storeid,
+								 communityid,
+								 buildingid,
+								 thingid,
+								 createdate,
+								 createuserid,
+								 updatedate,
+								 updateuserid)
+								values
+								('".$zconnectid."',
+								 '".$zstoreid."',
+								 '',
+								 '".$znewbuildingid."',
+								 '',
+								 now(),
+								 '".$zuserid."',
+								 now(),
+								 '".$zuserid."');");
+					} else {
+						$serror = '3D Shopping Plugin is not installed.';
+					}
 				}
 				
 				/* set the return values */

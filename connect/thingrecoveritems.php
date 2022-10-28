@@ -18,7 +18,7 @@ try {
 			'thingmolds' as itemtype
 		from ".wtw_tableprefix."thingmolds
 		where thingid='".$zthingid."'
-		   and deleted=1
+		   and deleted>0
 		   and not deleteddate is null
 		order by deleteddate desc, 
 			thingmoldid desc;");

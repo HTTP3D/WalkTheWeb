@@ -6,14 +6,25 @@ require_once('../core/functions/class_wtwconnect.php');
 global $wtwconnect;
 try {
 	/* google analytics tracking (if defined in wtw_config.php) */
+	$zuserid = $wtwconnect->userid;
 	$wtwconnect->trackPageView($wtwconnect->domainurl."/connect/avatars.php");
 
 	/* get values from querystring or session */
 	$zgroups = $wtwconnect->getVal('groups','');
+	$zfilter = $wtwconnect->getVal('filter','mine');
 	
 	$zhostuserid = '';
 	if ($wtwconnect->isUserInRole("Host") && $wtwconnect->isUserInRole("Admin") == false) {
 		$zhostuserid = $wtwconnect->userid;
+	}
+	$hasaccess = false;
+	if ($zfilter == 'all') {
+		$zroles = $wtwconnect->getUserRoles($zuserid);
+		foreach ($zroles as $zrole) {
+			if (strtolower($zrole['rolename']) == 'admin' || strtolower($zrole['rolename']) == 'architect' || strtolower($zrole['rolename']) == 'developer' || strtolower($zrole['rolename']) == 'graphics artist') {
+				$hasaccess = true;
+			}
+		}
 	}
 
 	$zresults = array();
@@ -64,15 +75,27 @@ try {
 				order by a1.hostuserid desc, a1.avatargroup, a1.displayname;");
 		}
 	} else {
-		$zresults = $wtwconnect->query("
-			select distinct a1.*,
-				'' as useravatarid,
-				u1.displayname as defaultdisplayname
-			from ".wtw_tableprefix."avatars a1
-				left join (select displayname from ".wtw_tableprefix."users where userid='".$wtwconnect->userid."') u1
-				on 1=1
-			where a1.deleted=0 and (a1.hostuserid='".$zhostuserid."' or a1.hostuserid='')
-			order by a1.hostuserid desc, a1.avatargroup, a1.displayname;");
+		if ($hasaccess) {
+			$zresults = $wtwconnect->query("
+				select distinct a1.*,
+					'' as useravatarid,
+					u1.displayname as defaultdisplayname
+				from ".wtw_tableprefix."avatars a1
+					left join (select displayname from ".wtw_tableprefix."users where userid='".$wtwconnect->userid."') u1
+					on 1=1
+				where a1.deleted=0
+				order by a1.hostuserid desc, a1.avatargroup, a1.displayname;");
+		} else {
+			$zresults = $wtwconnect->query("
+				select distinct a1.*,
+					'' as useravatarid,
+					u1.displayname as defaultdisplayname
+				from ".wtw_tableprefix."avatars a1
+					left join (select displayname from ".wtw_tableprefix."users where userid='".$wtwconnect->userid."') u1
+					on 1=1
+				where a1.deleted=0 and (a1.hostuserid='".$zhostuserid."' or a1.hostuserid='')
+				order by a1.hostuserid desc, a1.avatargroup, a1.displayname;");
+		}
 	}
 	$i = 0;
 	$zavatars = array();

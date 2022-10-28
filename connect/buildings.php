@@ -10,13 +10,16 @@ try {
 	
 	/* get values from querystring or session */
 	$zuserid = $wtwconnect->userid;
+	$zfilter = $wtwconnect->getVal('filter','mine');
 
 	/* check user for global roles with access */
 	$hasaccess = false;
-	$zroles = $wtwconnect->getUserRoles($zuserid);
-	foreach ($zroles as $zrole) {
-		if (strtolower($zrole['rolename']) == 'admin' || strtolower($zrole['rolename']) == 'architect' || strtolower($zrole['rolename']) == 'developer' || strtolower($zrole['rolename']) == 'graphics artist') {
-			$hasaccess = true;
+	if ($zfilter == 'all') {
+		$zroles = $wtwconnect->getUserRoles($zuserid);
+		foreach ($zroles as $zrole) {
+			if (strtolower($zrole['rolename']) == 'admin' || strtolower($zrole['rolename']) == 'architect' || strtolower($zrole['rolename']) == 'developer' || strtolower($zrole['rolename']) == 'graphics artist') {
+				$hasaccess = true;
+			}
 		}
 	}
 	/* select buildings by userid */

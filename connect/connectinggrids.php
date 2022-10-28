@@ -470,7 +470,7 @@ try {
 					left join (select * 
 							from ".wtw_tableprefix."things 
 							where thingid='".$zparentwebid."' 
-								and deleted=0 and deleted=1) parentthings
+								and deleted=0 and deleted>0) parentthings
 						on ((connectinggrids.parentwebid = parentthings.thingid
 						and connectinggrids.parentwebtype='thing')
 						or (parentbuildings.buildingid = connectinggrids.childwebid 
@@ -489,12 +489,12 @@ try {
 				
 					left join (select * from ".wtw_tableprefix."connectinggrids 
 							where childwebtype='thing' 
-								and deleted=0 and deleted=1) childconnectinggrids
+								and deleted=0 and deleted>0) childconnectinggrids
 						on connectinggrids.childwebid = childconnectinggrids.parentwebid
 						and connectinggrids.childwebtype='building'
 
 					left join (select * from ".wtw_tableprefix."things 
-							where deleted=0 and deleted=1) subchildthings
+							where deleted=0 and deleted>0) subchildthings
 						on childconnectinggrids.childwebid = subchildthings.thingid
 						and childconnectinggrids.childwebtype='thing'
 				
