@@ -1439,7 +1439,7 @@ wtwshopping.prototype.getStoreInfo = async function(zmoldname) {
 			}
 		}
 		if (zwebname == '') {
-			zwebname = 'Store Name';
+			zwebname = 'My 3D Store';
 		}
 		zmoldnameparts.molds[zmoldnameparts.moldind].webtext.webtext = WTW.encode(zwebname);
 		if (zstoreinfo.woocommerceapiurl != '' && zwebname == '') {
@@ -1500,7 +1500,7 @@ wtwshopping.prototype.setStoreInfo = function(zmoldname, zresponse) {
 					zcoveringtitle1.diffuseTexture.vOffset = .55;
 					ztitlemold2.material = zcoveringtitle1;
 
-					var znamelength = WTW.decode(zstorename).length;
+					var znamelength = zstorename.length;
 					var zlineheigth = '140px';
 					var zfontheight = '140px';
 					if (znamelength > 238) {
@@ -1532,7 +1532,7 @@ wtwshopping.prototype.setStoreInfo = function(zmoldname, zresponse) {
 						zfontheight = '90px';
 					}
 
-					WTW.wrapText(ztitlemold2, WTW.decode(zstorename), zlineheigth, zfontheight, 'center', 'top', 'white', 0, 0);
+					WTW.wrapText(ztitlemold2, zstorename, zlineheigth, zfontheight, 'center', 'top', 'white', 0, 0);
 					i = zresponse.length;
 				}
 			}
@@ -1845,7 +1845,7 @@ wtwshopping.prototype.openMoldForm = function(zmoldname, zmoldind, zshape, zwebt
 				if (dGet('wtw_tmoldwebtext').value == '') {
 					try {
 						if (zstoreinfo.storename != '') {
-							dGet('wtw_tmoldwebtext').value = atob(zstoreinfo.storename);
+							dGet('wtw_tmoldwebtext').value = WTW.decode(zstoreinfo.storename);
 						}
 					} catch(ex) {
 					}
@@ -1859,57 +1859,53 @@ wtwshopping.prototype.openMoldForm = function(zmoldname, zmoldind, zshape, zwebt
 				var zwebtextheight = 6;
 				var zwebtextthick = 1;
 				var zwebtextcolor = '#ff0000';
+				var zwebtextemissive = '#ff0000';
 				var zwebtextdiffuse = '#f0f0f0';
 				var zwebtextspecular = '#000000';
 				var zwebtextambient = '#808080';
-				if (zwebstyle.indexOf(',') > -1) {
-					while (zwebstyle.indexOf("'") > -1) {
-						zwebstyle = zwebstyle.replace("'",'');
-					}
-					while (zwebstyle.indexOf('}') > -1) {
-						zwebstyle = zwebstyle.replace('}','');
-					}
-					while (zwebstyle.indexOf('{') > -1) {
-						zwebstyle = zwebstyle.replace('{','');
-					}
-					zwebstyle = zwebstyle.replace('colors:diffuse','diffuse');
-					var zstyles = zwebstyle.split(',');
-					for (var i=0;i<zstyles.length;i++) {
-						if (zstyles[i].indexOf(':') > -1) {
-							var zstyle = zstyles[i].split(':');
-							switch (zstyle[0]) {
-								case 'anchor':
-									zwebtextalign = zstyle[1];
-									break;
-								case 'letter-height':
-									zwebtextheight = Number(zstyle[1]).toFixed(2);
-									break;
-								case 'letter-thickness':
-									zwebtextthick = Number(zstyle[1]).toFixed(2);
-									break;
-								case 'color':
-									zwebtextcolor = zstyle[1];
-									break;
-								case 'diffuse':
-									zwebtextdiffuse = zstyle[1];
-									break;
-								case 'specular':
-									zwebtextspecular = zstyle[1];
-									break;
-								case 'ambient':
-									zwebtextambient = zstyle[1];
-									break;
-							}
-						}
-					}
+				var zwebtextalpha = 1;
+				try {
+					zwebstyle = JSON.parse(zwebstyle);
+				} catch (ex) {}
+				if (zwebstyle.anchor != undefined) {
+					zwebtextalign = zwebstyle.anchor;
+				}
+				if (zwebstyle['letter-height'] != undefined) {
+					zwebtextheight = zwebstyle['letter-height'];
+				}
+				if (zwebstyle['letter-thickness'] != undefined) {
+					zwebtextthick = zwebstyle['letter-thickness'];
+				}
+				if (zwebstyle.color != undefined) {
+					zwebtextcolor = zwebstyle.color;
+				}
+				if (zwebstyle.alpha != undefined) {
+					zwebtextalpha = zwebstyle.alpha;
+				}
+				if (zwebstyle.colors.emissive != undefined) {
+					zwebtextemissive = zwebstyle.colors.emissive;
+				}
+				if (zwebstyle.colors.diffuse != undefined) {
+					zwebtextdiffuse = zwebstyle.colors.diffuse;
+				}
+				if (zwebstyle.colors.specular != undefined) {
+					zwebtextspecular = zwebstyle.colors.specular;
+				}
+				if (zwebstyle.colors.ambient != undefined) {
+					zwebtextambient = zwebstyle.colors.ambient;
 				}
 				WTW.setDDLValue('wtw_tmoldwebtextalign', zwebtextalign);
 				dGet('wtw_tmoldwebtextheight').value = zwebtextheight;
 				dGet('wtw_tmoldwebtextthick').value = zwebtextthick;
-				dGet('wtw_tmoldwebtextcolor').value = zwebtextcolor;
+				dGet('wtw_tmoldwebtextemissive').value = zwebtextemissive;
 				dGet('wtw_tmoldwebtextdiffuse').value = zwebtextdiffuse;
 				dGet('wtw_tmoldwebtextspecular').value = zwebtextspecular;
 				dGet('wtw_tmoldwebtextambient').value = zwebtextambient;
+
+				dGet('wtw_tmoldemissivecolor').value = zwebtextemissive;
+				dGet('wtw_tmolddiffusecolor').value = zwebtextdiffuse;
+				dGet('wtw_tmoldspecularcolor').value = zwebtextspecular;
+				dGet('wtw_tmoldambientcolor').value = zwebtextambient;
 			}
 		}
 	} catch (ex) {
@@ -2053,31 +2049,7 @@ wtwshopping.prototype.setColor = function(zmoldname, zcolorgroup, zemissivecolor
 					zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor = zspecularcolor;
 					zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor = zambientcolor;
 				}
-				if (zmoldnameparts.shape == 'store3dsign') {
-					dGet('wtw_tmoldwebtextcolor').value = zemissivecolor;
-					dGet('wtw_tmoldwebtextdiffuse').value = zdiffusecolor;
-					dGet('wtw_tmoldwebtextspecular').value = zspecularcolor;
-					dGet('wtw_tmoldwebtextambient').value = zambientcolor;
-					if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
-						var zlenx = 1;
-						var zleny = 1;
-						var zlenz = 1;
-						var zopacity = 100;
-						dGet('wtw_tmoldwebstyle').value = "{'anchor':'" + dGet('wtw_tmoldwebtextalign').options[dGet('wtw_tmoldwebtextalign').selectedIndex].value + "','letter-height':" + dGet('wtw_tmoldwebtextheight').value + ",'letter-thickness':" + dGet('wtw_tmoldwebtextthick').value + ",'color':'" + zemissivecolor + "','alpha':" + zopacity/100 + ",'colors':{'diffuse':'" + zdiffusecolor + "','specular':'" + zspecularcolor + "','ambient':'" + zambientcolor + "','emissive':'" + zemissivecolor + "'}}";
-						zmoldnameparts.molds[zmoldnameparts.moldind].webtext.webstyle = dGet('wtw_tmoldwebstyle').value;
-						
-						if (zmoldnameparts.molds[zmoldnameparts.moldind].scaling.x != undefined) {
-							zlenx = zmoldnameparts.molds[zmoldnameparts.moldind].scaling.x;
-						}
-						if (zmoldnameparts.molds[zmoldnameparts.moldind].scaling.y != undefined) {
-							zleny = zmoldnameparts.molds[zmoldnameparts.moldind].scaling.y;
-						}
-						if (zmoldnameparts.molds[zmoldnameparts.moldind].scaling.z != undefined) {
-							zlenz = zmoldnameparts.molds[zmoldnameparts.moldind].scaling.z;
-						}
-						zmold = WTW.addMold3DText(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind], zlenx, zleny, zlenz)
-					}
-				} else if (zmoldnameparts.shape == 'storeproduct' || zmoldnameparts.shape == 'storesign' || zmoldnameparts.shape == 'storecategories' || zmoldnameparts.shape == 'productsearch') {
+				if (zmoldnameparts.shape == 'storeproduct' || zmoldnameparts.shape == 'storesign' || zmoldnameparts.shape == 'storecategories' || zmoldnameparts.shape == 'productsearch') {
 					zmold = WTW.getMeshOrNodeByID(zmoldname + '-imageframe');
 				}
 				if (zmold != null && zmoldname.indexOf('store') > -1 && zmoldnameparts.shape != 'store3dsign') {

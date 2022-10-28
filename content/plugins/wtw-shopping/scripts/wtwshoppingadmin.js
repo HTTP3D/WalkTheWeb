@@ -37,8 +37,8 @@ wtwshopping.prototype.prefillStoreForm = async function() {
 		if (dGet('wtw_tstoreproducturl').value == '' || dGet('wtw_tstoreproducturl').value == WTWShopping.temptext + '/product/') {
 			dGet('wtw_tstoreproducturl').value = zstoreurl + '/product/';
 		}
-		if (dGet('wtw_tstorewooapiurl').value == '' || dGet('wtw_tstorewooapiurl').value == WTWShopping.temptext + '/wp-json/wc/v2/') {
-			dGet('wtw_tstorewooapiurl').value = zstoreurl + '/wp-json/wc/v2/';
+		if (dGet('wtw_tstorewooapiurl').value == '' || dGet('wtw_tstorewooapiurl').value == WTWShopping.temptext + '/wp-json/wc/v3/') {
+			dGet('wtw_tstorewooapiurl').value = zstoreurl + '/wp-json/wc/v3/';
 		}
 		WTWShopping.temptext = zstoreurl;
 	} catch (ex) {

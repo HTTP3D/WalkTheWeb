@@ -308,11 +308,11 @@ wtwshopping.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldvoffset').value = '0.00';
 				dGet('wtw_tmolduscale').value = '0.00';
 				dGet('wtw_tmoldvscale').value = '0.00';
-				dGet('wtw_tmoldwebtext').value = 'Text';
+				dGet('wtw_tmoldwebtext').value = 'My 3D Store';
 				dGet('wtw_tmoldwebtextheight').value = '6.00';
 				dGet('wtw_tmoldwebtextthick').value = '1.00';
 				WTW.setDDLValue('wtw_tmoldwebtextalign', 'center');
-				dGet('wtw_tmoldwebtextcolor').value = '#ff0000';
+				dGet('wtw_tmoldwebtextemissive').value = '#ff0000';
 				dGet('wtw_tmoldwebtextspecular').value = '#000000';
 				dGet('wtw_tmoldwebtextdiffuse').value = '#f0f0f0';
 				dGet('wtw_tmoldwebtextambient').value = '#808080';
@@ -1141,7 +1141,7 @@ wtwshopping.prototype.addMoldStore3DSign = function(zmoldname, zmolddef, zlenx, 
 			}
 		}
 		if (zwebname == '') {
-			zwebname = 'Store Name';
+			zwebname = 'My 3D Store';
 		}
 		zmolddef.webtext.webtext = WTW.encode(zwebname);
 		zmold = WTW.addMold3DText(zmoldname, zmolddef, zlenx, zleny, zlenz);
@@ -1545,7 +1545,7 @@ wtwshopping.prototype.setNewMold = function(zmoldname, zmolds, zmoldind, zrebuil
 						var zstoreinfo = WTWShopping.getStoreID(communityid, buildingid, thingid);
 						try {
 							if (zstoreinfo.storename != '') {
-								zwebname = atob(zstoreinfo.storename);
+								zwebname = WTW.decode(zstoreinfo.storename);
 							}
 						} catch(ex) {
 						}
@@ -1557,21 +1557,27 @@ wtwshopping.prototype.setNewMold = function(zmoldname, zmolds, zmoldind, zrebuil
 						}
 					}
 					if (zwebname == '') {
-						zwebname = 'Store Name';
+						zwebname = 'My 3D Store';
 					}
 					if (dGet('wtw_tmoldwebtext').value != zwebname) {
 						zmolds[zmoldind].webtext.webtext = WTW.encode(dGet('wtw_tmoldwebtext').value);
 						zrebuildmold = 1;
 					}
 					if (zmolds[zmoldind].shape == 'store3dsign') {
+						if (zmolds[zmoldind].webtext.webtext != undefined) {
+							if (zmolds[zmoldind].webtext.webtext != dGet('wtw_tmoldwebtext').value) {
+								zmolds[zmoldind].webtext.webtext = WTW.encode(dGet('wtw_tmoldwebtext').value);
+								zrebuildmold = 1;
+							}
+						}
 						if (dGet('wtw_tmoldwebtextheight').value == '' || WTW.isNumeric(dGet('wtw_tmoldwebtextheight').value) == false) {
 							dGet('wtw_tmoldwebtextheight').value = 6;
 						}
 						if (dGet('wtw_tmoldwebtextthick').value == '' || WTW.isNumeric(dGet('wtw_tmoldwebtextthick').value) == false) {
 							dGet('wtw_tmoldwebtextthick').value = 1;
 						}
-						if (dGet('wtw_tmoldwebtextcolor').value == '') {
-							dGet('wtw_tmoldwebtextcolor').value = '#ff0000';
+						if (dGet('wtw_tmoldwebtextemissive').value == '') {
+							dGet('wtw_tmoldwebtextemissive').value = '#ff0000';
 						}
 						if (dGet('wtw_tmoldwebtextdiffuse').value == '') {
 							dGet('wtw_tmoldwebtextdiffuse').value = '#f0f0f0';
@@ -1583,7 +1589,7 @@ wtwshopping.prototype.setNewMold = function(zmoldname, zmolds, zmoldind, zrebuil
 							dGet('wtw_tmoldwebtextambient').value = '#808080';
 						}
 						if (zmolds[zmoldind].webtext.webstyle != undefined) {
-							dGet('wtw_tmoldwebstyle').value = "{'anchor':'" + dGet('wtw_tmoldwebtextalign').options[dGet('wtw_tmoldwebtextalign').selectedIndex].value + "','letter-height':" + dGet('wtw_tmoldwebtextheight').value + ",'letter-thickness':" + dGet('wtw_tmoldwebtextthick').value + ",'color':'" + dGet('wtw_tmoldwebtextcolor').value + "','alpha':" + zopacity/100 + ",'colors':{'diffuse':'" + dGet('wtw_tmoldwebtextdiffuse').value + "','specular':'" + dGet('wtw_tmoldwebtextspecular').value + "','ambient':'" + dGet('wtw_tmoldwebtextambient').value + "','emissive':'" + dGet('wtw_tmoldwebtextcolor').value + "'}}";
+							dGet('wtw_tmoldwebstyle').value = "{\"anchor\":\"" + dGet('wtw_tmoldwebtextalign').options[dGet('wtw_tmoldwebtextalign').selectedIndex].value + "\",\"letter-height\":" + dGet('wtw_tmoldwebtextheight').value + ",\"letter-thickness\":" + dGet('wtw_tmoldwebtextthick').value + ",\"color\":\"" + dGet('wtw_tmoldwebtextemissive').value + "\",\"alpha\":" + zopacity/100 + ",\"colors\":{\"diffuse\":\"" + dGet('wtw_tmoldwebtextdiffuse').value + "\",\"specular\":\"" + dGet('wtw_tmoldwebtextspecular').value + "\",\"ambient\":\"" + dGet('wtw_tmoldwebtextambient').value + "\",\"emissive\":\"" + dGet('wtw_tmoldwebtextemissive').value + "\"}}";
 							if (zmolds[zmoldind].webtext.webstyle != dGet('wtw_tmoldwebstyle').value) {
 								zmolds[zmoldind].webtext.webstyle = dGet('wtw_tmoldwebstyle').value;
 								zrebuildmold = 1;
@@ -1596,6 +1602,7 @@ wtwshopping.prototype.setNewMold = function(zmoldname, zmolds, zmoldind, zrebuil
 						};
 						WTWShopping.setStoreInfo(zmoldname, zresponse);
 					}
+
 					break;
 				case 'storeaddtocart':
 				case 'storebuynow':
