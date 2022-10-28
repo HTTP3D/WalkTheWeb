@@ -404,13 +404,54 @@ WTWJS.prototype.copyCommunityComplete = function(zcommunityid) {
 	} 
 }
 
-WTWJS.prototype.getSelectCommunitiesList = async function() {
+WTWJS.prototype.setCommunitiesListTab = async function(zfilter) {
+	/* sets the tabs classes */
+	try {
+		if (zfilter == undefined) {
+			zfilter = 'mine';
+		}
+		if (zfilter == 'all' && WTW.isUserInRole('admin')) {
+			if (dGet('wtw_communitybuttonmine') != null) {
+				dGet('wtw_communitybuttonmine').className = 'wtw-localbutton wtw-leftradius';
+				dGet('wtw_communitybuttonall').className = 'wtw-localbuttonselected wtw-rightradius';
+			}
+		} else {
+			zfilter = 'mine';
+			if (dGet('wtw_communitybuttonmine') != null) {
+				dGet('wtw_communitybuttonmine').className = 'wtw-localbuttonselected wtw-leftradius';
+				dGet('wtw_communitybuttonall').className = 'wtw-localbutton wtw-rightradius';
+			}
+		}
+		WTW.getSelectCommunitiesList(zfilter);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-setCommunitiesListTab=' + ex.message);
+	} 
+}
+
+WTWJS.prototype.getSelectCommunitiesList = async function(zfilter) {
 	/* populates the admin menu for My 3D Community to load and edit */
 	try {
+		if (zfilter == undefined) {
+			zfilter = 'mine';
+		}
 		WTW.hide('wtw_listcommunities');
 		WTW.show('wtw_loadingcommunityid');
-		dGet('wtw_listcommunities').innerHTML = '';
-		WTW.getAsyncJSON('/connect/communities.php', 
+		var zlistcommunities = '';
+		if (WTW.isUserInRole('admin') || WTW.isUserInRole('developer') || WTW.isUserInRole('architect') || WTW.isUserInRole('graphic artist')) {
+			zlistcommunities = "<div class='wtw-localbuttonleftpad'></div><div id='wtw_communitybuttonmine' class='wtw-localbutton";
+			if (zfilter == 'mine') {
+				zlistcommunities += "selected";
+			}
+			zlistcommunities += " wtw-leftradius' onclick=\"WTW.setCommunitiesListTab('mine');\">Mine</div><div class='wtw-localbuttonmiddlepad'> or </div><div id='wtw_communitybuttonall' class='wtw-localbutton";
+			if (zfilter == 'all') {
+				zlistcommunities += "selected";
+			}
+			zlistcommunities += " wtw-rightradius' onclick=\"WTW.setCommunitiesListTab('all');\">All</div><div class='wtw-localbuttonrightpad'></div><div class='wtw-clear'></div>\r\n";
+		} else {
+			zlistcommunities = '<br /><br />';
+		}
+		dGet('wtw_listcommunities').innerHTML = zlistcommunities;
+		WTW.getAsyncJSON('/connect/communities.php?filter=' + zfilter, 
 			function(zresponse) {
 				WTW.communities = JSON.parse(zresponse);
 				if (WTW.communities != null) {
@@ -440,6 +481,8 @@ WTWJS.prototype.getSelectCommunitiesList = async function() {
 								}
 							}
 						}
+						dGet('wtw_listcommunities').innerHTML += "<div class='wtw-normalgray'>Total: <b>" + WTW.communities.length + "</b> Communities</div>";
+						
 						/* check for updated versions */
 						var zrequest2 = {
 							'versioncheck': JSON.stringify(zversioncheck),
@@ -1280,22 +1323,22 @@ WTWJS.prototype.openConfirmation = function(w) {
 		dGet('wtw_tconfirmid').value = w;
 		switch (w) {
 			case '1':
-				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete Building';
-				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the Building?';
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete 3D Building';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the 3D Building?';
 				dGet('wtw_confirmtext').innerHTML = '<br />Deleting the Building will Delete all Walls, Floors, and Web Components. It will also remove it from all <b>3D Communities</b>!';
-				dGet('wtw_bconfirm').value = 'Delete Building';
+				dGet('wtw_bconfirm').value = 'Delete 3D Building';
 				break;
 			case '2':
-				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete Community';
-				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the Community?';
+				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete 3D Community';
+				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the 3D Community?';
 				dGet('wtw_confirmtext').innerHTML = '<br />Deleting the Community will also Delete all Terrain, Building Placements, Walls, Floors, and Web Components.';
-				dGet('wtw_bconfirm').value = 'Delete Community';
+				dGet('wtw_bconfirm').value = 'Delete 3D Community';
 				break;
 			case '3':
 				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Delete Building from this Community';
 				dGet('wtw_confirmheading').innerHTML = 'Are you sure you want to Delete the Building from this Community?';
 				dGet('wtw_confirmtext').innerHTML = '<br />The building can always be added again if you change your mind.';
-				dGet('wtw_bconfirm').value = 'Delete Building from Community';
+				dGet('wtw_bconfirm').value = 'Delete 3D Building from 3D Community';
 				break;
 			case '4':
 				dGet('wtw_confirmformtitle').innerHTML = 'Confirm Share 3D Building';

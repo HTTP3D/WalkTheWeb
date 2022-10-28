@@ -84,7 +84,6 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 			case 'importpage':
 				if (WTW.adminView == 1) {
 					dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowlink' onclick=\"dGet('wtw_modelfilter').value='';dGet('wtw_tgroupuploadobjectid').value='';dGet('wtw_tgroupdiv').value='';WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);\">" + WTW.__('Media Library') + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__('WalkTheWeb Downloads') + "</div>";
-					WTW.hide('wtw_installprogress');
 					WTW.hide('searchcommunitiesdiv');
 					WTW.hide('searchbuildingsdiv');
 					WTW.hide('searchthingsdiv');
@@ -1655,14 +1654,15 @@ WTWJS.prototype.displayDownloadsQueue = async function(zdownloadinfo, zshow) {
 		if (zshow == undefined) {
 			zshow = true;
 		}
-		var zdownloadslist = '<div>';
+		var zdownloadslist = "<div id='wtw_downloadqueuelistdiv'>";
 		if (zshow) {
 			for (var i=0;i < zdownloadinfo.length;i++) {
 				if (zdownloadinfo[i] != null) {
+					zdownloadslist += "<div id='wtw_downloadqueue-" + zdownloadinfo[i].downloadid + "'>";
 					if (zdownloadinfo[i].imageurl != '') {
 						zdownloadslist += "<img src='" + zdownloadinfo[i].imageurl + "' class='wtw-smallimageleft' />";
 					}
-					zdownloadslist += "<div style='padding:2px;margin:0px 10px 10px 20px;'><b>" + zdownloadinfo[i].templatename + "</b> (" + zdownloadinfo[i].version + ")<br /><div style='float:right;'><div onclick=\"WTW.downloadWebFromQueue('" + zdownloadinfo[i].downloadid + "','" + zdownloadinfo[i].webid + "','" + zdownloadinfo[i].webtype + "','1');\" class='wtw-searchresultbuttonyellow'>Download</div><br /><div onclick=\"WTW.downloadWebFromQueue('" + zdownloadinfo[i].downloadid + "','" + zdownloadinfo[i].webid + "','" + zdownloadinfo[i].webtype + "','0');\" class='wtw-searchresultbutton'>Cancel</div></div><br /><b>Created By:</b> " + zdownloadinfo[i].displayname + "<br /><b>on</b> " + WTW.formatDate(zdownloadinfo[i].createdate) + "<br />" + zdownloadinfo[i].description + "<br /></div><div style='clear:both;'></div><hr />";
+					zdownloadslist += "<div style='padding:2px;margin:0px 10px 10px 20px;'><b>" + zdownloadinfo[i].templatename + "</b> (" + zdownloadinfo[i].version + ")<br /><div style='float:right;'><div onclick=\"WTW.downloadWebFromQueue('" + btoa(zdownloadinfo[i].templatename) + "', '" + zdownloadinfo[i].downloadid + "','" + zdownloadinfo[i].webid + "','" + zdownloadinfo[i].webtype + "','1');\" class='wtw-searchresultbuttonyellow'>Download</div><br /><div onclick=\"WTW.downloadWebFromQueue('" + btoa(zdownloadinfo[i].templatename) + "', '" + zdownloadinfo[i].downloadid + "','" + zdownloadinfo[i].webid + "','" + zdownloadinfo[i].webtype + "','0');\" class='wtw-searchresultbutton'>Cancel</div></div><br /><b>Created By:</b> " + zdownloadinfo[i].displayname + "<br /><b>on</b> " + WTW.formatDate(zdownloadinfo[i].createdate) + "<br />" + zdownloadinfo[i].description + "<br /></div><div style='clear:both;'></div><hr /></div>";
 				}
 			}
 		}
@@ -1670,7 +1670,11 @@ WTWJS.prototype.displayDownloadsQueue = async function(zdownloadinfo, zshow) {
 		if (zshow) {
 			dGet('wtw_downloadqueuelist').innerHTML = zdownloadslist;
 			dGet('wtw_dashboard').style.height = (WTW.sizeY-100)+'px';
-			WTW.show('wtw_downloadqueue');
+			if (zdownloadinfo.length > 0) {
+				WTW.show('wtw_downloadqueue');
+			} else {
+				WTW.hide('wtw_downloadqueue');
+			}
 		}
 		/* update badges */
 		dGet('wtw_adminmenudashboardbadge').innerHTML = zdownloadinfo.length;
@@ -1680,8 +1684,7 @@ WTWJS.prototype.displayDownloadsQueue = async function(zdownloadinfo, zshow) {
 	}
 }
 
-//
-WTWJS.prototype.downloadWebFromQueue = async function(zdownloadid, zwebid, zwebtype, zprocess) {
+WTWJS.prototype.downloadWebFromQueue = async function(ztemplatename, zdownloadid, zwebid, zwebtype, zprocess) {
 	/* download 3D Web from queue */
 	try {
 		/* process the queue - mark it downloaded */
@@ -1690,19 +1693,30 @@ WTWJS.prototype.downloadWebFromQueue = async function(zdownloadid, zwebid, zwebt
 			'webid': zwebid,
 			'webtype': zwebtype,
 			'process': zprocess,
-			'function':'updatedownloadqueue'
+			'function':'updatedownloadsqueue'
 		};
-		WTW.postAsyncJSON('/core/handlers/communities.php', zrequest, 
+		WTW.postAsyncJSON('/core/handlers/downloads.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
 				/* refresh the dashboard - update downloads queue */
-				WTW.openDashboardForm();
+				if (zresponse.serror == '') {
+					if (dGet('wtw_downloadqueue-' + zdownloadid) != null) {
+						dGet('wtw_downloadqueue-' + zdownloadid).remove();
+					}
+					if (zprocess == '0') {
+						if (dGet('wtw_downloadqueuelistdiv') != null) {
+							if (dGet('wtw_downloadqueuelistdiv').hasChildNodes() == false) {
+								WTW.hide('wtw_downloadqueue');
+							}
+						}
+					}
+				}
 			}
 		);
 		if (zprocess == '1') {
-			/* download the 3D Web */
-			WTW.downloadWeb(zwebid, zwebtype);
+			/* download the 3D Web - note templatename is btoa() */
+			WTW.downloadWeb('queue', ztemplatename, zwebid, zwebid, zwebtype);
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminforms.js-downloadWebFromQueue=' + ex.message);

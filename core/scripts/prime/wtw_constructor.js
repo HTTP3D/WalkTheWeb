@@ -91,7 +91,7 @@ function WTWJS() {
 	
 	/* WTW.roles - provides an array of roles the user is assigned to. Changing this array does not provide any additional access, it is only a mask for relevant visual options. All Access is verified on the php side when making updates and retrieving information. */
 	this.roles = [];
-
+	
 
 /* optimization settings */
 	

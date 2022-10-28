@@ -282,13 +282,54 @@ WTWJS.prototype.copyThingComplete = function(zthingid) {
 	} 
 }
 
-WTWJS.prototype.getSelectThingsList = async function() {
+WTWJS.prototype.setThingsListTab = async function(zfilter) {
+	/* sets the tabs classes */
+	try {
+		if (zfilter == undefined) {
+			zfilter = 'mine';
+		}
+		if (zfilter == 'all' && WTW.isUserInRole('admin')) {
+			if (dGet('wtw_thingbuttonmine') != null) {
+				dGet('wtw_thingbuttonmine').className = 'wtw-localbutton wtw-leftradius';
+				dGet('wtw_thingbuttonall').className = 'wtw-localbuttonselected wtw-rightradius';
+			}
+		} else {
+			zfilter = 'mine';
+			if (dGet('wtw_thingbuttonmine') != null) {
+				dGet('wtw_thingbuttonmine').className = 'wtw-localbuttonselected wtw-leftradius';
+				dGet('wtw_thingbuttonall').className = 'wtw-localbutton wtw-rightradius';
+			}
+		}
+		WTW.getSelectThingsList(zfilter);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminbuildings.js-setThingsListTab=' + ex.message);
+	} 
+}
+
+WTWJS.prototype.getSelectThingsList = async function(zfilter) {
 	/* populates the admin menu for My 3D Things to load and edit */
 	try {
+		if (zfilter == undefined) {
+			zfilter = 'mine';
+		}
 		WTW.hide('wtw_listthings');
 		WTW.show('wtw_loadingthingid');
-		dGet('wtw_listthings').innerHTML = '';
-		WTW.getAsyncJSON('/connect/things.php?userid=' + dGet('wtw_tuserid').value, 
+		var zlistthings = '';
+		if (WTW.isUserInRole('admin') || WTW.isUserInRole('developer') || WTW.isUserInRole('architect') || WTW.isUserInRole('graphic artist')) {
+			zlistthings = "<div class='wtw-localbuttonleftpad'></div><div id='wtw_thingbuttonmine' class='wtw-localbutton";
+			if (zfilter == 'mine') {
+				zlistthings += "selected";
+			}
+			zlistthings += " wtw-leftradius' onclick=\"WTW.setThingsListTab('mine');\">Mine</div><div class='wtw-localbuttonmiddlepad'> or </div><div id='wtw_thingbuttonall' class='wtw-localbutton";
+			if (zfilter == 'all') {
+				zlistthings += "selected";
+			}
+			zlistthings += " wtw-rightradius' onclick=\"WTW.setThingsListTab('all');\">All</div><div class='wtw-localbuttonrightpad'></div><div class='wtw-clear'></div>\r\n";
+		} else {
+			zlistthings = '<br /><br />';
+		}
+		dGet('wtw_listthings').innerHTML = zlistthings;
+		WTW.getAsyncJSON('/connect/things.php?filter=' + zfilter, 
 			function(zresponse) {
 				WTW.things = JSON.parse(zresponse);
 				if (WTW.things != null) {
@@ -318,6 +359,8 @@ WTWJS.prototype.getSelectThingsList = async function() {
 								}
 							}
 						}
+						dGet('wtw_listthings').innerHTML += "<div class='wtw-normalgray'>Total: <b>" + WTW.things.length + "</b> Things</div>";
+
 						/* check for updated versions */
 						var zrequest2 = {
 							'versioncheck': JSON.stringify(zversioncheck),

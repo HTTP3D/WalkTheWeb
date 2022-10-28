@@ -114,7 +114,7 @@ WTWJS.prototype.initEnvironment = function() {
 		canvas.addEventListener('webglcontextrestored', function (event) {/*initializeResources();*/}, false);
 		
 		/* initialize babylon game engine */
-		engine = new BABYLON.Engine(canvas, true, {deterministicLockstep: false, lockstepMaxSteps: 4, doNotHandleContextLost: WTW.doNotHandleContextLost});
+		engine = new BABYLON.Engine(canvas, true, {deterministicLockstep: false, lockstepMaxSteps: 4, doNotHandleContextLost: WTW.doNotHandleContextLost, stencil: true});
 		/* add WalkTheWeb version to the console.log */
 		console.log('%c\r\n\r\nWalkTheWeb Open-Source 3D Internet\r\n' + wtw_versiontext + '\r\n', 'color:green;font-weight:bold;');
 		
@@ -1575,7 +1575,7 @@ WTWJS.prototype.startRender = function() {
 							scene.fogDensity = 0.01;
 							scene.fogColor = new BABYLON.Color3(0.0, 0.3, 0.4);
 						} else {
-							/* dynamically change hte sky sphere size as my avatar rises higher off ground */
+							/* dynamically change the sky sphere size as my avatar rises higher off ground */
 							var zskysize = 1000 + (zabspos.y * 2);
 							if (zskysize < 3500) {
 								zskysize = 3500;

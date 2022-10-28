@@ -155,51 +155,42 @@ WTWJS.prototype.openMoldForm = async function(zmoldind, zshape, zwebtype, zsavep
 				var zwebtextdiffuse = '#f0f0f0';
 				var zwebtextspecular = '#000000';
 				var zwebtextambient = '#808080';
-				if (zwebstyle.indexOf(',') > -1) {
-					while (zwebstyle.indexOf('"') > -1) {
-						zwebstyle = zwebstyle.replace('"','');
-					}
-					while (zwebstyle.indexOf('}') > -1) {
-						zwebstyle = zwebstyle.replace('}','');
-					}
-					while (zwebstyle.indexOf('{') > -1) {
-						zwebstyle = zwebstyle.replace('{','');
-					}
-					zwebstyle = zwebstyle.replace('colors:diffuse','diffuse');
-					var zstyles = zwebstyle.split(',');
-					for (var i=0;i<zstyles.length;i++) {
-						if (zstyles[i].indexOf(':') > -1) {
-							style = zstyles[i].split(':');
-							switch (style[0]) {
-								case 'anchor':
-									zwebtextalign = style[1];
-									break;
-								case 'letter-height':
-									zwebtextheight = Number(style[1]).toFixed(2);
-									break;
-								case 'letter-thickness':
-									zwebtextthick = Number(style[1]).toFixed(2);
-									break;
-								case 'color':
-									zwebtextcolor = style[1];
-									break;
-								case 'diffuse':
-									zwebtextdiffuse = style[1];
-									break;
-								case 'specular':
-									zwebtextspecular = style[1];
-									break;
-								case 'ambient':
-									zwebtextambient = style[1];
-									break;
-							}
-						}
-					}
+				var zwebtextalpha = 1;
+				try {
+					zwebstyle = JSON.parse(zwebstyle);
+				} catch (ex) {}
+				if (zwebstyle.anchor != undefined) {
+					zwebtextalign = zwebstyle.anchor;
+				}
+				if (zwebstyle['letter-height'] != undefined) {
+					zwebtextheight = zwebstyle['letter-height'];
+				}
+				if (zwebstyle['letter-thickness'] != undefined) {
+					zwebtextthick = zwebstyle['letter-thickness'];
+				}
+				if (zwebstyle.color != undefined) {
+					zwebtextcolor = zwebstyle.color;
+				}
+				if (zwebstyle.alpha != undefined) {
+					zwebtextalpha = zwebstyle.alpha;
+				}
+				if (zwebstyle.colors.emissive != undefined) {
+					zwebtextemissive = zwebstyle.colors.emissive;
+				}
+				if (zwebstyle.colors.diffuse != undefined) {
+					zwebtextdiffuse = zwebstyle.colors.diffuse;
+				}
+				if (zwebstyle.colors.specular != undefined) {
+					zwebtextspecular = zwebstyle.colors.specular;
+				}
+				if (zwebstyle.colors.ambient != undefined) {
+					zwebtextambient = zwebstyle.colors.ambient;
 				}
 				WTW.setDDLValue('wtw_tmoldwebtextalign', zwebtextalign);
 				dGet('wtw_tmoldwebtextheight').value = zwebtextheight;
 				dGet('wtw_tmoldwebtextthick').value = zwebtextthick;
-				dGet('wtw_tmoldwebtextcolor').value = zwebtextcolor;
+				
+				dGet('wtw_tmoldwebtextemissive').value = zwebtextcolor;
 				dGet('wtw_tmoldwebtextdiffuse').value = zwebtextdiffuse;
 				dGet('wtw_tmoldwebtextspecular').value = zwebtextspecular;
 				dGet('wtw_tmoldwebtextambient').value = zwebtextambient;
@@ -2505,11 +2496,6 @@ WTWJS.prototype.openColorSelector = function(zobj, ztitle, zcolorgroup) {
 		dGet('wtw_tmoldname').value = zmoldname;
 		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
-			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
-			
-			/* reset the mold color and save settings to form fields and array */
-//			WTW.setMoldColor(zmoldname, zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor, zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor);
-			
 			if (WTW.guiAdminColors != null) {
 				WTW.guiAdminColors.dispose();
 				WTW.guiAdminColors = null;
@@ -2532,24 +2518,70 @@ WTWJS.prototype.openColorSelector = function(zobj, ztitle, zcolorgroup) {
 			zmold = WTW.pluginsOpenColorSelector(zmold, zmoldname, dGet('wtw_tmoldshape').value, zcolorgroup);
 			
 			var zcolorpicker = new BABYLON.GUI.ColorPicker();
-			if (zmold.material != null) {
+			var colorvalue = null;
+			var zmesh = scene.getMeshByID(zmoldname);
+			if (zmesh != null) {
+				if (zmesh.material != null) {
+					switch (zcolorgroup) {
+						case 'diffuse':
+							colorvalue = zmesh.material.diffuseColor;
+							break;
+						case 'specular':
+							colorvalue = zmesh.material.specularColor;
+							break;
+						case 'emissive':
+							colorvalue = zmesh.material.emissiveColor;
+							break;
+						case 'ambient':
+							colorvalue = zmesh.material.ambientColor;
+							break;
+					}
+				}
+			} else {
+				var znode = scene.getTransformNodeByID(zmoldname);
+				if (znode != null) {
+					var zchildmeshes = znode.getChildren();
+					for (var i=0;i<zchildmeshes.length;i++) {
+						if (zchildmeshes[i] != null) {
+							if (zchildmeshes[i].material != null) {
+								switch (zcolorgroup) {
+									case 'diffuse':
+										colorvalue = zchildmeshes[i].material.diffuseColor;
+										break;
+									case 'specular':
+										colorvalue = zchildmeshes[i].material.specularColor;
+										break;
+									case 'emissive':
+										colorvalue = zchildmeshes[i].material.emissiveColor;
+										break;
+									case 'ambient':
+										colorvalue = zchildmeshes[i].material.ambientColor;
+										break;
+								}
+							}
+						}
+					}
+				}
+			}
+			if (colorvalue == null) {
 				switch (zcolorgroup) {
 					case 'diffuse':
-						zcolorpicker.value = zmold.material.diffuseColor;
+						colorvalue = new BABYLON.Color3.FromHexString(dGet('wtw_tmolddiffusecolor').value);
 						break;
 					case 'specular':
-						zcolorpicker.value = zmold.material.specularColor;
+						colorvalue = new BABYLON.Color3.FromHexString(dGet('wtw_tmoldspecularcolor').value);
 						break;
 					case 'emissive':
-						zcolorpicker.value = zmold.material.emissiveColor;
+						colorvalue = new BABYLON.Color3.FromHexString(dGet('wtw_tmoldemissivecolor').value);
 						break;
 					case 'ambient':
-						zcolorpicker.value = zmold.material.ambientColor;
+						colorvalue = new BABYLON.Color3.FromHexString(dGet('wtw_tmoldambientcolor').value);
 						break;
 				}
 			}
 			zcolorpicker.height = '250px';
 			zcolorpicker.width = '250px';
+			zcolorpicker.value = colorvalue;
 			zcolorpicker.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
 			zcolorpicker.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 			zcolorpicker.onValueChangedObservable.add(function(value) {
@@ -2569,109 +2601,61 @@ WTWJS.prototype.setMoldColor = function(zmoldname, zspecularcolor, zemissivecolo
 	try {
 		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
+			if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zspecularcolor) == false) {
+				zspecularcolor = '#ffffff';
+			}
+			if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zemissivecolor) == false) {
+				zemissivecolor = '#000000';
+			}
+			if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zdiffusecolor) == false) {
+				zdiffusecolor = '#686868';
+			}
+			if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zambientcolor) == false) {
+				zambientcolor = '#575757';
+			}
 			var zmoldnameparts = WTW.getMoldnameParts(zmoldname);
-			try {
-				if (zmold.material != undefined && zmold.material != null) {
-					WTW.disposeDirectionalTexture(zmold);
-						if (zmold.material.diffuseTexture != undefined) {
-							if (zmold.material.diffuseTexture != null) {
-								zmold.material.diffuseTexture.dispose();
-								zmold.material.diffuseTexture = null;
+			var zmesh = scene.getMeshByID(zmoldname);
+			if (zmesh != null) {
+				var zcovering = zmesh.material.clone();
+				zcovering.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
+				zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
+				zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
+				zcovering.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
+				zmesh.material.dispose();
+				zmesh.material = zcovering;
+			} else {
+				var znode = scene.getTransformNodeByID(zmoldname);
+				if (znode != null) {
+					var zchildmeshes = znode.getChildren();
+					for (var i=0;i<zchildmeshes.length;i++) {
+						if (zchildmeshes[i] != null) {
+							if (zchildmeshes[i].material != null) {
+								var zcovering = zchildmeshes[i].material.clone();
+								zcovering.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
+								zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
+								zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
+								zcovering.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
+								zchildmeshes[i].material.dispose();
+								zchildmeshes[i].material = zcovering;
 							}
 						}
-					zmold.material.dispose();
-					zmold.material = null;
-				}
-			} catch (ex) {}
-			
-			var zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
+					}
+				}					
+			}
 			if (zmoldnameparts.molds[zmoldnameparts.moldind] != null) {
-				if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zspecularcolor)) {
-					zcovering.specularColor = new BABYLON.Color3.FromHexString(zspecularcolor);
-				} else {
-					zcovering.specularColor = new BABYLON.Color3.FromHexString('#ffffff');
-				}
-				if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zemissivecolor)) {
-					zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zemissivecolor);
-				} else {
-					zcovering.emissiveColor = new BABYLON.Color3.FromHexString('#000000');
-				}
-				if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zdiffusecolor)) {
-					zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zdiffusecolor);
-				} else {
-					zcovering.diffuseColor = new BABYLON.Color3.FromHexString('#686868');
-				}
-				if (/^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(zambientcolor)) {
-					zcovering.ambientColor = new BABYLON.Color3.FromHexString(zambientcolor);
-				} else {
-					zcovering.ambientColor = new BABYLON.Color3.FromHexString('#575757');
-				}
-
-				if (zmoldnameparts.molds[zmoldnameparts.moldind].covering == 'marble') {
-					if (zmoldnameparts.molds[zmoldnameparts.moldind].opacity != undefined) {
-						if (WTW.isNumeric(zmoldnameparts.molds[zmoldnameparts.moldind].opacity)) {
-							var zopacity = Number(zmoldnameparts.molds[zmoldnameparts.moldind].opacity) / 100;
-							if (zopacity > 1) {
-								zopacity = 1;
-							} else if (zopacity < 0) {
-								zopacity = 0;
-							}
-						}
-					}
-					var zmax = Math.max(Number(zmoldnameparts.molds[zmoldnameparts.moldind].scaling.x), Number(zmoldnameparts.molds[zmoldnameparts.moldind].scaling.y), Number(zmoldnameparts.molds[zmoldnameparts.moldind].scaling.z));
-					var zuscale = 1/zmax;
-					var zvscale = 1/zmax;
-					if (WTW.isNumeric(zmoldnameparts.molds[zmoldnameparts.moldind].graphics.uscale)) {
-						if (Number(zmoldnameparts.molds[zmoldnameparts.moldind].graphics.uscale) > 0) {
-							zuscale = Number(zmoldnameparts.molds[zmoldnameparts.moldind].graphics.uscale);
-						}
-					}
-					if (WTW.isNumeric(zmoldnameparts.molds[zmoldnameparts.moldind].graphics.vscale)) {
-						if (Number(zmoldnameparts.molds[zmoldnameparts.moldind].graphics.vscale) > 0) {
-							zvscale = Number(zmoldnameparts.molds[zmoldnameparts.moldind].graphics.vscale);
-						}
-					}
-					if (zuscale < 1) {
-						zuscale = 1;
-					}
-					if (zvscale < 1) {
-						zvscale = 1;
-					}
-					zcovering.alpha = zopacity;
-					var zmarbletexture = new BABYLON.MarbleProceduralTexture('matmarbletex' + zmoldname, 512, scene);
-					zmarbletexture.numberOfTilesHeight = Number(zuscale).toFixed(0);
-					zmarbletexture.numberOfTilesWidth = Number(zvscale).toFixed(0);
-					zcovering.ambientTexture = zmarbletexture;
-				}
-				zmold.material = zcovering;
-
-				dGet('wtw_tmolddiffusecolor').value = zdiffusecolor;
-				dGet('wtw_tmoldemissivecolor').value = zemissivecolor;
-				dGet('wtw_tmoldspecularcolor').value = zspecularcolor;
-				dGet('wtw_tmoldambientcolor').value = zambientcolor;
-				dGet('wtw_tmoldwebtextdiffuse').value = zdiffusecolor;
-				dGet('wtw_tmoldwebtextcolor').value = zemissivecolor;
-				dGet('wtw_tmoldwebtextspecular').value = zspecularcolor;
-				dGet('wtw_tmoldwebtextambient').value = zambientcolor;
 				zmoldnameparts.molds[zmoldnameparts.moldind].color.diffusecolor = zdiffusecolor;
 				zmoldnameparts.molds[zmoldnameparts.moldind].color.emissivecolor = zemissivecolor;
 				zmoldnameparts.molds[zmoldnameparts.moldind].color.specularcolor = zspecularcolor;
 				zmoldnameparts.molds[zmoldnameparts.moldind].color.ambientcolor = zambientcolor;
-			} else {
-				zcovering.specularColor = new BABYLON.Color3.FromHexString('#ffffff');
-				zcovering.emissiveColor = new BABYLON.Color3.FromHexString('#000000');
-				zcovering.diffuseColor = new BABYLON.Color3.FromHexString('#686868');	
-				zcovering.ambientColor = new BABYLON.Color3.FromHexString('#575757');	
-				zmold.material = zcovering;
-				dGet('wtw_tmolddiffusecolor').value = '#ffffff';
-				dGet('wtw_tmoldemissivecolor').value = '#000000';
-				dGet('wtw_tmoldspecularcolor').value = '#686868';
-				dGet('wtw_tmoldambientcolor').value = '#575757';
-				dGet('wtw_tmoldwebtextdiffuse').value = '#ffffff';
-				dGet('wtw_tmoldwebtextcolor').value = '#000000';
-				dGet('wtw_tmoldwebtextspecular').value = '#686868';
-				dGet('wtw_tmoldwebtextambient').value = '#575757';
 			}
+			dGet('wtw_tmolddiffusecolor').value = zdiffusecolor;
+			dGet('wtw_tmoldemissivecolor').value = zemissivecolor;
+			dGet('wtw_tmoldspecularcolor').value = zspecularcolor;
+			dGet('wtw_tmoldambientcolor').value = zambientcolor;
+			dGet('wtw_tmoldwebtextdiffuse').value = zdiffusecolor;
+			dGet('wtw_tmoldwebtextemissive').value = zemissivecolor;
+			dGet('wtw_tmoldwebtextspecular').value = zspecularcolor;
+			dGet('wtw_tmoldwebtextambient').value = zambientcolor;
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminmolds.js-setMoldColor=' + ex.message);
@@ -2741,104 +2725,122 @@ WTWJS.prototype.setColor = function(zmoldname, zcolorgroup, zr, zg, zb) {
 				break;
 		}
 		if (zmolds[zmoldind] != null) {
+			var zmoldname2 = zmoldname;
 			var zmold = WTW.getMeshOrNodeByID(zmoldname);
 			var zmoldimageframe = WTW.getMeshOrNodeByID(zmoldname + '-imageframe');
 			if (zmoldimageframe != null) {
 				/* some molds have an inner object that takes the color */
 				zmold = zmoldimageframe;
+				/* make imageframe the base moldname */
+				zmoldname2 = zmoldname + '-imageframe';
 			}
 			if (zmold != null) {
-				if (zmold.material != undefined) {
-					var zcovering = zmold.material;
-					if (zcovering != null) {
-						switch (zcolorgroup) {
-							case 'emissive':
-								zcovering.emissiveColor = new BABYLON.Color3(zr,zg,zb);
-								zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
-								zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
-								zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
-								break;
-							case 'diffuse':
-								zcovering.diffuseColor = new BABYLON.Color3(zr,zg,zb);
-								zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
-								zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
-								zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
-								break;
-							case 'specular':
-								zcovering.specularColor = new BABYLON.Color3(zr,zg,zb);
-								zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
-								zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
-								zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
-								break;
-							case 'ambient':
-								zcovering.ambientColor = new BABYLON.Color3(zr,zg,zb);
-								zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
-								zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
-								zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
-								break;
+				var zmesh = scene.getMeshByID(zmoldname2);
+				if (zmesh != null) {
+					if (zmesh.material != undefined) {
+						var zcovering = zmesh.material.clone();
+						if (zcovering != null) {
+							switch (zcolorgroup) {
+								case 'emissive':
+									zcovering.emissiveColor = new BABYLON.Color3(zr,zg,zb);
+									zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+									zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
+									zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+									break;
+								case 'diffuse':
+									zcovering.diffuseColor = new BABYLON.Color3(zr,zg,zb);
+									zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+									zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+									zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+									break;
+								case 'specular':
+									zcovering.specularColor = new BABYLON.Color3(zr,zg,zb);
+									zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+									zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
+									zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+									break;
+								case 'ambient':
+									zcovering.ambientColor = new BABYLON.Color3(zr,zg,zb);
+									zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+									zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+									zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
+									break;
+							}
+							zmesh.material.dispose();
+							zmesh.material = zcovering;
 						}
-						zmold.material.dispose();
-						zmold.material = zcovering;
 					}
-					var zdiffusecolor = zcovering.diffuseColor.toHexString().toLowerCase();
-					var zspecularcolor = zcovering.specularColor.toHexString().toLowerCase();
-					var zemissivecolor = zcovering.emissiveColor.toHexString().toLowerCase();
-					var zambientcolor = zcovering.ambientColor.toHexString().toLowerCase();
-					switch (zcolorgroup) {
-						case 'emissive':
-							zmolds[zmoldind].color.emissivecolor = zemissivecolor;
-							dGet('wtw_tmoldemissivecolor').value = zemissivecolor;
-							dGet('wtw_tmoldwebtextcolor').value = zemissivecolor;
-							break;
-						case 'diffuse':
-							zmolds[zmoldind].color.diffusecolor = zdiffusecolor;
-							dGet('wtw_tmolddiffusecolor').value = zdiffusecolor;
-							dGet('wtw_tmoldwebtextdiffuse').value = zdiffusecolor;
-							break;
-						case 'specular':
-							zmolds[zmoldind].color.specularcolor = zspecularcolor;
-							dGet('wtw_tmoldspecularcolor').value = zspecularcolor;
-							dGet('wtw_tmoldwebtextspecular').value = zspecularcolor;
-							break;
-						case 'ambient':
-							zmolds[zmoldind].color.ambientcolor = zambientcolor;
-							dGet('wtw_tmoldambientcolor').value = zambientcolor;
-							dGet('wtw_tmoldwebtextambient').value = zambientcolor;
-							break;
-					}
-					zmolds[zmoldind].color.diffusecolor = zdiffusecolor;
-					zmolds[zmoldind].color.emissivecolor = zemissivecolor;
-					zmolds[zmoldind].color.specularcolor = zspecularcolor;
-					zmolds[zmoldind].color.ambientcolor = zambientcolor;
-					WTW.pluginsSetColor(zmoldname, zcolorgroup, zemissivecolor, zdiffusecolor, zspecularcolor, zambientcolor);
 				} else {
-					var zcolor = new BABYLON.Color3(zr,zg,zb);
-					switch (zcolorgroup) {
-						case 'emissive':
-							dGet('wtw_tmoldemissivecolor').value = zcolor.toHexString();
-							dGet('wtw_tmoldwebtextcolor').value = zcolor.toHexString();
-							zmolds[zmoldind].color.emissivecolor = zcolor.toHexString();
-							break;
-						case 'diffuse':
-							dGet('wtw_tmolddiffusecolor').value = zcolor.toHexString();
-							dGet('wtw_tmoldwebtextdiffuse').value = zcolor.toHexString();
-							zmolds[zmoldind].color.diffusecolor = zcolor.toHexString();
-							break;
-						case 'specular':
-							dGet('wtw_tmoldspecularcolor').value = zcolor.toHexString();
-							dGet('wtw_tmoldwebtextspecular').value = zcolor.toHexString();
-							zmolds[zmoldind].color.specularcolor = zcolor.toHexString();
-							break;
-						case 'ambient':
-							dGet('wtw_tmoldambientcolor').value = zcolor.toHexString();
-							dGet('wtw_tmoldwebtextambient').value = zcolor.toHexString();
-							zmolds[zmoldind].color.ambientcolor = zcolor.toHexString();
-							break;
+					var znode = scene.getTransformNodeByID(zmoldname2);
+					if (znode != null) {
+						var zchildmeshes = znode.getChildren();
+						for (var i=0;i<zchildmeshes.length;i++) {
+							if (zchildmeshes[i] != null) {
+								if (zchildmeshes[i].material != undefined) {
+									var zcovering = zchildmeshes[i].material.clone();
+									if (zcovering != null) {
+										switch (zcolorgroup) {
+											case 'emissive':
+												zcovering.emissiveColor = new BABYLON.Color3(zr,zg,zb);
+												zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+												zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
+												zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+												break;
+											case 'diffuse':
+												zcovering.diffuseColor = new BABYLON.Color3(zr,zg,zb);
+												zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+												zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+												zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+												break;
+											case 'specular':
+												zcovering.specularColor = new BABYLON.Color3(zr,zg,zb);
+												zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+												zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
+												zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+												break;
+											case 'ambient':
+												zcovering.ambientColor = new BABYLON.Color3(zr,zg,zb);
+												zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+												zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+												zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);
+												break;
+										}
+										zchildmeshes[i].material.dispose();
+										zchildmeshes[i].material = zcovering;
+									}
+								}
+							}
+						}
 					}
-					WTW.setNewMold();
 				}
+				
+				var zcolor = new BABYLON.Color3(zr,zg,zb);
+				switch (zcolorgroup) {
+					case 'emissive':
+						dGet('wtw_tmoldemissivecolor').value = zcolor.toHexString().toLowerCase();
+						dGet('wtw_tmoldwebtextemissive').value = zcolor.toHexString().toLowerCase();
+						zmolds[zmoldind].color.emissivecolor = zcolor.toHexString().toLowerCase();
+						break;
+					case 'diffuse':
+						dGet('wtw_tmolddiffusecolor').value = zcolor.toHexString().toLowerCase();
+						dGet('wtw_tmoldwebtextdiffuse').value = zcolor.toHexString().toLowerCase();
+						zmolds[zmoldind].color.diffusecolor = zcolor.toHexString().toLowerCase();
+						break;
+					case 'specular':
+						dGet('wtw_tmoldspecularcolor').value = zcolor.toHexString().toLowerCase();
+						dGet('wtw_tmoldwebtextspecular').value = zcolor.toHexString().toLowerCase();
+						zmolds[zmoldind].color.specularcolor = zcolor.toHexString().toLowerCase();
+						break;
+					case 'ambient':
+						dGet('wtw_tmoldambientcolor').value = zcolor.toHexString().toLowerCase();
+						dGet('wtw_tmoldwebtextambient').value = zcolor.toHexString().toLowerCase();
+						zmolds[zmoldind].color.ambientcolor = zcolor.toHexString().toLowerCase();
+						break;
+				}
+				WTW.pluginsSetColor(zmoldname, zcolorgroup, dGet('wtw_tmoldemissivecolor').value, dGet('wtw_tmolddiffusecolor').value, dGet('wtw_tmoldspecularcolor').value, dGet('wtw_tmoldambientcolor').value);
 			}
 		}
+		WTW.setNewMold();
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminmolds.js-setColor=' + ex.message);
 	}
@@ -3008,20 +3010,26 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 				zmolds[zmoldind].color.specularcolor = dGet('wtw_tmoldspecularcolor').value;
 				zmolds[zmoldind].color.ambientcolor = dGet('wtw_tmoldambientcolor').value;
 				if (zmold.material != undefined) {
-					zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
-					zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
-					zmold.material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
-					zmold.material.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+					var zcovering = zmold.material.clone();
+					zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
+					zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+					zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+					zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+					zmold.material.dispose();
+					zmold.material = zcovering;
 				}
 				if (zmolds[zmoldind].covering == 'color' || zmolds[zmoldind].covering == 'marble') {
 					var zmoldimageframename = zmoldname + '-imageframe';
 					var zmoldimageframe = WTW.getMeshOrNodeByID(zmoldimageframename);
 					if (zmoldimageframe != null) {	
 						if (zmoldimageframe.material != undefined) {
-							zmoldimageframe.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
-							zmoldimageframe.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
-							zmoldimageframe.material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
-							zmoldimageframe.material.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+							var zcovering = zmoldimageframe.material.clone();
+							zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
+							zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+							zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+							zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+							zmoldimageframe.material.dispose();
+							zmoldimageframe.material = zcovering;
 						}
 					}
 				}
@@ -3060,38 +3068,43 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 					case 'terrain':
 						zrebuildmold = 1;
 						break;
-					case 'babylonfile':
-						var zchildmeshes = zmold.getChildMeshes();
-						if (zchildmeshes != null) {
-							for (var i=0;i < zchildmeshes.length;i++) {
-								if (zchildmeshes[i] != null) {
-									if (zchildmeshes[i].material != null) {
-										zchildmeshes[i].material.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
-										zchildmeshes[i].material.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
-										zchildmeshes[i].material.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
-										zchildmeshes[i].material.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
-									}
-									if (zreceiveshadowsupdate) {
-										zchildmeshes[i].receiveShadows = zreceiveshadows;
-									}
-									if (zwaterreflectionupdate && WTW.waterMat != null) {
-										if (zwaterreflection) {
-											WTW.addReflectionRefraction(zchildmeshes[i]);
-										} else {
-											WTW.removeReflectionRefraction(zchildmeshes[i].name);
-										}
-									}
-								}
-							}
-						}
-						break;
 					default:
 						if (zwaterreflection && WTW.waterMat != null) {
 							WTW.addReflectionRefraction(zmold);
 						}
 						break;
 				}
-
+				var znode = scene.getTransformNodeByID(zmoldname);
+				if (znode != null) {
+					/* uses transform node as base */
+					var zchildmeshes = znode.getChildMeshes();
+					if (zchildmeshes != null) {
+						for (var i=0;i < zchildmeshes.length;i++) {
+							if (zchildmeshes[i] != null) {
+								if (zchildmeshes[i].material != null) {
+									var zcovering = zchildmeshes[i].material.clone();
+									zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.diffusecolor);	
+									zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.emissivecolor);
+									zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.specularcolor);
+									zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolds[zmoldind].color.ambientcolor);
+									zchildmeshes[i].material.dispose();
+									zchildmeshes[i].material = zcovering;
+								}
+								if (zreceiveshadowsupdate) {
+									zchildmeshes[i].receiveShadows = zreceiveshadows;
+								}
+								if (zwaterreflectionupdate && WTW.waterMat != null) {
+									if (zwaterreflection) {
+										WTW.addReflectionRefraction(zchildmeshes[i]);
+									} else {
+										WTW.removeReflectionRefraction(zchildmeshes[i].name);
+									}
+								}
+							}
+						}
+					}
+				}
+				
 				if (dGet('wtw_tmoldcoveringold').value == '') {
 					dGet('wtw_tmoldcoveringold').value = zcoveringname;
 				}
@@ -3264,8 +3277,8 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 					if (dGet('wtw_tmoldwebtextthick').value == '' || WTW.isNumeric(dGet('wtw_tmoldwebtextthick').value) == false) {
 						dGet('wtw_tmoldwebtextthick').value = 1;
 					}
-					if (dGet('wtw_tmoldwebtextcolor').value == '') {
-						dGet('wtw_tmoldwebtextcolor').value = '#ff0000';
+					if (dGet('wtw_tmoldwebtextemissive').value == '') {
+						dGet('wtw_tmoldwebtextemissive').value = '#ff0000';
 					}
 					if (dGet('wtw_tmoldwebtextdiffuse').value == '') {
 						dGet('wtw_tmoldwebtextdiffuse').value = '#f0f0f0';
@@ -3277,7 +3290,7 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 						dGet('wtw_tmoldwebtextambient').value = '#808080';
 					}
 					if (zmolds[zmoldind].webtext.webstyle != undefined) {
-						dGet('wtw_tmoldwebstyle').value = "{\"anchor\":\"" + dGet('wtw_tmoldwebtextalign').options[dGet('wtw_tmoldwebtextalign').selectedIndex].value + "\",\"letter-height\":" + dGet('wtw_tmoldwebtextheight').value + ",\"letter-thickness\":" + dGet('wtw_tmoldwebtextthick').value + ",\"color\":\"" + dGet('wtw_tmoldwebtextcolor').value + "\",\"alpha\":" + zopacity/100 + ",\"colors\":{\"diffuse\":\"" + dGet('wtw_tmoldwebtextdiffuse').value + "\",\"specular\":\"" + dGet('wtw_tmoldwebtextspecular').value + "\",\"ambient\":\"" + dGet('wtw_tmoldwebtextambient').value + "\",\"emissive\":\"" + dGet('wtw_tmoldwebtextcolor').value + "\"}}";
+						dGet('wtw_tmoldwebstyle').value = "{\"anchor\":\"" + dGet('wtw_tmoldwebtextalign').options[dGet('wtw_tmoldwebtextalign').selectedIndex].value + "\",\"letter-height\":" + dGet('wtw_tmoldwebtextheight').value + ",\"letter-thickness\":" + dGet('wtw_tmoldwebtextthick').value + ",\"color\":\"" + dGet('wtw_tmoldwebtextemissive').value + "\",\"alpha\":" + zopacity/100 + ",\"colors\":{\"diffuse\":\"" + dGet('wtw_tmoldwebtextdiffuse').value + "\",\"specular\":\"" + dGet('wtw_tmoldwebtextspecular').value + "\",\"ambient\":\"" + dGet('wtw_tmoldwebtextambient').value + "\",\"emissive\":\"" + dGet('wtw_tmoldwebtextemissive').value + "\"}}";
 						if (zmolds[zmoldind].webtext.webstyle != dGet('wtw_tmoldwebstyle').value) {
 							zmolds[zmoldind].webtext.webstyle = dGet('wtw_tmoldwebstyle').value;
 							zrebuildmold = 1;

@@ -434,6 +434,8 @@ WTWJS.prototype.mouseClick = function(zevent) {
 							WTW.checkImageClick(zpickedname);
 						} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
 							WTW.checkVideoClick(zpickedname);
+						} else if (zpickedname.indexOf('-createscene') > -1) {
+							WTW.openIFrame('/core/pages/create3dwebsite.php?useremail='+dGet('wtw_tuseremail').value, .9, .9, 'Create 3D Website');
 						} else if (zpickedname.indexOf('-vehicle') > -1) {
 							WTW.toggleStartVehicle(zpickedname);
 						} else {
@@ -1641,6 +1643,9 @@ WTWJS.prototype.hilightMoldFast = function(zmoldname, zcolor) {
 	try {
 		var zmold = WTW.getMeshOrNodeByID(zmoldname);
 		if (zmold != null) {
+			if (WTW.highlightLayer == null) {
+				WTW.highlightLayer = new BABYLON.HighlightLayer('highlightlayer', scene);
+			}
 			var zcolorset = BABYLON.Color3.Yellow();
 			switch (zcolor.toLowerCase()) {
 				case 'green':
@@ -1657,9 +1662,6 @@ WTWJS.prototype.hilightMoldFast = function(zmoldname, zcolor) {
 					break;
 			}
 			WTW.unhilightMold(zmoldname);
-			if (WTW.highlightLayer == null) {
-				WTW.highlightLayer = new BABYLON.HighlightLayer('highlightlayer', scene);
-			}
 			WTW.highlightLayer.outerGlow = true;
 			WTW.highlightLayer.innerGlow = true;
 			WTW.highlightLayer.addMesh(zmold, zcolorset);
@@ -1677,30 +1679,40 @@ WTWJS.prototype.hilightMoldFast = function(zmoldname, zcolor) {
 WTWJS.prototype.hilightMold = function(zmoldname, zcolor) {
 	/* highlight a mold on the 3D Scene */
 	try {
-		var zmold = WTW.getMeshOrNodeByID(zmoldname);
+		if (WTW.highlightLayer == null) {
+			WTW.highlightLayer = new BABYLON.HighlightLayer('highlightlayer', scene);
+		}
+		var zcolorset = BABYLON.Color3.Yellow();
+		switch (zcolor.toLowerCase()) {
+			case 'green':
+				zcolorset = BABYLON.Color3.Green();
+				break;
+			case 'red':
+				zcolorset = BABYLON.Color3.Red();
+				break;
+			case 'blue':
+				zcolorset = BABYLON.Color3.Blue();
+				break;
+			case 'yellow':
+				zcolorset = BABYLON.Color3.Yellow();
+				break;
+		}
+		var zmold = scene.getMeshByID(zmoldname);
 		if (zmold != null) {
-			var zcolorset = BABYLON.Color3.Yellow();
-			switch (zcolor.toLowerCase()) {
-				case 'green':
-					zcolorset = BABYLON.Color3.Green();
-					break;
-				case 'red':
-					zcolorset = BABYLON.Color3.Red();
-					break;
-				case 'blue':
-					zcolorset = BABYLON.Color3.Blue();
-					break;
-				case 'yellow':
-					zcolorset = BABYLON.Color3.Yellow();
-					break;
-			}
 			WTW.unhilightMold(zmoldname);
-			if (WTW.highlightLayer == null) {
-				WTW.highlightLayer = new BABYLON.HighlightLayer('highlightlayer', scene);
-			}
 			WTW.highlightLayer.outerGlow = true;
-			//WTW.highlightLayer.innerGlow = true;
+			WTW.highlightLayer.innerGlow = false;
 			WTW.highlightLayer.addMesh(zmold, zcolorset);
+		} else {
+			zmold = scene.getTransformNodeByID(zmoldname);
+			if (zmold != null) {
+				var zchildmolds = zmold.getChildren();
+				for (var i = 0;i<zchildmolds.length;i++) {
+					if (zchildmolds[i] != null) {
+						WTW.highlightLayer.addMesh(zchildmolds[i], zcolorset);
+					}
+				}
+			}
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_input.js-hilightMold=' + ex.message);
@@ -1711,9 +1723,19 @@ WTWJS.prototype.unhilightMold = function(zmoldname) {
 	/* unhighlight a mold on the 3D Scene */
 	try {
 		if (WTW.highlightLayer != null) {
-			var zmold = WTW.getMeshOrNodeByID(zmoldname);
+			var zmold = scene.getMeshByID(zmoldname);
 			if (zmold != null) {
 				WTW.highlightLayer.removeMesh(zmold);
+			} else {
+				zmold = scene.getTransformNodeByID(zmoldname);
+				if (zmold != null) {
+					var zchildmolds = zmold.getChildren();
+					for (var i = 0;i<zchildmolds.length;i++) {
+						if (zchildmolds[i] != null) {
+							WTW.highlightLayer.removeMesh(zchildmolds[i]);
+						}
+					}
+				}
 			}
 		}
 	} catch (ex) {

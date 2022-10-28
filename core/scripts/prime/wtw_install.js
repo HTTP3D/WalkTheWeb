@@ -381,6 +381,8 @@ WTWJS.prototype.openIFrame = function(zurl, zwidth, zheight, ztitle) {
 		if (ziframe.src != zurl) {
 			ziframe.src = zurl;
 		}
+		dGet('wtw_ibrowsewidth').value = zwidth;
+		dGet('wtw_ibrowseheight').value = zheight;
 		dGet('wtw_ibrowsediv').style.width = Math.round(WTW.sizeX * zwidth) + 'px';
 		dGet('wtw_ibrowsediv').style.height = Math.round(WTW.sizeY * zheight) + 'px';
 		dGet('wtw_ibrowsediv').style.left = Math.round((WTW.sizeX * (1 - zwidth)) / 2) + 'px';
@@ -442,20 +444,25 @@ WTWJS.prototype.setWindowSize = function() {
             WTW.sizeX = document.body.clientWidth;
             WTW.sizeY = document.body.clientHeight;
         }
-		if (dGet('wtw_ibrowsediv').style.display != 'none') {
-			var zwidth = dGet('wtw_ibrowsediv').clientWidth;
-			var zheight = dGet('wtw_ibrowsediv').clientHeight;
-			if (WTW.isNumeric(zwidth)) {
-				dGet('wtw_ibrowsediv').style.width = Math.round(Number(zwidth)) + 'px';
-				dGet('wtw_ibrowsediv').style.left = Math.round((WTW.sizeX - Number(zwidth)) / 2) + 'px';
+		if (dGet('wtw_ibrowsediv') != null) {
+			if (dGet('wtw_ibrowsediv').style.display != 'none') {
+				var zwidth = .9;
+				var zheight = .9;
+				if (WTW.isNumeric(dGet('wtw_ibrowsewidth').value)) {
+					zwidth = dGet('wtw_ibrowsewidth').value;
+				}
+				if (WTW.isNumeric(dGet('wtw_ibrowseheight').value)) {
+					zheight = dGet('wtw_ibrowseheight').value;
+				}
+				if (WTW.isNumeric(zwidth)) {
+					dGet('wtw_ibrowsediv').style.width = Math.round(WTW.sizeX * Number(zwidth)) + 'px';
+					dGet('wtw_ibrowsediv').style.left = Math.round((WTW.sizeX - (WTW.sizeX * Number(zwidth))) / 2) + 'px';
+				}
+				if (WTW.isNumeric(zheight)) {
+					dGet('wtw_ibrowsediv').style.height = Math.round(WTW.sizeY * Number(zheight)) + 'px';
+					dGet('wtw_ibrowsediv').style.top = Math.round((WTW.sizeY - (WTW.sizeY * Number(zheight))) / 2) + 'px';
+				}
 			}
-			if (WTW.isNumeric(zheight)) {
-				dGet('wtw_ibrowsediv').style.height = Math.round(Number(zheight)) + 'px';
-				dGet('wtw_ibrowsediv').style.top = Math.round((WTW.sizeY - Number(zheight)) / 2) + 'px';
-			}
-			dGet('wtw_ibrowsediv').style.display = 'inline-block';
-			dGet('wtw_ibrowsediv').style.visibility = 'visible';
-			dGet('wtw_ibrowsediv').style.zIndex = 3000;
 		}
     } catch (ex) {
 		WTW.log('core-scripts-prime-wtw_install.js-setWindowSize=' + ex.message);

@@ -5,13 +5,54 @@
 /* these functions are used to administer a website in admin mode only */
 /* avatars can be created to be Controlled by the user or as an AI */
 
-WTWJS.prototype.openSelectAvatar = function() {
+WTWJS.prototype.setAvatarsListTab = async function(zfilter) {
+	/* sets the tabs classes */
+	try {
+		if (zfilter == undefined) {
+			zfilter = 'mine';
+		}
+		if (zfilter == 'all' && WTW.isUserInRole('admin')) {
+			if (dGet('wtw_avatarbuttonmine') != null) {
+				dGet('wtw_avatarbuttonmine').className = 'wtw-localbutton wtw-leftradius';
+				dGet('wtw_avatarbuttonall').className = 'wtw-localbuttonselected wtw-rightradius';
+			}
+		} else {
+			zfilter = 'mine';
+			if (dGet('wtw_avatarbuttonmine') != null) {
+				dGet('wtw_avatarbuttonmine').className = 'wtw-localbuttonselected wtw-leftradius';
+				dGet('wtw_avatarbuttonall').className = 'wtw-localbutton wtw-rightradius';
+			}
+		}
+		WTW.openSelectAvatar(zfilter);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_admincommunities.js-setAvatarsListTab=' + ex.message);
+	} 
+}
+
+WTWJS.prototype.openSelectAvatar = function(zfilter) {
 	/* open the Select 3D Avatar Form */
 	try {
+		if (zfilter == undefined) {
+			zfilter = 'mine';
+		}
 		WTW.hide('wtw_listavatars');
 		WTW.show('wtw_loadingavatarid');
-		dGet('wtw_listavatars').innerHTML = '';
-		WTW.getAsyncJSON('/connect/avatars.php', 
+		var zlistavatars = '';
+		if (WTW.isUserInRole('admin') || WTW.isUserInRole('developer') || WTW.isUserInRole('architect') || WTW.isUserInRole('graphic artist')) {
+			zlistavatars = "<div class='wtw-localbuttonleftpad'></div><div id='wtw_avatarbuttonmine' class='wtw-localbutton";
+			if (zfilter == 'mine') {
+				zlistavatars += "selected";
+			}
+			zlistavatars += " wtw-leftradius' onclick=\"WTW.setAvatarsListTab('mine');\">Mine</div><div class='wtw-localbuttonmiddlepad'> or </div><div id='wtw_avatarbuttonall' class='wtw-localbutton";
+			if (zfilter == 'all') {
+				zlistavatars += "selected";
+			}
+			zlistavatars += " wtw-rightradius' onclick=\"WTW.setAvatarsListTab('all');\">All</div><div class='wtw-localbuttonrightpad'></div><div class='wtw-clear'></div>\r\n";
+		} else {
+			zlistavatars = '<br /><br />';
+		}
+		dGet('wtw_listavatars').innerHTML = zlistavatars;
+		WTW.getAsyncJSON('/connect/avatars.php?filter=' + zfilter, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				if (zresponse.avatars != null) {
@@ -55,6 +96,8 @@ WTWJS.prototype.openSelectAvatar = function() {
 							}
 						}
 					}
+					dGet('wtw_listavatars').innerHTML += "<div class='wtw-normalgray'>Total: <b>" + zresponse.avatars.length + "</b> Avatars</div>";
+
 					/* check for updated versions */
 					var zrequest2 = {
 						'versioncheck': JSON.stringify(zversioncheck),
@@ -115,9 +158,9 @@ WTWJS.prototype.downloadAvatarVersion = function(zobj, zwebid, zupdatewebid, zve
 			'versionid': zversionid,
 			'version': zversion,
 			'webtype': zwebtype,
-			'function':'downloadupdateweb'
+			'function':'downloadupdateavatar'
 		};
-		WTW.postAsyncJSON('/core/handlers/avatars.php', zrequest, 
+		WTW.postAsyncJSON('/core/handlers/downloads.php', zrequest, 
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */

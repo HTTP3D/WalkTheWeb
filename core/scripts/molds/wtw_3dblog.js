@@ -564,7 +564,7 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 				'anchor':'center',
 				'letter-height':6.00,
 				'letter-thickness':1.00,
-				'color':'#ff0000',
+				'color':zemissivecolor,
 				'alpha':1.00,
 				'colors':{
 					'diffuse':zdiffusecolor,
@@ -574,7 +574,23 @@ WTWJS.prototype.addMold3DText = function(zmoldname, zmolddef, zlenx, zleny, zlen
 				}
 			};
 		} else {
-			zwebstyle = JSON.parse(zwebstyle);
+			try {
+				zwebstyle = JSON.parse(zwebstyle);
+			} catch (ex) {
+				zwebstyle = {
+					'anchor':'center',
+					'letter-height':6.00,
+					'letter-thickness':1.00,
+					'color':zemissivecolor,
+					'alpha':1.00,
+					'colors':{
+						'diffuse':zdiffusecolor,
+						'specular':zspecularcolor,
+						'ambient':zambientcolor,
+						'emissive':zemissivecolor
+					}
+				};
+			}
 		}
 		WTW.disposeClean(zmoldname + '-text');
 		Writer = BABYLON.MeshWriter(scene, {scale:1});

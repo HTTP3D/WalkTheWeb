@@ -273,13 +273,54 @@ WTWJS.prototype.copyBuildingComplete = function(zbuildingid) {
 	} 
 }
 
-WTWJS.prototype.getSelectBuildingsList = async function() {
+WTWJS.prototype.setBuildingsListTab = async function(zfilter) {
+	/* sets the tabs classes */
+	try {
+		if (zfilter == undefined) {
+			zfilter = 'mine';
+		}
+		if (zfilter == 'all' && WTW.isUserInRole('admin')) {
+			if (dGet('wtw_buildingbuttonmine') != null) {
+				dGet('wtw_buildingbuttonmine').className = 'wtw-localbutton wtw-leftradius';
+				dGet('wtw_buildingbuttonall').className = 'wtw-localbuttonselected wtw-rightradius';
+			}
+		} else {
+			zfilter = 'mine';
+			if (dGet('wtw_buildingbuttonmine') != null) {
+				dGet('wtw_buildingbuttonmine').className = 'wtw-localbuttonselected wtw-leftradius';
+				dGet('wtw_buildingbuttonall').className = 'wtw-localbutton wtw-rightradius';
+			}
+		}
+		WTW.getSelectBuildingsList(zfilter);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminbuildings.js-setBuildingsListTab=' + ex.message);
+	} 
+}
+
+WTWJS.prototype.getSelectBuildingsList = async function(zfilter) {
 	/* populates the admin menu for My 3D Buildings to load and edit */
 	try {
+		if (zfilter == undefined) {
+			zfilter = 'mine';
+		}
 		WTW.hide('wtw_listbuildings');
 		WTW.show('wtw_loadingbuildingid');
-		dGet('wtw_listbuildings').innerHTML = '';
-		WTW.getAsyncJSON('/connect/buildings.php', 
+		var zlistbuildings = '';
+		if (WTW.isUserInRole('admin') || WTW.isUserInRole('developer') || WTW.isUserInRole('architect') || WTW.isUserInRole('graphic artist')) {
+			zlistbuildings = "<div class='wtw-localbuttonleftpad'></div><div id='wtw_buildingbuttonmine' class='wtw-localbutton";
+			if (zfilter == 'mine') {
+				zlistbuildings += "selected";
+			}
+			zlistbuildings += " wtw-leftradius' onclick=\"WTW.setBuildingsListTab('mine');\">Mine</div><div class='wtw-localbuttonmiddlepad'> or </div><div id='wtw_buildingbuttonall' class='wtw-localbutton";
+			if (zfilter == 'all') {
+				zlistbuildings += "selected";
+			}
+			zlistbuildings += " wtw-rightradius' onclick=\"WTW.setBuildingsListTab('all');\">All</div><div class='wtw-localbuttonrightpad'></div><div class='wtw-clear'></div>\r\n";
+		} else {
+			zlistbuildings = '<br /><br />';
+		}
+		dGet('wtw_listbuildings').innerHTML = zlistbuildings;
+		WTW.getAsyncJSON('/connect/buildings.php?filter=' + zfilter, 
 			function(zresponse) {
 				WTW.buildings = JSON.parse(zresponse);
 				if (WTW.buildings != null) {
@@ -309,6 +350,8 @@ WTWJS.prototype.getSelectBuildingsList = async function() {
 								}
 							}
 						}
+						dGet('wtw_listbuildings').innerHTML += "<div class='wtw-normalgray'>Total: <b>" + WTW.buildings.length + "</b> Buildings</div>";
+
 						/* check for updated versions */
 						var zrequest2 = {
 							'versioncheck': JSON.stringify(zversioncheck),

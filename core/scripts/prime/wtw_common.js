@@ -1182,22 +1182,33 @@ WTWJS.prototype.loadSkyScene = function (zinclination, zluminance, zazimuth, zra
 
 WTWJS.prototype.setMeshTransparentFog = function(zmold, zmaxz) {
 	/* used on large molds to provide the fog appearance at distances by vertex points */
+	var zheapsizeused = 0;
+	var zheapsize = 0;
+	var zheapsizelimit = 0;
     try {
-		/* vertex colors */
-		var zcolors = [];
-		var zcolor = [1,1,1,1];
-		var zvtx = zmold.getVerticesData( BABYLON.VertexBuffer.PositionKind);
-		var i = 0;
-		while (i<zvtx.length) {
-			var zx = zvtx[i++];
-			var zy = zvtx[i++];
-			var zz = zvtx[i++];
-			zcolor[3] = 1.0 - Math.min(1, Math.max(0, zz / zmaxz));
-			zcolors.push(zcolor[0],zcolor[1],zcolor[2],zcolor[3]);
+		/* check memory before adding this feature */
+		zheapsizeused = performance.memory.usedJSHeapSize;
+		zheapsize = performance.memory.totalJSHeapSize;
+		zheapsizelimit = performance.memory.jsHeapSizeLimit;
+		var zheapsizesoftlimit = 500000;
+		if (zheapsizeused < zheapsizelimit - zheapsizesoftlimit && zheapsize < zheapsizelimit - zheapsizesoftlimit) {
+			/* only perform this feature if there is room in the buffer */
+			var zvtx = zmold.getVerticesData( BABYLON.VertexBuffer.PositionKind);
+			/* vertex colors */
+			var zcolors = [];
+			var zcolor = [1,1,1,1];
+			var i = 0;
+			while (i<zvtx.length) {
+				var zx = zvtx[i++];
+				var zy = zvtx[i++];
+				var zz = zvtx[i++];
+				zcolor[3] = 1.0 - Math.min(1, Math.max(0, zz / zmaxz));
+				zcolors.push(zcolor[0],zcolor[1],zcolor[2],zcolor[3]);
+			}
+			zmold.setVerticesData( BABYLON.VertexBuffer.ColorKind, zcolors);
+			zmold.useVertexColors = true;
+			zmold.hasVertexAlpha = true;
 		}
-		zmold.setVerticesData( BABYLON.VertexBuffer.ColorKind, zcolors);
-		zmold.useVertexColors = true;
-		zmold.hasVertexAlpha = true;
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_common.js-setMeshTransparentFog=' + ex.message);
 	}

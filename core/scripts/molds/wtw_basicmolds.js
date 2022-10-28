@@ -1039,6 +1039,120 @@ WTWJS.prototype.addMoldVideo = function(zmoldname, zmolddef, zlenx, zleny, zlenz
     return zmold;
 }
 
+WTWJS.prototype.addMoldCreateSceneKiosk = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
+    var zmold;
+    try {
+		var zpositionx = 0;
+		var zpositiony = 0;
+		var zpositionz = 0;
+		var zrotationx = 0;
+		var zrotationy = 0;
+		var zrotationz = 0;
+		if (zmolddef.position.x != undefined) {
+			if (WTW.isNumeric(zmolddef.position.x)) {
+				zpositionx = Number(zmolddef.position.x);
+			}
+		}
+		if (zmolddef.position.y != undefined) {
+			if (WTW.isNumeric(zmolddef.position.y)) {
+				zpositiony = Number(zmolddef.position.y);
+			}
+		}
+		if (zmolddef.position.z != undefined) {
+			if (WTW.isNumeric(zmolddef.position.z)) {
+				zpositionz = Number(zmolddef.position.z);
+			}
+		}
+		if (zmolddef.rotation.x != undefined) {
+			if (WTW.isNumeric(zmolddef.rotation.x)) {
+				zrotationx = Number(zmolddef.rotation.x);
+			}
+		}
+		if (zmolddef.rotation.y != undefined) {
+			if (WTW.isNumeric(zmolddef.rotation.y)) {
+				zrotationy = Number(zmolddef.rotation.y);
+			}
+		}
+		if (zmolddef.rotation.z != undefined) {
+			if (WTW.isNumeric(zmolddef.rotation.z)) {
+				zrotationz = Number(zmolddef.rotation.z);
+			}
+		}
+		zmold = new BABYLON.TransformNode(zmoldname);
+		zmold.position = new BABYLON.Vector3(zpositionx,zpositiony,zpositionz);
+		zmold.rotation = new BABYLON.Vector3(WTW.getRadians(zrotationx),WTW.getRadians(zrotationy),WTW.getRadians(zrotationz));
+		zmold.scaling = new BABYLON.Vector3(zlenx,zleny,zlenz);
+		
+		if (WTW.adminView == 1) {
+			var zbasemold = new BABYLON.TransformNode(zmoldname + '-guide');
+			zbasemold.position = new BABYLON.Vector3(0,5.35,0);
+			zbasemold.rotation = new BABYLON.Vector3(0,0,0);
+			zbasemold.scaling = new BABYLON.Vector3(3.7,10.7,3.7);
+			zbasemold.parent = zmold;
+		}
+
+		var zloop = false;
+		zmolddef.objects.folder = '/content/system/babylon/createscene/';
+		zmolddef.objects.file = 'createscene.babylon';
+		BABYLON.SceneLoader.ImportMeshAsync('', zmolddef.objects.folder, zmolddef.objects.file, scene).then(
+			function (zresults) {
+				if (zresults.meshes != null) {
+					var zobjectanimations = [];
+					
+					// add object animations using WTW.newObjectAnimation();
+/*					zobjectanimations[0] = WTW.newObjectAnimation();
+					zobjectanimations[0].animationname = 'playTV';
+					zobjectanimations[0].moldevent = 'onclick';
+					zobjectanimations[0].moldnamepart = 'play';
+					zobjectanimations[0].startframe = 10;
+					zobjectanimations[0].endframe = 20;
+					zobjectanimations[0].animationloop = false;
+					zobjectanimations[0].speedratio = 1.00;
+					zobjectanimations[0].additionalscript = 'WTW.checkVideoClick';
+					zobjectanimations[0].additionalparameters = zmoldname + ',1';
+					
+					zobjectanimations[1] = WTW.newObjectAnimation();
+					zobjectanimations[1].animationname = 'pauseTV';
+					zobjectanimations[1].moldevent = 'onclick';
+					zobjectanimations[1].moldnamepart = 'pause';
+					zobjectanimations[1].startframe = 10;
+					zobjectanimations[1].endframe = 20;
+					zobjectanimations[1].animationloop = false;
+					zobjectanimations[1].speedratio = 1.00;
+					zobjectanimations[1].additionalscript = 'WTW.checkVideoClick';
+					zobjectanimations[1].additionalparameters = zmoldname + ',0';
+*/
+					zmold = scene.getTransformNodeByID(zmoldname);
+
+					for (var i=0; i < zresults.meshes.length; i++) {
+						if (zresults.meshes[i] != null) {
+							var zmeshname = zresults.meshes[i].name.toLowerCase();
+							var zchildmoldname = zmoldname + '-' + zmeshname;
+							zresults.meshes[i].name = zchildmoldname;
+							zresults.meshes[i].id = zchildmoldname;
+							WTW.registerMouseOver(zresults.meshes[i]);
+							if (zresults.meshes[i].parent == null) {
+								zresults.meshes[i].parent = zmold;
+							}
+							if (zobjectanimations != null) {
+//								WTW.addMoldAnimation(zmoldname, zmeshname, zresults.meshes[i], zobjectanimations);
+							}
+						}
+					}
+				}
+				/* check to see if the mold still exists since the time it was requested */
+				var zmold = WTW.getMeshOrNodeByID(zmoldname);
+				if (zmold == null) {
+					WTW.disposeClean(zmoldname);
+				}
+			}
+		);
+    } catch (ex) {
+        WTW.log('core-scripts-molds-basicmolds\r\n addMoldCreateSceneKiosk=' + ex.message);
+    }
+    return zmold;
+}
+
 WTWJS.prototype.addMoldCandleFlame = function(zmoldname, zmolddef, zlenx, zleny, zlenz) {
 	var zmold;
 	try {
@@ -1375,18 +1489,6 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 		zmold.rotation = new BABYLON.Vector3(0,0,0);
 		zmold.scaling = new BABYLON.Vector3(zlenx, zleny, zlenz);
 
-/*		if (WTW.adminView == 1) {
-			var zbasemold = new BABYLON.TransformNode(zmoldname + '-guide');
-			zbasemold.position = new BABYLON.Vector3(0,0,0);
-			zbasemold.rotation = new BABYLON.Vector3(0,0,0);
-			zbasemold.scaling = new BABYLON.Vector3(1,1,1);
-			zbasemold.parent = zmold;
-		}
-*/
-
-//		if (zmoldname.indexOf('-vehicle') > -1) {
-//			zmold.physicsImpostor = new BABYLON.PhysicsImpostor(zmold, BABYLON.PhysicsImpostor.BoxImpostor, {ignoreParent: true,  mass: 1, friction: 1, restitution: 0.9 }, scene);
-//		}
 		var zmoldrot = null;
 		var zuploadobjectid = '';
 		var zobjectfolder = '';

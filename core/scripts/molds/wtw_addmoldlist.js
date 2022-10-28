@@ -62,8 +62,9 @@ WTWJS.prototype.getWebMoldList = function() {
 		zwebmoldlist[zwebmoldlist.length] = '3D Text';
 		zwebmoldlist[zwebmoldlist.length] = 'Image';
         zwebmoldlist[zwebmoldlist.length] = 'Video';
-		zwebmoldlist[zwebmoldlist.length] = 'Video Stream';
+/*		zwebmoldlist[zwebmoldlist.length] = 'Video Stream'; */
 		zwebmoldlist[zwebmoldlist.length] = 'Babylon File';
+		zwebmoldlist[zwebmoldlist.length] = 'Create Scene Kiosk';
         zwebmoldlist[zwebmoldlist.length] = 'Lightbulb';
 /*	    zwebmoldlist[zwebmoldlist.length] = 'Spot Light'; */
         zwebmoldlist[zwebmoldlist.length] = 'Candle Flame';
@@ -265,6 +266,12 @@ WTWJS.prototype.addMold = function(zmoldname, zmolddef, zparentname, zcoveringna
 				/* plane - one sided flat box, streaming video will display on it */
 				zmold = WTW.addVideoStream(zmoldname, zlenx, zleny, zlenz);
 				zcoveringname = 'none';
+				break;
+			case 'createscenekiosk':
+				/* Create Scene Kiosk - allows users to click the botton to trigger Create Scene from Pages */
+				zmold = WTW.addMoldCreateSceneKiosk(zmoldname, zmolddef, zlenx, zleny, zlenz);
+				zcoveringname = 'none';
+				break;
 				break;
             case 'lightbulb':
 				/* lightbulb - adds smaller light to scene - great for inside rooms */
@@ -604,7 +611,7 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 		dGet('wtw_tmoldwebtextheight').value = '6.00';
 		dGet('wtw_tmoldwebtextthick').value = '1.00';
 		WTW.setDDLValue('wtw_tmoldwebtextalign', 'center');
-		dGet('wtw_tmoldwebtextcolor').value = '';
+		dGet('wtw_tmoldwebtextemissive').value = '';
 		dGet('wtw_tmoldwebtextspecular').value = '';
 		dGet('wtw_tmoldwebtextdiffuse').value = '';
 		dGet('wtw_tmoldwebtextambient').value = '';
@@ -844,7 +851,7 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldwebtextheight').value = '6.00';
 				dGet('wtw_tmoldwebtextthick').value = '1.00';
 				WTW.setDDLValue('wtw_tmoldwebtextalign', 'center');
-				dGet('wtw_tmoldwebtextcolor').value = '#ff0000';
+				dGet('wtw_tmoldwebtextemissive').value = '#ff0000';
 				dGet('wtw_tmoldwebtextspecular').value = '#000000';
 				dGet('wtw_tmoldwebtextdiffuse').value = '#f0f0f0';
 				dGet('wtw_tmoldwebtextambient').value = '#808080';
@@ -882,6 +889,13 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				dGet('wtw_tmoldscalingz').value = '0.00';
 				dGet('wtw_tmoldrotationy').value = zrotationy + 180;
 				dGet('wtw_tmoldsubdivisions').value = '2';
+				break;
+			case 'createscenekiosk':
+				dGet('wtw_tmoldpositiony').value = zpositiony - .5;
+				dGet('wtw_tmoldscalingx').value = '1.00';
+				dGet('wtw_tmoldscalingy').value = '1.00';
+				dGet('wtw_tmoldscalingz').value = '1.00';
+				dGet('wtw_tmoldrotationy').value = zrotationy - 90;
 				break;
 			case 'simpletextbox':
 				dGet('wtw_tmoldscalingx').value = '.25';
@@ -1466,6 +1480,18 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 				dGet('wtw_editmoldformtitle').innerHTML = 'Edit Video';
 				WTW.show('wtw_moldscalediv');
 				WTW.show('wtw_moldmergemoldsdiv');
+				break;
+			case 'createscenekiosk':
+				dGet('wtw_moldpositiontitle').innerHTML = 'Position';
+				dGet('wtw_moldscalingtitle').innerHTML = 'Length';
+				dGet('wtw_moldrotationtitle').innerHTML = 'Rotation';
+				dGet('wtw_moldtexturetitle').innerHTML = 'Texture Image';
+				dGet('wtw_bsavethismold').innerHTML = '<u>S</u>ave Kiosk';
+				dGet('wtw_bdelmold').innerHTML = '<u>D</u>elete Kiosk';
+				dGet('wtw_editmoldformtitle').innerHTML = 'Edit Kiosk';
+				WTW.hide('wtw_moldbasictexturesetdiv');
+				WTW.hide('wtw_moldbumptexturetitle');
+				WTW.hide('wtw_moldbumptextureset2div');
 				break;
 			case 'raisedimage':
 				dGet('wtw_moldpositiontitle').innerHTML = 'Position';
