@@ -1,0 +1,49 @@
+Exporter version: 2.93.5, Blender version: 3.2.1
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  C:\Data\HTTP3DInc\Blender\entryscene\
+	Python World class constructor completed
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  stand
+		processing begun of material:  rock
+		processing begun of material:  white
+		processing begun of material:  blue
+		processing begun of material:  black
+			processing texture Rock047_1K_Color
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture Rock047_1K_AmbientOcclusion
+				texture type:  specularTexture, mapped using: "UVMap"
+			processing texture Rock047_1K_Roughness
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture Rock047_1K_NormalDX
+				texture type:  bumpTexture, mapped using: "UVMap"
+		processing begun of multimaterial:  createscene.Multimaterial#0
+		num positions      :  6143
+		num normals        :  6143
+		num tangents       :  0
+		num uvs            :  12286
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  5803
+	processing begun of mesh:  startbutton
+		animation processing begun
+========= An error was encountered =========
+  File "C:\Users\adishno\AppData\Roaming\Blender Foundation\Blender\3.2\scripts\addons\babylon_js\json_exporter.py", line 116, in execute
+    mesh = Mesh(object, scene, self)
+  File "C:\Users\adishno\AppData\Roaming\Blender Foundation\Blender\3.2\scripts\addons\babylon_js\mesh.py", line 49, in __init__
+    self.define_animations(bpyMesh, True, True, True)
+  File "C:\Users\adishno\AppData\Roaming\Blender Foundation\Blender\3.2\scripts\addons\babylon_js\f_curve_animatable.py", line 51, in define_animations
+    hasData = rotAnimation.append_range(object, animationRange)
+  File "C:\Users\adishno\AppData\Roaming\Blender Foundation\Blender\3.2\scripts\addons\babylon_js\animation.py", line 111, in append_range
+    bpy.context.scene.frame_set(animationRange.frames_in[idx])
+ERROR:  Scene.frame_set(): error with argument 1, "frame" -  Function.frame expected an int type, not float
+========= end of processing =========
+elapsed time:  0 min, 0.3801 secs
