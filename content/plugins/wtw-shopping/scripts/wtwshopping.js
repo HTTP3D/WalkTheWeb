@@ -929,7 +929,7 @@ wtwshopping.prototype.loadProductDisplay = async function(zmoldname, zproductnam
 				}
 			}
 			if (zimageurl != '') {
-				WTW.getAsyncJSON(zstoreinfo.storeurl + '/image.php?walktheweb_image_url=' + zimageurl, 
+				WTW.getAsyncJSON(zstoreinfo.storeurl + '/walktheweb/image.php?walktheweb_image_url=' + zimageurl.replace('?','&'), 
 					function(zresponse2) {
 						if (zresponse2 != null) {
 							var zpimage = WTW.getMeshOrNodeByID(zmoldname + '-clickimage');
@@ -1443,8 +1443,7 @@ wtwshopping.prototype.getStoreInfo = async function(zmoldname) {
 		}
 		zmoldnameparts.molds[zmoldnameparts.moldind].webtext.webtext = WTW.encode(zwebname);
 		if (zstoreinfo.woocommerceapiurl != '' && zwebname == '') {
-			//var zurl = zstoreinfo.storeurl + '/walktheweb/storeinfo.php?walktheweb_store_info=1'; /* new plugin */
-			var zurl = zstoreinfo.storeurl + '/storeinfo.php?walktheweb_store_info=1';
+			var zurl = zstoreinfo.storeurl + '/walktheweb/storeinfo.php?walktheweb_store_info=1';
 			WTW.getAsyncJSON(zurl, 
 				function(zresponse) {
 					WTWShopping.setStoreInfo(zmoldname, JSON.parse(zresponse));
