@@ -185,6 +185,9 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				WTW.show('wtw_fullpageplugins');
 				WTW.show(zitem);
 				switch (zsetcategory) {
+					case 'Optional Upgrades':
+						WTW.openOptionalUpgrades();
+						break;
 					case 'Invoices':
 						WTW.openInvoices('admin');
 						break;
@@ -5523,6 +5526,51 @@ WTWJS.prototype.saveAPIKeyForm = async function(w) {
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminforms.js-saveAPIKeyForm=' + ex.message);
+	}
+}
+
+/* Optional Upgrades Admin */
+
+WTWJS.prototype.openOptionalUpgrades = async function() {
+	/* open Optional Upgrades page form */
+	try {
+		WTW.show('wtw_optionalpage');
+		WTW.show('wtw_loadingoptional');
+		dGet('wtw_optionaltitle').innerHTML = 'Optional Upgrades';
+		dGet('wtw_optionalnote').innerHTML = '<b>Optional Upgrades</b> are additional services or features that may require a payment to unlock. Note that some are subscriptions while others are one-time fees.<br />';
+		dGet('wtw_optionallist').innerHTML = '';
+		var zrequest = {
+			'function':'getoptionalupdates'
+		};
+		WTW.postAsyncJSON('/core/handlers/invoices.php', zrequest,
+			function(zresponse) {
+				if (zresponse != null) {
+					zresponse = JSON.parse(zresponse);
+					/* send JSON results to be formated on the form */
+					var zoptionallist = "<table class='wtw-table'><tr><td class='wtw-tablecolumnheading'><b>Title ID</b></td>\r\n";
+					zoptionallist += "<td class='wtw-tablecolumnheading'><b>Description</b></td>\r\n";
+					zoptionallist += "<td class='wtw-tablecolumnheading'><b>Instructions</b></td>\r\n";
+					zoptionallist += "<td class='wtw-tablecolumnheading' style='white-space:nowrap;'><b>Base Price</b></td>\r\n";
+					zoptionallist += "<td class='wtw-tablecolumnheading'><b>&nbsp;</b></td></tr>";
+					if (zresponse.upgrades != undefined) {
+						for (var i=0;i<zresponse.upgrades.length;i++) {
+							if (zresponse.upgrades[i] != null) {
+								zoptionallist += "<tr><td class='wtw-tablecolumns' style='white-space:nowrap;'><b>" + zresponse.upgrades[i].title + "</b></td>\r\n";
+								zoptionallist += "<td class='wtw-tablecolumns'>" + zresponse.upgrades[i].description + "</td>\r\n";
+								zoptionallist += "<td class='wtw-tablecolumns'>" + zresponse.upgrades[i].instructions + "</td>\r\n";
+								zoptionallist += "<td class='wtw-tablecolumns'>" + WTW.formatMoney(zresponse.upgrades[i].startprice) + "</td>\r\n";
+								zoptionallist += "<td class='wtw-tablecolumns'>" + "</td></tr>\r\n";
+							}
+						}
+					}
+					zoptionallist += '</table>\r\n';
+					dGet('wtw_optionallist').innerHTML = zoptionallist;
+					WTW.hide('wtw_loadingoptional');
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log('core-scripts-admin-wtw_adminforms.js-openOptionalUpgrades=' + ex.message);
 	}
 }
 

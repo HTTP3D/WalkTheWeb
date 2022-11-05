@@ -1041,18 +1041,28 @@ WTWJS.prototype.toggleAdminSubMenu = function(zobj) {
 				}
 				break;
 			case 'wtw_adminmenuinvoices':
-				if ((dGet('wtw_invoicepage').style.display == 'none' || dGet('wtw_invoicepage').style.display == '') && (dGet('wtw_myinvoicepage').style.display == 'none' || dGet('wtw_myinvoicepage').style.display == '')) {
-					WTW.openFullPageForm('fullpage','Invoices','wtw_invoicepage');
+				if ((dGet('wtw_optionalpage').style.display == 'none' || dGet('wtw_optionalpage').style.display == '') && (dGet('wtw_invoicepage').style.display == 'none' || dGet('wtw_invoicepage').style.display == '') && (dGet('wtw_myinvoicepage').style.display == 'none' || dGet('wtw_myinvoicepage').style.display == '')) {
+					if (dGet('wtw_adminoptionalupgrades') != null) {
+						WTW.openFullPageForm('fullpage','Optional Upgrades','wtw_optionalpage');
+					} else {
+						WTW.openFullPageForm('fullpage','Invoices','wtw_invoicepage');
+					}
 				} else {
+					WTW.hide('wtw_optionalpage');
 					WTW.hide('wtw_invoicepage');
 					WTW.hide('wtw_myinvoicepage');
 					WTW.closeFullPageForm();
 				}
 				break;
-			case 'wtw_adminmenuinvoices2':
-				if ((dGet('wtw_myinvoicepage').style.display == 'none' || dGet('wtw_myinvoicepage').style.display == '')) {
-					WTW.openFullPageForm('fullpage','My Invoices','wtw_myinvoicepage');
+			case 'wtw_adminmyinvoices2':
+				if ((dGet('wtw_optionalpage').style.display == 'none' || dGet('wtw_optionalpage').style.display == '') && (dGet('wtw_myinvoicepage').style.display == 'none' || dGet('wtw_myinvoicepage').style.display == '')) {
+					if (dGet('wtw_adminoptionalupgrades') != null) {
+						WTW.openFullPageForm('fullpage','Optional Upgrades','wtw_optionalpage');
+					} else {
+						WTW.openFullPageForm('fullpage','My Invoices','wtw_myinvoicepage');
+					}
 				} else {
+					WTW.hide('wtw_optionalpage');
 					WTW.hide('wtw_myinvoicepage');
 					WTW.closeFullPageForm();
 				}

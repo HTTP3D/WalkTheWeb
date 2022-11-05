@@ -26,25 +26,50 @@ WTWJS.prototype.communitySearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
 		var ztempsearchresults = '';
+		var zformat = 2;
+		if (Number(document.getElementById('wtw_downloadstcols').value) > 0) {
+			zformat = Number(document.getElementById('wtw_downloadstcols').value);
+		}
 		dGet('wtw_commtempsearchresults').innerHTML = '';
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
+			var zbuttonstyle = '';
 			var zcommunityid = zresponse[i].servercommunityid;
 			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
 			var zdirsize = WTW.formatNumber(Math.round(Number(zresponse[i].dirsize)/1000000),0);
 			if (WTW.isNumeric(zresponse[i].downloads)) {
 				zdownloads = zresponse[i].downloads;
 			}
-			ztempsearchresults += "<input type='button' id='wtw_bcommtempselect" + i + "' class='wtw-searchresultbutton' value='Download' onclick=\"WTW.downloadWeb('community', '" + btoa(zresponse[i].templatename) + "', '" + zcommunityid + "', '" + zcommunityid + "', 'community');\" />";
-			ztempsearchresults += "<h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3><br />";
+			if (zformat > 1) {
+				var zcols = '';
+				switch (zformat) {
+					case 2:
+						zcols = 'wtw-largecol';
+						break;
+					case 3:
+						zcols = 'wtw-medcol';
+						break;
+					case 4:
+						zcols = 'wtw-smallcol';
+						break;
+				}
+				ztempsearchresults += "<div class='" + zcols + "'>";
+				zbuttonstyle = "style='margin:2px 2px 5px 5px;'";
+			}
+			ztempsearchresults += "<h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3>";
+			if (zresponse[i].imageurl != "") {
+				ztempsearchresults += "<div style=\"clear:both;\"></div><img id='wtw_search" + zcommunityid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('community', '" + btoa(zresponse[i].templatename) + "', '" + zcommunityid + "', '" + zcommunityid + "', 'community');\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+			}
+			ztempsearchresults += "<input type='button' id='wtw_bcommtempselect" + i + "' class='wtw-searchresultbutton' value='Download' onclick=\"WTW.downloadWeb('community', '" + btoa(zresponse[i].templatename) + "', '" + zcommunityid + "', '" + zcommunityid + "', 'community');\" " + zbuttonstyle + " />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
 			ztempsearchresults += "<div class='wtw-right' style='min-width:150px;'>File Count: <b>" + zresponse[i].filecount + "</b></div><div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
 			ztempsearchresults += "<div class='wtw-right' style='min-width:150px;'>Folder Size: <b>" + zdirsize + " MB</b></div><div style='white-space:normal;font-weight:normal;color:#000000;'>Version: <b>[" + zresponse[i].version + "]</b> " + zresponse[i].versiondesc + ".</div><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
-			if (zresponse[i].imageurl != "") {
-				ztempsearchresults += "<div style=\"clear:both;\"></div><img id='wtw_search" + zcommunityid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('community', '" + btoa(zresponse[i].templatename) + "', '" + zcommunityid + "', '" + zcommunityid + "', 'community');\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+			if (zformat > 1) {
+				ztempsearchresults += "</div>";
+			} else {
+				ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 			}
-			ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 		}
 		dGet('wtw_commtempsearchresults').innerHTML = ztempsearchresults;
 		WTW.show('wtw_commtempsearchresults');
@@ -60,7 +85,11 @@ WTWJS.prototype.buildingSearch = async function(zsearch) {
 		WTW.hide('wtw_downloadingnoticequeue');
 		WTW.hide('wtw_downloadcomplete');
 		zsearch = WTW.encode(zsearch);
-		WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/sharesearch.php?search=' + zsearch + '&webtype=building&buildingtype=2', 
+		var zbuildingtype = 2;
+		if (zsearch != '') {
+			zbuildingtype = '';
+		}
+		WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/sharesearch.php?search=' + zsearch + '&webtype=building&buildingtype=' + zbuildingtype, 
 			function(zresponse) {
 				WTW.buildingSearchReply(JSON.parse(zresponse));
 			}
@@ -74,25 +103,51 @@ WTWJS.prototype.buildingSearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
 		var ztempsearchresults = '';
+		var zformat = 2;
+		if (Number(document.getElementById('wtw_downloadstcols').value) > 0) {
+			zformat = Number(document.getElementById('wtw_downloadstcols').value);
+		}
 		dGet('wtw_buildtempsearchresults').innerHTML = '';
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
+			var zbuttonstyle = '';
 			var zbuildingid = zresponse[i].serverbuildingid;
 			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
 			var zdirsize = WTW.formatNumber(Math.round(Number(zresponse[i].dirsize)/1000000),0);
 			if (WTW.isNumeric(zresponse[i].downloads)) {
 				zdownloads = zresponse[i].downloads;
 			}
+			if (zformat > 1) {
+				var zcols = '';
+				switch (zformat) {
+					case 2:
+						zcols = 'wtw-largecol';
+						break;
+					case 3:
+						zcols = 'wtw-medcol';
+						break;
+					case 4:
+						zcols = 'wtw-smallcol';
+						break;
+				}
+				ztempsearchresults += "<div class='" + zcols + "'>";
+				zbuttonstyle = "style='margin:2px 2px 5px 5px;'";
+			}
+			ztempsearchresults += "<h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3>";
+			if (zresponse[i].imageurl != "") {
+				ztempsearchresults += "<img id='wtw_search" + zbuildingid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('building', '" + btoa(zresponse[i].templatename) + "', '" + zbuildingid + "', '" + zbuildingid + "', 'building');return (false);\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+			}
+
 			ztempsearchresults += "<br /><input type='button' id='wtw_btempselect" + i + "' class='wtw-searchresultbutton' value='Download' onclick=\"WTW.downloadWeb('building', '" + btoa(zresponse[i].templatename) + "', '" + zbuildingid + "', '" + zbuildingid + "', 'building');return (false);\" />";
-			ztempsearchresults += "<h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
 			ztempsearchresults += "<div class='wtw-right' style='min-width:150px;'>File Count: <b>" + zresponse[i].filecount + "</b></div><div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
 			ztempsearchresults += "<div class='wtw-right' style='min-width:150px;'>Folder Size: <b>" + zdirsize + " MB</b></div><div style='white-space:normal;font-weight:normal;color:#000000;'>Version: <b>[" + zresponse[i].version + "]</b> " + zresponse[i].versiondesc + ".</div><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
-			if (zresponse[i].imageurl != "") {
-				ztempsearchresults += "<img id='wtw_search" + zbuildingid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('building', '" + btoa(zresponse[i].templatename) + "', '" + zbuildingid + "', '" + zbuildingid + "', 'building');return (false);\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+			if (zformat > 1) {
+				ztempsearchresults += "</div>";
+			} else {
+				ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 			}
-			ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 		}
 		dGet('wtw_buildtempsearchresults').innerHTML = ztempsearchresults;
 		WTW.show('wtw_buildtempsearchresults');
@@ -122,25 +177,51 @@ WTWJS.prototype.thingSearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
 		var ztempsearchresults = '';
+		var zformat = 2;
+		if (Number(document.getElementById('wtw_downloadstcols').value) > 0) {
+			zformat = Number(document.getElementById('wtw_downloadstcols').value);
+		}
 		dGet('wtw_thingtempsearchresults').innerHTML = '';
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
+			var zbuttonstyle = '';
 			var zthingid = zresponse[i].serverthingid;
 			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
 			var zdirsize = WTW.formatNumber(Math.round(Number(zresponse[i].dirsize)/1000000),0);
 			if (WTW.isNumeric(zresponse[i].downloads)) {
 				zdownloads = zresponse[i].downloads;
 			}
+			if (zformat > 1) {
+				var zcols = '';
+				switch (zformat) {
+					case 2:
+						zcols = 'wtw-largecol';
+						break;
+					case 3:
+						zcols = 'wtw-medcol';
+						break;
+					case 4:
+						zcols = 'wtw-smallcol';
+						break;
+				}
+				ztempsearchresults += "<div class='" + zcols + "'>";
+				zbuttonstyle = "style='margin:2px 2px 5px 5px;'";
+			}
+			ztempsearchresults += "<h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3>";
+			if (zresponse[i].imageurl != "") {
+				ztempsearchresults += "<img id='wtw_search" + zthingid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('thing', '" + btoa(zresponse[i].templatename) + "', '" + zthingid + "', '" + zthingid + "', 'thing');return (false);\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+			}
+
 			ztempsearchresults += "<br /><input type='button' id='wtw_bthingtempselect" + i + "' class='wtw-searchresultbutton' value='Download' onclick=\"WTW.downloadWeb('thing', '" + btoa(zresponse[i].templatename) + "', '" + zthingid + "', '" + zthingid + "', 'thing');return (false);\" />";
-			ztempsearchresults += "<h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
 			ztempsearchresults += "<div class='wtw-right' style='min-width:150px;'>File Count: <b>" + zresponse[i].filecount + "</b></div><div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
 			ztempsearchresults += "<div class='wtw-right' style='min-width:150px;'>Folder Size: <b>" + zdirsize + " MB</b></div><div style='white-space:normal;font-weight:normal;color:#000000;'>Version: <b>[" + zresponse[i].version + "]</b> " + zresponse[i].versiondesc + ".</div><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
-			if (zresponse[i].imageurl != "") {
-				ztempsearchresults += "<img id='wtw_search" + zthingid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('thing', '" + btoa(zresponse[i].templatename) + "', '" + zthingid + "', '" + zthingid + "', 'thing');return (false);\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+			if (zformat > 1) {
+				ztempsearchresults += "</div>";
+			} else {
+				ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 			}
-			ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 		}
 		dGet('wtw_thingtempsearchresults').innerHTML = ztempsearchresults;
 		WTW.show('wtw_thingtempsearchresults');
@@ -171,17 +252,41 @@ WTWJS.prototype.avatarSearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
 		var ztempsearchresults = '';
+		var zformat = 2;
+		if (Number(document.getElementById('wtw_downloadstcols').value) > 0) {
+			zformat = Number(document.getElementById('wtw_downloadstcols').value);
+		}
 		dGet('wtw_avatartempsearchresults').innerHTML = '';
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
+			var zbuttonstyle = '';
 			var zavatarid = zresponse[i].serveravatarid;
 			var zcreatedate  = WTW.formatDate(zresponse[i].createdate);
 			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
 			if (WTW.isNumeric(zresponse[i].downloads)) {
 				zdownloads = zresponse[i].downloads;
 			}
+			if (zformat > 1) {
+				var zcols = '';
+				switch (zformat) {
+					case 2:
+						zcols = 'wtw-largecol';
+						break;
+					case 3:
+						zcols = 'wtw-medcol';
+						break;
+					case 4:
+						zcols = 'wtw-smallcol';
+						break;
+				}
+				ztempsearchresults += "<div class='" + zcols + "'>";
+				zbuttonstyle = "style='margin:2px 2px 5px 5px;'";
+			}
+			ztempsearchresults += "<h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3>";
+			if (zresponse[i].imageurl != "") {
+				ztempsearchresults += "<img id='wtw_search" + zavatarid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('avatar', '" + btoa(zresponse[i].templatename) + "', '" + zavatarid + "', '" + zavatarid + "', 'avatar');return (false);\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+			}
 			ztempsearchresults += "<br /><input type='button' id='wtw_bavatartempselect" + i + "' class='wtw-searchresultbutton' value='Download' onclick=\"WTW.downloadWeb('avatar', '" + btoa(zresponse[i].templatename) + "', '" + zavatarid + "', '" + zavatarid + "', 'avatar');return (false);\" />";
-			ztempsearchresults += "<h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
 			if (zresponse[i].version == '1.0.0') {
 				ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].createdisplayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
@@ -191,16 +296,53 @@ WTWJS.prototype.avatarSearchReply = function(zresponse) {
 			}
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Version: <b>[" + zresponse[i].version + "]</b> " + zresponse[i].versiondesc + ".</div><br />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
-			if (zresponse[i].imageurl != "") {
-				ztempsearchresults += "<img id='wtw_search" + zavatarid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('avatar', '" + btoa(zresponse[i].templatename) + "', '" + zavatarid + "', '" + zavatarid + "', 'avatar');return (false);\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+			if (zformat > 1) {
+				ztempsearchresults += "</div>";
+			} else {
+				ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 			}
-			ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
 		}
 		dGet('wtw_avatartempsearchresults').innerHTML = ztempsearchresults;
 		WTW.show('wtw_avatartempsearchresults');
 		WTW.setWindowSize();
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_downloads.js-avatarSearchReply=' + ex.message);
+	}
+}
+
+WTWJS.prototype.updateCols = function(zobj, zcols) {
+	try {
+		dGet('wtw_downloadstcols').value = zcols;
+		document.getElementById('wtw_downloadscol1').className = 'wtw-tinyimg';
+		document.getElementById('wtw_downloadscol2').className = 'wtw-tinyimg';
+		document.getElementById('wtw_downloadscol3').className = 'wtw-tinyimg';
+		document.getElementById('wtw_downloadscol4').className = 'wtw-tinyimg';
+		document.getElementById('wtw_downloadscol1').src = document.getElementById('wtw_downloadscol1').src.replace('set','');
+		document.getElementById('wtw_downloadscol2').src = document.getElementById('wtw_downloadscol2').src.replace('set','');
+		document.getElementById('wtw_downloadscol3').src = document.getElementById('wtw_downloadscol3').src.replace('set','');
+		document.getElementById('wtw_downloadscol4').src = document.getElementById('wtw_downloadscol4').src.replace('set','');
+		document.getElementById(zobj.id).className = 'wtw-tinyimgselected';
+		zobj.src = zobj.src.replace(zobj.id.replace('wtw_downloads','') + '.png', zobj.id.replace('wtw_downloads','') + 'set.png');
+		
+		if (dGet('searchcommunitiesdiv').style.display != 'none') {
+			if (dGet('wtw_tcommunitysearch') != null) {
+				WTW.communitySearch(dGet('wtw_tcommunitysearch').value);
+			}
+		} else if (dGet('searchbuildingsdiv').style.display != 'none') {
+			if (dGet('wtw_tbuildingsearch') != null) {
+				WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);
+			}
+		} else if (dGet('searchthingsdiv').style.display != 'none') {
+			if (dGet('wtw_tthingsearch') != null) {
+				WTW.thingSearch(dGet('wtw_tthingsearch').value);
+			}
+		} else if (dGet('searchavatarsdiv').style.display != 'none') {
+			if (dGet('wtw_tavatarsearch') != null) {
+				WTW.avatarSearch(dGet('wtw_tavatarsearch').value);
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_downloads.js-updateCols=' + ex.message);
 	}
 }
 
