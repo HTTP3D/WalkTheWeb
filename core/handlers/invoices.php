@@ -53,8 +53,12 @@ try {
 		case "deleteinvoicedetail":
 			/* delete an invoice detail */
 			$zresponse = $wtwinvoices->deleteInvoiceDetail($zinvoicedetailid);
-			break;	}
-
+			break;
+		case "getoptionalupdates":
+			/* get the recordset of optional updates */
+			$zresponse = $wtwinvoices->getOptionalUpdates();
+			break;
+	}
 	/* set headers to keep data local to server */
 	echo $wtwhandlers->addHandlerHeader($wtwhandlers->domainname);
 	/* return the response from the function */

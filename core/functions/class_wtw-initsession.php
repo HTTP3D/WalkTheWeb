@@ -22,7 +22,7 @@ class wtw {
 	
 	/* declare public $wtw variables */
 	public $version = '3.5.4';
-	public $dbversion = '1.2.18';
+	public $dbversion = '1.2.20';
 	public $versiondate = '2022-10-28';
 	public $oldversion = '';
 	public $olddbversion = '';
@@ -992,7 +992,8 @@ class wtw {
 					echo "<div class='wtw-fullwidth'><br /><div class='wtw-widepage'>";
 					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
 					echo "<input type='hidden' id='wtw_serverinstanceid' value='".$this->serverinstanceid."' />";
-
+					echo "<input type='hidden' id='wtw_downloadstcols' value='2' />";
+					
 					echo "<div id='wtw_selectwebform' class='wtw-searchform'>";
 					echo "<h2 class='wtw-login'>Select Your First 3D Community Scene</h2>";
 					echo "<div class='wtw-searcharea'><div class='wtw-searchlabel'>Search:</div>";
@@ -1018,6 +1019,7 @@ class wtw {
 					echo "<div class='wtw-fullwidth'><br /><div class='wtw-widepage'>";
 					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
 					echo "<input type='hidden' id='wtw_serverinstanceid' value='".$this->serverinstanceid."' />";
+					echo "<input type='hidden' id='wtw_downloadstcols' value='2' />";
 					echo "<input type='hidden' id='wtw_tcommunityid' value='".$zcommunityid."' />";
 					echo "<input type='hidden' id='wtw_tbuildingpositionx' value='".$zbuildingpositionx."' />";
 					echo "<input type='hidden' id='wtw_tbuildingpositiony' value='".$zbuildingpositiony."' />";

@@ -442,7 +442,73 @@ class wtwinvoices {
 			);
 		}
 		return $zresponse;		
-	}	
+	}
+	
+	public function getOptionalUpdates() {
+		/* returns list of optional updates if they exist */
+		global $wtwhandlers;
+		$zresponse = array(
+			'upgrades'=> array(),
+			'serror'=> ''
+		);
+		try {
+			$zhostuserid = '';
+			if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false && $wtwhandlers->isUserInRole("Developer") == false) {
+				$zhostuserid = $wtwhandlers->userid;
+			}
+			if ($wtwhandlers->hasValue($zhostuserid)) {
+				$zresults = $wtwhandlers->query("
+					select oaa1.*,
+						oa1.title,
+						oa1.instructions,
+						oa1.description,
+						oa1.serverwide,
+						oa1.hostwide,
+						oa1.domainwide,
+						oa1.subscription,
+						oa1.startprice
+					from ".wtw_tableprefix."optionalupgradesapplied oaa1
+						inner join ".wtw_tableprefix."optionalupgrades oa1
+						on oaa1.optionalid=oa1.optionalid
+					where oaa1.deleted=0
+						and (oaa1.hostuserid='".$wtwhandlers->userid."'
+							or oaa1.createuserid='".$wtwhandlers->userid."')
+					order by oaa1.activedate desc, oaa1.domainname, oaa1.optionalid, oaa1.appliedid;");
+				$zresponse = array(
+					'upgrades'=> $zresults,
+					'serror'=> ''
+				);
+			} else if ($wtwhandlers->isUserInRole("Admin") || $wtwhandlers->isUserInRole("Developer")) {
+				$zresults = $wtwhandlers->query("
+					select oaa1.*,
+						oa1.title,
+						oa1.instructions,
+						oa1.description,
+						oa1.serverwide,
+						oa1.hostwide,
+						oa1.domainwide,
+						oa1.subscription,
+						oa1.startprice
+					from ".wtw_tableprefix."optionalupgradesapplied oaa1
+						inner join ".wtw_tableprefix."optionalupgrades oa1
+						on oaa1.optionalid=oa1.optionalid
+					where oaa1.deleted=0
+						and oaa1.hostuserid=''
+					order by oaa1.activedate desc, oaa1.domainname, oaa1.optionalid, oaa1.appliedid;");
+				$zresponse = array(
+					'upgrades'=> $zresults,
+					'serror'=> ''
+				);
+			}
+		} catch (Exception $e) {
+			$wtwhandlers->serror("core-functions-class_wtwinvoices.php-getOptionalUpdates=".$e->getMessage());
+			$zresponse = array(
+				'upgrades'=> array(),
+				'serror'=> $e->getMessage()
+			);
+		}
+		return $zresponse;		
+	}
 }
 
 	function wtwinvoices() {

@@ -727,7 +727,8 @@ class wtwdb {
 		/* pass the tablename without prefix, id field name, and (optional) if you want a starting test value */
 		$zkeyid = '';
 		try {
-			if (!isset($zdefaultkeyid) || empty($zdefaultkeyid)) {
+			/* check for default and make sure default is not New From Scratch or versions will not work */
+			if (!isset($zdefaultkeyid) || empty($zdefaultkeyid) || ($ztablename == 'communities' && $zdefaultkeyid == '0000000000000000') || ($ztablename == 'buildings' && $zdefaultkeyid == '1111111111111111') || ($ztablename == 'things' && $zdefaultkeyid == '2222222222222222')) {
 				$zdefaultkeyid = $this->getRandomString(16,1);
 			}
 			while (empty($zkeyid)) {
@@ -2070,6 +2071,190 @@ class wtwdb {
 			$this->serror("core-functions-class_wtwdb.php-getmoldpoints=".$e->getMessage());
 		}
 		return $zpathpoints;
+	}
+	
+	public function checkOptionalUpgrades() {
+		try {
+			$zhostuserid = '';
+			if ($this->isUserInRole("Host") && $this->isUserInRole("Admin") == false && $this->isUserInRole("Developer") == false) {
+				$zhostuserid = $this->userid;
+			}
+			$zresults = $this->query("
+				select *
+				from ".wtw_tableprefix."optionalupgrades
+				where deleted=0;
+			");
+			foreach ($zresults as $zrow) {
+				if ($this->isUserInRole("Admin") || $this->isUserInRole("Developer")) {
+					switch ($zrow['title']) {
+						case '3D Internet Services';
+							$zpluginactive = false;
+							$zresults2 = $this->query("
+								select *
+								from ".wtw_tableprefix."plugins
+								where pluginname='wtw-3dinternet'
+									and deleted=0;
+							");
+							foreach ($zresults2 as $zrow2) {
+								if ($zrow2['active'] == '1') {
+									$zpluginactive = true;
+								}
+							}
+							$zresults3 = $this->query("
+								select *
+								from ".wtw_tableprefix."optionalupgradesapplied
+								where optionalid='".$zrow['optionalid']."';
+							");
+							if (count($zresults3) > 0) {
+								foreach ($zresults3 as $zrow3) {
+									if (empty($zrow3['deleted'])) {
+										if ($zpluginactive) {
+											$this->query("
+												update ".wtw_tableprefix."optionalupgradesapplied
+												set activedate=now(),
+													updatedate=now(),
+													updateuserid='".$this->userid."',
+													deleteddate=now(),
+													deleteduserid='".$this->userid."',
+													deleted=1
+												where appliedid='".$zrow3['appliedid']."'
+											");
+										}
+									} else if ($zpluginactive == false) {
+										$this->query("
+											update ".wtw_tableprefix."optionalupgradesapplied
+											set activedate=null,
+												updatedate=now(),
+												updateuserid='".$this->userid."',
+												deleteddate=null,
+												deleteduserid='',
+												deleted=0
+											where appliedid='".$zrow3['appliedid']."'
+										");
+									}
+								}
+							} else if ($zpluginactive == false) {
+								$zappliedid = $this->getRandomString(16,1);
+								$this->query("
+									insert into ".wtw_tableprefix."optionalupgradesapplied
+									   (appliedid,
+									    optionalid,
+										activedate,
+									    createdate,
+										createuserid,
+										updatedate,
+										updateuserid)
+									   values
+									   ('".$zappliedid."',
+									    '".$zrow['optionalid']."',
+										now(),
+										now(),
+										'".$this->userid."',
+										now(),
+										'".$this->userid."');
+								");
+							}
+							break;
+						case 'Multiplayer Services':
+							
+							
+							
+							break;
+					}
+				} else if ($this->hasValue($zhostuserid)) {
+					switch ($zrow['title']) {
+						case 'Custom Domain Name':
+							$zcustomdomain = false;
+							$zappliedid = null;
+							$zresults2 = $this->query("
+								select wd1.*,
+									oua1.appliedid
+								from ".wtw_tableprefix."webdomains wd1
+									left join ".wtw_tableprefix."optionalupgradesapplied oua1
+									on oua1.optionalid='".$zrow['optionalid']."'
+								where wd1.hostuserid='".$zhostuserid."'
+									and wd1.deleted=0;
+							");
+							foreach ($zresults2 as $zrow2) {
+								$zcustomdomain = true;
+								$zappliedid = $zrow2['appliedid'];
+							}
+							if ($zcustomdomain == false && !isset($zappliedid)) {
+								$zappliedid = $this->getRandomString(16,1);
+								$this->query("
+									insert into ".wtw_tableprefix."optionalupgradesapplied
+									   (appliedid,
+									    optionalid,
+										hostuserid,
+										price,
+									    createdate,
+										createuserid,
+										updatedate,
+										updateuserid)
+									   values
+									   ('".$zappliedid."',
+									    '".$zrow['optionalid']."',
+										'".$zhostuserid."',
+										".$zrow['startprice'].",
+										now(),
+										'".$this->userid."',
+										now(),
+										'".$this->userid."');
+								");
+							}
+							break;
+						case 'SSL for Custom Domain Name':
+							$zstartprice = 0;
+							if (isset($zrow['startprice']) && !empty($zrow['startprice'])) {
+								$zstartprice = $zrow['startprice'];
+							}
+							$zresults2 = $this->query("
+								select wd1.*,
+									oua1.appliedid
+								from ".wtw_tableprefix."webdomains wd1
+									left join ".wtw_tableprefix."optionalupgradesapplied oua1
+									on oua1.optionalid='".$zrow['optionalid']."'
+									and wd1.domainname=oua1.domainname
+								where wd1.hostuserid='".$zhostuserid."'
+									and wd1.deleted=0;
+							");
+							foreach ($zresults2 as $zrow2) {
+								if (empty($zrow2["forcehttps"]) && !isset($zrow2['appliedid'])) {
+									if (isset($zrow2['sslprice']) && !empty($zrow2['sslprice'])) {
+										$zstartprice = $zrow2['sslprice'];
+									}
+									$zappliedid = $this->getRandomString(16,1);
+									$this->query("
+										insert into ".wtw_tableprefix."optionalupgradesapplied
+										   (appliedid,
+											optionalid,
+											hostuserid,
+											domainname,
+											price,
+											createdate,
+											createuserid,
+											updatedate,
+											updateuserid)
+										   values
+										   ('".$zappliedid."',
+											'".$zrow['optionalid']."',
+											'".$zhostuserid."',
+											'".$zrow2['domainname']."',
+											".$zstartprice.",
+											now(),
+											'".$this->userid."',
+											now(),
+											'".$this->userid."');
+									");
+								}
+							}
+							break;
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwdb.php-checkOptionalUpgrades=".$e->getMessage());
+		}
 	}
 	
 	public function getWebAliases($zwebtype, $zwebid) {

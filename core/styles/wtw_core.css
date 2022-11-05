@@ -1248,6 +1248,30 @@ button {
 	border-top:1px solid #454545;
 	border-bottom:1px solid #454545; 
 }
+.wtw-tinyimg {
+	display:inline-block;
+	width:30px;
+	height:auto;
+	margin:2px;
+	border:1px solid transparent;
+	border-radius:2px;
+	padding:1px;
+}
+.wtw-tinyimg:hover {
+	cursor:pointer;
+}
+.wtw-tinyimgselected {
+	display:inline-block;
+	width:30px;
+	height:auto;
+	margin:2px;
+	border:1px solid blue;
+	border-radius:2px;
+	padding:1px;
+}
+.wtw-tinyimgselected:hover {
+	cursor:pointer;
+}
 h3.wtw-categoryheading {
 	color:#ffffff;
 	background:#000000;
@@ -1587,6 +1611,36 @@ hr.wtw-menuhr {
 	width:28%;
 	min-height:20px;
 }
+.wtw-smallcol {
+	display:inline-block;
+	width: 21%;
+	min-height:200px;
+	border:1px solid #afafaf;
+	border-radius:10px;
+	margin:5px 1% auto 1%;
+	padding:10px;
+	vertical-align:top; 
+}
+.wtw-medcol {
+	display:inline-block;
+	width: 28%;
+	min-height:200px;
+	border:1px solid #afafaf;
+	border-radius:10px;
+	margin:5px 1% auto 1%;
+	padding:10px;
+	vertical-align:top; 
+}
+.wtw-largecol {
+	display:inline-block;
+	width: 45%;
+	min-height:200px;
+	border:1px solid #afafaf;
+	border-radius:10px;
+	margin:5px 1% auto 1%;
+	padding:10px;
+	vertical-align:top; 
+}
 .wtw-onecol {
 	cursor:default;
 	display:block;
@@ -1619,6 +1673,14 @@ hr.wtw-menuhr {
 	cursor:default;
 	float:left;
 	margin-left:10px;
+}
+.wtw-searchdiv {
+	float:right;
+	white-space:nowrap;
+}
+.wtw-colicons {
+	display:inline-block;
+	margin-right:20px;
 }
 .wtw-menurighticon {
 	float:right;
@@ -1923,6 +1985,7 @@ td.wtw-tablecolumnheadingright {
 }
 td.wtw-tablecolumns {
 	border-bottom:1px solid #375377;
+	vertical-align:top;
 	min-height:38px;
 	padding:5px;
 }

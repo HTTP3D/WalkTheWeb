@@ -174,6 +174,7 @@ class wtwadmin {
 			$zhiddenfields .= "<input type='hidden' id='wtw_tavatargroupid' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tavataranimationeventid' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tavatarfolderdisplay' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='wtw_downloadstcols' value='2' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tversionid' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tbadges' value='0' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tbadgesupdates' value='0' />\r\n";
@@ -436,6 +437,14 @@ class wtwadmin {
 			$zpagedata .= "			<div id='searchavatarsdiv' class='wtw-searchbar'>\r\n";
 			$zpagedata .= "				<b>Search:</b> <input id='wtw_tavatarsearch' type='text' value='' size='20' maxlength='255' class='wtw-gotext' />\r\n";
 			$zpagedata .= "				<input id='wtw_bavatarsearch' type='button' value='Go' onclick=\"WTW.avatarSearch(dGet('wtw_tavatarsearch').value);\" class='wtw-gobutton' />\r\n";
+			$zpagedata .= "			</div>\r\n";
+			$zpagedata .= "			<div class='wtw-searchdiv'>\r\n";
+			$zpagedata .= "				<div class='wtw-colicons'>\r\n";
+			$zpagedata .= "					<img id='wtw_downloadscol1' src='/content/system/images/col1.png' alt='1 Column' title='1 Column' class='wtw-tinyimg' onclick='WTW.updateCols(this, 1);' />\r\n";
+			$zpagedata .= "					<img id='wtw_downloadscol2' src='/content/system/images/col2set.png' alt='2 Columns' title='2 Columns' class='wtw-tinyimgselected' onclick='WTW.updateCols(this, 2);' />\r\n";
+			$zpagedata .= "					<img id='wtw_downloadscol3' src='/content/system/images/col3.png' alt='3 Columns' title='3 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 3);' />\r\n";
+			$zpagedata .= "					<img id='wtw_downloadscol4' src='/content/system/images/col4.png' alt='4 Columns' title='4 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 4);' />\r\n";
+			$zpagedata .= "				</div>\r\n";
 			$zpagedata .= "			</div>\r\n";
 			$zpagedata .= "		</div><div class='wtw-clear'></div><hr />\r\n";
 			$zpagedata .= "		<div style='width:100%;margin:0px;text-align:center;'>\r\n";
@@ -956,7 +965,7 @@ class wtwadmin {
 			$zpagedata .= "						<div class='wtw-yellowbuttonright' onclick='WTW.saveDomainForm(-1);'>Cancel</div>\r\n";
 			$zpagedata .= "						<div id='wtw_domainfunctionsdiv' class='wtw-hide'></div>\r\n";
 			$zpagedata .= "						<div class='wtw-clear'></div><br />\r\n";
-			if ($wtwdb->isUserInRole("Host")) {
+			if ($wtwdb->isUserInRole("Host") || $wtwdb->isUserInRole("Admin") || $wtwdb->isUserInRole("Developer")) {
 				$zdnsarecord = $wtw->serverip;
 				$zdnscname = ''; 
 				if (defined('wtw_defaultdomain')) {
@@ -1125,6 +1134,21 @@ class wtwadmin {
 			$zpagedata .= "					<div id='wtw_loadingapikeys' class='wtw-loadingnoticecentered'>Loading...</div>\r\n";
 			$zpagedata .= "					<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "				</div>\r\n";
+			$zpagedata .= "			</div>\r\n";
+			$zpagedata .= "		</div>\r\n";
+			$zpagedata .= "	</div>\r\n";
+			
+			/* Optional Upgrades Page */
+			$zpagedata .= "	<div id='wtw_optionalpage' class='wtw-fullpage'>\r\n";
+			$zpagedata .= "		<div class='wtw-dashboardboxleftfull'>\r\n";
+			$zpagedata .= "			<div id='wtw_optionaltitle' class='wtw-dashboardboxtitle'>My Invoices</div>\r\n";
+			$zpagedata .= "			<div id='wtw_optionalnote' class='wtw-roundedbox'><b>My Invoices</b> provide printable receipts for your WalkTheWeb Purchases and Upgrades.<br /></div>\r\n";
+			$zpagedata .= "			<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "			<div class='wtw-dashboardbox'>\r\n";
+			$zpagedata .= "				<div id='wtw_optionallist'></div><br />\r\n";
+			$zpagedata .= "				<div class='wtw-clear'></div>\r\n";
+			$zpagedata .= "				<div id='wtw_loadingoptional' class='wtw-loadingnoticecentered'>Loading...</div>\r\n";
+			$zpagedata .= "				<div class='wtw-clear'></div>\r\n";
 			$zpagedata .= "			</div>\r\n";
 			$zpagedata .= "		</div>\r\n";
 			$zpagedata .= "	</div>\r\n";

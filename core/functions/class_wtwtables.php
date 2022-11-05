@@ -763,6 +763,48 @@ class wtwtables {
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 			");
 			$wtwdb->deltaCreateTable("
+				CREATE TABLE `".wtw_tableprefix."optionalupgrades` (
+				  `optionalid` varchar(16) NOT NULL,
+				  `title` varchar(255) DEFAULT NULL,
+				  `instructions` varchar(255) DEFAULT '',
+				  `description` varchar(255) DEFAULT '',
+				  `serverwide` int DEFAULT '0',
+				  `hostwide` int DEFAULT '0',
+				  `domainwide` int DEFAULT '0',
+				  `subscription` int DEFAULT '0',
+				  `startprice` decimal(18,2) DEFAULT '0.00',
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int DEFAULT '0',
+				  PRIMARY KEY (`optionalid`),
+				  UNIQUE KEY `".wtw_tableprefix."optionalid_UNIQUE` (`optionalid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			");
+			$wtwdb->deltaCreateTable("
+				CREATE TABLE `".wtw_tableprefix."optionalupgradesapplied` (
+				  `appliedid` varchar(16) NOT NULL,
+				  `optionalid` varchar(16) DEFAULT NULL,
+				  `hostuserid` varchar(16) DEFAULT '',
+				  `activedate` datetime DEFAULT NULL,
+				  `expiredate` datetime DEFAULT NULL,
+				  `price` decimal(18,2) DEFAULT '0.00',
+				  `domainname` varchar(255) DEFAULT '',
+				  `createdate` datetime DEFAULT NULL,
+				  `createuserid` varchar(16) DEFAULT '',
+				  `updatedate` datetime DEFAULT NULL,
+				  `updateuserid` varchar(16) DEFAULT '',
+				  `deleteddate` datetime DEFAULT NULL,
+				  `deleteduserid` varchar(16) DEFAULT '',
+				  `deleted` int DEFAULT '0',
+				  PRIMARY KEY (`appliedid`),
+				  UNIQUE KEY `".wtw_tableprefix."appliedid_UNIQUE` (`appliedid`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			");
+			$wtwdb->deltaCreateTable("
 				CREATE TABLE `".wtw_tableprefix."plugins` (
 				  `pluginname` varchar(255) NOT NULL,
 				  `active` int DEFAULT '0',
@@ -3615,8 +3657,86 @@ class wtwtables {
 					set groupid=uploadobjectid
 					where groupid='';
 				");
+				
+				/* updated 3.5.5 - added optional upgrades */
+				$zresults = $wtwdb->query("
+					select optionalid 
+					from ".wtw_tableprefix."optionalupgrades 
+					where optionalid='0dhcad25ljunojk7';
+				");
+				if (empty(count($zresults))) {
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."optionalupgrades 
+						(optionalid, title, instructions, description, serverwide, hostwide, domainwide, subscription, startprice, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES 
+						('0dhcad25ljunojk7','3D Internet Services','Admin Menu -&gt; 3D Plugins -&gt;Enable 3D Internet.','Turn on 3D Internet Services to enable Global WalkTheWeb Accounts and find multiplayer options.',1,0,0,0,0.00,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
+					");			
+				}
+				$zresults = $wtwdb->query("
+					select optionalid 
+					from ".wtw_tableprefix."optionalupgrades 
+					where optionalid='1l2ieg46j55caf7q';
+				");
+				if (empty(count($zresults))) {
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."optionalupgrades 
+						(optionalid, title, instructions, description, serverwide, hostwide, domainwide, subscription, startprice, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES 
+						('1l2ieg46j55caf7q','Multiplayer Services','Admin Menu -&gt; 3D Internet -&gt; Turn on Multiplayer Services.','Turn on Multiplayer Services to show all 3D Avatars (with chat options) visiting your 3D Websites.',1,0,0,1,120.00,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
+					");			
+				}
+				$zresults = $wtwdb->query("
+					select optionalid 
+					from ".wtw_tableprefix."optionalupgrades 
+					where optionalid='2gabogb4p4i6c9al';
+				");
+				if (empty(count($zresults))) {
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."optionalupgrades 
+						(optionalid, title, instructions, description, serverwide, hostwide, domainwide, subscription, startprice, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES 
+						('2gabogb4p4i6c9al','Custom Domain Name','Admin Menu -&gt; 3D Websites -&gt; Web Domains -&gt; Add New.','Add your Custom Domain Name to your 3D Website. (example: http://3d.YourDomain.com).',0,0,1,1,99.99,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
+					");			
+				}
+				$zresults = $wtwdb->query("
+					select optionalid 
+					from ".wtw_tableprefix."optionalupgrades 
+					where optionalid='3tsgycu7j2rjhtll';
+				");
+				if (empty(count($zresults))) {
+					$wtwdb->query("
+						INSERT INTO ".wtw_tableprefix."optionalupgrades 
+						(optionalid, title, instructions, description, serverwide, hostwide, domainwide, subscription, startprice, createdate, createuserid, updatedate, updateuserid, deleteddate, deleteduserid, deleted)
+						VALUES 
+						('3tsgycu7j2rjhtll','SSL for Custom Domain Name','Admin Menu -&gt; 3D Websites -&gt; Web Domains -&gt; Edit.','Add SSL Cert (https) to your Custom Domain Name for your 3D Website. (example: https://3d.YourDomain.com).',0,0,1,1,89.99,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
+					");			
+				}
+				/* updated 3.5.5 - versionid correction for New Object from Scratch */
+				$wtwdb->query("
+					update ".wtw_tableprefix."communities
+					set versionid=communityid,
+						updatedate=now(),
+						updateuserid='".$zuserid."'
+					where versionid='z4kxj6jtryefnf7y'
+						and not communityid='z4kxj6jtryefnf7y';
+				");
+				$wtwdb->query("
+					update ".wtw_tableprefix."buildings
+					set versionid=buildingid,
+						updatedate=now(),
+						updateuserid='".$zuserid."'
+					where versionid='a6w1oihuemflxj7u'
+						and not buildingid='a6w1oihuemflxj7u';
+				");
+				$wtwdb->query("
+					update ".wtw_tableprefix."things
+					set versionid=thingid,
+						updatedate=now(),
+						updateuserid='".$zuserid."'
+					where versionid='v6b5lsgd9zze503v'
+						and not thingid='v6b5lsgd9zze503v';
+				");
 			}
-
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 		} catch (Exception $e) {
 			$wtw->serror("core-functions-tabledefs.php-checkDBVersionData=".$e->getMessage());

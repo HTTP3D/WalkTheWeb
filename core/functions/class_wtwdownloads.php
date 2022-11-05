@@ -790,6 +790,10 @@ class wtwdownloads {
 					/* get new foreign keys */
 					$znewtextureid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zrequest->textureid);
 					$znewskydomeid = $wtwhandlers->getIDByPastID('uploads', 'uploadid', 'pastuploadid', $zrequest->skydomeid);
+					$zversionid = $zrequest->versionid;
+					if ($zversionid == '0000000000000000') {
+						$zversionid = $znewwebid;
+					}
 					
 					/* insert new record into communities table */
 					$wtwhandlers->query("
@@ -863,7 +867,7 @@ class wtwdownloads {
 						values
 						   ('".$znewwebid."',
 							'".$zrequest->communityid."',
-							'".$zrequest->versionid."',
+							'".$zversionid."',
 							'".$zrequest->version."',
 							".$wtwhandlers->checkNumber($zrequest->versionorder,1000000).",
 							'".addslashes($zrequest->versiondesc)."',
@@ -950,6 +954,11 @@ class wtwdownloads {
 							 '".$zuserid."');");
 					break;
 				case "building":
+					$zversionid = $zrequest->versionid;
+					if ($zversionid == '1111111111111111') {
+						$zversionid = $znewwebid;
+					}
+
 					/* insert new record into buildings table */
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."buildings 
@@ -988,7 +997,7 @@ class wtwdownloads {
 						values
 						   ('".$znewwebid."',
 							'".$zrequest->buildingid."',
-							'".$zrequest->versionid."',
+							'".$zversionid."',
 							'".$zrequest->version."',
 							".$wtwhandlers->checkNumber($zrequest->versionorder,1000000).",
 							'".addslashes($zrequest->versiondesc)."',
@@ -1040,6 +1049,10 @@ class wtwdownloads {
 							 '".$zuserid."');");
 					break;
 				case "thing":
+					$zversionid = $zrequest->versionid;
+					if ($zversionid == '2222222222222222') {
+						$zversionid = $znewwebid;
+					}
 					/* insert new record into things table */
 					$wtwhandlers->query("
 						insert into ".wtw_tableprefix."things 
@@ -1078,7 +1091,7 @@ class wtwdownloads {
 						values
 						   ('".$znewwebid."',
 							'".$zrequest->thingid."',
-							'".$zrequest->versionid."',
+							'".$zversionid."',
 							'".$zrequest->version."',
 							".$wtwhandlers->checkNumber($zrequest->versionorder,1000000).",
 							'".addslashes($zrequest->versiondesc)."',
