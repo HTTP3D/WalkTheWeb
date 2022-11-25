@@ -76,8 +76,8 @@ class wtw3dinternet {
 				/* add admin menu items */
 				/* wtwplugins class -> addAdminMenuItem function (menu item id, menu text, level 1 sort, level 1 id, level 2 sort, level 2 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
 				
-				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetmenu', $wtwplugins->__('3D Internet'), -1, 'wtw_3dinternetmenu', 0, '', '/content/plugins/wtw-3dinternet/assets/images/menuworld.png', array('admin','developer'), "WTW.adminMenuItemSelected(this);WTW.toggleAdminSubMenu(this);");
-				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetsettings', $wtwplugins->__('Login and Multiplayer Settings'), -1, 'wtw_3dinternetmenu', 1, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternetsettingspage');wtw3dinternet.serviceCheck('multiplayer');");
+				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetmenu', $wtwplugins->__('3D Internet'), -70, 'wtw_3dinternetmenu', 0, '', '/content/plugins/wtw-3dinternet/assets/images/menuworld.png', array('admin','developer'), "WTW.adminMenuItemSelected(this);WTW.toggleAdminSubMenu(this);");
+				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetsettings', $wtwplugins->__('Login and Multiplayer Settings'), -70, 'wtw_3dinternetmenu', 1, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternetsettingspage');wtw3dinternet.serviceCheck('multiplayer');");
 
 				/* admin full page settings forms */
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
