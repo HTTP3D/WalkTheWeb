@@ -561,42 +561,6 @@ class wtwusers {
 		return $zsuccess;
 	}
 	
-	public function addHostRoleToAll() {
-		/* adds all existing users to Host Role (except Admins) */
-		global $wtwhandlers;
-		$zresponse = array(
-			'serror'=> ''
-		);
-		try {
-			if ($wtwhandlers->isUserInRole("admin")) {
-				$zresults = $wtwhandlers->query("
-					select u1.*,
-						r1.roleid,
-						r1.rolename
-					from ".wtw_tableprefix."users u1
-						left join ".wtw_tableprefix."usersinroles ur1
-							on u1.userid=ur1.userid
-						left join (select roleid, rolename 
-							from ".wtw_tableprefix."roles 
-							where deleted=0 and (rolename like 'host' or rolename like 'admin')) r1
-							on ur1.roleid=r1.roleid
-					where u1.deleted=0
-						and r1.roleid is null
-					order by userid;
-				");
-				foreach ($zresults as $zrow) {
-					$this->addUserRole($zrow["userid"], 'Host');
-				}
-			}
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwusers.php-addHostRoleToAll=".$e->getMessage());
-			$zresponse = array(
-				'serror'=> $e->getMessage()
-			);
-		}
-		return $zresponse;
-	}
-	
 	public function addUserPermissions($zusersearch, $zcommunityid, $zbuildingid, $zthingid, $zuseraccess) {
 		/* add permission to a particular 3D Community, Building, or Thing */
 		/* mainly used with Developers, Architects, and Graphic Artists (not in the admin role) for project level permissions */

@@ -1016,6 +1016,14 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 			
+			$jsdata .= "	WTWJS.prototype.pluginsOpenDomainForm = function() {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('opendomainform');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsOpenDomainForm=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsSaveDomainForm = function(w, zinvoiceid, zdomainname, zinvoicedescription, zinvoicetotal) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->getScriptFunction('savedomainform');

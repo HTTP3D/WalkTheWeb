@@ -2270,7 +2270,7 @@ class wtw {
 			$zmetadata = "<title>".$zsitename."</title>\r\n";
 			$zmetadata .= "<meta http-equiv='Cache-Control' content='no-cache, no-store, must-revalidate' />\r\n";
 			$zmetadata .= "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>\r\n";
-			$zmetadata .= "<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>\r\n";
+			$zmetadata .= "<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1' />\r\n";
 			$zmetadata .= "<meta http-equiv='Pragma' content='no-cache' />\r\n";
 			$zmetadata .= "<meta http-equiv='Expires' content='-1' />\r\n";
 			$zmetadata .= "<link id='wtw_favicon' rel='icon' href='".$zsiteiconpath."' />\r\n";
@@ -2290,20 +2290,20 @@ class wtw {
 
 			$zmetadata .= "<meta name='keywords' content=\"WalkTheWeb,3D Internet,Metaverse,Multiverse,open-source,http3d,".$zsitedescription."\" />\r\n";
 			$zmetadata .= "<meta property='image' content='".$zpreviewpath."' />\r\n";
-			$zmetadata .= "<meta property='image:width' content='".$zpreviewwidth."'/>\r\n";
-			$zmetadata .= "<meta property='image:height' content='".$zpreviewheight."'/>\r\n";
+			$zmetadata .= "<meta property='image:width' content='".$zpreviewwidth."' />\r\n";
+			$zmetadata .= "<meta property='image:height' content='".$zpreviewheight."' />\r\n";
 			$zmetadata .= "<meta property='image:alt' content=\"".$zsitename."\" />\r\n";
 			$zmetadata .= "<meta property='url' content='".$this->protocol.$this->domainname.$this->uri."' />\r\n";
 
 			$zmetadata .= "<meta name='twitter:card' content='summary'>\r\n";
-			$zmetadata .= "<meta name='twitter:url' content='".$this->protocol.$this->domainname.$this->uri."'>\r\n";
-			$zmetadata .= "<meta name='twitter:title' content=\"".$zsitename."\">\r\n";
-			$zmetadata .= "<meta name='twitter:description' content=\"".$zsitedescription."\">\r\n";
-			$zmetadata .= "<meta name='twitter:image' content='".$zpreviewpath."'>\r\n";
+			$zmetadata .= "<meta name='twitter:url' content='".$this->protocol.$this->domainname.$this->uri."' />\r\n";
+			$zmetadata .= "<meta name='twitter:title' content=\"".$zsitename."\" />\r\n";
+			$zmetadata .= "<meta name='twitter:description' content=\"".$zsitedescription."\" />\r\n";
+			$zmetadata .= "<meta name='twitter:image' content='".$zpreviewpath."' />\r\n";
 
 			/* additional optional meta data - should be defined on the /config/wtw_config.php file */
 			if (defined('domainverify')) {
-				$zmetadata .= "<meta name='p:domain_verify' content=\"".domainverify."\"/>\r\n";
+				$zmetadata .= "<meta name='p:domain_verify' content=\"".domainverify."\" />\r\n";
 			}
 			if (defined('fbappid')) {
 				$zmetadata .= "<meta property='fb:app_id' content=\"".fbappid."\" />\r\n";

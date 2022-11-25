@@ -248,7 +248,7 @@ select.wtw-fileselectcategory {
 }
 .wtw-gotext {
 	min-height:32px;
-	min-width:300px;
+	min-width:200px;
 	font-size:1.4em;
 }
 .wtw-filelist {

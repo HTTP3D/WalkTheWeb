@@ -135,14 +135,6 @@ try {
 	$zumask = $wtwhandlers->getPost('umask',$zdefaultumask);
 	$zchmod = $wtwhandlers->getPost('chmod',$zdefaultchmod);
 
-	$zserverhosting = $wtwhandlers->getPost('serverhosting','0');
-	$zserverhostprice = $wtwhandlers->getPost('serverhostprice','0');
-	$zserversslprice = $wtwhandlers->getPost('serversslprice','0');
-	$zserverhostdays = $wtwhandlers->getPost('serverhostdays','365');
-	$zserverdnsarecord = $wtwhandlers->getPost('serverdnsarecord','');
-	$zserverdnscname = $wtwhandlers->getPost('serverdnscname','');
-	$zserverhostuserrole = $wtwhandlers->getPost('serverhostuserrole','0');
-	
 	$zftphost = $wtwhandlers->getPost('ftphost',$zdefaultftphost);
 	$zftpuser = $wtwhandlers->getPost('ftpuser',$zdefaultftpuser);
 	$zftppassword = $wtwhandlers->getPost('ftppassword',$zdefaultftppassword);
@@ -183,12 +175,6 @@ try {
 			break;
 		case "saveserversettings":
 			$zresponse = $wtwtools->saveServerSettings($zdbserver, $zdbname, $zdbusername, $zdbpassword, $zdefaultlanguage, $zcontentpath, $zdefaultdomain, $zdefaultsitename, $zgoogleanalytics, $zadminemail, $zadminname, $zumask, $zchmod, $zftphost, $zftpuser, $zftppassword, $zftpbase);
-			break;
-		case "gethostingserversettings":
-			$zresponse = $wtwtools->getHostingServerSettings();
-			break;
-		case "savehostingserversettings":
-			$zresponse = $wtwtools->saveHostingServerSettings($zserverhosting, $zserverhostprice, $zserversslprice, $zserverhostdays, $zserverdnsarecord, $zserverdnscname, $zserverhostuserrole);
 			break;
 		case "getlanguages":
 			$zresponse = $wtwtools->getLanguages();

@@ -135,6 +135,7 @@ class wtwpluginloader {
 			'description' => '',
 			'foldername' => $zfolder,
 			'filename' => $zpluginphp,
+			'imageurl' => '',
 			'updatedate' => '',
 			'updateurl' => '',
 			'websrequired' => array(),
@@ -177,6 +178,15 @@ class wtwpluginloader {
 						require_once($zcontentpath."/plugins/".$zpluginname."/".$zpluginname.".php");
 					}
 				}
+			}
+			if (file_exists($zcontentpath.'/plugins/'.$zfolder.'/'.$zfolder.'.png')) {
+				$zresponse['imageurl'] = '/content/plugins/'.$zfolder.'/'.$zfolder.'.png';
+			} else if (file_exists($zcontentpath.'/plugins/'.$zfolder.'/'.$zfolder.'.jpg')) {
+				$zresponse['imageurl'] = '/content/plugins/'.$zfolder.'/'.$zfolder.'.jpg';
+			} else if (file_exists($zcontentpath.'/plugins/'.$zfolder.'/'.$zfolder.'.gif')) {
+				$zresponse['imageurl'] = '/content/plugins/'.$zfolder.'/'.$zfolder.'.gif';
+			} else {
+				$zresponse['imageurl'] = '/content/system/images/plugin.png';
 			}
 		} catch (Exception $e) {
 			$wtwdb->serror("core-functions-class_wtwpluginloader.php-getPluginPHP=".$e->getMessage());

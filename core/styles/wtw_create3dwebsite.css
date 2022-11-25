@@ -307,6 +307,30 @@ h4.wtw-dashboardheading {
 	background-color: #ccffcc;
 	box-shadow: 3px 6px #006600;
 }
+.wtw-tinyimg {
+	display:inline-block;
+	width:30px;
+	height:auto;
+	margin:2px;
+	border:1px solid transparent;
+	border-radius:2px;
+	padding:1px;
+}
+.wtw-tinyimg:hover {
+	cursor:pointer;
+}
+.wtw-tinyimgselected {
+	display:inline-block;
+	width:30px;
+	height:auto;
+	margin:2px;
+	border:1px solid blue;
+	border-radius:2px;
+	padding:1px;
+}
+.wtw-tinyimgselected:hover {
+	cursor:pointer;
+}
 a.wtw-createbutton {
 	padding:20px;
 	border-top:#afafaf 1px solid;
@@ -886,8 +910,46 @@ input.wtw-textboxwider:disabled {
 	padding: 5px 5px 5px 0px;
 	text-align:right;
 }
+.wtw-smallcol {
+	display:inline-block;
+	width: 21%;
+	min-height:200px;
+	border:1px solid #afafaf;
+	border-radius:10px;
+	margin:5px 1% auto 1%;
+	padding:10px;
+	vertical-align:top; 
+}
+.wtw-medcol {
+	display:inline-block;
+	width: 28%;
+	min-height:200px;
+	border:1px solid #afafaf;
+	border-radius:10px;
+	margin:5px 1% auto 1%;
+	padding:10px;
+	vertical-align:top; 
+}
+.wtw-largecol {
+	display:inline-block;
+	width: 45%;
+	min-height:200px;
+	border:1px solid #afafaf;
+	border-radius:10px;
+	margin:5px 1% auto 1%;
+	padding:10px;
+	vertical-align:top; 
+}
 .wtw-notes {
 	border:1px solid #cfcfcf;
 	border-radius:15px;
 	padding:10px;
+}
+.wtw-searchdiv {
+	float:right;
+	white-space:nowrap;
+}
+.wtw-colicons {
+	display:inline-block;
+	margin-right:20px;
 }

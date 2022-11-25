@@ -685,6 +685,7 @@ class wtwtables {
 				  `invoicedate` datetime DEFAULT NULL,
 				  `invoicedescription` varchar(255) DEFAULT '',
 				  `invoicetotal` decimal(18,2) DEFAULT '0',
+				  `paiddate` datetime DEFAULT NULL,
 				  `createdate` datetime DEFAULT NULL,
 				  `createuserid` varchar(16) DEFAULT '',
 				  `updatedate` datetime DEFAULT NULL,

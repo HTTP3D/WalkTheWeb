@@ -66,6 +66,14 @@ try {
 		<div id="wtw_wizard1" class="wtw-dashboardpage" style="display:none;visibility:hidden;">
 			<div id="wtw_step1_0" class="wtw-navbuttonback" onclick="" style="visibility:hidden;">&#8592; Back</div>
 			<div id="wtw_step1_2" class="wtw-navbuttonnext" onclick="WTW.startWizard(2);" style="visibility:hidden;">Next &#8594;</div>
+			<div class="wtw-searchdiv">
+				<div class="wtw-colicons">
+					<img id='wtw_downloadscol1' src='/content/system/images/col1.png' alt='1 Column' title='1 Column' class='wtw-tinyimg' onclick='WTW.updateCols(this, 1);' />
+					<img id='wtw_downloadscol2' src='/content/system/images/col2set.png' alt='2 Columns' title='2 Columns' class='wtw-tinyimgselected' onclick='WTW.updateCols(this, 2);' />
+					<img id='wtw_downloadscol3' src='/content/system/images/col3.png' alt='3 Columns' title='3 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 3);' />
+					<img id='wtw_downloadscol4' src='/content/system/images/col4.png' alt='4 Columns' title='4 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 4);' />
+				</div>
+			</div>
 			<h2 class="wtw-dashboardheading"><span style="color:blue">WalkTheWeb<sup>®</sup></span> Step 1 - Select a 3D Building</h2>
 			<div class="wtw-searchlabel">Search:</div> <input id='wtw_tbuildingsearch' name='wtw_tbuildingsearch' type='text' value='' size='20' maxlength='255' class="wtw-textbox" autocomplete="" /> 
 			<input name='wtw_bbuildingsearch' type='button' value='Search' onclick="WTW.buildingSearch();" class="wtw-searchbutton" /><div style='min-height:20px;clear:both;'></div><hr />
@@ -78,6 +86,14 @@ try {
 		<div id="wtw_wizard2" class="wtw-dashboardpage" style="display:none;visibility:hidden;">
 			<div id="wtw_step2_1" class="wtw-navbuttonback" onclick="WTW.startWizard(1);">&#8592; Back</div>
 			<div id="wtw_step2_3" class="wtw-navbuttonnext" onclick="WTW.startWizard(3);" style="visibility:hidden;">Next &#8594;</div>
+			<div class="wtw-searchdiv">
+				<div class="wtw-colicons">
+					<img id='wtw_2downloadscol1' src='/content/system/images/col1.png' alt='1 Column' title='1 Column' class='wtw-tinyimg' onclick='WTW.updateCols(this, 1);' />
+					<img id='wtw_2downloadscol2' src='/content/system/images/col2set.png' alt='2 Columns' title='2 Columns' class='wtw-tinyimgselected' onclick='WTW.updateCols(this, 2);' />
+					<img id='wtw_2downloadscol3' src='/content/system/images/col3.png' alt='3 Columns' title='3 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 3);' />
+					<img id='wtw_2downloadscol4' src='/content/system/images/col4.png' alt='4 Columns' title='4 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 4);' />
+				</div>
+			</div>
 			<h2 class="wtw-dashboardheading">Step 2 - Select a 3D Community Scene</h2>
 			<div class="wtw-searchlabel">Search:</div> <input id='wtw_tcommunitysearch' name='wtw_tcommunitysearch' type='text' value='' size='20' maxlength='255' class="wtw-textbox" autocomplete="" /> 
 			<input name='wtw_bcommunitysearch' type='button' value='Search' onclick="WTW.communitySearch();" class="wtw-searchbutton" /><div style='min-height:20px;clear:both;'></div><hr />
@@ -290,6 +306,7 @@ try {
 	<input type="hidden" id="wtw_domainurl" name="wtw_domainurl" value="<?php echo $wtwhandlers->domainurl; ?>" />
 	<input type="hidden" id="wtw_websiteurl" name="wtw_websiteurl" value="" />
 	<input type="hidden" id="wtw_serverip" name="wtw_serverip" value="<?php echo $wtwhandlers->serverip; ?>" />
+	<input type="hidden" id="wtw_downloadstcols" value="2" />
 	<script>WTW.startWizard(1);</script>
 <?php
 	} catch (Exception $e) {
