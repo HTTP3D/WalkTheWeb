@@ -20,7 +20,7 @@ try {
 	$zconnectinggridind = $wtwconnect->getVal('connectinggridind','-1');
 	$zforcegraphiclevel = $wtwconnect->getVal('graphiclevel','-1');
 
-	/* get building molds that have been deleted */
+	/* gets all related molds */
 	$zresults = $wtwconnect->query("
 		select distinct
 			a1.communitymoldid,

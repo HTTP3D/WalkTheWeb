@@ -36,6 +36,14 @@ Check out this video of the Install and Getting Started Walk-Through:
 
 https://www.youtube.com/watch?v=EMrBnzfAMZM
 
+WINDOWS IIS SERVERS
+---------------------------------------------------------------------------
+If running on Windows IIS, make sure the PHP and the url-rewrite extensions are installed.
+
+https://php.iis.net/
+
+https://www.iis.net/downloads/microsoft/url-rewrite
+
 LEARNING
 ---------------------------------------------------------------------------
 There are videos at: https://www.youtube.com/c/WalkTheWeb3d

@@ -17,6 +17,7 @@ global $wtwconnect;
 			'description' => '',
 			'foldername' => $zfolder,
 			'filename' => $zpluginphp,
+			'imageurl' => '',
 			'updatedate' => '',
 			'updateurl' => '',
 			'loaded' => '1',
@@ -56,6 +57,15 @@ global $wtwconnect;
 				if ($wtwconnect->hasValue($zpluginname)) {
 					$zresponse['active'] = getPluginActive($zpluginname);
 				}
+			}
+			if (file_exists($zcontentpath.'/plugins/'.$zfolder.'/'.$zfolder.'.png')) {
+				$zresponse['imageurl'] = '/content/plugins/'.$zfolder.'/'.$zfolder.'.png';
+			} else if (file_exists($zcontentpath.'/plugins/'.$zfolder.'/'.$zfolder.'.jpg')) {
+				$zresponse['imageurl'] = '/content/plugins/'.$zfolder.'/'.$zfolder.'.jpg';
+			} else if (file_exists($zcontentpath.'/plugins/'.$zfolder.'/'.$zfolder.'.gif')) {
+				$zresponse['imageurl'] = '/content/plugins/'.$zfolder.'/'.$zfolder.'.gif';
+			} else {
+				$zresponse['imageurl'] = '/content/system/images/plugin.png';
 			}
 		} catch (Exception $e) {
 			$wtwconnect->serror("connect-pluginsrequired.php-getPluginPHP=".$e->getMessage());
