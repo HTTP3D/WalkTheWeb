@@ -434,8 +434,8 @@ WTWJS.prototype.mouseClick = function(zevent) {
 							WTW.checkImageClick(zpickedname);
 						} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
 							WTW.checkVideoClick(zpickedname);
-						} else if (zpickedname.indexOf('-createscene') > -1) {
-							WTW.openIFrame('/core/pages/create3dwebsite.php?useremail='+dGet('wtw_tuseremail').value, .9, .9, 'Create 3D Website');
+//						} else if (zpickedname.indexOf('-createscene') > -1) {
+//							WTW.openIFrame('/core/pages/create3dwebsite.php?useremail='+dGet('wtw_tuseremail').value, .9, .9, 'Create 3D Website');
 						} else if (zpickedname.indexOf('-vehicle') > -1) {
 							WTW.toggleStartVehicle(zpickedname);
 						} else {

@@ -91,6 +91,43 @@ WTWJS.prototype.startWizard = function(zstep) {
 	}
 }
 
+WTWJS.prototype.updateCols = function(zobj, zcols) {
+	try {
+		dGet('wtw_downloadstcols').value = zcols;
+		dGet('wtw_downloadscol1').className = 'wtw-tinyimg';
+		dGet('wtw_downloadscol2').className = 'wtw-tinyimg';
+		dGet('wtw_downloadscol3').className = 'wtw-tinyimg';
+		dGet('wtw_downloadscol4').className = 'wtw-tinyimg';
+		dGet('wtw_downloadscol1').src = dGet('wtw_downloadscol1').src.replace('set','');
+		dGet('wtw_downloadscol2').src = dGet('wtw_downloadscol2').src.replace('set','');
+		dGet('wtw_downloadscol3').src = dGet('wtw_downloadscol3').src.replace('set','');
+		dGet('wtw_downloadscol4').src = dGet('wtw_downloadscol4').src.replace('set','');
+		dGet(zobj.id.replace('wtw_2downloads','wtw_downloads')).className = 'wtw-tinyimgselected';
+		var znewicon = zobj.src.replace(zobj.id.replace('wtw_downloads','').replace('wtw_2downloads','') + '.png', zobj.id.replace('wtw_downloads','').replace('wtw_2downloads','') + 'set.png');
+		dGet('wtw_2downloadscol1').className = dGet('wtw_downloadscol1').className;
+		dGet('wtw_2downloadscol2').className = dGet('wtw_downloadscol2').className;
+		dGet('wtw_2downloadscol3').className = dGet('wtw_downloadscol3').className;
+		dGet('wtw_2downloadscol4').className = dGet('wtw_downloadscol4').className;
+		dGet('wtw_2downloadscol1').src = dGet('wtw_downloadscol1').src;
+		dGet('wtw_2downloadscol2').src = dGet('wtw_downloadscol2').src;
+		dGet('wtw_2downloadscol3').src = dGet('wtw_downloadscol3').src;
+		dGet('wtw_2downloadscol4').src = dGet('wtw_downloadscol4').src;
+		dGet(zobj.id.replace('wtw_2downloads','wtw_downloads')).src = znewicon;
+		dGet(zobj.id.replace('wtw_downloads','wtw_2downloads')).src = znewicon;
+		if (dGet('wtw_wizard1').style.display != 'none') {
+			if (dGet('wtw_tbuildingsearch') != null) {
+				WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);
+			}
+		} else if (dGet('wtw_wizard2').style.display != 'none') {
+			if (dGet('wtw_tcommunitysearch') != null) {
+				WTW.communitySearch(dGet('wtw_tcommunitysearch').value);
+			}
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_create3dwebsite.js-updateCols=' + ex.message);
+	}
+}
+
 WTWJS.prototype.buildingSearch = function(zsearch) {
 	/* keyword search to find a building to download to your instance */
 	try {
@@ -113,23 +150,48 @@ WTWJS.prototype.buildingSearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
 		var ztempsearchresults = '';
+		var zformat = 2;
+		if (Number(document.getElementById('wtw_downloadstcols').value) > 0) {
+			zformat = Number(document.getElementById('wtw_downloadstcols').value);
+		}
 		dGet('wtw_buildtempsearchresults').innerHTML = "";
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
+			var zbuttonstyle = '';
 			var zbuildingid = zresponse[i].serverbuildingid;
 			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
 			if (WTW.isNumeric(zresponse[i].downloads)) {
 				zdownloads = zresponse[i].downloads;
 			}
-			ztempsearchresults += "<div class=\"wtw-simplebox\"><input type='button' id='wtw_btempselect" + i + "' class='wtw-searchresultbutton' value='Select' onclick=\"WTW.selectBuilding('" + zbuildingid + "','" + zresponse[i].templatename + "','" + zresponse[i].imageurl + "');return (false);\" />";
-			ztempsearchresults += "<div style='display:inline-block;max-width:80%;'><h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3><br />";
-			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
-			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
-			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div></div><br />";
+			if (zformat > 1) {
+				var zcols = '';
+				switch (zformat) {
+					case 2:
+						zcols = 'wtw-largecol';
+						break;
+					case 3:
+						zcols = 'wtw-medcol';
+						break;
+					case 4:
+						zcols = 'wtw-smallcol';
+						break;
+				}
+				ztempsearchresults += "<div class='" + zcols + "'>";
+				zbuttonstyle = "style='margin:2px 2px 5px 5px;'";
+			}
+			ztempsearchresults += "<div style='display:inline-block;max-width:80%;'><h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3>";
 			if (zresponse[i].imageurl != "") {
 				ztempsearchresults += "<img id='wtw_search" + zbuildingid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.selectBuilding('" + zbuildingid + "','" + zresponse[i].templatename + "','" + zresponse[i].imageurl + "');return (false);\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
 			}
-			ztempsearchresults += "<br /></div><hr style=\"width:96%;\" />";
+			ztempsearchresults += "<div class=\"wtw-simplebox\"><input type='button' id='wtw_btempselect" + i + "' class='wtw-searchresultbutton' value='Select' onclick=\"WTW.selectBuilding('" + zbuildingid + "','" + zresponse[i].templatename + "','" + zresponse[i].imageurl + "');return (false);\" " + zbuttonstyle + " />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div></div><br />";
+			if (zformat > 1) {
+				ztempsearchresults += "</div></div>";
+			} else {
+				ztempsearchresults += "<br /></div><hr style=\"width:96%;\" />";
+			}
 		}
 		dGet('wtw_buildtempsearchresults').innerHTML = ztempsearchresults;
 	} catch (ex) {
@@ -172,23 +234,48 @@ WTWJS.prototype.communitySearchReply = function(zresponse) {
 	/* receives search results and parses for screen display */
 	try {
 		var ztempsearchresults = '';
+		var zformat = 2;
+		if (Number(document.getElementById('wtw_downloadstcols').value) > 0) {
+			zformat = Number(document.getElementById('wtw_downloadstcols').value);
+		}
 		dGet('wtw_communitytempsearchresults').innerHTML = "";
 		for (var i=0; i < zresponse.length; i++) {
 			var zdownloads = 0;
+			var zbuttonstyle = '';
 			var zcommunityid = zresponse[i].servercommunityid;
 			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
 			if (WTW.isNumeric(zresponse[i].downloads)) {
 				zdownloads = zresponse[i].downloads;
 			}
-			ztempsearchresults += "<div class=\"wtw-simplebox\"><input type='button' id='wtw_bcommtempselect" + i + "' class='wtw-searchresultbutton' value='Select' onclick=\"WTW.selectCommunity('" + zcommunityid + "','" + zresponse[i].templatename + "','" + zresponse[i].imageurl + "');\" />";
-			ztempsearchresults += "<div style='display:inline-block;max-width:80%;'><h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3><br />";
-			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
-			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
-			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div></div><br />";
+			if (zformat > 1) {
+				var zcols = '';
+				switch (zformat) {
+					case 2:
+						zcols = 'wtw-largecol';
+						break;
+					case 3:
+						zcols = 'wtw-medcol';
+						break;
+					case 4:
+						zcols = 'wtw-smallcol';
+						break;
+				}
+				ztempsearchresults += "<div class='" + zcols + "'>";
+				zbuttonstyle = "style='margin:2px 2px 5px 5px;'";
+			}
+			ztempsearchresults += "<div style='display:inline-block;max-width:80%;'><h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3>";
 			if (zresponse[i].imageurl != "") {
 				ztempsearchresults += "<div style=\"clear:both;\"></div><img id='wtw_search" + zcommunityid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.selectCommunity('" + zcommunityid + "','" + zresponse[i].templatename + "','" + zresponse[i].imageurl + "');\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
 			}
-			ztempsearchresults += "<br /></div><hr style=\"width:96%;\" />";
+			ztempsearchresults += "<div class=\"wtw-simplebox\"><input type='button' id='wtw_bcommtempselect" + i + "' class='wtw-searchresultbutton' value='Select' onclick=\"WTW.selectCommunity('" + zcommunityid + "','" + zresponse[i].templatename + "','" + zresponse[i].imageurl + "');\" " + zbuttonstyle + " />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div></div><br />";
+			if (zformat > 1) {
+				ztempsearchresults += "</div></div>";
+			} else {
+				ztempsearchresults += "<br /></div><hr style=\"width:96%;\" />";
+			}
 		}
 		dGet('wtw_communitytempsearchresults').innerHTML = ztempsearchresults;
 	} catch (ex) {

@@ -286,7 +286,7 @@ WTWJS.prototype.avatarSearchReply = function(zresponse) {
 			if (zresponse[i].imageurl != "") {
 				ztempsearchresults += "<img id='wtw_search" + zavatarid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('avatar', '" + btoa(zresponse[i].templatename) + "', '" + zavatarid + "', '" + zavatarid + "', 'avatar');return (false);\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
 			}
-			ztempsearchresults += "<br /><input type='button' id='wtw_bavatartempselect" + i + "' class='wtw-searchresultbutton' value='Download' onclick=\"WTW.downloadWeb('avatar', '" + btoa(zresponse[i].templatename) + "', '" + zavatarid + "', '" + zavatarid + "', 'avatar');return (false);\" />";
+			ztempsearchresults += "<br /><input type='button' id='wtw_bavatartempselect" + i + "' class='wtw-searchresultbutton' value='Download' onclick=\"WTW.downloadWeb('avatar', '" + btoa(zresponse[i].templatename) + "', '" + zavatarid + "', '" + zavatarid + "', 'avatar');return (false);\" " + zbuttonstyle + " />";
 			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
 			if (zresponse[i].version == '1.0.0') {
 				ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].createdisplayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
@@ -310,20 +310,109 @@ WTWJS.prototype.avatarSearchReply = function(zresponse) {
 	}
 }
 
+WTWJS.prototype.pluginSearch = async function(zsearch) {
+	/* keyword search to find a plugin to download to your instance */
+	try {
+		WTW.hide('wtw_downloadingnotice');
+		WTW.hide('wtw_downloadingnoticequeue');
+		WTW.hide('wtw_downloadcomplete');
+		zsearch = WTW.encode(zsearch);
+		WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/sharesearch.php?search=' + zsearch + '&webtype=plugin', 
+			function(zresponse) {
+				WTW.pluginSearchReply(JSON.parse(zresponse));
+			}
+		);
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_downloads.js-pluginSearch=' + ex.message);
+	}
+}
+
+WTWJS.prototype.pluginSearchReply = function(zresponse) {
+	/* receives search results and parses for screen display */
+	try {
+		var ztempsearchresults = '';
+		var zformat = 2;
+		if (Number(document.getElementById('wtw_downloadstcols').value) > 0) {
+			zformat = Number(document.getElementById('wtw_downloadstcols').value);
+		}
+		dGet('wtw_plugintempsearchresults').innerHTML = '';
+		for (var i=0; i < zresponse.length; i++) {
+			var zdownloads = 0;
+			var zbuttonstyle = '';
+			var zpluginid = zresponse[i].serverpluginid;
+			var zcreatedate  = WTW.formatDate(zresponse[i].createdate);
+			var zupdatedate  = WTW.formatDate(zresponse[i].updatedate);
+			if (WTW.isNumeric(zresponse[i].downloads)) {
+				zdownloads = zresponse[i].downloads;
+			}
+			if (zformat > 1) {
+				var zcols = '';
+				switch (zformat) {
+					case 2:
+						zcols = 'wtw-largecol';
+						break;
+					case 3:
+						zcols = 'wtw-medcol';
+						break;
+					case 4:
+						zcols = 'wtw-smallcol';
+						break;
+				}
+				ztempsearchresults += "<div class='" + zcols + "'>";
+				zbuttonstyle = "style='margin:2px 2px 5px 5px;'";
+			}
+			ztempsearchresults += "<h3 class=\"wtw-black\">" + zresponse[i].templatename + "</h3><br />[" + zresponse[i].pluginname + "]";
+			if (zresponse[i].imageurl != "") {
+				ztempsearchresults += "<img id='wtw_search" + zpluginid + "' src='" + zresponse[i].imageurl + "' onmouseover=\"this.style.border='1px solid yellow';\" onmouseout=\"this.style.border='1px solid gray';\" onclick=\"WTW.downloadWeb('plugin', '" + btoa(zresponse[i].templatename) + "', '" + zpluginid + "', '" + zpluginid + "', 'plugin');return (false);\" style=\"margin:2%;border:1px solid gray;cursor:pointer;width:96%;height:auto;\" alt='" + zresponse[i].templatename + "' title='" + zresponse[i].templatename + "' />";
+			}
+			ztempsearchresults += "<br /><input type='button' id='wtw_bplugintempselect" + i + "' class='wtw-searchresultbutton' value='Download' onclick=\"WTW.downloadWeb('plugin', '" + btoa(zresponse[i].templatename) + "', '" + zpluginid + "', '" + zpluginid + "', 'plugin');return (false);\" " + zbuttonstyle + " />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>" + zresponse[i].description + "</div><br />";
+			if (zresponse[i].version == '1.0.0') {
+				ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].createdisplayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
+			} else {
+				ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Created By: <b>" + zresponse[i].createdisplayname + "</b> (<b>" + zcreatedate + "</b>)</div><br />";
+				ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Updated By: <b>" + zresponse[i].displayname + "</b> (<b>" + zupdatedate + "</b>)</div><br />";
+			}
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Version: <b>[" + zresponse[i].version + "]</b> " + zresponse[i].versiondesc + ".</div><br />";
+			ztempsearchresults += "<div style='white-space:normal;font-weight:normal;color:#000000;'>Downloaded: <b>" + zdownloads + "</b> times.</div><br />";
+			ztempsearchresults += "<a href='" + zresponse[i].githuburl + "' target='_blank'>" + zresponse[i].githuburl + "</a><br />";
+			if (zformat > 1) {
+				ztempsearchresults += "</div>";
+			} else {
+				ztempsearchresults += "<br /><hr style=\"width:96%;\" />";
+			}
+		}
+		dGet('wtw_plugintempsearchresults').innerHTML = ztempsearchresults;
+		WTW.show('wtw_plugintempsearchresults');
+		WTW.setWindowSize();
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_downloads.js-pluginSearchReply=' + ex.message);
+	}
+}
+
 WTWJS.prototype.updateCols = function(zobj, zcols) {
 	try {
 		dGet('wtw_downloadstcols').value = zcols;
-		document.getElementById('wtw_downloadscol1').className = 'wtw-tinyimg';
-		document.getElementById('wtw_downloadscol2').className = 'wtw-tinyimg';
-		document.getElementById('wtw_downloadscol3').className = 'wtw-tinyimg';
-		document.getElementById('wtw_downloadscol4').className = 'wtw-tinyimg';
-		document.getElementById('wtw_downloadscol1').src = document.getElementById('wtw_downloadscol1').src.replace('set','');
-		document.getElementById('wtw_downloadscol2').src = document.getElementById('wtw_downloadscol2').src.replace('set','');
-		document.getElementById('wtw_downloadscol3').src = document.getElementById('wtw_downloadscol3').src.replace('set','');
-		document.getElementById('wtw_downloadscol4').src = document.getElementById('wtw_downloadscol4').src.replace('set','');
-		document.getElementById(zobj.id).className = 'wtw-tinyimgselected';
+		dGet('wtw_downloadscol1').className = 'wtw-tinyimg';
+		dGet('wtw_downloadscol2').className = 'wtw-tinyimg';
+		dGet('wtw_downloadscol3').className = 'wtw-tinyimg';
+		dGet('wtw_downloadscol4').className = 'wtw-tinyimg';
+		dGet('wtw_downloadscol1').src = dGet('wtw_downloadscol1').src.replace('set','');
+		dGet('wtw_downloadscol2').src = dGet('wtw_downloadscol2').src.replace('set','');
+		dGet('wtw_downloadscol3').src = dGet('wtw_downloadscol3').src.replace('set','');
+		dGet('wtw_downloadscol4').src = dGet('wtw_downloadscol4').src.replace('set','');
+		dGet(zobj.id).className = 'wtw-tinyimgselected';
 		zobj.src = zobj.src.replace(zobj.id.replace('wtw_downloads','') + '.png', zobj.id.replace('wtw_downloads','') + 'set.png');
-		
+		if (dGet('wtw_2downloadscol1') != null) {
+			dGet('wtw_2downloadscol1').className = dGet('wtw_downloadscol1').className;
+			dGet('wtw_2downloadscol2').className = dGet('wtw_downloadscol2').className;
+			dGet('wtw_2downloadscol3').className = dGet('wtw_downloadscol3').className;
+			dGet('wtw_2downloadscol4').className = dGet('wtw_downloadscol4').className;
+			dGet('wtw_2downloadscol1').src = dGet('wtw_downloadscol1').src;
+			dGet('wtw_2downloadscol2').src = dGet('wtw_downloadscol2').src;
+			dGet('wtw_2downloadscol3').src = dGet('wtw_downloadscol3').src;
+			dGet('wtw_2downloadscol4').src = dGet('wtw_downloadscol4').src;
+		}
 		if (dGet('searchcommunitiesdiv').style.display != 'none') {
 			if (dGet('wtw_tcommunitysearch') != null) {
 				WTW.communitySearch(dGet('wtw_tcommunitysearch').value);
@@ -339,6 +428,10 @@ WTWJS.prototype.updateCols = function(zobj, zcols) {
 		} else if (dGet('searchavatarsdiv').style.display != 'none') {
 			if (dGet('wtw_tavatarsearch') != null) {
 				WTW.avatarSearch(dGet('wtw_tavatarsearch').value);
+			}
+		} else if (dGet('searchpluginsdiv').style.display != 'none') {
+			if (dGet('wtw_tpluginsearch') != null) {
+				WTW.pluginSearch(dGet('wtw_tpluginsearch').value);
 			}
 		}
 	} catch (ex) {

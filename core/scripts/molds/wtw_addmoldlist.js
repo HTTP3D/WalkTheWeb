@@ -989,7 +989,6 @@ WTWJS.prototype.setMoldFormFields = function(zshape) {
 		WTW.hide('wtw_moldaddimagediv');
 		WTW.hide('wtw_moldscalediv');
 		WTW.hide('wtw_moldmergemoldsdiv');
-		dGet('wtw_tmoldcsgaction').selectedIndex = 0;
 		WTW.show('wtw_moldscalingydiv');
 		WTW.show('wtw_moldcolorsdiv');
 		WTW.show('wtw_moldtexturesetdiv');

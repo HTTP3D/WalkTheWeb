@@ -1100,28 +1100,17 @@ WTWJS.prototype.addMoldCreateSceneKiosk = function(zmoldname, zmolddef, zlenx, z
 					var zobjectanimations = [];
 					
 					// add object animations using WTW.newObjectAnimation();
-/*					zobjectanimations[0] = WTW.newObjectAnimation();
-					zobjectanimations[0].animationname = 'playTV';
+					zobjectanimations[0] = WTW.newObjectAnimation();
+					zobjectanimations[0].animationname = 'createSceneButton';
 					zobjectanimations[0].moldevent = 'onclick';
-					zobjectanimations[0].moldnamepart = 'play';
-					zobjectanimations[0].startframe = 10;
-					zobjectanimations[0].endframe = 20;
+					zobjectanimations[0].moldnamepart = 'createscene';
+					zobjectanimations[0].startframe = 1;
+					zobjectanimations[0].endframe = 40;
 					zobjectanimations[0].animationloop = false;
 					zobjectanimations[0].speedratio = 1.00;
-					zobjectanimations[0].additionalscript = 'WTW.checkVideoClick';
-					zobjectanimations[0].additionalparameters = zmoldname + ',1';
-					
-					zobjectanimations[1] = WTW.newObjectAnimation();
-					zobjectanimations[1].animationname = 'pauseTV';
-					zobjectanimations[1].moldevent = 'onclick';
-					zobjectanimations[1].moldnamepart = 'pause';
-					zobjectanimations[1].startframe = 10;
-					zobjectanimations[1].endframe = 20;
-					zobjectanimations[1].animationloop = false;
-					zobjectanimations[1].speedratio = 1.00;
-					zobjectanimations[1].additionalscript = 'WTW.checkVideoClick';
-					zobjectanimations[1].additionalparameters = zmoldname + ',0';
-*/
+					zobjectanimations[0].additionalscript = 'WTW.create3DWebsite';
+					zobjectanimations[0].additionalparameters = '';
+
 					zmold = scene.getTransformNodeByID(zmoldname);
 
 					for (var i=0; i < zresults.meshes.length; i++) {
@@ -1135,7 +1124,7 @@ WTWJS.prototype.addMoldCreateSceneKiosk = function(zmoldname, zmolddef, zlenx, z
 								zresults.meshes[i].parent = zmold;
 							}
 							if (zobjectanimations != null) {
-//								WTW.addMoldAnimation(zmoldname, zmeshname, zresults.meshes[i], zobjectanimations);
+								WTW.addMoldAnimation(zmoldname, zmeshname, zresults.meshes[i], zobjectanimations);
 							}
 						}
 					}

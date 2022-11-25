@@ -1503,7 +1503,7 @@ WTWJS.prototype.clearEditMold = function() {
 		dGet('wtw_tmoldind').value = '-1';
 		dGet('wtw_tmoldname').value = '';
 		dGet('wtw_tmoldcsgmoldid').value = '';
-		dGet('wtw_tmoldcsgaction').selectedIndex = -1;
+		dGet('wtw_tmoldcsgaction').selectedIndex = 0;
 		dGet('wtw_tmoldalttag').value = '';
 		dGet('wtw_tmolddiffusecolor').value = '#ffffff';
 		dGet('wtw_tmoldemissivecolor').value = '#000000';
@@ -2317,6 +2317,7 @@ WTWJS.prototype.addMergePart = function(mold) {
 			}
 		}
 		WTW.selectMergePart(2); 
+		WTW.setNewMold(1);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminmolds.js-addMergePart=' + ex.message);
 	}
@@ -2369,7 +2370,7 @@ WTWJS.prototype.removeMerge = function(zmoldname) {
 		}
 		WTW.disposeClean(zmoldname);
 		WTW.setShownMolds();
-		WTW.setNewMold();
+		WTW.setNewMold(1);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminmolds.js-removeMerge=' + ex.message);
 	}
@@ -3594,20 +3595,6 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 								zwaterreflection = true;
 							}
 						}
-/*						if (zreceiveshadows == '1') {
-							if (zmold.material != null) {
-								zmold.material.unfreeze();
-							}
-							zmold.receiveShadows = true;
-						} else {
-							if (zmold.material != null && WTW.adminView == 0) {
-								zmold.material.freeze();
-							}
-						}
-						if (WTW.shadowSet > 0) {
-							WTW.shadows.getShadowMap().renderList.push(zmold);
-						}
-*/
 						zmold.receiveShadows = zreceiveshadows;
 						if (zwaterreflection && WTW.waterMat != null) {
 							WTW.addReflectionRefraction(zmold);

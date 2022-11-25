@@ -2571,6 +2571,15 @@ WTWJS.prototype.setClosestBuilding = function() {
 	}
 }
 
+WTWJS.prototype.create3DWebsite = function() {
+	/* open Create 3D Website wizard Process */
+	try {
+		WTW.openIFrame('/core/pages/create3dwebsite.php?useremail='+dGet('wtw_tuseremail').value, .9, .9, 'Create 3D Website');
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_utilities.js-create3DWebsite=' + ex.message);
+	}
+}
+
 
 /* arrays: check, find index, and remove from arrays */
 

@@ -299,6 +299,36 @@ WTWJS.prototype.isNumeric = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
+WTWJS.prototype.formatNumber = function(zval, zdecimalpoints) {
+	/* format a number with #,###.## (zval is the number and zdecimalpoints is number of decimal points) */
+	var znumbertext = '';
+	try {
+		if (zdecimalpoints == undefined) {
+			zdecimalpoints= 2;
+		}
+		if (zval != null) {
+			if (WTW.isNumeric(zval)) {
+				zval = Number(zval);
+				var zdecimal = '';
+				var zround = '';
+				var zval1 = 0;
+				var zval4 = 0;
+				var zval3 = 0;
+				var zval2 = zval.toFixed(zdecimalpoints), zval3 = zval2|0, b = zval < 0 ? 1 : 0,
+				zval4 = Math.abs(zval2-zval3), zdecimal = ('' + zval4.toFixed(zdecimalpoints)).substr(2, zdecimalpoints),
+				zval1 = '' + zval3, i = zval1.length, zround = '';
+				while ( (i-=3) > b ) { 
+					zround = ',' + zval1.substr(i, 3) + zround; 
+				}
+				znumbertext = zval1.substr(0, i + 3) + zround + (zdecimal ? '.' + zdecimal: '');
+			}
+		}
+    } catch (ex) {
+		WTW.log('core-scripts-prime-wtw_install.js-formatNumber=' + ex.message);
+    }  
+	return znumbertext;
+}
+
 WTWJS.prototype.selectMultiplayerPackage = function(zobj) {
 	try {
 		dGet('wtw_business').className = 'wtw-servicelisting';
