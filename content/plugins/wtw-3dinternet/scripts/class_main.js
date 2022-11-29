@@ -602,7 +602,7 @@ WTW_3DINTERNET.prototype.purchaseComplete = async function() {
 WTW_3DINTERNET.prototype.openActivateWindow = function() {
 	/* opens the window to offer service */
 	try {
-		WTW.openIFrame('https://3dnet.walktheweb.com/core/pages/serviceactivation.php?serverinstanceid=' + btoa(dGet('wtw_serverinstanceid').value) + '&domainname=' + btoa(wtw_domainname) + '&domainurl=' + btoa(wtw_domainurl) + '&websiteurl=' + btoa(wtw_websiteurl) + '&serverip=' + btoa(dGet('wtw_serverip').value) + '&userid=' + btoa(dGet('wtw_tuserid').value) + '&useremail=' + btoa(dGet('wtw_tuseremail').value), .5, .7, 'WalkTheWeb Service Activation');
+		WTW.openIFrame('https://3dnet.walktheweb.com/core/pages/serviceactivation.php?serverinstanceid=' + btoa(dGet('wtw_serverinstanceid').value) + '&domainname=' + btoa(wtw_domainname) + '&domainurl=' + btoa(wtw_domainurl) + '&websiteurl=' + btoa(wtw_websiteurl) + '&serverip=' + btoa(dGet('wtw_serverip').value) + '&userid=' + btoa(dGet('wtw_tuserid').value) + '&useremail=' + btoa(dGet('wtw_tuseremail').value), .6, .9, 'WalkTheWeb Service Activation');
 	} catch (ex) {
 		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-openActivateWindow=' + ex.message);
 	} 
