@@ -58,8 +58,12 @@ class wtwusers {
 				if ($wtwdb->userExists($zuserid)) {
 					global $wtw;
 					global $wtwuser;
-					$wtw->userid = $zuserid;
-					$wtwuser->userid = $zuserid;
+					if (isset($wtw)) {
+						$wtw->userid = $zuserid;
+					}
+					if (isset($wtwuser)) {
+						$wtwuser->userid = $zuserid;
+					}
 				}
 			}
 		} catch (Exception $e) {
@@ -109,19 +113,23 @@ class wtwusers {
 						$_SESSION["wtw_uploadpathid"] = $zrow["uploadpathid"];
 						if ($wtwdb->hasValue($zuserid)) {
 							if ($wtwdb->userExists($zuserid)) {
-								try {
+								if (isset($wtw)) {
 									$wtw->userid = $zuserid;
+								}
+								if (isset($wtwuser)) {
 									$wtwuser->userid = $zuserid;
-								} catch (Exception $e) {}
+								}
 							}
 						}
 					} else {
 						$_SESSION["wtw_userid"] = '';
 						$_SESSION["wtw_uploadpathid"] = '';
-						try {
+						if (isset($wtw)) {
 							$wtw->userid = '';
+						}
+						if (isset($wtwuser)) {
 							$wtwuser->userid = '';
-						} catch (Exception $e) {}
+						}
 					}
 				}
 			}
@@ -147,6 +155,8 @@ class wtwusers {
 			'serror'=>'Invalid Global Account'
 		);
 		try {
+
+
 			$zresults = array();
 			$zuserid = '';
 			$zdisplayname = $wtwdb->decode64($zdisplayname);
@@ -193,10 +203,12 @@ class wtwusers {
 						$_SESSION["wtw_globaluserid"] = '';
 						$_SESSION["wtw_usertoken"] = '';
 						$_SESSION["wtw_uploadpathid"] = '';
-						try {
+						if (isset($wtw)) {
 							$wtw->userid = $zuserid;
+						}
+						if (isset($wtwuser)) {
 							$wtwuser->userid = $zuserid;
-						} catch (Exception $e) {}
+						}
 					}
 				}
 			} else {
@@ -811,7 +823,8 @@ class wtwusers {
 		/* creates a local user account - does not mean they have access to anything including Admin */
 		global $wtwhandlers;
 		$zsuccess = false;
-		$zserror = "";
+		$zserror = '';
+		$zuserid = '';
 		try {
 			$zdisplayname = $wtwhandlers->decode64($zdisplayname);
 			$zpassword = $wtwhandlers->decode64($zpassword);
@@ -857,8 +870,12 @@ class wtwusers {
 					$_SESSION["wtw_uploadpathid"] = $zuploadpathid;			
 					global $wtw;
 					global $wtwuser;
-					$wtw->userid = $zuserid;
-					$wtwuser->userid = $zuserid;
+					if (isset($wtw)) {
+						$wtw->userid = $zuserid;
+					}
+					if (isset($wtwuser)) {
+						$wtwuser->userid = $zuserid;
+					}
 					/* add user to Host Role by default if server host user role setting is enabled */
 					$zaddhostrole = false;
 					if (defined('wtw_server_host_user_role')) {
@@ -884,6 +901,7 @@ class wtwusers {
 		return array( 
 			'success' => $zsuccess,
 			'serror'  => $zserror,
+			'userid' => $zuserid,
 			'email'  => $zuseremail,
 			'displayname'  => addslashes($zdisplayname));
 	}
@@ -1013,17 +1031,28 @@ class wtwusers {
 				$zfirstname = $wtwhandlers->decode64($zfirstname);
 				$zlastname = $wtwhandlers->decode64($zlastname);
 				$zgender = $wtwhandlers->decode64($zgender);
-
+				
+				$zfounduserid = '';
+				$zresults = $wtwhandlers->query("
+					select * from ".wtw_tableprefix."users
+					where email='".$zuseremail."'
+						and userid='".$zuserid."'
+						and deleted=0
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfounduserid = $zrow["userid"];
+				}
+				
 				if ($wtwhandlers->hasValue($zdob)) {
 					$zdob = date('Y-m-d', strtotime($zdob));
 					$zdob = "'".$zdob."'";
 				} else {
 					$zdob = "null";
 				}
-				if ($this->isEmailAvailable($zuseremail)) {
+				if ($this->isEmailAvailable($zuseremail) || (!empty($zfounduserid) && $zfounduserid == $zuserid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."users
-						set useremail='".$zuseremail."',
+						set email='".$zuseremail."',
 							updatedate=now(),
 							updateuserid='".$wtwhandlers->userid."'
 						where userid='".$wtwhandlers->userid."'
@@ -1059,11 +1088,21 @@ class wtwusers {
 			$zsuccess = false;
 			if (!empty($wtwhandlers->getSessionUserID())) {
 				$zdisplayname = $wtwhandlers->decode64($zdisplayname);
+				$zfounduserid = '';
+				$zresults = $wtwhandlers->query("
+					select * from ".wtw_tableprefix."users
+					where email='".$zemail."'
+						and userid='".$wtwhandlers->userid."'
+						and deleted=0
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zfounduserid = $zrow["userid"];
+				}
 				
-				if ($this->isEmailAvailable($zemail)) {
+				if ($this->isEmailAvailable($zemail) || (!empty($zfounduserid) && $zfounduserid == $zuserid)) {
 					$wtwhandlers->query("
 						update ".wtw_tableprefix."users
-						set useremail='".$zemail."',
+						set email='".$zemail."',
 							updatedate=now(),
 							updateuserid='".$wtwhandlers->userid."'
 						where userid='".$wtwhandlers->userid."'

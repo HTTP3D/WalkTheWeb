@@ -308,8 +308,15 @@ class wtwhandlers {
 	}
 
 	public function hasValue(&$zvalue) {
-		global $wtwdb;
-		return $wtwdb->hasValue($zvalue);
+		$zresponse = false;
+		try {
+			if (isset($zvalue) && !empty($zvalue)) {
+				$zresponse = true;
+			}
+		} catch (Exception $e) {
+			$this->serror("core-functions-class_wtwhandlers.php-hasValue=".$e->getMessage());
+		}
+		return $zresponse;
 	}
 
 	public function checkIDFormat($zid) {

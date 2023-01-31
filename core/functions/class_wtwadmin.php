@@ -51,6 +51,7 @@ class wtwadmin {
 			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_fields.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_cameras.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_profile.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_login.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/earcut.js?x=".$zver."'></script>\r\n";
 			/* $zjsdata .= "<script src='/core/scripts/engine/oimo.js?x=".$zver."'></script>\r\n"; */
@@ -74,6 +75,7 @@ class wtwadmin {
 			$zjsdata .= "<script src='/core/scripts/molds/wtw_basicmolds.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/molds/wtw_addmoldlist.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/molds/wtw_3dblog.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/molds/wtw_3dforms.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/automations/wtw_basicautomations.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/automations/wtw_addautomationlist.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/vehicles/wtw_vehicles.js?x=".$zver."'></script>\r\n";

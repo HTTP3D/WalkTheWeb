@@ -3537,7 +3537,8 @@ class wtwtables {
 						('wtw_menumic','Mic On','main','right',-980,1,'','/content/system/images/menumicoff32.png','WTW.toggleMicMute','',1,'".$ztimestamp."','".$zuserid."','".$ztimestamp."','".$zuserid."',NULL,'',0);
 					");			
 				}
-			} else if ($zoldversion1 == 3 && $zoldversion2 < 6) {
+			} 
+			if ($zoldversion1 == 3 && $zoldversion2 < 6) {
 				/* updated 3.5.2 - added Menu Items */
 				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='WalkTheWeb Help' and menuset='Help Menu';");
 				if (count($zresults) == 0) {
