@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2023 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -10,9 +10,6 @@ function WTW_3DINTERNET() {
 	this.masterChat = '0'; /* toggle off or on Chat (server level) */
 	this.masterVoiceChat = '0'; /* toggle off or on Voice Chat (server level) */
 	this.masterFranchising = '0'; /* toggle off or on ability to franchise out your buildings to other server 3D Scenes*/
-	this.globalLogins = '0'; /* toggle off or on global WalkTheWeb user logins - 1 to allow */
-	this.localLogins = '1'; /* toggle off or on local server logins - 1 to allow */
-	this.anonymousLogins = '1'; /* toggle off or on the use of anonymous avatars - 0 to require login */
 	this.admin = null; /* admin channel object - used for connection and checking multiplayer server settings */
 	this.move = null; /* movement channel object - tracks and sends multiplayer movements */
 	this.chat = null; /* chat channel object - processes all chat to and from your user */
@@ -228,7 +225,7 @@ WTW_3DINTERNET.prototype.loadUserSettingsAfterEngine = function() {
 WTW_3DINTERNET.prototype.loadLoginSettings = function(zloaddefault) {
 	/* load additional login settings */
 	try {
-		WTW.getSettings('wtw3dinternet_enableGlobal, wtw3dinternet_enableLocal, wtw3dinternet_enableAnonymous, wtw3dinternet_masterMove, wtw3dinternet_masterChat, wtw3dinternet_masterVoiceChat, wtw3dinternet_masterFranchising', 'wtw3dinternet.responseLoadLoginSettings');
+		WTW.getSettings('wtw3dinternet_masterMove, wtw3dinternet_masterChat, wtw3dinternet_masterVoiceChat, wtw3dinternet_masterFranchising', 'wtw3dinternet.responseLoadLoginSettings');
 		
 		var zavatarids = WTW.getCookie('AvatarIDs');
 		if (zavatarids != null) {
@@ -274,21 +271,6 @@ WTW_3DINTERNET.prototype.responseLoadLoginSettings = async function(zsettings, z
 	/* performed after it loads the login settings - sets the plugin global variables */
 	try {
 		zsetting = JSON.parse(zsettings);
-		if (zsetting.wtw3dinternet_enableGlobal != undefined) {
-			if (zsetting.wtw3dinternet_enableGlobal != '') {
-				wtw3dinternet.globalLogins = zsetting.wtw3dinternet_enableGlobal;					
-			}
-		}
-		if (zsetting.wtw3dinternet_enableLocal != undefined) {
-			if (zsetting.wtw3dinternet_enableLocal != '') {
-				wtw3dinternet.localLogins = zsetting.wtw3dinternet_enableLocal;					
-			}
-		}
-		if (zsetting.wtw3dinternet_enableAnonymous != undefined) {
-			if (zsetting.wtw3dinternet_enableAnonymous != '') {
-				wtw3dinternet.anonymousLogins = zsetting.wtw3dinternet_enableAnonymous;					
-			}
-		}
 		if (zsetting.wtw3dinternet_masterMove != undefined) {
 			if (zsetting.wtw3dinternet_masterMove != '') {
 				wtw3dinternet.masterMove = zsetting.wtw3dinternet_masterMove;
@@ -309,9 +291,6 @@ WTW_3DINTERNET.prototype.responseLoadLoginSettings = async function(zsettings, z
 				wtw3dinternet.masterFranchising = zsetting.wtw3dinternet_masterFranchising;
 			}
 		}
-		if (wtw3dinternet.globalLogins != '1') {
-			wtw3dinternet.localLogins = '1';
-		}
 		wtw3dinternet.setControlPanelSwitches();
 		WTW.loadLoginAvatarSelect();
 
@@ -323,7 +302,7 @@ WTW_3DINTERNET.prototype.responseLoadLoginSettings = async function(zsettings, z
 			}
 		);		
 	} catch (ex) {
-		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-responseLoadUserSettings=' + ex.message);
+		WTW.log('plugins:wtw-3dinternet:scripts-class_main.js-responseLoadLoginSettings=' + ex.message);
 	} 
 }
 
@@ -370,7 +349,7 @@ WTW_3DINTERNET.prototype.setControlPanelSwitches = function() {
 	try {
 		if (WTW.adminView == 1) {
 			if (dGet('wtw3dinternet_enableglobaltext') != null) {
-				if (wtw3dinternet.globalLogins == '1') {
+				if (WTW.globalLogins == '1') {
 					dGet('wtw3dinternet_enableglobaltext').className = 'wtw-enablelabel';
 					dGet('wtw3dinternet_enableglobaltext').innerHTML = 'Global Login/Avatars Enabled';
 					dGet('wtw3dinternet_enableglobal').checked = true;
@@ -379,7 +358,7 @@ WTW_3DINTERNET.prototype.setControlPanelSwitches = function() {
 					dGet('wtw3dinternet_enableglobaltext').innerHTML = 'Global Login/Avatars Disabled';
 					dGet('wtw3dinternet_enableglobal').checked = false;
 				}
-				if (wtw3dinternet.localLogins == '1') {
+				if (WTW.localLogins == '1') {
 					dGet('wtw3dinternet_enablelocaltext').className = 'wtw-enablelabel';
 					dGet('wtw3dinternet_enablelocaltext').innerHTML = 'Local Login/Avatars Enabled';
 					dGet('wtw3dinternet_enablelocal').checked = true;
@@ -388,7 +367,7 @@ WTW_3DINTERNET.prototype.setControlPanelSwitches = function() {
 					dGet('wtw3dinternet_enablelocaltext').innerHTML = 'Local Login/Avatars Disabled';
 					dGet('wtw3dinternet_enablelocal').checked = false;
 				}
-				if (wtw3dinternet.anonymousLogins == '1') {
+				if (WTW.anonymousLogins == '1') {
 					dGet('wtw3dinternet_enableanonymoustext').className = 'wtw-enablelabel';
 					dGet('wtw3dinternet_enableanonymoustext').innerHTML = 'Anonymous (Guest) Avatars Enabled';
 					dGet('wtw3dinternet_enableanonymous').checked = true;
@@ -450,19 +429,19 @@ WTW_3DINTERNET.prototype.changeSwitch = function(zobj) {
 		}
 		switch (zobj.id) {
 			case 'wtw3dinternet_enableglobal':
-				wtw3dinternet.globalLogins = zchecked;
+				WTW.globalLogins = zchecked;
 				if (zchecked == '0') {
-					wtw3dinternet.localLogins = '1';
+					WTW.localLogins = '1';
 				}
 				break;
 			case 'wtw3dinternet_enablelocal':
-				wtw3dinternet.localLogins = zchecked;
+				WTW.localLogins = zchecked;
 				if (zchecked == '0') {
-					wtw3dinternet.globalLogins = '1';
+					WTW.globalLogins = '1';
 				}
 				break;
 			case 'wtw3dinternet_enableanonymous':
-				wtw3dinternet.anonymousLogins = zchecked;
+				WTW.anonymousLogins = zchecked;
 				break;
 			case 'wtw3dinternet_enablemultiplayer':
 				wtw3dinternet.enableMultiplayer(zchecked);
@@ -479,9 +458,9 @@ WTW_3DINTERNET.prototype.changeSwitch = function(zobj) {
 		}
 		wtw3dinternet.setControlPanelSwitches();
 		let zsettings = {
-			'wtw3dinternet_enableGlobal': wtw3dinternet.globalLogins,
-			'wtw3dinternet_enableLocal': wtw3dinternet.localLogins,
-			'wtw3dinternet_enableAnonymous': wtw3dinternet.anonymousLogins,
+			'WTW_globalLogins': WTW.globalLogins,
+			'WTW_localLogins': WTW.localLogins,
+			'WTW_anonymousLogins': WTW.anonymousLogins,
 			'wtw3dinternet_masterMove': wtw3dinternet.masterMove,
 			'wtw3dinternet_masterChat': wtw3dinternet.masterChat,
 			'wtw3dinternet_masterVoiceChat': wtw3dinternet.masterVoiceChat,
@@ -720,31 +699,31 @@ WTW_3DINTERNET.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 				break;
 			case 'Login Menu':
 				zpagediv += "<h2 class='wtw-login'>Login Menu</h2>";
-				if (wtw3dinternet.globalLogins == '1') {
+				if (WTW.globalLogins == '1') {
 					zpagediv += "<div class='wtw-loginbutton' onclick='WTW.openGlobalLogin();'><img src='/content/system/images/menuwtw.png' alt='WalkTheWeb' title='WalkTheWeb' class='wtw-image40'/><img id='wtw_globalcheck' src='/content/system/images/greencheck.png' class='wtw-imageright40' /><div style='margin-top:4px;'>WalkTheWeb Login<br /><span style='font-size:.6em;'>(Works on most WalkTheWeb 3D Websites)</span></div></div>";
 				}
-				if (wtw3dinternet.localLogins == '1') {
+				if (WTW.localLogins == '1') {
 					zpagediv += "<div class='wtw-loginbutton' onclick=\"WTW.openLocalLogin('3D Website Login', .4, .6);\"><img src='/content/system/images/icon-128x128.jpg' alt='HTTP3D Inc.' title='HTTP3D Inc.' class='wtw-image40'/><img id='wtw_localcheck' src='/content/system/images/greencheck.png' class='wtw-imageright40' /><div style='margin-top:4px;'>3D Website Login<br /><span style='font-size:.6em;'>(3D Websites on this Server Only)</span></div></div>";
 				}
 				if (dGet('wtw_tuserid').value != '') {
-					if (wtw3dinternet.globalLogins == '1') {
+					if (WTW.globalLogins == '1') {
 						zpagediv += "<div class='wtw-logincancel' onclick='WTW.logoutGlobal();'>Logout WalkTheWeb</div>&nbsp;&nbsp;";
 					}
-					if (wtw3dinternet.localLogins == '1') {
+					if (WTW.localLogins == '1') {
 						zpagediv += "<div class='wtw-logincancel' onclick='WTW.logout();' style='width:170px;'>Logout 3D Website Only</div>";
 					}
 				} else {
-					if (wtw3dinternet.anonymousLogins == '1') {
+					if (WTW.anonymousLogins == '1') {
 						zpagediv += "<div class='wtw-loginbutton' onclick=\"WTW.openLocalLogin('Select an Anonymous Avatar', .4, .5);\"><img src='/content/system/images/menuprofilebig.png' alt='Anonymous Login' title='Anonymous Login' class='wtw-image40'/><div style='margin-top:10px;'>Continue as Guest</div></div>";
 					}
 				}
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
-				if (dGet('wtw_tusertoken').value == '' || wtw3dinternet.globalLogins != '1') {
+				if (dGet('wtw_tusertoken').value == '' || WTW.globalLogins != '1') {
 					if (dGet('wtw_globalcheck') != null) {
 						dGet('wtw_globalcheck').style.visibility = 'hidden';
 					}
 				}
-				if (dGet('wtw_tuserid').value == '' || wtw3dinternet.localLogins != '1') {
+				if (dGet('wtw_tuserid').value == '' || WTW.localLogins != '1') {
 					if (dGet('wtw_localcheck') != null) {
 						dGet('wtw_localcheck').style.visibility = 'hidden';
 					}
@@ -766,7 +745,7 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault, zeditmode) {
 		let zversioncheck = [];
 		let zlocalcomplete = false;
 		let zglobalcomplete = false;
-		if (wtw3dinternet.localLogins == '1') {
+		if (WTW.localLogins == '1') {
 			if (dGet('wtw_myavatars') != null) {
 				WTW.getJSON('/connect/avatars.php?groups=my', 
 					function(zresponse) {
@@ -821,14 +800,14 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault, zeditmode) {
 							}
 						}
 						zlocalcomplete = true;
-						if (zglobalcomplete || wtw3dinternet.globalLogins != '1') {
+						if (zglobalcomplete || WTW.globalLogins != '1') {
 							WTW.showMyAvatarList(zmyavatars, .4, .8, zeditmode, zversioncheck);
 						}
 					}
 				);
 			}
 		}
-		if (wtw3dinternet.globalLogins == '1') {
+		if (WTW.globalLogins == '1') {
 			if (dGet('wtw_myavatars') != null) {
 				/* call for global list */
 				var zrequest = {
@@ -889,7 +868,7 @@ WTW_3DINTERNET.prototype.getMyAvatarList = function(zloaddefault, zeditmode) {
 							}
 						}
 						zglobalcomplete = true;
-						if (zlocalcomplete || wtw3dinternet.localLogins != '1') {
+						if (zlocalcomplete || WTW.localLogins != '1') {
 							WTW.showMyAvatarList(zmyavatars, .4, .8, zeditmode, zversioncheck);
 						}
 					}
@@ -907,7 +886,7 @@ WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zusera
 	/* avatar selected - load avatar */
 	var zloading = false;
 	try {
-		if (wtw3dinternet.globalLogins == '1') {
+		if (WTW.globalLogins == '1') {
 			if (zglobaluseravatarid == '' && zuseravatarid != '') {
 				var zdisplayname = 'Anonymous';
 				if (dGet('wtw_tnewavatardisplayname') != null) {
@@ -919,6 +898,7 @@ WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zusera
 				}
 				zloading = true;
 
+				WTW.openLoginHUD('Loading 3D Avatar');
 				var zrequest = {
 					'useravatarid': zuseravatarid,
 					'function':'setuseravatarglobalhash'
@@ -957,7 +937,15 @@ WTW_3DINTERNET.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zusera
 										}
 									}
 								);
+							} else {
+								WTW.closeLoginHUD();
+								WTW.log("Avatar Not Found.");
+								WTW.openLocalLogin('Select Avatar',.4,.9);
 							}
+						} else {
+							WTW.closeLoginHUD();
+							WTW.log("Avatar Not Found.");
+							WTW.openLocalLogin('Select Avatar',.4,.9);
 						}
 					}
 				);
