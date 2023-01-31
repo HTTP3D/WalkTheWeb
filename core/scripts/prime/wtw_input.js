@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2023 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -211,7 +211,7 @@ WTWJS.prototype.keyDown = function(zevent) {
 		}
 		if (WTW.adminView == 1 && (zctrl || zevent.keyCode == 27)) {
 			WTW.adminMenuQuickKeys(zevent.keyCode);
-		} else if (WTW.canvasFocus == 1 && WTW.placeHolder == 0) {
+		} else if (WTW.canvasFocus == 1) { //  && WTW.placeHolder == 0
 			if (WTW.pause == 1) {
 				WTW.startRender();
 			}
@@ -228,22 +228,52 @@ WTWJS.prototype.keyDown = function(zevent) {
 							zevent.preventDefault();
 						}
 					}
-					var zmoldname = WTW.selectedMoldName;
-					if (dGet(zmoldname) != null) {
+					if (dGet(WTW.selectedMoldName + '-textbox') != null) {
 						/* mold name of 3D input box has matching HTML input element */
-						dGet(zmoldname).value = dGet(zmoldname).value.replace('|','');
+						dGet(WTW.selectedMoldName + '-textbox').value = dGet(WTW.selectedMoldName + '-textbox').value.replace('|','');
 						switch (zevent.key) {
 							case 'Backspace':
 							case 'Delete':
 								/* remove the last character */
-								var ztext = dGet(zmoldname).value.substring(0, dGet(zmoldname).value.length - 1);
-								dGet(zmoldname).value = ztext;
+								var ztext = dGet(WTW.selectedMoldName + '-textbox').value.substring(0, dGet(WTW.selectedMoldName + '-textbox').value.length - 1);
+								dGet(WTW.selectedMoldName + '-textbox').value = ztext;
+								break;
+							case 'Tab':
+								if (WTW.selectedMoldName.indexOf('hudlogin-') > -1) {
+									WTW.addText(true);
+								}
+								WTW.tabNextField();
+								zevent.preventDefault();
 								break;
 							default:
-								/* only process accepted keys */
-								var zaccept = 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-+_@';
-								if (zaccept.indexOf(zevent.key) > -1) {
-									dGet(zmoldname).value += zevent.key;
+								if (WTW.selectedMoldName.indexOf('-check-') > -1) {
+									if (dGet(WTW.selectedMoldName + '-textbox').checked) {
+										dGet(WTW.selectedMoldName + '-textbox').checked = false;
+									} else {
+										dGet(WTW.selectedMoldName + '-textbox').checked = true;
+									}
+								} else if (WTW.selectedMoldName.indexOf('-button-') > -1) {
+									if (WTW.selectedMoldName.indexOf('hudlogin-') > -1) {
+										/* execute animation on button pressed by keyboard entry */
+										WTW.executeAnimationByName(WTW.selectedMoldName.replace('hudlogin-','HUDLOGIN').replace('-',''));
+										/* process click */
+										WTW.hudLoginClick(WTW.selectedMoldName);
+									}
+								} else {
+									/* only process accepted keys */
+									var zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_@&";
+									if (WTW.selectedMoldName.indexOf('-email-') > -1) {
+										zaccept = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_@";
+									} else if (WTW.selectedMoldName.indexOf('-name-') > -1) {
+										zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_',";
+									} else if (WTW.selectedMoldName.indexOf('-password-') > -1) {
+										zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-+_@!#$%^&*()=[]:;'?,";
+									} else if (WTW.selectedMoldName.indexOf('-search-') > -1) {
+										zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_@'";
+									}
+									if (zaccept.indexOf(zevent.key) > -1) {
+										dGet(WTW.selectedMoldName + '-textbox').value += zevent.key;
+									}
 								}
 								break;
 						}
@@ -290,6 +320,9 @@ WTWJS.prototype.keyPressed = function(keycode) {
 			switch (keycode) {
 				case 67: /* c */
 					WTW.hudToggleCompass();
+					break;
+				case 76: /* l */
+					WTW.hudLoginToggle();
 					break;
 				case 72: /* h */
 				case 77: /* m */
@@ -430,6 +463,8 @@ WTWJS.prototype.mouseClick = function(zevent) {
 						WTW.checkMoldEvent('onclick', zpickedname);
 						if (zpickedname.substr(0,4) == 'hud-') {
 							WTW.hudClick(zpickedname);
+						} else if (zpickedname.substr(0,9) == 'hudlogin-') {
+							WTW.hudLoginClick(zpickedname);
 						} else if (zpickedname.indexOf('-image') > -1) {
 							WTW.checkImageClick(zpickedname);
 						} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
@@ -780,6 +815,8 @@ WTWJS.prototype.clearSelectedMold = function () {
 		/* clear the selected mold */
 		if (WTW.selectedMoldName.indexOf('hud-') > -1) {
 			WTW.hudEditRefreshText(WTW.selectedMoldName, 'hud-pageform', true);
+		} else if (WTW.selectedMoldName.indexOf('hudlogin-') > -1) {
+			WTW.addText(true);
 		}
 		WTW.selectedMoldName = '';
 	} catch (ex) {
@@ -2273,6 +2310,8 @@ WTWJS.prototype.checkHovers = function(zmold) {
 				zshape = 'avatar';
 			} else if (zmoldname.indexOf('hud-') > -1) {
 				WTW.hudCheckHovers(zmoldname, 1);
+			} else if (zmoldname.indexOf('hudlogin-') > -1) {
+				WTW.mouseOverLoginHUD(zmoldname, 1);
 			}
 		}
 		if (zmoldname != undefined) {
@@ -2315,6 +2354,9 @@ WTWJS.prototype.resetHovers = function() {
 		} else {
 			if (zmoldname.indexOf('hud-') > -1) {
 				WTW.hudCheckHovers(zmoldname, 0);
+			}
+			if (zmoldname.indexOf('hudlogin-') > -1) {
+				WTW.mouseOverLoginHUD(zmoldname, 0);
 			}
 		}
 	} catch (ex) {

@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2023 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -330,12 +330,13 @@ WTWJS.prototype.hudAddSaveClose = function(zid, zpositionx, zpositiony, zpositio
 	}
 }
 
-WTWJS.prototype.hudEditText = function(zmoldname) {
+WTWJS.prototype.hudEditText = function(zmoldname, zparentname) {
 	/* set selected mold and allow keyboard to enter text to 3D Textbox */
 	try {
 		WTW.hilightMoldFast(zmoldname, 'green');
 		var zoldmoldname = WTW.selectedMoldName;
 		if (WTW.selectedMoldName != zmoldname) {
+			WTW.clearSelectedMold();
 			WTW.selectedMoldName = zmoldname;
 			if (WTW.textTimer != null) {
 				window.clearInterval(WTW.textTimer);
@@ -346,7 +347,7 @@ WTWJS.prototype.hudEditText = function(zmoldname) {
 		if (WTW.textTimer == null) {
 			WTW.textTimer = window.setInterval(function(){
 				if (WTW.selectedMoldName != '' && dGet(WTW.selectedMoldName) != null) {
-					WTW.hudEditRefreshText(WTW.selectedMoldName, 'hud-pageform');
+					WTW.hudEditRefreshText(WTW.selectedMoldName, zparentname);
 				} else {
 					window.clearInterval(WTW.textTimer);
 					WTW.textTimer = null;
@@ -420,7 +421,7 @@ WTWJS.prototype.hudEditRefreshText = function(zmoldname, zparentname, zeditdone)
 					'emissive':'#37370d'
 				}
 			};
-			var zmoldparent = WTW.getMeshOrNodeByID('hud-pageform');
+			var zmoldparent = WTW.getMeshOrNodeByID(zparentname);
 			
 			zdisplaytext = new Writer(zshowtext, zwebstyle);
 			var zmytext = zdisplaytext.getMesh();

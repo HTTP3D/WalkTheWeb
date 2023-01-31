@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2023 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -262,6 +262,7 @@ WTWJS.prototype.loadLoginSettings = function() {
 				window.location.href = '/';
 			}
 		}
+		WTW.getSettings('WTW_globalLogins, WTW_localLogins, WTW_anonymousLogins', 'WTW.responseLoadLoginSettings');
 		/* hook for plugins to be able to intercept the user loading process and add functions to include or replace */
 		var zloaddefault = true;
 		zloaddefault = WTW.pluginsLoadLoginSettings(zloaddefault);
@@ -271,6 +272,33 @@ WTWJS.prototype.loadLoginSettings = function() {
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_core.js-loadLoginSettings=' + ex.message);
+	} 
+}
+
+WTWJS.prototype.responseLoadLoginSettings = async function(zsettings, zparameters) {
+	/* performed after it loads the login settings - sets the login global variables */
+	try {
+		zsetting = JSON.parse(zsettings);
+		if (zsetting.WTW_globalLogins != undefined) {
+			if (zsetting.WTW_globalLogins != '') {
+				WTW.globalLogins = zsetting.WTW_globalLogins;					
+			}
+		}
+		if (zsetting.WTW_localLogins != undefined) {
+			if (zsetting.WTW_localLogins != '') {
+				WTW.localLogins = zsetting.WTW_localLogins;					
+			}
+		}
+		if (zsetting.WTW_anonymousLogins != undefined) {
+			if (zsetting.WTW_anonymousLogins != '') {
+				WTW.anonymousLogins = zsetting.WTW_anonymousLogins;					
+			}
+		}
+		if (WTW.globalLogins != '1') {
+			WTW.localLogins = '1';
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-prime-wtw_core.js-responseLoadLoginSettings=' + ex.message);
 	} 
 }
 
@@ -294,6 +322,7 @@ WTWJS.prototype.loadLoginAvatarSelect = function() {
 				if (WTW.getCookie('globaluseravatarid') != null) {
 					zglobaluseravatarid = WTW.getCookie('globaluseravatarid');
 				}
+				WTW.openLoginHUD('Loading 3D Avatar');
 				/* if avatar saved, load avatar */
 				WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobaluseravatarid, zuseravatarid, '', false);
 			} else {

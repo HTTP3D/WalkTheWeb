@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2023 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -471,10 +471,16 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 					zmold.material = WTW.addCovering(zcoveringname, zmoldname, zmolddef, zlenx, zleny, zlenz, zspecial1, zspecial2);
 					if (zmold.material != undefined) {
 						/* set colors and color tinting mainly for textures just added */
-						zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);	
-						zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
-						zmold.material.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
-						zmold.material.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+						if (zmolddef.color.diffusecolor != undefined && zmolddef.color.emissivecolor != undefined && zmolddef.color.specularcolor != undefined && zmolddef.color.ambientcolor != undefined) {
+							zmold.material.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);	
+							zmold.material.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+							zmold.material.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+							zmold.material.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+						} else if (zmolddef.color != undefined) {
+							if (zmolddef.color.indexOf('#') > -1) {
+								zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color);
+							}
+						}
 					}
 				}
 			}
@@ -489,7 +495,7 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 				/* if not intentionally set to off, use collisions */
 				zmold.checkCollisions = true; 
 			}
-			if (WTW.adminView == 1) {
+			if (WTW.adminView == 1 || zmolddef.ispickable == '1') {
 				/* mouse over covers hovers in the 3D Scene - for admin mode */
 				WTW.registerMouseOver(zmold);
 			}

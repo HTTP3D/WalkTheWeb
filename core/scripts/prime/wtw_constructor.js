@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2023 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -89,6 +89,15 @@ function WTWJS() {
 	/* WTW.hudLayout - identifies the current layout of the Heads Up Display (HUD): '' = center, 'left', 'right', or 'bottom' */
 	this.hudLayout = '';
 	
+	/* WTW.globalLogins - toggle off or on global WalkTheWeb user logins - 1 to allow */
+	this.globalLogins = '0'; 
+
+	/* WTW.localLogins - toggle off or on local server logins - 1 to allow */
+	this.localLogins = '1';
+
+	/* WTW.anonymousLogins - toggle off or on the use of anonymous avatars - 0 to require login */
+	this.anonymousLogins = '1'; 
+
 	/* WTW.roles - provides an array of roles the user is assigned to. Changing this array does not provide any additional access, it is only a mask for relevant visual options. All Access is verified on the php side when making updates and retrieving information. */
 	this.roles = [];
 	
@@ -440,10 +449,36 @@ function WTWJS() {
 	
 	/* WTW.selectedMoldName - currently selected mold used for interacting with it (example: select fill in the blank - adds text to mold). */
 	this.selectedMoldName = '';
+
+	/* WTW.offsetX, WTW.offsetY, WTW.offsetZ - are used to offset the 3D Text to the surface of the Selected Mold above. */
+	this.offsetX = 0;
+	this.offsetY = 0;
+	this.offsetZ = 0;
+	
+	/* WTW.maxLength - The max number of characters to show in 3D Text on the Selected Mold. All characters are entered, but only some display to stay without the bounds of the Mold. Note that when W or M (wider characters) are in the entered text, this number is reduced as much as 80% in the addText function used to create the 3D Text. */
+	this.maxLength = 10;
 	
 	/* WTW.textTimer - used to create a blinking cursor in the fill in the blank for editing the Selected Mold (above) */
 	this.textTimer = null;
+	
+	/* WTW.tabOrder - array of fields for the form to use for Selected Mold when tab is clicked. It will check if the mold exists and move to the next mold if it does not. */
+	this.tabOrder = [];
 
+	/* WTW.webStyle - sets the font for the 3D Text for the Selected Mold, mainly for blinking cursor and text updates */
+	this.webStyle = {
+		'anchor':'left',
+		'letter-height':1.00,
+		'letter-thickness':.2,
+		'color':'#0069ff',
+		'alpha':1.00,
+		'colors':{
+			'diffuse':'#0069ff',
+			'specular':'#c0c0c0',
+			'ambient':'#c0c0c0',
+			'emissive':'#000000'
+		}
+	};
+	
 	/* temp global variables used to sync 2 animations in the demo scene (depreciated and will be removed soon) */
 	this.temp1 = null;
 	this.temp2 = null;

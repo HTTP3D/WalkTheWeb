@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2023 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -1723,7 +1723,7 @@ WTWJS.prototype.disposeClean = function(zmoldname, zcheck) {
 					}
 				}
 				try {
-					if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf('actionzone') > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1 || zmoldname.indexOf('editavatar') > -1 || zmoldname == 'hud') {
+					if (zmoldname.indexOf('babylonfile') > -1 || zmoldname.indexOf('actionzone') > -1 || zmoldname.indexOf('myavatar') > -1 || zmoldname.indexOf('person') > -1 || zmoldname.indexOf('editavatar') > -1 || zmoldname == 'hud' || zmoldname == 'hudlogin') {
 						/* dispose of child objects from imported meshes */
 						var zchildmeshes = zmold.getChildren();
 						if (zchildmeshes != null) {

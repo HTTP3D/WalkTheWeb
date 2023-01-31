@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2023 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -38,10 +38,16 @@ WTWJS.prototype.addCoveringColor = function(zmoldname, zmolddef) {
 		}
 		zcovering = new BABYLON.StandardMaterial('mat' + zmoldname, scene);
 		zcovering.alpha = zopacity;
-		zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
-		zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
-		zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
-		zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+		if (zmolddef.color.diffusecolor != undefined && zmolddef.color.emissivecolor != undefined && zmolddef.color.specularcolor != undefined && zmolddef.color.ambientcolor != undefined) {
+			zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color.diffusecolor);
+			zcovering.emissiveColor = new BABYLON.Color3.FromHexString(zmolddef.color.emissivecolor);
+			zcovering.specularColor = new BABYLON.Color3.FromHexString(zmolddef.color.specularcolor);
+			zcovering.ambientColor = new BABYLON.Color3.FromHexString(zmolddef.color.ambientcolor);
+		} else if (zmolddef.color != undefined) {
+			if (zmolddef.color.indexOf('#') > -1) {
+				zcovering.diffuseColor = new BABYLON.Color3.FromHexString(zmolddef.color);
+			}
+		}
 	} catch (ex) {
 		WTW.log('core-scripts-coverings-basiccoverings\r\n addCoveringColor=' + ex.message);
 	}

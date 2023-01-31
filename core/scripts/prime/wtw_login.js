@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2023 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -8,16 +8,76 @@
 WTWJS.prototype.openGlobalLogin = function() {
 	/* opens login for 3dnet.walktheweb.com - as a global WalkTheWeb login option */
 	try {
-		WTW.openIFrame('https://3dnet.walktheweb.com/core/login/login.php?serverinstanceid=' + btoa(dGet('wtw_serverinstanceid').value) + '&domainname=' + btoa(wtw_domainname) + '&domainurl=' + btoa(wtw_domainurl) + '&websiteurl=' + btoa(wtw_websiteurl) + '&webid=' + btoa(communityid + buildingid + thingid), .4, .6, 'Login Menu');
+		WTW.openLoginHUD('WalkTheWeb Login');
+//		WTW.openIFrame('https://3dnet.walktheweb.com/core/login/login.php?serverinstanceid=' + btoa(dGet('wtw_serverinstanceid').value) + '&domainname=' + btoa(wtw_domainname) + '&domainurl=' + btoa(wtw_domainurl) + '&websiteurl=' + btoa(wtw_websiteurl) + '&webid=' + btoa(communityid + buildingid + thingid), .4, .6, 'Login Menu');
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_login.js-openGlobalLogin=' + ex.message);
 	}
 }
 
+WTWJS.prototype.tryGlobalLogin = function() {
+	try {
+//		dGet('wtw_loginerrortext').innerHTML = "";
+		let zemail = dGet('wtw_temail').value;
+		let zpassword = dGet('wtw_tpassword').value;
+		let zserverip = dGet('wtw_serverip').value;
+		var zrequest = {
+			'useremail':btoa(zemail),
+			'password':btoa(zpassword),
+			'serverip':btoa(zserverip),
+			'function':'login'
+		};
+		WTW.postJSON("https://3dnet.walktheweb.com/connect/authenticate.php", zrequest, 
+			function(zresponse) {
+				zresponse = JSON.parse(zresponse);
+				var zuserid = '';
+				var zusertoken = '';
+				var zwtwusertoken = '';
+				if (zresponse.userid != undefined) {
+					zuserid = zresponse.userid;
+				}
+				if (zresponse.usertoken != undefined) {
+					zusertoken = zresponse.usertoken;
+				}
+				if (zresponse.wtwusertoken != undefined) {
+					zwtwusertoken = zresponse.wtwusertoken;
+				}
+				if (zusertoken.length > 100 || zuserid != '') {
+/*					dGet('wtw_loginlabel').innerHTML = 'WalkTheWeb Login';
+					WTW.hide('wtw_hostlogindiv');
+					WTW.hide('wtw_logindiv');
+					WTW.hide('wtw_registerdiv');
+					WTW.hide('wtw_resetpassworddiv');
+					dGet('wtw_usertoken').value = zusertoken;
+					dGet('wtw_wtwusertoken').value = zwtwusertoken;
+					dGet('wtw_userid').value = zuserid;
+					dGet('wtw_temailloggedin').disabled = false;
+					dGet('wtw_temailloggedin').value = zemail;
+					dGet('wtw_temailloggedin').disabled = true;
+					dGet('wtw_wtwemail').disabled = false;
+					dGet('wtw_wtwemail').value = zemail;
+					dGet('wtw_wtwemail').disabled = true;
+					WTW.show('wtw_loggedindiv');
+					if (dGet('wtw_usertoken').value != '' || dGet('wtw_userid').value != '') {
+						dGet('wtw_step4_5').style.visibility = 'visible';
+						dGet('wtw_step4_5b').style.visibility = 'visible';
+					}
+*/				} else {
+					dGet('wtw_loginerrortext').innerHTML = zresponse.serror;
+				}
+			}
+		);
+	} catch (ex) {
+		WTW.log("core-scripts-prime-wtw_login.js-tryGlobalLogin=" + ex.message);
+	}
+}	
+
+
 WTWJS.prototype.logoutGlobal = function() {
 	/* references 3dnet.walktheweb.com - logout of global WalkTheWeb login */
 	try {
-		WTW.openIFrame('https://3dnet.walktheweb.com/core/login/login.php?logout=1&serverinstanceid=' + btoa(dGet('wtw_serverinstanceid').value) + '&domainname=' + btoa(wtw_domainname) + '&domainurl=' + btoa(wtw_domainurl) + '&websiteurl=' + btoa(wtw_websiteurl) + '&webid=' + btoa(communityid + buildingid + thingid), .4, .6, 'Login Menu');
+		WTW.openLoginHUD('WalkTheWeb Login');
+//		WTW.openIFrame('https://3dnet.walktheweb.com/core/login/login.php?logout=1&serverinstanceid=' + btoa(dGet('wtw_serverinstanceid').value) + '&domainname=' + btoa(wtw_domainname) + '&domainurl=' + btoa(wtw_domainurl) + '&websiteurl=' + btoa(wtw_websiteurl) + '&webid=' + btoa(communityid + buildingid + thingid), .4, .6, 'Login Menu');
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_login.js-logoutGlobal=' + ex.message);
 	}
@@ -105,10 +165,11 @@ WTWJS.prototype.globalLoginResponse = function(zresponse) {
 WTWJS.prototype.openLoginMenu = function() {
 	/* open login menu for login or show profile as needed */
 	try {
+		WTW.closeIFrame();
 		if (dGet('wtw_tuserid').value != '') {
-			WTW.openLocalLogin('Local Profile', .4, .6);
+			WTW.openLoginHUD('User Menu');
 		} else {
-			WTW.openLocalLogin('Login Menu', .4, .5);
+			WTW.openLoginHUDLogin();
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_login.js-openLoginMenu=' + ex.message);
@@ -161,9 +222,9 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 					"<div class='wtw-loginlabelspace'>&nbsp;</div><div class='wtw-logintext'><input type='checkbox' id='wtw_trememberlogin' class='wtw-checkbox' /> Remember Me</div><div style='clear:both;'></div><br />" +
 					"<div id='wtw_loginerrortext' class='wtw-errortext'>&nbsp;</div><br />" +
 					"<div class='wtw-loginbutton' onclick='WTW.loginAttempt();'><img src='/content/system/images/icon-128x128.jpg' alt='HTTP3D Inc.' title='HTTP3D Inc.' class='wtw-image40'/><div style='margin-top:10px;'>3D Website Login</div></div>" +
-					"<div class='wtw-logincancel' onclick='WTW.openLoginMenu();'>Cancel</div>&nbsp;&nbsp;" +
-					"<div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('Recover Login', .4, .5);\">Forgot Login?</div>&nbsp;&nbsp;" +
-					"<div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('Create Login', .4, .7);\">Create Login</div>";
+					"<div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('Create Login', .4, .7);\">Create Login</div>&nbsp;&nbsp;" +
+					"<div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('Recover Login', .4, .5);\">Forgot Password?</div>&nbsp;&nbsp;" +
+					"<div class='wtw-logincancel' onclick='WTW.openLoginMenu();'>Cancel</div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 				var zlogin = WTW.getCookie('rememberlogin');
 				if (zlogin != '') {
@@ -178,7 +239,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 					"<div class='wtw-loginlabel'>Email</div><div><input type='text' id='wtw_temailrecover' autocomplete='email' class='wtw-textbox' maxlength='255' /></div><div style='clear:both;'></div>" +
 					"<div id='wtw_reseterrortext' class='wtw-errortext'>&nbsp;</div><br />" +
 					"<div class='wtw-loginbutton' onclick='WTW.passwordReset();'><div style='margin-top:10px;'>Recover my Password</div></div>" +
-					"<div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('3D Website Login', .4, .6);\">Return to Login</div>&nbsp;&nbsp;";
+					"<div class='wtw-logincancel' onclick=\"WTW.closeIFrame();WTW.openLoginHUD('3D Website Login');\">Return to Login</div>&nbsp;&nbsp;";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 				break;
 			case 'Email Verification':
@@ -211,7 +272,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 			case 'Select Avatar':
 				zpagediv += "<h2 class='wtw-login'>Select My Avatar</h2>" + 
 					"<div class='wtw-loadingmenu'>Loading</div>" + 
-					"<div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('Local Profile', .4, .6);\">Cancel</div>";
+					"<div class='wtw-logincancel' onclick=\"WTW.closeIFrame();WTW.openLoginHUD('User Menu');\">Cancel</div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 				WTW.getFullAvatarList(true, zwidth, zheight);
 				break;
@@ -225,7 +286,7 @@ WTWJS.prototype.openLocalLogin = function(zitem, zwidth, zheight) {
 			case 'Select an Anonymous Avatar':
 				zpagediv += "<h2 class='wtw-login'>Select an Anonymous Avatar</h2>" + 
 					"<div class='wtw-loadingmenu'>Loading</div>" + 
-					"<div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('Login Menu', .4, .5);\">Cancel</div>";
+					"<div class='wtw-logincancel' onclick=\"WTW.closeIFrame();WTW.openLoginHUDLogin();\">Cancel</div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 				WTW.getAnonymousAvatarList();
 				break;
@@ -276,7 +337,7 @@ WTWJS.prototype.getLocalProfile = async function(zedit, zwidth, zheight) {
 					zpagediv += "<div id='wtw_errortext' class='wtw-errortext'>&nbsp;</div><br />";
 					zpagediv += "<div class='wtw-loginbutton' onclick='WTW.saveMyProfile();'><div style='margin-top:4px;'>Save Profile</div></div>";
 
-					zpagediv += "<div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('Local Profile', .4, .6);\">Cancel</div>";
+					zpagediv += "<div class='wtw-logincancel' onclick=\"WTW.closeIFrame();WTW.openLoginHUD('User Menu');\">Cancel</div>";
 				} else {
 					zpagediv += "<h2 class='wtw-login'>Local Profile</h2>";
 					zpagediv += "<div class='wtw-loginlabel'>Display Name</div><div class='wtw-profiletext'>" + zresponse.displayname + "</div><div style='clear:both;'></div>";
@@ -333,7 +394,8 @@ WTWJS.prototype.saveMyProfileComplete = function(zresponse) {
 	/* save local server user profile complete */
 	try {
 		if (zresponse == '') {
-			WTW.openLocalLogin('Local Profile', .4, .6);
+			WTW.closeIFrame();
+			WTW.openLoginHUD('User Menu');
 		} else {
 			dGet('wtw_errortext').innerHTML = zresponse;
 			window.setTimeout(function() {
@@ -396,7 +458,7 @@ WTWJS.prototype.getAnonymousAvatarList = async function() {
 					zpagediv += 'No Anonymous Avatars Available';
 				}
 				zpagediv += '</div>';
-				zpagediv += "<br /><div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('Login Menu', .4, .5);\">Cancel</div>";
+				zpagediv += "<br /><div class='wtw-logincancel' onclick=\"WTW.openLoginHUDLogin();\">Cancel</div>";
 				dGet('wtw_ipagediv').innerHTML = zpagediv;
 			}
 		);
@@ -470,7 +532,7 @@ WTWJS.prototype.getFullAvatarList = async function(zshowmyavatars, zwidth, zheig
 				}
 				zpagediv += '</div>';
 				if (zshowmyavatars) {
-					zpagediv += "<div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('Local Profile', .4, .6);\">Cancel</div>";
+					zpagediv += "<div class='wtw-logincancel' onclick=\"WTW.closeIFrame();WTW.openLoginHUD('User Menu');\">Cancel</div>";
 				} else {
 					zpagediv += "<br /><div class='wtw-logincancel' onclick=\"WTW.openLocalLogin('Select My Avatar', .4, .6);\">Cancel</div>";
 				}
@@ -803,6 +865,7 @@ WTWJS.prototype.updateVersionDisplay = async function(zobj, zversion, zoldversio
 WTWJS.prototype.onMyAvatarSaveSelect = async function(zglobaluseravatarid, zuseravatarid, zavatarid) {
 	/* process to enter the 3D Scene when the avatar is selected (save my selection) */
 	try {
+		WTW.openLoginHUD('Loading 3D Avatar');
 		if (dGet('wtw_tnewavatardisplayname') != null) {
 			if (dGet('wtw_menudisplayname').innerHTML == '' && dGet('wtw_tnewavatardisplayname').value != '') {
 				dGet('wtw_menudisplayname').innerHTML = dGet('wtw_tnewavatardisplayname').value;
@@ -851,6 +914,7 @@ WTWJS.prototype.onMyAvatarSelect = function(zglobaluseravatarid, zuseravatarid, 
 	/* after the avatar is saved, this process loads the avatar */
 	/* and allows plugins to provide alternate loading and saving of changed avatars */
 	try {
+		WTW.openLoginHUD('Loading 3D Avatar');
 		dGet('wtw_tuseravatarid').value = zuseravatarid;
 		dGet('wtw_tglobaluseravatarid').value = zglobaluseravatarid;
 		dGet('wtw_tavatarid').value = zavatarid;
@@ -980,7 +1044,7 @@ WTWJS.prototype.logout = async function() {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
-				WTW.openLoginMenu();
+				WTW.openLoginHUDLogin();
 			}
 		);
 	} catch (ex) {
@@ -1149,7 +1213,8 @@ WTWJS.prototype.editProfile = function() {
 		WTW.showInline('wtw_teditemail');
 		WTW.show('wtw_menusaveprofile');
 		WTW.show('wtw_menucancelsaveprofile');
-		WTW.showSettingsMenu('wtw_menuprofile');
+		//WTW.showSettingsMenu('wtw_menuprofile');
+		WTW.openLoginHUD('User Menu');
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_login.js-editProfile=' + ex.message);
 	}
@@ -1179,7 +1244,7 @@ WTWJS.prototype.saveProfile = async function() {
 				dGet('wtw_menuemail').innerHTML = dGet('wtw_teditemail').value;
 				WTW.showInline('wtw_menudisplayname');
 				WTW.showInline('wtw_menuemail');
-				WTW.showSettingsMenu('wtw_menuprofile');
+				//WTW.showSettingsMenu('wtw_menuprofile');
 				WTW.saveProfileComplete(zresponse.serror);
 			}
 		);
@@ -1192,10 +1257,11 @@ WTWJS.prototype.saveProfileComplete = function(zresponse) {
 	/* save local server user profile complete */
 	try {
 		dGet('wtw_profileerrortext').innerHTML = zresponse;
-		WTW.showSettingsMenu('wtw_menuprofile');
+		//WTW.showSettingsMenu('wtw_menuprofile');
 		window.setTimeout(function() {
 			dGet('wtw_profileerrortext').innerHTML = '';
-			WTW.showSettingsMenu('wtw_menuprofile');
+			//WTW.showSettingsMenu('wtw_menuprofile');
+			WTW.openLoginHUD('User Menu');
 		},5000);
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_login.js-saveProfileComplete=' + ex.message);
@@ -1213,7 +1279,8 @@ WTWJS.prototype.cancelEditProfile = function() {
 		WTW.showInline('wtw_menuemail');
 		dGet('wtw_teditdisplayname').value = dGet('wtw_menudisplayname').innerHTML;
 		dGet('wtw_teditemail').value = dGet('wtw_menuemail').innerHTML;
-		WTW.showSettingsMenu('wtw_menuprofile');
+		//WTW.showSettingsMenu('wtw_menuprofile');
+		WTW.openLoginHUD('User Menu');
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_login.js-cancelEditProfile=' + ex.message);
 	}

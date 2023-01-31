@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2023 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -32,6 +32,7 @@ WTWJS.prototype.loadAvatarPlaceholder = function() {
 WTWJS.prototype.reloadAvatar = function() {
 	/* used by the global login page to trigger an avatar reload after changes are made */
 	try {
+		WTW.openLoginHUD('Loading 3D Avatar');
 		WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, dGet('wtw_tglobaluseravatarid').value, dGet('wtw_tuseravatarid').value, '', true);
     } catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_loadavatar.js-reloadAvatar=' + ex.message);
@@ -199,6 +200,9 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 		WTW.pluginsSavedAvatarRetrieved(zavatarname, zsendrefresh);
     } catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_loadavatar.js-updateAvatar=' + ex.message);
+		if (zavatarname.indexOf('myavatar') > -1) {
+			WTW.openLoginHUD('Loading 3D Avatar');
+		}
 		WTW.getSavedAvatar('myavatar-' + dGet('wtw_tinstanceid').value, zglobaluseravatarid, zuseravatarid, zavatarid, true);
     }
 }
@@ -890,6 +894,7 @@ WTWJS.prototype.avatarLoadComplete = function(zavatarname) {
 		if (typeof WTW.pluginsAvatarLoadComplete == 'function') {
 			WTW.pluginsAvatarLoadComplete(zavatarname);
 		}
+		WTW.closeLoginHUD();
     } catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_loadavatar.js-avatarLoadComplete=' + ex.message);
     }
