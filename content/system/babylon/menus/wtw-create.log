@@ -1,0 +1,381 @@
+Exporter version: 3.3.0, Blender version: 3.3.1
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  C:\Data\HTTP3DInc\Blender\menus\
+	Python World class constructor completed
+	processing begun of mesh:  createloginbox
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		processing begun of multimaterial:  wtw_create.Multimaterial#0
+		num positions      :  17067
+		num normals        :  17067
+		num tangents       :  0
+		num uvs            :  34134
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  27542
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  button-create
+		animation processing begun
+			processing action createAction:  in[1 - 100], out[0 - 100]
+		processing begun of material:  blue
+		processing begun of material:  background
+		processing begun of material:  white
+		registered as also a user of material:  blue
+		registered as also a user of material:  background
+		processing begun of multimaterial:  wtw_create.Multimaterial#1
+		num positions      :  171
+		num normals        :  171
+		num tangents       :  0
+		num uvs            :  342
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  84
+	processing begun of mesh:  button-cancelcreate
+		animation processing begun
+			processing action cancelAction:  in[1 - 100], out[0 - 100]
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		registered as also a user of material:  gray
+		registered as also a user of material:  background
+		registered as also a user of material:  blue
+		processing begun of multimaterial:  wtw_create.Multimaterial#2
+		num positions      :  171
+		num normals        :  171
+		num tangents       :  0
+		num uvs            :  342
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  84
+	processing begun of mesh:  password-password
+		processing begun of material:  yellow
+		processing begun of material:  white
+		registered as also a user of material:  white
+		processing begun of multimaterial:  wtw_create.Multimaterial#3
+		num positions      :  22
+		num normals        :  22
+		num tangents       :  0
+		num uvs            :  44
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  20
+	processing begun of mesh:  email-email
+		processing begun of material:  yellow
+		processing begun of material:  white
+		registered as also a user of material:  yellow
+		registered as also a user of material:  white
+		processing begun of multimaterial:  wtw_create.Multimaterial#4
+		num positions      :  22
+		num normals        :  22
+		num tangents       :  0
+		num uvs            :  44
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  20
+	processing begun of mesh:  password-password2
+		processing begun of material:  yellow
+		processing begun of material:  white
+		registered as also a user of material:  yellow
+		registered as also a user of material:  white
+		processing begun of multimaterial:  wtw_create.Multimaterial#5
+		num positions      :  22
+		num normals        :  22
+		num tangents       :  0
+		num uvs            :  44
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  20
+	processing begun of mesh:  invalidemail
+		processing begun of material:  red
+		num positions      :  7747
+		num normals        :  7747
+		num tangents       :  0
+		num uvs            :  15494
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  12416
+		WARNING: # of 0 area faces found:  20
+	processing begun of mesh:  invalidpassword
+		processing begun of material:  red
+		registered as also a user of material:  red
+		num positions      :  11426
+		num normals        :  11426
+		num tangents       :  0
+		num uvs            :  22852
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  18665
+		WARNING: # of 0 area faces found:  24
+	processing begun of mesh:  email-emailborder
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		registered as also a user of material:  gray
+		registered as also a user of material:  background
+		registered as also a user of material:  blue
+		processing begun of multimaterial:  wtw_create.Multimaterial#6
+		num positions      :  173
+		num normals        :  173
+		num tangents       :  0
+		num uvs            :  346
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  152
+	processing begun of mesh:  email-emailborderfocus
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		registered as also a user of material:  gray
+		registered as also a user of material:  background
+		registered as also a user of material:  blue
+		processing begun of multimaterial:  wtw_create.Multimaterial#7
+		num positions      :  173
+		num normals        :  173
+		num tangents       :  0
+		num uvs            :  346
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  152
+	processing begun of mesh:  password-passwordborder
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		registered as also a user of material:  gray
+		registered as also a user of material:  background
+		registered as also a user of material:  blue
+		processing begun of multimaterial:  wtw_create.Multimaterial#8
+		num positions      :  174
+		num normals        :  174
+		num tangents       :  0
+		num uvs            :  348
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  152
+	processing begun of mesh:  password-passwordborderfocus
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		registered as also a user of material:  gray
+		registered as also a user of material:  background
+		registered as also a user of material:  blue
+		processing begun of multimaterial:  wtw_create.Multimaterial#9
+		num positions      :  174
+		num normals        :  174
+		num tangents       :  0
+		num uvs            :  348
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  152
+	processing begun of mesh:  password-password2border
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		registered as also a user of material:  gray
+		registered as also a user of material:  background
+		registered as also a user of material:  blue
+		processing begun of multimaterial:  wtw_create.Multimaterial#10
+		num positions      :  173
+		num normals        :  173
+		num tangents       :  0
+		num uvs            :  346
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  152
+	processing begun of mesh:  password-password2borderfocus
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		registered as also a user of material:  gray
+		registered as also a user of material:  background
+		registered as also a user of material:  blue
+		processing begun of multimaterial:  wtw_create.Multimaterial#11
+		num positions      :  173
+		num normals        :  173
+		num tangents       :  0
+		num uvs            :  346
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  152
+	processing begun of mesh:  button-createtext
+		processing begun of material:  blue
+		processing begun of material:  background
+		processing begun of material:  white
+		registered as also a user of material:  blue
+		registered as also a user of material:  background
+		registered as also a user of material:  white
+		processing begun of multimaterial:  wtw_create.Multimaterial#12
+		num positions      :  5759
+		num normals        :  5759
+		num tangents       :  0
+		num uvs            :  11518
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  9496
+		WARNING: # of 0 area faces found:  8
+	processing begun of mesh:  button-cancelcreatetext
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		registered as also a user of material:  gray
+		registered as also a user of material:  background
+		registered as also a user of material:  blue
+		processing begun of multimaterial:  wtw_create.Multimaterial#13
+		num positions      :  5160
+		num normals        :  5160
+		num tangents       :  0
+		num uvs            :  10320
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  8534
+		WARNING: # of 0 area faces found:  10
+	processing begun of mesh:  white
+		processing begun of material:  white
+		registered as also a user of material:  white
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  gray
+		processing begun of material:  gray
+		registered as also a user of material:  gray
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  blue
+		processing begun of material:  blue
+		registered as also a user of material:  blue
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  green
+		processing begun of material:  green
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  black
+		processing begun of material:  black
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  yellow
+		processing begun of material:  yellow
+		registered as also a user of material:  yellow
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  invalidpasswords
+		processing begun of material:  red
+		registered as also a user of material:  red
+		num positions      :  16450
+		num normals        :  16450
+		num tangents       :  0
+		num uvs            :  32900
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  27009
+		WARNING: # of 0 area faces found:  16
+	processing begun of mesh:  invalidemailinuse
+		processing begun of material:  red
+		registered as also a user of material:  red
+		num positions      :  12500
+		num normals        :  12500
+		num tangents       :  0
+		num uvs            :  25000
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  20191
+		WARNING: # of 0 area faces found:  16
+	processing begun of mesh:  titlecreatelocal
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		registered as also a user of material:  gray
+		registered as also a user of material:  background
+		registered as also a user of material:  blue
+		processing begun of multimaterial:  wtw_create.Multimaterial#14
+		num positions      :  11275
+		num normals        :  11275
+		num tangents       :  0
+		num uvs            :  22550
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  18387
+	processing begun of mesh:  titlecreatewtw
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		registered as also a user of material:  gray
+		registered as also a user of material:  background
+		registered as also a user of material:  blue
+		processing begun of multimaterial:  wtw_create.Multimaterial#15
+		num positions      :  11275
+		num normals        :  11275
+		num tangents       :  0
+		num uvs            :  22550
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  18387
+	processing begun of light (POINT):  Light
+========= Writing of JSON file started =========
+	writing mesh:  createloginbox
+	writing mesh:  button-create
+	writing mesh:  button-cancelcreate
+	writing mesh:  password-password
+	writing mesh:  email-email
+	writing mesh:  password-password2
+	writing mesh:  invalidemail
+	writing mesh:  invalidpassword
+	writing mesh:  email-emailborder
+	writing mesh:  email-emailborderfocus
+	writing mesh:  password-passwordborder
+	writing mesh:  password-passwordborderfocus
+	writing mesh:  password-password2border
+	writing mesh:  password-password2borderfocus
+	writing mesh:  button-createtext
+	writing mesh:  button-cancelcreatetext
+	writing mesh:  white
+	writing mesh:  gray
+	writing mesh:  blue
+	writing mesh:  green
+	writing mesh:  black
+	writing mesh:  yellow
+	writing mesh:  invalidpasswords
+	writing mesh:  invalidemailinuse
+	writing mesh:  titlecreatelocal
+	writing mesh:  titlecreatewtw
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 14.2386 secs

@@ -1,0 +1,163 @@
+Exporter version: 3.3.0, Blender version: 3.3.1
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  C:\Data\HTTP3DInc\Blender\menus\
+	Python World class constructor completed
+	processing begun of mesh:  loginmenubox
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		processing begun of material:  green.001
+		processing begun of multimaterial:  wtw_loginmenu.Multimaterial#0
+		num positions      :  8183
+		num normals        :  8183
+		num tangents       :  0
+		num uvs            :  16366
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  12943
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  button-loginguest
+		animation processing begun
+			processing action loginguestAction:  in[1 - 100], out[0 - 100]
+		processing begun of material:  blue
+		processing begun of material:  background
+		processing begun of material:  white
+		registered as also a user of material:  blue
+		registered as also a user of material:  background
+		processing begun of multimaterial:  wtw_loginmenu.Multimaterial#1
+		num positions      :  171
+		num normals        :  171
+		num tangents       :  0
+		num uvs            :  342
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  84
+	processing begun of mesh:  button-loginwtw
+		animation processing begun
+			processing action loginwtwAction:  in[1 - 100], out[0 - 100]
+		processing begun of material:  blue
+		processing begun of material:  background
+		processing begun of material:  white
+		registered as also a user of material:  blue
+		registered as also a user of material:  background
+		registered as also a user of material:  white
+		processing begun of multimaterial:  wtw_loginmenu.Multimaterial#2
+		num positions      :  171
+		num normals        :  171
+		num tangents       :  0
+		num uvs            :  342
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  84
+	processing begun of mesh:  button-loginlocal
+		animation processing begun
+			processing action loginlocalAction:  in[1 - 100], out[0 - 100]
+		processing begun of material:  blue
+		processing begun of material:  background
+		processing begun of material:  white
+		registered as also a user of material:  blue
+		registered as also a user of material:  background
+		registered as also a user of material:  white
+		processing begun of multimaterial:  wtw_loginmenu.Multimaterial#3
+		num positions      :  171
+		num normals        :  171
+		num tangents       :  0
+		num uvs            :  342
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  84
+	processing begun of mesh:  button-loginwtwtext
+		processing begun of material:  white
+		registered as also a user of material:  white
+		num positions      :  11726
+		num normals        :  11726
+		num tangents       :  0
+		num uvs            :  23452
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  18791
+		WARNING: # of 0 area faces found:  4
+	processing begun of mesh:  button-loginlocaltext
+		processing begun of material:  white
+		registered as also a user of material:  white
+		num positions      :  14003
+		num normals        :  14003
+		num tangents       :  0
+		num uvs            :  28006
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  22761
+		WARNING: # of 0 area faces found:  8
+	processing begun of mesh:  button-loginguesttext
+		processing begun of material:  white
+		registered as also a user of material:  white
+		num positions      :  13496
+		num normals        :  13496
+		num tangents       :  0
+		num uvs            :  26992
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  22100
+	processing begun of mesh:  blue
+		processing begun of material:  blue
+		registered as also a user of material:  blue
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  green
+		processing begun of material:  green
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  white
+		processing begun of material:  white
+		registered as also a user of material:  white
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  yellow
+		processing begun of material:  yellow
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of light (POINT):  Light
+========= Writing of JSON file started =========
+	writing mesh:  loginmenubox
+	writing mesh:  button-loginguest
+	writing mesh:  button-loginwtw
+	writing mesh:  button-loginlocal
+	writing mesh:  button-loginwtwtext
+	writing mesh:  button-loginlocaltext
+	writing mesh:  button-loginguesttext
+	writing mesh:  blue
+	writing mesh:  green
+	writing mesh:  white
+	writing mesh:  yellow
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 8.1428 secs

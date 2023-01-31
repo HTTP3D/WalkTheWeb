@@ -1,0 +1,116 @@
+Exporter version: 3.3.0, Blender version: 3.3.1
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  C:\Data\HTTP3DInc\Blender\menus\
+	Python World class constructor completed
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  spindle
+		animation processing begun
+			processing action spindleAction:  in[0 - 180], out[0 - 180]
+		processing begun of material:  gray
+		processing begun of material:  blue
+		processing begun of multimaterial:  wtw_loading.Multimaterial#0
+		num positions      :  2446
+		num normals        :  2446
+		num tangents       :  0
+		num uvs            :  4892
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2500
+	processing begun of mesh:  loading
+		processing begun of material:  yellow
+		num positions      :  7858
+		num normals        :  7858
+		num tangents       :  0
+		num uvs            :  15716
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  12837
+		WARNING: # of 0 area faces found:  8
+	processing begun of mesh:  loading3dmodel
+		processing begun of material:  yellow
+		registered as also a user of material:  yellow
+		num positions      :  13441
+		num normals        :  13441
+		num tangents       :  0
+		num uvs            :  26882
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  22009
+		WARNING: # of 0 area faces found:  4
+	processing begun of mesh:  loading3davatar
+		processing begun of material:  yellow
+		registered as also a user of material:  yellow
+		num positions      :  14687
+		num normals        :  14687
+		num tangents       :  0
+		num uvs            :  29374
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  24010
+		WARNING: # of 0 area faces found:  4
+	processing begun of mesh:  loading3dscene
+		processing begun of material:  yellow
+		registered as also a user of material:  yellow
+		num positions      :  14764
+		num normals        :  14764
+		num tangents       :  0
+		num uvs            :  29528
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  24334
+		WARNING: # of 0 area faces found:  4
+	processing begun of mesh:  loading3dcommunity
+		processing begun of material:  yellow
+		registered as also a user of material:  yellow
+		num positions      :  16927
+		num normals        :  16927
+		num tangents       :  0
+		num uvs            :  33854
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  27584
+		WARNING: # of 0 area faces found:  4
+	processing begun of mesh:  loading3dbuilding
+		processing begun of material:  yellow
+		registered as also a user of material:  yellow
+		num positions      :  17441
+		num normals        :  17441
+		num tangents       :  0
+		num uvs            :  34882
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  28490
+		WARNING: # of 0 area faces found:  4
+	processing begun of mesh:  loading3dthing
+		processing begun of material:  yellow
+		registered as also a user of material:  yellow
+		num positions      :  14721
+		num normals        :  14721
+		num tangents       :  0
+		num uvs            :  29442
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  24011
+		WARNING: # of 0 area faces found:  4
+	processing begun of light (POINT):  Light
+========= Writing of JSON file started =========
+	writing mesh:  spindle
+	writing mesh:  loading
+	writing mesh:  loading3dmodel
+	writing mesh:  loading3davatar
+	writing mesh:  loading3dscene
+	writing mesh:  loading3dcommunity
+	writing mesh:  loading3dbuilding
+	writing mesh:  loading3dthing
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 14.6765 secs

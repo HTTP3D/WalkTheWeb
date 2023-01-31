@@ -1,0 +1,193 @@
+Exporter version: 3.3.0, Blender version: 3.3.1
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  C:\Data\HTTP3DInc\Blender\menus\
+	Python World class constructor completed
+	processing begun of mesh:  usermenubox
+		processing begun of material:  gray
+		processing begun of material:  background
+		processing begun of material:  blue
+		processing begun of material:  green.001
+		processing begun of multimaterial:  wtw_usermenu.Multimaterial#0
+		num positions      :  6219
+		num normals        :  6219
+		num tangents       :  0
+		num uvs            :  12438
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  9874
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  button-editmyavatar
+		animation processing begun
+			processing action loginguestAction:  in[1 - 100], out[0 - 100]
+		processing begun of material:  blue
+		processing begun of material:  background
+		processing begun of material:  white
+		registered as also a user of material:  blue
+		registered as also a user of material:  background
+		processing begun of multimaterial:  wtw_usermenu.Multimaterial#1
+		num positions      :  171
+		num normals        :  171
+		num tangents       :  0
+		num uvs            :  342
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  84
+	processing begun of mesh:  button-editprofile
+		animation processing begun
+			processing action loginwtwAction:  in[1 - 100], out[0 - 100]
+		processing begun of material:  blue
+		processing begun of material:  background
+		processing begun of material:  white
+		registered as also a user of material:  blue
+		registered as also a user of material:  background
+		registered as also a user of material:  white
+		processing begun of multimaterial:  wtw_usermenu.Multimaterial#2
+		num positions      :  171
+		num normals        :  171
+		num tangents       :  0
+		num uvs            :  342
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  84
+	processing begun of mesh:  button-selectmyavatar
+		animation processing begun
+			processing action loginlocalAction:  in[1 - 100], out[0 - 100]
+		processing begun of material:  blue
+		processing begun of material:  background
+		processing begun of material:  white
+		registered as also a user of material:  blue
+		registered as also a user of material:  background
+		registered as also a user of material:  white
+		processing begun of multimaterial:  wtw_usermenu.Multimaterial#3
+		num positions      :  171
+		num normals        :  171
+		num tangents       :  0
+		num uvs            :  342
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  84
+	processing begun of mesh:  blue
+		processing begun of material:  blue
+		registered as also a user of material:  blue
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  green
+		processing begun of material:  green
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  white
+		processing begun of material:  white
+		registered as also a user of material:  white
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  yellow
+		processing begun of material:  yellow
+		num positions      :  4
+		num normals        :  4
+		num tangents       :  0
+		num uvs            :  8
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  2
+	processing begun of mesh:  button-logout
+		animation processing begun
+			processing action loginguestAction.001:  in[1 - 100], out[0 - 100]
+		processing begun of material:  blue
+		processing begun of material:  background
+		processing begun of material:  white
+		registered as also a user of material:  blue
+		registered as also a user of material:  background
+		registered as also a user of material:  white
+		processing begun of multimaterial:  wtw_usermenu.Multimaterial#4
+		num positions      :  171
+		num normals        :  171
+		num tangents       :  0
+		num uvs            :  342
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  84
+	processing begun of mesh:  button-editprofiletext
+		processing begun of material:  white
+		registered as also a user of material:  white
+		num positions      :  7314
+		num normals        :  7314
+		num tangents       :  0
+		num uvs            :  14628
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  11658
+	processing begun of mesh:  selectmyavatartext
+		processing begun of material:  white
+		registered as also a user of material:  white
+		num positions      :  10032
+		num normals        :  10032
+		num tangents       :  0
+		num uvs            :  20064
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  16224
+		WARNING: # of 0 area faces found:  16
+	processing begun of mesh:  button-editmyavatartext
+		processing begun of material:  white
+		registered as also a user of material:  white
+		num positions      :  7447
+		num normals        :  7447
+		num tangents       :  0
+		num uvs            :  14894
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  11828
+		WARNING: # of 0 area faces found:  8
+	processing begun of mesh:  button-logouttext
+		processing begun of material:  white
+		registered as also a user of material:  white
+		num positions      :  6576
+		num normals        :  6576
+		num tangents       :  0
+		num uvs            :  13152
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  10641
+		WARNING: # of 0 area faces found:  4
+	processing begun of light (POINT):  Light
+========= Writing of JSON file started =========
+	writing mesh:  usermenubox
+	writing mesh:  button-editmyavatar
+	writing mesh:  button-editprofile
+	writing mesh:  button-selectmyavatar
+	writing mesh:  blue
+	writing mesh:  green
+	writing mesh:  white
+	writing mesh:  yellow
+	writing mesh:  button-logout
+	writing mesh:  button-editprofiletext
+	writing mesh:  selectmyavatartext
+	writing mesh:  button-editmyavatartext
+	writing mesh:  button-logouttext
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 7.2477 secs
