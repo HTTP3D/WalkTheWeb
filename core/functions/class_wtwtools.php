@@ -254,8 +254,15 @@ class wtwtools {
 					}
 				}
 			} else {
+				umask(0);
 				mkdir($zfilepath, octdec(wtw_chmod), true);
 				chmod($zfilepath, octdec(wtw_chmod));
+				if (defined('wtw_umask')) {
+					/* reset umask */
+					if (wtw_umask != '0') {
+						umask(octdec(wtw_umask));
+					}
+				}
 			}
 			/* sort the results by language, then abbreviation */
 /*			function arraysort($a, $b) {
@@ -297,7 +304,14 @@ class wtwtools {
 					}
 				}
 				fclose($cfile);
+				umask(0);
 				chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
+				if (defined('wtw_umask')) {
+					/* reset umask */
+					if (wtw_umask != '0') {
+						umask(octdec(wtw_umask));
+					}
+				}
 			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwtools.php-updateConfigSetting=".$e->getMessage());

@@ -257,8 +257,15 @@ class wtwdownloads {
 				$znewfolder = $wtwhandlers->contentpath.'/uploads/'.$zwebtypes.'/'.$znewwebid;
 				$znewurl = $wtwhandlers->contenturl.'/uploads/'.$zwebtypes.'/'.$znewwebid;
 				if (!file_exists($znewfolder)) {
+					umask(0);
 					mkdir($znewfolder, octdec(wtw_chmod), true);
 					chmod($znewfolder, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				if (isset($zrequest->users)) {
 					$this->downloadUsers(json_encode($zrequest->users), $zusertoken);
@@ -460,8 +467,15 @@ class wtwdownloads {
 				$zresponse['newfolder'] = $znewfolder;
 				$zresponse['newurl'] = $znewurl;
 				if (!file_exists($znewfolder)) {
+					umask(0);
 					mkdir($znewfolder, octdec(wtw_chmod), true);
 					chmod($znewfolder, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 			}
 		} catch (Exception $e) {
@@ -618,8 +632,15 @@ class wtwdownloads {
 				$znewuploadsfolder = $znewfolder.'/uploads';
 				$znewuploadsurl = $znewurl.'/uploads';
 				if (!file_exists($znewuploadsfolder)) {
+					umask(0);
 					mkdir($znewuploadsfolder, octdec(wtw_chmod), true);
 					chmod($znewuploadsfolder, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				if (!empty($zupload->filepath)) {
 					try {
@@ -628,7 +649,14 @@ class wtwdownloads {
 						if ($zfileext == 'babylon' || $zfileext == 'manifest' || $zfileext == 'blend' || $zfileext == 'obj' || $zfileext == 'glb' || $zfileext == 'glbt' || $zfileext == 'fbx' || $zfileext == 'dae' || $zfileext == 'stl' || $zfileext == 'jpg' || $zfileext == 'jpeg' || $zfileext == 'bmp' || $zfileext == 'tif' || $zfileext == 'tiff' || $zfileext == 'png' || $zfileext == 'gif' || $zfileext == 'webp' || $zfileext == 'wav' || $zfileext == 'mp3' || $zfileext == 'mp4' || $zfileext == 'wma' || $zfileext == 'aac' || $zfileext == 'flac' || $zfileext == 'webm' || $zfileext == 'ogg' || $zfileext == 'mpg' || $zfileext == 'avi' || $zfileext == 'mov' || $zfileext == 'wmv' || $zfileext == 'flv' || $zfileext == 'swf' || $zfileext == 'mtl' || $zfileext == '3ds' || $zfileext == 'c4d' || $zfileext == 'txt' || $zfileext == 'log' || $zfileext == 'pdf') {
 							/* download each file */
 							file_put_contents($znewuploadsfolder.'/'.$zupload->filename, fopen($zupload->filepath, 'r'));
+							umask(0);
 							chmod($znewuploadsfolder.'/'.$zupload->filename, octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 							$znewfileurl = $znewuploadsurl.'/'.$zupload->filename;
 						}
 					} catch (Exception $e) {
@@ -1196,20 +1224,41 @@ class wtwdownloads {
 				
 				$znewobjectfolder = $znewfolder.'/avataranimations';
 				if (!file_exists($znewobjectfolder)) {
+					umask(0);
 					mkdir($znewobjectfolder, octdec(wtw_chmod), true);
 					chmod($znewobjectfolder, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				if (!empty($zavataranimation->objectfolder) && !empty($zavataranimation->objectfile)) {
 					$znewobjectfolder = $znewfolder.'/avataranimations/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zavataranimation->objectfile))));
 					if (!file_exists($znewobjectfolder)) {
+						umask(0);
 						mkdir($znewobjectfolder, octdec(wtw_chmod), true);
 						chmod($znewobjectfolder, octdec(wtw_chmod));
+						if (defined('wtw_umask')) {
+							/* reset umask */
+							if (wtw_umask != '0') {
+								umask(octdec(wtw_umask));
+							}
+						}
 					}
 					$zfileext = strtolower(pathinfo($znewobjectfolder."/".$zavataranimation->objectfile, PATHINFO_EXTENSION));
 					if ($zfileext == 'babylon') {
 						try {
 							file_put_contents($znewobjectfolder."/".$zavataranimation->objectfile, fopen($zavataranimation->objectfolder.$zavataranimation->objectfile, 'r'));
+							umask(0);
 							chmod($znewobjectfolder."/".$zavataranimation->objectfile, octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 						} catch (Exception $e) {
 							$wtwhandlers->serror("core-functions-class_wtwdownloads.php-downloadActionZonesAvatarAnimations-getfile-babylon=".$e->getMessage());
 							$zresponse = array(
@@ -1218,7 +1267,14 @@ class wtwdownloads {
 						}	
 						try {
 							file_put_contents($znewobjectfolder."/".$zavataranimation->objectfile.".manifest", fopen($zavataranimation->objectfolder.$zavataranimation->objectfile.".manifest", 'r'));
+							umask(0);
 							chmod($znewobjectfolder."/".$zavataranimation->objectfile.".manifest", octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 						} catch (Exception $e) {
 							$wtwhandlers->serror("core-functions-class_wtwdownloads.php-downloadActionZonesAvatarAnimations-getfile-manifest=".$e->getMessage());
 							$zresponse = array(
@@ -1231,7 +1287,14 @@ class wtwdownloads {
 								$ziconfilename = basename($zavataranimation->animationicon);  
 								$znewanimationicon = $znewobjectfolder."/".$ziconfilename;
 								file_put_contents($znewanimationicon, fopen($zavataranimation->animationicon, 'r'));
+								umask(0);
 								chmod($znewanimationicon, octdec(wtw_chmod));
+								if (defined('wtw_umask')) {
+									/* reset umask */
+									if (wtw_umask != '0') {
+										umask(octdec(wtw_umask));
+									}
+								}
 							} catch (Exception $e) {
 								$wtwhandlers->serror("core-functions-class_wtwdownloads.php-downloadActionZonesAvatarAnimations-getfile-icon=".$e->getMessage());
 								$zresponse = array(
@@ -1541,15 +1604,29 @@ class wtwdownloads {
 				
 				$znewscriptfolder = $znewfolder.'/scripts';
 				if (!file_exists($znewscriptfolder)) {
+					umask(0);
 					mkdir($znewscriptfolder, octdec(wtw_chmod), true);
 					chmod($znewscriptfolder, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				if (!empty($zscript->scriptpath)) {
 					$zfileext = strtolower(pathinfo($znewscriptfolder."/".$zscript->scriptfilename, PATHINFO_EXTENSION));
 					if ($zfileext == 'js') {
 						try {
 							file_put_contents($znewscriptfolder."/".$zscript->scriptfilename, fopen($zscript->scriptpath, 'r'));
+							umask(0);
 							chmod($znewscriptfolder."/".$zscript->scriptfilename, octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 						} catch (Exception $e) {
 							$wtwhandlers->serror("core-functions-class_wtwcommunities.php-downloadWeb-getfile-js=".$e->getMessage());
 							$zresponse = array(
@@ -1925,7 +2002,7 @@ class wtwdownloads {
 				$i += 1;
 
 				if ($wtwhandlers->hasValue($zuploadobject->uploadobjectid)) {
-					
+					umask(0);
 					$znewobjectfolder = $znewfolder.'/objects';
 					if (!file_exists($znewobjectfolder)) {
 						mkdir($znewobjectfolder, octdec(wtw_chmod), true);
@@ -1935,6 +2012,12 @@ class wtwdownloads {
 					if (!file_exists($znewobjectfolder)) {
 						mkdir($znewobjectfolder, octdec(wtw_chmod), true);
 						chmod($znewobjectfolder, octdec(wtw_chmod));
+					}
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
 					}
 					$znewobjecturl = $znewurl.'/objects/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zuploadobject->objectfile))))."/";
 					
@@ -1977,7 +2060,14 @@ class wtwdownloads {
 							$zfileext = strtolower(pathinfo($zfile->filepath, PATHINFO_EXTENSION));
 							if ($zfileext == 'babylon' || $zfileext == 'manifest' || $zfileext == 'blend' || $zfileext == 'obj' || $zfileext == 'glb' || $zfileext == 'glbt' || $zfileext == 'fbx' || $zfileext == 'dae' || $zfileext == 'stl' || $zfileext == 'jpg' || $zfileext == 'jpeg' || $zfileext == 'bmp' || $zfileext == 'tif' || $zfileext == 'tiff' || $zfileext == 'png' || $zfileext == 'gif' || $zfileext == 'webp' || $zfileext == 'wav' || $zfileext == 'mp3' || $zfileext == 'mp4' || $zfileext == 'wma' || $zfileext == 'aac' || $zfileext == 'flac' || $zfileext == 'webm' || $zfileext == 'ogg' || $zfileext == 'mpg' || $zfileext == 'avi' || $zfileext == 'mov' || $zfileext == 'wmv' || $zfileext == 'flv' || $zfileext == 'swf' || $zfileext == 'mtl' || $zfileext == '3ds' || $zfileext == 'c4d' || $zfileext == 'txt' || $zfileext == 'log' || $zfileext == 'pdf') {
 								file_put_contents($znewobjectfolder.'/'.$zfile->filename, fopen($zfile->filepath, 'r'));
+								umask(0);
 								chmod($znewobjectfolder.'/'.$zfile->filename, octdec(wtw_chmod));
+								if (defined('wtw_umask')) {
+									/* reset umask */
+									if (wtw_umask != '0') {
+										umask(octdec(wtw_umask));
+									}
+								}
 							}
 						} catch (Exception $e) {
 							$wtwhandlers->serror("core-functions-class_wtwdownloads.php-downloadUploadObjects-getfiles=".$e->getMessage());
@@ -2914,8 +3004,15 @@ class wtwdownloads {
 				$znewfolder = $wtwhandlers->contentpath.'/uploads/'.$zwebtypes.'/'.$zwebid;
 				$znewurl = $wtwhandlers->contenturl.'/uploads/'.$zwebtypes.'/'.$zwebid;
 				if (!file_exists($znewfolder)) {
+					umask(0);
 					mkdir($znewfolder, octdec(wtw_chmod), true);
 					chmod($znewfolder, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				
 				/* process all users associated to this download (for your reference) */
@@ -2991,8 +3088,15 @@ class wtwdownloads {
 					$znewuploadsfolder = $znewfolder.'/uploads';
 					$znewuploadsurl = $znewurl.'/uploads';
 					if (!file_exists($znewuploadsfolder)) {
+						umask(0);
 						mkdir($znewuploadsfolder, octdec(wtw_chmod), true);
 						chmod($znewuploadsfolder, octdec(wtw_chmod));
+						if (defined('wtw_umask')) {
+							/* reset umask */
+							if (wtw_umask != '0') {
+								umask(octdec(wtw_umask));
+							}
+						}
 					}
 					if (!empty($zupload->filepath)) {
 						try {
@@ -3001,7 +3105,14 @@ class wtwdownloads {
 							if ($zfileext == 'babylon' || $zfileext == 'manifest' || $zfileext == 'blend' || $zfileext == 'obj' || $zfileext == 'glb' || $zfileext == 'glbt' || $zfileext == 'fbx' || $zfileext == 'dae' || $zfileext == 'stl' || $zfileext == 'jpg' || $zfileext == 'jpeg' || $zfileext == 'bmp' || $zfileext == 'tif' || $zfileext == 'tiff' || $zfileext == 'png' || $zfileext == 'gif' || $zfileext == 'webp' || $zfileext == 'wav' || $zfileext == 'mp3' || $zfileext == 'mp4' || $zfileext == 'wma' || $zfileext == 'aac' || $zfileext == 'flac' || $zfileext == 'webm' || $zfileext == 'ogg' || $zfileext == 'mpg' || $zfileext == 'avi' || $zfileext == 'mov' || $zfileext == 'wmv' || $zfileext == 'flv' || $zfileext == 'swf' || $zfileext == 'mtl' || $zfileext == '3ds' || $zfileext == 'c4d' || $zfileext == 'txt' || $zfileext == 'log' || $zfileext == 'pdf') {
 								/* download each file */
 								file_put_contents($znewuploadsfolder.'/'.$zupload->filename, fopen($zupload->filepath, 'r'));
+								umask(0);
 								chmod($znewuploadsfolder.'/'.$zupload->filename, octdec(wtw_chmod));
+								if (defined('wtw_umask')) {
+									/* reset umask */
+									if (wtw_umask != '0') {
+										umask(octdec(wtw_umask));
+									}
+								}
 								$znewfileurl = $znewuploadsurl.'/'.$zupload->filename;
 							}
 						} catch (Exception $e) {
@@ -3560,26 +3671,54 @@ class wtwdownloads {
 					
 					$znewobjectfolder = $znewfolder.'/avataranimations';
 					if (!file_exists($znewobjectfolder)) {
+						umask(0);
 						mkdir($znewobjectfolder, octdec(wtw_chmod), true);
 						chmod($znewobjectfolder, octdec(wtw_chmod));
+						if (defined('wtw_umask')) {
+							/* reset umask */
+							if (wtw_umask != '0') {
+								umask(octdec(wtw_umask));
+							}
+						}
 					}
 					if (!empty($zavataranimation->objectfolder) && !empty($zavataranimation->objectfile)) {
 						$znewobjectfolder = $znewfolder.'/avataranimations/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zavataranimation->objectfile))));
 						if (!file_exists($znewobjectfolder)) {
+							umask(0);
 							mkdir($znewobjectfolder, octdec(wtw_chmod), true);
 							chmod($znewobjectfolder, octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 						}
 						$zfileext = strtolower(pathinfo($znewobjectfolder."/".$zavataranimation->objectfile, PATHINFO_EXTENSION));
 						if ($zfileext == 'babylon') {
 							try {
 								file_put_contents($znewobjectfolder."/".$zavataranimation->objectfile, fopen($zavataranimation->objectfolder.$zavataranimation->objectfile, 'r'));
+								umask(0);
 								chmod($znewobjectfolder."/".$zavataranimation->objectfile, octdec(wtw_chmod));
+								if (defined('wtw_umask')) {
+									/* reset umask */
+									if (wtw_umask != '0') {
+										umask(octdec(wtw_umask));
+									}
+								}
 							} catch (Exception $e) {
 								$wtwhandlers->serror("core-functions-class_wtwdownloads.php-downloadUpdateWeb-getfile-babylon=".$e->getMessage());
 							}	
 							try {
 								file_put_contents($znewobjectfolder."/".$zavataranimation->objectfile.".manifest", fopen($zavataranimation->objectfolder.$zavataranimation->objectfile.".manifest", 'r'));
+								umask(0);
 								chmod($znewobjectfolder."/".$zavataranimation->objectfile.".manifest", octdec(wtw_chmod));
+								if (defined('wtw_umask')) {
+									/* reset umask */
+									if (wtw_umask != '0') {
+										umask(octdec(wtw_umask));
+									}
+								}
 							} catch (Exception $e) {
 								$wtwhandlers->serror("core-functions-class_wtwdownloads.php-downloadUpdateWeb-getfile-manifest=".$e->getMessage());
 							}	
@@ -3589,7 +3728,14 @@ class wtwdownloads {
 									$ziconfilename = basename($zavataranimation->animationicon);  
 									$znewanimationicon = $znewobjectfolder."/".$ziconfilename;
 									file_put_contents($znewanimationicon, fopen($zavataranimation->animationicon, 'r'));
+									umask(0);
 									chmod($znewanimationicon, octdec(wtw_chmod));
+									if (defined('wtw_umask')) {
+										/* reset umask */
+										if (wtw_umask != '0') {
+											umask(octdec(wtw_umask));
+										}
+									}
 								} catch (Exception $e) {
 									$wtwhandlers->serror("core-functions-class_wtwdownloads.php-downloadUpdateWeb-getfile-icon=".$e->getMessage());
 								}	
@@ -3899,15 +4045,29 @@ class wtwdownloads {
 					
 					$znewscriptfolder = $znewfolder.'/scripts';
 					if (!file_exists($znewscriptfolder)) {
+						umask(0);
 						mkdir($znewscriptfolder, octdec(wtw_chmod), true);
 						chmod($znewscriptfolder, octdec(wtw_chmod));
+						if (defined('wtw_umask')) {
+							/* reset umask */
+							if (wtw_umask != '0') {
+								umask(octdec(wtw_umask));
+							}
+						}
 					}
 					if (!empty($zscript->scriptpath)) {
 						$zfileext = strtolower(pathinfo($znewscriptfolder."/".$zscript->scriptfilename, PATHINFO_EXTENSION));
 						if ($zfileext == 'js') {
 							try {
 								file_put_contents($znewscriptfolder."/".$zscript->scriptfilename, fopen($zscript->scriptpath, 'r'));
+								umask(0);
 								chmod($znewscriptfolder."/".$zscript->scriptfilename, octdec(wtw_chmod));
+								if (defined('wtw_umask')) {
+									/* reset umask */
+									if (wtw_umask != '0') {
+										umask(octdec(wtw_umask));
+									}
+								}
 							} catch (Exception $e) {
 								$wtwhandlers->serror("core-functions-class_wtwdownloads.php-downloadUpdateWeb-getfile-js=".$e->getMessage());
 							}	
@@ -4196,7 +4356,7 @@ class wtwdownloads {
 					$i += 1;
 					
 					if ($wtwhandlers->hasValue($zuploadobject->uploadobjectid)) {
-						
+						umask(0);
 						$znewobjectfolder = $znewfolder.'/objects';
 						if (!file_exists($znewobjectfolder)) {
 							mkdir($znewobjectfolder, octdec(wtw_chmod), true);
@@ -4206,6 +4366,12 @@ class wtwdownloads {
 						if (!file_exists($znewobjectfolder)) {
 							mkdir($znewobjectfolder, octdec(wtw_chmod), true);
 							chmod($znewobjectfolder, octdec(wtw_chmod));
+						}
+						if (defined('wtw_umask')) {
+							/* reset umask */
+							if (wtw_umask != '0') {
+								umask(octdec(wtw_umask));
+							}
 						}
 						$znewobjecturl = $znewurl.'/objects/'.str_replace(".obj","",str_replace(".gltf","",str_replace(".glb","",str_replace(".babylon","",$zuploadobject->objectfile))))."/";
 						
@@ -4248,7 +4414,14 @@ class wtwdownloads {
 								$zfileext = strtolower(pathinfo($zfile->filepath, PATHINFO_EXTENSION));
 								if ($zfileext == 'babylon' || $zfileext == 'manifest' || $zfileext == 'blend' || $zfileext == 'obj' || $zfileext == 'glb' || $zfileext == 'glbt' || $zfileext == 'fbx' || $zfileext == 'dae' || $zfileext == 'stl' || $zfileext == 'jpg' || $zfileext == 'jpeg' || $zfileext == 'bmp' || $zfileext == 'tif' || $zfileext == 'tiff' || $zfileext == 'png' || $zfileext == 'gif' || $zfileext == 'webp' || $zfileext == 'wav' || $zfileext == 'mp3' || $zfileext == 'mp4' || $zfileext == 'wma' || $zfileext == 'aac' || $zfileext == 'flac' || $zfileext == 'webm' || $zfileext == 'ogg' || $zfileext == 'mpg' || $zfileext == 'avi' || $zfileext == 'mov' || $zfileext == 'wmv' || $zfileext == 'flv' || $zfileext == 'swf' || $zfileext == 'mtl' || $zfileext == '3ds' || $zfileext == 'c4d' || $zfileext == 'txt' || $zfileext == 'log' || $zfileext == 'pdf') {
 									file_put_contents($znewobjectfolder.'/'.$zfile->filename, fopen($zfile->filepath, 'r'));
+									umask(0);
 									chmod($znewobjectfolder.'/'.$zfile->filename, octdec(wtw_chmod));
+									if (defined('wtw_umask')) {
+										/* reset umask */
+										if (wtw_umask != '0') {
+											umask(octdec(wtw_umask));
+										}
+									}
 								}
 							} catch (Exception $e) {
 								$wtwhandlers->serror("core-functions-class_wtwdownloads.php-downloadUpdateWeb-getfiles=".$e->getMessage());
@@ -5125,8 +5298,15 @@ class wtwdownloads {
 				$znewfolder = $wtwhandlers->contentpath.'/uploads/avatars/'.$znewwebid;
 				$znewurl = $wtwhandlers->contenturl.'/uploads/avatars/'.$znewwebid;
 				if (!file_exists($znewfolder)) {
+					umask(0);
 					mkdir($znewfolder, octdec(wtw_chmod), true);
 					chmod($znewfolder, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				
 				/* write main avatar record */
@@ -5240,8 +5420,15 @@ class wtwdownloads {
 				$znewfolder = $wtwhandlers->contentpath.'/uploads/avatars/'.$znewwebid;
 				$znewurl = $wtwhandlers->contenturl.'/uploads/avatars/'.$znewwebid;
 				if (!file_exists($znewfolder)) {
+					umask(0);
 					mkdir($znewfolder, octdec(wtw_chmod), true);
 					chmod($znewfolder, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				
 				/* write main avatar record */
@@ -5435,8 +5622,15 @@ class wtwdownloads {
 				if (strpos($zfile->file,'/') !== false) {
 					list($zfolder, $zfilename) = explode('/', $zfile->file);
 					if (!file_exists(wtw_rootpath.$zobjectfolder.$zfolder)) {
+						umask(0);
 						mkdir(wtw_rootpath.$zobjectfolder.$zfolder, octdec(wtw_chmod), true);
 						chmod(wtw_rootpath.$zobjectfolder.$zfolder, octdec(wtw_chmod));
+						if (defined('wtw_umask')) {
+							/* reset umask */
+							if (wtw_umask != '0') {
+								umask(octdec(wtw_umask));
+							}
+						}
 					}
 					$wtwhandlers->getFilefromURL('https://3dnet.walktheweb.com/content/uploads/avatars/'.$zwebid.'/'.$zfolder.'/'.$zfilename, wtw_rootpath.$zobjectfolder.$zfolder.'/', $zfilename);
 				} else {
@@ -5753,8 +5947,15 @@ class wtwdownloads {
 				$znewfolder = $wtwhandlers->contentpath.'/uploads/avatars/'.$zwebid;
 				$znewurl = $wtwhandlers->contenturl.'/uploads/avatars/'.$zwebid;
 				if (!file_exists($znewfolder)) {
+					umask(0);
 					mkdir($znewfolder, octdec(wtw_chmod), true);
 					chmod($znewfolder, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				
 				/* process all users associated to this download (for your reference) */
@@ -5930,8 +6131,15 @@ class wtwdownloads {
 					if (strpos($zfile->file,'/') !== false) {
 						list($zfolder, $zfilename) = explode('/', $zfile->file);
 						if (!file_exists(wtw_rootpath.$zobjectfolder.$zfolder)) {
+							umask(0);
 							mkdir(wtw_rootpath.$zobjectfolder.$zfolder, octdec(wtw_chmod), true);
 							chmod(wtw_rootpath.$zobjectfolder.$zfolder, octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 						}
 						$wtwhandlers->getFilefromURL('https://3dnet.walktheweb.com/content/uploads/avatars/'.$zupdatewebid.'/'.$zfolder.'/'.$zfilename, wtw_rootpath.$zobjectfolder.$zfolder.'/', $zfilename);
 					} else {
@@ -6271,8 +6479,15 @@ class wtwdownloads {
 				$znewfolder = $wtwhandlers->contentpath.'/uploads/useravatars/'.$zuseravatarid;
 				$znewurl = $wtwhandlers->contenturl.'/uploads/useravatars/'.$zuseravatarid;
 				if (!file_exists($znewfolder)) {
+					umask(0);
 					mkdir($znewfolder, octdec(wtw_chmod), true);
 					chmod($znewfolder, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				
 				/* process all users associated to this download (for your reference) */
@@ -6364,8 +6579,15 @@ class wtwdownloads {
 					if (strpos($zfile->file,'/') !== false) {
 						list($zfolder, $zfilename) = explode('/', $zfile->file);
 						if (!file_exists(wtw_rootpath.$zobjectfolder.$zfolder)) {
+							umask(0);
 							mkdir(wtw_rootpath.$zobjectfolder.$zfolder, octdec(wtw_chmod), true);
 							chmod(wtw_rootpath.$zobjectfolder.$zfolder, octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 						}
 						$wtwhandlers->getFilefromURL('https://3dnet.walktheweb.com/content/uploads/avatars/'.$zupdatewebid.'/'.$zfolder.'/'.$zfilename, wtw_rootpath.$zobjectfolder.$zfolder.'/', $zfilename);
 					} else {

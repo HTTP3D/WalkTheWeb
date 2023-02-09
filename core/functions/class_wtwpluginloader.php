@@ -106,8 +106,15 @@ class wtwpluginloader {
 					}
 				}
 			} else {
+				umask(0);
 				mkdir($zfilepath, octdec(wtw_chmod), true);
 				chmod($zfilepath, octdec(wtw_chmod));
+				if (defined('wtw_umask')) {
+					/* reset umask */
+					if (wtw_umask != '0') {
+						umask(octdec(wtw_umask));
+					}
+				}
 			}
 			/* sort the results by plugin name, then title */
 			function arraysort($a, $b) {
@@ -372,6 +379,7 @@ class wtwpluginloader {
 		try {
 			$ztempfilename = $zpluginname.str_replace(".","-",$zversion).".zip";
 			$ztempfilepath = $wtwhandlers->contentpath."/system/updates/".$zpluginname."/";
+			umask(0);
 			if (!file_exists($wtwhandlers->contentpath."/system")) {
 				mkdir($wtwhandlers->contentpath."/system", octdec(wtw_chmod), true);
 				chmod($wtwhandlers->contentpath."/system", octdec(wtw_chmod));
@@ -384,11 +392,24 @@ class wtwpluginloader {
 				mkdir($wtwhandlers->contentpath."/system/updates/".$zpluginname, octdec(wtw_chmod), true);
 				chmod($wtwhandlers->contentpath."/system/updates/".$zpluginname, octdec(wtw_chmod));
 			}
+			if (defined('wtw_umask')) {
+				/* reset umask */
+				if (wtw_umask != '0') {
+					umask(octdec(wtw_umask));
+				}
+			}
 			
 			$wtwhandlers->getFilefromURL($zupdateurl, $ztempfilepath, $ztempfilename);
 			
 			if (file_exists($ztempfilepath.$ztempfilename)) {
+				umask(0);
 				chmod($ztempfilepath.$ztempfilename, octdec(wtw_chmod));
+				if (defined('wtw_umask')) {
+					/* reset umask */
+					if (wtw_umask != '0') {
+						umask(octdec(wtw_umask));
+					}
+				}
 				$zip = new ZipArchive;
 				$res = $zip->open($ztempfilepath.$ztempfilename);
 				if ($res === true) {

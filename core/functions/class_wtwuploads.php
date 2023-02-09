@@ -30,15 +30,29 @@ class wtwuploads {
 				$serror = "Source File not Found. ".$zfilepath1.$zfile1;
 			}
 			if (!file_exists($zfilepath2)) {
+				umask(0);
 				mkdir($zfilepath2, octdec(wtw_chmod), true);
 				chmod($zfilepath2, octdec(wtw_chmod));
+				if (defined('wtw_umask')) {
+					/* reset umask */
+					if (wtw_umask != '0') {
+						umask(octdec(wtw_umask));
+					}
+				}
 			}
 			if (file_exists($zfilepath2.$zfile2)) {
 				$serror = "Destination File Already Exists. ".$zfilepath2.$zfile2;
 			}
 			if ($serror == "") {
+				umask(0);
 				copy($zfilepath1.$zfile1, $zfilepath2.$zfile2);
 				chmod($zfilepath2.$zfile2, octdec(wtw_chmod));
+				if (defined('wtw_umask')) {
+					/* reset umask */
+					if (wtw_umask != '0') {
+						umask(octdec(wtw_umask));
+					}
+				}
 			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-copyFile=".$e->getMessage());
@@ -182,7 +196,14 @@ class wtwuploads {
 			$zdata1 = $wtwhandlers->decode64($zfiledata);
 			$zfile1 = $zfilepath1.$zfilename1;
 			$zsuccess = file_put_contents($zfile1, $zdata1);
+			umask(0);
 			chmod($zfile1, octdec(wtw_chmod));
+			if (defined('wtw_umask')) {
+				/* reset umask */
+				if (wtw_umask != '0') {
+					umask(octdec(wtw_umask));
+				}
+			}
 			$zfilepath = "";
 			$zfiletitle = "";
 			if ($zfilename1 == "defaultbuilding.png") {
@@ -301,7 +322,14 @@ class wtwuploads {
 				unlink($ztargetfile);
 			}
 			$zimagesavefunc($ztemp, $ztargetfile);
+			umask(0);
 			chmod($ztargetfile, octdec(wtw_chmod));
+			if (defined('wtw_umask')) {
+				/* reset umask */
+				if (wtw_umask != '0') {
+					umask(octdec(wtw_umask));
+				}
+			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-resizeImage=".$e->getMessage());
 		}
@@ -420,7 +448,14 @@ class wtwuploads {
 					unlink($zfilepath);
 				}
 				$zimagesavefunc($znewimage, $zfilepath);
+				umask(0);
 				chmod($zfilepath, octdec(wtw_chmod));
+				if (defined('wtw_umask')) {
+					/* reset umask */
+					if (wtw_umask != '0') {
+						umask(octdec(wtw_umask));
+					}
+				}
 				$zfilesize = filesize($zfilepath);
 				$zfiledata = addslashes($wtwhandlers->openFilefromURL($zfilepath));
 				$znewfilename = "";
@@ -445,7 +480,14 @@ class wtwuploads {
 					unlink($zfilepath);
 				}
 				$zimagesavefunc($znewimage, $zfilepath);
+				umask(0);
 				chmod($zfilepath, octdec(wtw_chmod));
+				if (defined('wtw_umask')) {
+					/* reset umask */
+					if (wtw_umask != '0') {
+						umask(octdec(wtw_umask));
+					}
+				}
 				$zfilesize = filesize($zfilepath);
 				$zfiledata = addslashes($wtwhandlers->openFilefromURL($zfilepath));
 				$znewfilename = "";
@@ -521,8 +563,15 @@ class wtwuploads {
 				$pathname = pathinfo('/'.$zfilename);
 				$newfolder = $pathname['filename'];
 				if (!file_exists($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder)) {
+					umask(0);
 					mkdir($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder, octdec(wtw_chmod), true);
 					chmod($wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				$zuploadpath = $zuploadpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder."/";
 				$zbrowsepath = $wtwhandlers->contenturl."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$newfolder."/";
@@ -709,7 +758,14 @@ class wtwuploads {
 							$zfileresults = $this->writeDataToFile($zrow->filedata, $zwebtype, $zwebid, $zrow->filename);
 							$zfilename = $zfileresults["filename"];
 							$zfilepath = $zfileresults["filepath"];
+							umask(0);
 							chmod($zfilepath, octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 							$wtwhandlers->query("
 								insert into ".wtw_tableprefix."uploads
 									(uploadid, 
@@ -757,7 +813,14 @@ class wtwuploads {
 							$zfileresults = $this->writeFileFromPath($zrow->filepath, $zwebtype, $zwebid, $zrow->filename);
 							$zfilename = $zfileresults["filename"];
 							$zfilepath = $zfileresults["filepath"];
+							umask(0);
 							chmod($zfilepath, octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 							$wtwhandlers->query("
 								insert into ".wtw_tableprefix."uploads
 									(uploadid, 
@@ -1008,7 +1071,14 @@ class wtwuploads {
 			$zdata1 = $wtwhandlers->decode64($zbase64data);
 			$znewfilepath = $zbrowsepath.$znewfilename;
 			$zsuccess = file_put_contents($zfilepath.$znewfilename, $zdata1);	
+			umask(0);
 			chmod($zfilepath.$znewfilename, octdec(wtw_chmod));			
+			if (defined('wtw_umask')) {
+				/* reset umask */
+				if (wtw_umask != '0') {
+					umask(octdec(wtw_umask));
+				}
+			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-writeDataToFile=".$e->getMessage());
 		}
@@ -1862,7 +1932,14 @@ class wtwuploads {
 					echo "Your file was not uploaded.";
 				} else {
 					if (move_uploaded_file($zuploadfile["tmp_name"], $ztargetfile)) {
+						umask(0);
 						chmod($ztargetfile, octdec(wtw_chmod));
+						if (defined('wtw_umask')) {
+							/* reset umask */
+							if (wtw_umask != '0') {
+								umask(octdec(wtw_umask));
+							}
+						}
 						$this->uploadObjectFileToDb($ztargetfile, $zpastfilename, $zfileextension, $zfiletype);
 					} else {
 						echo "There was an error uploading your file.";
@@ -1883,8 +1960,15 @@ class wtwuploads {
 			if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 				$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/media/";
 				if (!file_exists($zfilepath)) {
+					umask(0);
 					mkdir($zfilepath, octdec(wtw_chmod), true);
 					chmod($zfilepath, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				for ($i = 0; $i < count($zuploadfiles["name"]);$i++) {
 					$zisvalid = 1;
@@ -1906,7 +1990,14 @@ class wtwuploads {
 					} 
 					if ($zisvalid == 1) {
 						if (move_uploaded_file($zuploadfiles["tmp_name"][$i], $ztargetfile)) {
+							umask(0);
 							chmod($ztargetfile, octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 							$this->uploadFileToDb($ztargetfile, '', $zpastfilename, $zfileextension, $zfiletype, '1'); 
 						} else {
 							$serror .= "There was an error uploading your files.";
@@ -1929,8 +2020,15 @@ class wtwuploads {
 			if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 				$zfilepath = $wtwhandlers->contentpath."/uploads/users/".$_SESSION['wtw_uploadpathid']."/objects/".$zobjectfilepart;
 				if (!file_exists($zfilepath)) {
+					umask(0);
 					mkdir($zfilepath, octdec(wtw_chmod), true);
 					chmod($zfilepath, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				for ($i = 0; $i < count($zuploadfiles["name"]);$i++) {
 					$zisvalid = 1;
@@ -1949,8 +2047,14 @@ class wtwuploads {
 					}
 					if ($zisvalid == 1) {
 						if (move_uploaded_file($zuploadfiles["tmp_name"][$i], $ztargetfile)) {
+							umask(0);
 							chmod($ztargetfile, octdec(wtw_chmod));
-/*							$this->uploadFileToDb($ztargetfile, '', $zpastfilename, $zfileextension, $zfiletype, '1'); */
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 						} else {
 							$serror .= "There was an error uploading your files.";
 						}
@@ -2066,8 +2170,15 @@ class wtwuploads {
 			if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
 				$zfilepath = $wtwhandlers->contentpath."/uploads/".$zwebtype."/".$zwebid;
 				if (!file_exists($zfilepath)) {
+					umask(0);
 					mkdir($zfilepath, octdec(wtw_chmod), true);
 					chmod($zfilepath, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				for ($i = 0; $i < count($zuploadfiles["name"]);$i++) {
 					$zisvalid = 1;
@@ -2086,7 +2197,14 @@ class wtwuploads {
 					}
 					if ($zisvalid == 1) {
 						if (move_uploaded_file($zuploadfiles["tmp_name"][$i], $ztargetfile)) {
+							umask(0);
 							chmod($ztargetfile, octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 							$this->saveJavaScriptFile($zactionzoneid, $zwebtype, $zwebid, $zpastfilename);
 						} else {
 							$serror .= "There was an error uploading your files.";

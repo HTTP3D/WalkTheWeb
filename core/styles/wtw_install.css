@@ -65,11 +65,76 @@
 	font-weight:bold;
 	float:left;
 }
+.wtw-searchdiv {
+	float:right;
+	white-space:nowrap;
+}
+.wtw-colicons {
+	display:inline-block;
+	margin-right:20px;
+}
+img.wtw-tinyimg {
+	display:inline-block;
+	width:30px;
+	height:auto;
+	margin:2px;
+	border:1px solid transparent;
+	border-radius:2px;
+	padding:1px;
+}
+img.wtw-tinyimg:hover {
+	cursor:pointer;
+}
+img.wtw-tinyimgselected {
+	display:inline-block;
+	width:30px;
+	height:auto;
+	margin:2px;
+	border:1px solid blue;
+	border-radius:2px;
+	padding:1px;
+}
+img.wtw-tinyimgselected:hover {
+	cursor:pointer;
+}
+.wtw-smallcol {
+	display:inline-block;
+	width: 21%;
+	min-height:200px;
+	border:1px solid #afafaf;
+	border-radius:10px;
+	margin:5px 1% auto 1%;
+	padding:10px;
+	vertical-align:top; 
+}
+.wtw-medcol {
+	display:inline-block;
+	width: 28%;
+	min-height:200px;
+	border:1px solid #afafaf;
+	border-radius:10px;
+	margin:5px 1% auto 1%;
+	padding:10px;
+	vertical-align:top; 
+}
+.wtw-largecol {
+	display:inline-block;
+	width: 45%;
+	min-height:200px;
+	border:1px solid #afafaf;
+	border-radius:10px;
+	margin:5px 1% auto 1%;
+	padding:10px;
+	vertical-align:top; 
+}
 .wtw-lightblock {
 	margin:20px;
 	border-radius:15px;
 	padding:10px;
 	background-color:#ffffff;
+}
+.wtw-whitetext {
+	color:#ffffff;
 }
 .wtw-pointer {
 	cursor:pointer;

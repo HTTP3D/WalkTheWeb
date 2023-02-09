@@ -307,7 +307,7 @@ h4.wtw-dashboardheading {
 	background-color: #ccffcc;
 	box-shadow: 3px 6px #006600;
 }
-.wtw-tinyimg {
+img.wtw-tinyimg {
 	display:inline-block;
 	width:30px;
 	height:auto;
@@ -316,10 +316,10 @@ h4.wtw-dashboardheading {
 	border-radius:2px;
 	padding:1px;
 }
-.wtw-tinyimg:hover {
+img.wtw-tinyimg:hover {
 	cursor:pointer;
 }
-.wtw-tinyimgselected {
+img.wtw-tinyimgselected {
 	display:inline-block;
 	width:30px;
 	height:auto;
@@ -328,7 +328,7 @@ h4.wtw-dashboardheading {
 	border-radius:2px;
 	padding:1px;
 }
-.wtw-tinyimgselected:hover {
+img.wtw-tinyimgselected:hover {
 	cursor:pointer;
 }
 a.wtw-createbutton {
@@ -648,7 +648,7 @@ input.wtw-textboxwider:disabled {
 	font-size:1.2em;
 	font-weight:bold;
 }
-.wtw-loginlogo {
+img.wtw-loginlogo {
 	width:40px;
 	height:40px;
 	border:0px transparent;

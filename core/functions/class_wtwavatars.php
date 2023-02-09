@@ -2214,8 +2214,15 @@ class wtwavatars {
 			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zfilepath = wtw_rootpath.$zobjectfolder;
 				if (!file_exists($zfilepath)) {
+					umask(0);
 					mkdir($zfilepath, octdec(wtw_chmod), true);
 					chmod($zfilepath, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				if ($wtwhandlers->endsWith($zfilepath, "/") == false) {
 					$zfilepath .= "/";
@@ -2251,7 +2258,14 @@ class wtwavatars {
 					);
 				} else {
 					if (move_uploaded_file($zuploadfile["tmp_name"], $ztargetfile)) {
+						umask(0);
 						chmod($ztargetfile, octdec(wtw_chmod));
+						if (defined('wtw_umask')) {
+							/* reset umask */
+							if (wtw_umask != '0') {
+								umask(octdec(wtw_umask));
+							}
+						}
 						$zresponse = array(
 							'serror'=> '',
 							'objectfolder'=> $zobjectfolder,
@@ -2290,8 +2304,15 @@ class wtwavatars {
 			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
 				$zfilepath = wtw_rootpath.$zobjectfolder;
 				if (!file_exists($zfilepath)) {
+					umask(0);
 					mkdir($zfilepath, octdec(wtw_chmod), true);
 					chmod($zfilepath, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				if ($wtwhandlers->endsWith($zfilepath, "/") == false) {
 					$zfilepath .= "/";
@@ -2321,7 +2342,14 @@ class wtwavatars {
 					}
 					if ($zisvalid == 1) {
 						if (move_uploaded_file($zuploadfiles["tmp_name"][$i], $ztargetfile)) {
+							umask(0);
 							chmod($ztargetfile, octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 							$zresponse = array(
 								'serror'=> $zobjectfolder,
 								'objectfolder'=> $zuploadfiles["tmp_name"][$i],

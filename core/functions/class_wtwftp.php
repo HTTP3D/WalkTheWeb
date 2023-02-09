@@ -24,7 +24,7 @@ class wtwftp {
 	public function __construct() {
 		global $wtwhandlers;
 		if (!defined('wtw_chmod')) {
-			define("wtw_chmod", 0755);
+			define("wtw_chmod", "775");
 		}
 		$this->retry = (isset($o['reattempts'])) ? $o['reattempts'] : 3;
         $this->ftpPasv = (isset($o['passive_mode'])) ? $o['passive_mode'] : true;

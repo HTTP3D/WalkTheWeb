@@ -230,11 +230,11 @@ class wtw {
 				define("wtw_ftpbase", '');
 			}
 			if (defined('wtw_umask') == false) {
-				define("wtw_umask", "0027");
+				define("wtw_umask", "0");
 			}
 			umask(octdec(wtw_umask));
 			if (defined('wtw_chmod') == false) {
-				define("wtw_chmod", "755");
+				define("wtw_chmod", "775");
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtw-initsession.php-checkHost=" . $e->getMessage());
@@ -433,8 +433,15 @@ class wtw {
 				if ($_SERVER['REQUEST_METHOD']=='POST') {
 					/* database connectivity values submitted and processed */
 					if (!file_exists(wtw_rootpath.'/config')) {
+						umask(0);
 						mkdir(wtw_rootpath.'/config', octdec(wtw_chmod), true);
 						chmod(wtw_rootpath.'/config', octdec(wtw_chmod));
+						if (defined('wtw_umask')) {
+							/* reset umask */
+							if (wtw_umask != '0') {
+								umask(octdec(wtw_umask));
+							}
+						}
 					}
 					$zserver = $_POST["wtw_dbserver"];
 					$zdatabase = $_POST["wtw_dbname"];
@@ -477,7 +484,14 @@ class wtw {
 						fwrite($zfile,"    define(\"wtw_defaultdomain\", \"".$zdomainname."\");\r\n\r\n");
 						fwrite($zfile,"?>");
 						fclose($zfile);
+						umask(0);
 						chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
+						if (defined('wtw_umask')) {
+							/* reset umask */
+							if (wtw_umask != '0') {
+								umask(octdec(wtw_umask));
+							}
+						}
 						$zsetupstep = 0;
 						header("Location: ".$this->domainurl."/"); 
 						exit();
@@ -500,13 +514,27 @@ class wtw {
 					fwrite($zfile,"    define(\"wtw_serverinstanceid\", \"".$this->serverinstanceid."\");\r\n");
 					fwrite($zfile,"?>");
 					fclose($zfile);
+					umask(0);
 					chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 			}
 			/* create .htaccess file from htaccess file template if it does not exist - IIS and NginX will ignore it */
 			if (!file_exists(wtw_rootpath.'/.htaccess')) {
 				copy(wtw_rootpath.'/htaccess', wtw_rootpath.'/.htaccess');
+				umask(0);
 				chmod(wtw_rootpath.'/.htaccess', octdec(wtw_chmod));
+				if (defined('wtw_umask')) {
+					/* reset umask */
+					if (wtw_umask != '0') {
+						umask(octdec(wtw_umask));
+					}
+				}
 			}
 			/* if using plain text password - convert plain text password to encoded password */
 			if (defined('wtw_dbserver') && defined('wtw_dbname') && defined('wtw_dbusername') && defined('wtw_dbpassword')) {
@@ -545,7 +573,14 @@ class wtw {
 						}
 					}
 					fclose($zfile);
+					umask(0);
 					chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 					header("Location: ".$this->domainurl."/"); 
 					exit();
 				}
@@ -648,6 +683,7 @@ class wtw {
 						foreach ($zresults as $zrow) {
 							/* set basic current user information - if it exists */
 							$wtwuser->email = $zrow["email"];
+							$wtwuser->displayname = $zrow["displayname"];
 							$wtwuser->userimageurl = $zrow["userimageurl"];
 							$wtwuser->uploadpathid = $zrow["uploadpathid"];
 						}
@@ -663,6 +699,7 @@ class wtw {
 						global $wtwtables;
 						$zsitename = $_POST["wtw_tsitename"];
 						$zanalytics = $_POST["wtw_googleanalytics"];
+						$zpreloaded = $_POST["wtw_installmethod"];
 						$zadmindisplayname = base64_encode($_POST["wtw_tadmindisplayname"]);
 						$zadminpassword = $_POST["wtw_tadminpassword"];
 						$zadminpassword2 = $_POST["wtw_tadminpassword2"];
@@ -680,7 +717,14 @@ class wtw {
 							fwrite($zfile,"    define(\"wtw_adminemail\", \"".$zadminemail."\");\r\n");
 							fwrite($zfile,"?>");
 							fclose($zfile);
+							umask(0);
 							chmod(wtw_rootpath.'/config/wtw_config.php', octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 						}
 						/* set up initial admin user - from installation process */
 						$zuserid = $wtwusers->firstAdminUser($zadmindisplayname,$zadminpassword,$zadminemail);
@@ -688,6 +732,9 @@ class wtw {
 						$this->oldversion = $zversion;
 						/* load initial tables form install */
 						$wtwtables->loadInitDbData($zuserid);
+						if ($zpreloaded == 'default') {
+							$wtwtables->loadInitBuildingCommunity($this->domainname, $this->protocol, $zuserid);
+						}
 						/* set user as admin role */
 						$wtwusers->addUserRole($zuserid, 'Admin');
 						header("Location: ".$this->domainurl."/"); 
@@ -695,6 +742,7 @@ class wtw {
 					} catch (Exception $e){}
 				}
 			}
+			$zbuildingid = '';
 			$zcommunityid = '';
 			$zbuildingpositionx = '0';
 			$zbuildingpositiony = '0';
@@ -706,6 +754,41 @@ class wtw {
 			$zbuildingrotationy = '0';
 			$zbuildingrotationz = '0';
 			if ($zsetupstep == 0) {
+				/* check if first 3D Building is created */
+				global $wtwdb;
+				$zcount = 0;
+				$zresults = $wtwdb->query("select t1.*, 
+						t2.scount 
+					from ".wtw_tableprefix."buildings t1
+						left join (select count(*) as scount  from ".wtw_tableprefix."buildings) t2
+						on 1=1
+					where t1.downloadparentwebid=''
+					order by t1.createdate
+					limit 1;");
+				foreach ($zresults as $zrow) {
+					$zcount = $zrow["scount"];
+					$zbuildingid = $zrow["buildingid"];
+				}
+				if ($zcount == 0) {
+					if (!isset($_SESSION["wtw_userid"]) || empty($_SESSION["wtw_userid"])) {
+						/* if not logged in - log in admin user */
+						$zsetupstep = 5;
+						if ($_SERVER['REQUEST_METHOD']=='POST') {
+							global $wtwusers;
+							$zadminemail = base64_encode($_POST["wtw_tadminemail"]);
+							$zadminpassword = base64_encode($_POST["wtw_tadminpassword"]);
+							$zuser = $wtwusers->loginAttempt($zadminemail,$zadminpassword);
+							if ($this->hasValue($_SESSION["wtw_userid"])) {
+								$zsetupstep = 0;
+							}
+						}
+					}
+					if ($zsetupstep == 0) {
+						$zsetupstep = 6;
+					}
+				}				
+			}
+			if ($zsetupstep == 0) {
 				/* check if first 3D Community is created */
 				global $wtwdb;
 				$scount = 0;
@@ -714,7 +797,7 @@ class wtw {
 					from ".wtw_tableprefix."communities t1
 						left join (select count(*) as scount  from ".wtw_tableprefix."communities) t2
 						on 1=1
-					order by t1.createdate desc
+					order by t1.createdate
 					limit 1;");
 				foreach ($zresults as $zrow) {
 					$scount = $zrow["scount"];
@@ -728,7 +811,58 @@ class wtw {
 					$zbuildingrotationx = $zrow["buildingrotationx"];
 					$zbuildingrotationy = $zrow["buildingrotationy"];
 					$zbuildingrotationz = $zrow["buildingrotationz"];
-					
+					/* check for connecting grid of first community and first building */
+					if ($this->hasValue($zcommunityid) && $this->hasValue($zbuildingid)) {
+						$zresultsconnectinggrid = $wtwdb->query("
+							select * from ".wtw_tableprefix."connectinggrids
+							where parentwebid='".$zcommunityid."'
+								and parentwebtype='community'
+								and childwebid='".$zbuildingid."'
+								and childwebtype='building';");
+						if (count($zresultsconnectinggrid) == 0) {
+							$zconnectinggridid = $wtwdb->getRandomString(16,1);
+							$wtwdb->query("
+								insert into ".wtw_tableprefix."connectinggrids
+								   (connectinggridid,
+									parentwebid,
+									parentwebtype,
+									childwebid,
+									childwebtype,
+									positionx,
+									positiony,
+									positionz,
+									scalingx,
+									scalingy,
+									scalingz,
+									rotationx,
+									rotationy,
+									rotationz,
+									createdate,
+									createuserid,
+									updatedate,
+									updateuserid)
+								   values
+								   ('".$zconnectinggridid."',
+									'".$zcommunityid."',
+									'community',
+									'".$zbuildingid."',
+									'building',
+									".$zbuildingpositionx.",
+									".$zbuildingpositiony.",
+									".$zbuildingpositionz.",
+									".$zbuildingscalingx.",
+									".$zbuildingscalingy.",
+									".$zbuildingscalingz.",
+									".$zbuildingrotationx.",
+									".$zbuildingrotationy.",
+									".$zbuildingrotationz.",
+									now(),
+									'".$this->userid."',
+									now(),
+									'".$this->userid."');");
+						}
+					}
+					/* add web alias */
 					$zresultsweb = $wtwdb->query("
 						select * from ".wtw_tableprefix."webaliases
 						where domainname='".$this->domainname."'
@@ -761,40 +895,6 @@ class wtw {
 								now(),
 								'".$this->userid."');");
 					}
-					$zresultsweb = $wtwdb->query("
-						select * from ".wtw_tableprefix."webdomains
-						where domainname='".$this->domainname."'
-							and deleted=0;");
-					if (count($zresultsweb) == 0) {
-						$zwebdomainid = $wtwdb->getRandomString(16,1);
-						$zforcehttps = 0;
-						if ($this->protocol == "https://") {
-							$zforcehttps = 1;
-						}
-						$wtwdb->query("
-							insert into ".wtw_tableprefix."webdomains
-							   (webdomainid,
-							    hostuserid,
-								domainname,
-								forcehttps,
-								startdate,
-								allowhosting,
-								createdate,
-								createuserid,
-								updatedate,
-								updateuserid)
-							   values
-							   ('".$zwebdomainid."',
-							    '',
-								'".$this->domainname."',
-								".$zforcehttps.",
-								now(),
-								'1',
-								now(),
-								'".$this->userid."',
-								now(),
-								'".$this->userid."');");
-					}
 				}
 				if ($scount == 0) {
 					if (!isset($_SESSION["wtw_userid"]) || empty($_SESSION["wtw_userid"])) {
@@ -811,35 +911,6 @@ class wtw {
 						}
 					}
 					if ($zsetupstep == 0) { 
-						$zsetupstep = 6;
-					}
-				}
-			}
-			if ($zsetupstep == 0) {
-				/* check if first 3D Building is created */
-				global $wtwdb;
-				$zcount = 0;
-				$zresults = $wtwdb->query("select count(*) scount 
-					from ".wtw_tableprefix."buildings
-					where downloadparentwebid='';");
-				foreach ($zresults as $zrow) {
-					$zcount = $zrow["scount"];
-				}
-				if ($zcount == 0) {
-					if (!isset($_SESSION["wtw_userid"]) || empty($_SESSION["wtw_userid"])) {
-						/* if not logged in - log in admin user */
-						$zsetupstep = 5;
-						if ($_SERVER['REQUEST_METHOD']=='POST') {
-							global $wtwusers;
-							$zadminemail = base64_encode($_POST["wtw_tadminemail"]);
-							$zadminpassword = base64_encode($_POST["wtw_tadminpassword"]);
-							$zuser = $wtwusers->loginAttempt($zadminemail,$zadminpassword);
-							if ($this->hasValue($_SESSION["wtw_userid"])) {
-								$zsetupstep = 0;
-							}
-						}
-					}
-					if ($zsetupstep == 0) {
 						$zsetupstep = 7;
 					}
 				} else {
@@ -939,7 +1010,12 @@ class wtw {
 					echo "<div class='wtw-label'><b>Google Analytics (Optional):</b></div>";
 					echo "<input name='wtw_googleanalytics' type='text' value='' size='20' maxlength='24' class='wtw-textbox' />";
 					echo "<div class='wtw-clearspace'></div>";
-					
+					echo "<div class='wtw-label'><b>Install Method:</b></div>";
+					echo "<div class='wtw-clearspace'></div>";
+					echo "<input name='wtw_installmethod' id='wtw_installmethodpreloaded' type='radio' value='default' class='wtw-textbox' checked /> <span class='wtw-whitetext'>Default - Use preloaded 3D Building and 3D Community.</span><br />";
+					echo "<div class='wtw-whitetext' style='margin-left:100px;'>(no download required).</div><br /><br />";
+					echo "<input name='wtw_installmethod' id='wtw_installmethoddefault' type='radio' value='custom' class='wtw-textbox' /> <span class='wtw-whitetext'>Custom - Select 3D Building and 3D Community to download.</span><br /><br />";
+					echo "<div class='wtw-clearspace'></div>";
 					echo "<div class='wtw-icenter'><input name='wtw_bsave' type='submit' value='Save and Continue' class='wtw-button' /></div>";
 					echo "<br /></div><br /></div><br /></form></body></html>";
 					die;
@@ -982,7 +1058,7 @@ class wtw {
 					echo "<br /></div><br /></div><br /></form></body></html>";
 					die;					
 					break;
-				case 6: /* select Your 3D Community */
+				case 6: /* select Your 3D Building */
 					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
 					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' />";
 					echo "<script>var wtw_domainname = '".$this->domainname."';</script>";
@@ -993,57 +1069,68 @@ class wtw {
 					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
 					echo "<input type='hidden' id='wtw_serverinstanceid' value='".$this->serverinstanceid."' />";
 					echo "<input type='hidden' id='wtw_downloadstcols' value='2' />";
-					
-					echo "<div id='wtw_selectwebform' class='wtw-searchform'>";
-					echo "<h2 class='wtw-login'>Select Your First 3D Community Scene</h2>";
-					echo "<div class='wtw-searcharea'><div class='wtw-searchlabel'>Search:</div>";
-					echo "<input name='wtw_bcommunitysearch' type='button' value='Search' onclick=\"WTW.communitySearch(dGet('wtw_tcommunitysearch').value);\" class='wtw-searchbutton' />";
-					echo "<input id='wtw_tcommunitysearch' name='wtw_tcommunitysearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
-					echo "<div class='wtw-clearspace'></div>";
-					echo "<div id='wtw_downloadingnotice' class='wtw-hide'></div>";
-					
-					echo "<br /><hr /><div id='wtw_commtempsearchresults' class='wtw-indentmore'></div>";
-					echo "</div></div><br /></div><br /></form>";
-					echo "<script>";
-					echo "WTW.communitySearch('');";
-					echo "</script></body></html>";
-					die;
-					break;
-				case 7: /* select Your 3D Building */
-					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
-					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' />";
-					echo "<script>var wtw_domainname = '".$this->domainname."';</script>";
-					echo "<script src='/core/scripts/prime/wtw_install.js'></script>";
-					echo "<script src='/core/scripts/prime/wtw_downloads.js'></script>";
-					echo "</head><body class='wtw-body'><form id='wtw_form1' action='' method='post'>";
-					echo "<div class='wtw-fullwidth'><br /><div class='wtw-widepage'>";
-					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
-					echo "<input type='hidden' id='wtw_serverinstanceid' value='".$this->serverinstanceid."' />";
-					echo "<input type='hidden' id='wtw_downloadstcols' value='2' />";
-					echo "<input type='hidden' id='wtw_tcommunityid' value='".$zcommunityid."' />";
-					echo "<input type='hidden' id='wtw_tbuildingpositionx' value='".$zbuildingpositionx."' />";
-					echo "<input type='hidden' id='wtw_tbuildingpositiony' value='".$zbuildingpositiony."' />";
-					echo "<input type='hidden' id='wtw_tbuildingpositionz' value='".$zbuildingpositionz."' />";
-					echo "<input type='hidden' id='wtw_tbuildingscalingx' value='".$zbuildingscalingx."' />";
-					echo "<input type='hidden' id='wtw_tbuildingscalingy' value='".$zbuildingscalingy."' />";
-					echo "<input type='hidden' id='wtw_tbuildingscalingz' value='".$zbuildingscalingz."' />";
-					echo "<input type='hidden' id='wtw_tbuildingrotationx' value='".$zbuildingrotationx."' />";
-					echo "<input type='hidden' id='wtw_tbuildingrotationy' value='".$zbuildingrotationy."' />";
-					echo "<input type='hidden' id='wtw_tbuildingrotationz' value='".$zbuildingrotationz."' />";
 
 					echo "<div id='wtw_selectwebform' class='wtw-searchform'>";
-					echo "<h2 class='wtw-login'>Select Your First 3D Building Scene</h2>";
-
-					echo "<div class='wtw-searcharea'><div class='wtw-searchlabel'>Search:</div>";
+					echo "<h2 class='wtw-login'>Select Your First 3D Building</h2>";
+					
+					echo "<div class='wtw-searchdiv'>";
+					echo "<div class='wtw-colicons'>";
+					echo "<img id='wtw_downloadscol1' src='/content/system/images/col1.png' alt='1 Column' title='1 Column' class='wtw-tinyimg' onclick='WTW.updateCols(this, 1);' />";
+					echo "<img id='wtw_downloadscol2' src='/content/system/images/col2set.png' alt='2 Columns' title='2 Columns' class='wtw-tinyimgselected' onclick='WTW.updateCols(this, 2);' />";
+					echo "<img id='wtw_downloadscol3' src='/content/system/images/col3.png' alt='3 Columns' title='3 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 3);' />";
+					echo "<img id='wtw_downloadscol4' src='/content/system/images/col4.png' alt='4 Columns' title='4 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 4);' />";
+					echo "</div>";
+					echo "</div>";
+					echo "<div class='wtw-searcharea'>";
+					echo "<div><div class='wtw-searchlabel'>Search:</div>";
 					echo "<input name='wtw_bbuildingsearch' type='button' value='Search' onclick=\"WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);\" class='wtw-searchbutton' />";
 					echo "<input id='wtw_tbuildingsearch' name='wtw_tbuildingsearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
-					echo "<div class='wtw-clearspace'></div>";
+					echo "</div><div class='wtw-clearspace'></div>";
 					echo "<div id='wtw_downloadingnotice' class='wtw-hide'></div>";
 
 					echo "<br /><hr /><div id='wtw_buildtempsearchresults' class='wtw-indentmore'></div>";
 					echo "</div></div><br /></div><br /></form>";
 					echo "<script>";
 					echo "WTW.buildingSearch('');";
+					echo "</script></body></html>";
+					die;
+					break;
+				case 7: /* select Your 3D Community */
+					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
+					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' />";
+					echo "<script>var wtw_domainname = '".$this->domainname."';</script>";
+					echo "<script src='/core/scripts/prime/wtw_install.js'></script>";
+					echo "<script src='/core/scripts/prime/wtw_downloads.js'></script>";
+					echo "</head><body class='wtw-body'><form id='wtw_form1' action='' method='post'>";
+					echo "<div class='wtw-fullwidth'><br /><div class='wtw-widepage'>";
+					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
+					echo "<input type='hidden' id='wtw_serverinstanceid' value='".$this->serverinstanceid."' />";
+					echo "<input type='hidden' id='wtw_tbuildingid' value='".$zbuildingid."' />";
+					echo "<input type='hidden' id='wtw_tcommunityid' value='".$zcommunityid."' />";
+					echo "<input type='hidden' id='wtw_downloadstcols' value='2' />";
+					
+					echo "<div id='wtw_selectwebform' class='wtw-searchform'>";
+					echo "<h2 class='wtw-login'>Select Your First 3D Community Scene</h2>";
+
+					echo "<div class='wtw-searchdiv'>";
+					echo "<div class='wtw-colicons'>";
+					echo "<img id='wtw_downloadscol1' src='/content/system/images/col1.png' alt='1 Column' title='1 Column' class='wtw-tinyimg' onclick='WTW.updateCols(this, 1);' />";
+					echo "<img id='wtw_downloadscol2' src='/content/system/images/col2set.png' alt='2 Columns' title='2 Columns' class='wtw-tinyimgselected' onclick='WTW.updateCols(this, 2);' />";
+					echo "<img id='wtw_downloadscol3' src='/content/system/images/col3.png' alt='3 Columns' title='3 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 3);' />";
+					echo "<img id='wtw_downloadscol4' src='/content/system/images/col4.png' alt='4 Columns' title='4 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 4);' />";
+					echo "</div>";
+					echo "</div>";
+					echo "<div class='wtw-searcharea'>";
+					echo "<div><div class='wtw-searchlabel'>Search:</div>";
+					echo "<input name='wtw_bcommunitysearch' type='button' value='Search' onclick=\"WTW.communitySearch(dGet('wtw_tcommunitysearch').value);\" class='wtw-searchbutton' />";
+					echo "<input id='wtw_tcommunitysearch' name='wtw_tcommunitysearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
+					echo "</div><div class='wtw-clearspace'></div>";
+					echo "<div id='wtw_downloadingnotice' class='wtw-hide'></div>";
+					
+					echo "<br /><hr /><div id='wtw_commtempsearchresults' class='wtw-indentmore'></div>";
+					echo "</div></div><br /></div><br /></form>";
+					echo "<script>";
+					echo "WTW.communitySearch('');";
 					echo "</script></body></html>";
 					die;
 					break;
@@ -2502,6 +2589,27 @@ class wtw {
 		$zhiddenfields = "";
 		global $wtwuser;
 		try {
+			$zuploadmaxfilesize = ini_get('upload_max_filesize');
+			$zpostmaxsize = ini_get('post_max_size');
+			$zmemorylimit = ini_get('memory_limit');
+			if (strpos(strtolower($zuploadmaxfilesize), 'm') !== false) {
+				$zuploadmaxfilesize = str_replace('m','',strtolower($zuploadmaxfilesize));
+				$zuploadmaxfilesize .= '000000';
+				$zuploadmaxfilesize = $zuploadmaxfilesize * 1.024;
+			}
+			if (strpos(strtolower($zpostmaxsize), 'm') !== false) {
+				$zpostmaxsize = str_replace('m','',strtolower($zpostmaxsize));
+				$zpostmaxsize .= '000000';
+				$zpostmaxsize = $zpostmaxsize * 1.024;
+			}
+			if (strpos(strtolower($zmemorylimit), 'm') !== false) {
+				$zmemorylimit = str_replace('m','',strtolower($zmemorylimit));
+				$zmemorylimit .= '000000';
+				$zmemorylimit = $zmemorylimit * 1.024;
+			}
+			$zhiddenfields .= "<input type='hidden' id='upload_max_filesize' value='".$zuploadmaxfilesize."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='post_max_size' value='".$zpostmaxsize."' />\r\n";
+			$zhiddenfields .= "<input type='hidden' id='memory_limit' value='".$zmemorylimit."' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_serverinstanceid' value='".$this->serverinstanceid."' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_serverip' value='".$this->serverip."' />\r\n";
 			$zhiddenfields .= "<input type='hidden' id='wtw_tusertoken' value='".$this->usertoken."' />\r\n";

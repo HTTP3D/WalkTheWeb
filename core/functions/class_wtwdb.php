@@ -430,6 +430,7 @@ class wtwdb {
 	public function checkContentFolders($zcommunityid, $zbuildingid, $zthingid, $zavatarid) {
 		/* checks and adds content folders as needed for use with uploaded files */
 		try {
+			umask(0);
 			if (!file_exists($this->contentpath."/uploads")) {
 				mkdir($this->contentpath."/uploads", octdec(wtw_chmod), true);
 				chmod($this->contentpath."/uploads", octdec(wtw_chmod));
@@ -554,6 +555,12 @@ class wtwdb {
 					chmod($this->contentpath."/uploads/feedback/snapshots", octdec(wtw_chmod));
 				}
 			}
+			if (defined('wtw_umask')) {
+				/* reset umask */
+				if (wtw_umask != '0') {
+					umask(octdec(wtw_umask));
+				}
+			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-checkContentFolders=".$e->getMessage());
 		}
@@ -565,8 +572,15 @@ class wtwdb {
 			if (strpos($zsourcefolder, $this->contentpath) !== false && strpos($zdestinationfolder, $this->contentpath) !== false) {
 				$zfolder = opendir($zsourcefolder);
 				if (!file_exists($zdestinationfolder)) {
+					umask(0);
 					mkdir($zdestinationfolder, octdec(wtw_chmod), true);
 					chmod($zdestinationfolder, octdec(wtw_chmod));
+					if (defined('wtw_umask')) {
+						/* reset umask */
+						if (wtw_umask != '0') {
+							umask(octdec(wtw_umask));
+						}
+					}
 				}
 				while(false !== ($zfile = readdir($zfolder))) {
 					if (($zfile != '.') && ($zfile != '..')) {
@@ -575,7 +589,14 @@ class wtwdb {
 						}
 						else {
 							copy($zsourcefolder.'/'.$zfile, $zdestinationfolder.'/'.$zfile);
+							umask(0);
 							chmod($zdestinationfolder.'/'.$zfile, octdec(wtw_chmod));
+							if (defined('wtw_umask')) {
+								/* reset umask */
+								if (wtw_umask != '0') {
+									umask(octdec(wtw_umask));
+								}
+							}
 						}
 					}
 				} 
@@ -647,7 +668,14 @@ class wtwdb {
 				curl_close($zgetfile);
 				fclose($zopenfile);
 			}
+			umask(0);
 			chmod($zfilepath.$zfilename, octdec(wtw_chmod));
+			if (defined('wtw_umask')) {
+				/* reset umask */
+				if (wtw_umask != '0') {
+					umask(octdec(wtw_umask));
+				}
+			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwdb.php-getFilefromURL=".$e->getMessage());
 			$zsuccess = false;

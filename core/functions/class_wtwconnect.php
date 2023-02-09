@@ -159,11 +159,11 @@ class wtwconnect {
 				define("wtw_ftpbase", '');
 			}
 			if (defined('wtw_umask') == false) {
-				define("wtw_umask", "0027");
+				define("wtw_umask", "0");
 			}
 			umask(octdec(wtw_umask));
 			if (defined('wtw_chmod') == false) {
-				define("wtw_chmod", "755");
+				define("wtw_chmod", "775");
 			}
 		} catch (Exception $e) {
 			$this->serror("core-functions-class_wtwconnect.php-initClass=" . $e->getMessage());
