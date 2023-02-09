@@ -1,0 +1,92 @@
+Exporter version: 6.3.0, Blender version: 2.80 (sub 75)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  C:\Users\adishno\Desktop\walktheweb\park\
+	Python World class constructor completed
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  classic single light pole 001
+		processing begun of material:  claasic bench wood
+		processing begun of material:  classic bench metal
+		processing begun of material:  classic bin inside
+		processing begun of material:  classic bin
+		processing begun of material:  classic bin wood
+			processing texture Wood35_col
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Wood35_col.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Wood35_col.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVChannel_1"
+			processing texture Wood35_rgh
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Wood35_rgh.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Wood35_rgh.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVChannel_1"
+			processing texture Wood35_nrm
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Wood35_nrm.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Wood35_nrm.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVChannel_1"
+			processing texture Marmite
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmite.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmite.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVChannel_1"
+			processing texture Marmitespecular
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmitespecular.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmitespecular.jpg' are the same file
+				texture type:  specularTexture, mapped using: "UVChannel_1"
+			processing texture Marmitebump
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmitebump.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmitebump.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVChannel_1"
+			processing texture Marmite
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmite.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmite.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVChannel_1"
+			processing texture Marmitebump
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmitebump.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmitebump.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVChannel_1"
+			processing texture Marmite
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmite.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmite.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVChannel_1"
+			processing texture Marmitespecular
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmitespecular.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmitespecular.jpg' are the same file
+				texture type:  specularTexture, mapped using: "UVChannel_1"
+			processing texture Marmitebump
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmitebump.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Marmitebump.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVChannel_1"
+			processing texture Wood35_col
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Wood35_col.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Wood35_col.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVChannel_1"
+			processing texture Wood35_rgh
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Wood35_rgh.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Wood35_rgh.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVChannel_1"
+			processing texture Wood35_nrm
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Wood35_nrm.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\park\\Wood35_nrm.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVChannel_1"
+		processing begun of multimaterial:  parkbench.Multimaterial#0
+		Custom split normals with tangents being used
+		num positions      :  43210
+		num normals        :  43210
+		num tangents       :  172840
+		num uvs            :  86420
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  121296
+		WARNING: # of 0 area faces found:  64
+	processing begun of light (DIRECTIONAL):  Light
+========= Writing of JSON file started =========
+	writing mesh:  classic single light pole 001
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 5.803 secs

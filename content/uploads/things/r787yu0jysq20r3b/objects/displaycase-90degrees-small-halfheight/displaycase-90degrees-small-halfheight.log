@@ -1,0 +1,61 @@
+Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  D:\Data\HTTP3DInc\Blender\displaycases\
+	Python World class constructor completed
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  counter
+		processing begun of material:  black metal
+		processing begun of material:  transparent
+		processing begun of material:  window
+		processing begun of material:  floorboards
+			processing texture blackmetal_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\displaycases\\blackmetal_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\displaycases\\blackmetal_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture blackmetal_metalness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\displaycases\\blackmetal_metalness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\displaycases\\blackmetal_metalness.jpg' are the same file
+				texture type:  metallicTexture, mapped using: "UVMap"
+			processing texture blackmetal_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\displaycases\\blackmetal_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\displaycases\\blackmetal_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture blackmetal_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\displaycases\\blackmetal_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\displaycases\\blackmetal_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+			processing texture whiteplanks_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\displaycases\\whiteplanks_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\displaycases\\whiteplanks_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture whiteplanks_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\displaycases\\whiteplanks_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\displaycases\\whiteplanks_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture whiteplanks_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\displaycases\\whiteplanks_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\displaycases\\whiteplanks_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+		processing begun of multimaterial:  displaycase_90degrees_small_halfheight.Multimaterial#0
+		num positions      :  657
+		num normals        :  657
+		num tangents       :  0
+		num uvs            :  1314
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  762
+	processing begun of light (DIRECTIONAL):  Light
+========= Writing of JSON file started =========
+	writing mesh:  counter
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 0.2114 secs
