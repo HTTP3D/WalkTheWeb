@@ -1,0 +1,222 @@
+Exporter version: 6.4.4, Blender version: 2.90.0
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  D:\Data\HTTP3DInc\Blender\cashierlouise\
+	Python World class constructor completed
+	processing begun of skeleton:  Armature, id:  0
+		processing begun of bone:  mixamorig8:Hips, index:  0
+		processing begun of bone:  mixamorig8:Spine, index:  1
+		processing begun of bone:  mixamorig8:Spine1, index:  2
+		processing begun of bone:  mixamorig8:Spine2, index:  3
+		processing begun of bone:  mixamorig8:Neck, index:  4
+		processing begun of bone:  mixamorig8:Head, index:  5
+		processing begun of bone:  mixamorig8:HeadTop_End, index:  6
+		processing begun of bone:  mixamorig8:LeftShoulder, index:  7
+		processing begun of bone:  mixamorig8:LeftArm, index:  8
+		processing begun of bone:  mixamorig8:LeftForeArm, index:  9
+		processing begun of bone:  mixamorig8:LeftHand, index:  10
+		processing begun of bone:  mixamorig8:LeftHandThumb1, index:  11
+		processing begun of bone:  mixamorig8:LeftHandThumb2, index:  12
+		processing begun of bone:  mixamorig8:LeftHandThumb3, index:  13
+		processing begun of bone:  mixamorig8:LeftHandThumb4, index:  14
+		processing begun of bone:  mixamorig8:LeftHandIndex1, index:  15
+		processing begun of bone:  mixamorig8:LeftHandIndex2, index:  16
+		processing begun of bone:  mixamorig8:LeftHandIndex3, index:  17
+		processing begun of bone:  mixamorig8:LeftHandIndex4, index:  18
+		processing begun of bone:  mixamorig8:LeftHandMiddle1, index:  19
+		processing begun of bone:  mixamorig8:LeftHandMiddle2, index:  20
+		processing begun of bone:  mixamorig8:LeftHandMiddle3, index:  21
+		processing begun of bone:  mixamorig8:LeftHandMiddle4, index:  22
+		processing begun of bone:  mixamorig8:LeftHandRing1, index:  23
+		processing begun of bone:  mixamorig8:LeftHandRing2, index:  24
+		processing begun of bone:  mixamorig8:LeftHandRing3, index:  25
+		processing begun of bone:  mixamorig8:LeftHandRing4, index:  26
+		processing begun of bone:  mixamorig8:LeftHandPinky1, index:  27
+		processing begun of bone:  mixamorig8:LeftHandPinky2, index:  28
+		processing begun of bone:  mixamorig8:LeftHandPinky3, index:  29
+		processing begun of bone:  mixamorig8:LeftHandPinky4, index:  30
+		processing begun of bone:  mixamorig8:RightShoulder, index:  31
+		processing begun of bone:  mixamorig8:RightArm, index:  32
+		processing begun of bone:  mixamorig8:RightForeArm, index:  33
+		processing begun of bone:  mixamorig8:RightHand, index:  34
+		processing begun of bone:  mixamorig8:RightHandThumb1, index:  35
+		processing begun of bone:  mixamorig8:RightHandThumb2, index:  36
+		processing begun of bone:  mixamorig8:RightHandThumb3, index:  37
+		processing begun of bone:  mixamorig8:RightHandThumb4, index:  38
+		processing begun of bone:  mixamorig8:RightHandIndex1, index:  39
+		processing begun of bone:  mixamorig8:RightHandIndex2, index:  40
+		processing begun of bone:  mixamorig8:RightHandIndex3, index:  41
+		processing begun of bone:  mixamorig8:RightHandIndex4, index:  42
+		processing begun of bone:  mixamorig8:RightHandMiddle1, index:  43
+		processing begun of bone:  mixamorig8:RightHandMiddle2, index:  44
+		processing begun of bone:  mixamorig8:RightHandMiddle3, index:  45
+		processing begun of bone:  mixamorig8:RightHandMiddle4, index:  46
+		processing begun of bone:  mixamorig8:RightHandRing1, index:  47
+		processing begun of bone:  mixamorig8:RightHandRing2, index:  48
+		processing begun of bone:  mixamorig8:RightHandRing3, index:  49
+		processing begun of bone:  mixamorig8:RightHandRing4, index:  50
+		processing begun of bone:  mixamorig8:RightHandPinky1, index:  51
+		processing begun of bone:  mixamorig8:RightHandPinky2, index:  52
+		processing begun of bone:  mixamorig8:RightHandPinky3, index:  53
+		processing begun of bone:  mixamorig8:RightHandPinky4, index:  54
+		processing begun of bone:  mixamorig8:LeftUpLeg, index:  55
+		processing begun of bone:  mixamorig8:LeftLeg, index:  56
+		processing begun of bone:  mixamorig8:LeftFoot, index:  57
+		processing begun of bone:  mixamorig8:LeftToeBase, index:  58
+		processing begun of bone:  mixamorig8:LeftToe_End, index:  59
+		processing begun of bone:  mixamorig8:RightUpLeg, index:  60
+		processing begun of bone:  mixamorig8:RightLeg, index:  61
+		processing begun of bone:  mixamorig8:RightFoot, index:  62
+		processing begun of bone:  mixamorig8:RightToeBase, index:  63
+		processing begun of bone:  mixamorig8:RightToe_End, index:  64
+		processing action Armature|mixamo.com|Layer0:  in[1 - 219], out[0 - 219]
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  Ch07_Body
+		processing begun of material:  Ch07_body
+			processing texture Ch07_1001_Normal
+				texture type:  bumpTexture, mapped using: "map1"
+			processing texture Ch07_1001_Diffuse
+				texture type:  diffuseTexture, mapped using: "map1"
+			processing texture Ch07_1001_Specular
+				texture type:  specularTexture, mapped using: "map1"
+			processing texture Ch07_1001_Glossiness
+				texture type:  value not meaningful 2, mapped using: "map1"
+		Custom split normals with tangents being used
+		num positions      :  11117
+		num normals        :  11117
+		num tangents       :  44468
+		num uvs            :  22234
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  18894
+		Skeleton stats:  
+			Total Influencers:  22027
+			Avg # of influencers per vertex:  1.9814
+			Highest # of influencers observed:  7, num vertices with this:  14
+			exported as 7 influencers
+			num skeletonWeights and skeletonIndices:  88936
+	processing begun of mesh:  Ch07_Suit
+		processing begun of material:  Ch07_body
+		registered as also a user of material:  Ch07_body
+		Custom split normals with tangents being used
+		num positions      :  6204
+		num normals        :  6204
+		num tangents       :  24816
+		num uvs            :  12408
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  9479
+		Skeleton stats:  
+			Total Influencers:  18267
+			Avg # of influencers per vertex:  2.9444
+			Highest # of influencers observed:  6, num vertices with this:  34
+			exported as 6 influencers
+			num skeletonWeights and skeletonIndices:  49632
+	processing begun of mesh:  Ch07_Pants
+		processing begun of material:  Ch07_body
+		registered as also a user of material:  Ch07_body
+		Custom split normals with tangents being used
+		num positions      :  4462
+		num normals        :  4462
+		num tangents       :  17848
+		num uvs            :  8924
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  7091
+		Skeleton stats:  
+			Total Influencers:  10063
+			Avg # of influencers per vertex:  2.2553
+			Highest # of influencers observed:  5, num vertices with this:  13
+			exported as 5 influencers
+			num skeletonWeights and skeletonIndices:  35696
+	processing begun of mesh:  Ch07_Shirt
+		processing begun of material:  Ch07_body
+		registered as also a user of material:  Ch07_body
+		Custom split normals with tangents being used
+		num positions      :  1124
+		num normals        :  1124
+		num tangents       :  4496
+		num uvs            :  2248
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  992
+		Skeleton stats:  
+			Total Influencers:  2135
+			Avg # of influencers per vertex:  1.8995
+			Highest # of influencers observed:  5, num vertices with this:  25
+			exported as 5 influencers
+			num skeletonWeights and skeletonIndices:  8992
+	processing begun of mesh:  Ch07_Eyelashes
+		processing begun of material:  Ch07_hair
+			processing texture Ch07_1001_Normal
+				texture type:  bumpTexture, mapped using: "map1"
+			processing texture Ch07_1002_Diffuse
+				texture type:  diffuseTexture, mapped using: "map1"
+		Custom split normals with tangents being used
+		num positions      :  803
+		num normals        :  803
+		num tangents       :  3212
+		num uvs            :  1606
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  1024
+		Skeleton stats:  
+			Total Influencers:  803
+			Avg # of influencers per vertex:  1
+			Highest # of influencers observed:  1, num vertices with this:  803
+			exported as 1 influencers
+			num skeletonWeights and skeletonIndices:  3212
+	processing begun of mesh:  Ch07_Hair
+		processing begun of material:  Ch07_hair
+		registered as also a user of material:  Ch07_hair
+		Custom split normals with tangents being used
+		num positions      :  7359
+		num normals        :  7359
+		num tangents       :  29436
+		num uvs            :  14718
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  10054
+		Skeleton stats:  
+			Total Influencers:  8730
+			Avg # of influencers per vertex:  1.1863
+			Highest # of influencers observed:  3, num vertices with this:  78
+			exported as 3 influencers
+			num skeletonWeights and skeletonIndices:  29436
+	processing begun of mesh:  Ch07_Heels
+		processing begun of material:  Ch07_body
+		registered as also a user of material:  Ch07_body
+		Custom split normals with tangents being used
+		num positions      :  3261
+		num normals        :  3261
+		num tangents       :  13044
+		num uvs            :  6522
+		num uvs2           :  0
+		num colors         :  0
+		num triangles      :  5304
+		Skeleton stats:  
+			Total Influencers:  5316
+			Avg # of influencers per vertex:  1.6302
+			Highest # of influencers observed:  3, num vertices with this:  40
+			exported as 3 influencers
+			num skeletonWeights and skeletonIndices:  13044
+	processing begun of light (POINT):  Light
+========= Writing of JSON file started =========
+	writing mesh:  Ch07_Body
+	writing mesh:  Ch07_Suit
+	writing mesh:  Ch07_Pants
+	writing mesh:  Ch07_Shirt
+	writing mesh:  Ch07_Eyelashes
+	writing mesh:  Ch07_Hair
+	writing mesh:  Ch07_Heels
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 52.8865 secs
