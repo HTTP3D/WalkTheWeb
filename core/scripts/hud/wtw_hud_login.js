@@ -544,8 +544,10 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 								} else if (atob(zpassword).length == 0) {
 									zmoldfocus = 'hudlogin-password-password';
 								} else {
-									zmoldfocus = 'hudlogin-button-loginwtw';
+									zmoldfocus = 'hudlogin-button-login';
 								}
+							} else {
+								zmoldfocus = 'hudlogin-email-email';
 							}
 							WTW.hudLoginFocusText('hudlogin-email-email', true);
 							WTW.hudLoginFocusText('hudlogin-password-password', true);
@@ -562,8 +564,10 @@ WTWJS.prototype.openLoginHUD = function(zpage) {
 								} else if (atob(zpassword).length == 0) {
 									zmoldfocus = 'hudlogin-password-password';
 								} else {
-									zmoldfocus = 'hudlogin-button-loginwtw';
+									zmoldfocus = 'hudlogin-button-login';
 								}
+							} else {
+								zmoldfocus = 'hudlogin-email-email';
 							}
 							WTW.hudLoginFocusText('hudlogin-email-email', true);
 							WTW.hudLoginFocusText('hudlogin-password-password', true);

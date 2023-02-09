@@ -382,6 +382,9 @@ WTWJS.prototype.saveMyProfile = async function() {
 			function(zresponse) {
 				zresponse = JSON.parse(zresponse);
 				/* note serror would contain errors */
+				if (zresponse == '') {
+					WTW.setLoginValues(dGet('wtw_tuserid').value, dGet('wtw_tprofiledisplayname').value, dGet('wtw_tprofileemail').value);
+				}
 				WTW.saveMyProfileComplete(zresponse.serror);
 			}
 		);

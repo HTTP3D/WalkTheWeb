@@ -15,15 +15,19 @@ WTWJS.prototype.loadAvatarPlaceholder = function() {
 		/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
 		/* is it set to delete after 10 seconds */
 		var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
-		zstartstand.scaling = new BABYLON.Vector3(25, 1, 25);
-		zstartstand.position = new BABYLON.Vector3(zavatardef.start.position.x, zavatardef.start.position.y, zavatardef.start.position.z);
+		zstartstand.scaling = new BABYLON.Vector3(1, 1, 1);
+		zstartstand.position = new BABYLON.Vector3(zavatardef.start.position.x, zavatardef.start.position.y-.49, zavatardef.start.position.z);
 		zstartstand.checkCollisions = true;
 		zcovering = new BABYLON.StandardMaterial('matstartstand', scene);
 		zstartstand.material = new BABYLON.StandardMaterial('matstartstand', scene);
 		zstartstand.material.alpha = 0;
 		WTW.myAvatar = WTW.addAvatarPlaceholder(zavatardef.name, zavatardef);
 		WTW.myAvatar.rotation.y = WTW.getRadians(zavatardef.start.rotation.y);
-		window.setTimeout(function() {zstartstand.dispose();},10000);
+		window.setTimeout(function() {
+			if (WTW.isInitCycle == 0) {
+				zstartstand.dispose();
+			}
+		},10000);
     } catch (ex) {
 		WTW.log('core-scripts-avatars-wtw_loadavatar.js-loadAvatarPlaceholder=' + ex.message);
     }
@@ -170,8 +174,8 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 			/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
 			/* is it set to delete after 10 seconds */
 			var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
-			zstartstand.scaling = new BABYLON.Vector3(25, 1, 25);
-			zstartstand.position = new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY - .57, WTW.init.startPositionZ);
+			zstartstand.scaling = new BABYLON.Vector3(1, 1, 1);
+			zstartstand.position = new BABYLON.Vector3(WTW.init.startPositionX, WTW.init.startPositionY - .49, WTW.init.startPositionZ);
 			zstartstand.checkCollisions = true;
 			zcovering = new BABYLON.StandardMaterial('matstartstand', scene);
 			zstartstand.material = new BABYLON.StandardMaterial('matstartstand', scene);
@@ -185,7 +189,11 @@ WTWJS.prototype.updateAvatar = function(zavatarname, zavatardef, zsendrefresh) {
 			} else if (zavatarname.indexOf('editavatar') > -1) {
 				WTW.editAvatar = zavatar;
 			}
-			window.setTimeout(function() {zstartstand.dispose();},10000);
+			window.setTimeout(function() {
+				if (WTW.isInitCycle == 0) {
+					zstartstand.dispose();
+				}
+			},10000);
 		} else {
 			/* if the avatar meshes are the same, only update the colors and animations */
 			WTW.updateAvatarColors(zavatarname, zavatardef);

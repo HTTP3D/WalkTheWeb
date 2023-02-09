@@ -28,10 +28,10 @@ WTWJS.prototype.focusText = function(zeditdone) {
 		}
 		if (dGet(ztextbox) == null) {
 			if (dGet('wtw_formfields') == null) {
-				var zsearchboxdiv = document.createElement('div');
-				zsearchboxdiv.id = 'wtw_formfields';
-				zsearchboxdiv.className = 'wtw-hide';
-				document.getElementsByTagName('body')[0].appendChild(zsearchboxdiv);
+				var zformsdiv = document.createElement('div');
+				zformsdiv.id = 'wtw_formfields';
+				zformsdiv.className = 'wtw-hide';
+				document.getElementsByTagName('body')[0].appendChild(zformsdiv);
 			}
 			var zinput = document.createElement('input');
 			zinput.id = ztextbox;
@@ -40,7 +40,7 @@ WTWJS.prototype.focusText = function(zeditdone) {
 			} else if (WTW.selectedMoldName.indexOf('-check-') > -1) {
 				zinput.type = 'checkbox';
 			} else {
-				zinput.type = 'hidden';
+				zinput.type = 'text';
 			}
 			zinput.value = '';
 			if (ztitlewtw != null) {
@@ -70,6 +70,26 @@ WTWJS.prototype.focusText = function(zeditdone) {
 			}
 			dGet('wtw_formfields').appendChild(zinput);
 		}
+		if (dGet('wtw_mobileinput') == null) {
+			var zmobileinput = document.createElement('input');
+			zmobileinput.id = 'wtw_mobileinput';
+			zmobileinput.value = '';
+			zmobileinput.onkeydown = function() { WTW.setMobileInput();};
+			if (WTW.selectedMoldName.indexOf('-password-') > -1) {
+				zmobileinput.type = 'password';
+			} else {
+				zmobileinput.type = 'text';
+			}
+			document.body.appendChild(zmobileinput);
+		} else {
+			if (WTW.selectedMoldName.indexOf('-password-') > -1) {
+				dGet('wtw_mobileinput').type = 'password';
+			} else {
+				dGet('wtw_mobileinput').type = 'text';
+			}
+			dGet('wtw_mobileinput').value = '';
+		}
+//		dGet('wtw_mobileinput').focus();
 		if (zeditdone) {
 			WTW.addText(true);
 		} else {
@@ -242,5 +262,34 @@ WTWJS.prototype.tabNextField = function() {
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-molds-wtw_3dforms.js-tabNextField=' + ex.message);
+	}
+}
+
+WTWJS.prototype.setMobileInput = function() {
+	/* capture mobile input text (allowing keyboard to show) */
+	try {
+		var zevent = window.event;
+		/* only process accepted keys */
+		var zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_@&";
+		if (WTW.selectedMoldName.indexOf('-email-') > -1) {
+			zaccept = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_@";
+		} else if (WTW.selectedMoldName.indexOf('-name-') > -1) {
+			zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_',";
+		} else if (WTW.selectedMoldName.indexOf('-password-') > -1) {
+			zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-+_@!#$%^&*()=[]:;'?,";
+		} else if (WTW.selectedMoldName.indexOf('-search-') > -1) {
+			zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_@'";
+		}
+		if (zaccept.indexOf(zevent.key) > -1) {
+			dGet('wtw_mobileinput').value += zevent.key;
+			if (dGet(WTW.selectedMoldName + '-textbox') != null) {
+				dGet(WTW.selectedMoldName + '-textbox').value = dGet('wtw_mobileinput').value;
+//WTW.log("SET TEXT=" + dGet('wtw_mobileinput').value);
+				WTW.addText();
+			}
+			zevent.preventDefault();
+		}
+	} catch (ex) {
+		WTW.log('core-scripts-molds-wtw_3dforms.js-setMobileInput=' + ex.message);
 	}
 }

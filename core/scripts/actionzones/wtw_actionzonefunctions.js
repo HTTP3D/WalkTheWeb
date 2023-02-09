@@ -458,8 +458,8 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 							/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
 							var zspawnpoint = WTW.getSpawnPoint(zresponse.spawnzones, zspawnactionzoneid);
 							var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
-							zstartstand.scaling = new BABYLON.Vector3(50, 1, 50);
-							zstartstand.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y, zspawnpoint.position.z);
+							zstartstand.scaling = new BABYLON.Vector3(1, 1, 1);
+							zstartstand.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y-.49, zspawnpoint.position.z);
 							zstartstand.checkCollisions = true;
 							zstartstand.material = new BABYLON.StandardMaterial('matstartstand', scene);
 							zstartstand.material.alpha = 0;
@@ -529,8 +529,10 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 								WTW.myAvatar.rotation.y = WTW.getRadians(zspawnpoint.rotation.y);
 								/* delete start stand after 10 seconds */
 								window.setTimeout(function() {
-									zstartstand.dispose();
-								},5000);
+									if (WTW.isInitCycle == 0) {
+										zstartstand.dispose();
+									}
+								},10000);
 							},3000);
 						}
 					);

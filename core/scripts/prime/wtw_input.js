@@ -271,8 +271,9 @@ WTWJS.prototype.keyDown = function(zevent) {
 									} else if (WTW.selectedMoldName.indexOf('-search-') > -1) {
 										zaccept = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-_@'";
 									}
-									if (zaccept.indexOf(zevent.key) > -1) {
+									if (zaccept.indexOf(zevent.key) > -1 && document.activeElement.id != 'wtw_mobileinput') {
 										dGet(WTW.selectedMoldName + '-textbox').value += zevent.key;
+										zevent.preventDefault();
 									}
 								}
 								break;

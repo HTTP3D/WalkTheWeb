@@ -413,25 +413,35 @@ WTWJS.prototype.updateCols = function(zobj, zcols) {
 			dGet('wtw_2downloadscol3').src = dGet('wtw_downloadscol3').src;
 			dGet('wtw_2downloadscol4').src = dGet('wtw_downloadscol4').src;
 		}
-		if (dGet('searchcommunitiesdiv').style.display != 'none') {
-			if (dGet('wtw_tcommunitysearch') != null) {
-				WTW.communitySearch(dGet('wtw_tcommunitysearch').value);
+		if (dGet('searchcommunitiesdiv') != null) {
+			/* used by WTW Downloads page */
+			if (dGet('searchcommunitiesdiv').style.display != 'none') {
+				if (dGet('wtw_tcommunitysearch') != null) {
+					WTW.communitySearch(dGet('wtw_tcommunitysearch').value);
+				}
+			} else if (dGet('searchbuildingsdiv').style.display != 'none') {
+				if (dGet('wtw_tbuildingsearch') != null) {
+					WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);
+				}
+			} else if (dGet('searchthingsdiv').style.display != 'none') {
+				if (dGet('wtw_tthingsearch') != null) {
+					WTW.thingSearch(dGet('wtw_tthingsearch').value);
+				}
+			} else if (dGet('searchavatarsdiv').style.display != 'none') {
+				if (dGet('wtw_tavatarsearch') != null) {
+					WTW.avatarSearch(dGet('wtw_tavatarsearch').value);
+				}
+			} else if (dGet('searchpluginsdiv').style.display != 'none') {
+				if (dGet('wtw_tpluginsearch') != null) {
+					WTW.pluginSearch(dGet('wtw_tpluginsearch').value);
+				}
 			}
-		} else if (dGet('searchbuildingsdiv').style.display != 'none') {
+		} else {
+			/* used by install */
 			if (dGet('wtw_tbuildingsearch') != null) {
 				WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);
-			}
-		} else if (dGet('searchthingsdiv').style.display != 'none') {
-			if (dGet('wtw_tthingsearch') != null) {
-				WTW.thingSearch(dGet('wtw_tthingsearch').value);
-			}
-		} else if (dGet('searchavatarsdiv').style.display != 'none') {
-			if (dGet('wtw_tavatarsearch') != null) {
-				WTW.avatarSearch(dGet('wtw_tavatarsearch').value);
-			}
-		} else if (dGet('searchpluginsdiv').style.display != 'none') {
-			if (dGet('wtw_tpluginsearch') != null) {
-				WTW.pluginSearch(dGet('wtw_tpluginsearch').value);
+			} else if (dGet('wtw_tcommunitysearch') != null) {
+				WTW.communitySearch(dGet('wtw_tcommunitysearch').value);
 			}
 		}
 	} catch (ex) {
@@ -509,6 +519,7 @@ WTWJS.prototype.downloadWeb = async function(ztrigger, ztemplatename, zwebid, zn
 			);
 		} else {
 			var zisinstall = true;
+			var zbuildingid = '';
 			var zcommunityid = '';
 			var zbuildingpositionx = 0;
 			var zbuildingpositiony = 0;
@@ -526,18 +537,10 @@ WTWJS.prototype.downloadWeb = async function(ztrigger, ztemplatename, zwebid, zn
 			}
 			if (zisinstall && zwebtype == 'building') {
 				if (dGet('wtw_tcommunityid') != null) {
-					zcommunityid = dGet('wtw_tcommunityid').value;
-					zbuildingpositionx = dGet('wtw_tbuildingpositionx').value;
-					zbuildingpositiony = dGet('wtw_tbuildingpositiony').value;
-					zbuildingpositionz = dGet('wtw_tbuildingpositionz').value;
-					zbuildingscalingx = dGet('wtw_tbuildingscalingx').value;
-					zbuildingscalingy = dGet('wtw_tbuildingscalingy').value;
-					zbuildingscalingz = dGet('wtw_tbuildingscalingz').value;
-					zbuildingrotationx = dGet('wtw_tbuildingrotationx').value;
-					zbuildingrotationy = dGet('wtw_tbuildingrotationy').value;
-					zbuildingrotationz = dGet('wtw_tbuildingrotationz').value;
+					if (dGet('wtw_tcommunityid') != null) {
+						zcommunityid = dGet('wtw_tcommunityid').value;
+					}
 				}
-				
 			}
 			/* multiple calls so we can update the progress */
 			var zrequest = {
@@ -1144,7 +1147,8 @@ WTWJS.prototype.downloadWebProgress = async function(zoriginalnewwebid, zorigina
 				zstagename = 'Processing First Building';
 				zpercent = 2;
 				if (zisinstall && zwebtype == 'building' && zoriginalwebtype == 'community' && zoriginalnewwebid != '') {
-					zprocess = true;
+					/* this step is disabled */
+					zprocess = false;
 					zrequest = {
 						'newwebid':znewwebid,
 						'webtype':zwebtype,
