@@ -1,0 +1,51 @@
+Exporter version: 6.3.0, Blender version: 2.80 (sub 75)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  C:\Users\adishno\Desktop\walktheweb\walkthewebbeach\CashRegister\
+	Python World class constructor completed
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  Plane.146
+		processing begun of material:  cashregistermat
+			processing texture Cash_Register
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\walkthewebbeach\\CashRegister\\Cash_Register.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\walkthewebbeach\\CashRegister\\Cash_Register.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture Cash_Register_Metallic
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\walkthewebbeach\\CashRegister\\Cash_Register_Metallic.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\walkthewebbeach\\CashRegister\\Cash_Register_Metallic.jpg' are the same file
+				texture type:  metallicTexture, mapped using: "UVMap"
+			processing texture Cash_Register_NoAO_SPEC
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\walkthewebbeach\\CashRegister\\Cash_Register_NoAO_SPEC.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\walkthewebbeach\\CashRegister\\Cash_Register_NoAO_SPEC.jpg' are the same file
+				texture type:  specularTexture, mapped using: "UVMap"
+			processing texture Cash_Register_NoAO_Roughness
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\walkthewebbeach\\CashRegister\\Cash_Register_NoAO_Roughness.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\walkthewebbeach\\CashRegister\\Cash_Register_NoAO_Roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture Cash_Register_NoAO_NRM
+				WARNING: Exception during copy:
+					'C:\\Users\\adishno\\Desktop\\walktheweb\\walkthewebbeach\\CashRegister\\Cash_Register_NoAO_NRM.jpg' and 'C:\\Users\\adishno\\Desktop\\walktheweb\\walkthewebbeach\\CashRegister\\Cash_Register_NoAO_NRM.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+		Custom split normals with tangents being used
+		num positions      :  2440
+		num normals        :  2440
+		num tangents       :  9760
+		num uvs            :  4880
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  3261
+		WARNING: # of 0 area faces found:  2
+	processing begun of light (DIRECTIONAL):  Light
+========= Writing of JSON file started =========
+	writing mesh:  Plane.146
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 0.1329 secs

@@ -1,0 +1,101 @@
+Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  D:\Data\HTTP3DInc\Blender\building\coffeecorner\
+	Python World class constructor completed
+	processing begun of mesh:  outside building
+		processing begun of material:  Material
+		processing begun of material:  windows
+		processing begun of material:  brown canvas
+		processing begun of material:  white canvas
+		processing begun of material:  painted plaster
+		processing begun of material:  brown wood
+		processing begun of material:  black metal
+		processing begun of material:  backdrop
+			processing texture brownfabric_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\brownfabric_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\brownfabric_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture yellowfabric_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\yellowfabric_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\yellowfabric_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture yellowfabric_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\yellowfabric_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\yellowfabric_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+			processing texture whitefabric_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\whitefabric_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\whitefabric_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture yellowfabric_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\yellowfabric_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\yellowfabric_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture yellowfabric_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\yellowfabric_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\yellowfabric_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+			processing texture paintedplaster_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\paintedplaster_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\paintedplaster_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture paintedplaster_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\paintedplaster_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\paintedplaster_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture paintedplaster_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\paintedplaster_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\paintedplaster_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+			processing texture brownwoodsiding_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\brownwoodsiding_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\brownwoodsiding_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture redwoodsiding_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\redwoodsiding_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\redwoodsiding_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture redwoodsiding_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\redwoodsiding_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\redwoodsiding_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+			processing texture blackmetal_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\blackmetal_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\blackmetal_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture blackmetal_metalness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\blackmetal_metalness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\blackmetal_metalness.jpg' are the same file
+				texture type:  metallicTexture, mapped using: "UVMap"
+			processing texture blackmetal_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\blackmetal_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\blackmetal_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture blackmetal_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\blackmetal_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\coffeecorner\\blackmetal_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+		processing begun of multimaterial:  coffeecorner.Multimaterial#0
+		num positions      :  2146
+		num normals        :  2146
+		num tangents       :  0
+		num uvs            :  4292
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  2532
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of light (DIRECTIONAL):  Light
+========= Writing of JSON file started =========
+	writing mesh:  outside building
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 0.5819 secs
