@@ -1,0 +1,152 @@
+Exporter version: 6.3.1, Blender version: 2.82 (sub 7)
+========= Conversion from Blender to Babylon.js =========
+	Scene settings used :
+		Inline textures     :  false
+		Material Type       :  PBR
+		Positions Precision :  4
+		Normals Precision   :  3
+		UVs Precision       :  3
+		Vert Color Precision:  3
+		Mat Weight Precision:  2
+		Keep Z-up r-handed  :  no
+		Texture directory   :  D:\Data\HTTP3DInc\Blender\building\city-oldcanalside\
+	Python World class constructor completed
+	processing begun of mesh:  foundation
+		processing begun of material:  Material
+		processing begun of material:  green rock
+		processing begun of material:  green rock light
+		processing begun of material:  white marble
+		processing begun of material:  white bricks
+		processing begun of material:  path rocks
+		processing begun of material:  sidewalks
+		processing begun of material:  bridge rock
+		processing begun of material:  transparent
+			processing texture greenrock_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\greenrock_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\greenrock_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture greenrock_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\greenrock_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\greenrock_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture greenrock_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\greenrock_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\greenrock_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+			processing texture greenrocklight_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\greenrocklight_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\greenrocklight_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture greenrocklight_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\greenrocklight_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\greenrocklight_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture greenrocklight_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\greenrocklight_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\greenrocklight_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+			processing texture whitemarble_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whitemarble_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whitemarble_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture whitemarble_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whitemarble_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whitemarble_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture whitemarble_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whitemarble_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whitemarble_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+			processing texture whitepavingstones_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whitepavingstones_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whitepavingstones_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture whitepavingstones_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whitepavingstones_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whitepavingstones_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture whitepavingstones_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whitepavingstones_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whitepavingstones_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+			processing texture pathrocks_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\pathrocks_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\pathrocks_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture pathrocks_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\pathrocks_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\pathrocks_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture pathrocks_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\pathrocks_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\pathrocks_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+			processing texture whiteconcrete_color
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whiteconcrete_color.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whiteconcrete_color.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture whiteconcrete_roughness
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whiteconcrete_roughness.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whiteconcrete_roughness.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture whiteconcrete_normal
+				WARNING: Exception during copy:
+					'd:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whiteconcrete_normal.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\whiteconcrete_normal.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+			processing texture ground21_col
+				WARNING: Exception during copy:
+					'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\ground21_col.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\ground21_col.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture ground21_rgh
+				WARNING: Exception during copy:
+					'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\ground21_rgh.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\ground21_rgh.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture ground21_nrm
+				WARNING: Exception during copy:
+					'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\ground21_nrm.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\ground21_nrm.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+		processing begun of multimaterial:  city_oldcanalside.Multimaterial#0
+		num positions      :  6925
+		num normals        :  6925
+		num tangents       :  0
+		num uvs            :  13850
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  7482
+		WARNING: # of 0 area faces found:  2
+	processing begun of camera (UniversalCamera):  Camera
+	processing begun of mesh:  street
+		processing begun of material:  street
+		processing begun of material:  bridge rock
+		processing begun of material:  sidewalks
+		processing begun of material:  transparent
+			processing texture asphalt_col
+				WARNING: Exception during copy:
+					'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\asphalt_col.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\asphalt_col.jpg' are the same file
+				texture type:  diffuseTexture, mapped using: "UVMap"
+			processing texture asphalt_rgh
+				WARNING: Exception during copy:
+					'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\asphalt_rgh.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\asphalt_rgh.jpg' are the same file
+				texture type:  value not meaningful 2, mapped using: "UVMap"
+			processing texture asphalt_nrm
+				WARNING: Exception during copy:
+					'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\asphalt_nrm.jpg' and 'D:\\Data\\HTTP3DInc\\Blender\\building\\city-oldcanalside\\asphalt_nrm.jpg' are the same file
+				texture type:  bumpTexture, mapped using: "UVMap"
+		registered as also a user of material:  bridge rock
+		registered as also a user of material:  sidewalks
+		registered as also a user of material:  transparent
+		processing begun of multimaterial:  city_oldcanalside.Multimaterial#1
+		num positions      :  12869
+		num normals        :  12869
+		num tangents       :  0
+		num uvs            :  25738
+		num uvs2           :  0
+		num colors         :  0
+		num indices        :  14241
+	processing begun of light (DIRECTIONAL):  Light
+========= Writing of JSON file started =========
+	writing mesh:  foundation
+	writing mesh:  street
+========= Writing of JSON file completed =========
+========= end of processing =========
+elapsed time:  0 min, 1.4925 secs
