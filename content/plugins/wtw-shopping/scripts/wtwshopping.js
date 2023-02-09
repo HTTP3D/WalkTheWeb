@@ -1,4 +1,4 @@
-/* All code is Copyright 2013-2022 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
+/* All code is Copyright 2013-2023 Aaron Scott Dishno Ed.D., HTTP3D Inc. - WalkTheWeb, and the contributors */
 /* "3D Browsing" is a USPTO Patented (Serial # 9,940,404) and Worldwide PCT Patented Technology by Aaron Scott Dishno Ed.D. and HTTP3D Inc. */
 /* Read the included GNU Ver 3.0 license file for details and additional release information. */
 
@@ -2126,85 +2126,87 @@ wtwshopping.prototype.searchProducts = async function(zmoldname) {
 wtwshopping.prototype.searchProductsText = async function(zmoldname) {
 	/* search Text area is clicked or selected - starts selected mold as active and blinks a cursor */
 	try {
-		WTW.hilightMoldFast(zmoldname, 'green');
-		var ztextbox = zmoldname + '-textbox';
-		if (dGet(ztextbox) == null) {
-			if (dGet('wtwshopping_searchboxes') == null) {
-				var zsearchboxdiv = document.createElement('div');
-				zsearchboxdiv.id = 'wtwshopping_searchboxes';
-				zsearchboxdiv.className = 'wtw-hide';
-				document.getElementsByTagName('body')[0].appendChild(zsearchboxdiv);
-			}
-			var zinput = document.createElement('input');
-			zinput.id = ztextbox;
-			zinput.type = 'hidden';
-			zinput.value = '';
-			dGet('wtwshopping_searchboxes').appendChild(zinput);
-		}
-		if (WTW.selectedMoldName != zmoldname) {
-			WTW.selectedMoldName = zmoldname;
-			window.clearInterval(WTW.textTimer);
-			WTW.textTimer = null;
-		}
-		/* start blinking cursor at end of text typed */
-		if (WTW.textTimer == null) {
-			WTW.textTimer = window.setInterval(function(){
-				var zinputid = WTW.selectedMoldName + '-textbox';
-				var zwebstyle = {
-					'anchor':'left',
-					'letter-height':1.00,
-					'letter-thickness':.2,
-					'color':'#ffffff',
-					'alpha':1.00,
-					'colors':{
-						'diffuse':'#ffffff',
-						'specular':'#989e2c',
-						'ambient':'#888722',
-						'emissive':'#37370d'
-					}
-				};
-				var zmold = WTW.getMeshOrNodeByID(WTW.selectedMoldName);
-				if (zmold != null && dGet(zinputid) != null) {
-					WTW.disposeClean(WTW.selectedMoldName + '-text');
-					var zshowtext = dGet(zinputid).value;
-					/* if text is too long, trim text for display */
-					var zhaspipe = 0;
-					var zmaxlength = 10;
-					if (zshowtext.indexOf('|') > -1) {
-						zhaspipe = 1;
-						zshowtext = zshowtext.replace('|','');
-					}
-					/* W and M are wider and can not fit as many characters on the display screen */
-					if (zshowtext.indexOf('w') > -1 || zshowtext.indexOf('m') > -1 || zshowtext.indexOf('W') > -1 || zshowtext.indexOf('M') > -1) {
-						zmaxlength = 7;
-					}
-					if (zshowtext.length > zmaxlength) {
-						zshowtext = zshowtext.substr(zshowtext.length-zmaxlength-1,zshowtext.length-(zshowtext.length-zmaxlength-1));
-					}
-					/* decide if pipe key | should show or not */
-					if (zhaspipe == 0) {
-						zshowtext += '|';
-						dGet(zinputid).value += '|';
-					} else {
-						dGet(zinputid).value = dGet(zinputid).value.replace('|','');
-					}
-					/* create 3d text */
-					Writer = BABYLON.MeshWriter(scene, {scale:1});
-					var zdisplaytext = null;
-					if (zshowtext != '') {
-						zdisplaytext = new Writer(zshowtext, zwebstyle);
-						var zmytext = zdisplaytext.getMesh();
-						zmytext.rotation = new BABYLON.Vector3(WTW.getRadians(-45), 0, 0);
-						zmytext.position = new BABYLON.Vector3(-2.5, 10.25, 0);
-						zmytext.name = WTW.selectedMoldName + '-text';
-						zmytext.parent = zmold;
-						zmytext.isPickable = false;
-					}
-				} else {
-					window.clearInterval(WTW.textTimer);
-					WTW.textTimer = null;
+		if (WTW.selectedMoldName.indexOf('productsearch') > -1) {
+			WTW.hilightMoldFast(zmoldname, 'green');
+			var ztextbox = zmoldname + '-textbox';
+			if (dGet(ztextbox) == null) {
+				if (dGet('wtwshopping_searchboxes') == null) {
+					var zsearchboxdiv = document.createElement('div');
+					zsearchboxdiv.id = 'wtwshopping_searchboxes';
+					zsearchboxdiv.className = 'wtw-hide';
+					document.getElementsByTagName('body')[0].appendChild(zsearchboxdiv);
 				}
-			},500);
+				var zinput = document.createElement('input');
+				zinput.id = ztextbox;
+				zinput.type = 'hidden';
+				zinput.value = '';
+				dGet('wtwshopping_searchboxes').appendChild(zinput);
+			}
+			if (WTW.selectedMoldName != zmoldname) {
+				WTW.selectedMoldName = zmoldname;
+				window.clearInterval(WTW.textTimer);
+				WTW.textTimer = null;
+			}
+			/* start blinking cursor at end of text typed */
+			if (WTW.textTimer == null) {
+				WTW.textTimer = window.setInterval(function(){
+					var zinputid = WTW.selectedMoldName + '-textbox';
+					var zwebstyle = {
+						'anchor':'left',
+						'letter-height':1.00,
+						'letter-thickness':.2,
+						'color':'#ffffff',
+						'alpha':1.00,
+						'colors':{
+							'diffuse':'#ffffff',
+							'specular':'#989e2c',
+							'ambient':'#888722',
+							'emissive':'#37370d'
+						}
+					};
+					var zmold = WTW.getMeshOrNodeByID(WTW.selectedMoldName);
+					if (zmold != null && dGet(zinputid) != null) {
+						WTW.disposeClean(WTW.selectedMoldName + '-text');
+						var zshowtext = dGet(zinputid).value;
+						/* if text is too long, trim text for display */
+						var zhaspipe = 0;
+						var zmaxlength = 10;
+						if (zshowtext.indexOf('|') > -1) {
+							zhaspipe = 1;
+							zshowtext = zshowtext.replace('|','');
+						}
+						/* W and M are wider and can not fit as many characters on the display screen */
+						if (zshowtext.indexOf('w') > -1 || zshowtext.indexOf('m') > -1 || zshowtext.indexOf('W') > -1 || zshowtext.indexOf('M') > -1) {
+							zmaxlength = 7;
+						}
+						if (zshowtext.length > zmaxlength) {
+							zshowtext = zshowtext.substr(zshowtext.length-zmaxlength-1,zshowtext.length-(zshowtext.length-zmaxlength-1));
+						}
+						/* decide if pipe key | should show or not */
+						if (zhaspipe == 0) {
+							zshowtext += '|';
+							dGet(zinputid).value += '|';
+						} else {
+							dGet(zinputid).value = dGet(zinputid).value.replace('|','');
+						}
+						/* create 3d text */
+						Writer = BABYLON.MeshWriter(scene, {scale:1});
+						var zdisplaytext = null;
+						if (zshowtext != '') {
+							zdisplaytext = new Writer(zshowtext, zwebstyle);
+							var zmytext = zdisplaytext.getMesh();
+							zmytext.rotation = new BABYLON.Vector3(WTW.getRadians(-45), 0, 0);
+							zmytext.position = new BABYLON.Vector3(-2.5, 10.25, 0);
+							zmytext.name = WTW.selectedMoldName + '-text';
+							zmytext.parent = zmold;
+							zmytext.isPickable = false;
+						}
+					} else {
+						window.clearInterval(WTW.textTimer);
+						WTW.textTimer = null;
+					}
+				},500);
+			}
 		}
 	} catch (ex) { 
 		WTW.log('plugins:wtw-shopping:scripts-wtwshopping.js-searchProductsText=' + ex.message);
@@ -2214,25 +2216,28 @@ wtwshopping.prototype.searchProductsText = async function(zmoldname) {
 wtwshopping.prototype.keyDownSelectedMold = async function(zevent) {
 	/* process key when pressed */
 	try {
-		var zinputid = WTW.selectedMoldName + '-textbox';
-		if (dGet(zinputid) != null) {
-			dGet(zinputid).value = dGet(zinputid).value.replace('|','');
-			switch (zevent.key) {
-				case 'Backspace':
-				case 'Delete':
-					/* remove the last character */
-					var ztext = dGet(zinputid).value.substring(0, dGet(zinputid).value.length - 1);
-					dGet(zinputid).value = ztext;
-					break;
-				default:
-					/* only process accepted keys */
-					var zaccept = 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-+';
-					if (zaccept.indexOf(zevent.key) > -1) {
-						dGet(zinputid).value += zevent.key;
-					}
-					break;
+/*		if (WTW.selectedMoldName.indexOf('productsearch') > -1) {
+			var zinputid = WTW.selectedMoldName + '-textbox';
+			if (dGet(zinputid) != null) {
+				dGet(zinputid).value = dGet(zinputid).value.replace('|','');
+				switch (zevent.key) {
+					case 'Backspace':
+					case 'Delete':
+						/ * remove the last character * /
+						var ztext = dGet(zinputid).value.substring(0, dGet(zinputid).value.length - 1);
+						dGet(zinputid).value = ztext;
+						break;
+					default:
+						/ * only process accepted keys * /
+						var zaccept = 'abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-+';
+						if (zaccept.indexOf(zevent.key) > -1) {
+							dGet(zinputid).value += zevent.key;
+						}
+						break;
+				}
 			}
 		}
+*/
 	} catch (ex) { 
 		WTW.log('plugins:wtw-shopping:scripts-wtwshopping.js-keyDownSelectedMold=' + ex.message);
 	}
@@ -2241,57 +2246,60 @@ wtwshopping.prototype.keyDownSelectedMold = async function(zevent) {
 wtwshopping.prototype.clearSelectedMold = function () {
 	/* selected mold pauses keyboard avatar movement - clearing will allow avatar to move again */
 	try {
-		var zinputid = WTW.selectedMoldName + '-textbox';
-		if (dGet(zinputid) != null) {
-			dGet(zinputid).value = dGet(zinputid).value.replace('|','');
-		}
-		/* stop the timer if it is running */
-		if (WTW.textTimer != null) {
-			window.clearInterval(WTW.textTimer);
-			WTW.textTimer = null;
-		}
-		/* in case the text still has the pipe | - repaint the text one last time */
-		var zinputid = WTW.selectedMoldName + '-textbox';
-		var zwebstyle = {
-			'anchor':'left',
-			'letter-height':1.00,
-			'letter-thickness':.2,
-			'color':'#ffffff',
-			'alpha':1.00,
-			'colors':{
-				'diffuse':'#ffffff',
-				'specular':'#989e2c',
-				'ambient':'#888722',
-				'emissive':'#37370d'
+		if (WTW.selectedMoldName.indexOf('productsearch') > -1) {
+			var zinputid = WTW.selectedMoldName + '-textbox';
+			if (dGet(zinputid) != null) {
+				dGet(zinputid).value = dGet(zinputid).value.replace('|','');
 			}
-		};
-		var zmold = WTW.getMeshOrNodeByID(WTW.selectedMoldName);
-		if (zmold != null && dGet(zinputid) != null) {
-			WTW.disposeClean(WTW.selectedMoldName + '-text');
-			var zshowtext = dGet(zinputid).value;
-			/* if text is too long, trim text for display */
-			var zmaxlength = 10;
-			if (zshowtext.indexOf('|') > -1) {
-				zshowtext = zshowtext.replace('|','');
+			/* stop the timer if it is running */
+			if (WTW.textTimer != null) {
+				window.clearInterval(WTW.textTimer);
+				WTW.textTimer = null;
 			}
-			/* W and M are wider and can not fit as many characters on the display screen */
-			if (zshowtext.indexOf('w') > -1 || zshowtext.indexOf('m') > -1 || zshowtext.indexOf('W') > -1 || zshowtext.indexOf('M') > -1) {
-				zmaxlength = 7;
-			}
-			if (zshowtext.length > zmaxlength) {
-				zshowtext = zshowtext.substr(zshowtext.length-zmaxlength-1,zshowtext.length-(zshowtext.length-zmaxlength-1));
-			}
-			/* create 3d text */
-			Writer = BABYLON.MeshWriter(scene, {scale:1});
-			var zdisplaytext = null;
-			if (zshowtext != '') {
-				zdisplaytext = new Writer(zshowtext, zwebstyle);
-				var zmytext = zdisplaytext.getMesh();
-				zmytext.rotation = new BABYLON.Vector3(WTW.getRadians(-45), 0, 0);
-				zmytext.position = new BABYLON.Vector3(-2.5, 10.25, 0);
-				zmytext.name = WTW.selectedMoldName + '-text';
-				zmytext.parent = zmold;
-				zmytext.isPickable = false;
+			/* in case the text still has the pipe | - repaint the text one last time */
+			var zinputid = WTW.selectedMoldName + '-textbox';
+			var zwebstyle = {
+				'anchor':'left',
+				'letter-height':1.00,
+				'letter-thickness':.2,
+				'color':'#ffffff',
+				'alpha':1.00,
+				'colors':{
+					'diffuse':'#ffffff',
+					'specular':'#989e2c',
+					'ambient':'#888722',
+					'emissive':'#37370d'
+				}
+			};
+			var zmold = WTW.getMeshOrNodeByID(WTW.selectedMoldName);
+			if (zmold != null && dGet(zinputid) != null) {
+				WTW.disposeClean(WTW.selectedMoldName + '-text');
+				var zshowtext = dGet(zinputid).value;
+				/* if text is too long, trim text for display */
+				var zmaxlength = 10;
+				if (zshowtext.indexOf('|') > -1) {
+					zshowtext = zshowtext.replace('|','');
+				}
+				/* W and M are wider and can not fit as many characters on the display screen */
+				if (zshowtext.indexOf('w') > -1 || zshowtext.indexOf('m') > -1 || zshowtext.indexOf('W') > -1 || zshowtext.indexOf('M') > -1) {
+					zmaxlength = 7;
+				}
+				if (zshowtext.length > zmaxlength) {
+					zshowtext = zshowtext.substr(zshowtext.length-zmaxlength-1,zshowtext.length-(zshowtext.length-zmaxlength-1));
+				}
+				/* create 3d text */
+				Writer = BABYLON.MeshWriter(scene, {scale:1});
+				var zdisplaytext = null;
+				if (zshowtext != '') {
+					zdisplaytext = new Writer(zshowtext, zwebstyle);
+					var zmytext = zdisplaytext.getMesh();
+					zmytext.rotation = new BABYLON.Vector3(WTW.getRadians(-45), 0, 0);
+					zmytext.position = new BABYLON.Vector3(-2.5, 10.25, 0);
+					zmytext.id = WTW.selectedMoldName + '-text';
+					zmytext.name = WTW.selectedMoldName + '-text';
+					zmytext.parent = zmold;
+					zmytext.isPickable = false;
+				}
 			}
 		}
 	} catch (ex) {
