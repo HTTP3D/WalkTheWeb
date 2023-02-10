@@ -20,7 +20,7 @@ class wtwthingmolds {
 		}
 	}
 	
-	function saveThingMold($zthingmoldid, $zthingid, $zloadactionzoneid, $zunloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zsubdivisions, $zreceiveshadows, $zgraphiclevel, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain) {
+	function saveThingMold($zthingmoldid, $zthingid, $zloadactionzoneid, $zunloadactionzoneid, $zshape, $zcovering, $zpositionx, $zpositiony, $zpositionz, $zscalingx, $zscalingy, $zscalingz, $zrotationx, $zrotationy, $zrotationz, $zspecial1, $zspecial2, $zuoffset, $zvoffset, $zuscale, $zvscale, $zuploadobjectid, $zsubdivisions, $zreceiveshadows, $zgraphiclevel, $zcheckcollisions, $zispickable, $zvideoid, $zvideoposterid, $ztextureid, $ztexturebumpid, $zheightmapid, $zmixmapid, $ztexturerid, $ztexturegid, $ztexturebid, $ztexturebumprid, $ztexturebumpgid, $ztexturebumpbid, $zopacity, $zwaterreflection, $zactionzoneid, $zcsgmoldid, $zcsgaction, $zalttag, $zwebtext, $zwebstyle, $zmoldpath1points, $zmoldpath2points, $zdiffusecolor, $zspecularcolor, $zemissivecolor, $zambientcolor, $zsoundid, $zsoundname, $zsoundattenuation, $zsoundloop, $zsoundmaxdistance, $zsoundrollofffactor, $zsoundrefdistance, $zsoundconeinnerangle, $zsoundconeouterangle, $zsoundconeoutergain) {
 		/* saves thing mold settings when a thing mold is added or edited */
 		global $wtwhandlers;
 		try {
@@ -61,6 +61,8 @@ class wtwthingmolds {
 							subdivisions=".$wtwhandlers->checkNumber($zsubdivisions,12).",
 							receiveshadows=".$wtwhandlers->checkNumber($zreceiveshadows,0).",
 							graphiclevel=".$wtwhandlers->checkNumber($zgraphiclevel,0).",
+							checkcollisions=".$wtwhandlers->checkNumber($zcheckcollisions,1).",
+							ispickable=".$wtwhandlers->checkNumber($zispickable,1).",
 							videoid='".$zvideoid."',
 							videoposterid='".$zvideoposterid."',
 							textureid='".$ztextureid."',
@@ -122,6 +124,8 @@ class wtwthingmolds {
 							subdivisions,
 							receiveshadows,
 							graphiclevel,
+							checkcollisions,
+							ispickable,
 							videoid,
 							videoposterid,
 							textureid,
@@ -186,6 +190,8 @@ class wtwthingmolds {
 							".$wtwhandlers->checkNumber($zsubdivisions,12).",
 							".$wtwhandlers->checkNumber($zreceiveshadows,0).",
 							".$wtwhandlers->checkNumber($zgraphiclevel,0).",
+							".$wtwhandlers->checkNumber($zcheckcollisions,1).",
+							".$wtwhandlers->checkNumber($zispickable,1).",
 							'".$zvideoid."',
 							'".$zvideoposterid."',
 							'".$ztextureid."',

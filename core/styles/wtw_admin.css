@@ -81,6 +81,12 @@ select.wtw-fileselectcategory {
 	color:#c0c0c0;
 	text-align:left;
 }
+li.wtw-grayleft {
+	white-space:normal;
+	font-weight:normal;
+	color:#c0c0c0;
+	text-align:left;
+}
 .wtw-examplenote {
 	color:#303030;
 	font-size:1em;

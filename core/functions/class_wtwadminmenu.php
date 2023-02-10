@@ -1041,6 +1041,7 @@ class wtwadminmenu {
 		$zmenu = '';
 		try {
 			$zmenu .= "<div id='wtw_adminmenu28b' class='wtw-smallprintbackground wtw-hide' onclick='WTW.blockPassThrough();'>\r\n";
+			$zmenu .= "     <div class='wtw-menulevel0text wtw-leftalign'>This option sets the position, scaling, and rotation for the <b>first 3D Building</b> that gets added to this 3D Community by automated processes and wizards (like your original WalkTheWeb install).</div>\r\n";
 			$zmenu .= "		<h4>3D Building Position</h4>\r\n";
 			$zmenu .= "		<div class='wtw-onecol wtw-nowrap'>Position Z (left,-right)<br />\r\n";
 			$zmenu .= "			<input type='text' id='wtw_tfirstbuildpositionz' maxlength='16' class='wtw-secondcolcontent wtw-smallprintinput' onclick=\"WTW.checkKey(this, 'number', 0, 0);\" onkeyup=\"WTW.checkKey(this, 'number', 0, 0);\" onblur=\"WTW.checkKey(this, 'number', 0, 1);WTW.setFirstBuilding();\" />\r\n";
@@ -1727,11 +1728,13 @@ class wtwadminmenu {
 			$zmenu .= "				<h2 class='wtw-marginbottom'>Exclusion Zone</h2>\r\n";
 			$zmenu .= "				<select id='wtw_tmoldunloadactionzoneid' class='wtw-pointer'></select>\r\n";
 			$zmenu .= "			</div>\r\n";
-			$zmenu .= "			<div id='wtw_moldshadowreflectiondiv'><br /><br />\r\n";
+			$zmenu .= "			<div id='wtw_moldshadowreflectiondiv' style='text-align:left;'><br /><br />\r\n";
 			$zmenu .= "				<input type='checkbox' id='wtw_tmoldreceiveshadows' class='wtw-smallprint' value='1' onchange='WTW.setNewMold(1);' /><span style='color:#c0c0c0;'> Allow Shadows on Surface</span><br /><br />\r\n";
 			$zmenu .= "				<input type='checkbox' id='wtw_tmoldwaterreflection' class='wtw-smallprint' value='1' onchange='WTW.setNewMold(1);' /><span style='color:#c0c0c0;'> Select to Reflect on Water</span><br /><br />\r\n";
+			$zmenu .= "				<input type='checkbox' id='wtw_tmoldcheckcollisions' class='wtw-smallprint' value='1' onchange='WTW.setNewMold(1);' /><span style='color:#c0c0c0;'> Select to Check Collisions</span><br /><br />\r\n";
+			$zmenu .= "				<input type='checkbox' id='wtw_tmoldispickable' class='wtw-smallprint' value='1' onchange='WTW.setNewMold(1);' /><span style='color:#c0c0c0;'> Select to be Pickable in Browse Mode (Always on for Admin Mode)</span><br /><br />\r\n";
 			$zmenu .= "			</div>\r\n";
-			$zmenu .= "			<div id='wtw_moldtexturesetdiv'><br /><br />\r\n";
+			$zmenu .= "			<div id='wtw_moldtexturesetdiv'>\r\n";
 			$zmenu .= "				<input type='checkbox' id='wtw_tmoldgraphiclevel' class='wtw-smallprint' value='1' onchange='WTW.setNewMold(1);' /><span style='color:#c0c0c0;'> Force Original Graphic</span><br /><br />\r\n";
 			$zmenu .= "				<div id='wtw_alttagdiv'>\r\n";
 			$zmenu .= "					<hr class='wtw-menuhr' />\r\n";
