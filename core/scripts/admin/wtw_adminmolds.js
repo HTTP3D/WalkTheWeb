@@ -224,22 +224,37 @@ WTWJS.prototype.openMoldForm = async function(zmoldind, zshape, zwebtype, zsavep
 			if (zshape == 'image' && zmolds[zmoldind].graphics.webimages[0] != undefined) {
 				dGet('wtw_tmoldimageind').value = '0';
 				var zimageid = 't1qlqxd6pzubzzzy';
+				var zimagepath = '';
 				var zimagehoverid = 't1qlqxd6pzubzzzy';
+				var zimagehoverpath = '';
 				var zimageclickid = 't1qlqxd6pzubzzzy';
+				var zimageclickpath = '';
 				if (zmolds[zmoldind].graphics.webimages[0].imageid != '') {
 					zimageid = zmolds[zmoldind].graphics.webimages[0].imageid;
+				}
+				if (zmolds[zmoldind].graphics.webimages[0].imagepath != undefined) {
+					zimagepath = zmolds[zmoldind].graphics.webimages[0].imagepath;
 				}
 				if (zmolds[zmoldind].graphics.webimages[0].imagehoverid != '') {
 					zimagehoverid = zmolds[zmoldind].graphics.webimages[0].imagehoverid;
 				}
+				if (zmolds[zmoldind].graphics.webimages[0].imagehoverpath != undefined) {
+					zimagehoverpath = zmolds[zmoldind].graphics.webimages[0].imagehoverpath;
+				}
 				if (zmolds[zmoldind].graphics.webimages[0].imageclickid != '') {
 					zimageclickid = zmolds[zmoldind].graphics.webimages[0].imageclickid;
+				}
+				if (zmolds[zmoldind].graphics.webimages[0].imageclickpath != undefined) {
+					zimageclickpath = zmolds[zmoldind].graphics.webimages[0].imageclickpath;
 				}
 				dGet('wtw_tmoldimagejsfunction').value = zmolds[zmoldind].graphics.webimages[0].jsfunction;
 				dGet('wtw_tmoldimagejsparameters').value = zmolds[zmoldind].graphics.webimages[0].jsparameters;
 				dGet('wtw_tmoldaddimageid').value = zimageid;
+				dGet('wtw_tmoldaddimagepath').value = zimagepath;
 				dGet('wtw_tmoldaddimagehoverid').value = zimagehoverid;				
+				dGet('wtw_tmoldaddimagehoverpath').value = zimagehoverpath;				
 				dGet('wtw_tmoldaddimageclickid').value = zimageclickid;	
+				dGet('wtw_tmoldaddimageclickpath').value = zimageclickpath;	
 				if (zmolds[zmoldind].graphics.webimages[0].jsfunction == 'WTW.openWebpage') {
 					dGet('wtw_tmoldaddonclick').selectedIndex = 2;
 				} else if (zmolds[zmoldind].graphics.webimages[0].jsfunction == 'WTW.openIFrame') {
@@ -250,7 +265,9 @@ WTWJS.prototype.openMoldForm = async function(zmoldind, zshape, zwebtype, zsavep
 					dGet('wtw_tmoldaddonclick').selectedIndex = 0;
 				}
 				WTW.changeOnClickEvent(dGet('wtw_tmoldaddonclick'));
-				if (dGet('wtw_tmoldaddimageid').value != '') {
+				if (dGet('wtw_tmoldaddimagepath').value != '') {
+					dGet('wtw_moldaddimagepreview').src = dGet('wtw_tmoldaddimagepath').value;
+				} else if (dGet('wtw_tmoldaddimageid').value != '') {
 					WTW.getAsyncJSON('/connect/upload.php?uploadid=' + dGet('wtw_tmoldaddimageid').value, 
 						function(zresponse) {
 							WTW.loadUpload(JSON.parse(zresponse),dGet('wtw_tmoldaddimageid').value,0);
@@ -261,7 +278,9 @@ WTWJS.prototype.openMoldForm = async function(zmoldind, zshape, zwebtype, zsavep
 						}
 					);
 				}
-				if (dGet('wtw_tmoldaddimagehoverid').value != '') {
+				if (dGet('wtw_tmoldaddimagehoverpath').value != '') {
+					dGet('wtw_moldaddimagehoverpreview').src = dGet('wtw_tmoldaddimagehoverpath').value;
+				} else if (dGet('wtw_tmoldaddimagehoverid').value != '') {
 					WTW.getAsyncJSON('/connect/upload.php?uploadid=' + dGet('wtw_tmoldaddimagehoverid').value, 
 						function(zresponse) {
 							WTW.loadUpload(JSON.parse(zresponse),dGet('wtw_tmoldaddimagehoverid').value,0);
@@ -1421,8 +1440,8 @@ WTWJS.prototype.submitMoldForm = async function(zselect) {
 				'imageid': zmolds[zmoldind].graphics.webimages[0].imageid,
 				'imagehoverid': zmolds[zmoldind].graphics.webimages[0].imagehoverid,
 				'imageclickid': zmolds[zmoldind].graphics.webimages[0].imageclickid,
-				'imagejsfunction': zmolds[zmoldind].graphics.webimages[0].jsfunction,
-				'imagejsparameters': zmolds[zmoldind].graphics.webimages[0].jsparameters,
+				'jsfunction': zmolds[zmoldind].graphics.webimages[0].jsfunction,
+				'jsparameters': zmolds[zmoldind].graphics.webimages[0].jsparameters,
 				'waterreflection': zmolds[zmoldind].graphics.waterreflection,
 				'deleted': '0',
 				'function':'savemold'
@@ -3040,7 +3059,9 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 					case 'image':
 						zcoveringname = 'hidden';
 						zmolds[zmoldind].graphics.webimages[0].imageid = dGet('wtw_tmoldaddimageid').value;
+						zmolds[zmoldind].graphics.webimages[0].imagepath = dGet('wtw_tmoldaddimagepath').value;
 						zmolds[zmoldind].graphics.webimages[0].imagehoverid = dGet('wtw_tmoldaddimagehoverid').value;
+						zmolds[zmoldind].graphics.webimages[0].imagehoverpath = dGet('wtw_tmoldaddimagehoverpath').value;
 						zrebuildmold = 1;
 						break;
 					case 'tube':

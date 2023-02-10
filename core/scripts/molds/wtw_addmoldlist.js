@@ -868,6 +868,7 @@ WTWJS.prototype.setNewMoldDefaults = function(zshape) {
 				break;
 			case 'image':
 				dGet('wtw_tmoldscalingx').value = '.25';
+				dGet('wtw_tmoldrotationy').value = zrotationy + 90;
 				break;
 			case 'raisedimage':
 				dGet('wtw_tmoldscalingx').value = '.25';

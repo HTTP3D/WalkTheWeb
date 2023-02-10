@@ -1134,6 +1134,9 @@ WTWJS.prototype.setSelectFileID = function(zselectedobj, zuploadid, zoriginalid,
 				WTW.setDDLValue('wtw_tmoldsoundattenuation', 'linear');
 				WTW.setSoundFields();
 				break;
+			case 'image':
+				WTW.setNewMold(1);
+				break;
 		}
 		switch (zitem) {
 			case 'extendedgroundtexture':

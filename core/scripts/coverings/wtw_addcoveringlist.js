@@ -31,19 +31,21 @@ WTWJS.prototype.getCoveringList = function(zshape) {
 			zcoveringlist[zcoveringlist.length] = 'Road';
 			zcoveringlist[zcoveringlist.length] = 'Hidden';
 		}
-		WTW.coveringlist = WTW.pluginsCoverings(WTW.coveringlist);
+		zcoveringlist = WTW.pluginsCoverings(zcoveringlist);
 		WTW.clearDDL('wtw_tmoldcovering');
 		for (var i=0;i < zcoveringlist.length;i++) {
-			var zoption = document.createElement('option');
-			zoption.text = zcoveringlist[i];
-			zoption.value = zcoveringlist[i].toLowerCase();
-			if (zcoveringlist[i] == 'Texture') {
-				zoption.selected = true;
+			if (zcoveringlist[i] != null) {
+				var zoption = document.createElement('option');
+				zoption.text = zcoveringlist[i];
+				zoption.value = zcoveringlist[i].toLowerCase();
+				if (zcoveringlist[i] == 'Texture') {
+					zoption.selected = true;
+				}
+				dGet('wtw_tmoldcovering').add(zoption);
 			}
-			dGet('wtw_tmoldcovering').add(zoption);
 		}
 	} catch (ex) {
-		WTW.log('core-scripts-molds-addcoveringlist\r\n getCoveringList=' + ex.message);
+		WTW.log('core-scripts-molds-addcoveringlist.js-getCoveringList=' + ex.message);
 	} 
 	return zcoveringlist;
 }
@@ -105,7 +107,7 @@ WTWJS.prototype.addCovering = function(zcoveringname, zmoldname, zmolddef, zlenx
 				break;
 		}
 	} catch (ex) {
-		WTW.log('core-scripts-molds-addcoveringlist\r\n addCovering=' + ex.message);
+		WTW.log('core-scripts-molds-addcoveringlist.js-addCovering=' + ex.message);
 	} 
 	return zcovering;
 }
@@ -228,6 +230,6 @@ WTWJS.prototype.setCoveringFormFields = function(zcoveringname) {
 		}	
 		WTW.pluginsSetCoveringFormFields(zcoveringname);
 	} catch (ex) {
-		WTW.log('core-scripts-molds-addcoveringlist\r\n setCoveringFormFields=' + ex.message);
+		WTW.log('core-scripts-molds-addcoveringlist.js-setCoveringFormFields=' + ex.message);
 	}
 }

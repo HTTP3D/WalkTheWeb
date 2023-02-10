@@ -2205,7 +2205,7 @@ WTWJS.prototype.checkImageClick = function(zmoldname) {
 				if (zmoldnameparts.molds[zmoldnameparts.moldind].graphics.webimages[0].jsfunction != undefined) {
 					var zfunctionname = zmoldnameparts.molds[zmoldnameparts.moldind].graphics.webimages[0].jsfunction;
 					if (zfunctionname != '') {
-						WTW.setFunctionAndExecute(zfunctionname, zparameters, zmoldname);
+						WTW.setFunctionAndExecute(zfunctionname, zparameters);
 					}
 				}
 			}
