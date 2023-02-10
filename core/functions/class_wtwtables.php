@@ -3797,7 +3797,7 @@ class wtwtables {
 					");			
 				}
 			} 
-			if ($zoldversion1 == 3 && $zoldversion2 < 6) {
+			if (($zoldversion1 == 3 && $zoldversion2 < 6) || $zoldversion1 < 3) {
 				/* updated 3.5.2 - added Menu Items */
 				$zresults = $wtwdb->query("select * from ".wtw_tableprefix."menuitems where menutext='WalkTheWeb Help' and menuset='Help Menu';");
 				if (count($zresults) == 0) {
@@ -3997,7 +3997,47 @@ class wtwtables {
 					where versionid='v6b5lsgd9zze503v'
 						and not thingid='v6b5lsgd9zze503v';
 				");
+				/* updated 3.6.0 - changed login global variables (settings) */
+				$zresults = $wtwdb->query("
+					select * 
+					from ".wtw_tableprefix."settings 
+					where settingname='WTW_globalLogins'
+						or settingname='WTW_localLogins'
+						or settingname='WTW_anonymousLogins';
+				");
+				if (empty(count($zresults))) {
+					$wtwdb->query("
+						update ".wtw_tableprefix."settings
+						set settingname='WTW_globalLogins',
+							updatedate=now(),
+							updateuserid='".$zuserid."'
+						where settingname='wtw3dinternet_enableGlobal';
+					");
+					$wtwdb->query("
+						update ".wtw_tableprefix."settings
+						set settingname='WTW_localLogins',
+							updatedate=now(),
+							updateuserid='".$zuserid."'
+						where settingname='wtw3dinternet_enableLocal';
+					");
+					$wtwdb->query("
+						update ".wtw_tableprefix."settings
+						set settingname='WTW_anonymousLogins',
+							updatedate=now(),
+							updateuserid='".$zuserid."'
+						where settingname='wtw3dinternet_enableAnonymous';
+					");
+				}
+				/* remove old settings if they exist */
+				$wtwdb->query("
+					delete from ".wtw_tableprefix."settings 
+					where settingname='wtw3dinternet_enableGlobal'
+						or settingname='wtw3dinternet_enableLocal'
+						or settingname='wtw3dinternet_enableAnonymous';
+				");
+				
 			}
+
 			$wtwdb->saveSetting("wtw_dbversion", $wtw->dbversion);
 		} catch (Exception $e) {
 			$wtw->serror("core-functions-tabledefs.php-checkDBVersionData=".$e->getMessage());
