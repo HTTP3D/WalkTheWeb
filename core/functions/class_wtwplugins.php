@@ -922,7 +922,7 @@ class wtwplugins {
 
 			$jsdata .= "	WTWJS.prototype.pluginsCoverings = function(zcoveringlist) {\r\n";
 			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->returnCoveringDefsList('covering');
+			$jsdata .= 	$this->returnCoveringDefsList();
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsCoverings=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
@@ -1299,7 +1299,8 @@ class wtwplugins {
 						$zjsfunction .= ";";
 					}
 					if (strlen($zcoveringtitle) > 1) {
-						$zscripttext .= "zcoveringlist[zcoveringlist.length] = {'name':'".$zcoveringtitle."','helpurl':''};\r\n";
+//						$zscripttext .= "zcoveringlist[zcoveringlist.length] = {'name':'".$zcoveringtitle."','helpurl':''};\r\n";
+						$zscripttext .= "zcoveringlist[zcoveringlist.length] = '".$zcoveringtitle."';\r\n";
 					}
 				}
 			}			
