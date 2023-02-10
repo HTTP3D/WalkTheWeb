@@ -86,6 +86,16 @@ WTWJS.prototype.openMoldForm = async function(zmoldind, zshape, zwebtype, zsavep
 				} else {
 					dGet('wtw_tmoldwaterreflection').checked = false;
 				}
+				if (zmolds[zmoldind].checkcollisions == '1') {
+					dGet('wtw_tmoldcheckcollisions').checked = true;
+				} else {
+					dGet('wtw_tmoldcheckcollisions').checked = false;
+				}
+				if (zmolds[zmoldind].ispickable == '1') {
+					dGet('wtw_tmoldispickable').checked = true;
+				} else {
+					dGet('wtw_tmoldispickable').checked = false;
+				}
 			}
 			dGet('wtw_tmolddiffusecolor').value = zmolds[zmoldind].color.diffusecolor;
 			dGet('wtw_tmoldemissivecolor').value = zmolds[zmoldind].color.emissivecolor;
@@ -446,6 +456,16 @@ WTWJS.prototype.loadMoldForm = function(zmolddef) {
 			dGet('wtw_tmoldwaterreflection').checked = true;
 		} else {
 			dGet('wtw_tmoldwaterreflection').checked = false;
+		}
+		if (zmolddef.checkcollisions == '1') {
+			dGet('wtw_tmoldcheckcollisions').checked = true;
+		} else {
+			dGet('wtw_tmoldcheckcollisions').checked = false;
+		}
+		if (zmolddef.ispickable == '1') {
+			dGet('wtw_tmoldispickable').checked = true;
+		} else {
+			dGet('wtw_tmoldispickable').checked = false;
 		}
 		if (dGet('wtw_tmoldcsgmoldid').value != '') {
 			dGet('wtw_bselectcsgshape').innerHTML = 'Change Shape to Merge';
@@ -835,6 +855,16 @@ WTWJS.prototype.openAddNewMold = function(zwebtype, zshape) {
 			zmolds[zmoldind].graphics.waterreflection = '1';
 		} else {
 			zmolds[zmoldind].graphics.waterreflection = '0';
+		}
+		if (dGet('wtw_tmoldcheckcollisions').checked == true) {
+			zmolds[zmoldind].checkcollisions = '1';
+		} else {
+			zmolds[zmoldind].checkcollisions = '0';
+		}
+		if (dGet('wtw_tmoldispickable').checked == true) {
+			zmolds[zmoldind].ispickable = '1';
+		} else {
+			zmolds[zmoldind].ispickable = '0';
 		}
 		zmolds[zmoldind].graphics.texture.id = dGet('wtw_tmoldtextureid').value;
 		zmolds[zmoldind].graphics.texture.path = dGet('wtw_tmoldtexturepath').value;
@@ -1315,6 +1345,16 @@ WTWJS.prototype.submitMoldForm = async function(zselect) {
 				ziswaterreflection = '1';
 			}
 			zmolds[zmoldind].graphics.waterreflection = ziswaterreflection;
+			var zcheckcollisions = '0';
+			if (dGet('wtw_tmoldcheckcollisions').checked) {
+				zcheckcollisions = '1';
+			}
+			zmolds[zmoldind].checkcollisions = zcheckcollisions;
+			var zispickable = '0';
+			if (dGet('wtw_tmoldispickable').checked) {
+				zispickable = '1';
+			}
+			zmolds[zmoldind].ispickable = zispickable;
 			zmolds[zmoldind].graphics.webimageind = dGet('wtw_tmoldimageind').value;
 			zmolds[zmoldind].sound.id = dGet('wtw_tmoldsoundid').value;
 			zmolds[zmoldind].sound.name = dGet('wtw_tmoldsoundname').value;
@@ -1419,8 +1459,8 @@ WTWJS.prototype.submitMoldForm = async function(zselect) {
 				'actionzoneid': zmolds[zmoldind].actionzoneid,
 				'minheight': '0',
 				'maxheight': zmolds[zmoldind].graphics.heightmap.maxheight,
-				'checkcollisions': '1',
-				'ispickable': '1',
+				'checkcollisions': zmolds[zmoldind].checkcollisions,
+				'ispickable': zmolds[zmoldind].ispickable,
 				'csgmoldid': zmolds[zmoldind].csg.moldid,
 				'csgaction': zmolds[zmoldind].csg.action,
 				'imageid': '',
@@ -1542,6 +1582,8 @@ WTWJS.prototype.clearEditMold = function() {
 		dGet('wtw_tmoldsoundconeoutergain').value = '.5';
 		dGet('wtw_tmoldimageind').value = '';
 		dGet('wtw_tmoldwaterreflection').checked = false;
+		dGet('wtw_tmoldcheckcollisions').checked = true;
+		dGet('wtw_tmoldispickable').checked = false;
 		dGet('wtw_tmoldmaxheight').value = '30';
 		dGet('wtw_tmoldreceiveshadows').checked = false;
 		dGet('wtw_tmoldgraphiclevel').checked = false;
@@ -3014,6 +3056,27 @@ WTWJS.prototype.setNewMold = function(zrebuildmold) {
 						}
 						zmolds[zmoldind].graphics.waterreflection = '0';
 					}
+				}
+				if (zmolds[zmoldind].checkcollisions != undefined) {
+					var zcheckcollisions = zmolds[zmoldind].checkcollisions;
+					if (dGet('wtw_tmoldcheckcollisions').checked == true) {
+						zmolds[zmoldind].checkcollisions = '1';
+					} else {
+						zmolds[zmoldind].checkcollisions = '0';
+					}
+					if (zcheckcollisions != zmolds[zmoldind].checkcollisions) {
+						/* if change occurred - rebuild mold */
+						zrebuildmold = 1;
+					}
+				}
+				if (zmolds[zmoldind].ispickable != undefined) {
+					var zispickable = zmolds[zmoldind].ispickable;
+					if (dGet('wtw_tmoldispickable').checked == true) {
+						zmolds[zmoldind].ispickable = '1';
+					} else {
+						zmolds[zmoldind].ispickable = '0';
+					}
+					/* note all molds are pickable in Admin mode */
 				}
 				if (WTW.isNumeric(dGet('wtw_tmoldmaxheight').value)) {
 					if (Number(dGet('wtw_tmoldmaxheight').value) < 0) {

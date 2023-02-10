@@ -471,12 +471,15 @@ WTWJS.prototype.addMoldImage = function(zmoldname, zmolddef, zlenx, zleny, zlenz
 		zmolddefimage.graphics.uoffset = zvoffset;
 		zmolddefimage.graphics.voffset = zuoffset;
 		zmolddefimage.parentname = zmoldname + '-base';
-		zmolddefimage.checkcollisions = '1';
+		zmolddefimage.checkcollisions = zmolddef.checkcollisions;
 		var zimagemold = BABYLON.MeshBuilder.CreateBox(zmoldname + '-mainimage', {}, scene);
 		zimagemold.scaling = new BABYLON.Vector3(.2, zlenz, zleny);
 		zimagemold.rotation.x = WTW.getRadians(-90);
 		zimagemold.material = WTW.addCovering('texture', zmoldname + '-mainimage', zmolddefimage, .2, zlenz, zleny, '0', '0');
 		zimagemold.material.alpha = 1;
+		if (zmolddef.checkcollisions == '1') {
+			zimagemold.checkCollisions = true;
+		}
 		zimagemold.parent = zbasemold;
 		WTW.registerMouseOver(zimagemold);
 		if (zimagehoverid != '' && zimagehoverid != 't1qlqxd6pzubzzzy') {
@@ -670,11 +673,14 @@ WTWJS.prototype.addMoldRaisedImage = async function(zmoldname, zmolddef, zlenx, 
 		zmolddefimage.graphics.uscale = 10/zleny;
 		zmolddefimage.graphics.vscale = 10/zlenz;
 		zmolddefimage.parentname = zmoldname + '-base';
-		zmolddefimage.checkcollisions = '1';
+		zmolddefimage.checkcollisions = zmolddef.checkcollisions;;
 		var zimagemold = BABYLON.MeshBuilder.CreateBox(zmoldname + '-mainimage', {}, scene);
 		zimagemold.scaling = new BABYLON.Vector3(.2, zleny, zlenz);
 		zimagemold.material = WTW.addCovering('directional texture', zmoldname + '-mainimage', zmolddefimage, .2, zleny, zlenz, '0', '0');
 		zimagemold.material.alpha = 1;
+		if (zmolddef.checkcollisions == '1') {
+			zimagemold.checkCollisions = true;
+		}
 		zimagemold.parent = zbasemold;
 		WTW.registerMouseOver(zimagemold);
 		if (zimagehoverid != '' && zimagehoverid != 't1qlqxd6pzubzzzy') {
@@ -1492,6 +1498,8 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 		var zambientcolor = '#ffffff';
 		var zreceiveshadows = false;
 		var zwaterreflection = false;
+		var zcheckcollisions = true;
+		var zispickable = true;
 		if (zmolddef.color != undefined) {
 			if (zmolddef.color.diffusecolor != undefined) {
 				if (zmolddef.color.diffusecolor != '') {
@@ -1534,6 +1542,16 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 		if (zmolddef.parentname != undefined) {
 			if (zmolddef.parentname != '') {
 				zparentname = zmolddef.parentname;
+			}
+		}
+		if (zmolddef.checkcollisions != undefined) {
+			if (zmolddef.checkcollisions != '1') {
+				zcheckcollisions = false;
+			}
+		}
+		if (zmolddef.ispickable != undefined) {
+			if (zmolddef.ispickable != '1') {
+				zispickable = false;
 			}
 		}
 		/* get array of animation defs */
@@ -1621,11 +1639,14 @@ WTWJS.prototype.addMoldBabylonFile = function(zmoldname, zmolddef, zlenx, zleny,
 									}
 
 									/* make sure child meshes are pickable */
-									if (WTW.adminView == 1) {
+									if (WTW.adminView == 1 || zispickable) {
 										zresults.meshes[i].isPickable = true;
 										WTW.registerMouseOver(zresults.meshes[i]);
 									}
-
+									/* make sure child meshes check collisions if flag is true (we are not forcing false, just inheriting original settings) */
+									if (zcheckcollisions) {
+										zresults.meshes[i].checkcollisions = true;
+									}
 									/* make sure all object meshes have a parent */
 									if (zresults.meshes[i].parent == null) {
 										if (zbillboard == '1') {

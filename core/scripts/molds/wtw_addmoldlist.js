@@ -245,27 +245,27 @@ WTWJS.prototype.addMold = function(zmoldname, zmolddef, zparentname, zcoveringna
 			case '3dtext':
 				/* 3dtext - 3d text font you can add text to 3D Scenes */
 				zmold = WTW.addMold3DText(zmoldname, zmolddef, zlenx, zleny, zlenz);
-				zcoveringname = 'none';
+				zcoveringname = 'done';
 				break;
 			case 'image':
 				/* image - with ability to hover over and change image */
 				zmold = WTW.addMoldImage(zmoldname, zmolddef, zlenx, zleny, zlenz);
-				zcoveringname = 'none';
+				zcoveringname = 'done';
 				break;
 			case 'raisedimage':
 				/* raisedimage - image that uses a heightmap */
 				zmold = WTW.addMoldRaisedImage(zmoldname, zmolddef, zlenx, zleny, zlenz, zsubdivisions, zmolddef.graphics.heightmap.path, zminheight, zmaxheight);
-				zcoveringname = 'none';
+				zcoveringname = 'done';
 				break;
             case 'video':
 				/* video - video player or screen - real videos with play, pause, stop , and rewind buttons */
 				zmold = WTW.addMoldVideo(zmoldname, zmolddef, zlenx, zleny, zlenz);
-				zcoveringname = 'none';
+				zcoveringname = 'done';
 				break;
 			case 'videostream':
 				/* plane - one sided flat box, streaming video will display on it */
 				zmold = WTW.addVideoStream(zmoldname, zlenx, zleny, zlenz);
-				zcoveringname = 'none';
+				zcoveringname = 'done';
 				break;
 			case 'createscenekiosk':
 				/* Create Scene Kiosk - allows users to click the botton to trigger Create Scene from Pages */
@@ -424,7 +424,7 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 					/* correction for molds that cannot use directional covering */
 					zcoveringname = 'texture';
 				}
-				if (zcoveringname != 'none') {
+				if (zcoveringname != 'none' && zcoveringname != 'done') {
 					/* molds that require coverings to be added */
 					if (zcoveringname == 'directional texture') {
 						/* clear out old covering on directional defined surfaces before recovering */
@@ -488,12 +488,11 @@ WTWJS.prototype.completeMold = function(zmold, zmoldname, zparentname, zmolddef,
 				/* if mold is set to add reflection, add mold to the reflections array */
 				WTW.addReflectionRefraction(zmold);
 			}
-			if (zcheckcollisions == '0' || zcoveringname == 'none') {
+			if (zcheckcollisions == '1' && zcoveringname != 'none') {
+				zmold.checkCollisions = true; 
+			} else {
 				zmolddef.checkcollisions = '0';
 				zmold.checkCollisions = false;
-			} else {
-				/* if not intentionally set to off, use collisions */
-				zmold.checkCollisions = true; 
 			}
 			if (WTW.adminView == 1 || zmolddef.ispickable == '1') {
 				/* mouse over covers hovers in the 3D Scene - for admin mode */
