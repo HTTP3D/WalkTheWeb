@@ -126,7 +126,7 @@ class devidplugintemplate {
 			
 			/* Custom coverings (materials) */
 			/* The following create the list of new coverings added by this plugin and assign the script to create the covering */
-			$wtwplugins->addCoveringDef("My Custom Covering", "devidplugintemplate.addCoveringMyCustomCovering(zmoldname, zmolddef, zlenx, zleny, zlenz, zspecial1, zspecial2);");
+//			$wtwplugins->addCoveringDef("My Custom Covering", "devidplugintemplate.addCoveringMyCustomCovering(zmoldname, zmolddef, zlenx, zleny, zlenz, zspecial1, zspecial2);");
 			/* Set the custom covering defaults and show-hide mold form fields as needed */
 			$wtwplugins->addScriptFunction("setcoveringformfields", "devidplugintemplate.setCoveringFormFields(zcoveringname);");
 			
