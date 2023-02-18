@@ -482,42 +482,7 @@ WTWJS.prototype.getSelectCommunitiesList = async function(zfilter) {
 							}
 						}
 						dGet('wtw_listcommunities').innerHTML += "<div class='wtw-normalgray'>Total: <b>" + WTW.communities.length + "</b> Communities</div>";
-						
-						/* check for updated versions */
-						var zrequest2 = {
-							'versioncheck': JSON.stringify(zversioncheck),
-							'function':'versioncheck'
-						};
-						WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/versioncheck.php', zrequest2, 
-							function(zresponse2) {
-								zresponse2 = JSON.parse(zresponse2);
-								for (var i = 0; i < zresponse2.length; i++) {
-									if (zresponse2[i] != null) {
-										var zversionid = zresponse2[i].versionid;
-										if (document.getElementById('wtw_beditweb-' + zversionid) != null) {
-											var zwebid = zresponse2[i].webid;
-											var zupdatewebid = zresponse2[i].updatewebid;
-											var zversion = zresponse2[i].version;
-											var zoldversion = zresponse2[i].oldversion;
-											
-											var zdiv = document.createElement('div');
-											zdiv.id = 'wtw_beditweb_update-' + zversionid;
-											zdiv.className = 'wtw-badgebutton';
-											zdiv.innerHTML = 'Update Available (v' + zversion + ')';
-											zdiv.onclick = function(zevent) {
-												if (zevent == undefined) {
-													zevent = window.event;
-												}
-												WTW.downloadWebVersion(this, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'community');
-												zevent.stopPropagation();
-												zevent.preventDefault();
-											};
-											document.getElementById('wtw_beditweb-' + zversionid).appendChild(zdiv);
-										}
-									}
-								}
-							}
-						);
+						WTW.pluginsShowListVersionCheck('community', zversioncheck);
 					} else {
 						dGet('wtw_listcommunities').innerHTML = "<div class='wtw-yellow'>No 3D Communities Found</div><br />";
 						dGet("wtw_listcommunities").innerHTML += "<div id='wtw_adminaddcommunity2' class='wtw-adminsubmenu' onclick=\"WTW.adminMenuItemSelected(dGet('wtw_adminaddcommunity'));\">Add New 3D Community</div>";

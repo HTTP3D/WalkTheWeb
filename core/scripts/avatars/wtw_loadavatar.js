@@ -78,23 +78,7 @@ WTWJS.prototype.getSavedAvatar = async function(zavatarname, zglobaluseravatarid
 			if (zavatarname.indexOf('-') > -1) {
 				zinstanceid = zavatarname.split('-')[1];
 			}
-			if (zglobaluseravatarid != '') {
-				/* global avatar - uses a secure post method to 3dnet.walktheweb.com */
-				var zrequest = {
-					'globaluseravatarid':btoa(zglobaluseravatarid),
-					'serverinstanceid':btoa(dGet('wtw_serverinstanceid').value),
-					'instanceid':btoa(zinstanceid),
-					'function':'getglobalavatar'
-				};
-				WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalavatar.php', zrequest, 
-					function(zresponse) {
-						zresponse = JSON.parse(zresponse);
-						if (zresponse.avatar != null) {
-							WTW.updateAvatar(zavatarname, zresponse.avatar, zsendrefresh);
-						}
-					}
-				);
-			} else {
+			if (zglobaluseravatarid == '') {
 				/* Local or Anonymous avatar - uses a get method to current server */
 				WTW.getAsyncJSON('/connect/useravatar.php?avatarid=' + btoa(zavatarid) + '&useravatarid=' + btoa(zuseravatarid) + '&instanceid=' + btoa(zinstanceid), 
 					function(zresponse) {
@@ -107,6 +91,7 @@ WTWJS.prototype.getSavedAvatar = async function(zavatarname, zglobaluseravatarid
 					}	
 				);
 			}
+			WTW.pluginsGetSavedAvatar(zglobaluseravatarid, zinstanceid, zavatarname, zsendrefresh);
 		} else {
 			WTW.openLocalLogin('Select Avatar', .4, .9);
 		}

@@ -505,11 +505,7 @@ WTWJS.prototype.onMessage = function (zevent) {
 		zevent = zevent || window.event;
 		let zsafe = false;
 		// Check sender origin to be trusted
-		if (zevent.origin == 'https://3d.walktheweb.com') {
-			zsafe = true;
-		} else if (zevent.origin == 'https://3dnet.walktheweb.com') {
-			zsafe = true;
-		} else if (zevent.origin == 'https://3dnet.walktheweb.network') {
+		if (zevent.origin == 'https://3dnet.walktheweb.com') {
 			zsafe = true;
 		} else if (zevent.origin == wtw_domainurl) {
 			zsafe = true;

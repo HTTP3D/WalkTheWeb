@@ -2122,12 +2122,9 @@ WTWJS.prototype.feedbackSubmit = async function() {
 					dGet('wtw_feedbackmessage').value = '';
 					dGet('wtw_feedbacksnapshot').src = '';
 					WTW.hide('wtw_feedbacksnapshot');
-					/* forward feedback to WalkTheWeb hub to be logged */
-					WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/feedback.php', zrequest, 
-						function(zresponse2) {
-							zresponse2 = JSON.parse(zresponse2);
-						}
-					);
+					
+					WTW.pluginsFeedbackSubmit(zrequest);
+					
 					window.setTimeout(function(){
 						WTW.hide('wtw_feedbackthankyou');
 						WTW.show('wtw_feedbackform');

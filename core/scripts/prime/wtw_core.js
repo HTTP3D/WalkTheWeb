@@ -953,12 +953,16 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 						/* fetch action zones for the connecting grid item - triggers further loading of web object */
 						if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid == '') {
 							zserver = 'local';
-							var zactionzoneurl = '/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind;
+							var zconnectinggridid = WTW.connectingGrids[zconnectinggridind].connectinggridid;
+							var zactionzonesurl = '/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
+							
 							if (WTW.connectingGrids[zconnectinggridind].childserverfranchiseid != '') {
 								zserver = WTW.connectingGrids[zconnectinggridind].childserverfranchiseid;
-								zactionzoneurl = 'https://3dnet.walktheweb.com/connect/franchiseactionzonesbywebid.php?serverfranchiseid=' + zserver + '&franchiseid=' + WTW.connectingGrids[zconnectinggridind].childwebid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind;
 							}
-							WTW.getJSON(zactionzoneurl, 
+							
+							zactionzonesurl = WTW.pluginsGetActionZonesByWebID(zactionzonesurl, zserver, zcommunityid, zbuildingid, zthingid, WTW.connectingGrids[zconnectinggridind].moldname, zconnectinggridid, zconnectinggridind);
+
+							WTW.getJSON(zactionzonesurl, 
 								function(zresponse) {
 									WTW.loadActionZones(JSON.parse(zresponse), zserver);
 								}
@@ -977,12 +981,17 @@ WTWJS.prototype.loadConnectingGrids = function(zaddconnectinggrids) {
 						/* fetch action zones for the connecting grid item - triggers further loading of web object */
 						if (WTW.connectingGrids[zconnectinggridind].altloadactionzoneid == '') {
 							zserver = 'local';
-							var zactionzoneurl = '/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind;
+							var zconnectinggridid = WTW.connectingGrids[zconnectinggridind].connectinggridid;
+
+							var zactionzonesurl = '/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
+							
 							if (WTW.connectingGrids[zconnectinggridind].childserverfranchiseid != '') {
 								zserver = WTW.connectingGrids[zconnectinggridind].childserverfranchiseid;
-								zactionzoneurl = 'https://3dnet.walktheweb.com/connect/franchiseactionzonesbywebid.php?serverfranchiseid=' + zserver + '&franchiseid=' + WTW.connectingGrids[zconnectinggridind].childwebid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind;
 							}
-							WTW.getJSON(zactionzoneurl, 
+							
+							zactionzonesurl = WTW.pluginsGetActionZonesByWebID(zactionzonesurl, zserver, zcommunityid, zbuildingid, zthingid, WTW.connectingGrids[zconnectinggridind].moldname, zconnectinggridid, zconnectinggridind);
+							
+							WTW.getJSON(zactionzonesurl, 
 								function(zresponse) {
 									WTW.loadActionZones(JSON.parse(zresponse), zserver);
 								}
@@ -1040,12 +1049,16 @@ WTWJS.prototype.getActionZones = async function(zconnectinggridind) {
 			/* fetch the action zones from the internet for a given web object */
 			if (zaltloadactionzoneid == '') {
 				var zserver = 'local';
-				var zactionzoneurl = '/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind;
+				var zparentname = WTW.connectingGrids[zconnectinggridind].moldname;
+				var zconnectinggridid = WTW.connectingGrids[zconnectinggridind].connectinggridid;
+				var zactionzonesurl = '/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
+				
 				if (WTW.connectingGrids[zconnectinggridind].childserverfranchiseid != '') {
 					zserver = WTW.connectingGrids[zconnectinggridind].childserverfranchiseid;
-					zactionzoneurl = 'https://3dnet.walktheweb.com/connect/franchiseactionzonesbywebid.php?serverfranchiseid=' + zserver + '&franchiseid=' + WTW.connectingGrids[zconnectinggridind].childwebid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&connectinggridid=' + WTW.connectingGrids[zconnectinggridind].connectinggridid + '&connectinggridind=' + zconnectinggridind;
 				}
-				WTW.getAsyncJSON(zactionzoneurl, 
+				zactionzonesurl = WTW.pluginsGetActionZonesByWebID(zactionzonesurl, zserver, zcommunityid, zbuildingid, zthingid, zparentname, zconnectinggridid, zconnectinggridind);
+				
+				WTW.getAsyncJSON(zactionzonesurl, 
 					function(zresponse) {
 						WTW.loadActionZones(JSON.parse(zresponse), zserver);
 					}
@@ -1185,13 +1198,13 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 				zparentname = WTW.actionZones[zactionzoneind].parentname;
 			}
 		}
-		/* fetch action zones to be loaded by the load zone */
+		/* fetch action zones to be loaded by the load zone - only if it is not already loaded */
 		if (zaltloadactionzoneid == '') {
-			var zactionzoneurl = '/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
-			if (zserver != 'local') {
-				zactionzoneurl = 'https://3dnet.walktheweb.com/connect/franchiseactionzonesbywebid.php?serverfranchiseid=' + zserver + '&franchiseid=' + WTW.connectingGrids[zconnectinggridind].childwebid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
-			}
-			WTW.getAsyncJSON(zactionzoneurl, 
+			var zactionzonesurl = '/connect/actionzonesbywebid.php?communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
+			
+			zactionzonesurl = WTW.pluginsGetActionZonesByWebID(zactionzonesurl, zserver, zcommunityid, zbuildingid, zthingid, zparentname, zconnectinggridid, zconnectinggridind);
+			
+			WTW.getAsyncJSON(zactionzonesurl, 
 				function(zresponse) {
 					WTW.loadActionZones(JSON.parse(zresponse));
 				}
@@ -1222,9 +1235,9 @@ WTWJS.prototype.getMoldsByWebID = async function(zactionzoneind) {
 		}
 		/* fetch molds (mesh definitions) to be loaded by the load zone */
 		var zmoldsurl = '/connect/moldsbywebid.php?webcommunityid=' + communityid + '&webbuildingid=' + buildingid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentactionzoneind=' + zactionzoneind + '&actionzoneid=' + zactionzoneid + '&parentname=' + WTW.actionZones[zactionzoneind].parentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind + '&userid=' + dGet('wtw_tuserid').value + '&graphiclevel=' + zgraphiclevel;
-		if (zserver != 'local') {
-			zmoldsurl = 'https://3dnet.walktheweb.com/connect/franchisemoldsbywebid.php?serverfranchiseid=' + zserver + '&franchiseid=' + WTW.connectingGrids[zconnectinggridind].childwebid + '&webcommunityid=' + communityid + '&webbuildingid=' + buildingid + '&communityid=' + zcommunityid + '&buildingid=' + zbuildingid + '&thingid=' + zthingid + '&parentactionzoneind=' + zactionzoneind + '&actionzoneid=' + zactionzoneid + '&parentname=' + WTW.actionZones[zactionzoneind].parentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind + '&userid=' + dGet('wtw_tuserid').value + '&graphiclevel=' + zgraphiclevel;
-		}
+		
+		zmoldsurl = WTW.pluginsGetMoldsByWebID(zmoldsurl, zserver, zcommunityid, zbuildingid, zthingid, zactionzoneid, zactionzoneind, zconnectinggridid, zconnectinggridind, zgraphiclevel);
+		
 		WTW.getAsyncJSON(zmoldsurl, 
 			function(zresponse) {
 				WTW.loadMolds(JSON.parse(zresponse));

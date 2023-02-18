@@ -724,9 +724,9 @@ WTWJS.prototype.hudLoginClick = function(zmoldname) {
 						/* login menu */
 						WTW.closeLoginHUD();
 						if (dGet('wtw_tuserid').value == '') {
-							WTW.openGlobalLogin();
+							wtw3dinternet.openGlobalLogin();
 						} else {
-							WTW.logoutGlobal();
+							wtw3dinternet.logoutGlobal();
 						}
 					} else if (zmoldname == 'hudlogin-button-loginlocal') {
 						/* login menu */
@@ -1043,141 +1043,7 @@ WTWJS.prototype.hudLoginLogin = function() {
 			if (zremembertext != null) {
 				zremembertext.isVisible = true;
 			}
-			if (zlocal == false) {
-				if (zremembercheck) {
-					WTW.setCookie('globalloginemail', zemail, 365);
-					WTW.setCookie('globalloginpassword', btoa(zpassword), 365);
-					WTW.setCookie('globalloginremember', zremembercheck, 365);
-				} else {
-					WTW.deleteCookie('globalloginemail');
-					WTW.deleteCookie('globalloginpassword');
-					WTW.deleteCookie('globalloginremember');
-				}
-				var zserverip = dGet('wtw_serverip').value;
-				var zrequest = {
-					'useremail':btoa(zemail),
-					'password':btoa(zpassword),
-					'serverip':btoa(zserverip),
-					'function':'login'
-				};
-				WTW.postJSON("https://3dnet.walktheweb.com/connect/authenticate.php", zrequest, 
-					function(zresponse) {
-						zresponse = JSON.parse(zresponse);
-						var zuserid = '';
-						var zdisplayname = '';
-						var zuseremail = '';
-						var zusertoken = '';
-						var zwtwusertoken = '';
-						if (zresponse.userid != undefined) {
-							zuserid = zresponse.userid;
-						}
-						if (zresponse.displayname != undefined) {
-							zdisplayname = zresponse.displayname;
-						}
-						if (zresponse.useremail != undefined) {
-							zuseremail = zresponse.useremail;
-						}
-						if (zresponse.usertoken != undefined) {
-							zusertoken = zresponse.usertoken;
-						}
-						if (zresponse.wtwusertoken != undefined) {
-							zwtwusertoken = zresponse.wtwusertoken;
-						}
-						
-						if (zusertoken.length > 100 || zuserid != '') {
-							dGet('wtw_tusertoken').value = zusertoken;
-							dGet('wtw_tglobaluserid').value = zwtwusertoken;
-							dGet('wtw_tuserid').value = zuserid;
-							dGet('wtw_tuseremail').value = zuseremail;
-							WTW.closeLoginHUD();
-							var zrequest = {
-								'globaluserid':zwtwusertoken,
-								'usertoken':zusertoken,
-								'displayname':btoa(zdisplayname),
-								'useremail':zuseremail,
-								'function':'globallogin'
-							};
-							WTW.postAsyncJSON('/core/handlers/users.php', zrequest,
-								function(zresponse) {
-									zresponse = JSON.parse(zresponse);
-									/* continue if no errors */
-									if (WTW.globalLoginResponse(zresponse)) {
-										WTW.openLocalLogin('Select Avatar',.4,.9);
-									}
-								}
-							);
-						} else {
-							/* there is an error */
-							serror = zresponse.serror;
-							dGet('wtw_tuserid').value = '';
-							dGet('wtw_tuseremail').value = '';
-							dGet('wtw_tdisplayname').value = '';
-							dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
-							dGet('wtw_menudisplayname').innerHTML = 'Login';
-							dGet('wtw_tuserimageurl').value = '';
-							dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
-							dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
-
-							WTW.log("Login Error = " + serror);
-							var zinvalidlogin = WTW.getMeshOrNodeByID('hudlogin-invalidlogin');
-							var zfocus = false;
-							var zremember = WTW.getMeshOrNodeByID('hudlogin-check-remember');
-							var zrememberborder = WTW.getMeshOrNodeByID('hudlogin-check-rememberborder');
-							var zrememberborderfocus = WTW.getMeshOrNodeByID('hudlogin-check-rememberborderfocus');
-							var zremembertext = WTW.getMeshOrNodeByID('hudlogin-check-remembertext');
-							var zremember3dtext = WTW.getMeshOrNodeByID('hudlogin-check-remember-text');
-							if (zinvalidlogin != null) {
-								zinvalidlogin.isVisible = true;
-							}
-							if (zremember != null) {
-								zremember.isVisible = false;
-							}
-							if (zrememberborder != null) {
-								zrememberborder.isVisible = false;
-							}
-							if (zrememberborderfocus != null) {
-								zfocus = zrememberborderfocus.isVisible;
-								zrememberborderfocus.isVisible = false;
-							}
-							if (zremembertext != null) {
-								zremembertext.isVisible = false;
-							}
-							if (zremember3dtext != null) {
-								zremember3dtext.isVisible = false;
-							}
-							window.setTimeout(function(){
-								zinvalidlogin = WTW.getMeshOrNodeByID('hudlogin-invalidlogin');
-								zremember = WTW.getMeshOrNodeByID('hudlogin-check-remember');
-								zrememberborder = WTW.getMeshOrNodeByID('hudlogin-check-rememberborder');
-								zrememberborderfocus = WTW.getMeshOrNodeByID('hudlogin-check-rememberborderfocus');
-								zremembertext = WTW.getMeshOrNodeByID('hudlogin-check-remembertext');
-								zremember3dtext = WTW.getMeshOrNodeByID('hudlogin-check-remember-text');
-								if (zinvalidlogin != null) {
-									zinvalidlogin.isVisible = false;
-								}
-								if (zremember != null) {
-									zremember.isVisible = true;
-								}
-								if (zfocus) {
-									if (zrememberborderfocus != null) {
-										zrememberborderfocus.isVisible = true;
-									}
-								} else {
-									if (zrememberborder != null) {
-										zrememberborder.isVisible = true;
-									}
-								}
-								if (zremembertext != null) {
-									zremembertext.isVisible = true;
-								}
-								if (zremember3dtext != null) {
-									zremember3dtext.isVisible = true;
-								}
-							},5000);
-						}
-					}
-				);
-			} else {
+			if (zlocal) {
 				if (zremembercheck) {
 					WTW.setCookie('localloginemail', zemail, 365);
 					WTW.setCookie('localloginpassword', btoa(zpassword), 365);
@@ -1200,6 +1066,7 @@ WTWJS.prototype.hudLoginLogin = function() {
 					}
 				);
 			}
+			WTW.pluginsHudLoginLogin(zlocal, zemail, zpassword, zremembercheck);
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginLogin=' + ex.message);
@@ -1340,93 +1207,7 @@ WTWJS.prototype.hudLoginCreate = function() {
 			if (zinvalidemail != null) {
 				zinvalidemail.isVisible = false;
 			}
-			if (zlocal == false) {
-				var zserverip = dGet('wtw_serverip').value;
-				var zdisplayname = '';
-				var zemailparts = zemail.split('@');
-				zdisplayname = zemailparts[0];
-				var zrequest = {
-					'useremail':btoa(zemail),
-					'password':btoa(zpassword),
-					'password2':btoa(zpassword2),
-					'displayname':btoa(zdisplayname),
-					'serverip':btoa(zserverip),
-					'function':'register'
-				};
-				WTW.postJSON("https://3dnet.walktheweb.com/connect/authenticate.php", zrequest, 
-					function(zresponse) {
-						zresponse = JSON.parse(zresponse);
-						var zuserid = '';
-						var zdisplayname = '';
-						var zuseremail = '';
-						var zusertoken = '';
-						var zwtwusertoken = '';
-						if (zresponse.userid != undefined) {
-							zuserid = zresponse.userid;
-						}
-						if (zresponse.displayname != undefined) {
-							zdisplayname = zresponse.displayname;
-						}
-						if (zresponse.useremail != undefined) {
-							zuseremail = zresponse.useremail;
-						}
-						if (zresponse.usertoken != undefined) {
-							zusertoken = zresponse.usertoken;
-						}
-						if (zresponse.wtwusertoken != undefined) {
-							zwtwusertoken = zresponse.wtwusertoken;
-						}
-						
-						if (zusertoken.length > 100 || zuserid != '') {
-							dGet('wtw_tusertoken').value = zusertoken;
-							dGet('wtw_tglobaluserid').value = zwtwusertoken;
-							dGet('wtw_tuserid').value = zuserid;
-							dGet('wtw_tuseremail').value = zuseremail;
-							WTW.closeLoginHUD();
-							var zrequest = {
-								'globaluserid':zwtwusertoken,
-								'usertoken':zusertoken,
-								'displayname':btoa(zdisplayname),
-								'useremail':zuseremail,
-								'function':'globallogin'
-							};
-							WTW.postAsyncJSON('/core/handlers/users.php', zrequest,
-								function(zresponse) {
-									zresponse = JSON.parse(zresponse);
-									/* continue if no errors */
-									if (WTW.globalLoginResponse(zresponse)) {
-										WTW.openLocalLogin('Select Avatar',.4,.9);
-									}
-								}
-							);
-						} else {
-							/* there is an error */
-							serror = zresponse.serror;
-							dGet('wtw_tuserid').value = '';
-							dGet('wtw_tuseremail').value = '';
-							dGet('wtw_tdisplayname').value = '';
-							dGet('wtw_mainmenudisplayname').innerHTML = 'Login';
-							dGet('wtw_menudisplayname').innerHTML = 'Login';
-							dGet('wtw_tuserimageurl').value = '';
-							dGet('wtw_profileimagelg').src = '/content/system/images/menuprofilebig.png';
-							dGet('wtw_profileimagesm').src = '/content/system/images/menuprofile32.png';
-
-							WTW.log("Login Error = " + serror);
-							var zinvalidlogin = WTW.getMeshOrNodeByID('hudlogin-invalidlogin');
-							var zfocus = false;
-							if (zinvalidlogin != null) {
-								zinvalidlogin.isVisible = true;
-							}
-							window.setTimeout(function(){
-								zinvalidlogin = WTW.getMeshOrNodeByID('hudlogin-invalidlogin');
-								if (zinvalidlogin != null) {
-									zinvalidlogin.isVisible = false;
-								}
-							},5000);
-						}
-					}
-				);
-			} else {
+			if (zlocal) {
 				var zdisplayname = '';
 				var zemailparts = zemail.split('@');
 				zdisplayname = zemailparts[0];
@@ -1444,6 +1225,7 @@ WTWJS.prototype.hudLoginCreate = function() {
 					}
 				);
 			}
+			WTW.pluginsHudLoginCreate(zlocal, zemail, zpassword, zpassword2);
 		}
 	} catch (ex) {
 		WTW.log('core-scripts-hud-wtw_hud_login.js-hudLoginCreate=' + ex.message);

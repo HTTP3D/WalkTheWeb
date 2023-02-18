@@ -239,7 +239,7 @@ WTWJS.prototype.adminMenuItemSelected = function(zobj) {
 						break;
 					case 'wtw_admincommunityaddbuilding':
 						WTW.hideAdminMenu();
-						WTW.showFranchise(dGet('wtw_buildingbuttonlocal'),'building');
+						wtw3dinternet.showFranchise(dGet('wtw_buildingbuttonlocal'),'building');
 						WTW.show('wtw_adminmenu27');
 						break;
 					case 'wtw_admincommunityaddthing':
@@ -1090,82 +1090,6 @@ WTWJS.prototype.toggleAdminSubMenu = function(zobj) {
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminmenus.js-toggleAdminSubMenu=' + ex.message);
 	}
-}
-
-
-/* franchise functions */
-
-WTWJS.prototype.showFranchise = function(zobj, zwebtype) {
-	/* toggle Local vs Internet */
-	try {
-		switch (zobj.id) {
-			case 'wtw_' + zwebtype + 'buttonlocal':
-				dGet('wtw_' + zwebtype + 'buttonlocal').className = 'wtw-localbuttonselected';
-				dGet('wtw_' + zwebtype + 'buttoninternet').className = 'wtw-localbutton';
-				WTW.hide('wtw_' + zwebtype + 'internetdiv');
-				switch (zwebtype) {
-					case 'community':
-						//WTW.getAddCommunityList();
-						break;
-					case 'building':
-						WTW.getAddBuildingList();
-						break;
-					case 'thing':
-						WTW.getAddThingList();
-						break;
-				}
-				break;
-			case 'wtw_' + zwebtype + 'buttoninternet':
-				dGet('wtw_' + zwebtype + 'buttoninternet').className = 'wtw-localbuttonselected';
-				dGet('wtw_' + zwebtype + 'buttonlocal').className = 'wtw-localbutton';
-				WTW.show('wtw_' + zwebtype + 'internetdiv');
-				dGet('wtw_' + zwebtype + 'buttonlist').innerHTML = '';
-				dGet('wtw_franchise' + zwebtype + 'search').value = '3d.';
-				dGet('wtw_franchise' + zwebtype + 'search').focus();
-				break;
-		}
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminmenus.js-showFranchise=' + ex.message);
-	}		
-}
-
-WTWJS.prototype.getFranchiseList = async function(zwebtype) {
-	/* 3D Buildings and 3D Things can be added to 3D Communities */
-	/* 3D Things can also be added to 3D Buildings */
-	/* this function creates a list of 3D Webs (by webtype) to add */
-	try {
-		WTW.hide('wtw_' + zwebtype + 'buttonlist');
-		WTW.show('wtw_loading' + zwebtype + 'buttonlist');
-		dGet('wtw_' + zwebtype + 'buttonlist').innerHTML = '';
-		var zrequest = {
-			'domainname': dGet('wtw_franchise' + zwebtype + 'search').value,
-			'webtype': zwebtype,
-			'function':'getfranchises'
-		};
-		WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/franchises.php', zrequest,
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				var zbuttonlist = '';
-				if (zresponse != null) {
-					for (var i = 0; i < zresponse.length; i++) {
-						if (zresponse[i] != null) {
-							zbuttonlist += "<div id='wtw_badd' + zwebtype + 'mold" + zresponse[i].franchiseid + "' onclick=\"WTW.addConnectingGrid('" + zwebtype + "', '', '" + zresponse[i].sitename + "', '" + zresponse[i].franchiseid + "', '" + zresponse[i].serverfranchiseid + "', '" + zresponse[i].webalias + "');\" class='wtw-menulevel2'>";
-							if (zresponse[i].sitepreview != '') {
-								zbuttonlist += "<img src='" + zresponse[i].sitepreview + "' style='width:100%;height:auto;' /><br />";
-							}
-							zbuttonlist += "<b>" + zresponse[i].sitename + "</b><br /><div class='wtw-menusmalltext'>" + zresponse[i].sitedescription + "</div></div>\r\n";
-						}
-					}
-				}
-				dGet('wtw_' + zwebtype + 'buttonlist').innerHTML = zbuttonlist;
-				WTW.hide('wtw_loading' + zwebtype + 'buttonlist');
-				WTW.show('wtw_' + zwebtype + 'buttonlist');
-				WTW.setWindowSize();
-			}
-		);
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminmenus.js-getFranchiseList=' + ex.message);
-	}		
 }
 
 

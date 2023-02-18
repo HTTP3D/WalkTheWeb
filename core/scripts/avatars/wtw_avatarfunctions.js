@@ -773,52 +773,15 @@ WTWJS.prototype.deleteUserAvatar = function(zglobaluseravatarid, zuseravatarid, 
 			WTW.postAsyncJSON('/core/handlers/avatars.php', zrequest, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
-					if (zglobaluseravatarid != '') {
-						/* send request to global server avatars handler */
-						var zrequest2 = {
-							'globaluseravatarid':zglobaluseravatarid,
-							'globaluserid':btoa(dGet('wtw_tglobaluserid').value),
-							'serverinstanceid':dGet('wtw_serverinstanceid').value,
-							'userid':dGet('wtw_tuserid').value,
-							'instanceid':dGet('wtw_tinstanceid').value,
-							'useravatarid':zuseravatarid,
-							'function':'deleteglobaluseravatar'
-						};
-						/* send request to global server avatars handler */
-						WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalsaveavatar.php', zrequest2, 
-							function(zresponse2) {
-								zresponse2 = JSON.parse(zresponse2);
-								/* global user avatar - refresh list */
-								WTW.getMyAvatarList(zwidth, zheight, true);
-							}
-						);
-					} else {
+					WTW.pluginsDeleteUserAvatar(zglobaluseravatarid, zuseravatarid, zwidth, zheight);
+					if (zglobaluseravatarid == '') {
 						/* only had local user avatar - refresh list */
 						WTW.getMyAvatarList(zwidth, zheight, true);
 					}
 				}
 			);
 		} else {
-			if (zglobaluseravatarid != '') {
-				/* send request to global server avatars handler */
-				var zrequest2 = {
-					'globaluseravatarid':zglobaluseravatarid,
-					'globaluserid':btoa(dGet('wtw_tglobaluserid').value),
-					'serverinstanceid':dGet('wtw_serverinstanceid').value,
-					'userid':dGet('wtw_tuserid').value,
-					'instanceid':dGet('wtw_tinstanceid').value,
-					'useravatarid':zuseravatarid,
-					'function':'deleteglobaluseravatar'
-				};
-				/* send request to global server avatars handler */
-				WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalsaveavatar.php', zrequest2, 
-					function(zresponse2) {
-						zresponse2 = JSON.parse(zresponse2);
-						/* global user avatar - refresh list */
-						WTW.getMyAvatarList(zwidth, zheight, true);
-					}
-				);
-			}
+			WTW.pluginsDeleteUserAvatar(zglobaluseravatarid, zuseravatarid, zwidth, zheight);
 		}
 	} catch(ex) {
 		WTW.log('core-scripts-avatars-wtw_avatarfunctions.js-deleteUserAvatar=' + ex.message);

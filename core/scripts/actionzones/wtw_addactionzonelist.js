@@ -348,6 +348,7 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 		WTW.hide('wtw_actionzoneswingdoordiv');
 		WTW.hide('wtw_actionzonemovementdistancediv');
 		WTW.hide('wtw_actionzonerotatespeeddiv');
+		dGet('wtw_actionzoneadvancedoptslink').innerHTML = '-- Show Advanced Options --';
 		WTW.hide('wtw_actionzoneadvancedopts');
 		WTW.hide('wtw_attachactionzonediv');
 		WTW.hide('wtw_actionzoneavataranimationsdiv');
@@ -373,6 +374,7 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				WTW.hide('wtw_actionzonepartsdiv');
 				dGet('wtw_editactionzoneformtitle').innerHTML = 'Add Load Zone';
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
+				dGet('wtw_actionzoneadvancedoptslink').innerHTML = '-- Hide Advanced Options --';
 				WTW.show('wtw_actionzoneadvancedopts');
 				WTW.show('wtw_azjavascriptdiv');
 				break;
@@ -383,6 +385,7 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				WTW.hide('wtw_actionzonepartsdiv');
 				dGet('wtw_editactionzoneformtitle').innerHTML = 'Add Unload Zone';
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
+				dGet('wtw_actionzoneadvancedoptslink').innerHTML = '-- Hide Advanced Options --';
 				WTW.show('wtw_actionzoneadvancedopts');
 				WTW.show('wtw_azjavascriptdiv');
 				break;
@@ -393,6 +396,7 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				WTW.hide('wtw_actionzonepartsdiv');
 				dGet('wtw_editactionzoneformtitle').innerHTML = 'Add Teleport Zone';
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
+				dGet('wtw_actionzoneadvancedoptslink').innerHTML = '-- Hide Advanced Options --';
 				WTW.show('wtw_actionzoneadvancedopts');
 				WTW.show('wtw_actionzoneteleportdiv');
 				break;
@@ -403,6 +407,7 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				WTW.hide('wtw_actionzonepartsdiv');
 				dGet('wtw_editactionzoneformtitle').innerHTML = 'Add Spawn Zone';
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
+				dGet('wtw_actionzoneadvancedoptslink').innerHTML = '-- Hide Advanced Options --';
 				WTW.show('wtw_actionzoneadvancedopts');
 				break;
 			case 'loadanimations':
@@ -412,6 +417,7 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				WTW.hide('wtw_actionzonepartsdiv');
 				dGet('wtw_editactionzoneformtitle').innerHTML = 'Add Load Animations';
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
+				dGet('wtw_actionzoneadvancedoptslink').innerHTML = '-- Hide Advanced Options --';
 				WTW.show('wtw_actionzoneadvancedopts');
 				WTW.show('wtw_actionzoneavataranimationsdiv');
 				break;
@@ -440,6 +446,7 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				dGet('wtw_editactionzoneformtitle').innerHTML = 'Add Seat';
 				dGet('wtw_axispositiontitle').innerHTML = 'Camera Position';
 				dGet('wtw_axisrotationtitle').innerHTML = 'Camera Rotation';
+				dGet('wtw_actionzoneadvancedoptslink').innerHTML = '-- Hide Advanced Options --';
 				WTW.show('wtw_actionzoneadvancedopts');
 				WTW.show('wtw_attachactionzonediv');
 				WTW.show('wtw_actionzonepartsdiv');
@@ -454,13 +461,13 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				WTW.hide('wtw_actionzonemovementdistancediv');
 				WTW.hide('wtw_actionzonepartsdiv');
 				dGet('wtw_editactionzoneformtitle').innerHTML = 'Add Ride Along Zone';
+				dGet('wtw_actionzoneadvancedoptslink').innerHTML = '-- Hide Advanced Options --';
 				WTW.show('wtw_actionzoneadvancedopts');
 				break;
 			case 'rotate':
 				WTW.hide('wtw_axisrotationy');
 				WTW.hide('wtw_actionzonesettingsdiv');
 				WTW.hide('wtw_actionzoneadvancedoptslink');
-				WTW.hide('wtw_actionzoneadvancedopts');
 				dGet('wtw_editactionzoneformtitle').innerHTML = 'Add Rotation Zone';
 				dGet('wtw_tcopyaxletoactionzone').disabled = true;
 				dGet('wtw_tcopyaxletoactionzone').checked = true;
@@ -489,6 +496,8 @@ WTWJS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				dGet('wtw_editactionzoneformtitle').innerHTML = 'Add Driver Seat';
 				dGet('wtw_axispositiontitle').innerHTML = 'Camera Position';
 				dGet('wtw_axisrotationtitle').innerHTML = 'Camera Rotation';
+				dGet('wtw_actionzoneadvancedoptslink').innerHTML = '-- Hide Advanced Options --';
+				dGet('wtw_actionzoneadvancedoptslink').innerHTML = '-- Hide Advanced Options --';
 				WTW.show('wtw_actionzoneadvancedopts');
 				WTW.show('wtw_attachactionzonediv');
 				break;

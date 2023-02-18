@@ -97,42 +97,7 @@ WTWJS.prototype.openSelectAvatar = function(zfilter) {
 						}
 					}
 					dGet('wtw_listavatars').innerHTML += "<div class='wtw-normalgray'>Total: <b>" + zresponse.avatars.length + "</b> Avatars</div>";
-
-					/* check for updated versions */
-					var zrequest2 = {
-						'versioncheck': JSON.stringify(zversioncheck),
-						'function':'versioncheck'
-					};
-					WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/versioncheck.php', zrequest2, 
-						function(zresponse2) {
-							zresponse2 = JSON.parse(zresponse2);
-							for (var i = 0; i < zresponse2.length; i++) {
-								if (zresponse2[i] != null) {
-									var zversionid = zresponse2[i].versionid;
-									if (document.getElementById('wtw_beditavatar-' + zversionid) != null) {
-										var zwebid = zresponse2[i].webid;
-										var zupdatewebid = zresponse2[i].updatewebid;
-										var zversion = zresponse2[i].version;
-										var zoldversion = zresponse2[i].oldversion;
-										
-										var zdiv = document.createElement('div');
-										zdiv.id = 'wtw_beditavatar_update-' + zversionid;
-										zdiv.className = 'wtw-badgebutton';
-										zdiv.innerHTML = 'Update Available (v' + zversion + ')';
-										zdiv.onclick = function(zevent) {
-											if (zevent == undefined) {
-												zevent = window.event;
-											}
-											WTW.downloadAvatarVersion(this, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'avatar');
-											zevent.stopPropagation();
-											zevent.preventDefault();
-										};
-										document.getElementById('wtw_beditavatar-' + zversionid).appendChild(zdiv);
-									}
-								}
-							}
-						}
-					);
+					WTW.pluginsShowListVersionCheck('avatar', zversioncheck);
 				}
 				window.setTimeout(function() {
 					WTW.hide('wtw_loadingavatarid');
@@ -170,7 +135,7 @@ WTWJS.prototype.downloadAvatarVersion = function(zobj, zwebid, zupdatewebid, zve
 					dGet('wtw_beditavatar-' + zwebid).innerHTML = dGet('wtw_beditavatar-' + zwebid).innerHTML.replace(zoldversion,zversion);
 				}
 				/* update badges */
-				WTW.checkForUpdates();
+				wtw3dinternet.checkForUpdates();
 				window.setTimeout(function(){
 					if (dGet('wtw_beditavatar_update-' + zwebid) != null) {
 						dGet('wtw_beditavatar_update-' + zwebid).remove();

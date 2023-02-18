@@ -50,8 +50,8 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__('Updates') + "</div>";
 				WTW.show('wtw_showfilepage');
 				WTW.show('wtw_updatespage');
-				WTW.checkForUpdates('1');
-				WTW.loadArchiveUpdates();
+				wtw3dinternet.checkForUpdates('1');
+				wtw3dinternet.loadArchiveUpdates();
 				break;
 			case 'feedback':
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__('Feedback') + "</div>";
@@ -160,7 +160,7 @@ WTWJS.prototype.openFullPageForm = function(zpageid, zsetcategory, zitem, zitemn
 			case 'plugins':
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__('3D Plugins') + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__(zsetcategory) + "</div>";
 				WTW.show('wtw_showfilepage');
-				WTW.checkForUpdates('2', zsetcategory);
+				wtw3dinternet.checkForUpdates('2', zsetcategory);
 				break;
 			case 'settings':
 				dGet('wtw_fullpageformtitle').innerHTML = "<div class='wtw-toparrowtext'>" + WTW.__('Settings') + "</div><img id='wtw_arrowicon1' src='/content/system/images/menuarrow32.png' alt='' title='' class='wtw-toparrowicon' /><div class='wtw-toparrowtext'>" + WTW.__(zsetcategory) + "</div>";
@@ -345,7 +345,7 @@ WTWJS.prototype.checkForFeedbackComplete = function(zresponse, zfilter) {
 		if (dGet('wtw_adminmenufeedbackbadge') != null) {
 			dGet('wtw_adminmenufeedbackbadge').innerHTML = znewfeedback;
 		}
-		WTW.updateBadges();
+		wtw3dinternet.updateBadges();
 		
 		if (dGet('wtw_feedbackpagescroll') != null) {
 			dGet('wtw_selectimagepage').style.height = (WTW.sizeY - 100) + 'px';
@@ -382,7 +382,7 @@ WTWJS.prototype.toggleFeedback = async function(zfeedbackid) {
 									}
 								}
 							}
-							WTW.updateBadges();
+							wtw3dinternet.updateBadges();
 						}
 					);
 					dGet('wtw_feedback-status-' + zfeedbackid).innerHTML = 'Open';
@@ -672,169 +672,9 @@ WTWJS.prototype.openDashboardForm = async function(zshow) {
 				}
 			}
 		);
-		if (zshow) {
-			WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/videolinks.php', 
-				function(zresponse) {
-					zresponse = JSON.parse(zresponse);
-					for (var i=0;i<zresponse.length;i++) {
-						if (zresponse[i] != null) {
-							if (i == 0) {
-								dGet('wtw_latestvideotitle').innerHTML = atob(zresponse[i].videotitle);
-								dGet('wtw_latestvideodetails').innerHTML = 'Presented by: ' + zresponse[i].presenter + ' on ' + WTW.formatDate(zresponse[i].updatedate) + '<br /><br />' + atob(zresponse[i].description);
-								if (zresponse[i].videourl.indexOf('?v=') > -1) {
-									var zyoutubeid = zresponse[i].videourl.split('?v=')[1];
-									dGet('wtw_latestvideo').innerHTML = "<iframe width='100%' height='auto' src='https://www.youtube.com/embed/" + zyoutubeid + "?list=PLnMgA5ebbr8KXw9z5vp4E202e-RTKa9X-' frameborder='0' allowfullscreen style='min-height:350px;'></iframe>";
-								}
-							} else {
-								
-							}
-						}
-					}
-					WTW.show('wtw_videolinks');
-				}
-			);
-			WTW.getAsyncJSON('https://3dnet.walktheweb.com/connect/wtwactivities.php', 
-				function(zresponse) {
-					zresponse = JSON.parse(zresponse);
-					var zwtwactivities = '';
-					for (var i=0;i<zresponse.length;i++) {
-						if (zresponse[i] != null) {
-							zwtwactivities += "<h2 class='wtw-black'>" + atob(zresponse[i].activitytitle) + ' (' + WTW.formatDate(zresponse[i].createdate) + ')</h2>' + atob(zresponse[i].activitydescription) + '<br />';
-							switch (zresponse[i].category) {
-								case 'Shared 3D Avatar':
-								case 'Shared 3D Web':
-									zwtwactivities += "<h3 class='wtw-blue'>" + atob(zresponse[i].sharedtitle) + "</h3>";
-									zwtwactivities += atob(zresponse[i].shareddescription) + '<br /><br />';
-									zwtwactivities += '<b>Search Tags</b><br />' + atob(zresponse[i].tags) + '<br /><br />';
-									break;
-								case 'WalkTheWeb Users':
-									zresponse[i].sharedimage = '';
-								case 'WalkTheWeb Servers':
-									if (zresponse[i].sharedimage == '') {
-										zresponse[i].sharedimage = 'https://3dnet.walktheweb.com/wp-content/uploads/2021/02/NewWTWServer.png';
-									}
-									zwtwactivities += "<h3><a href='" + zresponse[i].website + "' target='_blank'>" + zresponse[i].website + "</a></h3>";
-									zwtwactivities += "<div class='wtw-mincol'>City: </div><b>" + zresponse[i].city + "</b><br /><div class='wtw-mincol'>Region: </div><b>" + zresponse[i].region + "</b><br /><div class='wtw-mincol'>Country: </div><b>" + zresponse[i].country + "</b><br /><div class='wtw-mincol'>Continent: </div><b>" + zresponse[i].continent + '</b><br /><br />';
-									break;
-								case 'WalkTheWeb Video':
-									zwtwactivities += "<h3><a href='" + zresponse[i].videourl + "' target='_blank'>" + zresponse[i].website + "</a></h3>";
-									zwtwactivities += 'Presented by: ' + zresponse[i].presenter + ' on ' + WTW.formatDate(zresponse[i].createdate) + '<br /><br />' + atob(zresponse[i].videodescription);
-									break;
-							}
-							if (zresponse[i].sharedimage != '') {
-								zwtwactivities += "<img src='" + zresponse[i].sharedimage + "' style='width:100%;height:auto;' /><hr />";
-							} else {
-								zwtwactivities += '<hr />';
-							}
-						}
-					}
-					dGet('wtw_wtwactivitylist').innerHTML = zwtwactivities;
-					WTW.show('wtw_wtwactivity');
-				}
-			);
-		}
+		WTW.pluginsOpenDashboardForm(zshow);
 	} catch (ex) {
 		WTW.log('core-scripts-admin-wtw_adminforms.js-openDashboardForm=' + ex.message);
-	}
-}
-
-WTWJS.prototype.getDownloadsInfo = async function(zdownloads, zshow) {
-	/* uses the local downloads to get the download info from 3dnet.walktheweb.com hub */
-	try {
-		var zuserid = ''; /* blank will show all downloads pending on server - admin role */
-		if (WTW.isUserInRole('Host') && WTW.isUserInRole('Admin') == false) {
-			/* sending userid will limit the list to only downloads for this user */
-			zuserid = dGet('wtw_tuserid').value;
-		}
-		var zrequest = {
-			'downloads': JSON.stringify(zdownloads),
-			'userid': zuserid,
-			'function':'getdownloadinfo'
-		};
-		WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/downloadsinfo.php', zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				/* note serror would contain errors */
-				WTW.displayDownloadsQueue(zresponse, zshow);
-			}
-		);
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminforms.js-getDownloadsInfo=' + ex.message);
-	}
-}
-
-WTWJS.prototype.displayDownloadsQueue = async function(zdownloadinfo, zshow) {
-	/* display any downloads with info and preview */
-	try {
-		if (zshow == undefined) {
-			zshow = true;
-		}
-		var zdownloadslist = "<div id='wtw_downloadqueuelistdiv'>";
-		if (zshow) {
-			for (var i=0;i < zdownloadinfo.length;i++) {
-				if (zdownloadinfo[i] != null) {
-					zdownloadslist += "<div id='wtw_downloadqueue-" + zdownloadinfo[i].downloadid + "'>";
-					if (zdownloadinfo[i].imageurl != '') {
-						zdownloadslist += "<img src='" + zdownloadinfo[i].imageurl + "' class='wtw-smallimageleft' />";
-					}
-					zdownloadslist += "<div style='padding:2px;margin:0px 10px 10px 20px;'><b>" + zdownloadinfo[i].templatename + "</b> (" + zdownloadinfo[i].version + ")<br /><div style='float:right;'><div onclick=\"WTW.downloadWebFromQueue('" + btoa(zdownloadinfo[i].templatename) + "', '" + zdownloadinfo[i].downloadid + "','" + zdownloadinfo[i].webid + "','" + zdownloadinfo[i].webtype + "','1');\" class='wtw-searchresultbuttonyellow'>Download</div><br /><div onclick=\"WTW.downloadWebFromQueue('" + btoa(zdownloadinfo[i].templatename) + "', '" + zdownloadinfo[i].downloadid + "','" + zdownloadinfo[i].webid + "','" + zdownloadinfo[i].webtype + "','0');\" class='wtw-searchresultbutton'>Cancel</div></div><br /><b>Created By:</b> " + zdownloadinfo[i].displayname + "<br /><b>on</b> " + WTW.formatDate(zdownloadinfo[i].createdate) + "<br />" + zdownloadinfo[i].description + "<br /></div><div style='clear:both;'></div><hr /></div>";
-				}
-			}
-		}
-		zdownloadslist += "</div>";
-		if (zshow) {
-			dGet('wtw_downloadqueuelist').innerHTML = zdownloadslist;
-			dGet('wtw_dashboard').style.height = (WTW.sizeY-100)+'px';
-			if (zdownloadinfo.length > 0) {
-				WTW.show('wtw_downloadqueue');
-			} else {
-				WTW.hide('wtw_downloadqueue');
-			}
-		}
-		/* update badges */
-		dGet('wtw_adminmenudashboardbadge').innerHTML = zdownloadinfo.length;
-		WTW.updateBadges();
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminforms.js-displayDownloadsQueue=' + ex.message);
-	}
-}
-
-WTWJS.prototype.downloadWebFromQueue = async function(ztemplatename, zdownloadid, zwebid, zwebtype, zprocess) {
-	/* download 3D Web from queue */
-	try {
-		/* process the queue - mark it downloaded */
-		var zrequest = {
-			'downloadid': zdownloadid,
-			'webid': zwebid,
-			'webtype': zwebtype,
-			'process': zprocess,
-			'function':'updatedownloadsqueue'
-		};
-		WTW.postAsyncJSON('/core/handlers/downloads.php', zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				/* note serror would contain errors */
-				/* refresh the dashboard - update downloads queue */
-				if (zresponse.serror == '') {
-					if (dGet('wtw_downloadqueue-' + zdownloadid) != null) {
-						dGet('wtw_downloadqueue-' + zdownloadid).remove();
-					}
-					if (zprocess == '0') {
-						if (dGet('wtw_downloadqueuelistdiv') != null) {
-							if (dGet('wtw_downloadqueuelistdiv').hasChildNodes() == false) {
-								WTW.hide('wtw_downloadqueue');
-							}
-						}
-					}
-				}
-			}
-		);
-		if (zprocess == '1') {
-			/* download the 3D Web - note templatename is btoa() */
-			WTW.downloadWeb('queue', ztemplatename, zwebid, zwebid, zwebtype);
-		}
-	} catch (ex) {
-		WTW.log('core-scripts-admin-wtw_adminforms.js-downloadWebFromQueue=' + ex.message);
 	}
 }
 

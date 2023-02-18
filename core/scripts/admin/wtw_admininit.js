@@ -110,7 +110,7 @@ WTWJS.prototype.adminLoadAfterScreen = function() {
 				}
 			}
 			/* check for updates to WalkTheWeb and 3D Plugins */
-			WTW.checkForUpdates('1');
+			wtw3dinternet.checkForUpdates('1');
 		} else {
 			/* page is returning from a babylon screen shot */
 			/* open the appropriate menu option */

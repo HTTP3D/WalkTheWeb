@@ -353,11 +353,13 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 			zpositionz = znewcoords.positionZ;
 			zrotationy = znewcoords.rotationY;
 			var zactionzonesurl = '/connect/actionzones.php?thingid=' + zchildwebid + '&buildingid=' + zchildwebid + '&communityid=&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
+
+			zactionzonesurl = WTW.pluginsAddConnectingGridActionZones(zactionzonesurl, zchildwebtype, zchildwebid, zchildwebname, zfranchiseid, zserverfranchiseid, zwebalias, zparentname, zconnectinggridid, zconnectinggridind);
 			if (zfranchiseid != '') {
-				zactionzonesurl = 'https://3dnet.walktheweb.com/connect/franchiseactionzones.php?franchiseid=' + zfranchiseid + '&serverfranchiseid=' + zserverfranchiseid + '&webalias=' + zwebalias + '&parentname=' + zparentname + '&connectinggridid=' + zconnectinggridid + '&connectinggridind=' + zconnectinggridind;
 				zchildwebid = zfranchiseid;
 				zserver =  zserverfranchiseid;
 			}
+
 			WTW.getAsyncJSON(zactionzonesurl, 
 				function(zresponse) {
 					var zaddactionzones = JSON.parse(zresponse);
@@ -464,9 +466,9 @@ WTWJS.prototype.addConnectingGrid = async function(zchildwebtype, zchildwebid, z
 					if (zchildwebtype == 'building') {
 						/* get any 3D Things connecting grids in the 3D Building */
 						var zconnectinggridsurl = '/connect/connectinggrids.php?parentwebid=' + zchildwebid + '&startpositionx=0&startpositiony=0&startpositionz=0&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname;
-						if (zfranchiseid != '') {
-							zconnectinggridsurl = 'https://3dnet.walktheweb.com/connect/franchiseconnectinggrids.php?franchiseid=' + zfranchiseid + '&serverfranchiseid=' + zserverfranchiseid + '&webalias=' + zwebalias + '&parentname=' + WTW.connectingGrids[zconnectinggridind].moldname + '&startpositionx=0&startpositiony=0&startpositionz=0';
-						}
+						
+						zconnectinggridsurl = WTW.pluginsAddConnectingGrid(zconnectinggridsurl, zchildwebtype, zchildwebid, zchildwebname, zfranchiseid, zserverfranchiseid, zwebalias, WTW.connectingGrids[zconnectinggridind].moldname);
+
 						WTW.getAsyncJSON(zconnectinggridsurl, 
 							function(zresponse) {
 								WTW.loadChildConnectingGrids(JSON.parse(zresponse), zserver);

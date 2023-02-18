@@ -5,83 +5,8 @@
 /* These functions provide many of the common functions for browse and admin modes */
 /* login pages, select avatar, account, profile, options, and related functions */
 
-WTWJS.prototype.openGlobalLogin = function() {
-	/* opens login for 3dnet.walktheweb.com - as a global WalkTheWeb login option */
-	try {
-		WTW.openLoginHUD('WalkTheWeb Login');
-//		WTW.openIFrame('https://3dnet.walktheweb.com/core/login/login.php?serverinstanceid=' + btoa(dGet('wtw_serverinstanceid').value) + '&domainname=' + btoa(wtw_domainname) + '&domainurl=' + btoa(wtw_domainurl) + '&websiteurl=' + btoa(wtw_websiteurl) + '&webid=' + btoa(communityid + buildingid + thingid), .4, .6, 'Login Menu');
-	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_login.js-openGlobalLogin=' + ex.message);
-	}
-}
-
-WTWJS.prototype.tryGlobalLogin = function() {
-	try {
-//		dGet('wtw_loginerrortext').innerHTML = "";
-		let zemail = dGet('wtw_temail').value;
-		let zpassword = dGet('wtw_tpassword').value;
-		let zserverip = dGet('wtw_serverip').value;
-		var zrequest = {
-			'useremail':btoa(zemail),
-			'password':btoa(zpassword),
-			'serverip':btoa(zserverip),
-			'function':'login'
-		};
-		WTW.postJSON("https://3dnet.walktheweb.com/connect/authenticate.php", zrequest, 
-			function(zresponse) {
-				zresponse = JSON.parse(zresponse);
-				var zuserid = '';
-				var zusertoken = '';
-				var zwtwusertoken = '';
-				if (zresponse.userid != undefined) {
-					zuserid = zresponse.userid;
-				}
-				if (zresponse.usertoken != undefined) {
-					zusertoken = zresponse.usertoken;
-				}
-				if (zresponse.wtwusertoken != undefined) {
-					zwtwusertoken = zresponse.wtwusertoken;
-				}
-				if (zusertoken.length > 100 || zuserid != '') {
-/*					dGet('wtw_loginlabel').innerHTML = 'WalkTheWeb Login';
-					WTW.hide('wtw_hostlogindiv');
-					WTW.hide('wtw_logindiv');
-					WTW.hide('wtw_registerdiv');
-					WTW.hide('wtw_resetpassworddiv');
-					dGet('wtw_usertoken').value = zusertoken;
-					dGet('wtw_wtwusertoken').value = zwtwusertoken;
-					dGet('wtw_userid').value = zuserid;
-					dGet('wtw_temailloggedin').disabled = false;
-					dGet('wtw_temailloggedin').value = zemail;
-					dGet('wtw_temailloggedin').disabled = true;
-					dGet('wtw_wtwemail').disabled = false;
-					dGet('wtw_wtwemail').value = zemail;
-					dGet('wtw_wtwemail').disabled = true;
-					WTW.show('wtw_loggedindiv');
-					if (dGet('wtw_usertoken').value != '' || dGet('wtw_userid').value != '') {
-						dGet('wtw_step4_5').style.visibility = 'visible';
-						dGet('wtw_step4_5b').style.visibility = 'visible';
-					}
-*/				} else {
-					dGet('wtw_loginerrortext').innerHTML = zresponse.serror;
-				}
-			}
-		);
-	} catch (ex) {
-		WTW.log("core-scripts-prime-wtw_login.js-tryGlobalLogin=" + ex.message);
-	}
-}	
 
 
-WTWJS.prototype.logoutGlobal = function() {
-	/* references 3dnet.walktheweb.com - logout of global WalkTheWeb login */
-	try {
-		WTW.openLoginHUD('WalkTheWeb Login');
-//		WTW.openIFrame('https://3dnet.walktheweb.com/core/login/login.php?logout=1&serverinstanceid=' + btoa(dGet('wtw_serverinstanceid').value) + '&domainname=' + btoa(wtw_domainname) + '&domainurl=' + btoa(wtw_domainurl) + '&websiteurl=' + btoa(wtw_websiteurl) + '&webid=' + btoa(communityid + buildingid + thingid), .4, .6, 'Login Menu');
-	} catch (ex) {
-		WTW.log('core-scripts-prime-wtw_login.js-logoutGlobal=' + ex.message);
-	}
-}
 
 WTWJS.prototype.globalLogin = async function(zparameters) {
 	/* references 3dnet.walktheweb.com - global WalkTheWeb login complete and confirms the local values from login */
@@ -730,45 +655,7 @@ WTWJS.prototype.showMyAvatarList = function(zmyavatars, zwidth, zheight, zeditmo
 				}
 				if (zversioncheck != undefined) {
 					/* check for updated versions */
-					var zrequest2 = {
-						'versioncheck': JSON.stringify(zversioncheck),
-						'function':'versioncheck'
-					};
-					WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/versioncheck.php', zrequest2, 
-						function(zresponse2) {
-							zresponse2 = JSON.parse(zresponse2);
-							for (var i = 0; i < zresponse2.length; i++) {
-								if (zresponse2[i] != null) {
-									var zglobaluseravatarid = zresponse2[i].globaluseravatarid;
-									var zuseravatarid = zresponse2[i].useravatarid;
-									var zupdateuseravatarid = zuseravatarid;
-									if (zglobaluseravatarid != '') {
-										zupdateuseravatarid = zglobaluseravatarid;
-									}
-									if (document.getElementById('wtw_beditavatar-' + zupdateuseravatarid) != null) {
-										var zwebid = zresponse2[i].webid;
-										var zupdatewebid = zresponse2[i].updatewebid;
-										var zversionid = zresponse2[i].versionid;
-										var zversion = zresponse2[i].version;
-										var zoldversion = zresponse2[i].oldversion;
-										var zdiv = document.createElement('div');
-										zdiv.id = 'wtw_beditavatar_update-' + zupdateuseravatarid;
-										zdiv.className = 'wtw-badgebutton';
-										zdiv.innerHTML = 'Update Available (v' + zversion + ')';
-										zdiv.onclick = function(zevent) {
-											if (zevent == undefined) {
-												zevent = window.event;
-											}
-											WTW.downloadUserAvatarVersion(this, zglobaluseravatarid, zuseravatarid, zupdateuseravatarid, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'avatar');
-											zevent.stopPropagation();
-											zevent.preventDefault();
-										};
-										document.getElementById('wtw_beditavatar-' + zupdateuseravatarid).appendChild(zdiv);
-									}
-								}
-							}
-						}
-					);
+					WTW.pluginsShowListVersionCheck('useravatar', zversioncheck);
 				}
 			}
 			WTW.show('wtw_createnewavatar');
@@ -807,19 +694,7 @@ WTWJS.prototype.downloadUserAvatarVersion = function(zobj, zglobaluseravatarid, 
 				function(zresponse) {
 					zresponse = JSON.parse(zresponse);
 					/* note serror would contain errors */
-					if (zglobaluseravatarid != '') {
-						WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalsaveavatar.php', zrequest, 
-							function(zresponse2) {
-								zresponse = JSON.parse(zresponse2);
-								WTW.updateVersionDisplay(zobj, zversion, zoldversion, 'wtw_beditavatar-' + zupdateuseravatarid, 'wtw_beditavatar_update-' + zupdateuseravatarid);
-								window.setTimeout(function(){
-									if (dGet('wtw_tglobaluseravatarid').value == zglobaluseravatarid) {
-										WTW.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zwebid);
-									}
-								},10000);
-							}
-						);
-					} else {
+					if (zglobaluseravatarid == '') {
 						WTW.updateVersionDisplay(zobj, zversion, zoldversion, 'wtw_beditavatar-' + zupdateuseravatarid, 'wtw_beditavatar_update-' + zupdateuseravatarid);
 						window.setTimeout(function(){
 							if (dGet('wtw_tuseravatarid').value == zuseravatarid) {
@@ -827,21 +702,11 @@ WTWJS.prototype.downloadUserAvatarVersion = function(zobj, zglobaluseravatarid, 
 							}
 						},10000);
 					}
-				}
-			);
-		} else if (zglobaluseravatarid != '') {
-			WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/globalsaveavatar.php', zrequest, 
-				function(zresponse2) {
-					zresponse = JSON.parse(zresponse2);
-					WTW.updateVersionDisplay(zobj, zversion, zoldversion, 'wtw_beditavatar-' + zupdateuseravatarid, 'wtw_beditavatar_update-' + zupdateuseravatarid);
-					window.setTimeout(function(){
-						if (dGet('wtw_tglobaluseravatarid').value == zglobaluseravatarid) {
-							WTW.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zwebid);
-						}
-					},10000);
+					WTW.pluginsDownloadUserAvatarVersionResponse(zobj, zglobaluseravatarid, zuseravatarid, zupdateuseravatarid, zwebid, zupdatewebid, zversionid, zversion, zoldversion, zwebtype);
 				}
 			);
 		}
+		WTW.pluginsDownloadUserAvatarVersion(zobj, zglobaluseravatarid, zuseravatarid, zupdateuseravatarid, zwebid, zupdatewebid, zversionid, zversion, zoldversion, zwebtype);
 	} catch (ex) {
 		WTW.log('core-scripts-prime-wtw_login.js-downloadUserAvatarVersion=' + ex.message);
 	} 

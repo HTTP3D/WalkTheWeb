@@ -360,42 +360,7 @@ WTWJS.prototype.getSelectThingsList = async function(zfilter) {
 							}
 						}
 						dGet('wtw_listthings').innerHTML += "<div class='wtw-normalgray'>Total: <b>" + WTW.things.length + "</b> Things</div>";
-
-						/* check for updated versions */
-						var zrequest2 = {
-							'versioncheck': JSON.stringify(zversioncheck),
-							'function':'versioncheck'
-						};
-						WTW.postAsyncJSON('https://3dnet.walktheweb.com/connect/versioncheck.php', zrequest2, 
-							function(zresponse2) {
-								zresponse2 = JSON.parse(zresponse2);
-								for (var i = 0; i < zresponse2.length; i++) {
-									if (zresponse2[i] != null) {
-										var zwebid = zresponse2[i].webid;
-										var zversionid = zresponse2[i].versionid;
-										if (document.getElementById('wtw_beditweb-' + zwebid) != null) {
-											var zupdatewebid = zresponse2[i].updatewebid;
-											var zversion = zresponse2[i].version;
-											var zoldversion = zresponse2[i].oldversion;
-											
-											var zdiv = document.createElement('div');
-											zdiv.id = 'wtw_beditweb_update-' + zwebid;
-											zdiv.className = 'wtw-badgebutton';
-											zdiv.innerHTML = 'Update Available (v' + zversion + ')';
-											zdiv.onclick = function(zevent) {
-												if (zevent == undefined) {
-													zevent = window.event;
-												}
-												WTW.downloadWebVersion(this, zwebid, zupdatewebid, zversionid, zversion, zoldversion, 'thing');
-												zevent.stopPropagation();
-												zevent.preventDefault();
-											};
-											document.getElementById('wtw_beditweb-' + zwebid).appendChild(zdiv);
-										}
-									}
-								}
-							}
-						);
+						WTW.pluginsShowListVersionCheck('thing', zversioncheck);
 					} else {
 						dGet('wtw_listthings').innerHTML = "<div class='wtw-yellow'>No 3D Things Found</div><br />";
 						dGet("wtw_listthings").innerHTML += "<div id='wtw_adminaddthing2' class='wtw-adminsubmenu' onclick=\"WTW.adminMenuItemSelected(dGet('wtw_adminaddthing'));\">Add New 3D Thing</div>";

@@ -466,6 +466,8 @@ WTWJS.prototype.mouseClick = function(zevent) {
 							WTW.hudClick(zpickedname);
 						} else if (zpickedname.substr(0,9) == 'hudlogin-') {
 							WTW.hudLoginClick(zpickedname);
+						} else if (zpickedname.substr(0,9) == 'myavatar-') {
+							WTW.setFunctionAndExecute('WTW.toggleMenuAnimations','');
 						} else if (zpickedname.indexOf('-image') > -1) {
 							WTW.checkImageClick(zpickedname);
 						} else if (zpickedname.indexOf('-videoposter') > -1 || zpickedname.indexOf('-video-screen') > -1) {
@@ -829,16 +831,12 @@ WTWJS.prototype.onMessage = function (zevent) {
 	/* message listener is enabled and this function can receive predefined messages from an iframe within the WalkTheWeb instance */
 	try {
 		zevent = zevent || window.event;
-		let zsafe = false;
+		var zsafe = false;
 		// Check sender origin to be trusted
-		if (zevent.origin == 'https://3d.walktheweb.com') {
+		if (zevent.origin == wtw_domainurl) {
 			zsafe = true;
-		} else if (zevent.origin == 'https://3dnet.walktheweb.com') {
-			zsafe = true;
-		} else if (zevent.origin == 'https://3dnet.walktheweb.network') {
-			zsafe = true;
-		} else if (zevent.origin == wtw_domainurl) {
-			zsafe = true;
+		} else {
+			zsafe = WTW.pluginsOnMessage(zevent);
 		}
 		if (zsafe) {
 			let zfunctionname = '';

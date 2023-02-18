@@ -413,7 +413,13 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 							communityid = zteleportwebid;
 							buildingid = '';
 							thingid = '';
-							var zconnectinggrids = WTW.unloadAllZones();
+							var zconnectinggrids = [];
+							if (zteleportwebid != zoldwebid || zteleportwebtype != zoldwebtype) {
+								/* new scene - clear current scene */
+								zconnectinggrids = WTW.unloadAllZones(zoldwebid, zoldwebtype);
+							} else {
+								/* same scene - let action zones handle the load / unload */
+							}
 							
 							/* hide avatar for reentry */
 							var zavatarparts = [];
@@ -439,6 +445,19 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 								'skyTurbidity':Number(zresponse.communityinfo.skyturbidity),
 								'skyMieDirectionalG':Number(zresponse.communityinfo.skymiedirectionalg),
 								'skyMieCoefficient':Number(zresponse.communityinfo.skymiecoefficient),
+								'waterBumpHeight':Number(zresponse.communityinfo.waterbumpheight),
+								'waterSubdivisions':Number(zresponse.communityinfo.watersubdivisions),
+								'windForce':Number(zresponse.communityinfo.windforce),
+								'windDirectionX':Number(zresponse.communityinfo.winddirectionx),
+								'windDirectionY':Number(zresponse.communityinfo.winddirectiony),
+								'windDirectionZ':Number(zresponse.communityinfo.winddirectionz),
+								'waterWaveHeight':Number(zresponse.communityinfo.waterwaveheight),
+								'waterWaveLength':Number(zresponse.communityinfo.waterwavelength),
+								'waterColorRefraction':zresponse.communityinfo.watercolorrefraction,
+								'waterColorReflection':zresponse.communityinfo.watercolorreflection,
+								'waterColorBlendFactor':Number(zresponse.communityinfo.watercolorblendfactor),
+								'waterColorBlendFactor2':Number(zresponse.communityinfo.watercolorblendfactor2),
+								'waterAlpha':Number(zresponse.communityinfo.wateralpha),
 								'groundPositionY':Number(zresponse.startlocation.position.groundpositiony),
 								'waterPositionY':Number(zresponse.startlocation.position.waterpositiony),
 								'startPositionX':Number(zresponse.startlocation.position.x),
@@ -458,7 +477,7 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 							/* start stand is a small box used to make sure you do not drop with gravity before the ground is rendered */
 							var zspawnpoint = WTW.getSpawnPoint(zresponse.spawnzones, zspawnactionzoneid);
 							var zstartstand = BABYLON.MeshBuilder.CreateBox('startstand', {}, scene);
-							zstartstand.scaling = new BABYLON.Vector3(1, 1, 1);
+							zstartstand.scaling = new BABYLON.Vector3(50, 1, 50);
 							zstartstand.position = new BABYLON.Vector3(zspawnpoint.position.x, zspawnpoint.position.y-.49, zspawnpoint.position.z);
 							zstartstand.checkCollisions = true;
 							zstartstand.material = new BABYLON.StandardMaterial('matstartstand', scene);
@@ -470,11 +489,50 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 							WTW.avatarShowFadeSwirlLong('myavatar-' + dGet('wtw_tinstanceid').value, zavatarparts);
 
 							WTW.extraGround.position.y = Number(WTW.init.groundPositionY);
-							if (WTW.init.groundPositionY == 0) {
-								WTW.water.position.y = -50;
-							} else {
-								WTW.water.position.y = Number(WTW.init.waterPositionY);
+							/* remove current water from the old scene */
+							if (WTW.water != null) {
+								WTW.water.material.dispose();
+								WTW.water.dispose();
+								WTW.water = null;
 							}
+							/* if ground is set below 0 (zero) y value, add water to the scene at 0 (zero) y value - otherwise no main water plane is loaded */
+							if ((WTW.init.groundPositionY < 0) || (WTW.adminView == 1 && communityid != '')) {
+								WTW.initLoadUpload(WTW.init.groundTextureID, WTW.init.groundTextureID, 7);
+								if (WTW.adminView == 1 && communityid != '' && WTW.init.groundPositionY == 0) {
+									WTW.init.waterPositionY = -50;
+								}
+								/* create water */
+								WTW.water = BABYLON.Mesh.CreateGround('communitywater', 5000, 5000, Math.round(WTW.init.waterSubdivisions), scene, false);
+								
+								WTW.waterMat = new BABYLON.WaterMaterial('communitywatermat', scene, new BABYLON.Vector2(512, 512));
+								
+								WTW.waterMat.bumpTexture = new BABYLON.Texture('/content/system/images/waterbump.png', scene);
+								WTW.waterMat.bumpHeight = WTW.init.waterBumpHeight;
+
+								WTW.waterMat.windForce = WTW.init.windForce;
+								WTW.waterMat.windDirection = new BABYLON.Vector2(WTW.init.windDirectionX, WTW.init.windDirectionZ);
+
+								WTW.waterMat.waveHeight = WTW.init.waterWaveHeight;
+								WTW.waterMat.waveLength = WTW.init.waterWaveLength;	
+
+								/* water color blended with the refraction (near) */
+								WTW.waterMat.waterColor = new BABYLON.Color3.FromHexString(WTW.init.waterColorRefraction); 
+								WTW.waterMat.colorBlendFactor = WTW.init.waterColorBlendFactor;
+								/* water color blended with the reflection (far) */
+								WTW.waterMat.waterColor2 = new BABYLON.Color3.FromHexString(WTW.init.waterColorReflection); 
+								WTW.waterMat.colorBlendFactor2 = WTW.init.waterColorBlendFactor2;
+
+								WTW.waterMat.alpha = WTW.init.waterAlpha;
+								WTW.waterMat.backFaceCulling = true;
+								WTW.water.isPickable = false;
+								WTW.water.checkCollisions = false;
+								WTW.water.material = WTW.waterMat;
+								WTW.water.position.y = WTW.init.waterPositionY;
+								WTW.waterMat.addToRenderList(WTW.sky);
+								WTW.waterMat.addToRenderList(WTW.extraGround);
+					//			WTW.water.physicsImpostor = new BABYLON.PhysicsImpostor(WTW.water, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.5 }, scene);
+							}
+
 							scene.gravity = new BABYLON.Vector3(0, -WTW.init.gravity, 0);
 							/* set new content rating */
 							WTW.setContentRating();
@@ -506,13 +564,15 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 							WTW.mainParentMold = zmainparent;
 							WTW.myAvatar.parent = zmainparent;
 							
-							/* remove connecting grids from old scene */
-							for (var i=0; i<zconnectinggrids.length;i++) {
-								if (zconnectinggrids[i] != null) {
-									if (zconnectinggrids[i].moldname != WTW.mainParent) {
-										WTW.addUnloadConnectingGridToQueue(zconnectinggrids[i].connectinggridind);
-										WTW.disposeClean(zconnectinggrids[i].moldname);
-										WTW.connectingGrids[zconnectinggrids[i].connectinggridind] = null;
+							/* remove connecting grids from old scene - if it is no longer the same scene */
+							if (zteleportwebid != zoldwebid || zteleportwebtype != zoldwebtype) {
+								for (var i=0; i<zconnectinggrids.length;i++) {
+									if (zconnectinggrids[i] != null) {
+										if (zconnectinggrids[i].moldname != WTW.mainParent) {
+											WTW.addUnloadConnectingGridToQueue(zconnectinggrids[i].connectinggridind);
+											WTW.disposeClean(zconnectinggrids[i].moldname);
+											WTW.connectingGrids[zconnectinggrids[i].connectinggridind] = null;
+										}
 									}
 								}
 							}
@@ -547,7 +607,7 @@ WTWJS.prototype.teleport = function(zactionzoneindex) {
 	}
 }
 
-WTWJS.prototype.unloadAllZones = function() {
+WTWJS.prototype.unloadAllZones = function(zoldwebid, zoldwebtype) {
 	/* Unload All Zones for teleport */
 	var zconnectinggrids = [];
 	try {
@@ -597,7 +657,7 @@ WTWJS.prototype.unloadAllZones = function() {
 				WTW.thingMolds[i] = null;
 			}
 		}
-		WTW.pluginsUnloadAllZones();
+		WTW.pluginsUnloadAllZones(zoldwebid, zoldwebtype);
 
 		for (var i = 0; i < WTW.actionZones.length; i++) {
 			if (WTW.actionZones[i] != null) {
@@ -612,6 +672,7 @@ WTWJS.prototype.unloadAllZones = function() {
 		WTW.buildings = [];
 		WTW.things = [];
 		WTW.automations = [];
+
 	} catch (ex) {
 		WTW.log('core-scripts-actionzones-wtw_actionzonefunctions.js-unloadAllZones=' + ex.message);
 	}
