@@ -83,6 +83,7 @@ WTW_AVATARS.prototype.setActionZoneFormFields = function(zactionzonetype) {
 				WTW.hide('wtw_copyaxletoactionzonediv');
 				WTW.hide('wtw_actionzoneadvancedoptslink');
 				WTW.hide('wtw_actionzonepartsdiv');
+				dGet('wtw_actionzoneadvancedoptslink').innerHTML = '-- Hide Advanced Options --';
 				WTW.show('wtw_actionzoneadvancedopts');
 				break;
 		}

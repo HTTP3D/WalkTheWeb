@@ -120,30 +120,39 @@ class wtw3dinternet {
 			/* $wtwplugins->addScriptFunction('hookname', 'function(parameters);'); */
 
 			$wtwplugins->addScriptFunction("openlocallogin", "wtw3dinternet.openLocalLogin(zitem, zwidth, zheight);");
+			$wtwplugins->addScriptFunction("hudloginlogin", "wtw3dinternet.hudLoginLogin(zlocal, zemail, zpassword, zremembercheck);");
+			$wtwplugins->addScriptFunction("hudlogincreate", "wtw3dinternet.hudLoginCreate(zlocal, zemail, zpassword, zpassword2);");
 			
-			$wtwplugins->addScriptFunction("myavataranimationsloaded", "wtw3dinternet.activateMultiplayer();");
-			$wtwplugins->addScriptFunction("getmyavatarlist", "wtw3dinternet.getMyAvatarList(zloaddefault, zeditmode);");
-			
-			$wtwplugins->addScriptFunction("savedavatarretrieved", "wtw3dinternet.savedAvatarRetrieved(zavatarname, zsendrefresh);");
+			$wtwplugins->addScriptFunction("addconnectinggrid", "wtw3dinternet.addConnectingGrid(zconnectinggridsurl, zchildwebtype, zchildwebid, zchildwebname, zfranchiseid, zserverfranchiseid, zwebalias, zparentname);");
+			$wtwplugins->addScriptFunction("addconnectinggridactionzones", "wtw3dinternet.addConnectingGridActionZones(zactionzonesurl, zchildwebtype, zchildwebid, zchildwebname, zfranchiseid, zserverfranchiseid, zwebalias, zparentname, zconnectinggridid, zconnectinggridind);");
 
-			$wtwplugins->addScriptFunction("avatarbeforecreate", "wtw3dinternet.showAvatarIDs(zavatarname);");
 			$wtwplugins->addScriptFunction("checkactionperzonetrigger", "wtw3dinternet.multiPersonInActionZone(zactionzone);");
 			$wtwplugins->addScriptFunction("checkactionzone", "wtw3dinternet.checkActionZone();");
-
 			$wtwplugins->addScriptFunction("enteractionzone", "wtw3dinternet.enterLoadZone(zmoldname, zmolddef);");
+			$wtwplugins->addScriptFunction("getactionzonesbywebid", "wtw3dinternet.getActionZonesByWebID(zactionzonesurl, zserver, zcommunityid, zbuildingid, zthingid, zparentname, zconnectinggridid, zconnectinggridind);");
 
 			$wtwplugins->addScriptFunction("exitactionzone", "wtw3dinternet.exitLoadZone(zmoldname, zmolddef);");
-
-			$wtwplugins->addScriptFunction("unloadallzones", "wtw3dinternet.unloadAllZones();");
+			$wtwplugins->addScriptFunction("unloadallzones", "wtw3dinternet.unloadAllZones(zoldwebid, zoldwebtype);");
 
 			$wtwplugins->addScriptFunction("loadusersettingsafterengine", "wtw3dinternet.loadUserSettingsAfterEngine();"); 
 
 			$wtwplugins->addScriptFunction("resetactivitytimer", "wtw3dinternet.resetActivityTimer();");
 			$wtwplugins->addScriptFunction("loadloginsettings", "wtw3dinternet.loadLoginSettings(zloaddefault);");
 
-			$wtwplugins->addScriptFunction("moveavatar", "wtw3dinternet.moveAvatar(zavatar, zmoveevents);");
+			$wtwplugins->addScriptFunction("getmyavatarlist", "wtw3dinternet.getMyAvatarList(zloaddefault, zeditmode);");
 			$wtwplugins->addScriptFunction("onmyavatarselect", "wtw3dinternet.onMyAvatarSelect(zglobaluseravatarid, zuseravatarid, zavatarid);");
+			$wtwplugins->addScriptFunction("getsavedavatar", "wtw3dinternet.getSavedAvatar(zglobaluseravatarid, zinstanceid, zavatarname, zsendrefresh);");
+			$wtwplugins->addScriptFunction("savedavatarretrieved", "wtw3dinternet.savedAvatarRetrieved(zavatarname, zsendrefresh);");
+			$wtwplugins->addScriptFunction("myavataranimationsloaded", "wtw3dinternet.activateMultiplayer();");
+			$wtwplugins->addScriptFunction("avatarbeforecreate", "wtw3dinternet.showAvatarIDs(zavatarname);");
+			$wtwplugins->addScriptFunction("showlistversioncheck", "wtw3dinternet.showListVersionCheck(zwebtype, zversioncheck);");
+			$wtwplugins->addScriptFunction("downloaduseravatarversionresponse", "wtw3dinternet.downloadUserAvatarVersionResponse(zobj, zglobaluseravatarid, zuseravatarid, zupdateuseravatarid, zwebid, zupdatewebid, zversionid, zversion, zoldversion, zwebtype);");
+			$wtwplugins->addScriptFunction("downloaduseravatarversion", "wtw3dinternet.downloadUserAvatarVersion(zobj, zglobaluseravatarid, zuseravatarid, zupdateuseravatarid, zwebid, zupdatewebid, zversionid, zversion, zoldversion, zwebtype);");
+			$wtwplugins->addScriptFunction("avatarloadcomplete", "wtw3dinternet.avatarLoadComplete(zavatarname);");
+			$wtwplugins->addScriptFunction("moveavatar", "wtw3dinternet.moveAvatar(zavatar, zmoveevents);");
+			$wtwplugins->addScriptFunction("deleteuseravatar", "wtw3dinternet.deleteUserAvatar(zglobaluseravatarid, zuseravatarid, zwidth, zheight);");
 			
+			$wtwplugins->addScriptFunction("opendashboardform", "wtw3dinternet.openDashboardForm(zshow);");
 			$wtwplugins->addScriptFunction("toggleadminsubmenu", "wtw3dinternet.toggleAdminSubMenu(zobj);");
 			$wtwplugins->addScriptFunction("closemenus", "wtw3dinternet.closeMenus(zmenuid);");
 			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadVoiceChat();");
@@ -157,7 +166,10 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("resethovers", "wtw3dinternet.resetHovers(zmoldname, zshape);");
 			$wtwplugins->addScriptFunction("keyup", "wtw3dinternet.keyUp(zevent);");
 
-			$wtwplugins->addScriptFunction("avatarloadcomplete", "wtw3dinternet.avatarLoadComplete(zavatarname);");
+			$wtwplugins->addScriptFunction("onmessage", "wtw3dinternet.onMessage(zevent);");
+			$wtwplugins->addScriptFunction("getmoldsbywebid", "wtw3dinternet.getMoldsByWebID(zmoldsurl, zserver, zcommunityid, zbuildingid, zthingid, zactionzoneid, zactionzoneind, zconnectinggridid, zconnectinggridind, zgraphiclevel);");
+
+			$wtwplugins->addScriptFunction("feedbacksubmit", "wtw3dinternet.feedbackSubmit(zrequest);");
 
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-3dinternet:functions-class_plugin.php.php-initHooks=".$e->getMessage());
