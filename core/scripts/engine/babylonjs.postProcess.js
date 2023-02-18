@@ -7,7 +7,7 @@
 		exports["babylonjs-post-process"] = factory(require("babylonjs"));
 	else
 		root["POSTPROCESSES"] = factory(root["BABYLON"]);
-})((typeof self !== "undefined" ? self : typeof global !== "undefined" ? global : this), function(__WEBPACK_EXTERNAL_MODULE_core_Misc_decorators__) {
+})((typeof self !== "undefined" ? self : typeof global !== "undefined" ? global : this), (__WEBPACK_EXTERNAL_MODULE_core_Misc_decorators__) => {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
@@ -27,6 +27,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "__await": () => (/* binding */ __await),
 /* harmony export */   "__awaiter": () => (/* binding */ __awaiter),
 /* harmony export */   "__classPrivateFieldGet": () => (/* binding */ __classPrivateFieldGet),
+/* harmony export */   "__classPrivateFieldIn": () => (/* binding */ __classPrivateFieldIn),
 /* harmony export */   "__classPrivateFieldSet": () => (/* binding */ __classPrivateFieldSet),
 /* harmony export */   "__createBinding": () => (/* binding */ __createBinding),
 /* harmony export */   "__decorate": () => (/* binding */ __decorate),
@@ -45,7 +46,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "__spreadArrays": () => (/* binding */ __spreadArrays),
 /* harmony export */   "__values": () => (/* binding */ __values)
 /* harmony export */ });
-/*! *****************************************************************************
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -130,7 +131,7 @@ function __generator(thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -154,7 +155,11 @@ function __generator(thisArg, body) {
 
 var __createBinding = Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -285,6 +290,11 @@ function __classPrivateFieldSet(receiver, state, value, kind, f) {
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 }
 
+function __classPrivateFieldIn(state, receiver) {
+    if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
+    return typeof state === "function" ? receiver === state : state.has(receiver);
+}
+
 
 /***/ }),
 
@@ -379,7 +389,7 @@ var AsciiArtFontTexture = /** @class */ (function (_super) {
     /**
      * Gets the max char width of a font.
      * @param font the font to use, use the W3C CSS notation
-     * @return the max char width
+     * @returns the max char width
      */
     AsciiArtFontTexture.prototype._getFontWidth = function (font) {
         var fontDraw = document.createElement("canvas");
@@ -392,7 +402,7 @@ var AsciiArtFontTexture = /** @class */ (function (_super) {
     /**
      * Gets the max char height of a font.
      * @param font the font to use, use the W3C CSS notation
-     * @return the max char height
+     * @returns the max char height
      */
     AsciiArtFontTexture.prototype._getFontHeight = function (font) {
         var fontDraw = document.createElement("canvas");
@@ -428,7 +438,7 @@ var AsciiArtFontTexture = /** @class */ (function (_super) {
     };
     /**
      * Clones the current AsciiArtTexture.
-     * @return the clone of the texture.
+     * @returns the clone of the texture.
      */
     AsciiArtFontTexture.prototype.clone = function () {
         return new AsciiArtFontTexture(this.name, this._font, this._text, this.getScene());
@@ -437,7 +447,7 @@ var AsciiArtFontTexture = /** @class */ (function (_super) {
      * Parses a json object representing the texture and returns an instance of it.
      * @param source the source JSON representation
      * @param scene the scene to create the texture for
-     * @return the parsed texture
+     * @returns the parsed texture
      */
     AsciiArtFontTexture.Parse = function (source, scene) {
         var texture = core_Misc_decorators__WEBPACK_IMPORTED_MODULE_1__.SerializationHelper.Parse(function () { return new AsciiArtFontTexture(source.name, source.font, source.text, scene); }, source, scene, null);
@@ -468,10 +478,7 @@ var AsciiArtPostProcess = /** @class */ (function (_super) {
      * @param options can either be the font name or an option object following the IAsciiArtPostProcessOptions format
      */
     function AsciiArtPostProcess(name, camera, options) {
-        var _this = _super.call(this, name, "asciiart", ["asciiArtFontInfos", "asciiArtOptions"], ["asciiArtFont"], {
-            width: camera.getEngine().getRenderWidth(),
-            height: camera.getEngine().getRenderHeight(),
-        }, camera, core_Misc_decorators__WEBPACK_IMPORTED_MODULE_1__.Texture.TRILINEAR_SAMPLINGMODE, camera.getEngine(), true) || this;
+        var _this = _super.call(this, name, "asciiart", ["asciiArtFontInfos", "asciiArtOptions"], ["asciiArtFont"], 1, camera, core_Misc_decorators__WEBPACK_IMPORTED_MODULE_1__.Texture.TRILINEAR_SAMPLINGMODE, undefined, true) || this;
         /**
          * This defines the amount you want to mix the "tile" or caracter space colored in the ascii art.
          * This number is defined between 0 and 1;
@@ -497,7 +504,8 @@ var AsciiArtPostProcess = /** @class */ (function (_super) {
                 _this.mixToNormal = options.mixToNormal || _this.mixToNormal;
             }
         }
-        _this._asciiArtFontTexture = new AsciiArtFontTexture(name, font, characterSet, camera.getScene());
+        var scene = (camera === null || camera === void 0 ? void 0 : camera.getScene()) || _this._scene;
+        _this._asciiArtFontTexture = new AsciiArtFontTexture(name, font, characterSet, scene);
         var textureSize = _this._asciiArtFontTexture.getSize();
         _this.onApply = function (effect) {
             effect.setTexture("asciiArtFont", _this._asciiArtFontTexture);
@@ -531,7 +539,7 @@ var name = "asciiartPixelShader";
 var shader = "varying vec2 vUV;uniform sampler2D textureSampler;uniform sampler2D asciiArtFont;uniform vec4 asciiArtFontInfos;uniform vec4 asciiArtOptions;float getLuminance(vec3 color)\n{return clamp(dot(color,vec3(0.2126,0.7152,0.0722)),0.,1.);}\n#define CUSTOM_FRAGMENT_DEFINITIONS\nvoid main(void) \n{float caracterSize=asciiArtFontInfos.x;float numChar=asciiArtFontInfos.y-1.0;float fontx=asciiArtFontInfos.z;float fonty=asciiArtFontInfos.w;float screenx=asciiArtOptions.x;float screeny=asciiArtOptions.y;float tileX=float(floor((gl_FragCoord.x)/caracterSize))*caracterSize/screenx;float tileY=float(floor((gl_FragCoord.y)/caracterSize))*caracterSize/screeny;vec2 tileUV=vec2(tileX,tileY);vec4 tileColor=texture2D(textureSampler,tileUV);vec4 baseColor=texture2D(textureSampler,vUV);float tileLuminance=getLuminance(tileColor.rgb);float offsetx=(float(floor(tileLuminance*numChar)))*caracterSize/fontx;float offsety=0.0;float x=float(mod(gl_FragCoord.x,caracterSize))/fontx;float y=float(mod(gl_FragCoord.y,caracterSize))/fonty;vec4 finalColor= texture2D(asciiArtFont,vec2(offsetx+x,offsety+(caracterSize/fonty-y)));finalColor.rgb*=tileColor.rgb;finalColor.a=1.0;finalColor= mix(finalColor,tileColor,asciiArtOptions.w);finalColor= mix(finalColor,baseColor,asciiArtOptions.z);gl_FragColor=finalColor;}";
 // Sideeffect
 core_Engines_shaderStore__WEBPACK_IMPORTED_MODULE_0__.ShaderStore.ShadersStore[name] = shader;
-/** @hidden */
+/** @internal */
 var asciiartPixelShader = { name: name, shader: shader };
 
 
@@ -645,7 +653,7 @@ var DigitalRainFontTexture = /** @class */ (function (_super) {
     /**
      * Gets the max char width of a font.
      * @param font the font to use, use the W3C CSS notation
-     * @return the max char width
+     * @returns the max char width
      */
     DigitalRainFontTexture.prototype._getFontWidth = function (font) {
         var fontDraw = document.createElement("canvas");
@@ -658,7 +666,7 @@ var DigitalRainFontTexture = /** @class */ (function (_super) {
     /**
      * Gets the max char height of a font.
      * @param font the font to use, use the W3C CSS notation
-     * @return the max char height
+     * @returns the max char height
      */
     DigitalRainFontTexture.prototype._getFontHeight = function (font) {
         var fontDraw = document.createElement("canvas");
@@ -694,7 +702,7 @@ var DigitalRainFontTexture = /** @class */ (function (_super) {
     };
     /**
      * Clones the current DigitalRainFontTexture.
-     * @return the clone of the texture.
+     * @returns the clone of the texture.
      */
     DigitalRainFontTexture.prototype.clone = function () {
         return new DigitalRainFontTexture(this.name, this._font, this._text, this.getScene());
@@ -703,7 +711,7 @@ var DigitalRainFontTexture = /** @class */ (function (_super) {
      * Parses a json object representing the texture and returns an instance of it.
      * @param source the source JSON representation
      * @param scene the scene to create the texture for
-     * @return the parsed texture
+     * @returns the parsed texture
      */
     DigitalRainFontTexture.Parse = function (source, scene) {
         var texture = core_Misc_decorators__WEBPACK_IMPORTED_MODULE_1__.SerializationHelper.Parse(function () { return new DigitalRainFontTexture(source.name, source.font, source.text, scene); }, source, scene, null);
@@ -734,10 +742,7 @@ var DigitalRainPostProcess = /** @class */ (function (_super) {
      * @param options can either be the font name or an option object following the IDigitalRainPostProcessOptions format
      */
     function DigitalRainPostProcess(name, camera, options) {
-        var _this = _super.call(this, name, "digitalrain", ["digitalRainFontInfos", "digitalRainOptions", "cosTimeZeroOne", "matrixSpeed"], ["digitalRainFont"], {
-            width: camera.getEngine().getRenderWidth(),
-            height: camera.getEngine().getRenderHeight(),
-        }, camera, core_Misc_decorators__WEBPACK_IMPORTED_MODULE_1__.Texture.TRILINEAR_SAMPLINGMODE, camera.getEngine(), true) || this;
+        var _this = _super.call(this, name, "digitalrain", ["digitalRainFontInfos", "digitalRainOptions", "cosTimeZeroOne", "matrixSpeed"], ["digitalRainFont"], 1.0, camera, core_Misc_decorators__WEBPACK_IMPORTED_MODULE_1__.Texture.TRILINEAR_SAMPLINGMODE, undefined, true) || this;
         /**
          * This defines the amount you want to mix the "tile" or caracter space colored in the digital rain.
          * This number is defined between 0 and 1;
@@ -754,7 +759,7 @@ var DigitalRainPostProcess = /** @class */ (function (_super) {
         _this.speed = 0.003;
         // Default values.
         var font = "15px Monospace";
-        var characterSet = "古池や蛙飛び込む水の音ふるいけやかわずとびこむみずのおと初しぐれ猿も小蓑をほしげ也はつしぐれさるもこみのをほしげなり江戸の雨何石呑んだ時鳥えどのあめなんごくのんだほととぎす";
+        var characterSet = "å¤æ± ã‚„è›™é£›ã³è¾¼ã‚€æ°´ã®éŸ³ãµã‚‹ã„ã‘ã‚„ã‹ã‚ãšã¨ã³ã“ã‚€ã¿ãšã®ãŠã¨åˆã—ãã‚ŒçŒ¿ã‚‚å°è“‘ã‚’ã»ã—ã’ä¹Ÿã¯ã¤ã—ãã‚Œã•ã‚‹ã‚‚ã“ã¿ã®ã‚’ã»ã—ã’ãªã‚Šæ±Ÿæˆ¸ã®é›¨ä½•çŸ³å‘‘ã‚“ã æ™‚é³¥ãˆã©ã®ã‚ã‚ãªã‚“ã”ãã®ã‚“ã ã»ã¨ã¨ãŽã™";
         // Use options.
         if (options) {
             if (typeof options === "string") {
@@ -766,7 +771,8 @@ var DigitalRainPostProcess = /** @class */ (function (_super) {
                 _this.mixToNormal = options.mixToNormal || _this.mixToNormal;
             }
         }
-        _this._digitalRainFontTexture = new DigitalRainFontTexture(name, font, characterSet, camera.getScene());
+        var scene = (camera === null || camera === void 0 ? void 0 : camera.getScene()) || null;
+        _this._digitalRainFontTexture = new DigitalRainFontTexture(name, font, characterSet, scene);
         var textureSize = _this._digitalRainFontTexture.getSize();
         var alpha = 0.0;
         var cosTimeZeroOne = 0.0;
@@ -807,7 +813,7 @@ var name = "digitalrainPixelShader";
 var shader = "varying vec2 vUV;uniform sampler2D textureSampler;uniform sampler2D digitalRainFont;uniform vec4 digitalRainFontInfos;uniform vec4 digitalRainOptions;uniform mat4 matrixSpeed;uniform float cosTimeZeroOne;float getLuminance(vec3 color)\n{return clamp(dot(color,vec3(0.2126,0.7152,0.0722)),0.,1.);}\n#define CUSTOM_FRAGMENT_DEFINITIONS\nvoid main(void) \n{float caracterSize=digitalRainFontInfos.x;float numChar=digitalRainFontInfos.y-1.0;float fontx=digitalRainFontInfos.z;float fonty=digitalRainFontInfos.w;float screenx=digitalRainOptions.x;float screeny=digitalRainOptions.y;float ratio=screeny/fonty;float columnx=float(floor((gl_FragCoord.x)/caracterSize));float tileX=float(floor((gl_FragCoord.x)/caracterSize))*caracterSize/screenx;float tileY=float(floor((gl_FragCoord.y)/caracterSize))*caracterSize/screeny;vec2 tileUV=vec2(tileX,tileY);vec4 tileColor=texture2D(textureSampler,tileUV);vec4 baseColor=texture2D(textureSampler,vUV);float tileLuminance=getLuminance(tileColor.rgb);int st=int(mod(columnx,4.0));float speed=cosTimeZeroOne*(sin(tileX*314.5)*0.5+0.6); \nfloat x=float(mod(gl_FragCoord.x,caracterSize))/fontx;float y=float(mod(speed+gl_FragCoord.y/screeny,1.0));y*=ratio;vec4 finalColor= texture2D(digitalRainFont,vec2(x,1.0-y));vec3 high=finalColor.rgb*(vec3(1.2,1.2,1.2)*pow(1.0-y,30.0));finalColor.rgb*=vec3(pow(tileLuminance,5.0),pow(tileLuminance,1.5),pow(tileLuminance,3.0));finalColor.rgb+=high;finalColor.rgb=clamp(finalColor.rgb,0.,1.);finalColor.a=1.0;finalColor= mix(finalColor,tileColor,digitalRainOptions.w);finalColor= mix(finalColor,baseColor,digitalRainOptions.z);gl_FragColor=finalColor;}";
 // Sideeffect
 core_Engines_shaderStore__WEBPACK_IMPORTED_MODULE_0__.ShaderStore.ShadersStore[name] = shader;
-/** @hidden */
+/** @internal */
 var digitalrainPixelShader = { name: name, shader: shader };
 
 

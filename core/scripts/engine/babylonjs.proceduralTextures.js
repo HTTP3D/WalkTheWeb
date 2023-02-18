@@ -7,7 +7,7 @@
 		exports["babylonjs-procedural-textures"] = factory(require("babylonjs"));
 	else
 		root["PROCEDURALTEXTURES"] = factory(root["BABYLON"]);
-})((typeof self !== "undefined" ? self : typeof global !== "undefined" ? global : this), function(__WEBPACK_EXTERNAL_MODULE_core_Misc_decorators__) {
+})((typeof self !== "undefined" ? self : typeof global !== "undefined" ? global : this), (__WEBPACK_EXTERNAL_MODULE_core_Misc_decorators__) => {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
@@ -27,6 +27,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "__await": () => (/* binding */ __await),
 /* harmony export */   "__awaiter": () => (/* binding */ __awaiter),
 /* harmony export */   "__classPrivateFieldGet": () => (/* binding */ __classPrivateFieldGet),
+/* harmony export */   "__classPrivateFieldIn": () => (/* binding */ __classPrivateFieldIn),
 /* harmony export */   "__classPrivateFieldSet": () => (/* binding */ __classPrivateFieldSet),
 /* harmony export */   "__createBinding": () => (/* binding */ __createBinding),
 /* harmony export */   "__decorate": () => (/* binding */ __decorate),
@@ -45,7 +46,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "__spreadArrays": () => (/* binding */ __spreadArrays),
 /* harmony export */   "__values": () => (/* binding */ __values)
 /* harmony export */ });
-/*! *****************************************************************************
+/******************************************************************************
 Copyright (c) Microsoft Corporation.
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -130,7 +131,7 @@ function __generator(thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -154,7 +155,11 @@ function __generator(thisArg, body) {
 
 var __createBinding = Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -285,6 +290,11 @@ function __classPrivateFieldSet(receiver, state, value, kind, f) {
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 }
 
+function __classPrivateFieldIn(state, receiver) {
+    if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
+    return typeof state === "function" ? receiver === state : state.has(receiver);
+}
+
 
 /***/ }),
 
@@ -306,7 +316,7 @@ var name = "brickProceduralTexturePixelShader";
 var shader = "precision highp float;varying vec2 vPosition;varying vec2 vUV;uniform float numberOfBricksHeight;uniform float numberOfBricksWidth;uniform vec3 brickColor;uniform vec3 jointColor;float rand(vec2 n) {return fract(cos(dot(n,vec2(12.9898,4.1414)))*43758.5453);}\nfloat noise(vec2 n) {const vec2 d=vec2(0.0,1.0);vec2 b=floor(n),f=smoothstep(vec2(0.0),vec2(1.0),fract(n));return mix(mix(rand(b),rand(b+d.yx),f.x),mix(rand(b+d.xy),rand(b+d.yy),f.x),f.y);}\nfloat fbm(vec2 n) {float total=0.0,amplitude=1.0;for (int i=0; i<4; i++) {total+=noise(n)*amplitude;n+=n;amplitude*=0.5;}\nreturn total;}\nfloat roundF(float number){return sign(number)*floor(abs(number)+0.5);}\n#define CUSTOM_FRAGMENT_DEFINITIONS\nvoid main(void)\n{float brickW=1.0/numberOfBricksWidth;float brickH=1.0/numberOfBricksHeight;float jointWPercentage=0.01;float jointHPercentage=0.05;vec3 color=brickColor;float yi=vUV.y/brickH;float nyi=roundF(yi);float xi=vUV.x/brickW;if (mod(floor(yi),2.0)==0.0){xi=xi-0.5;}\nfloat nxi=roundF(xi);vec2 brickvUV=vec2((xi-floor(xi))/brickH,(yi-floor(yi))/ brickW);if (yi<nyi+jointHPercentage && yi>nyi-jointHPercentage){color=mix(jointColor,vec3(0.37,0.25,0.25),(yi-nyi)/jointHPercentage+0.2);}\nelse if (xi<nxi+jointWPercentage && xi>nxi-jointWPercentage){color=mix(jointColor,vec3(0.44,0.44,0.44),(xi-nxi)/jointWPercentage+0.2);}\nelse {float brickColorSwitch=mod(floor(yi)+floor(xi),3.0);if (brickColorSwitch==0.0)\ncolor=mix(color,vec3(0.33,0.33,0.33),0.3);else if (brickColorSwitch==2.0)\ncolor=mix(color,vec3(0.11,0.11,0.11),0.3);}\ngl_FragColor=vec4(color,1.0);}";
 // Sideeffect
 core_Engines_shaderStore__WEBPACK_IMPORTED_MODULE_0__.ShaderStore.ShadersStore[name] = shader;
-/** @hidden */
+/** @internal */
 var brickProceduralTexturePixelShader = { name: name, shader: shader };
 
 
@@ -468,7 +478,7 @@ var name = "cloudProceduralTexturePixelShader";
 var shader = "precision highp float;varying vec2 vUV;uniform vec4 skyColor;uniform vec4 cloudColor;uniform float amplitude;uniform int numOctaves;float rand(vec2 n) {return fract(cos(dot(n,vec2(12.9898,4.1414)))*43758.5453);}\nfloat noise(vec2 n) {const vec2 d=vec2(0.0,1.0);vec2 b=floor(n),f=smoothstep(vec2(0.0),vec2(1.0),fract(n));return mix(mix(rand(b),rand(b+d.yx),f.x),mix(rand(b+d.xy),rand(b+d.yy),f.x),f.y);}\nfloat fbm(vec2 n) {float total=0.0,ampl=amplitude;\n#ifdef WEBGL2\nfor (int i=0; i<numOctaves; i++) {\n#else\nfor (int i=0; i<4; i++) {\n#endif\ntotal+=noise(n)*ampl;n+=n;ampl*=0.5;}\nreturn total;}\nvoid main() {vec2 p=vUV*12.0;vec4 c=mix(skyColor,cloudColor,fbm(p));gl_FragColor=c;}\n";
 // Sideeffect
 core_Engines_shaderStore__WEBPACK_IMPORTED_MODULE_0__.ShaderStore.ShadersStore[name] = shader;
-/** @hidden */
+/** @internal */
 var cloudProceduralTexturePixelShader = { name: name, shader: shader };
 
 
@@ -630,7 +640,7 @@ var name = "fireProceduralTexturePixelShader";
 var shader = "precision highp float;uniform float time;uniform vec3 c1;uniform vec3 c2;uniform vec3 c3;uniform vec3 c4;uniform vec3 c5;uniform vec3 c6;uniform vec2 speed;uniform float shift;uniform float alphaThreshold;varying vec2 vUV;float rand(vec2 n) {return fract(cos(dot(n,vec2(12.9898,4.1414)))*43758.5453);}\nfloat noise(vec2 n) {const vec2 d=vec2(0.0,1.0);vec2 b=floor(n),f=smoothstep(vec2(0.0),vec2(1.0),fract(n));return mix(mix(rand(b),rand(b+d.yx),f.x),mix(rand(b+d.xy),rand(b+d.yy),f.x),f.y);}\nfloat fbm(vec2 n) {float total=0.0,amplitude=1.0;for (int i=0; i<4; i++) {total+=noise(n)*amplitude;n+=n;amplitude*=0.5;}\nreturn total;}\nvoid main() {vec2 p=vUV*8.0;float q=fbm(p-time*0.1);vec2 r=vec2(fbm(p+q+time*speed.x-p.x-p.y),fbm(p+q-time*speed.y));vec3 c=mix(c1,c2,fbm(p+r))+mix(c3,c4,r.x)-mix(c5,c6,r.y);vec3 color=c*cos(shift*vUV.y);float luminance=dot(color.rgb,vec3(0.3,0.59,0.11));gl_FragColor=vec4(color,luminance*alphaThreshold+(1.0-alphaThreshold));}";
 // Sideeffect
 core_Engines_shaderStore__WEBPACK_IMPORTED_MODULE_0__.ShaderStore.ShadersStore[name] = shader;
-/** @hidden */
+/** @internal */
 var fireProceduralTexturePixelShader = { name: name, shader: shader };
 
 
@@ -854,7 +864,7 @@ var name = "grassProceduralTexturePixelShader";
 var shader = "precision highp float;varying vec2 vPosition;varying vec2 vUV;uniform vec3 herb1Color;uniform vec3 herb2Color;uniform vec3 herb3Color;uniform vec3 groundColor;float rand(vec2 n) {return fract(cos(dot(n,vec2(12.9898,4.1414)))*43758.5453);}\nfloat noise(vec2 n) {const vec2 d=vec2(0.0,1.0);vec2 b=floor(n),f=smoothstep(vec2(0.0),vec2(1.0),fract(n));return mix(mix(rand(b),rand(b+d.yx),f.x),mix(rand(b+d.xy),rand(b+d.yy),f.x),f.y);}\nfloat fbm(vec2 n) {float total=0.0,amplitude=1.0;for (int i=0; i<4; i++) {total+=noise(n)*amplitude;n+=n;amplitude*=0.5;}\nreturn total;}\n#define CUSTOM_FRAGMENT_DEFINITIONS\nvoid main(void) {\n#define CUSTOM_FRAGMENT_MAIN_BEGIN\nvec3 color=mix(groundColor,herb1Color,rand(gl_FragCoord.xy*4.0));color=mix(color,herb2Color,rand(gl_FragCoord.xy*8.0));color=mix(color,herb3Color,rand(gl_FragCoord.xy));color=mix(color,herb1Color,fbm(gl_FragCoord.xy*16.0));gl_FragColor=vec4(color,1.0);\n#define CUSTOM_FRAGMENT_MAIN_END\n}";
 // Sideeffect
 core_Engines_shaderStore__WEBPACK_IMPORTED_MODULE_0__.ShaderStore.ShadersStore[name] = shader;
-/** @hidden */
+/** @internal */
 var grassProceduralTexturePixelShader = { name: name, shader: shader };
 
 
@@ -1092,7 +1102,7 @@ var name = "marbleProceduralTexturePixelShader";
 var shader = "precision highp float;\nvarying vec2 vPosition;\nvarying vec2 vUV;\nuniform float numberOfTilesHeight;\nuniform float numberOfTilesWidth;\nuniform float amplitude;\nuniform vec3 marbleColor;\nuniform vec3 jointColor;\nconst vec3 tileSize=vec3(1.1,1.0,1.1);\nconst vec3 tilePct=vec3(0.98,1.0,0.98);\nfloat rand(vec2 n) {\nreturn fract(cos(dot(n,vec2(12.9898,4.1414)))*43758.5453);\n}\nfloat noise(vec2 n) {\nconst vec2 d=vec2(0.0,1.0);\nvec2 b=floor(n),f=smoothstep(vec2(0.0),vec2(1.0),fract(n));\nreturn mix(mix(rand(b),rand(b+d.yx),f.x),mix(rand(b+d.xy),rand(b+d.yy),f.x),f.y);\n}\nfloat turbulence(vec2 P)\n{\nfloat val=0.0;\nfloat freq=1.0;\nfor (int i=0; i<4; i++)\n{\nval+=abs(noise(P*freq)/freq);\nfreq*=2.07;\n}\nreturn val;\n}\nfloat roundF(float number){\nreturn sign(number)*floor(abs(number)+0.5);\n}\nvec3 marble_color(float x)\n{\nvec3 col;\nx=0.5*(x+1.);\nx=sqrt(x); \nx=sqrt(x);\nx=sqrt(x);\ncol=vec3(.2+.75*x); \ncol.b*=0.95; \nreturn col;\n}\nvoid main()\n{\nfloat brickW=1.0/numberOfTilesWidth;\nfloat brickH=1.0/numberOfTilesHeight;\nfloat jointWPercentage=0.01;\nfloat jointHPercentage=0.01;\nvec3 color=marbleColor;\nfloat yi=vUV.y/brickH;\nfloat nyi=roundF(yi);\nfloat xi=vUV.x/brickW;\nif (mod(floor(yi),2.0)==0.0){\nxi=xi-0.5;\n}\nfloat nxi=roundF(xi);\nvec2 brickvUV=vec2((xi-floor(xi))/brickH,(yi-floor(yi))/brickW);\nif (yi<nyi+jointHPercentage && yi>nyi-jointHPercentage){\ncolor=mix(jointColor,vec3(0.37,0.25,0.25),(yi-nyi)/jointHPercentage+0.2);\n}\nelse if (xi<nxi+jointWPercentage && xi>nxi-jointWPercentage){\ncolor=mix(jointColor,vec3(0.44,0.44,0.44),(xi-nxi)/jointWPercentage+0.2);\n}\nelse {\nfloat t=6.28*brickvUV.x/(tileSize.x+noise(vec2(vUV)*6.0));\nt+=amplitude*turbulence(brickvUV.xy);\nt=sin(t);\ncolor=marble_color(t);\n}\ngl_FragColor=vec4(color,0.0);\n}";
 // Sideeffect
 core_Engines_shaderStore__WEBPACK_IMPORTED_MODULE_0__.ShaderStore.ShadersStore[name] = shader;
-/** @hidden */
+/** @internal */
 var marbleProceduralTexturePixelShader = { name: name, shader: shader };
 
 
@@ -1254,7 +1264,7 @@ var name = "normalMapProceduralTexturePixelShader";
 var shader = "precision highp float;uniform sampler2D baseSampler;uniform float size;varying vec2 vUV;const vec3 LUMA_COEFFICIENT=vec3(0.2126,0.7152,0.0722);float lumaAtCoord(vec2 coord)\n{vec3 pixel=texture2D(baseSampler,coord).rgb;float luma=dot(pixel,LUMA_COEFFICIENT);return luma;}\nvoid main()\n{float lumaU0=lumaAtCoord(vUV+vec2(-1.0, 0.0)/size);float lumaU1=lumaAtCoord(vUV+vec2( 1.0, 0.0)/size);float lumaV0=lumaAtCoord(vUV+vec2( 0.0,-1.0)/size);float lumaV1=lumaAtCoord(vUV+vec2( 0.0, 1.0)/size);vec2 slope=(vec2(lumaU0-lumaU1,lumaV0-lumaV1)+1.0)*0.5;gl_FragColor=vec4(slope,1.0,1.0);}\n";
 // Sideeffect
 core_Engines_shaderStore__WEBPACK_IMPORTED_MODULE_0__.ShaderStore.ShadersStore[name] = shader;
-/** @hidden */
+/** @internal */
 var normalMapProceduralTexturePixelShader = { name: name, shader: shader };
 
 
@@ -1381,7 +1391,7 @@ var name = "perlinNoiseProceduralTexturePixelShader";
 var shader = "precision highp float;uniform float size;uniform float time;uniform float translationSpeed;varying vec2 vUV;float r(float n)\n{return fract(cos(n*89.42)*343.42);}\nvec2 r(vec2 n)\n{return vec2(r(n.x*23.62-300.0+n.y*34.35),r(n.x*45.13+256.0+n.y*38.89)); }\nfloat worley(vec2 n,float s)\n{float dis=1.0;for(int x=-1; x<=1; x++)\n{for(int y=-1; y<=1; y++)\n{vec2 p=floor(n/s)+vec2(x,y);float d=length(r(p)+vec2(x,y)-fract(n/s));if (dis>d)\ndis=d;}}\nreturn 1.0-dis;}\nvec3 hash33(vec3 p3)\n{p3=fract(p3*vec3(0.1031,0.11369,0.13787));p3+=dot(p3,p3.yxz+19.19);return -1.0+2.0*fract(vec3((p3.x+p3.y)*p3.z,(p3.x+p3.z)*p3.y,(p3.y+p3.z)*p3.x));}\nfloat perlinNoise(vec3 p)\n{vec3 pi=floor(p);vec3 pf=p-pi;vec3 w=pf*pf*(3.0-2.0*pf);return mix(\nmix(\nmix(\ndot(pf-vec3(0,0,0),hash33(pi+vec3(0,0,0))),\ndot(pf-vec3(1,0,0),hash33(pi+vec3(1,0,0))),w.x\n),mix(\ndot(pf-vec3(0,0,1),hash33(pi+vec3(0,0,1))),\ndot(pf-vec3(1,0,1),hash33(pi+vec3(1,0,1))),w.x\n),w.z\n),mix(\nmix(\ndot(pf-vec3(0,1,0),hash33(pi+vec3(0,1,0))),\ndot(pf-vec3(1,1,0),hash33(pi+vec3(1,1,0))),w.x\n),mix(\ndot(pf-vec3(0,1,1),hash33(pi+vec3(0,1,1))),\ndot(pf-vec3(1,1,1),hash33(pi+vec3(1,1,1))),w.x\n),w.z\n),w.y\n);}\n#define CUSTOM_FRAGMENT_DEFINITIONS\nvoid main(void)\n{vec2 uv=gl_FragCoord.xy+translationSpeed;float dis=(\n1.0+perlinNoise(vec3(uv/vec2(size,size),time*0.05)*8.0))\n* (1.0+(worley(uv,32.0)+ 0.5*worley(2.0*uv,32.0)+0.25*worley(4.0*uv,32.0))\n);gl_FragColor=vec4(vec3(dis/4.0),1.0);}\n";
 // Sideeffect
 core_Engines_shaderStore__WEBPACK_IMPORTED_MODULE_0__.ShaderStore.ShadersStore[name] = shader;
-/** @hidden */
+/** @internal */
 var perlinNoiseProceduralTexturePixelShader = { name: name, shader: shader };
 
 
@@ -1508,7 +1518,7 @@ var name = "roadProceduralTexturePixelShader";
 var shader = "precision highp float;varying vec2 vUV; \nuniform vec3 roadColor;float rand(vec2 n) {return fract(cos(dot(n,vec2(12.9898,4.1414)))*43758.5453);}\nfloat noise(vec2 n) {const vec2 d=vec2(0.0,1.0);vec2 b=floor(n),f=smoothstep(vec2(0.0),vec2(1.0),fract(n));return mix(mix(rand(b),rand(b+d.yx),f.x),mix(rand(b+d.xy),rand(b+d.yy),f.x),f.y);}\nfloat fbm(vec2 n) {float total=0.0,amplitude=1.0;for (int i=0; i<4; i++) {total+=noise(n)*amplitude;n+=n;amplitude*=0.5;}\nreturn total;}\n#define CUSTOM_FRAGMENT_DEFINITIONS\nvoid main(void) {\n#define CUSTOM_FRAGMENT_MAIN_BEGIN\nfloat ratioy=mod(gl_FragCoord.y*100.0 ,fbm(vUV*2.0));vec3 color=roadColor*ratioy;gl_FragColor=vec4(color,1.0);\n#define CUSTOM_FRAGMENT_MAIN_END\n}";
 // Sideeffect
 core_Engines_shaderStore__WEBPACK_IMPORTED_MODULE_0__.ShaderStore.ShadersStore[name] = shader;
-/** @hidden */
+/** @internal */
 var roadProceduralTexturePixelShader = { name: name, shader: shader };
 
 
@@ -1619,10 +1629,10 @@ __webpack_require__.r(__webpack_exports__);
 // Do not edit.
 
 var name = "starfieldProceduralTexturePixelShader";
-var shader = "precision highp float;\n#define volsteps 20\n#define iterations 15\nvarying vec2 vPosition;varying vec2 vUV;uniform float time;uniform float alpha;uniform float beta;uniform float zoom;uniform float formuparam;uniform float stepsize;uniform float tile;uniform float brightness;uniform float darkmatter;uniform float distfading;uniform float saturation;void main()\n{vec3 dir=vec3(vUV*zoom,1.);float localTime=time*0.0001;mat2 rot1=mat2(cos(alpha),sin(alpha),-sin(alpha),cos(alpha));mat2 rot2=mat2(cos(beta),sin(beta),-sin(beta),cos(beta));dir.xz*=rot1;dir.xy*=rot2;vec3 from=vec3(1.,.5,0.5);from+=vec3(-2.,localTime*2.,localTime);from.xz*=rot1;from.xy*=rot2;float s=0.1,fade=1.;vec3 v=vec3(0.);for (int r=0; r<volsteps; r++) {vec3 p=from+s*dir*.5;p=abs(vec3(tile)-mod(p,vec3(tile*2.))); \nfloat pa,a=pa=0.;for (int i=0; i<iterations; i++) {p=abs(p)/dot(p,p)-formuparam; \na+=abs(length(p)-pa); \npa=length(p);}\nfloat dm=max(0.,darkmatter-a*a*.001); \na*=a*a; \nif (r>6) fade*=1.-dm; \nv+=fade;v+=vec3(s,s*s,s*s*s*s)*a*brightness*fade; \nfade*=distfading; \ns+=stepsize;}\nv=mix(vec3(length(v)),v,saturation); \ngl_FragColor=vec4(v*.01,1.);}";
+var shader = "precision highp float;\n#define volsteps 20\n#define iterations 15\nvarying vec2 vPosition;varying vec2 vUV;uniform float time;uniform float alpha;uniform float beta;uniform float zoom;uniform float formuparam;uniform float stepsize;uniform float tile;uniform float brightness;uniform float darkmatter;uniform float distfading;uniform float saturation;void main()\n{vec3 dir=vec3(vUV*zoom,1.);float localTime=time*0.0001;mat2 rot1=mat2(cos(alpha),sin(alpha),-sin(alpha),cos(alpha));mat2 rot2=mat2(cos(beta),sin(beta),-sin(beta),cos(beta));dir.xz*=rot1;dir.xy*=rot2;vec3 from_=vec3(1.,.5,0.5);from_+=vec3(-2.,localTime*2.,localTime);from_.xz*=rot1;from_.xy*=rot2;float s=0.1,fade=1.;vec3 v=vec3(0.);for (int r=0; r<volsteps; r++) {vec3 p=from_+s*dir*.5;p=abs(vec3(tile)-mod(p,vec3(tile*2.))); \nfloat pa,a=pa=0.;for (int i=0; i<iterations; i++) {p=abs(p)/dot(p,p)-formuparam; \na+=abs(length(p)-pa); \npa=length(p);}\nfloat dm=max(0.,darkmatter-a*a*.001); \na*=a*a; \nif (r>6) fade*=1.-dm; \nv+=fade;v+=vec3(s,s*s,s*s*s*s)*a*brightness*fade; \nfade*=distfading; \ns+=stepsize;}\nv=mix(vec3(length(v)),v,saturation); \ngl_FragColor=vec4(v*.01,1.);}";
 // Sideeffect
 core_Engines_shaderStore__WEBPACK_IMPORTED_MODULE_0__.ShaderStore.ShadersStore[name] = shader;
-/** @hidden */
+/** @internal */
 var starfieldProceduralTexturePixelShader = { name: name, shader: shader };
 
 
@@ -1895,7 +1905,7 @@ var name = "woodProceduralTexturePixelShader";
 var shader = "precision highp float;varying vec2 vPosition;varying vec2 vUV;uniform float ampScale;uniform vec3 woodColor;float rand(vec2 n) {return fract(cos(dot(n,vec2(12.9898,4.1414)))*43758.5453);}\nfloat noise(vec2 n) {const vec2 d=vec2(0.0,1.0);vec2 b=floor(n),f=smoothstep(vec2(0.0),vec2(1.0),fract(n));return mix(mix(rand(b),rand(b+d.yx),f.x),mix(rand(b+d.xy),rand(b+d.yy),f.x),f.y);}\nfloat fbm(vec2 n) {float total=0.0,amplitude=1.0;for (int i=0; i<4; i++) {total+=noise(n)*amplitude;n+=n;amplitude*=0.5;}\nreturn total;}\n#define CUSTOM_FRAGMENT_DEFINITIONS\nvoid main(void) {\n#define CUSTOM_FRAGMENT_MAIN_BEGIN\nfloat ratioy=mod(vUV.x*ampScale,2.0+fbm(vUV*0.8));vec3 wood=woodColor*ratioy;gl_FragColor=vec4(wood,1.0);\n#define CUSTOM_FRAGMENT_MAIN_END\n}";
 // Sideeffect
 core_Engines_shaderStore__WEBPACK_IMPORTED_MODULE_0__.ShaderStore.ShadersStore[name] = shader;
-/** @hidden */
+/** @internal */
 var woodProceduralTexturePixelShader = { name: name, shader: shader };
 
 
