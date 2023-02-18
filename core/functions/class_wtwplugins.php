@@ -579,12 +579,54 @@ class wtwplugins {
 			$jsdata .= "			WTW.log('class_wtw-pluginsOpenLocalLogin=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
-			
+
+			$jsdata .= "	WTWJS.prototype.pluginsHudLoginLogin = function(zlocal, zemail, zpassword, zremembercheck) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('hudloginlogin');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsHudLoginLogin=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsHudLoginCreate = function(zlocal, zemail, zpassword, zpassword2) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('hudlogincreate');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsHudLoginCreate=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsOnMessage = function(zevent) {\r\n";
+			$jsdata .= "		var zsafe = false;\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->returnScriptFunction('onmessage', 'zsafe');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsOnMessage=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zsafe;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsShowListVersionCheck = function(zwebtype, zversioncheck) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('showlistversioncheck');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsShowListVersionCheck=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsMyAnimationsLoaded = function() {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= $this->getScriptFunction('myavataranimationsloaded');
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsMyAnimationsLoaded=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsGetSavedAvatar = function(zglobaluseravatarid, zinstanceid, zavatarname, zsendrefresh) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('getsavedavatar');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsGetSavedAvatar=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
@@ -596,6 +638,22 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsDownloadUserAvatarVersion = function(zobj, zglobaluseravatarid, zuseravatarid, zupdateuseravatarid, zwebid, zupdatewebid, zversionid, zversion, zoldversion, zwebtype) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('downloaduseravatarversion');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsDownloadUserAvatarVersion=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsDownloadUserAvatarVersionResponse = function(zobj, zglobaluseravatarid, zuseravatarid, zupdateuseravatarid, zwebid, zupdatewebid, zversionid, zversion, zoldversion, zwebtype) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('downloaduseravatarversionresponse');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsDownloadUserAvatarVersionResponse=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsGetMyAvatarList = function(zloaddefault, zeditmode) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->returnScriptFunction('getmyavatarlist','zloaddefault');
@@ -603,6 +661,56 @@ class wtwplugins {
 			$jsdata .= "			WTW.log('class_wtw-pluginsGetMyAvatarList=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "		return zloaddefault;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsAvatarBeforeCreate = function(zavatarname, zavatardef) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('avatarbeforecreate', 'zavatardef');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsAvatarBeforeCreate=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zavatardef;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsMoveAvatar = function(zavatar, zmoveevents) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('moveavatar');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsMoveAvatar=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsEnterAvatar = function(zavatarname) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('enteravatar');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsEnterAvatar=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsAvatarLoadComplete = function(zavatarname) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('avatarloadcomplete');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsAvatarLoadComplete=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsSetAvatarMovement = function(zavatar, zevent, zweight) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('setavatarmovement', 'zweight');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsSetAvatarMovement=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zweight;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsDeleteUserAvatar = function(zglobaluseravatarid, zuseravatarid, zwidth, zheight) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= $this->getScriptFunction('deleteuseravatar');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsDeleteUserAvatar=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
 			$jsdata .= "	WTWJS.prototype.pluginsCheckActionPerZoneTrigger = function(zactionzone) {\r\n";
@@ -655,21 +763,12 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsUnloadAllZones = function() {\r\n";
+			$jsdata .= "	WTWJS.prototype.pluginsUnloadAllZones = function(zoldwebid, zoldwebtype) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= $this->getScriptFunction('unloadallzones');
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsUnloadAllZones=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
-			$jsdata .= "	}\r\n";
-
-			$jsdata .= "	WTWJS.prototype.pluginsAvatarBeforeCreate = function(zavatarname, zavatardef) {\r\n";
-			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->returnScriptFunction('avatarbeforecreate', 'zavatardef');
-			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('class_wtw-pluginsAvatarBeforeCreate=' + ex.message);\r\n";
-			$jsdata .= "		}\r\n";
-			$jsdata .= "		return zavatardef;\r\n";
 			$jsdata .= "	}\r\n";
 
 			$jsdata .= "	WTWJS.prototype.pluginsOnClick = function(zpickedname) {\r\n";
@@ -752,45 +851,21 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
-			$jsdata .= "	WTWJS.prototype.pluginsMoveAvatar = function(zavatar, zmoveevents) {\r\n";
-			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->getScriptFunction('moveavatar');
-			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('class_wtw-pluginsMoveAvatar=' + ex.message);\r\n";
-			$jsdata .= "		}\r\n";
-			$jsdata .= "	}\r\n";
-
-			$jsdata .= "	WTWJS.prototype.pluginsEnterAvatar = function(zavatarname) {\r\n";
-			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->getScriptFunction('enteravatar');
-			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('class_wtw-pluginsEnterAvatar=' + ex.message);\r\n";
-			$jsdata .= "		}\r\n";
-			$jsdata .= "	}\r\n";
-
-			$jsdata .= "	WTWJS.prototype.pluginsAvatarLoadComplete = function(zavatarname) {\r\n";
-			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->getScriptFunction('avatarloadcomplete');
-			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('class_wtw-pluginsAvatarLoadComplete=' + ex.message);\r\n";
-			$jsdata .= "		}\r\n";
-			$jsdata .= "	}\r\n";
-
-			$jsdata .= "	WTWJS.prototype.pluginsSetAvatarMovement = function(zavatar, zevent, zweight) {\r\n";
-			$jsdata .= "		try {\r\n";
-			$jsdata .= 	$this->returnScriptFunction('setavatarmovement', 'zweight');
-			$jsdata .= "		} catch (ex) {\r\n";
-			$jsdata .= "			WTW.log('class_wtw-pluginsSetAvatarMovement=' + ex.message);\r\n";
-			$jsdata .= "		}\r\n";
-			$jsdata .= "		return zweight;\r\n";
-			$jsdata .= "	}\r\n";
-
 			$jsdata .= "	WTWJS.prototype.pluginsDisposeClean = function(zmoldname) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->getScriptFunction('disposeclean');
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsDisposeClean=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsAddConnectingGrid = function(zconnectinggridsurl, zchildwebtype, zchildwebid, zchildwebname, zfranchiseid, zserverfranchiseid, zwebalias, zparentname) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('addconnectinggrid','zconnectinggridsurl');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsAddConnectingGrid=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zconnectinggridsurl;\r\n";
 			$jsdata .= "	}\r\n";
 
 			$jsdata .= "	WTWJS.prototype.pluginsActionZones = function(zactionzonelist) {\r\n";
@@ -800,6 +875,24 @@ class wtwplugins {
 			$jsdata .= "			WTW.log('class_wtw-pluginsActionZones=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
 			$jsdata .= "		return zactionzonelist;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsAddConnectingGridActionZones = function(zactionzonesurl, zchildwebtype, zchildwebid, zchildwebname, zfranchiseid, zserverfranchiseid, zwebalias, zparentname, zconnectinggridid, zconnectinggridind) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('addconnectinggridactionzones','zactionzonesurl');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsAddConnectingGridActionZones=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zactionzonesurl;\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsGetActionZonesByWebID = function(zactionzonesurl, zserver, zcommunityid, zbuildingid, zthingid, zparentname, zconnectinggridid, zconnectinggridind) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('getactionzonesbywebid','zactionzonesurl');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsGetActionZonesByWebID=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zactionzonesurl;\r\n";
 			$jsdata .= "	}\r\n";
 
 			$jsdata .= "	WTWJS.prototype.pluginsAddActionZones = function(zactionzonetype, zactionzonename, zactionzoneind, zactionzonedef) {\r\n";
@@ -862,6 +955,15 @@ class wtwplugins {
 			$jsdata .= "		} catch (ex) {\r\n";
 			$jsdata .= "			WTW.log('class_wtw-pluginsOpenAddNewMold=' + ex.message);\r\n";
 			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
+			$jsdata .= "	WTWJS.prototype.pluginsGetMoldsByWebID = function(zmoldsurl, zserver, zcommunityid, zbuildingid, zthingid, zactionzoneid, zactionzoneind, zconnectinggridid, zconnectinggridind, zgraphiclevel) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->returnScriptFunction('getmoldsbywebid','zmoldsurl');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsGetMoldsByWebID=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "		return zmoldsurl;\r\n";
 			$jsdata .= "	}\r\n";
 
 			$jsdata .= "	WTWJS.prototype.pluginsLoadMoldForm = function(zwebtype, zshape, zmoldname) {\r\n";
@@ -997,6 +1099,14 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 
+			$jsdata .= "	WTWJS.prototype.pluginsOpenDashboardForm = function(zshow) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('opendashboardform');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsOpenDashboardForm=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 			$jsdata .= "	WTWJS.prototype.pluginsCloseMenus = function(zmenuid) {\r\n";
 			$jsdata .= "		try {\r\n";
 			$jsdata .= 	$this->getScriptFunction('closemenus');
@@ -1039,7 +1149,14 @@ class wtwplugins {
 			$jsdata .= "		}\r\n";
 			$jsdata .= "	}\r\n";
 			
-			//
+			$jsdata .= "	WTWJS.prototype.pluginsFeedbackSubmit = function(zrequest) {\r\n";
+			$jsdata .= "		try {\r\n";
+			$jsdata .= 	$this->getScriptFunction('feedbacksubmit');
+			$jsdata .= "		} catch (ex) {\r\n";
+			$jsdata .= "			WTW.log('class_wtw-pluginsFeedbackSubmit=' + ex.message);\r\n";
+			$jsdata .= "		}\r\n";
+			$jsdata .= "	}\r\n";
+
 
 			$jsdata .= "</script>"; 
 		} catch (Exception $e) {

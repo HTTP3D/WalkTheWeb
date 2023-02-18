@@ -53,17 +53,20 @@ class wtwadmin {
 			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_profile.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/hud/wtw_hud_login.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_objectdefinitions.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/earcut.js?x=".$zver."'></script>\r\n";
-			/* $zjsdata .= "<script src='/core/scripts/engine/oimo.js?x=".$zver."'></script>\r\n"; */
+			$zjsdata .= "<script src='/core/scripts/engine/ammo.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/recast.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/cannon.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/oimo.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/earcut.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/babylon.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.loaders.min.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.materials.min.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.postProcess.min.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/babylon.gui.min.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.proceduralTextures.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/babylonjs.materials.min.js?x=".$zver."'></script>\r\n";
+			$zjsdata .= "<script src='/core/scripts/engine/babylon.accessibility.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/pep.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/engine/loader.js?x=".$zver."'></script>\r\n";
+//			$zjsdata .= "<script src='/core/scripts/engine/loader.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/engine/meshwriter.min.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_input.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/admin/wtw_admininput.js?x=".$zver."'></script>\r\n";
