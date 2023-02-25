@@ -3,9 +3,9 @@
 /* permissions are required for access to some data */
 /* this connect file provides web aliases information */
 require_once('../core/functions/class_wtwconnect.php');
-require_once('../core/functions/class_wtwdownloads.php');
+require_once('../content/plugins/wtw-3dinternet/functions/class_downloads.php');
 global $wtwconnect;
-global $wtwdownloads;
+global $wtw_3dinternet_downloads;
 
 try {
 	echo $wtwconnect->addConnectHeader('*');
@@ -80,7 +80,7 @@ try {
 
 	switch ($zfunction) {
 		case "downloadqueue":
-			$zresponse = $wtwdownloads->addDownloadQueue($zwebid, $zwebtype);
+			$zresponse = $wtw_3dinternet_downloads->addDownloadQueue($zwebid, $zwebtype);
 			break;
 		case "syncwebsites":
 			$zapikeyid = '';
@@ -210,7 +210,7 @@ try {
 					$zhostuserid = $zuserid;
 				}
 				/* download community */
-				$zresults = $wtwdownloads->downloadWeb($zcommunityid, $zcommunityid, 'community', $zwtwusertoken, '', '', '', 0, 0, 0, 1, 1, 1, 0, 0, 0);
+				$zresults = $wtw_3dinternet_downloads->downloadWeb($zcommunityid, $zcommunityid, 'community', $zwtwusertoken, '', '', '', 0, 0, 0, 1, 1, 1, 0, 0, 0);
 				
 				$znewcommunityid = $zresults["newwebid"];
 
@@ -253,7 +253,7 @@ try {
 				}
 
 				/* download building */
-				$zresults = $wtwdownloads->downloadWeb($zbuildingid, $zbuildingid, 'building', $zwtwusertoken, $znewcommunityid, 'community', $znewcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);
+				$zresults = $wtw_3dinternet_downloads->downloadWeb($zbuildingid, $zbuildingid, 'building', $zwtwusertoken, $znewcommunityid, 'community', $znewcommunityid, $zbuildingpositionx, $zbuildingpositiony, $zbuildingpositionz, $zbuildingscalingx, $zbuildingscalingy, $zbuildingscalingz, $zbuildingrotationx, $zbuildingrotationy, $zbuildingrotationz);
 				
 				$znewbuildingid = $zresults["newwebid"];
 				

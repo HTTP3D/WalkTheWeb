@@ -147,6 +147,19 @@ try {
 				communities.skyturbidity,
 				communities.skymiedirectionalg,
 				communities.skymiecoefficient,
+				communities.waterbumpheight,
+				communities.watersubdivisions,
+				communities.windforce,
+				communities.winddirectionx,
+				communities.winddirectiony,
+				communities.winddirectionz,
+				communities.waterwaveheight,
+				communities.waterwavelength,
+				communities.watercolorrefraction,
+				communities.watercolorreflection,
+				communities.watercolorblendfactor,
+				communities.watercolorblendfactor2,
+				communities.wateralpha,
 				'' as thingauthorizationid
 			from (select * from ".wtw_tableprefix."communities 
 						where deleted=0 and communityid = '".$zcommunityid."') communities
@@ -227,6 +240,19 @@ try {
 				communities.skyturbidity,
 				communities.skymiedirectionalg,
 				communities.skymiecoefficient,
+				communities.waterbumpheight,
+				communities.watersubdivisions,
+				communities.windforce,
+				communities.winddirectionx,
+				communities.winddirectiony,
+				communities.winddirectionz,
+				communities.waterwaveheight,
+				communities.waterwavelength,
+				communities.watercolorrefraction,
+				communities.watercolorreflection,
+				communities.watercolorblendfactor,
+				communities.watercolorblendfactor2,
+				communities.wateralpha,
 				'' as thingauthorizationid,
 				'' as userauthorizationid
 			from (select * from ".wtw_tableprefix."communities 
@@ -286,6 +312,19 @@ try {
 				10 as skyturbidity,
 				.8 as skymiedirectionalg,
 				.005 as skymiecoefficient,
+				'0.60' as waterbumpheight,
+				'2.00' as watersubdivisions,
+				'-10.00' as windforce,
+				'1.00' as winddirectionx,
+				'0.00' as winddirectiony,
+				'1.00' as winddirectionz,
+				'0.20' as waterwaveheight,
+				'0.02' as waterwavelength,
+				'#23749c' as watercolorrefraction,
+				'#52bcf1' as watercolorreflection,
+				'0.20' as watercolorblendfactor,
+				'0.20' as watercolorblendfactor2,
+				'0.90' as wateralpha,
 				'' as thingauthorizationid
 			from (select * from ".wtw_tableprefix."buildings 
 						where buildings.deleted=0 
@@ -345,6 +384,19 @@ try {
 				10 as skyturbidity,
 				.8 as skymiedirectionalg,
 				.005 as skymiecoefficient,
+				'0.60' as waterbumpheight,
+				'2.00' as watersubdivisions,
+				'-10.00' as windforce,
+				'1.00' as winddirectionx,
+				'0.00' as winddirectiony,
+				'1.00' as winddirectionz,
+				'0.20' as waterwaveheight,
+				'0.02' as waterwavelength,
+				'#23749c' as watercolorrefraction,
+				'#52bcf1' as watercolorreflection,
+				'0.20' as watercolorblendfactor,
+				'0.20' as watercolorblendfactor2,
+				'0.90' as wateralpha,
 				'' as thingauthorizationid
 			from (select * from ".wtw_tableprefix."things 
 						where things.deleted=0 
@@ -474,7 +526,20 @@ try {
 			'skyrayleigh' => $zrow["skyrayleigh"],
 			'skyturbidity' => $zrow["skyturbidity"],
 			'skymiedirectionalg' => $zrow["skymiedirectionalg"],
-			'skymiecoefficient' => $zrow["skymiecoefficient"]
+			'skymiecoefficient' => $zrow["skymiecoefficient"],
+			'waterbumpheight' => $zrow["waterbumpheight"],
+			'watersubdivisions' => $zrow["watersubdivisions"],
+			'windforce' => $zrow["windforce"],
+			'winddirectionx' => $zrow["winddirectionx"],
+			'winddirectiony' => $zrow["winddirectiony"],
+			'winddirectionz' => $zrow["winddirectionz"],
+			'waterwaveheight' => $zrow["waterwaveheight"],
+			'waterwavelength' => $zrow["waterwavelength"],
+			'watercolorrefraction' => $zrow["watercolorrefraction"],
+			'watercolorreflection' => $zrow["watercolorreflection"],
+			'watercolorblendfactor' => $zrow["watercolorblendfactor"],
+			'watercolorblendfactor2' => $zrow["watercolorblendfactor2"],
+			'wateralpha' => $zrow["wateralpha"]
 		);	
 		$zposition = array(
 			'x' => $zrow["positionx"],
