@@ -164,12 +164,6 @@ try {
 		case "deleteavatarfile":
 			$zresponse = $wtwavatars->deleteAvatarFile($zfilename, $zobjectfolder);
 			break;
-		case "saveavatartemplate":
-			$zresponse = $wtwavatars->saveAvatarTemplate($zavatarid, $ztemplatename, $zdescription, $ztags, $zversion, $zversiondesc);
-			break;
-		case "shareavatartemplate":
-			$zresponse = $wtwavatars->shareAvatarTemplate($zavatarid, $zsharehash);
-			break;
 		case "setuseravatarglobalhash":
 			$zresponse = $wtwavatars->setUserAvatarGlobalHash($zuseravatarid);
 			break;

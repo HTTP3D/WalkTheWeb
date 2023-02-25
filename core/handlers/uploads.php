@@ -80,10 +80,7 @@ try {
 			$wtwuploads->deleteWebDomain($zwebdomainid);
 			break;
 		case "savewebalias":
-			$zfranchiseid = $wtwuploads->saveWebAlias($zwebaliasid, $zforcehttps, $zdomainname, $zcommunitypublishname, $zbuildingpublishname, $zthingpublishname, $zcommunityid, $zbuildingid, $zthingid, $zsitename, $zsitedescription, $zsiteiconid, $zfranchise, $zinstanceid);
-			$zresponse = array(
-				'franchiseid'=> $zfranchiseid
-			);
+			$zresponse = $wtwuploads->saveWebAlias($zwebaliasid, $zforcehttps, $zdomainname, $zcommunitypublishname, $zbuildingpublishname, $zthingpublishname, $zcommunityid, $zbuildingid, $zthingid, $zsitename, $zsitedescription, $zsiteiconid, $zfranchise, $zinstanceid);
 			break;
 		case "deletewebalias":
 			$wtwuploads->deleteWebAlias($zwebaliasid);

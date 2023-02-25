@@ -1,6 +1,6 @@
 <?php
 class wtwcommunitymolds {
-	/* $wtwcommunitymolds class for admin database functions for 3d community molds */
+	/* wtwcommunitymolds class for admin database functions for 3d community molds */
 	protected static $_instance = null;
 	
 	public static function instance() {

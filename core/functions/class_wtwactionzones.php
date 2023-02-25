@@ -1,6 +1,6 @@
 <?php
 class wtwactionzones {
-	/* $wtwactionzones class for admin database functions for action zones */
+	/* wtwactionzones class for admin database functions for action zones */
 	protected static $_instance = null;
 	
 	public static function instance() {

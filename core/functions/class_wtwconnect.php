@@ -1,6 +1,6 @@
 <?php
 class wtwconnect {
-	/* $wtwconnect class for database functions tied to the /connect folder files */
+	/* wtwconnect class for database functions tied to the /connect folder files */
 	/* these /connect files are designed to extend data to other servers - like having your 3D Building in their 3D Community Scene */
 	protected static $_instance = null;
 	

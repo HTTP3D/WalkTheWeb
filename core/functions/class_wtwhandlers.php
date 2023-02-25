@@ -1,6 +1,6 @@
 <?php
 class wtwhandlers {
-	/* $wtwhandlers class for database functions tied to the /core/handlers folder files */
+	/* wtwhandlers class for database functions tied to the /core/handlers folder files */
 	protected static $_instance = null;
 	
 	public static function instance() {

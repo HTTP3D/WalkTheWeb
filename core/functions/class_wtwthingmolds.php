@@ -1,6 +1,6 @@
 <?php
 class wtwthingmolds {
-	/* $wtwthingmolds class for admin database functions for 3d thing molds */
+	/* wtwthingmolds class for admin database functions for 3d thing molds */
 	protected static $_instance = null;
 	
 	public static function instance() {

@@ -1,6 +1,6 @@
 <?php
 class wtwpluginloader {
-	/* $wtwpluginloader class for WalkTheWeb functions for loading the various 3d plugins */
+	/* wtwpluginloader class for WalkTheWeb functions for loading the various 3d plugins */
 	/* this is used by the engine to determine if a plugin is found, active, and to implement plugin code as necessary */
 	/* if you are creating a plugin, use the /core/functions/class_plugins.php for functions and global values */
 	protected static $_instance = null;

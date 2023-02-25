@@ -20,8 +20,6 @@ try {
 	$zversiondesc = $wtwhandlers->decode64($wtwhandlers->getPost('versiondesc',''));
 	$zcommunityname = $wtwhandlers->decode64($wtwhandlers->getPost('communityname',''));
 	$zcommunitydescription = $wtwhandlers->decode64($wtwhandlers->getPost('communitydescription',''));
-	$zdescription = $wtwhandlers->decode64($wtwhandlers->getPost('description',''));
-	$ztags = $wtwhandlers->decode64($wtwhandlers->getPost('tags',''));
 	$zanalyticsid = $wtwhandlers->getPost('analyticsid','');
 	$zspawnactionzoneid = $wtwhandlers->getPost('spawnactionzoneid','');
 	$zgroundpositiony = $wtwhandlers->getPost('groundpositiony','');
@@ -70,7 +68,6 @@ try {
 	$zbuildingrotationx = $wtwhandlers->getPost('buildingrotationx','0');
 	$zbuildingrotationy = $wtwhandlers->getPost('buildingrotationy','0');
 	$zbuildingrotationz = $wtwhandlers->getPost('buildingrotationz','0');
-	$zsharehash = $wtwhandlers->getPost('sharehash','');
 	
 	/* select the function called */
 	$zresponse = array();
@@ -101,12 +98,6 @@ try {
 			break;
 		case "saveextendedground":
 			$wtwcommunities->saveCommunityGround($zcommunityid, $zgroundtextureid);
-			break;
-		case "savecommunitytemplate":
-			$zresponse = $wtwcommunities->saveCommunityTemplate($zcommunityid, $zcommunityname, $zdescription, $ztags, $zversion, $zversiondesc);
-			break;
-		case "sharecommunitytemplate":
-			$zresponse = $wtwcommunities->shareCommunityTemplate($zcommunityid, $zsharehash);
 			break;
 	}
 

@@ -1,6 +1,6 @@
 <?php 
 class wtwtables {
-	/* $wtwtables class for defining and updating the core WalkTheWeb Tables, data upgrades, and initializing data */
+	/* wtwtables class for defining and updating the core WalkTheWeb Tables, data upgrades, and initializing data */
 	protected static $_instance = null;
 	
 	public static function instance() {

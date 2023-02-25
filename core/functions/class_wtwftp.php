@@ -1,6 +1,6 @@
 <?php
 class wtwftp {
-	/* $wtwftp class for admin database functions for api related functionality */
+	/* wtwftp class for admin database functions for api related functionality */
 	protected static $_instance = null;
 	
 	public static function instance() {

@@ -1,6 +1,6 @@
 <?php
 class wtwadminmenu {
-	/* $wtwadminmenu class for the menu functions for WalkTheWeb Websites when browsed from admin.php */
+	/* wtwadminmenu class for the menu functions for WalkTheWeb Websites when browsed from admin.php */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -62,7 +62,6 @@ class wtwadminmenu {
 				$this->addAdminMenuItem('wtw_adminmedia', $this->__('Media Library'), -95, 'wtw_medialibrary', 0, '', '/content/system/images/menumedia.png', $updateroles, "WTW.toggleAdminSubMenu(this);");
 				$this->addAdminMenuItem('wtw_adminmediaobjects', $this->__('3D Models'), -95, 'wtw_medialibrary', 1, 'wtw_viewobjects', '', $updateroles, "dGet('wtw_modelfilter').value='';dGet('wtw_tgroupuploadobjectid').value='';dGet('wtw_tgroupdiv').value='';WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);");
 				$this->addAdminMenuItem('wtw_adminmediafiles', $this->__('Files and Textures'), -95, 'wtw_medialibrary', 2, 'wtw_viewfiles', '', $updateroles, "WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(2);");
-				$this->addAdminMenuItem('wtw_adminmediawtwdownloads', $this->__('WalkTheWeb Downloads'), -95, 'wtw_medialibrary', 3, 'wtw_viewwtwdownloads', '', $updateroles, "WTW.openFullPageForm('importpage','communities');");
 
 				$this->addAdminMenuItem('wtw_admincommunities', $this->__('3D Communities'), -90, 'wtw_communities', 0, '', '/content/system/images/menucommunities.png', $updateroles, "WTW.toggleAdminMenuLevel('communities');");
 				$this->addAdminMenuItem('wtw_adminselectcommunity', $this->__('Select 3D Community'), -90, 'wtw_communities', 1, 'wtw_selectcommunity', '', $updateroles, "WTW.adminMenuItemSelected(this);");
@@ -702,15 +701,7 @@ class wtwadminmenu {
 			$zmenu .= "					<div class='wtw-menuheader'>".$this->__('Add 3D Thing')."</div>\r\n";
 			$zmenu .= "					<a href='https://www.walktheweb.com/wiki/add-3d-things-to-3d-buildings-or-3d-communities/' title='Help' alt='Help' class='wtw-helplink' target='_blank'>?</a>\r\n";
 			$zmenu .= "					<div id='wtw_loadingthingbuttonlist' class='wtw-loadingnoticecentered'>".$this->__('Loading')."</div>\r\n";
-			$zmenu .= "					<div class='wtw-localbuttonleftpad'></div><div id='wtw_thingbuttonlocal' class='wtw-localbuttonselected wtw-leftradius' onclick=\"wtw3dinternet.showFranchise(this, 'thing');\">".$this->__('Local')."</div><div class='wtw-localbuttonmiddlepad'> or </div><div id='wtw_thingbuttoninternet' class='wtw-localbutton wtw-rightradius' onclick=\"wtw3dinternet.showFranchise(this, 'thing');\">".$this->__('3D Internet')."</div><div class='wtw-localbuttonrightpad'></div>\r\n";
-			$zmenu .= "					<div class='wtw-clear'></div>\r\n";
-			$zmenu .= "					<div id='wtw_thinginternetdiv' class='wtw-hide'>\r\n";
-			$zmenu .= "						<h4 class='wtw-marginbottom'>".$this->__('Domain Name')."</h4>\r\n";
-			$zmenu .= "						<div class='wtw-example'>(".$this->__('Example').": 3d.walktheweb.com)</div><br />\r\n";
-			$zmenu .= "						<input type='text' id='wtw_franchisethingsearch' maxlength='255' style='width:260px;' onclick=\"WTW.checkKey(this, 'webname', 1, 0);\" onkeyup=\"WTW.checkKey(this, 'webname', 1, 0);\" onblur=\"WTW.checkKey(this, 'webname', 1, 1);\" /><br /><br />\r\n";
-			$zmenu .= "						<div id='wtw_bsearchthingfranchises' class='wtw-greenbuttonbig' onclick=\"wtw3dinternet.getFranchiseList('thing');\">".$this->__('Search Franchises')."</div><br /><br />\r\n";
-			$zmenu .= "					</div>\r\n";
-			$zmenu .= "					<div class='wtw-clear'></div>\r\n";			
+			$zmenu .= 					$this->getAdminMenuDivs('add3dthing');
 			$zmenu .= "					<div id='wtw_thingbuttonlist'></div>\r\n";
 			$zmenu .= "					<br />\r\n";
 			$zmenu .= "					<div id='wtw_cancel13' class='wtw-yellowbutton' onclick='WTW.adminMenuItemSelected(this);'>".$this->__('Cancel')."</div>\r\n";
@@ -722,7 +713,7 @@ class wtwadminmenu {
 			$zmenu .= 						$this->getAdminConnectingGridMenu();
 			$zmenu .= "					<br />\r\n";
 			$zmenu .= "					<div id='wtw_beditconnectinggrid' class='wtw-greenbuttonbig' onclick='WTW.submitConnectingGridsForm(1);'>".$this->__('Save Location')."</div>\r\n";
-			$zmenu .= "					<div id='wtw_bdelconnectinggrid' class='wtw-redbutton' onclick=\"WTW.openConfirmation('3');\">".$this->__('Delete 3D Building')."</div>\r\n";
+			$zmenu .= "					<div id='wtw_bdelconnectinggrid' class='wtw-redbutton' onclick=\"WTW.openConfirmation('Delete Building from this Community');\">".$this->__('Delete 3D Building')."</div>\r\n";
 			$zmenu .= "					<div id='wtw_cancel14' class='wtw-yellowbutton' onclick='WTW.adminMenuItemSelected(this);'>".$this->__('Cancel')."</div>\r\n";
 			$zmenu .= "					<br /><br />\r\n";
 			$zmenu .= "				</div>\r\n";
@@ -800,15 +791,7 @@ class wtwadminmenu {
 			$zmenu .= "					<div id='wtw_bback27' alt='Back' title='Back' class='wtw-backbutton' onclick='WTW.adminMenuItemSelected(this);'>&lt;&lt;</div>\r\n";
 			$zmenu .= "					<div class='wtw-menuheader'>".$this->__('Add 3D Building')."</div>\r\n";
 			$zmenu .= "					<div id='wtw_loadingbuildingbuttonlist' class='wtw-loadingnoticecentered'>".$this->__('Loading')."</div>\r\n";
-			$zmenu .= "					<div class='wtw-localbuttonleftpad'></div><div id='wtw_buildingbuttonlocal' class='wtw-localbuttonselected wtw-leftradius' onclick=\"wtw3dinternet.showFranchise(this, 'building');\">".$this->__('Local')."</div><div class='wtw-localbuttonmiddlepad'> or </div><div id='wtw_buildingbuttoninternet' class='wtw-localbutton wtw-rightradius' onclick=\"wtw3dinternet.showFranchise(this, 'building');\">".$this->__('3D Internet')."</div><div class='wtw-localbuttonrightpad'></div>\r\n";
-			$zmenu .= "					<div class='wtw-clear'></div>\r\n";
-			$zmenu .= "					<div id='wtw_buildinginternetdiv' class='wtw-hide'>\r\n";
-			$zmenu .= "						<h4 class='wtw-marginbottom'>".$this->__('Domain Name')."</h4>\r\n";
-			$zmenu .= "						<div class='wtw-example'>(".$this->__('Example').": 3d.walktheweb.com)</div><br />\r\n";
-			$zmenu .= "						<input type='text' id='wtw_franchisebuildingsearch' maxlength='255' style='width:260px;' onclick=\"WTW.checkKey(this, 'webname', 1, 0);\" onkeyup=\"WTW.checkKey(this, 'webname', 1, 0);\" onblur=\"WTW.checkKey(this, 'webname', 1, 1);\" /><br /><br />\r\n";
-			$zmenu .= "						<div id='wtw_bsearchbuildingfranchises' class='wtw-greenbuttonbig' onclick=\"wtw3dinternet.getFranchiseList('building');\">".$this->__('Search Franchises')."</div><br /><br />\r\n";
-			$zmenu .= "					</div>\r\n";
-			$zmenu .= "					<div class='wtw-clear'></div>\r\n";
+			$zmenu .= 					$this->getAdminMenuDivs('add3dbuilding');
 			$zmenu .= "					<div id='wtw_buildingbuttonlist'></div>\r\n";
 			$zmenu .= "					<br />\r\n";
 			$zmenu .= "					<div id='wtw_cancel27' class='wtw-yellowbutton' onclick='WTW.adminMenuItemSelected(this);'>".$this->__('Cancel')."</div>\r\n";

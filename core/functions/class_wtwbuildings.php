@@ -1,6 +1,6 @@
 <?php
 class wtwbuildings {
-	/* $wtwbuildings class for admin database functions for 3d buildings */
+	/* wtwbuildings class for admin database functions for 3d buildings */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -1646,131 +1646,7 @@ class wtwbuildings {
 		}
 		return $zsuccess;
 	}
-			
-	public function saveBuildingTemplate($zbuildingid, $ztemplatename, $zdescription, $ztags, $zversion, $zversiondesc) {
-		/* save building as a template to the media library */
-		global $wtwhandlers;
-		$zresponse = array(
-			'success'=>'',
-			'serror'=>'',
-			'userid'=>'',
-			'sharehash'=>''
-		);
-		try {
-			if ($wtwhandlers->checkAdminAccess("", $zbuildingid, "")) {
-				$zuserid = "";
-				$zfoundbuildingid = "";
-				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
-					$zuserid = $_SESSION["wtw_userid"];
-				}
-				$ztemplatename = $wtwhandlers->escapeHTML($ztemplatename);
-				$zdescription = $wtwhandlers->escapeHTML($zdescription);
-				$ztags = $wtwhandlers->escapeHTML($ztags);
-				$zversiondesc = $wtwhandlers->escapeHTML($zversiondesc);
-				$zsharehash = $wtwhandlers->getRandomString(16,1);
-				$zresponse["sharehash"] = $zsharehash;
-				$zversion1 = 1;
-				$zversion2 = 0;
-				$zversion3 = 0;
 
-				if (strpos($zversion, '.') !== false) {
-					try {
-						list($zversion1, $zversion2, $zversion3) = explode('.', $zversion);
-					} catch (Exception $e) {
-						$zversion1 = 1;
-						$zversion2 = 0;
-						$zversion3 = 0;
-					}
-				}
-				$zversionorder = (1000000*$zversion1) + (1000*$zversion2) + $zversion3;
-				
-				$zresults = $wtwhandlers->query("
-					select buildingid 
-					from ".wtw_tableprefix."buildings 
-					where buildingid='".$zbuildingid."' limit 1;");
-				foreach ($zresults as $zrow) {
-					$zfoundbuildingid = $zrow["buildingid"];
-				}
-				if ($wtwhandlers->hasValue($zfoundbuildingid)) {
-					$wtwhandlers->query("
-						update ".wtw_tableprefix."buildings
-						set templatename='".$ztemplatename."',
-						    tags='".$ztags."',
-							description='".$zdescription."',
-							sharehash='".$zsharehash."',
-							version='".$zversion."',
-							versionorder=".$zversionorder.",
-							versiondesc='".$zversiondesc."',
-							shareuserid='".$zuserid."',
-							sharetemplatedate=now(),
-							updatedate=now(),
-							updateuserid='".$zuserid."'
-						where buildingid='".$zbuildingid."'
-						limit 1;");
-				}
-				
-				/* allow child items to be downloaded with 3D Building */
-				$zresults = $wtwhandlers->query("
-					select * 
-					from ".wtw_tableprefix."connectinggrids 
-					where parentwebid='".$zbuildingid."'
-						and deleted=0;");
-				foreach ($zresults as $zrow) {
-					$zwebtypes = "";
-					switch ($zrow["childwebtype"]) {
-						case "community":
-							$zwebtypes = "communities";
-							break;
-						case "building":
-							$zwebtypes = "buildings";
-							break;
-						case "thing":
-							$zwebtypes = "things";
-							break;
-					}
-					$wtwhandlers->query("
-						update ".wtw_tableprefix.$zwebtypes."
-						set sharehash='".$zsharehash."',
-							shareuserid='".$zuserid."',
-							sharetemplatedate=now(),
-							updatedate=now(),
-							updateuserid='".$zuserid."'
-						where ".$zrow["childwebtype"]."id='".$zrow["childwebid"]."'
-						limit 1;");
-				}
-			} 
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwbuildings.php-saveBuildingTemplate=".$e->getMessage());
-		}
-		return $zresponse;
-	}	
-
-	public function shareBuildingTemplate($zbuildingid, $zsharehash) {
-		/* share building as a template to the media library */
-		global $wtwhandlers;
-		$zresponse = array(
-			'success'=>'',
-			'serror'=>'',
-			'userid'=>'',
-			'sharehash'=>''
-		);
-		try {
-			if ($wtwhandlers->checkAdminAccess("", $zbuildingid, "")) {
-				$zuserid = "";
-				$zfoundbuildingid = "";
-				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
-					$zuserid = $_SESSION["wtw_userid"];
-				}
-				$zfromurl = "https://3dnet.walktheweb.com/connect/share.php?buildingid=".$zbuildingid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;
-
-				$zresponse = $wtwhandlers->openFilefromURL($zfromurl);
-				$zresponse = json_decode($zresponse, true);
-			}
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwbuildings.php-shareBuildingTemplate=".$e->getMessage());
-		}
-		return $zresponse;
-	}	
 }
 
 	function wtwbuildings() {

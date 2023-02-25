@@ -1,6 +1,6 @@
 <?php
 class wtwthings {
-	/* $wtwthings class for admin database functions for 3d things */
+	/* wtwthings class for admin database functions for 3d things */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -1347,99 +1347,6 @@ class wtwthings {
 		return $zsuccess;
 	}
 	
-	public function saveThingTemplate($zthingid, $ztemplatename, $zdescription, $ztags, $zversion, $zversiondesc) {
-		/* save thing as a template to the media library */
-		global $wtwhandlers;
-		$zresponse = array(
-			'success'=>'',
-			'serror'=>'',
-			'userid'=>'',
-			'sharehash'=>''
-		);
-		try {
-			if ($wtwhandlers->checkAdminAccess("", "", $zthingid)) {
-				$zuserid = "";
-				$zfoundthingid = "";
-				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
-					$zuserid = $_SESSION["wtw_userid"];
-				}
-				$ztemplatename = $wtwhandlers->escapeHTML($ztemplatename);
-				$zdescription = $wtwhandlers->escapeHTML($zdescription);
-				$ztags = $wtwhandlers->escapeHTML($ztags);
-				$zversiondesc = $wtwhandlers->escapeHTML($zversiondesc);
-				$zsharehash = $wtwhandlers->getRandomString(16,1);
-				$zresponse["sharehash"] = $zsharehash;
-				$zversion1 = 1;
-				$zversion2 = 0;
-				$zversion3 = 0;
-
-				if (strpos($zversion, '.') !== false) {
-					try {
-						list($zversion1, $zversion2, $zversion3) = explode('.', $zversion);
-					} catch (Exception $e) {
-						$zversion1 = 1;
-						$zversion2 = 0;
-						$zversion3 = 0;
-					}
-				}
-				$zversionorder = (1000000*$zversion1) + (1000*$zversion2) + $zversion3;
-				
-				$zresults = $wtwhandlers->query("
-					select thingid 
-					from ".wtw_tableprefix."things 
-					where thingid='".$zthingid."' limit 1;");
-				foreach ($zresults as $zrow) {
-					$zfoundthingid = $zrow["thingid"];
-				}
-				if ($wtwhandlers->hasValue($zfoundthingid)) {
-					$wtwhandlers->query("
-						update ".wtw_tableprefix."things
-						set templatename='".$ztemplatename."',
-						    tags='".$ztags."',
-							description='".$zdescription."',
-							sharehash='".$zsharehash."',
-							shareuserid='".$zuserid."',
-							version='".$zversion."',
-							versionorder=".$zversionorder.",
-							versiondesc='".$zversiondesc."',
-							updatedate=now(),
-							updateuserid='".$zuserid."'
-						where thingid='".$zthingid."'
-						limit 1;");
-				}
-			} 
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwthings.php-saveThingTemplate=".$e->getMessage());
-		}
-		return $zresponse;
-	}	
-
-	public function shareThingTemplate($zthingid, $zsharehash) {
-		/* share thing as a template to the media library */
-		global $wtwhandlers;
-		$zresponse = array(
-			'success'=>'',
-			'serror'=>'',
-			'userid'=>'',
-			'sharehash'=>''
-		);
-		try {
-			if ($wtwhandlers->checkAdminAccess("", "", $zthingid)) {
-				$zuserid = "";
-				$zfoundthingid = "";
-				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
-					$zuserid = $_SESSION["wtw_userid"];
-				}
-				$zfromurl = "https://3dnet.walktheweb.com/connect/share.php?thingid=".$zthingid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;
-
-				$zresponse = $wtwhandlers->openFilefromURL($zfromurl);
-				$zresponse = json_decode($zresponse, true);
-			}
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwthings.php-shareThingTemplate=".$e->getMessage());
-		}
-		return $zresponse;
-	}	
 }
 
 	function wtwthings() {

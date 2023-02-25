@@ -1,6 +1,6 @@
 <?php
 class wtwadmin {
-	/* main $wtwadmin class for WalkTheWeb Websites when browsed from admin.php */
+	/* main wtwadmin class for WalkTheWeb Websites when browsed from admin.php */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -40,7 +40,6 @@ class wtwadmin {
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_login.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_uploads.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_analytics.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/prime/wtw_downloads.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_cameras.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/avatars/wtw_basicavatars.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/avatars/wtw_addavatarlist.js?x=".$zver."'></script>\r\n";
@@ -143,13 +142,6 @@ class wtwadmin {
 			$zmainelements .= "		</div>\r\n";
 			$zmainelements .= "	</div>\r\n";
 			$zmainelements .= "</div>\r\n";
-			
-			/* added for video preview and streaming to 3D Scenes */
-			$zmainelements .= "<div id='wtw_videopreview' class='wtw-videopreview'>";
-			$zmainelements .= "	<div><video id='wtw_camerapreview' class='wtw-camerapreview'></video></div><br />";
-			$zmainelements .= "	<button id='wtw_startrecording' disabled onclick='wtw3dinternet.startRecording();' class='wtw-videobuttons'>Start Video</button> &nbsp;&nbsp;&nbsp; ";
-			$zmainelements .= "	<button id='wtw_stoprecording' disabled onclick='wtw3dinternet.stopRecording();' class='wtw-videobuttons'>Stop Video</button>";
-			$zmainelements .= "</div>";
 		} catch (Exception $e) {
 			$wtw->serror("core-functions-class_wtwadmin.php-loadMainElementsAdmin=".$e->getMessage());
 		}
@@ -420,66 +412,6 @@ class wtwadmin {
 			$zpagedata .= "		</div>\r\n";
 			$zpagedata .= "	</div>\r\n";
 
-			/* media library - 3d downloads */
-			$zpagedata .= "	<div id='wtw_showimportpage' class='wtw-dashboardpage wtw-hide' style='display:none;'>\r\n";
-			$zpagedata .= "		<div id='wtw_importhorizontalmenu' class='wtw-horizontalmenu'>\r\n";
-			$zpagedata .= "			<div id='wtw_menumedialibrary' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);\">Back</div>\r\n";
-			$zpagedata .= "			<div id='wtw_menuwtwcommunities' class='wtw-menutabtopselected' onclick=\"WTW.openFullPageForm('importpage','communities');\">3D Communities</div>\r\n";
-			$zpagedata .= "			<div id='wtw_menuwtwbuildings' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('importpage','buildings');\">3D Buildings</div>\r\n";
-			$zpagedata .= "			<div id='wtw_menuwtwthings' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('importpage','things');\">3D Things</div>\r\n";
-			$zpagedata .= "			<div id='wtw_menuwtwavatars' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('importpage','avatars');\">3D Avatars</div>\r\n";
-			$zpagedata .= "			<div id='wtw_menuwtwplugins' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('importpage','plugins');\">3D Plugins</div>\r\n";
-			$zpagedata .= "			<div id='searchcommunitiesdiv' class='wtw-searchbar'>\r\n";
-			$zpagedata .= "				<b>Search:</b> <input id='wtw_tcommunitysearch' type='text' value='' size='15' maxlength='255' class='wtw-gotext' />\r\n";
-			$zpagedata .= "				<input id='wtw_bcommunitysearch' type='button' value='Go' onclick=\"WTW.communitySearch(dGet('wtw_tcommunitysearch').value);\" class='wtw-gobutton' />\r\n";
-			$zpagedata .= "			</div>\r\n";
-			$zpagedata .= "			<div id='searchbuildingsdiv' class='wtw-searchbar'>\r\n";
-			$zpagedata .= "				<b>Search:</b> <input id='wtw_tbuildingsearch' type='text' value='' size='15' maxlength='255' class='wtw-gotext' />\r\n";
-			$zpagedata .= "				<input id='wtw_bbuildingsearch' type='button' value='Go' onclick=\"WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);\" class='wtw-gobutton' />\r\n";
-			$zpagedata .= "			</div>\r\n";
-			$zpagedata .= "			<div id='searchthingsdiv' class='wtw-searchbar'>\r\n";
-			$zpagedata .= "				<b>Search:</b> <input id='wtw_tthingsearch' type='text' value='' size='15' maxlength='255' class='wtw-gotext' />\r\n";
-			$zpagedata .= "				<input id='wtw_bthingsearch' type='button' value='Go' onclick=\"WTW.thingSearch(dGet('wtw_tthingsearch').value);\" class='wtw-gobutton' />\r\n";
-			$zpagedata .= "			</div>\r\n";
-			$zpagedata .= "			<div id='searchavatarsdiv' class='wtw-searchbar'>\r\n";
-			$zpagedata .= "				<b>Search:</b> <input id='wtw_tavatarsearch' type='text' value='' size='15' maxlength='255' class='wtw-gotext' />\r\n";
-			$zpagedata .= "				<input id='wtw_bavatarsearch' type='button' value='Go' onclick=\"WTW.avatarSearch(dGet('wtw_tavatarsearch').value);\" class='wtw-gobutton' />\r\n";
-			$zpagedata .= "			</div>\r\n";
-			$zpagedata .= "			<div id='searchpluginsdiv' class='wtw-searchbar'>\r\n";
-			$zpagedata .= "				<b>Search:</b> <input id='wtw_tpluginsearch' type='text' value='' size='15' maxlength='255' class='wtw-gotext' />\r\n";
-			$zpagedata .= "				<input id='wtw_bpluginsearch' type='button' value='Go' onclick=\"WTW.pluginSearch(dGet('wtw_tpluginsearch').value);\" class='wtw-gobutton' />\r\n";
-			$zpagedata .= "			</div>\r\n";
-			$zpagedata .= "			<div class='wtw-searchdiv'>\r\n";
-			$zpagedata .= "				<div class='wtw-colicons'>\r\n";
-			$zpagedata .= "					<img id='wtw_downloadscol1' src='/content/system/images/col1.png' alt='1 Column' title='1 Column' class='wtw-tinyimg' onclick='WTW.updateCols(this, 1);' />\r\n";
-			$zpagedata .= "					<img id='wtw_downloadscol2' src='/content/system/images/col2set.png' alt='2 Columns' title='2 Columns' class='wtw-tinyimgselected' onclick='WTW.updateCols(this, 2);' />\r\n";
-			$zpagedata .= "					<img id='wtw_downloadscol3' src='/content/system/images/col3.png' alt='3 Columns' title='3 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 3);' />\r\n";
-			$zpagedata .= "					<img id='wtw_downloadscol4' src='/content/system/images/col4.png' alt='4 Columns' title='4 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 4);' />\r\n";
-			$zpagedata .= "				</div>\r\n";
-			$zpagedata .= "			</div>\r\n";
-			$zpagedata .= "		</div><div class='wtw-clear'></div><hr />\r\n";
-			$zpagedata .= "		<div style='width:100%;margin:0px;text-align:center;'>\r\n";
-			$zpagedata .= "			<!--img src='/content/system/images/wtwlogo.png' / -->\r\n";
-			$zpagedata .= "			<div id='wtw_selectwebform'>\r\n";
-
-			$zpagedata .= "				<div id='wtw_downloadingnotice' class='wtw-hide'></div>\r\n";
-
-			$zpagedata .= "				<div id='wtw_commtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
-			$zpagedata .= "				<div id='wtw_buildtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
-			$zpagedata .= "				<div id='wtw_thingtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
-			$zpagedata .= "				<div id='wtw_avatartempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
-			$zpagedata .= "				<div id='wtw_plugintempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
-			$zpagedata .= "				<div id='wtw_downloadcomplete' class='wtw-hide'>\r\n";
-			$zpagedata .= "					<h3 class='wtw-black'>Download Complete</h3><br />\r\n";
-			$zpagedata .= "					<div id='wtw_downloadcompletemessage'>You can find your <b>New 3D Community</b> in the <b>Admin Menu</b><br />or select from the following:</div><br />\r\n";
-			$zpagedata .= "					<input id='wtw_bopenwebdownload' type='button' value='Open Your New 3D Community in the Editor' onclick='' style='font-size:1.4em;border-radius:10px;cursor:pointer;' /><br /><br />\r\n";
-			$zpagedata .= "					<input id='wtw_bcontinuewebdownload' type='button' value='Continue Searching for Downloads' onclick='' style='font-size:1.4em;border-radius:10px;cursor:pointer;' /><br /><br />\r\n";
-			$zpagedata .= "					<input id='wtw_bclosewebdownload' type='button' value='Close WalkTheWeb Downloads' onclick='WTW.closeFullPageForm();' style='font-size:1.4em;border-radius:10px;cursor:pointer;' /><br /><br />\r\n";
-			$zpagedata .= "				</div>\r\n";
-			$zpagedata .= "			</div>\r\n";
-			$zpagedata .= "		</div><br />\r\n";
-			$zpagedata .= "	</div>\r\n";
-			
 			/* media library - select image page */
 			$zpagedata .= "	<div id='wtw_selectimagepage' class='wtw-dashboardpage wtw-hide' style='display:none;'>\r\n";
 			$zpagedata .= "		<div id='wtw_horizontalmenu' class='wtw-horizontalmenu'>\r\n";

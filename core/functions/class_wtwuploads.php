@@ -1,6 +1,6 @@
 <?php
 class wtwuploads {
-	/* $wtwuploads class for WalkTheWeb functions for uploading and retrieving files */
+	/* wtwuploads class for WalkTheWeb functions for uploading and retrieving files */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -1088,7 +1088,7 @@ class wtwuploads {
 	}
 	
 	public function writeFileFromPath($zfromurl, $zwebtype, $zwebid, $zfilename) {
-		/* gets a file form the internet and stores it locally - used mainly to retrieve textures and images from https://3dnet.walktheweb.com */
+		/* gets a file from the internet and stores it locally - used mainly to retrieve textures and images for WTW Downloads */
 		global $wtwhandlers;
 		$znewfilename = "";
 		$znewfilepath = "";
@@ -1322,7 +1322,18 @@ class wtwuploads {
 	public function saveWebAlias($zoldwebaliasid, $zforcehttps, $zdomainname, $zcommunitypublishname, $zbuildingpublishname, $zthingpublishname, $zcommunityid, $zbuildingid, $zthingid, $zsitename, $zsitedescription, $zsiteiconid, $zfranchise, $zinstanceid) {
 		/* updates the web alias from the admin menu settings page */
 		global $wtwhandlers;
-		$zfranchiseid = '';
+		$zresponse = array(
+			'hostuserid'=> '',
+			'displayname'=> '',
+			'useremail'=> '',
+			'uploadpathid'=> '',
+			'webaliasid'=> '',
+			'webalias'=> '',
+			'foundfranchiseid'=> '',
+			'siteiconpath'=> '',
+			'sitepreview'=> '',
+			'serror'=> ''
+		);
 		try {
 			$zwebalias = '';
 			$zwebaliasid = '';
@@ -1567,65 +1578,35 @@ class wtwuploads {
 						$zsitepreview = $wtwhandlers->domainurl.$zsitepreview;
 					}
 				}
-				$zrequest = stream_context_create(array('http' =>
-					array(
-						'method'  => 'POST',
-						'header'  => 'Content-Type: application/x-www-form-urlencoded',
-						'content' => http_build_query(
-							array(
-								'serverinstanceid' => $wtwhandlers->serverinstanceid,
-								'serverip' => $wtwhandlers->serverip,
-								'domainname' => $zdomainname,
-								'domainurl' => base64_encode($wtwhandlers->domainurl),
-								'instanceid' => $zinstanceid,
-								'userid' => $wtwhandlers->userid,
-								'hostuserid' => $zhostuserid,
-								'userip' => $wtwhandlers->userip,
-								'globaluserid' => base64_encode($wtwhandlers->globaluserid),
-								'usertoken' => $wtwhandlers->usertoken,
-								'displayname' => $zdisplayname,
-								'email' => $zemail,
-								'uploadpathid' => $zuploadpathid,
-								'webaliasid' => $zwebaliasid,
-								'forcehttps' => $zforcehttps,
-								'webalias' => $zwebalias,
-								'communityid' => $zcommunityid,
-								'communitypublishname' => $zcommunitypublishname,
-								'buildingid' => $zbuildingid,
-								'buildingpublishname' => $zbuildingpublishname,
-								'thingid' => $zthingid,
-								'thingpublishname' => $zthingpublishname,
-								'franchise' => $zfranchise,
-								'franchiseid' => $zfoundfranchiseid,
-								'sitename' => $zsitename,
-								'sitedescription' => $zsitedescription,
-								'siteiconid' => $zsiteiconid,
-								'siteiconpath' => $zsiteiconpath,
-								'sitepreview' => $zsitepreview,
-								'function' => 'franchisechange'
-							)
-						)
-					)
-				));
-					
-				$zresponse = $wtwhandlers->openFilefromURL('https://3dnet.walktheweb.com/connect/franchises.php', false, $zrequest);			
-				if ($wtwhandlers->hasValue($zresponse)) {
-					$zresponse = json_decode($zresponse);
-					$zfranchiseid = '';
-					if ($wtwhandlers->hasValue($zresponse->franchiseid)) {
-						$zfranchiseid = $zresponse->franchiseid;
-						$wtwhandlers->query("
-						update ".wtw_tableprefix."webaliases
-						set franchiseid='".$zfranchiseid."'
-						where webaliasid='".$zwebaliasid."'
-						limit 1;");
-					}
-				}
+				$zresponse = array(
+					'hostuserid'=> $zhostuserid,
+					'displayname'=> $zdisplayname,
+					'useremail'=> $zemail,
+					'uploadpathid'=> $zuploadpathid,
+					'webaliasid'=> $zwebaliasid,
+					'webalias'=> $zwebalias,
+					'foundfranchiseid'=> $zfoundfranchiseid,
+					'siteiconpath'=> $zsiteiconpath,
+					'sitepreview'=> $zsitepreview,
+					'serror'=> ''
+				);
 			}
 		} catch (Exception $e) {
 			$wtwhandlers->serror("core-functions-class_wtwuploads.php-saveWebAlias=".$e->getMessage());
+			$zresponse = array(
+				'hostuserid'=> '',
+				'displayname'=> '',
+				'useremail'=> '',
+				'uploadpathid'=> '',
+				'webaliasid'=> '',
+				'webalias'=> '',
+				'foundfranchiseid'=> '',
+				'siteiconpath'=> '',
+				'sitepreview'=> '',
+				'serror'=> $e->getMessage()
+			);
 		}
-		return $zfranchiseid;
+		return $zresponse;
 	}
 	
 	public function deleteWebAlias($zwebaliasid) {

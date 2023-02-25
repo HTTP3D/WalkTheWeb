@@ -1,6 +1,6 @@
 <?php
 class wtwbuildingmolds {
-	/* $wtwbuildingmolds class for admin database functions for 3d building molds */
+	/* wtwbuildingmolds class for admin database functions for 3d building molds */
 	protected static $_instance = null;
 	
 	public static function instance() {

@@ -1,6 +1,6 @@
 <?php
 class wtwinvoices {
-	/* $wtwinvoices class for admin database functions for tools */
+	/* wtwinvoices class for admin database functions for tools */
 	protected static $_instance = null;
 	
 	public static function instance() {

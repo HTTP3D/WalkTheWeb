@@ -1,6 +1,6 @@
 <?php
 class wtwanimations {
-	/* $wtwanimations class for admin database functions for animations */
+	/* wtwanimations class for admin database functions for animations */
 	protected static $_instance = null;
 	
 	public static function instance() {

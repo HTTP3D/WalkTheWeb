@@ -1,6 +1,6 @@
 <?php
 class wtwusers {
-	/* $wtwusers class for WalkTheWeb user database and login functions */
+	/* wtwusers class for WalkTheWeb user database and login functions */
 	protected static $_instance = null;
 	
 	public static function instance() {

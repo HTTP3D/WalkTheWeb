@@ -1,6 +1,6 @@
 <?php
 class wtwapi {
-	/* $wtwapi class for admin database functions for api related functionality */
+	/* wtwapi class for admin database functions for api related functionality */
 	protected static $_instance = null;
 	
 	public static function instance() {

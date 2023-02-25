@@ -1,6 +1,6 @@
 <?php
 class wtwdb {
-	/* main $wtwdb class for WalkTheWeb database functions */
+	/* main wtwdb class for WalkTheWeb database functions */
 	protected static $_instance = null;
 	
 	public static function instance() {

@@ -1,6 +1,6 @@
 <?php
 class wtwmenus {
-	/* $wtwmenus class for main WalkTheWeb browsing menu functions */
+	/* wtwmenus class for main WalkTheWeb browsing menu functions */
 	protected static $_instance = null;
 	
 	public static function instance() {

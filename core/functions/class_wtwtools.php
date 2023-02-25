@@ -1,6 +1,6 @@
 <?php
 class wtwtools {
-	/* $wtwtools class for admin database functions for tools */
+	/* wtwtools class for admin database functions for tools */
 	protected static $_instance = null;
 	
 	public static function instance() {

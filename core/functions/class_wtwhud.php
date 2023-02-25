@@ -1,6 +1,6 @@
 <?php
 class wtwhud {
-	/* $wtwhud class for admin database functions for avatars */
+	/* wtwhud class for admin database functions for avatars */
 	protected static $_instance = null;
 	
 	public static function instance() {

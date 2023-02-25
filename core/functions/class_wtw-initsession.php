@@ -1061,9 +1061,11 @@ class wtw {
 				case 6: /* select Your 3D Building */
 					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
 					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' />";
-					echo "<script>var wtw_domainname = '".$this->domainname."';</script>";
+					echo "<script>var wtw_domainname = '".$this->domainname."';";
+					echo "function WTW_3DINTERNET() {this.install = true;}";
+					echo "var wtw3dinternet = new WTW_3DINTERNET();</script>";
 					echo "<script src='/core/scripts/prime/wtw_install.js'></script>";
-					echo "<script src='/core/scripts/prime/wtw_downloads.js'></script>";
+					echo "<script src='/content/plugins/wtw-3dinternet/scripts/downloads.js'></script>";
 					echo "</head><body class='wtw-body'><form id='wtw_form1' action='' method='post'>";
 					echo "<div class='wtw-fullwidth'><br /><div class='wtw-widepage'>";
 					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
@@ -1075,15 +1077,15 @@ class wtw {
 					
 					echo "<div class='wtw-searchdiv'>";
 					echo "<div class='wtw-colicons'>";
-					echo "<img id='wtw_downloadscol1' src='/content/system/images/col1.png' alt='1 Column' title='1 Column' class='wtw-tinyimg' onclick='WTW.updateCols(this, 1);' />";
-					echo "<img id='wtw_downloadscol2' src='/content/system/images/col2set.png' alt='2 Columns' title='2 Columns' class='wtw-tinyimgselected' onclick='WTW.updateCols(this, 2);' />";
-					echo "<img id='wtw_downloadscol3' src='/content/system/images/col3.png' alt='3 Columns' title='3 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 3);' />";
-					echo "<img id='wtw_downloadscol4' src='/content/system/images/col4.png' alt='4 Columns' title='4 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 4);' />";
+					echo "<img id='wtw_downloadscol1' src='/content/system/images/col1.png' alt='1 Column' title='1 Column' class='wtw-tinyimg' onclick='wtw3dinternet.updateCols(this, 1);' />";
+					echo "<img id='wtw_downloadscol2' src='/content/system/images/col2set.png' alt='2 Columns' title='2 Columns' class='wtw-tinyimgselected' onclick='wtw3dinternet.updateCols(this, 2);' />";
+					echo "<img id='wtw_downloadscol3' src='/content/system/images/col3.png' alt='3 Columns' title='3 Columns' class='wtw-tinyimg' onclick='wtw3dinternet.updateCols(this, 3);' />";
+					echo "<img id='wtw_downloadscol4' src='/content/system/images/col4.png' alt='4 Columns' title='4 Columns' class='wtw-tinyimg' onclick='wtw3dinternet.updateCols(this, 4);' />";
 					echo "</div>";
 					echo "</div>";
 					echo "<div class='wtw-searcharea'>";
 					echo "<div><div class='wtw-searchlabel'>Search:</div>";
-					echo "<input name='wtw_bbuildingsearch' type='button' value='Search' onclick=\"WTW.buildingSearch(dGet('wtw_tbuildingsearch').value);\" class='wtw-searchbutton' />";
+					echo "<input name='wtw_bbuildingsearch' type='button' value='Search' onclick=\"wtw3dinternet.buildingSearch(dGet('wtw_tbuildingsearch').value);\" class='wtw-searchbutton' />";
 					echo "<input id='wtw_tbuildingsearch' name='wtw_tbuildingsearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
 					echo "</div><div class='wtw-clearspace'></div>";
 					echo "<div id='wtw_downloadingnotice' class='wtw-hide'></div>";
@@ -1091,16 +1093,18 @@ class wtw {
 					echo "<br /><hr /><div id='wtw_buildtempsearchresults' class='wtw-indentmore'></div>";
 					echo "</div></div><br /></div><br /></form>";
 					echo "<script>";
-					echo "WTW.buildingSearch('');";
+					echo "wtw3dinternet.buildingSearch('');";
 					echo "</script></body></html>";
 					die;
 					break;
 				case 7: /* select Your 3D Community */
 					echo "<!DOCTYPE html><html><head><title>WalkTheWeb Setup</title>";
 					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' />";
-					echo "<script>var wtw_domainname = '".$this->domainname."';</script>";
+					echo "<script>var wtw_domainname = '".$this->domainname."';";
+					echo "function WTW_3DINTERNET() {this.install = true;}";
+					echo "var wtw3dinternet = new WTW_3DINTERNET();</script>";
 					echo "<script src='/core/scripts/prime/wtw_install.js'></script>";
-					echo "<script src='/core/scripts/prime/wtw_downloads.js'></script>";
+					echo "<script src='/content/plugins/wtw-3dinternet/scripts/downloads.js'></script>";
 					echo "</head><body class='wtw-body'><form id='wtw_form1' action='' method='post'>";
 					echo "<div class='wtw-fullwidth'><br /><div class='wtw-widepage'>";
 					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
@@ -1114,15 +1118,15 @@ class wtw {
 
 					echo "<div class='wtw-searchdiv'>";
 					echo "<div class='wtw-colicons'>";
-					echo "<img id='wtw_downloadscol1' src='/content/system/images/col1.png' alt='1 Column' title='1 Column' class='wtw-tinyimg' onclick='WTW.updateCols(this, 1);' />";
-					echo "<img id='wtw_downloadscol2' src='/content/system/images/col2set.png' alt='2 Columns' title='2 Columns' class='wtw-tinyimgselected' onclick='WTW.updateCols(this, 2);' />";
-					echo "<img id='wtw_downloadscol3' src='/content/system/images/col3.png' alt='3 Columns' title='3 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 3);' />";
-					echo "<img id='wtw_downloadscol4' src='/content/system/images/col4.png' alt='4 Columns' title='4 Columns' class='wtw-tinyimg' onclick='WTW.updateCols(this, 4);' />";
+					echo "<img id='wtw_downloadscol1' src='/content/system/images/col1.png' alt='1 Column' title='1 Column' class='wtw-tinyimg' onclick='wtw3dinternet.updateCols(this, 1);' />";
+					echo "<img id='wtw_downloadscol2' src='/content/system/images/col2set.png' alt='2 Columns' title='2 Columns' class='wtw-tinyimgselected' onclick='wtw3dinternet.updateCols(this, 2);' />";
+					echo "<img id='wtw_downloadscol3' src='/content/system/images/col3.png' alt='3 Columns' title='3 Columns' class='wtw-tinyimg' onclick='wtw3dinternet.updateCols(this, 3);' />";
+					echo "<img id='wtw_downloadscol4' src='/content/system/images/col4.png' alt='4 Columns' title='4 Columns' class='wtw-tinyimg' onclick='wtw3dinternet.updateCols(this, 4);' />";
 					echo "</div>";
 					echo "</div>";
 					echo "<div class='wtw-searcharea'>";
 					echo "<div><div class='wtw-searchlabel'>Search:</div>";
-					echo "<input name='wtw_bcommunitysearch' type='button' value='Search' onclick=\"WTW.communitySearch(dGet('wtw_tcommunitysearch').value);\" class='wtw-searchbutton' />";
+					echo "<input name='wtw_bcommunitysearch' type='button' value='Search' onclick=\"wtw3dinternet.communitySearch(dGet('wtw_tcommunitysearch').value);\" class='wtw-searchbutton' />";
 					echo "<input id='wtw_tcommunitysearch' name='wtw_tcommunitysearch' type='text' value='' size='20' maxlength='255' class='wtw-textbox' /></div>";
 					echo "</div><div class='wtw-clearspace'></div>";
 					echo "<div id='wtw_downloadingnotice' class='wtw-hide'></div>";
@@ -1130,7 +1134,7 @@ class wtw {
 					echo "<br /><hr /><div id='wtw_commtempsearchresults' class='wtw-indentmore'></div>";
 					echo "</div></div><br /></div><br /></form>";
 					echo "<script>";
-					echo "WTW.communitySearch('');";
+					echo "wtw3dinternet.communitySearch('');";
 					echo "</script></body></html>";
 					die;
 					break;
@@ -1143,7 +1147,6 @@ class wtw {
 					echo "<link rel='stylesheet' type='text/css' href='/core/styles/wtw_install.css' />";
 					echo "<script>var wtw_domainname = '".$this->domainname."';</script>";
 					echo "<script src='/core/scripts/prime/wtw_install.js'></script>";
-					echo "<script src='/core/scripts/prime/wtw_downloads.js'></script>";
 					echo "</head><body class='wtw-body'><form id='wtw_form1' action='' method='post'>";
 					echo "<div class='wtw-fullwidth'><br /><div class='wtw-widepage'>";
 					echo "<img src='/content/system/images/wtw-multiverse-logo-1024.png' class='wtw-logoimage' />";
@@ -2493,7 +2496,6 @@ class wtw {
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_login.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_uploads.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_analytics.js?x=".$zver."'></script>\r\n";
-			$zjsdata .= "<script src='/core/scripts/prime/wtw_downloads.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/prime/wtw_cameras.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/avatars/wtw_basicavatars.js?x=".$zver."'></script>\r\n";
 			$zjsdata .= "<script src='/core/scripts/avatars/wtw_addavatarlist.js?x=".$zver."'></script>\r\n";

@@ -1,5 +1,6 @@
 <?php
 class wtwconnectinggrids {
+	/* wtwconnectinggrids class for admin database functions for connecting grids */
 	protected static $_instance = null;
 	
 	public static function instance() {

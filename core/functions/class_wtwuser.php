@@ -1,6 +1,6 @@
 <?php
 class wtwuser {
-	/* $wtwuser class for quick information about the current WalkTheWeb user */
+	/* wtwuser class for quick information about the current WalkTheWeb user */
 	protected static $_instance = null;
 	
 	public static function instance() {

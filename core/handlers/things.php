@@ -30,9 +30,6 @@ try {
 	$zrotationy = $wtwhandlers->getPost('rotationy','0');;
 	$zrotationz = $wtwhandlers->getPost('rotationz','0');;
 	$zgravity = $wtwhandlers->getPost('gravity','9.8');
-	$zdescription = $wtwhandlers->decode64($wtwhandlers->getPost('description',''));
-	$ztags = $wtwhandlers->decode64($wtwhandlers->getPost('tags',''));
-	$zsharehash = $wtwhandlers->getPost('sharehash','');
 	
 	/* select the function called */
 	$zresponse = array();
@@ -51,12 +48,6 @@ try {
 			break;
 		case "savegravity":
 			//$wtwthings->saveThingGravity($zthingid, $zgravity);
-			break;
-		case "savethingtemplate":
-			$zresponse = $wtwthings->saveThingTemplate($zthingid, $zthingname, $zdescription, $ztags, $zversion, $zversiondesc);
-			break;
-		case "sharethingtemplate":
-			$zresponse = $wtwthings->shareThingTemplate($zthingid, $zsharehash);
 			break;
 	}
 

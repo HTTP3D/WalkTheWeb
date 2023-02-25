@@ -1,6 +1,6 @@
 <?php
 class wtwavatars {
-	/* $wtwavatars class for admin database functions for avatars */
+	/* wtwavatars class for admin database functions for avatars */
 	protected static $_instance = null;
 	
 	public static function instance() {
@@ -1639,122 +1639,6 @@ class wtwavatars {
 				'serror'=>$e->getMessage(),
 				'avatarid'=>$zavatarid
 			);
-		}
-		return $zresponse;
-	}
-	
-	public function saveAvatarTemplate($zavatarid, $ztemplatename, $zdescription, $ztags, $zversion, $zversiondesc) {
-		/* saves the avatar information (Not User Avatar, just the starting avatar you can choose) - admin function */
-		global $wtwhandlers;
-		$zresponse = array(
-			'serror'=>'',
-			'avatarid'=>$zavatarid,
-			'sharehash'=>''
-		);
-		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
-				$zfoundavatarid = '';
-				$zhostuserid = '';
-				if ($wtwhandlers->isUserInRole("Host") && $wtwhandlers->isUserInRole("Admin") == false) {
-					$zhostuserid = $wtwhandlers->userid;
-				}
-				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
-					$zuserid = $_SESSION["wtw_userid"];
-				}
-				$ztemplatename = $wtwhandlers->decode($ztemplatename);
-				$zdescription = $wtwhandlers->decode($zdescription);
-				$ztags = $wtwhandlers->decode($ztags);
-				$zversiondesc = $wtwhandlers->decode($zversiondesc);
-					
-				$ztemplatename = $wtwhandlers->escapeHTML($ztemplatename);
-				$zdescription = $wtwhandlers->escapeHTML($zdescription);
-				$ztags = $wtwhandlers->escapeHTML($ztags);
-				$zversiondesc = $wtwhandlers->escapeHTML($zversiondesc);
-				$zsharehash = $wtwhandlers->getRandomString(16,1);
-				$zresponse["sharehash"] = $zsharehash;
-				$zversion1 = 1;
-				$zversion2 = 0;
-				$zversion3 = 0;
-
-				if (strpos($zversion, '.') !== false) {
-					try {
-						list($zversion1, $zversion2, $zversion3) = explode('.', $zversion);
-					} catch (Exception $e) {
-						$zversion1 = 1;
-						$zversion2 = 0;
-						$zversion3 = 0;
-					}
-				}
-				$zversionorder = (1000000*$zversion1) + (1000*$zversion2) + $zversion3;
-
-				$zresults = $wtwhandlers->query("
-					select avatarid
-					from ".wtw_tableprefix."avatars
-					where avatarid='".$zavatarid."'
-					limit 1;");
-				foreach ($zresults as $zrow) {
-					$zfoundavatarid = $zrow["avatarid"];
-				}
-				if ($wtwhandlers->hasValue($zfoundavatarid)) {
-					$wtwhandlers->query("
-						update ".wtw_tableprefix."avatars
-						set templatename='".$ztemplatename."',
-							description='".$zdescription."',
-							tags='".$ztags."',
-							version='".$zversion."',
-							versionorder=".$zversionorder.",
-							versiondesc='".$zversiondesc."',
-							sharehash='".$zsharehash."',
-							shareuserid='".$wtwhandlers->userid."',
-							updatedate=now(),
-							updateuserid='".$wtwhandlers->userid."'
-						where avatarid='".$zavatarid."'
-							and (hostuserid='".$zhostuserid."'
-								or createuserid='".$wtwhandlers->userid."')
-						limit 1;
-					");
-				}
-			} else {
-				$zresponse = array(
-					'serror'=>'Requires Admin Permissions',
-					'avatarid'=>$zavatarid,
-					'sharehash'=>''
-				);
-			}
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwavatars.php-saveAvatarTemplate=".$e->getMessage());
-			$zresponse = array(
-				'serror'=>$e->getMessage(),
-				'avatarid'=>$zavatarid,
-				'sharehash'=>''
-			);
-		}
-		return $zresponse;
-	}
-	
-	public function shareAvatarTemplate($zavatarid, $zsharehash) {
-		/* share thing as a template to the media library */
-		global $wtwhandlers;
-		$zresponse = array(
-			'success'=>'',
-			'serror'=>'',
-			'userid'=>'',
-			'sharehash'=>''
-		);
-		try {
-			if ($wtwhandlers->hasPermission(array("admin","developer","architect","graphics artist","host"))) {
-				$zuserid = "";
-				$zfoundavatarid = "";
-				if ($wtwhandlers->hasValue($_SESSION["wtw_userid"])) {
-					$zuserid = $_SESSION["wtw_userid"];
-				}
-				$zfromurl = "https://3dnet.walktheweb.com/connect/shareavatar.php?avatarid=".$zavatarid."&userid=".$zuserid."&sharehash=".$zsharehash."&domainurl=".$wtwhandlers->domainurl;
-
-				$zresponse = $wtwhandlers->openFilefromURL($zfromurl);
-				$zresponse = json_decode($zresponse, true);
-			}
-		} catch (Exception $e) {
-			$wtwhandlers->serror("core-functions-class_wtwavatars.php-shareAvatarTemplate=".$e->getMessage());
 		}
 		return $zresponse;
 	}
