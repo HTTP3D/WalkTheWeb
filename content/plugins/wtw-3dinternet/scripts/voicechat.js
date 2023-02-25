@@ -10,7 +10,7 @@ WTW_3DINTERNET.prototype.initVoiceChatSocket = function() {
 			wtw3dinternet.voicechat = io.connect('https://3dnet.walktheweb.network/voicechat', {});
 
 			wtw3dinternet.voicechat.on('receive audio', function(zdata) {
-				if (wtw3dinternet.masterChat == '1') {
+				if (wtw3dinternet.masterVoiceChat == '1') {
 					if (wtw3dinternet.isBlockedOrBanned(zdata.instanceid) == false) {
 //						wtw3dinternet.playAvatarVoice(zdata);
 					}
@@ -18,7 +18,7 @@ WTW_3DINTERNET.prototype.initVoiceChatSocket = function() {
 			});
 			
 			wtw3dinternet.voicechat.on('receive talking', function(zdata) {
-				if (wtw3dinternet.masterChat == '1') {
+				if (wtw3dinternet.masterVoiceChat == '1') {
 					if (wtw3dinternet.isBlockedOrBanned(zdata.instanceid) == false) {
 						wtw3dinternet.updateAvatarTalking(zdata);
 					}
@@ -1219,3 +1219,23 @@ WTW_3DINTERNET.prototype.startVideoDisplay = function() {
 	}
 }
 */
+
+
+
+
+WTW_3DINTERNET.prototype.onMicrophoneGrantedOnMessage = function(zevent, zrecordbuffer) {
+	try {
+		if (WTW.micMute == false) {
+			if (zevent.data.eventType === 'buffer') {
+				zrecordbuffer = new Float32Array(zevent.data.buffer);
+			}
+			if (zevent.data.eventType === 'data' && WTW.micMute == false) {
+//    	        socket.volatile.emit('voice', { id: socket.id, buffer: zrecordbuffer.slice(zevent.data.start, zevent.data.end).buffer });
+				wtw3dinternet.streamAudio(zrecordbuffer.slice(zevent.data.start, zevent.data.end).buffer);
+//				wtw3dinternet.streamAudio(zstream);
+			}
+		}
+	} catch(ex) {
+		WTW.log("plugins:wtw-3dinternet:scripts-voicechat.js-onMicrophoneGrantedOnMessage=" + ex.message);
+	}
+}

@@ -76,13 +76,28 @@ class wtw3dinternet {
 				/* add admin menu items */
 				/* wtwplugins class -> addAdminMenuItem function (menu item id, menu text, level 1 sort, level 1 id, level 2 sort, level 2 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
 				
+				$wtwplugins->addAdminMenuItem('wtw_adminmediawtwdownloads', $wtwplugins->__('WalkTheWeb Downloads'), -95, 'wtw_medialibrary', 3, 'wtw_viewwtwdownloads', '', array('admin','developer','architect','host'), "WTW.openFullPageForm('importpage','".$wtwplugins->__('communities')."');");
 				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetmenu', $wtwplugins->__('3D Internet'), -70, 'wtw_3dinternetmenu', 0, '', '/content/plugins/wtw-3dinternet/assets/images/menuworld.png', array('admin','developer'), "WTW.adminMenuItemSelected(this);WTW.toggleAdminSubMenu(this);");
-				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetsettings', $wtwplugins->__('Login and Multiplayer Settings'), -70, 'wtw_3dinternetmenu', 1, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternetsettingspage');wtw3dinternet.serviceCheck('multiplayer');");
+				
+				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetavatars', $wtwplugins->__('WalkTheWeb Logins and Avatars'), -70, 'wtw_3dinternetmenu', 1, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternetloginspage');");
+				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetmultiplayer', $wtwplugins->__('Multiplayer and Chat'), -70, 'wtw_3dinternetmenu', 2, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternetmultiplayerpage');wtw3dinternet.serviceCheck('multiplayer');");
+				$wtwplugins->addAdminMenuItem('wtw_admin3dinternettemplates', $wtwplugins->__('Templates and Sharing'), -70, 'wtw_3dinternetmenu', 3, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternettemplatespage');");
+				$wtwplugins->addAdminMenuItem('wtw_admin3dinternetfranchising', $wtwplugins->__('Franchising to the Internet'), -70, 'wtw_3dinternetmenu', 4, 'wtw_3dinternetsettings', '', array('admin','developer'), "WTW.openFullPageForm('fullpage','".$wtwplugins->__('3D Internet')."','wtw_3dinternetfranchisingpage');");
 
 				/* admin full page settings forms */
 				/* wtwplugins class -> addFullPageForm function (form id, allowed roles array - null for all, form html string) */
-				$wtwplugins->addFullPageForm('wtw_3dinternetsettingspage', array('admin','developer'), $this->admin3dInternetSettingsForm());
-				
+				$wtwplugins->addFullPageForm('wtw_showimportpage', array('admin','developer','architect','host'), $this->admin3dInternetWTWDownloadsForm());
+
+				$wtwplugins->addFullPageForm('wtw_3dinternetloginspage', array('admin','developer'), $this->admin3dInternetLoginsForm());
+				$wtwplugins->addFullPageForm('wtw_3dinternetmultiplayerpage', array('admin','developer'), $this->admin3dInternetMultiplayerForm());
+				$wtwplugins->addFullPageForm('wtw_3dinternettemplatespage', array('admin','developer'), $this->admin3dInternetTemplatesForm());
+				$wtwplugins->addFullPageForm('wtw_3dinternetfranchisingpage', array('admin','developer'), $this->admin3dInternetFranchisingForm());
+
+				/* add div section to add 3D Building to a 3D Community Menu form */
+				$wtwplugins->addAdminMenuDiv('add3dbuilding', 'wtw_addbuildingfromserverdiv', $this->addWebFromServerDiv('building'), array('admin','developer','architect','host'));
+
+				/* add div section to add 3D Thing to a 3D Community Menu form */
+				$wtwplugins->addAdminMenuDiv('add3dthing', 'wtw_addthingfromserverdiv', $this->addWebFromServerDiv('thing'), array('admin','developer','architect','host'));
 			}
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-3dinternet:functions-class_plugin.php-initAdminOnlyHooks=".$e->getMessage());
@@ -99,12 +114,19 @@ class wtw3dinternet {
 
 			/* javascripts */
 			/* wtwplugins class -> addScript function (script id, '1' for admin only, script browse url) */
-			$wtwplugins->addScript('wtw-3dinternet-recordrtc', null, "/core/scripts/engine/recordrtc.js");
+
 			$wtwplugins->addScript('wtw-3dinternet-script', null, WTW_3DINTERNET_URL . "/scripts/class_main.js");
-			$wtwplugins->addScript('wtw-3dinternet-voicechat', null, WTW_3DINTERNET_URL . "/scripts/voicechat.js");
-			$wtwplugins->addScript('wtw-3dinternet-chat', null, WTW_3DINTERNET_URL . "/scripts/chat.js");
-			$wtwplugins->addScript('wtw-3dinternet-move', null, WTW_3DINTERNET_URL . "/scripts/move.js");
+			$wtwplugins->addScript('wtw-3dinternet-downloads', null, WTW_3DINTERNET_URL . "/scripts/downloads.js");
+			$wtwplugins->addScript('wtw-3dinternet-bans', null, WTW_3DINTERNET_URL . "/scripts/bans.js");
+			$wtwplugins->addScript('wtw-3dinternet-versions', null, WTW_3DINTERNET_URL . "/scripts/versions.js");
+			$wtwplugins->addScript('wtw-3dinternet-franchises', null, WTW_3DINTERNET_URL . "/scripts/franchises.js");
+			$wtwplugins->addScript('wtw-3dinternet-templates', null, WTW_3DINTERNET_URL . "/scripts/templates.js");
+
 			$wtwplugins->addScript('wtw-3dinternet-admin', null, WTW_3DINTERNET_URL . "/scripts/admin.js");
+			$wtwplugins->addScript('wtw-3dinternet-move', null, WTW_3DINTERNET_URL . "/scripts/move.js");
+			$wtwplugins->addScript('wtw-3dinternet-chat', null, WTW_3DINTERNET_URL . "/scripts/chat.js");
+			$wtwplugins->addScript('wtw-3dinternet-recordrtc', null, "/core/scripts/engine/recordrtc.js");
+			$wtwplugins->addScript('wtw-3dinternet-voicechat', null, WTW_3DINTERNET_URL . "/scripts/voicechat.js");
 			
 			/* browse menu (bottom) settings Menu Items */
 			/* wtwplugins class -> addSettingsMenuItem function (menu item id, menu text, sort order, level 1 id, level 1 icon, allowed roles array - null for all, onclick JavaScript function) */
@@ -115,14 +137,37 @@ class wtw3dinternet {
 			$wtwplugins->addMenuForm("wtw_3dinternetmuliplayerform", "Multiplayer Settings", $this->_3dInternetSettingsForm(), null, 'wtw-slideupmenuright');
 			$wtwplugins->addMenuForm("wtw_menuchat", "Connect", $this->_3dInternetChatForm(), null, 'wtw-slideupmenuleft');
 
-
 			/* hook plugin script functions into existing wtw functions */
 			/* $wtwplugins->addScriptFunction('hookname', 'function(parameters);'); */
 
+			$wtwplugins->addScriptFunction("openfullpageform", "wtw3dinternet.openFullPageForm(zpageid, zsetcategory, zitem, zitemname, zitemnamepath, zpreviewname);");
+			$wtwplugins->addScriptFunction("opendashboardform", "wtw3dinternet.openDashboardForm(zshow);");
+			$wtwplugins->addScriptFunction("opendashboardformdownloads", "wtw3dinternet.openDashboardFormDownloads(zdownloads, zshow);");
+			$wtwplugins->addScriptFunction("checkforupdates", "wtw3dinternet.checkForUpdates(zshow, zfilter);");
+			$wtwplugins->addScriptFunction("updatebadges", "wtw3dinternet.updateBadges(ztotalupdates, ztotaldashboardupdates);");
+			$wtwplugins->addScriptFunction("openconfirmation", "wtw3dinternet.openConfirmation(zoption);");
+			$wtwplugins->addScriptFunction("completedconfirmation", "wtw3dinternet.completedConfirmation(zoption);");
+			$wtwplugins->addScriptFunction("adminloadafterscreen", "wtw3dinternet.adminLoadAfterScreen(zhmenu);");
+			$wtwplugins->addScriptFunction("adminmenuitemselected", "wtw3dinternet.adminMenuItemSelected(zobj);");
+			$wtwplugins->addScriptFunction("toggleadminsubmenu", "wtw3dinternet.toggleAdminSubMenu(zobj);");
+			$wtwplugins->addScriptFunction("closemenus", "wtw3dinternet.closeMenus(zmenuid);");
+			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadVoiceChat();");
+			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadChat();");
+			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadMove();");
+			
+			$wtwplugins->addScriptFunction("onmessage", "wtw3dinternet.onMessage(zevent);");
+			$wtwplugins->addScriptFunction("onclick", "wtw3dinternet.onClick(zpickedname);");
+			$wtwplugins->addScriptFunction("hudloginclick", "wtw3dinternet.hudLoginClick(zmoldname);");
 			$wtwplugins->addScriptFunction("openlocallogin", "wtw3dinternet.openLocalLogin(zitem, zwidth, zheight);");
 			$wtwplugins->addScriptFunction("hudloginlogin", "wtw3dinternet.hudLoginLogin(zlocal, zemail, zpassword, zremembercheck);");
 			$wtwplugins->addScriptFunction("hudlogincreate", "wtw3dinternet.hudLoginCreate(zlocal, zemail, zpassword, zpassword2);");
-			
+			$wtwplugins->addScriptFunction("onmicrophonegrantedonmessage", "wtw3dinternet.onMicrophoneGrantedOnMessage(zevent, zrecordbuffer);");
+			$wtwplugins->addScriptFunction("onmicvolumechange", "wtw3dinternet.onMicVolumeChange(zvolume);");
+			$wtwplugins->addScriptFunction("togglemicmute", "wtw3dinternet.toggleMicMute();");
+			$wtwplugins->addScriptFunction("checkhovers", "wtw3dinternet.checkHovers(zmoldname, zshape);");
+			$wtwplugins->addScriptFunction("resethovers", "wtw3dinternet.resetHovers(zmoldname, zshape);");
+			$wtwplugins->addScriptFunction("keyup", "wtw3dinternet.keyUp(zevent);");
+
 			$wtwplugins->addScriptFunction("addconnectinggrid", "wtw3dinternet.addConnectingGrid(zconnectinggridsurl, zchildwebtype, zchildwebid, zchildwebname, zfranchiseid, zserverfranchiseid, zwebalias, zparentname);");
 			$wtwplugins->addScriptFunction("addconnectinggridactionzones", "wtw3dinternet.addConnectingGridActionZones(zactionzonesurl, zchildwebtype, zchildwebid, zchildwebname, zfranchiseid, zserverfranchiseid, zwebalias, zparentname, zconnectinggridid, zconnectinggridind);");
 
@@ -152,24 +197,10 @@ class wtw3dinternet {
 			$wtwplugins->addScriptFunction("moveavatar", "wtw3dinternet.moveAvatar(zavatar, zmoveevents);");
 			$wtwplugins->addScriptFunction("deleteuseravatar", "wtw3dinternet.deleteUserAvatar(zglobaluseravatarid, zuseravatarid, zwidth, zheight);");
 			
-			$wtwplugins->addScriptFunction("opendashboardform", "wtw3dinternet.openDashboardForm(zshow);");
-			$wtwplugins->addScriptFunction("toggleadminsubmenu", "wtw3dinternet.toggleAdminSubMenu(zobj);");
-			$wtwplugins->addScriptFunction("closemenus", "wtw3dinternet.closeMenus(zmenuid);");
-			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadVoiceChat();");
-			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadChat();");
-			$wtwplugins->addScriptFunction("beforeunload", "wtw3dinternet.beforeUnloadMove();");
-			
-			$wtwplugins->addScriptFunction("onclick", "wtw3dinternet.onClick(zpickedname);");
-			$wtwplugins->addScriptFunction("onmicvolumechange", "wtw3dinternet.onMicVolumeChange(zvolume);");
-			$wtwplugins->addScriptFunction("togglemicmute", "wtw3dinternet.toggleMicMute();");
-			$wtwplugins->addScriptFunction("checkhovers", "wtw3dinternet.checkHovers(zmoldname, zshape);");
-			$wtwplugins->addScriptFunction("resethovers", "wtw3dinternet.resetHovers(zmoldname, zshape);");
-			$wtwplugins->addScriptFunction("keyup", "wtw3dinternet.keyUp(zevent);");
-
-			$wtwplugins->addScriptFunction("onmessage", "wtw3dinternet.onMessage(zevent);");
 			$wtwplugins->addScriptFunction("getmoldsbywebid", "wtw3dinternet.getMoldsByWebID(zmoldsurl, zserver, zcommunityid, zbuildingid, zthingid, zactionzoneid, zactionzoneind, zconnectinggridid, zconnectinggridind, zgraphiclevel);");
 
 			$wtwplugins->addScriptFunction("feedbacksubmit", "wtw3dinternet.feedbackSubmit(zrequest);");
+			$wtwplugins->addScriptFunction("savealiasform", "wtw3dinternet.saveAliasForm(zoption, zhostuserid, zwebaliasid, zdomainname, zforcehttps, zwebalias, zaliascommunityid, zaliasbuildingid, zaliasthingid, zcommunitypublishname, zbuildingpublishname, zthingpublishname, zfoundfranchiseid, zfranchise, zsiteiconpath, zsitepreview);");
 
 		} catch (Exception $e) {
 			$wtwplugins->serror("plugins:wtw-3dinternet:functions-class_plugin.php.php-initHooks=".$e->getMessage());
@@ -193,14 +224,14 @@ class wtw3dinternet {
 		return $zformdata;
 	}
 
-	public function admin3dInternetSettingsForm() {
+	public function admin3dInternetLoginsForm() {
 		/* admin settings form for 3D Internet */
 		global $wtwplugins;
 		$zformdata = "";
 		try {
 			$zformdata .= "<div class=\"wtw-dashboardboxleftfull\">\r\n";
-			$zformdata .= "	<div class=\"wtw-dashboardboxtitle\">3D Internet - Login and Multiplayer Settings</div>\r\n";
-			$zformdata .= "		<div class='wtw-roundedbox'><b>3D Internet Settings</b> provide global WalkTheWeb functionality and services. Use this panel to turn on or off features at a server level.<br /></div>\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardboxtitle\">3D Internet - WalkTheWeb Logins and Avatars</div>\r\n";
+			$zformdata .= "		<div class='wtw-roundedbox'><b>3D Internet</b> provides WalkTheWeb Global Logins and Avatars use to any WalkTheWeb site with these settings enabled. Use this panel to turn on or off features at a server level.<br /></div>\r\n";
 			$zformdata .= "		<div class='wtw-clear'></div>\r\n";
 			$zformdata .= "		<div class=\"wtw-dashboardbox\">\r\n";
 			
@@ -212,6 +243,25 @@ class wtw3dinternet {
 			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enableanonymous\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enableanonymoustext\" class=\"wtw-disabledlabel\">Anonymous (Guest) Avatars Disabled</div> <br />These are visitors without a login.<br />\r\n";
 			$zformdata .= "			</div>\r\n";
 
+			$zformdata .= "		</div>\r\n";
+			$zformdata .= "</div>\r\n";
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins-3dinternet.php-admin3dInternetLoginsForm=".$e->getMessage());
+		}
+		return $zformdata;
+	}
+
+	public function admin3dInternetMultiplayerForm() {
+		/* admin settings form for 3D Internet */
+		global $wtwplugins;
+		$zformdata = "";
+		try {
+			$zformdata .= "<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardboxtitle\">3D Internet - Multiplayer and Chat</div>\r\n";
+			$zformdata .= "		<div class='wtw-roundedbox'><b>3D Internet</b> provides real-time multiplayer and chat services. Use this panel to turn on or off features at a server level.<br /></div>\r\n";
+			$zformdata .= "		<div class='wtw-clear'></div>\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardbox\">\r\n";
+			
 			/* multiplayer setings conects to the multiplayer/chat hub server */
 			$zformdata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
 			$zformdata .= "				<div class=\"wtw-controlpaneltitlediv\">Multiplayer Settings</div>\r\n";
@@ -229,23 +279,153 @@ class wtw3dinternet {
 			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablevoicechat\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablevoicechattext\" class=\"wtw-disabledlabel\">Multiplayer Voice Chat Disabled</div><div style=\"clear:both;\"></div>\r\n";
 			$zformdata .= "			</div>\r\n";
 			
-			/* for future use */
-			$zformdata .= "			<div class=\"wtw-controlpaneldiv\" style=\"display:none;visibility:hidden;\">\r\n";
-			$zformdata .= "				<div class=\"wtw-controlpaneltitlediv\">Franchising Settings</div>\r\n";
-			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablefranchisebuildings\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablefranchisebuildingstext\" class=\"wtw-disabledlabel\">3D Buildings Franchising Disabled</div><br />\r\n";
-			$zformdata .= "			</div>\r\n";
 
 			$zformdata .= "			<br /><br /><div onclick=\"WTW.toggle('wtw_videopreview');\" class=\"wtw-logincancel\" style=\"display:none;visibility:hidden;\">TEST VIDEO</div>\r\n";
 
 			$zformdata .= "		</div>\r\n";
-			$zformdata .= "	</div>\r\n";
+
+			/* added for testing video preview and streaming to 3D Scenes */
+			$zformdata .= "<div id='wtw_videopreview' class='wtw-videopreview'>";
+			$zformdata .= "	<div><video id='wtw_camerapreview' class='wtw-camerapreview'></video></div><br />";
+			$zformdata .= "	<button id='wtw_startrecording' disabled onclick='wtw3dinternet.startRecording();' class='wtw-videobuttons'>Start Video</button> &nbsp;&nbsp;&nbsp; ";
+			$zformdata .= "	<button id='wtw_stoprecording' disabled onclick='wtw3dinternet.stopRecording();' class='wtw-videobuttons'>Stop Video</button>";
+			$zformdata .= "</div>";
+
 			$zformdata .= "</div>\r\n";
 		} catch (Exception $e) {
-			$wtwplugins->serror("plugins-3dinternet.php-admin3dInternetSettingsForm=".$e->getMessage());
+			$wtwplugins->serror("plugins-3dinternet.php-admin3dInternetMultiplayerForm=".$e->getMessage());
 		}
 		return $zformdata;
 	}
-		
+
+	public function admin3dInternetTemplatesForm() {
+		/* admin settings form for 3D Internet */
+		global $wtwplugins;
+		$zformdata = "";
+		try {
+			$zformdata .= "<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardboxtitle\">3D Internet - Downloads and Sharing</div>\r\n";
+			$zformdata .= "		<div class='wtw-roundedbox'><b>WalkTheWeb Downloads</b> provide the ability to download 3D Webs (3D Community Scenes, 3D Buildings, 3D Things, 3D Avatars) and 3D Plugins. <b>Sharing</b> allows you to upload your 3D Webs as a template for others to download copies from the WalkTheWeb Hub (https://3dnet.walktheweb.com). This does not affect your own local copy of the 3D Web. Use this panel to turn on or off features at a server level.<br /></div>\r\n";
+			$zformdata .= "		<div class='wtw-clear'></div>\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardbox\">\r\n";
+			
+			/* Templates settings - optional WalkTheWeb Downloads and Sharing */
+			$zformdata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
+			
+			$zformdata .= "				<div class=\"wtw-controlpaneltitlediv\">WalkTheWeb Downloads Settings</div>\r\n";
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enabledownloads\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enabledownloadstext\" class=\"wtw-disabledlabel\">WalkTheWeb Downloads Disabled</div> <br />The options to download 3D Communities, 3D Buildings, 3D Things, and 3D Avatars.<br /><br />\r\n";
+			
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enableplugins\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablepluginstext\" class=\"wtw-disabledlabel\">Download 3D Plugins Disabled</div> <br />The options to download and add additional 3D Plugins.<br /><br /><br />\r\n";
+
+			$zformdata .= "				<div class=\"wtw-controlpaneltitlediv\">Sharing Templates Settings</div>\r\n";
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablesharing\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablesharingtext\" class=\"wtw-disabledlabel\">Sharing 3D Webs Disabled</div> <br />The options to share template copies of your 3D Communities, 3D Buildings, 3D Things, and 3D Avatars.<br /><br />\r\n";
+			
+			$zformdata .= "			</div>\r\n";
+
+			$zformdata .= "		</div>\r\n";
+			$zformdata .= "</div>\r\n";
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins-3dinternet.php-admin3dInternetTemplatesForm=".$e->getMessage());
+		}
+		return $zformdata;
+	}
+
+	public function admin3dInternetFranchisingForm() {
+		/* admin settings form for 3D Internet */
+		global $wtwplugins;
+		$zformdata = "";
+		try {
+			$zformdata .= "<div class=\"wtw-dashboardboxleftfull\">\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardboxtitle\">3D Internet - Franchising to the Internet</div>\r\n";
+			$zformdata .= "		<div class='wtw-roundedbox'><b>Franchising</b> provides the ability to allow others to add your selection of 3D Buildings and 3D Things to their scenes, while still being hosted and maintained on your server. You can select which 3D Buildings and 3D Things to franchise under <b>3D Websites -&gt; 3D Web Aliases</b>. Note that this is different from sharing templates where they get a copy of your 3D Building or 3D Thing and can modify it. Use this panel to turn on or off features at a server level.<br /></div>\r\n";
+			$zformdata .= "		<div class='wtw-clear'></div>\r\n";
+			$zformdata .= "		<div class=\"wtw-dashboardbox\">\r\n";
+			
+			/* franchising settings - optional ability to add 3D Webs from other servers */
+			$zformdata .= "			<div class=\"wtw-controlpaneldiv\">\r\n";
+			$zformdata .= "				<div class=\"wtw-controlpaneltitlediv\">Franchising Settings</div>\r\n";
+
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablefranchising\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablefranchisingtext\" class=\"wtw-disabledlabel\">Franchising your 3D Webs Disabled</div><br />The options to franchise your selection of 3D Buildings and 3D Things to other servers on the Internet.<br /><br />\r\n";
+			$zformdata .= "				<label class=\"wtw-switch\"><input id=\"wtw3dinternet_enablefranchiseadditions\" type=\"checkbox\" onclick=\"wtw3dinternet.changeSwitch(this);\"><span class=\"wtw-slider wtw-round\"></span></label><div id=\"wtw3dinternet_enablefranchiseadditionstext\" class=\"wtw-disabledlabel\">Franchise Additions Disabled</div><br />The option to add franchised 3D Buildings and 3D Things from the Internet to your 3D Communities and 3D Things from the Internet to your 3D Buildings.\r\n";
+
+			$zformdata .= "			</div>\r\n";
+
+			$zformdata .= "		</div>\r\n";
+			$zformdata .= "</div>\r\n";
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins-3dinternet.php-admin3dInternetFranchisingForm=".$e->getMessage());
+		}
+		return $zformdata;
+	}
+
+	public function admin3dInternetWTWDownloadsForm() {
+		/* admin settings form for 3D Internet */
+		global $wtwplugins;
+		$zformdata = "";
+		try {
+			/* media library - 3d downloads */
+			$zformdata .= "		<div id='wtw_importhorizontalmenu' class='wtw-horizontalmenu'>\r\n";
+			$zformdata .= "			<div id='wtw_menumedialibrary' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('medialibrary','');WTW.setImageMenu(4);\">Back</div>\r\n";
+			$zformdata .= "			<div id='wtw_menuwtwcommunities' class='wtw-menutabtopselected' onclick=\"WTW.openFullPageForm('importpage','communities');\">3D Communities</div>\r\n";
+			$zformdata .= "			<div id='wtw_menuwtwbuildings' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('importpage','buildings');\">3D Buildings</div>\r\n";
+			$zformdata .= "			<div id='wtw_menuwtwthings' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('importpage','things');\">3D Things</div>\r\n";
+			$zformdata .= "			<div id='wtw_menuwtwavatars' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('importpage','avatars');\">3D Avatars</div>\r\n";
+			$zformdata .= "			<div id='wtw_menuwtwplugins' class='wtw-menutabtop' onclick=\"WTW.openFullPageForm('importpage','plugins');\">3D Plugins</div>\r\n";
+			$zformdata .= "			<div id='searchcommunitiesdiv' class='wtw-searchbar'>\r\n";
+			$zformdata .= "				<b>Search:</b> <input id='wtw_tcommunitysearch' type='text' value='' size='15' maxlength='255' class='wtw-gotext' />\r\n";
+			$zformdata .= "				<input id='wtw_bcommunitysearch' type='button' value='Go' onclick=\"wtw3dinternet.communitySearch(dGet('wtw_tcommunitysearch').value);\" class='wtw-gobutton' />\r\n";
+			$zformdata .= "			</div>\r\n";
+			$zformdata .= "			<div id='searchbuildingsdiv' class='wtw-searchbar'>\r\n";
+			$zformdata .= "				<b>Search:</b> <input id='wtw_tbuildingsearch' type='text' value='' size='15' maxlength='255' class='wtw-gotext' />\r\n";
+			$zformdata .= "				<input id='wtw_bbuildingsearch' type='button' value='Go' onclick=\"wtw3dinternet.buildingSearch(dGet('wtw_tbuildingsearch').value);\" class='wtw-gobutton' />\r\n";
+			$zformdata .= "			</div>\r\n";
+			$zformdata .= "			<div id='searchthingsdiv' class='wtw-searchbar'>\r\n";
+			$zformdata .= "				<b>Search:</b> <input id='wtw_tthingsearch' type='text' value='' size='15' maxlength='255' class='wtw-gotext' />\r\n";
+			$zformdata .= "				<input id='wtw_bthingsearch' type='button' value='Go' onclick=\"wtw3dinternet.thingSearch(dGet('wtw_tthingsearch').value);\" class='wtw-gobutton' />\r\n";
+			$zformdata .= "			</div>\r\n";
+			$zformdata .= "			<div id='searchavatarsdiv' class='wtw-searchbar'>\r\n";
+			$zformdata .= "				<b>Search:</b> <input id='wtw_tavatarsearch' type='text' value='' size='15' maxlength='255' class='wtw-gotext' />\r\n";
+			$zformdata .= "				<input id='wtw_bavatarsearch' type='button' value='Go' onclick=\"wtw3dinternet.avatarSearch(dGet('wtw_tavatarsearch').value);\" class='wtw-gobutton' />\r\n";
+			$zformdata .= "			</div>\r\n";
+			$zformdata .= "			<div id='searchpluginsdiv' class='wtw-searchbar'>\r\n";
+			$zformdata .= "				<b>Search:</b> <input id='wtw_tpluginsearch' type='text' value='' size='15' maxlength='255' class='wtw-gotext' />\r\n";
+			$zformdata .= "				<input id='wtw_bpluginsearch' type='button' value='Go' onclick=\"wtw3dinternet.pluginSearch(dGet('wtw_tpluginsearch').value);\" class='wtw-gobutton' />\r\n";
+			$zformdata .= "			</div>\r\n";
+			$zformdata .= "			<div class='wtw-searchdiv'>\r\n";
+			$zformdata .= "				<div class='wtw-colicons'>\r\n";
+			$zformdata .= "					<img id='wtw_downloadscol1' src='/content/system/images/col1.png' alt='1 Column' title='1 Column' class='wtw-tinyimg' onclick='wtw3dinternet.updateCols(this, 1);' />\r\n";
+			$zformdata .= "					<img id='wtw_downloadscol2' src='/content/system/images/col2set.png' alt='2 Columns' title='2 Columns' class='wtw-tinyimgselected' onclick='wtw3dinternet.updateCols(this, 2);' />\r\n";
+			$zformdata .= "					<img id='wtw_downloadscol3' src='/content/system/images/col3.png' alt='3 Columns' title='3 Columns' class='wtw-tinyimg' onclick='wtw3dinternet.updateCols(this, 3);' />\r\n";
+			$zformdata .= "					<img id='wtw_downloadscol4' src='/content/system/images/col4.png' alt='4 Columns' title='4 Columns' class='wtw-tinyimg' onclick='wtw3dinternet.updateCols(this, 4);' />\r\n";
+			$zformdata .= "				</div>\r\n";
+			$zformdata .= "			</div>\r\n";
+			$zformdata .= "		</div><div class='wtw-clear'></div><hr />\r\n";
+			$zformdata .= "		<div style='width:100%;margin:0px;text-align:center;'>\r\n";
+			$zformdata .= "			<!--img src='/content/system/images/wtwlogo.png' / -->\r\n";
+			$zformdata .= "			<div id='wtw_selectwebform'>\r\n";
+
+			$zformdata .= "				<div id='wtw_downloadingnotice' class='wtw-hide'></div>\r\n";
+
+			$zformdata .= "				<div id='wtw_commtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
+			$zformdata .= "				<div id='wtw_buildtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
+			$zformdata .= "				<div id='wtw_thingtempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
+			$zformdata .= "				<div id='wtw_avatartempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
+			$zformdata .= "				<div id='wtw_plugintempsearchresults' style='margin-left:20px;text-align:left;overflow-y:auto;overflow-x:hidden;'></div>\r\n";
+			$zformdata .= "				<div id='wtw_downloadcomplete' class='wtw-hide'>\r\n";
+			$zformdata .= "					<h3 class='wtw-black'>Download Complete</h3><br />\r\n";
+			$zformdata .= "					<div id='wtw_downloadcompletemessage'>You can find your <b>New 3D Community</b> in the <b>Admin Menu</b><br />or select from the following:</div><br />\r\n";
+			$zformdata .= "					<input id='wtw_bopenwebdownload' type='button' value='Open Your New 3D Community in the Editor' onclick='' style='font-size:1.4em;border-radius:10px;cursor:pointer;' /><br /><br />\r\n";
+			$zformdata .= "					<input id='wtw_bcontinuewebdownload' type='button' value='Continue Searching for Downloads' onclick='' style='font-size:1.4em;border-radius:10px;cursor:pointer;' /><br /><br />\r\n";
+			$zformdata .= "					<input id='wtw_bclosewebdownload' type='button' value='Close WalkTheWeb Downloads' onclick='WTW.closeFullPageForm();' style='font-size:1.4em;border-radius:10px;cursor:pointer;' /><br /><br />\r\n";
+			$zformdata .= "				</div>\r\n";
+			$zformdata .= "			</div>\r\n";
+			$zformdata .= "		</div><br />\r\n";
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins-3dinternet.php-admin3dInternetWTWDownloadsForm=".$e->getMessage());
+		}
+		return $zformdata;
+	}
+	
 	public function _3dInternetSettingsForm() {
 		/* form for multiplayer settings on browse menu */
 		$zformdata = "";
@@ -273,7 +453,26 @@ class wtw3dinternet {
 		}
 		return $zformdata;
 	}
-	
+
+	public function addWebFromServerDiv($zwebtype) {
+		/* div at the top of the Add 3D Web (webtype) menu selection */
+		$zmenu = "";
+		try {
+			$zmenu .= "					<div class='wtw-localbuttonleftpad'></div><div id='wtw_".$zwebtype."buttonlocal' class='wtw-localbuttonselected wtw-leftradius' onclick=\"wtw3dinternet.showFranchise(this, '".$zwebtype."');\">Local</div><div class='wtw-localbuttonmiddlepad'> or </div><div id='wtw_".$zwebtype."buttoninternet' class='wtw-localbutton wtw-rightradius' onclick=\"wtw3dinternet.showFranchise(this, '".$zwebtype."');\">3D Internet</div><div class='wtw-localbuttonrightpad'></div>\r\n";
+			$zmenu .= "					<div class='wtw-clear'></div>\r\n";
+			$zmenu .= "					<div id='wtw_".$zwebtype."internetdiv' class='wtw-hide'>\r\n";
+			$zmenu .= "						<h4 class='wtw-marginbottom'>Domain Name</h4>\r\n";
+			$zmenu .= "						<div class='wtw-example'>(Example: 3d.walktheweb.com)</div><br />\r\n";
+			$zmenu .= "						<input type='text' id='wtw_franchise".$zwebtype."search' maxlength='255' style='width:260px;' onclick=\"WTW.checkKey(this, 'webname', 1, 0);\" onkeyup=\"WTW.checkKey(this, 'webname', 1, 0);\" onblur=\"WTW.checkKey(this, 'webname', 1, 1);\" /><br /><br />\r\n";
+			$zmenu .= "						<div id='wtw_bsearch".$zwebtype."franchises' class='wtw-greenbuttonbig' onclick=\"wtw3dinternet.getFranchiseList('".$zwebtype."');\">Search Franchises</div><br /><br />\r\n";
+			$zmenu .= "					</div>\r\n";
+			$zmenu .= "					<div class='wtw-clear'></div>\r\n";
+		} catch (Exception $e) {
+			$wtwplugins->serror("plugins-3dinternet.php-addWebFromServerDiv=".$e->getMessage());
+		}
+		return $zmenu;
+	}
+
 	public function checkTablesForUpdates() {
 		/* Table definitions for plugin - used for new installs and updates */
 		global $wtwplugins;
